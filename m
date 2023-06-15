@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9BC07322E3
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 00:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CF4F7322E7
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 00:55:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239759AbjFOWy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 18:54:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37884 "EHLO
+        id S239957AbjFOWzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 18:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238937AbjFOWyz (ORCPT
+        with ESMTP id S232234AbjFOWy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 18:54:55 -0400
+        Thu, 15 Jun 2023 18:54:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBA2272A;
-        Thu, 15 Jun 2023 15:54:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49559270E;
+        Thu, 15 Jun 2023 15:54:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BCE061BE6;
-        Thu, 15 Jun 2023 22:54:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89A2DC433C9;
-        Thu, 15 Jun 2023 22:54:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C8EFE61F12;
+        Thu, 15 Jun 2023 22:54:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F26B3C433CA;
+        Thu, 15 Jun 2023 22:54:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686869692;
-        bh=Df043vgm6CnnvUWCZd+vj+oFrnFuv7Ap9nxevuDGXJk=;
+        s=k20201202; t=1686869695;
+        bh=uOdg4scVwQQzL8UZnROnPCCRu7Nfdm5eCRa5kHL1u3w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YlHWY7F7AYPflO0rB6nuP/YL0uYkct0iT0RW4smQHkv38NoiU3x5EZpgJDHsw712j
-         Vp38wT2BA44kvTWC/0jULlBRzX7oyJ0gqRvCwFmbRzF5+/Zn7D5gHIFdK7d8WePt7a
-         q9c1djYEMs0r7zJj8s7xwGz0mv6MB8TYG89M7gUn8t4G8yg8Jnjb3x58NwsKpozVPm
-         3AaNRwGhHTGoBdtEBYI6wwLFK6egoozkefyYjD4OEu6DKSPMdZwVlAdas2A45Waq78
-         mY0ZCkVPBjhsKLbhiVAtMdc4vlY2tkNveEUAuQ8t2oMb7I/x4U9n6VaQtAffjJhkLp
-         d/7f1X5bty+Pw==
+        b=E7dnoqhMqsNpKE8pAOzKNBWZs2o3jqvpczL4+qj/AnHRAbA+aMbrugl5xHi0SGH8p
+         3QYW/NRiH3p1pwIvE0NvC5eh8etZ52ICkyfNOYgbr8KrpW772LN1+zxnN+Eo9bA0Ga
+         Q9upHj2X2cnQhgXHBZpU5AB5u8MiwoxTXmTB7zsNL2O+hEWZW07vQdpsnWDulbEme3
+         EqlDOvJGX3X1Cf7tTaSBdH+Jet1qUPYP86nbYEMLxP1KrMutgAL3sKbgmfn4hA+sGv
+         e4yiroGQHTlUV2ClVw69H4osMbp5083FmA45b+9n2lfWrh1IobvSzbBEs3fK0+rSLs
+         Y21RKq4cMVWrA==
 From:   Conor Dooley <conor@kernel.org>
 To:     palmer@dabbelt.com
 Cc:     conor@kernel.org, Conor Dooley <conor.dooley@microchip.com>,
@@ -41,14 +41,14 @@ Cc:     conor@kernel.org, Conor Dooley <conor.dooley@microchip.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/2] dt-bindings: riscv: cpus: add a ref the common cpu schema
-Date:   Thu, 15 Jun 2023 23:50:14 +0100
-Message-Id: <20230615-dubiously-parasail-79d34cefedce@spud>
+Subject: [PATCH v2 2/2] dt-bindings: riscv: cpus: switch to unevaluatedProperties: false
+Date:   Thu, 15 Jun 2023 23:50:15 +0100
+Message-Id: <20230615-viper-stoic-1ff8efd7d51d@spud>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230615-creamer-emu-ade0fa0bdb68@spud>
 References: <20230615-creamer-emu-ade0fa0bdb68@spud>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1511; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=xnf8UGz7+fdKaOoNLsbw78HDVnw230rwRyuBbYLfg8w=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDCndUxebKtwsSK6TCBAy6ShyYUjtPmOi/sPXT+gG59cVH ceOzzzfUcrCIMbBICumyJJ4u69Fav0flx3OPW9h5rAygQxh4OIUgIlM9GT47xnJvjnj5KeFukfl DqfV74nYoee2pvqvxfIPrfsOlGcwTmVkmPxO+7B23oY3m97O6v5sfVKvI5D5qdWH0hm7Kkvl9bq K+QA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=729; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=u/qrBFnL9e9PAex6e6NvnAWTZV+52ZOaw3F8Q/zOFMA=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDCndUxdfseKvjwla7JCU5jYp+vURlY9nUq7/K9Hpfz5/1 v5sm8Z7HaUsDGIcDLJiiiyJt/tapNb/cdnh3PMWZg4rE8gQBi5OAZjI8ysMf4WPBhXM3/362eI7 DlOZuQsNDnz3a7r51NT3r8yktv6Xhy4x/E84uNkwqIsh666IkITAudpLDw9Ov2TN+aiVfedRdq6 MDnYA
 X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -63,44 +63,27 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Conor Dooley <conor.dooley@microchip.com>
 
-To permit validation of RISC-V cpu nodes, "additionalProperties: true"
-needs to be swapped for "unevaluatedProperties: false". To facilitate
-this in a way that passes dt_binding_check, a reference to the cpu
-schema is required.
-
-Disallow the generic cache-op-block-size property that that drags in,
-since the RISC-V CBO extensions do not require a common size, and have
-individual properties.
+To permit validation of cpu nodes, swap "additionalProperties: true"
+out for "unevaluatedProperties: false".
 
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- Documentation/devicetree/bindings/riscv/cpus.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+ Documentation/devicetree/bindings/riscv/cpus.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
-index 3d2934b15e80..e89a10d9c06b 100644
+index e89a10d9c06b..144da86718c1 100644
 --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
 +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
-@@ -23,6 +23,9 @@ description: |
-   two cores, each of which has two hyperthreads, could be described as
-   having four harts.
+@@ -143,7 +143,7 @@ required:
+   - riscv,isa
+   - interrupt-controller
  
-+allOf:
-+  - $ref: /schemas/cpu.yaml#
-+
- properties:
-   compatible:
-     oneOf:
-@@ -98,6 +101,9 @@ properties:
-     $ref: "/schemas/types.yaml#/definitions/string"
-     pattern: ^rv(?:64|32)imaf?d?q?c?b?k?j?p?v?h?(?:[hsxz](?:[a-z])+)?(?:_[hsxz](?:[a-z])+)*$
+-additionalProperties: true
++unevaluatedProperties: false
  
-+  # RISC-V has multiple properties for cache op block sizes as the sizes
-+  # differ between individual CBO extensions
-+  cache-op-block-size: false
-   # RISC-V requires 'timebase-frequency' in /cpus, so disallow it here
-   timebase-frequency: false
- 
+ examples:
+   - |
 -- 
 2.39.2
 
