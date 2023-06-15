@@ -2,115 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6639730F15
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:08:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB579730F18
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242654AbjFOGIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 02:08:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37980 "EHLO
+        id S243269AbjFOGK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 02:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243553AbjFOGIW (ORCPT
+        with ESMTP id S230254AbjFOGKW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 02:08:22 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA404A7;
-        Wed, 14 Jun 2023 23:08:20 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35F684Wv012964;
-        Thu, 15 Jun 2023 01:08:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1686809284;
-        bh=3NAjiVPIi9Qh+/1jZT4iJ5D7YNH/KCh98ShDdQJk2YU=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=fZuKARzRDnB4cb4JFjO8ZpDwEu8LCDyEUcMTJ+U67Xo2zVCXyBVXDiKnqiWxhZqUS
-         OcIR4RGNaEcIG12GTtLNYKgnEmwdD9O9d0ILDELqmEVphffoBbu1fU3QKO6KcmKadj
-         MypvgVJkP928i74ERPLN4dyLLrWMpPxuHGHt/JfA=
-Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35F684w7117061
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 15 Jun 2023 01:08:04 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 15
- Jun 2023 01:08:04 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 15 Jun 2023 01:08:04 -0500
-Received: from [172.24.145.182] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35F680rA015262;
-        Thu, 15 Jun 2023 01:08:01 -0500
-Message-ID: <62ca6112-0aca-788e-fc9b-8a2c3ce9ba1f@ti.com>
-Date:   Thu, 15 Jun 2023 11:38:00 +0530
+        Thu, 15 Jun 2023 02:10:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5233A7
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 23:10:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 63010629BB
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 06:10:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B86C3C433CB;
+        Thu, 15 Jun 2023 06:10:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686809420;
+        bh=yBsF2yGxy6+m0GRyOTF57Yhzmj3bXyoRjSsZnLT9nDU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=rX946Bf04W9+IZQq6hSADW0tllmhWn0eC3T9uP9K+9sGab6av7979hKhZC6OY3pGK
+         BYsU2Qj3rxEY4Dqj6pbaofS/icFRxC+sYLtO/QpVjFNnyoN/v43QNM3L5ds5mlvJyY
+         iSq2/tOe6xKgn5MNaR7m7P+KCFHAhi0S7mJVDlLQ5s4OdftjE9/lqvvkPHQeGYa7Vk
+         R5JumZm3idS/YkA793guJ3zMS3+FmfBZ48qpAsxBT4nUlMSb5z0OhKGeLMCv5mNpH+
+         m8RIT9yZSs5SVyXQi9WewICfYw/HTOij7Lv+tYeveomqNHnkdEaJ9Np7OWiNCZXZj6
+         N7a7wTjYD009w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9F21BE21EEA;
+        Thu, 15 Jun 2023 06:10:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 3/5] arm64: dts: ti: add verdin am62
-Content-Language: en-US
-To:     Francesco Dolcini <francesco@dolcini.it>,
-        Nishanth Menon <nm@ti.com>
-CC:     Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230601131332.26877-1-francesco@dolcini.it>
- <20230601131332.26877-4-francesco@dolcini.it>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <20230601131332.26877-4-francesco@dolcini.it>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH net] net: dsa: felix: fix taprio guard band overflow at 10Mbps
+ with jumbo frames
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168680942064.31160.5418454678967580591.git-patchwork-notify@kernel.org>
+Date:   Thu, 15 Jun 2023 06:10:20 +0000
+References: <20230613170907.2413559-1-vladimir.oltean@nxp.com>
+In-Reply-To: <20230613170907.2413559-1-vladimir.oltean@nxp.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, andrew@lunn.ch, f.fainelli@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, claudiu.manoil@nxp.com,
+        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
+        xiaoliang.yang_1@nxp.com, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-On 01/06/23 18:43, Francesco Dolcini wrote:
+On Tue, 13 Jun 2023 20:09:07 +0300 you wrote:
+> The DEV_MAC_MAXLEN_CFG register contains a 16-bit value - up to 65535.
+> Plus 2 * VLAN_HLEN (4), that is up to 65543.
+> 
+> The picos_per_byte variable is the largest when "speed" is lowest -
+> SPEED_10 = 10. In that case it is (1000000L * 8) / 10 = 800000.
+> 
+> Their product - 52434400000 - exceeds 32 bits, which is a problem,
+> because apparently, a multiplication between two 32-bit factors is
+> evaluated as 32-bit before being assigned to a 64-bit variable.
+> In fact it's a problem for any MTU value larger than 5368.
+> 
+> [...]
 
-[...]
+Here is the summary with links:
+  - [net] net: dsa: felix: fix taprio guard band overflow at 10Mbps with jumbo frames
+    https://git.kernel.org/netdev/net/c/6ac7a27a8b07
 
-> +/* Verdin I2C_1 */
-> +&main_i2c1 {
-> +	status = "okay";
-> +
-> +	/* Audio Codec */
-> +	nau8822_1a: audio-codec@1a {
-> +		compatible = "nuvoton,nau8822";
-> +		reg = <0x1a>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_i2s1_mclk>; /* Configure AUDIO_EXT_REFCLK1 pin as output */
-> +		#sound-dai-cells = <0>;
-> +
-> +		/* POSTDIV4_16FF_MAIN_2_HSDIVOUT8_CLK -> AUDIO_EXT_REFCLK1 */
-> +		assigned-clocks = <&k3_clks 157 10>;
-> +		assigned-clock-parents = <&k3_clks 157 18>;
-> +		assigned-clock-rates = <25000000>; /* for 48KHz ± 1.7% */
-> +	};
-> +
-
-Oops, this node fails dtbs_check
-
-make ARCH=arm64 CROSS_COMPILE=$V8_CROSS CHECK_DTBS=y ti/k3-am625-verdin-nonwifi-dev.dtb
-
-/work/linux/arch/arm64/boot/dts/ti/k3-am625-verdin-nonwifi-dev.dtb: audio-codec@1a: '#sound-dai-cells', 'assigned-clock-parents', 'assigned-clock-rates', 'assigned-clocks' do not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /home/a0132425/workspace/k3-next/Documentation/devicetree/bindings/sound/nuvoton,nau8822.yaml
-/work/linux/arch/arm64/boot/dts/ti/k3-am625-verdin-nonwifi-dev.dtb: audio-codec@1a: 'anyOf' conditional failed, one must be fixed:
-	'clocks' is a required property
-	'#clock-cells' is a required property
-	From schema: /work/.local/lib/python3.10/site-packages/dtschema/schemas/clock/clock.yaml
-
-[...]
-
+You are awesome, thank you!
 -- 
-Regards
-Vignesh
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
