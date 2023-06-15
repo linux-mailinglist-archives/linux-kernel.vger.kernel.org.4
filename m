@@ -2,121 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD1CE732025
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 20:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB9D732033
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 20:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230157AbjFOSiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 14:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45014 "EHLO
+        id S229893AbjFOStO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 14:49:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbjFOSh6 (ORCPT
+        with ESMTP id S229658AbjFOStL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 14:37:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929C110F6;
-        Thu, 15 Jun 2023 11:37:57 -0700 (PDT)
+        Thu, 15 Jun 2023 14:49:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA371715;
+        Thu, 15 Jun 2023 11:49:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB8C662154;
-        Thu, 15 Jun 2023 18:37:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB540C433C0;
-        Thu, 15 Jun 2023 18:37:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D48ED6006F;
+        Thu, 15 Jun 2023 18:49:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 237F1C433C8;
+        Thu, 15 Jun 2023 18:49:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686854276;
-        bh=GrZU4Bzfm1Xqzo5EgU4CnnNwyScGSBZsQwfpSFcUTy4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=BODNwPZatG3b2JqhSWG5D/9wG7DxCwcU0n+OVYJJsEK8PJtcktivpxxL/Ml2BRlgr
-         AsmVfkubwqS1mWQi6oj5pwJFFfffaG2LN8l4gjYmn8D3F6/64Vz2nmwAfm/xpcWrKz
-         AI+zE2z1Ze9jLJ8o1OkjbkXOCTr7nu4ALkWKZBTRBuxvU2XmCxtJtSdU3CYXREzKcr
-         usrwH7iDCLZiPtl7TnZKHoKfA7qMDvSSyhqA6EjiV1ayFEvty4vb2Amh7S/WzbZ+vD
-         UJBUnhU2ZYt1DFC1JnGNmAdFb8cNNG9wr+5Tin6sZhpKNdwR3ocy9vj/ANs6CxYGL+
-         BeCL+54TSTW9Q==
-Date:   Thu, 15 Jun 2023 13:37:54 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        Stefan Roese <sr@denx.de>, Leon Romanovsky <leon@kernel.org>,
-        linux-rdma@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jim Wilson <wilson@tuliptree.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        David Abdurachmanov <david.abdurachmanov@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Lukas Wunner <lukas@wunner.de>, netdev@vger.kernel.org,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: Re: [PATCH v9 00/14] pci: Work around ASMedia ASM2824 PCIe link
- training failures
-Message-ID: <20230615183754.GA1483387@bhelgaas>
+        s=k20201202; t=1686854949;
+        bh=k1BrEmpYIXWtIaiqc1FiaqGCg4LfEpw0l7lGiSlOcmU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=FNmDZ0Hksi+nESkzoqQsBgBMP2ThQ7UzlQwBpbSyFPjd7IQCkGSfRUSkgvN9MXxmW
+         2zqZCaZIgKubGnRWSa6ZnE6MBG+SungmIwC3ClNxnWxDjgvoVB67F2cMcdtUlOt1QZ
+         Df+yNViV+Nk0L+GGdk15xUGkePYoYN/G/Tul+RD6RC1yGYePyMu0A1uIxJt4Yp3JlG
+         whlPIXptPZ52O//+tml7SIJ2ZuSGwg4Sug/mUBPFbHAx7rx1VI2WZsIqU074HytdRp
+         pHJHH36ibsuA3Hca43TwOc83UoyBSqBvPMbpcCw7+gq2Cg/aDVcHlqvk7NQeFmP0Hr
+         jZM5IXkwegfzg==
+Message-ID: <b76a8803-57aa-fa6b-ac33-b9d85f3398f9@kernel.org>
+Date:   Thu, 15 Jun 2023 13:49:06 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2306150124010.64925@angie.orcam.me.uk>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 1/1] EDAC/altera: Check previous DDR DBE during driver
+ probe
+Content-Language: en-US
+To:     niravkumar.l.rabara@intel.com
+Cc:     bp@alien8.de, james.morse@arm.com, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mchehab@kernel.org, rric@kernel.org,
+        tony.luck@intel.com
+References: <20230503061000.3279381-1-niravkumar.l.rabara@intel.com>
+ <20230615022534.4163918-1-niravkumar.l.rabara@intel.com>
+ <20230615022534.4163918-2-niravkumar.l.rabara@intel.com>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+In-Reply-To: <20230615022534.4163918-2-niravkumar.l.rabara@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 01:41:10AM +0100, Maciej W. Rozycki wrote:
-> On Wed, 14 Jun 2023, Bjorn Helgaas wrote:
+
+
+On 6/14/23 21:25, niravkumar.l.rabara@intel.com wrote:
+> From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
 > 
-> > >  This is v9 of the change to work around a PCIe link training phenomenon 
-> > > where a pair of devices both capable of operating at a link speed above 
-> > > 2.5GT/s seems unable to negotiate the link speed and continues training 
-> > > indefinitely with the Link Training bit switching on and off repeatedly 
-> > > and the data link layer never reaching the active state.
-> > > 
-> > >  With several requests addressed and a few extra issues spotted this
-> > > version has now grown to 14 patches.  It has been verified for device 
-> > > enumeration with and without PCI_QUIRKS enabled, using the same piece of 
-> > > RISC-V hardware as previously.  Hot plug or reset events have not been 
-> > > verified, as this is difficult if at all feasible with hardware in 
-> > > question.
-
-> >  static int pci_dev_wait(struct pci_dev *dev, char *reset_type, int timeout)
-> >  {
-> > -	bool retrain = true;
-> >  	int delay = 1;
-> > +	bool retrain = false;
-> > +	struct pci_dev *bridge;
-> > +
-> > +	if (pci_is_pcie(dev)) {
-> > +		retrain = true;
-> > +		bridge = pci_upstream_bridge(dev);
-> > +	}
+> Add DDR DBE check during driver probe to notify user if previous
+> reboot cause by DDR DBE and print DBE error related information.
 > 
->  If doing it this way, which I actually like, I think it would be a little 
-> bit better performance- and style-wise if this was written as:
+> Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+> ---
+>   drivers/edac/altera_edac.c                   | 29 ++++++++++++++++----
+>   include/linux/firmware/intel/stratix10-smc.h | 20 ++++++++++++++
+>   2 files changed, 44 insertions(+), 5 deletions(-)
 > 
-> 	if (pci_is_pcie(dev)) {
-> 		bridge = pci_upstream_bridge(dev);
-> 		retrain = !!bridge;
-> 	}
-> 
-> (or "retrain = bridge != NULL" if you prefer this style), and then we 
-> don't have to repeatedly check two variables iff (pcie && !bridge) in the 
-> loop below:
+> diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
+> index 8b31cd54bdb6..04c0675adc8c 100644
+> --- a/drivers/edac/altera_edac.c
+> +++ b/drivers/edac/altera_edac.c
+> @@ -2159,6 +2159,7 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
+>   #ifdef CONFIG_64BIT
+>   	{
+>   		int dberror, err_addr;
+> +		struct arm_smccc_res result;
+>   
+>   		edac->panic_notifier.notifier_call = s10_edac_dberr_handler;
+>   		atomic_notifier_chain_register(&panic_notifier_list,
+> @@ -2168,11 +2169,29 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
+>   		regmap_read(edac->ecc_mgr_map, S10_SYSMGR_UE_VAL_OFST,
+>   			    &dberror);
+>   		if (dberror) {
+> -			regmap_read(edac->ecc_mgr_map, S10_SYSMGR_UE_ADDR_OFST,
+> -				    &err_addr);
+> -			edac_printk(KERN_ERR, EDAC_DEVICE,
+> -				    "Previous Boot UE detected[0x%X] @ 0x%X\n",
+> -				    dberror, err_addr);
+> +			/* Bit-31 is set if previous DDR UE happened */
+> +			if (dberror & (1 << 31)) {
+> +				/* Read previous DDR UE info */
+> +				arm_smccc_smc(INTEL_SIP_SMC_READ_SEU_ERR, 0,
+> +					      0, 0, 0, 0, 0, 0, &result);
+> +
+> +				if (!result.a0) {
+> +					edac_printk(KERN_ERR, EDAC_DEVICE,
+> +						    "Previous DDR UE:Count=0x%X,Address=0x%X,ErrorData=0x%X\n"
+> +						    , (unsigned int)result.a1
+> +						    , (unsigned int)result.a2
+> +						    , (unsigned int)result.a3);
+> +				} else {
+> +					edac_printk(KERN_ERR, EDAC_DEVICE,
+> +						    "INTEL_SIP_SMC_SEU_ERR_STATUS failed\n");
+> +				}
+> +			} else {
+> +				regmap_read(edac->ecc_mgr_map, S10_SYSMGR_UE_ADDR_OFST,
+> +					    &err_addr);
+> +				edac_printk(KERN_ERR, EDAC_DEVICE,
+> +					    "Previous Boot UE detected[0x%X] @ 0x%X\n",
+> +					    dberror, err_addr);
+> +			}
+>   			/* Reset the sticky registers */
+>   			regmap_write(edac->ecc_mgr_map,
+>   				     S10_SYSMGR_UE_VAL_OFST, 0);
+> diff --git a/include/linux/firmware/intel/stratix10-smc.h b/include/linux/firmware/intel/stratix10-smc.h
+> index a718f853d457..48810c39f612 100644
+> --- a/include/linux/firmware/intel/stratix10-smc.h
+> +++ b/include/linux/firmware/intel/stratix10-smc.h
+> @@ -595,4 +595,24 @@ INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_FPGA_CONFIG_COMPLETED_WRITE)
+>   #define INTEL_SIP_SMC_FCS_GET_PROVISION_DATA \
+>   	INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_FCS_GET_PROVISION_DATA)
+>   
+> +/**
+> + * Request INTEL_SIP_SMC_READ_SEU_ERR
+> + * Sync call to get Single Event Upset Error information
+> + * SEU detects both corrected and uncorrected error
+> + *
+> + * Call register usage:
+> + * a0 INTEL_SIP_SMC_READ_SEU_ERR
+> + * a1-7 not used
+> + *
+> + * Return status:
+> + * a0 INTEL_SIP_SMC_STATUS_OK, INTEL_SIP_SMC_STATUS_NOT_SUPPORTED or
+> + *    INTEL_SIP_SMC_STATUS_ERROR
+> + * a1 error count of response data
+> + * a2 sector address of response data
+> + * a3 error data
+> + */
+> +#define INTEL_SIP_SMC_FUNCID_SEU_ERR_STATUS 153
+> +#define INTEL_SIP_SMC_READ_SEU_ERR \
+> +		INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_SEU_ERR_STATUS)
+> +
+>   #endif
 
-Done, thanks, I do like that better.  I did:
 
-  bridge = pci_upstream_bridge(dev);
-  if (bridge)
-    retrain = true;
-
-because it seems like it flows more naturally when reading.
-
-Bjorn
+Acked-by: Dinh Nguyen <dinguyen@kernel.org>
