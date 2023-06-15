@@ -2,200 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 820097310D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3924B7310DB
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244183AbjFOHeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 03:34:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48728 "EHLO
+        id S244075AbjFOHf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 03:35:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244937AbjFOHeB (ORCPT
+        with ESMTP id S244993AbjFOHem (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 03:34:01 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1636130D7
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:33:26 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b1b06af50eso22354681fa.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:33:26 -0700 (PDT)
+        Thu, 15 Jun 2023 03:34:42 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0072949
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:34:03 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-66615629689so1886386b3a.2
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:34:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686814405; x=1689406405;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MnmSwoYifJPcQDBqiLLFdZccmtskHS5NVMFEKw/IWo0=;
-        b=i2Y9h/xwBSasa+hIBJZUVgljLZv+3PHOYHTVuQGEqWPqmEZLUGu8D5KVjhqkUyp5h+
-         Gfa+42dFu2UUr6Dr5jnvhYEUrx+T0sL36Bhw2yNrO2GdeC7Oisf4FPHWwvN/Tq5OlUKH
-         wz2/DAvidQSK5QcfHinNhJ9TLyVG5t5r+TEnb9+0sQ0qRFj5mSOLNy7HrQrfICzBmkck
-         cKosEWmUqiML4AUHMeIxYZyoewhhu5A3/oEl8/B3YGF3aK0YMAA2J20Yaxcf8FfgSCFx
-         nZkogijqYgZRATYNDQe/KZkCuGNGIvv1zYGuH+Gaegx1x9gueR7UB4J7lAPBrdr0nv9T
-         b6Rg==
+        d=ventanamicro.com; s=google; t=1686814443; x=1689406443;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uSVZgRG5YqM/eFQOFzsv+7qQx2kR6U7K/exhbfh3iHo=;
+        b=ZU5NKMa7G4ct8b3MBmjVWKrm9NhEKEL5tmHTacR2un8854Mv7M7pqhvPirLhVQlLKD
+         yQJrWHCAeRXcVIuM2TcU0o7A0ieXOuLIj9mPpX0XJAvWzt397TT8XVjBsBEjPQmCjUHi
+         G6wwzmRmXhg8W1M7ODggv7uVUuVaMsRhPBVt+shONlAZyFq4rVmMix++00q5mtjr/wK2
+         rrsXFvjGIQZE5quFdViRsx8SRkNIb+eSdgUXVFzVNdJCEMBKlmIk39JaFHbnNrob+DWs
+         TFLKaYjlcY2JbZxX3Ipx9OGlOT9J2DwPNPx4qP3MiX8qUURz0qzLsH3ZwbpHr1OFD3Gx
+         2eVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686814405; x=1689406405;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MnmSwoYifJPcQDBqiLLFdZccmtskHS5NVMFEKw/IWo0=;
-        b=joU96tD+Z5yMEjL8TYuba4uKpuRDCvIQbIbo2h5Bp70thQaWqbK+V946e09vI9B80N
-         NmNTBY9g/wYf4F68/BmYh+ZUnbcWTjNOBhFZDesJmK5Q1bQlA3r+z/HUlxnDoToSB8to
-         YoSGlkUO/pf+3Mu3S/B82PexAdzgKU5c3+oB/yvrMnuHOryAWFMiqAhFUdiIWZP975HX
-         M33/nUA4VWLXiE8NRkTauuGC5MHV1qqkAw7fWs4vWd8+iNmX4Nkt1r7W/GNlK3MPJPNU
-         FBG4WFv5FB+5LsHuyMd3b9gI0xisXTjRACQwA+2QY1Xm+vOEHhUK/XdLzZ+mS4IZniUU
-         G7IQ==
-X-Gm-Message-State: AC+VfDyusML3LzrDC0jsyl6D2XWoCTNMPjIrYaiF989hawKUQEoeWlrj
-        YyZeMp3JEdjS+Ls28n3BpunRcQedIrl/re5HYhQAmQ==
-X-Google-Smtp-Source: ACHHUZ4A4D9bYIh/DCd989CSq5mzTqTBB7TyqViM2HqpkVG/J6HK8JUHg+eITccD/7lwn9EYwCr/cL6IqMVDrqt/Lsw=
-X-Received: by 2002:a2e:9dca:0:b0:2a8:a651:8098 with SMTP id
- x10-20020a2e9dca000000b002a8a6518098mr8150278ljj.38.1686814404866; Thu, 15
- Jun 2023 00:33:24 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686814443; x=1689406443;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uSVZgRG5YqM/eFQOFzsv+7qQx2kR6U7K/exhbfh3iHo=;
+        b=du+lR/MRK4BvnX2q018T2xbYkU8yhNchWNDolknOcmgWuojxpz3zMSY6iDj0ECdfdK
+         M6aN6mFliatLs3wHTNH33OTajRYnTX8LIp4gZGErHdfaXFkz9rNtHrFuWUvDvYg7Trv+
+         IvNmRfPMDmYDOYP/t8zqqLF5AIbN/7DQYsKU/BYl7T0Vj9+QY+VmgUCui7D2ni+r6SVX
+         MJGxBOgacqS6JY33d3TYH5nsBuAUMILhF8DLIuCnRqEeJgxEB1IcUWemWfwQFI1cBh28
+         qr7sAy2DHvwftH3FE+6ZZZVGSKdAl2GrFD3eefjkPM4puqALgSSkQN/MldGdz6iNYYVS
+         XeQQ==
+X-Gm-Message-State: AC+VfDxulsMUncjwjH47l1z4720q2NGwib4tP5N9cBz3Hvotf9DVH3Ws
+        3Nh7OZqumzWUZVfK/U2m8DwO1Q==
+X-Google-Smtp-Source: ACHHUZ6bJonZw603lvIGfQwVjskavYnCDRr4u1S4D2EB7M7IA9w4wtMrIHM/wnYPsW3vFEEdT710hg==
+X-Received: by 2002:a05:6a21:329a:b0:10b:cdb1:3563 with SMTP id yt26-20020a056a21329a00b0010bcdb13563mr4810645pzb.46.1686814442720;
+        Thu, 15 Jun 2023 00:34:02 -0700 (PDT)
+Received: from anup-ubuntu-vm.localdomain ([106.51.83.242])
+        by smtp.gmail.com with ESMTPSA id ji1-20020a170903324100b001b016313b1dsm8049855plb.86.2023.06.15.00.33.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 00:34:02 -0700 (PDT)
+From:   Anup Patel <apatel@ventanamicro.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Andrew Jones <ajones@ventanamicro.com>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Anup Patel <apatel@ventanamicro.com>
+Subject: [PATCH v3 00/10] RISC-V KVM in-kernel AIA irqchip
+Date:   Thu, 15 Jun 2023 13:03:43 +0530
+Message-Id: <20230615073353.85435-1-apatel@ventanamicro.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <000000000000556d9605fe1e5c40@google.com> <1cb93e56-f3e3-c972-1232-bbb67ad4f672@huaweicloud.com>
-In-Reply-To: <1cb93e56-f3e3-c972-1232-bbb67ad4f672@huaweicloud.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Thu, 15 Jun 2023 09:33:11 +0200
-Message-ID: <CACT4Y+b3r+UeY6PDTBFYqqZ3pNuG9hbCvRa6BY-b2CHhC7A7OQ@mail.gmail.com>
-Subject: Re: [syzbot] [reiserfs?] general protection fault in rcu_core (2)
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     syzbot <syzbot+b23c4c9d3d228ba328d7@syzkaller.appspotmail.com>,
-        jack@suse.cz, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, luto@kernel.org,
-        peterz@infradead.org, reiserfs-devel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
-        "yukuai (C)" <yukuai3@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Jun 2023 at 04:15, Yu Kuai <yukuai1@huaweicloud.com> wrote:
->
-> Hi,
->
-> =E5=9C=A8 2023/06/15 6:20, syzbot =E5=86=99=E9=81=93:
-> > syzbot has bisected this issue to:
-> >
-> > commit 2acf15b94d5b8ea8392c4b6753a6ffac3135cd78
-> > Author: Yu Kuai <yukuai3@huawei.com>
-> > Date:   Fri Jul 2 04:07:43 2021 +0000
-> >
-> >      reiserfs: add check for root_inode in reiserfs_fill_super
-> >
-> > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D1715ffdd=
-280000
->
-> git log:
->
-> 13d257503c09 reiserfs: check directory items on read from disk
-> 2acf15b94d5b reiserfs: add check for root_inode in reiserfs_fill_super
->
-> The bisect log shows that with commit 13d257503c09:
-> testing commit 13d257503c0930010ef9eed78b689cec417ab741 gcc
-> compiler: gcc (GCC) 10.2.1 20210217, GNU ld (GNU Binutils for Debian) 2.3=
-5.2
-> kernel signature:
-> fc456e669984fb9704d9e1d3cb7be68af3b83de4bb55124257ae28bb39a14dc7
-> run #0: basic kernel testing failed: possible deadlock in fs_reclaim_acqu=
-ire
-> run #1: crashed: KASAN: out-of-bounds Read in leaf_paste_in_buffer
-> run #2: crashed: KASAN: out-of-bounds Read in leaf_paste_in_buffer
-> run #3: crashed: KASAN: out-of-bounds Read in leaf_paste_in_buffer
-> run #4: crashed: KASAN: use-after-free Read in leaf_insert_into_buf
-> run #5: crashed: KASAN: out-of-bounds Read in leaf_paste_in_buffer
-> run #6: crashed: KASAN: out-of-bounds Read in leaf_paste_in_buffer
-> run #7: crashed: KASAN: out-of-bounds Read in leaf_paste_in_buffer
-> run #8: crashed: KASAN: out-of-bounds Read in leaf_paste_in_buffer
-> run #9: crashed: KASAN: out-of-bounds Read in leaf_paste_in_buffer
->
-> and think this is bad, then bisect to the last commit:
-> testing commit 2acf15b94d5b8ea8392c4b6753a6ffac3135cd78 gcc
-> compiler: gcc (GCC) 10.2.1 20210217, GNU ld (GNU Binutils for Debian) 2.3=
-5.2
-> kernel signature:
-> 6d0d5f26a4c0e15188c923383ecfb873ae57ca6a79f592493d6e9ca507949985
-> run #0: crashed: possible deadlock in fs_reclaim_acquire
-> run #1: OK
-> run #2: OK
-> run #3: OK
-> run #4: OK
-> run #5: OK
-> run #6: OK
-> run #7: OK
-> run #8: OK
-> run #9: OK
-> reproducer seems to be flaky
-> # git bisect bad 2acf15b94d5b8ea8392c4b6753a6ffac3135cd78
->
-> It seems to me the orignal crash general protection fault is not related
-> to this commit. Please kindly correct me if I'm wrong.
->
-> For the problem of lockdep warning, it first appeared in bisect log:
-> testing commit 406254918b232db198ed60f5bf1f8b84d96bca00 gcc
-> compiler: gcc (GCC) 10.2.1 20210217, GNU ld (GNU Binutils for Debian) 2.3=
-5.2
-> kernel signature:
-> 1c83f3c8b090a4702817c527e741a35506bc06911c71962d4c5fcef577de2fd3
-> run #0: basic kernel testing failed: BUG: sleeping function called from
-> invalid context in stack_depot_save
-> run #1: basic kernel testing failed: possible deadlock in fs_reclaim_acqu=
-ire
-> run #2: OK
-> run #3: OK
-> run #4: OK
-> run #5: OK
-> run #6: OK
-> run #7: OK
-> run #8: OK
-> run #9: OK
-> # git bisect good 406254918b232db198ed60f5bf1f8b84d96bca00
->
-> And I don't understand why syzbot thinks this is good, and later for the
-> same result, syzbot thinks 2acf15b94d5b is bad.
+This series adds in-kernel AIA irqchip to KVM RISC-V which trap-n-emulate
+IMSIC and APLIC MSI-mode for Guest. The APLIC MSI-mode trap-n-emulate is
+optional so KVM user space can emulate APLIC entirely in user space.
 
-I think the difference is "basic kernel testing failed", so that
-happened even before the reproducer for the bug was executed.
-So for all runs where the reproducer was executed, the result was "OK".
+The use of IMSIC HW guest files to accelerate IMSIC virtualization will be
+done as separate series since this depends on AIA irqchip drivers to be
+upstreamed. This series has no dependency on the AIA irqchip drivers.
 
+There is also a KVM AIA irq-bypass (or device MSI virtualization) series
+under development which depends on this series and upcoming IOMMU driver
+series.
 
+These patches (or this series) can also be found in the
+riscv_kvm_aia_irqchip_v3 branch at: https://github.com/avpatel/linux.git
 
-> Thanks,
-> Kuai
-> > start commit:   f8dba31b0a82 Merge tag 'asym-keys-fix-for-linus-v6.4-rc=
-5' ..
-> > git tree:       upstream
-> > final oops:     https://syzkaller.appspot.com/x/report.txt?x=3D1495ffdd=
-280000
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D1095ffdd280=
-000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D3c980bfe8b3=
-99968
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=3Db23c4c9d3d228=
-ba328d7
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1680f7d12=
-80000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D12fad50d280=
-000
-> >
-> > Reported-by: syzbot+b23c4c9d3d228ba328d7@syzkaller.appspotmail.com
-> > Fixes: 2acf15b94d5b ("reiserfs: add check for root_inode in reiserfs_fi=
-ll_super")
-> >
-> > For information about bisection process see: https://goo.gl/tpsmEJ#bise=
-ction
-> >
-> > .
-> >
->
-> --
-> You received this message because you are subscribed to the Google Groups=
- "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/syzkaller-bugs/1cb93e56-f3e3-c972-1232-bbb67ad4f672%40huaweicloud.com.
+Changes since v2:
+ - Added KVM_CAP_IRQCHIP in PATCH5
+ - Fix check for KVM_DEV_RISCV_AIA_CONFIG_IDS write in PATCH6
+ - Fix APLIC_IRQ_STATE_ENPEND usage in PATCH7
+
+Changes since v1:
+ - Rebased on Linux-6.4-rc6
+ - Addressed Atish's comment in PATCH6
+ - Added comments in arch/riscv/include/uapi/asm/kvm.h about APLIC and
+   IMSIC device attribute type
+
+Anup Patel (10):
+  RISC-V: KVM: Implement guest external interrupt line management
+  RISC-V: KVM: Add IMSIC related defines
+  RISC-V: KVM: Add APLIC related defines
+  RISC-V: KVM: Set kvm_riscv_aia_nr_hgei to zero
+  RISC-V: KVM: Skeletal in-kernel AIA irqchip support
+  RISC-V: KVM: Implement device interface for AIA irqchip
+  RISC-V: KVM: Add in-kernel emulation of AIA APLIC
+  RISC-V: KVM: Expose APLIC registers as attributes of AIA irqchip
+  RISC-V: KVM: Add in-kernel virtualization of AIA IMSIC
+  RISC-V: KVM: Expose IMSIC registers as attributes of AIA irqchip
+
+ arch/riscv/include/asm/kvm_aia.h       |  107 ++-
+ arch/riscv/include/asm/kvm_aia_aplic.h |   58 ++
+ arch/riscv/include/asm/kvm_aia_imsic.h |   38 +
+ arch/riscv/include/asm/kvm_host.h      |    4 +
+ arch/riscv/include/uapi/asm/kvm.h      |   72 ++
+ arch/riscv/kvm/Kconfig                 |    4 +
+ arch/riscv/kvm/Makefile                |    3 +
+ arch/riscv/kvm/aia.c                   |  274 +++++-
+ arch/riscv/kvm/aia_aplic.c             |  619 ++++++++++++++
+ arch/riscv/kvm/aia_device.c            |  673 +++++++++++++++
+ arch/riscv/kvm/aia_imsic.c             | 1083 ++++++++++++++++++++++++
+ arch/riscv/kvm/main.c                  |    3 +-
+ arch/riscv/kvm/vcpu.c                  |    2 +
+ arch/riscv/kvm/vm.c                    |  118 +++
+ include/uapi/linux/kvm.h               |    2 +
+ 15 files changed, 3027 insertions(+), 33 deletions(-)
+ create mode 100644 arch/riscv/include/asm/kvm_aia_aplic.h
+ create mode 100644 arch/riscv/include/asm/kvm_aia_imsic.h
+ create mode 100644 arch/riscv/kvm/aia_aplic.c
+ create mode 100644 arch/riscv/kvm/aia_device.c
+ create mode 100644 arch/riscv/kvm/aia_imsic.c
+
+-- 
+2.34.1
+
