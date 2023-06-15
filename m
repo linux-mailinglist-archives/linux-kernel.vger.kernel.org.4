@@ -2,93 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 916DD731A23
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B06D73198F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344431AbjFONgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 09:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44230 "EHLO
+        id S231489AbjFONGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 09:06:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344169AbjFONfb (ORCPT
+        with ESMTP id S234125AbjFONGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 09:35:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9C22D4C
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 06:35:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 15 Jun 2023 09:06:32 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D085196;
+        Thu, 15 Jun 2023 06:06:31 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E751263BBE
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 13:34:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C481CC433CD;
-        Thu, 15 Jun 2023 13:34:18 +0000 (UTC)
-Received: from rostedt by gandalf with local (Exim 4.96)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1q9n7B-000TtA-2s;
-        Thu, 15 Jun 2023 09:34:17 -0400
-Message-ID: <20230615133417.709819338@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Thu, 15 Jun 2023 09:05:46 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Beau Belgrave <beaub@linux.microsoft.com>
-Subject: [for-linus][PATCH 15/15] tracing/user_events: Document auto-cleanup and remove dyn_event refs
-References: <20230615130531.200384328@goodmis.org>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C0721223ED;
+        Thu, 15 Jun 2023 13:06:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1686834389; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YPwlg25jLGaHT3oj2DubbGYtU0RJM6ImkkU7cEnCagg=;
+        b=THle+G0AQvH4k9UPtgierHCbRY7nXJDDCl4OFDcuMVKru5VFjhIrIDBHQdH+Z0O4YfrIou
+        vcMvavvY/ib/0o4hnZgPxE/oQE1GHrSD6gcKuojcferz/KPcHDMFMDUzJjX2aOoKmbGwtz
+        cT90VGcEzSEmSjwH3L4YhjFWoz8wFbY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1686834389;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YPwlg25jLGaHT3oj2DubbGYtU0RJM6ImkkU7cEnCagg=;
+        b=Ot2Hg7P/MPe+PboV3rKSt/pFxiHOzjFNo139/UwcXQssONiu/NZqgBjx3xARILGrxa4T9N
+        6SKsJOrOxDp/XgCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8FD4913467;
+        Thu, 15 Jun 2023 13:06:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ck3ZIdUMi2T1SAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 15 Jun 2023 13:06:29 +0000
+Message-ID: <fe3b90b0-b52f-9677-0245-a201975c3e0c@suse.de>
+Date:   Thu, 15 Jun 2023 15:06:28 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 1/2] fbdev/offb: Update expected device name
+Content-Language: en-US
+To:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Salvatore Bonaccorso <carnil@debian.org>,
+        Cyril Brulebois <cyril@debamax.com>
+Cc:     linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, stable@vger.kernel.org,
+        Michal Suchanek <msuchanek@suse.de>
+References: <20230412095509.2196162-1-cyril@debamax.com>
+ <20230412095509.2196162-2-cyril@debamax.com> <ZDvrY7X9mpJ7WZ3z@eldamar.lan>
+ <11b342dc-1a46-d1be-5fdd-c6eee661e15a@leemhuis.info>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <11b342dc-1a46-d1be-5fdd-c6eee661e15a@leemhuis.info>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------MIFWyohkbRqZtPZHrrSmrfsA"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Beau Belgrave <beaub@linux.microsoft.com>
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------MIFWyohkbRqZtPZHrrSmrfsA
+Content-Type: multipart/mixed; boundary="------------5nyOBEXATYgsVY80Vv7FLhml";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Linux regressions mailing list <regressions@lists.linux.dev>,
+ Salvatore Bonaccorso <carnil@debian.org>, Cyril Brulebois <cyril@debamax.com>
+Cc: linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, stable@vger.kernel.org,
+ Michal Suchanek <msuchanek@suse.de>
+Message-ID: <fe3b90b0-b52f-9677-0245-a201975c3e0c@suse.de>
+Subject: Re: [PATCH 1/2] fbdev/offb: Update expected device name
+References: <20230412095509.2196162-1-cyril@debamax.com>
+ <20230412095509.2196162-2-cyril@debamax.com> <ZDvrY7X9mpJ7WZ3z@eldamar.lan>
+ <11b342dc-1a46-d1be-5fdd-c6eee661e15a@leemhuis.info>
+In-Reply-To: <11b342dc-1a46-d1be-5fdd-c6eee661e15a@leemhuis.info>
 
-Now user_events auto-cleanup upon the last reference by default. This
-makes it not possible to use the dynamics event file via tracefs.
+--------------5nyOBEXATYgsVY80Vv7FLhml
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Document that auto-cleanup is enabled by default and remove the refernce
-to /sys/kernel/tracing/dynamic_events file to make this clear.
+SGkNCg0KQW0gMTUuMDYuMjMgdW0gMTU6MDMgc2NocmllYiBMaW51eCByZWdyZXNzaW9uIHRy
+YWNraW5nIChUaG9yc3RlbiBMZWVtaHVpcyk6DQo+IE9uIDE2LjA0LjIzIDE0OjM0LCBTYWx2
+YXRvcmUgQm9uYWNjb3JzbyB3cm90ZToNCj4+DQo+PiBPbiBXZWQsIEFwciAxMiwgMjAyMyBh
+dCAxMTo1NTowOEFNICswMjAwLCBDeXJpbCBCcnVsZWJvaXMgd3JvdGU6DQo+Pj4gU2luY2Ug
+Y29tbWl0IDI0MWQyZmI1NmExOCAoIm9mOiBNYWtlIE9GIGZyYW1lYnVmZmVyIGRldmljZSBu
+YW1lcyB1bmlxdWUiKSwNCj4+PiBhcyBzcG90dGVkIGJ5IEZyw6lkw6lyaWMgQm9ubmFyZCwg
+dGhlIGhpc3RvcmljYWwgIm9mLWRpc3BsYXkiIGRldmljZSBpcw0KPj4+IGdvbmU6IHRoZSB1
+cGRhdGVkIGxvZ2ljIGNyZWF0ZXMgIm9mLWRpc3BsYXkuMCIgaW5zdGVhZCwgdGhlbiBhcyBt
+YW55DQo+Pj4gIm9mLWRpc3BsYXkuTiIgYXMgcmVxdWlyZWQuDQo+Pj4NCj4+PiBUaGlzIG1l
+YW5zIHRoYXQgb2ZmYiBubyBsb25nZXIgZmluZHMgdGhlIGV4cGVjdGVkIGRldmljZSwgd2hp
+Y2ggcHJldmVudHMNCj4+PiB0aGUgRGViaWFuIEluc3RhbGxlciBmcm9tIHNldHRpbmcgdXAg
+aXRzIGludGVyZmFjZSwgYXQgbGVhc3Qgb24gcHBjNjRlbC4NCj4+Pg0KPj4+IEl0IG1pZ2h0
+IGJlIGJldHRlciB0byBpdGVyYXRlIG9uIGFsbCBwb3NzaWJsZSBub2RlcywgYnV0IHVwZGF0
+aW5nIHRoZQ0KPj4+IGhhcmRjb2RlZCBkZXZpY2UgZnJvbSAib2YtZGlzcGxheSIgdG8gIm9m
+LWRpc3BsYXkuMCIgaXMgY29uZmlybWVkIHRvIGZpeA0KPj4+IHRoZSBEZWJpYW4gSW5zdGFs
+bGVyIGF0IHRoZSB2ZXJ5IGxlYXN0Lg0KPj4gWy4uLl0NCj4+ICNyZWd6Ym90IF5pbnRyb2R1
+Y2VkIDI0MWQyZmI1NmExOA0KPj4gI3JlZ3pib3QgdGl0bGU6IE9wZW4gRmlybXdhcmUgZnJh
+bWVidWZmZXIgY2Fubm90IGZpbmQgb2YtZGlzcGxheQ0KPj4gI3JlZ3pib3QgbGluazogaHR0
+cHM6Ly9idWd6aWxsYS5rZXJuZWwub3JnL3Nob3dfYnVnLmNnaT9pZD0yMTczMjgNCj4+ICNy
+ZWd6Ym90IGxpbms6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2FsbC8yMDIzMDQxMjA5NTUw
+OS4yMTk2MTYyLTEtY3lyaWxAZGViYW1heC5jb20vVC8jbTM0NDkzNDgwMjQzYTJjYWQyYWUz
+NTlhYmZkOWRiNWU3NTVmNDFhZGQNCj4+ICNyZWd6Ym90IGxpbms6IGh0dHBzOi8vYnVncy5k
+ZWJpYW4ub3JnLzEwMzMwNTgNCj4gDQo+IE5vIHJlcGx5IHRvIG15IHN0YXR1cyBpbnF1aXJ5
+WzFdIGEgZmV3IHdlZWtzIGFnbywgc28gSSBoYXZlIHRvIGFzc3VtZQ0KPiBub2JvZHkgY2Fy
+ZXMgYW55bW9yZS4gSWYgc29tZWJvZHkgc3RpbGwgY2FyZXMsIGhvbGxlciENCg0KSSdkIHRh
+a2UgYSBsb29rIGlmIGFueW9uZSBjYW4gcG9pbnQgbWUgdG8gYW4gZXhhbXBsZSBvZiBHZWVy
+dCdzIHByb3Bvc2FsLg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+IA0KPiAjcmVnemJv
+dCBpbmNvbmNsdXNpdmU6IG5vIGFuc3dlciB0byBhIHN0YXR1cyBpbnF1aXJ5DQo+ICNyZWd6
+Ym90IGlnbm9yZS1hY3Rpdml0eQ0KPiANCj4gWzFdDQo+IGh0dHBzOi8vbG9yZS5rZXJuZWwu
+b3JnL2xrbWwvZDFhZWU3ZDMtMDVmNi0wOTIwLWI4ZTEtNGVkNWNmM2Y5ZjcwQGxlZW1odWlz
+LmluZm8vDQo+IA0KPiBDaWFvLCBUaG9yc3RlbiAod2VhcmluZyBoaXMgJ3RoZSBMaW51eCBr
+ZXJuZWwncyByZWdyZXNzaW9uIHRyYWNrZXInIGhhdCkNCj4gLS0NCj4gRXZlcnl0aGluZyB5
+b3Ugd2FubmEga25vdyBhYm91dCBMaW51eCBrZXJuZWwgcmVncmVzc2lvbiB0cmFja2luZzoN
+Cj4gaHR0cHM6Ly9saW51eC1yZWd0cmFja2luZy5sZWVtaHVpcy5pbmZvL2Fib3V0LyN0bGRy
+DQo+IElmIEkgZGlkIHNvbWV0aGluZyBzdHVwaWQsIHBsZWFzZSB0ZWxsIG1lLCBhcyBleHBs
+YWluZWQgb24gdGhhdCBwYWdlLg0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGlj
+cyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdt
+YkgNCkZyYW5rZW5zdHJhc3NlIDE0NiwgOTA0NjEgTnVlcm5iZXJnLCBHZXJtYW55DQpHRjog
+SXZvIFRvdGV2LCBBbmRyZXcgTXllcnMsIEFuZHJldyBNY0RvbmFsZCwgQm91ZGllbiBNb2Vy
+bWFuDQpIUkIgMzY4MDkgKEFHIE51ZXJuYmVyZykNCg==
 
-Link: https://lkml.kernel.org/r/20230614163336.5797-7-beaub@linux.microsoft.com
+--------------5nyOBEXATYgsVY80Vv7FLhml--
 
-Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- Documentation/trace/user_events.rst | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+--------------MIFWyohkbRqZtPZHrrSmrfsA
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-diff --git a/Documentation/trace/user_events.rst b/Documentation/trace/user_events.rst
-index f79987e16cf4..e7b07313550a 100644
---- a/Documentation/trace/user_events.rst
-+++ b/Documentation/trace/user_events.rst
-@@ -14,10 +14,6 @@ Programs can view status of the events via
- /sys/kernel/tracing/user_events_status and can both register and write
- data out via /sys/kernel/tracing/user_events_data.
- 
--Programs can also use /sys/kernel/tracing/dynamic_events to register and
--delete user based events via the u: prefix. The format of the command to
--dynamic_events is the same as the ioctl with the u: prefix applied.
--
- Typically programs will register a set of events that they wish to expose to
- tools that can read trace_events (such as ftrace and perf). The registration
- process tells the kernel which address and bit to reflect if any tool has
-@@ -144,6 +140,9 @@ its name. Delete will only succeed if there are no references left to the
- event (in both user and kernel space). User programs should use a separate file
- to request deletes than the one used for registration due to this.
- 
-+**NOTE:** By default events will auto-delete when there are no references left
-+to the event. Flags in the future may change this logic.
-+
- Unregistering
- -------------
- If after registering an event it is no longer wanted to be updated then it can
--- 
-2.39.2
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmSLDNQFAwAAAAAACgkQlh/E3EQov+Db
+kQ/+KGqbOla/cqP49fzHPrd8Zbcp2WJaa6P1g8Ygr6U92wVzKB5XaGdUSBaD9tJsOC4LQKwRDoGW
+mLeM4ubyCw7mZyTkg/Uy7J9PctsQlxOuolsW6hkQ0Ubl0SaFyQ2sPUMJINz7lTFmP4KzqRM1/AdE
+O/q67Jh5QbA9Dmr1nxOxkOZbhz8k/KsuQMcrc7FmyXqfr60OPBhwumx7chWfxeKZYIh/9RSQEQEs
+mGnbmxC4tTxOHspJpP0yBy4GN/ebQhS+53r4KH9B561FBsXMEEnZLBEbdrB0J0MQ7szIsqHyzuEa
+uSZgjVvp8Jr2IdD6kHjL1TfikTVRGwNzgiiWvwew8nAEPuQ7KNUuuxDzF2H5jRdjlHLoY0b4nakL
+s5ESzr8BOCcAqIqdlmupyXgQslxSwkcRHXWGYh99Nl45ONStGqjOv6s6LKJO6gIOLNjKdwK38e87
+mO4WeCl23Wx6P/M5//6g20lS0yV5RwhQoXgCUvJhsvFYjt7gXLo/0qDLbGz9zKK6MeR19j0w3sGK
++apq/u/K4VqUNX806CHnNY4xejQ9713vlvmOHXay2yAtaRJ57avpx9XAdNfOT4p6HKicdsvpn3Db
+palLXstjkp/G06TbjLqaV+lqmAgSOsrMB1Js2C9k5tcCh/fKF1XIf7f9sXFAs8x9AWKs75eQcjuD
+HGk=
+=iH2J
+-----END PGP SIGNATURE-----
+
+--------------MIFWyohkbRqZtPZHrrSmrfsA--
