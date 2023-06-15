@@ -2,106 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA66732312
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 01:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B10D732316
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 01:07:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231830AbjFOXHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 19:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41590 "EHLO
+        id S231969AbjFOXHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 19:07:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjFOXHP (ORCPT
+        with ESMTP id S229534AbjFOXHk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 19:07:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54B9273D;
-        Thu, 15 Jun 2023 16:07:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3874461F82;
-        Thu, 15 Jun 2023 23:07:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EDCAC433C0;
-        Thu, 15 Jun 2023 23:07:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686870433;
-        bh=1PjAQXC6EO6kyUJubG5wMVdHRFYZIFiLVImaErWPjBI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pMgHW0sLFNHkyTREetfSgwDQToYlSsp1sZ8YAWd7yGIa/Ull2kkuyCsUXtTtXl3eV
-         vcA+Qx8wNvwW/rlbmyy2notXaHBgobRx7d/1MPrjj251Hg2zJW3g8YPtsgOAnkHpcb
-         D+i2nuJqImqv+PV47OVKG4mhnPegQ27xvuOc1Fyw8whi8af3rE+27PXqKXuc/G1qH5
-         yLqyWD6+toB//A4PP0y+O3Rf/9d1MvbO+H89bWERcJHXm474jBIIMNaykvQd4uLt3s
-         RKHGhA8L+DzFTNibj0HBGi6fy4zvjjZmaqvalrDF6aDABFNLBtQO77OtXZOeaB9W/H
-         f1atP3ctfAeyQ==
-Date:   Fri, 16 Jun 2023 00:07:05 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        =?iso-8859-1?Q?Fern=E1ndez?= Rojas <noltari@gmail.com>,
-        Marek Vasut <marex@denx.de>, Suman Anna <s-anna@ti.com>,
-        - <devicetree-spec@vger.kernel.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Remove last usage of "binding" or "schema"
- in titles
-Message-ID: <20230616-skydiver-unwritten-5cc47e04bf07@spud>
-References: <20230615213154.1753313-1-robh@kernel.org>
+        Thu, 15 Jun 2023 19:07:40 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFD6273F
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 16:07:37 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b4f8523197so9859645ad.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 16:07:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1686870456; x=1689462456;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RPv4fbHe7J+eAL9Nmh6sjLcdVOBe69VQf0iTOrC71Yc=;
+        b=F1wUuYVVR2j9n9/nCFqETna6uJ4/EAXcQGDAaTiHcsBG2HhKhsXXt2WZWg35Aq6EOd
+         XsCTG2WRBt3AJBnpsJOfdrC9TfasW1ANGOk6VaLrN4fZ8RYqsPsA1GpgtSuGxqaUDMnI
+         6Na+cuc5cIZEjansQvyQqk5n0L+SzV/iVg2M+lCGqoXXK5xSk5YhId2VCbbk9io6trHN
+         drX9NsDF6V8Ax6znUXaF9QInFabqOp9Mivc42fOTTfR6VHoDA2TkQKbipbQZLYjjdGpm
+         if5chhDyumICFJirJ450geIqvfACiwLYc4R9E4pYBYu/opQ37+0ZGuXdJ93DlSABu/y0
+         0ieg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686870456; x=1689462456;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RPv4fbHe7J+eAL9Nmh6sjLcdVOBe69VQf0iTOrC71Yc=;
+        b=FOVHG5DhA9L3jW7v89hsmPKodryE8Ob3uf8SEmnu2j80VSrTPKKca1Onwh3ntEPaIQ
+         nlLI1ev65xF740ZjaME9DC8sx24l88bhj5epMs+UHf9bWzshBN4u9pRRDZUNkh0VS327
+         MYnXpUCcpzprcdiSBlt+2xs5xo72WdzyJtL6mp/5UxGR3YRmsuvg2XnnPRtQ6LD2JUZV
+         cz0KakqybkrfypMAdTIc3lhwWb8HUCXudmDbXqmhU+bvMGA5AaoO2Gu1ucA87UqHek0B
+         m6CsJ21S5N59O055J2lUDND1gFmdGNOcVvmTIFmYpGpVGVHgxD05sZ13GAkezI5isfn9
+         DmTw==
+X-Gm-Message-State: AC+VfDyYEsIHzF2skMMSNlpv4fUxIqV6iKXwMcIYcfcx2AlM2xAPwNrd
+        mgEpsMJWzywjiaW4ctIjaix2OBWLZjk/FhmoAa0=
+X-Google-Smtp-Source: ACHHUZ6Rd2Y9gQSkogQeX1TMGEvvCehKiRYGqJWHFIXaSSSeR/C2ip04Q7NDkBb9deO2xNhWgjkm0A==
+X-Received: by 2002:a17:902:f68a:b0:1b4:5699:aac8 with SMTP id l10-20020a170902f68a00b001b45699aac8mr7610606plg.21.1686870456517;
+        Thu, 15 Jun 2023 16:07:36 -0700 (PDT)
+Received: from dread.disaster.area (pa49-180-13-202.pa.nsw.optusnet.com.au. [49.180.13.202])
+        by smtp.gmail.com with ESMTPSA id u16-20020a63f650000000b00502f4c62fd3sm13360868pgj.33.2023.06.15.16.07.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 16:07:36 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.96)
+        (envelope-from <david@fromorbit.com>)
+        id 1q9w3w-00CFXl-2H;
+        Fri, 16 Jun 2023 09:07:32 +1000
+Date:   Fri, 16 Jun 2023 09:07:32 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Lu Hongfei <luhongfei@vivo.com>
+Cc:     Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        "open list:EXT4 FILE SYSTEM" <linux-ext4@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        opensource.kernel@vivo.com, Yangtao Li <frank.li@vivo.com>
+Subject: Re: [PATCH] ext4: enable nowait async buffered writes
+Message-ID: <ZIuZtP7uxRKAOMmB@dread.disaster.area>
+References: <20230614083105.20663-1-luhongfei@vivo.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="UYzgGdFRAKyKvt7y"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230615213154.1753313-1-robh@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230614083105.20663-1-luhongfei@vivo.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 14, 2023 at 04:31:04PM +0800, Lu Hongfei wrote:
+> This adds the async buffered write support to ext4,
+> the following is the relevant test data.
+> 
+>     iodepth      | 1    | 2    | 4    | 8    | 16   | 32   |
+>     before(M/s)  | 842  | 1047 | 1098 | 1167 | 1172 | 1247 |
+>     after(M/s)   | 1293 | 1674 | 1794 | 1862 | 1897 | 1833 |
+> 
+> The following is the fio configuration:
+> 
+> [global]
+> ioengine=io_uring
+> sqthread_poll=1
+> threads=1
+> iodepth=16
+> hipri=0
+> direct=0
+> fixedbufs=0
+> uncached=0
+> nowait=0
+> force_async=0
+> randrepeat=0
+> time_based=0
+> size=256M
+> filename=/data/test/local/io_uring_test
+> group_reporting
+> [read256B-rand]
+> bs=4096
+> rw=randwrite
+> numjobs=1
+> 
+> Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+>  fs/ext4/file.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/fs/ext4/file.c b/fs/ext4/file.c
+> index 6a16d07965f9..5da7c5612324
+> --- a/fs/ext4/file.c
+> +++ b/fs/ext4/file.c
+> @@ -288,9 +288,6 @@ static ssize_t ext4_buffered_write_iter(struct kiocb *iocb,
+>  	ssize_t ret;
+>  	struct inode *inode = file_inode(iocb->ki_filp);
+>  
+> -	if (iocb->ki_flags & IOCB_NOWAIT)
+> -		return -EOPNOTSUPP;
+> -
+>  	inode_lock(inode);
 
---UYzgGdFRAKyKvt7y
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Ah, no, that's not how we enable IOCB_NOWAIT functionality. Just
+because removing the check makes it go a little bit faster, it
+doesn't mean that it is actually doing the right thing.
 
-On Thu, Jun 15, 2023 at 03:31:54PM -0600, Rob Herring wrote:
+i.e. before remove IOCB_NOWAIT checks like this, we actually have to
+make the functionality operate in a non-blocking manner when
+IOCB_NOWAIT is set.  Clearly, this patch does not do that, because
+the very first thing that occurs after the removed NOWAIT check is a
+blocking inode_lock() call....
 
-> -title: Restart and shutdown handler generic binding
-> +title: Restart and shutdown handler Common Properties
+Please go and look at the series that added NOWAIT buffered write
+support to XFS for io_uring an example of sorts of changes that need
+to be made to ext4 to support IOCB_NOWAIT buffered writes.
 
-With the new caps for Common Properties, the title here looks a bit odd.
-Should probably be s/shutdown handler/Shutdown Handler/ for title case,
-but w/e...
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+https://lore.kernel.org/linux-xfs/20220608171741.3875418-1-shr@fb.com/
 
 Cheers,
-Conor.
 
-
---UYzgGdFRAKyKvt7y
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIuZmQAKCRB4tDGHoIJi
-0vaOAQCvuB+Vy9A841viHe6D4DHohHomPDJhhehcVREBQDS3/wD/W6WhHVSt6J46
-5pM/kAhmxxmkyTHVvMdH2/sXzNDawgM=
-=Uxoq
------END PGP SIGNATURE-----
-
---UYzgGdFRAKyKvt7y--
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
