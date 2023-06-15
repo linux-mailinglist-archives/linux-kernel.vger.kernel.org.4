@@ -2,144 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 342E9731832
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A231731838
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244277AbjFOMKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 08:10:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54812 "EHLO
+        id S1343629AbjFOML1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 08:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238157AbjFOMKi (ORCPT
+        with ESMTP id S245596AbjFOMLX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 08:10:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09E8194
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 05:10:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4817360A05
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 12:10:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97596C433C8;
-        Thu, 15 Jun 2023 12:10:33 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>
-Cc:     Kees Cook <keescook@chromium.org>, chenhuacai@kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH] kthread: Rename user_mode_thread() to kmuser_thread()
-Date:   Thu, 15 Jun 2023 20:10:16 +0800
-Message-Id: <20230615121016.3731983-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.39.3
+        Thu, 15 Jun 2023 08:11:23 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5DB1BF8;
+        Thu, 15 Jun 2023 05:11:19 -0700 (PDT)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35FB6xEs000307;
+        Thu, 15 Jun 2023 05:11:12 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=pfpt0220; bh=RAqgRABPjTaZDbe/Mpr3pl768C+5SC+cpob8o2B1+8s=;
+ b=fPHhxI/9cTp66LPndBro7EVw/ATx3zdPAavLq7JIOO0tsKhjjO4klmPTLB6Lkxp5X5nC
+ RNIC9G8cgsNgOzVnjdjyi29DB93N5pPN1zzGBQ2AS1ILU+ETPEjkiDziznFfU4cwtUxR
+ THjn6b2afg295BeEXXa5NGOYID7Dz1nDiNkGu0Iv1jrxcRX6P/azukSN8EkBFuHyJA4c
+ OcGr1OrF/29s7uNmhqi+dYK1TTEEbYdFZTIZXCGJiJbO4dVdRc2zok+IoDQnFGj3j8N6
+ UA6r0f5Up8G7gEDNV6B0lSiiOWjW0fq9T/jeBEBQKokWwkKRTQ4xyEPvciQTTNXc5TVh XQ== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3r81g38763-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 05:11:12 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 15 Jun
+ 2023 05:11:11 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Thu, 15 Jun 2023 05:11:10 -0700
+Received: from setup-1.sclab.marvell.com (unknown [10.106.25.74])
+        by maili.marvell.com (Postfix) with ESMTP id D36253F704E;
+        Thu, 15 Jun 2023 05:11:10 -0700 (PDT)
+From:   Sathesh Edara <sedara@marvell.com>
+To:     <linux-kernel@vger.kernel.org>, <sburla@marvell.com>,
+        <vburru@marvell.com>, <davem@davemloft.net>, <edumazet@google.com>,
+        <kuba@kernel.org>, <pabeni@redhat.com>, <netdev@vger.kernel.org>
+CC:     <sedara@marvell.com>
+Subject: [PATCH] MAINTAINERS: update email addresses of octeon_ep driver maintainers
+Date:   Thu, 15 Jun 2023 05:10:57 -0700
+Message-ID: <20230615121057.135003-1-sedara@marvell.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-GUID: oxoUGwiH_ePX2BCl76msFhketskGSOAB
+X-Proofpoint-ORIG-GUID: oxoUGwiH_ePX2BCl76msFhketskGSOAB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-15_08,2023-06-14_02,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 343f4c49f2438d8 ("kthread: Don't allocate kthread_struct for init
-and umh") introduces a new function user_mode_thread() for init and umh.
+Update email addresses of Marvell octeon_ep driver maintainers.
+Also remove a former maintainer.
 
-init and umh are different from typical kernel threads since the don't
-need a "kthread" struct and they will finally become user processes by
-calling kernel_execve(), but on the other hand, they are also different
-from typical user mode threads (they have no "mm" structs at creation
-time, which is traditionally used to distinguish a user thread and a
-kernel thread).
-
-In a former patch I treat init and umh as "special kernel threads" and
-unify kernel_thread() and user_mode_thread() to kernel_thread() again.
-However, the patch has been nacked because init and umh are essentially
-"special user threads".
-
-Nevertheless, I still agree with Andrews' comment "But the naming isn't
-very good anyway. They should have been usermode_thread/kernel_thread or
-user_thread/kernel_thread.".
-
-Since Eric describes init and umh as "user threads run in kernel mode",
-in this patch I rename user_mode_thread() as kmuser_thread(), which is
-a little better than just user_thread().
-
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+Signed-off-by: Sathesh Edara <sedara@marvell.com>
 ---
- include/linux/sched/task.h | 2 +-
- init/main.c                | 2 +-
- kernel/fork.c              | 4 ++--
- kernel/umh.c               | 4 ++--
- 4 files changed, 6 insertions(+), 6 deletions(-)
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
-index e0f5ac90a228..c774d604b0a3 100644
---- a/include/linux/sched/task.h
-+++ b/include/linux/sched/task.h
-@@ -98,7 +98,7 @@ struct task_struct *create_io_thread(int (*fn)(void *), void *arg, int node);
- struct task_struct *fork_idle(int);
- extern pid_t kernel_thread(int (*fn)(void *), void *arg, const char *name,
- 			    unsigned long flags);
--extern pid_t user_mode_thread(int (*fn)(void *), void *arg, unsigned long flags);
-+extern pid_t kmuser_thread(int (*fn)(void *), void *arg, unsigned long flags);
- extern long kernel_wait4(pid_t, int __user *, int, struct rusage *);
- int kernel_wait(pid_t pid, int *stat);
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 081eb65ef865..23d91becf43a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12538,7 +12538,7 @@ F:	drivers/mtd/nand/raw/marvell_nand.c
  
-diff --git a/init/main.c b/init/main.c
-index af50044deed5..362ba90d6f73 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -697,7 +697,7 @@ noinline void __ref __noreturn rest_init(void)
- 	 * the init task will end up wanting to create kthreads, which, if
- 	 * we schedule it before we create kthreadd, will OOPS.
- 	 */
--	pid = user_mode_thread(kernel_init, NULL, CLONE_FS);
-+	pid = kmuser_thread(kernel_init, NULL, CLONE_FS);
- 	/*
- 	 * Pin init on the boot CPU. Task migration is not properly working
- 	 * until sched_init_smp() has been run. It will set the allowed
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 41c964104b58..57d5c8c1766e 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -2978,9 +2978,9 @@ pid_t kernel_thread(int (*fn)(void *), void *arg, const char *name,
- }
- 
- /*
-- * Create a user mode thread.
-+ * Create a kernel mode user thread.
-  */
--pid_t user_mode_thread(int (*fn)(void *), void *arg, unsigned long flags)
-+pid_t kmuser_thread(int (*fn)(void *), void *arg, unsigned long flags)
- {
- 	struct kernel_clone_args args = {
- 		.flags		= ((lower_32_bits(flags) | CLONE_VM |
-diff --git a/kernel/umh.c b/kernel/umh.c
-index 60aa9e764a38..28c0cf0da7be 100644
---- a/kernel/umh.c
-+++ b/kernel/umh.c
-@@ -130,7 +130,7 @@ static void call_usermodehelper_exec_sync(struct subprocess_info *sub_info)
- 
- 	/* If SIGCLD is ignored do_wait won't populate the status. */
- 	kernel_sigaction(SIGCHLD, SIG_DFL);
--	pid = user_mode_thread(call_usermodehelper_exec_async, sub_info, SIGCHLD);
-+	pid = kmuser_thread(call_usermodehelper_exec_async, sub_info, SIGCHLD);
- 	if (pid < 0)
- 		sub_info->retval = pid;
- 	else
-@@ -169,7 +169,7 @@ static void call_usermodehelper_exec_work(struct work_struct *work)
- 		 * want to pollute current->children, and we need a parent
- 		 * that always ignores SIGCHLD to ensure auto-reaping.
- 		 */
--		pid = user_mode_thread(call_usermodehelper_exec_async, sub_info,
-+		pid = kmuser_thread(call_usermodehelper_exec_async, sub_info,
- 				       CLONE_PARENT | SIGCHLD);
- 		if (pid < 0) {
- 			sub_info->retval = pid;
+ MARVELL OCTEON ENDPOINT DRIVER
+ M:	Veerasenareddy Burru <vburru@marvell.com>
+-M:	Abhijit Ayarekar <aayarekar@marvell.com>
++M:	Sathesh Edara <sedara@marvell.com>
+ L:	netdev@vger.kernel.org
+ S:	Supported
+ F:	drivers/net/ethernet/marvell/octeon_ep
 -- 
-2.39.3
+2.37.3
 
