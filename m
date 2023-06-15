@@ -2,65 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 955C4731DE6
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01424731DE9
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233813AbjFOQdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 12:33:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38466 "EHLO
+        id S233016AbjFOQe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 12:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233016AbjFOQdP (ORCPT
+        with ESMTP id S233936AbjFOQeq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 12:33:15 -0400
-Received: from mailrelay3-1.pub.mailoutpod2-cph3.one.com (mailrelay3-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:402::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 242E7211D
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 09:33:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=kRWfxKU6iLOyQwwGx2ME57rRsTmS+Y/mv8gYh4DhOyg=;
-        b=okJlCJ3JHQ3+H0XLiMBf0glJchvuuMsEcUCgzmvJnyKMoDMx5KHnSTtuAyw0+6C02Fj+PIczYsQAb
-         1sJXFppRbmiGQviCKIb6gD9tGzLEdywy9YByMgoeRCa84fyqZkmGszeCCOuLk+544Y+QNzLZKDM87E
-         R+MDZJ4STSxW54XyqvVk2jeDkTM+7hDVzHkzZIH7HZecVf7PLr7GF7PWoIRiAkQPtxs1vJ7iZjPeUI
-         8aMMfkVKa1VnG0CWOwYTNA76VeemsnDscjlKWyMSZ0Wyx32wByG6pAy08mMt1KyZN9XMciIJhmstwO
-         20X+A/bkr4Y7SdFgKgk+vxuxgnP+UnQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=kRWfxKU6iLOyQwwGx2ME57rRsTmS+Y/mv8gYh4DhOyg=;
-        b=XINu3AbpGKXRusYWTJ6IxnhI3JYWGjV1+42EsWbHmdUP4+C57+XyPjz9QZOcgglPnTa8mYWRY3EwX
-         WRTXCTvAw==
-X-HalOne-ID: 4f77e8bb-0b9a-11ee-8d88-b90637070a9d
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay3 (Halon) with ESMTPSA
-        id 4f77e8bb-0b9a-11ee-8d88-b90637070a9d;
-        Thu, 15 Jun 2023 16:33:10 +0000 (UTC)
-Date:   Thu, 15 Jun 2023 18:33:08 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Sandor Yu <Sandor.yu@nxp.com>
-Cc:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
-        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
-        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@gmail.com,
-        daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, vkoul@kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, oliver.brown@nxp.com,
-        linux-imx@nxp.com, kernel@pengutronix.de
-Subject: Re: [PATCH v6 3/8] drm: bridge: Cadence: Add MHDP8501 DP driver
-Message-ID: <20230615163308.GA1588386@ravnborg.org>
-References: <cover.1686729444.git.Sandor.yu@nxp.com>
- <67f54be91e91f6291c4ad3f5155598d699b8bc09.1686729444.git.Sandor.yu@nxp.com>
+        Thu, 15 Jun 2023 12:34:46 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D2A171C;
+        Thu, 15 Jun 2023 09:34:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=d9r3JB7tEgccA9qtOtOzXsHyll/xLx6MaKfk6VCI57g=; b=L4eXqxXs2JfQVvn2sh7BCzfwgR
+        egPwVF6LvzR/evxffYcnndfXRlfz2iXwNYdSqCPkAO0NEC5xaJ23lr3IQDc5dPD1+cMpucKSRHZQw
+        yoyW805HEpmxeLaLIqTtEv1/FcNgXDMDRnbQ4+fmIS20Kn2lvqq5aBvmfPHsx/PI3X1XrdLKxF0fc
+        aL3tI6aqbgXOgTUzdYph8bDDvgMpIO1CxU99ESSzOibK9jIwcjoTd+eG+oj3wt72E1GaCc71gPaMG
+        xcXAchM+K9RkqE/s2TB9kdF7IwnvNolChK25lJ5GfMBBb+3LkkDxpIw/kTkuVlKQZSG17/iXlSy7+
+        LXsrOHyg==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q9pvj-00FRqd-2S;
+        Thu, 15 Jun 2023 16:34:39 +0000
+Message-ID: <75a27ada-7e88-2f93-48ee-3dc89b7f1a9a@infradead.org>
+Date:   Thu, 15 Jun 2023 09:34:38 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <67f54be91e91f6291c4ad3f5155598d699b8bc09.1686729444.git.Sandor.yu@nxp.com>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: linux-next: Tree for Jun 2 (arch/powerpc/kernel/iommu.c)
+Content-Language: en-US
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     Timothy Pearson <tpearson@raptorengineering.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>
+References: <20230602140143.0af52cee@canb.auug.org.au>
+ <2d188c87-ef34-3812-7330-a985f756d959@infradead.org>
+ <87h6rogjok.fsf@mail.lhotse>
+ <586983120.3136676.1685851048873.JavaMail.zimbra@raptorengineeringinc.com>
+ <e2b46606-7ebc-c9a4-4f9a-873c0e71da5e@infradead.org>
+ <373175504.6295209.1686845130893.JavaMail.zimbra@raptorengineeringinc.com>
+ <208f3734-4902-ff5c-3410-5b9cd984dad7@infradead.org>
+In-Reply-To: <208f3734-4902-ff5c-3410-5b9cd984dad7@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,59 +64,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sandor,
 
-On Thu, Jun 15, 2023 at 09:38:13AM +0800, Sandor Yu wrote:
-> Add a new DRM DisplayPort bridge driver for Candence MHDP8501
-> used in i.MX8MQ SOC. MHDP8501 could support HDMI or DisplayPort
-> standards according embedded Firmware running in the uCPU.
+
+On 6/15/23 09:13, Randy Dunlap wrote:
 > 
-> For iMX8MQ SOC, the DisplayPort FW was loaded and activated by SOC
-> ROM code. Bootload binary included HDMI FW was required for the driver.
+> 
+> On 6/15/23 09:05, Timothy Pearson wrote:
+>>
+>>
+>> ----- Original Message -----
+>>> From: "Randy Dunlap" <rdunlap@infradead.org>
+>>> To: "Timothy Pearson" <tpearson@raptorengineering.com>, "Michael Ellerman" <mpe@ellerman.id.au>
+>>> Cc: "Stephen Rothwell" <sfr@canb.auug.org.au>, "Linux Next Mailing List" <linux-next@vger.kernel.org>, "linux-kernel"
+>>> <linux-kernel@vger.kernel.org>, "linuxppc-dev" <linuxppc-dev@lists.ozlabs.org>, "Alexey Kardashevskiy" <aik@ozlabs.ru>
+>>> Sent: Thursday, June 15, 2023 11:00:08 AM
+>>> Subject: Re: linux-next: Tree for Jun 2 (arch/powerpc/kernel/iommu.c)
+>>
+>>> Hi Timothy,
+>>>
+>>> On 6/3/23 20:57, Timothy Pearson wrote:
+>>>>
+>>>>
+>>>> ----- Original Message -----
+>>>>> From: "Michael Ellerman" <mpe@ellerman.id.au>
+>>>>> To: "Randy Dunlap" <rdunlap@infradead.org>, "Stephen Rothwell"
+>>>>> <sfr@canb.auug.org.au>, "Linux Next Mailing List"
+>>>>> <linux-next@vger.kernel.org>
+>>>>> Cc: "linux-kernel" <linux-kernel@vger.kernel.org>, "linuxppc-dev"
+>>>>> <linuxppc-dev@lists.ozlabs.org>, "Alexey
+>>>>> Kardashevskiy" <aik@ozlabs.ru>, "Timothy Pearson"
+>>>>> <tpearson@raptorengineering.com>
+>>>>> Sent: Saturday, June 3, 2023 7:22:51 PM
+>>>>> Subject: Re: linux-next: Tree for Jun 2 (arch/powerpc/kernel/iommu.c)
+>>>>
+>>>>> Randy Dunlap <rdunlap@infradead.org> writes:
+>>>>>> On 6/1/23 21:01, Stephen Rothwell wrote:
+>>>>>>> Hi all,
+>>>>>>>
+>>>>>>> Changes since 20230601:
+>>>>>>>
+>>>>>>
+>>>>>> On powerpc64, a randconfig failed with:
+>>>>>>
+>>>>>> In file included from ../include/linux/list.h:5,
+>>>>>>                  from ../include/linux/preempt.h:11,
+>>>>>>                  from ../include/linux/spinlock.h:56,
+>>>>>>                  from ../include/linux/mmzone.h:8,
+>>>>>>                  from ../include/linux/gfp.h:7,
+>>>>>>                  from ../include/linux/slab.h:15,
+>>>>>>                  from ../arch/powerpc/kernel/iommu.c:15:
+>>>>>> ../arch/powerpc/kernel/iommu.c: In function
+>>>>>> 'spapr_tce_setup_phb_iommus_initcall':
+>>>>>> ../arch/powerpc/kernel/iommu.c:1391:36: error: 'hose_list' undeclared (first use
+>>>>>> in this function); did you mean 'zonelist'?
+>>>>>>  1391 |         list_for_each_entry(hose, &hose_list, list_node) {
+>>>>>>       |                                    ^~~~~~~~~
+>>>>> ...
+>>>>>
+>>>>> hose_list is in pci-common.c which is built when PCI=y.
+>>>>>
+>>>>> PSERIES and POWERNV force PCI=y.
+>>>>>
+>>>>> But this config has neither:
+>>>>>
+>>>>> # CONFIG_PPC_POWERNV is not set
+>>>>> # CONFIG_PPC_PSERIES is not set
+>>>>> CONFIG_HAVE_PCI=y
+>>>>> # CONFIG_PCI is not set
+>>>>> # CONFIG_COMMON_CLK_RS9_PCIE is not set
+>>>>>
+>>>>>
+>>>>> Probably the spapr_tce code should be wrapped in an #ifdef that is only
+>>>>> enabled when POWERNV || PSERIES is enabled.
+>>>>>
+>>>>> cheers
+>>>>
+>>>> Sounds reasonable, I was going to look into this further over the weekend.  I
+>>>> can put together a patch for Monday if that works?
+>>>
+>>> Did you prepare a patch for this? I am still seeing this build error.
+>>>
+>>> thanks.
+>>> --
+>>> ~Randy
+>>
+>> Yes, it was sent in to the linuxppc-dev list some weeks ago.  Did it not arrive?
+> 
+> I don't know - I'm not subscribed to that list.
+> 
+> It's probably still in the patchworks review cycle
+> so it hasn't been applied anywhere that gets into linux-next.
 
-The bridge driver supports creating a connector, but is this really
-necessary?
+OK, it's here, mark with Success:
+http://patchwork.ozlabs.org/project/linuxppc-dev/patch/2015925968.3546872.1685990936823.JavaMail.zimbra@raptorengineeringinc.com/
 
-This part:
-> +static const struct drm_connector_funcs cdns_dp_connector_funcs = {
-> +	.fill_modes = drm_helper_probe_single_connector_modes,
-> +	.destroy = drm_connector_cleanup,
-> +	.reset = drm_atomic_helper_connector_reset,
-> +	.atomic_duplicate_state = drm_atomic_helper_connector_duplicate_state,
-> +	.atomic_destroy_state = drm_atomic_helper_connector_destroy_state,
-> +};
-> +
-> +static const struct drm_connector_helper_funcs cdns_dp_connector_helper_funcs = {
-> +	.get_modes = cdns_dp_connector_get_modes,
-> +};
-> +
-> +static int cdns_dp_bridge_attach(struct drm_bridge *bridge,
-> +				 enum drm_bridge_attach_flags flags)
-> +{
-> +	struct cdns_mhdp_device *mhdp = bridge->driver_private;
-> +	struct drm_encoder *encoder = bridge->encoder;
-> +	struct drm_connector *connector = &mhdp->connector;
-> +	int ret;
-> +
-> +	if (!(flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR)) {
-> +		connector->interlace_allowed = 0;
-> +
-> +		connector->polled = DRM_CONNECTOR_POLL_HPD;
-> +
-> +		drm_connector_helper_add(connector, &cdns_dp_connector_helper_funcs);
-> +
-> +		drm_connector_init(bridge->dev, connector, &cdns_dp_connector_funcs,
-> +				   DRM_MODE_CONNECTOR_DisplayPort);
-> +
-> +		drm_connector_attach_encoder(connector, encoder);
-> +	}
+I don't know what happens to it next or when.
 
-Unless you have a display driver that do not create their own connector
-then drop the above and error out if DRM_BRIDGE_ATTACH_NO_CONNECTOR is
-not set.
-It is encouraged that display drivers create their own connector.
+thanks.
 
-This was the only detail I looked for in the driver, I hope some else
-volunteer to review it.
-
-	Sam
+-- 
+~Randy
