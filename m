@@ -2,177 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A547315C0
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 12:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C597E7315C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 12:50:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239137AbjFOKuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 06:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54702 "EHLO
+        id S1343596AbjFOKu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 06:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241086AbjFOKuG (ORCPT
+        with ESMTP id S240308AbjFOKuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 06:50:06 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918BB1FDD;
-        Thu, 15 Jun 2023 03:50:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686826205; x=1718362205;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FcyhqzTeBGjztjLAE0WN1NbITmzLPl03bzOZHHHLy7k=;
-  b=UsGQIXF2VuJNR0yBd6qHBkLpbhE7rppWosq6poJhbFPIAX6fIYASfzYw
-   38wZVJAn/4MHKTtVByfI7PWI+oECvmweSUkz0bQ/toVK6ho1W+grBEzBc
-   hehXEwCW1Qqv9qeZPI/56YA6DoPlmIkNhgy8wLRXoHjAWKz9651So0wVV
-   Rrb6sOLLC8IQm+im8vZLn/br4dDSGf6ZcCvZIiQTwsOIYnRLZiJ+choQQ
-   fT/7eXHpw9a5BsZUaplMEnGhgfmsJdZEwQzWMPoiF4Gx5ERVreTLGyCEN
-   A2d+rO5MUmTeeyhkDGRdockNwvSf/yqGXNfWVRRjabdtQPHURvkgvuK5z
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="339222895"
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="339222895"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 03:50:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="802292007"
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="802292007"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP; 15 Jun 2023 03:50:03 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1q9kYD-003vAx-2v;
-        Thu, 15 Jun 2023 13:50:01 +0300
-Date:   Thu, 15 Jun 2023 13:50:01 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>
-Cc:     "Jadav, Raag" <raag.jadav@intel.com>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Sangannavar, Mallikarjunappa" 
-        <mallikarjunappa.sangannavar@intel.com>,
-        "N, Pandith" <pandith.n@intel.com>
-Subject: Re: [PATCH v3 2/3] pinctrl: intel: refine ->irq_set_type() hook
-Message-ID: <ZIrs2YSEUbPyvZWE@smile.fi.intel.com>
-References: <20230613085054.10976-1-raag.jadav@intel.com>
- <20230613085054.10976-3-raag.jadav@intel.com>
- <ZInpT0dUUVUcKdqv@smile.fi.intel.com>
- <DM6PR11MB2779F9C28712D7C25F9FB3768C5BA@DM6PR11MB2779.namprd11.prod.outlook.com>
- <20230615095517.GV45886@black.fi.intel.com>
+        Thu, 15 Jun 2023 06:50:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D96273F
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 03:50:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0352C6377D
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 10:50:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 603E5C433CA;
+        Thu, 15 Jun 2023 10:50:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686826220;
+        bh=mmKn3ew/3ihNeUTsrH7kpRJDU9VC/tq1DF43WBYgUjc=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=XQb1yjyu7equ0BYhCU1QJjHdCwPx/7WS07cuh6Ee/ukzrWWJa1lOqiPrjFZ7bhIfN
+         rqCUw7iOdeMlQ9Sd/UBrbOA+krlqf3GAn3GdEoyfc6UKwyzmCTNn7jghlDT3pBTU6l
+         cWK/1mKjrVPpo/YRcAWseb2TvcyzHFORxlrToAV62W/je68U9PrS8+dftkAC64UZXW
+         AWNzPahr7Pl+Rn2y1yaqaWLwv3imYKQklYwYL/6YjiIGiQ+78GTit/u4OfD34Idahr
+         VZdGhjkog7/pya9NtGQ9RyKKftj1EPmI3MhfvHrdXxgAUurN34QcFeTsJoLkIES5Bs
+         XDiN23PvR+y4g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3709AE270FB;
+        Thu, 15 Jun 2023 10:50:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230615095517.GV45886@black.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: macsec: fix double free of percpu stats
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168682622021.15431.8579667893782171995.git-patchwork-notify@kernel.org>
+Date:   Thu, 15 Jun 2023 10:50:20 +0000
+References: <20230613192220.159407-1-pchelkin@ispras.ru>
+In-Reply-To: <20230613192220.159407-1-pchelkin@ispras.ru>
+To:     Fedor Pchelkin <pchelkin@ispras.ru>
+Cc:     davem@davemloft.net, sd@queasysnail.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, raeds@nvidia.com,
+        liorna@nvidia.com, saeedm@nvidia.com, hannes@stressinduktion.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khoroshilov@ispras.ru, lvc-project@linuxtesting.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 12:55:17PM +0300, mika.westerberg@linux.intel.com wrote:
-> On Thu, Jun 15, 2023 at 09:48:12AM +0000, Jadav, Raag wrote:
-> > > On Tue, Jun 13, 2023 at 02:20:53PM +0530, Raag Jadav wrote:
+Hello:
 
-...
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-> > > Looking at this I realized that entire temporary variable assignments can be
-> > > done outside of spin lock. You probably would need another one for keeping
-> > > rxinv value.
-> > 
-> > Something like this?
-
-Almost, see below.
-
-> >         u32 value, rxevcfg;
-> >         u32 rxinv = 0;
-
-No assignment here.
-
-         u32 rxinv, rxevcfg;
-         u32 value;
-
-> >         if ((type & IRQ_TYPE_EDGE_BOTH) == IRQ_TYPE_EDGE_BOTH) {
-> >                 rxevcfg = PADCFG0_RXEVCFG_EDGE_BOTH;
-> >         } else if (type & IRQ_TYPE_EDGE_FALLING) {
-> >                 rxevcfg = PADCFG0_RXEVCFG_EDGE;
-> >         } else if (type & IRQ_TYPE_EDGE_RISING) {
-> >                 rxevcfg = PADCFG0_RXEVCFG_EDGE;
-> >         } else if (type & IRQ_TYPE_LEVEL_MASK) {
-> >                 rxevcfg = PADCFG0_RXEVCFG_LEVEL;
-> >         } else {
-> >                 rxevcfg = PADCFG0_RXEVCFG_DISABLED;
-> >         }
-
-Now, if it's fully included in the diff (even with --patience parameter),
-then you may drop {}.
-
-> >         if (type == IRQ_TYPE_EDGE_FALLING || type == IRQ_TYPE_LEVEL_LOW)
-> >                 rxinv = PADCFG0_RXINV;
-
-		else
-			rxinv = 0;
-
-> >         raw_spin_lock_irqsave(&pctrl->lock, flags);
-> > 
-> >         intel_gpio_set_gpio_mode(reg);
-> > 
-> >         value = readl(reg);
-> > 
-> >         value &= ~(PADCFG0_RXEVCFG_MASK | PADCFG0_RXINV);
-> >         value |= rxinv;
-> >         value |= rxevcfg << PADCFG0_RXEVCFG_SHIFT;
-
-And I would rewrite these to the standard patterns:
-
-         value = (value & ~PADCFG0_RXINV) | rxinv;
-         value = (value & ~PADCFG0_RXEVCFG_MASK) | (rxevcfg << PADCFG0_RXEVCFG_SHIFT);
-
-And looking at this, perhaps do shift also outside the lock:
-
-         } else {
-                 rxevcfg = PADCFG0_RXEVCFG_DISABLED;
-         }
-         rxevcfg <<= PADCFG0_RXEVCFG_SHIFT;
-
-But, taking into account scope of the _RXEVCFG_*, I would add shift directly to
-the definitions and kill that SHIFT entirely:
-
-#define PADCFG0_RXEVCFG_LEVEL           (0 << 25)
-#define PADCFG0_RXEVCFG_EDGE            (1 << 25)
-#define PADCFG0_RXEVCFG_DISABLED        (2 << 25)
-#define PADCFG0_RXEVCFG_EDGE_BOTH       (3 << 25)
-
-	 ...
-
-         value = (value & ~PADCFG0_RXINV) | rxinv;
-         value = (value & ~PADCFG0_RXEVCFG_MASK) | rxevcfg;
-
-Try that one and look if it looks better. It might even save bytes after all.
-
-> >         writel(value, reg);
+On Tue, 13 Jun 2023 22:22:20 +0300 you wrote:
+> Inside macsec_add_dev() we free percpu macsec->secy.tx_sc.stats and
+> macsec->stats on some of the memory allocation failure paths. However, the
+> net_device is already registered to that moment: in macsec_newlink(), just
+> before calling macsec_add_dev(). This means that during unregister process
+> its priv_destructor - macsec_free_netdev() - will be called and will free
+> the stats again.
 > 
-> This one looks better.
-> 
-> > > Will it give us any memory reduction in comparison to the current code?
-> > 
-> > add/remove: 0/0 grow/shrink: 1/0 up/down: 4/0 (4)
-> > Function                                     old     new   delta
-> > intel_gpio_irq_type                          317     321      +4
-> > Total: Before=10469, After=10473, chg +0.04%
-> > 
-> > Unfortunately gcc doesn't seem to consider this as best of the sequence,
-> > and I'm not entirely sure why.
-> 
-> It's fine as is, readability counts more than few bytes here.
+> [...]
 
+Here is the summary with links:
+  - net: macsec: fix double free of percpu stats
+    https://git.kernel.org/netdev/net/c/0c0cf3db83f8
+
+You are awesome, thank you!
 -- 
-With Best Regards,
-Andy Shevchenko
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
