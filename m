@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3341E7313F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D207313F4
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245291AbjFOJcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 05:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34408 "EHLO
+        id S245361AbjFOJcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 05:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240097AbjFOJci (ORCPT
+        with ESMTP id S244746AbjFOJci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 15 Jun 2023 05:32:38 -0400
 Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E732683;
-        Thu, 15 Jun 2023 02:32:36 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35F8YpBa021622;
-        Thu, 15 Jun 2023 11:32:23 +0200
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D5326B0;
+        Thu, 15 Jun 2023 02:32:37 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35F8I2F3009956;
+        Thu, 15 Jun 2023 11:32:24 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=selector1;
- bh=3uBLJmxq5VVWC2o5xkCW/MuK8POUJa1lY65SLOrbAlI=;
- b=cVtd5PJjhGLfmF4RwGm+bP1LzN007yc/3l6k9Ad4UD0tlSxgBDnOniSQTPbM9gKQ0mH4
- 05m34vL7As4a8I0I4ivY5z3Irgru2n7k9pwnxzztngJD6UgLRHAhPdPDsgYWuCQEc8y4
- ZlCnhZcv5PB5UO3roTqkSyh1TLgbJpsJuSsw0oomyBwU6chgQBGYcpWbLrACPnzgOrr+
- ncMjNT9SXEkhdi7Gt5g3wP0HaRcq7+/ZPNZewLvSgeqTmXPluL1KPNGzI47g/7FRACgF
- QrkKiuwPulr5/0D7x1hVLOk+xhqK56f+Y3xPx/lkpsOOGoXlXHlIpLZDmIjJANToBoLh cA== 
+ bh=Xy/hUYzK/4Hs4UPMJUFskvFcKLM1GyUKIZn77IV+Fes=;
+ b=ykj2xVGd4l8SPjOC+WaEsyn1vfQMeJB19nja7j0WMoq7jGqLyuTksVeSG1ypwhQ7oWbj
+ qdqRfPA/+c69YhcQSIiZss7N5gdsd2LRwaPwCf3S0NsBabQCZB1DW652Ne/wrKke5vPc
+ 0ypd32toBFM/zNCbKNuW+BCS3Rg9WG2DirmEDhKoXq/4hQ2r7/fH//5/YJaDJBDB0nbs
+ Qm7CNUebjRIch7m1yqK6MQVEV6CvmHJrAZtnPzQZLE6sVqkKnd+n11y8fsuJGXR9lZ5G
+ Dqd0JRs+nBQD3fWx4ydRRCxFE1yPK0Uex8nlR/bSzh2cVQGkIeOv+bIKFvVhwZgJVmV8 eA== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3r7y8sge46-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3r7s1maxs3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jun 2023 11:32:23 +0200
+        Thu, 15 Jun 2023 11:32:24 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E441810002A;
-        Thu, 15 Jun 2023 11:32:22 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 004F810002A;
+        Thu, 15 Jun 2023 11:32:23 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id DCD6421A91B;
-        Thu, 15 Jun 2023 11:32:22 +0200 (CEST)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id EBF8721A91B;
+        Thu, 15 Jun 2023 11:32:23 +0200 (CEST)
 Received: from localhost (10.252.8.64) by SHFDAG1NODE1.st.com (10.75.129.69)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 15 Jun
- 2023 11:32:22 +0200
+ 2023 11:32:23 +0200
 From:   Valentin Caron <valentin.caron@foss.st.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
@@ -53,9 +53,9 @@ CC:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
         Valentin Caron <valentin.caron@foss.st.com>
-Subject: [PATCH 2/7] rtc: stm32: don't stop time counter if not needed
-Date:   Thu, 15 Jun 2023 11:27:48 +0200
-Message-ID: <20230615092753.323844-3-valentin.caron@foss.st.com>
+Subject: [PATCH 3/7] rtc: stm32: improve rtc precision
+Date:   Thu, 15 Jun 2023 11:27:49 +0200
+Message-ID: <20230615092753.323844-4-valentin.caron@foss.st.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230615092753.323844-1-valentin.caron@foss.st.com>
 References: <20230615092753.323844-1-valentin.caron@foss.st.com>
@@ -77,79 +77,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Antonio Borneo <antonio.borneo@foss.st.com>
+From: Christophe Guibout <christophe.guibout@foss.st.com>
 
-RTC counters are stopped when INIT bit in ISR register is set and
-start counting from the (eventual) new value when INIT is reset.
+The rtc is used to update the stgen counter on wake up from
+low power modes, so it needs to be as much accurate as possible.
 
-In stm32_rtc_init(), called during probe, the INIT bit is set to
-program the prescaler and the 24h mode. This halts the RTC counter
-at each probe tentative causing the RTC time to loose from 0.3s to
-0.8s at each kernel boot.
-If the RTC is battery powered, both prescaler value and 24h mode
-are kept during power cycle and there is no need to program them
-again.
+The maximization of asynchronous divider leads to a 4ms rtc
+precision clock.
+By decreasing pred_a to 0, it will have pred_s=32767 (when
+need_accuracy is true), so stgen clock becomes more accurate
+with 30us precision.
+Nevertheless this will leads to an increase of power consumption.
 
-Check if the desired prescaler value and the 24h mode are already
-programmed, then skip reprogramming them to avoid halting the time
-counter.
-
-Signed-off-by: Antonio Borneo <antonio.borneo@foss.st.com>
+Signed-off-by: Christophe Guibout <christophe.guibout@foss.st.com>
 Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
 ---
- drivers/rtc/rtc-stm32.c | 23 +++++++++++++++++------
- 1 file changed, 17 insertions(+), 6 deletions(-)
+ drivers/rtc/rtc-stm32.c | 26 ++++++++++++++++++++++----
+ 1 file changed, 22 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/rtc/rtc-stm32.c b/drivers/rtc/rtc-stm32.c
-index abb77ad774a1..bd7a59a07537 100644
+index bd7a59a07537..cad88668bcfb 100644
 --- a/drivers/rtc/rtc-stm32.c
 +++ b/drivers/rtc/rtc-stm32.c
-@@ -628,7 +628,7 @@ static int stm32_rtc_init(struct platform_device *pdev,
- 	const struct stm32_rtc_registers *regs = &rtc->data->regs;
- 	unsigned int prer, pred_a, pred_s, pred_a_max, pred_s_max, cr;
- 	unsigned int rate;
--	int ret = 0;
-+	int ret;
+@@ -114,6 +114,7 @@ struct stm32_rtc_data {
+ 	void (*clear_events)(struct stm32_rtc *rtc, unsigned int flags);
+ 	bool has_pclk;
+ 	bool need_dbp;
++	bool need_accuracy;
+ };
  
- 	rate = clk_get_rate(rtc->rtc_ck);
+ struct stm32_rtc {
+@@ -545,6 +546,7 @@ static void stm32_rtc_clear_events(struct stm32_rtc *rtc,
+ static const struct stm32_rtc_data stm32_rtc_data = {
+ 	.has_pclk = false,
+ 	.need_dbp = true,
++	.need_accuracy = false,
+ 	.regs = {
+ 		.tr = 0x00,
+ 		.dr = 0x04,
+@@ -566,6 +568,7 @@ static const struct stm32_rtc_data stm32_rtc_data = {
+ static const struct stm32_rtc_data stm32h7_rtc_data = {
+ 	.has_pclk = true,
+ 	.need_dbp = true,
++	.need_accuracy = false,
+ 	.regs = {
+ 		.tr = 0x00,
+ 		.dr = 0x04,
+@@ -596,6 +599,7 @@ static void stm32mp1_rtc_clear_events(struct stm32_rtc *rtc,
+ static const struct stm32_rtc_data stm32mp1_data = {
+ 	.has_pclk = true,
+ 	.need_dbp = false,
++	.need_accuracy = true,
+ 	.regs = {
+ 		.tr = 0x00,
+ 		.dr = 0x04,
+@@ -636,11 +640,25 @@ static int stm32_rtc_init(struct platform_device *pdev,
+ 	pred_a_max = STM32_RTC_PRER_PRED_A >> STM32_RTC_PRER_PRED_A_SHIFT;
+ 	pred_s_max = STM32_RTC_PRER_PRED_S >> STM32_RTC_PRER_PRED_S_SHIFT;
  
-@@ -656,6 +656,20 @@ static int stm32_rtc_init(struct platform_device *pdev,
- 			 "fast" : "slow");
+-	for (pred_a = pred_a_max; pred_a + 1 > 0; pred_a--) {
+-		pred_s = (rate / (pred_a + 1)) - 1;
++	if (rate > (pred_a_max + 1) * (pred_s_max + 1)) {
++		dev_err(&pdev->dev, "rtc_ck rate is too high: %dHz\n", rate);
++		return -EINVAL;
++	}
++
++	if (rtc->data->need_accuracy) {
++		for (pred_a = 0; pred_a <= pred_a_max; pred_a++) {
++			pred_s = (rate / (pred_a + 1)) - 1;
+ 
+-		if (((pred_s + 1) * (pred_a + 1)) == rate)
+-			break;
++			if (pred_s <= pred_s_max && ((pred_s + 1) * (pred_a + 1)) == rate)
++				break;
++		}
++	} else {
++		for (pred_a = pred_a_max; pred_a + 1 > 0; pred_a--) {
++			pred_s = (rate / (pred_a + 1)) - 1;
++
++			if (((pred_s + 1) * (pred_a + 1)) == rate)
++				break;
++		}
  	}
  
-+	cr = readl_relaxed(rtc->base + regs->cr);
-+
-+	prer = readl_relaxed(rtc->base + regs->prer);
-+	prer &= STM32_RTC_PRER_PRED_S | STM32_RTC_PRER_PRED_A;
-+
-+	pred_s = (pred_s << STM32_RTC_PRER_PRED_S_SHIFT) &
-+		 STM32_RTC_PRER_PRED_S;
-+	pred_a = (pred_a << STM32_RTC_PRER_PRED_A_SHIFT) &
-+		 STM32_RTC_PRER_PRED_A;
-+
-+	/* quit if there is nothing to initialize */
-+	if ((cr & STM32_RTC_CR_FMT) == 0 && prer == (pred_s | pred_a))
-+		return 0;
-+
- 	stm32_rtc_wpr_unlock(rtc);
- 
- 	ret = stm32_rtc_enter_init_mode(rtc);
-@@ -665,13 +679,10 @@ static int stm32_rtc_init(struct platform_device *pdev,
- 		goto end;
- 	}
- 
--	prer = (pred_s << STM32_RTC_PRER_PRED_S_SHIFT) & STM32_RTC_PRER_PRED_S;
--	writel_relaxed(prer, rtc->base + regs->prer);
--	prer |= (pred_a << STM32_RTC_PRER_PRED_A_SHIFT) & STM32_RTC_PRER_PRED_A;
--	writel_relaxed(prer, rtc->base + regs->prer);
-+	writel_relaxed(pred_s, rtc->base + regs->prer);
-+	writel_relaxed(pred_a | pred_s, rtc->base + regs->prer);
- 
- 	/* Force 24h time format */
--	cr = readl_relaxed(rtc->base + regs->cr);
- 	cr &= ~STM32_RTC_CR_FMT;
- 	writel_relaxed(cr, rtc->base + regs->cr);
- 
+ 	/*
 -- 
 2.25.1
 
