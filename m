@@ -2,52 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF266731E19
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:45:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8101A731E1A
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:45:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236892AbjFOQpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 12:45:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43754 "EHLO
+        id S236934AbjFOQpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 12:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232053AbjFOQoq (ORCPT
+        with ESMTP id S233787AbjFOQot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 12:44:46 -0400
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6F830D6
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 09:44:32 -0700 (PDT)
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-3f8cec6641bso22528605e9.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 09:44:32 -0700 (PDT)
+        Thu, 15 Jun 2023 12:44:49 -0400
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E2A30E7
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 09:44:33 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3111547c8f9so837102f8f.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 09:44:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686847471; x=1689439471;
+        d=1e100.net; s=20221208; t=1686847472; x=1689439472;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cnu101MlL/lBc9D51wfUyU127xq92KgSEDJgVIsZ6RU=;
-        b=h8T/2GAVKqteALxJJb5540KEV/alCgtQntkyvSBDcvSa3xa5Rg4rmBbLAxqtO3pQjI
-         lpGyOnZ7y+78365TIet/IfQSUFd5EvYPiivvc47gvuYWDQkTpi3VIq6Oxn4QbkN7aTo0
-         Fv7XTGWtgp7ihZ0RC4qg3cp8brgTFLXVRJsvjinPRUPc7VjcsVu4G+kSOOdwia9rHylk
-         6GGHz2tJyVzkSa0Q8ErmoQ0yYF1FAFkItR5bEcS8liPPSVartfCqoHP7vikJExHcKKRH
-         sbKmRXAq+QIrpvrlicVaa8P3fFqZGY1/IZEUPkca9z3P6o3z1br3HkmUamAx992mMBPt
-         CqlA==
-X-Gm-Message-State: AC+VfDxMYpjatdQeHEXNV+gH5mUqy0uJ8ncF5EI0zZgB/0EjKgYCWTAk
-        uQlSoa6qKrHYV1bGcb4efL0=
-X-Google-Smtp-Source: ACHHUZ6tjv3xr59m+gYz8OVXnm1xmB74cCrv0sXwMg/z6UFWTLrHE2IEMmOXvM6S6QfjlV+oyShcwQ==
-X-Received: by 2002:a05:600c:295:b0:3f6:af2:8471 with SMTP id 21-20020a05600c029500b003f60af28471mr14466195wmk.26.1686847470651;
-        Thu, 15 Jun 2023 09:44:30 -0700 (PDT)
-Received: from localhost (fwdproxy-cln-017.fbsv.net. [2a03:2880:31ff:11::face:b00c])
-        by smtp.gmail.com with ESMTPSA id u2-20020a5d4342000000b0030e5c8d55f2sm21453538wrr.6.2023.06.15.09.44.29
+        bh=9Egc4fmm7smvfOFVQ5s3mS2mzKk6KiuOWVMSMxPPdik=;
+        b=VpXK5YNXS/HtX+hVmjlJhE8f5WiWEsHho/TjZuL1Joqxv/i5Oesln8761YBsGu6pw9
+         Z/HvRtryCldkj8L9em3gyoTosLU+3XiKceQbt3bgfjDkzFb7PJzewe7+zQUsu+fU/Uul
+         Nvjie7ZdurubDMNygzgWlszSM9wTgVfWGiMuINKbiXZ7sDbC/jaOQW5IEk86RPCA8pYv
+         cqZMENuL9/hAV28bfTIuZArVWLiixOo1pm6qiStJNAJTYeNYNN9g+tjAE5M1Gxa7QdZY
+         Yq0BRbzAMshi7UWL964mV2+0/07wg+0TK5YHKF3Szhv4Hnhv9DopENutwN3Nsy3o+rGz
+         fzVg==
+X-Gm-Message-State: AC+VfDwack0fWX5w282iUKWGrNvXSHErT6fRE+ia0NJ508Dq+cQXk4my
+        nzbtKtIPOzZ/UyjPEm3P5WI=
+X-Google-Smtp-Source: ACHHUZ6zhzYN6oAaFFfvbT3Be6zWySwMH+fDayw3K3IJRZC489llcfGrPebhYUtFhg6qnFKS2qYeDw==
+X-Received: by 2002:a05:6000:1b0c:b0:311:1a9a:90e4 with SMTP id f12-20020a0560001b0c00b003111a9a90e4mr841266wrz.57.1686847472206;
+        Thu, 15 Jun 2023 09:44:32 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-019.fbsv.net. [2a03:2880:31ff:13::face:b00c])
+        by smtp.gmail.com with ESMTPSA id c2-20020a5d5282000000b002fae7408544sm21515912wrv.108.2023.06.15.09.44.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 09:44:29 -0700 (PDT)
+        Thu, 15 Jun 2023 09:44:31 -0700 (PDT)
 From:   Breno Leitao <leitao@debian.org>
 To:     pawan.kumar.gupta@linux.intel.com, jpoimboe@kernel.org,
-        peterz@infradead.org, tglx@linutronix.de, bp@alien8.de,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc:     leit@fb.com, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] x86/bugs: Create an option to disable MMIO vulnerability
-Date:   Thu, 15 Jun 2023 09:44:14 -0700
-Message-Id: <20230615164417.3588162-4-leitao@debian.org>
+        peterz@infradead.org, tglx@linutronix.de, bp@alien8.de
+Cc:     leit@fb.com, hpa@zytor.com, x86@kernel.org, mingo@redhat.com,
+        dave.hansen@linux.intel.com, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] x86/bugs: Break down mitigations configurations
+Date:   Thu, 15 Jun 2023 09:44:15 -0700
+Message-Id: <20230615164417.3588162-5-leitao@debian.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230615164417.3588162-1-leitao@debian.org>
 References: <20230615164417.3588162-1-leitao@debian.org>
@@ -63,72 +61,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no way to disable MMIO Stale data mitigation today at
-compilation time. These mitigations are enabled even if
-CONFIG_SPECULATION_MITIGATIONS is unset.
+There is no way to compile a kernel today with some of the speculative
+mitigations disabled. Even if the kernel has
+CONFIG_SPECULATION_MITIGATIONS=n, some Intel mitigations, such as MDS, TAA,
+MMIO are still enabled and can only be disabled using a kernel parameter.
 
-Create a new KCONFIG option that allow MMIO mitigation to be disabled in
-compilation time.
+This patchset creates a way to choose what to enable or disable, and,
+get the mitigations disable if CONFIG_SPECULATION_MITIGATIONS is not
+set, as the rest of other mitigations.
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- arch/x86/Kconfig           | 10 ++++++++++
- arch/x86/kernel/cpu/bugs.c | 10 ++++++++--
- 2 files changed, 18 insertions(+), 2 deletions(-)
+Also, we want to print a warning message letting users know that these
+mitigations are disabled.
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 140af3b30c45..ba64f7c9b08d 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -2670,6 +2670,16 @@ config MITIGATE_TAA
- 	  which is available in various CPU internal buffers by using
- 	  asynchronous aborts within an Intel TSX transactional region.
- 
-+config MITIGATE_MMIO_STALE_DATA
-+	bool "Mitigate MMIO Stale Data hardware bug"
-+	depends on CPU_SUP_INTEL && X86_64
-+	default y
-+	help
-+	  Enable mitigation for MMIO Stale Data hardware bugs.  Processor MMIO
-+	  Stale Data Vulnerabilities are a class of memory-mapped I/O (MMIO)
-+	  vulnerabilities that can expose data. The vulnerabilities require the
-+	  attacker to have access to MMIO.
-+
- endif
- 
- config ARCH_HAS_ADD_PAGES
-diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-index 3615bda9573f..b5c171feb05e 100644
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -439,6 +439,7 @@ enum mmio_mitigations {
- /* Default mitigation for Processor MMIO Stale Data vulnerabilities */
- static enum mmio_mitigations mmio_mitigation __ro_after_init = MMIO_MITIGATION_VERW;
- static bool mmio_nosmt __ro_after_init = false;
-+#define MMIO_WARN_MSG "WARNING: MMIO Stale Data speculative mitigation disabled!\n"
- 
- static const char * const mmio_strings[] = {
- 	[MMIO_MITIGATION_OFF]		= "Vulnerable",
-@@ -451,12 +452,17 @@ static void __init mmio_select_mitigation(void)
- 	u64 ia32_cap;
- 
- 	if (!boot_cpu_has_bug(X86_BUG_MMIO_STALE_DATA) ||
--	     boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN) ||
--	     cpu_mitigations_off()) {
-+	     boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN)) {
- 		mmio_mitigation = MMIO_MITIGATION_OFF;
- 		return;
- 	}
- 
-+	if (cpu_mitigations_off() || !IS_ENABLED(CONFIG_MITIGATE_MDS)) {
-+		mmio_mitigation = MMIO_MITIGATION_OFF;
-+		pr_err(MMIO_WARN_MSG);
-+		return;
-+	}
-+
- 	if (mmio_mitigation == MMIO_MITIGATION_OFF)
- 		return;
- 
+Breno Leitao (2):
+  x86/speculation: Disable mitigations if CONFIG says so
+  x86/speculation: Print error when mitigations are disabled
+
+ arch/x86/kernel/cpu/bugs.c | 29 ++++++++++++++++++++++++-----
+ 1 file changed, 24 insertions(+), 5 deletions(-)
+
 -- 
 2.34.1
 
