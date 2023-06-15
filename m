@@ -2,297 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0573730FA6
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67129730FB1
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:49:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244341AbjFOGsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 02:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53318 "EHLO
+        id S238204AbjFOGtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 02:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237002AbjFOGrW (ORCPT
+        with ESMTP id S238307AbjFOGtN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 02:47:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA5E2D71;
-        Wed, 14 Jun 2023 23:45:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 63D9F61E7B;
-        Thu, 15 Jun 2023 06:45:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7533C433CC;
-        Thu, 15 Jun 2023 06:45:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686811540;
-        bh=jUyq9MCR5EFJXwJ9EDYffG16LnNM6FSeWeGUNewIMxU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cbV7kw2ngCC1lmiko6SGKS3SysBzaP00oiq9aYiboSSH5jy/ydr7mnnvI1QCjw/eu
-         fNDPcb/kTDU6NwAFyE56VoS3JYPtyJ8g+A4wHkgA9cTCWaNW8u61tBNEVI7O6PHQQR
-         Tt/lYo/t7AnT52rWNNuzE17ew4dWg95I0+dbSC3ZJf5E1msTZIH/luzE+ZQWw7a4BW
-         x9Ac6dHADeq1R1GK89Ke8rJnOwkc4ivNdetxCHDFrhScGInFmufXa/SmI3cRUNM+2v
-         pmuEEvtft9Sgo8LMBEezWlcr1kM7tHcoKZ3KgfHowofKfMlC25hT8QZjc4LN43quvX
-         I4dyVdSNhHwuQ==
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-519608ddbf7so1702611a12.2;
-        Wed, 14 Jun 2023 23:45:40 -0700 (PDT)
-X-Gm-Message-State: AC+VfDyG9VTsZnwU623tnQMN3Xgq56p07tNgFisQ0E4cf8Fvwe+rO+kq
-        FaSBifSWolMVz4k4pzTJ/ttpSF9RXSxKwCh4dB0=
-X-Google-Smtp-Source: ACHHUZ6ON8hmFkJ8hHDv8k/o/oD3CMjEPAjJX7IUgIb2V3DLHTKtRLfNQSo06ngI8f4EC9aCuLqphXcTzMj0jQAW6Hc=
-X-Received: by 2002:a05:6402:88e:b0:514:964c:4c42 with SMTP id
- e14-20020a056402088e00b00514964c4c42mr11191042edy.8.1686811538874; Wed, 14
- Jun 2023 23:45:38 -0700 (PDT)
+        Thu, 15 Jun 2023 02:49:13 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549C42D62;
+        Wed, 14 Jun 2023 23:47:59 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2b41e700103so8525101fa.2;
+        Wed, 14 Jun 2023 23:47:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686811677; x=1689403677;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O3hoT+7D5pHhrPbVSfAK0c9rFMVCQODh4bvnFJ3aIXs=;
+        b=RxypO+7ulWZW2Xd+Brv2amG47hyOVkgve8lccmYw435rjgP5mnEHwEMJ5l9qE06jxr
+         BATtcCQ9MnLq591v6s1aOZXOf0oNj3RcEg800iQbMrThqogq2CP6cDxs25JQaD5vvZ9w
+         Ng4KG5g4BdnnHaP/3BFBCJnQiJvHxZcvZgdaiGw5+PUMY7Qy4atu5/oQ7YCesivzrIbZ
+         hEmsvXsfRaVeuHtK0QzQODKWMfPBnGvrU+XACovC8DysfDvLWoU8VXKXhrK0JJA7fe3r
+         rkkNBr5cjVgY/SEWCDPyAJukNrIftsomrpQJlCPgEmVhsyNbEruckQUGWyyyviqPAZWw
+         bnaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686811677; x=1689403677;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=O3hoT+7D5pHhrPbVSfAK0c9rFMVCQODh4bvnFJ3aIXs=;
+        b=Ce3xNLtxZ29D0oJjlTGQOI3wvsR7e1sdQeeRW15Clrp9trjUUoCvdTMSM7bjhRX2gx
+         4ZcjBg18DZyW8g+nI+r50aLcGxYrtNga+05UF9PMDfITMpuO6og5V1HUES2g17BP7oeI
+         ki9v6Csw4fNOVFjjYknRMvKvjj24NNjctaHBZR7vZDfe+nveEQFPPKt0HP2wJAIKbijC
+         dBhx/9Eafq2TV2/jGxh7iCsthJ/hpDUSaHlXgy001blS5VQvqrPm3KYj8nwVJIbo4jbk
+         8BWyobCB1UHc652oVAUYVhKW6ZLGvYp3QzQch9CEDfvUB85LXCGFiE06re57ASIEiY4M
+         /EkA==
+X-Gm-Message-State: AC+VfDyLR66gisioGBiNNfEgapnMiW6fN1N069rCk45KHehtYXHH3POU
+        GmGnArIpHWQlbiYHXlCeSVkIpzJ3egEtIvyJVUukIYnqWVEOzdYU
+X-Google-Smtp-Source: ACHHUZ5TG9GTRx5egU/FbTNEndD607mf6f3ksMH2dhB+MQ7nXugStpQPhd/DAXiYROaM8g4S6iaJBdyGbNFHKnd0LmM=
+X-Received: by 2002:a2e:7d18:0:b0:2b1:fcb2:3026 with SMTP id
+ y24-20020a2e7d18000000b002b1fcb23026mr7426249ljc.5.1686811677057; Wed, 14 Jun
+ 2023 23:47:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230609022047.2195689-1-maobibo@loongson.cn> <CAAhV-H7n1Z58h2qxCASDXMMQBDN6x_vq6bH_utVhB5boYoZDGQ@mail.gmail.com>
- <4cfe93cb-7713-f994-45c3-e99fe34a3f9e@loongson.cn> <CAAhV-H7_RYzmuCunn5tMzWwKtzi_0sGqUBc5NV1F=_Hyc2X6jg@mail.gmail.com>
-In-Reply-To: <CAAhV-H7_RYzmuCunn5tMzWwKtzi_0sGqUBc5NV1F=_Hyc2X6jg@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Thu, 15 Jun 2023 14:45:26 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H46Ngj6MewcVor4ebFxJ_P-ET=PqwZXZa9=nNL1vYUntQ@mail.gmail.com>
-Message-ID: <CAAhV-H46Ngj6MewcVor4ebFxJ_P-ET=PqwZXZa9=nNL1vYUntQ@mail.gmail.com>
-Subject: Re: [PATCH v4] PCI: Align pci memory space base address with page size
-To:     "bibo, mao" <maobibo@loongson.cn>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-        loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn
+References: <20230612194311.24826-1-aakashsensharma@gmail.com> <20230614194930.5da4e418.gary@garyguo.net>
+In-Reply-To: <20230614194930.5da4e418.gary@garyguo.net>
+From:   Ariel Miculas <ariel.miculas@gmail.com>
+Date:   Thu, 15 Jun 2023 09:47:45 +0300
+Message-ID: <CAPDJoNu42E-_qrKB0s27POgaL6Np7-4=UO_5D27oOPaB4fEgwA@mail.gmail.com>
+Subject: Re: [PATCH] rust: bindgen: upgrade to 0.65.1
+To:     Gary Guo <gary@garyguo.net>
+Cc:     Aakash Sen Sharma <aakashsensharma@gmail.com>, corbet@lwn.net,
+        ojeda@kernel.org, alex.gaynor@gmail.com, wedsonaf@gmail.com,
+        boqun.feng@gmail.com, bjorn3_gh@protonmail.com, nathan@kernel.org,
+        ndesaulniers@google.com, trix@redhat.com, masahiroy@kernel.org,
+        me@kloenk.de, aliceryhl@google.com, benno.lossin@proton.me,
+        dev@niklasmohrin.de, lina@asahilina.net, hca@linux.ibm.com,
+        rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bjorn,
+Tested-by: Ariel Miculas <amiculas@cisco.com>
 
-What's your opinion? This patch indeed fixes a problem on LoongArch,
-and in theory other non-4K page platforms also need it. If someone
-disagrees, maybe we can use the old way: provide a LoongArch-specific
-pcibios_align_resource() at this time.
-
-Huacai
-
-On Fri, Jun 9, 2023 at 12:21=E2=80=AFPM Huacai Chen <chenhuacai@kernel.org>=
- wrote:
+On Wed, Jun 14, 2023 at 9:52=E2=80=AFPM Gary Guo <gary@garyguo.net> wrote:
 >
-> On Fri, Jun 9, 2023 at 11:47=E2=80=AFAM bibo, mao <maobibo@loongson.cn> w=
-rote:
+> On Tue, 13 Jun 2023 01:13:11 +0530
+> Aakash Sen Sharma <aakashsensharma@gmail.com> wrote:
+>
+> > * Rationale:
 > >
+> > Upgrades bindgen to code-generation for anonymous unions, structs, and =
+enums [7]
+> > for LLVM-16 based toolchains.
 > >
+> > The following upgrade also incorporates `noreturn` support from bindgen
+> > allowing us to remove useless `loop` calls which was placed as a
+> > workaround.
 > >
-> > =E5=9C=A8 2023/6/9 10:29, Huacai Chen =E5=86=99=E9=81=93:
-> > > Hi, Bibo,
-> > >
-> > > On Fri, Jun 9, 2023 at 10:20=E2=80=AFAM Bibo Mao <maobibo@loongson.cn=
-> wrote:
-> > >>
-> > >> Some PCI devices have only 4K memory space size, it is normal in gen=
-eral
-> > >> machines and aligned with page size. However some architectures whic=
-h
-> > >> support different page size, default page size on LoongArch is 16K, =
-and
-> > >> ARM64 supports page size varying from 4K to 64K. On machines where l=
-arger
-> > >> page size is use, memory space region of two different pci devices m=
-ay be
-> > >> in one page. It is not safe with mmu protection, also VFIO pci devic=
+> > * Truncated build logs on using bindgen `v0.56.0` prior to LLVM-16 tool=
+chain:
+> >
+> > ```
+> > $ make rustdoc LLVM=3D1 CLIPPY=3D1 -j$(nproc)
+> >   RUSTC L rust/core.o
+> >   BINDGEN rust/bindings/bindings_generated.rs
+> >   BINDGEN rust/bindings/bindings_helpers_generated.rs
+> >   BINDGEN rust/uapi/uapi_generated.rs
+> > thread 'main' panicked at '"ftrace_branch_data_union_(anonymous_at__/_/=
+include/linux/compiler_types_h_146_2)" is not a valid Ident', .../proc-macr=
+o2-1.0.24/src/fallback.rs:693:9
+> > ...
+> > thread 'main' panicked at '"ftrace_branch_data_union_(anonymous_at__/_/=
+include/linux/compiler_types_h_146_2)" is not a valid Ident', .../proc-macr=
+o2-1.0.24/src/fallback.rs:693:9
+> > ...
+> > ```
+> >
+> > * LLVM-16 Changes:
+> >
+> > API changes [1] were introduced such that libclang would emit names lik=
 e
-> > >> driver requires base address of pci memory space page aligned, so th=
-at it
-> > >> can be memory mapped to qemu user space when it is passed-through to=
- vm.
-> > >>
-> > >> It consumes more pci memory resource with page size alignment requir=
-ement,
-> > >> here extra option PCI_MEMRES_PAGE_ALIGN is added, it can be enabled =
-by
-> > >> different architectures.
-> > >>
-> > >> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
-> > >> ---
-> > >> Change history
-> > >> v4: add extra kernel option PCI_MEMRES_PAGE_ALIGN to set memory reso=
-urce
-> > >>     page aligned.
-> > >>
-> > >> v3: move alignment requirement to generic pci code
-> > >>
-> > >> v2: add pci resource alignment requirement in arch specified functio=
+> > "(unnamed union at compiler_types.h:146:2)" for unnamed unions, structs=
+, and
+> > enums whereas it previously returned an empty string.
+> >
+> > * Bindgen Changes:
+> >
+> > Bindgen `v0.56.0` on LLVM-16 based toolchains hence was unable to proce=
+ss the
+> > anonymous union in `include/linux/compiler_types` `struct ftrace_branch=
+_data`
+> > and caused subsequent panics as the new `libclang` API emitted name was=
+ not
+> > being handled. The following issue was fixed in Bindgen `v0.62.0` [2].
+> >
+> > Bindgen `v0.58.0` changed the flags `--whitelist-*` and `--blacklist-*`
+> > to `--allowlist-*` and `--blocklist-*` respectively [3].
+> >
+> > Bindgen `v0.61.0` added support for `_Noreturn`, `[[noreturn]]`, `__att=
+ribute__((noreturn))` [4],
+> > hence the empty `loop`s used to circumvent bindgen returning `!` in pla=
+ce of `()`
+> > for noreturn attributes have been removed completely.
+> >
+> > Bindgen `v0.61.0` also changed default functionality to bind `size_t` t=
+o `usize` [5] and
+> > added the `--no-size_t-is-usize` [5] flag to not bind `size_t` as `usiz=
+e`.
+> >
+> > Bindgen `v0.65.0` removed `--size_t-is-usize` flag [6].
+> >
+> > Link: https://github.com/llvm/llvm-project/commit/19e984ef8f49bc3ccced1=
+5621989fa9703b2cd5b [1]
+> > Link: https://github.com/rust-lang/rust-bindgen/pull/2319 [2]
+> > Link: https://github.com/rust-lang/rust-bindgen/pull/1990 [3]
+> > Link: https://github.com/rust-lang/rust-bindgen/issues/2094 [4]
+> > Link: https://github.com/rust-lang/rust-bindgen/commit/cc78b6fdb6e829e5=
+fb8fa1639f2182cb49333569 [5]
+> > Link: https://github.com/rust-lang/rust-bindgen/pull/2408 [6]
+> > Closes: https://github.com/Rust-for-Linux/linux/issues/1013 [7]
+> > Signed-off-by: Aakash Sen Sharma <aakashsensharma@gmail.com>
+>
+> Reviewed-by: Gary Guo <gary@garyguo.net>
+>
+> > ---
+> >  Documentation/process/changes.rst |  2 +-
+> >  rust/Makefile                     |  6 +++---
+> >  rust/helpers.c                    | 13 ++++++-------
+> >  rust/kernel/lib.rs                |  3 ---
+> >  scripts/min-tool-version.sh       |  2 +-
+> >  5 files changed, 11 insertions(+), 15 deletions(-)
+> >
+> > diff --git a/Documentation/process/changes.rst b/Documentation/process/=
+changes.rst
+> > index ef540865ad22..5f21c4c6cf5c 100644
+> > --- a/Documentation/process/changes.rst
+> > +++ b/Documentation/process/changes.rst
+> > @@ -32,7 +32,7 @@ you probably needn't concern yourself with pcmciautil=
+s.
+> >  GNU C                  5.1              gcc --version
+> >  Clang/LLVM (optional)  11.0.0           clang --version
+> >  Rust (optional)        1.62.0           rustc --version
+> > -bindgen (optional)     0.56.0           bindgen --version
+> > +bindgen (optional)     0.65.1           bindgen --version
+> >  GNU make               3.82             make --version
+> >  bash                   4.2              bash --version
+> >  binutils               2.25             ld -v
+> > diff --git a/rust/Makefile b/rust/Makefile
+> > index f88d108fbef0..c187c6f3a384 100644
+> > --- a/rust/Makefile
+> > +++ b/rust/Makefile
+> > @@ -279,7 +279,7 @@ quiet_cmd_bindgen =3D BINDGEN $@
+> >       $(BINDGEN) $< $(bindgen_target_flags) \
+> >               --use-core --with-derive-default --ctypes-prefix core::ff=
+i --no-layout-tests \
+> >               --no-debug '.*' \
+> > -             --size_t-is-usize -o $@ -- $(bindgen_c_flags_final) -DMOD=
+ULE \
+> > +             -o $@ -- $(bindgen_c_flags_final) -DMODULE \
+> >               $(bindgen_target_cflags) $(bindgen_target_extra)
+> >
+> >  $(obj)/bindings/bindings_generated.rs: private bindgen_target_flags =
+=3D \
+> > @@ -293,8 +293,8 @@ $(obj)/bindings/bindings_generated.rs: $(src)/bindi=
+ngs/bindings_helper.h \
+> >  # given it is `libclang`; but for consistency, future Clang changes an=
+d/or
+> >  # a potential future GCC backend for `bindgen`, we disable it too.
+> >  $(obj)/bindings/bindings_helpers_generated.rs: private bindgen_target_=
+flags =3D \
+> > -    --blacklist-type '.*' --whitelist-var '' \
+> > -    --whitelist-function 'rust_helper_.*'
+> > +    --blocklist-type '.*' --allowlist-var '' \
+> > +    --allowlist-function 'rust_helper_.*'
+> >  $(obj)/bindings/bindings_helpers_generated.rs: private bindgen_target_=
+cflags =3D \
+> >      -I$(objtree)/$(obj) -Wno-missing-prototypes -Wno-missing-declarati=
+ons
+> >  $(obj)/bindings/bindings_helpers_generated.rs: private bindgen_target_=
+extra =3D ; \
+> > diff --git a/rust/helpers.c b/rust/helpers.c
+> > index 121583282976..98d9ef47225b 100644
+> > --- a/rust/helpers.c
+> > +++ b/rust/helpers.c
+> > @@ -122,19 +122,18 @@ void rust_helper_put_task_struct(struct task_stru=
+ct *t)
+> >  EXPORT_SYMBOL_GPL(rust_helper_put_task_struct);
+> >
+> >  /*
+> > - * We use `bindgen`'s `--size_t-is-usize` option to bind the C `size_t=
+` type
+> > - * as the Rust `usize` type, so we can use it in contexts where Rust
+> > - * expects a `usize` like slice (array) indices. `usize` is defined to=
+ be
+> > - * the same as C's `uintptr_t` type (can hold any pointer) but not
+> > - * necessarily the same as `size_t` (can hold the size of any single
+> > + * `bindgen` binds the C `size_t` type the Rust `usize` type, so we ca=
 n
-> > >>     pcibios_align_resource on arm64/LoongArch platforms
-> > >>
-> > >> ---
-> > >>  arch/loongarch/Kconfig  | 1 +
-> > >>  drivers/pci/Kconfig     | 3 +++
-> > >>  drivers/pci/setup-res.c | 7 +++++++
-> > >>  3 files changed, 11 insertions(+)
-> > >>
-> > >> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> > >> index d38b066fc931..65b2f6ba9f8e 100644
-> > >> --- a/arch/loongarch/Kconfig
-> > >> +++ b/arch/loongarch/Kconfig
-> > >> @@ -142,6 +142,7 @@ config LOONGARCH
-> > >>         select PCI_LOONGSON
-> > >>         select PCI_MSI_ARCH_FALLBACKS
-> > >>         select PCI_QUIRKS
-> > >> +       select PCI_MEMRES_PAGE_ALIGN
-> > >>         select PERF_USE_VMALLOC
-> > >>         select RTC_LIB
-> > >>         select SMP
-> > >> diff --git a/drivers/pci/Kconfig b/drivers/pci/Kconfig
-> > >> index 9309f2469b41..9be5f85ff9dc 100644
-> > >> --- a/drivers/pci/Kconfig
-> > >> +++ b/drivers/pci/Kconfig
-> > >> @@ -128,6 +128,9 @@ config PCI_LOCKLESS_CONFIG
-> > >>  config PCI_BRIDGE_EMUL
-> > >>         bool
-> > >>
-> > >> +config PCI_MEMRES_PAGE_ALIGN
-> > >> +       bool
-> > >> +
-> > >>  config PCI_IOV
-> > >>         bool "PCI IOV support"
-> > >>         select PCI_ATS
-> > >> diff --git a/drivers/pci/setup-res.c b/drivers/pci/setup-res.c
-> > >> index 967f9a758923..6ad76734a670 100644
-> > >> --- a/drivers/pci/setup-res.c
-> > >> +++ b/drivers/pci/setup-res.c
-> > >> @@ -339,6 +339,13 @@ int pci_assign_resource(struct pci_dev *dev, in=
-t resno)
-> > >>                 return -EINVAL;
-> > >>         }
-> > >>
-> > >> +#ifdef CONFIG_PCI_MEMRES_PAGE_ALIGN
-> > >> +       /*
-> > >> +        * force minimum page alignment for vfio pci usage
-> > >> +        */
-> > >> +       if (res->flags & IORESOURCE_MEM)
-> > >> +               align =3D max_t(resource_size_t, PAGE_SIZE, align);
-> > >> +#endif
-> > > Does this really have its effect? The common version of
-> > > pcibios_align_resource() simply returns res->start, and doesn't care
-> > > about the 'align' parameter.
-> > yes, it works. The is output of command " lspci -vvv | grep Region" on =
-my
-> > 3C5000+7A2000 box. After the patch base address of all pci mem resource
-> > is aligned with 16K.
+> > + * use it in contexts where Rust expects a `usize` like slice (array) =
+indices.
+> > + * `usize` is defined to be the same as C's `uintptr_t` type (can hold=
+ any pointer)
+> > + * but not necessarily the same as `size_t` (can hold the size of any =
+single
+> >   * object). Most modern platforms use the same concrete integer type f=
+or
+> >   * both of them, but in case we find ourselves on a platform where
+> >   * that's not true, fail early instead of risking ABI or
+> >   * integer-overflow issues.
+> >   *
+> >   * If your platform fails this assertion, it means that you are in
+> > - * danger of integer-overflow bugs (even if you attempt to remove
+> > - * `--size_t-is-usize`). It may be easiest to change the kernel ABI on
+> > + * danger of integer-overflow bugs (even if you attempt to add
+> > + * `--no-size_t-is-usize`). It may be easiest to change the kernel ABI=
+ on
+> >   * your platform such that `size_t` matches `uintptr_t` (i.e., to incr=
+ease
+> >   * `size_t`, because `uintptr_t` has to be at least as big as `size_t`=
+).
+> >   */
+> > diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+> > index ee27e10da479..1b0dcf03b9c2 100644
+> > --- a/rust/kernel/lib.rs
+> > +++ b/rust/kernel/lib.rs
+> > @@ -95,7 +95,4 @@ fn panic(info: &core::panic::PanicInfo<'_>) -> ! {
+> >      pr_emerg!("{}\n", info);
+> >      // SAFETY: FFI call.
+> >      unsafe { bindings::BUG() };
+> > -    // Bindgen currently does not recognize `__noreturn` so `BUG` retu=
+rns `()`
+> > -    // instead of `!`. See <https://github.com/rust-lang/rust-bindgen/=
+issues/2094>.
+> > -    loop {}
+> >  }
+> > diff --git a/scripts/min-tool-version.sh b/scripts/min-tool-version.sh
+> > index 20d483ec6f5f..5b80c5d3a9f8 100755
+> > --- a/scripts/min-tool-version.sh
+> > +++ b/scripts/min-tool-version.sh
+> > @@ -30,7 +30,7 @@ rustc)
+> >       echo 1.62.0
+> >       ;;
+> >  bindgen)
+> > -     echo 0.56.0
+> > +     echo 0.65.1
+> >       ;;
+> >  *)
+> >       echo "$1: unknown tool" >&2
+> > --
+> > 2.40.1
 > >
-> > output without the patch:
-> >         Region 0: Memory at e0045240000 (64-bit, non-prefetchable) [siz=
-e=3D32K]
-> >         Region 0: Memory at e0045248000 (64-bit, non-prefetchable) [siz=
-e=3D32K]
-> >         Region 0: Memory at e0045250000 (64-bit, non-prefetchable) [siz=
-e=3D32K]
-> >         Region 0: Memory at e0045258000 (64-bit, non-prefetchable) [siz=
-e=3D32K]
-> >         Region 0: Memory at e0045260000 (64-bit, non-prefetchable) [siz=
-e=3D32K]
-> >         Region 0: Memory at e0045271400 (64-bit, non-prefetchable) [siz=
-e=3D256]
-> >         Region 2: Memory at e0040000000 (64-bit, non-prefetchable) [siz=
-e=3D64M]
-> >         Region 4: Memory at e0045200000 (64-bit, non-prefetchable) [siz=
-e=3D64K]
-> >         Region 0: Memory at e0045210000 (64-bit, non-prefetchable) [siz=
-e=3D64K]
-> >         Region 0: Memory at e0045220000 (64-bit, non-prefetchable) [siz=
-e=3D64K]
-> >         Region 0: Memory at e0045230000 (64-bit, non-prefetchable) [siz=
-e=3D64K]
-> >         Region 5: Memory at e0045271000 (32-bit, non-prefetchable) [siz=
-e=3D1K]
-> >         Region 0: Memory at e0045268000 (64-bit, non-prefetchable) [siz=
-e=3D4K]
-> >         Region 0: Memory at e0045269000 (64-bit, non-prefetchable) [siz=
-e=3D4K]
-> >         Region 0: Memory at e004526a000 (64-bit, non-prefetchable) [siz=
-e=3D4K]
-> >         Region 0: Memory at e004526b000 (64-bit, non-prefetchable) [siz=
-e=3D4K]
-> >         Region 0: Memory at e004526c000 (64-bit, non-prefetchable) [siz=
-e=3D4K]
-> >         Region 0: Memory at e004526d000 (64-bit, non-prefetchable) [siz=
-e=3D4K]
-> >         Region 0: Memory at e004526e000 (64-bit, non-prefetchable) [siz=
-e=3D4K]
-> >         Region 0: Memory at e004526f000 (64-bit, non-prefetchable) [siz=
-e=3D4K]
-> >         Region 0: Memory at e0045270000 (64-bit, non-prefetchable) [siz=
-e=3D4K]
-> >         Region 2: Memory at e0044000000 (64-bit, non-prefetchable) [siz=
-e=3D16M]
-> >         Region 0: Memory at e0045100000 (64-bit, non-prefetchable) [siz=
-e=3D1M]
-> >         Region 0: Memory at e0045000000 (64-bit, non-prefetchable) [siz=
-e=3D16K]
-> >
-> > out put with the patch:
-> >         Region 0: Memory at e0045240000 (64-bit, non-prefetchable) [siz=
-e=3D32K]
-> >         Region 0: Memory at e0045248000 (64-bit, non-prefetchable) [siz=
-e=3D32K]
-> >         Region 0: Memory at e0045250000 (64-bit, non-prefetchable) [siz=
-e=3D32K]
-> >         Region 0: Memory at e0045258000 (64-bit, non-prefetchable) [siz=
-e=3D32K]
-> >         Region 0: Memory at e0045260000 (64-bit, non-prefetchable) [siz=
-e=3D32K]
-> >         Region 0: Memory at e0045290000 (64-bit, non-prefetchable) [siz=
-e=3D256]
-> >         Region 2: Memory at e0040000000 (64-bit, non-prefetchable) [siz=
-e=3D64M]
-> >         Region 4: Memory at e0045200000 (64-bit, non-prefetchable) [siz=
-e=3D64K]
-> >         Region 0: Memory at e0045210000 (64-bit, non-prefetchable) [siz=
-e=3D64K]
-> >         Region 0: Memory at e0045220000 (64-bit, non-prefetchable) [siz=
-e=3D64K]
-> >         Region 0: Memory at e0045230000 (64-bit, non-prefetchable) [siz=
-e=3D64K]
-> >         Region 5: Memory at e004528c000 (32-bit, non-prefetchable) [siz=
-e=3D1K]
-> >         Region 0: Memory at e0045268000 (64-bit, non-prefetchable) [siz=
-e=3D4K]
-> >         Region 0: Memory at e004526c000 (64-bit, non-prefetchable) [siz=
-e=3D4K]
-> >         Region 0: Memory at e0045270000 (64-bit, non-prefetchable) [siz=
-e=3D4K]
-> >         Region 0: Memory at e0045274000 (64-bit, non-prefetchable) [siz=
-e=3D4K]
-> >         Region 0: Memory at e0045278000 (64-bit, non-prefetchable) [siz=
-e=3D4K]
-> >         Region 0: Memory at e004527c000 (64-bit, non-prefetchable) [siz=
-e=3D4K]
-> >         Region 0: Memory at e0045280000 (64-bit, non-prefetchable) [siz=
-e=3D4K]
-> >         Region 0: Memory at e0045284000 (64-bit, non-prefetchable) [siz=
-e=3D4K]
-> >         Region 0: Memory at e0045288000 (64-bit, non-prefetchable) [siz=
-e=3D4K]
-> >         Region 2: Memory at e0044000000 (64-bit, non-prefetchable) [siz=
-e=3D16M]
-> >         Region 0: Memory at e0045100000 (64-bit, non-prefetchable) [siz=
-e=3D1M]
-> >         Region 0: Memory at e0045000000 (64-bit, non-prefetchable) [siz=
-e=3D16K]
-> OK, thanks.
 >
-> Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
->
-> >
-> > Regards
-> > Bibo, Mao
-> > >
-> > > Huacai
-> > >>         size =3D resource_size(res);
-> > >>         ret =3D _pci_assign_resource(dev, resno, size, align);
-> > >>
-> > >> --
-> > >> 2.27.0
-> > >>
-> >
