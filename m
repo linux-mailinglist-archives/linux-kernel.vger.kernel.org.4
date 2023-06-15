@@ -2,164 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7CA2730F12
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:07:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6639730F15
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:08:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238439AbjFOGHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 02:07:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37950 "EHLO
+        id S242654AbjFOGIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 02:08:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236728AbjFOGHU (ORCPT
+        with ESMTP id S243553AbjFOGIW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 02:07:20 -0400
-Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC40A26B0;
-        Wed, 14 Jun 2023 23:06:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
-        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:Cc
-        :To:From:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=bOx+x+aNkJZYtlU42uTvVfhpkabjU4hq9FT92avJTsw=; b=ODu6UM+xWmOeodIoMdmuDTF96r
-        C54Gahhiy8PbGgHLVd/SldQWCof1ghe4VGpqCTouqh3DSLGENgukeArgLJIvv3YSAbuVl60LdC/7X
-        M3Rb2TqKLqclCI6UMBp8YJbHt1KiNEu4S7TWRD2lwSaA1mhsmxI8dr186LFmjL6eDXeu6aAQpqQli
-        ZE6cKFlR14a0S/4VavqRzfNxWK5xNjBXaDzg532tNgB9mSRkHnhBEfrsz8pSA3UMJL67lQL1SKoAj
-        WitHud0Od9/3AgK+R540dPJGJeEWhx6AwhrP2CdO6xMWzC+0EObUWp8AHg/linnE/pHOppviqgjVr
-        xi+MppbQ==;
-Received: from 89-212-21-243.static.t-2.net ([89.212.21.243]:51988 helo=[192.168.69.84])
-        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.96)
-        (envelope-from <andrej.picej@norik.com>)
-        id 1q9g7r-005nfQ-01;
-        Thu, 15 Jun 2023 08:06:30 +0200
-Message-ID: <31ed2ed3-8b59-3903-c491-a10a4702c23d@norik.com>
-Date:   Thu, 15 Jun 2023 08:06:29 +0200
+        Thu, 15 Jun 2023 02:08:22 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA404A7;
+        Wed, 14 Jun 2023 23:08:20 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35F684Wv012964;
+        Thu, 15 Jun 2023 01:08:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1686809284;
+        bh=3NAjiVPIi9Qh+/1jZT4iJ5D7YNH/KCh98ShDdQJk2YU=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=fZuKARzRDnB4cb4JFjO8ZpDwEu8LCDyEUcMTJ+U67Xo2zVCXyBVXDiKnqiWxhZqUS
+         OcIR4RGNaEcIG12GTtLNYKgnEmwdD9O9d0ILDELqmEVphffoBbu1fU3QKO6KcmKadj
+         MypvgVJkP928i74ERPLN4dyLLrWMpPxuHGHt/JfA=
+Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35F684w7117061
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 15 Jun 2023 01:08:04 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 15
+ Jun 2023 01:08:04 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 15 Jun 2023 01:08:04 -0500
+Received: from [172.24.145.182] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35F680rA015262;
+        Thu, 15 Jun 2023 01:08:01 -0500
+Message-ID: <62ca6112-0aca-788e-fc9b-8a2c3ce9ba1f@ti.com>
+Date:   Thu, 15 Jun 2023 11:38:00 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH] rtc: rv3028: Improve trickle charger logic
-Content-Language: en-GB
-From:   Andrej Picej <andrej.picej@norik.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     a.zummo@towertech.it, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, upstream@phytec.de
-References: <20230608090446.2899646-1-andrej.picej@norik.com>
- <20230608093155cedff41a@mail.local>
- <73bc2f5c-bdae-e57f-73ab-db5e453e0c7f@norik.com>
-In-Reply-To: <73bc2f5c-bdae-e57f-73ab-db5e453e0c7f@norik.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v2 3/5] arm64: dts: ti: add verdin am62
+Content-Language: en-US
+To:     Francesco Dolcini <francesco@dolcini.it>,
+        Nishanth Menon <nm@ti.com>
+CC:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230601131332.26877-1-francesco@dolcini.it>
+ <20230601131332.26877-4-francesco@dolcini.it>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+In-Reply-To: <20230601131332.26877-4-francesco@dolcini.it>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cpanel.siel.si
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - norik.com
-X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
-X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8. 06. 23 12:35, Andrej Picej wrote:
-> Hi Alexandre,
-> 
-> On 8. 06. 23 11:31, Alexandre Belloni wrote:
->> Hello,
->>
->> On 08/06/2023 11:04:46+0200, Andrej Picej wrote:
->>> +    ret = regmap_read(rv3028->regmap, RV3028_BACKUP, &val_old);
->>> +    if (ret < 0)
->>> +        return ret;
->>> +
->>> +    /* mask out only trickle charger bits */
->>> +    val_old = val_old & (RV3028_BACKUP_TCE | RV3028_BACKUP_TCR_MASK);
->>> +
->>>       /* setup trickle charger */
->>> -    if (!device_property_read_u32(&client->dev, 
->>> "trickle-resistor-ohms",
->>> -                      &ohms)) {
->>> +    if (device_property_read_u32(&client->dev, 
->>> "trickle-resistor-ohms", &ohms)) {
->>> +        /* disable the trickle charger */
->>> +        val = 0;
->>
->> You can't do that, this will break existing users that may set the
->> trickle charger from their bootloader for example.
-> 
-> hmm...ok I understand that idea. I thought that might be a problem. I 
-> guess keeping default as it is has a higher priority.
-> 
-> What do you say if setting this property to 0 (or maybe -1) disabled the 
-> trickle charger?
-> So if users add:
-> 
-> trickle-resistor-ohms = <0>;
-> or
-> trickle-resistor-ohms = <(-1)>;
-> 
-> this would mean disable the trickle charger?
-> 
-> I know it is far from optimal, but this would solve both things:
-> * not braking existing implementation,
-> * users could disable the trickle charger.
-> 
-> What do you say.
 
-Gentle ping. Would this be something you would consider?
 
-Thanks,
-Andrej
+On 01/06/23 18:43, Francesco Dolcini wrote:
 
-> 
-> Thanks for your review.
-> 
-> Best regards,
-> Andrej
-> 
->>
->>> +    } else {
->>>           int i;
->>>           for (i = 0; i < ARRAY_SIZE(rv3028_trickle_resistors); i++)
->>> @@ -947,15 +957,21 @@ static int rv3028_probe(struct i2c_client *client)
->>>                   break;
->>>           if (i < ARRAY_SIZE(rv3028_trickle_resistors)) {
->>> -            ret = rv3028_update_cfg(rv3028, RV3028_BACKUP, 
->>> RV3028_BACKUP_TCE |
->>> -                         RV3028_BACKUP_TCR_MASK, RV3028_BACKUP_TCE | 
->>> i);
->>> -            if (ret)
->>> -                return ret;
->>> +            /* enable the trickle charger and setup its resistor 
->>> accordingly */
->>> +            val = RV3028_BACKUP_TCE | i;
->>>           } else {
->>>               dev_warn(&client->dev, "invalid trickle resistor 
->>> value\n");
->>>           }
->>>       }
->>> +    /* only update EEPROM if changes are necessary */
->>> +    if (val_old != val) {
->>> +        ret = rv3028_update_cfg(rv3028, RV3028_BACKUP, 
->>> RV3028_BACKUP_TCE |
->>> +                    RV3028_BACKUP_TCR_MASK, val);
->>> +        if (ret)
->>> +            return ret;
->>> +    }
->>> +
->>>       ret = rtc_add_group(rv3028->rtc, &rv3028_attr_group);
->>>       if (ret)
->>>           return ret;
->>> -- 
->>> 2.25.1
->>>
->>
+[...]
+
+> +/* Verdin I2C_1 */
+> +&main_i2c1 {
+> +	status = "okay";
+> +
+> +	/* Audio Codec */
+> +	nau8822_1a: audio-codec@1a {
+> +		compatible = "nuvoton,nau8822";
+> +		reg = <0x1a>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_i2s1_mclk>; /* Configure AUDIO_EXT_REFCLK1 pin as output */
+> +		#sound-dai-cells = <0>;
+> +
+> +		/* POSTDIV4_16FF_MAIN_2_HSDIVOUT8_CLK -> AUDIO_EXT_REFCLK1 */
+> +		assigned-clocks = <&k3_clks 157 10>;
+> +		assigned-clock-parents = <&k3_clks 157 18>;
+> +		assigned-clock-rates = <25000000>; /* for 48KHz ± 1.7% */
+> +	};
+> +
+
+Oops, this node fails dtbs_check
+
+make ARCH=arm64 CROSS_COMPILE=$V8_CROSS CHECK_DTBS=y ti/k3-am625-verdin-nonwifi-dev.dtb
+
+/work/linux/arch/arm64/boot/dts/ti/k3-am625-verdin-nonwifi-dev.dtb: audio-codec@1a: '#sound-dai-cells', 'assigned-clock-parents', 'assigned-clock-rates', 'assigned-clocks' do not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /home/a0132425/workspace/k3-next/Documentation/devicetree/bindings/sound/nuvoton,nau8822.yaml
+/work/linux/arch/arm64/boot/dts/ti/k3-am625-verdin-nonwifi-dev.dtb: audio-codec@1a: 'anyOf' conditional failed, one must be fixed:
+	'clocks' is a required property
+	'#clock-cells' is a required property
+	From schema: /work/.local/lib/python3.10/site-packages/dtschema/schemas/clock/clock.yaml
+
+[...]
+
+-- 
+Regards
+Vignesh
