@@ -2,106 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59B69731FBF
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 20:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61DFD731FC7
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 20:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238099AbjFOSJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 14:09:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60496 "EHLO
+        id S238946AbjFOSKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 14:10:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237565AbjFOSJa (ORCPT
+        with ESMTP id S239374AbjFOSKM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 14:09:30 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D532D4E;
-        Thu, 15 Jun 2023 11:09:27 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-30af56f5f52so6041351f8f.1;
-        Thu, 15 Jun 2023 11:09:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686852565; x=1689444565;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BPImEVscMojs9n7lKMKdyofc4xjY1xoflsUxQYw/6Tc=;
-        b=QmRYT/l2vvGvs1/ND8lpYm14BMAW04Gz/Qh7LvvvDDIuttOKOdERGtbvpZvDCsF6la
-         s9EoxJ/DCBiGh/c2u0b0eTxzM56kO+Ye53Hsbutz4BrZyfjeLhpxPPKjxNV6LQH04m6w
-         uijrUDf0dbj+0O9KYIDYp1LvOf8M3/kdPT/kLakZtE2hLwKUzdZD61HbeYELetDhu7iZ
-         hMwPBy7c94PT3pNyjnqopMW6MqczzYcgW+XrHq+sXWpqZdv9GluD6O9DYyCmSwTZvw4X
-         KGNmd0uVZsjDb+08dhe8QtQCiUFQHvqktKkM5OfXPh+ucZEWA69OuRKGU1dgYqcFxrq7
-         3mNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686852565; x=1689444565;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BPImEVscMojs9n7lKMKdyofc4xjY1xoflsUxQYw/6Tc=;
-        b=JoAjVYYxVpC9Xak7281AmCoB2+I2Het1Aj/76FCUuUdCCTyYEDmum0a0JiqCN6x+xs
-         ZjcHSD7u+FC2c4eXteg8P1iY/Vtbwy37AsqHmJH6xOUggYmM222CmhKVVcF7NNsEwb+B
-         YSY9w1BBGqrl/tTIhKhyz4jvqpJMwF6Kimq3oyBm6kQOaXQruoGfNx/Jl/GngF/2NP+O
-         pq4BElEe983IiJazry9SwJXU1/kxy0xgWeG/R1yoK/4VPINKqmWAuBlRZc4F0zM14Xx6
-         btqLiTJw3aq+rwMEPlwBxMxVPaboY1vpWx4ZZQliDxAwYFTtv0Vt39Qpa7dmR/68j+vk
-         xRSQ==
-X-Gm-Message-State: AC+VfDyOs7LAWX/h6sfQppLDx+SRZK83xX4S0+gbVUf/7GQx3Zi4S/Eq
-        uedoxtaXahLajcLDeyVCjlBff6yjIfPQvOwgs6kT+Dt6fMT1AA==
-X-Google-Smtp-Source: ACHHUZ5ScKEXxs3N3riRpameibKwfQ5AgWGdRhPuq7vZ0BK5oQPEW/IWP2DdZoP9Jva/DF0QJH9x2fyXk/gMJei1FDU=
-X-Received: by 2002:a5d:4743:0:b0:30e:19a8:4b15 with SMTP id
- o3-20020a5d4743000000b0030e19a84b15mr11748710wrs.30.1686852565052; Thu, 15
- Jun 2023 11:09:25 -0700 (PDT)
+        Thu, 15 Jun 2023 14:10:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8EE295B;
+        Thu, 15 Jun 2023 11:10:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BEFFA6106D;
+        Thu, 15 Jun 2023 18:10:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DB04C433C0;
+        Thu, 15 Jun 2023 18:10:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686852610;
+        bh=vv4meO1knN0gNYFpBkBU7VnOP3JPLKf+tWByQNe1cyg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=As0HhD51H/x7PIE1X7eVgPnRRbhxiMsT9wGidylJBBPAf1MDJi7+z62Ej/E34fOFX
+         Sbav8GO/82gscjXoODCAyMJje2b09uKeM8OcJnjtMBT0YXSBiprSGDVxaS0RM7tFGE
+         ZLrmE4saX+pjfJFHlCFbiSKiViBIpUtAEny+B2HlYWZkyfS+cHitwfEn8VQZ1xj6AV
+         +YPRniQIWVSJ3dQdiP+VUPDcQlkKexDuuOJZl5J5Wn6mrM4vealArGrMYbuoq58lX6
+         bGAgvmIZkHGjFIQkINTTyu8BMN3Dfyutg6pyluOfADzGX4R/iNc7ibRvOGFNxDhCq/
+         ZnXa3HFUueASg==
+From:   SeongJae Park <sj@kernel.org>
+To:     paulmck@kernel.org
+Cc:     SeongJae Park <sj@kernel.org>, joel@joelfernandes.org,
+        mmpgouride@gmail.com, corbet@lwn.net, rcu@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/3] Docs/RCU/rculist_nulls: Minor fixup
+Date:   Thu, 15 Jun 2023 18:10:01 +0000
+Message-Id: <20230615181004.86850-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230613004341.3540325-1-azeemshaikh38@gmail.com>
- <202306131229.B5F2D9F@keescook> <CADmuW3VEiseKt2UM9o9jzzR8nEawh1jxANyxdZcxk89U65pXEQ@mail.gmail.com>
- <202306141049.BF86FA8F1F@keescook>
-In-Reply-To: <202306141049.BF86FA8F1F@keescook>
-From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-Date:   Thu, 15 Jun 2023 14:09:13 -0400
-Message-ID: <CADmuW3UZ9+9DmXPEyitgn_8Rg7U-iGvV-wJ-ug7eW84JSti47g@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: function: printer: Replace strlcpy with strscpy
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-hardening@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Albert Briscoe <albertsbriscoe@gmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 1:51=E2=80=AFPM Kees Cook <keescook@chromium.org> w=
-rote:
->
-> On Wed, Jun 14, 2023 at 10:12:14AM -0400, Azeem Shaikh wrote:
-> > On Tue, Jun 13, 2023 at 3:30=E2=80=AFPM Kees Cook <keescook@chromium.or=
-g> wrote:
-> > >
-> > > On Tue, Jun 13, 2023 at 12:43:41AM +0000, Azeem Shaikh wrote:
-> > [...]
-> > > > -     result =3D strlcpy(page, opts->pnp_string, PAGE_SIZE);
-> > > > -     if (result >=3D PAGE_SIZE) {
-> > > > +     result =3D strscpy(page, opts->pnp_string, PAGE_SIZE);
-> > > > +     if (result =3D=3D -E2BIG) {
-> > >
-> > > I think "< 1" might be a better test here.
-> >
-> > Curious, why "< 1" instead of "< 0"?
-> >
-> > > >               result =3D PAGE_SIZE;
-> > > >       } else if (page[result - 1] !=3D '\n' && result + 1 < PAGE_SI=
-ZE) {
->
-> It's for this case above where "result" may be used in an array index,
-> and if it's 0 or less, there will be a negative array index (due to the "=
--
-> 1"). So, here, it needs to be "< 1" instead of the more traditional "< 0"=
-.
->
+Changes from v2
+(https://lore.kernel.org/rcu/20230613182434.88317-1-sj@kernel.org/)
+- Drop first two patches that merged to Paul's tree
+- Add definition of 'obj' (Paul E. McKenney)
+- Fix more wrong hlist_[nulls]_head field name mentions
 
-Makes sense. Sent out a v2.
+Changes from v1
+(https://lore.kernel.org/rcu/20230518224008.2468-1-sj@kernel.org/)
+- Add Reviewed-by tags from Joel Fernandes for first three patches
+- Fix the text for wrong extra _release()
+
+---
+
+Fix minor problems in example code snippets and the text of
+rculist_nulls.rst file.
+
+
+SeongJae Park (3):
+  Docs/RCU/rculist_nulls: Specify type of the object in examples
+  Docs/RCU/rculist_nulls: Fix hlist_[nulls]_head field names of 'obj'
+  Docs/RCU/rculist_nulls: Fix text about atomic_set_release()
+
+ Documentation/RCU/rculist_nulls.rst | 28 +++++++++++++++++++++-------
+ 1 file changed, 21 insertions(+), 7 deletions(-)
+
+-- 
+2.25.1
+
