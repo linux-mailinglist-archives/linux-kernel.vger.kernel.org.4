@@ -2,162 +2,342 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C2957312B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:50:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 919E57314EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 12:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244000AbjFOIuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 04:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37246 "EHLO
+        id S1343722AbjFOKIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 06:08:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245475AbjFOItm (ORCPT
+        with ESMTP id S1343780AbjFOKHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 04:49:42 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B0D2D60;
-        Thu, 15 Jun 2023 01:49:25 -0700 (PDT)
-Received: from dggpeml500012.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QhbVc4z8WzMpP3;
-        Thu, 15 Jun 2023 16:46:16 +0800 (CST)
-Received: from localhost.localdomain (10.67.175.61) by
- dggpeml500012.china.huawei.com (7.185.36.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 15 Jun 2023 16:49:22 +0800
-From:   Zheng Yejian <zhengyejian1@huawei.com>
-To:     <rostedt@goodmis.org>, <gregkh@linuxfoundation.org>
-CC:     <mhiramat@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
-        <zhengyejian1@huawei.com>
-Subject: [PATCH 5.10] tracing: Add tracing_reset_all_online_cpus_unlocked() function
-Date:   Fri, 16 Jun 2023 04:49:31 +0800
-Message-ID: <20230615204931.3250659-1-zhengyejian1@huawei.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.175.61]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500012.china.huawei.com (7.185.36.15)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Thu, 15 Jun 2023 06:07:44 -0400
+X-Greylist: delayed 951 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Jun 2023 03:07:08 PDT
+Received: from m126.mail.126.com (m126.mail.126.com [220.181.12.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 84D482946;
+        Thu, 15 Jun 2023 03:07:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=wqqLtJeEX1Fn4XHCpE
+        mw4keEMpB9pn0pKjuiY3dBfak=; b=cbZw3BttBb+SWjcz06OGel0liAWhDXjnEF
+        gJ4T4Ql6hQzFitBkFX+hBz2yuyiSJF5QXCspZcA5kQuQiDh29wW4qBAipHu+GWZD
+        2VotPod3XGsIlFyX22JOThj6H83rowr5+Ly5LKFNLqo7WUGh5ea50GY33N2PYUPu
+        FU1f9AYZ8=
+Received: from wh-chevronli-w10.bayhubtech.com (unknown [58.48.115.170])
+        by zwqz-smtp-mta-g3-1 (Coremail) with SMTP id _____wD3BSr43opk8WKiAA--.50068S2;
+        Thu, 15 Jun 2023 17:50:49 +0800 (CST)
+From:   Chevron Li <chevron_li@126.com>
+To:     adrian.hunter@intel.com, ulf.hansson@linaro.org,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     shaper.liu@bayhubtech.com, xiaoguang.yu@bayhubtech.com,
+        shirley.her@bayhubtech.com, chevron.li@bayhubtech.com
+Subject: [PATCH V2 1/2] mmc: sdhci-pci-o2micro: add Bayhub new chip GG8 support for UHS-I
+Date:   Thu, 15 Jun 2023 17:50:11 +0800
+Message-Id: <20230615095012.30856-1-chevron_li@126.com>
+X-Mailer: git-send-email 2.18.0.windows.1
+X-CM-TRANSID: _____wD3BSr43opk8WKiAA--.50068S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW3CF1ktw47Ww4kXFWfGF4DArb_yoWDKr1UpF
+        ZYyayktr4UtFWrZ3s7tw1kZr17JF4qkrW0kFy3G3yIqF18C3y5Wr97CFZ8Xry8XrZaqw4f
+        XF4ktrWxWryUJw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UceOAUUUUU=
+X-Originating-IP: [58.48.115.170]
+X-CM-SenderInfo: hfkh42xrqbzxa6rslhhfrp/1tbiFx6PAVpEGgA+wgABs+
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+From: Chevron Li <chevron.li@bayhubtech.com>
 
-commit e18eb8783ec4949adebc7d7b0fdb65f65bfeefd9 upstream.
+Add Bayhub new chip GG8 support for UHS-I function
 
-Currently the tracing_reset_all_online_cpus() requires the
-trace_types_lock held. But only one caller of this function actually has
-that lock held before calling it, and the other just takes the lock so
-that it can call it. More users of this function is needed where the lock
-is not held.
-
-Add a tracing_reset_all_online_cpus_unlocked() function for the one use
-case that calls it without being held, and also add a lockdep_assert to
-make sure it is held when called.
-
-Then have tracing_reset_all_online_cpus() take the lock internally, such
-that callers do not need to worry about taking it.
-
-Link: https://lkml.kernel.org/r/20221123192741.658273220@goodmis.org
-
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Zheng Yejian <zhengyejian1@huawei.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-[this patch is pre-depended by be111ebd8868d4b7c041cb3c6102e1ae27d6dc1d
-due to tracing_reset_all_online_cpus() should be called after taking lock]
-Fixes: be111ebd8868 ("tracing: Free buffers when a used dynamic event is removed")
-Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
+Signed-off-by: Chevron Li <chevron.li@bayhubtech.com>
 ---
- kernel/trace/trace.c              | 11 ++++++++++-
- kernel/trace/trace.h              |  1 +
- kernel/trace/trace_events.c       |  2 +-
- kernel/trace/trace_events_synth.c |  2 --
- 4 files changed, 12 insertions(+), 4 deletions(-)
+Change in V1:
+1.Add GG8 chip IDs in sdhci-pci-core.c and sdhci-pci.h
+2.Add GG8 chip initialization flow at sdhci-pci-o2micro.c
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 482ec6606b7b..70526400e05c 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -2178,10 +2178,12 @@ void tracing_reset_online_cpus(struct array_buffer *buf)
- }
+Change in V2:
+1.updated typo description for the patch title.
+2.updated patch format according to reviewer's comments.
+---
+ drivers/mmc/host/sdhci-pci-core.c    |   4 +
+ drivers/mmc/host/sdhci-pci-o2micro.c | 148 ++++++++++++++++++++-------
+ drivers/mmc/host/sdhci-pci.h         |   4 +
+ 3 files changed, 120 insertions(+), 36 deletions(-)
+
+diff --git a/drivers/mmc/host/sdhci-pci-core.c b/drivers/mmc/host/sdhci-pci-core.c
+index 01975d145200..1d14300691f4 100644
+--- a/drivers/mmc/host/sdhci-pci-core.c
++++ b/drivers/mmc/host/sdhci-pci-core.c
+@@ -1898,6 +1898,10 @@ static const struct pci_device_id pci_ids[] = {
+ 	SDHCI_PCI_DEVICE(O2, SDS1,     o2),
+ 	SDHCI_PCI_DEVICE(O2, SEABIRD0, o2),
+ 	SDHCI_PCI_DEVICE(O2, SEABIRD1, o2),
++	SDHCI_PCI_DEVICE(O2, GG8_9860, o2),
++	SDHCI_PCI_DEVICE(O2, GG8_9861, o2),
++	SDHCI_PCI_DEVICE(O2, GG8_9862, o2),
++	SDHCI_PCI_DEVICE(O2, GG8_9863, o2),
+ 	SDHCI_PCI_DEVICE(ARASAN, PHY_EMMC, arasan),
+ 	SDHCI_PCI_DEVICE(SYNOPSYS, DWC_MSHC, snps),
+ 	SDHCI_PCI_DEVICE(GLI, 9750, gl9750),
+diff --git a/drivers/mmc/host/sdhci-pci-o2micro.c b/drivers/mmc/host/sdhci-pci-o2micro.c
+index 620f52ad9667..539bbafb3ff7 100644
+--- a/drivers/mmc/host/sdhci-pci-o2micro.c
++++ b/drivers/mmc/host/sdhci-pci-o2micro.c
+@@ -36,6 +36,7 @@
+ #define O2_SD_INF_MOD		0xF1
+ #define O2_SD_MISC_CTRL4	0xFC
+ #define O2_SD_MISC_CTRL		0x1C0
++#define O2_SD_EXP_INT_REG	0x1E0
+ #define O2_SD_PWR_FORCE_L0	0x0002
+ #define O2_SD_TUNING_CTRL	0x300
+ #define O2_SD_PLL_SETTING	0x304
+@@ -49,6 +50,9 @@
+ #define O2_SD_UHS2_L1_CTRL	0x35C
+ #define O2_SD_FUNC_REG3		0x3E0
+ #define O2_SD_FUNC_REG4		0x3E4
++#define O2_SD_PARA_SET_REG1 0x444
++#define O2_SD_VDDX_CTRL_REG	0x508
++#define O2_SD_GPIO_CTRL_REG1	0x510
+ #define O2_SD_LED_ENABLE	BIT(6)
+ #define O2_SD_FREG0_LEDOFF	BIT(13)
+ #define O2_SD_SEL_DLL		BIT(16)
+@@ -334,33 +338,45 @@ static int sdhci_o2_execute_tuning(struct mmc_host *mmc, u32 opcode)
+ 	scratch |= O2_SD_PWR_FORCE_L0;
+ 	sdhci_writew(host, scratch, O2_SD_MISC_CTRL);
  
- /* Must have trace_types_lock held */
--void tracing_reset_all_online_cpus(void)
-+void tracing_reset_all_online_cpus_unlocked(void)
+-	/* Stop clk */
+-	reg_val = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
+-	reg_val &= ~SDHCI_CLOCK_CARD_EN;
+-	sdhci_writew(host, reg_val, SDHCI_CLOCK_CONTROL);
+-
+-	if ((host->timing == MMC_TIMING_MMC_HS200) ||
+-		(host->timing == MMC_TIMING_UHS_SDR104)) {
+-		/* UnLock WP */
+-		pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch_8);
+-		scratch_8 &= 0x7f;
+-		pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch_8);
+-
+-		/* Set pcr 0x354[16] to choose dll clock, and set the default phase */
+-		pci_read_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH, &reg_val);
+-		reg_val &= ~(O2_SD_SEL_DLL | O2_SD_PHASE_MASK);
+-		reg_val |= (O2_SD_SEL_DLL | O2_SD_FIX_PHASE);
+-		pci_write_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH, reg_val);
++	/* Update output phase */
++	switch (chip->pdev->device) {
++	case PCI_DEVICE_ID_O2_SDS0:
++	case PCI_DEVICE_ID_O2_SEABIRD0:
++	case PCI_DEVICE_ID_O2_SEABIRD1:
++	case PCI_DEVICE_ID_O2_SDS1:
++	case PCI_DEVICE_ID_O2_FUJIN2:
++		/* Stop clk */
++		reg_val = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
++		reg_val &= ~SDHCI_CLOCK_CARD_EN;
++		sdhci_writew(host, reg_val, SDHCI_CLOCK_CONTROL);
++
++		if (host->timing == MMC_TIMING_MMC_HS200 ||
++		    host->timing == MMC_TIMING_UHS_SDR104) {
++			/* UnLock WP */
++			pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch_8);
++			scratch_8 &= 0x7f;
++			pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch_8);
++
++			/* Set pcr 0x354[16] to choose dll clock, and set the default phase */
++			pci_read_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH, &reg_val);
++			reg_val &= ~(O2_SD_SEL_DLL | O2_SD_PHASE_MASK);
++			reg_val |= (O2_SD_SEL_DLL | O2_SD_FIX_PHASE);
++			pci_write_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH, reg_val);
++
++			/* Lock WP */
++			pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch_8);
++			scratch_8 |= 0x80;
++			pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch_8);
++		}
+ 
+-		/* Lock WP */
+-		pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch_8);
+-		scratch_8 |= 0x80;
+-		pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch_8);
++		/* Start clk */
++		reg_val = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
++		reg_val |= SDHCI_CLOCK_CARD_EN;
++		sdhci_writew(host, reg_val, SDHCI_CLOCK_CONTROL);
++		break;
++	default:
++		break;
+ 	}
+-	/* Start clk */
+-	reg_val = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
+-	reg_val |= SDHCI_CLOCK_CARD_EN;
+-	sdhci_writew(host, reg_val, SDHCI_CLOCK_CONTROL);
+ 
+ 	/* wait DLL lock, timeout value 5ms */
+ 	if (readx_poll_timeout(sdhci_o2_pll_dll_wdt_control, host,
+@@ -563,6 +579,7 @@ static void sdhci_pci_o2_set_clock(struct sdhci_host *host, unsigned int clock)
+ 	u16 clk;
+ 	u8 scratch;
+ 	u32 scratch_32;
++	u32 dmdn_208m, dmdn_200m;
+ 	struct sdhci_pci_slot *slot = sdhci_priv(host);
+ 	struct sdhci_pci_chip *chip = slot->chip;
+ 
+@@ -578,16 +595,27 @@ static void sdhci_pci_o2_set_clock(struct sdhci_host *host, unsigned int clock)
+ 	scratch &= 0x7f;
+ 	pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch);
+ 
++	if (chip->pdev->device == PCI_DEVICE_ID_O2_GG8_9860 ||
++	    chip->pdev->device == PCI_DEVICE_ID_O2_GG8_9861 ||
++	    chip->pdev->device == PCI_DEVICE_ID_O2_GG8_9862 ||
++	    chip->pdev->device == PCI_DEVICE_ID_O2_GG8_9863) {
++		dmdn_208m = 0x2c500000;
++		dmdn_200m = 0x25200000;
++	} else {
++		dmdn_208m = 0x2c280000;
++		dmdn_200m = 0x25100000;
++	}
++
+ 	if ((host->timing == MMC_TIMING_UHS_SDR104) && (clock == 200000000)) {
+ 		pci_read_config_dword(chip->pdev, O2_SD_PLL_SETTING, &scratch_32);
+ 
+-		if ((scratch_32 & 0xFFFF0000) != 0x2c280000)
+-			o2_pci_set_baseclk(chip, 0x2c280000);
++		if ((scratch_32 & 0xFFFF0000) != dmdn_208m)
++			o2_pci_set_baseclk(chip, dmdn_208m);
+ 	} else {
+ 		pci_read_config_dword(chip->pdev, O2_SD_PLL_SETTING, &scratch_32);
+ 
+-		if ((scratch_32 & 0xFFFF0000) != 0x25100000)
+-			o2_pci_set_baseclk(chip, 0x25100000);
++		if ((scratch_32 & 0xFFFF0000) != dmdn_200m)
++			o2_pci_set_baseclk(chip, dmdn_200m);
+ 	}
+ 
+ 	pci_read_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH, &scratch_32);
+@@ -624,6 +652,11 @@ static int sdhci_pci_o2_probe_slot(struct sdhci_pci_slot *slot)
+ 	if (caps & SDHCI_CAN_DO_8BIT)
+ 		host->mmc->caps |= MMC_CAP_8_BIT_DATA;
+ 
++	host->quirks2 |= SDHCI_QUIRK2_BROKEN_DDR50;
++
++	sdhci_pci_o2_enable_msi(chip, host);
++
++	host->mmc_host_ops.execute_tuning = sdhci_o2_execute_tuning;
+ 	switch (chip->pdev->device) {
+ 	case PCI_DEVICE_ID_O2_SDS0:
+ 	case PCI_DEVICE_ID_O2_SEABIRD0:
+@@ -634,10 +667,6 @@ static int sdhci_pci_o2_probe_slot(struct sdhci_pci_slot *slot)
+ 		if (reg & 0x1)
+ 			host->quirks |= SDHCI_QUIRK_MULTIBLOCK_READ_ACMD12;
+ 
+-		host->quirks2 |= SDHCI_QUIRK2_BROKEN_DDR50;
+-
+-		sdhci_pci_o2_enable_msi(chip, host);
+-
+ 		if (chip->pdev->device == PCI_DEVICE_ID_O2_SEABIRD0) {
+ 			ret = pci_read_config_dword(chip->pdev,
+ 						    O2_SD_MISC_SETTING, &reg);
+@@ -663,15 +692,21 @@ static int sdhci_pci_o2_probe_slot(struct sdhci_pci_slot *slot)
+ 			host->quirks2 |= SDHCI_QUIRK2_PRESET_VALUE_BROKEN;
+ 		}
+ 
+-		host->mmc_host_ops.execute_tuning = sdhci_o2_execute_tuning;
+-
+ 		if (chip->pdev->device != PCI_DEVICE_ID_O2_FUJIN2)
+ 			break;
+ 		/* set dll watch dog timer */
+ 		reg = sdhci_readl(host, O2_SD_VENDOR_SETTING2);
+ 		reg |= (1 << 12);
+ 		sdhci_writel(host, reg, O2_SD_VENDOR_SETTING2);
+-
++		break;
++	case PCI_DEVICE_ID_O2_GG8_9860:
++	case PCI_DEVICE_ID_O2_GG8_9861:
++	case PCI_DEVICE_ID_O2_GG8_9862:
++	case PCI_DEVICE_ID_O2_GG8_9863:
++		host->mmc->caps2 |= MMC_CAP2_NO_SDIO;
++		host->mmc->caps |= MMC_CAP_HW_RESET;
++		host->quirks2 |= SDHCI_QUIRK2_PRESET_VALUE_BROKEN;
++		slot->host->mmc_host_ops.get_cd = sdhci_o2_get_cd;
+ 		break;
+ 	default:
+ 		break;
+@@ -684,6 +719,7 @@ static int sdhci_pci_o2_probe(struct sdhci_pci_chip *chip)
  {
- 	struct trace_array *tr;
+ 	int ret;
+ 	u8 scratch;
++	u16 scratch16;
+ 	u32 scratch_32;
  
-+	lockdep_assert_held(&trace_types_lock);
+ 	switch (chip->pdev->device) {
+@@ -893,6 +929,46 @@ static int sdhci_pci_o2_probe(struct sdhci_pci_chip *chip)
+ 		scratch |= 0x80;
+ 		pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch);
+ 		break;
++	case PCI_DEVICE_ID_O2_GG8_9860:
++	case PCI_DEVICE_ID_O2_GG8_9861:
++	case PCI_DEVICE_ID_O2_GG8_9862:
++	case PCI_DEVICE_ID_O2_GG8_9863:
++		/* UnLock WP */
++		ret = pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch);
++		if (ret)
++			return ret;
++		scratch &= 0x7f;
++		pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch);
 +
- 	list_for_each_entry(tr, &ftrace_trace_arrays, list) {
- 		if (!tr->clear_trace)
- 			continue;
-@@ -2193,6 +2195,13 @@ void tracing_reset_all_online_cpus(void)
- 	}
- }
- 
-+void tracing_reset_all_online_cpus(void)
-+{
-+	mutex_lock(&trace_types_lock);
-+	tracing_reset_all_online_cpus_unlocked();
-+	mutex_unlock(&trace_types_lock);
-+}
++		/* Select mode switch source as software control */
++		pci_read_config_word(chip->pdev, O2_SD_PARA_SET_REG1, &scratch16);
++		scratch16 &= 0xF8FF;
++		scratch16 |= BIT(9);
++		pci_write_config_word(chip->pdev, O2_SD_PARA_SET_REG1, scratch16);
 +
- /*
-  * The tgid_map array maps from pid to tgid; i.e. the value stored at index i
-  * is the tgid last observed corresponding to pid=i.
-diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
-index 37f616bf5fa9..e5b505b5b7d0 100644
---- a/kernel/trace/trace.h
-+++ b/kernel/trace/trace.h
-@@ -725,6 +725,7 @@ int tracing_is_enabled(void);
- void tracing_reset_online_cpus(struct array_buffer *buf);
- void tracing_reset_current(int cpu);
- void tracing_reset_all_online_cpus(void);
-+void tracing_reset_all_online_cpus_unlocked(void);
- int tracing_open_generic(struct inode *inode, struct file *filp);
- int tracing_open_generic_tr(struct inode *inode, struct file *filp);
- bool tracing_is_disabled(void);
-diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index bac13f24a96e..f8ed66f38175 100644
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -2661,7 +2661,7 @@ static void trace_module_remove_events(struct module *mod)
- 	 * over from this module may be passed to the new module events and
- 	 * unexpected results may occur.
- 	 */
--	tracing_reset_all_online_cpus();
-+	tracing_reset_all_online_cpus_unlocked();
- }
- 
- static int trace_module_notify(struct notifier_block *self,
-diff --git a/kernel/trace/trace_events_synth.c b/kernel/trace/trace_events_synth.c
-index 18291ab35657..ee174de0b8f6 100644
---- a/kernel/trace/trace_events_synth.c
-+++ b/kernel/trace/trace_events_synth.c
-@@ -1363,7 +1363,6 @@ int synth_event_delete(const char *event_name)
- 	mutex_unlock(&event_mutex);
- 
- 	if (mod) {
--		mutex_lock(&trace_types_lock);
- 		/*
- 		 * It is safest to reset the ring buffer if the module
- 		 * being unloaded registered any events that were
-@@ -1375,7 +1374,6 @@ int synth_event_delete(const char *event_name)
- 		 * occur.
- 		 */
- 		tracing_reset_all_online_cpus();
--		mutex_unlock(&trace_types_lock);
++		/* set VDD1 supply source */
++		pci_read_config_word(chip->pdev, O2_SD_VDDX_CTRL_REG, &scratch16);
++		scratch16 &= 0xFFE3;
++		scratch16 |= BIT(3);
++		pci_write_config_word(chip->pdev, O2_SD_VDDX_CTRL_REG, scratch16);
++
++		/* Set host drive strength*/
++		scratch16 = 0x0025;
++		pci_write_config_word(chip->pdev, O2_SD_PLL_SETTING, scratch16);
++
++		/* Set output delay*/
++		pci_read_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH, &scratch_32);
++		scratch_32 &= 0xFF0FFF00;
++		scratch_32 |= 0x00B0003B;
++		pci_write_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH, scratch_32);
++
++		/* Lock WP */
++		ret = pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch);
++		if (ret)
++			return ret;
++		scratch |= 0x80;
++		pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch);
++		break;
  	}
  
- 	return ret;
+ 	return 0;
+diff --git a/drivers/mmc/host/sdhci-pci.h b/drivers/mmc/host/sdhci-pci.h
+index 3661a224fb04..d680a030f3bf 100644
+--- a/drivers/mmc/host/sdhci-pci.h
++++ b/drivers/mmc/host/sdhci-pci.h
+@@ -11,6 +11,10 @@
+ #define PCI_DEVICE_ID_O2_FUJIN2		0x8520
+ #define PCI_DEVICE_ID_O2_SEABIRD0	0x8620
+ #define PCI_DEVICE_ID_O2_SEABIRD1	0x8621
++#define PCI_DEVICE_ID_O2_GG8_9860	0x9860
++#define PCI_DEVICE_ID_O2_GG8_9861	0x9861
++#define PCI_DEVICE_ID_O2_GG8_9862	0x9862
++#define PCI_DEVICE_ID_O2_GG8_9863	0x9863
+ 
+ #define PCI_DEVICE_ID_INTEL_PCH_SDIO0	0x8809
+ #define PCI_DEVICE_ID_INTEL_PCH_SDIO1	0x880a
+
+base-commit: 9e87b63ed37e202c77aa17d4112da6ae0c7c097c
 -- 
 2.25.1
 
