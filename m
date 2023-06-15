@@ -2,95 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 099D07311B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B97A7311BB
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239138AbjFOIFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 04:05:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43486 "EHLO
+        id S239164AbjFOIG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 04:06:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233955AbjFOIFu (ORCPT
+        with ESMTP id S237555AbjFOIGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 04:05:50 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039541AA;
-        Thu, 15 Jun 2023 01:05:48 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35F6XFam007602;
-        Thu, 15 Jun 2023 10:05:39 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=rWAsqAnk1NOFfSrch2LiFEFQGq9N0Hnm6C4sCs+M3D4=;
- b=31hrIaUG+w5OmHV87NzjL1XMuVANMHUndDS+geuV4yaGOSRyXOQRfrlPlvbdn+erMk7E
- seB4ccjWnvillD/+0LWQqybK3wYbzQ0F/izSPJp+NRdgSK5DI4Mr6gWxIxcgZOdLuUzr
- 2z9XHUE5ln/oMt3V24fhGcdbX0kC8U7nfGLX0K+IVs6YJZ39NXk2UAkJOWVsNjk5I516
- GYI+lm/SOr36nXOntV77sX9+UlnVpI66N0ucc9sf7C+sNe/62ElSfEJZfQT+6cUrnIeH
- 1FHYqTd3vTsl4+AfGLyhqFH6jw9P74Qbr16A05ZXcAY0wxa/4m5aDyF744wdhOqMPmSA KA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3r7s1maacb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jun 2023 10:05:39 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 343B010002A;
-        Thu, 15 Jun 2023 10:05:39 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 27FA2216EC2;
-        Thu, 15 Jun 2023 10:05:39 +0200 (CEST)
-Received: from [10.252.8.64] (10.252.8.64) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 15 Jun
- 2023 10:05:38 +0200
-Message-ID: <2785de74-69b2-8ebc-09c9-f834adb870c0@foss.st.com>
-Date:   Thu, 15 Jun 2023 10:05:33 +0200
+        Thu, 15 Jun 2023 04:06:53 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB761A1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:06:51 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-85-PRuVYsO4PPG9Khf-CB4twQ-1; Thu, 15 Jun 2023 09:06:48 +0100
+X-MC-Unique: PRuVYsO4PPG9Khf-CB4twQ-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 15 Jun
+ 2023 09:06:46 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Thu, 15 Jun 2023 09:06:46 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Demi Marie Obenour' <demi@invisiblethingslab.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     Alexey Dobriyan <adobriyan@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Lee Jones <lee@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: RE: [PATCH v3 0/4] Make sscanf() stricter
+Thread-Topic: [PATCH v3 0/4] Make sscanf() stricter
+Thread-Index: AQHZnXRzYKsBWmeEwU2LY4YQ5TFW+a+Is3nggAAaG4CAASnjAIAAtO+AgADXzkA=
+Date:   Thu, 15 Jun 2023 08:06:46 +0000
+Message-ID: <e354268a4efe48c9a8023a30c7292d12@AcuMS.aculab.com>
+References: <6ab6adce-2318-4ae6-bde6-4317485639fd@p183>
+ <ZId/IA41c2sJyvE0@itl-email> <ZIeHfBf3aB3vUgRM@smile.fi.intel.com>
+ <ZIeMyQXU49OcoxY2@itl-email>
+ <ec3d7ebe62654e949329785bb32c3822@AcuMS.aculab.com>
+ <ZIiMrDxI5Ts0s8fK@itl-email>
+ <23df90dd35874fd89c64906e6a6de164@AcuMS.aculab.com>
+ <ZIoeVjC6offUywop@itl-email>
+In-Reply-To: <ZIoeVjC6offUywop@itl-email>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 0/4] spi: stm32: add spi slave mode
-To:     Mark Brown <broonie@kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230614102628.202936-1-valentin.caron@foss.st.com>
- <d0b62ef2-5355-4c00-9ff6-4ea9995ec0e1@sirena.org.uk>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-From:   Valentin CARON <valentin.caron@foss.st.com>
-In-Reply-To: <d0b62ef2-5355-4c00-9ff6-4ea9995ec0e1@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.252.8.64]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-15_04,2023-06-14_02,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 6/14/23 14:16, Mark Brown wrote:
-> On Wed, Jun 14, 2023 at 12:26:23PM +0200, Valentin Caron wrote:
->> STM32 SPI can operate in slave mode.
->> This series add this functionnality in spi-stm32 driver.
-> The more modern terminology here is device mode.
-
-Hi Mark,
-
-Thanks for your review. I have resent a "v3" with this improvement.
-
-Regards,
-Valentin
+RnJvbTogRGVtaSBNYXJpZSBPYmVub3VyDQo+IFNlbnQ6IDE0IEp1bmUgMjAyMyAyMTowOQ0KLi4u
+Lg0KPiA+IFdoYXQgc29ydCBvZiBmb3JtYXRzIGFuZCBkYXRhIGFyZSBiZWluZyB1c2VkPw0KPiAN
+Cj4gQmFzZS0xMCBvciBiYXNlLTE2IGludGVnZXJzLCB3aXRoIHdoaXRlc3BhY2UgbmV2ZXIgYmVp
+bmcgdmFsaWQuDQoNCkluIHdoaWNoIGNhc2Ugc3NjYW5mKCkgcmVhbGx5IGlzbid0IHdoYXQgeW91
+IGFyZSBsb29raW5nIGZvci4NCg0KPiA+IFRoZSAiJXMiIGZvcm1hdCB0ZXJtaW5hdGVzIG9uIHdo
+aXRlc3BhY2UuDQo+ID4gRXZlbiBzdHJvdWwoKSAoYW5kIGZyaWVuZHMpIHdpbGwgc2tpcCBsZWFk
+aW5nIHdoaXRlc3BhY2UuDQo+IA0KPiBZZXMsIHdoaWNoIGlzIGEgcmVhc29uIHRoYXQgc3RydG8q
+bCgpIGFyZSBqdXN0IGJyb2tlbiBJTU8uDQoNClRoZXkgYXJlIG5vdCAnYnJva2VuJywgdGhhdCBp
+cyB3aGF0IGlzIHVzZWZ1bCBtb3N0IG9mIHRoZSB0aW1lLg0KVGhlIHVzdWFsIHByb2JsZW0gaXMg
+dGhhdCAiMDIwIiBpcyB0cmVhdGVkIGFzIG9jdGFsLg0KDQo+IEnigJltIHRyeWluZyB0byByZXBs
+YWNlIHRoZWlyIHVzZXMgaW4gWGVuIHdpdGggY3VzdG9tIHBhcnNpbmcgY29kZS4NCg0KVGhlbiB3
+cml0ZSBhIGN1c3RvbSBwYXJzZXIgOi0pDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJl
+c3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsx
+IDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
