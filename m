@@ -2,47 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2040C731978
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:02:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEDAD73196F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:01:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343675AbjFONB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 09:01:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55308 "EHLO
+        id S1343536AbjFONA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 09:00:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343650AbjFONBi (ORCPT
+        with ESMTP id S241853AbjFONAz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 09:01:38 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EEFF268C;
-        Thu, 15 Jun 2023 06:01:36 -0700 (PDT)
-Received: from dggpeml500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Qhj5c5BSfzMpW1;
-        Thu, 15 Jun 2023 20:58:28 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- dggpeml500002.china.huawei.com (7.185.36.158) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 15 Jun 2023 21:01:34 +0800
-From:   Junhao He <hejunhao3@huawei.com>
-To:     <will@kernel.org>, <jonathan.cameron@huawei.com>,
-        <linux-kernel@vger.kernel.org>, <mark.rutland@arm.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-doc@vger.kernel.org>, <linuxarm@huawei.com>,
-        <yangyicong@huawei.com>, <shenyang39@huawei.com>,
-        <prime.zeng@hisilicon.com>, <hejunhao3@huawei.com>
-Subject: [PATCH v5 3/3] docs: perf: Add new description for HiSilicon UC PMU
-Date:   Thu, 15 Jun 2023 20:59:26 +0800
-Message-ID: <20230615125926.29832-4-hejunhao3@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20230615125926.29832-1-hejunhao3@huawei.com>
-References: <20230615125926.29832-1-hejunhao3@huawei.com>
+        Thu, 15 Jun 2023 09:00:55 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9AB1BC9
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 06:00:53 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f004cc54f4so10519191e87.3
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 06:00:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686834052; x=1689426052;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5TctcZvXGN43HwETUwBc1JHngngPXfmJv1grpN3Hs04=;
+        b=kWH5wT1655+UGW6aDb53bxMa3hBYH17QrxPTsuS34rPkI7u4/If0ZBBvHfEtUeStHD
+         pruKT02Tr8NLLGcgRr1TK7G2XHjFbZ8e2sdxJg3ERDs/kgZEEJYqLQeee++MYsEWpj1Z
+         75Thz7oRqM3LRvJWI7ulD1ArHNj3llb7ylJ7HnmUn7o7mlcQp/Uvi6zY7D5dScmS0X03
+         i3V6q7GBE7qQo3b1C3Kgs/oNgCVyOGWTDmUoUr25o1zw1xZuvPrS78pgq/q9ns7q2R9p
+         FrsaTnnM0L7C/Ii0Ht5Xg64CoisL0wJ8Q2H4ZK1LZvVgtoXFqSranXUZHnqgqVUs2bga
+         kgtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686834052; x=1689426052;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5TctcZvXGN43HwETUwBc1JHngngPXfmJv1grpN3Hs04=;
+        b=kolu0l2LZh1JrYpTLVcV+rmLCQHreU/ePU3WLvtyYc/ufK3YwH4RI9ZmO96FqGtVD0
+         e0wZYwXmQPNn5UJ/fBeSTKbdCCsWovcJRW40NsNQnRDETzY7qNY75vTaI0Eylu6CF2aX
+         +6Sg3xzP2CHETCy1+wMsqI1+UjQhhGeGbIdmL489GRjkCeUVkdLMsDpZL5ch6OdZf4SR
+         WMXBj0oN/WPuR/f7g809jl9VCQVr38cBZ/VOWrj8ltqr5OR9I2dTEuGlACU98+1JIFNp
+         3HEuySvmbfRAjqQZGiD2qTe3KsoDvq0hbqK9eHo0DKE+FNaii3+cSaeahi5f3HiQ2yui
+         iS0A==
+X-Gm-Message-State: AC+VfDxuoSUnIqv/F20M3UthCt7W8xCE2Be9ykmt6zT4J9AiAyuAVeKB
+        osOXZP7RJtOJsVDLFhurdrckBg==
+X-Google-Smtp-Source: ACHHUZ5WnNmjpeWjgFMIShPC0wbAbHETohuoX3sQ4DalX61hG477WQFaQIWdr0WyVeYjQBNyGwTjjA==
+X-Received: by 2002:a19:7b05:0:b0:4f1:3eea:eaf9 with SMTP id w5-20020a197b05000000b004f13eeaeaf9mr10605445lfc.24.1686834051722;
+        Thu, 15 Jun 2023 06:00:51 -0700 (PDT)
+Received: from rayden (81-236-179-152-no272.tbcn.telia.com. [81.236.179.152])
+        by smtp.gmail.com with ESMTPSA id d29-20020ac25edd000000b004e83fbba141sm1860644lfq.164.2023.06.15.06.00.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 06:00:51 -0700 (PDT)
+Date:   Thu, 15 Jun 2023 15:00:49 +0200
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+To:     arm@kernel.org, soc@kernel.org
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        op-tee@lists.trustedfirmware.org
+Subject: [GIT PULL] Use kmemdup() in OP-TEE driver for v6.5
+Message-ID: <20230615130049.GA979203@rayden>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500002.china.huawei.com (7.185.36.158)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,40 +68,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A new function is added on HiSilicon uncore UC PMU.
+Hello arm-soc maintainers,
 
-The UC PMU support to filter statistical information based on
-the specified tx request uring channel. Make user configuration
-through "uring_channel" parameter.
-Document them to provide guidance on how to use them.
+Please pull this small patch to the OP-TEE driver that replaces
+kmalloc() + memcpy() with kmemdup() at one place.
 
-Signed-off-by: Junhao He <hejunhao3@huawei.com>
-Reviewed-by: Jonathan Cameron <Jonthan.Cameron@huawei.com>
-Reviewed-by: Yicong Yang <yangyicong@hisilicon.com>
-Acked-by: Mark Rutland <mark.rutland@arm.com>
----
- Documentation/admin-guide/perf/hisi-pmu.rst | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Thanks,
+Jens
 
-diff --git a/Documentation/admin-guide/perf/hisi-pmu.rst b/Documentation/admin-guide/perf/hisi-pmu.rst
-index 546979360513..939a524fa1d6 100644
---- a/Documentation/admin-guide/perf/hisi-pmu.rst
-+++ b/Documentation/admin-guide/perf/hisi-pmu.rst
-@@ -98,6 +98,14 @@ CCL/ICL-ID. For I/O die, the ICL-ID is followed by:
- 5'b00011: HAC_ICL;
- 5'b10000: PCIe_ICL;
- 
-+(e) uring_channel: UC PMU events 0x47~0x59 supports filtering by tx request
-+uring channel. It is 2 bits. Some important codes are as follows:
-+2'b11: count the events which sent to the uring_ext (MATA) channel;
-+2'b01: is the same as 2'b11;
-+2'b10: count the events which sent to the uring (non-MATA) channel;
-+2'b00: default value, count the events which sent to the both uring and
-+       uring_ext channel;
-+
- Users could configure IDs to count data come from specific CCL/ICL, by setting
- srcid_cmd & srcid_msk, and data desitined for specific CCL/ICL by setting
- tgtid_cmd & tgtid_msk. A set bit in srcid_msk/tgtid_msk means the PMU will not
--- 
-2.33.0
+The following changes since commit f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6:
 
+  Linux 6.4-rc2 (2023-05-14 12:51:40 -0700)
+
+are available in the Git repository at:
+
+  https://git.linaro.org/people/jens.wiklander/linux-tee.git tags/optee-use-kmemdup-for-6.5
+
+for you to fetch changes up to 6a8b7e80105416cc7324fda295608ea2d3f98862:
+
+  tee: optee: Use kmemdup() to replace kmalloc + memcpy (2023-06-15 08:49:55 +0200)
+
+----------------------------------------------------------------
+Use kmemdup() in OP-TEE driver
+
+----------------------------------------------------------------
+Jiapeng Chong (1):
+      tee: optee: Use kmemdup() to replace kmalloc + memcpy
+
+ drivers/tee/optee/smc_abi.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
