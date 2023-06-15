@@ -2,49 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE1C2731B6D
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:34:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50A58731B71
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343925AbjFOOeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 10:34:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54342 "EHLO
+        id S1344529AbjFOOg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 10:36:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344228AbjFOOel (ORCPT
+        with ESMTP id S241156AbjFOOgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 10:34:41 -0400
+        Thu, 15 Jun 2023 10:36:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B6C10F7
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 07:34:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC10A194;
+        Thu, 15 Jun 2023 07:36:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 32B1561949
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 14:34:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2545DC433C8;
-        Thu, 15 Jun 2023 14:34:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 68E2961298;
+        Thu, 15 Jun 2023 14:36:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B10CC433C8;
+        Thu, 15 Jun 2023 14:36:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686839679;
-        bh=EQOh51VjdnSVB1jEja9kzvDT2KtzLLOcPpFUeCtou3M=;
+        s=korg; t=1686839781;
+        bh=j7fswNF00+3EsBKE9l3ZGPQpN/5xxxUoZx34TL5CkLw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u6VE0KJYUyWs/AJpd/icaEkfLE2BmkcvUgrLcXtL99oZxvOw9Hv1TvdmQPtJVtlKQ
-         6wP1u1UA53NOP+nAbKoWwD0BzvsfDtbM8p35aGV7b006LDaQHiRzMh9j0/KbjXCep0
-         KBKxHCu7oCFBXWhsYY1wKyJfIvaPWy7xJ9N4ZpIQ=
-Date:   Thu, 15 Jun 2023 16:34:36 +0200
+        b=wJUePUXSGwFyZeIXTc/MCaXOpmi+1fQwp9quAdxPgCGFMgaGIGyuHot/RM4V9eUSg
+         bRRuajr0ywJxzZyTWi2eh94EmsUitXvQ9RpBJaxUWdHeJWwkm0GryLE5dqXgxMFtnn
+         kkFShesR42R6MG9PPdyUMHbNJJR5HLfYk9Kmbeeo=
+Date:   Thu, 15 Jun 2023 16:36:19 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Yogesh Hegde <yogi.kernel@gmail.com>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Philipp Hortmann <philipp.g.hortmann@gmail.com>
-Subject: Re: [PATCH v2 0/5] Trivial code cleanup patches
-Message-ID: <2023061520-gear-unwind-fbcc@gregkh>
-References: <cover.1686149467.git.yogi.kernel@gmail.com>
- <2023061532-fall-earthy-c429@gregkh>
- <20230615140908.GB37552@yogi-Zephyrus>
+To:     Prashanth K <quic_prashk@quicinc.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7] usb: common: usb-conn-gpio: Set last role to unknown
+ before initial detection
+Message-ID: <2023061512-vowed-panther-38ed@gregkh>
+References: <1685544074-17337-1-git-send-email-quic_prashk@quicinc.com>
+ <ZImE4L3YgABnCIsP@kuha.fi.intel.com>
+ <2023061547-staleness-camper-ae8a@gregkh>
+ <d5561151-08bb-9f5f-aa51-44c5ad31976b@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230615140908.GB37552@yogi-Zephyrus>
+In-Reply-To: <d5561151-08bb-9f5f-aa51-44c5ad31976b@quicinc.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,71 +59,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 07:39:08PM +0530, Yogesh Hegde wrote:
-> On Thu, Jun 15, 2023 at 12:36:45PM +0200, Greg Kroah-Hartman wrote:
-> > On Wed, Jun 07, 2023 at 08:31:19PM +0530, Yogesh Hegde wrote:
-> > > These patches remove variables in the struct rtllib_device that were 
-> > > set only once throughout the driver. Instead of using these variables, 
-> > > the patches modify the relevant code to directly call the corresponding 
-> > > functions, eliminating unnecessary indirection and removing CamelCase.
-> > > The patches are required to be applied in sequence.
+On Thu, Jun 15, 2023 at 07:52:32PM +0530, Prashanth K wrote:
+> 
+> 
+> On 15-06-23 03:00 pm, Greg Kroah-Hartman wrote:
+> > On Wed, Jun 14, 2023 at 12:14:08PM +0300, Heikki Krogerus wrote:
+> > > On Wed, May 31, 2023 at 08:11:14PM +0530, Prashanth K wrote:
+> > > > Currently if we bootup a device without cable connected, then
+> > > > usb-conn-gpio won't call set_role() since last_role is same as
+> > > > current role. This happens because during probe last_role gets
+> > > > initialised to zero.
+> > > > 
+> > > > To avoid this, added a new constant in enum usb_role, last_role
+> > > > is set to USB_ROLE_UNKNOWN before performing initial detection.
+> > > > 
+> > > > While at it, also handle default case for the usb_role switch
+> > > > in cdns3, intel-xhci-usb-role-switch & musb/jz4740 to avoid
+> > > > build warnings.
+> > > > 
+> > > > Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection detection driver")
+> > > > Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+> > > > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> > > > ---
+> > > > v7: Added default case in musb/jz4740.c & intel-xhci-usb-role-switch.c to
+> > > >      avoid build warnings.
+> > > > v6: Moved USB_ROLE_UNKNOWN towards the end of enum usb_role.
+> > > > v5: Update commit text to mention the changes made in cdns3 driver.
+> > > > v4: Added Reviewed-by tag.
+> > > > v3: Added a default case in drivers/usb/cdns3/core.c as pointed out by
+> > > >      the test robot.
+> > > > v2: Added USB_ROLE_UNKNWON to enum usb_role.
+> > > > 
+> > > >   drivers/usb/cdns3/core.c                       | 2 ++
+> > > >   drivers/usb/common/usb-conn-gpio.c             | 3 +++
+> > > >   drivers/usb/musb/jz4740.c                      | 2 ++
+> > > >   drivers/usb/roles/intel-xhci-usb-role-switch.c | 2 ++
+> > > >   include/linux/usb/role.h                       | 1 +
+> > > >   5 files changed, 10 insertions(+)
 > > > 
-> > > Yogesh Hegde (5):
-> > >   staging: rtl8192e: Remove variable SetWirelessMode
-> > >   staging: rtl8192e: Remove variable SetBWModeHandler
-> > >   staging: rtl8192e: Remove variable LeisurePSLeave
-> > >   staging: rtl8192e: Remove variable InitialGainHandler
-> > >   staging: rtl8192e: Remove DRV_NAME definition in rtllib_debug.h
+> > > Just to be clear to everybody, that USB_ROLE_UNKNOWN is not handled in
+> > > drivers/usb/roles/class.c, so this patch is broken.
 > > > 
-> > >  drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c |  4 ++--
-> > >  drivers/staging/rtl8192e/rtl8192e/rtl_core.c   |  4 ----
-> > >  drivers/staging/rtl8192e/rtl819x_HTProc.c      |  8 ++++----
-> > >  drivers/staging/rtl8192e/rtllib.h              |  6 ------
-> > >  drivers/staging/rtl8192e/rtllib_debug.h        |  5 -----
-> > >  drivers/staging/rtl8192e/rtllib_rx.c           |  3 ++-
-> > >  drivers/staging/rtl8192e/rtllib_softmac.c      | 16 +++++++---------
-> > >  drivers/staging/rtl8192e/rtllib_softmac_wx.c   |  9 +++++----
-> > >  8 files changed, 20 insertions(+), 35 deletions(-)
+> > > But the whole approach is wrong. That USB_ROLE_UNKNOWN is clearly a
+> > > flag where the other values in enum usb_role are actual switch states.
+> > > So it does not belong there.
 > > > 
-> > > -- 
-> > > 2.25.1
-> > > 
-> > > 
+> > > In general, adding globals states like that just in order to work
+> > > around issues in single drivers is never a good idea IMO.
 > > 
-> > These break the build, as reported by the test robot, please fix up.
+> > Ok, let me go revert this from my tree, thanks for the review.
+> > 
+> > greg k-h
 > 
-> Hi Greg,
+> In that case, can I resubmit v1 of this patch again, where I have used a
+> macro in usb-conn-gpio driver ? something like this.
 > 
-> These patches do not work because this driver is divided into two
-> modules.
+> @@ -27,6 +27,8 @@
+>  #define USB_CONN_IRQF	\
+>  	(IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING | IRQF_ONESHOT)
 > 
-> The driver is loaded in 2 different modules:
-> sudo insmod drivers/staging/rtl8192e/rtllib.ko
-> sudo insmod drivers/staging/rtl8192e/rtl8192e/r8192e_pci.ko
-> 
-> So this line is required:
-> priv->rtllib->SetWirelessMode = rtl92e_set_wireless_mode;
-> as one name is used in one module and one in the other module.
-> 
-> So when I suggested these fixes
-> 1.  Patchset to combine both the modules into one module.
-> 2.  Or resending v1 of the patchset.
-> 
-> to Dan Carpenter <dan.carpenter@linaro.org> and
-> Philipp Hortmann <philipp.g.hortmann@gmail.com>, in their opinion both the
-> suggested fixes are incorrect, which I agree with.
-> 
-> Link to conversation -
-> https://lore.kernel.org/linux-staging/90813181-02a1-b54f-132b-c68e7b797bb6@gmail.com/
-> 
-> I have yet to find a correct way to solve this problem. Please let me
-> know if you have any suggestions. 
+> +#define USB_ROLE_UNKNOWN (USB_ROLE_NONE -1)
 
-I don't know, sorry, that's up to you.  If a symbol is used in one
-module, then of course you can't remove it :)
+Are you referencing an existing enum here and assuming it is a specific
+value?
 
-don't mess with the modules split for now, just get the existing code
-cleaner, that's probably much easier, right?
+For obvious reasons, that can never work :)
 
 thanks,
 
