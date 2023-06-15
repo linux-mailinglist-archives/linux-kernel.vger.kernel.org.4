@@ -2,119 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A1DD73210D
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 22:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD62A732107
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 22:43:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbjFOUiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 16:38:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48562 "EHLO
+        id S230055AbjFOUmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 16:42:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjFOUiD (ORCPT
+        with ESMTP id S229510AbjFOUmU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 16:38:03 -0400
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634D2DF
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 13:38:02 -0700 (PDT)
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1b505665e2fso9230455ad.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 13:38:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686861482; x=1689453482;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xlt6XK9hN90RySb2MwOIg8snE8yI6VawU/byzCJpPMo=;
-        b=i4WU4YaIuYXZ7AcYaqhOpHXqFIJM56oxddXNKiLMXXHR2oVeFWl4ERS8sTfm3EL/9w
-         IkrMi+gkYrXNU5xYMjCbeXxsox6D6ONUgyh5qzcbCT0YLubJdPVIsFc5eRtSFJNFjQ4O
-         uu4bhQfoaOggcGAsvK8kJ/8ArS2stpjLHx0OF0wPGhCJQQXDHzw2Ujp58POJllGiNtX4
-         TaPSIgrSJx3CpZrilFEKcnh1NHZP8CGbduy26GoPXRimijq1TioxmqMnEqvjmVorHT/v
-         oz4cXqXScEtO/CE0TFcXIRB8K6P+XBWqVMEwrxClXmZAY9Dn/zwxSYrxZBBRTgRIiN1J
-         j6tw==
-X-Gm-Message-State: AC+VfDza6qQUHEuoPXgfmYlCsphlVcglATsKYL/B9X1nwGjZi7fAI56a
-        2Pcn/ujq5mNcKj6u8cY10tHTjx9bVaw=
-X-Google-Smtp-Source: ACHHUZ7nzjF9yaxFmIg5s6AhUUkKKz1+LAuskrhhtBpTXTKNbyLqjvW7hUeZ44kWxXsE1xb2JVO1zg==
-X-Received: by 2002:a17:902:c951:b0:1a2:a904:c42e with SMTP id i17-20020a170902c95100b001a2a904c42emr9208116pla.24.1686861481675;
-        Thu, 15 Jun 2023 13:38:01 -0700 (PDT)
-Received: from asus.hsd1.ca.comcast.net ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id y20-20020a170902b49400b001a980a23804sm14487233plr.4.2023.06.15.13.38.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 13:38:01 -0700 (PDT)
-From:   Bart Van Assche <bvanassche@acm.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [PATCH] sched/cputime: Make IRQ time accounting configurable at boot time
-Date:   Thu, 15 Jun 2023 13:37:26 -0700
-Message-ID: <20230615203745.1259-1-bvanassche@acm.org>
-X-Mailer: git-send-email 2.41.0
+        Thu, 15 Jun 2023 16:42:20 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A3826AA;
+        Thu, 15 Jun 2023 13:42:18 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 61BF51C0E67; Thu, 15 Jun 2023 22:42:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1686861736;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Swml0mtxVfq+msbs6Sx0sxLLdwoWY72Og0WE8BEL9WM=;
+        b=lwN+AAnArNFRsZTpgnBd8mnMp2SIPUFZ28picwxTn4reJ5f6IQgsLRJtIiLidXu13zqwdc
+        U5LtkF6x2MmXu7xatLZRuknEOSXEheff6IjIUMZ9d7WO092AFyb4Qqexle9/NRjLal0dNW
+        N/w2Rg3+LxsepWHJ2JN0ZBKq2CyluxU=
+Date:   Thu, 15 Jun 2023 22:41:56 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-mm@kvack.org,
+        linux-bcachefs@vger.kernel.org, viro@zeniv.linux.org.uk,
+        akpm@linux-foundation.org, boqun.feng@gmail.com,
+        brauner@kernel.org, hch@infradead.org, colyli@suse.de,
+        djwong@kernel.org, mingo@redhat.com, jack@suse.cz, axboe@kernel.dk,
+        willy@infradead.org, ojeda@kernel.org, ming.lei@redhat.com,
+        ndesaulniers@google.com, peterz@infradead.org,
+        phillip@squashfs.org.uk, urezki@gmail.com, longman@redhat.com,
+        will@kernel.org
+Subject: Re: [PATCH 00/32] bcachefs - a new COW filesystem
+Message-ID: <20230615204156.GA1119@bug>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some producers of Android devices want IRQ time accounting enabled while
-others want IRQ time accounting disabled. Hence, make IRQ time accounting
-configurable at boot time.
+Hi!
 
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
----
- Documentation/admin-guide/kernel-parameters.txt |  4 ++++
- kernel/sched/cputime.c                          | 13 +++++++++++++
- 2 files changed, 17 insertions(+)
+> I'm submitting the bcachefs filesystem for review and inclusion.
+>=20
+> Included in this patch series are all the non fs/bcachefs/ patches. The
+> entire tree, based on v6.3, may be found at:
+>=20
+>   http://evilpiepirate.org/git/bcachefs.git bcachefs-for-upstream
+>=20
+> ----------------------------------------------------------------
+>=20
+> bcachefs overview, status:
+>=20
+> Features:
+>  - too many to list
+>=20
+> Known bugs:
+>  - too many to list
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 9e5bab29685f..67a2ad3af833 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -5611,6 +5611,10 @@
- 			non-zero "wait" parameter.  See weight_single
- 			and weight_many.
- 
-+	sched_clock_irqtime= [KNL]
-+			Can be used to disable IRQ time accounting if
-+			CONFIG_IRQ_TIME_ACCOUNTING=y.
-+
- 	skew_tick=	[KNL] Offset the periodic timer tick per cpu to mitigate
- 			xtime_lock contention on larger systems, and/or RCU lock
- 			contention on all systems with CONFIG_MAXSMP set.
-diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
-index af7952f12e6c..d9c65017024d 100644
---- a/kernel/sched/cputime.c
-+++ b/kernel/sched/cputime.c
-@@ -24,6 +24,19 @@ DEFINE_PER_CPU(struct irqtime, cpu_irqtime);
- 
- static int sched_clock_irqtime;
- 
-+static int __init sched_clock_irqtime_setup(char *arg)
-+{
-+	bool enabled;
-+
-+	if (kstrtobool(arg, &enabled) < 0)
-+		pr_err("Invalid sched_clock_irqtime value\n");
-+	else
-+		sched_clock_irqtime = enabled;
-+	return 1;
-+}
-+
-+__setup("sched_clock_irqtime=", sched_clock_irqtime_setup);
-+
- void enable_sched_clock_irqtime(void)
- {
- 	sched_clock_irqtime = 1;
+
+Documentation: missing.
+
+Dunno. I guess it would help review if feature and known bugs lists were in=
+cluded.
+
+BR,
+									Pavel
+
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
