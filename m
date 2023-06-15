@@ -2,122 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76D21731EB1
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 19:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79552731EB5
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 19:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237247AbjFORHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 13:07:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60746 "EHLO
+        id S237663AbjFORKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 13:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbjFORH2 (ORCPT
+        with ESMTP id S237726AbjFORKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 13:07:28 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9AB7123;
-        Thu, 15 Jun 2023 10:07:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686848847; x=1718384847;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=FXV1YChUXwSF8PZCAUD+tpfoEBwKY/uzBtEPKcW5DBo=;
-  b=gXERln9Rg2qQwFDlRCdTAOm8jL3u9SrAqV8OkpEDKFRucJc5AqCzjokb
-   LgRaXKulvFhF4dwmS90c/S2U6mcMaXLnknXo39D7h/wmYsa6GngtcNO8R
-   Zf60P2XEEDKiuUs3WwU0vbHo1e15j3IKSU7TtOg+DP5t87Bk62lBpkStv
-   k9hN4pAjdxtt+pDY4rMijYkGAhkjt3o9IZLDNzlGO8FtRnS6oT+S6dJQF
-   vlS8rkSm0WynrtY5i/pDt4RPMqtqXLnpIJdMrv4zqtlQ9PtePcWNtdDhC
-   jNvtVuNw3V06rdlhHD+2G8tIBn8rPjCu3MjS3YJSkjLYiCdGVxs/I721t
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="387521010"
-X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="387521010"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 10:07:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="825368959"
-X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="825368959"
-Received: from akcopko-mobl2.amr.corp.intel.com (HELO [10.212.220.19]) ([10.212.220.19])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 10:07:26 -0700
-Message-ID: <a268fc1c-dd63-cac5-4aec-836a6299ab36@linux.intel.com>
-Date:   Thu, 15 Jun 2023 10:07:26 -0700
+        Thu, 15 Jun 2023 13:10:49 -0400
+Received: from s.wrqvtbkv.outbound-mail.sendgrid.net (s.wrqvtbkv.outbound-mail.sendgrid.net [149.72.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DEEE268A
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 10:10:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kwiboo.se;
+        h=from:subject:mime-version:to:cc:content-transfer-encoding:
+        content-type:cc:content-type:from:subject:to;
+        s=s1; bh=/iMiHruchMZdH7EbKaXXVbEUNCDq8w9JXi9nEY/WsG0=;
+        b=rO8/HnoE9YtWXVLmjXww+B4Qqmh2HHf+JnA+/rg1e9HzBFSKZgm2cRhwyyfazuNoVUPn
+        lmPBmV28a01qMJEC2UaPnponVCxXOghiGItj+76wIWtPsVSTP8lT+CyzIaNa7LfN0obOnQ
+        c5P6T5HViCabUuQQTnskaK/oVfH74EhBi5RUfzzEDu8LQUA9YrRP3ElfEyUijPZ/wW8u1U
+        KC5W0RT+rlR5pK4OY6Mo30Q73x1IRAtIpq4gqTrqNYwy8Y4GSrRVgsNSvbSYMdLHI4UoNg
+        Igc0NezKG+mcM0a3IFcbUFWcmBWgCKg3+ehe9bjaZWrsCzYJJzYJdTehv8HSteqQ==
+Received: by filterdrecv-77869f68cc-l7kjz with SMTP id filterdrecv-77869f68cc-l7kjz-1-648B45F7-28
+        2023-06-15 17:10:15.543950118 +0000 UTC m=+3087258.628411507
+Received: from bionic.localdomain (unknown)
+        by geopod-ismtpd-2 (SG)
+        with ESMTP
+        id nGTvoAPVSCO8vRsd_RsRfg
+        Thu, 15 Jun 2023 17:10:15.220 +0000 (UTC)
+From:   Jonas Karlman <jonas@kwiboo.se>
+Subject: [PATCH v4 0/6] Support more HDMI modes on RK3228/RK3328
+Date:   Thu, 15 Jun 2023 17:10:15 +0000 (UTC)
+Message-Id: <20230615171005.2251032-1-jonas@kwiboo.se>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH] PCI/ASPM: Enable ASPM on external PCIe devices
-Content-Language: en-US
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>, bhelgaas@google.com
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Michael Bottini <michael.a.bottini@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230615070421.1704133-1-kai.heng.feng@canonical.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20230615070421.1704133-1-kai.heng.feng@canonical.com>
-Content-Type: text/plain; charset=UTF-8
+X-SG-EID: =?us-ascii?Q?TdbjyGynYnRZWhH+7lKUQJL+ZxmxpowvO2O9SQF5CwCVrYgcwUXgU5DKUU3QxA?=
+ =?us-ascii?Q?fZekEeQsTe+RrMu3cja6a0h1XOkue=2FcxLltwil4?=
+ =?us-ascii?Q?k2y4aiZwCJ7=2FvKmD3jebfAfZdtNcM7nB2rsB1rs?=
+ =?us-ascii?Q?W2x6dmGJ+tvdv5r2Scmow9SIkrsu9+47Yx+0S0q?=
+ =?us-ascii?Q?bPq+dH09IgJ4uBykHL6SJjed5=2F=2F=2FMox67SwypdX?=
+ =?us-ascii?Q?4PEKGlxY6bY2ay6mCdBqEM2hoCt+eVwiVz4=2FUw?=
+To:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     Alex Bee <knaerzche@gmail.com>, linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jonas Karlman <jonas@kwiboo.se>
+X-Entity-ID: P7KYpSJvGCELWjBME/J5tg==
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_BL_SPAMCOP_NET,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is a revival of a 3+ year old series that never got picked up,
+it contains fixes and adds support for more HDMI modes on RK3228/RK3328.
 
+This v4 series contains the original v2/v3 patches targeting the inno
+hdmi phy driver, the last patch that adds support for more HDMI modes
+has been replaced with a new patch from Alex Bee.
 
-On 6/15/23 12:04 AM, Kai-Heng Feng wrote:
-> When a PCIe device is hotplugged to a Thunderbolt port, ASPM is not
-> enabled for that device. However, when the device is plugged preboot,
-> ASPM is enabled by default.
-> 
-> The disparity happens because BIOS doesn't have the ability to program
-> ASPM on hotplugged devices.
-> 
-> So enable ASPM by default for external connected PCIe devices so ASPM
-> settings are consitent between preboot and hotplugged.
+Part of this has been reworked from vendor BSP 4.4 kernel commits.
 
-Why it has to be consistent? Can you add info about what it solves?
+Patch 1-5 fixes issues and shortcomings in the inno hdmi phy driver.
 
-> 
-> On HP Thunderbolt Dock G4, enable ASPM can also fix BadDLLP error:
-> pcieport 0000:00:1d.0: AER: Corrected error received: 0000:07:04.0
-> pcieport 0000:07:04.0: PCIe Bus Error: severity=Corrected, type=Data Link Layer, (Receiver ID)
-> pcieport 0000:07:04.0:   device [8086:0b26] error status/mask=00000080/00002000
-> pcieport 0000:07:04.0:    [ 7] BadDLLP
-> 
-> The root cause is still unclear, but quite likely because the I225 on
-> the dock supports PTM, where ASPM timing is precalculated for the PTM.
-> 
-> Cc: Mario Limonciello <mario.limonciello@amd.com>
-> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217557
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
->  drivers/pci/pcie/aspm.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> index 66d7514ca111..613b0754c9bb 100644
-> --- a/drivers/pci/pcie/aspm.c
-> +++ b/drivers/pci/pcie/aspm.c
-> @@ -119,7 +119,9 @@ static int policy_to_aspm_state(struct pcie_link_state *link)
->  		/* Enable Everything */
->  		return ASPM_STATE_ALL;
->  	case POLICY_DEFAULT:
-> -		return link->aspm_default;
-> +		return dev_is_removable(&link->downstream->dev) ?
-> +			link->aspm_capable :
-> +			link->aspm_default;
->  	}
->  	return 0;
->  }
+Patch 6 adds support for more pixel clock rates in order to support
+common DMT modes in addition to CEA modes.
+
+These patches has been in use by LibreELEC and other distros for the
+past 3+ years, hoping they can be merged this time around :-)
+
+Changes i v4:
+- replace last patch
+
+Changes in v3:
+- split series
+- drop drm and device tree changes
+
+Changes in v2:
+- collect acked-by tag
+- drop the limit resolution width to 3840 patch
+
+This series is also available at [1].
+
+[1] https://github.com/Kwiboo/linux-rockchip/commits/next-20230615-inno-hdmi-phy
+
+Regards,
+Jonas
+
+Alex Bee (1):
+  phy/rockchip: inno-hdmi: add more supported pre-pll rates
+
+Huicong Xu (1):
+  phy/rockchip: inno-hdmi: force set_rate on power_on
+
+Jonas Karlman (3):
+  phy/rockchip: inno-hdmi: use correct vco_div_5 macro on rk3328
+  phy/rockchip: inno-hdmi: remove unused no_c from rk3328 recalc_rate
+  phy/rockchip: inno-hdmi: do not power on rk3328 post pll on reg write
+
+Zheng Yang (1):
+  phy/rockchip: inno-hdmi: round fractal pixclock in rk3328 recalc_rate
+
+ drivers/phy/rockchip/phy-rockchip-inno-hdmi.c | 234 +++++++++++++++---
+ 1 file changed, 198 insertions(+), 36 deletions(-)
 
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+2.40.1
+
