@@ -2,92 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C167312CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 484EE7312D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239780AbjFOIz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 04:55:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41044 "EHLO
+        id S238540AbjFOI4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 04:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239120AbjFOIzw (ORCPT
+        with ESMTP id S230102AbjFOI4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 04:55:52 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9261720
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:55:51 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9827bd8e0afso191573566b.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:55:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686819350; x=1689411350;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lV7QLu3dQCxU7BpztxvUiYaqzC4koTpfwg/H3VXhuQw=;
-        b=F5LzRUtkbc+owwF0fBE5WC4VBb0fae9atAHmdJ5eiah/rOsQ4J6MyeumPDtP5L6o9X
-         qk7o3f9VO3uDYH5U8sufXvpuf/GZ3nUT2XFcAlMfXfyhl28LqkkQz75QYxccDaLqTngi
-         r3gyRKkekQB4Ksm74vDEQaEqhuaegeVW5XrN2Rvf/3jJGI6QGW5JhP9BtJpwtYmFGjaz
-         6GJi42drqAvF5RMsmV8k2qwYEM9EAEAtMDR6mPWHQpi7tMETWDxcOlRUNdHTHcyW9vG4
-         JEcQAVZKrAVCyBYjAZohcs2RdybcIzeV+Nv7dwYwcqIxY5tf5RaAV+yYVsVLqWuTxqPM
-         PqBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686819350; x=1689411350;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lV7QLu3dQCxU7BpztxvUiYaqzC4koTpfwg/H3VXhuQw=;
-        b=gk7CoGCtzlOW5sV+bB2KvEWv7B21QHxS4iRUyB3KKS4tcw89v+gz8QSh7xK5o1jf9e
-         eyIR1FpshsX/S90oFdj+fLeODK6VArq8Pjxs3jBKvKrLb2Q4DLnYpTuKhbxsVF6d/3+V
-         JUAbONwvEA150m3nekw7zAa0t0mfHOba6hZC9zfYLl2fwdLGSooss1LXYks9apfTNQ9X
-         MpqUQgp6V2sdqYst2T3P08hVdUevx6R8miutBZ+Acym9WwrLjxpWMaaLIyZ4WrPpKKud
-         FAq2ENvCFEsy/hqVyeo3arQ4zOmLC//rkVIG9DXgVbD+LXH+4MQykGf2+YmvY3tlXKSB
-         oV8Q==
-X-Gm-Message-State: AC+VfDzuR8cljHrIFHqHBU2lcR3zgBf9g4+Phf7pn+lWx6BpSfVzR3Df
-        zRtx66vYAs9Txt6BkrCtH0bzfg==
-X-Google-Smtp-Source: ACHHUZ72V9SYWFf+LtAZvutrD0Tp0XqxJCIY+D2Td80wBJ9YF2VHhGposHwZvllf8xiTuwtTblssVw==
-X-Received: by 2002:a17:907:26ca:b0:974:1e0e:9bd4 with SMTP id bp10-20020a17090726ca00b009741e0e9bd4mr17990075ejc.16.1686819349690;
-        Thu, 15 Jun 2023 01:55:49 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id u3-20020a17090617c300b009788dfde0b2sm9157169eje.12.2023.06.15.01.55.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 01:55:49 -0700 (PDT)
-Message-ID: <c8d454b0-d355-f599-f720-b7e64374fb56@linaro.org>
-Date:   Thu, 15 Jun 2023 10:55:47 +0200
+        Thu, 15 Jun 2023 04:56:34 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C846B1BDA;
+        Thu, 15 Jun 2023 01:56:33 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BD3BF1FB;
+        Thu, 15 Jun 2023 01:57:17 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F2C0A3F71E;
+        Thu, 15 Jun 2023 01:56:31 -0700 (PDT)
+Date:   Thu, 15 Jun 2023 09:56:29 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Tushar Nimkar <quic_tnimkar@quicinc.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_lsrao@quicinc.com, quic_mkshah@quicinc.com,
+        Sudeep Holla <sudeep.holla@arm.com>, devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: arm: idle-states: Add
+ idle-state-disabled property
+Message-ID: <20230615085629.b2aaumhq7yqhs5lf@bogus>
+References: <20230608085544.16211-1-quic_tnimkar@quicinc.com>
+ <20230608085544.16211-2-quic_tnimkar@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: Regression: NULL pointer dereference after NFS_V4_2_READ_PLUS
- (commit 7fd461c47)
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Anna Schumaker <schumaker.anna@gmail.com>
-Cc:     Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <Anna.Schumaker@netapp.com>,
-        linux-nfs <linux-nfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <f591b13c-4600-e2a4-8efa-aac6ad828dd1@linaro.org>
- <2C5E9725-F152-4D2E-882E-CF92A35481BF@hammerspace.com>
- <7ba38377-7992-7f0f-d905-cceb42510f39@linaro.org>
- <51430925-8046-7066-84ed-2ff0db835347@linaro.org>
- <CAFX2Jf=5X3zyZEWQmD6Rg9jQAD7ccDbae5LQCwrAyPCVVoFumg@mail.gmail.com>
- <2add1769-1458-b185-bc78-6d573f61b6fc@linaro.org>
- <CAFX2JfnKy7juGQaDTzqosN9SF-zd+XrhSL9uh_Xg0GpJGDux-A@mail.gmail.com>
- <32530c36-91d0-d351-0689-aed6a0975a4b@linaro.org>
- <2f285607-cbf9-6abc-f436-edb6e9a3938b@linaro.org>
- <CAFX2Jfmz7QqZBEdzbPUhPs0yctnXVaVF68tX1c57YX=6ki=0TA@mail.gmail.com>
- <4fe39d77-eb7c-a578-aefa-45b76e2247c2@linaro.org>
- <CAFX2JfmdRMsHPTySiw4vm7BwJfRZj3s0V3_v7NJ+XwMxBBSo9A@mail.gmail.com>
- <a3683dd3-3f30-bb4c-539d-d1519de6e5bf@linaro.org>
- <CAFX2JfnS9GVc4NaxKhr9E4y10NNv6SPgcv1yoeHTfEw5NvZgMg@mail.gmail.com>
- <86d8e252-975f-5d48-4567-0911d5ef9a44@linaro.org>
- <CAFX2Jfn_DSs38WQYsRs2ifLi5w+T3BhZfSU2W80T6dK48_Bb5g@mail.gmail.com>
- <e8d31e48-df6a-fde4-4c6b-c4ccf1664ded@linaro.org>
-In-Reply-To: <e8d31e48-df6a-fde4-4c6b-c4ccf1664ded@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230608085544.16211-2-quic_tnimkar@quicinc.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,32 +48,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/06/2023 10:52, Krzysztof Kozlowski wrote:
-> On 14/06/2023 22:55, Anna Schumaker wrote:
->>>>> Still null ptr (built on 420b2d4 with your patch):
->>>>
->>>> We're through the merge window and at rc1 now, so I can spend more
->>>> time scratching my head over your bug again. We've come up with a
->>>> patch (attached) that adds a bunch of printks to show us what the
->>>> kernel thinks is going on. Do you mind trying it out and letting us
->>>> know what gets printed out? You'll need to make sure
->>>> CONFIG_NFS_V4_2_READ_PLUS is enabled when compiling the kernel.
->>>
->>> The patch does not apply. I tried: v6.4-rc1, v6.4-rc5, next-20230609.
->>
->> Can you try the attached patch on top of my 3-patch series from the
->> other day, and let me know what gets printed out? It adds a bunch of
->> printk()s at strategic points to print out what is going on with the
->> xdr scratch buffer since it's suddenly a bad memory address after
->> working for a bit on your machine.
->>
-> 
-> Here you have entire log - attached (113 kB, I hope goes past mailing
-> lists/spam filters).
+On Thu, Jun 08, 2023 at 02:25:42PM +0530, Tushar Nimkar wrote:
+> This change adds idle-state-disabled property using which certain or all
+> idle-states can be kept disabled during boot-up. Once boot-up is completed
+> same can be enabled using below command.
+>
+> echo N > /sys/devices/system/cpu/cpuX/cpuidle/stateX/disable
+>
+> Cc: devicetree@vger.kernel.org
+> Signed-off-by: Tushar Nimkar <quic_tnimkar@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/cpu/idle-states.yaml | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/cpu/idle-states.yaml b/Documentation/devicetree/bindings/cpu/idle-states.yaml
+> index b8cc826c9501..f999bc666bbd 100644
+> --- a/Documentation/devicetree/bindings/cpu/idle-states.yaml
+> +++ b/Documentation/devicetree/bindings/cpu/idle-states.yaml
+> @@ -358,6 +358,13 @@ patternProperties:
+>            systems entry-latency-us + exit-latency-us will exceed
+>            wakeup-latency-us by this duration.
+>
+> +      idle-state-disabled:
+> +        description: |
+> +          If present the idle state stays disabled. It can be enabled back from
+> +          shell using below command.
+> +          echo N > /sys/devices/system/cpu/cpuX/cpuidle/stateX/disable
+> +        type: boolean
+> +
 
-As expected this bounced from the mailing lists, but I hope you got it.
-If not, let me know.
+This is clearly a policy and not a hardware or firmware feature to expose
+in the device tree. So NACK, why can't you load it modules if you don't want
+idle states in the boot.
 
-Best regards,
-Krzysztof
+It is same as choosing any default governor or performance states, will you
+add those next ? It is simply policy not a feature/property to be exposed
+in the device tree.
 
+--
+Regards,
+Sudeep
