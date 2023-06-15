@@ -2,189 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2C0F730ECB
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 07:50:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0FB0730ECD
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 07:50:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbjFOFto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 01:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56922 "EHLO
+        id S230376AbjFOFuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 01:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjFOFtm (ORCPT
+        with ESMTP id S233126AbjFOFtv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 01:49:42 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6F010E9
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 22:49:41 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id d75a77b69052e-3f9b7de94e7so155401cf.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 22:49:41 -0700 (PDT)
+        Thu, 15 Jun 2023 01:49:51 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1BE26B1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 22:49:49 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-5147e40bbbbso11079544a12.3
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 22:49:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686808180; x=1689400180;
+        d=brainfault-org.20221208.gappssmtp.com; s=20221208; t=1686808188; x=1689400188;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4OtevX4Ed8o9vOu7pBdbUE0N/6rDWNEIM9CMGtbBiG8=;
-        b=uWJspio/ujbSrKrhjccdYpKoLZsnkwm2YqgJ5Wq9LWi1jTHtdfZkgus3kXPbvMe1UA
-         xv3Ou7GZxdhRKNr8ntrPNg1CYHhzSThtm+w/7FuvHOkFp4z+VUGvHu8FnW/1wY6oPryR
-         +luuGPw11CHqV65nP6gnXBaB0rzSml/T6qWODxyj0Ro35RE6gHAJpTp0sZVnSnTH4GWv
-         9h4jId8My+q0cOY4dbgPs5TND0rQ00KN//5giMLVhVGUcHiKdk7CDzqhUCVHIrYOdYsc
-         EC5xyQUvSaYZ7Wuq3r3astskW7hK3+sO54V9KHgfWtpDH8uuixzZHVdyjaK0/nsL1Pfs
-         7kSA==
+        bh=R30ZzlGN0VDeQnCpBNeh1UWt38VgrmhzqyCw6OkmtCg=;
+        b=M/pRoyyvWn5vLsPUbjRS6K0mtQ0WZOZ1nSvhcMuviz+Q9un9TDudaESBFWpvdjkm6b
+         u8S9KWzu63klxB2Jhik0hYkrxXH6XGaHRbY3Lm6ffzwN2ytpFjbcubwlYzT2w5Zh2KN+
+         C1uK1fBiocrKC7d6w2z7AE10EJd8jypXmckUY0JFv4ecDTCte2eJoQXdU7CSzKyKgDli
+         gHwoCEcvrBYlIENjFMXowg7frkDL1TGndDsbKMET0/3lSfNieRMmH7SjEqaKV/d59mBw
+         9e6FakXvIBLDaKRquhsu6KkEPkuzxPY3AvtJlnqzOw16TXB0K9yWT5hlfh8sHkEpdnzi
+         +TjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686808180; x=1689400180;
+        d=1e100.net; s=20221208; t=1686808188; x=1689400188;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4OtevX4Ed8o9vOu7pBdbUE0N/6rDWNEIM9CMGtbBiG8=;
-        b=Sq156B7B0LRZOYNxW2TZ6VQjDInJEBUDEg/hUv2eo3IIhw6TE8WaLUsn2N5LS9H3Iw
-         8Bf5FHSHMXwGC/LkxRU9wJAKgtpQSbmFvQ0FDkbxYFOYZKx5lIK4s8zfpXfJMxhoZHo4
-         b+432gfG+4C2E6B/I/GXx4UfzU8lmYPV5CvpU2SQKFoWW676j2jCqgSgifF0luQhenee
-         R0P8xa2P1QiSqQkS7rqyFFLUc4yOCSUV9fTdo34R/2h/pdBwsfkkEO0CnslxuEt6Vqgj
-         gCBXdCSf+9OD9vhRM2FupA/4ZhsKSdtoXp8nlMr/+UbsFDhkc6iL2IQmintncOwEjUil
-         tlyQ==
-X-Gm-Message-State: AC+VfDzBOLnnhqy7uCbdOIV3SaPbdUNpA/h3VThb5ePzJUtKx0CMCV1w
-        DRlFvZWx33eQn3q8eWGEmfq0uUfB+WpGluzLhxbmYA==
-X-Google-Smtp-Source: ACHHUZ7RNsojShxUmQ/UvuWDYnPae06STozzKgRTOJNOQEoo2GLqpr4YDs4raGdjATmEs7zmc+BRLQAf2XDZ7512P5A=
-X-Received: by 2002:a05:622a:1988:b0:3f9:6930:1308 with SMTP id
- u8-20020a05622a198800b003f969301308mr76070qtc.13.1686808180514; Wed, 14 Jun
- 2023 22:49:40 -0700 (PDT)
+        bh=R30ZzlGN0VDeQnCpBNeh1UWt38VgrmhzqyCw6OkmtCg=;
+        b=iqHscJrChqsKBBAJBIjSEvsNLoN3jrNpOMplBOUrOcWfeWZ8TCVkSCml7wWCo/wEu+
+         S6KGJq1ba3JmX9f8JJ3iU5FmrIXE8k3OBJ3+wNoE6GV69na4prLGMiNa61MMCkdRkQIr
+         JE0L0/TR9YQUsXPz4IuD+qdydF8gK3kiFMnCO9YcwMENmygJvc1eBe5G4vTXs9+YjWtv
+         +NXA91Ejx9VmDBCiLXgOwLcyozYEectLlcyFYYx4IxQ/7lFbsj5lotRVOtijwKQbmF/j
+         HgAuoRjE5HzB6rhQJ4uyM8YuFnEuMPe3XmcBrPviQ084yHnFjC46d7SgT2V0EG9OBvSU
+         oJXA==
+X-Gm-Message-State: AC+VfDxMa4lFkqkktMXb2yz94WBnbSa3tNWrPXDY4VLs9y+oxn+xNq+i
+        /zjhj29mJtXq74si3haPh2dRsKyuI+ECSE2dO1psrg==
+X-Google-Smtp-Source: ACHHUZ48dUT8JCtQf7+YAA0qvyZAGLhfYbopgB1p7VZRLCbpr1tGR9JDAihONmpnx45ALUU79k6wWn539M/nkceO/Co=
+X-Received: by 2002:a05:6402:1842:b0:514:9904:c8fe with SMTP id
+ v2-20020a056402184200b005149904c8femr8673507edy.39.1686808187712; Wed, 14 Jun
+ 2023 22:49:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230615001735.3643996-1-kan.liang@linux.intel.com> <20230615001735.3643996-2-kan.liang@linux.intel.com>
-In-Reply-To: <20230615001735.3643996-2-kan.liang@linux.intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 14 Jun 2023 22:49:28 -0700
-Message-ID: <CAP-5=fV2_7yWftPwd50r-OhxTdT3TKdZEdVsZAY7SE3UHRa=2A@mail.gmail.com>
-Subject: Re: [PATCH V2 1/8] perf evsel: Fix the annotation for hardware events
- on hybrid
-To:     kan.liang@linux.intel.com
-Cc:     acme@kernel.org, mingo@redhat.com, peterz@infradead.org,
-        namhyung@kernel.org, jolsa@kernel.org, adrian.hunter@intel.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ak@linux.intel.com, eranian@google.com, ahmad.yasin@intel.com
+References: <20230315101606.10636-1-wei.w.wang@intel.com>
+In-Reply-To: <20230315101606.10636-1-wei.w.wang@intel.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Thu, 15 Jun 2023 11:19:34 +0530
+Message-ID: <CAAhSdy0H0jGrEdCdrVBRr5f0SzLhfyk5Yayf2C_6UaFndv3dFw@mail.gmail.com>
+Subject: Re: [PATCH RESEND v2] KVM: move KVM_CAP_DEVICE_CTRL to the generic check
+To:     Wei Wang <wei.w.wang@intel.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 5:18=E2=80=AFPM <kan.liang@linux.intel.com> wrote:
+On Wed, Mar 15, 2023 at 3:47=E2=80=AFPM Wei Wang <wei.w.wang@intel.com> wro=
+te:
 >
-> From: Kan Liang <kan.liang@linux.intel.com>
+> KVM_CAP_DEVICE_CTRL allows userspace to check if the kvm_device
+> framework (e.g. KVM_CREATE_DEVICE) is supported by KVM. Move
+> KVM_CAP_DEVICE_CTRL to the generic check for the two reasons:
+> 1) it already supports arch agnostic usages (i.e. KVM_DEV_TYPE_VFIO).
+> For example, userspace VFIO implementation may needs to create
+> KVM_DEV_TYPE_VFIO on x86, riscv, or arm etc. It is simpler to have it
+> checked at the generic code than at each arch's code.
+> 2) KVM_CREATE_DEVICE has been added to the generic code.
 >
-> The annotation for hardware events is wrong on hybrid. For example,
->
->  # ./perf stat -a sleep 1
->
->  Performance counter stats for 'system wide':
->
->          32,148.85 msec cpu-clock                        #   32.000 CPUs =
-utilized
->                374      context-switches                 #   11.633 /sec
->                 33      cpu-migrations                   #    1.026 /sec
->                295      page-faults                      #    9.176 /sec
->         18,979,960      cpu_core/cycles/                 #  590.378 K/sec
->        261,230,783      cpu_atom/cycles/                 #    8.126 M/sec=
-                       (54.21%)
->         17,019,732      cpu_core/instructions/           #  529.404 K/sec
->         38,020,470      cpu_atom/instructions/           #    1.183 M/sec=
-                       (63.36%)
->          3,296,743      cpu_core/branches/               #  102.546 K/sec
->          6,692,338      cpu_atom/branches/               #  208.167 K/sec=
-                       (63.40%)
->             96,421      cpu_core/branch-misses/          #    2.999 K/sec
->          1,016,336      cpu_atom/branch-misses/          #   31.613 K/sec=
-                       (63.38%)
->
-> The hardware events have extended type on hybrid, but the evsel__match()
-> doesn't take it into account.
->
-> Filter the config on hybrid before checking.
->
-> With the patch,
->
->  # ./perf stat -a sleep 1
->
->  Performance counter stats for 'system wide':
->
->          32,139.90 msec cpu-clock                        #   32.003 CPUs =
-utilized
->                343      context-switches                 #   10.672 /sec
->                 32      cpu-migrations                   #    0.996 /sec
->                 73      page-faults                      #    2.271 /sec
->         13,712,841      cpu_core/cycles/                 #    0.000 GHz
->        258,301,691      cpu_atom/cycles/                 #    0.008 GHz  =
-                       (54.20%)
->         12,428,163      cpu_core/instructions/           #    0.91  insn =
-per cycle
->         37,786,557      cpu_atom/instructions/           #    2.76  insn =
-per cycle              (63.35%)
->          2,418,826      cpu_core/branches/               #   75.259 K/sec
->          6,965,962      cpu_atom/branches/               #  216.739 K/sec=
-                       (63.38%)
->             72,150      cpu_core/branch-misses/          #    2.98% of al=
-l branches
->          1,032,746      cpu_atom/branch-misses/          #   42.70% of al=
-l branches             (63.35%)
->
-> Suggested-by: Ian Rogers <irogers@google.com>
-> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+> Link: https://lore.kernel.org/all/20221215115207.14784-1-wei.w.wang@intel=
+.com
+> Signed-off-by: Wei Wang <wei.w.wang@intel.com>
+> Reviewed-by: Sean Christopherson <seanjc@google.com>
 
-Reviewed-by: Ian Rogers <irogers@google.com>
+Acked-by: Anup Patel <anup@brainfault.org> (riscv)
 
 Thanks,
-Ian
+Anup
 
 > ---
->  tools/perf/util/evsel.h | 17 ++++++++++++++---
->  1 file changed, 14 insertions(+), 3 deletions(-)
+>  arch/arm64/kvm/arm.c       | 1 -
+>  arch/powerpc/kvm/powerpc.c | 1 -
+>  arch/riscv/kvm/vm.c        | 1 -
+>  arch/s390/kvm/kvm-s390.c   | 1 -
+>  virt/kvm/kvm_main.c        | 1 +
+>  5 files changed, 1 insertion(+), 4 deletions(-)
 >
-> diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
-> index b365b449c6ea..cc6fb3049b99 100644
-> --- a/tools/perf/util/evsel.h
-> +++ b/tools/perf/util/evsel.h
-> @@ -10,6 +10,7 @@
->  #include <internal/evsel.h>
->  #include <perf/evsel.h>
->  #include "symbol_conf.h"
-> +#include "pmus.h"
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index 3bd732eaf087..96329e675771 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -202,7 +202,6 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, lon=
+g ext)
+>                 r =3D vgic_present;
+>                 break;
+>         case KVM_CAP_IOEVENTFD:
+> -       case KVM_CAP_DEVICE_CTRL:
+>         case KVM_CAP_USER_MEMORY:
+>         case KVM_CAP_SYNC_MMU:
+>         case KVM_CAP_DESTROY_MEMORY_REGION_WORKS:
+> diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
+> index 4c5405fc5538..185efed23896 100644
+> --- a/arch/powerpc/kvm/powerpc.c
+> +++ b/arch/powerpc/kvm/powerpc.c
+> @@ -526,7 +526,6 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, lon=
+g ext)
+>         case KVM_CAP_ENABLE_CAP:
+>         case KVM_CAP_ONE_REG:
+>         case KVM_CAP_IOEVENTFD:
+> -       case KVM_CAP_DEVICE_CTRL:
+>         case KVM_CAP_IMMEDIATE_EXIT:
+>         case KVM_CAP_SET_GUEST_DEBUG:
+>                 r =3D 1;
+> diff --git a/arch/riscv/kvm/vm.c b/arch/riscv/kvm/vm.c
+> index 65a964d7e70d..6efe93b282e1 100644
+> --- a/arch/riscv/kvm/vm.c
+> +++ b/arch/riscv/kvm/vm.c
+> @@ -57,7 +57,6 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long =
+ext)
 >
->  struct bpf_object;
->  struct cgroup;
-> @@ -350,9 +351,19 @@ u64 format_field__intval(struct tep_format_field *fi=
-eld, struct perf_sample *sam
->
->  struct tep_format_field *evsel__field(struct evsel *evsel, const char *n=
-ame);
->
-> -#define evsel__match(evsel, t, c)              \
-> -       (evsel->core.attr.type =3D=3D PERF_TYPE_##t &&      \
-> -        evsel->core.attr.config =3D=3D PERF_COUNT_##c)
-> +static inline bool __evsel__match(const struct evsel *evsel, u32 type, u=
-64 config)
-> +{
-> +       if (evsel->core.attr.type !=3D type)
-> +               return false;
-> +
-> +       if ((type =3D=3D PERF_TYPE_HARDWARE || type =3D=3D PERF_TYPE_HW_C=
-ACHE)  &&
-> +           perf_pmus__supports_extended_type())
-> +               return (evsel->core.attr.config & PERF_HW_EVENT_MASK) =3D=
-=3D config;
-> +
-> +       return evsel->core.attr.config =3D=3D config;
-> +}
-> +
-> +#define evsel__match(evsel, t, c) __evsel__match(evsel, PERF_TYPE_##t, P=
-ERF_COUNT_##c)
->
->  static inline bool evsel__match2(struct evsel *e1, struct evsel *e2)
->  {
+>         switch (ext) {
+>         case KVM_CAP_IOEVENTFD:
+> -       case KVM_CAP_DEVICE_CTRL:
+>         case KVM_CAP_USER_MEMORY:
+>         case KVM_CAP_SYNC_MMU:
+>         case KVM_CAP_DESTROY_MEMORY_REGION_WORKS:
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index 39b36562c043..7b097b5253ca 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -556,7 +556,6 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, lon=
+g ext)
+>         case KVM_CAP_ENABLE_CAP:
+>         case KVM_CAP_S390_CSS_SUPPORT:
+>         case KVM_CAP_IOEVENTFD:
+> -       case KVM_CAP_DEVICE_CTRL:
+>         case KVM_CAP_S390_IRQCHIP:
+>         case KVM_CAP_VM_ATTRIBUTES:
+>         case KVM_CAP_MP_STATE:
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index d255964ec331..71cc63640173 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -4523,6 +4523,7 @@ static long kvm_vm_ioctl_check_extension_generic(st=
+ruct kvm *kvm, long arg)
+>  #endif
+>         case KVM_CAP_BINARY_STATS_FD:
+>         case KVM_CAP_SYSTEM_EVENT_DATA:
+> +       case KVM_CAP_DEVICE_CTRL:
+>                 return 1;
+>         default:
+>                 break;
 > --
-> 2.35.1
+> 2.27.0
 >
