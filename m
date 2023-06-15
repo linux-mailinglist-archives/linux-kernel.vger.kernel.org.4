@@ -2,124 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D343731417
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:36:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C10A731408
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:34:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245737AbjFOJgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 05:36:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35368 "EHLO
+        id S245680AbjFOJeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 05:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245580AbjFOJeV (ORCPT
+        with ESMTP id S245580AbjFOJd5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 05:34:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D9E273F
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 02:33:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686821590;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=By+qTcV00Wxy2aMxnryfOK5l7c3RlTf1drDswP2UWb8=;
-        b=hByuYn2j1Yo7fIKVAav8sR4AvuvFJ1yF/azt7oW8mJoyaVBzbbqjziKeO+cO6XAOfZWlH4
-        lkGkAIW3be51Frfg1BXwTyUSzUWABO5Tbwl2F0Gl40KBcKvIHJ9WZHEqpiu/MevTGYLZ1f
-        BlCmIsm7VBPawCF5xBmkUKOEC3UG11E=
-Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com
- [209.85.219.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-122-pd2jSf8zOl-LhVxEOe-c2g-1; Thu, 15 Jun 2023 05:33:08 -0400
-X-MC-Unique: pd2jSf8zOl-LhVxEOe-c2g-1
-Received: by mail-yb1-f198.google.com with SMTP id 3f1490d57ef6-bc9483b506fso1724121276.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 02:33:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686821587; x=1689413587;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=By+qTcV00Wxy2aMxnryfOK5l7c3RlTf1drDswP2UWb8=;
-        b=WTpPDJ6WISgCBrnQyQ3DhjqWOZumKxn0K7pMl44BCqdCjMJDltennny60bw8TVx7bp
-         vz21grhnu52hYDxAkeacbwuJSz4GswfzWGWFwdwy9dJWlPEC7FUcDn+f5ERu3pZA3E9V
-         8Cu0hs7WRtpnBulJbJG9HBlqQsyglJiyWciG6FXIkXrAlwxnovN1eFep7xIf/UF484gQ
-         BESf7Xu/kEAMMqji5UKzaIg8lTavIL2Nc9dN4l/Xn1ExNFvhy3bNCaB3P6S0ynRDrST3
-         04zjnrqAztxBqYPQjUOYRS6J6YvYNUJrtVLhNiw/tFEa3qs3WlHzcX9IHoyO5O7wXpuL
-         ouOA==
-X-Gm-Message-State: AC+VfDy+abGqUzxJ9rMdGkTd+0yym41zzZUArxs14WynR9Y0+Szx21bA
-        vaGhakopVgqZRy+RuW0KrNK1+IrDN19vYSb4nkbemL5LfxZkKliLDLE5sSckHorbPM7WHDgFTrs
-        scA3L/NE9hR8a9/soVESIzLDLzTv4h0X9felHj49S
-X-Received: by 2002:a25:c5d3:0:b0:bc9:1019:541 with SMTP id v202-20020a25c5d3000000b00bc910190541mr4511769ybe.8.1686821587595;
-        Thu, 15 Jun 2023 02:33:07 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4wzABWOyoHZ4UD8kzzizr6eF73JPT8TMumNPs00qj7Wnb72JdlpUql0ilmvKC4QWb9uUl3XgGitZNA39kA0zU=
-X-Received: by 2002:a25:c5d3:0:b0:bc9:1019:541 with SMTP id
- v202-20020a25c5d3000000b00bc910190541mr4511761ybe.8.1686821587344; Thu, 15
- Jun 2023 02:33:07 -0700 (PDT)
+        Thu, 15 Jun 2023 05:33:57 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED4026B0
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 02:33:56 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35F8P3NM006680;
+        Thu, 15 Jun 2023 09:33:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=GLpzsJcKyUDHvjSzNRle4HJAV06lwhJVDoZ6sTtkRXg=;
+ b=IJJZ5Js6gb8pBffwf2yDAdKS6HkB+bH81/2rpzBFjN5OQizYmSV/TvV6MKCB+cGW073h
+ 1oF5+GNI4MSvS/Yee1viFPv5dSLg8e4IN5QPt4tL9k5uPzqz3INK9TV+UjP/IwdWQ+MZ
+ txBTn92G6DC5uv5K7NPGs+7fbMQoNR5q3WBKu4jb3yTVptgCtXbiIJUQJPEidRZop2UE
+ SjEbwCgkq7C8uGHEkPscYqI2sAKGy6IHeGpV3GtVxqFU/HhEXTNQIq5ET1doTsSl2lnF
+ 484Q07l/738cV/ISDgHohkmFaP6/NAUeP4Hzey1CCBLVZTwTQ6j8AOkGxU2J+PA1KLd7 EQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r7faea0xy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 09:33:40 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35F9XdXg009521
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 09:33:39 GMT
+Received: from hu-ajainp-blr.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 15 Jun 2023 02:33:36 -0700
+From:   Anvesh Jain P <quic_ajainp@quicinc.com>
+To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        "Robin Murphy" <robin.murphy@arm.com>
+CC:     <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        Anvesh Jain P <quic_ajainp@quicinc.com>,
+        Venkata Rao Kakani <quic_vkakani@quicinc.com>,
+        Vagdhan Kumar <quic_vagdhank@quicinc.com>
+Subject: [PATCH] iommu: export iommu_set_default_translated function
+Date:   Thu, 15 Jun 2023 15:03:08 +0530
+Message-ID: <20230615093308.24989-1-quic_ajainp@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20230615034830.1361853-1-hezhongkun.hzk@bytedance.com> <CAOUHufZBUEm1P7gm0nFkPSFkNg2fPbs3v3qhL-R9m5yFNoW2YA@mail.gmail.com>
-In-Reply-To: <CAOUHufZBUEm1P7gm0nFkPSFkNg2fPbs3v3qhL-R9m5yFNoW2YA@mail.gmail.com>
-From:   Fabian Deutsch <fdeutsch@redhat.com>
-Date:   Thu, 15 Jun 2023 11:32:50 +0200
-Message-ID: <CA+PVUaQ40isbN14=gJTM7Bo_h1cRF=7AQUbE2g+PYNUMwdZLog@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/3] zram: charge the compressed RAM to the page's memcgroup
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Zhongkun He <hezhongkun.hzk@bytedance.com>, minchan@kernel.org,
-        senozhatsky@chromium.org, mhocko@suse.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Yosry Ahmed <yosryahmed@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: QbhkyLbaLgfmV02yj--GH6bd89dyqRAe
+X-Proofpoint-GUID: QbhkyLbaLgfmV02yj--GH6bd89dyqRAe
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-15_06,2023-06-14_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
+ spamscore=0 priorityscore=1501 lowpriorityscore=0 bulkscore=0 adultscore=0
+ impostorscore=0 suspectscore=0 phishscore=0 mlxscore=0 mlxlogscore=903
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306150081
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 6:59=E2=80=AFAM Yu Zhao <yuzhao@google.com> wrote:
->
-> On Wed, Jun 14, 2023 at 9:48=E2=80=AFPM Zhongkun He
-> <hezhongkun.hzk@bytedance.com> wrote:
-> >
-> > The compressed RAM is currently charged to kernel, not to
-> > any memory cgroup, which is not satisfy our usage scenario.
-> > if the memory of a task is limited by memcgroup, it will
-> > swap out the memory to zram swap device when the memory
-> > is insufficient. In that case, the memory limit will have
-> > no effect.
-> >
-> > So, it should makes sense to charge the compressed RAM to
-> > the page's memory cgroup.
+export iommu_set_default_translated function to be used by other modules.
 
-While looking at this in the past weeks, I believe that there are two
-distinct problems:
-1. Direct zram usage by process within a cg ie. a process writing to a
-zram device
-2. Indirect zram usage by a process within a cg via swap (described above)
+Signed-off-by: Anvesh Jain P <quic_ajainp@quicinc.com>
+Signed-off-by: Venkata Rao Kakani <quic_vkakani@quicinc.com>
+Signed-off-by: Vagdhan Kumar <quic_vagdhank@quicinc.com>
+---
+ drivers/iommu/iommu.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Both of them probably require different solutions.
-In order to fix #1, accounting a zram device should be accounted
-towards a cgroup. IMHO this is something that should be fixed.
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index f1dcfa3f1a1b..1b4a5db58d66 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -2730,6 +2730,7 @@ void iommu_set_default_translated(bool cmd_line)
+ 		iommu_cmd_line |= IOMMU_CMD_LINE_DMA_API;
+ 	iommu_def_domain_type = IOMMU_DOMAIN_DMA;
+ }
++EXPORT_SYMBOL_GPL(iommu_set_default_translated);
+ 
+ bool iommu_default_passthrough(void)
+ {
 
-Yu Zhao and Yosry are probably much more familiar with the solution to #2.
-WRT per-cgrou-swapfile, to me this is addressing #2, but I agree with
-Yu Zhao, that there are probably better solutions to this.
-
-Lastly, this patchset, while it will possibly not address the swap
-issue (#2) completely, is it satisfying the needs of #1?
-
-- fabian
-
-> We used to do this a long time ago, but we had per-memcg swapfiles [1[
-> to prevent compressed pages from different memcgs from sharing the
-> same zspage.
->
-> Does this patchset alone suffer from the same problem, i.e., memcgs
-> sharing zspages?
->
-> [1] https://lwn.net/Articles/592923/
->
+base-commit: b6dad5178ceaf23f369c3711062ce1f2afc33644
+-- 
+2.17.1
 
