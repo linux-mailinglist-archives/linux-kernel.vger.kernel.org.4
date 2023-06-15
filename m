@@ -2,132 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADD0E731828
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5460E73182A
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240550AbjFOMIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 08:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53456 "EHLO
+        id S245381AbjFOMI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 08:08:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239068AbjFOMIs (ORCPT
+        with ESMTP id S241398AbjFOMIy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 08:08:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE44170E
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 05:08:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686830881;
+        Thu, 15 Jun 2023 08:08:54 -0400
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64473184;
+        Thu, 15 Jun 2023 05:08:53 -0700 (PDT)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 7A8299F4;
+        Thu, 15 Jun 2023 14:08:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1686830929;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BvRHsFB/oRi8HTtrrWbsQwfbB532rVXuG7TnMUDF+bc=;
-        b=g5FQAohQr0SXx7iYlW5xtuUOWhJVO2dOTgEJhZfjeSjWwAHKbwhQOq2y++IWzrxTpUnqlQ
-        dY80V5rSecCJa4INbwPHwknD2iQuErgKhaWaPhgjH3iYTrUmMKK/8PcBz02I9vyZ4k2XJq
-        4L0DbyBNgTKtkwV8GOZqozC5aCedebY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-45-z09Qo7_-MFOSQSQDj1rioA-1; Thu, 15 Jun 2023 08:07:57 -0400
-X-MC-Unique: z09Qo7_-MFOSQSQDj1rioA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3D503101CC8D;
-        Thu, 15 Jun 2023 12:07:52 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.51])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 161092026D49;
-        Thu, 15 Jun 2023 12:07:49 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <000000000000b2585a05fdeb8379@google.com>
-References: <000000000000b2585a05fdeb8379@google.com>
-To:     syzbot <syzbot+6efc50cc1f8d718d6cb7@syzkaller.appspotmail.com>
-Cc:     dhowells@redhat.com, davem@davemloft.net,
-        herbert@gondor.apana.org.au, kuba@kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [crypto?] KASAN: slab-out-of-bounds Read in extract_iter_to_sg
+        bh=ByiMuKGszO/RULKL4xEPKNdqXuS6jdAajX52qRjoh/M=;
+        b=z1xaFEBkLnxAYp4GTvNn4sIiMexPl6yL+tZeEf4oFbAD9M/vTcQYJ/aBHzCqECIZy9qNZs
+        gH3af8xsGNtbSR7m/ntvDk4bRgcDKl4ZfuLWxLJWO9anWnQsyGU/Kk4ydt7JBYDljsVOyV
+        fJSk5mLwGMNzog9JHJJzcjcQsLd9Fr9JabOoAyapDw16xocJWlb58PQyL3j0It0twNibOs
+        pVDs7mETUwrDSYRRpRQ4kULF4je8bVInj7feUdYZG+bjJVXnvw7eUEn49cPLvN0KC3ArCG
+        zcnjkT4NjGvurohIYeNXNx9InB+RaeqDVLPMQkg3aCEoHt6Xd8gWHRsBUBJGLw==
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <89570.1686830867.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Thu, 15 Jun 2023 13:07:47 +0100
-Message-ID: <89571.1686830867@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Date:   Thu, 15 Jun 2023 14:08:49 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+Cc:     tudor.ambarus@linaro.org, pratyush@kernel.org,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, git@amd.com, linux-mtd@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        amitrkcian2002@gmail.com
+Subject: Re: [PATCH 1/2] dt-bindings: mtd: jedec, spi-nor: Add DT property to
+ avoid setting SRWD bit in status register
+In-Reply-To: <20230615111649.36344-2-amit.kumar-mahapatra@amd.com>
+References: <20230615111649.36344-1-amit.kumar-mahapatra@amd.com>
+ <20230615111649.36344-2-amit.kumar-mahapatra@amd.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <54a22a94be29786f055924714a1ffce4@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.g=
-it main
+Am 2023-06-15 13:16, schrieb Amit Kumar Mahapatra:
+> If the WP signal of the flash device is not connected and the software 
+> sets
+> the status register write disable (SRWD) bit in the status register 
+> then
+> thestatus register permanently becomes read-only. To avoid this added a 
+> new
+> boolean DT property "broken-wp". If WP signal is not connected, then 
+> this
+> property should be set in the DT to avoid setting the SRWD during 
+> status
+> register write operation.
+> 
+> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+> ---
+>  .../devicetree/bindings/mtd/jedec,spi-nor.yaml      | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
+> b/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
+> index 89959e5c47ba..a509d34f14b2 100644
+> --- a/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
+> +++ b/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
+> @@ -70,6 +70,19 @@ properties:
+>        be used on such systems, to denote the absence of a reliable 
+> reset
+>        mechanism.
+> 
+> +  broken-wp:
+> +    type: boolean
+> +    description:
+> +      The SRWD bit in status register, combined with the WP signal 
+> provides
+> +      hardware data protection for the device. When the SRWD bit is 
+> set to 1,
+> +      and the WP signal is driven LOW, the status register nonvolatile 
+> bits
+> +      become read-only and the WRITE STATUS REGISTER operation will
+> not execute.
+> +      The only way to exit this hardware-protected mode is to drive
+> WP HIGH. But
+> +      if the WP signal of the flash device is not connected then
+> status register
+> +      permanently becomes read-only as the SRWD bit cannot be reset.
+> This boolean
+> +      flag can be used on such systems in which WP signal is not 
+> connected, to
+> +      avoid setting the SRWD bit while writing the status register.
 
-diff --git a/fs/splice.c b/fs/splice.c
-index 67ddaac1f5c5..17d692449e83 100644
---- a/fs/splice.c
-+++ b/fs/splice.c
-@@ -886,7 +886,6 @@ ssize_t splice_to_socket(struct pipe_inode_info *pipe,=
- struct file *out,
- 			}
- =
+FWIW, this is also a valid use case: have the WP# pin tied to low, the
+OEM will program the flash and then enable locking making the flash
+permanently write protected. IWO, if the pin is hard strapped to low,
+it is not always broken. You might add that to the description.
 
- 			seg =3D min_t(size_t, remain, buf->len);
--			seg =3D min_t(size_t, seg, PAGE_SIZE);
- =
-
- 			ret =3D pipe_buf_confirm(pipe, buf);
- 			if (unlikely(ret)) {
-@@ -897,10 +896,9 @@ ssize_t splice_to_socket(struct pipe_inode_info *pipe=
-, struct file *out,
- =
-
- 			bvec_set_page(&bvec[bc++], buf->page, seg, buf->offset);
- 			remain -=3D seg;
--			if (seg >=3D buf->len)
--				tail++;
--			if (bc >=3D ARRAY_SIZE(bvec))
-+			if (remain =3D=3D 0 || bc >=3D ARRAY_SIZE(bvec))
- 				break;
-+			tail++;
- 		}
- =
-
- 		if (!bc)
-diff --git a/net/ipv4/ip_output.c b/net/ipv4/ip_output.c
-index 457598dfa128..6e70839257f7 100644
---- a/net/ipv4/ip_output.c
-+++ b/net/ipv4/ip_output.c
-@@ -1041,7 +1041,8 @@ static int __ip_append_data(struct sock *sk,
- 	} else if ((flags & MSG_SPLICE_PAGES) && length) {
- 		if (inet->hdrincl)
- 			return -EPERM;
--		if (rt->dst.dev->features & NETIF_F_SG)
-+		if (rt->dst.dev->features & NETIF_F_SG &&
-+		    getfrag =3D=3D ip_generic_getfrag)
- 			/* We need an empty buffer to attach stuff to */
- 			paged =3D true;
- 		else
-diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
-index c06ff7519f19..1e8c90e97608 100644
---- a/net/ipv6/ip6_output.c
-+++ b/net/ipv6/ip6_output.c
-@@ -1593,7 +1593,8 @@ static int __ip6_append_data(struct sock *sk,
- 	} else if ((flags & MSG_SPLICE_PAGES) && length) {
- 		if (inet_sk(sk)->hdrincl)
- 			return -EPERM;
--		if (rt->dst.dev->features & NETIF_F_SG)
-+		if (rt->dst.dev->features & NETIF_F_SG &&
-+		    getfrag =3D=3D ip_generic_getfrag)
- 			/* We need an empty buffer to attach stuff to */
- 			paged =3D true;
- 		else
-
+-michael
