@@ -2,238 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C131A730E20
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 06:27:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD06730E29
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 06:30:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242003AbjFOE1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 00:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35886 "EHLO
+        id S231971AbjFOEad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 00:30:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbjFOE1u (ORCPT
+        with ESMTP id S229944AbjFOEa3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 00:27:50 -0400
-Received: from DM6FTOPR00CU001.outbound.protection.outlook.com (mail-centralusazon11020014.outbound.protection.outlook.com [52.101.61.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36F5198D;
-        Wed, 14 Jun 2023 21:27:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ovo3fTBixaxTuTgs73fQvCqLr8kCeDstXY5sYh6KSbQEM+I5VCUJZj7ky/+Y6cMhgvBXP6hPOs9UFxyylADDJ/a+f2ziyqK/dXamFfWvYQ14duaLuBx8bZKvaMo7nzsW0VwYxH05Aw18c8OEv0pRm9PPftogRRjakdUykKExdFQEKvKpyjgU8YXj4IiAFIGYqh9tEci5tbkJp7upEIWUFwwtztiZeDyIDRFWEd1j32F8RO2EX6KOcb1wUCHzWNTQXoSjpQWfPP2+8aX2yKTD0ekE7oMA3xFYcPT+QeXnqR/GGLX06I6m2RFrRlAqSXgJWjPnZxCMN5S/T5QpEdLFNQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=01YY/vBFjGjMwvGEHtJ87RVvi22XaEEoyqH5o61Lb0Y=;
- b=PdDW7ik/NjqWPiEDGoZiZH/x3gJgepaHeVpWs8sVW2pwUDRWPgDnL25O/8cPUAKycPxGBZWw4OrGAGOGrz+WthlomX6SKyWlJNj6Xmsz0VROY+2smyhzv+PRxhzDP9omxoKtJRdoU0OP0HMrC4P4LRQOKhsmTOOoZy+0OaqZa5FPhxG7lX/gPYyWvTWm051Ix18EaCvX9pSSpB3y9lFZ5c84Dx4U95ubibrbUXsoraem5rSrEp32rKfonMCMEuYpvgSVfgTrhg07yjqr5PsyIn5HbBksDUOLxPuUGCDOXD3IFvejvV+5KLzVsHsS1vfyJQhjhVtrcAWSrVKsEmzJBA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=01YY/vBFjGjMwvGEHtJ87RVvi22XaEEoyqH5o61Lb0Y=;
- b=XhuSZe76JU/9luGMWOXj8iPYCuA8mAcmfsMXtVQO5vZC1wMYZJiaEcFO4RCrL5jhGwnjHlYst913B7StXn7tGB6Hcnhv4SnAwR7w+tfzq4iBpL9h2/gFMA6ELFYr2rjs5gcTje9rW6mV/kLZrFSvgydBq18nrGQY/r7aCz5/iw0=
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
- by CH2PR21MB1510.namprd21.prod.outlook.com (2603:10b6:610:8e::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.10; Thu, 15 Jun
- 2023 04:27:45 +0000
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::bb03:96fc:3397:6022]) by SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::bb03:96fc:3397:6022%4]) with mapi id 15.20.6521.009; Thu, 15 Jun 2023
- 04:27:45 +0000
-From:   Dexuan Cui <decui@microsoft.com>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
-CC:     "bhelgaas@google.com" <bhelgaas@google.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Jake Oshins <jakeo@microsoft.com>,
-        "kuba@kernel.org" <kuba@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "robh@kernel.org" <robh@kernel.org>,
-        "saeedm@nvidia.com" <saeedm@nvidia.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Long Li <longli@microsoft.com>,
-        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
-        Saurabh Singh Sengar <ssengar@microsoft.com>,
-        "helgaas@kernel.org" <helgaas@kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Jose Teuttli Carranco <josete@microsoft.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH v3 2/6] PCI: hv: Fix a race condition in hv_irq_unmask()
- that can cause panic
-Thread-Topic: [PATCH v3 2/6] PCI: hv: Fix a race condition in hv_irq_unmask()
- that can cause panic
-Thread-Index: AQHZjvHvMuBijgFAUE2iuK+yh+6HEq+LXMWQ
-Date:   Thu, 15 Jun 2023 04:27:45 +0000
-Message-ID: <SA1PR21MB1335549F59339A9848101158BF5BA@SA1PR21MB1335.namprd21.prod.outlook.com>
-References: <20230420024037.5921-1-decui@microsoft.com>
- <20230420024037.5921-3-decui@microsoft.com> <ZG81WpJBBegbLSbT@lpieralisi>
-In-Reply-To: <ZG81WpJBBegbLSbT@lpieralisi>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=aea10944-eda4-4b97-ad94-fff1ee2a7f81;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-06-15T03:56:14Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|CH2PR21MB1510:EE_
-x-ms-office365-filtering-correlation-id: 3c684c38-fd56-4318-ea95-08db6d58ddfc
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: fsCAa9XuF09RB/t5bSR5HEDAsJ+jSfIV8pbW859ISj6ABOkBfJ+746G+iJe4AzPkR551F54A1MPR+ZebEPquz//ANK16uCbbVxL0JVav9OQ8jud/vyKIJrnhEIZRINpk1y9TTI0XkZzZ6bn+SnCrS18G4HaS9kvgb0uE10ivWsiyUZ/ChTxwbJWnuLheY5svRsvJ8GbT538V0LRjDqQuGShQKpSowTTr51EvA+jRxtevcTVbgq5gPC1v8B+B96+XQFJpUJmGmWrR/rYc9AQLSi0EKqAWXMq12H7H8zuoPy6l9lsjTy7h5EMB77auUEa0L1uKu6f0waidFmzXeKJG7d2t+Cv4KVXZ1JEz4Gxz/CVM0bl8I4UInjPgUppD6QXxmJamIURFiH1zq0x3Yd4zZ9xKn2xBkwaucp+03Sub343j8oyBKipvwhBHiGFIA5s0rkHH88JP+WzmN7IAb9ozQBnq/uHg6o/8xEdTK1EqFDa+dG+nVgomex/tSbBPm+zMHz5XUrlmqncs667k29N6dDalOXrCMQnIQtOAYacvdm08OKBPu7Nk9rkJKaYHFczdnsThukL6Tr/8ym91lXnpQbcQ0fKaj2OMCLycqiLNYAstI0dEZF/ZfGYRKu/7hCQptSaM8c01o0+MjHF+wEBMz5kyWWx5i1wBjNG+jFpKexE=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(366004)(39860400002)(376002)(346002)(451199021)(8990500004)(2906002)(86362001)(33656002)(52536014)(38070700005)(7416002)(55016003)(7696005)(83380400001)(186003)(9686003)(6506007)(5660300002)(82960400001)(71200400001)(478600001)(82950400001)(122000001)(54906003)(66946007)(66476007)(6916009)(64756008)(66446008)(76116006)(10290500003)(4326008)(316002)(38100700002)(66556008)(8676002)(41300700001)(8936002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?+Hi7sYsdZRxugsGb6H2yU5PDc9X7EPXvkpid15yjWnLDD/HwJ8mGxJXiPhLx?=
- =?us-ascii?Q?6GOeUeAAuzxSTnMKVaFB180rjzSQS2iK77dNnOG+qGfBgF/tQ2O12kH19YX6?=
- =?us-ascii?Q?0yMiAZAs0bXnLleV/ewfSBOvPO7xADy6E8Yd9wsT5ySMN13W/vSkUvnPi023?=
- =?us-ascii?Q?SQRgZfRW46VA+32iPfO+yswUchNs0wSm1FPBi58XOaWqpEJOt+zFGo15Gip1?=
- =?us-ascii?Q?PDv1dH+ZzCXzzqVwqUYxjFVnQAW3AxNDRZqPhPewa6n9jMWBzuxoQ4DCKZRD?=
- =?us-ascii?Q?m+gHMHWOrloMj+M4DfoA8rA80FqIb1sPoTGpM/0Wu0VlqGQSIivo/rkVsosW?=
- =?us-ascii?Q?yTPqEYS4x3QWtzoGtREPEEdIk/6pNf/bOzCr4njjwyHDyWI6LYkDoQWbTtdh?=
- =?us-ascii?Q?XmrJOLCyR40o2N0ihaZ54m5znnQknCwvrwZaobLRAyHepXQ2lE9BOWN4ukn5?=
- =?us-ascii?Q?P+xTLPiGXSUIHcirL4qTWVaTmudlmX1+oI/x2wMdDl0VcW+SI8eMFFBcbRgZ?=
- =?us-ascii?Q?ow1YHLUJGBWGEkLrHypglrCC3HzCHF3WD+7dvB/z4qAzAr1pviTRmiXmAO+9?=
- =?us-ascii?Q?iId/XNTOFwIkiydrZ4FbJoubSURJbVitmEp4Z3A1lMb7BPZsQN1Ata2oHeB5?=
- =?us-ascii?Q?a4JdcumwONa5DUmWjQhT6cXQfRVaOJ911o9XnAuZ5t8Q2O7BPWjqqhG2wOfY?=
- =?us-ascii?Q?h97eAEhyx/b6mX7HVR7A8C6pbATmsA1/WOotcmwk9qUk/cMFk893YuCInasz?=
- =?us-ascii?Q?6qpAzh/Gtx622VrrgKsIrTiwHm6p6FMcgsiv1r6cud1/nFrKUrm+Uy0TGIlj?=
- =?us-ascii?Q?b9aB9J6yWVYegn59AnmPmnardCFxZNe8gjgDQM83SalxXstI3Z8hXrTZhRF+?=
- =?us-ascii?Q?D+tE8hKfj+nzjgak8YbnUDiBhI+dEO1znkZEElzHPcuJXbE8c4w2ubsLn6OS?=
- =?us-ascii?Q?VfpoIDjSi55Arp5lNHWIynyv8R5jhyp9/UGY//w9315O97tlX62Ap1cZebI1?=
- =?us-ascii?Q?jI5wG5hYBNZJ6n5+ne/mD/cFX4XIsb4y5+WT4sOL3p/r4df7Jki0jagD+vrJ?=
- =?us-ascii?Q?+agIsVPlVjGjOkS1eiMS4HFqTfz1ySM3eeivcVQ8/kl7t7QvpOD1SyzOt0mK?=
- =?us-ascii?Q?swsTLoARXybLPzYMGFcMTM0CfdIayGGBi0H4k19IjHps+OlawqEccGafz3J2?=
- =?us-ascii?Q?kZrB3rJUPG9SOfVekkZdrG0wYq9roPnhBluepuFP6vo9BstzzPS00GAvupNU?=
- =?us-ascii?Q?4ZBsLZ+fYqxUFMfU+WCdQ9+xzfMxhV6+ULOQdyKmt98GYNJYaum8Bams5A63?=
- =?us-ascii?Q?8ooACjtsBdMmA0ZM9SziQdI8B6hs9y7ZjE9yTaggIlSPy6QTehHV9hFxJhHA?=
- =?us-ascii?Q?EBVhS6Mgtl1Y6BdKKnIOXLJoyRFq4lb6Cgf+j5iHA3tHxla0gl5guXjQF8Dl?=
- =?us-ascii?Q?2JIbJVi9jxGmtQcBg01RMpOw8uNpA1S25B/E3WIsnI1NaIQuF1a6dva+hREv?=
- =?us-ascii?Q?BJxxIDIn7z35wVYRVoeEQr4EQYz99+OM7u8JzJirEq6juojaWKYqukCZ2UyD?=
- =?us-ascii?Q?I2RRs0RjCWNv9GFpz2drO0vP+XHn1aXsdDMuH6FXaJhi/I/A0ERpi6S5uIFF?=
- =?us-ascii?Q?12DGr1H+EKzgx0mk+W7bJWI=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 15 Jun 2023 00:30:29 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2C3212C
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 21:30:28 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-3f9b7de94e7so136661cf.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 21:30:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686803427; x=1689395427;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NpMkYu68kVCSeADHU3WzS0gNWUL6UGuCaTOSPQaWnBY=;
+        b=p36xzpFyQSMpMiJHPw0/Pdew2Stos4FU9DmAXYJwWjGHT56YbT2MCu7Ci8b/U23JpT
+         jdUzXZRwLx8pEUu2QsgnomXr+MbIo1mSSCUatUTumirV2XyQzDxYpCqjucb3osckFpHD
+         0zPi4YLRfN3ydsujAYJ+G4ZJeqf3j167CQAF2G9AHI30kcwJPM9auqEaTRjk8zuMTAab
+         efaScxq7ge81XrsuaZEnNrSX6+k5fqS2uZOHdAT4bJ7jdFy3OEwBMWmPP2a2hUa4xetY
+         bssvB7NQY560fnbKA6DramQoxR1pQdGgEAsXdgqeB85m/Ru8fK47dQ2FoYUB05aBmSdq
+         gTkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686803427; x=1689395427;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NpMkYu68kVCSeADHU3WzS0gNWUL6UGuCaTOSPQaWnBY=;
+        b=atCMaYGPrh8+DsTtQ/JSYZeh5OjjXCNGFKyQgNVr9M99HEDhdZNr27iKWfi9zG15GV
+         Mx9LJh2PTJVc/FXBgzPymUJGtSKcm+r0CmLQxLTXvtizOG40qhxFTmzuFHBEaiRVerbj
+         oV3OH3IYQqtUXJ4rJo7ElqcflXCuowemC/GGtu3bAGc7V+BDFXGzeSPkXXEnXmYCcKDv
+         ouL8TBqGCYuv8jNwmLAkERE7yJ6YMdVRGflfAA5vFX+J7W09J+P/OFnrSlNRuGqQE+nh
+         uOMZD3KWiPWnQFMW53dPEsl1/WkiKexxCO2XQQWpUYBCTBXyI7qYOwDygvZ/YcIJJz5m
+         QhxA==
+X-Gm-Message-State: AC+VfDw6zumdItF61XQ6CzBXk6URPO3nNMutU8p2ge+8NfM0NsMbbYJr
+        ovRZXpeVU8ks0/n7fdc3ZPtV+Q2H9RMUXVdKA16UHg==
+X-Google-Smtp-Source: ACHHUZ7gl0OoSz/xmXaN/z+bmDucfMs5NuXGtC+sD0f5i5RdNTRhVV8pRvTQ2jcc3V2Rru+Bpud5QEtV8IYz5rcahrY=
+X-Received: by 2002:a05:622a:1447:b0:3f0:af20:1a37 with SMTP id
+ v7-20020a05622a144700b003f0af201a37mr55182qtx.15.1686803427047; Wed, 14 Jun
+ 2023 21:30:27 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3c684c38-fd56-4318-ea95-08db6d58ddfc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jun 2023 04:27:45.1664
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: eLVDdTK1gyitIS685Uh9V1/PzW8AzS/H0ieBZe528E+lQmwzumhTPA1mJPpHx1wmfAvJpz3lHFG2mtDsAgwK2A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR21MB1510
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20230615001735.3643996-1-kan.liang@linux.intel.com> <20230615001735.3643996-5-kan.liang@linux.intel.com>
+In-Reply-To: <20230615001735.3643996-5-kan.liang@linux.intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 14 Jun 2023 21:30:15 -0700
+Message-ID: <CAP-5=fWbLkyQpxxhfCmqit7p4WgHVUOCjsADm-XojcT5ppcv7g@mail.gmail.com>
+Subject: Re: [PATCH V2 4/8] perf metrics: Sort the Default metricgroup
+To:     kan.liang@linux.intel.com
+Cc:     acme@kernel.org, mingo@redhat.com, peterz@infradead.org,
+        namhyung@kernel.org, jolsa@kernel.org, adrian.hunter@intel.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ak@linux.intel.com, eranian@google.com, ahmad.yasin@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Lorenzo Pieralisi <lpieralisi@kernel.org>
-> Sent: Thursday, May 25, 2023 3:16 AM
-> > --- a/drivers/pci/controller/pci-hyperv.c
-> > +++ b/drivers/pci/controller/pci-hyperv.c
-> > @@ -643,6 +643,11 @@ static void hv_arch_irq_unmask(struct irq_data
-> >  *data)
-> >  	pbus =3D pdev->bus;
-> >  	hbus =3D container_of(pbus->sysdata, struct hv_pcibus_device, sysdata=
-);
-> >  	int_desc =3D data->chip_data;
-> > +	if (!int_desc) {
-> > +		dev_warn(&hbus->hdev->device, "%s() can not unmask irq %u\n",
-> > +			 __func__, data->irq);
-> > +		return;
-> > +	}
->=20
-> That's a check that should be there regardless ?
-Yes. Normally data->chip_data is set at the end of hv_compose_msi_msg(),
-and it should not be NULL. However, in rare circumstances, we might see a
-failure in hv_compose_msi_msg(), e.g. the hypervisor/host might return an
-error in comp.comp_pkt.completion_status (at least this is possible in theo=
-ry).
+On Wed, Jun 14, 2023 at 5:18=E2=80=AFPM <kan.liang@linux.intel.com> wrote:
+>
+> From: Kan Liang <kan.liang@linux.intel.com>
+>
+> The new default mode will print the metrics as a metric group. The
+> metrics from the same metric group must be adjacent to each other in the
+> metric list. But the metric_list_cmp() sorts metrics by the number of
+> events.
+>
+> Add a new sort for the Default metricgroup, which sorts by
+> default_metricgroup_name and metric_name.
+>
+> Add is_default in the struct metric_event to indicate that it's from
+> the Default metricgroup.
+>
+> Store the displayed metricgroup name of the Default metricgroup into
+> the metric expr for output.
+>
+> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+> ---
+>  tools/perf/util/metricgroup.c | 35 +++++++++++++++++++++++++++++++++++
+>  tools/perf/util/metricgroup.h |  3 +++
+>  2 files changed, 38 insertions(+)
+>
+> diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.=
+c
+> index 8b19644ade7d..acf86b15ee49 100644
+> --- a/tools/perf/util/metricgroup.c
+> +++ b/tools/perf/util/metricgroup.c
+> @@ -79,6 +79,7 @@ static struct rb_node *metric_event_new(struct rblist *=
+rblist __maybe_unused,
+>                 return NULL;
+>         memcpy(me, entry, sizeof(struct metric_event));
+>         me->evsel =3D ((struct metric_event *)entry)->evsel;
+> +       me->is_default =3D false;
+>         INIT_LIST_HEAD(&me->head);
+>         return &me->nd;
+>  }
+> @@ -1160,6 +1161,25 @@ static int metric_list_cmp(void *priv __maybe_unus=
+ed, const struct list_head *l,
+>         return right_count - left_count;
+>  }
+>
+> +/**
+> + * default_metricgroup_cmp - Implements complex key for the Default metr=
+icgroup
+> + *                          that first sorts by default_metricgroup_name=
+, then
+> + *                          metric_name.
+> + */
+> +static int default_metricgroup_cmp(void *priv __maybe_unused,
+> +                                  const struct list_head *l,
+> +                                  const struct list_head *r)
+> +{
+> +       const struct metric *left =3D container_of(l, struct metric, nd);
+> +       const struct metric *right =3D container_of(r, struct metric, nd)=
+;
+> +       int diff =3D strcmp(right->default_metricgroup_name, left->defaul=
+t_metricgroup_name);
+> +
+> +       if (diff)
+> +               return diff;
+> +
+> +       return strcmp(right->metric_name, left->metric_name);
+> +}
+> +
+>  struct metricgroup__add_metric_data {
+>         struct list_head *list;
+>         const char *pmu;
+> @@ -1515,6 +1535,7 @@ static int parse_groups(struct evlist *perf_evlist,
+>         LIST_HEAD(metric_list);
+>         struct metric *m;
+>         bool tool_events[PERF_TOOL_MAX] =3D {false};
+> +       bool is_default =3D !strcmp(str, "Default");
+>         int ret;
+>
+>         if (metric_events_list->nr_entries =3D=3D 0)
+> @@ -1549,6 +1570,9 @@ static int parse_groups(struct evlist *perf_evlist,
+>                         goto out;
+>         }
+>
+> +       if (is_default)
+> +               list_sort(NULL, &metric_list, default_metricgroup_cmp);
+> +
+>         list_for_each_entry(m, &metric_list, nd) {
+>                 struct metric_event *me;
+>                 struct evsel **metric_events;
+> @@ -1637,6 +1661,17 @@ static int parse_groups(struct evlist *perf_evlist=
+,
+>                 expr->metric_unit =3D m->metric_unit;
+>                 expr->metric_events =3D metric_events;
+>                 expr->runtime =3D m->pctx->sctx.runtime;
+> +               if (m->pmu && strcmp(m->pmu, "cpu")) {
+> +                       char *name;
+> +
+> +                       if (asprintf(&name, "%s (%s)", m->default_metricg=
+roup_name, m->pmu) < 0)
 
-In case we see a failure in hv_compose_msi_msg(), data->chip_data stays
-with its default value of NULL; because the return type of
-hv_compose_msi_msg() is "void", we can not return an error to the upper
-layer; later, when the upper layer calls request_irq() -> ... -> hv_irq_unm=
-ask(),
-hv_arch_irq_unmask() crashes because data->chip_data is NULL -- with this
-check, we're able to error out gracefully, and the user can better understa=
-nd
-what goes wrong.
+With EXTRA_CFLAGS=3D"-fsanitize=3Daddress" this is causing:
 
-> >  	spin_lock_irqsave(&hbus->retarget_msi_interrupt_lock, flags);
-> >
-> > @@ -1911,12 +1916,6 @@ static void hv_compose_msi_msg(struct
-> irq_data *data, struct msi_msg *msg)
-> >  		hv_pci_onchannelcallback(hbus);
-> >  		spin_unlock_irqrestore(&channel->sched_lock, flags);
-> >
-> > -		if (hpdev->state =3D=3D hv_pcichild_ejecting) {
-> > -			dev_err_once(&hbus->hdev->device,
-> > -				     "the device is being ejected\n");
-> > -			goto enable_tasklet;
-> > -		}
-> > -
-> >  		udelay(100);
-> >  	}
->=20
-> I don't understand why this code is in hv_compose_msi_msg() in the first
-> place (and why only in that function ?) to me this looks like you are
-> adding plasters in the code that can turn out to be problematic while
-> ejecting a device, this does not seem robust at all - that's my opinion.
+$ perf test 7 -vv -F
+  7: PMU events                                                      :
+...
+  7.5: Parsing of metric thresholds with fake PMUs                   :
+...
+=3D=3D2072355=3D=3DERROR: LeakSanitizer: detected memory leaks
 
-The code was incorrectly added by
-de0aa7b2f97d ("PCI: hv: Fix 2 hang issues in hv_compose_msi_msg()")
+Direct leak of 6199 byte(s) in 340 object(s) allocated from:
+   #0 0x7f24cce7077b in __interceptor_strdup
+../../../../src/libsanitizer/asan/asan_interceptors.cp
+p:439
+   #1 0x55972b328abd in asprintf util/util.c:566
+   #2 0x55972b251dbd in parse_groups util/metricgroup.c:1667
+   #3 0x55972b25231f in metricgroup__parse_groups_test util/metricgroup.c:1=
+719
+   #4 0x55972b139aff in test__parsing_callback tests/pmu-events.c:837
+   #5 0x55972b5119a9 in pmu_metrics_table_for_each_metric
+/tmp/perf/pmu-events/pmu-events.c:61641
+   #6 0x55972b511fdf in pmu_for_each_core_metric
+/tmp/perf/pmu-events/pmu-events.c:61742
+   #7 0x55972b13a3bc in test__parsing tests/pmu-events.c:898
+   #8 0x55972b106cd7 in run_test tests/builtin-test.c:236
+   #9 0x55972b106f7c in test_and_print tests/builtin-test.c:265
+   #10 0x55972b107f96 in __cmd_test tests/builtin-test.c:436
+   #11 0x55972b10927a in cmd_test tests/builtin-test.c:559
+   #12 0x55972b19584a in run_builtin
+/home/irogers/kernel.org/tools/perf/perf.c:323
+   #13 0x55972b195dbb in handle_internal_command
+/home/irogers/kernel.org/tools/perf/perf.c:377
+   #14 0x55972b196183 in run_argv /home/irogers/kernel.org/tools/perf/perf.=
+c:421
+   #15 0x55972b1966eb in main /home/irogers/kernel.org/tools/perf/perf.c:53=
+7
+   #16 0x7f24cbe46189 in __libc_start_call_main
+../sysdeps/nptl/libc_start_call_main.h:58
 
-de0aa7b2f97d says
+SUMMARY: AddressSanitizer: 6199 byte(s) leaked in 340 allocation(s)
 
-"
-2. If the host is ejecting the VF device before we reach
-    hv_compose_msi_msg(), in a UP VM, we can hang in hv_compose_msi_msg()
-    forever, because at this time the host doesn't respond to the
-    CREATE_INTERRUPT request.
-"
+As this is mixing allocated and unallocated strings, you like want to
+strdup the unallocated ones, then add a free to the exit routine.
 
-de0aa7b2f97d implies that the host doesn't respond to the guest's
-CREATE_INTERRUPT request once the guest receives the PCI_EJECT message -- t=
-his
-is incorrect: after the guest receives the PCI_EJECT message, actually the =
-host
-still responds to the guest's request, as long as the guest sends the reque=
-st within
-1 minute AND the guest doesn't send a PCI_EJECTION_COMPLETE message to
-the host in hv_eject_device_work(). The real issue is that currently the gu=
-est
-can send PCI_EJECTION_COMPLETE to the host before the guest finishes the
-device-probing/removing handling -- once the guest sends PCI_EJECTION_COMPL=
-ETE,
-the host unassigns the PCI device from the guest and ignores any request
-from the guest.
+Thanks,
+Ian
 
-So here the check "hpdev->state =3D=3D hv_pcichild_ejecting" is incorrect. =
-We
-should remove the check since it can cause a panic (see the commit messsage
-for the detailed explanation)
-
-The "premature PCI_EJECTION_COMPLETE" issue is resolved by:
-[PATCH v3 5/6] PCI: hv: Add a per-bus mutex state_lock
-
-> Feel free to merge this code, I can't ACK it, sorry.
->=20
-> Lorenzo
-Thanks for sharing the thougths!
+> +                               expr->default_metricgroup_name =3D m->def=
+ault_metricgroup_name;
+> +                       else
+> +                               expr->default_metricgroup_name =3D name;
+> +               } else
+> +                       expr->default_metricgroup_name =3D m->default_met=
+ricgroup_name;
+> +               if (is_default)
+> +                       me->is_default =3D true;
+>                 list_add(&expr->nd, &me->head);
+>         }
+>
+> diff --git a/tools/perf/util/metricgroup.h b/tools/perf/util/metricgroup.=
+h
+> index bf18274c15df..d5325c6ec8e1 100644
+> --- a/tools/perf/util/metricgroup.h
+> +++ b/tools/perf/util/metricgroup.h
+> @@ -22,6 +22,7 @@ struct cgroup;
+>  struct metric_event {
+>         struct rb_node nd;
+>         struct evsel *evsel;
+> +       bool is_default; /* the metric evsel from the Default metricgroup=
+ */
+>         struct list_head head; /* list of metric_expr */
+>  };
+>
+> @@ -55,6 +56,8 @@ struct metric_expr {
+>          * more human intelligible) and then add "MiB" afterward when dis=
+played.
+>          */
+>         const char *metric_unit;
+> +       /** Displayed metricgroup name of the Default metricgroup */
+> +       const char *default_metricgroup_name;
+>         /** Null terminated array of events used by the metric. */
+>         struct evsel **metric_events;
+>         /** Null terminated array of referenced metrics. */
+> --
+> 2.35.1
+>
