@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF6E873173A
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:40:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 350DD73173C
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344182AbjFOLkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 07:40:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
+        id S1344214AbjFOLk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 07:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344134AbjFOLjV (ORCPT
+        with ESMTP id S1344206AbjFOLjv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 07:39:21 -0400
+        Thu, 15 Jun 2023 07:39:51 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200033A98;
-        Thu, 15 Jun 2023 04:38:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D363ABE;
+        Thu, 15 Jun 2023 04:38:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E95A1638FA;
-        Thu, 15 Jun 2023 11:38:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 313FBC433C0;
-        Thu, 15 Jun 2023 11:38:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E7D263968;
+        Thu, 15 Jun 2023 11:38:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EC8DC433C0;
+        Thu, 15 Jun 2023 11:38:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686829113;
-        bh=mmdudRkuSbiUU5LPtsxAkTPhX5voY/Mn+ojKMk7dSZI=;
+        s=k20201202; t=1686829119;
+        bh=vgy54zVLHfKxQrPWgzf6k7yx1TAALDUu5NoFA/xkWhw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pwZQ/HLMttogt2rqrniQHwDukRaay1tHnkrZ07T1rz1tGSLKq2vfy4sXZQsi1Ls6p
-         uCdtDyYGlKL9oWffkWQsUpdSMcyUqMOwksvbfIPpRE76OzYo+IOYBv7mqa5ycsKOcZ
-         xZBZaTPuz/rxUgQ/I6q7bgJIGO7gVJ+qEAf8Go3ymu6L5tXDGFoX3HW43Tkx/NWeSm
-         0CaYB73ho/CONjjLD18TYM5Kxjmw/a0g60GA+w9iY/5fnIfShovCVhFmRTmUbwNdzh
-         7nyXIcVbWsDA8mYq+8DBVWfTrKrhmBtgtMDN8ZNzjh7Ntazh5xI7b9yrVtSN3S4mtn
-         SIFuTUADiimUA==
+        b=SUhPuSYqUiTMj+9pyfE3aG8zYu3WmxXoBZLGb3qGB92QdtGT75nxfXlghtq8rIgBo
+         7jHTvNWvI1i1hHEW3bzvfGJwmV9+92hxYtwbC9XNIqo4YLwSuAvwfMzlxvZDqoy5zA
+         VR/6OM3STrmrRNHG1to3oOgaXFyi/nrg53B81ULJwdDDwY6hQuRjYEEgqW4P9I2UJw
+         oQzAd8Y/iURuHVU4h4zGmcdfAwp8RrYtFX46t5aurc/zuHrWnxdZaxThRkAy4KlB4f
+         e80pGgq37VOHMi39oljxdgMjDltadn3MI6oKx685bM0ydi8KFSjpV6+CE7E0z600I3
+         zr1OcHZjw9PmA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Steve French <stfrench@microsoft.com>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Sasha Levin <sashal@kernel.org>, pc@cjr.nz, pc@manguebit.com,
-        ematsumiya@suse.de, lsahlber@redhat.com, sprasad@microsoft.com,
-        vl@samba.org, metze@samba.org
-Subject: [PATCH AUTOSEL 6.1 07/16] smb3: missing null check in SMB2_change_notify
-Date:   Thu, 15 Jun 2023 07:38:07 -0400
-Message-Id: <20230615113816.649135-7-sashal@kernel.org>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 08/16] media: cec: core: disable adapter in cec_devnode_unregister
+Date:   Thu, 15 Jun 2023 07:38:08 -0400
+Message-Id: <20230615113816.649135-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230615113816.649135-1-sashal@kernel.org>
 References: <20230615113816.649135-1-sashal@kernel.org>
@@ -62,37 +59,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steve French <stfrench@microsoft.com>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit b535cc796a4b4942cd189652588e8d37c1f5925a ]
+[ Upstream commit fe4526d99e2e06b08bb80316c3a596ea6a807b75 ]
 
-If plen is null when passed in, we only checked for null
-in one of the two places where it could be used. Although
-plen is always valid (not null) for current callers of the
-SMB2_change_notify function, this change makes it more consistent.
+Explicitly disable the CEC adapter in cec_devnode_unregister()
 
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <error27@gmail.com>
-Closes: https://lore.kernel.org/all/202305251831.3V1gbbFs-lkp@intel.com/
-Signed-off-by: Steve French <stfrench@microsoft.com>
+Usually this does not really do anything important, but for drivers
+that use the CEC pin framework this is needed to properly stop the
+hrtimer. Without this a crash would happen when such a driver is
+unloaded with rmmod.
+
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/cifs/smb2pdu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/cec/core/cec-adap.c | 5 ++++-
+ drivers/media/cec/core/cec-core.c | 2 ++
+ drivers/media/cec/core/cec-priv.h | 1 +
+ 3 files changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
-index 537e8679900b8..3ca593cdda76e 100644
---- a/fs/cifs/smb2pdu.c
-+++ b/fs/cifs/smb2pdu.c
-@@ -3779,7 +3779,7 @@ SMB2_change_notify(const unsigned int xid, struct cifs_tcon *tcon,
- 		if (*out_data == NULL) {
- 			rc = -ENOMEM;
- 			goto cnotify_exit;
--		} else
-+		} else if (plen)
- 			*plen = le32_to_cpu(smb_rsp->OutputBufferLength);
- 	}
+diff --git a/drivers/media/cec/core/cec-adap.c b/drivers/media/cec/core/cec-adap.c
+index 4f5ab3cae8a71..ac18707fddcd2 100644
+--- a/drivers/media/cec/core/cec-adap.c
++++ b/drivers/media/cec/core/cec-adap.c
+@@ -1582,7 +1582,7 @@ static void cec_claim_log_addrs(struct cec_adapter *adap, bool block)
+  *
+  * This function is called with adap->lock held.
+  */
+-static int cec_adap_enable(struct cec_adapter *adap)
++int cec_adap_enable(struct cec_adapter *adap)
+ {
+ 	bool enable;
+ 	int ret = 0;
+@@ -1592,6 +1592,9 @@ static int cec_adap_enable(struct cec_adapter *adap)
+ 	if (adap->needs_hpd)
+ 		enable = enable && adap->phys_addr != CEC_PHYS_ADDR_INVALID;
  
++	if (adap->devnode.unregistered)
++		enable = false;
++
+ 	if (enable == adap->is_enabled)
+ 		return 0;
+ 
+diff --git a/drivers/media/cec/core/cec-core.c b/drivers/media/cec/core/cec-core.c
+index af358e901b5f3..7e153c5cad04f 100644
+--- a/drivers/media/cec/core/cec-core.c
++++ b/drivers/media/cec/core/cec-core.c
+@@ -191,6 +191,8 @@ static void cec_devnode_unregister(struct cec_adapter *adap)
+ 	mutex_lock(&adap->lock);
+ 	__cec_s_phys_addr(adap, CEC_PHYS_ADDR_INVALID, false);
+ 	__cec_s_log_addrs(adap, NULL, false);
++	// Disable the adapter (since adap->devnode.unregistered is true)
++	cec_adap_enable(adap);
+ 	mutex_unlock(&adap->lock);
+ 
+ 	cdev_device_del(&devnode->cdev, &devnode->dev);
+diff --git a/drivers/media/cec/core/cec-priv.h b/drivers/media/cec/core/cec-priv.h
+index b78df931aa74b..ed1f8c67626bf 100644
+--- a/drivers/media/cec/core/cec-priv.h
++++ b/drivers/media/cec/core/cec-priv.h
+@@ -47,6 +47,7 @@ int cec_monitor_pin_cnt_inc(struct cec_adapter *adap);
+ void cec_monitor_pin_cnt_dec(struct cec_adapter *adap);
+ int cec_adap_status(struct seq_file *file, void *priv);
+ int cec_thread_func(void *_adap);
++int cec_adap_enable(struct cec_adapter *adap);
+ void __cec_s_phys_addr(struct cec_adapter *adap, u16 phys_addr, bool block);
+ int __cec_s_log_addrs(struct cec_adapter *adap,
+ 		      struct cec_log_addrs *log_addrs, bool block);
 -- 
 2.39.2
 
