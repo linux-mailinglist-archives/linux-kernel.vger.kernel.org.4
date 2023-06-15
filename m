@@ -2,65 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31C88731ED7
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 19:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 973EE731EDC
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 19:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbjFORWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 13:22:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38808 "EHLO
+        id S230242AbjFORZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 13:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbjFORWe (ORCPT
+        with ESMTP id S229628AbjFORZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 13:22:34 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB642711
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 10:22:33 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id 6a1803df08f44-62dee396e03so29064706d6.3
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 10:22:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686849752; x=1689441752;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rbupiR8gHfwAdf/+9rF4JmuzIqRAk1fExbDPZi36J18=;
-        b=fBaCPJHAtBstbSCmFjWt1lXjm5dYG05isbqA6qsB60s6fxNqaH3uZASLrgGKEjdwxg
-         BTAHEiLoEfe494f8N3n+4Hdv8zvkQ7SGNOag7iP+zF5rPDmFAa5CMZ1LCEwvDT5T67Qw
-         a4zu2EKZXl8p42i2tDbYvqi2ele0/bIbMPPw4=
+        Thu, 15 Jun 2023 13:25:50 -0400
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58EA0270C;
+        Thu, 15 Jun 2023 10:25:49 -0700 (PDT)
+Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-77acb04309dso443072539f.2;
+        Thu, 15 Jun 2023 10:25:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686849752; x=1689441752;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rbupiR8gHfwAdf/+9rF4JmuzIqRAk1fExbDPZi36J18=;
-        b=ewZ7LxHPkAqy0cVrG4fSFWz8WiirGUF26GpGMcKyJRaue9nUrMoUb5O5KOBSzQU8V9
-         ZveaLxYBNfEVO0wLVd+/0FUpE/CV9h+SNgmfFm5SEC7t2628zLwLtnhSCFu1u7Vf+e7G
-         eyBZudbVAaEZZqP8ikQ2MU5kU5ghqGpIFxc8Xnh4pIEa9yRge0DO/SAT8YbOfhKVPjPd
-         NnFs9CsF9VY3fHVe7yTgkwDJWj3O8RLtz8Pf2jHLBRPsG4ZjYLUaSSqqccXded9mM9Pr
-         IdHEsFEnoP8yQH4GbPnxGm9BIffhBdGTjEWQcPspP3uNqOPTCV7hXjm/v0i7lkYndWwR
-         Fmhw==
-X-Gm-Message-State: AC+VfDxDd+OVyoLUVeLyMeSb4xJCYnGaU1OE+VBv0K4hZjglhoGv0A8D
-        by0uoUBWYjMXD+ZwaFacWBbw7cFLxbxFv4M/z2YpPg==
-X-Google-Smtp-Source: ACHHUZ7lMOFk4YWLhlUTFpjaybvVnuFfaTFDik0TeDX0haDn/fuDUS/xed2BX/A9N7dBRfGBPwdMraQjMgSmt9RFqjA=
-X-Received: by 2002:a05:6214:29ed:b0:628:65c8:9c3c with SMTP id
- jv13-20020a05621429ed00b0062865c89c3cmr21860889qvb.27.1686849752351; Thu, 15
- Jun 2023 10:22:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <2023060611-coach-entitle-d4e4@gregkh> <20230607193328.3359487-1-pholla@chromium.org>
-In-Reply-To: <20230607193328.3359487-1-pholla@chromium.org>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Thu, 15 Jun 2023 10:22:22 -0700
-Message-ID: <CACeCKaci2nW5i2uVjXpLoOPJ5utBPJ4oSYwqs5CJzgz9PTL=LQ@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: typec: Fix fast_role_swap_current show function
-To:     Pavan Holla <pholla@chromium.org>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        bleung@chromium.org, linux-usb@vger.kernel.org,
+        d=1e100.net; s=20221208; t=1686849948; x=1689441948;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sC933hKpQF5JdEINIqEGLBBb4JoET4B1krk6QuWZQ8E=;
+        b=HHIJWlwoV4jlzMm27F+jYRkJkVVXkugLl/28qxpwO9ZcZB5UXYUpQMJ7y6R8ZZCykN
+         vlggdqPFGj2x04BX3cFTzqETNoYrejwts6S70iOji6+q+TuOp4vC1qT86Rvej8A0Ogfb
+         r9+JT0MIWgsSVtem0wZKFF+zGiI78kNGcqvhTmlXwKs6nEYD7W69bNOrAwXgmJ8qwPsm
+         R6XaxyHzMApam/12Hsq9GWtwOX1SipgsYggx/iJ6DOKQRVNPAWOxxFqBDykq00mW1OXN
+         eagLIIQVnG690bs1z/1gZYqe3V4tEVGNEtrTr0mLOKWTrGp+7GPiGYAy0PCsizHYSJgy
+         gd2Q==
+X-Gm-Message-State: AC+VfDzgfIObM1ZJ6WvmyykBRNdSf5seSjHGEqSfUWjCuc5ZAP5vrNpk
+        v6Y7RJyhGD24NzWkl3x7oA==
+X-Google-Smtp-Source: ACHHUZ6vs7uk1ULtYa9QZ49T2/R1dqPfF8wGisKxyfr+XOX8cDo1AmtTtASS3XLY03uvk3cJHKySXw==
+X-Received: by 2002:a92:c989:0:b0:335:9303:4345 with SMTP id y9-20020a92c989000000b0033593034345mr30929iln.25.1686849948572;
+        Thu, 15 Jun 2023 10:25:48 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id y9-20020a926409000000b0033a9ba8747dsm6129695ilb.30.2023.06.15.10.25.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 10:25:47 -0700 (PDT)
+Received: (nullmailer pid 1228844 invoked by uid 1000);
+        Thu, 15 Jun 2023 17:25:46 -0000
+Date:   Thu, 15 Jun 2023 11:25:46 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Conor Dooley <conor+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Subject: Re: [PATCH] dt-bindings: example-schema: don't use enum as fallback,
+ explain clock-names
+Message-ID: <168684994509.1228771.14931709897823421899.robh@kernel.org>
+References: <20230612092611.12385-1-krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230612092611.12385-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,15 +66,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 7, 2023 at 12:33=E2=80=AFPM Pavan Holla <pholla@chromium.org> w=
-rote:
->
-> The current implementation mistakenly performs a & operation on
-> the output of sysfs_emit. This patch performs the & operation before
-> calling sysfs_emit.
->
-> Fixes: 662a60102c12 ("usb: typec: Separate USB Power Delivery from USB Ty=
-pe-C")
-> Reported-by: Benson Leung <bleung@chromium.org>
-> Signed-off-by: Pavan Holla <pholla@chromium.org>
-Reviewed-by: Prashant Malani <pmalani@chromium.org>
+
+On Mon, 12 Jun 2023 11:26:11 +0200, Krzysztof Kozlowski wrote:
+> Compatibles with multiple entries should have usually only one fallback
+> compatible thus enum followed by enum is not a common case.  Use 'const'
+> as second compatible to show the recommended approach.
+> 
+> Explain also when clock-names are not really necessary.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/example-schema.yaml | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+
+Applied, thanks!
+
