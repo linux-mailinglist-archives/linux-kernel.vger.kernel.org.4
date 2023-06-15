@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6AB87316A1
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F107316A5
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:31:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343851AbjFOLbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 07:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
+        id S1343759AbjFOLbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 07:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245731AbjFOLbk (ORCPT
+        with ESMTP id S245751AbjFOLbl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 07:31:40 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82CB271F
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 04:31:38 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2b448b24a61so4989071fa.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 04:31:38 -0700 (PDT)
+        Thu, 15 Jun 2023 07:31:41 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A672710
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 04:31:39 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b44200367bso11852921fa.2
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 04:31:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686828697; x=1689420697;
+        d=linaro.org; s=google; t=1686828698; x=1689420698;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iagvrTdJe16mbe43XCaGjCeX1Svdet6EWcsi0Mlbfo0=;
-        b=C1G5NDiXspEzy5EQjsjez+uLoXWTbf1yhJfnfn5dw2nFfd7vBXpmy74ehzhi2gVWO0
-         98BA54WhJ6FJm5DDQ0XhB8jkpmXBh0ABSt+sBLjEnLVb88t7lkoqn0ZycBe3DOXs8TBc
-         Ezyff4QbewIrBte/SFLoA9fKc7m2p/X8k9i/KE/caEz9NN4kDvxahKkiybJN+8ZangzP
-         VkFJNg0xUKAhA2ZEva6jLrkemxDXhe0a4IPVV0jIXYbZKFvSGnJk+O0fwTG3NuOC5m0p
-         XjZFWWLSO8+d6tmRyNIzvOhN04zCvgRxHd8UDT3B8XakDsB3WR1xO57QE5JmQLIxnZa7
-         RL3w==
+        bh=5T8GgYIqVudWlnsC3oPDKoAyLE+QLU/Vc0UJQqOQEms=;
+        b=asxgBI7ZjmLrmbZmvFQpyF/5eFUTJQWWW7xKqJqFCtjlsV0LV7ZxW7CJ9oqI4vd0oj
+         4LPzImZ6wWupg9kgiUwvnSiwoBPIXTKiBAlXZx9T+p+A6Gt2dI9hArmwyNxiZeqpRw22
+         QHWN7auMbRPeq3+WXysgOGpLScuvTkMZeJ05E1bEix8FIVKMgOTvVGSEfk0g4JiqnBIN
+         RpL64eej6Q3bHM9J85d774/erJNuo6JMCRRf4v6ei65hYaWmxP5QRZfCZVDQ0m8LFEIT
+         gVA5mQIlskllXR1VRwp2V/3xjTd6wlPCgqTxGKf/7pgiFUwE+bn39vHttwfqr7toC9wb
+         Adsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686828697; x=1689420697;
+        d=1e100.net; s=20221208; t=1686828698; x=1689420698;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iagvrTdJe16mbe43XCaGjCeX1Svdet6EWcsi0Mlbfo0=;
-        b=TGBfc8J55qkvBpotH5nL1bWOmkLxVpUwODkspz4FApdkomelrz4ns4P6ukoUA8bOm3
-         Nw2BfhHBmKPRpNK5aPqnDWbC90dTirQpKzFiaFCB56gIzYRofww1feCphRwLZu7fgBHW
-         p4h0XZm0wx45l7Zee3Xizr0XBfDaPGkB8RxL/DNQN0E4E22BcQ1AIPTPmXiwcNGfCqeo
-         6+tFbtEnrWoaJRV3cKCxPfYDiBgUTkVsDkiEfO2SfQ4dBR31EvqLFfQI7vNmw6yP15V3
-         bozR+j9IV9T6dWkvHFV4+cwkB1h9bdPugcHU7BS61jXuYL1sAvyTm1I4B2EpYltS311p
-         3rfg==
-X-Gm-Message-State: AC+VfDwGt85CIx/36vhDdz6p2trTp1mmBVeeGnxI1PZUkY/VUvxI3YmD
-        GW7ezZxCxpNgk//8qH5whSpj7w==
-X-Google-Smtp-Source: ACHHUZ4Y0HPzWzh+M9sKVmQVFCAQ3f0hHOdfTS1SY7SsZK1b1Ui9Pb4I1jOd1s4VTLjtxaN/by9/4Q==
-X-Received: by 2002:a2e:9e86:0:b0:2b3:2f9b:7c9d with SMTP id f6-20020a2e9e86000000b002b32f9b7c9dmr6606616ljk.28.1686828697221;
-        Thu, 15 Jun 2023 04:31:37 -0700 (PDT)
+        bh=5T8GgYIqVudWlnsC3oPDKoAyLE+QLU/Vc0UJQqOQEms=;
+        b=VTvctptyscyuIf43UR9UKjrF3mVRJKW4Iw21nx9SUiGiqvaKozfVidaH79q6Ueb8SE
+         lqc3OkRn9tZ4YatRyUmnbrxFoC9WOIdVjhHco/VZBNaFQviKHjAdNaDcwEtejDqB/lS8
+         6iqaudRE08Ch3wUV4XUQ3qNJ9XKJ/F32E0k6DylQzcxqKvQC4A+Gxu/C5te/C/hnhYan
+         czjl3dPve/FWv59028p9QmxYgFCrRFKeI0RhOk+1ZUtG+2Jcshl4ODynRqYtk6EsFUgT
+         4y7/ydUTzFBiYD19EFHw2u7TIAUGtcyO+b5jQpJ88HP8ECyDFx0FTJMS+MdogFFmAjqV
+         yZZw==
+X-Gm-Message-State: AC+VfDwThHt/Ypevz93/W7KCJNJ7xl4Onhz6L6jgLY++oRXVHi3hXGZd
+        ZqD46UKqVzDK9V9v255dC4KQPg==
+X-Google-Smtp-Source: ACHHUZ7anJq5+jo+HNiZTaLF+2RxcGBAkP3TUmnIjwSU0KcnYb1vyWAXaCDG02wduM41vfWbpKYzEQ==
+X-Received: by 2002:a2e:3c0a:0:b0:2b1:fcb2:3029 with SMTP id j10-20020a2e3c0a000000b002b1fcb23029mr8451714lja.28.1686828698241;
+        Thu, 15 Jun 2023 04:31:38 -0700 (PDT)
 Received: from eriador.lan (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id y12-20020a2e320c000000b002b345f71039sm860525ljy.36.2023.06.15.04.31.36
+        by smtp.gmail.com with ESMTPSA id y12-20020a2e320c000000b002b345f71039sm860525ljy.36.2023.06.15.04.31.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 04:31:36 -0700 (PDT)
+        Thu, 15 Jun 2023 04:31:37 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 0/6] Add DSC v1.2 Support for DSI
-Date:   Thu, 15 Jun 2023 14:31:26 +0300
-Message-Id: <168682860387.384026.9115594076193676039.b4-ty@linaro.org>
+To:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, andersson@kernel.org,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     quic_abhinavk@quicinc.com, quic_jesszhan@quicinc.com,
+        quic_sbillaka@quicinc.com, marijn.suijten@somainline.org,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v14 00/10] add DSC 1.2 dpu supports
+Date:   Thu, 15 Jun 2023 14:31:27 +0300
+Message-Id: <168682860387.384026.8615794645993103495.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230405-add-dsc-support-v6-0-95eab864d1b6@quicinc.com>
-References: <20230405-add-dsc-support-v6-0-95eab864d1b6@quicinc.com>
+In-Reply-To: <1685036458-22683-1-git-send-email-quic_khsieh@quicinc.com>
+References: <1685036458-22683-1-git-send-email-quic_khsieh@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -80,33 +80,24 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Fri, 09 Jun 2023 15:57:12 -0700, Jessica Zhang wrote:
-> This is a series of changes for DSI to enable command mode support
-> for DSC v1.2.
+On Thu, 25 May 2023 10:40:48 -0700, Kuogee Hsieh wrote:
+> This series adds the DPU side changes to support DSC 1.2 encoder. This
+> was validated with both DSI DSC 1.2 panel and DP DSC 1.2 monitor.
+> The DSI and DP parts will be pushed later on top of this change.
+> This seriel is rebase on [1], [2] and catalog fixes from rev-4 of [3].
 > 
-> This includes:
-> 
-> 1) Rounding up `hdisplay / 3` in dsc_timing_setup()
-> 2) Adjusting pclk_rate to account for compression
-> 3) Fixing incorrect uses of slice_count in DSI DSC calculations
-> 4) Setting the DATA_COMPRESS bit when DSC is enabled
+> [1]: https://patchwork.freedesktop.org/series/116851/
+> [2]: https://patchwork.freedesktop.org/series/116615/
+> [3]: https://patchwork.freedesktop.org/series/112332/
 > 
 > [...]
 
 Applied, thanks!
 
-[1/6] msm/drm/dsi: Round up DSC hdisplay calculation
-      https://gitlab.freedesktop.org/lumag/msm/-/commit/21bf617110ba
-[2/6] drm/msm/dsi: Reduce pclk rate for compression
-      https://gitlab.freedesktop.org/lumag/msm/-/commit/7c9e4a554d4a
-[3/6] drm/msm/dpu: Add DPU_INTF_DATA_COMPRESS feature flag for DPU >= 7.0
-      https://gitlab.freedesktop.org/lumag/msm/-/commit/22598cfc94bb
-[4/6] drm/msm/dpu: Set DATA_COMPRESS on command mode for DCE/DSC 1.2
-      https://gitlab.freedesktop.org/lumag/msm/-/commit/1642b5803473
-[5/6] drm/msm/dsi: Remove incorrect references to slice_count
-      https://gitlab.freedesktop.org/lumag/msm/-/commit/155fa3a91d64
-
-Note, patch 6 is skipped for now
+[06/10] drm/msm/dpu: add support for DSC encoder v1.2 engine
+        https://gitlab.freedesktop.org/lumag/msm/-/commit/8c4094b275f6
+[09/10] drm/msm/dpu: add DSC 1.2 hw blocks for relevant chipsets
+        https://gitlab.freedesktop.org/lumag/msm/-/commit/0d1b10c63346
 
 Best regards,
 -- 
