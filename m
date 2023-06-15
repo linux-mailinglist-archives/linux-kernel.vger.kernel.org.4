@@ -2,63 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ACBA730D21
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 04:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B0E1730D28
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 04:22:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234171AbjFOCSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 22:18:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57448 "EHLO
+        id S237394AbjFOCWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 22:22:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241175AbjFOCSO (ORCPT
+        with ESMTP id S230144AbjFOCWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 22:18:14 -0400
-Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A391FFF;
-        Wed, 14 Jun 2023 19:18:09 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R821e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0Vl8S394_1686795482;
-Received: from 30.221.149.117(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0Vl8S394_1686795482)
-          by smtp.aliyun-inc.com;
-          Thu, 15 Jun 2023 10:18:04 +0800
-Message-ID: <552eebae-76bb-a2fe-ccdc-11e8a01717da@linux.alibaba.com>
-Date:   Thu, 15 Jun 2023 10:18:01 +0800
+        Wed, 14 Jun 2023 22:22:20 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBF61FC7;
+        Wed, 14 Jun 2023 19:22:16 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QhQzR4Z4Hz4wjC;
+        Thu, 15 Jun 2023 12:22:11 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1686795732;
+        bh=p5xSfDyYnXJ+NMp12bUovs/UHMo9Iq6/3qEBP2aWE7s=;
+        h=Date:From:To:Cc:Subject:From;
+        b=rCpNaGSbO4cpZNaTh21tAn3S91BcEAONQo46e0iIl/PbYcrJdmWxQViCEfMJG28YZ
+         MG98qO4dFB/m4z2+c6V6fW1iVE9HGQa/YkP8qRM5bFW2psfN8zcXVXD0URKY5pDP1O
+         f1slJygyUmDY3+8fjun8nMXnT8BvlKOUa3ytzYgj4ULQt5lUfHISOC3ntRA8DMkMih
+         uFrpoI4lyOLOSQEpiCqB8Fif2FxY2eytHH0b9chj+rrxHlKKR56PJJ/OD6KX2qGtDM
+         viXpgr23LgkfexpTfyltvKiW+w+bPor7dvikpWAlcu57ObICdgmGYNyjsb2YAlwrkI
+         fhRR9kXAgBJlg==
+Date:   Thu, 15 Jun 2023 12:22:01 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christoffer Dall <cdall@cs.columbia.edu>,
+        Marc Zyngier <maz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Joey Gouly <joey.gouly@arm.com>,
+        Kristina Martsenko <kristina.martsenko@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>
+Subject: linux-next: manual merge of the kvm-arm tree with the arm64 tree
+Message-ID: <20230615122201.75e36abd@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH v3 2/7] perf metric: Event "Compat" value supports
- matching multiple identifiers
-To:     John Garry <john.g.garry@oracle.com>,
-        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        Zhuo Song <zhuo.song@linux.alibaba.com>
-References: <1685438374-33287-1-git-send-email-renyu.zj@linux.alibaba.com>
- <1685438374-33287-3-git-send-email-renyu.zj@linux.alibaba.com>
- <c1d8ee9b-4839-1011-4dad-c4777d8f8224@oracle.com>
- <452e724b-2a2c-52fd-274b-60db7a7f730e@linux.alibaba.com>
- <c4b2fca8-602d-9c76-90a7-3eafd92da8bc@oracle.com>
- <76fcb062-61a8-5f90-b39d-b5fb6da35652@linux.alibaba.com>
- <5f38ef6c-8c50-5df9-19dd-c3c9fe590452@oracle.com>
- <e4be7189-a1ba-7758-bff3-e7b8d8ff1419@linux.alibaba.com>
- <892f57c7-8ce2-634c-26f3-4d4ab8b2f2ce@oracle.com>
- <079d7920-2030-2e00-a833-5ec6d450f7dc@oracle.com>
-From:   Jing Zhang <renyu.zj@linux.alibaba.com>
-In-Reply-To: <079d7920-2030-2e00-a833-5ec6d450f7dc@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+Content-Type: multipart/signed; boundary="Sig_/YDgaohlJglxE.E7b+0=/EcN";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,27 +56,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/YDgaohlJglxE.E7b+0=/EcN
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-在 2023/6/14 上午12:36, John Garry 写道:
-> On 12/06/2023 19:15, John Garry wrote:
->> On 08/06/2023 10:44, Jing Zhang wrote:
->>>> Unit is the format of the event_source device name. We should match based on that as well as compat. I need to check the code again to understand how that is done... it has changed a good bit in 3 years.
->>>>
->>> This situation only happens on uncore metric. I happened to write wrong Unit, but the metric still matches.
->>>
->>
->> I'm just double checking this now. I think any possible fix should be easy enough for current code but may be tricky for backport with lots of metric code changes.
-> 
-> I also have code to re-work sys event metric support such that we don't require "compat" or "Unit" values for a metric when the metric is described in terms of event aliases. That code is 2 years old, so may take a bit of time to rebase. I'll look to do that now.
-> 
+Today's linux-next merge of the kvm-arm tree got a conflict in:
 
-Sounds good!
+  arch/arm64/kernel/cpufeature.c
 
-Thanks,
-Jing
+between commits:
 
+  b7564127ffcb ("arm64: mops: detect and enable FEAT_MOPS")
+  2b760046a2d3 ("arm64: cpufeature: add TCR2 cpucap")
+  e43454c44232 ("arm64: cpufeature: add Permission Indirection Extension cp=
+ucap")
 
-> Thanks,
-> John
-> 
+from the arm64 tree and commits:
+
+  c876c3f182a5 ("KVM: arm64: Relax trapping of CTR_EL0 when FEAT_EVT is ava=
+ilable")
+  e2d6c906f0ac ("arm64: Add KVM_HVHE capability and has_hvhe() predicate")
+
+from the kvm-arm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/arm64/kernel/cpufeature.c
+index 6ea7f23b1287,f6e3598760f1..000000000000
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@@ -2662,27 -2656,23 +2677,44 @@@ static const struct arm64_cpu_capabilit
+  		.cpu_enable =3D cpu_enable_dit,
+  		ARM64_CPUID_FIELDS(ID_AA64PFR0_EL1, DIT, IMP)
+  	},
+ +	{
+ +		.desc =3D "Memory Copy and Memory Set instructions",
+ +		.capability =3D ARM64_HAS_MOPS,
+ +		.type =3D ARM64_CPUCAP_SYSTEM_FEATURE,
+ +		.matches =3D has_cpuid_feature,
+ +		.cpu_enable =3D cpu_enable_mops,
+ +		ARM64_CPUID_FIELDS(ID_AA64ISAR2_EL1, MOPS, IMP)
+ +	},
+ +	{
+ +		.capability =3D ARM64_HAS_TCR2,
+ +		.type =3D ARM64_CPUCAP_SYSTEM_FEATURE,
+ +		.matches =3D has_cpuid_feature,
+ +		ARM64_CPUID_FIELDS(ID_AA64MMFR3_EL1, TCRX, IMP)
+ +	},
+ +	{
+ +		.desc =3D "Stage-1 Permission Indirection Extension (S1PIE)",
+ +		.capability =3D ARM64_HAS_S1PIE,
+ +		.type =3D ARM64_CPUCAP_BOOT_CPU_FEATURE,
+ +		.matches =3D has_cpuid_feature,
+ +		ARM64_CPUID_FIELDS(ID_AA64MMFR3_EL1, S1PIE, IMP)
+ +	},
++ 	{
++ 		.desc =3D "Enhanced Virtualization Traps",
++ 		.capability =3D ARM64_HAS_EVT,
++ 		.type =3D ARM64_CPUCAP_SYSTEM_FEATURE,
++ 		.sys_reg =3D SYS_ID_AA64MMFR2_EL1,
++ 		.sign =3D FTR_UNSIGNED,
++ 		.field_pos =3D ID_AA64MMFR2_EL1_EVT_SHIFT,
++ 		.field_width =3D 4,
++ 		.min_field_value =3D ID_AA64MMFR2_EL1_EVT_IMP,
++ 		.matches =3D has_cpuid_feature,
++ 	},
++ 	{
++ 		.desc =3D "VHE for hypervisor only",
++ 		.capability =3D ARM64_KVM_HVHE,
++ 		.type =3D ARM64_CPUCAP_SYSTEM_FEATURE,
++ 		.matches =3D hvhe_possible,
++ 	},
+  	{},
+  };
+ =20
+
+--Sig_/YDgaohlJglxE.E7b+0=/EcN
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSKdckACgkQAVBC80lX
+0Gyxbwf9EM1Q4AJs0bQKVpsZr7EyPW+1+VlJ5fQkrrg10sumaUrro+mmWzCPH6fi
+PSf26S4yfznp4QF8DShD7q/16PPAC1QkYnIJs9oyO4uXL9iuxjwqewFJ5ALDiP1b
+0XWhNjMDodTCg0vK6foogBTPK3m74C4BwBYP7VnDzpPfNQN+/rDcqy5FVIC6ZJwO
+hbBSews+HJ5iPnFrvRhq3Bm6/pUH4L0JBee0y5L3jmucPyvUNfAr+dcSfopU6z/T
+7Ewpu6iNPAf4+NUSwyq6yXy/E4Kn444PLIKaf3G8QfqHEMfLJa+93Ciw2r+h9jpK
+OmgM4wEaWv5rpiXoNhrJZLa5n6Sjnw==
+=4Nz4
+-----END PGP SIGNATURE-----
+
+--Sig_/YDgaohlJglxE.E7b+0=/EcN--
