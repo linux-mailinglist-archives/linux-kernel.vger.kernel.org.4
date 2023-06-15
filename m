@@ -2,124 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DFB4730C54
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 02:45:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA9AC730C5C
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 02:48:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbjFOApn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 20:45:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58744 "EHLO
+        id S235320AbjFOAsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 20:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjFOApl (ORCPT
+        with ESMTP id S229453AbjFOAsK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 20:45:41 -0400
+        Wed, 14 Jun 2023 20:48:10 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4451BD2;
-        Wed, 14 Jun 2023 17:45:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975FF1BC9;
+        Wed, 14 Jun 2023 17:48:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 518DE61735;
-        Thu, 15 Jun 2023 00:45:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07031C433C8;
-        Thu, 15 Jun 2023 00:45:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A9CF61F4F;
+        Thu, 15 Jun 2023 00:48:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A82DC433C0;
+        Thu, 15 Jun 2023 00:48:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686789938;
-        bh=S2S+YtPbtG6r9Kjt3PcHYqK4rpFVN5o+G4qfcm4Kt8I=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GA/EV1al1Yu1YhR7NxUUzixoNQMFGNuHV3NT/lptBt0cMXTZCoyiDGtLD9OagEd6Y
-         I2x8h2L1YikUfOvMY+j9YU/lZsn6luYqQNnYHhijb/A5slSsghVTHHiH7bVOTtPHxR
-         xDH27GwwofzHOfmGzrOOZSyVQUXTRVpGUGywaRUEoEob36urt57DCsks6MxjVuTDTD
-         08rnsu7hE3CLwigg1P8XME+8dHVYOZccK0eOZTGWYOHP2YhHn/mQbHO/hRV3PtVRJs
-         B2gg6judzK0aY5UdosbZSL330Mk2NQapjzAnfGi+KSqx4T9MI385xFxyOAYQNiuj1v
-         XKedlnqgh8qBw==
-Message-ID: <1b6011e2-6ea0-21bc-77e9-90079443eeed@kernel.org>
-Date:   Thu, 15 Jun 2023 09:45:37 +0900
+        s=k20201202; t=1686790088;
+        bh=ljTHxAt2/H9b6qwb5RfqtZnhtJZN2CPWpT6t2q4z+44=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=L10bqQ2XIuTNsKR/DVIaAOmKRB34mM779Gb5ukrZ/YtRbXXOzWwwEyxvAnbDVf8Cl
+         V5jHQGhiqRCUw3qNbJa1QCoU4e8Ks050IjZYaywOEXfqdzFBFWRa9tDzsGr4Cayzd1
+         W+TszLJXjmiRJUIFmowq9MNMxuN2anui4gnkHZ8vqtdWB6U4E0Yl3hNn1+q5ciqk/z
+         +AiLHvblE9HxILjr+10y93R2M8853VZziuQt2FLcTDnPy0ALahEabJy0AAVMLIRLJm
+         hGrfjUe776bD17fxL9EuQyQV9e0+BKSkT/+rbFPDK54riiT6YYabTL3sFIBLE1PB+5
+         RsHk4IWAogE2Q==
+Message-ID: <e2afd4bde3e85db358d50553a60a744f.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 2/2] ata: octeon: Add compile test support
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-ide@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230614173633.2430653-1-robh@kernel.org>
- <20230614173633.2430653-2-robh@kernel.org>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <20230614173633.2430653-2-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230526-topic-smd_icc-v6-18-263283111e66@linaro.org>
+References: <20230526-topic-smd_icc-v6-0-263283111e66@linaro.org> <20230526-topic-smd_icc-v6-18-263283111e66@linaro.org>
+Subject: Re: [PATCH v6 18/22] clk: qcom: smd-rpm: Separate out interconnect bus clocks
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Evan Green <evgreen@chromium.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>
+Date:   Wed, 14 Jun 2023 17:48:06 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/15/23 02:36, Rob Herring wrote:
-> Add COMPILE_TEST to enable building Cavium Octeon drivers in MIPS
-> allyesconfig/allmodconfig builds. There's a dependency on MIPS headers,
-> so other arches can't be enabled.
-
-Yes, I tried... That is unfortunate.
-
-Looks good to me though. If I get an Ack for patch 1, I can queue this up
-through the ata tree.
-
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+Quoting Konrad Dybcio (2023-06-14 11:04:37)
+> The interconnect bus clocks are now handled within the ICC framework.
+> They still however need to get a kickstart *before* we call
+> clk_smd_rpm_enable_scaling(), or RPM will assume that they should all
+> be running at 0 kHz and the system will inevitably die.
+>=20
+> Separate them out to ensure such a kickstart can still take place.
+>=20
+> As a happy accident, the file got smaller:
+>=20
+> Total: Before=3D41951, After=3D41555, chg -0.94%
+>=20
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
-> Tested on allmodconfig build. Not sure if there's other MIPS configs 
-> where this doesn't work. We'll see what 0-day says.
-> 
->  drivers/ata/Kconfig          | 4 ++--
->  drivers/ata/pata_octeon_cf.c | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
-> index 42b51c9812a0..4572f837e504 100644
-> --- a/drivers/ata/Kconfig
-> +++ b/drivers/ata/Kconfig
-> @@ -239,7 +239,7 @@ config AHCI_MVEBU
->  
->  config AHCI_OCTEON
->  	tristate "Cavium Octeon Soc Serial ATA"
-> -	depends on SATA_AHCI_PLATFORM && CAVIUM_OCTEON_SOC
-> +	depends on SATA_AHCI_PLATFORM && MIPS && (CAVIUM_OCTEON_SOC || COMPILE_TEST)
->  	default y
->  	help
->  	  This option enables support for Cavium Octeon SoC Serial ATA.
-> @@ -373,7 +373,7 @@ config PDC_ADMA
->  
->  config PATA_OCTEON_CF
->  	tristate "OCTEON Boot Bus Compact Flash support"
-> -	depends on CAVIUM_OCTEON_SOC
-> +	depends on MIPS && (CAVIUM_OCTEON_SOC || COMPILE_TEST)
->  	select PATA_TIMINGS
->  	help
->  	  This option enables a polled compact flash driver for use with
-> diff --git a/drivers/ata/pata_octeon_cf.c b/drivers/ata/pata_octeon_cf.c
-> index 57b2166a6d5d..cc9e4b63ded9 100644
-> --- a/drivers/ata/pata_octeon_cf.c
-> +++ b/drivers/ata/pata_octeon_cf.c
-> @@ -853,8 +853,8 @@ static int octeon_cf_probe(struct platform_device *pdev)
->  					of_node_put(dma_node);
->  					return -EINVAL;
->  				}
-> -				cf_port->dma_base = (u64)devm_ioremap(&pdev->dev, res_dma->start,
-> -									 resource_size(res_dma));
-> +				cf_port->dma_base = (uintptr_t)devm_ioremap(&pdev->dev, res_dma->start,
-> +									    resource_size(res_dma));
->  				if (!cf_port->dma_base) {
->  					put_device(&dma_dev->dev);
->  					of_node_put(dma_node);
+>  drivers/clk/qcom/clk-smd-rpm.c | 278 +++++++++++++++++------------------=
+------
+>  1 file changed, 115 insertions(+), 163 deletions(-)
+>=20
+> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rp=
+m.c
+> index 6e7f0438e8b8..0d1d97659d59 100644
+> --- a/drivers/clk/qcom/clk-smd-rpm.c
+> +++ b/drivers/clk/qcom/clk-smd-rpm.c
+> @@ -498,13 +506,69 @@ DEFINE_CLK_SMD_RPM_XO_BUFFER(div_clk1, 11, 19200000=
+);
+>  DEFINE_CLK_SMD_RPM_XO_BUFFER(div_clk2, 12, 19200000);
+>  DEFINE_CLK_SMD_RPM_XO_BUFFER(div_clk3, 13, 19200000);
+> =20
+> +static struct clk_smd_rpm *bimc_pcnoc_icc_clks[] =3D {
 
--- 
-Damien Le Moal
-Western Digital Research
+Can these be const arrays?
 
+> +       &clk_smd_rpm_bimc_clk,
+> +       &clk_smd_rpm_bus_0_pcnoc_clk,
+> +};
+> +
+[...]
+> @@ -1332,6 +1275,15 @@ static int rpm_smd_clk_probe(struct platform_devic=
+e *pdev)
+>                         goto err;
+>         }
+> =20
+> +       for (i =3D 0; i < desc->num_icc_clks; i++) {
+> +               if (!desc->icc_clks[i])
+> +                       continue;
+> +
+> +               ret =3D clk_smd_rpm_handoff(desc->icc_clks[i]);
+
+This API can probably take a const struct clk_smd_rpm pointer as well.
