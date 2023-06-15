@@ -2,174 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75AA0731A18
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:35:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 234CE731A11
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240206AbjFONf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 09:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44636 "EHLO
+        id S245673AbjFONeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 09:34:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344291AbjFONeP (ORCPT
+        with ESMTP id S1344127AbjFONd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 09:34:15 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB3223584;
-        Thu, 15 Jun 2023 06:33:49 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DC6272F4;
-        Thu, 15 Jun 2023 06:34:33 -0700 (PDT)
-Received: from a077893.arm.com (unknown [10.163.46.86])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D33453F64C;
-        Thu, 15 Jun 2023 06:33:43 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-Subject: [PATCH V12 10/10] arm64/perf: Implement branch records save on PMU IRQ
-Date:   Thu, 15 Jun 2023 19:02:39 +0530
-Message-Id: <20230615133239.442736-11-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230615133239.442736-1-anshuman.khandual@arm.com>
-References: <20230615133239.442736-1-anshuman.khandual@arm.com>
+        Thu, 15 Jun 2023 09:33:58 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4740430F2;
+        Thu, 15 Jun 2023 06:33:41 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id 5614622812f47-39c84863e7cso4823623b6e.1;
+        Thu, 15 Jun 2023 06:33:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686836020; x=1689428020;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gXGICQ50G65MHvELHZmzGRAZEarhLjbzAG5FaOgvnLk=;
+        b=TVq8vXX7rBUuz1raSfavfMpyFMZdl/D0YFUzwlxrjAgFYRLapZtAol4AfXy8Sth7F/
+         KiuhbO6MEgfu0ptmk5jHIXTMISXJuPlan4DQAcq8el+1Eb2Ei6YxVwL8fCfdeZjcQe4b
+         tYwvEnxtu8tiuEtREuEFoq2OKfEk8+AFBB51Yt53KVEJP3jC575PEM1FS6LbPJm4cjXh
+         r5E6BbmOxPaXuOZOndJzNabzfnsHk22rwfpWH6eXtpizWq1tsPRxtIbna6Kj/ZlE22z1
+         7//effT7X6dAI8lr2ocinPekegaHt+31CT2WQ2saucHVUvbMGKgITT+BaxDWusf6j1w5
+         t17Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686836020; x=1689428020;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gXGICQ50G65MHvELHZmzGRAZEarhLjbzAG5FaOgvnLk=;
+        b=GE56rj8aGvfSzaWqFEp8el4wfGf3HRAC1Cq6rPlhGkNDhtbAN27KUE7RpvZhNeI9hz
+         H9COB3UmBNXLHTYMitkUNd6plWcw1pr0YX92soxYMnj9gD/LYiu/89BeaFHKjHFO2g/R
+         K5sB8LR+zpMdHqPIQZld+KiJgTTv9ViqWhb+4z2f0yt2RejnDoXzIfSvpCgnlreHJa4Z
+         0ilTv+Lz4sikFNEgdy4ZM072o9QzNHCgrTKm53+lraJS3pu/2Yj+GLaGxO+Mget9tV8j
+         5c7gLqHXDK/L4Y7DMHcyeCcFdeHcflffTciCuBdM54mOTg351jNgirb7/8/y0DfD6PZu
+         gKRw==
+X-Gm-Message-State: AC+VfDzoRwEA5FGRerYsdTGiKrPNYVSNnc4LD95XUfkQWSar0EIRv1h4
+        PXuLv4MPzTsSOtllfxGP1eWV275vGOg=
+X-Google-Smtp-Source: ACHHUZ7UWifzdJSDkHoWoiOZrjE+y0salSHzFZ9WHDKVYNMAp2o6swaqzv1eZus3VRfE/ZrQG22lKg==
+X-Received: by 2002:a05:6808:1782:b0:398:465e:ec68 with SMTP id bg2-20020a056808178200b00398465eec68mr14760468oib.4.1686836020404;
+        Thu, 15 Jun 2023 06:33:40 -0700 (PDT)
+Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
+        by smtp.gmail.com with ESMTPSA id e19-20020a05680809b300b0039a531d9b92sm6850679oig.56.2023.06.15.06.33.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jun 2023 06:33:39 -0700 (PDT)
+Message-ID: <5835c052-c101-ebc1-3609-88d6e12f13ac@gmail.com>
+Date:   Thu, 15 Jun 2023 10:33:34 -0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 1/6] rust: init: make doctests compilable/testable
+Content-Language: en-US
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>, David Gow <davidgow@google.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Andreas Hindborg <nmi@metaspace.dk>,
+        Philip Li <philip.li@intel.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+References: <20230614180837.630180-1-ojeda@kernel.org>
+ <20230614180837.630180-2-ojeda@kernel.org>
+ <2b4b23ce-316e-b998-7faf-e529b121a8b4@gmail.com>
+ <CANiq72mApAXEtoWgkaLvZJu6gn=9CkyogRXVfbYxPsR5TeFUVQ@mail.gmail.com>
+From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+In-Reply-To: <CANiq72mApAXEtoWgkaLvZJu6gn=9CkyogRXVfbYxPsR5TeFUVQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This modifies armv8pmu_branch_read() to concatenate live entries along with
-task context stored entries and then process the resultant buffer to create
-perf branch entry array for perf_sample_data. It follows the same principle
-like task sched out.
+On 6/15/23 06:31, Miguel Ojeda wrote:
+> On Thu, Jun 15, 2023 at 5:52 AM Martin Rodriguez Reboredo
+> <yakoyoku@gmail.com> wrote:
+>>
+>> Little question, what's the purpose of `FromErrno` here?
+> 
+> It was because `Error::from_errno` is `pub(crate)` in the `kernel`
+> crate. I should have added a comment -- my bad! :)
+> 
+> If we decided to make it `pub` eventually, then this `FromErrno` hack
+> can be removed.
+> 
+> Cheers,
+> Miguel
 
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Tested-by: James Clark <james.clark@arm.com>
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- drivers/perf/arm_brbe.c | 69 +++++++++++++++++++----------------------
- 1 file changed, 32 insertions(+), 37 deletions(-)
+I think that `FromErrno` should be made public the moment when more
+doctests rely upon it, until then.
 
-diff --git a/drivers/perf/arm_brbe.c b/drivers/perf/arm_brbe.c
-index 3bb17ced2b1d..d28067c896e2 100644
---- a/drivers/perf/arm_brbe.c
-+++ b/drivers/perf/arm_brbe.c
-@@ -653,41 +653,44 @@ void armv8pmu_branch_reset(void)
- 	isb();
- }
- 
--static bool capture_branch_entry(struct pmu_hw_events *cpuc,
--				 struct perf_event *event, int idx)
-+static void brbe_regset_branch_entries(struct pmu_hw_events *cpuc, struct perf_event *event,
-+				       struct brbe_regset *regset, int idx)
- {
- 	struct perf_branch_entry *entry = &cpuc->branches->branch_entries[idx];
--	u64 brbinf = get_brbinf_reg(idx);
--
--	/*
--	 * There are no valid entries anymore on the buffer.
--	 * Abort the branch record processing to save some
--	 * cycles and also reduce the capture/process load
--	 * for the user space as well.
--	 */
--	if (brbe_invalid(brbinf))
--		return false;
-+	u64 brbinf = regset[idx].brbinf;
- 
- 	perf_clear_branch_entry_bitfields(entry);
- 	if (brbe_record_is_complete(brbinf)) {
--		entry->from = get_brbsrc_reg(idx);
--		entry->to = get_brbtgt_reg(idx);
-+		entry->from = regset[idx].brbsrc;
-+		entry->to = regset[idx].brbtgt;
- 	} else if (brbe_record_is_source_only(brbinf)) {
--		entry->from = get_brbsrc_reg(idx);
-+		entry->from = regset[idx].brbsrc;
- 		entry->to = 0;
- 	} else if (brbe_record_is_target_only(brbinf)) {
- 		entry->from = 0;
--		entry->to = get_brbtgt_reg(idx);
-+		entry->to = regset[idx].brbtgt;
- 	}
- 	capture_brbe_flags(entry, event, brbinf);
--	return true;
-+}
-+
-+static void process_branch_entries(struct pmu_hw_events *cpuc, struct perf_event *event,
-+				   struct brbe_regset *regset, int nr_regset)
-+{
-+	int idx;
-+
-+	for (idx = 0; idx < nr_regset; idx++)
-+		brbe_regset_branch_entries(cpuc, event, regset, idx);
-+
-+	cpuc->branches->branch_stack.nr = nr_regset;
-+	cpuc->branches->branch_stack.hw_idx = -1ULL;
- }
- 
- void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
- {
--	int nr_hw_entries = brbe_get_numrec(cpuc->percpu_pmu->reg_brbidr);
-+	struct arm64_perf_task_context *task_ctx = event->pmu_ctx->task_ctx_data;
-+	struct brbe_regset live[BRBE_MAX_ENTRIES];
-+	int nr_live, nr_store, nr_hw_entries;
- 	u64 brbfcr, brbcr;
--	int idx = 0;
- 
- 	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
- 	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
-@@ -699,25 +702,17 @@ void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
- 	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
- 	isb();
- 
--	/* Loop through bank 0 */
--	select_brbe_bank(BRBE_BANK_IDX_0);
--	while (idx < nr_hw_entries && idx < BRBE_BANK0_IDX_MAX) {
--		if (!capture_branch_entry(cpuc, event, idx))
--			goto skip_bank_1;
--		idx++;
--	}
--
--	/* Loop through bank 1 */
--	select_brbe_bank(BRBE_BANK_IDX_1);
--	while (idx < nr_hw_entries && idx < BRBE_BANK1_IDX_MAX) {
--		if (!capture_branch_entry(cpuc, event, idx))
--			break;
--		idx++;
-+	nr_hw_entries = brbe_get_numrec(cpuc->percpu_pmu->reg_brbidr);
-+	nr_live = capture_brbe_regset(nr_hw_entries, live);
-+	if (event->ctx->task) {
-+		nr_store = task_ctx->nr_brbe_records;
-+		nr_store = stitch_stored_live_entries(task_ctx->store, live, nr_store,
-+						      nr_live, nr_hw_entries);
-+		process_branch_entries(cpuc, event, task_ctx->store, nr_store);
-+		task_ctx->nr_brbe_records = 0;
-+	} else {
-+		process_branch_entries(cpuc, event, live, nr_live);
- 	}
--
--skip_bank_1:
--	cpuc->branches->branch_stack.nr = idx;
--	cpuc->branches->branch_stack.hw_idx = -1ULL;
- 	process_branch_aborts(cpuc);
- 
- 	/* Unpause the buffer */
--- 
-2.25.1
-
+Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
