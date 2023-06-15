@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7F39731737
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF6E873173A
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343938AbjFOLkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 07:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53026 "EHLO
+        id S1344182AbjFOLkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 07:40:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344111AbjFOLjT (ORCPT
+        with ESMTP id S1344134AbjFOLjV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 07:39:19 -0400
+        Thu, 15 Jun 2023 07:39:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7983A86;
-        Thu, 15 Jun 2023 04:38:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200033A98;
+        Thu, 15 Jun 2023 04:38:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E08963680;
-        Thu, 15 Jun 2023 11:38:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5216C433C0;
-        Thu, 15 Jun 2023 11:38:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E95A1638FA;
+        Thu, 15 Jun 2023 11:38:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 313FBC433C0;
+        Thu, 15 Jun 2023 11:38:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686829110;
-        bh=SNeHZdA+/GRdBVUx2LtBVyhcwEvjjnPlzJqkO+RKOBU=;
+        s=k20201202; t=1686829113;
+        bh=mmdudRkuSbiUU5LPtsxAkTPhX5voY/Mn+ojKMk7dSZI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sbGd/qAax8BpJ3XcNm20PgFyVkK90uHkbcuIfbasBpqWd30sKERFTOnPXLSAsnjeH
-         +8F1PAnotEPuP95vBgPNJ0enfg+OfQwmEkGJXTc+GAsau8u5vfQZXaer4RsZDOGyNY
-         DouncqzGjWDCeXK6yffOWQdQpKl7f8RvHYhtEquRUrw+ITCRMfsxxFPAZixEw7XgKP
-         /hxFegEoGkYlFTsUJIr2lSpIvUVqfILpgDAEOrd+EOqZpFzCYmuixarPXCywru2GNM
-         k2DAkQSIA5HbfdAqE8eioNJcqAmbwVqGXxRJ6rPC24yyvt+im4nMtziv+tXPRzzuUQ
-         Aqh6apAe1aPdg==
+        b=pwZQ/HLMttogt2rqrniQHwDukRaay1tHnkrZ07T1rz1tGSLKq2vfy4sXZQsi1Ls6p
+         uCdtDyYGlKL9oWffkWQsUpdSMcyUqMOwksvbfIPpRE76OzYo+IOYBv7mqa5ycsKOcZ
+         xZBZaTPuz/rxUgQ/I6q7bgJIGO7gVJ+qEAf8Go3ymu6L5tXDGFoX3HW43Tkx/NWeSm
+         0CaYB73ho/CONjjLD18TYM5Kxjmw/a0g60GA+w9iY/5fnIfShovCVhFmRTmUbwNdzh
+         7nyXIcVbWsDA8mYq+8DBVWfTrKrhmBtgtMDN8ZNzjh7Ntazh5xI7b9yrVtSN3S4mtn
+         SIFuTUADiimUA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Marc Zyngier <maz@kernel.org>, Cornelia Huck <cohuck@redhat.com>,
-        Steven Price <steven.price@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Sasha Levin <sashal@kernel.org>, catalin.marinas@arm.com,
-        will@kernel.org, broonie@kernel.org, james.morse@arm.com,
-        kristina.martsenko@arm.com, robh@kernel.org,
-        jintack.lim@linaro.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.1 06/16] arm64: Add missing Set/Way CMO encodings
-Date:   Thu, 15 Jun 2023 07:38:06 -0400
-Message-Id: <20230615113816.649135-6-sashal@kernel.org>
+Cc:     Steve French <stfrench@microsoft.com>,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Sasha Levin <sashal@kernel.org>, pc@cjr.nz, pc@manguebit.com,
+        ematsumiya@suse.de, lsahlber@redhat.com, sprasad@microsoft.com,
+        vl@samba.org, metze@samba.org
+Subject: [PATCH AUTOSEL 6.1 07/16] smb3: missing null check in SMB2_change_notify
+Date:   Thu, 15 Jun 2023 07:38:07 -0400
+Message-Id: <20230615113816.649135-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230615113816.649135-1-sashal@kernel.org>
 References: <20230615113816.649135-1-sashal@kernel.org>
@@ -63,41 +62,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Zyngier <maz@kernel.org>
+From: Steve French <stfrench@microsoft.com>
 
-[ Upstream commit 8d0f019e4c4f2ee2de81efd9bf1c27e9fb3c0460 ]
+[ Upstream commit b535cc796a4b4942cd189652588e8d37c1f5925a ]
 
-Add the missing Set/Way CMOs that apply to tagged memory.
+If plen is null when passed in, we only checked for null
+in one of the two places where it could be used. Although
+plen is always valid (not null) for current callers of the
+SMB2_change_notify function, this change makes it more consistent.
 
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Reviewed-by: Cornelia Huck <cohuck@redhat.com>
-Reviewed-by: Steven Price <steven.price@arm.com>
-Reviewed-by: Oliver Upton <oliver.upton@linux.dev>
-Link: https://lore.kernel.org/r/20230515204601.1270428-2-maz@kernel.org
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <error27@gmail.com>
+Closes: https://lore.kernel.org/all/202305251831.3V1gbbFs-lkp@intel.com/
+Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/include/asm/sysreg.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+ fs/cifs/smb2pdu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
-index 7d301700d1a93..3a448ab0924b3 100644
---- a/arch/arm64/include/asm/sysreg.h
-+++ b/arch/arm64/include/asm/sysreg.h
-@@ -111,8 +111,14 @@
- #define SB_BARRIER_INSN			__SYS_BARRIER_INSN(0, 7, 31)
+diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
+index 537e8679900b8..3ca593cdda76e 100644
+--- a/fs/cifs/smb2pdu.c
++++ b/fs/cifs/smb2pdu.c
+@@ -3779,7 +3779,7 @@ SMB2_change_notify(const unsigned int xid, struct cifs_tcon *tcon,
+ 		if (*out_data == NULL) {
+ 			rc = -ENOMEM;
+ 			goto cnotify_exit;
+-		} else
++		} else if (plen)
+ 			*plen = le32_to_cpu(smb_rsp->OutputBufferLength);
+ 	}
  
- #define SYS_DC_ISW			sys_insn(1, 0, 7, 6, 2)
-+#define SYS_DC_IGSW			sys_insn(1, 0, 7, 6, 4)
-+#define SYS_DC_IGDSW			sys_insn(1, 0, 7, 6, 6)
- #define SYS_DC_CSW			sys_insn(1, 0, 7, 10, 2)
-+#define SYS_DC_CGSW			sys_insn(1, 0, 7, 10, 4)
-+#define SYS_DC_CGDSW			sys_insn(1, 0, 7, 10, 6)
- #define SYS_DC_CISW			sys_insn(1, 0, 7, 14, 2)
-+#define SYS_DC_CIGSW			sys_insn(1, 0, 7, 14, 4)
-+#define SYS_DC_CIGDSW			sys_insn(1, 0, 7, 14, 6)
- 
- /*
-  * Automatically generated definitions for system registers, the
 -- 
 2.39.2
 
