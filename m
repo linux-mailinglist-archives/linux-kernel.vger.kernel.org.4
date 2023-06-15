@@ -2,162 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91B6B7320A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 22:11:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 131127320A3
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 22:10:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235541AbjFOULP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 16:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37036 "EHLO
+        id S233739AbjFOUKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 16:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235994AbjFOULI (ORCPT
+        with ESMTP id S229653AbjFOUKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 16:11:08 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020D31BC;
-        Thu, 15 Jun 2023 13:10:59 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 8D1FF60304;
-        Thu, 15 Jun 2023 22:10:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1686859845; bh=uukwmcuMYyFo0+uF/3NGwM7VYyyngg3AIaPUOReXkV8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=HH2qoWkoKpWC5a5ltWnDz8kJiFKyq0nBa6RF7kKfZtDw8N3lDZKUnURqquNsKebg3
-         AqqxW4gYuMYvZjp1ELlumQNpV0bp28x1cObTAhW4/zISJ61GQFsG4DKqwBAEMJBHod
-         SNYyI37EMYIRJNVMUJuOgwj/iQOrkgIROJZzY5m3qS+bbhJTLE72+54eCnwMNqU0kB
-         cnBp/uBdKR7kSe9DngY5ubXuYUchQ13wxYBGnlFgYaGiT1QuOwnCNrAoAiUgFTN1Xj
-         0DjTrOvwe/isXOJZQgR3iNxdjnOjCXEb+EP9+FxpMua8oVtEjbRhXdhTdbq1C0iQZE
-         6P9qbtVA+4PRA==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Z5yJhetaoLVu; Thu, 15 Jun 2023 22:10:43 +0200 (CEST)
-Received: from [192.168.1.6] (unknown [94.250.191.183])
-        by domac.alu.hr (Postfix) with ESMTPSA id BAF1260303;
-        Thu, 15 Jun 2023 22:10:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1686859843; bh=uukwmcuMYyFo0+uF/3NGwM7VYyyngg3AIaPUOReXkV8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=UaDmI+vN/XSjRDZc4BsRC2qXr8H50gp48GJoXxMUcyeTqwj0Ze8Q0kIgoKfNTPgs9
-         e9nbpmZt6bXatFGlIhvsC4JPRxZB342NRIZ5aJ+5gmp0VJSMiIGHFzwk66ARmBd4zu
-         vutqwmIXwzTgS/O4zQ7919zeFAuONOjM5f/7tUvLnd61m0pqwm2HNq+PgO9aJJTtsB
-         5KfwcQVS2hGkkySw+/2ka2/I8r8xBz/GDRL1b+6rkdudq9m0Uk2FRK5Tor8+yk4JA3
-         lsSr0TmXkyBbezM/A4JSwg3CQwY2kms//onp8gPENGF8iLh+V3pV+jOrk3HpQ6zk5z
-         ZNq2Lhvc3M8vQ==
-Message-ID: <2d129924-d8c7-0aab-2766-950042b7a801@alu.unizg.hr>
-Date:   Thu, 15 Jun 2023 22:10:42 +0200
+        Thu, 15 Jun 2023 16:10:48 -0400
+Received: from s.wrqvtbkv.outbound-mail.sendgrid.net (s.wrqvtbkv.outbound-mail.sendgrid.net [149.72.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A88F12E
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 13:10:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kwiboo.se;
+        h=from:subject:mime-version:to:cc:content-transfer-encoding:
+        content-type:cc:content-type:from:subject:to;
+        s=s1; bh=If/pDcNZHjKHg2xr7fPICwEYrvkMiPF0Yu0cd9xm+8c=;
+        b=GozorMfIUTKX2p3yMPpaBV0J/anZcRNzQgygrAoAMUjiXVA02nBHk2H3MTrL64UPq0dK
+        IW61phWauueZvWEkTK4KTjgePv9b92oV9I8Ez81pzG7hub3pPoWkXydF6hbp1N6f6FvJlm
+        D+tKbsk6sW4+Y0evTou3YOc+ycEPTDXxcRJbyuBdPty63gSiFnSFM5NshpkYxuT/Cx5SMD
+        o5I1gfiEqF9FS56eCG5eB7eNGPrpbsmfLmbM8yMUmz05oEd/GvvYB9gqKHWuOe9vT3twAJ
+        0j4CLyM9I/5f6eC8tddHTrMHudrlc6DvtTTsOzKHgLgwbgkiF/34Pn40nODWvSPQ==
+Received: by filterdrecv-77869f68cc-lcgp6 with SMTP id filterdrecv-77869f68cc-lcgp6-1-648B7045-14
+        2023-06-15 20:10:45.330247636 +0000 UTC m=+3098087.523654011
+Received: from bionic.localdomain (unknown)
+        by geopod-ismtpd-5 (SG)
+        with ESMTP
+        id M8m6e9nORhaWVL_Bj7hb3A
+        Thu, 15 Jun 2023 20:10:44.821 +0000 (UTC)
+From:   Jonas Karlman <jonas@kwiboo.se>
+Subject: [PATCH v2 0/3] iommu: rockchip: Fix discovery table address encoding
+Date:   Thu, 15 Jun 2023 20:10:45 +0000 (UTC)
+Message-Id: <20230615201042.2291867-1-jonas@kwiboo.se>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: POSSIBLE BUG: selftests/net/fcnal-test.sh: [FAIL][FIX TESTED] in
- vrf "bind - ns-B IPv6 LLA" test
-Content-Language: en-US
-To:     Guillaume Nault <gnault@redhat.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <ZHeN3bg28pGFFjJN@debian>
- <a379796a-5cd6-caa7-d11d-5ffa7419b90e@alu.unizg.hr> <ZH84zGEODT97TEXG@debian>
- <48cfd903-ad2f-7da7-e5a6-a22392dc8650@alu.unizg.hr> <ZH+BhFzvJkWyjBE0@debian>
- <a3b2891d-d355-dacd-24ec-af9f8aacac57@alu.unizg.hr> <ZIC1r6IHOM5nr9QD@debian>
- <884d9eb7-0e8e-3e59-cf6d-2c6931da35ee@alu.unizg.hr> <ZINPuawVp2KKoCjS@debian>
- <a74fbb54-2594-fd37-c5fe-3a027d9a5ea3@alu.unizg.hr> <ZIl+k8zJ7A0vFKpB@debian>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <ZIl+k8zJ7A0vFKpB@debian>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-SG-EID: =?us-ascii?Q?TdbjyGynYnRZWhH+7lKUQJL+ZxmxpowvO2O9SQF5CwCVrYgcwUXgU5DKUU3QxA?=
+ =?us-ascii?Q?fZekEeQsTe+RrMu3cja6a0h7eTuGAfP89fgI7Mo?=
+ =?us-ascii?Q?5nZ7wt3U4bGdn6ikkP5Zd3dO0neB=2F5LK2JyiBDO?=
+ =?us-ascii?Q?u29YKFWbCeBwjYkAy19YoMXMyir3tW3Djs8Cmyd?=
+ =?us-ascii?Q?bvTCCbo8Lg1QCFsZ6+tUPrYOuM8SdhbXytKQ3C0?=
+ =?us-ascii?Q?9gB+krmM7OAnfyHJYcRjcyFRsjqk6rJeFQEv+0?=
+To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jonas Karlman <jonas@kwiboo.se>
+X-Entity-ID: P7KYpSJvGCELWjBME/J5tg==
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_BL_SPAMCOP_NET,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/14/23 10:47, Guillaume Nault wrote:
-> On Sat, Jun 10, 2023 at 08:04:02PM +0200, Mirsad Goran Todorovac wrote:
->> This also works on the Lenovo IdeaPad 3 Ubuntu 22.10 laptop, but on the AlmaLinux 8.8
->> Lenovo desktop I have a problem:
->>
->> [root@pc-mtodorov net]# grep FAIL ../fcnal-test-4.log
->> TEST: ping local, VRF bind - ns-A IP                                          [FAIL]
->> TEST: ping local, VRF bind - VRF IP                                           [FAIL]
->> TEST: ping local, device bind - ns-A IP                                       [FAIL]
->> TEST: ping local, VRF bind - ns-A IP                                          [FAIL]
->> TEST: ping local, VRF bind - VRF IP                                           [FAIL]
->> TEST: ping local, device bind - ns-A IP                                       [FAIL]
->> [root@pc-mtodorov net]#
->>
->> Kernel is the recent one:
->>
->> [root@pc-mtodorov net]# uname -rms
->> Linux 6.4.0-rc5-testnet-00003-g5b23878f7ed9 x86_64
->> [root@pc-mtodorov net]#
-> 
-> Maybe a problem with the ping version used by the distribution.
-> You can try "./fcnal-test.sh -t ipv4_ping -p -v" to view the commands
-> run and make the script stop when there's a test failure (so that you
-> can see the ping output and try your own commands in the testing
-> environment).
+This is a re-send of a series sent out in January, see [1].
 
-Thank you for taking the time for the reply. And thanks for the hint.
-But I am sort of on ebb tide on this.
+The address to the discovery table is currently encoded using an
+incorrect bit layout when configured into the MMU_DTE_ADDR reg.
 
-It would be good to have the test run on both versions of Linux to test
-the actual kernel faults. Maybe pack a version of ping command w the test?
-But I cannot deploy too much time in this.
+This currently do not cause any issue because the discovery and page
+tables is allocated in memory below 4GB thanks to the GFP_DMA32 flag.
 
-I hope then the upgrade AlmaLinux 8.8 -> 9.x (or CentOS clones in general)
-would solve the issue, but it is not guaranteed, and I would lose bisect
-to the old kernels. Which is why I do not upgrade to the latest releases
-in the first place. :-/
+Testing has shown that the discovery table address should be encoded
+using the same bit layout as the page table and memory page addresses.
 
-If it is just the AlmaLinux ping, then it is just an exotic distro, but it
-is a CentOS clone, so the issue might exist in the more popular Rocky, too.
+Removing the GFP_DMA32 on a RK3568 with 8GB of memory will result in:
 
-I am not sure what is the right way to do in this case or I would already
-have done it. Presumptuous maybe, but true.
+[    0.907236] rk_iommu fe043e00.iommu: Page fault at 0x00000000ff801000 of type read
+[    0.907264] rk_iommu fe043e00.iommu: iova = 0x00000000ff801000: dte_index: 0x3fe pte_index: 0x1 page_offset: 0x0
+[    0.907281] rk_iommu fe043e00.iommu: mmu_dte_addr: 0x000000010189a000 dte@0x000000010189aff8: 0x1722101 valid: 1 pte@0x0000000101722004: 0x2c01107 valid: 1 page@0x0000000102c01000 flags: 0x106
 
->>>> However, I have a question:
->>>>
->>>> In the ping + "With VRF" section, the tests with net.ipv4.raw_l3mdev_accept=1
->>>> are repeated twice, while "No VRF" section has the versions:
->>>>
->>>> SYSCTL: net.ipv4.raw_l3mdev_accept=0
->>>>
->>>> and
->>>>
->>>> SYSCTL: net.ipv4.raw_l3mdev_accept=1
->>>>
->>>> The same happens with the IPv6 ping tests.
->>>>
->>>> In that case, it could be that we have only 2 actual FAIL cases,
->>>> because the error is reported twice.
->>>>
->>>> Is this intentional?
->>>
->>> I don't know why the non-VRF tests are run once with raw_l3mdev_accept=0
->>> and once with raw_l3mdev_accept=1. Unless I'm missing something, this
->>> option shouldn't affect non-VRF users. Maybe the objective is to make
->>> sure that it really doesn't affect them. David certainly knows better.
->>
->> The problem appears to be that non-VRF tests are being ran with
->> raw_l3mdev_accept={0|1}, while VRF tests w raw_l3mdev_accept={1|1} ...
-> 
-> The reason the VRF tests run twice is to test both raw and ping sockets
-> (using the "net.ipv4.ping_group_range" sysctl). It doesn't seem anyone
-> ever intended to run the VRF tests with raw_l3mdev_accept=0.
-> 
-> Only the non-VRF tests were intended to be tested with
-> raw_l3mdev_accept=0 (see commit c032dd8cc7e2 ("selftests: Add ipv4 ping
-> tests to fcnal-test")). But I have no idea why.
+This series fixes this by using the existing mk_dtentries instead of the
+dma_addr_dte ops to encode the discovery table address, removes unused
+ops and finally removes the GFP_DMA32 flag to allow for discovery and
+page tables to be allocated in memory above 4GB.
 
-Well, you are not to blame if it is not documented.
+Changes in v2:
+- no changes, rebased on next-20230615
 
-This thing doesn't come out of the testsuite save by prayer and fasting,
-I'm afraid ;-)
+This series can also be found at [2].
 
-Best regards,
-Mirsad
+[1] https://lore.kernel.org/all/20230125221809.3275481-1-jonas@kwiboo.se/
+[2] https://github.com/Kwiboo/linux-rockchip/commits/next-20230615-iommu
+
+Jonas Karlman (3):
+  iommu: rockchip: Fix discovery table address encoding
+  iommu: rockchip: Remove unused variant ops
+  iommu: rockchip: Allocate tables from all available memory
+
+ drivers/iommu/rockchip-iommu.c | 45 +++++-----------------------------
+ 1 file changed, 6 insertions(+), 39 deletions(-)
+
+-- 
+2.40.1
+
