@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8A63730C13
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 02:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C36730C14
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 02:18:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235542AbjFOASY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 20:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48328 "EHLO
+        id S236429AbjFOAS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 20:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236287AbjFOASJ (ORCPT
+        with ESMTP id S236396AbjFOASK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 20:18:09 -0400
+        Wed, 14 Jun 2023 20:18:10 -0400
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F9CD2137;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A8E2135;
         Wed, 14 Jun 2023 17:18:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1686788288; x=1718324288;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=JcTNgc1YysOp+QU8ImUPz/k1E14UdvFfQQfaDb7pa+A=;
-  b=Vy/zVOjXhNZLbIgK3H+qi38VDCfKgvrrTuObA6vUMHyVrSYA/Hplgl69
-   hUG+byBXQXfs3DMWDF7U2T5BJFp4ySyjv5mrKFTh0Dhjo7blE4WysPQgu
-   NAW0JjKJOUqTc9xUo1lSWpZR8nb+CenfnjhqE69/jtR+Er/+uHJBUcLkx
-   tPTrP494B2xEtjhvpgBqeXCt4Ym6c2TUAT8SNyC1fdchDTDbb2poCpuOR
-   Dz0h2x84gCg+UJzXN5OxBrBL9j/lVomPihPJ5xhtIh2koMvzbZnZlsIRs
-   9mBkWzYPjzIP4WLj7L37ZiiJLSMgGBv6kpHh0rZdoWjiqNHHqtwByiPpl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="357652496"
+  bh=bhv1n6nkQ0mvHxRnrZ9f+xd58JX9bfqeh/mcIGmTOfQ=;
+  b=Xa0sZQ0/A5A3G4upk/aK793Nd1JB6n3ERlRdeCw9ogBmB4l5EF7Fvkrc
+   H/jDCsahnwpY0sjPG+iHWUFVwn0rckK7gn3TAzG0JDc9/DkjNdCEcPa7G
+   fDCGSUFEkt8c6o9e7RPfyIAVn9dLvl59jKz6YnGU+7CfE9VgQICPXWtNt
+   6Rd2R4nFkCRF+1ft4ltdXDqu7BC4U+PiUCrCgsEosNbfKoxOcMJZrSeTT
+   xVJisWPdDma9sG0q11e9Yy+2obsx9+vfCW6MG/YxOiWpkzU4sMBf/YHdN
+   BXDAyn2fYzzCnwpKmVWAXS4FQQ8BLNrFwgSkEHNItZVTCf0DLNTVBEUxm
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="357652505"
 X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="357652496"
+   d="scan'208";a="357652505"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 17:18:02 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 17:18:03 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="825021487"
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="825021493"
 X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="825021487"
+   d="scan'208";a="825021493"
 Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
-  by fmsmga002.fm.intel.com with ESMTP; 14 Jun 2023 17:18:00 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 14 Jun 2023 17:18:01 -0700
 From:   kan.liang@linux.intel.com
 To:     acme@kernel.org, mingo@redhat.com, peterz@infradead.org,
         irogers@google.com, namhyung@kernel.org, jolsa@kernel.org,
@@ -46,9 +46,9 @@ To:     acme@kernel.org, mingo@redhat.com, peterz@infradead.org,
         linux-kernel@vger.kernel.org
 Cc:     ak@linux.intel.com, eranian@google.com, ahmad.yasin@intel.com,
         Kan Liang <kan.liang@linux.intel.com>
-Subject: [PATCH V2 3/8] perf stat,jevents: Introduce Default tags for the default mode
-Date:   Wed, 14 Jun 2023 17:17:30 -0700
-Message-Id: <20230615001735.3643996-4-kan.liang@linux.intel.com>
+Subject: [PATCH V2 4/8] perf metrics: Sort the Default metricgroup
+Date:   Wed, 14 Jun 2023 17:17:31 -0700
+Message-Id: <20230615001735.3643996-5-kan.liang@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230615001735.3643996-1-kan.liang@linux.intel.com>
 References: <20230615001735.3643996-1-kan.liang@linux.intel.com>
@@ -66,110 +66,121 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kan Liang <kan.liang@linux.intel.com>
 
-Introduce a new metricgroup, Default, to tag all the metric groups which
-will be collected in the default mode.
+The new default mode will print the metrics as a metric group. The
+metrics from the same metric group must be adjacent to each other in the
+metric list. But the metric_list_cmp() sorts metrics by the number of
+events.
 
-Add a new field, DefaultMetricgroupName, in the JSON file to indicate
-the real metric group name. It will be printed in the default output
-to replace the event names.
+Add a new sort for the Default metricgroup, which sorts by
+default_metricgroup_name and metric_name.
 
-There is nothing changed for the output format.
+Add is_default in the struct metric_event to indicate that it's from
+the Default metricgroup.
 
-On SPR, both TopdownL1 and TopdownL2 are displayed in the default
-output.
+Store the displayed metricgroup name of the Default metricgroup into
+the metric expr for output.
 
-On ARM, Intel ICL and later platforms (before SPR), only TopdownL1 is
-displayed in the default output.
-
-Suggested-by: Stephane Eranian <eranian@google.com>
 Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
 ---
- tools/perf/builtin-stat.c          | 4 ++--
- tools/perf/pmu-events/jevents.py   | 5 +++--
- tools/perf/pmu-events/pmu-events.h | 1 +
- tools/perf/util/metricgroup.c      | 6 ++++++
- 4 files changed, 12 insertions(+), 4 deletions(-)
+ tools/perf/util/metricgroup.c | 35 +++++++++++++++++++++++++++++++++++
+ tools/perf/util/metricgroup.h |  3 +++
+ 2 files changed, 38 insertions(+)
 
-diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-index fc615bdeed4f..55601b4b5c34 100644
---- a/tools/perf/builtin-stat.c
-+++ b/tools/perf/builtin-stat.c
-@@ -2154,14 +2154,14 @@ static int add_default_attributes(void)
- 		 * Add TopdownL1 metrics if they exist. To minimize
- 		 * multiplexing, don't request threshold computation.
- 		 */
--		if (metricgroup__has_metric(pmu, "TopdownL1")) {
-+		if (metricgroup__has_metric(pmu, "Default")) {
- 			struct evlist *metric_evlist = evlist__new();
- 			struct evsel *metric_evsel;
- 
- 			if (!metric_evlist)
- 				return -1;
- 
--			if (metricgroup__parse_groups(metric_evlist, pmu, "TopdownL1",
-+			if (metricgroup__parse_groups(metric_evlist, pmu, "Default",
- 							/*metric_no_group=*/false,
- 							/*metric_no_merge=*/false,
- 							/*metric_no_threshold=*/true,
-diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-index 7ed258be1829..12e80bb7939b 100755
---- a/tools/perf/pmu-events/jevents.py
-+++ b/tools/perf/pmu-events/jevents.py
-@@ -54,8 +54,8 @@ _json_event_attributes = [
- # Attributes that are in pmu_metric rather than pmu_event.
- _json_metric_attributes = [
-     'pmu', 'metric_name', 'metric_group', 'metric_expr', 'metric_threshold',
--    'desc', 'long_desc', 'unit', 'compat', 'metricgroup_no_group', 'aggr_mode',
--    'event_grouping'
-+    'desc', 'long_desc', 'unit', 'compat', 'metricgroup_no_group',
-+    'default_metricgroup_name', 'aggr_mode', 'event_grouping'
- ]
- # Attributes that are bools or enum int values, encoded as '0', '1',...
- _json_enum_attributes = ['aggr_mode', 'deprecated', 'event_grouping', 'perpkg']
-@@ -307,6 +307,7 @@ class JsonEvent:
-     self.metric_name = jd.get('MetricName')
-     self.metric_group = jd.get('MetricGroup')
-     self.metricgroup_no_group = jd.get('MetricgroupNoGroup')
-+    self.default_metricgroup_name = jd.get('DefaultMetricgroupName')
-     self.event_grouping = convert_metric_constraint(jd.get('MetricConstraint'))
-     self.metric_expr = None
-     if 'MetricExpr' in jd:
-diff --git a/tools/perf/pmu-events/pmu-events.h b/tools/perf/pmu-events/pmu-events.h
-index 8cd23d656a5d..caf59f23cd64 100644
---- a/tools/perf/pmu-events/pmu-events.h
-+++ b/tools/perf/pmu-events/pmu-events.h
-@@ -61,6 +61,7 @@ struct pmu_metric {
- 	const char *desc;
- 	const char *long_desc;
- 	const char *metricgroup_no_group;
-+	const char *default_metricgroup_name;
- 	enum aggr_mode_class aggr_mode;
- 	enum metric_event_groups event_grouping;
- };
 diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
-index 74f2d8efc02d..8b19644ade7d 100644
+index 8b19644ade7d..acf86b15ee49 100644
 --- a/tools/perf/util/metricgroup.c
 +++ b/tools/perf/util/metricgroup.c
-@@ -137,6 +137,11 @@ struct metric {
- 	 * output.
+@@ -79,6 +79,7 @@ static struct rb_node *metric_event_new(struct rblist *rblist __maybe_unused,
+ 		return NULL;
+ 	memcpy(me, entry, sizeof(struct metric_event));
+ 	me->evsel = ((struct metric_event *)entry)->evsel;
++	me->is_default = false;
+ 	INIT_LIST_HEAD(&me->head);
+ 	return &me->nd;
+ }
+@@ -1160,6 +1161,25 @@ static int metric_list_cmp(void *priv __maybe_unused, const struct list_head *l,
+ 	return right_count - left_count;
+ }
+ 
++/**
++ * default_metricgroup_cmp - Implements complex key for the Default metricgroup
++ *			     that first sorts by default_metricgroup_name, then
++ *			     metric_name.
++ */
++static int default_metricgroup_cmp(void *priv __maybe_unused,
++				   const struct list_head *l,
++				   const struct list_head *r)
++{
++	const struct metric *left = container_of(l, struct metric, nd);
++	const struct metric *right = container_of(r, struct metric, nd);
++	int diff = strcmp(right->default_metricgroup_name, left->default_metricgroup_name);
++
++	if (diff)
++		return diff;
++
++	return strcmp(right->metric_name, left->metric_name);
++}
++
+ struct metricgroup__add_metric_data {
+ 	struct list_head *list;
+ 	const char *pmu;
+@@ -1515,6 +1535,7 @@ static int parse_groups(struct evlist *perf_evlist,
+ 	LIST_HEAD(metric_list);
+ 	struct metric *m;
+ 	bool tool_events[PERF_TOOL_MAX] = {false};
++	bool is_default = !strcmp(str, "Default");
+ 	int ret;
+ 
+ 	if (metric_events_list->nr_entries == 0)
+@@ -1549,6 +1570,9 @@ static int parse_groups(struct evlist *perf_evlist,
+ 			goto out;
+ 	}
+ 
++	if (is_default)
++		list_sort(NULL, &metric_list, default_metricgroup_cmp);
++
+ 	list_for_each_entry(m, &metric_list, nd) {
+ 		struct metric_event *me;
+ 		struct evsel **metric_events;
+@@ -1637,6 +1661,17 @@ static int parse_groups(struct evlist *perf_evlist,
+ 		expr->metric_unit = m->metric_unit;
+ 		expr->metric_events = metric_events;
+ 		expr->runtime = m->pctx->sctx.runtime;
++		if (m->pmu && strcmp(m->pmu, "cpu")) {
++			char *name;
++
++			if (asprintf(&name, "%s (%s)", m->default_metricgroup_name, m->pmu) < 0)
++				expr->default_metricgroup_name = m->default_metricgroup_name;
++			else
++				expr->default_metricgroup_name = name;
++		} else
++			expr->default_metricgroup_name = m->default_metricgroup_name;
++		if (is_default)
++			me->is_default = true;
+ 		list_add(&expr->nd, &me->head);
+ 	}
+ 
+diff --git a/tools/perf/util/metricgroup.h b/tools/perf/util/metricgroup.h
+index bf18274c15df..d5325c6ec8e1 100644
+--- a/tools/perf/util/metricgroup.h
++++ b/tools/perf/util/metricgroup.h
+@@ -22,6 +22,7 @@ struct cgroup;
+ struct metric_event {
+ 	struct rb_node nd;
+ 	struct evsel *evsel;
++	bool is_default; /* the metric evsel from the Default metricgroup */
+ 	struct list_head head; /* list of metric_expr */
+ };
+ 
+@@ -55,6 +56,8 @@ struct metric_expr {
+ 	 * more human intelligible) and then add "MiB" afterward when displayed.
  	 */
  	const char *metric_unit;
-+	/**
-+	 * Optional name of the metric group reported
-+	 * if the Default metric group is being processed.
-+	 */
++	/** Displayed metricgroup name of the Default metricgroup */
 +	const char *default_metricgroup_name;
- 	/** Optional null terminated array of referenced metrics. */
- 	struct metric_ref *metric_refs;
- 	/**
-@@ -219,6 +224,7 @@ static struct metric *metric__new(const struct pmu_metric *pm,
- 
- 	m->pmu = pm->pmu ?: "cpu";
- 	m->metric_name = pm->metric_name;
-+	m->default_metricgroup_name = pm->default_metricgroup_name;
- 	m->modifier = NULL;
- 	if (modifier) {
- 		m->modifier = strdup(modifier);
+ 	/** Null terminated array of events used by the metric. */
+ 	struct evsel **metric_events;
+ 	/** Null terminated array of referenced metrics. */
 -- 
 2.35.1
 
