@@ -2,159 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE396731BF7
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB773731BFC
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237454AbjFOO62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 10:58:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40144 "EHLO
+        id S1345005AbjFOO6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 10:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345151AbjFOO6R (ORCPT
+        with ESMTP id S1344998AbjFOO6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 10:58:17 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB45E2D50
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 07:58:15 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-51400fa347dso10694a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 07:58:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686841094; x=1689433094;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fFEMMsnaVMMTN+MNrLJhPSERf9Iz01XRTKYXqWbDbKw=;
-        b=q94/N+S0ANP0qfo3iED0X3GUvb12lTH4j3QOzDNGtZE/B+3GOiOiLpIeZ54MPTMd4f
-         lwLiM6RyD3FqWgDXOqXvCeLoOQaVfjgXUPDwGWebKkwKb+YuJPikfarnPzMI4LtrmcBp
-         y847xtkBebIRxzn8FikqQYnBHrlWutgujnpGaE4VZgsOJWgOTV689TI6qVQ1qvBNqLgG
-         4jfDLEuUCHIPmbOpUc2Dhetj7azg6cB+6vZsd/ovfnkOyGmWoR6xsqduCMHyySUhvtDp
-         zjwhO1KKBFysS18i7RB4CCsDxAjV2kRP6wynwyVEZExck+itLa+oePesLzVuvAxDNsOi
-         g2Pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686841094; x=1689433094;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fFEMMsnaVMMTN+MNrLJhPSERf9Iz01XRTKYXqWbDbKw=;
-        b=LpCjNv0mvv+ruA+V+cpG+Lf7QDqtRZrlbz81ffHVXs6fgrSMuPl2o9WocylSaqVsC8
-         JvXt1lQ35eGk3UXjfAhLIN7dwknIX7NEtjd0phhHaOiqgqsxT9VmfhxS8KIF7MzWNkpc
-         Xl8q+hxf7LFkcqlcHgDQzEbyKcamgOe10Rx6QQKSi69jSXT09z1NSs+QdaP6aj0k9R7F
-         E1pgMxV8Xxo/l+xL/0qzGqchrLXN2A4UAFCtWq2e75pqTsBm1onNNxpSbuBK+N4jKj9S
-         Rn5up5ag+Qt/ZTxLviY+0JoI8VIVJngp4oAI40vsNqyAbwQRiIwVJop/4gyvYNU3+S3R
-         2Wlw==
-X-Gm-Message-State: AC+VfDw8km1v/McEOZJWqr+6Oj3BetQq8vNFOofI1LXxAHPPGAaib/aM
-        XZpDpU709xuNiXAETiUPkmaU37lt1eZHRiTo9z9/oQ==
-X-Google-Smtp-Source: ACHHUZ4WXsDVRmMbD5nLQbERxBnWATUeJeVD98IO3VjjPOWmZCV24bKxbxwmLV9CtMkgeyPYIeCORQhTu7shXQ2gF+w=
-X-Received: by 2002:a50:9faf:0:b0:514:92e4:ab9f with SMTP id
- c44-20020a509faf000000b0051492e4ab9fmr69956edf.7.1686841093992; Thu, 15 Jun
- 2023 07:58:13 -0700 (PDT)
+        Thu, 15 Jun 2023 10:58:40 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49865297C;
+        Thu, 15 Jun 2023 07:58:34 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35FBsMwv017189;
+        Thu, 15 Jun 2023 14:58:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=8jddhpXQANB8fdbQa1qqaRX5nkctEsZwQvmCoXwnM84=;
+ b=TKoBFFOUE9CW32tnMAuXkyLbaapC3s/jCZ0ZUiAWb+5AuydF1xhG7IwYaOeMYo/k42Qf
+ zqu0E3JW5AZUi2WLrNzBbZXDkMA64FbYReYB1mpPhw5ZEh/C+1cVZjcR6MiQohqHAsBG
+ SqCWDAVeRFte2+q6+zblpkxpdkWQlLxpn3cPfbY6IGqvXvNdntfzT8omfbq49X8q4zCy
+ gbLxfCUMAsLPWcVU/Tmk+WdrzzIp630CptbAZD0bxQwE2u9eRnU2Uxz+Okt2ACOUHSYQ
+ EwpdcuTpQOh5Iv3hIPdvb+/2IAvEjrozB9e2x1ODErlzVL1RyOlNV/P8CPY8Mt4sp+px vQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r7cka36yb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 14:58:29 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35FEwPDo030284
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 14:58:25 GMT
+Received: from [10.216.11.0] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 15 Jun
+ 2023 07:58:21 -0700
+Message-ID: <551145bb-18f7-45af-b75e-7caccca113bc@quicinc.com>
+Date:   Thu, 15 Jun 2023 20:28:13 +0530
 MIME-Version: 1.0
-References: <20230613102905.2808371-1-usama.anjum@collabora.com>
- <20230613102905.2808371-3-usama.anjum@collabora.com> <CABb0KFHWnbrf2ythvO0OKsd1ZS9b4D9BNzwBCbn6g9OX4n6ZOg@mail.gmail.com>
- <0db01d90-09d6-08a4-bbb8-70670d3baa94@collabora.com> <CABb0KFEn5TU480A=YiN82nLRtGyKMABi8cZjuiGUU_jFZZo+8g@mail.gmail.com>
- <34203acf-7270-7ade-a60e-ae0f729dcf70@collabora.com> <CABb0KFFaXgJD99pWfx3MC+qrq5jUaPis_kZo6U8yL_8xdp0GJA@mail.gmail.com>
- <96b7cc00-d213-ad7d-1b48-b27f75b04d22@collabora.com> <CABb0KFEy_mRaT86TEOQ-BoTe_XOVw3Kp5VdzOfEEaiZJuT754g@mail.gmail.com>
-In-Reply-To: <CABb0KFEy_mRaT86TEOQ-BoTe_XOVw3Kp5VdzOfEEaiZJuT754g@mail.gmail.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Thu, 15 Jun 2023 16:58:02 +0200
-Message-ID: <CABb0KFGuqoDh-+FKcsZXxpSFWSM3mcLVQkotGE3RcNiFKh-a2g@mail.gmail.com>
-Subject: Re: [PATCH v18 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v7] usb: common: usb-conn-gpio: Set last role to unknown
+ before initial detection
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1685544074-17337-1-git-send-email-quic_prashk@quicinc.com>
+ <ZImE4L3YgABnCIsP@kuha.fi.intel.com>
+ <2023061547-staleness-camper-ae8a@gregkh>
+ <d5561151-08bb-9f5f-aa51-44c5ad31976b@quicinc.com>
+ <2023061512-vowed-panther-38ed@gregkh>
+From:   Prashanth K <quic_prashk@quicinc.com>
+In-Reply-To: <2023061512-vowed-panther-38ed@gregkh>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: NVx99CLevn-3KPC-wAGXUdEQwaDg9DZH
+X-Proofpoint-ORIG-GUID: NVx99CLevn-3KPC-wAGXUdEQwaDg9DZH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-15_11,2023-06-15_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
+ malwarescore=0 suspectscore=0 priorityscore=1501 lowpriorityscore=0
+ mlxlogscore=668 adultscore=0 impostorscore=0 bulkscore=0 clxscore=1015
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306150130
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Jun 2023 at 16:52, Micha=C5=82 Miros=C5=82aw <emmir@google.com> =
-wrote:
-> On Thu, 15 Jun 2023 at 15:58, Muhammad Usama Anjum
-> <usama.anjum@collabora.com> wrote:
-> > I'll send next revision now.
-> > On 6/14/23 11:00=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> > > (A quick reply to answer open questions in case they help the next ve=
-rsion.)
-> > >
-> > > On Wed, 14 Jun 2023 at 19:10, Muhammad Usama Anjum
-> > > <usama.anjum@collabora.com> wrote:
-> > >> On 6/14/23 8:14=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> > >>> On Wed, 14 Jun 2023 at 15:46, Muhammad Usama Anjum
-> > >>> <usama.anjum@collabora.com> wrote:
-> > >>>>
-> > >>>> On 6/14/23 3:36=E2=80=AFAM, Micha=C5=82 Miros=C5=82aw wrote:
-> > >>>>> On Tue, 13 Jun 2023 at 12:29, Muhammad Usama Anjum
-> > >>>>> <usama.anjum@collabora.com> wrote:
-> > >>>>> For flags name: PM_REQUIRE_WRITE_ACCESS?
-> > >>>>> Or Is it intended to be checked only if doing WP (as the current =
-name
-> > >>>>> suggests) and so it would be redundant as WP currently requires
-> > >>>>> `p->required_mask =3D PAGE_IS_WRITTEN`?
-> > >>>> This is intended to indicate that if userfaultfd is needed. If
-> > >>>> PAGE_IS_WRITTEN is mentioned in any of mask, we need to check if
-> > >>>> userfaultfd has been initialized for this memory. I'll rename to
-> > >>>> PM_SCAN_REQUIRE_UFFD.
-> > >>>
-> > >>> Why do we need that check? Wouldn't `is_written =3D false` work for=
- vmas
-> > >>> not registered via uffd?
-> > >> UFFD_FEATURE_WP_ASYNC and UNPOPULATED needs to be set on the memory =
-region
-> > >> for it to report correct written values on the memory region. Withou=
-t UFFD
-> > >> WP ASYNC and UNPOUPULATED defined on the memory, we consider UFFD_WP=
- state
-> > >> undefined. If user hasn't initialized memory with UFFD, he has no ri=
-ght to
-> > >> set is_written =3D false.
-> > >
-> > > How about calculating `is_written =3D is_uffd_registered() &&
-> > > is_uffd_wp()`? This would enable a user to apply GET+WP for the whole
-> > > address space of a process regardless of whether all of it is
-> > > registered.
-> > I wouldn't want to check if uffd is registered again and again. This is=
- why
-> > we are doing it only once every walk in pagemap_scan_test_walk().
->
-> There is no need to do the checks repeatedly. If I understand the code
-> correctly, uffd registration is per-vma, so it can be communicated
-> from test_walk to entry/hole callbacks via a field in
-> pagemap_scan_private.
 
-Actually... this could be exposed as a page category for the filter
-(e.g. PAGE_USES_UFFD_WP) and then you could just make the ioctl() to
-work for your usecase without tracking the ranges at the userspace
-side.
 
-Best Regards
-Micha=C5=82 Miros=C5=82aw
+On 15-06-23 08:06 pm, Greg Kroah-Hartman wrote:
+> On Thu, Jun 15, 2023 at 07:52:32PM +0530, Prashanth K wrote:
+>>
+>> In that case, can I resubmit v1 of this patch again, where I have used a
+>> macro in usb-conn-gpio driver ? something like this.
+>>
+>> @@ -27,6 +27,8 @@
+>>   #define USB_CONN_IRQF	\
+>>   	(IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING | IRQF_ONESHOT)
+>>
+>> +#define USB_ROLE_UNKNOWN (USB_ROLE_NONE -1)
+> 
+> Are you referencing an existing enum here and assuming it is a specific
+> value?
+
+I' not assuming UBS_ROLE_NONE to be a specific value, but I want an 
+integer (for macro) which is not equal to USB_ROLE_NONE/DEVICE/HOST, 
+that's why I'm using (USB_ROLE_NONE - 1), assuming enumerators NONE, 
+DEVICE & HOST will be having adjacent integer values. Wouldn't that help?
+
+Thanks,
+Prashanth K
+
+
