@@ -2,215 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EB74730CD0
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 03:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDE3E730CD1
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 03:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238124AbjFOBo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 21:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45474 "EHLO
+        id S238477AbjFOBpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 21:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238478AbjFOBow (ORCPT
+        with ESMTP id S239113AbjFOBoy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 21:44:52 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183802942;
-        Wed, 14 Jun 2023 18:44:26 -0700 (PDT)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QhQ3P4s2nzMpTW;
-        Thu, 15 Jun 2023 09:40:33 +0800 (CST)
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 15 Jun 2023 09:43:38 +0800
-Subject: Re: [PATCH] perf top & record: Fix segfault when default cycles event
- is not supported
-To:     Ian Rogers <irogers@google.com>
-CC:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>,
-        <adrian.hunter@intel.com>, <kan.liang@linux.intel.com>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230614151625.2077-1-yangjihong1@huawei.com>
- <CAP-5=fUf0+7HwZ+AHUR0nRD5QnfPn9_CPMEdJZP_5goPfrPB+Q@mail.gmail.com>
-From:   Yang Jihong <yangjihong1@huawei.com>
-Message-ID: <6d8d8641-d935-c920-6ef4-1766a82ec6b3@huawei.com>
-Date:   Thu, 15 Jun 2023 09:43:38 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Wed, 14 Jun 2023 21:44:54 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 366F226B8;
+        Wed, 14 Jun 2023 18:44:28 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id 6a1803df08f44-62de4cc0172so24007476d6.0;
+        Wed, 14 Jun 2023 18:44:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686793466; x=1689385466;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=89wdz+93fOJGDfymVTb02j/BFgyh+BUwRn3kzUFi0mA=;
+        b=qaUE7LU4qCjY5uyqrdAzpX1qPmRugFlBpI2GmkRPUr4pVjvrlLmBIDCU7nwGIWB0z0
+         pqHFpWka4MhO2OzuZvCfOZkVmA4ww4TSdX6oODkweS9MdUB2fOFlNMDovgeAeFF8/dcW
+         Vt0SDng1sMs+/lB52fQcM5ndpuMFP2dqlOYZjTNQcqsOXvxQ7R7UcoaDMaKvo0fL8FVH
+         ORuYvcMZIakjsgiG8HoUK4BSILlv9EuTVDvg2Yqd0Zx+hizVMYxo/nOmPhgf+n668FIK
+         h2P4h5ed8MHQmnApkYOprfPRCLnBhbi0N6s0eCxXF5aS+hO2O41DnUNFBx9GGqZnXQQq
+         NfcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686793466; x=1689385466;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=89wdz+93fOJGDfymVTb02j/BFgyh+BUwRn3kzUFi0mA=;
+        b=ccvkFRQKelHjhfQLcJbt+A0k2VMLXLlkDfPCKdXXB2Y1BCyGio8L5lNl0CrVBsnWqh
+         J/wnJ9GhwuOhB7wIkU+czuV59/WbzndZfRY2Yil5IV5myDuLwkWCjtSQ3lUNN5DcTS2A
+         E7UvMINu23muoCldDfIYfPiaCM8n35c39Mu3r8v+h02Mpvjnffy5P2lxCrsSUBn0xlt6
+         CgiNcbp1iZU3V+4SSGAeWfoXEo6taCJ5iRcOFFvurxQ1S6huTIOmOmPtbSpjFTJVLE9x
+         eeFM8IMBSrblBlnK+x+xWAq2fLsqMkiKP0uycKbpFxL4S5rKO/asnXht1YQuyzU080ox
+         qzJA==
+X-Gm-Message-State: AC+VfDwRjqdIzHygQEm+sMsn6oXp5eBEVgmO+0igDPK7qCicLQNj8kf6
+        n2XW8WaiaHj6OcG7nDBIl68=
+X-Google-Smtp-Source: ACHHUZ6mUyqj0y59odMzK/cplVR3BePgKBfHjKYwcbBBvPuWywGDU8vCFZCC/6crtTOLUqlFQtDlvw==
+X-Received: by 2002:a05:6214:19e2:b0:62d:e946:5188 with SMTP id q2-20020a05621419e200b0062de9465188mr13538848qvc.40.1686793465767;
+        Wed, 14 Jun 2023 18:44:25 -0700 (PDT)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id n6-20020a0ce546000000b006267daad667sm5270043qvm.94.2023.06.14.18.44.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 18:44:25 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailauth.nyi.internal (Postfix) with ESMTP id B4EB927C0054;
+        Wed, 14 Jun 2023 21:44:24 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Wed, 14 Jun 2023 21:44:24 -0400
+X-ME-Sender: <xms:92yKZJY-S4jpDP5jvDIK090rZrVDddT5MmpfL-ks-SACdb-7RDixuQ>
+    <xme:92yKZAaGgrBc3GL7bU3acW2W2bcOO-MsxYo19wB-f6J2UkBsc4sMYRH7sLyYfE_PI
+    QZwIWkV36QK0TAC5g>
+X-ME-Received: <xmr:92yKZL_M5CR2-nRl58TETt-ghJl2ZVdu5dT6uW97PU-35rEvai6EjZqFDHk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedvuddgheduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
+    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
+    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
+    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
+    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
+    igmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:92yKZHozVuyOU60t-cpqoSDOB7CTMQd-Nia8sC2Y-d4dTiNr-OzyxQ>
+    <xmx:92yKZEpLr4_3UaSVYme33QyFeK8b4_caL00Gl7wxPzCI6VKYzIFRrA>
+    <xmx:92yKZNQmZsDIZLNUFHcZ-VV-C80AV7YXgexJXK8cFC3rXBHzp--gOg>
+    <xmx:-GyKZAbgaDFx5_yoc2ckHBB68Cre8pwAHI7vNqyE0PEvQ2AWQ0S3DQ>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 14 Jun 2023 21:44:22 -0400 (EDT)
+Date:   Wed, 14 Jun 2023 18:44:19 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Andreas Hindborg <nmi@metaspace.dk>,
+        Philip Li <philip.li@intel.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH 0/6] KUnit integration for Rust doctests
+Message-ID: <ZIps86MbJF/iGIzd@boqun-archlinux>
+References: <20230614180837.630180-1-ojeda@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAP-5=fUf0+7HwZ+AHUR0nRD5QnfPn9_CPMEdJZP_5goPfrPB+Q@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230614180837.630180-1-ojeda@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        WEIRD_PORT autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On 2023/6/15 0:18, Ian Rogers wrote:
-> On Wed, Jun 14, 2023 at 8:18 AM Yang Jihong <yangjihong1@huawei.com> wrote:
->>
->> The perf-record and perf-top call parse_event() to add a cycles event to
->> an empty evlist. For the system that does not support hardware cycles
->> event, such as QEMU, the evlist is empty due to the following code process:
->>
->>    parse_event(evlist, "cycles:P" or ""cycles:Pu")
->>      parse_events(evlist, "cycles:P")
->>        __parse_events
->>          ...
->>          ret = parse_events__scanner(str, &parse_state);
->>          // ret = 0
->>          ...
->>          ret2 = parse_events__sort_events_and_fix_groups()
->>          if (ret2 < 0)
->>            return ret;
->>          // The cycles event is not supported, here ret2 = -EINVAL,
->>          // Here return 0.
->>          ...
->>          evlist__splice_list_tail(evlist)
->>          // The code here does not execute to, so the evlist is still empty.
->>
->> A null pointer occurs when the content in the evlist is accessed later.
->>
->> Before:
->>
->>    # perf list hw
->>
->>    List of pre-defined events (to be used in -e or -M):
->>
->>    # perf record true
->>    libperf: Miscounted nr_mmaps 0 vs 1
->>    WARNING: No sample_id_all support, falling back to unordered processing
->>    perf: Segmentation fault
->>    Obtained 1 stack frames.
->>    [0xc5beff]
->>    Segmentation fault
->>
->> Solution:
->>    If cycles event is not supported, try to fall back to cpu-clock event.
->>
->> After:
->>    # perf record true
->>    [ perf record: Woken up 1 times to write data ]
->>    [ perf record: Captured and wrote 0.006 MB perf.data ]
->>    #
->>
->> Fixes: 7b100989b4f6 ("perf evlist: Remove __evlist__add_default")
->> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+On Wed, Jun 14, 2023 at 08:08:24PM +0200, Miguel Ojeda wrote:
+> This is the initial KUnit integration for running Rust documentation
+> tests within the kernel.
 > 
-> Thanks, useful addition. The cpu-clock fall back wasn't present before
-> 7b100989b4f6 so is the fixes tag correct?
+> Thank you to the KUnit team for all the input and feedback on this
+> over the months, as well as the Intel LKP 0-Day team!
 > 
-Before 7b100989b4f6, perf-record call evlist__add_default() to create an 
-evsel and directly add it to the evlist, it does not search for the 
-corresponding PMU in the sysfs. Therefore, the evlist is not empty 
-before the commit 7b100989b4f6.
-
-> Wrt segv, I'm beginning to think that we should always forcibly create
-> a core PMU even if we can't find one one in sysfs, my guess is that is
-> what triggers the segv.
->
-
-Yes, that's the reason.
-
-Thanks,
-Yang.
-
-> evlist__add_default doesn't really explain what the function is doing
-> and default can have >1 meaning. Perhaps, evlist__add_cycles.
+> This may be merged through either the KUnit or the Rust trees. If
+> the KUnit team wants to merge it, then that would be great.
 > 
-> Thanks,
-> Ian
+> Please see the message in the main commit for the details.
 > 
->> ---
->>   tools/perf/builtin-record.c |  4 +---
->>   tools/perf/builtin-top.c    |  3 +--
->>   tools/perf/util/evlist.c    | 18 ++++++++++++++++++
->>   tools/perf/util/evlist.h    |  1 +
->>   4 files changed, 21 insertions(+), 5 deletions(-)
->>
->> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
->> index aec18db7ff23..29ae2b84a63a 100644
->> --- a/tools/perf/builtin-record.c
->> +++ b/tools/perf/builtin-record.c
->> @@ -4161,9 +4161,7 @@ int cmd_record(int argc, const char **argv)
->>                  record.opts.tail_synthesize = true;
->>
->>          if (rec->evlist->core.nr_entries == 0) {
->> -               bool can_profile_kernel = perf_event_paranoid_check(1);
->> -
->> -               err = parse_event(rec->evlist, can_profile_kernel ? "cycles:P" : "cycles:Pu");
->> +               err = evlist__add_default(rec->evlist);
->>                  if (err)
->>                          goto out;
->>          }
->> diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
->> index c363c04e16df..798cb9252a5f 100644
->> --- a/tools/perf/builtin-top.c
->> +++ b/tools/perf/builtin-top.c
->> @@ -1665,8 +1665,7 @@ int cmd_top(int argc, const char **argv)
->>                  goto out_delete_evlist;
->>
->>          if (!top.evlist->core.nr_entries) {
->> -               bool can_profile_kernel = perf_event_paranoid_check(1);
->> -               int err = parse_event(top.evlist, can_profile_kernel ? "cycles:P" : "cycles:Pu");
->> +               int err = evlist__add_default(top.evlist);
->>
->>                  if (err)
->>                          goto out_delete_evlist;
->> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
->> index 7ef43f72098e..60efa762405e 100644
->> --- a/tools/perf/util/evlist.c
->> +++ b/tools/perf/util/evlist.c
->> @@ -287,6 +287,24 @@ struct evsel *evlist__add_aux_dummy(struct evlist *evlist, bool system_wide)
->>          return evsel;
->>   }
->>
->> +int evlist__add_default(struct evlist *evlist)
->> +{
->> +       bool can_profile_kernel;
->> +       int err;
->> +
->> +       can_profile_kernel = perf_event_paranoid_check(1);
->> +       err = parse_event(evlist, can_profile_kernel ? "cycles:P" : "cycles:Pu");
->> +       if (err)
->> +               return err;
->> +
->> +       if (!evlist->core.nr_entries) {
->> +               pr_debug("The cycles event is not supported, trying to fall back to cpu-clock event\n");
->> +               return parse_event(evlist, "cpu-clock");
->> +       }
->> +
->> +       return 0;
->> +}
->> +
->>   #ifdef HAVE_LIBTRACEEVENT
->>   struct evsel *evlist__add_sched_switch(struct evlist *evlist, bool system_wide)
->>   {
->> diff --git a/tools/perf/util/evlist.h b/tools/perf/util/evlist.h
->> index 664c6bf7b3e0..47eea809ee91 100644
->> --- a/tools/perf/util/evlist.h
->> +++ b/tools/perf/util/evlist.h
->> @@ -116,6 +116,7 @@ int arch_evlist__cmp(const struct evsel *lhs, const struct evsel *rhs);
->>
->>   int evlist__add_dummy(struct evlist *evlist);
->>   struct evsel *evlist__add_aux_dummy(struct evlist *evlist, bool system_wide);
->> +int evlist__add_default(struct evlist *evlist);
->>   static inline struct evsel *evlist__add_dummy_on_all_cpus(struct evlist *evlist)
->>   {
->>          return evlist__add_aux_dummy(evlist, true);
->> --
->> 2.30.GIT
->>
-> .
-> 
+
+Great work! I've played this for a while, and it's really useful ;-)
+
+One thing though, maybe we can provide more clues for users to locate
+the corresponding Doctests? For example, I did the following to trigger
+an assertion:
+
+	diff --git a/rust/kernel/sync/lock/spinlock.rs b/rust/kernel/sync/lock/spinlock.rs
+	index 91eb2c9e9123..9ead152e2c7e 100644
+	--- a/rust/kernel/sync/lock/spinlock.rs
+	+++ b/rust/kernel/sync/lock/spinlock.rs
+	@@ -58,7 +58,7 @@ macro_rules! new_spinlock {
+	 ///
+	 /// // Allocate a boxed `Example`.
+	 /// let e = Box::pin_init(Example::new())?;
+	-/// assert_eq!(e.c, 10);
+	+/// assert_eq!(e.c, 11);
+	 /// assert_eq!(e.d.lock().a, 20);
+	 /// assert_eq!(e.d.lock().b, 30);
+	 /// # Ok::<(), Error>(())
+
+Originally I got:
+
+	[..] # Doctest from line 35
+	[..] # rust_doctest_kernel_sync_lock_spinlock_rs_0: ASSERTION FAILED at rust/doctests_kernel_generated.rs:2437
+	[..] Expected e.c == 11 to be true, but is false
+	[..] [FAILED] rust_doctest_kernel_sync_lock_spinlock_rs_0
+
+The assertion warning only says line 35 but which file? Yes, the
+".._sync_lock_spinlock_rs" name does provide the lead, however since we
+generate the test code, so we actually know the line # for each real
+test body, so I come up a way to give us the following:
+
+	[..] # rust_doctest_kernel_sync_lock_spinlock_rs_0: ASSERTION FAILED at rust/kernel/sync/lock/spinlock.rs:61
+	[..] Expected e.c == 11 to be true, but is false
+	[..] [FAILED] rust_doctest_kernel_sync_lock_spinlock_rs_0
+
+Thoughts?
+
+Regards,
+Boqun
+
+----------------->8
+diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
+index 3c94efcd7f76..807fe3633567 100644
+--- a/rust/kernel/kunit.rs
++++ b/rust/kernel/kunit.rs
+@@ -49,15 +49,15 @@ pub fn info(args: fmt::Arguments<'_>) {
+ #[doc(hidden)]
+ #[macro_export]
+ macro_rules! kunit_assert {
+-    ($name:literal, $condition:expr $(,)?) => {
++    ($name:literal, $diff:expr, $file:expr, $condition:expr $(,)?) => {
+         'out: {
+             // Do nothing if the condition is `true`.
+             if $condition {
+                 break 'out;
+             }
+ 
+-            static LINE: i32 = core::line!() as i32;
+-            static FILE: &'static $crate::str::CStr = $crate::c_str!(core::file!());
++            static LINE: i32 = core::line!() as i32 - $diff;
++            static FILE: &'static $crate::str::CStr = $crate::c_str!($file);
+             static CONDITION: &'static $crate::str::CStr = $crate::c_str!(stringify!($condition));
+ 
+             // SAFETY: FFI call without safety requirements.
+@@ -148,9 +148,9 @@ unsafe impl Sync for UnaryAssert {}
+ #[doc(hidden)]
+ #[macro_export]
+ macro_rules! kunit_assert_eq {
+-    ($name:literal, $left:expr, $right:expr $(,)?) => {{
++    ($name:literal, $diff:expr, $file:expr, $left:expr, $right:expr $(,)?) => {{
+         // For the moment, we just forward to the expression assert because, for binary asserts,
+         // KUnit supports only a few types (e.g. integers).
+-        $crate::kunit_assert!($name, $left == $right);
++        $crate::kunit_assert!($name, $diff, $file, $left == $right);
+     }};
+ }
+diff --git a/scripts/rustdoc_test_gen.rs b/scripts/rustdoc_test_gen.rs
+index 793885c32c0d..4786a2ef0dc6 100644
+--- a/scripts/rustdoc_test_gen.rs
++++ b/scripts/rustdoc_test_gen.rs
+@@ -75,6 +75,11 @@ fn main() {
+ 
+         let line = line.parse::<core::ffi::c_int>().unwrap();
+ 
++        let src_file = format!("rust/kernel/{}", file.replace("_rs", ".rs").replace("_", "/"));
++
++        // Calculate how many lines before `main` function (including the `main` function line).
++        let body_offset = body.lines().take_while(|l| !l.contains("fn main() {")).count() + 1;
++
+         use std::fmt::Write;
+         write!(
+             rust_tests,
+@@ -85,7 +90,7 @@ pub extern "C" fn {kunit_name}(__kunit_test: *mut kernel::bindings::kunit) {{
+     #[allow(unused)]
+     macro_rules! assert {{
+         ($cond:expr $(,)?) => {{{{
+-            kernel::kunit_assert!("{kunit_name}", $cond);
++            kernel::kunit_assert!("{kunit_name}", anchor - {line}, "{src_file}", $cond);
+         }}}}
+     }}
+ 
+@@ -93,7 +98,7 @@ macro_rules! assert {{
+     #[allow(unused)]
+     macro_rules! assert_eq {{
+         ($left:expr, $right:expr $(,)?) => {{{{
+-            kernel::kunit_assert_eq!("{kunit_name}", $left, $right);
++            kernel::kunit_assert_eq!("{kunit_name}", anchor - {line}, "{src_file}", $left, $right);
+         }}}}
+     }}
+ 
+@@ -101,9 +106,8 @@ macro_rules! assert_eq {{
+     #[allow(unused)]
+     use kernel::prelude::*;
+ 
+-    // Display line number so that developers can map the test easily to the source code.
+-    kernel::kunit::info(format_args!("    # Doctest from line {line}\n"));
+-
++    // The anchor where the test code body starts.
++    static anchor: i32 = core::line!() as i32 + {body_offset} + 1;
+     {{
+         {body}
+         main();
