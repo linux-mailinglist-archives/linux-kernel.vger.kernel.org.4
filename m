@@ -2,178 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F29730E67
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 06:50:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B495730E6D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 06:57:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242822AbjFOEub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 00:50:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42992 "EHLO
+        id S241829AbjFOE5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 00:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238310AbjFOEuZ (ORCPT
+        with ESMTP id S234019AbjFOE5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 00:50:25 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7192684
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 21:50:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686804619; x=1718340619;
-  h=date:from:to:cc:subject:message-id;
-  bh=G/QN5w2IFYqQOKnVxfMAPNV5WcBGeTazLU5Tly08aK4=;
-  b=FvLGe1JlNCHditaGnEtUQGCLE041huknpZKiuSUQUA5fBalmCLkOEDRB
-   daUogeS9nAxWv0aSqQLRweFxApMe8A0MVycAKQTrXlQyOy0Swe8gz3dXc
-   QCKmhLCkzxk3MHfVfau4SDw0ns9kxT4yDErGikHjiBVvV8K1XE38C+vIc
-   iAYrkharxPiSNKkE4460/68wLjWDjTMgkMTFsxd51GNChjPnnkA7DOS/f
-   lU3Iz34dXJISIfN5V4ZREwTDThv7Okv9zKFlQ9e0QL4inRtt2AP6DF9PN
-   G9fW63EhygVDNPce0anzW0KIy1ZK/TcGnctvl8mI96r5tXBoWKhuY1pVE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="361290135"
-X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="361290135"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 21:50:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="689647145"
-X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="689647145"
-Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 14 Jun 2023 21:50:17 -0700
-Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q9ew5-0001SV-02;
-        Thu, 15 Jun 2023 04:50:17 +0000
-Date:   Thu, 15 Jun 2023 12:49:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2023.06.09b] BUILD SUCCESS
- 9f16f9ce86f44a485791469eca26c4b89996d0dd
-Message-ID: <202306151248.1pGaMN5Z-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 15 Jun 2023 00:57:12 -0400
+Received: from BN6PR00CU002.outbound.protection.outlook.com (mail-eastus2azon11021018.outbound.protection.outlook.com [52.101.57.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204832118;
+        Wed, 14 Jun 2023 21:57:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mALjnZNYAnQzi9teh1mltkEl9fDZTS2Lr1pHjOyPimZ2v4LlCWEUjXQHGCuxTUYhUCBmU5TzM1hkE56hUa8kkMiZD94ba9vAikDwAtpARlAUc8rVjVXwndx3AjWriZcoubB/CyO1qW/6xs2m3nYPpvGfQAYZNyP7hAQQ8Kp+EV7ETBZJWDohNUrsVKULqbpokiEarvO40LaAbKZWELwkDCSrHTeumiaX8DTSLvsRNoRzHZISon+gQY6OX2g5eBD1XMyUDiFraGITc30/FDvUYa3+NQxVNdkrid9rDLzBP9qSz72Wa7YnRjz2+modKapw7hf5u+qWc2P3TnmQ5HAMkA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZXKRRudZqBRoATLNZjCOcz2JVp54ixGobyCQwFQXH9k=;
+ b=ZsxtOR82D2PoZrEnY+AH6Zi6v2IsatcDJJ3FmgcOKLBFtSzIY5oBRlaWZJrOUJhEZNw+Yd7TV3/9EuegZLUrq0Fn0CvFUuCl2QpfpRrZXSMYqMnBBXFftuaxQIpvZ8xkW74PM5vULXCGade89LaW/3bhm2ndpv8N1WZYevyV8+cTf8/5Aq36X+tNpcNKoz0+UG4b7sYWrk5VB/QfNLPP0Vuv/ZD8wcHzmaxHg3miByl0cb/xa1RO/u9P5BFdK8DqCEM99V33ZVVZBPCoA0Rd5iFBp7TAOX8is7UGXvezi8Tn3/zYAETSiMfmml6VKahamAG/ygl5hN3mPuMaTmkwlQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZXKRRudZqBRoATLNZjCOcz2JVp54ixGobyCQwFQXH9k=;
+ b=bAHoQYU6NDJhJgGxuUTUq9Xop4j1HuzKnobRSJwrn31bkwttTeuw1B1AiNTI5eCbJ9q/rPfteQgLwARA5hDN/UR/b2rJ6cygYL04hYITHdTMBY2Zae0Pnv8ChorpBokKs6iLDcV046Swx79qgPwcsU4JxHsoLcpqgFRZy922318=
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
+ by SJ1PR21MB3745.namprd21.prod.outlook.com (2603:10b6:a03:453::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.0; Thu, 15 Jun
+ 2023 04:57:06 +0000
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::bb03:96fc:3397:6022]) by SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::bb03:96fc:3397:6022%4]) with mapi id 15.20.6521.009; Thu, 15 Jun 2023
+ 04:57:06 +0000
+From:   Dexuan Cui <decui@microsoft.com>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "bp@alien8.de" <bp@alien8.de>
+CC:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        Wei Liu <wei.liu@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: RE: [PATCH v2 1/2] x86/hyperv: Fix hyperv_pcpu_input_arg handling
+ when CPUs go online/offline
+Thread-Topic: [PATCH v2 1/2] x86/hyperv: Fix hyperv_pcpu_input_arg handling
+ when CPUs go online/offline
+Thread-Index: AQHZmhcEH9Pry/rM70OIGsPwJiaqdq+LViXw
+Date:   Thu, 15 Jun 2023 04:57:06 +0000
+Message-ID: <SA1PR21MB1335F1236B20CD37553B6DEEBF5BA@SA1PR21MB1335.namprd21.prod.outlook.com>
+References: <1684862062-51576-1-git-send-email-mikelley@microsoft.com>
+ <ZG0LTAeV+KMAGXIq@liuwe-devbox-debian-v2>
+ <BYAPR21MB168882149A235E16CDECA1D8D750A@BYAPR21MB1688.namprd21.prod.outlook.com>
+In-Reply-To: <BYAPR21MB168882149A235E16CDECA1D8D750A@BYAPR21MB1688.namprd21.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=90ce544f-5797-4f90-b34c-2d3f5a2ee06a;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-06-08T14:34:39Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|SJ1PR21MB3745:EE_
+x-ms-office365-filtering-correlation-id: 96146e8c-67ce-4acf-4259-08db6d5cf7ff
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: jCalO495gb1MNSSbc1dofQ4/nGqM7oD5QtsotxFMy2oKXMU1hnqeReeXhPzIhl03JbT3iBIpk9s1Ur4tdbWVn3o7/neAYVwHkAS1ta04MTt/d2OVjCUPg87Vl3YBbU2swJwALajWuBYuq+dyVzk/hhHEnlHhu2eEWQHoNIHwFc0FRMz3LdYhck1nl3nRuST/7lcHle3hAI1iYXk+/9HJlynj7IuIYYFXiJbFQSRSHZKMPC3cSrQ2eEXqqgUuSBXXol1MmW+RZTOhTAH6QmFbSUdSW7NGflWoGLhg21velpN8ScKupB9M6mGX+W0WOt0EIjR5RWKWTKycrMRnJntplj/ZGy8c8GBJ5ns21ohc3zvi0VAKXO1Poj48L9gn3kUqNFiUK2WYJY3g0L5tiEz+Jh1IOYYhQpn6Qe7buAHac+/tPOk/n0oOVkqEO4SMEEFQQk022oozPFRHNZnt3t59Ep6YvNqkn/5wf4j2fyM+BizVo2+zd4BiwUUqzg10hsRNnOGcMR7x6FhHh8Refq8bZNj3mXcX9mowy/1Z4xA7brbc76K6jve3ypqUnyIZVHC9lg1F8tx7lb+drxEv2+BwF8eNUODvaneZcvUEDJG/F85YHMj/tLHNas51ToT5K+6VFVp6JtrGhz6YSy8AunKBC28aPGqenTfpeyKNLSIvYPo=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(39860400002)(396003)(366004)(136003)(451199021)(55016003)(110136005)(54906003)(82950400001)(122000001)(82960400001)(71200400001)(478600001)(10290500003)(8936002)(8676002)(76116006)(66946007)(66476007)(41300700001)(64756008)(316002)(38100700002)(5660300002)(4326008)(66556008)(66446008)(186003)(7696005)(83380400001)(6506007)(53546011)(9686003)(86362001)(52536014)(33656002)(7416002)(38070700005)(2906002)(8990500004);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?tqASGbTXrjoLWU7RK101Q+iokF2zWn8PvFmt7xw2W82RAzS9iiOIVzzHBhWK?=
+ =?us-ascii?Q?5FbydLyg9IzF9xTwfBQRhNgw2HfCPmq6i7zdOT6BFVfINNlUP+q7mSJfXB0N?=
+ =?us-ascii?Q?whv8UqZhb1rb5Qp7inY8+JA2m/3PfFEXWN0oB573nVw8seStWXCcg5NAv9Xl?=
+ =?us-ascii?Q?jjwPxRWdO5NObTL25p4NasHNytqj0ze8MALNVVSXhUyEgesC/vpvLg4/J4Qk?=
+ =?us-ascii?Q?NeQTSRkOeC+OFGYe3IyHT4Ho2riABOEpwf0oaDJp+Lu72lc5P96AKsiu1O0z?=
+ =?us-ascii?Q?BojXLNpDeneWRtr3SqrDR+iAr/Uk1nV6eljCwICmrAbOSU+V1kQVcrQRmraW?=
+ =?us-ascii?Q?C895qJscG5gUPBmNUJbHKUKte64Gn+Qs1hViw/lSkjhZBN254URwDC0iuDKr?=
+ =?us-ascii?Q?RW+rd9qDtluE/888bFX9lfe1RPqb+KcjQl4x1SB2u9v/B/uMvXtrOCNyofL0?=
+ =?us-ascii?Q?xn+aZBb2+tqnMoMThgJffBw4e8NfeNpTveCnwF6AAc53PfHMlHiO6sfgZ5yX?=
+ =?us-ascii?Q?X6d+yPORrCiOyrPL9JSnQcKt4bpnZjYNPZmct58xVya5N3bgfOmk9j6wGaMC?=
+ =?us-ascii?Q?qP1exz5rAi9ll0dlT7P/nv9G6YRXiGXhDR8khTQYqZEYzwlWOLdHTwtoX6gI?=
+ =?us-ascii?Q?3RCpKxZw4OuX4baKgd25cKrGgRk7e3NXCQkvb2SZvcxbK2egaF9eRG/zOqoa?=
+ =?us-ascii?Q?P8ahd+ls4IItoOi3oaSNxiK0k9Yph4nFsLny99Xwa0dp5kPXxtLLOk/REijr?=
+ =?us-ascii?Q?ZsmNsq7rB7WZQGnD6LiGmbkd3jFNjk0svjLmkX/TVYDavgGXFaQKOvALEiXU?=
+ =?us-ascii?Q?rGRiAKmHKg8qGy/soqtm9dUy6KYdC1Hk6ARE/TEKtk7vTO4JGg3b/gXi9GLP?=
+ =?us-ascii?Q?X95yQR0txqPCj1DvyC3m+MhRx/+njiQlkMMdSbMcYh5yDCtGkQ18qsBNqW0g?=
+ =?us-ascii?Q?t7O9rdTUTocWpAxrtoNzPWrcANMaIvSkQlZ8G4simPz1FTf2/e5hseuTKs/9?=
+ =?us-ascii?Q?rYAESAALgERrpgog6IoPholUKtk8Datcc5K3D30QIJU/vRSbb7Dd2DXzqm3q?=
+ =?us-ascii?Q?S2/e+j/LbfRLbllkRmDy2Bq8O+osAwGerPqRKlvGaPbTkN131nhdF1HB8s90?=
+ =?us-ascii?Q?SiUrdiEQGkr0pUOmXuFfebCDVD8+VKWdOrKcmvVOc+2mGBS7tt3fiEROMTID?=
+ =?us-ascii?Q?cxq+LXT8Wby5PU4GHArtLg9V74frnmQpCffQZVplwIdcqbRHpz63zm3LZ1r6?=
+ =?us-ascii?Q?UVhPb6x0EYqcaTZlDuNFQXmQrE6VjLN5TG1FD75YvNyKD9ekenmqPA90QRVY?=
+ =?us-ascii?Q?weVAFeB/wyJcnXE56OEye/twotSaczxBwAadt9BuKm0jlwmAAAijBZN45ldS?=
+ =?us-ascii?Q?o/ZjDFf6K2zTim1Fa93IX91zOBxCTYW30X9V8LDbjcxlgWVm+v7jYbaqGSE8?=
+ =?us-ascii?Q?r5n6anG4xMuCjU9C33bn1ieIhOiN1lR/acTpY93xJBfBspCFdB1/XY0iboHh?=
+ =?us-ascii?Q?IiZWEVkW9pmahTH+R+uG9vRLWO5c7Jy4V1FCKZc62mYwTQH5+XbgSCG7O71T?=
+ =?us-ascii?Q?kfqir/GhOSNDTQJ3Z+zuGTTcnyK4UcCXJ49JEVN8+QxK5rZa/xE4Z1X3S++y?=
+ =?us-ascii?Q?NLxGlgdosfmrhpW6bSXkNnI=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 96146e8c-67ce-4acf-4259-08db6d5cf7ff
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jun 2023 04:57:06.8112
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: x1rGS7Ek3OuX3CrEPhcmHrHLdFUsO4lSlu+67u6U+QcAEOwEn0OGILdDdxpr2rlCDIY5SEuU1/UpwFFWjphoXQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR21MB3745
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.06.09b
-branch HEAD: 9f16f9ce86f44a485791469eca26c4b89996d0dd  torture: Add RCU Tasks individual-flavor build tests
+> From: Michael Kelley (LINUX) <mikelley@microsoft.com>
+> Sent: Thursday, June 8, 2023 7:39 AM
+> To: bp@alien8.de
+>=20
+> From: Wei Liu <wei.liu@kernel.org>
+> >
+> > On Tue, May 23, 2023 at 10:14:21AM -0700, Michael Kelley wrote:
+> > [...]
+> > > diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
+> > > index 0f1001d..3ceb9df 100644
+> > > --- a/include/linux/cpuhotplug.h
+> > > +++ b/include/linux/cpuhotplug.h
+> > > @@ -200,6 +200,7 @@ enum cpuhp_state {
+> > >
+> > >  	/* Online section invoked on the hotplugged CPU from the hotplug
+> thread */
+> > >  	CPUHP_AP_ONLINE_IDLE,
+> > > +	CPUHP_AP_HYPERV_ONLINE,
+> >
+> > x86 maintainers, are you okay with this?
+>=20
+> Boris -- Are you OK with this, and could give an ACK?  This small patch
+> set fixes a problem introduced into 6.4-rc1 by other Confidential VM
+> changes, so this fix needs to be incorporated before 6.4 is released.
+>=20
+> Michael
 
-elapsed time: 729m
+Hi Boris, gentle ping -- I hope this patch can be accepted soon as I
+and Tianyu need to rebase our SNP/TDX patches on this patch.
 
-configs tested: 101
-configs skipped: 6
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r004-20230612   gcc  
-alpha                randconfig-r022-20230612   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r001-20230612   gcc  
-arc                  randconfig-r043-20230612   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r046-20230612   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r036-20230612   clang
-csky                                defconfig   gcc  
-csky                 randconfig-r012-20230614   gcc  
-csky                 randconfig-r034-20230612   gcc  
-hexagon              randconfig-r031-20230612   clang
-hexagon              randconfig-r041-20230612   clang
-hexagon              randconfig-r045-20230612   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230614   clang
-i386                 randconfig-i002-20230614   clang
-i386                 randconfig-i003-20230614   clang
-i386                 randconfig-i004-20230614   clang
-i386                 randconfig-i005-20230614   clang
-i386                 randconfig-i006-20230614   clang
-i386                 randconfig-i011-20230614   gcc  
-i386                 randconfig-i012-20230614   gcc  
-i386                 randconfig-i013-20230614   gcc  
-i386                 randconfig-i014-20230614   gcc  
-i386                 randconfig-i015-20230614   gcc  
-i386                 randconfig-i016-20230614   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r002-20230612   gcc  
-loongarch            randconfig-r005-20230612   gcc  
-loongarch            randconfig-r014-20230614   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze   buildonly-randconfig-r002-20230614   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r016-20230614   clang
-mips                 randconfig-r021-20230612   clang
-nios2                               defconfig   gcc  
-nios2                randconfig-r006-20230612   gcc  
-nios2                randconfig-r032-20230612   gcc  
-openrisc     buildonly-randconfig-r006-20230614   gcc  
-openrisc             randconfig-r024-20230612   gcc  
-parisc                           allyesconfig   gcc  
-parisc       buildonly-randconfig-r004-20230614   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r035-20230612   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc      buildonly-randconfig-r001-20230614   gcc  
-powerpc      buildonly-randconfig-r005-20230614   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r015-20230614   gcc  
-riscv                randconfig-r033-20230612   clang
-riscv                randconfig-r042-20230612   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r003-20230612   clang
-s390                 randconfig-r011-20230614   gcc  
-s390                 randconfig-r025-20230612   gcc  
-s390                 randconfig-r044-20230612   gcc  
-sh                               allmodconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   clang
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230612   clang
-x86_64               randconfig-a002-20230612   clang
-x86_64               randconfig-a003-20230612   clang
-x86_64               randconfig-a004-20230612   clang
-x86_64               randconfig-a005-20230612   clang
-x86_64               randconfig-a006-20230612   clang
-x86_64               randconfig-a011-20230612   gcc  
-x86_64               randconfig-a012-20230612   gcc  
-x86_64               randconfig-a013-20230612   gcc  
-x86_64               randconfig-a014-20230612   gcc  
-x86_64               randconfig-a015-20230612   gcc  
-x86_64               randconfig-a016-20230612   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> > >  	CPUHP_AP_KVM_ONLINE,
+> > >  	CPUHP_AP_SCHED_WAIT_EMPTY,
+> > >  	CPUHP_AP_SMPBOOT_THREADS,
+> > > --
+> > > 1.8.3.1
+> > >
