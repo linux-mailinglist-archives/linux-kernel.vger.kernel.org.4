@@ -2,107 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76BAB731D16
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 17:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62F9A731CE7
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 17:44:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344135AbjFOPuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 11:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42232 "EHLO
+        id S241579AbjFOPon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 11:44:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344086AbjFOPtm (ORCPT
+        with ESMTP id S241806AbjFOPoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 11:49:42 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9A1DF;
-        Thu, 15 Jun 2023 08:49:38 -0700 (PDT)
+        Thu, 15 Jun 2023 11:44:25 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87296123;
+        Thu, 15 Jun 2023 08:44:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686844178; x=1718380178;
+  t=1686843864; x=1718379864;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=PFBtTtmWe3T3OLLflnk8WWM5W5odQPoBX/I7JOJDbQE=;
-  b=dVXUZEjNZGynz3mqarh0IYhioTOFuJgFqzyHmguVsDgQ6e6ciik0g5CK
-   RbVBRgmS0VKiHJII5dsmmaag6o+VyLNUHHit3d4om7yGOOZxhNDRRMevq
-   pD/+ynPdrR67+SPxT47naStNAU2EihV7fDUgK9zGNbnGGlaQ9Tq0xSoHh
-   Ga/wwzhAktfTM6iJaHXYT9FS1WOH9lLmo4ZHpQuasrA49vM2WozfYJLhA
-   qDJ0/LFrVIWgvhPvxnBSvVqtcpPfAd756s+zLx8mLaOz+YoNeiB7jMF+w
-   nxbbbSlDpHDpjwMKGQ1w4dKAx3roTLERfnW27H7LCYeVAhmtVNh7xONIf
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="424868043"
+   mime-version:in-reply-to;
+  bh=RXbiqLl8GWsL9ZGg7ZpV3Yt5NwEmT30I05Aoa4zNtRk=;
+  b=aagqDEz7d/9T8HgUyOFDewNFIyAunk3chAK120Dz44VRoFOkaSVpk/0P
+   WDTP51nYilfxz6t/R1TRSpEk3VK+plR43qQQjqVCbmodZk0coGpkuvP14
+   CosY0lt2sWwVq1tWYbIUxp92It7nHKfgBd5KUyUvW5kiHcdHH/iIzn38q
+   Lg0NRls+sIVZL2VwDiJviacVEwxMU+Grs69XO9AVvlznZzf99EXWIW1F1
+   dCfDE10/ooLTRl5G5hHtTSwN/HqRrFXU7Y8TlkXJF2qyxf9ubDJ5mMSvn
+   GvHZk9vzHGwA+dMoskIdle/CWZEyGbw4HlohpOTU2bKFBoGE6N9veSfNA
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="358943554"
 X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="424868043"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 08:36:11 -0700
+   d="scan'208";a="358943554"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 08:44:18 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="857019779"
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="742277036"
 X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="857019779"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP; 15 Jun 2023 08:36:09 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1q9p15-003yU3-1z;
-        Thu, 15 Jun 2023 18:36:07 +0300
-Date:   Thu, 15 Jun 2023 18:36:07 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: Re: [PATCH v3 3/5] gpio: aggregator: Prevent collisions between DT
- and user device IDs
-Message-ID: <ZIsv51766AXAiQ7E@smile.fi.intel.com>
-References: <20230615132023.13801-1-andriy.shevchenko@linux.intel.com>
- <20230615132023.13801-4-andriy.shevchenko@linux.intel.com>
- <CAMuHMdVAwKCUnOeuz_PE6ijtfTVf8a3rTQZ=JvThOmqytu5HCA@mail.gmail.com>
+   d="scan'208";a="742277036"
+Received: from makuznet-mobl1.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.168.134])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 08:44:17 -0700
+Date:   Thu, 15 Jun 2023 08:44:15 -0700
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Mike Rapoport <rppt@kernel.org>, x86@kernel.org,
+        linux-cxl@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Derick Marks <derick.w.marks@intel.com>
+Subject: Re: [PATCH v2 1/2] x86/numa: Introduce numa_fill_memblks()
+Message-ID: <ZIsxz6Swf54a66FN@aschofie-mobl2>
+References: <cover.1686712819.git.alison.schofield@intel.com>
+ <9fcc548a6b4727cb2538e5227d7bad2e94e6adaf.1686712819.git.alison.schofield@intel.com>
+ <20230615083407.GB1683497@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMuHMdVAwKCUnOeuz_PE6ijtfTVf8a3rTQZ=JvThOmqytu5HCA@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230615083407.GB1683497@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 04:54:14PM +0200, Geert Uytterhoeven wrote:
-> On Thu, Jun 15, 2023 at 3:51 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > In case we have a device instantiated via DT or other means than
-> > via new_device sysfs node, the collision with the latter is possible.
-> > Prevent such collisions by allocating user instantiated devices with
-> > higher IDs, currently set to 1024.
+On Thu, Jun 15, 2023 at 10:34:07AM +0200, Peter Zijlstra wrote:
+> On Tue, Jun 13, 2023 at 09:35:24PM -0700, alison.schofield@intel.com wrote:
+> > From: Alison Schofield <alison.schofield@intel.com>
+> > 
+> > numa_fill_memblks() fills in the gaps in numa_meminfo memblks
+> > over an HPA address range.
 > 
-> Can you please elaborate? How exactly is this possible?
-> 
-> Aggregators instantiated through sysfs are named "gpio-aggregator.<n>",
-> and are IDR-based.
-> Aggregators instantiated from DT are named "<unit-address>.<node-name>".
-> How can this conflict? When instantiated from ACPI?
-> What am I missing?
+> What's with the Host part, should that not simply be PA ?
 
-Nothing. It's me who misunderstood how OF platform device naming schema works.
+Yes, it should be PA.
 
-So this patch can be discarded as we never will have gpio-delay available for
-removal via delete_device sysfs node.
-
-Bart, tell me if you need a new version w/o this patch (but note that b4 can
-handle this case with
-
-	b4 -slt -P1,2,4,5 ...
-
-).
-
--- 
-With Best Regards,
-Andy Shevchenko
+The HPA acronym usage is CXL-land language, where we qualify
+qualify physical addresses as either HPAs and DPAs (Device),
+seeping in needlessly.
 
 
