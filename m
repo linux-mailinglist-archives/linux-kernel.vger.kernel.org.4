@@ -2,134 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD79B7314F5
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 12:12:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16FE47314F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 12:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240601AbjFOKMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 06:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33758 "EHLO
+        id S244866AbjFOKNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 06:13:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240517AbjFOKM3 (ORCPT
+        with ESMTP id S239841AbjFOKNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 06:12:29 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D5842710
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 03:12:27 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f8d0e814dfso15039265e9.3
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 03:12:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686823945; x=1689415945;
-        h=content-transfer-encoding:in-reply-to:subject:organization
-         :references:cc:to:content-language:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zz9EX+Ta4PloLk34RJ2hnXK/x9oTdPVOw0dFQbZy70I=;
-        b=frDkKppf7lZoIiLPcx/27B7RgHBKXqgtzlP/rh77BLFE3SROa9LxxSjX0hYVsi93Eh
-         pihQ2Zb5eyq7gMv33tbGJsRj+Qug3TvDMAJx+xdvCazTNVcRub4Ku3T2MqOG/t9CJ4VA
-         BGlhoRaR5ctRw9tEmpJZ2DsMImtcr2nxcf6TtacCV71di92Q2LJrLGygNFVjKwT2SuCf
-         2AMISPslSoznjAM6va9T7YngkUzSBuU6lJUPjNsasWZUiKvG6RFDdYYIxyDVbOOE86f0
-         VowdSZaUy1Yp2rGYAOwJLEtpaJ+JYGdGN0MqOMnuQxxPUpY4ckofRlcherP+O8FWZeYw
-         Vy1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686823945; x=1689415945;
-        h=content-transfer-encoding:in-reply-to:subject:organization
-         :references:cc:to:content-language:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=zz9EX+Ta4PloLk34RJ2hnXK/x9oTdPVOw0dFQbZy70I=;
-        b=lG1x8bGFSyO1iDE0YvCRMAhqMJPObmVDbx0bViz4uwbSTXOxBIMKMduREqvRnaYXwM
-         1XzVBO6AIqqUoOM/ggrVLrLFF34Gpls0V2YlF7JsWKRax943IHZeK21ikgayh2sVm/uV
-         3RtfZAvv8doLsl2uNl5m2QawJgIq1RJnbaAJeCocowO0iycZtXJaiqQOsLzeMhat9uTb
-         63NR5/Qo1tyq8E1R49OTurpOXP3pOv2GQnb6zoxLe32mc2vFnlcaw5p/tpMQHbgu1Vml
-         JALQ9DTajayR3dJ1TJBh/CVB/iEikNZgurypQmAL6UsEBn/rlgyLQXW175/tlZ6Zirs+
-         N0lA==
-X-Gm-Message-State: AC+VfDxDcyu33zpSmioml1H2wq7S8E9cEJzMTQAJd7hwQyqTQHZIg5La
-        /va+CMo5BLOxdwUrrLgTygA5vg==
-X-Google-Smtp-Source: ACHHUZ6cP3h9pbkk+CWbJrI5Giw2RTOJdpJN7rRK57+WSwcGuPKNLwcuav9AADz+5ttsuona8PGN8g==
-X-Received: by 2002:a5d:6442:0:b0:311:d35:e23f with SMTP id d2-20020a5d6442000000b003110d35e23fmr2990366wrw.27.1686823945596;
-        Thu, 15 Jun 2023 03:12:25 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:f60a:f5e3:7ae:6745? ([2a01:e0a:982:cbb0:f60a:f5e3:7ae:6745])
-        by smtp.gmail.com with ESMTPSA id f11-20020a5d50cb000000b0030fb828511csm13974283wrt.100.2023.06.15.03.12.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 03:12:25 -0700 (PDT)
-Message-ID: <44ebcc5e-d424-0e5f-1384-19397a0c36ae@linaro.org>
-Date:   Thu, 15 Jun 2023 12:12:24 +0200
+        Thu, 15 Jun 2023 06:13:37 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E9E12710;
+        Thu, 15 Jun 2023 03:13:35 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 87FDC1FB;
+        Thu, 15 Jun 2023 03:14:19 -0700 (PDT)
+Received: from [10.57.85.251] (unknown [10.57.85.251])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DABFA3F71E;
+        Thu, 15 Jun 2023 03:13:32 -0700 (PDT)
+Message-ID: <36565295-ebaa-2a66-3389-ba5eb714ab34@arm.com>
+Date:   Thu, 15 Jun 2023 11:13:27 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-From:   neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230601-topic-sm8x50-upstream-redriver-v3-0-988c560e2195@linaro.org>
- <20230601-topic-sm8x50-upstream-redriver-v3-2-988c560e2195@linaro.org>
- <2023061514-wager-iphone-cf71@gregkh>
-Organization: Linaro Developer Services
-Subject: Re: [PATCH v3 2/2] usb: typec: add support for the nb7vpq904m Type-C
- Linear Redriver
-In-Reply-To: <2023061514-wager-iphone-cf71@gregkh>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] Revert "Revert "Revert "arm64: dma: Drop cache
+ invalidation from arch_dma_prep_coherent()"""
+Content-Language: en-GB
+To:     Douglas Anderson <dianders@chromium.org>,
+        Will Deacon <will@kernel.org>
+Cc:     andersson@kernel.org, amit.pundir@linaro.org,
+        linux-arm-msm@vger.kernel.org, konrad.dybcio@somainline.org,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        sumit.semwal@linaro.org, Stephen Boyd <swboyd@chromium.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230614165904.1.I279773c37e2c1ed8fbb622ca6d1397aea0023526@changeid>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20230614165904.1.I279773c37e2c1ed8fbb622ca6d1397aea0023526@changeid>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/06/2023 11:47, Greg Kroah-Hartman wrote:
-> On Tue, Jun 13, 2023 at 04:50:08PM +0200, neil.armstrong@linaro.org wrote:
->> From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->>
->> Add support for the ON Semiconductor NB7VPQ904M Type-C USB SuperSpeed
->> and DisplayPort ALT Mode Linear Redriver chip found on some devices
->> with a Type-C port.
->>
->> The redriver compensates ultra High-Speeed DisplayPort and USB
->> Super Speed signal integrity losses mainly due to PCB & transmission
->> cables.
->>
->> The redriver doesn't support SuperSpeed lines swapping, but
->> can support Type-C SBU lines swapping.
->>
->> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
->>   drivers/usb/typec/mux/Kconfig      |   8 +
->>   drivers/usb/typec/mux/Makefile     |   1 +
->>   drivers/usb/typec/mux/nb7vpq904m.c | 529 +++++++++++++++++++++++++++++++++++++
->>   3 files changed, 538 insertions(+)
+On 2023-06-15 00:59, Douglas Anderson wrote:
+> This reverts commit 7bd6680b47fa4cd53ee1047693c09825e212a6f5.
 > 
-> I get the following build error on my system with this applied:
+> When booting a sc7180-trogdor based device on mainline, I see errors
+> that look like this:
 > 
->    CC [M]  drivers/usb/typec/mux/nb7vpq904m.o
-> drivers/usb/typec/mux/nb7vpq904m.c: In function ‘nb7vpq904m_register_bridge’:
-> drivers/usb/typec/mux/nb7vpq904m.c:327:20: error: ‘struct drm_bridge’ has no member named ‘of_node’
->    327 |         nb7->bridge.of_node = nb7->client->dev.of_node;
->        |                    ^
+>   qcom_scm firmware:scm: Assign memory protection call failed -22
+>   qcom_rmtfs_mem 94600000.memory: assign memory failed
+>   qcom_rmtfs_mem: probe of 94600000.memory failed with error -22
 > 
+> The device still boots OK, but WiFi doesn't work.
 > 
-> What went wrong?
+> The failure only seems to happen when
+> CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y. When I don't have that set then
+> everything is peachy. Presumably something about the extra
+> initialization disagrees with the change to drop cache invalidation.
 
-DRM bridge attach should be protected by #ifdef CONFIG_OF aswell, I'll send a v4 with such fix.
+AFAICS init_on_alloc essentially just adds __GFP_ZERO to the page 
+allocation. This should make no difference to a DMA allocation given 
+that dma_alloc_attrs explicitly zeros its allocation anyway. However... 
+for the non-coherent case, the DMA API's memset will be done through the 
+non-cacheable remap, while __GFP_ZERO can leave behind cached zeros for 
+the linear map alias. Thus what I assume must be happening here is that 
+"DMA" from the firmware is still making cacheable accesses to the buffer 
+and getting those zeros instead of whatever actual data which was 
+subsequently written non-cacheably direct to RAM. So either the firmware 
+still needs fixing to make non-cacheable accesses, or the SCM driver 
+needs to correctly describe it as coherent.
 
-Thanks for the report,
-Neil
-> 
-> thanks,
-> 
-> greg k-h
+Thanks,
+Robin.
 
+> Fixes: 7bd6680b47fa ("Revert "Revert "arm64: dma: Drop cache invalidation from arch_dma_prep_coherent()""")
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+> 
+>   arch/arm64/mm/dma-mapping.c | 17 ++++++++++++++++-
+>   1 file changed, 16 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/mm/dma-mapping.c b/arch/arm64/mm/dma-mapping.c
+> index 3cb101e8cb29..5240f6acad64 100644
+> --- a/arch/arm64/mm/dma-mapping.c
+> +++ b/arch/arm64/mm/dma-mapping.c
+> @@ -36,7 +36,22 @@ void arch_dma_prep_coherent(struct page *page, size_t size)
+>   {
+>   	unsigned long start = (unsigned long)page_address(page);
+>   
+> -	dcache_clean_poc(start, start + size);
+> +	/*
+> +	 * The architecture only requires a clean to the PoC here in order to
+> +	 * meet the requirements of the DMA API. However, some vendors (i.e.
+> +	 * Qualcomm) abuse the DMA API for transferring buffers from the
+> +	 * non-secure to the secure world, resetting the system if a non-secure
+> +	 * access shows up after the buffer has been transferred:
+> +	 *
+> +	 * https://lore.kernel.org/r/20221114110329.68413-1-manivannan.sadhasivam@linaro.org
+> +	 *
+> +	 * Using clean+invalidate appears to make this issue less likely, but
+> +	 * the drivers themselves still need fixing as the CPU could issue a
+> +	 * speculative read from the buffer via the linear mapping irrespective
+> +	 * of the cache maintenance we use. Once the drivers are fixed, we can
+> +	 * relax this to a clean operation.
+> +	 */
+> +	dcache_clean_inval_poc(start, start + size);
+>   }
+>   
+>   #ifdef CONFIG_IOMMU_DMA
