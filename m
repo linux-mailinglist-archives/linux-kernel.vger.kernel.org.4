@@ -2,118 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3620E73145B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:46:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15DA4731460
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241714AbjFOJqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 05:46:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45370 "EHLO
+        id S244166AbjFOJrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 05:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238768AbjFOJqI (ORCPT
+        with ESMTP id S238604AbjFOJrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 05:46:08 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E71A1A3;
-        Thu, 15 Jun 2023 02:46:06 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VlA7p6M_1686822362;
-Received: from 30.240.108.67(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VlA7p6M_1686822362)
-          by smtp.aliyun-inc.com;
-          Thu, 15 Jun 2023 17:46:03 +0800
-Message-ID: <c8c1ee02-0490-8bea-1fda-324de29ab565@linux.alibaba.com>
-Date:   Thu, 15 Jun 2023 17:46:00 +0800
+        Thu, 15 Jun 2023 05:47:40 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 454261A2
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 02:47:39 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b517ee9157so3028455ad.3
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 02:47:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1686822459; x=1689414459;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dcIbsuTuras7nhZRKwXQYUq8Gmb7hiznRWwdCPO8xpM=;
+        b=aQGO6ueCJziuDO+nAGnGz5QTl5OIKIrHs2i/hdOQKmAgBl4NTbEF1FRxIZGr6oiKVr
+         /kynnbR43iXhit/NSlrXDmfTvgDE0HhrlyCWduduh9BjVekMKhHhBRlq8lT/ipShEooi
+         cMHo6Yn0pimsYW+JmQcRZyz8zv6gw8saL1C+qbe5FXq91uU8D4P4d7oQB+CKeFY6Cw8F
+         0cyghIRKVXG5pm5m8XSsNklnZv0BqLC1QRHKZQhHwt6IwB36xAaTm2sErgNDdYsyF5EO
+         xEzPHJJSm82TCnY6gEwxT21zSgLm07cT8e6ZxUcKMyag9W9EnGAr5bpmO0T0QlL8QMcd
+         AMQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686822459; x=1689414459;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dcIbsuTuras7nhZRKwXQYUq8Gmb7hiznRWwdCPO8xpM=;
+        b=lua+JAO+j00l7vbrDUDquVlbp3OIqxetf7JfMhQ4MilLj7oNt98XnukGaOts90NpL4
+         I+dL54g159EV85AjFS3kAWyE87OpyQ0JrfXO0CL3qvZPh8K40uqwv+WPky4XEjDs31TM
+         ttc/X+NDmHws+/DuyDaPaDf87PgI5H8PyIWQrp2SUH7wazqPSnrkHAS9S2M4WLq301pu
+         ogm3Xr9uIXxoTXTEp1Bs6sBRiy7seoc6QXbgZdfE047hUdf1tHoH6Feb9dBN5Y7xDMG4
+         Ny27EyVt6vupTG2PEAfjUKgiSS/IxkbgZzqnRkfXzh2ew57uwJcq7AgdqWXDqF9DdnQd
+         dh6A==
+X-Gm-Message-State: AC+VfDwxrGg/Vlbu1QG7khehoMcjAkgXRaZzk4bpzoRB+EHK5tK7sGr4
+        bSGbX8CNZgJZpXlmiq0m21FgAQ==
+X-Google-Smtp-Source: ACHHUZ4DB1lofP+kyQ79jZotePluoFWtcHF3WEHWh7MQjOnnqgczFkuipTQ03MximRBmBW9a4rI9mg==
+X-Received: by 2002:a17:903:244e:b0:1b3:c7c7:74ae with SMTP id l14-20020a170903244e00b001b3c7c774aemr12312783pls.45.1686822458748;
+        Thu, 15 Jun 2023 02:47:38 -0700 (PDT)
+Received: from hsinchu15 (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
+        by smtp.gmail.com with ESMTPSA id w22-20020a170902d71600b001a64851087bsm4800996ply.272.2023.06.15.02.47.36
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 15 Jun 2023 02:47:38 -0700 (PDT)
+Date:   Thu, 15 Jun 2023 17:47:33 +0800
+From:   Nylon Chen <nylon.chen@sifive.com>
+To:     Andreas Schwab <schwab@suse.de>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        jszhang@kernel.org, ajones@ventanamicro.com, aou@eecs.berkeley.edu,
+        palmer@dabbelt.com, paul.walmsley@sifive.com,
+        greentime.hu@sifive.com, zong.li@sifive.com, nylon7717@gmail.com
+Subject: Re: [PATCH v2] RISC-V: Support 32_PCREL relocation type in kernel
+ module
+Message-ID: <20230615094732.GA8710@hsinchu15>
+References: <20230615072302.25638-1-nylon.chen@sifive.com>
+ <20230615-unvisited-deceit-9beab8ce987a@wendy>
+ <CAHh=Yk_=oZJ6eY3jJzLavub5rGsvY=MKv4tGXeiqkz+rgJHwDQ@mail.gmail.com>
+ <20230615-luxurious-rewire-84ff9d639fea@wendy>
+ <20230615084310.GA780@hsinchu15>
+ <mvmo7lh2ip6.fsf@suse.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH] sign-file: simplify main function implementation
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230525084343.56824-1-tianjia.zhang@linux.alibaba.com>
- <CT8AWM6PDMMX.RAF5C6RS1P95@suppilovahvero>
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-In-Reply-To: <CT8AWM6PDMMX.RAF5C6RS1P95@suppilovahvero>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <mvmo7lh2ip6.fsf@suse.de>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jarkko,
-
-On 6/10/23 1:38 AM, Jarkko Sakkinen wrote:
-> On Thu May 25, 2023 at 11:43 AM EEST, Tianjia Zhang wrote:
->> use_signed_attrs is an unnecessary variable, deleting this variable
->> can simplify the code.
->>
->> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
->> ---
->>   scripts/sign-file.c | 12 ++----------
->>   1 file changed, 2 insertions(+), 10 deletions(-)
->>
->> diff --git a/scripts/sign-file.c b/scripts/sign-file.c
->> index 94267cf72197..377d586762f9 100644
->> --- a/scripts/sign-file.c
->> +++ b/scripts/sign-file.c
->> @@ -224,7 +224,6 @@ int main(int argc, char **argv)
->>   	bool raw_sig = false;
->>   	unsigned char buf[4096];
->>   	unsigned long module_size, sig_size;
->> -	unsigned int use_signed_attrs;
->>   	const EVP_MD *digest_algo;
->>   	EVP_PKEY *private_key;
->>   #ifndef USE_PKCS7
->> @@ -242,12 +241,6 @@ int main(int argc, char **argv)
->>   
->>   	key_pass = getenv("KBUILD_SIGN_PIN");
->>   
->> -#ifndef USE_PKCS7
->> -	use_signed_attrs = CMS_NOATTR;
->> -#else
->> -	use_signed_attrs = PKCS7_NOATTR;
->> -#endif
->> -
->>   	do {
->>   		opt = getopt(argc, argv, "sdpk");
->>   		switch (opt) {
->> @@ -340,8 +333,7 @@ int main(int argc, char **argv)
->>   
->>   		ERR(!CMS_add1_signer(cms, x509, private_key, digest_algo,
->>   				     CMS_NOCERTS | CMS_BINARY |
->> -				     CMS_NOSMIMECAP | use_keyid |
->> -				     use_signed_attrs),
->> +				     CMS_NOSMIMECAP | CMS_NOATTR | use_keyid),
->>   		    "CMS_add1_signer");
->>   		ERR(CMS_final(cms, bm, NULL, CMS_NOCERTS | CMS_BINARY) < 0,
->>   		    "CMS_final");
->> @@ -349,7 +341,7 @@ int main(int argc, char **argv)
->>   #else
->>   		pkcs7 = PKCS7_sign(x509, private_key, NULL, bm,
->>   				   PKCS7_NOCERTS | PKCS7_BINARY |
->> -				   PKCS7_DETACHED | use_signed_attrs);
->> +				   PKCS7_DETACHED | PKCS7_NOATTR);
->>   		ERR(!pkcs7, "PKCS7_sign");
->>   #endif
->>   
->> -- 
->> 2.24.3 (Apple Git-128)
+On Thu, Jun 15, 2023 at 11:11:49AM +0200, Andreas Schwab wrote:
+> On Jun 15 2023, Nylon Chen wrote:
+>
+Hi Andreas,
+> > Because LLVM currently has it enabled by default(https://reviews.llvm.org/D145164), it will generate this
+> > relocation type.
+> >
+> >>From what I know, GCC will also enable it in the future.
 > 
-> I'm sorry but I don't see how this makes our lives better.
-> 
-> If, however, this was part of a larger patch, it might make sense, if
-> there was a real functional change concerning the same code blocks.
-> 
-> BR, Jarkko
+> That's why the kernel explicitly disables it.
+Ok, thanks for your feedback, after I cross-tested, there is indeed no relevant relocation type generated.
 
-As you might expect, this is a stand-alone patch and there are no other
-changes attached to it.
+If this error no longer occurs.
 
-Best regards,
-Tianjia
+I am open to the idea of adding this patch to the upstream and would like to hear your thoughts on whether it is still necessary. 
+> 
+> -- 
+> Andreas Schwab, SUSE Labs, schwab@suse.de
+> GPG Key fingerprint = 0196 BAD8 1CE9 1970 F4BE  1748 E4D4 88E3 0EEA B9D7
+> "And now for something completely different."
