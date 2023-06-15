@@ -2,55 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BDC7731789
+	by mail.lfdr.de (Postfix) with ESMTP id E8F7C73178A
 	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344459AbjFOLnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 07:43:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53144 "EHLO
+        id S1344468AbjFOLnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 07:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344296AbjFOLmb (ORCPT
+        with ESMTP id S1344373AbjFOLme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 07:42:31 -0400
+        Thu, 15 Jun 2023 07:42:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3020130F8;
-        Thu, 15 Jun 2023 04:39:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22132448A;
+        Thu, 15 Jun 2023 04:39:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 14501639E6;
-        Thu, 15 Jun 2023 11:39:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BA71C433C0;
-        Thu, 15 Jun 2023 11:39:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24ED863A0B;
+        Thu, 15 Jun 2023 11:39:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB2BAC433CB;
+        Thu, 15 Jun 2023 11:39:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686829155;
-        bh=OgHqwIY8rGq/HHn1hD0yYLlYuhNWRn90S1CNL2qy43w=;
+        s=k20201202; t=1686829156;
+        bh=WV/1Qmhz1L4Aa5wT8rBkJJICwmIUKm7sp8KSy9uZycs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BxhtFtL0wRywsVP2PVk1nAcbKLsxVIHHaboRYoCQFgN7TvnaF4kvUyv4k06wykd5A
-         tU7MTMQkbb9YUx4QtmxbhJXa8eZxhapLM3s4Eizg/lufb5JOfanlNRexJKOHbKmuHc
-         Fv7I1+bQLn6BSrOE601tjzBjKpBDK+EIHEpTUC/pVf4tR4QliUHFqq+lGTLNYozFEU
-         oSyoIXrbLpwq9I0JvAFx28ACeSCqK4zpv/eYRvLYseCCJ1qiBnWlUNq4m0Io57f0iF
-         UNa6AG32bKsn/FZFgYTRUsr6nw4+6aCsfpnpmEdxqMoKurMa9A6ZlPKwQ5o9U6yHxZ
-         2J/9d43RhN2aw==
+        b=BvbQoKFD7g0yTacI01LsuIbwLmnS7XhcrGpedKp7mERqpSxxehmo2LBuN/otXo8kU
+         TZEDWLDDLEuoeKrKLhvgmSjkg/iajF+WUEwcwpK9wubyeQw2l3fAhFJppmMbUETZly
+         66SQ4iaWOdmD5JjVrel8jQOl2zpem+z7Hxmflo4fRynqA2ksdzixxayp2A1gylazPJ
+         pG/5AJchS8yMx/03pdxxTTssg1ura+x+9PvAFOzi3zP89DEX40R1PgcBAGw4Lic0p7
+         DGtELicb8FoE/jHNLiboTQw2fdH5iGGLp/28ghFR888/LKjaAFWQBcMPj8z4kIB+U+
+         Ktykg72+SPGWw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Uday Shankar <ushankar@purestorage.com>,
-        Costa Sapuntzakis <costa@purestorage.com>,
-        Randy Jennings <randyj@purestorage.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Christoph Hellwig <hch@lst.de>,
-        Keith Busch <kbusch@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-nvme@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.15 09/10] nvme: double KA polling frequency to avoid KATO with TBKAS on
-Date:   Thu, 15 Jun 2023 07:38:53 -0400
-Message-Id: <20230615113854.649370-9-sashal@kernel.org>
+Cc:     Theodore Ts'o <tytso@mit.edu>, Sasha Levin <sashal@kernel.org>,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 10/10] ext4: enable the lazy init thread when remounting read/write
+Date:   Thu, 15 Jun 2023 07:38:54 -0400
+Message-Id: <20230615113854.649370-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230615113854.649370-1-sashal@kernel.org>
 References: <20230615113854.649370-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 5.15.117
@@ -65,76 +58,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uday Shankar <ushankar@purestorage.com>
+From: Theodore Ts'o <tytso@mit.edu>
 
-[ Upstream commit ea4d453b9ec9ea279c39744cd0ecb47ef48ede35 ]
+[ Upstream commit eb1f822c76beeaa76ab8b6737ab9dc9f9798408c ]
 
-With TBKAS on, the completion of one command can defer sending a
-keep alive for up to twice the delay between successive runs of
-nvme_keep_alive_work. The current delay of KATO / 2 thus makes it
-possible for one command to defer sending a keep alive for up to
-KATO, which can result in the controller detecting a KATO. The following
-trace demonstrates the issue, taking KATO = 8 for simplicity:
+In commit a44be64bbecb ("ext4: don't clear SB_RDONLY when remounting
+r/w until quota is re-enabled") we defer clearing tyhe SB_RDONLY flag
+in struct super.  However, we didn't defer when we checked sb_rdonly()
+to determine the lazy itable init thread should be enabled, with the
+next result that the lazy inode table initialization would not be
+properly started.  This can cause generic/231 to fail in ext4's
+nojournal mode.
 
-1. t = 0: run nvme_keep_alive_work, no keep-alive sent
-2. t = ε: I/O completion seen, set comp_seen = true
-3. t = 4: run nvme_keep_alive_work, see comp_seen == true,
-          skip sending keep-alive, set comp_seen = false
-4. t = 8: run nvme_keep_alive_work, see comp_seen == false,
-          send a keep-alive command.
+Fix this by moving when we decide to start or stop the lazy itable
+init thread to after we clear the SB_RDONLY flag when we are
+remounting the file system read/write.
 
-Here, there is a delay of 8 - ε between receiving a command completion
-and sending the next command. With ε small, the controller is likely to
-detect a keep alive timeout.
+Fixes a44be64bbecb ("ext4: don't clear SB_RDONLY when remounting r/w until...")
 
-Fix this by running nvme_keep_alive_work with a delay of KATO / 4
-whenever TBKAS is on. Going through the above trace now gives us a
-worst-case delay of 4 - ε, which is in line with the recommendation of
-sending a command every KATO / 2 in the NVMe specification.
-
-Reported-by: Costa Sapuntzakis <costa@purestorage.com>
-Reported-by: Randy Jennings <randyj@purestorage.com>
-Signed-off-by: Uday Shankar <ushankar@purestorage.com>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Keith Busch <kbusch@kernel.org>
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Link: https://lore.kernel.org/r/20230527035729.1001605-1-tytso@mit.edu
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nvme/host/core.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+ fs/ext4/super.c | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-index e5318b38c6624..98a7649a0f061 100644
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -1247,9 +1247,25 @@ EXPORT_SYMBOL_NS_GPL(nvme_execute_passthru_rq, NVME_TARGET_PASSTHRU);
-  *   The host should send Keep Alive commands at half of the Keep Alive Timeout
-  *   accounting for transport roundtrip times [..].
-  */
-+static unsigned long nvme_keep_alive_work_period(struct nvme_ctrl *ctrl)
-+{
-+	unsigned long delay = ctrl->kato * HZ / 2;
-+
-+	/*
-+	 * When using Traffic Based Keep Alive, we need to run
-+	 * nvme_keep_alive_work at twice the normal frequency, as one
-+	 * command completion can postpone sending a keep alive command
-+	 * by up to twice the delay between runs.
-+	 */
-+	if (ctrl->ctratt & NVME_CTRL_ATTR_TBKAS)
-+		delay /= 2;
-+	return delay;
-+}
-+
- static void nvme_queue_keep_alive_work(struct nvme_ctrl *ctrl)
- {
--	queue_delayed_work(nvme_wq, &ctrl->ka_work, ctrl->kato * HZ / 2);
-+	queue_delayed_work(nvme_wq, &ctrl->ka_work,
-+			   nvme_keep_alive_work_period(ctrl));
- }
+diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+index bf8a780cd69b6..ebe2abc064e7b 100644
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -5962,18 +5962,6 @@ static int ext4_remount(struct super_block *sb, int *flags, char *data)
+ 		}
+ 	}
  
- static void nvme_keep_alive_end_io(struct request *rq, blk_status_t status)
+-	/*
+-	 * Reinitialize lazy itable initialization thread based on
+-	 * current settings
+-	 */
+-	if (sb_rdonly(sb) || !test_opt(sb, INIT_INODE_TABLE))
+-		ext4_unregister_li_request(sb);
+-	else {
+-		ext4_group_t first_not_zeroed;
+-		first_not_zeroed = ext4_has_uninit_itable(sb);
+-		ext4_register_li_request(sb, first_not_zeroed);
+-	}
+-
+ 	/*
+ 	 * Handle creation of system zone data early because it can fail.
+ 	 * Releasing of existing data is done when we are sure remount will
+@@ -6011,6 +5999,18 @@ static int ext4_remount(struct super_block *sb, int *flags, char *data)
+ 	if (enable_rw)
+ 		sb->s_flags &= ~SB_RDONLY;
+ 
++	/*
++	 * Reinitialize lazy itable initialization thread based on
++	 * current settings
++	 */
++	if (sb_rdonly(sb) || !test_opt(sb, INIT_INODE_TABLE))
++		ext4_unregister_li_request(sb);
++	else {
++		ext4_group_t first_not_zeroed;
++		first_not_zeroed = ext4_has_uninit_itable(sb);
++		ext4_register_li_request(sb, first_not_zeroed);
++	}
++
+ 	if (!ext4_has_feature_mmp(sb) || sb_rdonly(sb))
+ 		ext4_stop_mmpd(sbi);
+ 
 -- 
 2.39.2
 
