@@ -2,141 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BB51731336
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:08:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E8C731354
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:15:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241071AbjFOJIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 05:08:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46440 "EHLO
+        id S245497AbjFOJKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 05:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245385AbjFOJIp (ORCPT
+        with ESMTP id S245504AbjFOJJz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 05:08:45 -0400
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82741FE8;
-        Thu, 15 Jun 2023 02:08:37 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0Vl9wwvH_1686820112;
-Received: from 30.240.108.67(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0Vl9wwvH_1686820112)
-          by smtp.aliyun-inc.com;
-          Thu, 15 Jun 2023 17:08:34 +0800
-Message-ID: <66c72938-912c-5167-fdb1-bffefe1db0c9@linux.alibaba.com>
-Date:   Thu, 15 Jun 2023 17:08:31 +0800
+        Thu, 15 Jun 2023 05:09:55 -0400
+Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8B730CB;
+        Thu, 15 Jun 2023 02:09:14 -0700 (PDT)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1q9iyU-003G7R-4O; Thu, 15 Jun 2023 17:09:03 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Thu, 15 Jun 2023 17:09:02 +0800
+Date:   Thu, 15 Jun 2023 17:09:02 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     "Adam, Mahmoud" <mngyadam@amazon.de>
+Cc:     Mahmoud Adam <mngyadam@amazon.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] KEYS: use kfree_sensitive with key
+Message-ID: <ZIrVLk73ulTPzOGq@gondor.apana.org.au>
+References: <20230613160723.61729-1-mngyadam@amazon.com>
+ <ZImNO0AijmNriZuL@gondor.apana.org.au>
+ <CB10C1D8-BA86-4E1B-B9B7-FDF6AFD3E089@amazon.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH v2] integrity: Fix possible multiple allocation in
- integrity_inode_get()
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230530121453.10249-1-tianjia.zhang@linux.alibaba.com>
- <20230601064244.33633-1-tianjia.zhang@linux.alibaba.com>
- <CT86SNGF201H.2UZF8SN2MEKZ6@suppilovahvero>
-Content-Language: en-US
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-In-Reply-To: <CT86SNGF201H.2UZF8SN2MEKZ6@suppilovahvero>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CB10C1D8-BA86-4E1B-B9B7-FDF6AFD3E089@amazon.de>
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jarkko,
+On Wed, Jun 14, 2023 at 01:32:51PM +0000, Adam, Mahmoud wrote:
+>
+> I think this holds for the other lines as well, I can use pkey->key_is_private to check for them also
 
-On 6/9/23 10:24 PM, Jarkko Sakkinen wrote:
-> On Thu Jun 1, 2023 at 9:42 AM EEST, Tianjia Zhang wrote:
->> When integrity_inode_get() is querying and inserting the cache, there
->> is a conditional race in the concurrent environment.
->>
->> The race condition is the result of not properly implementing
->> "double-checked locking". In this case, it first checks to see if the
->> iint cache record exists before taking the lock, but doesn't check
->> again after taking the integrity_iint_lock.
->>
->> Fixes: bf2276d10ce5 ("ima: allocating iint improvements")
->> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
->> Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
->> Cc: <stable@vger.kernel.org> # v3.10+
-> 
-> s/v3.10/v4.14/
-> 
-> I.e. cover only currently maintained longterms, right?
-> 
+That might be going a bit overboard.
 
-Yes, the race condition was indeed introduced in 3.10, but the fix is
-estimated to only cover the LTS version.
+So if the key is definitely public, then use kfree.  If we don't
+know what it is (i.e., public or private), then just use kfree_sensitive.
 
-> 
->> ---
->>   security/integrity/iint.c | 15 +++++++++------
->>   1 file changed, 9 insertions(+), 6 deletions(-)
->>
->> diff --git a/security/integrity/iint.c b/security/integrity/iint.c
->> index c73858e8c6d5..a462df827de2 100644
->> --- a/security/integrity/iint.c
->> +++ b/security/integrity/iint.c
->> @@ -43,12 +43,10 @@ static struct integrity_iint_cache *__integrity_iint_find(struct inode *inode)
->>   		else if (inode > iint->inode)
->>   			n = n->rb_right;
->>   		else
->> -			break;
->> +			return iint;
->>   	}
->> -	if (!n)
->> -		return NULL;
->>   
->> -	return iint;
->> +	return NULL;
->>   }
->>   
->>   /*
->> @@ -113,10 +111,15 @@ struct integrity_iint_cache *integrity_inode_get(struct inode *inode)
->>   		parent = *p;
->>   		test_iint = rb_entry(parent, struct integrity_iint_cache,
->>   				     rb_node);
->> -		if (inode < test_iint->inode)
->> +		if (inode < test_iint->inode) {
->>   			p = &(*p)->rb_left;
->> -		else
->> +		} else if (inode > test_iint->inode) {
->>   			p = &(*p)->rb_right;
->> +		} else {
->> +			write_unlock(&integrity_iint_lock);
->> +			kmem_cache_free(iint_cache, iint);
->> +			return test_iint;
->> +		}
->>   	}
->>   
->>   	iint->inode = inode;
->> -- 
->> 2.24.3 (Apple Git-128)
-> 
-> Mimi, are you picking this?
-
-Mimi has picked this patch in next-integrity.
-
-> 
-> Off-topic: how do you compile kernel on macOS, you're using VM right?
-> I'm just interested because I recently bought Mac mini for both
-> compiling and testing arm64. Optimal would be to be able to compile
-> the kernel on bare metal and then deploy to a VM...
-> 
-
-I am currently only coding and sending the final patch on a Mac.
-Compilation and testing are still carried out in the linux environment.
-If you have experience in launching a linux VM on macOS, please share it
-with me, thanks.
-
-Best regards,
-Tianjia
+Thanks,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
