@@ -2,246 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A40E97312A2
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3804B7312AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:50:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245163AbjFOItP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 04:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
+        id S238236AbjFOIuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 04:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240932AbjFOIsY (ORCPT
+        with ESMTP id S245018AbjFOIsc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 04:48:24 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100CD3C1E;
-        Thu, 15 Jun 2023 01:47:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1686818835; x=1718354835;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=QTzovRalX3ETeY4VZEKtHx2GIcZ+aGw7PXrcvk6ii2c=;
-  b=dcvIlLIOxqA/NyB8OIJZdIWNm+JDM/HXaIVOLDFAHQS7MIYzW96CNS2e
-   KQlgRlYT7wm3GsulKbWhwMoHXe4pgFLLHwkBmkvjGfBHCjfsDI1vbMdzH
-   SkxvD6HYQk/TH9SGyoKtOmC7/BCrjT0rcFXdLVmgxG9sIt3/YCeJXLCbY
-   imuiRKa8f7/N3mHjhT/VW1hJwCNptp04XeVjaXb5mxO+7mxKEIt6idomC
-   N3oCBSjblSPyP6Qufj4ztCMFeo0J7yXCvJrYmgRMVbt40D2pXnQQt4YV2
-   f66WYosf4NzRMUxHLlryZTsi8A5FIdAYiAyejRdH/vyVD/18JqL3XxVll
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="218618754"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Jun 2023 01:47:14 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 15 Jun 2023 01:47:12 -0700
-Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Thu, 15 Jun 2023 01:47:09 -0700
-Message-ID: <c03077f4-93de-d1c4-0f5d-19292553e6c8@microchip.com>
-Date:   Thu, 15 Jun 2023 10:46:57 +0200
+        Thu, 15 Jun 2023 04:48:32 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1697A2D6D;
+        Thu, 15 Jun 2023 01:47:44 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35F6Zuum016146;
+        Thu, 15 Jun 2023 10:47:36 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=2Uw0OO2d1PspJCO4EJYYYgI2JrkAhJ2sdxcuh6mFlpM=;
+ b=xVhhHeGQk1l7ea79uw+yuhQ39SZI4WchooY3/cPP3xFjGN11KZFtl5B2mrsJT17TbKUR
+ f8AxrLwehKRpHX962cLr7dPjY4Maf1nEhKaa9et2RAk0pO6MHKdZUJ2THHbUuDqMbX13
+ enx87+NiOynbQebC7D874lgHe01VUvCbJl/T0ER5o2of+EOa90i8ut1ddOfE/8MxujkP
+ +buyV31H7D95FBblYNWlPxWqYxHdLKYwLVcbabYeTEGcMayVKwCBK+hPDQ8i9UpeSod0
+ LWysLZG/ObVHsv4PayIaIb+J1v86Lb0j6+o1kpunQx1HQ82uV4ak+nVIUM7oBfsOPcI4 +w== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3r7wgx169a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 10:47:36 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0FB9810004B;
+        Thu, 15 Jun 2023 10:47:31 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 079F721862A;
+        Thu, 15 Jun 2023 10:47:31 +0200 (CEST)
+Received: from [10.201.21.9] (10.201.21.9) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 15 Jun
+ 2023 10:47:30 +0200
+Message-ID: <f95a6dbe-f774-7778-9cd8-aba0677b9413@foss.st.com>
+Date:   Thu, 15 Jun 2023 10:47:29 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH net-next v4 2/2] net: macb: Add support for partial store
- and forward
+Subject: Re: [PATCH V7 1/3] rpmsg: core: Add signal API support
 Content-Language: en-US
-To:     Pranavi Somisetty <pranavi.somisetty@amd.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <claudiu.beznea@microchip.com>
-CC:     <git@amd.com>, <michal.simek@amd.com>, <harini.katakam@amd.com>,
-        <radhey.shyam.pandey@amd.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-References: <20230613054340.12837-1-pranavi.somisetty@amd.com>
- <20230613054340.12837-3-pranavi.somisetty@amd.com>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <20230613054340.12837-3-pranavi.somisetty@amd.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Bjorn Andersson <andersson@kernel.org>
+CC:     Sarannya S <quic_sarannya@quicinc.com>,
+        <quic_bjorande@quicinc.com>, <swboyd@chromium.org>,
+        <quic_clew@quicinc.com>, <mathieu.poirier@linaro.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>,
+        Deepak Kumar Singh <quic_deesin@quicinc.com>
+References: <1682160127-18103-1-git-send-email-quic_sarannya@quicinc.com>
+ <1682160127-18103-2-git-send-email-quic_sarannya@quicinc.com>
+ <c44d8942-83e5-01ec-491b-bac1fb27de99@foss.st.com>
+ <20230614152435.2quoctx6ouvw4ous@ripper>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Organization: STMicroelectronics
+In-Reply-To: <20230614152435.2quoctx6ouvw4ous@ripper>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.201.21.9]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-15_05,2023-06-14_02,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/06/2023 at 07:43, Pranavi Somisetty wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> 
-> From: Maulik Jodhani <maulik.jodhani@xilinx.com>
-> 
-> When the receive partial store and forward mode is activated, the
-> receiver will only begin to forward the packet to the external AHB
-> or AXI slave when enough packet data is stored in the packet buffer.
-> The amount of packet data required to activate the forwarding process
-> is programmable via watermark registers which are located at the same
-> address as the partial store and forward enable bits. Adding support to
-> read this rx-watermark value from device-tree, to program the watermark
-> registers and enable partial store and forwarding.
-> 
-> Signed-off-by: Maulik Jodhani <maulik.jodhani@xilinx.com>
-> Signed-off-by: Pranavi Somisetty <pranavi.somisetty@amd.com>
+Hi,
 
-Looks good to me:
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+On 6/14/23 17:24, Bjorn Andersson wrote:
+> On Mon, Apr 24, 2023 at 02:49:29PM +0200, Arnaud POULIQUEN wrote:
+>> Hello,
+>>
+>> On 4/22/23 12:42, Sarannya S wrote:
+>>> From: Deepak Kumar Singh <quic_deesin@quicinc.com>
+>>>
+>>> Some transports like Glink support the state notifications between
+>>> clients using flow control signals similar to serial protocol signals.
+>>> Local glink client drivers can send and receive flow control status
+>>> to glink clients running on remote processors.
+>>>
+>>> Add APIs to support sending and receiving of flow control status by
+>>> rpmsg clients.
+>>>
+>>> Signed-off-by: Deepak Kumar Singh <quic_deesin@quicinc.com>
+>>> Signed-off-by: Sarannya S <quic_sarannya@quicinc.com>
+>>> ---
+>>>  drivers/rpmsg/rpmsg_core.c     | 21 +++++++++++++++++++++
+>>>  drivers/rpmsg/rpmsg_internal.h |  2 ++
+>>>  include/linux/rpmsg.h          | 15 +++++++++++++++
+>>>  3 files changed, 38 insertions(+)
+>>>
+>>> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
+>>> index a2207c0..e8bbe05 100644
+>>> --- a/drivers/rpmsg/rpmsg_core.c
+>>> +++ b/drivers/rpmsg/rpmsg_core.c
+>>> @@ -331,6 +331,25 @@ int rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src, u32 dst,
+>>>  EXPORT_SYMBOL(rpmsg_trysend_offchannel);
+>>>  
+>>>  /**
+>>> + * rpmsg_set_flow_control() - sets/clears serial flow control signals
+>>> + * @ept:	the rpmsg endpoint
+>>> + * @enable:	pause/resume incoming data flow	
+>>> + * @dst:	destination address of the endpoint
+>>> + *
+>>> + * Return: 0 on success and an appropriate error value on failure.
+>>> + */
+>>> +int rpmsg_set_flow_control(struct rpmsg_endpoint *ept, bool enable, u32 dst)
+>>> +{
+>>> +	if (WARN_ON(!ept))
+>>> +		return -EINVAL;
+>>> +	if (!ept->ops->set_flow_control)
+>>> +		return -ENXIO;
+>>
+>> Here we return an error if the backend does not implement the ops.
+>> But the set_flow_control ops is optional.
+>> Should we return 0 instead with a debug message?
+>>
+> 
+> It seems reasonable to allow the software to react to the absence of
+> flow control support, so a debug message wouldn't help.
+> 
+> But advertising that more explicitly by returning something like
+> EOPNOTSUPP seems better.
 
-Thanks for your patch and effort to address comments Pranavi.
+Right, this seems more reliable.
 
-Best regards,
-   Nicolas
+Thanks,
+Arnaud
 
-> ---
-> Changes v2:
-> 1. Removed all the changes related to validating FCS when Rx checksum offload is disabled.
-> 2. Instead of using a platform dependent number (0xFFF) for the reset value of rx watermark,
-> derive it from designcfg_debug2 register.
-> 3. Added a check to see if partial s/f is supported, by reading the
-> designcfg_debug6 register.
 > 
-> Changes v3:
-> 1. Followed reverse christmas tree pattern in declaring variables.
-> 2. Return -EINVAL when an invalid watermark value is set.
-> 3. Removed netdev_info when partial store and forward is not enabled.
-> 4. Validating the rx-watermark value in probe itself and only write to the register
-> in init.
-> 5. Writing a reset value to the pbuf_cuthru register before disabing partial store
-> and forward is redundant. So removing it.
-> 6. Removed the platform caps flag.
-> 7. Instead of reading rx-watermark from DT in macb_configure_caps,
-> reading it in probe.
-> 8. Changed Signed-Off-By and author names on this patch.
-> 
-> Changes v4:
-> 1. Removed redundant code and unused variables.
-> 2. When the rx-watermark value is invalid, instead of returning EINVAL,
-> do not enable partial store and forward.
-> 3. Change rx-watermark variable's size to u32 instead of u16.
-> ---
->   drivers/net/ethernet/cadence/macb.h      | 12 +++++++++++
->   drivers/net/ethernet/cadence/macb_main.c | 27 ++++++++++++++++++++++++
->   2 files changed, 39 insertions(+)
-> 
-> diff --git a/drivers/net/ethernet/cadence/macb.h b/drivers/net/ethernet/cadence/macb.h
-> index 14dfec4db8f9..39d53117a8ce 100644
-> --- a/drivers/net/ethernet/cadence/macb.h
-> +++ b/drivers/net/ethernet/cadence/macb.h
-> @@ -82,6 +82,7 @@
->   #define GEM_NCFGR              0x0004 /* Network Config */
->   #define GEM_USRIO              0x000c /* User IO */
->   #define GEM_DMACFG             0x0010 /* DMA Configuration */
-> +#define GEM_PBUFRXCUT          0x0044 /* RX Partial Store and Forward */
->   #define GEM_JML                        0x0048 /* Jumbo Max Length */
->   #define GEM_HS_MAC_CONFIG      0x0050 /* GEM high speed config */
->   #define GEM_HRB                        0x0080 /* Hash Bottom */
-> @@ -343,6 +344,10 @@
->   #define GEM_ADDR64_SIZE                1
-> 
-> 
-> +/* Bitfields in PBUFRXCUT */
-> +#define GEM_ENCUTTHRU_OFFSET   31 /* Enable RX partial store and forward */
-> +#define GEM_ENCUTTHRU_SIZE     1
-> +
->   /* Bitfields in NSR */
->   #define MACB_NSR_LINK_OFFSET   0 /* pcs_link_state */
->   #define MACB_NSR_LINK_SIZE     1
-> @@ -509,6 +514,8 @@
->   #define GEM_TX_PKT_BUFF_OFFSET                 21
->   #define GEM_TX_PKT_BUFF_SIZE                   1
-> 
-> +#define GEM_RX_PBUF_ADDR_OFFSET                        22
-> +#define GEM_RX_PBUF_ADDR_SIZE                  4
-> 
->   /* Bitfields in DCFG5. */
->   #define GEM_TSU_OFFSET                         8
-> @@ -517,6 +524,8 @@
->   /* Bitfields in DCFG6. */
->   #define GEM_PBUF_LSO_OFFSET                    27
->   #define GEM_PBUF_LSO_SIZE                      1
-> +#define GEM_PBUF_CUTTHRU_OFFSET                        25
-> +#define GEM_PBUF_CUTTHRU_SIZE                  1
->   #define GEM_DAW64_OFFSET                       23
->   #define GEM_DAW64_SIZE                         1
-> 
-> @@ -1283,6 +1292,9 @@ struct macb {
-> 
->          u32                     wol;
-> 
-> +       /* holds value of rx watermark value for pbuf_rxcutthru register */
-> +       u32                     rx_watermark;
-> +
->          struct macb_ptp_info    *ptp_info;      /* macb-ptp interface */
-> 
->          struct phy              *sgmii_phy;     /* for ZynqMP SGMII mode */
-> diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
-> index 41964fd02452..7d023b92b169 100644
-> --- a/drivers/net/ethernet/cadence/macb_main.c
-> +++ b/drivers/net/ethernet/cadence/macb_main.c
-> @@ -2617,6 +2617,9 @@ static void macb_reset_hw(struct macb *bp)
->          macb_writel(bp, TSR, -1);
->          macb_writel(bp, RSR, -1);
-> 
-> +       /* Disable RX partial store and forward and reset watermark value */
-> +       gem_writel(bp, PBUFRXCUT, 0);
-> +
->          /* Disable all interrupts */
->          for (q = 0, queue = bp->queues; q < bp->num_queues; ++q, ++queue) {
->                  queue_writel(queue, IDR, -1);
-> @@ -2770,6 +2773,10 @@ static void macb_init_hw(struct macb *bp)
->                  bp->rx_frm_len_mask = MACB_RX_JFRMLEN_MASK;
-> 
->          macb_configure_dma(bp);
-> +
-> +       /* Enable RX partial store and forward and set watermark */
-> +       if (bp->rx_watermark)
-> +               gem_writel(bp, PBUFRXCUT, (bp->rx_watermark | GEM_BIT(ENCUTTHRU)));
->   }
-> 
->   /* The hash address register is 64 bits long and takes up two
-> @@ -4923,6 +4930,7 @@ static int macb_probe(struct platform_device *pdev)
->          phy_interface_t interface;
->          struct net_device *dev;
->          struct resource *regs;
-> +       u32 wtrmrk_rst_val;
->          void __iomem *mem;
->          struct macb *bp;
->          int err, val;
-> @@ -4995,6 +5003,25 @@ static int macb_probe(struct platform_device *pdev)
-> 
->          bp->usrio = macb_config->usrio;
-> 
-> +       /* By default we set to partial store and forward mode for zynqmp.
-> +        * Disable if not set in devicetree.
-> +        */
-> +       if (GEM_BFEXT(PBUF_CUTTHRU, gem_readl(bp, DCFG6))) {
-> +               err = of_property_read_u32(bp->pdev->dev.of_node,
-> +                                          "cdns,rx-watermark",
-> +                                          &bp->rx_watermark);
-> +
-> +               if (!err) {
-> +                       /* Disable partial store and forward in case of error or
-> +                        * invalid watermark value
-> +                        */
-> +                       wtrmrk_rst_val = (1 << (GEM_BFEXT(RX_PBUF_ADDR, gem_readl(bp, DCFG2)))) - 1;
-> +                       if (bp->rx_watermark > wtrmrk_rst_val || !bp->rx_watermark) {
-> +                               dev_info(&bp->pdev->dev, "Invalid watermark value\n");
-> +                               bp->rx_watermark = 0;
-> +                       }
-> +               }
-> +       }
->          spin_lock_init(&bp->lock);
-> 
->          /* setup capabilities */
-> --
-> 2.36.1
-> 
-
--- 
-Nicolas Ferre
-
+> Regards,
+> Bjorn
