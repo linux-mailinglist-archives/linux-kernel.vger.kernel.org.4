@@ -2,194 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8948D73139B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78D67731377
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243465AbjFOJW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 05:22:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
+        id S238184AbjFOJUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 05:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237138AbjFOJWP (ORCPT
+        with ESMTP id S237158AbjFOJUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 05:22:15 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF522715;
-        Thu, 15 Jun 2023 02:22:09 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35F82d54022646;
-        Thu, 15 Jun 2023 11:21:50 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=i1KQomgbTCKKL1jhfJcq7MepijYGukr9j+2PCgWp/oI=;
- b=Vubs1l+rfvAQc9+HOllCIuWdAGDSInzCAuLZaGX1KwvqS7OEx8Sw+SniB9W2TB2sWa9X
- 7F702keig91HWbGFRRbnXLlsGvpJxamz6656v4gbYoEywi8YDW7m+boMRZF1FX6wMHLx
- HeKwkn9GK7jpiQ/JUkNn9g7bH9jh6scgFETkm8elxZWAm5uNOZiPBC1i+8adg56gq9x8
- Q7guEhFM9rWwWVmOchf+RBPujLkrLsNpmCL+pLFj5g481LHrplajBak4/CwIvoV1J11W
- ju7tRR6YHKEQw/+ek9BwlZ2EUVLXWV7rrVp+K8QtN4x0TvuUKnjdLUVBXUKWYQM8zp93 Gw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3r7vkfsqsp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jun 2023 11:21:50 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C245610002A;
-        Thu, 15 Jun 2023 11:21:49 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B894521A235;
-        Thu, 15 Jun 2023 11:21:49 +0200 (CEST)
-Received: from localhost (10.201.21.210) by SHFDAG1NODE2.st.com (10.75.129.70)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 15 Jun
- 2023 11:21:48 +0200
-From:   Yann Gautier <yann.gautier@foss.st.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>
-CC:     Conor Dooley <conor+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        <linux-kernel@vger.kernel.org>, Marek Vasut <marex@denx.de>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Xiang wangx <wangxiang@cdjrlc.com>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Yann Gautier <yann.gautier@foss.st.com>
-Subject: [PATCH 6/6] mmc: mmci: stm32: add delay block support for STM32MP25
-Date:   Thu, 15 Jun 2023 11:20:01 +0200
-Message-ID: <20230615092001.1213132-7-yann.gautier@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230615092001.1213132-1-yann.gautier@foss.st.com>
-References: <20230615092001.1213132-1-yann.gautier@foss.st.com>
+        Thu, 15 Jun 2023 05:20:39 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FCE419B5
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 02:20:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=VJf8eYHVYCsVZWGj5WU5NKUE6RcPsFfWXduJSEsZwhw=; b=adNoPsIf3rftxigO9zc1H9H3bO
+        Co9nWpcn9ca7+/d4bP/HGUKbaNYil5WVCj9XR/HD5i/q0y8r66zISHqUvqSakM/7JUn+kAkNUytJl
+        0NsbFm7M1ysAYE0qoM0bcIjnMfAhFwvO5B93fsrYdt2wY9w1rfv2ibOKh9epStSQv9piUOyWRU5rx
+        QGsBrSHjoZvjXT/YxiHn9n7kfwKqWrMsL0oy5BWCSmibK9q5XTMgwDPU/mBiqqW+msuxbNiQe8NVW
+        mS5u6bo1G6eCE1sWmD02QTlw8IdbwP7IilA2X0Dr1yDyXa2b/BXPB6EhjR74CFQh+93fOneV4P6mk
+        dp9hxO/Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q9j9T-007R8Y-2J; Thu, 15 Jun 2023 09:20:23 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 78B6F3002A9;
+        Thu, 15 Jun 2023 11:20:21 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5DDA3265FBBD4; Thu, 15 Jun 2023 11:20:21 +0200 (CEST)
+Date:   Thu, 15 Jun 2023 11:20:21 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        "Paul E . McKenney" <paulmck@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
+        tim.c.chen@intel.com
+Subject: Re: [Patch v2 2/2] x86/tsc: use logical_packages as a better
+ estimation of socket numbers
+Message-ID: <20230615092021.GE1683497@hirez.programming.kicks-ass.net>
+References: <20230613052523.1106821-1-feng.tang@intel.com>
+ <20230613052523.1106821-2-feng.tang@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.201.21.210]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-15_06,2023-06-14_02,2023-05-22_02
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230613052523.1106821-2-feng.tang@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On STM32MP25, the delay block is inside the SoC, and configured through
-the SYSCFG registers. The algorithm is also different from what was in
-STM32MP1 chip.
+On Tue, Jun 13, 2023 at 01:25:23PM +0800, Feng Tang wrote:
+> Commit b50db7095fe0 ("x86/tsc: Disable clocksource watchdog for TSC
+> on qualified platorms") was introduced to solve problem that
+> sometimes TSC clocksource is wrongly judged as unstable by watchdog
+> like 'jiffies', HPET, etc.
+> 
+> In it, the hardware socket number is a key factor for judging whether
+> to disable the watchdog for TSC, and 'nr_online_nodes' was chosen as
+> an estimation due to it is needed in early boot phase before
+> registering 'tsc-early' clocksource, where all none-boot CPUs are not
+> brought up yet.
+> 
+> In recent patch review, Dave and Rui pointed out there are many cases
+> in which 'nr_online_nodes' is not accurate, like:
+> 
+> * numa emulation (numa=fake=4 etc.)
+> * numa=off
+> * platforms with CPU-less HBM nodes, CPU-less Optane memory nodes.
+> * SNC (sub-numa cluster) mode enabled
+> * 'nr_cpus=' and 'maxcpus=' kernel cmdline parameter setup
+> 
+> Peter Zijlstra suggested 'logical_packages', and it seems to be the
+> best option we have as it covers all the cases above except the
+> last one. But it is only usable after smp_init() and all CPUs are
+> brought up, while 'tsc-early' is initialized before that.
+> 
+> One solution is to skip the watchdog for 'tsc-early' clocksource,
+> and move the check after smp_init(), while before 'tsc' clocksource
+> is registered, where 'logical_packages' could be used.
+> 
+> For 'nr_cpus' and 'maxcpus' cmdline case, the global flag
+> 'package_count_unreliable' will be set to true and the watchdog
+> will be kept as is.
 
-Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
----
- drivers/mmc/host/mmci_stm32_sdmmc.c | 66 ++++++++++++++++++++++++++++-
- 1 file changed, 65 insertions(+), 1 deletion(-)
+So I have at least two machines where I boot with 'possible_cpus=#'
+because the BIOS MADT is reporting a stupid number of CPUs that aren't
+actually there.
 
-diff --git a/drivers/mmc/host/mmci_stm32_sdmmc.c b/drivers/mmc/host/mmci_stm32_sdmmc.c
-index c51c85ca24917..d6112a8dacf8b 100644
---- a/drivers/mmc/host/mmci_stm32_sdmmc.c
-+++ b/drivers/mmc/host/mmci_stm32_sdmmc.c
-@@ -33,6 +33,20 @@
- #define DLYB_LNG_TIMEOUT_US	1000
- #define SDMMC_VSWEND_TIMEOUT_US 10000
- 
-+#define SYSCFG_DLYBSD_CR	0x0
-+#define DLYBSD_CR_EN		BIT(0)
-+#define DLYBSD_CR_RXTAPSEL_MASK	GENMASK(6, 1)
-+#define DLYBSD_TAPSEL_NB	32
-+#define DLYBSD_BYP_EN		BIT(16)
-+#define DLYBSD_BYP_CMD		GENMASK(21, 17)
-+#define DLYBSD_ANTIGLITCH_EN	BIT(22)
-+
-+#define SYSCFG_DLYBSD_SR	0x4
-+#define DLYBSD_SR_LOCK		BIT(0)
-+#define DLYBSD_SR_RXTAPSEL_ACK	BIT(1)
-+
-+#define DLYBSD_TIMEOUT_1S_IN_US	1000000
-+
- struct sdmmc_lli_desc {
- 	u32 idmalar;
- 	u32 idmabase;
-@@ -499,6 +513,46 @@ static int sdmmc_dlyb_mp15_prepare(struct mmci_host *host)
- 	return 0;
- }
- 
-+static int sdmmc_dlyb_mp25_enable(struct sdmmc_dlyb *dlyb)
-+{
-+	u32 cr, sr;
-+
-+	cr = readl_relaxed(dlyb->base + SYSCFG_DLYBSD_CR);
-+	cr |= DLYBSD_CR_EN;
-+
-+	writel_relaxed(cr, dlyb->base + SYSCFG_DLYBSD_CR);
-+
-+	return readl_relaxed_poll_timeout(dlyb->base + SYSCFG_DLYBSD_SR,
-+					   sr, sr & DLYBSD_SR_LOCK, 1,
-+					   DLYBSD_TIMEOUT_1S_IN_US);
-+}
-+
-+static int sdmmc_dlyb_mp25_set_cfg(struct sdmmc_dlyb *dlyb,
-+				   int unit __maybe_unused, int phase,
-+				   bool sampler __maybe_unused)
-+{
-+	u32 cr, sr;
-+
-+	cr = readl_relaxed(dlyb->base + SYSCFG_DLYBSD_CR);
-+	cr &= ~DLYBSD_CR_RXTAPSEL_MASK;
-+	cr |= FIELD_PREP(DLYBSD_CR_RXTAPSEL_MASK, phase);
-+
-+	writel_relaxed(cr, dlyb->base + SYSCFG_DLYBSD_CR);
-+
-+	return readl_relaxed_poll_timeout(dlyb->base + SYSCFG_DLYBSD_SR,
-+					  sr, sr & DLYBSD_SR_RXTAPSEL_ACK, 1,
-+					  DLYBSD_TIMEOUT_1S_IN_US);
-+}
-+
-+static int sdmmc_dlyb_mp25_prepare(struct mmci_host *host)
-+{
-+	struct sdmmc_dlyb *dlyb = host->variant_priv;
-+
-+	dlyb->max = DLYBSD_TAPSEL_NB;
-+
-+	return 0;
-+}
-+
- static int sdmmc_dlyb_phase_tuning(struct mmci_host *host, u32 opcode)
- {
- 	struct sdmmc_dlyb *dlyb = host->variant_priv;
-@@ -639,6 +693,12 @@ static struct sdmmc_tuning_ops dlyb_tuning_mp15_ops = {
- 	.set_cfg = sdmmc_dlyb_mp15_set_cfg,
- };
- 
-+static struct sdmmc_tuning_ops dlyb_tuning_mp25_ops = {
-+	.dlyb_enable = sdmmc_dlyb_mp25_enable,
-+	.tuning_prepare = sdmmc_dlyb_mp25_prepare,
-+	.set_cfg = sdmmc_dlyb_mp25_set_cfg,
-+};
-+
- void sdmmc_variant_init(struct mmci_host *host)
- {
- 	struct device_node *np = host->mmc->parent->of_node;
-@@ -657,7 +717,11 @@ void sdmmc_variant_init(struct mmci_host *host)
- 		return;
- 
- 	dlyb->base = base_dlyb;
--	dlyb->ops = &dlyb_tuning_mp15_ops;
-+	if (of_device_is_compatible(np, "st,stm32mp25-sdmmc2"))
-+		dlyb->ops = &dlyb_tuning_mp25_ops;
-+	else
-+		dlyb->ops = &dlyb_tuning_mp15_ops;
-+
- 	host->variant_priv = dlyb;
- 	host->mmc_ops->execute_tuning = sdmmc_execute_tuning;
- }
--- 
-2.25.1
+So I think I'm lucky and side-stepped this nonsense, but if someone were
+to use nr_cpus= for this same purpose, they get screwed over and get the
+watchdog. Sad day for them I suppose.
 
+I realize there might not be a perfect solution, but I'm also struggling
+to see the value of the whole package_count_unreliable thing.
