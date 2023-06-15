@@ -2,68 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E61F4731BF1
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E328731BF2
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344814AbjFOO4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 10:56:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38594 "EHLO
+        id S1344980AbjFOO4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 10:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345157AbjFOO4a (ORCPT
+        with ESMTP id S1344229AbjFOO4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 10:56:30 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758BC2954
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 07:56:29 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f8cc04c278so19222425e9.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 07:56:29 -0700 (PDT)
+        Thu, 15 Jun 2023 10:56:20 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7812956
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 07:56:18 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f122ff663eso10672793e87.2
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 07:56:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686840988; x=1689432988;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZejLKN5aLCLQqaxNI770STmW64dCVjdqgJRYwrLAEQY=;
-        b=PLv0SOqjQIJKhHDvPhJa/ZXB9L6XDUaeP7ZKUz07rxGmbHpPzPDaIqnBTNJRKv73lf
-         73zFaCphp11PzXmvWBy7SMjfUaaGsYMlOhN5KfuKgPgKWX7pmuIauxcdRvTtKWboDOaS
-         6ZdWEqdqMTaq49d1a7W2ZfqKhadmkebP+Trm4=
+        d=linaro.org; s=google; t=1686840976; x=1689432976;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=csR9aAPz4FxkrS5GoizHZQY30Kq0wuoDZfsCT7YoxRI=;
+        b=bGwN4OOTlXZmzNmKYqwuRIkotLX8Hfm3b+WpaLN5VJrIZxhyUsmGwD77SDAvlTE+65
+         iIx9QBCNy8yWBKh3RlkcDQ3MiLIef1yUH2Q52dSUArqPjsCXkkQ6x6/agefJ6OOTsy7m
+         m60FCRekV8IXEkTL8Q/UKHx2KoRPGflU0ELRN1YbB//3y2qaMq00bHdFMl3SQX0aYwct
+         ihQoHgcX2Iv6q0kvgR1XAPMzjzc3XWjANHILQR79zX/HWln7r1quE2wN4ey/ZkTJx9x5
+         CoRQ/vYprOJcaa3oBC7v+RYslihtx/jLhuuCi9a/Rn7XxQLiZZivXi1FESD5GUpfwhZz
+         NKpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686840988; x=1689432988;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZejLKN5aLCLQqaxNI770STmW64dCVjdqgJRYwrLAEQY=;
-        b=fRvw+qw5hEIlrC14v+w+tTzAdN/LD08w8yc0TZp/PbULeK2bd5mpEkYh7j0ZT9/TOL
-         a3DdZM+a9rDNW9u4bPQXXXLvS780HY14OOBVhTvCMYTFzhjC5qR4L26vfiFluj63HXR1
-         ZqfELwPISIV4oPFora1lsv31nU2pJbVdKQicrxpOAJVMQgFTHVO2fyor6/0Yr6wXLTxq
-         rYCOTHBcZ0NT8zBz/FrY/+BRzV/S3Qbrl1RLtaYLcENqc7yV8nQIhsugkWUCMP7e6DUP
-         nRrPy8YngB2TgMJu3CqlQgl5MgUhwUR1+GnR0Q8ZlRl+ElmIeSfscajruXM2Xb1T5SZ/
-         JagQ==
-X-Gm-Message-State: AC+VfDwZ7TpnW8d4qEVM7L81QNS5uXcFce/KyQQPZPJdCFeecXKIIv0w
-        f+n6AdbmptsddtPRv3X7WbiGmw==
-X-Google-Smtp-Source: ACHHUZ5OpUwlJ/vrCXpmVoMFPIO8LTjjlYgRLY492Ohe4rUYc/w74e7rMy7X0TCztfIjKLgSpnSJyQ==
-X-Received: by 2002:a05:600c:b54:b0:3f6:2ee:6993 with SMTP id k20-20020a05600c0b5400b003f602ee6993mr14415646wmr.4.1686840987856;
-        Thu, 15 Jun 2023 07:56:27 -0700 (PDT)
-Received: from revest.zrh.corp.google.com ([2a00:79e0:9d:6:7ec7:7f97:45af:3056])
-        by smtp.gmail.com with ESMTPSA id e13-20020a05600c218d00b003f709a7e46bsm20617755wme.46.2023.06.15.07.56.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 07:56:27 -0700 (PDT)
-From:   Florent Revest <revest@chromium.org>
-To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Cc:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, nathan@kernel.org,
-        ndesaulniers@google.com, trix@redhat.com,
-        Florent Revest <revest@chromium.org>, stable@vger.kernel.org
-Subject: [PATCH bpf] bpf/btf: Accept function names that contain dots
-Date:   Thu, 15 Jun 2023 16:56:07 +0200
-Message-ID: <20230615145607.3469985-1-revest@chromium.org>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+        d=1e100.net; s=20221208; t=1686840976; x=1689432976;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=csR9aAPz4FxkrS5GoizHZQY30Kq0wuoDZfsCT7YoxRI=;
+        b=fK+durR5B+PkN+icJgXnc/MFednthpNX5gw0H47LU39KHqjLP145pc0E5Hc7S8vSG1
+         BmlQw+1FMl6AyddYWvkzpLyRS2fqnhLK7ZS60p47sIPVKo7kE/a4jqQnqOltO6GzASXv
+         YmlPWFMdLnhVn6Xlbt0FlcaybFMenH95bMocT+VfGpO77bX6e7kRwwaAsKxABb8NoCFG
+         QNJirrNmEZJZeXrh8pAFx1iWSEQPlnU9cPaujM5WC8Sobdx/96+apkawnG0GyZX4BJQU
+         PwOGvi2tIDuSG0ToU6rH7ySW6UDB7U+0FZWLqgXJKJB57ybSEJO+A7qt/ksgjnpvkDTk
+         +ySQ==
+X-Gm-Message-State: AC+VfDyOGKTXGRyKHg9jKqQN9/WwD1BZaLftqprt7rcqi/2n9zaoPwnv
+        Rervwyl8HPPrdUk5Iyvntw9CPQ==
+X-Google-Smtp-Source: ACHHUZ7hBxjCGZTKAwkEC373GYuu2jd0RjRmG41v9QxKfkZIW4/NAzQlHgHBYYrzdaMlft4FApbh4A==
+X-Received: by 2002:a19:2d4a:0:b0:4f8:49a7:2deb with SMTP id t10-20020a192d4a000000b004f849a72debmr135604lft.8.1686840976383;
+        Thu, 15 Jun 2023 07:56:16 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id w6-20020ac24426000000b004f755ceafb4sm1056055lfl.159.2023.06.15.07.56.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jun 2023 07:56:16 -0700 (PDT)
+Message-ID: <56a04da4-310f-7995-f7a1-bb1873353201@linaro.org>
+Date:   Thu, 15 Jun 2023 16:56:14 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH V2 0/2] Add support for GPIO based leds and buttons on
+ IPQ5332/9574 devices
+Content-Language: en-US
+To:     Sridharan S N <quic_sridsn@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230615145311.2776-1-quic_sridsn@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230615145311.2776-1-quic_sridsn@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,99 +78,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building a kernel with LLVM=1, LLVM_IAS=0 and CONFIG_KASAN=y, LLVM
-leaves DWARF tags for the "asan.module_ctor" & co symbols. In turn,
-pahole creates BTF_KIND_FUNC entries for these and this makes the BTF
-metadata validation fail because they contain a dot.
+On 15.06.2023 16:53, Sridharan S N wrote:
+> Add support for wlan-2g led and wps button available on IPQ5332 and
+> IPQ9574
+> 
+> Sridharan S N (2):
+>   arm64: dts: qcom: ipq5332: enable GPIO based LEDs and Buttons
+>   arm64: dts: qcom: ipq9574: enable GPIO based LEDs
+You sent a v*3* half an hour ago. There's no signs of [RESEND] or other
+explanations and the changelog is gone.
 
-In a dramatic turn of event, this BTF verification failure can cause
-the netfilter_bpf initialization to fail, causing netfilter_core to
-free the netfilter_helper hashmap and netfilter_ftp to trigger a
-use-after-free. The risk of u-a-f in netfilter will be addressed
-separately but the existence of "asan.module_ctor" debug info under some
-build conditions sounds like a good enough reason to accept functions
-that contain dots in BTF.
+Please now send a v4 after you get reviews on this one (which I assume
+is the latest) so as not to confuse the patch workflow tools and explain
+each of the previous submissions.
 
-Cc: stable@vger.kernel.org
-Fixes: 1dc92851849c ("bpf: kernel side support for BTF Var and DataSec")
-Signed-off-by: Florent Revest <revest@chromium.org>
----
- kernel/bpf/btf.c | 20 ++++++++------------
- 1 file changed, 8 insertions(+), 12 deletions(-)
-
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 6b682b8e4b50..72b32b7cd9cd 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -744,13 +744,12 @@ static bool btf_name_offset_valid(const struct btf *btf, u32 offset)
- 	return offset < btf->hdr.str_len;
- }
- 
--static bool __btf_name_char_ok(char c, bool first, bool dot_ok)
-+static bool __btf_name_char_ok(char c, bool first)
- {
- 	if ((first ? !isalpha(c) :
- 		     !isalnum(c)) &&
- 	    c != '_' &&
--	    ((c == '.' && !dot_ok) ||
--	      c != '.'))
-+	    c != '.')
- 		return false;
- 	return true;
- }
-@@ -767,20 +766,20 @@ static const char *btf_str_by_offset(const struct btf *btf, u32 offset)
- 	return NULL;
- }
- 
--static bool __btf_name_valid(const struct btf *btf, u32 offset, bool dot_ok)
-+static bool __btf_name_valid(const struct btf *btf, u32 offset)
- {
- 	/* offset must be valid */
- 	const char *src = btf_str_by_offset(btf, offset);
- 	const char *src_limit;
- 
--	if (!__btf_name_char_ok(*src, true, dot_ok))
-+	if (!__btf_name_char_ok(*src, true))
- 		return false;
- 
- 	/* set a limit on identifier length */
- 	src_limit = src + KSYM_NAME_LEN;
- 	src++;
- 	while (*src && src < src_limit) {
--		if (!__btf_name_char_ok(*src, false, dot_ok))
-+		if (!__btf_name_char_ok(*src, false))
- 			return false;
- 		src++;
- 	}
-@@ -788,17 +787,14 @@ static bool __btf_name_valid(const struct btf *btf, u32 offset, bool dot_ok)
- 	return !*src;
- }
- 
--/* Only C-style identifier is permitted. This can be relaxed if
-- * necessary.
-- */
- static bool btf_name_valid_identifier(const struct btf *btf, u32 offset)
- {
--	return __btf_name_valid(btf, offset, false);
-+	return __btf_name_valid(btf, offset);
- }
- 
- static bool btf_name_valid_section(const struct btf *btf, u32 offset)
- {
--	return __btf_name_valid(btf, offset, true);
-+	return __btf_name_valid(btf, offset);
- }
- 
- static const char *__btf_name_by_offset(const struct btf *btf, u32 offset)
-@@ -4422,7 +4418,7 @@ static s32 btf_var_check_meta(struct btf_verifier_env *env,
- 	}
- 
- 	if (!t->name_off ||
--	    !__btf_name_valid(env->btf, t->name_off, true)) {
-+	    !__btf_name_valid(env->btf, t->name_off)) {
- 		btf_verifier_log_type(env, t, "Invalid name");
- 		return -EINVAL;
- 	}
--- 
-2.41.0.162.gfafddb0af9-goog
-
+Konrad
+> 
+>  .../boot/dts/qcom/ipq5332-rdp-common.dtsi     | 39 +++++++++++++++++++
+>  .../boot/dts/qcom/ipq9574-rdp-common.dtsi     | 20 ++++++++++
+>  2 files changed, 59 insertions(+)
+> 
