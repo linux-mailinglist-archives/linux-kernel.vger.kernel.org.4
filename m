@@ -2,165 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4678B73102A
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:08:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD93E731042
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:11:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243116AbjFOHIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 03:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35722 "EHLO
+        id S244735AbjFOHLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 03:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbjFOHHu (ORCPT
+        with ESMTP id S244722AbjFOHJz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 03:07:50 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DE46297B
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:07:30 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1b517ee9157so2193595ad.3
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:07:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686812849; x=1689404849;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/XYFZNhQhLPndaLiIE3HiydrBYKKYSw5+7Q2Iga72GE=;
-        b=QffQjV5jdnIxPDfXyY+XAo4ikT59dZOrHS8Ci9EpL3ZVmwHVbRrlDq0uOoaqbQX0Ue
-         HDZdI0yQ3l3fhvEbgOyROCSY3+q553kB7qLI7mmo+quJhpu0JR95SfUlNOzIxvs/5tXE
-         ayDjDKtE1dbzRoK43PRcNM9xR96+DKZHc6gBrk3/2xFPl+evWDTGLvRfUSH2k7qtqkvU
-         I8NDJDlJzp8X3YoQY3nWYnSKueyaAYbU5WhgSENyeq8mlPeXVO4v3qRS9IpbBeaOw9Xb
-         Row6srUPosBQroYqRoQ+Mu7r6ck4g7YI8outObv7p/uA+cMuSZ/8PUYLDG3XvDTx50Pe
-         5U4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686812849; x=1689404849;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=/XYFZNhQhLPndaLiIE3HiydrBYKKYSw5+7Q2Iga72GE=;
-        b=jxiPaAJoXf7dH9fXh79Od2AiF/PWtLSu6oSMz0+0FIpd9Ap2aZbQP+vcwnts+JcbsO
-         vuyNiWX2lLT7VkIFEGQ21mP5ihBXUiwS1izq4IRwQNn3QZC32q5iWKVuRSc5eCokv6AL
-         dA6/Hb9lEOb+4yldS6SzrV7S+GoDEw4WGDm9zo40XrYQdWnvmHJwMR7vkOwIN6ovC49j
-         GE8RKCDypGGuVjgBhcUfAuhWHtoR6A2Y2rEOrv/yJsng8O8nTBwrsvZSw9Wp6ErQR2EY
-         KzteanQKFZ/bIkncTwhuKn5hyYy9UYu51dNai9lCPKwXFgpnHRF8synXyj+v6htQ31dG
-         cJEw==
-X-Gm-Message-State: AC+VfDwNNkCfQJNSfyG1fiV/3HL+TLPT+8RDCDVzYwZY9dCZeVRQJYAO
-        4cdMXAfcIaQcleaSGP0jwoo=
-X-Google-Smtp-Source: ACHHUZ5KArXvwmpPvjWJRsoIdcMTJrLgfD8jhLDG9rWLArrFTfLpS19d0IHExAAscENLa5ipZ/+sgg==
-X-Received: by 2002:a17:902:930c:b0:1ab:19db:f2b with SMTP id bc12-20020a170902930c00b001ab19db0f2bmr12869315plb.36.1686812849397;
-        Thu, 15 Jun 2023 00:07:29 -0700 (PDT)
-Received: from [192.168.0.103] ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id m4-20020a1709026bc400b001ac5896e96esm1181351plt.207.2023.06.15.00.07.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 00:07:28 -0700 (PDT)
-Message-ID: <1326a6e4-758d-3344-d90c-8a126748b034@gmail.com>
-Date:   Thu, 15 Jun 2023 14:07:19 +0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Content-Language: en-US
-To:     Manikanta Pubbisetty <quic_mpubbise@quicinc.com>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Atheros 11K <ath11k@lists.infradead.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Fwd: ath11k: QCN9074: ce desc not available for wmi command
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Thu, 15 Jun 2023 03:09:55 -0400
+X-Greylist: delayed 152 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Jun 2023 00:08:44 PDT
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A1C297B;
+        Thu, 15 Jun 2023 00:08:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686812912; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=L6Unz2wogBCGZpNCk/2gHso29R2v034P4hfnLPsJ2uHlUoEw/91KrSQzzKrauhOxYe
+    QLBj0RtcSRB/beCifgPIxx0kT38gihAKzCZe7WX4kB2uwOO3lmYQenLXUZst+xO2qJil
+    klfLGP8Sw1CRAFNBwHhQV1waUwfydLi2zIOdl5qAfBy5nDtARx8a/eVo2oqVNOmMCB7z
+    AdZZM7qHb87PdnD3IQIchCtuFXAcf9oxWzrksiSaFg2zw1bZQL+YomXGPPCnYg2xBxnc
+    ag4v7tZjlhYcGKDIO/XGLaGNdrnDcAGFvK9KSyCKaQocbLb74GMR+RbBDg+WdX7fahRY
+    nnuQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686812912;
+    s=strato-dkim-0002; d=strato.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=8+qFfB1rN2Sj/O8U/wDDRxw1z4CJQphmlltjDLoIQFU=;
+    b=tSAjbAtEsAWBhxQGs1TY183UuZlIbWR3xA/T+9FpUCYYgH/WIbR22bnvWfzB4o//Xk
+    48t7wqwXrtvUDk4NX52PR2wUmEDaf8gFey3I8AWgl+PHgs1Ogt5g6DoFAMuXLXu2bPmU
+    dnLjuc0ovZHm57YUgsIO+tQrYxa7+gCbYAxonwq2HM8dWv7g86GBjP8oDzHWHWfPiTPu
+    GFneu73YJfOSoWOFkHqnG4VRJ+BiBfVvqhonyJYpoQp48SEAlQaM7Ho+h0zOVNT47b0M
+    D94KJIMgDNyQgE5jZ1VtHwWIbz6QtTNdFL16CYdX3St+aWvR9b/oBsJulNuEW5pIj2Jm
+    Usfg==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686812912;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=8+qFfB1rN2Sj/O8U/wDDRxw1z4CJQphmlltjDLoIQFU=;
+    b=fqsxASzjL94hytAHlMkUBSz2aEPp+JdkcxdjbQvHDS1gaILhHXC6l8eKPjhNBIg9IM
+    EBheQZN42MweYYolbuctyWuGz0e/ZRfR0hoHsafu8qvGTht3hN8bQC3NgyULvoJ0YJ8o
+    C8MVp1zbKAiiEac/h+wtgU+Rb2800aTBbVBUA7HVfJKYuBIV0eqA6QXAriI+ZEACVqdX
+    HIqPMYpKszjTYaIdk1ktSBUVoaPYijhe1dyOj24j3tYeclc7Hsw6L8bUWUD8UcGKEnK1
+    VUp+XRvEI1E+6qBu4t5xJ7jO3F8EyyDY5Bq70z8yp+ZkcfbCbQFOwRD/2QlvE/0R5wF7
+    V6Kw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686812912;
+    s=strato-dkim-0003; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=8+qFfB1rN2Sj/O8U/wDDRxw1z4CJQphmlltjDLoIQFU=;
+    b=G5prsUdaZypuOfJGqNK67nTIA8+mflVABVlfs7lbDsZEKLKnrcq3m8VVM3kEq2vw/s
+    LjwkO1m/d6GaGJy2pnAQ==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Apz9PSN6LgsXcGeonQ="
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 49.6.0 DYNA|AUTH)
+    with ESMTPSA id jaf17fz5F78W25s
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Thu, 15 Jun 2023 09:08:32 +0200 (CEST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH 0/9] MIPS: CI20: Add WiFi / Bluetooth support
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <20230609082348.GK8160@alpha.franken.de>
+Date:   Thu, 15 Jun 2023 09:08:32 +0200
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        list@opendingux.net
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <E3586962-A5A0-476E-8B5C-AFB1E1B0C4E6@goldelico.com>
+References: <20230604145642.200577-1-paul@crapouillou.net>
+ <20230609082348.GK8160@alpha.franken.de>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+X-Mailer: Apple Mail (2.3445.104.21)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Thomas,
 
-I notice a regression report on Bugzilla [1]. Quoting from it:
+> Am 09.06.2023 um 10:23 schrieb Thomas Bogendoerfer =
+<tsbogend@alpha.franken.de>:
+>=20
+> On Sun, Jun 04, 2023 at 04:56:33PM +0200, Paul Cercueil wrote:
+>> Hi,
+>>=20
+>> Here's a set of patches to add support for the WiFi / Bluetooth chip =
+on
+>> the CI20.
+>>=20
+>> WiFi works pretty well, provided it is used with the latest firmware
+>> provided by linux-firmware. Bluetooth does not work very well here, =
+as
+>> I cannot get my wireless keyboard to pair; but it does detect it, and =
+it
+>> does see they key presses when I type the pairing code.
+>>=20
+>> I only tested with a somewhat recent (~2022) Buildroot-based =
+userspace.
+>> I enabled WEXT compatibility because the CI20 is typically used with =
+a
+>> very old userspace, but I did not try to use it with old tools like
+>> ifconfig/iwconfig.
+>>=20
+>> Cheers,
+>> -Paul
+>>=20
+>> Paul Cercueil (9):
+>>  MIPS: DTS: CI20: Fix regulators
+>>  MIPS: DTS: CI20: Fix ACT8600 regulator node names
+>>  MIPS: DTS: CI20: Add parent supplies to ACT8600 regulators
+>>  MIPS: DTS: CI20: Do not force-enable CIM and WiFi regulators
+>>  MIPS: DTS: CI20: Misc. cleanups
+>>  MIPS: DTS: CI20: Parent MSCMUX clock to MPLL
+>>  MIPS: DTS: CI20: Enable support for WiFi / Bluetooth
+>>  MIPS: configs: CI20: Regenerate defconfig
+>>  MIPS: configs: CI20: Enable WiFi / Bluetooth
+>>=20
+>> arch/mips/boot/dts/ingenic/ci20.dts | 148 =
++++++++++++++++++++---------
+>> arch/mips/configs/ci20_defconfig    |  47 ++++++---
+>> 2 files changed, 133 insertions(+), 62 deletions(-)
+>>=20
+>> --=20
+>> 2.39.2
+>=20
+> series applied to mips-next.
 
-> Hello, 
-> 
-> We are trying to connect 2x QCN9074 together (one as AP, the other as client). 
-> 
-> Using Ubuntu 22.04 hwe 5.19 generic kernel allows to pair both units in 800.11ac 80MHz only. Any other combinations of 802.11ax or ac/ax with 160MHz bandwidth does not work. The client kernel freezes when associating to QCN9074 AP without specific logs and requires reboot. I'll post another bug once I can get more logs. 
-> 
-> Since quite some patches came through since 5.19 - some of them related to 160MHz bandwidth. I tried multiple newer mainline kernels without success and usually the same error. 
-> 
-> Building kernel from latest ath master branch: 6.4.0-rc4-wt-ath+ gives the following dmesg output:
-> 
-> [  353.587072] ath11k_pci 0000:04:00.0: BAR 0: assigned [mem 0xa4200000-0xa43fffff 64bit]
-> [  353.587180] ath11k_pci 0000:04:00.0: MSI vectors: 1
-> [  353.587186] ath11k_pci 0000:04:00.0: qcn9074 hw1.0
-> [  353.741799] mhi mhi0: Requested to power ON
-> [  353.741806] mhi mhi0: Power on setup success
-> [  353.912479] mhi mhi0: Wait for device to enter SBL or Mission mode
-> [  354.007221] ath11k_pci 0000:04:00.0: chip_id 0x0 chip_family 0x0 board_id 0xff soc_id 0xffffffff
-> [  354.007225] ath11k_pci 0000:04:00.0: fw_version 0x2403072e fw_build_timestamp 2021-06-06 23:27 fw_build_id 
-> [  355.333791] ath11k_pci 0000:04:00.0: leaving PCI ASPM disabled to avoid MHI M2 problems
-> [  355.729786] ath11k_pci 0000:04:00.0 wlp4s0: renamed from wlan0
-> [  358.960477] ath11k_pci 0000:04:00.0: ce desc not available for wmi command 36866
-> [  358.960481] ath11k_pci 0000:04:00.0: failed to send WMI_STA_POWERSAVE_PARAM_CMDID
-> [  358.960484] ath11k_pci 0000:04:00.0: could not set uapsd params -105
-> [  358.960485] ath11k_pci 0000:04:00.0: failed to set sta uapsd: -105
-> [  362.032472] ath11k_pci 0000:04:00.0: ce desc not available for wmi command 90113
-> [  362.032477] ath11k_pci 0000:04:00.0: failed to send WMI_REQUEST_STATS cmd
-> [  362.032479] ath11k_pci 0000:04:00.0: could not request fw stats (-105)
-> [  362.032480] ath11k_pci 0000:04:00.0: failed to request fw pdev stats: -105
-> [  365.104479] ath11k_pci 0000:04:00.0: ce desc not available for wmi command 20482
-> [  365.104483] ath11k_pci 0000:04:00.0: failed to submit WMI_VDEV_DELETE_CMDID
-> [  365.104485] ath11k_pci 0000:04:00.0: failed to delete WMI vdev 0: -105
-> [  365.104487] ath11k_pci 0000:04:00.0: failed to delete vdev 0: -105
-> [  368.176472] ath11k_pci 0000:04:00.0: ce desc not available for wmi command 16387
-> [  368.176476] ath11k_pci 0000:04:00.0: failed to send WMI_PDEV_SET_PARAM cmd
-> [  368.176479] ath11k_pci 0000:04:00.0: failed to enable PMF QOS: (-105
-> [  371.248474] ath11k_pci 0000:04:00.0: ce desc not available for wmi command 16387
-> [  371.248478] ath11k_pci 0000:04:00.0: failed to send WMI_PDEV_SET_PARAM cmd
-> [  371.248480] ath11k_pci 0000:04:00.0: failed to enable PMF QOS: (-105
-> [  374.320393] ath11k_pci 0000:04:00.0: ce desc not available for wmi command 16387
-> [  374.320397] ath11k_pci 0000:04:00.0: failed to send WMI_PDEV_SET_PARAM cmd
-> [  374.320400] ath11k_pci 0000:04:00.0: failed to enable PMF QOS: (-105
-> 
-> Both PCs are Intel x86 (same bug for AMD). We have multiple references of QCN9074 that we tested:
-> - Sparklan WPEQ-405AX (our preferred one, as they are the only vendor I know that went through FCC certification) - This unit can associate to APs only with the firmware Sparklan provided. Otherwise, link strength is reported low and barely no APs are listed after scanning.
-> - Emwicon WMX7406 - has better performances with Sparklan's vendor FW. Works with ath11k-firmware 2.7.0.1 but shows lower TX mostly.
-> 
-> Tested FW (non exhaustive):
-> # ath11k-firmware 2.5.0.1
-> 823915206101779f8cab6b89066e1040  /lib/firmware/ath11k/QCN9074/hw1.0/amss.bin
-> 668f53050a92db5b4281ae5f26c7e35d  /lib/firmware/ath11k/QCN9074/hw1.0/board-2.bin
-> fcca36959c5f56f9f0fb7015083dc806  /lib/firmware/ath11k/QCN9074/hw1.0/m3.bin
-> 
-> # ath11k-firmware 2.7.0.1
-> 465d0a063d049f7e4b79d267a035c6c7  /lib/firmware/ath11k/QCN9074/hw1.0/amss.bin
-> 668f53050a92db5b4281ae5f26c7e35d  /lib/firmware/ath11k/QCN9074/hw1.0/board-2.bin
-> ad8fafb9c1deab744c972469be916e72  /lib/firmware/ath11k/QCN9074/hw1.0/m3.bin
-> 
-> # Vendor firmware 
-> 1e88ff2e2b5bcf7f130397cb5b21ef39  /lib/firmware/ath11k/QCN9074/hw1.0/amss.bin
-> 7b3ce8686713a724946466ec1fefc2f4  /lib/firmware/ath11k/QCN9074/hw1.0/board.bin
-> d0a6f7ccd52f9e3886f0bc96309f7b9a  /lib/firmware/ath11k/QCN9074/hw1.0/m3.bin
-> 
-> 
-> Attached dmesg log with ath11k debug_mask=0xFFFF and lspci. 
-> 
-> Thank you
+I think this was a little too early. Please see my review.
 
-See Bugzilla for the full thread and attached dmesg.
+Best regards,
+Nikolaus
 
-Manikanta: This regression is apparently caused by a commit of yours.
-Would you like to take a look on it?
+>=20
+> Thomas.
+>=20
+> --=20
+> Crap can work. Given enough thrust pigs will fly, but it's not =
+necessarily a
+> good idea.                                                [ RFC1925, =
+2.3 ]
 
-Anyway, I'm adding it to regzbot:
-
-#regzbot introduced: 13aa2fb692d371 https://bugzilla.kernel.org/show_bug.cgi?id=217536
-#regzbot title: Threaded NAPI causes ce desc unavailable error on ath11k
-
-Thanks.
-
-[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217536
-
--- 
-An old man doll... just what I always wanted! - Clara
