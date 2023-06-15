@@ -2,108 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38D65730D5B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 04:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E3E730D5D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 04:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237950AbjFOCxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 22:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39338 "EHLO
+        id S241619AbjFOCxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 22:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231177AbjFOCxV (ORCPT
+        with ESMTP id S242470AbjFOCxa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 22:53:21 -0400
-Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3386926A2;
-        Wed, 14 Jun 2023 19:53:19 -0700 (PDT)
-Received: from ed3e173716be.home.arpa (unknown [124.16.138.129])
-        by APP-05 (Coremail) with SMTP id zQCowACHpwQZfYpkfMiQAg--.41550S2;
-        Thu, 15 Jun 2023 10:53:13 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     keescook@chromium.org
-Cc:     tony.luck@intel.com, gpiccoli@igalia.com,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v2] pstore/platform: Add check for kstrdup
-Date:   Thu, 15 Jun 2023 10:53:12 +0800
-Message-Id: <20230615025312.48712-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 14 Jun 2023 22:53:30 -0400
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5617226B1;
+        Wed, 14 Jun 2023 19:53:28 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id DA1D6ECD8E;
+        Wed, 14 Jun 2023 19:53:27 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 1TuKSNZEzzml; Wed, 14 Jun 2023 19:53:27 -0700 (PDT)
+From:   Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
+        t=1686797607; bh=W6yGQPaKblXM6pB5IEmuGlSyN4iL12QpXtqEw0PdKVU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=JEsa9H0hkL1veqdXruONDggfIJB7rY2gXThff1FpaS71jzXtY3dcIvZ8NNCvewIkd
+         5gTe2UN11dC257p7AINUDKZqP02lW7PZwd2wkxYLHNQOEOWi4WQ4taKJFMjGKNXCmw
+         Da0IsCerX894BVP3rYuYEJcA7rpgFpG9diWKDaDqQ7E1ql6ryzHOeQICElTlLpIAek
+         31o0bMxAgn2S9q55GBYE9JbeAWmzvqoiqT1jGXYQkrSN7P4CFG5K/7ER/+TbVyjqor
+         dE+BIOuwYyb74kojIvdKnkNDRt3xancNmi8yTMXtf7obEQo/PTcV1yGhutBYoY+DDw
+         ZXFJt4xw7UdXQ==
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Peng Fan <peng.fan@nxp.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        Peng Fan <peng.fan@oss.nxp.com>
+Cc:     "amitk@kernel.org" <amitk@kernel.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "andrew.smirnov@gmail.com" <andrew.smirnov@gmail.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Alice Guo <alice.guo@nxp.com>
+Subject: Re: [PATCH 2/3] thermal: qoriq_thermal: only enable supported sensors
+Date:   Thu, 15 Jun 2023 04:53:17 +0200
+Message-ID: <4844567.31r3eYUQgx@pliszka>
+In-Reply-To: <2e57d14a-214e-c3e0-e011-e804ce8c9b39@oss.nxp.com>
+References: <20230516083746.63436-1-peng.fan@oss.nxp.com>
+ <507b5daa-73e7-8d21-4f73-c56f88c6bf77@linaro.org>
+ <2e57d14a-214e-c3e0-e011-e804ce8c9b39@oss.nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowACHpwQZfYpkfMiQAg--.41550S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7WFWfuw4xKr1rXw1fur1DGFg_yoW8XrW5p3
-        ykCwn3JFW8G3W29w1vq3WrZF4YqF4ktr4rJ3yxta1xtwn0gr1YvrWUt3ZavFy8JryfXr17
-        JF1rCw15uFZ0vF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkq14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4U
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JV
-        WxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
-        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbJ3ktUUUUU==
-X-Originating-IP: [124.16.138.129]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add check for the return value of kstrdup() and return the error
-if it fails in order to avoid NULL pointer dereference.
+On czwartek, 15 czerwca 2023 04:29:01 CEST Peng Fan wrote:
+> On 6/8/2023 3:10 AM, Daniel Lezcano wrote:
+> >
+> > [...]
+> >
+> > Ok, I misunderstood. I thought that was for failing registered thermal
+> > zone.
+> > 
+> > Would enabling the site in ops->change_mode do the trick ?
+> 
+> No. ops->change_mode not able to do the trick.
+> 
+> devm_thermal_of_zone_register->thermal_zone_device_enable
+> ->thermal_zone_device_set_mode->__thermal_zone_device_update.part.0
+> ->__thermal_zone_get_temp
+> 
+> The thermal_zone_device_set_mode will call change_mode, if return
+> fail here, the thermal zone will fail to be registered.
+> 
+> Thanks,
+> Peng.
 
-Fixes: 563ca40ddf40 ("pstore/platform: Switch pstore_info::name to const")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog:
+I think the idea is not to return a failure in ops->change_mode, but to move 
+enabling the site in REGS_TMR/REGS_V2_TMSR register from 
+qoriq_tmu_register_tmu_zone to ops->change_mode. This way the site will be 
+enabled only for actually existing thermal zones, since those not described in 
+the device tree won't reach thermal_zone_device_enable.
 
-v1 -> v2:
+S.
 
-1. Allocate a copy earlier.
----
- fs/pstore/platform.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/fs/pstore/platform.c b/fs/pstore/platform.c
-index cbc0b468c1ab..727f8ce71062 100644
---- a/fs/pstore/platform.c
-+++ b/fs/pstore/platform.c
-@@ -573,6 +573,8 @@ static int pstore_write_user_compat(struct pstore_record *record,
-  */
- int pstore_register(struct pstore_info *psi)
- {
-+	char *new_backend;
-+
- 	if (backend && strcmp(backend, psi->name)) {
- 		pr_warn("backend '%s' already in use: ignoring '%s'\n",
- 			backend, psi->name);
-@@ -593,6 +595,10 @@ int pstore_register(struct pstore_info *psi)
- 		return -EINVAL;
- 	}
- 
-+	new_backend = kstrdup(psi->name, GFP_KERNEL);
-+	if (!new_backend)
-+		return -ENOMEM;
-+
- 	mutex_lock(&psinfo_lock);
- 	if (psinfo) {
- 		pr_warn("backend '%s' already loaded: ignoring '%s'\n",
-@@ -630,7 +636,7 @@ int pstore_register(struct pstore_info *psi)
- 	 * Update the module parameter backend, so it is visible
- 	 * through /sys/module/pstore/parameters/backend
- 	 */
--	backend = kstrdup(psi->name, GFP_KERNEL);
-+	backend = new_backend;
- 
- 	pr_info("Registered %s as persistent store backend\n", psi->name);
- 
--- 
-2.25.1
 
