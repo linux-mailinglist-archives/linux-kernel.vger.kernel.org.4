@@ -2,253 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2A5731018
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24BCE731019
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:05:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244096AbjFOHFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 03:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35254 "EHLO
+        id S243754AbjFOHFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 03:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233813AbjFOHFX (ORCPT
+        with ESMTP id S237830AbjFOHFY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 03:05:23 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3733DDF;
+        Thu, 15 Jun 2023 03:05:24 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2072.outbound.protection.outlook.com [40.107.94.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA11B189;
         Thu, 15 Jun 2023 00:05:22 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35F6gnTu013251;
-        Thu, 15 Jun 2023 07:05:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=o1XjIHqTHkGP1XrVMkoJrsPBw9FCpVkiki/z38yx75U=;
- b=YuJF/rL1I3gMJhsXQ/zLrQy8/ng8VUoxqHKk5NHF3G3GqAoNKZ2ic39Amp0pDbTz2zBO
- ZtYJD5f0rYiKnHNsojxHiGQ/F+Qx5+kkLj38GnZDnvaZyUm9MLTtjkeu4VGWbhG4FbPc
- kdCu+gGNbLGc2BRYk/4jihseXJ50LJajwys0VManC5CUfLo6mQS+8oaFIhnf8ZYGjjy7
- MrVCDjlHffD2AC81grZFebFkqjm0kOCJJ3xZa442Svk3EZEbLc88G+irEIGp++kbVUP2
- ujR3n+NRVcZAJBgSnGv3f6j8yHJ/q63ckkwShc9gzX52RxqS/GFeWdlS1vMC7/8GOzpq Hw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r7p4q8r3y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jun 2023 07:05:18 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35F75IBG023128
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jun 2023 07:05:18 GMT
-Received: from [10.110.8.184] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 15 Jun
- 2023 00:05:14 -0700
-Message-ID: <66f3bedf-5181-09da-c945-5cc8b8dda381@quicinc.com>
-Date:   Thu, 15 Jun 2023 12:35:11 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 2/2] spi: spi-geni-qcom: Add SPI SLAVE mode support for
- GENI based QuPv3
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <broonie@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <quic_msavaliy@quicinc.com>, <quic_vtanuku@quicinc.com>,
-        <quic_vnivarth@quicinc.com>, <quic_arandive@quicinc.com>
-References: <20230613065229.5619-1-quic_ptalari@quicinc.com>
- <20230613065229.5619-3-quic_ptalari@quicinc.com>
- <d39df510-c0d0-97c2-4a35-e28829ddd761@linaro.org>
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=X79vdGDe74d0ViP88O9UR+o+1Jx5lVQgXoQRSZGLED+sOYi9+jLRnPLCuTT//Eps/qrhqVZbxMhKcPmechUmHu3ueqluHKer3K6woxYAALpKQIQhh0BEU44z8PUNCe94Cme25SB7cskyjdX1cSwVw3z501FSRi/VwNFVg7Jm0F+kGLjHQmX4nou1ZTJX4nE1FST6BRnzzV3zIqGv0/ykGLosUpIbussvUBrknp49w8QPQp4zEbmEq4gX6elLF0XeV8z91e/0B+2xfKuiVZc2IgYBAE5FOqkbHv+ihrEU/TfgTs19RWTuPeMvJeZArwAluZcF9nXjVFKnIMOK6hM1gg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GLtCioAkKiKuhN7cN/J8BLXrgHuRRVRJm2G7HLIy0vc=;
+ b=jKTEA7vkZEWmr4pRZimEXmpTaNLITWweECj4MBm5I5wrVJrHcZIhQL1S8lKtHWfP5QBxQlmaP5p4A9fYC84bx8eyaI5bP5tT0xkXz1NpUoMxvHq2503ugeTYjp9FMH47MyHsSUaRQD2GmCUD1YiYYgeb7H3M863WX8vEFfPVJa414nLzScajGlwEIoa7MoBsMAwHqGqXVRlXJxYSu+T1+9lEkGL3oQjugssv/KSXOPOcVCph4VEMtlqZG49dQmN/42zhfg7f4M6WL0l11+qJjN0ihrHhybni6vq04dlJwSxHjlDSfMgmxSGbHgy06Z6E3Kb3+xaXO7OmaxvdJnj3bA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GLtCioAkKiKuhN7cN/J8BLXrgHuRRVRJm2G7HLIy0vc=;
+ b=u8f6/48+wg9YzrkgmVEUcaPlHeVmj5eB6NdZq/7CinygnP+DldljUxArm+9z5q6Da9vvkPjRQdPp/H2oZRHmyNi+5nyfvuXLRGm1J0oYTnMVUwld7BADYCBYxVc6Ci4iMnV05B23JeQv6ZknIMFQQk+6JOJONhU2xYo8wvObtFY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BYAPR12MB3589.namprd12.prod.outlook.com (2603:10b6:a03:df::29)
+ by IA0PR12MB8255.namprd12.prod.outlook.com (2603:10b6:208:404::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Thu, 15 Jun
+ 2023 07:05:20 +0000
+Received: from BYAPR12MB3589.namprd12.prod.outlook.com
+ ([fe80::401e:2e7f:7c2b:6bff]) by BYAPR12MB3589.namprd12.prod.outlook.com
+ ([fe80::401e:2e7f:7c2b:6bff%4]) with mapi id 15.20.6455.024; Thu, 15 Jun 2023
+ 07:05:20 +0000
+Message-ID: <87ce15c9-670e-f270-94b7-580b0a54f59f@amd.com>
+Date:   Thu, 15 Jun 2023 09:05:12 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] accel/qaic: Call DRM helper function to destroy prime GEM
 Content-Language: en-US
-From:   Praveen Talari <quic_ptalari@quicinc.com>
-In-Reply-To: <d39df510-c0d0-97c2-4a35-e28829ddd761@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: MIiSJ1bIXD8GlJxwmMDZHqvtFwUjYsCP
-X-Proofpoint-ORIG-GUID: MIiSJ1bIXD8GlJxwmMDZHqvtFwUjYsCP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-15_04,2023-06-14_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 adultscore=0 lowpriorityscore=0 impostorscore=0
- bulkscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999 phishscore=0
- mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306150058
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Jeffrey Hugo <quic_jhugo@quicinc.com>, quic_carlv@quicinc.com,
+        quic_pkanojiy@quicinc.com, sukrut.bellary@linux.com,
+        sumit.semwal@linaro.org
+Cc:     ogabbay@kernel.org, linux-arm-msm@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-media@vger.kernel.org
+References: <20230614161528.11710-1-quic_jhugo@quicinc.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20230614161528.11710-1-quic_jhugo@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR0P281CA0121.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:97::19) To BYAPR12MB3589.namprd12.prod.outlook.com
+ (2603:10b6:a03:df::29)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3589:EE_|IA0PR12MB8255:EE_
+X-MS-Office365-Filtering-Correlation-Id: 41f0e3b4-6e74-489e-724f-08db6d6ee15e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jYTm++mVn2DC6g1B3ydcXG1yo28MrjsAMcF5jLvUI1HddQ7FE2C1zcVqqmNOiCWqoSkY8oX+21S0bLTja7xgiWCBQR2pApRi7vm8GdjG0XeeCkr9ksYbkbcVTGWhUxNF8SjVBtlAmJknfG/rCXF5lLIyYnO+pTFfbca8E+BZQ9XUS1DaINDBNyAy7wFYDwg4wKM14hBvtTgRJeDef6zI9JYoJ2txDYJc+aUH1stBq83grzgLvOKodzskjHy1FHxvuGvKBBQGF6BFuM/VY8ycdT1glL7PFl6hITVLksgyRsd+67ZH8YPLzIJTlfQKdq/CvxI/PHyiD5U1xVjJ2V1COBhzCKv/GKT7KKkVMFqJTt3X9S5Ab81TRbnV+7tLfhZ90ISf0Ut3KunNvseC5fIaQRIz+T8q0gFXtZQsTHSI3Xg8EHs1vz+lEmTahEvMx3F0v1DyKSeUhgeY5yzPHJqrKhvQwrjF3w76yfsGAKWdk4R214GWJWfYxUd/hamYH+YS7hBxE6Dal5VArg5XcHAG4wRPgNyJW2c2TM9tukUCzlS+eE6HPfBjDY0tNZfzCt+d+pIlbd6R0oFPnX48XU3HhPK88cneq1gyAs9/GrQzyuNgTvbi1qUTUeib3ubJiBtq3kPai4LYB+w389t3PvBWPg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3589.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(366004)(376002)(346002)(136003)(451199021)(31686004)(66946007)(4326008)(66556008)(36756003)(66476007)(186003)(478600001)(66574015)(2906002)(2616005)(966005)(8676002)(41300700001)(316002)(31696002)(86362001)(6486002)(7416002)(6666004)(6506007)(8936002)(5660300002)(83380400001)(38100700002)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VWV1bklYSFZ1M3pxbjJBRElLbkNpNUpCazZTVDNTb2I1TmRqQTVlZEpOWHRE?=
+ =?utf-8?B?bXU4K3NobVc4QXcweS81R0JMZFdNLzArL2JROU5IYzhVRUFwY2Z1SDBtdmxG?=
+ =?utf-8?B?N0luZ1V4OGE2Y3g3R25PTjFvNGxFUkcxSm5IWDhpSG1QVEdTUXpPMFYvZExB?=
+ =?utf-8?B?Ump1QVBjZzZQa0FXZi9icmFIWVg0MWh0MVdpZUFsK3c5YWd0NzF5MENuUGVy?=
+ =?utf-8?B?SUF6Qit3dDIxOE1hd1RNTkdvNExMSFBrQitTZzlPZkNTdndKN3BtUjk4cFdO?=
+ =?utf-8?B?QlE0YjZjbVlpeVl4U1BTdlc5MXN5YmE3OGF6ZnQvSGEybVptWWxiVTV6djMx?=
+ =?utf-8?B?bFNTMlRrM3Jtbkk3ZzlsQStZM3JNaVdwc2tjZ0N1YXJMVzZBakVTNkF3MEcr?=
+ =?utf-8?B?V0xyK00zeldZTzVNOFA4bHRHWDJQUkljc0t5OW1FdkdyTngrS1RybWYwNUZh?=
+ =?utf-8?B?Qmt6RlZodmtWc3BJVE9NY3h2YmRtNmhucHQzZ1pNZ1NJN3EzcVg0eGM3OW9L?=
+ =?utf-8?B?bUhud3JuSGtGL1l1aU5KeG9EbWNJTFRYcmN5SDNLSVpCN0hxdWQyTDRHRnhl?=
+ =?utf-8?B?elBoODVVQUIvR1p1UEQ2REwzZjAxdi8vMGVNSE1lMlE4bk5rNnVQOHRMTW1E?=
+ =?utf-8?B?ZXFnS3ZUWVlKWUZwbUZzV3lmZUNjaHNBRlRRRlR0N2dGUE9nT3VKVG9rcWt3?=
+ =?utf-8?B?UUtVcExXbWtuZkYreENkUkUzbGg5OUl0M0pMeDBEUGtmbWp5enlERzh6VkN6?=
+ =?utf-8?B?bWlQanBCd1hUQ0o1VUY2U0sxZW1NdXlMWStjY0dUblkrWHJGTTBCdVhxMFpH?=
+ =?utf-8?B?eTY5NHNhenFvVkdpY3FQT3NOV3JtZEd0QnJVMFNlK1RlWWxkb2RhYXlVUGhX?=
+ =?utf-8?B?UnFHZlkrMmNFNys2TVVrZHd4U2lWSVNndVU1YXlLSCtqajdSUGRKN29TZFY5?=
+ =?utf-8?B?d3IvejN6c24ydXB5dXh6K2xRUlFBb3VQQVJkNUVaUXpQM0dlVVJZWTZKL2Zt?=
+ =?utf-8?B?L09KZm1PUUR2MVFtRUZFRHF3UTlPOUltZWFDUThVejVLOUg5T09SRlMyQkNh?=
+ =?utf-8?B?Y1p0bndUdE1yV3hPeVVPUFV2TkZ0a0JOcDZDb2lZM0ZEWE5qaCticVVLODRG?=
+ =?utf-8?B?UkxvMXN6Uk1mLzdITEhWZzdydEIyMG4xTlV1TDE0clVDTGRpOWpRWW9tUHF1?=
+ =?utf-8?B?QXBDMHZybC9pbnNUVXozaklQZE91cDlSdkcwb1lUN2E1UnNNTHA5Z1lFNDFR?=
+ =?utf-8?B?MEtMaTh3YkQvenE1bXorbkZlUjVCaFplYUlzTXFhVVN5VXlHQ2F4cmdzcXg4?=
+ =?utf-8?B?SjhGZ2EwOGlRL1NjVjZLejd5TU5BdzVzSWMvdHJMY0UrVjYxZUJqTk1tWjR5?=
+ =?utf-8?B?bElRQVVkV3pSQnkxdG80MUkzUnNibXBuZzBWQUYvMVZJMWxKUGNwQ2dwNkJp?=
+ =?utf-8?B?MXllVUhhajV3eW1vdVdPakpsOG91aFBJeTZIN2xBVUxBOHNLcWZFNDBKdUpn?=
+ =?utf-8?B?cnROUTRmVXBadlhtUm0rNXNtSDhpRWJSVjE5WkFleDRkU05RYUJyZXFhMzFs?=
+ =?utf-8?B?YnZ1eldTTHdZVWRUcDRHRUdvajc3T2hKREN4ODBHck5Wam5pWEhWNXlESmJ3?=
+ =?utf-8?B?ZmIwTXYwTlZvNkdKaFBSKzNPMXpNZU9uVXBUZWt3K1pzUENhb3dkSFU5SzZR?=
+ =?utf-8?B?MUFWWXQrbmZOeUt0ZmNESUUyVjRGYlhkRHloMkJ5emIzUnp0Vy9OeFlHQnp4?=
+ =?utf-8?B?N1gxZ2x0MjZzTmVab3B1MGlDOXNOeXl5TndzWjBLcHdOanFzeTMvUWhEM0M2?=
+ =?utf-8?B?a1BPMWNRTmpvOERacXJGamJxUWJTME5TdGNYclpKRnVvM0JCejhYYTVPVXNk?=
+ =?utf-8?B?QlpsOWg5SkF3a25xZHlHbHN2N0t2RnVISU1ZNUs0UDFyQVdRVEZRVHdWNmty?=
+ =?utf-8?B?U0JrekdyajJCaFA5blFOeTBoZkI4NzcrUllraWxYMXFyNllMU1RuYnRZWlJn?=
+ =?utf-8?B?Q3FReEROUm5UV3JBWFo1VWtsdVkzSS9lU3VFeG9VM01ZYVA4MHl1UnBodlVI?=
+ =?utf-8?B?aU5PaVk3ZVQycTYxTFRFVFNDazBYVXR3bnF4TWdwbHc3dzBXT09pMGRRaytD?=
+ =?utf-8?B?ZVdqUW9OT21PdEo3YkI0a3Y1MHoxcmJVWG1NVEVFUDFvK29RUFcwNHYxaHhB?=
+ =?utf-8?Q?HdLU/iQCVuKaW76DfW/wPb0/HDIRzPloUZkfJUDGc1ml?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 41f0e3b4-6e74-489e-724f-08db6d6ee15e
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3589.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 07:05:20.0801
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yGQUJFbzoSJHvnXC7Y71WpmleeYvEHFWrLgNYgyZfCGwmCuZkesbxtTO5yiaKivk
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8255
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
 
-Thank you for review.
 
-On 6/13/2023 5:57 PM, Konrad Dybcio wrote:
+Am 14.06.23 um 18:15 schrieb Jeffrey Hugo:
+> From: Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>
 >
-> On 13.06.2023 08:52, Praveen Talari wrote:
->> Add SPI SLAVE mode support for GENI based QuPv3.
->>
-> Copying the commit title in the commit message is a bit lackluster for
-> adding new functionality.
-Modified commit message
->> Signed-off-by: Praveen Talari <quic_ptalari@quicinc.com>
->> ---
->>   drivers/spi/spi-geni-qcom.c | 55 +++++++++++++++++++++++++++++++++----
->>   1 file changed, 49 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
->> index 206cc04bb1ed..2e3ae29e79e0 100644
->> --- a/drivers/spi/spi-geni-qcom.c
->> +++ b/drivers/spi/spi-geni-qcom.c
->> @@ -12,6 +12,7 @@
->>   #include <linux/platform_device.h>
->>   #include <linux/pm_opp.h>
->>   #include <linux/pm_runtime.h>
->> +#include <linux/property.h>
->>   #include <linux/soc/qcom/geni-se.h>
->>   #include <linux/spi/spi.h>
->>   #include <linux/spinlock.h>
->> @@ -52,6 +53,9 @@
->>   #define SPI_CS_CLK_DELAY_MSK		GENMASK(19, 10)
->>   #define SPI_CS_CLK_DELAY_SHFT		10
->>   
->> +#define SE_SPI_SLAVE_EN				(0x2BC)
->> +#define SPI_SLAVE_EN				BIT(0)
->> +
->>   /* M_CMD OP codes for SPI */
->>   #define SPI_TX_ONLY		1
->>   #define SPI_RX_ONLY		2
->> @@ -99,6 +103,24 @@ struct spi_geni_master {
->>   	int cur_xfer_mode;
->>   };
->>   
->> +static struct spi_master *get_spi_master(struct device *dev)
->> +{
->> +	struct platform_device *pdev = to_platform_device(dev);
->> +	struct spi_master *spi = platform_get_drvdata(pdev);
->> +
->> +	return spi;
->> +}
->> +
->> +static void spi_slv_setup(struct spi_geni_master *mas)
->> +{
->> +	struct geni_se *se = &mas->se;
->> +
->> +	writel(SPI_SLAVE_EN, se->base + SE_SPI_SLAVE_EN);
->> +	writel(GENI_IO_MUX_0_EN, se->base + GENI_OUTPUT_CTRL);
->> +	writel(START_TRIGGER, se->base + SE_GENI_CFG_SEQ_START);
->> +	dev_info(mas->dev, "spi slave setup done\n");
-> dev_dbg
-changed to dev_dbg
+> smatch warning:
+> 	drivers/accel/qaic/qaic_data.c:620 qaic_free_object() error:
+> 		dereferencing freed memory 'obj->import_attach'
 >
->> +}
->> +
->>   static int get_spi_clk_cfg(unsigned int speed_hz,
->>   			struct spi_geni_master *mas,
->>   			unsigned int *clk_idx,
->> @@ -140,12 +162,18 @@ static void handle_se_timeout(struct spi_master *spi,
->>   	const struct spi_transfer *xfer;
->>   
->>   	spin_lock_irq(&mas->lock);
->> -	reinit_completion(&mas->cancel_done);
->>   	if (mas->cur_xfer_mode == GENI_SE_FIFO)
->>   		writel(0, se->base + SE_GENI_TX_WATERMARK_REG);
->>   
->>   	xfer = mas->cur_xfer;
->>   	mas->cur_xfer = NULL;
->> +
->> +	if (spi->slave) {
->> +		spin_unlock_irq(&mas->lock);
->> +		goto unmap_if_dma;
->> +	}
->> +
->> +	reinit_completion(&mas->cancel_done);
-> Moving reiniting cancel_done after possibly writing the register
-> for both mas/slv cases sounds like a separate change - is it
-> necessary?
-there will be a chance of double reinit for slave because of goto 
-statement. Hence moved to down.
+> obj->import_attach is detached and freed using dma_buf_detach().
+> But used after free to decrease the dmabuf ref count using
+> dma_buf_put().
 >
->>   	geni_se_cancel_m_cmd(se);
->>   	spin_unlock_irq(&mas->lock);
->>   
->> @@ -541,6 +569,8 @@ static bool geni_can_dma(struct spi_controller *ctlr,
->>   
->>   	if (mas->cur_xfer_mode == GENI_GPI_DMA)
->>   		return true;
->> +	if (ctlr->slave)
->> +		return true;
-> Regardless of the xfer mode?
-we always operates spi slave in dma mode and added code comments
+> drm_prime_gem_destroy() handles this issue and performs the proper clean
+> up instead of open coding it in the driver.
 >
->>   
->>   	len = get_xfer_len_in_words(xfer, mas);
->>   	fifo_size = mas->tx_fifo_depth * mas->fifo_width_bits / mas->cur_bits_per_word;
->> @@ -619,6 +649,7 @@ static void spi_geni_release_dma_chan(struct spi_geni_master *mas)
->>   
->>   static int spi_geni_init(struct spi_geni_master *mas)
->>   {
->> +	struct spi_master *spi = get_spi_master(mas->dev);
->>   	struct geni_se *se = &mas->se;
->>   	unsigned int proto, major, minor, ver;
->>   	u32 spi_tx_cfg, fifo_disable;
->> @@ -627,7 +658,14 @@ static int spi_geni_init(struct spi_geni_master *mas)
->>   	pm_runtime_get_sync(mas->dev);
->>   
->>   	proto = geni_se_read_proto(se);
->> -	if (proto != GENI_SE_SPI) {
->> +
->> +	if (spi->slave) {
->> +		if (proto != GENI_SE_SPI_SLAVE) {
->> +			dev_err(mas->dev, "Invalid proto %d\n", proto);
->> +			goto out_pm;
->> +		}
->> +		spi_slv_setup(mas);
->> +	} else if (proto != GENI_SE_SPI) {
->>   		dev_err(mas->dev, "Invalid proto %d\n", proto);
->>   		goto out_pm;
->>   	}
->> @@ -677,9 +715,11 @@ static int spi_geni_init(struct spi_geni_master *mas)
->>   	}
->>   
->>   	/* We always control CS manually */
->> -	spi_tx_cfg = readl(se->base + SE_SPI_TRANS_CFG);
->> -	spi_tx_cfg &= ~CS_TOGGLE;
->> -	writel(spi_tx_cfg, se->base + SE_SPI_TRANS_CFG);
->> +	if (!spi->slave) {
->> +		spi_tx_cfg = readl(se->base + SE_SPI_TRANS_CFG);
->> +		spi_tx_cfg &= ~CS_TOGGLE;
->> +		writel(spi_tx_cfg, se->base + SE_SPI_TRANS_CFG);
->> +	}
->>   
->>   out_pm:
->>   	pm_runtime_put(mas->dev);
->> @@ -1072,6 +1112,9 @@ static int spi_geni_probe(struct platform_device *pdev)
->>   	pm_runtime_set_autosuspend_delay(&pdev->dev, 250);
->>   	pm_runtime_enable(dev);
->>   
->> +	if (device_property_read_bool(&pdev->dev, "qcom,slv-ctrl"))
->> +		spi->slave = true;
-> Missing dt-bindings
-Added dt-binding file
+> Fixes: ff13be830333 ("accel/qaic: Add datapath")
+> Reported-by: Sukrut Bellary <sukrut.bellary@linux.com>
+> Closes: https://lore.kernel.org/all/20230610021200.377452-1-sukrut.bellary@linux.com/
+> Suggested-by: Christian König <christian.koenig@amd.com>
+> Signed-off-by: Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>
+> Reviewed-by: Carl Vanderlip <quic_carlv@quicinc.com>
+> Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+
+Reviewed-by: Christian König <christian.koenig@amd.com>
+
+> ---
+>   drivers/accel/qaic/qaic_data.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> Konrad
->> +
->>   	ret = geni_icc_get(&mas->se, NULL);
->>   	if (ret)
->>   		goto spi_geni_probe_runtime_disable;
->> @@ -1092,7 +1135,7 @@ static int spi_geni_probe(struct platform_device *pdev)
->>   	 * for dma (gsi) mode, the gsi will set cs based on params passed in
->>   	 * TRE
->>   	 */
->> -	if (mas->cur_xfer_mode == GENI_SE_FIFO)
->> +	if (!spi->slave && mas->cur_xfer_mode == GENI_SE_FIFO)`
->>   		spi->set_cs = spi_geni_set_cs;
->>   
->>   	ret = request_irq(mas->irq, geni_spi_isr, 0, dev_name(dev), spi);
+> diff --git a/drivers/accel/qaic/qaic_data.c b/drivers/accel/qaic/qaic_data.c
+> index e42c1f9ffff8..e9a1cb779b30 100644
+> --- a/drivers/accel/qaic/qaic_data.c
+> +++ b/drivers/accel/qaic/qaic_data.c
+> @@ -23,6 +23,7 @@
+>   #include <linux/wait.h>
+>   #include <drm/drm_file.h>
+>   #include <drm/drm_gem.h>
+> +#include <drm/drm_prime.h>
+>   #include <drm/drm_print.h>
+>   #include <uapi/drm/qaic_accel.h>
+>   
+> @@ -616,8 +617,7 @@ static void qaic_free_object(struct drm_gem_object *obj)
+>   
+>   	if (obj->import_attach) {
+>   		/* DMABUF/PRIME Path */
+> -		dma_buf_detach(obj->import_attach->dmabuf, obj->import_attach);
+> -		dma_buf_put(obj->import_attach->dmabuf);
+> +		drm_prime_gem_destroy(obj, NULL);
+>   	} else {
+>   		/* Private buffer allocation path */
+>   		qaic_free_sgt(bo->sgt);
+
