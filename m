@@ -2,152 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FA717318FA
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:28:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A97E97318FE
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:30:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240686AbjFOM2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 08:28:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40474 "EHLO
+        id S239458AbjFOMaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 08:30:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240024AbjFOM2c (ORCPT
+        with ESMTP id S229571AbjFOM37 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 08:28:32 -0400
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3112B95;
-        Thu, 15 Jun 2023 05:28:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1686832106; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=bzCtMGP56z3zFeCKjQcyLs2fpXa7sj/XW35Qim9C3jGTjjrk7DoaPugChvVuMFINNO
-    lRcFLo31zP6cpp34D/IkcKtaCq2HVREOTiUiUYuegPCtW0271TU5/YKNuph/PwfNsnXF
-    rJIkHE8XRlJaoLVdCgtDFslxN9zcVpU8UEmjTI4OezYzFBpHeYBDQQJ6iy/siFIByIyQ
-    XShaNrekjuDXJhHQP7AsvlaK2ikRTpzK8o74pLL6X5ztYQM6eattq2lOfAv9dw3e2C+k
-    bcnqD6vqV2UFI/PPU3W4Uqz/Mj5SMvL4MGaGFemE6h4z/nsdKReGb+AqFZ2Tpvjs8sKX
-    dBeQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686832106;
-    s=strato-dkim-0002; d=strato.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=L8zahWCOH6BtOyqV84y/NXgx3tYFcQ4H5CS9K/3b9bI=;
-    b=IzTndO3C42btSk6DYAnFUPkGhtRl9Dk/f3UqLvfawMb2Q+aJLEks9TAHBV1uwXZXVq
-    ALZJuf22c7StD0TOLMDofu/kiFYflRsZHN23e/UDTaeDWC67fV8XyqAHQVCWKyEujYlp
-    sdYs97g56BYQePB/Me0406UMwfILjcw3Bi+gIxzmrUt8RR2uJ0K+IUB8aFZTEfhUt3KK
-    anM1ZjUfwNHkAOGlLX18EyCHm3n4ez1BbYG19PyLWS2RMKE/eVxkvHjkWpOHjRtaxG2c
-    AsDrRIAh6KGwaqiMMrgEZ9bmWr5yhR0xhJ0tcIMq8XofmtcnsvgcgRfEsSoMsVI6rMrU
-    X96Q==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686832106;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=L8zahWCOH6BtOyqV84y/NXgx3tYFcQ4H5CS9K/3b9bI=;
-    b=XOPfZi8xXC47E74buZVemU7KGyTfOl2mLhJ+47wAx6DudVfnS5JTCeQABhiJKfzqFs
-    DoONMhgza/+NcAVQwUEPSaem2ioSu/3K/cqV/F0F9PPMdcPbhHb08xKb/FM5ptP/3JJs
-    sK9XuA7FDn/WckfDsxKm34/JXu8MlatLAQV6btrVee/C0JmXPoQY+WLQR/sbb1qqPD3/
-    h56aENrfObLB51J0A8pFO2T2NVaqm7nfplXk4bUGcUZ5kpLNoDp+bETEmDFw3Gmb+CXb
-    JlYV71Gj01n2uiNChzrCuZwBnC7PDVu8iXTkzkdsN6m9Bn71fv7dMgIMq3iLwnkOX+S+
-    1Xcg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686832106;
-    s=strato-dkim-0003; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=L8zahWCOH6BtOyqV84y/NXgx3tYFcQ4H5CS9K/3b9bI=;
-    b=CnIpYnbgeAWTik1SNBQOK0z3JrYxmQtCodlGuSFIufni8kYbys6BaYEYz0RVKaa9c3
-    +MIR6vSron+RYt6TrdDQ==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Apz9PSN6LgsXcGeonQ="
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 49.6.0 DYNA|AUTH)
-    with ESMTPSA id jaf17fz5FCSP40V
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Thu, 15 Jun 2023 14:28:25 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH 0/9] MIPS: CI20: Add WiFi / Bluetooth support
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <A8EBCBA4-D9BA-4C2F-9C91-38128D06EDBA@goldelico.com>
-Date:   Thu, 15 Jun 2023 14:28:25 +0200
-Cc:     list@opendingux.net, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <AA802E24-A97B-42B6-90A4-5ECB1E4D9294@goldelico.com>
-References: <20230615084006.79194526F801@goldelico.com>
- <C1924536-FA97-4E75-9D22-99E5AF24EE5B@goldelico.com>
- <A8EBCBA4-D9BA-4C2F-9C91-38128D06EDBA@goldelico.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 15 Jun 2023 08:29:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E45D95
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 05:29:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686832153;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=miKGhTsa1C617Jf+rAPO8YcjvbVy2XjmmKexewlCMig=;
+        b=W/XBmv3Wk6hK09pMVSS+wFwC2riPJNm0W2KnoCGOXonTrrJhaV/jERTDFHaGwZ/sRwiSSj
+        gPBVAECcSD7BlShFqSYOj8Pekipg5T7cnyR+GS5gn8aaJ2rkHZj5o6LMjkwaMcfWDkEKAt
+        5QuIT5BIvI11dAbJq7nYFhiBm/V/Bv4=
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
+ [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-592-8GqbNtmGMKKCZIzGySFbMQ-1; Thu, 15 Jun 2023 08:29:10 -0400
+X-MC-Unique: 8GqbNtmGMKKCZIzGySFbMQ-1
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-1b51e91dc6aso2249935ad.0
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 05:29:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686832149; x=1689424149;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=miKGhTsa1C617Jf+rAPO8YcjvbVy2XjmmKexewlCMig=;
+        b=bx0K2dfwBAUT7Qz8I/Dya7o22boBmrmsrrOdZXfTQ29N2BThzOiGA+fSxC4dsDcUFj
+         YOz9fGnbxISm+8Sbg8eZiPO2D+QrvKUQTsLjyzqvtbe1hvLNpiUDzG3XqDY5ZZwEMIlN
+         aIsBCq628BSjDJiwTOxRzUMo3EQaqP4jxvORTTGHNNwsIIJwexQosirXd8Z96DUvdsdH
+         /CTnjJ1KuXUL0cZ4ZjctR6eDD2bh8hIHEDYeifaoIUbNALl5oWPC7IliCDkYCQQLAzNW
+         s/fQHYWfbVaFQC0CT5xDSNp0Y+EjtxqSjoth/nFE/QA0s2ISiCERCJSvFvCsPPQmBisR
+         QYAA==
+X-Gm-Message-State: AC+VfDykmIV4Sx4ujMDF/5XZrVRPUF0KS7aPMmCt9CY13eyICloqlsGh
+        k5Q4bf9hVwoc6R5JxItlAwP1bD5hhExM3kWUU2AzKL4ETHQ3TZrw2Bp5icDpN44xDGwNmVMecDL
+        3dmHPkmgk70VtJmbgLSV8S3/a
+X-Received: by 2002:a17:902:ecc9:b0:1b0:fe9:e57e with SMTP id a9-20020a170902ecc900b001b00fe9e57emr16332662plh.0.1686832149260;
+        Thu, 15 Jun 2023 05:29:09 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ47UwUMIaeKjeei4hpwO38mx1dbD0wAapGYqH6wtjkzhQTmhZv/MA3mxt0UYN8TaPs+w9oB1A==
+X-Received: by 2002:a17:902:ecc9:b0:1b0:fe9:e57e with SMTP id a9-20020a170902ecc900b001b00fe9e57emr16332648plh.0.1686832149003;
+        Thu, 15 Jun 2023 05:29:09 -0700 (PDT)
+Received: from [10.72.12.155] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id w5-20020a1709029a8500b001ab0a30c895sm13953037plp.202.2023.06.15.05.29.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jun 2023 05:29:08 -0700 (PDT)
+Message-ID: <bb20aebe-e598-9212-1533-c777ea89948a@redhat.com>
+Date:   Thu, 15 Jun 2023 20:29:01 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v5 00/14] ceph: support idmapped mounts
+Content-Language: en-US
+From:   Xiubo Li <xiubli@redhat.com>
+To:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Cc:     Gregory Farnum <gfarnum@redhat.com>,
+        Christian Brauner <brauner@kernel.org>, stgraber@ubuntu.com,
+        linux-fsdevel@vger.kernel.org, Ilya Dryomov <idryomov@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230608154256.562906-1-aleksandr.mikhalitsyn@canonical.com>
+ <f3864ed6-8c97-8a7a-f268-dab29eb2fb21@redhat.com>
+ <CAEivzxcRsHveuW3nrPnSBK6_2-eT4XPvza3kN2oogvnbVXBKvQ@mail.gmail.com>
+ <20230609-alufolie-gezaubert-f18ef17cda12@brauner>
+ <CAEivzxc_LW6mTKjk46WivrisnnmVQs0UnRrh6p0KxhqyXrErBQ@mail.gmail.com>
+ <ac1c6817-9838-fcf3-edc8-224ff85691e0@redhat.com>
+ <CAJ4mKGby71qfb3gd696XH3AazeR0Qc_VGYupMznRH3Piky+VGA@mail.gmail.com>
+ <977d8133-a55f-0667-dc12-aa6fd7d8c3e4@redhat.com>
+ <CAEivzxcr99sERxZX17rZ5jW9YSzAWYvAjOOhBH+FqRoso2=yng@mail.gmail.com>
+ <626175e2-ee91-0f1a-9e5d-e506aea366fa@redhat.com>
+In-Reply-To: <626175e2-ee91-0f1a-9e5d-e506aea366fa@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+[...]
 
->>>=20
->>> Since this patch will actually make the various ACT8600 regulators =
-work at their specified voltage, maybe the voltage on one of the updated =
-regulators is wrong?
->>>=20
->>> Maybe change the regulators one by one back to their old name, until =
-you find the one that is problematic? That may give us more info.
->>=20
->> That is what I also have though about but have not yet done.
->> Will try as soon as I find a time slot.
->=20
-> I have reverted the whole patch (had only a conflict in wifi_io / =
-LDO6) and now I can boot.
->=20
-> But do not see a WiFi or Bluetooth interface.
->=20
-> So it looks as if the CI20 variants are indeed different. Which would =
-also explain why we
-> originally came up with two different solutions to add WiFi.
->=20
-> Next I will try to bisect the individual changes...
+ > > >
+ > > > I thought about this too and came to the same conclusion, that 
+UID/GID
+ > > > based
+ > > > restriction can be applied dynamically, so detecting it on mount-time
+ > > > helps not so much.
+ > > >
+ > > For this you please raise one PR to ceph first to support this, and in
+ > > the PR we can discuss more for the MDS auth caps. And after the PR
+ > > getting merged then in this patch series you need to check the
+ > > corresponding option or flag to determine whether could the idmap
+ > > mounting succeed.
+ >
+ > I'm sorry but I don't understand what we want to support here. Do we 
+want to
+ > add some new ceph request that allows to check if UID/GID-based
+ > permissions are applied for
+ > a particular ceph client user?
 
-It is this and not the regulator names:
+IMO we should prevent users to set UID/GID-based MDS auth caps from ceph 
+side. And users should know what has happened.
 
-diff --git a/arch/mips/boot/dts/ingenic/ci20.dts =
-b/arch/mips/boot/dts/ingenic/ci20.dts
-index e2221d44e4269..391be48e6427a 100644
---- a/arch/mips/boot/dts/ingenic/ci20.dts
-+++ b/arch/mips/boot/dts/ingenic/ci20.dts
-@@ -295,7 +295,6 @@ &i2c0 {
-        act8600: act8600@5a {
-                compatible =3D "active-semi,act8600";
-                reg =3D <0x5a>;
--               status =3D "okay";
-=20
-                regulators {
-                        vddcore: SUDCDC1 {
+Once users want to support the idmap mounts they should know that the 
+MDS auth caps won't work anymore.
 
+Thanks
 
-Now I wonder how it works without status =3D "okay" for you but not for =
-me.
-
-Does your test branch have additional patches which add this back?
-
-Or does your board variant have better or different burnt in defaults =
-than
-my act8600 so that it runs without any driver?
-
-The chip reads as:
-
-ACTIVE
-8601QJ
-MD361
-
-BR,
-Nikolaus
+- Xiubo
 
