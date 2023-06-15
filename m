@@ -2,157 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7840C731D0C
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 17:49:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E6AD731D26
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 17:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241308AbjFOPtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 11:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42028 "EHLO
+        id S1344528AbjFOPwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 11:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235594AbjFOPs7 (ORCPT
+        with ESMTP id S1343749AbjFOPwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 11:48:59 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4B72D43
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 08:48:57 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f61b45ee0dso10875257e87.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 08:48:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686844136; x=1689436136;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PUAJ9GModBvA4BiyyqRlwTWGMClzVaAkbccnzBcQo3s=;
-        b=MAv3MustOdNWaVH6UO8Tri+zzNC5QiaRcjMYPdrOwkg1F9oLpNPh+Se9yT+bTw19yM
-         yp+3SnvrP3HaKHCpiwKlnxf9HOqrTMMAodRVIvGhiLCbwFbMfInStr+7OLvdh2I0aagU
-         bDIphpBENWQ7JOeyR9wIVFYGEIto1/CU2Pn6fYlcuRQm/4N4/ZcbM7bIRjBOYmtrvxeQ
-         XqFRL7flShjHn4VKXYwR57MWAOTacVW9A5HZ5ue5Q4MaLGXDU6dbqDhvTDUItnS7dElF
-         kJxlZ5zB+5bdVK8ZFqWH2XfFhVItlBYcddiER9Shjw9oSEvhVUnJpP2HamlKkQR7bkPY
-         XR6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686844136; x=1689436136;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PUAJ9GModBvA4BiyyqRlwTWGMClzVaAkbccnzBcQo3s=;
-        b=eG/1qlrbm/q7dl748xZmrzeTWly4Jh/ptoOgX7/Fd0SUlAwpSa3nSy5p3HfqjSK3fa
-         eqyOf49daaD1VYjlGoKwAtFfDPGua+8Oqi/EKUG+wv50G6Wg0EhVraf1N0LKxhQBFMLe
-         JvxsRRra1+SAsIe9I0POA3vPmPNc76XLdqRtTG8A5xyH87LeyZ3xfoXu4nUzBaRrOuXZ
-         6Q2i61lwFi3S5wl13ps7oKAJOK770NVW2EvQJZuINYJhpIiUuRxmTcBp1QvG3p93u3si
-         GaFLxTf03IjOzB56BimRlXwKk7/jCx8gQnFjpVy8fd7CZZEuqVYtPh7US9GyBRqM6WPw
-         qHBQ==
-X-Gm-Message-State: AC+VfDyYOre+NFhbN2saXi9RmUIqaYJA7QMb6yEvaJSx+2Z5dpHu6NaS
-        mM3DiXsfp1o27fSWB8cjefViKg==
-X-Google-Smtp-Source: ACHHUZ7G/1KtQPGOmB35K5gwxpTmfOodKftc5Fr+/cmcI1X+hOOeaGnPkjyvF5SbSC55aY60zofuoA==
-X-Received: by 2002:a19:5e58:0:b0:4f6:3c00:1766 with SMTP id z24-20020a195e58000000b004f63c001766mr9696485lfi.15.1686844136084;
-        Thu, 15 Jun 2023 08:48:56 -0700 (PDT)
-Received: from vingu-book.. ([2a01:e0a:f:6020:bbac:2128:4a5:31a7])
-        by smtp.gmail.com with ESMTPSA id h8-20020a1ccc08000000b003f8d80ecc5asm5765516wmb.12.2023.06.15.08.48.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 08:48:54 -0700 (PDT)
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, danny@kdrag0n.dev,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, srinivas.kandagatla@linaro.org
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH] arm64: dts: qcom: sm8250: correct dynamic power coefficients
-Date:   Thu, 15 Jun 2023 17:48:52 +0200
-Message-Id: <20230615154852.130076-1-vincent.guittot@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 15 Jun 2023 11:52:46 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF3018D;
+        Thu, 15 Jun 2023 08:52:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686844365; x=1718380365;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hTjPvLrhpjH9sRdy6Q9p9cBPgeBY5Gueb8oOzCcA7U4=;
+  b=LpnSwRE1S42eSVf4P+m8LoryX7Q4Izk3nWyLMpCkdv7Rp4Jk2czDeyS5
+   dyvPC6Um5a2JSnHMwxezBZwnLuv+d62ajyrqgnsHNMyuXncxOGILTeT6N
+   87kOX3nnxYq0H4NtGmsab/BoAzGEsfMzrCEnuYEF+eDKAH3D0pi3SmUvr
+   iIvBC54roVFA0c1/hDjt+iLyfuUbDT1cfbtSdC4IOe43RIZhWhUB/lr0r
+   vgvnKpd9GiTiYeJlxmub3G2QpUYGKcL1EESO6kQ1GzVvTUl6cKcdGALjQ
+   7WjEV+OktMXWTZNHU9KGJwx0rCLneIOF5GMOoO6on42zVfwsMqoBb26FU
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="348652234"
+X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
+   d="scan'208";a="348652234"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 08:50:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="689818935"
+X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
+   d="scan'208";a="689818935"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 15 Jun 2023 08:50:07 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1q9pEb-003ye9-2S;
+        Thu, 15 Jun 2023 18:50:05 +0300
+Date:   Thu, 15 Jun 2023 18:50:05 +0300
+From:   "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>
+To:     Michael Brunner <michael.brunner@kontron.com>
+Cc:     "josef@oderland.se" <josef@oderland.se>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "wsa@kernel.org" <wsa@kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ingmar Klein <Ingmar.Klein@kontron.com>
+Subject: Re: [PATCH v1 1/1] i2c: scmi: Convert to be a platform driver
+Message-ID: <ZIszLQ+Jv8YJr4Mu@smile.fi.intel.com>
+References: <20220906155507.39483-1-andriy.shevchenko@linux.intel.com>
+ <Yxj1ZQjBfdG1u93d@shikoro>
+ <23c8fafe-af56-afb0-1257-222705bc36f3@oderland.se>
+ <b8eff79f-0be0-e6a5-64ba-e085b0ea52b2@oderland.se>
+ <Yxm9tlb4H7fspRMZ@smile.fi.intel.com>
+ <60c1756765b9a3f1eab0dcbd84f59f00fe1caf48.camel@kontron.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <60c1756765b9a3f1eab0dcbd84f59f00fe1caf48.camel@kontron.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sm8250 faces the same problem with its Energy Model as sdm845. The energy
-cost of LITTLE cores is reported to be higher than medium or big cores
+On Mon, May 15, 2023 at 07:51:55AM +0000, Michael Brunner wrote:
+> On Thu, 2022-09-08 at 13:02 +0300, Andy Shevchenko wrote:
+> > On Thu, Sep 08, 2022 at 09:48:29AM +0200, Josef Johansson wrote:
+> > > On 9/8/22 08:07, Josef Johansson wrote:
+> > > > On 9/7/22 21:47, Wolfram Sang wrote:
+> > > > > On Tue, Sep 06, 2022 at 06:55:07PM +0300, Andy Shevchenko
+> > > > > wrote:
 
-EM computes the energy with formula:
+First of all, sorry for so-o lo-o-ong delay. Too many emails in a backlog.
 
-energy = OPP's cost / maximum cpu capacity * utilization
+...
 
-On v6.4-rc6 we have:
-max capacity of CPU0 = 284
-capacity of CPU0's OPP(1612800 Hz) = 253
-cost of CPU0's OPP(1612800 Hz) = 191704
+> > > I compiled with linux-6.0.0-rc4 with your patch on top.
+> > > 
+> > > Have been running flawless so far. Boot showed no problems.
 
-max capacity of CPU4 = 871
-capacity of CPU4's OPP(710400 Hz) = 255
-cost of CPU4's OPP(710400 Hz) = 343217
+> We just noticed that this change prevents the usage of the i2c-scmi
+> driver on basically all Kontron COMe based boards.
 
-Both OPPs have almost the same compute capacity but the estimated energy
-per unit of utilization will be estimated to:
+Does this device have resources defined in DSDT? Can you show all variants?
 
-energy CPU0 = 191704 / 284 * 1 = 675
-energy CPU4 = 343217 / 871 * 1 = 394
+> The reason is the patch "ACPI / platform: Add SMB0001 HID to
+> forbidden_id_list" submitted in November 2018 by Hans de Goede.
 
-EM estimates that little CPU0 will consume 71% more than medium CPU4 for
-the same compute capacity. According to [1], little consumes 25% less than
-medium core for Coremark benchmark at those OPPs for the same duration.
 
-Set the dynamic-power-coefficient of CPU0-3 to 105 to fix the energy model
-for little CPUs.
+> The
+> patch blacklists the SMB0001 HID that is also used by the COMe boards.
+> This was due to issues with HP AMD based laptops according to the
+> commit message.
+> Ironically the commit message there states that it is OK to blacklist
+> the HID as the device directly binds to the acpi_bus and therefore the
+> platform_device is not needed anyway. This changed with this patch.
+> 
+> As this affects all systems using this HID, applying a patch that
+> whitelists specific boards again in the acpi-platform driver doesn't
+> seem to be a good solution to me.
+> Therefore I would request to remove this patch again, unless someone
+> has a better idea.
 
-[1] https://github.com/kdrag0n/freqbench/tree/master/results/sm8250/k30s
+I have a better idea if the DSDT has no resources. See the Q above.
 
-Fixes: 6aabed5526ee ("arm64: dts: qcom: sm8250: Add CPU capacities and energy model")
-Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
----
-
-Srini gave me access to sm8250 rb5 board so I checked the EM and found
-that it has similar problem as sdm845.
-
- arch/arm64/boot/dts/qcom/sm8250.dtsi | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index 7bea916900e2..4b0835109b01 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -100,7 +100,7 @@ CPU0: cpu@0 {
- 			clocks = <&cpufreq_hw 0>;
- 			enable-method = "psci";
- 			capacity-dmips-mhz = <448>;
--			dynamic-power-coefficient = <205>;
-+			dynamic-power-coefficient = <105>;
- 			next-level-cache = <&L2_0>;
- 			power-domains = <&CPU_PD0>;
- 			power-domain-names = "psci";
-@@ -131,7 +131,7 @@ CPU1: cpu@100 {
- 			clocks = <&cpufreq_hw 0>;
- 			enable-method = "psci";
- 			capacity-dmips-mhz = <448>;
--			dynamic-power-coefficient = <205>;
-+			dynamic-power-coefficient = <105>;
- 			next-level-cache = <&L2_100>;
- 			power-domains = <&CPU_PD1>;
- 			power-domain-names = "psci";
-@@ -156,7 +156,7 @@ CPU2: cpu@200 {
- 			clocks = <&cpufreq_hw 0>;
- 			enable-method = "psci";
- 			capacity-dmips-mhz = <448>;
--			dynamic-power-coefficient = <205>;
-+			dynamic-power-coefficient = <105>;
- 			next-level-cache = <&L2_200>;
- 			power-domains = <&CPU_PD2>;
- 			power-domain-names = "psci";
-@@ -181,7 +181,7 @@ CPU3: cpu@300 {
- 			clocks = <&cpufreq_hw 0>;
- 			enable-method = "psci";
- 			capacity-dmips-mhz = <448>;
--			dynamic-power-coefficient = <205>;
-+			dynamic-power-coefficient = <105>;
- 			next-level-cache = <&L2_300>;
- 			power-domains = <&CPU_PD3>;
- 			power-domain-names = "psci";
 -- 
-2.34.1
+With Best Regards,
+Andy Shevchenko
+
 
