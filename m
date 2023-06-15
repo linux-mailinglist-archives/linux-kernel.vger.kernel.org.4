@@ -2,61 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE5E0731950
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:56:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A6B731954
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240506AbjFOM4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 08:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52054 "EHLO
+        id S245018AbjFOM5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 08:57:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238460AbjFOM4w (ORCPT
+        with ESMTP id S240718AbjFOM4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 08:56:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E331BC9;
+        Thu, 15 Jun 2023 08:56:55 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4BE0268C
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 05:56:53 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f64fb05a8aso10538026e87.0
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 05:56:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686833812; x=1689425812;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=v1CbTBRn8vQDvPf6Z2biUED1bJGUXq/a80Hy0PH+rSA=;
+        b=pIzCccIMIRGK2q25DpBRdjMSE9rF2EraF12WiZ8h6N7uHRGusZ2WBw7HdRHqX2CeL5
+         EKul/KBbvQJkKxXtT093+Wj1U/LHPnCAmqvmia0QrGEdbHfA+Zss1Abfir1yj56IH/9o
+         uOGSulxNPYsuDFKg+RHzEHMoS48IYece+jmC5VW4+cnXP4VxKmfwBOr++lmyPuey5vXe
+         Pq6ZGehysyoWw4MAO8BKFLiDiFqbT/PklBljqRPuA896y5RlHwx4Tm5/0eWdIxhu0TtZ
+         ubzHiTGNXQ4XpK81GBliesQcRh1r6v4SjeNXQbHNPM0IOGA+tRleTV9kXy14TroVf1Lt
+         d4gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686833812; x=1689425812;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=v1CbTBRn8vQDvPf6Z2biUED1bJGUXq/a80Hy0PH+rSA=;
+        b=HdhrwiUIdHaA2O5JLVfC1U5X5jzs2VtKBO9kwQQ6S5EObx200Ul/6b5hKj8+nXaYZA
+         jFFNzDAUvSd/T3dE9e2IIfxvBTgRylW/ubKN0GcBCH+67xHM2MPyHr+8REEG4p4zAkjL
+         jf9GW9kZjOTp9lfeiIvqa82Rd6cwGvfFGlN0OPn23HAlR/mVX9Nf8d6a9TNnKeX7lP5b
+         xHCV/as2Dqisln5b91ndhmml/Eb41TZefGmL3plv+Y3qpCslbckLVZdUMQbaiBpaZ6ER
+         Wg+qNt+7nheXHp1YCwQUcCLDxv0DGMy8CnmIDrjFxNWb+et8TaOE7RrqIwmgsptGGBaY
+         wddw==
+X-Gm-Message-State: AC+VfDxVHHHeMq39D5czbihYZa/PHDA/oWTjVxuL/Aj4lTdXxoeLhbRR
+        plTnk+zWz4lhtP8Gw7JZF3iFgw==
+X-Google-Smtp-Source: ACHHUZ4idKi9MKj9dACNe9eMwOfmRi1oqlCWD4/JIb33nDqyZCNa4kpiBxTMJ7GeUtyUjAUAiC/Yng==
+X-Received: by 2002:a05:6512:48b:b0:4ef:ed49:fcc2 with SMTP id v11-20020a056512048b00b004efed49fcc2mr11392533lfq.26.1686833811790;
         Thu, 15 Jun 2023 05:56:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CD25462C0F;
-        Thu, 15 Jun 2023 12:56:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98A4BC433C9;
-        Thu, 15 Jun 2023 12:56:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686833810;
-        bh=WdxuvrA1XPiuVFvFqhmfdWqDsUHJWdCtQE7+XLc8lF0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pCLSVk1PO72n9bExzFoJR88YrFa+UT8nfSv/Rm+zNe02qKDNgaAJ+JwJZXhc2OOmH
-         EqBrPiOkndf6YPwzmIxbI2stD/kZzGA0eQQlgtEp0/K0S/xPL6H7Kf3jEX9UXYwhGR
-         VpIuK1R3YXLgXRYYQA3nOQdJg4zrMrH6uDy/f+pO2fdgnzKyhCrIapvs2//8OVtz2p
-         iyBhBFrJRBhgd7ack2/L515fbrVr3t2q7bUIpiQoPr5N9tis5FpXWc7jHLXX+J5jzN
-         rqHpXAQBRcBF90O8zfQ6tdQWlgqPdFBmIN7DZ93yMcZcxV9ba6p9Fhuw+KO9AiuH6t
-         sDDGXC2NxE1uA==
-From:   Christian Brauner <brauner@kernel.org>
-To:     wenyang.linux@foxmail.com
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Christoph Hellwig <hch@lst.de>, Dylan Yudaken <dylany@fb.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Eric Biggers <ebiggers@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH v3] eventfd: add a uapi header for eventfd userspace APIs
-Date:   Thu, 15 Jun 2023 14:56:34 +0200
-Message-Id: <20230615-insbesondere-kochen-eee1a4b2581d@brauner>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <tencent_2B6A999A23E86E522D5D9859D54FFCF9AA05@qq.com>
-References: <tencent_2B6A999A23E86E522D5D9859D54FFCF9AA05@qq.com>
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id l9-20020ac25549000000b004f63739e2f1sm2559845lfk.255.2023.06.15.05.56.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jun 2023 05:56:51 -0700 (PDT)
+Message-ID: <18103637-c191-9b8f-7983-d0b1591f9024@linaro.org>
+Date:   Thu, 15 Jun 2023 14:56:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=833; i=brauner@kernel.org; h=from:subject:message-id; bh=WdxuvrA1XPiuVFvFqhmfdWqDsUHJWdCtQE7+XLc8lF0=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaR0c5ULM3ZFlR5fYGfF3XDV1cew9sndOzv8fqUaHv11KKUv 68fcjlIWBjEuBlkxRRaHdpNwueU8FZuNMjVg5rAygQxh4OIUgImET2T4K9QdoLjcWbtpb3rXnci2Hx un3bc/55E3+6lCfoDaykX3uhgZZlS9Yvy+cJm5ecn+n/LJ0fIc9/f6Cwuwce+/2jrZZo8kJwA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 19/23] arm64: dts: qcom: sa8775p: add the SGMII PHY
+ node
+Content-Language: en-US
+To:     Bartosz Golaszewski <brgl@bgdev.pl>, Vinod Koul <vkoul@kernel.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>
+Cc:     netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230615121419.175862-1-brgl@bgdev.pl>
+ <20230615121419.175862-20-brgl@bgdev.pl>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230615121419.175862-20-brgl@bgdev.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,23 +95,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Jun 2023 02:40:28 +0800, wenyang.linux@foxmail.com wrote:
-> Create a uapi header include/uapi/linux/eventfd.h, move the associated
-> flags to the uapi header, and include it from linux/eventfd.h.
+On 15.06.2023 14:14, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
+> Add the internal SGMII/SerDes PHY node for sa8775p platforms.
 > 
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Applied to the vfs.misc branch of the vfs/vfs.git tree.
-Patches in the vfs.misc branch should appear in linux-next soon.
-
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
-
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs.misc
-
-[1/1] eventfd: add a uapi header for eventfd userspace APIs
-      https://git.kernel.org/vfs/vfs/c/3e3a566392e2
+Konrad
+>  arch/arm64/boot/dts/qcom/sa8775p.dtsi | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> index b130136acffe..b6d95813c98c 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> @@ -1837,6 +1837,15 @@ adreno_smmu: iommu@3da0000 {
+>  				     <GIC_SPI 687 IRQ_TYPE_LEVEL_HIGH>;
+>  		};
+>  
+> +		serdes0: phy@8901000 {
+> +			compatible = "qcom,sa8775p-dwmac-sgmii-phy";
+> +			reg = <0x0 0x08901000 0x0 0xe10>;
+> +			clocks = <&gcc GCC_SGMI_CLKREF_EN>;
+> +			clock-names = "sgmi_ref";
+> +			#phy-cells = <0>;
+> +			status = "disabled";
+> +		};
+> +
+>  		pdc: interrupt-controller@b220000 {
+>  			compatible = "qcom,sa8775p-pdc", "qcom,pdc";
+>  			reg = <0x0 0x0b220000 0x0 0x30000>,
