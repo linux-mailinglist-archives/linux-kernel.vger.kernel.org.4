@@ -2,68 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB58731EF5
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 19:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 709D3731EFD
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 19:29:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238887AbjFOR1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 13:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41074 "EHLO
+        id S231288AbjFOR24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 13:28:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239284AbjFOR1R (ORCPT
+        with ESMTP id S229629AbjFOR2x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 13:27:17 -0400
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71CAB2944;
-        Thu, 15 Jun 2023 10:27:12 -0700 (PDT)
-Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-777b1b5ff50so358246139f.3;
-        Thu, 15 Jun 2023 10:27:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686850031; x=1689442031;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Thu, 15 Jun 2023 13:28:53 -0400
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3B2AC
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 10:28:52 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id 6a1803df08f44-62de4cc0172so30234836d6.0
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 10:28:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1686850131; x=1689442131;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vKk+TgAjylPN5EUy5QdAn2mAooqy0Uaxj8L8e+7bg3c=;
-        b=gEDeazn+RujxgGhGlT0FLfTX2u8vAd9/62Jhs8aJWKVdXeNa3thZA88YF08L000NSb
-         EXcngv6c6L43eLQWBNrAfNjl+6eDUakveoZqAZa8lP/rIynrzO8GTx1XZiwmPAdVfdSh
-         u0egpycjgppsk5FPz8SXh3qPo/TcRFg7CZkCc9kDACBqE70Ad0UGtKsxaQOmxA8vFPxx
-         WGPNacYau8IRGixRan+pm7nos14rllRTaQkP755mAUoptp7of66aqHAM2javqBNmjL6A
-         HIgbnmsoJTdQstMutJvg1hjFsRG5hZRCtDUA2S3dt0blEz6/67CHidOfdO9LCddgLNze
-         /JIQ==
-X-Gm-Message-State: AC+VfDx0M8AkOXSvD6PcZZ0aoMogWPgyX9Tn3h47wk5tChGo8ng3E3/f
-        3+8SV2dwxm2hDEFn3TKDog==
-X-Google-Smtp-Source: ACHHUZ687Kt6K8e3YCR3HIVzkrF4r312BQJ99CW0umX1310Gm/rdPancA3e4T+8F8FLon1Scz73T4w==
-X-Received: by 2002:a6b:dc14:0:b0:76f:f54d:36ff with SMTP id s20-20020a6bdc14000000b0076ff54d36ffmr96005ioc.11.1686850031691;
-        Thu, 15 Jun 2023 10:27:11 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id a22-20020a5d89d6000000b007747a6d875csm6163436iot.9.2023.06.15.10.27.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 10:27:10 -0700 (PDT)
-Received: (nullmailer pid 1230967 invoked by uid 1000);
-        Thu, 15 Jun 2023 17:27:09 -0000
-Date:   Thu, 15 Jun 2023 11:27:09 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        linux-crypto@vger.kernel.org,
-        Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Gaurav Jain <gaurav.jain@nxp.com>, devicetree@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Pankaj Gupta <pankaj.gupta@nxp.com>,
-        linux-kernel@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>
-Subject: Re: [PATCH 2/2] dt-bindings: crypto: fsl,sec-v4.0-mon: Add
- "linux,keycodes" and deprecate "linux,keycode"
-Message-ID: <168685002907.1230919.13694167518227679407.robh@kernel.org>
-References: <20230613201231.2826352-1-robh@kernel.org>
- <20230613201231.2826352-2-robh@kernel.org>
+        bh=osliInNk1/bU9RCFmEpWSSuapVy8I/16aX6E/CrvA2U=;
+        b=TfS+uE1yKvVXVl+IfYsl3xobG8Dd/xgHVlpu80X7s9BpSwRELd7/sdVF/ZZCUdyyfl
+         zrPMInrof6aqrDGnX0SvLh1juhNEmS4Ed6VCcAvg7hqbAOlNEWpHfl3naxtJW7o+RvBn
+         OUeMO48Ye35N9sxuDv7KGDAxvZAwKGnHs+fOI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686850131; x=1689442131;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=osliInNk1/bU9RCFmEpWSSuapVy8I/16aX6E/CrvA2U=;
+        b=bHhAml8NrUrGeOF34tlTfuxn3AyPmbNB6ws0ti5WD+DmiwviAz/tc1GHVghUTe0ASQ
+         8EbD326sa40OrettxLrMFKLN+5fkReuW3Ur6ElUxF7ASySSDIQJJlg38LFc6tvQQ7XgP
+         conrvt5Ll2aZEMrsPGpolV4LJQfY56rcHjPACrdbH/cFU5docWuxmSP8pMTl82mAf3ar
+         fdb+0rCXgxTwxtWx0nM9SGSbYux5mZh8qVcxcg5MMD01iW7tspCd6egJuJs4dMszPEfg
+         ylqqHYtkE6GaW5XNeGO0Q9ns80BOoRkkpmu6BhRycnhVEvyqtSn6LqhWpZg/qtDNFkNy
+         Tyqg==
+X-Gm-Message-State: AC+VfDyWIQERHoI/S4eV87eekRldOLX4UMEKHDpf/ippfKZvlqyCmrgW
+        HQ6dWB04BUe2UGAs5exXQYULGIM7mHAf6FpB/2NvrseiYjGsbCXmROw=
+X-Google-Smtp-Source: ACHHUZ7pe4zCXQ4NLlLiPRFyWNxdw7kGImRkU4IzfMmSI5b4NW36cbEtevkNvNQQ31od0pXQquvWnaQ/NoPg+f070qs=
+X-Received: by 2002:ad4:5d4a:0:b0:629:1659:dcc with SMTP id
+ jk10-20020ad45d4a000000b0062916590dccmr25254405qvb.34.1686850131319; Thu, 15
+ Jun 2023 10:28:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230613201231.2826352-2-robh@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20230605010117.794691-1-utkarsh.h.patel@intel.com> <20230605010117.794691-2-utkarsh.h.patel@intel.com>
+In-Reply-To: <20230605010117.794691-2-utkarsh.h.patel@intel.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Thu, 15 Jun 2023 10:28:41 -0700
+Message-ID: <CACeCKaeVw4UJ8oCj-wmWgf6TCcKYdprqb8Wdu-g2ZC5npgs71g@mail.gmail.com>
+Subject: Re: [PATCH 1/2] platform/chrome: cros_ec_typec: Configure Retimer
+ cable type
+To:     Utkarsh Patel <utkarsh.h.patel@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        heikki.krogerus@linux.intel.com, bleung@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,17 +67,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+(Sorry, I've been out on leave so haven't had a chance to look at this earl=
+ier)
 
-On Tue, 13 Jun 2023 14:12:30 -0600, Rob Herring wrote:
-> The "linux,keycode" property is non-standard. Add the common property
-> "linux,keycodes" and mark "linux,keycode" deprecated so that the mistake
-> is not propagated.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+On Sun, Jun 4, 2023 at 6:00=E2=80=AFPM Utkarsh Patel <utkarsh.h.patel@intel=
+.com> wrote:
+>
+> Connector class driver only configure cable type active or passive.
+> With this change it will also configure if the cable type is retimer or
+> redriver if required by AP. This details will be provided by Chrome EC
+> as a part of cable discover mode VDO.
+>
+> This change also brings in corresponding EC header updates from the EC
+> code base [1].
+
+Please separate this into another patch.
+
+>
+> [1]:
+> https://chromium.googlesource.com/chromiumos/platform/ec/+/refs/heads/mas=
+ter/include/ec_commands.h
+>
+> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
 > ---
->  .../devicetree/bindings/crypto/fsl,sec-v4.0-mon.yaml         | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
+>  drivers/platform/chrome/cros_ec_typec.c        | 8 +++++++-
+>  include/linux/platform_data/cros_ec_commands.h | 2 ++
+>  2 files changed, 9 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/c=
+hrome/cros_ec_typec.c
+> index a673c3342470..9c18b1df64a7 100644
+> --- a/drivers/platform/chrome/cros_ec_typec.c
+> +++ b/drivers/platform/chrome/cros_ec_typec.c
+> @@ -448,6 +448,9 @@ static int cros_typec_enable_tbt(struct cros_typec_da=
+ta *typec,
+>         if (pd_ctrl->control_flags & USB_PD_CTRL_ACTIVE_CABLE)
+>                 data.enter_vdo |=3D TBT_ENTER_MODE_ACTIVE_CABLE;
+>
+> +       if (pd_ctrl->control_flags & USB_PD_CTRL_RETIMER_CABLE)
+> +               data.enter_vdo |=3D TBT_CABLE_RETIMER;
+> +
+>         if (!port->state.alt) {
+>                 port->state.alt =3D port->port_altmode[CROS_EC_ALTMODE_TB=
+T];
+>                 ret =3D cros_typec_usb_safe_state(port);
+> @@ -522,8 +525,11 @@ static int cros_typec_enable_usb4(struct cros_typec_=
+data *typec,
+>         /* Cable Type */
+>         if (pd_ctrl->control_flags & USB_PD_CTRL_OPTICAL_CABLE)
+>                 data.eudo |=3D EUDO_CABLE_TYPE_OPTICAL << EUDO_CABLE_TYPE=
+_SHIFT;
+> -       else if (pd_ctrl->control_flags & USB_PD_CTRL_ACTIVE_CABLE)
+> +       else if (pd_ctrl->control_flags & USB_PD_CTRL_RETIMER_CABLE)
+>                 data.eudo |=3D EUDO_CABLE_TYPE_RE_TIMER << EUDO_CABLE_TYP=
+E_SHIFT;
+> +       else if (!(pd_ctrl->control_flags & USB_PD_CTRL_RETIMER_CABLE) &&
+> +                 (pd_ctrl->control_flags & USB_PD_CTRL_ACTIVE_CABLE))
+> +               data.eudo |=3D EUDO_CABLE_TYPE_RE_DRIVER << EUDO_CABLE_TY=
+PE_SHIFT;
+>
+>         data.active_link_training =3D !!(pd_ctrl->control_flags &
+>                                        USB_PD_CTRL_ACTIVE_LINK_UNIDIR);
+> diff --git a/include/linux/platform_data/cros_ec_commands.h b/include/lin=
+ux/platform_data/cros_ec_commands.h
+> index ab721cf13a98..c9aa5495c666 100644
+> --- a/include/linux/platform_data/cros_ec_commands.h
+> +++ b/include/linux/platform_data/cros_ec_commands.h
+> @@ -4963,6 +4963,8 @@ struct ec_response_usb_pd_control_v1 {
+>  #define USB_PD_CTRL_TBT_LEGACY_ADAPTER  BIT(2)
+>  /* Active Link Uni-Direction */
+>  #define USB_PD_CTRL_ACTIVE_LINK_UNIDIR  BIT(3)
+> +/* Retimer/Redriver cable */
+> +#define USB_PD_CTRL_RETIMER_CABLE BIT(4)
 
-Applied, thanks!
+Why are we adding this to this host commands interface? Is this
+information not available from the Cable (plug)'s
+Identity information? We register all of that in the port driver
+already [1], so we should just use that, instead
+of changing the host command interface.
 
+Thanks,
+
+[1]  https://elixir.bootlin.com/linux/v6.4-rc6/source/drivers/platform/chro=
+me/cros_ec_typec.c#L768
