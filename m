@@ -2,223 +2,373 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEC9A731186
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:58:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C17C273119E
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238968AbjFOH6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 03:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40212 "EHLO
+        id S244869AbjFOH7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 03:59:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbjFOH6g (ORCPT
+        with ESMTP id S244129AbjFOH7Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 03:58:36 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2103.outbound.protection.outlook.com [40.107.94.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9D4135;
-        Thu, 15 Jun 2023 00:58:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MGlWu/Tsygs3KbFgVJFxpXvp+FWwP+ONYpcYXSGdeEdMeimA1F1QznyCKcPsjhmo7QyNDJb+Y5G6S6nN/2R3DT5BwRwp7quZeD9RIOZ5FDnmAdPoAlr5shU78v0ZwlwnnujVipT46kuZ/Ni8A0dQzC+bRfX+zCF5Ito6HLidV0wcWOtMZSWooig1THdSD1k1cGsMeNUzEA/0BRih+rgK5waMdcZj5c0IyGh9aeK4TqLnsNnrRF/y1iqikzYQZTyBEY31mWs6AfOSYmDIxyXVUEancHkgFUH7Q9sqO2jDeqZbi6r2YzHTqQYGmUbj2PhRs+LgFpR04y+qttAR3IKHXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/hgqcFAR9oWgfjzXT74uILVy54mUDzESgVGU/sn1sSA=;
- b=F0GxS6x024nIfr+b7zAeMFj1Mnz6BkW/iR/rXSGlyWBqkU4BfZ2+Mc/sRr0/yQc8cntiVkNsqtNFAUPro2B3zaEoHs+d3opiMoMcsEOO+4r5jnPZRt9KhFDq8smisxNfT8oPlmfL24sr4ymdrdvND1AaqrjQaWnCE16FAWl3QhZVqovjjeGnm/Be1CVo8Nf0XdxCvZxTj79jlk/UHVGJZDgr7v47OHnoLYhV0Q/CPGOE59EkDjsPNFmkLzBw6swsRQxAsbHJUmlBOWxnqJ+Hi3fhgx5moVkF8jvGasYJxdmSjoZXjY5d14Tub/uiKfoQLFL0r2LwO7BSeGscSiwrlA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/hgqcFAR9oWgfjzXT74uILVy54mUDzESgVGU/sn1sSA=;
- b=ATCmfsEX+Fu/R48GFc9N492Cj7W3H+t7bq3kQJQW1qkzqc2u0+PviSnTqy+GjUB9S/IwnIAaUBXjseBHXdM4J+OTn4E8hHH2AUwG/pOKJzafrqL6Y8OS8VchY7QyYeDAJuU2GURFEOHFSZPcQi1ef+KJQ2zVe9POCVh57SkWPN0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SA1PR13MB6148.namprd13.prod.outlook.com (2603:10b6:806:337::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.38; Thu, 15 Jun
- 2023 07:58:30 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e%5]) with mapi id 15.20.6500.025; Thu, 15 Jun 2023
- 07:58:30 +0000
-Date:   Thu, 15 Jun 2023 09:58:22 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>,
-        Peilin Ye <yepeilin.cs@gmail.com>,
-        Pedro Tammela <pctammela@mojatatu.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Zhengchao Shao <shaozhengchao@huawei.com>,
-        Maxim Georgiev <glipus@gmail.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>
-Subject: Re: [PATCH v2 net-next 6/9] net: netdevsim: create a mock-up PTP
- Hardware Clock driver
-Message-ID: <ZIrEnitQEJ+P83wg@corigine.com>
-References: <20230613215440.2465708-1-vladimir.oltean@nxp.com>
- <20230613215440.2465708-7-vladimir.oltean@nxp.com>
- <ZIm8kK7plae8CLvV@corigine.com>
- <20230614221718.cx6yjiwrpik4iesw@skbuf>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230614221718.cx6yjiwrpik4iesw@skbuf>
-X-ClientProxiedBy: AM0PR10CA0087.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:208:15::40) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Thu, 15 Jun 2023 03:59:24 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E1CD2137
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:59:13 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QhZRf2qbWzTkyD;
+        Thu, 15 Jun 2023 15:58:38 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 15 Jun 2023 15:59:10 +0800
+CC:     <yangyicong@hisilicon.com>, Peter Zijlstra <peterz@infradead.org>,
+        <mingo@redhat.com>, <juri.lelli@redhat.com>,
+        <vincent.guittot@linaro.org>, <dietmar.eggemann@arm.com>,
+        <tim.c.chen@linux.intel.com>, <gautham.shenoy@amd.com>,
+        <mgorman@suse.de>, <vschneid@redhat.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <rostedt@goodmis.org>,
+        <bsegall@google.com>, <bristot@redhat.com>,
+        <prime.zeng@huawei.com>, <jonathan.cameron@huawei.com>,
+        <ego@linux.vnet.ibm.com>, <srikar@linux.vnet.ibm.com>,
+        <linuxarm@huawei.com>, <21cnbao@gmail.com>,
+        <kprateek.nayak@amd.com>, <wuyun.abel@bytedance.com>,
+        Barry Song <baohua@kernel.org>,
+        Tim Chen <tim.c.chen@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        Len Brown <len.brown@intel.com>
+Subject: Re: [PATCH v8 2/2] sched/fair: Scan cluster before scanning LLC in
+ wake-up path
+To:     Chen Yu <yu.c.chen@intel.com>
+References: <20230530070253.33306-1-yangyicong@huawei.com>
+ <20230530070253.33306-3-yangyicong@huawei.com>
+ <20230530115527.GC156198@hirez.programming.kicks-ass.net>
+ <8fcba5d4-eea5-d7c4-2bf7-482321b333b7@huawei.com>
+ <ce714341-af58-2522-69a8-321f02c82893@huawei.com>
+ <ZIFKf2PkIkiRmUaK@chenyu5-mobl2.ccr.corp.intel.com>
+ <85e29dd8-60f6-1e84-b3e4-061e5a2a0037@huawei.com>
+ <ZIMEEnozzC+Uyluv@chenyu5-mobl2.ccr.corp.intel.com>
+ <f534ead9-56cc-d834-90a3-67f8532230ff@huawei.com>
+ <be1f2bcd-fe03-2b0a-0754-1054a09663a2@huawei.com>
+ <ZIhkr5xIijJG6AKF@chenyu5-mobl2.ccr.corp.intel.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <e7a0461d-fc28-b752-605c-bd8e89f5a844@huawei.com>
+Date:   Thu, 15 Jun 2023 15:59:10 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SA1PR13MB6148:EE_
-X-MS-Office365-Filtering-Correlation-Id: f22b4bc7-5dc6-4a67-6a5a-08db6d764f29
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iGvRAQeE7z/LPdaG8mf154luiEtyb28ZCTYdneWlqXFM/CxahYvInX3mziloIYAjqhoc5b9r0+aKBK1kxMFCot91raRHwl/snLsNnyVdEBvqvOZxmgJzXDVXkf+csWb+fNSbM4ITHnXtg7QB/ucw6Ekxma0Ot1hRrWdTiEBx+Zq/offn3lcGfTsSJ+HrrQZ9ZPF02VGetwTZPBiqBSgVHMwvEysVBx3lYxQq/SkF0Pqe9tWlWODAXWANKDkOEVytKRH/8vM+hqXhaJsRDBouOis6KHl763n69jWF3ugcu/3C6CMyYrylFSOmCscWZm/vT7XAoeNrAN4QpNlTZqdkALqaznF5hCnQh8YkvkVdeWzqWE5nU7oeO/1KUKcD4O56NPqGCtYac5PUV9rqWZr6tTAKUqDKNRPa9lAME6kzMdtitqhp6pcn3tSZNbfenWQSEQ7NHWmXlR8iBUfGT73dFq5FnbPJrnsGG8Aux9yisrRHB+ZH+mp2OmoO59135Uhd9+Ryp4A+tPUOYdKvfzxsjzp6khvEDX1wQxaszV6hi7zAgTPkZccSgq/Wv9WBObbO5KoHeck9MUJp12jlMVsTpUAG0cIBB3dAMMsQricfTcqLlr2guZJs6n/cy+/zSy7CJQPrIJjxJrh8iapWgBP89E7w8UwDbjVD76Rh/rloeGc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39840400004)(396003)(136003)(366004)(376002)(346002)(451199021)(36756003)(86362001)(2906002)(44832011)(7416002)(6666004)(6486002)(186003)(83380400001)(5660300002)(6512007)(6506007)(478600001)(54906003)(6916009)(66476007)(66556008)(2616005)(4326008)(316002)(38100700002)(66946007)(8936002)(8676002)(41300700001)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sytrfk3HnIGx+Rr90Fx7aObE3iUr5Ib2DCJT80FOUN6KsPThpxhGhJuUUiUt?=
- =?us-ascii?Q?wftdkno3JJCgMZYjULlqZTo7i9IyMcIJgdCodglezraVLSJl8COdvuhXJkwm?=
- =?us-ascii?Q?fBKSKuAcee4618z0QEK/+wJpf8SEoWGfkxIeZ6x63fOBCO44PXmlw+rYPRhZ?=
- =?us-ascii?Q?xrNT2TdKieWnqmJ+m1nwvEpmRUEvBwmfZA/MCUoHeVLqCS3G1bgSh5txB9Ia?=
- =?us-ascii?Q?m8lYhJNhIwZf0Z8Z/Bj2zH/PPJa3VpkZwK2lcu2kAZdnVEXy7T5UgjZGra/r?=
- =?us-ascii?Q?86BkZzNlVSn9KK5nhvMhKLFFUrF/YuKrvcWmGLUhJVDUM1Haj86mir13fYtw?=
- =?us-ascii?Q?sdwBMf3BovpVeuCaZ50YFMFmxCx4QQSm9lhJHii3h0FuQnN8rS5m7zI+AwxB?=
- =?us-ascii?Q?5uFkvMcZUSRkQ+zJerLqQCueEQktyBi61rmqGSHnWberw6Z8P1sgKt/N4ZZQ?=
- =?us-ascii?Q?PY7gWAxhO5KwWxcYioXKbxg1zBTG9IE/v3cZR7+K+E3vIgdikYeOhZiuRNW4?=
- =?us-ascii?Q?KhIt4ar/WhX8EX7n29dbwNNJPyyvzXxot+fs5e13TbALXxrPPCewnm4mbWcd?=
- =?us-ascii?Q?2NU2ae2o5u28nkafw+c/V1YdppsRT7QFVBbNeZU2wHGio5JV61L68nklGVaK?=
- =?us-ascii?Q?vjErtcSHOhuTeE5xh7tEh6jnskj9TcjifCaLdG+tyiOmqP1+MtcHxN2lvlSo?=
- =?us-ascii?Q?xGrfrhci9CRYmnw54bUt6GfxKbYp3e+IeR770TzNByV87rSf2ayWHJUyKI0A?=
- =?us-ascii?Q?PriEpGvA+4e/DWM28u4E+zUQekqud3GNhgFsX5PKGy/apCbLT4wpZbJLZPQG?=
- =?us-ascii?Q?cQ+qWTifV0ZaXBJSGef8xbpp5wPsGs0u2pBkP1Gt7JhBDmGgzuweSRIxwlDv?=
- =?us-ascii?Q?JLnpp/I/echKxdlwRNrJ0/nmNWwYv5MPzZntG+q/PH67UIPpfzF6F5C4oFQQ?=
- =?us-ascii?Q?IhPFPBxspwz6p5XvqRU4FpwUsn+qRXV7qMp921AE20r86anzjPW35XFFjVAZ?=
- =?us-ascii?Q?9CyjsDftWznMklrkEqCEq/vPNFRYBL3DgdRr8UjeI0Fa1InID/1zc+o6fSab?=
- =?us-ascii?Q?qrQForr5s24Ut1PV31wY4INsIu2t4jkxyR9PSJj29yqCwIqp9lBnloX4/vEj?=
- =?us-ascii?Q?HwSMrN9yRpCVW3kYU9vZyDrFKO9yHklE9G49Yfxq4uR5m5sjwIG28/AE2agL?=
- =?us-ascii?Q?9S9Y3AxQstoHQpPkCC37TdgM/pRJ7+VgljfsA5etzx+UDL2zq7VBRBu5q1aS?=
- =?us-ascii?Q?hgpPwpI16JulJvi9qzKnz3I20Tepo/lrFcNi85ckH+09rqZai8NAes7K68F5?=
- =?us-ascii?Q?Xs6yOZ0JatM7WuQtEqIPfYLZThyknSV1aubnn69ugA/93jlbmE4GCgsvlzX2?=
- =?us-ascii?Q?EenqBj9OoBJQitRb9hVt6pLfGTdsDDUF7RKIREI9Ag5OdA5DMT8HbTSetrlQ?=
- =?us-ascii?Q?RxE7c7MQoU2hK4eImtuag8jlzIV3E/AE54vQgcizK3aXW9NU6mc5z7C09zlP?=
- =?us-ascii?Q?wOX440iGEq8mEd6grypbEyEc85lWPo4z0ucaztIPWtYG319I5TVsxMXOSLUu?=
- =?us-ascii?Q?4WIVkbyvGiH1xx4uoQJxs14WHsmesVjOVhNR7Yoow+tA+pNrvDHI5IGvsJjL?=
- =?us-ascii?Q?4SfVJbbFoRp3V8IvpRbrHI+sj+J0zbrd48xEtO/sAX/YrRhmQLqE2tvuKFof?=
- =?us-ascii?Q?Z+DpDg=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f22b4bc7-5dc6-4a67-6a5a-08db6d764f29
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 07:58:30.6194
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qKcwZ8kv2QJWhRRsA8U5EJwBgPfxsuPejnTrv1cUJKkYv9WEiwuchNcH1MIpheHstDNXBWuTThyNAUZgzgvQWz+LVYqQcINMp5W7ogT51EE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR13MB6148
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZIhkr5xIijJG6AKF@chenyu5-mobl2.ccr.corp.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Dan Carpenter
-
-On Thu, Jun 15, 2023 at 01:17:18AM +0300, Vladimir Oltean wrote:
-> Hi Simon,
+On 2023/6/13 20:44, Chen Yu wrote:
+> On 2023-06-13 at 16:09:17 +0800, Yicong Yang wrote:
+>> On 2023/6/13 15:36, Yicong Yang wrote:
+>>> On 2023/6/9 18:50, Chen Yu wrote:
+>>>> On 2023-06-08 at 14:45:54 +0800, Yicong Yang wrote:
+>>>>> On 2023/6/8 11:26, Chen Yu wrote:
+>>>>>> On 2023-05-31 at 16:21:00 +0800, Yicong Yang wrote:
+>>>>>>> On 2023/5/30 22:39, Yicong Yang wrote:
+>>>>>>>> On 2023/5/30 19:55, Peter Zijlstra wrote:
+>>>>>>>>> On Tue, May 30, 2023 at 03:02:53PM +0800, Yicong Yang wrote:
+>>>>>>>>>
+>>>>>>>>>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+>>>>>>>>>> index 373ff5f55884..b8c129ed8b47 100644
+>>>>>>>>>> --- a/kernel/sched/fair.c
+>>>>>>>>>> +++ b/kernel/sched/fair.c
+>>>>>>>>>> @@ -6994,6 +6994,30 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
+>>>>>>>>>>  		}
+>>>>>>>>>>  	}
+>>>>>>>>>>  
+>>>>>>>>>> +	if (static_branch_unlikely(&sched_cluster_active)) {
+>>>>>>>>>> +		struct sched_domain *sdc = rcu_dereference(per_cpu(sd_cluster, target));
+>>>>>>>>>> +
+>>>>>>>>>> +		if (sdc) {
+>>>>>>>>>> +			for_each_cpu_wrap(cpu, sched_domain_span(sdc), target + 1) {
+>>>>>>>>>> +				if (!cpumask_test_cpu(cpu, cpus))
+>>>>>>>>>> +					continue;
+>>>>>>>>>> +
+>>>>>>>>>> +				if (has_idle_core) {
+>>>>>>>>>> +					i = select_idle_core(p, cpu, cpus, &idle_cpu);
+>>>>>>>>>> +					if ((unsigned int)i < nr_cpumask_bits)
+>>>>>>>>>> +						return i;
+>>>>>>>>>> +				} else {
+>>>>>>>>>> +					if (--nr <= 0)
+>>>>>>>>>> +						return -1;
+>>>>>>>>>> +					idle_cpu = __select_idle_cpu(cpu, p);
+>>>>>>>>>> +					if ((unsigned int)idle_cpu < nr_cpumask_bits)
+>>>>>>>>>> +						return idle_cpu;
+>>>>>>>>>> +				}
+>>>>>>>>>> +			}
+>>>>>>>>>> +			cpumask_andnot(cpus, cpus, sched_domain_span(sdc));
+>>>>>>>>>> +		}
+>>>>>>>>>> +	}
+>>>>>>>>>
+>>>>>>>>> Would not this:
+>>>>>>>>>
+>>>>>>>>> --- a/kernel/sched/fair.c
+>>>>>>>>> +++ b/kernel/sched/fair.c
+>>>>>>>>> @@ -6994,6 +6994,29 @@ static int select_idle_cpu(struct task_s
+>>>>>>>>>  		}
+>>>>>>>>>  	}
+>>>>>>>>>  
+>>>>>>>>> +	if (static_branch_unlikely(&sched_cluster_active)) {
+>>>>>>>>> +		struct sched_group *sg = sd->groups;
+>>>>>>>>> +		if (sg->flags & SD_CLUSTER) {
+>>>>>>>>> +			for_each_cpu_wrap(cpu, sched_group_span(sg), target+1) {
+>>>>>>>>> +				if (!cpumask_test_cpu(cpu, cpus))
+>>>>>>>>> +					continue;
+>>>>>>>>> +
+>>>>>>>>> +				if (has_idle_core) {
+>>>>>>>>> +					i = select_idle_core(p, cpu, cpus, &idle_cpu);
+>>>>>>>>> +					if ((unsigned)i < nr_cpumask_bits)
+>>>>>>>>> +						return 1;
+>>>>>>>>> +				} else {
+>>>>>>>>> +					if (--nr <= 0)
+>>>>>>>>> +						return -1;
+>>>>>>>>> +					idle_cpu = __select_idle_cpu(cpu, p);
+>>>>>>>>> +					if ((unsigned)idle_cpu < nr_cpumask_bits)
+>>>>>>>>> +						return idle_cpu;
+>>>>>>>>> +				}
+>>>>>>>>> +			}
+>>>>>>>>> +			cpumask_andnot(cpus, cpus, sched_group_span(sg));
+>>>>>>>>> +		}
+>>>>>>>>> +	}
+>>>>>>>>> +
+>>>>>>>>>  	for_each_cpu_wrap(cpu, cpus, target + 1) {
+>>>>>>>>>  		if (has_idle_core) {
+>>>>>>>>>  			i = select_idle_core(p, cpu, cpus, &idle_cpu);
+>>>>>>>>>
+>>>>>>>>> also work? Then we can avoid the extra sd_cluster per-cpu variable.
+>>>>>>>>>
+>>>>>>>>
+>>>>>>>> I thought it will be fine since sg->flags is derived from the child domain. But practically it doesn't.
+>>>>>>>> Tested on a 2P Skylake server with no clusters, add some debug messages to see how sg->flags appears:
+>>>>>>>>
+>>>>>>>> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+>>>>>>>> index 69968ed9ffb9..5c443b74abf5 100644
+>>>>>>>> --- a/kernel/sched/topology.c
+>>>>>>>> +++ b/kernel/sched/topology.c
+>>>>>>>> @@ -90,8 +90,8 @@ static int sched_domain_debug_one(struct sched_domain *sd, int cpu, int level,
+>>>>>>>>
+>>>>>>>>                 cpumask_or(groupmask, groupmask, sched_group_span(group));
+>>>>>>>>
+>>>>>>>> -               printk(KERN_CONT " %d:{ span=%*pbl",
+>>>>>>>> -                               group->sgc->id,
+>>>>>>>> +               printk(KERN_CONT " %d:{ cluster: %s span=%*pbl",
+>>>>>>>> +                               group->sgc->id, group->flags & SD_CLUSTER ? "true" : "false",
+>>>>>>>>                                 cpumask_pr_args(sched_group_span(group)));
+>>>>>>>>
+>>>>>>>>                 if ((sd->flags & SD_OVERLAP) &&
+>>>>>>>>
+>>>>>>>> Unfortunately the result doesn't match what I expected, the MC domain's sg->flags still marked
+>>>>>>>> as cluster:
+>>>>>>>>
+>>>>>>>> [    8.886099] CPU0 attaching sched-domain(s):
+>>>>>>>> [    8.889539]  domain-0: span=0,40 level=SMT
+>>>>>>>> [    8.893538]   groups: 0:{ cluster: false span=0 }, 40:{ cluster: false span=40 }
+>>>>>>>> [    8.897538]   domain-1: span=0-19,40-59 level=MC
+>>>>>>>> [    8.901538]    groups: 0:{ cluster: true span=0,40 cap=2048 }, 1:{ cluster: true span=1,41 cap=2048 }, 2:{ cluster: true span=2,42 cap=2048 }, 3:{ cluster: true span=3,43 cap=2048 }, 4:{ cluster: true span=4,44 cap=2048 }, 5:{ cluster: true span=5,45 cap=2048 }, 6:{ cluster: true span=6,46 cap=2048 }, 7:{ cluster: true span=7,47 cap=2048 }, 8:{ cluster: true span=8,48 cap=2048 }, 9:{ cluster: true span=9,49 cap=2048 }, 10:{ cluster: true span=10,50 cap=2048 }, 11:{ cluster: true span=11,51 cap=2048 }, 12:{ cluster: true span=12,52 cap=2048 }, 13:{ cluster: true span=13,53 cap=2048 }, 14:{ cluster: true span=14,54 cap=2048 }, 15:{ cluster: true span=15,55 cap=2048 }, 16:{ cluster: true span=16,56 cap=2048 }, 17:{ cluster: true span=17,57 cap=2048 }, 18:{ cluster: true span=18,58 cap=2048 }, 19:{ cluster: true span=19,59 cap=2048 }
+>>>>>>>> [    8.905538]    domain-2: span=0-79 level=NUMA
+>>>>>>>> [    8.909538]     groups: 0:{ cluster: false span=0-19,40-59 cap=40960 }, 20:{ cluster: false span=20-39,60-79 cap=40960 }
+>>>>>>>>
+>>>>>>>> I assume we didn't handle the sg->flags correctly on the domain degeneration. Simply checked the code seems
+>>>>>>>> we've already make sg->flags = 0 on degeneration, maybe I need to check where's wrong.
+>>>>>>>>
+>>>>>>>
+>>>>>>> Currently we only update the groups' flags to 0 for the final lowest domain in [1]. The upper
+>>>>>>> domains' group won't be updated if degeneration happens. So we cannot use the suggested approach
+>>>>>>> for cluster scanning and sd_cluster per-cpu variable is still needed.
+>>>>>>>
+>>>>>>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/sched/topology.c?h=v6.4-rc4#n749
+>>>>>>>
+>>>>>>> Thanks.
+>>>>>>>
+>>>>>>>
+>>>>>> Is this an issue? Suppose sched domain A's parent domain
+>>>>>> is B, B's parent sched domain is C. When B degenerates, C's child domain
+>>>>>> pointer is adjusted to A. However, currently the code does not adjust C's
+>>>>>> sched groups' flags. Should we adjust C's sched groups flags to be the same
+>>>>>> as A to keep consistency?
+>>>>>
+>>>>> It depends on whether we're going to use it. currently only asym_smt_can_pull_tasks() uses
+>>>>> it within the SMT so I think update the lowest domain's group flag works. For correctness
+>>>>> all the domain group's flag should derives from its real child. I tried to solve this at group
+>>>>> building but seems hard to do, at that time we don't know whether a domain is going to degenerate
+>>>>> or not since the groups it not built.
+>>>>>
+>>>>>>
+>>>>>> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+>>>>>> index 6198fa135176..fe3fd70f2313 100644
+>>>>>> --- a/kernel/sched/topology.c
+>>>>>> +++ b/kernel/sched/topology.c
+>>>>>> @@ -713,14 +713,13 @@ cpu_attach_domain(struct sched_domain *sd, struct root_domain *rd, int cpu)
+>>>>>>  
+>>>>>>  	/* Remove the sched domains which do not contribute to scheduling. */
+>>>>>>  	for (tmp = sd; tmp; ) {
+>>>>>> -		struct sched_domain *parent = tmp->parent;
+>>>>>> +		struct sched_domain *parent = tmp->parent, *pparent;
+>>>>>>  		if (!parent)
+>>>>>>  			break;
+>>>>>>  
+>>>>>>  		if (sd_parent_degenerate(tmp, parent)) {
+>>>>>> -			tmp->parent = parent->parent;
+>>>>>> -			if (parent->parent)
+>>>>>> -				parent->parent->child = tmp;
+>>>>>> +			pparent = parent->parent;
+>>>>>> +			tmp->parent = pparent;
+>>>>>>  			/*
+>>>>>>  			 * Transfer SD_PREFER_SIBLING down in case of a
+>>>>>>  			 * degenerate parent; the spans match for this
+>>>>>> @@ -728,6 +727,18 @@ cpu_attach_domain(struct sched_domain *sd, struct root_domain *rd, int cpu)
+>>>>>>  			 */
+>>>>>>  			if (parent->flags & SD_PREFER_SIBLING)
+>>>>>>  				tmp->flags |= SD_PREFER_SIBLING;
+>>>>>> +
+>>>>>> +			if (pparent) {
+>>>>>> +				struct sched_group *sg = pparent->groups;
+>>>>>> +
+>>>>>> +				do {
+>>>>>> +					sg->flags = tmp->flags;
+>>>>>
+>>>>> May need to test on some heterogeous platforms. Does it always stand that child domain of CPU from
+>>>>> remote group have the same flags with @tmp?
+>>>>>
+>>>> Good question, for heterogenous platforms sched groups within the same domain might not always
+>>>> have the same flags, because if group1 and group2 sit in big/small-core child domain, they could
+>>>> have different balance flags in theory. Maybe only update the local group's flag is accurate.
+>>>>
+>>>> I found Tim has proposed a fix for a similar scenario, and it is for SD_SHARE_CPUCAPACITY, and it
+>>>> should be in tip:
+>>>> https://lore.kernel.org/lkml/168372654916.404.6677242284447941021.tip-bot2@tip-bot2/
+>>>> We could adjust it based on his change to remove SD_CLUSTER, or we can
+>>>> replace groups->flag with tmp->flag directly, in case we have other flags to be
+>>>> adjusted in the future.
+>>>>
+>>>
+>>> Thanks for the reference. I think we can handle the SD_CLUSTER in the same way and only update
+>>> local groups flag should satisfy our needs. I tried to use the correct child domains to build the
+>>> sched groups then all the groups will have the correct flags, but it'll be a bit more complex.
+>>>
+>>
+>> something like below, detect the sched domain degeneration first and try to rebuild the groups if
+>> necessary.
+> Not sure if we need to rebuild the groups. With only
 > 
-> On Wed, Jun 14, 2023 at 03:11:44PM +0200, Simon Horman wrote:
-> > > +#define MOCK_PHC_CC_SHIFT		31
-> > > +#define MOCK_PHC_CC_MULT		(1 << MOCK_PHC_CC_SHIFT)
-> > 
-> > Maybe BIT()?
+> if (parent->flags & SD_CLUSTER)
+> 	parent->parent->groups->flags &= ~SD_CLUSTER;
 > 
-> Sorry, not everything that is 1 << something has BIT() semantics.
-> This in particular is quite clearly just a multiplier factor
-> expressed as a power of 2.
-
-Yes, sorry about that.
-
-> > > +struct mock_phc *mock_phc_create(struct device *dev)
-> > > +{
-> > > +	struct mock_phc *phc;
-> > > +	int err;
-> > > +
-> > > +	phc = kzalloc(sizeof(*phc), GFP_KERNEL);
-> > > +	if (!phc) {
-> > > +		err = -ENOMEM;
-> > > +		goto out;
-> > > +	}
-> > > +
-> > > +	phc->info = (struct ptp_clock_info) {
-> > > +		.owner		= THIS_MODULE,
-> > > +		.name		= "Mock-up PTP clock",
-> > > +		.max_adj	= MOCK_PHC_MAX_ADJ_PPB,
-> > > +		.adjfine	= mock_phc_adjfine,
-> > > +		.adjtime	= mock_phc_adjtime,
-> > > +		.gettime64	= mock_phc_gettime64,
-> > > +		.settime64	= mock_phc_settime64,
-> > > +		.do_aux_work	= mock_phc_refresh,
-> > > +	};
-> > > +
-> > > +	phc->cc = (struct cyclecounter) {
-> > > +		.read	= mock_phc_cc_read,
-> > > +		.mask	= CYCLECOUNTER_MASK(64),
-> > > +		.mult	= MOCK_PHC_CC_MULT,
-> > > +		.shift	= MOCK_PHC_CC_SHIFT,
-> > > +	};
-> > > +
-> > > +	spin_lock_init(&phc->lock);
-> > > +	timecounter_init(&phc->tc, &phc->cc, 0);
-> > > +
-> > > +	phc->clock = ptp_clock_register(&phc->info, dev);
-> > > +	if (IS_ERR_OR_NULL(phc->clock)) {
-> > > +		err = PTR_ERR_OR_ZERO(phc->clock);
-> > > +		goto out_free_phc;
-> > > +	}
-> > > +
-> > > +	ptp_schedule_worker(phc->clock, MOCK_PHC_REFRESH_INTERVAL);
-> > > +
-> > > +	return phc;
-> > > +
-> > > +out_free_phc:
-> > > +	kfree(phc);
-> > > +out:
-> > > +	return ERR_PTR(err);
-> > > +}
-> > 
-> > Smatch complains that ERR_PTR may be passed zero.
-> > Looking at the IS_ERR_OR_NULL block above, this does indeed seem to be the
-> > case.
+> I see the correct flags.
 > 
-> The intention here had something to do with PTP being optional for the
-> caller (netdevsim). Not sure whether the implementation is the best -
-> and in particular whether ERR_PTR(0) is NULL or not. I guess this is
-> what the smatch warning (which I haven't looked at) is saying.
+> My understanding is that, although remote groups's flag might be incorrect,
+> later when other sched domain degenerates, these remote groups becomes local
+> groups for those sched domains, and the flags will be adjusted accordingly.
 
-Thanks. It's unclear to me if ERR_PTR(0) is actually valid or not.
-By itself it does seem harmless to me. But, OTOH, it is sometimes
-indicative of some other problem. Fortunately that seems not to
-be the case here.
+Maybe worth a try to build the groups correctly at very beginning rather
+correct it later when needed. Considering we've used it in several places[1][2]
+and this time we're going to use it for cluster.
 
+[1] 16d364ba6ef2 ("sched/topology: Introduce sched_group::flags")
+[2] https://lore.kernel.org/lkml/168372654916.404.6677242284447941021.tip-bot2@tip-bot2/
+
+>> Works on a non-cluster machine emulated with QEMU:
+>>
+>> qemu-system-aarch64 \
+>>         -kernel ${Image} \
+>>         -smp cores=16,threads=2 \
+>>         -cpu host --enable-kvm \
+>>         -m 32G \
+>>         -object memory-backend-ram,id=node0,size=8G \
+>>         -object memory-backend-ram,id=node1,size=8G \
+>>         -object memory-backend-ram,id=node2,size=8G \
+>>         -object memory-backend-ram,id=node3,size=8G \
+>>         -numa node,memdev=node0,cpus=0-7,nodeid=0 \
+>>         -numa node,memdev=node1,cpus=8-15,nodeid=1 \
+>>         -numa node,memdev=node2,cpus=16-23,nodeid=2 \
+>>         -numa node,memdev=node3,cpus=24-31,nodeid=3 \
+>>         -numa dist,src=0,dst=1,val=12 \
+>>         -numa dist,src=0,dst=2,val=20 \
+>>         -numa dist,src=0,dst=3,val=22 \
+>>         -numa dist,src=1,dst=2,val=22 \
+>>         -numa dist,src=1,dst=3,val=24 \
+>>         -numa dist,src=2,dst=3,val=12 \
+>>         -machine virt,iommu=smmuv3 \
+>>         -net none -initrd ${Rootfs} \
+>>         -nographic -bios $(pwd)/QEMU_EFI.fd \
+>>         -append "rdinit=/init console=ttyAMA0 earlycon=pl011,0x9000000 sched_verbose schedstats=enable loglevel=8"
+>>
+>> The flags looks correct:
+>> [    4.379910] CPU0 attaching sched-domain(s):
+>> [    4.380540]  domain-0: span=0-1 level=SMT
+>> [    4.381130]   groups: 0:{ cluster: false span=0 cap=1023 }, 1:{ cluster: false span=1 }
+>> [    4.382353]   domain-1: span=0-7 level=MC
+>> [    4.382950]    groups: 0:{ cluster: false span=0-1 cap=2047 }, 2:{ cluster: false span=2-3 cap=2048 }, 4:{ cluster: false span=4-5 cap=2048 }, 6:{ cluster: false span=6-7 cap=2048 }
+>> [    4.385378]    domain-2: span=0-15 level=NUMA
+>> [    4.386047]     groups: 0:{ cluster: false span=0-7 cap=8191 }, 8:{ cluster: false span=8-15 cap=8192 }
+>> [    4.387542]     domain-3: span=0-23 level=NUMA
+>> [    4.388197]      groups: 0:{ cluster: false span=0-15 cap=16383 }, 16:{ cluster: false span=16-23 cap=8192 }
+>> [    4.389661]      domain-4: span=0-31 level=NUMA
+>> [    4.390358]       groups: 0:{ cluster: false span=0-23 mask=0-7 cap=24575 }, 24:{ cluster: false span=16-31 mask=24-31 cap=16384 }
+>>
+>>
 > 
-> > Keeping Smatch happy is one thing - your call - but I do wonder if the
-> > caller of mock_phc_create() handles the NULL case correctly.
+> I did similar test based on your config:
+> qemu-system-x86_64 \
+>         -m 2G \
+>         -smp 16,threads=2,cores=4,sockets=2 \
+>         -numa node,mem=1G,cpus=0-7,nodeid=0 \
+>         -numa node,mem=1G,cpus=8-15,nodeid=1 \
+>         -kernel bzImage \
+>         -drive file=./ubuntu.raw,format=raw \
+>         -append "console=ttyS0 root=/dev/sda5 earlyprintk=serial ignore_loglevel sched_verbose" \
+>         -cpu host \
+>         -enable-kvm \
+>         -nographic
 > 
-> mock_phc_create() returns a pointer to an opaque data structure -
-> struct mock_phc - and the caller just carries that pointer around to the
-> other API calls exported by the mock_phc module. It doesn't need to care
-> whether the pointer is NULL or not, just the mock_phc module does (and
-> it does handle that part well, at least assuming that the pointer is NULL).
+> and print the group address as well as the SD_CLUSTER flag:
+> 
+> [    0.208583] CPU0 attaching sched-domain(s):
+> [    0.208998]  domain-0: span=0-1 level=SMT
+> [    0.209393]   groups: 0:{ cluster: false group 0xffff9ed3c19e6140 span=0 }, 1:{ cluster: false group 0xffff9ed3c19e6440 span=1 }
+> [    0.212463]   domain-1: span=0-7 level=MC
+> [    0.212856]    groups: 0:{ cluster: false group 0xffff9ed3c1a8f3c0 span=0-1 cap=2048 }, 2:{ cluster: true group 0xffff9ed3c1a8fac0 span=2-3 cap=2048 },
+> 
+> Yeah, group 0xffff9ed3c1a8fac0 has SD_CLUSTER, but...
+> 
 
-Thanks, got it.
+Something's wrong here. 0xffff9ed3c1a8fac0 shouldn't have SD_CLUSTER. Code above should works to successfully build
+MC's groups from SMT rather than CLS, Tested with qemu version 4.2.1 (from ubuntu 20.04) and mainline v8.0.0-1358-gac84b57b4d
+with your x86 topology, it looks like:
+
+[    0.517077] CPU0 attaching sched-domain(s):
+[    0.520858]  domain-0: span=0-1 level=SMT
+[    0.524858]   groups: 0:{ cluster: false span=0 }, 1:{ cluster: false span=1 }
+[    0.528858]   domain-1: span=0-7 level=MC
+[    0.532858]    groups: 0:{ cluster: false span=0-1 cap=2048 }, 2:{ cluster: false span=2-3 cap=2048 }, 4:{ cluster: false span=4-5 cap=2048 }, 6:{ cluster: false span=6-7 cap=2048 }
+[    0.536858]    domain-2: span=0-15 level=NUMA
+[    0.540858]     groups: 0:{ cluster: false span=0-7 cap=8192 }, 8:{ cluster: false span=8-15 cap=8192 }
+
+and for CPU 2:
+
+[    0.572859] CPU2 attaching sched-domain(s):
+[    0.576858]  domain-0: span=2-3 level=SMT
+[    0.580858]   groups: 2:{ cluster: false span=2 }, 3:{ cluster: false span=3 }
+[    0.584858]   domain-1: span=0-7 level=MC
+[    0.588858]    groups: 2:{ cluster: false span=2-3 cap=2048 }, 4:{ cluster: false span=4-5 cap=2048 }, 6:{ cluster: false span=6-7 cap=2048 }, 0:{ cluster: false span=0-1 cap=2048 }
+[    0.592858]    domain-2: span=0-15 level=NUMA
+[    0.596858]     groups: 0:{ cluster: false span=0-7 cap=8192 }, 8:{ cluster: false span=8-15 cap=8192 }
+
+Thanks.
