@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43F6473228E
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 00:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 767F2732290
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 00:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238912AbjFOWNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 18:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53880 "EHLO
+        id S238947AbjFOWNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 18:13:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbjFOWNX (ORCPT
+        with ESMTP id S231312AbjFOWNv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 18:13:23 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E9DBA
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 15:13:21 -0700 (PDT)
+        Thu, 15 Jun 2023 18:13:51 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B020E272D
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 15:13:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686867201; x=1718403201;
+  t=1686867222; x=1718403222;
   h=message-id:date:subject:to:cc:references:from:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=uMcnyhk3g/K552B+SzZF0W6EONa/jQYa0so0GEqkCtw=;
-  b=imxQVlM/BjR0bgam0FoX0zIr+h1ku4fCaqCujYGPVQYDEoTxd4OzC1Tv
-   B9mgAW19W1oyTEQL0bp0DHlBYe7Cz265D2cBycMZj1+LxXVPvUUfyQBU4
-   yyCT4oSZfuFT8wRUp2k6/h5FlAwzckIxeKmhbl+tLb2QeGvOdVA1T3bam
-   y6dQa0/d2VW2LJgSwlr9zWgkTnlmzO2pCFtkJW8O3aYlu8Szuc/TcdU3R
-   7l5Y/JOyLc7JjjvxkLMZ9t2ciyqvEBNGtB4WKT/rRo4Cw/JSmDzEHJCdx
-   w+u1zq8WlmBB4t4lp+mmVgkPYPGtx4YvhFxakq6/p3DmptX+rWyW4U0d2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="356543533"
+  bh=84BkT7yZiA/vwHE7ynfMldq9B9fs2L43eV+bTybmg/o=;
+  b=Bhu1ArMtTzLym6unZiMx/AHB8rGEzXfB9gBnC7tXEjeBAxV3zmsfY2GK
+   s3ACH0zNUI//WtDo1SusYOYbLhjOY7tPy4RML8nIfi7bHzaiP5vicqbWc
+   CxbLHMb+RcmVxWooVy9nIMjDofGe6JOnOHmkoJ9ZSh4SFEz9h2rOm3PBR
+   7L+71N7/DkkVjDm0f94m/nw54SIbqhj3OZ62AsZm0BE/LulUlVuGExerV
+   4TEUi9yJoMxZrhWhhVaTwtQn2SmZec12Y0L5yQjOBI8Kaa43G51eSj44h
+   o7EGpew+9JQYZ/q4wqRg6PUD249thecZKyM4jtskHnwf5nnstvAFAQx+V
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="343793294"
 X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="356543533"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 15:13:21 -0700
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="745846305"
+   d="scan'208";a="343793294"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 15:13:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="662931672"
 X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="745846305"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga001.jf.intel.com with ESMTP; 15 Jun 2023 15:13:20 -0700
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+   d="scan'208";a="662931672"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga003.jf.intel.com with ESMTP; 15 Jun 2023 15:13:40 -0700
+Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 15 Jun 2023 15:13:19 -0700
+ 15.1.2507.23; Thu, 15 Jun 2023 15:13:40 -0700
 Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Thu, 15 Jun 2023 15:13:19 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.176)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ 15.1.2507.23 via Frontend Transport; Thu, 15 Jun 2023 15:13:40 -0700
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.41) by
+ edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Thu, 15 Jun 2023 15:13:19 -0700
+ 15.1.2507.23; Thu, 15 Jun 2023 15:13:40 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nssNI2D10GEl3H1QlBDH5a8TdPd938yzfjHECVoAAXOGrdeYdx8TZbDaUTP/DIy2l+hMis5DG9FMOKoZGJn9RK9yVmjr56Sh83lSJal2/f/aBjDD09wUJQnTob9TYJD789fZsJM4tCajKD0xPdwIg7GPlWsxVQdpyeISASOWSKkX3u8wEaM9A7OB0GeOGnPFCgiGBmhkppjvd6zAY/xI8RW12GHyYjctKmq4L2z2TyDiEome2RF/sC3A1xTSs4MLiL4unp4fh+vDBATDkW1YVsgXNx5LjziKfQeJEGfuA2fMd+swxetNqmM/0KUcYDPE0F88PwAZh4hFqUpTUMD5hA==
+ b=i95sNdpVCf9XFR4S4FZaxfJn8ok2IdRLVvhriN9faK25nDP9MwtHp64fg4of8fp6Ap9vrWLLtovzJqCsG6xyhFkTGOmxenhsxCpSKWb62LTBOvqhPd8JsyF/qHvbCu+TUSsTARm8rxqUYnMEQFDg9jP+x8kVjdAVEQHg1k38FdqJt32gsCZZl/fwlZYue9itB3KL8Q1GZ+TIDChpC/Cf5OYlgwx/4XVzJ45wmMlOTn+VxWE1mfsC9usA4/ZcN6TwGu1T1scJ2emQC/mQ4IbjHhYcpFJwmnqmG93HnF6GwSege3qrfOCsVdYxZeg0m6pbAfue6nL743+Ktt5TqJDUSA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=u1kmXAoCsRSdbQjx/SRhceudY67xZYTlYym0ZM3/tkc=;
- b=kqKWjGpgSTYUnC8jvDnNrAaI0cGcjA2I5kljcBsVWAkne+EGtWXnbkY5FBrdU6QLEWTCiiQjvLbrT2aj6VhfzkAFVD7uShrd+Urwx/l5jc1n0pO31uPhrWmRYFmSPFKBAS/gJxA7oWzdCFzyUNBXbkzsqtgAVEQN0/9Ha31Sr12coELUfApQeoCpUsdzi/73sWKq4f8zEXs0Jeg/XSdborGzkfnt3/erPqZuQaUvwe0gOumwpZ48zFmRMuwkIDumFdJ58Eh2UUEiQUXsnIlD2C7PJ6zaG5I4MM4j8xTt9CdZHnvXJ/CNvUN9dFUIfKEM2fKSt3OZvaxMSF4jBbJYFA==
+ bh=4/lePUPKvPDi/4Pp0hNTkNRSpTGgMMwSF0UZIqyX6A8=;
+ b=JVRO38DfRZiBHroNs7t9nkSnoIIdr5OzpyJUTSYQOlagkccwbC44EpxI2N7dLjkd6kIZQk5m1bL7VqHeVdoV/MSCe6ut+7d4OVPnKlEIoYg0C8YjsbvmpFEchdPnpQdO9HBQ7tLXVx37hDj7b1i77xvhk4QSkz8RhpWhyHQZkBNHBa0qOKPYWfgYTfq9+VUE4ig6Cz0oXYabI86be5IBUyAwOxfqbmtiKppLxwLkVVs7kZaWddqp1PhIhjas41bLwXAnuTCDJFshE1qaIuBU6ELLhBjdDq27L9k7s1VKZgEe49zmvuKKS4F1twXJ9nFXK4/vS9KCqOPNJtiV9pIhTg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
@@ -66,17 +67,17 @@ Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
  by CY5PR11MB6367.namprd11.prod.outlook.com (2603:10b6:930:39::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Thu, 15 Jun
- 2023 22:13:12 +0000
+ 2023 22:13:38 +0000
 Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
  ([fe80::591f:4873:fd80:9a6d]) by SJ2PR11MB7573.namprd11.prod.outlook.com
  ([fe80::591f:4873:fd80:9a6d%6]) with mapi id 15.20.6455.045; Thu, 15 Jun 2023
- 22:13:12 +0000
-Message-ID: <201aff6a-7bd0-e0e6-5ee8-1b9eab223cb0@intel.com>
-Date:   Thu, 15 Jun 2023 15:13:10 -0700
+ 22:13:38 +0000
+Message-ID: <c3f3ce07-3402-4cd5-fcf8-1d505ee820e7@intel.com>
+Date:   Thu, 15 Jun 2023 15:13:35 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Firefox/102.0 Thunderbird/102.11.2
-Subject: Re: [PATCH v4 14/24] x86/resctrl: Allow resctrl_arch_rmid_read() to
- sleep
+Subject: Re: [PATCH v4 15/24] x86/resctrl: Allow arch to allocate memory
+ needed in resctrl_arch_rmid_read()
 Content-Language: en-US
 To:     James Morse <james.morse@arm.com>, <x86@kernel.org>,
         <linux-kernel@vger.kernel.org>
@@ -94,75 +95,75 @@ CC:     Fenghua Yu <fenghua.yu@intel.com>,
         Xin Hao <xhao@linux.alibaba.com>, <peternewman@google.com>,
         <dfustini@baylibre.com>
 References: <20230525180209.19497-1-james.morse@arm.com>
- <20230525180209.19497-15-james.morse@arm.com>
+ <20230525180209.19497-16-james.morse@arm.com>
 From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <20230525180209.19497-15-james.morse@arm.com>
+In-Reply-To: <20230525180209.19497-16-james.morse@arm.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR13CA0087.namprd13.prod.outlook.com
- (2603:10b6:a03:2c4::32) To SJ2PR11MB7573.namprd11.prod.outlook.com
+X-ClientProxiedBy: SJ0PR13CA0073.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c4::18) To SJ2PR11MB7573.namprd11.prod.outlook.com
  (2603:10b6:a03:4d2::10)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|CY5PR11MB6367:EE_
-X-MS-Office365-Filtering-Correlation-Id: 48043e76-973f-47a7-5117-08db6dedb56e
+X-MS-Office365-Filtering-Correlation-Id: 73a40892-9b01-40a6-ddbe-08db6dedc50b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 67s1Lr+TwkdAV61pnU5WvcG4l708/QMOXUlj97oE2q+gpUI4rcBeHEiL4nK803oHuLC6dsMZiRoh+1Hrb6b7Gs3LG0gj54xjBGDQxuEqSgyabkaT5Y9gPVXRHFztCE5GCsY3Lv2jwy6iL1b8ZvM0cmmUuNO0mq0Mw6ApYTDozARKvPgRNJMc6IH61ul0YTMARGCj7IT6H2/IePp+pZm8GAhlNYMxAT90vl+kel2+Q07p1S31HFmuVkVt/hTYYUSP49mD2eN5NQo3nAMCMB/9q71b6sb70hnD7QgBtboQt2xEHpP2KCfxcxuivF58qJdQCXgUeP/h0TYQ19DQFH24ezhoVU+jiFNzftK5lltZLNXu4WqDLX4YZJUq4CVbpOZGlhI245Z5FCaRHwfDE+Q2Vk1rkk/Ecq9pyZoxpajf6b5ONC7i2afahAa8pK2iTqOZIsjJb8tvlNTeG8HbOsMmdnnQ8E8rY00x7zJxC9y8JMbfUjKnPsp/HX5X7FsLy+N141nBeZjb5ZAQVZbVuSmuJFb2L/86n1hpdjnDL+leefXiHNv1q3/C48uUS9sWdKx8MwgiTemBIgH6c8yXURQNhoc7oRGjzBHIZo5kaWjUjphJ9cLhKEiCGec15YOAsSXe0A5bt2jBmjS75+drrLUBsg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(376002)(39860400002)(136003)(346002)(366004)(451199021)(31686004)(4326008)(66946007)(66556008)(36756003)(186003)(54906003)(478600001)(2616005)(2906002)(66476007)(316002)(8676002)(41300700001)(31696002)(86362001)(6486002)(7416002)(6506007)(53546011)(44832011)(8936002)(26005)(83380400001)(82960400001)(5660300002)(38100700002)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: 6JOVAFX/gEGfF5+JncKRCHfnObNcA/KzJUOYACaYQaVItBaSikUMxBKvFej2M0ZIeSTZDNYlgV2CpZ2r8kPei+oRIBlC+Co9foUsmCTsmIbceclEcStNrasT9U9W1J1MSnb5ze6wGeczQoEaDqys3uIowAGO09MVDRM0YEc69k8CFygJTw2SIYc6vrDCnd6B1CvTLg3OISxvemn5j09c4fZnzuZnTK4yqvpI5AJ5XtzLYhntpgzwC+0oQ/tEmnncdaM2lR6MCd08DJDtNjaL+acDEeoT5xy2ty+NcGJsSK4n51nJPdyySX/Ts8Xkx6EqLsumStHwth5rU6fTibUKaPDD3IFT7Gzwg+X022osnCrP48nfvta0v3PsPWL/2PAPwoU031tOYhdTpA6R4twC/Q15o9bdrqXB80ZRKi5KPpZXhtE5x+ToB25sikrtHi+L8mQTffX/BOS9a6aS1N4PX+3BVw4kF/fK27Suu6E6YTVObtAtXTtIO7RsxlQ+SjalJwknMk/qKQH12RDcbxk+9pmOgBxt9bSVw51rhslD7ecbHr0u7Q4xU5xQKrRALBTFiWJzSK7Z4D3TH9QbugUAf8cqB7DaYR38WQKGrR+j2erLezhFZ8nsGiF96oyjxwtYAoXCwur5LwMytwa/3d/c2g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(376002)(39860400002)(136003)(346002)(366004)(451199021)(31686004)(4326008)(66946007)(66556008)(36756003)(186003)(54906003)(478600001)(2616005)(2906002)(66476007)(316002)(6666004)(8676002)(41300700001)(31696002)(86362001)(6486002)(7416002)(6506007)(53546011)(44832011)(8936002)(26005)(83380400001)(82960400001)(5660300002)(38100700002)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?M1VtemptVkE1bUNnQVJMTWFJc01qUzRLb1czWUx6OUZmVzNGTWk2ZVRLb0ZD?=
- =?utf-8?B?cHRHM3dvUzArT0VoWFA5eUJEbkRqZ2NJUmczd3V5TmRWZHNHRUUxUmQzRFlH?=
- =?utf-8?B?TUFoc1QxRjZMNkJiSkUvcGRMeUpVdnFGUDJGaE5FSms4cVZhWExRbk9nQzlJ?=
- =?utf-8?B?SDhDTFFRU09DOWNWenM4cW01dXFOaDA4ZDNKQWlpM2RtNE1rWGxxQU4vbnlT?=
- =?utf-8?B?R3FsSlNPYXpwdnI1cTFRRmtBeFB1SDVyTDVyQ3hjQXFQUXJqWWNLcUpFSlBt?=
- =?utf-8?B?cU9wZXh0cHhXa2puY29sVU1CaVVYb0svRXp1djAyaVJmcE43MC8wa0QwQ3hY?=
- =?utf-8?B?eFZJNUJvZTNaNC9EcVlDZHFNZ1Vsa0FKUG43NHN5TkpVR1dhSTNINGhJZ2V5?=
- =?utf-8?B?YkpBWitYQVhlVEd5NitINWlyM1NOTndxWkF1L0RPOXZFRC9JR0dIUjNSUnIy?=
- =?utf-8?B?aW1CVDdjbnR5M29xZDR1YWRUVi9VTnYrd3ovYXJHUUNyNExCZndzdzJxK3FV?=
- =?utf-8?B?b2cxank3ci9ja2MzZ1piblFYVnVlQzdKYmxNbmJWNHh5dWk2b2RJRXROTWdF?=
- =?utf-8?B?YUtHeG5IZFJRMVNpL3VEUFdyTkJZSTdvQ0lRUWY2VTU2ODByM1o4ZHNQRkY1?=
- =?utf-8?B?NGZjTTQrV25TWkt0cTNaeHpZZ2J0dFJzSlpxL1gxNUxQdmRsUnZtbG1QVVpp?=
- =?utf-8?B?U3R6V0RsSHoxajY2aENUZTBMSWppQ0ora1k1Vi92KzBaYlNDbTY1M2cvcHRE?=
- =?utf-8?B?c2ZWM1FBRC9uR1ByYkdXZlhGWnkyTzJia2F5WGNJZWhKaGVWOWFrcVBubGsz?=
- =?utf-8?B?dFRid1laSU9KMEdkSStPT2NnMS9rWXllamJJbWJTakFRbzJkUTBtbnNQUmpk?=
- =?utf-8?B?VFMvVEhDUUZPOHdPeHVDSjlWOHBPakVvWXVyNWM1OGRiMkZiT1dWY01uSExE?=
- =?utf-8?B?Ny93YnhIOXljS1drbGo3OGt1MldmUEU0WlNQbzJ2NTF5SUEyd2NFbGNOOVF2?=
- =?utf-8?B?WEltN1FQaURTMWNlamYxTkJxdFBhNUQ5Qm44ZHNiN1hDeHpqV1RYbWthRTN2?=
- =?utf-8?B?ZldkeEdyTkdoc2EvRVhCNXpTTGw0OUJDTXMvMU0wVWhvSlVKQzRSM1ptWVhV?=
- =?utf-8?B?c1VZVHR2QnhQNFQvOUNOYndlR2hCUXJwRXZTOEJUSmU3ZGlUMDNjSVQ4N01P?=
- =?utf-8?B?Z2NTMDhsa2JpTVhkRWlBSEI2dGwwY1UxTCtMcEZWcC9CeFh0SDNFeFJpdGRO?=
- =?utf-8?B?dkVZTkNlWWJQbWFTWWh5ZHo1RGdOdmVsRHZXUmN6YlIydG11ZkZueHZZQms5?=
- =?utf-8?B?MFFmV29IVVRZUndsd05OR3VtV0h0RmZKOU1kTW16OG1JUVlESGxZVStUd1kr?=
- =?utf-8?B?OS8vNER4eE1uMVhNcHFkc3Bkd3hWaUVEd1dkMC9abUFsSm4yZVAyWVU0QlZn?=
- =?utf-8?B?aHptTk9Id2hESWMwZEFOLzZBZ1B0cTdRN25SOENsNnZ5WUV5b3ROZWFYY0NZ?=
- =?utf-8?B?OEg0SVdMMTJuTk1hUVl0b1BTTjNHVVlnK1VUT2ZNUDhHZTFCVkJOMHl2aXBB?=
- =?utf-8?B?V3hwZ3Y2M0FDeHJpYlBZM2locHdWME16cHNEK3l1WUhBMGZHN0xNTVhldmNo?=
- =?utf-8?B?VStwa3NMQVhDOXZtRDAzLy9zOGZNaW5pNGNDMjFuQUduSWFLV1JTOHdwNnEw?=
- =?utf-8?B?T0ZKQUR0enlDckNrWXdEbVBIYVlZdXJvSlF5MFlEQzIxNEMxbzVDVU5DYkN0?=
- =?utf-8?B?ZzhoOGNERm9qQUtoNWdRQjRQVjlhY1JvWitPc0ZjZzl5cU5JU2JhOGVEcExJ?=
- =?utf-8?B?OE5ZeUJZYmVTb3BhakVGbk1XTUpnQUZ5NGtyRFFNcFVSMU5TLzFxaUloNTdR?=
- =?utf-8?B?NDc3bWcvYU9qbXEwUzhnVi9ESjdrR1FhdThQZFd1VElnUWVqbFBXM1JEcjNM?=
- =?utf-8?B?L0EycW0wTkE4dmRWMzhPdHVCdFZxa3E3a3JXNkpKVlUwR1phMDMrSVE3dFFC?=
- =?utf-8?B?cE1SWXRMSjEyakxqTGRMSHBYYk9BL3M3N3JHbU5sZ2RuaXE4ZEdDNVJrVXdW?=
- =?utf-8?B?SG84SThEUXUzbWEzNHNNUlZWdXJPbzZTWVpET3hmWk5qNjRMS0VnZkhJek04?=
- =?utf-8?B?QXJMdytnNXdWTVBRWXdOQ3lpUkgrS3JRcmlmOER4S3Bla1NDSmZ4Q3FZWEd4?=
- =?utf-8?B?dXc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 48043e76-973f-47a7-5117-08db6dedb56e
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?REROanluc2cxTVdHbDU3djd0Qi9MWFBhZ0RxazZXcmZNcDVGazRjSUZLMTkx?=
+ =?utf-8?B?eFBITmlwVTJpb3pHSnU1c3djWHJ0WDNXZmNETHh5Q29VNDdKMjkxdGJ2T0s0?=
+ =?utf-8?B?UVRURFFKYU5CYXhxSThTemxxSG1CTC9tdjQ0aUYyaHZGT2l1R0ZZc0U1Nnpq?=
+ =?utf-8?B?dlVLSmZYZTFIUWVvbVE3S2RiSXM2N0ZaNk5GQWxDbFpVOXFuSEowaWR0OEJX?=
+ =?utf-8?B?OTNFYXQwU3I4ZzZXVXUrdWV6LzRNc2RCVjN6aFJBNEZLR3dHNnRHOHYwL2Jv?=
+ =?utf-8?B?TDMrS3h2azlxYVZVL05jSlRHaWFhaStmYWJDeDQ2dEQzN2o5bHg1c3orWUZt?=
+ =?utf-8?B?NzJoMHpUbnlxVTBCV2ExWVBrUVYzUC93TjhhWllzdlVySzZrTGY5aUxzWGRq?=
+ =?utf-8?B?ZVpJaEV6WUNBTVF3V1RMa0Q2eXFDRlp6WXFUT1RPZnFnWG5FUG1MV0pwMUF3?=
+ =?utf-8?B?aHJiUTZPczdYWkIxUGRHNTNtWENGMXJjVWJ5V2xCTjcwd0FrbEFpZ05UTkV6?=
+ =?utf-8?B?b2kvK0FFWmkrUXBqSXY0eGJRa0xYWkU4cC9EZHJtTXBkK2grMWVlYkhlcE92?=
+ =?utf-8?B?V202TDB1ZklnWjU4SjZzTFBpRWhFeXRWbUhDZnhkbTFSWFdKU3VacUlyQk5Z?=
+ =?utf-8?B?YXZsbGJvWERjMzB1QldwMlJJQ0dXU2MxYlV6UGQ2NEZ4cG1LSzNvTlpzQUlM?=
+ =?utf-8?B?c01GbmdZQUZtYjZuOVFrNFBrNW9KYW5vTXIrUG1EeWpoZEExUkdYbndwKzI5?=
+ =?utf-8?B?ejZLUEV5dWtWaDJScXhLQm9PZ21JMTVlRjA1dVdwaGl3VmROdW5XaE1oNGtR?=
+ =?utf-8?B?YUV6MTF6bHY2UHBCT2hjaEQ3cHJ0L0grekhFYWY2dG5ieTlxNlptaFJOMWxp?=
+ =?utf-8?B?RjJqbzE4ZXRObXp5TkI0SEM4SzFtYmJhN0kyU043ZUhQdGNuaUNCU253Rmt5?=
+ =?utf-8?B?YXJGcEVDOFo5Z2RKOHd5STVGRDVValZaRTZDbm50SlpreEhscEE1Y2Z4Nzhr?=
+ =?utf-8?B?RHJFY1dxcSs2RlBqdUNiYlhpWkRoRnBzbHpsMWUyb25sQmxDQmNvQnA4TzM0?=
+ =?utf-8?B?MUx1elFEN2xDSVNRck85dlJQRE9YZW91SjZhdFlpNlpiYVlKdjZsSVJoOE8r?=
+ =?utf-8?B?cFJ4bjFpdTdlWTdvNHp1NjducXlFc1JBWGNEK3JpOGdRZHFhTVlYZGw1amVJ?=
+ =?utf-8?B?SUIwREpPN3hnTHdWZnIydndibDRSalZVaTlWcGVOdUIyOW9jV0tWUW1GU2ox?=
+ =?utf-8?B?ZlRmQUxCNG9ISzhESDZ4Q2daZHpLOWRRWlFNTnZDNVl6b0ViMHZRWFQ2U2dn?=
+ =?utf-8?B?VS9OVWpNcnZFSVJDaGEyVWtYZ3dOTVpEOG03NzZzUEt2RGtEMHhvUkdYTGVB?=
+ =?utf-8?B?N25VSmNmekc3WGNKVmlqQmJnQUlZdmc4S2k2UWVmdUp5MER2MFdpZHlrUG03?=
+ =?utf-8?B?QkVFV0d1T3B3WVZMcndoemJNbndwQi93b3YxWnhON3ZsbHBHQWE0Z2RiNEtO?=
+ =?utf-8?B?cElxdGhFVVJab1gzQmQxdVVGelh6Sm5XQWdmRzBmRVdRQXpjc2ZxanE3U0Zr?=
+ =?utf-8?B?VmNMT1BHcDRIOVlqR0oyeWtWdkw1U0JyTmFScmZITWxkYkpTNGdQWGxPSlRN?=
+ =?utf-8?B?MVpRVW9DU0FwakQrenlPek1VMk5PUHIwa3hEcWN1RmlENURsUHpjdWQzMDNO?=
+ =?utf-8?B?d0h2NVJqbHhmMFExZGYrSU4rUis2MnFJK0lrMlRlVEdQbk9TV0V5WU5oMWtY?=
+ =?utf-8?B?OVplYUlBbTdSRGFFRDZBM2NZZTBNajRsdUNnejNjMmlOSTdtc2Q2NXplQU5n?=
+ =?utf-8?B?c2p5YUR2a0VJWVcvYlJoTnBrVmdGd0JtWFNnRzUxZnljZHIzZ1JMZHI1dUdO?=
+ =?utf-8?B?ZFNOOUNZaFVRSU9qSVF5UEZLSHh2VFFqTWVJNmoyOXpEWHpwN1ZnMTdNa0FS?=
+ =?utf-8?B?bVJiSlg2eUJtSXY2ZHdvRndUenpROGxGRGM4dlNwRFlMQzRZdHZXeEJSekh2?=
+ =?utf-8?B?OXNkSHhJMnBkK3NCNGlmTFdQb3o0cW9KcEJKeE8weDdkU0ZOSitlL3lZVVFx?=
+ =?utf-8?B?dHN5N2tIblVnM3hISXJLVmdtSFhNS25GWkh2bXFTK25OVS9OZTQrb1YyaTZO?=
+ =?utf-8?B?L1NxVkVWMXk1S0I1bSsrZzk2NkNyck1TSkZZc2x2ZmxUYW9IUzlLUGlnYWVN?=
+ =?utf-8?B?OXc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 73a40892-9b01-40a6-ddbe-08db6dedc50b
 X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 22:13:12.2910
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 22:13:38.4928
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: eA6AVDTc24unkAFrwo/ZB0Omm9oBsSekuDGlJPfxnLIKlagmzQUF0doNt3w3mSk5+vfccZs4JGc2L6AGNvIpcFCIxMNgtNoFLq595oZkd5E=
+X-MS-Exchange-CrossTenant-UserPrincipalName: zCuHhrdFriVa4BSBh+1G1yWw+MoBWo0rdfPAURotz/4El5fYSpc1EcZPT2Th8+D+UZUKImw3MirqXY2D6Ep7sHKNp3rZQymnWcLMDvBblOQ=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6367
 X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -172,172 +173,109 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi James,
 
-On 5/25/2023 11:01 AM, James Morse wrote:
-> MPAM's cache occupancy counters can take a little while to settle once
-> the monitor has been configured. The maximum settling time is described
-> to the driver via a firmware table. The value could be large enough
-> that it makes sense to sleep. To avoid exposing this to resctrl, it
-> should be hidden behind MPAM's resctrl_arch_rmid_read().
+On 5/25/2023 11:02 AM, James Morse wrote:
+> Depending on the number of monitors available, Arm's MPAM may need to
+> allocate a monitor prior to reading the counter value. Allocating a
+> contended resource may involve sleeping.
 > 
-> resctrl_arch_rmid_read() may be called via IPI meaning it is unable
-> to sleep. In this case resctrl_arch_rmid_read() should return an error
-> if it needs to sleep. This will only affect MPAM platforms where
-> the cache occupancy counter isn't available immediately, nohz_full is
-> in use, and there are there are no housekeeping CPUs in the necessary
-> domain.
+> add_rmid_to_limbo() calls resctrl_arch_rmid_read() for multiple domains,
+> the allocation should be valid for all domains.
 > 
-> There are three callers of resctrl_arch_rmid_read():
-> __mon_event_count() and __check_limbo() are both called from a
-> non-migrateable context. mon_event_read() invokes __mon_event_count()
-> using smp_call_on_cpu(), which adds work to the target CPUs workqueue.
-> rdtgroup_mutex() is held, meaning this cannot race with the resctrl
-> cpuhp callback. __check_limbo() is invoked via schedule_delayed_work_on()
-> also adds work to a per-cpu workqueue.
+> __check_limbo() and mon_event_count() each make multiple calls to
+> resctrl_arch_rmid_read(), to avoid extra work on contended systems,
+> the allocation should be valid for multiple invocations of
+> resctrl_arch_rmid_read().
 > 
-> The remaining call is add_rmid_to_limbo() which is called in response
-> to a user-space syscall that frees an rmid. This opportunistically
-
-rmid -> RMID
-
-> reads the llc occupancy counter on the current domain to see if the
-
-llc -> LLC
-
-> RMID is over the dirty threshold. This has to disable preemption to
-> avoid reading the wrong domain's value. Disabling pre-emption here
-> prevents resctrl_arch_rmid_read() from sleeping.
+> Add arch hooks for this allocation, which need calling before
+> resctrl_arch_rmid_read(). The allocated monitor is passed to
+> resctrl_arch_rmid_read(), then freed again afterwards. The helper
+> can be called on any CPU, and can sleep.
 > 
-> add_rmid_to_limbo() walks each domain, but only reads the counter
-> on one domain. If the system has more than one domain, the RMID will
-> always be added to the limbo list. If the RMIDs usage was not over the
-> threshold, it will be removed from the list when __check_limbo() runs.
-> Make this the default behaviour. Free RMIDs are always added to the
-> limbo list for each domain.
-> 
-> The user visible effect of this is that a clean RMID is not available
-> for re-allocation immediately after 'rmdir()' completes, this behaviour
-> was never portable as it never happened on a machine with multiple
-> domains.
-> 
-> Removing this path allows resctrl_arch_rmid_read() to sleep if its called
-> with interrupts unmasked. Document this is the expected behaviour, and
-> add a might_sleep() annotation to catch changes that won't work on arm64.
-> 
+> Tested-by: Shaopeng Tan <tan.shaopeng@fujitsu.com>
 > Signed-off-by: James Morse <james.morse@arm.com>
-> ---
-> The previous version allowed resctrl_arch_rmid_read() to be called on the
-> wrong CPUs, but now that this needs to take nohz_full and housekeeping into
-> account, its too complex.
-> 
+> ----
+
+Note the extra "-" 
+
 > Changes since v3:
->  * Removed error handling for smp_call_function_any(), this can't race
->    with the cpuhp callbacks as both hold rdtgroup_mutex.
->  * Switched to the alternative of removing the counter read, this simplifies
->    things dramatically.
+>  * Expanded comment.
+>  * Removed stray header include.
+>  * Reworded commit message.
+>  * Made ctx a void * instead of an int.
 > ---
->  arch/x86/kernel/cpu/resctrl/monitor.c | 15 ++-------------
->  include/linux/resctrl.h               | 18 +++++++++++++++++-
->  2 files changed, 19 insertions(+), 14 deletions(-)
-> 
+
+...
+
 > diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
-> index 6ba40495589a..fb33100e172b 100644
+> index fb33100e172b..6d140018358a 100644
 > --- a/arch/x86/kernel/cpu/resctrl/monitor.c
 > +++ b/arch/x86/kernel/cpu/resctrl/monitor.c
-> @@ -272,6 +272,8 @@ int resctrl_arch_rmid_read(struct rdt_resource *r, struct rdt_domain *d,
->  	struct arch_mbm_state *am;
->  	int ret = 0;
+> @@ -264,7 +264,7 @@ static u64 mbm_overflow_count(u64 prev_msr, u64 cur_msr, unsigned int width)
 >  
-> +	resctrl_arch_rmid_read_context_check();
-> +
->  	if (!cpumask_test_cpu(smp_processor_id(), &d->cpu_mask))
->  		return -EINVAL;
->  
-> @@ -462,8 +464,6 @@ static void add_rmid_to_limbo(struct rmid_entry *entry)
->  {
->  	struct rdt_resource *r = &rdt_resources_all[RDT_RESOURCE_L3].r_resctrl;
->  	struct rdt_domain *d;
-> -	int cpu, err;
-> -	u64 val = 0;
->  	u32 idx;
->  
->  	lockdep_assert_held(&rdtgroup_mutex);
-> @@ -471,17 +471,7 @@ static void add_rmid_to_limbo(struct rmid_entry *entry)
->  	idx = resctrl_arch_rmid_idx_encode(entry->closid, entry->rmid);
->  
->  	entry->busy = 0;
-> -	cpu = get_cpu();
->  	list_for_each_entry(d, &r->domains, list) {
-> -		if (cpumask_test_cpu(cpu, &d->cpu_mask)) {
-> -			err = resctrl_arch_rmid_read(r, d, entry->closid,
-> -						     entry->rmid,
-> -						     QOS_L3_OCCUP_EVENT_ID,
-> -						     &val);
-> -			if (err || val <= resctrl_rmid_realloc_threshold)
-> -				continue;
-> -		}
-> -
->  		/*
->  		 * For the first limbo RMID in the domain,
->  		 * setup up the limbo worker.
-> @@ -491,7 +481,6 @@ static void add_rmid_to_limbo(struct rmid_entry *entry)
->  		set_bit(idx, d->rmid_busy_llc);
->  		entry->busy++;
->  	}
-> -	put_cpu();
->  
->  	if (entry->busy)
->  		rmid_limbo_count++;
-
-Would entry->busy ever be 0 after this change?
-
-> diff --git a/include/linux/resctrl.h b/include/linux/resctrl.h
-> index ff7452f644e4..b961936decfa 100644
-> --- a/include/linux/resctrl.h
-> +++ b/include/linux/resctrl.h
-> @@ -234,7 +234,12 @@ void resctrl_offline_domain(struct rdt_resource *r, struct rdt_domain *d);
->   * @eventid:		eventid to read, e.g. L3 occupancy.
->   * @val:		result of the counter read in bytes.
->   *
-> - * Call from process context on a CPU that belongs to domain @d.
-> + * Some architectures need to sleep when first programming some of the counters.
-> + * (specifically: arm64's MPAM cache occupancy counters can return 'not ready'
-> + *  for a short period of time). Call from a non-migrateable process context on
-> + * a CPU that belongs to domain @d. e.g. use smp_call_on_cpu() or
-> + * schedule_work_on(). This function can be called with interrupts masked,
-> + * e.g. using smp_call_function_any(), but may concistently return an error.
->   *
-
-concistently -> consistently?
-
->   * Return:
->   * 0 on success, or -EIO, -EINVAL etc on error.
-> @@ -243,6 +248,17 @@ int resctrl_arch_rmid_read(struct rdt_resource *r, struct rdt_domain *d,
+>  int resctrl_arch_rmid_read(struct rdt_resource *r, struct rdt_domain *d,
 >  			   u32 closid, u32 rmid, enum resctrl_event_id eventid,
->  			   u64 *val);
+> -			   u64 *val)
+> +			   u64 *val, void *ignored)
+>  {
+>  	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);
+>  	struct rdt_hw_domain *hw_dom = resctrl_to_arch_dom(d);
+> @@ -331,9 +331,14 @@ void __check_limbo(struct rdt_domain *d, bool force_free)
+>  	u32 idx_limit = resctrl_arch_system_num_rmid_idx();
+>  	struct rmid_entry *entry;
+>  	u32 idx, cur_idx = 1;
+> +	void *arch_mon_ctx;
+>  	bool rmid_dirty;
+>  	u64 val = 0;
 >  
-> +/**
-> + * resctrl_arch_rmid_read_context_check()  - warn about invalid contexts
-> + *
-> + * When built with CONFIG_DEBUG_ATOMIC_SLEEP, this function will generate a
-> + * warning when resctrl_arch_rmid_read() is called from an invalid context.
+> +	arch_mon_ctx = resctrl_arch_mon_ctx_alloc(r, QOS_L3_OCCUP_EVENT_ID);
+> +	if (arch_mon_ctx < 0)
+> +		return;
+> +
 
-No need to say "this function" 
-Could this comment be more specific about which contexts are invalid instead of
-just referring to it as "invalid context". This seems to expect the reader to
-already know what an invalid context would be. 
+It seems that not all has adapted to the new type.
 
-> + */
-> +static inline void resctrl_arch_rmid_read_context_check(void)
-> +{
-> +	if (!irqs_disabled())
-> +		might_sleep();
-> +}
-
-Could you please elaborate why the "!irqs_disabled()" is needed?
-
+>  	/*
+>  	 * Skip RMID 0 and start from RMID 1 and check all the RMIDs that
+>  	 * are marked as busy for occupancy < threshold. If the occupancy
+> @@ -347,7 +352,8 @@ void __check_limbo(struct rdt_domain *d, bool force_free)
 >  
->  /**
->   * resctrl_arch_reset_rmid() - Reset any private state associated with rmid
+>  		entry = __rmid_entry(idx);
+>  		if (resctrl_arch_rmid_read(r, d, entry->closid, entry->rmid,
+> -					   QOS_L3_OCCUP_EVENT_ID, &val)) {
+> +					   QOS_L3_OCCUP_EVENT_ID, &val,
+> +					   arch_mon_ctx)) {
+>  			rmid_dirty = true;
+>  		} else {
+>  			rmid_dirty = (val >= resctrl_rmid_realloc_threshold);
+> @@ -360,6 +366,8 @@ void __check_limbo(struct rdt_domain *d, bool force_free)
+>  		}
+>  		cur_idx = idx + 1;
+>  	}
+> +
+> +	resctrl_arch_mon_ctx_free(r, QOS_L3_OCCUP_EVENT_ID, arch_mon_ctx);
+>  }
+>  
+>  bool has_busy_rmid(struct rdt_resource *r, struct rdt_domain *d)
+> @@ -539,7 +547,7 @@ static int __mon_event_count(u32 closid, u32 rmid, struct rmid_read *rr)
+>  	}
+>  
+>  	rr->err = resctrl_arch_rmid_read(rr->r, rr->d, closid, rmid, rr->evtid,
+> -					 &tval);
+> +					 &tval, rr->arch_mon_ctx);
+>  	if (rr->err)
+>  		return rr->err;
+>  
+> @@ -589,7 +597,6 @@ void mon_event_count(void *info)
+>  	int ret;
+>  
+>  	rdtgrp = rr->rgrp;
+> -
+>  	ret = __mon_event_count(rdtgrp->closid, rdtgrp->mon.rmid, rr);
+>  
+
+Stray change.
+
+>  	/*
 
 
 Reinette
