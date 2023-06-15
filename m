@@ -2,129 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A58731B71
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C09F731B7A
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:37:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344529AbjFOOg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 10:36:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54860 "EHLO
+        id S1344725AbjFOOhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 10:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241156AbjFOOgY (ORCPT
+        with ESMTP id S1343811AbjFOOhV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 10:36:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC10A194;
-        Thu, 15 Jun 2023 07:36:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 68E2961298;
-        Thu, 15 Jun 2023 14:36:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B10CC433C8;
-        Thu, 15 Jun 2023 14:36:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686839781;
-        bh=j7fswNF00+3EsBKE9l3ZGPQpN/5xxxUoZx34TL5CkLw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wJUePUXSGwFyZeIXTc/MCaXOpmi+1fQwp9quAdxPgCGFMgaGIGyuHot/RM4V9eUSg
-         bRRuajr0ywJxzZyTWi2eh94EmsUitXvQ9RpBJaxUWdHeJWwkm0GryLE5dqXgxMFtnn
-         kkFShesR42R6MG9PPdyUMHbNJJR5HLfYk9Kmbeeo=
-Date:   Thu, 15 Jun 2023 16:36:19 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Prashanth K <quic_prashk@quicinc.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7] usb: common: usb-conn-gpio: Set last role to unknown
- before initial detection
-Message-ID: <2023061512-vowed-panther-38ed@gregkh>
-References: <1685544074-17337-1-git-send-email-quic_prashk@quicinc.com>
- <ZImE4L3YgABnCIsP@kuha.fi.intel.com>
- <2023061547-staleness-camper-ae8a@gregkh>
- <d5561151-08bb-9f5f-aa51-44c5ad31976b@quicinc.com>
-MIME-Version: 1.0
+        Thu, 15 Jun 2023 10:37:21 -0400
+Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2080.outbound.protection.outlook.com [40.107.247.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5591A2;
+        Thu, 15 Jun 2023 07:37:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UQmtZ3se3XYsJO1pLWx5CmeMSKO6Dzmd6Kj/Nps4gE6lo7GTYEAB/m/07vMwmXbeqY+g5iXa9rHG1L1pAIU6LVu5PPt9aFmUAi5SsBOt7bOZ5zw1jZc4QiwFRxWMfIRi3RYAjvKd6ATnWxvZc1yW/TIhBO/XpjKlJ7F/aVWErijZfpfCEf+PcTfSqJguwgEM4SksCCFI1P6rwHRMX3TnxaCqdTbrTC8cdZKck6R/mPglhe2rjOP7ZukZU72rC3NSQDZOpdAVYnbUzLhpc7Jc8mQEOx3OtSVSuGvZ2FTVfe/NqxZjOXYKwpZwTvG5WbmOn37fCh8MrYnpyzOGD/AJMA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mv+Q2r/Lh4ip6Z0qBGIMTwH/4j3eKpo2sBaTwhSpLeA=;
+ b=FqQ2cc2R7qpBhTVWjp939ZcOocKOeynkC4Q0sisQRMFkLS4bW+bgSTeIm4uuSd4Ck0f+Rhgk1eR3qX0Xvdqa8HNBz7pQ9LcOkTLKzZkdIfv14/uIAk1smV6ZmYvWoOo8R3GaGrHV2Ix6ZUW89LEUYmX5o3ZZglWCc8kn/oaxIXGa/FMPXT+VnQu6SF7CyUXVfYeRBvGa2bNliLzjJoeayQzNiCoe2eJi0MDEMCPzr9WWZc4SOSRHP4p55KbNEaZPAWBlPKjJXLJTQ/SQed8vOdF+ASs+xIL+XXSQT6YIW9IXST8t4F+vAKATtF06EUGIAS6bCNsfC2FBew0lNhDtJw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mv+Q2r/Lh4ip6Z0qBGIMTwH/4j3eKpo2sBaTwhSpLeA=;
+ b=Gh4H/2a1R0yTvYzILvPZbOQsB5XhxPH0vDwaoZaAtYSv5EDSuqiFg9qmb8DfSiqisJ/p2iQBNf2SzdCyIxZnbGiiDZ7JkjAg6lh/hyo9UkzdH5MKVZQVhGAa0aINowi9GgM00ZslZRPELSEAWRkb41ix3IUB0lc6Hk7jL5w9uko=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
+ by AM8PR04MB7395.eurprd04.prod.outlook.com (2603:10a6:20b:1c4::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.25; Thu, 15 Jun
+ 2023 14:37:17 +0000
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::4a2a:262e:415f:e41c]) by AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::4a2a:262e:415f:e41c%7]) with mapi id 15.20.6477.035; Thu, 15 Jun 2023
+ 14:37:17 +0000
+Date:   Thu, 15 Jun 2023 10:37:04 -0400
+From:   Frank Li <Frank.li@nxp.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     vkoul@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peng.fan@nxp.com, joy.zou@nxp.com, shenwei.wang@nxp.com,
+        imx@lists.linux.dev
+Subject: Re: [PATCH v6 12/12] dt-bindings: fsl-dma: fsl-edma: add edma3
+ compatible string
+Message-ID: <ZIsiEIhmpS7DSs6R@lizhi-Precision-Tower-5810>
+References: <20230614193544.2114603-1-Frank.Li@nxp.com>
+ <20230614193544.2114603-13-Frank.Li@nxp.com>
+ <0cddd5e8-3de1-1b6a-b4b8-6304e4c674cf@linaro.org>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d5561151-08bb-9f5f-aa51-44c5ad31976b@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <0cddd5e8-3de1-1b6a-b4b8-6304e4c674cf@linaro.org>
+X-ClientProxiedBy: SJ0PR03CA0059.namprd03.prod.outlook.com
+ (2603:10b6:a03:33e::34) To AM6PR04MB4838.eurprd04.prod.outlook.com
+ (2603:10a6:20b:4::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM6PR04MB4838:EE_|AM8PR04MB7395:EE_
+X-MS-Office365-Filtering-Correlation-Id: d05c5b48-095a-4617-a5f8-08db6dae0489
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mspyX4v7qIgwVEj+P7nwmeWFXW8MyxIiKipmjje5155NrWeOGsyHigSp4MxRQzC7hNp6sCHoBZjuyZBa0T0Q5rOTqvjzBwq8+1RsjUucApQulPWWimnl7jawCVyuBOFWxsQgrPgVAT5ifb+KObQHKjvE3SRkDeZORMcgSSD1JyIBPZ+ficRQG1U3qRuutyFXawPXtqTZJ53X/EUMElNPYJuXnA4H5nT5umcAIHb/RJlCF/loGUQOPHHUhN8bcQfAehvOG1rOKgOtAUJq0IQvYX4MlmioJRy7s8VtKjPcYiizETzZjI5glbVgLepXAOsnIsuhY1TE5Vg0QWdKzrPTkaoGqY64VY2pWmX+Xr2HeAKeQX/j8z3096+yZk5xVySlMdDh01vPB4J+6CPaVseD/8qNTfyGKfVVyrNu/tgY4sBBeHb4enIW/zGqq8fbAGONC29Rk6zfIAKQEM5fEQNL0+jxo94klxc4LOuJPKzjFtyMITypUYrFqBZfS2CzH5BzzUaWrVQ4CXkAykz++DS0Tfj9d/n7HbFQLfM2ybgpIbkaQDjTF/QjenxBvZ1QNjJ7idWoUoyuR8LGug8B1qJBuIKa/0UKrwabVMQS5Q6pvYy+j3bK6tEVUS5GkdtEMwt2
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(7916004)(346002)(376002)(136003)(396003)(366004)(39860400002)(451199021)(186003)(2906002)(83380400001)(6666004)(6916009)(66476007)(66946007)(66556008)(33716001)(52116002)(316002)(8936002)(41300700001)(8676002)(6486002)(86362001)(4326008)(478600001)(9686003)(26005)(6512007)(53546011)(6506007)(38100700002)(38350700002)(5660300002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fYe+dr7A0BMcrFWNmC8xzzV4FsN69Dsqu3jiThsLDIJkKPRm6/eR2vsfT/B0?=
+ =?us-ascii?Q?2dmj54TG7A5eYhW9X8yNvH75eHNzKv+PmvfMQJRJ9iM+z5Rlu0VD/uhm+NfG?=
+ =?us-ascii?Q?iNPIH6mZtePIt4ebTRwLVfwsRTaG3IK5PzmTgqYoyw+IYKeRFt79A3lmBL+H?=
+ =?us-ascii?Q?runRDBVHbbf1072lfQu8bGPFELsob6J+wJ0+WMlgZ2J2KCkWOF97Z0ICADNL?=
+ =?us-ascii?Q?ymggfBSR9XDqLii+bv87iRQtwul1Tu3TUdoSjjX/zb7nxp5TffAFwJ2EVPxr?=
+ =?us-ascii?Q?OpnXaFV2rB0bepvcv5PZwZiM2G7K45N9D2kCyuWigxzsD4PwfZVwTsDrRqm+?=
+ =?us-ascii?Q?ZUOoOqrfNAuyBzZlqXVFhq3aI0JU0RrPoOCE8NPcUJvukrvsvBk47/fZBzH6?=
+ =?us-ascii?Q?UFIG54NELECwIr15UuDTTozWecU0tTAej0yeBWtYdlMCxjWyjKLWQhDZLvua?=
+ =?us-ascii?Q?uqQATj6iHojuY/51MfGRFDdWFrqy1+Jpc3ZpoPc9qkKDIyoEJoqWUhomGytK?=
+ =?us-ascii?Q?lL83tp80+S4kqWCqp2NYZG1VciID1uO/QRLtb+utVfzNIeCRHeT4u1mLd8pZ?=
+ =?us-ascii?Q?I4YrknuKIVwOhoUGa90/UC4VG48rJ4efVvbGf6Y8+qSBbsljHk/LQ3G1ikqf?=
+ =?us-ascii?Q?OVjwyoOhDkyYUJIsfDHJI8vfK+PwRuZX+MsHdIXwMED5HXgx1oBWazGA4Unq?=
+ =?us-ascii?Q?u4sBjBB4l4zS77bDtdeYrGmFOYrq/yzL+nB6JF8gB5khxgaedukveMPsYedJ?=
+ =?us-ascii?Q?YFOCvKieYAUxXYCmxRETg/J2/PcW2OAInwRJSsWAt3aAmgdaJwp1vBJvXPlC?=
+ =?us-ascii?Q?zEyXmGDDQHuIwUsq+evd0SDNubWfZXkxpCWMXAmGhod3bBNaz8pOsCa1mj82?=
+ =?us-ascii?Q?oQq0Wl01cZKe2txPakN6FaWoUo7pPbRluu53zR3VP284vL+27nq0kieE1Ev6?=
+ =?us-ascii?Q?zchjz9US7MM9Z4VE9qihpEWtqeSX0Pd0zsc5EjttBhUtZ1wawsWQxMLwCB3v?=
+ =?us-ascii?Q?D3NvxCGP88cvmUbQH9aRFRhgqN+h8MJ3xkuV/PHC73Qjq0bbpbdY3Cmiajeb?=
+ =?us-ascii?Q?cCHXSHrpwjr+QhwfT8PUEIO6Hs3v4Buak9KfGIvwkgO2QJRlsWFlAzJqPAXJ?=
+ =?us-ascii?Q?SJ0uLxXnRz+6mVIqVKM5OLlpqQr0632vIoFr2l0dPHfH0EtsJVej6ZtKdcwG?=
+ =?us-ascii?Q?Nci9pbDibuZZtDFwsBzmhLZL4/fJqQZZ1vx6ZfqA9BcSdZ0DrvZwhrqKyOJZ?=
+ =?us-ascii?Q?FIFZFZxgs9u4vptl9a1A5gO1qAnElLl5+uRM09xJ3ksXWOqdC+8O6kaY2tXU?=
+ =?us-ascii?Q?UPmDFXAzYmdywvN4xvzEAZnvstcNRqZ7cI/cEih+yL9kMCC136Q6XvSEgBw9?=
+ =?us-ascii?Q?BPNnNj5kmUxons3KmilBoDySO8xVg2AklLLvkZjKQ4RsCB350Qvqm9xNd/30?=
+ =?us-ascii?Q?ZYWnAIlken/p3Sk+Bgym+DSqXw7TWsWkAG+HscLtd+Ia3g1245EWTaiKWGf/?=
+ =?us-ascii?Q?Rs/WmQCwkdA+90zu197q0J5v2GxwkFKaFPdY5oxroAIVp9WOg+3u7hmnQSf7?=
+ =?us-ascii?Q?rZx93VeVHAmSonjcLAbqHCceLRlqoVUp93lEScBe?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d05c5b48-095a-4617-a5f8-08db6dae0489
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 14:37:17.2611
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: BGLqIPRv4bCTWaU6fIVdUWkCmnUxOZqVjou5RvQw9/9fTOmO2r2fUNCc15L6NmgL+WIttTeB2VVrxVC49Zk+zQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7395
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 07:52:32PM +0530, Prashanth K wrote:
+On Thu, Jun 15, 2023 at 12:52:18PM +0200, Krzysztof Kozlowski wrote:
+> On 14/06/2023 21:35, Frank Li wrote:
+> > +        # It is not necessary to write the interrupt name for each channel.
+> > +        # instead, you can simply maintain the sequential IRQ numbers as
+> > +        # defined for the DMA channels.
+> > +        interrupt-names: false
+> > +        clock-names:
 > 
+> items:
+>   - const: dma
 > 
-> On 15-06-23 03:00 pm, Greg Kroah-Hartman wrote:
-> > On Wed, Jun 14, 2023 at 12:14:08PM +0300, Heikki Krogerus wrote:
-> > > On Wed, May 31, 2023 at 08:11:14PM +0530, Prashanth K wrote:
-> > > > Currently if we bootup a device without cable connected, then
-> > > > usb-conn-gpio won't call set_role() since last_role is same as
-> > > > current role. This happens because during probe last_role gets
-> > > > initialised to zero.
-> > > > 
-> > > > To avoid this, added a new constant in enum usb_role, last_role
-> > > > is set to USB_ROLE_UNKNOWN before performing initial detection.
-> > > > 
-> > > > While at it, also handle default case for the usb_role switch
-> > > > in cdns3, intel-xhci-usb-role-switch & musb/jz4740 to avoid
-> > > > build warnings.
-> > > > 
-> > > > Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection detection driver")
-> > > > Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
-> > > > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> > > > ---
-> > > > v7: Added default case in musb/jz4740.c & intel-xhci-usb-role-switch.c to
-> > > >      avoid build warnings.
-> > > > v6: Moved USB_ROLE_UNKNOWN towards the end of enum usb_role.
-> > > > v5: Update commit text to mention the changes made in cdns3 driver.
-> > > > v4: Added Reviewed-by tag.
-> > > > v3: Added a default case in drivers/usb/cdns3/core.c as pointed out by
-> > > >      the test robot.
-> > > > v2: Added USB_ROLE_UNKNWON to enum usb_role.
-> > > > 
-> > > >   drivers/usb/cdns3/core.c                       | 2 ++
-> > > >   drivers/usb/common/usb-conn-gpio.c             | 3 +++
-> > > >   drivers/usb/musb/jz4740.c                      | 2 ++
-> > > >   drivers/usb/roles/intel-xhci-usb-role-switch.c | 2 ++
-> > > >   include/linux/usb/role.h                       | 1 +
-> > > >   5 files changed, 10 insertions(+)
-> > > 
-> > > Just to be clear to everybody, that USB_ROLE_UNKNOWN is not handled in
-> > > drivers/usb/roles/class.c, so this patch is broken.
-> > > 
-> > > But the whole approach is wrong. That USB_ROLE_UNKNOWN is clearly a
-> > > flag where the other values in enum usb_role are actual switch states.
-> > > So it does not belong there.
-> > > 
-> > > In general, adding globals states like that just in order to work
-> > > around issues in single drivers is never a good idea IMO.
-> > 
-> > Ok, let me go revert this from my tree, thanks for the review.
-> > 
-> > greg k-h
+> clocks:
+>   maxItems: 1
 > 
-> In that case, can I resubmit v1 of this patch again, where I have used a
-> macro in usb-conn-gpio driver ? something like this.
-> 
-> @@ -27,6 +27,8 @@
->  #define USB_CONN_IRQF	\
->  	(IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING | IRQF_ONESHOT)
-> 
-> +#define USB_ROLE_UNKNOWN (USB_ROLE_NONE -1)
+> You do not allow more than one clock, right?
 
-Are you referencing an existing enum here and assuming it is a specific
-value?
+Yes, at least now. Only 1 clock needed.
 
-For obvious reasons, that can never work :)
+> 
+> > +          const: dma
+> > +    else:
+> 
+> You already have two ifs, so you should not have else here, but rather
+> make each if clause proper for your setup.
+> 
+> BTW, the amount of differences point to very complicated schema, so you
+> should think whether it makes sense to keep binding growing in the first
+> place.
 
-thanks,
+Any good ways if don't growing binding at the first place?
 
-greg k-h
+> 
+> > +      properties:
+> > +        reg:
+> > +          minItems: 2
+> > +          maxItems: 3
+> > +        interrupts:
+> > +          minItems: 2
+> > +          maxItems: 17
+> 
+> missing clocks restriction to minItems: 2
+> 
+> 
+> > +        "#dma-cells":
+> > +          const: 2
+> > +        dma-channels:
+> > +          const: 32
+> > +
+> 
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
