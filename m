@@ -2,53 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D34E0730CF2
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 03:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC796730CF5
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 03:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237958AbjFOBzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 21:55:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50478 "EHLO
+        id S237931AbjFOB5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 21:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240276AbjFOByy (ORCPT
+        with ESMTP id S237966AbjFOB5O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 21:54:54 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A39BA6;
-        Wed, 14 Jun 2023 18:54:53 -0700 (PDT)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QhQG81z38zqTx4;
-        Thu, 15 Jun 2023 09:49:52 +0800 (CST)
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 15 Jun 2023 09:54:50 +0800
-Subject: Re: [PATCH] perf top & record: Fix segfault when default cycles event
- is not supported
-To:     Ian Rogers <irogers@google.com>
-CC:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>,
-        <adrian.hunter@intel.com>, <kan.liang@linux.intel.com>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230614151625.2077-1-yangjihong1@huawei.com>
- <CAP-5=fUf0+7HwZ+AHUR0nRD5QnfPn9_CPMEdJZP_5goPfrPB+Q@mail.gmail.com>
- <CAP-5=fVOXjjcusjv858SOGrnNgE2w2sb7zS=0sZUpdFfR1T_GA@mail.gmail.com>
-From:   Yang Jihong <yangjihong1@huawei.com>
-Message-ID: <668a6159-b7a8-ed25-d8fa-5584a4c04d37@huawei.com>
-Date:   Thu, 15 Jun 2023 09:54:49 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Wed, 14 Jun 2023 21:57:14 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5428A1720
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 18:57:13 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b3e3f33e33so96965ad.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 18:57:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686794233; x=1689386233;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FMLY1axQ9dhHgS2evzrC32ToK9p7zpIVVjZVrkVP9Q4=;
+        b=JgGHVcV8/EOlg76CXREOFygRfcPLh0TvPl2YGB0VlwURFpypN66Kb1alr53MRziI0e
+         HBYWPc90/oiaA7G6zUyWrl/uxY/oAhW9DKtoyE8Ho3PoorWVYZdX4w3Fxq1OcnWLaBu6
+         0LKDTDBzdo+KJIsG26awIGClEZe4bI/iRsZu0tmLTBVPsEH5a72580lO+Sy8YC0GOW6g
+         o08HyBosEsk2I2G38RG0zWToRkkdp29E/XznTlNmnTiVzEmZY/AWdY+4p3O/H67u6ndI
+         38FJWCrJAW8asX0QUo3w9AW+tptp2b5A3zCqQDu8DCVyosUvLpbpp5JXKWyLmpsPZkbg
+         VkUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686794233; x=1689386233;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FMLY1axQ9dhHgS2evzrC32ToK9p7zpIVVjZVrkVP9Q4=;
+        b=SUOpfZ+m33xGzl/QlbX5q9R1Wt/BmbJGwgA/GFxQR5SKLR4HDtEWGCkFKn+QsL1iar
+         6Uz7QGEBmFCsRAXoGpf3bykxlXQ9zEKN1Yja470vuIv1DWIlqA3nfXsYKaD4HyklbQF9
+         fIcMtC7RxXiLyUE4PPGqXbVDgmpLpYvX1ONj859qTtA68JY9g1GfL/ZWHBFXRRdQOv39
+         sjGp9a9rOCRngvdPTn9dgOTMysIJcEDZ1dJnE1TuO7R+eMh9qVvZvZa3YcAeDUMKmmg1
+         b6ak5nrRHOlFyoGu/vmQ4MDIW3H07VDVKfjM/RlW18DRNNLm0ZWDIaaTqyqMwE2SBdFA
+         JqRQ==
+X-Gm-Message-State: AC+VfDweiAqoSREw6TSELaUjWPO+wWX2lUXLWd0lmSU6dTSQRxlWsLpw
+        5LIVT/RWaGXjP6H0c5ALys9IUfKBEn7zh6cLgCGsUg==
+X-Google-Smtp-Source: ACHHUZ7k0wQBEo+NKxdCH3hP8L0i+8TYR5xJPePgVUW4Nh6Q7s/Lv/FmuVPnnao1IQ/tXOiUiu+GK3HzgdtUQbbtnqs=
+X-Received: by 2002:a17:902:f684:b0:1b3:a195:12d4 with SMTP id
+ l4-20020a170902f68400b001b3a19512d4mr124232plg.12.1686794232483; Wed, 14 Jun
+ 2023 18:57:12 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAP-5=fVOXjjcusjv858SOGrnNgE2w2sb7zS=0sZUpdFfR1T_GA@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20230606192858.3600174-1-rananta@google.com> <ZImwRAuSXcVt3UPV@linux.dev>
+In-Reply-To: <ZImwRAuSXcVt3UPV@linux.dev>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Wed, 14 Jun 2023 18:57:01 -0700
+Message-ID: <CAJHc60wUSNpFLeESWcpEa5OmN4bJg9wBre-2k8803WHpn03LGw@mail.gmail.com>
+Subject: Re: [PATCH v5 0/7] KVM: arm64: Add support for FEAT_TLBIRANGE
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,76 +75,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Jun 14, 2023 at 5:19=E2=80=AFAM Oliver Upton <oliver.upton@linux.de=
+v> wrote:
+>
+> Hi Raghavendra,
+>
+> On Tue, Jun 06, 2023 at 07:28:51PM +0000, Raghavendra Rao Ananta wrote:
+> > The series is based off of upstream v6.4-rc2, and applied David
+> > Matlack's common API for TLB invalidations[1] on top.
+>
+> Sorry I didn't spot the dependency earlier, but this isn't helpful TBH.
+>
+> David's series was partially applied, and what remains no longer cleanly
+> applies to the base you suggest. Independent of that, my *strong*
+> preference is that you just send out a series containing your patches as
+> well as David's. Coordinating dependent efforts is the only sane thing
+> to do. Also, those patches are 5 months old at this point which is
+> ancient history.
+>
+Would you rather prefer I detach this series from David's as I'm not
+sure what his plans are for future versions?
+On the other hand, the patches seem simple enough to rebase and give
+another shot at review, but may end up delaying this series.
+WDYT?
 
-On 2023/6/15 6:03, Ian Rogers wrote:
-> On Wed, Jun 14, 2023 at 9:18 AM Ian Rogers <irogers@google.com> wrote:
->>
->> On Wed, Jun 14, 2023 at 8:18 AM Yang Jihong <yangjihong1@huawei.com> wrote:
->>>
->>> The perf-record and perf-top call parse_event() to add a cycles event to
->>> an empty evlist. For the system that does not support hardware cycles
->>> event, such as QEMU, the evlist is empty due to the following code process:
->>>
->>>    parse_event(evlist, "cycles:P" or ""cycles:Pu")
->>>      parse_events(evlist, "cycles:P")
->>>        __parse_events
->>>          ...
->>>          ret = parse_events__scanner(str, &parse_state);
->>>          // ret = 0
->>>          ...
->>>          ret2 = parse_events__sort_events_and_fix_groups()
->>>          if (ret2 < 0)
->>>            return ret;
->>>          // The cycles event is not supported, here ret2 = -EINVAL,
->>>          // Here return 0.
->>>          ...
->>>          evlist__splice_list_tail(evlist)
->>>          // The code here does not execute to, so the evlist is still empty.
->>>
->>> A null pointer occurs when the content in the evlist is accessed later.
->>>
->>> Before:
->>>
->>>    # perf list hw
->>>
->>>    List of pre-defined events (to be used in -e or -M):
->>>
->>>    # perf record true
->>>    libperf: Miscounted nr_mmaps 0 vs 1
->>>    WARNING: No sample_id_all support, falling back to unordered processing
->>>    perf: Segmentation fault
->>>    Obtained 1 stack frames.
->>>    [0xc5beff]
->>>    Segmentation fault
->>>
->>> Solution:
->>>    If cycles event is not supported, try to fall back to cpu-clock event.
->>>
->>> After:
->>>    # perf record true
->>>    [ perf record: Woken up 1 times to write data ]
->>>    [ perf record: Captured and wrote 0.006 MB perf.data ]
->>>    #
->>>
->>> Fixes: 7b100989b4f6 ("perf evlist: Remove __evlist__add_default")
->>> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
->>
->> Thanks, useful addition. The cpu-clock fall back wasn't present before
->> 7b100989b4f6 so is the fixes tag correct?
-> 
-> Hmm... it should be coming from evsel__fallback:
-> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/evsel.c?h=tmp.perf-tools-next#n2840
-> so we shouldn't duplicate that logic. The question is why we're not
-> doing the fallback.
-> 
+Thank you.
+Raghavendra
 
-Yes, it's a bit of the same logic as evsel__fallback, or we can call 
-evlist__add_default() as before, simply create an evsel of hardware 
-cycles and add it directly to evlist.
-
-Please confirm whether this solution is feasible. If it is feasible, I 
-will send a v2 version.
-
-Thanks,
-Yang
+> > [1]:
+> > https://lore.kernel.org/linux-arm-kernel/20230126184025.2294823-1-dmatl=
+ack@google.com/
+>
+> --
+> Thanks,
+> Oliver
