@@ -2,211 +2,436 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6BE4732163
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 23:12:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCE0732169
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 23:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234048AbjFOVMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 17:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58752 "EHLO
+        id S229917AbjFOVNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 17:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjFOVML (ORCPT
+        with ESMTP id S229480AbjFOVND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 17:12:11 -0400
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02AAEC3;
-        Thu, 15 Jun 2023 14:12:10 -0700 (PDT)
-Received: by mail-oo1-xc2b.google.com with SMTP id 006d021491bc7-55b3b3e2928so1860655eaf.2;
-        Thu, 15 Jun 2023 14:12:09 -0700 (PDT)
+        Thu, 15 Jun 2023 17:13:03 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35DC2735
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 14:12:59 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b1ac373c9eso35170851fa.0
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 14:12:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686863529; x=1689455529;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cYFIoxmK6/11WcQGMEd3k+GSDGPqNwcIqNk05D0COTE=;
-        b=Ctj8OnhGP2r2mDaRqVkWYkbCXLxlBOU1XnLMs2rQnEZVFtLbX4y/91GeJfTZJq5ilZ
-         BEBJVQLtXSa74ZV6v9HQtOkzjDigIp47DOIRcrHwGUcKTsqQAhkMdn1UO87Sb7Gpm7ex
-         X45UZ0QhVvOtmv5xonVSE+x+ADmFWyurK8i6hsId3TXKamH0UIU6FCtus2oYmyYc/hXN
-         aKVQWGwGuIgL3W0ZwDOUERyeYftA7rlPAK83m58oUSPJYAdDpFEgGtRYfhALMGIZvZ2b
-         gofXVCoULo3vxmDnvGTZQX+wnBV6wdCwVEVCg+rvInQGzr6Uhq9I2bWmhZs/WkNDiQrK
-         W5gw==
+        d=linaro.org; s=google; t=1686863578; x=1689455578;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jUFJynfbYH68TgX/3zQnDPC8kILyVFzPYFqe48XXoJ4=;
+        b=CKrqkFKwkCG+NHBVhNryc3DylQL8Hr8ibvmALVJBz3FyuX51mC7FkXxQ8pU4TKA+Wi
+         oPLl16C52JWsAh4wnSIlxYe/j1gsldVI5ebyrI1YReG+cPn8HfthHPi9ow+IViHhUvQK
+         huipbFqHF8EJkkHXXanUGAciJ/x0500WZ6MpYLLUvvv29Uc3EjvYS3vilwiVQibK1Uje
+         TKMEnrYYmQrTarlbeaSuUFeMewHdMBch+0IXtEymTdlM7fPeeavbWknhxiFVjoz2dB++
+         kJSArksE3ZKcZZ4Z9LOcd38bW5td4CcCabPbl1fC5oj8AQiLM9VpIy35fehsdQQ+BTNg
+         IIxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686863529; x=1689455529;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cYFIoxmK6/11WcQGMEd3k+GSDGPqNwcIqNk05D0COTE=;
-        b=dNtcaH59WEHGWqVkytgnGRWeIUxTzLPyv4qPFosKJw+iCgSWdW9C6j+pd05uwqDPm4
-         Q5Vmdo0rZiCSp6G2f3Vet4ISTvXR+BRu/5zP7FL1xG6ycLlQkNxyrh9de1zN6e7wBD48
-         sX93BPbVFzPCj3Cz4iFeRnRuWJgyXiGXPT9tRNgRNfGVnLhqLLBvNTUo/EMNaIl6W/Qh
-         XZnf+x4JRCb7y0pLs0rccU7Aj/Om7ip2JT6XxJr8898YzZZOdYHFCs9lhK/dJBPlEwL1
-         AxRXOrN9h8NUKefUE1Lkuc9/BLUjV+Y0M6FRmlnkdg1ZaLf5E6BHZ6Mkc8VSHpjMdFQN
-         22Fw==
-X-Gm-Message-State: AC+VfDxa8UGHoIV8PqA7pHLEGrUmaSx0B3G9lLK23G+3x+AHhNeeRCgN
-        6ktk1RStX5rvuz2EAKfWnOWtMdI6zaDBSaeu+Aw=
-X-Google-Smtp-Source: ACHHUZ4RQOzLkRBT57QFtwfdt42rHQTpRvSKNUguWsVJUC9l4YMVkHjXvUxUEmpNf+dIqOqbJjieNSEhAcMqJy+p5M0=
-X-Received: by 2002:a05:6871:6ba6:b0:19f:ad5a:f518 with SMTP id
- zh38-20020a0568716ba600b0019fad5af518mr274084oab.25.1686863529246; Thu, 15
- Jun 2023 14:12:09 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686863578; x=1689455578;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jUFJynfbYH68TgX/3zQnDPC8kILyVFzPYFqe48XXoJ4=;
+        b=dGkhjf2rhZ5rJvz6Z3Yrlo+8ht2Wd71A0WADWblkbVbXdBhFaOO0UEPJKTzWM+iJpF
+         HJ7f4A1l8NyionP4AHxVjWpb3Po4rKdxCNS6vhGXW2O1OOoQ56G+nOZ5zoORFFBkW9PL
+         kUFGGN7FkA1PUbFcWTdMMIXK+ELbRN+7mfzo+xnECrsD1SpaGjI/XyI97TOVGTsLOsK2
+         w9y9/IxPh/QtOQiTLh6eU/MJHWxyCybALakhGcIM5bsjXZaHsexYrORBFMTWTKVulfSg
+         zpxrEsnxhiOXsu1+TXpfSZL2ODS/gxMTmSWd7d5MgR1DCVLJAU0gQUIy4cqPXD1D1e5m
+         Ur7A==
+X-Gm-Message-State: AC+VfDzHvPhBNSRL1Gjynpozr6sBAF+Z1+rtDUcVdkqejOwoEW6a/ESG
+        8J/1711lc7sbFj0hBUfiAVKg2w==
+X-Google-Smtp-Source: ACHHUZ4xMBT7SJ9fBGQ4PJ0W58mFDjweuxpu/r35fNnU/FhyjgWEUNTSbyS9rbbIrDOe02jh2sK0mQ==
+X-Received: by 2002:a2e:82d5:0:b0:2b1:a8e9:df4a with SMTP id n21-20020a2e82d5000000b002b1a8e9df4amr422963ljh.6.1686863578068;
+        Thu, 15 Jun 2023 14:12:58 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id b8-20020a2e8488000000b002b32f9b6bd3sm1809447ljh.62.2023.06.15.14.12.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 14:12:56 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Date:   Thu, 15 Jun 2023 23:12:48 +0200
+Subject: [PATCH] soc: qcom: icc-bwmon: Don't ignore return values of regmap
+ functions
 MIME-Version: 1.0
-References: <20230613030151.216625-1-15330273260@189.cn> <20230613030151.216625-3-15330273260@189.cn>
- <dbf0d89f-717a-1f78-aef2-f30506751d4d@loongson.cn>
-In-Reply-To: <dbf0d89f-717a-1f78-aef2-f30506751d4d@loongson.cn>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Thu, 15 Jun 2023 17:11:58 -0400
-Message-ID: <CADnq5_N6vVtzH6tzguZdHnP_TdRoG1G-Cr94O+X03jvtk=vhag@mail.gmail.com>
-Subject: Re: [PATCH v7 2/8] PCI/VGA: Deal only with VGA class devices
-To:     Sui Jingfeng <suijingfeng@loongson.cn>
-Cc:     Sui Jingfeng <15330273260@189.cn>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-fbdev@vger.kernel.org, kvm@vger.kernel.org,
-        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org, linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230615-topic-bwmonretval-v1-1-223bd048ebf7@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAM9+i2QC/x2NQQqDMBAAvyJ7biCJVaRfKT0kca0L6UY2agvi3
+ 7t4nIFhDqgohBUezQGCO1UqrOBuDaQ58BsNjcrgrW9t7zqzloWSid9PYcF1D9m0k+8tOj/cxwG
+ 0i6GiiRI4zVrylrPKRXCi3zV6vs7zD7a/Pcd4AAAA
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1686863575; l=11315;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=jQfZ8A8yO923snxoscqaGq6MypAl4RGdSw5D8sggzT4=;
+ b=Sxm0c6JgpeNiP7rNz7MZhk11JK10M/qBq1Ns5/UvDTTAkiLKl7qGahG9pclm62D2OGxEOK89s
+ YzRsFgOlbFACL4mwE2evUDXGRaKrL8QbYpkRFXI2fA0mcyZbjl4x2cb
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 6:50=E2=80=AFAM Sui Jingfeng <suijingfeng@loongson.=
-cn> wrote:
->
-> Hi,
->
-> On 2023/6/13 11:01, Sui Jingfeng wrote:
-> > From: Sui Jingfeng <suijingfeng@loongson.cn>
-> >
-> > Deal only with the VGA devcie(pdev->class =3D=3D 0x0300), so replace th=
-e
-> > pci_get_subsys() function with pci_get_class(). Filter the non-PCI disp=
-lay
-> > device(pdev->class !=3D 0x0300) out. There no need to process the non-d=
-isplay
-> > PCI device.
-> >
-> > Cc: Bjorn Helgaas <bhelgaas@google.com>
-> > Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
-> > ---
-> >   drivers/pci/vgaarb.c | 22 ++++++++++++----------
-> >   1 file changed, 12 insertions(+), 10 deletions(-)
-> >
-> > diff --git a/drivers/pci/vgaarb.c b/drivers/pci/vgaarb.c
-> > index c1bc6c983932..22a505e877dc 100644
-> > --- a/drivers/pci/vgaarb.c
-> > +++ b/drivers/pci/vgaarb.c
-> > @@ -754,10 +754,6 @@ static bool vga_arbiter_add_pci_device(struct pci_=
-dev *pdev)
-> >       struct pci_dev *bridge;
-> >       u16 cmd;
-> >
-> > -     /* Only deal with VGA class devices */
-> > -     if ((pdev->class >> 8) !=3D PCI_CLASS_DISPLAY_VGA)
-> > -             return false;
-> > -
->
-> Hi, here is probably a bug fixing.
->
-> For an example, nvidia render only GPU typically has 0x0380.
->
-> at its PCI class number, but  render only GPU should not participate in
-> the arbitration.
->
-> As it shouldn't snoop the legacy fixed VGA address.
->
-> It(render only GPU) can not display anything.
->
->
-> But 0x0380 >> 8 =3D 0x03, the filter  failed.
->
->
-> >       /* Allocate structure */
-> >       vgadev =3D kzalloc(sizeof(struct vga_device), GFP_KERNEL);
-> >       if (vgadev =3D=3D NULL) {
-> > @@ -1500,7 +1496,9 @@ static int pci_notify(struct notifier_block *nb, =
-unsigned long action,
-> >       struct pci_dev *pdev =3D to_pci_dev(dev);
-> >       bool notify =3D false;
-> >
-> > -     vgaarb_dbg(dev, "%s\n", __func__);
-> > +     /* Only deal with VGA class devices */
-> > +     if (pdev->class !=3D PCI_CLASS_DISPLAY_VGA << 8)
-> > +             return 0;
->
-> So here we only care 0x0300, my initial intent is to make an optimization=
-,
->
-> nowadays sane display graphic card should all has 0x0300 as its PCI
-> class number, is this complete right?
->
-> ```
->
-> #define PCI_BASE_CLASS_DISPLAY        0x03
-> #define PCI_CLASS_DISPLAY_VGA        0x0300
-> #define PCI_CLASS_DISPLAY_XGA        0x0301
-> #define PCI_CLASS_DISPLAY_3D        0x0302
-> #define PCI_CLASS_DISPLAY_OTHER        0x0380
->
-> ```
->
-> Any ideas ?
+As it turns out, not all regmap accesses succeed. Not knowing this is
+particularly suboptimal when there's a breaking change to the regmap
+APIs. Monitor the return values of regmap_ calls and propagate errors,
+should any occur.
 
-I'm not quite sure what you are asking about here.  For vga_arb, we
-only care about VGA class devices since those should be on the only
-ones that might have VGA routed to them.  However, as VGA gets
-deprecated, you'll have more non VGA PCI classes for devices which
-could be the pre-OS console device.
+To keep any level of readability in bwmon_enable(), add some comments
+to separate the logical blocks.
 
-Alex
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Depends on: https://lore.kernel.org/linux-arm-msm/20230610-topic-bwmon_opp-v2-1-0d25c1ce7dca@linaro.org/
+---
+ drivers/soc/qcom/icc-bwmon.c | 211 ++++++++++++++++++++++++++++++-------------
+ 1 file changed, 150 insertions(+), 61 deletions(-)
 
->
-> >       /* For now we're only intereted in devices added and removed. I d=
-idn't
-> >        * test this thing here, so someone needs to double check for the
-> > @@ -1510,6 +1508,8 @@ static int pci_notify(struct notifier_block *nb, =
-unsigned long action,
-> >       else if (action =3D=3D BUS_NOTIFY_DEL_DEVICE)
-> >               notify =3D vga_arbiter_del_pci_device(pdev);
-> >
-> > +     vgaarb_dbg(dev, "%s: action =3D %lu\n", __func__, action);
-> > +
-> >       if (notify)
-> >               vga_arbiter_notify_clients();
-> >       return 0;
-> > @@ -1534,8 +1534,8 @@ static struct miscdevice vga_arb_device =3D {
-> >
-> >   static int __init vga_arb_device_init(void)
-> >   {
-> > +     struct pci_dev *pdev =3D NULL;
-> >       int rc;
-> > -     struct pci_dev *pdev;
-> >
-> >       rc =3D misc_register(&vga_arb_device);
-> >       if (rc < 0)
-> > @@ -1545,11 +1545,13 @@ static int __init vga_arb_device_init(void)
-> >
-> >       /* We add all PCI devices satisfying VGA class in the arbiter by
-> >        * default */
-> > -     pdev =3D NULL;
-> > -     while ((pdev =3D
-> > -             pci_get_subsys(PCI_ANY_ID, PCI_ANY_ID, PCI_ANY_ID,
-> > -                            PCI_ANY_ID, pdev)) !=3D NULL)
-> > +     while (1) {
-> > +             pdev =3D pci_get_class(PCI_CLASS_DISPLAY_VGA << 8, pdev);
-> > +             if (!pdev)
-> > +                     break;
-> > +
-> >               vga_arbiter_add_pci_device(pdev);
-> > +     }
-> >
-> >       pr_info("loaded\n");
-> >       return rc;
->
-> --
-> Jingfeng
->
+diff --git a/drivers/soc/qcom/icc-bwmon.c b/drivers/soc/qcom/icc-bwmon.c
+index 8daf0eb03279..306f911d2be0 100644
+--- a/drivers/soc/qcom/icc-bwmon.c
++++ b/drivers/soc/qcom/icc-bwmon.c
+@@ -449,9 +449,10 @@ static const struct regmap_config sdm845_llcc_bwmon_regmap_cfg = {
+ 	.cache_type		= REGCACHE_RBTREE,
+ };
+ 
+-static void bwmon_clear_counters(struct icc_bwmon *bwmon, bool clear_all)
++static int bwmon_clear_counters(struct icc_bwmon *bwmon, bool clear_all)
+ {
+ 	unsigned int val = BWMON_CLEAR_CLEAR;
++	int ret;
+ 
+ 	if (clear_all)
+ 		val |= BWMON_CLEAR_CLEAR_ALL;
+@@ -463,14 +464,20 @@ static void bwmon_clear_counters(struct icc_bwmon *bwmon, bool clear_all)
+ 	 * region. So, we need to make sure the counter clear is completed
+ 	 * before we try to clear the IRQ or do any other counter operations.
+ 	 */
+-	regmap_field_force_write(bwmon->regs[F_CLEAR], val);
++	ret = regmap_field_force_write(bwmon->regs[F_CLEAR], val);
++	if (ret)
++		return ret;
++
+ 	if (bwmon->data->quirks & BWMON_NEEDS_FORCE_CLEAR)
+-		regmap_field_force_write(bwmon->regs[F_CLEAR], 0);
++		ret = regmap_field_force_write(bwmon->regs[F_CLEAR], 0);
++
++	return ret;
+ }
+ 
+-static void bwmon_clear_irq(struct icc_bwmon *bwmon)
++static int bwmon_clear_irq(struct icc_bwmon *bwmon)
+ {
+ 	struct regmap_field *global_irq_clr;
++	int ret;
+ 
+ 	if (bwmon->data->global_regmap_fields)
+ 		global_irq_clr = bwmon->global_regs[F_GLOBAL_IRQ_CLEAR];
+@@ -493,17 +500,27 @@ static void bwmon_clear_irq(struct icc_bwmon *bwmon)
+ 	 * clearing here so that local writes don't happen before the
+ 	 * interrupt is cleared.
+ 	 */
+-	regmap_field_force_write(bwmon->regs[F_IRQ_CLEAR], BWMON_IRQ_ENABLE_MASK);
+-	if (bwmon->data->quirks & BWMON_NEEDS_FORCE_CLEAR)
+-		regmap_field_force_write(bwmon->regs[F_IRQ_CLEAR], 0);
++	ret = regmap_field_force_write(bwmon->regs[F_IRQ_CLEAR], BWMON_IRQ_ENABLE_MASK);
++	if (ret)
++		return ret;
++
++	if (bwmon->data->quirks & BWMON_NEEDS_FORCE_CLEAR) {
++		ret = regmap_field_force_write(bwmon->regs[F_IRQ_CLEAR], 0);
++		if (ret)
++			return ret;
++	}
++
+ 	if (bwmon->data->quirks & BWMON_HAS_GLOBAL_IRQ)
+-		regmap_field_force_write(global_irq_clr,
+-					 BWMON_V4_GLOBAL_IRQ_ENABLE_ENABLE);
++		ret = regmap_field_force_write(global_irq_clr,
++					       BWMON_V4_GLOBAL_IRQ_ENABLE_ENABLE);
++
++	return ret;
+ }
+ 
+-static void bwmon_disable(struct icc_bwmon *bwmon)
++static int bwmon_disable(struct icc_bwmon *bwmon)
+ {
+ 	struct regmap_field *global_irq_en;
++	int ret;
+ 
+ 	if (bwmon->data->global_regmap_fields)
+ 		global_irq_en = bwmon->global_regs[F_GLOBAL_IRQ_ENABLE];
+@@ -511,20 +528,29 @@ static void bwmon_disable(struct icc_bwmon *bwmon)
+ 		global_irq_en = bwmon->regs[F_GLOBAL_IRQ_ENABLE];
+ 
+ 	/* Disable interrupts. Strict ordering, see bwmon_clear_irq(). */
+-	if (bwmon->data->quirks & BWMON_HAS_GLOBAL_IRQ)
+-		regmap_field_write(global_irq_en, 0x0);
+-	regmap_field_write(bwmon->regs[F_IRQ_ENABLE], 0x0);
++	if (bwmon->data->quirks & BWMON_HAS_GLOBAL_IRQ) {
++		ret = regmap_field_write(global_irq_en, 0x0);
++		if (ret)
++			return ret;
++	}
++
++	ret = regmap_field_write(bwmon->regs[F_IRQ_ENABLE], 0x0);
++	if (ret)
++		return ret;
+ 
+ 	/*
+ 	 * Disable bwmon. Must happen before bwmon_clear_irq() to avoid spurious
+ 	 * IRQ.
+ 	 */
+-	regmap_field_write(bwmon->regs[F_ENABLE], 0x0);
++	ret = regmap_field_write(bwmon->regs[F_ENABLE], 0x0);
++
++	return ret;
+ }
+ 
+-static void bwmon_enable(struct icc_bwmon *bwmon, unsigned int irq_enable)
++static int bwmon_enable(struct icc_bwmon *bwmon, unsigned int irq_enable)
+ {
+ 	struct regmap_field *global_irq_en;
++	int ret;
+ 
+ 	if (bwmon->data->global_regmap_fields)
+ 		global_irq_en = bwmon->global_regs[F_GLOBAL_IRQ_ENABLE];
+@@ -532,14 +558,21 @@ static void bwmon_enable(struct icc_bwmon *bwmon, unsigned int irq_enable)
+ 		global_irq_en = bwmon->regs[F_GLOBAL_IRQ_ENABLE];
+ 
+ 	/* Enable interrupts */
+-	if (bwmon->data->quirks & BWMON_HAS_GLOBAL_IRQ)
+-		regmap_field_write(global_irq_en,
+-				   BWMON_V4_GLOBAL_IRQ_ENABLE_ENABLE);
++	if (bwmon->data->quirks & BWMON_HAS_GLOBAL_IRQ) {
++		ret = regmap_field_write(global_irq_en,
++					 BWMON_V4_GLOBAL_IRQ_ENABLE_ENABLE);
++		if (ret)
++			return ret;
++	}
+ 
+-	regmap_field_write(bwmon->regs[F_IRQ_ENABLE], irq_enable);
++	ret = regmap_field_write(bwmon->regs[F_IRQ_ENABLE], irq_enable);
++	if (ret)
++		return ret;
+ 
+ 	/* Enable bwmon */
+-	regmap_field_write(bwmon->regs[F_ENABLE], BWMON_ENABLE_ENABLE);
++	ret = regmap_field_write(bwmon->regs[F_ENABLE], BWMON_ENABLE_ENABLE);
++
++	return ret;
+ }
+ 
+ static unsigned int bwmon_kbps_to_count(struct icc_bwmon *bwmon,
+@@ -548,55 +581,97 @@ static unsigned int bwmon_kbps_to_count(struct icc_bwmon *bwmon,
+ 	return kbps / bwmon->data->count_unit_kb;
+ }
+ 
+-static void bwmon_set_threshold(struct icc_bwmon *bwmon,
++static int bwmon_set_threshold(struct icc_bwmon *bwmon,
+ 				struct regmap_field *reg, unsigned int kbps)
+ {
+ 	unsigned int thres;
+ 
+ 	thres = mult_frac(bwmon_kbps_to_count(bwmon, kbps),
+ 			  bwmon->data->sample_ms, MSEC_PER_SEC);
+-	regmap_field_write(reg, thres);
++	return regmap_field_write(reg, thres);
+ }
+ 
+-static void bwmon_start(struct icc_bwmon *bwmon)
++static int bwmon_start(struct icc_bwmon *bwmon)
+ {
+ 	const struct icc_bwmon_data *data = bwmon->data;
++	int ret, window;
+ 	u32 bw_low = 0;
+-	int window;
+ 
+ 	/* No need to check for errors, as this must have succeeded before. */
+ 	dev_pm_opp_find_bw_ceil(bwmon->dev, &bw_low, 0);
+ 
+-	bwmon_clear_counters(bwmon, true);
++	ret = bwmon_clear_counters(bwmon, true);
++	if (ret)
++		return ret;
+ 
+ 	window = mult_frac(bwmon->data->sample_ms, HW_TIMER_HZ, MSEC_PER_SEC);
+ 	/* Maximum sampling window: 0xffffff for v4 and 0xfffff for v5 */
+-	regmap_field_write(bwmon->regs[F_SAMPLE_WINDOW], window);
+-
+-	bwmon_set_threshold(bwmon, bwmon->regs[F_THRESHOLD_HIGH], bw_low);
+-	bwmon_set_threshold(bwmon, bwmon->regs[F_THRESHOLD_MED], bw_low);
+-	bwmon_set_threshold(bwmon, bwmon->regs[F_THRESHOLD_LOW], 0);
+-
+-	regmap_field_write(bwmon->regs[F_THRESHOLD_COUNT_ZONE0],
+-			   BWMON_THRESHOLD_COUNT_ZONE0_DEFAULT);
+-	regmap_field_write(bwmon->regs[F_THRESHOLD_COUNT_ZONE1],
+-			   data->zone1_thres_count);
+-	regmap_field_write(bwmon->regs[F_THRESHOLD_COUNT_ZONE2],
+-			   BWMON_THRESHOLD_COUNT_ZONE2_DEFAULT);
+-	regmap_field_write(bwmon->regs[F_THRESHOLD_COUNT_ZONE3],
+-			   data->zone3_thres_count);
+-
+-	regmap_field_write(bwmon->regs[F_ZONE_ACTIONS_ZONE0],
+-			   BWMON_ZONE_ACTIONS_ZONE0);
+-	regmap_field_write(bwmon->regs[F_ZONE_ACTIONS_ZONE1],
+-			   BWMON_ZONE_ACTIONS_ZONE1);
+-	regmap_field_write(bwmon->regs[F_ZONE_ACTIONS_ZONE2],
+-			   BWMON_ZONE_ACTIONS_ZONE2);
+-	regmap_field_write(bwmon->regs[F_ZONE_ACTIONS_ZONE3],
+-			   BWMON_ZONE_ACTIONS_ZONE3);
+-
+-	bwmon_clear_irq(bwmon);
+-	bwmon_enable(bwmon, BWMON_IRQ_ENABLE_MASK);
++	ret = regmap_field_write(bwmon->regs[F_SAMPLE_WINDOW], window);
++	if (ret)
++		return ret;
++
++	/* Set up bandwidth thresholds */
++	ret = bwmon_set_threshold(bwmon, bwmon->regs[F_THRESHOLD_HIGH], bw_low);
++	if (ret)
++		return ret;
++
++	ret = bwmon_set_threshold(bwmon, bwmon->regs[F_THRESHOLD_MED], bw_low);
++	if (ret)
++		return ret;
++
++	ret = bwmon_set_threshold(bwmon, bwmon->regs[F_THRESHOLD_LOW], 0);
++	if (ret)
++		return ret;
++
++	/* Set up threshold counts */
++	ret = regmap_field_write(bwmon->regs[F_THRESHOLD_COUNT_ZONE0],
++				 BWMON_THRESHOLD_COUNT_ZONE0_DEFAULT);
++	if (ret)
++		return ret;
++
++	ret = regmap_field_write(bwmon->regs[F_THRESHOLD_COUNT_ZONE1],
++				 data->zone1_thres_count);
++	if (ret)
++		return ret;
++
++	ret = regmap_field_write(bwmon->regs[F_THRESHOLD_COUNT_ZONE2],
++				 BWMON_THRESHOLD_COUNT_ZONE2_DEFAULT);
++	if (ret)
++		return ret;
++
++	ret = regmap_field_write(bwmon->regs[F_THRESHOLD_COUNT_ZONE3],
++				 data->zone3_thres_count);
++	if (ret)
++		return ret;
++
++	/* Set up zone actions */
++	ret = regmap_field_write(bwmon->regs[F_ZONE_ACTIONS_ZONE0],
++				 BWMON_ZONE_ACTIONS_ZONE0);
++	if (ret)
++		return ret;
++
++	ret = regmap_field_write(bwmon->regs[F_ZONE_ACTIONS_ZONE1],
++				 BWMON_ZONE_ACTIONS_ZONE1);
++	if (ret)
++		return ret;
++
++	ret = regmap_field_write(bwmon->regs[F_ZONE_ACTIONS_ZONE2],
++				 BWMON_ZONE_ACTIONS_ZONE2);
++	if (ret)
++		return ret;
++
++	ret = regmap_field_write(bwmon->regs[F_ZONE_ACTIONS_ZONE3],
++				 BWMON_ZONE_ACTIONS_ZONE3);
++	if (ret)
++		return ret;
++
++	/* Clear any previous interrupts and get the stone rolling! */
++	ret = bwmon_clear_irq(bwmon);
++	if (ret)
++		return ret;
++
++
++	return bwmon_enable(bwmon, BWMON_IRQ_ENABLE_MASK);
+ }
+ 
+ static irqreturn_t bwmon_intr(int irq, void *dev_id)
+@@ -622,7 +697,8 @@ static irqreturn_t bwmon_intr(int irq, void *dev_id)
+ 		return IRQ_NONE;
+ 	}
+ 
+-	bwmon_disable(bwmon);
++	if (bwmon_disable(bwmon))
++		return IRQ_NONE;
+ 
+ 	zone = get_bitmask_order(status) - 1;
+ 	/*
+@@ -671,13 +747,20 @@ static irqreturn_t bwmon_intr_thread(int irq, void *dev_id)
+ 	else
+ 		irq_enable = BWMON_IRQ_ENABLE_MASK;
+ 
+-	bwmon_set_threshold(bwmon, bwmon->regs[F_THRESHOLD_HIGH],
+-			    up_kbps);
+-	bwmon_set_threshold(bwmon, bwmon->regs[F_THRESHOLD_MED],
+-			    down_kbps);
+-	bwmon_clear_counters(bwmon, false);
+-	bwmon_clear_irq(bwmon);
+-	bwmon_enable(bwmon, irq_enable);
++	if (bwmon_set_threshold(bwmon, bwmon->regs[F_THRESHOLD_HIGH], up_kbps))
++		return IRQ_NONE;
++
++	if (bwmon_set_threshold(bwmon, bwmon->regs[F_THRESHOLD_MED], down_kbps))
++		return IRQ_NONE;
++
++	if (bwmon_clear_counters(bwmon, false))
++		return IRQ_NONE;
++
++	if (bwmon_clear_irq(bwmon))
++		return IRQ_NONE;
++
++	if (bwmon_enable(bwmon, irq_enable))
++		return IRQ_NONE;
+ 
+ 	if (bwmon->target_kbps == bwmon->current_kbps)
+ 		goto out;
+@@ -780,7 +863,10 @@ static int bwmon_probe(struct platform_device *pdev)
+ 
+ 	bwmon->dev = dev;
+ 
+-	bwmon_disable(bwmon);
++	ret = bwmon_disable(bwmon);
++	if (ret)
++		return dev_err_probe(dev, ret, "failed to disable BWMON\n");
++
+ 	ret = devm_request_threaded_irq(dev, bwmon->irq, bwmon_intr,
+ 					bwmon_intr_thread,
+ 					IRQF_ONESHOT, dev_name(dev), bwmon);
+@@ -788,7 +874,10 @@ static int bwmon_probe(struct platform_device *pdev)
+ 		return dev_err_probe(dev, ret, "failed to request IRQ\n");
+ 
+ 	platform_set_drvdata(pdev, bwmon);
+-	bwmon_start(bwmon);
++
++	ret = bwmon_start(bwmon);
++	if (ret)
++		return dev_err_probe(dev, ret, "failed to start BWMON\n");
+ 
+ 	return 0;
+ }
+
+---
+base-commit: 772c02db794651e8d006813f545b8bfd6906b718
+change-id: 20230615-topic-bwmonretval-3f260e1284d8
+
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
+
