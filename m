@@ -2,156 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EB9D732033
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 20:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 617E5732037
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 20:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbjFOStO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 14:49:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46578 "EHLO
+        id S230230AbjFOSwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 14:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbjFOStL (ORCPT
+        with ESMTP id S230012AbjFOSv6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 14:49:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA371715;
-        Thu, 15 Jun 2023 11:49:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D48ED6006F;
-        Thu, 15 Jun 2023 18:49:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 237F1C433C8;
-        Thu, 15 Jun 2023 18:49:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686854949;
-        bh=k1BrEmpYIXWtIaiqc1FiaqGCg4LfEpw0l7lGiSlOcmU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=FNmDZ0Hksi+nESkzoqQsBgBMP2ThQ7UzlQwBpbSyFPjd7IQCkGSfRUSkgvN9MXxmW
-         2zqZCaZIgKubGnRWSa6ZnE6MBG+SungmIwC3ClNxnWxDjgvoVB67F2cMcdtUlOt1QZ
-         Df+yNViV+Nk0L+GGdk15xUGkePYoYN/G/Tul+RD6RC1yGYePyMu0A1uIxJt4Yp3JlG
-         whlPIXptPZ52O//+tml7SIJ2ZuSGwg4Sug/mUBPFbHAx7rx1VI2WZsIqU074HytdRp
-         pHJHH36ibsuA3Hca43TwOc83UoyBSqBvPMbpcCw7+gq2Cg/aDVcHlqvk7NQeFmP0Hr
-         jZM5IXkwegfzg==
-Message-ID: <b76a8803-57aa-fa6b-ac33-b9d85f3398f9@kernel.org>
-Date:   Thu, 15 Jun 2023 13:49:06 -0500
+        Thu, 15 Jun 2023 14:51:58 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429AE1FF9
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 11:51:56 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-bc4651e3838so2093151276.2
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 11:51:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686855115; x=1689447115;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oys6po3xV1zflUTK5Q7rHSTxvD+daqTUwms8w9Gkeig=;
+        b=TZhkEOVM+6kSP3s5XIj7Ew/F2o0nsoTRE4JNLY0qV8p3htIK+2Ja/WTZsyu+9D9+xV
+         R194akxrpQUzn/5KomHtspD+WL7yzirv7m6CrYCpfgMLyk1xYpMjgMt5Rp6VBh+TyEnT
+         WFBCKtzWarwwuRgVdhyYdDRR7RFF8M7JOEWsNRLullUntoYJ0xVVsB9eUIilmnpS6PD3
+         RZTOxzGP2mmiqCEtKkhYfdT5EVK5/2l0huHhyAnCS47j2BWUUKFzoAfZ7P/B9yiW+oda
+         IYwLwOrYuiih0pZqKFC5OudEhmMh+ceJtpvU7nt0RcFWkiHWS/zuzjmvNwouOojEdFAM
+         NJ2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686855115; x=1689447115;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oys6po3xV1zflUTK5Q7rHSTxvD+daqTUwms8w9Gkeig=;
+        b=JSpr9Kk2FPE5Tw40HbGGLI1YiZD47WITwpPorl6dPzjGXoqqC8u8cohfpKomV9qy7G
+         nNmzo6E9JxffT50MDZvK7Zacwcyv3VHId7Iwu633Gd7YWkfheCFHMnSN4bVswS5wcQgv
+         00aRN735oPGSJbCDe7kp07jmJ1YCFT+AQCx6nE1PTDe39FGMYFZ8p95vAEAkHY7vpr4X
+         f76Hz6FV3GkCfEODwK/TZXXbA89bav2a+/yJoqpjdKrkukncfBCgY/hvQolyFc7eov2q
+         OaF7w7PIU0WOoa1rEPDYZW/ox4JqCHwL4QoaizRMEduhX3WxODNIBHqcy7M2HUbiR3ML
+         tDJw==
+X-Gm-Message-State: AC+VfDyC+D6YkmR5YYwQlZM1opeqKVyWKmbTDrgq0KYVX6Kp8azTFrRN
+        OCJi5D2M8R4iQICKM50nQv86D4+wimffpGi0Y2UxJA==
+X-Google-Smtp-Source: ACHHUZ5MGUqqRHv95slcbK18Ur8RugPXouW0J3O984wR6h8VWSwkh4mWLExlNWIjg1eG8cz9Gob1bzBzu5dXlscM0yI=
+X-Received: by 2002:a25:424b:0:b0:ba8:972d:e37e with SMTP id
+ p72-20020a25424b000000b00ba8972de37emr5179293yba.14.1686855114258; Thu, 15
+ Jun 2023 11:51:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 1/1] EDAC/altera: Check previous DDR DBE during driver
- probe
-Content-Language: en-US
-To:     niravkumar.l.rabara@intel.com
-Cc:     bp@alien8.de, james.morse@arm.com, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mchehab@kernel.org, rric@kernel.org,
-        tony.luck@intel.com
-References: <20230503061000.3279381-1-niravkumar.l.rabara@intel.com>
- <20230615022534.4163918-1-niravkumar.l.rabara@intel.com>
- <20230615022534.4163918-2-niravkumar.l.rabara@intel.com>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <20230615022534.4163918-2-niravkumar.l.rabara@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230615092001.1213132-1-yann.gautier@foss.st.com>
+ <20230615092001.1213132-2-yann.gautier@foss.st.com> <CAPDyKFqJsqmNzeRg8hj55yUEMSycOWsmKVKsMWk4Qu7Y8_dNzg@mail.gmail.com>
+ <3b6781cb-8f59-e70a-bcf8-9fb48fa47cbf@foss.st.com> <266de9f5-826a-c1bf-be8d-11f5e27c87dc@foss.st.com>
+In-Reply-To: <266de9f5-826a-c1bf-be8d-11f5e27c87dc@foss.st.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 15 Jun 2023 20:51:42 +0200
+Message-ID: <CACRpkdZLtCwPQsPw_Lp3Ppw2ed6gOo+-82_y2WPVJ_oZUHbLoQ@mail.gmail.com>
+Subject: Re: [PATCH 1/6] dt-bindings: mmc: mmci: Add st,stm32mp25-sdmmc2 compatible
+To:     Yann Gautier <yann.gautier@foss.st.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        Conor Dooley <conor+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        linux-kernel@vger.kernel.org, Marek Vasut <marex@denx.de>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Xiang wangx <wangxiang@cdjrlc.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 15, 2023 at 5:19=E2=80=AFPM Yann Gautier <yann.gautier@foss.st.=
+com> wrote:
 
+> >        - description: Entry for STMicroelectronics variant of PL18x.
+> >            This dedicated compatible is used by bootloaders.
+(...)
+> >        - description: Entry for STMicroelectronics variant of PL18x for
+> >            STM32MP25. This dedicated compatible is used by bootloaders.
+(...)
+> > Should I remove (or adapt) both descriptions?
+> >
+> >
+>
+> At the time the patch was done it was really just used by bootloaders.
+> But as it is now used in the driver for delay block, I should remove the
+> second sentence.
 
-On 6/14/23 21:25, niravkumar.l.rabara@intel.com wrote:
-> From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
-> 
-> Add DDR DBE check during driver probe to notify user if previous
-> reboot cause by DDR DBE and print DBE error related information.
-> 
-> Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
-> ---
->   drivers/edac/altera_edac.c                   | 29 ++++++++++++++++----
->   include/linux/firmware/intel/stratix10-smc.h | 20 ++++++++++++++
->   2 files changed, 44 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-> index 8b31cd54bdb6..04c0675adc8c 100644
-> --- a/drivers/edac/altera_edac.c
-> +++ b/drivers/edac/altera_edac.c
-> @@ -2159,6 +2159,7 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
->   #ifdef CONFIG_64BIT
->   	{
->   		int dberror, err_addr;
-> +		struct arm_smccc_res result;
->   
->   		edac->panic_notifier.notifier_call = s10_edac_dberr_handler;
->   		atomic_notifier_chain_register(&panic_notifier_list,
-> @@ -2168,11 +2169,29 @@ static int altr_edac_a10_probe(struct platform_device *pdev)
->   		regmap_read(edac->ecc_mgr_map, S10_SYSMGR_UE_VAL_OFST,
->   			    &dberror);
->   		if (dberror) {
-> -			regmap_read(edac->ecc_mgr_map, S10_SYSMGR_UE_ADDR_OFST,
-> -				    &err_addr);
-> -			edac_printk(KERN_ERR, EDAC_DEVICE,
-> -				    "Previous Boot UE detected[0x%X] @ 0x%X\n",
-> -				    dberror, err_addr);
-> +			/* Bit-31 is set if previous DDR UE happened */
-> +			if (dberror & (1 << 31)) {
-> +				/* Read previous DDR UE info */
-> +				arm_smccc_smc(INTEL_SIP_SMC_READ_SEU_ERR, 0,
-> +					      0, 0, 0, 0, 0, 0, &result);
-> +
-> +				if (!result.a0) {
-> +					edac_printk(KERN_ERR, EDAC_DEVICE,
-> +						    "Previous DDR UE:Count=0x%X,Address=0x%X,ErrorData=0x%X\n"
-> +						    , (unsigned int)result.a1
-> +						    , (unsigned int)result.a2
-> +						    , (unsigned int)result.a3);
-> +				} else {
-> +					edac_printk(KERN_ERR, EDAC_DEVICE,
-> +						    "INTEL_SIP_SMC_SEU_ERR_STATUS failed\n");
-> +				}
-> +			} else {
-> +				regmap_read(edac->ecc_mgr_map, S10_SYSMGR_UE_ADDR_OFST,
-> +					    &err_addr);
-> +				edac_printk(KERN_ERR, EDAC_DEVICE,
-> +					    "Previous Boot UE detected[0x%X] @ 0x%X\n",
-> +					    dberror, err_addr);
-> +			}
->   			/* Reset the sticky registers */
->   			regmap_write(edac->ecc_mgr_map,
->   				     S10_SYSMGR_UE_VAL_OFST, 0);
-> diff --git a/include/linux/firmware/intel/stratix10-smc.h b/include/linux/firmware/intel/stratix10-smc.h
-> index a718f853d457..48810c39f612 100644
-> --- a/include/linux/firmware/intel/stratix10-smc.h
-> +++ b/include/linux/firmware/intel/stratix10-smc.h
-> @@ -595,4 +595,24 @@ INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_FPGA_CONFIG_COMPLETED_WRITE)
->   #define INTEL_SIP_SMC_FCS_GET_PROVISION_DATA \
->   	INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_FCS_GET_PROVISION_DATA)
->   
-> +/**
-> + * Request INTEL_SIP_SMC_READ_SEU_ERR
-> + * Sync call to get Single Event Upset Error information
-> + * SEU detects both corrected and uncorrected error
-> + *
-> + * Call register usage:
-> + * a0 INTEL_SIP_SMC_READ_SEU_ERR
-> + * a1-7 not used
-> + *
-> + * Return status:
-> + * a0 INTEL_SIP_SMC_STATUS_OK, INTEL_SIP_SMC_STATUS_NOT_SUPPORTED or
-> + *    INTEL_SIP_SMC_STATUS_ERROR
-> + * a1 error count of response data
-> + * a2 sector address of response data
-> + * a3 error data
-> + */
-> +#define INTEL_SIP_SMC_FUNCID_SEU_ERR_STATUS 153
-> +#define INTEL_SIP_SMC_READ_SEU_ERR \
-> +		INTEL_SIP_SMC_FAST_CALL_VAL(INTEL_SIP_SMC_FUNCID_SEU_ERR_STATUS)
-> +
->   #endif
+Remove both.
 
+After "This dedicated compatible is used by bootloaders" there is
+an implicit "in the SDK provided by ST Microelectronics", and that
+is of no concern for DT bindings, which are (well, in theory) used by
+e.g. BSD or other operating systems and who knows what they will
+use and not, we don't put Linux specifics in there, neither Boot
+loader specifics nor ST SDK specifics.
 
-Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+At least that is the little bureaucratic ambition we have.
+
+Yours,
+Linus Walleij
