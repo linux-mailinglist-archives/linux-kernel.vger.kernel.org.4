@@ -2,105 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 698E87313DF
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DD027313E2
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:31:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243934AbjFOJaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 05:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60366 "EHLO
+        id S244118AbjFOJbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 05:31:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241572AbjFOJaH (ORCPT
+        with ESMTP id S240097AbjFOJbv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 05:30:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA48D1BF3;
-        Thu, 15 Jun 2023 02:30:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 479C360D2F;
-        Thu, 15 Jun 2023 09:30:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 532BEC433C0;
-        Thu, 15 Jun 2023 09:30:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686821405;
-        bh=g9oxqboktwufCn9rbuF3dwcHMwFSybfjfe3JJJTEHdQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pHspmm6gtUwaHB9p3xbCe2mMhaVN8TR2HfBkcKxtTPediSvExBFACNgZjMxcwOkaQ
-         hqegNfJsILRT6OfNqFBYP9ieN8Wzb8i/k6SOWduZU6DwTWibTXZZXQdDF8G1uhXsHD
-         WDF3C0aT4ucg4Dq2wKoe8wEHNeB4X//elxs2Xfr0=
-Date:   Thu, 15 Jun 2023 11:30:03 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Prashanth K <quic_prashk@quicinc.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7] usb: common: usb-conn-gpio: Set last role to unknown
- before initial detection
-Message-ID: <2023061547-staleness-camper-ae8a@gregkh>
-References: <1685544074-17337-1-git-send-email-quic_prashk@quicinc.com>
- <ZImE4L3YgABnCIsP@kuha.fi.intel.com>
+        Thu, 15 Jun 2023 05:31:51 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716801FE4;
+        Thu, 15 Jun 2023 02:31:50 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-bc43a73ab22so935970276.0;
+        Thu, 15 Jun 2023 02:31:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686821509; x=1689413509;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=di66cKm4TSNTvyJIxIEt8peXod16WLfPyBmGUqyjx8A=;
+        b=e02FzfAAe7TAzqPFI1NcUDpyeWS8RO+q/51tmwLU9bP2Ro8bCXmKckt2kbm2ZjdxCy
+         fm3Pq8acrGSYhTJgQHto02XStVs4+X5cV9PGaXc5+msESCBYpbGe15S9IQI/7XBPHVwD
+         Et5+5hXyrvQPTLNccgcN3v0KHj6OJrr6m910qVknvd6M1PsQ+viNQr5lzG39v3MJhpV+
+         Jk5Is0s1GXsPATCc/FDmcNqhY6QK+J+ADjZ39RCzK4j9Fzi3I6gdP8DKLx6Hawkw6Voo
+         7D+tt1yiS0+fP1ivNHykUxMZEcYv9lcgG8NSDc/OBAluZG/NvPPUlVzz58O3TgCAw9pE
+         +BZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686821509; x=1689413509;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=di66cKm4TSNTvyJIxIEt8peXod16WLfPyBmGUqyjx8A=;
+        b=hLXr9lYrFf949tDJry5TGLoN3b7PKL2eXXUde6th7gJtO00G7E5bClJB1RBI3DkIND
+         3iGkWzBYuVrkKr2hpcrmwr0FGnfo7SEXb87KxJ7zePyjx4LfcL6PyGsk0phcCO3pWWwR
+         H2DHF1Hdd8yLoweqxCzIOFNpqzmQxzEj8112OLgWwLpvVprjUqTQSRDI6aclztquGw9k
+         OOC/4Y0JgEGU1UW36nH+Wcl+GsjrcOadCiHFaEjIj6Yt8kscyuvlmuFiv+h/xCo11XnZ
+         vDUaWNCNwwujXwE1BEw5eSKBQjWpC5lXgwB2rwyb59EO7utiG3YQ3geOJTjztq6/ykCf
+         Jokw==
+X-Gm-Message-State: AC+VfDwpXhdUORt4naWuPgnJRZiDjaIOVr6t6rRa9lEgC6yiEuY9ceBp
+        AYGnlovje28JL3bPFhq7Hi1LIkwef57GKOZcOlGiZRzIYmQ=
+X-Google-Smtp-Source: ACHHUZ6gTgwthX4La0xbY3vwt2dDYdqybB2xqWiZHioIDURaKg4OHiGOZ2lS1gUUCClyR9i4ST922OsezwVW9+gw8oU=
+X-Received: by 2002:a25:7316:0:b0:bc4:f2e5:5343 with SMTP id
+ o22-20020a257316000000b00bc4f2e55343mr4915969ybc.28.1686821509582; Thu, 15
+ Jun 2023 02:31:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZImE4L3YgABnCIsP@kuha.fi.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230614180837.630180-1-ojeda@kernel.org> <20230614180837.630180-2-ojeda@kernel.org>
+ <2b4b23ce-316e-b998-7faf-e529b121a8b4@gmail.com>
+In-Reply-To: <2b4b23ce-316e-b998-7faf-e529b121a8b4@gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 15 Jun 2023 11:31:38 +0200
+Message-ID: <CANiq72mApAXEtoWgkaLvZJu6gn=9CkyogRXVfbYxPsR5TeFUVQ@mail.gmail.com>
+Subject: Re: [PATCH 1/6] rust: init: make doctests compilable/testable
+To:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>, David Gow <davidgow@google.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Andreas Hindborg <nmi@metaspace.dk>,
+        Philip Li <philip.li@intel.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 12:14:08PM +0300, Heikki Krogerus wrote:
-> On Wed, May 31, 2023 at 08:11:14PM +0530, Prashanth K wrote:
-> > Currently if we bootup a device without cable connected, then
-> > usb-conn-gpio won't call set_role() since last_role is same as
-> > current role. This happens because during probe last_role gets
-> > initialised to zero.
-> > 
-> > To avoid this, added a new constant in enum usb_role, last_role
-> > is set to USB_ROLE_UNKNOWN before performing initial detection.
-> > 
-> > While at it, also handle default case for the usb_role switch
-> > in cdns3, intel-xhci-usb-role-switch & musb/jz4740 to avoid
-> > build warnings.
-> > 
-> > Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection detection driver")
-> > Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> > ---
-> > v7: Added default case in musb/jz4740.c & intel-xhci-usb-role-switch.c to
-> >     avoid build warnings.
-> > v6: Moved USB_ROLE_UNKNOWN towards the end of enum usb_role.
-> > v5: Update commit text to mention the changes made in cdns3 driver.
-> > v4: Added Reviewed-by tag.
-> > v3: Added a default case in drivers/usb/cdns3/core.c as pointed out by
-> >     the test robot.
-> > v2: Added USB_ROLE_UNKNWON to enum usb_role.
-> > 
-> >  drivers/usb/cdns3/core.c                       | 2 ++
-> >  drivers/usb/common/usb-conn-gpio.c             | 3 +++
-> >  drivers/usb/musb/jz4740.c                      | 2 ++
-> >  drivers/usb/roles/intel-xhci-usb-role-switch.c | 2 ++
-> >  include/linux/usb/role.h                       | 1 +
-> >  5 files changed, 10 insertions(+)
-> 
-> Just to be clear to everybody, that USB_ROLE_UNKNOWN is not handled in
-> drivers/usb/roles/class.c, so this patch is broken.
-> 
-> But the whole approach is wrong. That USB_ROLE_UNKNOWN is clearly a
-> flag where the other values in enum usb_role are actual switch states.
-> So it does not belong there.
-> 
-> In general, adding globals states like that just in order to work
-> around issues in single drivers is never a good idea IMO.
+On Thu, Jun 15, 2023 at 5:52=E2=80=AFAM Martin Rodriguez Reboredo
+<yakoyoku@gmail.com> wrote:
+>
+> Little question, what's the purpose of `FromErrno` here?
 
-Ok, let me go revert this from my tree, thanks for the review.
+It was because `Error::from_errno` is `pub(crate)` in the `kernel`
+crate. I should have added a comment -- my bad! :)
 
-greg k-h
+If we decided to make it `pub` eventually, then this `FromErrno` hack
+can be removed.
+
+Cheers,
+Miguel
