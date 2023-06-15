@@ -2,82 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F14F7313CF
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:28:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 698E87313DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241501AbjFOJ2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 05:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58960 "EHLO
+        id S243934AbjFOJaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 05:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241440AbjFOJ2X (ORCPT
+        with ESMTP id S241572AbjFOJaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 05:28:23 -0400
-Received: from mail.actia.se (mail.actia.se [212.181.117.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB1F199D;
-        Thu, 15 Jun 2023 02:28:22 -0700 (PDT)
-Received: from W388ANL.actianordic.se (10.12.12.26) by S035ANL.actianordic.se
- (10.12.31.116) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 15 Jun
- 2023 11:28:21 +0200
-From:   Jonas Blixt <jonas.blixt@actia.se>
-To:     <shuah@kernel.org>, <valentina.manea.m@gmail.com>
-CC:     <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jonas Blixt <jonas.blixt@actia.se>
-Subject: [PATCH v2] USB: usbip: fix stub_dev hub disconnect
-Date:   Thu, 15 Jun 2023 11:28:10 +0200
-Message-ID: <20230615092810.1215490-1-jonas.blixt@actia.se>
-X-Mailer: git-send-email 2.25.1
+        Thu, 15 Jun 2023 05:30:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA48D1BF3;
+        Thu, 15 Jun 2023 02:30:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 479C360D2F;
+        Thu, 15 Jun 2023 09:30:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 532BEC433C0;
+        Thu, 15 Jun 2023 09:30:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686821405;
+        bh=g9oxqboktwufCn9rbuF3dwcHMwFSybfjfe3JJJTEHdQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pHspmm6gtUwaHB9p3xbCe2mMhaVN8TR2HfBkcKxtTPediSvExBFACNgZjMxcwOkaQ
+         hqegNfJsILRT6OfNqFBYP9ieN8Wzb8i/k6SOWduZU6DwTWibTXZZXQdDF8G1uhXsHD
+         WDF3C0aT4ucg4Dq2wKoe8wEHNeB4X//elxs2Xfr0=
+Date:   Thu, 15 Jun 2023 11:30:03 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Prashanth K <quic_prashk@quicinc.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7] usb: common: usb-conn-gpio: Set last role to unknown
+ before initial detection
+Message-ID: <2023061547-staleness-camper-ae8a@gregkh>
+References: <1685544074-17337-1-git-send-email-quic_prashk@quicinc.com>
+ <ZImE4L3YgABnCIsP@kuha.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.12.12.26]
-X-EsetResult: clean, is OK
-X-EsetId: 37303A294A191A536D7367
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZImE4L3YgABnCIsP@kuha.fi.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a hub is disconnected that has device(s) that's attached to the usbip layer
-the disconnect function might fail because it tries to release the port
-on an already disconnected hub.
+On Wed, Jun 14, 2023 at 12:14:08PM +0300, Heikki Krogerus wrote:
+> On Wed, May 31, 2023 at 08:11:14PM +0530, Prashanth K wrote:
+> > Currently if we bootup a device without cable connected, then
+> > usb-conn-gpio won't call set_role() since last_role is same as
+> > current role. This happens because during probe last_role gets
+> > initialised to zero.
+> > 
+> > To avoid this, added a new constant in enum usb_role, last_role
+> > is set to USB_ROLE_UNKNOWN before performing initial detection.
+> > 
+> > While at it, also handle default case for the usb_role switch
+> > in cdns3, intel-xhci-usb-role-switch & musb/jz4740 to avoid
+> > build warnings.
+> > 
+> > Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection detection driver")
+> > Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> > ---
+> > v7: Added default case in musb/jz4740.c & intel-xhci-usb-role-switch.c to
+> >     avoid build warnings.
+> > v6: Moved USB_ROLE_UNKNOWN towards the end of enum usb_role.
+> > v5: Update commit text to mention the changes made in cdns3 driver.
+> > v4: Added Reviewed-by tag.
+> > v3: Added a default case in drivers/usb/cdns3/core.c as pointed out by
+> >     the test robot.
+> > v2: Added USB_ROLE_UNKNWON to enum usb_role.
+> > 
+> >  drivers/usb/cdns3/core.c                       | 2 ++
+> >  drivers/usb/common/usb-conn-gpio.c             | 3 +++
+> >  drivers/usb/musb/jz4740.c                      | 2 ++
+> >  drivers/usb/roles/intel-xhci-usb-role-switch.c | 2 ++
+> >  include/linux/usb/role.h                       | 1 +
+> >  5 files changed, 10 insertions(+)
+> 
+> Just to be clear to everybody, that USB_ROLE_UNKNOWN is not handled in
+> drivers/usb/roles/class.c, so this patch is broken.
+> 
+> But the whole approach is wrong. That USB_ROLE_UNKNOWN is clearly a
+> flag where the other values in enum usb_role are actual switch states.
+> So it does not belong there.
+> 
+> In general, adding globals states like that just in order to work
+> around issues in single drivers is never a good idea IMO.
 
-Fixes: 6080cd0e9239 ("staging: usbip: claim ports used by shared devices")
-Signed-off-by: Jonas Blixt <jonas.blixt@actia.se>
----
-v2:
- - Clarify comment
-v1:
- Link to v1: https://lore.kernel.org/linux-usb/20230615092205.GA1212960@W388ANL/T/#m575e37dc404067797eadf4444857366c73ba3420
----
- drivers/usb/usbip/stub_dev.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+Ok, let me go revert this from my tree, thanks for the review.
 
-diff --git a/drivers/usb/usbip/stub_dev.c b/drivers/usb/usbip/stub_dev.c
-index 2305d425e6c9..2170c95c8dab 100644
---- a/drivers/usb/usbip/stub_dev.c
-+++ b/drivers/usb/usbip/stub_dev.c
-@@ -427,8 +427,13 @@ static void stub_disconnect(struct usb_device *udev)
- 	/* release port */
- 	rc = usb_hub_release_port(udev->parent, udev->portnum,
- 				  (struct usb_dev_state *) udev);
--	if (rc) {
--		dev_dbg(&udev->dev, "unable to release port\n");
-+	/*
-+	 * NOTE: If a HUB disconnect triggered disconnect of the down stream
-+	 * device usb_hub_release_port will return -ENODEV so we can safely ignore
-+	 * that error here.
-+	 */
-+	if (rc && (rc != -ENODEV)) {
-+		dev_dbg(&udev->dev, "unable to release port (%i)\n", rc);
- 		return;
- 	}
- 
--- 
-2.25.1
-
+greg k-h
