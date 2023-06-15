@@ -2,207 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B412E730EA3
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 07:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 217F6730EAC
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 07:28:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243177AbjFOF0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 01:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51588 "EHLO
+        id S243256AbjFOF2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 01:28:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbjFOFZ6 (ORCPT
+        with ESMTP id S242904AbjFOF2l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 01:25:58 -0400
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DABA11715;
-        Wed, 14 Jun 2023 22:25:56 -0700 (PDT)
-Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-77b210292c5so124553939f.1;
-        Wed, 14 Jun 2023 22:25:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686806756; x=1689398756;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+8XvSUs++s8SCtB1NRYbEUottu+u+FOeTtSd2dCMIl4=;
-        b=OPkulilgoaeNsC2AHA9eVv/EXrX6X5PZ8ytnih9JqTnme2wS0h2q0bnHiSQLgyHI08
-         DQrZxqJtsYUfa+/6qPn2G+Wc5YbBbH9LHL1QZWPBCq3r9tGSGT95/iC9hiTQM0L22NFo
-         aT0EBtsQmhKGi1k7Mbr9AxihU/MKwskuSWMaxOOLEwGyrroqONj+yELXQhMb5MkM1n8B
-         Ho63N5933fERI/xdsg7/1xuReBS9SDITWC1P0wE5TV7jSLmfJs3da+hF8QB+l+ihqEzW
-         FR4fgvEaE3wtt1qyu+oVxIQKNxSdoauYB0dSYbpZjC5mWZ1Z3+6DOAAI+nKEtNEuiF7t
-         xqHA==
-X-Gm-Message-State: AC+VfDyNavSbCf2Sf1BO/6vnDKTHxTP62p6FezO+v9QAvd4N+OUPAUZJ
-        rMpXmZij9+xFAOkSRJgZpg==
-X-Google-Smtp-Source: ACHHUZ5QDYc4xJaaMz9XXahg84pWJ2bqFrHsJ0QmkRBa48Qll6rYChqgYKtFR7u+3VZBUkMpS5dA8w==
-X-Received: by 2002:a5d:8513:0:b0:74c:c6ed:6de with SMTP id q19-20020a5d8513000000b0074cc6ed06demr17005254ion.12.1686806755909;
-        Wed, 14 Jun 2023 22:25:55 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id k8-20020a02c768000000b00416650ba62esm5415546jao.76.2023.06.14.22.25.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 22:25:55 -0700 (PDT)
-Received: (nullmailer pid 3823193 invoked by uid 1000);
-        Thu, 15 Jun 2023 05:25:53 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+        Thu, 15 Jun 2023 01:28:41 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC9326B8;
+        Wed, 14 Jun 2023 22:28:35 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35F5RMsw013905;
+        Thu, 15 Jun 2023 05:28:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=JzYgkcS+xjpO5zjTAPM30RHvptVH8EP1NWTFiI7sVfk=;
+ b=mfs0hXPiSmbJ7E1CROAhuafdu7rIUX5xAzIZlbkKvM4+YmmtQ9YDqMGDMp7jcKeRMAYZ
+ gXcyGleQl0tXoAdHQ8DnkmBzu55LePuoPRM03vrgnXU7Lr/JwhR1+P6NrIVw7bIYWhbq
+ jmwgCSr+/4NGNPRDWJHrD9AhTZxPeDJ9vEXLkWpDorDuTR/amdT5nDf2WTvmpqw98gw8
+ a4NhKgVJrOQzr1pyo50ceBnAgDWl5os8ZGjChSGghsy3JsAOfRDo6sX20qZfA0wYKCqi
+ /iKGEEX89/VOmsqlyhhKa/tuqJskHRflY46iW8zcmgI4xJj28PSJ2uuvMyq+bFbYS2z8 Lw== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r7fae9g7d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 05:28:02 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35F5S1YQ013748
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 05:28:01 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Wed, 14 Jun 2023 22:27:51 -0700
+Date:   Thu, 15 Jun 2023 10:57:47 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <p.zabel@pengutronix.de>, <arnd@arndb.de>,
+        <geert+renesas@glider.be>, <neil.armstrong@linaro.org>,
+        <nfraprado@collabora.com>, <broonie@kernel.org>,
+        <rafal@milecki.pl>, <quic_srichara@quicinc.com>,
+        <quic_varada@quicinc.org>, <quic_wcheng@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH 2/9] dt-bindings: phy: qcom,m31: Document qcom,m31 USB phy
+Message-ID: <20230615052746.GB22186@varda-linux.qualcomm.com>
+References: <cover.1686126439.git.quic_varada@quicinc.com>
+ <14f60578e2935c0844537eab162af3afa52ffe39.1686126439.git.quic_varada@quicinc.com>
+ <98960024-7dbc-91a3-75de-90b529637916@linaro.org>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, vigneshr@ti.com, miquel.raynal@bootlin.com,
-        krzysztof.kozlowski+dt@linaro.org, richard@nod.at,
-        Vadym Kochan <vadym.kochan@plvision.eu>,
-        linux-arm-kernel@lists.infradead.org, gregory.clement@bootlin.com,
-        andrew@lunn.ch, sebastian.hesselbarth@gmail.com,
-        devicetree@vger.kernel.org
-In-Reply-To: <20230615040447.3484564-4-chris.packham@alliedtelesis.co.nz>
-References: <20230615040447.3484564-1-chris.packham@alliedtelesis.co.nz>
- <20230615040447.3484564-4-chris.packham@alliedtelesis.co.nz>
-Message-Id: <168680675314.3823167.2320130564713925420.robh@kernel.org>
-Subject: Re: [PATCH v9 3/3] dt-bindings: mtd: marvell-nand: Convert to YAML
- DT scheme
-Date:   Wed, 14 Jun 2023 23:25:53 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <98960024-7dbc-91a3-75de-90b529637916@linaro.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: HQxXuzhjPPT6BMwONL5mJFqqsvTWLvxK
+X-Proofpoint-GUID: HQxXuzhjPPT6BMwONL5mJFqqsvTWLvxK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-15_02,2023-06-14_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ spamscore=0 priorityscore=1501 lowpriorityscore=0 bulkscore=0 adultscore=0
+ impostorscore=0 suspectscore=0 phishscore=0 mlxscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306150046
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 07, 2023 at 08:31:50PM +0200, Krzysztof Kozlowski wrote:
+> On 07/06/2023 12:56, Varadarajan Narayanan wrote:
+> > Document the M31 USB2 phy present in IPQ5332
+>
+> Full stop.
 
-On Thu, 15 Jun 2023 16:04:47 +1200, Chris Packham wrote:
-> From: Vadym Kochan <vadym.kochan@plvision.eu>
-> 
-> Switch the DT binding to a YAML schema to enable the DT validation.
-> 
-> The text binding didn't mention it as a requirement but existing usage
-> has
-> 
->    compatible = "marvell,armada-8k-nand-controller",
->                 "marvell,armada370-nand-controller";
-> 
-> so the YAML allows this in addition to the individual compatible values.
-> 
-> There was also an incorrect reference to dma-names being "rxtx" where
-> the driver and existing device trees actually use dma-names = "data" so
-> this is corrected in the conversion.
-> 
-> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
-> 
-> Notes:
->     Changes in v9:
->     - depend on series from Miquel
->       https://lore.kernel.org/linux-mtd/20230606175246.190465-1-miquel.raynal@bootlin.com/
->     - enforce minimum/maximum for nand-rb
->     - move required: block for controller
->     - move unevaluatedProperties: for nand chip
->     - remove label, partitions and nand-on-flash-bbt which are covered by
->       generic schema
-> 
->     Changes in v8:
->     - Mark deprecated compatible values as such
->     - Allow "marvell,armada-8k-nand-controller" without
->       "marvell,armada370-nand-controller"
->     - Make dma-names usage reflect reality
->     - Update commit message
-> 
->     Changes in v7:
->     - Restore "label" and "partitions" properties (should be picked up via
->       nand-controller.yaml but aren't)
->     - Add/restore nand-on-flash-bbt and nand-ecc-mode which aren't covered
->       by nand-controller.yaml.
->     - Use "unevalautedProperties: false"
->     - Corrections for clock-names, dma-names, nand-rb and nand-ecc-strength
->     - Add pxa3xx-nand-controller example
-> 
->     Changes in v6:
->     - remove properties covered by nand-controller.yaml
->     - add example using armada-8k compatible
-> 
->     earlier changes:
-> 
->     v5:
->        1) Get back "label" and "partitions" properties but without
->           ref to the "partition.yaml" which was wrongly used.
-> 
->        2) Add "additionalProperties: false" for nand@ because all possible
->           properties are described.
-> 
->     v4:
->        1) Remove "label" and "partitions" properties
-> 
->        2) Use 2 clocks for A7K/8K platform which is a requirement
-> 
->     v3:
->       1) Remove txt version from the MAINTAINERS list
-> 
->       2) Use enum for some of compatible strings
-> 
->       3) Drop:
->             #address-cells
->             #size-cells:
-> 
->          as they are inherited from the nand-controller.yaml
-> 
->       4) Add restriction to use 2 clocks for A8K SoC
-> 
->       5) Dropped description for clock-names and extend it with
->          minItems: 1
-> 
->       6) Drop description for "dmas"
-> 
->       7) Use "unevalautedProperties: false"
-> 
->       8) Drop quites from yaml refs.
-> 
->       9) Use 4-space indentation for the example section
-> 
->     v2:
->       1) Fixed warning by yamllint with incorrect indentation for compatible list
-> 
->  .../bindings/mtd/marvell,nand-controller.yaml | 218 ++++++++++++++++++
->  .../devicetree/bindings/mtd/marvell-nand.txt  | 126 ----------
->  MAINTAINERS                                   |   1 -
->  3 files changed, 218 insertions(+), 127 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
->  delete mode 100644 Documentation/devicetree/bindings/mtd/marvell-nand.txt
-> 
+Ok.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> > Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > ---
+> >  .../devicetree/bindings/phy/qcom,m31.yaml          | 69 ++++++++++++++++++++++
+> >  1 file changed, 69 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/phy/qcom,m31.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/phy/qcom,m31.yaml b/Documentation/devicetree/bindings/phy/qcom,m31.yaml
+> > new file mode 100644
+> > index 0000000..8ad4ba4
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/phy/qcom,m31.yaml
+> > @@ -0,0 +1,69 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +
+>
+> Drop stray blank lines.
 
-yamllint warnings/errors:
+Ok.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml: Error in referenced schema matching $id: http://devicetree.org/schemas/mtd/raw-nand-chip.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mtd/marvell,nand-controller.example.dtb: nand-controller@d0000: nand@0: False schema does not allow {'reg': [[0]], 'label': ['main-storage'], 'nand-rb': [[0]], 'nand-ecc-mode': ['hw'], 'marvell,nand-keep-config': True, 'nand-on-flash-bbt': True, 'nand-ecc-strength': [[4]], 'nand-ecc-step-size': [[512]], 'partitions': {'compatible': ['fixed-partitions'], '#address-cells': [[1]], '#size-cells': [[1]], 'partition@0': {'label': ['Rootfs'], 'reg': [[0, 1073741824]]}}}
-	from schema $id: http://devicetree.org/schemas/mtd/marvell,nand-controller.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mtd/marvell,nand-controller.example.dtb: nand-controller@d0000: nand@0: Unevaluated properties are not allowed ('label', 'nand-on-flash-bbt', 'partitions' were unexpected)
-	from schema $id: http://devicetree.org/schemas/mtd/marvell,nand-controller.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mtd/marvell,nand-controller.example.dtb: nand-controller@720000: nand@0: False schema does not allow {'reg': [[0]], 'label': ['main-storage'], 'nand-rb': [[0]], 'nand-ecc-mode': ['hw'], 'nand-ecc-strength': [[8]], 'nand-ecc-step-size': [[512]]}
-	from schema $id: http://devicetree.org/schemas/mtd/marvell,nand-controller.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mtd/marvell,nand-controller.example.dtb: nand-controller@720000: nand@0: Unevaluated properties are not allowed ('label' was unexpected)
-	from schema $id: http://devicetree.org/schemas/mtd/marvell,nand-controller.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mtd/marvell,nand-controller.example.dtb: nand-controller@43100000: nand@0: False schema does not allow {'reg': [[0]], 'nand-rb': [[0]], 'nand-ecc-mode': ['hw'], 'marvell,nand-keep-config': True}
-	from schema $id: http://devicetree.org/schemas/mtd/marvell,nand-controller.yaml#
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/phy/qcom,m31.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Qualcomm M31 USB PHY
+>
+> What is M31?
 
-doc reference errors (make refcheckdocs):
+M31 is an external IP integrated into IPQ5332 SoC.
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230615040447.3484564-4-chris.packham@alliedtelesis.co.nz
+> > +
+> > +maintainers:
+> > +  - Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> > +  - Varadarajan Narayanan <quic_varada@quicinc.org>
+> > +
+> > +description:
+> > +  This file contains documentation for the USB M31 PHY found in Qualcomm
+>
+> Drop redundant parts ("This file contains documentation for the").
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+Ok.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+> > +  IPQ5018, IPQ5332 SoCs.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    oneOf:
+>
+> That's not oneOf.
 
-pip3 install dtschema --upgrade
+Ok.
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+> > +      - items:
+>
+> No items.
 
+Ok.
+
+> > +          - enum:
+> > +              - qcom,m31-usb-hsphy
+>
+> I am confused what's this. If m31 is coming from some IP block provider,
+> then you are using wrong vendor prefix.
+> https://www.m31tech.com/download_file/M31_USB.pdf
+>
+>
+> > +              - qcom,ipq5332-m31-usb-hsphy
+>
+> This confuses me even more. IPQ m31?
+
+Will change this to m31,usb-hsphy and m31,ipq5332-usb-hsphy respectively.
+Will that be acceptable?
+
+> > +
+> > +  reg:
+> > +    description:
+> > +      Offset and length of the M31 PHY register set
+>
+> Drop description, obvious.
+
+Ok.
+
+> > +    maxItems: 2
+> > +
+> > +  reg-names:
+> > +    items:
+> > +      - const: m31usb_phy_base
+> > +      - const: qscratch_base
+>
+> Drop "_base" from both.
+
+Ok. Will drop qscratch_base. This is in the controller space.
+Should not come here.
+
+> > +
+> > +  phy_type:
+> > +    oneOf:
+> > +      - items:
+> > +          - enum:
+> > +              - utmi
+> > +              - ulpi
+>
+> This does not belong to phy, but to USB node.
+
+This is used by the driver to set a bit during phy init. Hence
+have it as a replication of the USB node's entry. If this is not
+permissible, is there some way to get this from the USB node,
+or any other alternative mechanism?
+
+> > +
+> > +  resets:
+> > +    maxItems: 1
+> > +    description:
+> > +      List of phandles and reset pairs, one for each entry in reset-names.
+>
+> Drop useless description.
+
+Ok.
+
+> > +
+> > +  reset-names:
+> > +    items:
+> > +      - const:
+> > +          usb2_phy_reset
+>
+> Drop entire reset-names.
+
+Ok.
+
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/clock/qcom,ipq5332-gcc.h>
+> > +    hs_m31phy_0: hs_m31phy@5b00 {
+>
+> Node names should be generic. See also explanation and list of examples
+> in DT specification:
+> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+>
+> Also, no underscores in node names.
+
+Will change this as usbphy0:hs_m31phy@7b000
+
+> > +        compatible = "qcom,m31-usb-hsphy";
+> > +        reg = <0x5b000 0x3000>,
+>
+> This is not what your unit address is saying.
+
+Will change to 0x0007b000.
+
+> > +            <0x08af8800 0x400>;
+>
+> Align it.
+
+Will drop this. This is in the controller space.
+
+> > +        reg-names = "m31usb_phy_base",
+> > +                "qscratch_base";
+>
+> Align it.
+
+Ok.
+
+> > +        phy_type = "utmi";
+> > +        resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
+> > +        reset-names = "usb2_phy_reset";
+> > +
+> > +        status = "ok";
+>
+> Drop.
+
+Ok. Hopefully will get an alternative for the phy_type.
+
+Thanks
+Varada
+
+> > +    };
+>
+> Best regards,
+> Krzysztof
+>
