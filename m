@@ -2,131 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF052730BEE
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 02:06:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 001F6730BF2
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 02:06:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235822AbjFOAGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 20:06:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44240 "EHLO
+        id S234541AbjFOAGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 20:06:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbjFOAGO (ORCPT
+        with ESMTP id S230017AbjFOAGa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 20:06:14 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872B1199D;
-        Wed, 14 Jun 2023 17:06:12 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35F05ZO8043728;
-        Wed, 14 Jun 2023 19:05:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1686787535;
-        bh=Ro944csWL7XF8bTU/WPZzWSCBdvSsxg7qwCAJdlrbFg=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=jHlaxHDpCAJKpvYWkgeIlMdPEylesW5KT1MBZGCyxMlCSIcDjV7T2fd9bFhzGOtHt
-         ZZhrY3ysJxuPQl3fUcNbxqbw2pp6qpllhgjfKM7sGl906xxLlXhS4ylmv+Q/ke0piN
-         4aDPExz4IS2MCKM3KJyCpbpf7LSVTWrbVqx7N2rI=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35F05ZBR089860
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 14 Jun 2023 19:05:35 -0500
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 14
- Jun 2023 19:05:35 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 14 Jun 2023 19:05:35 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35F05Yen095911;
-        Wed, 14 Jun 2023 19:05:34 -0500
-Date:   Wed, 14 Jun 2023 19:05:34 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Benjamin Bara <bbara93@gmail.com>
-CC:     Wolfram Sang <wsa@kernel.org>, Lee Jones <lee@kernel.org>,
-        <rafael.j.wysocki@intel.com>, <dmitry.osipenko@collabora.com>,
-        <peterz@infradead.org>, <jonathanh@nvidia.com>,
-        <richard.leitner@linux.dev>, <treding@nvidia.com>,
-        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>,
-        Benjamin Bara <benjamin.bara@skidata.com>,
-        <stable@vger.kernel.org>
-Subject: Re: [PATCH v6 2/5] i2c: core: run atomic i2c xfer when !preemptible
-Message-ID: <20230615000534.hhha2buodatmwugl@turban>
-References: <20230327-tegra-pmic-reboot-v6-0-af44a4cd82e9@skidata.com>
- <20230327-tegra-pmic-reboot-v6-2-af44a4cd82e9@skidata.com>
+        Wed, 14 Jun 2023 20:06:30 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78291FFA;
+        Wed, 14 Jun 2023 17:06:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686787587; x=1718323587;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=djJPb93h9IgIoHTp34Q6aT2YGUU7mv3dQuXgsAsIWCM=;
+  b=d4HQnM45qTuJn8XGhOgT6ZfVUc8sRwE3YUwbkYNsjvD1+5m45t6KHSEW
+   my+vxUPtceKAh6gyH7cnY7m06krixYtSOLxLzWwjZgKwk3b7ocPuYSylR
+   8h2G85o9DsjvOu88nk45AmdfkwhYBnsXU79R87WsOzW9s9jEN0pVs0ILm
+   bBEFkZUjVRo4M4Trheo5KXNsDY8Ru4x6ppY8ObmIMMczk9MZ6T5H1DpFw
+   CgOO3Bc/D2czS/Pc7FbQJRSme/Z5lFWz8bZd506aFRrLZu36dF3qva/It
+   QwjvpDblt8PpywgMzL+avHHNENX8MfIbLrbfZpOZFeNYYTclj9uQZzWuM
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="424658773"
+X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
+   d="scan'208";a="424658773"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 17:06:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="856706141"
+X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
+   d="scan'208";a="856706141"
+Received: from gjgambo-mobl2.amr.corp.intel.com (HELO vcostago-mobl3) ([10.212.235.28])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 17:06:24 -0700
+From:   Vinicius Costa Gomes <vinicius.gomes@intel.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>, linux-kernel@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org,
+        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>,
+        Peilin Ye <yepeilin.cs@gmail.com>,
+        Pedro Tammela <pctammela@mojatatu.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Zhengchao Shao <shaozhengchao@huawei.com>,
+        Maxim Georgiev <glipus@gmail.com>
+Subject: Re: [PATCH v2 net-next 7/9] net: netdevsim: mimic tc-taprio offload
+In-Reply-To: <20230613215440.2465708-8-vladimir.oltean@nxp.com>
+References: <20230613215440.2465708-1-vladimir.oltean@nxp.com>
+ <20230613215440.2465708-8-vladimir.oltean@nxp.com>
+Date:   Wed, 14 Jun 2023 17:06:24 -0700
+Message-ID: <877cs5twqn.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230327-tegra-pmic-reboot-v6-2-af44a4cd82e9@skidata.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21:03-20230509, Benjamin Bara wrote:
-> From: Benjamin Bara <benjamin.bara@skidata.com>
-> 
-> Since bae1d3a05a8b, i2c transfers are non-atomic if preemption is
-> disabled. However, non-atomic i2c transfers require preemption (e.g. in
-> wait_for_completion() while waiting for the DMA).
-> 
-> panic() calls preempt_disable_notrace() before calling
-> emergency_restart(). Therefore, if an i2c device is used for the
-> restart, the xfer should be atomic. This avoids warnings like:
-> 
-> [   12.667612] WARNING: CPU: 1 PID: 1 at kernel/rcu/tree_plugin.h:318 rcu_note_context_switch+0x33c/0x6b0
-> [   12.676926] Voluntary context switch within RCU read-side critical section!
-> ...
-> [   12.742376]  schedule_timeout from wait_for_completion_timeout+0x90/0x114
-> [   12.749179]  wait_for_completion_timeout from tegra_i2c_wait_completion+0x40/0x70
-> ...
-> [   12.994527]  atomic_notifier_call_chain from machine_restart+0x34/0x58
-> [   13.001050]  machine_restart from panic+0x2a8/0x32c
-> 
-> Use !preemptible() instead, which is basically the same check as
-> pre-v5.2.
-> 
-> Fixes: bae1d3a05a8b ("i2c: core: remove use of in_atomic()")
-> Cc: stable@vger.kernel.org # v5.2+
-> Suggested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> Acked-by: Wolfram Sang <wsa@kernel.org>
-> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
+Vladimir Oltean <vladimir.oltean@nxp.com> writes:
+
+> To be able to use netdevsim for tc-testing with an offloaded tc-taprio
+> schedule, it needs to report a PTP clock (which it now does), and to
+> accept ndo_setup_tc(TC_SETUP_QDISC_TAPRIO) calls.
+>
+> Since netdevsim has no packet I/O, this doesn't do anything intelligent,
+> it only allows taprio offload code paths to go through some level of
+> automated testing.
+>
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 > ---
->  drivers/i2c/i2c-core.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/i2c-core.h b/drivers/i2c/i2c-core.h
-> index 1247e6e6e975..05b8b8dfa9bd 100644
-> --- a/drivers/i2c/i2c-core.h
-> +++ b/drivers/i2c/i2c-core.h
-> @@ -29,7 +29,7 @@ int i2c_dev_irq_from_resources(const struct resource *resources,
->   */
->  static inline bool i2c_in_atomic_xfer_mode(void)
->  {
-> -	return system_state > SYSTEM_RUNNING && irqs_disabled();
-> +	return system_state > SYSTEM_RUNNING && !preemptible();
+> v1->v2: patch is new
+>
+>  drivers/net/netdevsim/netdev.c | 27 +++++++++++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+>
+> diff --git a/drivers/net/netdevsim/netdev.c b/drivers/net/netdevsim/netdev.c
+> index 58cd51de5b79..e26be4bd0d90 100644
+> --- a/drivers/net/netdevsim/netdev.c
+> +++ b/drivers/net/netdevsim/netdev.c
+> @@ -209,6 +209,31 @@ static int nsim_set_vf_link_state(struct net_device *dev, int vf, int state)
+>  	return 0;
 >  }
 >  
->  static inline int __i2c_lock_bus_helper(struct i2c_adapter *adap)
-> 
+> +static void nsim_taprio_stats(struct tc_taprio_qopt_stats *stats)
+> +{
+> +	stats->window_drops = 0;
+> +	stats->tx_overruns = 0;
+> +}
+> +
+> +static int nsim_setup_tc_taprio(struct net_device *dev,
+> +				struct tc_taprio_qopt_offload *offload)
+> +{
+> +	int err = 0;
+> +
+> +	switch (offload->cmd) {
+> +	case TAPRIO_CMD_REPLACE:
+> +	case TAPRIO_CMD_DESTROY:
+> +		break;
+
+I was thinking about how useful would proper validation of the
+parameters be? Thinking that we could detect "driver API" breakages
+earlier, and we want it documented that the drivers should check for the
+things that it supports.
+
+Makes sense?
+
+> +	case TAPRIO_CMD_STATS:
+> +		nsim_taprio_stats(&offload->stats);
+> +		break;
+> +	default:
+> +		err = -EOPNOTSUPP;
+> +	}
+> +
+> +	return err;
+> +}
+> +
+>  static LIST_HEAD(nsim_block_cb_list);
+>  
+>  static int
+> @@ -217,6 +242,8 @@ nsim_setup_tc(struct net_device *dev, enum tc_setup_type type, void *type_data)
+>  	struct netdevsim *ns = netdev_priv(dev);
+>  
+>  	switch (type) {
+> +	case TC_SETUP_QDISC_TAPRIO:
+> +		return nsim_setup_tc_taprio(dev, type_data);
+>  	case TC_SETUP_BLOCK:
+>  		return flow_block_cb_setup_simple(type_data,
+>  						  &nsim_block_cb_list,
 > -- 
 > 2.34.1
-> 
-Tested-by: Nishanth Menon <nm@ti.com>
+>
 
-This in addition to a deeper bug in our driver seems to have helped
-resolve a report we had been looking at. Tested on beagleplay platform
-
-https://lore.kernel.org/all/ZGeHMjlnob2GFyHF@francesco-nb.int.toradex.com/
-
+Cheers,
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+Vinicius
