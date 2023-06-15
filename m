@@ -2,52 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC076730C88
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 03:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31246730C8F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 03:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234940AbjFOBRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 21:17:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35578 "EHLO
+        id S230487AbjFOBYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 21:24:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjFOBR1 (ORCPT
+        with ESMTP id S229516AbjFOBYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 21:17:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3671FD2;
-        Wed, 14 Jun 2023 18:17:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DC8161200;
-        Thu, 15 Jun 2023 01:17:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5D52C433C0;
-        Thu, 15 Jun 2023 01:17:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686791845;
-        bh=jC/V/5wTuDMjSNiSOnA5excD/Pg4jzWuQwRXLi7lZ5Q=;
-        h=Date:From:To:Cc:Subject:From;
-        b=LNn3r6SsDlIceMsugdzXzyHk9WrMjwzuxupyyplrVHyioNpMJdpql/gLeE+cky74M
-         7/gIN433a9Az+BryjDhdebV9l6Mnw4rB9+iqI6K5ce3PdjuOyjyiwgS3o4L1jcdmQY
-         t9PY3TpynCOtMjyn4mXp6Wga7IIu/2AZoBsp29aMD6JYTeKrrQppEc0MFMTKtgNwMF
-         krwRXUZxh2Vchb79SSKMEvvLrj7xm3Q1Tb5PktEXXLDaadwmoVq5AWvQv4qwKOV4hQ
-         Rs0JFIB02Mjw2n30gUblEh4OxBCw19+eCBmlKcuJ9iIvOLsYjFdW3V8a5voebM/9Ed
-         mRzHWmC4lfCxA==
-Date:   Wed, 14 Jun 2023 19:18:22 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] cgroup: Avoid -Wstringop-overflow warnings
-Message-ID: <ZIpm3pcs3iCP9UaR@work>
+        Wed, 14 Jun 2023 21:24:13 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE6A212D;
+        Wed, 14 Jun 2023 18:24:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686792252; x=1718328252;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ojIx/BgoPnAG/VR6HR7v1/Oou2aRENR+NAqwetBhTFY=;
+  b=BnwzD443j9Y3ALBhmtJ8A5k69AcxeL1R9y9d+k1nnv7LKdWqsbyWGoX4
+   xAyN2G/rfKtZUQOvzVNfqbvP1phZTmu+9yYruSMSJRDiznwhIYDPDTuL/
+   IAZXSGBvonwYVz2FpPlrvEw7ZzlWI2xKNmMasCjhhWhhS27IoJ9SgmiTb
+   rnO48pOETzqmrc8QI9Sae9XgzUxOOPJX0LN3cLJzcfzb2R2jJuI/1FHOC
+   jylLMA1DgGHBJ1ML3LUxTPydRixD0i5y0itquBaq9OSbclggcdGTeQWrk
+   zbRAd6LMY5jLC6Lr70txWLA64j7lAGCIc/mnKGUtp17zgxhDjDAh0fUNW
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="445149393"
+X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
+   d="scan'208";a="445149393"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 18:24:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="745291067"
+X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
+   d="scan'208";a="745291067"
+Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 14 Jun 2023 18:24:06 -0700
+Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q9biX-0001Fx-18;
+        Thu, 15 Jun 2023 01:24:05 +0000
+Date:   Thu, 15 Jun 2023 09:22:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dmitry Safonov <dima@arista.com>, David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dmitry Safonov <dima@arista.com>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Bob Gilligan <gilligan@arista.com>,
+        Dan Carpenter <error27@gmail.com>,
+        David Laight <David.Laight@aculab.com>,
+        Donald Cassidy <dcassidy@redhat.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Francesco Ruggeri <fruggeri05@gmail.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Ivan Delalande <colona@arista.com>,
+        Leonard Crestez <cdleonard@gmail.com>,
+        Salam Noureddine <noureddine@arista.com>
+Subject: Re: [PATCH v7 08/22] net/tcp: Add AO sign to RST packets
+Message-ID: <202306150911.gIaFpxg9-lkp@intel.com>
+References: <20230614230947.3954084-9-dima@arista.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230614230947.3954084-9-dima@arista.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,46 +83,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Address the following -Wstringop-overflow warnings seen when
-built with ARM architecture and aspeed_g4_defconfig configuration
-(notice that under this configuration CGROUP_SUBSYS_COUNT == 0):
-kernel/cgroup/cgroup.c:1208:16: warning: 'find_existing_css_set' accessing 4 bytes in a region of size 0 [-Wstringop-overflow=]
-kernel/cgroup/cgroup.c:1258:15: warning: 'css_set_hash' accessing 4 bytes in a region of size 0 [-Wstringop-overflow=]
-kernel/cgroup/cgroup.c:6089:18: warning: 'css_set_hash' accessing 4 bytes in a region of size 0 [-Wstringop-overflow=]
-kernel/cgroup/cgroup.c:6153:18: warning: 'css_set_hash' accessing 4 bytes in a region of size 0 [-Wstringop-overflow=]
+Hi Dmitry,
 
-These changes are based on commit d20d30ebb199 ("cgroup: Avoid compiler
-warnings with no subsystems").
+kernel test robot noticed the following build warnings:
 
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- kernel/cgroup/cgroup.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+[auto build test WARNING on b6dad5178ceaf23f369c3711062ce1f2afc33644]
 
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index cd497b90e11a..1ee76e62eb98 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -1200,6 +1200,9 @@ static struct css_set *find_css_set(struct css_set *old_cset,
- 	unsigned long key;
- 	int ssid;
- 
-+	if (!CGROUP_HAS_SUBSYS_CONFIG)
-+		return NULL;
-+
- 	lockdep_assert_held(&cgroup_mutex);
- 
- 	/* First see if we already have a cgroup group that matches
-@@ -6045,6 +6048,9 @@ int __init cgroup_init(void)
- 	struct cgroup_subsys *ss;
- 	int ssid;
- 
-+	if (!CGROUP_HAS_SUBSYS_CONFIG)
-+		return -EINVAL;
-+
- 	BUILD_BUG_ON(CGROUP_SUBSYS_COUNT > 16);
- 	BUG_ON(cgroup_init_cftypes(NULL, cgroup_base_files));
- 	BUG_ON(cgroup_init_cftypes(NULL, cgroup_psi_files));
+url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Safonov/net-tcp-Prepare-tcp_md5sig_pool-for-TCP-AO/20230615-071334
+base:   b6dad5178ceaf23f369c3711062ce1f2afc33644
+patch link:    https://lore.kernel.org/r/20230614230947.3954084-9-dima%40arista.com
+patch subject: [PATCH v7 08/22] net/tcp: Add AO sign to RST packets
+config: i386-randconfig-r021-20230612 (https://download.01.org/0day-ci/archive/20230615/202306150911.gIaFpxg9-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build):
+        git checkout b6dad5178ceaf23f369c3711062ce1f2afc33644
+        b4 shazam https://lore.kernel.org/r/20230614230947.3954084-9-dima@arista.com
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/ipv6/
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306150911.gIaFpxg9-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   net/ipv6/tcp_ipv6.c: In function 'tcp_v6_send_reset':
+>> net/ipv6/tcp_ipv6.c:1136:1: warning: label 'out' defined but not used [-Wunused-label]
+    1136 | out:
+         | ^~~
+
+
+vim +/out +1136 net/ipv6/tcp_ipv6.c
+
+2045a93527d963 Dmitry Safonov           2023-06-15  1110  
+c24b14c46bb88d Song Liu                 2017-10-23  1111  	if (sk) {
+c24b14c46bb88d Song Liu                 2017-10-23  1112  		oif = sk->sk_bound_dev_if;
+052e0690f1f62f Eric Dumazet             2019-07-10  1113  		if (sk_fullsock(sk)) {
+052e0690f1f62f Eric Dumazet             2019-07-10  1114  			const struct ipv6_pinfo *np = tcp_inet6_sk(sk);
+052e0690f1f62f Eric Dumazet             2019-07-10  1115  
+c24b14c46bb88d Song Liu                 2017-10-23  1116  			trace_tcp_send_reset(sk, skb);
+052e0690f1f62f Eric Dumazet             2019-07-10  1117  			if (np->repflow)
+052e0690f1f62f Eric Dumazet             2019-07-10  1118  				label = ip6_flowlabel(ipv6h);
+e9a5dceee56cb5 Eric Dumazet             2019-09-24  1119  			priority = sk->sk_priority;
+dc6456e938e938 Antoine Tenart           2023-04-27  1120  			txhash = sk->sk_txhash;
+052e0690f1f62f Eric Dumazet             2019-07-10  1121  		}
+f6c0f5d209fa80 Eric Dumazet             2019-09-24  1122  		if (sk->sk_state == TCP_TIME_WAIT) {
+50a8accf10627b Eric Dumazet             2019-06-05  1123  			label = cpu_to_be32(inet_twsk(sk)->tw_flowlabel);
+f6c0f5d209fa80 Eric Dumazet             2019-09-24  1124  			priority = inet_twsk(sk)->tw_priority;
+9258b8b1be2e1e Eric Dumazet             2022-09-22  1125  			txhash = inet_twsk(sk)->tw_txhash;
+f6c0f5d209fa80 Eric Dumazet             2019-09-24  1126  		}
+323a53c41292a0 Eric Dumazet             2019-06-05  1127  	} else {
+a346abe051bd2b Eric Dumazet             2019-07-01  1128  		if (net->ipv6.sysctl.flowlabel_reflect & FLOWLABEL_REFLECT_TCP_RESET)
+323a53c41292a0 Eric Dumazet             2019-06-05  1129  			label = ip6_flowlabel(ipv6h);
+c24b14c46bb88d Song Liu                 2017-10-23  1130  	}
+c24b14c46bb88d Song Liu                 2017-10-23  1131  
+e92dd77e6fe0a3 Wei Wang                 2020-09-08  1132  	tcp_v6_send_response(sk, skb, seq, ack_seq, 0, 0, 0, oif, key, 1,
+2045a93527d963 Dmitry Safonov           2023-06-15  1133  			     ipv6_get_dsfield(ipv6h), label, priority, txhash,
+2045a93527d963 Dmitry Safonov           2023-06-15  1134  			     ao_key, traffic_key, rcv_next, ao_sne);
+658ddaaf6694ad Shawn Lu                 2012-01-31  1135  
+3b24d854cb3538 Eric Dumazet             2016-04-01 @1136  out:
+658ddaaf6694ad Shawn Lu                 2012-01-31  1137  	rcu_read_unlock();
+ecc51b6d5ca04b Arnaldo Carvalho de Melo 2005-12-12  1138  }
+^1da177e4c3f41 Linus Torvalds           2005-04-16  1139  
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
