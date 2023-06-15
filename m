@@ -2,144 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 221CC731932
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:50:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35817731936
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:51:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245471AbjFOMui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 08:50:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48434 "EHLO
+        id S239871AbjFOMu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 08:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239033AbjFOMug (ORCPT
+        with ESMTP id S239033AbjFOMu4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 08:50:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D40A2126;
-        Thu, 15 Jun 2023 05:50:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CCA23625F0;
-        Thu, 15 Jun 2023 12:50:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBA46C433C8;
-        Thu, 15 Jun 2023 12:50:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686833434;
-        bh=9C0lIysBzhK2NDkLZ8zuWOZP34c6lCF4sNn1JWvzNkc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Yh4oUiVoqClwbgiExl0clwXIAhBdc+EGfyc1pP8k5YyWihS/NjiHOyXPKOW1APa+0
-         jO7L1bcu4ev6Hr9gPCVFxpMPK0L2ECM7+HUo1gVyMTWF669az9mbhAE+ACBvJochTz
-         zhZVopAKEqBqa96MZ0tFFhKfstjFskNC9/t1nZQU=
-Date:   Thu, 15 Jun 2023 14:50:31 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-Subject: Re: [PATCH V23 2/3] misc: dcc: Add driver support for Data Capture
- and Compare unit(DCC)
-Message-ID: <2023061515-unbuckled-consonant-e207@gregkh>
-References: <cover.1683265984.git.quic_schowdhu@quicinc.com>
- <2259ab0348282349e88905ea99bcb4aa815d941f.1683265984.git.quic_schowdhu@quicinc.com>
- <2023061542-reformed-unholy-10a3@gregkh>
- <cc9750f3-c85c-be7f-e63c-0fcf4eb160f0@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cc9750f3-c85c-be7f-e63c-0fcf4eb160f0@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 15 Jun 2023 08:50:56 -0400
+Received: from zg8tmtu5ljg5lje1ms4xmtka.icoremail.net (zg8tmtu5ljg5lje1ms4xmtka.icoremail.net [159.89.151.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 30B9A2126
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 05:50:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fudan.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+        Message-Id; bh=iJw8F+Y4aVx+d+Ckq+S6NcFQ7LcDhQJeExf86hEVhuY=; b=e
+        nHOwDDXvtGQ4c13ap5LXt1dbtce6chVTgWjdrhlVK6Ez6OCJP9IjuHYKWizjGk1q
+        yOcWQo+nwNrFnotuQz675tNwK7nvR51EKvUJ84M3qjZhGnh1diLFRFbV7L4x6rSo
+        7S7uha3Xi05XlG6geox0vsCLMrdZbBjGCg3oq7ncfM=
+Received: from ubuntu.localdomain (unknown [183.157.8.87])
+        by app2 (Coremail) with SMTP id XQUFCgC3vcEqCYtk5GchAQ--.63893S2;
+        Thu, 15 Jun 2023 20:50:50 +0800 (CST)
+From:   Chenyuan Mi <cymi20@fudan.edu.cn>
+To:     axboe@kernel.dk
+Cc:     sml.silence@gmail.com, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Chenyuan Mi <cymi20@fudan.edu.cn>
+Subject: [PATCH] tools/io_uring: Fix missing check for return value of malloc()
+Date:   Thu, 15 Jun 2023 05:50:45 -0700
+Message-Id: <20230615125045.125172-1-cymi20@fudan.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: XQUFCgC3vcEqCYtk5GchAQ--.63893S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrurWkuw1kZw48ZFyxXr4rAFb_yoW3uFX_uF
+        n7WryDWr93KrZ2yF1qkr48Xry8GF43AF109Fsxtr13JF13CaykWFyDXrn5CF1fXr1q9FW5
+        AFZ8G343G3429jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbsAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr1j
+        6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAG
+        YxC7MxkIecxEwVAFwVW5JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
+        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
+        wI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
+        v20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2
+        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
+        UI43ZEXa7VUjsYFtUUUUU==
+X-CM-SenderInfo: isqsiiisuqikmt6i3vldqovvfxof0/
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 06:13:53PM +0530, Souradeep Chowdhury wrote:
-> 
-> 
-> On 6/15/2023 4:03 PM, Greg Kroah-Hartman wrote:
-> > On Thu, May 04, 2023 at 11:36:22PM -0700, Souradeep Chowdhury wrote:
-> > > +/**
-> > > + * struct dcc_config_entry - configuration information related to each dcc instruction
-> > > + * @base:                    Base address of the register to be configured in dcc
-> > 
-> > Why is this a u32 and not a bigger size?
-> 
-> Currently only 32 bit register addresses are supported for DCC
-> configuration.
-> 
-> > 
-> > > + * @offset:                  Offset to the base address to be configured in dcc
-> > > + * @len:                     Length of the address in words to be configured in dcc
-> > 
-> > What is a "word" here, 16 bits?
-> 
-> Each word is 4 bytes(32 bits)
+The malloc() function may return NULL when it fails,
+which may cause null pointer deference in kmalloc(),
+add Null check for return value of malloc().
 
-See, I guess wrong, you should say what this is :)
+Found by our static analysis tool.
 
-> > > + * @loop_cnt:                The number of times to loop on the register address in case
-> > > +				of loop instructions
-> > > + * @write_val:               The value to be written on the register address in case of
-> > > +				write instructions
-> > > + * @mask:                    Mask corresponding to the value to be written in case of
-> > > +				write instructions
-> > > + * @apb_bus:                 Type of bus to be used for the instruction, can be either
-> > > +				'apb' or 'ahb'
-> > 
-> > How can a bool be either "apb" or "ahb"?
-> 
-> 1 stands for apb and 0 for ahb. Will update the same here.
+Signed-off-by: Chenyuan Mi <cymi20@fudan.edu.cn>
+---
+ tools/io_uring/io_uring-bench.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Why not have an enum?  Will there ever be another "bus"?
+diff --git a/tools/io_uring/io_uring-bench.c b/tools/io_uring/io_uring-bench.c
+index 7703f0118385..a7fedfdb9b84 100644
+--- a/tools/io_uring/io_uring-bench.c
++++ b/tools/io_uring/io_uring-bench.c
+@@ -560,6 +560,11 @@ int main(int argc, char *argv[])
+ 	pthread_create(&s->thread, NULL, submitter_fn, s);
+ 
+ 	fdepths = malloc(8 * s->nr_files);
++	if (!fdepths) {
++		printf("malloc failed");
++		return 1;
++	}
++
+ 	reap = calls = done = 0;
+ 	do {
+ 		unsigned long this_done = 0;
+-- 
+2.17.1
 
-> > > +static ssize_t ready_read(struct file *filp, char __user *userbuf,
-> > > +			  size_t count, loff_t *ppos)
-> > > +{
-> > > +	int ret = 0;
-> > > +	char *buf;
-> > > +	struct dcc_drvdata *drvdata = filp->private_data;
-> > > +
-> > > +	mutex_lock(&drvdata->mutex);
-> > > +
-> > > +	if (!is_dcc_enabled(drvdata)) {
-> > > +		ret = -EINVAL;
-> > > +		goto out_unlock;
-> > > +	}
-> > > +
-> > > +	if (!FIELD_GET(BIT(1), readl(drvdata->base + dcc_status(drvdata->mem_map_ver))))
-> > > +		buf = "Y\n";
-> > > +	else
-> > > +		buf = "N\n";
-> > > +out_unlock:
-> > > +	mutex_unlock(&drvdata->mutex);
-> > > +
-> > > +	if (ret < 0)
-> > > +		return -EINVAL;
-> > > +	else
-> > 
-> > You do the "lock, get a value, unlock, do something with the value"
-> > thing a bunch, but what prevents the value from changing after the lock
-> > happens?  So why is the lock needed at all?
-> 
-> The lock is used to prevent concurrent accesses of the drv_data when
-> scripts are being run from userspace.
-
-How would that matter?  The state can change instantly after the lock is
-given up, and then the returned value is now incorrect.  So no need for
-a lock at all as you really aren't "protecting" anything, or am I
-missing something else?
-
-thanks,
-
-greg k-h
