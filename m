@@ -2,96 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 707A173211C
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 22:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 389F3732129
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 22:56:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbjFOUzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 16:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52218 "EHLO
+        id S232322AbjFOU4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 16:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjFOUzL (ORCPT
+        with ESMTP id S229921AbjFOU4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 16:55:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F37826AA
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 13:55:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 34B736144A
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 20:55:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B77ABC433C8;
-        Thu, 15 Jun 2023 20:55:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686862509;
-        bh=EnxEUlqn+J/nPD5pYPbVvgaiUr+J0w36obkpgcW6z3Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LrEYaJ4ZGXTIAz5yOg05F+KhyePCb+8dETrP39NHQGBefpSm863+WF7RZoiwlWigm
-         psQD6OTPUiNT0PaxsumnUI+v5s7+Rk9cL0b3knlHo2YButXsSoLaqNU/FyQbFFbZxk
-         oo6ftaWEhaz2cXOEYGirW2WRaJjkBuB5Hy4wnu1x4QqwCWc5TXZo28hNbqo2vP9MKG
-         VTKHkRTaytagsy2snj7tQuLxmNvACCd/GtYXLc4sux+yE27ZOD9LUL/kpE3B1ADIS/
-         X0Pi/su/uuhE5DiMXt7X+kDi6lzxqUhFgmCVFZ8wu5/jkNitl2X0EK2TrEg0j7sunj
-         VJw6yfxTsQHDA==
-Date:   Thu, 15 Jun 2023 21:55:05 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Konrad Dybcio <konradybcio@kernel.org>
-Cc:     lkml <linux-kernel@vger.kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Subject: Re: [PATCH] regmap: Check for register readability before checking
- cache during read
-Message-ID: <274a7a7c-ca6c-44fe-8f7a-e19aaf86a86a@sirena.org.uk>
-References: <20230613-b4-regmap-check-readability-before-cache-v1-1-b144c0b01ed9@kernel.org>
- <ea63420a-a08d-3610-b01f-61dabe56d2df@kernel.org>
+        Thu, 15 Jun 2023 16:56:36 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC212270B;
+        Thu, 15 Jun 2023 13:56:35 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f8d0d684f3so22697335e9.2;
+        Thu, 15 Jun 2023 13:56:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686862594; x=1689454594;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dgV1It5yzYqbMebPqzMnKIWLU3rEcZIgopMZAjPAt2g=;
+        b=DfQBDDXzeQsp+dF++eEaRIp0slv3S+MuToAvwrWA4o8RaqsNOPU3dO12qNVpNiMUZd
+         w/AbZyCDBx9VkQmkBqIAW43KrUvKMG/5HcAogWc3WIuZoh92crMTJkg424oVNhStKJhs
+         /36r0RC7bjsil2vjJL0ew8kyY+ODbPuQeAoznYGUXWM6PQ8iw7/OeKdW1QKucxLmWfO0
+         /DTVek8mtZuPrKZeRuceiS9OMTvn4W1XHTZGCIo9Jjs4ZDycqwzKpJh4tEl1yWeQ3ch3
+         42/XrViLVuinuhSuXMGc4ADjsNR1lpf7Bv4d8JvUf3xfYl+9xZmiy9c0rvpFge6L+tRi
+         x+cA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686862594; x=1689454594;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dgV1It5yzYqbMebPqzMnKIWLU3rEcZIgopMZAjPAt2g=;
+        b=VinO9yTjN7eNhGJjJOvOZMrET/ayG1GaYEbXTAuwWWRqI3jHxoU6D0Sqe6Datm3yfv
+         bPk+9Jk139n1w61HobGzsUNn3HuKcyuYY2j9oLHMVHqcu8VvnWJ+P/ifIw7vS/hpvDwS
+         TMoBSA7+B/PRuJoNc+RCkBOAfjDDp6lB6Vlu3VMJd3K9AmIvjIcHepmeFeUGK1qcnGrG
+         YBAORB72zFBNpBtStNmnCZLtxvFWRItT4GLqjoDfnn+tSAnwLWqDzStepUeQaqOo8+yR
+         zP/9A/0NWIzYknNTKuk0kKpIrS0zUuWmU+5//Q3n/bz9JYo4iMF/MRrE1bh3KiZCcSrg
+         O3OA==
+X-Gm-Message-State: AC+VfDzGpu5GsTyk81+bQscwemj8BR1oT+vYfrvrGY2Svm0TNZodYXrf
+        Y8f/tJLKlmr2iZMoKwD2e0rFBiEfT8EL103X
+X-Google-Smtp-Source: ACHHUZ6W9+N2LhPksahWf6LEg4rQS8jsG3asSDIAPSQi11bN0szlV4/qXoCKy5Vuplfx3AeLUNmG9A==
+X-Received: by 2002:a7b:ce92:0:b0:3f7:3074:d2f2 with SMTP id q18-20020a7bce92000000b003f73074d2f2mr213658wmj.34.1686862593604;
+        Thu, 15 Jun 2023 13:56:33 -0700 (PDT)
+Received: from user-PC.. ([92.51.95.194])
+        by smtp.gmail.com with ESMTPSA id k24-20020a7bc318000000b003f733c1129fsm176372wmj.33.2023.06.15.13.56.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 13:56:33 -0700 (PDT)
+From:   Maksim Kiselev <bigunclemax@gmail.com>
+To:     linux-iio@vger.kernel.org
+Cc:     Maksim Kiselev <bigunclemax@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        =?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Ramona Bolboaca <ramona.bolboaca@analog.com>,
+        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Haibo Chen <haibo.chen@nxp.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: [PATCH v7 0/3] Add support for Allwinner GPADC on D1/T113s/R329/T507 SoCs
+Date:   Thu, 15 Jun 2023 23:55:19 +0300
+Message-Id: <20230615205540.1803975-1-bigunclemax@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pWr7QM6a1Q/bnGPH"
-Content-Disposition: inline
-In-Reply-To: <ea63420a-a08d-3610-b01f-61dabe56d2df@kernel.org>
-X-Cookie: You are false data.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series adds support for general purpose ADC (GPADC) on new
+Allwinner's SoCs, such as D1, T113s, T507 and R329. The implemented driver
+provides basic functionality for getting ADC channels data.
 
---pWr7QM6a1Q/bnGPH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Change History:
+v7:
+- Fixed typo in DT bindings property
 
-On Thu, Jun 15, 2023 at 10:45:53PM +0200, Konrad Dybcio wrote:
-> On 13.06.2023 22:07, Mark Brown wrote:
-> > Ensure that we don't return a spurious cache hit for unreadable registers
-> > (eg, with the flat cache which doesn't understand sparseness) by checking
-> > for readability before we do a cache lookup.
+v6:
+- Fixed DT bindings regexp for channel properties
+- Dropped checking the max number of channels from the drivers code
+  (This is redundant as we raly on DT bindings check)
 
-> this patch breaks using regmap_field_force_write() on fields that are
-> parts of registers marked as write-only (e.g. by regmap_access_table.no_ranges)
+v5:
+- Fixed DT bindings properties for child nodes
 
-> Is that intended?
+v4:
+- Fixed DT bindings warnings
+- Used GENMASK to clear the irq register
+- Minor formatting fixes
 
-> What's the recommended fix?
+v3:
+- Added DT bindings dual license, fixed property order and example formatting
+- Added explanations comments for timeout and mutex
+- Dropped unnecessary regmap and used readl/writel instead
+- Added error message about getting channel number
+- Renamed labels and variables to make them self-explanatory
 
-Ugh, let's just drop it - it's just an optimisation.
+v2:
+- Added lastch flag to avoid addition work for already selected channel
+- Added reset assertion on module remove
+- Added dynamic channel allocation and dropped iio_chan_spec arrays
+- Changed IIO_CHAN_INFO_SCALE type to FRACTIONAL_LOG2
+- Dropped separate compatible strings and configs for T113s and R329
+- Fixed includes
+- Fixed Kconfig description
+- Removed duplicate probe error messages
+- Used FIELD_PREP for bit setup
 
---pWr7QM6a1Q/bnGPH
-Content-Type: application/pgp-signature; name="signature.asc"
+v1:
+- Initial version
 
------BEGIN PGP SIGNATURE-----
+Maksim Kiselev (3):
+  iio: adc: Add Allwinner D1/T113s/R329/T507 SoCs GPADC
+  dt-bindings: iio: adc: Add Allwinner D1/T113s/R329/T507 SoCs GPADC
+  riscv: dts: allwinner: d1: Add GPADC node
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSLeqgACgkQJNaLcl1U
-h9APfgf+NgEsBtwozjnOrmA9FCn/MC2Rx1p/fIKyit0rpv0+2i25lZqwWHoRZ3uu
-nErEQ2Fif8fWFNpSVSzyBuBrI2Q4se+C+Huoi/G51jEo1jlgNB1WyA68aewFWguD
-QHXRi1Vt5COUYZMDhAZC4/4V9Lxx3FVe8317YIOwGDiDSacuyh+1+9SpBvimX5rj
-apGeYx5rTM74nKIZQMNncpu2oIVZ86HpjDdWpUJy9tDu4oiHPqdRGfv0/FBwm3gV
-5Vui/RlF0HApanO13Fe34jqIlgByb2S8J+ZRyKDufmM8BN1JGPjJwmPVr1wjyjzI
-hJ1u/bPENJQsOi7vlpOwIvHIE3vqoQ==
-=dxCs
------END PGP SIGNATURE-----
+ .../iio/adc/allwinner,sun20i-d1-gpadc.yaml    |  91 ++++++
+ .../boot/dts/allwinner/sunxi-d1s-t113.dtsi    |  10 +
+ drivers/iio/adc/Kconfig                       |  10 +
+ drivers/iio/adc/Makefile                      |   1 +
+ drivers/iio/adc/sun20i-gpadc-iio.c            | 276 ++++++++++++++++++
+ 5 files changed, 388 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/adc/allwinner,sun20i-d1-gpadc.yaml
+ create mode 100644 drivers/iio/adc/sun20i-gpadc-iio.c
 
---pWr7QM6a1Q/bnGPH--
+-- 
+2.39.2
+
