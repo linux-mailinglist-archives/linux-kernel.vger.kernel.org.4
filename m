@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2448730F78
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EA13730F7A
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbjFOGgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 02:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47004 "EHLO
+        id S243848AbjFOGhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 02:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244085AbjFOGfr (ORCPT
+        with ESMTP id S229511AbjFOGgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 02:35:47 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB172683
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 23:34:59 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-3f9b4a656deso27076931cf.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 23:34:59 -0700 (PDT)
+        Thu, 15 Jun 2023 02:36:24 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404E02954
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 23:35:34 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-bc4651e3838so1395650276.2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 23:35:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686810899; x=1689402899;
+        d=linaro.org; s=google; t=1686810933; x=1689402933;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/Osb3NHaHcbl6NnPMZnsY5uVW1zjRONnhdL0JLfyutQ=;
-        b=gij5KXYx6V1YiXKkDtT40nStKeLM8ZaMp66xTuviaYT0jTvUfZAxKDvN+Q3IuVLaZQ
-         cGUBons3f8ve8XnCAA4gC3YVbdtn4G8NQT+dAoNpuQ1OxEdk6rkj8a4ENQ4VlzEPnWKF
-         yJqvyVbpX7vQbGx4pf76F08AnbS+LkCKdfj4uFwYSb4EChptSrZNb385LXneeAKnh1pC
-         vys1hiqghHgWz1XLLVS6bAM5DHxV2COapbslbZBgqiJu3pMEEbfS8NoNVtGlh1fjjCan
-         a+mQdAnioCdzgS6+hGeoUR69UHTmzniMM4kkNURXXrE5c8yVdv4mTHrT9GgvtmtdfcVo
-         N2tA==
+        bh=mLa/CgfA5d+DY9dHcSH8mgD5fq7VSZe7M+p4b8NWBtk=;
+        b=mOO3PT1WrOIELxCfG0i/4igVe8lGlVmiONDFNGZJww1D7bBlzYSX8f+qCa/pywNzfi
+         M9e/CsmBwE8P4k5DRomSLFLQe6BVS1mNS2cfoO0qRDcjOHKiQXqe73ct7Bh1Y0eCW+XW
+         W/d37IG3hZW9RHimYdL3QLyDWl19jt6mlZasQBHk8lDdf2YrorHexqvwLDh4B9hUhlMy
+         FJ47MJu08OVdGBXdPnQ7YJKdzQ2ab6tKrq5/wO1Q8vHXASp+dPnPpMSOgqcMUgidMoo6
+         IJXDsTSMz5ENji7oitLqwpI5+NxsGSqlv1aF6ZmyljRpGJMK4WvQmOdLw5VkhpAr84Xf
+         2eQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686810899; x=1689402899;
+        d=1e100.net; s=20221208; t=1686810933; x=1689402933;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/Osb3NHaHcbl6NnPMZnsY5uVW1zjRONnhdL0JLfyutQ=;
-        b=Qym40ygTL+Qs0pOt41SpANkzaQBR5d+ak9z2vF7fe56sSoHX04NYDUfxntTD1Y8PfJ
-         /35pndCTFbakrHq56jldPzBou2J2kQIYepUB3JxdqF151gJ8+XUpo6xiUJlwmTsdt4EE
-         MzQ+pTRKcKCv1HANRscvvDyRo6EDSZeutQfsTig9rKrevEfV7KZg9C2CQQtdUKDxH3eC
-         0bQOXYo/Sh+CpvNtfTWKzbbqePcA7DyyGrPorAYye6iuAIO+E0XnrFHkpfm4rTINUTpu
-         SvoIKmKRUzcVV76OHY7BdxlqqgrXcW6oS9vZhGgNey4rg65Bs05Lph+CCNxfc6V9yrgy
-         EAog==
-X-Gm-Message-State: AC+VfDyLAMWHWC7ku2uud+BIpklqttR8McOGLJvq/VUXAXiOdGZuiMmA
-        fJOAStsY4DJzDRrsrg2jCyajMJb/mG4rPvquY4ubsg==
-X-Google-Smtp-Source: ACHHUZ5Ep9Fae9D4n4GrZmxZA7yjHbSLwyf9azOApm4uHNJsqlX2RKN8q8jkbu8hCC6kFi6EwWoLnxwifTxyOBBscXw=
-X-Received: by 2002:a05:622a:13:b0:3f8:6924:a0b6 with SMTP id
- x19-20020a05622a001300b003f86924a0b6mr5128624qtw.50.1686810899049; Wed, 14
- Jun 2023 23:34:59 -0700 (PDT)
+        bh=mLa/CgfA5d+DY9dHcSH8mgD5fq7VSZe7M+p4b8NWBtk=;
+        b=OdZWHqBRhO1/iz0L8gHpJ6SghOFM7aGDA9fCJOdlfau6xv6boj8ur7hI3JyUyD7KFd
+         5nZ+dv+AlQgFxkvmdR1OKQi+gcdHPrp6yv7L+ECePaUvNCFxIlvk2T1AOheFKw6GbNRl
+         61V3LhCxtHEqYeJzYshgXkO1h2S9MziEf+moWufaSjYGLnSzpUCEZ9cQ/V6SHPT04mUd
+         ozuT12tShIl1BR2sxnF9O9Zag2gAQZgU8x++WDBIEV8LBQmKM++4vm1/4VLUlN+6xKKp
+         FIyzoHddzNK1LPlBi2dqRjpl868WeEZra9R9s7mbJEDCMNkbM5/u6DCg8SSFExe9/O87
+         zeow==
+X-Gm-Message-State: AC+VfDxFtY4kGWV87MsT5EoIvC+HZcTBataKgcRPUfqM2LL8BOUaLaFc
+        nS0QVdeNJHFtWsrJqMRTOTJQLTFj3azWL5y1Jnj9oA==
+X-Google-Smtp-Source: ACHHUZ6KaRkbHGBeRCY14mwoBp7/8GV+7bITlsqgluLuuuSPsdu6e9DJ8B0bf2xG0Q3aw+6W8iifIr7KRw7CeavtV+w=
+X-Received: by 2002:a25:dad4:0:b0:bab:b84b:e500 with SMTP id
+ n203-20020a25dad4000000b00babb84be500mr3985971ybf.33.1686810933468; Wed, 14
+ Jun 2023 23:35:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230614231446.3687-1-andriy.shevchenko@linux.intel.com> <20230614231446.3687-2-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230614231446.3687-2-andriy.shevchenko@linux.intel.com>
+References: <20230614231446.3687-1-andriy.shevchenko@linux.intel.com> <20230614231446.3687-3-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230614231446.3687-3-andriy.shevchenko@linux.intel.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 15 Jun 2023 08:34:48 +0200
-Message-ID: <CACRpkdZ3sEoN2_L+307ReEDGhNQgLknp6HNPpD0aVvzzrbOUiQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] gpio: aggregator: Remove CONFIG_OF and
- of_match_ptr() protections
+Date:   Thu, 15 Jun 2023 08:35:22 +0200
+Message-ID: <CACRpkday2jkyuZXWW_TNqWLZzsVJJ2dLUg=L1AJ8aMr0wta0DA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] gpio: aggregator: Support delay for setting up
+ individual GPIOs
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
         Alexander Stein <alexander.stein@ew.tq-group.com>,
@@ -77,9 +77,10 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Thu, Jun 15, 2023 at 1:14=E2=80=AFAM Andy Shevchenko
 <andriy.shevchenko@linux.intel.com> wrote:
 
-> They stop the driver being used with ACPI PRP0001 and are something
-> I want to avoid being cut and paste into new drivers. Also include
-> mod_devicetable.h as we struct of_device_id is defined in there.
+> In some cases the GPIO may require an additional delay after setting
+> its value. Add support for that into the GPIO forwarder code.
+>
+> This will be fully enabled for use in the following changes.
 >
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
