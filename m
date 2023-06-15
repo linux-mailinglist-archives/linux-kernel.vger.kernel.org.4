@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38BE47317BB
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:44:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01CD77317CE
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344590AbjFOLoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 07:44:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58644 "EHLO
+        id S1344505AbjFOLqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 07:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344512AbjFOLnw (ORCPT
+        with ESMTP id S1344480AbjFOLoP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 07:43:52 -0400
+        Thu, 15 Jun 2023 07:44:15 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E3144BD;
-        Thu, 15 Jun 2023 04:40:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B50E2D7E;
+        Thu, 15 Jun 2023 04:40:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 43029639E7;
-        Thu, 15 Jun 2023 11:40:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9774AC433CC;
-        Thu, 15 Jun 2023 11:40:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A9B063950;
+        Thu, 15 Jun 2023 11:40:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93E89C433C0;
+        Thu, 15 Jun 2023 11:40:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686829220;
-        bh=2ByIcyxnN5zggGi9AIVTkb8AfABO0oZ9oy71RHOyZwo=;
+        s=k20201202; t=1686829224;
+        bh=OUkPyFZ7YysV8myAgTggcb6E/Rexi/BkL/+tGbXZ0cE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fUWqrjdFQtcTuIIf7OwDgchu3niMuIb4rJOrMmHCZ7L1kM4YjVNTz5u/wZ+oc04vN
-         oWiQZ092nGie8x5N9+p29Z810SLizRKSFMI/hGC4GBWehCuYNvRL0MIJJ2/JTW/Mp5
-         zriPpHXHYEnzYFFpldpggEsFpvO9/ZD6kqCXqhTfdliab2KV7qThoKfQROTogStY2H
-         wsFMoPcQkwG7UdWZdAZRVlxrPbo7i98XhMeiWFgQNq9UfOwA2yiA7wSTCX7R0fXxxE
-         QNKOa+pPkcMfRbpC9bJDWY7l7szIoMriNtd6aD0O+GRsZUH1+TinkuJ8r6yOBTLdfE
-         YqyfVNDgwa3bg==
+        b=LZtmY8tUsZ7DBjir/BjNx6GYgH2ixuQp3tjAzVgkHOktW19FFuFDKPoWUyxNTE2Pz
+         evx++E5QN88a5D9CKU/Tmxn7sjKFxNnt1I/OM+LhiHVeo0V+GBI97CFWaydvtw8dRy
+         vZquqHQIC0eQ41PEtX0GYH8xP9jY1yh9Sl3Ry0Vr5/ECcVZAH5WZNE8Vol1yLUqewv
+         LNZi+7X9j3nLfJ+TFj/huQheXrUsn49ji45n8HRJdLAlgdK5GFE7tsaQZfhTO3+yW0
+         zAwHrwh2Eo+eqrPbGQ4+p5y+7GDN6kPi2sE5WC4b6g50j69AK9GyKBuMLPe6LY3IbL
+         iR8u7yCjS4AGA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Denis Arefev <arefev@swemel.ru>, Ping Cheng <ping.cheng@wacom.com>,
-        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>,
-        jason.gerecke@wacom.com, jikos@kernel.org,
-        benjamin.tissoires@redhat.com, linux-input@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 2/6] HID: wacom: Add error check to wacom_parse_and_register()
-Date:   Thu, 15 Jun 2023 07:40:10 -0400
-Message-Id: <20230615114016.649846-2-sashal@kernel.org>
+Cc:     Marc Zyngier <maz@kernel.org>, Cornelia Huck <cohuck@redhat.com>,
+        Steven Price <steven.price@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Sasha Levin <sashal@kernel.org>, catalin.marinas@arm.com,
+        will@kernel.org, broonie@kernel.org, james.morse@arm.com,
+        kristina.martsenko@arm.com, robh@kernel.org,
+        jintack.lim@linaro.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 4.14 3/6] arm64: Add missing Set/Way CMO encodings
+Date:   Thu, 15 Jun 2023 07:40:11 -0400
+Message-Id: <20230615114016.649846-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230615114016.649846-1-sashal@kernel.org>
 References: <20230615114016.649846-1-sashal@kernel.org>
@@ -60,42 +63,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Denis Arefev <arefev@swemel.ru>
+From: Marc Zyngier <maz@kernel.org>
 
-[ Upstream commit 16a9c24f24fbe4564284eb575b18cc20586b9270 ]
+[ Upstream commit 8d0f019e4c4f2ee2de81efd9bf1c27e9fb3c0460 ]
 
-   Added a variable check and
-   transition in case of an error
+Add the missing Set/Way CMOs that apply to tagged memory.
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
-
-Signed-off-by: Denis Arefev <arefev@swemel.ru>
-Reviewed-by: Ping Cheng <ping.cheng@wacom.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Reviewed-by: Cornelia Huck <cohuck@redhat.com>
+Reviewed-by: Steven Price <steven.price@arm.com>
+Reviewed-by: Oliver Upton <oliver.upton@linux.dev>
+Link: https://lore.kernel.org/r/20230515204601.1270428-2-maz@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/wacom_sys.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ arch/arm64/include/asm/sysreg.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/hid/wacom_sys.c b/drivers/hid/wacom_sys.c
-index 3d521f289984a..28e7a4950b74a 100644
---- a/drivers/hid/wacom_sys.c
-+++ b/drivers/hid/wacom_sys.c
-@@ -2251,8 +2251,13 @@ static int wacom_parse_and_register(struct wacom *wacom, bool wireless)
- 		goto fail_quirks;
- 	}
+diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+index 3bbf0dc5ecad0..78d6f4bf117d6 100644
+--- a/arch/arm64/include/asm/sysreg.h
++++ b/arch/arm64/include/asm/sysreg.h
+@@ -98,8 +98,14 @@
+ 				       (!!x)<<8 | 0x1f)
  
--	if (features->device_type & WACOM_DEVICETYPE_WL_MONITOR)
-+	if (features->device_type & WACOM_DEVICETYPE_WL_MONITOR) {
- 		error = hid_hw_open(hdev);
-+		if (error) {
-+			hid_err(hdev, "hw open failed\n");
-+			goto fail_quirks;
-+		}
-+	}
+ #define SYS_DC_ISW			sys_insn(1, 0, 7, 6, 2)
++#define SYS_DC_IGSW			sys_insn(1, 0, 7, 6, 4)
++#define SYS_DC_IGDSW			sys_insn(1, 0, 7, 6, 6)
+ #define SYS_DC_CSW			sys_insn(1, 0, 7, 10, 2)
++#define SYS_DC_CGSW			sys_insn(1, 0, 7, 10, 4)
++#define SYS_DC_CGDSW			sys_insn(1, 0, 7, 10, 6)
+ #define SYS_DC_CISW			sys_insn(1, 0, 7, 14, 2)
++#define SYS_DC_CIGSW			sys_insn(1, 0, 7, 14, 4)
++#define SYS_DC_CIGDSW			sys_insn(1, 0, 7, 14, 6)
  
- 	wacom_set_shared_values(wacom_wac);
- 	devres_close_group(&hdev->dev, wacom);
+ #define SYS_OSDTRRX_EL1			sys_reg(2, 0, 0, 0, 2)
+ #define SYS_MDCCINT_EL1			sys_reg(2, 0, 0, 2, 0)
 -- 
 2.39.2
 
