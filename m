@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A13127319F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86DB57319F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245579AbjFON3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 09:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40434 "EHLO
+        id S240321AbjFONaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 09:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244403AbjFON3D (ORCPT
+        with ESMTP id S1344154AbjFONaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 09:29:03 -0400
+        Thu, 15 Jun 2023 09:30:07 -0400
 Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0612944;
-        Thu, 15 Jun 2023 06:29:02 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35FDSuDv013982;
-        Thu, 15 Jun 2023 08:28:56 -0500
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80090271C;
+        Thu, 15 Jun 2023 06:30:05 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35FDU06H014196;
+        Thu, 15 Jun 2023 08:30:00 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1686835736;
-        bh=8uqd5e0vpRcZntkbZEhFTb+I4lBVzSNewxS1zEhY2SM=;
+        s=ti-com-17Q1; t=1686835800;
+        bh=2NMh/b/afTkBqtJlqpb9uOC9liEojj7j/JQOCJZX2e0=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=aqW60r0CWdU1tLZ0OG0kSAzH5epDWc35iEAatPxpi5KQTrQMDtlaMCN38j7ZnbyWQ
-         GK8qqxLoMZKhOrstWjU9m+eSOlWyBtG/lY4jrsFVxbSCmQVG6UyeedJl+24CyOWLoB
-         qeGtJfya5uaNA06IAkIEqLJ/mwJd91TWkcYFRAxI=
-Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35FDSuLp117815
+        b=pL7twuoLZgaCXyqsqNG0i1d7uvDJAHLfdfcN+LhEhYDt5yPnokvrDmLkQsa32YA3m
+         7onQH5HI+5+dtadXbz9MLooRQRYNBAo/PQZfXh1D1mZe/NhLLqCSbHbwb+w+tkUbMj
+         idm7D0UK1NtUdqWBEceg0xO+wrN5NiwRV2mSGF+Y=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35FDU0Vc056505
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 15 Jun 2023 08:28:56 -0500
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 15 Jun 2023 08:30:00 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 15
- Jun 2023 08:28:56 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ Jun 2023 08:29:59 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 15 Jun 2023 08:28:56 -0500
+ Frontend Transport; Thu, 15 Jun 2023 08:29:59 -0500
 Received: from uda0132425.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35FDSqkp067924;
-        Thu, 15 Jun 2023 08:28:53 -0500
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35FDTuKn092222;
+        Thu, 15 Jun 2023 08:29:57 -0500
 From:   Vignesh Raghavendra <vigneshr@ti.com>
-To:     Tero Kristo <kristo@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
+To:     <linux-arm-kernel@lists.infradead.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Thejasvi Konduru <t-konduru@ti.com>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>, Nishanth Menon <nm@ti.com>,
-        Andrew Davis <afd@ti.com>, Apurva Nandan <a-nandan@ti.com>,
-        Udit Kumar <u-kumar1@ti.com>
-Subject: Re: [PATCH] arm64: dts: ti: k3-j784s4: Fix wakeup pinmux range and pinctrl node offsets
-Date:   Thu, 15 Jun 2023 18:58:51 +0530
-Message-ID: <168682622740.2286657.4598600901991294366.b4-ty@ti.com>
+        Neha Malcom Francis <n-francis@ti.com>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>, <nm@ti.com>,
+        <kristo@kernel.org>
+Subject: Re: [PATCH] arm64: dts: ti: k3-j721s2: Change CPTS clock parent
+Date:   Thu, 15 Jun 2023 18:59:54 +0530
+Message-ID: <168681817156.2098323.5002450800685982754.b4-ty@ti.com>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230503083143.32369-1-t-konduru@ti.com>
-References: <20230503083143.32369-1-t-konduru@ti.com>
+In-Reply-To: <20230605110443.84568-1-n-francis@ti.com>
+References: <20230605110443.84568-1-n-francis@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -69,26 +67,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thejasvi Konduru,
+Hi Neha Malcom Francis,
 
-On Wed, 03 May 2023 14:01:43 +0530, Thejasvi Konduru wrote:
-> The wkup_pmx register region in j784s4 has multiple non-addressable
-> regions, hence the existing wkup_pmx region is split as follows to
-> avoid the non-addressable regions. The pinctrl node offsets are
-> also corrected as per the newly split wkup_pmx* nodes.
-> 
-> wkup_pmx0 -> 13 pins (WKUP_PADCONFIG 0 - 12)
-> wkup_pmx1 -> 11 pins (WKUP_PADCONFIG 14 - 24)
-> wkup_pmx2 -> 72 pins (WKUP_PADCONFIG 26 - 97)
-> wkup_pmx3 -> 1 pin (WKUP_PADCONFIG 100)
+On Mon, 05 Jun 2023 16:34:43 +0530, Neha Malcom Francis wrote:
+> MAIN_PLL0 has a flag set in DM (Device Manager) that removes it's
+> capability to re-initialise clock frequencies. CPTS and RGMII has
+> MAIN_PLL3 as their parent which does not have this flag. While RGMII
+> needs this reinitialisation to default frequency to be able to get
+> 250MHz with its divider, CPTS can not get its required 200MHz with its
+> divider. Thus, move CPTS clock parent on J721S2 from MAIN_PLL3_HSDIV1 to
+> MAIN_PLL0_HSDIV6.
 > 
 > [...]
 
 I have applied the following to branch ti-k3-dts-next on [1].
 Thank you!
 
-[1/1] arm64: dts: ti: k3-j784s4: Fix wakeup pinmux range and pinctrl node offsets
-      commit: 14462bd0b247d05070d48d0f02eb7ca2680ab7bd
+[1/1] arm64: dts: ti: k3-j721s2: Change CPTS clock parent
+      commit: 1f36d0e8be3ae7717c801e954275fba6247b2f46
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent up the chain during
