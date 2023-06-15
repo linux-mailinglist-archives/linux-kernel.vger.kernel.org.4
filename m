@@ -2,54 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCA5D7323C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 01:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DCC67323C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 01:44:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237085AbjFOXnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 19:43:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58278 "EHLO
+        id S236884AbjFOXoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 19:44:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjFOXm7 (ORCPT
+        with ESMTP id S229600AbjFOXoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 19:42:59 -0400
+        Thu, 15 Jun 2023 19:44:04 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7F32944
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 16:42:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62BF2951
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 16:44:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686872578; x=1718408578;
-  h=date:from:to:cc:subject:message-id;
-  bh=BJ/ssBNFgWM7KZS10OeD86abJ6flUdX01zEfyZEWLrA=;
-  b=IgaRbTpCb9zW1Jz21kqRAVVFbzriAB6nkFUIF5e4uqcw1SjZXi6Wyd/C
-   SyY0i6GGtA5BpxGBP9TzWejKVejdiY+Ueoe+1Fx1phFYpe15oTWAUlhE+
-   Fh5kONrpQ4glfZg0N8kqwRUeJi/DCppPCc67XqY9j31QfCWPXPilmkM8z
-   SOcDRYgoZVzLv+68NXZ2WG/2sgdu97bJFvQjHEQ8OFp1hEevIv3/wuAmB
-   IzOSFbmZ/rnntVv8cCX0+Y2h+eRQV95Zyw0SZAG7jsiS0cT8Kb6yxGYoD
-   bn0rfGUxPMtk/nKlP7BMvGA+GrHdEMiMIuxblVgSGRvTktW0m4q4e/Vrs
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="348775886"
+  t=1686872643; x=1718408643;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=XALUK8CxrqvXblZukmBJYltTIdhKDKAp+59PwWhfawg=;
+  b=B0RJUu4BZ8A3ltsT9ZGPzCg5Wj7sJuyysbMKKR/b1NZOjjushpIT6Tpa
+   SDmFHET0TXj6+TOonnfcY8wEK6xqbKl9AkmpeqKc5TDJdHrzbmxo/YHgk
+   XJyVU5rmBg+8iUB2NCrDsp03uGqrOFsBXEkSHyrm7478Uav8sTAt+OKj1
+   YY4j8tHVABWf/YJJ5mTMNdfD4sm9L2wEDoo99hhp+AXJnCMOM0Ko/bABs
+   1qYGeQWb8kK1ZRWydup5nJlYxPIJKdy077370Hgzd1tcSZeoT6JnX8DGH
+   dMDL60Rfq+8bk7wDLX+Zta5tTGNGQg42ZMJghIJ6D3zAUaGwZNduH35BC
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="348776054"
 X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="348775886"
+   d="scan'208";a="348776054"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 16:42:57 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 16:44:03 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="742430926"
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="742431326"
 X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="742430926"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 15 Jun 2023 16:42:56 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q9wcC-0000WP-0e;
-        Thu, 15 Jun 2023 23:42:56 +0000
-Date:   Fri, 16 Jun 2023 07:42:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:sched/core] BUILD SUCCESS
- 4b85308dac750b16bd273b0f4e9c9b478fbb886b
-Message-ID: <202306160716.H8tNgV4k-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+   d="scan'208";a="742431326"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga008.jf.intel.com with ESMTP; 15 Jun 2023 16:44:03 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 15 Jun 2023 16:44:02 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 15 Jun 2023 16:44:02 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Thu, 15 Jun 2023 16:44:02 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.44) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Thu, 15 Jun 2023 16:44:01 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CvCF54REskVT6UK7OlXFXxUY12diyAki7JGn1pzQGe+qSbBUAq8lbHlyE0xf146LHgoTevWRWPXoYkvhPlZtkNd+GP98K3t/DrwOBrFUwyhTEFNmjz8bUclhGv/OdG8pHZqm2suyhFoTUD9xupst2jM6wGQYYLbxOuJODEDZndWnIND9B9Ec8cFlevmYtqxyk/B2kXM+AiiWDTCoeJvzKOYGkvoAh2iBzG0TXrIPU0bpJ2+FVxg1ZK5RLdmCpzywReQWw0I37xo4Nn4XujfjC4qb4OQcM9H67DNuSEN7/51HCtB7fUusFL5FsR/p+LbZpEc9Gp8Rp1Me/M7pONetQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hFzgceNh2SIWfh9SoXFa0oz2A4RmsPd6ko5zanol178=;
+ b=QCwFAFpd//ERM83jE72fHCRph5OekjWVjXR3+RSCatx3MFZfdVNNR51UdD7+/SXMybmRcmidY/95Zu0SiQEyHxorUUO5NffoygOa1NXV56XRRq3K8UlHTlvZ0lkw6TlTYwqIS6+D7Mh+/uRIXxXOOf0lLGXDdzHhGje1l3KnvN52s0oiAbc2jIEKumy+e/nd1Q3yXA1bPZf3A3dO9VbkF7e/vRjBq+t0mbqU6d3TV8+ygVNKa1JXbWm4ebsD2CnQgj9x3h+Z8Fg6uk7MdVfIWFfLKf0v0aobV6hnYwOMo/hcuH2I+N9YQitmxm5WTHb8s/GUGywPansSXfwytRLE2A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from MW5PR11MB5881.namprd11.prod.outlook.com (2603:10b6:303:19d::14)
+ by BL1PR11MB5383.namprd11.prod.outlook.com (2603:10b6:208:318::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.25; Thu, 15 Jun
+ 2023 23:43:59 +0000
+Received: from MW5PR11MB5881.namprd11.prod.outlook.com
+ ([fe80::a284:d072:336c:f233]) by MW5PR11MB5881.namprd11.prod.outlook.com
+ ([fe80::a284:d072:336c:f233%4]) with mapi id 15.20.6477.037; Thu, 15 Jun 2023
+ 23:43:59 +0000
+From:   "Zhang, Tina" <tina.zhang@intel.com>
+To:     "Xu, Yanfei" <yanfei.xu@intel.com>,
+        "dwmw2@infradead.org" <dwmw2@infradead.org>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>
+CC:     "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Xu, Yanfei" <yanfei.xu@intel.com>
+Subject: RE: [PATCH] iommu/vt-d: Fix to flush cache of PASID directory table
+Thread-Topic: [PATCH] iommu/vt-d: Fix to flush cache of PASID directory table
+Thread-Index: AQHZn1m2Yu+6fSI1tEWmXm/q0t2Ghq+Mg/Aw
+Date:   Thu, 15 Jun 2023 23:43:59 +0000
+Message-ID: <MW5PR11MB5881C833CBC14D106DD9A8B5895BA@MW5PR11MB5881.namprd11.prod.outlook.com>
+References: <20230615071613.690639-1-yanfei.xu@intel.com>
+In-Reply-To: <20230615071613.690639-1-yanfei.xu@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW5PR11MB5881:EE_|BL1PR11MB5383:EE_
+x-ms-office365-filtering-correlation-id: 822d2485-4d6a-4c35-7a7c-08db6dfa6438
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 1OWjrXV/KUR4Uq5S3GqONMrMf8wnsHbWQcXWu+X4b2MsRlH0pCRmIWJhloYjkMjNZzxzYIZmtEYBqIQ9D9vOr+TAcoKWIfCi5O6q4rsi00gjuUvUe4mL9aAA/BAMmLu0Y0XbLuXsldASeH04qRCjQSoFn10DB0mujMsu+++PwrZUc7ZRYGtydt0I79TkHOKAg9IKW/NdA9GMqnL8Wzvkuelha6VLvHTKi0HvT9CdMQzChDQOogdOM0K1bvgisbk16zv3dtGKcE7U+31SDMzENN/s59pVHv7e1N7JpIy/RSWlslQ5+vr8XDAFseEHZcqGomeiaDzhVNLI0J6YZLsuSa3Y/BUF+t5wIbHvjch6Kz4XKWNrsZ9mV+qYDRDAPDf7PUsLbA/u3zAovHMQZuITx+i1/lVPZtv4FeVzHuqXrpdORARvIrt36lJn43Wo95AG4TV5OlcgqAICzradBIOgWboNoeLxlydclTwj696mSgj4e7l+MEfLSvLdTwKsPWgjQMG7DI+uG5qEzwWI9ie/krMVerx7D+gxp+pE36VYyXq0Djq+9Pxk6txM4UrzxtbDh2nFqx4giZikw8eoxqITU28jQ2dsx2sYJcMGk1JgUjqwCm5SWkQNu25UaBEoZ3D4
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR11MB5881.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(39860400002)(136003)(366004)(346002)(376002)(451199021)(33656002)(38070700005)(38100700002)(86362001)(122000001)(478600001)(7696005)(8676002)(8936002)(41300700001)(4326008)(82960400001)(110136005)(54906003)(316002)(52536014)(5660300002)(6506007)(53546011)(186003)(9686003)(26005)(2906002)(55016003)(64756008)(66476007)(76116006)(66946007)(71200400001)(66446008)(66556008)(83380400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?prBGf0e0M/8YsIkvvnDEGUHfxYavrpj3KSkXU9oPomVwqQRvV985rdP9Edzw?=
+ =?us-ascii?Q?iDVZCrAbP/AfKvW/Gyh3ZLvAzg33M/H8vmvSQVLhNtg5OHoUWAtjOj/gADj0?=
+ =?us-ascii?Q?hceyK9Er2OjqcWTs702UfKebqI1AaalwJk2VQpf7O+JoB5kBbeTLjW3trQ2/?=
+ =?us-ascii?Q?K9Vk75Q+OwIYf77tECGJDtOq7IY8mCKUfVvMSVdepFNVxy3IkXBLEnwjKahE?=
+ =?us-ascii?Q?MLXZ29Wuco4lc3ASn4LOMtqnsqBPUNL6mzWu1pU/nFKqTzFA8n/fyEWf4k8g?=
+ =?us-ascii?Q?DN75NvwVV+Fnnvj4eWBSGFjHogDt+KM9+rxMKBRqAItlrxxMBsgYH8B5teKv?=
+ =?us-ascii?Q?/RLrVkmQW0Dgm3WpbmJYxFhGMfMZT/eezOoi5YsckETs2Vnj+qNchN4ydQOJ?=
+ =?us-ascii?Q?PkuU+Gp3aThMu6K6g/Xk/+XmIlJCduZmalg65Ccpl72kv+4+woNYMlAJLd7Z?=
+ =?us-ascii?Q?N/oWcAvWAbJbj6aGVyuNT8WMP6WkO7WK6wYCSBKolYYoNSTCtDFqU/PqJCmU?=
+ =?us-ascii?Q?Qj6ASrBepBYhj2JhqcaeYa1zWyEoHXDuIHPe+gQuCThHG5hdICQmsD9Z8Jx4?=
+ =?us-ascii?Q?6DD6RYxbxwxVNkiMgguppCRAgxZ256rqo7OL/iR02R+xzmG7NXyb1zrrb7y0?=
+ =?us-ascii?Q?Cu+7cOQR4t07JpPuRh7MUpScfsjHH3Zn4bKy3TT3qBYM4/gW1hqXb0SyQnNU?=
+ =?us-ascii?Q?ZBcYZXNb+yop0ndygzJpB1oisResmdqU7XXU8hoxDcFd0cirTs1YUI92pSd+?=
+ =?us-ascii?Q?jWeuK9SfU6uliFVSiQ32chxpTG7WU/ZWVcaMWTuA7FzlWdeYwZvI/cTH1vWc?=
+ =?us-ascii?Q?H+eSP5BHqD8HqArVQkTB0dPYGxJnbF76zXgxENOXBS0milCpXVh2Pyu+EeNz?=
+ =?us-ascii?Q?PWBxMIAPRbkvcdjOhzJ3qYWRghlD5mOjlFD4AubVFBjNMRx+u/ABdixKrdxW?=
+ =?us-ascii?Q?0QaxJl6DaBHQ1OqEABbE+E528qCRByvviGg2TuVjNizJHJzoEfe3+54OFy3S?=
+ =?us-ascii?Q?pmy7seYwOj4eE+Q3AYK4Vh1mU9E45rXKxdUyYtSoza0YYn5UsKOnIof18rDj?=
+ =?us-ascii?Q?r3rXK3bJp7yonKdzVWDQ8DGO+09vL7oyaRJKDwb8GDpKP2jjZben4FBVcmMX?=
+ =?us-ascii?Q?GCKCBczqeGNy1pxPtbdhupD7Ju1IAHO0+Phd4gfUUcvUAOFB8jBQNvvypArh?=
+ =?us-ascii?Q?PjkN4zZ9NbObFk2wD9EZKGR+ubjr/wilzCvoLERHQ/hH2PyweXbLoq+hevCl?=
+ =?us-ascii?Q?7NQhF4ARAmbwnnAf+kWjZCEaCdVy8eP7nTiy7y99ZhDQeMU0YnWG38rxiKFT?=
+ =?us-ascii?Q?+K1+w+JrYNDBjz5UGrTGozRD3wZ15SyidFy0JJAjuVSU8bhZImV8AVeIX1rG?=
+ =?us-ascii?Q?XL/WBaoNFpJ27BiZgPnB6ojaciQVnREaT79x/hbHia/PkKQ3fwLYpltXcPAm?=
+ =?us-ascii?Q?7DuMj3d7f6AKv9EXgunTpFYE21WFVzqeDlf5Jwveza1W8TF9IbjxDWLZY0Xs?=
+ =?us-ascii?Q?sHxOnP7Oi4lefD2dpe698rFP7hbyYN+6umPZJE00oBp//lnf9wAjUl/QD8f0?=
+ =?us-ascii?Q?b7f70Gyn1hzfxc+Oe9JKYlhK/dCh+IX3VneRi0vn?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW5PR11MB5881.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 822d2485-4d6a-4c35-7a7c-08db6dfa6438
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jun 2023 23:43:59.3728
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: UDJlRB82XKRcZ/7hVvTDiT0ZcQTOkdmdNRaowHfNQFpQ+H8ZjsrtK8L2bbgtpaxLL9QyMDyY3QKsoBYuw/EhJw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5383
+X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -60,172 +157,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
-branch HEAD: 4b85308dac750b16bd273b0f4e9c9b478fbb886b  sched/wait: Fix a kthread_park race with wait_woken()
+Hi,
 
-elapsed time: 728m
+> -----Original Message-----
+> From: Yanfei Xu <yanfei.xu@intel.com>
+> Sent: Thursday, June 15, 2023 3:16 PM
+> To: dwmw2@infradead.org; baolu.lu@linux.intel.com; joro@8bytes.org;
+> will@kernel.org; robin.murphy@arm.com
+> Cc: iommu@lists.linux.dev; linux-kernel@vger.kernel.org; Xu, Yanfei
+> <yanfei.xu@intel.com>
+> Subject: [PATCH] iommu/vt-d: Fix to flush cache of PASID directory table
+>=20
+> Even the PCI devices don't support pasid capability, PASID table is manda=
+tory
+> for a PCI device in scalable mode. However flushing cache of pasid direct=
+ory
+> table for these devices are not taken after pasid table is allocated as t=
+he "size"
+> of table is zero. Fix to assign it with a page size.
+>=20
+> Fixes: 194b3348bdbb ("iommu/vt-d: Fix PASID directory pointer coherency")
+> Signed-off-by: Yanfei Xu <yanfei.xu@intel.com>
+> ---
+>  drivers/iommu/intel/pasid.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/iommu/intel/pasid.c b/drivers/iommu/intel/pasid.c in=
+dex
+> c5d479770e12..bde7df055865 100644
+> --- a/drivers/iommu/intel/pasid.c
+> +++ b/drivers/iommu/intel/pasid.c
+> @@ -115,7 +115,9 @@ int intel_pasid_alloc_table(struct device *dev)
+>  				  intel_pasid_max_id);
+>=20
+>  	size =3D max_pasid >> (PASID_PDE_SHIFT - 3);
+> -	order =3D size ? get_order(size) : 0;
+> +	if (!size)
+> +		size =3D PAGE_SIZE;
+How about merging the logic of the above few lines into this one:
+size =3D info->pasid_supported ? max_pasid >> (PASID_PDE_SHIFT - 3) : PAGE_=
+SIZE;
 
-configs tested: 151
-configs skipped: 9
+Though the logic is about the same, the suggested one seems more intuitive.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Regards,
+-Tina
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r001-20230615   gcc  
-arc                  randconfig-r043-20230615   gcc  
-arc                           tb10x_defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                            dove_defconfig   clang
-arm                          gemini_defconfig   gcc  
-arm                  randconfig-r021-20230615   gcc  
-arm                  randconfig-r046-20230615   gcc  
-arm                         s5pv210_defconfig   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r002-20230615   gcc  
-csky                 randconfig-r005-20230615   gcc  
-csky                 randconfig-r006-20230615   gcc  
-csky                 randconfig-r012-20230614   gcc  
-csky                 randconfig-r034-20230615   gcc  
-hexagon      buildonly-randconfig-r002-20230615   clang
-hexagon              randconfig-r024-20230615   clang
-hexagon              randconfig-r041-20230615   clang
-hexagon              randconfig-r045-20230615   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r005-20230614   clang
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230614   clang
-i386                 randconfig-i001-20230615   gcc  
-i386                 randconfig-i002-20230614   clang
-i386                 randconfig-i002-20230615   gcc  
-i386                 randconfig-i003-20230614   clang
-i386                 randconfig-i003-20230615   gcc  
-i386                 randconfig-i004-20230614   clang
-i386                 randconfig-i004-20230615   gcc  
-i386                 randconfig-i005-20230614   clang
-i386                 randconfig-i005-20230615   gcc  
-i386                 randconfig-i006-20230614   clang
-i386                 randconfig-i006-20230615   gcc  
-i386                 randconfig-i011-20230615   clang
-i386                 randconfig-i012-20230615   clang
-i386                 randconfig-i013-20230615   clang
-i386                 randconfig-i014-20230615   clang
-i386                 randconfig-i015-20230615   clang
-i386                 randconfig-i016-20230615   clang
-i386                 randconfig-r004-20230615   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r014-20230614   gcc  
-loongarch            randconfig-r015-20230614   gcc  
-loongarch            randconfig-r022-20230615   gcc  
-loongarch            randconfig-r034-20230615   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r005-20230615   gcc  
-m68k                           virt_defconfig   gcc  
-microblaze   buildonly-randconfig-r002-20230614   gcc  
-microblaze           randconfig-r023-20230615   gcc  
-microblaze           randconfig-r025-20230615   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                     decstation_defconfig   gcc  
-mips                        omega2p_defconfig   clang
-nios2        buildonly-randconfig-r003-20230614   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r032-20230615   gcc  
-openrisc                    or1ksim_defconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc       buildonly-randconfig-r001-20230614   gcc  
-parisc       buildonly-randconfig-r004-20230614   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r023-20230615   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                        cell_defconfig   gcc  
-powerpc                     kilauea_defconfig   clang
-powerpc                      makalu_defconfig   gcc  
-powerpc                     mpc512x_defconfig   clang
-powerpc              randconfig-r011-20230614   gcc  
-powerpc              randconfig-r033-20230615   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv        buildonly-randconfig-r001-20230615   clang
-riscv                               defconfig   gcc  
-riscv                randconfig-r003-20230615   gcc  
-riscv                randconfig-r014-20230614   gcc  
-riscv                randconfig-r015-20230614   gcc  
-riscv                randconfig-r042-20230615   clang
-riscv                          rv32_defconfig   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r003-20230615   gcc  
-s390                 randconfig-r011-20230614   gcc  
-s390                 randconfig-r012-20230614   gcc  
-s390                 randconfig-r026-20230615   clang
-s390                 randconfig-r033-20230615   gcc  
-s390                 randconfig-r044-20230615   clang
-sh                               allmodconfig   gcc  
-sh           buildonly-randconfig-r006-20230614   gcc  
-sh                                  defconfig   gcc  
-sh                         ecovec24_defconfig   gcc  
-sh                   randconfig-r024-20230615   gcc  
-sh                   randconfig-r025-20230615   gcc  
-sh                   randconfig-r031-20230615   gcc  
-sh                   randconfig-r035-20230615   gcc  
-sh                   rts7751r2dplus_defconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r036-20230615   gcc  
-sparc64              randconfig-r001-20230615   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   clang
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230614   clang
-x86_64               randconfig-a001-20230615   gcc  
-x86_64               randconfig-a002-20230614   clang
-x86_64               randconfig-a002-20230615   gcc  
-x86_64               randconfig-a003-20230614   clang
-x86_64               randconfig-a003-20230615   gcc  
-x86_64               randconfig-a004-20230614   clang
-x86_64               randconfig-a004-20230615   gcc  
-x86_64               randconfig-a005-20230614   clang
-x86_64               randconfig-a005-20230615   gcc  
-x86_64               randconfig-a006-20230614   clang
-x86_64               randconfig-a006-20230615   gcc  
-x86_64               randconfig-a011-20230615   clang
-x86_64               randconfig-a012-20230615   clang
-x86_64               randconfig-a013-20230615   clang
-x86_64               randconfig-a014-20230615   clang
-x86_64               randconfig-a015-20230615   clang
-x86_64               randconfig-a016-20230615   clang
-x86_64                          rhel-8.3-func   gcc  
-x86_64                    rhel-8.3-kselftests   gcc  
-x86_64                           rhel-8.3-ltp   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                       common_defconfig   gcc  
-xtensa                  nommu_kc705_defconfig   gcc  
-xtensa               randconfig-r006-20230615   gcc  
-xtensa               randconfig-r016-20230614   gcc  
+> +	order =3D get_order(size);
+>  	pages =3D alloc_pages_node(info->iommu->node,
+>  				 GFP_KERNEL | __GFP_ZERO, order);
+>  	if (!pages) {
+> --
+> 2.34.1
+>=20
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
