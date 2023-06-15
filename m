@@ -2,63 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 509E173155E
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 12:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD6DF73156F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 12:33:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244646AbjFOKbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 06:31:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42220 "EHLO
+        id S245424AbjFOKd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 06:33:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244229AbjFOKay (ORCPT
+        with ESMTP id S241272AbjFOKdV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 06:30:54 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B182943;
-        Thu, 15 Jun 2023 03:30:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1686825047; x=1718361047;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=/hQkNtCiQw6P9n5A4WYc5ubabYXo3BYZHlNV+ERocO8=;
-  b=EuxbUIzY/OoM63Wo9lQzFt9o+Qkyxm8aQRjT8M4OCCSVtdS5+wq8zW4K
-   RXEbhYeWaOXm8rN7auwWL68weOsWaKw7Ru8D1AVLClIB7LqUWzcAt1iWV
-   wiAUZMo6yU7pQ7Sq32FC1wIxk7t1jSDth33cVHRxIPCe0HN7I7z/yu2Vl
-   AtLDHQP11U1e2sIpXkkJBgpJPHgdYvMOuqy6yEeclmtpaNTRb3QRRlUfY
-   PCaPMfpQNk41Nir9hv+ZCf+EHTfxy9AV27gePBIBYhtbHnUCKvEZKY00o
-   y3SkMxBXPqn3p4gikVUcCteF3KDSTP+aiOA2KFmUEvUTsxK4La7kbQ80V
-   g==;
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="216171867"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Jun 2023 03:30:46 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 15 Jun 2023 03:30:45 -0700
-Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Thu, 15 Jun 2023 03:30:42 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <mchehab@kernel.org>, <hverkuil-cisco@xs4all.nl>,
-        <olteanv@gmail.com>, <javierm@redhat.com>,
-        <sakari.ailus@linux.intel.com>,
-        <srinivas.pandruvada@linux.intel.com>,
-        <u.kleine-koenig@pengutronix.de>,
-        <laurent.pinchart@ideasonboard.com>, <m.felsch@pengutronix.de>
-CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Claudiu Beznea" <claudiu.beznea@microchip.com>
-Subject: [PATCH] media: i2c: tvp5150: check return value of devm_kasprintf()
-Date:   Thu, 15 Jun 2023 13:30:30 +0300
-Message-ID: <20230615103030.582531-1-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 15 Jun 2023 06:33:21 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D713273F;
+        Thu, 15 Jun 2023 03:33:11 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35FAWpJD126496;
+        Thu, 15 Jun 2023 05:32:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1686825171;
+        bh=MEI5OB8fSUMBomNKfdivI4tkGJD6GWwHDn4YvoSVYug=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=ghx9owtC1Jv9J3j4BBjIooUjLmcsewLT6PY4ukyioaDlo+FHES2OOtmvf5Muugym8
+         Jk1HqAxHSpMZB7KbRZt/33YEEV+QLn8KRvpNVrFriFolyo2lmR74Hr5rmPUfgBLZU9
+         4IezlVBpGL9hDolpwI885cPztIM81bIiMKiiD2Mo=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35FAWpMn036271
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 15 Jun 2023 05:32:51 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 15
+ Jun 2023 05:32:50 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 15 Jun 2023 05:32:50 -0500
+Received: from uda0132425.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35FAWjr5072607;
+        Thu, 15 Jun 2023 05:32:45 -0500
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+To:     Nishanth Menon <nm@ti.com>, Andrew Davis <afd@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Aradhya Bhatia <a-bhatia1@ti.com>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Linux ARM Kernel List <linux-arm-kernel@lists.infradead.org>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Praneeth Bajjuri <praneeth@ti.com>,
+        Rahul T R <r-ravikumar@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Jai Luthra <j-luthra@ti.com>,
+        Jayesh Choudhary <j-choudhary@ti.com>
+Subject: Re: (subset) [PATCH v4 0/2] arm64: dts: ti: Enable OLDI display on AM654 EVM
+Date:   Thu, 15 Jun 2023 16:02:39 +0530
+Message-ID: <168682513618.2245678.13591252413797935413.b4-ty@ti.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230509102354.10116-1-a-bhatia1@ti.com>
+References: <20230509102354.10116-1-a-bhatia1@ti.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,42 +80,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-devm_kasprintf() returns a pointer to dynamically allocated memory.
-Pointer could be NULL in case allocation fails. Check pointer validity.
-Identified with coccinelle (kmerr.cocci script).
+Hi Aradhya Bhatia,
 
-Fixes: 0556f1d580d4 ("media: tvp5150: add input source selection of_graph support")
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
+On Tue, 09 May 2023 15:53:52 +0530, Aradhya Bhatia wrote:
+> This patch series adds support for the Rocktech RK101II01D-CT OLDI
+> panel, on top of AM654 base-board EVM.
+> 
+> Moreover, it enables support for TI ECAP and TI EHRPWM drivers to
+> provide SW control of backlight.
+> 
+> While the AM654 GP EVM also consists of usb/pcie expansion board, I have
+> only added support for base-board + OLDI panel as I do not have the
+> required hardware.
+> 
+> [...]
 
-Hi,
+I have applied the following to branch ti-k3-dts-next on [1].
+Thank you!
 
-This has been addressed using kmerr.cocci script proposed for update
-at [1].
+[1/2] arm64: dts: ti: am65x: Add Rocktech OLDI panel DT overlay
+      commit: b8690ed3d1d16153be76f24de3a13797c9fd29b3
 
-Thank you,
-Claudiu Beznea
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent up the chain during
+the next merge window (or sooner if it is a relevant bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-[1] https://lore.kernel.org/all/20230530074044.1603426-1-claudiu.beznea@microchip.com/
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
- drivers/media/i2c/tvp5150.c | 4 ++++
- 1 file changed, 4 insertions(+)
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-diff --git a/drivers/media/i2c/tvp5150.c b/drivers/media/i2c/tvp5150.c
-index 859f1cb2fa74..84f87c016f9b 100644
---- a/drivers/media/i2c/tvp5150.c
-+++ b/drivers/media/i2c/tvp5150.c
-@@ -2068,6 +2068,10 @@ static int tvp5150_parse_dt(struct tvp5150 *decoder, struct device_node *np)
- 		tvpc->ent.name = devm_kasprintf(dev, GFP_KERNEL, "%s %s",
- 						v4l2c->name, v4l2c->label ?
- 						v4l2c->label : "");
-+		if (!tvpc->ent.name) {
-+			ret = -ENOMEM;
-+			goto err_free;
-+		}
- 	}
- 
- 	ep_np = of_graph_get_endpoint_by_regs(np, TVP5150_PAD_VID_OUT, 0);
--- 
-2.34.1
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
+--
+Vignesh
 
