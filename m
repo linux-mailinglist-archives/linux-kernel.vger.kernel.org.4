@@ -2,269 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F0A73111F
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:45:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 424D573113C
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:47:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238517AbjFOHp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 03:45:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59836 "EHLO
+        id S245165AbjFOHri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 03:47:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238157AbjFOHpZ (ORCPT
+        with ESMTP id S245161AbjFOHrI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 03:45:25 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC7BED
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:45:23 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-97467e06511so232144166b.2
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:45:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686815122; x=1689407122;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GShQN3aNeb/7szyOAsiAwnXDqLh1QR1gf41/K50luCM=;
-        b=SqSio0bSvHU9qKGsCc/ZYZRiw60stlxeWgphdgk06A11rBVv/rM5MDeiRuYtth2CV3
-         m2a01lcAf6P8y0X+eQ9pnNAjL8YtpHW3piO4T9dVixCuWuhO24pRvQIFtB7iJAHKwV7T
-         d2gigFLi0nqg/m7CQ8hgquYF6FlsdEn37vButF3jwbnQE7Y2vW+MDmIazSdSKft1/kh6
-         nS5j/9YiimTsBX3hfgyy9rD0K8aJEjg6+BAzqqZpUo3KAaUMjaPPnrluLuhDgf/IoJaq
-         DKY/fjwdv4lwvDdyRpCyUzlDys3OtUb/vRpuFfOLy7VxxZ07V95BOTsprxts/RQcE1lD
-         rsqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686815122; x=1689407122;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GShQN3aNeb/7szyOAsiAwnXDqLh1QR1gf41/K50luCM=;
-        b=B4Nui4F2x9mMnSHZiY6eA4xUi1Uq3gBvrpPtPIBwzSTZciOumFM6r1iYSHEnfaLBuA
-         mLFYfCPaXJVYoXJEI2rdugdeZ18/U0tui0XdjwZDXK/IlhBqxe3gULKp1dVBBAO60rm9
-         CwrABAHpHFdHRpcpYnXtQYdRrnDecjbASzfPxaYsZBy9vyAnDyit5DyVeaofh9Dv+xC6
-         qgkhqX1ik5A6htKzDJHybMrE8l13Kqi4FkulPjuJ9oIJCGlqS3mdwwPxZ7GPNtU4rotM
-         LurJB0//4mT6+Ac3geEa1dsT2paVlPsHFLgMhg7ntX9WkJ8iy+Im7hZbKZ/jL8SVBbV+
-         wNoA==
-X-Gm-Message-State: AC+VfDzRPu/MQ7H40Cm2HQJOaSwVCkREcYZlttYRs3KgFsgZGrRfuhJp
-        4kBrGZJOeuRZwhyMhPTIvUmhbimyXlRzwJG79KM=
-X-Google-Smtp-Source: ACHHUZ4pJSvwAenolK+mWB2JCajqR5hFQLSmeiE6Bf/3XMsDiYfnIdxnsdy4W2q12qVAnyu1p3SRDw==
-X-Received: by 2002:a17:906:7308:b0:968:1e8:a754 with SMTP id di8-20020a170906730800b0096801e8a754mr18444931ejc.72.1686815122438;
-        Thu, 15 Jun 2023 00:45:22 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id bi9-20020a170906a24900b009745417ca38sm8967577ejb.21.2023.06.15.00.45.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 00:45:22 -0700 (PDT)
-Message-ID: <f16e742f-e6f2-9761-e70d-e0e7cadcba4a@linaro.org>
-Date:   Thu, 15 Jun 2023 09:45:20 +0200
+        Thu, 15 Jun 2023 03:47:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82934119
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:46:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686815182;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=A8EMxgmvCedlr34NWfOFFqqcuBtr+S8AEgU6UUC5NPw=;
+        b=fjSs/P1l5CazQuJ3MWMrQd40uqiKZs/hqIMKag497+DUi42lIyD+DyWskaMyA4CsDYhk3/
+        zRtcItBaz1bKnt0Ra0t9yosMvqYzXbAeAKvXdH8dvItdZJUo2tO0w4DvWvC2EJ7y/qBO1k
+        rkjxBQijJxYFEvlPDQESSNBPsr/ZaUc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-108-GBhkLc3sPJWBmbYmJ_1ELg-1; Thu, 15 Jun 2023 03:46:18 -0400
+X-MC-Unique: GBhkLc3sPJWBmbYmJ_1ELg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D89E6835152;
+        Thu, 15 Jun 2023 07:46:17 +0000 (UTC)
+Received: from [10.39.208.37] (unknown [10.39.208.37])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 011A61400AFC;
+        Thu, 15 Jun 2023 07:46:15 +0000 (UTC)
+Message-ID: <be8a4e6b-e6e1-7952-ab63-9668dbc7d4af@redhat.com>
+Date:   Thu, 15 Jun 2023 09:46:13 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v9 3/3] dt-bindings: mtd: marvell-nand: Convert to YAML DT
- scheme
+ Thunderbird/102.10.0
 Content-Language: en-US
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        andrew@lunn.ch, gregory.clement@bootlin.com,
-        sebastian.hesselbarth@gmail.com
-Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Vadym Kochan <vadym.kochan@plvision.eu>
-References: <20230615040447.3484564-1-chris.packham@alliedtelesis.co.nz>
- <20230615040447.3484564-4-chris.packham@alliedtelesis.co.nz>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230615040447.3484564-4-chris.packham@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Yongji Xie <xieyongji@bytedance.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>, xuanzhuo@linux.alibaba.com,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Sheng Zhao <sheng.zhao@bytedance.com>,
+        Parav Pandit <parav@nvidia.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20230614115206.800118-1-maxime.coquelin@redhat.com>
+ <CACycT3t_Lea_g0T4sx8MR+r3ziNFyBOY5jozEmYFgOZ0eG8Kwg@mail.gmail.com>
+From:   Maxime Coquelin <maxime.coquelin@redhat.com>
+Subject: Re: [PATCH] vduse: fix NULL pointer dereference
+In-Reply-To: <CACycT3t_Lea_g0T4sx8MR+r3ziNFyBOY5jozEmYFgOZ0eG8Kwg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/06/2023 06:04, Chris Packham wrote:
-> From: Vadym Kochan <vadym.kochan@plvision.eu>
+
+
+On 6/15/23 09:25, Yongji Xie wrote:
+> On Wed, Jun 14, 2023 at 7:52 PM Maxime Coquelin
+> <maxime.coquelin@redhat.com> wrote:
+>>
+>> vduse_vdpa_set_vq_affinity callback can be called
+>> with NULL value as cpu_mask when deleting the vduse
+>> device.
+>>
+>> This patch clears virtqueue's IRQ affinity mask value
+>> instead of dereferencing NULL cpu_mask.
+>>
+>> [ 4760.952149] BUG: kernel NULL pointer dereference, address: 0000000000000000
+>> [ 4760.959110] #PF: supervisor read access in kernel mode
+>> [ 4760.964247] #PF: error_code(0x0000) - not-present page
+>> [ 4760.969385] PGD 0 P4D 0
+>> [ 4760.971927] Oops: 0000 [#1] PREEMPT SMP PTI
+>> [ 4760.976112] CPU: 13 PID: 2346 Comm: vdpa Not tainted 6.4.0-rc6+ #4
+>> [ 4760.982291] Hardware name: Dell Inc. PowerEdge R640/0W23H8, BIOS 2.8.1 06/26/2020
+>> [ 4760.989769] RIP: 0010:memcpy_orig+0xc5/0x130
+>> [ 4760.994049] Code: 16 f8 4c 89 07 4c 89 4f 08 4c 89 54 17 f0 4c 89 5c 17 f8 c3 cc cc cc cc 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 83 fa 08 72 1b <4c> 8b 06 4c 8b 4c 16 f8 4c 89 07 4c 89 4c 17 f8 c3 cc cc cc cc 66
+>> [ 4761.012793] RSP: 0018:ffffb1d565abb830 EFLAGS: 00010246
+>> [ 4761.018020] RAX: ffff9f4bf6b27898 RBX: ffff9f4be23969c0 RCX: ffff9f4bcadf6400
+>> [ 4761.025152] RDX: 0000000000000008 RSI: 0000000000000000 RDI: ffff9f4bf6b27898
+>> [ 4761.032286] RBP: 0000000000000000 R08: 0000000000000008 R09: 0000000000000000
+>> [ 4761.039416] R10: 0000000000000000 R11: 0000000000000600 R12: 0000000000000000
+>> [ 4761.046549] R13: 0000000000000000 R14: 0000000000000080 R15: ffffb1d565abbb10
+>> [ 4761.053680] FS:  00007f64c2ec2740(0000) GS:ffff9f635f980000(0000) knlGS:0000000000000000
+>> [ 4761.061765] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> [ 4761.067513] CR2: 0000000000000000 CR3: 0000001875270006 CR4: 00000000007706e0
+>> [ 4761.074645] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>> [ 4761.081775] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>> [ 4761.088909] PKRU: 55555554
+>> [ 4761.091620] Call Trace:
+>> [ 4761.094074]  <TASK>
+>> [ 4761.096180]  ? __die+0x1f/0x70
+>> [ 4761.099238]  ? page_fault_oops+0x171/0x4f0
+>> [ 4761.103340]  ? exc_page_fault+0x7b/0x180
+>> [ 4761.107265]  ? asm_exc_page_fault+0x22/0x30
+>> [ 4761.111460]  ? memcpy_orig+0xc5/0x130
+>> [ 4761.115126]  vduse_vdpa_set_vq_affinity+0x3e/0x50 [vduse]
+>> [ 4761.120533]  virtnet_clean_affinity.part.0+0x3d/0x90 [virtio_net]
+>> [ 4761.126635]  remove_vq_common+0x1a4/0x250 [virtio_net]
+>> [ 4761.131781]  virtnet_remove+0x5d/0x70 [virtio_net]
+>> [ 4761.136580]  virtio_dev_remove+0x3a/0x90
+>> [ 4761.140509]  device_release_driver_internal+0x19b/0x200
+>> [ 4761.145742]  bus_remove_device+0xc2/0x130
+>> [ 4761.149755]  device_del+0x158/0x3e0
+>> [ 4761.153245]  ? kernfs_find_ns+0x35/0xc0
+>> [ 4761.157086]  device_unregister+0x13/0x60
+>> [ 4761.161010]  unregister_virtio_device+0x11/0x20
+>> [ 4761.165543]  device_release_driver_internal+0x19b/0x200
+>> [ 4761.170770]  bus_remove_device+0xc2/0x130
+>> [ 4761.174782]  device_del+0x158/0x3e0
+>> [ 4761.178276]  ? __pfx_vdpa_name_match+0x10/0x10 [vdpa]
+>> [ 4761.183336]  device_unregister+0x13/0x60
+>> [ 4761.187260]  vdpa_nl_cmd_dev_del_set_doit+0x63/0xe0 [vdpa]
+>>
+>> Fixes: 28f6288eb63d ("vduse: Support set_vq_affinity callback")
+>> Cc: xieyongji@bytedance.com
+>>
+>> Signed-off-by: Maxime Coquelin <maxime.coquelin@redhat.com>
+>> ---
+>>   drivers/vdpa/vdpa_user/vduse_dev.c | 6 +++++-
+>>   1 file changed, 5 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
+>> index 5f5c21674fdc..cdca94e85762 100644
+>> --- a/drivers/vdpa/vdpa_user/vduse_dev.c
+>> +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
+>> @@ -726,7 +726,11 @@ static int vduse_vdpa_set_vq_affinity(struct vdpa_device *vdpa, u16 idx,
+>>   {
+>>          struct vduse_dev *dev = vdpa_to_vduse(vdpa);
+>>
+>> -       cpumask_copy(&dev->vqs[idx]->irq_affinity, cpu_mask);
+>> +       if (cpu_mask)
+>> +               cpumask_copy(&dev->vqs[idx]->irq_affinity, cpu_mask);
+>> +       else
+>> +               cpumask_clear(&dev->vqs[idx]->irq_affinity);
 > 
-> Switch the DT binding to a YAML schema to enable the DT validation.
+> I think we should set all the bits of irq affinity instead:
+> cpumask_setall(&dev->vqs[idx]->irq_affinity);
+
+I hesitated between both.
+My understanding is it only happens on removal, so either would work.
+But in case it can happen on other cases, it is indeed better to use
+cpumask_setall().
+
+I will post a v2 today.
+
+Thanks,
+Maxime
+
+> Thanks,
+> Yongji
 > 
-> The text binding didn't mention it as a requirement but existing usage
-> has
-> 
->    compatible = "marvell,armada-8k-nand-controller",
->                 "marvell,armada370-nand-controller";
-> 
-> so the YAML allows this in addition to the individual compatible values.
-> 
-> There was also an incorrect reference to dma-names being "rxtx" where
-> the driver and existing device trees actually use dma-names = "data" so
-> this is corrected in the conversion.
-> 
-> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
-> 
-> Notes:
->     Changes in v9:
->     - depend on series from Miquel
->       https://lore.kernel.org/linux-mtd/20230606175246.190465-1-miquel.raynal@bootlin.com/
->     - enforce minimum/maximum for nand-rb
->     - move required: block for controller
->     - move unevaluatedProperties: for nand chip
->     - remove label, partitions and nand-on-flash-bbt which are covered by
->       generic schema
->     
->     Changes in v8:
->     - Mark deprecated compatible values as such
->     - Allow "marvell,armada-8k-nand-controller" without
->       "marvell,armada370-nand-controller"
-
-???
-
-
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - const: marvell,armada-8k-nand-controller
-> +          - const: marvell,armada370-nand-controller
-> +      - enum:
-> +          - marvell,armada-8k-nand-controller
-
-This is wrong. 8k cannot be both: compatible and not compatible with
-370. It's not someone's cat to be in both states at the same time...
-
-> +          - marvell,armada370-nand-controller
-> +          - marvell,pxa3xx-nand-controller
-> +      - description: legacy bindings
-> +        deprecated: true
-> +        enum:
-> +          - marvell,armada-8k-nand
-> +          - marvell,armada370-nand
-> +          - marvell,pxa3xx-nand
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    description:
-> +      Shall reference the NAND controller clocks, the second one is
-> +      is only needed for the Armada 7K/8K SoCs
-> +    minItems: 1
-> +    maxItems: 2
-> +
-> +  clock-names:
-> +    minItems: 1
-> +    items:
-> +      - const: core
-> +      - const: reg
-> +
-> +  dmas:
-> +    maxItems: 1
-> +
-> +  dma-names:
-> +    items:
-> +      - const: data
-> +
-> +  marvell,system-controller:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: Syscon node that handles NAND controller related registers
-> +
-> +patternProperties:
-> +  "^nand@[a-f0-9]$":
-> +    type: object
-> +    $ref: raw-nand-chip.yaml
-> +
-> +    properties:
-> +      reg:
-> +        minimum: 0
-> +        maximum: 3
-> +
-> +      nand-rb:
-> +        items:
-> +          - minimum: 0
-> +            maximum: 1
-> +
-> +      nand-ecc-step-size:
-> +        const: 512
-> +
-> +      nand-ecc-strength:
-> +        enum: [1, 4, 8, 12, 16]
-> +
-> +      nand-ecc-mode:
-> +        const: hw
-> +
-> +      marvell,nand-keep-config:
-> +        $ref: /schemas/types.yaml#/definitions/flag
-> +        description: |
-
-Do not need '|' unless you need to preserve formatting.
-
-> +          Orders the driver not to take the timings from the core and
-> +          leaving them completely untouched. Bootloader timings will then
-> +          be used.
-> +
-> +      marvell,nand-enable-arbiter:
-> +        $ref: /schemas/types.yaml#/definitions/flag
-> +        description: |
-
-Do not need '|' unless you need to preserve formatting.
-
-> +          To enable the arbiter, all boards blindly used it,
-> +          this bit was set by the bootloader for many boards and even if
-> +          it is marked reserved in several datasheets, it might be needed to set
-> +          it (otherwise it is harmless).
-> +        deprecated: true
-> +
-> +    required:
-> +      - reg
-> +      - nand-rb
-> +
-> +    unevaluatedProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +
-> +allOf:
-> +  - $ref: nand-controller.yaml#
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: marvell,pxa3xx-nand-controller
-> +    then:
-> +      required:
-> +        - dmas
-> +        - dma-names
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: marvell,armada-8k-nand-controller
-> +    then:
-> +      properties:
-> +        clocks:
-> +          minItems: 2
-> +
-> +        clock-names:
-> +          minItems: 2
-> +
-> +      required:
-> +        - marvell,system-controller
-
-else:
-narrow clocks to 1? Or is the second clod also valid for other variants?
-Does not look like from your example.
-
-
-Best regards,
-Krzysztof
 
