@@ -2,144 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89126731AEF
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0C1A731AF6
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344950AbjFOONE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 10:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42214 "EHLO
+        id S1344929AbjFOONy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 10:13:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344910AbjFOOMr (ORCPT
+        with ESMTP id S1344888AbjFOONr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 10:12:47 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3277C2683
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 07:12:46 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35FE4O1N019435;
-        Thu, 15 Jun 2023 09:12:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=AjGNsoyoK5D+RJq6nyibBF7s8NAROrXXFDradtiR7EE=;
- b=cToN3yGLlHYejStDOuS6sTL8/BmqCwQuEn+N30FJvc6ckt8QbzGmjLMQsmFk7smlBEQN
- 07TOSvGxCBrZwfrC7pCLx5OrnHF7Ow6LDkPOlL8lqzXfAxoCZHFlAOj01kPWqzbYpu7z
- UdpNQ0YiybPlYaDcE3xKKouYzRPZRc9OEeiTR9cNGM6PGvAVq3PWa8N3WUQkqTVglY0j
- D8PK+/yDt6eYhepp20pkcAQzvdWFtQy+TPly0IoDDTqaOUmSFdVvezj96XoYwmkTDFS7
- mg7JYQXvg3ZyJtZTHlZSwmUMI+RT5IuXKbztpvbC9k0jnXQ/72BEgMPScmGScdxaMqlk fA== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3r4pk0d8fp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jun 2023 09:12:10 -0500
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Thu, 15 Jun
- 2023 15:12:08 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Thu, 15 Jun 2023 15:12:08 +0100
-Received: from edi-sw-dsktp-006.ad.cirrus.com (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.127])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 28DAB11DC;
-        Thu, 15 Jun 2023 14:12:08 +0000 (UTC)
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-To:     <vkoul@kernel.org>, <yung-chuan.liao@linux.intel.com>,
-        <pierre-louis.bossart@linux.intel.com>
-CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH 2/2] soundwire: stream: Make master_list ordered to prevent deadlocks
-Date:   Thu, 15 Jun 2023 15:12:08 +0100
-Message-ID: <20230615141208.679011-2-rf@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230615141208.679011-1-rf@opensource.cirrus.com>
-References: <20230615141208.679011-1-rf@opensource.cirrus.com>
+        Thu, 15 Jun 2023 10:13:47 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AFA2684
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 07:13:21 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b505665e2fso6300205ad.0
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 07:13:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1686838401; x=1689430401;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GA+sOdkXeaOqtYM+9HbR7PDD/Pvr8QBb+Sns/mm9TKc=;
+        b=W48NsgGYazSmdCr22LoO9vupuH0SLC4lcoPV5+3nWkkfH4oTHyezaIZdB9qkan3Qz1
+         ESUg2iTOq1UFlsZTCPtp7uekNSnfi+XP/b3tItwy6x7hkpXuycvoO/Nqwo3xSKQ1nzw0
+         sZhrU+pbuCRNKeW3nzegf434xR3xGsK/00gmhosPUBZyWI/bjSc5kM8UiDyeahnIgy69
+         WGqCrTXEkaITcWExAlVInrzcqZdul6NhcT5FHcM5wbUNE0kDO4JcHkiAWOaAPaxyTJ2F
+         uXi1pkS2o/itBwxD60aNH/FAIEOwqfvzjB+iVlXEQvd5xYM+E3KEyFgn5IA2mWtl28rf
+         QSbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686838401; x=1689430401;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GA+sOdkXeaOqtYM+9HbR7PDD/Pvr8QBb+Sns/mm9TKc=;
+        b=iKnhAv/jhtyf6Rfh7BlWhFj5MOr5h7lHZEJu2bqVoOrFaNHLRbDITqG4kaLINaXI5v
+         nkPU85G5dp8x6a3ViY2FfXFyOyMhScE+JuWEGkRW5GBSbzSFKeHldTQEO9qQmeGjEQgs
+         ipQZVUK6CcBFBwle/AzxJYtwhjnxcrCf8wtXd5OH9wUi2VBCCJlXfJdNFwWTuuAxLmFh
+         L6euSkWKegMbx01r2OdTQjwfR4bKRZQaXxp3rBMr4MoAjUpHPsr/tvqnKGrhnNE56kfs
+         vFpzHMToV+SZc+fxrOmRIAkkbdfZ1eK50+GVg8/7yVQHIwwTtap4rcxYUkV4EcUq/NFo
+         mv5g==
+X-Gm-Message-State: AC+VfDzTmA32MTSaGPQH/t+2t3unnLJTzjRaPkFjAMcLmugbDO5WxIDn
+        7apMu1a/LUGJ74wS3Rz6jpi90r66nGUa9SUSMQXWzQ==
+X-Google-Smtp-Source: ACHHUZ6GN/5aYk1XQT5drKDtzSEXs/CSKlLgNbJdbrIOJnExeJF5me6e5NorAz94rA60cZpxIq0U3pU2Eyu/6+7cMA4=
+X-Received: by 2002:a17:90b:158e:b0:25e:6196:ff96 with SMTP id
+ lc14-20020a17090b158e00b0025e6196ff96mr5697721pjb.12.1686838400794; Thu, 15
+ Jun 2023 07:13:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: mnNUJZBw1Evo7A57D6VUzeGSGj1bzS74
-X-Proofpoint-GUID: mnNUJZBw1Evo7A57D6VUzeGSGj1bzS74
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230615034830.1361853-1-hezhongkun.hzk@bytedance.com>
+ <ZIrbar9yQ6EZ217t@dhcp22.suse.cz> <CACSyD1Pz0SHOZ-aMr6NQ7vX5iNuhUUEnH=iysR49uxo=mbfN=Q@mail.gmail.com>
+ <ZIsBM06ZJSbB+bXz@dhcp22.suse.cz> <CACSyD1O5FZs5H7EFb58n=-MhiXPpOXXPP_+zVVo5nj1cm5ccoA@mail.gmail.com>
+ <ZIsR09IkLquV72dj@dhcp22.suse.cz>
+In-Reply-To: <ZIsR09IkLquV72dj@dhcp22.suse.cz>
+From:   =?UTF-8?B?6LS65Lit5Z2k?= <hezhongkun.hzk@bytedance.com>
+Date:   Thu, 15 Jun 2023 22:13:09 +0800
+Message-ID: <CACSyD1P19kxERKPUAVChjy7AzV6h6RKTV8252ntoK5EUy8uC2A@mail.gmail.com>
+Subject: Re: [External] Re: [RFC PATCH 1/3] zram: charge the compressed RAM to
+ the page's memcgroup
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     minchan@kernel.org, senozhatsky@chromium.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Always add buses to the stream->master_list in a fixed order.
-The unique bus->id is used to order the adding of buses to the
-list.
+>
+> OK, also make sure that the zsmalloc support is implemented before zram
+> depends on it.
+>
 
-This prevents lockdep asserts and possible deadlocks on streams
-that have multiple buses.
+OK. I got it.
 
-sdw_acquire_bus_lock() takes bus_lock in the order that buses
-are listed in stream->master_list. do_bank_switch() takes all
-the msg_lock in the same order.
+>
+> This is not really answering my question though. memcg under hard limit
+> is not really my concern. This is a simpler case. I am not saying it
+> doesn't need to get addresses but it is the memcg hard limited case that
+> is much more interested. Because your charges are going to fail very
+> likely and that would mean that swapout would fail AFAIU. If my
+> understanding is wrong then it would really help to describe that case
+> much more in the changelog.
+>
 
-To prevent a lockdep assert, and a possible real deadlock, the
-relative order of taking these mutexes must always be the same.
+OK, Got it. In many cases I have tested, it  will not fail because we did
+not charge the page directly=EF=BC=8Cbut the objects(like  slab,compressed =
+page),
+for the zspage may be shared by any memcg.
 
-For example, if a stream takes the mutexes in the order
-(bus0, bus1) lockdep will assert if another stream takes them
-in the order (bus1, bus0).
-
-More complex relative ordering will also assert, for example
-if two streams take (bus0, bus1) and (bus1, bus2), then a third
-stream takes (bus2, bus0).
-
-Previously sdw_stream_add_master() simply added the given bus
-to the end of the list, requiring the caller to guarantee that
-buses are added in a fixed order. This isn't reasonable or
-necessary - it's an internal implementation detail that should
-not be exposed by the API. It doesn't really make sense when
-there could be multiple independent calling drivers, to say
-"you must add your buses in the same order as a different driver,
-that you don't know about, added them".
-
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
----
- drivers/soundwire/stream.c | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/soundwire/stream.c b/drivers/soundwire/stream.c
-index 93baca08a0de..d77a8a0d42c8 100644
---- a/drivers/soundwire/stream.c
-+++ b/drivers/soundwire/stream.c
-@@ -1150,7 +1150,8 @@ static struct sdw_master_runtime
- *sdw_master_rt_alloc(struct sdw_bus *bus,
- 		     struct sdw_stream_runtime *stream)
- {
--	struct sdw_master_runtime *m_rt;
-+	struct sdw_master_runtime *m_rt, *walk_m_rt;
-+	struct list_head *insert_after;
- 
- 	m_rt = kzalloc(sizeof(*m_rt), GFP_KERNEL);
- 	if (!m_rt)
-@@ -1159,7 +1160,20 @@ static struct sdw_master_runtime
- 	/* Initialization of Master runtime handle */
- 	INIT_LIST_HEAD(&m_rt->port_list);
- 	INIT_LIST_HEAD(&m_rt->slave_rt_list);
--	list_add_tail(&m_rt->stream_node, &stream->master_list);
-+
-+	/*
-+	 * Add in order of bus id so that when taking the bus_lock
-+	 * of multiple buses they will always be taken in the same
-+	 * order to prevent a mutex deadlock.
-+	 */
-+	insert_after = &stream->master_list;
-+	list_for_each_entry_reverse(walk_m_rt, &stream->master_list, stream_node) {
-+		if (walk_m_rt->bus->id < bus->id) {
-+			insert_after = &walk_m_rt->stream_node;
-+			break;
-+		}
-+	}
-+	list_add(&m_rt->stream_node, insert_after);
- 
- 	list_add_tail(&m_rt->bus_node, &bus->m_rt_list);
- 
--- 
-2.30.2
-
+> --
+> Michal Hocko
+> SUSE Labs
