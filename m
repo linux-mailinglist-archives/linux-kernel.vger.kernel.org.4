@@ -2,84 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A139730FBC
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:50:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E608D730FE1
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:53:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244388AbjFOGub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 02:50:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56104 "EHLO
+        id S244554AbjFOGxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 02:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244586AbjFOGuA (ORCPT
+        with ESMTP id S244492AbjFOGwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 02:50:00 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442AF2715;
-        Wed, 14 Jun 2023 23:49:06 -0700 (PDT)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QhXsD60rVzLmVY;
-        Thu, 15 Jun 2023 14:47:12 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 15 Jun
- 2023 14:49:03 +0800
-Subject: Re: [PATCH net-next v4 5/5] page_pool: update document about frag API
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     <davem@davemloft.net>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        <linux-doc@vger.kernel.org>, <bpf@vger.kernel.org>
-References: <20230612130256.4572-1-linyunsheng@huawei.com>
- <20230612130256.4572-6-linyunsheng@huawei.com>
- <20230613214041.1c29a357@kernel.org>
- <1dc9b2e3-65ee-aa33-d604-a758fea98eb8@huawei.com>
- <20230614095649.5f7d8d40@kernel.org>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <7b426283-09f7-a16f-61b8-43319cdab27f@huawei.com>
-Date:   Thu, 15 Jun 2023 14:49:03 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        Thu, 15 Jun 2023 02:52:46 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5253C25
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 23:50:59 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id 6a1803df08f44-62fe188255eso2388936d6.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 23:50:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686811858; x=1689403858;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oMRhudSiSpL3e5txT8vbhqr+QDaWfHyk7j2Um62mDT8=;
+        b=T7Ozw9a4Rpk5FBpeOOFI2cHvQ75Pv8YaeyqaNBPPlG3HM0mdWF2AU8YGv139C7Qotc
+         kXs8SCDEo8JmHkjCs8yoLBP0z9Q8D82r/8HsGPufy/a/vG/zj/fgWdKy48NYSydzmXwV
+         UPSXoTyaFgkq5/yFg5MreZyga8zGkho7JFd3Aklj46+XVr4c0dsWui2rFe59ll2Tct3/
+         5rvFBpWerGx/lZ13EYjM9UsMJFhydpak58ql4a4GEGno1YUeFGTl5G5FhGzJXl6DUx2D
+         BxKxJsAAsIFvrqEMeHIWDvnXsRKzQI8cy2g8K0ugPHBUDciytrmlx3XhZxycjkoZkb++
+         PI0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686811858; x=1689403858;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oMRhudSiSpL3e5txT8vbhqr+QDaWfHyk7j2Um62mDT8=;
+        b=AImgnmVTGVOWekke4Uw6DWaINmERVAYdG5HyeSy5cnJ014LOu8j5RF4QEZW+1rCM8e
+         vbDn28JpuyueEW3CNSfc/TLk0h7PLFbzh3s2JYfL7RFD03bbS7dqzVu9s5thdhq9iz28
+         CveSh/HhfYglJ0C+3ppV3j8LdWeGnSnam1Y1+O3231KvjNR6UTYf+rz0gWpxf9DSuylE
+         dA/dgnTPv0QUse3l8mwpb4mEu6eNQwBkZyJr2f97bCQMFrXw6XPv9yQz9RO4pFDLujfe
+         45Q9gfV/ewpHqdTi1UvjMp0b3Kxbw9unwHSnHKNHOo6EQPugOWShf0JeJTCm3z02QNLL
+         ytdg==
+X-Gm-Message-State: AC+VfDzZdvra0QZ9w8BneG3iKyWgkrKFlsauyeADFQXFTlpLljWCG1bI
+        VnM+o6xW73yh/nIJLIPk5stWGCLUIsqvbNK55dU=
+X-Google-Smtp-Source: ACHHUZ6mT645E4io1T2ze4XYoY7HucpUABf9faETWdMPSaYYTJDi8qGa/TIQ4TmEcXACc7VUwOYQSX2XnL93fG/rYXU=
+X-Received: by 2002:a05:6214:1c0d:b0:5dd:b986:b44 with SMTP id
+ u13-20020a0562141c0d00b005ddb9860b44mr4642951qvc.6.1686811858377; Wed, 14 Jun
+ 2023 23:50:58 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20230614095649.5f7d8d40@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Sender: mrmusaibrahimibrahim4446@gmail.com
+Received: by 2002:ac8:58c5:0:b0:3f4:fdaa:8e20 with HTTP; Wed, 14 Jun 2023
+ 23:50:58 -0700 (PDT)
+From:   Mrs Bill Chantal Lawrence <mrsbillchantallawrence58@gmail.com>
+Date:   Wed, 14 Jun 2023 23:50:58 -0700
+X-Google-Sender-Auth: i5eK-rAvtvPlGhCQm4Y4Q9kzwFQ
+Message-ID: <CANgEpsKgEa9qfweAkkmuUJptSTq=hNuv9cJ3cnKgOd2d-dDqiw@mail.gmail.com>
+Subject: Hello Good Day
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/15 0:56, Jakub Kicinski wrote:
-> On Wed, 14 Jun 2023 20:04:39 +0800 Yunsheng Lin wrote:
->>> Seems like the semantics of page_pool_alloc() are always better than
->>> page_pool_alloc_frag(). Is there a reason to keep these two separate?  
->>
->> I am agree the semantics of page_pool_alloc() is better, I was thinking
->> about combining those two too.
->> The reason I am keeping it is about the nic hw with fixed buffer size for
->> each desc, and that buffer size is always smaller than or equal to half
->> of the page allocated from page pool, so it doesn't bother doing the
->> checking of 'size << 1 > max_size' and doesn't care about the actual
->> truesize.
-> 
-> I see. Let's reorg the documentation, then? Something along the lines
-> of, maybe:
+Hello Good Day, You have been compensated with the sum of 5.5 million
+dollars in this united nation.
 
-There is still one thing I am not sure about page_pool_alloc() API:
-It use *size both as input and output, I am not sure if it is a general
-pratice or not, or is there other better pratice than this.
+The payment will be issue into atm visa card and send to you from the
+santander bank.
+
+We need your address and your Whatsapp this my email.ID
+(mrsbillchantallawrence58@gmail.com ) contact  me
+
+Thanks my
+
+mrsbillchantalhanter
