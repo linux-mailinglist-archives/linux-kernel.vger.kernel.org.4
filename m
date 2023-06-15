@@ -2,82 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE4B6731901
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10FAD73190C
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:38:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241320AbjFOMdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 08:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42454 "EHLO
+        id S238606AbjFOMiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 08:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjFOMdE (ORCPT
+        with ESMTP id S231163AbjFOMh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 08:33:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA271FD4;
-        Thu, 15 Jun 2023 05:33:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AD29618EB;
-        Thu, 15 Jun 2023 12:33:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 573D9C433C8;
-        Thu, 15 Jun 2023 12:33:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686832380;
-        bh=7SJSooLHw1XqH2UYNvRcPE3YydGNfm0xAFxd/c7vKJo=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=e9DQHLZiLiYiczEKwCFXENboEz+vMXQomeNyJgQhiOS6DV2nBjiexJ3MOToPtBfS1
-         pPwRD735PQTbUQQNhPbSwamMRH9gjnmQI+71KBuz0Wk5kOMqBUCmb6YqM0IR2NOZa7
-         iec3qB+xHUVB6wtdkeaNQaEudyxzUtsnjj+xwZUluYWBxOlNmrPZGtXVyqfT9a0Bi1
-         8T4twX0pgNKlaYYJf/zXkzeOp1vnl3EFSy+IvaBS+XScfiRasUb6mo7Tjxxma2rBco
-         GNBuVNzZslNh8Gbk2IBJdFIgm94rnlylbeEYmS1TF3f0zshwQm4/tDQVDoRXo/24YP
-         yhtIIFO4BZc+w==
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id D1851BBEC2D; Thu, 15 Jun 2023 14:32:56 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>, Kalle Valo <kvalo@kernel.org>
-Cc:     Johannes Berg <johannes@sipsolutions.net>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, regressions@lists.linux.dev
-Subject: Re: Closing down the wireless trees for a summer break?
-In-Reply-To: <20230614122153.640292b9@kernel.org>
-References: <87y1kncuh4.fsf@kernel.org> <871qifxm9b.fsf@toke.dk>
- <20230613112834.7df36e95@kernel.org>
- <ba933d6e3d360298e400196371e37735aef3b1eb.camel@sipsolutions.net>
- <20230613195136.6815df9b@kernel.org>
- <c7c9418bcd5ac1035a007d336004eff48994dde7.camel@sipsolutions.net>
- <87a5x2ccao.fsf@kernel.org> <20230614122153.640292b9@kernel.org>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Thu, 15 Jun 2023 14:32:56 +0200
-Message-ID: <87sfasgb2f.fsf@toke.dk>
+        Thu, 15 Jun 2023 08:37:58 -0400
+Received: from out-2.mta1.migadu.com (out-2.mta1.migadu.com [95.215.58.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46BD1FE5
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 05:37:56 -0700 (PDT)
+Date:   Thu, 15 Jun 2023 12:37:49 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1686832675;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FDeNKX3N1AgGPqiR/rCePuztYVFhTKf9vPqEop9TYmM=;
+        b=b0Ps3XLAuqak82d/BomWL9V7tcPr2dg7JKi3t2FNudmZQ0oZq3HFyEjINu6FbnSozDAumE
+        Ts7eQowx8hOTJu/fCF+k+6/Ouy2WzOO2h4l0pFdMeAgfnV8P2l8U0w+Im3w7l+iEG/oHx8
+        BCcLOkPsr6m2lywBO0JtZo9IR6ZLYKM=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pbonzini@redhat.com,
+        seanjc@google.com, mtosatti@redhat.com, maz@kernel.org,
+        will@kernel.org, c.dall@virtualopensystems.com, peterx@redhat.com,
+        david@redhat.com, aarcange@redhat.com, shahuang@redhat.com,
+        hshuai@redhat.com, zhenyzha@redhat.com, shan.gavin@gmail.com
+Subject: Re: [PATCH v3] KVM: Avoid illegal stage2 mapping on invalid memory
+ slot
+Message-ID: <ZIsGHSNWtty4Yg0p@linux.dev>
+References: <20230615054259.14911-1-gshan@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230615054259.14911-1-gshan@redhat.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jakub Kicinski <kuba@kernel.org> writes:
+On Thu, Jun 15, 2023 at 03:42:59PM +1000, Gavin Shan wrote:
+> We run into guest hang in edk2 firmware when KSM is kept as running on
+> the host. The edk2 firmware is waiting for status 0x80 from QEMU's pflash
+> device (TYPE_PFLASH_CFI01) during the operation of sector erasing or
+> buffered write. The status is returned by reading the memory region of
+> the pflash device and the read request should have been forwarded to QEMU
+> and emulated by it. Unfortunately, the read request is covered by an
+> illegal stage2 mapping when the guest hang issue occurs. The read request
+> is completed with QEMU bypassed and wrong status is fetched. The edk2
+> firmware runs into an infinite loop with the wrong status.
 
-> On Wed, 14 Jun 2023 18:07:43 +0300 Kalle Valo wrote:
->> But do note that above is _only_ for -next patches. For patches going to
->> -rc releases we apply the patches directly to wireless, no other trees
->> are involved. My proposal was that net maintainers would take only fixes
->> for -rc releases, my guess from history is that it would be maximum of
->> 10-15 patches. And once me and Johannes are back we would sort out -next
->> patches before the merge window. But of course you guys can do whatever
->> you think is best :)
->
-> Ah, good note, I would have guessed that fixes go via special trees,
-> too. In that case it should indeed be easy. We'll just look out for
-> maintainer acks on the list and ping people if in doubt.
+[...]
 
-SGTM! :)
+> Fix the issue by skipping the invalid memory slot at (C) to avoid the
+> illegal stage2 mapping so that the read request for the pflash's status
+> is forwarded to QEMU and emulated by it. In this way, the correct pflash's
+> status can be returned from QEMU to break the infinite loop in the edk2
+> firmware.
+> 
+> We tried a git-bisect and the first problematic commit is cd4c71835228 ("
+> KVM: arm64: Convert to the gfn-based MMU notifier callbacks"). With this,
+> clean_dcache_guest_page() is called after the memory slots are iterated
+> in kvm_mmu_notifier_change_pte(). clean_dcache_guest_page() is called
+> before the iteration on the memory slots before this commit. This change
+> literally enlarges the racy window between kvm_mmu_notifier_change_pte()
+> and memory slot removal so that we're able to reproduce the issue in a
+> practical test case. However, the issue exists since commit d5d8184d35c9
+> ("KVM: ARM: Memory virtualization setup").
+> 
+> Cc: stable@vger.kernel.org # v3.9+
+> Fixes: d5d8184d35c9 ("KVM: ARM: Memory virtualization setup")
+> Reported-by: Shuai Hu <hshuai@redhat.com>
+> Reported-by: Zhenyu Zhang <zhenyzha@redhat.com>
+> Signed-off-by: Gavin Shan <gshan@redhat.com>
 
--Toke
+Thanks for fixing this Gavin. I'm more than happy to take this through
+the kvmarm tree since we got burned, but it'd probably be best if Paolo
+got it.
+
+Paolo, if you wind up grabbing it:
+
+Reviewed-by: Oliver Upton <oliver.upton@linux.dev>
+
+> ---
+> v3: Skip the invalid memory slots in change_pte() MMU notifier only,
+>     suggested by Sean. Improved changelog to describe how the fixes
+>     tag is given.
+> ---
+>  virt/kvm/kvm_main.c | 20 +++++++++++++++++++-
+>  1 file changed, 19 insertions(+), 1 deletion(-)
+> 
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 479802a892d4..65f94f592ff8 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -686,6 +686,24 @@ static __always_inline int kvm_handle_hva_range_no_flush(struct mmu_notifier *mn
+>  
+>  	return __kvm_handle_hva_range(kvm, &range);
+>  }
+> +
+> +static bool kvm_change_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+> +{
+> +	/*
+> +	 * Skipping invalid memslots is correct if and only change_pte() is
+
+nit: I think there's a typo here: s/if and only/if and only if/
+
+This is tiny, and can be fixed up when the patch is applied.
+
+-- 
+Thanks,
+Oliver
