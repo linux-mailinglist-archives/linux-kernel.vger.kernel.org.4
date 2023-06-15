@@ -2,109 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5AF073103B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32773731033
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243553AbjFOHKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 03:10:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36040 "EHLO
+        id S243703AbjFOHKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 03:10:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244484AbjFOHJo (ORCPT
+        with ESMTP id S234095AbjFOHJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 03:09:44 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD11273D
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:08:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686812906; x=1718348906;
-  h=date:from:to:cc:subject:message-id;
-  bh=jS6B6N1PWccdBaTZRqbjgZfbIgbN53G7GE8MeajCNk8=;
-  b=WBtuPwHUz5e5j8Cwn2ClMaJ3TD41uaTUG3nUqpPiAEdCSkhuNcnfH2jX
-   Nm3yy6q/Y4B+T1jZ750TjP/qQAza2/Dw6UHaqW5SV1W2cdxpP5zqz10O0
-   Pjs1eL9VvCuypkZ2YIdYiyJ0g2CUXeidn14/hG4wHY0u5DKp0XIZ3kIyf
-   CAMzYsuEU5JtgOeA3plwXifDfs0MWXhXT0hWAWR+DuwcEKEEp6TQMF/Il
-   XYXpiAPMVLRh7Vy3R20//1oRWiZSTplnj9rLAEzaZBy/reXP9puLE4mLz
-   zqSFWC7DYfi4hOgmrSocfHnu+c8BBS+yZ0YFB+HY6YbZ0TNcgXc9nDWPL
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="339179671"
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="339179671"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 00:08:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="706540138"
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="706540138"
-Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 15 Jun 2023 00:08:22 -0700
-Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q9h5S-0001Zz-2d;
-        Thu, 15 Jun 2023 07:08:14 +0000
-Date:   Thu, 15 Jun 2023 15:07:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/build] BUILD SUCCESS
- 9d9173e9ceb63660ccad80f41373fd7eb48ff4ac
-Message-ID: <202306151500.86869VdV-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 15 Jun 2023 03:09:23 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640C6294F;
+        Thu, 15 Jun 2023 00:08:04 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35F41aig010655;
+        Thu, 15 Jun 2023 07:08:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=Vauiuyl3X2oKiyWXW3lpTG9zTGHJSwIk2Ckvq1ljeTs=;
+ b=By+eCrCukT+/n/XSuDA2Wrat37aSlO3XzPe4PPmvmrC8bGY9kwOLseHS04BhcXAGUbgA
+ hrLRQ16is17WAUTkUcVRljLGHQPbKmkj6Dfc7Uokdl9+d3dlxiBP2cf0y8OMJfh5MTbS
+ SiCpeooTbcVzoGqC5R3Hv8lDdzp5c2DCtp9rmqSi2IlbbUxa8ZGhALE3lLVSrIgWm51c
+ MYDouRJePjYf+EmUozFTmyU9JMZNXCkEDWMMPI3PoGD6fe4HEKxmijq8PMnkjP1GeCOT
+ QveNdFk2xLnAIBpJS+SOrSJ+HldAeqTjN5bzvDrI+5vYX/A54iiDeYCjXogZEcVSdIKQ ug== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r7u8c8avb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 07:08:00 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35F77xo5026993
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 07:07:59 GMT
+Received: from hu-ptalari-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 15 Jun 2023 00:07:54 -0700
+From:   Praveen Talari <quic_ptalari@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <broonie@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <quic_msavaliy@quicinc.com>, <quic_vtanuku@quicinc.com>,
+        <quic_vnivarth@quicinc.com>, <quic_arandive@quicinc.com>,
+        Praveen Talari <quic_ptalari@quicinc.com>
+Subject: [PATCH v2 0/3] spi-geni-qcom: Add SPI SLAVE mode support for
+Date:   Thu, 15 Jun 2023 12:37:03 +0530
+Message-ID: <20230615070706.18322-1-quic_ptalari@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: eO9b5pNS-fhSY8uTww-PyrCvRyb3XEqW
+X-Proofpoint-GUID: eO9b5pNS-fhSY8uTww-PyrCvRyb3XEqW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-15_04,2023-06-14_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ lowpriorityscore=0 suspectscore=0 mlxlogscore=588 malwarescore=0
+ phishscore=0 bulkscore=0 impostorscore=0 priorityscore=1501 spamscore=0
+ mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306150058
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/build
-branch HEAD: 9d9173e9ceb63660ccad80f41373fd7eb48ff4ac  x86/build: Avoid relocation information in final vmlinux
+This series adds spi slave mode functionality to geni based Qupv3.
+The common header file contains spi slave related registers and masks.
 
-elapsed time: 726m
-
-configs tested: 32
-configs skipped: 91
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230614   clang
-i386                 randconfig-i002-20230614   clang
-i386                 randconfig-i003-20230614   clang
-i386                 randconfig-i004-20230614   clang
-i386                 randconfig-i005-20230614   clang
-i386                 randconfig-i006-20230614   clang
-i386                 randconfig-i011-20230612   gcc  
-i386                 randconfig-i012-20230612   gcc  
-i386                 randconfig-i013-20230612   gcc  
-i386                 randconfig-i014-20230612   gcc  
-i386                 randconfig-i015-20230612   gcc  
-i386                 randconfig-i016-20230612   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230612   clang
-x86_64               randconfig-a002-20230612   clang
-x86_64               randconfig-a003-20230612   clang
-x86_64               randconfig-a004-20230612   clang
-x86_64               randconfig-a005-20230612   clang
-x86_64               randconfig-a006-20230612   clang
-x86_64               randconfig-a011-20230612   gcc  
-x86_64               randconfig-a012-20230612   gcc  
-x86_64               randconfig-a013-20230612   gcc  
-x86_64               randconfig-a014-20230612   gcc  
-x86_64               randconfig-a015-20230612   gcc  
-x86_64               randconfig-a016-20230612   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
+Praveen Talari (3):
+  soc: qcom: geni-se: Add SPI SLAVE mode support for GENI based QuPv3
+  spi: dt-bindings: qcom,spi-geni-qcom: Add SPI SLAVE mode support for
+    GENI based QuPv3
+  spi: spi-geni-qcom: Add SPI SLAVE mode support for GENI based QuPv3
+---
+v1 -> v2:
+- Added dt-binding change for spi slave
+- Modified commit message
+- Addressed review comments in driver
+ .../bindings/spi/qcom,spi-geni-qcom.yaml      |  2 +
+ drivers/spi/spi-geni-qcom.c                   | 57 +++++++++++++++++--
+ include/linux/soc/qcom/geni-se.h              |  9 +++
+ 3 files changed, 62 insertions(+), 6 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.17.1
+
