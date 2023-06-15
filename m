@@ -2,109 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D39973122B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F4F731230
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244077AbjFOIai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 04:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54316 "EHLO
+        id S244433AbjFOIcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 04:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240677AbjFOIaf (ORCPT
+        with ESMTP id S244467AbjFOIcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 04:30:35 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587631A3;
-        Thu, 15 Jun 2023 01:30:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=8140F8ZxyIF8h0Y78lNADZ9yCgB7dr+4A7JOaUUAgcI=; b=Z8nk6srOke/jCJkziNLpMv2I9u
-        hHlVHMipg7fqtKw/YA95q37ZJ9hb+MhkbXSdrIYQ+xbTBgyfbFZ8gOioQ68s0WXI3LHo8Xjrcr+Pm
-        q5gyt066R88L/KOGdVYPWOA1PtL4/Lb+KhevAYmURmQosYXhA+mIbsM1uyV+4GxCcSHhXf/v8AhD1
-        FYa0vpuQOE4KNZffr0Rp8N465wJ+nVkAOVFYYNd8sam5MQkAQ2awILHwCIywcfzpqaxjYQNA6TD06
-        ekv386ndhr/dKt59ZiN565unKidOoXogHO2oL80v/afKfDz7eZe3iINNF/mFbbXO1yZYyeEUzV/pX
-        +HhcwzCQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q9iMc-00BkWh-0K;
-        Thu, 15 Jun 2023 08:29:55 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5D116300208;
-        Thu, 15 Jun 2023 10:29:49 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 3679B2456F421; Thu, 15 Jun 2023 10:29:49 +0200 (CEST)
-Date:   Thu, 15 Jun 2023 10:29:49 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     "Wilczynski, Michal" <michal.wilczynski@intel.com>,
-        alison.schofield@intel.com,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Mike Rapoport <rppt@kernel.org>, x86@kernel.org,
-        linux-cxl@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Derick Marks <derick.w.marks@intel.com>
-Subject: Re: [PATCH v2 1/2] x86/numa: Introduce numa_fill_memblks()
-Message-ID: <20230615082949.GA1683497@hirez.programming.kicks-ass.net>
-References: <cover.1686712819.git.alison.schofield@intel.com>
- <9fcc548a6b4727cb2538e5227d7bad2e94e6adaf.1686712819.git.alison.schofield@intel.com>
- <03945e1f-caf6-3e5c-babc-d30e4e02b65e@intel.com>
- <6489b23bc67e0_142af829456@dwillia2-xfh.jf.intel.com.notmuch>
+        Thu, 15 Jun 2023 04:32:12 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41AAD172A
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:32:08 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9745c5fed21so221953466b.3
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:32:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686817927; x=1689409927;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eDGmVxB8ASkcq8azv8Ho011acSqd10uZsawAwMEXTTE=;
+        b=mDrCFUQW1a+IavKmw8gUmHekrqVIwlFTW2T/5uhutBiENJCG9EN1/sNI1we3RSPXcl
+         GYUOQItrKEVF4T3xjM9CcoMuyZ+E9dHHx2Mkdn5O1UCdmabow894FhOOlYhubYdIGllg
+         bWl8gqs4ytdJ79kVKIgXPEHxVrBkC+lqd2CcWABMOHZmqEgqQ9keqtYIo2jC3jHhcc5v
+         XNGaPyvm9jLOJvlOWV1ljSUHcGZJBkNC9jiW2xr8cq6HJLFBG7rm40f7iSRe6OZ3UQPZ
+         vMSvI55TPe3HtdtF2ncnVC0JVhU+ZXoS/Vhwy2F4/L4o89ik7a9sEtvLGDdN5WRZbuF+
+         YBeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686817927; x=1689409927;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eDGmVxB8ASkcq8azv8Ho011acSqd10uZsawAwMEXTTE=;
+        b=lkVx9MRJhnlldTlrrVlY4HMtsUWAYQV6SovgzXT5qUpRKmZiawE4RvwakxcNl4Ljzk
+         ZV4QfABzxUEWoHbBgkYQDTCo7Sng9WN0aERl9VRGuuxytFOSRYXyssd+JJO/zNQ5jYld
+         cImZKElE0EZU/Lp8kcv+6RlcDvvLE6yjHJCUKnyffhQttsFMMsWj2Dw4ee7XJaEphe+/
+         5o97aS8cI29tEPxujDJ0zLdEP/OW6w2ctVL+2b8P7Grhg8SiLfmDvf8dxDk/304HMhj2
+         xSTAnrx19wZF89xGyOTU9qHo8Y2G3I+K7HXtlollp7cZ1RsD1w4uVWyYLuVKEFNdm5rV
+         3fkA==
+X-Gm-Message-State: AC+VfDxydRMdr3koHGLXHhG2x+kMDSiriNKwcKUDVRiUR2fBmtV3EkwT
+        RggpXYY0mjYw1eVlfqiXqXPTSQ==
+X-Google-Smtp-Source: ACHHUZ4CnizjcMXS8vu1oEAcv4W+CtwoOpFPcgzhdSqsZp0IDi7udHa8ciqtKXNib3pXkplHYbDnNA==
+X-Received: by 2002:a17:906:9b92:b0:973:e349:43c9 with SMTP id dd18-20020a1709069b9200b00973e34943c9mr17034760ejc.77.1686817926723;
+        Thu, 15 Jun 2023 01:32:06 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id d18-20020a170906371200b0098282bb8effsm1446763ejc.196.2023.06.15.01.32.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jun 2023 01:32:06 -0700 (PDT)
+Message-ID: <e720dd96-c77e-6914-873c-6e5b6b5c1ca7@linaro.org>
+Date:   Thu, 15 Jun 2023 10:32:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6489b23bc67e0_142af829456@dwillia2-xfh.jf.intel.com.notmuch>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 04/15] dt-bindings: display: mediatek: padding: Add
+ documentation for MT8188
+Content-Language: en-US
+To:     Hsiao Chien Sung <shawn.sung@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Singo Chang <singo.chang@mediatek.com>,
+        Nancy Lin <nancy.lin@mediatek.com>,
+        Jason-JH Lin <jason-jh.lin@mediatek.com>
+References: <20230614073125.17958-1-shawn.sung@mediatek.com>
+ <20230614073125.17958-5-shawn.sung@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230614073125.17958-5-shawn.sung@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 05:27:39AM -0700, Dan Williams wrote:
-> Wilczynski, Michal wrote:
-> > On 6/14/2023 6:35 AM, alison.schofield@intel.com wrote:
-
-> > > +static int __init cmp_memblk(const void *a, const void *b)
-> > > +{
-> > > +	const struct numa_memblk *ma = *(const struct numa_memblk **)a;
-> > > +	const struct numa_memblk *mb = *(const struct numa_memblk **)b;
-> > 
-> > Is this casting necessary  ?
+On 14/06/2023 09:31, Hsiao Chien Sung wrote:
+> PADDING is a new hardware module on MediaTek MT8188,
+> Add device tree bindings documentation for it.
 > 
-> This is idiomatic for sort() comparison handlers.
 
-Aside of that, it *is* actually required, since sort() does indirect
-calls to it's cmp_func_t argument the Control Flow Integrity (CFI, not
-to be confused with Call-Frame-Information) stuff has a hard requirement
-that function signatures match.
+A nit, subject: drop second/last, redundant "documentation for". The
+"dt-bindings" prefix is already stating that these are bindings and
+documentation.
 
-At the very least clang builds should warn if you do indirect calls with
-non-matching signatures these days. And kCFI enabled builds will get you
-a runtime error if you manage to ignore that warning.
+> Signed-off-by: Hsiao Chien Sung <shawn.sung@mediatek.com>
+> ---
+>  .../display/mediatek/mediatek,padding.yaml    | 81 +++++++++++++++++++
+>  1 file changed, 81 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,padding.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,padding.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,padding.yaml
+> new file mode 100644
+> index 000000000000..390a518fa2cf
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,padding.yaml
+> @@ -0,0 +1,81 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/mediatek/mediatek,padding.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek PADDING
 
-> > > +
-> > > +	if (ma->start != mb->start)
-> > > +		return (ma->start < mb->start) ? -1 : 1;
-> > > +
-> > > +	/* Caller handles duplicate start addresses */
-> > > +	return 0;
-> > > +}
+MediaTek Foo Bar Padding
 
+Please explain what is this. PADDING does not look like acronym. If it
+is, expand it.
+
+> +
+> +maintainers:
+> +  - Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> +  - Philipp Zabel <p.zabel@pengutronix.de>
+> +
+> +description:
+> +  MediaTek PADDING provides ability to VDOSYS1 to add pixels to width and height
+
+Expand the acronym.
+
+> +  of a layer with a specified color.
+> +  Since MIXER in VDOSYS1 requires the width of a layer to be 2-pixel-align, or
+> +  4-pixel-align when ETHDR is enabled, we need PADDING to deal with odd width.
+> +  Please notice that even if the PADDING is in bypass mode, settings in the
+> +  registers must be cleared to 0, or undefined behaviors could happen.
+> +
+> +properties:
+> +  compatible:
+> +    const: mediatek,mt8188-padding
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: RDMA Clock
+> +
+> +  mediatek,gce-client-reg:
+> +    description:
+> +      GCE (Global Command Engine) is a multi-core micro processor that helps
+> +      its clients to execute commands without interrupting CPU. This property
+> +      describes GCE client's information that is composed by 4 fields.
+> +      1. pHandle of the GCE (there may be several GCE processors)
+> +      2. Sub-system ID defined in the dt-binding like a user ID
+> +         (Please refer to include/dt-bindings/gce/<chip>-gce.h)
+> +      3. Offset from base address of the subsys you are at
+> +      4. Size of the register the client needs
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    items:
+> +      items:
+> +        - description: pHandle of the GCE
+
+Phandle (if first in sentence) or phandle. It's not a pH unit. Fix it in
+other places as well.
+
+
+> +        - description: Subsys ID defined in the dt-binding
+> +        - description: Offset from base address of the subsys
+> +        - description: Size of register
+
+
+Best regards,
+Krzysztof
 
