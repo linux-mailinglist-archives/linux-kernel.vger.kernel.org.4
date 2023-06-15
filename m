@@ -2,166 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E71731E6C
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:52:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0BA6731E3F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:51:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238354AbjFOQwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 12:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49388 "EHLO
+        id S229586AbjFOQvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 12:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236658AbjFOQvO (ORCPT
+        with ESMTP id S236797AbjFOQvF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 12:51:14 -0400
-Received: from mo4-p03-ob.smtp.rzone.de (mo4-p03-ob.smtp.rzone.de [85.215.255.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3DA12978;
-        Thu, 15 Jun 2023 09:51:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1686847859; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=C2MFh3Nl8ySHEwkt+v9B/pLF1JcBLKtutcWC9OiPC/bCibrN5lkkkTzp49/4SykZBs
-    KgyUgbw4Z4ph4LTyJ7jlD2696Vh8H5ZGLBqQyi1aTh6+74gCZQ1bNKUVTLIxNaAKpf7x
-    fiIQUsOWukCzLnnLbdvw2qtBYYuwb2y7vR2Aq1L7doo37Jv1MReNRp3FP49GCEzBGz3t
-    xIcyLZRVXXCQWPdnviIVN4Y+ErZ8+yYyxIOeScMhNIsYNy/zk4AVwKALZT1Z3WOwbjgy
-    5xQzh7m+WdDqE4EounwbhT9RjKNaGE96UwKcbVQa6LaGTvKvnB5IyzeKZ9Ve4w9pizCZ
-    ZOJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686847859;
-    s=strato-dkim-0002; d=strato.com;
-    h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
-    From:Subject:Sender;
-    bh=HZV9aVwyvKPAu680AA1+pBj60E1yrRK6tgCJfx+g4+I=;
-    b=fZUfb8AQnoOE0tkl35f7Ar+JSvF1pBm2x6IMPCIbJttTFxLtFt6JdaTiSBJjc13SBf
-    Wza2FHcCa5PHfTKs6EvmPp8X3as3ACbY9YGyvjb+f+5u3A8kRCOGEqc046p7iosD4A6z
-    xH3OqTs47mV1G+cSt6/BbPvuDI2HmZfwpPlcN38+cD8p+7iW5F9ET07FzpKx/DYGPB11
-    4ox3n4JqZYxfKFKK5q2SgkaiGD5QOPDFMBDsfmb9q1uYOxlvkGxrnPTqJxOAC2Ekpa9N
-    /9SzqsTEwdjwGt+62BZbaPgnx4q1JtaMVt1NBGJAHY8BKELtXbC1evtuDwz8VmypzmIx
-    VFDw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo03
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686847859;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
-    From:Subject:Sender;
-    bh=HZV9aVwyvKPAu680AA1+pBj60E1yrRK6tgCJfx+g4+I=;
-    b=gcWZ53fNE/QS2POK0QH3S/bL2YfH7Wsdpv0atmEE5oOp4/fYpK6dmqB/zW6bxobkZk
-    vUoYB1nfBZT0HqkyF6tza8zRibywJoYmqNj/ezDuAsfwTuuW1HtXlvmlEQFmsKH1OXP/
-    UqBMlwQZFQSPobzkVKZXleQp8zgqHmde25ZCQyvGqXXXerRIIAKDB1tmviNOfTWxsORJ
-    jL/htI0ijf/EjKvFFs2tSozJAdOe+rX82fUAQ0iKkl8/uDkIno+IyzDk5HDOtchr5ysg
-    rMygKwDMZDZjGBmW5mltnx2OD9GiM/X1WYKbRSQn/W7DIrAg9QpPQU9fGRucpRQm7/MS
-    0qlg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686847859;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
-    From:Subject:Sender;
-    bh=HZV9aVwyvKPAu680AA1+pBj60E1yrRK6tgCJfx+g4+I=;
-    b=fwOIT1RYgqTGXoPQNDvu8mELjjgHM3iBnqixt3m6Qsjl5vmOtq2ENGwS0m4lH4RW6n
-    JX2LvHf8b8QrKf4HtsCA==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQjVd4CteZ/7jYgS+mLFY+H0JAn9VOf59w=="
-Received: from [192.168.244.3]
-    by smtp.strato.de (RZmta 49.6.0 DYNA|AUTH)
-    with ESMTPSA id D0d0a8z5FGox42o
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 15 Jun 2023 18:50:59 +0200 (CEST)
-From:   Stephan Gerhold <stephan@gerhold.net>
-Date:   Thu, 15 Jun 2023 18:50:46 +0200
-Subject: [PATCH v3 13/13] ARM: dts: qcom: apq8064: Drop redundant /smd node
+        Thu, 15 Jun 2023 12:51:05 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD3C2686;
+        Thu, 15 Jun 2023 09:50:53 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 896C55C00DB;
+        Thu, 15 Jun 2023 12:50:52 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 15 Jun 2023 12:50:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1686847852; x=1686934252; bh=8r
+        cNAyML+y0Rntmc8b1zmnBL+V8Jvai2s3TWDYfgZms=; b=MA8RVSsca6Hy/n1KGS
+        /g9qI/dSMW8fIScGW381S4Fe8EZ58/BZ68Y46GRyD6RU0DdRf1S7iFKQGKUqjYcp
+        FWxlyhvX1nWZOowtdh+0Y8ghBbUDT59/Zc3k0qWF77JYnDChQrDb8q78BALSvqGA
+        rg+NDqf6TjSdVq85rG5OEelmibAhN3S6dTnbPoj21fjRb8U4+t7Il1scWp1tuPj6
+        laBP5zxtUo8wg9eW6NVEYxYCiKPT++wKN6KaIHwDuituWS9r2zkWvUxo1MikgN5q
+        RbMLakb76UzWgFUwNj13m7DjPatfNu9YZHP4YGqpcS3u7omLoOVwa+WDcBH1OSUT
+        0eZQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1686847852; x=1686934252; bh=8rcNAyML+y0Rn
+        tmc8b1zmnBL+V8Jvai2s3TWDYfgZms=; b=M1oM89fsLYgW+nQs6lO3F3q/70wL8
+        ULxChx1qwV2Vl7N9PE7+/biGp65zOKEFa7W4B0XPoy38ZDkQcXhsUthSBbO1QXns
+        9PWJ8k8jVe09LgY+2VvwDZYNwKo8A010hlo99IcUghjt0I6P+niloWUN5pFRiiHC
+        n0kL9fsAdhvPAeiV8Wo7JeBxyukCvLoeiD6P8mCyHRX4goM2UPJpxVGIGaSISWuq
+        uFG34A4BqIsUsSeJhgFJIQwk1P8nIpfZfUPNH7qukqTf0Lrjcp9tMKBVLO7rccLP
+        lKTcdQTGzRUH/4QSRlEdpcppn6Ge98G/tDxZIdUZvrJmwHllMfCy6BsVQ==
+X-ME-Sender: <xms:bEGLZNEENBP90p5D-Mb-6mfO58hQ4pg9Q3S40Urs2SUYxShO8o3BZQ>
+    <xme:bEGLZCXvG-A7LlTlC0fp8x7d73rvpF7DXeSX6_P7S8hXcex3PVNRmljQCm1digURO
+    H85e22sVxHfzsWQcUg>
+X-ME-Received: <xmr:bEGLZPJoPAg6b_hy4nR154wFAylvYqGV6dds8lKG06oukPcGucu7H2rOtb-RlpZb5VC1B3AUeIOauRBnQkoXWg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedvvddguddtvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehgtdfsredttddvnecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnhepueevudehuedtkeevgfduveejueefvddvvefhjefglefgtdekveeugeet
+    kefgleefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:bEGLZDGH_afCQysnN2FiiJYryXHK6j3nWthabepuPMbvxiMVUCHtiA>
+    <xmx:bEGLZDVa2KnKmtRunu2K3uom-gLtHmhv0X1losbspuaUdDySQxm9Wg>
+    <xmx:bEGLZOOi7FFZv5w4-1ztQuOpjEZVA8gxhfXPxHA7gSfhfs51R5OCDA>
+    <xmx:bEGLZPpxfxWeTwTKQhzRdRx1RwzKsFqZ7-1pFRlrC5RR2Q5K4UAvTw>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 15 Jun 2023 12:50:51 -0400 (EDT)
+Date:   Thu, 15 Jun 2023 18:50:50 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        m.grzeschik@pengutronix.de, windhl@126.com,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 09/11] clk: at91: sckc: switch to parent_data/parent_hw
+Message-ID: <7i3czgzxmkrgwjeogijhkb2hf5aenwv3qfjulzu4h3rpeunpod@qtwaavl4eqw4>
+References: <20230615093227.576102-1-claudiu.beznea@microchip.com>
+ <20230615093227.576102-10-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230531-rpm-rproc-v3-13-a07dcdefd918@gerhold.net>
-References: <20230531-rpm-rproc-v3-0-a07dcdefd918@gerhold.net>
-In-Reply-To: <20230531-rpm-rproc-v3-0-a07dcdefd918@gerhold.net>
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        Stephan Gerhold <stephan@gerhold.net>
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bnlxwil7t5zvhuit"
+Content-Disposition: inline
+In-Reply-To: <20230615093227.576102-10-claudiu.beznea@microchip.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "smd-edge"s for remote processors are typically specified below the
-remoteproc nodes. For some reason apq8064 also has them all listed in a
-top-level /smd node, disabled by default. None of the boards enable them.
 
-Right now apq8064 only has support for WCNSS/riva, but there the
-smd-edge is already defined with the same interrupt etc below the
-riva-pil node.
+--bnlxwil7t5zvhuit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Drop these redundant definitions since the /smd top-level node is now
-deprecated.
+On Thu, Jun 15, 2023 at 12:32:25PM +0300, Claudiu Beznea wrote:
+> Switch slow clock drivers to use parent_data and parent_hw.
+> With this parent-child relation is described with pointers rather
+> than strings.
+>=20
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
----
- arch/arm/boot/dts/qcom-apq8064.dtsi | 40 -------------------------------------
- 1 file changed, 40 deletions(-)
+Reviewed-by: Maxime Ripard <mripard@kernel.org>
 
-diff --git a/arch/arm/boot/dts/qcom-apq8064.dtsi b/arch/arm/boot/dts/qcom-apq8064.dtsi
-index d2289205ff81..e0adf237fc5c 100644
---- a/arch/arm/boot/dts/qcom-apq8064.dtsi
-+++ b/arch/arm/boot/dts/qcom-apq8064.dtsi
-@@ -226,46 +226,6 @@ smem {
- 		hwlocks = <&sfpb_mutex 3>;
- 	};
- 
--	smd {
--		compatible = "qcom,smd";
--
--		modem-edge {
--			interrupts = <0 37 IRQ_TYPE_EDGE_RISING>;
--
--			qcom,ipc = <&l2cc 8 3>;
--			qcom,smd-edge = <0>;
--
--			status = "disabled";
--		};
--
--		q6-edge {
--			interrupts = <0 90 IRQ_TYPE_EDGE_RISING>;
--
--			qcom,ipc = <&l2cc 8 15>;
--			qcom,smd-edge = <1>;
--
--			status = "disabled";
--		};
--
--		dsps-edge {
--			interrupts = <0 138 IRQ_TYPE_EDGE_RISING>;
--
--			qcom,ipc = <&sps_sic_non_secure 0x4080 0>;
--			qcom,smd-edge = <3>;
--
--			status = "disabled";
--		};
--
--		riva-edge {
--			interrupts = <0 198 IRQ_TYPE_EDGE_RISING>;
--
--			qcom,ipc = <&l2cc 8 25>;
--			qcom,smd-edge = <6>;
--
--			status = "disabled";
--		};
--	};
--
- 	smsm {
- 		compatible = "qcom,smsm";
- 
+Maxime
 
--- 
-2.40.1
+--bnlxwil7t5zvhuit
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZItBagAKCRDj7w1vZxhR
+xdrJAQCE63NMr1hjH5dwhyTQrdYmnpzRFQWvSxDkQSPCYqxQ3wD/TNt9GxJ+YQsG
+12WFOv8G7Fb1QGRCuvaIGRWhaF0HnAg=
+=Y5V1
+-----END PGP SIGNATURE-----
+
+--bnlxwil7t5zvhuit--
