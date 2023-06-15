@@ -2,98 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22E65731653
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FEF6731655
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343511AbjFOLR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 07:17:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42366 "EHLO
+        id S1343773AbjFOLSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 07:18:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343773AbjFOLRy (ORCPT
+        with ESMTP id S1343808AbjFOLSB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 07:17:54 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B95268C;
-        Thu, 15 Jun 2023 04:17:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686827873; x=1718363873;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hnlWnFgVThUFXWgEDt/gfZMVF79mIwmPpAPRvoKzkRw=;
-  b=YqTPMA7YTBDyQumA7KBUq8vNyLOOiWXTQ8zy0hMuGj+Po5LmcsoTJPEm
-   JVGnkHt9xtYrAXwc6qJ/8KAblXYQht8nlrQWoF0tNOD2yMmDwA8TCMoN4
-   uGJeMPalBDqhiRzRlp98PUZzcSuu2+gsZhHESSpMth+ZL52ev4K7KSiTp
-   Nyng91uvczaZLtkyTNtwdgOwNAtpGZHNlHsKkaax2gQxEGxCpWWeWbnyr
-   3GvKppSIeLnsY3iDwGxqBtOH+pRVeaqciJDkcZ+0WBolcE8quE9q9L+lg
-   61iQtUzXoUWgD4/if3M2j/Lk2jyMYqF1W4mbEW6s86e0Gn1sI2Xor6OcJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="348552650"
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="348552650"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 04:17:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="712420453"
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="712420453"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 15 Jun 2023 04:17:32 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1q9kyo-003vVz-37;
-        Thu, 15 Jun 2023 14:17:30 +0300
-Date:   Thu, 15 Jun 2023 14:17:30 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Jadav, Raag" <raag.jadav@intel.com>
-Cc:     "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Sangannavar, Mallikarjunappa" 
-        <mallikarjunappa.sangannavar@intel.com>,
-        "N, Pandith" <pandith.n@intel.com>
-Subject: Re: [PATCH v3 2/3] pinctrl: intel: refine ->irq_set_type() hook
-Message-ID: <ZIrzSoEW7dinDZoi@smile.fi.intel.com>
-References: <20230613085054.10976-1-raag.jadav@intel.com>
- <20230613085054.10976-3-raag.jadav@intel.com>
- <ZInpT0dUUVUcKdqv@smile.fi.intel.com>
- <DM6PR11MB2779F9C28712D7C25F9FB3768C5BA@DM6PR11MB2779.namprd11.prod.outlook.com>
- <20230615095517.GV45886@black.fi.intel.com>
- <ZIrs2YSEUbPyvZWE@smile.fi.intel.com>
- <DM6PR11MB2779664C590484A1601A93298C5BA@DM6PR11MB2779.namprd11.prod.outlook.com>
+        Thu, 15 Jun 2023 07:18:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB43271F;
+        Thu, 15 Jun 2023 04:17:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A24762544;
+        Thu, 15 Jun 2023 11:17:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5524C433C0;
+        Thu, 15 Jun 2023 11:17:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686827878;
+        bh=1uYU6LpiCcuTJ/wma2POx8xMt4BZqFeI+ixT4aEcTbA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=fHWFLirMyS5uj+mCayXhH0iRKX3b7wwkV7i3dsKljEK6E56E9MD/11rP/YrvCfQ6b
+         gJff3FPTVv6OtMfJV5Kklhx34qJhQqK9gu50+eRbKX7LTHtofIkuoZzwi+mtXO5s/Q
+         nbjyMYdV0T0j+NzMiBjgxgI0T3DF5Z4EuH3UBKR2LnU5t55KLkanQsz4frz8iIXnKV
+         hMlHkK9ohD9lL5naXCYejqMHJul3UnrxX2im9DGsPcoHiaukww1r2oZGzGEZLDkqtJ
+         QknJ9OzQhrk2bNePnmBtVlKxiPjg0f+9VmLuTJg4AIUMPc3M3XRrfN7GLkkm1x6W/1
+         jh58hCHDk2zOA==
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Ben Hutchings <ben@decadent.org.uk>,
+        linux-snps-arc@lists.infradead.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>
+Subject: [PATCH] kbuild: make modules_install copy modules.builtin(.modinfo)
+Date:   Thu, 15 Jun 2023 20:17:43 +0900
+Message-Id: <20230615111743.883891-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM6PR11MB2779664C590484A1601A93298C5BA@DM6PR11MB2779.namprd11.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 11:08:38AM +0000, Jadav, Raag wrote:
+Josh Triplett reports that initramfs-tools needs modules.builtin and
+modules.builtin.modinfo to create a working initramfs for a non-modular
+kernel.
 
-...
+If this is a general tooling issue not limited to Debian, I think it
+makes sense to change modules_install.
 
-> Should I add all of this in original patch or send this as a separate patch
-> on top this series?
+This commit changes the targets as follows when CONFIG_MODULES=n.
 
-Always base the changes on the respective subsystem tree, don't forget to use
---base when formatting patch with Git tools. Then send it separately. The 3rd
-patch in the series is questionable to me. I would like to look into it later
-on separately.
+In-tree builds:
+  make modules          -> no-op
+  make modules_install  -> install modules.builtin(.modinfo)
 
-(The first implies that there is no changes as per this series in that
- function).
+External module builds:
+  make modules          -> show error message like before
+  make modules_install  -> show error message like before
 
+Link: https://lore.kernel.org/lkml/36a4014c73a52af27d930d3ca31d362b60f4461c.1686356364.git.josh@joshtriplett.org/
+Reported-by: Josh Triplett <josh@joshtriplett.org>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
+
+ Makefile | 26 ++++++++++++++++----------
+ 1 file changed, 16 insertions(+), 10 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index cc3fe09c4dec..f18d59c81241 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1545,6 +1545,8 @@ modules_sign_only := y
+ endif
+ endif
+ 
++endif # CONFIG_MODULES
++
+ modinst_pre :=
+ ifneq ($(filter modules_install,$(MAKECMDGOALS)),)
+ modinst_pre := __modinst_pre
+@@ -1555,18 +1557,18 @@ PHONY += __modinst_pre
+ __modinst_pre:
+ 	@rm -rf $(MODLIB)/kernel
+ 	@rm -f $(MODLIB)/source
+-	@mkdir -p $(MODLIB)/kernel
++	@mkdir -p $(MODLIB)
++ifdef CONFIG_MODULES
+ 	@ln -s $(abspath $(srctree)) $(MODLIB)/source
+ 	@if [ ! $(objtree) -ef  $(MODLIB)/build ]; then \
+ 		rm -f $(MODLIB)/build ; \
+ 		ln -s $(CURDIR) $(MODLIB)/build ; \
+ 	fi
+ 	@sed 's:^\(.*\)\.o$$:kernel/\1.ko:' modules.order > $(MODLIB)/modules.order
++endif
+ 	@cp -f modules.builtin $(MODLIB)/
+ 	@cp -f $(objtree)/modules.builtin.modinfo $(MODLIB)/
+ 
+-endif # CONFIG_MODULES
+-
+ ###
+ # Cleaning is done on three levels.
+ # make clean     Delete most generated files
+@@ -1908,6 +1910,13 @@ help:
+ 	@echo  '  clean           - remove generated files in module directory only'
+ 	@echo  ''
+ 
++__external_modules_error:
++	@echo >&2 '***'
++	@echo >&2 '*** The present kernel disabled CONFIG_MODULES.'
++	@echo >&2 '*** You cannot build or install external modules.'
++	@echo >&2 '***'
++	@false
++
+ endif # KBUILD_EXTMOD
+ 
+ # ---------------------------------------------------------------------------
+@@ -1944,13 +1953,10 @@ else # CONFIG_MODULES
+ # Modules not configured
+ # ---------------------------------------------------------------------------
+ 
+-modules modules_install:
+-	@echo >&2 '***'
+-	@echo >&2 '*** The present kernel configuration has modules disabled.'
+-	@echo >&2 '*** To use the module feature, please run "make menuconfig" etc.'
+-	@echo >&2 '*** to enable CONFIG_MODULES.'
+-	@echo >&2 '***'
+-	@exit 1
++PHONY += __external_modules_error
++
++modules modules_install: __external_modules_error
++	@:
+ 
+ KBUILD_MODULES :=
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.39.2
 
