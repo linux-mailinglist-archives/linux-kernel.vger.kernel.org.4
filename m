@@ -2,87 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 316F5730FEE
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:55:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1C90731034
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:10:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244367AbjFOGyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 02:54:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56676 "EHLO
+        id S244527AbjFOHKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 03:10:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243947AbjFOGyN (ORCPT
+        with ESMTP id S244523AbjFOHJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 02:54:13 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BC530C7;
-        Wed, 14 Jun 2023 23:53:32 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35F4oQPC020257;
-        Thu, 15 Jun 2023 06:53:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=UEMwmEG9njOUsvy3AzL1HhgZC0gazs7PPtx1MYKTqzQ=;
- b=fQpDVHBmXTRH4HuGki6vvYaBYtcYdPeF2iHKEFddqGRluLGq/xBnyCIDrjIp3dD9AYZW
- jU5ohQ1of1zMJ6JDQ0DkZ6pYH8OjsuIqPoYYEDBC+DeKF3BLnUXlty64fsufLI4YFB+x
- ibHa+hBEN3ISIIsWAN7/lnL648olcDu34gSpKiHG3vhA0fsPISbxGNHx/e+jiUDUIMHE
- frCu3UGxyATMvBNfGblXYQoBoXzRoh+IhQQcEdjXiEXobHyg1W42+kZ5zR56JQZkRM1D
- mSCG3PC2cpZK6mvV8Id+IRMbLJVtIueD2cuBLeafw6acDGwBrCc1IIMpoEiMgFYdF2jl UA== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r7u8c89yg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jun 2023 06:53:00 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35F6r0kI014633
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jun 2023 06:53:00 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 14 Jun 2023 23:52:50 -0700
-Date:   Thu, 15 Jun 2023 12:22:41 +0530
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>, <vkoul@kernel.org>,
-        <kishon@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <gregkh@linuxfoundation.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <p.zabel@pengutronix.de>, <arnd@arndb.de>,
-        <geert+renesas@glider.be>, <neil.armstrong@linaro.org>,
-        <nfraprado@collabora.com>, <broonie@kernel.org>,
-        <rafal@milecki.pl>, <quic_srichara@quicinc.com>,
-        <quic_varada@quicinc.org>, <quic_wcheng@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH 7/9] arm64: dts: qcom: ipq5332: Add USB related nodes
-Message-ID: <20230615065240.GI22186@varda-linux.qualcomm.com>
-References: <cover.1686126439.git.quic_varada@quicinc.com>
- <1b48e737aa14f5b5539cbf04d473182121d5b1ad.1686126439.git.quic_varada@quicinc.com>
- <ff8c76e4-fb6c-106d-eae3-45edc06b0c0b@linaro.org>
+        Thu, 15 Jun 2023 03:09:29 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767E3296D
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:08:07 -0700 (PDT)
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230615070804epoutp04b1cff79eb64b4195937ea3c50da65f2a~ow2GXYut50219602196epoutp04H
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 07:08:04 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230615070804epoutp04b1cff79eb64b4195937ea3c50da65f2a~ow2GXYut50219602196epoutp04H
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1686812884;
+        bh=EGcDW2JUgCyU9XRlFhBjJMiX44JWtj7BLhhL20mI6/0=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=AS2oT8R+F9B5iBBIUn8v1qb3owWdgNjirpu3OAG9knp6GTTCzFgoKdHLbpDi7lfGl
+         w3ZgQ1Od6gwoTzhW9OVUiZ1s+1Td7MuX6UtN75LDvXBVE65ONFufVJq/fBEPvPIWRw
+         WnoRAzHdpm3IDkUGXT/O3ne6q+x9ABxcT7IC77xc=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20230615070803epcas5p36465025387f9e56699ad4291dbb183da~ow2FznXib2015820158epcas5p3b;
+        Thu, 15 Jun 2023 07:08:03 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.181]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4QhYKD6mGvz4x9Pp; Thu, 15 Jun
+        2023 07:08:00 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        54.73.44881.0D8BA846; Thu, 15 Jun 2023 16:08:00 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+        20230615065406epcas5p361076a0d683d59a8bc82ac30b5ee48e7~owp6bvCW90557505575epcas5p39;
+        Thu, 15 Jun 2023 06:54:06 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230615065406epsmtrp16bb639768ac3e50b4acd97640f0c6563~owp6atjZz2692326923epsmtrp1R;
+        Thu, 15 Jun 2023 06:54:06 +0000 (GMT)
+X-AuditID: b6c32a4a-c47ff7000001af51-19-648ab8d01d50
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F8.DC.28392.E85BA846; Thu, 15 Jun 2023 15:54:06 +0900 (KST)
+Received: from FDSFTE343 (unknown [107.122.81.111]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20230615065404epsmtip26e78c3c12bef2561775b262eb8833001~owp3xiMFH0988109881epsmtip2-;
+        Thu, 15 Jun 2023 06:54:03 +0000 (GMT)
+From:   "Chandrasekar R" <rcsekar@samsung.com>
+To:     =?UTF-8?Q?'Leonard_G=C3=B6hrs'?= <l.goehrs@pengutronix.de>,
+        "'Conor Dooley'" <conor@kernel.org>,
+        "'Rob Herring'" <robh@kernel.org>,
+        "'Alexandre TORGUE'" <alexandre.torgue@foss.st.com>,
+        "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
+        "'Wolfgang Grandegger'" <wg@grandegger.com>,
+        "'Marc Kleine-Budde'" <mkl@pengutronix.de>,
+        "'David S. Miller'" <davem@davemloft.net>,
+        "'Eric Dumazet'" <edumazet@google.com>,
+        "'Jakub Kicinski'" <kuba@kernel.org>,
+        "'Paolo Abeni'" <pabeni@redhat.com>
+Cc:     <kernel@pengutronix.de>, "'Rob Herring'" <robh+dt@kernel.org>,
+        "'Krzysztof Kozlowski'" <krzysztof.kozlowski+dt@linaro.org>,
+        "'Conor Dooley'" <conor+dt@kernel.org>,
+        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+In-Reply-To: <20230614123222.4167460-5-l.goehrs@pengutronix.de>
+Subject: RE: [PATCH v2 4/8] dt-bindings: can: m_can: change from additional-
+ to unevaluatedProperties
+Date:   Thu, 15 Jun 2023 12:24:02 +0530
+Message-ID: <11a001d99f56$2d94a360$88bdea20$@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ff8c76e4-fb6c-106d-eae3-45edc06b0c0b@linaro.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 5-zxQWYjHaNUlXgZztrkg-8-PrkiKNZT
-X-Proofpoint-GUID: 5-zxQWYjHaNUlXgZztrkg-8-PrkiKNZT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-15_04,2023-06-14_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 suspectscore=0 mlxlogscore=999 malwarescore=0
- phishscore=0 bulkscore=0 impostorscore=0 priorityscore=1501 spamscore=0
- mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306150056
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQJBfgczi9zBCP0v/3p/15qYfXGLHQLr7mzDAWe+ZPGumRKpwA==
+Content-Language: en-in
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrJJsWRmVeSWpSXmKPExsWy7bCmhu6FHV0pBpP2m1r8fDmN0WLN3nNM
+        FiunrmKzmHO+hcVi/pFzrBZPjz1it1g1dSeLRd+Lh8wWe19vZbe4sK2P1eLRhwZmi1XfpzJb
+        XN41h81i/aIpLBbHFohZfDv9htGide8Rdov/e3awWyy9t5PVQdhjy8qbTB5P+7eyeyzYVOrx
+        8dJtRo9NqzrZPO5c28Pm0f/XwOP9vqtsHp83yQVwRmXbZKQmpqQWKaTmJeenZOal2yp5B8c7
+        x5uaGRjqGlpamCsp5CXmptoqufgE6Lpl5gD9pKRQlphTChQKSCwuVtK3synKLy1JVcjILy6x
+        VUotSMkpMCnQK07MLS7NS9fLSy2xMjQwMDIFKkzIzmg5/5K94CBXxfxZF9kaGP9ydjFyckgI
+        mEh0vXnD1sXIxSEksJtRonf9BCYI5xOjxNXT76Ccz4wSf36cYoZpubdkKgtEYhejRP/cPVD9
+        Lxglri98xghSxSagI/G+7xtYQkTgB7PE0gOnWUEcZoHFTBITvm9nAqniFLCXuN3/C6iKg0NY
+        IF1i6wshkDCLgKrEk6sHwEp4BSwlmmedY4GwBSVOznwCZjMLaEssW/ga6iQFiZ9Pl7GC2CIC
+        ThIbryxhh6gRlzj6s4cZZK+EQDOnxMQNl6EaXCQW9H9mhbCFJV4d38IOYUtJvOxvg7KLJV59
+        n8wGYddI7Nu8GqrXXuLAlTksIDczC2hKrN+lDxGWlZh6ah0TxF4+id7fT5gg4rwSO+bB2IoS
+        07bOBGuVALrtyLyQCYxKs5B8NgvJZ7OQfDALYdkCRpZVjJKpBcW56anFpgVGeanl8BhPzs/d
+        xAhO81peOxgfPvigd4iRiYPxEKMEB7OSCO9TjfYUId6UxMqq1KL8+KLSnNTiQ4ymwOCeyCwl
+        mpwPzDR5JfGGJpYGJmZmZiaWxmaGSuK86rYnk4UE0hNLUrNTUwtSi2D6mDg4pRqYuD/oXsu8
+        Vt312orVn++7lDm/h9PHTFNbNtvQ/fHcJ3KWxK/0+DXfd9Wc0xeu/W34EWnLbeeouWqG39Uu
+        n8/9OdffFRarrzi1Za33MZV193fu37VBapvQBLFjvyYfeTl/CZNDz9PiXS8i997sEJVkmexd
+        HjbHQFgm4+8Pdq/7XdvMIjQYtSsCTeymFXw5faLog09cTKPBuifKHgyc7t3LpHfVRjk8CLxS
+        pl5dwOcop+sQa3VQ44Udz4HIj586Dc99TdKXuLWPr66oOj7PorHKO8ORa3OhaLlw2qUptgHv
+        OSfKfdWcn1cyaQ5flNOEm+68x7389P8JvTyV8+Z22iezqvK1i98mLJGQ3XlM558SS3FGoqEW
+        c1FxIgC0YitjfAQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA02RfUhTURiHO7t3d3fT5XWTPBp9MCjCyo8IOZI4i6BriQlGhkY2281W25RN
+        K6NgZBZazgpXOYZapG3LVWrWLC3T0iwzMw1jlixcU6y0pNmMNLYV+N8Dz/k9vHBITNCLh5Iy
+        ZS6jUkrkIoKH32sXLVurbSyWRp5+HI7cY5cAqm3pYSGTzkwgw+tTOKp82sNGjo5PHGTWNeFI
+        O2rHUMt4Iwf13tOy0adJDYbM0zoMvX1gINDta2U46qhahFwvvwBU2PKUg+aarRxU/bGJHS+k
+        75res2hHaSOHrqrPo7/32QBdby4i6KF3zQRd+ieSnng0QNBT9UuTuWm8WCkjlx1mVBFxe3kH
+        XA2nWDlXyaP2sUgNKOAUAy4JqfXw43UdXgx4pICyAvirp4nwiWBomez/x0JomnV6BwLqM4Al
+        w9DDBLUGTmhdhGccRGlwWKgrwD0Co0wsOGLl+artAH6bm/AKLiWGttIZb1VIMbCrtt1bxakV
+        cGSgleVhPhUDC/Q9uI8DYVf5yL/oalhiLwT/uebqOOa7bjl0O2rYHg6iNsG6/usc35tg+Mx9
+        DjsPhPp5Kf28lH5eSj9vUgVwMwhhctSKLIU6KmedkjkSrpYo1HnKrPB92Yp64P30sDAraDZP
+        hrcBFgnaACQxURDfseqMVMCXSvKPMarsDFWenFG3gcUkLgrm9xZ3ZQioLEkuc4hhchjVf8si
+        uaEaVmLKwQi3vCCg8bdYJRYN+Q3OXp5anNmdG1cTk/6ITtvT3ne5O8JdkZi63dhmOtHaer88
+        Vte641LC4JvehGSLSPnavzDe9iH1Ree3bZvqjNOibbErZ6J3f4U3Nw6Pyg1kacg+i0LrfOhI
+        LeL6B/R3hsRPJ/0wfo36dUcR/7ycPVSttlsq8l1GNBp3cs64Bf4uo/auvRJq+Nlp72jeMJZ/
+        IabEKRTzLZEXNj+Uy/ynqTjnUanjyXm3Nan/7M+tTWkuP9uMrFqWqXFmLiEVsdSr2qRobsqu
+        i+P7sePiupTA2cpb51oCzWK3bMENqiu9zNXQnbDzyUDiwqIvocO2zhARrj4giQrDVGrJXwBG
+        R7JjAwAA
+X-CMS-MailID: 20230615065406epcas5p361076a0d683d59a8bc82ac30b5ee48e7
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230614123256epcas5p4d6f139c203e63e7d2749c256806916ce
+References: <20230614123222.4167460-1-l.goehrs@pengutronix.de>
+        <CGME20230614123256epcas5p4d6f139c203e63e7d2749c256806916ce@epcas5p4.samsung.com>
+        <20230614123222.4167460-5-l.goehrs@pengutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,125 +137,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 08:24:04PM +0200, Konrad Dybcio wrote:
->
->
-> On 7.06.2023 12:56, Varadarajan Narayanan wrote:
-> > Add USB phy and controller nodes
-> >
-> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > ---
-> >  arch/arm64/boot/dts/qcom/ipq5332.dtsi | 55 +++++++++++++++++++++++++++++++++++
-> >  1 file changed, 55 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> > index c2d6cc65..3183357 100644
-> > --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> > @@ -383,6 +383,61 @@
-> >  				status = "disabled";
-> >  			};
-> >  		};
-> > +
-> > +		usb_0_m31phy: hs_m31phy@7b000 {
-> > +			compatible = "qcom,ipq5332-m31-usb-hsphy";
-> > +			reg = <0x0007b000 0x12C>,
-> random uppercase hex
-
-Ok.
-
-> > +			      <0x08af8800 0x400>;
-> > +			reg-names = "m31usb_phy_base",
-> > +				    "qscratch_base";
-> > +			phy_type= "utmi";
-> Missing space before '='
-
-Ok.
-
-> > +
-> > +			resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
-> > +			reset-names = "usb2_phy_reset";
-> > +
-> > +			status = "okay";
-> If you're only defining the node, it's enabled by default
->
-> In this case, you'd probably want to disable it by default.
-
-Ok.
-
-> > +		};
-> > +
-> > +		usb2: usb2@8a00000 {
-> > +			compatible = "qcom,ipq5332-dwc3", "qcom,dwc3";
-> > +			#address-cells = <1>;
-> > +			#size-cells = <1>;
-> > +			ranges;
-> Please push these 3 properties to the end
->
-> And add status = "disabled" below them.
-
-Ok.
-
-> > +
-> > +			reg = <0x08af8800 0x100>;
-> > +
-> > +			clocks = <&gcc GCC_USB0_MASTER_CLK>,
-> > +				<&gcc GCC_SNOC_USB_CLK>,
-> > +				<&gcc GCC_USB0_SLEEP_CLK>,
-> > +				<&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> > +
-> Please remove this newline.
->
-> > +			clock-names = "core",
-> > +				"iface",
-> > +				"sleep",
-> > +				"mock_utmi";
-> Please align this, and all other similar lists.
-
-Ok.
-
-> > +
-> > +			interrupts-extended = <&intc GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>;
-> interrupts-extended is unnecessary with just a single interrupt
-> source.. you can make it `interrupts` and drop the GIC reference.
->
-> It would also be nice to push the interrupt properties below 'reg'.
-> We're working on documenting and automating checking the preferred
-> property order.
-
-Ok.
-
-> > +			interrupt-names = "pwr_event";
-> > +
-> > +			resets = <&gcc GCC_USB_BCR>;
-> > +
-> > +			qcom,select-utmi-as-pipe-clk;
-> > +
-> > +			usb2_0_dwc: usb@8a00000 {
-> > +				compatible = "snps,dwc3";
-> > +				reg = <0x08a00000 0xe000>;
-> > +				clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> > +				clock-names = "ref";
-> > +				interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
-> > +				usb-phy = <&usb_0_m31phy>;
-> > +				tx-fifo-resize;
-> > +				snps,is-utmi-l1-suspend;
-> > +				snps,hird-threshold = /bits/ 8 <0x0>;
-> > +				snps,dis_u2_susphy_quirk;
-> > +				snps,dis_u3_susphy_quirk;
-> > +				snps,ref-clock-period-ns = <21>;
-> 1/21 is 0.0476..  that doesn't seem to correspond to the ref
-> clk frequency?
-
-dwc3_ref_clk_period() prefers ref clock's rate over ref-clock-period-ns.
-Since ref clock is available this is not used. Will remove this.
-
-Thanks
-Varada
-
-> Konrad
-> > +			};
-> > +		};
-> >  	};
-> >
-> >  	timer {
+ > This allows the usage of properties like termination-gpios and terminati=
+on-
+> ohms, which are specified in can-controller.yaml but were previously not
+> usable due to additionalProperties: false.
+>=20
+> Signed-off-by: Leonard G=C3=B6hrs=20<l.goehrs=40pengutronix.de>=0D=0A>=20=
+Suggested-by:=20Rob=20Herring=20<robh=40kernel.org>=0D=0ALooks=20good=20to=
+=20me,=0D=0AReviewed-by:=20Chandrasekar=20Ramakrishnan=20<rcsekar=40samsung=
+.com>=0D=0A>=20---=0D=0A>=20=20Documentation/devicetree/bindings/net/can/bo=
+sch,m_can.yaml=20=7C=202=20+-=0D=0A>=20=201=20file=20changed,=201=20inserti=
+on(+),=201=20deletion(-)=0D=0A>=20=0D=0A>=20diff=20--git=20a/Documentation/=
+devicetree/bindings/net/can/bosch,m_can.yaml=0D=0A>=20b/Documentation/devic=
+etree/bindings/net/can/bosch,m_can.yaml=0D=0A>=20index=2067879aab623b5..76c=
+5024b6423e=20100644=0D=0A>=20---=20a/Documentation/devicetree/bindings/net/=
+can/bosch,m_can.yaml=0D=0A>=20+++=20b/Documentation/devicetree/bindings/net=
+/can/bosch,m_can.yaml=0D=0A>=20=40=40=20-128,7=20+128,7=20=40=40=20required=
+:=0D=0A>=20=20=20=20-=20clock-names=0D=0A>=20=20=20=20-=20bosch,mram-cfg=0D=
+=0A>=20=0D=0A>=20-additionalProperties:=20false=0D=0A>=20+unevaluatedProper=
+ties:=20false=0D=0A>=20=0D=0A>=20=20examples:=0D=0A>=20=20=20=20-=20=7C=0D=
+=0A>=20--=0D=0A>=202.39.2=0D=0A=0D=0A=0D=0A
