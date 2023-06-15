@@ -2,75 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EAF1731EA2
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 19:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76D21731EB1
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 19:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbjFORFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 13:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59756 "EHLO
+        id S237247AbjFORHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 13:07:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232502AbjFORFR (ORCPT
+        with ESMTP id S229905AbjFORH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 13:05:17 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A75194;
-        Thu, 15 Jun 2023 10:05:16 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b443ebae0dso16163461fa.2;
-        Thu, 15 Jun 2023 10:05:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686848715; x=1689440715;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=crBt2ITg8SZ2kjr+v53DzcSzxyBX77tw0/FzCIW8K/M=;
-        b=DUuKjGKkLd3xr6fw7ISZK9UObyf9IKsH9P5OAMVKBBFO2p+gWILzdkAlmpX9qvis6c
-         rNIKx3JtA3BKucyQwwzgvgLT/405EdgBeNp5o+KsahwdLKpFFRk9rdnmg7z7SHJOZPzK
-         YLn4jzrY3rv65y71YS5w+xMd3K7068Y2Ui+ewyGSM6j7z0BXzwe5aXPLS7TmDcO+Qqzg
-         u3bCkITTMBXCH1+h/MQ7hxPK1TxyNbFO/XRceINXXj2lvq5Cvd0+DfnTBuN35QDj6r2X
-         eopRfgU6pF4o7AAyjP/vnsM63+YkWAp33Gis/C6he4BMsfBKr714P9vuRcc0m1IPGn+S
-         u2Yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686848715; x=1689440715;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=crBt2ITg8SZ2kjr+v53DzcSzxyBX77tw0/FzCIW8K/M=;
-        b=ikk9cwurbU7oeMZYoclSWrh2//W79KeWqHQwGqJsGH/kBa/XraXxiV9P/5AYnu98fB
-         Nd6IJOmGeH/n4fwZB+v8gUA23Z4080V/d4jwCAROIJB/en6tKoduNVnFT/L8Iw9J5XJt
-         COINcN5efdFy3nSCOiA37aODQPngNpTHPdZs0px9BmxBwHeYMJy7gTLSiyHTMXWBuuG8
-         E93MoEYt6Cq8lljQDl3+VW+g1EK5K2P5QVjBqBLC1sWT2ugjzSFEY8e/TEXaNqVkbGr+
-         r9ZQDrKt32VLiLgJa0ap096vKBhn0wF/fuoS4Ne4sRYlKrv4ixQR/HaMldHJbtzmuFXR
-         3kRA==
-X-Gm-Message-State: AC+VfDy6hnecGDlgPqjNSuBFN25HxxkonSkhOphWGsC/wdjLR7m7pXIs
-        9zfTh1ueL7jj+T4XBzNLShepUT8WLK5org==
-X-Google-Smtp-Source: ACHHUZ7r4SbDTfLJT6A+Xdd3hkh4l9+0lbKnY5uI/8PhcRo2xcI7zxTj5tNJ3wYJvt8qxVxw9ze7ug==
-X-Received: by 2002:a2e:a175:0:b0:2b3:47b3:3c39 with SMTP id u21-20020a2ea175000000b002b347b33c39mr49134ljl.23.1686848714423;
-        Thu, 15 Jun 2023 10:05:14 -0700 (PDT)
-Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id z27-20020a05651c023b00b002adc6c2cb3bsm3195205ljn.5.2023.06.15.10.05.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 10:05:13 -0700 (PDT)
-Message-ID: <fbd79f5f2b250ec913c78d91b94ca96fb96f67ee.camel@gmail.com>
-Subject: Re: [PATCH bpf] bpf/btf: Accept function names that contain dots
-From:   Eduard Zingerman <eddyz87@gmail.com>
-To:     Florent Revest <revest@chromium.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Cc:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, nathan@kernel.org,
-        ndesaulniers@google.com, trix@redhat.com, stable@vger.kernel.org
-Date:   Thu, 15 Jun 2023 20:05:11 +0300
-In-Reply-To: <CABRcYm+C+tPwXAGnaDRR_U2hzyt+09fjkKBp3tPx6iKT4wBE2Q@mail.gmail.com>
-References: <20230615145607.3469985-1-revest@chromium.org>
-         <CABRcYm+C+tPwXAGnaDRR_U2hzyt+09fjkKBp3tPx6iKT4wBE2Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        Thu, 15 Jun 2023 13:07:28 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9AB7123;
+        Thu, 15 Jun 2023 10:07:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686848847; x=1718384847;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=FXV1YChUXwSF8PZCAUD+tpfoEBwKY/uzBtEPKcW5DBo=;
+  b=gXERln9Rg2qQwFDlRCdTAOm8jL3u9SrAqV8OkpEDKFRucJc5AqCzjokb
+   LgRaXKulvFhF4dwmS90c/S2U6mcMaXLnknXo39D7h/wmYsa6GngtcNO8R
+   Zf60P2XEEDKiuUs3WwU0vbHo1e15j3IKSU7TtOg+DP5t87Bk62lBpkStv
+   k9hN4pAjdxtt+pDY4rMijYkGAhkjt3o9IZLDNzlGO8FtRnS6oT+S6dJQF
+   vlS8rkSm0WynrtY5i/pDt4RPMqtqXLnpIJdMrv4zqtlQ9PtePcWNtdDhC
+   jNvtVuNw3V06rdlhHD+2G8tIBn8rPjCu3MjS3YJSkjLYiCdGVxs/I721t
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="387521010"
+X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
+   d="scan'208";a="387521010"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 10:07:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="825368959"
+X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
+   d="scan'208";a="825368959"
+Received: from akcopko-mobl2.amr.corp.intel.com (HELO [10.212.220.19]) ([10.212.220.19])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 10:07:26 -0700
+Message-ID: <a268fc1c-dd63-cac5-4aec-836a6299ab36@linux.intel.com>
+Date:   Thu, 15 Jun 2023 10:07:26 -0700
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH] PCI/ASPM: Enable ASPM on external PCIe devices
+Content-Language: en-US
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>, bhelgaas@google.com
+Cc:     Mario Limonciello <mario.limonciello@amd.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Michael Bottini <michael.a.bottini@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230615070421.1704133-1-kai.heng.feng@canonical.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20230615070421.1704133-1-kai.heng.feng@canonical.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,46 +69,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-06-15 at 17:44 +0200, Florent Revest wrote:
-> On Thu, Jun 15, 2023 at 4:56=E2=80=AFPM Florent Revest <revest@chromium.o=
-rg> wrote:
-> >=20
-> > When building a kernel with LLVM=3D1, LLVM_IAS=3D0 and CONFIG_KASAN=3Dy=
-, LLVM
-> > leaves DWARF tags for the "asan.module_ctor" & co symbols.
->=20
-> To be fair I can't tell if this is an LLVM bug. It's sort of curious
-> that with LLVM_IAS=3D1, these debugging symbols are not kept and they
-> are with LLVM_IAS=3D0 but I don't know what the expected behavior should
-> be and how BTF should deal with it. I'll let people with more context
-> comment on this! :)
->=20
-> An easy reproducer is:
->=20
-> $ touch pwet.c
->=20
-> $ clang -g -fsanitize=3Dkernel-address -c -o pwet.o pwet.c
-> $ llvm-dwarfdump pwet.o | grep module_ctor
->=20
-> $ clang -fno-integrated-as -g -fsanitize=3Dkernel-address -c -o pwet.o pw=
-et.c
-> $ llvm-dwarfdump pwet.o | grep module_ctor
->                 DW_AT_name      ("asan.module_ctor")
 
-Interestingly, I am unable to reproduce it using either
-clang version 14.0.0-1ubuntu1 or clang main (bd66f4b1da30).
 
->=20
-> > In a dramatic turn of event, this BTF verification failure can cause
-> > the netfilter_bpf initialization to fail, causing netfilter_core to
-> > free the netfilter_helper hashmap and netfilter_ftp to trigger a
-> > use-after-free. The risk of u-a-f in netfilter will be addressed
-> > separately
->=20
-> To be precise, I meant "netfilter conntrack".
->=20
-> I sent the following patch as a more targeted mitigation for the uaf
-> https://lore.kernel.org/netfilter-devel/20230615152918.3484699-1-revest@c=
-hromium.org/T/#u
->=20
+On 6/15/23 12:04 AM, Kai-Heng Feng wrote:
+> When a PCIe device is hotplugged to a Thunderbolt port, ASPM is not
+> enabled for that device. However, when the device is plugged preboot,
+> ASPM is enabled by default.
+> 
+> The disparity happens because BIOS doesn't have the ability to program
+> ASPM on hotplugged devices.
+> 
+> So enable ASPM by default for external connected PCIe devices so ASPM
+> settings are consitent between preboot and hotplugged.
 
+Why it has to be consistent? Can you add info about what it solves?
+
+> 
+> On HP Thunderbolt Dock G4, enable ASPM can also fix BadDLLP error:
+> pcieport 0000:00:1d.0: AER: Corrected error received: 0000:07:04.0
+> pcieport 0000:07:04.0: PCIe Bus Error: severity=Corrected, type=Data Link Layer, (Receiver ID)
+> pcieport 0000:07:04.0:   device [8086:0b26] error status/mask=00000080/00002000
+> pcieport 0000:07:04.0:    [ 7] BadDLLP
+> 
+> The root cause is still unclear, but quite likely because the I225 on
+> the dock supports PTM, where ASPM timing is precalculated for the PTM.
+> 
+> Cc: Mario Limonciello <mario.limonciello@amd.com>
+> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217557
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> ---
+>  drivers/pci/pcie/aspm.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+> index 66d7514ca111..613b0754c9bb 100644
+> --- a/drivers/pci/pcie/aspm.c
+> +++ b/drivers/pci/pcie/aspm.c
+> @@ -119,7 +119,9 @@ static int policy_to_aspm_state(struct pcie_link_state *link)
+>  		/* Enable Everything */
+>  		return ASPM_STATE_ALL;
+>  	case POLICY_DEFAULT:
+> -		return link->aspm_default;
+> +		return dev_is_removable(&link->downstream->dev) ?
+> +			link->aspm_capable :
+> +			link->aspm_default;
+>  	}
+>  	return 0;
+>  }
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
