@@ -2,218 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9E92730C8E
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 03:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C47C730C90
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 03:26:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236263AbjFOBYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 21:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36464 "EHLO
+        id S236068AbjFOBZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 21:25:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjFOBYX (ORCPT
+        with ESMTP id S229516AbjFOBZU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 21:24:23 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F7EA212D;
-        Wed, 14 Jun 2023 18:24:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686792262; x=1718328262;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TKMlT1y1/y5VedBm18Sg1VLQSNu3WZkBrgxFikyleQQ=;
-  b=EY3nXxpuelSPTOtvtf/zcrZ91/GsN8NM5U8jsFJGv5h1gII2hw7jwlmu
-   s/xTjlqYlv4pH8XKQT/3IpDzOtHYuS8QXjxBGk4NPVcB7HrduUK2N7dVS
-   KUy6YcgsaX9nglqzxy3k75ZhpYFVhrG/tILQN4ZjCvaoA/6LOzkt54DWz
-   ew3ulEzoQvoYJkKqyhaHbi4uZNETm4Xqd23kG8dgBkfUY3KLtJ912cHmL
-   Mvc7TiQgOLIf5AKSXDjMgkPbD6cYVCbEcWyX+FI5e7WsoJ3gTn13IVYHz
-   cLFlayXr3frLHAQDj/o26SgVyKsJkitYz4TZ/ilnlQvgTSE3BWlEG0bu0
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="422385826"
-X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="422385826"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 18:24:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="742052049"
-X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
-   d="scan'208";a="742052049"
-Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 14 Jun 2023 18:24:06 -0700
-Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q9biX-0001G1-1L;
-        Thu, 15 Jun 2023 01:24:05 +0000
-Date:   Thu, 15 Jun 2023 09:23:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dmitry Safonov <dima@arista.com>, David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dmitry Safonov <dima@arista.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Bob Gilligan <gilligan@arista.com>,
-        Dan Carpenter <error27@gmail.com>,
-        David Laight <David.Laight@aculab.com>,
-        Donald Cassidy <dcassidy@redhat.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Francesco Ruggeri <fruggeri05@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Ivan Delalande <colona@arista.com>,
-        Leonard Crestez <cdleonard@gmail.com>,
-        Salam Noureddine <noureddine@arista.com>
-Subject: Re: [PATCH v7 08/22] net/tcp: Add AO sign to RST packets
-Message-ID: <202306150955.0sJRXmfG-lkp@intel.com>
-References: <20230614230947.3954084-9-dima@arista.com>
+        Wed, 14 Jun 2023 21:25:20 -0400
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B19A212D
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 18:25:15 -0700 (PDT)
+X-QQ-mid: bizesmtp70t1686792281tjip6eld
+Received: from localhost.localdomain ( [113.200.76.118])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 15 Jun 2023 09:24:40 +0800 (CST)
+X-QQ-SSF: 01400000000000D0H000000A0000020
+X-QQ-FEAT: iDzLjIm7mlbD7xs52j67WUD2pB0x3VsRV5ZisNLhsvuZpmeqaA5RV2ut9+ntW
+        zqllNjWbzu4wehBM9vXKTvfxsnTG9eJocR+q4nzDZkNUKBVIFRigC5rzUlPkgy60JVsglFw
+        i0Mp78Aga9YTbuni3V0G1PxTZFUJkA713T536YRZSx90bspHzSeNLpie+TL1SnSBKi2E3Bw
+        JUzOyJcurDm0MbBZykdrDRTZQrZ3CBseEfL+f0OMnI7c1ItpQ8OdphyHFDJz+NbiS0o6Nqu
+        D5O2RnTdlWx4/ZWWN3fiI5gXD/jVLDbYfkpRcm3MBNUAo8lRMTAB1HXgH1S5aah4kFlpK/n
+        hiLyOlmVItsK58QebeHolN7IQpmbMU6+VpbD3k95B3Xib9wCOsJ277a8jV2le+I2HmBIFCI
+        hmSuinntnfQ=
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 9483928106816243483
+From:   Guo Hui <guohui@uniontech.com>
+To:     peterz@infradead.org, mingo@redhat.com, will@kernel.org,
+        longman@redhat.com, boqun.feng@gmail.com
+Cc:     linux-kernel@vger.kernel.org, wangxiaohua@uniontech.com,
+        Guo Hui <guohui@uniontech.com>
+Subject: [PATCH] locking/osq_lock: Fix false sharing of optimistic_spin_node in osq_lock
+Date:   Thu, 15 Jun 2023 09:24:37 +0800
+Message-Id: <20230615012437.21087-1-guohui@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230614230947.3954084-9-dima@arista.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybglogicsvrsz:qybglogicsvrsz4a-0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
+For the performance of osq_lock,
+I have made a patch before:
 
-kernel test robot noticed the following build warnings:
+https://lore.kernel.org/lkml/20220628161251.21950-1-guohui@uniontech.com/
 
-[auto build test WARNING on b6dad5178ceaf23f369c3711062ce1f2afc33644]
+the analysis conclusion is due to the memory access
+of the following code caused performance degradation:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Safonov/net-tcp-Prepare-tcp_md5sig_pool-for-TCP-AO/20230615-071334
-base:   b6dad5178ceaf23f369c3711062ce1f2afc33644
-patch link:    https://lore.kernel.org/r/20230614230947.3954084-9-dima%40arista.com
-patch subject: [PATCH v7 08/22] net/tcp: Add AO sign to RST packets
-config: hexagon-randconfig-r025-20230612 (https://download.01.org/0day-ci/archive/20230615/202306150955.0sJRXmfG-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git checkout b6dad5178ceaf23f369c3711062ce1f2afc33644
-        b4 shazam https://lore.kernel.org/r/20230614230947.3954084-9-dima@arista.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/ipv6/
+cpu = node->cpu - 1;
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306150955.0sJRXmfG-lkp@intel.com/
+The instructions corresponding to the C code are:
+mov 0x14(%rax),%edi
+sub $0x1,%edi
 
-All warnings (new ones prefixed by >>):
+in the X86 operating environment,
+causing high cache-misses and degrading performance.
 
-   In file included from net/ipv6/tcp_ipv6.c:32:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from net/ipv6/tcp_ipv6.c:32:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from net/ipv6/tcp_ipv6.c:32:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> net/ipv6/tcp_ipv6.c:1136:1: warning: unused label 'out' [-Wunused-label]
-    1136 | out:
-         | ^~~~
-    1137 |         rcu_read_unlock();
-   7 warnings generated.
+The memory access instructions that cause performance degradation are
+further analyzed.The cache-misses of the above instructions are caused
+by a large number of cache-line false sharing
+when accessing non-local-CPU variables,as follows:
 
+         ---------------------------------
+         |   struct optimistic_spin_node |
+         ---------------------------------
+         | next | prev | locked |  cpu   |
+         ---------------------------------
+         |        cache line             |
+         ---------------------------------
+         |          CPU0                 |
+         ---------------------------------
 
-vim +/out +1136 net/ipv6/tcp_ipv6.c
+When a CPU other than CPU0 reads the value of
+optimistic_spin_node->cpu of CPU0,CPU0 frequently modifies
+the data of the cache line,which will cause false sharing
+on the currently accessing CPU,and the variable of
+the structure optimistic_spin_node type will be
+defined as a cacheline alignmented per cpu variable,
+each optimistic_spin_node variable is bound to the corresponding CPU core:
 
-2045a93527d963 Dmitry Safonov           2023-06-15  1110  
-c24b14c46bb88d Song Liu                 2017-10-23  1111  	if (sk) {
-c24b14c46bb88d Song Liu                 2017-10-23  1112  		oif = sk->sk_bound_dev_if;
-052e0690f1f62f Eric Dumazet             2019-07-10  1113  		if (sk_fullsock(sk)) {
-052e0690f1f62f Eric Dumazet             2019-07-10  1114  			const struct ipv6_pinfo *np = tcp_inet6_sk(sk);
-052e0690f1f62f Eric Dumazet             2019-07-10  1115  
-c24b14c46bb88d Song Liu                 2017-10-23  1116  			trace_tcp_send_reset(sk, skb);
-052e0690f1f62f Eric Dumazet             2019-07-10  1117  			if (np->repflow)
-052e0690f1f62f Eric Dumazet             2019-07-10  1118  				label = ip6_flowlabel(ipv6h);
-e9a5dceee56cb5 Eric Dumazet             2019-09-24  1119  			priority = sk->sk_priority;
-dc6456e938e938 Antoine Tenart           2023-04-27  1120  			txhash = sk->sk_txhash;
-052e0690f1f62f Eric Dumazet             2019-07-10  1121  		}
-f6c0f5d209fa80 Eric Dumazet             2019-09-24  1122  		if (sk->sk_state == TCP_TIME_WAIT) {
-50a8accf10627b Eric Dumazet             2019-06-05  1123  			label = cpu_to_be32(inet_twsk(sk)->tw_flowlabel);
-f6c0f5d209fa80 Eric Dumazet             2019-09-24  1124  			priority = inet_twsk(sk)->tw_priority;
-9258b8b1be2e1e Eric Dumazet             2022-09-22  1125  			txhash = inet_twsk(sk)->tw_txhash;
-f6c0f5d209fa80 Eric Dumazet             2019-09-24  1126  		}
-323a53c41292a0 Eric Dumazet             2019-06-05  1127  	} else {
-a346abe051bd2b Eric Dumazet             2019-07-01  1128  		if (net->ipv6.sysctl.flowlabel_reflect & FLOWLABEL_REFLECT_TCP_RESET)
-323a53c41292a0 Eric Dumazet             2019-06-05  1129  			label = ip6_flowlabel(ipv6h);
-c24b14c46bb88d Song Liu                 2017-10-23  1130  	}
-c24b14c46bb88d Song Liu                 2017-10-23  1131  
-e92dd77e6fe0a3 Wei Wang                 2020-09-08  1132  	tcp_v6_send_response(sk, skb, seq, ack_seq, 0, 0, 0, oif, key, 1,
-2045a93527d963 Dmitry Safonov           2023-06-15  1133  			     ipv6_get_dsfield(ipv6h), label, priority, txhash,
-2045a93527d963 Dmitry Safonov           2023-06-15  1134  			     ao_key, traffic_key, rcv_next, ao_sne);
-658ddaaf6694ad Shawn Lu                 2012-01-31  1135  
-3b24d854cb3538 Eric Dumazet             2016-04-01 @1136  out:
-658ddaaf6694ad Shawn Lu                 2012-01-31  1137  	rcu_read_unlock();
-ecc51b6d5ca04b Arnaldo Carvalho de Melo 2005-12-12  1138  }
-^1da177e4c3f41 Linus Torvalds           2005-04-16  1139  
+    DEFINE_PER_CPU_SHARED_ALIGNED(struct optimistic_spin_node, osq_node);
 
+Therefore, the value of optimistic_spin_node->cpu is usually unchanged,
+so the false sharing caused by access to optimistic_spin_node->cpu
+is caused by frequent modification of the other three attributes
+of optimistic_spin_node.
+
+There are two solutions as follows:
+
+solution 1:
+Put the cpu attribute of optimistic_spin_node into a cacheline separately.
+The patch is as follows：
+
+ struct optimistic_spin_node {
+        struct optimistic_spin_node *next, *prev;
+        int locked; /* 1 if lock acquired */
+-       int cpu; /* encoded CPU # + 1 value */
++       int cpu ____cacheline_aligned; /* encoded CPU # + 1 value */
+ };
+
+Unixbench full-core performance data is as follows:
+Machine: Hygon X86, 128 cores
+                                    with patch   without patch  promote
+Dhrystone 2 using register variables   194923.07    195091      -0.09%
+Double-Precision Whetstone             79885.47     79838.87    +0.06%
+Execl Throughput                       2327.17      2272.1      +2.42%
+File Copy 1024 bufsize 2000 maxblocks  742.1        687.53      +7.94%
+File Copy 256 bufsize 500 maxblocks    462.73       428.03      +8.11%
+File Copy 4096 bufsize 8000 maxblocks  1600.37      1520.53     +5.25%
+Pipe Throughput                        79815.33     79522.13    +0.37%
+Pipe-based Context Switching           28962.9      27987.8     +3.48%
+Process Creation                       3084.4       2999.1      +2.84%
+Shell Scripts 1 concurrent             11687.1      11394.67    +2.57%
+Shell Scripts 8 concurrent             10787.1      10496.17    +2.77%
+System Call Overhead                   4322.77      4322.23     +0.01%
+System Benchmarks Index Score          8079.4       7848.37     +3.0%
+
+solution 2:
+The core idea of osq lock is that
+the lock applicant spins on the local-CPU variable
+to eliminate cache-line bouncing.Therefore,
+the same method is used for the above degradation.
+For the optimistic_spin_node of the current CPU,
+the cpu attribute of its predecessor optimistic_spin_node is
+non-local-CPU variables,the cpu attribute of
+the predecessor optimistic_spin_node is cached
+in the optimistic_spin_node of the current CPU
+to eliminate performance degradation
+caused by non-local-CPU variable access, as follows:
+
+        bool osq_lock(struct optimistic_spin_queue *lock)
+        {
+                [... ...]
+
+                node->prev = prev;
+                node->prev_cpu = prev->cpu; --------------- A
+
+                [... ...]
+
+                WRITE_ONCE(next->prev, prev);
+                WRITE_ONCE(prev->next, next);
+                WRITE_ONCE(next->prev_cpu, prev->cpu); -------------- B
+
+                [... ...]
+        }
+
+        static inline int node_cpu(struct optimistic_spin_node *node)
+        {
+                return node->prev_cpu - 1; ----------------------------- C
+        }
+
+While setting the prev attribute of the optimistic_spin_node of
+the current CPU,the current patch also caches the prev cpu attribute
+in the prev_cpu attribute of the optimistic_spin_node of the current CPU,
+as in the above code lines A and B,where node is a per cpu variable,
+so each one node corresponds to a CPU core,and the cpu attribute of
+the node corresponding to the CPU core will not change.
+Only when the prev attribute of the node is set,
+the prev_cpu of the node may change with the change of prev.
+At other times, the prev attribute of the node will not change.
+so the prev_cpu of node will not change.
+This patch greatly reduces the non-local-CPU variable
+access at code line C and improves performance.
+
+Unixbench full-core performance data is as follows:
+Machine: Hygon X86, 128 cores
+                                    with patch   without patch   promote
+Dhrystone 2 using register variables  194818.7     195091        -0.14%
+Double-Precision Whetstone            79847.57     79838.87      +0.01%
+Execl Throughput                      2372.83      2272.1        +4.43%
+File Copy 1024 bufsize 2000 maxblocks 765          687.53        +11.27%
+File Copy 256 bufsize 500 maxblocks   472.13       428.03        +10.30%
+File Copy 4096 bufsize 8000 maxblocks 1658.13      1520.53       +9.05%
+Pipe Throughput                       79634.17     79522.13      +0.14%
+Pipe-based Context Switching          28584.7      27987.8       +2.13%
+Process Creation                      3020.27      2999.1        +0.71%
+Shell Scripts 1 concurrent            11890.87     11394.67      +4.35%
+Shell Scripts 8 concurrent            10912.9      10496.17      +3.97%
+System Call Overhead                  4320.63      4322.23       -0.04%
+System Benchmarks Index Score         8144.43      7848.37       +4.0%
+
+In summary, the performance of solution 2 is better than solution 1.
+Especially use cases: execl, file copy, shell1, shell8,
+great improvement,because solution 1 still has the possibility of
+remote memory access across NUMA nodes,
+and solution 2 completely accesses local-CPU variables,
+so solution 2 is better than solution 1.
+
+Both solutions also have a great improvement in the X86 virtual machine.
+
+The current patch also uses solution 2.
+
+Signed-off-by: Guo Hui <guohui@uniontech.com>
+---
+ include/linux/osq_lock.h  | 1 +
+ kernel/locking/osq_lock.c | 6 ++++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/osq_lock.h b/include/linux/osq_lock.h
+index 5581dbd3bd34..8a1bb36f4a07 100644
+--- a/include/linux/osq_lock.h
++++ b/include/linux/osq_lock.h
+@@ -10,6 +10,7 @@ struct optimistic_spin_node {
+ 	struct optimistic_spin_node *next, *prev;
+ 	int locked; /* 1 if lock acquired */
+ 	int cpu; /* encoded CPU # + 1 value */
++	int prev_cpu; /* Only for optimizing false sharing */
+ };
+ 
+ struct optimistic_spin_queue {
+diff --git a/kernel/locking/osq_lock.c b/kernel/locking/osq_lock.c
+index d5610ad52b92..bdcd216b73c4 100644
+--- a/kernel/locking/osq_lock.c
++++ b/kernel/locking/osq_lock.c
+@@ -24,7 +24,7 @@ static inline int encode_cpu(int cpu_nr)
+ 
+ static inline int node_cpu(struct optimistic_spin_node *node)
+ {
+-	return node->cpu - 1;
++	return node->prev_cpu - 1;
+ }
+ 
+ static inline struct optimistic_spin_node *decode_cpu(int encoded_cpu_val)
+@@ -110,6 +110,7 @@ bool osq_lock(struct optimistic_spin_queue *lock)
+ 
+ 	prev = decode_cpu(old);
+ 	node->prev = prev;
++	node->prev_cpu = prev->cpu;
+ 
+ 	/*
+ 	 * osq_lock()			unqueue
+@@ -141,7 +142,7 @@ bool osq_lock(struct optimistic_spin_queue *lock)
+ 	 * polling, be careful.
+ 	 */
+ 	if (smp_cond_load_relaxed(&node->locked, VAL || need_resched() ||
+-				  vcpu_is_preempted(node_cpu(node->prev))))
++				  vcpu_is_preempted(node_cpu(node))))
+ 		return true;
+ 
+ 	/* unqueue */
+@@ -200,6 +201,7 @@ bool osq_lock(struct optimistic_spin_queue *lock)
+ 
+ 	WRITE_ONCE(next->prev, prev);
+ 	WRITE_ONCE(prev->next, next);
++	WRITE_ONCE(next->prev_cpu, prev->cpu);
+ 
+ 	return false;
+ }
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.20.1
+
