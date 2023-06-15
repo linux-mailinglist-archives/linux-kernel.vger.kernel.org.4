@@ -2,120 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D4A0731AC0
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:02:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9230C731AC3
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:03:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344700AbjFOOCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 10:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37398 "EHLO
+        id S1344671AbjFOODd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 10:03:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344705AbjFOOCs (ORCPT
+        with ESMTP id S1344659AbjFOODa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 10:02:48 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303E42954;
-        Thu, 15 Jun 2023 07:02:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686837762; x=1718373762;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=zttLVJaw4A/zKfW8QvRzstWGwu9ts8jjjqC2T5OQw1c=;
-  b=Qy5+s+MTbVvxYpPuJSE9NqKYt0DdQpZjU3gXsw2Da1GneaJ1jGdJdtNM
-   JFFDyjUW4MRO2aDkxNeOmqEtoleZhd90NC5yWsoiwfszEWRws53smcbj3
-   yq0vraT75n2Fmev8I/ZnfIXNToqSXRFAJ1x3RBCdJIrk4xQgg9xOm/m12
-   hK93Tw466wqRqzRQNq//KLCLGwfyMgRLMHO3yKsfTXkxeG455GoerH6KP
-   XvqRiL/1vfpUy09HVEhpgatoe21F8t22I+68ceBBWuIx63h00W6Zd3nm8
-   52x7rPBoUC2mnu4yrRmcMWsQMiykMwUMaY0e9MbcXBVrSI0RgLWgB0J2T
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="387406064"
-X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="387406064"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 07:02:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="715635104"
-X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="715635104"
-Received: from ijarvine-mobl2.ger.corp.intel.com ([10.251.212.170])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 07:02:27 -0700
-Date:   Thu, 15 Jun 2023 17:02:21 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-cc:     bhelgaas@google.com, Mario Limonciello <mario.limonciello@amd.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Michael Bottini <michael.a.bottini@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pci@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] PCI/ASPM: Enable ASPM on external PCIe devices
-In-Reply-To: <20230615070421.1704133-1-kai.heng.feng@canonical.com>
-Message-ID: <e93dfb6f-575a-b233-a842-521f6b396be6@linux.intel.com>
-References: <20230615070421.1704133-1-kai.heng.feng@canonical.com>
+        Thu, 15 Jun 2023 10:03:30 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFA51FE8;
+        Thu, 15 Jun 2023 07:03:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=s31663417; t=1686837760; x=1687442560; i=georgmueller@gmx.net;
+ bh=iXLy0cXrEehKxf0tsrC//fveq+MM53eyH3CeZgX6K2U=;
+ h=X-UI-Sender-Class:Date:Subject:From:To:Cc:References:In-Reply-To;
+ b=CUrdfbixMn0FIOS9spWIoqykq5cS35aDnMBoEhbUkrdq2wbedpaIQL0MxaRiQiyKFk1pjw8
+ NML6bLNpuVdovlxPH+76nvFeOtZywUVUe7jCi2oVWoPK91E4L2AnLgxAUQgIGckWQZIWv2FNX
+ tyRC7vRZcbajQC8DVIWxGyutKb8nLR2wfLiFpdUlX+82WwsqVVXD4MLVKhD1zfCPovcVOyydx
+ HAOEUWJZLW3guOdYPNy+7cr+8CDVhHGuenBvCCsEc30vdrHG4e5y8fDCHUVw3n0dsKqxW8A49
+ CWZM8QCPNOI8W6xIUXDaQXwBbHZ+N3iZ7xudIUATiBYTxrWCBp/w==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [10.54.0.101] ([93.206.1.113]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mxm3K-1pv8Rl3Nq2-00zFzh; Thu, 15
+ Jun 2023 16:02:39 +0200
+Message-ID: <e42ada3c-f215-d5a5-f766-7f8aa1580667@gmx.net>
+Date:   Thu, 15 Jun 2023 16:02:37 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 3/3] tools/perf: Fix to get declared file name from
+ clang DWARF5
+Content-Language: en-US
+From:   =?UTF-8?Q?Georg_M=c3=bcller?= <georgmueller@gmx.net>
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        regressions@lists.linux.dev
+References: <166731050151.2100653.8202870942871353491.stgit@devnote3>
+ <166731052936.2100653.13380621874859467731.stgit@devnote3>
+ <5a00d5a5-7be7-ef8a-4044-9a16249fff25@gmx.net>
+In-Reply-To: <5a00d5a5-7be7-ef8a-4044-9a16249fff25@gmx.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:ktJkoSPE4EnqpzreQkqA3phFUsKqBpjSGlVvltL7n8kMHIHNn7i
+ D7PV7JZ2oTpxSOjkbxJB8K28PhosPii+K/rz3gCxufy9X5dkkPC7pjLPAPhktXG0R/4/J7F
+ GXAAXiVC7bKIYqe/s75aEKkZ+7IlEBUNgmRBfhsr3KHCQpcWjv7vZ3RjcbUvYRFN2TgyUfh
+ NEMpjMlodlsfPWKrTaI8g==
+UI-OutboundReport: notjunk:1;M01:P0:b3kHxBFFCTY=;a5HnLdNG4ub3LRU8oHkvMR+5cR/
+ 2k3s/H1JDMAiRfJR2tb+AWO74hyhYoMWEUApTLVeiF0qHZyro0DzJNvDViiY7uD/selPCkq/G
+ oIDRdWR2qvxo4Bt3kRyWA50mMztbC27VMKhbc9M4RDdezadlbMB7NhrAuikdftcRAXhN166R2
+ +xZp8kWY6ExxAz9arf3V270F/iqqS0JIqa1YUBzGNGGlQQDUEBWtV1jDhBf301esc2PGx1D0i
+ eGuANWdCNCT6hMFGAuxt8k+CwNBSfwTa2SjKyzK4ZjBfMvZrzHOHDv5Rd28ZRkYMRHgu2Fkdl
+ jH367TaL0kQStYUcTzwKUy3LtGcSF10FAm9kL/KtFQl1VRBcRB/GavHd1fNvxxd5ba/KP9SYF
+ i6AGbiarLpePi7Zi8vk1V5ZuI0mesomAWaL9oTQ/RldFqAWnnxbWx9Z64fgvLPIPVyMJX++n8
+ wPFOYy8oeGmQydlTkAEls5FKKYSq5yFHk6vii3374T97iHvFz6ODOMSqqCcYVDcyOGiKdImPV
+ /bKiz2inDg+Q7NDPyJ84ujt5FuUJiLZd0ucSK+XweJa+QeWUi2qUOm0NNei+YkUPyF+DKMwPw
+ JDUfinSWulLxAgFntxmbkIcSywAsw9shb7M5/EueasUacgI+aSqyuL7w5G1u8sXwvi0VHXY2R
+ BBmKecl9Lk+98CncYGTM+HwxzS0xY51YMuGaPb+pfVacl+rmq/YF8EoyZvHH64uJALQbwv3+c
+ pnqMOdknLFtIa7kUtrPPYKa6iRHvzEbKdzWWFuj0DAOr4PKYs6Zp0AVRhprVCFsE8GakkVnor
+ 3/PSYNG82dHCiWwB6Z+PV5uNVw54Nh6sle99VokidHKLEeMmMltL/tHAr47QA7i7zfCx/AMnn
+ SXS/cJmEZDh5Tee5ApTLt90gRqP5WkOaxl4fq39BBO/K/YMaA3rw24tRTNsO4mKUzFN9tXnk1
+ RUucXQ==
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Jun 2023, Kai-Heng Feng wrote:
+Hi all,
 
-> When a PCIe device is hotplugged to a Thunderbolt port, ASPM is not
-> enabled for that device. However, when the device is plugged preboot,
-> ASPM is enabled by default.
-> 
-> The disparity happens because BIOS doesn't have the ability to program
-> ASPM on hotplugged devices.
-> 
-> So enable ASPM by default for external connected PCIe devices so ASPM
-> settings are consitent between preboot and hotplugged.
+I have found a solution for this bug and will post a patch later today.
 
-consistent
+Am 09.06.23 um 14:21 schrieb Georg M=C3=BCller:
+>
+> Am 01.11.22 um 14:48 schrieb Masami Hiramatsu (Google):
+>> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>>
+>> Fix to get the declared file name even if it uses file index 0
+>> in DWARF5, using custom die_get_decl_file() function.
+>>
+>
+> this patch breaks perf probe on fedora 38.
+>
 
-> On HP Thunderbolt Dock G4, enable ASPM can also fix BadDLLP error:
+The problem is that die_get_file_name() uses the wrong cu_die.
 
-enabling ASPM ?
+I was pointed to the solution by reading elfutils commit e1db5cdc9:
 
--- 
- i.
+     dwarf_decl_file uses dwarf_attr_integrate to get the DW_AT_decl_file
+     attribute. This means the attribute might come from a different DIE
+     in a different CU. If so, we need to use the CU associated with the
+     attribute, not the original DIE, to resolve the file name.
 
-> pcieport 0000:00:1d.0: AER: Corrected error received: 0000:07:04.0
-> pcieport 0000:07:04.0: PCIe Bus Error: severity=Corrected, type=Data Link Layer, (Receiver ID)
-> pcieport 0000:07:04.0:   device [8086:0b26] error status/mask=00000080/00002000
-> pcieport 0000:07:04.0:    [ 7] BadDLLP
-> 
-> The root cause is still unclear, but quite likely because the I225 on
-> the dock supports PTM, where ASPM timing is precalculated for the PTM.
-> 
-> Cc: Mario Limonciello <mario.limonciello@amd.com>
-> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217557
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
->  drivers/pci/pcie/aspm.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> index 66d7514ca111..613b0754c9bb 100644
-> --- a/drivers/pci/pcie/aspm.c
-> +++ b/drivers/pci/pcie/aspm.c
-> @@ -119,7 +119,9 @@ static int policy_to_aspm_state(struct pcie_link_state *link)
->  		/* Enable Everything */
->  		return ASPM_STATE_ALL;
->  	case POLICY_DEFAULT:
-> -		return link->aspm_default;
-> +		return dev_is_removable(&link->downstream->dev) ?
-> +			link->aspm_capable :
-> +			link->aspm_default;
->  	}
->  	return 0;
->  }
-> 
+The correct cu_die has to be obtained via
+
+     dwarf_attr_integrate(dw_die, DW_AT_decl_file, &attr_mem)
+
+and then cu_die from the cu from attr_mem (dwarf_cu_die(attr_mem.cu, &cu_d=
+ie, ...)
+to obtain it) has to be used.
+
+Best regards,
+Georg
