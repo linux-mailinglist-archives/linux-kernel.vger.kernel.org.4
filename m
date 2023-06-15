@@ -2,53 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66D9F7319A5
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A59697319A8
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:13:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343796AbjFONMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 09:12:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60500 "EHLO
+        id S230128AbjFONNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 09:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343841AbjFONMc (ORCPT
+        with ESMTP id S239232AbjFONNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 09:12:32 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E86E3272A;
-        Thu, 15 Jun 2023 06:12:28 -0700 (PDT)
-X-GND-Sasl: cyril@debamax.com
-X-GND-Sasl: cyril@debamax.com
-X-GND-Sasl: cyril@debamax.com
-X-GND-Sasl: cyril@debamax.com
-X-GND-Sasl: cyril@debamax.com
-X-GND-Sasl: cyril@debamax.com
-X-GND-Sasl: cyril@debamax.com
-X-GND-Sasl: cyril@debamax.com
-X-GND-Sasl: cyril@debamax.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D9E3B1BF20C;
-        Thu, 15 Jun 2023 13:12:24 +0000 (UTC)
-Date:   Thu, 15 Jun 2023 15:12:23 +0200
-From:   Cyril Brulebois <cyril@debamax.com>
-To:     Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     Salvatore Bonaccorso <carnil@debian.org>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Herring <robh@kernel.org>,
-        Michal Suchanek <msuchanek@suse.de>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] fbdev/offb: Update expected device name
-Message-ID: <20230615131223.3jlzyjl27v5q42eh@debamax.com>
-Organization: DEBAMAX
-References: <20230412095509.2196162-1-cyril@debamax.com>
- <20230412095509.2196162-2-cyril@debamax.com>
- <ZDvrY7X9mpJ7WZ3z@eldamar.lan>
- <11b342dc-1a46-d1be-5fdd-c6eee661e15a@leemhuis.info>
+        Thu, 15 Jun 2023 09:13:38 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275812D54;
+        Thu, 15 Jun 2023 06:13:17 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35FDD6DL010718;
+        Thu, 15 Jun 2023 08:13:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1686834786;
+        bh=sNdmTxJmK3YxOpTk/pRDd0l7p9KrGXXliNWMmhycsJQ=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=EN6zrr9utMZuca8y3oQihIcp3aejizo9qPhfYo2m6YXVnFGqll3QY2oRSG1peBgjv
+         nvNgM/utoGNjC0IaK8grKXceGhgiHmb5UR+lodeRzu9nLlDV7kt3Do0mAmQCd5YlIX
+         5BdonxV9nKgPdA5/m107cetUBqMUGsLb8mr4Z8Ak=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35FDD6kU128316
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 15 Jun 2023 08:13:06 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 15
+ Jun 2023 08:13:06 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 15 Jun 2023 08:13:06 -0500
+Received: from uda0132425.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35FDD3f0055103;
+        Thu, 15 Jun 2023 08:13:04 -0500
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+To:     Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, Nishanth Menon <nm@ti.com>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, Andrew Davis <afd@ti.com>
+Subject: Re: [PATCH V3 0/3] arm64: dts: ti: k3-am65: dtbs_check warnings fixups
+Date:   Thu, 15 Jun 2023 18:43:01 +0530
+Message-ID: <168681817153.2098323.15467286493524465790.b4-ty@ti.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230607132043.3932726-1-nm@ti.com>
+References: <20230607132043.3932726-1-nm@ti.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wakbenit2xnt2vww"
-Content-Disposition: inline
-In-Reply-To: <11b342dc-1a46-d1be-5fdd-c6eee661e15a@leemhuis.info>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,44 +67,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Nishanth Menon,
 
---wakbenit2xnt2vww
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, 07 Jun 2023 08:20:40 -0500, Nishanth Menon wrote:
+> Hopefully, third time is a charm ;)
+> 
+> Series of minor fixups for AM65x device tree to cleanup some of the
+> dtbs_check warnings.
+> 
+> 
+> Changes Since V2:
+> * Dropped mux-controller fixup (should have been dropped when
+>   dependencies changed)
+> 
+> [...]
 
-Linux regression tracking (Thorsten Leemhuis) <regressions@leemhuis.info> (=
-2023-06-15):
-> No reply to my status inquiry[1] a few weeks ago, so I have to assume
-> nobody cares anymore. If somebody still cares, holler!
+I have applied the following to branch ti-k3-dts-next on [1].
+Thank you!
 
-I still care about a proper bugfix, for upstream and for the Debian
-distribution, and so does Salvatore. But fixing kernel regressions isn't
-my day job, so I haven't got around to working on it.
+[1/3] arm64: dts: ti: k3-am65-main: Fix mcan node name
+      commit: 498f7b0f9da9be6f6c099b4c8ffb502174623565
+[2/3] arm64: dts: ti: k3-am65-main: Drop deprecated ti,otap-del-sel property
+      commit: 2b9bb988742d1794e78d4297a99658f38477eedd
+[3/3] arm64: dts: ti: k3-am65-iot2050-common: Rename rtc8564 nodename
+      commit: 400f4953d53ccc07bb26bb6c9d425934ecab4aa8
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent up the chain during
+the next merge window (or sooner if it is a relevant bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Cheers,
---=20
-Cyril Brulebois -- Debian Consultant @ DEBAMAX -- https://debamax.com/
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---wakbenit2xnt2vww
-Content-Type: application/pgp-signature; name="signature.asc"
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
------BEGIN PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-iQIzBAABCgAdFiEEHoutkuoaze1Qayc7lZpsmSeGm2EFAmSLDjQACgkQlZpsmSeG
-m2HkXg/9E+QcBfG/Y0jj9Eb6MxbHHf8hyR3pRsmuOX1DA5zQMcxRJV0KVknZKQzn
-tuLBjgzupbWcEscBel+FT28pMM3HKxTc9wU2iBRhfHpz8nx5412Gp6Sba3E9K22X
-domUmIjCfj1RgV3fjMnGxukaLWdkE2qzE0iewN/hTgkG4oA1US/j0rNCW29PNir2
-7nKdp580PfhgEbCNPOPt0US2bdYZ2XhAjZpBmd8PtOBWXH2BWnwYoab+oqykiUBj
-vBjODSWLpoHe35wK4WOJt1u0Dv5eFid18ZagHNviFqERKT7CQduBszH3yajMACkl
-rrBrfDGqmNb8rZeGbcOajodRekRNHf8sUZ/nuZ5sLEUcXysLl6sgr1bRaW2W1oJj
-cohmtvFPcDC4LgGWT9bAMfjvm0rGDjJsFOkvnuehrw+Ae7aMpQ9yGV20GDZpjBBp
-4zKV2PpihZ5GCJ0c57Jzr1SOy2+HhYRZ9m5RVhZ/bu35SR8rVOfIMNb0fRwYxqA/
-Iuo2PBmWdrR0hefOQBP/2O/T/g6Fcs6dTfPnayUYvbkAguBPQXaanphBm6bZ4YbQ
-ebDTRFJJx1QH4KZhoRANEPGhpa/xfsjHZQ1y6kEZQp/mN8H2cyOVPUKuayf2w4R9
-8YCNdcizJt62boDEXkwjCYtU3o+cyOAWGMC9vanHlDUHEvYXkDQ=
-=/K9h
------END PGP SIGNATURE-----
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
+--
+Vignesh
 
---wakbenit2xnt2vww--
