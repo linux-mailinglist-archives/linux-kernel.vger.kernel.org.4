@@ -2,95 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2BE73148C
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:53:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB90E731497
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:54:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244121AbjFOJw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 05:52:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48982 "EHLO
+        id S1343575AbjFOJyj convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 15 Jun 2023 05:54:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343543AbjFOJwe (ORCPT
+        with ESMTP id S245692AbjFOJyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 05:52:34 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9130B30DD;
-        Thu, 15 Jun 2023 02:52:16 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35F9q7bo027217;
-        Thu, 15 Jun 2023 04:52:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1686822727;
-        bh=GvfemFcOZxkJL8pt6KUpdMMQnkvr05x7vzCOOMfeRPI=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=eiaFSu3WmWPwU66kYKjOL1+t924MWdRwNc4UUpMxbTdstpbPYL2kJDw9qp9cdPNuk
-         av+yR96JDBIyL56NjXqfwEVH/5UB/0luEA8iFyTyEgw7GkPkk1AbizpOtRRfoqHSbO
-         KZT83CkfpOwTYnhXehdfAvEYA/ezjx/kbwcGdc6k=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35F9q7CS012254
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 15 Jun 2023 04:52:07 -0500
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 15
- Jun 2023 04:52:07 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 15 Jun 2023 04:52:07 -0500
-Received: from [10.24.69.162] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35F9q4NR038334;
-        Thu, 15 Jun 2023 04:52:05 -0500
-Message-ID: <83ea521d-0d6e-f739-5db5-a935a3e52ee0@ti.com>
-Date:   Thu, 15 Jun 2023 15:22:04 +0530
+        Thu, 15 Jun 2023 05:54:16 -0400
+Received: from smtpbg151.qq.com (smtpbg151.qq.com [18.169.211.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6F92D61;
+        Thu, 15 Jun 2023 02:53:42 -0700 (PDT)
+X-QQ-mid: Yeas50t1686822773t395t65381
+Received: from 3DB253DBDE8942B29385B9DFB0B7E889 (jiawenwu@trustnetic.com [183.159.171.58])
+X-QQ-SSF: 00400000000000F0FPF000000000000
+From:   =?utf-8?b?Smlhd2VuIFd1?= <jiawenwu@trustnetic.com>
+X-BIZMAIL-ID: 8017873442922814828
+To:     "'Michael Walle'" <michael@walle.cc>,
+        "'Andy Shevchenko'" <andy.shevchenko@gmail.com>
+Cc:     <linus.walleij@linaro.org>, <brgl@bgdev.pl>,
+        <shreeya.patel@collabora.com>, <linux-gpio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230607081803.778223-1-jiawenwu@trustnetic.com> <CAHp75Vdbq3uHOyrfT-KFYRSj6v+s9GgOQjQ9a8mGn-4HSCpB9Q@mail.gmail.com> <15e2fc098a1e63317368f4812290ca35@walle.cc>
+In-Reply-To: <15e2fc098a1e63317368f4812290ca35@walle.cc>
+Subject: RE: [PATCH v2] gpiolib: Fix GPIO chip IRQ initialization restriction
+Date:   Thu, 15 Jun 2023 17:52:52 +0800
+Message-ID: <010401d99f6f$26d41600$747c4200$@trustnetic.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] arm64: dts: ti: k3-j784s4-main: Enable support for high
- speed modes
-To:     Bhavya Kapoor <b-kapoor@ti.com>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
-        <kristo@kernel.org>, <vigneshr@ti.com>, <nm@ti.com>
-References: <20230502090814.144791-1-b-kapoor@ti.com>
-Content-Language: en-US
-From:   Diwakar Dhyani <d-dhyani@ti.com>
-In-Reply-To: <20230502090814.144791-1-b-kapoor@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+        charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: zh-cn
+Thread-Index: AQJryWnquP8Y9u98p8GNjzLx69HVGQGrRNiSAZtbv0+uTRIGMA==
+X-QQ-SENDSIZE: 520
+Feedback-ID: Yeas:trustnetic.com:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FROM_EXCESS_BASE64,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 02/05/23 14:38, Bhavya Kapoor wrote:
-> eMMC tuning was incomplete earlier, so support for high speed modes was
-> kept disabled. Remove no-1-8-v property to enable support for high
-> speed modes for eMMC in J784S4 SoC.
+On Thursday, June 15, 2023 5:26 PM, Michael Walle wrote:
+> Am 2023-06-07 16:12, schrieb Andy Shevchenko:
+> > +Cc: Michael
+> >
+> > On Wed, Jun 7, 2023 at 11:20 AM Jiawen Wu <jiawenwu@trustnetic.com>
+> > wrote:
+> >>
+> >> In case of gpio-regmap, IRQ chip is added by regmap-irq and associated
+> >> with
+> >> GPIO chip by gpiochip_irqchip_add_domain(). The initialization flag
+> >> was not
+> >> added in gpiochip_irqchip_add_domain(), causing gpiochip_to_irq() to
+> >> return
+> >> -EPROBE_DEFER.
+> >
+> > Makes sense to me.
+> > FWIW,
+> > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> >
+> > But it would be nice to hear from Michael about this.
 > 
-> Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
-Reviewed-by: Diwakar Dhyani <d-dhyani@ti.com>
-> ---
->  arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi | 1 -
->  1 file changed, 1 deletion(-)
+> Thanks for bringing this to my attention. In fact, currently
+> my sl28cpld is broken due to this. So:
+
+Thanks for your test, it's exciting for me to actually fix a bug.
+
+BTW, I wonder if it has problems when unregistering gpio-regmap.
+Call Trace of irq_domain_remove() always exits in my test:
+https://lore.kernel.org/all/011c01d98d3d$99e6c6e0$cdb454a0$@trustnetic.com/
+
+Of course, it could be because there was something wrong with my
+test code. But I want to be clear about this.
+
 > 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
-> index e9169eb358c1..e0c2feca9d1e 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
-> @@ -378,7 +378,6 @@ main_sdhci0: mmc@4f80000 {
->  		mmc-hs200-1_8v;
->  		mmc-hs400-1_8v;
->  		dma-coherent;
-> -		no-1-8-v;
->  		status = "disabled";
->  	};
->  
+> Reviewed-by: Michael Walle <michael@walle.cc>
+> Tested-by: Michael Walle <michael@walle.cc> # on kontron-sl28
+> 
+> >> Fixes: 5467801f1fcb ("gpio: Restrict usage of GPIO chip irq members
+> >> before initialization")
+> >> Signed-off-by: Jiawen Wu <jiawenwu@trustnetic.com>
+> 
+> -michael
+> 
+
