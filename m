@@ -2,161 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22314732042
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 21:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8907732044
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 21:13:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbjFOTFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 15:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
+        id S229787AbjFOTNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 15:13:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjFOTFJ (ORCPT
+        with ESMTP id S229503AbjFOTNI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 15:05:09 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2082.outbound.protection.outlook.com [40.107.244.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0B42137;
-        Thu, 15 Jun 2023 12:05:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NZw+xuzYpIV+7yKF0aAYMNuTKTjyaKSfZJTDbSlCjtsKEyzD8v290psPdCCmdjrcbUNVNVdIAbHOPD0OYgALhAdJ73/72Q9UDEPXI4vXDWtd88Y5+RqnSz97KXDRUsn1E+hIm4P2cHoAPYVXY4QahGuVPkGgKzO3FAlSsYd1XvXmgzuUyIHb2FHMM5f06D4AsIg4D6W14/f1+GKKhx7Zx4BIQkrsDFBNzvu5awstY0VaGSenVY1kgvFZM9zyA0/CjTbTip+1QwbOa/frN1Dvw5t/4898Y5YqUMXqaI5qcLlOFy8+3hyENaOhcwNsLmdyo9nlhFXj54Bp5n5ZrtYDJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/SIHScrXhKrZeiy/U3K8olxZKan2QHj7mQffe37XYdo=;
- b=QjuXEOSfsV8ZFCA/O2Lw8gkleVh7nHFWdM7bby2Uck9WZgOZ5qnlV0q6cR5kIlN+4pJ+8MO6ChCykp+0BB/AqLThk7wXBY/+GaY4jaiAeGk35MxQKb80u5gse2zOhyZ3TXpm/BbiABiozg1qZh0SUxmyYJq2cDOTnvn2zfCKnZGqrrHas95ajWzOFS8RHo2h6fx03AQxRAUomhMgCgVdwH/II66kl1sHIqTSZ6U8mq8u9ah5Ngsd4u5ktZLLwaGKmAHlw2TIZJKunQR+Vp7YcyKQhn70WvKESMeyc+TC/jcVy2LbninP/TVMw8Iz6UsdTTNB2bO1wf1iXl7hMtcs6A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/SIHScrXhKrZeiy/U3K8olxZKan2QHj7mQffe37XYdo=;
- b=AESyWivlQmczdCRNy1rbNT4Em6/qAS4Uhp3FTmq3P4lla/QtillGIKTZBcXKkD/M7oZVMDb3vBjVRu9V4vVRUcRDHNFGtBamdmPT/6g4Fx3xVX5eK65Nndq6MsN9c3LG3Pdd6TkiTvYZAGIWOcafwuykkdbqDrXWOSmFp5bfqhc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
- by PH7PR12MB7332.namprd12.prod.outlook.com (2603:10b6:510:20f::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.37; Thu, 15 Jun
- 2023 19:05:05 +0000
-Received: from BY5PR12MB3876.namprd12.prod.outlook.com
- ([fe80::aeb:7ad3:2f4a:f218]) by BY5PR12MB3876.namprd12.prod.outlook.com
- ([fe80::aeb:7ad3:2f4a:f218%4]) with mapi id 15.20.6477.028; Thu, 15 Jun 2023
- 19:05:04 +0000
-Date:   Fri, 16 Jun 2023 00:34:51 +0530
-From:   Wyes Karny <wyes.karny@amd.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     ray.huang@amd.com, viresh.kumar@linaro.org, trenn@suse.com,
-        shuah@kernel.org, gautham.shenoy@amd.com,
-        Mario.Limonciello@amd.com, Perry.Yuan@amd.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 1/6] amd-pstate: Make amd-pstate epp driver name
- hyphenated
-Message-ID: <ZItg07DCRiUet+mj@BLR-5CG13462PL.amd.com>
-References: <20230612113615.205353-1-wyes.karny@amd.com>
- <20230612113615.205353-2-wyes.karny@amd.com>
- <CAJZ5v0gfqGj9X=3bdf6X4HqQDxg+gCJN10DXLruYD5p3kZ59Uw@mail.gmail.com>
- <ZItQmjQHe/I9CXJh@BLR-5CG13462PL.amd.com>
- <CAJZ5v0iKokaEo6ANPO1cHUzM2UL3guf3WcWoVbRH0iNo8D_kDQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0iKokaEo6ANPO1cHUzM2UL3guf3WcWoVbRH0iNo8D_kDQ@mail.gmail.com>
-X-ClientProxiedBy: PN2PR01CA0103.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:27::18) To BY5PR12MB3876.namprd12.prod.outlook.com
- (2603:10b6:a03:1a7::26)
+        Thu, 15 Jun 2023 15:13:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FC3271E;
+        Thu, 15 Jun 2023 12:13:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BC3461483;
+        Thu, 15 Jun 2023 19:13:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97082C433C0;
+        Thu, 15 Jun 2023 19:13:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686856386;
+        bh=bPY0hq3FTUjUrTnaMbnQu9NxRr6DfEwHr0iFePqWsk4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oJ8PW6eF8QHjmGWOvHtcXHk8RrraM4DJqoyxkXRQBGOqMPxjBSMrzsMiVmqnTvLC0
+         kaMSMQw5kqbrXaShP6qRk+5clbVB53UAJN/Mbcyv/pFFxJe8usimE/+WA/NOirnYIP
+         93Z04NYoL2c5HBcMKVngPS6dbHUSxEkQ926yJq3gNI/jDJCohW5Fi5jjde+MMH29N/
+         nVluf6QJbCnL3iA8LCKT4RS5Wk7bsGjkcuRlBZDZXKMs0EKUzGhQfR0gSnpgCqkEin
+         uPliW2HQAKNp6tq32cc9wzeSh6Y4BRK91S4mvjtTnuRxFnQJjn7XMCHW3qV/nLX1Cr
+         MpIIemRNouzaQ==
+Date:   Thu, 15 Jun 2023 20:13:01 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+Cc:     tudor.ambarus@linaro.org, pratyush@kernel.org,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, git@amd.com, michael@walle.cc,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, amitrkcian2002@gmail.com
+Subject: Re: [PATCH 1/2] dt-bindings: mtd: jedec, spi-nor: Add DT property to
+ avoid setting SRWD bit in status register
+Message-ID: <20230615-bright-divided-2eb72872d7cc@spud>
+References: <20230615111649.36344-1-amit.kumar-mahapatra@amd.com>
+ <20230615111649.36344-2-amit.kumar-mahapatra@amd.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|PH7PR12MB7332:EE_
-X-MS-Office365-Filtering-Correlation-Id: 571b516d-8c02-4640-962e-08db6dd36d76
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1d+x1LhOSzX/Nn6X5q8SMNDdekmUNAgiJr2RBkPlhYSg83k0pdUVw2WgQ42V5cwFHWI68EHA6Bog2+Q+80RGSX5izOiEnSW2UiVD41b0am/XlcbugSz7MHE1j4eviWV9+ekGmjTSidYFUv00Kw2icYaVYC5561MaMkZzRUyJsNRiTh8Zih+L8ShoctE5kb7jpHlYrcYmELMH6YCTEfXJ1ewIDW0ZrEMv8NTdAk4BjWy1hfbo1HFrO+5vHf1XyPUN1zNy6EcfB5v51PdNbAt3MEG7FKSOEyiqonugBlYy0667EamAT5T6d7r2jCcUxjVl/FjGDRDbp6doaR1EW7XmIVXY0mU3VnpEho9VtU2I0RBiLL/s6DSB7+DFYOvx0m6IxwNcBlFfJlrDoUk7Fu1XSdr0VHKO9XmhW7sxPg3cZnjcEtFX3DHqXspiU59wdcdHGu6W4fPY7yd0NhfRkwAu1Q5eGV/TSSABLwZAFfQP0gtrxRubiV0w878M1EftQygxtQvJ2+J+wVPGQlaUBrMDyFc8EVxr4Tae2uJa2fsXG6TyQ4yAe3jWZMDBfVGSsSYaHpIjj3rSHKyc7b797MrJjHsLmz9d1lKstd4GGe0GXQc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(376002)(136003)(346002)(366004)(451199021)(86362001)(186003)(38100700002)(53546011)(26005)(6506007)(6512007)(478600001)(5660300002)(6666004)(8936002)(8676002)(6486002)(44832011)(2906002)(316002)(6916009)(4326008)(66476007)(66946007)(66556008)(41300700001)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dzR3OEU2Q2Qwa1JTR1hWU3JjVkd3VEo2YXRjU3RPSU1QOXZHV1BDZXhrT1Z3?=
- =?utf-8?B?SU5PTFIrSCtvM2pKVzJoaUdIRzBDZ2t6YjBKK0RvZWJzTWJQMnd4VkR2blQz?=
- =?utf-8?B?WGRPakRrK1pNc3ZqNmlpakI1WlZHODBDRDhrS0pSZDBRM3dDUGFBZzlVWS82?=
- =?utf-8?B?WTZMY1FxVWtzTWFNSEw5OFpSeUs5dG9Bdnp6QnNrTjhhZVVEbkdPRkFaVWRt?=
- =?utf-8?B?UGJhQ1BrODA5aC9VYVU1ZkxGMTlad2NWVkRpZFN2MDNiRWd0WVJZVGFsdC8z?=
- =?utf-8?B?L2FUajlwdUUxOGg0M1RERENEN2kyS2d4MksySDQvZ04zRTJmNXdTS21naTNN?=
- =?utf-8?B?YW1UUDJ2cHpueHRqN3dVRGNQZ1UzVkdZRnBBR0NoYW5rV3g3V1dHd2crT1Ny?=
- =?utf-8?B?cDFjTXQzdGsyUmlyb1lMYXpDbVd2Z2VlTjJpaFRSajgvc2RCc3hPdi9vM05S?=
- =?utf-8?B?MlZGWTd2dEpkbWpHZHZoVmYwWW1PNmNzbFNKaWk0T2NoUFNDS0N4eng4cFNO?=
- =?utf-8?B?MDF3Q29qajBmUDBTM0pCQ0wvU0F2SnovenEySjhQUzBONFhETE1DWTVHd3JQ?=
- =?utf-8?B?M3VmV3BuRVd2RHUrQ2pwdjJGYXYzeGxxeWRsMkE4WTg1MHNJa0ZUcExRR1F1?=
- =?utf-8?B?UkVBaktydWdISjdmNFA4cE5Mb0ZML05uMVgvaDRqT1k5U00yNDNnbzhaN3NQ?=
- =?utf-8?B?ZUhoam11VzVHcVA4YXV5K1JWTXp2TnM4V0hxRDE1VlhyTkpHVmhMVnZ3Rjdk?=
- =?utf-8?B?VFA4bWdHL1Z3ZlVzanJzaFVpaFpJbkZlWEVMcld0L3phRVVWWDZJdjJEMytn?=
- =?utf-8?B?V3FFTWtWeFV4V0YyRzFMYmxobEtnWjdla0EvWkM0RlF2VmpOSTk0Vi9wZFhF?=
- =?utf-8?B?dUQrVnExZUJHSWl0OGMxUXo4bzc3Z09UZnJqTkxCYUlueEZYdGlUTXY2YlBE?=
- =?utf-8?B?ampYN0hRcE9ubVVpU2ovMmNsNUZHY0JhUlE3dzlWWlg2VXFZUFkrRHhBaGRO?=
- =?utf-8?B?RWs0TTBHblNoYkJiSHAxNm9GVHJkMHdCVUtzS0wraHJ6V1NyaHpLTDdFeHpC?=
- =?utf-8?B?Sy93Wkx1OVJJVHJjNE4rM0YyWU16bnhaQnAyMGVyWTZXVEVPVnR5OTRUQnU3?=
- =?utf-8?B?alArZmpvcHc5RURDYzR4N216b3VlT3dQYU9vRGRzNS9mYzJVTWxMNGlkcHZN?=
- =?utf-8?B?YUJ4S0JlaHJCL28wZGJyaUZTVTRQMmxDdndvd3JxcG5aWDc2TnplY0VuQVdO?=
- =?utf-8?B?dUNZWVE3TFRFRkVTazJrcFY5ZUpiNjMyWjN2VnNWSzhPZlRNSW01OFF3RzhZ?=
- =?utf-8?B?Q3Mzc09nMjRiRlc5bWd0UzQ5SjliTDU4S3RUNkl1RkFOUjdORjErYVRkS2hH?=
- =?utf-8?B?bDhDQW44eXlUOUdQT3RrYUtYdUtlWitwRUIxeDM1SWx2eXFJQ2pFeEtsdk9M?=
- =?utf-8?B?cUwxbmh3b2dIeSs1TjNxSjVIbVJrTGkzQ2ZISkpnakxIeWlreHM1S3kxODBK?=
- =?utf-8?B?SENHYlpoTHJxa0J6KzJkTUoyODRrbDlwV0ZCdjRVRVliSi9YL0laSjg2SFZJ?=
- =?utf-8?B?dEMweENvY2V6THhyaGRVSVM1VG11YlRpU0w1dk5JL0l1TjdiS1p3M2V6NkZz?=
- =?utf-8?B?K0dTaWFhMURWZS9MYVlseSt1MnZCdE9GaUdxcW5yOGNDMzgrR3Z3aWMyMnRt?=
- =?utf-8?B?VFcvb0dpQytyQzdZR2U5Vks0SnU5ZSt1aHdpTmMrUUxPYmh5NDhBZ0Vzb0VQ?=
- =?utf-8?B?K25YNml1QTJQYllMdUpUREpzVVVOb2YxYjBwU2FhN2JLSHhUN1JpMVN1NGNP?=
- =?utf-8?B?ZTZ0S1pFbDFORExTTkdGNEJLc1AzSTZGaFFKZFNLZThCSEJPRE9XMDIwVmI3?=
- =?utf-8?B?SStOZ05yWFpPMlNPWjdLQ0p1a2Z1bVdhY2hETTBFVGpmbTlCZkJWT0Z3UnJ5?=
- =?utf-8?B?Q0NxcStac0E2QkhVMnl2ZlVSUmJEaTBobWpWMXZDUlk5K2dzMFlOT2VNOHV3?=
- =?utf-8?B?Z1plOWdUZ0VGWXRWalQ4aGgrV1JseHdkc2w4NzF2ODdlSGFzcDhyVTZ3TmZF?=
- =?utf-8?B?T21jdktGanhvOExVSmVJakcrVHpMTTMvOU43WjQ0ZVp3dmpGL20wN1UweEhO?=
- =?utf-8?Q?kyOZ9qtpW8efhRWizP2LT6dk8?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 571b516d-8c02-4640-962e-08db6dd36d76
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 19:05:04.6929
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: T/rAbRAUPVpjIuobg4gOZo5ATyhbFYTr0JH4aWl3ARuOi8aRS0JQrroeJsZbBZ58BlLl++Z9IzsV5hxgBdVVwg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7332
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="XOs+VD/Ifi0NGstF"
+Content-Disposition: inline
+In-Reply-To: <20230615111649.36344-2-amit.kumar-mahapatra@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15 Jun 20:30, Rafael J. Wysocki wrote:
-> On Thu, Jun 15, 2023 at 7:55 PM Wyes Karny <wyes.karny@amd.com> wrote:
-> >
-> > Hi Rafael,
-> >
-> > On 15 Jun 19:31, Rafael J. Wysocki wrote:
-> > > On Mon, Jun 12, 2023 at 1:37 PM Wyes Karny <wyes.karny@amd.com> wrote:
-> > > >
-> > > > amd-pstate passive mode driver is hyphenated. So make amd-pstate active
-> > > > mode driver consistent with that rename "amd_pstate_epp" to
-> > > > "amd-pstate-epp".
-> > > >
-> > > > Cc: stable@vger.kernel.org
-> > > > Fixes: ffa5096a7c33 ("cpufreq: amd-pstate: implement Pstate EPP support for the AMD processors")
-> > > > Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
-> > > > Signed-off-by: Wyes Karny <wyes.karny@amd.com>
-> > >
-> > > How much does the rest of the series depend on this patch?
-> >
-> > The rest of the series is independent of this patch.
-> 
-> So it should have been posted separately as an individual fix.
-> 
-> Please resend the rest of the series without it to avoid confusion and
-> I'll apply it for 6.5 tomorrow.
 
-Sure, I'll send rest of the series separately.
+--XOs+VD/Ifi0NGstF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-Wyes
+On Thu, Jun 15, 2023 at 04:46:48PM +0530, Amit Kumar Mahapatra wrote:
+> If the WP signal of the flash device is not connected and the software se=
+ts
+> the status register write disable (SRWD) bit in the status register then
+> thestatus register permanently becomes read-only. To avoid this added a n=
+ew
+> boolean DT property "broken-wp". If WP signal is not connected, then this
+> property should be set in the DT to avoid setting the SRWD during status
+> register write operation.
+>=20
+> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+> ---
+>  .../devicetree/bindings/mtd/jedec,spi-nor.yaml      | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml b/D=
+ocumentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
+> index 89959e5c47ba..a509d34f14b2 100644
+> --- a/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
+> +++ b/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
+> @@ -70,6 +70,19 @@ properties:
+>        be used on such systems, to denote the absence of a reliable reset
+>        mechanism.
+> =20
+> +  broken-wp:
+> +    type: boolean
+> +    description:
+> +      The SRWD bit in status register, combined with the WP signal provi=
+des
+
+Should the first use of SRWD be spelt out as you did in your commit
+message?
+
+> +      The SRWD bit in status register, combined with the WP signal provi=
+des
+                                                                     ^
+nit: missing a comma here I think.
+
+> +      hardware data protection for the device. When the SRWD bit is set =
+to 1,
+> +      and the WP signal is driven LOW, the status register nonvolatile b=
+its
+> +      become read-only and the WRITE STATUS REGISTER operation will not =
+execute.
+> +      The only way to exit this hardware-protected mode is to drive WP H=
+IGH. But
+> +      if the WP signal of the flash device is not connected then status =
+register
+> +      permanently becomes read-only as the SRWD bit cannot be reset. Thi=
+s boolean
+> +      flag can be used on such systems in which WP signal is not connect=
+ed, to
+
+nit: s/such//
+
+Otherwise, seems reasonable to me & the detail in the description is
+nice.
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+Cheers,
+Conor.
+
+> +      avoid setting the SRWD bit while writing the status register.
+> +
+>    reset-gpios:
+>      description:
+>        A GPIO line connected to the RESET (active low) signal of the devi=
+ce.
+> --=20
+> 2.17.1
+>=20
+
+--XOs+VD/Ifi0NGstF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZItivQAKCRB4tDGHoIJi
+0n3lAQDYCPE7FzUWoRk/2NeBDx/xfJkho/o/GFZjMUnnb/0G/AEAqAmz6+IzA8ln
+bZ1D4QinLJJeMfUue9pnCokWv3csTQM=
+=O9sd
+-----END PGP SIGNATURE-----
+
+--XOs+VD/Ifi0NGstF--
