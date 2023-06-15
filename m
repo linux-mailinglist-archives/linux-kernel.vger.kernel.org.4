@@ -2,208 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97BDF7312C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C167312CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240808AbjFOIyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 04:54:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39962 "EHLO
+        id S239780AbjFOIz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 04:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240542AbjFOIyA (ORCPT
+        with ESMTP id S239120AbjFOIzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 04:54:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E852D4C
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:53:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686819187;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WjUU9ZIccsBnD/tga66pDtvz51Usi0faNl1rzgCxArw=;
-        b=bixmUKEi2zPCmCRjhY+PE8LKPXNFMpa5Ys56J30Nmo5Jsk82eO3ihzFmTEW8Oi3zYLJXpt
-        dlXSlGHEOIF5BxKBIQBFgfNr3ICZ1IEC/bV8iuuCFAnFaFtUP7JWcwuq3yduaoYRLjGKRY
-        oFCp9a0icp3z6cKbpihVZRSJ8/u/rmI=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-639-O4B7c6o5NhOzu4fEka2Xwg-1; Thu, 15 Jun 2023 04:53:03 -0400
-X-MC-Unique: O4B7c6o5NhOzu4fEka2Xwg-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-311145e2bacso264823f8f.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:53:03 -0700 (PDT)
+        Thu, 15 Jun 2023 04:55:52 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9261720
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:55:51 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9827bd8e0afso191573566b.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:55:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686819350; x=1689411350;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lV7QLu3dQCxU7BpztxvUiYaqzC4koTpfwg/H3VXhuQw=;
+        b=F5LzRUtkbc+owwF0fBE5WC4VBb0fae9atAHmdJ5eiah/rOsQ4J6MyeumPDtP5L6o9X
+         qk7o3f9VO3uDYH5U8sufXvpuf/GZ3nUT2XFcAlMfXfyhl28LqkkQz75QYxccDaLqTngi
+         r3gyRKkekQB4Ksm74vDEQaEqhuaegeVW5XrN2Rvf/3jJGI6QGW5JhP9BtJpwtYmFGjaz
+         6GJi42drqAvF5RMsmV8k2qwYEM9EAEAtMDR6mPWHQpi7tMETWDxcOlRUNdHTHcyW9vG4
+         JEcQAVZKrAVCyBYjAZohcs2RdybcIzeV+Nv7dwYwcqIxY5tf5RaAV+yYVsVLqWuTxqPM
+         PqBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686819182; x=1689411182;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WjUU9ZIccsBnD/tga66pDtvz51Usi0faNl1rzgCxArw=;
-        b=mDlGQD2bigpQ4zIdltp1O2kJsD3pkEO4iMusd2+03OFigmCI7H+hi6lSql1GO5PtIU
-         nHZ1pxVNE7lWGiEQNgSRg5CZ+LS7gzTQa8YTAfPaAdwptt0eEKGXMiA9I5Tkn6ihj3ZD
-         7VlkiFWML3KFj0do5ITLaLIXap3dLl3L88TpwAxvjqhrh37odZGDiQU+xQLyKH4Brgep
-         rs4wJCG4BzuZKCE1RnIac6kOXxQhbAzZ7GCVAqtsQX8DlVKIvixktJo4BBn3+Voa7bDh
-         npgtpc0DmmttPCq0yNDou69JFcY0A1VkWY8oMis4dYJmeNxda6zeRkQg2+tjoA4OPJKh
-         Y3kA==
-X-Gm-Message-State: AC+VfDy3eCeCiMOHl550uqUhx0iGg0oFrma5GTa0M2YScGPrhLtBnrUv
-        DFTACIle9PE9/2O1B2z3NBIExMGUPWBJ9LO7RbeNTAFfM5qM91+fEtvIZ3ahyVtF4a5Nj+/aVE9
-        3oMvVDGGJGxR3ukRO1o9AtVBk
-X-Received: by 2002:a5d:5107:0:b0:30a:782a:7f97 with SMTP id s7-20020a5d5107000000b0030a782a7f97mr9969797wrt.12.1686819182435;
-        Thu, 15 Jun 2023 01:53:02 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4aYlrTy5DWLWDAfJHCU9pIC2oBBngBvJVkKo3JbdV8LjiX6XZQ3THbsPRGGqKexFHlyZky4Q==
-X-Received: by 2002:a5d:5107:0:b0:30a:782a:7f97 with SMTP id s7-20020a5d5107000000b0030a782a7f97mr9969783wrt.12.1686819182011;
-        Thu, 15 Jun 2023 01:53:02 -0700 (PDT)
-Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
-        by smtp.gmail.com with ESMTPSA id h4-20020adffa84000000b0030647d1f34bsm20347917wrr.1.2023.06.15.01.53.00
+        d=1e100.net; s=20221208; t=1686819350; x=1689411350;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lV7QLu3dQCxU7BpztxvUiYaqzC4koTpfwg/H3VXhuQw=;
+        b=gk7CoGCtzlOW5sV+bB2KvEWv7B21QHxS4iRUyB3KKS4tcw89v+gz8QSh7xK5o1jf9e
+         eyIR1FpshsX/S90oFdj+fLeODK6VArq8Pjxs3jBKvKrLb2Q4DLnYpTuKhbxsVF6d/3+V
+         JUAbONwvEA150m3nekw7zAa0t0mfHOba6hZC9zfYLl2fwdLGSooss1LXYks9apfTNQ9X
+         MpqUQgp6V2sdqYst2T3P08hVdUevx6R8miutBZ+Acym9WwrLjxpWMaaLIyZ4WrPpKKud
+         FAq2ENvCFEsy/hqVyeo3arQ4zOmLC//rkVIG9DXgVbD+LXH+4MQykGf2+YmvY3tlXKSB
+         oV8Q==
+X-Gm-Message-State: AC+VfDzuR8cljHrIFHqHBU2lcR3zgBf9g4+Phf7pn+lWx6BpSfVzR3Df
+        zRtx66vYAs9Txt6BkrCtH0bzfg==
+X-Google-Smtp-Source: ACHHUZ72V9SYWFf+LtAZvutrD0Tp0XqxJCIY+D2Td80wBJ9YF2VHhGposHwZvllf8xiTuwtTblssVw==
+X-Received: by 2002:a17:907:26ca:b0:974:1e0e:9bd4 with SMTP id bp10-20020a17090726ca00b009741e0e9bd4mr17990075ejc.16.1686819349690;
+        Thu, 15 Jun 2023 01:55:49 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id u3-20020a17090617c300b009788dfde0b2sm9157169eje.12.2023.06.15.01.55.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 01:53:01 -0700 (PDT)
-Message-ID: <855fa10d-1211-d3d9-40a3-01a1ceaa33db@redhat.com>
-Date:   Thu, 15 Jun 2023 10:53:00 +0200
+        Thu, 15 Jun 2023 01:55:49 -0700 (PDT)
+Message-ID: <c8d454b0-d355-f599-f720-b7e64374fb56@linaro.org>
+Date:   Thu, 15 Jun 2023 10:55:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v3] KVM: Avoid illegal stage2 mapping on invalid memory
- slot
+Subject: Re: Regression: NULL pointer dereference after NFS_V4_2_READ_PLUS
+ (commit 7fd461c47)
 Content-Language: en-US
-To:     Gavin Shan <gshan@redhat.com>, kvmarm@lists.linux.dev
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pbonzini@redhat.com, seanjc@google.com, mtosatti@redhat.com,
-        maz@kernel.org, will@kernel.org, c.dall@virtualopensystems.com,
-        peterx@redhat.com, aarcange@redhat.com, shahuang@redhat.com,
-        hshuai@redhat.com, zhenyzha@redhat.com, shan.gavin@gmail.com
-References: <20230615054259.14911-1-gshan@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230615054259.14911-1-gshan@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Anna Schumaker <schumaker.anna@gmail.com>
+Cc:     Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <Anna.Schumaker@netapp.com>,
+        linux-nfs <linux-nfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <f591b13c-4600-e2a4-8efa-aac6ad828dd1@linaro.org>
+ <2C5E9725-F152-4D2E-882E-CF92A35481BF@hammerspace.com>
+ <7ba38377-7992-7f0f-d905-cceb42510f39@linaro.org>
+ <51430925-8046-7066-84ed-2ff0db835347@linaro.org>
+ <CAFX2Jf=5X3zyZEWQmD6Rg9jQAD7ccDbae5LQCwrAyPCVVoFumg@mail.gmail.com>
+ <2add1769-1458-b185-bc78-6d573f61b6fc@linaro.org>
+ <CAFX2JfnKy7juGQaDTzqosN9SF-zd+XrhSL9uh_Xg0GpJGDux-A@mail.gmail.com>
+ <32530c36-91d0-d351-0689-aed6a0975a4b@linaro.org>
+ <2f285607-cbf9-6abc-f436-edb6e9a3938b@linaro.org>
+ <CAFX2Jfmz7QqZBEdzbPUhPs0yctnXVaVF68tX1c57YX=6ki=0TA@mail.gmail.com>
+ <4fe39d77-eb7c-a578-aefa-45b76e2247c2@linaro.org>
+ <CAFX2JfmdRMsHPTySiw4vm7BwJfRZj3s0V3_v7NJ+XwMxBBSo9A@mail.gmail.com>
+ <a3683dd3-3f30-bb4c-539d-d1519de6e5bf@linaro.org>
+ <CAFX2JfnS9GVc4NaxKhr9E4y10NNv6SPgcv1yoeHTfEw5NvZgMg@mail.gmail.com>
+ <86d8e252-975f-5d48-4567-0911d5ef9a44@linaro.org>
+ <CAFX2Jfn_DSs38WQYsRs2ifLi5w+T3BhZfSU2W80T6dK48_Bb5g@mail.gmail.com>
+ <e8d31e48-df6a-fde4-4c6b-c4ccf1664ded@linaro.org>
+In-Reply-To: <e8d31e48-df6a-fde4-4c6b-c4ccf1664ded@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15.06.23 07:42, Gavin Shan wrote:
-> We run into guest hang in edk2 firmware when KSM is kept as running on
-> the host. The edk2 firmware is waiting for status 0x80 from QEMU's pflash
-> device (TYPE_PFLASH_CFI01) during the operation of sector erasing or
-> buffered write. The status is returned by reading the memory region of
-> the pflash device and the read request should have been forwarded to QEMU
-> and emulated by it. Unfortunately, the read request is covered by an
-> illegal stage2 mapping when the guest hang issue occurs. The read request
-> is completed with QEMU bypassed and wrong status is fetched. The edk2
-> firmware runs into an infinite loop with the wrong status.
+On 15/06/2023 10:52, Krzysztof Kozlowski wrote:
+> On 14/06/2023 22:55, Anna Schumaker wrote:
+>>>>> Still null ptr (built on 420b2d4 with your patch):
+>>>>
+>>>> We're through the merge window and at rc1 now, so I can spend more
+>>>> time scratching my head over your bug again. We've come up with a
+>>>> patch (attached) that adds a bunch of printks to show us what the
+>>>> kernel thinks is going on. Do you mind trying it out and letting us
+>>>> know what gets printed out? You'll need to make sure
+>>>> CONFIG_NFS_V4_2_READ_PLUS is enabled when compiling the kernel.
+>>>
+>>> The patch does not apply. I tried: v6.4-rc1, v6.4-rc5, next-20230609.
+>>
+>> Can you try the attached patch on top of my 3-patch series from the
+>> other day, and let me know what gets printed out? It adds a bunch of
+>> printk()s at strategic points to print out what is going on with the
+>> xdr scratch buffer since it's suddenly a bad memory address after
+>> working for a bit on your machine.
+>>
 > 
-> The illegal stage2 mapping is populated due to same page sharing by KSM
-> at (C) even the associated memory slot has been marked as invalid at (B)
-> when the memory slot is requested to be deleted. It's notable that the
-> active and inactive memory slots can't be swapped when we're in the middle
-> of kvm_mmu_notifier_change_pte() because kvm->mn_active_invalidate_count
-> is elevated, and kvm_swap_active_memslots() will busy loop until it reaches
-> to zero again. Besides, the swapping from the active to the inactive memory
-> slots is also avoided by holding &kvm->srcu in __kvm_handle_hva_range(),
-> corresponding to synchronize_srcu_expedited() in kvm_swap_active_memslots().
-> 
->    CPU-A                    CPU-B
->    -----                    -----
->                             ioctl(kvm_fd, KVM_SET_USER_MEMORY_REGION)
->                             kvm_vm_ioctl_set_memory_region
->                             kvm_set_memory_region
->                             __kvm_set_memory_region
->                             kvm_set_memslot(kvm, old, NULL, KVM_MR_DELETE)
->                               kvm_invalidate_memslot
->                                 kvm_copy_memslot
->                                 kvm_replace_memslot
->                                 kvm_swap_active_memslots        (A)
->                                 kvm_arch_flush_shadow_memslot   (B)
->    same page sharing by KSM
->    kvm_mmu_notifier_invalidate_range_start
->          :
->    kvm_mmu_notifier_change_pte
->      kvm_handle_hva_range
->      __kvm_handle_hva_range
->      kvm_set_spte_gfn            (C)
->          :
->    kvm_mmu_notifier_invalidate_range_end
-> 
-> Fix the issue by skipping the invalid memory slot at (C) to avoid the
-> illegal stage2 mapping so that the read request for the pflash's status
-> is forwarded to QEMU and emulated by it. In this way, the correct pflash's
-> status can be returned from QEMU to break the infinite loop in the edk2
-> firmware.
-> 
-> We tried a git-bisect and the first problematic commit is cd4c71835228 ("
-> KVM: arm64: Convert to the gfn-based MMU notifier callbacks"). With this,
-> clean_dcache_guest_page() is called after the memory slots are iterated
-> in kvm_mmu_notifier_change_pte(). clean_dcache_guest_page() is called
-> before the iteration on the memory slots before this commit. This change
-> literally enlarges the racy window between kvm_mmu_notifier_change_pte()
-> and memory slot removal so that we're able to reproduce the issue in a
-> practical test case. However, the issue exists since commit d5d8184d35c9
-> ("KVM: ARM: Memory virtualization setup").
-> 
-> Cc: stable@vger.kernel.org # v3.9+
-> Fixes: d5d8184d35c9 ("KVM: ARM: Memory virtualization setup")
-> Reported-by: Shuai Hu <hshuai@redhat.com>
-> Reported-by: Zhenyu Zhang <zhenyzha@redhat.com>
-> Signed-off-by: Gavin Shan <gshan@redhat.com>
-> ---
-> v3: Skip the invalid memory slots in change_pte() MMU notifier only,
->      suggested by Sean. Improved changelog to describe how the fixes
->      tag is given.
-> ---
->   virt/kvm/kvm_main.c | 20 +++++++++++++++++++-
->   1 file changed, 19 insertions(+), 1 deletion(-)
-> 
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 479802a892d4..65f94f592ff8 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -686,6 +686,24 @@ static __always_inline int kvm_handle_hva_range_no_flush(struct mmu_notifier *mn
->   
->   	return __kvm_handle_hva_range(kvm, &range);
->   }
-> +
-> +static bool kvm_change_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
-> +{
-> +	/*
-> +	 * Skipping invalid memslots is correct if and only change_pte() is
-> +	 * surrounded by invalidate_range_{start,end}(), which is currently
-> +	 * guaranteed by the primary MMU.  If that ever changes, KVM needs to
-> +	 * unmap the memslot instead of skipping the memslot to ensure that KVM
-> +	 * doesn't hold references to the old PFN.
-> +	 */
-> +	WARN_ON_ONCE(!READ_ONCE(kvm->mn_active_invalidate_count));
-> +
-> +	if (range->slot->flags & KVM_MEMSLOT_INVALID)
-> +		return false;
-> +
-> +	return kvm_set_spte_gfn(kvm, range);
-> +}
-> +
->   static void kvm_mmu_notifier_change_pte(struct mmu_notifier *mn,
->   					struct mm_struct *mm,
->   					unsigned long address,
-> @@ -707,7 +725,7 @@ static void kvm_mmu_notifier_change_pte(struct mmu_notifier *mn,
->   	if (!READ_ONCE(kvm->mmu_invalidate_in_progress))
->   		return;
->   
-> -	kvm_handle_hva_range(mn, address, address + 1, pte, kvm_set_spte_gfn);
-> +	kvm_handle_hva_range(mn, address, address + 1, pte, kvm_change_spte_gfn);
->   }
->   
->   void kvm_mmu_invalidate_begin(struct kvm *kvm, unsigned long start,
+> Here you have entire log - attached (113 kB, I hope goes past mailing
+> lists/spam filters).
 
-Makes perfect sense to me as well
+As expected this bounced from the mailing lists, but I hope you got it.
+If not, let me know.
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
-
--- 
-Cheers,
-
-David / dhildenb
+Best regards,
+Krzysztof
 
