@@ -2,64 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A919731C0E
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 17:00:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A89731C14
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 17:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241059AbjFOPAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 11:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41560 "EHLO
+        id S1344309AbjFOPAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 11:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345164AbjFOO75 (ORCPT
+        with ESMTP id S1344533AbjFOPAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 10:59:57 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2AE295C;
-        Thu, 15 Jun 2023 07:59:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686841196; x=1718377196;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VVBSBvMBZGW873x3/L4ZC2+Q3Ba2pg7UCxEhgZGxqRY=;
-  b=SmBADmU6KPajTO/u1p9JNhEKM3Gb1q+Dvi9hd6OQnVbCfUrDyuNS/RmL
-   e2eylmHcMguTg+bPxMpqy/m+TRsyxbc4oGrSG7ljJ8DChVsDqJbiBsZf9
-   GeTnJoAmcaD56n9uQ5okG37mIEO6i/GTooct8G9sbJZvRnop8DUnWpccJ
-   Y7NfieGmLCWOhXvoAtJ6OmIGvftwe2I4Ic2WavITvbEMAjsi0kXQ0rOUA
-   qbAunC6nHqowWQfRlxxhRCmgsbr3Xy+xu68BEgtawdVfSdsWFcd3Mud9L
-   EPf7AxWtZ/fAT292yUQtYxA3U3friX5MXdkPCf6jvVc8HG8L7J+1coLJG
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="357811937"
-X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="357811937"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 07:59:56 -0700
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="745591843"
-X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="745591843"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP; 15 Jun 2023 07:59:54 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1q9oS0-003y45-1l;
-        Thu, 15 Jun 2023 17:59:52 +0300
-Date:   Thu, 15 Jun 2023 17:59:52 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Subject: Re: [PATCH v1 1/1] of/platform: Propagate firmware node by calling
- device_set_node()
-Message-ID: <ZIsnaE95qIJ2DVzK@smile.fi.intel.com>
-References: <20230615145243.37095-1-andriy.shevchenko@linux.intel.com>
+        Thu, 15 Jun 2023 11:00:33 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB302947
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 08:00:28 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-128-67.bstnma.fios.verizon.net [173.48.128.67])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 35FExxAe026886
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 11:00:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1686841202; bh=tgle4UqVECPLWQfg/ZwxNkNJR442spWrhIwFYeeKZCY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=Ikc+QaXQlvQ3x3NFjmeKou5uxhvqZkJ1q1Zn0r1YZw8av5OTMZUNM2ci7frlFJCDR
+         3C7u33pbPL5N+ZwCyQiODtXUqUDg9nMxaBQBGvoVmjgZaXwnzeMaC6rOm9a04dBjs/
+         x8myv+eERKdyBvtH+iDjkmarhviwCkvYZlSkxp5TPk1NQxSdxItup4bxBAXb74YVIi
+         A3IaaAshV4XqgwJqnczbRSAMBiUjx4O93uHe03gNI8TpmMYdIDiCboo0Qh3QuVbQMi
+         RNgEXbQvqoyhJxi+DfOXD+bZdBbloXizAocYX31GnxivcbZS4jiUWE/T/p80/+qrXE
+         01F7Q1b9OxKLA==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id CF96215C02DC; Thu, 15 Jun 2023 10:59:59 -0400 (EDT)
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     adilger.kernel@dilger.ca, jack@suse.com, tudor.ambarus@linaro.org,
+        Zhihao Cheng <chengzhihao1@huawei.com>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
+Subject: Re: [PATCH v3 0/6] ext4: Fix stale buffer loading from last failed
+Date:   Thu, 15 Jun 2023 10:59:53 -0400
+Message-Id: <168683994076.282246.1635937592564086219.b4-ty@mit.edu>
+X-Mailer: git-send-email 2.31.0
+In-Reply-To: <20230315013128.3911115-1-chengzhihao1@huawei.com>
+References: <20230315013128.3911115-1-chengzhihao1@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230615145243.37095-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,25 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 05:52:43PM +0300, Andy Shevchenko wrote:
-> Insulate of_device_alloc() and of_amba_device_create() from possible
-> changes to fwnode_handle implementation by using device_set_node()
-> instead of open-coding dev->dev.fwnode assignments.
 
-Side note. When I preparing this change I have noticed a lot of
+On Wed, 15 Mar 2023 09:31:22 +0800, Zhihao Cheng wrote:
+> Patch 1 fixes reusing stale buffer heads from last failed mounting.
+> Patch 2~4 reconstructs 'j_format_version' initialization and checking
+> in loading process.
+> 
+> v1->v2:
+>   Adopt suggestions from Tudor, add fix tag and corrupt 'stable' field
+>   in patch 1.
+>   Reserve empty lines in patch 4.
+> v2->v3:
+>   Split block device checking cleanup into a new patch (2th).
+>   Add 'Reviewed-by' tag in patch 3-6.
+> 
+> [...]
 
-	dev_set_name(... dev_name())
+Applied, thanks!
 
-in the code which seems to me problematic in two ways:
-1) (minor) the dev_set_name() may fail, no checks are there;
-2) (major?) the above construction leaks memory.
+[1/6] ext4: Fix reusing stale buffer heads from last failed mounting
+      commit: ffea255f4052e6416a4b5738925337afbccd795a
+[2/6] ext4: ext4_put_super: Remove redundant checking for 'sbi->s_journal_bdev'
+      commit: a8f17d78525adf325c80f9dd1db469d337a5ce49
+[3/6] jbd2: remove unused feature macros
+      commit: 870a42846c1055c4ff9dfd492a0929c52a367d63
+[4/6] jbd2: switch to check format version in superblock directly
+      commit: 6014c2204f10b1199e15ab61aa30274a14999b1d
+[5/6] jbd2: factor out journal initialization from journal_get_superblock()
+      commit: 51bacdba23d85af2a9a145d97bfb77e6e85c98ad
+[6/6] jbd2: remove j_format_version
+      commit: 1f15ee267c0498016cc4aee2cdcc18e56ff42bae
 
-Is it on purpose (esp. second point)? If no, can it be fixed?
-Note, I'm not familiar with OF platform code, so I would help
-reviewing the change, but that's it.
-
+Best regards,
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Theodore Ts'o <tytso@mit.edu>
