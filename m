@@ -2,158 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 326B9730F1F
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:13:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B54730F27
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:15:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231641AbjFOGNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 02:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40496 "EHLO
+        id S243417AbjFOGPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 02:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbjFOGND (ORCPT
+        with ESMTP id S230254AbjFOGPn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 02:13:03 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2079.outbound.protection.outlook.com [40.107.220.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E361FC2;
-        Wed, 14 Jun 2023 23:13:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TJ39HQHZ1d6As56Xzlf1GTvcdt7RGEVWDjB4JsWEWSkIIR4qyPGO3zmEBYRtESMnARd+jNgyguO+1by417SLExpW9XDm0y4zVlHqkizAx86b7D5eEBRlPU15k4hTK9U1jJ3tL4Sb9cattPGgqZa095Den8v+Lu4C6+CPwJsgk3Pb9xcCBBEWDjRIw2qlHiCEm8p9dyvuoB5a3cRfQQceD2WYiLcZVB3gdV6semvE4VsAhMGpzPfHvdYg3gqh7iJaXirZUAmudnZTyRGuEq61yQi6cpKEopiIGCi1CUhE6Ygdg5TUXXQjQzm1O/AXgxFJEadLGekabMbTYhvAbe/akw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pMgiCeOszjF5fZvJtp1rctyKtfv/NpiiL+BB2blyvrw=;
- b=mmYiU0oG4eQXq24CvusdWcJPA9dUQFrE7jS7o33qwA2hEOHOu81kd/5pwQuBKUsdzfLwRDFHCKPQXwtzwxvQtnyEIm/UgYM+BbaE+qP0dRiowAKA9vfOPOFzmt6D2rUl4makUaGXNbMTU9gAQ1OoYo9HjKQbH64uLbxmioS/287BvrDMGD3H6jYKomhIR3CstPobXEFgINoLd8eNt3GwehFhqwLW3oIBNuVpMQcr52de+qw1rIoSz4P08K6hpuxQD3BWnyI+3awi4QhEij6SQj4gHUai7AeXyB3oSOvR/GWVoRy1rOavmBfCCzjT7zVCsX/j57dmWPAC0ciQGcz/dA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pMgiCeOszjF5fZvJtp1rctyKtfv/NpiiL+BB2blyvrw=;
- b=jvAOJxmbMNDJVivXGXRjL9bkOZ3vVhiPmK3sZov0Xmj1uUNuPwcbgyipAOFqnupZZACo3+odu4Rz027g7KKlo8MwjNCMlUQG3T/Xa9wWSGUAnNLbSBlo2ncqXfO3glNnyGeB+BL9oXwG+/d0JJcb2iA8At80DuAl6RjsIgrfu3M=
-Received: from DM5PR08CA0041.namprd08.prod.outlook.com (2603:10b6:4:60::30) by
- SN7PR12MB8819.namprd12.prod.outlook.com (2603:10b6:806:32a::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.37; Thu, 15 Jun
- 2023 06:12:59 +0000
-Received: from DM6NAM11FT096.eop-nam11.prod.protection.outlook.com
- (2603:10b6:4:60:cafe::c2) by DM5PR08CA0041.outlook.office365.com
- (2603:10b6:4:60::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.37 via Frontend
- Transport; Thu, 15 Jun 2023 06:12:58 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT096.mail.protection.outlook.com (10.13.173.145) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6500.27 via Frontend Transport; Thu, 15 Jun 2023 06:12:58 +0000
-Received: from BLR-5CG113396H.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 15 Jun
- 2023 01:12:52 -0500
-From:   Ravi Bangoria <ravi.bangoria@amd.com>
-To:     <acme@kernel.org>
-CC:     <ravi.bangoria@amd.com>, <irogers@google.com>, <jolsa@kernel.org>,
-        <namhyung@kernel.org>, <peterz@infradead.org>,
-        <james.clark@arm.com>, <alisaidi@amazon.com>, <leo.yan@linaro.org>,
-        <adrian.hunter@intel.com>, <kan.liang@linux.intel.com>,
-        <mark.rutland@arm.com>, <maddy@linux.ibm.com>,
-        <tmricht@linux.ibm.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <sandipan.das@amd.com>,
-        <ananth.narayan@amd.com>, <santosh.shukla@amd.com>
-Subject: [PATCH v2.1 2/3] perf mem amd: Fix perf_pmus__num_mem_pmus()
-Date:   Thu, 15 Jun 2023 11:42:38 +0530
-Message-ID: <20230615061238.2042-1-ravi.bangoria@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <e63e6d33-6659-b63f-2716-c347aba7f525@amd.com>
-References: <e63e6d33-6659-b63f-2716-c347aba7f525@amd.com>
+        Thu, 15 Jun 2023 02:15:43 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E3A1FC2;
+        Wed, 14 Jun 2023 23:15:42 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35F57MGO029957;
+        Thu, 15 Jun 2023 06:15:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=rcuJGoUPbfta+nfafmsO1hk9cPHxSC1TL0jnUatlus8=;
+ b=LxalkOwJPf2qOyalPmc3gJbJDUceepWfBhzNCya8JtvVZ6raBwG17PiMAs2kF3jJLt+d
+ fq1X/O1C643mjEY4ZmyKvZ/VbWjR51PNUIL1RrnzA3Z7xCicXj9XrdWOyyiiZgCjmzWs
+ w2ySWWXq4KEIizpo5xuA43Re2pmj5HAgeawPTQo+/BeHptcbCfKrLlgsngacciMWV66Q
+ 1CFvwF3W5cnylN/VUIFJycgLm5Nv6739nvAXShDAf9sBkfu9Ay6VYK8WkxPv90gM4c80
+ 3DiyOC5e2Rr4ZaJcvZXbs9B8njhl+o6p+uwKXSajGbHanb0VcUvWcv2Bop1eiGFl/8Qo AQ== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r7fae9jnc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 06:15:15 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35F6FEOu010333
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 06:15:14 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Wed, 14 Jun 2023 23:15:04 -0700
+Date:   Thu, 15 Jun 2023 11:44:59 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <p.zabel@pengutronix.de>, <arnd@arndb.de>,
+        <geert+renesas@glider.be>, <neil.armstrong@linaro.org>,
+        <nfraprado@collabora.com>, <broonie@kernel.org>,
+        <rafal@milecki.pl>, <quic_srichara@quicinc.com>,
+        <quic_varada@quicinc.org>, <quic_wcheng@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH 6/9] phy: qcom: Add qcom,m31 USB phy driver
+Message-ID: <20230615061458.GG22186@varda-linux.qualcomm.com>
+References: <cover.1686126439.git.quic_varada@quicinc.com>
+ <353c5affd1d638bdc7e4ed187616a938e8d763a4.1686126439.git.quic_varada@quicinc.com>
+ <1904d271-8db1-e012-ab00-060e418f4c14@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT096:EE_|SN7PR12MB8819:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0a36cb81-ca19-413d-a3c0-08db6d679128
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rRJd7T7SWI12qkVPhPmn/HgpCE5XPgIdBSvCiCKvWeyJGDlbz+SQZmHfGKOlf80yUkAGFYdKKJf7gO9IiclXGuXr6txr/sjMNo2q6AyarzOWTjWAzJPjdDF9AcYcFFd0Ksl76BF4V007e4hHiNzEbbWqm9Btd7heWtXanTr1Y5zLRhnD8yR3ABOZT6F8/VVk7JzI3AWx5j1bLd65Mf0rwboVp/zI6eUbW0/AS8Qi3lGqKzHMhpQF0q/FQJImvzNuPH8FyoPhB2/HtLlYUE7OJusk/gk7G7SPXs580cRuR/i6N6up1Urnak5x7mM3ABIGKaZUXNt1/UmHRcXjrf5UINtnWVrg+uBtoR/7Idqj0bWcJv0mwiR4Bp3rN018dWB1UIsPlLAHh8Kf2cYW4BBI+xmBBRl1k4alxJ0Wf/3OibYRVGbMvtRgARxMJLqzmA2DpQG156PZh8bqG7Y+9jgigAjzh4/4N6LFg8z6/UZlwQZ+Yzo03yJj24ukMFcD8dCZHQt6RUus9LBq7LijM/mExP0vcRmN2pCVOEuOrpY4Iy5ChZLunrVekrWENWAki/QUqQ+KHQcY7BDJ2NWUQ8OHQL/kD/puXm6SsRvAG7pv63sHTiZwhBKV7rx3e8H0YW6vletM00KzwJMR/w/rpUUvV46XJdWGq+z5PHlVOK9QH8kGZ3JX+iHs2/uJRQTNueiDar4q/viLATo3qzTeHDF1Mlfm5zLAQJfL3gemykMBCf7roDkT4OU95jMSSMScEw9/enBMuEotoCCfhZ5zXivzo2AGxUDybaPt9+zWisSrdB1CTQJYqUlbCJmeWiUyFbYr
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(39860400002)(346002)(376002)(451199021)(46966006)(36840700001)(40470700004)(36756003)(44832011)(2906002)(86362001)(82310400005)(7416002)(40480700001)(336012)(7696005)(83380400001)(6666004)(16526019)(36860700001)(186003)(26005)(1076003)(426003)(82740400003)(81166007)(356005)(40460700003)(54906003)(6916009)(70586007)(70206006)(4326008)(316002)(2616005)(5660300002)(8676002)(47076005)(8936002)(478600001)(41300700001)(101420200003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 06:12:58.6694
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0a36cb81-ca19-413d-a3c0-08db6d679128
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT096.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8819
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1904d271-8db1-e012-ab00-060e418f4c14@linaro.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Dbg8RrgnCegxLhykGu50sG5peXjt3tUd
+X-Proofpoint-GUID: Dbg8RrgnCegxLhykGu50sG5peXjt3tUd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-15_03,2023-06-14_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ spamscore=0 priorityscore=1501 lowpriorityscore=0 bulkscore=0 adultscore=0
+ impostorscore=0 suspectscore=0 phishscore=0 mlxscore=0 mlxlogscore=495
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306150051
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-perf mem/c2c on AMD internally uses IBS OP PMU, not the core PMU. Also,
-AMD platforms does not have heterogeneous PMUs.
+On Wed, Jun 07, 2023 at 08:36:45PM +0200, Krzysztof Kozlowski wrote:
+> On 07/06/2023 12:56, Varadarajan Narayanan wrote:
+> > Include M31 phy driver if CONFIG_PHY_QCOM_M31_USB is enabled
+> >
+> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+>
+> That's not a separate commit.
 
-Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
----
- tools/perf/arch/x86/util/pmu.c | 12 ++++++++++++
- tools/perf/util/pmus.c         |  2 +-
- 2 files changed, 13 insertions(+), 1 deletion(-)
+Will combine with the driver and post new version.
 
-diff --git a/tools/perf/arch/x86/util/pmu.c b/tools/perf/arch/x86/util/pmu.c
-index 3c0de3370d7e..65d8cdff4d5f 100644
---- a/tools/perf/arch/x86/util/pmu.c
-+++ b/tools/perf/arch/x86/util/pmu.c
-@@ -14,6 +14,8 @@
- #include "../../../util/intel-bts.h"
- #include "../../../util/pmu.h"
- #include "../../../util/fncache.h"
-+#include "../../../util/pmus.h"
-+#include "env.h"
- 
- struct pmu_alias {
- 	char *name;
-@@ -168,3 +170,13 @@ char *pmu_find_alias_name(const char *name)
- 
- 	return __pmu_find_alias_name(name);
- }
-+
-+int perf_pmus__num_mem_pmus(void)
-+{
-+	/* AMD uses IBS OP pmu and not a core PMU for perf mem/c2c */
-+	if (x86__is_amd_cpu())
-+		return 1;
-+
-+	/* Intel uses core pmus for perf mem/c2c */
-+	return perf_pmus__num_core_pmus();
-+}
-diff --git a/tools/perf/util/pmus.c b/tools/perf/util/pmus.c
-index 8c50ab8894b7..a2032c1b7644 100644
---- a/tools/perf/util/pmus.c
-+++ b/tools/perf/util/pmus.c
-@@ -242,7 +242,7 @@ const struct perf_pmu *perf_pmus__pmu_for_pmu_filter(const char *str)
- 	return NULL;
- }
- 
--int perf_pmus__num_mem_pmus(void)
-+int __weak perf_pmus__num_mem_pmus(void)
- {
- 	/* All core PMUs are for mem events. */
- 	return perf_pmus__num_core_pmus();
--- 
-2.40.1
+Thanks
+Varada
 
+> Best regards,
+> Krzysztof
+>
