@@ -2,103 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C08917310CA
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 820097310D0
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:34:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231225AbjFOHdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 03:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48580 "EHLO
+        id S244183AbjFOHeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 03:34:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243416AbjFOHc4 (ORCPT
+        with ESMTP id S244937AbjFOHeB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 03:32:56 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1422D5D
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:32:40 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-51a2661614cso484701a12.2
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:32:40 -0700 (PDT)
+        Thu, 15 Jun 2023 03:34:01 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1636130D7
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:33:26 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b1b06af50eso22354681fa.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:33:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686814359; x=1689406359;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0T01BUR4iszPkfnXV4jgUMkmxhDftwtafpe9lYKGnDA=;
-        b=WOUH9Nbt08zqpgFCndvBJAwWodKyinVlSsIdRlxu87njqklXzJoKG4tz78RGoxdBMq
-         eMPmQWN3FREY1Ofwo4Rc0CohiZJVMxyAvmSGkzuEVsAMdNhhxTGtBqoTdH4VWEQngAhG
-         OoTIasWySTORlamWrug9m4lSJoF/Sc0MEHiQGWnCSaAAsSGOMkbhIjYob3LEKIjc3oij
-         ic8vMYSm0Q+7JNL4EcWSBa+3SIJACce3UAStkO4WqWeNQlnW6sgZlPwlRSUgWcRUIE3f
-         LZ85xIWqFDjQtqta6bkVgbGksYO37nndDM0NETnZfQvOwI/BsoZEl0wZ5FsnWi7Vak28
-         XuTg==
+        d=google.com; s=20221208; t=1686814405; x=1689406405;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MnmSwoYifJPcQDBqiLLFdZccmtskHS5NVMFEKw/IWo0=;
+        b=i2Y9h/xwBSasa+hIBJZUVgljLZv+3PHOYHTVuQGEqWPqmEZLUGu8D5KVjhqkUyp5h+
+         Gfa+42dFu2UUr6Dr5jnvhYEUrx+T0sL36Bhw2yNrO2GdeC7Oisf4FPHWwvN/Tq5OlUKH
+         wz2/DAvidQSK5QcfHinNhJ9TLyVG5t5r+TEnb9+0sQ0qRFj5mSOLNy7HrQrfICzBmkck
+         cKosEWmUqiML4AUHMeIxYZyoewhhu5A3/oEl8/B3YGF3aK0YMAA2J20Yaxcf8FfgSCFx
+         nZkogijqYgZRATYNDQe/KZkCuGNGIvv1zYGuH+Gaegx1x9gueR7UB4J7lAPBrdr0nv9T
+         b6Rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686814359; x=1689406359;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0T01BUR4iszPkfnXV4jgUMkmxhDftwtafpe9lYKGnDA=;
-        b=fLhaOAzK9EZ8e3uBGWtK+UfuI0LwJdBhjI3crCjSmQ7WgWUHm+dqlHONno/GSOh0Pm
-         ZbaUgBNoaaSVrFuF7mSwaGVJYNA2/EBUv0C0TUsmsx4hXIj+kbcB5W00l1cwvOzgFSTq
-         VAK6Sw9QkNesu4KhnFYyAp+gmKKPA4gpW6+dJ3p1lK3mmsh98I9stvCPLHZ7jsSvHf7j
-         ynFPcp0beinRnymH9KBbg1gYA1GizlOpnwb2UzvhGEll6eRq8VQw8p+cYgs53AK04Hih
-         69gPSZgSs0OUQg3UInSXBtx0eVbySUnUQPtPFkh1ckkruSp5a0bi36zQ2sdxWNvL9Tj6
-         uX1A==
-X-Gm-Message-State: AC+VfDx9vm8yRmiwSUJ8R0pwm3nNfmcOs7DdF1jApe70TRRcL9Gtn8tX
-        Vjra+rvCg05f0BAvrJ5l31t0mw==
-X-Google-Smtp-Source: ACHHUZ4vc4UKj8FD6SlKtS2PYzsT6NzQeOIOWArA5HI/qAH+CQhyfwIsc1QUnMosg4S/oHU9avvWTg==
-X-Received: by 2002:aa7:d756:0:b0:516:416b:f736 with SMTP id a22-20020aa7d756000000b00516416bf736mr11247984eds.35.1686814358858;
-        Thu, 15 Jun 2023 00:32:38 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id m9-20020aa7c489000000b0051422f31b1bsm8437975edq.63.2023.06.15.00.32.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 00:32:38 -0700 (PDT)
-Message-ID: <df613aa9-00ea-2a8d-cf61-f1e85d26cd4d@linaro.org>
-Date:   Thu, 15 Jun 2023 09:32:35 +0200
+        d=1e100.net; s=20221208; t=1686814405; x=1689406405;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MnmSwoYifJPcQDBqiLLFdZccmtskHS5NVMFEKw/IWo0=;
+        b=joU96tD+Z5yMEjL8TYuba4uKpuRDCvIQbIbo2h5Bp70thQaWqbK+V946e09vI9B80N
+         NmNTBY9g/wYf4F68/BmYh+ZUnbcWTjNOBhFZDesJmK5Q1bQlA3r+z/HUlxnDoToSB8to
+         YoSGlkUO/pf+3Mu3S/B82PexAdzgKU5c3+oB/yvrMnuHOryAWFMiqAhFUdiIWZP975HX
+         M33/nUA4VWLXiE8NRkTauuGC5MHV1qqkAw7fWs4vWd8+iNmX4Nkt1r7W/GNlK3MPJPNU
+         FBG4WFv5FB+5LsHuyMd3b9gI0xisXTjRACQwA+2QY1Xm+vOEHhUK/XdLzZ+mS4IZniUU
+         G7IQ==
+X-Gm-Message-State: AC+VfDyusML3LzrDC0jsyl6D2XWoCTNMPjIrYaiF989hawKUQEoeWlrj
+        YyZeMp3JEdjS+Ls28n3BpunRcQedIrl/re5HYhQAmQ==
+X-Google-Smtp-Source: ACHHUZ4A4D9bYIh/DCd989CSq5mzTqTBB7TyqViM2HqpkVG/J6HK8JUHg+eITccD/7lwn9EYwCr/cL6IqMVDrqt/Lsw=
+X-Received: by 2002:a2e:9dca:0:b0:2a8:a651:8098 with SMTP id
+ x10-20020a2e9dca000000b002a8a6518098mr8150278ljj.38.1686814404866; Thu, 15
+ Jun 2023 00:33:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] dt-bindings: clock: drop unneeded quotes and use absolute
- /schemas path
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-References: <20230609140751.65129-1-krzysztof.kozlowski@linaro.org>
- <b07d3bfae4702417010ed5ee14739bb0.sboyd@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <b07d3bfae4702417010ed5ee14739bb0.sboyd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <000000000000556d9605fe1e5c40@google.com> <1cb93e56-f3e3-c972-1232-bbb67ad4f672@huaweicloud.com>
+In-Reply-To: <1cb93e56-f3e3-c972-1232-bbb67ad4f672@huaweicloud.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 15 Jun 2023 09:33:11 +0200
+Message-ID: <CACT4Y+b3r+UeY6PDTBFYqqZ3pNuG9hbCvRa6BY-b2CHhC7A7OQ@mail.gmail.com>
+Subject: Re: [syzbot] [reiserfs?] general protection fault in rcu_core (2)
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     syzbot <syzbot+b23c4c9d3d228ba328d7@syzkaller.appspotmail.com>,
+        jack@suse.cz, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, luto@kernel.org,
+        peterz@infradead.org, reiserfs-devel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        "yukuai (C)" <yukuai3@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/06/2023 02:35, Stephen Boyd wrote:
-> Quoting Krzysztof Kozlowski (2023-06-09 07:07:51)
->> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
->> checking for this can be enabled in yamllint.  Also absolute path
->> starting with /schemas is preferred.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
-> 
-> It's not clear if I should pick this up. Do you want to take it through
-> some DT tree?
+On Thu, 15 Jun 2023 at 04:15, Yu Kuai <yukuai1@huaweicloud.com> wrote:
+>
+> Hi,
+>
+> =E5=9C=A8 2023/06/15 6:20, syzbot =E5=86=99=E9=81=93:
+> > syzbot has bisected this issue to:
+> >
+> > commit 2acf15b94d5b8ea8392c4b6753a6ffac3135cd78
+> > Author: Yu Kuai <yukuai3@huawei.com>
+> > Date:   Fri Jul 2 04:07:43 2021 +0000
+> >
+> >      reiserfs: add check for root_inode in reiserfs_fill_super
+> >
+> > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D1715ffdd=
+280000
+>
+> git log:
+>
+> 13d257503c09 reiserfs: check directory items on read from disk
+> 2acf15b94d5b reiserfs: add check for root_inode in reiserfs_fill_super
+>
+> The bisect log shows that with commit 13d257503c09:
+> testing commit 13d257503c0930010ef9eed78b689cec417ab741 gcc
+> compiler: gcc (GCC) 10.2.1 20210217, GNU ld (GNU Binutils for Debian) 2.3=
+5.2
+> kernel signature:
+> fc456e669984fb9704d9e1d3cb7be68af3b83de4bb55124257ae28bb39a14dc7
+> run #0: basic kernel testing failed: possible deadlock in fs_reclaim_acqu=
+ire
+> run #1: crashed: KASAN: out-of-bounds Read in leaf_paste_in_buffer
+> run #2: crashed: KASAN: out-of-bounds Read in leaf_paste_in_buffer
+> run #3: crashed: KASAN: out-of-bounds Read in leaf_paste_in_buffer
+> run #4: crashed: KASAN: use-after-free Read in leaf_insert_into_buf
+> run #5: crashed: KASAN: out-of-bounds Read in leaf_paste_in_buffer
+> run #6: crashed: KASAN: out-of-bounds Read in leaf_paste_in_buffer
+> run #7: crashed: KASAN: out-of-bounds Read in leaf_paste_in_buffer
+> run #8: crashed: KASAN: out-of-bounds Read in leaf_paste_in_buffer
+> run #9: crashed: KASAN: out-of-bounds Read in leaf_paste_in_buffer
+>
+> and think this is bad, then bisect to the last commit:
+> testing commit 2acf15b94d5b8ea8392c4b6753a6ffac3135cd78 gcc
+> compiler: gcc (GCC) 10.2.1 20210217, GNU ld (GNU Binutils for Debian) 2.3=
+5.2
+> kernel signature:
+> 6d0d5f26a4c0e15188c923383ecfb873ae57ca6a79f592493d6e9ca507949985
+> run #0: crashed: possible deadlock in fs_reclaim_acquire
+> run #1: OK
+> run #2: OK
+> run #3: OK
+> run #4: OK
+> run #5: OK
+> run #6: OK
+> run #7: OK
+> run #8: OK
+> run #9: OK
+> reproducer seems to be flaky
+> # git bisect bad 2acf15b94d5b8ea8392c4b6753a6ffac3135cd78
+>
+> It seems to me the orignal crash general protection fault is not related
+> to this commit. Please kindly correct me if I'm wrong.
+>
+> For the problem of lockdep warning, it first appeared in bisect log:
+> testing commit 406254918b232db198ed60f5bf1f8b84d96bca00 gcc
+> compiler: gcc (GCC) 10.2.1 20210217, GNU ld (GNU Binutils for Debian) 2.3=
+5.2
+> kernel signature:
+> 1c83f3c8b090a4702817c527e741a35506bc06911c71962d4c5fcef577de2fd3
+> run #0: basic kernel testing failed: BUG: sleeping function called from
+> invalid context in stack_depot_save
+> run #1: basic kernel testing failed: possible deadlock in fs_reclaim_acqu=
+ire
+> run #2: OK
+> run #3: OK
+> run #4: OK
+> run #5: OK
+> run #6: OK
+> run #7: OK
+> run #8: OK
+> run #9: OK
+> # git bisect good 406254918b232db198ed60f5bf1f8b84d96bca00
+>
+> And I don't understand why syzbot thinks this is good, and later for the
+> same result, syzbot thinks 2acf15b94d5b is bad.
 
-Please grab it.
+I think the difference is "basic kernel testing failed", so that
+happened even before the reproducer for the bug was executed.
+So for all runs where the reproducer was executed, the result was "OK".
 
-Best regards,
-Krzysztof
 
+
+> Thanks,
+> Kuai
+> > start commit:   f8dba31b0a82 Merge tag 'asym-keys-fix-for-linus-v6.4-rc=
+5' ..
+> > git tree:       upstream
+> > final oops:     https://syzkaller.appspot.com/x/report.txt?x=3D1495ffdd=
+280000
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D1095ffdd280=
+000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D3c980bfe8b3=
+99968
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=3Db23c4c9d3d228=
+ba328d7
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1680f7d12=
+80000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D12fad50d280=
+000
+> >
+> > Reported-by: syzbot+b23c4c9d3d228ba328d7@syzkaller.appspotmail.com
+> > Fixes: 2acf15b94d5b ("reiserfs: add check for root_inode in reiserfs_fi=
+ll_super")
+> >
+> > For information about bisection process see: https://goo.gl/tpsmEJ#bise=
+ction
+> >
+> > .
+> >
+>
+> --
+> You received this message because you are subscribed to the Google Groups=
+ "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgi=
+d/syzkaller-bugs/1cb93e56-f3e3-c972-1232-bbb67ad4f672%40huaweicloud.com.
