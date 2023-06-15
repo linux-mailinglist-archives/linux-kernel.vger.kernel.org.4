@@ -2,129 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0A6B731954
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF5A6731957
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:57:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245018AbjFOM5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 08:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52098 "EHLO
+        id S241240AbjFOM5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 08:57:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240718AbjFOM4z (ORCPT
+        with ESMTP id S241952AbjFOM5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 08:56:55 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4BE0268C
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 05:56:53 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f64fb05a8aso10538026e87.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 05:56:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686833812; x=1689425812;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=v1CbTBRn8vQDvPf6Z2biUED1bJGUXq/a80Hy0PH+rSA=;
-        b=pIzCccIMIRGK2q25DpBRdjMSE9rF2EraF12WiZ8h6N7uHRGusZ2WBw7HdRHqX2CeL5
-         EKul/KBbvQJkKxXtT093+Wj1U/LHPnCAmqvmia0QrGEdbHfA+Zss1Abfir1yj56IH/9o
-         uOGSulxNPYsuDFKg+RHzEHMoS48IYece+jmC5VW4+cnXP4VxKmfwBOr++lmyPuey5vXe
-         Pq6ZGehysyoWw4MAO8BKFLiDiFqbT/PklBljqRPuA896y5RlHwx4Tm5/0eWdIxhu0TtZ
-         ubzHiTGNXQ4XpK81GBliesQcRh1r6v4SjeNXQbHNPM0IOGA+tRleTV9kXy14TroVf1Lt
-         d4gg==
+        Thu, 15 Jun 2023 08:57:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8452702
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 05:57:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686833820;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=U9JHKraOZ8C9H8TNlUxicYfNReQUH9J26rOccgFXmnY=;
+        b=fJlMg1aqvaW7O2pgnXQivSLTYHkz1rZT4RPrEp78NKSko5FH0cjPDf1opclcir1z094hzb
+        /dn816JDDP8fzZJBgy7VxR9roJFeJ5yB2epgXHahwtVMvlCcZryvCP3rpYDWR3p22YDs10
+        FGEmpwOaXV3Mx83nGAkndKKyb14r3DE=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-434-eixazXd5PFGpZZCB9IFxPQ-1; Thu, 15 Jun 2023 08:56:59 -0400
+X-MC-Unique: eixazXd5PFGpZZCB9IFxPQ-1
+Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-4edc7406cb5so6512035e87.3
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 05:56:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686833812; x=1689425812;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v1CbTBRn8vQDvPf6Z2biUED1bJGUXq/a80Hy0PH+rSA=;
-        b=HdhrwiUIdHaA2O5JLVfC1U5X5jzs2VtKBO9kwQQ6S5EObx200Ul/6b5hKj8+nXaYZA
-         jFFNzDAUvSd/T3dE9e2IIfxvBTgRylW/ubKN0GcBCH+67xHM2MPyHr+8REEG4p4zAkjL
-         jf9GW9kZjOTp9lfeiIvqa82Rd6cwGvfFGlN0OPn23HAlR/mVX9Nf8d6a9TNnKeX7lP5b
-         xHCV/as2Dqisln5b91ndhmml/Eb41TZefGmL3plv+Y3qpCslbckLVZdUMQbaiBpaZ6ER
-         Wg+qNt+7nheXHp1YCwQUcCLDxv0DGMy8CnmIDrjFxNWb+et8TaOE7RrqIwmgsptGGBaY
-         wddw==
-X-Gm-Message-State: AC+VfDxVHHHeMq39D5czbihYZa/PHDA/oWTjVxuL/Aj4lTdXxoeLhbRR
-        plTnk+zWz4lhtP8Gw7JZF3iFgw==
-X-Google-Smtp-Source: ACHHUZ4idKi9MKj9dACNe9eMwOfmRi1oqlCWD4/JIb33nDqyZCNa4kpiBxTMJ7GeUtyUjAUAiC/Yng==
-X-Received: by 2002:a05:6512:48b:b0:4ef:ed49:fcc2 with SMTP id v11-20020a056512048b00b004efed49fcc2mr11392533lfq.26.1686833811790;
-        Thu, 15 Jun 2023 05:56:51 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id l9-20020ac25549000000b004f63739e2f1sm2559845lfk.255.2023.06.15.05.56.50
+        d=1e100.net; s=20221208; t=1686833817; x=1689425817;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=U9JHKraOZ8C9H8TNlUxicYfNReQUH9J26rOccgFXmnY=;
+        b=JcjFiUWXWdlnjlE7c5sN0f5+T2GEGuJs9FrKfP+KIxljNsIQawWAo/6Hh6D5hEwWpm
+         eWjktYEonBmUXwwWX3M0rxVp/aj8+qcQGdGipcx2mdOr2F/KhroERDsjHvkvCA6cBcYB
+         qR76n4nmIX9inUfwnrXD5VlX76jj526kcyRWUPaSIgWnu+GTegS/6IocaAzWTX55XEqv
+         4eZkgEbJvHRVuMhB7nXpTeZ4CbEJynF8i4/7KN8p8NgE7G8cPCAvfFQKf8xUzSSo2O+5
+         B/eZGmSd5pwtE36twa9X2TmjsHV4vNPNmVDrC/hU+UpypkOdrzbgUDRy21XnUYSVsku4
+         oxpQ==
+X-Gm-Message-State: AC+VfDzulZEdMkbXUHD+jkNq3zu4ZN5ytieYcSY2zY6efSf44u28Qh6z
+        9qSHfkTqRTaZsnVUlReu9ukT/o5ldrWTJfqv2mgEhNerF+6pzY5BF75fBcL8BxK7Nn8g0209s1G
+        p7yQLmqBMJO/fgor/MsI5uCWd
+X-Received: by 2002:a19:7113:0:b0:4f3:b258:fee4 with SMTP id m19-20020a197113000000b004f3b258fee4mr9938776lfc.59.1686833817551;
+        Thu, 15 Jun 2023 05:56:57 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7bSB+Z4QicTb+uLFFwe367ysrOFiLTzBu/nB3bSm2df/9oyOxwkS4isQmvmMoD0F93eQAiFA==
+X-Received: by 2002:a19:7113:0:b0:4f3:b258:fee4 with SMTP id m19-20020a197113000000b004f3b258fee4mr9938758lfc.59.1686833817121;
+        Thu, 15 Jun 2023 05:56:57 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
+        by smtp.gmail.com with ESMTPSA id c12-20020a05600c0acc00b003f195d540d9sm20419103wmr.14.2023.06.15.05.56.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 05:56:51 -0700 (PDT)
-Message-ID: <18103637-c191-9b8f-7983-d0b1591f9024@linaro.org>
-Date:   Thu, 15 Jun 2023 14:56:49 +0200
+        Thu, 15 Jun 2023 05:56:56 -0700 (PDT)
+Message-ID: <bd119703-7b7b-c4ab-0c38-9b85809de252@redhat.com>
+Date:   Thu, 15 Jun 2023 14:56:55 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 19/23] arm64: dts: qcom: sa8775p: add the SGMII PHY
- node
+ Thunderbird/102.12.0
+Subject: Re: [External] Re: [RFC PATCH 1/3] zram: charge the compressed RAM to
+ the page's memcgroup
 Content-Language: en-US
-To:     Bartosz Golaszewski <brgl@bgdev.pl>, Vinod Koul <vkoul@kernel.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>
-Cc:     netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230615121419.175862-1-brgl@bgdev.pl>
- <20230615121419.175862-20-brgl@bgdev.pl>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230615121419.175862-20-brgl@bgdev.pl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+To:     =?UTF-8?B?6LS65Lit5Z2k?= <hezhongkun.hzk@bytedance.com>
+Cc:     minchan@kernel.org, senozhatsky@chromium.org, mhocko@suse.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230615034830.1361853-1-hezhongkun.hzk@bytedance.com>
+ <d9b22eaa-00a1-6c5c-99a0-126b085f7cb0@redhat.com>
+ <CACSyD1NxcYn_Uy2DUk1ywSyWsxFzq4H+poaWvF55SZZz5W-uRw@mail.gmail.com>
+ <3f54542e-235b-8456-f13f-786d21c6c14f@redhat.com>
+ <CACSyD1OxAMowHTE7KnL8nac_-=Vp4eyO00oyMLFo0qcEHx33GA@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <CACSyD1OxAMowHTE7KnL8nac_-=Vp4eyO00oyMLFo0qcEHx33GA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15.06.2023 14:14, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On 15.06.23 14:19, 贺中坤 wrote:
+> On Thu, Jun 15, 2023 at 7:19 PM David Hildenbrand <david@redhat.com> wrote:
+>>
+>> Yes, but my point is that there are cases where the pages you get are
+>> not charged. zram_bvec_write_partial() is just one such example that
+>> highlights the issue.
 > 
-> Add the internal SGMII/SerDes PHY node for sa8775p platforms.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Sorry ,I got it.
 
-Konrad
->  arch/arm64/boot/dts/qcom/sa8775p.dtsi | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-> index b130136acffe..b6d95813c98c 100644
-> --- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-> @@ -1837,6 +1837,15 @@ adreno_smmu: iommu@3da0000 {
->  				     <GIC_SPI 687 IRQ_TYPE_LEVEL_HIGH>;
->  		};
->  
-> +		serdes0: phy@8901000 {
-> +			compatible = "qcom,sa8775p-dwmac-sgmii-phy";
-> +			reg = <0x0 0x08901000 0x0 0xe10>;
-> +			clocks = <&gcc GCC_SGMI_CLKREF_EN>;
-> +			clock-names = "sgmi_ref";
-> +			#phy-cells = <0>;
-> +			status = "disabled";
-> +		};
-> +
->  		pdc: interrupt-controller@b220000 {
->  			compatible = "qcom,sa8775p-pdc", "qcom,pdc";
->  			reg = <0x0 0x0b220000 0x0 0x30000>,
+I suspect for the swap->zram we should always get charged pages, because 
+we're effectively writing out charged anon/shmem pages only -- without 
+any buffer in between.
+
+For the fs->zram or direct zram access device case I'm not so sure. It 
+highly depends on what gets mapped into the bio (e.g., a kernel buffer, 
+zeropage, ...). If it's a pagecache page, that should be charged and 
+we're good. No so sure about fs metadata or some other fs cases (e.g., 
+write() to a file that bypass the pagecache).
+
+-- 
+Cheers,
+
+David / dhildenb
+
