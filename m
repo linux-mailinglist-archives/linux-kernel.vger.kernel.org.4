@@ -2,102 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2B4C7318D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C2E7318D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240158AbjFOMVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 08:21:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57984 "EHLO
+        id S231298AbjFOMVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 08:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245029AbjFOMTn (ORCPT
+        with ESMTP id S1343949AbjFOMVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 08:19:43 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AEAA3C01
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 05:17:55 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Thu, 15 Jun 2023 08:21:13 -0400
+X-Greylist: delayed 635 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Jun 2023 05:19:26 PDT
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477253580;
+        Thu, 15 Jun 2023 05:19:26 -0700 (PDT)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A05051FE0D;
-        Thu, 15 Jun 2023 12:16:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1686831411; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        by mail.3ffe.de (Postfix) with ESMTPSA id AD4479F4;
+        Thu, 15 Jun 2023 14:18:59 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1686831539;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=86pO/5pX8I+6NSA3fZs+/KcyWC6lgb7caHW7+qPc8ko=;
-        b=mTBdbL6oQEScJdyCDi72UHa9I2GLbRNJ5ZjBPYHndoipUG71Z4Xxu63EC27CX6SqH+vo9X
-        FY6pdkkt8YRTcB27ib4YCNhwkeC/1pM5HqDnfft8LjxWV887AzC6Q1dGJNX59BghoFDaUU
-        YdVK15054ieCTAdkL/LC09lbkfUFbLM=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8F73013A47;
-        Thu, 15 Jun 2023 12:16:51 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id xmtlIjMBi2ScLQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 15 Jun 2023 12:16:51 +0000
-Date:   Thu, 15 Jun 2023 14:16:51 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     =?utf-8?B?6LS65Lit5Z2k?= <hezhongkun.hzk@bytedance.com>
-Cc:     minchan@kernel.org, senozhatsky@chromium.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [External] Re: [RFC PATCH 1/3] zram: charge the compressed RAM
- to the page's memcgroup
-Message-ID: <ZIsBM06ZJSbB+bXz@dhcp22.suse.cz>
-References: <20230615034830.1361853-1-hezhongkun.hzk@bytedance.com>
- <ZIrbar9yQ6EZ217t@dhcp22.suse.cz>
- <CACSyD1Pz0SHOZ-aMr6NQ7vX5iNuhUUEnH=iysR49uxo=mbfN=Q@mail.gmail.com>
+        bh=/Caj3WcHVhXv2orGAS3eW5p0U6TifL7MgYmHT2thsXY=;
+        b=zeqVvJFr2EAj1fuB6oUIj/6PEbDQDew4ofZWxW4UM3mB8WsZlzMAr4y55a3nE8GYqd9c0Y
+        Lft6AlIGpRxl+Oio0ZWRV951mmWmXdzuRYz1SbnT7Ws+k1te97Bna5/TI4oBCVGPsyvfqN
+        OGXn34D27nvQ1gvvQwkuwItw52UYLro8d4oEhzkrkDQK+zvHz6lKsLrglo745Xbo5fwuVO
+        Kth6/H8GjAMdoltgrkr9IOXrgZVkGwNB5McisG5eATfUi5OJEsqbKyURLmobLMoJV6yZLH
+        Kr1bh2UDOwElBSnvFM+hPAIIxWTUCQW5h2JTHta2T7zu5ET2JZcKvhwWSoNKhA==
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACSyD1Pz0SHOZ-aMr6NQ7vX5iNuhUUEnH=iysR49uxo=mbfN=Q@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Date:   Thu, 15 Jun 2023 14:18:59 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+Cc:     tudor.ambarus@linaro.org, pratyush@kernel.org,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, git@amd.com, linux-mtd@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        amitrkcian2002@gmail.com
+Subject: Re: [PATCH 2/2] mtd: spi-nor: Avoid setting SRWD bit in SR if WP
+ signal not connected
+In-Reply-To: <20230615111649.36344-3-amit.kumar-mahapatra@amd.com>
+References: <20230615111649.36344-1-amit.kumar-mahapatra@amd.com>
+ <20230615111649.36344-3-amit.kumar-mahapatra@amd.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <fe5ebc619350c378a14e88275e5dab3b@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 15-06-23 19:58:37, 贺中坤 wrote:
-> Hi michal,  glad to hear from you.
+Am 2023-06-15 13:16, schrieb Amit Kumar Mahapatra:
+> Setting the status register write disable (SRWD) bit in the status
+> register (SR) with WP signal of the flash not connected will configure 
+> the
+> SR permanently as read-only. If WP signal is not connected, avoid 
+> setting
+> SRWD bit while writing the SR during flash protection.
 > 
-> > I am not really deeply familiar with zram implementation nor usage but
-> > how is the above allocation going to be charged without __GFP_ACCOUNT in
-> > the gfp mask?
+> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+> ---
+>  drivers/mtd/spi-nor/core.c | 3 +++
+>  drivers/mtd/spi-nor/core.h | 1 +
+>  drivers/mtd/spi-nor/swp.c  | 5 +++--
+>  3 files changed, 7 insertions(+), 2 deletions(-)
 > 
-> Yes，zs_malloc() did not charge compressed memory, even if we add this gfp.
-> so we need to implement this function in this patchset. But this flag should be
-> used to enable this feature.
-
-Let me check I understand. This patch on its own doesn't really do
-anything. You need the zs_malloc support implemented in patch 3 for this
-to have any effect. Even with that in place the zs_malloc doesn't follow
-the __GFP_ACCOUNT scheme we use for allocation tracking. Correct?
-
-> > Also what exactly is going to happen for the swap backed by the zram
-> > device? Your memcg might be hitting the hard limit and therefore
-> > swapping out. Wouldn't zs_malloc fail very likely under that condition
-> > making the swap effectively unusable?
+> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+> index 0bb0ad14a2fc..81b57c51f41c 100644
+> --- a/drivers/mtd/spi-nor/core.c
+> +++ b/drivers/mtd/spi-nor/core.c
+> @@ -2864,6 +2864,9 @@ static void spi_nor_init_flags(struct spi_nor 
+> *nor)
+>  	if (flags & NO_CHIP_ERASE)
+>  		nor->flags |= SNOR_F_NO_OP_CHIP_ERASE;
 > 
-> This is the key point, as i said above, zs_malloc() did not charge
-> compressed memory,
-> so zs_malloc will not fail under that condition. if the zram swap is
-> large enough, zs_malloc
-> never fails unless system OOM.   so memory.max will be invalidated.
+> +	if (of_property_read_bool(np, "broken-wp"))
+> +		nor->flags |= SNOR_F_BROKEN_WP;
+> +
+>  	if (flags & SPI_NOR_RWW && nor->info->n_banks > 1 &&
+>  	    !nor->controller_ops)
+>  		nor->flags |= SNOR_F_RWW;
+> diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
+> index 4fb5ff09c63a..6ac932eba913 100644
+> --- a/drivers/mtd/spi-nor/core.h
+> +++ b/drivers/mtd/spi-nor/core.h
+> @@ -132,6 +132,7 @@ enum spi_nor_option_flags {
+>  	SNOR_F_SWP_IS_VOLATILE	= BIT(13),
+>  	SNOR_F_RWW		= BIT(14),
+>  	SNOR_F_ECC		= BIT(15),
+> +	SNOR_F_BROKEN_WP	= BIT(16),
+>  };
+> 
+>  struct spi_nor_read_command {
+> diff --git a/drivers/mtd/spi-nor/swp.c b/drivers/mtd/spi-nor/swp.c
+> index 0ba716e84377..074f3bce2034 100644
+> --- a/drivers/mtd/spi-nor/swp.c
+> +++ b/drivers/mtd/spi-nor/swp.c
+> @@ -214,8 +214,9 @@ static int spi_nor_sr_lock(struct spi_nor *nor,
+> loff_t ofs, uint64_t len)
+> 
+>  	status_new = (status_old & ~mask & ~tb_mask) | val;
+> 
+> -	/* Disallow further writes if WP pin is asserted */
+> -	status_new |= SR_SRWD;
+> +	/* Disallow further writes if WP pin is connected */
 
-I do not think this is answering my question. Or maybe I just
-misunderstand. Let me try again. Say you have a memcg under hard limit
-pressure so any further charge is going to fail. How can you reasonably
-implement zram back swapout if the memory is charged?
+"is not broken" or similar. Maybe descibe what is broken.
+Like I said, this might also be a valid use case.
 
--- 
-Michal Hocko
-SUSE Labs
+Thinking more about this, maybe we should make this
+configurable. I.e. make it possible to set the
+locking region without disabling further writes. Although
+I'm not sure how. Right now, we always enable both the
+software and hardware write protection. (winbond distiguish
+between software and hardware write protection here; software
+here means not linux/kernel but just setting the protection
+bits without the locking bit). And in the case WP# is tied
+to low, one should not use the hardware write protection.
+
+Although I'm not really sure, how to do that in a backwards
+compatible way.
+
+-michael
