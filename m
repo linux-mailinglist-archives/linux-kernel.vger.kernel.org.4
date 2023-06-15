@@ -2,65 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0115A7319E7
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:27:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EF027319EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:27:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241196AbjFON1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 09:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39664 "EHLO
+        id S237141AbjFON1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 09:27:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241287AbjFON12 (ORCPT
+        with ESMTP id S230423AbjFON1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 09:27:28 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4622735;
-        Thu, 15 Jun 2023 06:27:26 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35FDRH3O014003;
-        Thu, 15 Jun 2023 08:27:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1686835637;
-        bh=e2JqayMgeVvA/IBzTOt4qE8zDQV6l+OTweSpwewCVeg=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=w9PIZR+pt/FbrvtfYPGzQKcKnBGsdQBB4hM0b0PKUZAEnGAFVqssIf9jZb4+majKv
-         +QZgcJIQcl61iCDqTTamp9ghtGD04P2HtNVKtQpLvyM6KF+veAm9l9KiC79upqQU+X
-         hBWfgPZOMD5xUApJX+HAC0MmiFyidFCzU3e2/MrM=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35FDRHPk055324
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 15 Jun 2023 08:27:17 -0500
-Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 15
- Jun 2023 08:27:17 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 15 Jun 2023 08:27:17 -0500
-Received: from uda0132425.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35FDREFd090523;
-        Thu, 15 Jun 2023 08:27:14 -0500
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-To:     Conor Dooley <conor+dt@kernel.org>,
+        Thu, 15 Jun 2023 09:27:37 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E602726
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 06:27:35 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1q9n0Q-0006nm-HG; Thu, 15 Jun 2023 15:27:18 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1q9n0N-0002KD-VC; Thu, 15 Jun 2023 15:27:15 +0200
+Date:   Thu, 15 Jun 2023 15:27:15 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Vincent Legoll <vincent.legoll@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Nishanth Menon <nm@ti.com>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Tero Kristo <kristo@kernel.org>, Udit Kumar <u-kumar1@ti.com>
-Subject: Re: [PATCH V2 00/14] arm64: dts: ti: Fix up references to phandles
-Date:   Thu, 15 Jun 2023 18:57:12 +0530
-Message-ID: <168681817160.2098323.17959511532204360182.b4-ty@ti.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230606182220.3661956-1-nm@ti.com>
-References: <20230606182220.3661956-1-nm@ti.com>
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 00/25] Add perf support to the rockchip-dfi driver
+Message-ID: <20230615132715.GF18491@pengutronix.de>
+References: <20230524083153.2046084-1-s.hauer@pengutronix.de>
+ <20230614134034.3p3p75a3jophi2eu@mercury.elektranox.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230614134034.3p3p75a3jophi2eu@mercury.elektranox.org>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,68 +65,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nishanth Menon,
-
-On Tue, 06 Jun 2023 13:22:06 -0500, Nishanth Menon wrote:
-> When referring to array of phandles, using <> to separate the array
-> entries is better notation as it makes potential errors with phandle and
-> cell arguments easier to catch. Fix the outliers to be consistent with
-> the rest of the usage.
+On Wed, Jun 14, 2023 at 03:40:34PM +0200, Sebastian Reichel wrote:
+> Hi,
 > 
-> This set was caught by using: git grep '\s&' arch/arm64/boot/dts/ti/
-> and manually going through the list.
+> On Wed, May 24, 2023 at 10:31:28AM +0200, Sascha Hauer wrote:
+> > This is v5 of the series adding perf support to the rockchip DFI driver.
+> > 
+> > A lot has changed in the perf driver since v4. First of all the review
+> > feedback from Robin and Jonathan has been integrated. The perf driver
+> > now not only supports monitoring the total DDR utilization, but also the
+> > individual channels. I also reworked the way the raw 32bit counter
+> > values are summed up to 64bit perf values, so hopefully the code is
+> > easier to follow now.
+> > 
+> > lockdep found out that that locking in the perf driver was broken, so I
+> > reworked that as well. None of the perf hooks allows locking with
+> > mutexes or spinlocks, so in perf it's not possible to enable the DFI
+> > controller when needed. Instead I now unconditionally enable the DFI
+> > controller during probe when perf is enabled.
+> > 
+> > Furthermore the hrtimer I use for reading out the hardware counter
+> > values before they overflow race with perf. Now a seqlock is used to
+> > prevent that.
+> > 
+> > The RK3588 device tree changes for the DFI were not part of v4. As
+> > Vincent Legoll showed interest in testing this series the necessary
+> > device tree changes are now part of this series.
 > 
-> [...]
+> I tested the series on RK3588 EVB1. The read/write byts looks
+> sensible. Sometimes cycles reads unrealistic values, though:
+> 
+>  Performance counter stats for 'system wide':
+> 
+> 18446744070475110400      rockchip_ddr/cycles/
 
-I have applied the following to branch ti-k3-dts-next on [1].
-Thank you!
+This goes down to missing initialization of &dfi->last_perf_count, see
+my other mail. Will fix this in the next round.
 
-[01/14] arm64: dts: ti: k3-j721e-sk: Fixup reference to phandles array
-        commit: 12bf41da5c3a02a9a6f8059404ba97c39a8f1852
-[02/14] arm64: dts: ti: k3-j721e-som-p0/common-proc-board: Fixup reference to phandles array
-        commit: 7335c987de3e4741908a032914bd3f2979898375
-[03/14] arm64: dts: ti: k3-j721e-beagleboneai64: Move camera gpio pinctrl to gpio node
-        commit: d528c29fa7526adf7074fb166b99df7d5fd90670
-[04/14] arm64: dts: ti: k3-j721e-beagleboneai64: Move eeprom WP gpio pinctrl to eeprom node
-        commit: 88875d4c70cabcb509e9836086fdf2064ef89468
-[05/14] arm64: dts: ti: k3-j721e-beagleboneai64: Fixup reference to phandles array
-        commit: 4a701c01e7ff96966fcf2cf9df0d3dd851197317
-[06/14] arm64: dts: ti: k3-am642-phyboard-electra-rdk: Fixup reference to phandles array
-        commit: 56ccd4b1eb52e153d557c7c7ae19f849e5d5c2e1
-[07/14] arm64: dts: ti: k3-j7200-som/common-proc-board: Fixup reference to phandles array
-        commit: a6550e2547acbcd7b01ea26d447a437140df7c43
-[08/14] arm64: dts: ti: k3-j721s2-common-proc-board: Fixup reference to phandles array
-        commit: 6a2baa853500d1bbe986f29aacce4a0c859bf017
-[09/14] arm64: dts: ti: k3-am625-sk: Fixup reference to phandles array
-        commit: 875aad10d219494bb0ef0880b1b4a33f99c98a13
-[10/14] arm64: dts: ti: k3-am64-evm: Fixup reference to phandles array
-        commit: bb867df51d3b7f305222405c4e01373efc8866c7
-[11/14] arm64: dts: ti: k3-am64-sk: Fixup reference to phandles array
-        commit: 0e97d245633bffc0ae348c95f98a2af5b973811c
-[12/14] arm64: dts: ti: k3-am65-iot*: Fixup reference to phandles array
-        commit: f722090aeb70ca67b5f5a37a39a26fca29664dce
-[13/14] arm64: dts: ti: k3-am654-base-board: Fixup reference to phandles array
-        commit: 9da060be7491cc67323b8f4386ebc4524eba5970
-[14/14] arm64: dts: ti: k3-am68-sk-base-board: Fixup reference to phandles array
-        commit: 918ef215db22b18b75292b6e5bcb763ce27e0483
+Sascha
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent up the chain during
-the next merge window (or sooner if it is a relevant bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
---
-Vignesh
-
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
