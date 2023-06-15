@@ -2,168 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0390E731DDB
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:32:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 999D4731E22
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232429AbjFOQcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 12:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37686 "EHLO
+        id S230241AbjFOQra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 12:47:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232008AbjFOQcF (ORCPT
+        with ESMTP id S236080AbjFOQrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 12:32:05 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B5912E
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 09:32:04 -0700 (PDT)
+        Thu, 15 Jun 2023 12:47:05 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D583599
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 09:46:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686846724; x=1718382724;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XhSm0Ah8n5TfTVfCC5FzcpXI4AyB4pPPo3UttJyIm5c=;
-  b=KI/5B/4rNucmzmfzXCPH47jLsuByaM4iXhqBbsna/gbtXw0awmXSQKzM
-   XTLhH5kEpLM4l+p5SV0ba+2DOYPHvS7vZoy9fBTaRg4ZzRnF+AYFQyguV
-   SV/4B9P5J6dWtwYNKgdXJYbi/Vr4UviWGLGuTb0i71fQB/1qYpURiVFzD
-   BRfvjQRrn/6ixTK2t6fCgYXNfVTA7ac+0+Ik+FX8oFWKhW1RTtPWs9GzY
-   za/jdirCmWu+nepYR+dPAGmbyzoWSl+VG/6CdOsT6DWxRQoytAe4Ur9Dm
-   liB+pWO1ZyuaOzRJYgRt4RmFLGUd8WdM5CLQ8UIQstoMvu/YVXxecQTan
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="445338205"
+  t=1686847598; x=1718383598;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=PiVRmi1vjOZiGqiH/BFR7jdTY/8M9iyE6yzFyqVXpIo=;
+  b=YbF4ENe+YzyHTkJV+KcKPZUaah8uQqP4q3icGDtiWBv3Jggnp9OeaOS8
+   sfvlpV0WJag6MmklVXHAjFRTsTJFpAuHk2erDDxLru89UrTfxa6qbs/xF
+   PCraT0Ua+3wmgLartDWtUC6vS4WH6NfuuaAX56DHnunmHJ+dbAZik7ZXq
+   Hf32ZFdzLIdGaAsNY5Q9Ozetfaivugj8sdshTf66AGujc4CUiy1fjOlaw
+   ZwQI2QCdaM1hMgOWCT06vbQwScC0PgGjzlYeAIhSYR6KAaUh0dZG/TQsz
+   NWLssKaUcjOJ9OnA+onwyqFBEnPBI3XjfsIttZflLiIA26ocG3n2Mqxfl
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="387506744"
 X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="445338205"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 09:31:35 -0700
+   d="scan'208";a="387506744"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 09:46:23 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="886747196"
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="857040434"
 X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="886747196"
-Received: from ckale-mobl1.amr.corp.intel.com (HELO desk) ([10.212.176.170])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 09:31:35 -0700
-Date:   Thu, 15 Jun 2023 09:31:25 -0700
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Jordy Zomer <jordyzomer@google.com>
-Cc:     linux-kernel@vger.kernel.org, phil@philpotter.co.uk
-Subject: Re: [PATCH v2 1/1] cdrom: Fix spectre-v1 gadget
-Message-ID: <20230615163125.td3aodpfwth5n4mc@desk>
-References: <20230612110040.849318-1-jordyzomer@google.com>
- <20230612110040.849318-2-jordyzomer@google.com>
+   d="scan'208";a="857040434"
+Received: from mrejmak-mobl.ger.corp.intel.com (HELO [10.252.36.104]) ([10.252.36.104])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 09:46:21 -0700
+Message-ID: <2f010db3-73be-2cdd-0aef-62ec212769c1@linux.intel.com>
+Date:   Thu, 15 Jun 2023 18:31:27 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612110040.849318-2-jordyzomer@google.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH 1/2] soundwire: bus: Prevent lockdep asserts when stream
+ has multiple buses
+Content-Language: en-US
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>, vkoul@kernel.org,
+        yung-chuan.liao@linux.intel.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com
+References: <20230615141208.679011-1-rf@opensource.cirrus.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230615141208.679011-1-rf@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 11:00:40AM +0000, Jordy Zomer wrote:
-> This patch fixes a spectre-v1 gadget in cdrom.
-> The gadget could be triggered by,
->  speculatviely bypassing the cdi->capacity check.
+
+
+On 6/15/23 16:12, Richard Fitzgerald wrote:
+> Give the bus_lock and msg_lock of each bus a different unique key
+> so that it is possible to acquire the locks of multiple buses
+> without lockdep asserting a possible deadlock.
 > 
-> Signed-off-by: Jordy Zomer <jordyzomer@google.com>
+> Using mutex_init() to initialize a mutex gives all those mutexes
+> the same lock class. Lockdep checking treats it as an error to
+> attempt to take a mutex while already holding a mutex of the same
+> class. This causes a lockdep assert when sdw_acquire_bus_lock()
+> attempts to lock multiple buses, and when do_bank_switch() takes
+> multiple msg_lock.
+> 
+> [  138.697350] WARNING: possible recursive locking detected
+> [  138.697366] 6.3.0-test #1 Tainted: G            E
+> [  138.697380] --------------------------------------------
+> [  138.697394] play/903 is trying to acquire lock:
+> [  138.697409] ffff99b8c41aa8c8 (&bus->bus_lock){+.+.}-{3:3}, at:
+> sdw_prepare_stream+0x52/0x2e0
+> [  138.697443]
+>                but task is already holding lock:
+> [  138.697468] ffff99b8c41af8c8 (&bus->bus_lock){+.+.}-{3:3}, at:
+> sdw_prepare_stream+0x52/0x2e0
+> [  138.697493]
+>                other info that might help us debug this:
+> [  138.697521]  Possible unsafe locking scenario:
+> 
+> [  138.697540]        CPU0
+> [  138.697550]        ----
+> [  138.697559]   lock(&bus->bus_lock);
+> [  138.697570]   lock(&bus->bus_lock);
+> [  138.697581]
+>                 *** DEADLOCK ***
+> 
+> Giving each mutex a unique key allows multiple to be held
+> without triggering a lockdep assert. But note that it does not
+> allow them to be taken in one order then a different order.
+> If two mutexes are taken in the order A, B then they must
+> always be taken in that order otherwise they could deadlock.
+> 
+> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+
 > ---
->  drivers/cdrom/cdrom.c | 4 ++++
->  1 file changed, 4 insertions(+)
+>  drivers/soundwire/bus.c       | 15 +++++++++++++--
+>  include/linux/soundwire/sdw.h |  3 +++
+>  2 files changed, 16 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
-> index 416f723a2dbb..ecf2b458c108 100644
-> --- a/drivers/cdrom/cdrom.c
-> +++ b/drivers/cdrom/cdrom.c
-> @@ -264,6 +264,7 @@
->  #include <linux/errno.h>
->  #include <linux/kernel.h>
->  #include <linux/mm.h>
-> +#include <linux/nospec.h>
->  #include <linux/slab.h> 
->  #include <linux/cdrom.h>
->  #include <linux/sysctl.h>
-> @@ -2329,6 +2330,9 @@ static int cdrom_ioctl_media_changed(struct cdrom_device_info *cdi,
->  	if (arg >= cdi->capacity)
+> diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
+> index b44f8d0affa6..dba920ec88f6 100644
+> --- a/drivers/soundwire/bus.c
+> +++ b/drivers/soundwire/bus.c
+> @@ -69,8 +69,17 @@ int sdw_bus_master_add(struct sdw_bus *bus, struct device *parent,
 >  		return -EINVAL;
+>  	}
 >  
-> +	/* Prevent arg from speculatively bypassing the length check */
-> +	barrier_nospec();
-
-On a quick look it at the call chain ...
-
-sr_block_ioctl(..., arg)
-  cdrom_ioctl(..., arg)
-    cdrom_ioctl_media_changed(..., arg)
-
-.... it appears maximum value cdi->capacity can be only 1:
-
-sr_probe()
-{
-...
-	cd->cdi.capacity = 1;
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/scsi/sr.c?h=v6.4-rc6#n665
-
-If we know that max possible value than, instead of big hammer
-barrier_nospec(), its possible to use lightweight array_index_nospec()
-as below:
-
----
-diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
-index 416f723a2dbb..e1c4f969ffda 100644
---- a/drivers/cdrom/cdrom.c
-+++ b/drivers/cdrom/cdrom.c
-@@ -264,6 +264,7 @@
- #include <linux/errno.h>
- #include <linux/kernel.h>
- #include <linux/mm.h>
-+#include <linux/nospec.h>
- #include <linux/slab.h> 
- #include <linux/cdrom.h>
- #include <linux/sysctl.h>
-@@ -2329,6 +2330,9 @@ static int cdrom_ioctl_media_changed(struct cdrom_device_info *cdi,
- 	if (arg >= cdi->capacity)
- 		return -EINVAL;
- 
-+	/* Prevent arg from speculatively bypassing the length check */
-+	arg = array_index_nospec(arg, CDI_MAX_CAPACITY);
-+
- 	info = kmalloc(sizeof(*info), GFP_KERNEL);
- 	if (!info)
- 		return -ENOMEM;
-diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
-index 12869e6d4ebd..62e163dc29cc 100644
---- a/drivers/scsi/sr.c
-+++ b/drivers/scsi/sr.c
-@@ -662,7 +662,7 @@ static int sr_probe(struct device *dev)
- 	cd->cdi.ops = &sr_dops;
- 	cd->cdi.handle = cd;
- 	cd->cdi.mask = 0;
--	cd->cdi.capacity = 1;
-+	cd->cdi.capacity = CDI_MAX_CAPACITY;
- 	sprintf(cd->cdi.name, "sr%d", minor);
- 
- 	sdev->sector_size = 2048;	/* A guess, just in case */
-@@ -882,7 +882,7 @@ static int get_capabilities(struct scsi_cd *cd)
- 	    (buffer[n + 6] >> 5) == mechtype_cartridge_changer)
- 		cd->cdi.capacity =
- 		    cdrom_number_of_slots(&cd->cdi);
--	if (cd->cdi.capacity <= 1)
-+	if (cd->cdi.capacity <= CDI_MAX_CAPACITY)
- 		/* not a changer */
- 		cd->cdi.mask |= CDC_SELECT_DISC;
- 	/*else    I don't think it can close its tray
-diff --git a/include/linux/cdrom.h b/include/linux/cdrom.h
-index 67caa909e3e6..51c046354275 100644
---- a/include/linux/cdrom.h
-+++ b/include/linux/cdrom.h
-@@ -29,6 +29,8 @@ struct packet_command
- 	void			*reserved[1];
- };
- 
-+#define CDI_MAX_CAPACITY	1
-+
- /*
-  * _OLD will use PIO transfer on atapi devices, _BPC_* will use DMA
-  */
+> -	mutex_init(&bus->msg_lock);
+> -	mutex_init(&bus->bus_lock);
+> +	/*
+> +	 * Give each bus_lock and msg_lock a unique key so that lockdep won't
+> +	 * trigger a deadlock warning when the locks of several buses are
+> +	 * grabbed during configuration of a multi-bus stream.
+> +	 */
+> +	lockdep_register_key(&bus->msg_lock_key);
+> +	__mutex_init(&bus->msg_lock, "msg_lock", &bus->msg_lock_key);
+> +
+> +	lockdep_register_key(&bus->bus_lock_key);
+> +	__mutex_init(&bus->bus_lock, "bus_lock", &bus->bus_lock_key);
+> +
+>  	INIT_LIST_HEAD(&bus->slaves);
+>  	INIT_LIST_HEAD(&bus->m_rt_list);
+>  
+> @@ -181,6 +190,8 @@ void sdw_bus_master_delete(struct sdw_bus *bus)
+>  	sdw_master_device_del(bus);
+>  
+>  	sdw_bus_debugfs_exit(bus);
+> +	lockdep_unregister_key(&bus->bus_lock_key);
+> +	lockdep_unregister_key(&bus->msg_lock_key);
+>  	ida_free(&sdw_bus_ida, bus->id);
+>  }
+>  EXPORT_SYMBOL(sdw_bus_master_delete);
+> diff --git a/include/linux/soundwire/sdw.h b/include/linux/soundwire/sdw.h
+> index c076a3f879b3..f523ceabd059 100644
+> --- a/include/linux/soundwire/sdw.h
+> +++ b/include/linux/soundwire/sdw.h
+> @@ -5,6 +5,7 @@
+>  #define __SOUNDWIRE_H
+>  
+>  #include <linux/bug.h>
+> +#include <linux/lockdep_types.h>
+>  #include <linux/mod_devicetable.h>
+>  #include <linux/bitfield.h>
+>  
+> @@ -907,7 +908,9 @@ struct sdw_bus {
+>  	struct list_head slaves;
+>  	DECLARE_BITMAP(assigned, SDW_MAX_DEVICES);
+>  	struct mutex bus_lock;
+> +	struct lock_class_key bus_lock_key;
+>  	struct mutex msg_lock;
+> +	struct lock_class_key msg_lock_key;
+>  	int (*compute_params)(struct sdw_bus *bus);
+>  	const struct sdw_master_ops *ops;
+>  	const struct sdw_master_port_ops *port_ops;
