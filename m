@@ -2,59 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B5E1731712
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:39:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91FC47316D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:37:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344148AbjFOLj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 07:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52808 "EHLO
+        id S1343912AbjFOLhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 07:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344010AbjFOLit (ORCPT
+        with ESMTP id S1343928AbjFOLhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 07:38:49 -0400
+        Thu, 15 Jun 2023 07:37:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE876296F;
-        Thu, 15 Jun 2023 04:38:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E552297E;
+        Thu, 15 Jun 2023 04:37:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F18F6396F;
-        Thu, 15 Jun 2023 11:38:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACD50C433C8;
-        Thu, 15 Jun 2023 11:38:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686829090;
-        bh=e24B7I1+8WbntGbHE2aAajvBAli5E/UNsCHusC44aGQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EUAteg1stKgLDmZJUoF4vCKKg7IROKOInr3TgSY4q0oS0diwnk30rBtGoJO9dRe0z
-         Ornx0Xoug9kKW6VXbfmcT1e1d7AFMPe3JTJH8mhSi2A5BWCRQaoAhwqMfUUeG0Apw0
-         SJ5B6KiqqDRyaqel+AY7iOpiijrjqe2erg3kBOehdm+eZ7lfkIdQSVPKG8iEW2aiYs
-         vu4eTX7Zq7oa6G37wgF8N6kcNN+MGCPv3VzsVxGEVQhlVG1fzeyioA+qNsvJGS2iir
-         IRRwcKcBPiK7javXge2BPioewbNo0LKZ65PHz9g8aNkxovZkxIRLH9VG6lKRB4m0XC
-         uAcm2zbtvR9Fg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Uday Shankar <ushankar@purestorage.com>,
-        Costa Sapuntzakis <costa@purestorage.com>,
-        Randy Jennings <randyj@purestorage.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Christoph Hellwig <hch@lst.de>,
-        Keith Busch <kbusch@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-nvme@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.3 16/19] nvme: double KA polling frequency to avoid KATO with TBKAS on
-Date:   Thu, 15 Jun 2023 07:37:16 -0400
-Message-Id: <20230615113719.648862-16-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230615113719.648862-1-sashal@kernel.org>
-References: <20230615113719.648862-1-sashal@kernel.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A01DE63948;
+        Thu, 15 Jun 2023 11:37:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B1DBC433C9;
+        Thu, 15 Jun 2023 11:37:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686829040;
+        bh=wFknVUKg9Zep7d8KD5madwbt58kjiSFqs26HYAb1rbk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=s8wZ7QwQnAwBaJb/shpXNC8ztWfk7NIxmFM56AXHYktUqDHJdmxhysd0ZA6Wt3CDs
+         6KUhUniUBuODAE6OKAoMyDcOD9iAF2Kui7EC/JOGlsQpw3u5YUZWprfz1O/t2vIW31
+         7R0yRjpm0hfZFE21TJYs4by/L1wilgzZpHTeLskM=
+Date:   Thu, 15 Jun 2023 13:37:17 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Andreas Klinger <ak@it-klinger.de>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, netdev@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH v7 0/9] fix fwnode_irq_get[_byname()] returnvalue
+Message-ID: <2023061553-urging-collision-32f8@gregkh>
+References: <cover.1685340157.git.mazziesaccount@gmail.com>
+ <20230530233438.572db3fb@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.3.8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530233438.572db3fb@kernel.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -65,76 +76,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uday Shankar <ushankar@purestorage.com>
+On Tue, May 30, 2023 at 11:34:38PM -0700, Jakub Kicinski wrote:
+> On Mon, 29 May 2023 09:22:15 +0300 Matti Vaittinen wrote:
+> > The fwnode_irq_get() and the fwnode_irq_get_byname() may have returned
+> > zero if mapping the IRQ fails. This contradicts the
+> > fwnode_irq_get_byname() documentation. Furthermore, returning zero or
+> > errno on error is unepected and can easily lead to problems
+> > like.
+> 
+> What's the merging plan? Could patch 1 go to a stable branch 
+> and then driver trees can pull it in and apply their respective 
+> patches locally?
 
-[ Upstream commit ea4d453b9ec9ea279c39744cd0ecb47ef48ede35 ]
+I'll take patch 1 now, and then after 6.5-rc1, Matti, can you send the
+cleanup patches to the respective subsystems?
 
-With TBKAS on, the completion of one command can defer sending a
-keep alive for up to twice the delay between successive runs of
-nvme_keep_alive_work. The current delay of KATO / 2 thus makes it
-possible for one command to defer sending a keep alive for up to
-KATO, which can result in the controller detecting a KATO. The following
-trace demonstrates the issue, taking KATO = 8 for simplicity:
+thanks,
 
-1. t = 0: run nvme_keep_alive_work, no keep-alive sent
-2. t = ε: I/O completion seen, set comp_seen = true
-3. t = 4: run nvme_keep_alive_work, see comp_seen == true,
-          skip sending keep-alive, set comp_seen = false
-4. t = 8: run nvme_keep_alive_work, see comp_seen == false,
-          send a keep-alive command.
-
-Here, there is a delay of 8 - ε between receiving a command completion
-and sending the next command. With ε small, the controller is likely to
-detect a keep alive timeout.
-
-Fix this by running nvme_keep_alive_work with a delay of KATO / 4
-whenever TBKAS is on. Going through the above trace now gives us a
-worst-case delay of 4 - ε, which is in line with the recommendation of
-sending a command every KATO / 2 in the NVMe specification.
-
-Reported-by: Costa Sapuntzakis <costa@purestorage.com>
-Reported-by: Randy Jennings <randyj@purestorage.com>
-Signed-off-by: Uday Shankar <ushankar@purestorage.com>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Keith Busch <kbusch@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/nvme/host/core.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-index dba10d182c6b6..28b6fd52f88cb 100644
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -1163,9 +1163,25 @@ EXPORT_SYMBOL_NS_GPL(nvme_passthru_end, NVME_TARGET_PASSTHRU);
-  *   The host should send Keep Alive commands at half of the Keep Alive Timeout
-  *   accounting for transport roundtrip times [..].
-  */
-+static unsigned long nvme_keep_alive_work_period(struct nvme_ctrl *ctrl)
-+{
-+	unsigned long delay = ctrl->kato * HZ / 2;
-+
-+	/*
-+	 * When using Traffic Based Keep Alive, we need to run
-+	 * nvme_keep_alive_work at twice the normal frequency, as one
-+	 * command completion can postpone sending a keep alive command
-+	 * by up to twice the delay between runs.
-+	 */
-+	if (ctrl->ctratt & NVME_CTRL_ATTR_TBKAS)
-+		delay /= 2;
-+	return delay;
-+}
-+
- static void nvme_queue_keep_alive_work(struct nvme_ctrl *ctrl)
- {
--	queue_delayed_work(nvme_wq, &ctrl->ka_work, ctrl->kato * HZ / 2);
-+	queue_delayed_work(nvme_wq, &ctrl->ka_work,
-+			   nvme_keep_alive_work_period(ctrl));
- }
- 
- static enum rq_end_io_ret nvme_keep_alive_end_io(struct request *rq,
--- 
-2.39.2
-
+greg k-h
