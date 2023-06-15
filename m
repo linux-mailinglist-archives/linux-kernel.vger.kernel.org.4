@@ -2,75 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DC36731AF9
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9A6731B12
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:15:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344954AbjFOOOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 10:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43152 "EHLO
+        id S1345007AbjFOOPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 10:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344941AbjFOOO3 (ORCPT
+        with ESMTP id S1344994AbjFOOPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 10:14:29 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B163A1FC2
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 07:14:28 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-565de4b5be5so27320837b3.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 07:14:28 -0700 (PDT)
+        Thu, 15 Jun 2023 10:15:39 -0400
+Received: from smtp-fw-52002.amazon.com (smtp-fw-52002.amazon.com [52.119.213.150])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2CC9296C;
+        Thu, 15 Jun 2023 07:15:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686838468; x=1689430468;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7viRfd/Ct8U5RrqgvCgGqBfozF7RQD4igs0DqRCL6cE=;
-        b=N/9efvZeguJ9mTYp5uqlZJJgM9UzRYdeH+vy0nBO00FHtIhj1v5S8J8uFMHxXAdPq5
-         HMY7gCgct/iykDoEMY/UG1qvaS4tT96uzlhEPWL0wuon7fNHgp+8zvFR59EqaGk0IcR5
-         GIOIV7t4D2hGoqqUlwNaHk7O/lN3NwsHonXsFnvPwEXiapoG1W/+AS4q2pjBmrakJSVF
-         yBuwQ8oL0P8aYozIPFw4J1XAu0B0MLnP7ZuaGljQ1bIP+UL6K+Kg4Wn6tI5ZM7QUJHq1
-         DHMrSnuQrFIh+FjNv6J2EzUG6FbU+pYRhEnJGAtfHyCFNX57WYLzlhP+493R4eeaCpDG
-         TlLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686838468; x=1689430468;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=7viRfd/Ct8U5RrqgvCgGqBfozF7RQD4igs0DqRCL6cE=;
-        b=YuNkDqpYpDcw96AWgax8pUBg7MPep2RUbqH6BLTuwfCBh8dPjxWlgWE36/TQtI/WwY
-         DbSOQOnG/rwgW86SgTctmx/VYh/FtDzDSMOsuc13pShdBslqM5FMcaYO3UtLHmYRggzX
-         I2SYsPFYRowExvCARguebRw1CUoVVsblvfR7mVKrnaSiA9t2y6AMWcR40C/EKWvQcwxO
-         XsNn4kMe1kzNArqLCh9AyznBeEv8nXivYqe3GqMHvaGmvMBAJ7DId7CQ17LGhoeKEPMO
-         OLQJY/rlkWgzoUXBw83ufvxeuEeY8LB6zEtkb/wmEJbjeyBuCzM8cDC9wqrZIeDrnsdW
-         lGNQ==
-X-Gm-Message-State: AC+VfDx4ujro+ZzO1n/hZJfrGj0WdupO0nlNFt7Yeou/VBQ2Kbyz0r6A
-        DGba/n1ZZPqhTZeVh9IMSRQRmTQwOHE=
-X-Google-Smtp-Source: ACHHUZ6EIKcKvq/hS/fOZS8agFpvn3GY3pzYqorAftldiJlQkHc522gAG3GeNLMI7TYIN2aK4x1LHQhybZ4=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:bc0f:0:b0:56d:2abf:f0c with SMTP id
- a15-20020a81bc0f000000b0056d2abf0f0cmr2288100ywi.10.1686838467967; Thu, 15
- Jun 2023 07:14:27 -0700 (PDT)
-Date:   Thu, 15 Jun 2023 07:14:26 -0700
-In-Reply-To: <ZIrONR6cSegiK1e2@linux.dev>
-Mime-Version: 1.0
-References: <20230606192858.3600174-1-rananta@google.com> <ZImwRAuSXcVt3UPV@linux.dev>
- <CAJHc60wUSNpFLeESWcpEa5OmN4bJg9wBre-2k8803WHpn03LGw@mail.gmail.com> <ZIrONR6cSegiK1e2@linux.dev>
-Message-ID: <ZIscwv1NABW+wZ4J@google.com>
-Subject: Re: [PATCH v5 0/7] KVM: arm64: Add support for FEAT_TLBIRANGE
-From:   Sean Christopherson <seanjc@google.com>
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     Raghavendra Rao Ananta <rananta@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1686838534; x=1718374534;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=IjWZFA/uPlQulQ8EVAWQQd9KXy0ALDJz/lMgXQF8Mt0=;
+  b=fjHgsL/HHi1ijockecNtlaKghqrjzcSxuXI9nrvKP2qAWjABfZ3Ra7aW
+   S0oKDMIABABocAt93Yf4/sK/t6OrnyQf+7vcbDe/TxXQRtq/ryAWFdpkm
+   4JdXpPXdLAGYVy/o8Xn1N//tJQtwiosRstISIvqY2grkLZxJEojN9gtJa
+   4=;
+X-IronPort-AV: E=Sophos;i="6.00,245,1681171200"; 
+   d="scan'208";a="566798993"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-f7c754c9.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-52002.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 14:15:31 +0000
+Received: from EX19MTAUEB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2c-m6i4x-f7c754c9.us-west-2.amazon.com (Postfix) with ESMTPS id 8942740DAA;
+        Thu, 15 Jun 2023 14:15:30 +0000 (UTC)
+Received: from EX19D028UEC003.ant.amazon.com (10.252.137.159) by
+ EX19MTAUEB001.ant.amazon.com (10.252.135.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 15 Jun 2023 14:15:29 +0000
+Received: from [192.168.29.229] (10.106.179.32) by
+ EX19D028UEC003.ant.amazon.com (10.252.137.159) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 15 Jun 2023 14:15:27 +0000
+Message-ID: <67e3fcd8-0689-f5c4-6c16-c260d4f7ccaa@amazon.com>
+Date:   Thu, 15 Jun 2023 10:15:24 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] tick/common: Align tick period during sched_timer setup.
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mathias Krause <minipli@grsecurity.net>
+CC:     Sven-Haegar Koch <haegar@sdinet.de>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "Bhatnagar, Rishabh" <risbhat@amazon.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "sashal@kernel.org" <sashal@kernel.org>, <abuehaze@amazon.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Ingo Molnar" <mingo@kernel.org>
+References: <12c6f9a3-d087-b824-0d05-0d18c9bc1bf3@amazon.com>
+ <c4724b40-89f6-5aa7-720d-c4a4af57cf45@amazon.com>
+ <2023061428-compacter-economic-b648@gregkh>
+ <20230614092045.tNY8USjq@linutronix.de>
+ <4c4178a1-1050-ced4-e6fb-f95c3bdefc98@amazon.com>
+ <2a3fa097-8ba0-5b0e-f506-779fee5b8fef@sdinet.de>
+ <f5d2cc62-4aae-2579-1468-2e6e389f28dc@amazon.com>
+ <23fb8ad7-beb0-ae1c-fa5a-a682a57f79b0@grsecurity.net>
+ <20230615091830.RxMV2xf_@linutronix.de>
+Content-Language: en-US
+From:   Luiz Capitulino <luizcap@amazon.com>
+In-Reply-To: <20230615091830.RxMV2xf_@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.106.179.32]
+X-ClientProxiedBy: EX19D042UWB002.ant.amazon.com (10.13.139.175) To
+ EX19D028UEC003.ant.amazon.com (10.252.137.159)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,46 +84,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023, Oliver Upton wrote:
-> +cc Sean
->=20
-> On Wed, Jun 14, 2023 at 06:57:01PM -0700, Raghavendra Rao Ananta wrote:
-> > On Wed, Jun 14, 2023 at 5:19=E2=80=AFAM Oliver Upton <oliver.upton@linu=
-x.dev> wrote:
-> > >
-> > > Hi Raghavendra,
-> > >
-> > > On Tue, Jun 06, 2023 at 07:28:51PM +0000, Raghavendra Rao Ananta wrot=
-e:
-> > > > The series is based off of upstream v6.4-rc2, and applied David
-> > > > Matlack's common API for TLB invalidations[1] on top.
-> > >
-> > > Sorry I didn't spot the dependency earlier, but this isn't helpful TB=
-H.
-> > >
-> > > David's series was partially applied, and what remains no longer clea=
-nly
-> > > applies to the base you suggest. Independent of that, my *strong*
-> > > preference is that you just send out a series containing your patches=
- as
-> > > well as David's. Coordinating dependent efforts is the only sane thin=
-g
-> > > to do. Also, those patches are 5 months old at this point which is
-> > > ancient history.
-> > >
-> > Would you rather prefer I detach this series from David's as I'm not
-> > sure what his plans are for future versions?
-> > On the other hand, the patches seem simple enough to rebase and give
-> > another shot at review, but may end up delaying this series.
-> > WDYT?
->=20
-> In cases such as this you'd typically coordinate with the other
-> developer to pick up their changes as part of your series. Especially
-> for this case -- David's refactoring is _pointless_ without another
-> user for that code (i.e. arm64). As fun as it might be to antagonize
-> Sean, that series pokes x86 and I'd like an ack from on it.
->=20
-> So, please post a combined series that applies cleanly to an early 6.4
-> rc of your choosing, and cc all affected reviewers/maintainers.
 
-+1
+
+On 2023-06-15 05:18, Sebastian Andrzej Siewior wrote:
+
+> 
+> 
+> 
+> From: Thomas Gleixner <tglx@linutronix.de>
+> 
+> The tick period is aligned very early while the first clock_event_device
+> is registered. The system runs in periodic mode and switches later to
+> one-shot mode if possible.
+> 
+> The next wake-up event is programmed based on aligned value
+> (tick_next_period) but the delta value, that is used to program the
+> clock_event_device, is computed based on ktime_get().
+> 
+> With the subtracted offset, the devices fires in less than the exacted
+> time frame. With a large enough offset the system programs the timer for
+> the next wake-up and the remaining time left is too little to make any
+> boot progress. The system hangs.
+> 
+> Move the alignment later to the setup of tick_sched timer. At this point
+> the system switches to oneshot mode and a highres clocksource is
+> available. It safe to update tick_next_period ktime_get() will now
+> return accurate (not jiffies based) time.
+> 
+> [bigeasy: Patch description + testing].
+> 
+> Reported-by: Mathias Krause <minipli@grsecurity.net>
+> Reported-by: "Bhatnagar, Rishabh" <risbhat@amazon.com>
+> Fixes: e9523a0d81899 ("tick/common: Align tick period with the HZ tick.")
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Link: https://lore.kernel.org/5a56290d-806e-b9a5-f37c-f21958b5a8c0@grsecurity.net
+> Link: https://lore.kernel.org/12c6f9a3-d087-b824-0d05-0d18c9bc1bf3@amazon.com
+
+
+I've tested this against 5.10.184 (which is where it reproduces quick
+for me):
+
+Tested-by: Luiz Capitulino <luizcap@amazon.com>
+
+> ---
+>   kernel/time/tick-common.c | 11 +----------
+>   kernel/time/tick-sched.c  | 13 ++++++++++++-
+>   2 files changed, 13 insertions(+), 11 deletions(-)
+> 
+> diff --git a/kernel/time/tick-common.c b/kernel/time/tick-common.c
+> index 65b8658da829e..b85f2f9c32426 100644
+> --- a/kernel/time/tick-common.c
+> +++ b/kernel/time/tick-common.c
+> @@ -218,19 +218,10 @@ static void tick_setup_device(struct tick_device *td,
+>                   * this cpu:
+>                   */
+>                  if (tick_do_timer_cpu == TICK_DO_TIMER_BOOT) {
+> -                       ktime_t next_p;
+> -                       u32 rem;
+> 
+>                          tick_do_timer_cpu = cpu;
+> 
+> -                       next_p = ktime_get();
+> -                       div_u64_rem(next_p, TICK_NSEC, &rem);
+> -                       if (rem) {
+> -                               next_p -= rem;
+> -                               next_p += TICK_NSEC;
+> -                       }
+> -
+> -                       tick_next_period = next_p;
+> +                       tick_next_period = ktime_get();
+>   #ifdef CONFIG_NO_HZ_FULL
+>                          /*
+>                           * The boot CPU may be nohz_full, in which case set
+> diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+> index 52254679ec489..42c0be3080bde 100644
+> --- a/kernel/time/tick-sched.c
+> +++ b/kernel/time/tick-sched.c
+> @@ -161,8 +161,19 @@ static ktime_t tick_init_jiffy_update(void)
+>          raw_spin_lock(&jiffies_lock);
+>          write_seqcount_begin(&jiffies_seq);
+>          /* Did we start the jiffies update yet ? */
+> -       if (last_jiffies_update == 0)
+> +       if (last_jiffies_update == 0) {
+> +               u32 rem;
+> +
+> +               /*
+> +                * Ensure that the tick is aligned to a multiple of
+> +                * TICK_NSEC.
+> +                */
+> +               div_u64_rem(tick_next_period, TICK_NSEC, &rem);
+> +               if (rem)
+> +                       tick_next_period += TICK_NSEC - rem;
+> +
+>                  last_jiffies_update = tick_next_period;
+> +       }
+>          period = last_jiffies_update;
+>          write_seqcount_end(&jiffies_seq);
+>          raw_spin_unlock(&jiffies_lock);
+> --
+> 2.40.1
+> 
