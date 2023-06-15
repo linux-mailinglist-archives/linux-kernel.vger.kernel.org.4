@@ -2,64 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A59697319A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A1497319AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbjFONNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 09:13:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33298 "EHLO
+        id S1343838AbjFONOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 09:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239232AbjFONNi (ORCPT
+        with ESMTP id S1343746AbjFONN7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 09:13:38 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275812D54;
-        Thu, 15 Jun 2023 06:13:17 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35FDD6DL010718;
-        Thu, 15 Jun 2023 08:13:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1686834786;
-        bh=sNdmTxJmK3YxOpTk/pRDd0l7p9KrGXXliNWMmhycsJQ=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=EN6zrr9utMZuca8y3oQihIcp3aejizo9qPhfYo2m6YXVnFGqll3QY2oRSG1peBgjv
-         nvNgM/utoGNjC0IaK8grKXceGhgiHmb5UR+lodeRzu9nLlDV7kt3Do0mAmQCd5YlIX
-         5BdonxV9nKgPdA5/m107cetUBqMUGsLb8mr4Z8Ak=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35FDD6kU128316
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 15 Jun 2023 08:13:06 -0500
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 15
- Jun 2023 08:13:06 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 15 Jun 2023 08:13:06 -0500
-Received: from uda0132425.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35FDD3f0055103;
-        Thu, 15 Jun 2023 08:13:04 -0500
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-To:     Conor Dooley <conor+dt@kernel.org>,
+        Thu, 15 Jun 2023 09:13:59 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1A22716
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 06:13:41 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1q9mmu-00050K-6d; Thu, 15 Jun 2023 15:13:20 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1q9mmq-0001mi-I2; Thu, 15 Jun 2023 15:13:16 +0200
+Date:   Thu, 15 Jun 2023 15:13:16 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     linux-rockchip@lists.infradead.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Vincent Legoll <vincent.legoll@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Nishanth Menon <nm@ti.com>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, Andrew Davis <afd@ti.com>
-Subject: Re: [PATCH V3 0/3] arm64: dts: ti: k3-am65: dtbs_check warnings fixups
-Date:   Thu, 15 Jun 2023 18:43:01 +0530
-Message-ID: <168681817153.2098323.15467286493524465790.b4-ty@ti.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230607132043.3932726-1-nm@ti.com>
-References: <20230607132043.3932726-1-nm@ti.com>
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: Re: [PATCH v5 16/25] PM / devfreq: rockchip-dfi: Add perf support
+Message-ID: <20230615131316.GF15436@pengutronix.de>
+References: <20230524083153.2046084-1-s.hauer@pengutronix.de>
+ <20230524083153.2046084-17-s.hauer@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230524083153.2046084-17-s.hauer@pengutronix.de>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,48 +65,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nishanth Menon,
+On Wed, May 24, 2023 at 10:31:44AM +0200, Sascha Hauer wrote:
+> +static int rockchip_ddr_perf_event_add(struct perf_event *event, int flags)
+> +{
+> +	struct rockchip_dfi *dfi = container_of(event->pmu, struct rockchip_dfi, pmu);
+> +
+> +	dfi->active_events++;
+> +
+> +	if (dfi->active_events == 1)
 
-On Wed, 07 Jun 2023 08:20:40 -0500, Nishanth Menon wrote:
-> Hopefully, third time is a charm ;)
-> 
-> Series of minor fixups for AM65x device tree to cleanup some of the
-> dtbs_check warnings.
-> 
-> 
-> Changes Since V2:
-> * Dropped mux-controller fixup (should have been dropped when
->   dependencies changed)
-> 
-> [...]
+We need to initialize dfi->last_perf_count here:
 
-I have applied the following to branch ti-k3-dts-next on [1].
-Thank you!
+		rockchip_dfi_read_counters(dfi, &dfi->last_perf_count);
 
-[1/3] arm64: dts: ti: k3-am65-main: Fix mcan node name
-      commit: 498f7b0f9da9be6f6c099b4c8ffb502174623565
-[2/3] arm64: dts: ti: k3-am65-main: Drop deprecated ti,otap-del-sel property
-      commit: 2b9bb988742d1794e78d4297a99658f38477eedd
-[3/3] arm64: dts: ti: k3-am65-iot2050-common: Rename rtc8564 nodename
-      commit: 400f4953d53ccc07bb26bb6c9d425934ecab4aa8
+dfi->last_perf_count contains the start values for the counters and
+without initializing this the u32 counter overflows are not correctly
+handled.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent up the chain during
-the next merge window (or sooner if it is a relevant bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Sascha
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
---
-Vignesh
-
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
