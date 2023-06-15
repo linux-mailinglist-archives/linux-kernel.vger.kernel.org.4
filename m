@@ -2,102 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F49873142A
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5177673142D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343518AbjFOJhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 05:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37606 "EHLO
+        id S1343523AbjFOJh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 05:37:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343502AbjFOJhI (ORCPT
+        with ESMTP id S245611AbjFOJhn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 05:37:08 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9BC35B5
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 02:36:07 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3384B21A9A;
-        Thu, 15 Jun 2023 09:35:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1686821739; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=d39ZQ9SlNHEIcbFBtB4BFJzLZO0sDtDQiB2wLC4guso=;
-        b=Tb1o1o3WzqXIn8H3JgDLPA64csrHcqDrGlZvuMhBscIz8cM/Vm3dSlsN51nkm+Vkw3gG1z
-        9K7KWiB8tSHrL/bo3camWIqnhUS8uzlAcSsI+gyehBOh69ev4ycxfEzqoYa1VpR3vtTuHw
-        svpjLLUrX5iNcrcDccoocJggOKyRPWA=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2637513A47;
-        Thu, 15 Jun 2023 09:35:39 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FkdMCWvbimTMVQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 15 Jun 2023 09:35:39 +0000
-Date:   Thu, 15 Jun 2023 11:35:38 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Zhongkun He <hezhongkun.hzk@bytedance.com>
-Cc:     minchan@kernel.org, senozhatsky@chromium.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/3] zram: charge the compressed RAM to the page's
- memcgroup
-Message-ID: <ZIrbar9yQ6EZ217t@dhcp22.suse.cz>
-References: <20230615034830.1361853-1-hezhongkun.hzk@bytedance.com>
+        Thu, 15 Jun 2023 05:37:43 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BD63C3F
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 02:36:29 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f8d65ecdb8so17213135e9.0
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 02:36:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1686821787; x=1689413787;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5IBv0/BNAr0Oc9p1PBcHm79LmC19CaoKl/uwYX0mfdM=;
+        b=oMAydC3g3GzZoWd8RfevpVHXJQmIHxjv1pjmzeWKGhi0njvyC3+sYZjQ77SExm40n4
+         Uz+vS+uAmHPg4CjEhVlpynZX0uy95Zr4wa9HnbiAAyDBCeQY7vkdM+J3ejdHHXS2F3Wl
+         cIap9p+2MRhwbaRkOgbXpTvaURfYKxf3P0avRrCudn8gwv7hLJP4h/cas+51fSmgpQr4
+         wUj9EqN/QTpd+AOw5aj8mR+N7Mdub8P4RMHGL2SnktRzp5aJPIP4JVcjbfSeVc1K6I9Z
+         GCxb0s0MHTB+itLnY/bq7LfGW5ReEJJbonnb8MSsABVnx+tGNgi6PKBsjF19VRqbwhYz
+         4Dbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686821787; x=1689413787;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5IBv0/BNAr0Oc9p1PBcHm79LmC19CaoKl/uwYX0mfdM=;
+        b=hAcUKkeCpGwnbaTKUp1JPsGYNHMmpm2H6Uq2NXCJWjMmLEUcVco54uxhfv7tK796xS
+         sC3bf4vEGWPUzHqUxw7O/b0c3XvRh9GPrsJZ6oOXwxOl1nrNcIHGRDhWS4EeSYToiSvX
+         VqtfYTNFhsHn2x6gKK+CMmu8ZsdRvVulKtMIdCUtwOMqeTdAavgoF9wBGXeFrg92luAy
+         afi1LEJdtkVeBAylxF8xnlXPTFQuOdV6F1FnDx4E+VZ6o6ceuwjzFdecmtv/p9XYzFTx
+         YKN9sBa0QtAI6fh1AXgDtxZwqnX3Qhx/E5cvup202hO8nzLmyuY7P1+D7qgXIQOJ880o
+         mrjA==
+X-Gm-Message-State: AC+VfDyYYFauB1mQE/tLGdftYiuhLhbt7eH1RO9aFPWskKTuOq0yIvDr
+        nX0z/deTpwuih9CFsGEm+A2TUoE0xMEaFmABYFRPfQ==
+X-Google-Smtp-Source: ACHHUZ5Xr4a7B00EWkX/6qAhyNdm3PQK9SIUx5ZG3WIhbI5ZmacB2V1ZhcUYFBbPqNrE0nUds9pBIlGHUQtHYlwe7/U=
+X-Received: by 2002:a5d:4743:0:b0:307:8879:6cc1 with SMTP id
+ o3-20020a5d4743000000b0030788796cc1mr12874701wrs.71.1686821786944; Thu, 15
+ Jun 2023 02:36:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230615034830.1361853-1-hezhongkun.hzk@bytedance.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <202306151631.3uZmHI1c-lkp@intel.com>
+In-Reply-To: <202306151631.3uZmHI1c-lkp@intel.com>
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+Date:   Thu, 15 Jun 2023 11:36:16 +0200
+Message-ID: <CAHVXubjdcYmFTqbE8AdB6=grmnxSuSM+VtwoSLagT0wBd=ZeEg@mail.gmail.com>
+Subject: Re: riscv64-linux-ld: section .init.pi.text LMA [000000000197e820,0000000001981733]
+ overlaps section .data..percpu LMA [0000000001951000,0000000001b219d7]
+To:     kernel test robot <lkp@intel.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 15-06-23 11:48:30, Zhongkun He wrote:
-[...]
-> @@ -1419,6 +1420,10 @@ static int zram_write_page(struct zram *zram, struct page *page, u32 index)
->  	struct zcomp_strm *zstrm;
->  	unsigned long element = 0;
->  	enum zram_pageflags flags = 0;
-> +	struct mem_cgroup *memcg, *old_memcg;
-> +
-> +	memcg = page_memcg(page);
-> +	old_memcg = set_active_memcg(memcg);
->  
->  	mem = kmap_atomic(page);
->  	if (page_same_filled(mem, &element)) {
-[...]
-> @@ -1470,8 +1475,10 @@ static int zram_write_page(struct zram *zram, struct page *page, u32 index)
->  		handle = zs_malloc(zram->mem_pool, comp_len,
->  				GFP_NOIO | __GFP_HIGHMEM |
->  				__GFP_MOVABLE);
-> -		if (IS_ERR_VALUE(handle))
-> -			return PTR_ERR((void *)handle);
-> +		if (IS_ERR_VALUE(handle)) {
-> +			ret = PTR_ERR((void *)handle);
-> +			goto out;
-> +		}
->  
->  		if (comp_len != PAGE_SIZE)
->  			goto compress_again;
+On Thu, Jun 15, 2023 at 10:30=E2=80=AFAM kernel test robot <lkp@intel.com> =
+wrote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
+t master
+> head:   b6dad5178ceaf23f369c3711062ce1f2afc33644
+> commit: 3b90b09af5be42491a8a74a549318cfa265b3029 riscv: Fix orphan sectio=
+n warnings caused by kernel/pi
+> date:   5 weeks ago
+> config: riscv-randconfig-r004-20230615 (https://download.01.org/0day-ci/a=
+rchive/20230615/202306151631.3uZmHI1c-lkp@intel.com/config)
+> compiler: riscv64-linux-gcc (GCC) 12.3.0
+> reproduce (this is a W=3D1 build):
+>         mkdir -p ~/bin
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
+git/commit/?id=3D3b90b09af5be42491a8a74a549318cfa265b3029
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/=
+git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 3b90b09af5be42491a8a74a549318cfa265b3029
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.3.0 ~/bin/ma=
+ke.cross W=3D1 O=3Dbuild_dir ARCH=3Driscv olddefconfig
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.3.0 ~/bin/ma=
+ke.cross W=3D1 O=3Dbuild_dir ARCH=3Driscv SHELL=3D/bin/bash
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202306151631.3uZmHI1c-lkp=
+@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+>    riscv64-linux-ld: section .data LMA [0000000000261000,00000000007d98cf=
+] overlaps section .text LMA [00000000000a7a50,000000000197e81f]
+> >> riscv64-linux-ld: section .init.pi.text LMA [000000000197e820,00000000=
+01981733] overlaps section .data..percpu LMA [0000000001951000,0000000001b2=
+19d7]
+> >> riscv64-linux-ld: section .init.pi.rodata.str1.8 VMA [ffffffff821f3ed0=
+,ffffffff821f3f3a] overlaps section .data VMA [ffffffff82000000,ffffffff825=
+788cf]
 
-I am not really deeply familiar with zram implementation nor usage but
-how is the above allocation going to be charged without __GFP_ACCOUNT in
-the gfp mask?
+That's a XIP config, nothing to worry about.
 
-Also what exactly is going to happen for the swap backed by the zram
-device? Your memcg might be hitting the hard limit and therefore
-swapping out. Wouldn't zs_malloc fail very likely under that condition
-making the swap effectively unusable?
--- 
-Michal Hocko
-SUSE Labs
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
