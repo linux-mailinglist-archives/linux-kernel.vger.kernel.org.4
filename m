@@ -2,156 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEF18732395
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 01:23:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E452732398
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 01:27:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239397AbjFOXXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 19:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45928 "EHLO
+        id S231805AbjFOX1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 19:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240444AbjFOXWX (ORCPT
+        with ESMTP id S229762AbjFOX1b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 19:22:23 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23BC130FC
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 16:21:50 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f762b3227dso256753e87.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 16:21:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686871308; x=1689463308;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=a+svBDf4CLgOAipv+j0r6qWFrZWv28OUfTzAcDFjW8k=;
-        b=GCHOdnkoYXEvs/0jT/JPEJ88fwlvgz9KRcr4tdd1kVEoRdap5/XoymnOMrVgKYqg0u
-         qtgkwIV+8jgAeRsJ96GdMoqzjhufEGhX+iz2zQYykJuxurBiJreSCezAnbSqIXFy2Zok
-         QERYixcwm6AqzZPtv3VXY8bkQTgFQBEFQ+euYXRdArxUUoIoUCS1HhCvCF2is2Y3uqDd
-         3M3aSuie9CCXNOYaBSPUR/xJiWgDCpUwot/U7PAEs07FHHyBnuSaceKng+gOXCBPW7Aj
-         v1RPpRa6oPIKlo6oXNkkTPbOaJf3dfADfbNbutC57q5M2cz/W0qHjaatksJ4EtRhQ9uY
-         zAvQ==
+        Thu, 15 Jun 2023 19:27:31 -0400
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9A72D5D
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 16:27:05 -0700 (PDT)
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-62ff12ba965so1801676d6.3
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 16:27:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686871308; x=1689463308;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1686871569; x=1689463569;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=a+svBDf4CLgOAipv+j0r6qWFrZWv28OUfTzAcDFjW8k=;
-        b=POUk0Zo5WYoS0XJ4bGPXwgeS8V+hIXnRipgw2xaRKuB8zxo6UrrAiqjEcD7bpV0kmb
-         YUOp3LAVEqu5B8VEIvEK5DiXJZl63kGeX/qV5TV1FF9NVsYeVr4PH+y1LBKoBtZjR4D1
-         tCKi6kKkPt4jgAWhtbYkkpFqBbFiWmgerFi0rJkcxgsJHlmX7UTI5G9dEluYgxmKI5WY
-         I0Y74xdqhlgCPXVb2lO883BpNc1o/vL19nfu9pEphX9gANCW7cOVGILZaTGJZ9f26kj+
-         hfbUrn5Pvs85BQnDRkEIFd2lt74pMyHx4Jmze4hlA5pCHgGzxXJnYOOwu7xhDx73AZmR
-         jehg==
-X-Gm-Message-State: AC+VfDzk6VD8TUJwDZayzI67uWWAYGWVcj6ib6rIdgxKThJoPHa3s19y
-        ouaufC+4+BwX5IPWAUGxPlsNDw==
-X-Google-Smtp-Source: ACHHUZ5M8+Y1tEEhAxhunZ5k31fQ0kTL8g5RSZ1OpELl8hso07LURPszaXvFfhbNwT0tuON+1GdjNQ==
-X-Received: by 2002:a05:6512:398a:b0:4f4:e509:ef56 with SMTP id j10-20020a056512398a00b004f4e509ef56mr1852623lfu.25.1686871308495;
-        Thu, 15 Jun 2023 16:21:48 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id u25-20020a056512041900b004f24ee39661sm2744852lfk.137.2023.06.15.16.21.47
+        bh=wUpnKcxX83e/42mugp3BwoOPoVyd1XEyCwaCu/itwec=;
+        b=DVZbyQBv1xioJ7PFNwMLvLIfXPmGEY+tHQAHp6uQVZET6mYH7xx0ZGe0fzsMC/Gojr
+         UDPK6200G4ff2yduLc/IysuHLBuwKHuy/nYj2MqJa+lDe9gdZ4wxKMS8P//b0DxPypbv
+         BF6jbHJe7uceOB/AQIoRPkal+rqstc8KFyiY55oi8KgJuzgrNugsJGVV4Vdr5r0U7zhF
+         hMArmAtVQVpXqVkrzlAoXRNf+CsvFn8t/edrmzI/l6WGPEIf9XCXQH/4/vm9Yw/S3mbU
+         B44UQkyRsWFM5yx3eAmdriEFZ0+AZDj0+ZeMJo/mTuqEH6JxGsFVkaxvLrYHxQzdYJy3
+         bJiA==
+X-Gm-Message-State: AC+VfDwbojsdQ3mkZABezmvkSFC0Sr4RKZ+rhgNlzhUtzqqSAbd5jNsC
+        1jMHeAKw+qFjd0EoOwGXjw4=
+X-Google-Smtp-Source: ACHHUZ4Tpiky6qHRNbX6UMpuS06Q7JWS8POE/CF8BvbTPznw1X+nSWWGUM5EqJYnvKHi7+vdKpmRpw==
+X-Received: by 2002:a05:6214:1cc7:b0:62d:feee:252e with SMTP id g7-20020a0562141cc700b0062dfeee252emr376605qvd.55.1686871568767;
+        Thu, 15 Jun 2023 16:26:08 -0700 (PDT)
+Received: from maniforge ([24.1.27.177])
+        by smtp.gmail.com with ESMTPSA id q5-20020ad45ca5000000b00623950fbe48sm6285341qvh.41.2023.06.15.16.26.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 16:21:48 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Fri, 16 Jun 2023 01:21:01 +0200
-Subject: [PATCH v9 20/20] drm/msm/a6xx: Add A610 speedbin support
+        Thu, 15 Jun 2023 16:26:08 -0700 (PDT)
+Date:   Thu, 15 Jun 2023 18:26:05 -0500
+From:   David Vernet <void@manifault.com>
+To:     Aaron Lu <aaron.lu@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        rostedt@goodmis.org, dietmar.eggemann@arm.com, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        joshdon@google.com, roman.gushchin@linux.dev, tj@kernel.org,
+        kernel-team@meta.com
+Subject: Re: [RFC PATCH 3/3] sched: Implement shared wakequeue in CFS
+Message-ID: <20230615232605.GB2915572@maniforge>
+References: <20230613052004.2836135-1-void@manifault.com>
+ <20230613052004.2836135-4-void@manifault.com>
+ <20230613083203.GR4253@hirez.programming.kicks-ass.net>
+ <20230614043529.GA1942@ziqianlu-dell>
+ <20230615000103.GC2883716@maniforge>
+ <20230615044917.GA109334@ziqianlu-dell>
+ <20230615073153.GA110814@ziqianlu-dell>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230223-topic-gmuwrapper-v9-20-890d8f470c8b@linaro.org>
-References: <20230223-topic-gmuwrapper-v9-0-890d8f470c8b@linaro.org>
-In-Reply-To: <20230223-topic-gmuwrapper-v9-0-890d8f470c8b@linaro.org>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1686871277; l=1908;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=QopxU5AaMC+j/o5cTOrG8wzEEwTggnAJi8IemaS+5vw=;
- b=NYNylG8pigD3OTBd3OI53qX8ugm96hvBv8g6mwWgFpPpKI2cLy28RrZAm4FAkNYNvy9fmXUEY
- hEPbQ2EAryQCVzo06LJNPngbVcuJId2kFj0Bwt1/Dxnfm7lLvCfe6/I
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230615073153.GA110814@ziqianlu-dell>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A610 is implemented on at least three SoCs: SM6115 (bengal), SM6125
-(trinket) and SM6225 (khaje). Trinket does not support speed binning
-(only a single SKU exists) and we don't yet support khaje upstream.
-Hence, add a fuse mapping table for bengal to allow for per-chip
-frequency limiting.
+On Thu, Jun 15, 2023 at 03:31:53PM +0800, Aaron Lu wrote:
+> On Thu, Jun 15, 2023 at 12:49:17PM +0800, Aaron Lu wrote:
+> > I'll see if I can find a smaller machine and give it a run there too.
+> 
+> Found a Skylake with 18cores/36threads on each socket/LLC and with
+> netperf, the contention is still serious.
+> 
+> "
+> $ netserver
+> $ sudo sh -c "echo SWQUEUE > /sys/kernel/debug/sched/features"
+> $ for i in `seq 72`; do netperf -l 60 -n 72 -6 -t UDP_RR & done
+> "
+> 
+>         53.61%    53.61%  [kernel.vmlinux]            [k] native_queued_spin_lock_slowpath            -      -            
+>             |          
+>             |--27.93%--sendto
+>             |          entry_SYSCALL_64
+>             |          do_syscall_64
+>             |          |          
+>             |           --27.93%--__x64_sys_sendto
+>             |                     __sys_sendto
+>             |                     sock_sendmsg
+>             |                     inet6_sendmsg
+>             |                     udpv6_sendmsg
+>             |                     udp_v6_send_skb
+>             |                     ip6_send_skb
+>             |                     ip6_local_out
+>             |                     ip6_output
+>             |                     ip6_finish_output
+>             |                     ip6_finish_output2
+>             |                     __dev_queue_xmit
+>             |                     __local_bh_enable_ip
+>             |                     do_softirq.part.0
+>             |                     __do_softirq
+>             |                     net_rx_action
+>             |                     __napi_poll
+>             |                     process_backlog
+>             |                     __netif_receive_skb
+>             |                     __netif_receive_skb_one_core
+>             |                     ipv6_rcv
+>             |                     ip6_input
+>             |                     ip6_input_finish
+>             |                     ip6_protocol_deliver_rcu
+>             |                     udpv6_rcv
+>             |                     __udp6_lib_rcv
+>             |                     udp6_unicast_rcv_skb
+>             |                     udpv6_queue_rcv_skb
+>             |                     udpv6_queue_rcv_one_skb
+>             |                     __udp_enqueue_schedule_skb
+>             |                     sock_def_readable
+>             |                     __wake_up_sync_key
+>             |                     __wake_up_common_lock
+>             |                     |          
+>             |                      --27.85%--__wake_up_common
+>             |                                receiver_wake_function
+>             |                                autoremove_wake_function
+>             |                                default_wake_function
+>             |                                try_to_wake_up
+>             |                                |          
+>             |                                 --27.85%--ttwu_do_activate
+>             |                                           enqueue_task
+>             |                                           enqueue_task_fair
+>             |                                           |          
+>             |                                            --27.85%--_raw_spin_lock_irqsave
+>             |                                                      |          
+>             |                                                       --27.85%--native_queued_spin_lock_slowpath
+>             |          
+>              --25.67%--recvfrom
+>                        entry_SYSCALL_64
+>                        do_syscall_64
+>                        __x64_sys_recvfrom
+>                        __sys_recvfrom
+>                        sock_recvmsg
+>                        inet6_recvmsg
+>                        udpv6_recvmsg
+>                        __skb_recv_udp
+>                        |          
+>                         --25.67%--__skb_wait_for_more_packets
+>                                   schedule_timeout
+>                                   schedule
+>                                   __schedule
+>                                   |          
+>                                    --25.66%--pick_next_task_fair
+>                                              |          
+>                                               --25.65%--swqueue_remove_task
+>                                                         |          
+>                                                          --25.65%--_raw_spin_lock_irqsave
+>                                                                    |          
+>                                                                     --25.65%--native_queued_spin_lock_slowpath
+> 
+> I didn't aggregate the throughput(Trans. Rate per sec) from all these
+> clients, but a glimpse from the result showed that the throughput of
+> each client dropped from 4xxxx(NO_SWQUEUE) to 2xxxx(SWQUEUE).
+> 
+> Thanks,
+> Aaron
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+Ok, it seems that the issue is that I wasn't creating enough netperf
+clients. I assumed that -n $(nproc) was sufficient. I was able to repro
+the contention on my 26 core / 52 thread skylake client as well:
 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-index ff9a8d342c77..b3ada1e7b598 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-@@ -2204,6 +2204,30 @@ static bool a6xx_progress(struct msm_gpu *gpu, struct msm_ringbuffer *ring)
- 	return progress;
- }
- 
-+static u32 a610_get_speed_bin(u32 fuse)
-+{
-+	/*
-+	 * There are (at least) three SoCs implementing A610: SM6125 (trinket),
-+	 * SM6115 (bengal) and SM6225 (khaje). Trinket does not have speedbinning,
-+	 * as only a single SKU exists and we don't support khaje upstream yet.
-+	 * Hence, this matching table is only valid for bengal and can be easily
-+	 * expanded if need be.
-+	 */
-+
-+	if (fuse == 0)
-+		return 0;
-+	else if (fuse == 206)
-+		return 1;
-+	else if (fuse == 200)
-+		return 2;
-+	else if (fuse == 157)
-+		return 3;
-+	else if (fuse == 127)
-+		return 4;
-+
-+	return UINT_MAX;
-+}
-+
- static u32 a618_get_speed_bin(u32 fuse)
- {
- 	if (fuse == 0)
-@@ -2301,6 +2325,9 @@ static u32 fuse_to_supp_hw(struct device *dev, struct adreno_gpu *adreno_gpu, u3
- {
- 	u32 val = UINT_MAX;
- 
-+	if (adreno_is_a610(adreno_gpu))
-+		val = a610_get_speed_bin(fuse);
-+
- 	if (adreno_is_a618(adreno_gpu))
- 		val = a618_get_speed_bin(fuse);
- 
 
--- 
-2.41.0
+    41.01%  netperf          [kernel.vmlinux]                                                 [k] queued_spin_lock_slowpath
+            |          
+             --41.01%--queued_spin_lock_slowpath
+                       |          
+                        --40.63%--_raw_spin_lock_irqsave
+                                  |          
+                                  |--21.18%--enqueue_task_fair
+                                  |          |          
+                                  |           --21.09%--default_wake_function
+                                  |                     |          
+                                  |                      --21.09%--autoremove_wake_function
+                                  |                                |          
+                                  |                                 --21.09%--__wake_up_sync_key
+                                  |                                           sock_def_readable
+                                  |                                           __udp_enqueue_schedule_skb
+                                  |                                           udpv6_queue_rcv_one_skb
+                                  |                                           __udp6_lib_rcv
+                                  |                                           ip6_input
+                                  |                                           ipv6_rcv
+                                  |                                           process_backlog
+                                  |                                           net_rx_action
+                                  |                                           |          
+                                  |                                            --21.09%--__softirqentry_text_start
+                                  |                                                      __local_bh_enable_ip
+                                  |                                                      ip6_output
+                                  |                                                      ip6_local_out
+                                  |                                                      ip6_send_skb
+                                  |                                                      udp_v6_send_skb
+                                  |                                                      udpv6_sendmsg
+                                  |                                                      __sys_sendto
+                                  |                                                      __x64_sys_sendto
+                                  |                                                      do_syscall_64
+                                  |                                                      entry_SYSCALL_64
+                                  |          
+                                   --19.44%--swqueue_remove_task
+                                             |          
+                                              --19.42%--pick_next_task_fair
+                                                        |          
+                                                         --19.42%--schedule
+                                                                   |          
+                                                                    --19.21%--schedule_timeout
+                                                                              __skb_wait_for_more_packets
+                                                                              __skb_recv_udp
+                                                                              udpv6_recvmsg
+                                                                              inet6_recvmsg
+                                                                              __x64_sys_recvfrom
+                                                                              do_syscall_64
+                                                                              entry_SYSCALL_64
+    40.87%  netserver        [kernel.vmlinux]                                                 [k] queued_spin_lock_slowpath
+            |          
+             --40.87%--queued_spin_lock_slowpath
+                       |          
+                        --40.51%--_raw_spin_lock_irqsave
+                                  |          
+                                  |--21.03%--enqueue_task_fair
+                                  |          |          
+                                  |           --20.94%--default_wake_function
+                                  |                     |          
+                                  |                      --20.94%--autoremove_wake_function
+                                  |                                |          
+                                  |                                 --20.94%--__wake_up_sync_key
+                                  |                                           sock_def_readable
+                                  |                                           __udp_enqueue_schedule_skb
+                                  |                                           udpv6_queue_rcv_one_skb
+                                  |                                           __udp6_lib_rcv
+                                  |                                           ip6_input
+                                  |                                           ipv6_rcv
+                                  |                                           process_backlog
+                                  |                                           net_rx_action
+                                  |                                           |          
+                                  |                                            --20.94%--__softirqentry_text_start
+                                  |                                                      __local_bh_enable_ip
+                                  |                                                      ip6_output
+                                  |                                                      ip6_local_out
+                                  |                                                      ip6_send_skb
+                                  |                                                      udp_v6_send_skb
+                                  |                                                      udpv6_sendmsg
+                                  |                                                      __sys_sendto
+                                  |                                                      __x64_sys_sendto
+                                  |                                                      do_syscall_64
+                                  |                                                      entry_SYSCALL_64
+                                  |          
+                                   --19.48%--swqueue_remove_task
+                                             |          
+                                              --19.47%--pick_next_task_fair
+                                                        schedule
+                                                        |          
+                                                         --19.38%--schedule_timeout
+                                                                   __skb_wait_for_more_packets
+                                                                   __skb_recv_udp
+                                                                   udpv6_recvmsg
+                                                                   inet6_recvmsg
+                                                                   __x64_sys_recvfrom
+                                                                   do_syscall_64
+                                                                   entry_SYSCALL_64
 
+Thanks for the help in getting the repro on my end.
+
+So yes, there is certainly a scalability concern to bear in mind for
+swqueue for LLCs with a lot of cores. If you have a lot of tasks quickly
+e.g. blocking and waking on futexes in a tight loop, I expect a similar
+issue would be observed.
+
+On the other hand, the issue did not occur on my 7950X. I also wasn't
+able to repro the contention on the Skylake if I ran with the default
+netperf workload rather than UDP_RR (even with the additional clients).
+I didn't bother to take the mean of all of the throughput results
+between NO_SWQUEUE and SWQUEUE, but they looked roughly equal.
+
+So swqueue isn't ideal for every configuration, but I'll echo my
+sentiment from [0] that this shouldn't on its own necessarily preclude
+it from being merged given that it does help a large class of
+configurations and workloads, and it's disabled by default.
+
+[0]: https://lore.kernel.org/all/20230615000103.GC2883716@maniforge/
+
+Thanks,
+David
