@@ -2,131 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B433E731EE3
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 19:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4122D731EEB
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 19:26:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238797AbjFOR0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 13:26:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40072 "EHLO
+        id S229614AbjFOR01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 13:26:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236338AbjFOR0S (ORCPT
+        with ESMTP id S235249AbjFOR0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 13:26:18 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC282728
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 10:26:17 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id e9e14a558f8ab-33b7f217dd0so10195ab.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 10:26:17 -0700 (PDT)
+        Thu, 15 Jun 2023 13:26:21 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50476270C
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 10:26:18 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f60a27c4a2so10441350e87.2
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 10:26:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686849976; x=1689441976;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cRdXnKf8UMK6tMvS0Fe+HRivY9zJhDo1MyqxnJgwxrw=;
-        b=5dDLBI9MJ7+J3F+/51Jk1eM2fTbc71jazwc/vjucLDniC6v5D8G2m/r+D9PTqTg2Sx
-         eg+Mda1zhKn1qCptaIExp9uboTwFeaGNh5b1+9ZlipMZWGhu8neyraXj2gk3cIfJILip
-         mTdY1fqzoPFX7qrKZCDIoVRONKO+aBHWBBLnP0z8cT3QWE0yM/CkxnrBvEbmltkKmhiW
-         ZOsEAgPxj4F2IYcB6AypIb12ZA0iDuwjTIuDt1Eavf/6zWdpVgh0C8KTCZue2TmIK8rr
-         yG/Rr5sBVEWJ9gP81wH5Ulc0dlczEFzlfEu1G7foz9U6hAAjG1+NJCUFZ4ePs1yKFLAx
-         jX1g==
+        d=linaro.org; s=google; t=1686849976; x=1689441976;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9OD9CfNGG0ljVkHjUXzx71k7VdGMyNrkhpyVNqChErc=;
+        b=h1U7GUovXKBg8zOEwjAYNdcM+iamFEnF2AyGLYAtv4n1zNv+cXvGW4SnGRRNtqB5Dd
+         Mzpx/Z5vt/uZMY9kzIpw4tAAjqv3yDu7ohjM5GPCBy6Bn0BCJmgB4ytYJW9GxzZajY9t
+         +6kzNwwnYWMbOo1fkF3HDFp/e+s21JbsafUQ1uBkIkT6LBc9ZCqNHax6mAwtlba0WANj
+         CepmoZvfbLDiPiDRm3AhY/iZkpGSrDx3QInDHk3e2U0CCJc72ryVN7mjoNPde3aKTIQi
+         j9BpvivNlZ52lnTTWCsQ/MHiCBVsdUFBe3SJLJeCrhi168MnZAaFhQJLGQniG/tYye44
+         SZEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1686849976; x=1689441976;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cRdXnKf8UMK6tMvS0Fe+HRivY9zJhDo1MyqxnJgwxrw=;
-        b=KJCTV0tJDZxfWhFUqnC/71K86zjxaFq0JfIaAkZpPtwAuYEo87ibK8TrZx3dMlgm96
-         7JZCNbLhU0wTgEHsuxmhPO1DovJvDvdzU9Cyn6FXcVtGk7yQvD7a5VITkEL/C1pLiAQC
-         3Sn8uKinsrBn/UZMuRuNq3blbL6px98otGLCVYLfdF6R3Zb4rcKo4ZUu4qsJDMyBE6bt
-         S+WLD+IU3+VMvCs4kkucgiEAU/DmiAbp55CBJDpbS38Uo9Gyx/06Hw86zzNfK7hWdLEx
-         y5H6xBN3dtoU4yxRPI/kcp0nSgzdGShWXRRarvxAQJAsj0agt42VEQ5Z/7KlKRJc4Zg+
-         OKyQ==
-X-Gm-Message-State: AC+VfDypc8qxpgT1djaBWTwItqSJC6ytl7HOupzJfyrCVeR2dfF2c/at
-        cgNgTEYyoQWwKhAFxQtmxjgOFmnP2ULz+8/EjPu//w==
-X-Google-Smtp-Source: ACHHUZ7i+zVDOKsralxa6sy+kgOs0tNjf0DvhW9vYedUAncnrn7M3olVN0eC2JjpQTd12kzS61i4W579j0NcVfgOLfQ=
-X-Received: by 2002:a92:ca4f:0:b0:337:c28c:3d0f with SMTP id
- q15-20020a92ca4f000000b00337c28c3d0fmr110575ilo.6.1686849976378; Thu, 15 Jun
- 2023 10:26:16 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9OD9CfNGG0ljVkHjUXzx71k7VdGMyNrkhpyVNqChErc=;
+        b=cjxWo5MB1BUdcfqzIqn8l8286tp2t/Hg7rYldq2X7ejiyANIzzQBDL0lN5pqS7wztn
+         XEliu8/gQi+8bTha0gMakGLi64UtsjaTv3DenTAILtpPoZfrc3gz1HitIrCXSxBWHXzt
+         MaiDCjqFbBcXbxe1JvNjS0rrnEG5EOUcmUA5V/26taARO0qAgNW1jjk0tydl96n2u6Ck
+         j1e/jfuw0YUoQBALEP31ma2cARsdCaqmko3fyUt6xOQ1tbfNlq98IdzXKhsIMgHA4Ibi
+         bBIXFsOEtFRN4cWrQvlmfSc8B6u5wRwuiOXgCi9HpIqNMNvU7pnyB+NukseQxcy9gtJS
+         uMvg==
+X-Gm-Message-State: AC+VfDxX7elGwmIIF+z6uKJpLwvPquGeOOtaXuAIjIYLGuDZM3xGHJSG
+        vUMJ7n8Gz0AILhiR4pHKre10hA==
+X-Google-Smtp-Source: ACHHUZ6FWxB2G5sI0gRE4Ywc1DSB6zpSrGXY6CITo1W5RCOByENa7dVFWNEcmGMX7f/bgXCe2Er8nw==
+X-Received: by 2002:a05:6512:54e:b0:4f7:69c8:44ff with SMTP id h14-20020a056512054e00b004f769c844ffmr3217394lfl.2.1686849976301;
+        Thu, 15 Jun 2023 10:26:16 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id q28-20020ac25a1c000000b004f3b4d17114sm2645328lfn.144.2023.06.15.10.26.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jun 2023 10:26:15 -0700 (PDT)
+Message-ID: <5377c938-10df-20ce-2bdb-dad41e472041@linaro.org>
+Date:   Thu, 15 Jun 2023 19:26:14 +0200
 MIME-Version: 1.0
-References: <20230606192858.3600174-1-rananta@google.com> <ZImwRAuSXcVt3UPV@linux.dev>
- <CAJHc60wUSNpFLeESWcpEa5OmN4bJg9wBre-2k8803WHpn03LGw@mail.gmail.com>
- <ZIrONR6cSegiK1e2@linux.dev> <ZIscwv1NABW+wZ4J@google.com>
-In-Reply-To: <ZIscwv1NABW+wZ4J@google.com>
-From:   Raghavendra Rao Ananta <rananta@google.com>
-Date:   Thu, 15 Jun 2023 10:26:05 -0700
-Message-ID: <CAJHc60y523wJ0gZBm0o6vkYXdyus3QQC3t5W44LPDE+rN6CLzA@mail.gmail.com>
-Subject: Re: [PATCH v5 0/7] KVM: arm64: Add support for FEAT_TLBIRANGE
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Oliver Upton <oliver.upton@linux.dev>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2] arm64: dts: qcom: sdm845-db845c: Mark cont splash
+ memory region as reserved
+Content-Language: en-US
+To:     Amit Pundir <amit.pundir@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>
+Cc:     linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        dt <devicetree@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+References: <20230615142711.2994811-1-amit.pundir@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230615142711.2994811-1-amit.pundir@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allright, I'll resend the series along with David's patches.
+On 15.06.2023 16:27, Amit Pundir wrote:
+> Adding a reserved memory region for the framebuffer memory
+> (the splash memory region set up by the bootloader).
+> 
+> Signed-off-by: Amit Pundir <amit.pundir@linaro.org>
+> ---
+> v2: Updated commit message.
+> 
+> There was some dicussion on v1 but it didn't go anywhere,
+> https://lore.kernel.org/linux-kernel/20230124182857.1524912-1-amit.pundir@linaro.org/T/#u.
+> The general consensus is that this memory should be freed and be
+> made resuable but that (releasing this piece of memory) has been
+> tried before and it is not trivial to return the reserved memory
+> node to the system RAM pool in this case.
+> 
+>  arch/arm64/boot/dts/qcom/sdm845-db845c.dts | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+> index e14fe9bbb386..10a06ee8e262 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+> +++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+> @@ -101,6 +101,14 @@ hdmi_con: endpoint {
+>  		};
+>  	};
+>  
+> +	reserved-memory {
+> +		/* Cont splash region set up by the bootloader */
+> +		cont_splash_mem: framebuffer@9d400000 {
+> +			reg = <0x0 0x9d400000 0x0 0x2400000>;
+> +			no-map;
+> +		};
+> +	};
+&mdss {
+	memory-region = <&cont_splash_mem>;
+};
 
-Thank you.
-Raghavendra
+?
 
-On Thu, Jun 15, 2023 at 7:14=E2=80=AFAM Sean Christopherson <seanjc@google.=
-com> wrote:
->
-> On Thu, Jun 15, 2023, Oliver Upton wrote:
-> > +cc Sean
-> >
-> > On Wed, Jun 14, 2023 at 06:57:01PM -0700, Raghavendra Rao Ananta wrote:
-> > > On Wed, Jun 14, 2023 at 5:19=E2=80=AFAM Oliver Upton <oliver.upton@li=
-nux.dev> wrote:
-> > > >
-> > > > Hi Raghavendra,
-> > > >
-> > > > On Tue, Jun 06, 2023 at 07:28:51PM +0000, Raghavendra Rao Ananta wr=
-ote:
-> > > > > The series is based off of upstream v6.4-rc2, and applied David
-> > > > > Matlack's common API for TLB invalidations[1] on top.
-> > > >
-> > > > Sorry I didn't spot the dependency earlier, but this isn't helpful =
-TBH.
-> > > >
-> > > > David's series was partially applied, and what remains no longer cl=
-eanly
-> > > > applies to the base you suggest. Independent of that, my *strong*
-> > > > preference is that you just send out a series containing your patch=
-es as
-> > > > well as David's. Coordinating dependent efforts is the only sane th=
-ing
-> > > > to do. Also, those patches are 5 months old at this point which is
-> > > > ancient history.
-> > > >
-> > > Would you rather prefer I detach this series from David's as I'm not
-> > > sure what his plans are for future versions?
-> > > On the other hand, the patches seem simple enough to rebase and give
-> > > another shot at review, but may end up delaying this series.
-> > > WDYT?
-> >
-> > In cases such as this you'd typically coordinate with the other
-> > developer to pick up their changes as part of your series. Especially
-> > for this case -- David's refactoring is _pointless_ without another
-> > user for that code (i.e. arm64). As fun as it might be to antagonize
-> > Sean, that series pokes x86 and I'd like an ack from on it.
-> >
-> > So, please post a combined series that applies cleanly to an early 6.4
-> > rc of your choosing, and cc all affected reviewers/maintainers.
->
-> +1
+Konrad
+> +
+>  	lt9611_1v8: lt9611-vdd18-regulator {
+>  		compatible = "regulator-fixed";
+>  		regulator-name = "LT9611_1V8";
