@@ -2,348 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513CE731F70
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 19:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 196E9731F7D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 19:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbjFORnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 13:43:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50666 "EHLO
+        id S232126AbjFORrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 13:47:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237283AbjFORnE (ORCPT
+        with ESMTP id S234708AbjFORrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 13:43:04 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81A4272A
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 10:42:59 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1b3cab3a48dso39188035ad.3
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 10:42:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686850979; x=1689442979;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3VaVpYnKKIXM0ZMJBv2BahWS6rKgSDR5ikxQlp7Qm5M=;
-        b=CRqM4fJoSy0TOwQEM+dwNf4YLmN8ZNvadtNeqmejsTpkrhB3fUKCS5gVORcT3YAFGF
-         i/3D4htNDkxjLmMQr6ex9h88D9Mn3b3BcimZjQyHYDLLHrnhvGGLYYK4DnkhEsQ6CVaZ
-         cXJTMz7MEXsf3MpnUFcr6Mx0t4RSwdzHZHJMQ/Gw529RF41s9TMoKGTDzFQ40JREZYAz
-         j/q5bFPXA1TGS/pjeQnxzb2ibh5u61Yat52z5h2i3whlu/NZWmrHHKlNBlQzVnj3NGqb
-         fUd5ZYUT6Xx5VG3C07mjHJV5Ti0lFZylCk6cioTWTVk9aptHHtPLM7okEk048bn6RBzX
-         EGGw==
+        Thu, 15 Jun 2023 13:47:31 -0400
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544082721;
+        Thu, 15 Jun 2023 10:47:29 -0700 (PDT)
+Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-77ac14ff51bso330005539f.3;
+        Thu, 15 Jun 2023 10:47:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686850979; x=1689442979;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3VaVpYnKKIXM0ZMJBv2BahWS6rKgSDR5ikxQlp7Qm5M=;
-        b=SI3UcWO6te8mNgN4Tk9xr4gKy+sRcOM/BKDVGXHAxRXrURPuBST5KdEh0WAgSYjcnC
-         6jjfN9158FQxSgGsCyTfk0DJY8qY1AK07ebohtfZgUpgEr79boVs2g6Q3ZZ4mKAw4JNs
-         adMt04jRgpa/RrM5vhqKx54qI0RtnCryyGseaiGA2xR3PMSW/1gcO0uno+NBLnBV6wD3
-         nhMRcXdZTtUP3PM6JD4olrewiqD2xKHaAG3ur8fVCSmViRZRTwGboAw2hNrxnh/cfaLB
-         vbM8NC3j/3lhz1az8d40SL4lKgquESIm+9dUVMd9ovGaeosuD6KDhwv6wOBzPua1DXLT
-         wjxw==
-X-Gm-Message-State: AC+VfDx8Rpq7rqZofqb2PpXPlwmrKacMg6H989ed1EtU4pcpM2N3LbzF
-        O87O7J6dJwjgDZJ8pg8Q1isL5ZOloP0=
-X-Google-Smtp-Source: ACHHUZ4cQlpzVe0KczazAvYqGjGYoNkXv8UVqui26XxKS9kOBWmazT/WNj+BhRRRMGskVfw0J/AilzSk6Q0=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:f7d3:b0:1b5:147f:d8d1 with SMTP id
- h19-20020a170902f7d300b001b5147fd8d1mr547182plw.3.1686850979254; Thu, 15 Jun
- 2023 10:42:59 -0700 (PDT)
-Date:   Thu, 15 Jun 2023 10:42:57 -0700
-In-Reply-To: <20230526234435.662652-2-yuzhao@google.com>
-Mime-Version: 1.0
-References: <20230526234435.662652-1-yuzhao@google.com> <20230526234435.662652-2-yuzhao@google.com>
-Message-ID: <ZItNoeWriZgLUaon@google.com>
-Subject: Re: [PATCH mm-unstable v2 01/10] mm/kvm: add mmu_notifier_ops->test_clear_young()
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Anup Patel <anup@brainfault.org>,
-        Ben Gardon <bgardon@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Gavin Shan <gshan@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michael Larabel <michael@michaellarabel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Peter Xu <peterx@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
-        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
-        linux-trace-kernel@vger.kernel.org, x86@kernel.org,
-        linux-mm@google.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1686851248; x=1689443248;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=eOMHF+PAvYNj6z27LafaLYMbvuVFemfqC8gfypuerIw=;
+        b=jrns6R9jDZYO1QHJ7OmXo03ywWp3WwNKoeUHG2ncdDHexiwTw+LYEM7N4Hgj6lxWPw
+         K8N7gVMMCab5bzo4zshQL4ny9Mr55oHtL3ZE6XK+ZAr5Yyg7XIfKSSdYD+73EDiXG6iR
+         EWn6KSLFTDqGCfOZNYjXt47ec2bw5GyvMESSYQZ90Wcgspmhmijc6zuuuAfOcXqOdgZ9
+         AGjyJbCASP0fB/7BQfX+Xwvruia23b79a2dNz11H+A76icEr0F8i7rxywx1ERUPn13Gg
+         6GRl/RCAvF7VRJ3ms8e1FHABAEE5smhrD9uO0sTqHa4xYyLvGpoMYGN74BeRRh7OCGTB
+         uxkg==
+X-Gm-Message-State: AC+VfDwfN1IZPw5hWY9F7Tc9OuQR/6+phme/oxTqni4xQlDTYtcBXZnQ
+        9FTerlZD0/FK16igae7Tbgc0iLd3EA==
+X-Google-Smtp-Source: ACHHUZ46wBJxsKz51zlhelfDLrhVjW9R4d9vgt4Ap+liLjVoK6rQ9zl9E6L5p1auH+YynCFoQWNxYQ==
+X-Received: by 2002:a5e:8d0e:0:b0:77a:ec0c:5907 with SMTP id m14-20020a5e8d0e000000b0077aec0c5907mr121504ioj.13.1686851248522;
+        Thu, 15 Jun 2023 10:47:28 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id t5-20020a028785000000b0040fa5258658sm5684715jai.77.2023.06.15.10.47.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 10:47:27 -0700 (PDT)
+Received: (nullmailer pid 1252771 invoked by uid 1000);
+        Thu, 15 Jun 2023 17:47:26 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+In-Reply-To: <20230531-rpm-rproc-v3-6-a07dcdefd918@gerhold.net>
+References: <20230531-rpm-rproc-v3-0-a07dcdefd918@gerhold.net>
+ <20230531-rpm-rproc-v3-6-a07dcdefd918@gerhold.net>
+Message-Id: <168685124601.1252742.10827614978463684778.robh@kernel.org>
+Subject: Re: [PATCH v3 06/13] dt-bindings: remoteproc: Add Qualcomm RPM
+ processor/subsystem
+Date:   Thu, 15 Jun 2023 11:47:26 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023, Yu Zhao wrote:
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index 0e571e973bc2..374262545f96 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -258,6 +258,7 @@ int kvm_async_pf_wakeup_all(struct kvm_vcpu *vcpu);
->  #ifdef KVM_ARCH_WANT_MMU_NOTIFIER
->  struct kvm_gfn_range {
->  	struct kvm_memory_slot *slot;
-> +	void *args;
 
-There's no reason to make this "void *", just declare "struct test_clear_young_args"
-in the header.  Arch code won't be able to use it regardless.  And I vote for
-something more like "test_clear_young_metadata", as there's far more information
-in there than just function arguments.
+On Thu, 15 Jun 2023 18:50:39 +0200, Stephan Gerhold wrote:
+> On Qualcomm platforms, most subsystems (e.g. audio/modem DSP) are
+> described as remote processors in the device tree, with a dedicated
+> node where properties and services related to them can be described.
+> 
+> The Resource Power Manager (RPM) is also such a subsystem, with a
+> remote processor that is running a special firmware. Unfortunately,
+> the RPM never got a dedicated node representing it properly in the
+> device tree. Most of the RPM services are described below a top-level
+> /smd or /rpm-glink node.
+> 
+> However, SMD/GLINK is just one of the communication channels to the RPM
+> firmware. For example, the MPM interrupt functionality provided by the
+> RPM does not use SMD/GLINK but writes directly to a special memory
+> region allocated by the RPM firmware in combination with a mailbox.
+> Currently there is no good place in the device tree to describe this
+> functionality. It doesn't belong below SMD/GLINK but it's not an
+> independent top-level device either.
+> 
+> Introduce a new "qcom,rpm-proc" compatible that allows describing the
+> RPM as a remote processor/subsystem like all others. The SMD/GLINK node
+> is moved to a "smd-edge"/"glink-edge" subnode consistent with other
+> existing bindings. Additional subnodes (e.g. interrupt-controller for
+> MPM, rpm-master-stats) can be also added there.
+> 
+> Deprecate using the old top-level /smd node since all SMD edges
+> are now specified as subnodes of the remote processor.
+> 
+> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+> ---
+> This patch is based on qcom/for-next, since it needs the new
+> qcom,rpm-master-stats.yaml schema that is only applied there.
+> ---
+>  .../bindings/remoteproc/qcom,rpm-proc.yaml         | 171 +++++++++++++++++++++
+>  .../devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml |   6 +-
+>  .../devicetree/bindings/soc/qcom/qcom,smd.yaml     |   7 +
+>  3 files changed, 181 insertions(+), 3 deletions(-)
+> 
 
-And to stave off the argument that "void *" would allow reuse, take this opportunity
-to unionize the test_clear_young field with the change_pte field, e.g.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-	/* comment about these fields being callback specific. */
-	union {
-		struct test_clear_young_metadata *metadata;
-		pte_t pte;
-		unsigned long callback_arg; /* needs a better name */
-	};
+yamllint warnings/errors:
 
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 51e4882d0873..31ee58754b19 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -541,6 +541,7 @@ typedef void (*on_lock_fn_t)(struct kvm *kvm, unsigned long start,
->  typedef void (*on_unlock_fn_t)(struct kvm *kvm);
->  
->  struct kvm_hva_range {
-> +	void *args;
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/remoteproc/qcom,rpm-proc.yaml: Error in referenced schema matching $id: http://devicetree.org/schemas/soc/qcom/qcom,rpm-master-stats.yaml
 
-Same feedback as kvm_gfn_range.
+doc reference errors (make refcheckdocs):
 
->  	unsigned long start;
->  	unsigned long end;
->  	pte_t pte;
-> @@ -549,6 +550,7 @@ struct kvm_hva_range {
->  	on_unlock_fn_t on_unlock;
->  	bool flush_on_ret;
->  	bool may_block;
-> +	bool lockless;
->  };
->  
->  /*
-> @@ -602,6 +604,8 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
->  			hva_end = min(range->end, slot->userspace_addr +
->  						  (slot->npages << PAGE_SHIFT));
->  
-> +			gfn_range.args = range->args;
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230531-rpm-rproc-v3-6-a07dcdefd918@gerhold.net
 
-And this goes away because the generic callback_arg is what gets propagated.
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
-> +
->  			/*
->  			 * To optimize for the likely case where the address
->  			 * range is covered by zero or one memslots, don't
-> @@ -619,7 +623,7 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
->  			gfn_range.end = hva_to_gfn_memslot(hva_end + PAGE_SIZE - 1, slot);
->  			gfn_range.slot = slot;
->  
-> -			if (!locked) {
-> +			if (!range->lockless && !locked) {
->  				locked = true;
->  				KVM_MMU_LOCK(kvm);
->  				if (!IS_KVM_NULL_FN(range->on_lock))
-> @@ -628,6 +632,9 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
->  					break;
->  			}
->  			ret |= range->handler(kvm, &gfn_range);
-> +
-> +			if (range->lockless && ret)
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-I don't like overloading "lockless" to also mean "stop on ret".  Just add another
-flag, there's literally no cost for most callbacks as everything is constant at
-compile time and gets optimized away.
+pip3 install dtschema --upgrade
 
-> +		range.args = &args;
-> +		range.lockless = true;
-
-The lockless and stop_on_ret behavior needs comments.
-
-> +		range.handler = kvm_arch_test_clear_young;
-> +
-> +		if (!__kvm_handle_hva_range(kvm, &range))
-> +			return args.young ? MMU_NOTIFIER_RANGE_LOCKLESS : 0;
-> +	}
-> +
-> +	if (bitmap)
-> +		return 0;
-> +
-> +	range.args = NULL;
-> +	range.lockless = false;
-
-No need to manually clear these, they'll be zeroed by the initialization code.
-
-E.g. all in all, something like so
-
----
- include/linux/kvm_host.h |  9 +++++++--
- virt/kvm/kvm_main.c      | 29 +++++++++++++++++------------
- 2 files changed, 24 insertions(+), 14 deletions(-)
-
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 7a0922cbc36f..e04605061f5e 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -256,12 +256,17 @@ int kvm_async_pf_wakeup_all(struct kvm_vcpu *vcpu);
- #endif
- 
- #ifdef KVM_ARCH_WANT_MMU_NOTIFIER
-+struct test_clear_young_metadata;
-+
- struct kvm_gfn_range {
- 	struct kvm_memory_slot *slot;
--	void *args;
- 	gfn_t start;
- 	gfn_t end;
--	pte_t pte;
-+	union {
-+		struct test_clear_young_metadata *metadata;
-+		pte_t pte;
-+		unsigned long callback_arg;
-+	};
- 	bool may_block;
- };
- 
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index ac83cfb30771..8cf4fee9cd8b 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -536,16 +536,20 @@ typedef void (*on_lock_fn_t)(struct kvm *kvm, unsigned long start,
- typedef void (*on_unlock_fn_t)(struct kvm *kvm);
- 
- struct kvm_hva_range {
--	void *args;
- 	unsigned long start;
- 	unsigned long end;
--	pte_t pte;
- 	hva_handler_t handler;
-+	union {
-+		struct test_clear_young_metadata *metadata;
-+		pte_t pte;
-+		unsigned long callback_arg;
-+	};
- 	on_lock_fn_t on_lock;
- 	on_unlock_fn_t on_unlock;
- 	bool flush_on_ret;
- 	bool may_block;
- 	bool lockless;
-+	bool stop_on_ret;
- };
- 
- /*
-@@ -576,6 +580,9 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
- 	struct kvm_memslots *slots;
- 	int i, idx;
- 
-+	BUILD_BUG_ON(sizeof(gfn_range.callback_arg) != sizeof(gfn_range.pte) ||
-+		     sizeof(gfn_range.callback_arg) != sizeof(gfn_range.metadata));
-+
- 	if (WARN_ON_ONCE(range->end <= range->start))
- 		return 0;
- 
-@@ -599,16 +606,14 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
- 			hva_end = min(range->end, slot->userspace_addr +
- 						  (slot->npages << PAGE_SHIFT));
- 
--			gfn_range.args = range->args;
--
- 			/*
- 			 * To optimize for the likely case where the address
- 			 * range is covered by zero or one memslots, don't
- 			 * bother making these conditional (to avoid writes on
- 			 * the second or later invocation of the handler).
- 			 */
--			gfn_range.pte = range->pte;
- 			gfn_range.may_block = range->may_block;
-+			gfn_range.callback_arg = range->callback_arg;
- 
- 			/*
- 			 * {gfn(page) | page intersects with [hva_start, hva_end)} =
-@@ -628,7 +633,8 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
- 			}
- 			ret |= range->handler(kvm, &gfn_range);
- 
--			if (range->lockless && ret)
-+			/* comment goes here. */
-+			if (range->stop_on_ret && ret)
- 				break;
- 		}
- 	}
-@@ -830,7 +836,7 @@ static int kvm_mmu_notifier_clear_flush_young(struct mmu_notifier *mn,
- 	return kvm_handle_hva_range(mn, start, end, __pte(0), kvm_age_gfn);
- }
- 
--struct test_clear_young_args {
-+struct test_clear_young_metadata {
- 	unsigned long *bitmap;
- 	unsigned long end;
- 	bool clear;
-@@ -839,7 +845,7 @@ struct test_clear_young_args {
- 
- bool kvm_should_clear_young(struct kvm_gfn_range *range, gfn_t gfn)
- {
--	struct test_clear_young_args *args = range->args;
-+	struct test_clear_young_metadata *args = range->metadata;
- 
- 	VM_WARN_ON_ONCE(gfn < range->start || gfn >= range->end);
- 
-@@ -880,14 +886,15 @@ static int kvm_mmu_notifier_test_clear_young(struct mmu_notifier *mn, struct mm_
- 	trace_kvm_age_hva(start, end);
- 
- 	if (kvm_test_clear_young) {
--		struct test_clear_young_args args = {
-+		struct test_clear_young_metadata args = {
- 			.bitmap	= bitmap,
- 			.end	= end,
- 			.clear	= clear,
- 		};
- 
--		range.args = &args;
- 		range.lockless = true;
-+		range.stop_on_ret = true;
-+		range.metadata = &args;
- 		range.handler = kvm_test_clear_young;
- 
- 		if (!__kvm_handle_hva_range(kvm, &range))
-@@ -897,8 +904,6 @@ static int kvm_mmu_notifier_test_clear_young(struct mmu_notifier *mn, struct mm_
- 	if (bitmap)
- 		return 0;
- 
--	range.args = NULL;
--	range.lockless = false;
- 	range.handler = clear ? kvm_age_gfn : kvm_test_age_gfn;
- 
- 	return __kvm_handle_hva_range(kvm, &range) ? MMU_NOTIFIER_RANGE_YOUNG : 0;
-
-base-commit: 7a5d8be2c18415b73b9380741095f439d6983a40
--- 
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
