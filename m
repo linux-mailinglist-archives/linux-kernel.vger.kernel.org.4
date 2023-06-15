@@ -2,109 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A317313AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:23:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 403577313AF
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:26:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239981AbjFOJXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 05:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56576 "EHLO
+        id S239902AbjFOJ0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 05:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238918AbjFOJXi (ORCPT
+        with ESMTP id S230304AbjFOJ0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 05:23:38 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6ED42130;
-        Thu, 15 Jun 2023 02:23:36 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id af79cd13be357-75d46c7cd6cso268304885a.3;
-        Thu, 15 Jun 2023 02:23:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686821016; x=1689413016;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oGOHFXjoBS2ub7744MFzAfGB3y1RlKfr94cgOk8utvg=;
-        b=bQPiUW2V/29fzHAWymvAuQKmj6vXfz5zArXjocuKNgdfoFxWwTMHtWWS1g/dPGmOk9
-         gdnCT1uCVb+1TPiOdR0qq9Xp55gm3Kw4HgkiENLdyJ7Em6K1KJ56gxXpvgsUQyLNq9hH
-         iRHuY2mIidQd/qDJsBLM0FfcS3GxlHfjBgvZa/zwYlokG3p8IZ9nGTQi/FWiMwiarjy3
-         rjXZVu71fjJjFrKCb9n7BsQc+43Pj4ZMEH0O1Kb23mLVDUQz36LbEcCldXeIWmrYPNp4
-         rNR5x2LPD5WKSr8vCsvMUGSl3NUds51A18JWFiHz6B0U1hBuYdtMcdL11Jg3SHP+d5SN
-         hUCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686821016; x=1689413016;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oGOHFXjoBS2ub7744MFzAfGB3y1RlKfr94cgOk8utvg=;
-        b=DfiI4ibTkC5j4MBf2+6Okb1E26d4j+sQcxQ16PZgg4i+9ZjDiRXu2gARnqpWl7gf7R
-         yl8rzMBcmoO9ZdoSgmGSCpM7EOSAY6ByAJ9ZukZQ+oV4NoyyPICynTsNWJLzMhLbrO3Z
-         FkRZgMVkU883nwe6LEoJAQFkBKOmV4jmV1n5GySs1YeTGF542euLkioNrmja6pYDy2ZD
-         YkxSJEdsW9MIxe8c6aob1+gigew9PVPiiVswg7uxj+0sDC7Y2xCCaGn4oZMHfuuM9X0n
-         SAtuqLcXfnKFKtb3xPNZsILyFjC8P3x4L+RIin4hClOSUvgFAjOPbbZjdBXQeXuBXfdv
-         0scQ==
-X-Gm-Message-State: AC+VfDxcpZ18cP534HkisP1HbHft0KUMQnq+eHOv0SERNRqdab+fQm3V
-        7AbZo0aIgruDjUF51mNszbt/KBnUEdNcTVmimyc=
-X-Google-Smtp-Source: ACHHUZ5Xi1q7Qr8BpQtJ7QY25OlQp8ICSTCgK7JFeKCy6nELV0YWKp8eHxludT1KOtcxg84RnehJIFUxL8ijvgsUqx8=
-X-Received: by 2002:a05:622a:589:b0:3f9:d70f:ff6b with SMTP id
- c9-20020a05622a058900b003f9d70fff6bmr5547763qtb.56.1686821015825; Thu, 15 Jun
- 2023 02:23:35 -0700 (PDT)
+        Thu, 15 Jun 2023 05:26:22 -0400
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F024199D;
+        Thu, 15 Jun 2023 02:26:20 -0700 (PDT)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 0A0529F4;
+        Thu, 15 Jun 2023 11:26:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1686821178;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lFRE5LEM2FA/2a9hAASkoMN/GS/KTyiR0u3T0AoV1ZU=;
+        b=tWKV2EgVXHhD1VksOblafmCiw/KlJDL6TfuepwQIIX74nPKlJQvevTPRp2N8l7DZldc6ve
+        lQy9o/8jPlhAzUebuST6PFf+gj2ISMTI2+L4TNU/hQ3qUfZpk4p9hQ2tcENbznNtCTjZoQ
+        m5GfuMCl8jKh4DxyKeYoByNDTW4vz1+y9AAmew5I/iPUGkPJoVM4UgundY9HioSR9IVm6I
+        Yy6WjM4pkQdYzMNOWXNX2RGjsaNGXl37vFGyiKWq42idWBEBXR5tQL+uc2AEutV7oMx9Ij
+        nN7Gv4Wbgd7JNTzGLR6aUSxAEUo6FNjzVuLkNlE5megztEXKKrD/oY5W+nQLDg==
 MIME-Version: 1.0
-References: <20230614180837.630180-1-ojeda@kernel.org> <20230614180837.630180-6-ojeda@kernel.org>
- <49dad8fe-c509-6c43-559e-13a82563d3d0@gmail.com>
-In-Reply-To: <49dad8fe-c509-6c43-559e-13a82563d3d0@gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Thu, 15 Jun 2023 11:23:24 +0200
-Message-ID: <CANiq72mq4wYJ77qDKYWTO=FkA1AYat2rJd63Gps9aUrP82c9dQ@mail.gmail.com>
-Subject: Re: [PATCH 5/6] rust: support running Rust documentation tests as
- KUnit ones
-To:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>, David Gow <davidgow@google.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Alice Ryhl <aliceryhl@google.com>,
-        Andreas Hindborg <nmi@metaspace.dk>,
-        Philip Li <philip.li@intel.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Date:   Thu, 15 Jun 2023 11:26:17 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Jiawen Wu <jiawenwu@trustnetic.com>, linus.walleij@linaro.org,
+        brgl@bgdev.pl, shreeya.patel@collabora.com,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] gpiolib: Fix GPIO chip IRQ initialization restriction
+In-Reply-To: <CAHp75Vdbq3uHOyrfT-KFYRSj6v+s9GgOQjQ9a8mGn-4HSCpB9Q@mail.gmail.com>
+References: <20230607081803.778223-1-jiawenwu@trustnetic.com>
+ <CAHp75Vdbq3uHOyrfT-KFYRSj6v+s9GgOQjQ9a8mGn-4HSCpB9Q@mail.gmail.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <15e2fc098a1e63317368f4812290ca35@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 5:52=E2=80=AFAM Martin Rodriguez Reboredo
-<yakoyoku@gmail.com> wrote:
->
-> I can't remember that if this panic it will mention the path on it.
-> Though if it does, then use something more explicit than
-> `.unwrap()`.
+Am 2023-06-07 16:12, schrieb Andy Shevchenko:
+> +Cc: Michael
+> 
+> On Wed, Jun 7, 2023 at 11:20 AM Jiawen Wu <jiawenwu@trustnetic.com> 
+> wrote:
+>> 
+>> In case of gpio-regmap, IRQ chip is added by regmap-irq and associated 
+>> with
+>> GPIO chip by gpiochip_irqchip_add_domain(). The initialization flag 
+>> was not
+>> added in gpiochip_irqchip_add_domain(), causing gpiochip_to_irq() to 
+>> return
+>> -EPROBE_DEFER.
+> 
+> Makes sense to me.
+> FWIW,
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> 
+> But it would be nice to hear from Michael about this.
 
-It doesn't print it, and I am happy to make things more explicit, but
-in which case(s) do you see it failing?
+Thanks for bringing this to my attention. In fact, currently
+my sl28cpld is broken due to this. So:
 
-> Please do not use unwrap here, one can easily create a path that
-> it's not compliant under `rust/test/doctests/kernel` and get no
-> clue about where this script has failed. Use `.expect()` or
-> something else instead.
+Reviewed-by: Michael Walle <michael@walle.cc>
+Tested-by: Michael Walle <michael@walle.cc> # on kontron-sl28
 
-The folder is removed every time, so that should not happen I think.
-Yes, you can still hack things and call the script manually, but I
-wouldn't call that "easily".
+>> Fixes: 5467801f1fcb ("gpio: Restrict usage of GPIO chip irq members 
+>> before initialization")
+>> Signed-off-by: Jiawen Wu <jiawenwu@trustnetic.com>
 
-Nevertheless, I am happy to change it if we think there is a risk,
-e.g. `rustdoc` changing the pattern (though we pin the version so
-far).
-
-Thanks for taking a look Martin!
-
-Cheers,
-Miguel
+-michael
