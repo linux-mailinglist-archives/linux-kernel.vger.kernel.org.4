@@ -2,95 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4832673156B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 12:33:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D636731574
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 12:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245356AbjFOKdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 06:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43306 "EHLO
+        id S245251AbjFOKeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 06:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245065AbjFOKdF (ORCPT
+        with ESMTP id S240331AbjFOKeO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 06:33:05 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E07272E
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 03:33:02 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f736e0c9a8so14653225e9.2
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 03:33:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686825181; x=1689417181;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=m1HsVsrfhvETgBAemCLuPxBtPh8WFHYrP12bN6GFyYY=;
-        b=uMaNCLV11UTwxykENLei2iLrFhvTG8P03O8DJr5lwf8mgNUZQxml1spGRQdw/rjJdi
-         vDvDYpdwi+NF8na7ZYC3bqbYBa/U57zA36ok+Sin792TG9mBlvYFLiscpBq4LN8v4tw6
-         JBisVOC3J0GK3GJOmY+AIFlIr9VRAMR/bCooKP9bX7HyLhBzAsevIU3DRqh5FMWnm1Ua
-         KQ0VHuwlGq6h4aV6I5a326Mflh6A69Rk8daxbDveItUtCJS73fgSU0faXxvBn8gfShWv
-         C4VOdWTTP46nfRzWxYgiiUiuIPGlBDsmHhTX7oouTAv29gc9TFdtnuCmLik99H5eDGqs
-         7dGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686825181; x=1689417181;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=m1HsVsrfhvETgBAemCLuPxBtPh8WFHYrP12bN6GFyYY=;
-        b=TpJpZ1vXqUyD7R632TqDQip51flezPmkVbesJUCPMi2AFhVJ8QQTneHBKRcPt4HF8d
-         sxg+6XLd6YIWHKlDrX9XDLYcTn4VmkIFAL2GLxo1NNwviJQG5ZDZFajPEOqd8614wCDU
-         MWYiJSw4DWPiVPvoc+ZvnaABTG/IzGTaWsz3zlw3R1j2wknWU4GZx3Cinz7soJ7Zxf+T
-         aV9ZBdHkxgZtbzcTG/sDZGuSCtdAup46flhkWEZ6xcHj12jqSaWI8jgVo/Df1qCpSOrl
-         XnekQvvrKPDfMkUHaqgWJ8O5d9zd76xBzmL32kyBSfcyH5DbysnhOjFTYnShKoQIDQe2
-         75dA==
-X-Gm-Message-State: AC+VfDxs5K0AVcmOTvnMUoNykK2x3X+MCelvuP3UAXOSV9yWKny1Bh3e
-        Cxd+n8YoEFwvnqeH0sHPV5qCKg==
-X-Google-Smtp-Source: ACHHUZ70BObKAY22u1Fm4yaR0KyM4UzETrTl/M6QqK47BQrTdSWFzs536GwqnDbmm+6UXeAx93scJA==
-X-Received: by 2002:a1c:f70a:0:b0:3f5:1728:bde9 with SMTP id v10-20020a1cf70a000000b003f51728bde9mr11621935wmh.2.1686825180711;
-        Thu, 15 Jun 2023 03:33:00 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id q25-20020a7bce99000000b003f17848673fsm20072088wmj.27.2023.06.15.03.32.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 03:33:00 -0700 (PDT)
-From:   neil.armstrong@linaro.org
-Date:   Thu, 15 Jun 2023 12:32:55 +0200
-Subject: [PATCH v4 2/2] usb: typec: add support for the nb7vpq904m Type-C
- Linear Redriver
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230601-topic-sm8x50-upstream-redriver-v4-2-91d5820f3a03@linaro.org>
-References: <20230601-topic-sm8x50-upstream-redriver-v4-0-91d5820f3a03@linaro.org>
-In-Reply-To: <20230601-topic-sm8x50-upstream-redriver-v4-0-91d5820f3a03@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Thu, 15 Jun 2023 06:34:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D092D43;
+        Thu, 15 Jun 2023 03:33:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BB7F63010;
+        Thu, 15 Jun 2023 10:33:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C84FCC433C0;
+        Thu, 15 Jun 2023 10:33:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686825216;
+        bh=exmqd+FoMtiPk/hpswhFV1BEaiR+KDAxWqiDcyCjB/M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ubw0A8zH1OLn/Im7qAYHnS5RmaHSaOB2MqHNXmrd/fZPLYbBn3x1ZztIdf3zpfAEj
+         mPdNSJ84Ed5vKKT37F19XqB6B+6CZhZBcEdK5FYe86AAfS0N2sHAQlqD4qCAGFjpFM
+         TQWpB7oiuFW51/eMRp5Zsd/2iUzXayq7a4d22Z6U=
+Date:   Thu, 15 Jun 2023 12:33:33 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=16659;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=hr5eCT9CJLtsQRZLTzA99fzaKFuLxziSE8cMNrtnvik=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkiujZvv9oTg7igQl/2yN84pFrqgw04CTj4Rx6M8qB
- soDBmJ+JAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZIro2QAKCRB33NvayMhJ0bBHEA
- Cd/AXVTJMUPx/3P3XmoOMK0Qs12R0tA7kRwa7oAKeAsXmJU2gIPnb40qEfnwMZyUVOcM/jRyVj5VlN
- DGy7TpITijY0Voo+TAx9DLfd5t0L7ca4FovqRRyX71VLKhAGT2/eQvMb6eUIkvftSUljslevlpKn8M
- R3ouDTcMzgbpl3TP+ot+Nom4HBHwi4O/GsZglZWnJGxiOUyXaXNvETtZqUqfd3+BTGyTs0f1Up3kWy
- hxiw1+qfAxij5EH6OtylSXE9E6lpIY1ECFWXB0esPdZia0HckWtLjqzY5E54GYbv3FgcN1JGspBi1x
- gDZkAt21PqpqAZwkaacwZUCNl5+/7+7XhWHyBSQ8N7D5kBA4Iqqt/+hqXhnjZHi8xulpPiKUzAfdU3
- HRxH7QLWyaNRxbbdU2ik0Eq6+l6fj6oo81DLzUk6QhiAEHbjvcTfFPrSAiYWOUkAFysheUhHW1A2dK
- Dsft4CRT4AdnXcXmMTmNbd1beKLpjbenIY3DvMu2c9FDaCIqj8RtHjANYevZ3ocGH9s7uVfCDFyBNj
- zd34GN9dQTMj22mFY7H3pq9YL1b+CjeF5jUAFh9IFiEl3SgAZs8/dy2Cpp2jzeqlx9Ys3xbjRTYg+Y
- oZqh+ymopMoRh5SoNGYkRpJbfNsFf5DSDWknpsyuJJanBgH8AGcXSIKY3R9w==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Rob Herring <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>
+Subject: Re: [PATCH V23 2/3] misc: dcc: Add driver support for Data Capture
+ and Compare unit(DCC)
+Message-ID: <2023061542-reformed-unholy-10a3@gregkh>
+References: <cover.1683265984.git.quic_schowdhu@quicinc.com>
+ <2259ab0348282349e88905ea99bcb4aa815d941f.1683265984.git.quic_schowdhu@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2259ab0348282349e88905ea99bcb4aa815d941f.1683265984.git.quic_schowdhu@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -99,590 +62,1279 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+On Thu, May 04, 2023 at 11:36:22PM -0700, Souradeep Chowdhury wrote:
+> +/**
+> + * struct dcc_config_entry - configuration information related to each dcc instruction
+> + * @base:                    Base address of the register to be configured in dcc
 
-Add support for the ON Semiconductor NB7VPQ904M Type-C USB SuperSpeed
-and DisplayPort ALT Mode Linear Redriver chip found on some devices
-with a Type-C port.
+Why is this a u32 and not a bigger size?
 
-The redriver compensates ultra High-Speeed DisplayPort and USB
-Super Speed signal integrity losses mainly due to PCB & transmission
-cables.
+> + * @offset:                  Offset to the base address to be configured in dcc
+> + * @len:                     Length of the address in words to be configured in dcc
 
-The redriver doesn't support SuperSpeed lines swapping, but
-can support Type-C SBU lines swapping.
+What is a "word" here, 16 bits?
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- drivers/usb/typec/mux/Kconfig      |   8 +
- drivers/usb/typec/mux/Makefile     |   1 +
- drivers/usb/typec/mux/nb7vpq904m.c | 529 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 538 insertions(+)
+> + * @loop_cnt:                The number of times to loop on the register address in case
+> +				of loop instructions
+> + * @write_val:               The value to be written on the register address in case of
+> +				write instructions
+> + * @mask:                    Mask corresponding to the value to be written in case of
+> +				write instructions
+> + * @apb_bus:                 Type of bus to be used for the instruction, can be either
+> +				'apb' or 'ahb'
 
-diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
-index c46fa4f9d3df..8c4d6b8fb75c 100644
---- a/drivers/usb/typec/mux/Kconfig
-+++ b/drivers/usb/typec/mux/Kconfig
-@@ -35,4 +35,12 @@ config TYPEC_MUX_INTEL_PMC
- 	  control the USB role switch and also the multiplexer/demultiplexer
- 	  switches used with USB Type-C Alternate Modes.
- 
-+config TYPEC_MUX_NB7VPQ904M
-+	tristate "On Semiconductor NB7VPQ904M Type-C redriver driver"
-+	depends on I2C
-+	select REGMAP_I2C
-+	help
-+	  Say Y or M if your system has a On Semiconductor NB7VPQ904M Type-C
-+	  redriver chip found on some devices with a Type-C port.
-+
- endmenu
-diff --git a/drivers/usb/typec/mux/Makefile b/drivers/usb/typec/mux/Makefile
-index dda67e19b58b..76196096ef41 100644
---- a/drivers/usb/typec/mux/Makefile
-+++ b/drivers/usb/typec/mux/Makefile
-@@ -4,3 +4,4 @@ obj-$(CONFIG_TYPEC_MUX_FSA4480)		+= fsa4480.o
- obj-$(CONFIG_TYPEC_MUX_GPIO_SBU)	+= gpio-sbu-mux.o
- obj-$(CONFIG_TYPEC_MUX_PI3USB30532)	+= pi3usb30532.o
- obj-$(CONFIG_TYPEC_MUX_INTEL_PMC)	+= intel_pmc_mux.o
-+obj-$(CONFIG_TYPEC_MUX_NB7VPQ904M)	+= nb7vpq904m.o
-diff --git a/drivers/usb/typec/mux/nb7vpq904m.c b/drivers/usb/typec/mux/nb7vpq904m.c
-new file mode 100644
-index 000000000000..80e580d50129
---- /dev/null
-+++ b/drivers/usb/typec/mux/nb7vpq904m.c
-@@ -0,0 +1,529 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * OnSemi NB7VPQ904M Type-C driver
-+ *
-+ * Copyright (C) 2023 Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-+ */
-+#include <linux/i2c.h>
-+#include <linux/mutex.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/regmap.h>
-+#include <linux/bitfield.h>
-+#include <linux/of_graph.h>
-+#include <drm/drm_bridge.h>
-+#include <linux/usb/typec_dp.h>
-+#include <linux/usb/typec_mux.h>
-+#include <linux/usb/typec_retimer.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/regulator/consumer.h>
-+
-+#define NB7_CHNA		0
-+#define NB7_CHNB		1
-+#define NB7_CHNC		2
-+#define NB7_CHND		3
-+#define NB7_IS_CHAN_AD(channel) (channel == NB7_CHNA || channel == NB7_CHND)
-+
-+#define GEN_DEV_SET_REG			0x00
-+
-+#define GEN_DEV_SET_CHIP_EN		BIT(0)
-+#define GEN_DEV_SET_CHNA_EN		BIT(4)
-+#define GEN_DEV_SET_CHNB_EN		BIT(5)
-+#define GEN_DEV_SET_CHNC_EN		BIT(6)
-+#define GEN_DEV_SET_CHND_EN		BIT(7)
-+
-+#define GEN_DEV_SET_OP_MODE_MASK	GENMASK(3, 1)
-+
-+#define GEN_DEV_SET_OP_MODE_DP_CC2	0
-+#define GEN_DEV_SET_OP_MODE_DP_CC1	1
-+#define GEN_DEV_SET_OP_MODE_DP_4LANE	2
-+#define GEN_DEV_SET_OP_MODE_USB		5
-+
-+#define EQ_SETTING_REG_BASE		0x01
-+#define EQ_SETTING_REG(n)		(EQ_SETTING_REG_BASE + (n) * 2)
-+#define EQ_SETTING_MASK			GENMASK(3, 1)
-+
-+#define OUTPUT_COMPRESSION_AND_POL_REG_BASE	0x02
-+#define OUTPUT_COMPRESSION_AND_POL_REG(n)	(OUTPUT_COMPRESSION_AND_POL_REG_BASE + (n) * 2)
-+#define OUTPUT_COMPRESSION_MASK		GENMASK(2, 1)
-+
-+#define FLAT_GAIN_REG_BASE		0x18
-+#define FLAT_GAIN_REG(n)		(FLAT_GAIN_REG_BASE + (n) * 2)
-+#define FLAT_GAIN_MASK			GENMASK(1, 0)
-+
-+#define LOSS_MATCH_REG_BASE		0x19
-+#define LOSS_MATCH_REG(n)		(LOSS_MATCH_REG_BASE + (n) * 2)
-+#define LOSS_MATCH_MASK			GENMASK(1, 0)
-+
-+#define AUX_CC_REG			0x09
-+
-+#define CHIP_VERSION_REG		0x17
-+
-+struct nb7vpq904m {
-+	struct i2c_client *client;
-+	struct gpio_desc *enable_gpio;
-+	struct regulator *vcc_supply;
-+	struct regmap *regmap;
-+	struct typec_switch_dev *sw;
-+	struct typec_retimer *retimer;
-+
-+	bool swap_data_lanes;
-+	struct typec_switch *typec_switch;
-+
-+	struct drm_bridge bridge;
-+
-+	struct mutex lock; /* protect non-concurrent retimer & switch */
-+
-+	enum typec_orientation orientation;
-+	unsigned long mode;
-+	unsigned int svid;
-+};
-+
-+static void nb7vpq904m_set_channel(struct nb7vpq904m *nb7, unsigned int channel, bool dp)
-+{
-+	u8 eq, out_comp, flat_gain, loss_match;
-+
-+	if (dp) {
-+		eq = NB7_IS_CHAN_AD(channel) ? 0x6 : 0x4;
-+		out_comp = 0x3;
-+		flat_gain = NB7_IS_CHAN_AD(channel) ? 0x2 : 0x1;
-+		loss_match = 0x3;
-+	} else {
-+		eq = 0x4;
-+		out_comp = 0x3;
-+		flat_gain = NB7_IS_CHAN_AD(channel) ? 0x3 : 0x1;
-+		loss_match = NB7_IS_CHAN_AD(channel) ? 0x1 : 0x3;
-+	}
-+
-+	regmap_update_bits(nb7->regmap, EQ_SETTING_REG(channel),
-+			   EQ_SETTING_MASK, FIELD_PREP(EQ_SETTING_MASK, eq));
-+	regmap_update_bits(nb7->regmap, OUTPUT_COMPRESSION_AND_POL_REG(channel),
-+			   OUTPUT_COMPRESSION_MASK, FIELD_PREP(OUTPUT_COMPRESSION_MASK, out_comp));
-+	regmap_update_bits(nb7->regmap, FLAT_GAIN_REG(channel),
-+			   FLAT_GAIN_MASK, FIELD_PREP(FLAT_GAIN_MASK, flat_gain));
-+	regmap_update_bits(nb7->regmap, LOSS_MATCH_REG(channel),
-+			   LOSS_MATCH_MASK, FIELD_PREP(LOSS_MATCH_MASK, loss_match));
-+}
-+
-+static int nb7vpq904m_set(struct nb7vpq904m *nb7)
-+{
-+	bool reverse = (nb7->orientation == TYPEC_ORIENTATION_REVERSE);
-+
-+	switch (nb7->mode) {
-+	case TYPEC_STATE_SAFE:
-+		regmap_write(nb7->regmap, GEN_DEV_SET_REG,
-+			     GEN_DEV_SET_CHIP_EN |
-+			     GEN_DEV_SET_CHNA_EN |
-+			     GEN_DEV_SET_CHNB_EN |
-+			     GEN_DEV_SET_CHNC_EN |
-+			     GEN_DEV_SET_CHND_EN |
-+			     FIELD_PREP(GEN_DEV_SET_OP_MODE_MASK,
-+					GEN_DEV_SET_OP_MODE_USB));
-+		nb7vpq904m_set_channel(nb7, NB7_CHNA, false);
-+		nb7vpq904m_set_channel(nb7, NB7_CHNB, false);
-+		nb7vpq904m_set_channel(nb7, NB7_CHNC, false);
-+		nb7vpq904m_set_channel(nb7, NB7_CHND, false);
-+		regmap_write(nb7->regmap, AUX_CC_REG, 0x2);
-+
-+		return 0;
-+
-+	case TYPEC_STATE_USB:
-+		/*
-+		 * Normal Orientation (CC1)
-+		 * A -> USB RX
-+		 * B -> USB TX
-+		 * C -> X
-+		 * D -> X
-+		 * Flipped Orientation (CC2)
-+		 * A -> X
-+		 * B -> X
-+		 * C -> USB TX
-+		 * D -> USB RX
-+		 *
-+		 * Reversed if data lanes are swapped
-+		 */
-+		if (reverse ^ nb7->swap_data_lanes) {
-+			regmap_write(nb7->regmap, GEN_DEV_SET_REG,
-+				     GEN_DEV_SET_CHIP_EN |
-+				     GEN_DEV_SET_CHNA_EN |
-+				     GEN_DEV_SET_CHNB_EN |
-+				     FIELD_PREP(GEN_DEV_SET_OP_MODE_MASK,
-+						GEN_DEV_SET_OP_MODE_USB));
-+			nb7vpq904m_set_channel(nb7, NB7_CHNA, false);
-+			nb7vpq904m_set_channel(nb7, NB7_CHNB, false);
-+		} else {
-+			regmap_write(nb7->regmap, GEN_DEV_SET_REG,
-+				     GEN_DEV_SET_CHIP_EN |
-+				     GEN_DEV_SET_CHNC_EN |
-+				     GEN_DEV_SET_CHND_EN |
-+				     FIELD_PREP(GEN_DEV_SET_OP_MODE_MASK,
-+						GEN_DEV_SET_OP_MODE_USB));
-+			nb7vpq904m_set_channel(nb7, NB7_CHNC, false);
-+			nb7vpq904m_set_channel(nb7, NB7_CHND, false);
-+		}
-+		regmap_write(nb7->regmap, AUX_CC_REG, 0x2);
-+
-+		return 0;
-+
-+	default:
-+		if (nb7->svid != USB_TYPEC_DP_SID)
-+			return -EINVAL;
-+
-+		break;
-+	}
-+
-+	/* DP Altmode Setup */
-+
-+	regmap_write(nb7->regmap, AUX_CC_REG, reverse ? 0x1 : 0x0);
-+
-+	switch (nb7->mode) {
-+	case TYPEC_DP_STATE_C:
-+	case TYPEC_DP_STATE_E:
-+		/*
-+		 * Normal Orientation (CC1)
-+		 * A -> DP3
-+		 * B -> DP2
-+		 * C -> DP1
-+		 * D -> DP0
-+		 * Flipped Orientation (CC2)
-+		 * A -> DP0
-+		 * B -> DP1
-+		 * C -> DP2
-+		 * D -> DP3
-+		 */
-+		regmap_write(nb7->regmap, GEN_DEV_SET_REG,
-+			     GEN_DEV_SET_CHIP_EN |
-+			     GEN_DEV_SET_CHNA_EN |
-+			     GEN_DEV_SET_CHNB_EN |
-+			     GEN_DEV_SET_CHNC_EN |
-+			     GEN_DEV_SET_CHND_EN |
-+			     FIELD_PREP(GEN_DEV_SET_OP_MODE_MASK,
-+					GEN_DEV_SET_OP_MODE_DP_4LANE));
-+		nb7vpq904m_set_channel(nb7, NB7_CHNA, true);
-+		nb7vpq904m_set_channel(nb7, NB7_CHNB, true);
-+		nb7vpq904m_set_channel(nb7, NB7_CHNC, true);
-+		nb7vpq904m_set_channel(nb7, NB7_CHND, true);
-+		break;
-+
-+	case TYPEC_DP_STATE_D:
-+	case TYPEC_DP_STATE_F:
-+		regmap_write(nb7->regmap, GEN_DEV_SET_REG,
-+			     GEN_DEV_SET_CHIP_EN |
-+			     GEN_DEV_SET_CHNA_EN |
-+			     GEN_DEV_SET_CHNB_EN |
-+			     GEN_DEV_SET_CHNC_EN |
-+			     GEN_DEV_SET_CHND_EN |
-+			     FIELD_PREP(GEN_DEV_SET_OP_MODE_MASK,
-+					reverse ^ nb7->swap_data_lanes ?
-+						GEN_DEV_SET_OP_MODE_DP_CC2
-+						: GEN_DEV_SET_OP_MODE_DP_CC1));
-+
-+		/*
-+		 * Normal Orientation (CC1)
-+		 * A -> USB RX
-+		 * B -> USB TX
-+		 * C -> DP1
-+		 * D -> DP0
-+		 * Flipped Orientation (CC2)
-+		 * A -> DP0
-+		 * B -> DP1
-+		 * C -> USB TX
-+		 * D -> USB RX
-+		 *
-+		 * Reversed if data lanes are swapped
-+		 */
-+		if (nb7->swap_data_lanes) {
-+			nb7vpq904m_set_channel(nb7, NB7_CHNA, !reverse);
-+			nb7vpq904m_set_channel(nb7, NB7_CHNB, !reverse);
-+			nb7vpq904m_set_channel(nb7, NB7_CHNC, reverse);
-+			nb7vpq904m_set_channel(nb7, NB7_CHND, reverse);
-+		} else {
-+			nb7vpq904m_set_channel(nb7, NB7_CHNA, reverse);
-+			nb7vpq904m_set_channel(nb7, NB7_CHNB, reverse);
-+			nb7vpq904m_set_channel(nb7, NB7_CHNC, !reverse);
-+			nb7vpq904m_set_channel(nb7, NB7_CHND, !reverse);
-+		}
-+		break;
-+
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	return 0;
-+}
-+
-+static int nb7vpq904m_sw_set(struct typec_switch_dev *sw, enum typec_orientation orientation)
-+{
-+	struct nb7vpq904m *nb7 = typec_switch_get_drvdata(sw);
-+	int ret;
-+
-+	ret = typec_switch_set(nb7->typec_switch, orientation);
-+	if (ret)
-+		return ret;
-+
-+	mutex_lock(&nb7->lock);
-+
-+	if (nb7->orientation != orientation) {
-+		nb7->orientation = orientation;
-+
-+		ret = nb7vpq904m_set(nb7);
-+	}
-+
-+	mutex_unlock(&nb7->lock);
-+
-+	return ret;
-+}
-+
-+static int nb7vpq904m_retimer_set(struct typec_retimer *retimer, struct typec_retimer_state *state)
-+{
-+	struct nb7vpq904m *nb7 = typec_retimer_get_drvdata(retimer);
-+	int ret = 0;
-+
-+	mutex_lock(&nb7->lock);
-+
-+	if (nb7->mode != state->mode) {
-+		nb7->mode = state->mode;
-+
-+		if (state->alt)
-+			nb7->svid = state->alt->svid;
-+		else
-+			nb7->svid = 0; // No SVID
-+
-+		ret = nb7vpq904m_set(nb7);
-+	}
-+
-+	mutex_unlock(&nb7->lock);
-+
-+	return ret;
-+}
-+
-+#if IS_ENABLED(CONFIG_OF) && IS_ENABLED(CONFIG_DRM_PANEL_BRIDGE)
-+static int nb7vpq904m_bridge_attach(struct drm_bridge *bridge,
-+				    enum drm_bridge_attach_flags flags)
-+{
-+	struct nb7vpq904m *nb7 = container_of(bridge, struct nb7vpq904m, bridge);
-+	struct drm_bridge *next_bridge;
-+
-+	if (!(flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR))
-+		return -EINVAL;
-+
-+	next_bridge = devm_drm_of_get_bridge(&nb7->client->dev, nb7->client->dev.of_node, 0, 0);
-+	if (IS_ERR(next_bridge)) {
-+		dev_err(&nb7->client->dev, "failed to acquire drm_bridge: %pe\n", next_bridge);
-+		return PTR_ERR(next_bridge);
-+	}
-+
-+	return drm_bridge_attach(bridge->encoder, next_bridge, bridge,
-+				 DRM_BRIDGE_ATTACH_NO_CONNECTOR);
-+}
-+
-+static const struct drm_bridge_funcs nb7vpq904m_bridge_funcs = {
-+	.attach	= nb7vpq904m_bridge_attach,
-+};
-+
-+static int nb7vpq904m_register_bridge(struct nb7vpq904m *nb7)
-+{
-+	nb7->bridge.funcs = &nb7vpq904m_bridge_funcs;
-+	nb7->bridge.of_node = nb7->client->dev.of_node;
-+
-+	return devm_drm_bridge_add(&nb7->client->dev, &nb7->bridge);
-+}
-+#else
-+static int nb7vpq904m_register_bridge(struct nb7vpq904m *nb7)
-+{
-+	return 0;
-+}
-+#endif
-+
-+static const struct regmap_config nb7_regmap = {
-+	.max_register = 0x1f,
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+};
-+
-+enum {
-+	NORMAL_LANE_MAPPING,
-+	INVERT_LANE_MAPPING,
-+};
-+
-+#define DATA_LANES_COUNT	4
-+
-+static const int supported_data_lane_mapping[][DATA_LANES_COUNT] = {
-+	[NORMAL_LANE_MAPPING] = { 0, 1, 2, 3 },
-+	[INVERT_LANE_MAPPING] = { 3, 2, 1, 0 },
-+};
-+
-+static int nb7vpq904m_parse_data_lanes_mapping(struct nb7vpq904m *nb7)
-+{
-+	struct device_node *ep;
-+	u32 data_lanes[4];
-+	int ret, i, j;
-+
-+	ep = of_graph_get_endpoint_by_regs(nb7->client->dev.of_node, 1, 0);
-+
-+	if (ep) {
-+		ret = of_property_count_u32_elems(ep, "data-lanes");
-+		if (ret == -EINVAL)
-+			/* Property isn't here, consider default mapping */
-+			goto out_done;
-+		if (ret < 0)
-+			goto out_error;
-+
-+		if (ret != DATA_LANES_COUNT) {
-+			dev_err(&nb7->client->dev, "expected 4 data lanes\n");
-+			ret = -EINVAL;
-+			goto out_error;
-+		}
-+
-+		ret = of_property_read_u32_array(ep, "data-lanes", data_lanes, DATA_LANES_COUNT);
-+		if (ret)
-+			goto out_error;
-+
-+		for (i = 0; i < ARRAY_SIZE(supported_data_lane_mapping); i++) {
-+			for (j = 0; j < DATA_LANES_COUNT; j++) {
-+				if (data_lanes[j] != supported_data_lane_mapping[i][j])
-+					break;
-+			}
-+
-+			if (j == DATA_LANES_COUNT)
-+				break;
-+		}
-+
-+		switch (i) {
-+		case NORMAL_LANE_MAPPING:
-+			break;
-+		case INVERT_LANE_MAPPING:
-+			nb7->swap_data_lanes = true;
-+			dev_info(&nb7->client->dev, "using inverted data lanes mapping\n");
-+			break;
-+		default:
-+			dev_err(&nb7->client->dev, "invalid data lanes mapping\n");
-+			ret = -EINVAL;
-+			goto out_error;
-+		}
-+	}
-+
-+out_done:
-+	ret = 0;
-+
-+out_error:
-+	of_node_put(ep);
-+
-+	return ret;
-+}
-+
-+static int nb7vpq904m_probe(struct i2c_client *client)
-+{
-+	struct device *dev = &client->dev;
-+	struct typec_switch_desc sw_desc = { };
-+	struct typec_retimer_desc retimer_desc = { };
-+	struct nb7vpq904m *nb7;
-+	int ret;
-+
-+	nb7 = devm_kzalloc(dev, sizeof(*nb7), GFP_KERNEL);
-+	if (!nb7)
-+		return -ENOMEM;
-+
-+	nb7->client = client;
-+
-+	nb7->regmap = devm_regmap_init_i2c(client, &nb7_regmap);
-+	if (IS_ERR(nb7->regmap)) {
-+		dev_err(&client->dev, "Failed to allocate register map\n");
-+		return PTR_ERR(nb7->regmap);
-+	}
-+
-+	nb7->mode = TYPEC_STATE_SAFE;
-+	nb7->orientation = TYPEC_ORIENTATION_NONE;
-+
-+	mutex_init(&nb7->lock);
-+
-+	nb7->enable_gpio = devm_gpiod_get_optional(dev, "enable", GPIOD_OUT_LOW);
-+	if (IS_ERR(nb7->enable_gpio))
-+		return dev_err_probe(dev, PTR_ERR(nb7->enable_gpio),
-+				     "unable to acquire enable gpio\n");
-+
-+	nb7->vcc_supply = devm_regulator_get_optional(dev, "vcc");
-+	if (IS_ERR(nb7->vcc_supply))
-+		return PTR_ERR(nb7->vcc_supply);
-+
-+	nb7->typec_switch = fwnode_typec_switch_get(dev->fwnode);
-+	if (IS_ERR(nb7->typec_switch))
-+		return dev_err_probe(dev, PTR_ERR(nb7->typec_switch),
-+				     "failed to acquire orientation-switch\n");
-+
-+	ret = nb7vpq904m_parse_data_lanes_mapping(nb7);
-+	if (ret)
-+		return ret;
-+
-+	ret = regulator_enable(nb7->vcc_supply);
-+	if (ret)
-+		dev_warn(dev, "Failed to enable vcc: %d\n", ret);
-+
-+	gpiod_set_value(nb7->enable_gpio, 1);
-+
-+	ret = nb7vpq904m_register_bridge(nb7);
-+	if (ret)
-+		return ret;
-+
-+	sw_desc.drvdata = nb7;
-+	sw_desc.fwnode = dev->fwnode;
-+	sw_desc.set = nb7vpq904m_sw_set;
-+
-+	nb7->sw = typec_switch_register(dev, &sw_desc);
-+	if (IS_ERR(nb7->sw))
-+		return dev_err_probe(dev, PTR_ERR(nb7->sw),
-+				     "Error registering typec switch\n");
-+
-+	retimer_desc.drvdata = nb7;
-+	retimer_desc.fwnode = dev->fwnode;
-+	retimer_desc.set = nb7vpq904m_retimer_set;
-+
-+	nb7->retimer = typec_retimer_register(dev, &retimer_desc);
-+	if (IS_ERR(nb7->retimer)) {
-+		typec_switch_unregister(nb7->sw);
-+		return dev_err_probe(dev, PTR_ERR(nb7->retimer),
-+				     "Error registering typec retimer\n");
-+	}
-+
-+	return 0;
-+}
-+
-+static void nb7vpq904m_remove(struct i2c_client *client)
-+{
-+	struct nb7vpq904m *nb7 = i2c_get_clientdata(client);
-+
-+	typec_retimer_unregister(nb7->retimer);
-+	typec_switch_unregister(nb7->sw);
-+
-+	gpiod_set_value(nb7->enable_gpio, 0);
-+
-+	regulator_disable(nb7->vcc_supply);
-+}
-+
-+static const struct i2c_device_id nb7vpq904m_table[] = {
-+	{ "nb7vpq904m" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, nb7vpq904m_table);
-+
-+static const struct of_device_id nb7vpq904m_of_table[] = {
-+	{ .compatible = "onnn,nb7vpq904m" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, nb7vpq904m_of_table);
-+
-+static struct i2c_driver nb7vpq904m_driver = {
-+	.driver = {
-+		.name = "nb7vpq904m",
-+		.of_match_table = nb7vpq904m_of_table,
-+	},
-+	.probe_new	= nb7vpq904m_probe,
-+	.remove		= nb7vpq904m_remove,
-+	.id_table	= nb7vpq904m_table,
-+};
-+
-+module_i2c_driver(nb7vpq904m_driver);
-+
-+MODULE_AUTHOR("Dmitry Baryshkov <dmitry.baryshkov@linaro.org>");
-+MODULE_DESCRIPTION("OnSemi NB7VPQ904M Type-C driver");
-+MODULE_LICENSE("GPL");
+How can a bool be either "apb" or "ahb"?
 
--- 
-2.34.1
+> + * @desc_type:               Stores the type of dcc instruction
+> + * @list:                    This is used to append this instruction to the list of
+> +				instructions
+> + */
+> +struct dcc_config_entry {
+> +	u32				base;
+> +	u32				offset;
+> +	u32				len;
+> +	u32				loop_cnt;
+> +	u32				write_val;
+> +	u32				mask;
+> +	bool				apb_bus;
+> +	enum dcc_descriptor_type	desc_type;
+> +	struct list_head		list;
+> +};
+> +
+> +/**
+> + * struct dcc_drvdata - configuration information related to a dcc device
+> + * @base:		Base Address of the dcc device
+> + * @dev:		The device attached to the driver data
+> + * @mutex:		Lock to protect access and manipulation of dcc_drvdata
+> + * @ram_base:		Base address for the SRAM dedicated for the dcc device
+> + * @ram_size:		Total size of the SRAM dedicated for the dcc device
+> + * @ram_offset:		Offset to the SRAM dedicated for dcc device
+> + * @mem_map_ver:	Memory map version of DCC hardware
+> + * @ram_cfg:		Used for address limit calculation for dcc
+> + * @ram_start:		Starting address of DCC SRAM
+> + * @sram_dev:		Miscellaneous device equivalent of dcc SRAM
+> + * @cfg_head:		Points to the head of the linked list of addresses
+> + * @dbg_dir:		The dcc debugfs directory under which all the debugfs files are placed
+> + * @nr_link_list:	Total number of linkedlists supported by the DCC configuration
+> + * @loop_shift:		Loop offset bits range for the addresses
+> + * @enable_bitmap:	Bitmap to capture the enabled status of each linked list of addresses
 
+You use a pointer for a bitmap?
+
+> + */
+> +struct dcc_drvdata {
+> +	void __iomem		*base;
+> +	void __iomem            *ram_base;
+> +	struct device		*dev;
+> +	struct mutex		mutex;
+> +	size_t			ram_size;
+> +	size_t			ram_offset;
+> +	int			mem_map_ver;
+
+u64?
+
+> +	unsigned int		ram_cfg;
+> +	unsigned int		ram_start;
+> +	struct miscdevice	sram_dev;
+> +	struct list_head	*cfg_head;
+> +	struct dentry		*dbg_dir;
+> +	size_t			nr_link_list;
+
+"nr"?
+
+> +	u8			loop_shift;
+> +	unsigned long		*enable_bitmap;
+> +};
+> +
+> +struct dcc_cfg_attr {
+> +	u32	addr;
+> +	u32	prev_addr;
+> +	u32	prev_off;
+> +	u32	link;
+> +	u32	sram_offset;
+> +};
+> +
+> +struct dcc_cfg_loop_attr {
+> +	u32	loop_cnt;
+> +	u32	loop_len;
+> +	u32	loop_off;
+> +	bool    loop_start;
+> +};
+> +
+> +static inline u32 dcc_status(int version)
+> +{
+> +	return version == 1 ? 0x0c : 0x1c;
+> +}
+> +
+> +static inline u32 dcc_list_offset(int version)
+> +{
+> +	if (version == 1)
+> +		return 0x1c;
+> +	else if (version == 2)
+> +		return 0x2c;
+> +	else
+> +		return 0x34;
+> +}
+> +
+> +static inline void dcc_list_writel(struct dcc_drvdata *drvdata,
+> +				   u32 ll, u32 val, u32 off)
+> +{
+> +	u32 offset = dcc_list_offset(drvdata->mem_map_ver) + off;
+> +
+> +	writel(val, drvdata->base + ll * DCC_LL_OFFSET + offset);
+> +}
+> +
+> +static inline u32 dcc_list_readl(struct dcc_drvdata *drvdata, u32 ll, u32 off)
+> +{
+> +	u32 offset = dcc_list_offset(drvdata->mem_map_ver) + off;
+> +
+> +	return readl(drvdata->base + ll * DCC_LL_OFFSET + offset);
+> +}
+> +
+> +static void dcc_sram_write_auto(struct dcc_drvdata *drvdata,
+> +				u32 val, u32 *off)
+> +{
+> +	/* If the overflow condition is met increment the offset
+> +	 * and return to indicate that overflow has occurred
+> +	 */
+> +	if (unlikely(*off > drvdata->ram_size - 4)) {
+
+If you can not measure the difference in userspace when using
+likely/unlikely, then never use it as the compiler and CPU will do it
+better for you.
+
+> +		*off += 4;
+> +		return;
+> +	}
+> +
+> +	writel(val, drvdata->ram_base + *off);
+> +
+> +	*off += 4;
+> +}
+> +
+> +static int dcc_sw_trigger(struct dcc_drvdata *drvdata)
+> +{
+> +	void __iomem *addr;
+> +	int i;
+> +	u32 status;
+> +	u32 ll_cfg;
+> +	u32 tmp_ll_cfg;
+> +	u32 val;
+> +	int ret = 0;
+> +
+> +	mutex_lock(&drvdata->mutex);
+> +
+> +	for (i = 0; i < drvdata->nr_link_list; i++) {
+> +		if (!test_bit(i, drvdata->enable_bitmap))
+> +			continue;
+> +		ll_cfg = dcc_list_readl(drvdata, i, DCC_LL_CFG);
+> +		tmp_ll_cfg = ll_cfg & ~DCC_TRIGGER_MASK;
+> +		dcc_list_writel(drvdata, tmp_ll_cfg, i, DCC_LL_CFG);
+> +		dcc_list_writel(drvdata, 1, i, DCC_LL_SW_TRIGGER);
+> +		dcc_list_writel(drvdata, ll_cfg, i, DCC_LL_CFG);
+> +	}
+> +
+> +	addr = drvdata->base + dcc_status(drvdata->mem_map_ver);
+> +	if (readl_poll_timeout(addr, val, !FIELD_GET(DCC_STATUS_MASK, val),
+> +			       1, STATUS_READY_TIMEOUT)) {
+> +		dev_err(drvdata->dev, "DCC is busy after receiving sw trigger\n");
+> +		ret = -EBUSY;
+> +		goto out_unlock;
+> +	}
+> +
+> +	for (i = 0; i < drvdata->nr_link_list; i++) {
+> +		if (!test_bit(i, drvdata->enable_bitmap))
+> +			continue;
+> +
+> +		status = dcc_list_readl(drvdata, i, DCC_LL_BUS_ACCESS_STATUS);
+> +		if (!status)
+> +			continue;
+> +
+> +		dev_err(drvdata->dev, "Read access error for list %d err: 0x%x\n",
+> +			i, status);
+> +		ll_cfg = dcc_list_readl(drvdata, i, DCC_LL_CFG);
+> +		tmp_ll_cfg = ll_cfg & ~DCC_TRIGGER_MASK;
+> +		dcc_list_writel(drvdata, tmp_ll_cfg, i, DCC_LL_CFG);
+> +		dcc_list_writel(drvdata, DCC_STATUS_MASK, i, DCC_LL_BUS_ACCESS_STATUS);
+> +		dcc_list_writel(drvdata, ll_cfg, i, DCC_LL_CFG);
+> +		ret = -ENODATA;
+> +		break;
+> +	}
+> +
+> +out_unlock:
+> +	mutex_unlock(&drvdata->mutex);
+> +	return ret;
+> +}
+> +
+> +static void dcc_ll_cfg_reset_link(struct dcc_cfg_attr *cfg)
+> +{
+> +	cfg->addr = 0x00;
+> +	cfg->link = 0;
+> +	cfg->prev_off = 0;
+> +	cfg->prev_addr = cfg->addr;
+> +}
+> +
+> +static void dcc_emit_read_write(struct dcc_drvdata *drvdata,
+> +				struct dcc_config_entry *entry,
+> +				struct dcc_cfg_attr *cfg)
+> +{
+> +	if (cfg->link) {
+> +		/*
+> +		 * write new offset = 1 to continue
+> +		 * processing the list
+> +		 */
+> +
+> +		dcc_sram_write_auto(drvdata, cfg->link, &cfg->sram_offset);
+> +
+> +		/* Reset link and prev_off */
+> +		dcc_ll_cfg_reset_link(cfg);
+> +	}
+> +
+> +	cfg->addr = DCC_RD_MOD_WR_DESCRIPTOR;
+> +	dcc_sram_write_auto(drvdata, cfg->addr, &cfg->sram_offset);
+> +
+> +	dcc_sram_write_auto(drvdata, entry->mask, &cfg->sram_offset);
+> +
+> +	dcc_sram_write_auto(drvdata, entry->write_val, &cfg->sram_offset);
+> +
+> +	cfg->addr = 0;
+> +}
+> +
+> +static void dcc_emit_loop(struct dcc_drvdata *drvdata, struct dcc_config_entry *entry,
+> +			  struct dcc_cfg_attr *cfg,
+> +			  struct dcc_cfg_loop_attr *cfg_loop,
+> +			  u32 *total_len)
+> +{
+> +	int loop;
+> +
+> +	/* Check if we need to write link of prev entry */
+> +	if (cfg->link)
+> +		dcc_sram_write_auto(drvdata, cfg->link, &cfg->sram_offset);
+> +
+> +	if (cfg_loop->loop_start) {
+> +		loop = (cfg->sram_offset - cfg_loop->loop_off) / 4;
+> +		loop |= (cfg_loop->loop_cnt << drvdata->loop_shift) &
+> +				   GENMASK(DCC_ADDR_LIMIT, drvdata->loop_shift);
+> +		loop |= DCC_LOOP_DESCRIPTOR;
+> +		*total_len += (*total_len - cfg_loop->loop_len) * cfg_loop->loop_cnt;
+> +
+> +		dcc_sram_write_auto(drvdata, loop, &cfg->sram_offset);
+> +
+> +		cfg_loop->loop_start = false;
+> +		cfg_loop->loop_len = 0;
+> +		cfg_loop->loop_off = 0;
+> +	} else {
+> +		cfg_loop->loop_start = true;
+> +		cfg_loop->loop_cnt = entry->loop_cnt - 1;
+> +		cfg_loop->loop_len = *total_len;
+> +		cfg_loop->loop_off = cfg->sram_offset;
+> +	}
+> +
+> +	/* Reset link and prev_off */
+> +	dcc_ll_cfg_reset_link(cfg);
+> +}
+> +
+> +static void dcc_emit_write(struct dcc_drvdata *drvdata,
+> +			   struct dcc_config_entry *entry,
+> +			   struct dcc_cfg_attr *cfg)
+> +{
+> +	u32 off;
+> +
+> +	if (cfg->link) {
+> +		/*
+> +		 * write new offset = 1 to continue
+> +		 * processing the list
+> +		 */
+> +		dcc_sram_write_auto(drvdata, cfg->link, &cfg->sram_offset);
+> +
+> +		/* Reset link and prev_off */
+> +		cfg->addr = 0x00;
+> +		cfg->prev_off = 0;
+> +		cfg->prev_addr = cfg->addr;
+> +	}
+> +
+> +	off = entry->offset / 4;
+> +	/* write new offset-length pair to correct position */
+> +	cfg->link |= ((off & DCC_WRITE_OFF_MASK) | DCC_WRITE_MASK |
+> +		      FIELD_PREP(DCC_WRITE_LEN_MASK, entry->len));
+> +	cfg->link |= DCC_LINK_DESCRIPTOR;
+> +
+> +	/* Address type */
+> +	cfg->addr = (entry->base >> 4) & GENMASK(DCC_ADDR_LIMIT, 0);
+> +	if (entry->apb_bus)
+> +		cfg->addr |= DCC_ADDR_DESCRIPTOR | DCC_WRITE_IND | DCC_APB_IND;
+> +	else
+> +		cfg->addr |= DCC_ADDR_DESCRIPTOR | DCC_WRITE_IND | DCC_AHB_IND;
+> +	dcc_sram_write_auto(drvdata, cfg->addr, &cfg->sram_offset);
+> +
+> +	dcc_sram_write_auto(drvdata, cfg->link, &cfg->sram_offset);
+> +
+> +	dcc_sram_write_auto(drvdata, entry->write_val, &cfg->sram_offset);
+> +
+> +	cfg->addr = 0x00;
+> +	cfg->link = 0;
+> +}
+> +
+> +static int dcc_emit_read(struct dcc_drvdata *drvdata,
+> +			 struct dcc_config_entry *entry,
+> +			 struct dcc_cfg_attr *cfg,
+> +			 u32 *pos, u32 *total_len)
+> +{
+> +	u32 off;
+> +	u32 temp_off;
+> +
+> +	cfg->addr = (entry->base >> 4) & GENMASK(27, 0);
+> +
+> +	if (entry->apb_bus)
+> +		cfg->addr |= DCC_ADDR_DESCRIPTOR | DCC_READ_IND | DCC_APB_IND;
+> +	else
+> +		cfg->addr |= DCC_ADDR_DESCRIPTOR | DCC_READ_IND | DCC_AHB_IND;
+> +
+> +	off = entry->offset / 4;
+> +
+> +	*total_len += entry->len * 4;
+> +
+> +	if (!cfg->prev_addr || cfg->prev_addr != cfg->addr || cfg->prev_off > off) {
+> +		/* Check if we need to write prev link entry */
+> +		if (cfg->link)
+> +			dcc_sram_write_auto(drvdata, cfg->link, &cfg->sram_offset);
+> +		dev_dbg(drvdata->dev, "DCC: sram address 0x%x\n", cfg->sram_offset);
+> +
+> +		/* Write address */
+> +		dcc_sram_write_auto(drvdata, cfg->addr, &cfg->sram_offset);
+> +
+> +		/* Reset link and prev_off */
+> +		cfg->link = 0;
+> +		cfg->prev_off = 0;
+> +	}
+> +
+> +	if ((off - cfg->prev_off) > 0xff || entry->len > MAX_DCC_LEN) {
+> +		dev_err(drvdata->dev, "DCC: Programming error Base: 0x%x, offset 0x%x\n",
+> +			entry->base, entry->offset);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (cfg->link) {
+> +		/*
+> +		 * link already has one offset-length so new
+> +		 * offset-length needs to be placed at
+> +		 * bits [29:15]
+> +		 */
+> +		*pos = 15;
+> +
+> +		/* Clear bits [31:16] */
+> +		cfg->link &= GENMASK(14, 0);
+> +	} else {
+> +		/*
+> +		 * link is empty, so new offset-length needs
+> +		 * to be placed at bits [15:0]
+> +		 */
+> +		*pos = 0;
+> +		cfg->link = 1 << 15;
+> +	}
+> +
+> +	/* write new offset-length pair to correct position */
+> +	temp_off = (off - cfg->prev_off) & GENMASK(7, 0);
+> +	cfg->link |= temp_off | ((entry->len << 8) & GENMASK(14, 8)) << *pos;
+> +
+> +	cfg->link |= DCC_LINK_DESCRIPTOR;
+> +
+> +	if (*pos) {
+> +		dcc_sram_write_auto(drvdata, cfg->link, &cfg->sram_offset);
+> +		cfg->link = 0;
+> +	}
+> +
+> +	cfg->prev_off  = off + entry->len - 1;
+> +	cfg->prev_addr = cfg->addr;
+> +	return 0;
+> +}
+> +
+> +static int dcc_emit_config(struct dcc_drvdata *drvdata, unsigned int curr_list)
+> +{
+> +	int ret;
+> +	u32 total_len, pos;
+> +	struct dcc_config_entry *entry;
+> +	struct dcc_cfg_attr cfg = {0};
+> +	struct dcc_cfg_loop_attr cfg_loop = {0};
+> +
+> +	cfg.sram_offset = drvdata->ram_cfg * 4;
+> +	total_len = 0;
+> +
+> +	list_for_each_entry(entry, &drvdata->cfg_head[curr_list], list) {
+> +		switch (entry->desc_type) {
+> +		case DCC_READ_WRITE_TYPE:
+> +			dcc_emit_read_write(drvdata, entry, &cfg);
+> +			break;
+> +
+> +		case DCC_LOOP_TYPE:
+> +			dcc_emit_loop(drvdata, entry, &cfg, &cfg_loop, &total_len);
+> +			break;
+> +
+> +		case DCC_WRITE_TYPE:
+> +			dcc_emit_write(drvdata, entry, &cfg);
+> +			break;
+> +
+> +		case DCC_READ_TYPE:
+> +			ret = dcc_emit_read(drvdata, entry, &cfg, &pos, &total_len);
+> +			if (ret)
+> +				goto err;
+> +			break;
+> +		}
+> +	}
+> +
+> +	if (cfg.link)
+> +		dcc_sram_write_auto(drvdata, cfg.link, &cfg.sram_offset);
+> +
+> +	if (cfg_loop.loop_start) {
+> +		dev_err(drvdata->dev, "DCC: Programming error: Loop unterminated\n");
+> +		ret = -EINVAL;
+> +		goto err;
+> +	}
+> +
+> +	/* Handling special case of list ending with a rd_mod_wr */
+> +	if (cfg.addr == DCC_RD_MOD_WR_DESCRIPTOR) {
+> +		cfg.addr = (DCC_RD_MOD_WR_ADDR) & GENMASK(27, 0);
+> +		cfg.addr |= DCC_ADDR_DESCRIPTOR;
+> +		dcc_sram_write_auto(drvdata, cfg.addr, &cfg.sram_offset);
+> +	}
+> +
+> +	/* Setting zero to indicate end of the list */
+> +	cfg.link = DCC_LINK_DESCRIPTOR;
+> +	dcc_sram_write_auto(drvdata, cfg.link, &cfg.sram_offset);
+> +
+> +	/* Check if sram offset exceeds the ram size */
+> +	if (cfg.sram_offset > drvdata->ram_size)
+> +		goto overstep;
+> +
+> +	/* Update ram_cfg and check if the data will overstep */
+> +	drvdata->ram_cfg = (cfg.sram_offset + total_len) / 4;
+> +
+> +	if (cfg.sram_offset + total_len > drvdata->ram_size) {
+> +		cfg.sram_offset += total_len;
+> +		goto overstep;
+> +	}
+> +
+> +	drvdata->ram_start = cfg.sram_offset / 4;
+> +	return 0;
+> +overstep:
+> +	ret = -EINVAL;
+> +	memset_io(drvdata->ram_base, 0, drvdata->ram_size);
+> +
+> +err:
+> +	return ret;
+> +}
+> +
+> +static bool dcc_valid_list(struct dcc_drvdata *drvdata, unsigned int curr_list)
+> +{
+> +	u32 lock_reg;
+> +
+> +	if (list_empty(&drvdata->cfg_head[curr_list]))
+> +		return false;
+> +
+> +	if (test_bit(curr_list, drvdata->enable_bitmap)) {
+> +		dev_err(drvdata->dev, "List %d is already enabled\n", curr_list);
+> +		return false;
+> +	}
+> +
+> +	lock_reg = dcc_list_readl(drvdata, curr_list, DCC_LL_LOCK);
+> +	if (lock_reg & DCC_LOCK_MASK) {
+> +		dev_err(drvdata->dev, "List %d is already locked\n", curr_list);
+> +		return false;
+> +	}
+> +
+> +	return true;
+> +}
+> +
+> +static bool is_dcc_enabled(struct dcc_drvdata *drvdata)
+> +{
+> +	int list;
+> +
+> +	for (list = 0; list < drvdata->nr_link_list; list++)
+> +		if (test_bit(list, drvdata->enable_bitmap))
+> +			return true;
+> +
+> +	return false;
+> +}
+> +
+> +static int dcc_enable(struct dcc_drvdata *drvdata, unsigned int curr_list)
+> +{
+> +	int ret;
+> +	u32 ram_cfg_base;
+> +
+> +	mutex_lock(&drvdata->mutex);
+> +
+> +	if (!dcc_valid_list(drvdata, curr_list)) {
+> +		ret = -EINVAL;
+> +		goto out_unlock;
+> +	}
+> +
+> +	/* Fill dcc sram with the poison value.
+> +	 * This helps in understanding bus
+> +	 * hang from registers returning a zero
+> +	 */
+> +	if (!is_dcc_enabled(drvdata))
+> +		memset_io(drvdata->ram_base, 0xde, drvdata->ram_size);
+> +
+> +	/* 1. Take ownership of the list */
+> +	dcc_list_writel(drvdata, DCC_LOCK_MASK, curr_list, DCC_LL_LOCK);
+> +
+> +	/* 2. Program linked-list in the SRAM */
+> +	ram_cfg_base = drvdata->ram_cfg;
+> +	ret = dcc_emit_config(drvdata, curr_list);
+> +	if (ret) {
+> +		dcc_list_writel(drvdata, 0, curr_list, DCC_LL_LOCK);
+> +		goto out_unlock;
+> +	}
+> +
+> +	/* 3. Program DCC_RAM_CFG reg */
+> +	dcc_list_writel(drvdata, ram_cfg_base +
+> +			drvdata->ram_offset / 4, curr_list, DCC_LL_BASE);
+> +	dcc_list_writel(drvdata, drvdata->ram_start +
+> +			drvdata->ram_offset / 4, curr_list, DCC_FD_BASE);
+> +	dcc_list_writel(drvdata, 0xFFF, curr_list, DCC_LL_TIMEOUT);
+> +
+> +	/* 4. Clears interrupt status register */
+> +	dcc_list_writel(drvdata, 0, curr_list, DCC_LL_INT_ENABLE);
+> +	dcc_list_writel(drvdata, (BIT(0) | BIT(1) | BIT(2)),
+> +			curr_list, DCC_LL_INT_STATUS);
+> +
+> +	set_bit(curr_list, drvdata->enable_bitmap);
+> +
+> +	/* 5. Configure trigger */
+> +	dcc_list_writel(drvdata, DCC_TRIGGER_MASK,
+> +			curr_list, DCC_LL_CFG);
+> +
+> +out_unlock:
+> +	mutex_unlock(&drvdata->mutex);
+> +	return ret;
+> +}
+> +
+> +static void dcc_disable(struct dcc_drvdata *drvdata, int curr_list)
+> +{
+> +	mutex_lock(&drvdata->mutex);
+> +
+> +	if (!test_bit(curr_list, drvdata->enable_bitmap))
+> +		goto out_unlock;
+> +	dcc_list_writel(drvdata, 0, curr_list, DCC_LL_CFG);
+> +	dcc_list_writel(drvdata, 0, curr_list, DCC_LL_BASE);
+> +	dcc_list_writel(drvdata, 0, curr_list, DCC_FD_BASE);
+> +	dcc_list_writel(drvdata, 0, curr_list, DCC_LL_LOCK);
+> +	clear_bit(curr_list, drvdata->enable_bitmap);
+> +out_unlock:
+> +	mutex_unlock(&drvdata->mutex);
+> +}
+> +
+> +static u32 dcc_filp_curr_list(const struct file *filp)
+> +{
+> +	struct dentry *dentry = file_dentry(filp);
+> +	int curr_list, ret;
+> +
+> +	ret = kstrtoint(dentry->d_parent->d_name.name, 0, &curr_list);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return curr_list;
+> +}
+> +
+> +static ssize_t enable_read(struct file *filp, char __user *userbuf,
+> +			   size_t count, loff_t *ppos)
+> +{
+> +	char *buf;
+> +	struct dcc_drvdata *drvdata = filp->private_data;
+> +
+> +	mutex_lock(&drvdata->mutex);
+> +
+> +	if (is_dcc_enabled(drvdata))
+> +		buf = "Y\n";
+> +	else
+> +		buf = "N\n";
+> +
+> +	mutex_unlock(&drvdata->mutex);
+> +
+> +	return simple_read_from_buffer(userbuf, count, ppos, buf, strlen(buf));
+> +}
+> +
+> +static ssize_t enable_write(struct file *filp, const char __user *userbuf,
+> +			    size_t count, loff_t *ppos)
+> +{
+> +	int ret = 0, curr_list;
+> +	bool val;
+> +	struct dcc_drvdata *drvdata = filp->private_data;
+> +
+> +	curr_list = dcc_filp_curr_list(filp);
+> +	if (curr_list < 0)
+> +		return curr_list;
+> +
+> +	ret = kstrtobool_from_user(userbuf, count, &val);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (val) {
+> +		ret = dcc_enable(drvdata, curr_list);
+> +		if (ret)
+> +			return ret;
+> +	} else {
+> +		dcc_disable(drvdata, curr_list);
+> +	}
+> +
+> +	return count;
+> +}
+> +
+> +static const struct file_operations enable_fops = {
+> +	.read = enable_read,
+> +	.write = enable_write,
+> +	.open = simple_open,
+> +	.llseek = generic_file_llseek,
+> +};
+> +
+> +static ssize_t trigger_write(struct file *filp,
+> +			     const char __user *user_buf, size_t count,
+> +			     loff_t *ppos)
+> +{
+> +	int ret;
+> +	unsigned int val;
+> +	struct dcc_drvdata *drvdata = filp->private_data;
+> +
+> +	ret = kstrtouint_from_user(user_buf, count, 0, &val);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (val != 1)
+> +		return -EINVAL;
+> +
+> +	ret = dcc_sw_trigger(drvdata);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return count;
+> +}
+> +
+> +static const struct file_operations trigger_fops = {
+> +	.write = trigger_write,
+> +	.open = simple_open,
+> +	.llseek = generic_file_llseek,
+> +};
+> +
+> +static int dcc_config_add(struct dcc_drvdata *drvdata, unsigned int addr,
+> +			  unsigned int len, bool apb_bus, int curr_list)
+> +{
+> +	int ret = 0;
+> +	struct dcc_config_entry *entry, *pentry;
+> +	unsigned int base, offset;
+> +
+> +	mutex_lock(&drvdata->mutex);
+> +
+> +	if (!len || len > drvdata->ram_size / DCC_WORD_SIZE) {
+> +		dev_err(drvdata->dev, "DCC: Invalid length\n");
+> +		ret = -EINVAL;
+> +		goto out_unlock;
+> +	}
+> +
+> +	base = addr & DCC_ADDR_RANGE_MASK;
+> +
+> +	if (!list_empty(&drvdata->cfg_head[curr_list])) {
+> +		pentry = list_last_entry(&drvdata->cfg_head[curr_list],
+> +					 struct dcc_config_entry, list);
+> +
+> +		if (pentry->desc_type == DCC_READ_TYPE &&
+> +		    addr >= (pentry->base + pentry->offset) &&
+> +		    addr <= (pentry->base + pentry->offset + MAX_DCC_OFFSET)) {
+> +			/* Re-use base address from last entry */
+> +			base = pentry->base;
+> +
+> +			if ((pentry->len * 4 + pentry->base + pentry->offset)
+> +					== addr) {
+> +				len += pentry->len;
+> +
+> +				if (len > MAX_DCC_LEN)
+> +					pentry->len = MAX_DCC_LEN;
+> +				else
+> +					pentry->len = len;
+> +
+> +				addr = pentry->base + pentry->offset +
+> +					pentry->len * 4;
+> +				len -= pentry->len;
+> +			}
+> +		}
+> +	}
+> +
+> +	offset = addr - base;
+> +
+> +	while (len) {
+> +		entry = kzalloc(sizeof(*entry), GFP_KERNEL);
+> +		if (!entry) {
+> +			ret = -ENOMEM;
+> +			goto out_unlock;
+> +		}
+> +
+> +		entry->base = base;
+> +		entry->offset = offset;
+> +		entry->len = min_t(u32, len, MAX_DCC_LEN);
+> +		entry->desc_type = DCC_READ_TYPE;
+> +		entry->apb_bus = apb_bus;
+> +		INIT_LIST_HEAD(&entry->list);
+> +		list_add_tail(&entry->list,
+> +			      &drvdata->cfg_head[curr_list]);
+> +
+> +		len -= entry->len;
+> +		offset += MAX_DCC_LEN * 4;
+> +	}
+> +
+> +out_unlock:
+> +	mutex_unlock(&drvdata->mutex);
+> +	return ret;
+> +}
+> +
+> +static ssize_t dcc_config_add_read(struct dcc_drvdata *drvdata, char *buf, int curr_list)
+> +{
+> +	bool bus;
+> +	int len, nval;
+> +	unsigned int base;
+> +	char apb_bus[4];
+> +
+> +	nval = sscanf(buf, "%x %i %3s", &base, &len, apb_bus);
+> +	if (nval <= 0 || nval > 3)
+> +		return -EINVAL;
+> +
+> +	if (nval == 1) {
+> +		len = 1;
+> +		bus = false;
+> +	} else if (nval == 2) {
+> +		bus = false;
+> +	} else if (!strcmp("apb", apb_bus)) {
+> +		bus = true;
+> +	} else if (!strcmp("ahb", apb_bus)) {
+> +		bus = false;
+> +	} else {
+> +		return -EINVAL;
+> +	}
+> +
+> +	return dcc_config_add(drvdata, base, len, bus, curr_list);
+> +}
+> +
+> +static void dcc_config_reset(struct dcc_drvdata *drvdata)
+> +{
+> +	struct dcc_config_entry *entry, *temp;
+> +	int curr_list;
+> +
+> +	mutex_lock(&drvdata->mutex);
+> +
+> +	for (curr_list = 0; curr_list < drvdata->nr_link_list; curr_list++) {
+> +		list_for_each_entry_safe(entry, temp,
+> +					 &drvdata->cfg_head[curr_list], list) {
+> +			list_del(&entry->list);
+> +			kfree(entry);
+> +		}
+> +	}
+> +	drvdata->ram_start = 0;
+> +	drvdata->ram_cfg = 0;
+> +	mutex_unlock(&drvdata->mutex);
+> +}
+> +
+> +static ssize_t config_reset_write(struct file *filp,
+> +				  const char __user *user_buf, size_t count,
+> +				  loff_t *ppos)
+> +{
+> +	unsigned int val, ret;
+> +	struct dcc_drvdata *drvdata = filp->private_data;
+> +
+> +	ret = kstrtouint_from_user(user_buf, count, 0, &val);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (val)
+> +		dcc_config_reset(drvdata);
+> +
+> +	return count;
+> +}
+> +
+> +static const struct file_operations config_reset_fops = {
+> +	.write = config_reset_write,
+> +	.open = simple_open,
+> +	.llseek = generic_file_llseek,
+> +};
+> +
+> +static ssize_t ready_read(struct file *filp, char __user *userbuf,
+> +			  size_t count, loff_t *ppos)
+> +{
+> +	int ret = 0;
+> +	char *buf;
+> +	struct dcc_drvdata *drvdata = filp->private_data;
+> +
+> +	mutex_lock(&drvdata->mutex);
+> +
+> +	if (!is_dcc_enabled(drvdata)) {
+> +		ret = -EINVAL;
+> +		goto out_unlock;
+> +	}
+> +
+> +	if (!FIELD_GET(BIT(1), readl(drvdata->base + dcc_status(drvdata->mem_map_ver))))
+> +		buf = "Y\n";
+> +	else
+> +		buf = "N\n";
+> +out_unlock:
+> +	mutex_unlock(&drvdata->mutex);
+> +
+> +	if (ret < 0)
+> +		return -EINVAL;
+> +	else
+
+You do the "lock, get a value, unlock, do something with the value"
+thing a bunch, but what prevents the value from changing after the lock
+happens?  So why is the lock needed at all?
+
+thanks,
+
+greg k-h
+
+> +		return simple_read_from_buffer(userbuf, count, ppos, buf, strlen(buf) + 1);
+> +}
+> +
+> +static const struct file_operations ready_fops = {
+> +	.read = ready_read,
+> +	.open = simple_open,
+> +	.llseek = generic_file_llseek,
+> +};
+> +
+> +static int dcc_add_loop(struct dcc_drvdata *drvdata, unsigned long loop_cnt, int curr_list)
+> +{
+> +	struct dcc_config_entry *entry;
+> +
+> +	entry = kzalloc(sizeof(*entry), GFP_KERNEL);
+> +	if (!entry)
+> +		return -ENOMEM;
+> +
+> +	entry->loop_cnt = min_t(u32, loop_cnt, MAX_LOOP_CNT);
+> +	entry->desc_type = DCC_LOOP_TYPE;
+> +	INIT_LIST_HEAD(&entry->list);
+> +	list_add_tail(&entry->list, &drvdata->cfg_head[curr_list]);
+> +
+> +	return 0;
+> +}
+> +
+> +static ssize_t dcc_config_add_loop(struct dcc_drvdata *drvdata, char *buf, int curr_list)
+> +{
+> +	int ret, i = 0;
+> +	char *token, *input;
+> +	char delim[2] = " ";
+> +	unsigned int val[MAX_LOOP_ADDR];
+> +
+> +	input = buf;
+> +
+> +	while ((token = strsep(&input, delim)) && i < MAX_LOOP_ADDR) {
+> +		ret = kstrtoint(token, 0, &val[i++]);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	if (token) {
+> +		dev_err(drvdata->dev, "Max limit %u of loop address exceeded",
+> +			MAX_LOOP_ADDR);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (val[1] < 1 || val[1] > 8)
+> +		return -EINVAL;
+> +
+> +	ret = dcc_add_loop(drvdata, val[0], curr_list);
+> +	if (ret)
+> +		return ret;
+> +
+> +	for (i = 0; i < val[1]; i++)
+> +		dcc_config_add(drvdata, val[i + 2], 1, false, curr_list);
+> +
+> +	return dcc_add_loop(drvdata, 1, curr_list);
+> +}
+> +
+> +static int dcc_rd_mod_wr_add(struct dcc_drvdata *drvdata, unsigned int mask,
+> +			     unsigned int val, int curr_list)
+> +{
+> +	int ret = 0;
+> +	struct dcc_config_entry *entry;
+> +
+> +	mutex_lock(&drvdata->mutex);
+> +
+> +	if (list_empty(&drvdata->cfg_head[curr_list])) {
+> +		dev_err(drvdata->dev, "DCC: No read address programmed\n");
+> +		ret = -EPERM;
+> +		goto out_unlock;
+> +	}
+> +
+> +	entry = devm_kzalloc(drvdata->dev, sizeof(*entry), GFP_KERNEL);
+> +	if (!entry) {
+> +		ret = -ENOMEM;
+> +		goto out_unlock;
+> +	}
+> +
+> +	entry->desc_type = DCC_READ_WRITE_TYPE;
+> +	entry->mask = mask;
+> +	entry->write_val = val;
+> +	list_add_tail(&entry->list, &drvdata->cfg_head[curr_list]);
+> +out_unlock:
+> +	mutex_unlock(&drvdata->mutex);
+> +	return ret;
+> +}
+> +
+> +static ssize_t dcc_config_add_read_write(struct dcc_drvdata *drvdata, char *buf, int curr_list)
+> +{
+> +	int ret;
+> +	int nval;
+> +	unsigned int addr, mask, val;
+> +
+> +	nval = sscanf(buf, "%x %x %x", &addr, &mask, &val);
+> +
+> +	if (nval <= 1 || nval > 3)
+> +		return -EINVAL;
+> +
+> +	ret = dcc_config_add(drvdata, addr, 1, false, curr_list);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return dcc_rd_mod_wr_add(drvdata, mask, val, curr_list);
+> +}
+> +
+> +static int dcc_add_write(struct dcc_drvdata *drvdata, unsigned int addr,
+> +			 unsigned int write_val, int apb_bus, int curr_list)
+> +{
+> +	struct dcc_config_entry *entry;
+> +
+> +	entry = devm_kzalloc(drvdata->dev, sizeof(*entry), GFP_KERNEL);
+> +	if (!entry)
+> +		return -ENOMEM;
+> +
+> +	entry->desc_type = DCC_WRITE_TYPE;
+> +	entry->base = addr & GENMASK(31, 4);
+> +	entry->offset = addr - entry->base;
+> +	entry->write_val = write_val;
+> +	entry->len = 1;
+> +	entry->apb_bus = apb_bus;
+> +	list_add_tail(&entry->list, &drvdata->cfg_head[curr_list]);
+> +
+> +	return 0;
+> +}
+> +
+> +static ssize_t dcc_config_add_write(struct dcc_drvdata *drvdata, char *buf, int curr_list)
+> +{
+> +	bool bus;
+> +	int nval;
+> +	unsigned int addr, write_val;
+> +	char apb_bus[4];
+> +
+> +	nval = sscanf(buf, "%x %x %3s", &addr, &write_val, apb_bus);
+> +
+> +	if (nval <= 1 || nval > 3)
+> +		return -EINVAL;
+> +
+> +	if (nval == 2)
+> +		bus = true;
+> +
+> +	if (nval == 3) {
+> +		if (!strcmp("apb", apb_bus))
+> +			bus = true;
+> +		else if (!strcmp("ahb", apb_bus))
+> +			bus = false;
+> +		else
+> +			return -EINVAL;
+> +	}
+> +
+> +	return dcc_add_write(drvdata, addr, write_val, bus, curr_list);
+> +}
+> +
+> +static int config_show(struct seq_file *m, void *data)
+> +{
+> +	struct dcc_drvdata *drvdata = m->private;
+> +	struct dcc_config_entry *entry;
+> +	int index = 0, curr_list;
+> +
+> +	curr_list = dcc_filp_curr_list(m->file);
+> +	if (curr_list < 0)
+> +		return curr_list;
+> +
+> +	mutex_lock(&drvdata->mutex);
+> +
+> +	list_for_each_entry(entry, &drvdata->cfg_head[curr_list], list) {
+> +		index++;
+> +		switch (entry->desc_type) {
+> +		case DCC_READ_WRITE_TYPE:
+> +			seq_printf(m, "RW mask: 0x%x, val: 0x%x\n index: 0x%x\n",
+> +				   entry->mask, entry->write_val, index);
+> +			break;
+> +		case DCC_LOOP_TYPE:
+> +			seq_printf(m, "L index: 0x%x Loop: %d\n", index, entry->loop_cnt);
+> +			break;
+> +		case DCC_WRITE_TYPE:
+> +			seq_printf(m, "W Base:0x%x, Offset: 0x%x, val: 0x%x, APB: %d\n, Index: 0x%x\n",
+> +				   entry->base, entry->offset, entry->write_val, entry->apb_bus,
+> +				   index);
+> +			break;
+> +		case DCC_READ_TYPE:
+> +			seq_printf(m, "R Base:0x%x, Offset: 0x%x, len: 0x%x, APB: %d\n, Index: 0x%x\n",
+> +				   entry->base, entry->offset, entry->len, entry->apb_bus, index);
+> +		}
+> +	}
+> +	mutex_unlock(&drvdata->mutex);
+> +	return 0;
+> +}
+> +
+> +static int config_open(struct inode *inode, struct file *file)
+> +{
+> +	struct dcc_drvdata *drvdata = inode->i_private;
+> +
+> +	return single_open(file, config_show, drvdata);
+> +}
+> +
+> +static ssize_t config_write(struct file *filp,
+> +			    const char __user *user_buf, size_t count,
+> +			    loff_t *ppos)
+> +{
+> +	int ret, curr_list;
+> +	char *token, buf[50];
+> +	char *bufp = buf;
+> +	char *delim = " ";
+> +	struct dcc_drvdata *drvdata = filp->private_data;
+> +
+> +	if (count > sizeof(buf) || count == 0)
+> +		return -EINVAL;
+> +
+> +	ret = copy_from_user(buf, user_buf, count);
+> +	if (ret)
+> +		return -EFAULT;
+> +
+> +	curr_list = dcc_filp_curr_list(filp);
+> +	if (curr_list < 0)
+> +		return curr_list;
+> +
+> +	if (buf[count - 1] == '\n')
+> +		buf[count - 1] = '\0';
+> +	else
+> +		return -EINVAL;
+> +
+> +	token = strsep(&bufp, delim);
+> +
+> +	if (!strcmp("R", token)) {
+> +		ret = dcc_config_add_read(drvdata, bufp, curr_list);
+> +	} else if (!strcmp("W", token)) {
+> +		ret = dcc_config_add_write(drvdata, bufp, curr_list);
+> +	} else if (!strcmp("RW", token)) {
+> +		ret = dcc_config_add_read_write(drvdata, bufp, curr_list);
+> +	} else if (!strcmp("L", token)) {
+> +		ret = dcc_config_add_loop(drvdata, bufp, curr_list);
+> +	} else {
+> +		dev_err(drvdata->dev, "%s is not a correct input\n", token);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (ret)
+> +		return ret;
+> +
+> +	return count;
+> +}
+> +
+> +static const struct file_operations config_fops = {
+> +	.open = config_open,
+> +	.read = seq_read,
+> +	.write = config_write,
+> +	.llseek = seq_lseek,
+> +	.release = single_release,
+> +};
+> +
+> +static void dcc_delete_debug_dir(struct dcc_drvdata *drvdata)
+> +{
+> +	 debugfs_remove_recursive(drvdata->dbg_dir);
+> +};
+> +
+> +static void dcc_create_debug_dir(struct dcc_drvdata *drvdata)
+> +{
+> +	int i;
+> +	char list_num[10];
+> +	struct dentry *dcc_dev, *list;
+> +	struct device *dev = drvdata->dev;
+> +
+> +	drvdata->dbg_dir = debugfs_create_dir(KBUILD_MODNAME, NULL);
+> +	dcc_dev = debugfs_create_dir(dev_name(dev), drvdata->dbg_dir);
+> +
+> +	for (i = 0; i <= drvdata->nr_link_list; i++) {
+> +		sprintf(list_num, "%d", i);
+> +		list = debugfs_create_dir(list_num, dcc_dev);
+> +		debugfs_create_file("enable", 0600, list, drvdata, &enable_fops);
+> +		debugfs_create_file("config", 0600, list, drvdata, &config_fops);
+> +	}
+> +
+> +	debugfs_create_file("trigger", 0200, drvdata->dbg_dir, drvdata, &trigger_fops);
+> +	debugfs_create_file("ready", 0400, drvdata->dbg_dir, drvdata, &ready_fops);
+> +	debugfs_create_file("config_reset", 0200, drvdata->dbg_dir,
+> +			    drvdata, &config_reset_fops);
+> +}
+> +
+> +static ssize_t dcc_sram_read(struct file *file, char __user *data,
+> +			     size_t len, loff_t *ppos)
+> +{
+> +	unsigned char *buf;
+> +	struct dcc_drvdata *drvdata;
+> +
+> +	drvdata = container_of(file->private_data, struct dcc_drvdata,
+> +			       sram_dev);
+> +
+> +	/* EOF check */
+> +	if (*ppos >= drvdata->ram_size)
+> +		return 0;
+> +
+> +	if ((*ppos + len) > drvdata->ram_size)
+> +		len = (drvdata->ram_size - *ppos);
+> +
+> +	buf = kzalloc(len, GFP_KERNEL);
+> +	if (!buf)
+> +		return -ENOMEM;
+> +
+> +	memcpy_fromio(buf, drvdata->ram_base + *ppos, len);
+> +
+> +	if (copy_to_user(data, buf, len)) {
+> +		kfree(buf);
+> +		return -EFAULT;
+> +	}
+> +
+> +	*ppos += len;
+> +
+> +	kfree(buf);
+> +
+> +	return len;
+> +}
+> +
+> +static const struct file_operations dcc_sram_fops = {
+> +	.owner		= THIS_MODULE,
+> +	.read		= dcc_sram_read,
+> +	.llseek		= no_llseek,
+> +};
+> +
+> +static int dcc_sram_dev_init(struct dcc_drvdata *drvdata)
+> +{
+> +	drvdata->sram_dev.minor = MISC_DYNAMIC_MINOR;
+> +	drvdata->sram_dev.name = "dcc_sram";
+> +	drvdata->sram_dev.fops = &dcc_sram_fops;
+> +
+> +	return misc_register(&drvdata->sram_dev);
+> +}
+> +
+> +static void dcc_sram_dev_exit(struct dcc_drvdata *drvdata)
+> +{
+> +	misc_deregister(&drvdata->sram_dev);
+> +}
+> +
+> +static int dcc_probe(struct platform_device *pdev)
+> +{
+> +	u32 val;
+> +	int ret = 0, i;
+> +	struct device *dev = &pdev->dev;
+> +	struct dcc_drvdata *drvdata;
+> +	struct resource *res;
+> +
+> +	drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
+> +	if (!drvdata)
+> +		return -ENOMEM;
+> +
+> +	drvdata->dev = &pdev->dev;
+> +	platform_set_drvdata(pdev, drvdata);
+> +
+> +	drvdata->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(drvdata->base))
+> +		return PTR_ERR(drvdata->base);
+> +
+> +	drvdata->ram_base = devm_platform_get_and_ioremap_resource(pdev, 1, &res);
+> +	if (IS_ERR(drvdata->ram_base))
+> +		return PTR_ERR(drvdata->ram_base);
+> +
+> +	drvdata->ram_size = resource_size(res);
+> +
+> +	drvdata->ram_offset = (size_t)of_device_get_match_data(&pdev->dev);
+> +
+> +	val = readl(drvdata->base + DCC_HW_INFO);
+> +
+> +	if (FIELD_GET(DCC_VER_INFO_MASK, val)) {
+> +		drvdata->mem_map_ver = 3;
+> +		drvdata->nr_link_list = readl(drvdata->base + DCC_LL_NUM_INFO);
+> +		if (!drvdata->nr_link_list)
+> +			return	-EINVAL;
+> +	} else if ((val & DCC_VER_MASK2) == DCC_VER_MASK2) {
+> +		drvdata->mem_map_ver = 2;
+> +		drvdata->nr_link_list = readl(drvdata->base + DCC_LL_NUM_INFO);
+> +		if (!drvdata->nr_link_list)
+> +			return	-EINVAL;
+> +	} else {
+> +		drvdata->mem_map_ver = 1;
+> +		drvdata->nr_link_list = DCC_MAX_LINK_LIST;
+> +	}
+> +
+> +	/* Either set the fixed loop offset or calculate
+> +	 * it from the total number of words in dcc_sram.
+> +	 * Max consecutive addresses dcc can loop is
+> +	 * equivalent to the words in dcc_sram.
+> +	 */
+> +	if (val & DCC_LOOP_OFFSET_MASK)
+> +		drvdata->loop_shift = DCC_FIX_LOOP_OFFSET;
+> +	else
+> +		drvdata->loop_shift = get_bitmask_order((drvdata->ram_offset +
+> +					drvdata->ram_size) / DCC_SRAM_WORD_LENGTH - 1);
+> +
+> +	mutex_init(&drvdata->mutex);
+> +
+> +	drvdata->enable_bitmap = devm_kcalloc(dev, BITS_TO_LONGS(drvdata->nr_link_list),
+> +					      sizeof(*drvdata->enable_bitmap), GFP_KERNEL);
+> +	if (!drvdata->enable_bitmap)
+> +		return -ENOMEM;
+> +
+> +	drvdata->cfg_head = devm_kcalloc(dev, drvdata->nr_link_list,
+> +					 sizeof(*drvdata->cfg_head), GFP_KERNEL);
+> +	if (!drvdata->cfg_head)
+> +		return -ENOMEM;
+> +
+> +	for (i = 0; i < drvdata->nr_link_list; i++)
+> +		INIT_LIST_HEAD(&drvdata->cfg_head[i]);
+> +
+> +	ret = dcc_sram_dev_init(drvdata);
+> +	if (ret) {
+> +		dev_err(drvdata->dev, "DCC: sram node not registered.\n");
+> +		return ret;
+> +	}
+> +
+> +	dcc_create_debug_dir(drvdata);
+> +
+> +	return 0;
+> +}
+> +
+> +static int dcc_remove(struct platform_device *pdev)
+> +{
+> +	struct dcc_drvdata *drvdata = platform_get_drvdata(pdev);
+> +
+> +	dcc_delete_debug_dir(drvdata);
+> +	dcc_sram_dev_exit(drvdata);
+> +	dcc_config_reset(drvdata);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id dcc_match_table[] = {
+> +	{ .compatible = "qcom,sc7180-dcc", .data = (void *)0x6000 },
+> +	{ .compatible = "qcom,sc7280-dcc", .data = (void *)0x12000 },
+> +	{ .compatible = "qcom,sdm845-dcc", .data = (void *)0x6000 },
+> +	{ .compatible = "qcom,sm8150-dcc", .data = (void *)0x5000 },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, dcc_match_table);
+> +
+> +static struct platform_driver dcc_driver = {
+> +	.probe = dcc_probe,
+> +	.remove	= dcc_remove,
+> +	.driver	= {
+> +		.name = "qcom-dcc",
+> +		.of_match_table	= dcc_match_table,
+> +	},
+> +};
+> +
+> +module_platform_driver(dcc_driver);
+> +
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("Qualcomm Technologies Inc. DCC driver");
+> +
+> -- 
+> 2.17.1
+> 
