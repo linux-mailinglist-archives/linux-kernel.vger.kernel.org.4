@@ -2,81 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97CF0730C93
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 03:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0049D730C97
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 03:29:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236396AbjFOB05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 21:26:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37686 "EHLO
+        id S234716AbjFOB25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 21:28:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234019AbjFOB0x (ORCPT
+        with ESMTP id S229527AbjFOB2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 21:26:53 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1B426A6
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 18:26:52 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-544c0d768b9so5173013a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 18:26:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686792411; x=1689384411;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1wdQ4hMB3hMS0E+Dw9a/ZO6zl9PRKqCaZb3GUi1TdKI=;
-        b=PrHKGOCHbRXNdSaYeoH7o9qGme3TbtaEHWITt0X7F8NfAApQQkmc1dIPrkq6NfG0Do
-         YUKBoHm8rn0MpLQjL/QyQpzHhpthqRr50d0N7JBFTRL1jYIOrFckNy7CokvsdHdTyBSk
-         Jtud8z1dw9FV4rCJCF5fb0jaH4B7io+0Idw+MJ4wcsxxiLgtl7ewcUxpwUx1tAPccDci
-         Tk0dYm7I/Eg/SGeqjX7iKBx77LhcaFMkACA8MmEX+bLg+en2mZJiRuCHRF+5bU1o+TId
-         CanL0F+nDfR4nWlv8VhQAjSNm1PHtWJodEaLUyJ8lfxHubWQM1U8waxhjQn+YRahWKj1
-         GIqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686792411; x=1689384411;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1wdQ4hMB3hMS0E+Dw9a/ZO6zl9PRKqCaZb3GUi1TdKI=;
-        b=F0pg7sR6Yemn8J3oybFVrBkR6n3Y70SgykwxlRvb3DyTEdWPVCWRZRWNxeN8YB7sJH
-         B1nwtuq4bvA9ltWP3yvKjMFTV+TeYPtrWTRyrKeoutDk1SzQU+Tfvx9N9331xl0xgO+J
-         1/UiCzF/g8Qx/XenT6FS5ZigODSepcmpidnK9LgiVu9kIrtsg2xrkVlchYG+5lls2T1v
-         IUuKvMaaXlChpXRKAUD6ujHB4Dp+3HFCHn7nTVIDx00vcwTj5WnkqkQ4EgYKMAY3B86W
-         Xdya7GXLHIEqk8WXEV3din9AHKqHLqYhVGc99lP7NCwmBqwPhMey8qHy9wP77RCJOPIU
-         Kyww==
-X-Gm-Message-State: AC+VfDyN/C+Z49zYfeaJklhLRediZr1qG31ls9rr0ikoPPwMjiU+Wnam
-        SPIbORPgDq5JDGNXbaY57bYdtVmtSROb1zVPyCsjMg/1
-X-Google-Smtp-Source: ACHHUZ6X2rgbf5Oc9PcPxODJMLRh5TJDx7TL5LoTuVoB7Bt9V0A+4kfk+/VHsYVQFMPVY+tASAE7XQ==
-X-Received: by 2002:a05:6a21:6811:b0:118:b2e1:9adb with SMTP id wr17-20020a056a21681100b00118b2e19adbmr3114281pzb.61.1686792411552;
-        Wed, 14 Jun 2023 18:26:51 -0700 (PDT)
-Received: from leoy-huanghe.lan ([39.144.43.103])
-        by smtp.gmail.com with ESMTPSA id h25-20020aa786d9000000b0065055ad5754sm415054pfo.64.2023.06.14.18.26.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 18:26:51 -0700 (PDT)
-Date:   Thu, 15 Jun 2023 09:26:39 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     James Clark <james.clark@arm.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-perf-users@vger.kernel.org, broonie@kernel.org,
-        Aishwarya.TCV@arm.com, Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] perf tools: Add a place to put kernel config
- fragments for test runs
-Message-ID: <20230615012546.GN217089@leoy-huanghe.lan>
-References: <20230614140219.2335639-1-james.clark@arm.com>
- <ZInLBt9q2F99gTg8@kernel.org>
- <d02cce4a-47b1-a776-0d3a-a6a7c9a4d8fd@arm.com>
+        Wed, 14 Jun 2023 21:28:55 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A759C2125;
+        Wed, 14 Jun 2023 18:28:53 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QhPnr2GQ2z4f4DhP;
+        Thu, 15 Jun 2023 09:28:48 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgD3mp5PaYpkU3_rLg--.4972S3;
+        Thu, 15 Jun 2023 09:28:49 +0800 (CST)
+Subject: Re: [dm-devel] [PATCH -next v2 4/6] md: refactor
+ idle/frozen_sync_thread() to fix deadlock
+To:     Xiao Ni <xni@redhat.com>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     guoqing.jiang@linux.dev, agk@redhat.com, snitzer@kernel.org,
+        dm-devel@redhat.com, song@kernel.org, linux-raid@vger.kernel.org,
+        yangerkun@huawei.com, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20230529132037.2124527-1-yukuai1@huaweicloud.com>
+ <20230529132037.2124527-5-yukuai1@huaweicloud.com>
+ <05aa3b09-7bb9-a65a-6231-4707b4b078a0@redhat.com>
+ <74b404c4-4fdb-6eb3-93f1-0e640793bba6@huaweicloud.com>
+ <6e738d9b-6e92-20b7-f9d9-e1cf71d26d73@huaweicloud.com>
+ <CALTww292gwOe-WEjuBwJn0AXvJC4AbfMZXC43EvVt3GCeBoHfw@mail.gmail.com>
+ <5bf97ec5-0cb4-1163-6917-2bc98d912c2b@huaweicloud.com>
+ <CALTww28UapJnK+Xfx7O9uEd5ZH2E7ufPT_7pKY6YYuzTZ0Fbdw@mail.gmail.com>
+ <b96ec15b-6102-17bb-2c18-a487f224865b@huaweicloud.com>
+ <CALTww2-knHOoX35NB73X-sMn1u8EJHLA=0aOnoVqVm83+fdG5Q@mail.gmail.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <04700f85-62a2-1dbd-f330-80f9a13b7d2e@huaweicloud.com>
+Date:   Thu, 15 Jun 2023 09:28:47 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d02cce4a-47b1-a776-0d3a-a6a7c9a4d8fd@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CALTww2-knHOoX35NB73X-sMn1u8EJHLA=0aOnoVqVm83+fdG5Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgD3mp5PaYpkU3_rLg--.4972S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxWF45JFy8Xr4xAr18trWUArb_yoWruw47pr
+        y8AF1UGr4UAr47Z34Ut3WjvFW0y34UXF15Xr9xJry3Jwn5Kw4ftFW7CFW5uFykZFn5Jw1U
+        ZrWrJFWfZFWqy3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
+        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
+        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,98 +75,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 03:19:12PM +0100, James Clark wrote:
-> On 14/06/2023 15:13, Arnaldo Carvalho de Melo wrote:
-> > Em Wed, Jun 14, 2023 at 03:02:19PM +0100, James Clark escreveu:
-> >> We are currently keeping something like this in our CI because defconfig
-> >> doesn't give full coverage. It's not complete yet, but is a starting
-> >> point as a place to add to when a specific test needs something extra to
-> >> run.
-> >>
-> >> The RFC is for discussion on folder placement and file naming etc.
+Hi,
 
-I am wandering if we can put these configurations into kselftest (the
-folder tools/testing/selftests/).  You could see now kernel build has
-already provided option to merge kernel configurations for kselftests.
-
-> > Would be interesting to add the Kconfig maintainer to see if they have
-> > an opinion, Masahiro?
-
-Yeah, looking forward suggestions from Masahiro.
-
-> > - Arnaldo
-> >  
+在 2023/06/14 17:08, Xiao Ni 写道:
+> On Wed, Jun 14, 2023 at 4:29 PM Yu Kuai <yukuai1@huaweicloud.com> wrote:
+>>
+>> Hi,
+>>
+>> 在 2023/06/14 15:57, Xiao Ni 写道:
+>>> On Wed, Jun 14, 2023 at 3:38 PM Yu Kuai <yukuai1@huaweicloud.com> wrote:
+>>>>
+>>>> Hi,
+>>>>
+>>>> 在 2023/06/14 15:12, Xiao Ni 写道:
+>>>>> On Wed, Jun 14, 2023 at 10:04 AM Yu Kuai <yukuai1@huaweicloud.com> wrote:
+>>>>>>
+>>>>>> Hi,
+>>>>>>
+>>>>>> 在 2023/06/14 9:48, Yu Kuai 写道:
+>>>>>>
+>>>>>>
+>>>>>>>>
+>>>>>>>> In the patch, sync_seq is added in md_reap_sync_thread. In
+>>>>>>>> idle_sync_thread, if sync_seq isn't equal
+>>>>>>>>
+>>>>>>>> mddev->sync_seq, it should mean there is someone that stops the sync
+>>>>>>>> thread already, right? Why do
+>>>>>>>>
+>>>>>>>> you say 'new started sync thread' here?
+>>>>>>
+>>>>>> If someone stops the sync thread, and new sync thread is not started,
+>>>>>> then this sync_seq won't make a difference, above wait_event() will not
+>>>>>> wait because !test_bit(MD_RECOVERY_RUNNING, &mddev->recovery) will pass.
+>>>>>> So 'sync_seq' is only used when the old sync thread stops and new sync
+>>>>>> thread starts, add 'sync_seq' will bypass this case.
+>>>>>
+>>>>> Hi
+>>>>>
+>>>>> If a new sync thread starts, why can sync_seq be different? sync_seq
+>>>>> is only added in md_reap_sync_thread. And when a new sync request
+>>>>> starts, it can't stop the sync request again?
+>>>>>
+>>>>> Af first, the sync_seq is 0
+>>>>>
+>>>>> admin1
+>>>>> echo idle > sync_action
+>>>>> idle_sync_thread(sync_seq is 1)
+>>>>
+>>>> Wait, I'm confused here, how can sync_seq to be 1 here? I suppose you
+>>>> mean that there is a sync_thread just finished?
+>>>
+>>> Hi Kuai
+>>>
+>>> Yes. Because idle_sync_thread needs to wait until md_reap_sync_thread
+>>> finishes. And md_reap_sync_thread adds sync_seq. Do I understand your
+>>> patch right?
+>>
+>> Yes, noted that idle_sync_thread() will only wait if MD_RECOVERY_RUNNING
+>> is set.
+>>
+>>>
+>>>>
+>>>> Then the problem is that idle_sync_thread() read sync_seq after the old
+>>>> sync_thread is done, and new sync_thread start before wait_event() is
+>>>> called, should we wait for this new sync_thread?
+>>>>
+>>>> My answer here is that we should, but I'm also ok to not wait this new
+>>>> sync_thread, I don't think this behaviour matters. The key point here
+>>>> is that once wait_event() is called from idle_sync_thread(), this
+>>>> wait_event() should not wait for new sync_thread...
+>>>
+>>> I think we should wait. If we don't wait for it, there is a problem.
+>>> One person echos idle to sync_action and it doesn't work sometimes.
+>>> It's a strange thing.
+>>>
+>>
+>> Ok. I'll add new comment to emphasize that idle_sync_thread() won't wait
+>> for new sync_thread that is started after wait_event().
 > 
-> One concern I have is that uname -m gives a different result to the
-> ARCH= option for a kernel build (ARCH=arm64). Probably the build time
-> version is more useful to us so maybe that should be the file name.
+> I suggest removing this function. Without this change, it's more
+> simple and it can work well without problem. The people that echo idle
+> to sync_action needs to wait until the sync action finishes. The code
+> semantic is clear and simple.
+>>
+>>>>
+>>>>> echo resync > sync_action (new sync)
+>>>>
+>>>> If this is behind "echo idle > sync_action", idle_sync_thread should not
+>>>> see that MD_RECOVERY_RUNNING is set and wait_event() won't wait at all.
+>>>
+>>> `echo resync > sync_action` can't change the sync_seq. So 'echo idle >
+>>> sync_action' still waits until MD_RECOVERY_RUNNING is cleared?
+>>
+>> This is not accurate, if `echo resync > sync_action` triggers a new
+>> sync_thread, then sync_seq is updated when this sync_thread is done,
+>> during this period, MD_RECOVERY_RUNNING is still set, so `echo idle
+>>   >sync_action` will wait for sync_thread to be done.
+> 
+> I can understand your comment, but sorry, I still can't get how
+> sync_seq works. Could you give a specific case that explains how it
+> works?
 
-If we want to fit into kernel's build system, I'd like to use "arm64"
-rather than "aarch64" as the folder name.
+Ok, the problem is that echo ilde is supposed to interrupt sync_thread
+and stop sync_thread quickly. Now that we don't hold mutex here, we
+can't prevent new sync_thread to start. For exapmle:
 
-Seems to me, it is a legacy issue for using "arm64" as ARCH variable in
-Makefile, given we cannot change this, then the folder name 'arm64' would
-be easier for us to extend kernel's Makefile for building kernel of perf
-testing?
+1) a sync_thread A is runing, MD_RECOVERY_RUNNING is set;
 
-> Not sure what the x86 version is or if anyone is actually doing cross x86
-> builds...
+2) echo idle, A will be interrupted, mutex is not hold and
+idle_sync_thread() is waiting for MD_RECOVERY_RUNNING to be cleared.
 
-I don't understand this question and not sure if you are asking cross
-builds for kernel or perf.  Maybe a good reference for arch naming is
-the file scripts/subarch.include.
+3) A is interrupted, it'll clear MD_RECOVERY_RUNNING and try to wakeup
+idle_sync_thread(), however, before idle_sync_thread() is woken, A can
+be done and a new sync_thread B can be started, and MD_RECOVERY_RUNNING
+will be set again.
+
+4) idle_sync_thread() finially wake up, however, MD_RECOVERY_RUNNING is
+set and it will still waiting. And this time B won't be interrupted.
 
 Thanks,
-Leo
+Kuai
 
-> >> Signed-off-by: James Clark <james.clark@arm.com>
-> >> ---
-> >>  tools/perf/tests/config-fragments/README  |  7 +++++++
-> >>  tools/perf/tests/config-fragments/aarch64 |  1 +
-> >>  tools/perf/tests/config-fragments/config  | 11 +++++++++++
-> >>  3 files changed, 19 insertions(+)
-> >>  create mode 100644 tools/perf/tests/config-fragments/README
-> >>  create mode 100644 tools/perf/tests/config-fragments/aarch64
-> >>  create mode 100644 tools/perf/tests/config-fragments/config
-> >>
-> >> diff --git a/tools/perf/tests/config-fragments/README b/tools/perf/tests/config-fragments/README
-> >> new file mode 100644
-> >> index 000000000000..e816cfb1b96d
-> >> --- /dev/null
-> >> +++ b/tools/perf/tests/config-fragments/README
-> >> @@ -0,0 +1,7 @@
-> >> +This folder is for kernel config fragments that can be merged with
-> >> +defconfig to give full test coverage of a perf test run. This is only
-> >> +an optimistic set as some features require hardware support in order to
-> >> +pass and not skip.
-> >> +
-> >> +'config' is shared across all platforms, and for arch specific files,
-> >> +the file name should match that returned by 'uname -m'.
-> >> diff --git a/tools/perf/tests/config-fragments/aarch64 b/tools/perf/tests/config-fragments/aarch64
-> >> new file mode 100644
-> >> index 000000000000..64c4ab17cd58
-> >> --- /dev/null
-> >> +++ b/tools/perf/tests/config-fragments/aarch64
-> >> @@ -0,0 +1 @@
-> >> +CONFIG_CORESIGHT_SOURCE_ETM4X=y
-> >> diff --git a/tools/perf/tests/config-fragments/config b/tools/perf/tests/config-fragments/config
-> >> new file mode 100644
-> >> index 000000000000..c340b3195fca
-> >> --- /dev/null
-> >> +++ b/tools/perf/tests/config-fragments/config
-> >> @@ -0,0 +1,11 @@
-> >> +CONFIG_TRACEPOINTS=y
-> >> +CONFIG_STACKTRACE=y
-> >> +CONFIG_NOP_TRACER=y
-> >> +CONFIG_RING_BUFFER=y
-> >> +CONFIG_EVENT_TRACING=y
-> >> +CONFIG_CONTEXT_SWITCH_TRACER=y
-> >> +CONFIG_TRACING=y
-> >> +CONFIG_GENERIC_TRACER=y
-> >> +CONFIG_FTRACE=y
-> >> +CONFIG_FTRACE_SYSCALLS=y
-> >> +CONFIG_BRANCH_PROFILE_NONE=y
-> >> -- 
-> >> 2.34.1
-> >>
-> > 
