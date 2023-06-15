@@ -2,168 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68E757314AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D19A67314B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:58:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241208AbjFOJzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 05:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52390 "EHLO
+        id S245498AbjFOJ6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 05:58:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343787AbjFOJzP (ORCPT
+        with ESMTP id S240283AbjFOJ6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 05:55:15 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564E326B8;
-        Thu, 15 Jun 2023 02:55:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686822911; x=1718358911;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tgLchCQOCm3NxEtP7yRUXwmiZkL4G/bjAirc8TrgyEY=;
-  b=QwNF9fBHEY2EapsOvVGDhwdjERdA5zB/Tl3iixCWWt6WMgLzGkpyMgev
-   CfKEu59Iqdq4M5x/wjIMZa6mFMoNd/EAu16aEBhxQ27dhNMUut0l2TgRB
-   gXKdfQqAlNKkdakkTE1f+TfFu+YOUSPu+FCeBEArm7KkiZxR9XGDl9uvn
-   XvGv8WI5B3TAj/kqlZvezSd8xnAN0j9rrCQzmOYua2U7d2WyRaQ23cArW
-   Adghvj820Qc8bIN++vFyat4zfhV18ZPGjtXqEMQ9ckQ6NRH9+LYA8XAm/
-   RsuHXFKcy05iFM3A2NJOjYfzeL5Ob7FYSV0qqkPfgTckiqbLbG/NQHbCP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="357746579"
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="357746579"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 02:55:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="706598947"
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="706598947"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga007.jf.intel.com with ESMTP; 15 Jun 2023 02:55:08 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 7769D403; Thu, 15 Jun 2023 12:55:17 +0300 (EEST)
-Date:   Thu, 15 Jun 2023 12:55:17 +0300
-From:   "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>
-To:     "Jadav, Raag" <raag.jadav@intel.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Sangannavar, Mallikarjunappa" 
-        <mallikarjunappa.sangannavar@intel.com>,
-        "N, Pandith" <pandith.n@intel.com>
-Subject: Re: [PATCH v3 2/3] pinctrl: intel: refine ->irq_set_type() hook
-Message-ID: <20230615095517.GV45886@black.fi.intel.com>
-References: <20230613085054.10976-1-raag.jadav@intel.com>
- <20230613085054.10976-3-raag.jadav@intel.com>
- <ZInpT0dUUVUcKdqv@smile.fi.intel.com>
- <DM6PR11MB2779F9C28712D7C25F9FB3768C5BA@DM6PR11MB2779.namprd11.prod.outlook.com>
+        Thu, 15 Jun 2023 05:58:18 -0400
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4ED1FDB;
+        Thu, 15 Jun 2023 02:58:16 -0700 (PDT)
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1b517ee9157so3081945ad.3;
+        Thu, 15 Jun 2023 02:58:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686823096; x=1689415096;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=//1nqNY65Oj9cRjVXCMigOTuSDy4ibT25fqZRbusfJc=;
+        b=BB5q9MdtwCRUT5T5+PwwjLSZyYzDVGEcwpff1E8awnC+Pxsns1rYMtfX+PlNisHMCX
+         R9GBjz1QH44waIdZGLmXKS47V7hAWZGo8bTONG0Nqee/rx0AJWMJnbGTHCLaARi56bvu
+         z0hvNAlbQpQXLL8Zk7zBgYpKoqPZvKU88ykn6354azGQgQF/NXIc+QldR/5C96hlc/Bb
+         KfARq03siodybJMJQ5AFIBojEzOd8at/V7QySKQB6hSUdbFJp3CjHV7uWQYmQHalfGGO
+         opAWPGMeEeelPFF1SEfGvo233d+lj8AnH5RvXtrBWKnPsZCRW1D398zBPzaO1V77I45f
+         68Yg==
+X-Gm-Message-State: AC+VfDwVzH/7Wyg/9O0LoN8NuuADI+cMcUcP5kY927ejQskGboXEY/Lb
+        MKJC2bnBWKWVHZBRiuZNSvquPLdUCfpnI8CbpHo=
+X-Google-Smtp-Source: ACHHUZ7W9cAAI27g+9TLkuwB+IooIIWUEnWJOIa17tJaPX+uJTmj10PyWRum4nzlnV8maFyi7HhLNYe3CjfjzuDGYPc=
+X-Received: by 2002:a17:90a:2b49:b0:253:971b:dd1e with SMTP id
+ y9-20020a17090a2b4900b00253971bdd1emr3486539pjc.0.1686823095856; Thu, 15 Jun
+ 2023 02:58:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <DM6PR11MB2779F9C28712D7C25F9FB3768C5BA@DM6PR11MB2779.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <PAVPR10MB7209CEA1F5AD12B2E5C8ED86B15AA@PAVPR10MB7209.EURPRD10.PROD.OUTLOOK.COM>
+ <ZIrC6DpjjtmpIsI9@corigine.com>
+In-Reply-To: <ZIrC6DpjjtmpIsI9@corigine.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Thu, 15 Jun 2023 18:58:04 +0900
+Message-ID: <CAMZ6RqKzkEL+zfNyqn_f46K_h3_cX-BwGQJb8X5hH-vms0P=cw@mail.gmail.com>
+Subject: Re: [PATCH v5 1/3] can: length: fix bitstuffing count
+To:     Simon Horman <simon.horman@corigine.com>,
+        HMS Incident Management <incidentmanagement@hms.se>
+Cc:     "mkl@pengutronix.de" <mkl@pengutronix.de>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "Thomas.Kopp@microchip.com" <Thomas.Kopp@microchip.com>,
+        "socketcan@hartkopp.net" <socketcan@hartkopp.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "marex@denx.de" <marex@denx.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 09:48:12AM +0000, Jadav, Raag wrote:
-> > On Tue, Jun 13, 2023 at 02:20:53PM +0530, Raag Jadav wrote:
-> > > Utilize a temporary variable for common shift operation in
-> > > ->irq_set_type() hook and improve readability.
-> > > While at it, simplify if-else-if chain and save a few bytes.
-> > >
-> > > add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-16 (-16)
-> > > Function                                     old     new   delta
-> > > intel_gpio_irq_type                          317     301     -16
-> > > Total: Before=10469, After=10453, chg -0.15%
-> > 
-> > ...
-> > 
-> > >  	value = readl(reg);
-> > > -
-> > >  	value &= ~(PADCFG0_RXEVCFG_MASK | PADCFG0_RXINV);
-> > >
-> > >  	if ((type & IRQ_TYPE_EDGE_BOTH) == IRQ_TYPE_EDGE_BOTH) {
-> > > -		value |= PADCFG0_RXEVCFG_EDGE_BOTH <<
-> > PADCFG0_RXEVCFG_SHIFT;
-> > > +		rxevcfg = PADCFG0_RXEVCFG_EDGE_BOTH;
-> > >  	} else if (type & IRQ_TYPE_EDGE_FALLING) {
-> > > -		value |= PADCFG0_RXEVCFG_EDGE <<
-> > PADCFG0_RXEVCFG_SHIFT;
-> > > -		value |= PADCFG0_RXINV;
-> > > +		rxevcfg = PADCFG0_RXEVCFG_EDGE;
-> > >  	} else if (type & IRQ_TYPE_EDGE_RISING) {
-> > > -		value |= PADCFG0_RXEVCFG_EDGE <<
-> > PADCFG0_RXEVCFG_SHIFT;
-> > > +		rxevcfg = PADCFG0_RXEVCFG_EDGE;
-> > >  	} else if (type & IRQ_TYPE_LEVEL_MASK) {
-> > > -		if (type & IRQ_TYPE_LEVEL_LOW)
-> > > -			value |= PADCFG0_RXINV;
-> > > +		rxevcfg = PADCFG0_RXEVCFG_LEVEL;
-> > >  	} else {
-> > > -		value |= PADCFG0_RXEVCFG_DISABLED <<
-> > PADCFG0_RXEVCFG_SHIFT;
-> > > +		rxevcfg = PADCFG0_RXEVCFG_DISABLED;
-> > >  	}
-> > >
-> > > +	if (type == IRQ_TYPE_EDGE_FALLING || type ==
-> > IRQ_TYPE_LEVEL_LOW)
-> > > +		value |= PADCFG0_RXINV;
-> > > +
-> > > +	value |= rxevcfg << PADCFG0_RXEVCFG_SHIFT;
-> > >  	writel(value, reg);
-> > 
-> > Looking at this I realized that entire temporary variable assignments can be
-> > done outside of spin lock. You probably would need another one for keeping
-> > rxinv value.
-> 
-> Something like this?
-> 
->         u32 value, rxevcfg;
->         u32 rxinv = 0;
-> 
->         if ((type & IRQ_TYPE_EDGE_BOTH) == IRQ_TYPE_EDGE_BOTH) {
->                 rxevcfg = PADCFG0_RXEVCFG_EDGE_BOTH;
->         } else if (type & IRQ_TYPE_EDGE_FALLING) {
->                 rxevcfg = PADCFG0_RXEVCFG_EDGE;
->         } else if (type & IRQ_TYPE_EDGE_RISING) {
->                 rxevcfg = PADCFG0_RXEVCFG_EDGE;
->         } else if (type & IRQ_TYPE_LEVEL_MASK) {
->                 rxevcfg = PADCFG0_RXEVCFG_LEVEL;
->         } else {
->                 rxevcfg = PADCFG0_RXEVCFG_DISABLED;
->         }
-> 
->         if (type == IRQ_TYPE_EDGE_FALLING || type == IRQ_TYPE_LEVEL_LOW)
->                 rxinv = PADCFG0_RXINV;
-> 
->         raw_spin_lock_irqsave(&pctrl->lock, flags);
-> 
->         intel_gpio_set_gpio_mode(reg);
-> 
->         value = readl(reg);
-> 
->         value &= ~(PADCFG0_RXEVCFG_MASK | PADCFG0_RXINV);
->         value |= rxinv;
->         value |= rxevcfg << PADCFG0_RXEVCFG_SHIFT;
-> 
->         writel(value, reg);
+On Thu. 15 Jun. 2023 at 17:03, Simon Horman <simon.horman@corigine.com> wrote:
+> On Wed, Jun 14, 2023 at 08:40:42PM +0000, HMS Incident Management wrote:
+> > [You don't often get email from incidentmanagement@hms.se. Learn why this is important at https://aka.ms/LearnAboutSenderIdentification ]
+> >
+> > **We apologize for the delay in delivering this email, which was caused by a mail incident that occurred over the weekend on June 10th. This email was originally sent from vincent.mailhol@gmail.com on 06/11/2023 02:58:08
+> >
+> > The Stuff Bit Count is always coded on 4 bits [1]. Update the Stuff
+> > Bit Count size accordingly.
+> >
+> > In addition, the CRC fields of CAN FD Frames contain stuff bits at
+> > fixed positions called fixed stuff bits [2]. The CRC field starts with
+> > a fixed stuff bit and then has another fixed stuff bit after each
+> > fourth bit [2], which allows us to derive this formula:
+> >
+> >   FSB count = 1 + round_down(len(CRC field)/4)
+> >
+> > The length of the CRC field is [1]:
+> >
+> >   len(CRC field) = len(Stuff Bit Count) + len(CRC)
+> >                  = 4 + len(CRC)
+> >
+> > with len(CRC) either 17 or 21 bits depending of the payload length.
+> >
+> > In conclusion, for CRC17:
+> >
+> >   FSB count = 1 + round_down((4 + 17)/4)
+> >             = 6
+> >
+> > and for CRC 21:
+> >
+> >   FSB count = 1 + round_down((4 + 21)/4)
+> >             = 7
+> >
+> > Add a Fixed Stuff bits (FSB) field with above values and update
+> > CANFD_FRAME_OVERHEAD_SFF and CANFD_FRAME_OVERHEAD_EFF accordingly.
+> >
+> > [1] ISO 11898-1:2015 section 10.4.2.6 "CRC field":
+> >
+> >   The CRC field shall contain the CRC sequence followed by a recessive
+> >   CRC delimiter. For FD Frames, the CRC field shall also contain the
+> >   stuff count.
+> >
+> >   Stuff count
+> >
+> >   If FD Frames, the stuff count shall be at the beginning of the CRC
+> >   field. It shall consist of the stuff bit count modulo 8 in a 3-bit
+> >   gray code followed by a parity bit [...]
+> >
+> > [2] ISO 11898-1:2015 paragraph 10.5 "Frame coding":
+> >
+> >   In the CRC field of FD Frames, the stuff bits shall be inserted at
+> >   fixed positions; they are called fixed stuff bits. There shall be a
+> >   fixed stuff bit before the first bit of the stuff count, even if the
+> >   last bits of the preceding field are a sequence of five consecutive
+> >   bits of identical value, there shall be only the fixed stuff bit,
+> >   there shall not be two consecutive stuff bits. A further fixed stuff
+> >   bit shall be inserted after each fourth bit of the CRC field [...]
+> >
+> > Fixes: 85d99c3e2a13 ("can: length: can_skb_get_frame_len(): introduce function to get data length of frame in data link layer")
+> > Suggested-by: Thomas Kopp
+> > Signed-off-by: Vincent Mailhol
+> > Reviewed-by: Thomas Kopp
+>
+> Hi,
+>
+> Some feedback from my side, in the hope that it is useful.
+>
+> I guess this patch-set has had a bit of a journey, email-wise.
+> Unfortunately on it's trip the email addresses for the tags above got lost,
+> which by itself leads me to think it should be resent.
 
-This one looks better.
+I can see Thomas's email in the To: field.
 
-> > Will it give us any memory reduction in comparison to the current code?
-> 
-> add/remove: 0/0 grow/shrink: 1/0 up/down: 4/0 (4)
-> Function                                     old     new   delta
-> intel_gpio_irq_type                          317     321      +4
-> Total: Before=10469, After=10473, chg +0.04%
-> 
-> Unfortunately gcc doesn't seem to consider this as best of the sequence,
-> and I'm not entirely sure why.
+> Also, I think it would be best if the From address of the email
+> was from a human, who features in the Signed-off-by tags of the patches.
+> But perhaps this is also an artifact of the journey.
 
-It's fine as is, readability counts more than few bytes here.
+Yes, the original message had a correct From: tag. As far as I can
+see, only that From: tag was lost. The other To: and CC: fields seem
+correct.
+
+Also, the original message correctly reached the CAN mailing list with
+all the good tags.
+
+  https://lore.kernel.org/linux-can/20230611025728.450837-1-mailhol.vincent@wanadoo.fr/
+
+> It is also unclear to me where this applies - f.e. it doesn't
+> apply to the main branch of linux-can-next.
+
+I tested it right now, the original series apply well. The one you
+received was redacted and indeed does not apply. For example, this:
+
+  diff --git a/include/linux/can/length.h b/include/linux/can/length.h
+  index b8c12c83bc51..521fdbce2d69 100644
+  --- a/include/linux/can/length.h
+  +++ b/include/linux/can/length.h
+  @@ -1,6 +1,7 @@
+   /* SPDX-License-Identifier: GPL-2.0 */
+   /* Copyright (C) 2020 Oliver Hartkopp <socketcan@hartkopp.net>
+    * Copyright (C) 2020 Marc Kleine-Budde <kernel@pengutronix.de>
+  + * Copyright (C) 2020 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+    */
+
+   #ifndef _CAN_LENGTH_H
+
+became that:
+
+  diff --git a/include/linux/can/length.h b/include/linux/can/length.h
+  index b8c12c83bc51..521fdbce2d69 100644
+  --- a/include/linux/can/length.h
+  +++ b/include/linux/can/length.h
+  @@ -1,6 +1,7 @@
+   /* SPDX-License-Identifier: GPL-2.0 */
+   /* Copyright (C) 2020 Oliver Hartkopp
+    * Copyright (C) 2020 Marc Kleine-Budde
+  + * Copyright (C) 2020 Vincent Mailhol
+    */
+
+   #ifndef _CAN_LENGTH_H
+
+(note the missing e-mail address).
+
+@HMS incident management team, maybe this is something you should fix.
+
+> Lastly, I'm not a CAN maintainer. But I think it's usual to separate
+> fixes and enhancements into different series, likely the former
+> targeting the can tree while the latter targets the can-next tree
+> (I could be way off here).
+
+Hmm... The fact is that only the first two patches are fixes. The
+third one is not.  The fixes being really minor, there is no urgency.
+So I was thinking of having the full series go to the next branch and
+as long as there is the Fix: tag, the two first patches will
+eventually be picked by the stable team. I thought that this approach
+was easier than sending two fixes to the stable branch, wait for these
+to propagate to next and then send a second series of a single patch
+for next.
+
+@Marc, let me know what you prefer. I am fine to split if this works
+best for you. Also, I will wait for your answer before doing any
+resend.
+
+> If on the other hand, the patches in this series are not bug fixes,
+> then it is probably best to drop the 'fixes' language.
+
+I will keep the Fix tags. Even if minor (probably no visible
+repercussions) it still fixes an existing inaccuracy (whether you call
+it bug or not is another debate, but I often see typo fixes being
+backported, and these are a bit more than a typo fix).
+
+
+Yours sincerely,
+Vincent Mailhol
