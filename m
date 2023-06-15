@@ -2,82 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9445731022
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:06:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5AF073103B
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:10:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243821AbjFOHGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 03:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35690 "EHLO
+        id S243553AbjFOHKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 03:10:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243703AbjFOHGS (ORCPT
+        with ESMTP id S244484AbjFOHJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 03:06:18 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936C62728;
-        Thu, 15 Jun 2023 00:06:08 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35F4Emsg006244;
-        Thu, 15 Jun 2023 07:06:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=XWWiSC/2cMr8EAAI65Nfl+3f3bXFbZqlZsIW7m/HUGc=;
- b=WTvWiVr1JrjJpOIa7ecIVp6SWZ90cJifn02F4HX/8VGlfmaIXkegSBA0nu/Eh0j5qrJV
- CKZZ9LqCGusTBDDN3FwPuonwMYaDB8240O/FnHxAueF/ZRKeHQbWbcwYq2VXBpoaBsZg
- OeSO40Rrie7MHXA1H/decsSerX4KQU6S9cXrmqLeMVDXqGhECFCHMNaNvGOdQt54u08y
- o9b2THMhALz2TuLIH8a9YNQJyss+jkdfG3XIm/7UCRCAmMY+L+igzXOIUtGjNJeAMM54
- 8ni2dVWK1vuAIAvrjWH2WBRp0f8K5SFR0EpeL0DEdm3W2C01+s/eLiYZt8QKW6M9fwx9 Vw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r7u8c8aru-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jun 2023 07:06:05 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35F764q9024838
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jun 2023 07:06:04 GMT
-Received: from [10.110.8.184] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 15 Jun
- 2023 00:06:00 -0700
-Message-ID: <0848ee33-edd6-6f2c-a8d2-b374a1e0a378@quicinc.com>
-Date:   Thu, 15 Jun 2023 12:35:56 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 2/2] spi: spi-geni-qcom: Add SPI SLAVE mode support for
- GENI based QuPv3
-Content-Language: en-US
-To:     Shazad Hussain <quic_shazhuss@quicinc.com>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <broonie@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <quic_msavaliy@quicinc.com>, <quic_vtanuku@quicinc.com>,
-        <quic_vnivarth@quicinc.com>, <quic_arandive@quicinc.com>
-References: <20230613065229.5619-1-quic_ptalari@quicinc.com>
- <20230613065229.5619-3-quic_ptalari@quicinc.com>
- <886b1665-cbb9-e302-eb2d-b7ff9fd242a8@quicinc.com>
-From:   Praveen Talari <quic_ptalari@quicinc.com>
-In-Reply-To: <886b1665-cbb9-e302-eb2d-b7ff9fd242a8@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: s5WarNst3qgWcdAl0Hm_Cf8wLRXTMT6x
-X-Proofpoint-GUID: s5WarNst3qgWcdAl0Hm_Cf8wLRXTMT6x
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-15_04,2023-06-14_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 suspectscore=0 mlxlogscore=999 malwarescore=0
- phishscore=0 bulkscore=0 impostorscore=0 priorityscore=1501 spamscore=0
- mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306150058
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Thu, 15 Jun 2023 03:09:44 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD11273D
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:08:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686812906; x=1718348906;
+  h=date:from:to:cc:subject:message-id;
+  bh=jS6B6N1PWccdBaTZRqbjgZfbIgbN53G7GE8MeajCNk8=;
+  b=WBtuPwHUz5e5j8Cwn2ClMaJ3TD41uaTUG3nUqpPiAEdCSkhuNcnfH2jX
+   Nm3yy6q/Y4B+T1jZ750TjP/qQAza2/Dw6UHaqW5SV1W2cdxpP5zqz10O0
+   Pjs1eL9VvCuypkZ2YIdYiyJ0g2CUXeidn14/hG4wHY0u5DKp0XIZ3kIyf
+   CAMzYsuEU5JtgOeA3plwXifDfs0MWXhXT0hWAWR+DuwcEKEEp6TQMF/Il
+   XYXpiAPMVLRh7Vy3R20//1oRWiZSTplnj9rLAEzaZBy/reXP9puLE4mLz
+   zqSFWC7DYfi4hOgmrSocfHnu+c8BBS+yZ0YFB+HY6YbZ0TNcgXc9nDWPL
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="339179671"
+X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
+   d="scan'208";a="339179671"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 00:08:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="706540138"
+X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
+   d="scan'208";a="706540138"
+Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 15 Jun 2023 00:08:22 -0700
+Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q9h5S-0001Zz-2d;
+        Thu, 15 Jun 2023 07:08:14 +0000
+Date:   Thu, 15 Jun 2023 15:07:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/build] BUILD SUCCESS
+ 9d9173e9ceb63660ccad80f41373fd7eb48ff4ac
+Message-ID: <202306151500.86869VdV-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,157 +60,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/build
+branch HEAD: 9d9173e9ceb63660ccad80f41373fd7eb48ff4ac  x86/build: Avoid relocation information in final vmlinux
 
-Thank you for review.
+elapsed time: 726m
 
-On 6/13/2023 1:12 PM, Shazad Hussain wrote:
->
->
-> On 6/13/2023 12:22 PM, Praveen Talari wrote:
->> Add SPI SLAVE mode support for GENI based QuPv3.
->>
->> Signed-off-by: Praveen Talari <quic_ptalari@quicinc.com>
->> ---
->>   drivers/spi/spi-geni-qcom.c | 55 +++++++++++++++++++++++++++++++++----
->>   1 file changed, 49 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
->> index 206cc04bb1ed..2e3ae29e79e0 100644
->> --- a/drivers/spi/spi-geni-qcom.c
->> +++ b/drivers/spi/spi-geni-qcom.c
->> @@ -12,6 +12,7 @@
->>   #include <linux/platform_device.h>
->>   #include <linux/pm_opp.h>
->>   #include <linux/pm_runtime.h>
->> +#include <linux/property.h>
->>   #include <linux/soc/qcom/geni-se.h>
->>   #include <linux/spi/spi.h>
->>   #include <linux/spinlock.h>
->> @@ -52,6 +53,9 @@
->>   #define SPI_CS_CLK_DELAY_MSK        GENMASK(19, 10)
->>   #define SPI_CS_CLK_DELAY_SHFT        10
->>   +#define SE_SPI_SLAVE_EN                (0x2BC)
->> +#define SPI_SLAVE_EN                BIT(0)
->> +
->>   /* M_CMD OP codes for SPI */
->>   #define SPI_TX_ONLY        1
->>   #define SPI_RX_ONLY        2
->> @@ -99,6 +103,24 @@ struct spi_geni_master {
->>       int cur_xfer_mode;
->>   };
->>   +static struct spi_master *get_spi_master(struct device *dev)
->> +{
->> +    struct platform_device *pdev = to_platform_device(dev);
->> +    struct spi_master *spi = platform_get_drvdata(pdev);
->> +
->> +    return spi;
->> +}
->> +
->> +static void spi_slv_setup(struct spi_geni_master *mas)
->> +{
->> +    struct geni_se *se = &mas->se;
->> +
->> +    writel(SPI_SLAVE_EN, se->base + SE_SPI_SLAVE_EN);
->> +    writel(GENI_IO_MUX_0_EN, se->base + GENI_OUTPUT_CTRL);
->> +    writel(START_TRIGGER, se->base + SE_GENI_CFG_SEQ_START);
->> +    dev_info(mas->dev, "spi slave setup done\n");
->> +}
->> +
->>   static int get_spi_clk_cfg(unsigned int speed_hz,
->>               struct spi_geni_master *mas,
->>               unsigned int *clk_idx,
->> @@ -140,12 +162,18 @@ static void handle_se_timeout(struct spi_master 
->> *spi,
->>       const struct spi_transfer *xfer;
->>         spin_lock_irq(&mas->lock);
->> -    reinit_completion(&mas->cancel_done);
->>       if (mas->cur_xfer_mode == GENI_SE_FIFO)
->>           writel(0, se->base + SE_GENI_TX_WATERMARK_REG);
->>         xfer = mas->cur_xfer;
->>       mas->cur_xfer = NULL;
->> +
->> +    if (spi->slave) {
->> +        spin_unlock_irq(&mas->lock);
->> +        goto unmap_if_dma;
->> +    }
->> +
->> +    reinit_completion(&mas->cancel_done);
->>       geni_se_cancel_m_cmd(se);
->>       spin_unlock_irq(&mas->lock);
->>   @@ -541,6 +569,8 @@ static bool geni_can_dma(struct spi_controller 
->> *ctlr,
->>         if (mas->cur_xfer_mode == GENI_GPI_DMA)
->>           return true;
->> +    if (ctlr->slave)
->> +        return true;
->>         len = get_xfer_len_in_words(xfer, mas);
->>       fifo_size = mas->tx_fifo_depth * mas->fifo_width_bits / 
->> mas->cur_bits_per_word;
->> @@ -619,6 +649,7 @@ static void spi_geni_release_dma_chan(struct 
->> spi_geni_master *mas)
->>     static int spi_geni_init(struct spi_geni_master *mas)
->>   {
->> +    struct spi_master *spi = get_spi_master(mas->dev);
->>       struct geni_se *se = &mas->se;
->>       unsigned int proto, major, minor, ver;
->>       u32 spi_tx_cfg, fifo_disable;
->> @@ -627,7 +658,14 @@ static int spi_geni_init(struct spi_geni_master 
->> *mas)
->>       pm_runtime_get_sync(mas->dev);
->>         proto = geni_se_read_proto(se);
->> -    if (proto != GENI_SE_SPI) {
->> +
->> +    if (spi->slave) {
->> +        if (proto != GENI_SE_SPI_SLAVE) {
->> +            dev_err(mas->dev, "Invalid proto %d\n", proto);
->> +            goto out_pm;
->> +        }
->> +        spi_slv_setup(mas);
->> +    } else if (proto != GENI_SE_SPI) {
->>           dev_err(mas->dev, "Invalid proto %d\n", proto);
->>           goto out_pm;
->>       }
->> @@ -677,9 +715,11 @@ static int spi_geni_init(struct spi_geni_master 
->> *mas)
->>       }
->>         /* We always control CS manually */
->> -    spi_tx_cfg = readl(se->base + SE_SPI_TRANS_CFG);
->> -    spi_tx_cfg &= ~CS_TOGGLE;
->> -    writel(spi_tx_cfg, se->base + SE_SPI_TRANS_CFG);
->> +    if (!spi->slave) {
->> +        spi_tx_cfg = readl(se->base + SE_SPI_TRANS_CFG);
->> +        spi_tx_cfg &= ~CS_TOGGLE;
->> +        writel(spi_tx_cfg, se->base + SE_SPI_TRANS_CFG);
->> +    }
->>     out_pm:
->>       pm_runtime_put(mas->dev);
->> @@ -1072,6 +1112,9 @@ static int spi_geni_probe(struct 
->> platform_device *pdev)
->>       pm_runtime_set_autosuspend_delay(&pdev->dev, 250);
->>       pm_runtime_enable(dev);
->>   +    if (device_property_read_bool(&pdev->dev, "qcom,slv-ctrl"))
->
-> Should we update this property "qcom,slv-ctrl" in device tree bindings
-> as well !!
-Done
->
->
->> +        spi->slave = true;
->> +
->>       ret = geni_icc_get(&mas->se, NULL);
->>       if (ret)
->>           goto spi_geni_probe_runtime_disable;
->> @@ -1092,7 +1135,7 @@ static int spi_geni_probe(struct 
->> platform_device *pdev)
->>        * for dma (gsi) mode, the gsi will set cs based on params 
->> passed in
->>        * TRE
->>        */
->> -    if (mas->cur_xfer_mode == GENI_SE_FIFO)
->> +    if (!spi->slave && mas->cur_xfer_mode == GENI_SE_FIFO)
->>           spi->set_cs = spi_geni_set_cs;
->>         ret = request_irq(mas->irq, geni_spi_isr, 0, dev_name(dev), 
->> spi);
->
-> -Shazad
+configs tested: 32
+configs skipped: 91
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230614   clang
+i386                 randconfig-i002-20230614   clang
+i386                 randconfig-i003-20230614   clang
+i386                 randconfig-i004-20230614   clang
+i386                 randconfig-i005-20230614   clang
+i386                 randconfig-i006-20230614   clang
+i386                 randconfig-i011-20230612   gcc  
+i386                 randconfig-i012-20230612   gcc  
+i386                 randconfig-i013-20230612   gcc  
+i386                 randconfig-i014-20230612   gcc  
+i386                 randconfig-i015-20230612   gcc  
+i386                 randconfig-i016-20230612   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230612   clang
+x86_64               randconfig-a002-20230612   clang
+x86_64               randconfig-a003-20230612   clang
+x86_64               randconfig-a004-20230612   clang
+x86_64               randconfig-a005-20230612   clang
+x86_64               randconfig-a006-20230612   clang
+x86_64               randconfig-a011-20230612   gcc  
+x86_64               randconfig-a012-20230612   gcc  
+x86_64               randconfig-a013-20230612   gcc  
+x86_64               randconfig-a014-20230612   gcc  
+x86_64               randconfig-a015-20230612   gcc  
+x86_64               randconfig-a016-20230612   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
