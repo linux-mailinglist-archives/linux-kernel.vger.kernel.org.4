@@ -2,148 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87BA1731D6B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:06:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD0F731D6E
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbjFOQF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 12:05:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51706 "EHLO
+        id S230455AbjFOQGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 12:06:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233511AbjFOQFs (ORCPT
+        with ESMTP id S229651AbjFOQGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 12:05:48 -0400
-Received: from raptorengineering.com (mail.raptorengineering.com [23.155.224.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC392962;
-        Thu, 15 Jun 2023 09:05:34 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.rptsys.com (Postfix) with ESMTP id C42558284ECA;
-        Thu, 15 Jun 2023 11:05:33 -0500 (CDT)
-Received: from mail.rptsys.com ([127.0.0.1])
-        by localhost (vali.starlink.edu [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id Hn_yqK1TZ49t; Thu, 15 Jun 2023 11:05:33 -0500 (CDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.rptsys.com (Postfix) with ESMTP id 029168285373;
-        Thu, 15 Jun 2023 11:05:33 -0500 (CDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.rptsys.com 029168285373
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raptorengineering.com; s=B8E824E6-0BE2-11E6-931D-288C65937AAD;
-        t=1686845133; bh=rFUIajOuH+FadwYEaFgNJ33Jl5ybknrMbERZj5HLtXE=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=TRCOnV9vULN2EKIC6RkrYXQRMdSz224wIkjwnG2YD8ytSBUnnLhgLff59H382lPQy
-         a+9hfpBHgw739/WXMmokYNnU2Y0IwwNNv6aYKeiV9po84870EW47zK6Rn55XXLKcFX
-         HekRvKLI9PvKBbUbmOon3YXxTFtY52OUo0nGBfVo=
-X-Virus-Scanned: amavisd-new at rptsys.com
-Received: from mail.rptsys.com ([127.0.0.1])
-        by localhost (vali.starlink.edu [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id mK9YZwHZNAQ0; Thu, 15 Jun 2023 11:05:32 -0500 (CDT)
-Received: from vali.starlink.edu (localhost [127.0.0.1])
-        by mail.rptsys.com (Postfix) with ESMTP id B273B8284ECA;
-        Thu, 15 Jun 2023 11:05:32 -0500 (CDT)
-Date:   Thu, 15 Jun 2023 11:05:30 -0500 (CDT)
-From:   Timothy Pearson <tpearson@raptorengineering.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Timothy Pearson <tpearson@raptorengineering.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Alexey Kardashevskiy <aik@ozlabs.ru>
-Message-ID: <373175504.6295209.1686845130893.JavaMail.zimbra@raptorengineeringinc.com>
-In-Reply-To: <e2b46606-7ebc-c9a4-4f9a-873c0e71da5e@infradead.org>
-References: <20230602140143.0af52cee@canb.auug.org.au> <2d188c87-ef34-3812-7330-a985f756d959@infradead.org> <87h6rogjok.fsf@mail.lhotse> <586983120.3136676.1685851048873.JavaMail.zimbra@raptorengineeringinc.com> <e2b46606-7ebc-c9a4-4f9a-873c0e71da5e@infradead.org>
-Subject: Re: linux-next: Tree for Jun 2 (arch/powerpc/kernel/iommu.c)
+        Thu, 15 Jun 2023 12:06:50 -0400
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F81CEC;
+        Thu, 15 Jun 2023 09:06:49 -0700 (PDT)
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-62ff12ba965so6837986d6.3;
+        Thu, 15 Jun 2023 09:06:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686845208; x=1689437208;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=om/3rexWstZ0S91L+gEIlLHFrjZY2axSUrZtEHSrgPw=;
+        b=ZZQL4xqfGZ3YLUTqzQn49CKVqPvpjrVqFazPlRVc1ueFt5k+LJsgRJOAi64aV/oT6x
+         6NtO4H78XWGqXqSfEYo/sN4zDpvSxx0j+WNIQAiylReKW+WpXqZhV5zgIen8/+Qa/Qx9
+         GYExjb6DOm1V0GGci2OMqQGe8pqGQHvzqthy+JKZTAxG4I0iepi7UBTQhHYnogAsEGHL
+         S0L9q96OKiN191tOO9b9kTbPJE6lCVlpDSzblYic2+uR14ZK1Sqh5DK+0fjxyfdsqogJ
+         3+Q+t0yn+Cr+13EDlXugxhOMcOstITWtyhCUVbq54/Hv7PZaS1OgrgF1xXe6LPc1v0+X
+         iZcg==
+X-Gm-Message-State: AC+VfDy+6zsg9cyeyOlPadUXxw8DzixtFbMsQdn9YVfTHOmvCL6LCyGX
+        kN+gVplIIb2cnkZL8gBqxeV1ISNqhqY=
+X-Google-Smtp-Source: ACHHUZ6R9f7ZOwUs11BR3qFTpaQS/APHWFr0N/VDKoHBD955SpblUzKKuZKmRKgHavagfOfZazrQmg==
+X-Received: by 2002:ad4:5b88:0:b0:5e0:3825:9ad9 with SMTP id 8-20020ad45b88000000b005e038259ad9mr12265018qvp.2.1686845208016;
+        Thu, 15 Jun 2023 09:06:48 -0700 (PDT)
+Received: from snowbird ([2600:4041:5505:2302:25d5:bdf3:65da:2bb9])
+        by smtp.gmail.com with ESMTPSA id c11-20020a0ce14b000000b0062382e1e228sm5926310qvl.49.2023.06.15.09.06.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 09:06:47 -0700 (PDT)
+Date:   Thu, 15 Jun 2023 09:06:45 -0700
+From:   Dennis Zhou <dennis@kernel.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mmc: inline the first mmc_scan() on mmc_start_host()
+Message-ID: <ZIs3FQMiU75EhT6S@snowbird>
+References: <20230329202148.71107-1-dennis@kernel.org>
+ <CAPDyKFoKmWAC0V_t7WL-5OauxS-iiLxW+KhqC6RzJXD_szjPCA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: Zimbra 8.5.0_GA_3042 (ZimbraWebClient - GC112 (Linux)/8.5.0_GA_3042)
-Thread-Topic: linux-next: Tree for Jun 2 (arch/powerpc/kernel/iommu.c)
-Thread-Index: GvseGKdjg/1HXFjWDleWSYOY8qMIcw==
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFoKmWAC0V_t7WL-5OauxS-iiLxW+KhqC6RzJXD_szjPCA@mail.gmail.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
------ Original Message -----
-> From: "Randy Dunlap" <rdunlap@infradead.org>
-> To: "Timothy Pearson" <tpearson@raptorengineering.com>, "Michael Ellerman" <mpe@ellerman.id.au>
-> Cc: "Stephen Rothwell" <sfr@canb.auug.org.au>, "Linux Next Mailing List" <linux-next@vger.kernel.org>, "linux-kernel"
-> <linux-kernel@vger.kernel.org>, "linuxppc-dev" <linuxppc-dev@lists.ozlabs.org>, "Alexey Kardashevskiy" <aik@ozlabs.ru>
-> Sent: Thursday, June 15, 2023 11:00:08 AM
-> Subject: Re: linux-next: Tree for Jun 2 (arch/powerpc/kernel/iommu.c)
-
-> Hi Timothy,
+On Tue, Jun 13, 2023 at 04:25:11PM +0200, Ulf Hansson wrote:
+> On Wed, 29 Mar 2023 at 22:21, Dennis Zhou <dennis@kernel.org> wrote:
+> >
+> > When using dm-verity with a data partition on an emmc device, dm-verity
+> > races with the discovery of attached emmc devices. This is because mmc's
+> > probing code sets up the host data structure then a work item is
+> > scheduled to do discovery afterwards. To prevent this race on init,
+> > let's inline the first call to detection, __mm_scan(), and let
+> > subsequent detect calls be handled via the workqueue.
+> >
+> > Signed-off-by: Dennis Zhou <dennis@kernel.org>
 > 
-> On 6/3/23 20:57, Timothy Pearson wrote:
->> 
->> 
->> ----- Original Message -----
->>> From: "Michael Ellerman" <mpe@ellerman.id.au>
->>> To: "Randy Dunlap" <rdunlap@infradead.org>, "Stephen Rothwell"
->>> <sfr@canb.auug.org.au>, "Linux Next Mailing List"
->>> <linux-next@vger.kernel.org>
->>> Cc: "linux-kernel" <linux-kernel@vger.kernel.org>, "linuxppc-dev"
->>> <linuxppc-dev@lists.ozlabs.org>, "Alexey
->>> Kardashevskiy" <aik@ozlabs.ru>, "Timothy Pearson"
->>> <tpearson@raptorengineering.com>
->>> Sent: Saturday, June 3, 2023 7:22:51 PM
->>> Subject: Re: linux-next: Tree for Jun 2 (arch/powerpc/kernel/iommu.c)
->> 
->>> Randy Dunlap <rdunlap@infradead.org> writes:
->>>> On 6/1/23 21:01, Stephen Rothwell wrote:
->>>>> Hi all,
->>>>>
->>>>> Changes since 20230601:
->>>>>
->>>>
->>>> On powerpc64, a randconfig failed with:
->>>>
->>>> In file included from ../include/linux/list.h:5,
->>>>                  from ../include/linux/preempt.h:11,
->>>>                  from ../include/linux/spinlock.h:56,
->>>>                  from ../include/linux/mmzone.h:8,
->>>>                  from ../include/linux/gfp.h:7,
->>>>                  from ../include/linux/slab.h:15,
->>>>                  from ../arch/powerpc/kernel/iommu.c:15:
->>>> ../arch/powerpc/kernel/iommu.c: In function
->>>> 'spapr_tce_setup_phb_iommus_initcall':
->>>> ../arch/powerpc/kernel/iommu.c:1391:36: error: 'hose_list' undeclared (first use
->>>> in this function); did you mean 'zonelist'?
->>>>  1391 |         list_for_each_entry(hose, &hose_list, list_node) {
->>>>       |                                    ^~~~~~~~~
->>> ...
->>>
->>> hose_list is in pci-common.c which is built when PCI=y.
->>>
->>> PSERIES and POWERNV force PCI=y.
->>>
->>> But this config has neither:
->>>
->>> # CONFIG_PPC_POWERNV is not set
->>> # CONFIG_PPC_PSERIES is not set
->>> CONFIG_HAVE_PCI=y
->>> # CONFIG_PCI is not set
->>> # CONFIG_COMMON_CLK_RS9_PCIE is not set
->>>
->>>
->>> Probably the spapr_tce code should be wrapped in an #ifdef that is only
->>> enabled when POWERNV || PSERIES is enabled.
->>>
->>> cheers
->> 
->> Sounds reasonable, I was going to look into this further over the weekend.  I
->> can put together a patch for Monday if that works?
+> Along with the patch for the mmci driver, this one applied too, for
+> next, thanks!
 > 
-> Did you prepare a patch for this? I am still seeing this build error.
-> 
-> thanks.
-> --
-> ~Randy
 
-Yes, it was sent in to the linuxppc-dev list some weeks ago.  Did it not arrive?
+Thank you Ulf! I'm good with this just being applied to for-next.
+
+Thanks,
+Dennis
+
+> Note also that I took the liberty to clarify the commit message a bit.
+> 
+> Moreover, if we want this to be applied for stable kernels, we need to
+> manage that separately, as then the mmci patch is needed too. Please
+> ping if you need some pointers in regards to this.
+> 
+> Kind regards
+> Uffe
+> 
+> > ---
+> >  drivers/mmc/core/core.c | 15 +++++++++++----
+> >  1 file changed, 11 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
+> > index 368f10405e13..c0fdc438c882 100644
+> > --- a/drivers/mmc/core/core.c
+> > +++ b/drivers/mmc/core/core.c
+> > @@ -2185,10 +2185,8 @@ int mmc_card_alternative_gpt_sector(struct mmc_card *card, sector_t *gpt_sector)
+> >  }
+> >  EXPORT_SYMBOL(mmc_card_alternative_gpt_sector);
+> >
+> > -void mmc_rescan(struct work_struct *work)
+> > +void __mmc_rescan(struct mmc_host *host)
+> >  {
+> > -       struct mmc_host *host =
+> > -               container_of(work, struct mmc_host, detect.work);
+> >         int i;
+> >
+> >         if (host->rescan_disable)
+> > @@ -2249,6 +2247,14 @@ void mmc_rescan(struct work_struct *work)
+> >                 mmc_schedule_delayed_work(&host->detect, HZ);
+> >  }
+> >
+> > +void mmc_rescan(struct work_struct *work)
+> > +{
+> > +       struct mmc_host *host =
+> > +               container_of(work, struct mmc_host, detect.work);
+> > +
+> > +       __mmc_rescan(host);
+> > +}
+> > +
+> >  void mmc_start_host(struct mmc_host *host)
+> >  {
+> >         host->f_init = max(min(freqs[0], host->f_max), host->f_min);
+> > @@ -2261,7 +2267,8 @@ void mmc_start_host(struct mmc_host *host)
+> >         }
+> >
+> >         mmc_gpiod_request_cd_irq(host);
+> > -       _mmc_detect_change(host, 0, false);
+> > +       host->detect_change = 1;
+> > +       __mmc_rescan(host);
+> >  }
+> >
+> >  void __mmc_stop_host(struct mmc_host *host)
+> > --
+> > 2.40.0
+> >
