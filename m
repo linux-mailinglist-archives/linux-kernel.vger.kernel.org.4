@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39EE7731776
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E0517317A8
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344413AbjFOLnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 07:43:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53316 "EHLO
+        id S1344313AbjFOLoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 07:44:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344285AbjFOLmN (ORCPT
+        with ESMTP id S1344230AbjFOLnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 07:42:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15DD30FF;
-        Thu, 15 Jun 2023 04:39:44 -0700 (PDT)
+        Thu, 15 Jun 2023 07:43:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 851AB3AA9;
+        Thu, 15 Jun 2023 04:40:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C31B660F23;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F9F861B8D;
+        Thu, 15 Jun 2023 11:39:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD075C433CB;
         Thu, 15 Jun 2023 11:39:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24328C433C8;
-        Thu, 15 Jun 2023 11:39:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686829184;
-        bh=VvcDlxUQaRiX2ruxjT8DhrhgUh+QPAZStuGAHH2eEFk=;
+        s=k20201202; t=1686829185;
+        bh=n83YZv8wLuLtFKpdKE8JIDNngMwK+FjRX1OMW/pqegI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BFTbIG4F95727E1Yj7SXmajheqXbePlOczW1ruZjSP0tzshVSqFyY5f2dVO8CDKV6
-         3/x2f2p/ccvDfDXzka1EPQEL0bcDuH8yUbzIpSBmKYLFpov1pwrCT1OlJusRyRMqCF
-         QaVjKG11lipRBAxOidFNZaWfYthT/WdaGID0V9M1Af64m6jlm1u6zntuVl06w2t256
-         XDrY1fJfHzxplj61gMxDLGCgFkq+U/Jlpm5PKrzXkT/2aLACqDHjaXwnicl9i+aUhZ
-         h3tjhb+IXzpD9oXFO29nsAqIMImSge/5Vu/HwMv3X1vA/kXEymO3baYm5v3NVYWcTp
-         cCdayddVQ9Kfw==
+        b=kMvYWO1W2aKZH6y3ekAx+JdfSwOEKZ4YjfmbcDslTMGHtHRL7iLnFj+dBCHLgjm6d
+         BDuZpeNliiOMP0uizBKEGKSEn+0t6ftET1t7KdCjebaYW/HDNWQl6m1TqBQ7WA2+VI
+         3++T1XwCQDBbOWLETfXDMVwy9g+m7aayX2HrvXg10RcbFVQ8fMddeUPETSOZZFPPgW
+         aLsTFamXRH4zGs7j6cUF1FkI6mIzi5CH+4LNq4UX+1OvcO+9dI904vfA420BjAlUhs
+         tn5tdyS7Fj57HJNKmPO5C/ArC/O+JgHW6YbGXMo80NSr9w+21S92/7FUrr/ETIAKSC
+         9uObFxZxlQqJQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Maurizio Lombardi <mlombard@redhat.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, d.bogdanov@yadro.com,
-        peilin.ye@bytedance.com, yang.lee@linux.alibaba.com,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 2/8] scsi: target: iscsi: Prevent login threads from racing between each other
-Date:   Thu, 15 Jun 2023 07:39:32 -0400
-Message-Id: <20230615113938.649627-2-sashal@kernel.org>
+Cc:     Sung-Chi Li <lschyi@chromium.org>, Jiri Kosina <jkosina@suse.cz>,
+        Sasha Levin <sashal@kernel.org>, jikos@kernel.org,
+        benjamin.tissoires@redhat.com, linux-input@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 3/8] HID: google: add jewel USB id
+Date:   Thu, 15 Jun 2023 07:39:33 -0400
+Message-Id: <20230615113938.649627-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230615113938.649627-1-sashal@kernel.org>
 References: <20230615113938.649627-1-sashal@kernel.org>
@@ -52,8 +49,8 @@ X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 5.4.247
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,68 +59,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maurizio Lombardi <mlombard@redhat.com>
+From: Sung-Chi Li <lschyi@chromium.org>
 
-[ Upstream commit 2a737d3b8c792400118d6cf94958f559de9c5e59 ]
+[ Upstream commit ed84c4517a5bc536e8572a01dfa11bc22a280d06 ]
 
-The tpg->np_login_sem is a semaphore that is used to serialize the login
-process when multiple login threads run concurrently against the same
-target portal group.
+Add 1 additional hammer-like device.
 
-The iscsi_target_locate_portal() function finds the tpg, calls
-iscsit_access_np() against the np_login_sem semaphore and saves the tpg
-pointer in conn->tpg;
-
-If iscsi_target_locate_portal() fails, the caller will check for the
-conn->tpg pointer and, if it's not NULL, then it will assume that
-iscsi_target_locate_portal() called iscsit_access_np() on the semaphore.
-
-Make sure that conn->tpg gets initialized only if iscsit_access_np() was
-successful, otherwise iscsit_deaccess_np() may end up being called against
-a semaphore we never took, allowing more than one thread to access the same
-tpg.
-
-Signed-off-by: Maurizio Lombardi <mlombard@redhat.com>
-Link: https://lore.kernel.org/r/20230508162219.1731964-4-mlombard@redhat.com
-Reviewed-by: Mike Christie <michael.christie@oracle.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sung-Chi Li <lschyi@chromium.org>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/target/iscsi/iscsi_target_nego.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/hid/hid-google-hammer.c | 2 ++
+ drivers/hid/hid-ids.h           | 1 +
+ 2 files changed, 3 insertions(+)
 
-diff --git a/drivers/target/iscsi/iscsi_target_nego.c b/drivers/target/iscsi/iscsi_target_nego.c
-index e32d93b927428..4017464a5909b 100644
---- a/drivers/target/iscsi/iscsi_target_nego.c
-+++ b/drivers/target/iscsi/iscsi_target_nego.c
-@@ -1053,6 +1053,7 @@ int iscsi_target_locate_portal(
- 	iscsi_target_set_sock_callbacks(conn);
+diff --git a/drivers/hid/hid-google-hammer.c b/drivers/hid/hid-google-hammer.c
+index b6947d7573473..2ebad3ed4e3af 100644
+--- a/drivers/hid/hid-google-hammer.c
++++ b/drivers/hid/hid-google-hammer.c
+@@ -473,6 +473,8 @@ static const struct hid_device_id hammer_devices[] = {
+ 		     USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_EEL) },
+ 	{ HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
+ 		     USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_HAMMER) },
++	{ HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
++		     USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_JEWEL) },
+ 	{ HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
+ 		     USB_VENDOR_ID_GOOGLE, USB_DEVICE_ID_GOOGLE_MAGNEMITE) },
+ 	{ HID_DEVICE(BUS_USB, HID_GROUP_GENERIC,
+diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
+index b883423a89c5d..479516bbb61bf 100644
+--- a/drivers/hid/hid-ids.h
++++ b/drivers/hid/hid-ids.h
+@@ -490,6 +490,7 @@
+ #define USB_DEVICE_ID_GOOGLE_MOONBALL	0x5044
+ #define USB_DEVICE_ID_GOOGLE_DON	0x5050
+ #define USB_DEVICE_ID_GOOGLE_EEL	0x5057
++#define USB_DEVICE_ID_GOOGLE_JEWEL	0x5061
  
- 	login->np = np;
-+	conn->tpg = NULL;
- 
- 	login_req = (struct iscsi_login_req *) login->req;
- 	payload_length = ntoh24(login_req->dlength);
-@@ -1122,7 +1123,6 @@ int iscsi_target_locate_portal(
- 	 */
- 	sessiontype = strncmp(s_buf, DISCOVERY, 9);
- 	if (!sessiontype) {
--		conn->tpg = iscsit_global->discovery_tpg;
- 		if (!login->leading_connection)
- 			goto get_target;
- 
-@@ -1139,9 +1139,11 @@ int iscsi_target_locate_portal(
- 		 * Serialize access across the discovery struct iscsi_portal_group to
- 		 * process login attempt.
- 		 */
-+		conn->tpg = iscsit_global->discovery_tpg;
- 		if (iscsit_access_np(np, conn->tpg) < 0) {
- 			iscsit_tx_login_rsp(conn, ISCSI_STATUS_CLS_TARGET_ERR,
- 				ISCSI_LOGIN_STATUS_SVC_UNAVAILABLE);
-+			conn->tpg = NULL;
- 			ret = -1;
- 			goto out;
- 		}
+ #define USB_VENDOR_ID_GOTOP		0x08f2
+ #define USB_DEVICE_ID_SUPER_Q2		0x007f
 -- 
 2.39.2
 
