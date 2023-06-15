@@ -2,183 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B554731079
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:23:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9850273107C
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243577AbjFOHW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 03:22:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41518 "EHLO
+        id S243096AbjFOHXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 03:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244833AbjFOHWU (ORCPT
+        with ESMTP id S242220AbjFOHXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 03:22:20 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2115.outbound.protection.outlook.com [40.107.243.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3885E69;
-        Thu, 15 Jun 2023 00:21:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bU8u7tosQ0Aqh/wyvh5LBd61erTnJ+SbnNKLLvYfGnnf/Z7NSU9cFV3nmBO0pTWHM+qInTNlpQTdi7w/cPRE65MSVO4mmH+eSYnRp9I9lZxRsIdAGlM3cyWoUpa55902CDVCJHglBqgOW3DcQaFBy3ZIqtpVrqa3yObVxgmM5LT+JXEbIcA87a1v54V63IhchCuqFv3brXyXZWTsykLrjgbzzAChAeNDxtQZVfnpiuLjvjZxpwuNkWWqVbpUJ0cHugY/9in1UZjh4ObHS7egSk1c50iOYwVUCjC70pJ8TOwbm+zCQz6Xc5dOaW4tjAEbzxONTXQdhk3/Mvq2IJc8tg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KmfY233crHUrsMQn9W1dcmnnhnfjX0ggIKiDjpei+8I=;
- b=jicHL6Y+i3XydtWozSJn//m9RjuEh0osdLF488wTzU2XvBmSjImWeH9JDQR9M2jPXV7Z7uzWxSJmHz0dNr4JLGvUDpkyXiZYK8jKgBVt6kIltKHZHYJtJpg1d8obTzLq6xAhBXlKTDI+DCIa5ppbhxa1on+OCqGVZoZHDooSaz1jvbFYWKAmAb2lTPmtdFhb4NtZaGxSpHC88J9EDwK5mRFt8Vut4IBbY64AWATf35a2FvyZpVXA+8jwYYWkV/D2Cr1j3CUn5sGW8COjVmOxTScg1kfsaSLkHbzwwZRndZDMY5HGlXp0rfnBlx5Ylndk3kZT1X1e1qqDEDgedKYaYA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KmfY233crHUrsMQn9W1dcmnnhnfjX0ggIKiDjpei+8I=;
- b=DplhG3l2rQxc6npvt6l5q0O1uQ4VsfFDQJwoRKDPvwABOL/X9O6+0J/yYwoE0Mb8XMuB+zQBgrx1leToVzk8O4NZY2D0bgcgVwl/GzMJ5JpS3zTkPg/BUma4H3WqPsxWvxHaOP+G+yK5Inja4aBXzSi1f4fFJEBsShwixMAiZXc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by BN0PR13MB4758.namprd13.prod.outlook.com (2603:10b6:408:12c::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.37; Thu, 15 Jun
- 2023 07:21:53 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e%5]) with mapi id 15.20.6500.025; Thu, 15 Jun 2023
- 07:21:52 +0000
-Date:   Thu, 15 Jun 2023 09:21:43 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Lorenz Bauer <lmb@isovalent.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Ahern <dsahern@kernel.org>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Joe Stringer <joe@wand.net.nz>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Hemanth Malla <hemanthmalla@gmail.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 3/6] net: remove duplicate reuseport_lookup
- functions
-Message-ID: <ZIq8B2ie8k4hMFa/@corigine.com>
-References: <20230613-so-reuseport-v2-0-b7c69a342613@isovalent.com>
- <20230613-so-reuseport-v2-3-b7c69a342613@isovalent.com>
- <ZIiMKgt6iQwJ6vCx@corigine.com>
- <CAN+4W8jTTQqz2Fgzz4AndzpEo=Xteqisv88HqQu=j_VPcu3OVQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAN+4W8jTTQqz2Fgzz4AndzpEo=Xteqisv88HqQu=j_VPcu3OVQ@mail.gmail.com>
-X-ClientProxiedBy: AS4P191CA0021.EURP191.PROD.OUTLOOK.COM
- (2603:10a6:20b:5d9::6) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Thu, 15 Jun 2023 03:23:37 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A2910E3
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:23:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686813813; x=1718349813;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=AyVzFXfvvX5OIfE/LFA/Rh5crB3M1AKei6Um2jAbSA4=;
+  b=UNRh21sZfL4MefE+CWAy0EEnRinIjNAHOBh2igHbko1nDec82EaKqhdW
+   9EK3XRp7IUWm6Irb0NbqeF/khGmVO69tQrCvE2Gq0WC8FN3T/dCTGOH8l
+   C6prLaX4d4f9fRz1ugA85b3YMRn3F1cdjD3I8beIQcmCV3fPiGh1gL8ze
+   frIAj0ogoyXNK2XUQtkAfVap9RvRXUVXxlhUFxGcqGHej7xL/tIiIXGyt
+   8whZgxUkYE3OgRmvBpEJPy3ujKgVmcI4WvpWzbL/AakApTBUP5yf9DyuE
+   Quvoo65xqUv3AE7FuuFWaqEyPMYF6KAmcmpJxU4wuKbDGBD8mN7VGbVVQ
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="445206070"
+X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
+   d="scan'208";a="445206070"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 00:23:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="777554265"
+X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
+   d="scan'208";a="777554265"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 00:23:31 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     Mel Gorman <mgorman@techsingularity.net>, <david@redhat.com>,
+        <akpm@linux-foundation.org>, <vbabka@suse.cz>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] mm: compaction: skip memory hole rapidly when
+ isolating migratable pages
+References: <770f9f61472b24b6bc89adbd71a77d9cf62bb54f.1686646361.git.baolin.wang@linux.alibaba.com>
+        <20230614095501.m4porztaibchrgwx@techsingularity.net>
+        <87ilbpo1d9.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <5f340d98-4ee0-35a9-58ed-943834d68042@linux.alibaba.com>
+Date:   Thu, 15 Jun 2023 15:22:02 +0800
+In-Reply-To: <5f340d98-4ee0-35a9-58ed-943834d68042@linux.alibaba.com> (Baolin
+        Wang's message of "Thu, 15 Jun 2023 11:59:00 +0800")
+Message-ID: <87fs6tfaw5.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BN0PR13MB4758:EE_
-X-MS-Office365-Filtering-Correlation-Id: af04220b-3f76-4086-4fca-08db6d7130e4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0X6JaKkp85l8+tYA2n2/LKEXe7ZLO/5OrBjESho0ruJCr4654dThm/ar9YeuwEHgjzkrepLqmOzxHu6Aa4bKPfMNT3Kp3Sl+s1yTb9Mmo7nVHKGYwdkjagdeG/4pcmZ0fMqyBts1j7Gva+a4Zu/3aAciGk4glmI6KoSNVwnHgBk872Dbefo/fEUIJFgPxYp0WcpJ7hV6fdhummWjBAJR+H3HTomgjpxDo1Xgca28iAS4pOO6dVgW5zB0ZwTNC7lNgtBUzv75vC3GjU1mdgIGUk/8EdImdoeMzIw0lp5qjCP+ez9kVozSgFtwgHmN3bVW/uhRsx22hwLDmAk/jDGOv5NeBIGzjVOgf2XQkj+Nu9klIYbnm6+Bd55DbrNi5HaxEXi9m/JsT5IsfJ0a3J5XEKOU06cT+MNR0XqtUU0kknYo/I7VQFYTPCIXMYSl628pTzBWaJZwz2L9TzFpwU1326qjQCdEsm65rxBOV/y6WYZMLM1JaeskhS97V0/d5s8Hp1urUPFNNZI5bNlmvUt31OmGaIdtawOlU49UAPIbz1WxiacoYj062lR0wGDyUdOwBM269cC8Ri+7udrfMQygQomEcvnQ7NCF7nwJLWvoDMs=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(376002)(136003)(366004)(39840400004)(451199021)(36756003)(44832011)(2906002)(86362001)(7416002)(966005)(6666004)(5660300002)(6486002)(186003)(83380400001)(6512007)(53546011)(6506007)(478600001)(54906003)(66946007)(66476007)(2616005)(4326008)(316002)(38100700002)(6916009)(66556008)(8676002)(8936002)(41300700001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eUdtV1pwaTgrcUtFb24wdW51bmhocXU2UXdHNmJ2eFRXSXNOdFZsMXRQUzlu?=
- =?utf-8?B?VUZzU21iRHZyWGlyN0dIVGFZSjF5K3NPYXc1N094VFpwKzZaNklrSVRsZXhF?=
- =?utf-8?B?V2dlbklodGVVQVkwRHN1YUkrVTlvU2FzdzkxdytoY3hJY25vZWJwK2lSTVVI?=
- =?utf-8?B?NENTZ1YzVEtEZG80THIwM0FMcFM0WTMyNlhTS2RJSGt0TkI0U08yRFRKcHJQ?=
- =?utf-8?B?SGtXN2lZUG5HRjI3VkJBbSsrR2cyQ1R5djlnSjBjOU5xZ3BhM0JIVHQ4RnJL?=
- =?utf-8?B?ZEFVWkpsV0dnK0NaaS9mdjRoM0UwdHJmRUZqSE5EK1ZQQi80UGhzeVdYcndo?=
- =?utf-8?B?Mi9aMFF6V1h0ZUloVWk0V01DckdrMjdMNnNaZUdxd1BjeTk0cnkwdUdkQkpW?=
- =?utf-8?B?eVV5WHh5T3NraDdwU1VjdWlkakloT2toVWtkTVZyQ3Q0ZGV0TDJnSDRLZURw?=
- =?utf-8?B?dmRSNVZ4NUd2K0JTb1Z5ZGs0QzJaZDN4M3Z4RHpWbGlWR0Z3eXJSeXZLWkk4?=
- =?utf-8?B?b0pwYktXcjRaZXBXWElrREJrMjVQMnArTjJXbFZ5VWF0SFV3UUdkWDFaNDEx?=
- =?utf-8?B?ejFBQUs1eW80V280cCtDRUlTTGd5dnE2UHV1bFVVMjc3YlpQWTdnNXB5ZkJ5?=
- =?utf-8?B?Mjl0YXFWZnB5UkJtUk54WForLzRzNTUzeDNCeUZIOHU4dFFBVk9DbFpxVEtT?=
- =?utf-8?B?VXhrSHVwOUhkMXFJRytmbUZscHdSdXIwdDJ5VVZtVXhZL1U2TitQTWJvUEt0?=
- =?utf-8?B?Q3ZaWDRHUko4Zm0zeWtVN2VtQ2tYVVdQMnZkek9VOCsxa3p5Y2hvMWZrSHJT?=
- =?utf-8?B?K3dLL2QwMXVIVUFMQlpWUGQyS1Q5OEYyaHVzeXpXN1BzSmhlUXpVbkhTVVJB?=
- =?utf-8?B?a3FsYmVoYkFBbXZ5aG5tSjAyam5SRHBBWVZFRm1kcXBiT1F0aktJdGkzNm1h?=
- =?utf-8?B?QXdMdkkzekoxN0pwL1hFWVQ4UGVQTzhtRU9SOEtHU2ZGRGU3MGF6b09hQkRB?=
- =?utf-8?B?VGtsV2loWG5JTDVLZGcwcE9VSzRuSWF5MzFPM3V3cEFFNVJpaEJKSXNtNU9t?=
- =?utf-8?B?QjNIRFVCSlFJN2Rsalo0bWRibnZwYWNURFR3ZFRld0FIUFZYb2JLTDhFQy82?=
- =?utf-8?B?UlA1SzIvcjhGNlpISHdiRUpLNExmelpzWWFmM1JTUSsvYjltVDNjaS9rS2k0?=
- =?utf-8?B?dzlXU1FOZTRpbnNqamN1UUNtRWRZaVJ1Rm10UXg1Q0pFTytxdmVIcXZFWGd0?=
- =?utf-8?B?Zlphd3pKZGNENmxuRUo3THBwV3ZxdjhjT3ZMU2RMK2pQeCtCZzlqN1VqbnpM?=
- =?utf-8?B?cUJFSW1pRHM1ZVdVQjRMRTZ3WTlVd2YzNHJxUkpRT2ZRMHFqRm5pSlp6N3dl?=
- =?utf-8?B?L1ZtZUU3MlBqMTR6NncyY1p2RkRjRVFUSVlGckd5VG9lTkJ1dVpYV1ZyV2Rh?=
- =?utf-8?B?TDlGcTdZMnFoVHRUcDdMMUd3WXY0bmdkTVdjYVIvRnoyZksyLzdSUDB2Unpa?=
- =?utf-8?B?dVA2VjBsNEQ3RUY0M1hZRlVlQ29oQTg1eXk0ZDY4OHM3S1pVZXBuRlkyVWln?=
- =?utf-8?B?U3pic3FzZFdOVUlLQ3c2Y3VXYUdIa1V4TU5laHhRMDRnRzdlVVRaUlNicitD?=
- =?utf-8?B?Sm9QNVZsSkxyZ2NvZUVMRTdwT0hNb0lNV2hvcVJicXlPQkFkT1NERVR3cWtz?=
- =?utf-8?B?VDBoYmp5MGsrc0hraEhwYXFDRkprZ2RUVmdVZk5jTld4WEwzbWp0QVg5dktt?=
- =?utf-8?B?MGZ2TThkYXU5M0tmdlVtWVhWcTFGSEVjQ2RQTHN4Z3FBNlF4ZTl6ZjNRNzk3?=
- =?utf-8?B?VEZPengxVWtyTEhaVUlLeWhoZG85Yk9DREdpUnRKYStWNVBhYk43R1JqZU9R?=
- =?utf-8?B?YU1PR2lhTGJYendoYnNnejUvdTJzVEkvQkZWZlYzVHpScWloaXU5WFBteVdt?=
- =?utf-8?B?RDg2aEIyMmJiakZrZXVCWGs4NU42WFplWGx4cVllYXMrbW9SRk1uWkg0VDB0?=
- =?utf-8?B?YWwyYXpQODcvSVNpS2RzRitvNWhlUlNmRmV3MS9nQTlJSWhoZDBDMEFBN2xh?=
- =?utf-8?B?NUk4RTBaTDRPZVZnVWVjV2N6b1huVjcxVlM0MnVPeUJqcUNwSksvbDJySzdo?=
- =?utf-8?B?SUdzazZwWUNwakJGNHZ2NFBHbzVvdG81NjlTNHBYUHY5S3ZhRlVwRzRQam9l?=
- =?utf-8?B?VXk5QVo1S1k1MDhYeW1YTjd6OUtiZTdxVUcrS0hZL0ZrVjZLdXRVYlh6ZFFZ?=
- =?utf-8?B?YXd4ZDBoYTU5aXJDL1ZzQWRXdjhnPT0=?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: af04220b-3f76-4086-4fca-08db6d7130e4
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 07:21:52.3646
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aBd2YQ5Qx7xU5uZ8vaPcD5N5Vu+L5/9qBM3Pt5edrkRMx8OWiFxSQ9hISQdapfYqOUQXv1ChjTOzRwbXzXWSZw+/mHv+Ye5NoCafuZYk99o=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR13MB4758
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 04:42:45PM +0100, Lorenz Bauer wrote:
-> On Tue, Jun 13, 2023 at 4:33 PM Simon Horman <simon.horman@corigine.com> wrote:
-> > >
-> > > +INDIRECT_CALLABLE_DECLARE(u32 udp_ehashfn(const struct net *,
-> > > +                                       const __be32, const __u16,
-> > > +                                       const __be32, const __be16));
-> > > +
-> >
-> > Hi Lorenz,
-> >
-> > Would this be better placed in a header file?
-> > GCC complains that in udp.c this function is neither static nor
-> > has a prototype.
-> 
-> Hi Simon,
-> 
-> The problem is that I don't want to pull in udp.h in
-> inet_hashtables.c, but that is the natural place to define that
-> function. I was hoping the macro magic would solve the problem, but oh
-> well. How do you make gcc complain, and what is the full error
-> message?
+Baolin Wang <baolin.wang@linux.alibaba.com> writes:
 
-Hi Lorenz,
+> On 6/15/2023 11:22 AM, Huang, Ying wrote:
+>> Hi, Mel,
+>> Mel Gorman <mgorman@techsingularity.net> writes:
+>> 
+>>> On Tue, Jun 13, 2023 at 04:55:04PM +0800, Baolin Wang wrote:
+>>>> On some machines, the normal zone can have a large memory hole like
+>>>> below memory layout, and we can see the range from 0x100000000 to
+>>>> 0x1800000000 is a hole. So when isolating some migratable pages, the
+>>>> scanner can meet the hole and it will take more time to skip the large
+>>>> hole. From my measurement, I can see the isolation scanner will take
+>>>> 80us ~ 100us to skip the large hole [0x100000000 - 0x1800000000].
+>>>>
+>>>> So adding a new helper to fast search next online memory section
+>>>> to skip the large hole can help to find next suitable pageblock
+>>>> efficiently. With this patch, I can see the large hole scanning only
+>>>> takes < 1us.
+>>>>
+>>>> [    0.000000] Zone ranges:
+>>>> [    0.000000]   DMA      [mem 0x0000000040000000-0x00000000ffffffff]
+>>>> [    0.000000]   DMA32    empty
+>>>> [    0.000000]   Normal   [mem 0x0000000100000000-0x0000001fa7ffffff]
+>>>> [    0.000000] Movable zone start for each node
+>>>> [    0.000000] Early memory node ranges
+>>>> [    0.000000]   node   0: [mem 0x0000000040000000-0x0000000fffffffff]
+>>>> [    0.000000]   node   0: [mem 0x0000001800000000-0x0000001fa3c7ffff]
+>>>> [    0.000000]   node   0: [mem 0x0000001fa3c80000-0x0000001fa3ffffff]
+>>>> [    0.000000]   node   0: [mem 0x0000001fa4000000-0x0000001fa402ffff]
+>>>> [    0.000000]   node   0: [mem 0x0000001fa4030000-0x0000001fa40effff]
+>>>> [    0.000000]   node   0: [mem 0x0000001fa40f0000-0x0000001fa73cffff]
+>>>> [    0.000000]   node   0: [mem 0x0000001fa73d0000-0x0000001fa745ffff]
+>>>> [    0.000000]   node   0: [mem 0x0000001fa7460000-0x0000001fa746ffff]
+>>>> [    0.000000]   node   0: [mem 0x0000001fa7470000-0x0000001fa758ffff]
+>>>> [    0.000000]   node   0: [mem 0x0000001fa7590000-0x0000001fa7ffffff]
+>>>>
+>>>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>>>
+>>> This may only be necessary for non-contiguous zones so a check for
+>>> zone_contiguous could be made but I suspect the saving, if any, would be
+>>> marginal.
+>>>
+>>> However, it's subtle that block_end_pfn can end up in an arbirary location
+>>> past the end of the zone or past cc->free_pfn. As the "continue" will update
+>>> cc->migrate_pfn, that might lead to errors in the future. It would be a
+>>> lot safer to pass in cc->free_pfn and do two things with the value. First,
+>>> there is no point scanning for a valid online section past cc->free_pfn so
+>>> terminating after cc->free_pfn may save some cycles. Second, cc->migrate_pfn
+>>> does not end up with an arbitrary value which is a more defensive approach
+>>> to any future programming errors.
+>> I have thought about this before.  Originally, I had thought that we
+>> were safe because cc->free_pfn should be in a online section and
+>> block_end_pfn should reach cc->free_pfn before the end of zone.  But
+>> after checking more code and thinking about it again, I found that the
+>> underlying sections may go offline under us during compaction.  So that,
+>> cc->free_pfn may be in a offline section or after the end of zone.  So,
+>> you are right, we need to consider the range of block_end_pfn.
+>> But, if we thought in this way (memory online/offline at any time),
+>> it
+>> appears that we need to check whether the underlying section was
+>> offlined.  For example, is it safe to use "pfn_to_page()" in
+>> "isolate_migratepages_block()"?  Is it possible for the underlying
+>> section to be offlined under us?
+>
+> It is possible. There is a previous discussion[1] about the race
+> between pfn_to_online_page() and memory offline.
+>
+> [1]
+> https://lore.kernel.org/lkml/87zgc6buoq.fsf@nvidia.com/T/#m642d91bcc726437e1848b295bc57ce249c7ca399
 
-sorry for the bother.
+Thank you very much for sharing!  That answers my questions directly!
 
-With gcc 12.3.0 [1] on x86_64 I see:
-
-$ make allmodconfig
-$ make W=1 net/ipv4/udp.o
-net/ipv4/udp.c:410:5: error: no previous prototype for 'udp_ehashfn' [-Werror=missing-prototypes]
-  410 | u32 udp_ehashfn(const struct net *net, const __be32 laddr, const __u16 lport,
-      |     ^~~~~~~~~~~
-
-[1] https://mirrors.edge.kernel.org/pub/tools/crosstool/
+Best Regards,
+Huang, Ying
