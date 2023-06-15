@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ECBB73206F
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 21:40:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A052C732070
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 21:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231705AbjFOTkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 15:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56828 "EHLO
+        id S231795AbjFOTku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 15:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjFOTkn (ORCPT
+        with ESMTP id S229572AbjFOTkn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 15 Jun 2023 15:40:43 -0400
 Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C66B2954
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 12:40:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0724B2953
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 12:40:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=BhX7pkXejcd+7jOdak4TeKh4gofIP/p6FvONT7yMD5Q=; b=Luncf/CUiCXEJyaixzGv2qhSHY
-        FpBEa0sP9GHb+kSvFbCdnhUAl6ex0IbnWIihLc+vrU5Pw52VWmVi1dYIF5rgUcq/yBbQ5fnBT7C0I
-        3wroRla56ysNYuNVj7s6Ut8oxsy9oQhuc+xhs6KBlF8eUg6x7JKUC0cX1ZsK5DDlHv12G98EZjay1
-        cpv9C9FULKKGfXA4bevZK24nVZmoUtTU5Yo4WNZjwGTMnKbQQWdG5EqCJVOkajdE1H0p+FBVsmvSu
-        YWvrH7dT6MjxhkaDEfbxUFnp+PZROLzB6Mfn5k5SkMpHhbmSh+wE8JWtqmXcPcMz3ZWUAJUMwTP2D
-        mPoNrRow==;
+        bh=5QR/G+Po7KVXkZ8pw8MI2J3h+jcGvJpJMtnZs0VY6Uw=; b=VH+MQ2phJAjRHH/4i2FQnrxJXJ
+        Of7AucP+aR7hJKYULJXBW0cOEdrBvHqOiYedgFVW3NEmFTRF6gYU/6Z4VXDhaSEHsV9Oxop2SBzZa
+        Txm9EE9XsckO/OjI7qy0ID7RJnAVBWX4dQEWjbxuaoKvngR39LRNmBIGV8vK+ISJtY0/dfrqoxFWI
+        ZOjeicpPcAjtcdc9s5AS46W7bjzGwDmnD/8y93CdPyQi4EzgDPRy37QR9CIbR7XshqofHeqZzq/4U
+        iosEOH2iSmO1XhZ1YTF8iamxZyFGPJo9rvgzJlwMD0VqkLvIZwZkrNpzOUZb2y8n5+IQWEG6z25VH
+        aqWvcIwg==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
         by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q9spY-00BtUT-1s;
+        id 1q9spY-00BtUU-1s;
         Thu, 15 Jun 2023 19:40:29 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1018830031B;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 14AA73003E1;
         Thu, 15 Jun 2023 21:40:27 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id E847C245F1E4B; Thu, 15 Jun 2023 21:40:26 +0200 (CEST)
-Message-ID: <20230615193722.127844423@infradead.org>
+        id EC6C52461D7D2; Thu, 15 Jun 2023 21:40:26 +0200 (CEST)
+Message-ID: <20230615193722.194131053@infradead.org>
 User-Agent: quilt/0.66
-Date:   Thu, 15 Jun 2023 21:35:47 +0200
+Date:   Thu, 15 Jun 2023 21:35:48 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     x86@kernel.org, alyssa.milburn@linux.intel.com
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         samitolvanen@google.com, keescook@chromium.org,
         jpoimboe@kernel.org, joao@overdrivepizza.com,
         tim.c.chen@linux.intel.com
-Subject: [PATCH 1/2] x86/cfi: Fix ret_from_fork indirect calls
+Subject: [PATCH 2/2] x86/fineibt: Poison ENDBR at +0
 References: <20230615193546.949657149@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,62 +60,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ret_from_fork stub does an indirect call to the kthread function,
-but only knows about Retpolines. Instead of making the asm more
-complicated, punt to C and let the compiler figure it out.
+Alyssa noticed that when building the kernel with CFI_CLANG+IBT and
+booting on IBT enabled hardware obtain FineIBT, the indirect functions
+look like:
 
-Specifically, this makes it a proper kCFI indirect call when needed (in
-fact, it is nearly impossible to code a kCFI indirect call in asm).
+  __cfi_foo:
+	endbr64
+	subl	$hash, %r10d
+	jz	1f
+	ud2
+	nop
+  1:
+  foo:
+	endbr64
 
-This was the only callsite that was still calling func()+0 on regular
-indirect functions.
+This is because clang currently does not supress ENDBR emission for
+functions it provides a __cfi prologue symbol for.
 
+Having this second ENDBR however makes it possible to elide the CFI
+check. Therefore, we should poison this second ENDBR (if present) when
+switching to FineIBT mode.
+
+Fixes: 931ab63664f0 ("x86/ibt: Implement FineIBT")
+Reported-by: "Milburn, Alyssa" <alyssa.milburn@intel.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/x86/entry/entry_64.S        |    6 ++++--
- arch/x86/include/asm/switch_to.h |    2 ++
- arch/x86/kernel/process_64.c     |    5 +++++
- 3 files changed, 11 insertions(+), 2 deletions(-)
+ arch/x86/kernel/alternative.c |   16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
---- a/arch/x86/entry/entry_64.S
-+++ b/arch/x86/entry/entry_64.S
-@@ -304,8 +304,10 @@ SYM_CODE_START_NOALIGN(ret_from_fork)
- 1:
- 	/* kernel thread */
- 	UNWIND_HINT_END_OF_STACK
--	movq	%r12, %rdi
--	CALL_NOSPEC rbx
-+	movq	%rbx, %rdi
-+	movq	%r12, %rsi
-+	call	kthread_from_fork
-+
- 	/*
- 	 * A kernel thread is allowed to return here after successfully
- 	 * calling kernel_execve().  Exit to userspace to complete the execve()
---- a/arch/x86/include/asm/switch_to.h
-+++ b/arch/x86/include/asm/switch_to.h
-@@ -74,6 +74,8 @@ static inline void update_task_stack(str
- #endif
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -940,6 +940,17 @@ static int cfi_rewrite_preamble(s32 *sta
+ 	return 0;
  }
  
-+extern void kthread_from_fork(int (*fn)(void *), void *);
-+
- static inline void kthread_frame_init(struct inactive_task_frame *frame,
- 				      int (*fun)(void *), void *arg)
- {
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -544,6 +544,11 @@ void compat_start_thread(struct pt_regs
- }
- #endif
- 
-+__visible noinstr void kthread_from_fork(int (*fn)(void *), void *arg)
++static void cfi_rewrite_endbr(s32 *start, s32 *end)
 +{
-+	fn(arg);
++	s32 *s;
++
++	for (s = start; s < end; s++) {
++		void *addr = (void *)s + *s;
++
++		poison_endbr(addr+16, false);
++	}
 +}
 +
- /*
-  *	switch_to(x,y) should switch tasks from x to y.
-  *
+ /* .retpoline_sites */
+ static int cfi_rand_callers(s32 *start, s32 *end)
+ {
+@@ -1034,14 +1045,19 @@ static void __apply_fineibt(s32 *start_r
+ 		return;
+ 
+ 	case CFI_FINEIBT:
++		/* place the FineIBT preamble at func()-16 */
+ 		ret = cfi_rewrite_preamble(start_cfi, end_cfi);
+ 		if (ret)
+ 			goto err;
+ 
++		/* rewrite the callers to target func()-16 */
+ 		ret = cfi_rewrite_callers(start_retpoline, end_retpoline);
+ 		if (ret)
+ 			goto err;
+ 
++		/* now that nobody targets func()+0, remove ENDBR there */
++		cfi_rewrite_endbr(start_cfi, end_cfi);
++
+ 		if (builtin)
+ 			pr_info("Using FineIBT CFI\n");
+ 		return;
 
 
