@@ -2,84 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 073707313DA
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:29:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F14F7313CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243674AbjFOJ3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 05:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59032 "EHLO
+        id S241501AbjFOJ2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 05:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243272AbjFOJ21 (ORCPT
+        with ESMTP id S241440AbjFOJ2X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 05:28:27 -0400
-Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352311BD2;
-        Thu, 15 Jun 2023 02:28:26 -0700 (PDT)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1q9jGq-003GV3-LL; Thu, 15 Jun 2023 17:28:01 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Thu, 15 Jun 2023 17:28:00 +0800
-Date:   Thu, 15 Jun 2023 17:28:00 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org,
-        syzbot+13a08c0bf4d212766c3c@syzkaller.appspotmail.com,
-        syzbot+14234ccf6d0ef629ec1a@syzkaller.appspotmail.com,
-        syzbot+4e2e47f32607d0f72d43@syzkaller.appspotmail.com,
-        syzbot+472626bb5e7c59fb768f@syzkaller.appspotmail.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] crypto: af_alg/hash: Fix recvmsg() after
- sendmsg(MSG_MORE)
-Message-ID: <ZIrZoKSFTibdKa95@gondor.apana.org.au>
-References: <1679829.1686785273@warthog.procyon.org.uk>
+        Thu, 15 Jun 2023 05:28:23 -0400
+Received: from mail.actia.se (mail.actia.se [212.181.117.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB1F199D;
+        Thu, 15 Jun 2023 02:28:22 -0700 (PDT)
+Received: from W388ANL.actianordic.se (10.12.12.26) by S035ANL.actianordic.se
+ (10.12.31.116) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 15 Jun
+ 2023 11:28:21 +0200
+From:   Jonas Blixt <jonas.blixt@actia.se>
+To:     <shuah@kernel.org>, <valentina.manea.m@gmail.com>
+CC:     <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Jonas Blixt <jonas.blixt@actia.se>
+Subject: [PATCH v2] USB: usbip: fix stub_dev hub disconnect
+Date:   Thu, 15 Jun 2023 11:28:10 +0200
+Message-ID: <20230615092810.1215490-1-jonas.blixt@actia.se>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1679829.1686785273@warthog.procyon.org.uk>
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
-        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.12.12.26]
+X-EsetResult: clean, is OK
+X-EsetId: 37303A294A191A536D7367
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 12:27:53AM +0100, David Howells wrote:
->     
-> If an AF_ALG socket bound to a hashing algorithm is sent a zero-length
-> message with MSG_MORE set and then recvmsg() is called without first
-> sending another message without MSG_MORE set to end the operation, an oops
-> will occur because the crypto context and result doesn't now get set up in
-> advance because hash_sendmsg() now defers that as long as possible in the
-> hope that it can use crypto_ahash_digest() - and then because the message
-> is zero-length, it the data wrangling loop is skipped.
-> 
-> Fix this by always making a pass of the loop, even in the case that no data
-> is provided to the sendmsg().
-> 
-> Fix also extract_iter_to_sg() to handle a zero-length iterator by returning
-> 0 immediately.
-> 
-> Whilst we're at it, remove the code to create a kvmalloc'd scatterlist if
-> we get more than ALG_MAX_PAGES - this shouldn't happen.
+If a hub is disconnected that has device(s) that's attached to the usbip layer
+the disconnect function might fail because it tries to release the port
+on an already disconnected hub.
 
-I don't think this is right.  If it's a zero-length message with
-MSG_MORE set, it should be ignored until a recvmsg(2) call is made.
+Fixes: 6080cd0e9239 ("staging: usbip: claim ports used by shared devices")
+Signed-off-by: Jonas Blixt <jonas.blixt@actia.se>
+---
+v2:
+ - Clarify comment
+v1:
+ Link to v1: https://lore.kernel.org/linux-usb/20230615092205.GA1212960@W388ANL/T/#m575e37dc404067797eadf4444857366c73ba3420
+---
+ drivers/usb/usbip/stub_dev.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-In any case, this patch doesn't fix all the syzbot reports.
-
-We need to think about reverting this change if it can't be fixed
-in time.
-
-Thanks,
+diff --git a/drivers/usb/usbip/stub_dev.c b/drivers/usb/usbip/stub_dev.c
+index 2305d425e6c9..2170c95c8dab 100644
+--- a/drivers/usb/usbip/stub_dev.c
++++ b/drivers/usb/usbip/stub_dev.c
+@@ -427,8 +427,13 @@ static void stub_disconnect(struct usb_device *udev)
+ 	/* release port */
+ 	rc = usb_hub_release_port(udev->parent, udev->portnum,
+ 				  (struct usb_dev_state *) udev);
+-	if (rc) {
+-		dev_dbg(&udev->dev, "unable to release port\n");
++	/*
++	 * NOTE: If a HUB disconnect triggered disconnect of the down stream
++	 * device usb_hub_release_port will return -ENODEV so we can safely ignore
++	 * that error here.
++	 */
++	if (rc && (rc != -ENODEV)) {
++		dev_dbg(&udev->dev, "unable to release port (%i)\n", rc);
+ 		return;
+ 	}
+ 
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+2.25.1
+
