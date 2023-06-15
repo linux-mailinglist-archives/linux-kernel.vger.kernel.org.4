@@ -2,118 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E5C7319C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1E43731A78
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343885AbjFONVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 09:21:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37096 "EHLO
+        id S1344550AbjFONvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 09:51:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240465AbjFONU7 (ORCPT
+        with ESMTP id S1344514AbjFONv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 09:20:59 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9AA1270C
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 06:20:50 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-5703cb4bcb4so4854057b3.3
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 06:20:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686835250; x=1689427250;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aX97xCToWV5//RvNXLNZC2c3J5Dbjde6RJhRL1H+eSE=;
-        b=Z7Vt+tJ6ZXAT2LMJTiuoQ4nJjIelvhefnByDBbvXpt8TZcUd8RDeuFg7udKdaqRbAV
-         coYNEisPjOGrp1ArWfKkeAS3dltxJqa+Tx6R5v5/Qvp28sHYnb8CRmoeUU9KzGP78y2k
-         n5lY8y00Gbrvp9tbOl++/Gzhg2y1yzHKXLW/2vYk9TuxbAzc2FKUoCcgukT2W32nvTGc
-         jP5iNG7m4UeqYq5dp4oLbAUfWWoTh/lnVvssrjTWwhP8hBHxlgJSktu+kllPHlxZRPNM
-         tczsTr+tYWs81+5oGtdledEpN+aCpaUeem933gLMQYq3B5vY7kICltVUUKcq22ZR9nB5
-         jF6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686835250; x=1689427250;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aX97xCToWV5//RvNXLNZC2c3J5Dbjde6RJhRL1H+eSE=;
-        b=fLBvF4X3e/02qB2Zw7PJA2rO4rC7WmWi/Z1jt5nfvCrNCGV13oCDO7zCIPBsNXH40u
-         4cSAJOYs7QxQ5wyTV7a8zKjicoCZKpLjA7faYWCmJJ/i8jA1HncclSd9xVcJ7CBbaQM5
-         V6PzGhVmm7VckNEUqlryMwm8jFhfYj/lML8aCLxOjwArH2Iw5LvUjLjG0CyLBxLE9M05
-         P013Y5ovlS1mwoXV4ZxHkDlGUHil53yAAXpZV2R3KJg1mY9IL8tVVicjtakpCt8matdo
-         0RP0KzZWWh9go6B+W1npiLZ82pcBsPNqbUoeojZ6VBhdbufNL9riZFRYZn+pp1/BcAnK
-         gZ4A==
-X-Gm-Message-State: AC+VfDwY4aNrXtsUFkkZwWsHJo/bzaHFFxAW/bFDVp6M0xnvTkNJvvR8
-        jO3B8lw2RITzk2tyIMIs4o/b7GYT8wDva6kSfHkflg==
-X-Google-Smtp-Source: ACHHUZ7cc7qLuWFlmewZHndMeTGJ1lCp7+tWMjE+IKpjzV597WRvXEOfvUA5tnyK2rMjzUksHUpC1md88NP3KWhBAFU=
-X-Received: by 2002:a81:a50d:0:b0:56d:278:fea0 with SMTP id
- u13-20020a81a50d000000b0056d0278fea0mr4849499ywg.7.1686835250160; Thu, 15 Jun
- 2023 06:20:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230615092001.1213132-1-yann.gautier@foss.st.com> <20230615092001.1213132-2-yann.gautier@foss.st.com>
-In-Reply-To: <20230615092001.1213132-2-yann.gautier@foss.st.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 15 Jun 2023 15:20:14 +0200
-Message-ID: <CAPDyKFqJsqmNzeRg8hj55yUEMSycOWsmKVKsMWk4Qu7Y8_dNzg@mail.gmail.com>
-Subject: Re: [PATCH 1/6] dt-bindings: mmc: mmci: Add st,stm32mp25-sdmmc2 compatible
-To:     Yann Gautier <yann.gautier@foss.st.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        Conor Dooley <conor+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        linux-kernel@vger.kernel.org, Marek Vasut <marex@denx.de>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Thu, 15 Jun 2023 09:51:26 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477471BDB;
+        Thu, 15 Jun 2023 06:51:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686837085; x=1718373085;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=MIuQ8cWazJW6GW0lML8T2aU1uWp7mxrZSU8mCIOK4QI=;
+  b=WHOIEtU/bMCnojbca1zarmN02vFLkp6lePbfzzq1Q2OBraW+xzNvnSj2
+   5QKiGPqUmNfAU6vSOPKP89Q/s/VrT6GcR64lmi02fMacSfoAbUTUko3Fb
+   uisBvze9pltaMbOV8T3T6VBxgSircxechoOC/J9qbG4zl4sys5fJJOup4
+   xsV9M72ajq943gj68J+HwGhbXJVPxePeId5mO1ly+Uh3K71EDOFJIyie1
+   CNWvyXRAwvQvRX2Mx6UCqdYl0FOOggeT+sWHORVLOMIounfmIaFBZ79EX
+   YTMKEsfV9RgjFX2HoCjaNBC4Vg6yUZ7SYyjN+P6TJ/tB2rGyBQcPo+Qa9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="361404907"
+X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
+   d="scan'208";a="361404907"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 06:20:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="802338786"
+X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
+   d="scan'208";a="802338786"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 15 Jun 2023 06:20:19 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 4093A379; Thu, 15 Jun 2023 16:20:28 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Xiang wangx <wangxiang@cdjrlc.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andy@kernel.org>
+Subject: [PATCH v3 0/5] gpio: aggregator: Incorporate gpio-delay functionality
+Date:   Thu, 15 Jun 2023 16:20:18 +0300
+Message-Id: <20230615132023.13801-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Jun 2023 at 11:20, Yann Gautier <yann.gautier@foss.st.com> wrote:
->
-> For STM32MP25, we'll need to distinguish how is managed the delay block.
-> This is done through a new comptible dedicated for this SoC, as the
-> delay block registers are located in SYSCFG peripheral.
->
-> Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
-> ---
->  Documentation/devicetree/bindings/mmc/arm,pl18x.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml b/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
-> index 1c96da04f0e53..e47b3418b6c77 100644
-> --- a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
-> @@ -59,6 +59,12 @@ properties:
->            - const: st,stm32-sdmmc2
->            - const: arm,pl18x
->            - const: arm,primecell
-> +      - description: Entry for STMicroelectronics variant of PL18x for
-> +          STM32MP25. This dedicated compatible is used by bootloaders.
+The newly appeared gpio-delay module enables external signal delay lines
+that may be connected to the GPIOs. But at the same time it copies the
+GPIO forwarder functionality. Besides that the approach does not scale.
+If we would have another external component, we would need yet another
+driver. That's why I think, and seems others support me, better to
+enable such a functionality inside GPIO aggregator driver.
 
-What does this last sentence mean? Can we drop it?
+Patch 1 is a cleanup that may be applied independently on the decision
+about the rest.
 
-> +        items:
-> +          - const: st,stm32mp25-sdmmc2
-> +          - const: arm,pl18x
-> +          - const: arm,primecell
->
->    clocks:
->      description: One or two clocks, the "apb_pclk" and the "MCLK"
-> --
-> 2.25.1
->
+Please, test and comment! Alexander, I would appreciate your tag.
 
-Kind regards
-Uffe
+In v3:
+- added new patch 3 to prevent device removal from sysfs
+- switched to feature in driver data instead of "compatible" (Geert)
+- applied tags (Geert, Linus)
+- left DT bindings untouched, can be amended later on
+
+In v2:
+- split as a series
+- covered CONFIG_OF_GPIO=n case
+- removed the gpio-delay
+- moved gpio-delay Kconfig help to the comment in the code
+- left udelay() call untouched as recommended by documentation
+
+Andy Shevchenko (5):
+  gpio: aggregator: Remove CONFIG_OF and of_match_ptr() protections
+  gpio: aggregator: Support delay for setting up individual GPIOs
+  gpio: aggregator: Prevent collisions between DT and user device IDs
+  gpio: aggregator: Set up a parser of delay line parameters
+  gpio: delay: Remove duplicative functionality
+
+ drivers/gpio/Kconfig           |   9 --
+ drivers/gpio/Makefile          |   1 -
+ drivers/gpio/gpio-aggregator.c | 113 +++++++++++++++++++++--
+ drivers/gpio/gpio-delay.c      | 164 ---------------------------------
+ 4 files changed, 106 insertions(+), 181 deletions(-)
+ delete mode 100644 drivers/gpio/gpio-delay.c
+
+-- 
+2.40.0.1.gaa8946217a0b
+
