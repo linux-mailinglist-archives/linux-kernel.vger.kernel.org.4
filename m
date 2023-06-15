@@ -2,93 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D77C73108B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:28:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49DB773108F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243502AbjFOH2f convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 15 Jun 2023 03:28:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46824 "EHLO
+        id S238472AbjFOHaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 03:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244871AbjFOH2X (ORCPT
+        with ESMTP id S244477AbjFOHaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 03:28:23 -0400
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE2F2103;
-        Thu, 15 Jun 2023 00:28:19 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-56fff21c2ebso16985527b3.3;
-        Thu, 15 Jun 2023 00:28:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686814099; x=1689406099;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6aCgTd1AzVYLSiaL/ArGFi9KO5j9jyzv9oqgVd3/+u8=;
-        b=aQUnwV8sOf/n7KJmsbvAqfL4no9hE0k50BO9py1v4RnZ8z3hN1/tgeyKo9o5n6E6hV
-         oL1cHnN+Ese6NBZa76+bja84ft/2ZlwkrjPswHzoPbxNjmydiGtFUzBdkTDaOfhehGnU
-         SQOfCYTROD/oFrXNeYm/gB3ttkkLDbVRWY19XfY+RXChr902zqdS1HbTjerIN429nBYh
-         Hewk8ED9WouwcQ6lg5/crpGNQ70S3Iouiky0x20yfxvpPwxJ2D9CuMmwcDRDZCBH9QFA
-         6tjtxYkoYHdDY/H6xxCuL9AwkaP9nZouc7bOoPsr+ra9E/M+dGXUmv9L28Z4P06umMLs
-         NHcw==
-X-Gm-Message-State: AC+VfDxNKDXm8rjvj6xrpXqVm/xpMujKI3/p10kxrb31f6/XBVAlIDo6
-        7m6vRucuKzREIZ1h/xkvDmNLjMunAwBQIg==
-X-Google-Smtp-Source: ACHHUZ5Htnp4g0kXIRRG3EoKEriLEYU3UJZFEVXz/nUjtoyJevKiU1mfY5BYZbV1QMGUq9ktdAfs5g==
-X-Received: by 2002:a81:6b87:0:b0:569:82b1:2ba5 with SMTP id g129-20020a816b87000000b0056982b12ba5mr4596677ywc.20.1686814098919;
-        Thu, 15 Jun 2023 00:28:18 -0700 (PDT)
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
-        by smtp.gmail.com with ESMTPSA id z22-20020a0dd716000000b00568c1c919d2sm3088825ywd.29.2023.06.15.00.28.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 00:28:18 -0700 (PDT)
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-bc4e41b7bc9so1432686276.2;
-        Thu, 15 Jun 2023 00:28:18 -0700 (PDT)
-X-Received: by 2002:a25:664a:0:b0:bc1:dfa5:83a4 with SMTP id
- z10-20020a25664a000000b00bc1dfa583a4mr4026240ybm.13.1686814098492; Thu, 15
- Jun 2023 00:28:18 -0700 (PDT)
+        Thu, 15 Jun 2023 03:30:00 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1465FDF;
+        Thu, 15 Jun 2023 00:29:57 -0700 (PDT)
+Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QhYmL3q0YzLmY3;
+        Thu, 15 Jun 2023 15:28:02 +0800 (CST)
+Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 15 Jun
+ 2023 15:29:53 +0800
+Subject: Re: [PATCH net-next v4 1/5] page_pool: frag API support for 32-bit
+ arch with 64-bit DMA
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     <davem@davemloft.net>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        <linux-rdma@vger.kernel.org>
+References: <20230612130256.4572-1-linyunsheng@huawei.com>
+ <20230612130256.4572-2-linyunsheng@huawei.com>
+ <20230613210906.42ea393e@kernel.org>
+ <99233a68-882f-51cd-bf7c-c2b83652ae09@huawei.com>
+ <20230614100713.5ee2538f@kernel.org>
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <ffb7cb38-68c8-d701-2506-b86d873fd28b@huawei.com>
+Date:   Thu, 15 Jun 2023 15:29:52 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-References: <20230614231446.3687-1-andriy.shevchenko@linux.intel.com> <20230614231446.3687-2-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230614231446.3687-2-andriy.shevchenko@linux.intel.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 15 Jun 2023 09:28:05 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVo=fm6LSPODQVLTOZORD3BGpzR6_+mDEm-U5H8jsfDpw@mail.gmail.com>
-Message-ID: <CAMuHMdVo=fm6LSPODQVLTOZORD3BGpzR6_+mDEm-U5H8jsfDpw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] gpio: aggregator: Remove CONFIG_OF and
- of_match_ptr() protections
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andy@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230614100713.5ee2538f@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 1:14 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> They stop the driver being used with ACPI PRP0001 and are something
-> I want to avoid being cut and paste into new drivers. Also include
-> mod_devicetable.h as we struct of_device_id is defined in there.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On 2023/6/15 1:07, Jakub Kicinski wrote:
+> On Wed, 14 Jun 2023 19:42:29 +0800 Yunsheng Lin wrote:
+>> On 2023/6/14 12:09, Jakub Kicinski wrote:
+>>> On Mon, 12 Jun 2023 21:02:52 +0800 Yunsheng Lin wrote:  
+>>>> Currently page_pool_alloc_frag() is not supported in 32-bit
+>>>> arch with 64-bit DMA, which seems to be quite common, see
+>>>> [1], which means driver may need to handle it when using
+>>>> page_pool_alloc_frag() API.
+>>>>
+>>>> In order to simplify the driver's work for supporting page
+>>>> frag, this patch allows page_pool_alloc_frag() to call
+>>>> page_pool_alloc_pages() to return a big page frag without  
+>>>
+>>> it returns an entire (potentially compound) page, not a frag.
+>>> AFAICT  
+>>
+>> As driver calls page_pool_alloc_frag(), and page_pool_alloc_frag()
+>> calls page_pool_alloc_pages(), page_pool_alloc_pages() is hidden
+>> inside page_pool_alloc_frag(), so it is a big page frag from driver's
+>> point of view:)
+> 
+> frag​ment : a part broken off, detached, or incomplete
+>           a small part broken or separated off something.
+> 
+> "big fragment" is definitely not the whole thing.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Alexander susgested something as below:
+non-fragmented - legacy page pool w/o page frags
+mono-frag - after this page page pool w/o frags
+fragmented - before/after this patch w/ frags
 
-Gr{oetje,eeting}s,
+https://patchwork.kernel.org/project/netdevbpf/patch/20230529092840.40413-3-linyunsheng@huawei.com/#25366535
 
-                        Geert
+Does 'mono-frag' make sense to you? or any better name in
+mind?
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+>>>> page splitting because of overlap issue between pp_frag_count
+>>>> and dma_addr_upper in 'struct page' for those arches.  
+>>>
+>>> These two lines seem to belong in the first paragraph,
+>>>   
+>>>> As page_pool_create() with PP_FLAG_PAGE_FRAG is supported in  
+>>>
+>>> "is" -> "will now be"
+>>>   
+>>>> 32-bit arch with 64-bit DMA now, mlx5 calls page_pool_create()
+>>>> with PP_FLAG_PAGE_FRAG and manipulate the page->pp_frag_count
+>>>> directly using the page_pool_defrag_page(), so add a checking
+>>>> for it to aoivd writing to page->pp_frag_count that may not
+>>>> exist in some arch.  
+>>>
+>>> This paragraph needs some proof reading :(  
+>>
+>> Perhaps something like below?
+>> mlx5 calls page_pool_create() with PP_FLAG_PAGE_FRAG and is
+>> not using the frag API, as PP_FLAG_PAGE_FRAG checking for arch
+>> with PAGE_POOL_DMA_USE_PP_FRAG_COUNT being true will now be
+>> removed in this patch, so add back the checking of
+>> PAGE_POOL_DMA_USE_PP_FRAG_COUNT for mlx5 driver to retain the
+>> old behavior, which is to avoid mlx5e_page_release_fragmented()
+>> calling page_pool_defrag_page() to write to page->pp_frag_count.
+> 
+> That's a 7-line long, single sentence. Not much better.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+I had the same feeling when I was typing:(
+Any suggestion for the adjustment?
+
+> 
+>>>> Note that it may aggravate truesize underestimate problem for
+>>>> skb as there is no page splitting for those pages, if driver
+>>>> need a accuate truesize, it may calculate that according to  
+>>>
+>>> accurate
+>>>   
+>>>> frag size, page order and PAGE_POOL_DMA_USE_PP_FRAG_COUNT
+>>>> being true or not. And we may provide a helper for that if it
+>>>> turns out to be helpful.
+>>>>
+>>>> 1. https://lore.kernel.org/all/20211117075652.58299-1-linyunsheng@huawei.com/  
+>>>   
+>>>> +		/* Return error here to avoid writing to page->pp_frag_count in
+>>>> +		 * mlx5e_page_release_fragmented() for page->pp_frag_count is  
+>>>
+>>> I don't see any direct access to pp_frag_count anywhere outside of
+>>> page_pool.h in net-next. PAGE_POOL_DMA_USE_PP_FRAG_COUNT sounds like 
+>>> an internal flag, drivers shouldn't be looking at it, IMO.  
+>>
+>> mlx5e_page_release_fragmented() calls page_pool_defrag_page(), maybe
+>> below is more correct:
+>>
+>> /* Return error here to avoid mlx5e_page_release_fragmented() calling
+>>  * page_pool_defrag_page() to write to page->pp_frag_count which is
+>>  * not usable for arch with PAGE_POOL_DMA_USE_PP_FRAG_COUNT being true.
+>> */
+>>
+>> I am agree with you about that drivers shouldn't be looking at it. But
+>> adding PAGE_POOL_DMA_USE_PP_FRAG_COUNT checking back to mlx5 seems to be
+>> the simplest way I can think of because of the reason mentioned above.
+>>
+>> And it seems that it is hard to change mlx5 to use frag API according to
+>> the below disscusion with Alexander:
+>>
+>> https://lore.kernel.org/all/CAKgT0UeD=sboWNUsP33_UsKEKyqTBfeOqNO5NCdFaxh9KXEG3w@mail.gmail.com/
+> 
+> It's better to add a flag like PP_FLAG_PAGE_FRAG for this use case and
+> have pool creation fail than poke at internals in the driver, IMO.
+
+Jesper also had the similiar comment about that, but we decided to postpone
+that because of the naming, any better name for that flag in mind?
+
+maybe something as:
+PP_FLAG_DRIVER_FRAG_HANDLING?
+
+> 
+> .
+> 
