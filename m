@@ -2,84 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCDFA7323C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 01:45:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5EE7323C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 01:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239906AbjFOXpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 19:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59534 "EHLO
+        id S231917AbjFOXiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 19:38:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjFOXpd (ORCPT
+        with ESMTP id S229600AbjFOXix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 19:45:33 -0400
-X-Greylist: delayed 456 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Jun 2023 16:45:32 PDT
-Received: from mail.mleia.com (mleia.com [178.79.152.223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8252944;
-        Thu, 15 Jun 2023 16:45:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
-        t=1686872275; bh=A6u4x3jb4/LgEVxlUE3uiaMkSr1fIxiRRK9Z09fHPs0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=cgQ+IxqM9hQOpJGD4SPGH7AjRTFcxnmYJG8UnJ8d24xHf7XplBzVmnxcfBtf6T+gA
-         rFqNQZnbIxRXB4bYsblXlg5ppkBfjpYHvHiVmwe4grj6Yd5hNXT1VEBFK0z0Mn+ZVq
-         YLzEJXhQn1aF9Y8ZhfE9mcd/uul2jbPAtPcThihGBr5FmEYSyb3x44sZlUTwQA+G1h
-         2+5sF7GVjGGCnZiFxK62fwsyk7FEABEk3AC67w3jTXbzOrR+X9CavmW2ckoKetNal8
-         s8fHuoPbNXXNzw03aihH8KqtdnbbQEw8yweGHlHzoYINVYAIM3JvxifFkZjePhtbhW
-         royYMB/E7xveg==
-Received: from mail.mleia.com (localhost [127.0.0.1])
-        by mail.mleia.com (Postfix) with ESMTP id 15DF142C531;
-        Thu, 15 Jun 2023 23:37:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
-        t=1686872275; bh=A6u4x3jb4/LgEVxlUE3uiaMkSr1fIxiRRK9Z09fHPs0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=cgQ+IxqM9hQOpJGD4SPGH7AjRTFcxnmYJG8UnJ8d24xHf7XplBzVmnxcfBtf6T+gA
-         rFqNQZnbIxRXB4bYsblXlg5ppkBfjpYHvHiVmwe4grj6Yd5hNXT1VEBFK0z0Mn+ZVq
-         YLzEJXhQn1aF9Y8ZhfE9mcd/uul2jbPAtPcThihGBr5FmEYSyb3x44sZlUTwQA+G1h
-         2+5sF7GVjGGCnZiFxK62fwsyk7FEABEk3AC67w3jTXbzOrR+X9CavmW2ckoKetNal8
-         s8fHuoPbNXXNzw03aihH8KqtdnbbQEw8yweGHlHzoYINVYAIM3JvxifFkZjePhtbhW
-         royYMB/E7xveg==
-Message-ID: <ee48b34f-b948-0008-63ae-a6b2b396446a@mleia.com>
-Date:   Fri, 16 Jun 2023 02:37:52 +0300
+        Thu, 15 Jun 2023 19:38:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0F8294E;
+        Thu, 15 Jun 2023 16:38:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE27262C63;
+        Thu, 15 Jun 2023 23:38:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BB25C433C0;
+        Thu, 15 Jun 2023 23:38:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686872331;
+        bh=Fqi/K2Gf7K/Hp8uv0SoXSv+oUBt2a09UEToTLMpKZAU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JNSeXOdAoDxAxc+XyTRJ4Nnp3IXYQg1jp8Tq9VNVbB4jpUTGrz1qdR2t0a/HNRUnh
+         tuGNQuQ1UZSBI6y/ESQWcL+dV5Nt6fUnRUCd8piqBa9t8OG2dfT+741FTon228RjIQ
+         eFyB2AjIJBTRZdAdbiLWgPJTso6HdXP6eYjC5AX0OoFsuC9TtxznJVTHuj1FVOHYna
+         1glW8sM9VWVmo2Y+cJgRJOlKxMSo9aixEnG+jQrqpDmsmBWMM7yBp0Gf+Qy4zhAFXf
+         jZVfyc/HCarUXQAlLB6p9xd0Z+eCu64Ns4FZj8tozsCFIriiK2CPCV9PI+PNuXGHya
+         wyiB8/zDRO7IA==
+Date:   Thu, 15 Jun 2023 16:38:49 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Dmitry Safonov <dima@arista.com>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-kernel@vger.kernel.org, Bob Gilligan <gilligan@arista.com>,
+        David Ahern <dsahern@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Francesco Ruggeri <fruggeri05@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        linux-crypto@vger.kernel.org
+Subject: Re: [PATCH-next 2/3] crypto: api - Provide gfp mask for tfm
+ allocation
+Message-ID: <20230615233849.GB25295@sol.localdomain>
+References: <20230614174643.3836590-1-dima@arista.com>
+ <20230614174643.3836590-3-dima@arista.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH v1 1/1] gpio: lpc18xx: Remove unused of_gpio.h inclusion
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andy@kernel.org>
-References: <20230615162519.21244-1-andriy.shevchenko@linux.intel.com>
-From:   Vladimir Zapolskiy <vz@mleia.com>
-In-Reply-To: <20230615162519.21244-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
-X-CRM114-CacheID: sfid-20230615_233755_113557_A2856BF7 
-X-CRM114-Status: UNSURE (   6.83  )
-X-CRM114-Notice: Please train this message. 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230614174643.3836590-3-dima@arista.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/15/23 19:25, Andy Shevchenko wrote:
-> The of_gpio.h is not and shouldn't be used in the GPIO drivers.
-> Remove it.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
+On Wed, Jun 14, 2023 at 06:46:42PM +0100, Dmitry Safonov wrote:
+> diff --git a/crypto/cipher.c b/crypto/cipher.c
+> index d39ef5f72ab8..184188339a4a 100644
+> --- a/crypto/cipher.c
+> +++ b/crypto/cipher.c
+> @@ -102,7 +102,7 @@ struct crypto_cipher *crypto_clone_cipher(struct crypto_cipher *cipher)
+>  		return ERR_PTR(-ENOSYS);
+>  
+>  	ntfm = __crypto_alloc_tfm(alg, CRYPTO_ALG_TYPE_CIPHER,
+> -				  CRYPTO_ALG_TYPE_MASK);
+> +				  CRYPTO_ALG_TYPE_MASK, GFP_ATOMIC);
+>  	if (IS_ERR(ntfm))
+>  		return ERR_CAST(ntfm);
+>  
 
-Thank you for the correct change.
+Should crypto_clone_cipher() not have a gfp_t argument itself?
 
-Acked-by: Vladimir Zapolskiy <vz@mleia.com>
+I'm wondering if any users of the crypto_clone_*() functions will need anything
+other than GFP_ATOMIC, such as GFP_NOFS or GFP_NOIO.
 
---
-Best wishes,
-Vladimir
+FWIW, btrfs's support for fscrypt is planned to use per-extent keys.  It's
+challenging to implement.  I've been thinking it might need a
+crypto_clone_skcipher() function that it can use during filesystem I/O.  That
+use case would want GFP_NOFS, I think.
+
+- Eric
