@@ -2,138 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 361A373172E
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:40:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5596873174C
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344091AbjFOLkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 07:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53304 "EHLO
+        id S1344304AbjFOLlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 07:41:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343981AbjFOLi4 (ORCPT
+        with ESMTP id S1344240AbjFOLlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 07:38:56 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64CE530F7;
-        Thu, 15 Jun 2023 04:38:16 -0700 (PDT)
-Date:   Thu, 15 Jun 2023 11:38:14 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686829094;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xKw1YBpgHN/11BK0WoeM1YbOvRJ2iSF8stqvZRVIrRU=;
-        b=lLKRgL3NHZgHESBg49E9zH/g2+Oo0EQDbu5yFKqRlU9E2uGzxJfUVCCzXqTgH+43GZqgZO
-        Gskjwh5Ra/e50Illa+B/cA8YE5YiW3035gds4FD9VOTkV/0peIZKsNRBqAEDUR6KYiAL6I
-        SQBmCRmmpN2/gwZJHwHhWdo1orIKwcqV6Z9JHm7ozPQjXEeHd6NTA9WixlbNGkk4PEwP1d
-        KfJ722v948kf6dGJ5LEbhACN+zcAhImAktXkz00Pj6b6+zxzzlj6lkUqo5IwYYb7YvXYqX
-        0DkQ/vsSLl55Bx7Gh0cws4hDDR6OOi5fpS4Izj4RkjDTJQDSQJw+tAb4qaWrbw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686829095;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xKw1YBpgHN/11BK0WoeM1YbOvRJ2iSF8stqvZRVIrRU=;
-        b=Ds0y7YF+T/dBSLMHzoh2EF0U4lCu7L094KcC24iirQ+h6mnhSwLBDJPeK7XYsDZFzQXcyp
-        DBRGAxNeNJwJHsDA==
-From:   "tip-bot2 for Josh Don" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched: Don't account throttle time for empty groups
-Cc:     Josh Don <joshdon@google.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230612232748.3948659-1-joshdon@google.com>
-References: <20230612232748.3948659-1-joshdon@google.com>
+        Thu, 15 Jun 2023 07:41:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5469830E7;
+        Thu, 15 Jun 2023 04:39:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EFEF462AD0;
+        Thu, 15 Jun 2023 11:38:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48F50C433C8;
+        Thu, 15 Jun 2023 11:38:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686829131;
+        bh=gkEUkTKKDqISeH840eDNW6Zy1Q0fZKHBArlkBoQ+9A0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=AUdktGIjH+hpc0mfBHzNNbje9LHLJGSK8DhgtgiLT14HW5SnzwB/OnpCE/wwcq4qU
+         SjAEoXTmoO2qgn8p4d9IdB56aurGBKH6iXdYxm4utq4NTInPX5sc0PsygwEXzJvxn2
+         QUaow3F3Yqyraq5R6rtzuiIeb1Hmyk6EwmXBWGskuEYVQOnxpKyy4oHzBvYB4+TYLo
+         lwAI3CIDA/s1UxAhcPJsPsAOkX/qOX7sYAXU/vXIdNuvVAR3nSXHi5o9dMnCSw1H80
+         fzpQD8sLn+vNMMPT/YZ67qm6/IDioQAFGha9ZBVUXbuqfhBi1/b+agTBgRnaJ28zHg
+         Vl/76bwffd9jg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Uday Shankar <ushankar@purestorage.com>,
+        Costa Sapuntzakis <costa@purestorage.com>,
+        Randy Jennings <randyj@purestorage.com>,
+        Hannes Reinecke <hare@suse.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Christoph Hellwig <hch@lst.de>,
+        Keith Busch <kbusch@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-nvme@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.1 14/16] nvme: check IO start time when deciding to defer KA
+Date:   Thu, 15 Jun 2023 07:38:14 -0400
+Message-Id: <20230615113816.649135-14-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230615113816.649135-1-sashal@kernel.org>
+References: <20230615113816.649135-1-sashal@kernel.org>
 MIME-Version: 1.0
-Message-ID: <168682909442.404.8265948687296102348.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.1.34
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/core branch of tip:
+From: Uday Shankar <ushankar@purestorage.com>
 
-Commit-ID:     eed673d4f701e17b8f887dbcbfd3b4bcc53503ec
-Gitweb:        https://git.kernel.org/tip/eed673d4f701e17b8f887dbcbfd3b4bcc53503ec
-Author:        Josh Don <joshdon@google.com>
-AuthorDate:    Mon, 12 Jun 2023 16:27:47 -07:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Thu, 15 Jun 2023 13:28:19 +02:00
+[ Upstream commit 774a9636514764ddc0d072ae0d1d1c01a47e6ddd ]
 
-sched: Don't account throttle time for empty groups
+When a command completes, we set a flag which will skip sending a
+keep alive at the next run of nvme_keep_alive_work when TBKAS is on.
+However, if the command was submitted long ago, it's possible that
+the controller may have also restarted its keep alive timer (as a
+result of receiving the command) long ago. The following trace
+demonstrates the issue, assuming TBKAS is on and KATO = 8 for
+simplicity:
 
-It is easy for a cfs_rq to become throttled even when it has no enqueued
-entities (for example, if we have just put_prev()'d the last runnable
-task of the cfs_rq, and the cfs_rq is out of quota).
+1. t = 0: submit I/O commands A, B, C, D, E
+2. t = 0.5: commands A, B, C, D, E reach controller, restart its keep
+            alive timer
+3. t = 1: A completes
+4. t = 2: run nvme_keep_alive_work, see recent completion, do nothing
+5. t = 3: B completes
+6. t = 4: run nvme_keep_alive_work, see recent completion, do nothing
+7. t = 5: C completes
+8. t = 6: run nvme_keep_alive_work, see recent completion, do nothing
+9. t = 7: D completes
+10. t = 8: run nvme_keep_alive_work, see recent completion, do nothing
+11. t = 9: E completes
 
-Avoid accounting this time towards total throttle time, since it
-otherwise falsely inflates the stats.
+At this point, 8.5 seconds have passed without restarting the
+controller's keep alive timer, so the controller will detect a keep
+alive timeout.
 
-Note that the dequeue path is special, since we normally disallow
-migrations when a task is in a throttled hierarchy (see
-throttled_lb_pair()).
+Fix this by checking the IO start time when deciding to defer sending a
+keep alive command. Only set comp_seen if the command started after the
+most recent run of nvme_keep_alive_work. With this change, the
+completions of B, C, and D will not set comp_seen and the run of
+nvme_keep_alive_work at t = 4 will send a keep alive.
 
-Signed-off-by: Josh Don <joshdon@google.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20230612232748.3948659-1-joshdon@google.com
+Reported-by: Costa Sapuntzakis <costa@purestorage.com>
+Reported-by: Randy Jennings <randyj@purestorage.com>
+Signed-off-by: Uday Shankar <ushankar@purestorage.com>
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Keith Busch <kbusch@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/sched/fair.c | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+ drivers/nvme/host/core.c | 14 +++++++++++++-
+ drivers/nvme/host/nvme.h |  1 +
+ 2 files changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 6189d1a..b56c86c 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -4873,8 +4873,14 @@ enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+index 50a83306bea7b..06dd1c0780bfc 100644
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -395,7 +395,16 @@ void nvme_complete_rq(struct request *req)
+ 	trace_nvme_complete_rq(req);
+ 	nvme_cleanup_cmd(req);
  
- 	if (cfs_rq->nr_running == 1) {
- 		check_enqueue_throttle(cfs_rq);
--		if (!throttled_hierarchy(cfs_rq))
-+		if (!throttled_hierarchy(cfs_rq)) {
- 			list_add_leaf_cfs_rq(cfs_rq);
-+		} else {
-+#ifdef CONFIG_CFS_BANDWIDTH
-+			if (!cfs_rq->throttled_clock)
-+				cfs_rq->throttled_clock = rq_clock(rq_of(cfs_rq));
-+#endif
-+		}
+-	if (ctrl->kas)
++	/*
++	 * Completions of long-running commands should not be able to
++	 * defer sending of periodic keep alives, since the controller
++	 * may have completed processing such commands a long time ago
++	 * (arbitrarily close to command submission time).
++	 * req->deadline - req->timeout is the command submission time
++	 * in jiffies.
++	 */
++	if (ctrl->kas &&
++	    req->deadline - req->timeout >= ctrl->ka_last_check_time)
+ 		ctrl->comp_seen = true;
+ 
+ 	switch (nvme_decide_disposition(req)) {
+@@ -1235,6 +1244,7 @@ static enum rq_end_io_ret nvme_keep_alive_end_io(struct request *rq,
+ 		return RQ_END_IO_NONE;
  	}
- }
  
-@@ -5480,7 +5486,9 @@ done:
- 	 * throttled-list.  rq->lock protects completion.
- 	 */
- 	cfs_rq->throttled = 1;
--	cfs_rq->throttled_clock = rq_clock(rq);
-+	SCHED_WARN_ON(cfs_rq->throttled_clock);
-+	if (cfs_rq->nr_running)
-+		cfs_rq->throttled_clock = rq_clock(rq);
- 	return true;
- }
++	ctrl->ka_last_check_time = jiffies;
+ 	ctrl->comp_seen = false;
+ 	spin_lock_irqsave(&ctrl->lock, flags);
+ 	if (ctrl->state == NVME_CTRL_LIVE ||
+@@ -1253,6 +1263,8 @@ static void nvme_keep_alive_work(struct work_struct *work)
+ 	bool comp_seen = ctrl->comp_seen;
+ 	struct request *rq;
  
-@@ -5498,7 +5506,10 @@ void unthrottle_cfs_rq(struct cfs_rq *cfs_rq)
- 	update_rq_clock(rq);
++	ctrl->ka_last_check_time = jiffies;
++
+ 	if ((ctrl->ctratt & NVME_CTRL_ATTR_TBKAS) && comp_seen) {
+ 		dev_dbg(ctrl->device,
+ 			"reschedule traffic based keep-alive timer\n");
+diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
+index 01d90424af534..ce668268b2c32 100644
+--- a/drivers/nvme/host/nvme.h
++++ b/drivers/nvme/host/nvme.h
+@@ -318,6 +318,7 @@ struct nvme_ctrl {
+ 	struct delayed_work ka_work;
+ 	struct delayed_work failfast_work;
+ 	struct nvme_command ka_cmd;
++	unsigned long ka_last_check_time;
+ 	struct work_struct fw_act_work;
+ 	unsigned long events;
  
- 	raw_spin_lock(&cfs_b->lock);
--	cfs_b->throttled_time += rq_clock(rq) - cfs_rq->throttled_clock;
-+	if (cfs_rq->throttled_clock) {
-+		cfs_b->throttled_time += rq_clock(rq) - cfs_rq->throttled_clock;
-+		cfs_rq->throttled_clock = 0;
-+	}
- 	list_del_rcu(&cfs_rq->throttled_list);
- 	raw_spin_unlock(&cfs_b->lock);
- 
+-- 
+2.39.2
+
