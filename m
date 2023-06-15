@@ -2,174 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB83E730F41
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1788730F4C
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243735AbjFOG0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 02:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43876 "EHLO
+        id S237668AbjFOG07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 02:26:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237795AbjFOG0J (ORCPT
+        with ESMTP id S229447AbjFOG0v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 02:26:09 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6607A26AF;
-        Wed, 14 Jun 2023 23:26:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686810362; x=1718346362;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=2iuy8KyO3OHv0vuu9wEkAYWlBpQgmQ6Sr/z3577fngY=;
-  b=msjafntMeg2VN/WtOYKToZMnuVtSIzA6r6Dg2BeiUQ83HNeTenyyHcOS
-   YkwZC+Z7I8a2Kf0MleV6pwWYqvOARb9TTLYG0DXm668kS9tz07kk0l1Yo
-   bmEMKCCQmySVnzW//tPyDJ0NJjR/01lIrBUtX9XdiuUEJpFlBd54VpAeR
-   hl8vZ8AK8fjs1VDsZ2Esm+SQh1J6OpCkm5ng+HUnbZNsdFLSfKleJ/RpY
-   f5TPG4zamtPIfY3msJWXgG6VhFwWQc9ijxMAvEkbW44HHuo3FK9fTTqo1
-   1V5R37gA5/AduPR2sU+906PB7+3/hw5OcImAX4PMJRrn1xeC1xdPbZs9u
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="361303658"
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="361303658"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 23:26:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="742121918"
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="742121918"
-Received: from akcopko-mobl2.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.212.220.19])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 23:26:01 -0700
-From:   Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: [PATCH v1] PCI: pciehp: Make sure DPC trigger status is reset in PDC handler
-Date:   Wed, 14 Jun 2023 23:25:59 -0700
-Message-Id: <20230615062559.1268404-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 15 Jun 2023 02:26:51 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96422690;
+        Wed, 14 Jun 2023 23:26:50 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35F4KmFd017112;
+        Thu, 15 Jun 2023 06:26:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=Llx5aUWzuRsf3dJ/od1r447zlOZBOr9tAFIk/M9sTDQ=;
+ b=aXywIXPJffsieon6Jd5XcAhSi3PqdZCldlf7P5QTbQ1pdQaQgeFUz63olWJGnOS7laWC
+ 4lJeSaBNryFCz0ex4vr5yh1kg+6Xyo7TsoZ8TVF/9JzZVA7F+sJ5PZ8AJ88EKRJQ/pp3
+ xLn3SDF/ghYFzzMo1J5BCVrf2KIrthfYkjcWxAPIf1cj/pmOgAX59gSYgS++8y6n2IaU
+ RMA9mRxS88y9pTUXYSsW5bFt+MRQhwuBveyCR41V5rsvF+0uUJeqxtNNB5rm/sVRBmLN
+ T/ZZfbMxTcuXuqt9TpSZ0esDPK3ywUo3AD85n0eEj1w5Xm8NFJFF8QgW7P/11Gkj+LOc GA== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r78c7apq3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 06:26:24 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35F6QNkJ021789
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 06:26:23 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Wed, 14 Jun 2023 23:26:09 -0700
+Date:   Thu, 15 Jun 2023 11:56:03 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <p.zabel@pengutronix.de>, <arnd@arndb.de>,
+        <geert+renesas@glider.be>, <neil.armstrong@linaro.org>,
+        <nfraprado@collabora.com>, <broonie@kernel.org>,
+        <rafal@milecki.pl>, <quic_srichara@quicinc.com>,
+        <quic_varada@quicinc.org>, <quic_wcheng@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH 7/9] arm64: dts: qcom: ipq5332: Add USB related nodes
+Message-ID: <20230615062603.GH22186@varda-linux.qualcomm.com>
+References: <cover.1686126439.git.quic_varada@quicinc.com>
+ <1b48e737aa14f5b5539cbf04d473182121d5b1ad.1686126439.git.quic_varada@quicinc.com>
+ <8e21fef3-5ae4-673a-dce2-4ebf1dd0eb66@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <8e21fef3-5ae4-673a-dce2-4ebf1dd0eb66@linaro.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: eteCNZMKAjnIX2uwp5kaCbgI_zSdUDrF
+X-Proofpoint-ORIG-GUID: eteCNZMKAjnIX2uwp5kaCbgI_zSdUDrF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-15_03,2023-06-14_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 malwarescore=0 lowpriorityscore=0 mlxscore=0 spamscore=0
+ suspectscore=0 clxscore=1015 adultscore=0 phishscore=0 bulkscore=0
+ mlxlogscore=814 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306150053
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During the EDR-based DPC recovery process, for devices with persistent
-issues, the firmware may choose not to handle the DPC error and leave
-the port in DPC triggered state. In such scenarios, if the user
-replaces the faulty device with a new one, the OS is expected to clear
-the DPC trigger status in the hotplug error handler to enable the new
-device enumeration. More details about this issue can be found in PCIe
-firmware specification, r3.3, sec titled "DPC Event Handling"
-Implementation note.
+On Wed, Jun 07, 2023 at 02:23:20PM +0300, Dmitry Baryshkov wrote:
+> On 07/06/2023 13:56, Varadarajan Narayanan wrote:
+> >Add USB phy and controller nodes
+> >
+> >Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> >---
+> >  arch/arm64/boot/dts/qcom/ipq5332.dtsi | 55 +++++++++++++++++++++++++++++++++++
+> >  1 file changed, 55 insertions(+)
+> >
+> >diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> >index c2d6cc65..3183357 100644
+> >--- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> >+++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> >@@ -383,6 +383,61 @@
+> >  				status = "disabled";
+> >  			};
+> >  		};
+> >+
+> >+		usb_0_m31phy: hs_m31phy@7b000 {
+> >+			compatible = "qcom,ipq5332-m31-usb-hsphy";
+> >+			reg = <0x0007b000 0x12C>,
+> >+			      <0x08af8800 0x400>;
+> >+			reg-names = "m31usb_phy_base",
+> >+				    "qscratch_base";
+> >+			phy_type= "utmi";
+> >+
+> >+			resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
+> >+			reset-names = "usb2_phy_reset";
+> >+
+> >+			status = "okay";
+> >+		};
+> >+
+> >+		usb2: usb2@8a00000 {
+> >+			compatible = "qcom,ipq5332-dwc3", "qcom,dwc3";
+> >+			#address-cells = <1>;
+> >+			#size-cells = <1>;
+> >+			ranges;
+> >+
+> >+			reg = <0x08af8800 0x100>;
+> >+
+> >+			clocks = <&gcc GCC_USB0_MASTER_CLK>,
+> >+				<&gcc GCC_SNOC_USB_CLK>,
+> >+				<&gcc GCC_USB0_SLEEP_CLK>,
+> >+				<&gcc GCC_USB0_MOCK_UTMI_CLK>;
+>
+> Please indent these values.
 
-Similar issue might also happen if the DPC or EDR recovery handler
-exits before clearing the trigger status. To fix this issue, clear the
-DPC trigger status in PDC interrupt handler.
+Ok.
 
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Reported-by: Thatchanamurthy Satish <Satish.Thatchanamurt@Dell.com>
----
- drivers/pci/hotplug/pciehp_hpc.c |  6 +++++
- drivers/pci/pci.h                |  4 ++++
- drivers/pci/pcie/dpc.c           | 40 ++++++++++++++++++++++++++++++++
- 3 files changed, 50 insertions(+)
+> >+
+> >+			clock-names = "core",
+> >+				"iface",
+> >+				"sleep",
+> >+				"mock_utmi";
+>
+> Please indent these values.
 
-diff --git a/drivers/pci/hotplug/pciehp_hpc.c b/drivers/pci/hotplug/pciehp_hpc.c
-index f8c70115b691..03f8f18a6cf5 100644
---- a/drivers/pci/hotplug/pciehp_hpc.c
-+++ b/drivers/pci/hotplug/pciehp_hpc.c
-@@ -735,6 +735,12 @@ static irqreturn_t pciehp_ist(int irq, void *dev_id)
- 				      PCI_EXP_SLTCTL_ATTN_IND_ON);
- 	}
- 
-+	/* Clear DPC trigger status */
-+	if ((events & PCI_EXP_SLTSTA_PDC) && pci_dpc_is_triggered(pdev)) {
-+		ctrl_dbg(ctrl, "Slot(%s): Clear DPC trigger\n", slot_name(ctrl));
-+		pci_dpc_reset_trigger(pdev);
-+	}
-+
- 	/*
- 	 * Ignore Link Down/Up events caused by Downstream Port Containment
- 	 * if recovery from the error succeeded.
-diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-index 2475098f6518..bbe70e9ab747 100644
---- a/drivers/pci/pci.h
-+++ b/drivers/pci/pci.h
-@@ -426,11 +426,15 @@ void pci_dpc_init(struct pci_dev *pdev);
- void dpc_process_error(struct pci_dev *pdev);
- pci_ers_result_t dpc_reset_link(struct pci_dev *pdev);
- bool pci_dpc_recovered(struct pci_dev *pdev);
-+bool pci_dpc_is_triggered(struct pci_dev *pdev);
-+void pci_dpc_reset_trigger(struct pci_dev *pdev);
- #else
- static inline void pci_save_dpc_state(struct pci_dev *dev) {}
- static inline void pci_restore_dpc_state(struct pci_dev *dev) {}
- static inline void pci_dpc_init(struct pci_dev *pdev) {}
- static inline bool pci_dpc_recovered(struct pci_dev *pdev) { return false; }
-+static inline bool pci_dpc_is_triggered(struct pci_dev *pdev) { return false; }
-+static inline void pci_dpc_reset_trigger(struct pci_dev *pdev) {}
- #endif
- 
- #ifdef CONFIG_PCIEPORTBUS
-diff --git a/drivers/pci/pcie/dpc.c b/drivers/pci/pcie/dpc.c
-index 3ceed8e3de41..ccdc90d37f6d 100644
---- a/drivers/pci/pcie/dpc.c
-+++ b/drivers/pci/pcie/dpc.c
-@@ -88,6 +88,46 @@ static bool dpc_completed(struct pci_dev *pdev)
- 	return true;
- }
- 
-+/**
-+ * pci_dpc_is_triggered - Check for DPC trigger status
-+ * @pdev: PCI device
-+ *
-+ * It is called from the PCIe hotplug driver to check for DPC
-+ * trigger status.
-+ *
-+ * Return True if DPC is triggered or false for other cases.
-+ */
-+bool pci_dpc_is_triggered(struct pci_dev *pdev)
-+{
-+	u16 status;
-+
-+	if (!pdev->dpc_cap)
-+		return false;
-+
-+	pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_STATUS, &status);
-+
-+	if ((!PCI_POSSIBLE_ERROR(status)) && (status & PCI_EXP_DPC_STATUS_TRIGGER))
-+		return true;
-+
-+	return false;
-+}
-+
-+/**
-+ * pci_reset_trigger - Clear DPC trigger status
-+ * @pdev: PCI device
-+ *
-+ * It is called from the PCIe hotplug driver to clean the DPC
-+ * trigger status in the PDC interrupt handler.
-+ */
-+void pci_dpc_reset_trigger(struct pci_dev *pdev)
-+{
-+	if (!pdev->dpc_cap)
-+		return;
-+
-+	pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_STATUS,
-+			      PCI_EXP_DPC_STATUS_TRIGGER);
-+}
-+
- /**
-  * pci_dpc_recovered - whether DPC triggered and has recovered successfully
-  * @pdev: PCI device
--- 
-2.34.1
+Ok.
 
+> >+
+> >+			interrupts-extended = <&intc GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>;
+>
+> No PHY IRQs?
+
+Will add.
+
+
+Thanks
+Varada
+
+> >+			interrupt-names = "pwr_event";
+> >+
+> >+			resets = <&gcc GCC_USB_BCR>;
+> >+
+> >+			qcom,select-utmi-as-pipe-clk;
+> >+
+> >+			usb2_0_dwc: usb@8a00000 {
+> >+				compatible = "snps,dwc3";
+> >+				reg = <0x08a00000 0xe000>;
+> >+				clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> >+				clock-names = "ref";
+> >+				interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
+> >+				usb-phy = <&usb_0_m31phy>;
+> >+				tx-fifo-resize;
+> >+				snps,is-utmi-l1-suspend;
+> >+				snps,hird-threshold = /bits/ 8 <0x0>;
+> >+				snps,dis_u2_susphy_quirk;
+> >+				snps,dis_u3_susphy_quirk;
+> >+				snps,ref-clock-period-ns = <21>;
+> >+			};
+> >+		};
+> >  	};
+> >  	timer {
+>
+> --
+> With best wishes
+> Dmitry
+>
