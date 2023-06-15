@@ -2,133 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E97DD731804
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:00:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 573167319E2
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:26:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344582AbjFOMA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 08:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47524 "EHLO
+        id S1344027AbjFONZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 09:25:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344035AbjFOMAH (ORCPT
+        with ESMTP id S240465AbjFONYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 08:00:07 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2135.outbound.protection.outlook.com [40.107.237.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A24728F;
-        Thu, 15 Jun 2023 04:55:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hawYRPs0rccdqLpAXIS41omNyQBwcqqDkG7jy34uEdTEY44kRSt1/6UVtKfGiXiU5xmNXtv6QxmhqP/4V+Tpb1imCq0nqdnxHamjOFnbeSKgp06FUeNfoWmPSCYBxCizA22bzt3qTJwbDCS9rfxPB8O8HIP95cp2AzlslEUVokw6F0Gju4CFK8yBaSOWjm9gOJ/todD00Ecc9xK6hmiWQBomyvZhuMOs31JpIDQy6Ipnq6J5PAhwc6DdDWA5WnsFdrEq6fFUn2SXlVDMl4rbSesiwwg6DQkiit1B6Sra2S2ejLGGpmqEE1G2C3tUYIa5i9Re+dBbFwd8Zgf5PzyQ5w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WM6ZTKuDrAm84phO7//Vzlp+6b+MexkWVFuXA+YR4hc=;
- b=LuhEqq6kvl8eBgtAB7vA6zYd4XDEZAgAgwoQ5aum6cjoX6UVs1eIJcBExleB/25SYszQ5BtX04yxRR7CjdYd8xQ7SZ7/1dViCZiGY9knBDB2GA/oB4AAh7QYoZkmFQNFFy5LIwhUYqDuxwZuJA3HXWdgq80vIr+5aDdUO5O5ay+5dljXEoYsdURFj8reFcxbknNB+MXBBoKifXmUe7+kNp4mPBVuAGUkuj5gHArOWbXH1Vc7AVtP1Ql5hgTvhh0N7oWrEos9PT2niGWTky56KXrpTkgucCQSmNK8Z1BGiEIP6o1Q6Xi0YZjYvp1l9jwnEVUgjTh5DBnD7ziEbBGSYQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WM6ZTKuDrAm84phO7//Vzlp+6b+MexkWVFuXA+YR4hc=;
- b=WEVGHYd54zpUU46t4y5tmHKe/NVY2gRM/yUls3kDghgByg8+2tj3D0sZvu6LkJySIiPGckzhOQ2pH7yFbLZGyprPi/UnsM9Xflv3QEhU9qHwJ1fsbw1FP7XWGWH9IR/gyJOR17JtEwSNm5iKeDI/BKKyPX0gCyeYAKzV0GQzlDw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by MW4PR13MB5990.namprd13.prod.outlook.com (2603:10b6:303:1ba::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.37; Thu, 15 Jun
- 2023 11:54:46 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e%5]) with mapi id 15.20.6500.025; Thu, 15 Jun 2023
- 11:54:46 +0000
-Date:   Thu, 15 Jun 2023 13:54:39 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Gabriel Somlo <gsomlo@gmail.com>,
-        Joel Stanley <joel@jms.id.au>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: ethernet: litex: add support for 64 bit stats
-Message-ID: <ZIr7/5IJbPjOt0Kd@corigine.com>
-References: <20230614162035.300-1-jszhang@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230614162035.300-1-jszhang@kernel.org>
-X-ClientProxiedBy: AM0PR02CA0139.eurprd02.prod.outlook.com
- (2603:10a6:20b:28d::6) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Thu, 15 Jun 2023 09:24:45 -0400
+Received: from mail.sitirkam.com (mail.aurorateknoglobal.com [103.126.10.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A043A270A;
+        Thu, 15 Jun 2023 06:24:44 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.sitirkam.com (Postfix) with ESMTP id E95E84E7BE85;
+        Thu, 15 Jun 2023 08:32:08 +0700 (WIB)
+Received: from mail.sitirkam.com ([127.0.0.1])
+        by localhost (mail.sitirkam.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id vCWv5wv-e4bs; Thu, 15 Jun 2023 08:32:08 +0700 (WIB)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.sitirkam.com (Postfix) with ESMTP id EBCB74E7B17E;
+        Thu, 15 Jun 2023 08:32:00 +0700 (WIB)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.sitirkam.com EBCB74E7B17E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sitirkam.com;
+        s=B8AB377C-ED3B-11EA-8736-9248CAEF674E; t=1686792721;
+        bh=q7vDHy+gLAr4GKZUDI+hjt8I93kvW09nNmGJORUTyfg=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=Tf7FWIxmdKqazaA50P1tzZyaij5Ra09whYpkGOTGYx+leNni4csixyNmnwapzLMY2
+         +SOpRTJcX2lJnWiyFTPPI52jdJFLC3Gxr0naX/qVoa40FXnTKMGLRrGytzuhmkrmVM
+         k02AK/m4j2GD7DBUtHZE2HAZ+7UeAeKuRJ1AWMmjaihfUvhOIW8sdcNMkWbliDVDE7
+         eBGbm0b+95+pUEgOc4ZUN2bi4mz0Wl5JgtWaG6la0EW/TSHLPcdc3Jrt7NdhMutJXj
+         EIdh2qJ3eZonpgVb2xu68Wd7xlr6RojQtmjH+Aqe5kBFTbiCRiRMxjMeXTn+KenIDo
+         Ipp2GuTzEJTPQ==
+X-Virus-Scanned: amavisd-new at mail.sitirkam.com
+Received: from mail.sitirkam.com ([127.0.0.1])
+        by localhost (mail.sitirkam.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id eMG2ZXjSIsZl; Thu, 15 Jun 2023 08:32:00 +0700 (WIB)
+Received: from [185.169.4.111] (unknown [185.169.4.111])
+        by mail.sitirkam.com (Postfix) with ESMTPSA id 230F94E7B17F;
+        Thu, 15 Jun 2023 08:31:55 +0700 (WIB)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|MW4PR13MB5990:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0fe1b880-d25d-4ba7-793b-08db6d975065
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OwsnCDX1bPrRMZTva7TGQYnbXaoO2rnG4n/3jqjp7Tr+EzhSJqosreA6h8BzOjJScoJFjiEgWOg0lX85iXN/gnA0FP3dafXJBZNxUdSyueVssioY2Ngj5n95Ga0IDfM9y4tItw7o+7ajBJb1XAEcq4kgBJRo5CHIMS7jQqXfzqvmRQ6UJ6WESSFijMY6CSiQKhDcZ9jR+KKQ3lA/oAKGXDsaieT2n3zZwxdEAzg/Ff4y/XU9VXRO7pZXGbTmNUqy5khY0e6BeQyqvXjpN7Jcd/x7XbYUBkPqOLBI8buvXVc3FKRG1dfK2789rSzkv1mO1KRIxMYdWUBLYhPgJVxcarijf3nk9MCmqJA/TfS54pE4fXTRJr2iMWltXVtjgfbs53W03B8V+GiSVmydN6cglAAvXFD7tvtgyFwkCzo7bc0UhO/vgRQ9UepHkqPVcdx7iYSvMdJqu538B9B8qxEtAK1F5mZEA57h/JxykoaxerLBdevFFpeOUQ13IZaksdvacMIV+qktFN4iWwYEwZTsGsQGg8fMnmVneNPGbTYXO7RanFXyYWQnnjDD6ppmDcPKzH09sJpZLesekqlLRQLL5DzZ66LIo2hk3bhuMlQBqIU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(396003)(136003)(39840400004)(376002)(451199021)(5660300002)(186003)(6506007)(44832011)(2906002)(4744005)(7416002)(2616005)(6512007)(41300700001)(8936002)(8676002)(6486002)(316002)(54906003)(6666004)(36756003)(478600001)(4326008)(66556008)(66476007)(86362001)(38100700002)(66946007)(6916009);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vS7dDwBdh9Xl1PHoow7HQMEA8TE4IsYQcypxq6E0lWP31RQlsky01KmdtHwg?=
- =?us-ascii?Q?+KM0nraSVlTFX278bFIzcKEGq03PG03/l6P+p7IF8Rbm1OPP8v4RvFKBIAbr?=
- =?us-ascii?Q?HgsteETwM+AilwxcX67ZU17ZXV4eS1wTwX9AFPa5irrR1A1haQlsHMY5r2gv?=
- =?us-ascii?Q?CtD/tYv3dJVkzy6fWyLFCFJimWDou+y6xC2/rxtP3T7AxU2NQKps4CHIJzNe?=
- =?us-ascii?Q?hS6gMLX9zM6DzoRmBnVy7vuUhJFhDiQc0mM3sOjnsHa0GgRvINTeTTRKTTp/?=
- =?us-ascii?Q?rL6RKaXA1IRcQQClmaYte29wIYY6zysGpnLDB6mMhkGzY+HISnKbYSlDms2q?=
- =?us-ascii?Q?MRV0o/6lWTW264k7YV18QW4aEEiWYJP/Tznspz0e9o442Owmeq6AoMhFpq1B?=
- =?us-ascii?Q?Gc5rIv1Wz5TG07rXL2ZKkQCZE2bzSrz0dflkmSkV7oSkUM3nAvIw5RGxySPJ?=
- =?us-ascii?Q?wgSjBHbb2d86AGe9zZtnJLEL1zl9niCSiP+JeQJpKtgstLFFSofvFLnIv8ju?=
- =?us-ascii?Q?5aP/VMcDyjy8a7oFSrRZ8a0PoiIhiJv+D6cThEDEPwRCUYy49M0tuf+dXklH?=
- =?us-ascii?Q?evhexfH+PgkGGZRNJ/mPT4bA32yp1BG8NMSGelVEYhfKgQGHn0Bb1v4TmknO?=
- =?us-ascii?Q?sRTHry7DSMSmwpINn9p7MbVHyNWFPJkEKRWafR1Vq+KZCF3v6OmIlF2kRsan?=
- =?us-ascii?Q?fbm+26yKPb4+S5fd+cPmvfwl/TV62O1x/O+M8uJ+lhVWSFDmbtpaDlZ84LUY?=
- =?us-ascii?Q?lv8CTEW0scituEYKoD80/2Yj2qxmv9c70qsrvJXEvXmFjujecj8KYLOvvdln?=
- =?us-ascii?Q?5uiHQYMSB88JUtSx8Bf605/g1p/J2CbC8FOxol03tGuFFVmdyvKQRqprd/Ja?=
- =?us-ascii?Q?OebgqezFJhCstHxi68902tqDgc6TpRJaQt2C2FUbC4YUPTugc6L1NQg6VowO?=
- =?us-ascii?Q?r0EIZx+ptAwQ4/SC9bljHER+jaOPul33aB+OMJLTTQvIHX4TLf9fI2aLB5Nk?=
- =?us-ascii?Q?j7/MgTiA9NFA3G4NgfIXq7xsy45kA/Ra3icAiJahcHJaMk+QfxX3ja+Xt8sO?=
- =?us-ascii?Q?Yjr6EzQMvRtcUBUcYLzDhScDMnWaY3NNdTis+4kQYs8Salpm5jfR5BUu4rfY?=
- =?us-ascii?Q?pAj5tzGtocP5LHCDlcIr4IwS5rQVQTndBBI5L2lVqhCPcXOY/PtvSCX2LAdg?=
- =?us-ascii?Q?FZdI912zWVZoqosjCZWaFW7saEbA9E4x6EO9yL/pCGmjizxuqA8Dw+OBwSaH?=
- =?us-ascii?Q?Mf1GRzXveC07sfPE5WthKT+K0fpsdT9PxgTEP2S/pbuffOgf3PPYM7admMip?=
- =?us-ascii?Q?x+XA5nCUV/B3+OX8eU0fdepoNMMddyMjo3FzjNKQzZUTisuyWRA/igncLZGx?=
- =?us-ascii?Q?yEwpbhmYZmXFN4cgEt3wqSyiDtzUysNj8ZhN63bgXpDYOnLj33rx0aNdNr/H?=
- =?us-ascii?Q?v0/LCQMYOEGYEdfIt17rrjEZDDzzLALDvnYKgDPAlNIu4XOzUk2fan7n/1v+?=
- =?us-ascii?Q?rRgAGORGbE0z4vJHPG6ge0deH/Dd6FklLhsPQ2agakcvmO0BCyK/grMMVfEw?=
- =?us-ascii?Q?GRUoluxbRLlZGc/1nztI47jW6CkJACYqH4v/qjxBjsURS4BSDhy71bmd0THk?=
- =?us-ascii?Q?UKaK6v5wMFWT68nLlO+0XOR7LaSzsge9oB48SwM2h7CaQTAkrf4mMTQntzKn?=
- =?us-ascii?Q?wp6OVA=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0fe1b880-d25d-4ba7-793b-08db6d975065
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 11:54:46.0866
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /vU2dr1oaI3S1pgmcklaAlXkfrTazWPqyg+odXkwV82IsvacwLApA7VdKENxQHGahW2/vBkNsqgfdjWI5zJ5YVr6x59lWiyT55J6Xv2HBfc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR13MB5990
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Spende
+To:     Recipients <admin@sitirkam.com>
+From:   "Maria-Elisabeth Schaeffler" <admin@sitirkam.com>
+Date:   Wed, 14 Jun 2023 18:34:03 -0700
+Reply-To: schaefflermariaelisabeth1941@gmail.com
+Message-Id: <20230615013156.230F94E7B17F@mail.sitirkam.com>
+X-Spam-Status: No, score=2.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 12:20:35AM +0800, Jisheng Zhang wrote:
-> Implement 64 bit per cpu stats to fix the overflow of netdev->stats
-> on 32 bit platforms. To simplify the code, we use net core
-> pcpu_sw_netstats infrastructure. One small drawback is some memory
-> overhead because litex uses just one queue, but we allocate the
-> counters per cpu.
-> 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+Your email account has been selected for a donation of =E2=82=AC1,700,000. =
+Please contact me for more information.
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
-
+Mrs Maria Elisabeth Schaeffler
+CEO SCHAEFFLER.
