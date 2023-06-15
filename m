@@ -2,53 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E46B2731444
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1891A731449
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343918AbjFOJkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 05:40:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40560 "EHLO
+        id S241671AbjFOJmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 05:42:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343697AbjFOJkH (ORCPT
+        with ESMTP id S1343833AbjFOJkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 05:40:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06FC30E6;
-        Thu, 15 Jun 2023 02:39:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27A9F621E2;
-        Thu, 15 Jun 2023 09:39:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08AE3C433C9;
-        Thu, 15 Jun 2023 09:39:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686821951;
-        bh=r6Tojsa+J6QEpbUTFlxJtR4e9II0ZoBS4MhS04CM0c8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ENhHmjQYvwCXAItnRbPoVGU2HfxOUEX8DOwQwlizbljXLQdyYtvtCyfvdNSbFPNe6
-         BlsvG0koqV90GuFdC1PBzI3BFQDPhP9frmFX3qKKw4ESS2F5FAZ59wFiOUIQDmefcL
-         +eUTn0E5sIkLK8qwQ6zCSgtEMeMwyb74I9bQcAZY=
-Date:   Thu, 15 Jun 2023 11:39:09 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Frank Wang <frank.wang@rock-chips.com>
-Cc:     sebastian.reichel@collabora.com, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, heiko@sntech.de,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
-        william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
-        yubing.zhang@rock-chips.com, wmc@rock-chips.com
-Subject: Re: [PATCH v3] usb: typec: tcpm: add get max power support
-Message-ID: <2023061551-gumminess-clasp-6285@gregkh>
-References: <20230322093120.8686-1-frank.wang@rock-chips.com>
+        Thu, 15 Jun 2023 05:40:21 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492903AAD;
+        Thu, 15 Jun 2023 02:39:50 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id E84311FDDA;
+        Thu, 15 Jun 2023 09:39:37 +0000 (UTC)
+Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
+        by relay2.suse.de (Postfix) with ESMTP id D015E2C141;
+        Thu, 15 Jun 2023 09:39:37 +0000 (UTC)
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: mm: Remove special handling for OCTEON CPUs
+Date:   Thu, 15 Jun 2023 11:39:33 +0200
+Message-Id: <20230615093933.121329-1-tsbogend@alpha.franken.de>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230322093120.8686-1-frank.wang@rock-chips.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_FAIL,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,20 +38,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 05:31:20PM +0800, Frank Wang wrote:
-> Traverse fixed pdos to calculate the maximum power that the charger
-> can provide, and it can be get by POWER_SUPPLY_PROP_INPUT_POWER_LIMIT
-> property.
-> 
-> Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
+Macro cpu_has_mips_r2_exec_hazard correctly handles OCTEON CPUs,
+so we don't need the extra switch cases for them.
 
-What ever happened to this patch?
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+---
+ arch/mips/mm/tlbex.c | 24 ++++--------------------
+ 1 file changed, 4 insertions(+), 20 deletions(-)
 
-Frank, can you rebase it and resubmit?
+diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
+index 80e05ee98d62..8d514a9082c6 100644
+--- a/arch/mips/mm/tlbex.c
++++ b/arch/mips/mm/tlbex.c
+@@ -2123,16 +2123,8 @@ static void build_r4000_tlb_load_handler(void)
+ 
+ 		uasm_i_tlbr(&p);
+ 
+-		switch (current_cpu_type()) {
+-		case CPU_CAVIUM_OCTEON:
+-		case CPU_CAVIUM_OCTEON_PLUS:
+-		case CPU_CAVIUM_OCTEON2:
+-			break;
+-		default:
+-			if (cpu_has_mips_r2_exec_hazard)
+-				uasm_i_ehb(&p);
+-			break;
+-		}
++		if (cpu_has_mips_r2_exec_hazard)
++			uasm_i_ehb(&p);
+ 
+ 		/* Examine  entrylo 0 or 1 based on ptr. */
+ 		if (use_bbit_insns()) {
+@@ -2197,16 +2189,8 @@ static void build_r4000_tlb_load_handler(void)
+ 
+ 		uasm_i_tlbr(&p);
+ 
+-		switch (current_cpu_type()) {
+-		case CPU_CAVIUM_OCTEON:
+-		case CPU_CAVIUM_OCTEON_PLUS:
+-		case CPU_CAVIUM_OCTEON2:
+-			break;
+-		default:
+-			if (cpu_has_mips_r2_exec_hazard)
+-				uasm_i_ehb(&p);
+-			break;
+-		}
++		if (cpu_has_mips_r2_exec_hazard)
++			uasm_i_ehb(&p);
+ 
+ 		/* Examine  entrylo 0 or 1 based on ptr. */
+ 		if (use_bbit_insns()) {
+-- 
+2.35.3
 
-thanks,
-
-greg k-h
