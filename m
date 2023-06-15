@@ -2,148 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C44730DAA
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 05:46:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED52C730DAE
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 05:49:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237482AbjFODqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 23:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50566 "EHLO
+        id S238120AbjFODtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 23:49:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjFODqG (ORCPT
+        with ESMTP id S238023AbjFODtF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 23:46:06 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2118.outbound.protection.outlook.com [40.107.215.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2BF191
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 20:46:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W0OOn8CF7bulV+NvkaT+8kD8G5o7hS9KUPV31ws+vB3X7OzuPw3BmvH9uAjVwDSyl9ZgACbwA2hlgRgFOpvYlfvb5j4HrbsJ6nhDca9ttlZ/tUT0rVSAFsipeP/p+bBGAFFiHpC3O+6FqH0tX6IkIlK303PPA2wsvFn9cYMvHfMlxG8lDYJcWENUu5KKOJxcIS6eysXPhd56bVnbmf7wXODsltPGPOCjmySmSCuVkXQPEldmJ3gJ4XJxYUMy0P/UfiS83gJdjshIoAEm/S92q3LOonrc9uAXL5lsm8scREUcBdoEe6GPhwQWdu+KV1JZSkm0b5XHnkzGYBbN5cXtYw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/nLzuJjX7sBndncqWaTh2UYef7txZXPPz4N9YbqHyaU=;
- b=QO9pd5JPR4uKEhxH0gmzX02ENP3+sj9pPWqw5qzoa5gH75T3Y0t9vtZbNneD08OMerKhCa8K1BdGDeIVmKNqJhRVAZhZJOI211dT5C3HcDsHDHTKfMo0lY4+Td22RDHliMqohWKcmTWVI+Il1LC4x+2eiXb2S+e3V/xrqOM28/Bq55eIpG4STTQOdQeoziOjiEI3pcISjPuvGuDVQjtXFlTfvvIuBAzAyT5OXBPdhX7cpltBarxdcLsxV9PYMKFCaqcWb9Is1lTCnGCFpLCSaQUlK3Wyg/XTgSwFPki56rJ5sPSdeeoFHUM6De0u2ZvwjZ2NX41Plhes/6KvIvIt2g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/nLzuJjX7sBndncqWaTh2UYef7txZXPPz4N9YbqHyaU=;
- b=DqIhhAOl/W5JCwO5DG/BW3MBf3xR7rhMLbMTIuX/pQuesD7busL6d4AFqXvhfTpPBaLhhrnta/Y+3hG3DGRnb8Hw4ldIY0ZTeHE3qDEJ/du/EQwMqGToJXhG7CQZKXikx7JswAX7lZ3nwZ2PzNpg3Lt8ugC5+z+TxjqNpcS3wUQ8N/nJ/eMXv88pVR19DK8mKlebX5e9DJVJHx0qgTilf4UzlV8WLy8cvCkWdb+d/WXw/hut+DPi6rENQ/HEqhdgKxLNIJeI4SMS/OmWqWS2mJe0NMuztm70Q/amucvJFQ4JNf1u5MjQ7esY+sCAmw4KN0NC4+T3FLg2UVNfi6ae9w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by PSAPR06MB4534.apcprd06.prod.outlook.com (2603:1096:301:7a::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.37; Thu, 15 Jun
- 2023 03:45:57 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c%4]) with mapi id 15.20.6500.025; Thu, 15 Jun 2023
- 03:45:57 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     Gao Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>,
-        Yue Hu <huyue2@coolpad.com>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>
-Cc:     Yangtao Li <frank.li@vivo.com>, linux-erofs@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] erofs: remove unnecessary goto
-Date:   Thu, 15 Jun 2023 11:45:38 +0800
-Message-Id: <20230615034539.14286-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SGXP274CA0009.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::21)
- To SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+        Wed, 14 Jun 2023 23:49:05 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904BB211C
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 20:48:39 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-54f75f85a17so2799973a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 20:48:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1686800919; x=1689392919;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vbu+qXDQAnJmw8qCM+u2edU9xMFzBPDexgHZg7upYSc=;
+        b=QuB/9REryqq6Mgb8L/e4zMTLqzDoDXfDapT3W0Gx/mxECAPvMPdAXb/7xqeOhW6cOS
+         rDSsPeeYrCYrv5l2lI+PFC6KhRdpynj5Nc5W68ZABRG0SVuM4SYMvOjbDQp9yiwdfuFg
+         c3IlUzDHTM3Fe8qKMpcnHym1vs/Tc9pnPa/Z9VZjvYSWuOV+oc3k2SLfRMFyiHBgDHcf
+         WE/hXQy+tuxSMe7jlfmDYO9nNIjXK8xkQy8hrUeKjS7HgAKMRd7kpWv9b+YE46IvVy/u
+         dilXepFYsW49CWNtr+c9qK0KedUGDaNOr6gL61uSNoBrjIPF6bYFFyLINhJRBq0lk7Pf
+         OxnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686800919; x=1689392919;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Vbu+qXDQAnJmw8qCM+u2edU9xMFzBPDexgHZg7upYSc=;
+        b=bK4dYPrfZLqKdRmZUq/DJnaOhlYhdxjfVL+WNXldOaDxZvs/2cOnkB2xpPxZJsEnGz
+         GP1AxdJmv8I1qBsF7z9MGI0fnevxg7iDq+JRxhk5nr1gwoYX6AMXoCXbYUZXLlNGq7Oj
+         PNJYIleE4fAHneePEMpix22ycw9DkcJijQBbPnoMZDkWtar2fejZorFZlJzSIqUI8+gr
+         63l+OUKk1uxouyerpa8CsILTNTuM4LrOh5yI6Gm5fpJcXhhrdoo7OYM5+K6hxCr+yxjH
+         yL+Dsl0X/eo6YYhkFJBSapRCfDcIcPa7w1i0XirtuBIiK0UY/8xveAgH+JfXICZre+9c
+         Sw+A==
+X-Gm-Message-State: AC+VfDxo39bmN9NevON6odUb/o9YguSyNw3x86y/HcDTuHQS6XKv9FvT
+        JEP4MqavyBiASKKoY2pBf74VdA==
+X-Google-Smtp-Source: ACHHUZ7IJ/OOff5P+kevIRNHk4rSmF9QFuBJH8tCKcPmy/VcWRp1kVAz+QNpkDSFj/YM7GxNJewtnw==
+X-Received: by 2002:a05:6a21:29ca:b0:11d:d83b:8d80 with SMTP id tv10-20020a056a2129ca00b0011dd83b8d80mr2265679pzb.46.1686800919047;
+        Wed, 14 Jun 2023 20:48:39 -0700 (PDT)
+Received: from Tower.bytedance.net ([203.208.167.147])
+        by smtp.gmail.com with ESMTPSA id 19-20020a170902c11300b001b3fb1119fdsm2751713pli.297.2023.06.14.20.48.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 20:48:38 -0700 (PDT)
+From:   Zhongkun He <hezhongkun.hzk@bytedance.com>
+To:     minchan@kernel.org, senozhatsky@chromium.org, mhocko@suse.com
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Zhongkun He <hezhongkun.hzk@bytedance.com>
+Subject: [RFC PATCH 1/3] zram: charge the compressed RAM to the page's memcgroup
+Date:   Thu, 15 Jun 2023 11:48:30 +0800
+Message-Id: <20230615034830.1361853-1-hezhongkun.hzk@bytedance.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|PSAPR06MB4534:EE_
-X-MS-Office365-Filtering-Correlation-Id: a58ca942-8b5b-4361-a940-08db6d53068f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: L45+LmTF/vvhqYxlZY5FNHzZ48D2xCpuxLfHLkkU5SLcI1DNn9HZbVSeODxN3jRndUyUb+leZ6aSZfTbVUnyyZjFoifZPXMNQYN5hfAnMnun5cqi8zwocsMlPkmCqNDYub7E5Fy/3RDjIjgfOtFkoaeTstsSW/NNM2bvpC4wq8idwZLjZ4gx0urmjI3ZDNy8Gaj5sDJ0moDmnUQlqm6HWr8MgkabBhky2cIwFebqQBAZnPuRQZRWdRWd5mdb9h9t9NajcWbv+nXslDJ6rwqiaCvlSSqAku2X8d94Wwe6IK8PywP705JSOV+kHpERmelILpKQG9447NHUr7EJHzAvO6PnX5U1S8zrjwmANg478nY2XgdE49l6RCwukdx/53oxXNcpPMng8DLJQnAGB4IXBtc2KMQMrb7Y+hHAG19jAhEHLBNEAKHnIz4ND089Mt25X25Frwos1lYpDjUrvISVezEFK8elI0kAi9LuWEc9u1Ov0JbkeUtZgHyCazWDwODYkD/z1RKfbvVUFHNmf5F8s2FrCDAfJvVtL0vhZyfMnsgjCF/IhaybQkz4HZJb10KAdACgvWzyQD678+LG6ITDB5KO6THyDs/Lj6mg0IV6j+AyE2jpdXGzXFew32ZxupjY
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(346002)(366004)(396003)(136003)(451199021)(38350700002)(38100700002)(478600001)(6666004)(110136005)(52116002)(6486002)(316002)(41300700001)(5660300002)(8936002)(8676002)(66476007)(66946007)(2906002)(66556008)(4326008)(4744005)(83380400001)(6512007)(26005)(186003)(1076003)(6506007)(2616005)(36756003)(86362001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Ztc4Aa6zc19EWDYsvz3aT5rURQg1yLIQBb+DzQRiSTKdyp/zbQXwQ3dkLqct?=
- =?us-ascii?Q?YRRXZ4R6iBb8arhpBHNzLf5ZvnS5ZyCDjuh2ZhHs0LyrBUkpo/oghFukS+1L?=
- =?us-ascii?Q?5YniC4bYB5YXWadZxPY6beGiQbbolECXfa7FvkP172xiH/+FEUCtWcaky/4e?=
- =?us-ascii?Q?7t6005hc6Xem46txsrKMxJ+a5b7f8Y+oQCy9adu9rCl/ojulslJSmve0R9Cw?=
- =?us-ascii?Q?SNZiurbmNSBE566cVO2IJZq07XRPC9x/Bn5DKFN0U5m0kI3fn2uXchRacG+v?=
- =?us-ascii?Q?9yHU9Fmk2IZStbjXM59SSseuhTgxDaaOQ0+IJ8HRiOJFHr9IjuvM7Kcy+lTb?=
- =?us-ascii?Q?gx+gvfUiqj4MaNZnmae4qJns7IXWUgHurFhRTNNEIPUOJ0hbK9WcxKFEVig+?=
- =?us-ascii?Q?9Z3HbGS/Cjf0E0V0PEQHJNeTQMHOvoITHw43yh2bCqYQVLWbOWCF2kWcbjVD?=
- =?us-ascii?Q?FcPtxHT5+uQixleifJd6gVgo8sIEEFpjRX2mNgG8Y6tnHE0LdhinmlD+8BXH?=
- =?us-ascii?Q?VR9yBQCODN4OBZ/9qnCuMz7dSdhCKXYhBHR9/vqsd/Fe9iVxaI2PT5wjB7PT?=
- =?us-ascii?Q?dhr+pc+fIJ0DLgi7n+Kr0YWMgdKsSjtdWwmDLTlyQhyD0+8QUkPZHkgSJKXP?=
- =?us-ascii?Q?7pY4ckoUlaxdT0ZUNAfSr71nZq19Okt7p8DAfSXFWQHspCNCleoNdBaVmXA1?=
- =?us-ascii?Q?ZBDlLy3Z1hsv5R4KDSu9u08whXtI/0m0++F9JY8Icd8UeXYEwcF/nJ1oCQ7L?=
- =?us-ascii?Q?x/6Ar1AIXd7KTVibaWuVCtDA1/K+PjkSuY12KUQa/uzsxBrq0IBuOT/zv0DU?=
- =?us-ascii?Q?1VoxIzrCTIvQEW5MczqE1fl3jsTAVTDqKjnvkOxh674F0bCJcakeZtf8VELn?=
- =?us-ascii?Q?H4XbZd8JW1YARhckhOmFt/vixG4w7uxvUJLfA44z9cfUV9rxV61I89Hz5l26?=
- =?us-ascii?Q?drbwjIJNveIwn77ovVpe1cZOYdLBZVu8TSI/4JI9ucLsb/JpiO35y+HDvIhm?=
- =?us-ascii?Q?pCnXZphfpnxFteQKVvuM6q0oR479n+cKpGlP2ITCUvB4i8L539r/lWmiw6et?=
- =?us-ascii?Q?Ll777RBs+UQGVakryaxtRjmHiUD3YNpdqxRQZ3f5n3kH0fPOf1XehZ70N02H?=
- =?us-ascii?Q?1hDw8mLbqhykyL0PgKZPnTk1HrMKQXWvWvtz7I5npC5VUIXIEE0ShOI1pq6p?=
- =?us-ascii?Q?dNsMl9+7Obn+lWbZgcvdKK2wIRMyHIGAs4eecphwp7s9MDKMNsZS4A1KM1Rn?=
- =?us-ascii?Q?jNaQ3fFc0IcNnYyLS/CvO8kOi4+SAs6k7Hbcp53ZFamYb2WlCAY1pfxCqoqa?=
- =?us-ascii?Q?LTI2niQPIxPnGcH26qRsasSWcy7l/+kdOxToJeE8/OLk3hJk8DJe/wLBs2Bq?=
- =?us-ascii?Q?k9k52E3QQFgWlyc0ZBInFVlRTqBJwGkJFb1bxhFJCW61uAYYMzKFgE358wY7?=
- =?us-ascii?Q?yaqHS2sdDTLdMEN8hboRaVvJG3rlIKLqYpwzGAkxBVRCGRGxrFc4nqSE8f+R?=
- =?us-ascii?Q?qlgpCec8sl9vOuq+roM1bQfqoBubU3p+ddCBm6wpC4A3iZZzhirrzqQAdrwZ?=
- =?us-ascii?Q?M49uFf1P2YU97GD5OMpDgA+CI01DPEBcGPrNcR9L?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a58ca942-8b5b-4361-a940-08db6d53068f
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 03:45:56.5936
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bVFiI0/BgfPd5cJpjb3lAI477aMhmLdk2HZ/bjuzHAMrUDzKkeyrHTnlsKWDmYdGDKmVqo0aXu+1lyreHyLQyQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR06MB4534
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's redundant, let's remove it.
+The compressed RAM is currently charged to kernel, not to
+any memory cgroup, which is not satisfy our usage scenario.
+if the memory of a task is limited by memcgroup, it will
+swap out the memory to zram swap device when the memory
+is insufficient. In that case, the memory limit will have
+no effect.
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
+So, it should makes sense to charge the compressed RAM to
+the page's memory cgroup.
+
+Signed-off-by: Zhongkun He <hezhongkun.hzk@bytedance.com>
 ---
- fs/erofs/super.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/block/zram/zram_drv.c | 22 ++++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
 
-diff --git a/fs/erofs/super.c b/fs/erofs/super.c
-index 811ab66d805e..f48ce692094d 100644
---- a/fs/erofs/super.c
-+++ b/fs/erofs/super.c
-@@ -1016,10 +1016,8 @@ static int __init erofs_module_init(void)
- 					       sizeof(struct erofs_inode), 0,
- 					       SLAB_RECLAIM_ACCOUNT,
- 					       erofs_inode_init_once);
--	if (!erofs_inode_cachep) {
--		err = -ENOMEM;
--		goto icache_err;
--	}
-+	if (!erofs_inode_cachep)
-+		return -ENOMEM;
+diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
+index f6d90f1ba5cf..03b508447473 100644
+--- a/drivers/block/zram/zram_drv.c
++++ b/drivers/block/zram/zram_drv.c
+@@ -33,6 +33,7 @@
+ #include <linux/debugfs.h>
+ #include <linux/cpuhotplug.h>
+ #include <linux/part_stat.h>
++#include <linux/memcontrol.h>
  
- 	err = erofs_init_shrinker();
- 	if (err)
-@@ -1054,7 +1052,6 @@ static int __init erofs_module_init(void)
- 	erofs_exit_shrinker();
- shrinker_err:
- 	kmem_cache_destroy(erofs_inode_cachep);
--icache_err:
- 	return err;
+ #include "zram_drv.h"
+ 
+@@ -1419,6 +1420,10 @@ static int zram_write_page(struct zram *zram, struct page *page, u32 index)
+ 	struct zcomp_strm *zstrm;
+ 	unsigned long element = 0;
+ 	enum zram_pageflags flags = 0;
++	struct mem_cgroup *memcg, *old_memcg;
++
++	memcg = page_memcg(page);
++	old_memcg = set_active_memcg(memcg);
+ 
+ 	mem = kmap_atomic(page);
+ 	if (page_same_filled(mem, &element)) {
+@@ -1426,7 +1431,7 @@ static int zram_write_page(struct zram *zram, struct page *page, u32 index)
+ 		/* Free memory associated with this sector now. */
+ 		flags = ZRAM_SAME;
+ 		atomic64_inc(&zram->stats.same_pages);
+-		goto out;
++		goto out_free;
+ 	}
+ 	kunmap_atomic(mem);
+ 
+@@ -1440,7 +1445,7 @@ static int zram_write_page(struct zram *zram, struct page *page, u32 index)
+ 		zcomp_stream_put(zram->comps[ZRAM_PRIMARY_COMP]);
+ 		pr_err("Compression failed! err=%d\n", ret);
+ 		zs_free(zram->mem_pool, handle);
+-		return ret;
++		goto out;
+ 	}
+ 
+ 	if (comp_len >= huge_class_size)
+@@ -1470,8 +1475,10 @@ static int zram_write_page(struct zram *zram, struct page *page, u32 index)
+ 		handle = zs_malloc(zram->mem_pool, comp_len,
+ 				GFP_NOIO | __GFP_HIGHMEM |
+ 				__GFP_MOVABLE);
+-		if (IS_ERR_VALUE(handle))
+-			return PTR_ERR((void *)handle);
++		if (IS_ERR_VALUE(handle)) {
++			ret = PTR_ERR((void *)handle);
++			goto out;
++		}
+ 
+ 		if (comp_len != PAGE_SIZE)
+ 			goto compress_again;
+@@ -1491,7 +1498,8 @@ static int zram_write_page(struct zram *zram, struct page *page, u32 index)
+ 	if (zram->limit_pages && alloced_pages > zram->limit_pages) {
+ 		zcomp_stream_put(zram->comps[ZRAM_PRIMARY_COMP]);
+ 		zs_free(zram->mem_pool, handle);
+-		return -ENOMEM;
++		ret = -ENOMEM;
++		goto out;
+ 	}
+ 
+ 	dst = zs_map_object(zram->mem_pool, handle, ZS_MM_WO);
+@@ -1506,7 +1514,7 @@ static int zram_write_page(struct zram *zram, struct page *page, u32 index)
+ 	zcomp_stream_put(zram->comps[ZRAM_PRIMARY_COMP]);
+ 	zs_unmap_object(zram->mem_pool, handle);
+ 	atomic64_add(comp_len, &zram->stats.compr_data_size);
+-out:
++out_free:
+ 	/*
+ 	 * Free memory associated with this sector
+ 	 * before overwriting unused sectors.
+@@ -1531,6 +1539,8 @@ static int zram_write_page(struct zram *zram, struct page *page, u32 index)
+ 
+ 	/* Update stats */
+ 	atomic64_inc(&zram->stats.pages_stored);
++out:
++	set_active_memcg(old_memcg);
+ 	return ret;
  }
  
 -- 
-2.39.0
+2.25.1
 
