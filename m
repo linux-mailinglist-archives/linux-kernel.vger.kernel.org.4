@@ -2,162 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA222731934
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 221CC731932
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbjFOMun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 08:50:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48448 "EHLO
+        id S245471AbjFOMui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 08:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239033AbjFOMuj (ORCPT
+        with ESMTP id S239033AbjFOMug (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 08:50:39 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE77212B;
-        Thu, 15 Jun 2023 05:50:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686833439; x=1718369439;
-  h=from:to:cc:subject:date:message-id;
-  bh=MOJCO9RuzR2EgnjwVGgZIJ+GDP91WXDJ30kFlVyK9qI=;
-  b=Au1JLVPCtaK+YKbYTMm9nfidqSks1f+C/L1BOWq27Vd67phK3EUQ0+xy
-   W3uM4VUPrQf6t+xjT3lGYzFzr3pKRs+umAQyew8Pbim6ISHaNK9IlMrSZ
-   yW+s4RvpbDB9RlFb2pB/nxGWo6YluRWuizdszQsvMnCjlge+sdUaMTk6Z
-   vb3u4dNUyr7jK199DJrSdRxaNb5S9wX0RMzuqqqWnmSIcTZsQaMG8IUM+
-   fkXVWmWYZuysRDmexc4ea0g0Wzh1vCM+6+27yyR5/0UTPBiHLoXjZCR5A
-   df6Fhq21Da6ie38jH+F8eYmTjDFBeBRUjb+T66I3nsr45xwQNm9f7ux8K
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="387372783"
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="387372783"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 05:50:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="802325045"
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="802325045"
-Received: from inesxmail01.iind.intel.com ([10.223.154.20])
-  by FMSMGA003.fm.intel.com with ESMTP; 15 Jun 2023 05:50:36 -0700
-Received: from inlubt0316.iind.intel.com (inlubt0316.iind.intel.com [10.191.20.213])
-        by inesxmail01.iind.intel.com (Postfix) with ESMTP id 659BD1973D;
-        Thu, 15 Jun 2023 18:20:35 +0530 (IST)
-Received: by inlubt0316.iind.intel.com (Postfix, from userid 12101951)
-        id 5EFF1186; Thu, 15 Jun 2023 18:20:35 +0530 (IST)
-From:   Raag Jadav <raag.jadav@intel.com>
-To:     linus.walleij@linaro.org, mika.westerberg@linux.intel.com,
-        andriy.shevchenko@linux.intel.com
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mallikarjunappa.sangannavar@intel.com, pandith.n@intel.com,
-        Raag Jadav <raag.jadav@intel.com>
-Subject: [PATCH v4] pinctrl: intel: refine ->irq_set_type() hook
-Date:   Thu, 15 Jun 2023 18:20:22 +0530
-Message-Id: <20230615125022.27421-1-raag.jadav@intel.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 15 Jun 2023 08:50:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D40A2126;
+        Thu, 15 Jun 2023 05:50:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CCA23625F0;
+        Thu, 15 Jun 2023 12:50:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBA46C433C8;
+        Thu, 15 Jun 2023 12:50:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686833434;
+        bh=9C0lIysBzhK2NDkLZ8zuWOZP34c6lCF4sNn1JWvzNkc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Yh4oUiVoqClwbgiExl0clwXIAhBdc+EGfyc1pP8k5YyWihS/NjiHOyXPKOW1APa+0
+         jO7L1bcu4ev6Hr9gPCVFxpMPK0L2ECM7+HUo1gVyMTWF669az9mbhAE+ACBvJochTz
+         zhZVopAKEqBqa96MZ0tFFhKfstjFskNC9/t1nZQU=
+Date:   Thu, 15 Jun 2023 14:50:31 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>
+Subject: Re: [PATCH V23 2/3] misc: dcc: Add driver support for Data Capture
+ and Compare unit(DCC)
+Message-ID: <2023061515-unbuckled-consonant-e207@gregkh>
+References: <cover.1683265984.git.quic_schowdhu@quicinc.com>
+ <2259ab0348282349e88905ea99bcb4aa815d941f.1683265984.git.quic_schowdhu@quicinc.com>
+ <2023061542-reformed-unholy-10a3@gregkh>
+ <cc9750f3-c85c-be7f-e63c-0fcf4eb160f0@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cc9750f3-c85c-be7f-e63c-0fcf4eb160f0@quicinc.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Refine ->irq_set_type() hook and improve its readability by:
+On Thu, Jun 15, 2023 at 06:13:53PM +0530, Souradeep Chowdhury wrote:
+> 
+> 
+> On 6/15/2023 4:03 PM, Greg Kroah-Hartman wrote:
+> > On Thu, May 04, 2023 at 11:36:22PM -0700, Souradeep Chowdhury wrote:
+> > > +/**
+> > > + * struct dcc_config_entry - configuration information related to each dcc instruction
+> > > + * @base:                    Base address of the register to be configured in dcc
+> > 
+> > Why is this a u32 and not a bigger size?
+> 
+> Currently only 32 bit register addresses are supported for DCC
+> configuration.
+> 
+> > 
+> > > + * @offset:                  Offset to the base address to be configured in dcc
+> > > + * @len:                     Length of the address in words to be configured in dcc
+> > 
+> > What is a "word" here, 16 bits?
+> 
+> Each word is 4 bytes(32 bits)
 
-- Reducing scope of spinlock by moving unneeded operations out of it.
-- Dropping redundant PADCFG0_RXEVCFG_SHIFT and including it directly
-  into PADCFG0_RXEVCFG_* definitions.
-- Utilizing temporary variables for common operations.
-- Simplifying if-else-if chain.
+See, I guess wrong, you should say what this is :)
 
-Signed-off-by: Raag Jadav <raag.jadav@intel.com>
----
- drivers/pinctrl/intel/pinctrl-intel.c | 45 ++++++++++++++-------------
- 1 file changed, 24 insertions(+), 21 deletions(-)
+> > > + * @loop_cnt:                The number of times to loop on the register address in case
+> > > +				of loop instructions
+> > > + * @write_val:               The value to be written on the register address in case of
+> > > +				write instructions
+> > > + * @mask:                    Mask corresponding to the value to be written in case of
+> > > +				write instructions
+> > > + * @apb_bus:                 Type of bus to be used for the instruction, can be either
+> > > +				'apb' or 'ahb'
+> > 
+> > How can a bool be either "apb" or "ahb"?
+> 
+> 1 stands for apb and 0 for ahb. Will update the same here.
 
-diff --git a/drivers/pinctrl/intel/pinctrl-intel.c b/drivers/pinctrl/intel/pinctrl-intel.c
-index e8adf2580321..036eae74c479 100644
---- a/drivers/pinctrl/intel/pinctrl-intel.c
-+++ b/drivers/pinctrl/intel/pinctrl-intel.c
-@@ -55,12 +55,11 @@
- 
- /* Offset from pad_regs */
- #define PADCFG0				0x000
--#define PADCFG0_RXEVCFG_SHIFT		25
- #define PADCFG0_RXEVCFG_MASK		GENMASK(26, 25)
--#define PADCFG0_RXEVCFG_LEVEL		0
--#define PADCFG0_RXEVCFG_EDGE		1
--#define PADCFG0_RXEVCFG_DISABLED	2
--#define PADCFG0_RXEVCFG_EDGE_BOTH	3
-+#define PADCFG0_RXEVCFG_LEVEL		(0 << 25)
-+#define PADCFG0_RXEVCFG_EDGE		(1 << 25)
-+#define PADCFG0_RXEVCFG_DISABLED	(2 << 25)
-+#define PADCFG0_RXEVCFG_EDGE_BOTH	(3 << 25)
- #define PADCFG0_PREGFRXSEL		BIT(24)
- #define PADCFG0_RXINV			BIT(23)
- #define PADCFG0_GPIROUTIOXAPIC		BIT(20)
-@@ -1127,9 +1126,9 @@ static int intel_gpio_irq_type(struct irq_data *d, unsigned int type)
- 	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
- 	struct intel_pinctrl *pctrl = gpiochip_get_data(gc);
- 	unsigned int pin = intel_gpio_to_pin(pctrl, irqd_to_hwirq(d), NULL, NULL);
-+	u32 rxevcfg, rxinv, value;
- 	unsigned long flags;
- 	void __iomem *reg;
--	u32 value;
- 
- 	reg = intel_get_padcfg(pctrl, pin, PADCFG0);
- 	if (!reg)
-@@ -1145,28 +1144,32 @@ static int intel_gpio_irq_type(struct irq_data *d, unsigned int type)
- 		return -EPERM;
- 	}
- 
--	raw_spin_lock_irqsave(&pctrl->lock, flags);
--
--	intel_gpio_set_gpio_mode(reg);
--
--	value = readl(reg);
--
--	value &= ~(PADCFG0_RXEVCFG_MASK | PADCFG0_RXINV);
--
- 	if ((type & IRQ_TYPE_EDGE_BOTH) == IRQ_TYPE_EDGE_BOTH) {
--		value |= PADCFG0_RXEVCFG_EDGE_BOTH << PADCFG0_RXEVCFG_SHIFT;
-+		rxevcfg = PADCFG0_RXEVCFG_EDGE_BOTH;
- 	} else if (type & IRQ_TYPE_EDGE_FALLING) {
--		value |= PADCFG0_RXEVCFG_EDGE << PADCFG0_RXEVCFG_SHIFT;
--		value |= PADCFG0_RXINV;
-+		rxevcfg = PADCFG0_RXEVCFG_EDGE;
- 	} else if (type & IRQ_TYPE_EDGE_RISING) {
--		value |= PADCFG0_RXEVCFG_EDGE << PADCFG0_RXEVCFG_SHIFT;
-+		rxevcfg = PADCFG0_RXEVCFG_EDGE;
- 	} else if (type & IRQ_TYPE_LEVEL_MASK) {
--		if (type & IRQ_TYPE_LEVEL_LOW)
--			value |= PADCFG0_RXINV;
-+		rxevcfg = PADCFG0_RXEVCFG_LEVEL;
- 	} else {
--		value |= PADCFG0_RXEVCFG_DISABLED << PADCFG0_RXEVCFG_SHIFT;
-+		rxevcfg = PADCFG0_RXEVCFG_DISABLED;
- 	}
- 
-+	if (type == IRQ_TYPE_EDGE_FALLING || type == IRQ_TYPE_LEVEL_LOW)
-+		rxinv = PADCFG0_RXINV;
-+	else
-+		rxinv = 0;
-+
-+	raw_spin_lock_irqsave(&pctrl->lock, flags);
-+
-+	intel_gpio_set_gpio_mode(reg);
-+
-+	value = readl(reg);
-+
-+	value = (value & ~PADCFG0_RXINV) | rxinv;
-+	value = (value & ~PADCFG0_RXEVCFG_MASK) | rxevcfg;
-+
- 	writel(value, reg);
- 
- 	if (type & IRQ_TYPE_EDGE_BOTH)
+Why not have an enum?  Will there ever be another "bus"?
 
-base-commit: e95433c367e681dc6d4613706bd74f483a25acd8
--- 
-2.17.1
+> > > +static ssize_t ready_read(struct file *filp, char __user *userbuf,
+> > > +			  size_t count, loff_t *ppos)
+> > > +{
+> > > +	int ret = 0;
+> > > +	char *buf;
+> > > +	struct dcc_drvdata *drvdata = filp->private_data;
+> > > +
+> > > +	mutex_lock(&drvdata->mutex);
+> > > +
+> > > +	if (!is_dcc_enabled(drvdata)) {
+> > > +		ret = -EINVAL;
+> > > +		goto out_unlock;
+> > > +	}
+> > > +
+> > > +	if (!FIELD_GET(BIT(1), readl(drvdata->base + dcc_status(drvdata->mem_map_ver))))
+> > > +		buf = "Y\n";
+> > > +	else
+> > > +		buf = "N\n";
+> > > +out_unlock:
+> > > +	mutex_unlock(&drvdata->mutex);
+> > > +
+> > > +	if (ret < 0)
+> > > +		return -EINVAL;
+> > > +	else
+> > 
+> > You do the "lock, get a value, unlock, do something with the value"
+> > thing a bunch, but what prevents the value from changing after the lock
+> > happens?  So why is the lock needed at all?
+> 
+> The lock is used to prevent concurrent accesses of the drv_data when
+> scripts are being run from userspace.
 
+How would that matter?  The state can change instantly after the lock is
+given up, and then the returned value is now incorrect.  So no need for
+a lock at all as you really aren't "protecting" anything, or am I
+missing something else?
+
+thanks,
+
+greg k-h
