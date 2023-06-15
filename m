@@ -2,109 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48B95731F1D
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 19:32:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E7E1731F2A
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 19:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236570AbjFORcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 13:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44068 "EHLO
+        id S236456AbjFOReH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 13:34:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232912AbjFORcc (ORCPT
+        with ESMTP id S236672AbjFOReF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 13:32:32 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB5F8271E
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 10:32:30 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f61b45ee0dso11050054e87.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 10:32:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686850349; x=1689442349;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cJxuaJ5691h/k4UcTAuN0XDw63vuAh/dneyBNjCjVmY=;
-        b=mV/e0OUTEj46icDsVr+JRbtP4EPO9HzVPEwP6B2e4JDKoPWX3NXfgikVpy+7wg2NbD
-         8V28anN5XJveBeXd0RgY9vPuEF6TN0Cqam02EPVxvzB5pxFuLp3AbYeS76tZawInOIj9
-         KfctomLfGfGYOd2X/XsNVfPd+G8HUmPVxTxg0ImRuLMoRfGGJQ7j6WjP38I5BylB+A+V
-         LosWW2IqnTnrq3ogF/+DAYkkRxAm8QGNNJo1EdpLM6Cdg5oqwkbmtPwEt3Iy90YmWpVA
-         Zpr+3HkzSgtohniS0LFHzVhyvY91mzUP3v9ZMhqVHIC4cJnqsY7R3vwvI0FEjG6movI5
-         8PVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686850349; x=1689442349;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=cJxuaJ5691h/k4UcTAuN0XDw63vuAh/dneyBNjCjVmY=;
-        b=ekRGX/fLe/52QbSIxNHciq7GRcKrQpbJpOOxHKBnt8QIbN0tw0Wto+EwQQQV88JckV
-         7fNdZf0oTuduKAAU/xTm7EV9pJC8DbIF65ixMwuLChyGTlE8+mEB3kaOTzqF9tXvvl9z
-         6dr8E8thLi4DS9uI23Dk0s8MoJCSEGLZLqERyxuwimUy6uV48qcyK21rqCBSkZq3EHr9
-         cspmNa/s96Z2Enu1DvKW8mHBLvW6YfEru61McibrkDqRTfcsx0h3kQBKDYBtuXi9bctv
-         ippwuzlDkQH1TXqWxcUimnxgL8m6A6TnScKVVJK18S0bxnS9m/LhufzgoOKWWghJWaBw
-         004w==
-X-Gm-Message-State: AC+VfDygxXTzEzL1tDIXUnrGUEJrdc2f3lTXHu8mylHHdHMTVWM+bOXB
-        +N3VRNYM8ZATNdoZ7H6+jNQ=
-X-Google-Smtp-Source: ACHHUZ6FZpgcNvW6Qi5ZSZdhqz1y/N8G1DHAib7CyXk9nmboV+EfYS5w6LkFk00Y5fDNCee33DChSA==
-X-Received: by 2002:a19:ca5a:0:b0:4f7:b640:fa43 with SMTP id h26-20020a19ca5a000000b004f7b640fa43mr2399794lfj.38.1686850348704;
-        Thu, 15 Jun 2023 10:32:28 -0700 (PDT)
-Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id s24-20020a1709060c1800b00969f25b96basm9570398ejf.204.2023.06.15.10.32.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 10:32:27 -0700 (PDT)
-Message-ID: <0047fc52-bc45-a768-8bdd-c0f12cddc17e@gmail.com>
-Date:   Thu, 15 Jun 2023 19:32:26 +0200
+        Thu, 15 Jun 2023 13:34:05 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818D51FF9;
+        Thu, 15 Jun 2023 10:34:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686850441; x=1718386441;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+NwFs4+og2uCPUm6VzVvVeB7ddBS4TzUbKnCattLObI=;
+  b=XSTGDmEx9i+eVBwVF0iZ+xjAOaDhiQEbthq4lMQQlTGImT4CmvAtBgPA
+   sq+ouNnOiXS+XjBzCdYCMLke/gAKuvlxLNgFwit2+yjfCqqOwwrHZ8s4f
+   hVGHqk+5hxRMouZeMIkHB1SgGXCiUnrzlc+9ShTgYmBK0IsKC4763ujLL
+   F0GDvtSIs2H46jkAuwoxy3HUlOLXaZLikqbgXm2OM1byAhRdN7Jhng96M
+   VDbd2J86/fn377IxzO2Z3aiyaodjJKAqFNnMP7Aplbjzvic53GfJ0ACtJ
+   KmqsCbxSBXdfn/tjn9xACkUgyhkOPils2n8s7tg6828XkjOr/18XQyJYk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="338614021"
+X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
+   d="scan'208";a="338614021"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 10:33:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="689863272"
+X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
+   d="scan'208";a="689863272"
+Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
+  by orsmga006.jf.intel.com with ESMTP; 15 Jun 2023 10:33:13 -0700
+From:   kan.liang@linux.intel.com
+To:     peterz@infradead.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org
+Cc:     ak@linux.intel.com, eranian@google.com,
+        Kan Liang <kan.liang@linux.intel.com>, stable@vger.kernel.org
+Subject: [PATCH] perf/x86/intel: Fix the FRONTEND encoding on GNR and MTL
+Date:   Thu, 15 Jun 2023 10:32:42 -0700
+Message-Id: <20230615173242.3726364-1-kan.liang@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-From:   Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v3 0/3] Fixes for Rockchip NAND controller driver
-To:     miquel.raynal@bootlin.com
-Cc:     richard@nod.at, vigneshr@ti.com, heiko@sntech.de,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, yifeng.zhao@rock-chips.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This serie contains various fixes for the Rockchip NAND controller
-driver that showed up while testing boot block writing.
+From: Kan Liang <kan.liang@linux.intel.com>
 
-Fixed are:
-  Always copy hwecc PA data to/from oob_poi buffer in order to be able
-  to read/write the various boot block layouts.
-  Add option to safely probe the driver on a NAND with unknown data layout.
-  Fix oobfree layout.
+When counting a FRONTEND event, the MSR_PEBS_FRONTEND is not correctly
+set on GNR and MTL p-core.
 
-Changed V3:
-  Change patch order, layout fixes first
-  Change prefixes
-  Reword
-  State that patches break all existing jffs2 users
+The umask value for the FRONTEND events is changed on GNR and MTL. The
+new umask is missing in the extra_regs[] table.
 
-Changed V2:
-  Add tag
-  Add manufacturer ops
-  Reword
+Add a dedicated intel_gnr_extra_regs[] for GNR and MTL p-core.
 
-Johan Jonker (3):
-  mtd: rawnand: rockchip-nand-controller: fix oobfree offset and
-    description
-  mtd: rawnand: rockchip-nand-controller: copy hwecc PA data to oob_poi
-    buffer
-  mtd: rawnand: rockchip-nand-controller: add skipbbt option
+Fixes: bc4000fdb009 ("perf/x86/intel: Add Granite Rapids")
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+Cc: stable@vger.kernel.org
+---
+ arch/x86/events/intel/core.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
- .../mtd/nand/raw/rockchip-nand-controller.c   | 52 ++++++++++++-------
- 1 file changed, 32 insertions(+), 20 deletions(-)
-
---
-2.30.2
+diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+index 89b9c1cebb61..27f3a7b34bd5 100644
+--- a/arch/x86/events/intel/core.c
++++ b/arch/x86/events/intel/core.c
+@@ -349,6 +349,16 @@ static struct event_constraint intel_spr_event_constraints[] = {
+ 	EVENT_CONSTRAINT_END
+ };
+ 
++static struct extra_reg intel_gnr_extra_regs[] __read_mostly = {
++	INTEL_UEVENT_EXTRA_REG(0x012a, MSR_OFFCORE_RSP_0, 0x3fffffffffull, RSP_0),
++	INTEL_UEVENT_EXTRA_REG(0x012b, MSR_OFFCORE_RSP_1, 0x3fffffffffull, RSP_1),
++	INTEL_UEVENT_PEBS_LDLAT_EXTRA_REG(0x01cd),
++	INTEL_UEVENT_EXTRA_REG(0x02c6, MSR_PEBS_FRONTEND, 0x9, FE),
++	INTEL_UEVENT_EXTRA_REG(0x03c6, MSR_PEBS_FRONTEND, 0x7fff1f, FE),
++	INTEL_UEVENT_EXTRA_REG(0x40ad, MSR_PEBS_FRONTEND, 0x7, FE),
++	INTEL_UEVENT_EXTRA_REG(0x04c2, MSR_PEBS_FRONTEND, 0x8, FE),
++	EVENT_EXTRA_END
++};
+ 
+ EVENT_ATTR_STR(mem-loads,	mem_ld_nhm,	"event=0x0b,umask=0x10,ldlat=3");
+ EVENT_ATTR_STR(mem-loads,	mem_ld_snb,	"event=0xcd,umask=0x1,ldlat=3");
+@@ -6496,6 +6506,7 @@ __init int intel_pmu_init(void)
+ 	case INTEL_FAM6_SAPPHIRERAPIDS_X:
+ 	case INTEL_FAM6_EMERALDRAPIDS_X:
+ 		x86_pmu.flags |= PMU_FL_MEM_LOADS_AUX;
++		x86_pmu.extra_regs = intel_spr_extra_regs;
+ 		fallthrough;
+ 	case INTEL_FAM6_GRANITERAPIDS_X:
+ 	case INTEL_FAM6_GRANITERAPIDS_D:
+@@ -6506,7 +6517,8 @@ __init int intel_pmu_init(void)
+ 
+ 		x86_pmu.event_constraints = intel_spr_event_constraints;
+ 		x86_pmu.pebs_constraints = intel_spr_pebs_event_constraints;
+-		x86_pmu.extra_regs = intel_spr_extra_regs;
++		if (!x86_pmu.extra_regs)
++			x86_pmu.extra_regs = intel_gnr_extra_regs;
+ 		x86_pmu.limit_period = spr_limit_period;
+ 		x86_pmu.pebs_ept = 1;
+ 		x86_pmu.pebs_aliases = NULL;
+@@ -6650,6 +6662,7 @@ __init int intel_pmu_init(void)
+ 		pmu->pebs_constraints = intel_grt_pebs_event_constraints;
+ 		pmu->extra_regs = intel_grt_extra_regs;
+ 		if (is_mtl(boot_cpu_data.x86_model)) {
++			x86_pmu.hybrid_pmu[X86_HYBRID_PMU_CORE_IDX].extra_regs = intel_gnr_extra_regs;
+ 			x86_pmu.pebs_latency_data = mtl_latency_data_small;
+ 			extra_attr = boot_cpu_has(X86_FEATURE_RTM) ?
+ 				mtl_hybrid_extra_attr_rtm : mtl_hybrid_extra_attr;
+-- 
+2.35.1
 
