@@ -2,85 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4144373124B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E8D731254
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:37:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244733AbjFOIfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 04:35:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56846 "EHLO
+        id S240647AbjFOIhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 04:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244920AbjFOIep (ORCPT
+        with ESMTP id S230102AbjFOIgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 04:34:45 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E272E294D
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:34:43 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-97881a996a0so253507966b.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:34:43 -0700 (PDT)
+        Thu, 15 Jun 2023 04:36:43 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6012960
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:36:27 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b1b92845e1so22487341fa.0
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:36:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686818082; x=1689410082;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4Iup8VQNhl0stIDF+NtcLsVwne6Lkml2Ei0ct6/cSec=;
-        b=b+zjG3JFTQ7EwjgMRqIAIxDAWGf8Mtgj47ozpBUTfjEN+ShwZ896y0vx68UDc/U6xS
-         fyiuO6f7lGaTT2Cijt9kQijua6uW9P8fh675h53fv5FaoO/JcxVYDgarxgM740lXy7BS
-         QrQZ/j4tmgICJcjDhearcMV/DiaKjdAoQHfCcUTYBJpId5Z2e23hZzdOK7CXVVZGiGX0
-         X9Ngw/Mmr2NUbhZp8uLbCn/d+UOqiNTHL+6+VETkjNqjdu8jTiT/qfdydLR5bs820sEM
-         6ehlRaBivKLseRk8QNkEl60vKBCvAe3Gmk5Pjc6F3bfSaLDMxvUQOUqVW5ekBP1c00w6
-         tdvQ==
+        d=atishpatra.org; s=google; t=1686818186; x=1689410186;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XDqFlnJs7b5XSrXYfFDcBdbg7c+MBzrrq0kAraysWF0=;
+        b=BF4NTGgyxuXLd/DCtsfhMWllCFX5t8hYdRqzQeUl9mxCjttJAJ7Pm8/A9437zSmkP2
+         fiulhEjOtigFq6kjTjDFwsjbyk5q51xYQkvo3CsBOJjdXMSWDuxF3PDmK12cqPN7B66v
+         hsQKjBkbPmpmAppRPNgBHtAEKvcG+b6yfyydk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686818082; x=1689410082;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4Iup8VQNhl0stIDF+NtcLsVwne6Lkml2Ei0ct6/cSec=;
-        b=WIqrwojc1mh/AbURIF3H9qszHgofq7NEGnN9BfbB/VRLzwet5/TF8ugi7X+ebeddtB
-         Y738w/+bya9OW2nuAJx+RcmY7JZ5aRNPmX7rc14YQSgdAyw7qlkE4C+E36Ej2IS42QBP
-         JL/I+tuYgkt+e95UWrxC4Jbg9W7tMfU6sBvGNbxIryyI1CGy+oCG9PXv4mdDkiX59PIk
-         RcLBabtGAubMB8hmqRArTUUuUHL/GFmEPLT8pBCz8DE2rqj/+X2fKUoU45s2/mepsH/c
-         W0cmGupIeCDrVAU3KdtMKXshR4wVnj3Cjz4R9xWEbnx09IBnq+GR9isnJcWKdjxQ+qke
-         2wSA==
-X-Gm-Message-State: AC+VfDxO9WEJq6x899T4eTno2z/aQC48+L7DnD1PHnpuUDwOHEixlNfM
-        wLQHcrdXU/PDGwFsyaRrqoCzfw==
-X-Google-Smtp-Source: ACHHUZ49mdKDX4D1IVd2EIxLIsTaIb1/nyceVdoyxS1eb2z7KL+iBlG2flpGnrAmQkcXmzH8v9sucw==
-X-Received: by 2002:a17:907:3f83:b0:94f:704d:a486 with SMTP id hr3-20020a1709073f8300b0094f704da486mr17808684ejc.32.1686818082440;
-        Thu, 15 Jun 2023 01:34:42 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id z6-20020a1709060ac600b009745ecf5438sm9000371ejf.193.2023.06.15.01.34.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 01:34:42 -0700 (PDT)
-Message-ID: <2e5b85cb-018f-d912-629f-8204ffdbf12c@linaro.org>
-Date:   Thu, 15 Jun 2023 10:34:39 +0200
+        d=1e100.net; s=20221208; t=1686818186; x=1689410186;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XDqFlnJs7b5XSrXYfFDcBdbg7c+MBzrrq0kAraysWF0=;
+        b=dGGPtIoxvOkmllLpZLjOKfY3f14EgizijnRcCRu0ZVx/XtSHDW8zCM0LBmHI5DQxH+
+         P9JVzrUUb8hu16M4EE0RNnCm6zXZztnw7Uw+Hd4pQg8KR4/CR+q/SpRxTQiv7Gq2T3Ls
+         NRAhETlOjFMk6j6XadGrF16dGhUsATBwtBtcABv7P9t4dxk4zoho+Q8k4t8coHAvSAsp
+         ZT89Js1FX8lBk9/C8N9TLqidvAH30EvqT7FWns1f62OZfOs3rDE8TBByj6cXsCCEgNvh
+         yhmcY4DoADkm4cudS8AYY0+pihwE6l+8iHxRFjEfJk1HPibjuGkMJkortmTnQ7+fKv8O
+         BzoQ==
+X-Gm-Message-State: AC+VfDw9ocq4cXeTC9jmwPIG2W6937jHSOcrc+sfyYRp9nAbX2nu4Gmc
+        ARBAUyM/rn5kioG2osUmsxe0wc+Bh7H0Y9h44ILx
+X-Google-Smtp-Source: ACHHUZ5Bdq/pHXm3zHoqwzxyGEBNA9JTaa6iUkRvIy+81mbIKyUzp1Kmd9vgi/5KwuUU4fD/I76lgbpxMD9W4Q7qWlI=
+X-Received: by 2002:a2e:8611:0:b0:2b3:4c18:cf41 with SMTP id
+ a17-20020a2e8611000000b002b34c18cf41mr2931471lji.53.1686818186178; Thu, 15
+ Jun 2023 01:36:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 07/15] dt-bindings: reset: mt8188: Add VDOSYS1 reset
- control bits
-Content-Language: en-US
-To:     Hsiao Chien Sung <shawn.sung@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Singo Chang <singo.chang@mediatek.com>,
-        Nancy Lin <nancy.lin@mediatek.com>,
-        Jason-JH Lin <jason-jh.lin@mediatek.com>
-References: <20230614073125.17958-1-shawn.sung@mediatek.com>
- <20230614073125.17958-8-shawn.sung@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230614073125.17958-8-shawn.sung@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230512085321.13259-1-alexghiti@rivosinc.com>
+ <20230512085321.13259-3-alexghiti@rivosinc.com> <20230531-707d254be1238272fb2c182d@orel>
+In-Reply-To: <20230531-707d254be1238272fb2c182d@orel>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Thu, 15 Jun 2023 01:36:14 -0700
+Message-ID: <CAOnJCUJHMt4ziauJw-O5vr1NohaSDpN=NQUoSC4oxHRurkV0JQ@mail.gmail.com>
+Subject: Re: [PATCH v2 02/10] include: riscv: Fix wrong include guard in riscv_pmu.h
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Conor Dooley <conor.dooley@microchip.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,15 +84,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/06/2023 09:31, Hsiao Chien Sung wrote:
-> Add MT8188 VDOSYS1 reset control bits.
-> 
-> Signed-off-by: Hsiao Chien Sung <shawn.sung@mediatek.com>
-> ---
+On Wed, May 31, 2023 at 6:56=E2=80=AFAM Andrew Jones <ajones@ventanamicro.c=
+om> wrote:
+>
+> On Fri, May 12, 2023 at 10:53:13AM +0200, Alexandre Ghiti wrote:
+> > The current include guard prevents the inclusion of asm/perf_event.h
+> > which uses the same include guard: fix the one in riscv_pmu.h so that i=
+t
+> > matches the file name.
+> >
+> > Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> > ---
+> >  include/linux/perf/riscv_pmu.h | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/include/linux/perf/riscv_pmu.h b/include/linux/perf/riscv_=
+pmu.h
+> > index 43fc892aa7d9..9f70d94942e0 100644
+> > --- a/include/linux/perf/riscv_pmu.h
+> > +++ b/include/linux/perf/riscv_pmu.h
+> > @@ -6,8 +6,8 @@
+> >   *
+> >   */
+> >
+> > -#ifndef _ASM_RISCV_PERF_EVENT_H
+> > -#define _ASM_RISCV_PERF_EVENT_H
+> > +#ifndef _RISCV_PMU_H
+> > +#define _RISCV_PMU_H
+> >
+> >  #include <linux/perf_event.h>
+> >  #include <linux/ptrace.h>
+> > @@ -81,4 +81,4 @@ int riscv_pmu_get_hpm_info(u32 *hw_ctr_width, u32 *nu=
+m_hw_ctr);
+> >
+> >  #endif /* CONFIG_RISCV_PMU */
+> >
+> > -#endif /* _ASM_RISCV_PERF_EVENT_H */
+> > +#endif /* _RISCV_PMU_H */
+> > --
+> > 2.37.2
+> >
+>
+> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 
-Squash it with previous. You are touch the same file adding almost the
-same bits...
 
-Best regards,
-Krzysztof
+Reviewed-by: Atish Patra <atishp@rivosinc.com>
 
+--=20
+Regards,
+Atish
