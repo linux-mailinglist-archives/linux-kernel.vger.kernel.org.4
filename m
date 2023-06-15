@@ -2,272 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 792C9730EDC
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 07:52:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91913730EDE
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 07:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237957AbjFOFwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 01:52:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58978 "EHLO
+        id S234448AbjFOFxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 01:53:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237867AbjFOFwh (ORCPT
+        with ESMTP id S236897AbjFOFwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 01:52:37 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F562719
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 22:52:21 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-3f98276f89cso107001cf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 22:52:21 -0700 (PDT)
+        Thu, 15 Jun 2023 01:52:46 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B1EB3;
+        Wed, 14 Jun 2023 22:52:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1686808361; x=1718344361;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=C7aF0yWfV1s1VE1VWExjYLax2b0knlBo4p9+gKyeABY=;
+  b=Uwk4LDR1kiUI0NdcPyRpVKIkkXkgQVstn6gSJkSPQwSTjhLm4iPrBpjK
+   yV2IkzrPrlL0R0BezoWTWevFDDLHk6Uojv7MvP1lbnzAjIMDTER3qWQb8
+   p9T6Sam5Y28/YhtpRmsIyrCHb9DAFNfghdKbA45Fc6J1Nv+10rIxTobxw
+   7IlFJF+jWvXDQXaq3rCbs9h4xKQzWQdsVln7KEzRKvbKxRmRBxnkyTxZV
+   Ssmro1qfNeA9WT0S9fJ14H18PRXgcpHP350/7Wq5CwiZ9gNHadsouOxty
+   ZcbMHJLt5TI2aQ43q+L67nvVIJTYVYLa5pXrzdZloF2GZUJQeiUsyW1HV
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
+   d="scan'208";a="217955968"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Jun 2023 22:52:40 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 14 Jun 2023 22:52:33 -0700
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Wed, 14 Jun 2023 22:52:33 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=c+akLWvHGV9Eplo3ptX18v1E/h67Y41HMci42yK9Jikv1zhksUZSIy6le7CLi3BpsL0jGcSr0nTCXiyYyfycYZbRXLHXkNgXFzUWCPWVoq99JkB1tBXR01oh5+lf08Wb5wvoLi8EAzI0fyVcR+4FQS8Ck/iDkrKAULYW6nTL39I+WhNipwei3TgHXBYio6rShazHy3jEeCs5pLbw9e01xTLqXlSqQ2rSzJ+b9wIUo0+UF4ut0xpG1N+D7PfpPTca/ElrEJwc3mPG8FIcEei4JC+OG2EwKpkYxl7/eqPPf7Xi5iWt60iFetVKry0dHMvljdDMPssrwRDClbPo/bibHQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=C7aF0yWfV1s1VE1VWExjYLax2b0knlBo4p9+gKyeABY=;
+ b=Wn5RtAfPoVOHwxdxkh+yj0eo2zWxGvwch9nBXgXUS36H0MOGgQ87Mv5IxgLGUCWBBeUuBBhZZRBUZvROyqTw8C9LBmz/m4OLKuBiCAw08IrRfWO82BVW6w6tSJrWuvJ3axcWxxJ4lL9UmMs1aJ5ehXM2pNVYynjlK3CCWxAv4t3yPyV6blYiXK8hrrgf24a2jKoAaKVk0MHMA3zfSS3Ugdzmn4+v2q1YfMZxkatv9F1QLBpoaPQhA6Rn4ivfB6ERHXLhAAWNf9fHQ5J57XTSBdT37JgJ4HfnuRmkUL25rld5AB99w2q6HgF92aPndRrZkEx43rOS889DEY5dn4/EmQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686808341; x=1689400341;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RvV1s9Ybihpk3I08Qn1WFec9efz9VOUQvHz72+VgOEs=;
-        b=7dB/GwIzS6IYN7XoGva93cZMfroWWgR9CNQQLJ28Crgkocf/mOANnSUoUhR8kdnj8c
-         x0wgOUoqpwUT+Y15Efe4mmpRNLio/84LxSZSWdRWNihX6sT2xE8dhUJP+ypNrvs5CT4d
-         Clw6NwecyRZ38q8LcI9/JmamPX6Js6H41yErMOj83tmvgRdeaYx1vO93HqP0yn07CZRT
-         BMP+ypzqMCUYp196eF0L9i0Uhpc1zLfj1PuaF4FZDuLvz4EjKjCoQz3ac7dKJj9Y0KH3
-         xVr3VTlMZCi/65ytGLFKuAgQgFLTewhquLdf4Ym8Vbq3e7E+LnhwDWA5xy8RzjUkbdam
-         rijg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686808341; x=1689400341;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RvV1s9Ybihpk3I08Qn1WFec9efz9VOUQvHz72+VgOEs=;
-        b=gSZZLmIK4hWR0Ckb62+c3RhadewOeV+FPB5Dg0meDw7K53AP2xPw6QGLXQuUOqqBua
-         eTOg6kIurbITzHm7QVXnTOIaGVjDVR2cBZhuh2m9B4j6Yi3opbFb8dE1c1Eso48cWBQ/
-         ZL8HPSQi9kZAud/hAsMjJwmOw9qp0thF84qcc0e9T6U2NG07gasJtwu1UT91zY1nzfCN
-         U5B8rzAtSzcTjJphBAwJLZZ+Iw3QFIl3EcXUwLTPMwlUPQtQSg5CDhbvD09IGKcV2TMC
-         qPxIoanZwF5+cNtsaPqJxaDUADWlpbGvBkWscrwStn7wD9TFrhijCCn63FZNdSP/0BWX
-         rDIA==
-X-Gm-Message-State: AC+VfDynJAZKHrO7OpeSITqJGfAe8m0cqxnUFPEd+bKT3b4PhpH+6izM
-        dxG52z0ESjCVh+DvP8ioARzG4sMTLOVLUKITBM0CJQ==
-X-Google-Smtp-Source: ACHHUZ7qgU3dpu4rIAx7AdmLtPFfR31Y7hYmj0/gpfjYTm1nVXytuQSca5mvnmmqFgME6Rir4dNf27KXa7PsZfwIs+0=
-X-Received: by 2002:a05:622a:1ba9:b0:3fa:7dbf:f268 with SMTP id
- bp41-20020a05622a1ba900b003fa7dbff268mr60622qtb.23.1686808340786; Wed, 14 Jun
- 2023 22:52:20 -0700 (PDT)
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=C7aF0yWfV1s1VE1VWExjYLax2b0knlBo4p9+gKyeABY=;
+ b=vYhCajh6lb5N5tBpc1VnAtl8fziK95uxtfyvTeyf2qmqJBgCl2ixeJ9ydddC9jPv2pFYs7eaYKeIYUzXpdc9lQ6lz1uhtOQrLH3VkxSoN++Eni1QxS7sNpPewxvty1RivGnzAjMjdsLpWQ08+ELhhrYAicHlqiF8DfuFTsuLyR8=
+Received: from IA1PR11MB6193.namprd11.prod.outlook.com (2603:10b6:208:3eb::19)
+ by MW4PR11MB7077.namprd11.prod.outlook.com (2603:10b6:303:223::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.26; Thu, 15 Jun
+ 2023 05:52:31 +0000
+Received: from IA1PR11MB6193.namprd11.prod.outlook.com
+ ([fe80::fae1:9490:ead6:1009]) by IA1PR11MB6193.namprd11.prod.outlook.com
+ ([fe80::fae1:9490:ead6:1009%4]) with mapi id 15.20.6477.028; Thu, 15 Jun 2023
+ 05:52:31 +0000
+From:   <Manikandan.M@microchip.com>
+To:     <Claudiu.Beznea@microchip.com>, <lee@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <Nicolas.Ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <sam@ravnborg.org>,
+        <bbrezillon@kernel.org>, <airlied@gmail.com>, <daniel@ffwll.ch>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>
+CC:     <Hari.PrasathGE@microchip.com>,
+        <Balamanikandan.Gunasundar@microchip.com>,
+        <Durai.ManickamKR@microchip.com>, <Nayabbasha.Sayed@microchip.com>,
+        <Dharma.B@microchip.com>, <Varshini.Rajendran@microchip.com>,
+        <Balakrishnan.S@microchip.com>
+Subject: Re: [PATCH 5/9] drm: atmel-hlcdc: add compatible string check for
+ XLCDC and HLCDC
+Thread-Topic: [PATCH 5/9] drm: atmel-hlcdc: add compatible string check for
+ XLCDC and HLCDC
+Thread-Index: AQHZncWR2rtrJdjaJEKmZ/pOm5WbTq+J3RiAgAGCgQA=
+Date:   Thu, 15 Jun 2023 05:52:31 +0000
+Message-ID: <c86e30d4-5c62-1446-035c-1f155b482d0e@microchip.com>
+References: <20230613070426.467389-1-manikandan.m@microchip.com>
+ <20230613070426.467389-6-manikandan.m@microchip.com>
+ <f0797746-ee52-582f-48c8-e6497426a7d6@microchip.com>
+In-Reply-To: <f0797746-ee52-582f-48c8-e6497426a7d6@microchip.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-GB
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: IA1PR11MB6193:EE_|MW4PR11MB7077:EE_
+x-ms-office365-filtering-correlation-id: 467745ad-941f-4ea4-41b3-08db6d64b57e
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: IBEW70U5QxuspkwT3LdsXRA8qb+u0thhHCpELb7xxU/J9Z4DhwX+SBJafjbZt5JrYGoFC10Gj3Kx87AdmLs7y8JyGkU4RNy0hZlkIOL0S/H9YPrL6OVsIU0I0prevCeUYDJD0Ig1YXf7cx4gGs0PzO2Ahcn7XzQMn5ci1o1XJwrXRX0+lEl1V1g4UHMTL30dFLO7hVEPkgSKRBv/Ixo8KCwXxEmf6aV+UAuC+z59QVQOMsrMR+WjbM+v7+PhjC27W1AMZQZZxgPDrAGfyz5Lc8htx2wPe9/uBt9st7BXIT5qnZT7bL8eG7xkU7fgelF7cLOL+nRHgCD/mS5oxqmLUonOrVmEBz0oeKumArUuR55otmyNkigr9GQBaIBt+MWYTTcucrf310oS0E/4slsVViThLUteLHIvDzv+Bdnxcimr+cjduzKixPxlYrUSSj1KxFMQ9YwtFLPn2OZSu9Qvj4eePcKVbyPcA/eNflhQDfn79a2mSTAVufMko2oJXSMn/TUUS6NcSPlBqnyngv6bk7fk/ownwSJ2PoEek7GIpcrHUwChgrmpX9pJSD8TzBUMB7g56cPZWkF4Y9Y9+Gx+9uUKyvtbYXzvKv1KphLo0DTrowy6qelf9jMLegG81s+lPuBGhEsWM+zO0z8o2d5W99obiUYez+vSrmV4pZ4YEec=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR11MB6193.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(396003)(366004)(136003)(346002)(39860400002)(451199021)(2906002)(41300700001)(7416002)(5660300002)(38070700005)(8936002)(8676002)(36756003)(86362001)(31696002)(71200400001)(6486002)(107886003)(478600001)(83380400001)(186003)(26005)(6512007)(6506007)(53546011)(64756008)(66556008)(2616005)(31686004)(66446008)(66476007)(66946007)(76116006)(91956017)(921005)(4326008)(122000001)(110136005)(38100700002)(54906003)(316002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OENNTU5uNXhHTm5GcnhUNW5QSUovRGJ5YkhxMVUyS1VUdEFFNDMyT0ZFRUJz?=
+ =?utf-8?B?blpwWDRtTjFTZDVRenJ0MHFJYUZqRjdsNTcxM2lCL2dQSHpKRGpLNHg0SERD?=
+ =?utf-8?B?b3QwN2lIUkVDaFdabjBrQS9sZWRZMnNjd2xDZndFVEpiL21pdHJibDRBQnpV?=
+ =?utf-8?B?TVZEQnUxSXZvQzdPcGFkeFl4aU9DZkpFa2V0N1hDaEpzb1ZhRlFrUHJid0VN?=
+ =?utf-8?B?MHdvUnBiWHNYelNGRVJ0Z1lqRnhYcUlPclc4Tk5qVG13eE1PZlpGeWwzYUhr?=
+ =?utf-8?B?d1hGbld6VWF4dlcySlhOZW9Vdk1GbUdNbkZOUXl0a1FuZktRSHlSQzE0WGIw?=
+ =?utf-8?B?d01ZNDF3TzkxQktoQ2Z4TUU4bml5MUk0YUR1RDFlRlVCQ3ZYN2gvc2k3YzVS?=
+ =?utf-8?B?dElEaFF0eDN1aTdkb25QU1gwTTUyemM2eXVaMlJmSzRQaUd5K2NRSWM3Z0Ur?=
+ =?utf-8?B?bU53eWpQUTRVbkZDSStDbWpXaGxSZ2x1VkVVbVRqSXkxamhVMFBUTmNDbnpm?=
+ =?utf-8?B?eFVLcFRzSTh5djM3MnVKRExmWXRJOXBLVEh5aHlyT3daOERnV3JYbWgzTzJH?=
+ =?utf-8?B?REw5aHUrNEJ3UmlFNTNQUGxudjN0SU8vOXlSRTFKY1VGaHJqdjNaYjFocW01?=
+ =?utf-8?B?czJkQXlxTFRrYTR2aHB6bmoyKzNMZ0JGbmkwcDVPT3d3bkpzTFdKMGc1Wkhh?=
+ =?utf-8?B?RVB5QkJxdGVENFR4djhEUlRIcGczV3Z0WmZtZlcrTVFsRWZ2SzRqcDdvUWUw?=
+ =?utf-8?B?WUJiRkgyeGJNaTFIQlZmUlNZc3IvVytOTEp1TGhuWVNrajkvZE1Da2NnQnJn?=
+ =?utf-8?B?ejdHQU9vZ3NXNUpEMU1icE9xVllFUHM2MXpmOSt2ZE1uUm9yZkNjSndEb1NY?=
+ =?utf-8?B?TzE4MUMxUmJVc29wc1k2cURjd1ZVcmkvdlZLaUtLMUluOWxaVzZBM3J3RjU3?=
+ =?utf-8?B?OXkza1F4OVB0VnFabDNsQXV2cVNXK1FCbFBNYUtud01oWWE2amNNS0EyQitr?=
+ =?utf-8?B?cDJWTFYwdXREU3dGaW9qRE9hNm51Skx6bFVoQjdZRkY0QWpiNzV4MkdTcDAr?=
+ =?utf-8?B?RlBOMlI0a2VlSzVJeWZ3cEhJeXF3QTFpK1R4SGV2LzZZQmpsNXBDRE5PMXF1?=
+ =?utf-8?B?dnVZQ29CRWRxWGNLNUpCdTM2QmpHKytHU2VuRURmNkptQXRtZUM0em9vRUhj?=
+ =?utf-8?B?alZRTzhqZUNZNmNINmJSOHR4VEtTQUI3T0kzWDdsSlBaRTdISEhUbDhKeWN2?=
+ =?utf-8?B?cmJrYUM0dGxhVUMvMXdwQmo5VVFka3lzT3dZUGVnc0wzelNteGFJNEFKNk9w?=
+ =?utf-8?B?d2RiZkI1QjNFbFY5UDErbkNEM0svK1FtZ1Z5eDNWL3V5ZFRCNDE3UUdObGVv?=
+ =?utf-8?B?M0JLOFIrcmV2WFVXYjB0YzNVbkQyVHpWTmVLTFJGeTdoMXlscERJNUNPMTJm?=
+ =?utf-8?B?SDIrVEQ3b0hscXo5QjBibVozQklVNFhqSW1kNmlmTDRIS2FTaE15cXUzWEdp?=
+ =?utf-8?B?ZUN1cGgyZkI3MVJURVJpMkFTUGxMTkdsb0s1TDJIMEllL012RG1Wak55Wk91?=
+ =?utf-8?B?amFOVDNPd0plM2YzdkM0TWJucklpcytDTUliRFhNc1dodWJsaGRacHQydUND?=
+ =?utf-8?B?aFJsd09xZ2FCUytRYlVCbzR4TWdrM09SSkdGbko4RTJSMm02U1ZVNW9BWVdM?=
+ =?utf-8?B?eWhZTGRDRXhGYVJrNUdsSnBtRWVtem1pVWZmSlZOMTlFMk5YbGtBbmRVNEtZ?=
+ =?utf-8?B?YXFxRk1XV29YOG41NFgvM25mYWtodTdKb1B2eEYxeUtCUWFHVVo1WWZXeWRB?=
+ =?utf-8?B?eXB6MUJtMEhVUnRuZEVndkhlaGt5SWdFTWFRTlUvb25qeVFkVHN2c1VQaWNM?=
+ =?utf-8?B?UXN2UmQ2ODdRRWdMY0lpc1UwR1ZOK010ek43YnN4MG01eENOV1AzSHFpbjIy?=
+ =?utf-8?B?ejNoSDJqSVNjdGVQbnFHSUJwT2huWDZxenRheWNudWtQd2MvUWRCRU4wSjlI?=
+ =?utf-8?B?Sk1VekpkalhGRWJLdlhPT2ZXQVJOVy9Ta2pPOU55emx1M2RtOE9UL3BTeTBL?=
+ =?utf-8?B?YlJLajkvbVl6bVBHcXJZaDVmVE92VmV5bjFCVWNGY3ZOR0IvaEYzemZ0a2N6?=
+ =?utf-8?Q?TcnPnnkcF48uIh3J2ZmThNE3+?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <6381083E74C32F41B9B972FF04B67E52@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20230615001735.3643996-1-kan.liang@linux.intel.com>
- <20230615001735.3643996-5-kan.liang@linux.intel.com> <CAP-5=fWbLkyQpxxhfCmqit7p4WgHVUOCjsADm-XojcT5ppcv7g@mail.gmail.com>
-In-Reply-To: <CAP-5=fWbLkyQpxxhfCmqit7p4WgHVUOCjsADm-XojcT5ppcv7g@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 14 Jun 2023 22:52:09 -0700
-Message-ID: <CAP-5=fU=jS6UmKdFziRq1Zt0c8FY+3XSrB9Xufw0BSHkGAcO-A@mail.gmail.com>
-Subject: Re: [PATCH V2 4/8] perf metrics: Sort the Default metricgroup
-To:     kan.liang@linux.intel.com
-Cc:     acme@kernel.org, mingo@redhat.com, peterz@infradead.org,
-        namhyung@kernel.org, jolsa@kernel.org, adrian.hunter@intel.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ak@linux.intel.com, eranian@google.com, ahmad.yasin@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR11MB6193.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 467745ad-941f-4ea4-41b3-08db6d64b57e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jun 2023 05:52:31.1874
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 7wnb+9HAsTuCWTLhkoWbfYGV8h6g5MFQ6XzBsd7jwRnZOx8K9ZMVSW2BSeIqrtqAmjoO4jIKcCkxftBvZ+Bxa48R76t6ralKgJwzaU6v4Pc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB7077
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 9:30=E2=80=AFPM Ian Rogers <irogers@google.com> wro=
-te:
->
-> On Wed, Jun 14, 2023 at 5:18=E2=80=AFPM <kan.liang@linux.intel.com> wrote=
-:
-> >
-> > From: Kan Liang <kan.liang@linux.intel.com>
-> >
-> > The new default mode will print the metrics as a metric group. The
-> > metrics from the same metric group must be adjacent to each other in th=
-e
-> > metric list. But the metric_list_cmp() sorts metrics by the number of
-> > events.
-> >
-> > Add a new sort for the Default metricgroup, which sorts by
-> > default_metricgroup_name and metric_name.
-> >
-> > Add is_default in the struct metric_event to indicate that it's from
-> > the Default metricgroup.
-> >
-> > Store the displayed metricgroup name of the Default metricgroup into
-> > the metric expr for output.
-> >
-> > Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-> > ---
-> >  tools/perf/util/metricgroup.c | 35 +++++++++++++++++++++++++++++++++++
-> >  tools/perf/util/metricgroup.h |  3 +++
-> >  2 files changed, 38 insertions(+)
-> >
-> > diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgrou=
-p.c
-> > index 8b19644ade7d..acf86b15ee49 100644
-> > --- a/tools/perf/util/metricgroup.c
-> > +++ b/tools/perf/util/metricgroup.c
-> > @@ -79,6 +79,7 @@ static struct rb_node *metric_event_new(struct rblist=
- *rblist __maybe_unused,
-> >                 return NULL;
-> >         memcpy(me, entry, sizeof(struct metric_event));
-> >         me->evsel =3D ((struct metric_event *)entry)->evsel;
-> > +       me->is_default =3D false;
-> >         INIT_LIST_HEAD(&me->head);
-> >         return &me->nd;
-> >  }
-> > @@ -1160,6 +1161,25 @@ static int metric_list_cmp(void *priv __maybe_un=
-used, const struct list_head *l,
-> >         return right_count - left_count;
-> >  }
-> >
-> > +/**
-> > + * default_metricgroup_cmp - Implements complex key for the Default me=
-tricgroup
-> > + *                          that first sorts by default_metricgroup_na=
-me, then
-> > + *                          metric_name.
-> > + */
-> > +static int default_metricgroup_cmp(void *priv __maybe_unused,
-> > +                                  const struct list_head *l,
-> > +                                  const struct list_head *r)
-> > +{
-> > +       const struct metric *left =3D container_of(l, struct metric, nd=
-);
-> > +       const struct metric *right =3D container_of(r, struct metric, n=
-d);
-> > +       int diff =3D strcmp(right->default_metricgroup_name, left->defa=
-ult_metricgroup_name);
-> > +
-> > +       if (diff)
-> > +               return diff;
-> > +
-> > +       return strcmp(right->metric_name, left->metric_name);
-> > +}
-> > +
-> >  struct metricgroup__add_metric_data {
-> >         struct list_head *list;
-> >         const char *pmu;
-> > @@ -1515,6 +1535,7 @@ static int parse_groups(struct evlist *perf_evlis=
-t,
-> >         LIST_HEAD(metric_list);
-> >         struct metric *m;
-> >         bool tool_events[PERF_TOOL_MAX] =3D {false};
-> > +       bool is_default =3D !strcmp(str, "Default");
-> >         int ret;
-> >
-> >         if (metric_events_list->nr_entries =3D=3D 0)
-> > @@ -1549,6 +1570,9 @@ static int parse_groups(struct evlist *perf_evlis=
-t,
-> >                         goto out;
-> >         }
-> >
-> > +       if (is_default)
-> > +               list_sort(NULL, &metric_list, default_metricgroup_cmp);
-> > +
-> >         list_for_each_entry(m, &metric_list, nd) {
-> >                 struct metric_event *me;
-> >                 struct evsel **metric_events;
-> > @@ -1637,6 +1661,17 @@ static int parse_groups(struct evlist *perf_evli=
-st,
-> >                 expr->metric_unit =3D m->metric_unit;
-> >                 expr->metric_events =3D metric_events;
-> >                 expr->runtime =3D m->pctx->sctx.runtime;
-> > +               if (m->pmu && strcmp(m->pmu, "cpu")) {
-> > +                       char *name;
-> > +
-> > +                       if (asprintf(&name, "%s (%s)", m->default_metri=
-cgroup_name, m->pmu) < 0)
->
-> With EXTRA_CFLAGS=3D"-fsanitize=3Daddress" this is causing:
->
-> $ perf test 7 -vv -F
->   7: PMU events                                                      :
-> ...
->   7.5: Parsing of metric thresholds with fake PMUs                   :
-> ...
-> =3D=3D2072355=3D=3DERROR: LeakSanitizer: detected memory leaks
->
-> Direct leak of 6199 byte(s) in 340 object(s) allocated from:
->    #0 0x7f24cce7077b in __interceptor_strdup
-> ../../../../src/libsanitizer/asan/asan_interceptors.cp
-> p:439
->    #1 0x55972b328abd in asprintf util/util.c:566
->    #2 0x55972b251dbd in parse_groups util/metricgroup.c:1667
->    #3 0x55972b25231f in metricgroup__parse_groups_test util/metricgroup.c=
-:1719
->    #4 0x55972b139aff in test__parsing_callback tests/pmu-events.c:837
->    #5 0x55972b5119a9 in pmu_metrics_table_for_each_metric
-> /tmp/perf/pmu-events/pmu-events.c:61641
->    #6 0x55972b511fdf in pmu_for_each_core_metric
-> /tmp/perf/pmu-events/pmu-events.c:61742
->    #7 0x55972b13a3bc in test__parsing tests/pmu-events.c:898
->    #8 0x55972b106cd7 in run_test tests/builtin-test.c:236
->    #9 0x55972b106f7c in test_and_print tests/builtin-test.c:265
->    #10 0x55972b107f96 in __cmd_test tests/builtin-test.c:436
->    #11 0x55972b10927a in cmd_test tests/builtin-test.c:559
->    #12 0x55972b19584a in run_builtin
-> /home/irogers/kernel.org/tools/perf/perf.c:323
->    #13 0x55972b195dbb in handle_internal_command
-> /home/irogers/kernel.org/tools/perf/perf.c:377
->    #14 0x55972b196183 in run_argv /home/irogers/kernel.org/tools/perf/per=
-f.c:421
->    #15 0x55972b1966eb in main /home/irogers/kernel.org/tools/perf/perf.c:=
-537
->    #16 0x7f24cbe46189 in __libc_start_call_main
-> ../sysdeps/nptl/libc_start_call_main.h:58
->
-> SUMMARY: AddressSanitizer: 6199 byte(s) leaked in 340 allocation(s)
->
-> As this is mixing allocated and unallocated strings, you like want to
-> strdup the unallocated ones, then add a free to the exit routine.
->
-> Thanks,
-> Ian
-
-Except for the memory leak, everything looks good here. Will ack with
-the memory leak fix.
-
-Thanks,
-Ian
-
-> > +                               expr->default_metricgroup_name =3D m->d=
-efault_metricgroup_name;
-> > +                       else
-> > +                               expr->default_metricgroup_name =3D name=
-;
-> > +               } else
-> > +                       expr->default_metricgroup_name =3D m->default_m=
-etricgroup_name;
-> > +               if (is_default)
-> > +                       me->is_default =3D true;
-> >                 list_add(&expr->nd, &me->head);
-> >         }
-> >
-> > diff --git a/tools/perf/util/metricgroup.h b/tools/perf/util/metricgrou=
-p.h
-> > index bf18274c15df..d5325c6ec8e1 100644
-> > --- a/tools/perf/util/metricgroup.h
-> > +++ b/tools/perf/util/metricgroup.h
-> > @@ -22,6 +22,7 @@ struct cgroup;
-> >  struct metric_event {
-> >         struct rb_node nd;
-> >         struct evsel *evsel;
-> > +       bool is_default; /* the metric evsel from the Default metricgro=
-up */
-> >         struct list_head head; /* list of metric_expr */
-> >  };
-> >
-> > @@ -55,6 +56,8 @@ struct metric_expr {
-> >          * more human intelligible) and then add "MiB" afterward when d=
-isplayed.
-> >          */
-> >         const char *metric_unit;
-> > +       /** Displayed metricgroup name of the Default metricgroup */
-> > +       const char *default_metricgroup_name;
-> >         /** Null terminated array of events used by the metric. */
-> >         struct evsel **metric_events;
-> >         /** Null terminated array of referenced metrics. */
-> > --
-> > 2.35.1
-> >
+T24gMTQvMDYvMjMgMTI6MTksIENsYXVkaXUgQmV6bmVhIC0gTTE4MDYzIHdyb3RlOg0KPiBPbiAx
+My4wNi4yMDIzIDEwOjA0LCBNYW5pa2FuZGFuIE11cmFsaWRoYXJhbiB3cm90ZToNCj4+IEZyb206
+IER1cmFpIE1hbmlja2FtIEtSIDxkdXJhaS5tYW5pY2thbWtyQG1pY3JvY2hpcC5jb20+DQo+Pg0K
+Pj4gQWRkIGNvbXBhdGlibGUgc3RyaW5nIGNoZWNrIHRvIGRpZmZlcmVudGlhdGUgWExDREMgYW5k
+IEhMQ0RDIGNvZGUNCj4+IHdpdGhpbiB0aGUgYXRtZWwtaGxjZGMgZHJpdmVyIGZpbGVzLg0KPj4N
+Cj4+IFNpZ25lZC1vZmYtYnk6IER1cmFpIE1hbmlja2FtIEtSIDxkdXJhaS5tYW5pY2thbWtyQG1p
+Y3JvY2hpcC5jb20+DQo+PiBTaWduZWQtb2ZmLWJ5OiBNYW5pa2FuZGFuIE11cmFsaWRoYXJhbiA8
+bWFuaWthbmRhbi5tQG1pY3JvY2hpcC5jb20+DQo+PiAtLS0NCj4+ICAgZHJpdmVycy9ncHUvZHJt
+L2F0bWVsLWhsY2RjL2F0bWVsX2hsY2RjX2RjLmMgfCA3ICsrKysrKysNCj4+ICAgZHJpdmVycy9n
+cHUvZHJtL2F0bWVsLWhsY2RjL2F0bWVsX2hsY2RjX2RjLmggfCAxICsNCj4+ICAgMiBmaWxlcyBj
+aGFuZ2VkLCA4IGluc2VydGlvbnMoKykNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUv
+ZHJtL2F0bWVsLWhsY2RjL2F0bWVsX2hsY2RjX2RjLmMgYi9kcml2ZXJzL2dwdS9kcm0vYXRtZWwt
+aGxjZGMvYXRtZWxfaGxjZGNfZGMuYw0KPj4gaW5kZXggZDdhZDgyOGU5ZThjLi5mYmJkMjU5MmVm
+YzcgMTAwNjQ0DQo+PiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vYXRtZWwtaGxjZGMvYXRtZWxfaGxj
+ZGNfZGMuYw0KPj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL2F0bWVsLWhsY2RjL2F0bWVsX2hsY2Rj
+X2RjLmMNCj4+IEBAIC03NjEsNiArNzYxLDEzIEBAIHN0YXRpYyBpbnQgYXRtZWxfaGxjZGNfZGNf
+bG9hZChzdHJ1Y3QgZHJtX2RldmljZSAqZGV2KQ0KPj4gICAJaWYgKCFkYykNCj4+ICAgCQlyZXR1
+cm4gLUVOT01FTTsNCj4+ICAgDQo+PiArCS8qIFNBTTlYNyBzdXBwb3J0cyBYTENEQyAqLw0KPj4g
+KwlpZiAoIXN0cmNtcChtYXRjaC0+Y29tcGF0aWJsZSwgIm1pY3JvY2hpcCxzYW05eDcteGxjZGMi
+KSkNCj4gDQo+IFRoaXMgY291bGQgYmUgYXZvaWRlZCBpZiBpeF94bGNkIGluIGFkZGVkIGluIGRy
+aXZlciBkYXRhLg0KU3VyZSwgSSB3aWxsIGNoZWNrIGZvciB0aGUgZmVhc2liaWxpdHkgb2YgdGhl
+IGNvZGUuDQpUaGFuayB5b3UNCj4gDQo+PiArCQlkYy0+aXNfeGxjZGMgPSB0cnVlOw0KPj4gKwll
+bHNlDQo+PiArCQkvKiBPdGhlciBTb0MncyB0aGF0IHN1cHBvcnRzIEhMQ0RDIElQICovDQo+PiAr
+CQlkYy0+aXNfeGxjZGMgPSBmYWxzZTsNCj4+ICsNCj4+ICAgCWRjLT5kZXNjID0gbWF0Y2gtPmRh
+dGE7DQo+PiAgIAlkYy0+aGxjZGMgPSBkZXZfZ2V0X2RydmRhdGEoZGV2LT5kZXYtPnBhcmVudCk7
+DQo+PiAgIAlkZXYtPmRldl9wcml2YXRlID0gZGM7DQo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9n
+cHUvZHJtL2F0bWVsLWhsY2RjL2F0bWVsX2hsY2RjX2RjLmggYi9kcml2ZXJzL2dwdS9kcm0vYXRt
+ZWwtaGxjZGMvYXRtZWxfaGxjZGNfZGMuaA0KPj4gaW5kZXggYWVkMTc0MmIzNjY1Li44MDRlNGQ0
+NzZmMmIgMTAwNjQ0DQo+PiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vYXRtZWwtaGxjZGMvYXRtZWxf
+aGxjZGNfZGMuaA0KPj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL2F0bWVsLWhsY2RjL2F0bWVsX2hs
+Y2RjX2RjLmgNCj4+IEBAIC00NTEsNiArNDUxLDcgQEAgc3RydWN0IGF0bWVsX2hsY2RjX2RjIHsN
+Cj4+ICAgCQl1MzIgaW1yOw0KPj4gICAJCXN0cnVjdCBkcm1fYXRvbWljX3N0YXRlICpzdGF0ZTsN
+Cj4+ICAgCX0gc3VzcGVuZDsNCj4+ICsJYm9vbCBpc194bGNkYzsNCj4+ICAgfTsNCj4+ICAgDQo+
+PiAgIGV4dGVybiBzdHJ1Y3QgYXRtZWxfaGxjZGNfZm9ybWF0cyBhdG1lbF9obGNkY19wbGFuZV9y
+Z2JfZm9ybWF0czsNCj4gDQoNCi0tIA0KVGhhbmtzIGFuZCBSZWdhcmRzLA0KTWFuaWthbmRhbiBN
+Lg0KDQo=
