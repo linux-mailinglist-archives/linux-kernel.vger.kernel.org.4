@@ -2,111 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E154D7319B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AEF57319C2
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240884AbjFONQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 09:16:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35284 "EHLO
+        id S240958AbjFONUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 09:20:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbjFONQH (ORCPT
+        with ESMTP id S1343896AbjFONTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 09:16:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E4B270C;
-        Thu, 15 Jun 2023 06:16:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 15 Jun 2023 09:19:55 -0400
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 641E71FEF;
+        Thu, 15 Jun 2023 06:19:52 -0700 (PDT)
+Received: from jerom (unknown [12.133.101.138])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E07260BB1;
-        Thu, 15 Jun 2023 13:16:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79BB8C433C8;
-        Thu, 15 Jun 2023 13:15:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686834962;
-        bh=BZz7VgE7FZsHyhQC20/TP0fYQCt9kxxbS+7BpFxp0Qg=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=ONIbZw9nFYdVAI8RzqPvNfyDIkAQ1WIVTIL3GcbFQ6BxtBYOxrwysYJuk22+zeGMN
-         Sga/nSXVvexeb2lhSdEwomGBeq6VwBBGKlHopueeoFrWZ15yqzeSIHAi4cNtdTdUxt
-         UwVS7TTNYCQhDUHMTmX8qwX21OdbY2sDggdiUcY+t2Rb8jPFCv/jptT5V+zWN9xWi5
-         bV6ol0zgnOl0HKUOUBgw0n4mtsQ20IQ8jXwoyIHOuIhwuOhACpr/6UtOp5W/RtDWLo
-         BgGT5FQbzSxJ5em79FWybn+N5Qfm+M2X0c464X6tyrQ1+BMTcyI/37IcCM9S6WbIes
-         dDYoVTAKJmJyg==
-From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Valentin Caron <valentin.caron@foss.st.com>
-Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230615075815.310261-1-valentin.caron@foss.st.com>
-References: <20230615075815.310261-1-valentin.caron@foss.st.com>
-Subject: Re: [PATCH v3 0/4] spi: stm32: add spi device mode
-Message-Id: <168683495795.547441.10667645380315680455.b4-ty@kernel.org>
-Date:   Thu, 15 Jun 2023 14:15:57 +0100
+        (Authenticated sender: serge)
+        by mail.hallyn.com (Postfix) with ESMTPSA id 146E75F8;
+        Thu, 15 Jun 2023 08:19:47 -0500 (CDT)
+Date:   Thu, 15 Jun 2023 08:19:42 -0500
+From:   Serge Hallyn <serge@hallyn.com>
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     paul@paul-moore.com, linux-security-module@vger.kernel.org,
+        jmorris@namei.org, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, mic@digikod.net
+Subject: Re: [PATCH v10 07/11] LSM: Helpers for attribute names and filling
+ lsm_ctx
+Message-ID: <ZIsP7rkD1MscMqQ3@jerom>
+References: <20230428203417.159874-1-casey@schaufler-ca.com>
+ <20230428203417.159874-8-casey@schaufler-ca.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-c6835
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230428203417.159874-8-casey@schaufler-ca.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Jun 2023 09:58:11 +0200, Valentin Caron wrote:
-> STM32 SPI can operate in device mode.
-> This series adds this functionnality in spi-stm32 driver.
+On Fri, Apr 28, 2023 at 01:34:13PM -0700, Casey Schaufler wrote:
+> Add lsm_name_to_attr(), which translates a text string to a
+> LSM_ATTR value if one is available.
 > 
-> Since v2:
->  - Rename this series: spi device mode
+> Add lsm_fill_user_ctx(), which fills a struct lsm_ctx, including
+> the trailing attribute value. The .len value is padded to a multiple
+> of 64 bits for alignment.
 > 
-> Since v1:
->  - Do not add #address-cells and #size-cells in st,stm32-spi.yaml
->  - Do not add cs-gpio description in st,stm32-spi.yaml
->  - Do not add st,spi-slave-underrun property to handle spi slave underrun
+> All are used in module specific components of LSM system calls.
 > 
-> [...]
+> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 
-Applied to
+Reviewed-by: Serge E. Hallyn <serge@hallyn.com>
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[1/4] spi: stm32: renaming of spi_master into spi_controller
-      commit: 6f486556abe35f2e6684f95241acbc463342d3eb
-[2/4] spi: stm32: use dmaengine_terminate_{a}sync instead of _all
-      commit: 4f2b39dc2d14d4fc55d7a3a140ac07eaa761b701
-[3/4] dt-bindings: spi: stm32: disable spi-slave property for stm32f4-f7
-      commit: e6afe03351ac81fbc4f2b93bf3b356f7b662939d
-[4/4] spi: stm32: introduction of stm32h7 SPI device mode support
-      commit: e40335fcb89acb274d05deffad9225e973278ec9
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+> ---
+>  include/linux/security.h | 13 ++++++++++++
+>  security/lsm_syscalls.c  | 24 ++++++++++++++++++++++
+>  security/security.c      | 44 ++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 81 insertions(+)
+> 
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index 806bff425af9..36ace59f9171 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -263,6 +263,7 @@ int unregister_blocking_lsm_notifier(struct notifier_block *nb);
+>  /* prototypes */
+>  extern int security_init(void);
+>  extern int early_security_init(void);
+> +extern u64 lsm_name_to_attr(const char *name);
+>  
+>  /* Security operations */
+>  int security_binder_set_context_mgr(const struct cred *mgr);
+> @@ -491,6 +492,8 @@ int security_inode_notifysecctx(struct inode *inode, void *ctx, u32 ctxlen);
+>  int security_inode_setsecctx(struct dentry *dentry, void *ctx, u32 ctxlen);
+>  int security_inode_getsecctx(struct inode *inode, void **ctx, u32 *ctxlen);
+>  int security_locked_down(enum lockdown_reason what);
+> +int lsm_fill_user_ctx(struct lsm_ctx __user *ctx, void *context,
+> +		      size_t context_size, u64 id, u64 flags);
+>  #else /* CONFIG_SECURITY */
+>  
+>  static inline int call_blocking_lsm_notifier(enum lsm_event event, void *data)
+> @@ -508,6 +511,11 @@ static inline  int unregister_blocking_lsm_notifier(struct notifier_block *nb)
+>  	return 0;
+>  }
+>  
+> +static inline u64 lsm_name_to_attr(const char *name)
+> +{
+> +	return LSM_ATTR_UNDEF;
+> +}
+> +
+>  static inline void security_free_mnt_opts(void **mnt_opts)
+>  {
+>  }
+> @@ -1420,6 +1428,11 @@ static inline int security_locked_down(enum lockdown_reason what)
+>  {
+>  	return 0;
+>  }
+> +static inline int lsm_fill_user_ctx(struct lsm_ctx __user *ctx, void *context,
+> +				    size_t context_size, u64 id, u64 flags)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+>  #endif	/* CONFIG_SECURITY */
+>  
+>  #if defined(CONFIG_SECURITY) && defined(CONFIG_WATCH_QUEUE)
+> diff --git a/security/lsm_syscalls.c b/security/lsm_syscalls.c
+> index b89cccb2f123..0b225adfe5f7 100644
+> --- a/security/lsm_syscalls.c
+> +++ b/security/lsm_syscalls.c
+> @@ -17,6 +17,30 @@
+>  #include <linux/lsm_hooks.h>
+>  #include <uapi/linux/lsm.h>
+>  
+> +/**
+> + * lsm_name_to_attr - map an LSM attribute name to its ID
+> + * @name: name of the attribute
+> + *
+> + * Returns the LSM attribute value associated with @name, or 0 if
+> + * there is no mapping.
+> + */
+> +u64 lsm_name_to_attr(const char *name)
+> +{
+> +	if (!strcmp(name, "current"))
+> +		return LSM_ATTR_CURRENT;
+> +	if (!strcmp(name, "exec"))
+> +		return LSM_ATTR_EXEC;
+> +	if (!strcmp(name, "fscreate"))
+> +		return LSM_ATTR_FSCREATE;
+> +	if (!strcmp(name, "keycreate"))
+> +		return LSM_ATTR_KEYCREATE;
+> +	if (!strcmp(name, "prev"))
+> +		return LSM_ATTR_PREV;
+> +	if (!strcmp(name, "sockcreate"))
+> +		return LSM_ATTR_SOCKCREATE;
+> +	return LSM_ATTR_UNDEF;
+> +}
+> +
+>  /**
+>   * sys_lsm_set_self_attr - Set current task's security module attribute
+>   * @attr: which attribute to set
+> diff --git a/security/security.c b/security/security.c
+> index 94b78bfd06b9..8c877d639cae 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -761,6 +761,50 @@ static int lsm_superblock_alloc(struct super_block *sb)
+>  	return 0;
+>  }
+>  
+> +/**
+> + * lsm_fill_user_ctx - Fill a user space lsm_ctx structure
+> + * @ctx: an LSM context to be filled
+> + * @context: the new context value
+> + * @context_size: the size of the new context value
+> + * @id: LSM id
+> + * @flags: LSM defined flags
+> + *
+> + * Fill all of the fields in a user space lsm_ctx structure.
+> + * Caller is assumed to have verified that @ctx has enough space
+> + * for @context.
+> + *
+> + * The total length is padded to a multiple of 64 bits to
+> + * accomodate possible alignment issues.
+> + *
+> + * Returns 0 on success, -EFAULT on a copyout error, -ENOMEM
+> + * if memory can't be allocated.
+> + */
+> +int lsm_fill_user_ctx(struct lsm_ctx __user *ctx, void *context,
+> +		      size_t context_size, u64 id, u64 flags)
+> +{
+> +	struct lsm_ctx *lctx;
+> +	size_t locallen = ALIGN(struct_size(lctx, ctx, context_size), 8);
+> +	int rc = 0;
+> +
+> +	lctx = kzalloc(locallen, GFP_KERNEL);
+> +	if (lctx == NULL)
+> +		return -ENOMEM;
+> +
+> +	lctx->id = id;
+> +	lctx->flags = flags;
+> +	lctx->ctx_len = context_size;
+> +	lctx->len = locallen;
+> +
+> +	memcpy(lctx->ctx, context, context_size);
+> +
+> +	if (copy_to_user(ctx, lctx, locallen))
+> +		rc = -EFAULT;
+> +
+> +	kfree(lctx);
+> +
+> +	return rc;
+> +}
+> +
+>  /*
+>   * The default value of the LSM hook is defined in linux/lsm_hook_defs.h and
+>   * can be accessed with:
+> -- 
+> 2.39.2
+> 
