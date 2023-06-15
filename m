@@ -2,73 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09D7E7323F9
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 01:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78EB17323FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 01:58:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230164AbjFOX6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 19:58:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36370 "EHLO
+        id S240517AbjFOX6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 19:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231195AbjFOX6M (ORCPT
+        with ESMTP id S240466AbjFOX63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 19:58:12 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6442707
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 16:58:11 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-514ab6cb529so2699775a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 16:58:11 -0700 (PDT)
+        Thu, 15 Jun 2023 19:58:29 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 188CC2953
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 16:58:25 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5701b4d6ef3so3280387b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 16:58:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686873489; x=1689465489;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hsldixVoPkFu+sgLKcb7381mh1dpFejnHhZ3xNKtZcQ=;
-        b=n8PCX3kXLm6H3l19sc/u529LfXwDjnAMgO68h3K/w/KEVnoo2OZfWBgb6laG/bCtRL
-         neTMaBJYJf27dn4xIYGy+ng9pm68btbX2cb1tYHZWGm9vPckpg6xBKXJxnnaT4ZBfZ+F
-         EGH5/TyGK7p1BPW6tl5thLq8OVyuZVHqUIbxGVo3XZuBHsXljMaqlU399ZER4oUlZsNM
-         6L8VmVaiDmE3hFzH0NyPZ/srVlTcYtimcF5KQEFOptm1eotB575wYPLKCMDaBg97Kc8a
-         KT/a5C5wVzXQbi6XJzsv+AQDBy6rtnnPtU2HId4htWaBvu0I64qnH5il6eE0gITBDtg7
-         mhog==
+        d=google.com; s=20221208; t=1686873504; x=1689465504;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2JGwGtheDvdmEXVQOAzwkfJJFvQFel3N1nvsrUgeg4s=;
+        b=a5V6Bi5+LUPhGmMSNZrYUe+i0L1wJvkbBKVigdOLfXgL0KyvgOZWaF6We0NSwhbHqM
+         DXtSsa93RR62HXCouDZLPn7jArxyx6Fq1Y/clmFYbtBjTa1/8pNyObKMiseGIIu4XUAd
+         S+9isvOilL94TfazUNQ2L80sY1HvjN+iihhGDLd9jXveyd8EU+Srl3LD/QA0zyG9h4ZS
+         lVDlHuIYazBj7dRx32X7ejvY2ZRkKl/TO79CzWDPgQR0dUfGGeta3cxD/A/5SD8Onq7m
+         C9X+xei/T1tWPby9cphRz5f5ThvM0hJZKpUZbelbDeAQSDFmEwuNvGtYzpnGzP1cMe/R
+         lIMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686873489; x=1689465489;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hsldixVoPkFu+sgLKcb7381mh1dpFejnHhZ3xNKtZcQ=;
-        b=iXMeMxSGYBsSmOQ2/Vw14QTvfLkXxN7KGd6Oxql6GhpGWkMIG3YO4o7RestzzpWyKw
-         g+OwHPScpAWUT6UINF3ohyI/MflETR78kXEAKQu80Pjnpm91K66oxsDHznyFlhpmPIqk
-         CSaEj2VapRjKyks7glGCuiCNGLXiQGCr3FDmwEhsiulbtUlpS4GygAbYo8Cwour797G0
-         YvN1HxjIFlsMC5gwhRUUudoWv3lGyFHpwLAHwt3/gUXbwXAtXDMRqKc8nkiLqMKjSDwz
-         kCfMmzmkN90fJpSW3WZF6S1x8NmPjijSGH4smwlN/e1qTkIVtY+B5zHha4Y7pDNzM46l
-         bbwA==
-X-Gm-Message-State: AC+VfDyMaQ5lj8jJbAfvstxQv8fy3pa8jj64ZL3eEbSi3aU6p45V4zjV
-        symKLws5nlda6O9URILXsD+LSicXl4Eq24MAec3eGfmK5VD3MFn/7x4=
-X-Google-Smtp-Source: ACHHUZ4QsuHjhAitOniaTHjnM44zbN1Ghan/CjtEQSQ6qzjTXG666XLScBY720A7tP4JQAj9EIOOTyhpb85UqOxqu7Q=
-X-Received: by 2002:a17:907:802:b0:974:fb94:8067 with SMTP id
- wv2-20020a170907080200b00974fb948067mr6126517ejb.23.1686873489622; Thu, 15
- Jun 2023 16:58:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230605004334.1930091-1-mizhang@google.com> <CALMp9eSQgcKd=SN4q2QRYbveKoayKzuYEQPM0Xu+FgQ_Mja8-g@mail.gmail.com>
- <CAL715WJowYL=W40SWmtPoz1F9WVBFDG7TQwbsV2Bwf9-cS77=Q@mail.gmail.com>
- <ZH4ofuj0qvKNO9Bz@google.com> <CAL715WKtsC=93Nqr7QJZxspWzF04_CLqN3FUxUaqTHWFRUrwBA@mail.gmail.com>
- <ZH+8GafaNLYPvTJI@google.com> <CAL715WJ1rHS9ORR2ttyAw+idqbaLnOhLveUhW8f4tB9o+ZsuiQ@mail.gmail.com>
- <ZH/PKMmWWgJQdcJQ@google.com>
-In-Reply-To: <ZH/PKMmWWgJQdcJQ@google.com>
-From:   Mingwei Zhang <mizhang@google.com>
-Date:   Thu, 15 Jun 2023 16:57:33 -0700
-Message-ID: <CAL715W+KSgNMk+kTt3=B-CgxTkToH6xmvHWvVmm3V+hir-jE=g@mail.gmail.com>
-Subject: Re: [PATCH] KVM: x86/mmu: Remove KVM MMU write lock when accessing indirect_shadow_pages
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Jim Mattson <jmattson@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        d=1e100.net; s=20221208; t=1686873504; x=1689465504;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2JGwGtheDvdmEXVQOAzwkfJJFvQFel3N1nvsrUgeg4s=;
+        b=W9EHaNCh3hRxUuZKWJjloFw84cBWOhwrV7kA4flMXzZApWJvnKAo1nKLjKdWQ7tV0d
+         AM8crfgzT050bZTVLT+4dYh74KYaJ+RbGucLAlFCMOkeFnp3esdHUy49jllIAh8cmneP
+         IKwN27ruH5i4+ezeJ8ETO2+QAXWtrMehtcfkMun64MDASn5jelOAPbfF88MA/jRv4898
+         qLxg3L0tQjxYA8UiCXor6edSyDnDY4s0dDMB9KedM7gH8xcW9l91rBVkzrmzsjCvnSK5
+         k8SVrNTn87DP2EaD4SFgNI0ZqsdQHKjZqmQVsetz4J+4H0s6WfD3TavIiugNuK9strc2
+         /kCg==
+X-Gm-Message-State: AC+VfDy67xGJphc4cQ5YbkkWLrPVdnqx5NkF9N1CEPBZlHkwRwDQsPff
+        FkTrU1kFEJeH1RQ4H+rW17m/o4+d6w8=
+X-Google-Smtp-Source: ACHHUZ7TA6PXDTpUy7HtrcTo7V2uQ3JKd/mX2ALr2Y51CEQmm/8kPRKkJw/mBHOmKhj8bOGphsr0zC+58YY=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:9f0a:0:b0:56c:e2da:f440 with SMTP id
+ s10-20020a819f0a000000b0056ce2daf440mr137130ywn.0.1686873504196; Thu, 15 Jun
+ 2023 16:58:24 -0700 (PDT)
+Date:   Thu, 15 Jun 2023 16:58:22 -0700
+In-Reply-To: <21568052-eb0f-a8d6-5225-3b422e9470e9@intel.com>
+Mime-Version: 1.0
+References: <20230511040857.6094-1-weijiang.yang@intel.com>
+ <20230511040857.6094-11-weijiang.yang@intel.com> <ZH73kDx6VCaBFiyh@chao-email>
+ <21568052-eb0f-a8d6-5225-3b422e9470e9@intel.com>
+Message-ID: <ZIulniryqlj0hLnt@google.com>
+Subject: Re: [PATCH v3 10/21] KVM:x86: Add #CP support in guest exception classification
+From:   Sean Christopherson <seanjc@google.com>
+To:     Weijiang Yang <weijiang.yang@intel.com>
+Cc:     Chao Gao <chao.gao@intel.com>, pbonzini@redhat.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peterz@infradead.org, rppt@kernel.org, binbin.wu@linux.intel.com,
+        rick.p.edgecombe@intel.com, john.allen@amd.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,33 +71,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 6, 2023 at 5:28=E2=80=AFPM Sean Christopherson <seanjc@google.c=
-om> wrote:
->
-> On Tue, Jun 06, 2023, Mingwei Zhang wrote:
-> > > > Hmm. I agree with both points above, but below, the change seems to=
-o
-> > > > heavyweight. smp_wb() is a mfence(), i.e., serializing all
-> > > > loads/stores before the instruction. Doing that for every shadow pa=
-ge
-> > > > creation and destruction seems a lot.
-> > >
-> > > No, the smp_*b() variants are just compiler barriers on x86.
-> >
-> > hmm, it is a "lock addl" now for smp_mb(). Check this: 450cbdd0125c
-> > ("locking/x86: Use LOCK ADD for smp_mb() instead of MFENCE")
-> >
-> > So this means smp_mb() is not a free lunch and we need to be a little
-> > bit careful.
->
-> Oh, those sneaky macros.  x86 #defines __smp_mb(), not the outer helper. =
- I'll
-> take a closer look before posting to see if there's a way to avoid the ru=
-ntime
-> barrier.
+On Thu, Jun 08, 2023, Weijiang Yang wrote:
+> 
+> On 6/6/2023 5:08 PM, Chao Gao wrote:
+> > On Thu, May 11, 2023 at 12:08:46AM -0400, Yang Weijiang wrote:
+> > > Add handling for Control Protection (#CP) exceptions(vector 21).
+> > > The new vector is introduced for Intel's Control-Flow Enforcement
+> > > Technology (CET) relevant violation cases.
+> > > 
+> > > Although #CP belongs contributory exception class, but the actual
+> > > effect is conditional on CET being exposed to guest. If CET is not
+> > > available to guest, #CP falls back to non-contributory and doesn't
+> > > have an error code.
+> > This sounds weird. is this the hardware behavior? If yes, could you
+> > point us to where this behavior is documented?
+> 
+> It's not SDM documented behavior.
 
-Checked again, I think using smp_wmb() and smp_rmb() should be fine as
-those are just compiler barriers. We don't need a full barrier here.
-
-Thanks.
--Mingwei
+The #CP behavior needs to be documented.  Please pester whoever you need to in
+order to make that happen.
