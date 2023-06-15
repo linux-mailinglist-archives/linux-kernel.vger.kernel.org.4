@@ -2,151 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8405873217C
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 23:19:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F4C732184
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 23:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232298AbjFOVTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 17:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
+        id S232694AbjFOVVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 17:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjFOVTb (ORCPT
+        with ESMTP id S229588AbjFOVVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 17:19:31 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E505D2960;
-        Thu, 15 Jun 2023 14:19:28 -0700 (PDT)
-X-GND-Sasl: cyril@debamax.com
-X-GND-Sasl: cyril@debamax.com
-X-GND-Sasl: cyril@debamax.com
-X-GND-Sasl: cyril@debamax.com
-X-GND-Sasl: cyril@debamax.com
-X-GND-Sasl: cyril@debamax.com
-X-GND-Sasl: cyril@debamax.com
-X-GND-Sasl: cyril@debamax.com
-X-GND-Sasl: cyril@debamax.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 653F160009;
-        Thu, 15 Jun 2023 21:19:25 +0000 (UTC)
-Date:   Thu, 15 Jun 2023 23:19:24 +0200
-From:   Cyril Brulebois <cyril@debamax.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Michal =?utf-8?B?U3VjaMOhbmVr?= <msuchanek@suse.de>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] fbdev/offb: Update expected device name
-Message-ID: <20230615211924.cf2qs52cfaf7m3f7@debamax.com>
-Organization: DEBAMAX
-References: <20230412095509.2196162-1-cyril@debamax.com>
- <20230412095509.2196162-2-cyril@debamax.com>
- <ZDvrY7X9mpJ7WZ3z@eldamar.lan>
- <11b342dc-1a46-d1be-5fdd-c6eee661e15a@leemhuis.info>
- <fe3b90b0-b52f-9677-0245-a201975c3e0c@suse.de>
- <20230615132107.GA9196@kitsune.suse.cz>
- <20230615200901.GA1572644-robh@kernel.org>
+        Thu, 15 Jun 2023 17:21:20 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B931D2961;
+        Thu, 15 Jun 2023 14:21:18 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b1afe57bdfso36418701fa.0;
+        Thu, 15 Jun 2023 14:21:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686864077; x=1689456077;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3xCwMrwUYV0R9yAFqVUBdbC5I8DxDmvwIMXupacMoGo=;
+        b=UPr8UAQZRXuQf/vFSnZAFHMamlJVol/qnVdpXnK5wB1dUr7oK4oX9aVKDivtXhR3pR
+         AIgZsJ09Tj4vIZ8XfzkmPLYPGs5vqW4sXGMKAG7iAGAJLq5p8JiT4Wdtr5Wuu7VTDWGK
+         Svd8QfmnTG3ya/GnvHVqqXNGBo6kItYKACzjYPX1OULvaqSgttsUxJ5ccpjNRbL19wWL
+         plSQZosJdWZ6x7w6VJSP0qPWM5vz/FCSbW81YZsSTQH3r9V2VHcxwv7FXipKWonsyt/Y
+         +z6o7Uzt+H8KqlQtqZZV7Ots0D4o6vKDDo8Gb9gg+Uu6/+UWD3fnyiFkuI9pjK6xrqv4
+         Gikw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686864077; x=1689456077;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3xCwMrwUYV0R9yAFqVUBdbC5I8DxDmvwIMXupacMoGo=;
+        b=AjCJT4nsn/re0lDzFdXaJJR8JUa1s9uZitZopsBdeyfLpLymibpf0E+BErgPCxINRP
+         LP24QEojuGhgHFEyMFTe5qPCYoJkDqVeMEspFytTh8EfYKagj58PtcQOxPcq6IcmWtgO
+         TCgvaorzjR94+L7p1FpoVLMg97MN163ZD6kCNiwbbEgpKSZNXKeH0l2Jnom5VW+uQ7UJ
+         jgXdxnfklx60+yihLCQYPjuzbRdlAWYj/su56LJb9pos0iM4n6Bw7jCK/tJR+uCPgCav
+         4QQoHrjUxoSaDQeukt4HTsEOfLO63MC2hT3sxVACaHosTSmZnHl/KRooeBCClsq4b1QQ
+         OF6g==
+X-Gm-Message-State: AC+VfDwUhsjv4XvNO1k7ozqVhFWrKqMTBotqpicUUDvuAx2vjBaPcYme
+        iPyiLLOMui6d+n5QE0nu+Vg=
+X-Google-Smtp-Source: ACHHUZ4h9P8mkpjeXtFSFF48bkvut00rmeYPaS2rRza2Sz26sHrAYleBu63MSN9bjndgZq6MIoAqjw==
+X-Received: by 2002:a2e:9d47:0:b0:2b1:b9b9:20d4 with SMTP id y7-20020a2e9d47000000b002b1b9b920d4mr373520ljj.5.1686864076727;
+        Thu, 15 Jun 2023 14:21:16 -0700 (PDT)
+Received: from [192.168.1.122] (cpc159313-cmbg20-2-0-cust161.5-4.cable.virginm.net. [82.0.78.162])
+        by smtp.gmail.com with ESMTPSA id hn10-20020a05600ca38a00b003f60eb72cf5sm300263wmb.2.2023.06.15.14.21.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jun 2023 14:21:16 -0700 (PDT)
+Subject: Re: powerpc: ERROR: modpost: "efx_tc_netevent_event"
+ [drivers/net/ethernet/sfc/sfc.ko] undefined!
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>, lkft-triage@lists.linaro.org
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        habetsm.xilinx@gmail.com
+References: <CA+G9fYsAvbqVr+W4=17sxwguGSQi6cU+9WZ_YQzg3Wj96e70uQ@mail.gmail.com>
+From:   Edward Cree <ecree.xilinx@gmail.com>
+Message-ID: <07503ee4-591c-17ba-6e56-91e5b3047c16@gmail.com>
+Date:   Thu, 15 Jun 2023 22:21:15 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zpftdcurb5ffwnvh"
-Content-Disposition: inline
-In-Reply-To: <20230615200901.GA1572644-robh@kernel.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CA+G9fYsAvbqVr+W4=17sxwguGSQi6cU+9WZ_YQzg3Wj96e70uQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 15/06/2023 14:57, Naresh Kamboju wrote:
+> Following build regressions noticed on Linux next-20230615.
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> Regressions found on powerpc:
+> 
+>  - build/gcc-8-ppc6xx_defconfig
+>  - build/gcc-12-ppc6xx_defconfig
+> 
+> 
+> buid log:
+> ====
+>    ERROR: modpost: "efx_tc_netevent_event"
+> [drivers/net/ethernet/sfc/sfc.ko] undefined!
+>    ERROR: modpost: "efx_tc_netdev_event"
+> [drivers/net/ethernet/sfc/sfc.ko] undefined!
+>    make[2]: *** [/builds/linux/scripts/Makefile.modpost:137:
+> Module.symvers] Error 1
 
---zpftdcurb5ffwnvh
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Known issue with CONFIG_SFC=[ym] and CONFIG_SFC_SRIOV=n.
+Fix already under way; v1 [1] had changes requested, v2 coming soon.
+But thank you for testing.  I'll cc you on v2 in case you want to test the fix.
+-ed
 
-Hi Rob,
-
-Rob Herring <robh@kernel.org> (2023-06-15):
-> On Thu, Jun 15, 2023 at 03:21:07PM +0200, Michal Such=C3=A1nek wrote:
-> > At the time this was proposed it was said that "of-display", is wrong,
-> > and that "of-display.0" must be used for the first device instead, and
-> > if something breaks an alias can be provided.
-> >=20
-> > So how does one provide an alias so that offb can find "of-display.0"
-> > as "of-display"?
->=20
-> I'm not aware of any way. There isn't because device names and paths are=
-=20
-> not considered ABI. There are mechanisms for getting stable class device=
-=20
-> indices (e.g. i2c0, mmcblk0, fb0, fb1, etc.) though not implemented for=
-=20
-> fbN (and please don't add it).=20
->=20
-> In any case, this should be an easy fix. Though if "linux,opened" or=20
-> "linux,boot-display" is not set, then you'd still get "of-display.0":
->=20
-> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-> index 78ae84187449..e46482cef9c7 100644
-> --- a/drivers/of/platform.c
-> +++ b/drivers/of/platform.c
-> @@ -553,7 +553,7 @@ static int __init of_platform_default_populate_init(v=
-oid)
->                         if (!of_get_property(node, "linux,opened", NULL) =
-||
->                             !of_get_property(node, "linux,boot-display", =
-NULL))
->                                 continue;
-> -                       dev =3D of_platform_device_create(node, "of-displ=
-ay.0", NULL);
-> +                       dev =3D of_platform_device_create(node, "of-displ=
-ay", NULL);
->                         of_node_put(node);
->                         if (WARN_ON(!dev))
->                                 return -ENOMEM;
-
-I've just replaced my clueless workaround with this patch on top of the
-kernel found in Debian 12 (Bookworm), i.e. 6.1.27 at this point, and it
-indeed fixes the black screen problem in the installer's context.
-
-I didn't run a full installation to check whether this kernel is also fine
-after rebooting into the installed system, but as far as I understood for
-the original bug report[1], it wasn't affected in the first place.
-
- 1. https://bugs.debian.org/1033058
-
-Will somebody else pick up the torch from here, and submit that for
-inclusion in master? Or should I re-submit the above patch on my own?
-
-I see my Debian colleagues have already pushed an updated v6.4-rc6 in
-experimental, so it should be rather easy to combine checking latest
-master with the distribution's packaging. Once that's done, I'm quite
-familiar with building an updated installer image on top of it=E2=80=A6
-
-
-Thanks,
---=20
-Cyril Brulebois -- Debian Consultant @ DEBAMAX -- https://debamax.com/
-
---zpftdcurb5ffwnvh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEHoutkuoaze1Qayc7lZpsmSeGm2EFAmSLgE4ACgkQlZpsmSeG
-m2HGdxAAjx/OIUvMJXqRQbNU18DH4aIs8GtXVP74rC39FpYhMiT25ZtEpk2fwGaL
-VaCspAGK1CqN5usg4hD1x8mN7zhROE6gd9fwd5a+wxhDsCWyF3BdpwKrlVpGTjFz
-3hCukzRW42ERph5rC93ffpP8xCmwHBMOl8wEXhhHcMoC92LIQt2W8YxK5dK6CdHD
-pVNDjluHpsRoOKg8ljJG2PpqSyrYv1gVyNrA2fdmR7cfgxCdHdwqyG0YqXKP5gBM
-V642y/YhM1Ds0LuCVtvZi6eU+lqXhEQIr/PFN+2gfvS6q768utWAuvPHHONuF+gU
-bzee336Skny9W6B2mUngreLm/JwXBuroaSDEcH1r0fKCOztSs7ii21psBfDp+6ji
-fhZfLja0Dm3JMmKrL0T6cF/a5q+ZbStutmiZZu9nQ31xHTs6jky89ZDbN5kWIoXT
-ahYfEwy4br3uLu0ddrWSnBsEzZFCBsZjaMuWOnAP1iIADEkxyGeG1HyAmG2Bm6u/
-CjpoyKfzt/lSL0wdbJEhhJv5r/sGndmznMfcflveIlAtoqwGef13O2phfanXdS9u
-4PkBkzt3IdBKM7rocmH+eo8SNBmaVnjq5tfRgiLfp4HKvv4QRzBPSippVn53CjKX
-NlH9CNA9MVJL3YZzJ+f9W1JHG/hz1zugKsKJQMCJXpz7VJ6Y6cI=
-=6dGw
------END PGP SIGNATURE-----
-
---zpftdcurb5ffwnvh--
+[1]: https://lore.kernel.org/all/20230612205428.1780-1-edward.cree@amd.com/
