@@ -2,256 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F1C2730C0F
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 02:17:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFF7C730C11
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 02:18:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236089AbjFOARl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 20:17:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47988 "EHLO
+        id S236475AbjFOASL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 20:18:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjFOARi (ORCPT
+        with ESMTP id S229822AbjFOASI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 20:17:38 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D312128
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 17:17:37 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35EK05Wt010634;
-        Thu, 15 Jun 2023 00:17:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2023-03-30;
- bh=+kIbv3KHI97zLxe7l1PP/6CciLO+U1PO7U2TvoAanrg=;
- b=KIzMa0TJTtC1VB6Icgomw8nA1CnydKTFqwFKPyN3Qth0tN4eNOjZUbP8BztG8BogWQAH
- xnmRGhTEazQshCmuOOY7BFD5xaVoCEKsGy5s0JyS1wimKoxdkbMicXMXrlg42G9Vb8hn
- OqCxquFFXCJfrm8ZdEBmpLuv1tbpJzwiXb3/GyRjDuhqqws+bIvYpoDuUYK8gu2BexcD
- 6Pi94Pk/RXLOjcUJCkrIE1WMfw5f9jY7cqxihsd8/FEraX8VeFQ+BS9VOVRo5hDjKGhY
- VLaWV/yk8LxyWzSsOeKEGfde5nDNh6YYU5UzJvhtB7YNCiTzLmUL7/OH+UnTYFZ7B5cg 4g== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r4fs20vj2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Jun 2023 00:17:18 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35EMVpSk016215;
-        Thu, 15 Jun 2023 00:17:17 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2170.outbound.protection.outlook.com [104.47.56.170])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3r4fm696ma-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Jun 2023 00:17:17 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mvd2i9E/jT6/mBI2sqcisgzwswj2WadE6z7yeN9IID8bSSpLyV9dVlopvMp0sYWSLtcvh6xFcgWN9Hi19ekt+1NdvHIiN90l9WyEpdqgW6DYLdJ5A7wHjtaVr2ttUopG/QB5Gz0Bj9uL+ABN8W7x20BBcTaAweerBm/dVqe6Xvof76nAlx0JwdAdafIVzp4DSil+S8MaEI4YDWESHu3bXgF4FZt+hD3BrCC4dFVJLYKk/GV1uXQkBW/nfPVnwBeuN3fCbbglyv4bBHTnQH1fka/wsda2i+loX4oAsPWcWs+B19XVEkFp8uRYqGtEV8GQszvhlcs3kOLu08XZpS72SA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+kIbv3KHI97zLxe7l1PP/6CciLO+U1PO7U2TvoAanrg=;
- b=PZVyX+wed4TOBe5HAFgqMO1TDAEIv1KLa9jqfAF/RVeIFciThpGyZGwT19I0pb9N3k3N7MM6PPOEWtk2n5A1Rv2G9nCHroemZcLCcgg1Jf7/GJ3lNcDGvz73JRZ1wxzv/8EEo7gFnoQ907H2cjTvGGW3e8tXkktTnDZr776IYTSu1wbMWb9mwJ1gof/wM6qB2/eXRNO7zSTic2fzdeCu1ZoA2X+vlMdMQqwEb8i/8zEoPmiE/MuJY2v8S3T5zI9bdxvc/kqmIGvmwewLlTFWgISMjCUIVDUkZu+cR8y90bzRNg7UvUokwN9RulYFZjgTszeZaXZLXeg2V2RQN920FA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+kIbv3KHI97zLxe7l1PP/6CciLO+U1PO7U2TvoAanrg=;
- b=yaE+LgSgiTCraElcF322Lsu3s4svUXegpEiWlR4UVlYGUcqgb7im0J5K+rF3fqsdonv11aIlS9hgKO5EXm8ykoHkY9AmRrWPqUTu8w3lRJOCpphBF4OwP55uATPJcmeUC59PgXUlakyXZqDgFuhDy0KAi0dwPb5BnfOTDO8LjwE=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by PH0PR10MB5546.namprd10.prod.outlook.com (2603:10b6:510:d9::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.44; Thu, 15 Jun
- 2023 00:17:14 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::4a17:13b0:2876:97f2]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::4a17:13b0:2876:97f2%7]) with mapi id 15.20.6477.037; Thu, 15 Jun 2023
- 00:17:14 +0000
-Date:   Wed, 14 Jun 2023 17:17:10 -0700
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        James Houghton <jthoughton@google.com>,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH 3/7] mm/hugetlb: Add page_mask for
- hugetlb_follow_page_mask()
-Message-ID: <20230615001710.GC38211@monkey>
-References: <20230613215346.1022773-1-peterx@redhat.com>
- <20230613215346.1022773-4-peterx@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230613215346.1022773-4-peterx@redhat.com>
-X-ClientProxiedBy: MW4PR03CA0045.namprd03.prod.outlook.com
- (2603:10b6:303:8e::20) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+        Wed, 14 Jun 2023 20:18:08 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D167E2135;
+        Wed, 14 Jun 2023 17:18:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686788280; x=1718324280;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=3KpmvHc3b6jBUN9/sgqJi6nH0JlBYGxrEjquDG6e1bs=;
+  b=Pj53Ymd2dc9mI99uWLw74NlESQNoTFWxqzHFJOtor3rbmlkrN7vOKgqc
+   gG1iUYUJKHlmfsAvESyW5pgNnTXAxxre6P00TQD6qsvX40boP3C2nNVw1
+   WjurzLr2E/EeOHQ6N+uUGYAOfboIJmNLfhLk3NPE1qCpcGBHEyqMCvXrC
+   oDxiRh0E2YlZUWv8fZYbCHp19hIFlNkH9UwgXGYxcyWG0ZU8mg76Ap49v
+   i1n1CX6k/hZiKDPIy4j4cvK+M/PMaEYG6ZuyG2xEAv7xf8TvvRTIBftLE
+   +XqBkVCXicZcDJOsqrbHn0dnJTJY5iN9Mfnz6eK01o2hzlF7PhhNXIXJx
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="357652477"
+X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
+   d="scan'208";a="357652477"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 17:18:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="825021465"
+X-IronPort-AV: E=Sophos;i="6.00,243,1681196400"; 
+   d="scan'208";a="825021465"
+Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
+  by fmsmga002.fm.intel.com with ESMTP; 14 Jun 2023 17:17:58 -0700
+From:   kan.liang@linux.intel.com
+To:     acme@kernel.org, mingo@redhat.com, peterz@infradead.org,
+        irogers@google.com, namhyung@kernel.org, jolsa@kernel.org,
+        adrian.hunter@intel.com, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     ak@linux.intel.com, eranian@google.com, ahmad.yasin@intel.com,
+        Kan Liang <kan.liang@linux.intel.com>
+Subject: [PATCH V2 0/8] New metricgroup output in perf stat default mode
+Date:   Wed, 14 Jun 2023 17:17:27 -0700
+Message-Id: <20230615001735.3643996-1-kan.liang@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|PH0PR10MB5546:EE_
-X-MS-Office365-Filtering-Correlation-Id: ce23aeed-bcab-46f7-8d91-08db6d35de99
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MKrbkLZXQqQ9MUs1eMsFc1zVUPp/JRtz9gsNYWbMn6JdwBAVYkrVZL91gxvnd5pEMaOyU3D3bmviw1UQPdYpxXvw6uAhsevc9DB5Jde1pnlsh14vAAgGL2ZNwC0zILeeBftC16AvlZYfC3zSHL1tw+W1ur2fw9Lr9MJmki7wzW1H4FsfvKNHkmNzBVaCMa9gTChHNH5rzvLZwJAfekyk4dg4U06xTbe/D+LJzEt5tDiuUGN25cw8Mu0mVQqZenc/49WAXD17BJAI5irx5/2qXvvZaSe0lgO0f9HHK6jHMQ+APTq2psUmGD4qUc21UvSiFrLutYJ62TttOTYoVtv007iYoyGTy1kagZReNW1jdJWj+yv8x1iK+u+wRUBqqI0UtMG8M1o+rBkVW8BqtUpwREML/Kn7Mut4qtnqtH8pjFnOG1v3AoBxCi2fCcz0rMnpAnO7SQJs1pkSHWKInJSxB9GtGctXUhLE3sVAXHC+l/bxD+LPDNBQOtnt7snq1VHiRCMIII5EAK7XB472p5VzyGVJml84WvgiOFZBO2KrKaOUm8vmhnbgi08krjzqpg9m
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(136003)(39860400002)(366004)(396003)(346002)(376002)(451199021)(6486002)(6666004)(83380400001)(38100700002)(86362001)(53546011)(26005)(33716001)(6506007)(9686003)(33656002)(1076003)(6512007)(186003)(66946007)(54906003)(2906002)(6916009)(316002)(8936002)(4326008)(44832011)(66476007)(7416002)(41300700001)(5660300002)(66556008)(478600001)(8676002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Sxf/yXe4WajEGX8JQ/C/N4s4qk0arADgE2eXlyXHXZojMYxHGi2jKSsJWK0m?=
- =?us-ascii?Q?1SnMHyBFfwUGBpnq+qMhVHcK8uvzrCGeh/lFcdPK264fizdl3jJZcZnBxE6o?=
- =?us-ascii?Q?oXUlKvEuoYeJcvYnQTTzMLP159pQ/Pbah4xKBcxjsvFTexH1mQUAXQyLQFsy?=
- =?us-ascii?Q?4XmklyhT9j79VMV2G6CmAWmZDLyG4dGD/rB1vOrVniFknVqFwjWov44kcFns?=
- =?us-ascii?Q?xygM5pSUaJYlyRI0kPi+iPwyr7qmPcYkUChQ0qamr9QoDqzQbGp5O2tS/H4y?=
- =?us-ascii?Q?cCAEKGYGuR+X4IPZ6CPCLOgDfKSzh6QDx3lxmSf30EumaodFzlt6YbeEayUt?=
- =?us-ascii?Q?/ffap/6GfYSJ7oRMujEhD5WIvPEoLCfoDF+FftzD1bOQ0pSkMexkM9hEc86+?=
- =?us-ascii?Q?bj/qTGHi3w6RJ3g1Brd0lnRvwQ9kb3nTAx5E3ozo7uBPIHxl49kLvRF68t8D?=
- =?us-ascii?Q?quDCuKm1xJRfl2u2+lDnGSlWqYT6ZgSw4Ljanf/ngtb0tVix8FKJAZdI1Tzk?=
- =?us-ascii?Q?5r2Pe0EAtDWLqde9F0PUOMbcKGFbfi6wQx5OGYGK2xTLdiljnpX/d7fQfr09?=
- =?us-ascii?Q?iwWd+lXurH5Z33DWEdVtGum/DooHrp5K4PR/4BvWQax8UASYJcdOC2+1TGAM?=
- =?us-ascii?Q?rerkcKYGnVU9oasXEgyYqs8ruzH8W4Yq9IUNKMUlODi+29Pwdfcrelk4nQfE?=
- =?us-ascii?Q?Xkex3omWzvEr8YJU06oR/b32TfSrvOmO1wiW+q5vzRLNz8af9jC2kNBnDEm3?=
- =?us-ascii?Q?8XhgUZ835rFzE4h6EJ+uc/WfHFQrw3G5Ngr6K3zQH2WdDQ1eODYY9AU7d2RV?=
- =?us-ascii?Q?dEymRYsVTQQmr+kX5KcrZTxmt6D2ri0rboJpumeIVh444tDC67vMtFel8Q5O?=
- =?us-ascii?Q?NKTU24TT6DOp5//8QRpk25IRdXaCSjPV2DTyszDSHu6fpOSE/vdNMcr/OXlr?=
- =?us-ascii?Q?8uy7/zTqCdb29W3vvdwVNG1e+E1HvdsaTH1HNECY1xx5NWnunsM+oKknSrNx?=
- =?us-ascii?Q?9Ri7cQ0xRyP0rlozOjA9Lge2yvopWsKiWT1neXi2XYlhMkfTs/iSg8FGxYse?=
- =?us-ascii?Q?cxWlefOZgC4KA46N8Z1p4GJq72PAY8oG6j0Umd/X2lFbsDez5nesIMMMjNOr?=
- =?us-ascii?Q?LZBo/vrVifh9INcWa4OOUTVMvlRuljys0EW+5pJDx1LUV5DCN0OPVeTtq3qM?=
- =?us-ascii?Q?tYdEHhHz9UyQ46GkkpJb6vI+MNovPh10/W8UMQoGRz7B0QmrefaPUt7nQ0iv?=
- =?us-ascii?Q?87t386sesThDShlLCsFPor02uxipdjdirxMdlqD9u3KKgrbWxe8cshUk4Bmj?=
- =?us-ascii?Q?a43l3udcJT511PDtEdgv+L67QLTyHVZwJMFhXGTjgviaiUDIiuDzhEOwG92M?=
- =?us-ascii?Q?h2ByaIBT7I+nR614hFM2rCJpEpNBu8hmY8M/ojBX4v2o+W5GnxY2Yozmp1+N?=
- =?us-ascii?Q?oiH7BpyMd4sdZ/WZoXJJY8F/8TuotEysQwCdV8wThntfXvbYo7Xiz+peo8RQ?=
- =?us-ascii?Q?Tu4M1paWg1hbwDNcXqdx65JL9NODjwqydP5oM1kSXdmpe50SjUMldsAtiHuB?=
- =?us-ascii?Q?GDbBmHw42cGgtU34SbQgbtUz70HIzC9oKYpBDqLY?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?rdIZDiOyje03FNZPSvlw6EYL5bse3Fryz2Jrxz5ZyHbUENsdysjAPUNDIQqS?=
- =?us-ascii?Q?wYOsMc8Rvb5D8Qm4h55iNfpGhj1E5j1Ssga6dIsAv+94gHF18zhQt3FU3ux9?=
- =?us-ascii?Q?wTj25h4SK1tTnp6UgZHB3YxOCKtsFXVJc9QqXa2MVz3KguevvE3Q4vtVfXPa?=
- =?us-ascii?Q?nXQgz0XpozwLg1yBvOo4jmgkjYFtghAO0WPpSfymT0cZc/37PeMXOL+5DPqi?=
- =?us-ascii?Q?Dh21HHUEOxV3XJnoIZnpfh1TwtHN4qFlkR8voVVtH5iViRijXHzADc8EvAav?=
- =?us-ascii?Q?s0Uz2NLbsljzM10qKunwIAVd6osMx8rGnPERUHfVG2qFZM7ciHmaUADiH5qq?=
- =?us-ascii?Q?QGqwD1pt6ea3xtM6VkzNOQhLBJqUYIhQxcKUFKedBuU40C9854ATtkYEYp11?=
- =?us-ascii?Q?+OSglHomCFVlntsJCDLe7hCi4J9y7xJyfh1FCikGvf1+cPwuD0j+m9WYlAvB?=
- =?us-ascii?Q?l0SazXLgUS1R5DZwku8sYv1DxCyhqQsNBly/dzqESeUA9p6UpH6Y2g978xCe?=
- =?us-ascii?Q?VFsats5vF+2V+mwhLv7dsZqFuxYACpe2AXqm0wTiV6v6CeBMc7GAAfzbJ3mP?=
- =?us-ascii?Q?zQ0ASafUP01ohuDWCbqpHUNx3a6EM4PGx4MCaE241wBnMMpteNAAow7Tjofg?=
- =?us-ascii?Q?UjwjxJaveS1UDCcvH+u0LcLWT619u1+Gya5vUSZ5PnI3HXUA8lJPFw0Ymoog?=
- =?us-ascii?Q?B7uZIIp9mG/Cvo+8vKFAfK33+Ukry8GwIIqxJkD/dqhF0aFmUmrf8ypPzYRi?=
- =?us-ascii?Q?BCXXm8X9GFjzcB4F+C9cAHfXtlwNdZsamygKNGc35G4CvoFCvxqz9as+EmEu?=
- =?us-ascii?Q?8ztqiRuB57RhvD7oBEZqoX27rxYh4Rr6cYPL5v84a1dtcY41HINHy6vQya+Y?=
- =?us-ascii?Q?FRqNXIJlY8d9fdt2OAJmShTK7v4x4d0t+9dCwXilVsSAq3bj/21Nbykw7vun?=
- =?us-ascii?Q?VXehwTq8enShfg33Lk5ALaR1Unh1MD0FiEKNDpzYKGhy575KGC4/LaCwc+HF?=
- =?us-ascii?Q?zeIO5eAeA9YwHloabDLQD8B3VsuCRYJvWjFP61Eq2/K5XPZVI9LHJg02nQom?=
- =?us-ascii?Q?hbPrLLOT?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ce23aeed-bcab-46f7-8d91-08db6d35de99
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 00:17:13.9944
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ftb1S1bJXNTPxU981TzwY6Usr/YNA8aCZgkeovT7nBuNW59dLEA1a0G7w/PComx5UPtsZX/8mQjDQ1wCJ84UcQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5546
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-14_14,2023-06-14_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0 mlxscore=0
- spamscore=0 malwarescore=0 adultscore=0 phishscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306150000
-X-Proofpoint-GUID: ILDEUCCb8rYptS3k5GbTt1AMTVYDKehQ
-X-Proofpoint-ORIG-GUID: ILDEUCCb8rYptS3k5GbTt1AMTVYDKehQ
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/13/23 17:53, Peter Xu wrote:
-> follow_page() doesn't need it, but we'll start to need it when unifying gup
-> for hugetlb.
-> 
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
->  include/linux/hugetlb.h | 8 +++++---
->  mm/gup.c                | 3 ++-
->  mm/hugetlb.c            | 4 +++-
->  3 files changed, 10 insertions(+), 5 deletions(-)
+From: Kan Liang <kan.liang@linux.intel.com>
 
-Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+Changes since V1:
+- Remove EVSEL_EVENT_MASK and use the __evsel__match which is suggested
+  by Ian.
+- Support TopdownL1 on both e-core and p-core of ADL in the default
+  mode. (Ian)
+- Have separate patches for the modifications of metricgroup and output.
+  (Ian)
+- Does 2nd sort for the Default metricgroup. Remove the logic of
+  changing the associated metric event. (Ian)
+- Move all the metric related code to stat-shadow (Ian)
+- Move the commong functions between stat+csv_output and stat+std_output
+  to the lib directory (Ian)
+
+In the default mode, the current output of the metricgroup include both
+events and metrics, which is not necessary and makes the output hard to
+read. Also, different ARCHs (even different generations of the ARCH) may
+have a different output format because of the different events in a
+metrics.
+
+The patch proposes a new output format which only outputting the value
+of each metric and the metricgroup name. It can brings a clean and
+consistent output format among ARCHs and generations.
+
+The first patche is a bug fix for the current code.
+
+The patches 2-5 introduce the new metricgroup output.
+
+The patches 6-8 improve the tests to cover the default mode.
+
+Here are some examples for the new output.
+
+STD output:
+
+On SPR
+
+perf stat -a sleep 1
+
+ Performance counter stats for 'system wide':
+
+        226,054.13 msec cpu-clock                        #  224.588 CPUs utilized
+               932      context-switches                 #    4.123 /sec
+               224      cpu-migrations                   #    0.991 /sec
+                76      page-faults                      #    0.336 /sec
+        45,940,682      cycles                           #    0.000 GHz
+        36,676,047      instructions                     #    0.80  insn per cycle
+         7,044,516      branches                         #   31.163 K/sec
+            62,169      branch-misses                    #    0.88% of all branches
+                        TopdownL1                 #     68.7 %  tma_backend_bound
+                                                  #      3.1 %  tma_bad_speculation
+                                                  #     13.0 %  tma_frontend_bound
+                                                  #     15.2 %  tma_retiring
+                        TopdownL2                 #      2.7 %  tma_branch_mispredicts
+                                                  #     19.6 %  tma_core_bound
+                                                  #      4.8 %  tma_fetch_bandwidth
+                                                  #      8.3 %  tma_fetch_latency
+                                                  #      2.9 %  tma_heavy_operations
+                                                  #     12.3 %  tma_light_operations
+                                                  #      0.4 %  tma_machine_clears
+                                                  #     49.1 %  tma_memory_bound
+
+       1.006529767 seconds time elapsed
+
+perf stat -a sleep 1
+
+ Performance counter stats for 'system wide':
+
+         32,127.99 msec cpu-clock                        #   31.992 CPUs utilized
+               240      context-switches                 #    7.470 /sec
+                32      cpu-migrations                   #    0.996 /sec
+                74      page-faults                      #    2.303 /sec
+         6,313,960      cpu_core/cycles/                 #    0.000 GHz
+       257,711,907      cpu_atom/cycles/                 #    0.008 GHz                         (54.18%)
+         4,477,162      cpu_core/instructions/           #    0.71  insn per cycle
+        37,721,481      cpu_atom/instructions/           #    5.97  insn per cycle              (63.33%)
+           809,747      cpu_core/branches/               #   25.204 K/sec
+         6,621,226      cpu_atom/branches/               #  206.089 K/sec                       (63.32%)
+            39,667      cpu_core/branch-misses/          #    4.90% of all branches
+         1,032,146      cpu_atom/branch-misses/          #  127.47% of all branches             (63.33%)
+             TopdownL1 (cpu_core)                 #      nan %  tma_backend_bound
+                                                  #      0.0 %  tma_bad_speculation
+                                                  #      nan %  tma_frontend_bound
+                                                  #      nan %  tma_retiring
+             TopdownL1 (cpu_atom)                 #     13.6 %  tma_bad_speculation      (63.36%)
+                                                  #     41.1 %  tma_frontend_bound       (63.54%)
+                                                  #     39.2 %  tma_backend_bound
+                                                  #     39.2 %  tma_backend_bound_aux    (63.93%)
+                                                  #      5.4 %  tma_retiring             (64.15%)
+
+       1.004244114 seconds time elapsed
+
+JSON output
+
+on SPR
+
+perf stat --json -a sleep 1
+{"counter-value" : "225904.823297", "unit" : "msec", "event" : "cpu-clock", "event-runtime" : 225904323425, "pcnt-running" : 100.00, "metric-value" : "224.456872", "metric-unit" : "CPUs utilized"}
+{"counter-value" : "986.000000", "unit" : "", "event" : "context-switches", "event-runtime" : 225904108985, "pcnt-running" : 100.00, "metric-value" : "4.364670", "metric-unit" : "/sec"}
+{"counter-value" : "224.000000", "unit" : "", "event" : "cpu-migrations", "event-runtime" : 225904016141, "pcnt-running" : 100.00, "metric-value" : "0.991568", "metric-unit" : "/sec"}
+{"counter-value" : "76.000000", "unit" : "", "event" : "page-faults", "event-runtime" : 225903913270, "pcnt-running" : 100.00, "metric-value" : "0.336425", "metric-unit" : "/sec"}
+{"counter-value" : "48433482.000000", "unit" : "", "event" : "cycles", "event-runtime" : 225903792732, "pcnt-running" : 100.00, "metric-value" : "0.000214", "metric-unit" : "GHz"}
+{"counter-value" : "38620409.000000", "unit" : "", "event" : "instructions", "event-runtime" : 225903657830, "pcnt-running" : 100.00, "metric-value" : "0.797391", "metric-unit" : "insn per cycle"}
+{"counter-value" : "7369473.000000", "unit" : "", "event" : "branches", "event-runtime" : 225903464328, "pcnt-running" : 100.00, "metric-value" : "32.622026", "metric-unit" : "K/sec"}
+{"counter-value" : "54747.000000", "unit" : "", "event" : "branch-misses", "event-runtime" : 225903234523, "pcnt-running" : 100.00, "metric-value" : "0.742889", "metric-unit" : "of all branches"}
+{"event-runtime" : 225902840555, "pcnt-running" : 100.00, "metricgroup" : "TopdownL1"}
+{"metric-value" : "69.950631", "metric-unit" : "%  tma_backend_bound"}
+{"metric-value" : "2.771783", "metric-unit" : "%  tma_bad_speculation"}
+{"metric-value" : "12.026074", "metric-unit" : "%  tma_frontend_bound"}
+{"metric-value" : "15.251513", "metric-unit" : "%  tma_retiring"}
+{"event-runtime" : 225902840555, "pcnt-running" : 100.00, "metricgroup" : "TopdownL2"}
+{"metric-value" : "2.351757", "metric-unit" : "%  tma_branch_mispredicts"}
+{"metric-value" : "19.729771", "metric-unit" : "%  tma_core_bound"}
+{"metric-value" : "4.555207", "metric-unit" : "%  tma_fetch_bandwidth"}
+{"metric-value" : "7.470867", "metric-unit" : "%  tma_fetch_latency"}
+{"metric-value" : "2.938808", "metric-unit" : "%  tma_heavy_operations"}
+{"metric-value" : "12.312705", "metric-unit" : "%  tma_light_operations"}
+{"metric-value" : "0.420026", "metric-unit" : "%  tma_machine_clears"}
+{"metric-value" : "50.220860", "metric-unit" : "%  tma_memory_bound"}
+
+On hybrid
+
+perf stat --json -a sleep 1
+{"counter-value" : "32131.530625", "unit" : "msec", "event" : "cpu-clock", "event-runtime" : 32131536951, "pcnt-running" : 100.00, "metric-value" : "31.992642", "metric-unit" : "CPUs utilized"}
+{"counter-value" : "328.000000", "unit" : "", "event" : "context-switches", "event-runtime" : 32131525778, "pcnt-running" : 100.00, "metric-value" : "10.208042", "metric-unit" : "/sec"}
+{"counter-value" : "32.000000", "unit" : "", "event" : "cpu-migrations", "event-runtime" : 32131515104, "pcnt-running" : 100.00, "metric-value" : "0.995906", "metric-unit" : "/sec"}
+{"counter-value" : "353.000000", "unit" : "", "event" : "page-faults", "event-runtime" : 32131501396, "pcnt-running" : 100.00, "metric-value" : "10.986094", "metric-unit" : "/sec"}
+{"counter-value" : "18685492.000000", "unit" : "", "event" : "cpu_core/cycles/", "event-runtime" : 16061585292, "pcnt-running" : 100.00, "metric-value" : "0.000582", "metric-unit" : "GHz"}
+{"counter-value" : "255620352.000000", "unit" : "", "event" : "cpu_atom/cycles/", "event-runtime" : 8690268422, "pcnt-running" : 54.00, "metric-value" : "0.007955", "metric-unit" : "GHz"}
+{"counter-value" : "15489913.000000", "unit" : "", "event" : "cpu_core/instructions/", "event-runtime" : 16061582200, "pcnt-running" : 100.00, "metric-value" : "0.828981", "metric-unit" : "insn per cycle"}
+{"counter-value" : "38790161.000000", "unit" : "", "event" : "cpu_atom/instructions/", "event-runtime" : 10163133324, "pcnt-running" : 63.00, "metric-value" : "2.075951", "metric-unit" : "insn per cycle"}
+{"counter-value" : "2908031.000000", "unit" : "", "event" : "cpu_core/branches/", "event-runtime" : 16061563416, "pcnt-running" : 100.00, "metric-value" : "90.503967", "metric-unit" : "K/sec"}
+{"counter-value" : "6814948.000000", "unit" : "", "event" : "cpu_atom/branches/", "event-runtime" : 10161711336, "pcnt-running" : 63.00, "metric-value" : "212.095343", "metric-unit" : "K/sec"}
+{"counter-value" : "97638.000000", "unit" : "", "event" : "cpu_core/branch-misses/", "event-runtime" : 16061535261, "pcnt-running" : 100.00, "metric-value" : "3.357530", "metric-unit" : "of all branches"}
+{"counter-value" : "1017066.000000", "unit" : "", "event" : "cpu_atom/branch-misses/", "event-runtime" : 10159971797, "pcnt-running" : 63.00, "metric-value" : "34.974386", "metric-unit" : "of all branches"}
+{"event-runtime" : 16061513607, "pcnt-running" : 100.00, "metricgroup" : "TopdownL1 (cpu_core)"}
+{"metric-value" : "nan", "metric-unit" : "%  tma_backend_bound"}
+{"metric-value" : "0.000000", "metric-unit" : "%  tma_bad_speculation"}
+{"metric-value" : "nan", "metric-unit" : "%  tma_frontend_bound"}
+{"metric-value" : "nan", "metric-unit" : "%  tma_retiring"}
+{"event-runtime" : 10157398501, "pcnt-running" : 63.00, "metricgroup" : "TopdownL1 (cpu_atom)"}
+{"metric-value" : "13.719821", "metric-unit" : "%  tma_bad_speculation"}
+{"event-runtime" : 10178698656, "pcnt-running" : 63.00, "metric-value" : "41.016738", "metric-unit" : "%  tma_frontend_bound"}
+{"event-runtime" : 10240582902, "pcnt-running" : 63.00, "metric-value" : "39.327764", "metric-unit" : "%  tma_backend_bound"}
+{"metric-value" : "39.327764", "metric-unit" : "%  tma_backend_bound_aux"}
+{"event-runtime" : 10284284920, "pcnt-running" : 64.00, "metric-value" : "5.374638", "metric-unit" : "%  tma_retiring"}
+
+CSV output
+
+On SPR
+
+perf stat -x, -a sleep 1
+225851.20,msec,cpu-clock,225850700108,100.00,224.431,CPUs utilized
+976,,context-switches,225850504803,100.00,4.321,/sec
+224,,cpu-migrations,225850410336,100.00,0.992,/sec
+76,,page-faults,225850304155,100.00,0.337,/sec
+52288305,,cycles,225850188531,100.00,0.000,GHz
+37977214,,instructions,225850071251,100.00,0.73,insn per cycle
+7299859,,branches,225849890722,100.00,32.322,K/sec
+51102,,branch-misses,225849672536,100.00,0.70,of all branches
+,225849327050,100.00,,,,TopdownL1
+,,,,,70.1,%  tma_backend_bound
+,,,,,2.7,%  tma_bad_speculation
+,,,,,12.5,%  tma_frontend_bound
+,,,,,14.6,%  tma_retiring
+,225849327050,100.00,,,,TopdownL2
+,,,,,2.3,%  tma_branch_mispredicts
+,,,,,19.6,%  tma_core_bound
+,,,,,4.6,%  tma_fetch_bandwidth
+,,,,,7.9,%  tma_fetch_latency
+,,,,,2.9,%  tma_heavy_operations
+,,,,,11.7,%  tma_light_operations
+,,,,,0.5,%  tma_machine_clears
+,,,,,50.5,%  tma_memory_bound
+
+On Hybrid
+
+perf stat -x, -a sleep 1
+32139.34,msec,cpu-clock,32139351409,100.00,32.001,CPUs utilized
+225,,context-switches,32139342672,100.00,7.001,/sec
+32,,cpu-migrations,32139337772,100.00,0.996,/sec
+72,,page-faults,32139328384,100.00,2.240,/sec
+6766433,,cpu_core/cycles/,16067551558,100.00,0.000,GHz
+256500230,,cpu_atom/cycles/,8695757391,54.00,0.008,GHz
+4688595,,cpu_core/instructions/,16067558976,100.00,0.69,insn per cycle
+37487490,,cpu_atom/instructions/,10165193856,63.00,5.54,insn per cycle
+845211,,cpu_core/branches/,16067540225,100.00,26.298,K/sec
+6571193,,cpu_atom/branches/,10155940853,63.00,204.459,K/sec
+41359,,cpu_core/branch-misses/,16067516493,100.00,4.89,of all branches
+1020231,,cpu_atom/branch-misses/,10159363620,63.00,120.71,of all branches
+,16067494476,100.00,,,,TopdownL1 (cpu_core)
+,,,,,,%  tma_backend_bound
+,,,,,0.0,%  tma_bad_speculation
+,,,,,,%  tma_frontend_bound
+,,,,,,%  tma_retiring
+,10160989992,63.00,,,,TopdownL1 (cpu_atom)
+,,,,,13.8,%  tma_bad_speculation
+,10188319019,63.00,,,41.3,%  tma_frontend_bound
+,10258326591,63.00,,,38.6,%  tma_backend_bound
+,,,,,38.6,%  tma_backend_bound_aux
+,10282689488,64.00,,,5.4,%  tma_retiring
+
+
+Kan Liang (8):
+  perf evsel: Fix the annotation for hardware events on hybrid
+  perf metric: JSON flag to default metric group
+  perf stat,jevents: Introduce Default tags for the default mode
+  perf metrics: Sort the Default metricgroup
+  perf stat: New metricgroup output for the default mode
+  pert tests: Update metric-value for perf stat JSON output
+  perf test: Move all the check functions of stat csv output to lib
+  perf test: Add test case for the standard perf stat output
+
+ tools/perf/builtin-stat.c                     |   5 +-
+ .../arch/x86/alderlake/adl-metrics.json       |  45 +++--
+ .../arch/x86/alderlaken/adln-metrics.json     |  25 ++-
+ .../arch/x86/icelake/icl-metrics.json         |  20 +-
+ .../arch/x86/icelakex/icx-metrics.json        |  20 +-
+ .../arch/x86/sapphirerapids/spr-metrics.json  |  60 +++---
+ .../arch/x86/tigerlake/tgl-metrics.json       |  20 +-
+ tools/perf/pmu-events/jevents.py              |   5 +-
+ tools/perf/pmu-events/pmu-events.h            |   1 +
+ .../tests/shell/lib/perf_json_output_lint.py  |   6 +-
+ tools/perf/tests/shell/lib/stat_output.sh     | 169 ++++++++++++++++
+ tools/perf/tests/shell/stat+csv_output.sh     | 188 ++----------------
+ tools/perf/tests/shell/stat+std_output.sh     | 108 ++++++++++
+ tools/perf/util/evsel.h                       |  18 +-
+ tools/perf/util/metricgroup.c                 |  41 ++++
+ tools/perf/util/metricgroup.h                 |   3 +
+ tools/perf/util/stat-display.c                | 108 +++++++++-
+ tools/perf/util/stat-shadow.c                 | 108 ++++++++--
+ tools/perf/util/stat.h                        |  15 ++
+ 19 files changed, 684 insertions(+), 281 deletions(-)
+ create mode 100755 tools/perf/tests/shell/lib/stat_output.sh
+ create mode 100755 tools/perf/tests/shell/stat+std_output.sh
+
 -- 
-Mike Kravetz
+2.35.1
 
-> 
-> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-> index 21f942025fec..0d6f389d98de 100644
-> --- a/include/linux/hugetlb.h
-> +++ b/include/linux/hugetlb.h
-> @@ -131,7 +131,8 @@ int move_hugetlb_page_tables(struct vm_area_struct *vma,
->  int copy_hugetlb_page_range(struct mm_struct *, struct mm_struct *,
->  			    struct vm_area_struct *, struct vm_area_struct *);
->  struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
-> -				unsigned long address, unsigned int flags);
-> +				      unsigned long address, unsigned int flags,
-> +				      unsigned int *page_mask);
->  long follow_hugetlb_page(struct mm_struct *, struct vm_area_struct *,
->  			 struct page **, unsigned long *, unsigned long *,
->  			 long, unsigned int, int *);
-> @@ -297,8 +298,9 @@ static inline void adjust_range_if_pmd_sharing_possible(
->  {
->  }
->  
-> -static inline struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
-> -				unsigned long address, unsigned int flags)
-> +static inline struct page *hugetlb_follow_page_mask(
-> +    struct vm_area_struct *vma, unsigned long address, unsigned int flags,
-> +    unsigned int *page_mask)
->  {
->  	BUILD_BUG(); /* should never be compiled in if !CONFIG_HUGETLB_PAGE*/
->  }
-> diff --git a/mm/gup.c b/mm/gup.c
-> index aa0668505d61..8d59ae4554e7 100644
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@ -794,7 +794,8 @@ static struct page *follow_page_mask(struct vm_area_struct *vma,
->  	 * Ordinary GUP uses follow_hugetlb_page for hugetlb processing.
->  	 */
->  	if (is_vm_hugetlb_page(vma))
-> -		return hugetlb_follow_page_mask(vma, address, flags);
-> +		return hugetlb_follow_page_mask(vma, address, flags,
-> +						&ctx->page_mask);
->  
->  	pgd = pgd_offset(mm, address);
->  
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index 9c261921b2cf..f037eaf9d819 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -6457,7 +6457,8 @@ static inline bool __follow_hugetlb_must_fault(struct vm_area_struct *vma,
->  }
->  
->  struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
-> -				unsigned long address, unsigned int flags)
-> +				      unsigned long address, unsigned int flags,
-> +				      unsigned int *page_mask)
->  {
->  	struct hstate *h = hstate_vma(vma);
->  	struct mm_struct *mm = vma->vm_mm;
-> @@ -6506,6 +6507,7 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
->  		 * because we hold the ptl lock and have verified pte_present().
->  		 */
->  		WARN_ON_ONCE(try_grab_page(page, flags));
-> +		*page_mask = huge_page_mask(h);
->  	}
->  out:
->  	spin_unlock(ptl);
-> -- 
-> 2.40.1
-> 
