@@ -2,199 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F171C73213C
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 22:59:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94881732142
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 23:02:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231320AbjFOU7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 16:59:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
+        id S231710AbjFOVCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 17:02:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbjFOU73 (ORCPT
+        with ESMTP id S230076AbjFOVCK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 16:59:29 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A00B26AA
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 13:59:27 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f649db9b25so11159577e87.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 13:59:27 -0700 (PDT)
+        Thu, 15 Jun 2023 17:02:10 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BD410E3
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 14:02:08 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id af79cd13be357-75e1ec47c3fso4564585a.2
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 14:02:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686862765; x=1689454765;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=niAlZljWXW/H63Y0SMOkpmVWJA4JXQOx/GZYVfHqRhM=;
-        b=IZAfsnAPCywJPU6vGov8IiuC6/OwaScJ9/lcwgZmfIQ+t81KTiG8qIrf4Q9J7ow31a
-         e0/BFZWJP4J1T5ji4OH0hSYdtWRyQls3po7+NhWcz4xvyi2YiVoG4Bion7fMqLczexeE
-         ggZ9o0NHQdd3oltkh5+eoV8OM4Y1YAaYUpslFx4qZEbmD3pTEjp24Oe0FC/7Dv0pblL3
-         lIX/ZO5eIxg7cHAp8QHOXm49JYcRqb8iSFLsnw7nm0v7XbE/qbJ97zdoMqPAowpz9f3U
-         TfgSxGaXXkY5OzOKfevkEBnWgvh3lTDbYP35Fzg9i9vLq7hX1lvXYLO8EAmWKhUcteOC
-         zWJA==
+        d=google.com; s=20221208; t=1686862927; x=1689454927;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gM071qijEG6vwQ8W2iWjOXAWrKZk2GbsTR59ysMJ+f0=;
+        b=r3+18zMpdGu3FBIH/XR/CeWPIdLuk9aHwOyPzPMPD+aHBmCQpHV+CqHUcVxkyh3f56
+         fQ7+hwVRMsFfVJ6+fAgFxywc9Ey5lBpqCJ1GP/M6gvUqaPeqlGn+b+LTUfV+eWSTjehP
+         AttQBBokUk9dBF//9b4mMJFpP/2IYaDEkFoGTV/xU2CUd5Kss+CHXPeuI2SnlPARzQjV
+         627F9+EcbOVoZxCvs6FMh/M6bErKb9BknEk6bpMOEacDUXg9U3FvnUNrB1OD8WsQ5mpN
+         ftALbqUPSTzgQw4ZxwDtP2xWijGeHdmJZRHt9ceN4vbAImdo/Irw3ryRWU7EZjVnA/Lw
+         osEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686862765; x=1689454765;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=niAlZljWXW/H63Y0SMOkpmVWJA4JXQOx/GZYVfHqRhM=;
-        b=RnhBfYXqFKjRuIvOlQrm+mOxDaNJmryDVkZlKPtwNxhiINl3801o8lg+ljmNE9mpSa
-         /hoJO8vjbDbXiG1OHx5mupkg8hrfZxJnFOTN1kZAh2oA79fvAVzlluzCeaphSj2q+y8h
-         1wt8uHUtlWhML6d7KB5iqikk6cDyax52tVNpbiSit2pvNcI8ibAKkOi8O4hJpA1fqUbV
-         PV8+hp3QNMenbP2xYnDB7il1zqwjqMPFlzO7llQaPhCxqVJUd6NChz5k2Vte6guqX+Jq
-         jV4+SqUo6JVwJy9kQ2Ja8RpwmhPo9eTsfTR8LqD9H62DLW3Uwa8/M915R3PoFLWd56BK
-         mr+w==
-X-Gm-Message-State: AC+VfDy30M56kbY/+9dpdXNjTxSMHs8UM5FUVzJ8FRstGQO5XqSFVIBI
-        EHufQu6CBz3mcfhK7kZRIH3yRkKwYlxkfJi0NZ0=
-X-Google-Smtp-Source: ACHHUZ5iut2/IQev9V/2oWiVW8z3ctcktYp59vG5CrqEkxtz2aEQV7PRsrNmDdJcBnuil92PLjjKQQ==
-X-Received: by 2002:a19:d611:0:b0:4f7:434b:70b4 with SMTP id n17-20020a19d611000000b004f7434b70b4mr7568688lfg.41.1686862765535;
-        Thu, 15 Jun 2023 13:59:25 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id c26-20020ac244ba000000b004ec8b638115sm2700798lfm.193.2023.06.15.13.59.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 13:59:25 -0700 (PDT)
-Message-ID: <e0141f93-b3d8-cc3e-7b2d-32618351ba10@linaro.org>
-Date:   Thu, 15 Jun 2023 22:59:23 +0200
+        d=1e100.net; s=20221208; t=1686862927; x=1689454927;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gM071qijEG6vwQ8W2iWjOXAWrKZk2GbsTR59ysMJ+f0=;
+        b=BJ9UgRsoTksbOLGhqlOjNSxN7lmLtY7kOvyyjC3ckWM6/ZWGwKxK3V1IbxssjlI2mS
+         Yy8Ea1pQXEIdEXl6f9gHzqcxrFUoBmbENHpjwhOwRo0OchQVj4F3NwmbJwm/4nmjH1a9
+         RWrrQ0qJKVZQWWM39+jbHj17sbc2BWx6mVgJ6X9zxd4GOvy0UlMwwAfaPTwY9O7oEmzH
+         o0WX5ifmfmbehexM5ztf3C9xwpvYNyVxdaWtfy01p4lmc+oQo/BI2s4daInnvaeyQdEq
+         UdNPW6tsr4QHbZR1Sgazf5/fpMTckbTpSS+1dCPxvyJxaAtz0w6G5Ol8od05elp/qKXl
+         ECKA==
+X-Gm-Message-State: AC+VfDw8ASW/zIkwtAf+vFzD1QUMSIkaD28/76UURyJbbFIR2jpQgm33
+        Thdq0IDmqAW7I1lEARa9tElAeu7UlgMn1QMXOUo7aQ==
+X-Google-Smtp-Source: ACHHUZ4krPXQb/OSjDusqHVygPJ8Ls9dUMXR5x901QOHwbeTZhZdMqBueLHq0YUPgxe/cr08Jcvy1LCoC+5/N/PO2+Y=
+X-Received: by 2002:ad4:5d62:0:b0:62f:f23e:14fe with SMTP id
+ fn2-20020ad45d62000000b0062ff23e14femr102715qvb.20.1686862927549; Thu, 15 Jun
+ 2023 14:02:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v8 07/18] drm/msm/a6xx: Add a helper for
- software-resetting the GPU
-Content-Language: en-US
-To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-References: <20230223-topic-gmuwrapper-v8-0-69c68206609e@linaro.org>
- <20230223-topic-gmuwrapper-v8-7-69c68206609e@linaro.org>
- <jplt5g5xuphbnci73pdtaxd63fguxtgtp4c37kc7ehavzrjbau@kamshezxnvgy>
- <001d7571-5e9f-4f60-f6d0-35806a3e51c5@linaro.org>
- <rd4mte26n22xlgx5umerpgr66b4wfi7mdm6ovszafyinrg3q4c@g227oj3nh2vc>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <rd4mte26n22xlgx5umerpgr66b4wfi7mdm6ovszafyinrg3q4c@g227oj3nh2vc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230614-kselftest-mm-llvm-v1-1-180523f277d3@kernel.org>
+In-Reply-To: <20230614-kselftest-mm-llvm-v1-1-180523f277d3@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 15 Jun 2023 17:01:56 -0400
+Message-ID: <CAKwvOdk0sPi95TSdbyEKXud68nHq_7=ccDwaCkVsyd54ArRC=A@mail.gmail.com>
+Subject: Re: [PATCH] selftests/mm: Fix cross compilation with LLVM
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15.06.2023 22:11, Akhil P Oommen wrote:
-> On Thu, Jun 15, 2023 at 12:34:06PM +0200, Konrad Dybcio wrote:
->>
->> On 6.06.2023 19:18, Akhil P Oommen wrote:
->>> On Mon, May 29, 2023 at 03:52:26PM +0200, Konrad Dybcio wrote:
->>>>
->>>> Introduce a6xx_gpu_sw_reset() in preparation for adding GMU wrapper
->>>> GPUs and reuse it in a6xx_gmu_force_off().
->>>>
->>>> This helper, contrary to the original usage in GMU code paths, adds
->>>> a write memory barrier which together with the necessary delay should
->>>> ensure that the reset is never deasserted too quickly due to e.g. OoO
->>>> execution going crazy.
->>>>
->>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>>> ---
->>>>  drivers/gpu/drm/msm/adreno/a6xx_gmu.c |  3 +--
->>>>  drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 11 +++++++++++
->>>>  drivers/gpu/drm/msm/adreno/a6xx_gpu.h |  1 +
->>>>  3 files changed, 13 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
->>>> index b86be123ecd0..5ba8cba69383 100644
->>>> --- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
->>>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
->>>> @@ -899,8 +899,7 @@ static void a6xx_gmu_force_off(struct a6xx_gmu *gmu)
->>>>  	a6xx_bus_clear_pending_transactions(adreno_gpu, true);
->>>>  
->>>>  	/* Reset GPU core blocks */
->>>> -	gpu_write(gpu, REG_A6XX_RBBM_SW_RESET_CMD, 1);
->>>> -	udelay(100);
->>>> +	a6xx_gpu_sw_reset(gpu, true);
->>>>  }
->>>>  
->>>>  static void a6xx_gmu_set_initial_freq(struct msm_gpu *gpu, struct a6xx_gmu *gmu)
->>>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
->>>> index e3ac3f045665..083ccb5bcb4e 100644
->>>> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
->>>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
->>>> @@ -1634,6 +1634,17 @@ void a6xx_bus_clear_pending_transactions(struct adreno_gpu *adreno_gpu, bool gx_
->>>>  	gpu_write(gpu, REG_A6XX_GBIF_HALT, 0x0);
->>>>  }
->>>>  
->>>> +void a6xx_gpu_sw_reset(struct msm_gpu *gpu, bool assert)
->>>> +{
->>>> +	gpu_write(gpu, REG_A6XX_RBBM_SW_RESET_CMD, assert);
->>>> +	/* Add a barrier to avoid bad surprises */
->>> Can you please make this comment a bit more clear? Highlight that we
->>> should ensure the register is posted at hw before polling.
->>>
->>> I think this barrier is required only during assert.
->> Generally it should not be strictly required at all, but I'm thinking
->> that it'd be good to keep it in both cases, so that:
->>
->> if (assert)
->> 	we don't keep writing things to the GPU if it's in reset
->> else
->> 	we don't start writing things to the GPU becomes it comes
->> 	out of reset
->>
->> Also, if you squint hard enough at the commit message, you'll notice
->> I intended for this so only be a wmb, but for some reason generalized
->> it.. Perhaps that's another thing I should fix!
->> for v9..
-> 
-> wmb() doesn't provide any ordering guarantee with the delay loop.
-Hm, fair.. I'm still not as fluent with memory access knowledge as I'd
-like to be..
+On Wed, Jun 14, 2023 at 5:19=E2=80=AFPM Mark Brown <broonie@kernel.org> wro=
+te:
+>
+> Currently the MM selftests attempt to work out the target architecture by
+> using CROSS_COMPILE or otherwise querying the host machine, storing the
+> target architecture in a variable called MACHINE rather than the usual AR=
+CH
+> though as far as I can tell (including for x86_64) the value is the same =
+as
+> we would use for architecture.
+>
+> When cross compiling with LLVM we don't need a CROSS_COMPILE as LLVM can
+> support many target architectures in a single build so this logic does no=
+t
+> work, CROSS_COMPILE is not set and we end up selecting tests for the host
+> rather than target architecture. Fix this by using the more standard ARCH
+> to describe the architecture, taking it from the environment if specified=
+.
+>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 
-> A common practice is to just read back the same register before
-> the loop because a readl followed by delay() is guaranteed to be ordered.
-So, how should I proceed? Keep the r/w barrier, or add a readback and
-a tiiiny (perhaps even using ndelay instead of udelay?) delay on de-assert?
+Broonie,
+Thanks for the patch! What's the best way to test this?
 
-Konrad
-> 
-> -Akhil.
->>
->> Konrad
->>>
->>> -Akhil.
->>>> +	mb();
->>>> +
->>>> +	/* The reset line needs to be asserted for at least 100 us */
->>>> +	if (assert)
->>>> +		udelay(100);
->>>> +}
->>>> +
->>>>  static int a6xx_pm_resume(struct msm_gpu *gpu)
->>>>  {
->>>>  	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
->>>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
->>>> index 9580def06d45..aa70390ee1c6 100644
->>>> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
->>>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
->>>> @@ -89,5 +89,6 @@ struct msm_gpu_state *a6xx_gpu_state_get(struct msm_gpu *gpu);
->>>>  int a6xx_gpu_state_put(struct msm_gpu_state *state);
->>>>  
->>>>  void a6xx_bus_clear_pending_transactions(struct adreno_gpu *adreno_gpu, bool gx_off);
->>>> +void a6xx_gpu_sw_reset(struct msm_gpu *gpu, bool assert);
->>>>  
->>>>  #endif /* __A6XX_GPU_H__ */
->>>>
->>>> -- 
->>>> 2.40.1
->>>>
+$ ARCH=3Darm64 make LLVM=3D1 -j128 -C tools/testing/selfte
+sts/mm/
+
+Is what I would have guessed, but I get errors with or without this patch.
+
+Also, fwiw, b4 shows that you don't have a pgp key setup for
+broonie@kernel.org; I don't think it matters, but maybe it's a
+surprise to you if you thought you had set that up,
+$ b4 shazam https://lore.kernel.org/llvm/20230614-kselftest-mm-llvm-v1-1-18=
+0523f277d3@kernel.org/
+...
+  =E2=9C=97 No key: openpgp/broonie@kernel.org
+
+
+> ---
+>  tools/testing/selftests/mm/Makefile | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
+>
+> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftest=
+s/mm/Makefile
+> index 23af4633f0f4..4f0c50c33ba7 100644
+> --- a/tools/testing/selftests/mm/Makefile
+> +++ b/tools/testing/selftests/mm/Makefile
+> @@ -5,12 +5,15 @@ LOCAL_HDRS +=3D $(selfdir)/mm/local_config.h $(top_srcd=
+ir)/mm/gup_test.h
+>
+>  include local_config.mk
+>
+> +ifeq ($(ARCH),)
+> +
+>  ifeq ($(CROSS_COMPILE),)
+>  uname_M :=3D $(shell uname -m 2>/dev/null || echo not)
+>  else
+>  uname_M :=3D $(shell echo $(CROSS_COMPILE) | grep -o '^[a-z0-9]\+')
+>  endif
+> -MACHINE ?=3D $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/' -e 's=
+/ppc64.*/ppc64/')
+> +ARCH ?=3D $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/' -e 's/pp=
+c64.*/ppc64/')
+> +endif
+>
+>  # Without this, failed build products remain, with up-to-date timestamps=
+,
+>  # thus tricking Make (and you!) into believing that All Is Well, in subs=
+equent
+> @@ -65,7 +68,7 @@ TEST_GEN_PROGS +=3D ksm_tests
+>  TEST_GEN_PROGS +=3D ksm_functional_tests
+>  TEST_GEN_PROGS +=3D mdwe_test
+>
+> -ifeq ($(MACHINE),x86_64)
+> +ifeq ($(ARCH),x86_64)
+>  CAN_BUILD_I386 :=3D $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_=
+32bit_program.c -m32)
+>  CAN_BUILD_X86_64 :=3D $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivia=
+l_64bit_program.c)
+>  CAN_BUILD_WITH_NOPIE :=3D $(shell ./../x86/check_cc.sh "$(CC)" ../x86/tr=
+ivial_program.c -no-pie)
+> @@ -87,13 +90,13 @@ TEST_GEN_PROGS +=3D $(BINARIES_64)
+>  endif
+>  else
+>
+> -ifneq (,$(findstring $(MACHINE),ppc64))
+> +ifneq (,$(findstring $(ARCH),ppc64))
+>  TEST_GEN_PROGS +=3D protection_keys
+>  endif
+>
+>  endif
+>
+> -ifneq (,$(filter $(MACHINE),arm64 ia64 mips64 parisc64 ppc64 riscv64 s39=
+0x sparc64 x86_64))
+> +ifneq (,$(filter $(ARCH),arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x =
+sparc64 x86_64))
+>  TEST_GEN_PROGS +=3D va_high_addr_switch
+>  TEST_GEN_PROGS +=3D virtual_address_range
+>  TEST_GEN_PROGS +=3D write_to_hugetlbfs
+> @@ -112,7 +115,7 @@ $(TEST_GEN_PROGS): vm_util.c
+>  $(OUTPUT)/uffd-stress: uffd-common.c
+>  $(OUTPUT)/uffd-unit-tests: uffd-common.c
+>
+> -ifeq ($(MACHINE),x86_64)
+> +ifeq ($(ARCH),x86_64)
+>  BINARIES_32 :=3D $(patsubst %,$(OUTPUT)/%,$(BINARIES_32))
+>  BINARIES_64 :=3D $(patsubst %,$(OUTPUT)/%,$(BINARIES_64))
+>
+>
+> ---
+> base-commit: 858fd168a95c5b9669aac8db6c14a9aeab446375
+> change-id: 20230614-kselftest-mm-llvm-a25a7daffa6f
+>
+> Best regards,
+> --
+> Mark Brown <broonie@kernel.org>
+>
+>
+
+
+--=20
+Thanks,
+~Nick Desaulniers
