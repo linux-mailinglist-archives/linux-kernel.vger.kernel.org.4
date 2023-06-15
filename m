@@ -2,153 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1158730D7C
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 05:25:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0499730D82
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 05:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242815AbjFODZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 23:25:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46002 "EHLO
+        id S236382AbjFOD1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 23:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237918AbjFODY4 (ORCPT
+        with ESMTP id S237918AbjFOD0x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 23:24:56 -0400
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC2B26AF
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 20:24:54 -0700 (PDT)
-Received: by mail-ua1-x935.google.com with SMTP id a1e0cc1a2514c-784f7f7deddso1266518241.3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 20:24:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686799494; x=1689391494;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2nSVGPPWBRzpCGCRYannX5iA+YMKGtqta1nbYF5t7UA=;
-        b=naLregnKKESEIb9Rj4ReayoHQGn78YEhwBRimP5/yR9tSsvy3UnvX3tgU6szoMUip+
-         50ISCvWu8EGTn6cEtxA8lCi74gdoa6k4GEUGC4DPGc8khHfUVK6cYsepluZ6DLtvbk9J
-         4rBhaNm+eUswtHkMKiCYQ9Mk3w8qGCAPY8ggo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686799494; x=1689391494;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2nSVGPPWBRzpCGCRYannX5iA+YMKGtqta1nbYF5t7UA=;
-        b=Dgl0++hBVpeaQrhcI+oJ0oTqk2kJg+VZt33Lw9o2VggalKXu4LpK3Gs/IlglxhPzsN
-         spjJTXPX6klUkzfB1dAX3W3LoaL6Ap0zZrZKz67w0riJFNV6z3D9ajk3X5HXTAqsu04j
-         sq9/9stfl0AeFbPDd+gjItIZRKK7P5S2ZesJSKJj0bXwtfLpj7ZFeGJ/qOivThhH/VI6
-         UYkbGFEBYEodfhLjqkn/lf4MFMPbKcKCvoj3LZAnMRcdnC4GI7GYnWH/s1CnMC3ITAAA
-         4DUuRxAgjwpfim4vCspGl47h3Zf47gPceBfw56Z5olYnisP2/jXwgF/3uBlmhirWn0sT
-         kL4w==
-X-Gm-Message-State: AC+VfDyG4adzqeou6cV91YS/zbuetKFVZ5fKoLQ5u2EJyPodLTh7X1Jp
-        Mg8yf2l5RNTBMV3cC5e3m7AZDYbNCX2pbAYJznEuyF1NWGcy8aZw
-X-Google-Smtp-Source: ACHHUZ7yKjRDJ1WlW1Oput8L54g88VDOjieJMDdfRPhL25+Te/RHk2aWjxgB6vrI6XWEfF2SBrmyef0xPxvHJ45yXOg=
-X-Received: by 2002:a05:6102:503:b0:43f:5c7e:d5db with SMTP id
- l3-20020a056102050300b0043f5c7ed5dbmr135418vsa.2.1686799493855; Wed, 14 Jun
- 2023 20:24:53 -0700 (PDT)
+        Wed, 14 Jun 2023 23:26:53 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CEFE2682;
+        Wed, 14 Jun 2023 20:26:49 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QhSPm1K9Bz4wjB;
+        Thu, 15 Jun 2023 13:26:36 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1686799607;
+        bh=bmc6oqF5FNKBZGg1/rZAHOUSx4X5esqFgaD2hQBXRq8=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=KB2FyunhTuXf+jozautVWXZthKKCB+waS3cucwpJbJk0s24v4KKDQVWgg9Q1V6jR3
+         0vEX2OWPXK/8QOdVINYGXUEXFhmEMCe6tR8/kJ2gs4NvUNlqzJka9/WRx2Av26B2bo
+         vITH1k1S5enB4XE2YnFXxPCt6IWEd6YUcRno10b5k49kD4HUIdaDZUg9pyurS1KRTV
+         HGZpbW1b+az+ld9IyfWGAhCPNIYxUEB/mIcl6YmKDvB1j32ka+tFJzfZQQ8K4TE/RF
+         jdgpZreP8tke/E0lPR+QDG6MJzN4Q+6VqMmtmB3YLVvYFkFLRyyYqL9Imhecexc6g6
+         0X6N/8mTgEXyA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Eric DeVolder <eric.devolder@oracle.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+        chenhuacai@kernel.org, geert@linux-m68k.org,
+        tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com,
+        deller@gmx.de, ysato@users.sourceforge.jp, dalias@libc.org,
+        glaubitz@physik.fu-berlin.de, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, kernel@xen0n.name, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com, hpa@zytor.com,
+        paulmck@kernel.org, peterz@infradead.org, frederic@kernel.org,
+        akpm@linux-foundation.org, ardb@kernel.org,
+        samitolvanen@google.com, juerg.haefliger@canonical.com,
+        arnd@arndb.de, rmk+kernel@armlinux.org.uk,
+        linus.walleij@linaro.org, sebastian.reichel@collabora.com,
+        rppt@kernel.org, kirill.shutemov@linux.intel.com,
+        anshuman.khandual@arm.com, ziy@nvidia.com, masahiroy@kernel.org,
+        ndesaulniers@google.com, mhiramat@kernel.org, ojeda@kernel.org,
+        thunder.leizhen@huawei.com, xin3.li@intel.com, tj@kernel.org,
+        gregkh@linuxfoundation.org, tsi@tuyoix.net, bhe@redhat.com,
+        hbathini@linux.ibm.com, sourabhjain@linux.ibm.com,
+        boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+Subject: Re: [PATCH v1 00/21] refactor Kconfig to consolidate KEXEC and
+ CRASH options
+In-Reply-To: <8a97f096-2bdc-0298-a1c5-8d48dbf94179@oracle.com>
+References: <20230612172805.681179-1-eric.devolder@oracle.com>
+ <202306131314.EFA558B7@keescook>
+ <8a97f096-2bdc-0298-a1c5-8d48dbf94179@oracle.com>
+Date:   Thu, 15 Jun 2023 13:26:35 +1000
+Message-ID: <87ilbpflsk.fsf@mail.lhotse>
 MIME-Version: 1.0
-References: <20230609083009.2822259-1-wenst@chromium.org> <20230609083009.2822259-8-wenst@chromium.org>
- <a5c00706-dc23-4561-8bcf-729fd10e74ef@sirena.org.uk>
-In-Reply-To: <a5c00706-dc23-4561-8bcf-729fd10e74ef@sirena.org.uk>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Thu, 15 Jun 2023 11:24:42 +0800
-Message-ID: <CAGXv+5HWM_mfKp-o8kOyZ7W8yqZwBwPF3QNwo5sBfuv4quc-vQ@mail.gmail.com>
-Subject: Re: [PATCH 7/9] regulator: mt6358: Add output voltage fine tuning to
- fixed regulators
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 12:15=E2=80=AFAM Mark Brown <broonie@kernel.org> wr=
-ote:
+Eric DeVolder <eric.devolder@oracle.com> writes:
+> On 6/13/23 15:21, Kees Cook wrote:
+>> On Mon, Jun 12, 2023 at 01:27:52PM -0400, Eric DeVolder wrote:
+>>> The Kconfig is refactored to consolidate KEXEC and CRASH options from
+>>> various arch/<arch>/Kconfig files into new file kernel/Kconfig.kexec.
+>> 
+>> This looks very nice!
+>> 
+> Thank you Kees!
 >
-> On Fri, Jun 09, 2023 at 04:30:04PM +0800, Chen-Yu Tsai wrote:
-> > The "fixed" LDO regulators found on the MT6358 and MT6366 PMICs have
-> > either no voltage selection register, or only one valid setting.
-> > However these do have a fine voltage calibration setting that can
-> > slightly boost the output voltage from 0 mV to 100 mV, in 10 mV
-> > increments.
->
-> This and the followup patch break the build on both arm64 and x86_64:
->
-> /build/stage/linux/drivers/regulator/mt6358-regulator.c:127:29: error: =
-=E2=80=98MT6358_VFE28_ANA_CON0=E2=80=99 undeclared here (not in a function)=
-; did you mean =E2=80=98MT6358_VIO28_ANA_CON0=E2=80=99?
->   127 |                 .vsel_reg =3D MT6358_##vreg##_ANA_CON0,   \
->       |                             ^~~~~~~
+>>> [...]
+>>> - The boolean ARCH_HAS_<option> in effect allows the arch to determine
+>>>    when the feature is allowed.  Archs which don't have the feature
+>>>    simply do not provide the corresponding ARCH_HAS_<option>.
+>>>    For each arch, where there previously were KEXEC and/or CRASH
+>>>    options, these have been replaced with the corresponding boolean
+>>>    ARCH_HAS_<option>, and an appropriate def_bool statement.
+>>>
+>>>    For example, if the arch supports KEXEC_FILE, then the
+>>>    ARCH_HAS_KEXEC_FILE simply has a 'def_bool y'. This permits the
+>>>    KEXEC_FILE option to be available.
+>>>
+>>>    If the arch has a 'depends on' statement in its original coding
+>>>    of the option, then that expression becomes part of the def_bool
+>>>    expression. For example, arm64 had:
+>>>
+>>>    config KEXEC
+>>>      depends on PM_SLEEP_SMP
+>>>
+>>>    and in this solution, this converts to:
+>>>
+>>>    config ARCH_HAS_KEXEC
+>>>      def_bool PM_SLEEP_SMP
+>>>
+>>>
+>>> - In order to account for the differences in the config coding for
+>>>    the three common options, the ARCH_SUPPORTS_<option> is used.
+>>>    This options has a 'depends on <option>' statement to couple it
+>>>    to the main option, and from there can insert the differences
+>>>    from the common option and the arch original coding of that option.
+>>>
+>>>    For example, a few archs enable CRYPTO and CRYTPO_SHA256 for
+>>>    KEXEC_FILE. These require a ARCH_SUPPORTS_KEXEC_FILE and
+>>>    'select CRYPTO' and 'select CRYPTO_SHA256' statements.
+>> 
+>> Naming nit: "HAS" and "SUPPORTS" feel very similar, and looking at
+>> existing configs, "ARCH_SUPPORTS_..." is already used for doing this
+>> kind of bare "bool" management. e.g. see ARCH_SUPPORTS_INT128
+>> 
+>> It looks like you need to split "depends" and "select" so the options
+>> can be chosen separately from the "selectable" configs.
+>> 
+>> How about naming this ARCH_SELECTS_<option>, since that's what it's
+>> there for?
+>> 
+> I'm OK with this. Let's see if others agree?
 
-Argh, I sequenced the patches in my tree incorrectly. I see you already
-merged the first six patches. I'll send a new version including a header
-change that this patch needs, and other fixups that reviewers suggested.
+Yeah please rename one or both of them. At a glance the difference
+between HAS and SUPPORTS is very non-obvious.
 
-ChenYu
+I like Kees' suggestion to use ARCH_SUPPORTS and ARCH_SELECTS.
 
-
-> /build/stage/linux/drivers/regulator/mt6358-regulator.c:525:9: note: in e=
-xpansion of macro =E2=80=98MT6358_REG_FIXED=E2=80=99
->   525 |         MT6358_REG_FIXED("ldo_vfe28", VFE28, MT6358_LDO_VFE28_CON=
-0, 0, 2800000),
->       |         ^~~~~~~~~~~~~~~~
-> /build/stage/linux/drivers/regulator/mt6358-regulator.c:127:29: error: =
-=E2=80=98MT6358_VCN28_ANA_CON0=E2=80=99 undeclared here (not in a function)=
-; did you mean =E2=80=98MT6358_VCN18_ANA_CON0=E2=80=99?
->   127 |                 .vsel_reg =3D MT6358_##vreg##_ANA_CON0,   \
->       |                             ^~~~~~~
-> /build/stage/linux/drivers/regulator/mt6358-regulator.c:526:9: note: in e=
-xpansion of macro =E2=80=98MT6358_REG_FIXED=E2=80=99
->   526 |         MT6358_REG_FIXED("ldo_vcn28", VCN28, MT6358_LDO_VCN28_CON=
-0, 0, 2800000),
->       |         ^~~~~~~~~~~~~~~~
-> /build/stage/linux/drivers/regulator/mt6358-regulator.c:127:29: error: =
-=E2=80=98MT6358_VXO22_ANA_CON0=E2=80=99 undeclared here (not in a function)=
-; did you mean =E2=80=98MT6358_VIO28_ANA_CON0=E2=80=99?
->   127 |                 .vsel_reg =3D MT6358_##vreg##_ANA_CON0,   \
->       |                             ^~~~~~~
-> /build/stage/linux/drivers/regulator/mt6358-regulator.c:527:9: note: in e=
-xpansion of macro =E2=80=98MT6358_REG_FIXED=E2=80=99
->   527 |         MT6358_REG_FIXED("ldo_vxo22", VXO22, MT6358_LDO_VXO22_CON=
-0, 0, 2200000),
->       |         ^~~~~~~~~~~~~~~~
-> /build/stage/linux/drivers/regulator/mt6358-regulator.c:127:29: error: =
-=E2=80=98MT6358_VAUX18_ANA_CON0=E2=80=99 undeclared here (not in a function=
-); did you mean =E2=80=98MT6358_VRF18_ANA_CON0=E2=80=99?
->   127 |                 .vsel_reg =3D MT6358_##vreg##_ANA_CON0,   \
->       |                             ^~~~~~~
-> /build/stage/linux/drivers/regulator/mt6358-regulator.c:528:9: note: in e=
-xpansion of macro =E2=80=98MT6358_REG_FIXED=E2=80=99
->   528 |         MT6358_REG_FIXED("ldo_vaux18", VAUX18,
->       |         ^~~~~~~~~~~~~~~~
-> /build/stage/linux/drivers/regulator/mt6358-regulator.c:127:29: error: =
-=E2=80=98MT6358_VBIF28_ANA_CON0=E2=80=99 undeclared here (not in a function=
-); did you mean =E2=80=98MT6358_VIO28_ANA_CON0=E2=80=99?
->   127 |                 .vsel_reg =3D MT6358_##vreg##_ANA_CON0,   \
->       |                             ^~~~~~~
-> /build/stage/linux/drivers/regulator/mt6358-regulator.c:530:9: note: in e=
-xpansion of macro =E2=80=98MT6358_REG_FIXED=E2=80=99
->   530 |         MT6358_REG_FIXED("ldo_vbif28", VBIF28,
->       |         ^~~~~~~~~~~~~~~~
-> /build/stage/linux/drivers/regulator/mt6358-regulator.c:127:29: error: =
-=E2=80=98MT6358_VAUD28_ANA_CON0=E2=80=99 undeclared here (not in a function=
-); did you mean =E2=80=98MT6358_VA12_ANA_CON0=E2=80=99?
->   127 |                 .vsel_reg =3D MT6358_##vreg##_ANA_CON0,   \
->       |                             ^~~~~~~
-> /build/stage/linux/drivers/regulator/mt6358-regulator.c:535:9: note: in e=
-xpansion of macro =E2=80=98MT6358_REG_FIXED=E2=80=99
->   535 |         MT6358_REG_FIXED("ldo_vaud28", VAUD28,
->       |         ^~~~~~~~~~~~~~~~
+cheers
