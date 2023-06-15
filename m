@@ -2,66 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD807315AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 12:45:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2637315B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 12:46:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244015AbjFOKpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 06:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51960 "EHLO
+        id S245536AbjFOKqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 06:46:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245402AbjFOKpf (ORCPT
+        with ESMTP id S245638AbjFOKqA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 06:45:35 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65A62119;
-        Thu, 15 Jun 2023 03:45:33 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35FAjH01129102;
-        Thu, 15 Jun 2023 05:45:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1686825917;
-        bh=oxs9Na9lP7pahFFNgBeM/trs2fmCewsHB/EmIiLGWY8=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=jtOwcmulfkjkjTCl6Ju3Dd2uF3gljMBbZEkcpf3dRcUbskFrG7K4xIbvBlJDPxadm
-         hTAIh5LQiGwl6rupieAZAL9IJtU5ed+ZdE3GEgCrZ4YFz8RZUiizEqOeCU6iTteqSU
-         VHthqO5uSxjFlwAukEp1IXzSnjMegHq3xbP1X1HI=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35FAjHQn006922
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 15 Jun 2023 05:45:17 -0500
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 15
- Jun 2023 05:45:16 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 15 Jun 2023 05:45:16 -0500
-Received: from uda0132425.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35FAjCRQ060295;
-        Thu, 15 Jun 2023 05:45:13 -0500
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-To:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-hardening@vger.kernel.org>,
-        Wadim Egorov <w.egorov@phytec.de>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>, <upstream@lists.phytec.de>,
-        <nm@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <keescook@chromium.org>,
-        <tony.luck@intel.com>, <gpiccoli@igalia.com>
-Subject: Re: [PATCH 1/2] dt-bindings: arm: ti: Add bindings for PHYTEC AM62x based hardware
-Date:   Thu, 15 Jun 2023 16:15:10 +0530
-Message-ID: <168681817164.2098323.15486911547839027350.b4-ty@ti.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230504140143.1425951-1-w.egorov@phytec.de>
-References: <20230504140143.1425951-1-w.egorov@phytec.de>
+        Thu, 15 Jun 2023 06:46:00 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB251FE4;
+        Thu, 15 Jun 2023 03:45:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1686825957; x=1718361957;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=Hx4vjWtNoUgGVQN3qQcXeqlxmDhDgyTOOSXzVVU5UPU=;
+  b=h2tC/nYNrOOC94MlqR2KFOdA2ecvE1S9t0Ug04vz6N2+NOtQFILdzydg
+   rxa7RaBdccySoZE8VOlAa9scPE9KbV+s/cdJ6EcAsJWz3x270+6kEQtrq
+   ZzprWUkggprGup1Q/f+/eBskOmXdWc6by64jKn1NThgLsxCmYflsmMn2s
+   EjjjKJN56suRLBZOT0nyyM7Ps6ziwBRWXjOQySI7I4DKc8qLGi5l8KKAY
+   5Tw7qJKsJ04fM0HdgARtems6b1XdB2gq5xMU3dAk4xOpmpcYhbDb79pFr
+   DHhrxAmyXQ+oQOQe4PTgAKrMa9LRm1NgxS3SpddVUYoKck/M/uJy27Uci
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
+   d="scan'208";a="218005591"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Jun 2023 03:45:54 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 15 Jun 2023 03:45:51 -0700
+Received: from den-dk-m31857.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Thu, 15 Jun 2023 03:45:47 -0700
+Message-ID: <255b4de132365501c6e1e97246c30d9729860546.camel@microchip.com>
+Subject: Re: [PATCH v7 01/22] net/tcp: Prepare tcp_md5sig_pool for TCP-AO
+From:   Steen Hegelund <steen.hegelund@microchip.com>
+To:     Dmitry Safonov <dima@arista.com>, David Ahern <dsahern@kernel.org>,
+        "Eric Dumazet" <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+CC:     <linux-kernel@vger.kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        "Ard Biesheuvel" <ardb@kernel.org>,
+        Bob Gilligan <gilligan@arista.com>,
+        "Dan Carpenter" <error27@gmail.com>,
+        David Laight <David.Laight@aculab.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Donald Cassidy <dcassidy@redhat.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Francesco Ruggeri <fruggeri05@gmail.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "Hideaki YOSHIFUJI" <yoshfuji@linux-ipv6.org>,
+        Ivan Delalande <colona@arista.com>,
+        Leonard Crestez <cdleonard@gmail.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        <netdev@vger.kernel.org>
+Date:   Thu, 15 Jun 2023 12:45:46 +0200
+In-Reply-To: <20230614230947.3954084-2-dima@arista.com>
+References: <20230614230947.3954084-1-dima@arista.com>
+         <20230614230947.3954084-2-dima@arista.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.48.3 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,39 +83,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wadim Egorov,
-
-On Thu, 04 May 2023 16:01:42 +0200, Wadim Egorov wrote:
-> Add devicetree bindings for AM62x based phyCORE-AM62 SoM
-> and phyBOARD-Lyra RDK.
-> 
-> 
-
-I have applied the following to branch ti-k3-dts-next on [1].
-Thank you!
-
-[1/2] dt-bindings: arm: ti: Add bindings for PHYTEC AM62x based hardware
-      commit: 94a58c5f131d7f0cf735af24574b7626aab77ab1
-[2/2] arm64: dts: ti: Add basic support for phyBOARD-Lyra-AM625
-      commit: 0ad58871f63cbc4a03360bebd4ccc967bd9346db
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent up the chain during
-the next merge window (or sooner if it is a relevant bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
---
-Vignesh
+SGkgRG1pdHJ5LAoKT24gVGh1LCAyMDIzLTA2LTE1IGF0IDAwOjA5ICswMTAwLCBEbWl0cnkgU2Fm
+b25vdiB3cm90ZToKPiBFWFRFUk5BTCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4g
+YXR0YWNobWVudHMgdW5sZXNzIHlvdSBrbm93IHRoZQo+IGNvbnRlbnQgaXMgc2FmZQo+IAo+IFRD
+UC1BTywgc2ltaWxhcmx5IHRvIFRDUC1NRDUsIG5lZWRzIHRvIGFsbG9jYXRlIHRmbXMgb24gYSBz
+bG93LXBhdGgsCj4gd2hpY2ggaXMgc2V0c29ja29wdCgpIGFuZCB1c2UgY3J5cHRvIGFoYXNoIHJl
+cXVlc3RzIG9uIGZhc3QgcGF0aHMsCj4gd2hpY2ggYXJlIFJYL1RYIHNvZnRpcnFzLiBBbHNvLCBp
+dCBuZWVkcyBhIHRlbXBvcmFyeS9zY3JhdGNoIGJ1ZmZlcgo+IGZvciBwcmVwYXJpbmcgdGhlIGhh
+c2guCj4gCj4gUmV3b3JrIHRjcF9tZDVzaWdfcG9vbCBpbiBvcmRlciB0byBzdXBwb3J0IG90aGVy
+IGhhc2hpbmcgYWxnb3JpdGhtcwo+IHRoYW4gTUQ1LiBJdCB3aWxsIG1ha2UgaXQgcG9zc2libGUg
+dG8gc2hhcmUgcHJlLWFsbG9jYXRlZCBjcnlwdG9fYWhhc2gKPiBkZXNjcmlwdG9ycyBhbmQgc2Ny
+YXRjaCBhcmVhIGJldHdlZW4gYWxsIFRDUCBoYXNoIHVzZXJzLgo+IAo+IEludGVybmFsbHkgdGNw
+X3NpZ3Bvb2wgY2FsbHMgY3J5cHRvX2Nsb25lX2FoYXNoKCkgQVBJIG92ZXIgcHJlLWFsbG9jYXRl
+ZAo+IGNyeXB0byBhaGFzaCB0Zm0uIEt1ZG9zIHRvIEhlcmJlcnQsIHdobyBwcm92aWRlZCB0aGlz
+IG5ldyBjcnlwdG8gQVBJLgo+IAo+IEkgd2FzIGEgbGl0dGxlIGNvbmNlcm5lZCBvdmVyIEdGUF9B
+VE9NSUMgYWxsb2NhdGlvbnMgb2YgYWhhc2ggYW5kCj4gY3J5cHRvX3JlcXVlc3QgaW4gUlgvVFgg
+KHNlZSB0Y3Bfc2lncG9vbF9zdGFydCgpKSwgc28gSSBiZW5jaG1hcmtlZCBib3RoCj4gImJhY2tl
+bmRzIiB3aXRoIGRpZmZlcmVudCBhbGdvcml0aG1zLCB1c2luZyBwYXRjaGVkIHZlcnNpb24gb2Yg
+aXBlcmYzWzJdLgo+IE9uIG15IGxhcHRvcCB3aXRoIGk3LTc2MDBVIEAgMi44MEdIejoKPiAKCi4u
+LiBzbmlwIC4uLgoKPiArLyoqCj4gKyAqIHRjcF9zaWdwb29sX2FsbG9jX2FoYXNoIC0gYWxsb2Nh
+dGVzIHBvb2wgZm9yIGFoYXNoIHJlcXVlc3RzCj4gKyAqIEBhbGc6IG5hbWUgb2YgYXN5bmMgaGFz
+aCBhbGdvcml0aG0KPiArICogQHNjcmF0Y2hfc2l6ZTogcmVzZXJ2ZSBhIHRjcF9zaWdwb29sOjpz
+Y3JhdGNoIGJ1ZmZlciBvZiB0aGlzIHNpemUKPiArICovCj4gK2ludCB0Y3Bfc2lncG9vbF9hbGxv
+Y19haGFzaChjb25zdCBjaGFyICphbGcsIHNpemVfdCBzY3JhdGNoX3NpemUpCj4gK3sKPiArwqDC
+oMKgwqDCoMKgIGludCBpLCByZXQ7Cj4gKwo+ICvCoMKgwqDCoMKgwqAgLyogc2xvdy1wYXRoICov
+Cj4gK8KgwqDCoMKgwqDCoCBtdXRleF9sb2NrKCZjcG9vbF9tdXRleCk7Cj4gK8KgwqDCoMKgwqDC
+oCByZXQgPSBzaWdwb29sX3Jlc2VydmVfc2NyYXRjaChzY3JhdGNoX3NpemUpOwo+ICvCoMKgwqDC
+oMKgwqAgaWYgKHJldCkKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBnb3RvIG91dDsK
+PiArwqDCoMKgwqDCoMKgIGZvciAoaSA9IDA7IGkgPCBjcG9vbF9wb3B1bGF0ZWQ7IGkrKykgewo+
+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGlmICghY3Bvb2xbaV0uYWxnKQo+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjb250aW51ZTsKPiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpZiAoc3RyY21wKGNwb29sW2ldLmFsZywgYWxnKSkK
+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgY29udGludWU7
+Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGlmIChrcmVmX3JlYWQoJmNwb29s
+W2ldLmtyZWYpID4gMCkKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqAga3JlZl9nZXQoJmNwb29sW2ldLmtyZWYpOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgIGVsc2UKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAga3JlZl9pbml0KCZjcG9vbFtpXS5rcmVmKTsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoCByZXQgPSBpOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGdvdG8gb3V0Owo+
+ICvCoMKgwqDCoMKgwqAgfQoKSGVyZSBpdCBsb29rcyB0byBtZSBsaWtlIHlvdSB3aWxsIG5ldmVy
+IGdldCB0byB0aGlzIHBhcnQgb2YgdGhlIGNvZGUgc2luY2UgeW91CmFsd2F5cyBlbmQgdXAgZ29p
+bmcgdG8gdGhlIG91dCBsYWJlbCBpbiB0aGUgcHJldmlvdXMgbG9vcC4KCj4gKwo+ICvCoMKgwqDC
+oMKgwqAgZm9yIChpID0gMDsgaSA8IGNwb29sX3BvcHVsYXRlZDsgaSsrKSB7Cj4gK8KgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAgaWYgKCFjcG9vbFtpXS5hbGcpCj4gK8KgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGJyZWFrOwo+ICvCoMKgwqDCoMKgwqAgfQo+
+ICvCoMKgwqDCoMKgwqAgaWYgKGkgPj0gQ1BPT0xfU0laRSkgewo+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgIHJldCA9IC1FTk9TUEM7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAgZ290byBvdXQ7Cj4gK8KgwqDCoMKgwqDCoCB9Cj4gKwo+ICvCoMKgwqDCoMKgwqAgcmV0ID0g
+X19jcG9vbF9hbGxvY19haGFzaCgmY3Bvb2xbaV0sIGFsZyk7Cj4gK8KgwqDCoMKgwqDCoCBpZiAo
+IXJldCkgewo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJldCA9IGk7Cj4gK8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgaWYgKGkgPT0gY3Bvb2xfcG9wdWxhdGVkKQo+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjcG9vbF9wb3B1bGF0ZWQr
+KzsKPiArwqDCoMKgwqDCoMKgIH0KPiArb3V0Ogo+ICvCoMKgwqDCoMKgwqAgbXV0ZXhfdW5sb2Nr
+KCZjcG9vbF9tdXRleCk7Cj4gK8KgwqDCoMKgwqDCoCByZXR1cm4gcmV0Owo+ICt9Cj4gK0VYUE9S
+VF9TWU1CT0xfR1BMKHRjcF9zaWdwb29sX2FsbG9jX2FoYXNoKTsKPiArCgouLi4gc25pcCAuLi4K
+Cgo+IMKgY2xlYXJfaGFzaDoKPiAtwqDCoMKgwqDCoMKgIHRjcF9wdXRfbWQ1c2lnX3Bvb2woKTsK
+PiAtY2xlYXJfaGFzaF9ub3B1dDoKPiArwqDCoMKgwqDCoMKgIHRjcF9zaWdwb29sX2VuZCgmaHAp
+Owo+ICtjbGVhcl9oYXNoX25vc3RhcnQ6Cj4gwqDCoMKgwqDCoMKgwqAgbWVtc2V0KG1kNV9oYXNo
+LCAwLCAxNik7Cj4gwqDCoMKgwqDCoMKgwqAgcmV0dXJuIDE7Cj4gwqB9Cj4gLS0KPiAyLjQwLjAK
+PiAKPiAKCkJSClN0ZWVuCg==
 
