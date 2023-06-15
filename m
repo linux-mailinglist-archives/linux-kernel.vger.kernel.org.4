@@ -2,35 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA57F7320F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 22:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35BAE7320FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 22:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbjFOUdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 16:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45756 "EHLO
+        id S232103AbjFOUd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 16:33:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbjFOUdx (ORCPT
+        with ESMTP id S231837AbjFOUdy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 16:33:53 -0400
+        Thu, 15 Jun 2023 16:33:54 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4856D2711
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F21271E
         for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 13:33:52 -0700 (PDT)
-Message-ID: <20230615190036.898273129@linutronix.de>
+Message-ID: <20230615193330.263684884@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686861230;
+        s=2020; t=1686861231;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc; bh=5QOf0xPwncxqslzo3Jd+s/CMQaxshErQ6DKbtCWtqBQ=;
-        b=4Gr4mvQnoLJdDX2MQg+Ox9t7CtsuphAHe5IzvobmwE0qfRjDMq+Yc/nabL6hEc52qaMYrE
-        33aCsU53h23xBaBnopZayOz1om9k+vt/NeEmkM5s5pzwofLT3IosjXbm7G/mkq6vfzzU2F
-        TTKfFh/H0UWeA+Fwa4iMPExyFC1vRQ7dN2mHdR+O4Bb8bF8n2HlAHZLG5pyB9wnDcX+/3E
-        n6NX23HJRX1GvN0vlk3YqoymPRs0MWwCChw/ASGQJaRVaWPuqNCcx81rUeL55qaoAak8Jp
-        W1h27PB16bY2POKShjO8gGsteWykn8F4Suh5g2gphNRrCWUzGRn66A7H7TrCzw==
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         references:references; bh=acEqf4q7Qtm/dIVEXjGN26S1eTXxFBpCuNJbm8wwWUk=;
+        b=wtYkDT5Wp6cmzquQsLIDVXHRu82TcABoicmjPmIBCdv4bMY3rUr6L5NL4TdVubX56rzsp8
+        CQm0ipkWL7tBKZhiNUZ9kF8rGD70UM6+NB8N1JxmlNWUyWtxs4n9/wAeb1y2dcaJYPXcJ6
+        4W5TcaKUDXYBuI6EPmCtStHLc7GA0Mu1qy04W49HlwotirGkrJkPsW/ndRf9GADvx48Vqd
+        wV+j/su6/vnHZ1aExpqUOvdGMM9D73RmxpBN0Mr/rpHWluywWIjiJZr+svPAScO77gnsqn
+        Cowk7vti+/cWmE5gipPNLYhsxTOzd0mn+tYK6bPSuCd8fyjc1+VJWuCoWm4EZg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686861230;
+        s=2020e; t=1686861231;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc; bh=5QOf0xPwncxqslzo3Jd+s/CMQaxshErQ6DKbtCWtqBQ=;
-        b=uGuFNY/aUpNc7kynBhAjP89XWOwPvER+YaN6l0b8JRxzh9mG9pFYFb0KZ/NPSDsJl+rAj4
-        mxSNwDVBjcYyc4Ag==
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         references:references; bh=acEqf4q7Qtm/dIVEXjGN26S1eTXxFBpCuNJbm8wwWUk=;
+        b=zkPF7gIjgtraA0L54z3AInrIrOMZ6k6R6IooaRpMMHKcIrF9KVYs2f10pRQy0BvTa6wtJK
+        W0qnqkggPK+sXKCA==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, Mario Limonciello <mario.limonciello@amd.com>,
@@ -40,8 +42,11 @@ Cc:     x86@kernel.org, Mario Limonciello <mario.limonciello@amd.com>,
         Tony Luck <tony.luck@intel.com>,
         Arjan van de Veen <arjan@linux.intel.com>,
         Eric Biederman <ebiederm@xmission.com>
-Subject: [patch v3 0/7] x86/smp: Cure stop_other_cpus() and kexec() troubles
-Date:   Thu, 15 Jun 2023 22:33:49 +0200 (CEST)
+Subject: [patch v3 1/7] x86/smp: Make stop_other_cpus() more robust
+References: <20230615190036.898273129@linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 15 Jun 2023 22:33:50 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -52,72 +57,241 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the third version of the stop_other_cpus() / kexec()
-vs. mwait_play_dead() series. Version 2 can be found here:
+Tony reported intermittent lockups on poweroff. His analysis identified the
+wbinvd() in stop_this_cpu() as the culprit. This was added to ensure that
+on SME enabled machines a kexec() does not leave any stale data in the
+caches when switching from encrypted to non-encrypted mode or vice versa.
 
-  https://lore.kernel.org/r/20230613115353.599087484@linutronix.de
+That wbindv() is conditional on the SME feature bit which is read directly
+from CPUID. But that readout does not check whether the CPUID leaf is
+available or not. If it's not available the CPU will return the value of
+the highest supported leaf instead. Depending on the content the "SME" bit
+might be set or not.
 
-The two issues addressed are:
+That's incorrect but harmless. Making the CPUID readout conditional makes
+the observed hangs go away, but it does not fix the underlying problem:
 
-  1) stop_other_cpus() continues after observing num_online_cpus() == 1.
+CPU0					CPU1
 
-     This is problematic because the to be stopped CPUs clear their online
-     bit first and then invoke eventually WBINVD, which can take a long
-     time. There seems to be an interaction between the WBINVD and the
-     reboot mechanics as this intermittendly results in hangs.
+ stop_other_cpus()
+   send_IPIs(REBOOT);			stop_this_cpu()
+   while (num_online_cpus() > 1);         set_online(false);
+   proceed... -> hang
+				          wbinvd()
 
-  2) kexec() kernel can overwrite the memory locations which "offline" CPUs
-     are monitoring. This write brings them out of MWAIT and they resume
-     execution on overwritten text, page tables, data and stacks resulting
-     in triple faults.
+WBINVD is an expensive operation and if multiple CPUs issue it at the same
+time the resulting delays are even larger.
 
-Cure them by:
+But CPU0 already observed num_online_cpus() going down to 1 and proceeds
+which causes the system to hang.
 
-  #1 Synchronizing stop_other_cpus() with a CPU mask which is updated in
-     stop_this_cpu() _after_ WBINVD completes.
+This issue exists independent of WBINVD, but the delays caused by WBINVD
+make it more prominent.
 
-  #2 Bringing offline CPUs out of MWAIT and move them into HLT before
-     starting the kexec() kernel. Optionaly send them an INIT IPI so they
-     go back into wait for startup state.
+Make this more robust by adding a cpumask which is initialized to the
+online CPU mask before sending the IPIs and CPUs clear their bit in
+stop_this_cpu() after the WBINVD completed. Check for that cpumask to
+become empty in stop_other_cpus() instead of watching num_online_cpus().
 
-Changes vs. V2:
+The cpumask cannot plug all holes either, but it's better than a raw
+counter and allows to restrict the NMI fallback IPI to be sent only to
+the CPUs which have not reported within the timeout window.
 
-  - Use a CPU mask instead of an atomic counter and send the NMI only to
-    CPUs which did not report that they reached HLT. That's still not race
-    free vs. a late handling of the reboot vector, but that's not fixable.
-
-Interestingly enough testing the NMI mechanics unearthed that after soft
-disabling the local APIC the CPU is _not_ handling the NMI despite the
-SDM claiming:
-
-  "The operation and response of a local APIC while in this software-disabled
-   state is as follows:
-
-   * The local APIC will respond normally to INIT, NMI, SMI, and SIPI messages."
-
-I validated that even without handling the NMI, the CPU is kicked out of
-HLT reliably.
-
-It's unclear whether that's X2APIC specific and I neither verified that
-behaviour on AMD. Nor is it clear what "respond normally" actually means.
-
-The AMD APM is not helpful either:
-
-  "SMI, NMI, INIT, Startup, and Remote Read interrupts may be accepted"
-
-Oh well.
-
-The series is also available from git:
-
-    git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git x86/kexec
-
-Thanks,
-
-	tglx
+Fixes: 08f253ec3767 ("x86/cpu: Clear SME feature flag when not in use")
+Reported-by: Tony Battersby <tonyb@cybernetics.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Link: https://lore.kernel.org/all/3817d810-e0f1-8ef8-0bbd-663b919ca49b@cybernetics.com
 ---
- include/asm/cpu.h |    2 
- include/asm/smp.h |    4 +
- kernel/process.c  |   25 +++++++--
- kernel/smp.c      |  111 +++++++++++++++++++++++++++++-----------
- kernel/smpboot.c  |  149 ++++++++++++++++++++++++++++++++++++++++--------------
- 5 files changed, 220 insertions(+), 71 deletions(-)
+V3: Use a cpumask to make the NMI case slightly safer - Ashok
+---
+ arch/x86/include/asm/cpu.h |    2 +
+ arch/x86/kernel/process.c  |   23 +++++++++++++-
+ arch/x86/kernel/smp.c      |   71 +++++++++++++++++++++++++++++++--------------
+ 3 files changed, 73 insertions(+), 23 deletions(-)
+
+
+--- a/arch/x86/include/asm/cpu.h
++++ b/arch/x86/include/asm/cpu.h
+@@ -98,4 +98,6 @@ extern u64 x86_read_arch_cap_msr(void);
+ int intel_find_matching_signature(void *mc, unsigned int csig, int cpf);
+ int intel_microcode_sanity_check(void *mc, bool print_err, int hdr_type);
+ 
++extern struct cpumask cpus_stop_mask;
++
+ #endif /* _ASM_X86_CPU_H */
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -759,13 +759,23 @@ bool xen_set_default_idle(void)
+ }
+ #endif
+ 
++struct cpumask cpus_stop_mask;
++
+ void __noreturn stop_this_cpu(void *dummy)
+ {
++	unsigned int cpu = smp_processor_id();
++
+ 	local_irq_disable();
++
+ 	/*
+-	 * Remove this CPU:
++	 * Remove this CPU from the online mask and disable it
++	 * unconditionally. This might be redundant in case that the reboot
++	 * vector was handled late and stop_other_cpus() sent an NMI.
++	 *
++	 * According to SDM and APM NMIs can be accepted even after soft
++	 * disabling the local APIC.
+ 	 */
+-	set_cpu_online(smp_processor_id(), false);
++	set_cpu_online(cpu, false);
+ 	disable_local_APIC();
+ 	mcheck_cpu_clear(this_cpu_ptr(&cpu_info));
+ 
+@@ -783,6 +793,15 @@ void __noreturn stop_this_cpu(void *dumm
+ 	 */
+ 	if (cpuid_eax(0x8000001f) & BIT(0))
+ 		native_wbinvd();
++
++	/*
++	 * This brings a cache line back and dirties it, but
++	 * native_stop_other_cpus() will overwrite cpus_stop_mask after it
++	 * observed that all CPUs reported stop. This write will invalidate
++	 * the related cache line on this CPU.
++	 */
++	cpumask_clear_cpu(cpu, &cpus_stop_mask);
++
+ 	for (;;) {
+ 		/*
+ 		 * Use native_halt() so that memory contents don't change
+--- a/arch/x86/kernel/smp.c
++++ b/arch/x86/kernel/smp.c
+@@ -27,6 +27,7 @@
+ #include <asm/mmu_context.h>
+ #include <asm/proto.h>
+ #include <asm/apic.h>
++#include <asm/cpu.h>
+ #include <asm/idtentry.h>
+ #include <asm/nmi.h>
+ #include <asm/mce.h>
+@@ -146,31 +147,43 @@ static int register_stop_handler(void)
+ 
+ static void native_stop_other_cpus(int wait)
+ {
+-	unsigned long flags;
+-	unsigned long timeout;
++	unsigned int cpu = smp_processor_id();
++	unsigned long flags, timeout;
+ 
+ 	if (reboot_force)
+ 		return;
+ 
+-	/*
+-	 * Use an own vector here because smp_call_function
+-	 * does lots of things not suitable in a panic situation.
+-	 */
++	/* Only proceed if this is the first CPU to reach this code */
++	if (atomic_cmpxchg(&stopping_cpu, -1, cpu) != -1)
++		return;
+ 
+ 	/*
+-	 * We start by using the REBOOT_VECTOR irq.
+-	 * The irq is treated as a sync point to allow critical
+-	 * regions of code on other cpus to release their spin locks
+-	 * and re-enable irqs.  Jumping straight to an NMI might
+-	 * accidentally cause deadlocks with further shutdown/panic
+-	 * code.  By syncing, we give the cpus up to one second to
+-	 * finish their work before we force them off with the NMI.
++	 * 1) Send an IPI on the reboot vector to all other CPUs.
++	 *
++	 *    The other CPUs should react on it after leaving critical
++	 *    sections and re-enabling interrupts. They might still hold
++	 *    locks, but there is nothing which can be done about that.
++	 *
++	 * 2) Wait for all other CPUs to report that they reached the
++	 *    HLT loop in stop_this_cpu()
++	 *
++	 * 3) If #2 timed out send an NMI to the CPUs which did not
++	 *    yet report
++	 *
++	 * 4) Wait for all other CPUs to report that they reached the
++	 *    HLT loop in stop_this_cpu()
++	 *
++	 * #3 can obviously race against a CPU reaching the HLT loop late.
++	 * That CPU will have reported already and the "have all CPUs
++	 * reached HLT" condition will be true despite the fact that the
++	 * other CPU is still handling the NMI. Again, there is no
++	 * protection against that as "disabled" APICs still respond to
++	 * NMIs.
+ 	 */
+-	if (num_online_cpus() > 1) {
+-		/* did someone beat us here? */
+-		if (atomic_cmpxchg(&stopping_cpu, -1, safe_smp_processor_id()) != -1)
+-			return;
++	cpumask_copy(&cpus_stop_mask, cpu_online_mask);
++	cpumask_clear_cpu(cpu, &cpus_stop_mask);
+ 
++	if (!cpumask_empty(&cpus_stop_mask)) {
+ 		/* sync above data before sending IRQ */
+ 		wmb();
+ 
+@@ -183,24 +196,34 @@ static void native_stop_other_cpus(int w
+ 		 * CPUs reach shutdown state.
+ 		 */
+ 		timeout = USEC_PER_SEC;
+-		while (num_online_cpus() > 1 && timeout--)
++		while (!cpumask_empty(&cpus_stop_mask) && timeout--)
+ 			udelay(1);
+ 	}
+ 
+ 	/* if the REBOOT_VECTOR didn't work, try with the NMI */
+-	if (num_online_cpus() > 1) {
++	if (!cpumask_empty(&cpus_stop_mask)) {
+ 		/*
+ 		 * If NMI IPI is enabled, try to register the stop handler
+ 		 * and send the IPI. In any case try to wait for the other
+ 		 * CPUs to stop.
+ 		 */
+ 		if (!smp_no_nmi_ipi && !register_stop_handler()) {
++			u32 dm;
++
+ 			/* Sync above data before sending IRQ */
+ 			wmb();
+ 
+ 			pr_emerg("Shutting down cpus with NMI\n");
+ 
+-			apic_send_IPI_allbutself(NMI_VECTOR);
++			dm = apic->dest_mode_logical ? APIC_DEST_LOGICAL : APIC_DEST_PHYSICAL;
++			dm |= APIC_DM_NMI;
++
++			for_each_cpu(cpu, &cpus_stop_mask) {
++				u32 apicid = apic->cpu_present_to_apicid(cpu);
++
++				apic_icr_write(dm, apicid);
++				apic_wait_icr_idle();
++			}
+ 		}
+ 		/*
+ 		 * Don't wait longer than 10 ms if the caller didn't
+@@ -208,7 +231,7 @@ static void native_stop_other_cpus(int w
+ 		 * one or more CPUs do not reach shutdown state.
+ 		 */
+ 		timeout = USEC_PER_MSEC * 10;
+-		while (num_online_cpus() > 1 && (wait || timeout--))
++		while (!cpumask_empty(&cpus_stop_mask) && (wait || timeout--))
+ 			udelay(1);
+ 	}
+ 
+@@ -216,6 +239,12 @@ static void native_stop_other_cpus(int w
+ 	disable_local_APIC();
+ 	mcheck_cpu_clear(this_cpu_ptr(&cpu_info));
+ 	local_irq_restore(flags);
++
++	/*
++	 * Ensure that the cpus_stop_mask cache lines are invalidated on
++	 * the other CPUs. See comment vs. SME in stop_this_cpu().
++	 */
++	cpumask_clear(&cpus_stop_mask);
+ }
+ 
+ /*
+
