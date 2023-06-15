@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04633731C95
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC81731C96
 	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 17:28:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345268AbjFOP1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 11:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57442 "EHLO
+        id S1345277AbjFOP1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 11:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345192AbjFOP05 (ORCPT
+        with ESMTP id S1345194AbjFOP06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 11:26:57 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E921BC9;
-        Thu, 15 Jun 2023 08:26:54 -0700 (PDT)
+        Thu, 15 Jun 2023 11:26:58 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD6E1BE3;
+        Thu, 15 Jun 2023 08:26:56 -0700 (PDT)
 X-GND-Sasl: herve.codina@bootlin.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686842813;
+        t=1686842815;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=kVNcNG6lGwmhGkvgIcyEWY+MHma3vPNVL1G9SDQv0N4=;
-        b=C+o78+8R1+tm2CcwSEoPCvVdBFZ3nyIz/qgoRiM1/45Wzh7KyFXEsbWNXI42bbr9qUJGJR
-        30iSDDSSzwjP+d1uboQ6pF5aOq9YCeBgvffj6G9qnf7XCpWk2BaGwVx9cTthnihWCuysPL
-        xoJ3sed8EOGWfirfICg/+zjIki2llikT5wQWQoOYO8baeTsSDuO8y+ueG+y32fg9HR0O3L
-        CcT4bPFtJzVsEUbo+1IhJBqTTWUrSj0joGBErl34WFuW5fDIK2aDcIUy65BaIPq2i1X11p
-        CmAaJb2xp6NXsxrVqDvh25owfxxGfRbw+fKn9bcCTPmb+D+2nn2RlTeqVkzuPQ==
+        bh=d9963SgDwUZQGuSUKwlHmZzyDrGgsWoQDbrdBcfFcD8=;
+        b=UXOxXlxcRgoSZIJtO2KdA/wyIFQ7TXCiMvqOGLOBakKIPqIRS8b61vEY5qbULtp99umlWV
+        dW4TmM6z9JM7JRPjEKCktlEkduoacFVEnypxFtiMVnyjM8uu02raI0y3FWsTU7dQw5JZe4
+        E/+zZraG98TwW2XLoaqC76ztcYwGh2mdh4DMdhI+0bN3cfMmJbA3qPDMXmPWkEF+CGtofu
+        u+5ofCJ5SzQm+iTGaO7f+uHPhAnNu1cIrQDeWasfZsTbJEnnERPMj24ncQveIWlbHicUjP
+        qPm8vn6yXF23xpHqk3b3W4R0DDlfrLfte2jl5R1dQ0t0GVoRVO8Up8UUxRlWFg==
 X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
@@ -45,8 +45,8 @@ X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPA id 6646FFF810;
-        Thu, 15 Jun 2023 15:26:52 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id DBF2DFF811;
+        Thu, 15 Jun 2023 15:26:53 +0000 (UTC)
 From:   Herve Codina <herve.codina@bootlin.com>
 To:     Herve Codina <herve.codina@bootlin.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
@@ -64,9 +64,9 @@ Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v5 11/13] ASoC: soc-dapm.h: Convert macros to return a compound literal
-Date:   Thu, 15 Jun 2023 17:26:29 +0200
-Message-Id: <20230615152631.224529-12-herve.codina@bootlin.com>
+Subject: [PATCH v5 12/13] ASoC: codecs: Add support for the generic IIO auxiliary devices
+Date:   Thu, 15 Jun 2023 17:26:30 +0200
+Message-Id: <20230615152631.224529-13-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230615152631.224529-1-herve.codina@bootlin.com>
 References: <20230615152631.224529-1-herve.codina@bootlin.com>
@@ -82,363 +82,416 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SND_SOC_DAPM_* helpers family are used to build widgets array in a
-static way.
+Industrial I/O devices can be present in the audio path.
+These devices needs to be used as audio components in order to be
+fully integrated in the audio path.
 
-Convert them to return a compound literal in order to use them in both
-static and dynamic way.
-With this conversion, the different SND_SOC_DAPM_* parameters can be
-computed by the code and the widget can be built based on this parameter
-computation.
-  static int create_widget(char *input_name)
-  {
-          struct snd_soc_dapm_widget widget;
-          char name*;
-          ...
-          name = input_name;
-          if (!name)
-                  name = "default";
-
-          widget = SND_SOC_DAPM_INPUT(name);
-          ...
-  }
+This support allows to consider these Industrial I/O devices as
+auxiliary audio devices and allows one to control them using mixer
+controls.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 ---
- include/sound/soc-dapm.h | 138 ++++++++++++++++++++++++++-------------
- 1 file changed, 92 insertions(+), 46 deletions(-)
+ sound/soc/codecs/Kconfig         |  12 ++
+ sound/soc/codecs/Makefile        |   2 +
+ sound/soc/codecs/audio-iio-aux.c | 338 +++++++++++++++++++++++++++++++
+ 3 files changed, 352 insertions(+)
+ create mode 100644 sound/soc/codecs/audio-iio-aux.c
 
-diff --git a/include/sound/soc-dapm.h b/include/sound/soc-dapm.h
-index 87f8e1793af1..2e38dff16779 100644
---- a/include/sound/soc-dapm.h
-+++ b/include/sound/soc-dapm.h
-@@ -42,36 +42,45 @@ struct soc_enum;
+diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
+index 44806bfe8ee5..92b7c417f1b2 100644
+--- a/sound/soc/codecs/Kconfig
++++ b/sound/soc/codecs/Kconfig
+@@ -53,6 +53,7 @@ config SND_SOC_ALL_CODECS
+ 	imply SND_SOC_AK5558
+ 	imply SND_SOC_ALC5623
+ 	imply SND_SOC_ALC5632
++	imply SND_SOC_AUDIO_IIO_AUX
+ 	imply SND_SOC_AW8738
+ 	imply SND_SOC_AW88395
+ 	imply SND_SOC_BT_SCO
+@@ -608,6 +609,17 @@ config SND_SOC_ALC5632
+ 	tristate
+ 	depends on I2C
  
- /* codec domain */
- #define SND_SOC_DAPM_VMID(wname) \
--{	.id = snd_soc_dapm_vmid, .name = wname, .kcontrol_news = NULL, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_vmid, .name = wname, .kcontrol_news = NULL, \
- 	.num_kcontrols = 0}
- 
- /* platform domain */
- #define SND_SOC_DAPM_SIGGEN(wname) \
--{	.id = snd_soc_dapm_siggen, .name = wname, .kcontrol_news = NULL, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_siggen, .name = wname, .kcontrol_news = NULL, \
- 	.num_kcontrols = 0, .reg = SND_SOC_NOPM }
- #define SND_SOC_DAPM_SINK(wname) \
--{	.id = snd_soc_dapm_sink, .name = wname, .kcontrol_news = NULL, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_sink, .name = wname, .kcontrol_news = NULL, \
- 	.num_kcontrols = 0, .reg = SND_SOC_NOPM }
- #define SND_SOC_DAPM_INPUT(wname) \
--{	.id = snd_soc_dapm_input, .name = wname, .kcontrol_news = NULL, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_input, .name = wname, .kcontrol_news = NULL, \
- 	.num_kcontrols = 0, .reg = SND_SOC_NOPM }
- #define SND_SOC_DAPM_OUTPUT(wname) \
--{	.id = snd_soc_dapm_output, .name = wname, .kcontrol_news = NULL, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_output, .name = wname, .kcontrol_news = NULL, \
- 	.num_kcontrols = 0, .reg = SND_SOC_NOPM }
- #define SND_SOC_DAPM_MIC(wname, wevent) \
--{	.id = snd_soc_dapm_mic, .name = wname, .kcontrol_news = NULL, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_mic, .name = wname, .kcontrol_news = NULL, \
- 	.num_kcontrols = 0, .reg = SND_SOC_NOPM, .event = wevent, \
- 	.event_flags = SND_SOC_DAPM_PRE_PMU | SND_SOC_DAPM_POST_PMD}
- #define SND_SOC_DAPM_HP(wname, wevent) \
--{	.id = snd_soc_dapm_hp, .name = wname, .kcontrol_news = NULL, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_hp, .name = wname, .kcontrol_news = NULL, \
- 	.num_kcontrols = 0, .reg = SND_SOC_NOPM, .event = wevent, \
- 	.event_flags = SND_SOC_DAPM_POST_PMU | SND_SOC_DAPM_PRE_PMD}
- #define SND_SOC_DAPM_SPK(wname, wevent) \
--{	.id = snd_soc_dapm_spk, .name = wname, .kcontrol_news = NULL, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_spk, .name = wname, .kcontrol_news = NULL, \
- 	.num_kcontrols = 0, .reg = SND_SOC_NOPM, .event = wevent, \
- 	.event_flags = SND_SOC_DAPM_POST_PMU | SND_SOC_DAPM_PRE_PMD}
- #define SND_SOC_DAPM_LINE(wname, wevent) \
--{	.id = snd_soc_dapm_line, .name = wname, .kcontrol_news = NULL, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_line, .name = wname, .kcontrol_news = NULL, \
- 	.num_kcontrols = 0, .reg = SND_SOC_NOPM, .event = wevent, \
- 	.event_flags = SND_SOC_DAPM_POST_PMU | SND_SOC_DAPM_PRE_PMD}
- 
-@@ -82,93 +91,110 @@ struct soc_enum;
- /* path domain */
- #define SND_SOC_DAPM_PGA(wname, wreg, wshift, winvert,\
- 	 wcontrols, wncontrols) \
--{	.id = snd_soc_dapm_pga, .name = wname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_pga, .name = wname, \
- 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
- 	.kcontrol_news = wcontrols, .num_kcontrols = wncontrols}
- #define SND_SOC_DAPM_OUT_DRV(wname, wreg, wshift, winvert,\
- 	 wcontrols, wncontrols) \
--{	.id = snd_soc_dapm_out_drv, .name = wname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_out_drv, .name = wname, \
- 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
- 	.kcontrol_news = wcontrols, .num_kcontrols = wncontrols}
- #define SND_SOC_DAPM_MIXER(wname, wreg, wshift, winvert, \
- 	 wcontrols, wncontrols)\
--{	.id = snd_soc_dapm_mixer, .name = wname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_mixer, .name = wname, \
- 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
- 	.kcontrol_news = wcontrols, .num_kcontrols = wncontrols}
- #define SND_SOC_DAPM_MIXER_NAMED_CTL(wname, wreg, wshift, winvert, \
- 	 wcontrols, wncontrols)\
--{       .id = snd_soc_dapm_mixer_named_ctl, .name = wname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_mixer_named_ctl, .name = wname, \
- 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
- 	.kcontrol_news = wcontrols, .num_kcontrols = wncontrols}
- /* DEPRECATED: use SND_SOC_DAPM_SUPPLY */
- #define SND_SOC_DAPM_MICBIAS(wname, wreg, wshift, winvert) \
--{	.id = snd_soc_dapm_micbias, .name = wname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_micbias, .name = wname, \
- 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
- 	.kcontrol_news = NULL, .num_kcontrols = 0}
- #define SND_SOC_DAPM_SWITCH(wname, wreg, wshift, winvert, wcontrols) \
--{	.id = snd_soc_dapm_switch, .name = wname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_switch, .name = wname, \
- 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
- 	.kcontrol_news = wcontrols, .num_kcontrols = 1}
- #define SND_SOC_DAPM_MUX(wname, wreg, wshift, winvert, wcontrols) \
--{	.id = snd_soc_dapm_mux, .name = wname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_mux, .name = wname, \
- 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
- 	.kcontrol_news = wcontrols, .num_kcontrols = 1}
- #define SND_SOC_DAPM_DEMUX(wname, wreg, wshift, winvert, wcontrols) \
--{	.id = snd_soc_dapm_demux, .name = wname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_demux, .name = wname, \
- 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
- 	.kcontrol_news = wcontrols, .num_kcontrols = 1}
- 
- /* Simplified versions of above macros, assuming wncontrols = ARRAY_SIZE(wcontrols) */
- #define SOC_PGA_ARRAY(wname, wreg, wshift, winvert,\
- 	 wcontrols) \
--{	.id = snd_soc_dapm_pga, .name = wname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_pga, .name = wname, \
- 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
- 	.kcontrol_news = wcontrols, .num_kcontrols = ARRAY_SIZE(wcontrols)}
- #define SOC_MIXER_ARRAY(wname, wreg, wshift, winvert, \
- 	 wcontrols)\
--{	.id = snd_soc_dapm_mixer, .name = wname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_mixer, .name = wname, \
- 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
- 	.kcontrol_news = wcontrols, .num_kcontrols = ARRAY_SIZE(wcontrols)}
- #define SOC_MIXER_NAMED_CTL_ARRAY(wname, wreg, wshift, winvert, \
- 	 wcontrols)\
--{       .id = snd_soc_dapm_mixer_named_ctl, .name = wname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_mixer_named_ctl, .name = wname, \
- 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
- 	.kcontrol_news = wcontrols, .num_kcontrols = ARRAY_SIZE(wcontrols)}
- 
- /* path domain with event - event handler must return 0 for success */
- #define SND_SOC_DAPM_PGA_E(wname, wreg, wshift, winvert, wcontrols, \
- 	wncontrols, wevent, wflags) \
--{	.id = snd_soc_dapm_pga, .name = wname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_pga, .name = wname, \
- 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
- 	.kcontrol_news = wcontrols, .num_kcontrols = wncontrols, \
- 	.event = wevent, .event_flags = wflags}
- #define SND_SOC_DAPM_OUT_DRV_E(wname, wreg, wshift, winvert, wcontrols, \
- 	wncontrols, wevent, wflags) \
--{	.id = snd_soc_dapm_out_drv, .name = wname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_out_drv, .name = wname, \
- 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
- 	.kcontrol_news = wcontrols, .num_kcontrols = wncontrols, \
- 	.event = wevent, .event_flags = wflags}
- #define SND_SOC_DAPM_MIXER_E(wname, wreg, wshift, winvert, wcontrols, \
- 	wncontrols, wevent, wflags) \
--{	.id = snd_soc_dapm_mixer, .name = wname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_mixer, .name = wname, \
- 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
- 	.kcontrol_news = wcontrols, .num_kcontrols = wncontrols, \
- 	.event = wevent, .event_flags = wflags}
- #define SND_SOC_DAPM_MIXER_NAMED_CTL_E(wname, wreg, wshift, winvert, \
- 	wcontrols, wncontrols, wevent, wflags) \
--{       .id = snd_soc_dapm_mixer, .name = wname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_mixer, .name = wname, \
- 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
- 	.kcontrol_news = wcontrols, \
- 	.num_kcontrols = wncontrols, .event = wevent, .event_flags = wflags}
- #define SND_SOC_DAPM_SWITCH_E(wname, wreg, wshift, winvert, wcontrols, \
- 	wevent, wflags) \
--{	.id = snd_soc_dapm_switch, .name = wname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_switch, .name = wname, \
- 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
- 	.kcontrol_news = wcontrols, .num_kcontrols = 1, \
- 	.event = wevent, .event_flags = wflags}
- #define SND_SOC_DAPM_MUX_E(wname, wreg, wshift, winvert, wcontrols, \
- 	wevent, wflags) \
--{	.id = snd_soc_dapm_mux, .name = wname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_mux, .name = wname, \
- 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
- 	.kcontrol_news = wcontrols, .num_kcontrols = 1, \
- 	.event = wevent, .event_flags = wflags}
-@@ -176,101 +202,121 @@ struct soc_enum;
- /* additional sequencing control within an event type */
- #define SND_SOC_DAPM_PGA_S(wname, wsubseq, wreg, wshift, winvert, \
- 	wevent, wflags) \
--{	.id = snd_soc_dapm_pga, .name = wname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_pga, .name = wname, \
- 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
- 	.event = wevent, .event_flags = wflags, \
- 	.subseq = wsubseq}
- #define SND_SOC_DAPM_SUPPLY_S(wname, wsubseq, wreg, wshift, winvert, wevent, \
- 	wflags)	\
--{	.id = snd_soc_dapm_supply, .name = wname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_supply, .name = wname, \
- 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
- 	.event = wevent, .event_flags = wflags, .subseq = wsubseq}
- 
- /* Simplified versions of above macros, assuming wncontrols = ARRAY_SIZE(wcontrols) */
- #define SOC_PGA_E_ARRAY(wname, wreg, wshift, winvert, wcontrols, \
- 	wevent, wflags) \
--{	.id = snd_soc_dapm_pga, .name = wname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_pga, .name = wname, \
- 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
- 	.kcontrol_news = wcontrols, .num_kcontrols = ARRAY_SIZE(wcontrols), \
- 	.event = wevent, .event_flags = wflags}
- #define SOC_MIXER_E_ARRAY(wname, wreg, wshift, winvert, wcontrols, \
- 	wevent, wflags) \
--{	.id = snd_soc_dapm_mixer, .name = wname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_mixer, .name = wname, \
- 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
- 	.kcontrol_news = wcontrols, .num_kcontrols = ARRAY_SIZE(wcontrols), \
- 	.event = wevent, .event_flags = wflags}
- #define SOC_MIXER_NAMED_CTL_E_ARRAY(wname, wreg, wshift, winvert, \
- 	wcontrols, wevent, wflags) \
--{       .id = snd_soc_dapm_mixer, .name = wname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_mixer, .name = wname, \
- 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
- 	.kcontrol_news = wcontrols, .num_kcontrols = ARRAY_SIZE(wcontrols), \
- 	.event = wevent, .event_flags = wflags}
- 
- /* events that are pre and post DAPM */
- #define SND_SOC_DAPM_PRE(wname, wevent) \
--{	.id = snd_soc_dapm_pre, .name = wname, .kcontrol_news = NULL, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_pre, .name = wname, .kcontrol_news = NULL, \
- 	.num_kcontrols = 0, .reg = SND_SOC_NOPM, .event = wevent, \
- 	.event_flags = SND_SOC_DAPM_PRE_PMU | SND_SOC_DAPM_PRE_PMD}
- #define SND_SOC_DAPM_POST(wname, wevent) \
--{	.id = snd_soc_dapm_post, .name = wname, .kcontrol_news = NULL, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_post, .name = wname, .kcontrol_news = NULL, \
- 	.num_kcontrols = 0, .reg = SND_SOC_NOPM, .event = wevent, \
- 	.event_flags = SND_SOC_DAPM_POST_PMU | SND_SOC_DAPM_POST_PMD}
- 
- /* stream domain */
- #define SND_SOC_DAPM_AIF_IN(wname, stname, wchan, wreg, wshift, winvert) \
--{	.id = snd_soc_dapm_aif_in, .name = wname, .sname = stname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_aif_in, .name = wname, .sname = stname, \
- 	.channel = wchan, SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), }
- #define SND_SOC_DAPM_AIF_IN_E(wname, stname, wchan, wreg, wshift, winvert, \
- 			      wevent, wflags)				\
--{	.id = snd_soc_dapm_aif_in, .name = wname, .sname = stname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_aif_in, .name = wname, .sname = stname, \
- 	.channel = wchan, SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
- 	.event = wevent, .event_flags = wflags }
- #define SND_SOC_DAPM_AIF_OUT(wname, stname, wchan, wreg, wshift, winvert) \
--{	.id = snd_soc_dapm_aif_out, .name = wname, .sname = stname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_aif_out, .name = wname, .sname = stname, \
- 	.channel = wchan, SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), }
- #define SND_SOC_DAPM_AIF_OUT_E(wname, stname, wchan, wreg, wshift, winvert, \
- 			     wevent, wflags)				\
--{	.id = snd_soc_dapm_aif_out, .name = wname, .sname = stname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_aif_out, .name = wname, .sname = stname, \
- 	.channel = wchan, SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
- 	.event = wevent, .event_flags = wflags }
- #define SND_SOC_DAPM_DAC(wname, stname, wreg, wshift, winvert) \
--{	.id = snd_soc_dapm_dac, .name = wname, .sname = stname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_dac, .name = wname, .sname = stname, \
- 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert) }
- #define SND_SOC_DAPM_DAC_E(wname, stname, wreg, wshift, winvert, \
- 			   wevent, wflags)				\
--{	.id = snd_soc_dapm_dac, .name = wname, .sname = stname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_dac, .name = wname, .sname = stname, \
- 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
- 	.event = wevent, .event_flags = wflags}
- 
- #define SND_SOC_DAPM_ADC(wname, stname, wreg, wshift, winvert) \
--{	.id = snd_soc_dapm_adc, .name = wname, .sname = stname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_adc, .name = wname, .sname = stname, \
- 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), }
- #define SND_SOC_DAPM_ADC_E(wname, stname, wreg, wshift, winvert, \
- 			   wevent, wflags)				\
--{	.id = snd_soc_dapm_adc, .name = wname, .sname = stname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_adc, .name = wname, .sname = stname, \
- 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
- 	.event = wevent, .event_flags = wflags}
- #define SND_SOC_DAPM_CLOCK_SUPPLY(wname) \
--{	.id = snd_soc_dapm_clock_supply, .name = wname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_clock_supply, .name = wname, \
- 	.reg = SND_SOC_NOPM, .event = dapm_clock_event, \
- 	.event_flags = SND_SOC_DAPM_PRE_PMU | SND_SOC_DAPM_POST_PMD }
- 
- /* generic widgets */
- #define SND_SOC_DAPM_REG(wid, wname, wreg, wshift, wmask, won_val, woff_val) \
--{	.id = wid, .name = wname, .kcontrol_news = NULL, .num_kcontrols = 0, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = wid, .name = wname, .kcontrol_news = NULL, .num_kcontrols = 0, \
- 	.reg = wreg, .shift = wshift, .mask = wmask, \
- 	.on_val = won_val, .off_val = woff_val, }
- #define SND_SOC_DAPM_SUPPLY(wname, wreg, wshift, winvert, wevent, wflags) \
--{	.id = snd_soc_dapm_supply, .name = wname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_supply, .name = wname, \
- 	SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
- 	.event = wevent, .event_flags = wflags}
- #define SND_SOC_DAPM_REGULATOR_SUPPLY(wname, wdelay, wflags)	    \
--{	.id = snd_soc_dapm_regulator_supply, .name = wname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_regulator_supply, .name = wname, \
- 	.reg = SND_SOC_NOPM, .shift = wdelay, .event = dapm_regulator_event, \
- 	.event_flags = SND_SOC_DAPM_PRE_PMU | SND_SOC_DAPM_POST_PMD, \
- 	.on_val = wflags}
- #define SND_SOC_DAPM_PINCTRL(wname, active, sleep) \
--{	.id = snd_soc_dapm_pinctrl, .name = wname, \
-+(struct snd_soc_dapm_widget) { \
-+	.id = snd_soc_dapm_pinctrl, .name = wname, \
- 	.priv = (&(struct snd_soc_dapm_pinctrl_priv) \
- 		{ .active_state = active, .sleep_state = sleep,}), \
- 	.reg = SND_SOC_NOPM, .event = dapm_pinctrl_event, \
++config SND_SOC_AUDIO_IIO_AUX
++	tristate "Audio IIO Auxiliary device"
++	depends on IIO
++	help
++	  Enable support for Industrial I/O devices as audio auxiliary devices.
++	  This allows to have an IIO device present in the audio path and
++	  controlled using mixer controls.
++
++	  To compile this driver as a module, choose M here: the module
++	  will be called snd-soc-audio-iio-aux.
++
+ config SND_SOC_AW8738
+ 	tristate "Awinic AW8738 Audio Amplifier"
+ 	select GPIOLIB
+diff --git a/sound/soc/codecs/Makefile b/sound/soc/codecs/Makefile
+index 2c45c2f97e4e..f2828d3616c5 100644
+--- a/sound/soc/codecs/Makefile
++++ b/sound/soc/codecs/Makefile
+@@ -45,6 +45,7 @@ snd-soc-ak4671-objs := ak4671.o
+ snd-soc-ak5386-objs := ak5386.o
+ snd-soc-ak5558-objs := ak5558.o
+ snd-soc-arizona-objs := arizona.o arizona-jack.o
++snd-soc-audio-iio-aux-objs := audio-iio-aux.o
+ snd-soc-aw8738-objs := aw8738.o
+ snd-soc-aw88395-lib-objs := aw88395/aw88395_lib.o
+ snd-soc-aw88395-objs := aw88395/aw88395.o \
+@@ -421,6 +422,7 @@ obj-$(CONFIG_SND_SOC_AK5558)	+= snd-soc-ak5558.o
+ obj-$(CONFIG_SND_SOC_ALC5623)    += snd-soc-alc5623.o
+ obj-$(CONFIG_SND_SOC_ALC5632)	+= snd-soc-alc5632.o
+ obj-$(CONFIG_SND_SOC_ARIZONA)	+= snd-soc-arizona.o
++obj-$(CONFIG_SND_SOC_AUDIO_IIO_AUX)	+= snd-soc-audio-iio-aux.o
+ obj-$(CONFIG_SND_SOC_AW8738)	+= snd-soc-aw8738.o
+ obj-$(CONFIG_SND_SOC_AW88395_LIB) += snd-soc-aw88395-lib.o
+ obj-$(CONFIG_SND_SOC_AW88395)	+=snd-soc-aw88395.o
+diff --git a/sound/soc/codecs/audio-iio-aux.c b/sound/soc/codecs/audio-iio-aux.c
+new file mode 100644
+index 000000000000..b9d72cbb85f2
+--- /dev/null
++++ b/sound/soc/codecs/audio-iio-aux.c
+@@ -0,0 +1,338 @@
++// SPDX-License-Identifier: GPL-2.0-only
++//
++// ALSA SoC glue to use IIO devices as audio components
++//
++// Copyright 2023 CS GROUP France
++//
++// Author: Herve Codina <herve.codina@bootlin.com>
++
++#include <linux/iio/consumer.h>
++#include <linux/minmax.h>
++#include <linux/mod_devicetable.h>
++#include <linux/platform_device.h>
++#include <linux/slab.h>
++#include <linux/string_helpers.h>
++
++#include <sound/soc.h>
++#include <sound/tlv.h>
++
++struct audio_iio_aux_chan {
++	struct iio_channel *iio_chan;
++	const char *name;
++	int max;
++	int min;
++	bool is_invert_range;
++};
++
++struct audio_iio_aux {
++	struct device *dev;
++	struct audio_iio_aux_chan *chans;
++	unsigned int num_chans;
++};
++
++static int audio_iio_aux_info_volsw(struct snd_kcontrol *kcontrol,
++				    struct snd_ctl_elem_info *uinfo)
++{
++	struct audio_iio_aux_chan *chan = (struct audio_iio_aux_chan *)kcontrol->private_value;
++
++	uinfo->count = 1;
++	uinfo->value.integer.min = 0;
++	uinfo->value.integer.max = chan->max - chan->min;
++	uinfo->type = (uinfo->value.integer.max == 1) ?
++			SNDRV_CTL_ELEM_TYPE_BOOLEAN : SNDRV_CTL_ELEM_TYPE_INTEGER;
++	return 0;
++}
++
++static int audio_iio_aux_get_volsw(struct snd_kcontrol *kcontrol,
++				   struct snd_ctl_elem_value *ucontrol)
++{
++	struct audio_iio_aux_chan *chan = (struct audio_iio_aux_chan *)kcontrol->private_value;
++	int max = chan->max;
++	int min = chan->min;
++	bool invert_range = chan->is_invert_range;
++	int ret;
++	int val;
++
++	ret = iio_read_channel_raw(chan->iio_chan, &val);
++	if (ret < 0)
++		return ret;
++
++	ucontrol->value.integer.value[0] = val - min;
++	if (invert_range)
++		ucontrol->value.integer.value[0] = max - ucontrol->value.integer.value[0];
++
++	return 0;
++}
++
++static int audio_iio_aux_put_volsw(struct snd_kcontrol *kcontrol,
++				   struct snd_ctl_elem_value *ucontrol)
++{
++	struct audio_iio_aux_chan *chan = (struct audio_iio_aux_chan *)kcontrol->private_value;
++	int max = chan->max;
++	int min = chan->min;
++	bool invert_range = chan->is_invert_range;
++	int val;
++	int ret;
++	int tmp;
++
++	val = ucontrol->value.integer.value[0];
++	if (val < 0)
++		return -EINVAL;
++	if (val > max - min)
++		return -EINVAL;
++
++	val = val + min;
++	if (invert_range)
++		val = max - val;
++
++	ret = iio_read_channel_raw(chan->iio_chan, &tmp);
++	if (ret < 0)
++		return ret;
++
++	if (tmp == val)
++		return 0;
++
++	ret = iio_write_channel_raw(chan->iio_chan, val);
++	if (ret)
++		return ret;
++
++	return 1; /* The value changed */
++}
++
++static int audio_iio_aux_add_controls(struct snd_soc_component *component,
++				      struct audio_iio_aux_chan *chan)
++{
++	struct snd_kcontrol_new control = {};
++
++	control.iface = SNDRV_CTL_ELEM_IFACE_MIXER;
++	control.name = chan->name;
++	control.info = audio_iio_aux_info_volsw;
++	control.get = audio_iio_aux_get_volsw;
++	control.put = audio_iio_aux_put_volsw;
++	control.private_value = (unsigned long)chan;
++
++	return snd_soc_add_component_controls(component, &control, 1);
++}
++
++/*
++ * These data could be on stack but they are pretty big.
++ * As ASoC internally copy them and protect them against concurrent accesses
++ * (snd_soc_bind_card() protects using client_mutex), keep them in the global
++ * data area.
++ */
++static struct snd_soc_dapm_widget widgets[3];
++static struct snd_soc_dapm_route routes[2];
++
++/* Be sure sizes are correct (need 3 widgets and 2 routes) */
++static_assert(ARRAY_SIZE(widgets) >= 3, "3 widgets are needed");
++static_assert(ARRAY_SIZE(routes) >= 2, "2 routes are needed");
++
++static int audio_iio_aux_add_dapms(struct snd_soc_component *component,
++				   struct audio_iio_aux_chan *chan)
++{
++	struct snd_soc_dapm_context *dapm = snd_soc_component_get_dapm(component);
++	char *output_name;
++	char *input_name;
++	char *pga_name;
++	int ret;
++
++	input_name = kasprintf(GFP_KERNEL, "%s IN", chan->name);
++	if (!input_name)
++		return -ENOMEM;
++
++	output_name = kasprintf(GFP_KERNEL, "%s OUT", chan->name);
++	if (!output_name) {
++		ret = -ENOMEM;
++		goto out_free_input_name;
++	}
++	pga_name = kasprintf(GFP_KERNEL, "%s PGA", chan->name);
++	if (!pga_name) {
++		ret = -ENOMEM;
++		goto out_free_output_name;
++	}
++
++	widgets[0] = SND_SOC_DAPM_INPUT(input_name);
++	widgets[1] = SND_SOC_DAPM_OUTPUT(output_name);
++	widgets[2] = SND_SOC_DAPM_PGA(pga_name, SND_SOC_NOPM, 0, 0, NULL, 0);
++	ret = snd_soc_dapm_new_controls(dapm, widgets, 3);
++	if (ret)
++		goto out_free_pga_name;
++
++	routes[0].sink = pga_name;
++	routes[0].control = NULL;
++	routes[0].source = input_name;
++	routes[1].sink = output_name;
++	routes[1].control = NULL;
++	routes[1].source = pga_name;
++	ret = snd_soc_dapm_add_routes(dapm, routes, 2);
++
++	/* Allocated names are no more needed (duplicated in ASoC internals) */
++
++out_free_pga_name:
++	kfree(pga_name);
++out_free_output_name:
++	kfree(output_name);
++out_free_input_name:
++	kfree(input_name);
++	return ret;
++}
++
++static int audio_iio_aux_component_probe(struct snd_soc_component *component)
++{
++	struct audio_iio_aux *iio_aux = snd_soc_component_get_drvdata(component);
++	struct audio_iio_aux_chan *chan;
++	int ret;
++	int i;
++
++	for (i = 0; i < iio_aux->num_chans; i++) {
++		chan = iio_aux->chans + i;
++
++		ret = iio_read_max_channel_raw(chan->iio_chan, &chan->max);
++		if (ret)
++			return dev_err_probe(component->dev, ret,
++					     "chan[%d] %s: Cannot get max raw value\n",
++					     i, chan->name);
++
++		ret = iio_read_min_channel_raw(chan->iio_chan, &chan->min);
++		if (ret)
++			return dev_err_probe(component->dev, ret,
++					     "chan[%d] %s: Cannot get min raw value\n",
++					     i, chan->name);
++
++		if (chan->min > chan->max) {
++			dev_dbg(component->dev, "chan[%d] %s: Swap min and max\n",
++				i, chan->name);
++			swap(chan->min, chan->max);
++		}
++
++		/* Set initial value */
++		ret = iio_write_channel_raw(chan->iio_chan,
++					    chan->is_invert_range ? chan->max : chan->min);
++		if (ret)
++			return dev_err_probe(component->dev, ret,
++					     "chan[%d] %s: Cannot set initial value\n",
++					     i, chan->name);
++
++		ret = audio_iio_aux_add_controls(component, chan);
++		if (ret)
++			return ret;
++
++		ret = audio_iio_aux_add_dapms(component, chan);
++		if (ret)
++			return ret;
++
++		dev_dbg(component->dev, "chan[%d]: Added %s (min=%d, max=%d, invert=%s)\n",
++			i, chan->name, chan->min, chan->max,
++			str_on_off(chan->is_invert_range));
++	}
++
++	return 0;
++}
++
++static const struct snd_soc_component_driver audio_iio_aux_component_driver = {
++	.probe = audio_iio_aux_component_probe,
++};
++
++static int audio_iio_aux_probe(struct platform_device *pdev)
++{
++	struct audio_iio_aux_chan *iio_aux_chan;
++	struct device *dev = &pdev->dev;
++	struct audio_iio_aux *iio_aux;
++	const char **names;
++	u32 *invert_ranges;
++	int count;
++	int ret;
++	int i;
++
++	iio_aux = devm_kzalloc(dev, sizeof(*iio_aux), GFP_KERNEL);
++	if (!iio_aux)
++		return -ENOMEM;
++
++	iio_aux->dev = dev;
++
++	count = device_property_string_array_count(dev, "io-channel-names");
++	if (count < 0)
++		return dev_err_probe(dev, count, "failed to count io-channel-names\n");
++
++	iio_aux->num_chans = count;
++
++	iio_aux->chans = devm_kmalloc_array(dev, iio_aux->num_chans,
++					    sizeof(*iio_aux->chans), GFP_KERNEL);
++	if (!iio_aux->chans)
++		return -ENOMEM;
++
++	names = kcalloc(iio_aux->num_chans, sizeof(*names), GFP_KERNEL);
++	if (!names)
++		return -ENOMEM;
++
++	invert_ranges = kcalloc(iio_aux->num_chans, sizeof(*invert_ranges), GFP_KERNEL);
++	if (!invert_ranges) {
++		ret = -ENOMEM;
++		goto out_free_names;
++	}
++
++	ret = device_property_read_string_array(dev, "io-channel-names",
++						names, iio_aux->num_chans);
++	if (ret < 0) {
++		dev_err_probe(dev, ret, "failed to read io-channel-names\n");
++		goto out_free_invert_ranges;
++	}
++
++	/*
++	 * snd-control-invert-range is optional and can contain fewer items
++	 * than the number of channels. Unset values default to 0.
++	 */
++	count = device_property_count_u32(dev, "snd-control-invert-range");
++	if (count > 0) {
++		count = min_t(unsigned int, count, iio_aux->num_chans);
++		ret = device_property_read_u32_array(dev, "snd-control-invert-range",
++						     invert_ranges, count);
++		if (ret < 0) {
++			dev_err_probe(dev, ret, "failed to read snd-control-invert-range\n");
++			goto out_free_invert_ranges;
++		}
++	}
++
++	for (i = 0; i < iio_aux->num_chans; i++) {
++		iio_aux_chan = iio_aux->chans + i;
++		iio_aux_chan->name = names[i];
++		iio_aux_chan->is_invert_range = invert_ranges[i];
++
++		iio_aux_chan->iio_chan = devm_iio_channel_get(dev, iio_aux_chan->name);
++		if (IS_ERR(iio_aux_chan->iio_chan)) {
++			ret = PTR_ERR(iio_aux_chan->iio_chan);
++			dev_err_probe(dev, ret, "get IIO channel '%s' failed\n",
++				      iio_aux_chan->name);
++			goto out_free_invert_ranges;
++		}
++	}
++
++	platform_set_drvdata(pdev, iio_aux);
++
++	ret = devm_snd_soc_register_component(dev, &audio_iio_aux_component_driver,
++					      NULL, 0);
++out_free_invert_ranges:
++	kfree(invert_ranges);
++out_free_names:
++	kfree(names);
++	return ret;
++}
++
++static const struct of_device_id audio_iio_aux_ids[] = {
++	{ .compatible = "audio-iio-aux" },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, audio_iio_aux_ids);
++
++static struct platform_driver audio_iio_aux_driver = {
++	.driver = {
++		.name = "audio-iio-aux",
++		.of_match_table = audio_iio_aux_ids,
++	},
++	.probe = audio_iio_aux_probe,
++};
++module_platform_driver(audio_iio_aux_driver);
++
++MODULE_AUTHOR("Herve Codina <herve.codina@bootlin.com>");
++MODULE_DESCRIPTION("IIO ALSA SoC aux driver");
++MODULE_LICENSE("GPL");
 -- 
 2.40.1
 
