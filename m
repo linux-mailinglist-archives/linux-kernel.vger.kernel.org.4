@@ -2,147 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D6D731AB7
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:01:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11E1E731ABE
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344804AbjFOOBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 10:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36332 "EHLO
+        id S1344854AbjFOOC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 10:02:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjFOOBO (ORCPT
+        with ESMTP id S1344834AbjFOOCU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 10:01:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8446E1FF9
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 07:00:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686837620;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iY9+jzWeLLrhR3zsPgELSfNoWOXUeIAPez3AsCnmyUE=;
-        b=LwBVV/q01KAQRmnkMIT8bVgEW9pRN3hyBJeKqOVrbhpZ8pttCWjCXjwUOc3/ejbG9VCwpO
-        QpeOODmqbkWKTCCDQskLW8IImh3ptBeLwbrFQ3o5aWq0i0WN/i6AyDCd41aK+/rS1H4LfM
-        VRAJ1MfKCEnGOX7AOWEIUQmt/HdxDA8=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-605-RExO7t_INOeGskhcug2Ijw-1; Thu, 15 Jun 2023 10:00:18 -0400
-X-MC-Unique: RExO7t_INOeGskhcug2Ijw-1
-Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-51664cc4bddso6771587a12.2
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 07:00:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686837616; x=1689429616;
-        h=content-transfer-encoding:in-reply-to:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iY9+jzWeLLrhR3zsPgELSfNoWOXUeIAPez3AsCnmyUE=;
-        b=FXxFRv4tJyStsce8bseycWLanL6g+ELdQ750ewluQmYF6LZoNrNHHFOTPEBtdKdxD4
-         oUKVscRICOojjDGofT9gFIh8Z0jc2wO4y5q2wMOR6XON7w1hEeUfT1bc69spWyCW3M3c
-         9s1oTk92nR+EKIsi90XTFfI3niDFCyvewE766d9jh0ZEID8tQzm24KTgZq6Kn7SGKlOQ
-         XYP8K11Xc4KurlTZQkANRMyYWbvJWuhqoOnDQs+HZ+pV0Pn0Vj7NPp97jaWOss3NFWJj
-         xbxkja8jpO6HuRTOHbw7OVIj4M6TvYxBu5f89iTz/ERrPCJXJKG8cOd0d/y6z7/DUDlU
-         S+qg==
-X-Gm-Message-State: AC+VfDxAy/qRQqCV7fWsFZE55fCyNw1lQOgU3Oe2aBfr4ZLecRjZXzQr
-        1gKZJCAuK4CRnXmdVc5dXlC0UvkkpJBTL2k2kmcwdvY9I7JpnbhLryY9fR/Jd1YYokh5codZBZx
-        SYTFA0onPIVTh2S34jKQ5eiG9
-X-Received: by 2002:a05:6402:1252:b0:518:82c4:cc7e with SMTP id l18-20020a056402125200b0051882c4cc7emr3651691edw.17.1686837616423;
-        Thu, 15 Jun 2023 07:00:16 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ58ICTUk9qzBYW9m2U3cHL0vpsVIWAJ3qpjhMUfMNM+LxWyP8r4apEo2Pcp5+Wa7vwiB9elyA==
-X-Received: by 2002:a05:6402:1252:b0:518:82c4:cc7e with SMTP id l18-20020a056402125200b0051882c4cc7emr3651672edw.17.1686837616076;
-        Thu, 15 Jun 2023 07:00:16 -0700 (PDT)
-Received: from [192.168.42.222] (194-45-78-10.static.kviknet.net. [194.45.78.10])
-        by smtp.gmail.com with ESMTPSA id ba7-20020a0564021ac700b0050bc6983041sm8920929edb.96.2023.06.15.07.00.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 07:00:15 -0700 (PDT)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <b28b0e3e-87e4-5a02-c172-2d1424405a5a@redhat.com>
-Date:   Thu, 15 Jun 2023 16:00:13 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Cc:     brouer@redhat.com, hawk@kernel.org, ilias.apalodimas@linaro.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com
-Subject: Re: [PATCH net-next] page pool: not return page to alloc cache during
- pool destruction
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>,
-        Liang Chen <liangchen.linux@gmail.com>
-References: <20230615013645.7297-1-liangchen.linux@gmail.com>
- <20230614212031.7e1b6893@kernel.org>
-In-Reply-To: <20230614212031.7e1b6893@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 15 Jun 2023 10:02:20 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB2E1FCC;
+        Thu, 15 Jun 2023 07:02:19 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 3A0905C00D8;
+        Thu, 15 Jun 2023 10:02:17 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 15 Jun 2023 10:02:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1686837737; x=1686924137; bh=eY
+        CsNbwSpZasMtX08Ox/O4cr7nckW5aMGHyiTHaMEvU=; b=vOzobmNPGCa6Mb+YMn
+        asY4+o4H7LWFlBlorgzjotB25hUrMvqvukGFrvIOFTYkNkmBCFfkfYb7X6imkzfn
+        sML3mf0MEl+OOFAzv6L0+9AuUaTQic/O3l7J/Um+a/XK/7TQ3dK9jE23HkDJV3Vs
+        tDR4Cptq7Fgq6dS47eJsrpRHBCMYlX0sI0Td+Q7oFfoVuMaf0cMmk4mZGTrOZpYO
+        0rMG2r1EEBy5j9jm1bkbitkBDqQTPnwcL4WNXUNHHbhTVXFMjTwseb2LBCgUEp/1
+        +s+r4qww3/aMPqDMeUtP5In77D7fY0JN1JnDwlhLQ//7UetfJyigloRfTgfH3qFG
+        V+Fg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1686837737; x=1686924137; bh=eYCsNbwSpZasM
+        tX08Ox/O4cr7nckW5aMGHyiTHaMEvU=; b=RSjrdEsgeakMj9X0uhMrA2PN8j4Rw
+        pWXc64Yh1QUJkZeWJkSnJ0wQsjdXWC/3XpGIHvmkTcOdt0VT+5p3Xd6K+WSijJZD
+        P9QRahEgKUIIR6zj5ENb/as3xq4x6AqDJw4/GMYKH7b+N/YNAtxKum1MSPXLflPG
+        m+HlPmtoy7O2mEY7LLNS57KYNliFt1xshKmL9IOluY5EiwB7aXhrahSgQhyPoY5q
+        6VwOrvtNtqhDyTOc2qBbMDmGt9vkhZgEglyYMXiiMxdFV2KpT+lH4lAnZz1lUxWM
+        W0mHLLlOQST/9FfJJb2bpnMmrnrSx7xM+VZOqpQpE1UAmfOmbdFqxZq5A==
+X-ME-Sender: <xms:5xmLZKCYyHW13ObS6w0LD32bRjVKIvAyUoxIfkLUbwHtvZxyxzeB4A>
+    <xme:5xmLZEjY_hphZXlP1bRPz0opQcFXjc-eW38HI_E3PzOCKDizjqRXwR1xD4qSwCSeq
+    VcGMqtko0gNCR47e-Y>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedvvddgieejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:5xmLZNkekz6_0Xug5GdmBYkGf7aRRh9mTOIPN1FfLVJMFhxt3vwz8Q>
+    <xmx:5xmLZIyESrV9s75tfwvOAsFrQB5NyxdP7_8qsaRcPkjS3Q4Pnc6FtA>
+    <xmx:5xmLZPT7I_mIrWmX-DvFqlb4-GewBZkZk_6P1avaIqcMyNV5RSAH8w>
+    <xmx:6RmLZALLJEV_J5Zlse85sRbLxpAvhdWEEI0sUeczWEi-Hx4Bd32Kig>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 6F440B60089; Thu, 15 Jun 2023 10:02:15 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-496-g8c46984af0-fm-20230615.001-g8c46984a
+Mime-Version: 1.0
+Message-Id: <502240f7-2cac-4fe6-9e27-f9861db3666d@app.fastmail.com>
+In-Reply-To: <2023061555-enlighten-worshiper-c92d@gregkh>
+References: <20230612025355.547871-1-ychuang570808@gmail.com>
+ <20230612025355.547871-2-ychuang570808@gmail.com>
+ <2023061338-lunchbox-snorkel-e6a9@gregkh>
+ <f8eb6114-8248-8886-b301-c2886e50e016@gmail.com>
+ <2023061356-matchbook-footwear-d142@gregkh>
+ <35e768ad-7f15-48a4-9c38-09570026cf71@app.fastmail.com>
+ <2023061555-enlighten-worshiper-c92d@gregkh>
+Date:   Thu, 15 Jun 2023 16:01:55 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     "Jacky Huang" <ychuang570808@gmail.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, "Lee Jones" <lee@kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        "Stephen Boyd" <sboyd@kernel.org>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        "Jiri Slaby" <jirislaby@kernel.org>,
+        "Tomer Maimon" <tmaimon77@gmail.com>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        soc@kernel.org, schung@nuvoton.com, mjchen@nuvoton.com,
+        "Jacky Huang" <ychuang3@nuvoton.com>
+Subject: Re: [PATCH v14 1/1] tty: serial: Add Nuvoton ma35d1 serial driver support
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 15, 2023, at 12:19, Greg Kroah-Hartman wrote:
+> On Tue, Jun 13, 2023 at 05:44:23PM +0200, Arnd Bergmann wrote:
+>> On Tue, Jun 13, 2023, at 16:49, Greg KH wrote:
+>> I don't see how Jacky can come up with a patch to do this correctly
+>> without more specific guidance to what exactly you are looking for,
+>> after the last 123 people that added support for a new port got
+>> that merged.
+>
+> I keep complaining about this, when I notice it.  Just use the "default"
+> port type in the serial driver and don't add a new type here and it
+> should just work, right?
+>
+>> I checked debian codesearch and found only three obscure packages that
+>> accidentally include this header instead of including linux/serial.h,
+>> a couple of lists of all kernel headers, and none that include it on
+>> purpose. I agree that this header should really not exist in uapi,
+>> but the question is what exactly to do about it.
+>> 
+>> Possible changes would be:
+>> 
+>> - add a special value PORT_* constant other than PORT_UNKNOWN that
+>>   can be used by serial drivers instead of a unique value, and
+>>   ensure that the serial core can handle drivers using it.
+>
+> Why do we need a special constant?
 
+The "default" value is 0, which translates to PORT_UNKNOWN, and the
+serial core code prevents this from working. I think Jacky tried
+to use this the last one or two times you commented on it, and
+it did not work.
 
-On 15/06/2023 06.20, Jakub Kicinski wrote:
-> On Thu, 15 Jun 2023 09:36:45 +0800 Liang Chen wrote:
->> When destroying a page pool, the alloc cache and recycle ring are emptied.
->> If there are inflight pages, the retry process will periodically check the
->> recycle ring for recently returned pages, but not the alloc cache (alloc
->> cache is only emptied once). As a result, any pages returned to the alloc
->> cache after the page pool destruction will be stuck there and cause the
->> retry process to continuously look for inflight pages and report warnings.
->>
->> To safeguard against this situation, any pages returning to the alloc cache
->> after pool destruction should be prevented.
-> 
-> Let's hear from the page pool maintainers but I think the driver
-> is supposed to prevent allocations while pool is getting destroyed.
+Setting it to a plain '1' as Jacky suggested in his reply is the
+same as PORT_8250, which may or may not be a good choice here.
 
-Yes, this is a driver API violation. Direct returns (allow_direct) can
-only happen from drivers RX path, e.g while driver is active processing
-packets (in NAPI).  When driver is shutting down a page_pool, it MUST
-have stopped RX path and NAPI (napi_disable()) before calling
-page_pool_destroy()  Thus, this situation cannot happen and if it does
-it is a driver bug.
+Since the number is exported to userspace in serial_struct,
+it might be better to pick a new constant such as
 
-> Perhaps we can add DEBUG_NET_WARN_ON_ONCE() for this condition to
-> prevent wasting cycles in production builds?
-> 
+#define PORT_SERIAL_GENERIC (-1)
 
-For this page_pool code path ("allow_direct") it is extremely important
-we avoid wasting cycles in production.  As this is used for XDP_DROP
-use-cases for 100Gbit/s NICs.
+in order to be less ambiguous. It's a signed integer, so -1
+would work here this would clearly be a special value, or
+another option might be to use 255 as something that is
+slightly less special but still recognizable as something
+that may have a special meaning.
 
-At 100Gbit/s with 64 bytes Ethernet frames (84 on wire), the wirespeed
-is 148.8Mpps which gives CPU 6.72 nanosec to process each packet.
-The microbench[1] shows (below signature) that page_pool_alloc_pages() +
-page_pool_recycle_direct() cost 4.041 ns (or 14 cycles(tsc)).
-Thus, for this code fast-path every cycle counts.
-
-In practice PCIe transactions/sec seems limit total system to 108Mpps
-(with multiple RX-queues + descriptor compression) thus 9.26 nanosec to
-process each packet. Individual hardware RX queues seems be limited to
-around 36Mpps thus 27.77 nanosec to process each packet.
-
-Adding a DEBUG_NET_WARN_ON_ONCE will be annoying as I like to run my
-testlab kernels with CONFIG_DEBUG_NET, which will change this extreme
-fash-path slightly (adding some unlikely's affecting code layout to the
-mix).
-
-Question to Liang Chen: Did you hit this bug in practice?
-
---Jesper
-
-CPU E5-1650 v4 @ 3.60GHz
-  tasklet_page_pool01_fast_path Per elem:  14 cycles(tsc)  4.041 ns
-  tasklet_page_pool02_ptr_ring  Per elem:  49 cycles(tsc) 13.622 ns
-  tasklet_page_pool03_slow      Per elem: 162 cycles(tsc) 45.198 ns
-
-[1] 
-https://github.com/netoptimizer/prototype-kernel/blob/master/kernel/lib/bench_page_pool_simple.c
-
+      Arnd
