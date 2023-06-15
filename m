@@ -2,63 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59B98731E2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 411F5731E2D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:50:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236939AbjFOQtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 12:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44298 "EHLO
+        id S235420AbjFOQtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 12:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236656AbjFOQtE (ORCPT
+        with ESMTP id S236185AbjFOQtP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 12:49:04 -0400
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3883295E;
-        Thu, 15 Jun 2023 09:48:26 -0700 (PDT)
-Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-77acb944bdfso438110439f.0;
-        Thu, 15 Jun 2023 09:48:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686847706; x=1689439706;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eFEsL0GLVi4RtgCxkqPyG2MNt0gsxqeP3X7GxfYbipY=;
-        b=aLYciXUGRWgVNNr4iu6vLi2e5fmDknWIi1WjZqVKJWSp55Z9GLHwSeSQATA6QPAiqe
-         Ftb8ygeNQoIk0+FAs8y6EEvuACwH91cUwq6B1IsGqAOtvJR4TtbEbIf4E7dLop4FeA5d
-         Uou72qGylt+jhp37fiVRZ3Y3pvNTMymMfm2MT/FeGfaf2Y5Hwbi9iTuzFoASEh52zIRG
-         n6XMBxOGOANIYqGfiwi1kZPOO/4YgTVPMdbAPdzS9Rry1r1+RrytqmCY1erYZWTYRaZs
-         YexH46Paf7upRZqY0X5aoeUqvrKjj+5xGyGuoAwbfxhK5cNFngtRG34XU2JHV+DXUbjZ
-         PfsQ==
-X-Gm-Message-State: AC+VfDwZAbvsrC+e3x3b8MrCGcjY7kINEjEQbf09knIEh6CwjfoDtoBs
-        soksQtSA/Yz3Oy7N/nEVGX4Bo63ZmQ==
-X-Google-Smtp-Source: ACHHUZ7bj1TVUIo7zoNAxxsfF8oCMe4jDqlwq7B3hEb2xidbQ0+mRqXB8w9fmR00nVMNWaZRdFbcfg==
-X-Received: by 2002:a6b:fd17:0:b0:76c:62ab:5d96 with SMTP id c23-20020a6bfd17000000b0076c62ab5d96mr20199987ioi.19.1686847706093;
-        Thu, 15 Jun 2023 09:48:26 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id z3-20020a5ec903000000b0077ac811b20dsm6123778iol.38.2023.06.15.09.48.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 09:48:25 -0700 (PDT)
-Received: (nullmailer pid 1177025 invoked by uid 1000);
-        Thu, 15 Jun 2023 16:48:22 -0000
-Date:   Thu, 15 Jun 2023 10:48:22 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] of/platform: Propagate firmware node by calling
- device_set_node()
-Message-ID: <168684770004.1176923.6901939518921030402.robh@kernel.org>
-References: <20230615145243.37095-1-andriy.shevchenko@linux.intel.com>
+        Thu, 15 Jun 2023 12:49:15 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCDAF2D5E;
+        Thu, 15 Jun 2023 09:49:14 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 480685C0106;
+        Thu, 15 Jun 2023 12:49:14 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Thu, 15 Jun 2023 12:49:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1686847754; x=1686934154; bh=0e
+        k1jBDgMnsSC6f4mR2SRSNajWTw3nx/qz35iGSppxs=; b=hcQSL7qB8rsiUyRHpF
+        LPBKewYfYGtrT13spd4Pq6rDzr00/gUS8w+hqpRrVhKMMqMbbx0WxmOl7ysf6Mbh
+        +v7HpyGz7DQkjRO0X9qwlK6tZ8Tn8zQq3KXBOaB403uDAtejfAwIw4IFJpixMH/y
+        s2Mcc6eVEKDdtm3Gi7LGcDH9lmqYT8Th88fLrxYwXhrnrbAqudDHiqyEGZpwXc7I
+        PCSCmINk/+Du875lmI9kY5ngUc9hd6HRqO5ObN1SLrw+2/1cL3MHZ2DT90qoAQIA
+        FhaMZ3OXXd3CDcT4QJsYWTQEUIpVCI+Ya3Tm941Zkc7CCmsO2OESiAwLROVW4xql
+        7QpQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1686847754; x=1686934154; bh=0ek1jBDgMnsSC
+        6f4mR2SRSNajWTw3nx/qz35iGSppxs=; b=TSozwJQV8tC1xbaLlgE95ub+wXrpF
+        Fm84OvzPDs9t9cFrVJjY9bBK3EAFFCCB0frXAXxTFnAlvIL+hhxvCQD1ek1+JV22
+        B1WBqO+VPPhPk4mQDmli3EicARvd1ABB73FujpTElO3dJpXphz4gveWbWGmyyiTj
+        2N0ZYzlVGAyRGzFVUNx4Zld6+vrqKfflvEv7bACFpoSOkoL74DMxp6diGJSMq2zO
+        DhYQ8MvZYKgPax3O12OREXYy7L3JRmga0yPy3as72JfQRQghz5a+90HmR0BoZ6VN
+        3LHmxISC91IEPrkUsDhZkFW2jyxBA1krurZEkjH47LyT8obQ6PiSfZ+kA==
+X-ME-Sender: <xms:CkGLZDo4Y78ywoqGiuM_St9aq07Bj7gus77s6x0lGY6yuMoiP9Shiw>
+    <xme:CkGLZNooMQuhSEkiFiudWHmUR__S6KqZ59zCEPDYJ2_3ujEZXo4ozJpoAS4XErk5m
+    RBPHZMQli0FzkHPtPw>
+X-ME-Received: <xmr:CkGLZAOZ-po252SIuPdzk3wm2ijtiV25PBBt81i-RmwszeZR-LMi-S7vokmToaVB1Wqg9GrJy-yk4PhqEesEvA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedvvddguddtudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehgtdfsredttddvnecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnhepueevudehuedtkeevgfduveejueefvddvvefhjefglefgtdekveeugeet
+    kefgleefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:CkGLZG5E0w8ipaQPXw1oZefEQ4VpV0oOkZEZO8MWc1Lgng1gwKk_PQ>
+    <xmx:CkGLZC67GkKpZ_fO2xy7OnOGSNdMjnHWcrjpCbuT9r7RUABtEUecEg>
+    <xmx:CkGLZOii2xxnp-BpsTtlmSnhSNn7d-avfoOGvJS1_b6wkx1j6aLr8A>
+    <xmx:CkGLZEvI3fsP1cyh2VuohvnR6es29u5E0LPOcpcp9jzvfkkc7aWTwQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 15 Jun 2023 12:49:13 -0400 (EDT)
+Date:   Thu, 15 Jun 2023 18:49:12 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        m.grzeschik@pengutronix.de, windhl@126.com,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 03/11] clk: at91: clk-master: add support for parent_hw
+Message-ID: <cpgz2cpsbref6khjvf2qtuu7qvg7r2kbkcaxjb3umzxjeka3z2@i243me4l57v3>
+References: <20230615093227.576102-1-claudiu.beznea@microchip.com>
+ <20230615093227.576102-4-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wkkxdt37famqf3bn"
 Content-Disposition: inline
-In-Reply-To: <20230615145243.37095-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230615093227.576102-4-claudiu.beznea@microchip.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -66,16 +90,35 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Thu, 15 Jun 2023 17:52:43 +0300, Andy Shevchenko wrote:
-> Insulate of_device_alloc() and of_amba_device_create() from possible
-> changes to fwnode_handle implementation by using device_set_node()
-> instead of open-coding dev->dev.fwnode assignments.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/of/platform.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
-> 
+--wkkxdt37famqf3bn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Applied, thanks!
+On Thu, Jun 15, 2023 at 12:32:19PM +0300, Claudiu Beznea wrote:
+> Add support for parent_hw in master clock drivers.
+> With this parent-child relation is described with pointers rather
+> than strings making registration a bit faster.
+>=20
+> All the SoC based drivers that rely on clk-master were adapted
+> to the new API change. The switch itself for SoCs will be done
+> in subsequent patches.
+>=20
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 
+Reviewed-by: Maxime Ripard <mripard@kernel.org>
+
+Maxime
+
+--wkkxdt37famqf3bn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZItBCAAKCRDj7w1vZxhR
+xY0eAP0S1ZhFlNWRlQdoFeSt8+MWInAbeWCtsZyDch+tq9+REgD+K8D88nx9m1Sg
+0T9zr9SzA13XmTasliSnhnBUOezhIgk=
+=GoED
+-----END PGP SIGNATURE-----
+
+--wkkxdt37famqf3bn--
