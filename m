@@ -2,49 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFE1F73181E
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:05:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B25C73182D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:10:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344631AbjFOMF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 08:05:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50906 "EHLO
+        id S232328AbjFOMKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 08:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344771AbjFOMEy (ORCPT
+        with ESMTP id S244277AbjFOMJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 08:04:54 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD262978;
-        Thu, 15 Jun 2023 05:02:52 -0700 (PDT)
-Received: from dggpeml500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QhgM33RrkzqTt6;
-        Thu, 15 Jun 2023 19:39:59 +0800 (CST)
-Received: from [10.67.103.44] (10.67.103.44) by dggpeml500002.china.huawei.com
- (7.185.36.158) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 15 Jun
- 2023 19:44:58 +0800
-Subject: Re: [PATCH v4 1/3] drivers/perf: hisi: Add support for HiSilicon
- H60PA and PAv3 PMU driver
-To:     Mark Rutland <mark.rutland@arm.com>
-References: <20230609075608.36559-1-hejunhao3@huawei.com>
- <20230609075608.36559-2-hejunhao3@huawei.com> <ZILokkt17/yCPQQ2@FVFF77S0Q05N>
-CC:     <will@kernel.org>, <jonathan.cameron@huawei.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-doc@vger.kernel.org>, <linuxarm@huawei.com>,
-        <yangyicong@huawei.com>, <shenyang39@huawei.com>,
-        <prime.zeng@hisilicon.com>
-From:   hejunhao <hejunhao3@huawei.com>
-Message-ID: <1041ca74-9e63-f232-c0dd-fd14cc4b1e11@huawei.com>
-Date:   Thu, 15 Jun 2023 19:44:57 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+        Thu, 15 Jun 2023 08:09:50 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDCBD1B2;
+        Thu, 15 Jun 2023 05:09:48 -0700 (PDT)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QhgS26pYJzLmwK;
+        Thu, 15 Jun 2023 19:44:18 +0800 (CST)
+Received: from [10.67.111.205] (10.67.111.205) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 15 Jun 2023 19:46:09 +0800
+Subject: Re: [PATCH] perf top & record: Fix segfault when default cycles event
+ is not supported
+To:     Ian Rogers <irogers@google.com>
+CC:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@kernel.org>, <namhyung@kernel.org>,
+        <adrian.hunter@intel.com>, <kan.liang@linux.intel.com>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230614151625.2077-1-yangjihong1@huawei.com>
+ <CAP-5=fUf0+7HwZ+AHUR0nRD5QnfPn9_CPMEdJZP_5goPfrPB+Q@mail.gmail.com>
+ <CAP-5=fVOXjjcusjv858SOGrnNgE2w2sb7zS=0sZUpdFfR1T_GA@mail.gmail.com>
+ <668a6159-b7a8-ed25-d8fa-5584a4c04d37@huawei.com>
+ <CAP-5=fX6nWRboZ2dWc1h_y0pe5TAgs0QC0qwCeaLcALfJ+5YEA@mail.gmail.com>
+From:   Yang Jihong <yangjihong1@huawei.com>
+Message-ID: <cc3a669d-570b-2f0d-ce0f-0f4bee417eb2@huawei.com>
+Date:   Thu, 15 Jun 2023 19:46:09 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-In-Reply-To: <ZILokkt17/yCPQQ2@FVFF77S0Q05N>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.103.44]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500002.china.huawei.com (7.185.36.158)
+In-Reply-To: <CAP-5=fX6nWRboZ2dWc1h_y0pe5TAgs0QC0qwCeaLcALfJ+5YEA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.111.205]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -55,195 +58,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Mark
+Hello,
 
-Thanks for your comments.
-
-On 2023/6/9 16:53, Mark Rutland wrote:
-> Hi,
->
-> This generally looks ok, but I have a few minor comments.
->
-> On Fri, Jun 09, 2023 at 03:56:06PM +0800, Junhao He wrote:
->> Compared to the original PA device, H60PA offers higher bandwidth.
->> The H60PA is a new device and we use HID to differentiate them.
+On 2023/6/15 10:04, Ian Rogers wrote:
+> On Wed, Jun 14, 2023 at 6:55 PM Yang Jihong <yangjihong1@huawei.com> wrote:
 >>
->> The events supported by PAv3 and PAv2 are different. They use the
->> same HID.
-> That's a bit unfortunate -- doesn't that mean an older kernel that knows about
-> v2 will try to probe v3 as v2? Presumably things will go wrong if it pokes the
-> MMIO registers?
->
-> I appreciate it may be too late to change that now, but it seems like something
-> to consider in future (e.g. any changes not backwards compatible with v3 should
-> use a new HID).
-
-Yes, The older PA PMU driver will probe v3 as v2. And the PAv3 PMU removed
-some events which are supported by PAv2 PMU. Therefore, the PA events
-displayed by "perf list" cannot work properly.
-
-We plan to add new HID for PAv3 PMU in next version.
-
-Thanks.
-
->> The PMU version register is used in the driver to
->> distinguish different versions.
+>> Hello,
 >>
->> For each H60PA PMU, except for the overflow interrupt register, other
->> functions of the H60PA PMU are the same as the original PA PMU module.
->> It has 8-programable counters and each counter is free-running.
->> Interrupt is supported to handle counter (64-bits) overflow.
+>> On 2023/6/15 6:03, Ian Rogers wrote:
+>>> On Wed, Jun 14, 2023 at 9:18 AM Ian Rogers <irogers@google.com> wrote:
+>>>>
+>>>> On Wed, Jun 14, 2023 at 8:18 AM Yang Jihong <yangjihong1@huawei.com> wrote:
+>>>>>
+>>>>> The perf-record and perf-top call parse_event() to add a cycles event to
+>>>>> an empty evlist. For the system that does not support hardware cycles
+>>>>> event, such as QEMU, the evlist is empty due to the following code process:
+>>>>>
+>>>>>     parse_event(evlist, "cycles:P" or ""cycles:Pu")
+>>>>>       parse_events(evlist, "cycles:P")
+>>>>>         __parse_events
+>>>>>           ...
+>>>>>           ret = parse_events__scanner(str, &parse_state);
+>>>>>           // ret = 0
+>>>>>           ...
+>>>>>           ret2 = parse_events__sort_events_and_fix_groups()
+>>>>>           if (ret2 < 0)
+>>>>>             return ret;
+>>>>>           // The cycles event is not supported, here ret2 = -EINVAL,
+>>>>>           // Here return 0.
+>>>>>           ...
+>>>>>           evlist__splice_list_tail(evlist)
+>>>>>           // The code here does not execute to, so the evlist is still empty.
+>>>>>
+>>>>> A null pointer occurs when the content in the evlist is accessed later.
+>>>>>
+>>>>> Before:
+>>>>>
+>>>>>     # perf list hw
+>>>>>
+>>>>>     List of pre-defined events (to be used in -e or -M):
+>>>>>
+>>>>>     # perf record true
+>>>>>     libperf: Miscounted nr_mmaps 0 vs 1
+>>>>>     WARNING: No sample_id_all support, falling back to unordered processing
+>>>>>     perf: Segmentation fault
+>>>>>     Obtained 1 stack frames.
+>>>>>     [0xc5beff]
+>>>>>     Segmentation fault
+>>>>>
+>>>>> Solution:
+>>>>>     If cycles event is not supported, try to fall back to cpu-clock event.
+>>>>>
+>>>>> After:
+>>>>>     # perf record true
+>>>>>     [ perf record: Woken up 1 times to write data ]
+>>>>>     [ perf record: Captured and wrote 0.006 MB perf.data ]
+>>>>>     #
+>>>>>
+>>>>> Fixes: 7b100989b4f6 ("perf evlist: Remove __evlist__add_default")
+>>>>> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+>>>>
+>>>> Thanks, useful addition. The cpu-clock fall back wasn't present before
+>>>> 7b100989b4f6 so is the fixes tag correct?
+>>>
+>>> Hmm... it should be coming from evsel__fallback:
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/evsel.c?h=tmp.perf-tools-next#n2840
+>>> so we shouldn't duplicate that logic. The question is why we're not
+>>> doing the fallback.
+>>>
 >>
->> Signed-off-by: Junhao He <hejunhao3@huawei.com>
->> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->> Reviewed-by: Yicong Yang <yangyicong@hisilicon.com>
->> ---
->>   drivers/perf/hisilicon/hisi_uncore_pa_pmu.c | 142 +++++++++++++++++---
->>   drivers/perf/hisilicon/hisi_uncore_pmu.h    |   9 ++
->>   2 files changed, 136 insertions(+), 15 deletions(-)
->> @@ -284,6 +302,15 @@ static int hisi_pa_pmu_init_data(struct platform_device *pdev,
->>   
->>   	pa_pmu->identifier = readl(pa_pmu->base + PA_PMU_VERSION);
->>   
->> +	/* When running on v3 or later, returns the largest version supported */
->> +	if (pa_pmu->identifier >= HISI_PMU_V3)
->> +		pa_pmu->dev_info = &pa_pmu_info[2];
->> +	else if (pa_pmu->identifier == HISI_PMU_V2)
->> +		pa_pmu->dev_info = &pa_pmu_info[1];
->> +
->> +	if (!pa_pmu->dev_info || !pa_pmu->dev_info->name)
->> +		return -EINVAL;
->> +
-> Why does this use indices '2' and '1'? What happened to '0'?
->
-> It would be a bit clearer with something like:
->
-> 	enum pmu_dev_info_idx {
-> 		HISI_PMU_DEV_INFO_V2,
-> 		HISI_PMU_DEV_INFO_V3,
-> 		NR_HISI_PMU_DEV_INFO
-> 	}
->
-> Then the above can be:
->
-> 	if (pa_pmu->identifier >= HISI_PMU_V3)
-> 		pa_pmu->dev_info = &pa_pmu_info[PMU_DEV_INFO_V3];
-> 	else if (pa_pmu->identifier == HISI_PMU_V2)
-> 		pa_pmu->dev_info = &pa_pmu_info[PMU_DEV_INFO_V2];
-> 	else
-> 		return -EINVAL;
-> 	
-> 	if (!pa_pmu->dev_info->name)
-> 		return -EINVAL;
->
-> ... and when you define the dev_info instances:
+>> Yes, it's a bit of the same logic as evsel__fallback, or we can call
+>> evlist__add_default() as before, simply create an evsel of hardware
+>> cycles and add it directly to evlist.
+>>
+>> Please confirm whether this solution is feasible. If it is feasible, I
+>> will send a v2 version.
+> 
+> The previous evlist__add_default logic didn't handle wildcard PMUs for
+> cycles, hence wanting to reuse the parse events logic. The error is
+> that the logic now isn't doing the fallback properly. I think an
+> evlist__add_cycles which uses evsel__fallback makes sense matching the
+> previous logic. I'd be happy if you took a look. I'll write a patch so
+> that the perf_pmus list of core PMUs is never empty.
+> 
 
-Because of add new HID for PAv3, I'm going to replace the code with the 
-following:
+The gdb calltrace for core dump is as follows:
 
-     pa_pmu->dev_info = pa_pmu_info;
+(gdb) bt
+#0  0x00000000005ffaa2 in __perf_cpu_map__nr (cpus=0x0) at cpumap.c:283
+#1  0x00000000005ffd17 in perf_cpu_map__max (map=0x0) at cpumap.c:371
+#2  0x0000000000565644 in cpu_map_data__alloc 
+(syn_data=syn_data@entry=0x7ffc843bff30, 
+header_size=header_size@entry=8) at util/synthetic-events.c:1273
+#3  0x0000000000568712 in cpu_map_event__new (map=<optimized out>) at 
+util/synthetic-events.c:1321
+#4  perf_event__synthesize_cpu_map (tool=tool@entry=0xc37580 <record>, 
+map=<optimized out>, process=process@entry=0x413a80 
+<process_synthesized_event>, machine=machine@entry=0x0) at 
+util/synthetic-events.c:1341
+#5  0x000000000041426e in record__synthesize (tail=tail@entry=false, 
+rec=0xc37580 <record>) at builtin-record.c:2050
+#6  0x0000000000415a0b in __cmd_record (argc=<optimized out>, 
+argv=<optimized out>, rec=0xc37580 <record>) at builtin-record.c:2512
+#7  0x0000000000418f22 in cmd_record (argc=<optimized out>, 
+argv=<optimized out>) at builtin-record.c:4260
+#8  0x00000000004babdd in run_builtin (p=p@entry=0xc3a0e8 
+<commands+264>, argc=argc@entry=2, argv=argv@entry=0x7ffc843c5b30) at 
+perf.c:323
+#9  0x0000000000401632 in handle_internal_command (argv=0x7ffc843c5b30, 
+argc=2) at perf.c:377
+#10 run_argv (argcp=<synthetic pointer>, argv=<synthetic pointer>) at 
+perf.c:421
+#11 main (argc=2, argv=0x7ffc843c5b30) at perf.c:537
 
->> +static const struct hisi_pmu_dev_info hisi_h32pa[] = {
->> +	[1] = {
->> +		.name = "pa",
->> +		.attr_groups = hisi_pa_pmu_v2_attr_groups,
->> +		.private = &hisi_pa_pmu_regs,
->> +	},
->> +	[2] = {
->> +		.name = "pa",
->> +		.attr_groups = hisi_pa_pmu_v3_attr_groups,
->> +		.private = &hisi_pa_pmu_regs,
->> +	},
->> +	{}
->> +};
-> ... you could have:
->
-> 	static const struct hisi_pmu_dev_info hisi_h32pa[NR_HISI_PMU_DEV_INFO] = {
-> 		[HISI_PMU_DEV_INFO_V2] = {
-> 			.name = "pa",
-> 			.attr_groups = hisi_pa_pmu_v2_attr_groups,
-> 			.private = &hisi_pa_pmu_regs,
-> 		},
-> 		[HISI_PMU_DEV_INFO_V3] = {
-> 			.name = "pa",
-> 			.attr_groups = hisi_pa_pmu_v3_attr_groups,
-> 			.private = &hisi_pa_pmu_regs,
-> 		},
-> 	};
->
-> ... which would clearly match up with the probe path, and would ensure the
-> arrays are always correctly sized if there's a v4, etc.
+The direct cause of the problem is that rec->evlist->core.all_cpus is 
+empty, resulting in null pointer access.
 
-and the initialization of the xxx_dev_info structure is as follows:
+The code process is as follows:
 
-         struct hisi_pmu_dev_info hisi_h32pa_v2 = {
-                 ...
-         }
+cmd_record
+   parse_event(rec->evlist)
+   // Hardware cycle events should not be supported here, so rec->evlist 
+is empty
+   ...
 
-         struct hisi_pmu_dev_info hisi_h32pa_v3 = {
-                 ...
-         }
+   evlist__create_maps(rec->evlist)
+     perf_evlist__set_maps(&rec->evlist->core)
+	  perf_evlist__propagate_maps(&rec->evlist->core)
+	    perf_evlist__for_each_evsel(&rec->evlist->core, evsel)
+		// because rec->evlist is empty, don't get into that 
+__perf_evlist__propagate_maps(), so rec->evlist->core.all_cpus is NULL.
+		  __perf_evlist__propagate_maps
+		    rec->evlist->core.all_cpus = perf_cpu_map__merge(evlist->all_cpus, 
+evsel->cpus);
+   ...
 
->
->> diff --git a/drivers/perf/hisilicon/hisi_uncore_pmu.h b/drivers/perf/hisilicon/hisi_uncore_pmu.h
->> index 07890a8e96ca..a8d6d6905f3f 100644
->> --- a/drivers/perf/hisilicon/hisi_uncore_pmu.h
->> +++ b/drivers/perf/hisilicon/hisi_uncore_pmu.h
->> @@ -24,6 +24,7 @@
->>   #define pr_fmt(fmt)     "hisi_pmu: " fmt
->>   
->>   #define HISI_PMU_V2		0x30
->> +#define HISI_PMU_V3		0x40
->>   #define HISI_MAX_COUNTERS 0x10
->>   #define to_hisi_pmu(p)	(container_of(p, struct hisi_pmu, pmu))
->>   
->> @@ -62,6 +63,13 @@ struct hisi_uncore_ops {
->>   	void (*disable_filter)(struct perf_event *event);
->>   };
->>   
->> +/* Describes the HISI PMU chip features information */
->> +struct hisi_pmu_dev_info {
->> +	const char *name;
->> +	const struct attribute_group **attr_groups;
->> +	void *private;
->> +};
->> +
->>   struct hisi_pmu_hwevents {
->>   	struct perf_event *hw_events[HISI_MAX_COUNTERS];
->>   	DECLARE_BITMAP(used_mask, HISI_MAX_COUNTERS);
->> @@ -72,6 +80,7 @@ struct hisi_pmu_hwevents {
->>   struct hisi_pmu {
->>   	struct pmu pmu;
->>   	const struct hisi_uncore_ops *ops;
->> +	const struct hisi_pmu_dev_info *dev_info;
->>   	struct hisi_pmu_hwevents pmu_events;
->>   	/* associated_cpus: All CPUs associated with the PMU */
->>   	cpumask_t associated_cpus;
-> Will other hisi pmu drivers use the hisi_pmu_dev_info field in future?
+   __cmd_record
+     record__synthesize
+       perf_event__synthesize_cpu_map(rec->evlist->core.all_cpus)
+         cpu_map_event__new(rec->evlist->core.all_cpus)
+		  cpu_map_data__alloc(rec->evlist->core.all_cpus)
+		    perf_cpu_map__max(rec->evlist->core.all_cpus)
+			  __perf_cpu_map__nr
+			  // Here null pointer access!
+	...
+	
+	record__open
+       evsel__fallback
+	  // Here fallback is just starting
 
-yes, It is. and the member of private is also a general interface.
-If other uncore PMU have private implementations in registers
-or other, this member can also be used.
 
-Best regards,
-Junhao.
-
->
-> I ask because otherwise you could make this local to hisi_uncore_pa_pmu.c if
-> you structured this as:
->
-> struct hisi_pa_pmu {
-> 	struct hisi_pmu;
-> 	const char *name;
-> 	const struct attribute_group **attr_groups;
-> 	const struct hisi_pa_pmu_int_regs *regs;
-> }
->
-> ... which would give you some additional type-safety.
->
-> Thanks,
-> Mark
->
-> .
->
-
+Thanks,
+Yang
