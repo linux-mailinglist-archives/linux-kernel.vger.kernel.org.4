@@ -2,56 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1073A732113
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 22:48:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0285732112
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 22:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231161AbjFOUqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 16:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50228 "EHLO
+        id S232702AbjFOUqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 16:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjFOUp6 (ORCPT
+        with ESMTP id S229510AbjFOUqf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 16:45:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F7F26AA
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 13:45:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 166DD60F90
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 20:45:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8929C433C8;
-        Thu, 15 Jun 2023 20:45:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686861956;
-        bh=4kFWV9+xv5jLSm4U5yuODKQvD7AuhX6h1oB5batCmX0=;
-        h=Date:Subject:To:References:Cc:From:In-Reply-To:From;
-        b=ILI0n7N5PkVo1QKZhgos9zEUJzNQl5Sog0tSUKB/ACsfRmt+Ds5rFK+4lUruEpZlz
-         4QH7SBxihgDuiKmKot2AkCdgqyjIQIEkZGQr2Tx7d+KRopRHn2WG6z03fnQPhfqOPh
-         YwLKE4BR+KzeZJPubD4oGrWjm+dsOetdw8rn/jc0WIh1BTzW9fIvcbQpTQUqlnSn70
-         9Wbfo1cULYm98sPlMM2M13BK3075p6rZrFejx4Fe0B/xKZSDu6X/TPMemEcwLS6IU/
-         lzZpoTYcGSw7mWwzPC+90tZDpLqCEs8lbpmrE9dr0orM821swnQHXoUSf5XgTex4Wc
-         7bUHoDH+WAjog==
-Message-ID: <ea63420a-a08d-3610-b01f-61dabe56d2df@kernel.org>
-Date:   Thu, 15 Jun 2023 22:45:53 +0200
+        Thu, 15 Jun 2023 16:46:35 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A39F271E
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 13:46:32 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-3f9a81da5d7so78521cf.0
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 13:46:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686861991; x=1689453991;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eXkt2ZBGU5jZyQ4WPhoCS7lB4yMdQci0tXI9tZaRrDU=;
+        b=VPDs1chprSogpzpFP36IMnSxKMQrt703kO5bMV14QmFX+mMfQWvD6k1MQe9SpXt8JN
+         5YltQ9sjq3koyeq+fBA66GSKE7XMlhWNL+JL3RpiE7c4I22f28WhlakVexRJFVME5vM0
+         tH95JmlXiERSIWwRGsh5TG3aoAZ0KWRqRcZMjNbj2MKzAilmKL9Ao/wFgQKIWWrcMp8o
+         3l9iH6gd4j2gro6IWsBZkixJ9eAl+xG8fbD5hYXfNQoXBRfW8AYYMCljCft5rKqp971P
+         59kkTeIwjyg2Vh/PwXI4YjqaPHmwKadAH3OBCn+HyxdfkVc8q2DF2Zbrgtur+LqwbU3r
+         kdhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686861991; x=1689453991;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eXkt2ZBGU5jZyQ4WPhoCS7lB4yMdQci0tXI9tZaRrDU=;
+        b=E3FExCwh4zmhOdr/aWa+EYdhq+mIDWPGs4VXD9Wj3oYJeEF9AGGToraRM4RrwFyyeN
+         oD9IkoEwCGzQdVs4O18HsjOsad+h1XzA9RP5hkAS5NbHmbxQf0RHk2npwiIvG5V63mQz
+         Xl5ofGPIxIudEqhYx1QRB6+wVlCkF6rdBMdGBGsI5fMG2FxonXreDKr6Kx9v+xMyEXrU
+         NArbsKUJHAv/7Q8f0/rnvaXqZhPN7vznNhoccpfhRGxl7lQsIizGw9ZYgUm2/Z46gHV4
+         ctipXHuGShzPcKykqDlO6eOjMFch1/YsDVODRr+hKYP20s/J1v7MkAIifjltE42Q2gia
+         MQKA==
+X-Gm-Message-State: AC+VfDyojHjQdRjnSdNuJPOIoZUQBzzOV19Kf5Z3EvyhEyvWjR6vhm+0
+        7cWD4uAJeM4Nga4pVLxPzpASmkXirJ/0lrqVHsDuJA==
+X-Google-Smtp-Source: ACHHUZ4N/OwMTET2iljPnw6bbFSnqZMbHyS/G+s/58wtd3yW9j+pXrcF30ZUaVJErUv1ftafp7Gv3leEoaxgWev+1RE=
+X-Received: by 2002:a05:622a:44:b0:3f9:f877:1129 with SMTP id
+ y4-20020a05622a004400b003f9f8771129mr320926qtw.29.1686861991150; Thu, 15 Jun
+ 2023 13:46:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] regmap: Check for register readability before checking
- cache during read
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-References: <20230613-b4-regmap-check-readability-before-cache-v1-1-b144c0b01ed9@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>
-From:   Konrad Dybcio <konradybcio@kernel.org>
-In-Reply-To: <20230613-b4-regmap-check-readability-before-cache-v1-1-b144c0b01ed9@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20230613153415.350528-1-apatel@ventanamicro.com>
+ <20230613153415.350528-9-apatel@ventanamicro.com> <CAGETcx-hoPNanAwe4++6roqBXwSdc7z6Ei=-r9z6qFG1U7xVXg@mail.gmail.com>
+ <20230615-thyself-doornail-f0545ada9176@spud>
+In-Reply-To: <20230615-thyself-doornail-f0545ada9176@spud>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Thu, 15 Jun 2023 13:45:55 -0700
+Message-ID: <CAGETcx__Qt868abh-F_fu7ijMSWXciLjdjWiWf60e4_p78xb8w@mail.gmail.com>
+Subject: Re: [PATCH v4 08/10] irqchip: Add RISC-V advanced PLIC driver
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, iommu@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,61 +85,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 15, 2023 at 12:31=E2=80=AFPM Conor Dooley <conor@kernel.org> wr=
+ote:
+>
+> Hey Saravana,
+>
+> On Thu, Jun 15, 2023 at 12:17:08PM -0700, Saravana Kannan wrote:
+> > On Tue, Jun 13, 2023 at 8:35=E2=80=AFAM Anup Patel <apatel@ventanamicro=
+.com> wrote:
+>
+> btw, please try to delete the 100s of lines of unrelated context when
+> replying
 
+I always feel like some people like me to do this and others don't.
+Also, at times, people might want to reference the other lines of code
+when replying to my point. That's why I generally leave them in.
 
-On 13.06.2023 22:07, Mark Brown wrote:
-> Ensure that we don't return a spurious cache hit for unreadable registers
-> (eg, with the flat cache which doesn't understand sparseness) by checking
-> for readability before we do a cache lookup.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
-(+CC Bjorn)
+>
+> > > +static int __init aplic_dt_init(struct device_node *node,
+> > > +                               struct device_node *parent)
+> > > +{
+> > > +       /*
+> > > +        * The APLIC platform driver needs to be probed early
+> > > +        * so for device tree:
+> > > +        *
+> > > +        * 1) Set the FWNODE_FLAG_BEST_EFFORT flag in fwnode which
+> > > +        *    provides a hint to the device driver core to probe the
+> > > +        *    platform driver early.
+> > > +        * 2) Clear the OF_POPULATED flag in device_node because
+> > > +        *    of_irq_init() sets it which prevents creation of
+> > > +        *    platform device.
+> > > +        */
+> > > +       node->fwnode.flags |=3D FWNODE_FLAG_BEST_EFFORT;
+> >
+> > NACK. You are blindly plastering flags without trying to understand
+> > the real issue and fixing this correctly.
+> >
+> > > +       of_node_clear_flag(node, OF_POPULATED);
 
-Hi Mark,
+Also, this part is not needed if the macros I mentioned below are used.
 
-this patch breaks using regmap_field_force_write() on fields that are
-parts of registers marked as write-only (e.g. by regmap_access_table.no_ranges)
+> > > +       return 0;
+> > > +}
+> > > +IRQCHIP_DECLARE(riscv_aplic, "riscv,aplic", aplic_dt_init);
+> >
+> > This macro pretty much skips the entire driver core framework to probe
+> > and calls init and you are supposed to initialize the device when the
+> > init function is called.
+> >
+> > If you want your device/driver to follow the proper platform driver
+> > path (which is recommended), then you need to use the
+> > IRQCHIP_PLATFORM_DRIVER_BEGIN() and related macros. Grep for plenty of =
+examples.
+> >
+> > I offered to help you debug this issue and I asked for a dts file that
+> > corresponds to a board you are testing this on and seeing an issue.
+>
+> There isn't a dts file for this because there's no publicly available
+> hardware that actually has an APLIC. Maybe Ventana have pre-production
+> silicon that has it, but otherwise it's a QEMU job.
 
-Is that intended?
+1. QEMU example is fine too if it can be reproduced. I just asked for
+a dts file because I need the full global view of the dependencies. At
+a minimum, I'd at least expect to see some example DT and explanation
+of what dependency is causing the IRQ device to not be initialized on
+time, etc. Instead I just see random uses of flags with no description
+of the actual issue.
 
-What's the recommended fix?
+2. If it's not a dts available upstream, why should these drivers be
+accepted? I thought the norm was to only accept drivers that can
+actually be used.
 
-FWIW this breaks soc/qcom/icc-bwmon.c, causing an interrupt storm at boot due
-to the "clear the counters" register not being taken care of, so it'd be
-appreciated if we can sort this out quickly.
+-Saravana
 
-Konrad
->  drivers/base/regmap/regmap.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/base/regmap/regmap.c b/drivers/base/regmap/regmap.c
-> index fa2d3fba6ac9..3efbe59ca1a7 100644
-> --- a/drivers/base/regmap/regmap.c
-> +++ b/drivers/base/regmap/regmap.c
-> @@ -2897,6 +2897,9 @@ static int _regmap_read(struct regmap *map, unsigned int reg,
->  	int ret;
->  	void *context = _regmap_map_get_context(map);
->  
-> +	if (!regmap_readable(map, reg))
-> +		return -EIO;
-> +
->  	if (!map->cache_bypass) {
->  		ret = regcache_read(map, reg, val);
->  		if (ret == 0)
-> @@ -2906,9 +2909,6 @@ static int _regmap_read(struct regmap *map, unsigned int reg,
->  	if (map->cache_only)
->  		return -EBUSY;
->  
-> -	if (!regmap_readable(map, reg))
-> -		return -EIO;
-> -
->  	ret = map->reg_read(context, reg, val);
->  	if (ret == 0) {
->  		if (regmap_should_log(map))
-> 
-> ---
-> base-commit: 858fd168a95c5b9669aac8db6c14a9aeab446375
-> change-id: 20230613-b4-regmap-check-readability-before-cache-9f658338a5c1
-> 
-> Best regards,
+>
+> Cheers,
+> Conor.
+>
+> > But you haven't answered my question [1] and are pointing to some
+> > random commit and blaming it. That commit has no impact on any
+> > existing devices/drivers.
+> >
+> > Hi Marc,
+> >
+> > Please consider this patch Nacked as long as FWNODE_FLAG_BEST_EFFORT
+> > is used or until Anup actually works with us to debug the real issue.
+> >
+> > -Saravana
+> > [1] - https://lore.kernel.org/lkml/CAAhSdy2p6K70fc2yZLPdVGqEq61Y8F7WVT2=
+J8st5mQrzBi4WHg@mail.gmail.com/
