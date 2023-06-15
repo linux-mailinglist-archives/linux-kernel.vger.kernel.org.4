@@ -2,119 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 144A0731FA9
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 20:03:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E4A731FA7
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 20:03:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236598AbjFOSDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 14:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58142 "EHLO
+        id S234594AbjFOSDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 14:03:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjFOSDi (ORCPT
+        with ESMTP id S229509AbjFOSDN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 14:03:38 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E32C294D;
-        Thu, 15 Jun 2023 11:03:37 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-77a62a84855so330088639f.1;
-        Thu, 15 Jun 2023 11:03:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686852217; x=1689444217;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WO4wvoymcuMAWNuPabTIQ60hnmsXdbnj1sWoVRdUjgU=;
-        b=Q8rKplw1MdaA++C3yfoH/jMHoQRAjJwQ/Fx4HqfOtImtfsD0cokp/bK9NubdEPN0S3
-         lVi/CSVeKs3vS5C1pXcJIaY/eEvRTpDPNJuxiUSti98+ZkxRIRUPD8/divXb8MIGP+rr
-         YRH3TbNOsP3yzMIxSvxmxx7kuKNn/5Gp7kYHq4H3TS+zjurXlBA0HtLYLkulajaLP/g7
-         tQoaFNCtG+1k7hXKr9oZrz+GTJ65LC3WiQF7UBFJXweQfkZLRO/Sdxdk0+dmZce+QasM
-         VvxUmTXjhISrfONox49AauPTTUEuu4/o50oMy78PZMl5fBTk/TbHRF92BJOUzl64ANRY
-         +Iyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686852217; x=1689444217;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WO4wvoymcuMAWNuPabTIQ60hnmsXdbnj1sWoVRdUjgU=;
-        b=SipQg2Pzaegni1V+L22+/8wEXSkDFz6i4Mj8s+D1raYW8bOri8VK7wjwYwepqhbpLd
-         uQRAIG3L5DsApBzGZ+vxKZw4MRE4JigsrV48PqM24mPWKERcZjeOYVO5pIg9qC6Dq/7J
-         V5rHG71DEbeIhNpSO0qVqqbSd56fzj7yAA8PrktsOBqI0QYuXjbqbuTgQjD4v7Th+WA5
-         BUZ7L62OfFhrvazYjdYaatFCNGS3TQlbwahG+M5wE9ljwgtYajuvnohUolL8YAjLP0hk
-         x4NNWDyz0EzEfRKfYcVYSEDOnG3lAMgHPIFJDwkSsxqkl0s7D+qGHO4I6ZL7WXZZ+jcw
-         HfkA==
-X-Gm-Message-State: AC+VfDw1O0bn2KK1YiyjN85EuBM7Wv9X9DXUwFl/RRnU1Ya4XU8PLdnK
-        3kOF2bmECjfw35yd+Cloc8UvwqTnIgG3pQzw
-X-Google-Smtp-Source: ACHHUZ59/nicEQ8v5WP2ZpZIKHBGFfLebrsnAQ2jypcowPozX9jQwhD4cPS4Xl6AA2WyhvdMm2Ms3A==
-X-Received: by 2002:a6b:6d0f:0:b0:777:b531:eb57 with SMTP id a15-20020a6b6d0f000000b00777b531eb57mr263791iod.1.1686852216625;
-        Thu, 15 Jun 2023 11:03:36 -0700 (PDT)
-Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
-        by smtp.gmail.com with ESMTPSA id l30-20020a02cd9e000000b0041d8acd35b0sm5732433jap.3.2023.06.15.11.03.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 11:03:35 -0700 (PDT)
-From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>
-Cc:     linux-hardening@vger.kernel.org,
-        Azeem Shaikh <azeemshaikh38@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Albert Briscoe <albertsbriscoe@gmail.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH v2] usb: gadget: function: printer: Replace strlcpy with strscpy
-Date:   Thu, 15 Jun 2023 18:03:18 +0000
-Message-ID: <20230615180318.400639-1-azeemshaikh38@gmail.com>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+        Thu, 15 Jun 2023 14:03:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6152949;
+        Thu, 15 Jun 2023 11:03:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CF1362243;
+        Thu, 15 Jun 2023 18:03:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0504C433C0;
+        Thu, 15 Jun 2023 18:03:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686852191;
+        bh=2pj0TeYHvBeMLyFsjUdIZwPu4aw2LFARw1F9lkF8nA8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=P+b6hnjnj9qo5yXSvbeQA7uzmG7mKE0Q8w2EXG0KwOedKXFBf79EaCZWKwwmzzA9D
+         veAeWfRi/kxZ83n9lauUgX0y1Y1byh+v4MCxJExpgvEH13MDSezhA2HCbh++bb/+/b
+         ZnL0+Hi10VUaijzW/AQ8yJinh+e0Obnf0eVVfAtQdQVg7eWf8DnS/lzkb64D9F3vxH
+         BbQ1uVVZTccmNLUxgaE5H9kPR/W6EFOTie/eLNz9+o5hhdfDhrTZE2S4NXD5aPBtx4
+         /R7a0nJoijCVSXR9TqJZKA1FD9fkczEoIhPJHMy0DsraiuzNnrXM2K4GsBiiERco+c
+         ewFY5wBAbWNQQ==
+Date:   Thu, 15 Jun 2023 12:04:07 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Johannes Berg <johannes@sipsolutions.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] wifi: wext-core: Fix -Wstringop-overflow warning in
+ ioctl_standard_iw_point()
+Message-ID: <ZItSlzvIpjdjNfd8@work>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-strlcpy() reads the entire source buffer first.
-This read may exceed the destination size limit.
-This is both inefficient and can lead to linear read
-overflows if a source string is not NUL-terminated [1].
-In an effort to remove strlcpy() completely [2], replace
-strlcpy() here with strscpy().
+-Wstringop-overflow is legitimately warning us about extra_size
+pontentially being zero at some point, hence potenially ending
+up _allocating_ zero bytes of memory for extra pointer and then
+trying to access such object in a call to copy_from_user().
 
-Direct replacement is safe here since return value of -errno
-is used to check for truncation instead of PAGE_SIZE.
+Fix this by adding a sanity check to ensure we never end up
+trying to allocate zero bytes of data for extra pointer, before
+continue executing the rest of the code in the function.
 
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-[2] https://github.com/KSPP/linux/issues/89
+Address the following -Wstringop-overflow warning seen when built
+m68k architecture with allyesconfig configuration:
+                 from net/wireless/wext-core.c:11:
+In function '_copy_from_user',
+    inlined from 'copy_from_user' at include/linux/uaccess.h:183:7,
+    inlined from 'ioctl_standard_iw_point' at net/wireless/wext-core.c:825:7:
+arch/m68k/include/asm/string.h:48:25: warning: '__builtin_memset' writing 1 or more bytes into a region of size 0 overflows the destination [-Wstringop-overflow=]
+   48 | #define memset(d, c, n) __builtin_memset(d, c, n)
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~
+include/linux/uaccess.h:153:17: note: in expansion of macro 'memset'
+  153 |                 memset(to + (n - res), 0, res);
+      |                 ^~~~~~
+In function 'kmalloc',
+    inlined from 'kzalloc' at include/linux/slab.h:694:9,
+    inlined from 'ioctl_standard_iw_point' at net/wireless/wext-core.c:819:10:
+include/linux/slab.h:577:16: note: at offset 1 into destination object of size 0 allocated by '__kmalloc'
+  577 |         return __kmalloc(size, flags);
+      |                ^~~~~~~~~~~~~~~~~~~~~~
 
-Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+This help with the ongoing efforts to globally enable
+-Wstringop-overflow.
+
+Link: https://github.com/KSPP/linux/issues/315
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 ---
-v2:
- * Use "< 1" instead of "== -E2BIG".
- * Update commit log to say PAGE_SIZE instead of sizeof(dest).
+ net/wireless/wext-core.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-v1:
- * https://lore.kernel.org/all/20230613004341.3540325-1-azeemshaikh38@gmail.com/
-
- drivers/usb/gadget/function/f_printer.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
-index 28db3e336e7d..b91425611969 100644
---- a/drivers/usb/gadget/function/f_printer.c
-+++ b/drivers/usb/gadget/function/f_printer.c
-@@ -1211,8 +1211,8 @@ static ssize_t f_printer_opts_pnp_string_show(struct config_item *item,
- 	if (!opts->pnp_string)
- 		goto unlock;
+diff --git a/net/wireless/wext-core.c b/net/wireless/wext-core.c
+index a125fd1fa134..a161c64d1765 100644
+--- a/net/wireless/wext-core.c
++++ b/net/wireless/wext-core.c
+@@ -815,6 +815,12 @@ static int ioctl_standard_iw_point(struct iw_point *iwp, unsigned int cmd,
+ 		}
+ 	}
  
--	result = strlcpy(page, opts->pnp_string, PAGE_SIZE);
--	if (result >= PAGE_SIZE) {
-+	result = strscpy(page, opts->pnp_string, PAGE_SIZE);
-+	if (result < 1) {
- 		result = PAGE_SIZE;
- 	} else if (page[result - 1] != '\n' && result + 1 < PAGE_SIZE) {
- 		page[result++] = '\n';
++	/* Sanity-check to ensure we never end up _allocating_ zero
++	 * bytes of data for extra.
++	 */
++	if (extra_size <= 0)
++		return -EFAULT;
++
+ 	/* kzalloc() ensures NULL-termination for essid_compat. */
+ 	extra = kzalloc(extra_size, GFP_KERNEL);
+ 	if (!extra)
 -- 
-2.41.0.162.gfafddb0af9-goog
-
+2.34.1
 
