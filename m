@@ -2,209 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5BCC7311CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F02B07311CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239981AbjFOIK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 04:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45430 "EHLO
+        id S239347AbjFOIMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 04:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239145AbjFOIKY (ORCPT
+        with ESMTP id S230304AbjFOIMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 04:10:24 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8551F1A3;
-        Thu, 15 Jun 2023 01:10:22 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-519b771f23aso1739697a12.1;
-        Thu, 15 Jun 2023 01:10:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686816621; x=1689408621;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=OQKLPV7svhmFXU+YY6Z2XlGXEMzdG3pBcvTN7P5dgn4=;
-        b=DPMMQaiav3CPksaSlGQi1OmGyLof3HczsehsRRZbQBEfFtlNNnBnxuuTu/SY5YTuia
-         +Sx0uf/yEp8t3dYWj1ffJGkL7z7MrpyRMN7Vx2/4oMUmLAeC128ew/+d0XBvPlrA3E/S
-         rd48CUgHvIkEAZESZvatkrSGjUZGM/VoCEwAsl/qqbIbyLP4MjugbT4fyKCqnviINbMX
-         ln5FRujoUViiiFqosDrazXgBU2dA03foNPBF+q8vR5kIsTIJwzuydKylCCOqQAOA5L0I
-         Jp2DoCiVaoArqolQ7+aqAvLgESvj/GypiVKV4S4JkZwLWCKb7fjfn6kmvVF6cV9t4NZY
-         Jvmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686816621; x=1689408621;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OQKLPV7svhmFXU+YY6Z2XlGXEMzdG3pBcvTN7P5dgn4=;
-        b=bsDfIMRBKxz3gthJnlMsQnl8OU8LTLZpOfwsxELagsx7HOciPzyw4OQM6cvSNJ0gJg
-         zCJTm0kRxY5X7vl5Ie6dFQBMQRqlxJDfgXTw0RsFcveH319huRBKvAY7lHPYtjKgnyCX
-         LLYszmfMWLGvLdR6uzQTgIRxSxHUR8V+/Xw7St2ZfERf5s3cZ5zDBlbvkkiHEkJGr9Nb
-         QUdsOqczZXXFV3VEpN01w8DqoaKAfGOAZoa5Fm4/A/FejiyHiqkAv3WST6aNvM+YEsPO
-         Qo8awOLFVD1L70MN3/09gs+vgVMNW2pb77bqmSnjqTkV2tOjuViXj4zRxMETACGt0H0T
-         oSeg==
-X-Gm-Message-State: AC+VfDzs/QJtqaVAB2WPJ0KigI/5Ct/7SW8Ziz6f+2+HSGVytNXRaKlS
-        RvHV/ti3j2B2Ik2ygep9MNs=
-X-Google-Smtp-Source: ACHHUZ7Yu4GfUyPRFFA0QZbcc49O0I0TJbx78NV21zRT7vAoHc4cYSbthRFGE1Lk8n0MA6ur2Ndn4Q==
-X-Received: by 2002:a17:907:3e9f:b0:976:c9a6:4857 with SMTP id hs31-20020a1709073e9f00b00976c9a64857mr21640258ejc.57.1686816620649;
-        Thu, 15 Jun 2023 01:10:20 -0700 (PDT)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id dk17-20020a170906f0d100b0097886843f75sm9150820ejb.177.2023.06.15.01.10.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 01:10:20 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Thu, 15 Jun 2023 10:10:18 +0200
-To:     Ian Rogers <irogers@google.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>, Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Michael Petlan <mpetlan@redhat.com>
-Subject: Re: [PATCH 18/20] perf stat: Display event stats using aggr counts
-Message-ID: <ZIrHatpIlo3Y2ZPQ@krava>
-References: <20221018020227.85905-1-namhyung@kernel.org>
- <20221018020227.85905-19-namhyung@kernel.org>
- <ZInDSgrOzYSX124p@krava>
- <CAP-5=fX2ULvR7KFCwZN4wn1LSQmtJqQk7bK=T=BHdvnHuL=DdA@mail.gmail.com>
+        Thu, 15 Jun 2023 04:12:03 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6201A3
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:12:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1686816722; x=1718352722;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zMvFbd2Dmpe15HsekBKSTxJnEfVLCvXumharhvUUlYA=;
+  b=a+i04VAKZ+lswVJS/ju2CUH5dH6piOUR+PybJHguGncfgnLA5Kcj2NZ2
+   umxO5DKwNejettNutk9KlDKKxUZX556q6SSuvkRyXTgCYiDCUgTJW2o0t
+   CCBsIdMboJUoPGcKR3bmqvsN4GnDmXqUZBFftd/iXtsgu/qF58ERneF8H
+   AfQKgtoDw3i7aqnIJ7nXe2bYiYAdSIKhqy9TBZhK76MQcEpB4hllkOhD5
+   hih/VwwsceztFzL9C8FVZDTQ0diL3kiDeHb8OAP20347Oa/Kd6R54nujY
+   ny+FBg9+radyUUFZ2s9t57JOADN84EjAWu505PCI2pbZOrCwH937UTQHd
+   g==;
+X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
+   d="asc'?scan'208";a="230254116"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Jun 2023 01:12:02 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 15 Jun 2023 01:12:01 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Thu, 15 Jun 2023 01:11:59 -0700
+Date:   Thu, 15 Jun 2023 09:11:33 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Nylon Chen <nylon.chen@sifive.com>
+CC:     <schwab@suse.de>, <linux-kernel@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <jszhang@kernel.org>,
+        <ajones@ventanamicro.com>, <aou@eecs.berkeley.edu>,
+        <palmer@dabbelt.com>, <paul.walmsley@sifive.com>,
+        <greentime.hu@sifive.com>, <zong.li@sifive.com>,
+        <nylon7717@gmail.com>
+Subject: Re: [PATCH v2] RISC-V: Support 32_PCREL relocation type in kernel
+ module
+Message-ID: <20230615-luxurious-rewire-84ff9d639fea@wendy>
+References: <20230615072302.25638-1-nylon.chen@sifive.com>
+ <20230615-unvisited-deceit-9beab8ce987a@wendy>
+ <CAHh=Yk_=oZJ6eY3jJzLavub5rGsvY=MKv4tGXeiqkz+rgJHwDQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="h6NhA6OhD5BBwWq3"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fX2ULvR7KFCwZN4wn1LSQmtJqQk7bK=T=BHdvnHuL=DdA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHh=Yk_=oZJ6eY3jJzLavub5rGsvY=MKv4tGXeiqkz+rgJHwDQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 09:20:53AM -0700, Ian Rogers wrote:
-> On Wed, Jun 14, 2023 at 6:40 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+--h6NhA6OhD5BBwWq3
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hey Nylon,
+
+Firstly, no html emails please :/
+
+On Thu, Jun 15, 2023 at 03:52:27PM +0800, Nylon Chen wrote:
+> Conor Dooley <conor.dooley@microchip.com<mailto:conor.dooley@microchip.co=
+m>> =E6=96=BC 2023=E5=B9=B46=E6=9C=8815=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=
+=8B=E5=8D=883:38=E5=AF=AB=E9=81=93=EF=BC=9A
+> > On Thu, Jun 15, 2023 at 03:23:02PM +0800, Nylon Chen wrote:
+> > > Fix the 'unsupported relocation type' error caused by
+> > > enabling the -fasynchronous-unwind-tables flag,
+> > > which generates relocation types that are not supported.
 > >
-> > On Mon, Oct 17, 2022 at 07:02:25PM -0700, Namhyung Kim wrote:
-> > > Now aggr counts are ready for use.  Convert the display routines to use
-> > > the aggr counts and update the shadow stat with them.  It doesn't need
-> > > to aggregate counts or collect aliases anymore during the display.  Get
-> > > rid of now unused struct perf_aggr_thread_value.
-> > >
-> > > Note that there's a difference in the display order among the aggr mode.
-> > > For per-core/die/socket/node aggregation, it shows relevant events in
-> > > the same unit together, whereas global/thread/no aggregation it shows
-> > > the same events for different units together.  So it still uses separate
-> > > codes to display them due to the ordering.
-> > >
-> > > One more thing to note is that it breaks per-core event display for now.
-> > > The next patch will fix it to have identical output as of now.
-> > >
-> > > Acked-by: Ian Rogers <irogers@google.com>
-> > > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> >
-> > hi,
-> > this one seems to break 'perf stat -r X' not sure why so far..
-> >
-> > final counts seems to be accumulated instead of displaying average, like:
-> >
-> >
-> > with this patch:
-> >
-> >          Performance counter stats for './test_progs -n 103/1' (2 runs):
-> >
-> >                206,815,929      cycles:u                                                             ( +-  0.05% )
-> >             16,052,747,533      cycles:k                                                             ( +-  0.10% )
-> >             16,259,643,167      cycles                                                               ( +-  0.10% )
-> >
-> >                    1.98093 +- 0.00586 seconds time elapsed  ( +-  0.30% )
-> >
-> >
-> > without this patch:
-> >
-> >          Performance counter stats for './test_progs -n 103/1' (2 runs):
-> >
-> >                103,300,812      cycles:u                                                             ( +-  0.37% )
-> >              8,016,856,866      cycles:k                                                             ( +-  0.32% )
-> >              8,120,200,572      cycles                                                               ( +-  0.32% )
-> >
-> >                    1.97272 +- 0.00270 seconds time elapsed  ( +-  0.14% )
-> >
-> >
-> > any idea? ;-)
-> 
-> Is this still broken in perf-tools-next? The patch is quite old and
-> there's been work in this area. I'm assuming yes, but thought it was
-> worth checking.
+> > What commit adds the -fasynchronous-unwind-tables flag?
+> sorry my description is not correct, please allow me to add
+>=20
+> I mean, when we use the flag "-fasynchronous-unwind-tables," it generates
+> the relocation type R_RISCV_32_PCCREL. However, this type is currently not
+> supported, so an error will occur.
 
-yes
+(snip)
 
+> > Should there be a Fixes: tag for that commit?
 
-single run:
+> yes, I will do it.
 
-	[root@krava perf]# ./perf stat -e cycles:u ./perf bench sched pipe
-	# Running 'sched/pipe' benchmark:
-	# Executed 1000000 pipe operations between two processes
+What mainline commit actually enables this flag?
 
-	     Total time: 4.725 [sec]
+Cheers,
+Conor.
 
-	       4.725795 usecs/op
-		 211604 ops/sec
+--h6NhA6OhD5BBwWq3
+Content-Type: application/pgp-signature; name="signature.asc"
 
-	 Performance counter stats for './perf bench sched pipe':
+-----BEGIN PGP SIGNATURE-----
 
-	       398,096,363      cycles:u                                                              
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIrHtQAKCRB4tDGHoIJi
+0kYXAP4vjUBQC0nRI2nk+JJ2TuSAyNZbfK027v2MExRK2/XFZQD8Dsh0kgG+u+mL
+zmBMKAzwFIGn34kWR9aFPZrhGcm0HAY=
+=HQMi
+-----END PGP SIGNATURE-----
 
-	       4.737638715 seconds time elapsed
-
-	       0.227961000 seconds user
-	       4.348895000 seconds sys
-
-
-3 runs (with verbose):
-
-	[root@krava perf]# ./perf stat -v -r 3 -e cycles:u ./perf bench sched pipe
-	Using CPUID GenuineIntel-6-8C-1
-	Control descriptor is not initialized
-	[ perf stat: executing run #1 ... ]
-	# Running 'sched/pipe' benchmark:
-	# Executed 1000000 pipe operations between two processes
-
-	     Total time: 4.659 [sec]
-
-	       4.659396 usecs/op
-		 214620 ops/sec
-	cycles:u: 399150620 3866604490 3866604490
-	[ perf stat: executing run #2 ... ]
-	# Running 'sched/pipe' benchmark:
-	# Executed 1000000 pipe operations between two processes
-
-	     Total time: 4.656 [sec]
-
-	       4.656820 usecs/op
-		 214738 ops/sec
-	cycles:u: 795910540 7700776638 7700776638
-	[ perf stat: executing run #3 ... ]
-	# Running 'sched/pipe' benchmark:
-	# Executed 1000000 pipe operations between two processes
-
-	     Total time: 4.634 [sec]
-
-	       4.634090 usecs/op
-		 215792 ops/sec
-	cycles:u: 1189927957 11522039559 11522039559
-
-	 Performance counter stats for './perf bench sched pipe' (3 runs):
-
-	     1,189,927,957      cycles:u                                                                ( +- 19.18% )
-
-		    4.6611 +- 0.0102 seconds time elapsed  ( +-  0.22% )
-
-
-jirka
+--h6NhA6OhD5BBwWq3--
