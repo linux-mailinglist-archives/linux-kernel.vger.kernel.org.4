@@ -2,150 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B10D732316
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 01:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF670732327
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 01:18:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231969AbjFOXHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 19:07:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41932 "EHLO
+        id S232144AbjFOXSM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 15 Jun 2023 19:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjFOXHk (ORCPT
+        with ESMTP id S229510AbjFOXSK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 19:07:40 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFD6273F
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 16:07:37 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b4f8523197so9859645ad.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 16:07:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1686870456; x=1689462456;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RPv4fbHe7J+eAL9Nmh6sjLcdVOBe69VQf0iTOrC71Yc=;
-        b=F1wUuYVVR2j9n9/nCFqETna6uJ4/EAXcQGDAaTiHcsBG2HhKhsXXt2WZWg35Aq6EOd
-         XsCTG2WRBt3AJBnpsJOfdrC9TfasW1ANGOk6VaLrN4fZ8RYqsPsA1GpgtSuGxqaUDMnI
-         6Na+cuc5cIZEjansQvyQqk5n0L+SzV/iVg2M+lCGqoXXK5xSk5YhId2VCbbk9io6trHN
-         drX9NsDF6V8Ax6znUXaF9QInFabqOp9Mivc42fOTTfR6VHoDA2TkQKbipbQZLYjjdGpm
-         if5chhDyumICFJirJ450geIqvfACiwLYc4R9E4pYBYu/opQ37+0ZGuXdJ93DlSABu/y0
-         0ieg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686870456; x=1689462456;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RPv4fbHe7J+eAL9Nmh6sjLcdVOBe69VQf0iTOrC71Yc=;
-        b=FOVHG5DhA9L3jW7v89hsmPKodryE8Ob3uf8SEmnu2j80VSrTPKKca1Onwh3ntEPaIQ
-         nlLI1ev65xF740ZjaME9DC8sx24l88bhj5epMs+UHf9bWzshBN4u9pRRDZUNkh0VS327
-         MYnXpUCcpzprcdiSBlt+2xs5xo72WdzyJtL6mp/5UxGR3YRmsuvg2XnnPRtQ6LD2JUZV
-         cz0KakqybkrfypMAdTIc3lhwWb8HUCXudmDbXqmhU+bvMGA5AaoO2Gu1ucA87UqHek0B
-         m6CsJ21S5N59O055J2lUDND1gFmdGNOcVvmTIFmYpGpVGVHgxD05sZ13GAkezI5isfn9
-         DmTw==
-X-Gm-Message-State: AC+VfDyYEsIHzF2skMMSNlpv4fUxIqV6iKXwMcIYcfcx2AlM2xAPwNrd
-        mgEpsMJWzywjiaW4ctIjaix2OBWLZjk/FhmoAa0=
-X-Google-Smtp-Source: ACHHUZ6Rd2Y9gQSkogQeX1TMGEvvCehKiRYGqJWHFIXaSSSeR/C2ip04Q7NDkBb9deO2xNhWgjkm0A==
-X-Received: by 2002:a17:902:f68a:b0:1b4:5699:aac8 with SMTP id l10-20020a170902f68a00b001b45699aac8mr7610606plg.21.1686870456517;
-        Thu, 15 Jun 2023 16:07:36 -0700 (PDT)
-Received: from dread.disaster.area (pa49-180-13-202.pa.nsw.optusnet.com.au. [49.180.13.202])
-        by smtp.gmail.com with ESMTPSA id u16-20020a63f650000000b00502f4c62fd3sm13360868pgj.33.2023.06.15.16.07.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 16:07:36 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-        (envelope-from <david@fromorbit.com>)
-        id 1q9w3w-00CFXl-2H;
-        Fri, 16 Jun 2023 09:07:32 +1000
-Date:   Fri, 16 Jun 2023 09:07:32 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Lu Hongfei <luhongfei@vivo.com>
-Cc:     Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        "open list:EXT4 FILE SYSTEM" <linux-ext4@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        opensource.kernel@vivo.com, Yangtao Li <frank.li@vivo.com>
-Subject: Re: [PATCH] ext4: enable nowait async buffered writes
-Message-ID: <ZIuZtP7uxRKAOMmB@dread.disaster.area>
-References: <20230614083105.20663-1-luhongfei@vivo.com>
+        Thu, 15 Jun 2023 19:18:10 -0400
+X-Greylist: delayed 520 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Jun 2023 16:18:09 PDT
+Received: from mail.pcunix.cl (mail.pcunix.cl [201.236.145.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5DF62949;
+        Thu, 15 Jun 2023 16:18:09 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.pcunix.cl (Postfix) with ESMTP id 220F6A1888;
+        Thu, 15 Jun 2023 19:09:28 -0400 (-04)
+Received: from mail.pcunix.cl ([127.0.0.1])
+        by localhost (mail.pcunix.cl [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id vSrYsdyC9ejC; Thu, 15 Jun 2023 19:09:27 -0400 (-04)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.pcunix.cl (Postfix) with ESMTP id D6979A1889;
+        Thu, 15 Jun 2023 19:09:27 -0400 (-04)
+X-Virus-Scanned: amavisd-new at pcunix.cl
+Received: from mail.pcunix.cl ([127.0.0.1])
+        by localhost (mail.pcunix.cl [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id kaPrWKH7mT8k; Thu, 15 Jun 2023 19:09:27 -0400 (-04)
+Received: from [147.78.103.165] (unknown [192.168.10.1])
+        by mail.pcunix.cl (Postfix) with ESMTP id 3B82DA186E;
+        Thu, 15 Jun 2023 19:09:23 -0400 (-04)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230614083105.20663-1-luhongfei@vivo.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Loan Offer
+To:     Recipients <capital@tahoo.com>
+From:   capital@tahoo.com
+Date:   Thu, 15 Jun 2023 16:09:17 -0700
+Reply-To: sawdacapital@yahoo.com
+Message-Id: <20230615230923.3B82DA186E@mail.pcunix.cl>
+X-Spam-Status: No, score=4.2 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L5,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 04:31:04PM +0800, Lu Hongfei wrote:
-> This adds the async buffered write support to ext4,
-> the following is the relevant test data.
-> 
->     iodepth      | 1    | 2    | 4    | 8    | 16   | 32   |
->     before(M/s)  | 842  | 1047 | 1098 | 1167 | 1172 | 1247 |
->     after(M/s)   | 1293 | 1674 | 1794 | 1862 | 1897 | 1833 |
-> 
-> The following is the fio configuration:
-> 
-> [global]
-> ioengine=io_uring
-> sqthread_poll=1
-> threads=1
-> iodepth=16
-> hipri=0
-> direct=0
-> fixedbufs=0
-> uncached=0
-> nowait=0
-> force_async=0
-> randrepeat=0
-> time_based=0
-> size=256M
-> filename=/data/test/local/io_uring_test
-> group_reporting
-> [read256B-rand]
-> bs=4096
-> rw=randwrite
-> numjobs=1
-> 
-> Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
->  fs/ext4/file.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/fs/ext4/file.c b/fs/ext4/file.c
-> index 6a16d07965f9..5da7c5612324
-> --- a/fs/ext4/file.c
-> +++ b/fs/ext4/file.c
-> @@ -288,9 +288,6 @@ static ssize_t ext4_buffered_write_iter(struct kiocb *iocb,
->  	ssize_t ret;
->  	struct inode *inode = file_inode(iocb->ki_filp);
->  
-> -	if (iocb->ki_flags & IOCB_NOWAIT)
-> -		return -EOPNOTSUPP;
-> -
->  	inode_lock(inode);
+Hello,
 
-Ah, no, that's not how we enable IOCB_NOWAIT functionality. Just
-because removing the check makes it go a little bit faster, it
-doesn't mean that it is actually doing the right thing.
+We grant loans to individuals and companies. We are interested in financing of large volume projects and grant loans worldwide.
 
-i.e. before remove IOCB_NOWAIT checks like this, we actually have to
-make the functionality operate in a non-blocking manner when
-IOCB_NOWAIT is set.  Clearly, this patch does not do that, because
-the very first thing that occurs after the removed NOWAIT check is a
-blocking inode_lock() call....
+The interest rate will be 3% annually. The repayment period is 1-25 years.
 
-Please go and look at the series that added NOWAIT buffered write
-support to XFS for io_uring an example of sorts of changes that need
-to be made to ext4 to support IOCB_NOWAIT buffered writes.
+We offer:-
 
-https://lore.kernel.org/linux-xfs/20220608171741.3875418-1-shr@fb.com/
+*Project finance
+*Business loans
+*Personal loans
 
-Cheers,
+Loan Processing and financing takes about 2 to 3 working days from the day you submit your loan application. For more information reply to this mail.
 
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+Kind regards,
+Sawda Team
+
+ 
+
+NOTE: If you received this message in your SPAM/JUNK folder, that is because of the restrictions implemented by your Internet Service Provider, treat it genuinely.
