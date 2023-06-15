@@ -2,119 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA0147317CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:46:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE8017317CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344522AbjFOLqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 07:46:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58486 "EHLO
+        id S1344531AbjFOLqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 07:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344684AbjFOLpB (ORCPT
+        with ESMTP id S1345057AbjFOLpy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 07:45:01 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6962149F2
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 04:40:48 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9745ba45cd1so248708466b.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 04:40:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=grsecurity.net; s=grsec; t=1686829232; x=1689421232;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yHDankix+JLiU2Nr1JYTN9mJNWmPd/bjBdB0sjT8q/s=;
-        b=P4/ciUFY+38pISngwny9usr9/6X/fsPKJgI55lG4j8yHc1zyI1feX806s1s61qSlUp
-         1ttzIJkm2YeziTP2AsueW3COytk3K/Zv8zYHbTFsEMEI/cGbD9b+VI1RTtBmVJinFZak
-         GjLv8AkpSGlCmkKtZYy5YgTBmZN3kySPcnINOIIdQFph2B1XFjXVM2T/v6KPLJ90bdiD
-         qy5SKj9EKAs6dIHqXIW4IPKb7kV7nDXzphHMbJjTOdRiWsSWELmkJQvciBOv5NeuVzhM
-         FqZ20WSC1FxMkLf2VF0gpsL8SJIpPJRIT8aRr+PtUIj1iVL36bSNxfNsFBTWRJ8s/E4k
-         fxyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686829232; x=1689421232;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yHDankix+JLiU2Nr1JYTN9mJNWmPd/bjBdB0sjT8q/s=;
-        b=lBPauEq/84qeE5ZhmgpoBphwE6ihu07DXqApWYJ/GXTKI1W2TT+gtvD64rLC1gD8ae
-         XDNVO6qFhlHqbG1CEncFUJGns9fGDxhTYf9NhyenSS4+b4C8PkViArEdEfIQCC3E9mqq
-         zamYWJZwnj1pcT1UQl8XDoRcsMiFK6MdkI0ezXEyEB0ffBPl6XCqiBUYN/X87yTEDN8C
-         WSHJ/3mqlr8C3YkWooUdEJBpk+S/HjA7BPk0OrgPiLxbNJheq9Y3m+tKCXl34aFDj6M/
-         wQwfCM6UcjlkxfJC+NFpeg1B6H99Q9bFOeMpK4laBbD8FWdi0z0oYRX4q+cDmzjFWy3x
-         QM4Q==
-X-Gm-Message-State: AC+VfDzljbf7otp8LC1hEUGD1VTFMxY/u05biAk9PfDUL+Ic/sQVWTPD
-        fF7Odsl/juRW+eE8QZpm1jeWsg==
-X-Google-Smtp-Source: ACHHUZ52DMP0G3qO6HmYZtGySZejowJqoJB57B/aKKMedHNEDhi07a2R3IIaKQS2qJTdP8d5eS0pjg==
-X-Received: by 2002:a17:906:db0a:b0:977:befe:d888 with SMTP id xj10-20020a170906db0a00b00977befed888mr16689883ejb.13.1686829232551;
-        Thu, 15 Jun 2023 04:40:32 -0700 (PDT)
-Received: from ?IPV6:2003:f6:af1c:2300:fa33:8d65:b4c4:3ebe? (p200300f6af1c2300fa338d65b4c43ebe.dip0.t-ipconnect.de. [2003:f6:af1c:2300:fa33:8d65:b4c4:3ebe])
-        by smtp.gmail.com with ESMTPSA id zo18-20020a170906ff5200b0096ae4451c65sm9358824ejb.157.2023.06.15.04.40.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 04:40:32 -0700 (PDT)
-Message-ID: <1b2ed0be-7eb9-3224-5829-fcbdb00613e8@grsecurity.net>
-Date:   Thu, 15 Jun 2023 13:40:30 +0200
+        Thu, 15 Jun 2023 07:45:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E73A3C3E;
+        Thu, 15 Jun 2023 04:41:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 41FC061892;
+        Thu, 15 Jun 2023 11:40:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A889C433C0;
+        Thu, 15 Jun 2023 11:40:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686829253;
+        bh=LckNHiaqcOAmyFMYmvjfzWDptBSbUAyKA/Eb3MHyar4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=we1ZHvATxPN1dC+oPbIyH9xvD9p9e8nFfo5qwgo4Zcb9d4m8VP/WYXOQg16f0S5rX
+         noSVBPD1AM+lumjpI1kNw2nzpHzDl/9rcneIKJqiZXNrR+t9XlbRypQU3GvEVImnD0
+         KpZAw27wDskExBtEZnVStF+B6sNwRmnWs2gBSBE8=
+Date:   Thu, 15 Jun 2023 13:40:51 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Julien Panis <jpanis@baylibre.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        corbet@lwn.net, arnd@arndb.de, derek.kiernan@xilinx.com,
+        dragan.cvetic@xilinx.com, macro@orcam.me.uk,
+        baolu.lu@linux.intel.com, yi.l.liu@intel.com, jirislaby@kernel.org,
+        rostedt@goodmis.org, revest@chromium.org, gehao@kylinos.cn,
+        akpm@linux-foundation.org, jgg@ziepe.ca, razor@blackwall.org,
+        stephen@networkplumber.org, prabhakar.csengg@gmail.com,
+        contact@emersion.fr, alex.williamson@redhat.com,
+        akrowiak@linux.ibm.com, mark.rutland@arm.com,
+        ye.xingchen@zte.com.cn, ojeda@kernel.org, me@kloenk.de,
+        milan@mdaverde.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        sterzik@ti.com, u-kumar1@ti.com, eblanc@baylibre.com,
+        jneanne@baylibre.com, aseketeli@baylibre.com
+Subject: Re: [GIT PULL] Immutable branch containing TPS6594 core (MFD)
+ support due for the v6.5 merge window
+Message-ID: <2023061531-unfazed-calamari-91a2@gregkh>
+References: <20230511095126.105104-1-jpanis@baylibre.com>
+ <20230523074416.GA2174496@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] timekeeping: Align tick_sched_timer() with the HZ tick.
- -- regression report
-Content-Language: en-US, de-DE
-To:     "Richard W.M. Jones" <rjones@redhat.com>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Gusenleitner Klaus <gus@keba.com>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        stable@vger.kernel.org
-References: <20230406095735.0_14edn3@linutronix.de>
- <20230406105529.GB392176@hirez.programming.kicks-ass.net>
- <87mt3lqnde.ffs@tglx> <20230406150254.ZrawA2Y-@linutronix.de>
- <87jzypq6gq.ffs@tglx> <20230418122639.ikgfvu3f@linutronix.de>
- <5a56290d-806e-b9a5-f37c-f21958b5a8c0@grsecurity.net>
- <20230615090356.GD10301@redhat.com>
-From:   Mathias Krause <minipli@grsecurity.net>
-In-Reply-To: <20230615090356.GD10301@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230523074416.GA2174496@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15.06.23 11:03, Richard W.M. Jones wrote:
-> On Wed, Jun 14, 2023 at 12:59:46AM +0200, Mathias Krause wrote:
->> This patch causes VM boot hangs for us. It took a while to identify as 
->> the boot hangs were only ~1 out of 30 but it's clearly it. Reverting 
->> the commit got me 100 boots in a row without any issue.
+On Tue, May 23, 2023 at 08:44:16AM +0100, Lee Jones wrote:
+> As promised.
 > 
-> FWIW I have quite a nice test program for catching these sorts of boot
-> hangs, see attached.  You need to change the VMLINUX define to point
-> to your vmlinux or vmlinuz file.
-
-Heh, nice. For this specific case, though, a simple boot loop in a
-single VM was sufficient:
-
-  $ kvm -cpu host -smp 8 -m 8G -display none -serial stdio -s \
-        -kernel path/to/bzImage -append 'console=ttyS0 panic=1'
-
-This will reboot the VM in an endless loop until it hangs which is
-visually noticeable as there's no more output generated to the terminal.
-At that time one can attach to it via gdb and investigate further:
-
-  $ gdb -ex 'target remote :1234' path/to/vmlinux
-
-Yet another advantage is that one can filter the output, e.g. via:
-
-  $ kvm ... | grep clock
-
-Thanks,
-Mathias
-
+> The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 > 
-> Rich.
+>   Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
 > 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-tps6594-core-v6.5
+> 
+> for you to fetch changes up to 325bec7157b3859b45b9471447f5d130ab8a8723:
+> 
+>   mfd: tps6594: Add driver for TI TPS6594 PMIC (2023-05-18 16:06:14 +0100)
+
+Thanks, I've pulled this into my char-misc tree so that I can take the
+other patches here.
+
+greg k-h
