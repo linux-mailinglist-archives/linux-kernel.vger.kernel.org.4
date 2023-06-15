@@ -2,121 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5166F732088
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 21:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C2A773208F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 22:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbjFOTzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 15:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60780 "EHLO
+        id S230074AbjFOUAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 16:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232139AbjFOTzB (ORCPT
+        with ESMTP id S229632AbjFOUAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 15:55:01 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FBAA295A
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 12:55:00 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-bd20beffda6so2200978276.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 12:55:00 -0700 (PDT)
+        Thu, 15 Jun 2023 16:00:19 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5505295A
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 13:00:17 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-516500163b2so301a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 13:00:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686858900; x=1689450900;
+        d=google.com; s=20221208; t=1686859216; x=1689451216;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zarhNLNxJGcgzFm4V/dlUfwEydM2+khl1826v1Ld6wo=;
-        b=omzFWI9V+BtaWILreAC2kA65CZu3BhXlKb9bd1vTMVRxwqvTQ86NWOMb8UBr7/+zom
-         +k1fUe4ve3JpHGCqQcK9NsZVkImdB/Lo+/njCuQPf32XfaaZL9CZBdhjOsBBUZSZqcae
-         SmQGh+G7KR6p70maYmVRYPCLLZ04fZaf0q6LeoWmhLvvRZyGg2Wqz1Chrg2E1ZaR+1tR
-         gHcjBvMlW4iE9ItnxoZRvMeeOIbZVsIENG7e3JHw8Wz6k7d0NwrafuHHwwoYFP6Wkv6+
-         hwyJMjWgJqY/3Ux+26E2hWY3M57/nh2n7O2MenAcHc6+q88IETUCRGyLS7ahtXvbnf+L
-         q7SA==
+        bh=+RWqrzTlZYe8/Gfpdw2HrcNGicUcMl9+E9jN4a7pTg0=;
+        b=r8b1n9ZwhABfsIVwNrOC+42qy+6eKOYn88GRmm5/860S+dOA70/GmS+MgS6xsMu8Dy
+         U7CEjqWFIT5C/GKLEtTwTjzUmds0heLEdHByLQeDqGqa7BGMfnrdciyjCH9beLdxeUgW
+         OMbz4q5EZkoHPmwl9Z/mpvg4v77WVolcyjGqiEqNgidrU8n44T48dg4yBjV4oEURlVEA
+         uE6OvmGJKphObmjGKcEj3YSZBs+pShjnTUDpiMtWCfUWStekfQKoIQ7WCYH6HgkdVQl+
+         7gNTpWgRF9tnJfJKjb8M2cZdiPfiZYJ5vhALMc1BWoJoL7g+5WKhC9/YkwkbvAL6r1Yx
+         uGGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686858900; x=1689450900;
+        d=1e100.net; s=20221208; t=1686859216; x=1689451216;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zarhNLNxJGcgzFm4V/dlUfwEydM2+khl1826v1Ld6wo=;
-        b=SAlufzdAWUdy1Nl3ezqfSd4lMZRfv6TxG6hMH2IOwn4OCadPGngX/nkNeH/rdP7Lup
-         glTBZSG6eqWPxPH9Z7w2as71hercpKE/suTfbsP7pbjBQQE9kSs0JYtHymoo316HHE5t
-         jmeNEPp1dDxcYy++mOdyPJ6tg6mAZbCSSZoqyR/vJIN+ZFX/rLaAkBnLHHoRcIX+dmfH
-         faGWof0wOYPlxTK/VCZgoyMxxKSWGbmnEjCbT3qyxpWnSxZiVx+VELuLKh/clklLBJDi
-         o1pftUdWsexDiHmBqagezUPd2hozsZPGCqhkSGFnUvl1MBsFw01Wxub6MJTQOqn5pW7R
-         4wow==
-X-Gm-Message-State: AC+VfDz00gqhypxYHoMZ/zcyrfMRmTrVTdU5t7HwcxoFPpcNYcTfemlx
-        wM/1OTkOyHD1/l6y5EU55IlsmQmd+FJ6ZxjqHHVmIg==
-X-Google-Smtp-Source: ACHHUZ6Yx/mZVW7nno+7MO/Qy94W3ta+kHrxF19zn9d6b4qJpSAQFM1D+WoaDzO9Q8B9HSCJAgBJFmvbmrbEGNKRsaE=
-X-Received: by 2002:a25:cc86:0:b0:bca:9c66:e53b with SMTP id
- l128-20020a25cc86000000b00bca9c66e53bmr6280244ybf.14.1686858899754; Thu, 15
- Jun 2023 12:54:59 -0700 (PDT)
+        bh=+RWqrzTlZYe8/Gfpdw2HrcNGicUcMl9+E9jN4a7pTg0=;
+        b=UFEQMvPPFtIm1P7a1gyGOMyP8jDiOhKQEQFlDTBcVmWRW5NwtoznFSjDQThBr1Yf4m
+         FI+tA5nfEayXS/Ku5CFoLa25rLGd4JoRr16Ba0vyKNra6H0WAispAc1QJuPGoogOlc4R
+         pMvkGLcp6s0Sk1uUtXbJKy8Oojzosq80gltBCH8dTN2U/3U5mheYC7YiIPDDCNH1u6YH
+         K3kIC0Jg08+kofgeY+C936GsqRa6LtfLjH/1S8QddxpLHNxWBbT2MBGuO9L8VvEn4wx1
+         pprEOLYK2428sEeaJxwJpP3OBNA2ADGLlNpC0eK60faVCOTrtMF5uLbEaXzaeXUHQTqg
+         vHZw==
+X-Gm-Message-State: AC+VfDw0puQu2nOdP1nZjCkY8B/3yJ7X9GgxZshbNtrgK1zqn1F54HeT
+        2hWv3S4i6g14yioH67bom45sReHhqPYPhaDVS4K3cA==
+X-Google-Smtp-Source: ACHHUZ59IUn6ONdci8fY72qJ+fprLwkmaLiabWTmH9HLJPn3BDB2NQeOO/TEIF/PybYaw++bw7+gWImgKfMD6QqIj5s=
+X-Received: by 2002:a50:bac3:0:b0:506:b280:4993 with SMTP id
+ x61-20020a50bac3000000b00506b2804993mr128656ede.2.1686859216245; Thu, 15 Jun
+ 2023 13:00:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230607151127.1542024-1-pavacic.p@gmail.com> <20230607151127.1542024-4-pavacic.p@gmail.com>
-In-Reply-To: <20230607151127.1542024-4-pavacic.p@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 15 Jun 2023 21:54:48 +0200
-Message-ID: <CACRpkdbrEA54qmfTKSsFRG9ZS4u8hM6P5TXtOjRAiW+TD_v-fQ@mail.gmail.com>
-Subject: Re: [PATCH v4 3/3] drm/panel-fannal-c3004: Add fannal c3004 DSI panel
-To:     Paulo Pavacic <pavacic.p@gmail.com>
-Cc:     neil.armstrong@linaro.org, sam@ravnborg.org, airlied@gmail.com,
-        daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
+References: <20230613102905.2808371-1-usama.anjum@collabora.com>
+ <20230613102905.2808371-3-usama.anjum@collabora.com> <CABb0KFHWnbrf2ythvO0OKsd1ZS9b4D9BNzwBCbn6g9OX4n6ZOg@mail.gmail.com>
+ <0db01d90-09d6-08a4-bbb8-70670d3baa94@collabora.com> <CABb0KFEn5TU480A=YiN82nLRtGyKMABi8cZjuiGUU_jFZZo+8g@mail.gmail.com>
+ <34203acf-7270-7ade-a60e-ae0f729dcf70@collabora.com> <CABb0KFFaXgJD99pWfx3MC+qrq5jUaPis_kZo6U8yL_8xdp0GJA@mail.gmail.com>
+ <96b7cc00-d213-ad7d-1b48-b27f75b04d22@collabora.com> <CABb0KFEy_mRaT86TEOQ-BoTe_XOVw3Kp5VdzOfEEaiZJuT754g@mail.gmail.com>
+ <CABb0KFGuqoDh-+FKcsZXxpSFWSM3mcLVQkotGE3RcNiFKh-a2g@mail.gmail.com> <43c96533-8009-e42f-721c-4b2d1e142f5d@collabora.com>
+In-Reply-To: <43c96533-8009-e42f-721c-4b2d1e142f5d@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Thu, 15 Jun 2023 22:00:04 +0200
+Message-ID: <CABb0KFF5LCmvdY_hVmH0SSCOdyeT1dAA=Kh=T7wUSx=9eLLy=g@mail.gmail.com>
+Subject: Re: [PATCH v18 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paulo,
+On Thu, 15 Jun 2023 at 17:16, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+>
+> Please review the v19. I hope to get your reviewed by tag soon.
+>
+> On 6/15/23 7:58=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> > On Thu, 15 Jun 2023 at 16:52, Micha=C5=82 Miros=C5=82aw <emmir@google.c=
+om> wrote:
+> >> On Thu, 15 Jun 2023 at 15:58, Muhammad Usama Anjum
+> >> <usama.anjum@collabora.com> wrote:
+> >>> I'll send next revision now.
+> >>> On 6/14/23 11:00=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> >>>> (A quick reply to answer open questions in case they help the next v=
+ersion.)
+> >>>>
+> >>>> On Wed, 14 Jun 2023 at 19:10, Muhammad Usama Anjum
+> >>>> <usama.anjum@collabora.com> wrote:
+> >>>>> On 6/14/23 8:14=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> >>>>>> On Wed, 14 Jun 2023 at 15:46, Muhammad Usama Anjum
+> >>>>>> <usama.anjum@collabora.com> wrote:
+> >>>>>>>
+> >>>>>>> On 6/14/23 3:36=E2=80=AFAM, Micha=C5=82 Miros=C5=82aw wrote:
+> >>>>>>>> On Tue, 13 Jun 2023 at 12:29, Muhammad Usama Anjum
+> >>>>>>>> <usama.anjum@collabora.com> wrote:
+> >>>>>>>> For flags name: PM_REQUIRE_WRITE_ACCESS?
+> >>>>>>>> Or Is it intended to be checked only if doing WP (as the current=
+ name
+> >>>>>>>> suggests) and so it would be redundant as WP currently requires
+> >>>>>>>> `p->required_mask =3D PAGE_IS_WRITTEN`?
+> >>>>>>> This is intended to indicate that if userfaultfd is needed. If
+> >>>>>>> PAGE_IS_WRITTEN is mentioned in any of mask, we need to check if
+> >>>>>>> userfaultfd has been initialized for this memory. I'll rename to
+> >>>>>>> PM_SCAN_REQUIRE_UFFD.
+> >>>>>>
+> >>>>>> Why do we need that check? Wouldn't `is_written =3D false` work fo=
+r vmas
+> >>>>>> not registered via uffd?
+> >>>>> UFFD_FEATURE_WP_ASYNC and UNPOPULATED needs to be set on the memory=
+ region
+> >>>>> for it to report correct written values on the memory region. Witho=
+ut UFFD
+> >>>>> WP ASYNC and UNPOUPULATED defined on the memory, we consider UFFD_W=
+P state
+> >>>>> undefined. If user hasn't initialized memory with UFFD, he has no r=
+ight to
+> >>>>> set is_written =3D false.
+> >>>>
+> >>>> How about calculating `is_written =3D is_uffd_registered() &&
+> >>>> is_uffd_wp()`? This would enable a user to apply GET+WP for the whol=
+e
+> >>>> address space of a process regardless of whether all of it is
+> >>>> registered.
+> >>> I wouldn't want to check if uffd is registered again and again. This =
+is why
+> >>> we are doing it only once every walk in pagemap_scan_test_walk().
+> >>
+> >> There is no need to do the checks repeatedly. If I understand the code
+> >> correctly, uffd registration is per-vma, so it can be communicated
+> >> from test_walk to entry/hole callbacks via a field in
+> >> pagemap_scan_private.
+> >
+> > Actually... this could be exposed as a page category for the filter
+> > (e.g. PAGE_USES_UFFD_WP) and then you could just make the ioctl() to
+> > work for your usecase without tracking the ranges at the userspace
+> > side.
+> I'm not sure about page category. ASAIK the current check isn't bad when =
+we
+> already mention in documentation that memory must be registered with UFFD
+> WP before using write feature of the IOCTL.
 
-thanks for your patch!
+You could relax the (documentation) rule to be "WP works only on
+ranges registeder via UFFD for ASYNC_WP". That way you allow people,
+who don't read documentation to shoot their foot, but don't block
+people that know what they are doing from exploiting the nice feature
+that they don't need to track all the WP-registered ranges calling the
+ioctl() for each one and instead can just call it once for the whole
+address space.
 
-Overall this looks very good.
-
-I doubt that the display controller is actually by Fannal, but I guess
-you tried to find out? We usually try to identify the underlying display
-controller so the driver can be named after it and reused for more
-display panels.
-
-Some minor questions/nitpicks below.
-
-On Wed, Jun 7, 2023 at 5:11=E2=80=AFPM Paulo Pavacic <pavacic.p@gmail.com> =
-wrote:
-
-> +static int fannal_panel_enable(struct drm_panel *panel)
-> +{
-> +       struct mipi_dsi_device *dsi =3D to_mipi_dsi_device(panel->dev);
-> +
-> +       mipi_dsi_generic_write_seq(dsi, 0xFF, 0x77, 0x01, 0x00, 0x00, 0x1=
-3);
-> +       mipi_dsi_generic_write_seq(dsi, 0xEF, 0x08);
-
-Why is everything using mipi_dsi_generic_write_seq() instead of
-mipi_dsi_dcs_write_seq()?
-
-Especially here, because 0x11 is certainly a command:
-
-> +       mipi_dsi_generic_write_seq(dsi, 0x11); //MIPI_DCS_EXIT_SLEEP_MODE
-
-Instead use:
-
-    ret =3D mipi_dsi_dcs_exit_sleep_mode(dsi);
-    if (ret)
-            return ret;
-
-
-> +       mipi_dsi_generic_write_seq(dsi, 0x29); //MIPI_DCS_SET_DISPLAY_ON
-
-Instead use:
-
-    ret =3D mipi_dsi_dcs_set_display_on(dsi);
-    if (ret)
-            return ret;
-
-Yours,
-Linus Walleij
+Best Regards
+Micha=C5=82 Miros=C5=82aw
