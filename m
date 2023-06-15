@@ -2,162 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57795730D0D
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 04:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67EAA730D14
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 04:16:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238185AbjFOCPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 22:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55440 "EHLO
+        id S241008AbjFOCQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 22:16:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjFOCPO (ORCPT
+        with ESMTP id S238267AbjFOCQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 22:15:14 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875CC1BE8;
-        Wed, 14 Jun 2023 19:15:12 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QhQqH4HGcz4f3knX;
-        Thu, 15 Jun 2023 10:15:07 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgCHLaEodIpkxertLg--.6998S3;
-        Thu, 15 Jun 2023 10:15:06 +0800 (CST)
-Subject: Re: [syzbot] [reiserfs?] general protection fault in rcu_core (2)
-To:     syzbot <syzbot+b23c4c9d3d228ba328d7@syzkaller.appspotmail.com>,
-        jack@suse.cz, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, luto@kernel.org,
-        peterz@infradead.org, reiserfs-devel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <000000000000556d9605fe1e5c40@google.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <1cb93e56-f3e3-c972-1232-bbb67ad4f672@huaweicloud.com>
-Date:   Thu, 15 Jun 2023 10:15:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Wed, 14 Jun 2023 22:16:35 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FA91BEC;
+        Wed, 14 Jun 2023 19:16:35 -0700 (PDT)
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35EJcZmV009944;
+        Thu, 15 Jun 2023 02:15:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2023-03-30;
+ bh=nUbXpebNc5HuZ9sdR+OhaecOaaP7FE3N3bodrbFXLS8=;
+ b=jqZRW1WRza9j4NXa1/Aty667+bZhE+DH2jepOTUrNWbEpbIVtNUs+3cw/tBC+/ih2ymF
+ K1vCqjJ/HRg6M56NYnY+blg8Bq9wQi70bsccDMwOyK70AsYJA0O/di88R3Pis1AqM3zl
+ dBR+ROT3fadzZ/EZDrIbUXeqMIpq/R5C5gYBBwrLfaqnAngq8Sk21MaAWcIqJbOzhHhT
+ 0X9uqDaxyBI0tNmirBNBkwDRz02CH+/92+VSF77PieGMGn132uADf7wjOJCyChRcfvag
+ jsMaJrQwYUyc/l53oHRkpnISeKMPFZ6sb5k6i2/uVZAb6U2Jsnmt828NVkTJPmu8RFVK Lw== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r4g3bs1fq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 15 Jun 2023 02:15:43 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35F1FmFj008399;
+        Thu, 15 Jun 2023 02:15:42 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3r4fmcm0ht-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 15 Jun 2023 02:15:42 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35F2FfSv031296;
+        Thu, 15 Jun 2023 02:15:41 GMT
+Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3r4fmcm0h8-2;
+        Thu, 15 Jun 2023 02:15:41 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     kys@microsoft.com, longli@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, jejb@linux.ibm.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, Michael Kelley <mikelley@microsoft.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH 1/1] scsi: storvsc: Always set no_report_opcodes
+Date:   Wed, 14 Jun 2023 22:15:32 -0400
+Message-Id: <168679530533.3778443.1192688670908894213.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <1686343101-18930-1-git-send-email-mikelley@microsoft.com>
+References: <1686343101-18930-1-git-send-email-mikelley@microsoft.com>
 MIME-Version: 1.0
-In-Reply-To: <000000000000556d9605fe1e5c40@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgCHLaEodIpkxertLg--.6998S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxCw1fuFy7ur47Ar1fuFy8Krg_yoWrGw4xpF
-        45Kw42yr9YyrWUJwnFkF15ua4I9Fn8WFW7WrW7WrZ2vanIqrnxXa1Iyr43uFWUur4Fy34k
-        Jw1DC3Z3tw1rZa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvab4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
-        6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv
-        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyT
-        uYvjxUrR6zUUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-14_14,2023-06-14_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=934 phishscore=0
+ malwarescore=0 mlxscore=0 adultscore=0 bulkscore=0 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306150017
+X-Proofpoint-ORIG-GUID: 4W3DeEKV7HP2NHfD2gHlntszRvld73W0
+X-Proofpoint-GUID: 4W3DeEKV7HP2NHfD2gHlntszRvld73W0
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, 09 Jun 2023 13:38:21 -0700, Michael Kelley wrote:
 
-在 2023/06/15 6:20, syzbot 写道:
-> syzbot has bisected this issue to:
+> Hyper-V synthetic SCSI devices do not support the MAINTENANCE_IN SCSI
+> command, so scsi_report_opcode() always fails, resulting in messages
+> like this:
 > 
-> commit 2acf15b94d5b8ea8392c4b6753a6ffac3135cd78
-> Author: Yu Kuai <yukuai3@huawei.com>
-> Date:   Fri Jul 2 04:07:43 2021 +0000
+> hv_storvsc <guid>: tag#205 cmd 0xa3 status: scsi 0x2 srb 0x86 hv 0xc0000001
 > 
->      reiserfs: add check for root_inode in reiserfs_fill_super
+> The recently added support for command duration limits calls
+> scsi_report_opcode() four times as each device comes online, which
+> significantly increases the number of messages logged in a system with
+> many disks.
 > 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1715ffdd280000
+> [...]
 
-git log:
+Applied to 6.4/scsi-fixes, thanks!
 
-13d257503c09 reiserfs: check directory items on read from disk
-2acf15b94d5b reiserfs: add check for root_inode in reiserfs_fill_super
+[1/1] scsi: storvsc: Always set no_report_opcodes
+      https://git.kernel.org/mkp/scsi/c/31d16e712bdc
 
-The bisect log shows that with commit 13d257503c09:
-testing commit 13d257503c0930010ef9eed78b689cec417ab741 gcc
-compiler: gcc (GCC) 10.2.1 20210217, GNU ld (GNU Binutils for Debian) 2.35.2
-kernel signature: 
-fc456e669984fb9704d9e1d3cb7be68af3b83de4bb55124257ae28bb39a14dc7
-run #0: basic kernel testing failed: possible deadlock in fs_reclaim_acquire
-run #1: crashed: KASAN: out-of-bounds Read in leaf_paste_in_buffer
-run #2: crashed: KASAN: out-of-bounds Read in leaf_paste_in_buffer
-run #3: crashed: KASAN: out-of-bounds Read in leaf_paste_in_buffer
-run #4: crashed: KASAN: use-after-free Read in leaf_insert_into_buf
-run #5: crashed: KASAN: out-of-bounds Read in leaf_paste_in_buffer
-run #6: crashed: KASAN: out-of-bounds Read in leaf_paste_in_buffer
-run #7: crashed: KASAN: out-of-bounds Read in leaf_paste_in_buffer
-run #8: crashed: KASAN: out-of-bounds Read in leaf_paste_in_buffer
-run #9: crashed: KASAN: out-of-bounds Read in leaf_paste_in_buffer
-
-and think this is bad, then bisect to the last commit:
-testing commit 2acf15b94d5b8ea8392c4b6753a6ffac3135cd78 gcc
-compiler: gcc (GCC) 10.2.1 20210217, GNU ld (GNU Binutils for Debian) 2.35.2
-kernel signature: 
-6d0d5f26a4c0e15188c923383ecfb873ae57ca6a79f592493d6e9ca507949985
-run #0: crashed: possible deadlock in fs_reclaim_acquire
-run #1: OK
-run #2: OK
-run #3: OK
-run #4: OK
-run #5: OK
-run #6: OK
-run #7: OK
-run #8: OK
-run #9: OK
-reproducer seems to be flaky
-# git bisect bad 2acf15b94d5b8ea8392c4b6753a6ffac3135cd78
-
-It seems to me the orignal crash general protection fault is not related
-to this commit. Please kindly correct me if I'm wrong.
-
-For the problem of lockdep warning, it first appeared in bisect log:
-testing commit 406254918b232db198ed60f5bf1f8b84d96bca00 gcc
-compiler: gcc (GCC) 10.2.1 20210217, GNU ld (GNU Binutils for Debian) 2.35.2
-kernel signature: 
-1c83f3c8b090a4702817c527e741a35506bc06911c71962d4c5fcef577de2fd3
-run #0: basic kernel testing failed: BUG: sleeping function called from 
-invalid context in stack_depot_save
-run #1: basic kernel testing failed: possible deadlock in fs_reclaim_acquire
-run #2: OK
-run #3: OK
-run #4: OK
-run #5: OK
-run #6: OK
-run #7: OK
-run #8: OK
-run #9: OK
-# git bisect good 406254918b232db198ed60f5bf1f8b84d96bca00
-
-And I don't understand why syzbot thinks this is good, and later for the
-same result, syzbot thinks 2acf15b94d5b is bad.
-
-Thanks,
-Kuai
-> start commit:   f8dba31b0a82 Merge tag 'asym-keys-fix-for-linus-v6.4-rc5' ..
-> git tree:       upstream
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=1495ffdd280000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1095ffdd280000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3c980bfe8b399968
-> dashboard link: https://syzkaller.appspot.com/bug?extid=b23c4c9d3d228ba328d7
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1680f7d1280000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12fad50d280000
-> 
-> Reported-by: syzbot+b23c4c9d3d228ba328d7@syzkaller.appspotmail.com
-> Fixes: 2acf15b94d5b ("reiserfs: add check for root_inode in reiserfs_fill_super")
-> 
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-> 
-> .
-> 
-
+-- 
+Martin K. Petersen	Oracle Linux Engineering
