@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EF8A731F2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 19:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F03B731F2D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 19:34:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237386AbjFOReL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 13:34:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
+        id S230003AbjFORe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 13:34:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236728AbjFOReG (ORCPT
+        with ESMTP id S237826AbjFOReV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 13:34:06 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19DE62710
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 10:34:05 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-51a21185130so1631358a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 10:34:05 -0700 (PDT)
+        Thu, 15 Jun 2023 13:34:21 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBAB2962
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 10:34:16 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-98220bb31c6so327742666b.3
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 10:34:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686850443; x=1689442443;
+        d=gmail.com; s=20221208; t=1686850455; x=1689442455;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=onV5CTTksC2Qd78lIixG0/dIqB3m8E1M6AA6FD8Jbs0=;
-        b=prWxaZ36pGTgPaazXWWLSZ/xe/uSXBNIHmD1xZ7n5pE3rJGVNhR0N9Zm23NkJFrUaX
-         23X1HZj+C9gLiF3S2wI4MyAWgNOYENKQhq1kaOcWW9A3n5U8qc2s3L4U+OiTGCDSZ+dl
-         Qwk4OmTavRtpKxzglgdJ3cCggklFJ/wLxLq5239yhVxe5zGikHCWEciVS+C1L/06GyVb
-         rJwug9nP3s50XCidh0wzVYY6HrVRZPHorWCfYqoyabW9o9fauqFnoK33z0+lP1KceyNI
-         HD4g9S/10dq66w1VFds9N1AyvSFP/qsDfpYJ2O37DLOOJ+xsvpIdME3n6vg7nx2kLdDd
-         OmlQ==
+        bh=AATBn5YLXyzdI1LR5/a8tiR4gJT09RugCUbqiVh3Rxw=;
+        b=LCxgZGYdHmRtIa1epcAMXaTawFX1hoAbqO+/VQyDMM0o2VWiFkxJyosGfgNV87DmX3
+         LasbD4KBEzGP+RTVPhMr7jTuj7XzhaoWRougNeDjoTErIsNh0nlHC/nruRBiyOEWFc5a
+         rCGs/Li5bAxAQOJ1YdhyzfbHuGGsLkuY0tNTs8Uy9rlek7Z2s55hqRHsXf7JNCSejTCV
+         gVQPH8NCBqiuJP3w4JU/vtSWyhF+sOvQ14qztC1Nwnj0n8XJoUXsLgQsEI+cTbNwjtKN
+         DdEJgRrc/t/UufumzQJTcW57oWjygDq25syEf7nmlEVKhSZf11jsWb5ZXtKpJ8CnqOxq
+         a73A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686850443; x=1689442443;
+        d=1e100.net; s=20221208; t=1686850455; x=1689442455;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=onV5CTTksC2Qd78lIixG0/dIqB3m8E1M6AA6FD8Jbs0=;
-        b=iZd3tCFPWtinsch+mTwIwO+4BBjy/JZAy48OAteQXVLWXTuLgzMsXjIP9Xtuli2X3b
-         A+iakV4OMDbU3GXkgmjwNLoc5RhscCcnct5ntK7rVSkzhVTYh72eZ2ES0n0K/8GM8JjT
-         B0Q4UjDe6U0c8ZsI4nSttGdS+iWtZbIzabkjoNr0PIpdJGmk68McoJ6ftJWTBIEnfc9u
-         oDojxfGNImoISPcBvZjxfzMQ97Q2kajgQf9yhGOmAOGTcMGDM7GLiMyycBjATpCnFT3G
-         uEpsj2+thmH19nAImVlmIM2GFwV7Mqj4S8yBNf2ZbC2PC+kLF4ppIcJtt2lfkCgafqAY
-         Jd6A==
-X-Gm-Message-State: AC+VfDwPRVGbFQzG6oKK/y9d3JXfhKx7Nt2pn+JXf3n0VbNendEasutS
-        K30RsHh0Jpcy/KlIdxJ54Ds=
-X-Google-Smtp-Source: ACHHUZ7yVhTWxSx4Cm9ZHg7+/ypOKVReVuS22P2vQuoAqqVdJ5E27xkglGRuj9g2yRDFuFKhEgHSvg==
-X-Received: by 2002:aa7:c994:0:b0:518:7954:d082 with SMTP id c20-20020aa7c994000000b005187954d082mr5824467edt.10.1686850443301;
-        Thu, 15 Jun 2023 10:34:03 -0700 (PDT)
+        bh=AATBn5YLXyzdI1LR5/a8tiR4gJT09RugCUbqiVh3Rxw=;
+        b=TLIgRz1+XxxiLoa8QIswUQf/M++7uiRYG2aQwjRCSwHHjVa0QLDtjgJFz060XBsYzT
+         9dazxwUraxPp7INQyyZiEfnhlN8fAcQ9tTkSKaWRQ1z6xGEOqF692IzbZ1vWYUa/Xl+L
+         y98+JESBpInLm5Ra+5E0SaD6kN7Z+m26kbEKZfxlcq5QlXOjv3DZrBTC3u9W3dQSf1+d
+         vAuMEjsYcLNtAalLZS8ln1TjhKhdvJaWsD2BWxpKzUiAvZm8ZsmW9ORS3Yz6SmjvewoK
+         6vmXeg37oBr3GAu+MjjKRIbDdBtadLNuOKSCs5emDTW/0HEBjLmY1wJNCTjAhZ42L7n4
+         1o5A==
+X-Gm-Message-State: AC+VfDxMYWE0ugwhr2+yRoAGuCZyM+Ga4+cKXFCrTqTkI8l14UTC9ZZn
+        gCa7CZpjmdKDynsDRKy3QijFlwqyxFY=
+X-Google-Smtp-Source: ACHHUZ4srb9y1tkxLxtkeekMy9MQR0COOl9U9xhSiBiCvaZcF5unIixCsXQAjAyHXsEhxk9JGUCH3Q==
+X-Received: by 2002:a17:907:9342:b0:973:8198:bbfb with SMTP id bv2-20020a170907934200b009738198bbfbmr21130029ejc.31.1686850454927;
+        Thu, 15 Jun 2023 10:34:14 -0700 (PDT)
 Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id b20-20020aa7d494000000b00514a3c04646sm9172936edr.73.2023.06.15.10.34.02
+        by smtp.gmail.com with ESMTPSA id p14-20020a170906140e00b009786ae9ed50sm9599908ejc.194.2023.06.15.10.34.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 10:34:02 -0700 (PDT)
-Message-ID: <dfb76ad5-b62a-3f1d-494e-cd17d57945ae@gmail.com>
-Date:   Thu, 15 Jun 2023 19:34:01 +0200
+        Thu, 15 Jun 2023 10:34:14 -0700 (PDT)
+Message-ID: <539cfba7-dd6f-015e-b990-a2335cb3aac9@gmail.com>
+Date:   Thu, 15 Jun 2023 19:34:13 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
 From:   Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v3 1/3] mtd: rawnand: rockchip-nand-controller: fix oobfree
- offset and description
+Subject: [PATCH v3 2/3] mtd: rawnand: rockchip-nand-controller: copy hwecc PA
+ data to oob_poi buffer
 To:     miquel.raynal@bootlin.com
 Cc:     richard@nod.at, vigneshr@ti.com, heiko@sntech.de,
         linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -78,18 +78,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The MTD framework reserves 1 or 2 bytes for the bad block marker
-depending on the bus size. The rockchip-nand-controller driver
-currently only supports a 8 bit bus, but reserves standard 2 bytes
-for the BBM in the chip->oob_poi buffer. The first free OOB byte is
-therefore OOB2 at offset 2. Page Address (PA) bytes are located at the
-last 4 positions before ECC. The current advertised free OOB area has
-an offset that starts at OOB6 and a length that overlaps with the space
-reserved for the PA bytes. Writing unrelated data to a reserved space
-with a specific task can corrupt our boot block page read order.
-Fix by changing the free OOB offset to 2.
+Rockchip boot blocks are written per 4 x 512 byte sectors per page.
+Each page must have a page address (PA) pointer in OOB to the next page.
+Pages are written in a pattern depending on the NAND chip ID.
+This logic used to build a page pattern table is not fully disclosed and
+is not easy to fit in the MTD framework.
+The formula in rk_nfc_write_page_hwecc() function is not correct.
+Make hwecc and raw behavior identical.
+Generate boot block page address and pattern for hwecc in user space
+and copy PA data to/from the already reserved last 4 bytes before EEC
+in the chip->oob_poi data layout.
 
-This change breaks existing jffs2 users.
+This patch breaks all existing jffs2 users that have free OOB overlap
+with the reserved space for PA data.
 
 Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 ---
@@ -97,75 +98,85 @@ Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 Changed V3:
   Change prefixes
   Reword
-  State break existing users.
-
 ---
-
-Example:
-
-Wrong free OOB offset starts at OOB6:
-oob_region->offset = NFC_SYS_DATA_SIZE + 2;
-                   = 4 + 2
-                   = 6
-
-oob_region->length = rknand->metadata_size - NFC_SYS_DATA_SIZE - 2;
-                   = 32 - 4 - 2
-                   = 26
-
-Together with this length above it overlaps a reserved space for the
-boot blocks Page Address(PA)
-
-chip->oob_poi buffer layout for 8 steps:
-
-BBM0   BBM1  OOB2  OOB3  | OOB4  OOB5  OOB6  OOB7
-
-OOB8   OOB9  OOB10 OOB11 | OOB12 OOB13 OOB15 OOB15
-OOB16  OOB17 OOB18 OOB19 | OOB20 OOB21 OOB22 OOB23
-
-OOB24  OOB25 OOB26 OOB27 | PA0   PA1   PA2   PA3
-
-ECC0   ECC1  ECC2  ECC3  | ...   ...   ...   ...
-
-Fix by new offset at OOB2:
-oob_region->offset = 2;
-
-The full range of free OOB with 8 steps runs from OOB2
-till/including OOB27.
----
- drivers/mtd/nand/raw/rockchip-nand-controller.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+ .../mtd/nand/raw/rockchip-nand-controller.c   | 34 ++++++++++++-------
+ 1 file changed, 21 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/mtd/nand/raw/rockchip-nand-controller.c b/drivers/mtd/nand/raw/rockchip-nand-controller.c
-index 2312e2736..37fc07ba5 100644
+index 37fc07ba5..5a0468034 100644
 --- a/drivers/mtd/nand/raw/rockchip-nand-controller.c
 +++ b/drivers/mtd/nand/raw/rockchip-nand-controller.c
-@@ -562,9 +562,10 @@ static int rk_nfc_write_page_raw(struct nand_chip *chip, const u8 *buf,
- 		 *    BBM  OOB1 OOB2 OOB3 |......|  PA0  PA1  PA2  PA3
- 		 *
- 		 * The rk_nfc_ooblayout_free() function already has reserved
--		 * these 4 bytes with:
-+		 * these 4 bytes together with 2 bytes for BBM
-+		 * by reducing it's length:
- 		 *
--		 * oob_region->offset = NFC_SYS_DATA_SIZE + 2;
-+		 * oob_region->length = rknand->metadata_size - NFC_SYS_DATA_SIZE - 2;
- 		 */
- 		if (!i)
- 			memcpy(rk_nfc_oob_ptr(chip, i),
-@@ -933,12 +934,8 @@ static int rk_nfc_ooblayout_free(struct mtd_info *mtd, int section,
- 	if (section)
- 		return -ERANGE;
+@@ -598,7 +598,7 @@ static int rk_nfc_write_page_hwecc(struct nand_chip *chip, const u8 *buf,
+ 	int pages_per_blk = mtd->erasesize / mtd->writesize;
+ 	int ret = 0, i, boot_rom_mode = 0;
+ 	dma_addr_t dma_data, dma_oob;
+-	u32 reg;
++	u32 tmp;
+ 	u8 *oob;
 
--	/*
--	 * The beginning of the OOB area stores the reserved data for the NFC,
--	 * the size of the reserved data is NFC_SYS_DATA_SIZE bytes.
--	 */
- 	oob_region->length = rknand->metadata_size - NFC_SYS_DATA_SIZE - 2;
--	oob_region->offset = NFC_SYS_DATA_SIZE + 2;
-+	oob_region->offset = 2;
+ 	nand_prog_page_begin_op(chip, page, 0, NULL, 0);
+@@ -625,6 +625,13 @@ static int rk_nfc_write_page_hwecc(struct nand_chip *chip, const u8 *buf,
+ 	 *
+ 	 *   0xFF 0xFF 0xFF 0xFF | BBM OOB1 OOB2 OOB3 | ...
+ 	 *
++	 * The code here just swaps the first 4 bytes with the last
++	 * 4 bytes without losing any data.
++	 *
++	 * The chip->oob_poi data layout:
++	 *
++	 *    BBM  OOB1 OOB2 OOB3 |......|  PA0  PA1  PA2  PA3
++	 *
+ 	 * Configure the ECC algorithm supported by the boot ROM.
+ 	 */
+ 	if ((page < (pages_per_blk * rknand->boot_blks)) &&
+@@ -635,21 +642,17 @@ static int rk_nfc_write_page_hwecc(struct nand_chip *chip, const u8 *buf,
+ 	}
 
- 	return 0;
- }
+ 	for (i = 0; i < ecc->steps; i++) {
+-		if (!i) {
+-			reg = 0xFFFFFFFF;
+-		} else {
++		if (!i)
++			oob = chip->oob_poi + (ecc->steps - 1) * NFC_SYS_DATA_SIZE;
++		else
+ 			oob = chip->oob_poi + (i - 1) * NFC_SYS_DATA_SIZE;
+-			reg = oob[0] | oob[1] << 8 | oob[2] << 16 |
+-			      oob[3] << 24;
+-		}
+
+-		if (!i && boot_rom_mode)
+-			reg = (page & (pages_per_blk - 1)) * 4;
++		tmp = oob[0] | oob[1] << 8 | oob[2] << 16 | oob[3] << 24;
+
+ 		if (nfc->cfg->type == NFC_V9)
+-			nfc->oob_buf[i] = reg;
++			nfc->oob_buf[i] = tmp;
+ 		else
+-			nfc->oob_buf[i * (oob_step / 4)] = reg;
++			nfc->oob_buf[i * (oob_step / 4)] = tmp;
+ 	}
+
+ 	dma_data = dma_map_single(nfc->dev, (void *)nfc->page_buf,
+@@ -812,12 +815,17 @@ static int rk_nfc_read_page_hwecc(struct nand_chip *chip, u8 *buf, int oob_on,
+ 		goto timeout_err;
+ 	}
+
+-	for (i = 1; i < ecc->steps; i++) {
+-		oob = chip->oob_poi + (i - 1) * NFC_SYS_DATA_SIZE;
++	for (i = 0; i < ecc->steps; i++) {
++		if (!i)
++			oob = chip->oob_poi + (ecc->steps - 1) * NFC_SYS_DATA_SIZE;
++		else
++			oob = chip->oob_poi + (i - 1) * NFC_SYS_DATA_SIZE;
++
+ 		if (nfc->cfg->type == NFC_V9)
+ 			tmp = nfc->oob_buf[i];
+ 		else
+ 			tmp = nfc->oob_buf[i * (oob_step / 4)];
++
+ 		*oob++ = (u8)tmp;
+ 		*oob++ = (u8)(tmp >> 8);
+ 		*oob++ = (u8)(tmp >> 16);
 --
 2.30.2
 
