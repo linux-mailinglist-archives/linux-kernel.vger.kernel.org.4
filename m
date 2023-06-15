@@ -2,79 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1FA731C97
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 17:28:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6B16731CAB
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 17:30:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345284AbjFOP1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 11:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57458 "EHLO
+        id S1344163AbjFOPaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 11:30:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345196AbjFOP07 (ORCPT
+        with ESMTP id S1345240AbjFOP35 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 11:26:59 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA96A1BC9;
-        Thu, 15 Jun 2023 08:26:57 -0700 (PDT)
-X-GND-Sasl: herve.codina@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686842816;
+        Thu, 15 Jun 2023 11:29:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D49FA3A9B
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 08:28:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686842889;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=WiCubefUJT8lqguruRQEQMdku90oEPaE9zL5TkFrvME=;
-        b=mi96fjGzH8Mu4wIWBL14eimJQeuzdBWTbb317jMDprLXgEnY7GaDRq5W67+eGeXjgEHnVf
-        f2NJ9vfOxmVmvYP5vjSLnFVPQKKR4fUvMjTkr1pWj9JTCzOqfWsvR0t9Kk2PCuIW4RXD6+
-        OGoW2Ora7ohu+I9nDvV4JAH4zNl3tSoBHuM5TbhKGW8LEt3z9VJIQcQIY7styBo9hMSQ2N
-        Xpmpob9tdU2Hs8hSmkj7DDztKepqOrhJG0r1WH/1ldvvp/YZL5/nnOzOvIjgbZVvtwED2A
-        Zi4KGPktO/gO/PRo+IgwzrIm3H2TeGs8xThW35U8ccqEaRjG+ZwEI6d1w6c36Q==
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPA id 58DD0FF805;
-        Thu, 15 Jun 2023 15:26:55 +0000 (UTC)
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v5 13/13] ASoC: simple-card: Handle additional devices
-Date:   Thu, 15 Jun 2023 17:26:31 +0200
-Message-Id: <20230615152631.224529-14-herve.codina@bootlin.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230615152631.224529-1-herve.codina@bootlin.com>
-References: <20230615152631.224529-1-herve.codina@bootlin.com>
+        bh=LlaHq+6BCrVBcrQ8Na7RMHfJ8FeQemTtI2xqglcCkXU=;
+        b=DUGwePr5XLULOTmdcN+fP2hQinpUKpG89/BU97LKzO5nsRKZUojRgibtczfpmaW2qRv1Xs
+        3/usnfLgYaz8oBO4/AdDl9/RQ22E3PS8hrdx9XW2/mSKKDzIMt/OVDzDhCmCmIdTUWoZgc
+        A1ZgM+2QB8J+2WneCLvpfoiiLl9l4ps=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-426-kmoDJkdWMhir5-5Ee9lOXQ-1; Thu, 15 Jun 2023 11:28:07 -0400
+X-MC-Unique: kmoDJkdWMhir5-5Ee9lOXQ-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-30932d15a30so4576907f8f.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 08:28:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686842886; x=1689434886;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LlaHq+6BCrVBcrQ8Na7RMHfJ8FeQemTtI2xqglcCkXU=;
+        b=GlSwF1FvwONGPyb5C9siKqNpKelG2zoQDGUoRtdyUczOzitQQKaSzi1Gy3PZ/MJrFa
+         H61qjBfWwg/bpiAUHtgPPrLaFaeiw0kqv4tD9tqTSLiqFky12cecWqFt2+XhGxzQEM1T
+         pSy/AF51WNWs+Ge3J4W4TjCraRgcioe4zf4Zu0L9zp120qb8eIHFtOX9+AV0HjFMGafk
+         u7ZBisPwb/Yf3emtslqFQsTC58MMK0VpS7W+pB6we90LIMxV2ZErveI6cjOrkHdl3XMM
+         vVTrdo8+DFYXXL64BWmAWuVCXzR3kurZ1NSQkNxBRwid64e98ws1zJGW/vIMHY18R6Ym
+         phQQ==
+X-Gm-Message-State: AC+VfDxCHYKIoNFy0+x09dnbIa11ENB8uJjgR+vNhxECIYoLpGiheTW7
+        8PsYNHt8Fcg4FfGoQyRoDdI4YIImxZFUWWqRtCTLf7yMe2T+7XpatBb8KSLSeXtUVOlKi6TEJS0
+        YQ0U+z6WEbyfffUMuY5xIUaxH
+X-Received: by 2002:adf:ee0a:0:b0:309:38af:d300 with SMTP id y10-20020adfee0a000000b0030938afd300mr12258518wrn.33.1686842885918;
+        Thu, 15 Jun 2023 08:28:05 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7i9Wv62/yjtEnLPAa08XZGuwZTqAknXVdxagM6V2PtcQKVccjjNFzlF8XbcFye7/05WLzkhg==
+X-Received: by 2002:adf:ee0a:0:b0:309:38af:d300 with SMTP id y10-20020adfee0a000000b0030938afd300mr12258499wrn.33.1686842885541;
+        Thu, 15 Jun 2023 08:28:05 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70b:b500:4648:c96c:d6ba:4b8d? (p200300cbc70bb5004648c96cd6ba4b8d.dip0.t-ipconnect.de. [2003:cb:c70b:b500:4648:c96c:d6ba:4b8d])
+        by smtp.gmail.com with ESMTPSA id n11-20020adfe78b000000b0030fc666686bsm10330585wrm.85.2023.06.15.08.28.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jun 2023 08:28:04 -0700 (PDT)
+Message-ID: <b6d8ab51-f75d-18f1-ed41-e2566eb76f9f@redhat.com>
+Date:   Thu, 15 Jun 2023 17:28:03 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] checkpatch: Include GEM_BUG_xxx variant in the excluded
+ check list
+Content-Language: en-US
+To:     "Ruhl, Michael J" <michael.j.ruhl@intel.com>,
+        Joe Perches <joe@perches.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "apw@canonical.com" <apw@canonical.com>,
+        "dwaipayanray1@gmail.com" <dwaipayanray1@gmail.com>,
+        "lukas.bulwahn@gmail.com" <lukas.bulwahn@gmail.com>,
+        "corbet@lwn.net" <corbet@lwn.net>
+References: <20230614164955.1319870-1-michael.j.ruhl@intel.com>
+ <b777a049b3817c7eee364310aac89470e9ea882e.camel@perches.com>
+ <IA1PR11MB641820FC52D35D1CECE6830DC15BA@IA1PR11MB6418.namprd11.prod.outlook.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <IA1PR11MB641820FC52D35D1CECE6830DC15BA@IA1PR11MB6418.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,120 +90,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-An additional-devs subnode can be present in the simple-card top node.
-This subnode is used to declared some "virtual" additional devices.
+On 15.06.23 17:04, Ruhl, Michael J wrote:
+>> -----Original Message-----
+>> From: Joe Perches <joe@perches.com>
+>> Sent: Wednesday, June 14, 2023 9:47 PM
+>> To: Ruhl, Michael J <michael.j.ruhl@intel.com>; linux-kernel@vger.kernel.org;
+>> apw@canonical.com; dwaipayanray1@gmail.com; lukas.bulwahn@gmail.com;
+>> corbet@lwn.net; david@redhat.com
+>> Subject: Re: [PATCH] checkpatch: Include GEM_BUG_xxx variant in the
+>> excluded check list
+>>
+>> On Wed, 2023-06-14 at 12:49 -0400, Michael J. Ruhl wrote:
+>>> GEM_BUG_ON is usually compiled as WARN.  You have to change to
+>>> debug configuration to get this to be BUG.
+>>>
+>>> checkpatch flags this a WARN level issue.
+>>>
+>>> Since this is a i915 local debug macro, allow its use in checkpatch.pl.
+>>>
+>>> Fixes: 69d517e6e210 ("checkpatch: warn on usage of VM_BUG_ON() and
+>> other BUG variants")
+>>
+>> Not a "Fixes", just an additional check
+> 
 
-Create related devices from this subnode and avoid this subnode presence
-to interfere with the already supported subnodes analysis.
+That was discussed when developing that patch:
 
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
----
- sound/soc/generic/simple-card.c | 46 +++++++++++++++++++++++++++++++--
- 1 file changed, 44 insertions(+), 2 deletions(-)
+https://lore.kernel.org/linux-mm/87tu5vflld.fsf@intel.com/T/
 
-diff --git a/sound/soc/generic/simple-card.c b/sound/soc/generic/simple-card.c
-index 6f044cc8357e..ae4a47018278 100644
---- a/sound/soc/generic/simple-card.c
-+++ b/sound/soc/generic/simple-card.c
-@@ -348,6 +348,7 @@ static int __simple_for_each_link(struct asoc_simple_priv *priv,
- 	struct device *dev = simple_priv_to_dev(priv);
- 	struct device_node *top = dev->of_node;
- 	struct device_node *node;
-+	struct device_node *add_devs;
- 	uintptr_t dpcm_selectable = (uintptr_t)of_device_get_match_data(dev);
- 	bool is_top = 0;
- 	int ret = 0;
-@@ -359,6 +360,8 @@ static int __simple_for_each_link(struct asoc_simple_priv *priv,
- 		is_top = 1;
- 	}
- 
-+	add_devs = of_get_child_by_name(top, PREFIX "additional-devs");
-+
- 	/* loop for all dai-link */
- 	do {
- 		struct asoc_simple_data adata;
-@@ -367,6 +370,12 @@ static int __simple_for_each_link(struct asoc_simple_priv *priv,
- 		struct device_node *np;
- 		int num = of_get_child_count(node);
- 
-+		/* Skip additional-devs node */
-+		if (node == add_devs) {
-+			node = of_get_next_child(top, node);
-+			continue;
-+		}
-+
- 		/* get codec */
- 		codec = of_get_child_by_name(node, is_top ?
- 					     PREFIX "codec" : "codec");
-@@ -380,12 +389,15 @@ static int __simple_for_each_link(struct asoc_simple_priv *priv,
- 
- 		/* get convert-xxx property */
- 		memset(&adata, 0, sizeof(adata));
--		for_each_child_of_node(node, np)
-+		for_each_child_of_node(node, np) {
-+			if (np == add_devs)
-+				continue;
- 			simple_parse_convert(dev, np, &adata);
-+		}
- 
- 		/* loop for all CPU/Codec node */
- 		for_each_child_of_node(node, np) {
--			if (plat == np)
-+			if (plat == np || add_devs == np)
- 				continue;
- 			/*
- 			 * It is DPCM
-@@ -427,6 +439,7 @@ static int __simple_for_each_link(struct asoc_simple_priv *priv,
- 	} while (!is_top && node);
- 
-  error:
-+	of_node_put(add_devs);
- 	of_node_put(node);
- 	return ret;
- }
-@@ -464,6 +477,31 @@ static int simple_for_each_link(struct asoc_simple_priv *priv,
- 	return ret;
- }
- 
-+static void simple_depopulate_aux(void *data)
-+{
-+	struct asoc_simple_priv *priv = data;
-+
-+	of_platform_depopulate(simple_priv_to_dev(priv));
-+}
-+
-+static int simple_populate_aux(struct asoc_simple_priv *priv)
-+{
-+	struct device *dev = simple_priv_to_dev(priv);
-+	struct device_node *node;
-+	int ret;
-+
-+	node = of_get_child_by_name(dev->of_node, PREFIX "additional-devs");
-+	if (!node)
-+		return 0;
-+
-+	ret = of_platform_populate(node, NULL, NULL, dev);
-+	of_node_put(node);
-+	if (ret)
-+		return ret;
-+
-+	return devm_add_action_or_reset(dev, simple_depopulate_aux, priv);
-+}
-+
- static int simple_parse_of(struct asoc_simple_priv *priv, struct link_info *li)
- {
- 	struct snd_soc_card *card = simple_priv_to_card(priv);
-@@ -493,6 +531,10 @@ static int simple_parse_of(struct asoc_simple_priv *priv, struct link_info *li)
- 	if (ret < 0)
- 		return ret;
- 
-+	ret = simple_populate_aux(priv);
-+	if (ret < 0)
-+		return ret;
-+
- 	ret = snd_soc_of_parse_aux_devs(card, PREFIX "aux-devs");
- 
- 	return ret;
+GEM_BUG_ON(
+-> Bad with CONFIG_DRM_I915_DEBUG_GEM_ONCE
+
+Just like VM_BUG_ON or CI_BUG_ON... that BUGs only with another kernel 
+config on.
+
+So this is expected.
+
 -- 
-2.40.1
+Cheers,
+
+David / dhildenb
 
