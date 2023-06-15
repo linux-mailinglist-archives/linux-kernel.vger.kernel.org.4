@@ -2,60 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6560A731960
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:59:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A701C731956
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245722AbjFOM7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 08:59:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53458 "EHLO
+        id S241023AbjFOM5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 08:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343514AbjFOM7D (ORCPT
+        with ESMTP id S240652AbjFOM5m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 08:59:03 -0400
-Received: from smtp-fw-9106.amazon.com (smtp-fw-9106.amazon.com [207.171.188.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113372700;
-        Thu, 15 Jun 2023 05:58:57 -0700 (PDT)
+        Thu, 15 Jun 2023 08:57:42 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCDC3268A
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 05:57:40 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-30fa23e106bso4932106f8f.3
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 05:57:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1686833937; x=1718369937;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=SngTreX9qafzwT80LSxBPU6C4pEnYSvfLSIgpOhMlis=;
-  b=OCc9YrxxCpNTmJiUvNaMseRwCHTP064lamkUIzYsZkIXZkqupnJqpWl9
-   Pwo/UqTunNk/1ldHKixTjwWThirpfP95In3BMnfEF5dQDsIw2xsMwij5J
-   k5J7yjML/ZQVTqs7uExRQePGaR4mm2z4vpd6FYE7LYR/gZ3NvRubtgZAd
-   s=;
-X-IronPort-AV: E=Sophos;i="6.00,244,1681171200"; 
-   d="scan'208";a="654379430"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-366646a6.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9106.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 12:58:37 +0000
-Received: from EX19MTAUEB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1a-m6i4x-366646a6.us-east-1.amazon.com (Postfix) with ESMTPS id 7D491A28B0;
-        Thu, 15 Jun 2023 12:58:34 +0000 (UTC)
-Received: from EX19MTAUEC001.ant.amazon.com (10.252.135.222) by
- EX19MTAUEB001.ant.amazon.com (10.252.135.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Thu, 15 Jun 2023 12:58:33 +0000
-Received: from dev-dsk-mngyadam-1c-a2602c62.eu-west-1.amazon.com (10.15.1.225)
- by mail-relay.amazon.com (10.252.135.200) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Thu, 15 Jun 2023 12:58:33 +0000
-Received: by dev-dsk-mngyadam-1c-a2602c62.eu-west-1.amazon.com (Postfix, from userid 23907357)
-        id 436D831E0; Thu, 15 Jun 2023 12:58:33 +0000 (UTC)
-From:   Mahmoud Adam <mngyadam@amazon.com>
-To:     <dhowells@redhat.com>
-CC:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <keyrings@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Mahmoud Adam <mngyadam@amazon.com>
-Subject: [PATCH v2] KEYS: use kfree_sensitive with key
-Date:   Thu, 15 Jun 2023 12:57:13 +0000
-Message-ID: <20230615125712.105873-1-mngyadam@amazon.com>
-X-Mailer: git-send-email 2.40.1
+        d=linaro.org; s=google; t=1686833859; x=1689425859;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q8xh5vyd+GR/5dO/72QSwLjCc2jeYDKhssNeiXwjjaE=;
+        b=FdDKhKnbG9ZKhSrzl2Z9UXln9rDc6VtMwZP8jtbQPoa+Eo4ZBTNd8Fc/B2Qv13tBCc
+         SYHJXRSfhPpXGsgwBAv/3bWsBR6AoOo0uKazPaIwAidAb/APmYBFyKylxFxNn6Cs6otJ
+         r8EBilxPFa3r01C4zFVau9U9pTrOdKDnBXBMvrI09RrgDhCgsaz1X5g8qRCPe+EXAzx6
+         wNYQYQLHaPaz2bhP4479eRavcI2AWzScWIZpIvx1BnCZN7uvqgBllpA/19Z7fkeZSjLF
+         ByAwPZ6VB4+g78KOq7KSpoYXlSi4lNns6Jq6FmZe0n3BkdLCz+b2i1H1nW536hZVG2W9
+         SvhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686833859; x=1689425859;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Q8xh5vyd+GR/5dO/72QSwLjCc2jeYDKhssNeiXwjjaE=;
+        b=K2SQRp5S6DoSwTkVvJeDvr14AIqp2p1fxNuUFbWuEhz/Uw/LFmvmOohwH4/s0TpTil
+         HHt5DjSy9CjFnaqRYsDdX3leLDbWtpBsA0mZyl3fSvXleZSIrEkaDju9aLkxKh7etifC
+         Umza4k5oLRlgHX9SNGh7miJTHqYV20KAxWy13+5NvR2Ui1ngENWrQTXHWfAJ4uwNqSoH
+         gGRxwa3CquNYEuMZjmm7HPgcJbwuEQJAHvylaiJjKZqr79lF3x4VgOVb3ODV3s14sCFd
+         zJ//2rV4K+9hFEbvsRQs2EbhYaRN25h399emXkVAmMuWKa7bZahJqyQe58STmRiTQrMm
+         75yg==
+X-Gm-Message-State: AC+VfDyt1qwja8eX4V8XRkFrLJkYiPAZw+eT9JM03ADrUdidj/v7KCLN
+        a0E8BNDstmP0Uq4WL55xOWRAjGbOLnehM8A6wVhp0LDnd+dzyd2e
+X-Google-Smtp-Source: ACHHUZ4q6gXFkaVMc0iU3bq294NH/Y7gn9HB+thx+5YdmHhTBTFo+rOiD3uedZRA07ZTwZwQbVHW3D8TzklWGtUiPT4=
+X-Received: by 2002:adf:e28a:0:b0:30f:b1e8:88a1 with SMTP id
+ v10-20020adfe28a000000b0030fb1e888a1mr10246989wri.20.1686833859306; Thu, 15
+ Jun 2023 05:57:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230613011853.6385-1-jiapeng.chong@linux.alibaba.com> <CAFA6WYO1dr_Se9AWyToZCwbxDA10D2bM_ADXLCLi8Acx+sxspQ@mail.gmail.com>
+In-Reply-To: <CAFA6WYO1dr_Se9AWyToZCwbxDA10D2bM_ADXLCLi8Acx+sxspQ@mail.gmail.com>
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+Date:   Thu, 15 Jun 2023 14:57:28 +0200
+Message-ID: <CAHUa44G69uobzWEWUBtncViH-Xf4aXYot=y+XvQJZwqqbs-otw@mail.gmail.com>
+Subject: Re: [PATCH v2] tee: optee: Use kmemdup() to replace kmalloc + memcpy
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,58 +70,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-key might contain private part of the key, so better use
-kfree_sensitive to free it
+On Tue, Jun 13, 2023 at 10:42=E2=80=AFAM Sumit Garg <sumit.garg@linaro.org>=
+ wrote:
+>
+> On Tue, 13 Jun 2023 at 06:49, Jiapeng Chong
+> <jiapeng.chong@linux.alibaba.com> wrote:
+> >
+> > Use kmemdup rather than duplicating its implementation.
+> >
+> > ./drivers/tee/optee/smc_abi.c:1542:12-19: WARNING opportunity for kmemd=
+up.
+> >
+> > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> > Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=3D5480
+> > Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> > ---
+> > Changes in v2:
+> >   -Add one commit message.
+> >
+> >  drivers/tee/optee/smc_abi.c | 3 +--
+> >  1 file changed, 1 insertion(+), 2 deletions(-)
+> >
+>
+> Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
 
-Signed-off-by: Mahmoud Adam <mngyadam@amazon.com>
----
-v2: kfree_sensitive only private key
+I'm picking up this.
 
- crypto/asymmetric_keys/public_key.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+Thanks,
+Jens
 
-diff --git a/crypto/asymmetric_keys/public_key.c b/crypto/asymmetric_keys/public_key.c
-index eca5671ad3f2..cd8c4123d936 100644
---- a/crypto/asymmetric_keys/public_key.c
-+++ b/crypto/asymmetric_keys/public_key.c
-@@ -43,7 +43,10 @@ static void public_key_describe(const struct key *asymmetric_key,
- void public_key_free(struct public_key *key)
- {
- 	if (key) {
--		kfree(key->key);
-+		if(key->key_is_private)
-+			kfree_sensitive(key->key);
-+		else
-+			kfree(key->key);
- 		kfree(key->params);
- 		kfree(key);
- 	}
-@@ -218,7 +221,7 @@ static int software_key_query(const struct kernel_pkey_params *params,
- 	ret = 0;
-
- error_free_key:
--	kfree(key);
-+	kfree_sensitive(key);
- error_free_tfm:
- 	crypto_free_akcipher(tfm);
- 	pr_devel("<==%s() = %d\n", __func__, ret);
-@@ -303,7 +306,7 @@ static int software_key_eds_op(struct kernel_pkey_params *params,
- 		ret = req->dst_len;
-
- error_free_key:
--	kfree(key);
-+	kfree_sensitive(key);
- error_free_req:
- 	akcipher_request_free(req);
- error_free_tfm:
-@@ -456,7 +459,7 @@ int public_key_verify_signature(const struct public_key *pkey,
- 	ret = crypto_wait_req(crypto_akcipher_verify(req), &cwait);
-
- error_free_key:
--	kfree(key);
-+	kfree_sensitive(key);
- error_free_req:
- 	akcipher_request_free(req);
- error_free_tfm:
---
-2.40.1
+>
+> -Sumit
+>
+> > diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
+> > index 3861ae06d902..d5b28fd35d66 100644
+> > --- a/drivers/tee/optee/smc_abi.c
+> > +++ b/drivers/tee/optee/smc_abi.c
+> > @@ -1541,12 +1541,11 @@ static int optee_load_fw(struct platform_device=
+ *pdev,
+> >          * This uses the GFP_DMA flag to ensure we are allocated memory=
+ in the
+> >          * 32-bit space since TF-A cannot map memory beyond the 32-bit =
+boundary.
+> >          */
+> > -       data_buf =3D kmalloc(fw->size, GFP_KERNEL | GFP_DMA);
+> > +       data_buf =3D kmemdup(fw->data, fw->size, GFP_KERNEL | GFP_DMA);
+> >         if (!data_buf) {
+> >                 rc =3D -ENOMEM;
+> >                 goto fw_err;
+> >         }
+> > -       memcpy(data_buf, fw->data, fw->size);
+> >         data_pa =3D virt_to_phys(data_buf);
+> >         reg_pair_from_64(&data_pa_high, &data_pa_low, data_pa);
+> >         reg_pair_from_64(&data_size_high, &data_size_low, data_size);
+> > --
+> > 2.20.1.7.g153144c
+> >
