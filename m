@@ -2,116 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB08730ED0
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 07:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A20730ED8
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 07:51:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233898AbjFOFud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 01:50:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57332 "EHLO
+        id S235020AbjFOFvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 01:51:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234203AbjFOFuX (ORCPT
+        with ESMTP id S236343AbjFOFvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 01:50:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165E426B9
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 22:50:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 89BC262A9E
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 05:50:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E8350C433C9;
-        Thu, 15 Jun 2023 05:50:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686808219;
-        bh=SedMeHwmLBxn/cujm0GopUWPCqwoBUUROOmiaRnfzo8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=hrSVLMQ2i4k1KAYrNtLklibzNj6hQ9zmt5+sPlD2+35pF41AO3WIFezpqfPOR0VY6
-         5x+hB1QiE5vBc1+3vXysfUUjd/MfTEMTbASBbIzwXRkonAHBtCcPSA8WA+buy//QQA
-         4FoJSldet6Cgq/k0SC8kZOeAC+VTdNG+eegN0Kn3RAv1Sbwes/UCTU6jWtAGXWnpQ4
-         t71C3YF+oj2nWKPgv0zanKcJjhbJSQGWtX3wYv15SXY+z9V3H2gfElJk3CPFSJJL61
-         Jl6zmNzymg4ASJ0AliGIbWVHtCUVzr3vImuCzvO6Z6MP/ObgxCVZ39ebBhPsuJsxzK
-         Scaq6P65kCr4A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C422BE21EEA;
-        Thu, 15 Jun 2023 05:50:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 15 Jun 2023 01:51:19 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58B82961
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 22:51:04 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-3f98276f89cso106621cf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 22:51:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686808264; x=1689400264;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MsujUUkIkGPb1RjMWNMneyCY+OpEp4SMkg0gPmgmeUE=;
+        b=mlAZdFUeclS9DSi1vYvLCC4ojnFxhm3xDeWmMBT9aqGrkJxw2o60JYFKNn50vwrFO6
+         E8F4Co3vexcVliW9eh/PVrGDfKBH7/MnXD8xAdQd1LVJD3ylzKUZw7EZkAh/dZtslWsI
+         Rr7+MnhO6N20zguLB0CPKX0UcBEZ9PCM3KIWQQUK/6XMRkWFWTdPOPf3vKPIbOaLrF5V
+         3kFbwxPrdEXlmSZ8BRZfBol1J9ggJYBHUZsFYVu/ZjkeCno/OT5PAPvZ+6fNCERJqA9E
+         5N7GlefGzoEiF3Grks8X9qJf2UhP23xLMQhz1RbodiQSJmCQ1G5++70tWjU9NFzo/zOx
+         7TLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686808264; x=1689400264;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MsujUUkIkGPb1RjMWNMneyCY+OpEp4SMkg0gPmgmeUE=;
+        b=BWVKzMzhXl4Xm5JtFk1PzxZ5Q+eeHOyUXZ1TI10KdztIilchiOogYQ3/MTn3q42Rur
+         jv6GTJVlXkGK89ZFPpHUo841aFva3p1vlT6fYxKVptwKk4dotLOcAvhctXBfjqPKiZGB
+         4cB4u+towN7XW1bSdSlLVfpY2/qd1WEYeim3rgsoeJDb5/YIGXZlnVnPE02O38lKvEHL
+         tydXvYO0vPBUjUv3HvdoT5GK+kjXRag1XRe4MDCIuMqYKCfezKy6gD+7SAJwihN/p7AY
+         7pL74ICPP8YjD6HfGUefpWBRYN+j/6IQLbCyMGaP5CYelCxIufr+cAzGm8EeavOnQu98
+         mkwA==
+X-Gm-Message-State: AC+VfDyPfjAysjpkKmMY9uSfMPhmszlPj+EuEbaahmvoVFX2fx+FXaHw
+        IctZj0hS8/BuAQQiqZ4zjGq8dgcVFXDc7/0wZTPexw==
+X-Google-Smtp-Source: ACHHUZ5Uu0FVxoIBwPYCt4nTv+IsX/esPM7txZQn4rZdA2/67Zxorp+WhMMGXyQ/gkUpfRN8lM5zIAUgfG1qv5a6Hk0=
+X-Received: by 2002:ac8:5b08:0:b0:3e3:8c75:461 with SMTP id
+ m8-20020ac85b08000000b003e38c750461mr82908qtw.6.1686808263729; Wed, 14 Jun
+ 2023 22:51:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v1] net/handshake: remove fput() that causes use-after-free
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168680821979.19671.5148979786262319669.git-patchwork-notify@kernel.org>
-Date:   Thu, 15 Jun 2023 05:50:19 +0000
-References: <20230614015249.987448-1-linma@zju.edu.cn>
-In-Reply-To: <20230614015249.987448-1-linma@zju.edu.cn>
-To:     Lin Ma <linma@zju.edu.cn>
-Cc:     kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230615001735.3643996-1-kan.liang@linux.intel.com> <20230615001735.3643996-4-kan.liang@linux.intel.com>
+In-Reply-To: <20230615001735.3643996-4-kan.liang@linux.intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 14 Jun 2023 22:50:52 -0700
+Message-ID: <CAP-5=fUDg4aN-oQ6TkxFiTEwZJur_YS9cH05U4yUP8FzQaF28A@mail.gmail.com>
+Subject: Re: [PATCH V2 3/8] perf stat,jevents: Introduce Default tags for the
+ default mode
+To:     kan.liang@linux.intel.com
+Cc:     acme@kernel.org, mingo@redhat.com, peterz@infradead.org,
+        namhyung@kernel.org, jolsa@kernel.org, adrian.hunter@intel.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ak@linux.intel.com, eranian@google.com, ahmad.yasin@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Wed, Jun 14, 2023 at 5:18=E2=80=AFPM <kan.liang@linux.intel.com> wrote:
+>
+> From: Kan Liang <kan.liang@linux.intel.com>
+>
+> Introduce a new metricgroup, Default, to tag all the metric groups which
+> will be collected in the default mode.
+>
+> Add a new field, DefaultMetricgroupName, in the JSON file to indicate
+> the real metric group name. It will be printed in the default output
+> to replace the event names.
+>
+> There is nothing changed for the output format.
+>
+> On SPR, both TopdownL1 and TopdownL2 are displayed in the default
+> output.
+>
+> On ARM, Intel ICL and later platforms (before SPR), only TopdownL1 is
+> displayed in the default output.
+>
+> Suggested-by: Stephane Eranian <eranian@google.com>
+> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Reviewed-by: Ian Rogers <irogers@google.com>
 
-On Wed, 14 Jun 2023 09:52:49 +0800 you wrote:
-> A reference underflow is found in TLS handshake subsystem that causes a
-> direct use-after-free. Part of the crash log is like below:
-> 
-> [    2.022114] ------------[ cut here ]------------
-> [    2.022193] refcount_t: underflow; use-after-free.
-> [    2.022288] WARNING: CPU: 0 PID: 60 at lib/refcount.c:28 refcount_warn_saturate+0xbe/0x110
-> [    2.022432] Modules linked in:
-> [    2.022848] RIP: 0010:refcount_warn_saturate+0xbe/0x110
-> [    2.023231] RSP: 0018:ffffc900001bfe18 EFLAGS: 00000286
-> [    2.023325] RAX: 0000000000000000 RBX: 0000000000000007 RCX: 00000000ffffdfff
-> [    2.023438] RDX: 0000000000000000 RSI: 00000000ffffffea RDI: 0000000000000001
-> [    2.023555] RBP: ffff888004c20098 R08: ffffffff82b392c8 R09: 00000000ffffdfff
-> [    2.023693] R10: ffffffff82a592e0 R11: ffffffff82b092e0 R12: ffff888004c200d8
-> [    2.023813] R13: 0000000000000000 R14: ffff888004c20000 R15: ffffc90000013ca8
-> [    2.023930] FS:  0000000000000000(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
-> [    2.024062] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    2.024161] CR2: ffff888003601000 CR3: 0000000002a2e000 CR4: 00000000000006f0
-> [    2.024275] Call Trace:
-> [    2.024322]  <TASK>
-> [    2.024367]  ? __warn+0x7f/0x130
-> [    2.024430]  ? refcount_warn_saturate+0xbe/0x110
-> [    2.024513]  ? report_bug+0x199/0x1b0
-> [    2.024585]  ? handle_bug+0x3c/0x70
-> [    2.024676]  ? exc_invalid_op+0x18/0x70
-> [    2.024750]  ? asm_exc_invalid_op+0x1a/0x20
-> [    2.024830]  ? refcount_warn_saturate+0xbe/0x110
-> [    2.024916]  ? refcount_warn_saturate+0xbe/0x110
-> [    2.024998]  __tcp_close+0x2f4/0x3d0
-> [    2.025065]  ? __pfx_kunit_generic_run_threadfn_adapter+0x10/0x10
-> [    2.025168]  tcp_close+0x1f/0x70
-> [    2.025231]  inet_release+0x33/0x60
-> [    2.025297]  sock_release+0x1f/0x80
-> [    2.025361]  handshake_req_cancel_test2+0x100/0x2d0
-> [    2.025457]  kunit_try_run_case+0x4c/0xa0
-> [    2.025532]  kunit_generic_run_threadfn_adapter+0x15/0x20
-> [    2.025644]  kthread+0xe1/0x110
-> [    2.025708]  ? __pfx_kthread+0x10/0x10
-> [    2.025780]  ret_from_fork+0x2c/0x50
-> 
-> [...]
+Thanks,
+Ian
 
-Here is the summary with links:
-  - [v1] net/handshake: remove fput() that causes use-after-free
-    https://git.kernel.org/netdev/net/c/361b6889ae63
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> ---
+>  tools/perf/builtin-stat.c          | 4 ++--
+>  tools/perf/pmu-events/jevents.py   | 5 +++--
+>  tools/perf/pmu-events/pmu-events.h | 1 +
+>  tools/perf/util/metricgroup.c      | 6 ++++++
+>  4 files changed, 12 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+> index fc615bdeed4f..55601b4b5c34 100644
+> --- a/tools/perf/builtin-stat.c
+> +++ b/tools/perf/builtin-stat.c
+> @@ -2154,14 +2154,14 @@ static int add_default_attributes(void)
+>                  * Add TopdownL1 metrics if they exist. To minimize
+>                  * multiplexing, don't request threshold computation.
+>                  */
+> -               if (metricgroup__has_metric(pmu, "TopdownL1")) {
+> +               if (metricgroup__has_metric(pmu, "Default")) {
+>                         struct evlist *metric_evlist =3D evlist__new();
+>                         struct evsel *metric_evsel;
+>
+>                         if (!metric_evlist)
+>                                 return -1;
+>
+> -                       if (metricgroup__parse_groups(metric_evlist, pmu,=
+ "TopdownL1",
+> +                       if (metricgroup__parse_groups(metric_evlist, pmu,=
+ "Default",
+>                                                         /*metric_no_group=
+=3D*/false,
+>                                                         /*metric_no_merge=
+=3D*/false,
+>                                                         /*metric_no_thres=
+hold=3D*/true,
+> diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jev=
+ents.py
+> index 7ed258be1829..12e80bb7939b 100755
+> --- a/tools/perf/pmu-events/jevents.py
+> +++ b/tools/perf/pmu-events/jevents.py
+> @@ -54,8 +54,8 @@ _json_event_attributes =3D [
+>  # Attributes that are in pmu_metric rather than pmu_event.
+>  _json_metric_attributes =3D [
+>      'pmu', 'metric_name', 'metric_group', 'metric_expr', 'metric_thresho=
+ld',
+> -    'desc', 'long_desc', 'unit', 'compat', 'metricgroup_no_group', 'aggr=
+_mode',
+> -    'event_grouping'
+> +    'desc', 'long_desc', 'unit', 'compat', 'metricgroup_no_group',
+> +    'default_metricgroup_name', 'aggr_mode', 'event_grouping'
+>  ]
+>  # Attributes that are bools or enum int values, encoded as '0', '1',...
+>  _json_enum_attributes =3D ['aggr_mode', 'deprecated', 'event_grouping', =
+'perpkg']
+> @@ -307,6 +307,7 @@ class JsonEvent:
+>      self.metric_name =3D jd.get('MetricName')
+>      self.metric_group =3D jd.get('MetricGroup')
+>      self.metricgroup_no_group =3D jd.get('MetricgroupNoGroup')
+> +    self.default_metricgroup_name =3D jd.get('DefaultMetricgroupName')
+>      self.event_grouping =3D convert_metric_constraint(jd.get('MetricCons=
+traint'))
+>      self.metric_expr =3D None
+>      if 'MetricExpr' in jd:
+> diff --git a/tools/perf/pmu-events/pmu-events.h b/tools/perf/pmu-events/p=
+mu-events.h
+> index 8cd23d656a5d..caf59f23cd64 100644
+> --- a/tools/perf/pmu-events/pmu-events.h
+> +++ b/tools/perf/pmu-events/pmu-events.h
+> @@ -61,6 +61,7 @@ struct pmu_metric {
+>         const char *desc;
+>         const char *long_desc;
+>         const char *metricgroup_no_group;
+> +       const char *default_metricgroup_name;
+>         enum aggr_mode_class aggr_mode;
+>         enum metric_event_groups event_grouping;
+>  };
+> diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.=
+c
+> index 74f2d8efc02d..8b19644ade7d 100644
+> --- a/tools/perf/util/metricgroup.c
+> +++ b/tools/perf/util/metricgroup.c
+> @@ -137,6 +137,11 @@ struct metric {
+>          * output.
+>          */
+>         const char *metric_unit;
+> +       /**
+> +        * Optional name of the metric group reported
+> +        * if the Default metric group is being processed.
+> +        */
+> +       const char *default_metricgroup_name;
+>         /** Optional null terminated array of referenced metrics. */
+>         struct metric_ref *metric_refs;
+>         /**
+> @@ -219,6 +224,7 @@ static struct metric *metric__new(const struct pmu_me=
+tric *pm,
+>
+>         m->pmu =3D pm->pmu ?: "cpu";
+>         m->metric_name =3D pm->metric_name;
+> +       m->default_metricgroup_name =3D pm->default_metricgroup_name;
+>         m->modifier =3D NULL;
+>         if (modifier) {
+>                 m->modifier =3D strdup(modifier);
+> --
+> 2.35.1
+>
