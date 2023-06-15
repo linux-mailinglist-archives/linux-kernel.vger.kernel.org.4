@@ -2,90 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A207F731207
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:22:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E52C73120E
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:23:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238409AbjFOIWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 04:22:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50920 "EHLO
+        id S244203AbjFOIXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 04:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244203AbjFOIW0 (ORCPT
+        with ESMTP id S239977AbjFOIXH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 04:22:26 -0400
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CB51FE5;
-        Thu, 15 Jun 2023 01:22:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1686817343; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=FaLjgn9vXsbIgsQMfjM7AmyD4jf593oXpI4yPU6DlTzmZfTC8f/LZiv3FXfmE42kBb
-    8O1L0WgZxL18RodiBhTqYChMVRkv+fOLwntZnuA7NEP78Mw9iXtTJhVPWlQkUgTWqK00
-    alpmUjwpJ5R/Q3KTMVsPG3iiVlq0TR6fUyWI/mnuNsDyMysbbF676kJP/FYRAtPiHGan
-    6ggEn4lb/bTus1nlBf8+uJV+i6kO6+FKYLcDoLggUYdEyO+nKLshR6PpE/OpGpPrH8k6
-    jGQ9b/Irz60xwPzuwblyGybc9TebEwc38WiGk/PbzSn2nt05pNzy1VR3bqssiWs4Z+z8
-    vlAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686817343;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=9wy0kZTaLDB+nQbBxTTmH0OFUPaKM85WQOyRAqCXrhs=;
-    b=gmBU4wwhfFGsSUCQO1uctt2GFSt45+NiQ2T4S3gJpQXoec8XV2dgMsTEv6E4pGhHS2
-    Zci4e6PGGK9I6bVgP42NYZpoFqbfqqMNsZJGSCIkoC/YJ5jlibAB6EKHr/By3Pbr3M00
-    eBPyXoi+94FzTL0RXvCrUOlhoJ2ZLTWXBJWSyiUUGaUxkz0EpToVM4Y45RAkp6Daq8Ju
-    k5uC2fZQP4scIGOFpgkDZb9L7SHt+7tw/ksjd69TlnZ96dOWEuQzpyS2v45rwQDkKGbY
-    kT0gza7YCPhbx+MajXT/GbzSQ3Gb3IFhK+GYjN2wwwzjp24TwZqaM0tY0lA9qibBUQ7a
-    JZTw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686817343;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=9wy0kZTaLDB+nQbBxTTmH0OFUPaKM85WQOyRAqCXrhs=;
-    b=Yl8qg3tro0sHB4dPL/jk3DTg+Ptxgbwuqq0d9CLqakwl/9IbyxlIVRcjV9gqs1MUUF
-    gg6YrQLP27wiCZ23BcNOCagQw/NiXT1gxLXNdQ5IK6L9mzRu0jgg9EPjHRhGhuSoTjBa
-    36r56az/9l/MlOShQVW/SZbuS8NVCQItBtPrWEjzX81m0B1DGdnmcgIG1CeAH+RCKvFe
-    Kt/oj3fZEDhCQsRCMR3T3I9sazrJagpV1klV+xDG6Un2sXPNoGy4AuPvLeOhx7ZzPaHS
-    46pAvE/UgRp0wPZlnwf7fW88vogLqw4n6c9HZvWZiuwauOqa4swPMMBiT06FelV8h6rg
-    TSgA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686817343;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=9wy0kZTaLDB+nQbBxTTmH0OFUPaKM85WQOyRAqCXrhs=;
-    b=+BQ/asWxIx/VRseV6EEyiAFbpX8pvNOnAeEmTwUZxSM0xNuOzdrhpuMyB7opmvQlzl
-    4eqkj7gIb2FaI48ohIAA==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA9J/h"
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.6.0 DYNA|AUTH)
-    with ESMTPSA id D0d0a8z5F8MM1zd
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 15 Jun 2023 10:22:22 +0200 (CEST)
-Date:   Thu, 15 Jun 2023 10:22:12 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: qcom: msm8996: Fix HDMI node
-Message-ID: <ZIrJ86IsLOm_Scbc@gerhold.net>
-References: <20230615-topic-8996hdmi-v1-1-39584bfd68d2@linaro.org>
+        Thu, 15 Jun 2023 04:23:07 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B581BF8
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:23:04 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-982a99fda0dso38200466b.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:23:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686817383; x=1689409383;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hbmVcYLIlPS0DHtDeqS3ZubLc2DlQ1dwCFfetTypgB4=;
+        b=JA0UKC/uTCTTXbSjWMKtYiOs7C+nPwDsKdRnSWeSKrsmu0g+PTPaMCTNRzxHZgB9CE
+         wsnZPQCyVGmj6i7ZD66fWaB4NMcif3DihHMDKrYanaR1HW2zr/VRpEm0gLwkoIrfDtWt
+         gOLeylkxqy7VbpDexDxzHwgN0j9FCCyUJOig9KOsQ3xhaUEf1zpbnlo/XpIvnUgKieh+
+         lRgHYtV0iEv6UretPJNm1ELInlIbilok3E+TzfWMKg04utJ8do2Ojg4/DJURAU/QDwzW
+         zxnI/oFUOHQpqCqSQdbvG1scCS7CQawwgPR+CHk/ybX9sAbdj7XE2ir4x4lSKdHTTVsq
+         PhVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686817383; x=1689409383;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hbmVcYLIlPS0DHtDeqS3ZubLc2DlQ1dwCFfetTypgB4=;
+        b=G5h9NK/VIzUfd0s2hKqr3jBXDlhMGLbTleQ8tsajmDey3kaqkc9sQj8CoaD99yOIgl
+         zhUp5mt0SRL+PKWsXu8FWTUFGu17xZd+rQ6b0CPcqMvpyhzQcXl/yRPaZANosvy0vt2/
+         W+rXTLrPRg9ciH6JVTfJjQHoD2RYJP0VmFHD/UjnjsOaUeK2+RMVnVdqZSSV7a0qvyvJ
+         FAjbWwXeFRCA1OFSg7gaZksF+dxtJBz5GcDIIx6zR8Ddor4x/PI5NQchQofO0QyKnJ1g
+         Bgrdq1afXc8tBGrrQJRmdCrO8phfwlj9h8gxf38VS/+fZm/XS7Lr5GPbbO8x7jLXk8+Z
+         OkvQ==
+X-Gm-Message-State: AC+VfDx8J6Ootf0KOj1r1gkI1H1Yius1BvE/0Sbui30zWFOAd+0/HQq1
+        Z0ziMpdidpjD15PxMux0R2/74w==
+X-Google-Smtp-Source: ACHHUZ5Ayr1lYS51e5Fu6lICLqbiWy+mmk5M47rHAxINk5BfWxKxPYOWJcLo3Po0CmRWxNsO4oOngw==
+X-Received: by 2002:a17:907:9414:b0:979:65f0:cd07 with SMTP id dk20-20020a170907941400b0097965f0cd07mr16316887ejc.38.1686817383326;
+        Thu, 15 Jun 2023 01:23:03 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id i6-20020a1709063c4600b00982a352f078sm503388ejg.124.2023.06.15.01.23.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jun 2023 01:23:02 -0700 (PDT)
+Message-ID: <a3f053e9-b6b0-29a8-8b43-7abe5a43057b@linaro.org>
+Date:   Thu, 15 Jun 2023 10:23:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230615-topic-8996hdmi-v1-1-39584bfd68d2@linaro.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH net-next v4 1/2] dt-bindings: net: cdns,macb: Add
+ rx-watermark property
+To:     Pranavi Somisetty <pranavi.somisetty@amd.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        nicolas.ferre@microchip.com, claudiu.beznea@microchip.com
+Cc:     git@amd.com, michal.simek@amd.com, harini.katakam@amd.com,
+        radhey.shyam.pandey@amd.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20230613054340.12837-1-pranavi.somisetty@amd.com>
+ <20230613054340.12837-2-pranavi.somisetty@amd.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230613054340.12837-2-pranavi.somisetty@amd.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,58 +81,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 10:12:32AM +0200, Konrad Dybcio wrote:
-> A recent commit messed up the node name and compatibles. Fix it.
+On 13/06/2023 07:43, Pranavi Somisetty wrote:
+> watermark value is the minimum amount of packet data
+> required to activate the forwarding process. The watermark
+> implementation and maximum size is dependent on the device
+> where Cadence MACB/GEM is used.
 > 
-> Fixes: f43b6dc7d56e ("arm64: dts: qcom: msm8996: rename labels for HDMI nodes")
-
-Looks like that commit did a simple search & replace without checking
-the result :')
-
-Can you also fix the weird pinctrl node names in apq8096-db820c?
-(mdss_hdmi -> mdss-hdmi, or maybe even rename it back to just hdmi-
-since that part doesn't really need grouping...)
-
-The "hdmi-dai-link" was also changed to "mdss_hdmi-dai-link".
-
-Thanks,
-Stephan
-
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Signed-off-by: Pranavi Somisetty <pranavi.somisetty@amd.com>
 > ---
->  arch/arm64/boot/dts/qcom/msm8996.dtsi | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-> index 0cb2d4f08c3a..40ac0a784a4a 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-> @@ -1136,8 +1136,8 @@ mdss_dsi1_phy: phy@996400 {
->  				status = "disabled";
->  			};
->  
-> -			mdss_hdmi: mdss_hdmi-tx@9a0000 {
-> -				compatible = "qcom,mdss_hdmi-tx-8996";
-> +			mdss_hdmi: hdmi-tx@9a0000 {
-> +				compatible = "qcom,hdmi-tx-8996";
->  				reg =	<0x009a0000 0x50c>,
->  					<0x00070000 0x6158>,
->  					<0x009e0000 0xfff>;
-> @@ -1180,7 +1180,7 @@ mdss_hdmi_in: endpoint {
->  
->  			mdss_hdmi_phy: phy@9a0600 {
->  				#phy-cells = <0>;
-> -				compatible = "qcom,mdss_hdmi-phy-8996";
-> +				compatible = "qcom,hdmi-phy-8996";
->  				reg = <0x009a0600 0x1c4>,
->  				      <0x009a0a00 0x124>,
->  				      <0x009a0c00 0x124>,
-> 
-> ---
-> base-commit: 925294c9aa184801cc0a451b69a18dd0fe7d847d
-> change-id: 20230615-topic-8996hdmi-520fb03bd36c
-> 
-> Best regards,
-> -- 
-> Konrad Dybcio <konrad.dybcio@linaro.org>
-> 
+> Changes v2:
+
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
