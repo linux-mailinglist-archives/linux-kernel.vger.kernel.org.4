@@ -2,130 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A17D730F66
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0701730F5D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243925AbjFOGdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 02:33:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46072 "EHLO
+        id S243529AbjFOGcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 02:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243758AbjFOGdC (ORCPT
+        with ESMTP id S229447AbjFOGcc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 02:33:02 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0251981
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 23:32:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686810777; x=1718346777;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=m7Rg4Z8tN68L4Ggv7n3oCaLNZ0NWwcD2fhinr5NJ6OQ=;
-  b=co44K2m84MtPbutrQTOmRZ7P8d7pHS4BjPnRtyHG6EzGZ/BXbvLKdTrI
-   s3xQ2+zSNsedfgebjvPGmsvXAmdrr5+6v+e5gMpS2YFtRZm7niaP2w+tD
-   7+0sIMijP+HnM+2iBN86gU4NOSaHuLbKfZrqp7Ah0GjFd9x8xOuO1lowv
-   pLQRzpS9avsmKw/vWGGzR/xVEgY9EKK4IjHKzF7ECDp/wJZPqmecjJKcy
-   OBuJYVWa4UGVY5O+HsI5KiEghX3/nnzLRreApR9Z1aIDujKV2QXS2N1v/
-   POfOdIJSW2HRaI6Q0SdzpDy1H6gwJLwNP9P/rlrE3btKl3Z5AgFtIagXR
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="343527716"
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="343527716"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 23:32:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="712345887"
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="712345887"
-Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 14 Jun 2023 23:32:47 -0700
-Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q9gXG-0001Yd-2W;
-        Thu, 15 Jun 2023 06:32:46 +0000
-Date:   Thu, 15 Jun 2023 14:32:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Felix.Kuehling@amd.com
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Xinhui.Pan@amd.com, Abaci Robot <abaci@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, alexander.deucher@amd.com,
-        christian.koenig@amd.com
-Subject: Re: [PATCH] drm/amdkfd: Switch over to memdup_user()
-Message-ID: <202306151407.U4D2AMDM-lkp@intel.com>
-References: <20230614020432.44044-1-jiapeng.chong@linux.alibaba.com>
+        Thu, 15 Jun 2023 02:32:32 -0400
+Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62659EB
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 23:32:29 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0Vl9Oxes_1686810740;
+Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0Vl9Oxes_1686810740)
+          by smtp.aliyun-inc.com;
+          Thu, 15 Jun 2023 14:32:26 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     linux-erofs@lists.ozlabs.org
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Gao Xiang <hsiangkao@linux.alibaba.com>
+Subject: [PATCH] erofs: clean up zmap.c
+Date:   Thu, 15 Jun 2023 14:32:19 +0800
+Message-Id: <20230615063219.87466-1-hsiangkao@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230614020432.44044-1-jiapeng.chong@linux.alibaba.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jiapeng,
+Several trivial cleanups which aren't quite necessary to split:
 
-kernel test robot noticed the following build warnings:
+ - Rename lcluster load functions as well as justify full indexes
+   since they are typically used for global deduplication for
+   compressed data;
 
-[auto build test WARNING on next-20230613]
-[cannot apply to drm-misc/drm-misc-next v6.4-rc6 v6.4-rc5 v6.4-rc4 linus/master v6.4-rc6]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+ - Avoid unnecessary lines, comments for simplicity.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jiapeng-Chong/drm-amdkfd-Switch-over-to-memdup_user/20230614-100553
-base:   next-20230613
-patch link:    https://lore.kernel.org/r/20230614020432.44044-1-jiapeng.chong%40linux.alibaba.com
-patch subject: [PATCH] drm/amdkfd: Switch over to memdup_user()
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230615/202306151407.U4D2AMDM-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build):
-        git checkout next-20230613
-        b4 shazam https://lore.kernel.org/r/20230614020432.44044-1-jiapeng.chong@linux.alibaba.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/
+No logic changes.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306151407.U4D2AMDM-lkp@intel.com/
+Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+---
+ fs/erofs/zmap.c | 69 +++++++++++++++++++++----------------------------
+ 1 file changed, 29 insertions(+), 40 deletions(-)
 
-All warnings (new ones prefixed by >>):
-
-   drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_device_queue_manager.c: In function 'get_queue_ids':
->> drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_device_queue_manager.c:2815:24: warning: returning 'long int' from a function with return type 'uint32_t *' {aka 'unsigned int *'} makes pointer from integer without a cast [-Wint-conversion]
-    2815 |                 return PTR_ERR(queue_ids);
-         |                        ^~~~~~~~~~~~~~~~~~
-
-
-vim +2815 drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_device_queue_manager.c
-
-  2804	
-  2805	static uint32_t *get_queue_ids(uint32_t num_queues, uint32_t *usr_queue_id_array)
-  2806	{
-  2807		size_t array_size = num_queues * sizeof(uint32_t);
-  2808		uint32_t *queue_ids = NULL;
-  2809	
-  2810		if (!usr_queue_id_array)
-  2811			return NULL;
-  2812	
-  2813		queue_ids = memdup_user(usr_queue_id_array, array_size);
-  2814		if (IS_ERR(queue_ids))
-> 2815			return PTR_ERR(queue_ids);
-  2816	
-  2817		return queue_ids;
-  2818	}
-  2819	
-
+diff --git a/fs/erofs/zmap.c b/fs/erofs/zmap.c
+index 920fb4dbc731..47f5a87be7b1 100644
+--- a/fs/erofs/zmap.c
++++ b/fs/erofs/zmap.c
+@@ -22,8 +22,8 @@ struct z_erofs_maprecorder {
+ 	bool partialref;
+ };
+ 
+-static int legacy_load_cluster_from_disk(struct z_erofs_maprecorder *m,
+-					 unsigned long lcn)
++static int z_erofs_load_full_lcluster(struct z_erofs_maprecorder *m,
++				      unsigned long lcn)
+ {
+ 	struct inode *const inode = m->inode;
+ 	struct erofs_inode *const vi = EROFS_I(inode);
+@@ -226,8 +226,8 @@ static int unpack_compacted_index(struct z_erofs_maprecorder *m,
+ 	return 0;
+ }
+ 
+-static int compacted_load_cluster_from_disk(struct z_erofs_maprecorder *m,
+-					    unsigned long lcn, bool lookahead)
++static int z_erofs_load_compact_lcluster(struct z_erofs_maprecorder *m,
++					 unsigned long lcn, bool lookahead)
+ {
+ 	struct inode *const inode = m->inode;
+ 	struct erofs_inode *const vi = EROFS_I(inode);
+@@ -277,23 +277,23 @@ static int compacted_load_cluster_from_disk(struct z_erofs_maprecorder *m,
+ 	return unpack_compacted_index(m, amortizedshift, pos, lookahead);
+ }
+ 
+-static int z_erofs_load_cluster_from_disk(struct z_erofs_maprecorder *m,
+-					  unsigned int lcn, bool lookahead)
++static int z_erofs_load_lcluster_from_disk(struct z_erofs_maprecorder *m,
++					   unsigned int lcn, bool lookahead)
+ {
+-	const unsigned int datamode = EROFS_I(m->inode)->datalayout;
+-
+-	if (datamode == EROFS_INODE_COMPRESSED_FULL)
+-		return legacy_load_cluster_from_disk(m, lcn);
+-
+-	if (datamode == EROFS_INODE_COMPRESSED_COMPACT)
+-		return compacted_load_cluster_from_disk(m, lcn, lookahead);
+-
+-	return -EINVAL;
++	switch (EROFS_I(m->inode)->datalayout) {
++	case EROFS_INODE_COMPRESSED_FULL:
++		return z_erofs_load_full_lcluster(m, lcn);
++	case EROFS_INODE_COMPRESSED_COMPACT:
++		return z_erofs_load_compact_lcluster(m, lcn, lookahead);
++	default:
++		return -EINVAL;
++	}
+ }
+ 
+ static int z_erofs_extent_lookback(struct z_erofs_maprecorder *m,
+ 				   unsigned int lookback_distance)
+ {
++	struct super_block *sb = m->inode->i_sb;
+ 	struct erofs_inode *const vi = EROFS_I(m->inode);
+ 	const unsigned int lclusterbits = vi->z_logical_clusterbits;
+ 
+@@ -301,21 +301,15 @@ static int z_erofs_extent_lookback(struct z_erofs_maprecorder *m,
+ 		unsigned long lcn = m->lcn - lookback_distance;
+ 		int err;
+ 
+-		/* load extent head logical cluster if needed */
+-		err = z_erofs_load_cluster_from_disk(m, lcn, false);
++		err = z_erofs_load_lcluster_from_disk(m, lcn, false);
+ 		if (err)
+ 			return err;
+ 
+ 		switch (m->type) {
+ 		case Z_EROFS_LCLUSTER_TYPE_NONHEAD:
+-			if (!m->delta[0]) {
+-				erofs_err(m->inode->i_sb,
+-					  "invalid lookback distance 0 @ nid %llu",
+-					  vi->nid);
+-				DBG_BUGON(1);
+-				return -EFSCORRUPTED;
+-			}
+ 			lookback_distance = m->delta[0];
++			if (!lookback_distance)
++				goto err_bogus;
+ 			continue;
+ 		case Z_EROFS_LCLUSTER_TYPE_PLAIN:
+ 		case Z_EROFS_LCLUSTER_TYPE_HEAD1:
+@@ -324,16 +318,15 @@ static int z_erofs_extent_lookback(struct z_erofs_maprecorder *m,
+ 			m->map->m_la = (lcn << lclusterbits) | m->clusterofs;
+ 			return 0;
+ 		default:
+-			erofs_err(m->inode->i_sb,
+-				  "unknown type %u @ lcn %lu of nid %llu",
++			erofs_err(sb, "unknown type %u @ lcn %lu of nid %llu",
+ 				  m->type, lcn, vi->nid);
+ 			DBG_BUGON(1);
+ 			return -EOPNOTSUPP;
+ 		}
+ 	}
+-
+-	erofs_err(m->inode->i_sb, "bogus lookback distance @ nid %llu",
+-		  vi->nid);
++err_bogus:
++	erofs_err(sb, "bogus lookback distance %u @ lcn %lu of nid %llu",
++		  lookback_distance, lcn, vi->nid);
+ 	DBG_BUGON(1);
+ 	return -EFSCORRUPTED;
+ }
+@@ -365,7 +358,7 @@ static int z_erofs_get_extent_compressedlen(struct z_erofs_maprecorder *m,
+ 	if (m->compressedblks)
+ 		goto out;
+ 
+-	err = z_erofs_load_cluster_from_disk(m, lcn, false);
++	err = z_erofs_load_lcluster_from_disk(m, lcn, false);
+ 	if (err)
+ 		return err;
+ 
+@@ -397,9 +390,8 @@ static int z_erofs_get_extent_compressedlen(struct z_erofs_maprecorder *m,
+ 			break;
+ 		fallthrough;
+ 	default:
+-		erofs_err(m->inode->i_sb,
+-			  "cannot found CBLKCNT @ lcn %lu of nid %llu",
+-			  lcn, vi->nid);
++		erofs_err(sb, "cannot found CBLKCNT @ lcn %lu of nid %llu", lcn,
++			  vi->nid);
+ 		DBG_BUGON(1);
+ 		return -EFSCORRUPTED;
+ 	}
+@@ -407,9 +399,7 @@ static int z_erofs_get_extent_compressedlen(struct z_erofs_maprecorder *m,
+ 	map->m_plen = erofs_pos(sb, m->compressedblks);
+ 	return 0;
+ err_bonus_cblkcnt:
+-	erofs_err(m->inode->i_sb,
+-		  "bogus CBLKCNT @ lcn %lu of nid %llu",
+-		  lcn, vi->nid);
++	erofs_err(sb, "bogus CBLKCNT @ lcn %lu of nid %llu", lcn, vi->nid);
+ 	DBG_BUGON(1);
+ 	return -EFSCORRUPTED;
+ }
+@@ -430,7 +420,7 @@ static int z_erofs_get_extent_decompressedlen(struct z_erofs_maprecorder *m)
+ 			return 0;
+ 		}
+ 
+-		err = z_erofs_load_cluster_from_disk(m, lcn, true);
++		err = z_erofs_load_lcluster_from_disk(m, lcn, true);
+ 		if (err)
+ 			return err;
+ 
+@@ -477,7 +467,7 @@ static int z_erofs_do_map_blocks(struct inode *inode,
+ 	initial_lcn = ofs >> lclusterbits;
+ 	endoff = ofs & ((1 << lclusterbits) - 1);
+ 
+-	err = z_erofs_load_cluster_from_disk(&m, initial_lcn, false);
++	err = z_erofs_load_lcluster_from_disk(&m, initial_lcn, false);
+ 	if (err)
+ 		goto unmap_out;
+ 
+@@ -535,8 +525,7 @@ static int z_erofs_do_map_blocks(struct inode *inode,
+ 	if (flags & EROFS_GET_BLOCKS_FINDTAIL) {
+ 		vi->z_tailextent_headlcn = m.lcn;
+ 		/* for non-compact indexes, fragmentoff is 64 bits */
+-		if (fragment &&
+-		    vi->datalayout == EROFS_INODE_COMPRESSED_FULL)
++		if (fragment && vi->datalayout == EROFS_INODE_COMPRESSED_FULL)
+ 			vi->z_fragmentoff |= (u64)m.pblk << 32;
+ 	}
+ 	if (ztailpacking && m.lcn == vi->z_tailextent_headlcn) {
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.24.4
+
