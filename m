@@ -2,99 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6249A7312B6
+	by mail.lfdr.de (Postfix) with ESMTP id 173007312B5
 	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244453AbjFOIux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 04:50:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37222 "EHLO
+        id S244337AbjFOIut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 04:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245626AbjFOIuF (ORCPT
+        with ESMTP id S244175AbjFOIuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 04:50:05 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BAC2967;
-        Thu, 15 Jun 2023 01:49:56 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35F8nmKn039794;
-        Thu, 15 Jun 2023 03:49:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1686818988;
-        bh=3wcwsJ/V1odDLw6p+p7BMZNxVQakzirBJfJHtCzG0k0=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=agjvPUs5xkzf/PIvRJ1h2PtqYqlfs7JR+63mwBG6huYbYixHIYmHfjKBaOtIkXgdp
-         fz0czsqZ//BCDdOvooE/Bq6bJHfTeSyW2y4DSFSTQR5Itrl0uc8e72LzffwWCfL2R/
-         YMNH5ysrGJ9qNMBO0lvqS0mxSZafY9ndi3BqHnXY=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35F8nmTF100618
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 15 Jun 2023 03:49:48 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 15
- Jun 2023 03:49:48 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 15 Jun 2023 03:49:48 -0500
-Received: from uda0132425.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35F8nk7x028622;
-        Thu, 15 Jun 2023 03:49:46 -0500
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-To:     <nm@ti.com>, Roger Quadros <rogerq@kernel.org>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>, <r-gunasekaran@ti.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4] arm64: dts: ti: k3-am625: Enable Type-C port for USB0
-Date:   Thu, 15 Jun 2023 14:19:32 +0530
-Message-ID: <168681888539.2100501.7989391250218171520.b4-ty@ti.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230523123348.52850-1-rogerq@kernel.org>
-References: <20230523123348.52850-1-rogerq@kernel.org>
+        Thu, 15 Jun 2023 04:50:23 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39755171F;
+        Thu, 15 Jun 2023 01:50:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1686819022; x=1718355022;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=s6xySSvqAyBgvbFbPXNePC1dpE5fMWsiRXZNX2mbPaw=;
+  b=Pp1uV2Pgka2Oj+hmLcr/6g7lhwzZMProv05IvKfP0VN6egFHfKey4r3N
+   LzElvvDTZ0yWJngOnHtzCZy3bSJ4beh+PoUP5uLr/TSW4sSOMZNmWaPal
+   nhvl2kGzsuVTwb8CEXw8koY9lowjD4J7jo1lhbPUTzaSo8sKGyRRXC4ht
+   pt7ZZJl5Xs8j01pNTdEW/YjL7f/tM7I0CPQfnLh2r3D+UmR5CxkA4hOJS
+   m4EKZhUI9WjRPdgpqwM/FBUWV3FcOqlQsV5MDcjBarKCey3TuFCZ8V6wZ
+   DRNXeJ2vmZwGkHGsGvWBLJJ8z0uKPw1eFHxvgwyYzy1JthuaAyT7FYR9g
+   g==;
+X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
+   d="scan'208";a="157080682"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Jun 2023 01:50:20 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 15 Jun 2023 01:50:20 -0700
+Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Thu, 15 Jun 2023 01:50:17 -0700
+Message-ID: <5fd62bc2-4383-8511-1e53-a4253e4a319f@microchip.com>
+Date:   Thu, 15 Jun 2023 10:50:05 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net-next v4 1/2] dt-bindings: net: cdns,macb: Add
+ rx-watermark property
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Pranavi Somisetty <pranavi.somisetty@amd.com>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <claudiu.beznea@microchip.com>
+CC:     <git@amd.com>, <michal.simek@amd.com>, <harini.katakam@amd.com>,
+        <radhey.shyam.pandey@amd.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+References: <20230613054340.12837-1-pranavi.somisetty@amd.com>
+ <20230613054340.12837-2-pranavi.somisetty@amd.com>
+ <a3f053e9-b6b0-29a8-8b43-7abe5a43057b@linaro.org>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <a3f053e9-b6b0-29a8-8b43-7abe5a43057b@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roger Quadros,
-
-On Tue, 23 May 2023 15:33:48 +0300, Roger Quadros wrote:
-> USB0 is a Type-C port with dual data role and power sink.
+On 15/06/2023 at 10:23, Krzysztof Kozlowski wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> 
+> On 13/06/2023 07:43, Pranavi Somisetty wrote:
+>> watermark value is the minimum amount of packet data
+>> required to activate the forwarding process. The watermark
+>> implementation and maximum size is dependent on the device
+>> where Cadence MACB/GEM is used.
+>>
+>> Signed-off-by: Pranavi Somisetty <pranavi.somisetty@amd.com>
+>> ---
+>> Changes v2:
 > 
 > 
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-I have applied the following to branch ti-k3-dts-next on [1].
-Thank you!
+If mine is needed as well:
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-[1/1] arm64: dts: ti: k3-am625: Enable Type-C port for USB0
-      commit: 2c213d19515caf880e6c8266fbeda4145894c10e
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent up the chain during
-the next merge window (or sooner if it is a relevant bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
---
-Vignesh
+-- 
+Nicolas Ferre
 
