@@ -2,168 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D51887321F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 23:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 562F373224D
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 00:01:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232566AbjFOVzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 17:55:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44138 "EHLO
+        id S232726AbjFOWBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 18:01:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232578AbjFOVz3 (ORCPT
+        with ESMTP id S231479AbjFOWA6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 17:55:29 -0400
-Received: from s.wrqvwxzv.outbound-mail.sendgrid.net (s.wrqvwxzv.outbound-mail.sendgrid.net [149.72.154.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA647296F
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 14:55:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kwiboo.se;
-        h=mime-version:subject:references:from:in-reply-to:to:cc:content-type:
-        content-transfer-encoding:cc:content-type:from:subject:to;
-        s=s1; bh=pmSNmFv8Qq/2rHp1zEKtJzjGqmBa6T/jN8+FgSZUDls=;
-        b=p6CehaPAY1h1iCF05fwKdPovmHB53S/8IxXG0tcYDMWyFkOf5JLAeooCwDkP7SYvxKqq
-        LWrrFfGnFNB/obKwzPNQYfwfFOmy8fO9OJ5ZZp5h+npxbUzRJKoK2p4u0xefHqElmQ4WZH
-        kunhtv9sOH1ZIligw0EuMryiRJfa2wG5OswWHs1cR+Vy6s/0i7iwGUsFTxR444ucu44iGg
-        OizU3T0TNVpM/Z2b8YsLf9AwfARu4FlCNMhfkeFJYDLf9CjWNq5T/ViRHRhc6cSSZRiFRS
-        StFScmxsB6hEk2nIuN+0jSMaRW6lFL1sovqweKtwRUPfxy8THF1k+Q3FUvmCRcOQ==
-Received: by filterdrecv-8684c58db7-nd6mk with SMTP id filterdrecv-8684c58db7-nd6mk-1-648B88CB-19
-        2023-06-15 21:55:23.885959543 +0000 UTC m=+3104213.148175023
-Received: from [192.168.1.50] (unknown)
-        by geopod-ismtpd-9 (SG) with ESMTP
-        id SyILOUxbSpSZyd76TgqJvw
-        Thu, 15 Jun 2023 21:55:23.448 +0000 (UTC)
-Message-ID: <76bd851f-ce85-4695-2f6c-797019f50ba6@kwiboo.se>
-Date:   Thu, 15 Jun 2023 21:55:24 +0000 (UTC)
+        Thu, 15 Jun 2023 18:00:58 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40052962;
+        Thu, 15 Jun 2023 15:00:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686866457; x=1718402457;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VixVhVq+fB60ytIjlPKKkNw/tWOkMvypRvdQAxH+drM=;
+  b=kyVhkwH4Bk2+hQRV20aoXFVwybAMsof61Y8h/VQ8cMWCl/VcI6wH519K
+   dhcMQICQXbsm+wOhkQSXmo1N5sR4ahp9mjSKjvvzPscssNXMxuXVI/xzD
+   9a4BUes+tFWUTMDF3x8BAOXizKb/bTwpkglM/DCff59D6djU4DGzyd3Ul
+   h2n2H9yWQvWXXhBzjItNWvAstfkDM1/d9mygOmt9pcneD3SKcTsq8gkoV
+   ulP3RAUzVQ7Zg4UYVWttkvpX/sqBo+ogtF161QAOBYu2dga6pacMsVoay
+   D6q09ccDJpth/lTQPMuBDfRzIZXzk2dMbiJggiy1A7wO42YMCGT6QyEyE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="339391364"
+X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
+   d="scan'208";a="339391364"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 15:00:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="689970719"
+X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
+   d="scan'208";a="689970719"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 15 Jun 2023 15:00:52 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q9v1P-0000Qn-1F;
+        Thu, 15 Jun 2023 22:00:51 +0000
+Date:   Fri, 16 Jun 2023 05:59:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Xiaolei Wang <xiaolei.wang@windriver.com>, peter.chen@kernel.org,
+        pawell@cadence.com, rogerq@kernel.org, a-govindraju@ti.com,
+        gregkh@linuxfoundation.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: cdns3: Put the cdns set active part outside the
+ spin lock
+Message-ID: <202306160517.DJARQEZU-lkp@intel.com>
+References: <20230615110424.4007675-1-xiaolei.wang@windriver.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 1/3] iommu: rockchip: Fix discovery table address
- encoding
-Content-Language: en-US
-References: <20230615201042.2291867-1-jonas@kwiboo.se>
- <20230615201042.2291867-2-jonas@kwiboo.se>
- <81ea403e-1279-bb01-9b74-51afd6d8532b@arm.com>
-From:   Jonas Karlman <jonas@kwiboo.se>
-In-Reply-To: <81ea403e-1279-bb01-9b74-51afd6d8532b@arm.com>
-X-SG-EID: =?us-ascii?Q?TdbjyGynYnRZWhH+7lKUQJL+ZxmxpowvO2O9SQF5CwCVrYgcwUXgU5DKUU3QxA?=
- =?us-ascii?Q?fZekEeQsTe+RrMu3cja6a0h7EUeRq2SPOAxvJSb?=
- =?us-ascii?Q?IwwbxO8yaLTE9GQ552mGiSuOFkpow81qZjI9loa?=
- =?us-ascii?Q?ewxGLE8qaAGjuXJiqPzIky7teT5aRw6d250sBRm?=
- =?us-ascii?Q?v8oLyTeRx2s5BkyMjm+i1A+bxRnKq+UigYfE053?=
- =?us-ascii?Q?16vKOpEyM9khkmrAy4K=2F2B7k+6efrwvj+rCk7=2F?=
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Joerg Roedel <jroedel@suse.de>
-X-Entity-ID: P7KYpSJvGCELWjBME/J5tg==
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <20230615110424.4007675-1-xiaolei.wang@windriver.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-15 23:24, Robin Murphy wrote:
-> On 2023-06-15 21:10, Jonas Karlman wrote:
->> The address to the discovery table is currently encoded using the
->> following bit layout.
->>
->>   31:12 - Address bit 31:0
->>   11: 4 - Address bit 39:32
->>
->> This is also the bit layout used by the vendor kernel.
->>
->> However, testing has shown that addresses to the discovery/page tables
->> and memory pages are all encoded using the same bit layout.
->>
->> IOMMU v1:
->>   31:12 - Address bit 31:0
->>
->> IOMMU v2:
->>   31:12 - Address bit 31:0
->>   11: 8 - Address bit 35:32
->>    7: 4 - Address bit 39:36
->>
->> Change to use the mk_dtentries ops to encode the discovery table address
-> 
-> Nit: s/discovery/directory/g
+Hi Xiaolei,
 
-Oops, will fix in entire series in a v3 :-)
+kernel test robot noticed the following build errors:
 
-> 
->> correctly. Also update the bit layout comment for the page address.
->>
->> These changes render the dte_addr_phys and dma_addr_dte ops unused
->> and will be removed in a following patch.
-> 
-> TBH I'd just squash that into this patch - we don't gain anything from 
-> leaving dead code in stable kernels, and at worst it just stands to make 
-> future fixes harder to backport.
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.4-rc6 next-20230615]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Make sense, will squash them in v3.
+url:    https://github.com/intel-lab-lkp/linux/commits/Xiaolei-Wang/usb-cdns3-Put-the-cdns-set-active-part-outside-the-spin-lock/20230615-190721
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20230615110424.4007675-1-xiaolei.wang%40windriver.com
+patch subject: [PATCH v2] usb: cdns3: Put the cdns set active part outside the spin lock
+config: riscv-randconfig-r042-20230615 (https://download.01.org/0day-ci/archive/20230616/202306160517.DJARQEZU-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
+        git fetch usb usb-testing
+        git checkout usb/usb-testing
+        b4 shazam https://lore.kernel.org/r/20230615110424.4007675-1-xiaolei.wang@windriver.com
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/usb/cdns3/
 
-> 
->> Fixes: 227014b33f62 ("iommu: rockchip: Add internal ops to handle variants")
->> Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
->> ---
->> v2:
->> - replace currently with correctly in commit message
->>
->>   drivers/iommu/rockchip-iommu.c | 8 ++++----
->>   1 file changed, 4 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/iommu/rockchip-iommu.c b/drivers/iommu/rockchip-iommu.c
->> index 4054030c3237..d46319f77e5c 100644
->> --- a/drivers/iommu/rockchip-iommu.c
->> +++ b/drivers/iommu/rockchip-iommu.c
->> @@ -278,8 +278,8 @@ static u32 rk_mk_pte(phys_addr_t page, int prot)
->>   /*
->>    * In v2:
->>    * 31:12 - Page address bit 31:0
->> - *  11:9 - Page address bit 34:32
->> - *   8:4 - Page address bit 39:35
->> + * 11: 8 - Page address bit 35:32
->> + *  7: 4 - Page address bit 39:36
->>    *     3 - Security
->>    *     2 - Writable
->>    *     1 - Readable
->> @@ -577,7 +577,7 @@ static void log_iova(struct rk_iommu *iommu, int index, dma_addr_t iova)
->>   	page_offset = rk_iova_page_offset(iova);
->>   
->>   	mmu_dte_addr = rk_iommu_read(base, RK_MMU_DTE_ADDR);
->> -	mmu_dte_addr_phys = rk_ops->dte_addr_phys(mmu_dte_addr);
->> +	mmu_dte_addr_phys = rk_ops->pt_address(mmu_dte_addr);
->>   
->>   	dte_addr_phys = mmu_dte_addr_phys + (4 * dte_index);
->>   	dte_addr = phys_to_virt(dte_addr_phys);
->> @@ -967,7 +967,7 @@ static int rk_iommu_enable(struct rk_iommu *iommu)
->>   
->>   	for (i = 0; i < iommu->num_mmu; i++) {
->>   		rk_iommu_write(iommu->bases[i], RK_MMU_DTE_ADDR,
->> -			       rk_ops->dma_addr_dte(rk_domain->dt_dma));
->> +			       rk_ops->mk_dtentries(rk_domain->dt_dma));
-> 
-> Hmm, this writes the RK_DTE_PT_VALID bit into the register as well - 
-> does that really make sense?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306160517.DJARQEZU-lkp@intel.com/
 
-On v1 bit 11:0 behave as read-only and on v2 bit 3:0 behave read-only.
-Writing anything to those bits read back as 0, so was safe to write
-RK_DTE_PT_VALID. Should probably mention this in a comment in v3.
+All errors (new ones prefixed by >>):
 
-Regards,
-Jonas
+   In file included from drivers/usb/cdns3/cdns3-plat.c:16:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/usb/cdns3/cdns3-plat.c:16:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/usb/cdns3/cdns3-plat.c:16:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:743:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     743 |         insb(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
+     104 | #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from drivers/usb/cdns3/cdns3-plat.c:16:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:751:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     751 |         insw(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
+     105 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from drivers/usb/cdns3/cdns3-plat.c:16:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:759:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     759 |         insl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
+     106 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from drivers/usb/cdns3/cdns3-plat.c:16:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:768:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     768 |         outsb(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+     118 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from drivers/usb/cdns3/cdns3-plat.c:16:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:777:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     777 |         outsw(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
+     119 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from drivers/usb/cdns3/cdns3-plat.c:16:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:786:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     786 |         outsl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
+     120 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from drivers/usb/cdns3/cdns3-plat.c:16:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:1134:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1134 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+>> drivers/usb/cdns3/cdns3-plat.c:258:18: error: too few arguments to function call, expected 2, have 1
+     258 |         cdns_resume(cdns);
+         |         ~~~~~~~~~~~     ^
+   drivers/usb/cdns3/core.h:132:19: note: 'cdns_resume' declared here
+     132 | static inline int cdns_resume(struct cdns *cdns, u8 set_active)
+         |                   ^
+>> drivers/usb/cdns3/cdns3-plat.c:261:2: error: call to undeclared function 'cdns_set_active'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     261 |         cdns_set_active(cdns, !PMSG_IS_AUTO(msg));
+         |         ^
+   13 warnings and 2 errors generated.
 
-> 
-> Thanks,
-> Robin.
-> 
->>   		rk_iommu_base_command(iommu->bases[i], RK_MMU_CMD_ZAP_CACHE);
->>   		rk_iommu_write(iommu->bases[i], RK_MMU_INT_MASK, RK_MMU_IRQ_MASK);
->>   	}
 
+vim +258 drivers/usb/cdns3/cdns3-plat.c
+
+   229	
+   230	static int cdns3_controller_resume(struct device *dev, pm_message_t msg)
+   231	{
+   232		struct cdns *cdns = dev_get_drvdata(dev);
+   233		int ret;
+   234		unsigned long flags;
+   235	
+   236		if (!cdns->in_lpm)
+   237			return 0;
+   238	
+   239		if (cdns_power_is_lost(cdns)) {
+   240			phy_exit(cdns->usb2_phy);
+   241			ret = phy_init(cdns->usb2_phy);
+   242			if (ret)
+   243				return ret;
+   244	
+   245			phy_exit(cdns->usb3_phy);
+   246			ret = phy_init(cdns->usb3_phy);
+   247			if (ret)
+   248				return ret;
+   249		}
+   250	
+   251		ret = set_phy_power_on(cdns);
+   252		if (ret)
+   253			return ret;
+   254	
+   255		cdns3_set_platform_suspend(cdns->dev, false, false);
+   256	
+   257		spin_lock_irqsave(&cdns->lock, flags);
+ > 258		cdns_resume(cdns);
+   259		cdns->in_lpm = false;
+   260		spin_unlock_irqrestore(&cdns->lock, flags);
+ > 261		cdns_set_active(cdns, !PMSG_IS_AUTO(msg));
+   262		if (cdns->wakeup_pending) {
+   263			cdns->wakeup_pending = false;
+   264			enable_irq(cdns->wakeup_irq);
+   265		}
+   266		dev_dbg(cdns->dev, "%s ends\n", __func__);
+   267	
+   268		return ret;
+   269	}
+   270	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
