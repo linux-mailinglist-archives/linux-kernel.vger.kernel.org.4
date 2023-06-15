@@ -2,202 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D948573144F
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79FD6731454
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:44:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241639AbjFOJnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 05:43:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43416 "EHLO
+        id S241509AbjFOJoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 05:44:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240189AbjFOJnm (ORCPT
+        with ESMTP id S245024AbjFOJoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 05:43:42 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1F0270E
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 02:43:40 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id 5614622812f47-39ab96e6aefso4974426b6e.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 02:43:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1686822220; x=1689414220;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vMy1Pb+TA2cOdvuxJ5yY65mwMnkTqfoyE70yJ/ynDcI=;
-        b=O0s0UoIWDNXHrwMp4wnGcpuo0BVxREa6/YH7qaGnjqb+PIRGy07hGnP7mOuBwXqVma
-         TkrG/+NU8BtcSsCk0NtZywqVM4m0RBTvKfWnUxDycBUAgwxcodeOzY/wuy7089Ax0M0e
-         J9ASl3dXR5X9jdt9rn3Q4X9BZdJaNiqX1i1DA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686822220; x=1689414220;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vMy1Pb+TA2cOdvuxJ5yY65mwMnkTqfoyE70yJ/ynDcI=;
-        b=Y+N+cU6uRiPmQ0KBV2bQGJz5+jYwvjAyxqedg5yUJgVpCZGCBfK3uwSg6VpDRVvLAU
-         l2E1z56ZnOSfx4Oqj5/REJo2S/lI0Zp1OeXjb57zXdj+Ho3Z7x9M7o4vMd4w78u+8TJ1
-         UiiKLRmBI7IPzXX5rAs6nzvajVsI19DHhT0Onjq2GQOD2VdelAXxPNQK7e5DLY2Ojnrl
-         LqyRjnd7+vxdWHqTBxJgkitB7BwDD4usm+B4ycSDxwEehjQhrtqYCn2JATK0E/nOjqpl
-         hbZRtp7bGcN3oHCE7Fc0Ko9rSzUVJPzjxi5PO+HlQnOz9oYFpV/a/f4RuuC4GV7ANRdR
-         zqRQ==
-X-Gm-Message-State: AC+VfDwcpY3c3+wKXUgjF8zWy+IbfKUxPhn7dE2bDU1TorbGhWmWZ3fc
-        g5QguG4OnUqkUwUsHv+OaoAyeDsBBTaoHj+nQWvDYQ==
-X-Google-Smtp-Source: ACHHUZ6Cif8QTBZaHh0W1Qhci6YrNAKxLJVKhT4HYFy7aFA+SE6XNAjsP43kNk2E3DEH+pOXb6zTwijhMAgZO0x3vEE=
-X-Received: by 2002:a05:6808:211b:b0:399:de83:96f2 with SMTP id
- r27-20020a056808211b00b00399de8396f2mr15297736oiw.8.1686822219722; Thu, 15
- Jun 2023 02:43:39 -0700 (PDT)
+        Thu, 15 Jun 2023 05:44:08 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCA21BF9;
+        Thu, 15 Jun 2023 02:44:03 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 880B4223BA;
+        Thu, 15 Jun 2023 09:44:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1686822242; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=n5pjg/fCgnrgGrdkPSR3HbmaWlbjpvDa5iaWKn4LzO4=;
+        b=m+5VYLOA/bkv8Q28cuJEpr4tIX0dgZO4DJEtdEskOguTneqJzV8aqT0l11AV1sQwX2RSeL
+        gSI0jCIE96L5GSPZ4NYHjoCXqE+lwcQzdDHq2p0evSDP9qbCdckyNdXSUZUMYrLmxNs4eZ
+        N4571dOSZjzhEsRpQ1wcSDifHkFENAs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1686822242;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=n5pjg/fCgnrgGrdkPSR3HbmaWlbjpvDa5iaWKn4LzO4=;
+        b=xUpI62rR/HvggSEP+Y1L5tDmyXpKRBHq5Ufx9Mz4We0XDj9PSecClkKZvX1LvycrNDl1+8
+        8cjrTon/dtUAuRAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 79C5113A47;
+        Thu, 15 Jun 2023 09:44:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 17a1HWLdimRLWgAAMHmgww
+        (envelope-from <dwagner@suse.de>); Thu, 15 Jun 2023 09:44:02 +0000
+From:   Daniel Wagner <dwagner@suse.de>
+To:     linux-nvme@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Shin'ichiro Kawasaki <shinichiro@fastmail.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Hannes Reinecke <hare@suse.de>,
+        James Smart <jsmart2021@gmail.com>,
+        Daniel Wagner <dwagner@suse.de>
+Subject: [PATCH v1 0/2] nvme-fc: Fix blktests hangers
+Date:   Thu, 15 Jun 2023 11:43:54 +0200
+Message-Id: <20230615094356.14878-1-dwagner@suse.de>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230615083404.57112-1-alex.maftei@amd.com>
-In-Reply-To: <20230615083404.57112-1-alex.maftei@amd.com>
-From:   Pavan Chebbi <pavan.chebbi@broadcom.com>
-Date:   Thu, 15 Jun 2023 15:13:27 +0530
-Message-ID: <CALs4sv2+nb3i8VQKNsqLzrCR0Sq6oHPwrzxYdeAaMVX+1-Z+VA@mail.gmail.com>
-Subject: Re: [PATCH] selftests/ptp: Fix timestamp printf format for PTP_SYS_OFFSET
-To:     Alex Maftei <alex.maftei@amd.com>
-Cc:     richardcochran@gmail.com, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000003b18d905fe27e764"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000003b18d905fe27e764
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+A couple more fixes to enable blktests for the fc transport.
 
-On Thu, Jun 15, 2023 at 2:05=E2=80=AFPM Alex Maftei <alex.maftei@amd.com> w=
-rote:
->
-> Previously, timestamps were printed using "%lld.%u" which is incorrect
-> for nanosecond values lower than 100,000,000 as they're fractional
-> digits, therefore leading zeros are meaningful.
->
-> This patch changes the format strings to "%lld.%09u" in order to add
-> leading zeros to the nanosecond value.
->
-> Fixes: 568ebc5985f5 ("ptp: add the PTP_SYS_OFFSET ioctl to the testptp pr=
-ogram")
-> Fixes: 4ec54f95736f ("ptp: Fix compiler warnings in the testptp utility")
-> Fixes: 6ab0e475f1f3 ("Documentation: fix misc. warnings")
-> Signed-off-by: Alex Maftei <alex.maftei@amd.com>
-> ---
->  tools/testing/selftests/ptp/testptp.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
+1) Another module unloading hanger which can be triggered with
+   the nvme/048 tests:
 
-Change looks good but can you mark this for "net" correctly and get
-CI/sanity checks done.
+   run blktests nvme/048 at 2023-06-06 13:04:49
+   nvmet: adding nsid 1 to subsystem blktests-subsystem-1
+   nvme nvme2: NVME-FC{0}: create association : host wwpn 0x20001100aa000002  rport wwpn 0x20001100aa000001: NQN "blktests-subsystem-1"
+   (NULL device *): {0:0} Association created
+   [478] nvmet: ctrl 1 start keep-alive timer for 1 secs
+   [478] nvmet: check nqn.2014-08.org.nvmexpress:uuid:3d0c3f5d-cb37-4bc4-af29-2168953bfc0a
+   [478] nvmet: nvmet_setup_dhgroup: ctrl 1 selecting dhgroup 0
+   [478] nvmet: No authentication provided
+   nvmet: creating nvm controller 1 for subsystem blktests-subsystem-1 for NQN nqn.2014-08.org.nvmexpress:uuid:3d0c3f5d-cb37-4bc4-af29-2168953bfc0a.
+   [478] nvmet: adding queue 1 to ctrl 1.
+   [407] nvmet: adding queue 2 to ctrl 1.
+   [6549] nvmet: adding queue 3 to ctrl 1.
+   [1760] nvmet: adding queue 4 to ctrl 1.
+   nvme nvme2: NVME-FC{0}: controller connect complete
+   nvme nvme2: NVME-FC{0}: new ctrl: NQN "blktests-subsystem-1"
+   [478] nvmet: ctrl 1 reschedule traffic based keep-alive timer
+   [407] nvmet: ctrl 1 update keep-alive timer for 1 secs
+   nvme nvme2: NVME-FC{0}: io failed due to lldd error 6
+   nvme nvme2: NVME-FC{0}: transport association event: transport detected io error
+   nvme nvme2: NVME-FC{0}: resetting controller
+   [478] nvmet: ctrl 1 stop keep-alive
+   (NULL device *): {0:0} Association deleted
+   nvme nvme2: NVME-FC{0}: create association : host wwpn 0x20001100aa000002  rport wwpn 0x20001100aa000001: NQN "blktests-subsystem-1"
+   (NULL device *): {0:0} Association freed
+   (NULL device *): {0:0} Association created
+   (NULL device *): Disconnect LS failed: No Association
+   [407] nvmet: ctrl 1 start keep-alive timer for 1 secs
+   [407] nvmet: check nqn.2014-08.org.nvmexpress:uuid:3d0c3f5d-cb37-4bc4-af29-2168953bfc0a
+   [407] nvmet: nvmet_setup_dhgroup: ctrl 1 selecting dhgroup 0
+   [407] nvmet: No authentication provided
+   nvmet: creating nvm controller 1 for subsystem blktests-subsystem-1 for NQN nqn.2014-08.org.nvmexpress:uuid:3d0c3f5d-cb37-4bc4-af29-2168953bfc0a.
+   nvme nvme2: reconnect: revising io queue count from 4 to 1
+   [478] nvmet: adding queue 1 to ctrl 1.
+   nvme nvme2: NVME-FC{0}: controller connect complete
+   [478] nvmet: ctrl 1 reschedule traffic based keep-alive timer
+   [478] nvmet: ctrl 1 update keep-alive timer for 1 secs
+   [478] nvmet: ctrl 1 update keep-alive timer for 1 secs
+   [6549] nvmet: ctrl 1 update keep-alive timer for 1 secs
+   [6549] nvmet: ctrl 1 update keep-alive timer for 1 secs
+   [6549] nvmet: ctrl 1 update keep-alive timer for 1 secs
+   [6549] nvmet: ctrl 1 update keep-alive timer for 1 secs
+   [1760] nvmet: ctrl 1 update keep-alive timer for 1 secs
+   [1760] nvmet: ctrl 1 update keep-alive timer for 1 secs
+   [1760] nvmet: ctrl 1 update keep-alive timer for 1 secs
+   [1760] nvmet: ctrl 1 update keep-alive timer for 1 secs
+   [1760] nvmet: ctrl 1 update keep-alive timer for 1 secs
+   [1760] nvmet: ctrl 1 update keep-alive timer for 1 secs
+   [407] nvmet: ctrl 1 update keep-alive timer for 1 secs
+   nvme nvme2: NVME-FC{0}: io failed due to lldd error 6
+   nvme nvme2: NVME-FC{0}: transport association event: transport detected io error
+   nvme nvme2: NVME-FC{0}: resetting controller
+   [478] nvmet: ctrl 1 stop keep-alive
+   (NULL device *): {0:0} Association deleted
+   (NULL device *): {0:0} Association freed
+   (NULL device *): Disconnect LS failed: No Association
+   nvme nvme2: NVME-FC{0}: create association : host wwpn 0x20001100aa000002  rport wwpn 0x20001100aa000001: NQN "blktests-subsystem-1"
+   (NULL device *): {0:0} Association created
+   [1760] nvmet: ctrl 1 start keep-alive timer for 1 secs
+   [1760] nvmet: check nqn.2014-08.org.nvmexpress:uuid:3d0c3f5d-cb37-4bc4-af29-2168953bfc0a
+   [1760] nvmet: nvmet_setup_dhgroup: ctrl 1 selecting dhgroup 0
+   [1760] nvmet: No authentication provided
+   nvmet: creating nvm controller 1 for subsystem blktests-subsystem-1 for NQN nqn.2014-08.org.nvmexpress:uuid:3d0c3f5d-cb37-4bc4-af29-2168953bfc0a.
+   nvme nvme2: reconnect: revising io queue count from 1 to 4
+   [478] nvmet: adding queue 1 to ctrl 1.
+   [407] nvmet: adding queue 2 to ctrl 1.
+   [6549] nvmet: adding queue 3 to ctrl 1.
+   [1760] nvmet: adding queue 4 to ctrl 1.
+   nvme nvme2: NVME-FC{0}: controller connect complete
+   [1760] nvmet: ctrl 1 reschedule traffic based keep-alive timer
+   [478] nvmet: ctrl 1 update keep-alive timer for 1 secs
+   [478] nvmet: ctrl 1 update keep-alive timer for 1 secs
+   [478] nvmet: ctrl 1 update keep-alive timer for 1 secs
+   [478] nvmet: ctrl 1 update keep-alive timer for 1 secs
+   [1760] nvmet: ctrl 1 update keep-alive timer for 1 secs
+   [6549] nvmet: ctrl 1 update keep-alive timer for 1 secs
+   [1760] nvmet: ctrl 1 update keep-alive timer for 1 secs
+   [6549] nvmet: ctrl 1 update keep-alive timer for 1 secs
+   [1760] nvmet: ctrl 1 update keep-alive timer for 1 secs
+   [1760] nvmet: ctrl 1 update keep-alive timer for 1 secs
+   [6549] nvmet: ctrl 1 update keep-alive timer for 1 secs
+   [1760] nvmet: ctrl 1 update keep-alive timer for 1 secs
+   [6549] nvmet: ctrl 1 update keep-alive timer for 1 secs
+   nvme nvme2: Removing ctrl: NQN "blktests-subsystem-1"
+   [407] nvmet: ctrl 1 stop keep-alive
+   (NULL device *): {0:0} Association deleted
+   (NULL device *): {0:0} Association freed
+   (NULL device *): Disconnect LS failed: No Association
+   nvme_fc: nvme_fc_exit_module: waiting for ctlr deletes
+   BTRFS info (device vda2): qgroup scan completed (inconsistency flag cleared)
+   INFO: task modprobe:11758 blocked for more than 491 seconds.
+         Tainted: G        W          6.4.0-rc2+ #3
+   "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+   task:modprobe        state:D stack:0     pid:11758 ppid:11585  flags:0x00004002
+   Call Trace:
+    <TASK>
+    __schedule+0x17b5/0x4870
+    ? finish_lock_switch+0x8f/0x120
+    ? finish_task_switch+0x17f/0x5c0
+    ? __sched_text_start+0x10/0x10
+    ? __schedule+0x17bd/0x4870
+    ? do_raw_spin_trylock+0xc9/0x1f0
+    schedule+0xe6/0x1e0
+    schedule_timeout+0x7e/0x1e0
+    ? __cfi_schedule_timeout+0x10/0x10
+    ? do_raw_spin_trylock+0xc9/0x1f0
+    ? __cfi_lock_release+0x10/0x10
+    ? do_raw_spin_unlock+0x116/0x8a0
+    wait_for_common+0x377/0x600
+    ? wait_for_completion+0x30/0x30
+    cleanup_module+0x222/0x240 [nvme_fc bda1ef6f83d00208ba257c5d0ac34dd6bdb58bf9]
+    __se_sys_delete_module+0x388/0x550
+    ? __x64_sys_delete_module+0x50/0x50
+    ? task_work_run+0x236/0x290
+    ? syscall_enter_from_user_mode+0x2e/0x210
+    do_syscall_64+0x6e/0xa0
+    ? syscall_exit_to_user_mode+0x5e/0x220
+    ? do_syscall_64+0x7d/0xa0
+    ? syscall_exit_to_user_mode+0x5e/0x220
+    ? do_syscall_64+0x7d/0xa0
+    ? syscall_exit_to_user_mode+0x5e/0x220
+    ? do_syscall_64+0x7d/0xa0
+    entry_SYSCALL_64_after_hwframe+0x72/0xdc
+   RIP: 0033:0x7fa80811aebb
+   RSP: 002b:00007fff80ea0a88 EFLAGS: 00000206 ORIG_RAX: 00000000000000b0
+   RAX: ffffffffffffffda RBX: 000055a0b5acf1f0 RCX: 00007fa80811aebb
+   RDX: 0000000000000000 RSI: 0000000000000800 RDI: 000055a0b5acf258
+   RBP: 0000000000000000 R08: 1999999999999999 R09: 0000000000000000
+   R10: 00007fa808193ac0 R11: 0000000000000206 R12: 00007fff80ea0ad0
+   R13: 000055a0b5acf1f0 R14: 0000000000000000 R15: 0000000000000000
+    </TASK>
+ 
 
-> diff --git a/tools/testing/selftests/ptp/testptp.c b/tools/testing/selfte=
-sts/ptp/testptp.c
-> index 198ad5f32187..cfa9562f3cd8 100644
-> --- a/tools/testing/selftests/ptp/testptp.c
-> +++ b/tools/testing/selftests/ptp/testptp.c
-> @@ -502,11 +502,11 @@ int main(int argc, char *argv[])
->                         interval =3D t2 - t1;
->                         offset =3D (t2 + t1) / 2 - tp;
->
-> -                       printf("system time: %lld.%u\n",
-> +                       printf("system time: %lld.%09u\n",
->                                 (pct+2*i)->sec, (pct+2*i)->nsec);
-> -                       printf("phc    time: %lld.%u\n",
-> +                       printf("phc    time: %lld.%09u\n",
->                                 (pct+2*i+1)->sec, (pct+2*i+1)->nsec);
-> -                       printf("system time: %lld.%u\n",
-> +                       printf("system time: %lld.%09u\n",
->                                 (pct+2*i+2)->sec, (pct+2*i+2)->nsec);
->                         printf("system/phc clock time offset is %" PRId64=
- " ns\n"
->                                "system     clock time delay  is %" PRId64=
- " ns\n",
-> --
-> 2.28.0
->
->
+2) When executing blktests nvme/030 in a tight loop, I was able to
+   reproduce a different hanger. In this case the ->done() function
+   was never executed on the host fc side. It turns out we didn't
+   enqueue work items correctly and thus would only process one
+   work item.
 
---0000000000003b18d905fe27e764
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+   run blktests nvme/030 at 2023-06-13 14:03:52
+   nvmet: adding nsid 1 to subsystem blktests-subsystem-1
+   nvme nvme2: NVME-FC{0}: create association : host wwpn 0x20001100aa000002  rport wwpn 0x20001100aa000001: NQN "nqn.2014-08.org.nvmexpress.discovery"
+   (NULL device *): {0:0} Association created
+   [23733] nvmet: ctrl 1 start keep-alive timer for 120 secs
+   nvmet: creating discovery controller 1 for subsystem nqn.2014-08.org.nvmexpress.discovery for NQN nqn.2014-08.org.nvmexpress:uuid:242d4a24-2484-4a80-8234-d0169409c5e8.
+   nvme nvme2: NVME-FC{0}: controller connect complete
+   nvme nvme2: NVME-FC{0}: new ctrl: NQN "nqn.2014-08.org.nvmexpress.discovery"
+   nvme nvme2: Removing ctrl: NQN "nqn.2014-08.org.nvmexpress.discovery"
+   [23771] nvmet: ctrl 1 stop keep-alive
+   nvmet: adding nsid 1 to subsystem blktests-subsystem-2
+   (NULL device *): {0:0} Association deleted
+   (NULL device *): {0:0} Association freed
+   (NULL device *): Disconnect LS failed: No Association
+   nvme nvme2: NVME-FC{0}: create association : host wwpn 0x20001100aa000002  rport wwpn 0x20001100aa000001: NQN "nqn.2014-08.org.nvmexpress.discovery"
+   (NULL device *): {0:0} Association created
+   [27320] nvmet: ctrl 1 start keep-alive timer for 120 secs
+   nvmet: creating discovery controller 1 for subsystem nqn.2014-08.org.nvmexpress.discovery for NQN nqn.2014-08.org.nvmexpress:uuid:242d4a24-2484-4a80-8234-d0169409c5e8.
+   nvme nvme2: NVME-FC{0}: controller connect complete
+   nvme nvme2: NVME-FC{0}: new ctrl: NQN "nqn.2014-08.org.nvmexpress.discovery"
+   nvme nvme2: Removing ctrl: NQN "nqn.2014-08.org.nvmexpress.discovery"
+   [27320] nvmet: ctrl 1 stop keep-alive
+   nvme nvme2: NVME-FC{0}: create association : host wwpn 0x20001100aa000002  rport wwpn 0x20001100aa000001: NQN "nqn.2014-08.org.nvmexpress.discovery"
+   (NULL device *): {0:1} Association created
+   (NULL device *): {0:0} Association deleted
+   (NULL device *): {0:0} Association freed
+   (NULL device *): Disconnect LS failed: No Association
+   INFO: task kworker/u8:4:102 blocked for more than 491 seconds.
+         Tainted: G        W          6.4.0-rc2+ #3
+   "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+   task:kworker/u8:4    state:D stack:0     pid:102   ppid:2      flags:0x00004000
+   Workqueue: nvme-wq nvme_fc_connect_ctrl_work [nvme_fc]
+   Call Trace:
+    <TASK>
+    __schedule+0x17b5/0x4870
+    ? try_to_wake_up+0xb5/0xfc0
+    ? __cfi_lock_release+0x10/0x10
+    ? __sched_text_start+0x10/0x10
+    ? _raw_spin_unlock_irqrestore+0x24/0x50
+    ? lock_release+0x2aa/0xd10
+    ? wq_worker_sleeping+0x1e/0x200
+    schedule+0xe6/0x1e0
+    schedule_timeout+0x7e/0x1e0
+    ? __cfi_schedule_timeout+0x10/0x10
+    ? mark_lock+0x94/0x340
+    ? lockdep_hardirqs_on_prepare+0x2aa/0x5e0
+    wait_for_common+0x377/0x600
+    ? queue_work_on+0x57/0xa0
+    ? wait_for_completion+0x30/0x30
+    nvme_fc_connect_ctrl_work+0x7dc/0x1a80 [nvme_fc 39e2bf78272df3a610fb1f9884513e99038af746]
+    process_one_work+0x80f/0xfb0
+    ? rescuer_thread+0x1130/0x1130
+    ? do_raw_spin_trylock+0xc9/0x1f0
+    ? lock_acquired+0x310/0x9a0
+    ? worker_thread+0xd5e/0x1260
+    worker_thread+0xbde/0x1260
+    kthread+0x25d/0x2f0
+    ? __cfi_worker_thread+0x10/0x10
+    ? __cfi_kthread+0x10/0x10
+    ret_from_fork+0x29/0x50
+    </TASK>
+ 
+Daniel Wagner (2):
+  nvme-fc: Do not wait in vain when unloading module
+  nvme-fcloop: queue work items correctly
 
-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
-OltyqaGBuzv+bJTUL+bmV7E4QBLIqGt4jVr1R9hJdH6KxXwJdyfHZ9C6qXmoe2NQhiFUyBOJ0wgk
-dB9Z1IU7nCwvNKYg2JMoJs93tIgbhPJg/D7pqW8gabkCAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
-BB0wG4EZcGF2YW4uY2hlYmJpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUEV6y/89alKPoFbKUaJXsvWu5
-fdowDQYJKoZIhvcNAQELBQADggEBAEHSIB6g652wVb+r2YCmfHW47Jo+5TuCBD99Hla8PYhaWGkd
-9HIyD3NPhb6Vb6vtMWJW4MFGQF42xYRrAS4LZj072DuMotr79rI09pbOiWg0FlRRFt6R9vgUgebu
-pWSH7kmwVXcPtY94XSMMak4b7RSKig2mKbHDpD4bC7eGlwl5RxzYkgrHtMNRmHmQor5Nvqe52cFJ
-25Azqtwvjt5nbrEd81iBmboNTEnLaKuxbbCtLaMEP8xKeDjAKnNOqHUMps0AsQT8c0EGq39YHpjp
-Wn1l67VU0rMShbEFsiUf9WYgE677oinpdm0t2mdCjxr35tryxptoTZXKHDxr/Yy6l6ExggJtMIIC
-aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
-EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwV/XkICjVscn4SNZMw
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIKKQwEVDCoPHJ9ws5RTQ0dEqPUynTXDW
-qnIq4HmWY8ZHMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDYx
-NTA5NDM0MFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQAY0j/krNK71Hbc+gL+TPywvfz9fImj4s2GY75ywNMBuPAoW3u9
-xuacMQVF4ZgCIarea7GdfxWGEhySdERtZevGXk0tcAGAkDEYv+IzCvaLV0uRHa9ZoDX0i8dumbcv
-De67p3Ko7/bt3YCQyJFBYpUtQO7AECMN62qb0hBus7fDyDBJ+YlZBwegXjjA+JRhx8CwPgeeKbRw
-6U7HiHEGAW7pZkctay6cPZjFJKxIhsgDA9yEWFfy2qCS4LBVOvj/VjFLbPpxH2L0Ihfn7wAI9uaW
-H9y/j7Z0mRp+4JVpFx1N0VIfF2oGYOh1GyK48FcEeeZYzLbMrN9f0HvbUhOq4x1J
---0000000000003b18d905fe27e764--
+ drivers/nvme/host/fc.c       | 20 +++++++++++++-------
+ drivers/nvme/target/fcloop.c |  8 ++++----
+ 2 files changed, 17 insertions(+), 11 deletions(-)
+
+-- 
+2.40.1
+
