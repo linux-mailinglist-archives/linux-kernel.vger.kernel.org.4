@@ -2,51 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F3E731307
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:06:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33825731332
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:08:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244816AbjFOJGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 05:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45532 "EHLO
+        id S245384AbjFOJIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 05:08:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239145AbjFOJGo (ORCPT
+        with ESMTP id S245480AbjFOJIY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 05:06:44 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD8E119;
-        Thu, 15 Jun 2023 02:06:43 -0700 (PDT)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QhbxY1zzLzTkjT;
-        Thu, 15 Jun 2023 17:06:09 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 15 Jun
- 2023 17:06:41 +0800
-Subject: Re: [PATCH net-next] page pool: not return page to alloc cache during
- pool destruction
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-To:     Liang Chen <liangchen.linux@gmail.com>, <hawk@kernel.org>,
-        <ilias.apalodimas@linaro.org>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>
-References: <20230615013645.7297-1-liangchen.linux@gmail.com>
- <5296508e-5008-b5bb-ac2e-a0a69b720954@huawei.com>
-Message-ID: <468d3200-159c-f4ad-5907-48331cd7edd8@huawei.com>
-Date:   Thu, 15 Jun 2023 17:06:41 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        Thu, 15 Jun 2023 05:08:24 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D1E1FFF;
+        Thu, 15 Jun 2023 02:08:20 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id 6a1803df08f44-62de1a3e354so26723426d6.3;
+        Thu, 15 Jun 2023 02:08:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686820099; x=1689412099;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8WSj6TQv3vBLARHOJ2yajyVkw7AyFI4ZOe0aw/IQH/U=;
+        b=gzpdtC2oKKSvAsSSSE13exp+rXvu3PBiXTLFtAKaYq193Y/8RSJZnKbaXGDk6dxo2A
+         PUSxk9O9XQkz+uMXnaaMj4TpHz7EMYnxeuyd/mSlubKRO7GAomC+A1tL0Sow1iUKB3Ve
+         K3z4/TT25npQrPHqf4VIUwvR/feBumlutzCPzJyQSDRRK9T2mWacPvNrjh0T8KfIbwnW
+         e/NA00WqHPQTrc+GYqTm7f+edo3wwE4l9VhIcur91O1ZfHbeqIw7lfCVCXElD+PE6lf/
+         9XGiU3BpYuCm+u8INmZ02UolC7nESMTWGsnDa5cx5wBQHpHDsaCfnga5sfScHA0wZi/+
+         acaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686820099; x=1689412099;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8WSj6TQv3vBLARHOJ2yajyVkw7AyFI4ZOe0aw/IQH/U=;
+        b=PwNQxxSmHeO1nBk3+dMmYJyGcvHzDJjtsSmQ1TERI5O7VOi4+VCBlI7W5GVEbwfUmU
+         D+LteAI26lSjhhKYIaBZQEaXqwFX6Wk+W709XKnfd12N4ua7UKfair0mI12dWWVYK58N
+         r1oGC8ItF/A1zr8aghWL1V7vK82vvqst5BWtQZ5GRIRBmNUf7gKjeYDndNGx78gGEHC+
+         oMuu8EgUdtnU220fg4A77acob/dCTR6i4+FtOPsWmCGGb7ipu+aGjeOsh9MABP47Xtlx
+         ajqZjW3wPDoCXudpBMh2QN8jjr6yEMFIHf9HqAkSE6IsJGKkFUfiiRIT155JONaxh3zT
+         fMsA==
+X-Gm-Message-State: AC+VfDwOdIp6Tp3bHwEY5A6Uva4jw5Nmr3QFVYNP51mTRtSGFWQVDgST
+        dGk5rtXAWwEvkSPYOKdu1J5dUYOMF7E7mln2sdM=
+X-Google-Smtp-Source: ACHHUZ4MqjM7aqb2JoPXfjP85vyJdTQhybQ+drvfyMGnQ1feLcHLP7kZDLFOW8WAUd9M+dglkx2J3aXb9UauUAeh0Ds=
+X-Received: by 2002:a05:6214:21ed:b0:61b:6a71:e741 with SMTP id
+ p13-20020a05621421ed00b0061b6a71e741mr18837605qvj.23.1686820099334; Thu, 15
+ Jun 2023 02:08:19 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <5296508e-5008-b5bb-ac2e-a0a69b720954@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20230614231446.3687-1-andriy.shevchenko@linux.intel.com>
+ <20230614231446.3687-4-andriy.shevchenko@linux.intel.com> <CAMuHMdVaJ2Fqc5+YFCO9isUebUaeZE31T3C+SXDeVXOii=Ra4A@mail.gmail.com>
+In-Reply-To: <CAMuHMdVaJ2Fqc5+YFCO9isUebUaeZE31T3C+SXDeVXOii=Ra4A@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 15 Jun 2023 12:07:43 +0300
+Message-ID: <CAHp75VezU_GN-C_ZARmLZ-WyLcz_rxqicwnAjvSu6fnv-y4Mkg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] gpio: aggregator: Set up a parser of delay line parameters
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andy@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,55 +75,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/15 17:01, Yunsheng Lin wrote:
-> On 2023/6/15 9:36, Liang Chen wrote:
->> When destroying a page pool, the alloc cache and recycle ring are emptied.
->> If there are inflight pages, the retry process will periodically check the
->> recycle ring for recently returned pages, but not the alloc cache (alloc
->> cache is only emptied once). As a result, any pages returned to the alloc
->> cache after the page pool destruction will be stuck there and cause the
->> retry process to continuously look for inflight pages and report warnings.
-> 
-> It seems there is still page_pool_put[_full]_page() called with
-> allow_direct being true after page_pool_destroy() is call, which
-> is not allowed.
-> 
-> Normally the driver will call napi_disable() before
-> page_pool_destroy() to ensure there is no such page_pool_destroy()
+On Thu, Jun 15, 2023 at 10:48=E2=80=AFAM Geert Uytterhoeven
+<geert@linux-m68k.org> wrote:
+> On Thu, Jun 15, 2023 at 1:14=E2=80=AFAM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> > The aggregator mode can also handle properties of the platform,
+> > that do not belong to the GPIO controller itself. One of such
+> > a property is a signal delay line. Set up a parser to support it.
 
-no such page_pool_put[_full]_page()
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>
+> Thanks for your patch!
+>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-> calling with allow_direct being true after page_pool_destroy() is
-> called.
-> 
->>
->> To safeguard against this situation, any pages returning to the alloc cache
->> after pool destruction should be prevented.
->>
->> Signed-off-by: Liang Chen <liangchen.linux@gmail.com>
->> ---
->>  net/core/page_pool.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/net/core/page_pool.c b/net/core/page_pool.c
->> index a3e12a61d456..76255313d349 100644
->> --- a/net/core/page_pool.c
->> +++ b/net/core/page_pool.c
->> @@ -595,7 +595,7 @@ __page_pool_put_page(struct page_pool *pool, struct page *page,
->>  			page_pool_dma_sync_for_device(pool, page,
->>  						      dma_sync_size);
->>  
->> -		if (allow_direct && in_softirq() &&
->> +		if (allow_direct && in_softirq() && !pool->destroy_cnt &&
-> 
-> The checking seems racy when  __page_pool_put_page() and
-> page_pool_destroy() are called concurently.
-> 
->>  		    page_pool_recycle_in_cache(page, pool))
->>  			return NULL;
->>  
->>
-> 
-> 
-> .
-> 
+Thank you!
+
+> One suggestion for improvement below...
+
+Sure, for v3!
+
+--=20
+With Best Regards,
+Andy Shevchenko
