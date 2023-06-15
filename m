@@ -2,133 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA8C57323A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 01:31:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7CBD7323B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 01:32:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjFOXbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 19:31:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53838 "EHLO
+        id S237974AbjFOXb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 19:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbjFOXa6 (ORCPT
+        with ESMTP id S232793AbjFOXb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 19:30:58 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8006C171F
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 16:30:57 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-25ea8fb138fso147360a91.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 16:30:57 -0700 (PDT)
+        Thu, 15 Jun 2023 19:31:56 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B625F171F
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 16:31:54 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f76a4c211dso3269011e87.3
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 16:31:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686871857; x=1689463857;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vyL+qgKJrcKsdTc3WR8O7KWE3ZdhseNke0mLmEAF7qY=;
-        b=GcNnMG4gLuWH2DzhqEsZ69wits+33+UN7SvejxrIqgg/c2BTzmlx5wx+ZDiyj+UcJi
-         YcGr7b8cseUjr+AJqUqP+fautL1pmEdxqVjop/kzh/wWnRMexTz4nDKnhATbltXw0bO6
-         RPNByW+psGHEvmmSVAPSeceAqArTPJ3m2kFtux1NSRQTOty5MXhMgq+gMjDj16PUTwYv
-         v93cjHFn3xB2DJb1Fixja117EYkNx4PmnF8iZmSbG0dxmC4YpwzuDJilhTrPVfvj2Gq3
-         ZT94rD+97BmgmG/89s0bsW+byYQGI7NChbbOz4Gh8gBO740udK+Mrh1Mt+Hy9VXDnr5f
-         TEng==
+        d=philpotter-co-uk.20221208.gappssmtp.com; s=20221208; t=1686871913; x=1689463913;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OYCrQY+vD5Zhy3XYtfstQ901gmXcf6Fa7FD0xvyG1mA=;
+        b=WkXEayk061Kdw3iPzXlRwePQmWd2w33QCzircznXEC0Xx0IC+D9GzBjbBVkK4jKq2q
+         nfdE6tqVk/Gikz2CP+Thg4Q1DCawjcIr2SSaIclxQg+u0CPecJ/NTczT8BeRY3Dk/dET
+         d+oQ293TtRZuAOMXp7I2K/t+PBKNmWMkHPNwSfQxviqsRH1vq9CtH5sao+riq5IN72c2
+         /hxRKvTivMHKM90GmVp55bdLn7HnYcurm+je0mswz7Q26LMaedh8OnB1pKXpvjiFzHFA
+         VYCVsmKzS3cipmmpHO02zO/oLBb3sQX5JWLKG0tEN13r+/hXo5JhvCj1IVf2tFlbKxq7
+         POfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686871857; x=1689463857;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=vyL+qgKJrcKsdTc3WR8O7KWE3ZdhseNke0mLmEAF7qY=;
-        b=IuCzTpcMSr6yharFt0cpy2OrgTnpuI0HhK0i5tgmv+lc9L6tn3Fjvfd+pu+2eB0rJr
-         aj+ei5MCN1HjZK12TqygXKoxsqdjrqlghkWorsKAa6IPI2u5yK0lzVchc3ulmmz0UpxD
-         CtifB6R/sliwktcmVfys2rYSdmSiOSrvkD3O+daKnt72F/QXFeuDt3o2JTDQxjtyJKhe
-         gs9gpNIc9+eVcCUWpeZ/ZqOk7MIJgcIc4sT5KEK3BHVGYPFOAh6Re4vH9qcCjhw+i7Fl
-         ZRVePOx3mng5U2t8HA9TxvRpHmzsbEWGj81y/kgT2z6cZqqATAb/8d/jQEjiMTVT/vOM
-         EU+w==
-X-Gm-Message-State: AC+VfDwoc1tKKP0HUhfsa5mEQOier9r5c4oVAMrquQ//0bp+2KOxkA3z
-        uUgqrfdejUADXbT5vr+FOR4rT/NJlsM=
-X-Google-Smtp-Source: ACHHUZ4VSZccyzB174lDhurPUahLzt0d6P8rWLALZfCrAECY5/hEq1icU5LoFaW0qsZXVf4a3c1BpIqTI2M=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:2f43:b0:253:3b5f:fde1 with SMTP id
- s61-20020a17090a2f4300b002533b5ffde1mr1036267pjd.1.1686871856868; Thu, 15 Jun
- 2023 16:30:56 -0700 (PDT)
-Date:   Thu, 15 Jun 2023 16:30:55 -0700
-In-Reply-To: <20230511040857.6094-1-weijiang.yang@intel.com>
-Mime-Version: 1.0
-References: <20230511040857.6094-1-weijiang.yang@intel.com>
-Message-ID: <ZIufL7p/ZvxjXwK5@google.com>
-Subject: Re: [PATCH v3 00/21] Enable CET Virtualization
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yang Weijiang <weijiang.yang@intel.com>
-Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, peterz@infradead.org,
-        rppt@kernel.org, binbin.wu@linux.intel.com,
-        rick.p.edgecombe@intel.com, john.allen@amd.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1686871913; x=1689463913;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OYCrQY+vD5Zhy3XYtfstQ901gmXcf6Fa7FD0xvyG1mA=;
+        b=f7hvpEJUT35MrzMb4V2Om+CFDh3BL7zRHMxdDIBz2pv7bRNLwcAWCTdvYQxDQ+BzGd
+         3CDPrI0Zdl5s4XRxBWLXvF67eNXT26efaYip7qxaQPGt2oCU7fH7nOp3g0pTDvWa5j9K
+         sC5g/NMhxyuFP1N8W2/t+qE2nXLev8FPq/+IcKj22G2Ga1AimB30x6pSVnVMtGWpvAiP
+         YYzrtYCooNZq9UV1DiI/9G6M2nha4g9+IerXv1r8/yfXWkH0crPXNTRRtOS9QTxe69ZT
+         WgObpVPJqduBS0vRzrbI5sWrWy2+cbO9EXi47+R/ItLE9S98EnV8q18fySkZyTGLT1B+
+         O81Q==
+X-Gm-Message-State: AC+VfDwZgLdxaZogPC9jSdoTmtjYCfm7Gtohmrshsk73hdjDva8BVilb
+        ZyACH4uUWKE8Xnkj1b0vxfU2+A==
+X-Google-Smtp-Source: ACHHUZ67+RO4aZ/zllxkh6V7HrysWfqRH2iujxqDDBvPqKh9/DHLw/Kh5WD70xMyopEPLhoc1BpBfg==
+X-Received: by 2002:a19:8c44:0:b0:4f6:2c03:36b0 with SMTP id i4-20020a198c44000000b004f62c0336b0mr104795lfj.26.1686871912504;
+        Thu, 15 Jun 2023 16:31:52 -0700 (PDT)
+Received: from equinox (2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0::2])
+        by smtp.gmail.com with ESMTPSA id 12-20020a05600c028c00b003f736735424sm435340wmk.43.2023.06.15.16.31.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 16:31:51 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 00:31:50 +0100
+From:   Phillip Potter <phil@philpotter.co.uk>
+To:     pawan.kumar.gupta@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org, jordyzomer@google.com,
+        linux-block@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] cdrom: Fix spectre-v1 gadget
+Message-ID: <ZIufZn+reW0rza1H@equinox>
+References: <20230612110040.849318-1-jordyzomer@google.com>
+ <20230612110040.849318-2-jordyzomer@google.com>
+ <20230615163125.td3aodpfwth5n4mc@desk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230615163125.td3aodpfwth5n4mc@desk>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023, Yang Weijiang wrote:
-> The last patch is introduced to support supervisor SHSTK but the feature =
-is
-> not enabled on Intel platform for now, the main purpose of this patch is =
-to
-> facilitate AMD folks to enable the feature.
+On Thu, Jun 15, 2023 at 09:31:25AM -0700, Pawan Gupta wrote:
+> On Mon, Jun 12, 2023 at 11:00:40AM +0000, Jordy Zomer wrote:
+> > This patch fixes a spectre-v1 gadget in cdrom.
+> > The gadget could be triggered by,
+> >  speculatviely bypassing the cdi->capacity check.
+> > 
+> > Signed-off-by: Jordy Zomer <jordyzomer@google.com>
+> > ---
+> >  drivers/cdrom/cdrom.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
+> > index 416f723a2dbb..ecf2b458c108 100644
+> > --- a/drivers/cdrom/cdrom.c
+> > +++ b/drivers/cdrom/cdrom.c
+> > @@ -264,6 +264,7 @@
+> >  #include <linux/errno.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/mm.h>
+> > +#include <linux/nospec.h>
+> >  #include <linux/slab.h> 
+> >  #include <linux/cdrom.h>
+> >  #include <linux/sysctl.h>
+> > @@ -2329,6 +2330,9 @@ static int cdrom_ioctl_media_changed(struct cdrom_device_info *cdi,
+> >  	if (arg >= cdi->capacity)
+> >  		return -EINVAL;
+> >  
+> > +	/* Prevent arg from speculatively bypassing the length check */
+> > +	barrier_nospec();
+> 
+> On a quick look it at the call chain ...
+> 
+> sr_block_ioctl(..., arg)
+>   cdrom_ioctl(..., arg)
+>     cdrom_ioctl_media_changed(..., arg)
+> 
+> .... it appears maximum value cdi->capacity can be only 1:
+> 
+> sr_probe()
+> {
+> ...
+> 	cd->cdi.capacity = 1;
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/scsi/sr.c?h=v6.4-rc6#n665
+> 
+> If we know that max possible value than, instead of big hammer
+> barrier_nospec(), its possible to use lightweight array_index_nospec()
+> as below:
+> ...
 
-I am beyond confused by the SDM's wording of CET_SSS.
+Hi Pawan and Jordy,
 
-First, it says that CET_SSS says the CPU isn't buggy (or maybe "less buggy"=
- is
-more appropriate phrasing).
+I've now looked at this. It is possible for cdi->capacity to be > 1, as
+it is set via get_capabilities() -> cdrom_number_of_slots(), if the
+device is an individual or cartridge changer.
 
-  Bit 18: CET_SSS. If 1, indicates that an operating system can enable supe=
-rvisor
-  shadow stacks as long as it ensures that certain supervisor shadow-stack =
-pushes
-  will not cause page faults (see Section 17.2.3 of the Intel=C2=AE 64 and =
-IA-32
-  Architectures Software Developer=E2=80=99s Manual, Volume 1).
+Therefore, I think using CDI_MAX_CAPACITY of 1 is not the correct
+approach. Jordy's V2 patch is fine therefore, but perhaps using
+array_index_nospec() with cdi->capacity is still better than a
+do/while loop from a performance perspective, given it would be cached
+etc. at that point, so possibly quicker. Thoughts? (I'm no expert on
+spectre-v1 I'll admit).
 
-But then it says says VMMs shouldn't set the bit.
-
-  When emulating the CPUID instruction, a virtual-machine monitor should re=
-turn
-  this bit as 0 if those pushes can cause VM exits.
-
-Based on the Xen code (which is sadly a far better source of information th=
-an the
-SDM), I *think* that what the SDM is trying to say is that VMMs should not =
-set
-CET_SS if VM-Exits can occur ***and*** the bit is not set in the host CPU. =
- Because
-if the SDM really means "VMMs should never set the bit", then what on earth=
- is the
-point of the bit.
-
-> In summary, this new series enables CET user SHSTK/IBT and kernel IBT, bu=
-t
-> doesn't fully support CET supervisor SHSTK, the enabling work is left for
-> the future.
-
-Why?  If my interpretation of the SDM is correct, then all the pieces are t=
-here.
-
-> Executed all KVM-unit-test cases and KVM selftests against this series, a=
-ll
-> test cases passed except the vmx test, the failure is due to CR4_CET bit
-> testing in test_vmxon_bad_cr(). After add CR4_CET bit to skip list, the t=
-est
-> passed. I'll send a patch to fix this issue later.
-
-Your cover letter from v2 back in April said the same thing.  Why hasn't th=
-e patch
-been posted?  And what exactly is the issue?  IIUC, setting CR4.CET with
-MSR_IA32_S_CET=3D0 and MSR_IA32_U_CET=3D0 should be a nop, which suggests t=
-hat there's
-a KVM bug.  And if that's the case, the next obvious questions is, why are =
-you
-posting known buggy code?
+Regards,
+Phil
