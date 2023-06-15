@@ -2,64 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 231387319FC
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:30:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BD107319FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343971AbjFONad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 09:30:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41710 "EHLO
+        id S1343994AbjFONai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 09:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245679AbjFONaV (ORCPT
+        with ESMTP id S245369AbjFONa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 09:30:21 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FE0272D;
-        Thu, 15 Jun 2023 06:30:19 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35FDUEo1014792;
-        Thu, 15 Jun 2023 08:30:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1686835814;
-        bh=Aw5FsNFw9nqi8Vpg9HRWv8o5b1W6GIetxXxH+jN0qj0=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=NHubE+Fae8YJoDw3SfUT/lK5UGVEm2497YQLfdRi2tqLTf8itHxYMRPOLXrm0kQUH
-         o5kR8Eo3w706iInPR9c/spocQBVEPJF2ko/tKL+KdFKDE/CXqsqmyTRnvG6FQKfz48
-         83H81/b+UQGlNi622QdKXQ3fRPsqxCoN3jA9EsYI=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35FDUEDZ008529
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 15 Jun 2023 08:30:14 -0500
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 15
- Jun 2023 08:30:13 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 15 Jun 2023 08:30:13 -0500
-Received: from uda0132425.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35FDUAGU023498;
-        Thu, 15 Jun 2023 08:30:11 -0500
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Neha Malcom Francis <n-francis@ti.com>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>, <nm@ti.com>,
-        <kristo@kernel.org>, <u-kumar1@ti.com>
-Subject: Re: [PATCH v6 0/3] Add support for ESM
-Date:   Thu, 15 Jun 2023 19:00:08 +0530
-Message-ID: <168681817159.2098323.16745476643883270591.b4-ty@ti.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230504080526.133149-1-n-francis@ti.com>
-References: <20230504080526.133149-1-n-francis@ti.com>
+        Thu, 15 Jun 2023 09:30:28 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD7112948;
+        Thu, 15 Jun 2023 06:30:24 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BC0781FB;
+        Thu, 15 Jun 2023 06:31:08 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 920DE3F64C;
+        Thu, 15 Jun 2023 06:30:22 -0700 (PDT)
+Date:   Thu, 15 Jun 2023 14:30:20 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Cristian Marussi <cristian.marussi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH 09/16] dt-bindings: firmware: arm,scmi: Extend bindings
+ for protocol@13
+Message-ID: <20230615133020.pomw53jrzehbwahd@bogus>
+References: <20230607124628.157465-1-ulf.hansson@linaro.org>
+ <20230607124628.157465-10-ulf.hansson@linaro.org>
+ <20230615084430.boamsz56kqqi3n6h@bogus>
+ <CAPDyKFoiL47wadabh1jcOr4q4uwJm1UyhHHMnmVcys=bBBVcXQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFoiL47wadabh1jcOr4q4uwJm1UyhHHMnmVcys=bBBVcXQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,45 +55,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neha Malcom Francis,
-
-On Thu, 04 May 2023 13:35:23 +0530, Neha Malcom Francis wrote:
-> ESM (Error Signaling Module) is a fundamental IP responsible for
-> handling safety events. The driver currently present in U-Boot is
-> responsible for configuring ESM. This patch series adds dt-binding and
-> nodes for J721E and J7200. This goes towards end goal of having DTB sync
-> with that of U-Boot as well as ensuring completeness of hardware
-> description in devicetree.
+On Thu, Jun 15, 2023 at 11:39:06AM +0200, Ulf Hansson wrote:
+> On Thu, 15 Jun 2023 at 10:44, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> >
+> > On Wed, Jun 07, 2023 at 02:46:21PM +0200, Ulf Hansson wrote:
+> > > The protocol@13 node is describing the performance scaling option for the
+> > > ARM SCMI interface, as a clock provider. This is unnecessary limiting, as
+> > > performance scaling is in many cases not limited to switching a clock's
+> > > frequency.
+> > >
+> > > Therefore, let's extend the binding so the interface can be modelled as a
+> > > generic "performance domain" too. The common way to describe this, is to
+> > > use the "power-domain" bindings, so let's use that.
+> > >
+> > > Cc: Rob Herring <robh+dt@kernel.org>
+> > > Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> > > Cc: Conor Dooley <conor+dt@kernel.org>
+> > > Cc: devicetree@vger.kernel.org
+> > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > > ---
+> > >  Documentation/devicetree/bindings/firmware/arm,scmi.yaml | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+> > > index 5824c43e9893..cff9d1e4cea1 100644
+> > > --- a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+> > > +++ b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+> > > @@ -145,8 +145,8 @@ properties:
+> > >        '#clock-cells':
+> > >          const: 1
+> > >
+> > > -    required:
+> > > -      - '#clock-cells'
+> >
+> > I am yet to look at the patches, just looked at this binding changes for now.
+> >
+> > Won't this break compatibility with existing DTBs. IMO, this is strict
+> > no no, you can't drop #clock-cells. I wanted to add performance-domains
+> > here as alternative but decided to not as I knew you were working on this.
 > 
-> [...]
+> Thanks for reviewing!
+> 
+> The point with the suggested change was to allow any kind of
+> combination of using #clock-cells and/or #power-domain-cells. Honestly
+> I didn't really know how to best express that in the binding, but
+> maybe someone can help me out here?
+>
 
-I have applied the following to branch ti-k3-dts-next on [1].
-Thank you!
+Even I don't know exact details, but there are rules like if this
+property is present, some other property can't be there or something
+on the similar lines. I have vague idea/recollection from my previous
+experiments which probably was not needed then and hence I can't just
+point to any examples unless I go and search myself.
 
-[1/3] dt-bindings: misc: esm: Add ESM support for TI K3 devices
-      commit: 444f312a73f789bb9f10bbb423f7ae6c3aa76198
-[2/3] arm64: dts: ti: k3-j721e: Add ESM support
-      commit: 19bfd51845d551c6f4e39969c13c6b8285b94d1c
-[3/3] arm64: dts: ti: k3-j7200: Add ESM support
-      commit: e3d1f2768853f375b87a1c6fc00501165ddae49d
+> I think enforcing #clock-cells to be used is unnecessary. Making it
+> optional should not break existing DTBs, right?
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent up the chain during
-the next merge window (or sooner if it is a relevant bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Correct. That is what I meant, it is either #clock-cells or
+#power-domain-cells
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+>
+> Moreover, currently it seems to be only Juno that uses "protocol@13"
+> and the "#clock-cells" (at least by looking at the DTSes in-kernel).
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Yes only one that has upstream DTS changes, but for sure it is used on
+couple of other platforms. So for we are still far away from deprecate it
+but we can eventually once users of it are ready to use new binding.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+> So, I wonder if it's really such a big deal to update the DT bindings
+> for "protocol@13" at this point, but I may not have the complete
+> picture.
+>
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
+Yes it does break compatibility. Yes I know Juno is not a production
+platform, but associating DT with kernel change makes is hard to switch
+to older stable kernel versions without DT change which I really hate as
+I will be wondering which SCMI perf is not working with stable kernel few
+months down the line. So yes, we are not dropping the support for old
+bindings even if it just for Juno(though I am sure it is not the only one).
+I have spent time on such silly things when we were in the process of
+pushing these bindings initially upstream. I prefer not to repeat that.
+
 --
-Vignesh
-
+Regards,
+Sudeep
