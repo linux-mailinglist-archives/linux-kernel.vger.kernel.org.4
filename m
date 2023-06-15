@@ -2,73 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3297F73119B
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:59:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC9A731186
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244104AbjFOH7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 03:59:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40350 "EHLO
+        id S238968AbjFOH6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 03:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239248AbjFOH7F (ORCPT
+        with ESMTP id S230240AbjFOH6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 03:59:05 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131B61709;
-        Thu, 15 Jun 2023 00:59:02 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35F6C7WZ016397;
-        Thu, 15 Jun 2023 09:58:51 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=h4BKIL1e9bnW0s1IYBnDkWGil7s+SMC0Tu1DnQV+DKQ=;
- b=jEF5ZZp09RAhKYMcDTy6G++dWiTVzSfCMnH09QS7lNcraAUezNjTxo/UgksbdYOvgpn9
- VWK5xE+XE33xpfYUy3Qb7xxI7/QQP9fVEFKJOJpabbCuBSS0ZT6MQS5kyoELQg9ZQeNG
- Izt0zTiPIbsnqRmea0FkDTo7qKuyE6gVxcjBC5K0siKiw22AKJ6k6ddjIyKfPXk0RUV7
- Ove9D0EYZG1UXtUuTZ3q6xRFC7JBgDMs5b4u0XhwPnGUC66lQVP2uzE+UmWdSLET6Yt+
- tEqbWCgAFzRXMiuEULeSNRfbs8uCMF1H+wNXg7/ZK2GF+oR9oqkcqQwQizOYxQIUvAun Cg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3r795qyq4k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jun 2023 09:58:51 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 37C9810002A;
-        Thu, 15 Jun 2023 09:58:51 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2EEE62115F0;
-        Thu, 15 Jun 2023 09:58:51 +0200 (CEST)
-Received: from localhost (10.252.8.64) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 15 Jun
- 2023 09:58:50 +0200
-From:   Valentin Caron <valentin.caron@foss.st.com>
-To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>
-CC:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Valentin Caron <valentin.caron@foss.st.com>
-Subject: [PATCH v3 4/4] spi: stm32: introduction of stm32h7 SPI device mode support
-Date:   Thu, 15 Jun 2023 09:58:15 +0200
-Message-ID: <20230615075815.310261-5-valentin.caron@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230615075815.310261-1-valentin.caron@foss.st.com>
-References: <20230615075815.310261-1-valentin.caron@foss.st.com>
+        Thu, 15 Jun 2023 03:58:36 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2103.outbound.protection.outlook.com [40.107.94.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9D4135;
+        Thu, 15 Jun 2023 00:58:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MGlWu/Tsygs3KbFgVJFxpXvp+FWwP+ONYpcYXSGdeEdMeimA1F1QznyCKcPsjhmo7QyNDJb+Y5G6S6nN/2R3DT5BwRwp7quZeD9RIOZ5FDnmAdPoAlr5shU78v0ZwlwnnujVipT46kuZ/Ni8A0dQzC+bRfX+zCF5Ito6HLidV0wcWOtMZSWooig1THdSD1k1cGsMeNUzEA/0BRih+rgK5waMdcZj5c0IyGh9aeK4TqLnsNnrRF/y1iqikzYQZTyBEY31mWs6AfOSYmDIxyXVUEancHkgFUH7Q9sqO2jDeqZbi6r2YzHTqQYGmUbj2PhRs+LgFpR04y+qttAR3IKHXw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/hgqcFAR9oWgfjzXT74uILVy54mUDzESgVGU/sn1sSA=;
+ b=F0GxS6x024nIfr+b7zAeMFj1Mnz6BkW/iR/rXSGlyWBqkU4BfZ2+Mc/sRr0/yQc8cntiVkNsqtNFAUPro2B3zaEoHs+d3opiMoMcsEOO+4r5jnPZRt9KhFDq8smisxNfT8oPlmfL24sr4ymdrdvND1AaqrjQaWnCE16FAWl3QhZVqovjjeGnm/Be1CVo8Nf0XdxCvZxTj79jlk/UHVGJZDgr7v47OHnoLYhV0Q/CPGOE59EkDjsPNFmkLzBw6swsRQxAsbHJUmlBOWxnqJ+Hi3fhgx5moVkF8jvGasYJxdmSjoZXjY5d14Tub/uiKfoQLFL0r2LwO7BSeGscSiwrlA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/hgqcFAR9oWgfjzXT74uILVy54mUDzESgVGU/sn1sSA=;
+ b=ATCmfsEX+Fu/R48GFc9N492Cj7W3H+t7bq3kQJQW1qkzqc2u0+PviSnTqy+GjUB9S/IwnIAaUBXjseBHXdM4J+OTn4E8hHH2AUwG/pOKJzafrqL6Y8OS8VchY7QyYeDAJuU2GURFEOHFSZPcQi1ef+KJQ2zVe9POCVh57SkWPN0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SA1PR13MB6148.namprd13.prod.outlook.com (2603:10b6:806:337::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.38; Thu, 15 Jun
+ 2023 07:58:30 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e%5]) with mapi id 15.20.6500.025; Thu, 15 Jun 2023
+ 07:58:30 +0000
+Date:   Thu, 15 Jun 2023 09:58:22 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>,
+        Peilin Ye <yepeilin.cs@gmail.com>,
+        Pedro Tammela <pctammela@mojatatu.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Zhengchao Shao <shaozhengchao@huawei.com>,
+        Maxim Georgiev <glipus@gmail.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>
+Subject: Re: [PATCH v2 net-next 6/9] net: netdevsim: create a mock-up PTP
+ Hardware Clock driver
+Message-ID: <ZIrEnitQEJ+P83wg@corigine.com>
+References: <20230613215440.2465708-1-vladimir.oltean@nxp.com>
+ <20230613215440.2465708-7-vladimir.oltean@nxp.com>
+ <ZIm8kK7plae8CLvV@corigine.com>
+ <20230614221718.cx6yjiwrpik4iesw@skbuf>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230614221718.cx6yjiwrpik4iesw@skbuf>
+X-ClientProxiedBy: AM0PR10CA0087.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:208:15::40) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.252.8.64]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-15_04,2023-06-14_02,2023-05-22_02
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SA1PR13MB6148:EE_
+X-MS-Office365-Filtering-Correlation-Id: f22b4bc7-5dc6-4a67-6a5a-08db6d764f29
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iGvRAQeE7z/LPdaG8mf154luiEtyb28ZCTYdneWlqXFM/CxahYvInX3mziloIYAjqhoc5b9r0+aKBK1kxMFCot91raRHwl/snLsNnyVdEBvqvOZxmgJzXDVXkf+csWb+fNSbM4ITHnXtg7QB/ucw6Ekxma0Ot1hRrWdTiEBx+Zq/offn3lcGfTsSJ+HrrQZ9ZPF02VGetwTZPBiqBSgVHMwvEysVBx3lYxQq/SkF0Pqe9tWlWODAXWANKDkOEVytKRH/8vM+hqXhaJsRDBouOis6KHl763n69jWF3ugcu/3C6CMyYrylFSOmCscWZm/vT7XAoeNrAN4QpNlTZqdkALqaznF5hCnQh8YkvkVdeWzqWE5nU7oeO/1KUKcD4O56NPqGCtYac5PUV9rqWZr6tTAKUqDKNRPa9lAME6kzMdtitqhp6pcn3tSZNbfenWQSEQ7NHWmXlR8iBUfGT73dFq5FnbPJrnsGG8Aux9yisrRHB+ZH+mp2OmoO59135Uhd9+Ryp4A+tPUOYdKvfzxsjzp6khvEDX1wQxaszV6hi7zAgTPkZccSgq/Wv9WBObbO5KoHeck9MUJp12jlMVsTpUAG0cIBB3dAMMsQricfTcqLlr2guZJs6n/cy+/zSy7CJQPrIJjxJrh8iapWgBP89E7w8UwDbjVD76Rh/rloeGc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39840400004)(396003)(136003)(366004)(376002)(346002)(451199021)(36756003)(86362001)(2906002)(44832011)(7416002)(6666004)(6486002)(186003)(83380400001)(5660300002)(6512007)(6506007)(478600001)(54906003)(6916009)(66476007)(66556008)(2616005)(4326008)(316002)(38100700002)(66946007)(8936002)(8676002)(41300700001)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sytrfk3HnIGx+Rr90Fx7aObE3iUr5Ib2DCJT80FOUN6KsPThpxhGhJuUUiUt?=
+ =?us-ascii?Q?wftdkno3JJCgMZYjULlqZTo7i9IyMcIJgdCodglezraVLSJl8COdvuhXJkwm?=
+ =?us-ascii?Q?fBKSKuAcee4618z0QEK/+wJpf8SEoWGfkxIeZ6x63fOBCO44PXmlw+rYPRhZ?=
+ =?us-ascii?Q?xrNT2TdKieWnqmJ+m1nwvEpmRUEvBwmfZA/MCUoHeVLqCS3G1bgSh5txB9Ia?=
+ =?us-ascii?Q?m8lYhJNhIwZf0Z8Z/Bj2zH/PPJa3VpkZwK2lcu2kAZdnVEXy7T5UgjZGra/r?=
+ =?us-ascii?Q?86BkZzNlVSn9KK5nhvMhKLFFUrF/YuKrvcWmGLUhJVDUM1Haj86mir13fYtw?=
+ =?us-ascii?Q?sdwBMf3BovpVeuCaZ50YFMFmxCx4QQSm9lhJHii3h0FuQnN8rS5m7zI+AwxB?=
+ =?us-ascii?Q?5uFkvMcZUSRkQ+zJerLqQCueEQktyBi61rmqGSHnWberw6Z8P1sgKt/N4ZZQ?=
+ =?us-ascii?Q?PY7gWAxhO5KwWxcYioXKbxg1zBTG9IE/v3cZR7+K+E3vIgdikYeOhZiuRNW4?=
+ =?us-ascii?Q?KhIt4ar/WhX8EX7n29dbwNNJPyyvzXxot+fs5e13TbALXxrPPCewnm4mbWcd?=
+ =?us-ascii?Q?2NU2ae2o5u28nkafw+c/V1YdppsRT7QFVBbNeZU2wHGio5JV61L68nklGVaK?=
+ =?us-ascii?Q?vjErtcSHOhuTeE5xh7tEh6jnskj9TcjifCaLdG+tyiOmqP1+MtcHxN2lvlSo?=
+ =?us-ascii?Q?xGrfrhci9CRYmnw54bUt6GfxKbYp3e+IeR770TzNByV87rSf2ayWHJUyKI0A?=
+ =?us-ascii?Q?PriEpGvA+4e/DWM28u4E+zUQekqud3GNhgFsX5PKGy/apCbLT4wpZbJLZPQG?=
+ =?us-ascii?Q?cQ+qWTifV0ZaXBJSGef8xbpp5wPsGs0u2pBkP1Gt7JhBDmGgzuweSRIxwlDv?=
+ =?us-ascii?Q?JLnpp/I/echKxdlwRNrJ0/nmNWwYv5MPzZntG+q/PH67UIPpfzF6F5C4oFQQ?=
+ =?us-ascii?Q?IhPFPBxspwz6p5XvqRU4FpwUsn+qRXV7qMp921AE20r86anzjPW35XFFjVAZ?=
+ =?us-ascii?Q?9CyjsDftWznMklrkEqCEq/vPNFRYBL3DgdRr8UjeI0Fa1InID/1zc+o6fSab?=
+ =?us-ascii?Q?qrQForr5s24Ut1PV31wY4INsIu2t4jkxyR9PSJj29yqCwIqp9lBnloX4/vEj?=
+ =?us-ascii?Q?HwSMrN9yRpCVW3kYU9vZyDrFKO9yHklE9G49Yfxq4uR5m5sjwIG28/AE2agL?=
+ =?us-ascii?Q?9S9Y3AxQstoHQpPkCC37TdgM/pRJ7+VgljfsA5etzx+UDL2zq7VBRBu5q1aS?=
+ =?us-ascii?Q?hgpPwpI16JulJvi9qzKnz3I20Tepo/lrFcNi85ckH+09rqZai8NAes7K68F5?=
+ =?us-ascii?Q?Xs6yOZ0JatM7WuQtEqIPfYLZThyknSV1aubnn69ugA/93jlbmE4GCgsvlzX2?=
+ =?us-ascii?Q?EenqBj9OoBJQitRb9hVt6pLfGTdsDDUF7RKIREI9Ag5OdA5DMT8HbTSetrlQ?=
+ =?us-ascii?Q?RxE7c7MQoU2hK4eImtuag8jlzIV3E/AE54vQgcizK3aXW9NU6mc5z7C09zlP?=
+ =?us-ascii?Q?wOX440iGEq8mEd6grypbEyEc85lWPo4z0ucaztIPWtYG319I5TVsxMXOSLUu?=
+ =?us-ascii?Q?4WIVkbyvGiH1xx4uoQJxs14WHsmesVjOVhNR7Yoow+tA+pNrvDHI5IGvsJjL?=
+ =?us-ascii?Q?4SfVJbbFoRp3V8IvpRbrHI+sj+J0zbrd48xEtO/sAX/YrRhmQLqE2tvuKFof?=
+ =?us-ascii?Q?Z+DpDg=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f22b4bc7-5dc6-4a67-6a5a-08db6d764f29
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 07:58:30.6194
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qKcwZ8kv2QJWhRRsA8U5EJwBgPfxsuPejnTrv1cUJKkYv9WEiwuchNcH1MIpheHstDNXBWuTThyNAUZgzgvQWz+LVYqQcINMp5W7ogT51EE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR13MB6148
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,301 +132,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for stm32h7 to use SPI controller in device role.
-In such case, the spi instance should have the spi-slave property
-defined.
++ Dan Carpenter
 
-Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
-Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
----
- drivers/spi/Kconfig     |   1 +
- drivers/spi/spi-stm32.c | 112 ++++++++++++++++++++++++++++------------
- 2 files changed, 79 insertions(+), 34 deletions(-)
+On Thu, Jun 15, 2023 at 01:17:18AM +0300, Vladimir Oltean wrote:
+> Hi Simon,
+> 
+> On Wed, Jun 14, 2023 at 03:11:44PM +0200, Simon Horman wrote:
+> > > +#define MOCK_PHC_CC_SHIFT		31
+> > > +#define MOCK_PHC_CC_MULT		(1 << MOCK_PHC_CC_SHIFT)
+> > 
+> > Maybe BIT()?
+> 
+> Sorry, not everything that is 1 << something has BIT() semantics.
+> This in particular is quite clearly just a multiplier factor
+> expressed as a power of 2.
 
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index 3de2ebe8294a..14810d24733b 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -936,6 +936,7 @@ config SPI_SPRD_ADI
- config SPI_STM32
- 	tristate "STMicroelectronics STM32 SPI controller"
- 	depends on ARCH_STM32 || COMPILE_TEST
-+	select SPI_SLAVE
- 	help
- 	  SPI driver for STMicroelectronics STM32 SoCs.
- 
-diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index 82fbd20e8a96..6d10fa4ab783 100644
---- a/drivers/spi/spi-stm32.c
-+++ b/drivers/spi/spi-stm32.c
-@@ -117,6 +117,7 @@
- #define STM32H7_SPI_CFG2_CPHA		BIT(24)
- #define STM32H7_SPI_CFG2_CPOL		BIT(25)
- #define STM32H7_SPI_CFG2_SSM		BIT(26)
-+#define STM32H7_SPI_CFG2_SSIOP		BIT(28)
- #define STM32H7_SPI_CFG2_AFCNTR		BIT(31)
- 
- /* STM32H7_SPI_IER bit fields */
-@@ -170,6 +171,10 @@
-  */
- #define SPI_DMA_MIN_BYTES	16
- 
-+/* STM32 SPI driver helpers */
-+#define STM32_SPI_MASTER_MODE(stm32_spi) (!(stm32_spi)->device_mode)
-+#define STM32_SPI_DEVICE_MODE(stm32_spi) ((stm32_spi)->device_mode)
-+
- /**
-  * struct stm32_spi_reg - stm32 SPI register & bitfield desc
-  * @reg:		register offset
-@@ -190,6 +195,7 @@ struct stm32_spi_reg {
-  * @cpol: clock polarity register and polarity bit
-  * @cpha: clock phase register and phase bit
-  * @lsb_first: LSB transmitted first register and bit
-+ * @cs_high: chips select active value
-  * @br: baud rate register and bitfields
-  * @rx: SPI RX data register
-  * @tx: SPI TX data register
-@@ -201,6 +207,7 @@ struct stm32_spi_regspec {
- 	const struct stm32_spi_reg cpol;
- 	const struct stm32_spi_reg cpha;
- 	const struct stm32_spi_reg lsb_first;
-+	const struct stm32_spi_reg cs_high;
- 	const struct stm32_spi_reg br;
- 	const struct stm32_spi_reg rx;
- 	const struct stm32_spi_reg tx;
-@@ -280,6 +287,7 @@ struct stm32_spi_cfg {
-  * @dma_tx: dma channel for TX transfer
-  * @dma_rx: dma channel for RX transfer
-  * @phys_addr: SPI registers physical base address
-+ * @device_mode: the controller is configured as SPI device
-  */
- struct stm32_spi {
- 	struct device *dev;
-@@ -307,6 +315,8 @@ struct stm32_spi {
- 	struct dma_chan *dma_tx;
- 	struct dma_chan *dma_rx;
- 	dma_addr_t phys_addr;
-+
-+	bool device_mode;
- };
- 
- static const struct stm32_spi_regspec stm32f4_spi_regspec = {
-@@ -318,6 +328,7 @@ static const struct stm32_spi_regspec stm32f4_spi_regspec = {
- 	.cpol = { STM32F4_SPI_CR1, STM32F4_SPI_CR1_CPOL },
- 	.cpha = { STM32F4_SPI_CR1, STM32F4_SPI_CR1_CPHA },
- 	.lsb_first = { STM32F4_SPI_CR1, STM32F4_SPI_CR1_LSBFRST },
-+	.cs_high = {},
- 	.br = { STM32F4_SPI_CR1, STM32F4_SPI_CR1_BR, STM32F4_SPI_CR1_BR_SHIFT },
- 
- 	.rx = { STM32F4_SPI_DR },
-@@ -336,6 +347,7 @@ static const struct stm32_spi_regspec stm32h7_spi_regspec = {
- 	.cpol = { STM32H7_SPI_CFG2, STM32H7_SPI_CFG2_CPOL },
- 	.cpha = { STM32H7_SPI_CFG2, STM32H7_SPI_CFG2_CPHA },
- 	.lsb_first = { STM32H7_SPI_CFG2, STM32H7_SPI_CFG2_LSBFRST },
-+	.cs_high = { STM32H7_SPI_CFG2, STM32H7_SPI_CFG2_SSIOP },
- 	.br = { STM32H7_SPI_CFG1, STM32H7_SPI_CFG1_MBR,
- 		STM32H7_SPI_CFG1_MBR_SHIFT },
- 
-@@ -971,6 +983,11 @@ static int stm32_spi_prepare_msg(struct spi_controller *ctrl,
- 	else
- 		clrb |= spi->cfg->regs->lsb_first.mask;
- 
-+	if (STM32_SPI_DEVICE_MODE(spi) && spi_dev->mode & SPI_CS_HIGH)
-+		setb |= spi->cfg->regs->cs_high.mask;
-+	else
-+		clrb |= spi->cfg->regs->cs_high.mask;
-+
- 	dev_dbg(spi->dev, "cpol=%d cpha=%d lsb_first=%d cs_high=%d\n",
- 		!!(spi_dev->mode & SPI_CPOL),
- 		!!(spi_dev->mode & SPI_CPHA),
-@@ -1161,7 +1178,8 @@ static int stm32h7_spi_transfer_one_irq(struct stm32_spi *spi)
- 	if (spi->tx_buf)
- 		stm32h7_spi_write_txfifo(spi);
- 
--	stm32_spi_set_bits(spi, STM32H7_SPI_CR1, STM32H7_SPI_CR1_CSTART);
-+	if (STM32_SPI_MASTER_MODE(spi))
-+		stm32_spi_set_bits(spi, STM32H7_SPI_CR1, STM32H7_SPI_CR1_CSTART);
- 
- 	writel_relaxed(ier, spi->base + STM32H7_SPI_IER);
- 
-@@ -1208,7 +1226,8 @@ static void stm32h7_spi_transfer_one_dma_start(struct stm32_spi *spi)
- 
- 	stm32_spi_enable(spi);
- 
--	stm32_spi_set_bits(spi, STM32H7_SPI_CR1, STM32H7_SPI_CR1_CSTART);
-+	if (STM32_SPI_MASTER_MODE(spi))
-+		stm32_spi_set_bits(spi, STM32H7_SPI_CR1, STM32H7_SPI_CR1_CSTART);
- }
- 
- /**
-@@ -1536,16 +1555,18 @@ static int stm32_spi_transfer_one_setup(struct stm32_spi *spi,
- 	spi->cfg->set_bpw(spi);
- 
- 	/* Update spi->cur_speed with real clock speed */
--	mbr = stm32_spi_prepare_mbr(spi, transfer->speed_hz,
--				    spi->cfg->baud_rate_div_min,
--				    spi->cfg->baud_rate_div_max);
--	if (mbr < 0) {
--		ret = mbr;
--		goto out;
--	}
-+	if (STM32_SPI_MASTER_MODE(spi)) {
-+		mbr = stm32_spi_prepare_mbr(spi, transfer->speed_hz,
-+					    spi->cfg->baud_rate_div_min,
-+					    spi->cfg->baud_rate_div_max);
-+		if (mbr < 0) {
-+			ret = mbr;
-+			goto out;
-+		}
- 
--	transfer->speed_hz = spi->cur_speed;
--	stm32_spi_set_mbr(spi, mbr);
-+		transfer->speed_hz = spi->cur_speed;
-+		stm32_spi_set_mbr(spi, mbr);
-+	}
- 
- 	comm_type = stm32_spi_communication_type(spi_dev, transfer);
- 	ret = spi->cfg->set_mode(spi, comm_type);
-@@ -1554,7 +1575,7 @@ static int stm32_spi_transfer_one_setup(struct stm32_spi *spi,
- 
- 	spi->cur_comm = comm_type;
- 
--	if (spi->cfg->set_data_idleness)
-+	if (STM32_SPI_MASTER_MODE(spi) && spi->cfg->set_data_idleness)
- 		spi->cfg->set_data_idleness(spi, transfer->len);
- 
- 	if (spi->cur_bpw <= 8)
-@@ -1575,7 +1596,8 @@ static int stm32_spi_transfer_one_setup(struct stm32_spi *spi,
- 	dev_dbg(spi->dev,
- 		"data frame of %d-bit, data packet of %d data frames\n",
- 		spi->cur_bpw, spi->cur_fthlv);
--	dev_dbg(spi->dev, "speed set to %dHz\n", spi->cur_speed);
-+	if (STM32_SPI_MASTER_MODE(spi))
-+		dev_dbg(spi->dev, "speed set to %dHz\n", spi->cur_speed);
- 	dev_dbg(spi->dev, "transfer of %d bytes (%d data frames)\n",
- 		spi->cur_xferlen, nb_words);
- 	dev_dbg(spi->dev, "dma %s\n",
-@@ -1670,12 +1692,13 @@ static int stm32f4_spi_config(struct stm32_spi *spi)
- }
- 
- /**
-- * stm32h7_spi_config - Configure SPI controller as SPI master
-+ * stm32h7_spi_config - Configure SPI controller
-  * @spi: pointer to the spi controller data structure
-  */
- static int stm32h7_spi_config(struct stm32_spi *spi)
- {
- 	unsigned long flags;
-+	u32 cr1 = 0, cfg2 = 0;
- 
- 	spin_lock_irqsave(&spi->lock, flags);
- 
-@@ -1683,24 +1706,28 @@ static int stm32h7_spi_config(struct stm32_spi *spi)
- 	stm32_spi_clr_bits(spi, STM32H7_SPI_I2SCFGR,
- 			   STM32H7_SPI_I2SCFGR_I2SMOD);
- 
--	/*
--	 * - SS input value high
--	 * - transmitter half duplex direction
--	 * - automatic communication suspend when RX-Fifo is full
--	 */
--	stm32_spi_set_bits(spi, STM32H7_SPI_CR1, STM32H7_SPI_CR1_SSI |
--						 STM32H7_SPI_CR1_HDDIR |
--						 STM32H7_SPI_CR1_MASRX);
-+	if (STM32_SPI_DEVICE_MODE(spi)) {
-+		/* Use native device select */
-+		cfg2 &= ~STM32H7_SPI_CFG2_SSM;
-+	} else {
-+		/*
-+		 * - Transmitter half duplex direction
-+		 * - Automatic communication suspend when RX-Fifo is full
-+		 * - SS input value high
-+		 */
-+		cr1 |= STM32H7_SPI_CR1_HDDIR | STM32H7_SPI_CR1_MASRX | STM32H7_SPI_CR1_SSI;
- 
--	/*
--	 * - Set the master mode (default Motorola mode)
--	 * - Consider 1 master/n slaves configuration and
--	 *   SS input value is determined by the SSI bit
--	 * - keep control of all associated GPIOs
--	 */
--	stm32_spi_set_bits(spi, STM32H7_SPI_CFG2, STM32H7_SPI_CFG2_MASTER |
--						  STM32H7_SPI_CFG2_SSM |
--						  STM32H7_SPI_CFG2_AFCNTR);
-+		/*
-+		 * - Set the master mode (default Motorola mode)
-+		 * - Consider 1 master/n devices configuration and
-+		 *   SS input value is determined by the SSI bit
-+		 * - keep control of all associated GPIOs
-+		 */
-+		cfg2 |= STM32H7_SPI_CFG2_MASTER | STM32H7_SPI_CFG2_SSM | STM32H7_SPI_CFG2_AFCNTR;
-+	}
-+
-+	stm32_spi_set_bits(spi, STM32H7_SPI_CR1, cr1);
-+	stm32_spi_set_bits(spi, STM32H7_SPI_CFG2, cfg2);
- 
- 	spin_unlock_irqrestore(&spi->lock, flags);
- 
-@@ -1756,17 +1783,30 @@ static const struct of_device_id stm32_spi_of_match[] = {
- };
- MODULE_DEVICE_TABLE(of, stm32_spi_of_match);
- 
-+static int stm32h7_spi_device_abort(struct spi_controller *ctrl)
-+{
-+	spi_finalize_current_transfer(ctrl);
-+	return 0;
-+}
-+
- static int stm32_spi_probe(struct platform_device *pdev)
- {
- 	struct spi_controller *ctrl;
- 	struct stm32_spi *spi;
- 	struct resource *res;
- 	struct reset_control *rst;
-+	struct device_node *np = pdev->dev.of_node;
-+	bool device_mode;
- 	int ret;
- 
--	ctrl = devm_spi_alloc_master(&pdev->dev, sizeof(struct stm32_spi));
-+	device_mode = of_property_read_bool(np, "spi-slave");
-+
-+	if (device_mode)
-+		ctrl = devm_spi_alloc_slave(&pdev->dev, sizeof(struct stm32_spi));
-+	else
-+		ctrl = devm_spi_alloc_master(&pdev->dev, sizeof(struct stm32_spi));
- 	if (!ctrl) {
--		dev_err(&pdev->dev, "spi master allocation failed\n");
-+		dev_err(&pdev->dev, "spi controller allocation failed\n");
- 		return -ENOMEM;
- 	}
- 	platform_set_drvdata(pdev, ctrl);
-@@ -1774,6 +1814,7 @@ static int stm32_spi_probe(struct platform_device *pdev)
- 	spi = spi_controller_get_devdata(ctrl);
- 	spi->dev = &pdev->dev;
- 	spi->ctrl = ctrl;
-+	spi->device_mode = device_mode;
- 	spin_lock_init(&spi->lock);
- 
- 	spi->cfg = (const struct stm32_spi_cfg *)
-@@ -1856,6 +1897,8 @@ static int stm32_spi_probe(struct platform_device *pdev)
- 	ctrl->transfer_one = stm32_spi_transfer_one;
- 	ctrl->unprepare_message = stm32_spi_unprepare_msg;
- 	ctrl->flags = spi->cfg->flags;
-+	if (STM32_SPI_DEVICE_MODE(spi))
-+		ctrl->slave_abort = stm32h7_spi_device_abort;
- 
- 	spi->dma_tx = dma_request_chan(spi->dev, "tx");
- 	if (IS_ERR(spi->dma_tx)) {
-@@ -1901,7 +1944,8 @@ static int stm32_spi_probe(struct platform_device *pdev)
- 	pm_runtime_mark_last_busy(&pdev->dev);
- 	pm_runtime_put_autosuspend(&pdev->dev);
- 
--	dev_info(&pdev->dev, "driver initialized\n");
-+	dev_info(&pdev->dev, "driver initialized (%s mode)\n",
-+		 STM32_SPI_MASTER_MODE(spi) ? "master" : "device");
- 
- 	return 0;
- 
--- 
-2.25.1
+Yes, sorry about that.
 
+> > > +struct mock_phc *mock_phc_create(struct device *dev)
+> > > +{
+> > > +	struct mock_phc *phc;
+> > > +	int err;
+> > > +
+> > > +	phc = kzalloc(sizeof(*phc), GFP_KERNEL);
+> > > +	if (!phc) {
+> > > +		err = -ENOMEM;
+> > > +		goto out;
+> > > +	}
+> > > +
+> > > +	phc->info = (struct ptp_clock_info) {
+> > > +		.owner		= THIS_MODULE,
+> > > +		.name		= "Mock-up PTP clock",
+> > > +		.max_adj	= MOCK_PHC_MAX_ADJ_PPB,
+> > > +		.adjfine	= mock_phc_adjfine,
+> > > +		.adjtime	= mock_phc_adjtime,
+> > > +		.gettime64	= mock_phc_gettime64,
+> > > +		.settime64	= mock_phc_settime64,
+> > > +		.do_aux_work	= mock_phc_refresh,
+> > > +	};
+> > > +
+> > > +	phc->cc = (struct cyclecounter) {
+> > > +		.read	= mock_phc_cc_read,
+> > > +		.mask	= CYCLECOUNTER_MASK(64),
+> > > +		.mult	= MOCK_PHC_CC_MULT,
+> > > +		.shift	= MOCK_PHC_CC_SHIFT,
+> > > +	};
+> > > +
+> > > +	spin_lock_init(&phc->lock);
+> > > +	timecounter_init(&phc->tc, &phc->cc, 0);
+> > > +
+> > > +	phc->clock = ptp_clock_register(&phc->info, dev);
+> > > +	if (IS_ERR_OR_NULL(phc->clock)) {
+> > > +		err = PTR_ERR_OR_ZERO(phc->clock);
+> > > +		goto out_free_phc;
+> > > +	}
+> > > +
+> > > +	ptp_schedule_worker(phc->clock, MOCK_PHC_REFRESH_INTERVAL);
+> > > +
+> > > +	return phc;
+> > > +
+> > > +out_free_phc:
+> > > +	kfree(phc);
+> > > +out:
+> > > +	return ERR_PTR(err);
+> > > +}
+> > 
+> > Smatch complains that ERR_PTR may be passed zero.
+> > Looking at the IS_ERR_OR_NULL block above, this does indeed seem to be the
+> > case.
+> 
+> The intention here had something to do with PTP being optional for the
+> caller (netdevsim). Not sure whether the implementation is the best -
+> and in particular whether ERR_PTR(0) is NULL or not. I guess this is
+> what the smatch warning (which I haven't looked at) is saying.
+
+Thanks. It's unclear to me if ERR_PTR(0) is actually valid or not.
+By itself it does seem harmless to me. But, OTOH, it is sometimes
+indicative of some other problem. Fortunately that seems not to
+be the case here.
+
+> 
+> > Keeping Smatch happy is one thing - your call - but I do wonder if the
+> > caller of mock_phc_create() handles the NULL case correctly.
+> 
+> mock_phc_create() returns a pointer to an opaque data structure -
+> struct mock_phc - and the caller just carries that pointer around to the
+> other API calls exported by the mock_phc module. It doesn't need to care
+> whether the pointer is NULL or not, just the mock_phc module does (and
+> it does handle that part well, at least assuming that the pointer is NULL).
+
+Thanks, got it.
