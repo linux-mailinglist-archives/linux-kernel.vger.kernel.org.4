@@ -2,125 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCA6D731BB0
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3D68731BAD
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:45:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344932AbjFOOpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 10:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59990 "EHLO
+        id S241400AbjFOOpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 10:45:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241542AbjFOOpj (ORCPT
+        with ESMTP id S241542AbjFOOpT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 10:45:39 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E781D294E;
-        Thu, 15 Jun 2023 07:45:35 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f61b45ee0dso10748465e87.0;
-        Thu, 15 Jun 2023 07:45:35 -0700 (PDT)
+        Thu, 15 Jun 2023 10:45:19 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477832736;
+        Thu, 15 Jun 2023 07:45:18 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-53fa455cd94so4284445a12.2;
+        Thu, 15 Jun 2023 07:45:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686840334; x=1689432334;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wV92pSpCVmnx9n4E1q+MRb4GksMGgD+y07OYM0/qT58=;
-        b=aIzfv4Mjupmq37gyHvFs8F/LSK3Xj9YVHKM2j607IKnuOkrvGZAVssXNMRXeWX+dmV
-         /AABX0+ICsavEYJX+R3R3oC/NUjWUAt54gfecZ3dQ96G9nKrk4AmGMC0G7j9Lbv1SgaH
-         HquSTWXbpgXY4d8vkgRan3VK+R5OFrH+2Tzl6vO74LPZSu7DHUE/j3uzddwaTKvx2H/t
-         5202qourcPHXWuCglvCP6CdoV+V9kEbAap/hK6RIej9iv8rZpwVYy0hFRMU8uItAvMrz
-         5CsyEKHBt1Sfnna5pi9Im9hGJRY1hJVT/ZiTBhH9OukB8sEog1MjIDrMhfm4o4YpicQL
-         mQiQ==
+        d=gmail.com; s=20221208; t=1686840318; x=1689432318;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=ED/wxhW99FN+zk9GAPL31YRv7SWGPV9mFSC1g/5zgiQ=;
+        b=AJ9zNQxXwhNH/yGTaTuXBdAOXQonHX5+rtfC8vBsyGyAJlw1XvnwiR6cFi/LJRfPKL
+         xuGc4uw7s7ZCZc2/XHzhj+v1JezT2OAu0Drn3rl7/Nk2bpzED0pS0DOrprvGMGnRtjmP
+         RJJJ8RPc4Qml2NWGW+Lcevim2b2xSTaGxWi7oqXdLz6M7tXiV8glNmdAoOQDm9JNG3/Z
+         RCnk9mk2w2ZaymyjkXQe7kIyNQVNa7sbf4Yhk6ziZQhgnll4SJ0UcXfeeg5Lx66ilBly
+         a6rut/JXkCWpeZKDTL9+85X42AeLgSgns/F6m/ficPgkzr7uUxIS/vqFQClAKbsNf1ti
+         HVuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686840334; x=1689432334;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wV92pSpCVmnx9n4E1q+MRb4GksMGgD+y07OYM0/qT58=;
-        b=UAIVFo7qfg4ejUsezgWLlRjiFd7Ze5lYvELDHff4zg5nY0R19NQycCM2T1vQ1MpMn7
-         1KkkHBgaEUaVj4YbGzp2qRC8MgcNHbYuen4YRi0EgRd19Rlv+wNqtfI+GtiC4BKx4lZi
-         GElieDKpKXDR2vZhqeMYoiJT/8et/j8HlgPrih5xskj94u34khXFIvs8GsXJM7ZDiJJT
-         I4/dce4DVxi90Rl9svUbp/nkKnyBryssNlJ5aED3k0XHFUeUIRRTb3U9qknzlWwE0MAJ
-         zPgEzItajHPEbQFmAutzjwrw1kblqdcdToShWZPp12/dsbI0S4HTuvdNBdTSW02lA4iV
-         d20A==
-X-Gm-Message-State: AC+VfDyhcdb4qdd9KtOUM0Nz7aWoviG2AMKGNZbPaBICKWlLsqhzcm04
-        eJ+q9THAuGqyQl9Qra6/SQa0UCIremN2xU9Djw==
-X-Google-Smtp-Source: ACHHUZ7JCXFEpcyRUkA34U51/Dy11OR5ITEbLUmrZUsxSsG6Is9Uo9yDnK3rcDKYLGftkk2WwnqeoQ==
-X-Received: by 2002:a19:e01e:0:b0:4f8:4348:e000 with SMTP id x30-20020a19e01e000000b004f84348e000mr1324141lfg.13.1686840333381;
-        Thu, 15 Jun 2023 07:45:33 -0700 (PDT)
-Received: from localhost.localdomain (mail.pulsar-telecom.ru. [94.181.180.60])
-        by smtp.gmail.com with ESMTPSA id h7-20020ac25967000000b004f13f4ec267sm244451lfp.186.2023.06.15.07.45.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 07:45:32 -0700 (PDT)
-From:   Aleksandr Shubin <privatesub2@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Aleksandr Shubin <privatesub2@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Maxime Ripard <mripard@kernel.org>, linux-pwm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-riscv@lists.infradead.org
-Subject: [PATCH v1 3/3] riscv: dts: allwinner: d1: Add pwm node
-Date:   Thu, 15 Jun 2023 17:43:58 +0300
-Message-Id: <20230615144423.828698-4-privatesub2@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230615144423.828698-1-privatesub2@gmail.com>
-References: <20230615144423.828698-1-privatesub2@gmail.com>
+        d=1e100.net; s=20221208; t=1686840318; x=1689432318;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ED/wxhW99FN+zk9GAPL31YRv7SWGPV9mFSC1g/5zgiQ=;
+        b=OvN8bWZ0gJ/abovLoTsuaCxW0/Y9pxpkdxe+NRZaIi+YxEtp6HNkOc5oG1x/2Jt/u0
+         F9YwJnTQ75HptndpIXL2TBXd1T/9wUle0m/d/Mc1nb1QKlQg4u5aCbX3mDnHRogf87+D
+         Spz1nv3hw96YSh8al8m8NVyEmGJGSdKLaS0QCfdwkEATrOpX+ioAf1d4IgIy0QmBp8kZ
+         sVQrLC/4y5mvHXjB6TQoLn4nRlllN211BgtMqfwn1T2cvSkZp3DeL9ctGuuAEP17m50h
+         enCMS7Mhr8WkzmgW/omrMjCoe0f0K8EnXl4eRiL7NHpez+DkWcxzXlK2oIOwSXI4AIn4
+         B9DQ==
+X-Gm-Message-State: AC+VfDxShhJmQe0wZyjdxKMdL/8JkWpnhKPS9yx/CvmwJZx5UcKhZBup
+        Ll5h96H12WkjGZvEWIcO9llouItafZE=
+X-Google-Smtp-Source: ACHHUZ74IWx1zjxNoDY8f7kfrYb9FuYOwYsIWQdJKopVXE5Bm2pkqjzKK8oB69fpZ5gk196r/MDPSg==
+X-Received: by 2002:a17:90a:2ca4:b0:25b:a9f1:9dee with SMTP id n33-20020a17090a2ca400b0025ba9f19deemr3848500pjd.0.1686840317524;
+        Thu, 15 Jun 2023 07:45:17 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 6-20020a17090a030600b0024dfb8271a4sm13928491pje.21.2023.06.15.07.45.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jun 2023 07:45:16 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <4594248c-b7c5-46cb-7d02-063c8235f5d2@roeck-us.net>
+Date:   Thu, 15 Jun 2023 07:45:14 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [RFT] Prototype of new watchdog
+Content-Language: en-US
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Oliver Neukum <oneukum@suse.com>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230615104137.20304-1-oneukum@suse.com>
+ <20230615104137.20304-2-oneukum@suse.com>
+ <1282253f-29a4-f6ad-8d7a-36efb02e040a@csgroup.eu>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <1282253f-29a4-f6ad-8d7a-36efb02e040a@csgroup.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-D1 and T113s contain a pwm controller with 8 channels.
-This controller is supported by the sun20i-pwm driver.
+On 6/15/23 07:29, Christophe Leroy wrote:
+> Please explain what this driver is.
+> 
+> Is that a driver for a new type of pcwd_usb ?
+> Is that a new driver for an existing equipment ? Why a new driver then ?
+> 
+> If it is an evolution of the existing driver, please do it in place of
+> the existing driver so that we see what is changed and what remains.
+> 
 
-Add a device tree node for it.
+Agreed, this should be a patch modifying pcwd_usb.c to use the watchdog core.
+Any cleanups should be sent as separate patches.
 
-Signed-off-by: Aleksandr Shubin <privatesub2@gmail.com>
----
- arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-index 922e8e0e2c09..50f0f761527b 100644
---- a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-+++ b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-@@ -127,6 +127,18 @@ uart3_pb_pins: uart3-pb-pins {
- 			};
- 		};
- 
-+		pwm: pwm@2000c00 {
-+			compatible = "allwinner,sun20i-d1-pwm";
-+			reg = <0x02000c00 0x400>;
-+			clocks = <&dcxo>,
-+				 <&ccu CLK_BUS_PWM>;
-+			clock-names = "hosc", "bus";
-+			resets = <&ccu RST_BUS_PWM>;
-+			allwinner,pwm-channels = <8>;
-+			status = "disabled";
-+			#pwm-cells = <0x3>;
-+		};
-+
- 		ccu: clock-controller@2001000 {
- 			compatible = "allwinner,sun20i-d1-ccu";
- 			reg = <0x2001000 0x1000>;
--- 
-2.25.1
+Thanks,
+Guenter
 
