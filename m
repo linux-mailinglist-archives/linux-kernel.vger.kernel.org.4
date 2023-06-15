@@ -2,141 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 915A5731DD6
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:31:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0390E731DDB
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:32:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231898AbjFOQbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 12:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37004 "EHLO
+        id S232429AbjFOQcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 12:32:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230452AbjFOQbQ (ORCPT
+        with ESMTP id S232008AbjFOQcF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 12:31:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6AF273E;
-        Thu, 15 Jun 2023 09:31:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9CE760DEC;
-        Thu, 15 Jun 2023 16:31:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CEB9C433C0;
-        Thu, 15 Jun 2023 16:31:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686846674;
-        bh=Ba6+TbNKPkyuZQ8mwf62Wv9MAIIfwgYKhkFTTivsGpQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=s1YJtKsSZsgntvLLc+qrvnOVQQhDVyH3F6XUy3g5A8+lB7tkTdRFI3SfmMEPNnk2d
-         2q/dbjFtLd1Aw2jP+9DEG5DJr+pqhO9oDZB/uxcF2Ag9SPFFqhMyVQOcLNBowYe5zE
-         otSbSVgQYUBwvuzaplXlDGaeztZq8Uko8zjAPxzcNLaAZap71zfoM3uM+IZH1ZzGpk
-         vPiyDB406693Cd8DuiuW4R/DhvKZALJwoZQCJLhn4SPvDUpPFajLkjjW1WNATWQwYc
-         WuAgp2ARLHo4SUDQG+4m8QjslVw+NgoWgQbe3ToSAEf0a5zxmY9gHkzcOCCx4XjFwy
-         yuZSApgamUczQ==
-Date:   Thu, 15 Jun 2023 09:31:11 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jiri Pirko <jiri@resnulli.us>
-Cc:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>,
-        "vadfed@meta.com" <vadfed@meta.com>,
-        "jonathan.lemon@gmail.com" <jonathan.lemon@gmail.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "vadfed@fb.com" <vadfed@fb.com>,
-        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "M, Saeed" <saeedm@nvidia.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "sj@kernel.org" <sj@kernel.org>,
-        "javierm@redhat.com" <javierm@redhat.com>,
-        "ricardo.canuelo@collabora.com" <ricardo.canuelo@collabora.com>,
-        "mst@redhat.com" <mst@redhat.com>,
-        "tzimmermann@suse.de" <tzimmermann@suse.de>,
-        "Michalik, Michal" <michal.michalik@intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "jacek.lawrynowicz@linux.intel.com" 
-        <jacek.lawrynowicz@linux.intel.com>,
-        "airlied@redhat.com" <airlied@redhat.com>,
-        "ogabbay@kernel.org" <ogabbay@kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "nipun.gupta@amd.com" <nipun.gupta@amd.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "linux@zary.sk" <linux@zary.sk>,
-        "masahiroy@kernel.org" <masahiroy@kernel.org>,
-        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
-        "geert+renesas@glider.be" <geert+renesas@glider.be>,
-        "Olech, Milena" <milena.olech@intel.com>,
-        "kuniyu@amazon.com" <kuniyu@amazon.com>,
-        "liuhangbin@gmail.com" <liuhangbin@gmail.com>,
-        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
-        "andy.ren@getcruise.com" <andy.ren@getcruise.com>,
-        "razor@blackwall.org" <razor@blackwall.org>,
-        "idosch@nvidia.com" <idosch@nvidia.com>,
-        "lucien.xin@gmail.com" <lucien.xin@gmail.com>,
-        "nicolas.dichtel@6wind.com" <nicolas.dichtel@6wind.com>,
-        "phil@nwl.cc" <phil@nwl.cc>,
-        "claudiajkang@gmail.com" <claudiajkang@gmail.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>, poros <poros@redhat.com>,
-        mschmidt <mschmidt@redhat.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "vadim.fedorenko@linux.dev" <vadim.fedorenko@linux.dev>
-Subject: Re: [RFC PATCH v8 01/10] dpll: documentation on DPLL subsystem
- interface
-Message-ID: <20230615093111.0ee762e4@kernel.org>
-In-Reply-To: <ZIrldB4ic3zt9nIk@nanopsycho>
-References: <20230609121853.3607724-1-arkadiusz.kubalewski@intel.com>
-        <20230609121853.3607724-2-arkadiusz.kubalewski@intel.com>
-        <20230612154329.7bd2d52f@kernel.org>
-        <ZIg8/0UJB9Lbyx2D@nanopsycho>
-        <20230613093801.735cd341@kernel.org>
-        <ZImH/6GzGdydC3U3@nanopsycho>
-        <DM6PR11MB465799A5A9BB0B8E73A073449B5AA@DM6PR11MB4657.namprd11.prod.outlook.com>
-        <20230614121514.0d038aa3@kernel.org>
-        <20230614122348.3e9b7e42@kernel.org>
-        <ZIrldB4ic3zt9nIk@nanopsycho>
+        Thu, 15 Jun 2023 12:32:05 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B5912E
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 09:32:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686846724; x=1718382724;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XhSm0Ah8n5TfTVfCC5FzcpXI4AyB4pPPo3UttJyIm5c=;
+  b=KI/5B/4rNucmzmfzXCPH47jLsuByaM4iXhqBbsna/gbtXw0awmXSQKzM
+   XTLhH5kEpLM4l+p5SV0ba+2DOYPHvS7vZoy9fBTaRg4ZzRnF+AYFQyguV
+   SV/4B9P5J6dWtwYNKgdXJYbi/Vr4UviWGLGuTb0i71fQB/1qYpURiVFzD
+   BRfvjQRrn/6ixTK2t6fCgYXNfVTA7ac+0+Ik+FX8oFWKhW1RTtPWs9GzY
+   za/jdirCmWu+nepYR+dPAGmbyzoWSl+VG/6CdOsT6DWxRQoytAe4Ur9Dm
+   liB+pWO1ZyuaOzRJYgRt4RmFLGUd8WdM5CLQ8UIQstoMvu/YVXxecQTan
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="445338205"
+X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
+   d="scan'208";a="445338205"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 09:31:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="886747196"
+X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
+   d="scan'208";a="886747196"
+Received: from ckale-mobl1.amr.corp.intel.com (HELO desk) ([10.212.176.170])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 09:31:35 -0700
+Date:   Thu, 15 Jun 2023 09:31:25 -0700
+From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To:     Jordy Zomer <jordyzomer@google.com>
+Cc:     linux-kernel@vger.kernel.org, phil@philpotter.co.uk
+Subject: Re: [PATCH v2 1/1] cdrom: Fix spectre-v1 gadget
+Message-ID: <20230615163125.td3aodpfwth5n4mc@desk>
+References: <20230612110040.849318-1-jordyzomer@google.com>
+ <20230612110040.849318-2-jordyzomer@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230612110040.849318-2-jordyzomer@google.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Jun 2023 12:18:28 +0200 Jiri Pirko wrote:
-> Yeah, that is what we had originally. This just pushes out the
-> different attr selection from the nest one level up to the actualy
-> nesting attribute.
-
-Oh no, no extra nesting. Let me try to fake up the output:
-
-'pin': [{
- {'clock-id': 282574471561216,
-  'module-name': 'ice',
-  'pin-dpll-caps': 4,
-  'pin-id': 13,
-  'parent-device': [{'pin-id': 2, 'pin-state': 'connected'},
-                    {'pin-id': 3, 'pin-state': 'disconnected'}],
-  'parent-pin': [{'id': 0, 'pin-direction': 'input'},
-                 {'id': 1, 'pin-direction': 'input'}],
-  'pin-type': 'synce-eth-port'}
-}]
-
-> One downside of this is you will have 2 arrays of parent objects,
-> one per parent type. Current code neatly groups them into a single array.
+On Mon, Jun 12, 2023 at 11:00:40AM +0000, Jordy Zomer wrote:
+> This patch fixes a spectre-v1 gadget in cdrom.
+> The gadget could be triggered by,
+>  speculatviely bypassing the cdi->capacity check.
 > 
-> I guess this is a matter of personal preference, I'm fine either way.
+> Signed-off-by: Jordy Zomer <jordyzomer@google.com>
+> ---
+>  drivers/cdrom/cdrom.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
+> index 416f723a2dbb..ecf2b458c108 100644
+> --- a/drivers/cdrom/cdrom.c
+> +++ b/drivers/cdrom/cdrom.c
+> @@ -264,6 +264,7 @@
+>  #include <linux/errno.h>
+>  #include <linux/kernel.h>
+>  #include <linux/mm.h>
+> +#include <linux/nospec.h>
+>  #include <linux/slab.h> 
+>  #include <linux/cdrom.h>
+>  #include <linux/sysctl.h>
+> @@ -2329,6 +2330,9 @@ static int cdrom_ioctl_media_changed(struct cdrom_device_info *cdi,
+>  	if (arg >= cdi->capacity)
+>  		return -EINVAL;
+>  
+> +	/* Prevent arg from speculatively bypassing the length check */
+> +	barrier_nospec();
 
-Yeah, could be.
+On a quick look it at the call chain ...
+
+sr_block_ioctl(..., arg)
+  cdrom_ioctl(..., arg)
+    cdrom_ioctl_media_changed(..., arg)
+
+.... it appears maximum value cdi->capacity can be only 1:
+
+sr_probe()
+{
+...
+	cd->cdi.capacity = 1;
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/scsi/sr.c?h=v6.4-rc6#n665
+
+If we know that max possible value than, instead of big hammer
+barrier_nospec(), its possible to use lightweight array_index_nospec()
+as below:
+
+---
+diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
+index 416f723a2dbb..e1c4f969ffda 100644
+--- a/drivers/cdrom/cdrom.c
++++ b/drivers/cdrom/cdrom.c
+@@ -264,6 +264,7 @@
+ #include <linux/errno.h>
+ #include <linux/kernel.h>
+ #include <linux/mm.h>
++#include <linux/nospec.h>
+ #include <linux/slab.h> 
+ #include <linux/cdrom.h>
+ #include <linux/sysctl.h>
+@@ -2329,6 +2330,9 @@ static int cdrom_ioctl_media_changed(struct cdrom_device_info *cdi,
+ 	if (arg >= cdi->capacity)
+ 		return -EINVAL;
+ 
++	/* Prevent arg from speculatively bypassing the length check */
++	arg = array_index_nospec(arg, CDI_MAX_CAPACITY);
++
+ 	info = kmalloc(sizeof(*info), GFP_KERNEL);
+ 	if (!info)
+ 		return -ENOMEM;
+diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
+index 12869e6d4ebd..62e163dc29cc 100644
+--- a/drivers/scsi/sr.c
++++ b/drivers/scsi/sr.c
+@@ -662,7 +662,7 @@ static int sr_probe(struct device *dev)
+ 	cd->cdi.ops = &sr_dops;
+ 	cd->cdi.handle = cd;
+ 	cd->cdi.mask = 0;
+-	cd->cdi.capacity = 1;
++	cd->cdi.capacity = CDI_MAX_CAPACITY;
+ 	sprintf(cd->cdi.name, "sr%d", minor);
+ 
+ 	sdev->sector_size = 2048;	/* A guess, just in case */
+@@ -882,7 +882,7 @@ static int get_capabilities(struct scsi_cd *cd)
+ 	    (buffer[n + 6] >> 5) == mechtype_cartridge_changer)
+ 		cd->cdi.capacity =
+ 		    cdrom_number_of_slots(&cd->cdi);
+-	if (cd->cdi.capacity <= 1)
++	if (cd->cdi.capacity <= CDI_MAX_CAPACITY)
+ 		/* not a changer */
+ 		cd->cdi.mask |= CDC_SELECT_DISC;
+ 	/*else    I don't think it can close its tray
+diff --git a/include/linux/cdrom.h b/include/linux/cdrom.h
+index 67caa909e3e6..51c046354275 100644
+--- a/include/linux/cdrom.h
++++ b/include/linux/cdrom.h
+@@ -29,6 +29,8 @@ struct packet_command
+ 	void			*reserved[1];
+ };
+ 
++#define CDI_MAX_CAPACITY	1
++
+ /*
+  * _OLD will use PIO transfer on atapi devices, _BPC_* will use DMA
+  */
