@@ -2,71 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A830E732288
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 00:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD1E732281
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 00:10:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbjFOWLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 18:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52474 "EHLO
+        id S238819AbjFOWKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 18:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbjFOWLh (ORCPT
+        with ESMTP id S231479AbjFOWKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 18:11:37 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E3330CD
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 15:10:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686867057; x=1718403057;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=i0FZYmK7JQiNiwfBTor0G0QvLv81S1GzzEFM2X655Vg=;
-  b=PgiubB5dmvc737eJxFpkTpZ06y1c86hQ+Bsia8IGZ5VtQGXpmfsDzjUp
-   zFT7FZfGtLQhpmfnH6wcJ1oNw5/JN23NlDhjdIpTmnuePEwm/+DRrpXXa
-   fsEWyoV0CzHbaHtimwoMFOI5oY0hnzmcqksX4htdqs728P/efPNCoha18
-   HNYlB840ja5XNYkF6SYWxLMNez4i82xH/zixwn/v4487iTwPCKY+aoxcV
-   35y8F29rSA2Yo+myRIoPEkXR6WaXmbkMvGqQrszqhVfwG1VYyZBJuEEsT
-   eZNTHg0LY+HJP3uLaJZdOlGJbsy1ppgKU1l4YdcOR35UZ4RfTcCwPu9wU
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="343792767"
-X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="343792767"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 15:10:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="662930662"
-X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="662930662"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 15 Jun 2023 15:10:52 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q9vB5-0000RZ-2t;
-        Thu, 15 Jun 2023 22:10:51 +0000
-Date:   Fri, 16 Jun 2023 06:10:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Ruihai Zhou <zhouruihai@huaqin.corp-partner.google.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        yangcong <yangcong5@huaqin.corp-partner.google.com>,
-        Jitao Shi <jitao.shi@mediatek.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 1/2] drm/panel: boe-tv101wum-nl6: Drop macros and open
- code sequences
-Message-ID: <202306160538.B7HKWlKo-lkp@intel.com>
-References: <20230615-fix-boe-tv101wum-nl6-v1-1-8ac378405fb7@linaro.org>
+        Thu, 15 Jun 2023 18:10:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BCA2688
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 15:10:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0122D6248C
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 22:10:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 56FE3C43391;
+        Thu, 15 Jun 2023 22:10:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686867021;
+        bh=PvDVB/s3EYPnFpmPS9hYT5dQN4Ri0f5Z0pnM2zA+VP8=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=MFbYa0FBEeGECayN1plDNj1lAef0yDQu8if4g9haK9ewoi/d/74KLnAx0lnv/hUiU
+         G+hL0SUH+FfFxhio6bHu8NOrYDI23DCuWXBHO7SR16Kj3XPknD3PaxqVpBZFRO2bQz
+         LZ60e4NpFsTi8nlNL75Tyr0mHzEtITSt92FyD1e2ci63cbq+6F+P1Dl+4gEQl/4yei
+         BMFJ/N3QvqrS2XZ+N+juySIfH+jId3DUQBJxZ4r1cso9lYpnglPulc5DOtvk0CrWx6
+         RbeqZnoTLWoad0Yvxn2eHmD7PM/LVXtHKdOpyB8twpk6u+Rv4uGXXERF45RXhxbdw1
+         +yPx7w3ELz4fw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 33F2EE270FB;
+        Thu, 15 Jun 2023 22:10:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230615-fix-boe-tv101wum-nl6-v1-1-8ac378405fb7@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] octeon_ep: Add missing check for ioremap
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168686702120.9701.16100974127550672864.git-patchwork-notify@kernel.org>
+Date:   Thu, 15 Jun 2023 22:10:21 +0000
+References: <20230615033400.2971-1-jiasheng@iscas.ac.cn>
+In-Reply-To: <20230615033400.2971-1-jiasheng@iscas.ac.cn>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     kuba@kernel.org, vburru@marvell.com, aayarekar@marvell.com,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        sburla@marvell.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,343 +60,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hello:
 
-kernel test robot noticed the following build warnings:
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-[auto build test WARNING on ac9a78681b921877518763ba0e89202254349d1b]
+On Thu, 15 Jun 2023 11:34:00 +0800 you wrote:
+> Add check for ioremap() and return the error if it fails in order to
+> guarantee the success of ioremap().
+> 
+> Fixes: 862cd659a6fb ("octeon_ep: Add driver framework and device initialization")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+> Changelog:
+> 
+> [...]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Linus-Walleij/drm-panel-boe-tv101wum-nl6-Drop-macros-and-open-code-sequences/20230616-042312
-base:   ac9a78681b921877518763ba0e89202254349d1b
-patch link:    https://lore.kernel.org/r/20230615-fix-boe-tv101wum-nl6-v1-1-8ac378405fb7%40linaro.org
-patch subject: [PATCH 1/2] drm/panel: boe-tv101wum-nl6: Drop macros and open code sequences
-config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20230616/202306160538.B7HKWlKo-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git checkout ac9a78681b921877518763ba0e89202254349d1b
-        b4 shazam https://lore.kernel.org/r/20230615-fix-boe-tv101wum-nl6-v1-1-8ac378405fb7@linaro.org
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=alpha olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash drivers/gpu/drm/panel/
+Here is the summary with links:
+  - [v2] octeon_ep: Add missing check for ioremap
+    https://git.kernel.org/netdev/net/c/9a36e2d44d12
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306160538.B7HKWlKo-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c:776:5: warning: no previous prototype for 'boe_init' [-Wmissing-prototypes]
-     776 | int boe_init(struct mipi_dsi_device *dsi)
-         |     ^~~~~~~~
-
-
-vim +/boe_init +776 drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
-
-   775	
- > 776	int boe_init(struct mipi_dsi_device *dsi)
-   777	{
-   778		msleep(24);
-   779		mipi_dsi_dcs_write_seq(dsi, 0xB0, 0x05);
-   780		mipi_dsi_dcs_write_seq(dsi, 0xB1, 0xE5);
-   781		mipi_dsi_dcs_write_seq(dsi, 0xB3, 0x52);
-   782		mipi_dsi_dcs_write_seq(dsi, 0xB0, 0x00);
-   783		mipi_dsi_dcs_write_seq(dsi, 0xB3, 0x88);
-   784		mipi_dsi_dcs_write_seq(dsi, 0xB0, 0x04);
-   785		mipi_dsi_dcs_write_seq(dsi, 0xB8, 0x00);
-   786		mipi_dsi_dcs_write_seq(dsi, 0xB0, 0x00);
-   787		mipi_dsi_dcs_write_seq(dsi, 0xB6, 0x03);
-   788		mipi_dsi_dcs_write_seq(dsi, 0xBA, 0x8B);
-   789		mipi_dsi_dcs_write_seq(dsi, 0xBF, 0x1A);
-   790		mipi_dsi_dcs_write_seq(dsi, 0xC0, 0x0F);
-   791		mipi_dsi_dcs_write_seq(dsi, 0xC2, 0x0C);
-   792		mipi_dsi_dcs_write_seq(dsi, 0xC3, 0x02);
-   793		mipi_dsi_dcs_write_seq(dsi, 0xC4, 0x0C);
-   794		mipi_dsi_dcs_write_seq(dsi, 0xC5, 0x02);
-   795		mipi_dsi_dcs_write_seq(dsi, 0xB0, 0x01);
-   796		mipi_dsi_dcs_write_seq(dsi, 0xE0, 0x26);
-   797		mipi_dsi_dcs_write_seq(dsi, 0xE1, 0x26);
-   798		mipi_dsi_dcs_write_seq(dsi, 0xDC, 0x00);
-   799		mipi_dsi_dcs_write_seq(dsi, 0xDD, 0x00);
-   800		mipi_dsi_dcs_write_seq(dsi, 0xCC, 0x26);
-   801		mipi_dsi_dcs_write_seq(dsi, 0xCD, 0x26);
-   802		mipi_dsi_dcs_write_seq(dsi, 0xC8, 0x00);
-   803		mipi_dsi_dcs_write_seq(dsi, 0xC9, 0x00);
-   804		mipi_dsi_dcs_write_seq(dsi, 0xD2, 0x03);
-   805		mipi_dsi_dcs_write_seq(dsi, 0xD3, 0x03);
-   806		mipi_dsi_dcs_write_seq(dsi, 0xE6, 0x04);
-   807		mipi_dsi_dcs_write_seq(dsi, 0xE7, 0x04);
-   808		mipi_dsi_dcs_write_seq(dsi, 0xC4, 0x09);
-   809		mipi_dsi_dcs_write_seq(dsi, 0xC5, 0x09);
-   810		mipi_dsi_dcs_write_seq(dsi, 0xD8, 0x0A);
-   811		mipi_dsi_dcs_write_seq(dsi, 0xD9, 0x0A);
-   812		mipi_dsi_dcs_write_seq(dsi, 0xC2, 0x0B);
-   813		mipi_dsi_dcs_write_seq(dsi, 0xC3, 0x0B);
-   814		mipi_dsi_dcs_write_seq(dsi, 0xD6, 0x0C);
-   815		mipi_dsi_dcs_write_seq(dsi, 0xD7, 0x0C);
-   816		mipi_dsi_dcs_write_seq(dsi, 0xC0, 0x05);
-   817		mipi_dsi_dcs_write_seq(dsi, 0xC1, 0x05);
-   818		mipi_dsi_dcs_write_seq(dsi, 0xD4, 0x06);
-   819		mipi_dsi_dcs_write_seq(dsi, 0xD5, 0x06);
-   820		mipi_dsi_dcs_write_seq(dsi, 0xCA, 0x07);
-   821		mipi_dsi_dcs_write_seq(dsi, 0xCB, 0x07);
-   822		mipi_dsi_dcs_write_seq(dsi, 0xDE, 0x08);
-   823		mipi_dsi_dcs_write_seq(dsi, 0xDF, 0x08);
-   824		mipi_dsi_dcs_write_seq(dsi, 0xB0, 0x02);
-   825		mipi_dsi_dcs_write_seq(dsi, 0xC0, 0x00);
-   826		mipi_dsi_dcs_write_seq(dsi, 0xC1, 0x0D);
-   827		mipi_dsi_dcs_write_seq(dsi, 0xC2, 0x17);
-   828		mipi_dsi_dcs_write_seq(dsi, 0xC3, 0x26);
-   829		mipi_dsi_dcs_write_seq(dsi, 0xC4, 0x31);
-   830		mipi_dsi_dcs_write_seq(dsi, 0xC5, 0x1C);
-   831		mipi_dsi_dcs_write_seq(dsi, 0xC6, 0x2C);
-   832		mipi_dsi_dcs_write_seq(dsi, 0xC7, 0x33);
-   833		mipi_dsi_dcs_write_seq(dsi, 0xC8, 0x31);
-   834		mipi_dsi_dcs_write_seq(dsi, 0xC9, 0x37);
-   835		mipi_dsi_dcs_write_seq(dsi, 0xCA, 0x37);
-   836		mipi_dsi_dcs_write_seq(dsi, 0xCB, 0x37);
-   837		mipi_dsi_dcs_write_seq(dsi, 0xCC, 0x39);
-   838		mipi_dsi_dcs_write_seq(dsi, 0xCD, 0x2E);
-   839		mipi_dsi_dcs_write_seq(dsi, 0xCE, 0x2F);
-   840		mipi_dsi_dcs_write_seq(dsi, 0xCF, 0x2F);
-   841		mipi_dsi_dcs_write_seq(dsi, 0xD0, 0x07);
-   842		mipi_dsi_dcs_write_seq(dsi, 0xD2, 0x00);
-   843		mipi_dsi_dcs_write_seq(dsi, 0xD3, 0x0D);
-   844		mipi_dsi_dcs_write_seq(dsi, 0xD4, 0x17);
-   845		mipi_dsi_dcs_write_seq(dsi, 0xD5, 0x26);
-   846		mipi_dsi_dcs_write_seq(dsi, 0xD6, 0x31);
-   847		mipi_dsi_dcs_write_seq(dsi, 0xD7, 0x3F);
-   848		mipi_dsi_dcs_write_seq(dsi, 0xD8, 0x3F);
-   849		mipi_dsi_dcs_write_seq(dsi, 0xD9, 0x3F);
-   850		mipi_dsi_dcs_write_seq(dsi, 0xDA, 0x3F);
-   851		mipi_dsi_dcs_write_seq(dsi, 0xDB, 0x37);
-   852		mipi_dsi_dcs_write_seq(dsi, 0xDC, 0x37);
-   853		mipi_dsi_dcs_write_seq(dsi, 0xDD, 0x37);
-   854		mipi_dsi_dcs_write_seq(dsi, 0xDE, 0x39);
-   855		mipi_dsi_dcs_write_seq(dsi, 0xDF, 0x2E);
-   856		mipi_dsi_dcs_write_seq(dsi, 0xE0, 0x2F);
-   857		mipi_dsi_dcs_write_seq(dsi, 0xE1, 0x2F);
-   858		mipi_dsi_dcs_write_seq(dsi, 0xE2, 0x07);
-   859		mipi_dsi_dcs_write_seq(dsi, 0xB0, 0x03);
-   860		mipi_dsi_dcs_write_seq(dsi, 0xC8, 0x0B);
-   861		mipi_dsi_dcs_write_seq(dsi, 0xC9, 0x07);
-   862		mipi_dsi_dcs_write_seq(dsi, 0xC3, 0x00);
-   863		mipi_dsi_dcs_write_seq(dsi, 0xE7, 0x00);
-   864		mipi_dsi_dcs_write_seq(dsi, 0xC5, 0x2A);
-   865		mipi_dsi_dcs_write_seq(dsi, 0xDE, 0x2A);
-   866		mipi_dsi_dcs_write_seq(dsi, 0xCA, 0x43);
-   867		mipi_dsi_dcs_write_seq(dsi, 0xC9, 0x07);
-   868		mipi_dsi_dcs_write_seq(dsi, 0xE4, 0xC0);
-   869		mipi_dsi_dcs_write_seq(dsi, 0xE5, 0x0D);
-   870		mipi_dsi_dcs_write_seq(dsi, 0xCB, 0x00);
-   871		mipi_dsi_dcs_write_seq(dsi, 0xB0, 0x06);
-   872		mipi_dsi_dcs_write_seq(dsi, 0xB8, 0xA5);
-   873		mipi_dsi_dcs_write_seq(dsi, 0xC0, 0xA5);
-   874		mipi_dsi_dcs_write_seq(dsi, 0xC7, 0x0F);
-   875		mipi_dsi_dcs_write_seq(dsi, 0xD5, 0x32);
-   876		mipi_dsi_dcs_write_seq(dsi, 0xB8, 0x00);
-   877		mipi_dsi_dcs_write_seq(dsi, 0xC0, 0x00);
-   878		mipi_dsi_dcs_write_seq(dsi, 0xBC, 0x00);
-   879		mipi_dsi_dcs_write_seq(dsi, 0xB0, 0x07);
-   880		mipi_dsi_dcs_write_seq(dsi, 0xB1, 0x00);
-   881		mipi_dsi_dcs_write_seq(dsi, 0xB2, 0x02);
-   882		mipi_dsi_dcs_write_seq(dsi, 0xB3, 0x0F);
-   883		mipi_dsi_dcs_write_seq(dsi, 0xB4, 0x25);
-   884		mipi_dsi_dcs_write_seq(dsi, 0xB5, 0x39);
-   885		mipi_dsi_dcs_write_seq(dsi, 0xB6, 0x4E);
-   886		mipi_dsi_dcs_write_seq(dsi, 0xB7, 0x72);
-   887		mipi_dsi_dcs_write_seq(dsi, 0xB8, 0x97);
-   888		mipi_dsi_dcs_write_seq(dsi, 0xB9, 0xDC);
-   889		mipi_dsi_dcs_write_seq(dsi, 0xBA, 0x22);
-   890		mipi_dsi_dcs_write_seq(dsi, 0xBB, 0xA4);
-   891		mipi_dsi_dcs_write_seq(dsi, 0xBC, 0x2B);
-   892		mipi_dsi_dcs_write_seq(dsi, 0xBD, 0x2F);
-   893		mipi_dsi_dcs_write_seq(dsi, 0xBE, 0xA9);
-   894		mipi_dsi_dcs_write_seq(dsi, 0xBF, 0x25);
-   895		mipi_dsi_dcs_write_seq(dsi, 0xC0, 0x61);
-   896		mipi_dsi_dcs_write_seq(dsi, 0xC1, 0x97);
-   897		mipi_dsi_dcs_write_seq(dsi, 0xC2, 0xB2);
-   898		mipi_dsi_dcs_write_seq(dsi, 0xC3, 0xCD);
-   899		mipi_dsi_dcs_write_seq(dsi, 0xC4, 0xD9);
-   900		mipi_dsi_dcs_write_seq(dsi, 0xC5, 0xE7);
-   901		mipi_dsi_dcs_write_seq(dsi, 0xC6, 0xF4);
-   902		mipi_dsi_dcs_write_seq(dsi, 0xC7, 0xFA);
-   903		mipi_dsi_dcs_write_seq(dsi, 0xC8, 0xFC);
-   904		mipi_dsi_dcs_write_seq(dsi, 0xC9, 0x00);
-   905		mipi_dsi_dcs_write_seq(dsi, 0xCA, 0x00);
-   906		mipi_dsi_dcs_write_seq(dsi, 0xCB, 0x16);
-   907		mipi_dsi_dcs_write_seq(dsi, 0xCC, 0xAF);
-   908		mipi_dsi_dcs_write_seq(dsi, 0xCD, 0xFF);
-   909		mipi_dsi_dcs_write_seq(dsi, 0xCE, 0xFF);
-   910		mipi_dsi_dcs_write_seq(dsi, 0xB0, 0x08);
-   911		mipi_dsi_dcs_write_seq(dsi, 0xB1, 0x04);
-   912		mipi_dsi_dcs_write_seq(dsi, 0xB2, 0x05);
-   913		mipi_dsi_dcs_write_seq(dsi, 0xB3, 0x11);
-   914		mipi_dsi_dcs_write_seq(dsi, 0xB4, 0x24);
-   915		mipi_dsi_dcs_write_seq(dsi, 0xB5, 0x39);
-   916		mipi_dsi_dcs_write_seq(dsi, 0xB6, 0x4F);
-   917		mipi_dsi_dcs_write_seq(dsi, 0xB7, 0x72);
-   918		mipi_dsi_dcs_write_seq(dsi, 0xB8, 0x98);
-   919		mipi_dsi_dcs_write_seq(dsi, 0xB9, 0xDC);
-   920		mipi_dsi_dcs_write_seq(dsi, 0xBA, 0x23);
-   921		mipi_dsi_dcs_write_seq(dsi, 0xBB, 0xA6);
-   922		mipi_dsi_dcs_write_seq(dsi, 0xBC, 0x2C);
-   923		mipi_dsi_dcs_write_seq(dsi, 0xBD, 0x30);
-   924		mipi_dsi_dcs_write_seq(dsi, 0xBE, 0xAA);
-   925		mipi_dsi_dcs_write_seq(dsi, 0xBF, 0x26);
-   926		mipi_dsi_dcs_write_seq(dsi, 0xC0, 0x62);
-   927		mipi_dsi_dcs_write_seq(dsi, 0xC1, 0x9B);
-   928		mipi_dsi_dcs_write_seq(dsi, 0xC2, 0xB5);
-   929		mipi_dsi_dcs_write_seq(dsi, 0xC3, 0xCF);
-   930		mipi_dsi_dcs_write_seq(dsi, 0xC4, 0xDB);
-   931		mipi_dsi_dcs_write_seq(dsi, 0xC5, 0xE8);
-   932		mipi_dsi_dcs_write_seq(dsi, 0xC6, 0xF5);
-   933		mipi_dsi_dcs_write_seq(dsi, 0xC7, 0xFA);
-   934		mipi_dsi_dcs_write_seq(dsi, 0xC8, 0xFC);
-   935		mipi_dsi_dcs_write_seq(dsi, 0xC9, 0x00);
-   936		mipi_dsi_dcs_write_seq(dsi, 0xCA, 0x00);
-   937		mipi_dsi_dcs_write_seq(dsi, 0xCB, 0x16);
-   938		mipi_dsi_dcs_write_seq(dsi, 0xCC, 0xAF);
-   939		mipi_dsi_dcs_write_seq(dsi, 0xCD, 0xFF);
-   940		mipi_dsi_dcs_write_seq(dsi, 0xCE, 0xFF);
-   941		mipi_dsi_dcs_write_seq(dsi, 0xB0, 0x09);
-   942		mipi_dsi_dcs_write_seq(dsi, 0xB1, 0x04);
-   943		mipi_dsi_dcs_write_seq(dsi, 0xB2, 0x02);
-   944		mipi_dsi_dcs_write_seq(dsi, 0xB3, 0x16);
-   945		mipi_dsi_dcs_write_seq(dsi, 0xB4, 0x24);
-   946		mipi_dsi_dcs_write_seq(dsi, 0xB5, 0x3B);
-   947		mipi_dsi_dcs_write_seq(dsi, 0xB6, 0x4F);
-   948		mipi_dsi_dcs_write_seq(dsi, 0xB7, 0x73);
-   949		mipi_dsi_dcs_write_seq(dsi, 0xB8, 0x99);
-   950		mipi_dsi_dcs_write_seq(dsi, 0xB9, 0xE0);
-   951		mipi_dsi_dcs_write_seq(dsi, 0xBA, 0x26);
-   952		mipi_dsi_dcs_write_seq(dsi, 0xBB, 0xAD);
-   953		mipi_dsi_dcs_write_seq(dsi, 0xBC, 0x36);
-   954		mipi_dsi_dcs_write_seq(dsi, 0xBD, 0x3A);
-   955		mipi_dsi_dcs_write_seq(dsi, 0xBE, 0xAE);
-   956		mipi_dsi_dcs_write_seq(dsi, 0xBF, 0x2A);
-   957		mipi_dsi_dcs_write_seq(dsi, 0xC0, 0x66);
-   958		mipi_dsi_dcs_write_seq(dsi, 0xC1, 0x9E);
-   959		mipi_dsi_dcs_write_seq(dsi, 0xC2, 0xB8);
-   960		mipi_dsi_dcs_write_seq(dsi, 0xC3, 0xD1);
-   961		mipi_dsi_dcs_write_seq(dsi, 0xC4, 0xDD);
-   962		mipi_dsi_dcs_write_seq(dsi, 0xC5, 0xE9);
-   963		mipi_dsi_dcs_write_seq(dsi, 0xC6, 0xF6);
-   964		mipi_dsi_dcs_write_seq(dsi, 0xC7, 0xFA);
-   965		mipi_dsi_dcs_write_seq(dsi, 0xC8, 0xFC);
-   966		mipi_dsi_dcs_write_seq(dsi, 0xC9, 0x00);
-   967		mipi_dsi_dcs_write_seq(dsi, 0xCA, 0x00);
-   968		mipi_dsi_dcs_write_seq(dsi, 0xCB, 0x16);
-   969		mipi_dsi_dcs_write_seq(dsi, 0xCC, 0xAF);
-   970		mipi_dsi_dcs_write_seq(dsi, 0xCD, 0xFF);
-   971		mipi_dsi_dcs_write_seq(dsi, 0xCE, 0xFF);
-   972		mipi_dsi_dcs_write_seq(dsi, 0xB0, 0x0A);
-   973		mipi_dsi_dcs_write_seq(dsi, 0xB1, 0x00);
-   974		mipi_dsi_dcs_write_seq(dsi, 0xB2, 0x02);
-   975		mipi_dsi_dcs_write_seq(dsi, 0xB3, 0x0F);
-   976		mipi_dsi_dcs_write_seq(dsi, 0xB4, 0x25);
-   977		mipi_dsi_dcs_write_seq(dsi, 0xB5, 0x39);
-   978		mipi_dsi_dcs_write_seq(dsi, 0xB6, 0x4E);
-   979		mipi_dsi_dcs_write_seq(dsi, 0xB7, 0x72);
-   980		mipi_dsi_dcs_write_seq(dsi, 0xB8, 0x97);
-   981		mipi_dsi_dcs_write_seq(dsi, 0xB9, 0xDC);
-   982		mipi_dsi_dcs_write_seq(dsi, 0xBA, 0x22);
-   983		mipi_dsi_dcs_write_seq(dsi, 0xBB, 0xA4);
-   984		mipi_dsi_dcs_write_seq(dsi, 0xBC, 0x2B);
-   985		mipi_dsi_dcs_write_seq(dsi, 0xBD, 0x2F);
-   986		mipi_dsi_dcs_write_seq(dsi, 0xBE, 0xA9);
-   987		mipi_dsi_dcs_write_seq(dsi, 0xBF, 0x25);
-   988		mipi_dsi_dcs_write_seq(dsi, 0xC0, 0x61);
-   989		mipi_dsi_dcs_write_seq(dsi, 0xC1, 0x97);
-   990		mipi_dsi_dcs_write_seq(dsi, 0xC2, 0xB2);
-   991		mipi_dsi_dcs_write_seq(dsi, 0xC3, 0xCD);
-   992		mipi_dsi_dcs_write_seq(dsi, 0xC4, 0xD9);
-   993		mipi_dsi_dcs_write_seq(dsi, 0xC5, 0xE7);
-   994		mipi_dsi_dcs_write_seq(dsi, 0xC6, 0xF4);
-   995		mipi_dsi_dcs_write_seq(dsi, 0xC7, 0xFA);
-   996		mipi_dsi_dcs_write_seq(dsi, 0xC8, 0xFC);
-   997		mipi_dsi_dcs_write_seq(dsi, 0xC9, 0x00);
-   998		mipi_dsi_dcs_write_seq(dsi, 0xCA, 0x00);
-   999		mipi_dsi_dcs_write_seq(dsi, 0xCB, 0x16);
-  1000		mipi_dsi_dcs_write_seq(dsi, 0xCC, 0xAF);
-  1001		mipi_dsi_dcs_write_seq(dsi, 0xCD, 0xFF);
-  1002		mipi_dsi_dcs_write_seq(dsi, 0xCE, 0xFF);
-  1003		mipi_dsi_dcs_write_seq(dsi, 0xB0, 0x0B);
-  1004		mipi_dsi_dcs_write_seq(dsi, 0xB1, 0x04);
-  1005		mipi_dsi_dcs_write_seq(dsi, 0xB2, 0x05);
-  1006		mipi_dsi_dcs_write_seq(dsi, 0xB3, 0x11);
-  1007		mipi_dsi_dcs_write_seq(dsi, 0xB4, 0x24);
-  1008		mipi_dsi_dcs_write_seq(dsi, 0xB5, 0x39);
-  1009		mipi_dsi_dcs_write_seq(dsi, 0xB6, 0x4F);
-  1010		mipi_dsi_dcs_write_seq(dsi, 0xB7, 0x72);
-  1011		mipi_dsi_dcs_write_seq(dsi, 0xB8, 0x98);
-  1012		mipi_dsi_dcs_write_seq(dsi, 0xB9, 0xDC);
-  1013		mipi_dsi_dcs_write_seq(dsi, 0xBA, 0x23);
-  1014		mipi_dsi_dcs_write_seq(dsi, 0xBB, 0xA6);
-  1015		mipi_dsi_dcs_write_seq(dsi, 0xBC, 0x2C);
-  1016		mipi_dsi_dcs_write_seq(dsi, 0xBD, 0x30);
-  1017		mipi_dsi_dcs_write_seq(dsi, 0xBE, 0xAA);
-  1018		mipi_dsi_dcs_write_seq(dsi, 0xBF, 0x26);
-  1019		mipi_dsi_dcs_write_seq(dsi, 0xC0, 0x62);
-  1020		mipi_dsi_dcs_write_seq(dsi, 0xC1, 0x9B);
-  1021		mipi_dsi_dcs_write_seq(dsi, 0xC2, 0xB5);
-  1022		mipi_dsi_dcs_write_seq(dsi, 0xC3, 0xCF);
-  1023		mipi_dsi_dcs_write_seq(dsi, 0xC4, 0xDB);
-  1024		mipi_dsi_dcs_write_seq(dsi, 0xC5, 0xE8);
-  1025		mipi_dsi_dcs_write_seq(dsi, 0xC6, 0xF5);
-  1026		mipi_dsi_dcs_write_seq(dsi, 0xC7, 0xFA);
-  1027		mipi_dsi_dcs_write_seq(dsi, 0xC8, 0xFC);
-  1028		mipi_dsi_dcs_write_seq(dsi, 0xC9, 0x00);
-  1029		mipi_dsi_dcs_write_seq(dsi, 0xCA, 0x00);
-  1030		mipi_dsi_dcs_write_seq(dsi, 0xCB, 0x16);
-  1031		mipi_dsi_dcs_write_seq(dsi, 0xCC, 0xAF);
-  1032		mipi_dsi_dcs_write_seq(dsi, 0xCD, 0xFF);
-  1033		mipi_dsi_dcs_write_seq(dsi, 0xCE, 0xFF);
-  1034		mipi_dsi_dcs_write_seq(dsi, 0xB0, 0x0C);
-  1035		mipi_dsi_dcs_write_seq(dsi, 0xB1, 0x04);
-  1036		mipi_dsi_dcs_write_seq(dsi, 0xB2, 0x02);
-  1037		mipi_dsi_dcs_write_seq(dsi, 0xB3, 0x16);
-  1038		mipi_dsi_dcs_write_seq(dsi, 0xB4, 0x24);
-  1039		mipi_dsi_dcs_write_seq(dsi, 0xB5, 0x3B);
-  1040		mipi_dsi_dcs_write_seq(dsi, 0xB6, 0x4F);
-  1041		mipi_dsi_dcs_write_seq(dsi, 0xB7, 0x73);
-  1042		mipi_dsi_dcs_write_seq(dsi, 0xB8, 0x99);
-  1043		mipi_dsi_dcs_write_seq(dsi, 0xB9, 0xE0);
-  1044		mipi_dsi_dcs_write_seq(dsi, 0xBA, 0x26);
-  1045		mipi_dsi_dcs_write_seq(dsi, 0xBB, 0xAD);
-  1046		mipi_dsi_dcs_write_seq(dsi, 0xBC, 0x36);
-  1047		mipi_dsi_dcs_write_seq(dsi, 0xBD, 0x3A);
-  1048		mipi_dsi_dcs_write_seq(dsi, 0xBE, 0xAE);
-  1049		mipi_dsi_dcs_write_seq(dsi, 0xBF, 0x2A);
-  1050		mipi_dsi_dcs_write_seq(dsi, 0xC0, 0x66);
-  1051		mipi_dsi_dcs_write_seq(dsi, 0xC1, 0x9E);
-  1052		mipi_dsi_dcs_write_seq(dsi, 0xC2, 0xB8);
-  1053		mipi_dsi_dcs_write_seq(dsi, 0xC3, 0xD1);
-  1054		mipi_dsi_dcs_write_seq(dsi, 0xC4, 0xDD);
-  1055		mipi_dsi_dcs_write_seq(dsi, 0xC5, 0xE9);
-  1056		mipi_dsi_dcs_write_seq(dsi, 0xC6, 0xF6);
-  1057		mipi_dsi_dcs_write_seq(dsi, 0xC7, 0xFA);
-  1058		mipi_dsi_dcs_write_seq(dsi, 0xC8, 0xFC);
-  1059		mipi_dsi_dcs_write_seq(dsi, 0xC9, 0x00);
-  1060		mipi_dsi_dcs_write_seq(dsi, 0xCA, 0x00);
-  1061		mipi_dsi_dcs_write_seq(dsi, 0xCB, 0x16);
-  1062		mipi_dsi_dcs_write_seq(dsi, 0xCC, 0xAF);
-  1063		mipi_dsi_dcs_write_seq(dsi, 0xCD, 0xFF);
-  1064		mipi_dsi_dcs_write_seq(dsi, 0xCE, 0xFF);
-  1065		mipi_dsi_dcs_write_seq(dsi, 0xB0, 0x00);
-  1066		mipi_dsi_dcs_write_seq(dsi, 0xB3, 0x08);
-  1067		mipi_dsi_dcs_write_seq(dsi, 0xB0, 0x04);
-  1068		mipi_dsi_dcs_write_seq(dsi, 0xB8, 0x68);
-  1069		msleep(150);
-  1070	
-  1071		return 0;
-  1072	}
-  1073	
-
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
