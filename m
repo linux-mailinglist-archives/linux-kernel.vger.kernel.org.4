@@ -2,87 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D505F730F84
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:39:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7031A730F8C
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244150AbjFOGjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 02:39:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49880 "EHLO
+        id S244178AbjFOGmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 02:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243842AbjFOGio (ORCPT
+        with ESMTP id S243884AbjFOGl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 02:38:44 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3F426A2
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 23:38:19 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-bb2ffa1e235so1348530276.0
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 23:38:19 -0700 (PDT)
+        Thu, 15 Jun 2023 02:41:26 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E049135B8;
+        Wed, 14 Jun 2023 23:39:50 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-543c6a2aa07so4176777a12.0;
+        Wed, 14 Jun 2023 23:39:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686811098; x=1689403098;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RN4dZI7gKG4P+u+i7PgTDiFGmRqA+JQ2PDHkjFHkniQ=;
-        b=VENEmsbEHPy5l8GsWeLe2Q9EnYmn09I4/q6g/pVmXbC0YTv0qI97omWcJk+ortDlgp
-         DbezUpnrTs1pjg6U1GGgQnozX3mXDGFh/GCAA09AoONXPT0k6W6Rj3Y3iQiERFL0/7SO
-         qvUTEDlQ2H8m619DGeUaCuqQrT3M73x7YL2+I8aNXnEn9xXK9qkCdFrhEOpV2yt3s0Vo
-         XpafVdzUySnnUWLNO8SBXFiA2y8XGl5nUaQ5pwbQ5ys+0QFRoGhdxrre17k93VaAjlyb
-         LR6+k58sx0KF85FL6Na8MDFA6/bKHsw1j9qw0pKGlAUtHlCvHfdQURIeQbM3tJIT1oGZ
-         PaXQ==
+        d=gmail.com; s=20221208; t=1686811190; x=1689403190;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5dr/pk1CTGpe8xWEsKJhTgU6K6RWawYjj0PJrmiMabI=;
+        b=j71V8tIoMnAkqTnlnzzM7y3ne0LUJHKP+0iSmYWbpVYC7DqsKJ4c3P5rQ5sld5JkWw
+         jEhSlL8jYe+SQ3gajlXkV5I3NNHWx5YwRtKxDcXTqiClFoiIZyUdcBVW5q+UdKqyT8x2
+         bRagHypQea3dDcmb2kvDA+4hUBAsJZ7qgOiRA1IjLYmvACI1HZfMpc2kUPyDa59tw84P
+         x4VWAGC0NXlo5MOsS+3s2bHy59bedoHboHeABypM4X84TNVATcDf8OmAi16wAt2GQfWL
+         N6lVO8I41+mJmFFhHpYUA/wET/EvYAoD57UJuXtaXyb0c7AetMLYjzyaJ5+Bh35csPYH
+         X4og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686811098; x=1689403098;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RN4dZI7gKG4P+u+i7PgTDiFGmRqA+JQ2PDHkjFHkniQ=;
-        b=Sbjz/fQJqdHCnrg6HLpC0wRArg3Jtes9w0hLcTWhSLiUBaeZOeSbd2fLSsVt4cwvGC
-         V7C7cD8EuAt1u87jl1HeL1g79z1EMHTQnpr2W4eK8Kxyt1e1SOsK4llfMPHTNiidYs8w
-         fNTWhwjcqnO020j+K1Y1eLGrCC6lijJ5GF12wpHlLZykuMFiooRvJmjV2Z9k92nYxcoc
-         8eW0OWxo865IhB/gL/jAFAJarEQXrXvqiFhm4u+MwXbAP/x1WRZn6KRrFbfOq1kLGU9J
-         DoRjmyo11BCj9Nfwgpy6qeGsrx+imv2elLgLDSvfF8Dm+gj4ugLnXv5vyq57HFNkrapi
-         VhBw==
-X-Gm-Message-State: AC+VfDx7Q1O2UT1JEHpVhPWvYuGkbP27EnwQX/z2UqKJc/LkUFrXakYt
-        cJ6vIKjYgfPBgB2k0htAHrG1xivXZgs59yNiLWsZlf9lUIwe0edce2o=
-X-Google-Smtp-Source: ACHHUZ5K0UZnEQWW7Hly0IWBgrCPksLQ7kI4IcQAAFkmDSCPLEUYOsO8XaLv3JOtIIy6xC7LMFjLMq9z7PkiugajbW8=
-X-Received: by 2002:a25:80c3:0:b0:bc5:affa:fedb with SMTP id
- c3-20020a2580c3000000b00bc5affafedbmr3645121ybm.41.1686811098412; Wed, 14 Jun
- 2023 23:38:18 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686811190; x=1689403190;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5dr/pk1CTGpe8xWEsKJhTgU6K6RWawYjj0PJrmiMabI=;
+        b=a0GPE8zj2NoGY/FJ1QOYAaarHrcgtHIWm0ztrfDoJ4p0Gv1X29KVJ6alrXVHiBlJqW
+         qEWpEoONQ16+MC3IJzVK8cnBeRzJs5qQ46dPNsPNHFGSAhPiyhb+234uFROgMqWsmc1A
+         SLGrEIH+M73UP5SDHGmDatSDc6/yB+pwIE4NIRj2Ys7O/8pg5JePhPsdp/g/C3Kw+YlT
+         cr461tCN0jk5epHaga3FjBH6O1e+zuO+Arb1MI8WwtA/W4bpqVSiXfeJeXTQGsARW4hT
+         F993zTCjecWn68sywSyVXCERULk8kf4qpN7QFO7azCLg4pHXmuYsM3jx32fzpzN2j96l
+         Qd/g==
+X-Gm-Message-State: AC+VfDzxmkw7jTvY/YYftIwPSF2TGc5t6gARi9NnZ/yGsHWq9i+Org8T
+        lPkRUk/FRwA1nVCbmQesfKbZCKQNYajQQg==
+X-Google-Smtp-Source: ACHHUZ7AQ3aMqwhakcw9+joN1EIbvod52rI078ZoK54hJ3gyiguRsgy7n/aKSDeVFyDYp8yba+iyZA==
+X-Received: by 2002:a17:90b:46c9:b0:25e:a1c0:af23 with SMTP id jx9-20020a17090b46c900b0025ea1c0af23mr59824pjb.38.1686811190294;
+        Wed, 14 Jun 2023 23:39:50 -0700 (PDT)
+Received: from oslab-pc.tsinghua.edu.cn ([166.111.139.122])
+        by smtp.gmail.com with ESMTPSA id mm23-20020a17090b359700b0025c1d5e3042sm4018845pjb.40.2023.06.14.23.39.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 23:39:49 -0700 (PDT)
+From:   Tuo Li <islituo@gmail.com>
+To:     sfrench@samba.org, pc@manguebit.com, lsahlber@redhat.com,
+        sprasad@microsoft.com, tom@talpey.com
+Cc:     linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-kernel@vger.kernel.org, baijiaju1990@outlook.com,
+        Tuo Li <islituo@gmail.com>, BassCheck <bass@buaa.edu.cn>
+Subject: [PATCH v2] smb: fix a possible data race in cifs_can_echo()
+Date:   Thu, 15 Jun 2023 14:38:53 +0800
+Message-Id: <20230615063853.15500-1-islituo@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230614231446.3687-1-andriy.shevchenko@linux.intel.com> <20230614231446.3687-5-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230614231446.3687-5-andriy.shevchenko@linux.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 15 Jun 2023 08:38:07 +0200
-Message-ID: <CACRpkdYXE2v+esitZoasczcij-EEBtd=50vFHHeEUWy_T4_1HQ@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] gpio: delay: Remove duplicative functionality
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andy@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 1:14=E2=80=AFAM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+The struct field TCP_Server_Info.tcpStatus is often protected by the lock
+srv_lock when is accessed. Here is an example in __cifs_reconnect():
 
-> Now that GPIO aggregator supports a delay line, drop the duplicative
-> functionality, i.e. the entire gpio-delay driver.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+  spin_lock(&server->srv_lock);
+  if (server->tcpStatus != CifsExiting)
+    server->tcpStatus = CifsNeedNegotiate;
+  spin_unlock(&server->srv_lock);
 
-This is the most pleasing technical solution for sure.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+However, the variable server->tcpStatus is accessed without holding the
+lock server->srv_lock in cifs_can_echo():
 
-Yours,
-Linus Walleij
+  if (server->tcpStatus == CifsGood)
+    return true;
+
+To fix this possible data race, a lock and unlock pair is added when
+accessing the variable server->tcpStatus.
+
+Reported-by: BassCheck <bass@buaa.edu.cn>
+Signed-off-by: Tuo Li <islituo@gmail.com>
+---
+v2:
+* Release the lock server->srv_lock in the false branch.
+---
+ fs/smb/client/smb1ops.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/fs/smb/client/smb1ops.c b/fs/smb/client/smb1ops.c
+index 7d1b3fc014d9..5120241d3c0e 100644
+--- a/fs/smb/client/smb1ops.c
++++ b/fs/smb/client/smb1ops.c
+@@ -1049,8 +1049,12 @@ cifs_dir_needs_close(struct cifsFileInfo *cfile)
+ static bool
+ cifs_can_echo(struct TCP_Server_Info *server)
+ {
+-	if (server->tcpStatus == CifsGood)
++	spin_lock(&server->srv_lock);
++	if (server->tcpStatus == CifsGood) {
++		spin_unlock(&server->srv_lock);
+ 		return true;
++	}
++	spin_unlock(&server->srv_lock);
+ 
+ 	return false;
+ }
+-- 
+2.34.1
+
