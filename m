@@ -2,129 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7916D731548
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 12:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3E0731547
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 12:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245066AbjFOK2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 06:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40228 "EHLO
+        id S243419AbjFOK2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 06:28:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239010AbjFOK2l (ORCPT
+        with ESMTP id S244229AbjFOK2h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 06:28:41 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA681B2
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 03:28:31 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id 5614622812f47-39ce64700cbso2959284b6e.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 03:28:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686824911; x=1689416911;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ucx4JyNaJjDbrzVBkD86w96Kw83IyLRW7oxLIVIfgdE=;
-        b=7ouIaWsiVZWKgSkwmCl8oevPpiNq4nqms8IeYNg+qOmi/9peaOvhuoanUlG2xuC2j9
-         xBY5MwOuOQ8Ii9mXEfXqNUe1crHWg7UhoUi3iTZ75qSE5KE3bDDeSQddj+HWmSy8+q8T
-         bPEpjE86b9PH8T6W8Q9mhxUwOQbFV9GPjqUbeR2+in+Rf3Pk/LeT4VJb8Q66Dp6iiLnR
-         C35enh/NYvi7dfcxL8MS8WAF1NheuSvd5OVgHuYXG5ac66LEJzcBbBv3fcnOCm3H7geO
-         xrNKoN1eLYHTlm+chXtZHNKOoZx2trrTUbop4Kak1v1rRL/hQ0Wc0Fgyz6liAaZCK/qi
-         ItLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686824911; x=1689416911;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ucx4JyNaJjDbrzVBkD86w96Kw83IyLRW7oxLIVIfgdE=;
-        b=EzvhaMWneE7PV9taaPggbcntyrxc4wXmtCkgirEo8E/DuWTaUjeeF6TAT4Duv0cw+t
-         OoSgJfG1jMV27dFJJ5QUgIIFO+jYQdZl6gSSDJ06alNHRztpjDnHjgMOfBNjB9bN3FWc
-         w5oLmDV/hNV4hrnvcam3YUqkpbE9li1RIHV2+k5aJg+xAbEeyi3DtpkvzrBJMVHBEbrD
-         XGIbxvXWyupirZvypZAXQBh168ycj+tIS81Mk+A+MNRizEyF3U/rlUXJnvhVJb4aYuXC
-         +7ZfE1URQJwbQmiK0vY/6HsW2MG4Pnz3BemgG5K5UqiNe3PWmnBAWEYJVhCq1A09ReNV
-         9Chw==
-X-Gm-Message-State: AC+VfDyEkJHS6Vm6g8O7krWpn99ytKetMikH9y/RW4HC0SLRfIbd9emS
-        qj3VNt+G7boms6wLcy7ssLOjCYyfyc8RQCZygPFf/vDzv7ESheub5mnMkQ==
-X-Google-Smtp-Source: ACHHUZ7G7Ng2XZijVQUl0Q3ancRaxI2gIYm17R9eKrVRa+k96JaJPFBd2+XLSr1KgIiM2dL3jgWZgdY2TEEPqJ9yDUg=
-X-Received: by 2002:a05:6808:209f:b0:398:bd63:b5fe with SMTP id
- s31-20020a056808209f00b00398bd63b5femr14802291oiw.18.1686824910847; Thu, 15
- Jun 2023 03:28:30 -0700 (PDT)
+        Thu, 15 Jun 2023 06:28:37 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C22A2D69;
+        Thu, 15 Jun 2023 03:28:24 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35FASI36035492;
+        Thu, 15 Jun 2023 05:28:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1686824898;
+        bh=Q+PFg8MVj68fdFjz6yBmn3VN+S2JhyVGeBpernnJN3w=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=giIPEXocxKY9ip/z78GaGzZd5UElnxTDlwa71sFJboFBsdmpRHNkkqcvPckz6F8LJ
+         j6PyQ87EoNydQDrYJV4SEWdSGYcFYKSkVl+12CYJRaRSuXMPa//L2NNQ8gOQs6Axx0
+         wEirjXHAYZZTKvLwgfrB5JA29qE6NP6kLHposaXw=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35FASI9w013918
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 15 Jun 2023 05:28:18 -0500
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 15
+ Jun 2023 05:28:18 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 15 Jun 2023 05:28:18 -0500
+Received: from uda0132425.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35FASFt2110609;
+        Thu, 15 Jun 2023 05:28:16 -0500
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, Nishanth Menon <nm@ti.com>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tero Kristo <kristo@kernel.org>
+Subject: Re: [PATCH 0/4] arm64: dts: ti: k3-am62x-sk-common: Cleanups and minor additions
+Date:   Thu, 15 Jun 2023 15:58:14 +0530
+Message-ID: <168682488237.2210554.1813394610850551665.b4-ty@ti.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230418213740.153519-1-nm@ti.com>
+References: <20230418213740.153519-1-nm@ti.com>
 MIME-Version: 1.0
-References: <CADyq12w_c=pq5sph9Ne+nshz2haeYK-kGYVwQTUqSb3W_kzrdA@mail.gmail.com>
- <20230615044905.GU45886@black.fi.intel.com>
-In-Reply-To: <20230615044905.GU45886@black.fi.intel.com>
-From:   Brian Geffon <bgeffon@google.com>
-Date:   Thu, 15 Jun 2023 06:27:54 -0400
-Message-ID: <CADyq12xEfTO6akSO5LqyGnF9vBQyptAXsFT7ZbaBjijVEJkU5A@mail.gmail.com>
-Subject: Re: thunderbolt: resume from hibernation CPUs racing in tb_ring_start
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Takashi Iwai <tiwai@suse.de>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Matthias Kaehlcke <mka@google.com>, linux-usb@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 12:49=E2=80=AFAM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> Hi,
->
-> On Wed, Jun 14, 2023 at 04:26:49PM -0400, Brian Geffon wrote:
-> > Hi,
-> > On ChromeOS we're running a 5.15 kernel patched up to 6.4-rc6 w.r.t to
-> > drivers/thunderbolt code and we're seeing a similar issue to the one
-> > discussed in https://lore.kernel.org/lkml/20230421140725.495-1-mario.li=
-monciello@amd.com/T/#
-> > / https://bugzilla.kernel.org/show_bug.cgi?id=3D217343 where when
-> > resuming from hibernation you'll see warnings along the lines of
-> >
-> > [  126.292769] thunderbolt 0000:00:0d.3: interrupt for RX ring 0 is
-> > already enabled
-> >
-> > The thing that's odd is it appears three CPUs are racing through this c=
-ode path:
-> >
-> > [  126.292076] ------------[ cut here ]------------
-> > [  126.292077] thunderbolt 0000:00:0d.2: interrupt for TX ring 0 is
-> > already enabled
-> > [  126.292080] proc_thermal_pci 0000:00:04.0: PM:
-> > pci_pm_thaw_noirq+0x0/0x7c returned 0 after 606 usecs
-> > [  126.292086] ------------[ cut here ]------------
-> > [  126.292087] thunderbolt 0000:00:0d.3: interrupt for TX ring 0 is
-> > already enabled
-> > [  126.292089] WARNING: CPU: 6 PID: 7879 at
-> > drivers/thunderbolt/nhi.c:138 ring_interrupt_active+0x1cd/0x225
-> > [  126.292092] Modules linked in:
-> > [  126.292091] WARNING: CPU: 0 PID: 175 at
-> > drivers/thunderbolt/nhi.c:138 ring_interrupt_active+0x1cd/0x225
-> > [  126.292157] CPU: 0 PID: 175 Comm: kworker/u24:2 Tainted: G     U
-> >         5.15.116-19568-g766d8095041b #24
-> > fdadcb2517d1d37363ad385ffddbc1ad5dc72550
-> > [  126.292158]  lzo_rle zram joydev
-> > [  126.292159] Hardware name: Google Anahera/Anahera, BIOS
-> > Google_Anahera.14505.143.0 06/22/2022
-> > [  126.292159]
-> > [  126.292160] Workqueue: events_unbound async_run_entry_fn
-> > [  126.292160] CPU: 6 PID: 7879 Comm: kworker/u24:13 Tainted: G     U
-> >           5.15.116-19568-g766d8095041b #24
->
-> Do you have this one?
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git/c=
-ommit/?h=3Dfixes&id=3D9f9666e65359d5047089aef97ac87c50f624ecb0
+Hi Nishanth Menon,
 
-Thank you for pointing me to this, we do not have that in our tree yet
-since it's not upstream. I'll apply it and see if it resolved the
-issue.
+On Tue, 18 Apr 2023 16:37:36 -0500, Nishanth Menon wrote:
+> This is a result of looking to cleanup u-boot and realizing there are
+> pieces missing in kernel that need to be pushed out.
+> 
+> So, minor cleanups and adding a few missing pieces.
+> 
+> Bootlog: https://gist.github.com/nmenon/5e18c8d02c13cf00db649b6f01971d99
+> 
+> [...]
 
-Thanks!
-Brian
+I have applied the following to branch ti-k3-dts-next on [1].
+Thank you!
+
+[1/4] arm64: dts: ti: k3-am62x-sk-common: Drop extra EoL
+      commit: 477d43f6d8546597e007a3a2ebd19f6e4e090fee
+[2/4] arm64: dts: ti: k3-am62x-sk-common: Describe main_uart1 and wkup_uart
+      commit: 76194aba0c30b1ee25067b34235141443bd078fb
+[3/4] arm64: dts: ti: k3-am62x-sk-common: Add eeprom
+      commit: f40ed3b39b486ed8fbca7aa4a319c8d1d14ac97d
+[4/4] arm64: dts: ti: k3-am62x-sk-common: Improve documentation of mcasp1_pins
+      commit: 5cab8abaee22470523a5293994a52784360a7926
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent up the chain during
+the next merge window (or sooner if it is a relevant bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
+--
+Vignesh
+
