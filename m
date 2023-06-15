@@ -2,64 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3848731E1E
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99A9C731E07
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237315AbjFOQqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 12:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44316 "EHLO
+        id S234969AbjFOQmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 12:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236686AbjFOQp0 (ORCPT
+        with ESMTP id S234795AbjFOQls (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 12:45:26 -0400
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129B82D60;
-        Thu, 15 Jun 2023 09:44:56 -0700 (PDT)
-Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-77aecbadfefso234365939f.3;
-        Thu, 15 Jun 2023 09:44:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686847494; x=1689439494;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xsMBqmgF0rY87deAgbWAVQ8J/025bqTGL9yMoTkGyWU=;
-        b=SMlQunxbHbKK47ouyag+dETywVyhzD26dcONEs7vSOYhDWfjp8N7Z/XMkuhlvzV8Fk
-         hPcRd7y62Xv8cIsYwlyklELVkv2mR5URg3qywtid5cFSFENxrRyXqlQ7vhlcLES598Re
-         /d4XGmZavHl+0SKVK0WfYIjhCBuzpGWodJztAXIMi5N/aEfuHKqc39FmgQIAnlIzHl3u
-         cQDVroFRHsW4yLo4EtjR83bENCQhGN18YC1l/9++Lg5dAR215J9NWtcD5A/X025+HxRZ
-         ZmTyo3zAnmLlNLFsSH0kikHfW2/IOwqzJCO06Ko+4wlCs1qtkw4VyWqH6LFqUcYQyP2b
-         NAlA==
-X-Gm-Message-State: AC+VfDyuYJLiunlpq3F2OHoh9cfT7r/EtdaT1fnPJ8pftn94+JbY9Zbe
-        XNbAvSvL2x/ZbZxNhhl40A==
-X-Google-Smtp-Source: ACHHUZ71kVLmLSj4RnOUsJPwuM9aCjRiUNC1DqZl8ZeK+7GmQZnX14smCeAQpYiHRP1TlutY6DZBiw==
-X-Received: by 2002:a6b:db14:0:b0:777:b765:661a with SMTP id t20-20020a6bdb14000000b00777b765661amr18187638ioc.14.1686847494494;
-        Thu, 15 Jun 2023 09:44:54 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id i14-20020a02ca4e000000b00411b2414eb5sm5610532jal.94.2023.06.15.09.44.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 09:44:53 -0700 (PDT)
-Received: (nullmailer pid 1173348 invoked by uid 1000);
-        Thu, 15 Jun 2023 16:44:52 -0000
-Date:   Thu, 15 Jun 2023 10:44:52 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Frank Rowand <frowand.list@gmail.com>
-Subject: Re: [PATCH v1 1/1] of/platform: Propagate firmware node by calling
- device_set_node()
-Message-ID: <20230615164452.GA1166619-robh@kernel.org>
-References: <20230615145243.37095-1-andriy.shevchenko@linux.intel.com>
- <ZIsnaE95qIJ2DVzK@smile.fi.intel.com>
- <ZIsnvXztBQvtYw9b@smile.fi.intel.com>
- <ZIsoWBxb8aGdJ4ja@smile.fi.intel.com>
+        Thu, 15 Jun 2023 12:41:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC49126B6;
+        Thu, 15 Jun 2023 09:41:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 512D561F13;
+        Thu, 15 Jun 2023 16:41:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0243CC433C0;
+        Thu, 15 Jun 2023 16:41:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686847306;
+        bh=zpqZV7qKWaYVN1SN8K2/7XS2tI9XhoNZ6+FwQdXJYeQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nyUl+wQN394xAOxbMzIIggaasbVy6GEeHTeBXYY5JtdtuNTyET8h/4lnMT1rITN8A
+         tppk0O8ic4w10FXqNjf1s3+j2NrS0GerHgqqyq43fgJQxPyscLqswRdIFNb7IAEqbj
+         /CbJooEWJGZhwOkDamnMXqaw7jqPBZGO+qs+kYThK/sWynhyirHFPBbauDyuHKN/qz
+         iHw884Opy6BFi0Iz+CMXiqjLdBC7FBkZlXFRCTdmLi0FhEFfWOp9xyvraUl3PHQfj5
+         i8NSkMU+aL4TeG81/flLI+RzxPJF0CXfI6SPA4fHtanqj3NriAtbVBvpihAf8E+6YO
+         eeS5f3A4yJAxA==
+Date:   Thu, 15 Jun 2023 09:45:07 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Sarannya S <quic_sarannya@quicinc.com>, swboyd@chromium.org,
+        quic_clew@quicinc.com, mathieu.poirier@linaro.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org,
+        Deepak Kumar Singh <quic_deesin@quicinc.com>
+Subject: Re: [PATCH V7 1/3] rpmsg: core: Add signal API support
+Message-ID: <20230615164507.mu7fd22poamjth7p@ripper>
+References: <1682160127-18103-1-git-send-email-quic_sarannya@quicinc.com>
+ <1682160127-18103-2-git-send-email-quic_sarannya@quicinc.com>
+ <20230614155453.dywcrntfjddxojfv@ripper>
+ <6e51d6d8-cd3a-b0f2-c044-6282749aae89@foss.st.com>
+ <20230615145039.GA3256591@hu-bjorande-lv.qualcomm.com>
+ <4d89950d-0376-e355-c70b-d054776e83d4@foss.st.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZIsoWBxb8aGdJ4ja@smile.fi.intel.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <4d89950d-0376-e355-c70b-d054776e83d4@foss.st.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,37 +64,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 06:03:52PM +0300, Andy Shevchenko wrote:
-> On Thu, Jun 15, 2023 at 06:01:17PM +0300, Andy Shevchenko wrote:
-> > On Thu, Jun 15, 2023 at 05:59:52PM +0300, Andy Shevchenko wrote:
-> > > On Thu, Jun 15, 2023 at 05:52:43PM +0300, Andy Shevchenko wrote:
-> > > > Insulate of_device_alloc() and of_amba_device_create() from possible
-> > > > changes to fwnode_handle implementation by using device_set_node()
-> > > > instead of open-coding dev->dev.fwnode assignments.
-> > > 
-> > > Side note. When I preparing this change I have noticed a lot of
-> > > 
-> > > 	dev_set_name(... dev_name())
-> > 
-> > Plus
-> > 
-> > 	dev_set_name(dev, ...)
-> > 	...
-> > 	dev_set_name(dev, ...)
-> > 
-> > on the same device will also give a memory leak.
+On Thu, Jun 15, 2023 at 06:19:37PM +0200, Arnaud POULIQUEN wrote:
 > 
-> Ah, seems false alarm, the kobject_set_name_vargs() frees the old one.
-> Sorry for the noise for second point. But the first one still applies.
 > 
-> > > in the code which seems to me problematic in two ways:
-> > > 1) (minor) the dev_set_name() may fail, no checks are there;
+> On 6/15/23 16:50, Bjorn Andersson wrote:
+> > On Thu, Jun 15, 2023 at 11:01:14AM +0200, Arnaud POULIQUEN wrote:
+> >>
+> >>
+> >> On 6/14/23 17:54, Bjorn Andersson wrote:
+> >>> On Sat, Apr 22, 2023 at 04:12:05PM +0530, Sarannya S wrote:
+> >>>> From: Deepak Kumar Singh <quic_deesin@quicinc.com>
+> >>>>
+> >>>> Some transports like Glink support the state notifications between
+> >>>> clients using flow control signals similar to serial protocol signals.
+> >>>> Local glink client drivers can send and receive flow control status
+> >>>> to glink clients running on remote processors.
+> >>>>
+> >>>> Add APIs to support sending and receiving of flow control status by
+> >>>> rpmsg clients.
+> >>>>
+> >>>> Signed-off-by: Deepak Kumar Singh <quic_deesin@quicinc.com>
+> >>>> Signed-off-by: Sarannya S <quic_sarannya@quicinc.com>
+> >>>> ---
+> >>>>  drivers/rpmsg/rpmsg_core.c     | 21 +++++++++++++++++++++
+> >>>>  drivers/rpmsg/rpmsg_internal.h |  2 ++
+> >>>>  include/linux/rpmsg.h          | 15 +++++++++++++++
+> >>>>  3 files changed, 38 insertions(+)
+> >>>>
+> >>>> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
+> >>>> index a2207c0..e8bbe05 100644
+> >>>> --- a/drivers/rpmsg/rpmsg_core.c
+> >>>> +++ b/drivers/rpmsg/rpmsg_core.c
+> >>>> @@ -331,6 +331,25 @@ int rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src, u32 dst,
+> >>>>  EXPORT_SYMBOL(rpmsg_trysend_offchannel);
+> >>>>  
+> >>>>  /**
+> >>>> + * rpmsg_set_flow_control() - sets/clears serial flow control signals
+> >>>> + * @ept:	the rpmsg endpoint
+> >>>> + * @enable:	pause/resume incoming data flow	
+> >>>
+> >>> As shown in the discussion, it's still not clear what true/false means.
+> >>> Also, let's try to clarify that it's a request for the other side to do
+> >>> something:
+> >>>
+> >>> * rpmsg_set_flow_control() - request remote to pause/resume transmission
+> >>> * ...
+> >>> * @enable: flow restricted
+> >>> * ...
+> >>>
+> >>>
+> >>> PS. There's a stray space at the end of the line.
+> >>
+> >> The notion of flow restricted seems to me also ambiguous. It does
+> >> not specify if the stream is limited in term of bandwidth or stopped.
+> >>
+> >> What about using XON/XOFF as specified in software flow control[1]
+> >>
+> >> XOFF	Pause transmission
+> >> XON	Resume transmission
+> >>
+> >> or simply pause/resume definitions
+> >>
+> > 
+> > I agree, that's still ambiguous.
+> > 
+> > I was concerned about expressing it such that the reader would assume
+> > that calling this means there will be no more data coming, but there
+> > might be things in the queues etc. Expressing it in terms of the state
+> > of transmission is clearer.
+> > 
+> > 
+> > /*
+> >  * rpmsg_set_flow_control() - request remote to pause/resume transmission
+> >  ...
+> >  * @enable: Pause transmission
+> >  ...
+> >  */
+> > 
+> > Does that sound okay and clear to you?
+> 
+> Much better! I still have a nitpicking point :)
+> What about replacing @enable variable by @pause to align the variable with the
+> usage?
+>  /*
+>   * rpmsg_set_flow_control() - request remote to pause/resume transmission
+>   ...
+>   * @pause: set to 1 to pause transmission, to 0 to resume the transmission
 
-Is there anything besides a memory alloc failure? What will print a 
-message already. Wouldn't we fail a bit later on when adding the 
-device anyways?
+It's a boolean, so I think with your name change suggestion, together
+with the function description, it should be clear enough what the two
+states (true/false) means.
 
-In a rough count, 92 out of 500 cases check the return of 
-dev_set_name().
+* @pause: Pause transmission
 
-Rob
+Thanks,
+Bjorn
