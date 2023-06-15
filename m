@@ -2,131 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20E3B730DF9
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 06:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84DAE730DFD
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 06:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242895AbjFOEQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 00:16:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32854 "EHLO
+        id S242934AbjFOERX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 00:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234019AbjFOEQM (ORCPT
+        with ESMTP id S242904AbjFOERT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 00:16:12 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054AB212A;
-        Wed, 14 Jun 2023 21:16:11 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35F41PAN010558;
-        Thu, 15 Jun 2023 04:15:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=+Z0nhqBAyEln1rQXqXvG8yP5Loe3eBpMLTiQInpJfK4=;
- b=TdOB1emnadtAzeFGv745tQzYSXHWmwMlUu70OIDB9LrZiU/YacCsQseW4h6RbJRpNbFv
- 4VDSCLxDfrC9NxxR+UZQkq6NnFS789cnw6O7q8jyuOdNl3AFYqqV171w1m/HS7McPaIP
- oHwRjLTbxYCcMZsvZrBzyUzbZ13WNOMcwTKBhChYF3zuHtzG2BxLopJPvL7ippxo6+G/
- B3CIFgI+4wsNZ0/UtVgZbPql8s2/o3CHxRfOLFHd6wVB43xqHxwMhrEnIA4i/iwFSxZp
- woA605ZEfA/OC/ip07NS6yEKzvb0LmLzqToFcz81TdFs7pN0uypo+1oSIsDyWyRwCZAC Dw== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r7u8c80ja-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jun 2023 04:15:37 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35F4FaFa017126
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jun 2023 04:15:36 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 14 Jun 2023 21:15:27 -0700
-Date:   Thu, 15 Jun 2023 09:45:23 +0530
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
-        <kishon@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <gregkh@linuxfoundation.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <p.zabel@pengutronix.de>, <arnd@arndb.de>,
-        <geert+renesas@glider.be>, <neil.armstrong@linaro.org>,
-        <nfraprado@collabora.com>, <broonie@kernel.org>,
-        <rafal@milecki.pl>, <quic_srichara@quicinc.com>,
-        <quic_varada@quicinc.org>, <quic_wcheng@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH 1/9] dt-bindings: usb: dwc3: Add IPQ5332 compatible
-Message-ID: <20230615041522.GA22186@varda-linux.qualcomm.com>
-References: <cover.1686126439.git.quic_varada@quicinc.com>
- <d07f804802f0678746aeba55910a83209ecbe054.1686126439.git.quic_varada@quicinc.com>
- <8fdd584e-988f-8542-f635-c0f6b5e63580@linaro.org>
+        Thu, 15 Jun 2023 00:17:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE7110A;
+        Wed, 14 Jun 2023 21:17:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D5CDD60ECD;
+        Thu, 15 Jun 2023 04:17:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF432C433C0;
+        Thu, 15 Jun 2023 04:17:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686802637;
+        bh=Wf7Wd81kwURj9/QONfqCGAHz6JBdBCub1nSOGMdDMA4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VcZufbfQCdXJzbcHg9NKloFUyJfXTJBoos26D/HEYloKrBGr7N5O9FuhPL2ET4HhM
+         E1oCxT4LMBe00RplzvezqEHpXG39/ki0nUsMO+zGFuMJPAVXilKM64QoZfjya/uq8k
+         s0fTInSgOpQHrwtLj9nAl2dFCHD8YptM9mTi7v1rIr87LCgIsAJ6jsX44zYF+1+Hmy
+         uCf77Z1ze7nz6xzI7dK8j/L3niRaLjR4r0C/0pdVlKf79F0wVig25eGvI23tzRdqqE
+         uIF3fXywF8zlOVy6YJte6po3PJcI2B/QW/bGe7jbPXoG8W4C/KjWQr/+CfKIBrDeF+
+         kzwXTElbSH/ow==
+Date:   Wed, 14 Jun 2023 21:17:15 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH net-next] tools: ynl-gen: generate docs for
+ <name>_max/_mask enums
+Message-ID: <20230614211715.01940bbd@kernel.org>
+In-Reply-To: <DM6PR11MB4657A5F161476B05C5F8B7569B5AA@DM6PR11MB4657.namprd11.prod.outlook.com>
+References: <20230613231709.150622-1-arkadiusz.kubalewski@intel.com>
+        <20230613231709.150622-3-arkadiusz.kubalewski@intel.com>
+        <20230613175928.4ea56833@kernel.org>
+        <DM6PR11MB46570AEF7E10089E70CC1D019B5AA@DM6PR11MB4657.namprd11.prod.outlook.com>
+        <20230614103852.3eb7fd02@kernel.org>
+        <DM6PR11MB4657A5F161476B05C5F8B7569B5AA@DM6PR11MB4657.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <8fdd584e-988f-8542-f635-c0f6b5e63580@linaro.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: uobfYjFoiKBivPOIJ3P6if7bRUruzbMz
-X-Proofpoint-GUID: uobfYjFoiKBivPOIJ3P6if7bRUruzbMz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-15_01,2023-06-14_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 suspectscore=0 mlxlogscore=556 malwarescore=0
- phishscore=0 bulkscore=0 impostorscore=0 priorityscore=1501 spamscore=0
- mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306150035
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 08:33:26PM +0200, Krzysztof Kozlowski wrote:
-> On 07/06/2023 12:56, Varadarajan Narayanan wrote:
-> > Document the IPQ5332 dwc3 compatible
->
-> Full stop.
+On Wed, 14 Jun 2023 22:11:38 +0000 Kubalewski, Arkadiusz wrote:
+> Thanks for pointing this, but it doesn't work :/
+> 
+> I tried described format but still ./scripts/kernel-doc warns about it.
+> Same as 'make htmldocs' does, as it uses ./scripts/kernel-doc
+> 
+> Also, if the enum is not described in the header, the docs produced by
+> the 'make htmldocs' would list the enum with the comment "undescribed".
 
-Ok.
+Oh, you're right :S Looks like private: does not work for enums.
 
-> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > ---
-> >  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> > index ae24dac..9c3d6f4 100644
-> > --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> > +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> > @@ -14,6 +14,7 @@ properties:
-> >      items:
-> >        - enum:
-> >            - qcom,ipq4019-dwc3
-> > +          - qcom,ipq5332-dwc3
-> >            - qcom,ipq6018-dwc3
-> >            - qcom,ipq8064-dwc3
-> >            - qcom,ipq8074-dwc3
-> > @@ -246,6 +247,7 @@ allOf:
-> >          compatible:
-> >            contains:
-> >              enum:
-> > +              - qcom,ipq5332-dwc3
-> >                - qcom,msm8994-dwc3
-> >                - qcom,qcs404-dwc3
->
-> What about interrupts?
+> It seems we need fixing:
+> - prevent warning from ./scripts/kernel-doc, so enums marked as "private:"
+>   would not warn
+> - generate __<ENUM_NAME>_MAX while marking them as "/* private: */"
+> - add some kind of "pattern exclude" directive/mechanics for generating
+>   docs with sphinx
+> 
+> Does it make sense?
+> TBH, not yet sure if all above are possible..
 
-Will fix and post next version.
+Let's ask Jon, and wait for him to chime in, I don't think these
+warnings should be a blocker for new families.
 
-Thanks
-Varada
+Jon, we have some "meta" entries in the uAPI enums in netlink 
+to mark the number of attributes, eg:
+
+enum {
+	NETDEV_A_DEV_IFINDEX = 1,
+	NETDEV_A_DEV_PAD,
+	NETDEV_A_DEV_XDP_FEATURES,
+/* private: */
+	__NETDEV_A_DEV_MAX, // this
+	NETDEV_A_DEV_MAX = (__NETDEV_A_DEV_MAX - 1) // and this
+};
+
+Also masks of all flags like:
+
+enum netdev_xdp_act {
+	NETDEV_XDP_ACT_BASIC = 1,
+	NETDEV_XDP_ACT_REDIRECT = 2,
+	NETDEV_XDP_ACT_NDO_XMIT = 4,
+	NETDEV_XDP_ACT_XSK_ZEROCOPY = 8,
+	NETDEV_XDP_ACT_HW_OFFLOAD = 16,
+	NETDEV_XDP_ACT_RX_SG = 32,
+	NETDEV_XDP_ACT_NDO_XMIT_SG = 64,
+/* private: */
+	NETDEV_XDP_ACT_MASK = 127, // this
+};
+
+which user space should not care about.
+
+I was hoping we can mark them as /* private: */ but that doesn't
+work, when we add kdocs without documenting those - there's a warning.
+Is this a known problem? Is it worth fixing?
+Do we need to fix both kernel-doc and sphinx or just the former?
