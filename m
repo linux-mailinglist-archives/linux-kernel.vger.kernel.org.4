@@ -2,68 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 401D97310CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C08917310CA
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242682AbjFOHdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 03:33:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48976 "EHLO
+        id S231225AbjFOHdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 03:33:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244336AbjFOHc7 (ORCPT
+        with ESMTP id S243416AbjFOHc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 03:32:59 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165152D76
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:32:43 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b4f9583404so14344155ad.2
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:32:43 -0700 (PDT)
+        Thu, 15 Jun 2023 03:32:56 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1422D5D
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:32:40 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-51a2661614cso484701a12.2
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:32:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shopee.com; s=shopee.com; t=1686814362; x=1689406362;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fNxDzGJxt2Rtrqq4SUvAlNEkp/z3fWK6RSnN1kjt4g4=;
-        b=KEuKbPWosv9iUFbOmk/dVUFWj71DFPDvQ7CbfsaMugZZDa8k//E8CAEE0n7vr+1f9j
-         LuaB0+g520Fb2VC8JF2Ke6qTtXHB+JzbKxSjCpCxOC9+m6pzYQjTgltBzMdNNNeet8Ea
-         TA9tu43p8KzKc8oCUgqgD54eZUaQvLI/G36bAbrWX2vpG6RWPW0E2Yk20bIdnngUwFnx
-         D1g4aYowz3lb2PduXbvRW/O2vQlVUUk6t5e9VKATy19FtWYWUTaAZlJk+ItZuMhRmNEr
-         ZqgledtelE5KdFama0C4457YvSAPiqJd6KA8hxamKJH0N860sPoNcs9G9Wa6jhBqj3x8
-         THYQ==
+        d=linaro.org; s=google; t=1686814359; x=1689406359;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0T01BUR4iszPkfnXV4jgUMkmxhDftwtafpe9lYKGnDA=;
+        b=WOUH9Nbt08zqpgFCndvBJAwWodKyinVlSsIdRlxu87njqklXzJoKG4tz78RGoxdBMq
+         eMPmQWN3FREY1Ofwo4Rc0CohiZJVMxyAvmSGkzuEVsAMdNhhxTGtBqoTdH4VWEQngAhG
+         OoTIasWySTORlamWrug9m4lSJoF/Sc0MEHiQGWnCSaAAsSGOMkbhIjYob3LEKIjc3oij
+         ic8vMYSm0Q+7JNL4EcWSBa+3SIJACce3UAStkO4WqWeNQlnW6sgZlPwlRSUgWcRUIE3f
+         LZ85xIWqFDjQtqta6bkVgbGksYO37nndDM0NETnZfQvOwI/BsoZEl0wZ5FsnWi7Vak28
+         XuTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686814362; x=1689406362;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fNxDzGJxt2Rtrqq4SUvAlNEkp/z3fWK6RSnN1kjt4g4=;
-        b=IrY2UQseNyJPmAv2xILqe+IEvehauVK/CpzA88fNYGl4k/zOHx5QUEqjAceRrdt08s
-         uosXWdrse9gc67chll+/AKTSctUCnugkIwcT+5oA+4StkTLkH8tX/EKiIcAZvkzIo6Ly
-         2u8mK734Qv+kysYJQDcfk6wQLkNKRJ+Tc9/DLXm4d47gvPEJBEvBbpiIVxUxMBo9nuG4
-         0lWc06xbZUrhFadcvhVV02NGdJnCJOE8o8gkFsQdIwVcgdT+9P6oCcvi0aqm6lYPkIq0
-         Y24pZCne/vUA+TtLIjx8YmKuIxmmVuLvKf9EiE13Xx+OQ9FX6j7vHCq/oJ26q+1jbMMz
-         Qs5A==
-X-Gm-Message-State: AC+VfDxxltO3ghHMncFOzVRGAcVhshRaBVojnKx5Ez+hVN3Wz1ZXc5BN
-        h+lWpu7yrntzOGHuL1xxWOTDzw==
-X-Google-Smtp-Source: ACHHUZ4RNNqwi8HU+cLMcAd/WjHpoTHaaDty+uv58jkXb+0O1XjbgRfWVrmXZ5x8K/OLSw71zvr47w==
-X-Received: by 2002:a17:903:2350:b0:1a1:b3bb:cd5b with SMTP id c16-20020a170903235000b001a1b3bbcd5bmr17543833plh.62.1686814362490;
-        Thu, 15 Jun 2023 00:32:42 -0700 (PDT)
-Received: from ubuntu-hf2.default.svc.cluster.local ([101.127.248.173])
-        by smtp.gmail.com with ESMTPSA id z18-20020a170903019200b001acad86ebc5sm13352570plg.33.2023.06.15.00.32.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 00:32:42 -0700 (PDT)
-From:   Haifeng Xu <haifeng.xu@shopee.com>
-To:     mhocko@suse.com
-Cc:     roman.gushchin@linux.dev, hannes@cmpxchg.org, shakeelb@google.com,
-        akpm@linux-foundation.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Haifeng Xu <haifeng.xu@shopee.com>
-Subject: [PATCH 2/2] mm/memcontrol: add check for allocation failure in mem_cgroup_init()
-Date:   Thu, 15 Jun 2023 07:32:26 +0000
-Message-Id: <20230615073226.1343-2-haifeng.xu@shopee.com>
-X-Mailer: git-send-email 2.25.1
+        d=1e100.net; s=20221208; t=1686814359; x=1689406359;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0T01BUR4iszPkfnXV4jgUMkmxhDftwtafpe9lYKGnDA=;
+        b=fLhaOAzK9EZ8e3uBGWtK+UfuI0LwJdBhjI3crCjSmQ7WgWUHm+dqlHONno/GSOh0Pm
+         ZbaUgBNoaaSVrFuF7mSwaGVJYNA2/EBUv0C0TUsmsx4hXIj+kbcB5W00l1cwvOzgFSTq
+         VAK6Sw9QkNesu4KhnFYyAp+gmKKPA4gpW6+dJ3p1lK3mmsh98I9stvCPLHZ7jsSvHf7j
+         ynFPcp0beinRnymH9KBbg1gYA1GizlOpnwb2UzvhGEll6eRq8VQw8p+cYgs53AK04Hih
+         69gPSZgSs0OUQg3UInSXBtx0eVbySUnUQPtPFkh1ckkruSp5a0bi36zQ2sdxWNvL9Tj6
+         uX1A==
+X-Gm-Message-State: AC+VfDx9vm8yRmiwSUJ8R0pwm3nNfmcOs7DdF1jApe70TRRcL9Gtn8tX
+        Vjra+rvCg05f0BAvrJ5l31t0mw==
+X-Google-Smtp-Source: ACHHUZ4vc4UKj8FD6SlKtS2PYzsT6NzQeOIOWArA5HI/qAH+CQhyfwIsc1QUnMosg4S/oHU9avvWTg==
+X-Received: by 2002:aa7:d756:0:b0:516:416b:f736 with SMTP id a22-20020aa7d756000000b00516416bf736mr11247984eds.35.1686814358858;
+        Thu, 15 Jun 2023 00:32:38 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id m9-20020aa7c489000000b0051422f31b1bsm8437975edq.63.2023.06.15.00.32.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jun 2023 00:32:38 -0700 (PDT)
+Message-ID: <df613aa9-00ea-2a8d-cf61-f1e85d26cd4d@linaro.org>
+Date:   Thu, 15 Jun 2023 09:32:35 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] dt-bindings: clock: drop unneeded quotes and use absolute
+ /schemas path
+Content-Language: en-US
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+References: <20230609140751.65129-1-krzysztof.kozlowski@linaro.org>
+ <b07d3bfae4702417010ed5ee14739bb0.sboyd@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <b07d3bfae4702417010ed5ee14739bb0.sboyd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,28 +85,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If mem_cgroup_init() fails to allocate mem_cgroup_tree_per_node, we
-should not try to initilaize it. Add check for this case to avoid
-potential NULL pointer dereference.
+On 15/06/2023 02:35, Stephen Boyd wrote:
+> Quoting Krzysztof Kozlowski (2023-06-09 07:07:51)
+>> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+>> checking for this can be enabled in yamllint.  Also absolute path
+>> starting with /schemas is preferred.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+> 
+> It's not clear if I should pick this up. Do you want to take it through
+> some DT tree?
 
-Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
----
- mm/memcontrol.c | 2 ++
- 1 file changed, 2 insertions(+)
+Please grab it.
 
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index c73c5fb33f65..7ebf64e48b25 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -7422,6 +7422,8 @@ static int __init mem_cgroup_init(void)
- 		struct mem_cgroup_tree_per_node *rtpn;
- 
- 		rtpn = kzalloc_node(sizeof(*rtpn), GFP_KERNEL, node);
-+		if (!rtpn)
-+			continue;
- 
- 		rtpn->rb_root = RB_ROOT;
- 		rtpn->rb_rightmost = NULL;
--- 
-2.25.1
+Best regards,
+Krzysztof
 
