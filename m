@@ -2,168 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BAA2731D3E
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE37F731D40
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241921AbjFOQAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 12:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47876 "EHLO
+        id S244403AbjFOQAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 12:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230256AbjFOQAO (ORCPT
+        with ESMTP id S241316AbjFOQAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 12:00:14 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A143E4;
-        Thu, 15 Jun 2023 09:00:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686844813; x=1718380813;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Z7lzWNBEGZ8+AKiNaUvSxKimaOLEam6bjdhYJzQtifI=;
-  b=ecnqhG5Zp0T+RMCjtOOtyaoHScQ/XtBMNLNcMjHQ/ZmscU7GdDZ6bcgW
-   0wnTRjK7Kg6kxxjTsEVgYnhWXGvxYxBWzwxlt7ZiwBIuQDiNEjUNY39w8
-   B9zz8YyWJeus8wnH9fYrOLVeLucNPHLuDMOCkqQZTsBnVr4EywpTJpzxA
-   gbMComK51EPISMMa9Orj7dyw3T3Qea0LTDww5eSlTbiIYIkilMxJ0hgpV
-   JqOuRJcVxIvq1LqKqJXHfj86dP8EK/mZIRiY+1/kj9ZO1En8nukDPavkb
-   TBA9pfCRbYnAspvQcMkX8AozZ2DXhF9OV8ghX3ciTidusTICscL9grs2T
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="343686185"
-X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="343686185"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 08:59:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="886727520"
-X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="886727520"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 15 Jun 2023 08:59:37 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q9pNo-00007a-31;
-        Thu, 15 Jun 2023 15:59:36 +0000
-Date:   Thu, 15 Jun 2023 23:59:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Xiaolei Wang <xiaolei.wang@windriver.com>, peter.chen@kernel.org,
-        pawell@cadence.com, rogerq@kernel.org, a-govindraju@ti.com,
-        gregkh@linuxfoundation.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: cdns3: Put the cdns set active part outside the
- spin lock
-Message-ID: <202306152319.B8AcWTgh-lkp@intel.com>
-References: <20230615110424.4007675-1-xiaolei.wang@windriver.com>
+        Thu, 15 Jun 2023 12:00:21 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A1F295B;
+        Thu, 15 Jun 2023 09:00:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=UrGANt7scBrisMpPSlfWbqcoa3cbh52COIYVdt4D2VY=; b=0QxAoBynm1SLoxxSI3Gclka5Vu
+        xUULIUSel2hEg2rLJ8O9BZaZHyrMxKQ4yYY3EdEF0sTzbZX4au+/KlFVLNOHc4Kwt+VY+yBCsexlJ
+        Es2+5cYctqb0heDwLAQOeW7ojHu52MJPhPFIH/XyxuIR/11WfXaeusqkohM1i9yBydIyIKjsC14tl
+        oRChPCxLXAAcvbchHQEuz9TI6BHX0crznjLQKOPyMHsfq247yt2Po1gdxDJXp2J5y7Er6f1yJ3WpJ
+        VEx43/do3B9eGlelwjIqPk1bDMRE8jIKvSSIJ748RNKabhQhDUsKMKMhJngRq17yPgthx/ySdfX0B
+        o5dl9luQ==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q9pOL-00FMVx-3A;
+        Thu, 15 Jun 2023 16:00:10 +0000
+Message-ID: <e2b46606-7ebc-c9a4-4f9a-873c0e71da5e@infradead.org>
+Date:   Thu, 15 Jun 2023 09:00:08 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230615110424.4007675-1-xiaolei.wang@windriver.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: linux-next: Tree for Jun 2 (arch/powerpc/kernel/iommu.c)
+Content-Language: en-US
+To:     Timothy Pearson <tpearson@raptorengineering.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>
+References: <20230602140143.0af52cee@canb.auug.org.au>
+ <2d188c87-ef34-3812-7330-a985f756d959@infradead.org>
+ <87h6rogjok.fsf@mail.lhotse>
+ <586983120.3136676.1685851048873.JavaMail.zimbra@raptorengineeringinc.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <586983120.3136676.1685851048873.JavaMail.zimbra@raptorengineeringinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xiaolei,
+Hi Timothy,
 
-kernel test robot noticed the following build errors:
+On 6/3/23 20:57, Timothy Pearson wrote:
+> 
+> 
+> ----- Original Message -----
+>> From: "Michael Ellerman" <mpe@ellerman.id.au>
+>> To: "Randy Dunlap" <rdunlap@infradead.org>, "Stephen Rothwell" <sfr@canb.auug.org.au>, "Linux Next Mailing List"
+>> <linux-next@vger.kernel.org>
+>> Cc: "linux-kernel" <linux-kernel@vger.kernel.org>, "linuxppc-dev" <linuxppc-dev@lists.ozlabs.org>, "Alexey
+>> Kardashevskiy" <aik@ozlabs.ru>, "Timothy Pearson" <tpearson@raptorengineering.com>
+>> Sent: Saturday, June 3, 2023 7:22:51 PM
+>> Subject: Re: linux-next: Tree for Jun 2 (arch/powerpc/kernel/iommu.c)
+> 
+>> Randy Dunlap <rdunlap@infradead.org> writes:
+>>> On 6/1/23 21:01, Stephen Rothwell wrote:
+>>>> Hi all,
+>>>>
+>>>> Changes since 20230601:
+>>>>
+>>>
+>>> On powerpc64, a randconfig failed with:
+>>>
+>>> In file included from ../include/linux/list.h:5,
+>>>                  from ../include/linux/preempt.h:11,
+>>>                  from ../include/linux/spinlock.h:56,
+>>>                  from ../include/linux/mmzone.h:8,
+>>>                  from ../include/linux/gfp.h:7,
+>>>                  from ../include/linux/slab.h:15,
+>>>                  from ../arch/powerpc/kernel/iommu.c:15:
+>>> ../arch/powerpc/kernel/iommu.c: In function
+>>> 'spapr_tce_setup_phb_iommus_initcall':
+>>> ../arch/powerpc/kernel/iommu.c:1391:36: error: 'hose_list' undeclared (first use
+>>> in this function); did you mean 'zonelist'?
+>>>  1391 |         list_for_each_entry(hose, &hose_list, list_node) {
+>>>       |                                    ^~~~~~~~~
+>> ...
+>>
+>> hose_list is in pci-common.c which is built when PCI=y.
+>>
+>> PSERIES and POWERNV force PCI=y.
+>>
+>> But this config has neither:
+>>
+>> # CONFIG_PPC_POWERNV is not set
+>> # CONFIG_PPC_PSERIES is not set
+>> CONFIG_HAVE_PCI=y
+>> # CONFIG_PCI is not set
+>> # CONFIG_COMMON_CLK_RS9_PCIE is not set
+>>
+>>
+>> Probably the spapr_tce code should be wrapped in an #ifdef that is only
+>> enabled when POWERNV || PSERIES is enabled.
+>>
+>> cheers
+> 
+> Sounds reasonable, I was going to look into this further over the weekend.  I can put together a patch for Monday if that works?
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.4-rc6 next-20230615]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Did you prepare a patch for this? I am still seeing this build error.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Xiaolei-Wang/usb-cdns3-Put-the-cdns-set-active-part-outside-the-spin-lock/20230615-190721
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20230615110424.4007675-1-xiaolei.wang%40windriver.com
-patch subject: [PATCH v2] usb: cdns3: Put the cdns set active part outside the spin lock
-config: arm64-randconfig-r003-20230615 (https://download.01.org/0day-ci/archive/20230615/202306152319.B8AcWTgh-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-        git fetch usb usb-testing
-        git checkout usb/usb-testing
-        b4 shazam https://lore.kernel.org/r/20230615110424.4007675-1-xiaolei.wang@windriver.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/usb/cdns3/
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306152319.B8AcWTgh-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/usb/cdns3/cdns3-plat.c: In function 'cdns3_controller_resume':
->> drivers/usb/cdns3/cdns3-plat.c:258:9: error: too few arguments to function 'cdns_resume'
-     258 |         cdns_resume(cdns);
-         |         ^~~~~~~~~~~
-   In file included from drivers/usb/cdns3/cdns3-plat.c:21:
-   drivers/usb/cdns3/core.h:132:19: note: declared here
-     132 | static inline int cdns_resume(struct cdns *cdns, u8 set_active)
-         |                   ^~~~~~~~~~~
->> drivers/usb/cdns3/cdns3-plat.c:261:9: error: implicit declaration of function 'cdns_set_active'; did you mean 'cxl_mem_active'? [-Werror=implicit-function-declaration]
-     261 |         cdns_set_active(cdns, !PMSG_IS_AUTO(msg));
-         |         ^~~~~~~~~~~~~~~
-         |         cxl_mem_active
-   cc1: some warnings being treated as errors
-
-
-vim +/cdns_resume +258 drivers/usb/cdns3/cdns3-plat.c
-
-   229	
-   230	static int cdns3_controller_resume(struct device *dev, pm_message_t msg)
-   231	{
-   232		struct cdns *cdns = dev_get_drvdata(dev);
-   233		int ret;
-   234		unsigned long flags;
-   235	
-   236		if (!cdns->in_lpm)
-   237			return 0;
-   238	
-   239		if (cdns_power_is_lost(cdns)) {
-   240			phy_exit(cdns->usb2_phy);
-   241			ret = phy_init(cdns->usb2_phy);
-   242			if (ret)
-   243				return ret;
-   244	
-   245			phy_exit(cdns->usb3_phy);
-   246			ret = phy_init(cdns->usb3_phy);
-   247			if (ret)
-   248				return ret;
-   249		}
-   250	
-   251		ret = set_phy_power_on(cdns);
-   252		if (ret)
-   253			return ret;
-   254	
-   255		cdns3_set_platform_suspend(cdns->dev, false, false);
-   256	
-   257		spin_lock_irqsave(&cdns->lock, flags);
- > 258		cdns_resume(cdns);
-   259		cdns->in_lpm = false;
-   260		spin_unlock_irqrestore(&cdns->lock, flags);
- > 261		cdns_set_active(cdns, !PMSG_IS_AUTO(msg));
-   262		if (cdns->wakeup_pending) {
-   263			cdns->wakeup_pending = false;
-   264			enable_irq(cdns->wakeup_irq);
-   265		}
-   266		dev_dbg(cdns->dev, "%s ends\n", __func__);
-   267	
-   268		return ret;
-   269	}
-   270	
-
+thanks.
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+~Randy
