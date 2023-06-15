@@ -2,80 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63390731CF2
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 17:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F5BB731CF9
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 17:47:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241603AbjFOPpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 11:45:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39844 "EHLO
+        id S1344021AbjFOPrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 11:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344392AbjFOPpg (ORCPT
+        with ESMTP id S1344142AbjFOPrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 11:45:36 -0400
-Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C210F2728;
-        Thu, 15 Jun 2023 08:45:34 -0700 (PDT)
-Received: by mail-oo1-xc31.google.com with SMTP id 006d021491bc7-558b04141e2so1688008eaf.0;
-        Thu, 15 Jun 2023 08:45:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686843934; x=1689435934;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=7uP2GIK/pJgBMyLexQ3e7d03sdWuNsvi/ReuDEmt6yw=;
-        b=Qwcly8aXM9oXm39Xr5Zsr1LNNGDQKCua51uPH+5kg/H7DfqImXe3gyUq6otsAEf/AF
-         tFZbxMTcRs6NWaPOXI/hHGVdh1FuRIuqo8bLOMST2wBFbAD6VdGSZUxjSIfAesT9rcPn
-         Fit3KGGWSS6m14HDc4ZBrO6xUj22FybcJU/MfR0Wsg38uW27idBNu7c2iocsBEnSmOQr
-         walzJNexY/Cp+2V/YAFCXd3SAGLGeojsfND/VtOhksAIS/gEjeF54LHh/7tSkUeL6ol5
-         08hj+l513uCE2/7yHQA4PH6kZIQkHBQQnCB6OJae3OPne5Xd0IaWFbJGZ5rYYlbpmh3K
-         1Yxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686843934; x=1689435934;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7uP2GIK/pJgBMyLexQ3e7d03sdWuNsvi/ReuDEmt6yw=;
-        b=ZF0bogKG3V6CaKXeYB2/wk817yckxdsMqFIMbRMfe+izoQq9V9QOI6MgvIQm4VZ/Y0
-         Havp8atflzYj0PDprudoYs2VhJiQiLE7kK7B5y0IvbMSE6Iq9C19tUOanocc73ThG084
-         pexepsZPm8u6mjTcBoP85O6NzlEhGTvAlrALK78Z9aZfiH5ZR/HgP0MKL0Rs8pir5FO2
-         sEq6dxpsra6RpEl5QZ70xt3A+SXKMCCCeji8EUC+DS2eps0+rejcixFxkpmJktopPMMo
-         HPYuPSW7Hkip29IYyOCYsBWlsd3JzlW1kRyO29nGHogNabmAQnoPqzP32Qo/3CX+ZBCe
-         rF6g==
-X-Gm-Message-State: AC+VfDwnQBOLAbSgq6hadeIWn4GCDUwZPVUCz86SviAwfgzCyIvsaBpr
-        6bITIOc+DBf2lEwMW3TPVlM=
-X-Google-Smtp-Source: ACHHUZ6BOIWCI6ss6eWnwOMKIBHAp+H7S9m9epWiLO3mc6eaUeUkaCMPA8xHRQ+o2z2X4fr6o6tRww==
-X-Received: by 2002:a05:6820:319:b0:555:722e:3ce with SMTP id l25-20020a056820031900b00555722e03cemr12060105ooe.9.1686843933676;
-        Thu, 15 Jun 2023 08:45:33 -0700 (PDT)
-Received: from [192.168.0.200] ([216.130.59.33])
-        by smtp.gmail.com with ESMTPSA id s3-20020a4aa543000000b0054f85f67f31sm5984474oom.46.2023.06.15.08.45.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 08:45:33 -0700 (PDT)
-Sender: Larry Finger <larry.finger@gmail.com>
-Message-ID: <11412b24-c107-247b-5e6f-1a95a737a9f7@lwfinger.net>
-Date:   Thu, 15 Jun 2023 10:45:26 -0500
+        Thu, 15 Jun 2023 11:47:19 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684B510F6;
+        Thu, 15 Jun 2023 08:47:18 -0700 (PDT)
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35FFFQMA009766;
+        Thu, 15 Jun 2023 15:46:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=087qHErCZA/JVKPFMbbrEGEkxbB+mjj9YP0xkEBcYl0=;
+ b=WNkYf8fBCCq7PJJdNiwboCADRsY9opFncrD4zFzV6JVES+QMwDgdBbYaI6UXIvU6Vll1
+ 4KUUgmfYI8spQcJPrXYGmqFWNMnQfGUIB7kQpEBdLoXlmg/Bbrp0UFKRbFteDsgA6W8l
+ rN3SaOYBcwY+X8TMlB0uxH+aHN4neCNnlMssLtKTTr3fn3+wzOLOp1JuzkDp4mt2je3f
+ rgF4MTl7Vul7iWv/zz2rq7EILgMi3cpHikw27wMOinCv+AgdSXMO55jd7ViunvYsFLKD
+ i3/XqkrVUqH4/sKRGzozlWGi2L99O14UbSuCysgof91uArmkt/z3RdhdhogTuB1qMzCT Fg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r84qb1yg0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 15:46:42 +0000
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35FF7tLo003717;
+        Thu, 15 Jun 2023 15:46:42 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r84qb1ydt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 15:46:42 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35F5mTQU029171;
+        Thu, 15 Jun 2023 15:46:39 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3r4gt53pxd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 15:46:39 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35FFkak827001424
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 15 Jun 2023 15:46:36 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A93F220040;
+        Thu, 15 Jun 2023 15:46:36 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2764F20043;
+        Thu, 15 Jun 2023 15:46:36 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.144.159.119])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 15 Jun 2023 15:46:36 +0000 (GMT)
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, x86@kernel.org,
+        linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu, tglx@linutronix.de,
+        dave.hansen@linux.intel.com, mingo@redhat.com, bp@alien8.de
+Subject: [PATCH 00/10] Introduce SMT level and add PowerPC support
+Date:   Thu, 15 Jun 2023 17:46:25 +0200
+Message-ID: <20230615154635.13660-1-ldufour@linux.ibm.com>
+X-Mailer: git-send-email 2.41.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: vbNxcUUp6qN-xWwxpfBrWD3mvl8RDwP1
+X-Proofpoint-ORIG-GUID: 9qz2-n89y1ASyiV1R1Nvr1hDg_lnuL0c
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [RFC 1/1] wifi: rtw88: Add support for the SDIO based RTL8723DS
- chipset
-To:     Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        Ping-Ke Shih <pkshih@realtek.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>
-References: <20230615142044.1357257-1-heinrich.schuchardt@canonical.com>
-Content-Language: en-US
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-In-Reply-To: <20230615142044.1357257-1-heinrich.schuchardt@canonical.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-15_12,2023-06-15_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
+ adultscore=0 lowpriorityscore=0 bulkscore=0 mlxlogscore=985 phishscore=0
+ spamscore=0 suspectscore=0 malwarescore=0 priorityscore=1501 clxscore=1011
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306150136
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,31 +91,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/15/23 09:20, Heinrich Schuchardt wrote:
-> Wire up RTL8723DS chipset support using the rtw88 SDIO HCI code as
-> well as the existing RTL8723D chipset code.
-> 
-> Signed-off-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-> ---
-> 
-> On my Lichee RV Dock board this patch is enough to make The RTL8723DS
-> work. But unfortunately after running some time the driver crashes.
-> My impression is that the crash is not specific to my patch but must
-> be hidden in one of the existing functions it is invoking.
-> 
-> This seems to be related to not checking pkt_stat->pkt_len.
-> 
-> My kernel was built against v6.4-rc6.
+I'm taking over the series Michael sent previously [1] which is smartly
+reviewing the initial series I sent [2].  This series is addressing the
+comments sent by Thomas and me on the Michael's one.
 
-Heinrich,
+Here is a short introduction to the issue this series is addressing:
 
-Martin Blumenstingl has written a driver for the 8723ds chip. It has been merged 
-into the wireless-next tree, and will be in mainline kernel 6.5. In addition, it 
-is available at https://github.com/lwfinger/rtw88.git.
+When a new CPU is added, the kernel is activating all its threads. This
+leads to weird, but functional, result when adding CPU on a SMT 4 system
+for instance.
 
-Please try it to see if it files your crash problem. Several users of rtw88 have 
-reported success.
+Here the newly added CPU 1 has 8 threads while the other one has 4 threads
+active (system has been booted with the 'smt-enabled=4' kernel option):
 
-Larry
+ltcden3-lp12:~ # ppc64_cpu --info
+Core   0:    0*    1*    2*    3*    4     5     6     7
+Core   1:    8*    9*   10*   11*   12*   13*   14*   15*
 
+This mixed SMT level may confused end users and/or some applications.
+
+There is no SMT level recorded in the kernel (common code), neither in user
+space, as far as I know. Such a level is helpful when adding new CPU or
+when optimizing the energy efficiency (when reactivating CPUs).
+
+When SMP and HOTPLUG_SMT are defined, this series is adding a new SMT level
+(cpu_smt_num_threads) and few callbacks allowing the architecture code to
+fine control this value, setting a max and a "at boot" level, and
+controling whether a thread should be onlined or not.
+
+[1] https://lore.kernel.org/linuxppc-dev/20230524155630.794584-1-mpe@ellerman.id.au/
+[2] https://lore.kernel.org/linuxppc-dev/20230331153905.31698-1-ldufour@linux.ibm.com/
+
+Laurent Dufour (1):
+  cpu/SMT: Remove topology_smt_supported()
+
+Michael Ellerman (9):
+  cpu/SMT: Move SMT prototypes into cpu_smt.h
+  cpu/SMT: Move smt/control simple exit cases earlier
+  cpu/SMT: Store the current/max number of threads
+  cpu/SMT: Create topology_smt_threads_supported()
+  cpu/SMT: Create topology_smt_thread_allowed()
+  cpu/SMT: Allow enabling partial SMT states via sysfs
+  powerpc/pseries: Initialise CPU hotplug callbacks earlier
+  powerpc: Add HOTPLUG_SMT support
+  powerpc/pseries: Honour current SMT state when DLPAR onlining CPUs
+
+ .../ABI/testing/sysfs-devices-system-cpu      |  1 +
+ arch/powerpc/Kconfig                          |  1 +
+ arch/powerpc/include/asm/topology.h           | 20 +++++
+ arch/powerpc/kernel/smp.c                     |  8 +-
+ arch/powerpc/platforms/pseries/hotplug-cpu.c  | 30 +++++--
+ arch/powerpc/platforms/pseries/pseries.h      |  2 +
+ arch/powerpc/platforms/pseries/setup.c        |  2 +
+ arch/x86/include/asm/topology.h               |  8 +-
+ arch/x86/kernel/cpu/bugs.c                    |  3 +-
+ arch/x86/kernel/smpboot.c                     | 25 +++++-
+ include/linux/cpu.h                           | 25 +-----
+ include/linux/cpu_smt.h                       | 33 ++++++++
+ kernel/cpu.c                                  | 83 +++++++++++++++----
+ 13 files changed, 187 insertions(+), 54 deletions(-)
+ create mode 100644 include/linux/cpu_smt.h
+
+-- 
+2.41.0
 
