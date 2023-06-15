@@ -2,199 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 967FC730C24
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 02:25:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CEDA730C2D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 02:27:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236837AbjFOAZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 20:25:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
+        id S237152AbjFOA1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 20:27:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231130AbjFOAZw (ORCPT
+        with ESMTP id S236965AbjFOA1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 20:25:52 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E640E3
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 17:25:52 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35EJSLLe011569;
-        Thu, 15 Jun 2023 00:25:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2023-03-30;
- bh=a1ZJ6ruecuSSOCVGpLL7Plhl6OKdlizHU6N5Lk6XmHU=;
- b=Mw29szS0FGW6mroNOPeU2IHD3px8C/52kkn28vOvqf1mQKdTANOwBz/WMLMipsfK0EK9
- NAjeQVC/t/F1CMJhbxBUKigQzFr0SMoAO4aBaMEVCA+2KUVSMv5U1xo/uGNmp+x6/UPZ
- 0xk1LyRAppVZoVAP1E8QTQU6+3aSKPn3S1EforWxvoLyoP4Ym05E8A9kNwBdhSkmEleC
- jhwJ95+76KD0PIUEHOYPvYMbUl1qvVjZRs0jShyFWV5MWKA1EqCYRRMER4tMHY9f6snT
- nxcbwNcVq1lNUJgZgu8I/B3khV0Qm+Kd4upAQk45b2wvnYR41XcgRwLuz2Tb6tBzxh30 Mw== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r4hquruq7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Jun 2023 00:25:32 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35EM04l3008307;
-        Thu, 15 Jun 2023 00:25:31 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2169.outbound.protection.outlook.com [104.47.55.169])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3r4fmchshy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Jun 2023 00:25:30 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SK7RGPygpVzlB6OwS8BYYk8Vao4kTQvjNUXcbizu2Cnfr8xyX6QGa7GYerhbiI6gBFdRjpUZkHk5E9eB9ivMYO6FhV2rdaP0AdulgI8OjyEYAWABQ1b9+BWcNI67JN3G+2bKNLZscb9DKy7soiC5xZi4bi8mbu4GkzXWD0mGrkjlre6KfwwMkWqP5Mu5NVzaPK2wJlnl8J6qWuNJBRuNafoU+rzBz/NB775Nqu/k2agN9WPij0urTGpBrjEPa6DLLDhpbUlK01oUeejL9BGL+gg/58w/QB97l3Xlw4mDEQtKSZBk/KyHXcwHeCXjdtH/xrKbMG4ym6n/yq4DnhNCgQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=a1ZJ6ruecuSSOCVGpLL7Plhl6OKdlizHU6N5Lk6XmHU=;
- b=lEgxwq02qZMhblCv0LJ+I+qLWe4LVU4xqjPhjUwYi+sAp3g0xKFywpA6+bQJrsb5uDOD0sY4wM5kLbwMoLom4YPLVfg0QzVrfdrKnXBj347HdoiGFbtvnIAZBO6UZySm3Cgbd03cPc1BcEV1YF3DL0ko3+Uy34HXsUXNi+L4QKvM56l3jX1o5yW2Y9ZlNsXHbbjDKI6RW+Ie3TmmjuF6Hf8Hhv1JytKEx52vEbU1q7m6MMJ9seQCtXSo4mHXOU0zkd7EFDu9UbnFzz99f7HT0W3Hiedobzj1jHdSAO6XFnIbwbegqXXlmHN0TfsrJt/EzFD5NqESUZDnUk0/y6trtQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Wed, 14 Jun 2023 20:27:03 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178BA2686
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 17:27:00 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-57028539aadso4925297b3.2
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 17:27:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=a1ZJ6ruecuSSOCVGpLL7Plhl6OKdlizHU6N5Lk6XmHU=;
- b=GNBuVLFe4VqJgol51fXLB67aneT7KvIEsV4W5CKK837Q+B5yuyrdJq/cmX2mRY070g7qFYFts591xsUMlCtn9LnCTGn+dln5twmtWeZMXLmRYl2+uyU6dc0rB2EGpfOn2PSAdkyD1Nv3m+Bf6/nc5bd1m0Gl1gYa3kqJyNN/tr0=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by IA1PR10MB7335.namprd10.prod.outlook.com (2603:10b6:208:3d8::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Thu, 15 Jun
- 2023 00:25:29 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::4a17:13b0:2876:97f2]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::4a17:13b0:2876:97f2%7]) with mapi id 15.20.6477.037; Thu, 15 Jun 2023
- 00:25:28 +0000
-Date:   Wed, 14 Jun 2023 17:25:25 -0700
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        d=google.com; s=20221208; t=1686788819; x=1689380819;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DnWlt5Rs3KXon7VRWQ16gguJVnALQ3ZmklO6Frv1x8M=;
+        b=WRHrIu3gJ2wGOTVICPuRYrvd1c7L0vJmrlkgymQr/8tluUcC03co9peWifCQEP1BsY
+         n1bcKbEoAy3csFFfNr5H+pB6uC7G+M6NDOY8RplOtmKbo0R9oGV+MU9bx9fwzUqBE6qz
+         UoP7JSR/WImIB+BSu++yiJd2ccucSuR3F/8O1ueWLj3eeb3W7W3deV4ilVi0Hz02Zt93
+         TjoBiZtPZ+PXM7D8IHAIhSy81RgpuYrpZDW9wXrDupoXxD94l+mSwBro2iU8DdUEQdKI
+         M+gCDPVaDv5mY02cBNtASY+U3YkMeuVD/52uz72mGD+cYhnjUb+L8OIbARxgrlvrjLd5
+         w90A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686788819; x=1689380819;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DnWlt5Rs3KXon7VRWQ16gguJVnALQ3ZmklO6Frv1x8M=;
+        b=b3NrD0ALJ/hfMASB6sjOLeZKI0tw+dH7ZPGj9hhR7v6Fg0lfEc7bw/gqN68sIofxz2
+         pAJQ0LHKVbio5nFw8rS8VJ/qThOHeEthe7eAv4aAzPbWuM+0OLsS+AMJr4H1CwJsPFgt
+         vTzbHM+mqHK4Gm7fw7GrtmdgUmLyAH7Q73rsQeEr94dRrlW/k9gQXUI6LiSOhPijmCoS
+         NJEqtKP1WJFPWRy5D+Qm0ilglsU/LqRHqT+ASYy8oUMRCczGDyF3SsBfJBWyZn4M6IgE
+         +YPU0ZMAOgSweXdKTpDqSPOOYO2vLVqFbZZKFQqVdL6JJxasUe/OxzR/3IlVcIf+dYxZ
+         o9BQ==
+X-Gm-Message-State: AC+VfDw9bunNLpaXMImAJ1pgOK+h06t85DhN+rS50djHCeI7MRGOTM4A
+        yjnA8vB0HlQICX1c2+dieUNX3g==
+X-Google-Smtp-Source: ACHHUZ7bmVwEeref/EmuNgObqE0Cze454MmZYUDZGEjkaQsMh2xmkr5i3f3fpHWj6dmJHfcSbaICaw==
+X-Received: by 2002:a81:8744:0:b0:56d:31bb:7388 with SMTP id x65-20020a818744000000b0056d31bb7388mr3076697ywf.49.1686788819041;
+        Wed, 14 Jun 2023 17:26:59 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id h81-20020a815354000000b0055a881abfc3sm2421337ywb.135.2023.06.14.17.26.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 17:26:57 -0700 (PDT)
+Date:   Wed, 14 Jun 2023 17:26:43 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Nathan Chancellor <nathan@kernel.org>
+cc:     Hugh Dickins <hughd@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        James Houghton <jthoughton@google.com>,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH 4/7] mm/hugetlb: Prepare hugetlb_follow_page_mask() for
- FOLL_PIN
-Message-ID: <20230615002525.GD38211@monkey>
-References: <20230613215346.1022773-1-peterx@redhat.com>
- <20230613215346.1022773-5-peterx@redhat.com>
- <533c32cf-9a18-1590-4d29-f076d6bd58c1@redhat.com>
- <ZInYh3cVUil9R/cf@x1n>
- <ef0f8e0e-cbce-7c7b-1b0e-c9d52ede7e0e@redhat.com>
- <ZIndN9isc4pTp2zK@x1n>
- <38574ed3-ea96-a72e-00dd-4e6204413a86@redhat.com>
- <ZInh//34yuKNuuX8@x1n>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZInh//34yuKNuuX8@x1n>
-X-ClientProxiedBy: MW4P221CA0009.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:303:8b::14) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v2 07/23] mips: update_mmu_cache() can replace
+ __update_tlb()
+In-Reply-To: <20230614231758.GA1503611@dev-arch.thelio-3990X>
+Message-ID: <f5526f17-9d78-f7ea-427a-7e76bfeb6b8@google.com>
+References: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com> <178970b0-1539-8aac-76fd-972c6c46ec17@google.com> <20230614231758.GA1503611@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|IA1PR10MB7335:EE_
-X-MS-Office365-Filtering-Correlation-Id: f5c9b4c4-0e1c-47e6-2c00-08db6d370592
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7yOAtJdwp6itd+0fppuxDnlYReR1uoxuLdHwOXpIIe7n/GpCODcRCqWQ0PGQyhPJOdVkCqbOln932Uzn+fxUepQonL9ogKhMDvaURnVwov1/9ADhWVbk2TyUstBDikVWynk7ODks/kKynbNXIbDnevLtTzt/wkL2KM7QDUhIP9jn/3dhuqwAKxrmbuY6n3/4PpOde+Vs9yP3orUCYRPYA3bqiU5/MLJXaw3vhGohqlol/MpIMa5BJHukCIkz+mrNnapFfCurz86SM5wZvcrasSitRPvkjswm0hci/Gx6gE9/kcrZ5Fr1M2ssIpQKdxRfCARp+Yq+c0Duul3rvtOuiTfpkOXS/lCrmu9GUCBjUqDnwPrXRT30T+lIWvltDnaWS7G6ZWZJWd/Ah0LoePepQ+bcLhiXQjumTrSoI16FQhQSkaOXeGOfedjGrJkwMXkYANxYp4AgZMhbKFO/OkkQNQBs7yHzFHdZ+xznfPk7iit9GlN9fV1G/4M7vNIwGqd+eXEtCCS+BTWsl9CtmwfUOuvhunjccZkjOS5cikTQRkZ3R6Sc/j9muDaJ1FTodgUy
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(366004)(136003)(39860400002)(376002)(346002)(396003)(451199021)(66476007)(66946007)(66556008)(54906003)(478600001)(8936002)(5660300002)(6916009)(6666004)(4326008)(8676002)(41300700001)(6486002)(316002)(38100700002)(33716001)(9686003)(186003)(26005)(6506007)(1076003)(44832011)(53546011)(6512007)(86362001)(2906002)(4744005)(7416002)(33656002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0OoHfee0xjPl0IBs5AtKqmUioI2FoZLPpLpJ8JUlS+MbgfcSCLFMoi6bWr4L?=
- =?us-ascii?Q?gq955FgDNz4HllVdbjNANBfyOMSMr5VqUxApy1g0S1YW8J/Tl8AstukCUBno?=
- =?us-ascii?Q?HMXHRXDYQ5uUhQMF+JARDx9+QGk8RMqlWaqlid+sF7lJDKH2+xPSjzDUWq+P?=
- =?us-ascii?Q?w4iJpjxA9TMWsRDDtshu1gHuxMnTyIyR2Nzu7+74PE2kybti0b93H2sD13Jr?=
- =?us-ascii?Q?cNVwTqWMhAe2mIIQZzYpPKfcAi2cmAGgRqkVnxfbCYwD5c1AnoJlBh2nLT6F?=
- =?us-ascii?Q?0TfJSXkjQI0W9IJ4l+4BdkKCkHeo6v6uABF5jLx2OMuiiEMm1pxbDXaBAdkn?=
- =?us-ascii?Q?u20tGGKpguya4b1Q7bSpZYb/YWO/+Jgo+BqZ4sRNWMOzUB7XxcMyJ5Yeu5b1?=
- =?us-ascii?Q?wpEiBKbABQ3K5YE+BltErNGLzba7L3yVCqlck6StV0oWW+xAtRoCSiFMTbhT?=
- =?us-ascii?Q?c0g+AfVgjMEE8QzgNQhlvejgRnhBQFAXxdizSNL7tN71J3YBH8S9jgvdHeOY?=
- =?us-ascii?Q?VRJelrPJ/GztXXneOAlTOBv5EPyUzgF7hMiEyCst+JdQMGMT8Rj9CItOh86L?=
- =?us-ascii?Q?uoI/SEUYCBwFzgnDvO25cLnTQG8OihoPn/qUEgqo6dxb5NUR8aweHbcCkoQM?=
- =?us-ascii?Q?5w7f0ZOox1t0bNjIQz26MtCLyC9YzLf84CIwrZd2ETlhfM3NQ1TUFQeSGSwB?=
- =?us-ascii?Q?NktupcNaz0BP090z/4HXCQ4TiuIQ+JrgAtRjx/zhywNiTo49m3l2BW5HPx7s?=
- =?us-ascii?Q?pn0GJ+2tL4iAsx0FQGwMSDG2i4gyadBsnxuzWmvNczNkdvIY0+N5yT07oHWg?=
- =?us-ascii?Q?+IBY4HB9Wv32n8AalEW7sUfvzsOg6oxFg6BHfLPz5wA40YrBUsDrVEANe/JL?=
- =?us-ascii?Q?Sv0BYo93MMZviIBC7SaRRIbP/WNM9jHZCQGwKgxiORLUrqsk2SYbDatlT2jh?=
- =?us-ascii?Q?4JPZj3iR1yHhE6ejOIvzH7l8I1G+ZbQqGE+Def20YdCFCKF07Vq2aGxKrUJD?=
- =?us-ascii?Q?k30USe7XgbIGjpOD8ItL+dvL7OS5w7chVzm4wfvXwd/CAZscpurvJcTbacNA?=
- =?us-ascii?Q?KmAf4IOEwO8tlPdLo94MUOck/Cf4Er+AM/xqdJIv/25oGkoB7qqcYty5gOxq?=
- =?us-ascii?Q?ewLktQ3nojhC7+0WA0KyHyGf4vOwpwaVW2MfE7gj8CfAFKsvWm6N9rwSiMka?=
- =?us-ascii?Q?uoiSZP04DSaGBOYSO01UsV5KD0dh1VMnx7wMj0w8iOrzHtL1BE3FIut0qiTU?=
- =?us-ascii?Q?W3kzVi33iRTKVyJzHjVxYOuCWMWi445rEc24wEoyc2W91V+yY97E1Zfsf5M2?=
- =?us-ascii?Q?cCLNf5h5WsJYW8KuNkoxM1DWdmscm6JBrzL/rsETFtPjQ4126XCGKJso2g1h?=
- =?us-ascii?Q?9EHKvy1AyqTWiKjn3NsvdBmfTYe3dx46MrFGTHNExuRL6KKe51LZ/x59Ktis?=
- =?us-ascii?Q?BCR7DblONB7cMGDqIYGFtGueUz/15DKn3nFH1nkXda5zzWpBoezAK6iC9ZIc?=
- =?us-ascii?Q?odLDZGEGo7SpMjKeFVVKHJWzBa4O/QO0pW/3Ek4uzfbAO+1xKk5IFOEuubP2?=
- =?us-ascii?Q?uNH0mTToBz4uQ0ry0jG4PHATK22j0DQ/KNT8aNwrWI200O891XJGJ7QeQ0gU?=
- =?us-ascii?Q?7Q=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?nBlmP7lPi6He2SR7IwMTyCFKHmm+xfu6tVjTEEjcvGxU5graJC3Kiwjj5ufZ?=
- =?us-ascii?Q?q3oqj3QeWU0hxyevMRi7W8boRpfbSC1NFKGD7nPLYRCfJM5k4t36hF36CED2?=
- =?us-ascii?Q?dJ/A/TQSiZwToyltUxyU8cwW1SuzLnGHN5BGTG2QCNCmpxM+KpRxHBL9qDgB?=
- =?us-ascii?Q?8tgMtnxPDl6n0FXCID4r6ZAeKfqNSqjVMjFkS21Fw968NQewUXSujZ2CkdD9?=
- =?us-ascii?Q?zLTJfZe1ELKqLHy1PzovTFnL+zvAvI+oVgPizg3qe7w7vCc0UV6JB6/g45nh?=
- =?us-ascii?Q?oIgeN9p9/Z15kFxhqELjsualP6h+U81nc/MBFDdaN4LDWRNL3itz79hJnvWk?=
- =?us-ascii?Q?dsPkdXxNSdEHJ/P2W9eYCd/jBHSUuvhIFpGevddkkD53J4cg0AC0cSyFpozz?=
- =?us-ascii?Q?38OEW/zmwdfKQ5WkQNCTOnDQ7Du1lq+QWVlwk78sUFt41xILMEdGumcHXYdR?=
- =?us-ascii?Q?cr9ZUwy2Jx3KgvuXh//4x6Z8IA9B6QVhNRpouIAY4Vd6QCKDXk4zJ6IMHRxU?=
- =?us-ascii?Q?CjXf2alCOKKZX29DPpSpKo8PmPxtQIn+JsF7UKHcyKrm4FuCWOc4MuKIUHie?=
- =?us-ascii?Q?5J4ZgIPtZvu9uGz2lL9mskTqiFcfqV9E2eVo+JNtSHTq1bj5sQVRuI3NZ802?=
- =?us-ascii?Q?dC3hN9Imji6Xo+gxA6yx4bk+7Q0PTGdvIKZvg6nOKj/HM5gmoYfywaMr46Dg?=
- =?us-ascii?Q?IUgGp3qiwYqQuHdKrK9HH1Zhmo+T2FigqlP29XIbD+DxEyJb39LReHY6W0Cf?=
- =?us-ascii?Q?+mjc8vOTiMuAS/aE2nyJKdVn9lkOFI/1l6YsOIG1glnP7uNXy+FPGSn+fMhh?=
- =?us-ascii?Q?2SailDSk17+B7p32LgDznmIp4DkKe//STjpKJ5VdO/GjPp5X8qTCJHD5E+zu?=
- =?us-ascii?Q?odgJJyTHyoDN/hsbAZstL5Ohx5mgfkiYopyEBbY6RrH5sk7MyFnvdR3bzfcg?=
- =?us-ascii?Q?ZkSq50ppgJ731CTQUZtjUHRmahuNlFUJf+0XF3o5SLbiSfBjmj4/JgyLfAV/?=
- =?us-ascii?Q?gj8vTAqDPordQ+84dWdmaeZVnJNGizyv/PGX2Y7E31t8+WHlu3NMde8mW/Q5?=
- =?us-ascii?Q?T1rZcdgd?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f5c9b4c4-0e1c-47e6-2c00-08db6d370592
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 00:25:28.8217
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MtP1RNUGNPWyGoSDwgqELbPDc/59vjYQBSARizP3hn1qYUyCk71B14f8ywTI28hXZCfKyaU/IJ4/WHM/tpwmSA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB7335
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-14_14,2023-06-14_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=525 phishscore=0
- malwarescore=0 mlxscore=0 adultscore=0 bulkscore=0 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306150001
-X-Proofpoint-ORIG-GUID: cpyUIL0mMVlS0bJFBv3kmE99YeJOXbsM
-X-Proofpoint-GUID: cpyUIL0mMVlS0bJFBv3kmE99YeJOXbsM
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/14/23 11:51, Peter Xu wrote:
-> On Wed, Jun 14, 2023 at 05:47:31PM +0200, David Hildenbrand wrote:
-> > Right. Then just call patch #2 "Add missing write-permission check" and this
-> > patch "Support FOLL_PIN in hugetlb_follow_page_mask()" or sth. like that.
-> > 
-> > Regarding the backport, I really wonder if patch #2 is required at all,
-> > because I didn't sport any applicable FOLL_WRITE users. Maybe there were
-> > some? Hm. If it's not applicable, a single "Support FOLL_PIN in
-> > hugetlb_follow_page_mask()" patch might be cleanest.
-> 
-> Yeah, I agree.  The code is definitely needed, not the split of patches if
-> no need for a backport.  Let me merge then.
-> 
+On Wed, 14 Jun 2023, Nathan Chancellor wrote:
 
-Should have read this before adding my RB to patch 2.  I assumed no
-backport.  Agree, than merging the gup_must_unshare here makes more sense.
--- 
-Mike Kravetz
+> Hi Hugh,
+> 
+> On Thu, Jun 08, 2023 at 12:17:24PM -0700, Hugh Dickins wrote:
+> > Don't make update_mmu_cache() a wrapper around __update_tlb(): call it
+> > directly, and use the ptep (or pmdp) provided by the caller, instead of
+> > re-calling pte_offset_map() - which would raise a question of whether a
+> > pte_unmap() is needed to balance it.
+> > 
+> > Check whether the "ptep" provided by the caller is actually the pmdp,
+> > instead of testing pmd_huge(): or test pmd_huge() too and warn if it
+> > disagrees?  This is "hazardous" territory: needs review and testing.
+> > 
+> > Signed-off-by: Hugh Dickins <hughd@google.com>
+> > ---
+> >  arch/mips/include/asm/pgtable.h | 15 +++------------
+> >  arch/mips/mm/tlb-r3k.c          |  5 +++--
+> >  arch/mips/mm/tlb-r4k.c          |  9 +++------
+> >  3 files changed, 9 insertions(+), 20 deletions(-)
+> > 
+> > diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
+> > index 574fa14ac8b2..9175dfab08d5 100644
+> > --- a/arch/mips/include/asm/pgtable.h
+> > +++ b/arch/mips/include/asm/pgtable.h
+> > @@ -565,15 +565,8 @@ static inline pte_t pte_swp_clear_exclusive(pte_t pte)
+> >  }
+> >  #endif
+> >  
+> > -extern void __update_tlb(struct vm_area_struct *vma, unsigned long address,
+> > -	pte_t pte);
+> > -
+> > -static inline void update_mmu_cache(struct vm_area_struct *vma,
+> > -	unsigned long address, pte_t *ptep)
+> > -{
+> > -	pte_t pte = *ptep;
+> > -	__update_tlb(vma, address, pte);
+> > -}
+> > +extern void update_mmu_cache(struct vm_area_struct *vma,
+> > +	unsigned long address, pte_t *ptep);
+> >  
+> >  #define	__HAVE_ARCH_UPDATE_MMU_TLB
+> >  #define update_mmu_tlb	update_mmu_cache
+> > @@ -581,9 +574,7 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
+> >  static inline void update_mmu_cache_pmd(struct vm_area_struct *vma,
+> >  	unsigned long address, pmd_t *pmdp)
+> >  {
+> > -	pte_t pte = *(pte_t *)pmdp;
+> > -
+> > -	__update_tlb(vma, address, pte);
+> > +	update_mmu_cache(vma, address, (pte_t *)pmdp);
+> >  }
+> >  
+> >  /*
+> > diff --git a/arch/mips/mm/tlb-r3k.c b/arch/mips/mm/tlb-r3k.c
+> > index 53dfa2b9316b..e5722cd8dd6d 100644
+> > --- a/arch/mips/mm/tlb-r3k.c
+> > +++ b/arch/mips/mm/tlb-r3k.c
+> > @@ -176,7 +176,8 @@ void local_flush_tlb_page(struct vm_area_struct *vma, unsigned long page)
+> >  	}
+> >  }
+> >  
+> > -void __update_tlb(struct vm_area_struct *vma, unsigned long address, pte_t pte)
+> > +void update_mmu_cache(struct vm_area_struct *vma,
+> > +		      unsigned long address, pte_t *ptep)
+> >  {
+> >  	unsigned long asid_mask = cpu_asid_mask(&current_cpu_data);
+> >  	unsigned long flags;
+> > @@ -203,7 +204,7 @@ void __update_tlb(struct vm_area_struct *vma, unsigned long address, pte_t pte)
+> >  	BARRIER;
+> >  	tlb_probe();
+> >  	idx = read_c0_index();
+> > -	write_c0_entrylo0(pte_val(pte));
+> > +	write_c0_entrylo0(pte_val(*ptep));
+> >  	write_c0_entryhi(address | pid);
+> >  	if (idx < 0) {					/* BARRIER */
+> >  		tlb_write_random();
+> > diff --git a/arch/mips/mm/tlb-r4k.c b/arch/mips/mm/tlb-r4k.c
+> > index 1b939abbe4ca..c96725d17cab 100644
+> > --- a/arch/mips/mm/tlb-r4k.c
+> > +++ b/arch/mips/mm/tlb-r4k.c
+> > @@ -290,14 +290,14 @@ void local_flush_tlb_one(unsigned long page)
+> >   * updates the TLB with the new pte(s), and another which also checks
+> >   * for the R4k "end of page" hardware bug and does the needy.
+> >   */
+> > -void __update_tlb(struct vm_area_struct * vma, unsigned long address, pte_t pte)
+> > +void update_mmu_cache(struct vm_area_struct *vma,
+> > +		      unsigned long address, pte_t *ptep)
+> >  {
+> >  	unsigned long flags;
+> >  	pgd_t *pgdp;
+> >  	p4d_t *p4dp;
+> >  	pud_t *pudp;
+> >  	pmd_t *pmdp;
+> > -	pte_t *ptep;
+> >  	int idx, pid;
+> >  
+> >  	/*
+> > @@ -326,10 +326,9 @@ void __update_tlb(struct vm_area_struct * vma, unsigned long address, pte_t pte)
+> >  	idx = read_c0_index();
+> >  #ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
+> >  	/* this could be a huge page  */
+> > -	if (pmd_huge(*pmdp)) {
+> > +	if (ptep == (pte_t *)pmdp) {
+> >  		unsigned long lo;
+> >  		write_c0_pagemask(PM_HUGE_MASK);
+> > -		ptep = (pte_t *)pmdp;
+> >  		lo = pte_to_entrylo(pte_val(*ptep));
+> >  		write_c0_entrylo0(lo);
+> >  		write_c0_entrylo1(lo + (HPAGE_SIZE >> 7));
+> > @@ -344,8 +343,6 @@ void __update_tlb(struct vm_area_struct * vma, unsigned long address, pte_t pte)
+> >  	} else
+> >  #endif
+> >  	{
+> > -		ptep = pte_offset_map(pmdp, address);
+> > -
+> >  #if defined(CONFIG_PHYS_ADDR_T_64BIT) && defined(CONFIG_CPU_MIPS32)
+> >  #ifdef CONFIG_XPA
+> >  		write_c0_entrylo0(pte_to_entrylo(ptep->pte_high));
+> > -- 
+> > 2.35.3
+> > 
+> 
+> I just bisected a crash while powering down a MIPS machine in QEMU to
+> this change as commit 8044511d3893 ("mips: update_mmu_cache() can
+> replace __update_tlb()") in linux-next.
+
+Thank you, Nathan, that's very helpful indeed.  This patch certainly knew
+that it wanted testing, and I'm glad to hear that it is now seeing some.
+
+While powering down?  The messages below look like it was just coming up,
+but no doubt that's because you were bisecting (or because I'm unfamiliar
+with what messages to expect there).  It's probably irrelevant information,
+but I wonder whether the (V)machine worked well enough for a while before
+you first powered down and spotted the problem, or whether it's never got
+much further than trying to run init (busybox)?  I'm trying to get a feel
+for whether the problem occurs under common or uncommon conditions.
+
+> Unfortunately, I can still
+> reproduce it with the existing fix you have for this change on the
+> mailing list, which is present in next-20230614.
+
+Right, that later fix was only for a build warning, nothing functional
+(or at least I hoped that it wasn't making any functional difference).
+
+Thanks a lot for the detailed instructions below: unfortunately, those
+would draw me into a realm of testing I've never needed to enter before,
+so a lot of time spent on setup and learning.  Usually, I just stare at
+the source.
+
+What this probably says is that I should revert most my cleanup there,
+and keep as close to the existing code as possible.  But some change is
+needed, and I may need to understand (or have a good guess at) what was
+going wrong, to decide what kind of retreat will be successful.
+
+Back to the source for a while: I hope I'll find examples in nearby MIPS
+kernel source (and git history), which will hint at the right way forward.
+Then send you a patch against next-20230614 to try, when I'm reasonably
+confident that it's enough to satisfy my purpose, but likely not to waste
+your time.
+
+Thanks, until later,
+Hugh
+
+> 
+> I can reproduce it with the GCC 13.1.0 on kernel.org [1].
+> 
+>   $ make -skj"$(nproc)" ARCH=mips CROSS_COMPILE=mips-linux- mrproper malta_defconfig vmlinux
+> 
+>   $ qemu-system-mipsel \
+>       -display none \
+>       -nodefaults \
+>       -cpu 24Kf \
+>       -machine malta \
+>       -kernel vmlinux \
+>       -initrd rootfs.cpio \
+>       -m 512m \
+>       -serial mon:stdio
+>   ...
+>   Linux version 6.4.0-rc6-next-20230614 (nathan@dev-arch.thelio-3990X) (mips-linux-gcc (GCC) 13.1.0, GNU ld (GNU Binutils) 2.40) #1 SMP Wed Jun 14 16:13:02 MST 2023
+>   ...
+>   Run /init as init process
+>   process '/bin/busybox' started with executable stack
+>   do_page_fault(): sending SIGSEGV to init for invalid read access from 0000003c
+>   epc = 77b893dc in ld-uClibc-1.0.39.so[77b84000+8000]
+>   ra  = 77b8930c in ld-uClibc-1.0.39.so[77b84000+8000]
+>   Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+>   ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]---
+> 
+> The rootfs is available at [2] if it is needed. I am more than happy to
+> provide additional information or test patches if necessary.
+> 
+> [1]: https://mirrors.edge.kernel.org/pub/tools/crosstool/
+> [2]: https://github.com/ClangBuiltLinux/boot-utils/releases/download/20230609-194440/mipsel-rootfs.cpio.zst
+> 
+> Cheers,
+> Nathan
