@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34FC77317AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:44:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E627C73178D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:43:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344557AbjFOLoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 07:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58144 "EHLO
+        id S1344474AbjFOLnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 07:43:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344448AbjFOLnT (ORCPT
+        with ESMTP id S1344251AbjFOLmm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 07:43:19 -0400
+        Thu, 15 Jun 2023 07:42:42 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B3535AA;
-        Thu, 15 Jun 2023 04:40:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319D72D6B;
+        Thu, 15 Jun 2023 04:39:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D6DD6248B;
-        Thu, 15 Jun 2023 11:39:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8308C433C8;
-        Thu, 15 Jun 2023 11:39:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 134C56390B;
+        Thu, 15 Jun 2023 11:39:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCD77C433C0;
+        Thu, 15 Jun 2023 11:39:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686829190;
-        bh=xUyf5LkmVWcJM1kAFRvNbQdgsFnxwmpbs/uEy87eLQE=;
+        s=k20201202; t=1686829191;
+        bh=XwERnW4Pnic3eOpM/mKDTGDmoa4xHYVBZQbDvRPgLAs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pGa6I6lBfwnoU4IdDRHj2RfWL/A9Rzq9eRPwuDqhfwMbQUJBMNl/N4eH7t3X9x7ec
-         xMvMkEdtppadantUrO0SP6O1ZEOc7wD8fWu+T9oUzPJFnudxFHD9rKM7gjDtu9ft0L
-         CBYa1kalPtNoPVoPHLcxOnRpqFPszXfbKQ/h10wUPR+WEoixItQyTRuQh1ERR5AdPY
-         uWyIKpRtcXRWhxspbrzEXMRGTIBlA0c7Bi/HRt2/HWGHOfBUfIf+Qt+o9w1QoYHVso
-         oabXtjSX3Fi6qeAxJlKynYvqC3tSYB0ivcbVM9hKHQziAEo3BvQY5HW9EykmIZfW1P
-         Nuej+zdH7myPQ==
+        b=QtpeeIvqYzXpYwNRvI0puSJeu9GhhRmfDkhp+JphWa0ejZ42BvqDwDMN6Le+VIJ/7
+         ifucBL3QYxnszX/w+5zESzHo/ntgvXnW6TJKSmd6ROCiVayxXDb3SZ8mQHalJ++kIY
+         Knf4voP1BfcydZswRj42XYaBULj8CqXHMN6XOiolsoTvT7P5RHtVSfYABWLdA5Vx1b
+         4/iR4OEyZI6SWohXP+v/VPoPYTtA8+uDDn8MMU61b7oB4LRsCd2BmOUylDi/hCwbbs
+         2l7IlmltQGQ3fTlrj4zHL484GQF/Mf7AeRZvkj+4OC7DbJK2xIHwnwonJJVrPu47A6
+         bEMDEYdrCPWrg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Marc Zyngier <maz@kernel.org>, Cornelia Huck <cohuck@redhat.com>,
-        Steven Price <steven.price@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Sasha Levin <sashal@kernel.org>, catalin.marinas@arm.com,
-        will@kernel.org, broonie@kernel.org, james.morse@arm.com,
-        kristina.martsenko@arm.com, robh@kernel.org,
-        jintack.lim@linaro.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 5/8] arm64: Add missing Set/Way CMO encodings
-Date:   Thu, 15 Jun 2023 07:39:35 -0400
-Message-Id: <20230615113938.649627-5-sashal@kernel.org>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 6/8] media: cec: core: don't set last_initiator if tx in progress
+Date:   Thu, 15 Jun 2023 07:39:36 -0400
+Message-Id: <20230615113938.649627-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230615113938.649627-1-sashal@kernel.org>
 References: <20230615113938.649627-1-sashal@kernel.org>
@@ -63,41 +59,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Zyngier <maz@kernel.org>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit 8d0f019e4c4f2ee2de81efd9bf1c27e9fb3c0460 ]
+[ Upstream commit 73af6c7511038249cad3d5f3b44bf8d78ac0f499 ]
 
-Add the missing Set/Way CMOs that apply to tagged memory.
+When a message was received the last_initiator is set to 0xff.
+This will force the signal free time for the next transmit
+to that for a new initiator. However, if a new transmit is
+already in progress, then don't set last_initiator, since
+that's the initiator of the current transmit. Overwriting
+this would cause the signal free time of a following transmit
+to be that of the new initiator instead of a next transmit.
 
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Reviewed-by: Cornelia Huck <cohuck@redhat.com>
-Reviewed-by: Steven Price <steven.price@arm.com>
-Reviewed-by: Oliver Upton <oliver.upton@linux.dev>
-Link: https://lore.kernel.org/r/20230515204601.1270428-2-maz@kernel.org
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/include/asm/sysreg.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/media/cec/cec-adap.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
-index 5b3bdad66b27e..1ff93878c8132 100644
---- a/arch/arm64/include/asm/sysreg.h
-+++ b/arch/arm64/include/asm/sysreg.h
-@@ -102,8 +102,14 @@
- #define SB_BARRIER_INSN			__SYS_BARRIER_INSN(0, 7, 31)
+diff --git a/drivers/media/cec/cec-adap.c b/drivers/media/cec/cec-adap.c
+index c665f7d20c448..4c1770b8128cb 100644
+--- a/drivers/media/cec/cec-adap.c
++++ b/drivers/media/cec/cec-adap.c
+@@ -1077,7 +1077,8 @@ void cec_received_msg_ts(struct cec_adapter *adap,
+ 	mutex_lock(&adap->lock);
+ 	dprintk(2, "%s: %*ph\n", __func__, msg->len, msg->msg);
  
- #define SYS_DC_ISW			sys_insn(1, 0, 7, 6, 2)
-+#define SYS_DC_IGSW			sys_insn(1, 0, 7, 6, 4)
-+#define SYS_DC_IGDSW			sys_insn(1, 0, 7, 6, 6)
- #define SYS_DC_CSW			sys_insn(1, 0, 7, 10, 2)
-+#define SYS_DC_CGSW			sys_insn(1, 0, 7, 10, 4)
-+#define SYS_DC_CGDSW			sys_insn(1, 0, 7, 10, 6)
- #define SYS_DC_CISW			sys_insn(1, 0, 7, 14, 2)
-+#define SYS_DC_CIGSW			sys_insn(1, 0, 7, 14, 4)
-+#define SYS_DC_CIGDSW			sys_insn(1, 0, 7, 14, 6)
+-	adap->last_initiator = 0xff;
++	if (!adap->transmit_in_progress)
++		adap->last_initiator = 0xff;
  
- #define SYS_OSDTRRX_EL1			sys_reg(2, 0, 0, 0, 2)
- #define SYS_MDCCINT_EL1			sys_reg(2, 0, 0, 2, 0)
+ 	/* Check if this message was for us (directed or broadcast). */
+ 	if (!cec_msg_is_broadcast(msg))
 -- 
 2.39.2
 
