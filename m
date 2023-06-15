@@ -2,96 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3ADB731CBF
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 17:31:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51C8C731CC6
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 17:34:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232327AbjFOPbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 11:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60958 "EHLO
+        id S238807AbjFOPeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 11:34:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344778AbjFOPbV (ORCPT
+        with ESMTP id S241727AbjFOPeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 11:31:21 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A8926A2;
-        Thu, 15 Jun 2023 08:31:08 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C80E71EC0856;
-        Thu, 15 Jun 2023 17:31:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1686843066;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=PBryx5NjZbJSrRf+j6W/ekU/ixeI5U4s1q3ZsejG/w8=;
-        b=HEmFhph18JWBnrUpt9EgtnFVmJtwPVicY98S9q2wgUdsCFePKgYiF9GygbC7vC+GcaR/mA
-        srxlb7Blf6DF+FLTZ9YZKY8aTpf4x//XOj09pgij6KNw9CqXZjOZiTbZ//S8EJFRCtz1IO
-        m8zGy/sMGug6cRzMkw7UjfO6o7adBeI=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id i2vMiVNrNnhs; Thu, 15 Jun 2023 15:31:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1686843064; bh=PBryx5NjZbJSrRf+j6W/ekU/ixeI5U4s1q3ZsejG/w8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lNwTg9mDWrL+mjPTsPKaXkpa1g0u5oL2lBYujReWrovObe4F8CbHTawRP3g0ekGBe
-         76xw54lSEzCnLPmEIPO3UWAGspal00sS7hnTT+dUfPDZ0XjG9DKxyICkd0pjulyDA4
-         iV1jvDosGt4j0ZG4BcnOkri0/ZRFSQ/EBbLClHfyndgc6jUM88L1BSPXn6W7OeL2uu
-         qh3kDtTqJgN78U5BZL+tRZjo6GoKJwm0Gc5Sceu5UjhY/pVk3NOy95SEOi/TdlCZ+u
-         +RJFRxLJkiRrpQdUu4jKxRXuRs/oTyRSMS37CbI3KQ3M/ipbph5egek4znbwAIzLdA
-         8/kG9HNdtK0LhDcOBjfxvqxNScdCW8DEfPYgdgjUat8bUcNHFjehoDpX3r2GKjLq7w
-         ef1UxgVwgV2h33vIxSKJ2HoCtP8komGG0SwYpnPlKpcJLRPAJtYAk1pI6IICqhK+h6
-         P5f4ea0IXpKogSscMSZjC8Wd2xl8B/73sFE8C8Q+OETxPx1Zw8SymG05YHaGSR7Q5d
-         iomQK8lhjNia8ggGv8oTqg8e/DoTmCjABn+5dI4DXNsl61SA0XjtoKVBvUqh5CJonN
-         nLoZC3yrW8AlubRRNnK39QAphQHhgVzZJ6iAX3NOv0tp5fyq8oQTIG+Jpadin2Qs3D
-         2OKimkRjbOLXbnuhhcOh5rV8=
-Received: from zn.tnic (p200300Ea971dC500329c23fffEa6A903.dip0.t-ipconnect.de [IPv6:2003:ea:971d:c500:329c:23ff:fea6:a903])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 725B640E018C;
-        Thu, 15 Jun 2023 15:30:55 +0000 (UTC)
-Date:   Thu, 15 Jun 2023 17:30:51 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     John Allen <john.allen@amd.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pbonzini@redhat.com, weijiang.yang@intel.com,
-        rick.p.edgecombe@intel.com, seanjc@google.com, x86@kernel.org,
-        thomas.lendacky@amd.com
-Subject: Re: [RFC PATCH v2] x86/sev-es: Include XSS value in GHCB CPUID
- request
-Message-ID: <20230615153051.GDZIsuq0qx2GQnO3jV@fat_crate.local>
-References: <20230524155619.415961-1-john.allen@amd.com>
- <20230615115255.GBZIr7l2XNKau16ayl@fat_crate.local>
- <ZIss1TJ3ra+dZKOg@johallen-workstation.lan>
+        Thu, 15 Jun 2023 11:34:05 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4AC626A2;
+        Thu, 15 Jun 2023 08:34:01 -0700 (PDT)
+Received: from loongson.cn (unknown [111.18.159.104])
+        by gateway (Coremail) with SMTP id _____8BxL_BlL4tklpoFAA--.12076S3;
+        Thu, 15 Jun 2023 23:33:57 +0800 (CST)
+Received: from [192.168.68.106] (unknown [111.18.159.104])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxVeRkL4tkEywcAA--.14766S3;
+        Thu, 15 Jun 2023 23:33:57 +0800 (CST)
+Message-ID: <93544487-4015-f89f-44cd-754670c354e5@loongson.cn>
+Date:   Thu, 15 Jun 2023 23:33:57 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZIss1TJ3ra+dZKOg@johallen-workstation.lan>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+To:     oleg@redhat.com
+Cc:     guoren@kernel.org, linux-csky@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
+        srikar@linux.vnet.ibm.com, yangtiezhu@loongson.cn
+References: <20230424152815.GA32615@redhat.com>
+Subject: Re: [PATCH] csky: uprobes: Restore thread.trap_no
+Content-Language: en-US
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+In-Reply-To: <20230424152815.GA32615@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8DxVeRkL4tkEywcAA--.14766S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
+        BjDU0xBIdaVrnRJUUUBvb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
+        xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
+        j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxV
+        AFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x02
+        67AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2
+        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
+        AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxAqzxv262kKe7AKxVWUXVWUAwCFx2IqxVCF
+        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIx
+        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07josjUUUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 10:23:01AM -0500, John Allen wrote:
-> How would you advise that I handle this entanglement in the next
-> series?
+ping, what is the status of this patch which has been received Acked-by:
 
-Send the *whole* and complete set to both maintainers - KVM and tip
-- and they'll decide how to do the patch tetris.
+https://lore.kernel.org/linux-csky/1682213987-3708-1-git-send-email-yangtiezhu@loongson.cn/
 
-Thx.
+Thanks,
+Tiezhu
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
