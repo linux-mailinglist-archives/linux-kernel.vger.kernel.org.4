@@ -2,45 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE48F73172D
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:40:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA299731732
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:40:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344125AbjFOLkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 07:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53456 "EHLO
+        id S1344147AbjFOLkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 07:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343988AbjFOLjB (ORCPT
+        with ESMTP id S1344040AbjFOLjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 07:39:01 -0400
+        Thu, 15 Jun 2023 07:39:03 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3477358D;
-        Thu, 15 Jun 2023 04:38:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4451D3599;
+        Thu, 15 Jun 2023 04:38:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5330B6391A;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BDAF639AC;
+        Thu, 15 Jun 2023 11:38:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F1ECC433D9;
         Thu, 15 Jun 2023 11:38:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2476BC433CB;
-        Thu, 15 Jun 2023 11:38:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686829098;
-        bh=44+CWWT8rfsec06AFFRF0CQ3ypck0n6NqlYkpddrr8U=;
-        h=From:To:Cc:Subject:Date:From;
-        b=A6GkOATK6lJWqcdfGo2CafGLBKLyma/KWY0idtLqg5B76Ri6VA8yvqoQav2KIBrSh
-         iUIPa0+mMJh5G3uTmw6JjtABMpkvjShbkOnR20RBeKvwJqdJjwL9DCFo1HKbVPfBBB
-         P6iP/afIiz8y+kSAoCefTmtpbqMea5LolzTL8RQ0mSlRugKyP2JgSmr2+QLykrM5CR
-         CDOgNWnWO0Ij/KogsvtP5kekWoVXIFDc9KI6wkN5Kwhl7Dt8Y8PKNZhAiJFQ7vidsN
-         iKCWzjutf6eK1vxoq9fxgnhQnkzyK0Et+24VIek3gOMv0CDrWU1tewABHfhrZmsmow
-         3B0G5JVXHRjiQ==
+        s=k20201202; t=1686829100;
+        bh=tySDa0XoEJtzAYPx5MNPEvUCe7vAfgvVHOqhnd3UqBs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=qjgZFaRzeLUbNUGmMFWiNGhqPADdyp90LWNVz+lDMrjgOPcugCx9dHl4/sTAFh0ky
+         PBvomnKCDhWpS5vCLJAaUiSjwKIZ45IPgZ3GvhmadeteC94UDznqBe+X2DqmnWtkb7
+         Lrc2SbEySK/67akJDJ/R++lkF4k3gs/Asc/0QJsoXGJuXGPbzELnKoYzDSFitH+1V8
+         xfXqKn2rHppv1Z3QmXfsFjfjqkXLSv7bE8fq89oWshuY8JxnIZELqedx4d1dqQWn9M
+         2eP0wbqwRvaPsxAwpCdctk1ZdULUjEuHvfhbmEiaixIOw73RgKHKuJf2S/rPyB8CE0
+         c6/f3D+JB7/5A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jim Wylder <jwylder@google.com>, Sasha Levin <sashal@kernel.org>,
-        broonie@kernel.org, gregkh@linuxfoundation.org
-Subject: [PATCH AUTOSEL 6.1 01/16] regmap: Account for register length when chunking
-Date:   Thu, 15 Jun 2023 07:38:01 -0400
-Message-Id: <20230615113816.649135-1-sashal@kernel.org>
+Cc:     Joao Martins <joao.m.martins@oracle.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Vasant Hegde <vasant.hegde@amd.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Sasha Levin <sashal@kernel.org>, joro@8bytes.org,
+        will@kernel.org, iommu@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.1 02/16] iommu/amd: Handle GALog overflows
+Date:   Thu, 15 Jun 2023 07:38:02 -0400
+Message-Id: <20230615113816.649135-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230615113816.649135-1-sashal@kernel.org>
+References: <20230615113816.649135-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -56,49 +62,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jim Wylder <jwylder@google.com>
+From: Joao Martins <joao.m.martins@oracle.com>
 
-[ Upstream commit 3981514180c987a79ea98f0ae06a7cbf58a9ac0f ]
+[ Upstream commit af47b0a24058e56e983881993752f88288ca6511 ]
 
-Currently, when regmap_raw_write() splits the data, it uses the
-max_raw_write value defined for the bus.  For any bus that includes
-the target register address in the max_raw_write value, the chunked
-transmission will always exceed the maximum transmission length.
-To avoid this problem, subtract the length of the register and the
-padding from the maximum transmission.
+GALog exists to propagate interrupts into all vCPUs in the system when
+interrupts are marked as non running (e.g. when vCPUs aren't running). A
+GALog overflow happens when there's in no space in the log to record the
+GATag of the interrupt. So when the GALOverflow condition happens, the
+GALog queue is processed and the GALog is restarted, as the IOMMU
+manual indicates in section "2.7.4 Guest Virtual APIC Log Restart
+Procedure":
 
-Signed-off-by: Jim Wylder <jwylder@google.com
-Link: https://lore.kernel.org/r/20230517152444.3690870-2-jwylder@google.com
-Signed-off-by: Mark Brown <broonie@kernel.org
+| * Wait until MMIO Offset 2020h[GALogRun]=0b so that all request
+|   entries are completed as circumstances allow. GALogRun must be 0b to
+|   modify the guest virtual APIC log registers safely.
+| * Write MMIO Offset 0018h[GALogEn]=0b.
+| * As necessary, change the following values (e.g., to relocate or
+| resize the guest virtual APIC event log):
+|   - the Guest Virtual APIC Log Base Address Register
+|      [MMIO Offset 00E0h],
+|   - the Guest Virtual APIC Log Head Pointer Register
+|      [MMIO Offset 2040h][GALogHead], and
+|   - the Guest Virtual APIC Log Tail Pointer Register
+|      [MMIO Offset 2048h][GALogTail].
+| * Write MMIO Offset 2020h[GALOverflow] = 1b to clear the bit (W1C).
+| * Write MMIO Offset 0018h[GALogEn] = 1b, and either set
+|   MMIO Offset 0018h[GAIntEn] to enable the GA log interrupt or clear
+|   the bit to disable it.
+
+Failing to handle the GALog overflow means that none of the VFs (in any
+guest) will work with IOMMU AVIC forcing the user to power cycle the
+host. When handling the event it resumes the GALog without resizing
+much like how it is done in the event handler overflow. The
+[MMIO Offset 2020h][GALOverflow] bit might be set in status register
+without the [MMIO Offset 2020h][GAInt] bit, so when deciding to poll
+for GA events (to clear space in the galog), also check the overflow
+bit.
+
+[suravee: Check for GAOverflow without GAInt, toggle CONTROL_GAINT_EN]
+
+Co-developed-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Signed-off-by: Joao Martins <joao.m.martins@oracle.com>
+Reviewed-by: Vasant Hegde <vasant.hegde@amd.com>
+Link: https://lore.kernel.org/r/20230419201154.83880-3-joao.m.martins@oracle.com
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/base/regmap/regmap.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/iommu/amd/amd_iommu.h |  1 +
+ drivers/iommu/amd/init.c      | 24 ++++++++++++++++++++++++
+ drivers/iommu/amd/iommu.c     |  9 ++++++++-
+ 3 files changed, 33 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/base/regmap/regmap.c b/drivers/base/regmap/regmap.c
-index 7de1f27d0323d..8359164bff903 100644
---- a/drivers/base/regmap/regmap.c
-+++ b/drivers/base/regmap/regmap.c
-@@ -2064,6 +2064,8 @@ int _regmap_raw_write(struct regmap *map, unsigned int reg,
- 	size_t val_count = val_len / val_bytes;
- 	size_t chunk_count, chunk_bytes;
- 	size_t chunk_regs = val_count;
-+	size_t max_data = map->max_raw_write - map->format.reg_bytes -
-+			map->format.pad_bytes;
- 	int ret, i;
+diff --git a/drivers/iommu/amd/amd_iommu.h b/drivers/iommu/amd/amd_iommu.h
+index c160a332ce339..24c7e6c6c0de9 100644
+--- a/drivers/iommu/amd/amd_iommu.h
++++ b/drivers/iommu/amd/amd_iommu.h
+@@ -15,6 +15,7 @@ extern irqreturn_t amd_iommu_int_thread(int irq, void *data);
+ extern irqreturn_t amd_iommu_int_handler(int irq, void *data);
+ extern void amd_iommu_apply_erratum_63(struct amd_iommu *iommu, u16 devid);
+ extern void amd_iommu_restart_event_logging(struct amd_iommu *iommu);
++extern void amd_iommu_restart_ga_log(struct amd_iommu *iommu);
+ extern int amd_iommu_init_devices(void);
+ extern void amd_iommu_uninit_devices(void);
+ extern void amd_iommu_init_notifier(void);
+diff --git a/drivers/iommu/amd/init.c b/drivers/iommu/amd/init.c
+index 7c14b1d32c8db..b0af8b5967e0d 100644
+--- a/drivers/iommu/amd/init.c
++++ b/drivers/iommu/amd/init.c
+@@ -751,6 +751,30 @@ void amd_iommu_restart_event_logging(struct amd_iommu *iommu)
+ 	iommu_feature_enable(iommu, CONTROL_EVT_LOG_EN);
+ }
  
- 	if (!val_count)
-@@ -2071,8 +2073,8 @@ int _regmap_raw_write(struct regmap *map, unsigned int reg,
++/*
++ * This function restarts event logging in case the IOMMU experienced
++ * an GA log overflow.
++ */
++void amd_iommu_restart_ga_log(struct amd_iommu *iommu)
++{
++	u32 status;
++
++	status = readl(iommu->mmio_base + MMIO_STATUS_OFFSET);
++	if (status & MMIO_STATUS_GALOG_RUN_MASK)
++		return;
++
++	pr_info_ratelimited("IOMMU GA Log restarting\n");
++
++	iommu_feature_disable(iommu, CONTROL_GALOG_EN);
++	iommu_feature_disable(iommu, CONTROL_GAINT_EN);
++
++	writel(MMIO_STATUS_GALOG_OVERFLOW_MASK,
++	       iommu->mmio_base + MMIO_STATUS_OFFSET);
++
++	iommu_feature_enable(iommu, CONTROL_GAINT_EN);
++	iommu_feature_enable(iommu, CONTROL_GALOG_EN);
++}
++
+ /*
+  * This function resets the command buffer if the IOMMU stopped fetching
+  * commands from it.
+diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
+index 26fb78003889f..2bda7d9a27bbd 100644
+--- a/drivers/iommu/amd/iommu.c
++++ b/drivers/iommu/amd/iommu.c
+@@ -836,6 +836,7 @@ amd_iommu_set_pci_msi_domain(struct device *dev, struct amd_iommu *iommu) { }
+ 	(MMIO_STATUS_EVT_OVERFLOW_INT_MASK | \
+ 	 MMIO_STATUS_EVT_INT_MASK | \
+ 	 MMIO_STATUS_PPR_INT_MASK | \
++	 MMIO_STATUS_GALOG_OVERFLOW_MASK | \
+ 	 MMIO_STATUS_GALOG_INT_MASK)
  
- 	if (map->use_single_write)
- 		chunk_regs = 1;
--	else if (map->max_raw_write && val_len > map->max_raw_write)
--		chunk_regs = map->max_raw_write / val_bytes;
-+	else if (map->max_raw_write && val_len > max_data)
-+		chunk_regs = max_data / val_bytes;
+ irqreturn_t amd_iommu_int_thread(int irq, void *data)
+@@ -859,10 +860,16 @@ irqreturn_t amd_iommu_int_thread(int irq, void *data)
+ 		}
  
- 	chunk_count = val_count / chunk_regs;
- 	chunk_bytes = chunk_regs * val_bytes;
+ #ifdef CONFIG_IRQ_REMAP
+-		if (status & MMIO_STATUS_GALOG_INT_MASK) {
++		if (status & (MMIO_STATUS_GALOG_INT_MASK |
++			      MMIO_STATUS_GALOG_OVERFLOW_MASK)) {
+ 			pr_devel("Processing IOMMU GA Log\n");
+ 			iommu_poll_ga_log(iommu);
+ 		}
++
++		if (status & MMIO_STATUS_GALOG_OVERFLOW_MASK) {
++			pr_info_ratelimited("IOMMU GA Log overflow\n");
++			amd_iommu_restart_ga_log(iommu);
++		}
+ #endif
+ 
+ 		if (status & MMIO_STATUS_EVT_OVERFLOW_INT_MASK) {
 -- 
 2.39.2
 
