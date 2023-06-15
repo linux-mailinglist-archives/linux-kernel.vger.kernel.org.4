@@ -2,132 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6B16731CAB
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 17:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD802731CDD
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 17:42:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344163AbjFOPaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 11:30:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58158 "EHLO
+        id S240576AbjFOPm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 11:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345240AbjFOP35 (ORCPT
+        with ESMTP id S238814AbjFOPmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 11:29:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D49FA3A9B
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 08:28:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686842889;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LlaHq+6BCrVBcrQ8Na7RMHfJ8FeQemTtI2xqglcCkXU=;
-        b=DUGwePr5XLULOTmdcN+fP2hQinpUKpG89/BU97LKzO5nsRKZUojRgibtczfpmaW2qRv1Xs
-        3/usnfLgYaz8oBO4/AdDl9/RQ22E3PS8hrdx9XW2/mSKKDzIMt/OVDzDhCmCmIdTUWoZgc
-        A1ZgM+2QB8J+2WneCLvpfoiiLl9l4ps=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-426-kmoDJkdWMhir5-5Ee9lOXQ-1; Thu, 15 Jun 2023 11:28:07 -0400
-X-MC-Unique: kmoDJkdWMhir5-5Ee9lOXQ-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-30932d15a30so4576907f8f.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 08:28:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686842886; x=1689434886;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LlaHq+6BCrVBcrQ8Na7RMHfJ8FeQemTtI2xqglcCkXU=;
-        b=GlSwF1FvwONGPyb5C9siKqNpKelG2zoQDGUoRtdyUczOzitQQKaSzi1Gy3PZ/MJrFa
-         H61qjBfWwg/bpiAUHtgPPrLaFaeiw0kqv4tD9tqTSLiqFky12cecWqFt2+XhGxzQEM1T
-         pSy/AF51WNWs+Ge3J4W4TjCraRgcioe4zf4Zu0L9zp120qb8eIHFtOX9+AV0HjFMGafk
-         u7ZBisPwb/Yf3emtslqFQsTC58MMK0VpS7W+pB6we90LIMxV2ZErveI6cjOrkHdl3XMM
-         vVTrdo8+DFYXXL64BWmAWuVCXzR3kurZ1NSQkNxBRwid64e98ws1zJGW/vIMHY18R6Ym
-         phQQ==
-X-Gm-Message-State: AC+VfDxCHYKIoNFy0+x09dnbIa11ENB8uJjgR+vNhxECIYoLpGiheTW7
-        8PsYNHt8Fcg4FfGoQyRoDdI4YIImxZFUWWqRtCTLf7yMe2T+7XpatBb8KSLSeXtUVOlKi6TEJS0
-        YQ0U+z6WEbyfffUMuY5xIUaxH
-X-Received: by 2002:adf:ee0a:0:b0:309:38af:d300 with SMTP id y10-20020adfee0a000000b0030938afd300mr12258518wrn.33.1686842885918;
-        Thu, 15 Jun 2023 08:28:05 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7i9Wv62/yjtEnLPAa08XZGuwZTqAknXVdxagM6V2PtcQKVccjjNFzlF8XbcFye7/05WLzkhg==
-X-Received: by 2002:adf:ee0a:0:b0:309:38af:d300 with SMTP id y10-20020adfee0a000000b0030938afd300mr12258499wrn.33.1686842885541;
-        Thu, 15 Jun 2023 08:28:05 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c70b:b500:4648:c96c:d6ba:4b8d? (p200300cbc70bb5004648c96cd6ba4b8d.dip0.t-ipconnect.de. [2003:cb:c70b:b500:4648:c96c:d6ba:4b8d])
-        by smtp.gmail.com with ESMTPSA id n11-20020adfe78b000000b0030fc666686bsm10330585wrm.85.2023.06.15.08.28.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 08:28:04 -0700 (PDT)
-Message-ID: <b6d8ab51-f75d-18f1-ed41-e2566eb76f9f@redhat.com>
-Date:   Thu, 15 Jun 2023 17:28:03 +0200
+        Thu, 15 Jun 2023 11:42:25 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712F6123;
+        Thu, 15 Jun 2023 08:42:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686843744; x=1718379744;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1esU+W96PtNXw+8kc/bDUrIBmwX+Wv8g4LjSnrvzNiM=;
+  b=DAtiTbCdFcr3Ha5tFNevmMnMClwecDlZciBepv2eEKubO6Ec2T6+4uzp
+   c/6TIqxMXFwtrxZdJzdoJzhmnDdhlZl4nxabE5+L13j+kscwmumWF3ST1
+   su2PNmpEhna/CX3ebYiJH9nWwwWkldwWfUOsQicy9M4DFmSZ4DgYHBI+Z
+   d0g37ZQ2nw9mgUjgR4w3vdtqp4fd4g1kNP8G7Wj93aex9goaVlYQyinm1
+   w0vZ5Swbn+cgPOCqtIvdjEdyhnGsN1GKcYlZW9WVzaKW8ufy1ke+NidVS
+   LlQ5SbLJ7LtKeUVFJQyvVgV9V4YF3ffJK5aHecFapyDy3/X60q4WIeBwI
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="361456083"
+X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
+   d="scan'208";a="361456083"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 08:28:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="959247177"
+X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
+   d="scan'208";a="959247177"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga006.fm.intel.com with ESMTP; 15 Jun 2023 08:28:34 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1q9otl-003yOe-0z;
+        Thu, 15 Jun 2023 18:28:33 +0300
+Date:   Thu, 15 Jun 2023 18:28:33 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Raag Jadav <raag.jadav@intel.com>
+Cc:     linus.walleij@linaro.org, mika.westerberg@linux.intel.com,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mallikarjunappa.sangannavar@intel.com, pandith.n@intel.com
+Subject: Re: [PATCH v4] pinctrl: intel: refine ->irq_set_type() hook
+Message-ID: <ZIsuIQ1OUffgSfqP@smile.fi.intel.com>
+References: <20230615125022.27421-1-raag.jadav@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] checkpatch: Include GEM_BUG_xxx variant in the excluded
- check list
-Content-Language: en-US
-To:     "Ruhl, Michael J" <michael.j.ruhl@intel.com>,
-        Joe Perches <joe@perches.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "apw@canonical.com" <apw@canonical.com>,
-        "dwaipayanray1@gmail.com" <dwaipayanray1@gmail.com>,
-        "lukas.bulwahn@gmail.com" <lukas.bulwahn@gmail.com>,
-        "corbet@lwn.net" <corbet@lwn.net>
-References: <20230614164955.1319870-1-michael.j.ruhl@intel.com>
- <b777a049b3817c7eee364310aac89470e9ea882e.camel@perches.com>
- <IA1PR11MB641820FC52D35D1CECE6830DC15BA@IA1PR11MB6418.namprd11.prod.outlook.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <IA1PR11MB641820FC52D35D1CECE6830DC15BA@IA1PR11MB6418.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230615125022.27421-1-raag.jadav@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15.06.23 17:04, Ruhl, Michael J wrote:
->> -----Original Message-----
->> From: Joe Perches <joe@perches.com>
->> Sent: Wednesday, June 14, 2023 9:47 PM
->> To: Ruhl, Michael J <michael.j.ruhl@intel.com>; linux-kernel@vger.kernel.org;
->> apw@canonical.com; dwaipayanray1@gmail.com; lukas.bulwahn@gmail.com;
->> corbet@lwn.net; david@redhat.com
->> Subject: Re: [PATCH] checkpatch: Include GEM_BUG_xxx variant in the
->> excluded check list
->>
->> On Wed, 2023-06-14 at 12:49 -0400, Michael J. Ruhl wrote:
->>> GEM_BUG_ON is usually compiled as WARN.  You have to change to
->>> debug configuration to get this to be BUG.
->>>
->>> checkpatch flags this a WARN level issue.
->>>
->>> Since this is a i915 local debug macro, allow its use in checkpatch.pl.
->>>
->>> Fixes: 69d517e6e210 ("checkpatch: warn on usage of VM_BUG_ON() and
->> other BUG variants")
->>
->> Not a "Fixes", just an additional check
+On Thu, Jun 15, 2023 at 06:20:22PM +0530, Raag Jadav wrote:
+> Refine ->irq_set_type() hook and improve its readability by:
 > 
+> - Reducing scope of spinlock by moving unneeded operations out of it.
+> - Dropping redundant PADCFG0_RXEVCFG_SHIFT and including it directly
+>   into PADCFG0_RXEVCFG_* definitions.
+> - Utilizing temporary variables for common operations.
+> - Simplifying if-else-if chain.
 
-That was discussed when developing that patch:
-
-https://lore.kernel.org/linux-mm/87tu5vflld.fsf@intel.com/T/
-
-GEM_BUG_ON(
--> Bad with CONFIG_DRM_I915_DEBUG_GEM_ONCE
-
-Just like VM_BUG_ON or CI_BUG_ON... that BUGs only with another kernel 
-config on.
-
-So this is expected.
+Pushed to my review and testing queue, thanks!
 
 -- 
-Cheers,
+With Best Regards,
+Andy Shevchenko
 
-David / dhildenb
 
