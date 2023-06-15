@@ -2,133 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84052730E90
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 07:15:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9064A730E92
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 07:16:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237661AbjFOFPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 01:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47990 "EHLO
+        id S238644AbjFOFQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 01:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjFOFPS (ORCPT
+        with ESMTP id S229853AbjFOFQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 01:15:18 -0400
-Received: from BN3PR00CU001.outbound.protection.outlook.com (mail-eastus2azon11020020.outbound.protection.outlook.com [52.101.56.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A13A26A8;
-        Wed, 14 Jun 2023 22:15:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=emnTF82ELj/VgYDJDWMlXq05cU8xSg95JdSbqpQxUdKbsFvPH47snFm43s+eWVjLrAesUXdTZ5qkEvFciZmxwPTnhQqY/Qlffi2jUbJAZkrZRg4NOaj2N7LUHLCyelFTnZFDE3veEAfaYO2SzY1TmebgUcvAjyGyLLjCaL9ho6Hl80G+zVxtGgB2CgVb/8gt6KEVrrH08dEhgri4eMvcRQQcCwKR0dH7iDsC0UlshH2pstzELv6Fy4YNQsvc97VwZ2q1W5wxD9OtNl4RsozNPPxc73EzWGGcMeXumIHS4xavG+OGrtg7vNNi//fM6wnu5SvwjZOyD664zPP+80vY1Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=I1nnZmNbbo+6N7H+QVRyC/F7aMnM3lvbaftD6XJIvTQ=;
- b=nor2dze8wo4izizrc3gD70XMQaoB731s3vpu4YiVLgbPHX9F77bK6D++9mi6IZqnaFAy1qQonO9gKmzbWz8sYQKbjZe9v5t8A/Jo8Gg4kXmEUKc9iPmcPDFLfTMlTXp9R99jynt+9oll2CrVzHYKOJX9IwsluX5jtJCAVMwV0FllU88Q5Xk53TMpH7jr+wizR1WPZYXGMwsMloM6OJTona0nUNY6dT/7aDW7CsyiFmmXka4axxQl5jUFCXu2nIRKquNX3DJg+q2cagSJYEss8hdY/wKXIYR3rtu1cQDpeHWDpmE9Y4T9LWDMKQo9PbepYHVM1SZPxZVXOfbq6XF8nQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=I1nnZmNbbo+6N7H+QVRyC/F7aMnM3lvbaftD6XJIvTQ=;
- b=FFgdI0GczYQ8KQtfP+LMJk3trYbtrDtSjIh6sU7vKmKAwud5c6zE075+uuAtIcjqGJr34lvdUgS8WoxRIg3P8MScLslDsMO6ed8m0a7wgE4qicc03Ec3zFpuERJg+1S5ZSVllnFb+vOrP8dKcSfEcqOWXOrUJ8+Pn4qikntvazQ=
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
- by LV2PR21MB3060.namprd21.prod.outlook.com (2603:10b6:408:17f::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.3; Thu, 15 Jun
- 2023 05:15:15 +0000
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::bb03:96fc:3397:6022]) by SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::bb03:96fc:3397:6022%4]) with mapi id 15.20.6521.009; Thu, 15 Jun 2023
- 05:15:14 +0000
-From:   Dexuan Cui <decui@microsoft.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
-Subject: RE: [PATCH 1/1] clocksource: hyper-v: Rework clocksource and sched
- clock setup
-Thread-Topic: [PATCH 1/1] clocksource: hyper-v: Rework clocksource and sched
- clock setup
-Thread-Index: AQHZmunMDcX9sMcFW0imDwJTULveWa+LWLrQ
-Date:   Thu, 15 Jun 2023 05:15:14 +0000
-Message-ID: <SA1PR21MB1335C1717D91BEE7124E2619BF5BA@SA1PR21MB1335.namprd21.prod.outlook.com>
-References: <1686325621-16382-1-git-send-email-mikelley@microsoft.com>
-In-Reply-To: <1686325621-16382-1-git-send-email-mikelley@microsoft.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=c4b887ed-4970-4bf5-ba16-f85bb53353b2;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-06-15T05:07:26Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|LV2PR21MB3060:EE_
-x-ms-office365-filtering-correlation-id: 68eb43aa-1329-40f5-ab5e-08db6d5f804c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ORYeXzQGA7dw0Xp0X7skMaOvM3K/dxhJwNGvnpOe4aezLKjvDgKngWp8ktNDGmSs4LgdvW0lgoe//sBvKZ5GhtQQWi0uQ0g+2it+lllPdqFT72XjswssuYsYi+1NgpBt8Qi3lE8s3mpZeYXK+Tf8DERXfy5ooDVFxxkC/FFbYQak+TNRWUqTh3uiG/NjGDrUFxE9TGiX88pePC2B3K6FFxCqjvvVOIfp7KAt7XheqI8+UzrPU1cyI8l6G/YXaurvYDT8nYKIebOGvvEdY9K/TNxc9SnnAbtRcL1zj5GogPTgN0vwzBsrpxRQP0ih0pEHttwO6L8PEKQPGa3FCPC8QlqyEOFR6aHsHdhiAwwGsgTbI3j1O8pqNiqbGS9X8jqt9W/DxxQ+KH226WQPFHjASg1ZDah9/KtFFPfe1t1YmiiYbbUERt3umZGd+VJrV86noG/OQP3F0pLXlfrS+TFYvufsUD4BzboiklkM/w0LeIl5K7cJEpJQL8YHsk85CiaXfNMOGl+02TUsLR6SlfYqfdWoOhbQAjCYB1BVWQh7W6l4PYUBd3lYyp6761sjcwKMhkNHJ14r+VsgPYSc4B1Jb5C0kequbSc4KIYUKVNdz+2w1ijclT16cugyekYnseoldhF/FMEBoYczpvb0VOc5bU3YDiCGuY8/XlcktEwtk6U=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(396003)(136003)(346002)(376002)(451199021)(186003)(9686003)(6506007)(38100700002)(86362001)(38070700005)(55016003)(82960400001)(122000001)(8990500004)(2906002)(558084003)(82950400001)(33656002)(41300700001)(7696005)(316002)(110136005)(10290500003)(76116006)(478600001)(8676002)(66446008)(71200400001)(8936002)(64756008)(66556008)(66946007)(66476007)(5660300002)(52536014);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?pIQ+95pxZQ4eXCOiTEpxoS0D1JeojzICPMf1Q15eF3I1KOOJB+C7JEFV3uOY?=
- =?us-ascii?Q?mhm+/diB2otqk2Xj+HL43wp2XiE/ivypdUp2waKtTkpI0o67BNCd8fRPV/LU?=
- =?us-ascii?Q?7Gyr8a2fybFs+tFQ4GuacrIc82IcspUtqrt7YaSJo8xz3Ul8phREnH7psOti?=
- =?us-ascii?Q?3L8PJDIvZc8Dc4Jv5KJ7QtFG02H8EfWXzJ0GHnHM7iIpukXO2IKSsl+PBkRW?=
- =?us-ascii?Q?8/XM956f0/NpfwADdGi8oCQIxXFN/D+W7wruOtzp4QXWvkAjSEjPhaQpjrpg?=
- =?us-ascii?Q?yLSfiRj7xPNozjk+RsuaPFAp9xKM85cR5cAwO846xYgTszgyboq1ocoEoD8z?=
- =?us-ascii?Q?qyU5HhizzQjO5ixZ1ZfIG2Do+Uelu6l7Zy6T4bnw8ka2R9QzZyKGpK9J24sf?=
- =?us-ascii?Q?Blsq7SIBkrTpQRsDDOR9k9CNvgv5DElVlF//vGnnQYyBib2jZAD0PispomUJ?=
- =?us-ascii?Q?BjybZkYRTODgKuWhnw3G0M7sf3M5q+j0jWXT66RBT9FtEAdiIobcBR/17H7x?=
- =?us-ascii?Q?oPPiZadgFYmmmOeulDAvrV1K+gJdGuuuap3gigBUu+vzjkf6pxEzz8yD5Vwd?=
- =?us-ascii?Q?MI4FGQIhuC7169MHgHUAraoA1nFNqroje2GdUaGvYODFCX23/sbzs8QlFXiS?=
- =?us-ascii?Q?G258L7trac60Bl+BqdrQQiWL7mfFDfoFF5Ltsj2ALXNABBuU+WkE5SQUrL16?=
- =?us-ascii?Q?48UX68dronATeg46JzN2x0qBQANU8TO5qe41+lu0UX6Xv24DlkyTP7exCi3t?=
- =?us-ascii?Q?flAd1nKTNQM485k00xrY7kbkhfTWnqAVrwbBNmRaIsficxaUoS/OfVglMabM?=
- =?us-ascii?Q?KHRtyan8OzC7LNFxNXrYI06NxIkP0dzxYOzxB7yNFs4XHK5CmHturPI+9ew3?=
- =?us-ascii?Q?l3vbvWjIFBvA5kWgDGNSkBgdhkB7PhJepZvCynVzI2eaDtFGgl/Ok1eGwbtN?=
- =?us-ascii?Q?d92Xklf5zVeBCh2Ar8WOJl6kwwCGcb45JkHlq5K1SB0DHpkKGV1X0/Neiiza?=
- =?us-ascii?Q?tluANYCvqcR+6lvHigAh/l/n+OMuagluXMlQdqkrFWQheZv8N3khSpdDP5Cq?=
- =?us-ascii?Q?tlmfhwJFgs1i3ZS2UXWlOVMjNQoOZsgxoN8Q/RUF9419h3sYKIyAu4exY5ke?=
- =?us-ascii?Q?3Td9VqhHyqRdF+9zHIQuy8RtPb7jOQ3vLXkPFgNkyLScivm7s7HBpSu+1+PA?=
- =?us-ascii?Q?utGAoUMYZy2x06QdIiAr9hrhdceZ6kmm+LXOL1JQM2GwLJKSg0E4oylCx5Wn?=
- =?us-ascii?Q?u10SknSVbfcb0IxDvR0qiLKpXwNJWf6iSuQ3vy1Ylux8hWR86LbhL9QbldI2?=
- =?us-ascii?Q?XE/lpJ0jGsijT3YiCZ0aO84hp7vrGADIq7quNFJUpqF+1vNXrIGDB5BPGc8o?=
- =?us-ascii?Q?pi76DT3/U62oZb8ybdNiuVgSZ6EPsfbqJqFbt9k7QtIGvi3c7pn1/9JpD3da?=
- =?us-ascii?Q?gQP2WeJrNim9L1SVBOBDXobDCq/C+c6oxfKCIKpv6YyU/olLMy03Aey6ENZl?=
- =?us-ascii?Q?VAH9c7FZxSYWkLhWfm4eXbJ6iox+mL05iG+zGnxIqRKTUSW53tsG9OqpFMmk?=
- =?us-ascii?Q?K/CWu/i57iFpOaIWOKBiSCqX8tSRDI2ZK6vFo3fF4+k+HyrF0Md9J8ef/4Nc?=
- =?us-ascii?Q?rin9pZMjellNw4VJzgnQ2rY=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 15 Jun 2023 01:16:44 -0400
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [IPv6:2001:67c:2050:0:465::201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C5A26A9;
+        Wed, 14 Jun 2023 22:16:40 -0700 (PDT)
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [10.196.197.202])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4QhVrf6fvfz9snk;
+        Thu, 15 Jun 2023 07:16:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
+        s=MBO0001; t=1686806194;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NJ9tbVJW/fCl46tCIc1R0NLFQsIT3IjS2TXsnrWjR/8=;
+        b=ZctlEB0s8TfAASUrOzLthi/QgcNN6X6m3/DePewA4K/qpeiCwxEMurtxd0tSzG7do53CJ+
+        tSFqFpYo9ePxHfU7Cm51Go+RmaSXANonmXNEg5uxozQhc9VAvbVk43CAUNyT453nvDKSZF
+        Qs01o5gzn4NL9jpz0LKKsD98gOXwlhpSD02W2Oh/PhEY/axuCC9C0OPYCgPAIzT668X/im
+        Mc6UUmNJJ7vBT362UAyf+Tq8oxIQCYsxz6IYuP3+3kSiG5GxUyO1Mwb3k78Pp/LOE8MU1x
+        G34KCkEIct7Er1rvGNIOLfA0qjhSNY8AmJ1x7hxBjlho+nR/k21uxRcPolIqkg==
+References: <20230613083626.227476-3-frank@oltmanns.dev>
+ <202306132038.nUB6hmCv-lkp@intel.com> <87edmeqwva.fsf@oltmanns.dev>
+ <aa23f41c0e313e97122ac384d66e2325.sboyd@kernel.org>
+From:   Frank Oltmanns <frank@oltmanns.dev>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        kernel test robot <lkp@intel.com>,
+        oe-kbuild-all@lists.linux.dev, "A.s. Dong" <aisheng.dong@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Subject: Re: [PATCH v2 2/2] clk: tests: Add tests for fractional divisor
+ approximation
+In-reply-to: <aa23f41c0e313e97122ac384d66e2325.sboyd@kernel.org>
+Date:   Thu, 15 Jun 2023 07:16:17 +0200
+Message-ID: <875y7ps3tq.fsf@oltmanns.dev>
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 68eb43aa-1329-40f5-ab5e-08db6d5f804c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jun 2023 05:15:14.4381
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8hoQWo8f19vbNG6sfpr5AGpa+CjOCnfFgK3uKRKnOjbd9vtGqO1eXtmq2bM8cinK0RzONXvsxf1lr+dKhmtEqg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR21MB3060
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Michael Kelley (LINUX) <mikelley@microsoft.com>
-> Sent: Friday, June 9, 2023 8:47 AM
-> ...
+Hi Stephen,
 
-Looks good to me.=20
+On 2023-06-14 at 13:02:24 -0700, Stephen Boyd <sboyd@kernel.org> wrote:
+> Quoting Frank Oltmanns (2023-06-14 01:19:37)
+>> Hi,
+>>
+>> On 2023-06-13 at 20:48:21 +0800, kernel test robot <lkp@intel.com> wrote:
+>> > Hi Frank,
+>> >
+>> > kernel test robot noticed the following build errors:
+>> >
+>> > [auto build test ERROR on v6.4-rc6]
+>> > [also build test ERROR on linus/master]
+>> > [cannot apply to clk/clk-next next-20230613]
+>> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+>> > And when submitting patch, we suggest to use '--base' as documented in
+>> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>> >
+>> > url:    https://github.com/intel-lab-lkp/linux/commits/Frank-Oltmanns/clk-fractional-divider-Improve-approximation-when-zero-based/20230613-163903
+>> > base:   v6.4-rc6
+>> > patch link:    https://lore.kernel.org/r/20230613083626.227476-3-frank%40oltmanns.dev
+>> > patch subject: [PATCH v2 2/2] clk: tests: Add tests for fractional divisor approximation
+>> > config: csky-randconfig-r011-20230612 (https://download.01.org/0day-ci/archive/20230613/202306132038.nUB6hmCv-lkp@intel.com/config)
+>> > compiler: csky-linux-gcc (GCC) 12.3.0
+>> > reproduce (this is a W=1 build):
+>> >         mkdir -p ~/bin
+>> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>> >         chmod +x ~/bin/make.cross
+>> >         git checkout v6.4-rc6
+>> >         b4 shazam https://lore.kernel.org/r/20230613083626.227476-3-frank@oltmanns.dev
+>> >         # save the config file
+>> >         mkdir build_dir && cp config build_dir/.config
+>> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=csky olddefconfig
+>> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=csky SHELL=/bin/bash
+>> >
+>> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+>> > the same patch/commit), kindly add following tags
+>> > | Reported-by: kernel test robot <lkp@intel.com>
+>> > | Closes: https://lore.kernel.org/oe-kbuild-all/202306132038.nUB6hmCv-lkp@intel.com/
+>> >
+>> > All errors (new ones prefixed by >>, old ones prefixed by <<):
+>> >
+>> >>> ERROR: modpost: "clk_fractional_divider_general_approximation" [drivers/clk/clk_test.ko] undefined!
+>>
+>> The issue seems to be that clk_fractional_divider_general_approximation
+>> is not exported as a symbol, while the config builds the clk_test as a
+>> module:
+>> CONFIG_CLK_KUNIT_TEST=m
+>>
+>> If I'm not mistaken, this means that I can't test
+>> clk_fractional_divider_general_approximation directly. Instead I'd have
+>> to test it using clk_fractional_divider_ops.round_rate.
+>>
+>> Can someone more knowlegdable than me please confirm if my understanding
+>> is correct?
+>
+> Export the symbol.
 
-Reviewed-by: Dexuan Cui <decui@microsoft.com>
+Ok. I can do that. Please note that I had already submitted a V3 [1],
+that went the way of using clk_fractional_divider_ops.round_rate. I
+apologize for not waiting for your feedback prior to submission. It
+won't happen again.
+
+I liked the approach of calling clk_fd_round_rate directly via the ops,
+because it might allow me to test the other ops as well using the same
+blueprint. Of course, I will not add test cases, if you don't want it.
+(Calling clk_fd_round_rate also had the side effect of teaching me, that
+fd clocks expect the fraction to be less than or equal to 1.)
+
+I don't want to waste your time, but if you could maybe have a chance to
+look at the approach I took in V3 and tell me if you still want me to
+export the symbol instead, that would be really helpful. I'll follow
+your preference.
+
+If I don't hear back until the weekend, I will treat your three words
+above as your preference and prepare a V4 that goes back to calling
+clk_fractional_divider_general_approximation directly.
+
+Thank you,
+  Frank
+
+[1]: https://lore.kernel.org/all/20230614185521.477924-3-frank@oltmanns.dev/
