@@ -2,112 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E9CA731398
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:22:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6744973139D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245501AbjFOJWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 05:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55182 "EHLO
+        id S240343AbjFOJWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 05:22:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243895AbjFOJWK (ORCPT
+        with ESMTP id S240323AbjFOJWQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 05:22:10 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B68211C
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 02:22:05 -0700 (PDT)
-Received: from kwepemm600020.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QhcB744kVz18MPq;
-        Thu, 15 Jun 2023 17:17:03 +0800 (CST)
-Received: from [10.174.179.160] (10.174.179.160) by
- kwepemm600020.china.huawei.com (7.193.23.147) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 15 Jun 2023 17:22:00 +0800
-Message-ID: <f51f8028-ac7b-2c7d-0526-24c227f80c5c@huawei.com>
-Date:   Thu, 15 Jun 2023 17:22:00 +0800
+        Thu, 15 Jun 2023 05:22:16 -0400
+Received: from mail.actia.se (mail.actia.se [212.181.117.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B0CD2726;
+        Thu, 15 Jun 2023 02:22:10 -0700 (PDT)
+Received: from W388ANL (10.12.12.26) by S035ANL.actianordic.se (10.12.31.116)
+ with Microsoft SMTP Server id 15.1.2507.23; Thu, 15 Jun 2023 11:22:07 +0200
+Date:   Thu, 15 Jun 2023 11:22:05 +0200
+From:   Jonas Blixt <jonas.blixt@actia.se>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <shuah@kernel.org>, <valentina.manea.m@gmail.com>,
+        <stern@rowland.harvard.edu>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] USB: usbip: fix stub_dev hub disconnect
+Message-ID: <20230615092205.GA1212960@W388ANL>
+References: <20230613092918.4191895-1-jonas.blixt@actia.se>
+ <2023061347-reverse-staleness-e4f3@gregkh>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] memblock: use the helper macro for_each_zone
-To:     Mike Rapoport <rppt@kernel.org>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <akpm@linux-foundation.org>, <wangkefeng.wang@huawei.com>,
-        <sunnanyong@huawei.com>
-References: <20230612125102.1674568-1-zhangpeng362@huawei.com>
- <20230614114627.GW52412@kernel.org>
-Content-Language: en-US
-From:   "zhangpeng (AS)" <zhangpeng362@huawei.com>
-In-Reply-To: <20230614114627.GW52412@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.160]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600020.china.huawei.com (7.193.23.147)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <2023061347-reverse-staleness-e4f3@gregkh>
+X-Originating-IP: [10.12.12.26]
+X-EsetResult: clean, is OK
+X-EsetId: 37303A294A191A536D7367
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/14 19:46, Mike Rapoport wrote:
+On Tue, Jun 13, 2023 at 11:50:31AM +0200, Greg KH wrote:
+> On Tue, Jun 13, 2023 at 11:29:18AM +0200, Jonas Blixt wrote:
+> > If a hub is disconnected that has device(s) that's attached to the usbip layer
+> > the disconnect function might fail because it tries to release the port
+> > on an already disconnected hub.
+> > 
+> > Fixes: 6080cd0e9239 ("staging: usbip: claim ports used by shared devices")
+> > Signed-off-by: Jonas Blixt <jonas.blixt@actia.se>
+> > ---
+> >  drivers/usb/usbip/stub_dev.c | 8 ++++++--
+> >  1 file changed, 6 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/usb/usbip/stub_dev.c b/drivers/usb/usbip/stub_dev.c
+> > index 2305d425e6c9..257861787cdf 100644
+> > --- a/drivers/usb/usbip/stub_dev.c
+> > +++ b/drivers/usb/usbip/stub_dev.c
+> > @@ -427,8 +427,12 @@ static void stub_disconnect(struct usb_device *udev)
+> >  	/* release port */
+> >  	rc = usb_hub_release_port(udev->parent, udev->portnum,
+> >  				  (struct usb_dev_state *) udev);
+> > -	if (rc) {
+> > -		dev_dbg(&udev->dev, "unable to release port\n");
+> > +	/*
+> > +	 * NOTE: If a HUB disconnect triggered disconnect of the down stream
+> > +	 * device usb_hub_release_port will return -ENODEV.
+> 
+> How about adding, "so we can safely ignore that error here."
+> 
+> thanks,
+> 
+> greg k-h
 
-> On Mon, Jun 12, 2023 at 08:51:02PM +0800, Peng Zhang wrote:
->> From: ZhangPeng <zhangpeng362@huawei.com>
->>
->> Let's use the helper macro for_each_zone to iterate over all memory
->> zones and reset the node managed pages. After that, we can remove the
->> unused function reset_node_managed_pages.
-> Are you sure it's safe to use for_each_zone() in all users of
-> reset_all_zones_managed_pages()?
->   
+Yes, I'll update the comment and prepare a V2 patch.
 
-Thanks for your review.
-
-Using for_each_zone() is indeed unsafe in some users of
-reset_all_zones_managed_pages(). Please ignore.
-
-Thanks,
-Peng
-
->> Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
->> ---
->>   mm/memblock.c | 14 +++-----------
->>   1 file changed, 3 insertions(+), 11 deletions(-)
->>
->> diff --git a/mm/memblock.c b/mm/memblock.c
->> index da4264528e1e..af552604c3fb 100644
->> --- a/mm/memblock.c
->> +++ b/mm/memblock.c
->> @@ -2122,23 +2122,15 @@ static unsigned long __init free_low_memory_core_early(void)
->>   
->>   static int reset_managed_pages_done __initdata;
->>   
->> -static void __init reset_node_managed_pages(pg_data_t *pgdat)
->> -{
->> -	struct zone *z;
->> -
->> -	for (z = pgdat->node_zones; z < pgdat->node_zones + MAX_NR_ZONES; z++)
->> -		atomic_long_set(&z->managed_pages, 0);
->> -}
->> -
->>   void __init reset_all_zones_managed_pages(void)
->>   {
->> -	struct pglist_data *pgdat;
->> +	struct zone *z;
->>   
->>   	if (reset_managed_pages_done)
->>   		return;
->>   
->> -	for_each_online_pgdat(pgdat)
->> -		reset_node_managed_pages(pgdat);
->> +	for_each_zone(z)
->> +		atomic_long_set(&z->managed_pages, 0);
->>   
->>   	reset_managed_pages_done = 1;
->>   }
->> -- 
->> 2.25.1
->>
+Jonas
