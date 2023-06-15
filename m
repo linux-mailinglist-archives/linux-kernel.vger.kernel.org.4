@@ -2,130 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 948647313A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:23:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20A317313AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 11:23:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239941AbjFOJXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 05:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56614 "EHLO
+        id S239981AbjFOJXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 05:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241180AbjFOJXY (ORCPT
+        with ESMTP id S238918AbjFOJXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 05:23:24 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 228A42963
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 02:23:21 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f8d258f203so14060245e9.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 02:23:21 -0700 (PDT)
+        Thu, 15 Jun 2023 05:23:38 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6ED42130;
+        Thu, 15 Jun 2023 02:23:36 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id af79cd13be357-75d46c7cd6cso268304885a.3;
+        Thu, 15 Jun 2023 02:23:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686820999; x=1689412999;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1eJ4rnNncWrFdm7bzEMvmmaAxoGgUg9BTjanAGULWsI=;
-        b=lNkaJMTARfH1VVBY7ioewtuj5T+/397Y5tzHIR0/jHDP8W0qjTF7ROKZKBzio6ZDtM
-         wz85yYf9rauahRbspJ9s3ynh/jlbRjglnIKT+CsyjlIzWwS5TmC5AZD5xnfAUDvB/RJB
-         LggpzGXbhIzCo+neKd43+fZoTWVheIVOYJvXGAVa7hpXDQqhlY8/1yZYNRMzXkX1z0Jb
-         mfirEGq/JuIzsmUSLje77zdGGJE9e8Ym6jDOJrS1VD1W2R98ElQCo5GmEcifSBefY5ld
-         FQvcvqT4EQ8BJCGxkUbOFE9ndvWoHgK9LMbosqKz80XUC1GS5pCFuonQbF5iwsyiYn27
-         GE0w==
+        d=gmail.com; s=20221208; t=1686821016; x=1689413016;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oGOHFXjoBS2ub7744MFzAfGB3y1RlKfr94cgOk8utvg=;
+        b=bQPiUW2V/29fzHAWymvAuQKmj6vXfz5zArXjocuKNgdfoFxWwTMHtWWS1g/dPGmOk9
+         gdnCT1uCVb+1TPiOdR0qq9Xp55gm3Kw4HgkiENLdyJ7Em6K1KJ56gxXpvgsUQyLNq9hH
+         iRHuY2mIidQd/qDJsBLM0FfcS3GxlHfjBgvZa/zwYlokG3p8IZ9nGTQi/FWiMwiarjy3
+         rjXZVu71fjJjFrKCb9n7BsQc+43Pj4ZMEH0O1Kb23mLVDUQz36LbEcCldXeIWmrYPNp4
+         rNR5x2LPD5WKSr8vCsvMUGSl3NUds51A18JWFiHz6B0U1hBuYdtMcdL11Jg3SHP+d5SN
+         hUCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686820999; x=1689412999;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1eJ4rnNncWrFdm7bzEMvmmaAxoGgUg9BTjanAGULWsI=;
-        b=c2WCHbvCFfZiAv5xexYxGxCvRtmlY3HiAtkbadkd2F/8EH37V6haFVy+hkGmn/0FBD
-         Z4zG1b1z5QELMHFc0XNOPqovKk28Pn4qhiEtdw7Hmn5YNdAXI0CKbICa2A+g/Wq8frEw
-         lC99D3pkmUc5UmVqVah4LBWvBolenQFRp6JmyCRNo+VdR6mC2ppgP+9TsNfaWVWsX7+c
-         oV+JwLkkhaosUypefLmdPr3MO/tC33qVR0TLDHt5EEagYlSTTMSOXNsk0pMp44MGjsYY
-         ghHoLFXLUYLgUFYZ7FlDKpBohgIjbrik38EXedngL6On1mWZetuh1F4tPQvZU2UiBwad
-         2W6g==
-X-Gm-Message-State: AC+VfDxgRT3vIo89G98+2hVFZ94SwJQA0yLTdubQhR4XUgwFK+k/O0M6
-        Tdvz3cOJd/bvZXwe7KSWnsCw4g==
-X-Google-Smtp-Source: ACHHUZ6C/7h2raAbsdWfbPiQPMNqx4kHVtCF3NETr54+UGit+TWqvkF/22lfW66ubm4EKfaSeLbUFA==
-X-Received: by 2002:a1c:6a18:0:b0:3f6:a966:ee8d with SMTP id f24-20020a1c6a18000000b003f6a966ee8dmr11361233wmc.26.1686820999555;
-        Thu, 15 Jun 2023 02:23:19 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id l8-20020a1c7908000000b003f7f4dc6d14sm19658140wme.14.2023.06.15.02.23.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 02:23:19 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Thu, 15 Jun 2023 11:23:17 +0200
-Subject: [PATCH] spi: spi-geni-qcom: correctly handle -EPROBE_DEFER from
- dma_request_chan()
+        d=1e100.net; s=20221208; t=1686821016; x=1689413016;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oGOHFXjoBS2ub7744MFzAfGB3y1RlKfr94cgOk8utvg=;
+        b=DfiI4ibTkC5j4MBf2+6Okb1E26d4j+sQcxQ16PZgg4i+9ZjDiRXu2gARnqpWl7gf7R
+         yl8rzMBcmoO9ZdoSgmGSCpM7EOSAY6ByAJ9ZukZQ+oV4NoyyPICynTsNWJLzMhLbrO3Z
+         FkRZgMVkU883nwe6LEoJAQFkBKOmV4jmV1n5GySs1YeTGF542euLkioNrmja6pYDy2ZD
+         YkxSJEdsW9MIxe8c6aob1+gigew9PVPiiVswg7uxj+0sDC7Y2xCCaGn4oZMHfuuM9X0n
+         SAtuqLcXfnKFKtb3xPNZsILyFjC8P3x4L+RIin4hClOSUvgFAjOPbbZjdBXQeXuBXfdv
+         0scQ==
+X-Gm-Message-State: AC+VfDxcpZ18cP534HkisP1HbHft0KUMQnq+eHOv0SERNRqdab+fQm3V
+        7AbZo0aIgruDjUF51mNszbt/KBnUEdNcTVmimyc=
+X-Google-Smtp-Source: ACHHUZ5Xi1q7Qr8BpQtJ7QY25OlQp8ICSTCgK7JFeKCy6nELV0YWKp8eHxludT1KOtcxg84RnehJIFUxL8ijvgsUqx8=
+X-Received: by 2002:a05:622a:589:b0:3f9:d70f:ff6b with SMTP id
+ c9-20020a05622a058900b003f9d70fff6bmr5547763qtb.56.1686821015825; Thu, 15 Jun
+ 2023 02:23:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230615-topic-sm8550-upstream-fix-spi-geni-qcom-probe-v1-1-6da9bf2db4a4@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAITYimQC/x2OywrCMBBFf6XM2oG0kmj9FXExiWM70DzMtCKU/
- rvB5TlwD3cH5SqscOt2qPwRlZwa9KcOwkxpYpRnYxjMcDaut7jmIgE1Xq01uBVdK1PEl3xRi+D
- ESfAdcsRSs2ccabwE77xlctCanpTRV0phbtW0LUuTpXLb/0/cH8fxA7kKpZqUAAAA
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Dan Carpenter <error27@gmail.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1251;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=e61ddUxKVebTptBbisyS/Wr1T7LFFXf6wr3UGnWvpKY=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkitiGXiHO86mu7QvqOwC0OnKaPO//C+YLvVBvmcp7
- ijTrhBmJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZIrYhgAKCRB33NvayMhJ0Y8aEA
- CUDTxQcSCAJscYUDzIxaLaeeelc2MzGtpM/PDKENWhBEgHkYKTPuCQxxhILZ7lQj1WLEW1+x1HuqLI
- EaR5FosiP+uwEN6bWCjS8DaqNPsh9Fovy0r1auSCYXy739hxzPOY1ANt1GVOl4TfP+WGdbL6913QH6
- ly9qT/jClaYomhtUzTlIBOqo+fEwMI1yhtNDV4bkQww1K8Osd9cgQY29rRbkllaSS/+yQGnvIQ3ASS
- yXxbKoPxSkMoEi+1Em5leQLktTPxGIgH8zi7mlYgk5E+OAqvAbOLj+eqRcvF6W/Y7si6dYide8wz0n
- 3Dl921NMJi5BZlmSCszRrgK/a74zjkyLCmi7LNzqaK1uY314PIY7cEROcSw7+zkQRL10374l8BzUf3
- sNKG+truLBNhyuQv3fRuQKr1GdPTVXtjb78ZnAJEzMr+j0kYWlseOzRMWZ/FarEDkB8CHjDcJxiihu
- LCiTQ9Fi+WfiZ0Xz4Ny95HkGYWNia5tgGUApYckUJCKNNmkR3LlmU8J7JShx4pUO6xi/qdfNUPyA4U
- bJj5IAXeLPW+77oz+bX130fDPS3kJpQsyQjKxjb+/UkASdEiKIsgIf7fepuO9s5t0CtQ12R7ieEVJF
- NZ4ll5PIjYAnGdIqAUE2rybPSKLORzMspXEa+yD05nr08fQc2BFF++uThNPg==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+References: <20230614180837.630180-1-ojeda@kernel.org> <20230614180837.630180-6-ojeda@kernel.org>
+ <49dad8fe-c509-6c43-559e-13a82563d3d0@gmail.com>
+In-Reply-To: <49dad8fe-c509-6c43-559e-13a82563d3d0@gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 15 Jun 2023 11:23:24 +0200
+Message-ID: <CANiq72mq4wYJ77qDKYWTO=FkA1AYat2rJd63Gps9aUrP82c9dQ@mail.gmail.com>
+Subject: Re: [PATCH 5/6] rust: support running Rust documentation tests as
+ KUnit ones
+To:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>, David Gow <davidgow@google.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Andreas Hindborg <nmi@metaspace.dk>,
+        Philip Li <philip.li@intel.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now spi_geni_grab_gpi_chan() errors are correctly reported, the
--EPROBE_DEFER error should be returned from probe in case the
-GPI dma driver is built as module and/or not probed yet.
+On Thu, Jun 15, 2023 at 5:52=E2=80=AFAM Martin Rodriguez Reboredo
+<yakoyoku@gmail.com> wrote:
+>
+> I can't remember that if this panic it will mention the path on it.
+> Though if it does, then use something more explicit than
+> `.unwrap()`.
 
-Fixes: b59c122484ec ("spi: spi-geni-qcom: Add support for GPI dma")
-Fixes: 6532582c353f ("spi: spi-geni-qcom: fix error handling in spi_geni_grab_gpi_chan()")
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- drivers/spi/spi-geni-qcom.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+It doesn't print it, and I am happy to make things more explicit, but
+in which case(s) do you see it failing?
 
-diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-index 206cc04bb1ed..0ebcc5fe92de 100644
---- a/drivers/spi/spi-geni-qcom.c
-+++ b/drivers/spi/spi-geni-qcom.c
-@@ -661,7 +661,8 @@ static int spi_geni_init(struct spi_geni_master *mas)
- 			geni_se_select_mode(se, GENI_GPI_DMA);
- 			dev_dbg(mas->dev, "Using GPI DMA mode for SPI\n");
- 			break;
--		}
-+		} else if (ret == -EPROBE_DEFER)
-+			goto out_pm;
- 		/*
- 		 * in case of failure to get gpi dma channel, we can still do the
- 		 * FIFO mode, so fallthrough
+> Please do not use unwrap here, one can easily create a path that
+> it's not compliant under `rust/test/doctests/kernel` and get no
+> clue about where this script has failed. Use `.expect()` or
+> something else instead.
 
----
-base-commit: 925294c9aa184801cc0a451b69a18dd0fe7d847d
-change-id: 20230615-topic-sm8550-upstream-fix-spi-geni-qcom-probe-9a97cb6b5ea6
+The folder is removed every time, so that should not happen I think.
+Yes, you can still hack things and call the script manually, but I
+wouldn't call that "easily".
 
-Best regards,
--- 
-Neil Armstrong <neil.armstrong@linaro.org>
+Nevertheless, I am happy to change it if we think there is a risk,
+e.g. `rustdoc` changing the pattern (though we pin the version so
+far).
 
+Thanks for taking a look Martin!
+
+Cheers,
+Miguel
