@@ -2,59 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33F07731ACB
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED390731ACE
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:06:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344742AbjFOOGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 10:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
+        id S1344840AbjFOOGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 10:06:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344716AbjFOOGF (ORCPT
+        with ESMTP id S1344716AbjFOOGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 10:06:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D3F1FE8
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 07:06:03 -0700 (PDT)
+        Thu, 15 Jun 2023 10:06:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0605B1BE8;
+        Thu, 15 Jun 2023 07:06:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C1EA62D90
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 14:06:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5466C433C0;
-        Thu, 15 Jun 2023 14:06:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686837962;
-        bh=2M6qrF4ORzCFN2c/lRhl6bHd4E8kwP4xtKpvVV/KLPQ=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 963D4629A6;
+        Thu, 15 Jun 2023 14:06:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85F76C433C8;
+        Thu, 15 Jun 2023 14:06:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686837996;
+        bh=2HWxn6SgFtrNnxm9GSS8Rtq52vTNyCTVVqs90CZgSGQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SZ2j3/pqpnU3o0tWYY25t99Y4mtVRiNp4oN92bIm4SGfe5/v0MZI4RdQ1BuSrNUyI
-         LKqNNYvYRHa7W62924yI+Oam42zxLrno6NgnmKv0xBem/Q2Z7XfSQHNh5GggpRLoVq
-         euBJj5ihapWfib7GEbcoSVn7VELv/pYcEhsoz79HLG1baXAG7sI4tkas7UTSameS0K
-         V4qRtM1xMt7234aPLA09cm3wLgpx/S6Z1c52XWvtsd7+r2orcPSpJa5u1Wq1Tu6UdC
-         4xZUpScsLiwj0zxdz8/tuR26Y4Mcan6RHALDjjbprZqXGkz5zDtPVzihNxBc+AAIxG
-         D122hUsy/SxuA==
-Date:   Thu, 15 Jun 2023 15:05:57 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Amelie Delaunay <amelie.delaunay@foss.st.com>
-Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Amelie Delaunay <amelie.delaunay@st.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH 2/2] mfd: stmfx: Nullify stmfx->vdd in case of
- error
-Message-ID: <20230615140557.GG3635807@google.com>
-References: <20230609092804.793100-1-amelie.delaunay@foss.st.com>
- <20230609092804.793100-2-amelie.delaunay@foss.st.com>
+        b=KpR36luzMbFukaoYSxIo/2ySvXZ9EI94ww6JPoZMp9yWn31FB5/1Jc+/1VCbSY/ed
+         xm7JCcRRg7tG5aCgWpZ765U8UWEq/1DZFZF0WW6EFcuYvS4QejYWGHzrK8LmHnV9g1
+         JMqUL53yXK4Pw9ebkLssTsQF9JW28YovjMw72+0E=
+Date:   Thu, 15 Jun 2023 16:06:33 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>
+Subject: Re: [PATCH V23 2/3] misc: dcc: Add driver support for Data Capture
+ and Compare unit(DCC)
+Message-ID: <2023061548-subtly-cackle-8be2@gregkh>
+References: <cover.1683265984.git.quic_schowdhu@quicinc.com>
+ <2259ab0348282349e88905ea99bcb4aa815d941f.1683265984.git.quic_schowdhu@quicinc.com>
+ <2023061542-reformed-unholy-10a3@gregkh>
+ <cc9750f3-c85c-be7f-e63c-0fcf4eb160f0@quicinc.com>
+ <2023061515-unbuckled-consonant-e207@gregkh>
+ <5d9ab90f-4fc3-26c6-141e-e9388ac2f0cf@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230609092804.793100-2-amelie.delaunay@foss.st.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <5d9ab90f-4fc3-26c6-141e-e9388ac2f0cf@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,19 +66,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 09 Jun 2023, Amelie Delaunay wrote:
-
-> Nullify stmfx->vdd in case devm_regulator_get_optional() returns an error.
-> And simplify code by returning an error only if return code is not -ENODEV,
-> which means there is no vdd regulator and it is not an issue.
+On Thu, Jun 15, 2023 at 07:17:34PM +0530, Souradeep Chowdhury wrote:
+> > > > > +static ssize_t ready_read(struct file *filp, char __user *userbuf,
+> > > > > +			  size_t count, loff_t *ppos)
+> > > > > +{
+> > > > > +	int ret = 0;
+> > > > > +	char *buf;
+> > > > > +	struct dcc_drvdata *drvdata = filp->private_data;
+> > > > > +
+> > > > > +	mutex_lock(&drvdata->mutex);
+> > > > > +
+> > > > > +	if (!is_dcc_enabled(drvdata)) {
+> > > > > +		ret = -EINVAL;
+> > > > > +		goto out_unlock;
+> > > > > +	}
+> > > > > +
+> > > > > +	if (!FIELD_GET(BIT(1), readl(drvdata->base + dcc_status(drvdata->mem_map_ver))))
+> > > > > +		buf = "Y\n";
+> > > > > +	else
+> > > > > +		buf = "N\n";
+> > > > > +out_unlock:
+> > > > > +	mutex_unlock(&drvdata->mutex);
+> > > > > +
+> > > > > +	if (ret < 0)
+> > > > > +		return -EINVAL;
+> > > > > +	else
+> > > > 
+> > > > You do the "lock, get a value, unlock, do something with the value"
+> > > > thing a bunch, but what prevents the value from changing after the lock
+> > > > happens?  So why is the lock needed at all?
+> > > 
+> > > The lock is used to prevent concurrent accesses of the drv_data when
+> > > scripts are being run from userspace.
+> > 
+> > How would that matter?  The state can change instantly after the lock is
+> > given up, and then the returned value is now incorrect.  So no need for
+> > a lock at all as you really aren't "protecting" anything, or am I
+> > missing something else?
 > 
-> Fixes: d75846ed08e6 ("mfd: stmfx: Fix dev_err_probe() call in stmfx_chip_init()")
-> Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
-> ---
->  drivers/mfd/stmfx.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+> This lock is needed to protect the access to the global instance of drv_data
+> structure instantiated at probe time within each individual callbacks of
+> debugfs.
 
-Applied, thanks
+What exactly are you "protecting" here that could change in a way that
+cause a problem?
 
--- 
-Lee Jones [李琼斯]
+You aren't returning a value that is ever guaranteed to be "correct"
+except that it happened sometime in the past, it might be right anymore.
+
+thanks,
+
+greg k-h
