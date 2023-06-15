@@ -2,114 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A3A6731DA3
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F25B7731DA8
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbjFOQTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 12:19:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59086 "EHLO
+        id S232419AbjFOQUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 12:20:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234129AbjFOQTI (ORCPT
+        with ESMTP id S230235AbjFOQUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 12:19:08 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498E9273E
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 09:19:06 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f8d0d68530so22440525e9.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 09:19:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google; t=1686845945; x=1689437945;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vYWBqB+lSwhG8wORrnHLWYrtimD2ZM+aCUIorOoeBDs=;
-        b=JIP18p220Cn8gTeeEDEWZ9vvN6ai5FZmR7HwbHVfknPADASswj8KY8eo3DQqEC6Siw
-         tGghDo8+MZoUnUHAjPSsJMsKB4hdKlAkGOCCOCktVDEab/EyyyG3RitjY3HR8eJEpZE0
-         k1SnS1gZ18dSfv2+70GLhmcq0wMVzZb1Zf/O71SC2+UNpnmZYQYYCbgim8iJf2AudYuy
-         Szg3tPMpM7jh2DCGhCcTBePit8eW1apYDr1SIkmdzpu3ix8NnapBMPK01xaBAhz2apzl
-         vnJ4ordrHGym2xfr0DqPjdlOi4towpcVpOpnI/4DELQdDnRNhyR34QDx1MjCObKhf3OW
-         oB2A==
+        Thu, 15 Jun 2023 12:20:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC7D1FE2
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 09:19:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686845960;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jdyRYox4ez58cOxucW/gKoUBvS+2+yUof+u/Mb1E798=;
+        b=DIW0giPVWxr7pvzaQ7aRDGk4zzZpcr8eux/vW9f/MH3/bQgwgrcrwecsY2wdWZve7gV+dI
+        BuFDOD2nPgb+oOFy9e8INHiQHaUUfphaSluuSyckU1pxTiXwL1QMjjBNRCJzyTNzUklnw9
+        Pkp0IKh4JMYD5PtaRlIF4A6YUsUIpBE=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-602-_w-H3rz7NU2juZEtFpKiyg-1; Thu, 15 Jun 2023 12:19:18 -0400
+X-MC-Unique: _w-H3rz7NU2juZEtFpKiyg-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-982180ac15cso186326066b.2
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 09:19:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686845945; x=1689437945;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vYWBqB+lSwhG8wORrnHLWYrtimD2ZM+aCUIorOoeBDs=;
-        b=BEeFt8XEDeDYA/4FUB4uXjCYErgIfDu1fu1PisxFSLyYtnwLVPxXMTiUhgFcH+g6St
-         eVdBoeS4zHVz3gUiB9VBrDjNRkzcIXCznaHH3zduv7JVbCLUS1to4ZBOoABMBhTmcCPt
-         LOp4pOYSwZGliuEc7C2369OzxEgAODDXDBdiCTBZyGs9Dm2GhKF8Gt/Mo5dYVZFtd6VP
-         jvARWBprHkjfx78+s92WEfk8DXTeoBE4+PeenfqzzexwcIRoz2BWVnoWKMb3+YztO2RU
-         6ZxtWFOE387hvaBLlRCF8lRM7wJAdjESMd4vIGxh2CArTok8TAIKMmrbTaEEUa7A/htu
-         1GTQ==
-X-Gm-Message-State: AC+VfDynyRkuUgG3kbr3XB11LOLQn/RGcPlFDoa1i3GOusdC+MUOQx2J
-        gCa+0OxY0jph6xbpsZCmTMbgkw==
-X-Google-Smtp-Source: ACHHUZ4xiHr1VKbX5NeyuOBIcDlSOCeMjQQ53SHspLWpdWC6Ufimksq4Zoqgb92AUWRxgzEufS7amg==
-X-Received: by 2002:a7b:c84c:0:b0:3f6:76e:604b with SMTP id c12-20020a7bc84c000000b003f6076e604bmr14882510wml.0.1686845944780;
-        Thu, 15 Jun 2023 09:19:04 -0700 (PDT)
-Received: from [10.83.37.24] ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id ja15-20020a05600c556f00b003f61177faffsm11354104wmb.0.2023.06.15.09.19.03
+        d=1e100.net; s=20221208; t=1686845957; x=1689437957;
+        h=content-transfer-encoding:in-reply-to:references:to
+         :content-language:subject:cc:user-agent:mime-version:date:message-id
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jdyRYox4ez58cOxucW/gKoUBvS+2+yUof+u/Mb1E798=;
+        b=DZdprYj4HQ6Y/bveX/E5MlLfyNrxJOkqRJELnrBsInWxzKkivCJv7DrlA2EJpNx0zx
+         G4zkfN/OPhFBeDd8cLYkuhAz0Nt/yYmdZj5BxEVjxqjwHKTklKPYsLVWiBqOrSmAD8st
+         91GdSVicDFOgW86ppPUVkDIkcfP8/FsJlxS2uWWq3RpwNhmz8odo24WDtuWAVu+tRjzC
+         4ninJvtJpX8hNeKgRhEkZ1Zxg3B2dF0/+zf3wcnluumk9Zdt47z6TRKnjtJLfkzfCdlK
+         Tjwr+WxKXiMOGAngT7cLM4nNOafQF+ViKEcleom//+mdzqrxqmBPSFDMoB7UyFEMWYzn
+         ZjiA==
+X-Gm-Message-State: AC+VfDyejiRUZ7npSypuX3y05xIo+8aoOWrF+4hePtvWTjaKJshVDCvP
+        NJuj5igCkTUwEBwMJ3Bc/YqIrRA1jrDAPLPk9trP1JvPm/hzGhv91YAdHvnuRtwk1n8CZqAYAyv
+        bQzl5mB+8H8wxlu/WvbbMkbmO
+X-Received: by 2002:a17:907:970a:b0:961:69a2:c8d6 with SMTP id jg10-20020a170907970a00b0096169a2c8d6mr21673385ejc.69.1686845957606;
+        Thu, 15 Jun 2023 09:19:17 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4wE25SZBquEw19ouy6JqTjsnj0Hsl0l67V3udSD3DC3NcZDIIvy5Y+0os9fyBaLhwHkEIpsg==
+X-Received: by 2002:a17:907:970a:b0:961:69a2:c8d6 with SMTP id jg10-20020a170907970a00b0096169a2c8d6mr21673365ejc.69.1686845957203;
+        Thu, 15 Jun 2023 09:19:17 -0700 (PDT)
+Received: from [192.168.42.222] (194-45-78-10.static.kviknet.net. [194.45.78.10])
+        by smtp.gmail.com with ESMTPSA id b16-20020a170906491000b0095342bfb701sm9776088ejq.16.2023.06.15.09.19.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 09:19:04 -0700 (PDT)
-Message-ID: <6aa4521f-e5d2-ed12-ab49-1132409ab358@arista.com>
-Date:   Thu, 15 Jun 2023 17:19:01 +0100
+        Thu, 15 Jun 2023 09:19:16 -0700 (PDT)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <0ba1bf9c-2e45-cd44-60d3-66feeb3268f3@redhat.com>
+Date:   Thu, 15 Jun 2023 18:19:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [v2 PATCH] crypto: api - Add __crypto_alloc_tfmgfp
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     linux-kernel@vger.kernel.org, Bob Gilligan <gilligan@arista.com>,
-        David Ahern <dsahern@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
+ Thunderbird/102.10.0
+Cc:     brouer@redhat.com, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
         Eric Dumazet <edumazet@google.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Francesco Ruggeri <fruggeri05@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        linux-crypto@vger.kernel.org
-References: <20230614174643.3836590-1-dima@arista.com>
- <20230614174643.3836590-3-dima@arista.com>
- <ZIrTQ1tN5LMuRB/5@gondor.apana.org.au>
+        Maryam Tahhan <mtahhan@redhat.com>, bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH net-next v3 3/4] page_pool: introduce page_pool_alloc()
+ API
 Content-Language: en-US
-From:   Dmitry Safonov <dima@arista.com>
-In-Reply-To: <ZIrTQ1tN5LMuRB/5@gondor.apana.org.au>
-Content-Type: text/plain; charset=UTF-8
+To:     Alexander Duyck <alexander.duyck@gmail.com>,
+        Yunsheng Lin <linyunsheng@huawei.com>
+References: <20230609131740.7496-1-linyunsheng@huawei.com>
+ <20230609131740.7496-4-linyunsheng@huawei.com>
+ <CAKgT0UfVwQ=ri7ZDNnsATH2RQpEz+zDBBb6YprvniMEWGdw+dQ@mail.gmail.com>
+ <36366741-8df2-1137-0dd9-d498d0f770e4@huawei.com>
+ <CAKgT0UdXTSv1fDHBX4UC6Ok9NXKMJ_9F88CEv5TK+mpzy0N21g@mail.gmail.com>
+ <c06f6f59-6c35-4944-8f7a-7f6f0e076649@huawei.com>
+ <CAKgT0UccmDe+CE6=zDYQHi1=3vXf5MptzDo+BsPrKdmP5j9kgQ@mail.gmail.com>
+In-Reply-To: <CAKgT0UccmDe+CE6=zDYQHi1=3vXf5MptzDo+BsPrKdmP5j9kgQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/15/23 10:00, Herbert Xu wrote:
+
+On 15/06/2023 16.45, Alexander Duyck wrote:
 [..]
 > 
-> Good catch.  Though I'd rather add the gfp argument to a separate
-> function because I'm in the process of replacing ciphers with
-> something that uses the new crypto_types API.
+> What concerns me is that you seem to be taking the page pool API in a
+> direction other than what it was really intended for. For any physical
+> device you aren't going to necessarily know what size fragment you are
+> working with until you have already allocated the page and DMA has
+> been performed. That is why drivers such as the Mellanox driver are
+> fragmenting in the driver instead of allocated pre-fragmented pages.
 > 
-> Once that happens ciphers will switch over to the normal cloning
-> call and this can be removed.
 
-LGTM, thanks!
++1
 
-> 
-> ---8<---
-> Use it straight away in crypto_clone_cipher(), as that is not meant to
-> sleep.
-> 
-> Fixes: 51d8d6d0f4be ("crypto: cipher - Add crypto_clone_cipher")
-> Signed-off-by: Dmitry Safonov <dima@arista.com>
-> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-> 
-> diff --git a/crypto/api.c b/crypto/api.c
-[..]
+I share concerns with Alexander Duyck here. As the inventor and
+maintainer, I can say this is taking the page_pool API in a direction I
+didn't intent or planned for. As Alex also says, the intent was for
+fixed sized memory chunks that are DMA ready.  Use-case was the physical
+device RX "early demux problem", where the size is not known before hand.
 
-Thanks,
-           Dmitry
+I need to be convinced this is a good direction to take the page_pool
+design/architecture into... e.g. allocations with dynamic sizes.
+Maybe it is a good idea, but as below "consumers" of the API is usually
+the way to show this is the case.
+
+[...]
+> 
+> What I was getting at is that if you are going to add an API you have
+> to have a consumer for the API. That is rule #1 for kernel API
+> development. You don't add API without a consumer for it. The changes
+> you are making are to support some future implementation, and I see it
+> breaking most of the existing implementation. That is my concern.
+> 
+
+You have mentioned veth as the use-case. I know I acked adding page_pool
+use-case to veth, for when we need to convert an SKB into an
+xdp_buff/xdp-frame, but maybe it was the wrong hammer(?).
+In this case in veth, the size is known at the page allocation time.
+Thus, using the page_pool API is wasting memory.  We did this for
+performance reasons, but we are not using PP for what is was intended
+for.  We mostly use page_pool, because it an existing recycle return
+path, and we were too lazy to add another alloc-type (see enum
+xdp_mem_type).
+
+Maybe you/we can extend veth to use this dynamic size API, to show us
+that this is API is a better approach.  I will signup for benchmarking
+this (and coordinating with CC Maryam as she came with use-case we
+improved on).
+
+--Jesper
 
