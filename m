@@ -2,66 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75EBF7316B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 287917316C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343835AbjFOLdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 07:33:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
+        id S1343858AbjFOLhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 07:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244783AbjFOLc6 (ORCPT
+        with ESMTP id S241149AbjFOLg7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 07:32:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FF2ED
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 04:32:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686828728;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=2jLPUY6QsgU36zacDi9VUOh4wRLZuAcl8Xg9zAds7pQ=;
-        b=FShPQN/+1la0pmaLAxgwYfxFkyFVUJOZoB+ZcwyHfDwWk7tL6F7GO7hkbg/WDRd1o2JZRB
-        4DFqePJ8FHhQALURlZxgqWKoTIiwYSn7wj1bldz26LxugDv2MQKow77arAzOFWQi66Vf5i
-        dTjcvFFrME5s/6ZmGOYhKTG0NTjJLrw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-517-B0uJZzaOOPCYIxFhQXYuOA-1; Thu, 15 Jun 2023 07:32:07 -0400
-X-MC-Unique: B0uJZzaOOPCYIxFhQXYuOA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 15 Jun 2023 07:36:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF0C212C;
+        Thu, 15 Jun 2023 04:36:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2D21E8022EF;
-        Thu, 15 Jun 2023 11:32:06 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.51])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 053F21415102;
-        Thu, 15 Jun 2023 11:32:03 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-cc:     dhowells@redhat.com,
-        syzbot+dd1339599f1840e4cc65@syzkaller.appspotmail.com,
-        Tom Herbert <tom@herbertland.com>,
-        Tom Herbert <tom@quantonium.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next] kcm: Fix unnecessary psock unreservation.
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 331D96387A;
+        Thu, 15 Jun 2023 11:36:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2571C433C8;
+        Thu, 15 Jun 2023 11:36:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686829017;
+        bh=8qjRqN0gKdO2Kze4Y40EjpeRbQoGwjmMEnwxWgVYtLE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=H4Sghg5omg9tdtMLz6O9EFOmQVJPdP7Q8Aet1nb1WPZPIlkC04jnnUd3KPiSF0hgi
+         re2tWE3nZwkq0gprmu710hn7wT3XnFaUMxx3tKYpS+lCAO7l/OVarjn751FSWIkYZK
+         ygPHlg+th9RCVlvMf6GLKksJLcPsKaacmFgKCh0GjybxG4GYb1AeaGZa0RXpifURs+
+         1kSyZeUldNiwnVsMMArRqMrNgSnSA1iBWxRsb5nTrXUjh27FZjMnEuphVn1hZUNyJ7
+         geeLZNOYCjHRNtyTIvtHfKnTE0eUhffFRwgrvb9OqXg6m7sBIXSFpRoaXtQXihadD9
+         xjNY9+X8xOOGA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sasha Levin <sashal@kernel.org>, sre@kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 01/37] power: supply: ab8500: Fix external_power_changed race
+Date:   Thu, 15 Jun 2023 07:36:18 -0400
+Message-Id: <20230615113654.648702-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <20786.1686828722.1@warthog.procyon.org.uk>
-Date:   Thu, 15 Jun 2023 12:32:02 +0100
-Message-ID: <20787.1686828722@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.3.8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,53 +59,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kcm_write_msgs() calls unreserve_psock() to release its hold on the
-underlying TCP socket if it has run out of things to transmit, but if we
-have nothing in the write queue on entry (e.g. because someone did a
-zero-length sendmsg), we don't actually go into the transmission loop and
-as a consequence don't call reserve_psock().
+From: Hans de Goede <hdegoede@redhat.com>
 
-Fix this by skipping the call to unreserve_psock() if we didn't reserve a
-psock.
+[ Upstream commit a5299ce4e96f3e8930e9c051b28d8093ada87b08 ]
 
-Fixes: c31a25e1db48 ("kcm: Send multiple frags in one sendmsg()")
-Reported-by: syzbot+dd1339599f1840e4cc65@syzkaller.appspotmail.com
-Link: https://lore.kernel.org/r/000000000000a61ffe05fe0c3d08@google.com/
-Signed-off-by: David Howells <dhowells@redhat.com>
-Tested-by: syzbot+dd1339599f1840e4cc65@syzkaller.appspotmail.com
-cc: Tom Herbert <tom@herbertland.com>
-cc: Tom Herbert <tom@quantonium.net>
-cc: "David S. Miller" <davem@davemloft.net>
-cc: Eric Dumazet <edumazet@google.com>
-cc: Jakub Kicinski <kuba@kernel.org>
-cc: Paolo Abeni <pabeni@redhat.com>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: netdev@vger.kernel.org
+ab8500_btemp_external_power_changed() dereferences di->btemp_psy,
+which gets sets in ab8500_btemp_probe() like this:
+
+        di->btemp_psy = devm_power_supply_register(dev, &ab8500_btemp_desc,
+                                                   &psy_cfg);
+
+As soon as devm_power_supply_register() has called device_add()
+the external_power_changed callback can get called. So there is a window
+where ab8500_btemp_external_power_changed() may get called while
+di->btemp_psy has not been set yet leading to a NULL pointer dereference.
+
+Fixing this is easy. The external_power_changed callback gets passed
+the power_supply which will eventually get stored in di->btemp_psy,
+so ab8500_btemp_external_power_changed() can simply directly use
+the passed in psy argument which is always valid.
+
+And the same applies to ab8500_fg_external_power_changed().
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/kcm/kcmsock.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/power/supply/ab8500_btemp.c | 6 ++----
+ drivers/power/supply/ab8500_fg.c    | 6 ++----
+ 2 files changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/net/kcm/kcmsock.c b/net/kcm/kcmsock.c
-index d75d775e9462..d0537c1c8cd7 100644
---- a/net/kcm/kcmsock.c
-+++ b/net/kcm/kcmsock.c
-@@ -661,6 +661,7 @@ static int kcm_write_msgs(struct kcm_sock *kcm)
- 				kcm_abort_tx_psock(psock, ret ? -ret : EPIPE,
- 						   true);
- 				unreserve_psock(kcm);
-+				psock = NULL;
+diff --git a/drivers/power/supply/ab8500_btemp.c b/drivers/power/supply/ab8500_btemp.c
+index 307ee6f71042e..6f83e99d2eb72 100644
+--- a/drivers/power/supply/ab8500_btemp.c
++++ b/drivers/power/supply/ab8500_btemp.c
+@@ -624,10 +624,8 @@ static int ab8500_btemp_get_ext_psy_data(struct device *dev, void *data)
+  */
+ static void ab8500_btemp_external_power_changed(struct power_supply *psy)
+ {
+-	struct ab8500_btemp *di = power_supply_get_drvdata(psy);
+-
+-	class_for_each_device(power_supply_class, NULL,
+-		di->btemp_psy, ab8500_btemp_get_ext_psy_data);
++	class_for_each_device(power_supply_class, NULL, psy,
++			      ab8500_btemp_get_ext_psy_data);
+ }
  
- 				txm->started_tx = false;
- 				kcm_report_tx_retry(kcm);
-@@ -696,7 +697,8 @@ static int kcm_write_msgs(struct kcm_sock *kcm)
- 	if (!head) {
- 		/* Done with all queued messages. */
- 		WARN_ON(!skb_queue_empty(&sk->sk_write_queue));
--		unreserve_psock(kcm);
-+		if (psock)
-+			unreserve_psock(kcm);
- 	}
+ /* ab8500 btemp driver interrupts and their respective isr */
+diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
+index 41a7bff9ac376..53560fbb6dcd3 100644
+--- a/drivers/power/supply/ab8500_fg.c
++++ b/drivers/power/supply/ab8500_fg.c
+@@ -2407,10 +2407,8 @@ static int ab8500_fg_init_hw_registers(struct ab8500_fg *di)
+  */
+ static void ab8500_fg_external_power_changed(struct power_supply *psy)
+ {
+-	struct ab8500_fg *di = power_supply_get_drvdata(psy);
+-
+-	class_for_each_device(power_supply_class, NULL,
+-		di->fg_psy, ab8500_fg_get_ext_psy_data);
++	class_for_each_device(power_supply_class, NULL, psy,
++			      ab8500_fg_get_ext_psy_data);
+ }
  
- 	/* Check if write space is available */
+ /**
+-- 
+2.39.2
 
