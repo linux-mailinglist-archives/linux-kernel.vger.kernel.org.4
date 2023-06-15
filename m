@@ -2,98 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7973731229
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D39973122B
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240647AbjFOIae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 04:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54310 "EHLO
+        id S244077AbjFOIai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 04:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240490AbjFOIac (ORCPT
+        with ESMTP id S240677AbjFOIaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 04:30:32 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D6A1A3
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:30:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686817831; x=1718353831;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QskzszjrhogeOl1D0645DmGzlntmUlbWhrL18KNhaqQ=;
-  b=VToY40PdlmBUinWsdgT3qEucb5KpSEPMMEo41g8SL9tGj9roVFw79Z3I
-   sZFb/cpx6jn8SKCBsYUBwuacRMWSj+uXW3AdDXZIS6MPV8tL3HsAEbuqB
-   W7Fi0MRJ25qjdIB4qk+n7sciI5S3UZoeelLc0W6ZytBeCtp9xrcuY9tp9
-   GQJa4xVNY1h361Y6abWXFhH/YSpMQcVG4P5mrgqDXz9qNS4Seg9o2RBTK
-   WpQPc4mdupWUl8jC9oHcEHcPQBL+kBx4mbjZpuOfsULT/CH9lBnNIpTBn
-   PHCzcyfRhym5IQ+kBXTjE0vI3QoeqhhuU9HqEQSZktx01L2S+6lX+VIkY
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="348520854"
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="348520854"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 01:30:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="706568777"
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="706568777"
-Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 15 Jun 2023 01:30:27 -0700
-Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q9iMs-0001eR-2G;
-        Thu, 15 Jun 2023 08:30:15 +0000
-Date:   Thu, 15 Jun 2023 16:29:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: riscv64-linux-ld: section .init.pi.text LMA
- [000000000197e820,0000000001981733] overlaps section .data..percpu LMA
- [0000000001951000,0000000001b219d7]
-Message-ID: <202306151631.3uZmHI1c-lkp@intel.com>
+        Thu, 15 Jun 2023 04:30:35 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587631A3;
+        Thu, 15 Jun 2023 01:30:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=8140F8ZxyIF8h0Y78lNADZ9yCgB7dr+4A7JOaUUAgcI=; b=Z8nk6srOke/jCJkziNLpMv2I9u
+        hHlVHMipg7fqtKw/YA95q37ZJ9hb+MhkbXSdrIYQ+xbTBgyfbFZ8gOioQ68s0WXI3LHo8Xjrcr+Pm
+        q5gyt066R88L/KOGdVYPWOA1PtL4/Lb+KhevAYmURmQosYXhA+mIbsM1uyV+4GxCcSHhXf/v8AhD1
+        FYa0vpuQOE4KNZffr0Rp8N465wJ+nVkAOVFYYNd8sam5MQkAQ2awILHwCIywcfzpqaxjYQNA6TD06
+        ekv386ndhr/dKt59ZiN565unKidOoXogHO2oL80v/afKfDz7eZe3iINNF/mFbbXO1yZYyeEUzV/pX
+        +HhcwzCQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q9iMc-00BkWh-0K;
+        Thu, 15 Jun 2023 08:29:55 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5D116300208;
+        Thu, 15 Jun 2023 10:29:49 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3679B2456F421; Thu, 15 Jun 2023 10:29:49 +0200 (CEST)
+Date:   Thu, 15 Jun 2023 10:29:49 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     "Wilczynski, Michal" <michal.wilczynski@intel.com>,
+        alison.schofield@intel.com,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Mike Rapoport <rppt@kernel.org>, x86@kernel.org,
+        linux-cxl@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Derick Marks <derick.w.marks@intel.com>
+Subject: Re: [PATCH v2 1/2] x86/numa: Introduce numa_fill_memblks()
+Message-ID: <20230615082949.GA1683497@hirez.programming.kicks-ass.net>
+References: <cover.1686712819.git.alison.schofield@intel.com>
+ <9fcc548a6b4727cb2538e5227d7bad2e94e6adaf.1686712819.git.alison.schofield@intel.com>
+ <03945e1f-caf6-3e5c-babc-d30e4e02b65e@intel.com>
+ <6489b23bc67e0_142af829456@dwillia2-xfh.jf.intel.com.notmuch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6489b23bc67e0_142af829456@dwillia2-xfh.jf.intel.com.notmuch>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b6dad5178ceaf23f369c3711062ce1f2afc33644
-commit: 3b90b09af5be42491a8a74a549318cfa265b3029 riscv: Fix orphan section warnings caused by kernel/pi
-date:   5 weeks ago
-config: riscv-randconfig-r004-20230615 (https://download.01.org/0day-ci/archive/20230615/202306151631.3uZmHI1c-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3b90b09af5be42491a8a74a549318cfa265b3029
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 3b90b09af5be42491a8a74a549318cfa265b3029
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+On Wed, Jun 14, 2023 at 05:27:39AM -0700, Dan Williams wrote:
+> Wilczynski, Michal wrote:
+> > On 6/14/2023 6:35 AM, alison.schofield@intel.com wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306151631.3uZmHI1c-lkp@intel.com/
+> > > +static int __init cmp_memblk(const void *a, const void *b)
+> > > +{
+> > > +	const struct numa_memblk *ma = *(const struct numa_memblk **)a;
+> > > +	const struct numa_memblk *mb = *(const struct numa_memblk **)b;
+> > 
+> > Is this casting necessary  ?
+> 
+> This is idiomatic for sort() comparison handlers.
 
-All errors (new ones prefixed by >>):
+Aside of that, it *is* actually required, since sort() does indirect
+calls to it's cmp_func_t argument the Control Flow Integrity (CFI, not
+to be confused with Call-Frame-Information) stuff has a hard requirement
+that function signatures match.
 
-   riscv64-linux-ld: section .data LMA [0000000000261000,00000000007d98cf] overlaps section .text LMA [00000000000a7a50,000000000197e81f]
->> riscv64-linux-ld: section .init.pi.text LMA [000000000197e820,0000000001981733] overlaps section .data..percpu LMA [0000000001951000,0000000001b219d7]
->> riscv64-linux-ld: section .init.pi.rodata.str1.8 VMA [ffffffff821f3ed0,ffffffff821f3f3a] overlaps section .data VMA [ffffffff82000000,ffffffff825788cf]
+At the very least clang builds should warn if you do indirect calls with
+non-matching signatures these days. And kCFI enabled builds will get you
+a runtime error if you manage to ignore that warning.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> > > +
+> > > +	if (ma->start != mb->start)
+> > > +		return (ma->start < mb->start) ? -1 : 1;
+> > > +
+> > > +	/* Caller handles duplicate start addresses */
+> > > +	return 0;
+> > > +}
+
+
