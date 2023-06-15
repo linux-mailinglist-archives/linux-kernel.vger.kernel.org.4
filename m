@@ -2,399 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E75507310E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A3B57310EF
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:38:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245085AbjFOHf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 03:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48582 "EHLO
+        id S245027AbjFOHiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 03:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245255AbjFOHfF (ORCPT
+        with ESMTP id S244192AbjFOHiH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 03:35:05 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3F830DF
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:34:36 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b3a82c8887so44946905ad.2
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:34:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1686814475; x=1689406475;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a6Rq1yi2+qD0HFNpBzumkvByzhdG8I7NvHz0A/3B5uA=;
-        b=D01H5OrVIr8we3GFahjjLHOivkiaE0jKVyBdXjUGqt0vsAO+bn24SN+JpiLa0PUN1H
-         2Z6DX6it+lm1BaxQA9tDe7zTNNqfjuyjWywwmeFRsHlKPMa+nsCsHmRzD5QD9pysNvME
-         MZD3apcuHfjaQOsjcnTqFZwXpqvNYfneO33m755HSZ0yX1KEDAUuC95Z9pGTTLQddnsk
-         f50Dxqrk2DcJYPfmdNKO0VjvN6FEzFdOoDuPv6aq8wrMkbl9vVR8dNuuItzJA0gn/SJY
-         +yGqUkXWeDXotS0UNBjQNGetCAo2kzU6BiLjW4KR1jmG4Fr7wkMM/VjXt819XqNZKPjn
-         RBaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686814475; x=1689406475;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a6Rq1yi2+qD0HFNpBzumkvByzhdG8I7NvHz0A/3B5uA=;
-        b=hAQLJZ1GHqRRs5dxikYKxVwsk2peMwADn9X4wNoDzW/3z/WEXIl500e5OF0ifs0mmP
-         8hNfF2gURvcl9J2c+xEEJDwq9k0cxAoXfG5dH4HBJ0e84IW7sZEapNnWeDiPAs+aMzIX
-         iYiR81Tjd+9O6e58MoqXqtK17qhCW6Dci2EE17sFNS5LpRKpMPUJYwLFif4JkpgsWAn9
-         paMwYbJBdnb/3u2OrX/HQTyJOJnSuqRrO6KRKXW33CoCbkQBdT6ZNOlbpr0YSPmlQXNj
-         A1E6tDRerX6HY1kN63v6cyMkzGw6pMSNM9R/uPwP7QWN8UPkMtmiM+pPp1NQx9kIctM6
-         yoqA==
-X-Gm-Message-State: AC+VfDzpeQCGjHNvGjqM+ApxyNKHi+SnP/EBHDl+4UhdZiooX49lSXNY
-        mn7t9u5k0dKL0jmjd253dwBxsQ==
-X-Google-Smtp-Source: ACHHUZ4l7irIUA/CXf68cBSaDH7QdRt29DwIkNVyjOIFDLs8AX8gkGfmdfm1sIJDRXEdvS6whAibZg==
-X-Received: by 2002:a17:902:da91:b0:1b5:1e24:8a76 with SMTP id j17-20020a170902da9100b001b51e248a76mr455504plx.65.1686814475589;
-        Thu, 15 Jun 2023 00:34:35 -0700 (PDT)
-Received: from anup-ubuntu-vm.localdomain ([106.51.83.242])
-        by smtp.gmail.com with ESMTPSA id ji1-20020a170903324100b001b016313b1dsm8049855plb.86.2023.06.15.00.34.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 00:34:35 -0700 (PDT)
-From:   Anup Patel <apatel@ventanamicro.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Atish Patra <atishp@atishpatra.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Andrew Jones <ajones@ventanamicro.com>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>
-Subject: [PATCH v3 10/10] RISC-V: KVM: Expose IMSIC registers as attributes of AIA irqchip
-Date:   Thu, 15 Jun 2023 13:03:53 +0530
-Message-Id: <20230615073353.85435-11-apatel@ventanamicro.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230615073353.85435-1-apatel@ventanamicro.com>
-References: <20230615073353.85435-1-apatel@ventanamicro.com>
+        Thu, 15 Jun 2023 03:38:07 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C534E26B0;
+        Thu, 15 Jun 2023 00:37:42 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 22C456606F57;
+        Thu, 15 Jun 2023 08:36:50 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686814610;
+        bh=LKh3/K++ffNF/AmhFmt1beqCBIT5fIwS1jSCTqbyqDI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=gr0uhLjDP3FkXRGO3mjV/ksfm1Gc9ctX7XQsIC90QRgClzsyzFOlitxUYypzdlbMi
+         76VM+QpyrDwoLufsZX11AlQZiska4ko9rQUvXF0hjLGNkqef+JQsQKLblJoQ7A8Y7A
+         kk8AVCse0DLXFJN86tgONSQmw6bKWr434KeiwLCKQj5z8CZqrNRnECojIrtwHjPnNc
+         24aWVEBFzVa657fisKnYqjvv4B0fLMQ3jVT+TbxbJPA/2gXbMZTgMI+irPexG9r033
+         +Eq2+/apzCvXELNEat2utZ+V4PbOeRoQypEStqHHsxyW0+PtSHtB5Q/oVrk2ToALfZ
+         PzrJ9i/AWyLWA==
+Message-ID: <938c740e-8196-ca0f-b53f-a0e33722e25c@collabora.com>
+Date:   Thu, 15 Jun 2023 09:36:48 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 01/15] dt-bindings: display: mediatek: ethdr: Add
+ compatible for MT8188
+Content-Language: en-US
+To:     =?UTF-8?B?U2hhd24gU3VuZyAo5a6L5a2d6KyZKQ==?= 
+        <Shawn.Sung@mediatek.com>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        =?UTF-8?B?U2luZ28gQ2hhbmcgKOW8teiIiOWciyk=?= 
+        <Singo.Chang@mediatek.com>,
+        =?UTF-8?B?SmFzb24tSkggTGluICjmnpfnnb/npaUp?= 
+        <Jason-JH.Lin@mediatek.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        =?UTF-8?B?TmFuY3kgTGluICjmnpfmrKPonqIp?= <Nancy.Lin@mediatek.com>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230614073125.17958-1-shawn.sung@mediatek.com>
+ <20230614073125.17958-2-shawn.sung@mediatek.com>
+ <1f044902-0726-34ed-3eea-7224e5750e22@collabora.com>
+ <6c24ad522f42ce35bf387bae1b8a029f58bb0e01.camel@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <6c24ad522f42ce35bf387bae1b8a029f58bb0e01.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We expose IMSIC registers as KVM device attributes of the in-kernel
-AIA irqchip device. This will allow KVM user-space to save/restore
-IMISC state of each VCPU using KVM device ioctls().
+Il 15/06/23 07:51, Shawn Sung (宋孝謙) ha scritto:
+> Hi Angelo,
+>   
+> Yes, MT8188 ETHDR is fully compatible with MT8195, so we didn't add its
+> compatible name to the driver but just listed it in dt-bindings.
+>   
+> May I double check with you that
+> I see there is a short description regarding "items" object:
+>> # items is a list of possible values for the property. The number of
+>> # values is determined by the number of elements in the list.
+>> # Order in lists is significant, order in dicts is not
+> in https://docs.kernel.org/devicetree/bindings/writing-schema.html
+>   
+> So does the compatible has to be:
+> "mediatek,mt8188-disp-ethdr", "mediatek,mt8195-disp-
+> ethdr" rather than in reversed order?
+>   
+> However, I couldn't find any description mentions the order in
+> Documentation/devicetree/bindings/writing-schema.rst
+> Not sure if the order in "items" object does not matter after then.
+>   
 
-Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
----
- arch/riscv/include/asm/kvm_aia.h  |   3 +
- arch/riscv/include/uapi/asm/kvm.h |  17 +++
- arch/riscv/kvm/aia_device.c       |  29 ++++-
- arch/riscv/kvm/aia_imsic.c        | 170 ++++++++++++++++++++++++++++++
- 4 files changed, 217 insertions(+), 2 deletions(-)
+No the order doesn't matter in that sense. If you check the other bindings,
+you'll see that the rule is to order by name, which your change as well does.
 
-diff --git a/arch/riscv/include/asm/kvm_aia.h b/arch/riscv/include/asm/kvm_aia.h
-index a4f6ebf90e31..1f37b600ca47 100644
---- a/arch/riscv/include/asm/kvm_aia.h
-+++ b/arch/riscv/include/asm/kvm_aia.h
-@@ -97,6 +97,9 @@ int kvm_riscv_vcpu_aia_imsic_update(struct kvm_vcpu *vcpu);
- int kvm_riscv_vcpu_aia_imsic_rmw(struct kvm_vcpu *vcpu, unsigned long isel,
- 				 unsigned long *val, unsigned long new_val,
- 				 unsigned long wr_mask);
-+int kvm_riscv_aia_imsic_rw_attr(struct kvm *kvm, unsigned long type,
-+				bool write, unsigned long *val);
-+int kvm_riscv_aia_imsic_has_attr(struct kvm *kvm, unsigned long type);
- void kvm_riscv_vcpu_aia_imsic_reset(struct kvm_vcpu *vcpu);
- int kvm_riscv_vcpu_aia_imsic_inject(struct kvm_vcpu *vcpu,
- 				    u32 guest_index, u32 offset, u32 iid);
-diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
-index 9ed822fc5589..61d7fecc4899 100644
---- a/arch/riscv/include/uapi/asm/kvm.h
-+++ b/arch/riscv/include/uapi/asm/kvm.h
-@@ -255,6 +255,23 @@ enum KVM_RISCV_SBI_EXT_ID {
-  */
- #define KVM_DEV_RISCV_AIA_GRP_APLIC		3
- 
-+/*
-+ * The lower 12-bits of the device attribute type contains the iselect
-+ * value of the IMSIC register (range 0x70-0xFF) whereas the higher order
-+ * bits contains the VCPU id.
-+ */
-+#define KVM_DEV_RISCV_AIA_GRP_IMSIC		4
-+#define KVM_DEV_RISCV_AIA_IMSIC_ISEL_BITS	12
-+#define KVM_DEV_RISCV_AIA_IMSIC_ISEL_MASK	\
-+		((1U << KVM_DEV_RISCV_AIA_IMSIC_ISEL_BITS) - 1)
-+#define KVM_DEV_RISCV_AIA_IMSIC_MKATTR(__vcpu, __isel)	\
-+		(((__vcpu) << KVM_DEV_RISCV_AIA_IMSIC_ISEL_BITS) | \
-+		 ((__isel) & KVM_DEV_RISCV_AIA_IMSIC_ISEL_MASK))
-+#define KVM_DEV_RISCV_AIA_IMSIC_GET_ISEL(__attr)	\
-+		((__attr) & KVM_DEV_RISCV_AIA_IMSIC_ISEL_MASK)
-+#define KVM_DEV_RISCV_AIA_IMSIC_GET_VCPU(__attr)	\
-+		((__attr) >> KVM_DEV_RISCV_AIA_IMSIC_ISEL_BITS)
-+
- /* One single KVM irqchip, ie. the AIA */
- #define KVM_NR_IRQCHIPS			1
- 
-diff --git a/arch/riscv/kvm/aia_device.c b/arch/riscv/kvm/aia_device.c
-index c649ad6e8e0a..84dae351b6d7 100644
---- a/arch/riscv/kvm/aia_device.c
-+++ b/arch/riscv/kvm/aia_device.c
-@@ -327,7 +327,7 @@ static int aia_set_attr(struct kvm_device *dev, struct kvm_device_attr *attr)
- 	u32 nr;
- 	u64 addr;
- 	int nr_vcpus, r = -ENXIO;
--	unsigned long type = (unsigned long)attr->attr;
-+	unsigned long v, type = (unsigned long)attr->attr;
- 	void __user *uaddr = (void __user *)(long)attr->addr;
- 
- 	switch (attr->group) {
-@@ -374,6 +374,15 @@ static int aia_set_attr(struct kvm_device *dev, struct kvm_device_attr *attr)
- 		r = kvm_riscv_aia_aplic_set_attr(dev->kvm, type, nr);
- 		mutex_unlock(&dev->kvm->lock);
- 
-+		break;
-+	case KVM_DEV_RISCV_AIA_GRP_IMSIC:
-+		if (copy_from_user(&v, uaddr, sizeof(v)))
-+			return -EFAULT;
-+
-+		mutex_lock(&dev->kvm->lock);
-+		r = kvm_riscv_aia_imsic_rw_attr(dev->kvm, type, true, &v);
-+		mutex_unlock(&dev->kvm->lock);
-+
- 		break;
- 	}
- 
-@@ -386,7 +395,7 @@ static int aia_get_attr(struct kvm_device *dev, struct kvm_device_attr *attr)
- 	u64 addr;
- 	int nr_vcpus, r = -ENXIO;
- 	void __user *uaddr = (void __user *)(long)attr->addr;
--	unsigned long type = (unsigned long)attr->attr;
-+	unsigned long v, type = (unsigned long)attr->attr;
- 
- 	switch (attr->group) {
- 	case KVM_DEV_RISCV_AIA_GRP_CONFIG:
-@@ -435,6 +444,20 @@ static int aia_get_attr(struct kvm_device *dev, struct kvm_device_attr *attr)
- 		if (copy_to_user(uaddr, &nr, sizeof(nr)))
- 			return -EFAULT;
- 
-+		break;
-+	case KVM_DEV_RISCV_AIA_GRP_IMSIC:
-+		if (copy_from_user(&v, uaddr, sizeof(v)))
-+			return -EFAULT;
-+
-+		mutex_lock(&dev->kvm->lock);
-+		r = kvm_riscv_aia_imsic_rw_attr(dev->kvm, type, false, &v);
-+		mutex_unlock(&dev->kvm->lock);
-+		if (r)
-+			return r;
-+
-+		if (copy_to_user(uaddr, &v, sizeof(v)))
-+			return -EFAULT;
-+
- 		break;
- 	}
- 
-@@ -473,6 +496,8 @@ static int aia_has_attr(struct kvm_device *dev, struct kvm_device_attr *attr)
- 		break;
- 	case KVM_DEV_RISCV_AIA_GRP_APLIC:
- 		return kvm_riscv_aia_aplic_has_attr(dev->kvm, attr->attr);
-+	case KVM_DEV_RISCV_AIA_GRP_IMSIC:
-+		return kvm_riscv_aia_imsic_has_attr(dev->kvm, attr->attr);
- 	}
- 
- 	return -ENXIO;
-diff --git a/arch/riscv/kvm/aia_imsic.c b/arch/riscv/kvm/aia_imsic.c
-index 2dc09dcb8ab5..8f108cfa80e5 100644
---- a/arch/riscv/kvm/aia_imsic.c
-+++ b/arch/riscv/kvm/aia_imsic.c
-@@ -277,6 +277,33 @@ static u32 imsic_mrif_topei(struct imsic_mrif *mrif, u32 nr_eix, u32 nr_msis)
- 	return 0;
- }
- 
-+static int imsic_mrif_isel_check(u32 nr_eix, unsigned long isel)
-+{
-+	u32 num = 0;
-+
-+	switch (isel) {
-+	case IMSIC_EIDELIVERY:
-+	case IMSIC_EITHRESHOLD:
-+		break;
-+	case IMSIC_EIP0 ... IMSIC_EIP63:
-+		num = isel - IMSIC_EIP0;
-+		break;
-+	case IMSIC_EIE0 ... IMSIC_EIE63:
-+		num = isel - IMSIC_EIE0;
-+		break;
-+	default:
-+		return -ENOENT;
-+	};
-+#ifndef CONFIG_32BIT
-+	if (num & 0x1)
-+		return -EINVAL;
-+#endif
-+	if ((num / 2) >= nr_eix)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
- static int imsic_mrif_rmw(struct imsic_mrif *mrif, u32 nr_eix,
- 			  unsigned long isel, unsigned long *val,
- 			  unsigned long new_val, unsigned long wr_mask)
-@@ -407,6 +434,86 @@ static void imsic_vsfile_read(int vsfile_hgei, int vsfile_cpu, u32 nr_eix,
- 			 imsic_vsfile_local_read, &idata, 1);
- }
- 
-+struct imsic_vsfile_rw_data {
-+	int hgei;
-+	int isel;
-+	bool write;
-+	unsigned long val;
-+};
-+
-+static void imsic_vsfile_local_rw(void *data)
-+{
-+	struct imsic_vsfile_rw_data *idata = data;
-+	unsigned long new_hstatus, old_hstatus, old_vsiselect;
-+
-+	old_vsiselect = csr_read(CSR_VSISELECT);
-+	old_hstatus = csr_read(CSR_HSTATUS);
-+	new_hstatus = old_hstatus & ~HSTATUS_VGEIN;
-+	new_hstatus |= ((unsigned long)idata->hgei) << HSTATUS_VGEIN_SHIFT;
-+	csr_write(CSR_HSTATUS, new_hstatus);
-+
-+	switch (idata->isel) {
-+	case IMSIC_EIDELIVERY:
-+		if (idata->write)
-+			imsic_vs_csr_write(IMSIC_EIDELIVERY, idata->val);
-+		else
-+			idata->val = imsic_vs_csr_read(IMSIC_EIDELIVERY);
-+		break;
-+	case IMSIC_EITHRESHOLD:
-+		if (idata->write)
-+			imsic_vs_csr_write(IMSIC_EITHRESHOLD, idata->val);
-+		else
-+			idata->val = imsic_vs_csr_read(IMSIC_EITHRESHOLD);
-+		break;
-+	case IMSIC_EIP0 ... IMSIC_EIP63:
-+	case IMSIC_EIE0 ... IMSIC_EIE63:
-+#ifndef CONFIG_32BIT
-+		if (idata->isel & 0x1)
-+			break;
-+#endif
-+		if (idata->write)
-+			imsic_eix_write(idata->isel, idata->val);
-+		else
-+			idata->val = imsic_eix_read(idata->isel);
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	csr_write(CSR_HSTATUS, old_hstatus);
-+	csr_write(CSR_VSISELECT, old_vsiselect);
-+}
-+
-+static int imsic_vsfile_rw(int vsfile_hgei, int vsfile_cpu, u32 nr_eix,
-+			   unsigned long isel, bool write,
-+			   unsigned long *val)
-+{
-+	int rc;
-+	struct imsic_vsfile_rw_data rdata;
-+
-+	/* We can only access register if we have a IMSIC VS-file */
-+	if (vsfile_cpu < 0 || vsfile_hgei <= 0)
-+		return -EINVAL;
-+
-+	/* Check IMSIC register iselect */
-+	rc = imsic_mrif_isel_check(nr_eix, isel);
-+	if (rc)
-+		return rc;
-+
-+	/* We can only access register on local CPU */
-+	rdata.hgei = vsfile_hgei;
-+	rdata.isel = isel;
-+	rdata.write = write;
-+	rdata.val = (write) ? *val : 0;
-+	on_each_cpu_mask(cpumask_of(vsfile_cpu),
-+			 imsic_vsfile_local_rw, &rdata, 1);
-+
-+	if (!write)
-+		*val = rdata.val;
-+
-+	return 0;
-+}
-+
- static void imsic_vsfile_local_clear(int vsfile_hgei, u32 nr_eix)
- {
- 	u32 i;
-@@ -758,6 +865,69 @@ int kvm_riscv_vcpu_aia_imsic_rmw(struct kvm_vcpu *vcpu, unsigned long isel,
- 	return rc;
- }
- 
-+int kvm_riscv_aia_imsic_rw_attr(struct kvm *kvm, unsigned long type,
-+				bool write, unsigned long *val)
-+{
-+	u32 isel, vcpu_id;
-+	unsigned long flags;
-+	struct imsic *imsic;
-+	struct kvm_vcpu *vcpu;
-+	int rc, vsfile_hgei, vsfile_cpu;
-+
-+	if (!kvm_riscv_aia_initialized(kvm))
-+		return -ENODEV;
-+
-+	vcpu_id = KVM_DEV_RISCV_AIA_IMSIC_GET_VCPU(type);
-+	vcpu = kvm_get_vcpu_by_id(kvm, vcpu_id);
-+	if (!vcpu)
-+		return -ENODEV;
-+
-+	isel = KVM_DEV_RISCV_AIA_IMSIC_GET_ISEL(type);
-+	imsic = vcpu->arch.aia_context.imsic_state;
-+
-+	read_lock_irqsave(&imsic->vsfile_lock, flags);
-+
-+	rc = 0;
-+	vsfile_hgei = imsic->vsfile_hgei;
-+	vsfile_cpu = imsic->vsfile_cpu;
-+	if (vsfile_cpu < 0) {
-+		if (write) {
-+			rc = imsic_mrif_rmw(imsic->swfile, imsic->nr_eix,
-+					    isel, NULL, *val, -1UL);
-+			imsic_swfile_extirq_update(vcpu);
-+		} else
-+			rc = imsic_mrif_rmw(imsic->swfile, imsic->nr_eix,
-+					    isel, val, 0, 0);
-+	}
-+
-+	read_unlock_irqrestore(&imsic->vsfile_lock, flags);
-+
-+	if (!rc && vsfile_cpu >= 0)
-+		rc = imsic_vsfile_rw(vsfile_hgei, vsfile_cpu, imsic->nr_eix,
-+				     isel, write, val);
-+
-+	return rc;
-+}
-+
-+int kvm_riscv_aia_imsic_has_attr(struct kvm *kvm, unsigned long type)
-+{
-+	u32 isel, vcpu_id;
-+	struct imsic *imsic;
-+	struct kvm_vcpu *vcpu;
-+
-+	if (!kvm_riscv_aia_initialized(kvm))
-+		return -ENODEV;
-+
-+	vcpu_id = KVM_DEV_RISCV_AIA_IMSIC_GET_VCPU(type);
-+	vcpu = kvm_get_vcpu_by_id(kvm, vcpu_id);
-+	if (!vcpu)
-+		return -ENODEV;
-+
-+	isel = KVM_DEV_RISCV_AIA_IMSIC_GET_ISEL(type);
-+	imsic = vcpu->arch.aia_context.imsic_state;
-+	return imsic_mrif_isel_check(imsic->nr_eix, isel);
-+}
-+
- void kvm_riscv_vcpu_aia_imsic_reset(struct kvm_vcpu *vcpu)
- {
- 	struct imsic *imsic = vcpu->arch.aia_context.imsic_state;
--- 
-2.34.1
+It's fine.
+
+P.S.: In case you didn't know, `make dt_binding_check` and `make dtbs_check`
+       will validate your bindings and your devicetrees against the bindings.
+
+Regards,
+Angelo
+
+> Thanks,
+> Hsiao Chien Sung
+> 
+> 
+> On Wed, 2023-06-14 at 13:41 +0200, AngeloGioacchino Del Regno wrote:
+>>   	
+>> External email : Please do not click links or open attachments until
+>> you have verified the sender or the content.
+>>   Il 14/06/23 09:31, Hsiao Chien Sung ha scritto:
+>>> Add compatible name for MediaTek MT8188 ETHDR.
+>>>
+>>> Signed-off-by: Hsiao Chien Sung <shawn.sung@mediatek.com>
+>>> ---
+>>>    .../bindings/display/mediatek/mediatek,ethdr.yaml           | 6
+>> +++++-
+>>>    1 file changed, 5 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git
+>> a/Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.y
+>> aml
+>> b/Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.y
+>> aml
+>>> index 801fa66ae615..677882348ede 100644
+>>> ---
+>> a/Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.y
+>> aml
+>>> +++
+>> b/Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.y
+>> aml
+>>> @@ -23,7 +23,11 @@ description:
+>>>
+>>>    properties:
+>>>      compatible:
+>>> -    const: mediatek,mt8195-disp-ethdr
+>>> +    oneOf:
+>>> +      - const: mediatek,mt8195-disp-ethdr
+>>> +      - items:
+>>> +          - const: mediatek,mt8188-disp-ethdr
+>>> +          - const: mediatek,mt8195-disp-ethdr
+>>>
+>>
+>> Is MT8188's ETHDR fully compatible with MT8195's ETHDR?
+>>
+>> If it is, you're not adding a mt8188 specific compatible string in
+>> the driver and
+>> this means that the devicetree will look like:
+>>
+>> compatible = "mediatek,mt8195-disp-ethdr", "mediatek,mt8188-disp-
+>> ethdr"
+>>
+>> ...so the proposed doc change works.
+>>
+>> Reviewed-by: AngeloGioacchino Del Regno <
+>> angelogioacchino.delregno@collabora.com>
+>>
+>>>      reg:
+>>>        maxItems: 7
+>>> --
+>>> 2.18.0
+>>>
+>>
+>>
 
