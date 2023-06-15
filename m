@@ -2,128 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A036731684
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEAEC731689
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239352AbjFOL3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 07:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48430 "EHLO
+        id S241469AbjFOLaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 07:30:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239015AbjFOL3a (ORCPT
+        with ESMTP id S240885AbjFOLah (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 07:29:30 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAAD8268C;
-        Thu, 15 Jun 2023 04:29:29 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f8c65020dfso19007395e9.2;
-        Thu, 15 Jun 2023 04:29:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686828568; x=1689420568;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=cLMoHRQkNaVEJbS7Ev0Yvn4A21A5U5fl8EoeJfa1evM=;
-        b=Yv73hjsA1PHoQjwh0SsiNTpMlq5QMrgH+ucTTQ/1umRZrbHvX22JoOHVuTJuNLbrqj
-         T2vWpV4Ql+QoWdNJqa8JK6rG80PvZZr80XIAg49x1i8wIErCOb9tKAN1gn96fHA3vrS2
-         qs8ZHcBbeTX7odc4cMhnK/jf0v0V/I/Ujn2Z7qfVaQxkHo0AxCzkbbfAip4Zs9hyZ7tj
-         7yIpudhrLL3XTK/axjjYFGbIV/XXrcDOo5oUlYEem8Uf+tqzJ5+mpoZ9SaAxh5webClz
-         3rHMw6HUNUNvXDBK8EYkTl9G/axO0ipwCDHwaBfctT7bXOiLCsQHG4lH55qUTqs+xEiK
-         pHIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686828568; x=1689420568;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cLMoHRQkNaVEJbS7Ev0Yvn4A21A5U5fl8EoeJfa1evM=;
-        b=afuvhfh8GvL/qzIa7JFLBOml6YQPKExYYD2wPEeIJA5BPDnoC8O9qLX/0aP2FgC0gu
-         bqRsCgcasSGdnMyTHF8QDOFofZdOK4F2wKYVTfNVHpuW7twPUjSyD1k18mGfncTNRU2E
-         5QPjepYZl61qGPzXBILNsLAHZO7Yul2CWpjn9apWcqZlcogc03GXniQNDTcgGkXF7pTs
-         Nvo2mUYU4nZAZDF/AZ7wdPfGY0jd6abW0g5KLdREJwLG8KmlD8W1/hTEHAg5RXu0Buot
-         BYPplgQy0dJhs8fMbCJMbBP/3GF1dETPuxoMHeVGPsQnA2eJ/ivQTdZHmOpp5fV5+ffb
-         70iA==
-X-Gm-Message-State: AC+VfDwF5q9gUxVvbPyNKdlEv0RUiOVIxKQ5GS+G2fkAXWkQm6YAKdhY
-        PjPmFlufSW7eRuBaG9W1di1f6rNiFjc=
-X-Google-Smtp-Source: ACHHUZ58KwgDXTDG6pMkF9+44DVif+hPHlagF+7zOsU6Ghm0GF/2b1zRlRePitJfpW2ZKw7zaRiwoA==
-X-Received: by 2002:a05:600c:2144:b0:3f7:5e07:ea54 with SMTP id v4-20020a05600c214400b003f75e07ea54mr14233392wml.13.1686828567565;
-        Thu, 15 Jun 2023 04:29:27 -0700 (PDT)
-Received: from Ansuel-xps. (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
-        by smtp.gmail.com with ESMTPSA id p17-20020a1c7411000000b003f7e4639aabsm20220093wmc.10.2023.06.15.04.29.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 04:29:26 -0700 (PDT)
-Message-ID: <648af616.1c0a0220.f8289.b7a9@mx.google.com>
-X-Google-Original-Message-ID: <ZIr2FGIXzvMD1PWg@Ansuel-xps.>
-Date:   Thu, 15 Jun 2023 13:29:24 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/3] clk: qcom: clk-rcg2: add support for rcg2 freq
- multi ops
-References: <20230427150717.20860-1-ansuelsmth@gmail.com>
- <20230427150717.20860-3-ansuelsmth@gmail.com>
- <82072c2b-8483-6fb6-a9d1-c9882825c9cb@linaro.org>
- <6473e34c.df0a0220.33a79.6c95@mx.google.com>
- <4afbcdd0-a11c-4826-d669-2ffc9488a8b6@linaro.org>
- <64749bf4.5d0a0220.325c0.64b5@mx.google.com>
- <d251be3e02b2fe28357c884e39fe7601.sboyd@kernel.org>
+        Thu, 15 Jun 2023 07:30:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148EB2695
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 04:30:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A637A626B2
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 11:30:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66CE2C433C0;
+        Thu, 15 Jun 2023 11:30:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686828636;
+        bh=R9F8GfHIz5BzxMyYLOltGUrhmXtWgm9RjW99JiZySp0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dB5c/uqncj87+C2R9Ni1LUM4gA5CB+rNQVniaQabBj4lth1T4APuNfj+PUMccVgt5
+         OoM3PADiPzcc6z60HlPG6RhGHBHBUwIsZLi1N5ze12FBJjKYbRK3/cI6V35sA444ba
+         hzA/Vj6FIif+sW/IuVrARisqzpCukoTYR+54JaM2GSGGgHOyu21JRBWQN3wUMVidZm
+         GlSWryL3G9Iek14LFKgdURzUd/llaPe1dSKsKQs1rYnWhhEELJ5yoaA8hqsYXFYxhi
+         z9g0egVQgKo70a4eogD6s5NgFMSUtz43i1Kpjah3SrOtF0soUGU13ONJD4fSJRVBGw
+         j8z7E9K6JuMWA==
+Date:   Thu, 15 Jun 2023 12:30:31 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     YingKun Meng <mengyingkun@loongson.cn>
+Cc:     lgirdwood@gmail.com, krzysztof.kozlowski@linaro.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH v3 1/3] ASoC: Add support for Loongson I2S controller
+Message-ID: <89022514-9f99-4fdc-9eba-d428ad0bcbb6@sirena.org.uk>
+References: <20230614122140.3402749-1-mengyingkun@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="/A+VzvD15DayBDle"
 Content-Disposition: inline
-In-Reply-To: <d251be3e02b2fe28357c884e39fe7601.sboyd@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230614122140.3402749-1-mengyingkun@loongson.cn>
+X-Cookie: You are false data.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 05:28:08PM -0700, Stephen Boyd wrote:
-> Quoting Christian Marangi (2023-05-29 05:34:57)
-> > On Mon, May 29, 2023 at 02:12:23PM +0200, Konrad Dybcio wrote:
-> > > On 28.05.2023 14:37, Christian Marangi wrote:
-> > > > On Sat, May 27, 2023 at 06:11:16PM +0200, Konrad Dybcio wrote:
-> > > >> On 27.04.2023 17:07, Christian Marangi wrote:
-> > > >>> +  * Force the first conf if we can't find a correct config.
-> > > >>> +  */
-> > > >>> + if (unlikely(i == f->num_confs))
-> > > >>> +         best_conf = f->confs;
-> > > >> Is that a supported scenario or would it be a device driver / clock
-> > > >> driver error?
-> > > >>
-> > > > 
-> > > > It's to handle case for the 2 continue in the loop and arriving in a
-> > > > situation where best_conf was never set?
-> > > > 
-> > > > Should we return a warning and an ERR_PTR? Idea was to provide a best
-> > > > effort selection.
-> > > Hm.. I'm not sure what's the expected behavior here.. Stephen?
-> > > 
-> > 
-> > I have this implementation rady, if you want I can send this revision
-> > and discuss that in v5 directly. It's WARN and returning -EINVAL.
-> 
-> I'd only have a WARN if you never expect to hit that case. Otherwise, it
-> should return -EINVAL and not warn. At a quick glance it sounds like
-> some sort of rounding policy, so just make sure the
-> round_rate/determine_rate implementation agrees with what set_rate()
-> will do and it should be good.
 
-Hi, in theory the WAN path should never happen, as it means no parent
-for the clk are present. So I guess with your logic printing a WARN is
-correct.
+--/A+VzvD15DayBDle
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-About the rounding policy this is more or less problematic, it's a
-CLOSEST policy, so not a CEIL or FLOOR one. The determine_rate apply the
-very same selection logic of set_rate so also that should be good.
+On Wed, Jun 14, 2023 at 08:21:40PM +0800, YingKun Meng wrote:
+> From: Yingkun Meng <mengyingkun@loongson.cn>
+>=20
+> Loongson I2S controller is found on 7axxx/2kxxx chips from loongson,
+> it is a PCI device with two private DMA controllers, one for playback,
+> the other for capture.
+>=20
+> The driver supports the use of DTS or ACPI to describe device resources.
 
-I sent v5 some time ago with the concern here addressed so if you have
-time it would be good if you can check that.
+One minor thing which can be done as an incremental patch:
 
--- 
-	Ansuel
+> +/*
+> + * DMA registers descriptor.
+> + */
+> +struct loongson_dma_desc {
+> +	u32 order;		/* Next descriptor address register */
+
+This probably needs a __packed to ensure the layout doesn't get changed
+by the compiler (eg, with struct randomisation options).
+
+--/A+VzvD15DayBDle
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSK9lYACgkQJNaLcl1U
+h9DVwwf/XbYLj9C6R6KJf+n6qkH6SmKd8327N8rN5wqMmGk3eGtuKHwLH9j4p2BV
+vdvPkbcWbLiULZLXC8bpxg/KeOXTyS873qsvMoiNjqaIKKpGAuLNM1fhNrIRtgpg
+dj/OBVVQg90Web2zrDiUia0uqRzU8mY/WRffRuVaiUfDBQmaHkaCEgK3cxbP6o91
+WTulyQP9NVE6Vh7dcndWOpLc526CZkmOPgO7pSyGzw/n8D09nTicsP6zNb95GtHl
+AxQOuu5Dun7ibJAbWKACf+VeXPYfBsg0EuR6/rIn2SrYodg39sPi5b45KL2kR/mI
+JvxjCSIrK8YUePlv7O/iqHuaFsJXTQ==
+=yMz1
+-----END PGP SIGNATURE-----
+
+--/A+VzvD15DayBDle--
