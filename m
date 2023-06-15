@@ -2,116 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B278731585
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 12:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4397273157D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 12:35:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343750AbjFOKg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 06:36:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45574 "EHLO
+        id S1343708AbjFOKfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 06:35:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343634AbjFOKgW (ORCPT
+        with ESMTP id S245538AbjFOKec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 06:36:22 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD3A30E7
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 03:35:58 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b4146fbadeso12371801fa.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 03:35:58 -0700 (PDT)
+        Thu, 15 Jun 2023 06:34:32 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257952942
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 03:34:11 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f74cda5f1dso5808326e87.3
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 03:34:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1686825354; x=1689417354;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=l/LIH/8tDobUxqCUyGA4SYSGQ0gjLDuFc8VDRXk4ph0=;
-        b=t2KNv9IaUishhCD8drwNW62Rq/3a/FCloiSJhfAgiaUN2zs42Ens6DFX5ujvUnp9fq
-         jomrw1GTw3Mnr0faUZFL5zHeQo6JYRmP9RdSbiFWVB4f7Jc7ql61P4Oz+N+yL5Ux4686
-         gZZbnkPxyeDv+FIh6EiMuo/NDU4zvhJW4UU6GKIi67Xaj8x2VeitWnmw0ZmldN1z0JIX
-         uZmqxWYpaqRfyMXaVzowx7ZUZf5gRVaFNSXdpao+GijdDSctsvaBkwML6x5Ub1CugnsF
-         rmRkPIbbCHES0UfTtK+z+efg2XQ3E5bBMffX2LPC1bS+4y2eGzza8UYKUaLFCJ8Rkqzf
-         yxXg==
+        d=linaro.org; s=google; t=1686825249; x=1689417249;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=G8QVs6IFYYIXBUDr6PLIM4vaEwCL0Jet3wwAQMko+hY=;
+        b=TYyKQmV+8Q/wxVs6R4Uml9i+kL0onsHJpSQ0m6cvTbJwiGniH59jYx9ptbp1qn4JTJ
+         dLawg1a0MgiGEVc5U/pvgihrz4Ze+rTI0ZlsTa7Mej+zmR77v7uW4E72/Ti47A0W/r9S
+         lKzZP6PjJcb5gDqRq0hFSZQ02CkRPOMOkzACI5/YxwoXOoiY3EkjqkFU1MNzkwgCKadN
+         gc1UUlvAdKDSD/npgg5kYy6Y2lsmSxgijCaDxu9Q6vbXuB/2JorDHOovJsw3q7uwJd20
+         RwgPz6wh+5aW7CU9r6MhABb1/4jZdcPwMUZFnmLESeBBAz2X9xk2Y+CXmldi+T/w0lnS
+         GfTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686825354; x=1689417354;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l/LIH/8tDobUxqCUyGA4SYSGQ0gjLDuFc8VDRXk4ph0=;
-        b=gz7Z7O59Yxc1BxeYjtKUq2W4Pi7pc36X55ZViayOf7CK74n+8Eel/AXbplZ2QL7pmk
-         wMD3iOB+Cgq8ac9Ak4+YqU2LZlMTCe+AoOIzZwzxtq3IZx1qh9Fm8QR7tq46OSIc8Txx
-         CLfkB3xt3gf3cCo8FqveZw3/a2KprwFiEqytisk8aGbq1p4dPRtY5+dV9bGU6APmI0cY
-         R3xltl+HJwmHeVyAzGzjBIvsfNY6el7arkGPFaPhy038rJBMhW9mfovUUyDrsOYA8D36
-         em5DY4/T68sKS4iolhPAXDDQF8eW2pH7q20d45rHPB4XscnZj0BX4BDnIpR+Z40HMg/E
-         fA2Q==
-X-Gm-Message-State: AC+VfDymEsTNuli29dEZZ6FBhJBa7+fduyctn99dYIjHgkBrm5w+yi0i
-        iLfW+VeBX9ygrJsHOr+YAn6x5w==
-X-Google-Smtp-Source: ACHHUZ5tFwQzljs2BgS9NdfeGuMyF35ugJqAUUTzva7a1d/70Bld4c6jPztkOMTnsorkzGEn8fmP7Q==
-X-Received: by 2002:a05:651c:10cc:b0:2af:1c62:c133 with SMTP id l12-20020a05651c10cc00b002af1c62c133mr7693715ljn.8.1686825353802;
-        Thu, 15 Jun 2023 03:35:53 -0700 (PDT)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id 26-20020a05600c029a00b003f7298a32ccsm20107519wmk.41.2023.06.15.03.35.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 03:35:53 -0700 (PDT)
-References: <20230614084212.1359-1-lukas.bulwahn@gmail.com>
-User-agent: mu4e 1.8.13; emacs 28.2
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Jian Hu <jian.hu@amlogic.com>,
-        Dmitry Rokosov <ddrokosov@sberdevices.ru>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-amlogic@lists.infradead.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: repair pattern in ARM/Amlogic Meson SoC
- CLOCK FRAMEWORK
-Date:   Thu, 15 Jun 2023 12:33:52 +0200
-In-reply-to: <20230614084212.1359-1-lukas.bulwahn@gmail.com>
-Message-ID: <1jbkhh2et4.fsf@starbuckisacylon.baylibre.com>
+        d=1e100.net; s=20221208; t=1686825249; x=1689417249;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=G8QVs6IFYYIXBUDr6PLIM4vaEwCL0Jet3wwAQMko+hY=;
+        b=FeaI+ilXO9PIjBIKtdgQGvcY5VD2ui8cpnwNhAN73YuhLGpag+45DqeUMzCwKo60Pa
+         apI25lRVxMMSKtalFLGHo/ZqIIetjl9053eG/jyO1CWI7y8haISoZbKGQ0jEtaS9bBbz
+         WeMZz1u2t+XHuQcZCoJGbj7b7fQggRLdH5z2UlVKs3t6oo/SjeLLrCRbRm1PjcvEgnHx
+         UVoLEiOrZdANP0XSPdf3jzpG0xixB64rExqyyxXI706uCI0rst618xWWtQyo29U6KBV8
+         rHApXu9kRR94hZ2ZVLtj30nTRyZkZvzAvUlKIdT35h5sbPM9PHUO+WTxcvgK3hXwYieQ
+         2DXw==
+X-Gm-Message-State: AC+VfDyADoEzCogxVkID5bN85UOdM2OkLEaj2mFzYmTpqyWaDJ0N+AM8
+        6a5rFQwAVMwh4TCI9Xzt1iw6WQ==
+X-Google-Smtp-Source: ACHHUZ7yhIVM9232hKYltYGexXTGAQbYM4uGSl7gtvYnnnoTX1sxq98NzXEeEFBv5qIChyCAh3VCcQ==
+X-Received: by 2002:a19:651a:0:b0:4f7:69a9:b882 with SMTP id z26-20020a19651a000000b004f769a9b882mr2538888lfb.3.1686825249292;
+        Thu, 15 Jun 2023 03:34:09 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id u26-20020ac243da000000b004f4d5003e8dsm2505864lfl.7.2023.06.15.03.34.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jun 2023 03:34:08 -0700 (PDT)
+Message-ID: <001d7571-5e9f-4f60-f6d0-35806a3e51c5@linaro.org>
+Date:   Thu, 15 Jun 2023 12:34:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v8 07/18] drm/msm/a6xx: Add a helper for
+ software-resetting the GPU
+Content-Language: en-US
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+References: <20230223-topic-gmuwrapper-v8-0-69c68206609e@linaro.org>
+ <20230223-topic-gmuwrapper-v8-7-69c68206609e@linaro.org>
+ <jplt5g5xuphbnci73pdtaxd63fguxtgtp4c37kc7ehavzrjbau@kamshezxnvgy>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <jplt5g5xuphbnci73pdtaxd63fguxtgtp4c37kc7ehavzrjbau@kamshezxnvgy>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6.06.2023 19:18, Akhil P Oommen wrote:
+> On Mon, May 29, 2023 at 03:52:26PM +0200, Konrad Dybcio wrote:
+>>
+>> Introduce a6xx_gpu_sw_reset() in preparation for adding GMU wrapper
+>> GPUs and reuse it in a6xx_gmu_force_off().
+>>
+>> This helper, contrary to the original usage in GMU code paths, adds
+>> a write memory barrier which together with the necessary delay should
+>> ensure that the reset is never deasserted too quickly due to e.g. OoO
+>> execution going crazy.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>  drivers/gpu/drm/msm/adreno/a6xx_gmu.c |  3 +--
+>>  drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 11 +++++++++++
+>>  drivers/gpu/drm/msm/adreno/a6xx_gpu.h |  1 +
+>>  3 files changed, 13 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+>> index b86be123ecd0..5ba8cba69383 100644
+>> --- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+>> @@ -899,8 +899,7 @@ static void a6xx_gmu_force_off(struct a6xx_gmu *gmu)
+>>  	a6xx_bus_clear_pending_transactions(adreno_gpu, true);
+>>  
+>>  	/* Reset GPU core blocks */
+>> -	gpu_write(gpu, REG_A6XX_RBBM_SW_RESET_CMD, 1);
+>> -	udelay(100);
+>> +	a6xx_gpu_sw_reset(gpu, true);
+>>  }
+>>  
+>>  static void a6xx_gmu_set_initial_freq(struct msm_gpu *gpu, struct a6xx_gmu *gmu)
+>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>> index e3ac3f045665..083ccb5bcb4e 100644
+>> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>> @@ -1634,6 +1634,17 @@ void a6xx_bus_clear_pending_transactions(struct adreno_gpu *adreno_gpu, bool gx_
+>>  	gpu_write(gpu, REG_A6XX_GBIF_HALT, 0x0);
+>>  }
+>>  
+>> +void a6xx_gpu_sw_reset(struct msm_gpu *gpu, bool assert)
+>> +{
+>> +	gpu_write(gpu, REG_A6XX_RBBM_SW_RESET_CMD, assert);
+>> +	/* Add a barrier to avoid bad surprises */
+> Can you please make this comment a bit more clear? Highlight that we
+> should ensure the register is posted at hw before polling.
+> 
+> I think this barrier is required only during assert.
+Generally it should not be strictly required at all, but I'm thinking
+that it'd be good to keep it in both cases, so that:
 
-On Wed 14 Jun 2023 at 10:42, Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+if (assert)
+	we don't keep writing things to the GPU if it's in reset
+else
+	we don't start writing things to the GPU becomes it comes
+	out of reset
 
-> Commit e6c6ddb397e2 ("dt-bindings: clock: meson: add A1 PLL clock
-> controller bindings") adds a file entry with pattern
-> "include/dt-bindings/clock/a1*" to the ARM/Amlogic Meson SoC CLOCK
-> FRAMEWORK section. However, all header files added in the patch series to
-> add Amlogic A1 clock controller drivers carry the prefix "amlogic,a1", and
-> there are not header files matching "a1*".
->
-> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-> broken reference.
->
-> Adjust the pattern of this file entry to match the headers actually added.
->
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Also, if you squint hard enough at the commit message, you'll notice
+I intended for this so only be a wmb, but for some reason generalized
+it.. Perhaps that's another thing I should fix!
+for v9..
 
-Added fix tag:
-Fixes: e6c6ddb397e2 ("dt-bindings: clock: meson: add A1 PLL clock controller bindings")
-
-and applied through the amlogic clock tree.
-Thx
-
-> ---
->  MAINTAINERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 08c7efe271c3..08f7c69c67c4 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -1887,7 +1887,7 @@ L:	linux-amlogic@lists.infradead.org
->  S:	Maintained
->  F:	Documentation/devicetree/bindings/clock/amlogic*
->  F:	drivers/clk/meson/
-> -F:	include/dt-bindings/clock/a1*
-> +F:	include/dt-bindings/clock/amlogic,a1*
->  F:	include/dt-bindings/clock/gxbb*
->  F:	include/dt-bindings/clock/meson*
-
+Konrad
+> 
+> -Akhil.
+>> +	mb();
+>> +
+>> +	/* The reset line needs to be asserted for at least 100 us */
+>> +	if (assert)
+>> +		udelay(100);
+>> +}
+>> +
+>>  static int a6xx_pm_resume(struct msm_gpu *gpu)
+>>  {
+>>  	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
+>> index 9580def06d45..aa70390ee1c6 100644
+>> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
+>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
+>> @@ -89,5 +89,6 @@ struct msm_gpu_state *a6xx_gpu_state_get(struct msm_gpu *gpu);
+>>  int a6xx_gpu_state_put(struct msm_gpu_state *state);
+>>  
+>>  void a6xx_bus_clear_pending_transactions(struct adreno_gpu *adreno_gpu, bool gx_off);
+>> +void a6xx_gpu_sw_reset(struct msm_gpu *gpu, bool assert);
+>>  
+>>  #endif /* __A6XX_GPU_H__ */
+>>
+>> -- 
+>> 2.40.1
+>>
