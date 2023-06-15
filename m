@@ -2,127 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03665731A42
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55681731A49
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344388AbjFONlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 09:41:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49170 "EHLO
+        id S1343797AbjFONl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 09:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344442AbjFONkh (ORCPT
+        with ESMTP id S1343904AbjFONlC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 09:40:37 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDBB448D;
-        Thu, 15 Jun 2023 06:39:32 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35FDdFLn016323;
-        Thu, 15 Jun 2023 08:39:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1686836355;
-        bh=2/pBkqDceYj9n0f+/NIxgpHbw2aZzs7700cTCtTWooY=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=I2yEe5Te+hrjmA64vfviScLXJJRm+nhiKTE3f41t69kH7SCz6lvowWXQYofgmNskq
-         mnwAL1efvSUGzUvV4mk5okAqek6o95VLmlHCmi3bsfDXQq2Kus3u0DXsmKoSC+J3/e
-         9exTgGEg/eB73YSbdkW6d7EASCWYV2peSNifPuWo=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35FDdFJg124047
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 15 Jun 2023 08:39:15 -0500
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 15
- Jun 2023 08:39:14 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 15 Jun 2023 08:39:14 -0500
-Received: from uda0132425.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35FDdBpm011260;
-        Thu, 15 Jun 2023 08:39:12 -0500
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-To:     Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tero Kristo <kristo@kernel.org>, Nishanth Menon <nm@ti.com>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Udit Kumar <u-kumar1@ti.com>,
-        Neha Malcom Francis <n-francis@ti.com>
-Subject: Re: [PATCH 0/9] arm64: dts: ti: k3-j721e-*: Fix up pinmux and aliases
-Date:   Thu, 15 Jun 2023 19:09:09 +0530
-Message-ID: <168683627164.2366271.3394284993273377362.b4-ty@ti.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230601183151.1000157-1-nm@ti.com>
-References: <20230601183151.1000157-1-nm@ti.com>
+        Thu, 15 Jun 2023 09:41:02 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2108.outbound.protection.outlook.com [40.107.223.108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92AC72954;
+        Thu, 15 Jun 2023 06:40:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZyiR1/tdHbh3DJ1r1DtSGIA48Sw79Q60WUsaUXwgedguPsozZA7/Y0haUC7FbRc1j8Q/xxT+A0OvdGH+mtQ5bzFeDMggX+3Dbp5lFpeMuKOyL62CHiK0VfuB7Za+WV8hAn2eBF9TDKNT5Kzhf5fPTWu2pxLLbit+NUVMo2nS/M67m6UpjDcWuadXV8AzsFpMpznXrSgmnT30yRyzFJNKUB1Xp/Y00uMaWBH8SqJVvD/fUjzUgjzq/ASzGuWmMdpAhSxdsQFldk50Rm0E3AYRsNbv/Lk5z7RoV+rDTYwCpxRbkjbGeS/p3KLo+m6qti+I9GUZRh4aOe1NtFIN9XhMcg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VfxIArYinMjtkMUMvXqndtaWULriwqfrY390ftMlokw=;
+ b=lul8HodIHIosn/97pjMDQ1Hp+Av0Nrn5QLR4J9L6TyKL0OWv1f3N0Ah4S81iVIEq+exic9zm6ips62Fi3fEmCJIj5ErwVFx0Gn9YYNO/DMF9k4s7f3O0xytun6p/yEEckeMMCUM9xliBOl8lA9fZL7P6RlGpCqwUPFpmHHSFsucH5QIumPS9vNIPXNVL2Qg+9BBziBtbtDMUNc6ae7oY4AYgqi87gr7x9u2wgidKsMPsIP2e7Lpn+RSwSU3ykQ7u4yGrDRMvvEzOKmrz64BPXHw3OOCkwvloJntLWhV80PrI+YbsUwCTwKZzaCnAmUO+31OMWx8hUqIXC3NQ+1c6zA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VfxIArYinMjtkMUMvXqndtaWULriwqfrY390ftMlokw=;
+ b=nhC/zvtw9hBbqy3I86d2ICThUVB/cZOZ+YkPWNnYo0JaPFBpgYItbfrPi67BqXJzbtdVHERAHArpiK8BlrsH/uBGVJzxoxgtLuhH+mkamvVsdKswjcNd5rEhPY43Atx84MEb0ZfegylcPwPFS7hb7kZrHjLHY8+usoudPxRcWG0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by CO6PR13MB6030.namprd13.prod.outlook.com (2603:10b6:303:14a::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.27; Thu, 15 Jun
+ 2023 13:40:18 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e%5]) with mapi id 15.20.6500.025; Thu, 15 Jun 2023
+ 13:40:18 +0000
+Date:   Thu, 15 Jun 2023 15:40:11 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Wang Ming <machel@vivo.com>
+Cc:     Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        opensource.kernel@vivo.com
+Subject: Re: [PATCH v1] drivers:net:ethernet:Remove unneeded code
+Message-ID: <ZIsUu4pUVyGRacHe@corigine.com>
+References: <20230615084110.7225-1-machel@vivo.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230615084110.7225-1-machel@vivo.com>
+X-ClientProxiedBy: AM3PR07CA0055.eurprd07.prod.outlook.com
+ (2603:10a6:207:4::13) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CO6PR13MB6030:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3b6e0493-58c7-4f3e-b666-08db6da60ebb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: df3R5xCrLqrYF9txViR34D7TOoe2T6P5wXCpl13NJi7BBwYzkAfsO6SC0q+wSdiU6/YVp8DOR6UUkP9+cqhMvhVqCmvhpujJvmX98ApBCHnzLIZ1bppxB9S0me46K7vBFzQGwpA78u6oGglHEAblf+zFKK7MZH4+eRtv+tro7yAIC/nlOygvfulVby8vjbiCfDh31Xum/M8vTAFsUA4kYcC+Mw88+T9MC3+17l+StiUZNZxrW5Mn/WjWgzVls8BJh74RcYYun7KRWzOV1XlgDOmZPNGBfG5tUWGG45i8yC5LORHc5mMQpf/XBC43hgpsx4b29gcBUfkiFSG4WPmpc+F0lBv4sJ8wCOcSZnFnat5ggCQrUEGnDCz8mm1txx6kkrumu5eEJDGqgNHvmei6qYzFuppURieqsxv+tQVSg5DmqvdtdBY5qtxZzj/kaIS0Cpof5i4uAkYw10AFqHAbGh9g9TYFW98r8d7R8Kd3VWFf8479PeMEPqMwoP6BJIokJcFyIlkHD3/8QH7s1OGDfgdcmuDWVlcZ2fnlwcq3SCBvVlnuzujr03GxbyZxmnZVxZZdMKkbI1OZ2eukES/55ViWQ8cPQ6gHJirXNCLRmpg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(136003)(396003)(346002)(39840400004)(451199021)(2906002)(6512007)(186003)(83380400001)(2616005)(6916009)(66946007)(66476007)(66556008)(4326008)(41300700001)(8936002)(8676002)(6486002)(316002)(6666004)(54906003)(86362001)(36756003)(38100700002)(478600001)(44832011)(7416002)(6506007)(5660300002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XIrrQwUm3EespvKblzwYfNoKIg+ajRKWuUEbjEuFSPfQS70Ts0GDuOqLQEZu?=
+ =?us-ascii?Q?eDopZd2g64wypG4zLBrXXlQlxcig+wj6m+Iu08zsDEx0Om8A3Uf6gx5XhRlo?=
+ =?us-ascii?Q?SWmSxpkI/j8ceCQTM39jt3THEFuPbu0o3fihonNEnH0tz7Ve3Gu3CczGlnWU?=
+ =?us-ascii?Q?XWyfu9o7LG3vV2B37W34qHjOp2k2GRxo6lF1U4BpbAv0I8mH+BWoFVnVLhXL?=
+ =?us-ascii?Q?Bqw4e5oGzMg8NYBk7ftX814/aiKWk18P6W8YWqtf8IW6ma9Tc4SuPEqrrn/D?=
+ =?us-ascii?Q?cvxt51sqFHPBF6zBoh/lOuJxz7Ds+YeCEnO9O7U+/VOMbUkgeiEeFfTFShAI?=
+ =?us-ascii?Q?I7h2KnXxJgEgpZFBpeVLHsV91pUr7uvFIKbUFR7ypOQ2X4xG+faFFT2u2uQW?=
+ =?us-ascii?Q?mhVaJ1y9tU9dCQaqVh9VqosOeScDvGJ6SsmLLQ/7y/MrIl1zD0XkUN7SjDR1?=
+ =?us-ascii?Q?r98kdWOvJfZIwn/pxmMKkRuDYsHwU6+cSnpfCKtJkV3LHlLlHYG11MNyaayf?=
+ =?us-ascii?Q?kWoxDi1Az3KFaR8nxL7Gqm8LL6+v1i2oD+ZVRWvljEfqX2aRmaBL/L1tnZoo?=
+ =?us-ascii?Q?nw/y6eIefpwa9L0oFIVEYfvU9ljnhy0EBx2b4tFlCt4+xX5cY2yFVv/Ma/iE?=
+ =?us-ascii?Q?6QQPaFLzQfuuIWaNPq+4hJHh8zvLQbKEdkI9ybKA/EJek3HGQNq/BpyEv8n/?=
+ =?us-ascii?Q?d6CtCEXIWDEKpZIbHmRV1BfH3/6bokLlEi/J/L8T/xb2fiXZchXHNN3pHQBB?=
+ =?us-ascii?Q?sda5/IrHkdFAOKgZtd/1MkXbXyOrKvkkihaNxVHsBtC/ZQWLeO27vq4A6X+1?=
+ =?us-ascii?Q?czRQ3m9zovh70KO23mZk/XptJEr7/Zwyks3ddWTNwx59+LkpkIcA8yRGhD41?=
+ =?us-ascii?Q?BbpjnwIqzMogtPZrQSXF3DQaRuxJ70krSRGsladMujw8g2xR2EIERl9wJgj3?=
+ =?us-ascii?Q?p1pRiWTqI/bxada/IDwRIFnf5wWyrs1IbLj3QIns91bwHpoHAl0D2CK6g1a5?=
+ =?us-ascii?Q?UkSSVWYJCLQIezuARo0OMl6Ra+Sv7ypOZofpfUnQ8R2YzFM8uUyZ0avhsSBH?=
+ =?us-ascii?Q?nPmUllLtvOeOkzntx3b5lzqSE/dr8YlOm1d1xezrdQHhTA0HNwY9QRjvhv5S?=
+ =?us-ascii?Q?9HheydutZumBKh81919skO7Zk9nUKV8EMDhqdIsUvAbdsjBjkoQ+cenWFgcr?=
+ =?us-ascii?Q?nOkCH2ywnDML09SnipgsmHSmX8nDOrJMb40TIwZg04gi/sHx9eLEjqVtwE/S?=
+ =?us-ascii?Q?O0AalbQ4i1Ef492vS5qOB9LHD6oI9saKSqEnqkXnZ5Ry52Peb+ztZbEyqJGR?=
+ =?us-ascii?Q?I4aWeaVy7jb5SZfXl0giM+ZWwGECLavr+nQVr5C7MWY12V+6+pecyRl6lFga?=
+ =?us-ascii?Q?kUZykGBL+Yrkosj2/inQqMpCe3SVH6ui9NqR3FsSv5y7Wgkb/9ALy/hMt2nA?=
+ =?us-ascii?Q?GDDJdGkPeKFwJVDcuzNVCFos181rQEgrBnCVCF5bwXnxXB8dwvKOOrw/FxHm?=
+ =?us-ascii?Q?B+NdMAfNI7FiNovq4xIYtm/WagZ5FmPMoC9fGfCYN28C2tRbgvxHIGGKOGVa?=
+ =?us-ascii?Q?g3xhnpn0N7vqOaW+3z6OeyhFsNZ3vs1P0X2G069nvnQMQPlEX9se3SuC6IW6?=
+ =?us-ascii?Q?Ex96b6ZPQ68wcL8pHr61K0ngY0R8Xvk1OYJ48sv5m5G4ijYSq3reMa6wxI4F?=
+ =?us-ascii?Q?aZGJkg=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3b6e0493-58c7-4f3e-b666-08db6da60ebb
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 13:40:18.5073
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VNHt8FGWWldH65Uh7DsQyJJ/vaiFPHi+QGYlcV/Vk1tWUrQAxwPJyCuAQ4lVFru7YWnDtR876H1+WgzQtq9PCNFg4iNiGQo0zLSI6EKUP5A=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR13MB6030
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nishanth Menon,
-
-On Thu, 01 Jun 2023 13:31:42 -0500, Nishanth Menon wrote:
-> This series cleansup k3-j721e platforms for pinmuxes and aliases.
-> Provide complete description of uart and i2c instead of piggy-backing on
-> bootloader configurations, ensure board detection eeproms are defined,
-> aliases be defined in the board files as well.
+On Thu, Jun 15, 2023 at 04:40:56PM +0800, Wang Ming wrote:
+> Remove unused helper code.
+> Fix the following coccicheck warning:
 > 
-> Many of these changes were maintained in u-boot tree, and this moves
-> those orphan changes to the super set definition in kernel.
+> drivers/net/ethernet/mellanox/mlx5/core/eswitch.c:808:34-35:
+> WARNING: unneeded memset.
 > 
-> [...]
+> Signed-off-by: Wang Ming <machel@vivo.com>
 
+Hi Wang Ming,
 
-I have applied the following to branch ti-k3-dts-next on [1].
-Thank you!
+unfortunately your patch has been whitespace mangled - tabs have been
+converted into 8 spaces. Possibly this was done by your mail client
+or mail server. In any case the result is that the patch doesn't apply.
+And unfortunately that breaks our processes.
 
-[1/9] arm64: dts: ti: k3-j721e-sk: Add missing uart pinmuxes
-      commit: acfb362a9c78d6708080cdd850b036225c78371b
-[2/9] arm64: dts: ti: k3-j721e-sk: Enable wakeup_i2c0 and eeprom
-      commit: 1b4b376c878b36d1a1c848ebc885487e4cad2546
-[3/9] arm64: dts: ti: j721e-som/common-proc-board: Add product links
-      commit: 26efc8d1ad0cc14e2740d310935fa146b1fc5a58
-[4/9] arm64: dts: ti: j721e-common-proc-board: Add uart pinmux
-      commit: 86718345b4d3c0d386b3f73ef43e7f72ff04cf4a
-[5/9] arm64: dts: ti: k3-j721e-som-p0: Enable wakeup_i2c0 and eeprom
-      commit: b04b18ccb3d5c19c864c10f7cc7b014218aecb22
-[6/9] arm64: dts: ti: k3-j721e-beagleboneai64: Add wakeup_uart pinmux
-      commit: 4c2c99026ca1525912b40cbc1b69306145ce7082
-[7/9] arm64: dts: ti: k3-j721e-sk: Define aliases at board level
-      commit: d1a4304c149d1a26a912d532501ead42e5952501
-[8/9] arm64: dts: ti: k3-j721e-common-proc-board: Define aliases at board level
-      commit: ff59580bf2580ec262098399aab03dfca537bec8
-[9/9] arm64: dts: ti: k3-j721e: Drop SoC level aliases
-      commit: 8be20986e0c54420e52048d20bdc31e3a8aec93f
+Also, assuming that as this patch is a not a bug fix, it is targeted at the
+"net-next", as opposed to "net", tree. This should be noted in the subject.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent up the chain during
-the next merge window (or sooner if it is a relevant bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+        Subject: [PATCH net-next v2] ...
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Looking at the git history of eswitch.c, I think that
+a better prefix for the patch is "mlx5/core: E-Switch, "
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+        Subject: [PATCH net-next v2] mlx5/core: E-Switch, ...
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+> ---
+>  drivers/net/ethernet/mellanox/mlx5/core/eswitch.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/eswitch.c b/drivers/net/ethernet/mellanox/mlx5/core/eswitch.c
+> index 31956cd9d..ae0939488 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/eswitch.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/eswitch.c
+> @@ -805,7 +805,6 @@ static int mlx5_esw_vport_caps_get(struct mlx5_eswitch *esw, struct mlx5_vport *
+>         hca_caps = MLX5_ADDR_OF(query_hca_cap_out, query_ctx, capability);
+>         vport->info.roce_enabled = MLX5_GET(cmd_hca_cap, hca_caps, roce);
+> 
+> -       memset(query_ctx, 0, query_out_sz);
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
---
-Vignesh
+I'm not saying this change is wrong.
+But I am saying that it's not immediately obvious to me why
+it is correct. And in any case, I think the patch description
+needs to describe why it is correct.
+
+Likewise, "Remove unneeded code" seems rather terse.
+
+Also, FWIIW, I don't see this when using coccicheck.
+But perhaps that's just me. I'm using:
+
+ make C=2 CHECK=scripts/coccicheck drivers/net/ethernet/mellanox/mlx5/core/eswitch.o
+
+>         err = mlx5_vport_get_other_func_cap(esw->dev, vport->vport, query_ctx,
+>                                             MLX5_CAP_GENERAL_2);
+>         if (err)
+
+Please consider waiting for further review, and as appropriate,
+addressing the problems above and reposting your patch.
+
+-- 
+pw-bot: cr
 
