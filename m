@@ -2,65 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 231A7732137
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 22:58:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F171C73213C
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 22:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbjFOU65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 16:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
+        id S231320AbjFOU7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 16:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbjFOU6z (ORCPT
+        with ESMTP id S229917AbjFOU73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 16:58:55 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B296726AA;
-        Thu, 15 Jun 2023 13:58:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686862733; x=1718398733;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=u/yF5q/mKuNIIasnmFpVP4NTwMSDM4yMAcvhwIuO2kk=;
-  b=bCZEc/ycpijCdo006at7d0IXwdTvXZpgaQBXMKV7mEdLL9iKnkuBvWeu
-   b/BaAYd2gd5wD4EzzQrCI0Rl4gV9qJcMGj5Zf/Jso0g+tGZKqxulxJmyT
-   XCcSqZFAyG570Wf4aQCpUVqCAVV4NR6bvTLI0SsSxwKNknhUkV4otC7Gq
-   kOOWNOMWeSgB+aWONzAtMStILgrWomDo/nBLFwrakyK74/sr4adh9eHVy
-   ArM/HqBdyEzdCczGOKF+sXiXmhWAhxFYAxs1UUXDYCPzwA6evQt76eAXr
-   Y4JY6FkqcighU9hqVGSVK0SRBw/WzMGtRr45+xo+j5N4MMw5eRHSdNwSP
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="422682380"
-X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="422682380"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 13:58:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="1042833189"
-X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="1042833189"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 15 Jun 2023 13:58:50 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q9u3N-0000NB-1D;
-        Thu, 15 Jun 2023 20:58:49 +0000
-Date:   Fri, 16 Jun 2023 04:58:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lizhi Hou <lizhi.hou@amd.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, Lizhi Hou <lizhi.hou@amd.com>,
-        max.zhen@amd.com, sonal.santan@amd.com,
-        stefano.stabellini@xilinx.com
-Subject: Re: [PATCH V9 6/6] of: unittest: Add pci_dt_testdrv pci driver
-Message-ID: <202306160410.HTDpoLQa-lkp@intel.com>
-References: <1686847842-33780-7-git-send-email-lizhi.hou@amd.com>
+        Thu, 15 Jun 2023 16:59:29 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A00B26AA
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 13:59:27 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f649db9b25so11159577e87.0
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 13:59:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686862765; x=1689454765;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=niAlZljWXW/H63Y0SMOkpmVWJA4JXQOx/GZYVfHqRhM=;
+        b=IZAfsnAPCywJPU6vGov8IiuC6/OwaScJ9/lcwgZmfIQ+t81KTiG8qIrf4Q9J7ow31a
+         e0/BFZWJP4J1T5ji4OH0hSYdtWRyQls3po7+NhWcz4xvyi2YiVoG4Bion7fMqLczexeE
+         ggZ9o0NHQdd3oltkh5+eoV8OM4Y1YAaYUpslFx4qZEbmD3pTEjp24Oe0FC/7Dv0pblL3
+         lIX/ZO5eIxg7cHAp8QHOXm49JYcRqb8iSFLsnw7nm0v7XbE/qbJ97zdoMqPAowpz9f3U
+         TfgSxGaXXkY5OzOKfevkEBnWgvh3lTDbYP35Fzg9i9vLq7hX1lvXYLO8EAmWKhUcteOC
+         zWJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686862765; x=1689454765;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=niAlZljWXW/H63Y0SMOkpmVWJA4JXQOx/GZYVfHqRhM=;
+        b=RnhBfYXqFKjRuIvOlQrm+mOxDaNJmryDVkZlKPtwNxhiINl3801o8lg+ljmNE9mpSa
+         /hoJO8vjbDbXiG1OHx5mupkg8hrfZxJnFOTN1kZAh2oA79fvAVzlluzCeaphSj2q+y8h
+         1wt8uHUtlWhML6d7KB5iqikk6cDyax52tVNpbiSit2pvNcI8ibAKkOi8O4hJpA1fqUbV
+         PV8+hp3QNMenbP2xYnDB7il1zqwjqMPFlzO7llQaPhCxqVJUd6NChz5k2Vte6guqX+Jq
+         jV4+SqUo6JVwJy9kQ2Ja8RpwmhPo9eTsfTR8LqD9H62DLW3Uwa8/M915R3PoFLWd56BK
+         mr+w==
+X-Gm-Message-State: AC+VfDy30M56kbY/+9dpdXNjTxSMHs8UM5FUVzJ8FRstGQO5XqSFVIBI
+        EHufQu6CBz3mcfhK7kZRIH3yRkKwYlxkfJi0NZ0=
+X-Google-Smtp-Source: ACHHUZ5iut2/IQev9V/2oWiVW8z3ctcktYp59vG5CrqEkxtz2aEQV7PRsrNmDdJcBnuil92PLjjKQQ==
+X-Received: by 2002:a19:d611:0:b0:4f7:434b:70b4 with SMTP id n17-20020a19d611000000b004f7434b70b4mr7568688lfg.41.1686862765535;
+        Thu, 15 Jun 2023 13:59:25 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id c26-20020ac244ba000000b004ec8b638115sm2700798lfm.193.2023.06.15.13.59.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jun 2023 13:59:25 -0700 (PDT)
+Message-ID: <e0141f93-b3d8-cc3e-7b2d-32618351ba10@linaro.org>
+Date:   Thu, 15 Jun 2023 22:59:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1686847842-33780-7-git-send-email-lizhi.hou@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v8 07/18] drm/msm/a6xx: Add a helper for
+ software-resetting the GPU
+Content-Language: en-US
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+References: <20230223-topic-gmuwrapper-v8-0-69c68206609e@linaro.org>
+ <20230223-topic-gmuwrapper-v8-7-69c68206609e@linaro.org>
+ <jplt5g5xuphbnci73pdtaxd63fguxtgtp4c37kc7ehavzrjbau@kamshezxnvgy>
+ <001d7571-5e9f-4f60-f6d0-35806a3e51c5@linaro.org>
+ <rd4mte26n22xlgx5umerpgr66b4wfi7mdm6ovszafyinrg3q4c@g227oj3nh2vc>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <rd4mte26n22xlgx5umerpgr66b4wfi7mdm6ovszafyinrg3q4c@g227oj3nh2vc>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,80 +92,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lizhi,
+On 15.06.2023 22:11, Akhil P Oommen wrote:
+> On Thu, Jun 15, 2023 at 12:34:06PM +0200, Konrad Dybcio wrote:
+>>
+>> On 6.06.2023 19:18, Akhil P Oommen wrote:
+>>> On Mon, May 29, 2023 at 03:52:26PM +0200, Konrad Dybcio wrote:
+>>>>
+>>>> Introduce a6xx_gpu_sw_reset() in preparation for adding GMU wrapper
+>>>> GPUs and reuse it in a6xx_gmu_force_off().
+>>>>
+>>>> This helper, contrary to the original usage in GMU code paths, adds
+>>>> a write memory barrier which together with the necessary delay should
+>>>> ensure that the reset is never deasserted too quickly due to e.g. OoO
+>>>> execution going crazy.
+>>>>
+>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>>> ---
+>>>>  drivers/gpu/drm/msm/adreno/a6xx_gmu.c |  3 +--
+>>>>  drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 11 +++++++++++
+>>>>  drivers/gpu/drm/msm/adreno/a6xx_gpu.h |  1 +
+>>>>  3 files changed, 13 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+>>>> index b86be123ecd0..5ba8cba69383 100644
+>>>> --- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+>>>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+>>>> @@ -899,8 +899,7 @@ static void a6xx_gmu_force_off(struct a6xx_gmu *gmu)
+>>>>  	a6xx_bus_clear_pending_transactions(adreno_gpu, true);
+>>>>  
+>>>>  	/* Reset GPU core blocks */
+>>>> -	gpu_write(gpu, REG_A6XX_RBBM_SW_RESET_CMD, 1);
+>>>> -	udelay(100);
+>>>> +	a6xx_gpu_sw_reset(gpu, true);
+>>>>  }
+>>>>  
+>>>>  static void a6xx_gmu_set_initial_freq(struct msm_gpu *gpu, struct a6xx_gmu *gmu)
+>>>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>>>> index e3ac3f045665..083ccb5bcb4e 100644
+>>>> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>>>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+>>>> @@ -1634,6 +1634,17 @@ void a6xx_bus_clear_pending_transactions(struct adreno_gpu *adreno_gpu, bool gx_
+>>>>  	gpu_write(gpu, REG_A6XX_GBIF_HALT, 0x0);
+>>>>  }
+>>>>  
+>>>> +void a6xx_gpu_sw_reset(struct msm_gpu *gpu, bool assert)
+>>>> +{
+>>>> +	gpu_write(gpu, REG_A6XX_RBBM_SW_RESET_CMD, assert);
+>>>> +	/* Add a barrier to avoid bad surprises */
+>>> Can you please make this comment a bit more clear? Highlight that we
+>>> should ensure the register is posted at hw before polling.
+>>>
+>>> I think this barrier is required only during assert.
+>> Generally it should not be strictly required at all, but I'm thinking
+>> that it'd be good to keep it in both cases, so that:
+>>
+>> if (assert)
+>> 	we don't keep writing things to the GPU if it's in reset
+>> else
+>> 	we don't start writing things to the GPU becomes it comes
+>> 	out of reset
+>>
+>> Also, if you squint hard enough at the commit message, you'll notice
+>> I intended for this so only be a wmb, but for some reason generalized
+>> it.. Perhaps that's another thing I should fix!
+>> for v9..
+> 
+> wmb() doesn't provide any ordering guarantee with the delay loop.
+Hm, fair.. I'm still not as fluent with memory access knowledge as I'd
+like to be..
 
-kernel test robot noticed the following build warnings:
+> A common practice is to just read back the same register before
+> the loop because a readl followed by delay() is guaranteed to be ordered.
+So, how should I proceed? Keep the r/w barrier, or add a readback and
+a tiiiny (perhaps even using ndelay instead of udelay?) delay on de-assert?
 
-[auto build test WARNING on pci/next]
-[also build test WARNING on pci/for-linus robh/for-next linus/master v6.4-rc6 next-20230615]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Lizhi-Hou/of-dynamic-Add-interfaces-for-creating-device-node-dynamically/20230616-005610
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/1686847842-33780-7-git-send-email-lizhi.hou%40amd.com
-patch subject: [PATCH V9 6/6] of: unittest: Add pci_dt_testdrv pci driver
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20230616/202306160410.HTDpoLQa-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add pci https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git
-        git fetch pci next
-        git checkout pci/next
-        b4 shazam https://lore.kernel.org/r/1686847842-33780-7-git-send-email-lizhi.hou@amd.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306160410.HTDpoLQa-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/asm-generic/bug.h:22,
-                    from arch/mips/include/asm/bug.h:42,
-                    from include/linux/bug.h:5,
-                    from include/linux/mmdebug.h:5,
-                    from include/linux/mm.h:6,
-                    from include/linux/memblock.h:12,
-                    from drivers/of/unittest.c:8:
-   drivers/of/unittest.c: In function 'unittest_pci_probe':
->> include/linux/kern_levels.h:5:25: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 4 has type 'resource_size_t' {aka 'unsigned int'} [-Wformat=]
-       5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
-         |                         ^~~~~~
-   include/linux/printk.h:427:25: note: in definition of macro 'printk_index_wrap'
-     427 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ^~~~
-   include/linux/printk.h:498:9: note: in expansion of macro 'printk'
-     498 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-         |         ^~~~~~
-   include/linux/kern_levels.h:11:25: note: in expansion of macro 'KERN_SOH'
-      11 | #define KERN_ERR        KERN_SOH "3"    /* error conditions */
-         |                         ^~~~~~~~
-   include/linux/printk.h:498:16: note: in expansion of macro 'KERN_ERR'
-     498 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-         |                ^~~~~~~~
-   drivers/of/unittest.c:45:17: note: in expansion of macro 'pr_err'
-      45 |                 pr_err("FAIL %s():%i " fmt, __func__, __LINE__, ##__VA_ARGS__); \
-         |                 ^~~~~~
-   drivers/of/unittest.c:3844:9: note: in expansion of macro 'unittest'
-    3844 |         unittest(res->start == exp_addr, "Incorrect translated address %llx, expected %llx\n",
-         |         ^~~~~~~~
-
-
-vim +5 include/linux/kern_levels.h
-
-314ba3520e513a Joe Perches 2012-07-30  4  
-04d2c8c83d0e3a Joe Perches 2012-07-30 @5  #define KERN_SOH	"\001"		/* ASCII Start Of Header */
-04d2c8c83d0e3a Joe Perches 2012-07-30  6  #define KERN_SOH_ASCII	'\001'
-04d2c8c83d0e3a Joe Perches 2012-07-30  7  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Konrad
+> 
+> -Akhil.
+>>
+>> Konrad
+>>>
+>>> -Akhil.
+>>>> +	mb();
+>>>> +
+>>>> +	/* The reset line needs to be asserted for at least 100 us */
+>>>> +	if (assert)
+>>>> +		udelay(100);
+>>>> +}
+>>>> +
+>>>>  static int a6xx_pm_resume(struct msm_gpu *gpu)
+>>>>  {
+>>>>  	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+>>>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
+>>>> index 9580def06d45..aa70390ee1c6 100644
+>>>> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
+>>>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
+>>>> @@ -89,5 +89,6 @@ struct msm_gpu_state *a6xx_gpu_state_get(struct msm_gpu *gpu);
+>>>>  int a6xx_gpu_state_put(struct msm_gpu_state *state);
+>>>>  
+>>>>  void a6xx_bus_clear_pending_transactions(struct adreno_gpu *adreno_gpu, bool gx_off);
+>>>> +void a6xx_gpu_sw_reset(struct msm_gpu *gpu, bool assert);
+>>>>  
+>>>>  #endif /* __A6XX_GPU_H__ */
+>>>>
+>>>> -- 
+>>>> 2.40.1
+>>>>
