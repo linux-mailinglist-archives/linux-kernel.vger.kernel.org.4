@@ -2,79 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 466AF73181F
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:05:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8304F731821
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:05:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344702AbjFOMFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 08:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50904 "EHLO
+        id S1344741AbjFOMFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 08:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344768AbjFOMEx (ORCPT
+        with ESMTP id S1344934AbjFOMFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 08:04:53 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6563B2976;
-        Thu, 15 Jun 2023 05:02:51 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-6658b869cf2so523696b3a.1;
-        Thu, 15 Jun 2023 05:02:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686830571; x=1689422571;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gtR5yyjqqOCcg96T40YDoUHPwlla3NqWVuy2D+ZwTIk=;
-        b=PhKz+v5RhdIZi9p3VwAdDvXQV5oRpln5h3H1OahPU9aPdUTrEDtHRZrQWyeNYkXDhQ
-         FW+GtnP5O4PQNfU7c2r1RSfrUsxyPAFnXmWW+HL0psVqM9niZcIAYtfP5rNoVRk4TNtA
-         1NnBSz0msntQ5g15c8mgesTGUDLTiopufKHo2jgbtnZjCRPcD+iOvpo8B+0YrVBPdzWj
-         V6etC3SrridTxb50fjzgznPI1RZxiKP3A1hIX+EKYTB6Bt9/Y3G7ccRoUuVtM96MUFXV
-         6fVkLBvdMEcOMh5w/qxg0mEj74/3VJSzLpmSzJwEZRtZMgrRkG82ll5H7pqgycrPVgbi
-         FGqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686830571; x=1689422571;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gtR5yyjqqOCcg96T40YDoUHPwlla3NqWVuy2D+ZwTIk=;
-        b=F28zpCSHpiY2uM3giO6LZc8uI6Cd4+EaLF8P/M6IgbYHQNk5DBMTXqVp+Cu6Kwwg0d
-         eObX21EWKLvJaSvDTrXb1JdPqjaqwQ8kS4M6iTM4QIWyk9CnNXPUKNC9FBP+pSP13lQL
-         BZ2lWXp9wGPnsRrPF8J4j+WelmV04zFDXQpBPnMzRnFtSMLt+MGHuHhnMnm6IGJpFeH1
-         5p2QADfOvG7A22LSGb0KZtfBsCsSL4KLghI6yUmeI006XC8t6QmIkeSIphL1gfnkDRfE
-         pYr6GtUOhbdSJFyYe4vX08inlxDrjDbih/gWjGuM1k2A2DzFFjvQXi5I8hzaQZDac/QL
-         C0VQ==
-X-Gm-Message-State: AC+VfDzm1jJhc6RtJC8bZQjyWBNJ5FDqPD1SIR02vRa+hDOfWNyNeXkM
-        z7Q4AW2yN9HUUVXzCxVSzbfy4eljVX9E16hXfR0=
-X-Google-Smtp-Source: ACHHUZ6+VxPro345cAyYns3wxBIQ8MkoqAQ7K0joSqII6JtVpNSXaEzuVfrY/vlsvBIaTx3vOplxpbmmOMkf991aJKQ=
-X-Received: by 2002:a17:90b:3614:b0:253:25c3:7a95 with SMTP id
- ml20-20020a17090b361400b0025325c37a95mr5822610pjb.14.1686830570764; Thu, 15
- Jun 2023 05:02:50 -0700 (PDT)
+        Thu, 15 Jun 2023 08:05:18 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BF33AB8
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 05:04:11 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1q9lhx-0006fN-Ca; Thu, 15 Jun 2023 14:04:09 +0200
+Message-ID: <824b3be1-adad-7191-a670-dd6290b0f6c3@leemhuis.info>
+Date:   Thu, 15 Jun 2023 14:04:08 +0200
 MIME-Version: 1.0
-References: <20230530224820.303619-1-jm@ti.com> <20230530224820.303619-3-jm@ti.com>
-In-Reply-To: <20230530224820.303619-3-jm@ti.com>
-From:   Hiago Franco <hiagofranco@gmail.com>
-Date:   Thu, 15 Jun 2023 14:02:39 +0200
-Message-ID: <CAK4Znzk_9-nsEW16-ue4sSapixTn3UCPqKkj7iBX+Q_GKLUjoQ@mail.gmail.com>
-Subject: Re: [PATCH v8 2/2] can: m_can: Add hrtimer to generate software interrupt
-To:     Judith Mendez <jm@ti.com>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Schuyler Patton <spatton@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Simon Horman <simon.horman@corigine.com>,
-        Conor Dooley <conor+dt@linaro.org>,
-        Tony Lindgren <tony@atomide.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [6.4-rc6] Crash during a kexec operation
+ (tpm_amd_is_rng_defective)
+Content-Language: en-US, de-DE
+To:     Sachin Sant <sachinp@linux.ibm.com>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     jarkko@kernel.org, linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+References: <99B81401-DB46-49B9-B321-CF832B50CAC3@linux.ibm.com>
+From:   "Linux regression tracking #adding (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <99B81401-DB46-49B9-B321-CF832B50CAC3@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1686830651;e523dacf;
+X-HE-SMSGID: 1q9lhx-0006fN-Ca
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,22 +48,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 12:51=E2=80=AFAM Judith Mendez <jm@ti.com> wrote:
->
-> Introduce timer polling method to MCAN since some SoCs may not
-> have M_CAN interrupt routed to A53 Linux and do not have
-> interrupt property in device tree M_CAN node.
->
-> On AM62x SoC, MCANs on MCU domain do not have hardware interrupt
-> routed to A53 Linux, instead they will use timer polling method.
->
-> Add an hrtimer to MCAN class device. Each MCAN will have its own
-> hrtimer instantiated if there is no hardware interrupt found in
-> device tree M_CAN node. The timer will generate a software
-> interrupt every 1 ms. In hrtimer callback, we check if there is
-> a transaction pending by reading a register, then process by
-> calling the isr if there is.
->
-> Signed-off-by: Judith Mendez <jm@ti.com>
+[CCing the regression list, as it should be in the loop for regressions:
+https://docs.kernel.org/admin-guide/reporting-regressions.html]
 
-Tested-by: Hiago De Franco <hiago.franco@toradex.com> # Toradex Verdin AM62
+[TLDR: I'm adding this report to the list of tracked Linux kernel
+regressions; the text you find below is based on a few templates
+paragraphs you might have encountered already in similar form.
+See link in footer if these mails annoy you.]
+
+On 14.06.23 17:12, Sachin Sant wrote:
+> Following crash is observed during a kexec operation on 
+> IBM Power10 server:
+> 
+> [ 34.381548] Kernel attempted to read user page (50) - exploit attempt? (uid: 0)
+> [ 34.381562] BUG: Kernel NULL pointer dereference on read at 0x00000050
+> [ 34.381565] Faulting instruction address: 0xc0000000009db1e4
+> [ 34.381569] Oops: Kernel access of bad area, sig: 11 [#1]
+> [ 34.381572] LE PAGE_SIZE=64K MMU=Radix SMP NR_CPUS=2048 NUMA pSeries
+> [ 34.381576] Modules linked in: dm_mod(E) nft_fib_inet(E) nft_fib_ipv4(E) nft_fib_ipv6(E) nft_fib(E) nft_reject_inet(E) nf_reject_ipv4(E) nf_reject_ipv6(E) nft_reject(E) nft_ct(E) nft_chain_nat(E) nf_nat(E) nf_conntrack(E) nf_defrag_ipv6(E) nf_defrag_ipv4(E) bonding(E) tls(E) rfkill(E) ip_set(E) sunrpc(E) nf_tables(E) nfnetlink(E) pseries_rng(E) aes_gcm_p10_crypto(E) drm(E) drm_panel_orientation_quirks(E) xfs(E) libcrc32c(E) sd_mod(E) sr_mod(E) t10_pi(E) crc64_rocksoft_generic(E) cdrom(E) crc64_rocksoft(E) crc64(E) sg(E) ibmvscsi(E) scsi_transport_srp(E) ibmveth(E) vmx_crypto(E) fuse(E)
+> [ 34.381613] CPU: 18 PID: 5918 Comm: kexec Kdump: loaded Tainted: G E 6.4.0-rc6-00037-gb6dad5178cea #3
+> [ 34.381618] Hardware name: IBM,9080-HEX POWER10 (raw) 0x800200 0xf000006 of:IBM,FW1030.20 (NH1030_058) hv:phyp pSeries
+> [ 34.381621] NIP: c0000000009db1e4 LR: c0000000009db928 CTR: c0000000009eab60
+> [ 34.381625] REGS: c00000009742f780 TRAP: 0300 Tainted: G E (6.4.0-rc6-00037-gb6dad5178cea)
+> [ 34.381628] MSR: 800000000280b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE> CR: 44488884 XER: 00000001
+> [ 34.381638] CFAR: c0000000009db19c DAR: 0000000000000050 DSISR: 40000000 IRQMASK: 0 
+> [ 34.381638] GPR00: c0000000009db928 c00000009742fa20 c0000000014a1500 c0000000081d0000 
+> [ 34.381638] GPR04: c00000000d842c50 c00000000d842c50 0000000000000025 fffffffffffe0000 
+> [ 34.381638] GPR08: 0000000000000000 0000000000000000 0000000000000009 c008000000785280 
+> [ 34.381638] GPR12: c0000000009eab60 c00000135fab7f00 0000000000000000 0000000000000000 
+> [ 34.381638] GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
+> [ 34.381638] GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
+> [ 34.381638] GPR24: 0000000000000000 0000000000000000 0000000000000000 c000000002e21e08 
+> [ 34.381638] GPR28: c00000000d842c48 c000000002a02208 c00000000321c0c0 c0000000081d0000 
+> [ 34.381674] NIP [c0000000009db1e4] tpm_amd_is_rng_defective+0x74/0x240
+> [ 34.381681] LR [c0000000009db928] tpm_chip_unregister+0x138/0x160
+> [ 34.381685] Call Trace:
+> [ 34.381686] [c00000009742faa0] [c0000000009db928] tpm_chip_unregister+0x138/0x160
+> [ 34.381690] [c00000009742fae0] [c0000000009eab94] tpm_ibmvtpm_remove+0x34/0x130
+> [ 34.381695] [c00000009742fb50] [c000000000115738] vio_bus_remove+0x58/0xd0
+> [ 34.381701] [c00000009742fb90] [c000000000a01ecc] device_shutdown+0x21c/0x39c
+> [ 34.381705] [c00000009742fc20] [c0000000001a2684] kernel_restart_prepare+0x54/0x70
+> [ 34.381710] [c00000009742fc40] [c000000000292c48] kernel_kexec+0xa8/0x100
+> [ 34.381714] [c00000009742fcb0] [c0000000001a2cd4] __do_sys_reboot+0x214/0x2c0
+> [ 34.381718] [c00000009742fe10] [c000000000034adc] system_call_exception+0x13c/0x340
+> [ 34.381723] [c00000009742fe50] [c00000000000d05c] system_call_vectored_common+0x15c/0x2ec
+> [ 34.381729] --- interrupt: 3000 at 0x7fff9c5459f0
+> [ 34.381732] NIP: 00007fff9c5459f0 LR: 0000000000000000 CTR: 0000000000000000
+> [ 34.381735] REGS: c00000009742fe80 TRAP: 3000 Tainted: G E (6.4.0-rc6-00037-gb6dad5178cea)
+> [ 34.381738] MSR: 800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE> CR: 42422884 XER: 00000000
+> [ 34.381747] IRQMASK: 0 
+> [ 34.381747] GPR00: 0000000000000058 00007ffffad83d70 000000012fc47f00 fffffffffee1dead 
+> [ 34.381747] GPR04: 0000000028121969 0000000045584543 0000000000000000 0000000000000003 
+> [ 34.381747] GPR08: 0000000000100000 0000000000000000 0000000000000000 0000000000000000 
+> [ 34.381747] GPR12: 0000000000000000 00007fff9c7bb2c0 000000012fc3f598 0000000000000000 
+> [ 34.381747] GPR16: ffffffffffffffff 0000000000000000 000000012fc1fcc0 0000000000000000 
+> [ 34.381747] GPR20: 0000000000008913 0000000000008914 000000014b891020 0000000000000003 
+> [ 34.381747] GPR24: 0000000000000000 0000000000000001 0000000000000003 00007ffffad83ef0 
+> [ 34.381747] GPR28: 000000012fc19f10 00007fff9c6419c0 000000014b891080 000000014b891040 
+> [ 34.381781] NIP [00007fff9c5459f0] 0x7fff9c5459f0
+> [ 34.381784] LR [0000000000000000] 0x0
+> [ 34.381786] --- interrupt: 3000
+> [ 34.381788] Code: 5463063e 408201c8 38210080 4e800020 60000000 60000000 60000000 7c0802a6 fbe10078 7c7f1b78 f8010090 e9230728 <e9890050> 2c2c0000 41820020 7d8903a6 
+> [ 34.381800] ---[ end trace 0000000000000000 ]---
+> [ 34.384090] pstore: backend (nvram) writing error (-1)
+> 
+> Git bisect points to following patch
+> 
+> commit bd8621ca1510e6e802df9855bdc35a04a3cfa932
+>     tpm: Add !tpm_amd_is_rng_defective() to the hwrng_unregister() call site
+> 
+> Reverting the commit allows a successful kexec operation.
+
+Thanks for the report. To be sure the issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
+tracking bot:
+
+#regzbot ^introduced bd8621ca1510e6e802df9855bdc35a04a3cfa932
+#regzbot title tpm/ppc: crash during a kexec
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
+
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (the parent of this mail). See page linked in footer for
+details.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
