@@ -2,160 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99A9C731E07
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:42:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF2F6731E23
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234969AbjFOQmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 12:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
+        id S235423AbjFOQrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 12:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234795AbjFOQls (ORCPT
+        with ESMTP id S237131AbjFOQrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 12:41:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC49126B6;
-        Thu, 15 Jun 2023 09:41:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 512D561F13;
-        Thu, 15 Jun 2023 16:41:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0243CC433C0;
-        Thu, 15 Jun 2023 16:41:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686847306;
-        bh=zpqZV7qKWaYVN1SN8K2/7XS2tI9XhoNZ6+FwQdXJYeQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nyUl+wQN394xAOxbMzIIggaasbVy6GEeHTeBXYY5JtdtuNTyET8h/4lnMT1rITN8A
-         tppk0O8ic4w10FXqNjf1s3+j2NrS0GerHgqqyq43fgJQxPyscLqswRdIFNb7IAEqbj
-         /CbJooEWJGZhwOkDamnMXqaw7jqPBZGO+qs+kYThK/sWynhyirHFPBbauDyuHKN/qz
-         iHw884Opy6BFi0Iz+CMXiqjLdBC7FBkZlXFRCTdmLi0FhEFfWOp9xyvraUl3PHQfj5
-         i8NSkMU+aL4TeG81/flLI+RzxPJF0CXfI6SPA4fHtanqj3NriAtbVBvpihAf8E+6YO
-         eeS5f3A4yJAxA==
-Date:   Thu, 15 Jun 2023 09:45:07 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Sarannya S <quic_sarannya@quicinc.com>, swboyd@chromium.org,
-        quic_clew@quicinc.com, mathieu.poirier@linaro.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org,
-        Deepak Kumar Singh <quic_deesin@quicinc.com>
-Subject: Re: [PATCH V7 1/3] rpmsg: core: Add signal API support
-Message-ID: <20230615164507.mu7fd22poamjth7p@ripper>
-References: <1682160127-18103-1-git-send-email-quic_sarannya@quicinc.com>
- <1682160127-18103-2-git-send-email-quic_sarannya@quicinc.com>
- <20230614155453.dywcrntfjddxojfv@ripper>
- <6e51d6d8-cd3a-b0f2-c044-6282749aae89@foss.st.com>
- <20230615145039.GA3256591@hu-bjorande-lv.qualcomm.com>
- <4d89950d-0376-e355-c70b-d054776e83d4@foss.st.com>
+        Thu, 15 Jun 2023 12:47:09 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE7B2686
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 09:46:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686847605; x=1718383605;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=peYeLn9BGLKhNAB74de+wNh8KFc+idh7Mo+rg1C/Ax4=;
+  b=Sp7siHi2Af5uJBP/b7+k9tmp/8W1yUaoeLDwGsWs5lG+ypQ9pGV3aM4b
+   XWaV9toi13NhI1ORWdmG3a+c4JFcNgrSL1wVNtunI4L9Je3qySMBTDK+R
+   5V7cpUVawkqT7+YFXJrjQiwczXeFdD+qM+Ev10NB/XBEIJZxORgaeOoBt
+   xuzmucSiNLl9/VUw/TKDzTomD1ivP4JvjTA8HCMdBwt4whOTSL00NvxHu
+   fMDPE5157ByrRAvw8XQ9Yg5eKDuvqPcUqLU+jFmAgqT01Ru0FaMlBy+5E
+   UkA5PfSYCYpqoTqW8VVztmPUvMVhHxSUhPArr4+4eYYEx5WWBS/O7P6cd
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="387506770"
+X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
+   d="scan'208";a="387506770"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 09:46:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="857040464"
+X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
+   d="scan'208";a="857040464"
+Received: from mrejmak-mobl.ger.corp.intel.com (HELO [10.252.36.104]) ([10.252.36.104])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 09:46:26 -0700
+Message-ID: <9eca7ccc-7955-43d3-178a-998d0f430a4c@linux.intel.com>
+Date:   Thu, 15 Jun 2023 18:46:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4d89950d-0376-e355-c70b-d054776e83d4@foss.st.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH 2/2] soundwire: stream: Make master_list ordered to
+ prevent deadlocks
+Content-Language: en-US
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>, vkoul@kernel.org,
+        yung-chuan.liao@linux.intel.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com
+References: <20230615141208.679011-1-rf@opensource.cirrus.com>
+ <20230615141208.679011-2-rf@opensource.cirrus.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230615141208.679011-2-rf@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 06:19:37PM +0200, Arnaud POULIQUEN wrote:
-> 
-> 
-> On 6/15/23 16:50, Bjorn Andersson wrote:
-> > On Thu, Jun 15, 2023 at 11:01:14AM +0200, Arnaud POULIQUEN wrote:
-> >>
-> >>
-> >> On 6/14/23 17:54, Bjorn Andersson wrote:
-> >>> On Sat, Apr 22, 2023 at 04:12:05PM +0530, Sarannya S wrote:
-> >>>> From: Deepak Kumar Singh <quic_deesin@quicinc.com>
-> >>>>
-> >>>> Some transports like Glink support the state notifications between
-> >>>> clients using flow control signals similar to serial protocol signals.
-> >>>> Local glink client drivers can send and receive flow control status
-> >>>> to glink clients running on remote processors.
-> >>>>
-> >>>> Add APIs to support sending and receiving of flow control status by
-> >>>> rpmsg clients.
-> >>>>
-> >>>> Signed-off-by: Deepak Kumar Singh <quic_deesin@quicinc.com>
-> >>>> Signed-off-by: Sarannya S <quic_sarannya@quicinc.com>
-> >>>> ---
-> >>>>  drivers/rpmsg/rpmsg_core.c     | 21 +++++++++++++++++++++
-> >>>>  drivers/rpmsg/rpmsg_internal.h |  2 ++
-> >>>>  include/linux/rpmsg.h          | 15 +++++++++++++++
-> >>>>  3 files changed, 38 insertions(+)
-> >>>>
-> >>>> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
-> >>>> index a2207c0..e8bbe05 100644
-> >>>> --- a/drivers/rpmsg/rpmsg_core.c
-> >>>> +++ b/drivers/rpmsg/rpmsg_core.c
-> >>>> @@ -331,6 +331,25 @@ int rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src, u32 dst,
-> >>>>  EXPORT_SYMBOL(rpmsg_trysend_offchannel);
-> >>>>  
-> >>>>  /**
-> >>>> + * rpmsg_set_flow_control() - sets/clears serial flow control signals
-> >>>> + * @ept:	the rpmsg endpoint
-> >>>> + * @enable:	pause/resume incoming data flow	
-> >>>
-> >>> As shown in the discussion, it's still not clear what true/false means.
-> >>> Also, let's try to clarify that it's a request for the other side to do
-> >>> something:
-> >>>
-> >>> * rpmsg_set_flow_control() - request remote to pause/resume transmission
-> >>> * ...
-> >>> * @enable: flow restricted
-> >>> * ...
-> >>>
-> >>>
-> >>> PS. There's a stray space at the end of the line.
-> >>
-> >> The notion of flow restricted seems to me also ambiguous. It does
-> >> not specify if the stream is limited in term of bandwidth or stopped.
-> >>
-> >> What about using XON/XOFF as specified in software flow control[1]
-> >>
-> >> XOFF	Pause transmission
-> >> XON	Resume transmission
-> >>
-> >> or simply pause/resume definitions
-> >>
-> > 
-> > I agree, that's still ambiguous.
-> > 
-> > I was concerned about expressing it such that the reader would assume
-> > that calling this means there will be no more data coming, but there
-> > might be things in the queues etc. Expressing it in terms of the state
-> > of transmission is clearer.
-> > 
-> > 
-> > /*
-> >  * rpmsg_set_flow_control() - request remote to pause/resume transmission
-> >  ...
-> >  * @enable: Pause transmission
-> >  ...
-> >  */
-> > 
-> > Does that sound okay and clear to you?
-> 
-> Much better! I still have a nitpicking point :)
-> What about replacing @enable variable by @pause to align the variable with the
-> usage?
->  /*
->   * rpmsg_set_flow_control() - request remote to pause/resume transmission
->   ...
->   * @pause: set to 1 to pause transmission, to 0 to resume the transmission
 
-It's a boolean, so I think with your name change suggestion, together
-with the function description, it should be clear enough what the two
-states (true/false) means.
 
-* @pause: Pause transmission
+On 6/15/23 16:12, Richard Fitzgerald wrote:
+> Always add buses to the stream->master_list in a fixed order.
+> The unique bus->id is used to order the adding of buses to the
+> list.
+> 
+> This prevents lockdep asserts and possible deadlocks on streams
+> that have multiple buses.
+> 
+> sdw_acquire_bus_lock() takes bus_lock in the order that buses
+> are listed in stream->master_list. do_bank_switch() takes all
+> the msg_lock in the same order.
+> 
+> To prevent a lockdep assert, and a possible real deadlock, the
+> relative order of taking these mutexes must always be the same.
+> 
+> For example, if a stream takes the mutexes in the order
+> (bus0, bus1) lockdep will assert if another stream takes them
+> in the order (bus1, bus0).
+> 
+> More complex relative ordering will also assert, for example
+> if two streams take (bus0, bus1) and (bus1, bus2), then a third
+> stream takes (bus2, bus0).
+> 
+> Previously sdw_stream_add_master() simply added the given bus
+> to the end of the list, requiring the caller to guarantee that
+> buses are added in a fixed order. This isn't reasonable or
+> necessary - it's an internal implementation detail that should
+> not be exposed by the API. It doesn't really make sense when
+> there could be multiple independent calling drivers, to say
+> "you must add your buses in the same order as a different driver,
+> that you don't know about, added them".
 
-Thanks,
-Bjorn
+Makes sense to me. The other way to look at this is that the notion of
+'stream' and dailink are virtually synonyms, and 'sdw_stream_add_master'
+is called from each DAI of a dailink, hence in a fixed order. But
+nothing really defines how dailinks include the dais, and in a
+hypothetical case with multiple controllers, each with multiple links,
+there would be an ambiguity anyways so using the ida-allocated bus->id
+is a good solution indeed.
+
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
