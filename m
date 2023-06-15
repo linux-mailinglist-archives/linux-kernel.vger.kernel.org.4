@@ -2,123 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5EFA731674
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:24:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0515F731676
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:24:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245504AbjFOLYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 07:24:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46534 "EHLO
+        id S245727AbjFOLY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 07:24:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236141AbjFOLYI (ORCPT
+        with ESMTP id S240978AbjFOLYW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 07:24:08 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1C51FDB
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 04:24:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686828248; x=1718364248;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=wZealJFBuKHllUbXwzgu9RKiUrb3oBvFvTlLh890Dvg=;
-  b=F6wvQgZX7P3aH3k6QKOKh0heCmVXLvkGn9G4lfsb8v8wqk7eZVQ2OUGZ
-   gwTCaiafS8FjEbx14qD68/NPnTSEQu1ScyZhHaP1oyTRdg4B8QH0lkh8O
-   5F3p8nj1HO0mipYeqfKGmI50WorjVkuO/+voz5D0kRL+qMAu6tJBtWmXa
-   ArXQYfb1Fl+Zs9UVBh2gbmZll+mv679/PK84roqThta1gUv1n+mTFD7gu
-   EFJIW2QUhdt2fh9ttBg+Noy5nPvc3wlm/72pXLD3W1jNbPoaIwbNf9QJs
-   3b1BtTrRUM3aGUzzg0AT9rPWszehHBE4hH8fw6KV5XRCXQGi142YBfETS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="361363997"
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="361363997"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 04:24:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="886607456"
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="886607456"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 15 Jun 2023 04:24:02 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1q9l55-003vZr-1M;
-        Thu, 15 Jun 2023 14:23:59 +0300
-Date:   Thu, 15 Jun 2023 14:23:59 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     'Demi Marie Obenour' <demi@invisiblethingslab.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Lee Jones <lee@kernel.org>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: Re: [PATCH v3 0/4] Make sscanf() stricter
-Message-ID: <ZIr0z6u17xogE5+n@smile.fi.intel.com>
-References: <6ab6adce-2318-4ae6-bde6-4317485639fd@p183>
- <ZId/IA41c2sJyvE0@itl-email>
- <ZIeHfBf3aB3vUgRM@smile.fi.intel.com>
- <ZIeMyQXU49OcoxY2@itl-email>
- <ec3d7ebe62654e949329785bb32c3822@AcuMS.aculab.com>
- <ZIiMrDxI5Ts0s8fK@itl-email>
- <23df90dd35874fd89c64906e6a6de164@AcuMS.aculab.com>
- <ZIoeVjC6offUywop@itl-email>
- <e354268a4efe48c9a8023a30c7292d12@AcuMS.aculab.com>
+        Thu, 15 Jun 2023 07:24:22 -0400
+Received: from sasl.smtp.pobox.com (pb-sasl1.pobox.com [64.147.108.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 209012949;
+        Thu, 15 Jun 2023 04:24:20 -0700 (PDT)
+Received: from sasl.smtp.pobox.com (unknown [127.0.0.1])
+        by pb-sasl1.pobox.com (Postfix) with ESMTP id 6AA32AA013;
+        Thu, 15 Jun 2023 07:24:17 -0400 (EDT)
+        (envelope-from mlord@pobox.com)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=pobox.com; h=subject:to
+        :cc:references:from:message-id:date:mime-version:in-reply-to
+        :content-type:content-transfer-encoding; s=sasl; bh=R9REBIl2cJpk
+        vNtAOVV6nK22FQwV/7KTOjLjZ7mcB48=; b=tS3ATrgD8sVwNv2VFlvLuLwPJnm/
+        0cBHpbCJkX1iBUdvh06MVqEO0N1JHvHKds0p8PaXPkWlg8CjQOnxGuo1Zvqo+cfZ
+        LKUFdgiSvg0/pmZlH09g2hDKelNxaTFQcOqlwJddw8kVS6EqwXUXznlzWtDrjCSb
+        0SvjRzUzTaI6PLk=
+Received: from pb-sasl1.nyi.icgroup.com (unknown [127.0.0.1])
+        by pb-sasl1.pobox.com (Postfix) with ESMTP id 508E6AA011;
+        Thu, 15 Jun 2023 07:24:17 -0400 (EDT)
+        (envelope-from mlord@pobox.com)
+Received: from [10.0.0.9] (unknown [24.156.181.9])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by pb-sasl1.pobox.com (Postfix) with ESMTPSA id 41322AA010;
+        Thu, 15 Jun 2023 07:24:16 -0400 (EDT)
+        (envelope-from mlord@pobox.com)
+Subject: Re: [PATCH] HID: logitech-hidpp: Handle timeout differently from busy
+To:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Jiri Kosina <jikos@kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
+        =?UTF-8?Q?Filipe_La=c3=adns?= <lains@riseup.net>,
+        Nestor Lopez Casado <nlopezcasad@logitech.com>
+References: <20230531082428.21763-1-hadess@hadess.net>
+ <nycvar.YFH.7.76.2305311606160.29760@cbobk.fhfr.pm>
+ <nycvar.YFH.7.76.2306031440380.29760@cbobk.fhfr.pm>
+ <15bb2507-a145-7f1b-8e84-58aeb02484b9@leemhuis.info>
+ <nycvar.YFH.7.76.2306061527080.29760@cbobk.fhfr.pm>
+ <42b6e582-f642-7521-135a-449140984211@leemhuis.info>
+ <53903462-2552-b707-3831-cad3ef873b0d@leemhuis.info>
+From:   Mark Lord <mlord@pobox.com>
+Message-ID: <aa0e3371-dad1-3296-18fb-1957b92aa4d1@pobox.com>
+Date:   Thu, 15 Jun 2023 07:24:15 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.7.0
 MIME-Version: 1.0
+In-Reply-To: <53903462-2552-b707-3831-cad3ef873b0d@leemhuis.info>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e354268a4efe48c9a8023a30c7292d12@AcuMS.aculab.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Pobox-Relay-ID: 29ECEAB2-0B6F-11EE-A78A-8E2B5958DECB-82205200!pb-sasl1.pobox.com
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 08:06:46AM +0000, David Laight wrote:
-> From: Demi Marie Obenour
-> > Sent: 14 June 2023 21:09
-
+On 2023-06-15 03:24 AM, Linux regression tracking (Thorsten Leemhuis) wrote:
+>
 ...
+> https://bugzilla.kernel.org/show_bug.cgi?id=217412
+> 
+> --- Comment #47 from Mark Blakeney ---
+> @Juha, kernel 6.3.7 adds the 2 patches intended to fix this bug and the
+> startup delay is now gone. However, I have had 2 cases over the last 5
+> days in which I have been running 6.3.7 where my mouse fails to be
+> detected at all after startup. I have to pull the Logitech receiver
+> out/in to get the mouse working. Never seen this issue before so I
+> suspect the patches are not right.
+> ```
 
-> > > What sort of formats and data are being used?
-> > 
-> > Base-10 or base-16 integers, with whitespace never being valid.
-> 
-> In which case sscanf() really isn't what you are looking for.
-> 
-> > > The "%s" format terminates on whitespace.
-> > > Even stroul() (and friends) will skip leading whitespace.
-> > 
-> > Yes, which is a reason that strto*l() are just broken IMO.
-> 
-> They are not 'broken', that is what is useful most of the time.
-> The usual problem is that "020" is treated as octal.
-> 
-> > I’m trying to replace their uses in Xen with custom parsing code.
-> 
-> Then write a custom parser :-)
+I too have had that happen with recent kernels, but have not yet put
+a finger to a specific version or cause.
 
-Hmm... Usually we are against zillion implementations of the same with zillion
-bugs hidden (each buggy implementation with its own bugs).
+Just toggling the power button on the wireless mouse is enough for
+it to "re-appear".
 
+The 5.4.xx kernels never had this issue.  I went straight from those
+to the 6.3.xx ones, where it does happen sometimes, both with and without
+the recent "delay" fixes.
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Mark Lord
