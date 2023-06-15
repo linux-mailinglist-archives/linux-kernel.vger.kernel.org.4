@@ -2,109 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C4D6731605
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 028AB731607
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:03:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241481AbjFOLDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 07:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34220 "EHLO
+        id S240526AbjFOLDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 07:03:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239287AbjFOLDF (ORCPT
+        with ESMTP id S244497AbjFOLDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 07:03:05 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A762721
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 04:03:03 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b203891b2cso25278261fa.3
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 04:03:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1686826982; x=1689418982;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8/bt1dAWppMoxhJfVjqrwV2ZjuTN1PkZV9nbDOgWa78=;
-        b=IkmzE2t46xCrw5S4s+6FeD5g42TQfM7SZYrTWut3B0okjDqFQYoRW7+vWoMH90Joyp
-         JJsBwAmr10F5I1NesW+D/S+10PdJRijAewLdpLkeK3kiuWAYyg+URInhJTtoqen1MN8t
-         uJHk2SjBiym5AtVbsyc/f6OnGPvwmhCEFi+V8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686826982; x=1689418982;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8/bt1dAWppMoxhJfVjqrwV2ZjuTN1PkZV9nbDOgWa78=;
-        b=TLdxwkMzaxbIYbDstc19AXB5l+9iBRpeR8O4b/JRWiIPY/V0BWjO8Y8RnaiADAxdah
-         P8TTn0c0nZXPwRGinrzzIg+8D1ilt2n8vxLobuKhExnB1cQ8SJjwFGi8o+p4rdsbx6yL
-         8DSDbFVfbIFS4cSX8B8wSN3bKEpIQ9nbuTmLPFD2qqg8NuMNsBRjTd3G3zjE0pmGPGAJ
-         ay8nAZGsYfHfKCPpi25zhJI4LJHQWh6TyqFoZeE8rCGlhrN5M8pzr8xxPB8FqwuF8gHu
-         QT32/zBtkvc1pdyNVM3jy90Sp/pVL8o+ycezNCjMUntEf/+pjixH93mSc9oA497LDshX
-         1Ceg==
-X-Gm-Message-State: AC+VfDyju4dT1D0HF9p84uR1TwqCi8EuA5htqz6flMc+ukltQEglE3lP
-        eBIypdHxhZ9TrGUhvl9dP4ZfYg==
-X-Google-Smtp-Source: ACHHUZ5vqGU+cjdTQVd653JJ4tvfSKEV01KP0mJwq6VplcyPdzf22pxzo98dgSMhssRcQLgHAtCP2Q==
-X-Received: by 2002:a2e:a0ce:0:b0:2b0:2d23:79b with SMTP id f14-20020a2ea0ce000000b002b02d23079bmr8570078ljm.3.1686826981872;
-        Thu, 15 Jun 2023 04:03:01 -0700 (PDT)
-Received: from [172.16.11.116] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id c9-20020a05651c014900b002b4496a1737sm72455ljd.46.2023.06.15.04.03.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 04:03:01 -0700 (PDT)
-Message-ID: <a1807670-5f6d-eea0-34c3-942303544eab@rasmusvillemoes.dk>
-Date:   Thu, 15 Jun 2023 13:03:00 +0200
+        Thu, 15 Jun 2023 07:03:24 -0400
+Received: from out-28.mta0.migadu.com (out-28.mta0.migadu.com [IPv6:2001:41d0:1004:224b::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5302948
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 04:03:21 -0700 (PDT)
+Message-ID: <de03d60e-0720-33be-e0fa-fcde587489a5@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1686826999;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=31dJgRFCsqu//EY9h78jvruPaMDSErokC9iXi+ASWUw=;
+        b=SZ4wMuTBIUu5D2Uu+rBnCQy0OOD7DdSnRy6AEXBiO5JgDhnUOg4XrKl8If4miXjlDy6x7J
+        MzgA7Q0+0ZokiqjuTX4qM6Rf4lawzfyhkZcQgYn/uSbSS5B7layFM3KGBzzw9egKU2yUAn
+        EQFYzWrQDBmIwamHP8fw6n1db+1UiUw=
+Date:   Thu, 15 Jun 2023 19:03:13 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 0/8] rtc: isl12022: battery backup voltage and clock
- support
-Content-Language: en-US, da
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
- <20230613130011.305589-1-linux@rasmusvillemoes.dk>
- <e78d3ea1-9acb-1d4f-1b9a-0bab75613189@linaro.org>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <e78d3ea1-9acb-1d4f-1b9a-0bab75613189@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] NFSv4.2: fix wrong shrinker_id
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>, trond.myklebust@hammerspace.com,
+        anna@kernel.org, fllinden@amazon.com
+Cc:     oe-kbuild-all@lists.linux.dev, linux-nfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>
+References: <20230614072443.3264264-1-qi.zheng@linux.dev>
+ <202306150121.cN9iKnvx-lkp@intel.com>
+ <0d70dc6c-3f7e-b899-adcb-5b71c1aa298e@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Qi Zheng <qi.zheng@linux.dev>
+In-Reply-To: <0d70dc6c-3f7e-b899-adcb-5b71c1aa298e@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/06/2023 21.06, Krzysztof Kozlowski wrote:
-> On 13/06/2023 15:00, Rasmus Villemoes wrote:
->> The current handling of the low-battery bits in the status register is
->> wrong. The first six patches fix that and implement proper support for
->> RTC_VL_READ.
->>
->> The last two patches allow describing the isl12022 as a clock
->> provider, for now just as a fixed 32kHz clock. They are also
->> tangentially related to the backup battery, in that when the isl12022
->> is not used as a clock source, one can save some power consumption in
->> battery mode by setting the FOx bits to 0.
->>
->> v2 changes:
+
+
+On 2023/6/15 10:46, Qi Zheng wrote:
 > 
-> Do not attach (thread) your patchsets to some other threads (unrelated
-> or older versions). This buries them deep in the mailbox and might
-> interfere with applying entire sets.
 > 
+> On 2023/6/15 02:06, kernel test robot wrote:
+>> Hi Qi,
+>>
+>> kernel test robot noticed the following build errors:
+>>
+>> [auto build test ERROR on linus/master]
+>> [also build test ERROR on trondmy-nfs/linux-next v6.4-rc6 next-20230614]
+>> [If your patch is applied to the wrong git tree, kindly drop us a note.
+>> And when submitting patch, we suggest to use '--base' as documented in
+>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>>
+>> url:    
+>> https://github.com/intel-lab-lkp/linux/commits/Qi-Zheng/NFSv4-2-fix-wrong-shrinker_id/20230614-152853
+>> base:   linus/master
+>> patch link:    
+>> https://lore.kernel.org/r/20230614072443.3264264-1-qi.zheng%40linux.dev
+>> patch subject: [PATCH] NFSv4.2: fix wrong shrinker_id
+>> config: i386-debian-10.3 
+>> (https://download.01.org/0day-ci/archive/20230615/202306150121.cN9iKnvx-lkp@intel.com/config)
+>> compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+>> reproduce (this is a W=1 build):
+>>          git checkout linus/master
+>>          b4 shazam 
+>> https://lore.kernel.org/r/20230614072443.3264264-1-qi.zheng@linux.dev
+>>          # save the config file
+>>          mkdir build_dir && cp config build_dir/.config
+>>          make W=1 O=build_dir ARCH=i386 olddefconfig
+>>          make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+>>
+>> If you fix the issue in a separate patch/commit (i.e. not just a new 
+>> version of
+>> the same patch/commit), kindly add following tags
+>> | Reported-by: kernel test robot <lkp@intel.com>
+>> | Closes: 
+>> https://lore.kernel.org/oe-kbuild-all/202306150121.cN9iKnvx-lkp@intel.com/
+>>
+>> All errors (new ones prefixed by >>, old ones prefixed by <<):
+>>
+>>>> ERROR: modpost: "free_prealloced_shrinker" [fs/nfs/nfsv4.ko] undefined!
+>>>> ERROR: modpost: "register_shrinker_prepared" [fs/nfs/nfsv4.ko] 
+>>>> undefined!
+>>>> ERROR: modpost: "prealloc_shrinker" [fs/nfs/nfsv4.ko] undefined!
+> 
+> Ah, these three functions need to be exported. Will fix it in the v2.
 
-Arrgh, I really didn't mean to do that with v3, but I reused the 'git
-send-email' from my shell history and overlooked that I had that
---in-reply-to :(
+Or we can just swap the order of register_shrinker() and 
+list_lru_init_memcg().
 
-Sorry folks!
-
-Rasmus
-
+> 
+>>
