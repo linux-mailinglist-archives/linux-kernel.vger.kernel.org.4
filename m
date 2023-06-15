@@ -2,83 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 199C673219E
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 23:24:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B9C73219F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 23:25:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236671AbjFOVYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 17:24:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35268 "EHLO
+        id S229790AbjFOVY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 17:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232211AbjFOVYm (ORCPT
+        with ESMTP id S237283AbjFOVYx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 17:24:42 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2EF213F
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 14:24:41 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-53425d37fefso45118a12.3
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 14:24:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686864280; x=1689456280;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BTZ5wBqtEZTdQvE+t4svmHg7qfGpYuHSch0PJIYuwpc=;
-        b=UAVsbD+rOMz++YgcW9tDED5JpE4OtPhi8YPdcJXBtp9QX/IuUNehT65/Ow0C2MVATA
-         EGkOw9+hzLJ/cne35+LiVmqq2VTyNPYprLQrF9PLovES/6rq+ysn1ynLSIPg9dxR0QcP
-         ohnL9z8scervdEXxdk8w4DmpOq30/cvInSmT5Gg8XN4EymRebuq04qWWupQWdLUWsAl9
-         /oLD4P/6IaBzJWYwS1JXtGKIvkCsJwaGsLRIh5HRYg26diQc+RPmV3rRY2yHtn5phe+V
-         00L3TnFD95hRUUoX3sWZZv7weYp4e19oOTv/Axg4x7EepYQ1PmPoMjahS3ar1I7WQNkm
-         guqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686864280; x=1689456280;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BTZ5wBqtEZTdQvE+t4svmHg7qfGpYuHSch0PJIYuwpc=;
-        b=fgnqyjlNsmoyX12kI3H0/8MCvpZ0akWquzpxOIn2b0fe1yg0/7NOxRc8m41zLkr42Z
-         ChXTzXrUcTCvXS93i1FcnNxiCV3p3NMmU9noP/TRJhn+y2mAh+M/BVJHl1m7Ip6Oo7SC
-         9QYpXTnuunFJsjMVOfw76RCaWNN7suvpyjbSyEtJaZuqGZickVOsLGl2NRl7zbCIW5pW
-         T1Nig+ufRqO29/3YEbXgfeydyToOSjj6bYy+656sbRKTQOziiCPog5M36bq/c062N7ib
-         PKujb0tNiYKBfsIlMZdXtTc/cJaMaBbesX+1y3kPZkqtv1QE8s7b+uv/JF1z7HMJMFjl
-         QoVA==
-X-Gm-Message-State: AC+VfDxtI+hukMcqRQuqvu+MTP7lR2F7T+nKZBogJbZ0Apfcyp3Yt8/P
-        WIkehAudlK4P6DKxh6vaWUFqKicrlDI=
-X-Google-Smtp-Source: ACHHUZ7KzdQOHShTf1QUgNGdz/w2OVyoX+Tv6bGUzNqpJKuWr7Ua1EYxLokpQ+pxGv3Ta28uZLEjEQEgwWQ=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:5559:0:b0:54f:73ef:f3a with SMTP id
- f25-20020a635559000000b0054f73ef0f3amr2104031pgm.9.1686864280542; Thu, 15 Jun
- 2023 14:24:40 -0700 (PDT)
-Date:   Thu, 15 Jun 2023 14:24:38 -0700
-In-Reply-To: <20230615054259.14911-1-gshan@redhat.com>
-Mime-Version: 1.0
-References: <20230615054259.14911-1-gshan@redhat.com>
-Message-ID: <ZIuBliqWsgGmXpzJ@google.com>
-Subject: Re: [PATCH v3] KVM: Avoid illegal stage2 mapping on invalid memory slot
-From:   Sean Christopherson <seanjc@google.com>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     kvmarm@lists.linux.dev, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pbonzini@redhat.com,
-        mtosatti@redhat.com, maz@kernel.org, will@kernel.org,
-        c.dall@virtualopensystems.com, peterx@redhat.com, david@redhat.com,
-        aarcange@redhat.com, shahuang@redhat.com, hshuai@redhat.com,
-        zhenyzha@redhat.com, shan.gavin@gmail.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 15 Jun 2023 17:24:53 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F42141FC2
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 14:24:51 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BDE851FB;
+        Thu, 15 Jun 2023 14:25:35 -0700 (PDT)
+Received: from [10.57.85.251] (unknown [10.57.85.251])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F3B773F663;
+        Thu, 15 Jun 2023 14:24:49 -0700 (PDT)
+Message-ID: <81ea403e-1279-bb01-9b74-51afd6d8532b@arm.com>
+Date:   Thu, 15 Jun 2023 22:24:42 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 1/3] iommu: rockchip: Fix discovery table address
+ encoding
+Content-Language: en-GB
+To:     Jonas Karlman <jonas@kwiboo.se>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Joerg Roedel <jroedel@suse.de>
+References: <20230615201042.2291867-1-jonas@kwiboo.se>
+ <20230615201042.2291867-2-jonas@kwiboo.se>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20230615201042.2291867-2-jonas@kwiboo.se>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023, Gavin Shan wrote:
-> Cc: stable@vger.kernel.org # v3.9+
-> Fixes: d5d8184d35c9 ("KVM: ARM: Memory virtualization setup")
-> Reported-by: Shuai Hu <hshuai@redhat.com>
-> Reported-by: Zhenyu Zhang <zhenyzha@redhat.com>
-> Signed-off-by: Gavin Shan <gshan@redhat.com>
+On 2023-06-15 21:10, Jonas Karlman wrote:
+> The address to the discovery table is currently encoded using the
+> following bit layout.
+> 
+>   31:12 - Address bit 31:0
+>   11: 4 - Address bit 39:32
+> 
+> This is also the bit layout used by the vendor kernel.
+> 
+> However, testing has shown that addresses to the discovery/page tables
+> and memory pages are all encoded using the same bit layout.
+> 
+> IOMMU v1:
+>   31:12 - Address bit 31:0
+> 
+> IOMMU v2:
+>   31:12 - Address bit 31:0
+>   11: 8 - Address bit 35:32
+>    7: 4 - Address bit 39:36
+> 
+> Change to use the mk_dtentries ops to encode the discovery table address
+
+Nit: s/discovery/directory/g
+
+> correctly. Also update the bit layout comment for the page address.
+> 
+> These changes render the dte_addr_phys and dma_addr_dte ops unused
+> and will be removed in a following patch.
+
+TBH I'd just squash that into this patch - we don't gain anything from 
+leaving dead code in stable kernels, and at worst it just stands to make 
+future fixes harder to backport.
+
+> Fixes: 227014b33f62 ("iommu: rockchip: Add internal ops to handle variants")
+> Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
 > ---
+> v2:
+> - replace currently with correctly in commit message
+> 
+>   drivers/iommu/rockchip-iommu.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/iommu/rockchip-iommu.c b/drivers/iommu/rockchip-iommu.c
+> index 4054030c3237..d46319f77e5c 100644
+> --- a/drivers/iommu/rockchip-iommu.c
+> +++ b/drivers/iommu/rockchip-iommu.c
+> @@ -278,8 +278,8 @@ static u32 rk_mk_pte(phys_addr_t page, int prot)
+>   /*
+>    * In v2:
+>    * 31:12 - Page address bit 31:0
+> - *  11:9 - Page address bit 34:32
+> - *   8:4 - Page address bit 39:35
+> + * 11: 8 - Page address bit 35:32
+> + *  7: 4 - Page address bit 39:36
+>    *     3 - Security
+>    *     2 - Writable
+>    *     1 - Readable
+> @@ -577,7 +577,7 @@ static void log_iova(struct rk_iommu *iommu, int index, dma_addr_t iova)
+>   	page_offset = rk_iova_page_offset(iova);
+>   
+>   	mmu_dte_addr = rk_iommu_read(base, RK_MMU_DTE_ADDR);
+> -	mmu_dte_addr_phys = rk_ops->dte_addr_phys(mmu_dte_addr);
+> +	mmu_dte_addr_phys = rk_ops->pt_address(mmu_dte_addr);
+>   
+>   	dte_addr_phys = mmu_dte_addr_phys + (4 * dte_index);
+>   	dte_addr = phys_to_virt(dte_addr_phys);
+> @@ -967,7 +967,7 @@ static int rk_iommu_enable(struct rk_iommu *iommu)
+>   
+>   	for (i = 0; i < iommu->num_mmu; i++) {
+>   		rk_iommu_write(iommu->bases[i], RK_MMU_DTE_ADDR,
+> -			       rk_ops->dma_addr_dte(rk_domain->dt_dma));
+> +			       rk_ops->mk_dtentries(rk_domain->dt_dma));
 
-With Oliver's comment suggestion,
+Hmm, this writes the RK_DTE_PT_VALID bit into the register as well - 
+does that really make sense?
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+Thanks,
+Robin.
+
+>   		rk_iommu_base_command(iommu->bases[i], RK_MMU_CMD_ZAP_CACHE);
+>   		rk_iommu_write(iommu->bases[i], RK_MMU_INT_MASK, RK_MMU_IRQ_MASK);
+>   	}
