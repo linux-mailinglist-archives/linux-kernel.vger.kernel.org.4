@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C05AB731006
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0526C731007
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:01:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244503AbjFOHBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 03:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
+        id S244547AbjFOHBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 03:01:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244464AbjFOHBP (ORCPT
+        with ESMTP id S244490AbjFOHBW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 03:01:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238482689
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:00:39 -0700 (PDT)
+        Thu, 15 Jun 2023 03:01:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91AFB1720
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:00:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686812438;
+        s=mimecast20190719; t=1686812451;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tWug6tK250qyQQCYO8fMKWJIjS1otJVNG8Ic8LjsM4w=;
-        b=Eo2AlVCpxtNTiodVcclX37lu5QQ3DHc2WwyiP7bIYIgpD6REFtO2KiooRu+V3DKnmp1hQC
-        c94jSK9nNdX/czB5Ven1M2md25oH4qANYPPmm2oBVEZjVu4NvvwVRKIDuZYwHf6IqyfIib
-        dUaItSi1o58JlpvjJTFI88wG9RauteI=
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
- [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=rZl5IePXwMxAc+yncc6R0RiTzMx0XP4ndlclonASOGI=;
+        b=KozAFdaiE/+cDXu6R5WCaZ49HZmR1M8ePvTpoAPU21W9tT1ir74mlpMRYwrE+6h51yuOP/
+        Ff3lyeKvFu3EY3Fsdi21BO2WtID/II9mbjfKQQnzVMdR8yFDVPWpd8FQ8EpwTpuPZ+pOv0
+        Hz+k2ou7YNgUtb1+VEkKffW/llCRuX4=
+Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com
+ [209.85.160.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-518-P64RxU-QPqSJrB-0L9WY0A-1; Thu, 15 Jun 2023 03:00:37 -0400
-X-MC-Unique: P64RxU-QPqSJrB-0L9WY0A-1
-Received: by mail-ot1-f69.google.com with SMTP id 46e09a7af769-6b2ac1fe3d6so5838076a34.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:00:36 -0700 (PDT)
+ us-mta-249-_iXHRncOODeo98XF-K2tbA-1; Thu, 15 Jun 2023 03:00:49 -0400
+X-MC-Unique: _iXHRncOODeo98XF-K2tbA-1
+Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-1a36fa3850dso4581533fac.0
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:00:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686812436; x=1689404436;
+        d=1e100.net; s=20221208; t=1686812448; x=1689404448;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tWug6tK250qyQQCYO8fMKWJIjS1otJVNG8Ic8LjsM4w=;
-        b=QDlc4XBOHY1hIE9aJDv+c1mh3FJ5Y9HBPxctdUuyeV/n5doS8oVPz7/ht4HJbXLxOx
-         g/JYQpqoITnsQCzflUwUVm33FfD6bfz+TyJ8h6TYJtW3Cy5LIZNzjlTL2I/1tHbmwRHh
-         BrFkWLP16/DTFsZzgwBFblN5xrUoz2D1xE6mehOF4H3VKPI7dCtbsrkJ4/6oYDesnioF
-         MxfVYGaDlNo7qHj8/lB3EDA9VZEqJuyWkFLblpLzgjobX0v8tFbcyjPo3S+BeaQMxDva
-         o/4/rj2XyLze+ri8ZiMSYi0gXUrZtN/Bo94lh/RlUTB1qPlBZ4zFAn3f2///1is+jllK
-         IQEA==
-X-Gm-Message-State: AC+VfDw8FUN0wwWamAiNkWBeUrPv2qBr7LsF8MeKBzw8h0Cr22GioesD
-        Aa6HaUeeJuUIDoGRiVRfk+wrkYtYSDXmGAMAp5dM2clzY8TGWbsYOjdU3S9QLz/9enqEqHFI6fg
-        15XbzifuNSQz+OudPMgLxz5GQ
-X-Received: by 2002:a05:6830:10d5:b0:6b0:a7f8:aef3 with SMTP id z21-20020a05683010d500b006b0a7f8aef3mr14682447oto.25.1686812436206;
-        Thu, 15 Jun 2023 00:00:36 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5/Pe39HUBrfVOWKfPiOSlYTCdt0+Mvaw05lad9KQQ6R9Ij0haub1MnBrBtdB77e23r6sRdnQ==
-X-Received: by 2002:a05:6830:10d5:b0:6b0:a7f8:aef3 with SMTP id z21-20020a05683010d500b006b0a7f8aef3mr14682438oto.25.1686812435989;
-        Thu, 15 Jun 2023 00:00:35 -0700 (PDT)
+        bh=rZl5IePXwMxAc+yncc6R0RiTzMx0XP4ndlclonASOGI=;
+        b=SUM4sfFcGvzNne13U9yzViB2bNHhAeHmmABM+p2vp2yDQzvG37ECmt0XMqqEF84r7R
+         WgVRXdQAEaDRcKcO1ZqP5kZPM5gUdskZL+5dSWF8P1ynWuCtBXSkOw+ZLh0ZMosJswzn
+         LGJVsWQGKZCUS75X+Oq52GgxZ0TiSOCOllIhqIZTc6UocR55nJnRhHJ/o14nk7IylYbH
+         vDpWo1ZkAljeHYKDBuULvGh8ljr7S/JM2Uh68y3CzDsGTPGinhQV/Ot3wrS25QevXUt4
+         fAzKx4F0Pj3Vne9TI1x/b1EISZ+21hLncPzSF4Y+oe1ZyVlroPMqEIHRxvyE7AqeunoX
+         OM+A==
+X-Gm-Message-State: AC+VfDyOfcNX4KnOstLBtRr9YJlfWn+VsqX5Yvxz3GcDvA8CyIkYJDWG
+        1xksuUkoi49qHFFKimx37qc0ud1n3tj5KtmjsivFKZPextpn/8VDfyYBOpAX2yFu0Ey4GslGvov
+        /wcORcB8Cn+pBjgLIJJqWtBhG
+X-Received: by 2002:a05:6870:e896:b0:19f:6fae:d5fc with SMTP id q22-20020a056870e89600b0019f6faed5fcmr10541232oan.33.1686812448502;
+        Thu, 15 Jun 2023 00:00:48 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4RTn4EVzEzJIlR5WDuNxNcCA8RtViRGRXrf6wQXuxD0HoRgO8I/0CdFEYSCfLpGO8E99u/Bg==
+X-Received: by 2002:a05:6870:e896:b0:19f:6fae:d5fc with SMTP id q22-20020a056870e89600b0019f6faed5fcmr10541218oan.33.1686812448256;
+        Thu, 15 Jun 2023 00:00:48 -0700 (PDT)
 Received: from localhost.localdomain ([2804:1b3:a800:60ac:48e:4eb0:11b4:f1e8])
-        by smtp.gmail.com with ESMTPSA id d4-20020a0568301b6400b006b2b51fd2ebsm6472317ote.81.2023.06.15.00.00.33
+        by smtp.gmail.com with ESMTPSA id d4-20020a0568301b6400b006b2b51fd2ebsm6472317ote.81.2023.06.15.00.00.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 00:00:35 -0700 (PDT)
+        Thu, 15 Jun 2023 00:00:47 -0700 (PDT)
 From:   Leonardo Bras <leobras@redhat.com>
 To:     Steven Rostedt <rostedt@goodmis.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
@@ -67,9 +67,9 @@ To:     Steven Rostedt <rostedt@goodmis.org>,
         Yury Norov <yury.norov@gmail.com>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: [RFC PATCH v5 1/2] trace,smp: Add tracepoints around remotelly called functions
-Date:   Thu, 15 Jun 2023 03:59:45 -0300
-Message-ID: <20230615065944.188876-5-leobras@redhat.com>
+Subject: [RFC PATCH v5 2/2] trace,smp: Add tracepoints for scheduling remotelly called functions
+Date:   Thu, 15 Jun 2023 03:59:47 -0300
+Message-ID: <20230615065944.188876-7-leobras@redhat.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230615065944.188876-3-leobras@redhat.com>
 References: <20230615065944.188876-3-leobras@redhat.com>
@@ -77,162 +77,136 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The recently added ipi_send_{cpu,cpumask} tracepoints allow finding sources
-of IPIs targeting CPUs running latency-sensitive applications.
+Add a tracepoint for when a CSD is queued to a remote CPU's
+call_single_queue. This allows finding exactly which CPU queued a given CSD
+when looking at a csd_function_{entry,exit} event, and also enables us to
+accurately measure IPI delivery time with e.g. a synthetic event:
 
-For NOHZ_FULL CPUs, all IPIs are interference, and those tracepoints are
-sufficient to find them and work on getting rid of them. In some setups
-however, not *all* IPIs are to be suppressed, but long-running IPI
-callbacks can still be problematic.
+  $ echo 'hist:keys=cpu,csd.hex:ts=common_timestamp.usecs' >\
+      /sys/kernel/tracing/events/smp/csd_queue_cpu/trigger
+  $ echo 'csd_latency unsigned int dst_cpu; unsigned long csd; u64 time' >\
+      /sys/kernel/tracing/synthetic_events
+  $ echo \
+  'hist:keys=common_cpu,csd.hex:'\
+  'time=common_timestamp.usecs-$ts:'\
+  'onmatch(smp.csd_queue_cpu).trace(csd_latency,common_cpu,csd,$time)' >\
+      /sys/kernel/tracing/events/smp/csd_function_entry/trigger
 
-Add a pair of tracepoints to mark the start and end of processing a CSD IPI
-callback, similar to what exists for softirq, workqueue or timer callbacks.
+  $ trace-cmd record -e 'synthetic:csd_latency' hackbench
+  $ trace-cmd report
+  <...>-467   [001]    21.824263: csd_queue_cpu:        cpu=0 callsite=try_to_wake_up+0x2ea func=sched_ttwu_pending csd=0xffff8880076148b8
+  <...>-467   [001]    21.824280: ipi_send_cpu:         cpu=0 callsite=try_to_wake_up+0x2ea callback=generic_smp_call_function_single_interrupt+0x0
+  <...>-489   [000]    21.824299: csd_function_entry:   func=sched_ttwu_pending csd=0xffff8880076148b8
+  <...>-489   [000]    21.824320: csd_latency:          dst_cpu=0, csd=18446612682193848504, time=36
 
+Suggested-by: Valentin Schneider <vschneid@redhat.com>
 Signed-off-by: Leonardo Bras <leobras@redhat.com>
 ---
- include/trace/events/csd.h | 45 ++++++++++++++++++++++++++++++++++++++
- kernel/smp.c               | 25 ++++++++++++++++-----
- 2 files changed, 64 insertions(+), 6 deletions(-)
- create mode 100644 include/trace/events/csd.h
+ include/trace/events/csd.h | 27 +++++++++++++++++++++++++++
+ kernel/smp.c               | 16 +++++-----------
+ 2 files changed, 32 insertions(+), 11 deletions(-)
 
 diff --git a/include/trace/events/csd.h b/include/trace/events/csd.h
-new file mode 100644
-index 000000000000..af1df5200ae6
---- /dev/null
+index af1df5200ae6..67e9d01f80c2 100644
+--- a/include/trace/events/csd.h
 +++ b/include/trace/events/csd.h
-@@ -0,0 +1,45 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM csd
+@@ -7,6 +7,33 @@
+ 
+ #include <linux/tracepoint.h>
+ 
++TRACE_EVENT(csd_queue_cpu,
 +
-+#if !defined(_TRACE_CSD_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _TRACE_CSD_H
++	TP_PROTO(const unsigned int cpu,
++		unsigned long callsite,
++		smp_call_func_t func,
++		struct __call_single_data *csd),
 +
-+#include <linux/tracepoint.h>
-+
-+/*
-+ * Tracepoints for a function which is called as an effect of smp_call_function.*
-+ */
-+DECLARE_EVENT_CLASS(csd_function,
-+
-+	TP_PROTO(smp_call_func_t func, struct __call_single_data *csd),
-+
-+	TP_ARGS(func, csd),
++	TP_ARGS(cpu, callsite, func, csd),
 +
 +	TP_STRUCT__entry(
-+		__field(void *,	func)
-+		__field(void *,	csd)
-+	),
++		__field(unsigned int, cpu)
++		__field(void *, callsite)
++		__field(void *, func)
++		__field(void *, csd)
++		),
 +
-+	TP_fast_assign(
-+		__entry->func	= func;
-+		__entry->csd	= csd;
-+	),
++	    TP_fast_assign(
++		__entry->cpu = cpu;
++		__entry->callsite = (void *)callsite;
++		__entry->func = func;
++		__entry->csd  = csd;
++		),
 +
-+	TP_printk("func=%ps, csd=%p", __entry->func, __entry->csd)
-+);
++	TP_printk("cpu=%u callsite=%pS func=%ps csd=%p",
++		__entry->cpu, __entry->callsite, __entry->func, __entry->csd)
++	);
 +
-+DEFINE_EVENT(csd_function, csd_function_entry,
-+	TP_PROTO(smp_call_func_t func, struct __call_single_data *csd),
-+	TP_ARGS(func, csd)
-+);
-+
-+DEFINE_EVENT(csd_function, csd_function_exit,
-+	TP_PROTO(smp_call_func_t func, struct __call_single_data *csd),
-+	TP_ARGS(func, csd)
-+);
-+
-+#endif /* _TRACE_CSD_H */
-+
-+/* This part must be outside protection */
-+#include <trace/define_trace.h>
+ /*
+  * Tracepoints for a function which is called as an effect of smp_call_function.*
+  */
 diff --git a/kernel/smp.c b/kernel/smp.c
-index 919387be6d4e..7199b5a22043 100644
+index 7199b5a22043..692dbb400701 100644
 --- a/kernel/smp.c
 +++ b/kernel/smp.c
-@@ -27,6 +27,9 @@
- #include <linux/jump_label.h>
- 
- #include <trace/events/ipi.h>
-+#define CREATE_TRACE_POINTS
-+#include <trace/events/csd.h>
-+#undef CREATE_TRACE_POINTS
- 
- #include "smpboot.h"
- #include "sched/smp.h"
-@@ -121,6 +124,14 @@ send_call_function_ipi_mask(struct cpumask *mask)
- 	arch_send_call_function_ipi_mask(mask);
- }
- 
-+static __always_inline void
-+csd_do_func(smp_call_func_t func, void *info, struct __call_single_data *csd)
-+{
-+	trace_csd_function_entry(func, csd);
-+	func(info);
-+	trace_csd_function_exit(func, csd);
-+}
-+
- #ifdef CONFIG_CSD_LOCK_WAIT_DEBUG
- 
- static DEFINE_STATIC_KEY_MAYBE(CONFIG_CSD_LOCK_WAIT_DEBUG_DEFAULT, csdlock_debug_enabled);
-@@ -375,7 +386,7 @@ static int generic_exec_single(int cpu, call_single_data_t *csd)
- 		csd_lock_record(csd);
- 		csd_unlock(csd);
- 		local_irq_save(flags);
--		func(info);
-+		csd_do_func(func, info, NULL);
- 		csd_lock_record(NULL);
- 		local_irq_restore(flags);
- 		return 0;
-@@ -477,7 +488,7 @@ static void __flush_smp_call_function_queue(bool warn_cpu_offline)
- 			}
- 
- 			csd_lock_record(csd);
--			func(info);
-+			csd_do_func(func, info, csd);
- 			csd_unlock(csd);
- 			csd_lock_record(NULL);
- 		} else {
-@@ -508,7 +519,7 @@ static void __flush_smp_call_function_queue(bool warn_cpu_offline)
- 
- 				csd_lock_record(csd);
- 				csd_unlock(csd);
--				func(info);
-+				csd_do_func(func, info, csd);
- 				csd_lock_record(NULL);
- 			} else if (type == CSD_TYPE_IRQ_WORK) {
- 				irq_work_single(csd);
-@@ -522,8 +533,10 @@ static void __flush_smp_call_function_queue(bool warn_cpu_offline)
- 	/*
- 	 * Third; only CSD_TYPE_TTWU is left, issue those.
+@@ -340,7 +340,7 @@ void __smp_call_single_queue(int cpu, struct llist_node *node)
+ 	 * even if we haven't sent the smp_call IPI yet (e.g. the stopper
+ 	 * executes migration_cpu_stop() on the remote CPU).
  	 */
--	if (entry)
--		sched_ttwu_pending(entry);
-+	if (entry) {
-+		csd = llist_entry(entry, typeof(*csd), node.llist);
-+		csd_do_func(sched_ttwu_pending, entry, csd);
-+	}
- }
+-	if (trace_ipi_send_cpu_enabled()) {
++	if (trace_csd_queue_cpu_enabled()) {
+ 		call_single_data_t *csd;
+ 		smp_call_func_t func;
  
+@@ -348,7 +348,7 @@ void __smp_call_single_queue(int cpu, struct llist_node *node)
+ 		func = CSD_TYPE(csd) == CSD_TYPE_TTWU ?
+ 			sched_ttwu_pending : csd->func;
  
-@@ -816,7 +829,7 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
- 		unsigned long flags;
- 
- 		local_irq_save(flags);
--		func(info);
-+		csd_do_func(func, info, NULL);
- 		local_irq_restore(flags);
+-		trace_ipi_send_cpu(cpu, _RET_IP_, func);
++		trace_csd_queue_cpu(cpu, _RET_IP_, func, csd);
  	}
  
+ 	/*
+@@ -741,7 +741,7 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
+ 	int cpu, last_cpu, this_cpu = smp_processor_id();
+ 	struct call_function_data *cfd;
+ 	bool wait = scf_flags & SCF_WAIT;
+-	int nr_cpus = 0, nr_queued = 0;
++	int nr_cpus = 0;
+ 	bool run_remote = false;
+ 	bool run_local = false;
+ 
+@@ -799,21 +799,15 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
+ 			csd->node.src = smp_processor_id();
+ 			csd->node.dst = cpu;
+ #endif
++			trace_csd_queue_cpu(cpu, _RET_IP_, func, csd);
++
+ 			if (llist_add(&csd->node.llist, &per_cpu(call_single_queue, cpu))) {
+ 				__cpumask_set_cpu(cpu, cfd->cpumask_ipi);
+ 				nr_cpus++;
+ 				last_cpu = cpu;
+ 			}
+-			nr_queued++;
+ 		}
+ 
+-		/*
+-		 * Trace each smp_function_call_*() as an IPI, actual IPIs
+-		 * will be traced with func==generic_smp_call_function_single_ipi().
+-		 */
+-		if (nr_queued)
+-			trace_ipi_send_cpumask(cfd->cpumask, _RET_IP_, func);
+-
+ 		/*
+ 		 * Choose the most efficient way to send an IPI. Note that the
+ 		 * number of CPUs might be zero due to concurrent changes to the
 -- 
 2.41.0
 
