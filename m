@@ -2,118 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA9AC730C5C
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 02:48:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8C38730C60
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 02:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235320AbjFOAsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 20:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59326 "EHLO
+        id S236045AbjFOAtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 20:49:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjFOAsK (ORCPT
+        with ESMTP id S229748AbjFOAtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 20:48:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975FF1BC9;
-        Wed, 14 Jun 2023 17:48:09 -0700 (PDT)
+        Wed, 14 Jun 2023 20:49:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B939A1BE3;
+        Wed, 14 Jun 2023 17:49:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A9CF61F4F;
-        Thu, 15 Jun 2023 00:48:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A82DC433C0;
-        Thu, 15 Jun 2023 00:48:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4534A6125A;
+        Thu, 15 Jun 2023 00:49:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89E07C433C0;
+        Thu, 15 Jun 2023 00:49:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686790088;
-        bh=ljTHxAt2/H9b6qwb5RfqtZnhtJZN2CPWpT6t2q4z+44=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=L10bqQ2XIuTNsKR/DVIaAOmKRB34mM779Gb5ukrZ/YtRbXXOzWwwEyxvAnbDVf8Cl
-         V5jHQGhiqRCUw3qNbJa1QCoU4e8Ks050IjZYaywOEXfqdzFBFWRa9tDzsGr4Cayzd1
-         W+TszLJXjmiRJUIFmowq9MNMxuN2anui4gnkHZ8vqtdWB6U4E0Yl3hNn1+q5ciqk/z
-         +AiLHvblE9HxILjr+10y93R2M8853VZziuQt2FLcTDnPy0ALahEabJy0AAVMLIRLJm
-         hGrfjUe776bD17fxL9EuQyQV9e0+BKSkT/+rbFPDK54riiT6YYabTL3sFIBLE1PB+5
-         RsHk4IWAogE2Q==
-Message-ID: <e2afd4bde3e85db358d50553a60a744f.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1686790183;
+        bh=jINt6zP8j0KPwm3QNGyIB+T36vd5weBGWcv1oySUb8g=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=fFpIjYpUsicc3z46XQMXfbVOP0rxoZ3ciubuvOafCo/l5bUinIOJA9RqQgN5V7nvo
+         T0eCcD+/NJNUNBGMBCGaZ6mKmlLKLkKgSfGXC97BrRoPDzC7TvsxPacpAs7AJRwrh7
+         e4n4DYjgSNNNF6vPg6ly9QEr1srJ5XLyomtHebBfrbrkoFYr440llKSUrnLFgFXSKz
+         M8lLZYyMgEN01ii/jJo3LsonGsqfadA+Rl6U6S8EXA8Df/PxhnIStnPAluZdxSskA7
+         jC2KbdNyvYDsO+K2qv4uW04b7Qcwf87tzy9zKmkEq6SXltvrQtC72xpXXZyxJXsBpd
+         kR2CxZaNXzbOA==
+Message-ID: <7276875c-d330-cbd4-ccfc-e7e16bedcaaa@kernel.org>
+Date:   Thu, 15 Jun 2023 09:49:41 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230526-topic-smd_icc-v6-18-263283111e66@linaro.org>
-References: <20230526-topic-smd_icc-v6-0-263283111e66@linaro.org> <20230526-topic-smd_icc-v6-18-263283111e66@linaro.org>
-Subject: Re: [PATCH v6 18/22] clk: qcom: smd-rpm: Separate out interconnect bus clocks
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Evan Green <evgreen@chromium.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v1 25/43] dt-bindings: ata: Add Cirrus EP93xx
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Nikita Shubin <nikita.shubin@maquefel.me>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 14 Jun 2023 17:48:06 -0700
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Michael Peters <mpeters@embeddedts.com>,
+        Kris Bahnsen <kris@embeddedts.com>, linux-ide@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+ <20230601054549.10843-7-nikita.shubin@maquefel.me>
+ <fe8bfbfc-0ce5-d4ea-a2a8-8608fe4e2f97@kernel.org>
+ <20230614190030.GA2547354-robh@kernel.org>
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <20230614190030.GA2547354-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Konrad Dybcio (2023-06-14 11:04:37)
-> The interconnect bus clocks are now handled within the ICC framework.
-> They still however need to get a kickstart *before* we call
-> clk_smd_rpm_enable_scaling(), or RPM will assume that they should all
-> be running at 0 kHz and the system will inevitably die.
->=20
-> Separate them out to ensure such a kickstart can still take place.
->=20
-> As a happy accident, the file got smaller:
->=20
-> Total: Before=3D41951, After=3D41555, chg -0.94%
->=20
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  drivers/clk/qcom/clk-smd-rpm.c | 278 +++++++++++++++++------------------=
-------
->  1 file changed, 115 insertions(+), 163 deletions(-)
->=20
-> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rp=
-m.c
-> index 6e7f0438e8b8..0d1d97659d59 100644
-> --- a/drivers/clk/qcom/clk-smd-rpm.c
-> +++ b/drivers/clk/qcom/clk-smd-rpm.c
-> @@ -498,13 +506,69 @@ DEFINE_CLK_SMD_RPM_XO_BUFFER(div_clk1, 11, 19200000=
-);
->  DEFINE_CLK_SMD_RPM_XO_BUFFER(div_clk2, 12, 19200000);
->  DEFINE_CLK_SMD_RPM_XO_BUFFER(div_clk3, 13, 19200000);
-> =20
-> +static struct clk_smd_rpm *bimc_pcnoc_icc_clks[] =3D {
+On 6/15/23 04:00, Rob Herring wrote:
+> On Fri, Jun 02, 2023 at 08:57:37AM +0900, Damien Le Moal wrote:
+>> On 6/1/23 14:45, Nikita Shubin wrote:
+>>> Add YAML bindings for ep93xx SoC PATA.
+>>>
+>>> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+>>> ---
+>>>
+>>> Notes:
+>>>     v0 -> v1:
+>>>     
+>>>     - renamed file to ep9312-pata
+>>
+>> Looks OK to me but given that this is both for the cirrus,ep9315-pata and
+>> cirrus,ep9312-pata, wouldn't it be better to name the file
+>> cirrus,ep931x-pata.yaml ?
+> 
+> cirrus,ep9312-pata makes sense given that is the common fallback.
+> 
+> Wildcards are okay in filenames (only) when there's not a common 
+> fallback.
 
-Can these be const arrays?
+Got it.
 
-> +       &clk_smd_rpm_bimc_clk,
-> +       &clk_smd_rpm_bus_0_pcnoc_clk,
-> +};
-> +
-[...]
-> @@ -1332,6 +1275,15 @@ static int rpm_smd_clk_probe(struct platform_devic=
-e *pdev)
->                         goto err;
->         }
-> =20
-> +       for (i =3D 0; i < desc->num_icc_clks; i++) {
-> +               if (!desc->icc_clks[i])
-> +                       continue;
-> +
-> +               ret =3D clk_smd_rpm_handoff(desc->icc_clks[i]);
+> 
+>>>     - changed email to dlemoal@kernel.org
+>>>     - dropped label
+>>>     - fixed ident
+>>>
+>>>  .../bindings/ata/cirrus,ep9312-pata.yaml      | 44 +++++++++++++++++++
+>>>  1 file changed, 44 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/ata/cirrus,ep9312-pata.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/ata/cirrus,ep9312-pata.yaml b/Documentation/devicetree/bindings/ata/cirrus,ep9312-pata.yaml
+>>> new file mode 100644
+>>> index 000000000000..3489be55a6fe
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/ata/cirrus,ep9312-pata.yaml
+>>> @@ -0,0 +1,44 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/ata/cirrus,ep9312-pata.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Cirrus Logic EP9312 PATA controller
+>>> +
+>>> +maintainers:
+>>> +  - Damien Le Moal <dlemoal@kernel.org>
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    oneOf:
+>>> +      - const: cirrus,ep9312-pata
+>>
+>> I am not a DT specialist, but isn't this line superfluous since it is listed in
+>> the items ?
+> 
+> No, this entry is for ep9312. The next entry is for ep9315 which is 
+> compatible with ep9312 version. The cirrus,ep9315-pata is there in case 
+> a distinction (e.g. quirk/errata) needs to be made by the driver 
+> without having to change the DT.
 
-This API can probably take a const struct clk_smd_rpm pointer as well.
+Thanks for all the clarification.
+
+Looks good then.
+
+Acked-by: Damien Le Moal <dlemoal@kernel.org>
+
+I can take this patch through the ata tree, but it may be better to have it with
+the entire series (arm tree ?)
+
+-- 
+Damien Le Moal
+Western Digital Research
+
