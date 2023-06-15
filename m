@@ -2,229 +2,388 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 608D2732267
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 00:06:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C46732272
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 00:08:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234796AbjFOWGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 18:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49160 "EHLO
+        id S238095AbjFOWID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 18:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237296AbjFOWGC (ORCPT
+        with ESMTP id S237804AbjFOWIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 18:06:02 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9044C199
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 15:05:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686866749; x=1718402749;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=lNxpqUnP6C+U5stL7E4KlEX/eYS8mRTco+8L86lQcm8=;
-  b=G2hHcbsT3C6LOlXfJZZcHvCGA7Zpvq778ZsmaVKTiuBZY1xmaiBdZnlz
-   fHCXMe89PdZVcVQ3+iQn/8sCfj1IA/fWpsLxOpLhZq1xe9QhkkR1MpV74
-   uwd4L0ioZEEq9nB+Wf4Qfy+4wpzDyluOsuYA3FaHI02MRnw/7ZEXcz3uP
-   iMSptSJpxGjgXacqF3gWtNmSoTJ17gXnIiO6Nzs8JtrkbmN4Hh3nYu/dM
-   c+Uh2SVpXZ9IKEnXoVkXEdlZZUpRZH9TmYRHSfo4Wn2g2gsKqQRu5s6Rh
-   n2Y0BSrLTcur5fj54aPplkuZW20B8nuuKPHPL/rzk9kzS6fw0mDRy5axX
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="356541885"
-X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="356541885"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 15:05:49 -0700
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="745842889"
-X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="745842889"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga001.jf.intel.com with ESMTP; 15 Jun 2023 15:05:48 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 15 Jun 2023 15:05:48 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 15 Jun 2023 15:05:47 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Thu, 15 Jun 2023 15:05:47 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.170)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Thu, 15 Jun 2023 15:05:47 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RrrXYvQIZvkg448aIV0u7HrfJkvm5cgaqSuiIrhOXO4yT6sNerAcjL7Ps4ts956vZoJ6LxzbiiPPtH/+aV5vdKMViM2Gd/wAdTcLOVZTfLutm5LkhwBr3DIQ0Cmckn4JmsxDCsoWBbK7ZmfDnxio8j9U/WbhSSYbAhBRxIZCJFDyWNY0R0oDzkvp4BB/TeSNAlzxDvfacpvBG0fh3wM9AVBO8awhuLu+TlCAsB1zUsf6lxegppWZnE76u9iZHUigG9r3ZlKZ5Sde2rcqXObmIB79NDf6N/MsdvVmgJN2eoWz8tjxNsJFUj2ysIbURYpvwMHyb0oW4tkIPRZUwmRokg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=75iqgDkFCcSaoAclJvsv/4zk7OMEkR4TRKcDyFLN3xQ=;
- b=J7/Q8l85hzASvyOgR1jznrOExCGixxoxbDK0xoQt08lDNJXs2rJL0QJkYA3NOF0P+R7DSJruGuchutn0enjSFmA6nlgH9MxNSdDxDJwbKOLZIeGUjFDVoJx+/WWT8Le2ZDtDyCeLKKphr/Kz17XEUPZUeX3UMxmX9i+HcQIZK6zRN/Txs2xMa0YUEX9G2GIdetoHgE1Sal0Vp03Q2bT8DmIjjMPmvg8Gz3BQ3hNNE5BWr90pTuV+5jzVt4yfHPvAEQi5fGR7nu5zqQAyNaQ34uLEXK3lLJ2SsS3E6DbOsB96WsvW4/tt7OsyjIA0xBJhkG2hEDm0B9ZbcKmoIP2ClQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
- by SN7PR11MB7511.namprd11.prod.outlook.com (2603:10b6:806:347::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.44; Thu, 15 Jun
- 2023 22:05:45 +0000
-Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
- ([fe80::591f:4873:fd80:9a6d]) by SJ2PR11MB7573.namprd11.prod.outlook.com
- ([fe80::591f:4873:fd80:9a6d%6]) with mapi id 15.20.6455.045; Thu, 15 Jun 2023
- 22:05:45 +0000
-Message-ID: <742becbc-40fb-e6da-5070-39a4b4d46a39@intel.com>
-Date:   Thu, 15 Jun 2023 15:05:43 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.2
-Subject: Re: [PATCH v4 05/24] x86/resctrl: Allow RMID allocation to be scoped
- by CLOSID
-Content-Language: en-US
-To:     James Morse <james.morse@arm.com>, <x86@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Fenghua Yu <fenghua.yu@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        <shameerali.kolothum.thodi@huawei.com>,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        <carl@os.amperecomputing.com>, <lcherian@marvell.com>,
-        <bobo.shaobowang@huawei.com>, <tan.shaopeng@fujitsu.com>,
-        <xingxin.hx@openanolis.org>, <baolin.wang@linux.alibaba.com>,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Xin Hao <xhao@linux.alibaba.com>, <peternewman@google.com>,
-        <dfustini@baylibre.com>
-References: <20230525180209.19497-1-james.morse@arm.com>
- <20230525180209.19497-6-james.morse@arm.com>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <20230525180209.19497-6-james.morse@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0233.namprd03.prod.outlook.com
- (2603:10b6:a03:39f::28) To SJ2PR11MB7573.namprd11.prod.outlook.com
- (2603:10b6:a03:4d2::10)
+        Thu, 15 Jun 2023 18:08:00 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E7F272D
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 15:07:54 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id e9e14a558f8ab-33b7f217dd0so62415ab.0
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 15:07:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686866874; x=1689458874;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KEqKkThMQzQYaVyTD2kgo4GkHwhHxMZnpLhGp1yGLGI=;
+        b=UUkUJO8xJ5iMueO5x9c8SwYef9EZOHxDfvAZbgkfxaEvGaVvhAUhHii88SWwduaCuJ
+         3LZR94Yyt/OxjoUYt+mt6EilDMbtFPRgpBePZI0CIn4Imt966ERgil3bo/f7GRgiFl+h
+         l7zgxquvdnnIm/CFlsjcIq1Nd+gwekG/Ot8ggAFy67rmjxInj9s4Rlwb8lI4GYEHG4Ki
+         YIagzlm6SMj37/Os5RmAZ034nyBC16BD1QQHIlGIlk9zHkq9sEL2FddgroYHSzCz5g9v
+         rNCl5B9GZgqZciU2HSVXf6ysfLlvH/OQ/XHbv3Aws7qZ3Q+jwtmNuhX/bzzBBAg0gVZd
+         9u0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686866874; x=1689458874;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KEqKkThMQzQYaVyTD2kgo4GkHwhHxMZnpLhGp1yGLGI=;
+        b=bB4D/7hpYxRCBRf+Ey0R6DFgOvo2vMajKgCOWaK3KngJNzn8joRYUo/WPC4I3y5ArD
+         8uDX7q/1kbsqgHRefssdYv0BETMvd36pqEMSH5le9Xodl0y3UzBy1xFKOJtnWLyMbpDv
+         Pushbna4MTZfhSa/tP8E4wJ2DEemhzEzTVIt6rTDcMcdwL4WjRQoaYleQnnJvdOAr3Dd
+         rGSeL7pADtoJVFmAafku/8BUNtrAm8qUhS9y6Q4oi/X6sTzCNFX0Y4MS1MfkERvogi1d
+         v1H5XeoI0rtikOiXnEnY+lkPQ1/pYgKKfyEKxLj9rn3wBOfjb6AQaXqZUQoVUl+izIMd
+         rJQA==
+X-Gm-Message-State: AC+VfDzu0yPo/imt2PpQzI2ioH30AbpByCyPUYZ5lkl42/v9wqWqt4c2
+        5FG8iH6WaiEJ+KcFuh5hJItHdw==
+X-Google-Smtp-Source: ACHHUZ5PSUsX4TBlglte5PXxwY7OQy07gHXQmXZtXOgld5DvEn3H3RXARC81CLd3B/5nJfh4T753eA==
+X-Received: by 2002:a05:6e02:1caa:b0:33d:8c8a:cd0e with SMTP id x10-20020a056e021caa00b0033d8c8acd0emr242053ill.20.1686866873554;
+        Thu, 15 Jun 2023 15:07:53 -0700 (PDT)
+Received: from google.com ([2620:15c:183:202:e767:3e73:f240:e08c])
+        by smtp.gmail.com with ESMTPSA id h21-20020a02b615000000b0041d89b79fdasm5824838jam.20.2023.06.15.15.07.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 15:07:53 -0700 (PDT)
+Date:   Thu, 15 Jun 2023 16:07:48 -0600
+From:   Yu Zhao <yuzhao@google.com>
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Hugh Dickins <hughd@google.com>
+Cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v2 07/23] mips: update_mmu_cache() can replace
+ __update_tlb()
+Message-ID: <ZIuLtABQvb8yiMih@google.com>
+References: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com>
+ <178970b0-1539-8aac-76fd-972c6c46ec17@google.com>
+ <20230614231758.GA1503611@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|SN7PR11MB7511:EE_
-X-MS-Office365-Filtering-Correlation-Id: 534ef48a-5f2a-427f-452e-08db6decab49
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: O3sxGAzTjgyQNGTn1pijGGF/Otus92CaEEw8MIgPx3Ytx8173duxjzNttywT0S1LqIhW1Um86h9OlcVsNZN3lhYIvQS31UhL/RgMAema6bU1pVhGc+deRGlPNQmnCB37d3X4nmj3QK8IwYLAWbxfJ9XEICHPGohUwZkzXcRQ4V0Gimf2Xvb7U2oDogM0LPbrJ01GYa0dvjqqGCZbJSUnlH3FSYynS2sPAgRVJJMs6qxHGPffkm76oLcxjR5Ta8QJWLH0lVp5Wc2PUjtBTzSEK1yN1ioyYeR1WF3HKUorpjFz3ytSeRhf1YyHpDPDE/xGKq3j0EiZ2SmNiQahaklupubUkg9yFstxgTY/ewTszKPNDoyGHFgg+C9Nv+s7I2VPu+LV6bIjAJtoxSrduTsi9Up278DkuuZ42gb7OYlk8fTndln2IpXlxxoJuokyZfuT2X9XMC9+/dSynU2/ZRCuYcCI5wNdNH8biFylDEz2PsrQU5eCYAURyFc8sawrRDP5hNSN0sHmDoHCNykhqhXmrmCDDfnNlPPOGLxbR0Pd2Yc5CqThWRl6y9ISKyiGr6O7379Q0LLixa2wTEAFVS9/fx+Xmnt8s2rwPGvftfo8xMRBpGne51GI++pJN5+vgsqRtQF8SDiDfhfkDt703aJuTA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(346002)(136003)(366004)(396003)(39860400002)(451199021)(31686004)(66476007)(66556008)(66946007)(316002)(54906003)(478600001)(4326008)(36756003)(86362001)(2616005)(31696002)(6506007)(83380400001)(53546011)(186003)(6512007)(26005)(8936002)(41300700001)(44832011)(5660300002)(8676002)(2906002)(7416002)(6486002)(82960400001)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SGp3V0RMWTJvbzFKTnZrYkp2YlVtWHYwcUlRMmQreGNxRUlpYVlaRGJPUzl1?=
- =?utf-8?B?VEJNNC9iMUZVa1NCeW02bHlPdUU3b3ljYmowdExkL0pTUWJyTktSWjlEbEdB?=
- =?utf-8?B?RktabnVHK1R4Q3FtYjlRUWgvZ1dUSlV5dTF1N1BIamM0NzVxUUNVS0Ryekky?=
- =?utf-8?B?Lzh2cWxTeHlva1N2YzFDSlRQbUR5djB5U2liWnRHUTZjVnlMZS8vcnU3MzlH?=
- =?utf-8?B?YjkrM29VZ0ZCMzNwYU9OczdETzI1blBLV1NXU3BQaGNDSEdmTFBZakdNZzRp?=
- =?utf-8?B?am8zSGoyc3lGTjM5Z0NpcjErYXEwMCs1dzVBU3RpTCthUHRiYWMxWXFxbHFX?=
- =?utf-8?B?N08velhGcFdReHl3bm9hVUwwa093ZTkzSG9IVCttSzhiYVptczVzc1ZSalpV?=
- =?utf-8?B?SklMYW5Ka3lZWUVkaU4wbWY0WndBVjV4WFBqZkE1R0E2UmxNL1k4SDBaMEc2?=
- =?utf-8?B?K3ZGY3JURzRBMlE3SzlDaVA2dHkwMHBNUzBaamVHQjhBV2N3Qys0bzlxUmNy?=
- =?utf-8?B?dFE1MC85RXZRemI0dzU5NTNlZ3UzakdUcjQvb1g4WTBIMzVqYWJaYVBSRWNE?=
- =?utf-8?B?MXNVeklJQVhnVmlXZ0hFUjRyeGpsT1lkSmdRcWVsLzJlTTZaL2c1cmdxc2xv?=
- =?utf-8?B?Tm1BQURSNFVYTnQzRHp6TllHTitGZ2hQVTQxYjIxcis0SVczRkduNktLWXhv?=
- =?utf-8?B?MzViQ3FNMytwand0RHkvdm40VnJ2a1NjWFVmV1BDS2ZWOGkvYVRZNGNqWWFp?=
- =?utf-8?B?WXRaZSsvb0wzR0FYTm1jaGxRMkxFLy8xc3cwWDlYOUNUdlB5VEZvU2lRK2VF?=
- =?utf-8?B?ekVEek9DT0lDZVJ1SWsxcHg2Y01JK0l6QWlXSkxhYzkwMWw1OXhJOTNRV05z?=
- =?utf-8?B?MjUvdUhHRnViTDBWU3hBVy9PbTNZMklUQ2tBUXR4NGZiQ2xiMkJQMng0cHZs?=
- =?utf-8?B?N0RpS0FNbEw4VlRLTm81V1djMDBZT3lXRWxqYmNuK2Z5L3FKQ0JBVXROdVNJ?=
- =?utf-8?B?WlVrYjNEM1lFcDhsZ1Y2UWpNZjFEK1daazRseWVtZkFvblFpdTdyaldtU1lV?=
- =?utf-8?B?RDNGZURDWG4xcWxLL1B3RTRFREZacFpBZCt6SDlmTWM2cXFhbjFRdStOc2pH?=
- =?utf-8?B?M2c5NThRV2dPLzZwM3RqUnRLaEtXVGMvelluTUlpTkhQdW1QWGszb3Vyb2c4?=
- =?utf-8?B?ZFhGWXZxYkJhZWFlRGJVRDBVMVd4dDdZeWx0NnhFRC91MXhrSTVmS1o5Z3dN?=
- =?utf-8?B?enp3SmlsQTlRQVNZSDgwcTZUdlN2UE4wY3pCTkxrdTdCWW81NWtkUjhMTjFX?=
- =?utf-8?B?K0VMT0VhN0N6UFhVQlZRdkg5UWV0bEVYay9GZlVrQWZGNkQ1ZnI4SnFRdWJW?=
- =?utf-8?B?Y0h1MDJyeTdaVzFraVdLVnh0MnNTR3FOajdyWG9rU3dad0RoSHNnWWlrZG9u?=
- =?utf-8?B?YjZyMDk2Q3pXS0ZrR0FDZWxkekhYcjBBbmkrMXY4My9oK0xKWk16VnpOM09h?=
- =?utf-8?B?cjNhWHl6Um5YQkZvY3JzQXpDZEpjTWtJYklkNmxtOEJ6UFM1dlNtNVdXNm5Y?=
- =?utf-8?B?WVhjd0ZKTHRFM1Q5bzRreUFyR2dGbS9KM3E4L01Dd3kvcEtUWE1LWFROcUVP?=
- =?utf-8?B?UDNoVnlUU25kejh0U3VQZkd6em5ScVJSNDVJTTYvSE5nZTYzMUxCTW03dDN5?=
- =?utf-8?B?dXprL2dvS3pnRXNjNC9OMmNwb25GeWJsS0UxYytYUzdBYUVMTTh1RHFnL0Vx?=
- =?utf-8?B?TnRNVWxXN3ZzSmRHZ1Y1Ny9md1ZkbHZ0MWVlSVl6U1U3TUdWZi9uak5iZEhF?=
- =?utf-8?B?Z0xKeGRmUGhzOW94WWxMTlpRVGJ6cWhRSjJtRWxUbjIxaGhzZ2xpM2lEV1ll?=
- =?utf-8?B?S1hXazNEVkxnZkZTcmlEaDVwR00zWkt5N2lVYnowYmRqcFhnOFZJcTlKdDM5?=
- =?utf-8?B?WjExVHJkWkZYN1BlSDkzUDI0UEgvWEErcitDU29YZ011UUEzR1ZwVXJhZ0Vy?=
- =?utf-8?B?TEFuQWU2a2g3SUhvKzAvR0N1V3pXVVhyakplNmxmeEt3aWJ3REZQWEIwNS95?=
- =?utf-8?B?bDZ6Y0tRZEFrOFZtWml0M3hudzAzMkdOZzBnWnN3M0RIYW9Fb3BkeG5VZk1h?=
- =?utf-8?B?VjNudlpCcVhtOUhSREdQQjJiMjVXVHZWSytnWWVNVkVoeU5Jd0pSTkZ0dWla?=
- =?utf-8?B?MUE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 534ef48a-5f2a-427f-452e-08db6decab49
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 22:05:45.7966
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zGdTiPxnpMe5uHvHYOiostEtidWdvW29kzaI4oHz4sUBC3Jne5CPprzDMhz8Ua5Koxnj/VadonpnnnsnM9kycERt4kJjc7wDNo/xewfTqzo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB7511
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230614231758.GA1503611@dev-arch.thelio-3990X>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi James,
+On Wed, Jun 14, 2023 at 04:17:58PM -0700, Nathan Chancellor wrote:
+> Hi Hugh,
+> 
+> On Thu, Jun 08, 2023 at 12:17:24PM -0700, Hugh Dickins wrote:
+> > Don't make update_mmu_cache() a wrapper around __update_tlb(): call it
+> > directly, and use the ptep (or pmdp) provided by the caller, instead of
+> > re-calling pte_offset_map() - which would raise a question of whether a
+> > pte_unmap() is needed to balance it.
+> > 
+> > Check whether the "ptep" provided by the caller is actually the pmdp,
+> > instead of testing pmd_huge(): or test pmd_huge() too and warn if it
+> > disagrees?  This is "hazardous" territory: needs review and testing.
+> > 
+> > Signed-off-by: Hugh Dickins <hughd@google.com>
+> > ---
+> >  arch/mips/include/asm/pgtable.h | 15 +++------------
+> >  arch/mips/mm/tlb-r3k.c          |  5 +++--
+> >  arch/mips/mm/tlb-r4k.c          |  9 +++------
+> >  3 files changed, 9 insertions(+), 20 deletions(-)
+> > 
+> 
+> I just bisected a crash while powering down a MIPS machine in QEMU to
+> this change as commit 8044511d3893 ("mips: update_mmu_cache() can
+> replace __update_tlb()") in linux-next. Unfortunately, I can still
+> reproduce it with the existing fix you have for this change on the
+> mailing list, which is present in next-20230614.
+> 
+> I can reproduce it with the GCC 13.1.0 on kernel.org [1].
+> 
+>   $ make -skj"$(nproc)" ARCH=mips CROSS_COMPILE=mips-linux- mrproper malta_defconfig vmlinux
+> 
+>   $ qemu-system-mipsel \
+>       -display none \
+>       -nodefaults \
+>       -cpu 24Kf \
+>       -machine malta \
+>       -kernel vmlinux \
+>       -initrd rootfs.cpio \
+>       -m 512m \
+>       -serial mon:stdio
+>   ...
+>   Linux version 6.4.0-rc6-next-20230614 (nathan@dev-arch.thelio-3990X) (mips-linux-gcc (GCC) 13.1.0, GNU ld (GNU Binutils) 2.40) #1 SMP Wed Jun 14 16:13:02 MST 2023
+>   ...
+>   Run /init as init process
+>   process '/bin/busybox' started with executable stack
+>   do_page_fault(): sending SIGSEGV to init for invalid read access from 0000003c
+>   epc = 77b893dc in ld-uClibc-1.0.39.so[77b84000+8000]
+>   ra  = 77b8930c in ld-uClibc-1.0.39.so[77b84000+8000]
+>   Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+>   ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]---
+> 
+> The rootfs is available at [2] if it is needed. I am more than happy to
+> provide additional information or test patches if necessary.
+> 
+> [1]: https://mirrors.edge.kernel.org/pub/tools/crosstool/
+> [2]: https://github.com/ClangBuiltLinux/boot-utils/releases/download/20230609-194440/mipsel-rootfs.cpio.zst
 
-On 5/25/2023 11:01 AM, James Morse wrote:
+Seeing this on real h/w as well (just to confirm).
 
-> diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
-> index bcc25f5339c0..27e731c7de72 100644
-> --- a/arch/x86/kernel/cpu/resctrl/monitor.c
-> +++ b/arch/x86/kernel/cpu/resctrl/monitor.c
-> @@ -337,24 +337,49 @@ bool has_busy_rmid(struct rdt_resource *r, struct rdt_domain *d)
->  	return find_first_bit(d->rmid_busy_llc, idx_limit) != idx_limit;
->  }
->  
-> -/*
-> - * As of now the RMIDs allocation is global.
-> - * However we keep track of which packages the RMIDs
-> - * are used to optimize the limbo list management.
-> - */
-> -int alloc_rmid(void)
-> +static struct rmid_entry *resctrl_find_free_rmid(u32 closid)
->  {
-> -	struct rmid_entry *entry;
-> -
-> -	lockdep_assert_held(&rdtgroup_mutex);
-> +	struct rmid_entry *itr;
-> +	u32 itr_idx, cmp_idx;
->  
->  	if (list_empty(&rmid_free_lru))
-> -		return rmid_limbo_count ? -EBUSY : -ENOSPC;
-> +		return rmid_limbo_count ? ERR_PTR(-EBUSY) : ERR_PTR(-ENOSPC);
-> +
-> +	list_for_each_entry(itr, &rmid_free_lru, list) {
-> +		/*
-> +		 * get the index of this free RMID, and the index it would need
-> +		 * to be if it were used with this CLOSID.
-
-Please start sentences with a capital letter.
-
-> +		 * If the CLOSID is irrelevant on this architecture, these will
-> +		 * always be the same meaning the compiler can reduce this loop
-> +		 * to a single list_entry_first() call.
-> +		 */
-> +		itr_idx = resctrl_arch_rmid_idx_encode(itr->closid, itr->rmid);
-> +		cmp_idx = resctrl_arch_rmid_idx_encode(closid, itr->rmid);
-> +
-> +		if (itr_idx == cmp_idx)
-> +			return itr;
-> +	}
-> +
-> +	return ERR_PTR(-ENOSPC);
-> +}
-> +
-
-Reinette
-
+Linux version 6.4.0-rc4-00437-g4bab5c42a698 (root@yuzhao.bld.corp.google.com) (mips64el-linux-gnuabi64-gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40) #3 SMP PREEMPT Thu Jun 15 01:05:20 MDT 2023
+Skipping L2 locking due to reduced L2 cache size
+CVMSEG size: 2 cache lines (256 bytes)
+printk: bootconsole [early0] enabled
+CPU0 revision is: 000d9602 (Cavium Octeon III)
+FPU revision is: 00739600
+Kernel sections are not in the memory maps
+Wasting 243712 bytes for tracking 4352 unused pages
+Initrd not found or empty - disabling initrd
+Using passed Device Tree.
+software IO TLB: SWIOTLB bounce buffer size adjusted to 0MB
+software IO TLB: area num 1.
+software IO TLB: mapped [mem 0x000000000370d000-0x000000000374d000] (0MB)
+Primary instruction cache 78kB, virtually tagged, 39 way, 16 sets, linesize 128 bytes.
+Primary data cache 32kB, 32-way, 8 sets, linesize 128 bytes.
+Zone ranges:
+  DMA32    [mem 0x0000000001100000-0x00000000efffffff]
+  Normal   empty
+Movable zone start for each node
+Early memory node ranges
+  node   0: [mem 0x0000000001100000-0x0000000003646fff]
+  node   0: [mem 0x0000000003700000-0x000000000fafffff]
+  node   0: [mem 0x0000000020000000-0x000000004ebfffff]
+Initmem setup node 0 [mem 0x0000000001100000-0x000000004ebfffff]
+On node 0, zone DMA32: 4352 pages in unavailable ranges
+On node 0, zone DMA32: 185 pages in unavailable ranges
+On node 0, zone DMA32: 1280 pages in unavailable ranges
+On node 0, zone DMA32: 5120 pages in unavailable ranges
+percpu: Embedded 15 pages/cpu s24368 r8192 d28880 u61440
+pcpu-alloc: s24368 r8192 d28880 u61440 alloc=15*4096
+pcpu-alloc: [0] 0 [0] 1 [0] 2 [0] 3 
+Kernel command line:  loglevel=8 console=ttyS0,115200
+printk: log_buf_len individual max cpu contribution: 4096 bytes
+printk: log_buf_len total cpu_extra contributions: 12288 bytes
+printk: log_buf_len min size: 16384 bytes
+printk: log_buf_len: 32768 bytes
+printk: early log buf free: 14184(86%)
+Dentry cache hash table entries: 131072 (order: 8, 1048576 bytes, linear)
+Inode-cache hash table entries: 65536 (order: 7, 524288 bytes, linear)
+Built 1 zonelists, mobility grouping on.  Total pages: 247772
+mem auto-init: stack:all(zero), heap alloc:off, heap free:off
+Memory: 950032K/1004828K available (8058K kernel code, 575K rwdata, 1880K rodata, 27488K init, 158K bss, 54796K reserved, 0K cma-reserved)
+rcu: Preemptible hierarchical RCU implementation.
+rcu: 	RCU event tracing is enabled.
+rcu: 	RCU restricting CPUs from NR_CPUS=32 to nr_cpu_ids=4.
+rcu: RCU calculated value of scheduler-enlistment delay is 10 jiffies.
+rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
+NR_IRQS: 512
+CIB interrupt controller probed: 800107000000e000 23
+CIB interrupt controller probed: 800107000000e200 12
+CIB interrupt controller probed: 800107000000e400 6
+CIB interrupt controller probed: 800107000000ec00 15
+CIB interrupt controller probed: 800107000000e600 4
+CIB interrupt controller probed: 800107000000e800 11
+CIB interrupt controller probed: 800107000000e900 11
+rcu: srcu_init: Setting srcu_struct sizes based on contention.
+clocksource: OCTEON_CVMCOUNT: mask: 0xffffffffffffffff max_cycles: 0x1cd42e4dffb, max_idle_ns: 881590591483 ns
+Calibrating delay loop (skipped) preset value.. 2000.00 BogoMIPS (lpj=10000000)
+pid_max: default: 32768 minimum: 301
+LSM: initializing lsm=capability,integrity
+Mount-cache hash table entries: 2048 (order: 2, 16384 bytes, linear)
+Mountpoint-cache hash table entries: 2048 (order: 2, 16384 bytes, linear)
+rcu: Hierarchical SRCU implementation.
+rcu: 	Max phase no-delay instances is 1000.
+smp: Bringing up secondary CPUs ...
+SMP: Booting CPU01 (CoreId  1)...
+CPU1 revision is: 000d9602 (Cavium Octeon III)
+FPU revision is: 00739600
+SMP: Booting CPU02 (CoreId  2)...
+CPU2 revision is: 000d9602 (Cavium Octeon III)
+FPU revision is: 00739600
+SMP: Booting CPU03 (CoreId  3)...
+CPU3 revision is: 000d9602 (Cavium Octeon III)
+FPU revision is: 00739600
+smp: Brought up 1 node, 4 CPUs
+devtmpfs: initialized
+clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+futex hash table entries: 1024 (order: 5, 131072 bytes, linear)
+NET: Registered PF_NETLINK/PF_ROUTE protocol family
+PCIe: Initializing port 0
+PCIe: BIST2 FAILED for port 0 (0x0000000000000003)
+PCIe: Link timeout on port 0, probably the slot is empty
+PCIe: Initializing port 1
+PCIe: BIST FAILED for port 1 (0xffffffffffffffff)
+PCIe: Link timeout on port 1, probably the slot is empty
+HugeTLB: registered 2.00 MiB page size, pre-allocated 0 pages
+HugeTLB: 0 KiB vmemmap can be freed for a 2.00 MiB page
+SCSI subsystem initialized
+libata version 3.00 loaded.
+usbcore: registered new interface driver usbfs
+usbcore: registered new interface driver hub
+usbcore: registered new device driver usb
+pps_core: LinuxPPS API ver. 1 registered
+pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+PTP clock support registered
+EDAC MC: Ver: 3.0.0
+PCI host bridge to bus 0000:00
+pci_bus 0000:00: root bus resource [mem 0x1000000000000]
+pci_bus 0000:00: root bus resource [io  0x0000]
+pci_bus 0000:00: No busn resource found for root bus, will use [bus 00-ff]
+pci_bus 0000:00: busn_res: [bus 00-ff] end is updated to 00
+vgaarb: loaded
+clocksource: Switched to clocksource OCTEON_CVMCOUNT
+NET: Registered PF_INET protocol family
+IP idents hash table entries: 16384 (order: 5, 131072 bytes, linear)
+tcp_listen_portaddr_hash hash table entries: 512 (order: 1, 8192 bytes, linear)
+Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
+TCP established hash table entries: 8192 (order: 4, 65536 bytes, linear)
+TCP bind hash table entries: 8192 (order: 6, 262144 bytes, linear)
+TCP: Hash tables configured (established 8192 bind 8192)
+UDP hash table entries: 512 (order: 2, 16384 bytes, linear)
+UDP-Lite hash table entries: 512 (order: 2, 16384 bytes, linear)
+NET: Registered PF_UNIX/PF_LOCAL protocol family
+RPC: Registered named UNIX socket transport module.
+RPC: Registered udp transport module.
+RPC: Registered tcp transport module.
+RPC: Registered tcp NFSv4.1 backchannel transport module.
+PCI: CLS 0 bytes, default 128
+platform 1180068000000.uctl: clocks initialized.
+platform 1180069000000.uctl: clocks initialized.
+Starting KVM with MIPS VZ extensions
+workingset: timestamp_bits=62 max_order=18 bucket_order=0
+NFS: Registering the id_resolver key type
+Key type id_resolver registered
+Key type id_legacy registered
+nfs4filelayout_init: NFSv4 File Layout Driver Registering...
+nfs4flexfilelayout_init: NFSv4 Flexfile Layout Driver Registering...
+io scheduler mq-deadline registered
+io scheduler kyber registered
+io scheduler bfq registered
+gpio gpiochip0: Static allocation of GPIO base is deprecated, use dynamic allocation.
+octeon_gpio 1070000000800.gpio-controller: OCTEON GPIO driver probed.
+Serial: 8250/16550 driver, 2 ports, IRQ sharing disabled
+printk: console [ttyS0] disabled
+1180000000800.serial: ttyS0 at MMIO 0x1180000000800 (irq = 34, base_baud = 25000000) is a OCTEON
+printk: console [ttyS0] enabled
+printk: console [ttyS0] enabled
+printk: bootconsole [early0] disabled
+printk: bootconsole [early0] disabled
+1180000000c00.serial: ttyS1 at MMIO 0x1180000000c00 (irq = 35, base_baud = 25000000) is a OCTEON
+loop: module loaded
+Driver 'pata_octeon_cf' needs updating - please use bus_type methods
+slram: not enough parameters.
+spi-octeon 1070000001000.spi: OCTEON SPI bus driver
+process '/bin/kmod' started with executable stack
+do_page_fault(): sending SIGSEGV to modprobe for invalid read access from 0000000000000298
+epc = 000000fff3346470 in ld.so.1[fff3328000+2e000]
+ra  = 000000fff33456d0 in ld.so.1[fff3328000+2e000]
+do_page_fault(): sending SIGSEGV to modprobe for invalid read access from 0000000000000298
+epc = 000000fff3c78470 in ld.so.1[fff3c5a000+2e000]
+ra  = 000000fff3c776d0 in ld.so.1[fff3c5a000+2e000]
+do_page_fault(): sending SIGSEGV to modprobe for invalid read access from 0000000000021da8
+epc = 000000fff35aa2c0 in ld.so.1[fff358d000+2e000]
+ra  = 000000fff35aa688 in ld.so.1[fff358d000+2e000]
+do_page_fault(): sending SIGSEGV to modprobe for invalid read access from 0000000000000298
+epc = 000000fff34cc470 in ld.so.1[fff34ae000+2e000]
+ra  = 000000fff34cb6d0 in ld.so.1[fff34ae000+2e000]
+mdio_octeon 1180000001800.mdio: Probed
+mdio_octeon 1180000001900.mdio: Probed
+dwc3 1680000000000.xhci: Configuration mismatch. dr_mode forced to host
+dwc3 1690000000000.xhci: Configuration mismatch. dr_mode forced to host
+xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
+xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 1
+xhci-hcd xhci-hcd.0.auto: hcc params 0x0220f06d hci version 0x100 quirks 0x0000000002010010
+xhci-hcd xhci-hcd.0.auto: irq 25, io mem 0x1680000000000
+dwc3 1680000000000.xhci: xhci_plat_probe get usb3phy fail (ret=-6)
+xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
+xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 2
+xhci-hcd xhci-hcd.0.auto: Host supports USB 3.0 SuperSpeed
+hub 1-0:1.0: USB hub found
+hub 1-0:1.0: 1 port detected
+usb usb2: We don't know the algorithms for LPM for this host, disabling LPM.
+hub 2-0:1.0: USB hub found
+hub 2-0:1.0: 1 port detected
+xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
+xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned bus number 3
+xhci-hcd xhci-hcd.1.auto: hcc params 0x0220f06d hci version 0x100 quirks 0x0000000002010010
+xhci-hcd xhci-hcd.1.auto: irq 26, io mem 0x1690000000000
+dwc3 1690000000000.xhci: xhci_plat_probe get usb3phy fail (ret=-6)
+xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
+xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned bus number 4
+xhci-hcd xhci-hcd.1.auto: Host supports USB 3.0 SuperSpeed
+hub 3-0:1.0: USB hub found
+hub 3-0:1.0: 1 port detected
+usb usb4: We don't know the algorithms for LPM for this host, disabling LPM.
+hub 4-0:1.0: USB hub found
+hub 4-0:1.0: 1 port detected
+usbcore: registered new interface driver usb-storage
+i2c-octeon 1180000001000.i2c: probed
+i2c-octeon 1180000001200.i2c: probed
+octeon_wdt: Initial granularity 5 Sec
+EDAC DEVICE0: Giving out device to module octeon-cpu controller cache: DEV octeon_pc_edac (INTERRUPT)
+EDAC DEVICE1: Giving out device to module octeon-l2c controller octeon_l2c_err: DEV octeon_l2c_edac (POLLED)
+octeon_lmc_edac octeon_lmc_edac.0: Disabled (ECC not enabled)
+Interface 0 has 4 ports (SGMII)
+Interface 1 has 4 ports (SGMII)
+Interface 3 has 4 ports (LOOP)
+NET: Registered PF_INET6 protocol family
+Segment Routing with IPv6
+In-situ OAM (IOAM) with IPv6
+sit: IPv6, IPv4 and MPLS over IPv4 tunneling driver
+NET: Registered PF_PACKET protocol family
+Key type dns_resolver registered
+OF: fdt: not creating '/sys/firmware/fdt': CRC check failed
+Freeing unused kernel image (initmem) memory: 27488K
+This architecture does not have kernel memory protection.
+Run /init as init process
+  with arguments:
+    /init
+  with environment:
+    HOME=/
+    TERM=linux
+do_page_fault(): sending SIGSEGV to init for invalid read access from 0000000000021da8
+epc = 000000fff3a542c0 in ld.so.1[fff3a37000+2e000]
+ra  = 000000fff3a54688 in ld.so.1[fff3a37000+2e000]
+Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]---
