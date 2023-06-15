@@ -2,56 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D54C73103C
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:10:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5170273102B
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244699AbjFOHKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 03:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36062 "EHLO
+        id S244630AbjFOHIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 03:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244552AbjFOHJq (ORCPT
+        with ESMTP id S244199AbjFOHHv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 03:09:46 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8582962
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:08:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686812911; x=1718348911;
-  h=date:from:to:cc:subject:message-id;
-  bh=budWuW+rvZulEzVhDm3EKta8WIrORZbdaRudLr7OV0E=;
-  b=bS54NLPxgy2uhsLDT1VeaD4q9gqxiHmpyFXSk1/IJljo4HADCvGxPGcb
-   Ll0FQXBMBvEPpLvKU91YLkBPPjbSmLNmYRmZpWA7t0yWYH2ZMztfoWxsP
-   waa98ALtsgOXEw+JKKMqM9bw26zNQEBmWCvld7rNB2zmm5qBS8nuBCeww
-   qCu3pwLiC6vLfbswUHpq7MZ0h2u8xJ2nNeT+QbCLEFsvgHPZGFUIaXx1+
-   d5JUerXt4muoANsChAOTu6gE1sIQu4MBGIFeQX81z/X+Pj41I9Bt6szWI
-   Mbw1Q1GWqFNHTVf7ikNmByJC2WMnvJEu/H1pTULlR/nu/V7frUnL4Leu6
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="357715076"
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="357715076"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 00:08:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="959083117"
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="959083117"
-Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 15 Jun 2023 00:08:07 -0700
-Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q9h4c-0001Zx-0T;
-        Thu, 15 Jun 2023 07:07:50 +0000
-Date:   Thu, 15 Jun 2023 15:07:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 45af195ec1293aa726934b9311d94bde94e6309d
-Message-ID: <202306151511.HCcddq2A-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        Thu, 15 Jun 2023 03:07:51 -0400
+Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DE9198D
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 00:07:30 -0700 (PDT)
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-594-oWywjiogNEqfBUu3vDnHqA-1; Thu, 15 Jun 2023 03:07:27 -0400
+X-MC-Unique: oWywjiogNEqfBUu3vDnHqA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2ABC33849534;
+        Thu, 15 Jun 2023 07:07:22 +0000 (UTC)
+Received: from hog (unknown [10.45.224.17])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 11D322026D49;
+        Thu, 15 Jun 2023 07:07:19 +0000 (UTC)
+Date:   Thu, 15 Jun 2023 09:07:18 +0200
+From:   Sabrina Dubroca <sd@queasysnail.net>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Raed Salem <raeds@nvidia.com>,
+        Lior Nahmanson <liorna@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Hannes Frederic Sowa <hannes@stressinduktion.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org
+Subject: Re: [PATCH] net: macsec: fix double free of percpu stats
+Message-ID: <ZIq4prrdiXN77Y9N@hog>
+References: <20230613192220.159407-1-pchelkin@ispras.ru>
+ <20230613200150.361bc462@kernel.org>
+ <ZImx5pp98OSNnv4I@hog>
+ <20230614090126.149049b1@kernel.org>
+ <20230614201714.lgwpk4wyojribbyj@fpc>
+ <ZIot16xcgb7l8wer@hog>
+ <20230614230239.02c388a8@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230614230239.02c388a8@kernel.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,52 +64,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 45af195ec1293aa726934b9311d94bde94e6309d  Merge x86/build into tip/master
+2023-06-14, 23:02:39 -0700, Jakub Kicinski wrote:
+> On Wed, 14 Jun 2023 23:15:03 +0200 Sabrina Dubroca wrote:
+> > It's been 7 years... your guess is about as good as mine :/
+> > 
+> > I wouldn't bother reshuffling the device creation code just to make
+> > the handling of rare failures a bit nicer.
+> 
+> Would you be willing to venture a review tag?
 
-elapsed time: 726m
-
-configs tested: 33
-configs skipped: 90
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230614   clang
-i386                 randconfig-i002-20230614   clang
-i386                 randconfig-i003-20230614   clang
-i386                 randconfig-i004-20230614   clang
-i386                 randconfig-i005-20230614   clang
-i386                 randconfig-i006-20230614   clang
-i386                 randconfig-i011-20230612   gcc  
-i386                 randconfig-i012-20230612   gcc  
-i386                 randconfig-i013-20230612   gcc  
-i386                 randconfig-i014-20230612   gcc  
-i386                 randconfig-i015-20230612   gcc  
-i386                 randconfig-i016-20230612   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r006-20230614   clang
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230614   clang
-x86_64               randconfig-a002-20230614   clang
-x86_64               randconfig-a003-20230614   clang
-x86_64               randconfig-a004-20230614   clang
-x86_64               randconfig-a005-20230614   clang
-x86_64               randconfig-a006-20230614   clang
-x86_64               randconfig-a011-20230612   gcc  
-x86_64               randconfig-a012-20230612   gcc  
-x86_64               randconfig-a013-20230612   gcc  
-x86_64               randconfig-a014-20230612   gcc  
-x86_64               randconfig-a015-20230612   gcc  
-x86_64               randconfig-a016-20230612   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
+Reviewed-by: Sabrina Dubroca <sd@queasysnail.net>
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Sabrina
+
