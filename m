@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 798A47315F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 12:59:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7FE07315F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 12:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343861AbjFOK7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 06:59:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
+        id S1343867AbjFOK7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 06:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343817AbjFOK6z (ORCPT
+        with ESMTP id S1343821AbjFOK64 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 06:58:55 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD13295D
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 03:58:50 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f61d79b0f2so10528051e87.3
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 03:58:50 -0700 (PDT)
+        Thu, 15 Jun 2023 06:58:56 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C202963
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 03:58:51 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f5f728c4aaso816581e87.0
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 03:58:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1686826728; x=1689418728;
+        d=rasmusvillemoes.dk; s=google; t=1686826729; x=1689418729;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=N6N4ojvwXgyqqnUo/wtTdbg/VBkKSYsLenHRuGk8XAM=;
-        b=Rw5sSbfvjOx+S2rKxZwJjwADqE3HdGV7U3SRGxcQi45apK6bFKUzEgtmB5NwCcftep
-         k4Xa4HGviEy7FndmC/dYBURZCl8nuKOxJnHh1e3Gr9kvwB0If82SSXyBHV98aMS/YcGv
-         1XWU6Fz0nQHtjZK5jqrw4y4XnrvtXW7meYQcA=
+        bh=aIDXI/11BslSskl54h414rVvg2lyuYHt6cU/p8nUA9g=;
+        b=c+yjgpGdQDmhjuZnQbwyxD0bDl3q0M4kNfPSdir/p7LY1WGleDG12sNdYUO7Rb5WlH
+         03N73vRJzClXVVrzkZo0u1dim3YMGTaAQPixcPL6a0FxZCV9VUpHlth3LUTwwf7q7W37
+         /iBl5UwPSg2+YwoOnEP/twQHno662NOBmN2fQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686826728; x=1689418728;
+        d=1e100.net; s=20221208; t=1686826729; x=1689418729;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=N6N4ojvwXgyqqnUo/wtTdbg/VBkKSYsLenHRuGk8XAM=;
-        b=OWdJKva1f8zeVXIj1XxuEahuATXMUXS77jA0Q5lj6YfI0bUEReLE5fL0V8OnZGtdwi
-         IF5rQeZGVbGt2jKXM1FUhIcFHM42wFIkXMLpbd7r7OweXMWARLd+GcagCb5qQBOW2xBn
-         6R6RuZqkF/V65a7+qPV1Azv1N5FpeSecqnscAmsnDxPa3pU1+boj1/fKQoNxP/P6IdVW
-         gDs2wUXhTMYLTUWGq3ZsdrsazPUQ0hHH60EOO/d2E5Gii/OQrwrEtCNDfIri+O9CM+nv
-         XnwVzXLWRprecBGnY4rSObUPaZO1Dd0hJ/JMdJVGh7XA3ykTlbRkQzlinZNclPG8aquh
-         vILw==
-X-Gm-Message-State: AC+VfDxJ1gWHyUc419GRwU975XGiLnzB5TL+zVOqZinDNENE4PAP9oit
-        xz6wQhxpcca164t66jE7EdYFBg==
-X-Google-Smtp-Source: ACHHUZ7BeNID2yzxlZkWzwvz+EhuQh45YUNB0n+mUzuq6O1PUeD+FGtrkV2yRiz7A7m5tscCJmu/qA==
-X-Received: by 2002:a05:6512:619:b0:4f8:48f3:f06 with SMTP id b25-20020a056512061900b004f848f30f06mr15465lfe.48.1686826728635;
-        Thu, 15 Jun 2023 03:58:48 -0700 (PDT)
+        bh=aIDXI/11BslSskl54h414rVvg2lyuYHt6cU/p8nUA9g=;
+        b=WikVQVG3wcVQnL/fvYJE4U3df1Q8bl0oUce9NsC9n5tQTqzYCjDxoJ++YR+sMSe0h/
+         ikcmQEHeIaLQkRAlDvZG4GPlBW5uujCPXgfXDS1ypvjczIVp20YMyF/JH3ZIvhBlDzAM
+         3I5pl7PmyyW4bTnFXRsO2iX69vvyMV9Smq0RrOjLHGbGgqKL6FqxDImnXCS5l4f7B+VL
+         6fxo7dSvXZtfT5VjsDLEjyq9VJWvxZKo4Gcsz8EoTjdkBla3stilfjjj1REja+m024ER
+         qIKXG36/Pa0Lk8+rt5t45LLd+ewMU7PMYGXvRF41fj7cixwWD7W+pGoDzsh4aKNQlFGs
+         2SHw==
+X-Gm-Message-State: AC+VfDwJFOjMPDj/IpbgRVz9UKJWNox7PuVLnXFHlEjc2z/cLh26ksjN
+        k6II7Ol9CzNb5H5V7N8p80jpdA==
+X-Google-Smtp-Source: ACHHUZ7f9+BJ+Uy13A8hOyIDEh2/w/DuN5eK4X5Jue10bhs+MZzLvyEWhKBWBwM8XgHJSKNwg3wfVQ==
+X-Received: by 2002:a05:6512:398a:b0:4f4:e509:ef56 with SMTP id j10-20020a056512398a00b004f4e509ef56mr1374697lfu.25.1686826729727;
+        Thu, 15 Jun 2023 03:58:49 -0700 (PDT)
 Received: from prevas-ravi.prevas.se ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id h7-20020ac25967000000b004f13f4ec267sm165364lfp.186.2023.06.15.03.58.43
+        by smtp.gmail.com with ESMTPSA id h7-20020ac25967000000b004f13f4ec267sm165364lfp.186.2023.06.15.03.58.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 03:58:43 -0700 (PDT)
+        Thu, 15 Jun 2023 03:58:49 -0700 (PDT)
 From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
@@ -56,9 +56,9 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 6/8] rtc: isl12022: trigger battery level detection during probe
-Date:   Thu, 15 Jun 2023 12:58:24 +0200
-Message-Id: <20230615105826.411953-7-linux@rasmusvillemoes.dk>
+Subject: [PATCH v3 7/8] dt-bindings: rtc: isl12022: add #clock-cells property
+Date:   Thu, 15 Jun 2023 12:58:25 +0200
+Message-Id: <20230615105826.411953-8-linux@rasmusvillemoes.dk>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230615105826.411953-1-linux@rasmusvillemoes.dk>
 References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
@@ -75,47 +75,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the meaning of the SR_LBAT85 and SR_LBAT75 bits are different in
-battery backup mode, they may very well be set after power on, and
-stay set for up to a minute (i.e. until the battery detection in VDD
-mode happens when the seconds counter hits 59). This would mean that
-userspace doing a ioctl(RTC_VL_READ) early on could get a false
-positive.
-
-The battery level detection can also be triggered by explicitly
-writing a 1 to the TSE bit in the BETA register. Do that once during
-boot. Empirically, this does not immediately update the bits in
-the status register (i.e., an immediate read of SR after this write
-can still show stale values), but the update is done after a few
-milliseconds, so certainly before the RTC device gets registered and
-userspace has a chance of doing the ioctl() on this device.
+The isl12022 has a dual-purpose irq/f_out pin, which can either be
+used as an interrupt or clock output.
 
 Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 ---
- drivers/rtc/rtc-isl12022.c | 10 ++++++++++
+ .../devicetree/bindings/rtc/intersil,isl12022.yaml     | 10 ++++++++++
  1 file changed, 10 insertions(+)
 
-diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
-index a48456abdcb9..916879b0388c 100644
---- a/drivers/rtc/rtc-isl12022.c
-+++ b/drivers/rtc/rtc-isl12022.c
-@@ -272,6 +272,16 @@ static void isl12022_set_trip_levels(struct device *dev)
- 	ret = regmap_update_bits(regmap, ISL12022_REG_PWR_VBAT, mask, val);
- 	if (ret)
- 		dev_warn(dev, "unable to set battery alarm levels: %d\n", ret);
-+
-+	/*
-+	 * Force a write of the TSE bit in the BETA register, in order
-+	 * to trigger an update of the LBAT75 and LBAT85 bits in the
-+	 * status register. In battery backup mode, those bits have
-+	 * another meaning, so without this, they may contain stale
-+	 * values for up to a minute after power-on.
-+	 */
-+	regmap_write_bits(regmap, ISL12022_REG_BETA,
-+			  ISL12022_BETA_TSE, ISL12022_BETA_TSE);
- }
+diff --git a/Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml b/Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml
+index 3c6c07aaa78f..c2d1441ef273 100644
+--- a/Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml
++++ b/Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml
+@@ -19,6 +19,9 @@ properties:
+   interrupts:
+     maxItems: 1
  
- static int isl12022_probe(struct i2c_client *client)
++  '#clock-cells':
++    const: 0
++
+   isil,battery-trip-levels-microvolt:
+     description:
+       The battery voltages at which the first alarm and second alarm
+@@ -33,6 +36,13 @@ required:
+ 
+ allOf:
+   - $ref: rtc.yaml#
++  # If #clock-cells is present, interrupts must not be present
++  - if:
++      required:
++        - '#clock-cells'
++    then:
++      properties:
++        interrupts: false
+ 
+ unevaluatedProperties: false
+ 
 -- 
 2.37.2
 
