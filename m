@@ -2,122 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE713731D47
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:02:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C9A731D49
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:03:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235458AbjFOQC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 12:02:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49398 "EHLO
+        id S232782AbjFOQC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 12:02:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjFOQCY (ORCPT
+        with ESMTP id S229473AbjFOQCw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 12:02:24 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86481E4;
-        Thu, 15 Jun 2023 09:02:22 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-31109cd8d8cso1699621f8f.2;
-        Thu, 15 Jun 2023 09:02:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686844941; x=1689436941;
-        h=content-transfer-encoding:subject:cc:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SuwWGq/HZTxd+1ns842IDWBOssilEnZa9jIQGRloFJA=;
-        b=f3q81OD5ezF4qhYMYUbnN+WtLhIvVBfMYV4g1xtJKhjK7wFmV5gErSXzTP1kZ6LBG5
-         60ghM80tKdOR7U3UAP5VnGZSurLa+9hP1j9otZXiyL26B6cwyTDoxIhxdi9svkB3zLhk
-         esXYJlm5FDk+2iiQY7csUZcjPJXM6uQG9V0ooaVGBejvlB9DSyKK+3+JvHItNmChoS17
-         pixbcCgLEDzf3i6Q+dyVGxsLaf8/Qg/0LXxMWlskC4BAQzxxT66stQ9zr8SNfBR0QRn1
-         pYJ2+8NGv7p4tMZWMcDyCPV7iC2tc5XMix76b+LpytznRXLHnjkSXEAA5UKBVcZ3QG/i
-         iQDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686844941; x=1689436941;
-        h=content-transfer-encoding:subject:cc:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=SuwWGq/HZTxd+1ns842IDWBOssilEnZa9jIQGRloFJA=;
-        b=Zd2OrDFi0cuc5aESUjIG6VmBb/qF5EhynJ8C7UhuyQCFiJSOBMa1ajJQQ/J+TjiXJi
-         fCOysuGNTEzTbWZ6n0aJnlXpXu9adOe3necv7Tgn7iOczqpiIsyQDQaNg+NUNJqmw+l2
-         u/xs42/iLVDobbgvPSt3FGfwHgwUa4SNWkEtrCIJaPgTThJJP4vxSsu1BHLWfrjRWWCD
-         xkWSzP+3QP3h9chzrJnA4gVvXDLuszpYjwi3eY7I7t1i0q/12VYQdcR3HOFrfnQm4c15
-         Fm1tkVVnluCj9wggjKABgGviYeK7soB8bT9ikSNgT2DNRS2Dt2MkRf4zsCBIrHi1gYyR
-         JUPQ==
-X-Gm-Message-State: AC+VfDyXQhk9DdN5RQCoedyVbmuMwzKtVKUcwvFHEYAbm4jLxO+vQP40
-        wLFSU6pS6TCMElxc0dvl3uM0GhYfo0Pxjg==
-X-Google-Smtp-Source: ACHHUZ5MqPAJT3yys/PhcsaiSphe9kaP3XoGrFoelWEJzR7ufELNuAC+SxXIe55D9uq6SoyF4MjE5A==
-X-Received: by 2002:adf:ff87:0:b0:311:1b27:74a6 with SMTP id j7-20020adfff87000000b003111b2774a6mr569553wrr.28.1686844940673;
-        Thu, 15 Jun 2023 09:02:20 -0700 (PDT)
-Received: from [192.168.0.210] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.googlemail.com with ESMTPSA id f9-20020a5d6649000000b0030f9dc63ff1sm19454197wrw.88.2023.06.15.09.02.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 09:02:20 -0700 (PDT)
-Message-ID: <7a853516-9da5-811b-1e9c-84e5483a8a08@gmail.com>
-Date:   Thu, 15 Jun 2023 17:02:18 +0100
+        Thu, 15 Jun 2023 12:02:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2681E2953
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 09:02:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686844924;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=E6zeZ2Y3tf2OPH/rRcIX6GxS4cB2PEK5LsG9Q9HL7Ww=;
+        b=cePLoYbOl6gWo50dKqOKtJ6iWrDY6LmYwW33c3kU5l3qSeRC8UIsfU7Jj4kJa8M9Azvi5L
+        O/jiDrsq4x+L/b+vcZVbWWBoTVg37ucex+gy7xRKe9tuX/g274IOOIeoEISrevoD4TGEfN
+        /MHxFQv/VstLrvGVjLh2dXRGNS9meNA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-322-I4ftdIS-MyauR0oETNCk3w-1; Thu, 15 Jun 2023 12:01:59 -0400
+X-MC-Unique: I4ftdIS-MyauR0oETNCk3w-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2882D857D10;
+        Thu, 15 Jun 2023 16:01:36 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.51])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E7496C1603B;
+        Thu, 15 Jun 2023 16:01:34 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <000000000000b2585a05fdeb8379@google.com>
+References: <000000000000b2585a05fdeb8379@google.com>
+To:     syzbot <syzbot+6efc50cc1f8d718d6cb7@syzkaller.appspotmail.com>
+Cc:     dhowells@redhat.com, davem@davemloft.net,
+        herbert@gondor.apana.org.au, kuba@kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [crypto?] KASAN: slab-out-of-bounds Read in extract_iter_to_sg
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Content-Language: en-US
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Shuah Khan <shuah@kernel.org>,
-        Nicholas Miehlbradt <nicholas@linux.ibm.com>,
-        Nicholas Miehlbradt <nicholas@linux.ibm.com>,
-        Benjamin Gray <bgray@linux.ibm.com>
-From:   "Colin King (gmail)" <colin.i.king@gmail.com>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: file removal issue in tools/testing/selftests/powerpc/mm/tlbie_test.c
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <256754.1686844894.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Thu, 15 Jun 2023 17:01:34 +0100
+Message-ID: <256755.1686844894@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Static analysis with cppcheck has found an issue in the following commit:
-
-commit 047e6575aec71d75b765c22111820c4776cd1c43
-Author: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-Date:   Tue Sep 24 09:22:53 2019 +0530
-
-     powerpc/mm: Fixup tlbie vs mtpidr/mtlpidr ordering issue on POWER9
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.g=
+it main
 
 
-The issue in tools/testing/selftests/powerpc/mm/tlbie_test.c in 
-end_verification_log() is as follows:
+diff --git a/fs/smb/client/smb2ops.c b/fs/smb/client/smb2ops.c
+index 38d2265c77fd..e97abe6055a1 100644
+--- a/fs/smb/client/smb2ops.c
++++ b/fs/smb/client/smb2ops.c
+@@ -4333,8 +4333,7 @@ static void *smb2_get_aead_req(struct crypto_aead *t=
+fm, struct smb_rqst *rqst,
+ 		}
+ 		sgtable.orig_nents =3D sgtable.nents;
+ =
 
-static inline void end_verification_log(unsigned int tid, unsigned 
-nr_anamolies)
-{
-         FILE *f = fp[tid];
-         char logfile[30];
-         char path[LOGDIR_NAME_SIZE + 30];
-         char separator[] = "/";
+-		rc =3D extract_iter_to_sg(iter, count, &sgtable,
+-					num_sgs - sgtable.nents, 0);
++		rc =3D extract_iter_to_sg(iter, count, &sgtable, num_sgs, 0);
+ 		iov_iter_revert(iter, rc);
+ 		sgtable.orig_nents =3D sgtable.nents;
+ 	}
+diff --git a/lib/scatterlist.c b/lib/scatterlist.c
+index e97d7060329e..6fd20bfc01a4 100644
+--- a/lib/scatterlist.c
++++ b/lib/scatterlist.c
+@@ -1120,7 +1120,8 @@ static ssize_t extract_user_to_sg(struct iov_iter *i=
+ter,
+ 	pages -=3D sg_max;
+ =
 
-         fclose(f);
+ 	do {
+-		res =3D iov_iter_extract_pages(iter, &pages, maxsize, sg_max,
++		res =3D iov_iter_extract_pages(iter, &pages, maxsize,
++					     sg_max - sgtable->nents,
+ 					     extraction_flags, &off);
+ 		if (res < 0)
+ 			goto failed;
+@@ -1129,7 +1130,6 @@ static ssize_t extract_user_to_sg(struct iov_iter *i=
+ter,
+ 		maxsize -=3D len;
+ 		ret +=3D len;
+ 		npages =3D DIV_ROUND_UP(off + len, PAGE_SIZE);
+-		sg_max -=3D npages;
+ =
 
-         if (nr_anamolies == 0) {
-                 remove(path);
-                 return;
-         }
-	.... etc
+ 		for (; npages > 0; npages--) {
+ 			struct page *page =3D *pages;
+@@ -1142,7 +1142,7 @@ static ssize_t extract_user_to_sg(struct iov_iter *i=
+ter,
+ 			len -=3D seg;
+ 			off =3D 0;
+ 		}
+-	} while (maxsize > 0 && sg_max > 0);
++	} while (maxsize > 0 && sgtable->nents < sg_max);
+ =
 
+ 	return ret;
+ =
 
-in the case where nr_anamolies is zero the remove(path) call is using an 
-uninitialized path, this potentially could contain uninitialized garbage 
-on the stack (and if one is unlucky enough it may be a valid filename 
-that one does not want to be removed).
+@@ -1183,11 +1183,10 @@ static ssize_t extract_bvec_to_sg(struct iov_iter =
+*iter,
+ 		sg_set_page(sg, bv[i].bv_page, len, off);
+ 		sgtable->nents++;
+ 		sg++;
+-		sg_max--;
+ =
 
-Not sure what the original intention was, but this code looks incorrect 
-to me.
+ 		ret +=3D len;
+ 		maxsize -=3D len;
+-		if (maxsize <=3D 0 || sg_max =3D=3D 0)
++		if (maxsize <=3D 0 || sgtable->nents >=3D sg_max)
+ 			break;
+ 		start =3D 0;
+ 	}
+@@ -1242,14 +1241,13 @@ static ssize_t extract_kvec_to_sg(struct iov_iter =
+*iter,
+ 			sg_set_page(sg, page, len, off);
+ 			sgtable->nents++;
+ 			sg++;
+-			sg_max--;
+ =
 
-Colin
+ 			len -=3D seg;
+ 			kaddr +=3D PAGE_SIZE;
+ 			off =3D 0;
+-		} while (len > 0 && sg_max > 0);
++		} while (len > 0 && sgtable->nents < sg_max);
+ =
+
+-		if (maxsize <=3D 0 || sg_max =3D=3D 0)
++		if (maxsize <=3D 0 || sgtable->nents >=3D sg_max)
+ 			break;
+ 		start =3D 0;
+ 	}
+@@ -1294,11 +1292,10 @@ static ssize_t extract_xarray_to_sg(struct iov_ite=
+r *iter,
+ 		sg_set_page(sg, folio_page(folio, 0), len, offset);
+ 		sgtable->nents++;
+ 		sg++;
+-		sg_max--;
+ =
+
+ 		maxsize -=3D len;
+ 		ret +=3D len;
+-		if (maxsize <=3D 0 || sg_max =3D=3D 0)
++		if (maxsize <=3D 0 || sgtable->nents >=3D sg_max)
+ 			break;
+ 	}
+ =
+
+@@ -1318,7 +1315,8 @@ static ssize_t extract_xarray_to_sg(struct iov_iter =
+*iter,
+  *
+  * Extract the page fragments from the given amount of the source iterato=
+r and
+  * add them to a scatterlist that refers to all of those bits, to a maxim=
+um
+- * addition of @sg_max elements.
++ * addition of @sg_max elements.  @sgtable->nents indicates how many of t=
+he
++ * elements are already used.
+  *
+  * The pages referred to by UBUF- and IOVEC-type iterators are extracted =
+and
+  * pinned; BVEC-, KVEC- and XARRAY-type are extracted but aren't pinned; =
+PIPE-
+@@ -1343,6 +1341,11 @@ ssize_t extract_iter_to_sg(struct iov_iter *iter, s=
+ize_t maxsize,
+ 	if (maxsize =3D=3D 0)
+ 		return 0;
+ =
+
++	if (WARN_ON_ONCE(sg_max =3D=3D 0))
++		return -EIO;
++	if (WARN_ON_ONCE(sgtable->nents >=3D sg_max))
++		return -EIO;
++
+ 	switch (iov_iter_type(iter)) {
+ 	case ITER_UBUF:
+ 	case ITER_IOVEC:
+
