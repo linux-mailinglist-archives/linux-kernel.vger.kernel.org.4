@@ -2,181 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4397273157D
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 12:35:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A181731578
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 12:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343708AbjFOKfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 06:35:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44650 "EHLO
+        id S241254AbjFOKfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 06:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245538AbjFOKec (ORCPT
+        with ESMTP id S1343784AbjFOKfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 06:34:32 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257952942
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 03:34:11 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f74cda5f1dso5808326e87.3
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 03:34:11 -0700 (PDT)
+        Thu, 15 Jun 2023 06:35:01 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4317F297D
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 03:34:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686825249; x=1689417249;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=G8QVs6IFYYIXBUDr6PLIM4vaEwCL0Jet3wwAQMko+hY=;
-        b=TYyKQmV+8Q/wxVs6R4Uml9i+kL0onsHJpSQ0m6cvTbJwiGniH59jYx9ptbp1qn4JTJ
-         dLawg1a0MgiGEVc5U/pvgihrz4Ze+rTI0ZlsTa7Mej+zmR77v7uW4E72/Ti47A0W/r9S
-         lKzZP6PjJcb5gDqRq0hFSZQ02CkRPOMOkzACI5/YxwoXOoiY3EkjqkFU1MNzkwgCKadN
-         gc1UUlvAdKDSD/npgg5kYy6Y2lsmSxgijCaDxu9Q6vbXuB/2JorDHOovJsw3q7uwJd20
-         RwgPz6wh+5aW7CU9r6MhABb1/4jZdcPwMUZFnmLESeBBAz2X9xk2Y+CXmldi+T/w0lnS
-         GfTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686825249; x=1689417249;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G8QVs6IFYYIXBUDr6PLIM4vaEwCL0Jet3wwAQMko+hY=;
-        b=FeaI+ilXO9PIjBIKtdgQGvcY5VD2ui8cpnwNhAN73YuhLGpag+45DqeUMzCwKo60Pa
-         apI25lRVxMMSKtalFLGHo/ZqIIetjl9053eG/jyO1CWI7y8haISoZbKGQ0jEtaS9bBbz
-         WeMZz1u2t+XHuQcZCoJGbj7b7fQggRLdH5z2UlVKs3t6oo/SjeLLrCRbRm1PjcvEgnHx
-         UVoLEiOrZdANP0XSPdf3jzpG0xixB64rExqyyxXI706uCI0rst618xWWtQyo29U6KBV8
-         rHApXu9kRR94hZ2ZVLtj30nTRyZkZvzAvUlKIdT35h5sbPM9PHUO+WTxcvgK3hXwYieQ
-         2DXw==
-X-Gm-Message-State: AC+VfDyADoEzCogxVkID5bN85UOdM2OkLEaj2mFzYmTpqyWaDJ0N+AM8
-        6a5rFQwAVMwh4TCI9Xzt1iw6WQ==
-X-Google-Smtp-Source: ACHHUZ7yhIVM9232hKYltYGexXTGAQbYM4uGSl7gtvYnnnoTX1sxq98NzXEeEFBv5qIChyCAh3VCcQ==
-X-Received: by 2002:a19:651a:0:b0:4f7:69a9:b882 with SMTP id z26-20020a19651a000000b004f769a9b882mr2538888lfb.3.1686825249292;
-        Thu, 15 Jun 2023 03:34:09 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id u26-20020ac243da000000b004f4d5003e8dsm2505864lfl.7.2023.06.15.03.34.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 03:34:08 -0700 (PDT)
-Message-ID: <001d7571-5e9f-4f60-f6d0-35806a3e51c5@linaro.org>
-Date:   Thu, 15 Jun 2023 12:34:06 +0200
+  d=axis.com; q=dns/txt; s=axis-central1; t=1686825275;
+  x=1718361275;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:to:cc;
+  bh=N5F0WUYU45IWqZJe9HXUkJMQ38Qcy4Sg2+BO0tEm4Qs=;
+  b=FYHeF9NwzM/p4dVKidwQhPUmDD/nZM5ekKh8oxQXtecn63FE9wnF0Psj
+   Jbae6v3xz+vOYrfwOQMnR0kfYuBHvrriyOND6nNXKBfAG3K2Djg5w1yuo
+   rB9Z13/+PRY/UjaYX4qcDjYas58kaquLlb1paf/1bLkuCrAOF9uhxegW1
+   G4T87fIAElMiGyZ+6buTOl1RmTPjVy7qMLI36KPshC4KtNc+QwoZcYq1j
+   n/2XYs1T7kKxwpbdzJp0D81lKz4/70iwOip1rj2AQ6hFikjnTtF0nwXyn
+   1pPJ6BKzwgNk5TG55VIi7gZ/Rkbd9DtoFCRV6GHNgQudC++tIuPEf/iOa
+   w==;
+From:   =?utf-8?q?M=C3=A5rten_Lindahl?= <marten.lindahl@axis.com>
+Date:   Thu, 15 Jun 2023 12:34:32 +0200
+Subject: [PATCH] ARM: kexec: Make smp stop calls asynchronous
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v8 07/18] drm/msm/a6xx: Add a helper for
- software-resetting the GPU
-Content-Language: en-US
-To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-References: <20230223-topic-gmuwrapper-v8-0-69c68206609e@linaro.org>
- <20230223-topic-gmuwrapper-v8-7-69c68206609e@linaro.org>
- <jplt5g5xuphbnci73pdtaxd63fguxtgtp4c37kc7ehavzrjbau@kamshezxnvgy>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <jplt5g5xuphbnci73pdtaxd63fguxtgtp4c37kc7ehavzrjbau@kamshezxnvgy>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-ID: <20230615-arm-smp-call-async-v1-1-58f4afb20f0f@axis.com>
+X-B4-Tracking: v=1; b=H4sIADfpimQC/x2N0QrCMAwAf2Xk2UDX2qH+iviQ1dQF1joSEWXs3
+ +18PI7jVjBWYYNLt4LyW0yetUF/6CBNVB+Mcm8M3vnghj4iaUErCyaaZyT71oThNMSQ89Gdo4c
+ WjmSMo1JN054WshfrLhblLJ//7Xrbth9wJlWrfQAAAA==
+To:     Russell King <linux@armlinux.org.uk>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@axis.com>,
+        =?utf-8?q?M=C3=A5rten_Lindahl?= <marten.lindahl@axis.com>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1686825272; l=2227;
+ i=marten.lindahl@axis.com; s=20230329; h=from:subject:message-id;
+ bh=r9H1QenBlIqwCnqnJ1Ys0LmHkHkdbbmsh2aKm0880Qk=;
+ b=hlv5yW7GghIo24kUv304csMkuZHhJiBvtd5jLD345B60Z/owvNGmbfKlJWRNOI72WcBWSXQEo
+ 6E8H3gHyfSZAMG70puG5VssQa+o0K2/uOt0RF+qx9I5Ec1KJ3f2jtrT
+X-Developer-Key: i=marten.lindahl@axis.com; a=ed25519;
+ pk=JfbjqFPJnIDIQOkJBeatC8+S3Ax3N0RIdmN+fL3wXgw=
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6.06.2023 19:18, Akhil P Oommen wrote:
-> On Mon, May 29, 2023 at 03:52:26PM +0200, Konrad Dybcio wrote:
->>
->> Introduce a6xx_gpu_sw_reset() in preparation for adding GMU wrapper
->> GPUs and reuse it in a6xx_gmu_force_off().
->>
->> This helper, contrary to the original usage in GMU code paths, adds
->> a write memory barrier which together with the necessary delay should
->> ensure that the reset is never deasserted too quickly due to e.g. OoO
->> execution going crazy.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  drivers/gpu/drm/msm/adreno/a6xx_gmu.c |  3 +--
->>  drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 11 +++++++++++
->>  drivers/gpu/drm/msm/adreno/a6xx_gpu.h |  1 +
->>  3 files changed, 13 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
->> index b86be123ecd0..5ba8cba69383 100644
->> --- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
->> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
->> @@ -899,8 +899,7 @@ static void a6xx_gmu_force_off(struct a6xx_gmu *gmu)
->>  	a6xx_bus_clear_pending_transactions(adreno_gpu, true);
->>  
->>  	/* Reset GPU core blocks */
->> -	gpu_write(gpu, REG_A6XX_RBBM_SW_RESET_CMD, 1);
->> -	udelay(100);
->> +	a6xx_gpu_sw_reset(gpu, true);
->>  }
->>  
->>  static void a6xx_gmu_set_initial_freq(struct msm_gpu *gpu, struct a6xx_gmu *gmu)
->> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
->> index e3ac3f045665..083ccb5bcb4e 100644
->> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
->> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
->> @@ -1634,6 +1634,17 @@ void a6xx_bus_clear_pending_transactions(struct adreno_gpu *adreno_gpu, bool gx_
->>  	gpu_write(gpu, REG_A6XX_GBIF_HALT, 0x0);
->>  }
->>  
->> +void a6xx_gpu_sw_reset(struct msm_gpu *gpu, bool assert)
->> +{
->> +	gpu_write(gpu, REG_A6XX_RBBM_SW_RESET_CMD, assert);
->> +	/* Add a barrier to avoid bad surprises */
-> Can you please make this comment a bit more clear? Highlight that we
-> should ensure the register is posted at hw before polling.
-> 
-> I think this barrier is required only during assert.
-Generally it should not be strictly required at all, but I'm thinking
-that it'd be good to keep it in both cases, so that:
+If a panic is triggered by a hrtimer interrupt all online cpus will be
+noitfied and set offline. But as highlighted by commit 19dbdcb8039c
+("smp: Warn on function calls from softirq context") this call should
+not be made synchronous with disabled interrupts:
 
-if (assert)
-	we don't keep writing things to the GPU if it's in reset
-else
-	we don't start writing things to the GPU becomes it comes
-	out of reset
+  softdog: Initiating panic
+  Kernel panic - not syncing: Software Watchdog Timer expired
+  WARNING: CPU: 1 PID: 0 at kernel/smp.c:753 smp_call_function_many_cond
+    unwind_backtrace:
+      show_stack
+      dump_stack_lvl
+      __warn
+      warn_slowpath_fmt
+      smp_call_function_many_cond
+      smp_call_function
+      crash_smp_send_stop.part.0
+      machine_crash_shutdown
+      __crash_kexec
+      panic
+      softdog_fire
+      __hrtimer_run_queues
+      hrtimer_interrupt
 
-Also, if you squint hard enough at the commit message, you'll notice
-I intended for this so only be a wmb, but for some reason generalized
-it.. Perhaps that's another thing I should fix!
-for v9..
+Make the smp call for machine_crash_nonpanic_core() asynchronous.
 
-Konrad
-> 
-> -Akhil.
->> +	mb();
->> +
->> +	/* The reset line needs to be asserted for at least 100 us */
->> +	if (assert)
->> +		udelay(100);
->> +}
->> +
->>  static int a6xx_pm_resume(struct msm_gpu *gpu)
->>  {
->>  	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
->> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
->> index 9580def06d45..aa70390ee1c6 100644
->> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
->> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
->> @@ -89,5 +89,6 @@ struct msm_gpu_state *a6xx_gpu_state_get(struct msm_gpu *gpu);
->>  int a6xx_gpu_state_put(struct msm_gpu_state *state);
->>  
->>  void a6xx_bus_clear_pending_transactions(struct adreno_gpu *adreno_gpu, bool gx_off);
->> +void a6xx_gpu_sw_reset(struct msm_gpu *gpu, bool assert);
->>  
->>  #endif /* __A6XX_GPU_H__ */
->>
->> -- 
->> 2.40.1
->>
+Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
+---
+ arch/arm/kernel/machine_kexec.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/kernel/machine_kexec.c b/arch/arm/kernel/machine_kexec.c
+index 46364b699cc3..5d07cf9e0044 100644
+--- a/arch/arm/kernel/machine_kexec.c
++++ b/arch/arm/kernel/machine_kexec.c
+@@ -94,16 +94,28 @@ static void machine_crash_nonpanic_core(void *unused)
+ 	}
+ }
+ 
++static DEFINE_PER_CPU(call_single_data_t, cpu_stop_csd) =
++	CSD_INIT(machine_crash_nonpanic_core, NULL);
++
+ void crash_smp_send_stop(void)
+ {
+ 	static int cpus_stopped;
+ 	unsigned long msecs;
++	call_single_data_t *csd;
++	int cpu, this_cpu = raw_smp_processor_id();
+ 
+ 	if (cpus_stopped)
+ 		return;
+ 
+ 	atomic_set(&waiting_for_crash_ipi, num_online_cpus() - 1);
+-	smp_call_function(machine_crash_nonpanic_core, NULL, false);
++	for_each_online_cpu(cpu) {
++		if (cpu == this_cpu)
++			continue;
++
++		csd = &per_cpu(cpu_stop_csd, cpu);
++		smp_call_function_single_async(cpu, csd);
++	}
++
+ 	msecs = 1000; /* Wait at most a second for the other cpus to stop */
+ 	while ((atomic_read(&waiting_for_crash_ipi) > 0) && msecs) {
+ 		mdelay(1);
+
+---
+base-commit: 858fd168a95c5b9669aac8db6c14a9aeab446375
+change-id: 20230615-arm-smp-call-async-38653ff40952
+
+Best regards,
+-- 
+Mårten Lindahl <marten.lindahl@axis.com>
+
