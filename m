@@ -2,52 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8232730D54
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 04:46:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F41F730D56
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 04:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242306AbjFOCqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 22:46:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37294 "EHLO
+        id S242380AbjFOCqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 22:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232620AbjFOCqH (ORCPT
+        with ESMTP id S241782AbjFOCqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 22:46:07 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B342126;
-        Wed, 14 Jun 2023 19:46:05 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QhRVy57Csz4wjF;
-        Thu, 15 Jun 2023 12:46:02 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1686797163;
-        bh=nKyzclnLPcWFjNYP7oi3eE77p75xY/56CGKsZnifZvg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=FsF1vWY5Ns92exTXpbe/LmG54Y1xUzqv54VbSdGu/EIiiKtFkmsFbzPat6VI+JVnQ
-         kK3QRe1a3dvlMAbnA1P5RE2VDTIEGDED7u6bGAKpN1fHe9ks/fk2/8hdbajlpfpOBZ
-         dVW2rNYdjivBIRCsB5YWN2xZVOCvZVBjlafMU+01e0nkZ1KzRkP9u28RTJDIuWZst8
-         iZsYSdgfviRUYDWz2//nXg/7He6xozKt2aDfIUXIOAscklFTrYxL5BWnT6uPQ3COvP
-         +aVc4+yXoc63NctDkEJO1gv2ZRbjTcjvnngk1QLCh1A0M3IF5g0HzsQylUt2p2+t6X
-         lLkSANyORFV0Q==
-Date:   Thu, 15 Jun 2023 12:45:58 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christoffer Dall <cdall@cs.columbia.edu>,
-        Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>
-Subject: linux-next: manual merge of the kvm-arm tree with the arm64 tree
-Message-ID: <20230615124558.2cea58b3@canb.auug.org.au>
+        Wed, 14 Jun 2023 22:46:34 -0400
+Received: from out-13.mta0.migadu.com (out-13.mta0.migadu.com [IPv6:2001:41d0:1004:224b::d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996F6212A
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 19:46:31 -0700 (PDT)
+Message-ID: <0d70dc6c-3f7e-b899-adcb-5b71c1aa298e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1686797188;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=y0GLUQ1UnO+552Jxj5qXSKEt050MqlSFN7YUE1XZExg=;
+        b=ckqRwCReb+YhVMvbIJ6+LmkbLPTucmKwFPl/YSAn3/pnmPpMpFWesyjzWj7Xtffa5oDQtK
+        9i4K6gH81yNOO4s2SfaJIQ9XmKl+muy2z7DgnJ4A+QbQeKX+OIfNB28sl1IJ/fCNFc2LNU
+        hUIh4P2AAl+WR0btOBMVKS6ux9KhkGQ=
+Date:   Thu, 15 Jun 2023 10:46:21 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/XQPD4Xdl0k8WcknO4fxyhlV";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+Subject: Re: [PATCH] NFSv4.2: fix wrong shrinker_id
+To:     kernel test robot <lkp@intel.com>, Qi Zheng <qi.zheng@linux.dev>,
+        trond.myklebust@hammerspace.com, anna@kernel.org,
+        fllinden@amazon.com
+Cc:     oe-kbuild-all@lists.linux.dev, linux-nfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>
+References: <20230614072443.3264264-1-qi.zheng@linux.dev>
+ <202306150121.cN9iKnvx-lkp@intel.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Qi Zheng <qi.zheng@linux.dev>
+In-Reply-To: <202306150121.cN9iKnvx-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,121 +52,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/XQPD4Xdl0k8WcknO4fxyhlV
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Today's linux-next merge of the kvm-arm tree got a conflict in:
+On 2023/6/15 02:06, kernel test robot wrote:
+> Hi Qi,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on linus/master]
+> [also build test ERROR on trondmy-nfs/linux-next v6.4-rc6 next-20230614]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Qi-Zheng/NFSv4-2-fix-wrong-shrinker_id/20230614-152853
+> base:   linus/master
+> patch link:    https://lore.kernel.org/r/20230614072443.3264264-1-qi.zheng%40linux.dev
+> patch subject: [PATCH] NFSv4.2: fix wrong shrinker_id
+> config: i386-debian-10.3 (https://download.01.org/0day-ci/archive/20230615/202306150121.cN9iKnvx-lkp@intel.com/config)
+> compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+> reproduce (this is a W=1 build):
+>          git checkout linus/master
+>          b4 shazam https://lore.kernel.org/r/20230614072443.3264264-1-qi.zheng@linux.dev
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          make W=1 O=build_dir ARCH=i386 olddefconfig
+>          make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202306150121.cN9iKnvx-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>, old ones prefixed by <<):
+> 
+>>> ERROR: modpost: "free_prealloced_shrinker" [fs/nfs/nfsv4.ko] undefined!
+>>> ERROR: modpost: "register_shrinker_prepared" [fs/nfs/nfsv4.ko] undefined!
+>>> ERROR: modpost: "prealloc_shrinker" [fs/nfs/nfsv4.ko] undefined!
 
-  arch/arm64/kernel/kaslr.c
+Ah, these three functions need to be exported. Will fix it in the v2.
 
-between commit:
-
-  6e13b6b923b3 ("arm64: kaslr: split kaslr/module initialization")
-  e46b7103aef3 ("arm64: module: move module randomization to module.c")
-
-from the arm64 tree and commit:
-
-  0ddc312b7c73 ("arm64: Turn kaslr_feature_override into a generic SW featu=
-re override")
-
-from the kvm-arm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This is
-now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your
-tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/arm64/kernel/kaslr.c
-index 17f96a19781d,5d4ce7f5f157..000000000000
---- a/arch/arm64/kernel/kaslr.c
-+++ b/arch/arm64/kernel/kaslr.c
-@@@ -4,33 -4,46 +4,33 @@@
-   */
- =20
-  #include <linux/cache.h>
- -#include <linux/crc32.h>
-  #include <linux/init.h>
- -#include <linux/libfdt.h>
- -#include <linux/mm_types.h>
- -#include <linux/sched.h>
- -#include <linux/types.h>
- -#include <linux/pgtable.h>
- -#include <linux/random.h>
- +#include <linux/printk.h>
- =20
- -#include <asm/fixmap.h>
- -#include <asm/kernel-pgtable.h>
- +#include <asm/cpufeature.h>
-  #include <asm/memory.h>
- -#include <asm/mmu.h>
- -#include <asm/sections.h>
- -#include <asm/setup.h>
- =20
- -u64 __ro_after_init module_alloc_base;
-  u16 __initdata memstart_offset_seed;
- =20
-- struct arm64_ftr_override kaslr_feature_override __initdata;
--=20
- -static int __init kaslr_init(void)
- +bool __ro_after_init __kaslr_is_enabled =3D false;
- +
- +void __init kaslr_init(void)
-  {
-- 	if (kaslr_feature_override.val & kaslr_feature_override.mask & 0xf) {
- -	u64 module_range;
- -	u32 seed;
- -
- -	/*
- -	 * Set a reasonable default for module_alloc_base in case
- -	 * we end up running with module randomization disabled.
- -	 */
- -	module_alloc_base =3D (u64)_etext - MODULES_VSIZE;
- -
-+ 	if (cpuid_feature_extract_unsigned_field(arm64_sw_feature_override.val &
-+ 						 arm64_sw_feature_override.mask,
-+ 						 ARM64_SW_FEATURE_OVERRIDE_NOKASLR)) {
-  		pr_info("KASLR disabled on command line\n");
- -		return 0;
- +		return;
-  	}
- =20
- -	if (!kaslr_enabled()) {
- +	/*
- +	 * The KASLR offset modulo MIN_KIMG_ALIGN is taken from the physical
- +	 * placement of the image rather than from the seed, so a displacement
- +	 * of less than MIN_KIMG_ALIGN means that no seed was provided.
- +	 */
- +	if (kaslr_offset() < MIN_KIMG_ALIGN) {
-  		pr_warn("KASLR disabled due to lack of seed\n");
- -		return 0;
- +		return;
-  	}
- =20
-  	pr_info("KASLR enabled\n");
-
---Sig_/XQPD4Xdl0k8WcknO4fxyhlV
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSKe2YACgkQAVBC80lX
-0GxrjggAgJEMNlX2l1yrvVCoHIjN27l0p7hocz9bu0rH0GE3WsIE9dm6t2jGPIO3
-Y2cPzVzf7lUM2DnkLRTsOBQj9evwiLEllP6u/Lc7048yV9zz4FrUBeLIqBECk5WG
-UyZiF9XVCb0L/dmuhor8vqx3nFRcYZbK7PWII1wn4NEVa/hZfpeKqrDhH3Okee6m
-9YuFomSyGAagOTrWi4al6cz6eL3fsnc7fbaDxQL0dFTGTyzKN7/nytDGUtMIvz1i
-xxyXbAvwOu7RekcsljO4caXGPJK1b06HM1U9D5CGB/nbbBEHQIKgy/HAIiYIOgNj
-Ydi9tPUIg2vrpgzEbg2x+DD/Ay0zYw==
-=6B52
------END PGP SIGNATURE-----
-
---Sig_/XQPD4Xdl0k8WcknO4fxyhlV--
+> 
