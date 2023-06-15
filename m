@@ -2,204 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4CBD7318B4
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:16:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE957318C2
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:17:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344598AbjFOMQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 08:16:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57936 "EHLO
+        id S1344868AbjFOMQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 08:16:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344832AbjFOMP4 (ORCPT
+        with ESMTP id S1344885AbjFOMQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 08:15:56 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E559294A
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 05:15:05 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f7deee339dso1591180e87.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 05:15:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1686831304; x=1689423304;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ehfVzvQExF8A0HC8WC/ILIhv/WTmHbal1y8W4TeN1es=;
-        b=KIh3E9Trrv0o8j5qc7wu9J1KSN2D6U60ApSMwOUvHp31DZYXVVO3f3FPpVd8fJQWhh
-         c37/Buv5uwHPjlwByLawGWns2DCMt8AHP4ss8+UNgMQBrUzz/bVj/wQQY9ZM3a1372de
-         EKAlTGIxVygKIr0SlJh/ki44s1QN678Am3RQITT4AYPxrx/NiGpWCdiqQeDAS2M3M+1h
-         GA8L/xz8TGLA8H7BsoBWWPlIwv3TmCN6imb9NR0/QBgDmoW9WqcN6Rwws4CWTx+YR4gV
-         /6Qas9eLTC8mFurtEk1LkGE2JpdAToYDIkAl7kjZM2TAFHgYgvmSMOv9fAXXqS12Klhv
-         0V1Q==
+        Thu, 15 Jun 2023 08:16:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 725CC2D59
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 05:15:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686831299;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=l5404QqJ9PwKRp/L4j64ezHhwogh+Ie4zcQIBW4EmEI=;
+        b=FKT8GQs0OrZh6NcrXdcqLcuVo6dxo6ID6IONHtGhPhfXobUYO9xOq0K1dlUS1+CJ5S7XCt
+        vWuR/+CZG1zhgbZprBDhZsILT+5hsyZsYw8srIAm0aZAeHTDLuN1WphTHvXW/HZ/QBkwIO
+        pFLzeUdH9Al0MiL5O5U+IBFRrd4uJCw=
+Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com
+ [209.85.128.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-631-c80rTqFAPdKrSUSazglP7Q-1; Thu, 15 Jun 2023 08:14:58 -0400
+X-MC-Unique: c80rTqFAPdKrSUSazglP7Q-1
+Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-56ff697b86cso24374917b3.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 05:14:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686831304; x=1689423304;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1686831298; x=1689423298;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ehfVzvQExF8A0HC8WC/ILIhv/WTmHbal1y8W4TeN1es=;
-        b=aV9OjnEG3CfYp5RsiCTBbxRUy+ih3Cr9Hyd4yk4EXUuvHAlPNCenD/cB8X360COjas
-         y4qglMCpU7fuKq4fKyDXJZRBCc8VDTv/IC86OyPFqvAz0nFEczIZTdSBgidqjJJYRtPb
-         mgv8Lwr48pvBjJbk9vQ2fKOTs+E3EPuq/NBfmp4UwBZ9Cf/QlCERbZaSAjT4efWnc5h2
-         r3REKTy28gAkJLvqWtQkvKZIgDZl+8Xuv+q629YhQ1vA14QRkGQeKLtJXJII5v35Ux4u
-         Ld3mAuoNsmXLBd0yS3WUyDjNBc2vimGq4Oz9swgwfBEI/HxkfUpLFKuOIyv+WJf+goCK
-         Teeg==
-X-Gm-Message-State: AC+VfDwOQnxyRAQSJ0dhtw+KkrHZ7CP+Ui4IbwB9e0uXiOJa3+j9Hlcl
-        eldiPcJ2LdcV0hp81wiNl1MkoQ==
-X-Google-Smtp-Source: ACHHUZ501jOXOdbI2vCoh9Z+8k50wxBJblPlQxddMcmLJtJFW3AHRsWBrNj0ZJXAqwZBC0Y5jwcrWQ==
-X-Received: by 2002:a05:6512:44b:b0:4f2:6817:2379 with SMTP id y11-20020a056512044b00b004f268172379mr9064077lfk.23.1686831303698;
-        Thu, 15 Jun 2023 05:15:03 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:2ad4:65a7:d9f3:a64e])
-        by smtp.gmail.com with ESMTPSA id k17-20020a5d4291000000b003047ea78b42sm20918012wrq.43.2023.06.15.05.15.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 05:15:03 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>
-Cc:     netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH v2 23/23] arm64: dts: qcom: sa8775p-ride: enable ethernet0
-Date:   Thu, 15 Jun 2023 14:14:19 +0200
-Message-Id: <20230615121419.175862-24-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230615121419.175862-1-brgl@bgdev.pl>
-References: <20230615121419.175862-1-brgl@bgdev.pl>
+        bh=l5404QqJ9PwKRp/L4j64ezHhwogh+Ie4zcQIBW4EmEI=;
+        b=L47crp7CVXgXK+qIkeodaJn18W6AwT3LAFVrmsE+SI+rgzEgf8x32TEN1qskYuM1U/
+         k+7G8UPSGXglA0yw9sbAtTwYjYr4OpPiokIADe+jgqbPM2PjU76P23Mf6BvXG+V77mbk
+         kOivWQGPBo8hvTEuN1al+gmLg8bYqgNqjYSwtAapKShcJKHMs9AVGtu6N6L15bBrTsKG
+         ViMmSK+myxqaPVRlVlqowfFbOzGnti5OBPsn8yC6myGzGm8AT/s9SmCInH8o9MombmcP
+         XFx5n6mrGYZENbFennWZytKmzJXmcmSP0IORiTk4kA6TouAEUcHVbNKnFTBIgloolfbW
+         8wFw==
+X-Gm-Message-State: AC+VfDydjlcP8eI+yqazlrd3yOaWHs37MfXdxw88h3eAyZRJ2zmRrtmn
+        T6ClESp/uUgCwzgFqtv42CPRm6pqU65owdCkIf3Fk6Vfd4YDzSI95jsjedsE1ANwPhFvc6hgfjJ
+        JWvFcjNE30i/jScxuTvYmgkx5O3zBDAM0EEF+2bhU
+X-Received: by 2002:a25:4c89:0:b0:bce:81a4:d01d with SMTP id z131-20020a254c89000000b00bce81a4d01dmr4167329yba.34.1686831297930;
+        Thu, 15 Jun 2023 05:14:57 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7bt74dQwyhmZGqxPQPhFJX2M7hWAKu0bEofTYEYlV2Y09Sb6Pvk3LWyGxUJFROME74Om5rnH1uFS9h/QV5Bss=
+X-Received: by 2002:a25:4c89:0:b0:bce:81a4:d01d with SMTP id
+ z131-20020a254c89000000b00bce81a4d01dmr4167310yba.34.1686831297638; Thu, 15
+ Jun 2023 05:14:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230615034830.1361853-1-hezhongkun.hzk@bytedance.com>
+ <CAOUHufZBUEm1P7gm0nFkPSFkNg2fPbs3v3qhL-R9m5yFNoW2YA@mail.gmail.com>
+ <CA+PVUaTqNTSYkTy9yCFF=Y+xkimgM+3YQRF7EYr1UruesQnJrg@mail.gmail.com> <CACSyD1P=RtUtVOQrY9NVwn79=80zgC92NJyaqbjHXdrhZONx1A@mail.gmail.com>
+In-Reply-To: <CACSyD1P=RtUtVOQrY9NVwn79=80zgC92NJyaqbjHXdrhZONx1A@mail.gmail.com>
+From:   Fabian Deutsch <fdeutsch@redhat.com>
+Date:   Thu, 15 Jun 2023 14:14:41 +0200
+Message-ID: <CA+PVUaS5FhNksVUL-7+Ts6qyEd=tCV8e_2ig7pLwZa8hvhzwHg@mail.gmail.com>
+Subject: Re: [External] Re: [RFC PATCH 1/3] zram: charge the compressed RAM to
+ the page's memcgroup
+To:     =?UTF-8?B?6LS65Lit5Z2k?= <hezhongkun.hzk@bytedance.com>
+Cc:     Yu Zhao <yuzhao@google.com>, minchan@kernel.org,
+        senozhatsky@chromium.org, mhocko@suse.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On Thu, Jun 15, 2023 at 12:00=E2=80=AFPM =E8=B4=BA=E4=B8=AD=E5=9D=A4 <hezho=
+ngkun.hzk@bytedance.com> wrote:
+>
+> > While looking at this in the past weeks, I believe that there are two d=
+istinct problems:
+> > 1. Direct zram usage by process within a cg ie. a process writing to a =
+zram device
+> > 2. Indirect zram usage by a process within a cg via swap (described abo=
+ve)
+> >
+> > Both of them probably require different solutions.
+> > In order to fix #1, accounting a zram device should be accounted toward=
+s a cgroup. IMHO this is something that should be fixed.
+> >
+> > Yu Zhao and Yosry are probably much more familiar with the solution to =
+#2.
+> > WRT per-cgrou-swapfile, to me this is addressing #2, but I agree with Y=
+u Zhao, that there are probably better solutions to this.
+> >
+> > Lastly, this patchset, while it will possibly not address the swap issu=
+e (#2) completely, is it satisfying the needs of #1?
+> >
+> > - fabian
+>
+> Thanks for your reply, fabian. According to the previous design and
+> test results, this patchset can meet the need of  direct and
+> indirect usage scenarios=EF=BC=8Ccharge the compressed memory to memory c=
+group.
 
-Enable the first 1Gb ethernet port on sa8775p-ride development board.
+As said, I can not speak about the indirect swap case, but if it is
+addressing the direct case, and putting the memory accounting on the
+cgroup - then this would address one of the use-cases I have in mind.
+Thanks!
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/sa8775p-ride.dts | 88 +++++++++++++++++++++++
- 1 file changed, 88 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-index bf90f825ff67..b2aa16037707 100644
---- a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-@@ -261,6 +261,94 @@ vreg_l8e: ldo8 {
- 	};
- };
- 
-+&ethernet0 {
-+	phy-mode = "sgmii";
-+	phy-handle = <&sgmii_phy>;
-+
-+	pinctrl-0 = <&ethernet0_default>;
-+	pinctrl-names = "default";
-+
-+	snps,mtl-rx-config = <&mtl_rx_setup>;
-+	snps,mtl-tx-config = <&mtl_tx_setup>;
-+	snps,ps-speed = <1000>;
-+
-+	status = "okay";
-+
-+	mdio {
-+		compatible = "snps,dwmac-mdio";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		reset-gpios = <&pmm8654au_2_gpios 8 GPIO_ACTIVE_LOW>;
-+		reset-delay-us = <11000>;
-+		reset-post-delay-us = <70000>;
-+
-+		sgmii_phy: phy@8 {
-+			reg = <0x8>;
-+			device_type = "ethernet-phy";
-+		};
-+	};
-+
-+	mtl_rx_setup: rx-queues-config {
-+		snps,rx-queues-to-use = <4>;
-+		snps,rx-sched-sp;
-+
-+		queue0 {
-+			snps,dcb-algorithm;
-+			snps,map-to-dma-channel = <0x0>;
-+			snps,route-up;
-+			snps,priority = <0x1>;
-+		};
-+
-+		queue1 {
-+			snps,dcb-algorithm;
-+			snps,map-to-dma-channel = <0x1>;
-+			snps,route-ptp;
-+		};
-+
-+		queue2 {
-+			snps,avb-algorithm;
-+			snps,map-to-dma-channel = <0x2>;
-+			snps,route-avcp;
-+		};
-+
-+		queue3 {
-+			snps,avb-algorithm;
-+			snps,map-to-dma-channel = <0x3>;
-+			snps,priority = <0xc>;
-+		};
-+	};
-+
-+	mtl_tx_setup: tx-queues-config {
-+		snps,tx-queues-to-use = <4>;
-+		snps,tx-sched-sp;
-+
-+		queue0 {
-+			snps,dcb-algorithm;
-+		};
-+
-+		queue1 {
-+			snps,dcb-algorithm;
-+		};
-+
-+		queue2 {
-+			snps,avb-algorithm;
-+			snps,send_slope = <0x1000>;
-+			snps,idle_slope = <0x1000>;
-+			snps,high_credit = <0x3e800>;
-+			snps,low_credit = <0xffc18000>;
-+		};
-+
-+		queue3 {
-+			snps,avb-algorithm;
-+			snps,send_slope = <0x1000>;
-+			snps,idle_slope = <0x1000>;
-+			snps,high_credit = <0x3e800>;
-+			snps,low_credit = <0xffc18000>;
-+		};
-+	};
-+};
-+
- &i2c11 {
- 	clock-frequency = <400000>;
- 	pinctrl-0 = <&qup_i2c11_default>;
--- 
-2.39.2
+- fabian
 
