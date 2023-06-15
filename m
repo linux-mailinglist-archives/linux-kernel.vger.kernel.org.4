@@ -2,123 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66B08731E38
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D8B731E4D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 18:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236867AbjFOQvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 12:51:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49204 "EHLO
+        id S237894AbjFOQvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 12:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235820AbjFOQuu (ORCPT
+        with ESMTP id S235017AbjFOQvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 12:50:50 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0AAF2D45;
-        Thu, 15 Jun 2023 09:50:38 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id B331F5C011A;
-        Thu, 15 Jun 2023 12:50:37 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Thu, 15 Jun 2023 12:50:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1686847837; x=1686934237; bh=vI
-        /hsoiUvma2GUe2XFIA+w7iata8Xrp62/nT+TjfC1g=; b=501D+/oPYAwT3uVkcX
-        WkZ22rscfGQnEb9BadEIsQbZwxbfzGrxruC6TK8eRql+8GrIU93YruZPdSbB+SyV
-        jLh3k+eMCQ6mZQgubyrKBG+hZGEZzA35qn6FdgiFpZGfgM75EhTOXY1Twz/e69K3
-        25vCmGnjmJSVrNtzHQuHCZ1hLJwtazKZDf9cCK4CZim54PMKWS+T2UPbDLBuYb4l
-        OK/J1OYOG+ZtvaO080RD1ScCbTsafgQ62N3L1IsGAbpkFGCk3P7gvvpQiFFKBO6D
-        JyavBwqB93znXbOM3+KgFRB8clsw3GcRmlW65fLUdzQcoGy4tVYOeS77JA8qYl4c
-        Szfw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1686847837; x=1686934237; bh=vI/hsoiUvma2G
-        Ue2XFIA+w7iata8Xrp62/nT+TjfC1g=; b=SWlMtKwCbPZh1rGH88mftqv4A+lVF
-        NVavhAo4ULQuqhBs46Yp9EhGhIuap1tin+pCLlHiJQgcPnQ/YubGnGBL9ogRIprw
-        ZwvlircCWkX2yyETVd8ZAEisQAiSsJtDP6jfORxZNpEOdyuyxGeDspdCi1Q1XUvh
-        2i1F8SpRLebq3ChDwT/zuRTG8vsMHu/Wkt4qImPksDustaClKEOcfSiU+A/fbuWM
-        1Yexpq+2KSiQAEd/pUhpdjfSIkK1TJeb08zYytUirbwy/7G9+8+lbCFPNPcsFN7m
-        9IAevR65wckDEPiT0DNzai9qv05pJQ+rOemYH3H9FmviNe2fEyPqQHmAw==
-X-ME-Sender: <xms:XUGLZMJKQj-A5n59OhC1Vm4bRqg08icJuclqa35RC1ItFV3HryHbyg>
-    <xme:XUGLZMI8Mu1alpdTsMau7UuEMmy5h2FdhBWPMxsa035kothOTgGLIX3jw3WlOmdn1
-    iLX2BrSI1_uuZP9xzc>
-X-ME-Received: <xmr:XUGLZMuCMlcUzb8yHA9--S9qI_tXYRlH5MTqRjwKAuMmwlvQ2WYYtYbJHdpGWfQDsDb_roMbTawatH-VjDUIlw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedvvddguddtudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehgtdfsredttddvnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepueevudehuedtkeevgfduveejueefvddvvefhjefglefgtdekveeugeet
-    kefgleefnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:XUGLZJZ-C2RU9kbFU4ASeptjcCZHHpsEP5_VrnciMxJNevOO-3PpJA>
-    <xmx:XUGLZDZuK-9BuKu1Zn-BXQWnUOOVyh2K6_rx6BtCEubfE0teogDasg>
-    <xmx:XUGLZFANMckhOCy2-lVRpj791UaNs-nVhEQ56zzC4ZdlPhLPhddusQ>
-    <xmx:XUGLZBO0gyTJxDU-A4XQws8NBft9O8FDxvE-L_RGqsVl4AtNdAQHvA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 15 Jun 2023 12:50:37 -0400 (EDT)
+        Thu, 15 Jun 2023 12:51:10 -0400
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738F5295A;
+        Thu, 15 Jun 2023 09:51:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686847855; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=mhFWwgg9/K2CIRT6uPEyI/Blj3vXcLCeqxqfGYsIHLKWWkck0Hv8rGOqGE4A9uYsua
+    EGMfWhJ2mjjVluRb++X/Jl7lxJc71HmzSH5dMl46brXJY0yrmuKAhA+PaQNSh3cXfe2g
+    tpa9El2mWcsOUvmOHNnyL1PK/io+3S9nG52Nne0Z51+jJsQwvGINAo6ABl8lyhhYD+hj
+    o+k+KxPaTMVtMTKnCAMQlo5wp7IDqD0qPgbANgNaAs2m6KECkczTb4wgYO0tUrZNbr2i
+    lInWzNNZeSOmpv3JmT1zN+kvnx1vUt5I6TpPxxoPOSoqCGC/zSNS/9gKG0JPKAWGMS9N
+    5B7w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686847855;
+    s=strato-dkim-0002; d=strato.com;
+    h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
+    From:Subject:Sender;
+    bh=zIP6Ad+n6GtTcdAN99toMZU1nMdvUwM/xKmNfiwoI/o=;
+    b=ZazKYoS4pIUqBgp5SgGIdGwx2dBU7fB0AmtPw0rGaCRrV7NNeS+1ybe99+qN3WQRiy
+    dVZVM+BLsRfqmc4s704B/nLjr6BM+4if7LlDuffWUZsnjuY/ItybtfxhhGJ9fdeQyUqL
+    gdzWpdTYYKI4WQ41DR9EeyAsIxEyjSJT/qQ2FS94eqZ7qmR69xn0R5CKMVLVrt646Dpu
+    wDn8oj3MdwN/scdrmxbrJogSK22nON79m/pD23mPuN+jMKqLVxi5SLW2mGAraJt5hzzr
+    kDZbc8pkqDqWlFnqiBEtPhSHL8GGuysGGPF478HTgcZbw2QEpBACy7pcfBoQxFmdIPpJ
+    B1rQ==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686847855;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
+    From:Subject:Sender;
+    bh=zIP6Ad+n6GtTcdAN99toMZU1nMdvUwM/xKmNfiwoI/o=;
+    b=HPtSrxzp37SnCjw6mSC5MPNEwdiABkiYSiu7RyYJD3Hfp4ztm3+Hn3CoAgz/ow+tb6
+    JfeZm7OnEKCWk+CgkGCcrUf8EWU8tsB5vL6TzblScS5yG9KP43Xf7BDImgiQyn8sK/sy
+    AXgNmq0Qlr2hvjyJ9QTtM5vknX3fHKaWceFAxro4Zsnt6wx5HRyYMheojCRcLPxSaQpo
+    1B/isZV+lCgIuEO6VcQqVf85SGCJOHEjeJW0UqS4PN05mELD+TwnanbKVxwY0az4272p
+    q3ux3gFcYiN6cIVViuMXnuxy6V7WtSAydkxAMwvcoNqI6QiKJfIY3ZQ1yMGSd9AM7AVn
+    Qd8w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686847855;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
+    From:Subject:Sender;
+    bh=zIP6Ad+n6GtTcdAN99toMZU1nMdvUwM/xKmNfiwoI/o=;
+    b=NZYz6twwo+WsmWVDiBV5rVckt0IBVNvQtTPrxC9DPP1OdhySDYoxND09AkfjPJpOwP
+    CBzLxlCYr2ppCYEb70Dg==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQjVd4CteZ/7jYgS+mLFY+H0JAn9VOf59w=="
+Received: from [192.168.244.3]
+    by smtp.strato.de (RZmta 49.6.0 DYNA|AUTH)
+    with ESMTPSA id D0d0a8z5FGot42d
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 15 Jun 2023 18:50:55 +0200 (CEST)
+From:   Stephan Gerhold <stephan@gerhold.net>
 Date:   Thu, 15 Jun 2023 18:50:35 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        m.grzeschik@pengutronix.de, windhl@126.com,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 07/11] clk: at91: clk-utmi: add support for parent_hw
-Message-ID: <r3432f4teontgh5obljdggl4dn5n3fn3bxjntlpzxzjrw7s2zp@6uleyrrdwx7k>
-References: <20230615093227.576102-1-claudiu.beznea@microchip.com>
- <20230615093227.576102-8-claudiu.beznea@microchip.com>
+Subject: [PATCH v3 02/13] dt-bindings: soc: qcom: smd-rpm: Add MSM8909 to
+ qcom,smd-channels
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="67qssutobxzdeit6"
-Content-Disposition: inline
-In-Reply-To: <20230615093227.576102-8-claudiu.beznea@microchip.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230531-rpm-rproc-v3-2-a07dcdefd918@gerhold.net>
+References: <20230531-rpm-rproc-v3-0-a07dcdefd918@gerhold.net>
+In-Reply-To: <20230531-rpm-rproc-v3-0-a07dcdefd918@gerhold.net>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+MSM8909 is using qcom,smd-channels but is missing in the list, add it
+there as well.
 
---67qssutobxzdeit6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: 709d473dd5e1 ("dt-bindings: soc: qcom: smd-rpm: Add MSM8909")
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+---
+ Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-On Thu, Jun 15, 2023 at 12:32:23PM +0300, Claudiu Beznea wrote:
-> Add support for parent_hw in utmi clock drivers.
-> With this parent-child relation is described with pointers rather
-> than strings making registration a bit faster.
->=20
-> All the SoC based drivers that rely on clk-utmi were adapted
-> to the new API change. The switch itself for SoCs will be done
-> in subsequent patches.
->=20
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
+index fe814b991559..78822315edeb 100644
+--- a/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
++++ b/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
+@@ -82,6 +82,7 @@ if:
+         enum:
+           - qcom,rpm-apq8084
+           - qcom,rpm-msm8226
++          - qcom,rpm-msm8909
+           - qcom,rpm-msm8916
+           - qcom,rpm-msm8936
+           - qcom,rpm-msm8953
 
-Reviewed-by: Maxime Ripard <mripard@kernel.org>
+-- 
+2.40.1
 
-Maxime
-
---67qssutobxzdeit6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZItBWwAKCRDj7w1vZxhR
-xcO3AP9Ngpz6vvvc6cBWVZFmqHd6QGEA3f4N++MeMjbbUkZgqAD/Xb341DBKY8k0
-1DxM5M86J0W4/N8/uwzctcDcdw253wc=
-=/xzB
------END PGP SIGNATURE-----
-
---67qssutobxzdeit6--
