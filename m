@@ -2,61 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A3BD731A91
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00785731A87
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344639AbjFONzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 09:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59582 "EHLO
+        id S1344279AbjFONyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 09:54:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344641AbjFONyq (ORCPT
+        with ESMTP id S238051AbjFONyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 09:54:46 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD0D1FD4;
-        Thu, 15 Jun 2023 06:54:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686837284; x=1718373284;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=815xhyqBJVkUcTa8Wnb+dhIrshSrEjCMA06FFhOLA18=;
-  b=kmXuT3ujwTcmvUdRvX4h+dVAgbOY5t3ACG20eWo3smlgfNTBOpBHQMZD
-   2D9XqijUdcNJEgBSMCa4g+A0Fy+T8Zb1sTJ84Nj/H0BD4cXmFxfB1BwpK
-   f+LldfKonXADpSibh/lksv2p27AhHUP6yz7+VoDvkodfHvd2RSOU9wRtr
-   1Gl/Bv2PvpOl+5dyelAqVgPaiD2MltHgZOjc22paFZhmozAvqypB2AHf+
-   phgksY9Xph7ZduabuvhKgSg/REkX2uXDjplYFJhltBMJsGSwf1gUVF1ZD
-   uQRM/lvflUoptMfwLVriqw8Bp5MELRh8Gtaf5F2+z+DcHQg9ALRr6zwZa
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="356411436"
-X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="356411436"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 06:54:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="782527077"
-X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="782527077"
-Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
-  by fmsmga004.fm.intel.com with ESMTP; 15 Jun 2023 06:54:42 -0700
-From:   kan.liang@linux.intel.com
-To:     acme@kernel.org, mingo@redhat.com, peterz@infradead.org,
-        irogers@google.com, namhyung@kernel.org, jolsa@kernel.org,
-        adrian.hunter@intel.com, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     ak@linux.intel.com, eranian@google.com, ahmad.yasin@intel.com,
-        Kan Liang <kan.liang@linux.intel.com>
-Subject: [PATCH V3 8/8] perf test: Add test case for the standard perf stat output
-Date:   Thu, 15 Jun 2023 06:53:15 -0700
-Message-Id: <20230615135315.3662428-9-kan.liang@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230615135315.3662428-1-kan.liang@linux.intel.com>
-References: <20230615135315.3662428-1-kan.liang@linux.intel.com>
-MIME-Version: 1.0
+        Thu, 15 Jun 2023 09:54:36 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CF81BDB
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 06:54:35 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id 46e09a7af769-6b2f0a140b7so3724267a34.3
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 06:54:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1686837274; x=1689429274;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8aL6s+S70COXWhSW1xa78Cs58KFjDmq4WzqQOCdiOiQ=;
+        b=gO90/AdNIolSs15osNgKPkFkIycjW7AtQYUlLN1kYKDXG53CQt5/HpTfPL0SNKfV+q
+         SBWNbTDKbv/9XgznIq3QER7UkD+YWke3zclHBDwZ2nHPc4ylAj5ge1f1IcR3+d2kahjh
+         FjwxFrj3VTydDLQ8yv1GwQc4oPAYYSqq6rAimwqpm4MWQF1ys3owYsjib5W9t3oPlflv
+         CDxfBNyUSej0G/0GHx04kNAQv57eAAF0dPazGO3Io2PRLrW6FNWGhJg1fsAUgp5GjzPp
+         UgoQUCxffIfRWnbiqH/Yl9jZh0limMMAjS//SbPA5K1ihbmZnzRuFEVkb1B+JtDuEwVQ
+         cs3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686837274; x=1689429274;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8aL6s+S70COXWhSW1xa78Cs58KFjDmq4WzqQOCdiOiQ=;
+        b=S4yRz7p+gCSri5SNleksO5gsTakWbqnBD/fKzOLvmS6j7STh43wWAaOF+JVHz30dWE
+         3lf9/DVart/JFO6BD4IwrspQyrO7D+pnYrWbx7IymfgsARY3SExONoe2Fn7qcsADRSLg
+         eaJ0dK0Y+hzrnlhrgT5n9ND77WqxOwScjuUgUqJzUWjAPBjBrZ//u5iCeVwldSyBw+FG
+         5PQ0kOkEwupV34CvVjO0piYVQMIrXW9dNHrjsbSD70AX4RoP820iH0unZ+TOj78LqDbY
+         sQ1zCer58GgG0vChznaxqTXfiVsBbCGgerKiPfiGS2PZ81ccSyZDqkn097ejXsZaGJ1g
+         sb0Q==
+X-Gm-Message-State: AC+VfDxplh5nJx/Y2um8jzMFdwkiMziS3Z/VGZYdaJmIxCw0eObMqmwy
+        wt6ZP2JFfRHLzJvDmdOWfamqYQ==
+X-Google-Smtp-Source: ACHHUZ5I63uqJ8FKjWG+8uwoFHcGcg1JHnF32YJoVu3zwVNY0nDaVNwrqRY/Q7wnBZo524tHS2PlDw==
+X-Received: by 2002:a05:6358:cb2f:b0:129:c6d6:ce40 with SMTP id gr47-20020a056358cb2f00b00129c6d6ce40mr12848161rwb.15.1686837274461;
+        Thu, 15 Jun 2023 06:54:34 -0700 (PDT)
+Received: from localhost ([135.180.227.0])
+        by smtp.gmail.com with ESMTPSA id g25-20020a633759000000b0051afa49e07asm12980492pgn.50.2023.06.15.06.54.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 06:54:33 -0700 (PDT)
+Date:   Thu, 15 Jun 2023 06:54:33 -0700 (PDT)
+X-Google-Original-Date: Wed, 14 Jun 2023 09:58:00 PDT (-0700)
+Subject:     Re: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+In-Reply-To: <ZInqDdXh6wNK3NHq@xhacker>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+        Arnd Bergmann <arnd@arndb.de>, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     jszhang@kernel.org
+Message-ID: <mhng-41a06775-95dc-4747-aaab-2c5c83fd6422@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,132 +73,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+On Wed, 14 Jun 2023 09:25:49 PDT (-0700), jszhang@kernel.org wrote:
+>
+> On Wed, Jun 14, 2023 at 07:49:17AM -0700, Palmer Dabbelt wrote:
+>> On Tue, 23 May 2023 09:54:58 PDT (-0700), jszhang@kernel.org wrote:
+>> > When trying to run linux with various opensource riscv core on
+>> > resource limited FPGA platforms, for example, those FPGAs with less
+>> > than 16MB SDRAM, I want to save mem as much as possible. One of the
+>> > major technologies is kernel size optimizations, I found that riscv
+>> > does not currently support HAVE_LD_DEAD_CODE_DATA_ELIMINATION, which
+>> > passes -fdata-sections, -ffunction-sections to CFLAGS and passes the
+>> > --gc-sections flag to the linker.
+>> >
+>> > This not only benefits my case on FPGA but also benefits defconfigs.
+>> > Here are some notable improvements from enabling this with defconfigs:
+>> >
+>> > nommu_k210_defconfig:
+>> >    text    data     bss     dec     hex
+>> > 1112009  410288   59837 1582134  182436     before
+>> >  962838  376656   51285 1390779  1538bb     after
+>> >
+>> > rv32_defconfig:
+>> >    text    data     bss     dec     hex
+>> > 8804455 2816544  290577 11911576 b5c198     before
+>> > 8692295 2779872  288977 11761144 b375f8     after
+>> >
+>> > defconfig:
+>> >    text    data     bss     dec     hex
+>> > 9438267 3391332  485333 13314932 cb2b74     before
+>> > 9285914 3350052  483349 13119315 c82f53     after
+>> >
+>> > patch1 and patch2 are clean ups.
+>> > patch3 fixes a typo.
+>> > patch4 finally enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION for riscv.
+>> >
+>> > NOTE: Zhangjin Wu firstly sent out a patch to enable dead code
+>> > elimination for riscv several months ago, I didn't notice it until
+>> > yesterday. Although it missed some preparations and some sections's
+>> > keeping, he is the first person to enable this feature for riscv. To
+>> > ease merging, this series take his patch into my entire series and
+>> > makes patch4 authored by him after getting his ack to reflect
+>> > the above fact.
+>> >
+>> > Since v1:
+>> >   - collect Reviewed-by, Tested-by tag
+>> >   - Make patch4 authored by Zhangjin Wu, add my co-developed-by tag
+>> >
+>> > Jisheng Zhang (3):
+>> >   riscv: move options to keep entries sorted
+>> >   riscv: vmlinux-xip.lds.S: remove .alternative section
+>> >   vmlinux.lds.h: use correct .init.data.* section name
+>> >
+>> > Zhangjin Wu (1):
+>> >   riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+>> >
+>> >  arch/riscv/Kconfig                  |  13 +-
+>> >  arch/riscv/kernel/vmlinux-xip.lds.S |   6 -
+>> >  arch/riscv/kernel/vmlinux.lds.S     |   6 +-
+>> >  include/asm-generic/vmlinux.lds.h   |   2 +-
+>> >  4 files changed, 11 insertions(+), 16 deletions(-)
+>>
+>> Do you have a base commit for this?  It's not applying to 6.4-rc1 and the
+>> patchwork bot couldn't find one either.
+>
+> Hi Palmer,
+>
+> Commit 3b90b09af5be ("riscv: Fix orphan section warnings caused by
+> kernel/pi") touches vmlinux.lds.S, so to make the merge easy, this
+> series is based on 6.4-rc2.
 
-Add a new test case to verify the standard perf stat output with
-different options.
+Thanks.
 
-Reviewed-by: Ian Rogers <irogers@google.com>
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
----
- tools/perf/tests/shell/stat+std_output.sh | 108 ++++++++++++++++++++++
- 1 file changed, 108 insertions(+)
- create mode 100755 tools/perf/tests/shell/stat+std_output.sh
-
-diff --git a/tools/perf/tests/shell/stat+std_output.sh b/tools/perf/tests/shell/stat+std_output.sh
-new file mode 100755
-index 000000000000..98cc3356a04a
---- /dev/null
-+++ b/tools/perf/tests/shell/stat+std_output.sh
-@@ -0,0 +1,108 @@
-+#!/bin/bash
-+# perf stat STD output linter
-+# SPDX-License-Identifier: GPL-2.0
-+# Tests various perf stat STD output commands for
-+# default event and metricgroup
-+
-+set -e
-+
-+. $(dirname $0)/lib/stat_output.sh
-+
-+stat_output=$(mktemp /tmp/__perf_test.stat_output.std.XXXXX)
-+
-+event_name=(cpu-clock task-clock context-switches cpu-migrations page-faults cycles instructions branches branch-misses stalled-cycles-frontend stalled-cycles-backend)
-+event_metric=("CPUs utilized" "CPUs utilized" "/sec" "/sec" "/sec" "GHz" "insn per cycle" "/sec" "of all branches" "frontend cycles idle" "backend cycles idle")
-+
-+metricgroup_name=(TopdownL1 TopdownL2)
-+
-+cleanup() {
-+  rm -f "${stat_output}"
-+
-+  trap - EXIT TERM INT
-+}
-+
-+trap_cleanup() {
-+  cleanup
-+  exit 1
-+}
-+trap trap_cleanup EXIT TERM INT
-+
-+function commachecker()
-+{
-+	local -i cnt=0
-+	local prefix=1
-+
-+	case "$1"
-+	in "--interval")	prefix=2
-+	;; "--per-thread")	prefix=2
-+	;; "--system-wide-no-aggr")	prefix=2
-+	;; "--per-core")	prefix=3
-+	;; "--per-socket")	prefix=3
-+	;; "--per-node")	prefix=3
-+	;; "--per-die")		prefix=3
-+	;; "--per-cache")	prefix=3
-+	esac
-+
-+	while read line
-+	do
-+		# Ignore initial "started on" comment.
-+		x=${line:0:1}
-+		[ "$x" = "#" ] && continue
-+		# Ignore initial blank line.
-+		[ "$line" = "" ] && continue
-+		# Ignore "Performance counter stats"
-+		x=${line:0:25}
-+		[ "$x" = "Performance counter stats" ] && continue
-+		# Ignore "seconds time elapsed" and break
-+		[[ "$line" == *"time elapsed"* ]] && break
-+
-+		main_body=$(echo $line | cut -d' ' -f$prefix-)
-+		x=${main_body%#*}
-+		# Check default metricgroup
-+		y=$(echo $x | tr -d ' ')
-+		[ "$y" = "" ] && continue
-+		for i in "${!metricgroup_name[@]}"; do
-+			[[ "$y" == *"${metricgroup_name[$i]}"* ]] && break
-+		done
-+		[[ "$y" == *"${metricgroup_name[$i]}"* ]] && continue
-+
-+		# Check default event
-+		for i in "${!event_name[@]}"; do
-+			[[ "$x" == *"${event_name[$i]}"* ]] && break
-+		done
-+
-+		[[ ! "$x" == *"${event_name[$i]}"* ]] && {
-+			echo "Unknown event name in $line" 1>&2
-+			exit 1;
-+		}
-+
-+		# Check event metric if it exists
-+		[[ ! "$main_body" == *"#"* ]] && continue
-+		[[ ! "$main_body" == *"${event_metric[$i]}"* ]] && {
-+			echo "wrong event metric. expected ${event_metric[$i]} in $line" 1>&2
-+			exit 1;
-+		}
-+	done < "${stat_output}"
-+	return 0
-+}
-+
-+perf_cmd="-o ${stat_output}"
-+
-+skip_test=$(check_for_topology)
-+check_no_args "STD" "$perf_cmd"
-+check_system_wide "STD" "$perf_cmd"
-+check_interval "STD" "$perf_cmd"
-+check_per_thread "STD" "$perf_cmd"
-+check_per_node "STD" "$perf_cmd"
-+if [ $skip_test -ne 1 ]
-+then
-+	check_system_wide_no_aggr "STD" "$perf_cmd"
-+	check_per_core "STD" "$perf_cmd"
-+	check_per_cache_instance "STD" "$perf_cmd"
-+	check_per_die "STD" "$perf_cmd"
-+	check_per_socket "STD" "$perf_cmd"
-+else
-+	echo "[Skip] Skipping tests for system_wide_no_aggr, per_core, per_die and per_socket since socket id exposed via topology is invalid"
-+fi
-+cleanup
-+exit 0
--- 
-2.35.1
-
+>
+> Thanks
