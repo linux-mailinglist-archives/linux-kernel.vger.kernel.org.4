@@ -2,192 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 856DF731FEC
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 20:26:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21D77731FFA
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 20:29:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230282AbjFOS04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 14:26:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38652 "EHLO
+        id S237595AbjFOS3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 14:29:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjFOS0y (ORCPT
+        with ESMTP id S229798AbjFOS3n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 14:26:54 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E71199D
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 11:26:53 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1b51ba96cb4so6236985ad.3
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 11:26:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686853612; x=1689445612;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=v5j0wCZPnfsM4/SjEwwVDfexZdOw0uK6iqseA0HQUzE=;
-        b=pVetr2jEMF5lF1mCTvADonXqP6bFE0nxsdmxOn0ASTw2/bFTnBCX3GM5/ND7idJYcK
-         WLJ9v5Jtgv7YkQ2t1A7zr6BtWjGAUd3nGNd07s8rKjBzK87V1SPxXbBBFz/A0h4/TJ+6
-         PGmBMXeXE9iwEFyxsQoXFCV8sBkm29Ah7+IBIGN34Rgv+Rsgl1RNt8i9bBt7KJ4b5QVP
-         kObHHMIWjacSwTjfHlphojvQG6ZoJtxmutK76LuVb5zNph2otTKjSu6e9v7dG85CX5qp
-         /ZUeWSJZa6+15VCNA95293lQnjitxNStYywqEhGfprGR2cMKGHH5r/UDSXD2EdD+dK2Z
-         XA6g==
+        Thu, 15 Jun 2023 14:29:43 -0400
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5812A7;
+        Thu, 15 Jun 2023 11:29:42 -0700 (PDT)
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-30e3caa6aa7so8061301f8f.1;
+        Thu, 15 Jun 2023 11:29:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686853612; x=1689445612;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v5j0wCZPnfsM4/SjEwwVDfexZdOw0uK6iqseA0HQUzE=;
-        b=djxq6a9JKglF+gK1Q6x5Ldk+fE4RfI4l71OtvqdShdbLdKaaer8CzaF3o9PZYefw6+
-         RffZ0PeaNlaHuaxDLjtqyYkkqU3Gc/7ApQjIc6EUWUi0YZWDZ13x4/kg/1SszByg+SX8
-         Z81SFUSL5HD6Ypnb5YnLIEw7GIAamXtE3IN0u/xJ0bMVV+6ZWFE1I9CYCotC9itncJRW
-         +HeNovxlX0ERAhgOspZKkrELIoRSPa+/uKnX8TkS+0TPZC0zeyePvV8hwDL4oAm34U7g
-         Q/H8pg2O6JBH7qudHY8+nyChRTLv9DSofZqk3cW9etk55TxTuoLjKsFe6uZhmsrLkovD
-         0slQ==
-X-Gm-Message-State: AC+VfDwFOOL7yXD66zjbxo87Dcc8Svs6UsFL9iJ0TvxPawGiMdytEHjD
-        wTolt+ZgowCm2lflu+K3mXoq39Q9QVQ=
-X-Google-Smtp-Source: ACHHUZ4XblfvtELYfPfTXYv/mZguDzYqVYK+D/wTZAy9MdyrQSECLLlB+UmOM8NMKOmXv6Fwf6a/c1+W5jI=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:a70f:b0:1b5:64:1862 with SMTP id
- w15-20020a170902a70f00b001b500641862mr893196plq.9.1686853612603; Thu, 15 Jun
- 2023 11:26:52 -0700 (PDT)
-Date:   Thu, 15 Jun 2023 11:26:51 -0700
-In-Reply-To: <20230526234435.662652-10-yuzhao@google.com>
-Mime-Version: 1.0
-References: <20230526234435.662652-1-yuzhao@google.com> <20230526234435.662652-10-yuzhao@google.com>
-Message-ID: <ZItX64Bbx5vdjo9M@google.com>
-Subject: Re: [PATCH mm-unstable v2 09/10] kvm/x86: add kvm_arch_test_clear_young()
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Anup Patel <anup@brainfault.org>,
-        Ben Gardon <bgardon@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Gavin Shan <gshan@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michael Larabel <michael@michaellarabel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Peter Xu <peterx@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
-        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
-        linux-trace-kernel@vger.kernel.org, x86@kernel.org,
-        linux-mm@google.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1686853781; x=1689445781;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=c8i3hO6Asw9z4pBJsjq1JNXvz4oP43/hziP/VGcJWDw=;
+        b=NMaDZHnDQ3Z7ZmSAQTNabAZvQhaN6MlPLivFhypaF4Osrc9bPn8oStXT7dDFcwREbH
+         spKHCOcDlCUls045W042NqKFqb0IXj88a5cWvjTuTFcPPEhJMj/MbrJY3aKstPJGGW7c
+         ckz9ld2O1pSW5l0PqqcQnOieFPPbVmfQi8xhNLA90yDIPwTrcAXX5OIUw5AIgpNj84dq
+         iPDOTe8j0bkzbF7i7D4gtgaNjB2Ark+pgNSMDCxSe6udXwKYvlcENirEIeeOsZ1dGDdd
+         tJlIWm7Yfu+f4njbfV8ban3J9jteDFQMuhMZSYlqjS/vE2L+tl6l6fdJnRz3jLhYF6LY
+         3crQ==
+X-Gm-Message-State: AC+VfDxbjV+17RjI7JOn2IDkWmJNass3LA/ZHoHvSIopw7PZnT0RHSLR
+        tqBV17pOKBLO02o52iUuT3c=
+X-Google-Smtp-Source: ACHHUZ5bNKCVo0ONW/4FCdjDRxW3DorS7WwJat8TD6mIj0BzMMV2c0ZYkNZEQqcZAdMqee8pptpPRQ==
+X-Received: by 2002:adf:f810:0:b0:30f:d32c:ed8e with SMTP id s16-20020adff810000000b0030fd32ced8emr4950226wrp.45.1686853781021;
+        Thu, 15 Jun 2023 11:29:41 -0700 (PDT)
+Received: from ryzen.lan (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net. [82.11.51.62])
+        by smtp.gmail.com with ESMTPSA id c3-20020adffb03000000b0030ab5ebefa8sm21525887wrr.46.2023.06.15.11.29.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 11:29:40 -0700 (PDT)
+From:   Lucas Tanure <tanure@linux.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Nick <nick@khadas.com>, Artem <art@khadas.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        Lucas Tanure <tanure@linux.com>
+Subject: [PATCH 0/6] Add Amlogic A311D2 and Khadas Vim4 Board Support
+Date:   Thu, 15 Jun 2023 19:29:32 +0100
+Message-ID: <20230615182938.18487-1-tanure@linux.com>
+X-Mailer: git-send-email 2.41.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023, Yu Zhao wrote:
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index 08340219c35a..6875a819e007 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -1232,6 +1232,40 @@ bool kvm_tdp_mmu_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
->  	return kvm_tdp_mmu_handle_gfn(kvm, range, test_age_gfn);
->  }
->  
-> +bool kvm_arch_test_clear_young(struct kvm *kvm, struct kvm_gfn_range *range)
-> +{
-> +	struct kvm_mmu_page *root;
-> +	int offset = ffs(shadow_accessed_mask) - 1;
-> +
-> +	if (kvm_shadow_root_allocated(kvm))
+The Khadas VIM4 uses the Amlogic A311D2 SoC, based on the Amlogic
+Meson T7 SoC family. This chip is not the same as A311D used in Vim3
+board.
 
-This needs a comment.
+Work based on Khadas 5.4 branch:
+https://github.com/khadas/linux/tree/khadas-vims-5.4.y
 
-> +		return true;
-> +
-> +	rcu_read_lock();
-> +
-> +	list_for_each_entry_rcu(root, &kvm->arch.tdp_mmu_roots, link) {
+Board Features:
+- 8GB LPDDR4X 2016MHz
+- 32GB eMMC 5.1 storage
+- 32MB SPI flash
+- 10/100/1000 Base-T Ethernet
+- AP6275S Wireless (802.11 a/b/g/n/ac/ax, BT5.1)
+- HDMI 2.1 video
+- HDMI Input
+- 1x USB 2.0 + 1x USB 3.0 ports
+- 1x USB-C (power) with USB 2.0 OTG
+- 3x LED's (1x red, 1x blue, 1x white)
+- 3x buttons (power, function, reset)
+- M2 socket with PCIe, USB, ADC & I2C
+- 40pin GPIO Header
+- 1x micro SD card slot
 
-As requested in v1[1], please add a macro for a lockless walk.
+Lucas Tanure (6):
+  dt-bindings: arm: amlogic: add Amlogic T7 based Khadas VIM4 bindings
+  dt-bindings: clock: Bindings for Meson T7 clock controller
+  clk: meson: t7: add peripheral clock controller
+  dt-bindings: serial: amlogic, meson-uart: support T7
+  tty: serial: meson: Added T7 SOC compatibility
+  arm64: dts: meson-t7-a311d2-khadas-vim4: add initial device-tree
 
-[1] https://lkml.kernel.org/r/Y%2Fed0XYAPx%2B7pukA%40google.com
+ .../devicetree/bindings/arm/amlogic.yaml      |    7 +
+ .../bindings/clock/amlogic,mesont7.yaml       |   69 +
+ .../bindings/serial/amlogic,meson-uart.yaml   |    1 +
+ arch/arm64/boot/dts/amlogic/Makefile          |    1 +
+ .../amlogic/meson-t7-a311d2-khadas-vim4.dts   |  112 +
+ arch/arm64/boot/dts/amlogic/meson-t7.dtsi     |  202 +
+ drivers/clk/meson/Kconfig                     |   17 +
+ drivers/clk/meson/Makefile                    |    1 +
+ drivers/clk/meson/t7.c                        | 8014 +++++++++++++++++
+ drivers/clk/meson/t7.h                        |  235 +
+ drivers/tty/serial/meson_uart.c               |    4 +
+ include/dt-bindings/clock/mesont7-clkc.h      |  487 +
+ 12 files changed, 9150 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/amlogic,mesont7.yaml
+ create mode 100644 arch/arm64/boot/dts/amlogic/meson-t7-a311d2-khadas-vim4.dts
+ create mode 100644 arch/arm64/boot/dts/amlogic/meson-t7.dtsi
+ create mode 100644 drivers/clk/meson/t7.c
+ create mode 100644 drivers/clk/meson/t7.h
+ create mode 100644 include/dt-bindings/clock/mesont7-clkc.h
 
-> +		struct tdp_iter iter;
-> +
-> +		if (kvm_mmu_page_as_id(root) != range->slot->as_id)
-> +			continue;
-> +
-> +		tdp_root_for_each_leaf_pte(iter, root, range->start, range->end) {
-> +			u64 *sptep = rcu_dereference(iter.sptep);
-> +
-> +			VM_WARN_ON_ONCE(!page_count(virt_to_page(sptep)));
-
-Hrm, I don't like adding this in KVM.  The primary MMU might guarantee that this
-callback is invoked if and only if the SPTE is backed by struct page memory, but
-there's no reason to assume that's true in KVM.  If we want the sanity check, then
-this needs to use kvm_pfn_to_refcounted_page().
-
-And it should use KVM's MMU_WARN_ON(), which is a mess and effectively dead code,
-but I'm working on changing that[*], i.e. by the time this gets to Linus' tree,
-the sanity check should have a much cleaner implementation.
-
-[2] https://lore.kernel.org/all/20230511235917.639770-8-seanjc@google.com
-
-> +
-> +			if (!(iter.old_spte & shadow_accessed_mask))
-> +				continue;
-> +
-> +			if (kvm_should_clear_young(range, iter.gfn))
-> +				clear_bit(offset, (unsigned long *)sptep);
-
-If/when you rebase on https://github.com/kvm-x86/linux/tree/next, can you pull
-out the atomic bits of tdp_mmu_clear_spte_bits() and use that new helper? E.g.
-
-diff --git a/arch/x86/kvm/mmu/tdp_iter.h b/arch/x86/kvm/mmu/tdp_iter.h
-index fae559559a80..914c34518829 100644
---- a/arch/x86/kvm/mmu/tdp_iter.h
-+++ b/arch/x86/kvm/mmu/tdp_iter.h
-@@ -58,15 +58,18 @@ static inline u64 kvm_tdp_mmu_write_spte(tdp_ptep_t sptep, u64 old_spte,
-        return old_spte;
- }
- 
-+static inline u64 tdp_mmu_clear_spte_bits_atomic(tdp_ptep_t sptep, u64 mask)
-+{
-+       atomic64_t *sptep_atomic = (atomic64_t *)rcu_dereference(sptep);
-+
-+       return (u64)atomic64_fetch_and(~mask, sptep_atomic);
-+}
-+
- static inline u64 tdp_mmu_clear_spte_bits(tdp_ptep_t sptep, u64 old_spte,
-                                          u64 mask, int level)
- {
--       atomic64_t *sptep_atomic;
--
--       if (kvm_tdp_mmu_spte_need_atomic_write(old_spte, level)) {
--               sptep_atomic = (atomic64_t *)rcu_dereference(sptep);
--               return (u64)atomic64_fetch_and(~mask, sptep_atomic);
--       }
-+       if (kvm_tdp_mmu_spte_need_atomic_write(old_spte, level))
-+               return tdp_mmu_clear_spte_bits_atomic(sptep, mask);
- 
-        __kvm_tdp_mmu_write_spte(sptep, old_spte & ~mask);
-        return old_spte;
+--
+2.41.0
 
