@@ -2,98 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72FE9731813
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:03:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 328CC73181D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:05:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344713AbjFOMDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 08:03:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47556 "EHLO
+        id S244856AbjFOMFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 08:05:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbjFOMC7 (ORCPT
+        with ESMTP id S1344730AbjFOMEt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 08:02:59 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6DA4493
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 04:58:49 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-25c101bf7deso2298148a91.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 04:58:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1686830329; x=1689422329;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bNHs/NR0g3CX4rW6Ho5JPY5yd2snM7LkZeKUoyaN2ks=;
-        b=WV1XjiHElJw1Dt3NqHZK44RMlOQSXYmk9mEYfzgObb3VsK8oAGUb+OAM2MLVaU/tg5
-         G12vn9VD7ij3vcUmK9wtMNlp19C8vMlDfkHAdmGbI5YMONVbhGcoLpUvuaoRh7kF6PNv
-         A9UoEHfRvVPVitjoMsuGncjnAgkyACv525U31JYBkMmqLXMnEZOhxNI4pYU6RZHmPAPZ
-         LHPdfQ+b1e+Y/Q5lQ4p+kstmmpl+B13kTv/ai8ePLcHL997uUqAmbOoULuIuHiW7vqRs
-         opzj5nFbzlgGlKw6+IbURjL+8S0ZuwCUtZl5eLxeMSBDX+DqSM1Yeyn7O0veq6KqDhQs
-         zq5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686830329; x=1689422329;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bNHs/NR0g3CX4rW6Ho5JPY5yd2snM7LkZeKUoyaN2ks=;
-        b=Phb4QBoRJfSmbUYLAwZuswDyqB0lfZ/G7I1PHoUgm4dyDIyUOiETCG4ySWX4YKnmvR
-         5R0uKUHYFYxE0FvXLz7DHMWakvR9ilybbvRXbtDiPpbQXdVHaI+j+oWjvf11eZrHPSs5
-         h2RkATOi3eIg0uBIJ2X5Sum9X3MpF0Tm2a5Yl75wDwAnQCFCUPO+OyqczWB8QKNYNOrS
-         x+QiW/8qSYjdd6dtpUJFfh1wSEExgFaaWWeQgco8OUz+XywFMLfRQc0g73cR15cphsEA
-         1Rc2En1RZcy7QQx+4WE5kUfrjTphBHxt7ydU/0QsJAkOIxO6lN1lWrnlYW1jPX3Rc8+J
-         ewEg==
-X-Gm-Message-State: AC+VfDxay8RkoqCkWRraBZ+IRY9EX8oWN37FtGqG/eEHvdMNKp4hQ168
-        PoyCszBgi4a29YYPpzUqtMGXHy0yQMfcEs4ZYsNRTg==
-X-Google-Smtp-Source: ACHHUZ7H84huBYjF2DEKDb9mSSjBrZREUPgUPr4YGUukPXUxSgt0KbpwnJnKEx26CCSb63p91mc7xHdbX27D8ZU26X0=
-X-Received: by 2002:a17:90a:804a:b0:25c:7f2:2e5d with SMTP id
- e10-20020a17090a804a00b0025c07f22e5dmr4083701pjw.13.1686830329333; Thu, 15
- Jun 2023 04:58:49 -0700 (PDT)
+        Thu, 15 Jun 2023 08:04:49 -0400
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCAD83C1E
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 05:02:28 -0700 (PDT)
+X-QQ-mid: bizesmtp81t1686830516td0ag0cp
+Received: from localhost.localdomain ( [113.200.76.118])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 15 Jun 2023 20:01:54 +0800 (CST)
+X-QQ-SSF: 01400000000000D0H000000A0000020
+X-QQ-FEAT: U7OmrCiPqqCNs/1Wo4j9RRW767Dpr6gKSGIV7rEhk2Ho0VjgHu8Y0rNelj88+
+        e3Dwulayjn32aTNqtC5GnIA+kdpn8PVdFjCwBwfeplEwhX7s9R48vMp85sfD8C/MHb31iFs
+        n5orTlH3zxdna8x9hYzwg+00cxVwlpx+Dvh1WrYdUYL5oIy+nyNo6q0ZdunhNLw84eaq9fc
+        Kic18ZVXsljJn8UDiRVtUJhJP5XEHSMEnBX6HmgHfkWmfxDT+LgSDGWdTjTiZMrKDl7rPJe
+        h/xFzX8chawsft1dSpvnumGB4H7wo1l4Q56ew3fqbPOJYtmOv6AXJYI7vx/pluvlimVV3oQ
+        eBw383rJfJ+zhU7FlMSdOkCwsdGNrLWTNMBfYtpUecUvOEQ1SmgxZLe5kFcOngV0wldGP/G
+        Xt11U8JyYu7ZfENG0UOTSQ==
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 4772815933109222999
+From:   Guo Hui <guohui@uniontech.com>
+To:     peterz@infradead.org, mingo@redhat.com, will@kernel.org,
+        longman@redhat.com, boqun.feng@gmail.com
+Cc:     linux-kernel@vger.kernel.org, wangxiaohua@uniontech.com,
+        Guo Hui <guohui@uniontech.com>
+Subject: [PATCH v2] locking/osq_lock: Fix false sharing of optimistic_spin_node in osq_lock
+Date:   Thu, 15 Jun 2023 20:01:52 +0800
+Message-Id: <20230615120152.20836-1-guohui@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20230615034830.1361853-1-hezhongkun.hzk@bytedance.com> <ZIrbar9yQ6EZ217t@dhcp22.suse.cz>
-In-Reply-To: <ZIrbar9yQ6EZ217t@dhcp22.suse.cz>
-From:   =?UTF-8?B?6LS65Lit5Z2k?= <hezhongkun.hzk@bytedance.com>
-Date:   Thu, 15 Jun 2023 19:58:37 +0800
-Message-ID: <CACSyD1Pz0SHOZ-aMr6NQ7vX5iNuhUUEnH=iysR49uxo=mbfN=Q@mail.gmail.com>
-Subject: Re: [External] Re: [RFC PATCH 1/3] zram: charge the compressed RAM to
- the page's memcgroup
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     minchan@kernel.org, senozhatsky@chromium.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybglogicsvrsz:qybglogicsvrsz4a-0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi michal,  glad to hear from you.
+For the performance of osq_lock,
+I have made a patch before:
 
-> I am not really deeply familiar with zram implementation nor usage but
-> how is the above allocation going to be charged without __GFP_ACCOUNT in
-> the gfp mask?
+https://lore.kernel.org/lkml/20220628161251.21950-1-guohui@uniontech.com/
 
-Yes=EF=BC=8Czs_malloc() did not charge compressed memory, even if we add th=
-is gfp.
-so we need to implement this function in this patchset. But this flag shoul=
-d be
-used to enable this feature.
+the analysis conclusion is due to the memory access
+of the following code caused performance degradation:
 
-> Also what exactly is going to happen for the swap backed by the zram
-> device? Your memcg might be hitting the hard limit and therefore
-> swapping out. Wouldn't zs_malloc fail very likely under that condition
-> making the swap effectively unusable?
+cpu = node->cpu - 1;
 
-This is the key point, as i said above, zs_malloc() did not charge
-compressed memory,
-so zs_malloc will not fail under that condition. if the zram swap is
-large enough, zs_malloc
-never fails unless system OOM.   so memory.max will be invalidated.
+The instructions corresponding to the C code are:
+mov 0x14(%rax),%edi
+sub $0x1,%edi
 
+in the X86 operating environment,
+causing high cache-misses and degrading performance.
 
-> --
-> Michal Hocko
-> SUSE Labs
+The memory access instructions that cause performance degradation are
+further analyzed.The cache-misses of the above instructions are caused
+by a large number of cache-line false sharing
+when accessing non-local-CPU variables,as follows:
+
+         ---------------------------------
+         |   struct optimistic_spin_node |
+         ---------------------------------
+         | next | prev | locked |  cpu   |
+         ---------------------------------
+         |        cache line             |
+         ---------------------------------
+         |          CPU0                 |
+         ---------------------------------
+
+When a CPU other than CPU0 reads the value of
+optimistic_spin_node->cpu of CPU0,CPU0 frequently modifies
+the data of the cache line,which will cause false sharing
+on the currently accessing CPU,and the variable of
+the structure optimistic_spin_node type will be
+defined as a cacheline alignmented per cpu variable,
+each optimistic_spin_node variable is bound to the corresponding CPU core:
+
+    DEFINE_PER_CPU_SHARED_ALIGNED(struct optimistic_spin_node, osq_node);
+
+Therefore, the value of optimistic_spin_node->cpu is usually unchanged,
+so the false sharing caused by access to optimistic_spin_node->cpu
+is caused by frequent modification of the other three attributes
+of optimistic_spin_node.
+
+There are two solutions as follows:
+
+solution 1:
+Put the cpu attribute of optimistic_spin_node into a cacheline separately.
+The patch is as follows：
+
+ struct optimistic_spin_node {
+        struct optimistic_spin_node *next, *prev;
+        int locked; /* 1 if lock acquired */
+-       int cpu; /* encoded CPU # + 1 value */
++       int cpu ____cacheline_aligned; /* encoded CPU # + 1 value */
+ };
+
+Unixbench full-core performance data is as follows:
+Machine: Hygon X86, 128 cores
+                                    with patch   without patch  promote
+Dhrystone 2 using register variables   194923.07    195091      -0.09%
+Double-Precision Whetstone             79885.47     79838.87    +0.06%
+Execl Throughput                       2327.17      2272.1      +2.42%
+File Copy 1024 bufsize 2000 maxblocks  742.1        687.53      +7.94%
+File Copy 256 bufsize 500 maxblocks    462.73       428.03      +8.11%
+File Copy 4096 bufsize 8000 maxblocks  1600.37      1520.53     +5.25%
+Pipe Throughput                        79815.33     79522.13    +0.37%
+Pipe-based Context Switching           28962.9      27987.8     +3.48%
+Process Creation                       3084.4       2999.1      +2.84%
+Shell Scripts 1 concurrent             11687.1      11394.67    +2.57%
+Shell Scripts 8 concurrent             10787.1      10496.17    +2.77%
+System Call Overhead                   4322.77      4322.23     +0.01%
+System Benchmarks Index Score          8079.4       7848.37     +3.0%
+
+solution 2:
+The core idea of osq lock is that
+the lock applicant spins on the local-CPU variable
+to eliminate cache-line bouncing.Therefore,
+the same method is used for the above degradation.
+For the optimistic_spin_node of the current CPU,
+the cpu attribute of its predecessor optimistic_spin_node is
+non-local-CPU variables,the cpu attribute of
+the predecessor optimistic_spin_node is cached
+in the optimistic_spin_node of the current CPU
+to eliminate performance degradation
+caused by non-local-CPU variable access, as follows:
+
+        bool osq_lock(struct optimistic_spin_queue *lock)
+        {
+                [... ...]
+
+                node->prev = prev;
+                node->prev_cpu = prev->cpu; --------------- A
+
+                [... ...]
+
+                WRITE_ONCE(next->prev, prev);
+                WRITE_ONCE(prev->next, next);
+                WRITE_ONCE(next->prev_cpu, prev->cpu); -------------- B
+
+                [... ...]
+        }
+
+        static inline int node_cpu(struct optimistic_spin_node *node)
+        {
+                return node->prev_cpu - 1; ----------------------------- C
+        }
+
+While setting the prev attribute of the optimistic_spin_node of
+the current CPU,the current patch also caches the prev cpu attribute
+in the prev_cpu attribute of the optimistic_spin_node of the current CPU,
+as in the above code lines A and B,where node is a per cpu variable,
+so each one node corresponds to a CPU core,and the cpu attribute of
+the node corresponding to the CPU core will not change.
+Only when the prev attribute of the node is set,
+the prev_cpu of the node may change with the change of prev.
+At other times, the prev attribute of the node will not change.
+so the prev_cpu of node will not change.
+This patch greatly reduces the non-local-CPU variable
+access at code line C and improves performance.
+
+Unixbench full-core performance data is as follows:
+Machine: Hygon X86, 128 cores
+                                    with patch   without patch   promote
+Dhrystone 2 using register variables  194818.7     195091        -0.14%
+Double-Precision Whetstone            79847.57     79838.87      +0.01%
+Execl Throughput                      2372.83      2272.1        +4.43%
+File Copy 1024 bufsize 2000 maxblocks 765          687.53        +11.27%
+File Copy 256 bufsize 500 maxblocks   472.13       428.03        +10.30%
+File Copy 4096 bufsize 8000 maxblocks 1658.13      1520.53       +9.05%
+Pipe Throughput                       79634.17     79522.13      +0.14%
+Pipe-based Context Switching          28584.7      27987.8       +2.13%
+Process Creation                      3020.27      2999.1        +0.71%
+Shell Scripts 1 concurrent            11890.87     11394.67      +4.35%
+Shell Scripts 8 concurrent            10912.9      10496.17      +3.97%
+System Call Overhead                  4320.63      4322.23       -0.04%
+System Benchmarks Index Score         8144.43      7848.37       +4.0%
+
+In summary, the performance of solution 2 is better than solution 1.
+Especially use cases: execl, file copy, shell1, shell8,
+great improvement,because solution 1 still has the possibility of
+remote memory access across NUMA nodes,
+and solution 2 completely accesses local-CPU variables,
+so solution 2 is better than solution 1.
+
+Both solutions also have a great improvement in the X86 virtual machine.
+
+The current patch also uses solution 2.
+
+Signed-off-by: Guo Hui <guohui@uniontech.com>
+---
+ include/linux/osq_lock.h  | 1 +
+ kernel/locking/osq_lock.c | 8 +++++---
+ 2 files changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/osq_lock.h b/include/linux/osq_lock.h
+index 5581dbd3bd34..8a1bb36f4a07 100644
+--- a/include/linux/osq_lock.h
++++ b/include/linux/osq_lock.h
+@@ -10,6 +10,7 @@ struct optimistic_spin_node {
+ 	struct optimistic_spin_node *next, *prev;
+ 	int locked; /* 1 if lock acquired */
+ 	int cpu; /* encoded CPU # + 1 value */
++	int prev_cpu; /* Only for optimizing false sharing */
+ };
+ 
+ struct optimistic_spin_queue {
+diff --git a/kernel/locking/osq_lock.c b/kernel/locking/osq_lock.c
+index d5610ad52b92..ea1fdd10ab3e 100644
+--- a/kernel/locking/osq_lock.c
++++ b/kernel/locking/osq_lock.c
+@@ -22,9 +22,9 @@ static inline int encode_cpu(int cpu_nr)
+ 	return cpu_nr + 1;
+ }
+ 
+-static inline int node_cpu(struct optimistic_spin_node *node)
++static inline int node_prev_cpu(struct optimistic_spin_node *node)
+ {
+-	return node->cpu - 1;
++	return READ_ONCE(node->prev_cpu) - 1;
+ }
+ 
+ static inline struct optimistic_spin_node *decode_cpu(int encoded_cpu_val)
+@@ -110,6 +110,7 @@ bool osq_lock(struct optimistic_spin_queue *lock)
+ 
+ 	prev = decode_cpu(old);
+ 	node->prev = prev;
++	node->prev_cpu = prev->cpu;
+ 
+ 	/*
+ 	 * osq_lock()			unqueue
+@@ -141,7 +142,7 @@ bool osq_lock(struct optimistic_spin_queue *lock)
+ 	 * polling, be careful.
+ 	 */
+ 	if (smp_cond_load_relaxed(&node->locked, VAL || need_resched() ||
+-				  vcpu_is_preempted(node_cpu(node->prev))))
++				  vcpu_is_preempted(node_prev_cpu(node))))
+ 		return true;
+ 
+ 	/* unqueue */
+@@ -200,6 +201,7 @@ bool osq_lock(struct optimistic_spin_queue *lock)
+ 
+ 	WRITE_ONCE(next->prev, prev);
+ 	WRITE_ONCE(prev->next, next);
++	WRITE_ONCE(next->prev_cpu, prev->cpu);
+ 
+ 	return false;
+ }
+-- 
+2.20.1
+
