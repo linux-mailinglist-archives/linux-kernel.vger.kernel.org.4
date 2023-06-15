@@ -2,226 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F493731B3C
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDFB4731B4F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345033AbjFOOYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 10:24:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
+        id S1344488AbjFOO1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 10:27:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345046AbjFOOYI (ORCPT
+        with ESMTP id S241308AbjFOO1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 10:24:08 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2105.outbound.protection.outlook.com [40.107.244.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC01270E;
-        Thu, 15 Jun 2023 07:24:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=egB0/J2Y4nEy5SxgPMa8SKKEb/nqDdBUufVD8rkKmqcDBxz5jtvg4OC/4xZKPqgW3kwNamNaD/8RyF+QX9ucDuhwTvvFe2LlYL7vBn4MY7ebgOkPdqtNZ4PgkQfwJz3/ZXA/CY5JCjTAAn3LmA3oL5TmKDkrBlo5+1FhQ7Gvo8nRhxpMrJrHXkOQzvW9J0h5BQeBfL5djyycTiHl+i5h08FeW920rl3R8W7Mxz2yVvYVyC7LGlr9AGS6zXOD2+iz/L+gbkLUw24qK2bJOBe68iYMm2qi1isYj/Z5EK0a0LmshKw67cfaqH7I8iKDoEeiSl9ezlG31J/SonvNy2WWrA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=07tmuNyTZWfxJI7qUN2AQb3q1IETxYg9I8GITJ+a7po=;
- b=YPgUz29dlYxrNz3xUBOTU4qozKtiAo+1a1ZiPoSUT2OEFDnDlNUr5Vrg0nDMLpFS7WvUIPPIYZGha4n1GuvuWLm6NVWh98Pq9x0TtvVrv+mei2vzI6igak3iK2SN14TzHE45Du7mm6uvP9W6VFQQwqkiDUYot/vkaUIohliScoCNbcUF+Wke5k4gNTEw9mj+Q58OoCHRDPyM2/Fd6y1xLXM5aGhwt0Lq9IWuiq/lQzszH0DC0W+j1dX1DuWCxFrBLGjTbbfQ6o9MGZlIAhyG2zE5c4R25yWEgY9ErYGHh+s1mkYEee4SgFeclTxXsMDkdstaeGli4W+p24gzxkNO8g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Thu, 15 Jun 2023 10:27:20 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79FBD2704
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 07:27:18 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-66643830ab3so1893746b3a.0
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 07:27:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=07tmuNyTZWfxJI7qUN2AQb3q1IETxYg9I8GITJ+a7po=;
- b=i/+HqGe89TU8Jckv+Cg0MTUnU4OTbGcY4UFZrRXv8peNgfaU0g59sT3od5W/1CXrHhPbhB695VHc1RpXME52PrXv7fI8T8dNbdVv1cPEnzn3K8cljmgQ2sRjUt5Uk6TdwiTxW2ohWbpvW13W/uYHvyThLvVHQ+EPJsPLWZz2rQ8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by PH0PR13MB6019.namprd13.prod.outlook.com (2603:10b6:510:fc::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.25; Thu, 15 Jun
- 2023 14:24:02 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e%5]) with mapi id 15.20.6500.025; Thu, 15 Jun 2023
- 14:24:02 +0000
-Date:   Thu, 15 Jun 2023 16:23:55 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     carlos.fernandez@technica-engineering.de
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: macsec SCI assignment for ES = 0
-Message-ID: <ZIse+5VepvY5dXN0@corigine.com>
-References: <20230615111315.6072-1-carlos.fernandez@technica-engineering.de>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230615111315.6072-1-carlos.fernandez@technica-engineering.de>
-X-ClientProxiedBy: AS4P251CA0018.EURP251.PROD.OUTLOOK.COM
- (2603:10a6:20b:5d3::10) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=linaro.org; s=google; t=1686839238; x=1689431238;
+        h=content-transfer-encoding:author:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fx/MdSHrygrfEupx7fTJALuFQUBdMezRza5vPp79ZkY=;
+        b=cRJMxBwFjT6tpqn0cHuWuzLwWGZ6XxpeFtiKltWubxfumAn3MQknDaIO2bpeJviJIP
+         Myxw86vLE/iHzzEOvzOl6ZbjsFvVCOCc141lF0pa1y+tQoXVfO9Ru0ausAvlueYeT7vO
+         151VMNn28Pu8ppWqauTvZbyhYmWT05ybgn9UY7HXZ+H8YIjhRLxyjjS+mrP2sq5n+Jvv
+         LkN9xtjoVF4HHJpYoaE4DnyORPj6xUKufyatUXQs+kT2slLhO9LxcFVhHBAQPOz6QsdM
+         ROdTv7Am2hbUJ32IX8jnbLeYD8GCkky1KmScdkWxtuFfhs3sds20bNS+0sx1UQPbLUbU
+         vrew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686839238; x=1689431238;
+        h=content-transfer-encoding:author:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Fx/MdSHrygrfEupx7fTJALuFQUBdMezRza5vPp79ZkY=;
+        b=JZEiQGrU2CTyVdlR4swvvyL4+btbLQhPl4Rys3D317xnKT98nXGyF11Eis92sa/yBd
+         YQkHAxyXtkzP/gjc9V7nVnJnz9tBiF9NY4x3qgBhX75pRRXo1iYcoIE14gLA6J9iutMF
+         mTIF8nUYClEDAiSWSINE9kp8iyDCLZND3l5YoXqNDhPa8DNTltquf4JDI8nYZ0Rr4NQ3
+         DYAhIYxRsAaOtGXv+m6v31ATMsHY0OGNLEUjnaw3nkkqoT3c6JOGaa1oS8Dk1jTc9BvY
+         TAkjBfqwhLx5HcFO9ocfoUGv4yZNgX/COomxvjmpndhAY0lD9NhWQIyEDYg2vICC33Um
+         9rAw==
+X-Gm-Message-State: AC+VfDwMLnj7CAf8R8RjJmYXgqqmKYFA1zswL44rTV5z3yX15KEx+qun
+        7OjVThcDkxxfnOElrtgibOwL9Q==
+X-Google-Smtp-Source: ACHHUZ6cBthXcPeaMlmqQaMPOJfo1WlbQqotxd59hdZakq6AXsSziHWknx0+CFlx/FoZf2AvGjjFBg==
+X-Received: by 2002:a05:6a20:7d94:b0:10b:8221:3348 with SMTP id v20-20020a056a207d9400b0010b82213348mr6100156pzj.50.1686839237796;
+        Thu, 15 Jun 2023 07:27:17 -0700 (PDT)
+Received: from localhost.localdomain ([49.207.50.231])
+        by smtp.gmail.com with ESMTPSA id y9-20020a655a09000000b005287a0560c9sm11931577pgs.1.2023.06.15.07.27.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 07:27:17 -0700 (PDT)
+From:   Amit Pundir <amit.pundir@linaro.org>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>
+Cc:     linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        dt <devicetree@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] arm64: dts: qcom: sdm845-db845c: Mark cont splash memory region as reserved
+Date:   Thu, 15 Jun 2023 19:57:11 +0530
+Message-Id: <20230615142711.2994811-1-amit.pundir@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH0PR13MB6019:EE_
-X-MS-Office365-Filtering-Correlation-Id: f8394ea8-64a4-4818-53bb-08db6dac2acb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2gh4sB/Vyv9Cq10/ZDPj6orRYk9d7MToySoqL7KBjZpSzZs1wt+XXYRtvdPNH6Kn1cXXsrublfJdOUxjlwpsopPkz/I49E8xcBgJJV+erM6xEJop5RsoIFKvQthL17wDdZLVf03ZRIhtcYwPo61uGwNzNwGiI1iqVoHVfWZkCJ9lr7FbIPMRd8y+Ey7m+exd5qwrZMF+ge/SvIdvKpQzvT7EYl4FVWEQ12K3YcOF7EpVjwyASkYWI3Dldnib0Buy39C30Tc9Ihzgp4kqItHTwin6uzHxOmJyxB1GFQEvgQN4NZznZa746E4ZRyEnifK15GRQapyt/9SxRe5Vbk23gA+PLV46regs+v1EMYcJ/6lDJtnHUSXOSbEDbT7Y9lp3fOqhrp1nvyZVm5KjPfJxWK8MO9cQzaqQqQliz+cad68ktGa1P9Neai9VB7iwc51Qac3EigSuuOfZer9vhTVrBJxTSSMufQxKunTXUknZpzRyKPdl6nikXzGtOIZNMPIvXGj91F357/G1dr5lliy1Im4rRhO0m5zMkl3PEy3Cu39pxjLd50+AIppXqZKo2Vc8v6eSr0Pxj+7WS4BV6sdHLOjj6YOmchTb1FcVtQ6qO8oD/zD1P6Xc58KCk3Us4H7IEtHv0Bp0fEgMPfgDe3Jk8lqmNdx7mXJo09DSEwU+MlQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(346002)(39840400004)(136003)(376002)(451199021)(5660300002)(478600001)(8936002)(41300700001)(316002)(8676002)(6486002)(6506007)(44832011)(186003)(4326008)(6916009)(66946007)(66556008)(66476007)(6666004)(6512007)(2616005)(2906002)(83380400001)(38100700002)(86362001)(36756003)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?r0Z/RL0Wexwj7Q2NyiHmK4EbZ7kqT0LizCBbAA2EEp4q5dmVnv1OfJW5JRsu?=
- =?us-ascii?Q?29d3CWy2HGnsQE630bdHyY/aARJxWwg3I3X4a2ahRVIJ8hvub60OxpZUPWXa?=
- =?us-ascii?Q?yRfDlTL9lb16sZgbNO8v2EPYEAXqmRTpLTr8BUP2rj1F4YzHKZoIWkGGMewx?=
- =?us-ascii?Q?aq0NT5uAKXl/pyQtxkP+JKjeZ/eEYfBD/SeP2yMP5sLizDdDcGKLacz/VCN6?=
- =?us-ascii?Q?c2Un5CVrFSpXqE7Vy0AiKS7T/gFCDUjPvNIS1JCnUEhNbA2MxwWA+GgyKh7s?=
- =?us-ascii?Q?Dgscs3YHaw3mDaS+XEk8wiT28HTuUeQQ7ExqrMK6zHdKQYI8WtWdrp5aet6u?=
- =?us-ascii?Q?GqKLJ9k3LdZvO0gHNNIiTlS82ZrZKA8C7XS6Fh6pn6KhQf4SF79lWdSvVIUb?=
- =?us-ascii?Q?bVQfhUys4rB7EEIC+HKN0uzSTtP6rtmUK/J3oFVjigZoPZNmsvgbkQChgVRu?=
- =?us-ascii?Q?oD/I7tQMHolkW2798JIOP2bIOqFNJYHOmUSXnjDV0MF4b1mdOsNqbiy7IdDV?=
- =?us-ascii?Q?+/UmpRArWgAyNtsHwOSyGZX4thmw97BN0kElzF9vAPBW8L5LyQbyOiGaqj3R?=
- =?us-ascii?Q?NDQ8g6CPQonbbHvi8CiQFyndr26NVXSG2gSC2LceJWDpU0coPIbKGpe0bRUQ?=
- =?us-ascii?Q?L7s5Y+IAxfxYuLpNTZbNSQUfIocZvQd+aGMjyI5k192PRZTunwpZv4FiE5bA?=
- =?us-ascii?Q?GD9r4mHxGAAp6s+FU/YRn5QNb8VF4pRZ+hzAdv/ZkmKSlDtRMQxxnEzGmrxI?=
- =?us-ascii?Q?DmSZckCHtsqrSq+56e7R4H5vXP7WG1rkTKVC1Z13XXSzXurQDxljW6KB1JWc?=
- =?us-ascii?Q?AOtDtidfaprYvzqywuEAYAdeeKJG9rAS0vlUR68Pbw1554A3S5G8QeDQD4Qe?=
- =?us-ascii?Q?GtwToXqwRa/3kZTPrjhtZJHuHMAthlsRY/rOihj8K79gHbcpZl1AwmygzpcR?=
- =?us-ascii?Q?hMp9bz7UlJv+WVauCxv29wUdiw1PWjhMt/NmRrzBFTaL71jrzvghorZsMOKZ?=
- =?us-ascii?Q?82h9/Bq4kL5fOr3wzyIUJ0n/lJZgiaWUGPTxm2E13UojrLa9liBUMYnQLbKW?=
- =?us-ascii?Q?jKeS0OSBNGi4KBewRllrXp5lpzv9Voaoqxryv2SCnOlCdYwcCHv0Bjof8t+a?=
- =?us-ascii?Q?fhSPB84MUlgHzsJp0m3Acf8aFuYoLDyuqP6Npmq6tZve92W92+vQ+PtFl4zJ?=
- =?us-ascii?Q?R/3p54TpVgjDyT400T1efktXqyTSrsGrqeb1yHrc68ciUatm5bF4Nx/tsFT+?=
- =?us-ascii?Q?xsfkShrqUh2Fw6U9QZ6nwItnXQu4Zs2Xi5FiQjcBSRQBKaB0fPJ1EbZStjj8?=
- =?us-ascii?Q?AZ9TjEQ0dXMupc41e5kZf+LlskeeIvZTCVrNTL+7Gra4L6ygxNZ3jZvH/xzC?=
- =?us-ascii?Q?9DT9gdQG7tIrdHjpflERXOXwK/6ebK6D4XnQ7vr96cOzbvFvktmfc/kKloes?=
- =?us-ascii?Q?0o9gSYU35aDrVaO+Rq2KH7JVEw6raqcWr23EzGv0vJtNBjfJbsSTJ1q6vb/N?=
- =?us-ascii?Q?a1bNNoWTBMGV0WbVGgV5dVIMHTn7B4G8tcT5SoMd7dBmxhnFC68vNIGLyEi/?=
- =?us-ascii?Q?XXID9agROQjolsmwOMB7aWUoSHrFP/3MOn9CGnbMHb3Y5S60rr+xx9TzObZT?=
- =?us-ascii?Q?Gb+ny+I1dB4bP/YeMgkQZu8abGgW3cXBiCy3W6ApkvLWfbjtoNgbEisLfzVf?=
- =?us-ascii?Q?4VG3Jw=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f8394ea8-64a4-4818-53bb-08db6dac2acb
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 14:24:02.4496
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3kBgRq+jc/KstIJvGH9RfgaabTJjyNE+B6bsBi5uAh7cE9JzjtzluM6gP87i/8tpbC8Ose4t45w1ijDDqjZFhbTmSAVKewmUok9UZbS++L8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB6019
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Author: Amit Pundir <amit.pundir@linaro.org>
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 01:13:15PM +0200, carlos.fernandez@technica-engineering.de wrote:
-> From: Carlos Fernandez <carlos.fernandez@technica-engineering.de>
-> 
-> According to 802.1AE standard, when ES and SC flags in TCI are zero, used
-> SCI should be the current active SC_RX. Current kernel does not implement
-> it and uses the header MAC address.
-> 
-> Without this patch, when ES = 0 (using a bridge or switch), header MAC
-> will not fit the SCI and MACSec frames will be discarted.
-> 
-> Signed-off-by: Carlos Fernandez <carlos.fernandez@technica-engineering.de>
+Adding a reserved memory region for the framebuffer memory
+(the splash memory region set up by the bootloader).
 
-Hi Carlos,
+Signed-off-by: Amit Pundir <amit.pundir@linaro.org>
+---
+v2: Updated commit message.
 
-some feedback from my side.
+There was some dicussion on v1 but it didn't go anywhere,
+https://lore.kernel.org/linux-kernel/20230124182857.1524912-1-amit.pundir@linaro.org/T/#u.
+The general consensus is that this memory should be freed and be
+made resuable but that (releasing this piece of memory) has been
+tried before and it is not trivial to return the reserved memory
+node to the system RAM pool in this case.
 
-> ---
->  drivers/net/macsec.c | 28 ++++++++++++++++++++++------
->  1 file changed, 22 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/net/macsec.c b/drivers/net/macsec.c
-> index 3427993f94f7..ea9b15d555f4 100644
-> --- a/drivers/net/macsec.c
-> +++ b/drivers/net/macsec.c
-> @@ -256,16 +256,32 @@ static sci_t make_sci(const u8 *addr, __be16 port)
->  	return sci;
->  }
->  
-> -static sci_t macsec_frame_sci(struct macsec_eth_header *hdr, bool sci_present)
-> +static sci_t macsec_frame_sci(struct macsec_eth_header *hdr, bool sci_present,
-> +		struct macsec_rxh_data *rxd)
+ arch/arm64/boot/dts/qcom/sdm845-db845c.dts | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-The indentation of the line above should be such that it aligns with the
-inside of the parentheses on the previous line.
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+index e14fe9bbb386..10a06ee8e262 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
++++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+@@ -101,6 +101,14 @@ hdmi_con: endpoint {
+ 		};
+ 	};
+ 
++	reserved-memory {
++		/* Cont splash region set up by the bootloader */
++		cont_splash_mem: framebuffer@9d400000 {
++			reg = <0x0 0x9d400000 0x0 0x2400000>;
++			no-map;
++		};
++	};
++
+ 	lt9611_1v8: lt9611-vdd18-regulator {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "LT9611_1V8";
+-- 
+2.25.1
 
-static sci_t macsec_frame_sci(struct macsec_eth_header *hdr, bool sci_present,
-			      struct macsec_rxh_data *rxd)
-
->  {
-> +	struct macsec_dev *macsec_device;
->  	sci_t sci;
-> -
-> +	/* SC = 1*/
->  	if (sci_present)
->  		memcpy(&sci, hdr->secure_channel_id,
-> -		       sizeof(hdr->secure_channel_id));
-> -	else
-> +				sizeof(hdr->secure_channel_id));
-> +	/* SC = 0; ES = 0*/
-> +	else if (0 == (hdr->tci_an & (MACSEC_TCI_ES | MACSEC_TCI_SC))) {
-> +		list_for_each_entry_rcu(macsec_device, &rxd->secys, secys) {
-> +			struct macsec_rx_sc *rx_sc;
-> +			struct macsec_secy *secy = &macsec_device->secy;
-
-For new networking code, please use reverse xmas tree order - longest line
-to shortest - for local variable declarations.
-
-			struct macsec_secy *secy = &macsec_device->secy;
-			struct macsec_rx_sc *rx_sc;
-
-> +
-> +			for_each_rxsc(secy, rx_sc) {
-> +				rx_sc = rx_sc ? macsec_rxsc_get(rx_sc) : NULL;
-> +				if (rx_sc && rx_sc->active) {
-> +					sci = rx_sc->sci;
-> +					return sci;
-> +				}
-
-I wonder if this can be more succinctly written as:
-
-				if (rx_sc && rx_sc->active)
-					return rx_sc->sci;
-
-> +			}
-> +		}
-> +	} else {
->  		sci = make_sci(hdr->eth.h_source, MACSEC_PORT_ES);
-> -
-> +	}
->  	return sci;
->  }
-
-clang-16 complains, as I understand things, that if
-the else if condition is met above, but sci is not returned from
-within it, then sci is uninitialised here.
-
-Perhaps that cannot happen.
-But perhaps it would be better guard against it somehow?
-
- drivers/net/macsec.c:270:3: warning: variable 'sci' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
-                 list_for_each_entry_rcu(macsec_device, &rxd->secys, secys) {
-                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ./include/linux/rculist.h:392:3: note: expanded from macro 'list_for_each_entry_rcu'
-                 &pos->member != (head);                                 \
-                 ^~~~~~~~~~~~~~~~~~~~~~
- drivers/net/macsec.c:285:9: note: uninitialized use occurs here
-         return sci;
-                ^~~
- drivers/net/macsec.c:270:3: note: remove the condition if it is always true
-                 list_for_each_entry_rcu(macsec_device, &rxd->secys, secys) {
-                 ^
- ./include/linux/rculist.h:392:3: note: expanded from macro 'list_for_each_entry_rcu'
-                 &pos->member != (head);                                 \
-                 ^
- drivers/net/macsec.c:263:11: note: initialize the variable 'sci' to silence this warning
-         sci_t sci;
-                  ^
-                   = 0
-
-...
