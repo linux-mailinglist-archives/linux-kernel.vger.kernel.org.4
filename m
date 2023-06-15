@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B0BB73173D
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:41:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7535573173E
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 13:41:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344224AbjFOLlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 07:41:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53316 "EHLO
+        id S1344226AbjFOLlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 07:41:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344240AbjFOLj5 (ORCPT
+        with ESMTP id S1344246AbjFOLj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 07:39:57 -0400
+        Thu, 15 Jun 2023 07:39:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB3B2945;
-        Thu, 15 Jun 2023 04:38:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158622952;
+        Thu, 15 Jun 2023 04:38:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4620D63904;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 79E9C6391A;
+        Thu, 15 Jun 2023 11:38:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24A81C433C9;
         Thu, 15 Jun 2023 11:38:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1849BC433C8;
-        Thu, 15 Jun 2023 11:38:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686829122;
-        bh=OU6nnv2G9WVBthz755bwpd8EJ+LMKuGvk/LoTtkIfD8=;
+        s=k20201202; t=1686829123;
+        bh=Jb2eDNzb5clEgaqpLLm/ZuGYk4VLgm9j+GK5focns5U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TurloeCqM7Eud5YswPtkLchlfQxODfFM8EzlIkpiWgwHvri+72zZP3YhoNJithV6B
-         FOSbHZRkHyk9JBRSdHaIdDWD6iDCsuqdc1DnScMGniqE9jR5FOIm/qcZ8qxXrdQ7zl
-         RhGs/ZLzVTLqLnMSpI1AAD94VXGmhtPlxg/9qfLVEYj/LazE4Y30ORfGN1SKIdjJfH
-         Gsw3UpjCPR99jrmZDWv+yLcmWrEeL5pPZoYBNjycm2J5go2LAZ7bqXLvkoVfYpTlft
-         tRgAyO4uznzTNIg9J0/L/M2UZJ2nqrD30yIub2tJEqP5opnF8NTwXMUsUepz7U9uJf
-         fkt+mXD1YOsoA==
+        b=s1L2gTUaiJc05eLHGg1UHvkrrA1qHGJfyvc4FFyFZ/D4vxdZ6iKOOiI7KhKJ+96WF
+         87qlqFdFHcHk14m38FtRG6ddfknXxguC/iVVdaOc8ECQBMCqTZlGzIc99Se576CuFD
+         JLmOfVj7a2/4yr2f6b2b5Ox9DS/ofXR+uK4S32CEs4/ufMzH9jM+vlskOO/2dUQoEL
+         wZ0DbB0QC02pURIphHTiYYNi8+bGx1HlfdsQ1OT2yLDxoDUIOBqvlW7pev27O3YKag
+         DjbDFwhAWF3mu9UwnK6i/KkRL7ydcfHUOlYdZXAqQ6qRJqOIocAUklLeq9ZJwgDbfI
+         Fa61ncCBpB5fw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 09/16] media: cec: core: don't set last_initiator if tx in progress
-Date:   Thu, 15 Jun 2023 07:38:09 -0400
-Message-Id: <20230615113816.649135-9-sashal@kernel.org>
+Cc:     Osama Muhammad <osmtendev@gmail.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>,
+        krzysztof.kozlowski@linaro.org, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 10/16] nfcsim.c: Fix error checking for debugfs_create_dir
+Date:   Thu, 15 Jun 2023 07:38:10 -0400
+Message-Id: <20230615113816.649135-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230615113816.649135-1-sashal@kernel.org>
 References: <20230615113816.649135-1-sashal@kernel.org>
@@ -59,39 +61,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+From: Osama Muhammad <osmtendev@gmail.com>
 
-[ Upstream commit 73af6c7511038249cad3d5f3b44bf8d78ac0f499 ]
+[ Upstream commit 9b9e46aa07273ceb96866b2e812b46f1ee0b8d2f ]
 
-When a message was received the last_initiator is set to 0xff.
-This will force the signal free time for the next transmit
-to that for a new initiator. However, if a new transmit is
-already in progress, then don't set last_initiator, since
-that's the initiator of the current transmit. Overwriting
-this would cause the signal free time of a following transmit
-to be that of the new initiator instead of a next transmit.
+This patch fixes the error checking in nfcsim.c.
+The DebugFS kernel API is developed in
+a way that the caller can safely ignore the errors that
+occur during the creation of DebugFS nodes.
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/cec/core/cec-adap.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/nfc/nfcsim.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/media/cec/core/cec-adap.c b/drivers/media/cec/core/cec-adap.c
-index ac18707fddcd2..b1512f9c5895c 100644
---- a/drivers/media/cec/core/cec-adap.c
-+++ b/drivers/media/cec/core/cec-adap.c
-@@ -1090,7 +1090,8 @@ void cec_received_msg_ts(struct cec_adapter *adap,
- 	mutex_lock(&adap->lock);
- 	dprintk(2, "%s: %*ph\n", __func__, msg->len, msg->msg);
+diff --git a/drivers/nfc/nfcsim.c b/drivers/nfc/nfcsim.c
+index 85bf8d586c707..0f6befe8be1e2 100644
+--- a/drivers/nfc/nfcsim.c
++++ b/drivers/nfc/nfcsim.c
+@@ -336,10 +336,6 @@ static struct dentry *nfcsim_debugfs_root;
+ static void nfcsim_debugfs_init(void)
+ {
+ 	nfcsim_debugfs_root = debugfs_create_dir("nfcsim", NULL);
+-
+-	if (!nfcsim_debugfs_root)
+-		pr_err("Could not create debugfs entry\n");
+-
+ }
  
--	adap->last_initiator = 0xff;
-+	if (!adap->transmit_in_progress)
-+		adap->last_initiator = 0xff;
- 
- 	/* Check if this message was for us (directed or broadcast). */
- 	if (!cec_msg_is_broadcast(msg))
+ static void nfcsim_debugfs_remove(void)
 -- 
 2.39.2
 
