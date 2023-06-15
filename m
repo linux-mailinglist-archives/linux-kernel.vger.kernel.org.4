@@ -2,78 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A198730F7C
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:38:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB80730F7D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:38:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244048AbjFOGi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 02:38:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46426 "EHLO
+        id S243179AbjFOGic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 02:38:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244020AbjFOGhh (ORCPT
+        with ESMTP id S244085AbjFOGh7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 02:37:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7256F30E9
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 23:35:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686810945;
+        Thu, 15 Jun 2023 02:37:59 -0400
+Received: from out-51.mta0.migadu.com (out-51.mta0.migadu.com [91.218.175.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB8D2945
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 23:36:50 -0700 (PDT)
+MIME-Version: 1.0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1686811009;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=X4wlkttPOcasVDRYX1HT0XHqYNDJfm6yG6bhk7nZo7o=;
-        b=ZJlZQzCx4MwBE4O8FUYvQ8BvwM3TkHT6tHQ229xjJYXbjzsnvYvWC8uWjkQm7jrJJri8en
-        vdtDNlc/VU1baqFJF2Tsfi+SF6AJ0vTSVq+7HhILfbmYlX10N4MTpn2NvBsBhKDV7h6hM6
-        WpL7qNLqQVAfhuLjpGwLe4/XEU1Ib0g=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-352-aVWubZCdNO64MUtqpU1GzQ-1; Thu, 15 Jun 2023 02:35:43 -0400
-X-MC-Unique: aVWubZCdNO64MUtqpU1GzQ-1
-Received: by mail-lj1-f200.google.com with SMTP id 38308e7fff4ca-2b448e0a667so94661fa.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 23:35:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686810942; x=1689402942;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=X4wlkttPOcasVDRYX1HT0XHqYNDJfm6yG6bhk7nZo7o=;
-        b=cpYAfKZKW4JFj61JNSZUr3ZSon5BUfet63Aqru+738EYJngc0TuyVT61u8AcWgo3rP
-         E66nzN3gLjBZvj03EgiR0W8VGx6Hfrh1mgWnLY6hNmD+km5AGNgaIsSt8yOumnkTH90j
-         Jg3ZibS/tv0LCBX8sTls7eVU+z5G9hp5NQKeq+GuS2Cv5oohpj9yXEplVAyLpkWimqwj
-         FZo/D2jrOiXABbLOXQz7Jd3I5dJ4ApuOLwZ4sqY9cx6PcKTfnMZb6BY1vBpWVcAMNVZq
-         +uL1r0S2FEIeMeze/tgP+YM1kWW3056TLB/zrrGnqGzb2k10hDP0ec55+Y+4YIdskuav
-         evUA==
-X-Gm-Message-State: AC+VfDyhTooqrlMckpaR9DuvCGR/3blYuJN5H6Q8D4sRQzlm3LBXtv3N
-        B/HeFKvzSGq5VUkWiRAgwXvbSdU6V7eoBESevAMDGQJ1Uic21S9btjKIbZjC7ljye2u7IlMK7Jg
-        VwrWdRx1A43666Az1La1ZlFhFcaiC6835fiSuPmuh
-X-Received: by 2002:a2e:b04e:0:b0:2ad:b01b:d458 with SMTP id d14-20020a2eb04e000000b002adb01bd458mr8414319ljl.30.1686810942357;
-        Wed, 14 Jun 2023 23:35:42 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6f83OZtGZDJ49SzhCci8d+5XJ8YZTzKwOqDFtlyv+wgb2h1O4LvehRyu/wZ89Hr0Q/2At4SRGj9zzxLMJWjWg=
-X-Received: by 2002:a2e:b04e:0:b0:2ad:b01b:d458 with SMTP id
- d14-20020a2eb04e000000b002adb01bd458mr8414295ljl.30.1686810941918; Wed, 14
- Jun 2023 23:35:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230601075333.14021-1-ihuguet@redhat.com> <87sfb1oz13.fsf@meer.lwn.net>
- <8f27ad5f-9a9c-3db0-a934-88e1810974f3@digikod.net> <CACT4oue7DgUf+65yat+6t9VrSji1N0njxunObHbRzfjMCAPmYQ@mail.gmail.com>
- <CAMZ6RqJ66wxVAcveVunQ3W6sYihQM43Hi44D7TAee_nUPk+ZXA@mail.gmail.com>
- <CACT4ouc23BYWNBrE7w0a8Huy5hrhaix3=0P3kuXFQhwk_uib1g@mail.gmail.com> <CAMZ6RqKHTYcGfBX=RZWqzSD+PFpOoH8A_dM0vY6yp2P3Acd=Wg@mail.gmail.com>
-In-Reply-To: <CAMZ6RqKHTYcGfBX=RZWqzSD+PFpOoH8A_dM0vY6yp2P3Acd=Wg@mail.gmail.com>
-From:   =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@redhat.com>
-Date:   Thu, 15 Jun 2023 08:35:30 +0200
-Message-ID: <CACT4oudDKALZ0ZQPrOj2o3cRBRoaGMK_S+hQx-q4ENfv4UCtnQ@mail.gmail.com>
-Subject: Re: [PATCH v4] Add .editorconfig file for basic formatting
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
-        Jonathan Corbet <corbet@lwn.net>, ojeda@kernel.org,
-        danny@kdrag0n.dev, masahiroy@kernel.org, jgg@nvidia.com,
-        linux-kernel@vger.kernel.org, joe@perches.com,
-        linux@rasmusvillemoes.dk, willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
+        bh=Xqyxiv3NjzIYmlM2b62iN8glzRDo+4uOYjVrDy5I0P8=;
+        b=t6zyKJvFRDiN0aAngGaVQ1jAQOVILdfKieEoYB+ja0n9eE8YfrwsOvUu7Fim0UompUZFbB
+        Yhpnt8d4Q0WHDl0DwiUwqnpPjZhWkdvMlAJorKSk9MGdYM3Bvq9qaC86/OaSo5WBlI5rkH
+        TI6eg8URPCr7DQabm+0ubQf3GWOTH2o=
+Date:   Thu, 15 Jun 2023 06:36:48 +0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   "Yajun Deng" <yajun.deng@linux.dev>
+Message-ID: <d8a0a36fbf88497e051ce7610678ce5c@linux.dev>
+Subject: Re: [PATCH] mm/mm_init.c: remove spinlock in early_pfn_to_nid()
+To:     "Mike Rapoport" <rppt@kernel.org>
+Cc:     "Greg KH" <gregkh@linuxfoundation.org>, rafael@kernel.org,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+In-Reply-To: <20230615062021.GI52412@kernel.org>
+References: <20230615062021.GI52412@kernel.org>
+ <20230614115339.GX52412@kernel.org>
+ <2023061431-litigate-upchuck-7ed1@gregkh>
+ <20230614110324.3839354-1-yajun.deng@linux.dev>
+ <ab067588892217b6ee6ce759bd569b12@linux.dev>
+ <a96c998f9d73f03c85463d7314f6ea8a@linux.dev>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,117 +54,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 4:40=E2=80=AFAM Vincent MAILHOL
-<mailhol.vincent@wanadoo.fr> wrote:
->
-> On Wed. 14 Jun. 2023 at 22:04, =C3=8D=C3=B1igo Huguet <ihuguet@redhat.com=
-> wrote:
-> > On Wed, Jun 14, 2023 at 2:55=E2=80=AFPM Vincent MAILHOL <mailhol.vincen=
-t@wanadoo.fr> wrote:
-> > > On Wed. 14 Jun. 2023 at 20:40, =C3=8D=C3=B1igo Huguet <ihuguet@redhat=
-.com> wrote:
->
-> (...)
->
-> > > > Right now I see 2 possibilities:
-> > > > - Provide an .editorconfig.default so those that want to use it, ca=
-n
-> > > > do it. But I wouldn't mess with cherry-picking directories that
-> > > > already complies and those that don't, just the developer chooses t=
-o
-> > > > use it or not, and that's all.
-> > > > - Provide an .editorconfig directly, and those that don't want to u=
-se
-> > > > it, either disable it in their editors or manually delete the file.
-> > > >
-> > > > Please tell me what approach you prefer.
-> > >
-> > > Personally, I vote for the latter. My honest opinion is that we are
-> > > putting too much consideration into the risk of rejections.
-> >
-> > I completely agree.
-> >
-> > > =C3=8D=C3=B1igo previously stated that editors such as Kate can not o=
-pt out. I
-> > > think that the reason is simply that no one has complained about it s=
-o
-> > > far. I did some research on the internet with the keyword "kate
-> > > disable editorconfig", and nothing  relevant appeared. A deeper
-> > > research made me found this:
-> >
-> > I have not "complained", but I have filled a request just today, that
-> > I think won't reach far: https://bugs.kde.org/show_bug.cgi?id=3D471008
->
-> Wow! That's a lot of investment on your side. Clearly, there is no
-> appetite from the maintainers. But if something needs to be done
-> (which I doubt), I think it should be on the editor's side rather than
-> on the project using that .editorconfig file.
->
-> > >   KatePart has support for reading configurations from
-> > >   .editorconfig files, when the editorconfig library is
-> > >   installed. KatePart automatically searches for a .editorconfig
-> > >   whenever you open a file. It gives priority to .kateconfig
-> > >   files, though.
-> > >
-> > > source: https://docs.kde.org/stable5/en/kate/katepart/config-variable=
-s.html
-> > >
-> > > So it appears that for Kate, installing the editorconfig lib is a
-> > > prerequisite. I think it falls in the opt-in category.
-> >
-> > I'm not 100% sure, but I think that this is a requisite at build time.
-> > So unless you build Kate from source, it will be built-in without
-> > opt-out choice.
->
-> It seems you are right. On Ubuntu, the "kate" package actually depends
-> on "libeditorconfig0", so indeed, that's a hard dependency. My bad.
->
-> That said, on source based distribution, it should be configurable.
-> Taking gentoo as an example, you get an editorconfig USEFLAG which
-> allows to choose whether or not you enable editorconfig during the
-> compilation:
->
->   https://packages.gentoo.org/packages/kde-frameworks/ktexteditor
->
-> I continued my investigation. Here is the commit which adds
-> editorconfig to ktexteditor (used by kate):
->
->   https://github.com/KDE/ktexteditor/commit/f9f133b6ac72dfa12bdeeab1a37c5=
-e9dc9a9354e
->
-> Looking at what the code does, it first walk through the absolute path
-> in reverse and if it finds a .kateconfig file, it does an early
-> return:
->
->   https://github.com/KDE/ktexteditor/blob/f9f133b6ac72dfa12bdeeab1a37c5e9=
-dc9a9354e/src/document/katedocument.cpp#L2578
->
-> This should act as a kill switch. Not tested, but adding a .kateconfig
-> seems like a valid opt out method. This is consistent with the
-> paragraph I quoted in my previous message:
->
->   It gives priority to .kateconfig files, though.
->
-> Problem solved?
-
-Very good catch. I have tried and adding an empty .kateconfig file
-makes that .editorconfig is ignored. For me this is a simple enough
-workaround. We can document it as a comment in the top of
-.editorconfig file.
-
->
-> > > Is there really an editor with default opt-in and no options to
-> > > opt-out? I doubt...
-> >
-> > Kate is the only one I have seen so far, but it's difficult to know.
-> >
-> > > I really think we should have the .editorconfig at the root and for
-> > > the rare edge cases where the user really wants to opt-out, I
-> > > sincerely believe that there will be solutions. I have seen many
-> > > projects using it and I do not recall push backs or complaints.
->
-
-
---=20
-=C3=8D=C3=B1igo Huguet
-
+June 15, 2023 2:20 PM, "Mike Rapoport" <rppt@kernel.org> wrote:=0A=0A> On=
+ Thu, Jun 15, 2023 at 03:02:58AM +0000, Yajun Deng wrote:=0A> =0A>> June =
+14, 2023 7:53 PM, "Mike Rapoport" <rppt@kernel.org> wrote:=0A>> =0A>> Hi,=
+=0A>> =0A>> On Wed, Jun 14, 2023 at 11:28:32AM +0000, Yajun Deng wrote:=
+=0A>> =0A>> June 14, 2023 7:09 PM, "Greg KH" <gregkh@linuxfoundation.org>=
+ wrote:=0A>> =0A>> On Wed, Jun 14, 2023 at 07:03:24PM +0800, Yajun Deng w=
+rote:=0A>> =0A>> When the system boots, only one cpu is enabled before sm=
+p_init().=0A>> So the spinlock is not needed in most cases, remove it.=0A=
+>> =0A>> Add spinlock in get_nid_for_pfn() because it is after smp_init()=
+.=0A>> =0A>> So this is two different things at once in the same patch?=
+=0A>> =0A>> Or are they the same problem and both need to go in to solve =
+it?=0A>> =0A>> And if a spinlock is not needed at early boot, is it reall=
+y causing any=0A>> problems?=0A>> =0A>> They are the same problem.=0A>> I=
+ added pr_info in early_pfn_to_nid(), found get_nid_for_pfn() is the only=
+=0A>> case need to add spinlock.=0A>> This patch tested on my x86 system.=
+=0A>> =0A>> Are you sure it'll work on !x86?=0A>> =0A>> I'm probably sure=
+ of that, although I don't have a !x86 machine.=0A>> =0A>> early_pfn_to_n=
+id() is called in smp_init() and kasan_init() on=0A>> different architect=
+ures. If it works well on x86, it'll work on=0A>> !x86.=0A> =0A> This is =
+often not true. Please verify that other architectures do not call=0A> ea=
+rly_pfn_to_nid() after smp_init(). The explanation why it is safe should=
+=0A> be a part of the changelog.=0A> =0A>> Signed-off-by: Yajun Deng <yaj=
+un.deng@linux.dev>=0A>> ---=0A>> drivers/base/node.c | 11 +++++++++--=0A>=
+> mm/mm_init.c | 18 +++---------------=0A>> 2 files changed, 12 insertion=
+s(+), 17 deletions(-)=0A>> =0A>> diff --git a/drivers/base/node.c b/drive=
+rs/base/node.c=0A>> index 9de524e56307..844102570ff2 100644=0A>> --- a/dr=
+ivers/base/node.c=0A>> +++ b/drivers/base/node.c=0A>> @@ -748,8 +748,15 @=
+@ int unregister_cpu_under_node(unsigned int cpu, unsigned int nid)=0A>> =
+static int __ref get_nid_for_pfn(unsigned long pfn)=0A>> {=0A>> #ifdef CO=
+NFIG_DEFERRED_STRUCT_PAGE_INIT=0A>> - if (system_state < SYSTEM_RUNNING)=
+=0A>> - return early_pfn_to_nid(pfn);=0A>> + static DEFINE_SPINLOCK(early=
+_pfn_lock);=0A>> + int nid;=0A>> +=0A>> + if (system_state < SYSTEM_RUNNI=
+NG) {=0A>> + spin_lock(&early_pfn_lock);=0A>> + nid =3D early_pfn_to_nid(=
+pfn);=0A>> + spin_unlock(&early_pfn_lock);=0A>> =0A>> Adding an external =
+lock for when you call a function is VERY dangerous=0A>> as you did not d=
+ocument this anywhere, and there's no way to enforce it=0A>> properly at =
+all.=0A>> =0A>> I should add a comment before early_pfn_to_nid().=0A>> =
+=0A>> Does your change actually result in any boot time changes? How was =
+this=0A>> tested?=0A>> =0A>> Just a bit.=0A>> =0A>> Just a bit tested? Or=
+ just a bit of boot time changes?=0A>> For the latter, do you have number=
+s?=0A>> =0A>> For the latter, the most beneficial function is memmap_init=
+_reserved_pages(),=0A>> the boot time changes depending on whether DEFERR=
+ED_STRUCT_PAGE_INIT=0A>> is defined or not.=0A>> =0A>> -->memmap_init_res=
+erved_pages()=0A>> -->for_each_reserved_mem_range()=0A>> reserve_bootmem_=
+region()=0A>> -->for()=0A>> init_reserved_page()=0A>> --> early_pfn_to_ni=
+d()=0A> =0A> A better solution would be to pass nid to reserve_bootmem_ra=
+nge() and drop=0A> the call to early_pfn_to_nid() in init_reserved_page()=
+.=0A> =0A> Then there won't be lock contention and no need for fragile ch=
+anges in the=0A> locking.=0A>=0A=0AGreat, I will try it.=0A=0A =0A>> If d=
+efine CONFIG_DEFERRED_STRUCT_PAGE_INIT:=0A>> =0A>> before:=0A>> memmap_in=
+it_reserved_pages() 1.87 seconds=0A>> after:=0A>> memmap_init_reserved_pa=
+ges() 1.27 seconds=0A>> =0A>> 32% time reduction.=0A> =0A> These measurem=
+ents should be part of the changelog.=0A> =0A>> If not define CONFIG_DEFE=
+RRED_STRUCT_PAGE_INIT:=0A>> =0A>> early_pfn_to_nid() is called by few,=0A=
+>> boot time didn't change.=0A>> =0A>> By the way, this machine has 190GB=
+ RAM.=0A>> =0A>> --=0A>> Sincerely yours,=0A>> Mike.=0A> =0A> --=0A> Sinc=
+erely yours,=0A> Mike.
