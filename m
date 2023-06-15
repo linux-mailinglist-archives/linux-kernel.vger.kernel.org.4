@@ -2,77 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B45D87318EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:24:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFBD27318F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344382AbjFOMYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 08:24:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35498 "EHLO
+        id S237678AbjFOMZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 08:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344018AbjFOMYE (ORCPT
+        with ESMTP id S1344948AbjFOMZL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 08:24:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B7E3A9B
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 05:21:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686831714;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kYEtR6Ta+AFtEBh75sLC3RO2svtF0qXz9FJ2urYLUrw=;
-        b=HUlUQo9CeCw++lxIM5+1B0NyxDkftkpLyDY4N8ug5UY4QNpKKsTH+Vf0339YGnqYslLSLp
-        WFOPU0+Dwafxq1T3xP7eT2ZA/ykItGf1vGz8/X9XlQtaWQZ95j0MG3RqHhqhacZYcSwY19
-        +P91nHMH2kMT4zsSKmigzlSYlUeE53s=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-217-nohnvbOANIuyM_8O6okfxg-1; Thu, 15 Jun 2023 08:21:48 -0400
-X-MC-Unique: nohnvbOANIuyM_8O6okfxg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 15 Jun 2023 08:25:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0F535B3;
+        Thu, 15 Jun 2023 05:23:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DB3F6101A58E;
-        Thu, 15 Jun 2023 12:21:47 +0000 (UTC)
-Received: from localhost (unknown [10.39.192.206])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 83CB61131F;
-        Thu, 15 Jun 2023 12:21:47 +0000 (UTC)
-Date:   Thu, 15 Jun 2023 13:21:46 +0100
-From:   "Richard W.M. Jones" <rjones@redhat.com>
-To:     YiFei Zhu <zhuyifei@google.com>
-Cc:     dev@aaront.org, linux-kernel@vger.kernel.org, peterz@infradead.org,
-        zhuyifei1999@gmail.com
-Subject: Re: printk.time causes rare kernel boot hangs
-Message-ID: <20230615122146.GF10301@redhat.com>
-References: <20230614112625.GN7912@redhat.com>
- <20230615110429.2839058-1-zhuyifei@google.com>
- <20230615113108.GN7636@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 33B8262DD5;
+        Thu, 15 Jun 2023 12:23:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39EF0C433C8;
+        Thu, 15 Jun 2023 12:23:31 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
+        Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [GIT PULL] LoongArch fixes for v6.4-rc7
+Date:   Thu, 15 Jun 2023 20:23:11 +0800
+Message-Id: <20230615122311.3754870-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230615113108.GN7636@redhat.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following changes since commit 858fd168a95c5b9669aac8db6c14a9aeab446375:
 
-Never mind, I've tested the fix here, problem solved!
+  Linux 6.4-rc6 (2023-06-11 14:35:30 -0700)
 
-https://lore.kernel.org/all/87jzypq6gq.ffs@tglx/T/#m860cc015534899c7fcd12dc184c96441027f602b
+are available in the Git repository at:
 
-Rich.
+  git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.4-1
 
--- 
-Richard Jones, Virtualization Group, Red Hat http://people.redhat.com/~rjones
-Read my programming and virtualization blog: http://rwmj.wordpress.com
-libguestfs lets you edit virtual machines.  Supports shell scripting,
-bindings from many languages.  http://libguestfs.org
+for you to fetch changes up to 41efbb682de1231c3f6361039f46ad149e3ff5b9:
 
+  LoongArch: Fix debugfs_create_dir() error checking (2023-06-15 14:35:56 +0800)
+
+----------------------------------------------------------------
+LoongArch fixes for v6.4-rc7
+
+Some trivial bug fixes for v6.4-rc7.
+----------------------------------------------------------------
+Hongchen Zhang (1):
+      LoongArch: Let pmd_present() return true when splitting pmd
+
+Huacai Chen (1):
+      LoongArch: Fix perf event id calculation
+
+Immad Mir (1):
+      LoongArch: Fix debugfs_create_dir() error checking
+
+Qi Hu (1):
+      LoongArch: Fix the write_fcsr() macro
+
+Qing Zhang (1):
+      LoongArch: Avoid uninitialized alignment_mask
+
+ arch/loongarch/include/asm/loongarch.h    | 2 +-
+ arch/loongarch/include/asm/pgtable-bits.h | 2 ++
+ arch/loongarch/include/asm/pgtable.h      | 3 ++-
+ arch/loongarch/kernel/hw_breakpoint.c     | 2 ++
+ arch/loongarch/kernel/perf_event.c        | 6 +++---
+ arch/loongarch/kernel/unaligned.c         | 2 +-
+ 6 files changed, 11 insertions(+), 6 deletions(-)
