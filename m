@@ -2,67 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF6DA73126D
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61401731269
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:39:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245345AbjFOIk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 04:40:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59164 "EHLO
+        id S244351AbjFOIj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 04:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245203AbjFOIj7 (ORCPT
+        with ESMTP id S238214AbjFOIjN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 04:39:59 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C452135
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:39:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686818398; x=1718354398;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=o2eOJnsU2nuFZcaG4NHXOrDBiDTgP3ZlwkknmbtbcTc=;
-  b=jB/rvL+pesixrNTfKY73I7IQQrUpopHTBL0ruDhVJqKNn0M1ILCZB9fX
-   yFmaCwE7irayR1j50mlN2nwkvh2e4ArTYRh6rrIpCUUdZ4Mftrxb7clyT
-   bC4F19sFEamLNVrBo10VEO7b1d1xdnXz7xl4p+r0+3OTrPaHhQ1mYx0U8
-   p/iAfHmIwH2oVcWtzHS1/NKVSYx7wCewPFCO4LXeZhHHVr+9NL5oHxbhb
-   IaAoMgArS7K16EVRUxjJ2b5mcXpPmA6sag+rQuiT8NJBUy750HK/Y/0u+
-   r9dfttTNGmJM6GckcI1C+5bRM7uRRRQX14mx1fD2WeuhFTi14P1Ffq8fx
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="338478231"
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="338478231"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 01:39:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="706575183"
-X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
-   d="scan'208";a="706575183"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 01:39:50 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        akpm@linux-foundation.org, vbabka@suse.cz, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] mm: compaction: skip memory hole rapidly when
- isolating migratable pages
-References: <770f9f61472b24b6bc89adbd71a77d9cf62bb54f.1686646361.git.baolin.wang@linux.alibaba.com>
-        <20230614095501.m4porztaibchrgwx@techsingularity.net>
-        <87ilbpo1d9.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <5f340d98-4ee0-35a9-58ed-943834d68042@linux.alibaba.com>
-        <87fs6tfaw5.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <5b5e7dd0-d60b-ca46-215c-f59947b805fe@redhat.com>
-Date:   Thu, 15 Jun 2023 16:38:17 +0800
-In-Reply-To: <5b5e7dd0-d60b-ca46-215c-f59947b805fe@redhat.com> (David
-        Hildenbrand's message of "Thu, 15 Jun 2023 09:46:53 +0200")
-Message-ID: <87bkhhf7d2.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+        Thu, 15 Jun 2023 04:39:13 -0400
+Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A3E296A
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:39:09 -0700 (PDT)
+Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-7773997237cso806181339f.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:39:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686818348; x=1689410348;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aM+Phr1An1GIiImzmdxTCUrcwlJ97syswvKcfB+xT2c=;
+        b=V1BtArkSOC1+5rpi2nNujBs4svdV1rxBo9Mca4xvgclOuswYvdjDovcpqbWEZ2l8MW
+         besxqMDdnlb5Pe5maNZjFX8iNHzGnfzJQC06+x+21CbpTZxzXd46MXvZmsOKUO2Aso4d
+         sAqnJhQMeRI3AdD2Cv0pUIUro3Nukd9N+Xq/xoxNScFDP3f0rIB3408M+pajKiS8P3OL
+         Ap9j86Xk+OzUAQDkU/tcdobSRIojiynDhjr97KjfZVtbJBLr4iuh55fKh4ghlH1DKeBY
+         suY9jraC61vP93dCn+wkL/EEjQf1/XuVNtBtJGyjXAZ+WmAdSM8jCSIoWKWLSahYxSq6
+         OM9Q==
+X-Gm-Message-State: AC+VfDxUgUbwZhkqE9SRBKrQ/CfF7iyuZMcaqxXNrx5PF6EabeAIf5rG
+        N2jTJL11Q4yVlBYy9EwtDLXxs2mD6aNC+0/D5DgpILKPNQdK
+X-Google-Smtp-Source: ACHHUZ7XYj2xat4zS17Sbt9bRcr5SaxkDqlPIN162EqFbB3AYNU3wgjlFOxUMG9aUDVsUdfLY7hrKbCq0uAQO8rAOFcKH8z397p1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a02:94c1:0:b0:423:1093:c805 with SMTP id
+ x59-20020a0294c1000000b004231093c805mr731017jah.3.1686818348544; Thu, 15 Jun
+ 2023 01:39:08 -0700 (PDT)
+Date:   Thu, 15 Jun 2023 01:39:08 -0700
+In-Reply-To: <000000000000cbb5f505faa4d920@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000773bb005fe270004@google.com>
+Subject: Re: [syzbot] [f2fs?] possible deadlock in f2fs_release_file
+From:   syzbot <syzbot+e5b81eaab292e00e7d98@syzkaller.appspotmail.com>
+To:     chao@kernel.org, jaegeuk@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,92 +57,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Hildenbrand <david@redhat.com> writes:
+syzbot has found a reproducer for the following issue on:
 
-> On 15.06.23 09:22, Huang, Ying wrote:
->> Baolin Wang <baolin.wang@linux.alibaba.com> writes:
->> 
->>> On 6/15/2023 11:22 AM, Huang, Ying wrote:
->>>> Hi, Mel,
->>>> Mel Gorman <mgorman@techsingularity.net> writes:
->>>>
->>>>> On Tue, Jun 13, 2023 at 04:55:04PM +0800, Baolin Wang wrote:
->>>>>> On some machines, the normal zone can have a large memory hole like
->>>>>> below memory layout, and we can see the range from 0x100000000 to
->>>>>> 0x1800000000 is a hole. So when isolating some migratable pages, the
->>>>>> scanner can meet the hole and it will take more time to skip the large
->>>>>> hole. From my measurement, I can see the isolation scanner will take
->>>>>> 80us ~ 100us to skip the large hole [0x100000000 - 0x1800000000].
->>>>>>
->>>>>> So adding a new helper to fast search next online memory section
->>>>>> to skip the large hole can help to find next suitable pageblock
->>>>>> efficiently. With this patch, I can see the large hole scanning only
->>>>>> takes < 1us.
->>>>>>
->>>>>> [    0.000000] Zone ranges:
->>>>>> [    0.000000]   DMA      [mem 0x0000000040000000-0x00000000ffffffff]
->>>>>> [    0.000000]   DMA32    empty
->>>>>> [    0.000000]   Normal   [mem 0x0000000100000000-0x0000001fa7ffffff]
->>>>>> [    0.000000] Movable zone start for each node
->>>>>> [    0.000000] Early memory node ranges
->>>>>> [    0.000000]   node   0: [mem 0x0000000040000000-0x0000000fffffffff]
->>>>>> [    0.000000]   node   0: [mem 0x0000001800000000-0x0000001fa3c7ffff]
->>>>>> [    0.000000]   node   0: [mem 0x0000001fa3c80000-0x0000001fa3ffffff]
->>>>>> [    0.000000]   node   0: [mem 0x0000001fa4000000-0x0000001fa402ffff]
->>>>>> [    0.000000]   node   0: [mem 0x0000001fa4030000-0x0000001fa40effff]
->>>>>> [    0.000000]   node   0: [mem 0x0000001fa40f0000-0x0000001fa73cffff]
->>>>>> [    0.000000]   node   0: [mem 0x0000001fa73d0000-0x0000001fa745ffff]
->>>>>> [    0.000000]   node   0: [mem 0x0000001fa7460000-0x0000001fa746ffff]
->>>>>> [    0.000000]   node   0: [mem 0x0000001fa7470000-0x0000001fa758ffff]
->>>>>> [    0.000000]   node   0: [mem 0x0000001fa7590000-0x0000001fa7ffffff]
->>>>>>
->>>>>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->>>>>
->>>>> This may only be necessary for non-contiguous zones so a check for
->>>>> zone_contiguous could be made but I suspect the saving, if any, would be
->>>>> marginal.
->>>>>
->>>>> However, it's subtle that block_end_pfn can end up in an arbirary location
->>>>> past the end of the zone or past cc->free_pfn. As the "continue" will update
->>>>> cc->migrate_pfn, that might lead to errors in the future. It would be a
->>>>> lot safer to pass in cc->free_pfn and do two things with the value. First,
->>>>> there is no point scanning for a valid online section past cc->free_pfn so
->>>>> terminating after cc->free_pfn may save some cycles. Second, cc->migrate_pfn
->>>>> does not end up with an arbitrary value which is a more defensive approach
->>>>> to any future programming errors.
->>>> I have thought about this before.  Originally, I had thought that we
->>>> were safe because cc->free_pfn should be in a online section and
->>>> block_end_pfn should reach cc->free_pfn before the end of zone.  But
->>>> after checking more code and thinking about it again, I found that the
->>>> underlying sections may go offline under us during compaction.  So that,
->>>> cc->free_pfn may be in a offline section or after the end of zone.  So,
->>>> you are right, we need to consider the range of block_end_pfn.
->>>> But, if we thought in this way (memory online/offline at any time),
->>>> it
->>>> appears that we need to check whether the underlying section was
->>>> offlined.  For example, is it safe to use "pfn_to_page()" in
->>>> "isolate_migratepages_block()"?  Is it possible for the underlying
->>>> section to be offlined under us?
->>>
->>> It is possible. There is a previous discussion[1] about the race
->>> between pfn_to_online_page() and memory offline.
->>>
->>> [1]
->>> https://lore.kernel.org/lkml/87zgc6buoq.fsf@nvidia.com/T/#m642d91bcc726437e1848b295bc57ce249c7ca399
->> Thank you very much for sharing!  That answers my questions
->> directly!
->
-> I remember another discussion (but can't find it) regarding why memory
-> compaction can get away without pfn_to_online_page() all over the
-> place. The use is limited to __reset_isolation_pfn().
+HEAD commit:    b6dad5178cea Merge tag 'nios2_fix_v6.4' of git://git.kerne..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12510203280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5bcee04c3b2a8237
+dashboard link: https://syzkaller.appspot.com/bug?extid=e5b81eaab292e00e7d98
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10db66f7280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14577753280000
 
-Per my understanding, isolate_migratepages() -> pageblock_pfn_to_page()
-will check whether the pageblock is online.  So if the pageblock isn't
-offlined afterwards, we can use pfn_to_page().
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/0ae77e66553b/disk-b6dad517.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/5b2da4d23e74/vmlinux-b6dad517.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/23130b8e7a8a/bzImage-b6dad517.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/70b8358ae62a/mount_0.gz
 
-> But yes, in theory pfn_to_online_page() can race with memory offlining.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e5b81eaab292e00e7d98@syzkaller.appspotmail.com
 
-Thanks for confirmation.
+loop4: rw=2049, sector=77824, nr_sectors = 3048 limit=63271
+syz-executor110: attempt to access beyond end of device
+loop4: rw=2049, sector=80872, nr_sectors = 1048 limit=63271
+======================================================
+WARNING: possible circular locking dependency detected
+6.4.0-rc6-syzkaller-00037-gb6dad5178cea #0 Not tainted
+------------------------------------------------------
+syz-executor110/5218 is trying to acquire lock:
+ffff88806676b660 (&sb->s_type->i_mutex_key#17){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ffff88806676b660 (&sb->s_type->i_mutex_key#17){+.+.}-{3:3}, at: f2fs_release_file fs/f2fs/file.c:1866 [inline]
+ffff88806676b660 (&sb->s_type->i_mutex_key#17){+.+.}-{3:3}, at: f2fs_release_file+0xca/0x100 fs/f2fs/file.c:1856
 
-Best Regards,
-Huang, Ying
+but task is already holding lock:
+ffff88802100c448 (&sbi->node_write){++++}-{3:3}, at: f2fs_down_read fs/f2fs/f2fs.h:2087 [inline]
+ffff88802100c448 (&sbi->node_write){++++}-{3:3}, at: f2fs_write_single_data_page+0x166e/0x19d0 fs/f2fs/data.c:2842
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #2 (&sbi->node_write){++++}-{3:3}:
+       __lock_release kernel/locking/lockdep.c:5419 [inline]
+       lock_release+0x33c/0x670 kernel/locking/lockdep.c:5725
+       up_write+0x2a/0x520 kernel/locking/rwsem.c:1625
+       f2fs_up_write fs/f2fs/f2fs.h:2122 [inline]
+       block_operations+0xca4/0xe80 fs/f2fs/checkpoint.c:1288
+       f2fs_write_checkpoint+0x5fa/0x4b40 fs/f2fs/checkpoint.c:1651
+       __write_checkpoint_sync fs/f2fs/checkpoint.c:1768 [inline]
+       __checkpoint_and_complete_reqs+0xea/0x350 fs/f2fs/checkpoint.c:1787
+       issue_checkpoint_thread+0xe3/0x250 fs/f2fs/checkpoint.c:1818
+       kthread+0x344/0x440 kernel/kthread.c:379
+       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+
+-> #1 (&sbi->cp_rwsem){++++}-{3:3}:
+       down_read+0x9c/0x480 kernel/locking/rwsem.c:1520
+       f2fs_down_read fs/f2fs/f2fs.h:2087 [inline]
+       f2fs_lock_op fs/f2fs/f2fs.h:2130 [inline]
+       f2fs_convert_inline_inode+0x47b/0x8e0 fs/f2fs/inline.c:218
+       f2fs_preallocate_blocks fs/f2fs/file.c:4480 [inline]
+       f2fs_file_write_iter+0x1a1f/0x24d0 fs/f2fs/file.c:4712
+       call_write_iter include/linux/fs.h:1868 [inline]
+       do_iter_readv_writev+0x20b/0x3b0 fs/read_write.c:735
+       do_iter_write+0x185/0x7e0 fs/read_write.c:860
+       vfs_writev+0x1aa/0x670 fs/read_write.c:933
+       do_pwritev+0x1b6/0x270 fs/read_write.c:1030
+       __do_sys_pwritev2 fs/read_write.c:1089 [inline]
+       __se_sys_pwritev2 fs/read_write.c:1080 [inline]
+       __x64_sys_pwritev2+0xef/0x150 fs/read_write.c:1080
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (&sb->s_type->i_mutex_key#17){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3113 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3232 [inline]
+       validate_chain kernel/locking/lockdep.c:3847 [inline]
+       __lock_acquire+0x2fcd/0x5f30 kernel/locking/lockdep.c:5088
+       lock_acquire kernel/locking/lockdep.c:5705 [inline]
+       lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5670
+       down_write+0x92/0x200 kernel/locking/rwsem.c:1573
+       inode_lock include/linux/fs.h:775 [inline]
+       f2fs_release_file fs/f2fs/file.c:1866 [inline]
+       f2fs_release_file+0xca/0x100 fs/f2fs/file.c:1856
+       __fput+0x27c/0xa90 fs/file_table.c:321
+       task_work_run+0x16f/0x270 kernel/task_work.c:179
+       get_signal+0x1c7/0x25b0 kernel/signal.c:2652
+       arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+       exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+       exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
+       __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+       syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
+       do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+Chain exists of:
+  &sb->s_type->i_mutex_key#17 --> &sbi->cp_rwsem --> &sbi->node_write
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  rlock(&sbi->node_write);
+                               lock(&sbi->cp_rwsem);
+                               lock(&sbi->node_write);
+  lock(&sb->s_type->i_mutex_key#17);
+
+ *** DEADLOCK ***
+
+1 lock held by syz-executor110/5218:
+ #0: ffff88802100c448 (&sbi->node_write){++++}-{3:3}, at: f2fs_down_read fs/f2fs/f2fs.h:2087 [inline]
+ #0: ffff88802100c448 (&sbi->node_write){++++}-{3:3}, at: f2fs_write_single_data_page+0x166e/0x19d0 fs/f2fs/data.c:2842
+
+stack backtrace:
+CPU: 1 PID: 5218 Comm: syz-executor110 Not tainted 6.4.0-rc6-syzkaller-00037-gb6dad5178cea #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2188
+ check_prev_add kernel/locking/lockdep.c:3113 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3232 [inline]
+ validate_chain kernel/locking/lockdep.c:3847 [inline]
+ __lock_acquire+0x2fcd/0x5f30 kernel/locking/lockdep.c:5088
+ lock_acquire kernel/locking/lockdep.c:5705 [inline]
+ lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5670
+ down_write+0x92/0x200 kernel/locking/rwsem.c:1573
+ inode_lock include/linux/fs.h:775 [inline]
+ f2fs_release_file fs/f2fs/file.c:1866 [inline]
+ f2fs_release_file+0xca/0x100 fs/f2fs/file.c:1856
+ __fput+0x27c/0xa90 fs/file_table.c:321
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ get_signal+0x1c7/0x25b0 kernel/signal.c:2652
+ arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+ exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+ syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
+ do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f6b9a0179b9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 a1 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f6b99fc32f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000148
+RAX: fffffffffffffffb RBX: 00007f6b9a0a47a8 RCX: 00007f6b9a0179b9
+RDX: 0000000000000001 RSI: 0000000020000240 RDI: 0000000000000004
+RBP: 00007f6b9a0a47a0 R08: 0000000000000000 R09: 0000000000000003
+R10: 0000000000001400 R11: 0000000000000246 R12: 00007f6b9a0a47ac
+R13: 00007f6b9a071008 R14: 6f6f6c2f7665642f R15: 0000000000022000
+ </TASK>
+
+
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
