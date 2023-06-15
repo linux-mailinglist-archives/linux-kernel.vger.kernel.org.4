@@ -2,88 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3EA573125E
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:38:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF6DA73126D
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 10:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238605AbjFOIiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 04:38:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58900 "EHLO
+        id S245345AbjFOIk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 04:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238105AbjFOIiK (ORCPT
+        with ESMTP id S245203AbjFOIj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 04:38:10 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2A71711
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:38:08 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-51a20138617so1068057a12.2
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:38:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686818286; x=1689410286;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bTnONamiWI78G9kUPlocf8m4LdwDUY7gVx5tClnqFK4=;
-        b=MREZxTbfuV54pYz1RaDjFOtGb+ttRwS1Syl6YbhS8vPvKWa9fivV4OGflJSiaN4vAe
-         iq+BJttG+xGc3Yssj0IusaIIJ3MMog0KRJoJ8fXzF0g/pSzq5kaHFqwau0Lygbz8rUB4
-         QqF+UhYI+G8SwsxUJEe3wd2AKcj8FmF67yCtQOQ+hr8FlXAGEHb85+Xos2UaLon1o8NQ
-         uRO/YQzyonRZKOTERBd+PsDCk3XXelwOufQNoCoj51y7OqSrz1wGAZe7p6eAt16WjJZo
-         4Ln/hCI78DkSG2q2fqRIsVovFR8T8hMIr6keXD9B9XzO+LemdX3EEZSeoHdsvgj4bij3
-         IiKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686818286; x=1689410286;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bTnONamiWI78G9kUPlocf8m4LdwDUY7gVx5tClnqFK4=;
-        b=Z4i2KN0QKo6Oo+ubc8C83rxItMTmoAzKmuQC7xVkTh14C8v3WxqykYTlCRuJjnOd99
-         mW/um0+mIpn1QJGrQScbBnsP/hgkBGo2dvdZ26ACJ6M3ivd8QWfaUv+drzD0v9R0czs2
-         5cj4iV/W1v7dQCUzloUMc4xgpxCS9/WmssFD/wBSKVXIjNn4d4LU7pMrPI0yH0OblWcu
-         uEKFPEmMa5GPTpCGsPUt6AnlIS7RQIq1/5++iQqKvnnF/uNLciAMoJmG3UNmavdPACMf
-         Pw6AZ0c/42ATXqSii7uPCkSG75CiOpxchu05j2Ro/wPNUynkNZ792CDg4rhHGIZsiMOq
-         UU0Q==
-X-Gm-Message-State: AC+VfDwXr5pWRTbZ4q1/DGHWqCSGkXknbGkTWTKz+r1Tuaw3EWAxhl0z
-        TN4gGgKU8Nv8uA0FUyUxJhCYHA==
-X-Google-Smtp-Source: ACHHUZ46W2BILCCTozrhqHTaCBXCLZyuSFXyw+aYUXP6Q2C3uhcA+0fx3GAwzBzhVK41U14a0WogqQ==
-X-Received: by 2002:a05:6402:1518:b0:51a:263c:ae54 with SMTP id f24-20020a056402151800b0051a263cae54mr849701edw.33.1686818286530;
-        Thu, 15 Jun 2023 01:38:06 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id b20-20020a05640202d400b005182df57885sm6383999edx.19.2023.06.15.01.38.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 01:38:06 -0700 (PDT)
-Message-ID: <d35e2f57-f3b1-415a-f74b-84c928c38fb7@linaro.org>
-Date:   Thu, 15 Jun 2023 10:38:03 +0200
+        Thu, 15 Jun 2023 04:39:59 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C452135
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 01:39:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686818398; x=1718354398;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=o2eOJnsU2nuFZcaG4NHXOrDBiDTgP3ZlwkknmbtbcTc=;
+  b=jB/rvL+pesixrNTfKY73I7IQQrUpopHTBL0ruDhVJqKNn0M1ILCZB9fX
+   yFmaCwE7irayR1j50mlN2nwkvh2e4ArTYRh6rrIpCUUdZ4Mftrxb7clyT
+   bC4F19sFEamLNVrBo10VEO7b1d1xdnXz7xl4p+r0+3OTrPaHhQ1mYx0U8
+   p/iAfHmIwH2oVcWtzHS1/NKVSYx7wCewPFCO4LXeZhHHVr+9NL5oHxbhb
+   IaAoMgArS7K16EVRUxjJ2b5mcXpPmA6sag+rQuiT8NJBUy750HK/Y/0u+
+   r9dfttTNGmJM6GckcI1C+5bRM7uRRRQX14mx1fD2WeuhFTi14P1Ffq8fx
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="338478231"
+X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
+   d="scan'208";a="338478231"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 01:39:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="706575183"
+X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
+   d="scan'208";a="706575183"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 01:39:50 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        akpm@linux-foundation.org, vbabka@suse.cz, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] mm: compaction: skip memory hole rapidly when
+ isolating migratable pages
+References: <770f9f61472b24b6bc89adbd71a77d9cf62bb54f.1686646361.git.baolin.wang@linux.alibaba.com>
+        <20230614095501.m4porztaibchrgwx@techsingularity.net>
+        <87ilbpo1d9.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <5f340d98-4ee0-35a9-58ed-943834d68042@linux.alibaba.com>
+        <87fs6tfaw5.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <5b5e7dd0-d60b-ca46-215c-f59947b805fe@redhat.com>
+Date:   Thu, 15 Jun 2023 16:38:17 +0800
+In-Reply-To: <5b5e7dd0-d60b-ca46-215c-f59947b805fe@redhat.com> (David
+        Hildenbrand's message of "Thu, 15 Jun 2023 09:46:53 +0200")
+Message-ID: <87bkhhf7d2.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v4 1/3] dt-bindings: PCI: qcom: ep: Add interconnects path
-Content-Language: en-US
-To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        manivannan.sadhasivam@linaro.org
-Cc:     quic_vbadigan@quicinc.com, quic_ramkri@quicinc.com,
-        linux-arm-msm@vger.kernel.org, konrad.dybcio@linaro.org,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "open list:PCIE ENDPOINT DRIVER FOR QUALCOMM" 
-        <linux-pci@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <1686752666-13426-1-git-send-email-quic_krichai@quicinc.com>
- <1686752666-13426-2-git-send-email-quic_krichai@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1686752666-13426-2-git-send-email-quic_krichai@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,22 +70,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/06/2023 16:24, Krishna chaitanya chundru wrote:
-> Some platforms may not boot if a device driver doesn't
-> initialize the interconnect path. Mostly it is handled
-> by the bootloader but we have starting to see cases
-> where bootloader simply ignores them.
-> 
-> Add the "pcie-mem" interconnect path as a required property
-> to the bindings.
-> 
+David Hildenbrand <david@redhat.com> writes:
 
-I did not receive third patch in the series, so I hope you corrected all
-DTS in the linux-next (sdx55, sdx65).
+> On 15.06.23 09:22, Huang, Ying wrote:
+>> Baolin Wang <baolin.wang@linux.alibaba.com> writes:
+>> 
+>>> On 6/15/2023 11:22 AM, Huang, Ying wrote:
+>>>> Hi, Mel,
+>>>> Mel Gorman <mgorman@techsingularity.net> writes:
+>>>>
+>>>>> On Tue, Jun 13, 2023 at 04:55:04PM +0800, Baolin Wang wrote:
+>>>>>> On some machines, the normal zone can have a large memory hole like
+>>>>>> below memory layout, and we can see the range from 0x100000000 to
+>>>>>> 0x1800000000 is a hole. So when isolating some migratable pages, the
+>>>>>> scanner can meet the hole and it will take more time to skip the large
+>>>>>> hole. From my measurement, I can see the isolation scanner will take
+>>>>>> 80us ~ 100us to skip the large hole [0x100000000 - 0x1800000000].
+>>>>>>
+>>>>>> So adding a new helper to fast search next online memory section
+>>>>>> to skip the large hole can help to find next suitable pageblock
+>>>>>> efficiently. With this patch, I can see the large hole scanning only
+>>>>>> takes < 1us.
+>>>>>>
+>>>>>> [    0.000000] Zone ranges:
+>>>>>> [    0.000000]   DMA      [mem 0x0000000040000000-0x00000000ffffffff]
+>>>>>> [    0.000000]   DMA32    empty
+>>>>>> [    0.000000]   Normal   [mem 0x0000000100000000-0x0000001fa7ffffff]
+>>>>>> [    0.000000] Movable zone start for each node
+>>>>>> [    0.000000] Early memory node ranges
+>>>>>> [    0.000000]   node   0: [mem 0x0000000040000000-0x0000000fffffffff]
+>>>>>> [    0.000000]   node   0: [mem 0x0000001800000000-0x0000001fa3c7ffff]
+>>>>>> [    0.000000]   node   0: [mem 0x0000001fa3c80000-0x0000001fa3ffffff]
+>>>>>> [    0.000000]   node   0: [mem 0x0000001fa4000000-0x0000001fa402ffff]
+>>>>>> [    0.000000]   node   0: [mem 0x0000001fa4030000-0x0000001fa40effff]
+>>>>>> [    0.000000]   node   0: [mem 0x0000001fa40f0000-0x0000001fa73cffff]
+>>>>>> [    0.000000]   node   0: [mem 0x0000001fa73d0000-0x0000001fa745ffff]
+>>>>>> [    0.000000]   node   0: [mem 0x0000001fa7460000-0x0000001fa746ffff]
+>>>>>> [    0.000000]   node   0: [mem 0x0000001fa7470000-0x0000001fa758ffff]
+>>>>>> [    0.000000]   node   0: [mem 0x0000001fa7590000-0x0000001fa7ffffff]
+>>>>>>
+>>>>>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>>>>>
+>>>>> This may only be necessary for non-contiguous zones so a check for
+>>>>> zone_contiguous could be made but I suspect the saving, if any, would be
+>>>>> marginal.
+>>>>>
+>>>>> However, it's subtle that block_end_pfn can end up in an arbirary location
+>>>>> past the end of the zone or past cc->free_pfn. As the "continue" will update
+>>>>> cc->migrate_pfn, that might lead to errors in the future. It would be a
+>>>>> lot safer to pass in cc->free_pfn and do two things with the value. First,
+>>>>> there is no point scanning for a valid online section past cc->free_pfn so
+>>>>> terminating after cc->free_pfn may save some cycles. Second, cc->migrate_pfn
+>>>>> does not end up with an arbitrary value which is a more defensive approach
+>>>>> to any future programming errors.
+>>>> I have thought about this before.  Originally, I had thought that we
+>>>> were safe because cc->free_pfn should be in a online section and
+>>>> block_end_pfn should reach cc->free_pfn before the end of zone.  But
+>>>> after checking more code and thinking about it again, I found that the
+>>>> underlying sections may go offline under us during compaction.  So that,
+>>>> cc->free_pfn may be in a offline section or after the end of zone.  So,
+>>>> you are right, we need to consider the range of block_end_pfn.
+>>>> But, if we thought in this way (memory online/offline at any time),
+>>>> it
+>>>> appears that we need to check whether the underlying section was
+>>>> offlined.  For example, is it safe to use "pfn_to_page()" in
+>>>> "isolate_migratepages_block()"?  Is it possible for the underlying
+>>>> section to be offlined under us?
+>>>
+>>> It is possible. There is a previous discussion[1] about the race
+>>> between pfn_to_online_page() and memory offline.
+>>>
+>>> [1]
+>>> https://lore.kernel.org/lkml/87zgc6buoq.fsf@nvidia.com/T/#m642d91bcc726437e1848b295bc57ce249c7ca399
+>> Thank you very much for sharing!  That answers my questions
+>> directly!
+>
+> I remember another discussion (but can't find it) regarding why memory
+> compaction can get away without pfn_to_online_page() all over the
+> place. The use is limited to __reset_isolation_pfn().
 
+Per my understanding, isolate_migratepages() -> pageblock_pfn_to_page()
+will check whether the pageblock is online.  So if the pageblock isn't
+offlined afterwards, we can use pfn_to_page().
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> But yes, in theory pfn_to_online_page() can race with memory offlining.
 
-Best regards,
-Krzysztof
+Thanks for confirmation.
 
+Best Regards,
+Huang, Ying
