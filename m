@@ -2,122 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 361CD7319AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DBF17319AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:14:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343826AbjFONOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 09:14:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33466 "EHLO
+        id S240604AbjFONOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 09:14:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231159AbjFONNr (ORCPT
+        with ESMTP id S1343710AbjFONNu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 09:13:47 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15B52949;
-        Thu, 15 Jun 2023 06:13:31 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35FDDPfT010754;
-        Thu, 15 Jun 2023 08:13:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1686834805;
-        bh=M7CeXsp0hI8eJl4yv7H32Sa2Shs0XQoJyWaQVxvyiA0=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=ybkxGjP0ipsCC8AF00VLoCDEe7Im+x3N88dnHtMOoLWKUzUjPaYn0VL/PBSxpYoLK
-         dWeNVHkFVhM/hFSG5p4w/0H8y99ZAivGQD5gWN9aNDnbBkH8OfaJTuILXcG7FYKT1x
-         gr6fpsIUvxcCeJo+HoYgP/3puFEpMKoK0A23SWIw=
-Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35FDDP0H128431
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 15 Jun 2023 08:13:25 -0500
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 15
- Jun 2023 08:13:25 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 15 Jun 2023 08:13:25 -0500
-Received: from uda0132425.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35FDDLIM055309;
-        Thu, 15 Jun 2023 08:13:22 -0500
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-To:     Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Nishanth Menon <nm@ti.com>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Tero Kristo <kristo@kernel.org>, Udit Kumar <u-kumar1@ti.com>,
-        Nitin Yadav <n-yadav@ti.com>, Andrew Davis <afd@ti.com>
-Subject: Re: [PATCH 0/7] arm64: dts: ti: Add additional secproxy instances
-Date:   Thu, 15 Jun 2023 18:43:20 +0530
-Message-ID: <168681817155.2098323.11372041300861131434.b4-ty@ti.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230530165900.47502-1-nm@ti.com>
-References: <20230530165900.47502-1-nm@ti.com>
+        Thu, 15 Jun 2023 09:13:50 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA221294D
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 06:13:33 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-657c4bcad0bso2025890b3a.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 06:13:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1686834813; x=1689426813;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=g1B1o/FLv9G0pUm1w2hOwI7VRYkKM2WCDqp7dFZZlHs=;
+        b=NxuAR8Kwlaeh/EmM1YCgCVqYyw6uo92KBbxLVItzxTFf/kOvv92ue2AYLsEwBT9uJb
+         UwLIbo4RYn5vetNgHJS1efdFP5hetZzoQ0RJ1xTF1jqSumRQ7LFHxWMvRcGX71raeM2w
+         5F7GToKM2tzpJl6DIm7fz0ROqrC8k18jzvopqmfB7aFf91epmPNpL+4BR6BsranQ4QXm
+         L4AFcQuMep4XB4CN4eBft6LJ0aTGFUB8kq6L44upxPCWlLOlZsP0Q3BPhuErKOR16kXM
+         f723VBQCousEB8mvomyvAOvsUNbUF7FURhWHCnoWA6bK9lZui2bBDM9kmgDn5o1/6rDd
+         xUzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686834813; x=1689426813;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g1B1o/FLv9G0pUm1w2hOwI7VRYkKM2WCDqp7dFZZlHs=;
+        b=brLzV5JJrOjtRns/hM5BalmH78Sm+yAg8F2HIE9TR1IV0GntbzsXq2BVoV484aC2QC
+         DhwwF3eJT5oS7h+Qq9/z4SFnK7ZFAtex5nc0KI3QH/AedMsVRqKEJbG7FpUGlDPobl9D
+         Fu0hNvZsQDc2XN6JrZ6fej4veZxPTA+NKe+VR+eChoFQp8vkO7QAYsX0+Ye9zlJm0GRG
+         Gb7Ri8u4iHzk1qq0Ii2b9UVqRDbPEOLVLBxk1fH4aMoCaJ77ZDFIreWHPCvKnTsA9gIe
+         DIFq+baFEMgrAO6HgUp0eUeiMSNnYNgqLiCz+2a5rfsPGLCS7Ea6R4YztF/MdrER8nmY
+         iNwg==
+X-Gm-Message-State: AC+VfDw4uAKlAfMXqQJV9RVJJXmtwdXR6Q3G8gbRnwrMMotDJEpIw729
+        31kivDfbuqarEXNUPVIUbF3Djw==
+X-Google-Smtp-Source: ACHHUZ6nCkovgZAgHNee1ALFg9f+niLoHWwizdqsMfP5mdeUjMGgTN+jwfaM9Dq/iz4xZ0yunDXZtw==
+X-Received: by 2002:a17:90b:3852:b0:25b:e83b:593f with SMTP id nl18-20020a17090b385200b0025be83b593fmr13345455pjb.4.1686834813160;
+        Thu, 15 Jun 2023 06:13:33 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id ga12-20020a17090b038c00b002564dc3cb60sm1881320pjb.9.2023.06.15.06.13.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jun 2023 06:13:32 -0700 (PDT)
+Message-ID: <ec762677-f8d4-94ab-e7b3-adee45a052a1@kernel.dk>
+Date:   Thu, 15 Jun 2023 07:13:31 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] tools/io_uring: Fix missing check for return value of
+ malloc()
+Content-Language: en-US
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Chenyuan Mi <cymi20@fudan.edu.cn>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring Mailing List <io-uring@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20230615125045.125172-1-cymi20@fudan.edu.cn>
+ <34898926-681e-1790-4303-e2b54e793a62@gnuweeb.org>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <34898926-681e-1790-4303-e2b54e793a62@gnuweeb.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nishanth Menon,
-
-On Tue, 30 May 2023 11:58:53 -0500, Nishanth Menon wrote:
-> This series introduces secure proxies meant for usage with bootloaders
-> and firmware components in the SoC for all K3 SoCs. AM64x SoC is an odd
-> case here as the single instance of secure proxy is dual use for both
-> ROM and general purpose. All other SoCs have independent instances that
-> is used for firmware and bootloader communication.
+On 6/15/23 7:00?AM, Ammar Faizi wrote:
+> On 6/15/23 7:50 PM, Chenyuan Mi wrote:
+>> The malloc() function may return NULL when it fails,
+>> which may cause null pointer deference in kmalloc(),
 > 
-> Nitin had posted [1] to address one of the SoCs (AM62), I am cleaning
-> that patch a bit in this series.
-> 
-> [...]
+> It's a userspace app, there is no kmalloc(). Also, I don't think it's
+> worth to fix a missing ENOMEM handling for that old test program. But
+> anyway, let's wait for maintainers' comment on this.
 
-I have applied the following to branch ti-k3-dts-next on [1].
-Thank you!
+Definitely not worth it, and I find it odd how the author would target
+just one of multiple allocations in that file. I'm guessing it's because
+this checker only checks for malloc(), and no thought has otherwise gone
+into a) if the patch makes any sense at all, and b) if it does make
+sense, are there potentially other cases to consider?
 
-[1/7] arm64: dts: ti: k3-am62-main: Add sa3_secproxy
-      commit: 7450aa5153af55a0c63785a6917e35a989a4fdf5
-[2/7] arm64: dts: ti: k3-am62a-main: Add sa3_secproxy
-      commit: f7d3b11cacd1fc9596444e89209b80800d20ea22
-[3/7] arm64: dts: ti: k3-am65-mcu: Add mcu_secproxy
-      commit: 84debc33b529cae428f29b1eb21ccc05c8b47a16
-[4/7] arm64: dts: ti: k3-j7200-mcu: Add mcu_secproxy
-      commit: c4e43f5aef9731c480789dcb044d261f894a102e
-[5/7] arm64: dts: ti: k3-j721e-mcu: Add mcu_secproxy
-      commit: 753904da7072646666fa17a5030ef2be871a385a
-[6/7] arm64: dts: ti: k3-j721s2-mcu-wakeup: Add sa3_secproxy and mcu_sec_proxy
-      commit: 77f622cb8633c020a78cfb8b7d3d73ba3eaf0a44
-[7/7] arm64: dts: ti: k3-j784s4-mcu-wakeup: Add sa3_secproxy and mcu_sec_proxy
-      commit: 389ad7111ddd99a05c75bc7d4f480a0526761d06
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent up the chain during
-the next merge window (or sooner if it is a relevant bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
---
-Vignesh
+-- 
+Jens Axboe
 
