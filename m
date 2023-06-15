@@ -2,198 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31B74731BBA
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD14F731B83
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:39:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345094AbjFOOrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 10:47:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33344 "EHLO
+        id S1344585AbjFOOjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 10:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345089AbjFOOre (ORCPT
+        with ESMTP id S238807AbjFOOjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 10:47:34 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730DF297B;
-        Thu, 15 Jun 2023 07:47:24 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id DD6CD5C0110;
-        Thu, 15 Jun 2023 10:47:23 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Thu, 15 Jun 2023 10:47:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1686840443; x=1686926843; bh=L5
-        CucTn2nK/6ilWkZCkYXAEXi37p54TLgVd4NqLySVs=; b=MrHyT4BAxtK6OrVF3/
-        NLgBLROkQsxwyC23Tz7wnZH7MfI0SqdzZDAoETPyuKL6DFN0JwUjfClpf2nTwe0h
-        +HxlGW4hQm9fqEQrFCagN96GIqMaZdrolBgD+hgOxdNDYogWLbvp6IxKFOP1SCvy
-        PRP8CwgQVsnGmz8g3PfZ0oOtsy9tt9nAnrhg05ffaY9f34qUjzoqv8V9vzxtEdm+
-        9blvB6bf28rf2iLsqbwXlTm4ROZPas5SNVCowjaNd+4rL30VwwUsXGnY2GPF455A
-        AxMMs3qBo+RXe8VliJ00RbjCr7jaK128GdbrG8W0gHScK07Y8fxWBDEgh1nVCB4s
-        V4Hg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1686840443; x=1686926843; bh=L5CucTn2nK/6i
-        lWkZCkYXAEXi37p54TLgVd4NqLySVs=; b=krLNryTD7nnL8EQElM93RdreP4Km6
-        SF8iXucPHaZGs6uaPqsYFHXvj/nvkNsmEri4NyGQP+Y3SeRFEDJKOzEyiflsnhcY
-        1Uuho+PrWrRvhoDcqD9JptrWxDd6WRkjjfSaLrb43Ze8NvX5nvtDB6mGXJMaJbl/
-        JkKcduFxuOf/GuI2L/Z1roABSJXZ814ouZzjD792yvO73jw/qc+5L+Pn01QSQccU
-        m1eBk9YWeRuS/VS+gP6ssGa4hiemh2ScG+qVfMdddEpLV6TqOQkggDS4iMPcOYj/
-        RNQ9XfGgDrf1tJHZzmbQQOlN8nJXY0pDIMd/9Xq7jqcmHCbW5yITmJRZw==
-X-ME-Sender: <xms:eiSLZFoOopYwLzscePzl9mf9itXamZV4tIKmpE2teCqenh6j6wwYfg>
-    <xme:eiSLZHoU00qYSZjXtcR8aGGx1asLgMR5qo9cTiNmg7RFxnAAoat4OXGMXUbSqCxsU
-    v5tWnB7ZK7bPcDjORw>
-X-ME-Received: <xmr:eiSLZCOsHSSYNF9iwE5P-zlLD2QAU6d06HJUco4POSnoobQT1Ohg8ww3WS2WpIso1dBIKjd_aqVZn_J4lRLZgQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedvvddgjeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffvvefukffhfhggtggujgesghdtsfertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpefhhfehtdektdejueeltefhjeeltdffffejheffudfhvdfhhfeludekkefg
-    hffhfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:eySLZA4pcVjxOqQTLtJPI8yzRNxn15GIOeL4PHrCOr5ZrxyHQ2m0hQ>
-    <xmx:eySLZE7TPIyQ2HDe4GTwjbSw7jDAn3wW8DNAskD1zUqZMLQNyDTc-A>
-    <xmx:eySLZIiojEx9wSGlaS26Rg6RDw7WboxOFSSPHf-bE2Fdv3fJ-T4Eow>
-    <xmx:eySLZBzV1qRwU7Hq-EhjqWNANLkdy3_j6GsOOcaKGWnnEQJ77drqXg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 15 Jun 2023 10:47:22 -0400 (EDT)
-Date:   Tue, 13 Jun 2023 17:30:06 +0200
-To:     Frank Oltmanns <frank@oltmanns.dev>
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Roman Beranek <me@crly.cz>,
-        Samuel Holland <samuel@sholland.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 1/2] clk: sunxi-ng: nkm: consider alternative parent
- rates when finding rate
-Message-ID: <wnxjbbjfcnrg7ogwkfwbnldvyqbpt23b6mnrieb2zffooaojts@sudsbfjbjt64>
-From:   Maxime Ripard <maxime@cerno.tech>
-References: <20230605190745.366882-1-frank@oltmanns.dev>
- <20230605190745.366882-2-frank@oltmanns.dev>
- <2bvcukogzhcdbfsrruylgw5fbezaqjpcojqaambfoiv5fc2upy@ffumn5sevbeb>
- <875y7y1f0d.fsf@oltmanns.dev>
- <sijbhopoxuw5wodyry3smg7tm4wzoc7k6xakt4qdvxqsok32mv@u7rh4dct5ya6>
- <87a5x41w5r.fsf@oltmanns.dev>
- <unoskbtcteluxj7g3xkwc7ngcmglvcbm5ah25m7huhqxwd4dj3@nmfxbedwyu54>
- <87wn07zmxp.fsf@oltmanns.dev>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cghg4gjbgxgwxw55"
+        Thu, 15 Jun 2023 10:39:00 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B27194;
+        Thu, 15 Jun 2023 07:38:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686839940; x=1718375940;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=3szpj7JGU3NnIawR3go2d2Zx7MeAt7I54+kmg8XfYaU=;
+  b=X4/cIhyl2iG1PM7cCmxmrhwvbDcLb6sxI0suZPL1/iGaBbpCI53Lsu93
+   YE+m0YEbZm4AC47TTuq6nBw253kyyqBhTPL3Ellaj6XAbZt7tzjOI+tYJ
+   Xh2DNfjMd8EPj+QADgNSci+4CNLmwaOYXkdEH8KzV+RbmS9lnahWYc3nD
+   0ETbg4PH2t0otX539iEdNht95C0X7CoXFauhCw/HXZxkUbYcNcfMIwDpR
+   PwxOth6PVkU6kug7bx0qIznyTVYhtqBm14ii0tByGVPp4DB1aR6rvOxdj
+   X8q1j7prpTBUD0cHKz6uhof6YY9xonDonPazaPtvbapHls/1I3+mcaM0L
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="424834305"
+X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
+   d="scan'208";a="424834305"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 06:49:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="802364525"
+X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
+   d="scan'208";a="802364525"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by FMSMGA003.fm.intel.com with ESMTP; 15 Jun 2023 06:49:40 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 15 Jun 2023 06:49:40 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Thu, 15 Jun 2023 06:49:40 -0700
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.45) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Thu, 15 Jun 2023 06:49:34 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=A6h5xUeYB3oOi/qhsi77tMXOTTi8od3wz/0EEaX3MsHtwx3OI4PQPJVsNQeDCfTj01tAqQ7WcQClVv6MM25nAIFZGzxFChJjd4GZplbDH9M/DO0dTxBah9F1bBKAE2BUiYR4qpCXDk6q3SyPyQ04tPF7itOzy59w/K10SRrPfuNvsXkqhgwksnuVuT7LuTFHuk8vLIHdZ5mTrQHILJsWzCywRahDkliIoW+pmuykoZaJuYlP+psq3zAcS8uD5EI5WdNv4qbEC4xTQv17AS/Ps8awH5GOIos2q5jtWR6/DfaJVgjGhzrLStokZMf0NtXn9GbeokzkBVOck1TsNSV6Mw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+xhWC2PSwz4j+W5EqqK6JN3X01dBDwktoMPElovQeAM=;
+ b=NYrrPC2GmnjMESH/Z2s/IPBh9+zagWljmgLG5ddMPfQN31HHrZ5CTxpiRJLBn8GB1y2L1jCucUD0NYEUru+bQIcomiFusRwaoQ8HPOF6dyBTlm7B31Rv9H2Mdm4wJ8YOuJYq5yedr5BA83iG3qw+t2hOn8O/aE63w3GriS1LqK828B+sWHXS/AjU+afsigLwuGp13gb4w7+FfOoLzhQInmOwIyL0p1dfq2rF7GoQEcLWYK/7XjmFHKIyCfpC3ITprWxzriwkKBX6/JYUfF9n96eZk2NMITJs0rxkr1Sa3NucwzDah7SEAjl3lCbP3ExEAgGxTBLaqWMUcr8dtZTfHA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
+ PH7PR11MB6450.namprd11.prod.outlook.com (2603:10b6:510:1f5::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.25; Thu, 15 Jun
+ 2023 13:49:32 +0000
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::9e4f:80cc:e0aa:6809]) by DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::9e4f:80cc:e0aa:6809%2]) with mapi id 15.20.6477.028; Thu, 15 Jun 2023
+ 13:49:31 +0000
+Date:   Thu, 15 Jun 2023 15:49:23 +0200
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     YueHaibing <yuehaibing@huawei.com>
+CC:     <bjorn@kernel.org>, <magnus.karlsson@intel.com>,
+        <jonathan.lemon@gmail.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
+        <john.fastabend@gmail.com>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <maxtram95@gmail.com>
+Subject: Re: [PATCH net-next] xsk: Remove unused inline function
+ xsk_buff_discard()
+Message-ID: <ZIsW47S1Pdzqxkxt@boxer>
+References: <20230615124612.37772-1-yuehaibing@huawei.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <87wn07zmxp.fsf@oltmanns.dev>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230615124612.37772-1-yuehaibing@huawei.com>
+X-ClientProxiedBy: FR0P281CA0112.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a8::11) To DM4PR11MB6117.namprd11.prod.outlook.com
+ (2603:10b6:8:b3::19)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|PH7PR11MB6450:EE_
+X-MS-Office365-Filtering-Correlation-Id: 54fa059e-c67f-4533-5251-08db6da75848
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sJhVtOHWPNOTfIv01POamYgrwOFmd5YNK0cauno+LZXzzvUjo4zWGJFI1wTgSI3WdJA91QI3i8UGQ9rEveK9ewRQ8kuIUrI7PK/tB26Sb+WtsST2sf4cBCcxLOaae13veERuVwE5YkoXvxvozwbGii0raCeYdPp+0ZMt0Rgr1AwQkOM7yOLoJPUhmADaVc8BFCHDlUatMwE+pqQlf2G35wla+uac7oofbX0/iRqQdzRTN4lk4KPt+LALEDb0Ee5lAq4RAR5cFtGaWHl3JeeYeT/ZxgJozeZdjht5J8miWfG6rBtGDnEg8b3yT50+9yqmWFwBCQpAnbeSA93vGqk/LgCnHlLrkZAm0cv/PRx+dbOzSvOiCW5Rsbl2fbMJzZ0Nf1pl8Voe3nDjWLNPOr+ReQh4zgEGQVKnH9gIe2SWJtSaXsWrB13YUZZADaAD9VhFLTQdrogu5y3uKnZnByPjLEQm8VSw4rPSDLyoEuA5crt1jU0YV/27pXeVefczOlFZmW4YSXbLygNylXnJJ2v6scp6bccL5FkGEp5Lgp1b2hee1HxSX7sDuQ6EP9UxQkTW
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(396003)(366004)(39860400002)(136003)(346002)(376002)(451199021)(8676002)(41300700001)(86362001)(6666004)(8936002)(33716001)(6486002)(66556008)(6916009)(66946007)(66476007)(316002)(4326008)(9686003)(478600001)(6512007)(26005)(44832011)(7416002)(5660300002)(83380400001)(6506007)(186003)(2906002)(4744005)(38100700002)(82960400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9dEdqS3WdSXnGLUE8VtnkNOBBWbOFqoS+Mcry/8SzAK3Dr5FhZ0LziZen66D?=
+ =?us-ascii?Q?18y6iy/UGfC98ZNSjHLYp7xk1VrhWgVb91UPSoY1DhQlWSfwlkCO/odoiELm?=
+ =?us-ascii?Q?pL/nJHJe0DSQ5S7MInIkbZZHLVzroLAFgDvCGke37rAGT6awEH7sBfcd23zi?=
+ =?us-ascii?Q?uK5fTQgDfnLADtPE9yFaCKzzGCEkLtyHdInHFjV/CLfHpFSl+us+SEZkln13?=
+ =?us-ascii?Q?iyQbUiTmd6LpGKPcP+KixaS6q5tzkCYpLZauoEDIiyPGLtvR7icZm2W71XcU?=
+ =?us-ascii?Q?CSo8kzvYhMfLSEsNijFw/vDrfm3UmCpOk0i7XZT1ZK7VRjTs2ZPkhl/+UU97?=
+ =?us-ascii?Q?J9F9M8yV51c6DSlSN/pwBeC39qIOEw+6AKEq1l6fov05vQE93GbuCkCqncKj?=
+ =?us-ascii?Q?R4oiuDuaH/YJKhiJb6VVyBYlRZmI5vHiEKpfAn3FIRS/bVeFXtHVdQ2e0Exn?=
+ =?us-ascii?Q?LXxPBf7buSCYG4PCaEXN2oTHHUlklKwGWilx0trk3AABPsQI6XzIaC36CqRj?=
+ =?us-ascii?Q?zsCMRtt9DH9nUnTAdAX2inM+ExQgvQKIgKF8aaKDWLILtEggfIfjbJumx8u9?=
+ =?us-ascii?Q?tMUFyK1Al6q69as+aeWY5GWdKZsh5+/eEEg5ZriAyQBHKhUYBIf1UJn+v6RA?=
+ =?us-ascii?Q?wEgIzZNI9KjLe0iOsPM38huslhTZNu8pEoeT/ol9LgBSqtIE5iBtMfudXhuB?=
+ =?us-ascii?Q?Vb6iXhJctL3s5z84IDmZbPFAAnWo79t5fKAPy+F5Eoht3xDxR3yx5sRmTl17?=
+ =?us-ascii?Q?QoLLFJ18gbgDTqHAWZYDb7axHjSEnufIfG8xXRX5EItJjDVDDzg0xTp8udpz?=
+ =?us-ascii?Q?NPiTt9JI+8nG3itGBihZcTWmLjvhhhmkerXS/kQBhn/lgij2o3LC2uEsbRL/?=
+ =?us-ascii?Q?VbiljiR3L692+7Cg9ppOxWo4Qzn1Pu6ZrOe+noLm+9LPbrFhgcAlLfPNDG0m?=
+ =?us-ascii?Q?I2K78O5pGDxexs1Ed2ycpTo41K441KWI7ghv6hEcFl0LasijRBkvgG+BXRFk?=
+ =?us-ascii?Q?HIYZt84eVqTIPYLmlQIRepd79Kpiisl1CmubuLD65y/+kQjN517yyZY9Gb1T?=
+ =?us-ascii?Q?i09nlme11xyPxklE8wANSzrNfkKteJsPpmGUAC6qNYuKVq/QfNGqJEg/NILz?=
+ =?us-ascii?Q?ok75u/uzUUNXyBmy5EoKrvqcYlTXm4Nf70uBxuUpiJ+sydneqHTNZCVuIgGh?=
+ =?us-ascii?Q?OpVXY0KVcBot6/BKAu9jNtFwsI1Ntikvalc7FXig5pJbTbn7TUGt6ZnKIllz?=
+ =?us-ascii?Q?5ovTOgEpBcoDQq1POlOiYenHGGqR1XDzPd5Ly9S20Ml3FF5ZMy1J4usU024w?=
+ =?us-ascii?Q?SYyHaFin4jfrd2txszG35P9WWu9dvDIq7Ef5BgiqE5e5rmquFOI5csVEdkIB?=
+ =?us-ascii?Q?8Ynr0YZcLEMVWJHHnV9EVKt8hS4W2PRqUgagBQ9dq7IuGOs70h8PchVjpObo?=
+ =?us-ascii?Q?iuPFOY99UdItdh/XnQbx/6ggW2sFqw+G+XgBeZpBKa5FRy6dInmn8J9JTzSD?=
+ =?us-ascii?Q?V3ADIHE86zfIFTCb0fMumrt49DpZf3aBOCflTHvsbpHP8GvM3I6gXqp1nLnG?=
+ =?us-ascii?Q?tpwAlMM0PqqKlWef5eI4uXQoQty5LDThZyLuwcbT8RUjmHywhTrRSghQny5j?=
+ =?us-ascii?Q?6w=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 54fa059e-c67f-4533-5251-08db6da75848
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 13:49:31.3211
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9r0Sp2Ed0nzrV6S+2M7Qu8hMk9inbNmr/MtmwDMq7ffwAn1oi7xhynYQwchLikbq1oqzMUpqqY9CBBN+8iQKxu8kbY/9NN7GUN4331m50Vc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6450
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 15, 2023 at 08:46:12PM +0800, YueHaibing wrote:
+> commit f2f167583601 ("xsk: Remove unused xsk_buff_discard")
+> left behind this, remove it.
+> 
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 
---cghg4gjbgxgwxw55
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yeah this is a stub for !CONFIG_XDP_SOCKETS...
 
-On Tue, Jun 13, 2023 at 12:17:06PM +0200, Frank Oltmanns wrote:
-> Hi Maxime,
->=20
-> I'll now only respond to one aspect of your mail, because it's the
-> foundation for the whole behaviour.
->=20
-> On 2023-06-13 at 11:10:08 +0200, Maxime Ripard <maxime@cerno.tech> wrote:
-> [...]
-> >> >> ccu_nkm_find_best is called in the following two situations:
-> >> >>  a. from ccu_nkm_set_rate when setting the rate
-> >> >>  b. from ccu_nkm_round_rate when determining the rate
-> >> >>
-> >> >> In situation a. we never want ccu_nkm_find_best to try different pa=
-rent
-> >> >> rates because setting the parent rate is a done deal (at least that=
-'s my
-> >> >> understanding).
-> >> >>
-> >> >> In situation b. we only want ccu_nkm_find_best to try different par=
-ent
-> >> >> rates when, as you mentioned, the CLK_SET_RATE_PARENT flag is set.
-> >> >
-> >> > It doesn't really matter though. The output of that function must be
-> >> > stable and must return the same set of factors and parent rate for a
-> >> > given target rate.
-> >> >
-> >>
-> >> I'm not sure if we're talking about the same thing here. Of course the
-> >> set of factors and parent rate for a given target rate will be differe=
-nt
-> >> depending on the fact if we can or cannot adjust the parent rate,
-> >> agreed?
-> >
-> > Yes, but here you also have a different behaviour in clk_round_rate()
-> > and in clk_set_rate(), which isn't ok.
-> >
-> > Basically, clk_set_rate() + clk_get_rate() must be equal to
-> > clk_round_rate().
-> >
-> > If you change if you look for parents depending on whether you're being
-> > called in clk_round_rate() and clk_set_rate(), then you're breaking that
-> > expectation.
-> >
-> >> Let me compare my implementation to ccu_mp.
-> >>
-> >> ccu_mp_round_rate either calls the function ccu_mp_find_best or
-> >> ccu_mp_find_best_with_parent_adj, depending on CLK_SET_RATE_PARENT.
-> >
-> > Yes, and it's fine: the flag is per-clock, and the output is the same
-> > depending on whether we're being called by clk_round_rate() and
-> > clk_set_rate().
-> >
->=20
-> The output is really not the same.
->=20
-> ccu_mp_set_rate() always calls ccu_mp_find_best(). It never (!) considers
-> changing the parent, independent of any flags.
->=20
-> ccu_mp_round_rate() is calling ccu_mp_find_best() OR
-> ccu_mp_find_best_with_parent_adj() depending on the flag.
->=20
-> If I understand you correctly, you consider that a bug.
+Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-No, sorry, you're right.
-
-clk_set_rate will call round_rate first, which will (possibly) pick up a
-new parent, and by the time set_rate is called our parent will have been
-changed already so we will just call find_best again considering only
-that parent.
-
-The set of factors and dividers should remain the same there, but I
-don't think that's a concern.
-
-That leaves us with the rounding stuff, and the overall function
-arguments. I like the structure of ccu_mp better, is there a reason to
-deviate from it?
-
-Maxime
-
---cghg4gjbgxgwxw55
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZIiLeQAKCRDj7w1vZxhR
-xZwOAP0V27baWBPmfpGaKZQrnd/GOqaGcGGZZuCPI3ZDiH4lzAD/RqTkEXmNCeP+
-vkcuc67x9IsePwvMFq3jBor1njpnVgc=
-=84G2
------END PGP SIGNATURE-----
-
---cghg4gjbgxgwxw55--
+> ---
+>  include/net/xdp_sock_drv.h | 4 ----
+>  1 file changed, 4 deletions(-)
+> 
+> diff --git a/include/net/xdp_sock_drv.h b/include/net/xdp_sock_drv.h
+> index 9c0d860609ba..c243f906ebed 100644
+> --- a/include/net/xdp_sock_drv.h
+> +++ b/include/net/xdp_sock_drv.h
+> @@ -255,10 +255,6 @@ static inline void xsk_buff_free(struct xdp_buff *xdp)
+>  {
+>  }
+>  
+> -static inline void xsk_buff_discard(struct xdp_buff *xdp)
+> -{
+> -}
+> -
+>  static inline void xsk_buff_set_size(struct xdp_buff *xdp, u32 size)
+>  {
+>  }
+> -- 
+> 2.34.1
+> 
+> 
