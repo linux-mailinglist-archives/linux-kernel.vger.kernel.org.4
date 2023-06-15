@@ -2,128 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7E1731F2A
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 19:34:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EF8A731F2B
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 19:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236456AbjFOReH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 13:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45498 "EHLO
+        id S237386AbjFOReL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 13:34:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236672AbjFOReF (ORCPT
+        with ESMTP id S236728AbjFOReG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 13:34:05 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818D51FF9;
-        Thu, 15 Jun 2023 10:34:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686850441; x=1718386441;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=+NwFs4+og2uCPUm6VzVvVeB7ddBS4TzUbKnCattLObI=;
-  b=XSTGDmEx9i+eVBwVF0iZ+xjAOaDhiQEbthq4lMQQlTGImT4CmvAtBgPA
-   sq+ouNnOiXS+XjBzCdYCMLke/gAKuvlxLNgFwit2+yjfCqqOwwrHZ8s4f
-   hVGHqk+5hxRMouZeMIkHB1SgGXCiUnrzlc+9ShTgYmBK0IsKC4763ujLL
-   F0GDvtSIs2H46jkAuwoxy3HUlOLXaZLikqbgXm2OM1byAhRdN7Jhng96M
-   VDbd2J86/fn377IxzO2Z3aiyaodjJKAqFNnMP7Aplbjzvic53GfJ0ACtJ
-   KmqsCbxSBXdfn/tjn9xACkUgyhkOPils2n8s7tg6828XkjOr/18XQyJYk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="338614021"
-X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="338614021"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 10:33:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="689863272"
-X-IronPort-AV: E=Sophos;i="6.00,245,1681196400"; 
-   d="scan'208";a="689863272"
-Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
-  by orsmga006.jf.intel.com with ESMTP; 15 Jun 2023 10:33:13 -0700
-From:   kan.liang@linux.intel.com
-To:     peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org
-Cc:     ak@linux.intel.com, eranian@google.com,
-        Kan Liang <kan.liang@linux.intel.com>, stable@vger.kernel.org
-Subject: [PATCH] perf/x86/intel: Fix the FRONTEND encoding on GNR and MTL
-Date:   Thu, 15 Jun 2023 10:32:42 -0700
-Message-Id: <20230615173242.3726364-1-kan.liang@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 15 Jun 2023 13:34:06 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19DE62710
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 10:34:05 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-51a21185130so1631358a12.0
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 10:34:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686850443; x=1689442443;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=onV5CTTksC2Qd78lIixG0/dIqB3m8E1M6AA6FD8Jbs0=;
+        b=prWxaZ36pGTgPaazXWWLSZ/xe/uSXBNIHmD1xZ7n5pE3rJGVNhR0N9Zm23NkJFrUaX
+         23X1HZj+C9gLiF3S2wI4MyAWgNOYENKQhq1kaOcWW9A3n5U8qc2s3L4U+OiTGCDSZ+dl
+         Qwk4OmTavRtpKxzglgdJ3cCggklFJ/wLxLq5239yhVxe5zGikHCWEciVS+C1L/06GyVb
+         rJwug9nP3s50XCidh0wzVYY6HrVRZPHorWCfYqoyabW9o9fauqFnoK33z0+lP1KceyNI
+         HD4g9S/10dq66w1VFds9N1AyvSFP/qsDfpYJ2O37DLOOJ+xsvpIdME3n6vg7nx2kLdDd
+         OmlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686850443; x=1689442443;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=onV5CTTksC2Qd78lIixG0/dIqB3m8E1M6AA6FD8Jbs0=;
+        b=iZd3tCFPWtinsch+mTwIwO+4BBjy/JZAy48OAteQXVLWXTuLgzMsXjIP9Xtuli2X3b
+         A+iakV4OMDbU3GXkgmjwNLoc5RhscCcnct5ntK7rVSkzhVTYh72eZ2ES0n0K/8GM8JjT
+         B0Q4UjDe6U0c8ZsI4nSttGdS+iWtZbIzabkjoNr0PIpdJGmk68McoJ6ftJWTBIEnfc9u
+         oDojxfGNImoISPcBvZjxfzMQ97Q2kajgQf9yhGOmAOGTcMGDM7GLiMyycBjATpCnFT3G
+         uEpsj2+thmH19nAImVlmIM2GFwV7Mqj4S8yBNf2ZbC2PC+kLF4ppIcJtt2lfkCgafqAY
+         Jd6A==
+X-Gm-Message-State: AC+VfDwPRVGbFQzG6oKK/y9d3JXfhKx7Nt2pn+JXf3n0VbNendEasutS
+        K30RsHh0Jpcy/KlIdxJ54Ds=
+X-Google-Smtp-Source: ACHHUZ7yVhTWxSx4Cm9ZHg7+/ypOKVReVuS22P2vQuoAqqVdJ5E27xkglGRuj9g2yRDFuFKhEgHSvg==
+X-Received: by 2002:aa7:c994:0:b0:518:7954:d082 with SMTP id c20-20020aa7c994000000b005187954d082mr5824467edt.10.1686850443301;
+        Thu, 15 Jun 2023 10:34:03 -0700 (PDT)
+Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id b20-20020aa7d494000000b00514a3c04646sm9172936edr.73.2023.06.15.10.34.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jun 2023 10:34:02 -0700 (PDT)
+Message-ID: <dfb76ad5-b62a-3f1d-494e-cd17d57945ae@gmail.com>
+Date:   Thu, 15 Jun 2023 19:34:01 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+From:   Johan Jonker <jbx6244@gmail.com>
+Subject: [PATCH v3 1/3] mtd: rawnand: rockchip-nand-controller: fix oobfree
+ offset and description
+To:     miquel.raynal@bootlin.com
+Cc:     richard@nod.at, vigneshr@ti.com, heiko@sntech.de,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, yifeng.zhao@rock-chips.com
+References: <0047fc52-bc45-a768-8bdd-c0f12cddc17e@gmail.com>
+Content-Language: en-US
+In-Reply-To: <0047fc52-bc45-a768-8bdd-c0f12cddc17e@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+The MTD framework reserves 1 or 2 bytes for the bad block marker
+depending on the bus size. The rockchip-nand-controller driver
+currently only supports a 8 bit bus, but reserves standard 2 bytes
+for the BBM in the chip->oob_poi buffer. The first free OOB byte is
+therefore OOB2 at offset 2. Page Address (PA) bytes are located at the
+last 4 positions before ECC. The current advertised free OOB area has
+an offset that starts at OOB6 and a length that overlaps with the space
+reserved for the PA bytes. Writing unrelated data to a reserved space
+with a specific task can corrupt our boot block page read order.
+Fix by changing the free OOB offset to 2.
 
-When counting a FRONTEND event, the MSR_PEBS_FRONTEND is not correctly
-set on GNR and MTL p-core.
+This change breaks existing jffs2 users.
 
-The umask value for the FRONTEND events is changed on GNR and MTL. The
-new umask is missing in the extra_regs[] table.
-
-Add a dedicated intel_gnr_extra_regs[] for GNR and MTL p-core.
-
-Fixes: bc4000fdb009 ("perf/x86/intel: Add Granite Rapids")
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-Cc: stable@vger.kernel.org
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 ---
- arch/x86/events/intel/core.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index 89b9c1cebb61..27f3a7b34bd5 100644
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -349,6 +349,16 @@ static struct event_constraint intel_spr_event_constraints[] = {
- 	EVENT_CONSTRAINT_END
- };
- 
-+static struct extra_reg intel_gnr_extra_regs[] __read_mostly = {
-+	INTEL_UEVENT_EXTRA_REG(0x012a, MSR_OFFCORE_RSP_0, 0x3fffffffffull, RSP_0),
-+	INTEL_UEVENT_EXTRA_REG(0x012b, MSR_OFFCORE_RSP_1, 0x3fffffffffull, RSP_1),
-+	INTEL_UEVENT_PEBS_LDLAT_EXTRA_REG(0x01cd),
-+	INTEL_UEVENT_EXTRA_REG(0x02c6, MSR_PEBS_FRONTEND, 0x9, FE),
-+	INTEL_UEVENT_EXTRA_REG(0x03c6, MSR_PEBS_FRONTEND, 0x7fff1f, FE),
-+	INTEL_UEVENT_EXTRA_REG(0x40ad, MSR_PEBS_FRONTEND, 0x7, FE),
-+	INTEL_UEVENT_EXTRA_REG(0x04c2, MSR_PEBS_FRONTEND, 0x8, FE),
-+	EVENT_EXTRA_END
-+};
- 
- EVENT_ATTR_STR(mem-loads,	mem_ld_nhm,	"event=0x0b,umask=0x10,ldlat=3");
- EVENT_ATTR_STR(mem-loads,	mem_ld_snb,	"event=0xcd,umask=0x1,ldlat=3");
-@@ -6496,6 +6506,7 @@ __init int intel_pmu_init(void)
- 	case INTEL_FAM6_SAPPHIRERAPIDS_X:
- 	case INTEL_FAM6_EMERALDRAPIDS_X:
- 		x86_pmu.flags |= PMU_FL_MEM_LOADS_AUX;
-+		x86_pmu.extra_regs = intel_spr_extra_regs;
- 		fallthrough;
- 	case INTEL_FAM6_GRANITERAPIDS_X:
- 	case INTEL_FAM6_GRANITERAPIDS_D:
-@@ -6506,7 +6517,8 @@ __init int intel_pmu_init(void)
- 
- 		x86_pmu.event_constraints = intel_spr_event_constraints;
- 		x86_pmu.pebs_constraints = intel_spr_pebs_event_constraints;
--		x86_pmu.extra_regs = intel_spr_extra_regs;
-+		if (!x86_pmu.extra_regs)
-+			x86_pmu.extra_regs = intel_gnr_extra_regs;
- 		x86_pmu.limit_period = spr_limit_period;
- 		x86_pmu.pebs_ept = 1;
- 		x86_pmu.pebs_aliases = NULL;
-@@ -6650,6 +6662,7 @@ __init int intel_pmu_init(void)
- 		pmu->pebs_constraints = intel_grt_pebs_event_constraints;
- 		pmu->extra_regs = intel_grt_extra_regs;
- 		if (is_mtl(boot_cpu_data.x86_model)) {
-+			x86_pmu.hybrid_pmu[X86_HYBRID_PMU_CORE_IDX].extra_regs = intel_gnr_extra_regs;
- 			x86_pmu.pebs_latency_data = mtl_latency_data_small;
- 			extra_attr = boot_cpu_has(X86_FEATURE_RTM) ?
- 				mtl_hybrid_extra_attr_rtm : mtl_hybrid_extra_attr;
--- 
-2.35.1
+Changed V3:
+  Change prefixes
+  Reword
+  State break existing users.
+
+---
+
+Example:
+
+Wrong free OOB offset starts at OOB6:
+oob_region->offset = NFC_SYS_DATA_SIZE + 2;
+                   = 4 + 2
+                   = 6
+
+oob_region->length = rknand->metadata_size - NFC_SYS_DATA_SIZE - 2;
+                   = 32 - 4 - 2
+                   = 26
+
+Together with this length above it overlaps a reserved space for the
+boot blocks Page Address(PA)
+
+chip->oob_poi buffer layout for 8 steps:
+
+BBM0   BBM1  OOB2  OOB3  | OOB4  OOB5  OOB6  OOB7
+
+OOB8   OOB9  OOB10 OOB11 | OOB12 OOB13 OOB15 OOB15
+OOB16  OOB17 OOB18 OOB19 | OOB20 OOB21 OOB22 OOB23
+
+OOB24  OOB25 OOB26 OOB27 | PA0   PA1   PA2   PA3
+
+ECC0   ECC1  ECC2  ECC3  | ...   ...   ...   ...
+
+Fix by new offset at OOB2:
+oob_region->offset = 2;
+
+The full range of free OOB with 8 steps runs from OOB2
+till/including OOB27.
+---
+ drivers/mtd/nand/raw/rockchip-nand-controller.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/mtd/nand/raw/rockchip-nand-controller.c b/drivers/mtd/nand/raw/rockchip-nand-controller.c
+index 2312e2736..37fc07ba5 100644
+--- a/drivers/mtd/nand/raw/rockchip-nand-controller.c
++++ b/drivers/mtd/nand/raw/rockchip-nand-controller.c
+@@ -562,9 +562,10 @@ static int rk_nfc_write_page_raw(struct nand_chip *chip, const u8 *buf,
+ 		 *    BBM  OOB1 OOB2 OOB3 |......|  PA0  PA1  PA2  PA3
+ 		 *
+ 		 * The rk_nfc_ooblayout_free() function already has reserved
+-		 * these 4 bytes with:
++		 * these 4 bytes together with 2 bytes for BBM
++		 * by reducing it's length:
+ 		 *
+-		 * oob_region->offset = NFC_SYS_DATA_SIZE + 2;
++		 * oob_region->length = rknand->metadata_size - NFC_SYS_DATA_SIZE - 2;
+ 		 */
+ 		if (!i)
+ 			memcpy(rk_nfc_oob_ptr(chip, i),
+@@ -933,12 +934,8 @@ static int rk_nfc_ooblayout_free(struct mtd_info *mtd, int section,
+ 	if (section)
+ 		return -ERANGE;
+
+-	/*
+-	 * The beginning of the OOB area stores the reserved data for the NFC,
+-	 * the size of the reserved data is NFC_SYS_DATA_SIZE bytes.
+-	 */
+ 	oob_region->length = rknand->metadata_size - NFC_SYS_DATA_SIZE - 2;
+-	oob_region->offset = NFC_SYS_DATA_SIZE + 2;
++	oob_region->offset = 2;
+
+ 	return 0;
+ }
+--
+2.30.2
 
