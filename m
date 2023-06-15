@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A2D3732096
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 22:06:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C82E3732097
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 22:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbjFOUG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 16:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34612 "EHLO
+        id S230317AbjFOUGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 16:06:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjFOUG0 (ORCPT
+        with ESMTP id S229510AbjFOUG2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 16:06:26 -0400
+        Thu, 15 Jun 2023 16:06:28 -0400
 Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD33295D
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 13:06:25 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id af79cd13be357-75d4f12d4a3so1484185a.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 13:06:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8DF295D
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 13:06:27 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id af79cd13be357-75d57fdb014so985085a.0
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 13:06:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1686859584; x=1689451584;
+        d=broadcom.com; s=google; t=1686859586; x=1689451586;
         h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=YBp/Rtkye9A2SX5W55+KGtFjX2gPNbk20w1lf0dP+p4=;
-        b=B8t8Z36jQgm5n3pso0+0nMsgQ1tUcK7aHSbUbYa6CRrOJSvzl27ijBFH4ljAmaN4o4
-         F+dWdmQDrQOOhwyC3rhGg9VhrZCVTaHXIjV+ciUpnb2PDuSsrV1O8bDI+xxTR/WRVLz6
-         C15SryyistAXsQy4eLKW9bEDKg+edt5Mfz7/c=
+        bh=lRDyIOpz2b/gNydAGSVVX09M19SeCM9kBA3rfVdsGFY=;
+        b=KPTQNXulMO8nfFL/mLLDMgi7eD7VN54alFWZG0yQxnrKulKuTiVSf6LWHCG0etYhXE
+         U3tpkyQ4U+3Vhlb8xPjyQa3HlOUymzPyTZRmIZ/KxHShBCF/XCXhssXsuDLxlmLR/QrQ
+         1oW3TOEOdi10Uf/NioBVS+rJcRaPMdiSUHRwU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686859584; x=1689451584;
+        d=1e100.net; s=20221208; t=1686859586; x=1689451586;
         h=references:in-reply-to:message-id:date:subject:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YBp/Rtkye9A2SX5W55+KGtFjX2gPNbk20w1lf0dP+p4=;
-        b=PIsesXOA8ABAKdyoosdN8IAUW7t3Q/1vOLdzV1dV8iwUU+lVUiyifYb5GG40c+Wkqp
-         KfTKNdMAz4NJMRxbeIsi5kGyg8/TCmrPAI4E8CqooONvGejws2i9oMYkYz7RDKaL4kJX
-         lafhLmxfo3mPJnikOwXbfcX0e7vH9CwFiU0EkWJK1uR3nUkZOztmUyss6O71WtnV/b9+
-         0+J9G8ZvU1kKNeEPbXGXn2vZDJ/K6bFvd1/rLqPYv3cpyPWYVgv0PIC479fJ/6mwQZWp
-         I61iRf4hZGsp/tDFV8aRYeXm/bSoHWr4foWkHu+vC3rC6i7APpE5Uqagl8LqjM3issWO
-         CMDA==
-X-Gm-Message-State: AC+VfDxJrKn0Vpfprtp/1IN1xZBtZRertss/pywl6HMQ+2R7gfDExw2o
-        zzySY6pynOuAg3fYa4jVmfdGZg==
-X-Google-Smtp-Source: ACHHUZ4I8QqRqxVTJ00VzyT9TWYR5uen+/Rc2bZUMBzr1gHqwNZ161+yG9cqJ5FNF2WEFkeOMAPi8Q==
-X-Received: by 2002:a37:688f:0:b0:75d:44af:19f2 with SMTP id d137-20020a37688f000000b0075d44af19f2mr19579005qkc.11.1686859584470;
-        Thu, 15 Jun 2023 13:06:24 -0700 (PDT)
+        bh=lRDyIOpz2b/gNydAGSVVX09M19SeCM9kBA3rfVdsGFY=;
+        b=bRshQuAZazsaTbgU2fV9JU2Gik+PfWX8aY6T2sMD4Ql6bmQzMfpMpR1spx+y+hA8Wl
+         lJQbGcQ15+80RHYvinLlkH9lXOvArqVpJnU6mIJ0RR7l4gqu4djEZFYVxvJKtB1uFDL2
+         BfjEUN+Gra8Dj/rG9VgjC5H0HkthOetAc8HlE2JlbPPN4nqDGU5A+p1tt4iPjfzhl44i
+         1S8jvOkQ/oFBxlnGUBBrNEsQEFIUhfSw/td3AMBqYI7lFO/Cp82jjBP7nxPndhqfHMN5
+         MjLxCrw5qTugJzzdbu/pz7lJ1QSnah8yPqVfeWahIqFHtuXJd0fID1BxIq9rM0W0pfwF
+         o3xA==
+X-Gm-Message-State: AC+VfDyT9QN3Do8JVl1MjF1FQfSt4yNGb9tNFmv3ubMzXCKvDgX9yuE+
+        2tHjPUhcHwDIk7+DEQRdXpNSdQ==
+X-Google-Smtp-Source: ACHHUZ4nbdc+NMWLTaoFQA+gFzuMVyutwZpNyFoF6NOU3BIz13ty/29ts1p06jRmNXaSpaVrqI4aRQ==
+X-Received: by 2002:a05:620a:298e:b0:75b:23a0:d9c3 with SMTP id r14-20020a05620a298e00b0075b23a0d9c3mr25997037qkp.25.1686859586650;
+        Thu, 15 Jun 2023 13:06:26 -0700 (PDT)
 Received: from stbirv-lnx-2.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id k4-20020a05620a142400b0075ceca53e84sm5721407qkj.15.2023.06.15.13.06.23
+        by smtp.gmail.com with ESMTPSA id k4-20020a05620a142400b0075ceca53e84sm5721407qkj.15.2023.06.15.13.06.25
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 15 Jun 2023 13:06:24 -0700 (PDT)
+        Thu, 15 Jun 2023 13:06:26 -0700 (PDT)
 From:   Justin Chen <justin.chen@broadcom.com>
 To:     linux-phy@lists.infradead.org
 Cc:     bcm-kernel-feedback-list@broadcom.com,
@@ -55,122 +55,170 @@ Cc:     bcm-kernel-feedback-list@broadcom.com,
         Kishon Vijay Abraham I <kishon@kernel.org>,
         linux-kernel@vger.kernel.org (open list:BROADCOM BRCMSTB USB2 and USB3
         PHY DRIVER)
-Subject: [PATCH 1/2] phy: usb: Turn off phy when port is in suspend
-Date:   Thu, 15 Jun 2023 13:06:16 -0700
-Message-Id: <1686859578-45242-2-git-send-email-justin.chen@broadcom.com>
+Subject: [PATCH 2/2] phy: usb: suppress OC condition for 7439b2
+Date:   Thu, 15 Jun 2023 13:06:17 -0700
+Message-Id: <1686859578-45242-3-git-send-email-justin.chen@broadcom.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1686859578-45242-1-git-send-email-justin.chen@broadcom.com>
 References: <1686859578-45242-1-git-send-email-justin.chen@broadcom.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000055dd9f05fe309a04"
+        boundary="00000000000077a56105fe309a53"
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         MIME_HEADER_CTYPE_ONLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_TVD_MIME_NO_HEADERS autolearn=ham
-        autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,T_TVD_MIME_NO_HEADERS,UPPERCASE_50_75
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000055dd9f05fe309a04
+--00000000000077a56105fe309a53
 
-The COMMONONN bit turns off the PHY when the host controller puts it
-into suspend state. This can happen during the following...
-- Nothing is connected to the port
-- The host controller goes into low power mode whatever due to auto
-  suspend or system suspend.
+We hit a false positive OC for 7439b2 in DRD/device mode for the
+second port. So disable the OC check for this use case. Add capability
+to suppress OC condition for specific ports.
 
-With COMMONONN we also must unset U2_FREECLK_EXISTS since the UTMI
-clock is fed by the PHY.
-
-With these changes we see a power savings of ~12mW when port is in
-suspend.
-
-Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
 Signed-off-by: Justin Chen <justin.chen@broadcom.com>
 ---
- drivers/phy/broadcom/phy-brcm-usb-init-synopsys.c | 15 +++++++++++++--
- drivers/phy/broadcom/phy-brcm-usb-init.h          |  8 ++++++++
- 2 files changed, 21 insertions(+), 2 deletions(-)
+ drivers/phy/broadcom/phy-brcm-usb-init.c | 34 ++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/drivers/phy/broadcom/phy-brcm-usb-init-synopsys.c b/drivers/phy/broadcom/phy-brcm-usb-init-synopsys.c
-index 76cf4280d7ed..4c10cafded4e 100644
---- a/drivers/phy/broadcom/phy-brcm-usb-init-synopsys.c
-+++ b/drivers/phy/broadcom/phy-brcm-usb-init-synopsys.c
-@@ -59,6 +59,8 @@
- #define   USB_CTLR_TP_DIAG1_wake_MASK			BIT(1)
- #define USB_CTRL_CTLR_CSHCR		0x50
- #define   USB_CTRL_CTLR_CSHCR_ctl_pme_en_MASK		BIT(18)
-+#define USB_CTRL_P0_U2PHY_CFG1		0x68
-+#define   USB_CTRL_P0_U2PHY_CFG1_COMMONONN_MASK		BIT(10)
+diff --git a/drivers/phy/broadcom/phy-brcm-usb-init.c b/drivers/phy/broadcom/phy-brcm-usb-init.c
+index a1ca83308f98..39536b6d96a9 100644
+--- a/drivers/phy/broadcom/phy-brcm-usb-init.c
++++ b/drivers/phy/broadcom/phy-brcm-usb-init.c
+@@ -35,6 +35,11 @@
+ #define   USB_CTRL_SETUP_STRAP_IPP_SEL_MASK		BIT(25) /* option */
+ #define   USB_CTRL_SETUP_CC_DRD_MODE_ENABLE_MASK	BIT(26) /* option */
+ #define   USB_CTRL_SETUP_STRAP_CC_DRD_MODE_ENABLE_SEL_MASK BIT(27) /* opt */
++#define   USB_CTRL_SETUP_OC_DISABLE_PORT0_MASK		BIT(28)
++#define   USB_CTRL_SETUP_OC_DISABLE_PORT1_MASK		BIT(29)
++#define   USB_CTRL_SETUP_OC_DISABLE_MASK		GENMASK(29, 28) /* option */
++#define   USB_CTRL_SETUP_OC3_DISABLE_PORT0_MASK		BIT(30)
++#define   USB_CTRL_SETUP_OC3_DISABLE_PORT1_MASK		BIT(31)
+ #define   USB_CTRL_SETUP_OC3_DISABLE_MASK		GENMASK(31, 30) /* option */
+ #define USB_CTRL_PLL_CTL		0x04
+ #define   USB_CTRL_PLL_CTL_PLL_SUSPEND_EN_MASK		BIT(27)
+@@ -114,6 +119,8 @@ enum {
+ 	USB_CTRL_SETUP_SCB2_EN_SELECTOR,
+ 	USB_CTRL_SETUP_SS_EHCI64BIT_EN_SELECTOR,
+ 	USB_CTRL_SETUP_STRAP_IPP_SEL_SELECTOR,
++	USB_CTRL_SETUP_OC3_DISABLE_PORT0_SELECTOR,
++	USB_CTRL_SETUP_OC3_DISABLE_PORT1_SELECTOR,
+ 	USB_CTRL_SETUP_OC3_DISABLE_SELECTOR,
+ 	USB_CTRL_PLL_CTL_PLL_IDDQ_PWRDN_SELECTOR,
+ 	USB_CTRL_USB_PM_BDC_SOFT_RESETB_SELECTOR,
+@@ -190,6 +197,8 @@ usb_reg_bits_map_table[BRCM_FAMILY_COUNT][USB_CTRL_SELECTOR_COUNT] = {
+ 		USB_CTRL_SETUP_SCB2_EN_MASK,
+ 		USB_CTRL_SETUP_SS_EHCI64BIT_EN_MASK,
+ 		USB_CTRL_SETUP_STRAP_IPP_SEL_MASK,
++		USB_CTRL_SETUP_OC3_DISABLE_PORT0_MASK,
++		USB_CTRL_SETUP_OC3_DISABLE_PORT1_MASK,
+ 		USB_CTRL_SETUP_OC3_DISABLE_MASK,
+ 		0, /* USB_CTRL_PLL_CTL_PLL_IDDQ_PWRDN_MASK */
+ 		0, /* USB_CTRL_USB_PM_BDC_SOFT_RESETB_MASK */
+@@ -232,6 +241,8 @@ usb_reg_bits_map_table[BRCM_FAMILY_COUNT][USB_CTRL_SELECTOR_COUNT] = {
+ 		USB_CTRL_SETUP_SCB2_EN_MASK,
+ 		USB_CTRL_SETUP_SS_EHCI64BIT_EN_MASK,
+ 		0, /* USB_CTRL_SETUP_STRAP_IPP_SEL_MASK */
++		USB_CTRL_SETUP_OC3_DISABLE_PORT0_MASK,
++		USB_CTRL_SETUP_OC3_DISABLE_PORT1_MASK,
+ 		USB_CTRL_SETUP_OC3_DISABLE_MASK,
+ 		USB_CTRL_PLL_CTL_PLL_IDDQ_PWRDN_MASK,
+ 		0, /* USB_CTRL_USB_PM_BDC_SOFT_RESETB_MASK */
+@@ -253,6 +264,8 @@ usb_reg_bits_map_table[BRCM_FAMILY_COUNT][USB_CTRL_SELECTOR_COUNT] = {
+ 		0, /* USB_CTRL_SETUP_SCB2_EN_MASK */
+ 		USB_CTRL_SETUP_SS_EHCI64BIT_EN_MASK,
+ 		USB_CTRL_SETUP_STRAP_IPP_SEL_MASK,
++		USB_CTRL_SETUP_OC3_DISABLE_PORT0_MASK,
++		USB_CTRL_SETUP_OC3_DISABLE_PORT1_MASK,
+ 		USB_CTRL_SETUP_OC3_DISABLE_MASK,
+ 		0, /* USB_CTRL_PLL_CTL_PLL_IDDQ_PWRDN_MASK */
+ 		USB_CTRL_USB_PM_BDC_SOFT_RESETB_MASK,
+@@ -274,6 +287,8 @@ usb_reg_bits_map_table[BRCM_FAMILY_COUNT][USB_CTRL_SELECTOR_COUNT] = {
+ 		USB_CTRL_SETUP_SCB2_EN_MASK,
+ 		USB_CTRL_SETUP_SS_EHCI64BIT_EN_MASK,
+ 		0, /* USB_CTRL_SETUP_STRAP_IPP_SEL_MASK */
++		USB_CTRL_SETUP_OC3_DISABLE_PORT0_MASK,
++		USB_CTRL_SETUP_OC3_DISABLE_PORT1_MASK,
+ 		USB_CTRL_SETUP_OC3_DISABLE_MASK,
+ 		USB_CTRL_PLL_CTL_PLL_IDDQ_PWRDN_MASK,
+ 		0, /* USB_CTRL_USB_PM_BDC_SOFT_RESETB_MASK */
+@@ -295,6 +310,8 @@ usb_reg_bits_map_table[BRCM_FAMILY_COUNT][USB_CTRL_SELECTOR_COUNT] = {
+ 		USB_CTRL_SETUP_SCB2_EN_MASK,
+ 		USB_CTRL_SETUP_SS_EHCI64BIT_EN_MASK,
+ 		0, /* USB_CTRL_SETUP_STRAP_IPP_SEL_MASK */
++		USB_CTRL_SETUP_OC3_DISABLE_PORT0_MASK,
++		USB_CTRL_SETUP_OC3_DISABLE_PORT1_MASK,
+ 		USB_CTRL_SETUP_OC3_DISABLE_MASK,
+ 		0, /* USB_CTRL_PLL_CTL_PLL_IDDQ_PWRDN_MASK */
+ 		0, /* USB_CTRL_USB_PM_BDC_SOFT_RESETB_MASK */
+@@ -316,6 +333,8 @@ usb_reg_bits_map_table[BRCM_FAMILY_COUNT][USB_CTRL_SELECTOR_COUNT] = {
+ 		USB_CTRL_SETUP_SCB2_EN_MASK,
+ 		USB_CTRL_SETUP_SS_EHCI64BIT_EN_VAR_MASK,
+ 		0, /* USB_CTRL_SETUP_STRAP_IPP_SEL_MASK */
++		0, /* USB_CTRL_SETUP_OC3_DISABLE_PORT0_MASK */
++		0, /* USB_CTRL_SETUP_OC3_DISABLE_PORT1_MASK */
+ 		0, /* USB_CTRL_SETUP_OC3_DISABLE_MASK */
+ 		USB_CTRL_PLL_CTL_PLL_IDDQ_PWRDN_MASK,
+ 		0, /* USB_CTRL_USB_PM_BDC_SOFT_RESETB_MASK */
+@@ -337,6 +356,8 @@ usb_reg_bits_map_table[BRCM_FAMILY_COUNT][USB_CTRL_SELECTOR_COUNT] = {
+ 		USB_CTRL_SETUP_SCB2_EN_MASK,
+ 		USB_CTRL_SETUP_SS_EHCI64BIT_EN_MASK,
+ 		USB_CTRL_SETUP_STRAP_IPP_SEL_MASK,
++		USB_CTRL_SETUP_OC3_DISABLE_PORT0_MASK,
++		USB_CTRL_SETUP_OC3_DISABLE_PORT1_MASK,
+ 		USB_CTRL_SETUP_OC3_DISABLE_MASK,
+ 		0, /* USB_CTRL_PLL_CTL_PLL_IDDQ_PWRDN_MASK */
+ 		USB_CTRL_USB_PM_BDC_SOFT_RESETB_MASK,
+@@ -358,6 +379,8 @@ usb_reg_bits_map_table[BRCM_FAMILY_COUNT][USB_CTRL_SELECTOR_COUNT] = {
+ 		USB_CTRL_SETUP_SCB2_EN_MASK,
+ 		USB_CTRL_SETUP_SS_EHCI64BIT_EN_VAR_MASK,
+ 		0, /* USB_CTRL_SETUP_STRAP_IPP_SEL_MASK */
++		USB_CTRL_SETUP_OC3_DISABLE_PORT0_MASK,
++		USB_CTRL_SETUP_OC3_DISABLE_PORT1_MASK,
+ 		USB_CTRL_SETUP_OC3_DISABLE_MASK,
+ 		USB_CTRL_PLL_CTL_PLL_IDDQ_PWRDN_MASK,
+ 		0, /* USB_CTRL_USB_PM_BDC_SOFT_RESETB_MASK */
+@@ -379,6 +402,8 @@ usb_reg_bits_map_table[BRCM_FAMILY_COUNT][USB_CTRL_SELECTOR_COUNT] = {
+ 		0, /* USB_CTRL_SETUP_SCB2_EN_MASK */
+ 		USB_CTRL_SETUP_SS_EHCI64BIT_EN_MASK,
+ 		USB_CTRL_SETUP_STRAP_IPP_SEL_MASK,
++		USB_CTRL_SETUP_OC3_DISABLE_PORT0_MASK,
++		USB_CTRL_SETUP_OC3_DISABLE_PORT1_MASK,
+ 		USB_CTRL_SETUP_OC3_DISABLE_MASK,
+ 		0, /* USB_CTRL_PLL_CTL_PLL_IDDQ_PWRDN_MASK */
+ 		USB_CTRL_USB_PM_BDC_SOFT_RESETB_MASK,
+@@ -400,6 +425,8 @@ usb_reg_bits_map_table[BRCM_FAMILY_COUNT][USB_CTRL_SELECTOR_COUNT] = {
+ 		0, /* USB_CTRL_SETUP_SCB2_EN_MASK */
+ 		0, /*USB_CTRL_SETUP_SS_EHCI64BIT_EN_MASK */
+ 		USB_CTRL_SETUP_STRAP_IPP_SEL_MASK,
++		USB_CTRL_SETUP_OC3_DISABLE_PORT0_MASK,
++		USB_CTRL_SETUP_OC3_DISABLE_PORT1_MASK,
+ 		USB_CTRL_SETUP_OC3_DISABLE_MASK,
+ 		0, /* USB_CTRL_PLL_CTL_PLL_IDDQ_PWRDN_MASK */
+ 		USB_CTRL_USB_PM_BDC_SOFT_RESETB_MASK,
+@@ -872,6 +899,13 @@ static void usb_init_common(struct brcm_usb_init_params *params)
  
- /* Register definitions for the USB_PHY block in 7211b0 */
- #define USB_PHY_PLL_CTL			0x00
-@@ -90,6 +92,8 @@
- #define   BDC_EC_AXIRDA_RTS_MASK			GENMASK(31, 28)
- #define   BDC_EC_AXIRDA_RTS_SHIFT			28
+ 	brcmusb_memc_fix(params);
  
-+#define USB_XHCI_GBL_GUSB2PHYCFG	0x100
-+#define   USB_XHCI_GBL_GUSB2PHYCFG_U2_FREECLK_EXISTS_MASK	BIT(30)
- 
- static void usb_mdio_write_7211b0(struct brcm_usb_init_params *params,
- 				  uint8_t addr, uint16_t data)
-@@ -140,13 +144,17 @@ static void xhci_soft_reset(struct brcm_usb_init_params *params,
- 			int on_off)
- {
- 	void __iomem *ctrl = params->regs[BRCM_REGS_CTRL];
-+	void __iomem *xhci_gbl = params->regs[BRCM_REGS_XHCI_GBL];
- 
- 	/* Assert reset */
--	if (on_off)
-+	if (on_off) {
- 		USB_CTRL_UNSET(ctrl, USB_PM, XHC_SOFT_RESETB);
- 	/* De-assert reset */
--	else
-+	} else {
- 		USB_CTRL_SET(ctrl, USB_PM, XHC_SOFT_RESETB);
-+		/* Required for COMMONONN to be set */
-+		USB_XHCI_GBL_UNSET(xhci_gbl, GUSB2PHYCFG, U2_FREECLK_EXISTS);
++	/* Workaround for false positive OC for 7439b2 in DRD/Device mode */
++	if ((params->family_id == 0x74390012) &&
++	    (params->supported_port_modes != USB_CTLR_MODE_HOST)) {
++		USB_CTRL_SET(ctrl, SETUP, OC_DISABLE_PORT1);
++		USB_CTRL_SET_FAMILY(params, SETUP, OC3_DISABLE_PORT1);
 +	}
- }
- 
- static void usb_init_ipp(struct brcm_usb_init_params *params)
-@@ -320,6 +328,9 @@ static void usb_init_common_7216(struct brcm_usb_init_params *params)
- 	/* 1 millisecond - for USB clocks to settle down */
- 	usleep_range(1000, 2000);
- 
-+	/* Disable PHY when port is suspended */
-+	USB_CTRL_SET(ctrl, P0_U2PHY_CFG1, COMMONONN);
 +
- 	usb_wake_enable_7216(params, false);
- 	usb_init_common(params);
- }
-diff --git a/drivers/phy/broadcom/phy-brcm-usb-init.h b/drivers/phy/broadcom/phy-brcm-usb-init.h
-index f9fbf8fb80e5..c1a88f5cd4cd 100644
---- a/drivers/phy/broadcom/phy-brcm-usb-init.h
-+++ b/drivers/phy/broadcom/phy-brcm-usb-init.h
-@@ -34,6 +34,14 @@ enum brcmusb_reg_sel {
- 	brcm_usb_ctrl_unset(USB_CTRL_REG(base, reg),		\
- 			    USB_CTRL_##reg##_##field##_MASK)
- 
-+#define USB_XHCI_GBL_REG(base, reg) ((void __iomem *)base + USB_XHCI_GBL_##reg)
-+#define USB_XHCI_GBL_SET(base, reg, field) \
-+	brcm_usb_ctrl_set(USB_XHCI_GBL_REG(base, reg), \
-+			  USB_XHCI_GBL_##reg##_##field##_MASK)
-+#define USB_XHCI_GBL_UNSET(base, reg, field) \
-+	brcm_usb_ctrl_unset(USB_XHCI_GBL_REG(base, reg), \
-+			    USB_XHCI_GBL_##reg##_##field##_MASK)
-+
- struct  brcm_usb_init_params;
- 
- struct brcm_usb_init_ops {
+ 	if (USB_CTRL_MASK_FAMILY(params, USB_DEVICE_CTL1, PORT_MODE)) {
+ 		reg = brcm_usb_readl(USB_CTRL_REG(ctrl, USB_DEVICE_CTL1));
+ 		reg &= ~USB_CTRL_MASK_FAMILY(params, USB_DEVICE_CTL1,
 -- 
 2.7.4
 
 
---00000000000055dd9f05fe309a04
+--00000000000077a56105fe309a53
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -241,13 +289,13 @@ sDL+OV16G+F9CkNMN3txsym8Nnx5WAYZb6+rBUIhMGz70V05xsHQfzvo2s7f0J1tJ5BoRlPPhL0h
 VOnWA3h71u9TfSsv+PXVm3P21TfOS2uc1hbzEqyENCP4i5XQ0rv0TmPW42GZ0o4xggJtMIICaQIB
 ATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhH
 bG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwj8BKLXNpALfemdRAwDQYJ
-YIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEINtZb5cf9qd15jixqpoWNzibUdqt9XGAeZoV
-yIB+dGwQMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDYxNTIw
-MDYyNFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFl
+YIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJpM3SEFZBv2dV4s/fUhjsDLFwYDAz26eG66
+Xr1G38KJMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDYxNTIw
+MDYyNlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFl
 AwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATAN
-BgkqhkiG9w0BAQEFAASCAQAUGRd6J79XMl1TNQvpI+YVqnKhJc0Iron9sd1BE1l5Kj+8tmTLD940
-6IBH6SmD8E1sO55SBgmbexF5vSJnnnT04HcorzAneUj11TZyC9s9OoTT1gf7NIc+/LFDozdFPtUu
-yotA+s1v1tTMjEg3Hl9YDpPqVucjjeSc9GN6QeMHRA4+WV6BYyEJzhZtgzHMqSusIfh9jo65paxP
-IKTqJLoQ0oH56T3UoJX5C9EdMeAUppuc+hFC4MDuUnP4msQ7yrb3cyiOkLjGgGZKQ9fdIDXoz5Uh
-GiaWr2jH7PF3gKx+yLyHfSM0dbftCImKn823a5e4Tdf+FXMbb5WVpqLm3GtK
---00000000000055dd9f05fe309a04--
+BgkqhkiG9w0BAQEFAASCAQBGPjXdOyLcCQbaKf0O4DIt66NEy2mK/vFit97YaFhyPcCo0JARsQm6
+xgdc55VdNfDzkKCOejsbvlgLZAjRps0G7kQmbqBpNsUBE7jQI1+Ywno8Zy4XOznbWGIBTg8ULl8U
+sF090tHO27zzefNkDdSR0DtyX2deoPZe8PK/EShH8DP/dooQO1crHUVxaJWLuW+76wawHjRIPrUN
+yd1HmNmbU0RAY9N/if7LymgrgV0U1mnZZASBhNAZEk8mVgvLV6mhlbtVmiZ/fHVS5agcBQAIjkSY
+bb29IZtw7RuF2gu9xTBmnIn/ZLO0nR/PF87g1UN+/dW/bWm+9lq83aM1bd5l
+--00000000000077a56105fe309a53--
