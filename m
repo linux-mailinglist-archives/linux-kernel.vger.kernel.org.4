@@ -2,135 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13324731F51
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 19:37:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 566D0731F62
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 19:39:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235899AbjFORha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 13:37:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48074 "EHLO
+        id S233683AbjFORjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 13:39:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238201AbjFORh1 (ORCPT
+        with ESMTP id S229649AbjFORi6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 13:37:27 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50C91271E
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 10:37:25 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f764e9295dso3646387e87.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 10:37:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686850643; x=1689442643;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sS/MT18TbbX2jMpeAwwA0bIb+s3HEO/Echw+aOl6/GU=;
-        b=B8mvzhf5WuhVLMVRcYuGUdxnA8Ti5Zs8skswNJ4NaD7+LQGIONc31ByGCSjGiQ9hfE
-         wgjCbIIyb/KExyzgjkkVdiv3XZ3DzGRyTuDIPAGSYJRO7kSgxRzgfdzIx4eMg+FsrBnC
-         pGnT4R4qlqPJ/PYbgHsbquU+PZz7f3te2xiNOlwOzR8mzkbbUaIUkrqdhDl1LsLv+0UC
-         MUlx/7H83JDlPDytp20YRpeFRUs98jRdAK96EU+5HkT5bbodsPT+WbnPK+amgdY/F4JQ
-         AtXT/AsqvkiI9f6KyxEOQJXmzmJFVjGL1JHIiAsTbK8QZPf06/zNcaTRL/jLOwIHhveO
-         sNTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686850643; x=1689442643;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sS/MT18TbbX2jMpeAwwA0bIb+s3HEO/Echw+aOl6/GU=;
-        b=iFPoiHWGctXoy+jGFZ6Wm5kJtD37+aIvE2juey+5VWRV64rfchky1glCv9voZ7StWA
-         Dq4z3CCU03M9oQi3W8snaKpGOUXdU3CmEBIWwDuWkn09pdUUc8Ch7ooOzBj/j1fRDDCH
-         +OT4dCVIrtA8BGtVNizjV6QY6Tgq6LdCgor52zHT5ydL7SlPiC0kSQsWdZIe0G62kXJc
-         ApLGOROCN1yqjq+2DANQzBWYoNXkH+Znc7/oyFHTA2gvpkM2ONHCQeaIxmsS0RGhOwXS
-         O8nFg2BavnoctuE5YRVSH8csztwSAHcIWCwcfPH2AQk//cTHfDNXfBF5+53LjqSP/bx4
-         QXLA==
-X-Gm-Message-State: AC+VfDwOKzLihTafZbc/wpnnU83Uw7CHSgFNUYs+sQcgH+QGHEpM/Hsd
-        myW4nSfZ8IEopUoDg8Ml5uKzcg==
-X-Google-Smtp-Source: ACHHUZ4mhfg3B13M94QZSA5qHf8c5YQMAaQuggxJYcxAikF/BlUuKxfN4HG+SuiCSv61fgVkxwkFnQ==
-X-Received: by 2002:ac2:5b1b:0:b0:4f7:69ca:4e71 with SMTP id v27-20020ac25b1b000000b004f769ca4e71mr3957509lfn.34.1686850643464;
-        Thu, 15 Jun 2023 10:37:23 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id c26-20020ac244ba000000b004ec8b638115sm2640405lfm.193.2023.06.15.10.37.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 10:37:23 -0700 (PDT)
-Message-ID: <278f3baa-a760-18cf-1a43-2814793af987@linaro.org>
-Date:   Thu, 15 Jun 2023 19:37:21 +0200
+        Thu, 15 Jun 2023 13:38:58 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FF01BDB;
+        Thu, 15 Jun 2023 10:38:56 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35FG4DjV001861;
+        Thu, 15 Jun 2023 19:38:40 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=WVSwhybmAV6yFwYl/ec10wt/7sRPE+inDDJ2qyzeYXc=;
+ b=nsI0QSd5WUAwiTuWEhNhY8uAWQ/fKWLBh7qIDb3yv2fUCkhUko0Cc1q/3Ib/NA+LwXvO
+ +65mzkcEfl0JaRrk7LYcL1MKdWf5X0bk4ju1E22mKB7lTIhZ01Kg/v2+faPmP3ekdRAP
+ M2a34y53SdwJvXpY5jTlgqbvZulEDJ7HiToGkO6exBIpGSAJMbsJw8gB5Faop6bs7GdP
+ uY78p/WmJbWIlpbItsT9JWY4kg0XPAlaRKNefoR7NXvGtUTmw6HgWOLM40Nps0cgk9cH
+ iCGUi6Gh7wopoK1OPHgxvKIxigxWS8s2B+dq8a2RhcbDmlaezqYd9H7a3vv47NbfPvnN Cw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3r82fy9sm2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 15 Jun 2023 19:38:40 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 95AE110002A;
+        Thu, 15 Jun 2023 19:38:38 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7DDAF245525;
+        Thu, 15 Jun 2023 19:38:38 +0200 (CEST)
+Received: from [10.252.8.64] (10.252.8.64) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 15 Jun
+ 2023 19:38:37 +0200
+Message-ID: <b25d30de-8a22-b5ea-e58c-78b3d55b3cac@foss.st.com>
+Date:   Thu, 15 Jun 2023 19:38:36 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v6 00/22] Restructure RPM SMD ICC
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 3/4] dt-bindings: spi: stm32: disable spi-slave
+ property for stm32f4-f7
 Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Evan Green <evgreen@chromium.org>,
-        Georgi Djakov <djakov@kernel.org>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>
-References: <20230526-topic-smd_icc-v6-0-263283111e66@linaro.org>
- <0764b5fda92acb995ffbd05c4b3d2b2f.sboyd@kernel.org>
- <8568eead-90f6-ce15-d483-4d72dbab6294@linaro.org>
- <f526046568e6bbc8dc567109e6911f65.sboyd@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <f526046568e6bbc8dc567109e6911f65.sboyd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+        Conor Dooley <conor+dt@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>
+CC:     <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230615075815.310261-1-valentin.caron@foss.st.com>
+ <20230615075815.310261-4-valentin.caron@foss.st.com>
+ <479bf05e-342d-f94b-87f3-4cc0a95fb01a@linaro.org>
+From:   Valentin CARON <valentin.caron@foss.st.com>
+In-Reply-To: <479bf05e-342d-f94b-87f3-4cc0a95fb01a@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.252.8.64]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-15_13,2023-06-15_01,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15.06.2023 19:35, Stephen Boyd wrote:
-> Quoting Konrad Dybcio (2023-06-15 00:52:07)
->> On 15.06.2023 02:49, Stephen Boyd wrote:
->>> Quoting Konrad Dybcio (2023-06-14 11:04:19)
->>>> This series reshuffles things around, moving the management of SMD RPM
->>>> bus clocks to the interconnect framework where they belong. This helps
->>>> us solve a couple of issues:
->>>>
->>>> 1. We can work towards unused clk cleanup of RPMCC without worrying
->>>>    about it killing some NoC bus, resulting in the SoC dying.
->>>>    Deasserting actually unused RPM clocks (among other things) will
->>>>    let us achieve "true SoC-wide power collapse states", also known as
->>>>    VDD_LOW and VDD_MIN.
->>>>
->>>> 2. We no longer have to keep tons of quirky bus clock ifs in the icc
->>>>    driver. You either have a RPM clock and call "rpm set rate" or you
->>>>    have a single non-RPM clock (like AHB_CLK_SRC) or you don't have any.
->>>>
->>>> 3. There's less overhead - instead of going through layers and layers of
->>>>    the CCF, ratesetting comes down to calling max() and sending a single
->>>>    RPM message. ICC is very very dynamic so that's a big plus.
->>>>
->>>> The clocks still need to be vaguely described in the clk-smd-rpm driver,
->>>> as it gives them an initial kickoff, before actually telling RPM to
->>>> enable DVFS scaling.  After RPM receives that command, all clocks that
->>>> have not been assigned a rate are considered unused and are shut down
->>>> in hardware, leading to the same issue as described in point 1.
->>>
->>> Why can't we move the enable of DVFS scaling call to the interconnect
->>> driver as well? We want the clk driver to not reference the interconnect
->>> resources at all.
->> That would result in no rpmcc ratesetting on platforms without a functional
->> interconnect driver. The DVFS call concerns both bus and !bus clocks.
->>
-> 
-> That's the intent. Probe the interconnect driver to get bus clk rate
-> setting.
-> 
-> What are the !bus clocks managed by RPM?
-Depending on the platform, that includes IPA, GPU, OCMEM, RF.. everything
-that's not been separated out in patch 18.
+Hi Krzysztof,
 
-Konrad
+On 6/15/23 15:36, Krzysztof Kozlowski wrote:
+> On 15/06/2023 09:58, Valentin Caron wrote:
+>> From: Alain Volmat <alain.volmat@foss.st.com>
+>>
+>> STM32F4 and STM32F7 can't switch to spi device mode.
+>> Forbid this property with compatible "st,stm32f4-spi".
+> Just to clarify - driver cannot switch or hardware does not support it?
+
+Driver can't support it right now but hardware can.
+
+> Please use subject prefixes matching the subsystem. You can get them for
+> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+> your patch is touching. (spi: dt-bindings:)
+Sorry, I missed that.
+> Best regards,
+> Krzysztof
+
+Regards,
+Valentin
+
