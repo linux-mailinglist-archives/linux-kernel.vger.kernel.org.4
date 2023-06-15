@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7A173199E
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:11:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B42273199F
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343822AbjFONLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 09:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59322 "EHLO
+        id S238944AbjFONLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 09:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343710AbjFONLO (ORCPT
+        with ESMTP id S1343749AbjFONLV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 09:11:14 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648B226B1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 06:10:51 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1b4f95833c7so12705665ad.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 06:10:51 -0700 (PDT)
+        Thu, 15 Jun 2023 09:11:21 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB2B2700
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 06:10:56 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-666a63f7907so386521b3a.2
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 06:10:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1686834651; x=1689426651;
+        d=bytedance.com; s=google; t=1686834656; x=1689426656;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rh1upVsLkWtnKrYRXZBQpn/CVX3v0vcX/4UFjQ1Vcrw=;
-        b=PnvoyOBWI0174VERzdCx/bjEaYkDquh7yUGjQ50/UMkljqo5RjJXjL/cpgyU0TzpL0
-         eH4VXPKnzVaqjcP0gOrMx+1QHFabhbbyvY/b0lpA7NNL3TpSSbiM5VkBsMKRfz9VcWo2
-         lFwoUO7O78+d9CNvG3CfhEJFuWdZ8b1+UY+22FceCZ1Z5L8AhIi7hCMxeK3Nv8H36S9l
-         rpau8waC19HwkB9lNxumaKNM/lwcYVUZc1+ee++CYY+F7cyGfZ46ler+HLrq1LcRvZAN
-         eQsUxGjTPIwUCUuGKYO2Lmqr+uiqKzT6QsnoYFz+N2wYgGq3hiijfpQwjmPzO1Qqg6X7
-         no0g==
+        bh=CEErg3d4yT8esB8KpwjYxwMfJsf51/geZ+6n58UDGJs=;
+        b=EF9Lkit8KeZA+6lEZX30z4AtzxQeXjXaFk3VG1hfh2/OEXDrTUs+QkddvuqbwKFGw5
+         NNqqQL7MJRL8o5afvaoXGXt4M2Y5EUJhZvfO8yDoT8KKFGuNv4uRv4JQKKveXRRez2CH
+         cpC9z+LFWjAtvwcmvfv1o236zgBYalBIf6twvsjmnqLecvTIgrQrJMwXOCE6tXnTXFMn
+         ctm9NYACNGn6WIX2bZXp0PHMVPzmFZkGkETZdQjMNpURRfxtWpaAKdqsjVwGkcyG/1Et
+         nnhuWEUU1xw2Jry13IAXUIyr1+L4D2uCbd0+m403S9gXx0X5hRfXAZ2XQQ4MIGqEJL4k
+         3rtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686834651; x=1689426651;
+        d=1e100.net; s=20221208; t=1686834656; x=1689426656;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rh1upVsLkWtnKrYRXZBQpn/CVX3v0vcX/4UFjQ1Vcrw=;
-        b=FPjfkBK4VscN6vbOSofvMw2Qw4FD1Kehmudr4zvuVhzHroHobCxBsS5vEtfrR8T6pp
-         en2esUDEdONuqo7iRVScA9lW1Z4UDFnq44FPd5salKoe8LlxAbmJGeGKnpnn3QUKftdv
-         ZaAlivtHoKwJI8J19zWGRc/1L2tHa2wfkQ7c25vF9fZ2hh08QMwqNynAO+GWz00XNFCI
-         kF9ihrIgts0H6OHBPv1daHPDCPVkH5IxHKOIhxB3DDN++FUH1OscON8JQJbLPYUTz2pF
-         BzwOJASeFASmsRWbJC4FFkfU60UdC4zMoMQpgjdRCYBWF7wtKNIgIbvnnKNF4lgV+HFo
-         Ul8g==
-X-Gm-Message-State: AC+VfDw9Zj4+JRxytXvRCC5uvjhhEfHzqa2PuQD87HYDluwZlRTM5KRK
-        f/vBkHcaIRVkTV390pYUjsnoGl9/yfFA2Xv5/XE=
-X-Google-Smtp-Source: ACHHUZ6kYlTrHFDEkqjnopSe0wt5bMIuHrwtTI/7vuPr5aH9vc14N6FGbaSoQP1LNTuYXmE9OOVpYg==
-X-Received: by 2002:a17:902:7042:b0:1af:fd3a:2b7d with SMTP id h2-20020a170902704200b001affd3a2b7dmr12733721plt.48.1686834650878;
-        Thu, 15 Jun 2023 06:10:50 -0700 (PDT)
+        bh=CEErg3d4yT8esB8KpwjYxwMfJsf51/geZ+6n58UDGJs=;
+        b=CpVBy0MX9Iy1NR7lulxhqIceILJReRzqp023YcZfOEAuWlFMTtq7w9fTyNPHmIUPKF
+         9AIQabK/0YVyqp1v/kbNLBRr+nkeTNFUzsv0Ww9oydDFAEYqG3iB9BMqBDuAiMbjzBMf
+         +4cXAujwGM9PERvXBjorAg2m6X1saV5f/AkF36l2Ss+xrLnO7Tsuzun+kASKYGSy89QT
+         C1ZhvdRWbQRgpKEpyIAsfLNyLGKBROp2hHi8yM8K3XTJVkJP/lO6ISm16NXeYVoewO2b
+         fxGaHIUqaMA4/435NaD7OM/oi1PFWM8H59zce+fBgmdNsKY4AF8uad9ww1/xGrXvJl48
+         kgYQ==
+X-Gm-Message-State: AC+VfDxpAi/XC22tMyjTpdgtdVJy2Cmw6gTwRJMCWvlj+U8jUD+0fyzf
+        IDWrA/hRWQrINO0NbKFDOJ0DfA==
+X-Google-Smtp-Source: ACHHUZ66o8V5eliveHpTDDCN4qg3tEA6UrvtjbBXn2YuCrBWuT9CqkfigWT9RVAiW4pUBar41PkAow==
+X-Received: by 2002:a05:6a20:72ac:b0:10c:2349:459d with SMTP id o44-20020a056a2072ac00b0010c2349459dmr5255910pzk.11.1686834656065;
+        Thu, 15 Jun 2023 06:10:56 -0700 (PDT)
 Received: from localhost.localdomain ([139.177.225.249])
-        by smtp.gmail.com with ESMTPSA id x1-20020a170902b40100b001a804b16e38sm14036019plr.150.2023.06.15.06.10.47
+        by smtp.gmail.com with ESMTPSA id x1-20020a170902b40100b001a804b16e38sm14036019plr.150.2023.06.15.06.10.51
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 15 Jun 2023 06:10:50 -0700 (PDT)
+        Thu, 15 Jun 2023 06:10:54 -0700 (PDT)
 From:   Peng Zhang <zhangpeng.00@bytedance.com>
 To:     Liam.Howlett@oracle.com
 Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org,
         Peng Zhang <zhangpeng.00@bytedance.com>
-Subject: [PATCH 7/8] maple_tree: replace mas_logical_pivot() with mas_safe_pivot()
-Date:   Thu, 15 Jun 2023 21:08:58 +0800
-Message-Id: <20230615130859.21858-8-zhangpeng.00@bytedance.com>
+Subject: [PATCH 8/8] maple_tree: drop mas_first_entry()
+Date:   Thu, 15 Jun 2023 21:08:59 +0800
+Message-Id: <20230615130859.21858-9-zhangpeng.00@bytedance.com>
 X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 In-Reply-To: <20230615130859.21858-1-zhangpeng.00@bytedance.com>
 References: <20230615130859.21858-1-zhangpeng.00@bytedance.com>
@@ -73,80 +73,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace mas_logical_pivot() with mas_safe_pivot() and drop
-mas_logical_pivot() since it won't be used anymore. We can do this since
-now all nodes will have node limit pivot (if it is not full node).
+The internal function mas_first_entry() is no longer used, so drop it.
 
 Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
 ---
- lib/maple_tree.c | 33 +++------------------------------
- 1 file changed, 3 insertions(+), 30 deletions(-)
+ lib/maple_tree.c | 72 ------------------------------------------------
+ 1 file changed, 72 deletions(-)
 
 diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index becb4c224e57..4c9f40322f5f 100644
+index 4c9f40322f5f..3908a3937214 100644
 --- a/lib/maple_tree.c
 +++ b/lib/maple_tree.c
-@@ -728,33 +728,6 @@ mas_safe_min(struct ma_state *mas, unsigned long *pivots, unsigned char offset)
- 	return mas->min;
+@@ -6658,78 +6658,6 @@ static inline struct maple_enode *mas_get_slot(struct ma_state *mas,
+ 			offset);
  }
  
+-
 -/*
-- * mas_logical_pivot() - Get the logical pivot of a given offset.
-- * @mas: The maple state
-- * @pivots: The pointer to the maple node pivots
-- * @offset: The offset into the pivot array
-- * @type: The maple node type
+- * mas_first_entry() - Go the first leaf and find the first entry.
+- * @mas: the maple state.
+- * @limit: the maximum index to check.
+- * @*r_start: Pointer to set to the range start.
 - *
-- * When there is no value at a pivot (beyond the end of the data), then the
-- * pivot is actually @mas->max.
+- * Sets mas->offset to the offset of the entry, r_start to the range minimum.
 - *
-- * Return: the logical pivot of a given @offset.
+- * Return: The first entry or MAS_NONE.
 - */
--static inline unsigned long
--mas_logical_pivot(struct ma_state *mas, unsigned long *pivots,
--		  unsigned char offset, enum maple_type type)
+-static inline void *mas_first_entry(struct ma_state *mas, struct maple_node *mn,
+-		unsigned long limit, enum maple_type mt)
+-
 -{
--	unsigned long lpiv = mas_safe_pivot(mas, pivots, offset, type);
+-	unsigned long max;
+-	unsigned long *pivots;
+-	void __rcu **slots;
+-	void *entry = NULL;
 -
--	if (likely(lpiv))
--		return lpiv;
+-	mas->index = mas->min;
+-	if (mas->index > limit)
+-		goto none;
 -
--	if (likely(offset))
--		return mas->max;
+-	max = mas->max;
+-	mas->offset = 0;
+-	while (likely(!ma_is_leaf(mt))) {
+-		MAS_WARN_ON(mas, mte_dead_node(mas->node));
+-		slots = ma_slots(mn, mt);
+-		entry = mas_slot(mas, slots, 0);
+-		pivots = ma_pivots(mn, mt);
+-		if (unlikely(ma_dead_node(mn)))
+-			return NULL;
+-		max = pivots[0];
+-		mas->node = entry;
+-		mn = mas_mn(mas);
+-		mt = mte_node_type(mas->node);
+-	}
+-	MAS_WARN_ON(mas, mte_dead_node(mas->node));
 -
--	return lpiv;
+-	mas->max = max;
+-	slots = ma_slots(mn, mt);
+-	entry = mas_slot(mas, slots, 0);
+-	if (unlikely(ma_dead_node(mn)))
+-		return NULL;
+-
+-	/* Slot 0 or 1 must be set */
+-	if (mas->index > limit)
+-		goto none;
+-
+-	if (likely(entry))
+-		return entry;
+-
+-	mas->offset = 1;
+-	entry = mas_slot(mas, slots, 1);
+-	pivots = ma_pivots(mn, mt);
+-	if (unlikely(ma_dead_node(mn)))
+-		return NULL;
+-
+-	mas->index = pivots[0] + 1;
+-	if (mas->index > limit)
+-		goto none;
+-
+-	if (likely(entry))
+-		return entry;
+-
+-none:
+-	if (likely(!ma_dead_node(mn)))
+-		mas->node = MAS_NONE;
+-	return NULL;
 -}
 -
- /*
-  * mte_set_pivot() - Set a pivot to a value in an encoded maple node.
-  * @mn: The encoded maple node
-@@ -2202,7 +2175,7 @@ static noinline_for_kasan void mas_store_b_node(struct ma_wr_state *wr_mas,
- 		goto b_end;
- 
- 	/* Handle new range ending before old range ends */
--	piv = mas_logical_pivot(mas, wr_mas->pivots, offset_end, wr_mas->type);
-+	piv = mas_safe_pivot(mas, wr_mas->pivots, offset_end, wr_mas->type);
- 	if (piv > mas->last) {
- 		if (piv == ULONG_MAX)
- 			mas_bulk_rebalance(mas, b_node->b_end, wr_mas->type);
-@@ -4911,7 +4884,7 @@ static inline bool mas_anode_descend(struct ma_state *mas, unsigned long size)
- 	min = mas_safe_min(mas, pivots, offset);
- 	data_end = ma_data_end(node, type, pivots, mas->max);
- 	for (; offset <= data_end; offset++) {
--		pivot = mas_logical_pivot(mas, pivots, offset, type);
-+		pivot = mas_safe_pivot(mas, pivots, offset, type);
- 
- 		/* Not within lower bounds */
- 		if (mas->index > pivot)
-@@ -7003,7 +6976,7 @@ static void mas_validate_gaps(struct ma_state *mas)
- 
- 	gaps = ma_gaps(node, mt);
- 	for (i = 0; i < mt_slot_count(mte); i++) {
--		p_end = mas_logical_pivot(mas, pivots, i, mt);
-+		p_end = mas_safe_pivot(mas, pivots, i, mt);
- 
- 		if (!gaps) {
- 			if (!mas_get_slot(mas, i))
+ /* Depth first search, post-order */
+ static void mas_dfs_postorder(struct ma_state *mas, unsigned long max)
+ {
 -- 
 2.20.1
 
