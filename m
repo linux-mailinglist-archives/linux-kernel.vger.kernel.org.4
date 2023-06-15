@@ -2,411 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDE3F7322EB
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 00:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1E697322F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 01:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231172AbjFOW5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 18:57:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39202 "EHLO
+        id S231976AbjFOXDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 19:03:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjFOW5U (ORCPT
+        with ESMTP id S229475AbjFOXC6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 18:57:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5CC270E
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 15:57:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CAAEB621E9
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 22:57:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB1B2C433C8;
-        Thu, 15 Jun 2023 22:57:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686869837;
-        bh=IYHov47zpNtK3EvkkUSglMjcqEvPSaRLMpVn9p7Mxog=;
-        h=From:To:Cc:Subject:Date:From;
-        b=HYACdSW8G5QNgik71LtbfX3YA9C0bEK0N+c2I/0gM3+qCQaXhFmYJ8VBzYsU5qQng
-         SeJVcCZTZeVBLsrWDb+MgO/JcnqdPXi0UmdGOpSLTyL9evH78UQezG2rHL/2DS7suw
-         vnlFutY99Tp07R/pb0NRw87VeHbAAzI43ocOTAaTtpora6X1pJtGiiv7ugw+V1wpB/
-         Z0VWM+Z3qwyXjTbhpctVO+EzqqlUpXJTuXm+AQBXsP4KipCj6xWDsLA2tf9D6ynGcD
-         K/pGWYV//SaIe4gD0w9XedFE5FUGELuhkuQHITVEx5U/7ShXitaKM9fmL60AhU3gjw
-         433bHiwLH3RlQ==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     torvalds@linux-foundation.org
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pabeni@redhat.com
-Subject: [GIT PULL] Networking for v6.4-rc7
-Date:   Thu, 15 Jun 2023 15:57:16 -0700
-Message-Id: <20230615225716.1507720-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.40.1
+        Thu, 15 Jun 2023 19:02:58 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7947C294D
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 16:02:55 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-bd20beffda6so36232276.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 16:02:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686870174; x=1689462174;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rocsqxxn2Z+cT1JHYvXfzCdKlHTpr3EP6mTFGVcBZg0=;
+        b=MJTZvP19w7L3mwEdMeExhSCW1AUDkDcDZIGA09b4Lsgr6AlQ/Jre5s3pQVCVJJ7rQb
+         5+EQMNtJaTaY+aRJKrCSqlImib7KZddKIew66TbvLd683FL9AyfE66fgz1T7BtZHDMm8
+         2jNBCticE3VbvZxgnHDLhllKeMXxMDja6NYMekmWJVMnL0qXYLEhZcbBya6ztZKzets8
+         eOxxHJ/YfIwfRnvaqFcbsGZUKRVZaOyJdqvanJIQ7D74NV/Gvoq+dfmVK1oXzh1JvH5P
+         0RtdON+E/jvZHQ2QI/6IDa9W4KDnatFP6KwfH05hk8Ymf0ujYFguYsacUpxAce6WF76M
+         r8mQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686870174; x=1689462174;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rocsqxxn2Z+cT1JHYvXfzCdKlHTpr3EP6mTFGVcBZg0=;
+        b=OopcDHP9kbSMEe+zEtNgkJgJAlo0NZzCqAk0LxvYX01e7Bptk/zr2EoR6zZcOKqxM7
+         D8Pi64KvYlRKKnnfHvUYTkLY8x2GK1ZbPj35Hz7IRdBo68iT1YuDfokRFbpSDEBtf10D
+         utSbzKq1W3ok9fIB77mKAYxaSD6iMTPn2WBMYFbj5arZ9WkTtcfjom7Q7Kloh3IWa1iK
+         KvFc2dY3ZzOVqyOeh3++yNztH3Fu3APsHqH/yXEmAAspHh/WJkqo6tCtuPtu6PlyzKdj
+         sMdeHVj3+BFMCNOcdFG7SVEjbMqOE1hpIr77Y45JQ2ZZci4kclgONg90/v71UBEgesvb
+         Se/A==
+X-Gm-Message-State: AC+VfDxcfmW+sRqlY1cR5Pcd2j9V3CufWJHDEgAFDvENtvaDVlqhcI1+
+        GZ2YTDXe2ePorRQFLHyVRwR81g==
+X-Google-Smtp-Source: ACHHUZ4yNZeWVfFpqfOHWwVeKQ0LO1X5XLl6oMWM14BiamATBX7pt4vwNxCwa9vlqY3LDt6NBppgPg==
+X-Received: by 2002:a81:7bd5:0:b0:56d:2dd6:c5b3 with SMTP id w204-20020a817bd5000000b0056d2dd6c5b3mr138534ywc.31.1686870174477;
+        Thu, 15 Jun 2023 16:02:54 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id w6-20020a0ded06000000b0056d2a19ad91sm2857020ywe.103.2023.06.15.16.02.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 16:02:54 -0700 (PDT)
+Date:   Thu, 15 Jun 2023 16:02:43 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Nathan Chancellor <nathan@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, Yu Zhao <yuzhao@google.com>,
+        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH v2 07/23 replacement] mips: add pte_unmap() to balance
+ pte_offset_map()
+In-Reply-To: <76b41825-30fa-b9e8-d043-2affcba24317@google.com>
+Message-ID: <addfcb3-b5f4-976e-e050-a2508e589cfe@google.com>
+References: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com> <178970b0-1539-8aac-76fd-972c6c46ec17@google.com> <20230614231758.GA1503611@dev-arch.thelio-3990X> <f5526f17-9d78-f7ea-427a-7e76bfeb6b8@google.com> <344a4da-3890-45fd-607e-b5f85ca6ad48@google.com>
+ <20230615155059.GB3665766@dev-arch.thelio-3990X> <76b41825-30fa-b9e8-d043-2affcba24317@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus!
+To keep balance in future, __update_tlb() remember to pte_unmap() after
+pte_offset_map().  This is an odd case, since the caller has already done
+pte_offset_map_lock(), then mips forgets the address and recalculates it;
+but my two naive attempts to clean that up did more harm than good.
+
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Hugh Dickins <hughd@google.com>
+---
+Andrew, please replace my mips patch, and its build warning fix patch,
+in mm-unstable by this less ambitious but working replacement - thanks.
+
+ arch/mips/mm/tlb-r4k.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/arch/mips/mm/tlb-r4k.c b/arch/mips/mm/tlb-r4k.c
+index 1b939abbe4ca..93c2d695588a 100644
+--- a/arch/mips/mm/tlb-r4k.c
++++ b/arch/mips/mm/tlb-r4k.c
+@@ -297,7 +297,7 @@ void __update_tlb(struct vm_area_struct * vma, unsigned long address, pte_t pte)
+ 	p4d_t *p4dp;
+ 	pud_t *pudp;
+ 	pmd_t *pmdp;
+-	pte_t *ptep;
++	pte_t *ptep, *ptemap = NULL;
+ 	int idx, pid;
+ 
+ 	/*
+@@ -344,7 +344,12 @@ void __update_tlb(struct vm_area_struct * vma, unsigned long address, pte_t pte)
+ 	} else
+ #endif
+ 	{
+-		ptep = pte_offset_map(pmdp, address);
++		ptemap = ptep = pte_offset_map(pmdp, address);
++		/*
++		 * update_mmu_cache() is called between pte_offset_map_lock()
++		 * and pte_unmap_unlock(), so we can assume that ptep is not
++		 * NULL here: and what should be done below if it were NULL?
++		 */
+ 
+ #if defined(CONFIG_PHYS_ADDR_T_64BIT) && defined(CONFIG_CPU_MIPS32)
+ #ifdef CONFIG_XPA
+@@ -373,6 +378,9 @@ void __update_tlb(struct vm_area_struct * vma, unsigned long address, pte_t pte)
+ 	tlbw_use_hazard();
+ 	htw_start();
+ 	flush_micro_tlb_vm(vma);
++
++	if (ptemap)
++		pte_unmap(ptemap);
+ 	local_irq_restore(flags);
+ }
+ 
+-- 
+2.35.3
 
-The following changes since commit 25041a4c02c7cf774d8b6ed60586fd64f1cdaa81:
-
-  Merge tag 'net-6.4-rc6' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2023-06-08 09:27:19 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git net-6.4-rc7
-
-for you to fetch changes up to 8f0e3703571fe771d06235870ccbbf4ad41e63e8:
-
-  Merge branch 'udplite-dccp-print-deprecation-notice' (2023-06-15 15:09:00 -0700)
-
-----------------------------------------------------------------
-Including fixes from wireless, and netfilter.
-
-Selftests excluded - we have 58 patches and diff of +442/-199,
-which isn't really small but perhaps with the exception of
-the WiFi locking change it's old(ish) bugs.
-
-We have no known problems with v6.4.
-
-The selftest changes are rather large as MPTCP folks try to apply
-Greg's guidance that selftest from torvalds/linux should be able
-to run against stable kernels.
-
-Last thing I should call out is the DCCP/UDP-lite deprecation notices,
-we are fairly sure those are dead, but if we're wrong reverting them
-back in won't be fun.
-
-Current release - regressions:
-
- - wifi:
-  - cfg80211: fix double lock bug in reg_wdev_chan_valid()
-  - iwlwifi: mvm: spin_lock_bh() to fix lockdep regression
-
-Current release - new code bugs:
-
- - handshake: remove fput() that causes use-after-free
-
-Previous releases - regressions:
-
- - sched: cls_u32: fix reference counter leak leading to overflow
-
- - sched: cls_api: fix lockup on flushing explicitly created chain
-
-Previous releases - always broken:
-
- - nf_tables: integrate pipapo into commit protocol
-
- - nf_tables: incorrect error path handling with NFT_MSG_NEWRULE,
-   fix dangling pointer on failure
-
- - ping6: fix send to link-local addresses with VRF
-
- - sched: act_pedit: parse L3 header for L4 offset, the skb may
-   not have the offset saved
-
- - sched: act_ct: fix promotion of offloaded unreplied tuple
-
- - sched: refuse to destroy an ingress and clsact Qdiscs if there
-   are lockless change operations in flight
-
- - wifi: mac80211: fix handful of bugs in multi-link operation
-
- - ipvlan: fix bound dev checking for IPv6 l3s mode
-
- - eth: enetc: correct the indexes of highest and 2nd highest TCs
-
- - eth: ice: fix XDP memory leak when NIC is brought up and down
-
-Misc:
-
- - add deprecation notices for UDP-lite and DCCP
-
- - selftests: mptcp: skip tests not supported by old kernels
-
- - sctp: handle invalid error codes without calling BUG()
-
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-
-----------------------------------------------------------------
-Ahmed Zaki (1):
-      iavf: remove mask from iavf_irq_enable_queues()
-
-Aleksandr Loktionov (1):
-      igb: fix nvm.ops.read() error handling
-
-Alex Maftei (1):
-      selftests/ptp: Fix timestamp printf format for PTP_SYS_OFFSET
-
-Benjamin Berg (3):
-      wifi: cfg80211: fix link del callback to call correct handler
-      wifi: mac80211: take lock before setting vif links
-      wifi: mac80211: fragment per STA profile correctly
-
-Christian Marangi (1):
-      net: ethernet: stmicro: stmmac: fix possible memory leak in __stmmac_open
-
-Dan Carpenter (4):
-      wifi: cfg80211: fix double lock bug in reg_wdev_chan_valid()
-      sctp: handle invalid error codes without calling BUG()
-      sctp: fix an error code in sctp_sf_eat_auth()
-      net: ethernet: ti: am65-cpsw: Call of_node_put() on error path
-
-Danielle Ratson (1):
-      selftests: forwarding: hw_stats_l3: Set addrgenmode in a separate step
-
-David Christensen (1):
-      bnx2x: fix page fault following EEH recovery
-
-David S. Miller (2):
-      Merge branch 'octeontx2-af-fixes'
-      Merge tag 'nf-23-06-08' of git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf
-
-Dmitry Mastykin (1):
-      netlabel: fix shift wrapping bug in netlbl_catmap_setlong()
-
-Eric Dumazet (1):
-      net: lapbether: only support ethernet devices
-
-Fedor Pchelkin (1):
-      net: macsec: fix double free of percpu stats
-
-Guillaume Nault (1):
-      ping6: Fix send to link-local addresses with VRF.
-
-Hangbin Liu (1):
-      ipvlan: fix bound dev checking for IPv6 l3s mode
-
-Hugh Dickins (1):
-      wifi: iwlwifi: mvm: spin_lock_bh() to fix lockdep regression
-
-Ilan Peer (1):
-      wifi: mac80211: Use active_links instead of valid_links in Tx
-
-Jakub Buchocki (1):
-      ice: Fix ice module unload
-
-Jakub Kicinski (9):
-      Merge branch 'selftests-mptcp-skip-tests-not-supported-by-old-kernels-part-2'
-      Merge branch '100GbE' of git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/net-queue
-      net: ethtool: correct MAX attribute value for stats
-      Merge branch 'fixes-for-q-usgmii-speeds-and-autoneg'
-      Merge branch 'mptcp-fixes'
-      Merge branch 'fix-small-bugs-and-annoyances-in-tc-testing'
-      Merge tag 'wireless-2023-06-14' of git://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless
-      Merge branch '1GbE' of git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/net-queue
-      Merge branch 'udplite-dccp-print-deprecation-notice'
-
-Jan Karcher (1):
-      MAINTAINERS: add reviewers for SMC Sockets
-
-Jiasheng Jiang (1):
-      octeon_ep: Add missing check for ioremap
-
-Johannes Berg (2):
-      wifi: mac80211: fix link activation settings order
-      wifi: cfg80211: remove links only on AP
-
-Julian Ruess (1):
-      s390/ism: Fix trying to free already-freed IRQ by repeated ism_dev_exit()
-
-Kamil Maziarz (1):
-      ice: Fix XDP memory leak when NIC is brought up and down
-
-Kuniyuki Iwashima (2):
-      udplite: Print deprecation notice.
-      dccp: Print deprecation notice.
-
-Lee Jones (1):
-      net/sched: cls_u32: Fix reference counter leak leading to overflow
-
-Lin Ma (2):
-      net/handshake: remove fput() that causes use-after-free
-      net: tipc: resize nlattr array to correct size
-
-Matthieu Baerts (31):
-      selftests: mptcp: lib: skip if missing symbol
-      selftests: mptcp: connect: skip transp tests if not supported
-      selftests: mptcp: connect: skip disconnect tests if not supported
-      selftests: mptcp: connect: skip TFO tests if not supported
-      selftests: mptcp: diag: skip listen tests if not supported
-      selftests: mptcp: diag: skip inuse tests if not supported
-      selftests: mptcp: pm nl: remove hardcoded default limits
-      selftests: mptcp: pm nl: skip fullmesh flag checks if not supported
-      selftests: mptcp: sockopt: relax expected returned size
-      selftests: mptcp: sockopt: skip getsockopt checks if not supported
-      selftests: mptcp: sockopt: skip TCP_INQ checks if not supported
-      selftests: mptcp: userspace pm: skip if 'ip' tool is unavailable
-      selftests: mptcp: userspace pm: skip if not supported
-      selftests: mptcp: userspace pm: skip PM listener events tests if unavailable
-      selftests: mptcp: lib: skip if not below kernel version
-      selftests: mptcp: join: use 'iptables-legacy' if available
-      selftests: mptcp: join: helpers to skip tests
-      selftests: mptcp: join: skip check if MIB counter not supported
-      selftests: mptcp: join: skip test if iptables/tc cmds fail
-      selftests: mptcp: join: support local endpoint being tracked or not
-      selftests: mptcp: join: skip Fastclose tests if not supported
-      selftests: mptcp: join: support RM_ADDR for used endpoints or not
-      selftests: mptcp: join: skip implicit tests if not supported
-      selftests: mptcp: join: skip backup if set flag on ID not supported
-      selftests: mptcp: join: skip fullmesh flag tests if not supported
-      selftests: mptcp: join: skip userspace PM tests if not supported
-      selftests: mptcp: join: skip fail tests if not supported
-      selftests: mptcp: join: skip MPC backups tests if not supported
-      selftests: mptcp: join: skip PM listener tests if not supported
-      selftests: mptcp: join: uniform listener tests
-      selftests: mptcp: join: skip mixed tests if not supported
-
-Max Tottenham (1):
-      net/sched: act_pedit: Parse L3 Header for L4 offset
-
-Maxime Chevallier (2):
-      net: phylink: report correct max speed for QUSGMII
-      net: phylink: use a dedicated helper to parse usgmii control word
-
-Muhammad Husaini Zulkifli (1):
-      igc: Clean the TX buffer and TX descriptor ring
-
-Nithin Dabilpuram (1):
-      octeontx2-af: fix lbk link credits on cn10k
-
-Pablo Neira Ayuso (3):
-      netfilter: nf_tables: integrate pipapo into commit protocol
-      netfilter: nfnetlink: skip error delivery on batch in case of ENOMEM
-      netfilter: nf_tables: incorrect error path handling with NFT_MSG_NEWRULE
-
-Paolo Abeni (1):
-      Merge branch 'net-sched-fix-race-conditions-in-mini_qdisc_pair_swap'
-
-Paul Blakey (1):
-      net/sched: act_ct: Fix promotion of offloaded unreplied tuple
-
-Peilin Ye (2):
-      net/sched: Refactor qdisc_graft() for ingress and clsact Qdiscs
-      net/sched: qdisc_destroy() old ingress and clsact Qdiscs before grafting
-
-Ratheesh Kannoth (1):
-      octeontx2-af: Fix promiscuous mode
-
-Satha Rao (1):
-      octeontx2-af: fixed resource availability check
-
-Simon Horman (1):
-      ice: Don't dereference NULL in ice_gnss_read error path
-
-Vinicius Costa Gomes (1):
-      igc: Fix possible system crash when loading module
-
-Vlad Buslov (5):
-      selftests/tc-testing: Fix Error: Specified qdisc kind is unknown.
-      selftests/tc-testing: Fix Error: failed to find target LOG
-      selftests/tc-testing: Fix SFB db test
-      selftests/tc-testing: Remove configs that no longer exist
-      net/sched: cls_api: Fix lockup on flushing explicitly created chain
-
-Vladimir Oltean (1):
-      net: dsa: felix: fix taprio guard band overflow at 10Mbps with jumbo frames
-
-Wei Fang (1):
-      net: enetc: correct the indexes of highest and 2nd highest TCs
-
-Wes Huang (1):
-      net: usb: qmi_wwan: add support for Compal RXM-G1
-
-Yoshihiro Shimoda (1):
-      net: renesas: rswitch: Fix timestamp feature after all descriptors are used
-
-Yuezhen Luan (1):
-      igb: Fix extts capture value format for 82580/i354/i350
-
-Zhengchao Shao (1):
-      net/sched: taprio: fix slab-out-of-bounds Read in taprio_dequeue_from_txq
-
-Íñigo Huguet (1):
-      sfc: fix XDP queues mode with legacy IRQ
-
- MAINTAINERS                                        |   3 +
- drivers/net/dsa/ocelot/felix_vsc9959.c             |   2 +-
- drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c   |   9 +-
- drivers/net/ethernet/freescale/enetc/enetc_qos.c   |   4 +-
- drivers/net/ethernet/intel/iavf/iavf.h             |   2 +-
- drivers/net/ethernet/intel/iavf/iavf_main.c        |  15 +-
- drivers/net/ethernet/intel/iavf/iavf_register.h    |   2 +-
- drivers/net/ethernet/intel/ice/ice_gnss.c          |   8 +-
- drivers/net/ethernet/intel/ice/ice_main.c          |  20 +-
- drivers/net/ethernet/intel/igb/igb_ethtool.c       |   3 +
- drivers/net/ethernet/intel/igb/igb_main.c          |   8 +-
- drivers/net/ethernet/intel/igc/igc_main.c          |  12 +-
- .../net/ethernet/marvell/octeon_ep/octep_main.c    |   7 +-
- .../net/ethernet/marvell/octeontx2/af/rvu_nix.c    |   7 +-
- .../ethernet/marvell/octeontx2/af/rvu_npc_hash.c   |  29 +-
- drivers/net/ethernet/renesas/rswitch.c             |  36 +-
- drivers/net/ethernet/sfc/efx_channels.c            |   2 +
- drivers/net/ethernet/sfc/siena/efx_channels.c      |   2 +
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c  |   9 +-
- drivers/net/ethernet/ti/am65-cpsw-nuss.c           |   2 +-
- drivers/net/ipvlan/ipvlan_l3s.c                    |   4 +
- drivers/net/macsec.c                               |  12 +-
- drivers/net/phy/phylink.c                          |  41 +-
- drivers/net/usb/qmi_wwan.c                         |   2 +
- drivers/net/wan/lapbether.c                        |   3 +
- drivers/net/wireless/intel/iwlwifi/mvm/rs.c        |  12 +-
- drivers/s390/net/ism_drv.c                         |   8 -
- include/net/netfilter/nf_flow_table.h              |   2 +-
- include/net/netfilter/nf_tables.h                  |   4 +-
- include/net/sch_generic.h                          |   8 +
- include/uapi/linux/ethtool_netlink.h               |   2 +-
- net/dccp/proto.c                                   |   3 +
- net/handshake/handshake.h                          |   1 -
- net/handshake/request.c                            |   4 -
- net/ipv4/udplite.c                                 |   2 +
- net/ipv6/ping.c                                    |   3 +-
- net/ipv6/udplite.c                                 |   4 +
- net/mac80211/cfg.c                                 |   9 +-
- net/mac80211/ieee80211_i.h                         |   2 +-
- net/mac80211/link.c                                |   4 +-
- net/mac80211/mlme.c                                |   5 +-
- net/mac80211/tx.c                                  |   6 +-
- net/mac80211/util.c                                |   4 +-
- net/netfilter/nf_flow_table_core.c                 |  13 +-
- net/netfilter/nf_flow_table_ip.c                   |   4 +-
- net/netfilter/nf_tables_api.c                      |  59 ++-
- net/netfilter/nfnetlink.c                          |   3 +-
- net/netfilter/nft_set_pipapo.c                     |  55 ++-
- net/netlabel/netlabel_kapi.c                       |   3 +-
- net/sched/act_ct.c                                 |   9 +-
- net/sched/act_pedit.c                              |  48 +-
- net/sched/cls_api.c                                |  12 +-
- net/sched/cls_u32.c                                |  18 +-
- net/sched/sch_api.c                                |  44 +-
- net/sched/sch_generic.c                            |  14 +-
- net/sched/sch_taprio.c                             |   3 +
- net/sctp/sm_sideeffect.c                           |   5 +-
- net/sctp/sm_statefuns.c                            |   2 +-
- net/tipc/bearer.c                                  |   4 +-
- net/wireless/rdev-ops.h                            |   6 +-
- net/wireless/reg.c                                 |   3 -
- net/wireless/util.c                                |   9 +-
- .../selftests/net/forwarding/hw_stats_l3.sh        |  11 +-
- tools/testing/selftests/net/mptcp/config           |   1 +
- tools/testing/selftests/net/mptcp/diag.sh          |  42 +-
- tools/testing/selftests/net/mptcp/mptcp_connect.sh |  20 +
- tools/testing/selftests/net/mptcp/mptcp_join.sh    | 513 +++++++++++++--------
- tools/testing/selftests/net/mptcp/mptcp_lib.sh     |  64 +++
- tools/testing/selftests/net/mptcp/mptcp_sockopt.c  |  18 +-
- tools/testing/selftests/net/mptcp/mptcp_sockopt.sh |  20 +-
- tools/testing/selftests/net/mptcp/pm_netlink.sh    |  27 +-
- tools/testing/selftests/net/mptcp/userspace_pm.sh  |  13 +-
- tools/testing/selftests/ptp/testptp.c              |   6 +-
- tools/testing/selftests/tc-testing/config          |   6 +-
- .../selftests/tc-testing/tc-tests/qdiscs/sfb.json  |   4 +-
- tools/testing/selftests/tc-testing/tdc.sh          |   1 +
- 76 files changed, 945 insertions(+), 442 deletions(-)
