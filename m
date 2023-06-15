@@ -2,488 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E444730EEC
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA11F730EF1
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 08:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237730AbjFOGAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 02:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33298 "EHLO
+        id S243331AbjFOGBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 02:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237640AbjFOGAA (ORCPT
+        with ESMTP id S243249AbjFOGAx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 02:00:00 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F34D10E9
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 22:59:57 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id d75a77b69052e-3f98276f89cso108971cf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 22:59:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686808796; x=1689400796;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iwLXNvmJWq+30nrmcBy4VuXtVSXUFElMyNebY4rwbYw=;
-        b=Owki3kfyj2jk4cXw5jBbVygHfQAIZD3VYDTG+NbrBQCulZH5ObQ4CUviJo/EXG5P+m
-         R25V8eRW/AEYszvBDos9vZ4kQyt5zhmD6s3yVs+ECQYd5eTcg2iaBZPK+eeNpBTEtXyD
-         zH7NP8gYW6XmlryDXsmFm7Y46Snw393hLDfeYSanBBtNsYcTfRKzSql6zSCleVfg5GAh
-         JeiwhUB3sm+6oPUYmrOsyl/WRCNu2rJefUcsJeDWV3+2DFw/ytX8Qpk6Ay/zrKoP/H2Y
-         ZSgrEXrteAn4PWYmFEJC0DD+9Hdll5XqczH39W0w72uVhdv8C6Gk7H8IWjzEZp2Xj33D
-         kWug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686808796; x=1689400796;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iwLXNvmJWq+30nrmcBy4VuXtVSXUFElMyNebY4rwbYw=;
-        b=iyqKIWIO9ZbiXH0Cw6b5vmMzYvy3WTSLBRDoTvawZMLLU9y0EJtmOMzWSHzMINEYzR
-         nEslU2CAO/cxyf2txB0TFHGX4uH+MDbyFkOfu961D4CCKVLwTgsg24ex8DfdR6AZID6D
-         hgsjmla6PJB+MbP6gXu7+ouj4lydeBx5TE2yNDw4hyQs1JKYFVHwBMVwvEB6YNi9pYsp
-         CioRKgYZzp43KCa5S3y6UPp55d3qIlnzK/iiTxKWv8TovABm0w+1M++BjVugt0ZrCs88
-         nQANe3+nmdrG0iUMT0y2XuWz4aaRKwbzZbmCeRbHgSWgYoeP18y31J0IIJtrhJSZPoE4
-         uSzg==
-X-Gm-Message-State: AC+VfDy2D7kMlFviqk5USfddNlTENKJ7gnCDkzYMfm/voJujhDUSfPCU
-        YxV/q8qEJ3bt6qwk8Do3vrLW4rS5ra8QPVnIMmXqxitMIxSwPHxbnaKWgw==
-X-Google-Smtp-Source: ACHHUZ7dB7aOllkbSj8zY+iHzILOAFLv5ZA2onSNwUYkdbbXXcNBqzJe7ovQiDJJDF0+iaJ/++u3Xv6xSEQ9NsPU0l4=
-X-Received: by 2002:ac8:4e83:0:b0:3f9:a73b:57bb with SMTP id
- 3-20020ac84e83000000b003f9a73b57bbmr95837qtp.4.1686808796473; Wed, 14 Jun
- 2023 22:59:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230615001735.3643996-1-kan.liang@linux.intel.com> <20230615001735.3643996-8-kan.liang@linux.intel.com>
-In-Reply-To: <20230615001735.3643996-8-kan.liang@linux.intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 14 Jun 2023 22:59:44 -0700
-Message-ID: <CAP-5=fWHBjBtViACSsGDRN+R+BYYjnRfxqGak1ticwZ0hnZKMw@mail.gmail.com>
-Subject: Re: [PATCH V2 7/8] perf test: Move all the check functions of stat
- csv output to lib
-To:     kan.liang@linux.intel.com
-Cc:     acme@kernel.org, mingo@redhat.com, peterz@infradead.org,
-        namhyung@kernel.org, jolsa@kernel.org, adrian.hunter@intel.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ak@linux.intel.com, eranian@google.com, ahmad.yasin@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 15 Jun 2023 02:00:53 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2B6294E
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 23:00:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686808848; x=1718344848;
+  h=date:from:to:cc:subject:message-id;
+  bh=TrcSEKWXfc+u3sWHJGzLs2kAVCjIXdXyk7fndaD2itk=;
+  b=kiOMfad6suOZ6IVo3fcuAetX7S3NOrCEqkk3xyT6aCQiVnpCGSKiq6TZ
+   Y+S91eP1OtuvBPyW77MWHvNJOS6FQp5WoxhpNC8gtLrPhsDU05oyclpBX
+   wxDs929h7Qak+ZzwamBr36UmjqrSPS7inW8SrEEqialYMHPfQ2M5GmNt8
+   hqN4kytvHpMTdEWXMI9bPrpf+tUO+XYTd5elSSg20Mh5RMCUz9DLtJxay
+   TxWrt6d1NyeY+uWIVO9BrDejMy6o1Za37ptHqyMXUybBl1a4i4KVpgQ65
+   orJ+qYDxysfbnn/BhhlYTFlGxx8+VC+H4FubpFSEl3SCOQN6uGYb8IfcA
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="357702400"
+X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
+   d="scan'208";a="357702400"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2023 23:00:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10741"; a="959053070"
+X-IronPort-AV: E=Sophos;i="6.00,244,1681196400"; 
+   d="scan'208";a="959053070"
+Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 14 Jun 2023 23:00:46 -0700
+Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q9g2H-0001Wx-2C;
+        Thu, 15 Jun 2023 06:00:45 +0000
+Date:   Thu, 15 Jun 2023 13:59:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/alternatives] BUILD SUCCESS
+ 2bd4aa9325821551648cf9738d6aa3a49317d7e5
+Message-ID: <202306151336.YAJk2qSi-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 5:18=E2=80=AFPM <kan.liang@linux.intel.com> wrote:
->
-> From: Kan Liang <kan.liang@linux.intel.com>
->
-> These functions can be shared with the stat std output test.
->
-> There is no functional change.
->
-> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/alternatives
+branch HEAD: 2bd4aa9325821551648cf9738d6aa3a49317d7e5  x86/alternative: PAUSE is not a NOP
 
-Reviewed-by: Ian Rogers <irogers@google.com>
+Unverified Warning (likely false positive, please contact us if interested):
 
-Thanks,
-Ian
+arch/x86/kernel/alternative.c:1474:32: warning: no previous prototype for '__alt_reloc_selftest' [-Wmissing-prototypes]
+arch/x86/kernel/alternative.c:1474:32: warning: no previous prototype for function '__alt_reloc_selftest' [-Wmissing-prototypes]
 
-> ---
->  tools/perf/tests/shell/lib/stat_output.sh | 169 +++++++++++++++++++
->  tools/perf/tests/shell/stat+csv_output.sh | 188 ++--------------------
->  2 files changed, 184 insertions(+), 173 deletions(-)
->  create mode 100755 tools/perf/tests/shell/lib/stat_output.sh
->
-> diff --git a/tools/perf/tests/shell/lib/stat_output.sh b/tools/perf/tests=
-/shell/lib/stat_output.sh
-> new file mode 100755
-> index 000000000000..363979b1123d
-> --- /dev/null
-> +++ b/tools/perf/tests/shell/lib/stat_output.sh
-> @@ -0,0 +1,169 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +# Return true if perf_event_paranoid is > $1 and not running as root.
-> +function ParanoidAndNotRoot()
-> +{
-> +        [ "$(id -u)" !=3D 0 ] && [ "$(cat /proc/sys/kernel/perf_event_pa=
-ranoid)" -gt $1 ]
-> +}
-> +
-> +# $1 name $2 extra_opt
-> +check_no_args()
-> +{
-> +        echo -n "Checking $1 output: no args"
-> +        perf stat $2 true
-> +        commachecker --no-args
-> +        echo "[Success]"
-> +}
-> +
-> +check_system_wide()
-> +{
-> +       echo -n "Checking $1 output: system wide "
-> +       if ParanoidAndNotRoot 0
-> +       then
-> +               echo "[Skip] paranoid and not root"
-> +               return
-> +       fi
-> +       perf stat -a $2 true
-> +       commachecker --system-wide
-> +       echo "[Success]"
-> +}
-> +
-> +check_system_wide_no_aggr()
-> +{
-> +       echo -n "Checking $1 output: system wide no aggregation "
-> +       if ParanoidAndNotRoot 0
-> +       then
-> +               echo "[Skip] paranoid and not root"
-> +               return
-> +       fi
-> +       perf stat -A -a --no-merge $2 true
-> +       commachecker --system-wide-no-aggr
-> +       echo "[Success]"
-> +}
-> +
-> +check_interval()
-> +{
-> +       echo -n "Checking $1 output: interval "
-> +       perf stat -I 1000 $2 true
-> +       commachecker --interval
-> +       echo "[Success]"
-> +}
-> +
-> +check_event()
-> +{
-> +       echo -n "Checking $1 output: event "
-> +       perf stat -e cpu-clock $2 true
-> +       commachecker --event
-> +       echo "[Success]"
-> +}
-> +
-> +check_per_core()
-> +{
-> +       echo -n "Checking $1 output: per core "
-> +       if ParanoidAndNotRoot 0
-> +       then
-> +               echo "[Skip] paranoid and not root"
-> +               return
-> +       fi
-> +       perf stat --per-core -a $2 true
-> +       commachecker --per-core
-> +       echo "[Success]"
-> +}
-> +
-> +check_per_thread()
-> +{
-> +       echo -n "Checking $1 output: per thread "
-> +       if ParanoidAndNotRoot 0
-> +       then
-> +               echo "[Skip] paranoid and not root"
-> +               return
-> +       fi
-> +       perf stat --per-thread -a $2 true
-> +       commachecker --per-thread
-> +       echo "[Success]"
-> +}
-> +
-> +check_per_cache_instance()
-> +{
-> +       echo -n "Checking $1 output: per cache instance "
-> +       if ParanoidAndNotRoot 0
-> +       then
-> +               echo "[Skip] paranoid and not root"
-> +               return
-> +       fi
-> +       perf stat --per-cache -a $2 true
-> +       commachecker --per-cache
-> +       echo "[Success]"
-> +}
-> +
-> +check_per_die()
-> +{
-> +       echo -n "Checking $1 output: per die "
-> +       if ParanoidAndNotRoot 0
-> +       then
-> +               echo "[Skip] paranoid and not root"
-> +               return
-> +       fi
-> +       perf stat --per-die -a $2 true
-> +       commachecker --per-die
-> +       echo "[Success]"
-> +}
-> +
-> +check_per_node()
-> +{
-> +       echo -n "Checking $1 output: per node "
-> +       if ParanoidAndNotRoot 0
-> +       then
-> +               echo "[Skip] paranoid and not root"
-> +               return
-> +       fi
-> +       perf stat --per-node -a $2 true
-> +       commachecker --per-node
-> +       echo "[Success]"
-> +}
-> +
-> +check_per_socket()
-> +{
-> +       echo -n "Checking $1 output: per socket "
-> +       if ParanoidAndNotRoot 0
-> +       then
-> +               echo "[Skip] paranoid and not root"
-> +               return
-> +       fi
-> +       perf stat --per-socket -a $2 true
-> +       commachecker --per-socket
-> +       echo "[Success]"
-> +}
-> +
-> +# The perf stat options for per-socket, per-core, per-die
-> +# and -A ( no_aggr mode ) uses the info fetched from this
-> +# directory: "/sys/devices/system/cpu/cpu*/topology". For
-> +# example, socket value is fetched from "physical_package_id"
-> +# file in topology directory.
-> +# Reference: cpu__get_topology_int in util/cpumap.c
-> +# If the platform doesn't expose topology information, values
-> +# will be set to -1. For example, incase of pSeries platform
-> +# of powerpc, value for  "physical_package_id" is restricted
-> +# and set to -1. Check here validates the socket-id read from
-> +# topology file before proceeding further
-> +
-> +FILE_LOC=3D"/sys/devices/system/cpu/cpu*/topology/"
-> +FILE_NAME=3D"physical_package_id"
-> +
-> +function check_for_topology()
-> +{
-> +       if ! ParanoidAndNotRoot 0
-> +       then
-> +               socket_file=3D`ls $FILE_LOC/$FILE_NAME | head -n 1`
-> +               [ -z $socket_file ] && {
-> +                       echo 0
-> +                       return
-> +               }
-> +               socket_id=3D`cat $socket_file`
-> +               [ $socket_id =3D=3D -1 ] && {
-> +                       echo 1
-> +                       return
-> +               }
-> +       fi
-> +       echo 0
-> +}
-> diff --git a/tools/perf/tests/shell/stat+csv_output.sh b/tools/perf/tests=
-/shell/stat+csv_output.sh
-> index ed082daf839c..34a0701fee05 100755
-> --- a/tools/perf/tests/shell/stat+csv_output.sh
-> +++ b/tools/perf/tests/shell/stat+csv_output.sh
-> @@ -6,7 +6,8 @@
->
->  set -e
->
-> -skip_test=3D0
-> +. $(dirname $0)/lib/stat_output.sh
-> +
->  csv_sep=3D@
->
->  stat_output=3D$(mktemp /tmp/__perf_test.stat_output.csv.XXXXX)
-> @@ -63,181 +64,22 @@ function commachecker()
->         return 0
->  }
->
-> -# Return true if perf_event_paranoid is > $1 and not running as root.
-> -function ParanoidAndNotRoot()
-> -{
-> -        [ "$(id -u)" !=3D 0 ] && [ "$(cat /proc/sys/kernel/perf_event_pa=
-ranoid)" -gt $1 ]
-> -}
-> -
-> -check_no_args()
-> -{
-> -       echo -n "Checking CSV output: no args "
-> -       perf stat -x$csv_sep -o "${stat_output}" true
-> -        commachecker --no-args
-> -       echo "[Success]"
-> -}
-> -
-> -check_system_wide()
-> -{
-> -       echo -n "Checking CSV output: system wide "
-> -       if ParanoidAndNotRoot 0
-> -       then
-> -               echo "[Skip] paranoid and not root"
-> -               return
-> -       fi
-> -       perf stat -x$csv_sep -a -o "${stat_output}" true
-> -        commachecker --system-wide
-> -       echo "[Success]"
-> -}
-> -
-> -check_system_wide_no_aggr()
-> -{
-> -       echo -n "Checking CSV output: system wide no aggregation "
-> -       if ParanoidAndNotRoot 0
-> -       then
-> -               echo "[Skip] paranoid and not root"
-> -               return
-> -       fi
-> -       perf stat -x$csv_sep -A -a --no-merge -o "${stat_output}" true
-> -        commachecker --system-wide-no-aggr
-> -       echo "[Success]"
-> -}
-> -
-> -check_interval()
-> -{
-> -       echo -n "Checking CSV output: interval "
-> -       perf stat -x$csv_sep -I 1000 -o "${stat_output}" true
-> -        commachecker --interval
-> -       echo "[Success]"
-> -}
-> -
-> -
-> -check_event()
-> -{
-> -       echo -n "Checking CSV output: event "
-> -       perf stat -x$csv_sep -e cpu-clock -o "${stat_output}" true
-> -        commachecker --event
-> -       echo "[Success]"
-> -}
-> -
-> -check_per_core()
-> -{
-> -       echo -n "Checking CSV output: per core "
-> -       if ParanoidAndNotRoot 0
-> -       then
-> -               echo "[Skip] paranoid and not root"
-> -               return
-> -       fi
-> -       perf stat -x$csv_sep --per-core -a -o "${stat_output}" true
-> -        commachecker --per-core
-> -       echo "[Success]"
-> -}
-> -
-> -check_per_thread()
-> -{
-> -       echo -n "Checking CSV output: per thread "
-> -       if ParanoidAndNotRoot 0
-> -       then
-> -               echo "[Skip] paranoid and not root"
-> -               return
-> -       fi
-> -       perf stat -x$csv_sep --per-thread -a -o "${stat_output}" true
-> -        commachecker --per-thread
-> -       echo "[Success]"
-> -}
-> -
-> -check_per_cache_instance()
-> -{
-> -       echo -n "Checking CSV output: per cache instance "
-> -       if ParanoidAndNotRoot 0
-> -       then
-> -               echo "[Skip] paranoid and not root"
-> -               return
-> -       fi
-> -       perf stat -x$csv_sep --per-cache -a true 2>&1 | commachecker --pe=
-r-cache
-> -       echo "[Success]"
-> -}
-> -
-> -check_per_die()
-> -{
-> -       echo -n "Checking CSV output: per die "
-> -       if ParanoidAndNotRoot 0
-> -       then
-> -               echo "[Skip] paranoid and not root"
-> -               return
-> -       fi
-> -       perf stat -x$csv_sep --per-die -a -o "${stat_output}" true
-> -        commachecker --per-die
-> -       echo "[Success]"
-> -}
-> -
-> -check_per_node()
-> -{
-> -       echo -n "Checking CSV output: per node "
-> -       if ParanoidAndNotRoot 0
-> -       then
-> -               echo "[Skip] paranoid and not root"
-> -               return
-> -       fi
-> -       perf stat -x$csv_sep --per-node -a -o "${stat_output}" true
-> -        commachecker --per-node
-> -       echo "[Success]"
-> -}
-> -
-> -check_per_socket()
-> -{
-> -       echo -n "Checking CSV output: per socket "
-> -       if ParanoidAndNotRoot 0
-> -       then
-> -               echo "[Skip] paranoid and not root"
-> -               return
-> -       fi
-> -       perf stat -x$csv_sep --per-socket -a -o "${stat_output}" true
-> -        commachecker --per-socket
-> -       echo "[Success]"
-> -}
-> -
-> -# The perf stat options for per-socket, per-core, per-die
-> -# and -A ( no_aggr mode ) uses the info fetched from this
-> -# directory: "/sys/devices/system/cpu/cpu*/topology". For
-> -# example, socket value is fetched from "physical_package_id"
-> -# file in topology directory.
-> -# Reference: cpu__get_topology_int in util/cpumap.c
-> -# If the platform doesn't expose topology information, values
-> -# will be set to -1. For example, incase of pSeries platform
-> -# of powerpc, value for  "physical_package_id" is restricted
-> -# and set to -1. Check here validates the socket-id read from
-> -# topology file before proceeding further
-> -
-> -FILE_LOC=3D"/sys/devices/system/cpu/cpu*/topology/"
-> -FILE_NAME=3D"physical_package_id"
-> -
-> -check_for_topology()
-> -{
-> -       if ! ParanoidAndNotRoot 0
-> -       then
-> -               socket_file=3D`ls $FILE_LOC/$FILE_NAME | head -n 1`
-> -               [ -z $socket_file ] && return 0
-> -               socket_id=3D`cat $socket_file`
-> -               [ $socket_id =3D=3D -1 ] && skip_test=3D1
-> -               return 0
-> -       fi
-> -}
-> +perf_cmd=3D"-x$csv_sep -o ${stat_output}"
->
-> -check_for_topology
-> -check_no_args
-> -check_system_wide
-> -check_interval
-> -check_event
-> -check_per_thread
-> -check_per_node
-> +skip_test=3D$(check_for_topology)
-> +check_no_args "CSV" "$perf_cmd"
-> +check_system_wide "CSV" "$perf_cmd"
-> +check_interval "CSV" "$perf_cmd"
-> +check_event "CSV" "$perf_cmd"
-> +check_per_thread "CSV" "$perf_cmd"
-> +check_per_node "CSV" "$perf_cmd"
->  if [ $skip_test -ne 1 ]
->  then
-> -       check_system_wide_no_aggr
-> -       check_per_core
-> -       check_per_cache_instance
-> -       check_per_die
-> -       check_per_socket
-> +       check_system_wide_no_aggr "CSV" "$perf_cmd"
-> +       check_per_core "CSV" "$perf_cmd"
-> +       check_per_cache_instance "CSV" "$perf_cmd"
-> +       check_per_die "CSV" "$perf_cmd"
-> +       check_per_socket "CSV" "$perf_cmd"
->  else
->         echo "[Skip] Skipping tests for system_wide_no_aggr, per_core, pe=
-r_die and per_socket since socket id exposed via topology is invalid"
->  fi
-> --
-> 2.35.1
->
+Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- i386-allyesconfig
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- i386-debian-10.3
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- i386-defconfig
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- i386-randconfig-i001-20230615
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- i386-randconfig-i002-20230615
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- i386-randconfig-i003-20230615
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- i386-randconfig-i004-20230615
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- i386-randconfig-i005-20230615
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- i386-randconfig-i006-20230615
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- i386-randconfig-i011-20230612
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- i386-randconfig-i012-20230612
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- i386-randconfig-i013-20230612
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- i386-randconfig-i014-20230612
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- i386-randconfig-i015-20230612
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- i386-randconfig-i016-20230612
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- i386-randconfig-r014-20230614
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- x86_64-allyesconfig
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- x86_64-defconfig
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- x86_64-kexec
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- x86_64-randconfig-a011-20230612
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- x86_64-randconfig-a012-20230612
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- x86_64-randconfig-a013-20230612
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- x86_64-randconfig-a014-20230612
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- x86_64-randconfig-a015-20230612
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- x86_64-randconfig-a016-20230612
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+`-- x86_64-rhel-8.3
+    `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+clang_recent_errors
+|-- x86_64-buildonly-randconfig-r001-20230614
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-function-__alt_reloc_selftest
+|-- x86_64-randconfig-a001-20230612
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-function-__alt_reloc_selftest
+|-- x86_64-randconfig-a002-20230612
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-function-__alt_reloc_selftest
+|-- x86_64-randconfig-a003-20230612
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-function-__alt_reloc_selftest
+|-- x86_64-randconfig-a004-20230612
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-function-__alt_reloc_selftest
+|-- x86_64-randconfig-a005-20230612
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-function-__alt_reloc_selftest
+|-- x86_64-randconfig-a006-20230612
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-function-__alt_reloc_selftest
+`-- x86_64-rhel-8.3-rust
+    `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-function-__alt_reloc_selftest
+
+elapsed time: 724m
+
+configs tested: 99
+configs skipped: 8
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r011-20230614   gcc  
+alpha                randconfig-r013-20230614   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r025-20230612   gcc  
+arc                  randconfig-r043-20230612   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r046-20230612   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky         buildonly-randconfig-r002-20230614   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r005-20230612   gcc  
+hexagon              randconfig-r003-20230612   clang
+hexagon              randconfig-r015-20230614   clang
+hexagon              randconfig-r041-20230612   clang
+hexagon              randconfig-r045-20230612   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230615   gcc  
+i386                 randconfig-i002-20230615   gcc  
+i386                 randconfig-i003-20230615   gcc  
+i386                 randconfig-i004-20230615   gcc  
+i386                 randconfig-i005-20230615   gcc  
+i386                 randconfig-i006-20230615   gcc  
+i386                 randconfig-i011-20230612   gcc  
+i386                 randconfig-i012-20230612   gcc  
+i386                 randconfig-i013-20230612   gcc  
+i386                 randconfig-i014-20230612   gcc  
+i386                 randconfig-i015-20230612   gcc  
+i386                 randconfig-i016-20230612   gcc  
+i386                 randconfig-r014-20230614   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r023-20230612   gcc  
+m68k                 randconfig-r035-20230612   gcc  
+m68k                 randconfig-r036-20230612   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips         buildonly-randconfig-r005-20230614   gcc  
+mips                 randconfig-r031-20230612   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r016-20230614   gcc  
+nios2                randconfig-r022-20230612   gcc  
+openrisc             randconfig-r024-20230612   gcc  
+parisc                           allyesconfig   gcc  
+parisc       buildonly-randconfig-r003-20230614   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r032-20230612   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r034-20230612   clang
+riscv                randconfig-r042-20230612   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r026-20230612   gcc  
+s390                 randconfig-r044-20230612   gcc  
+sh                               allmodconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r033-20230612   gcc  
+sparc64              randconfig-r021-20230612   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   clang
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230614   clang
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230612   clang
+x86_64               randconfig-a002-20230612   clang
+x86_64               randconfig-a003-20230612   clang
+x86_64               randconfig-a004-20230612   clang
+x86_64               randconfig-a005-20230612   clang
+x86_64               randconfig-a006-20230612   clang
+x86_64               randconfig-a011-20230612   gcc  
+x86_64               randconfig-a012-20230612   gcc  
+x86_64               randconfig-a013-20230612   gcc  
+x86_64               randconfig-a014-20230612   gcc  
+x86_64               randconfig-a015-20230612   gcc  
+x86_64               randconfig-a016-20230612   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r002-20230612   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
