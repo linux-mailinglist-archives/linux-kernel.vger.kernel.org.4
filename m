@@ -2,137 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0510B731FDA
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 20:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85A2A731FE4
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 20:18:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230144AbjFOSOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 14:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36100 "EHLO
+        id S230373AbjFOSSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 14:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbjFOSOf (ORCPT
+        with ESMTP id S229734AbjFOSSG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 14:14:35 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FE010F7
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 11:14:33 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b39bf8d5faso23873461fa.1
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 11:14:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686852872; x=1689444872;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TyNYAJPbrsk4+kV6DyQJsOygOqO+LfaaaEVKNin4xFM=;
-        b=FYscYYVsxDxn/+cJkq4UPRu4HqpXyg4D3FwGUrOibNEdKQjSw0euEBZVPfDUR6DCTF
-         vkHZnjSJ/0vBEzmEaoZxIeEdLo/1YMK0NSrE6B5UQI7tV6Eo1QmM2WT8kfbMRyFPerTx
-         pThLyNJ5QnqnXo4JBtrlmlDufSHgtFuSMHWDg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686852872; x=1689444872;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TyNYAJPbrsk4+kV6DyQJsOygOqO+LfaaaEVKNin4xFM=;
-        b=Gwhh3+KimLgVtp7m7BAR6mAi9hszh3iFxN9eawwkHukQ/wIgBMPJw46TLb6M3AV0IL
-         FSO9/KKycGolLck3FHaMdPB5vJ1DHJT6k4HYMfl2+IsQld0XHVMvjYTlPgL2c2jN51lW
-         WUG/b5bibou9Gpz0vT2feEpn2KLnvYbmup2dLEuep3/F/7KhH7KYR74qfneL23YvkMol
-         Woj1XGbJVfVXfK2hDruNiCgQ6wxdoOOh/VnEFDa9G3FscnWq/VisbIUkuN/Ct9tXyxO9
-         s4fICZm7+MwmhR24uDDFqoQYG7upDk5Rf0A/Z7awDpFRD5fN6SPTlCkbxczzskcOSzRL
-         yAQQ==
-X-Gm-Message-State: AC+VfDyaE8W7k7QJ6NujR1G6uhJtMT5musop9HBqeCdqsJpLranR0fbX
-        8ycr/KnhNAsFjIdvnx2eRdxpf7aohK28xPd8/cSvj8Z7
-X-Google-Smtp-Source: ACHHUZ7fIZ7LRK/jdPzO0/+fEQCUiCUp8lnL5Ed3zc4ey81RdOGKWepvIA0znjMbEeEjWGSTnQXHFw==
-X-Received: by 2002:a2e:9615:0:b0:2ac:7d3b:6312 with SMTP id v21-20020a2e9615000000b002ac7d3b6312mr200774ljh.22.1686852871888;
-        Thu, 15 Jun 2023 11:14:31 -0700 (PDT)
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com. [209.85.208.53])
-        by smtp.gmail.com with ESMTPSA id j10-20020aa7c40a000000b0051a315d6e1bsm233103edq.70.2023.06.15.11.14.31
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 11:14:31 -0700 (PDT)
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-51400fa347dso1447a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 11:14:31 -0700 (PDT)
-X-Received: by 2002:a50:d697:0:b0:510:b2b7:8a78 with SMTP id
- r23-20020a50d697000000b00510b2b78a78mr101415edi.5.1686852871368; Thu, 15 Jun
- 2023 11:14:31 -0700 (PDT)
+        Thu, 15 Jun 2023 14:18:06 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142BB1BF8;
+        Thu, 15 Jun 2023 11:18:05 -0700 (PDT)
+Received: from [192.168.178.23] (unknown [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 01090CE6AF;
+        Thu, 15 Jun 2023 18:17:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1686853053; bh=ugMipXK+nPc+Xd0ZaX7mPO2A2Ca+rG1kX4NQoi4EwMU=;
+        h=From:Date:Subject:To:Cc;
+        b=Uj8RyxvN70jrrEHAuk2KK9V0OuGn6s831dQ0WoGRgG8wRr/lS6QBvWx+fC77B5oE4
+         S7s6BSOSNTvThYvB8Idbbz6XYUieym7uL/Elki7k6/LLmZ2nORFl6NDQigh0hVhHeK
+         YDzPYoqbGdFIg8gLdL2xOTGr7TcHO7DYE2og5w1M=
+From:   Luca Weiss <luca@z3ntu.xyz>
+Date:   Thu, 15 Jun 2023 20:17:12 +0200
+Subject: [PATCH v2] ARM: dts: qcom: msm8974: correct qfprom node size
 MIME-Version: 1.0
-References: <20230601213440.2488667-1-dianders@chromium.org> <20230601143109.v9.6.Ia3aeac89bb6751b682237e76e5ba594318e4b1aa@changeid>
-In-Reply-To: <20230601143109.v9.6.Ia3aeac89bb6751b682237e76e5ba594318e4b1aa@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 15 Jun 2023 11:14:18 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XbnUZh2uQ5Sr3Dg=+Kiz7rfZVyP-zNQtXrV_NSsCTFcA@mail.gmail.com>
-Message-ID: <CAD=FV=XbnUZh2uQ5Sr3Dg=+Kiz7rfZVyP-zNQtXrV_NSsCTFcA@mail.gmail.com>
-Subject: Re: [PATCH v9 6/7] kgdb: Provide a stub kgdb_nmicallback() if !CONFIG_KGDB
-To:     Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     linux-perf-users@vger.kernel.org, ito-yuichi@fujitsu.com,
-        Chen-Yu Tsai <wens@csie.org>, Ard Biesheuvel <ardb@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-arm-kernel@lists.infradead.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        Masayoshi Mizuma <msys.mizuma@gmail.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230130-msm8974-qfprom-v2-1-3839cf41d9ee@z3ntu.xyz>
+X-B4-Tracking: v=1; b=H4sIAKdVi2QC/3WOOQ6DMBREr4Jc5yMvYUuVe0QUxvkOLjDGBsQi7
+ h6DlDLlG83TzE4CeoOBPJKdeJxNML2NwG8JUa20HwTzjkw45YIyQaELXVkVdxi0830HOasUxVL
+ zHBsSpUYGhMZLq9pTG1Ts/JQ8ZekKyk3a43CWnUdtlmv9VUduTRh7v15nZnamf3dnBgyqIpOSY
+ oa0FM9N2HFKl3Uj9XEcX5LdFmbZAAAA
+To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>
+Cc:     Rob Herring <robh@kernel.org>, Andy Gross <andy.gross@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Craig Tatlor <ctatlor97@gmail.com>,
+        Luca Weiss <luca@z3ntu.xyz>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1457; i=luca@z3ntu.xyz;
+ h=from:subject:message-id; bh=CEB4c/s6J/pZAcxWuRvn233hJFsOJA018x2AsQ+Iqjw=;
+ b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBki1W60QkmzyTC110njYohlKqolQLQCLjeMCCui
+ Z8scKBL2yWJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZItVugAKCRBy2EO4nU3X
+ VhmOEADR5SRR416eXnGqX21q7pqrOIjGCMkg+sG82eO0rF/W/c5xD6Zh3n2Rw+/MNZDxBbOGDxI
+ fhdNVfdWPeDSySSGJWhJlu+jWeA7VI1rp/5Poy4wwq617qSatFhnfT/wuj1+GdnHM+XQ+qlq0s3
+ uj7GUOxEwufePdMFhW1es2caQqCH/jhlNL9e2ArscNK68KwEZyrsrjXjkHuZuEW3u0UYMTvlJDS
+ WNDbfZiNLm/gnxBlh2Kpuuhs9HriBSDWF2599eRoWMWx+cRayV4a7TkC8AeIyBhlcAIQwD5Mn1I
+ ZYPN4x8CQ8A9umfN7c5+Aj/KRZc6CmFGAxcwL8W9RSP0Fkp1MvgqQ7b7Jro2WSWh4xgJgvEytDy
+ kODWBFDE4AyhrgNFHLcS+vYtN35iXoYkj5KGW2PlnNDV84MINWT1f5EKOxMdcJinrTG6r3S1HLC
+ EUmn3qFA3nwobuIxiEZJzGMtZYuXXYYDTPaHngzUgknaWXGaR0+YvS+HBbAXCTgO7tBvQvB/u/A
+ yZ5TbEHDZMB4yeyLWsLNnklADTSIXifXGyuClvbqeLTd5RGq6KWEXE1wVd5sWrDUXH12iyPnjLw
+ hlEEqQHbhuI3K0aN3Mi1BKeKfgbQ6wrARFkchmPdoujiYpoITe3oLmTiu1XcAeA+66KmeNkNOUt
+ VEYYLnQcpk6g3nA==
+X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
+ fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Daniel,
+From: Craig Tatlor <ctatlor97@gmail.com>
 
-On Thu, Jun 1, 2023 at 2:37=E2=80=AFPM Douglas Anderson <dianders@chromium.=
-org> wrote:
->
-> To save architectures from needing to wrap the call in #ifdefs, add a
-> stub no-op version of kgdb_nmicallback(), which returns 1 if it didn't
-> handle anything.
->
-> Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
-> In v9 this is the only kgdb dependency. I'm assuming it could go
-> through the arm64 tree? If that's not a good idea, we could always
-> change the patch ("arm64: kgdb: Roundup cpus using IPI as NMI") not to
-> depend on it by only calling kgdb_nmicallback() if CONFIG_KGDB is not
-> defined.
->
-> Changes in v9:
-> - Added missing "inline"
->
-> Changes in v8:
-> - "Provide a stub kgdb_nmicallback() if !CONFIG_KGDB" new for v8
->
->  include/linux/kgdb.h | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/include/linux/kgdb.h b/include/linux/kgdb.h
-> index 258cdde8d356..76e891ee9e37 100644
-> --- a/include/linux/kgdb.h
-> +++ b/include/linux/kgdb.h
-> @@ -365,5 +365,6 @@ extern void kgdb_free_init_mem(void);
->  #define dbg_late_init()
->  static inline void kgdb_panic(const char *msg) {}
->  static inline void kgdb_free_init_mem(void) { }
-> +static inline int kgdb_nmicallback(int cpu, void *regs) { return 1; }
+The qfprom actually has size 0x3000, so adjust the reg.
 
-What do you think about landing just ${SUBJECT} patch in kgdb right
-now so it can end up in v6.5-rc1? It seems like this series is
-currently blocked on Mark getting a spare moment and it seems unlikely
-that'll happen this cycle. If we at least land the kgdb patch then it
-would make things all that much easier to land in the next cycle. The
-kgdb patch feels like it can make sense on its own...
+Note that the non-ECC-corrected qfprom can be found at 0xfc4b8000
+(-0x4000). The current reg points to the ECC-corrected qfprom block
+which should have equivalent values at all offsets compared to the
+non-corrected version.
 
--Doug
+[luca@z3ntu.xyz: extract to standalone patch and adjust for review
+comments]
+
+Fixes: c59ffb519357 ("arm: dts: msm8974: Add thermal zones, tsens and qfprom nodes")
+Signed-off-by: Craig Tatlor <ctatlor97@gmail.com>
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+---
+Changes in v2:
+- Keep base offset but expand reg from 0x1000 to 0x3000 (Konrad)
+- Link to v1: https://lore.kernel.org/r/20230130-msm8974-qfprom-v1-1-975aa0e5e083@z3ntu.xyz
+---
+ arch/arm/boot/dts/qcom-msm8974.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi b/arch/arm/boot/dts/qcom-msm8974.dtsi
+index 7ed0d925a4e9..3156fe25967f 100644
+--- a/arch/arm/boot/dts/qcom-msm8974.dtsi
++++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
+@@ -1194,7 +1194,7 @@ restart@fc4ab000 {
+ 
+ 		qfprom: qfprom@fc4bc000 {
+ 			compatible = "qcom,msm8974-qfprom", "qcom,qfprom";
+-			reg = <0xfc4bc000 0x1000>;
++			reg = <0xfc4bc000 0x3000>;
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+ 
+
+---
+base-commit: 858fd168a95c5b9669aac8db6c14a9aeab446375
+change-id: 20230130-msm8974-qfprom-619c0e8f26eb
+
+Best regards,
+-- 
+Luca Weiss <luca@z3ntu.xyz>
+
