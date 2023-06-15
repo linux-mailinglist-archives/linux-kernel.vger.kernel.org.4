@@ -2,570 +2,1080 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C618C730ED6
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 07:50:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B700730ED4
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 07:50:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238458AbjFOFuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 01:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57266 "EHLO
+        id S237626AbjFOFuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 01:50:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231366AbjFOFue (ORCPT
+        with ESMTP id S233813AbjFOFud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 01:50:34 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6142709;
-        Wed, 14 Jun 2023 22:50:27 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35F5MGGI003767;
-        Thu, 15 Jun 2023 05:49:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=qyRSQhyQlf/bopFtO5Wpt2EMsSFbkPBev1GV2KYJ7/A=;
- b=oXwV3TgR/f1MJR7NJba+oW2gyVoCVpUTzX5GuY4vTGVeu9KMf+5EqhjcR5gvXNbuPZW5
- rnYf/H48vtTZX64Bb7POSn51Pg3IGtdYTlqhI/k/0/otkkStcgfsRSN3FwePrEHzZQwY
- ViWP9evBeGWNL6C/sByRi11CrN3YRul0qDuHeFJUdE2sAOCGjgYTAV3yiP/wVkUXDik8
- rEOMlliCyYpgTz3xORAKsF9y9qk26EQdyPNqQfcDQ0YdZxhSZJP8MZGFGqsOCk0ayJ69
- RSAzPZsFap0WJ+rj8xGdX/6mi4T0n5mMWGH1ao5xDud74JuafogrzUmVq97WCNyheVws 3A== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r7ebt9pd6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jun 2023 05:49:56 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35F5ntNY021223
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jun 2023 05:49:55 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 14 Jun 2023 22:49:46 -0700
-Date:   Thu, 15 Jun 2023 11:19:36 +0530
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>, <vkoul@kernel.org>,
-        <kishon@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <gregkh@linuxfoundation.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <p.zabel@pengutronix.de>, <arnd@arndb.de>,
-        <geert+renesas@glider.be>, <neil.armstrong@linaro.org>,
-        <nfraprado@collabora.com>, <broonie@kernel.org>,
-        <rafal@milecki.pl>, <quic_srichara@quicinc.com>,
-        <quic_varada@quicinc.org>, <quic_wcheng@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH 3/9] phy: qcom-m31: Introduce qcom,m31 USB phy driver
-Message-ID: <20230615054935.GC22186@varda-linux.qualcomm.com>
-References: <cover.1686126439.git.quic_varada@quicinc.com>
- <6bb345c6a57ee27516764f36ba7d34fd1a719b87.1686126439.git.quic_varada@quicinc.com>
- <416bef68-6df3-d5c4-2aed-ef1ae7c78d7b@linaro.org>
+        Thu, 15 Jun 2023 01:50:33 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974622727
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 22:50:24 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3f98276f89cso106331cf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 14 Jun 2023 22:50:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686808223; x=1689400223;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LN7MujmvNUTGye6GDbct2aPod7Fi2Qz4HFiOrDXh53k=;
+        b=yGN+tz1C6BAOYYmAlTEvjQ4tkLu2eLJDbL9yaRaopUz1ZCa2aWhbIwiCuZ7zImrYmw
+         HDZLJFLYw+IXR40dtvvh1Qgl80VkXeLRYCBHZcFD0N3af7JY02/Nxd5RCUhQj2Cy5PNf
+         /kCslie2wKXX1exOi8XxlsqGu00mFRfMvusIQx+7yXDMX2d1225AgXLjymO7i9jCJrqC
+         v22NaCLZrwKxH7ip0YUs32cI4DnnoHcBzg4nvx6psjkEX1PtPFd14Gfm0tvYDFsSNlO4
+         nQTXLkSXrxyH12OX44YDojDBgTGrOBeMGII2Xgyir7uqCik7TlbhFpXJWg3Xuh/30xZ9
+         TINw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686808223; x=1689400223;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LN7MujmvNUTGye6GDbct2aPod7Fi2Qz4HFiOrDXh53k=;
+        b=V0ZIv5tkX3OPQOnzkGzJRmQChCsAQ7Ec8lEMCtXOq1jUoSzM2Mgx0MnIGWBApemk2D
+         CdeDBS5cFtJuZNj3iwiMR75HjtNU2wiQb/L9ITGtfMdVYDvGeCjrD7gopL+OUrSMeR9z
+         IUrGP/v2BlTDTH6f5Qfg2KZJ64RTlMLCEZG4nuutEAejCuqIuzT5YCGemUyBgNYBR9A0
+         56b4OHM7BBTr7OBCFJULdqnIc57kjSbTrg/j00jMWskQso0WgaAnUwvvzK25uOmGb0r0
+         +TCSZZ40YyZkdd9NYmR+6dJ8B8wUcVB/sssie6++2FMVqVgGCDe93js2OYdLfQKKieor
+         pP/Q==
+X-Gm-Message-State: AC+VfDypDqk6JL9yGQSH8kdTkxX8FMV0yZgkCEhpOS0VIprN2RIyNGp1
+        MBJMjwMuQgXCE9axHcArbd2VXbpxavbwcBZBYbrQHw==
+X-Google-Smtp-Source: ACHHUZ4RiFyf7wFzj97tpIHjOnrgn/00yHkgQTRDT+HrhaO+E7943D5GsBLYe0u9DDBt2UszLk4ksWRJnQuqmqoIQ6k=
+X-Received: by 2002:a05:622a:1212:b0:3fa:3c8f:3435 with SMTP id
+ y18-20020a05622a121200b003fa3c8f3435mr79050qtx.27.1686808222748; Wed, 14 Jun
+ 2023 22:50:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <416bef68-6df3-d5c4-2aed-ef1ae7c78d7b@linaro.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: PXQeWPGa55BPPaGnzfuLos0eiXN3W36p
-X-Proofpoint-ORIG-GUID: PXQeWPGa55BPPaGnzfuLos0eiXN3W36p
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-15_02,2023-06-14_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 spamscore=0
- mlxscore=0 suspectscore=0 lowpriorityscore=0 adultscore=0
- priorityscore=1501 bulkscore=0 mlxlogscore=999 impostorscore=0
- phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306150049
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230615001735.3643996-1-kan.liang@linux.intel.com> <20230615001735.3643996-3-kan.liang@linux.intel.com>
+In-Reply-To: <20230615001735.3643996-3-kan.liang@linux.intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 14 Jun 2023 22:50:10 -0700
+Message-ID: <CAP-5=fUy5QHcLpMD14VQD1N5CR3wf=b5DjhCDiqcHOfx+JjZ1w@mail.gmail.com>
+Subject: Re: [PATCH V2 2/8] perf metric: JSON flag to default metric group
+To:     kan.liang@linux.intel.com
+Cc:     acme@kernel.org, mingo@redhat.com, peterz@infradead.org,
+        namhyung@kernel.org, jolsa@kernel.org, adrian.hunter@intel.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ak@linux.intel.com, eranian@google.com, ahmad.yasin@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 01:54:23PM +0200, Konrad Dybcio wrote:
+On Wed, Jun 14, 2023 at 5:18=E2=80=AFPM <kan.liang@linux.intel.com> wrote:
 >
+> From: Kan Liang <kan.liang@linux.intel.com>
 >
-> On 7.06.2023 12:56, Varadarajan Narayanan wrote:
-> > Add the M31 USB2 phy driver
-> >
-> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > ---
-> >  drivers/phy/qualcomm/phy-qcom-m31.c | 360 ++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 360 insertions(+)
-> >  create mode 100644 drivers/phy/qualcomm/phy-qcom-m31.c
-> >
-> > diff --git a/drivers/phy/qualcomm/phy-qcom-m31.c b/drivers/phy/qualcomm/phy-qcom-m31.c
-> > new file mode 100644
-> > index 0000000..d29a91e
-> > --- /dev/null
-> > +++ b/drivers/phy/qualcomm/phy-qcom-m31.c
-> > @@ -0,0 +1,360 @@
-> > +// SPDX-License-Identifier: GPL-2.0+
-> > +/*
-> > + * Copyright (c) 2014-2016, 2020, The Linux Foundation. All rights reserved.
-> > + */
-> > +
-> > +#include <linux/module.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/err.h>
-> > +#include <linux/slab.h>
-> > +#include <linux/clk.h>
-> > +#include <linux/delay.h>
-> > +#include <linux/io.h>
-> > +#include <linux/of.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/usb/phy.h>
-> > +#include <linux/reset.h>
-> > +#include <linux/of_device.h>
-> Please sort these
-
-Ok.
-
-> > +
-> > +enum clk_reset_action {
-> > +	CLK_RESET_DEASSERT	= 0,
-> > +	CLK_RESET_ASSERT	= 1
-> > +};
-> > +
-> > +#define USB2PHY_PORT_POWERDOWN		0xA4
-> > +#define POWER_UP			BIT(0)
-> > +#define POWER_DOWN			0
-> > +
-> > +#define USB2PHY_PORT_UTMI_CTRL1	0x40
-> > +
-> > +#define USB2PHY_PORT_UTMI_CTRL2	0x44
-> > +#define UTMI_ULPI_SEL			BIT(7)
-> > +#define UTMI_TEST_MUX_SEL		BIT(6)
-> > +
-> > +#define HS_PHY_CTRL_REG			0x10
-> > +#define UTMI_OTG_VBUS_VALID             BIT(20)
-> > +#define SW_SESSVLD_SEL                  BIT(28)
-> > +
-> > +#define USB_PHY_CFG0			0x94
-> > +#define USB_PHY_UTMI_CTRL5		0x50
-> > +#define USB_PHY_FSEL_SEL		0xB8
-> > +#define USB_PHY_HS_PHY_CTRL_COMMON0	0x54
-> > +#define USB_PHY_REFCLK_CTRL		0xA0
-> > +#define USB_PHY_HS_PHY_CTRL2		0x64
-> > +#define USB_PHY_UTMI_CTRL0		0x3c
-> > +#define USB2PHY_USB_PHY_M31_XCFGI_1	0xBC
-> > +#define USB2PHY_USB_PHY_M31_XCFGI_4	0xC8
-> > +#define USB2PHY_USB_PHY_M31_XCFGI_5	0xCC
-> > +#define USB2PHY_USB_PHY_M31_XCFGI_11	0xE4
-> Could you sort them address-wise?
-
-Ok.
-
-> > +
-> > +#define USB2_0_TX_ENABLE		BIT(2)
-> > +#define HSTX_SLEW_RATE_565PS		3
-> > +#define PLL_CHARGING_PUMP_CURRENT_35UA	(3 << 3)
-> > +#define ODT_VALUE_38_02_OHM		(3 << 6)
-> > +#define ODT_VALUE_45_02_OHM		BIT(2)
-> > +#define HSTX_PRE_EMPHASIS_LEVEL_0_55MA	(1)
-> Weird mix of values, bits, bitfields.. perhaps BIT(n) and
-> GENMASK() (+ FIELD_PREP) would be more suitable?
-
-Ok.
-
-> > +
-> > +#define UTMI_PHY_OVERRIDE_EN		BIT(1)
-> > +#define POR_EN				BIT(1)
-> Please associate these with their registers, like
-
-Ok.
-
-> #define FOO_REG		0xf00
->  #define POR_EN		BIT(1)
+> For the default output, the default metric group could vary on different
+> platforms. For example, on SPR, the TopdownL1 and TopdownL2 metrics
+> should be displayed in the default mode. On ICL, only the TopdownL1
+> should be displayed.
 >
-> > +#define FREQ_SEL			BIT(0)
-> > +#define COMMONONN			BIT(7)
-> > +#define FSEL				BIT(4)
-> > +#define RETENABLEN			BIT(3)
-> > +#define USB2_SUSPEND_N_SEL		BIT(3)
-> > +#define USB2_SUSPEND_N			BIT(2)
-> > +#define USB2_UTMI_CLK_EN		BIT(1)
-> > +#define CLKCORE				BIT(1)
-> > +#define ATERESET			~BIT(0)
-> > +#define FREQ_24MHZ			(5 << 4)
-> > +#define XCFG_COARSE_TUNE_NUM		(2 << 0)
-> > +#define XCFG_FINE_TUNE_NUM		(1 << 3)
-> same comment
-
-Ok.
-
-> > +
-> > +static void m31usb_write_readback(void *base, u32 offset,
-> > +					const u32 mask, u32 val);
-> We don't need this forward-definition, just move the function up.
+> Add a flag so we can tag the default metric group for different
+> platforms rather than hack the perf code.
 >
-> > +
-> > +struct m31usb_phy {
-> > +	struct usb_phy		phy;
-> > +	void __iomem		*base;
-> > +	void __iomem		*qscratch_base;
-> > +
-> > +	struct reset_control	*phy_reset;
-> > +
-> > +	bool			cable_connected;
-> > +	bool			suspended;
-> > +	bool			ulpi_mode;
-> > +};
-> > +
-> > +static void m31usb_reset(struct m31usb_phy *qphy, u32 action)
-> > +{
-> > +	if (action == CLK_RESET_ASSERT)
-> > +		reset_control_assert(qphy->phy_reset);
-> > +	else
-> > +		reset_control_deassert(qphy->phy_reset);
-> > +	wmb(); /* ensure data is written to hw register */
-> Please move the comment above the call.
-
-This is used only once. Hence, will move it to the calling location itself.
-
-> > +}
-> > +
-> > +static void m31usb_phy_enable_clock(struct m31usb_phy *qphy)
-> > +{
-> > +	/* Enable override ctrl */
-> > +	writel(UTMI_PHY_OVERRIDE_EN, qphy->base + USB_PHY_CFG0);
-> Some of the comments are missing a space before '*/'
+> The flag is added to Intel TopdownL1 since ICL and ADL, TopdownL2 metrics
+> since SPR.
 >
-> Also, please consider adding some newlines to logically split the
-> actions.
+> Add a new field, DefaultMetricgroupName, in the JSON file to indicate
+> the real metric group name.
 >
-> > +	/* Enable POR*/
-> > +	writel(POR_EN, qphy->base + USB_PHY_UTMI_CTRL5);
-> > +	udelay(15);
-> > +	/* Configure frequency select value*/
-> > +	writel(FREQ_SEL, qphy->base + USB_PHY_FSEL_SEL);
-> > +	/* Configure refclk frequency */
-> > +	writel(COMMONONN | FSEL | RETENABLEN,
-> > +		qphy->base + USB_PHY_HS_PHY_CTRL_COMMON0);
-> > +	/* select refclk source */
-> > +	writel(CLKCORE, qphy->base + USB_PHY_REFCLK_CTRL);
-> > +	/* select ATERESET*/
-> > +	writel(POR_EN & ATERESET, qphy->base + USB_PHY_UTMI_CTRL5);
-> > +	writel(USB2_SUSPEND_N_SEL | USB2_SUSPEND_N | USB2_UTMI_CLK_EN,
-> > +		qphy->base + USB_PHY_HS_PHY_CTRL2);
-> > +	writel(0x0, qphy->base + USB_PHY_UTMI_CTRL5);
-> > +	writel(USB2_SUSPEND_N | USB2_UTMI_CLK_EN,
-> > +		qphy->base + USB_PHY_HS_PHY_CTRL2);
-> > +	/* Disable override ctrl */
-> > +	writel(0x0, qphy->base + USB_PHY_CFG0);
-> > +}
-> > +
-> > +static void ipq5332_m31usb_phy_enable_clock(struct m31usb_phy *qphy)
-> > +{
-> > +	/* Enable override ctrl */
-> > +	writel(UTMI_PHY_OVERRIDE_EN, qphy->base + USB_PHY_CFG0);
-> > +	/* Enable POR*/
-> ditto
+> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+
+Reviewed-by: Ian Rogers <irogers@google.com>
+
+Thanks,
+Ian
+
+> ---
+>  .../arch/x86/alderlake/adl-metrics.json       | 45 ++++++++------
+>  .../arch/x86/alderlaken/adln-metrics.json     | 25 ++++----
+>  .../arch/x86/icelake/icl-metrics.json         | 20 ++++---
+>  .../arch/x86/icelakex/icx-metrics.json        | 20 ++++---
+>  .../arch/x86/sapphirerapids/spr-metrics.json  | 60 +++++++++++--------
+>  .../arch/x86/tigerlake/tgl-metrics.json       | 20 ++++---
+>  6 files changed, 114 insertions(+), 76 deletions(-)
 >
-> > +	writel(POR_EN, qphy->base + USB_PHY_UTMI_CTRL5);
-> > +	udelay(15);
-> > +	/* Configure frequency select value*/
-> > +	writel(FREQ_SEL, qphy->base + USB_PHY_FSEL_SEL);
-> > +	/* Configure refclk frequency */
-> > +	writel(COMMONONN | FREQ_24MHZ | RETENABLEN,
-> > +		qphy->base + USB_PHY_HS_PHY_CTRL_COMMON0);
-> > +	/* select ATERESET*/
-> > +	writel(POR_EN & ATERESET, qphy->base + USB_PHY_UTMI_CTRL5);
-> > +	writel(USB2_SUSPEND_N_SEL | USB2_SUSPEND_N | USB2_UTMI_CLK_EN,
-> > +		qphy->base + USB_PHY_HS_PHY_CTRL2);
-> > +	writel(XCFG_COARSE_TUNE_NUM  | XCFG_FINE_TUNE_NUM,
-> > +				qphy->base + USB2PHY_USB_PHY_M31_XCFGI_11);
-> > +	/* Adjust HSTX slew rate to 565 ps*/
-> > +	/* Adjust PLL lock Time counter for release clock to 35uA */
-> > +	/* Adjust Manual control ODT value to 38.02 Ohm */
-> > +	writel(HSTX_SLEW_RATE_565PS | PLL_CHARGING_PUMP_CURRENT_35UA |
-> > +		ODT_VALUE_38_02_OHM, qphy->base + USB2PHY_USB_PHY_M31_XCFGI_4);
-> These functions seem very similar, with the main difference being that
-> IPQ5332 adds some more writes at the end. Perhaps some commonizing could
-> be done?
+> diff --git a/tools/perf/pmu-events/arch/x86/alderlake/adl-metrics.json b/=
+tools/perf/pmu-events/arch/x86/alderlake/adl-metrics.json
+> index c9f7e3d4ab08..85fb975b6f56 100644
+> --- a/tools/perf/pmu-events/arch/x86/alderlake/adl-metrics.json
+> +++ b/tools/perf/pmu-events/arch/x86/alderlake/adl-metrics.json
+> @@ -129,33 +129,36 @@
+>      },
+>      {
+>          "BriefDescription": "Counts the total number of issue slots  tha=
+t were not consumed by the backend due to backend stalls",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "TOPDOWN_BE_BOUND.ALL / tma_info_core_slots",
+> -        "MetricGroup": "TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_backend_bound",
+>          "MetricThreshold": "tma_backend_bound > 0.1",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "PublicDescription": "Counts the total number of issue slots  th=
+at were not consumed by the backend due to backend stalls.  Note that uops =
+must be available for consumption in order for this event to count.  If a u=
+op is not available (IQ is empty), this event will not count.   The rest of=
+ these subevents count backend stalls, in cycles, due to an outstanding req=
+uest which is memory bound vs core bound.   The subevents are not slot base=
+d events and therefore can not be precisely added or subtracted from the Ba=
+ckend_Bound_Aux subevents which are slot based.",
+>          "ScaleUnit": "100%",
+>          "Unit": "cpu_atom"
+>      },
+>      {
+>          "BriefDescription": "Counts the total number of issue slots  tha=
+t were not consumed by the backend due to backend stalls",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "tma_backend_bound",
+> -        "MetricGroup": "TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_backend_bound_aux",
+>          "MetricThreshold": "tma_backend_bound_aux > 0.2",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "PublicDescription": "Counts the total number of issue slots  th=
+at were not consumed by the backend due to backend stalls.  Note that UOPS =
+must be available for consumption in order for this event to count.  If a u=
+op is not available (IQ is empty), this event will not count.  All of these=
+ subevents count backend stalls, in slots, due to a resource limitation.   =
+These are not cycle based events and therefore can not be precisely added o=
+r subtracted from the Backend_Bound subevents which are cycle based.  These=
+ subevents are supplementary to Backend_Bound and can be used to analyze re=
+sults from a resource perspective at allocation.",
+>          "ScaleUnit": "100%",
+>          "Unit": "cpu_atom"
+>      },
+>      {
+>          "BriefDescription": "Counts the total number of issue slots that=
+ were not consumed by the backend because allocation is stalled due to a mi=
+spredicted jump or a machine clear",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "(tma_info_core_slots - (cpu_atom@TOPDOWN_FE_BOUND=
+.ALL@ + cpu_atom@TOPDOWN_BE_BOUND.ALL@ + cpu_atom@TOPDOWN_RETIRING.ALL@)) /=
+ tma_info_core_slots",
+> -        "MetricGroup": "TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_bad_speculation",
+>          "MetricThreshold": "tma_bad_speculation > 0.15",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "PublicDescription": "Counts the total number of issue slots tha=
+t were not consumed by the backend because allocation is stalled due to a m=
+ispredicted jump or a machine clear. Only issue slots wasted due to fast nu=
+kes such as memory ordering nukes are counted. Other nukes are not accounte=
+d for. Counts all issue slots blocked during this recovery window including=
+ relevant microcode flows and while uops are not yet available in the instr=
+uction queue (IQ). Also includes the issue slots that were consumed by the =
+backend but were thrown away because they were younger than the mispredict =
+or machine clear.",
+>          "ScaleUnit": "100%",
+>          "Unit": "cpu_atom"
+> @@ -295,11 +298,12 @@
+>      },
+>      {
+>          "BriefDescription": "Counts the number of issue slots  that were=
+ not consumed by the backend due to frontend stalls.",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "TOPDOWN_FE_BOUND.ALL / tma_info_core_slots",
+> -        "MetricGroup": "TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_frontend_bound",
+>          "MetricThreshold": "tma_frontend_bound > 0.2",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "ScaleUnit": "100%",
+>          "Unit": "cpu_atom"
+>      },
+> @@ -722,11 +726,12 @@
+>      },
+>      {
+>          "BriefDescription": "Counts the numer of issue slots  that resul=
+t in retirement slots.",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "TOPDOWN_RETIRING.ALL / tma_info_core_slots",
+> -        "MetricGroup": "TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_retiring",
+>          "MetricThreshold": "tma_retiring > 0.75",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "ScaleUnit": "100%",
+>          "Unit": "cpu_atom"
+>      },
+> @@ -832,22 +837,24 @@
+>      },
+>      {
+>          "BriefDescription": "This category represents fraction of slots =
+where no uops are being delivered due to a lack of required resources for a=
+ccepting new uops in the Backend",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "cpu_core@topdown\\-be\\-bound@ / (cpu_core@topdow=
+n\\-fe\\-bound@ + cpu_core@topdown\\-bad\\-spec@ + cpu_core@topdown\\-retir=
+ing@ + cpu_core@topdown\\-be\\-bound@) + 0 * tma_info_thread_slots",
+> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_backend_bound",
+>          "MetricThreshold": "tma_backend_bound > 0.2",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "PublicDescription": "This category represents fraction of slots=
+ where no uops are being delivered due to a lack of required resources for =
+accepting new uops in the Backend. Backend is the portion of the processor =
+core where the out-of-order scheduler dispatches ready uops into their resp=
+ective execution units; and once completed these uops get retired according=
+ to program order. For example; stalls due to data-cache misses or stalls d=
+ue to the divider unit being overloaded are both categorized under Backend =
+Bound. Backend Bound is further divided into two main categories: Memory Bo=
+und and Core Bound. Sample with: TOPDOWN.BACKEND_BOUND_SLOTS",
+>          "ScaleUnit": "100%",
+>          "Unit": "cpu_core"
+>      },
+>      {
+>          "BriefDescription": "This category represents fraction of slots =
+wasted due to incorrect speculations",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "max(1 - (tma_frontend_bound + tma_backend_bound +=
+ tma_retiring), 0)",
+> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_bad_speculation",
+>          "MetricThreshold": "tma_bad_speculation > 0.15",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "PublicDescription": "This category represents fraction of slots=
+ wasted due to incorrect speculations. This include slots used to issue uop=
+s that do not eventually get retired and slots for which the issue-pipeline=
+ was blocked due to recovery from earlier incorrect speculation. For exampl=
+e; wasted work due to miss-predicted branches are categorized under Bad Spe=
+culation category. Incorrect data speculation followed by Memory Ordering N=
+ukes is another example.",
+>          "ScaleUnit": "100%",
+>          "Unit": "cpu_core"
+> @@ -1112,11 +1119,12 @@
+>      },
+>      {
+>          "BriefDescription": "This category represents fraction of slots =
+where the processor's Frontend undersupplies its Backend",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "cpu_core@topdown\\-fe\\-bound@ / (cpu_core@topdow=
+n\\-fe\\-bound@ + cpu_core@topdown\\-bad\\-spec@ + cpu_core@topdown\\-retir=
+ing@ + cpu_core@topdown\\-be\\-bound@) - cpu_core@INT_MISC.UOP_DROPPING@ / =
+tma_info_thread_slots",
+> -        "MetricGroup": "PGO;TmaL1;TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;PGO;TmaL1;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_frontend_bound",
+>          "MetricThreshold": "tma_frontend_bound > 0.15",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "PublicDescription": "This category represents fraction of slots=
+ where the processor's Frontend undersupplies its Backend. Frontend denotes=
+ the first part of the processor core responsible to fetch operations that =
+are executed later on by the Backend part. Within the Frontend; a branch pr=
+edictor predicts the next address to fetch; cache-lines are fetched from th=
+e memory subsystem; parsed into instructions; and lastly decoded into micro=
+-operations (uops). Ideally the Frontend can issue Pipeline_Width uops ever=
+y cycle to the Backend. Frontend Bound denotes unutilized issue-slots when =
+there is no Backend stall; i.e. bubbles where Frontend delivered no uops wh=
+ile Backend could have accepted them. For example; stalls due to instructio=
+n-cache misses would be categorized under Frontend Bound. Sample with: FRON=
+TEND_RETIRED.LATENCY_GE_4_PS",
+>          "ScaleUnit": "100%",
+>          "Unit": "cpu_core"
+> @@ -2316,11 +2324,12 @@
+>      },
+>      {
+>          "BriefDescription": "This category represents fraction of slots =
+utilized by useful work i.e. issued uops that eventually get retired",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "cpu_core@topdown\\-retiring@ / (cpu_core@topdown\=
+\-fe\\-bound@ + cpu_core@topdown\\-bad\\-spec@ + cpu_core@topdown\\-retirin=
+g@ + cpu_core@topdown\\-be\\-bound@) + 0 * tma_info_thread_slots",
+> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_retiring",
+>          "MetricThreshold": "tma_retiring > 0.7 | tma_heavy_operations > =
+0.1",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "PublicDescription": "This category represents fraction of slots=
+ utilized by useful work i.e. issued uops that eventually get retired. Idea=
+lly; all pipeline slots would be attributed to the Retiring category.  Reti=
+ring of 100% would indicate the maximum Pipeline_Width throughput was achie=
+ved.  Maximizing Retiring typically increases the Instructions-per-cycle (s=
+ee IPC metric). Note that a high Retiring value does not necessary mean the=
+re is no room for more performance.  For example; Heavy-operations or Micro=
+code Assists are categorized under Retiring. They often indicate suboptimal=
+ performance and can often be optimized or avoided. Sample with: UOPS_RETIR=
+ED.SLOTS",
+>          "ScaleUnit": "100%",
+>          "Unit": "cpu_core"
+> diff --git a/tools/perf/pmu-events/arch/x86/alderlaken/adln-metrics.json =
+b/tools/perf/pmu-events/arch/x86/alderlaken/adln-metrics.json
+> index ed9ff25a03cf..0f1628d698da 100644
+> --- a/tools/perf/pmu-events/arch/x86/alderlaken/adln-metrics.json
+> +++ b/tools/perf/pmu-events/arch/x86/alderlaken/adln-metrics.json
+> @@ -94,31 +94,34 @@
+>      },
+>      {
+>          "BriefDescription": "Counts the total number of issue slots  tha=
+t were not consumed by the backend due to backend stalls",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "TOPDOWN_BE_BOUND.ALL / tma_info_core_slots",
+> -        "MetricGroup": "TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_backend_bound",
+>          "MetricThreshold": "tma_backend_bound > 0.1",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "PublicDescription": "Counts the total number of issue slots  th=
+at were not consumed by the backend due to backend stalls.  Note that uops =
+must be available for consumption in order for this event to count.  If a u=
+op is not available (IQ is empty), this event will not count.   The rest of=
+ these subevents count backend stalls, in cycles, due to an outstanding req=
+uest which is memory bound vs core bound.   The subevents are not slot base=
+d events and therefore can not be precisely added or subtracted from the Ba=
+ckend_Bound_Aux subevents which are slot based.",
+>          "ScaleUnit": "100%"
+>      },
+>      {
+>          "BriefDescription": "Counts the total number of issue slots  tha=
+t were not consumed by the backend due to backend stalls",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "tma_backend_bound",
+> -        "MetricGroup": "TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_backend_bound_aux",
+>          "MetricThreshold": "tma_backend_bound_aux > 0.2",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "PublicDescription": "Counts the total number of issue slots  th=
+at were not consumed by the backend due to backend stalls.  Note that UOPS =
+must be available for consumption in order for this event to count.  If a u=
+op is not available (IQ is empty), this event will not count.  All of these=
+ subevents count backend stalls, in slots, due to a resource limitation.   =
+These are not cycle based events and therefore can not be precisely added o=
+r subtracted from the Backend_Bound subevents which are cycle based.  These=
+ subevents are supplementary to Backend_Bound and can be used to analyze re=
+sults from a resource perspective at allocation.",
+>          "ScaleUnit": "100%"
+>      },
+>      {
+>          "BriefDescription": "Counts the total number of issue slots that=
+ were not consumed by the backend because allocation is stalled due to a mi=
+spredicted jump or a machine clear",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "(tma_info_core_slots - (TOPDOWN_FE_BOUND.ALL + TO=
+PDOWN_BE_BOUND.ALL + TOPDOWN_RETIRING.ALL)) / tma_info_core_slots",
+> -        "MetricGroup": "TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_bad_speculation",
+>          "MetricThreshold": "tma_bad_speculation > 0.15",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "PublicDescription": "Counts the total number of issue slots tha=
+t were not consumed by the backend because allocation is stalled due to a m=
+ispredicted jump or a machine clear. Only issue slots wasted due to fast nu=
+kes such as memory ordering nukes are counted. Other nukes are not accounte=
+d for. Counts all issue slots blocked during this recovery window including=
+ relevant microcode flows and while uops are not yet available in the instr=
+uction queue (IQ). Also includes the issue slots that were consumed by the =
+backend but were thrown away because they were younger than the mispredict =
+or machine clear.",
+>          "ScaleUnit": "100%"
+>      },
+> @@ -243,11 +246,12 @@
+>      },
+>      {
+>          "BriefDescription": "Counts the number of issue slots  that were=
+ not consumed by the backend due to frontend stalls.",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "TOPDOWN_FE_BOUND.ALL / tma_info_core_slots",
+> -        "MetricGroup": "TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_frontend_bound",
+>          "MetricThreshold": "tma_frontend_bound > 0.2",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "ScaleUnit": "100%"
+>      },
+>      {
+> @@ -612,11 +616,12 @@
+>      },
+>      {
+>          "BriefDescription": "Counts the numer of issue slots  that resul=
+t in retirement slots.",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "TOPDOWN_RETIRING.ALL / tma_info_core_slots",
+> -        "MetricGroup": "TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_retiring",
+>          "MetricThreshold": "tma_retiring > 0.75",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "ScaleUnit": "100%"
+>      },
+>      {
+> diff --git a/tools/perf/pmu-events/arch/x86/icelake/icl-metrics.json b/to=
+ols/perf/pmu-events/arch/x86/icelake/icl-metrics.json
+> index 20210742171d..cc4edf855064 100644
+> --- a/tools/perf/pmu-events/arch/x86/icelake/icl-metrics.json
+> +++ b/tools/perf/pmu-events/arch/x86/icelake/icl-metrics.json
+> @@ -111,21 +111,23 @@
+>      },
+>      {
+>          "BriefDescription": "This category represents fraction of slots =
+where no uops are being delivered due to a lack of required resources for a=
+ccepting new uops in the Backend",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "topdown\\-be\\-bound / (topdown\\-fe\\-bound + to=
+pdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) + 5 * cpu@I=
+NT_MISC.RECOVERY_CYCLES\\,cmask\\=3D1\\,edge@ / tma_info_thread_slots",
+> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_backend_bound",
+>          "MetricThreshold": "tma_backend_bound > 0.2",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "PublicDescription": "This category represents fraction of slots=
+ where no uops are being delivered due to a lack of required resources for =
+accepting new uops in the Backend. Backend is the portion of the processor =
+core where the out-of-order scheduler dispatches ready uops into their resp=
+ective execution units; and once completed these uops get retired according=
+ to program order. For example; stalls due to data-cache misses or stalls d=
+ue to the divider unit being overloaded are both categorized under Backend =
+Bound. Backend Bound is further divided into two main categories: Memory Bo=
+und and Core Bound. Sample with: TOPDOWN.BACKEND_BOUND_SLOTS",
+>          "ScaleUnit": "100%"
+>      },
+>      {
+>          "BriefDescription": "This category represents fraction of slots =
+wasted due to incorrect speculations",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "max(1 - (tma_frontend_bound + tma_backend_bound +=
+ tma_retiring), 0)",
+> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_bad_speculation",
+>          "MetricThreshold": "tma_bad_speculation > 0.15",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "PublicDescription": "This category represents fraction of slots=
+ wasted due to incorrect speculations. This include slots used to issue uop=
+s that do not eventually get retired and slots for which the issue-pipeline=
+ was blocked due to recovery from earlier incorrect speculation. For exampl=
+e; wasted work due to miss-predicted branches are categorized under Bad Spe=
+culation category. Incorrect data speculation followed by Memory Ordering N=
+ukes is another example.",
+>          "ScaleUnit": "100%"
+>      },
+> @@ -372,11 +374,12 @@
+>      },
+>      {
+>          "BriefDescription": "This category represents fraction of slots =
+where the processor's Frontend undersupplies its Backend",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "topdown\\-fe\\-bound / (topdown\\-fe\\-bound + to=
+pdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) - INT_MISC.=
+UOP_DROPPING / tma_info_thread_slots",
+> -        "MetricGroup": "PGO;TmaL1;TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;PGO;TmaL1;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_frontend_bound",
+>          "MetricThreshold": "tma_frontend_bound > 0.15",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "PublicDescription": "This category represents fraction of slots=
+ where the processor's Frontend undersupplies its Backend. Frontend denotes=
+ the first part of the processor core responsible to fetch operations that =
+are executed later on by the Backend part. Within the Frontend; a branch pr=
+edictor predicts the next address to fetch; cache-lines are fetched from th=
+e memory subsystem; parsed into instructions; and lastly decoded into micro=
+-operations (uops). Ideally the Frontend can issue Pipeline_Width uops ever=
+y cycle to the Backend. Frontend Bound denotes unutilized issue-slots when =
+there is no Backend stall; i.e. bubbles where Frontend delivered no uops wh=
+ile Backend could have accepted them. For example; stalls due to instructio=
+n-cache misses would be categorized under Frontend Bound. Sample with: FRON=
+TEND_RETIRED.LATENCY_GE_4_PS",
+>          "ScaleUnit": "100%"
+>      },
+> @@ -1378,11 +1381,12 @@
+>      },
+>      {
+>          "BriefDescription": "This category represents fraction of slots =
+utilized by useful work i.e. issued uops that eventually get retired",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "topdown\\-retiring / (topdown\\-fe\\-bound + topd=
+own\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) + 0 * tma_inf=
+o_thread_slots",
+> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_retiring",
+>          "MetricThreshold": "tma_retiring > 0.7 | tma_heavy_operations > =
+0.1",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "PublicDescription": "This category represents fraction of slots=
+ utilized by useful work i.e. issued uops that eventually get retired. Idea=
+lly; all pipeline slots would be attributed to the Retiring category.  Reti=
+ring of 100% would indicate the maximum Pipeline_Width throughput was achie=
+ved.  Maximizing Retiring typically increases the Instructions-per-cycle (s=
+ee IPC metric). Note that a high Retiring value does not necessary mean the=
+re is no room for more performance.  For example; Heavy-operations or Micro=
+code Assists are categorized under Retiring. They often indicate suboptimal=
+ performance and can often be optimized or avoided. Sample with: UOPS_RETIR=
+ED.SLOTS",
+>          "ScaleUnit": "100%"
+>      },
+> diff --git a/tools/perf/pmu-events/arch/x86/icelakex/icx-metrics.json b/t=
+ools/perf/pmu-events/arch/x86/icelakex/icx-metrics.json
+> index ef25cda019be..6f25b5b7aaf6 100644
+> --- a/tools/perf/pmu-events/arch/x86/icelakex/icx-metrics.json
+> +++ b/tools/perf/pmu-events/arch/x86/icelakex/icx-metrics.json
+> @@ -315,21 +315,23 @@
+>      },
+>      {
+>          "BriefDescription": "This category represents fraction of slots =
+where no uops are being delivered due to a lack of required resources for a=
+ccepting new uops in the Backend",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "topdown\\-be\\-bound / (topdown\\-fe\\-bound + to=
+pdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) + 5 * cpu@I=
+NT_MISC.RECOVERY_CYCLES\\,cmask\\=3D1\\,edge@ / tma_info_thread_slots",
+> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_backend_bound",
+>          "MetricThreshold": "tma_backend_bound > 0.2",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "PublicDescription": "This category represents fraction of slots=
+ where no uops are being delivered due to a lack of required resources for =
+accepting new uops in the Backend. Backend is the portion of the processor =
+core where the out-of-order scheduler dispatches ready uops into their resp=
+ective execution units; and once completed these uops get retired according=
+ to program order. For example; stalls due to data-cache misses or stalls d=
+ue to the divider unit being overloaded are both categorized under Backend =
+Bound. Backend Bound is further divided into two main categories: Memory Bo=
+und and Core Bound. Sample with: TOPDOWN.BACKEND_BOUND_SLOTS",
+>          "ScaleUnit": "100%"
+>      },
+>      {
+>          "BriefDescription": "This category represents fraction of slots =
+wasted due to incorrect speculations",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "max(1 - (tma_frontend_bound + tma_backend_bound +=
+ tma_retiring), 0)",
+> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_bad_speculation",
+>          "MetricThreshold": "tma_bad_speculation > 0.15",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "PublicDescription": "This category represents fraction of slots=
+ wasted due to incorrect speculations. This include slots used to issue uop=
+s that do not eventually get retired and slots for which the issue-pipeline=
+ was blocked due to recovery from earlier incorrect speculation. For exampl=
+e; wasted work due to miss-predicted branches are categorized under Bad Spe=
+culation category. Incorrect data speculation followed by Memory Ordering N=
+ukes is another example.",
+>          "ScaleUnit": "100%"
+>      },
+> @@ -576,11 +578,12 @@
+>      },
+>      {
+>          "BriefDescription": "This category represents fraction of slots =
+where the processor's Frontend undersupplies its Backend",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "topdown\\-fe\\-bound / (topdown\\-fe\\-bound + to=
+pdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) - INT_MISC.=
+UOP_DROPPING / tma_info_thread_slots",
+> -        "MetricGroup": "PGO;TmaL1;TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;PGO;TmaL1;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_frontend_bound",
+>          "MetricThreshold": "tma_frontend_bound > 0.15",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "PublicDescription": "This category represents fraction of slots=
+ where the processor's Frontend undersupplies its Backend. Frontend denotes=
+ the first part of the processor core responsible to fetch operations that =
+are executed later on by the Backend part. Within the Frontend; a branch pr=
+edictor predicts the next address to fetch; cache-lines are fetched from th=
+e memory subsystem; parsed into instructions; and lastly decoded into micro=
+-operations (uops). Ideally the Frontend can issue Pipeline_Width uops ever=
+y cycle to the Backend. Frontend Bound denotes unutilized issue-slots when =
+there is no Backend stall; i.e. bubbles where Frontend delivered no uops wh=
+ile Backend could have accepted them. For example; stalls due to instructio=
+n-cache misses would be categorized under Frontend Bound. Sample with: FRON=
+TEND_RETIRED.LATENCY_GE_4_PS",
+>          "ScaleUnit": "100%"
+>      },
+> @@ -1674,11 +1677,12 @@
+>      },
+>      {
+>          "BriefDescription": "This category represents fraction of slots =
+utilized by useful work i.e. issued uops that eventually get retired",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "topdown\\-retiring / (topdown\\-fe\\-bound + topd=
+own\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) + 0 * tma_inf=
+o_thread_slots",
+> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_retiring",
+>          "MetricThreshold": "tma_retiring > 0.7 | tma_heavy_operations > =
+0.1",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "PublicDescription": "This category represents fraction of slots=
+ utilized by useful work i.e. issued uops that eventually get retired. Idea=
+lly; all pipeline slots would be attributed to the Retiring category.  Reti=
+ring of 100% would indicate the maximum Pipeline_Width throughput was achie=
+ved.  Maximizing Retiring typically increases the Instructions-per-cycle (s=
+ee IPC metric). Note that a high Retiring value does not necessary mean the=
+re is no room for more performance.  For example; Heavy-operations or Micro=
+code Assists are categorized under Retiring. They often indicate suboptimal=
+ performance and can often be optimized or avoided. Sample with: UOPS_RETIR=
+ED.SLOTS",
+>          "ScaleUnit": "100%"
+>      },
+> diff --git a/tools/perf/pmu-events/arch/x86/sapphirerapids/spr-metrics.js=
+on b/tools/perf/pmu-events/arch/x86/sapphirerapids/spr-metrics.json
+> index 4f3dd85540b6..c732982f70b5 100644
+> --- a/tools/perf/pmu-events/arch/x86/sapphirerapids/spr-metrics.json
+> +++ b/tools/perf/pmu-events/arch/x86/sapphirerapids/spr-metrics.json
+> @@ -340,31 +340,34 @@
+>      },
+>      {
+>          "BriefDescription": "This category represents fraction of slots =
+where no uops are being delivered due to a lack of required resources for a=
+ccepting new uops in the Backend",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "topdown\\-be\\-bound / (topdown\\-fe\\-bound + to=
+pdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) + 0 * tma_i=
+nfo_thread_slots",
+> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_backend_bound",
+>          "MetricThreshold": "tma_backend_bound > 0.2",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "PublicDescription": "This category represents fraction of slots=
+ where no uops are being delivered due to a lack of required resources for =
+accepting new uops in the Backend. Backend is the portion of the processor =
+core where the out-of-order scheduler dispatches ready uops into their resp=
+ective execution units; and once completed these uops get retired according=
+ to program order. For example; stalls due to data-cache misses or stalls d=
+ue to the divider unit being overloaded are both categorized under Backend =
+Bound. Backend Bound is further divided into two main categories: Memory Bo=
+und and Core Bound. Sample with: TOPDOWN.BACKEND_BOUND_SLOTS",
+>          "ScaleUnit": "100%"
+>      },
+>      {
+>          "BriefDescription": "This category represents fraction of slots =
+wasted due to incorrect speculations",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "max(1 - (tma_frontend_bound + tma_backend_bound +=
+ tma_retiring), 0)",
+> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_bad_speculation",
+>          "MetricThreshold": "tma_bad_speculation > 0.15",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "PublicDescription": "This category represents fraction of slots=
+ wasted due to incorrect speculations. This include slots used to issue uop=
+s that do not eventually get retired and slots for which the issue-pipeline=
+ was blocked due to recovery from earlier incorrect speculation. For exampl=
+e; wasted work due to miss-predicted branches are categorized under Bad Spe=
+culation category. Incorrect data speculation followed by Memory Ordering N=
+ukes is another example.",
+>          "ScaleUnit": "100%"
+>      },
+>      {
+>          "BriefDescription": "This metric represents fraction of slots th=
+e CPU has wasted due to Branch Misprediction",
+> +        "DefaultMetricgroupName": "TopdownL2",
+>          "MetricExpr": "topdown\\-br\\-mispredict / (topdown\\-fe\\-bound=
+ + topdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) + 0 * =
+tma_info_thread_slots",
+> -        "MetricGroup": "BadSpec;BrMispredicts;TmaL2;TopdownL2;tma_L2_gro=
+up;tma_bad_speculation_group;tma_issueBM",
+> +        "MetricGroup": "BadSpec;BrMispredicts;Default;TmaL2;TopdownL2;tm=
+a_L2_group;tma_bad_speculation_group;tma_issueBM",
+>          "MetricName": "tma_branch_mispredicts",
+>          "MetricThreshold": "tma_branch_mispredicts > 0.1 & tma_bad_specu=
+lation > 0.15",
+> -        "MetricgroupNoGroup": "TopdownL2",
+> +        "MetricgroupNoGroup": "TopdownL2;Default",
+>          "PublicDescription": "This metric represents fraction of slots t=
+he CPU has wasted due to Branch Misprediction.  These slots are either wast=
+ed by uops fetched from an incorrectly speculated program path; or stalls w=
+hen the out-of-order part of the machine needs to recover its state from a =
+speculative path. Sample with: TOPDOWN.BR_MISPREDICT_SLOTS. Related metrics=
+: tma_info_bad_spec_branch_misprediction_cost, tma_info_bottleneck_mispredi=
+ctions, tma_mispredicts_resteers",
+>          "ScaleUnit": "100%"
+>      },
+> @@ -407,11 +410,12 @@
+>      },
+>      {
+>          "BriefDescription": "This metric represents fraction of slots wh=
+ere Core non-memory issues were of a bottleneck",
+> +        "DefaultMetricgroupName": "TopdownL2",
+>          "MetricExpr": "max(0, tma_backend_bound - tma_memory_bound)",
+> -        "MetricGroup": "Backend;Compute;TmaL2;TopdownL2;tma_L2_group;tma=
+_backend_bound_group",
+> +        "MetricGroup": "Backend;Compute;Default;TmaL2;TopdownL2;tma_L2_g=
+roup;tma_backend_bound_group",
+>          "MetricName": "tma_core_bound",
+>          "MetricThreshold": "tma_core_bound > 0.1 & tma_backend_bound > 0=
+.2",
+> -        "MetricgroupNoGroup": "TopdownL2",
+> +        "MetricgroupNoGroup": "TopdownL2;Default",
+>          "PublicDescription": "This metric represents fraction of slots w=
+here Core non-memory issues were of a bottleneck.  Shortage in hardware com=
+pute resources; or dependencies in software's instructions are both categor=
+ized under Core Bound. Hence it may indicate the machine ran out of an out-=
+of-order resource; certain execution units are overloaded or dependencies i=
+n program's data- or instruction-flow are limiting the performance (e.g. FP=
+-chained long-latency arithmetic operations).",
+>          "ScaleUnit": "100%"
+>      },
+> @@ -509,21 +513,23 @@
+>      },
+>      {
+>          "BriefDescription": "This metric represents fraction of slots th=
+e CPU was stalled due to Frontend bandwidth issues",
+> +        "DefaultMetricgroupName": "TopdownL2",
+>          "MetricExpr": "max(0, tma_frontend_bound - tma_fetch_latency)",
+> -        "MetricGroup": "FetchBW;Frontend;TmaL2;TopdownL2;tma_L2_group;tm=
+a_frontend_bound_group;tma_issueFB",
+> +        "MetricGroup": "Default;FetchBW;Frontend;TmaL2;TopdownL2;tma_L2_=
+group;tma_frontend_bound_group;tma_issueFB",
+>          "MetricName": "tma_fetch_bandwidth",
+>          "MetricThreshold": "tma_fetch_bandwidth > 0.1 & tma_frontend_bou=
+nd > 0.15 & tma_info_thread_ipc / 6 > 0.35",
+> -        "MetricgroupNoGroup": "TopdownL2",
+> +        "MetricgroupNoGroup": "TopdownL2;Default",
+>          "PublicDescription": "This metric represents fraction of slots t=
+he CPU was stalled due to Frontend bandwidth issues.  For example; ineffici=
+encies at the instruction decoders; or restrictions for caching in the DSB =
+(decoded uops cache) are categorized under Fetch Bandwidth. In such cases; =
+the Frontend typically delivers suboptimal amount of uops to the Backend. S=
+ample with: FRONTEND_RETIRED.LATENCY_GE_2_BUBBLES_GE_1_PS;FRONTEND_RETIRED.=
+LATENCY_GE_1_PS;FRONTEND_RETIRED.LATENCY_GE_2_PS. Related metrics: tma_dsb_=
+switches, tma_info_botlnk_l2_dsb_misses, tma_info_frontend_dsb_coverage, tm=
+a_info_inst_mix_iptb, tma_lcp",
+>          "ScaleUnit": "100%"
+>      },
+>      {
+>          "BriefDescription": "This metric represents fraction of slots th=
+e CPU was stalled due to Frontend latency issues",
+> +        "DefaultMetricgroupName": "TopdownL2",
+>          "MetricExpr": "topdown\\-fetch\\-lat / (topdown\\-fe\\-bound + t=
+opdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) - INT_MISC=
+.UOP_DROPPING / tma_info_thread_slots",
+> -        "MetricGroup": "Frontend;TmaL2;TopdownL2;tma_L2_group;tma_fronte=
+nd_bound_group",
+> +        "MetricGroup": "Default;Frontend;TmaL2;TopdownL2;tma_L2_group;tm=
+a_frontend_bound_group",
+>          "MetricName": "tma_fetch_latency",
+>          "MetricThreshold": "tma_fetch_latency > 0.1 & tma_frontend_bound=
+ > 0.15",
+> -        "MetricgroupNoGroup": "TopdownL2",
+> +        "MetricgroupNoGroup": "TopdownL2;Default",
+>          "PublicDescription": "This metric represents fraction of slots t=
+he CPU was stalled due to Frontend latency issues.  For example; instructio=
+n-cache misses; iTLB misses or fetch stalls after a branch misprediction ar=
+e categorized under Frontend Latency. In such cases; the Frontend eventuall=
+y delivers no uops for some period. Sample with: FRONTEND_RETIRED.LATENCY_G=
+E_16_PS;FRONTEND_RETIRED.LATENCY_GE_8_PS",
+>          "ScaleUnit": "100%"
+>      },
+> @@ -611,11 +617,12 @@
+>      },
+>      {
+>          "BriefDescription": "This category represents fraction of slots =
+where the processor's Frontend undersupplies its Backend",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "topdown\\-fe\\-bound / (topdown\\-fe\\-bound + to=
+pdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) - INT_MISC.=
+UOP_DROPPING / tma_info_thread_slots",
+> -        "MetricGroup": "PGO;TmaL1;TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;PGO;TmaL1;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_frontend_bound",
+>          "MetricThreshold": "tma_frontend_bound > 0.15",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "PublicDescription": "This category represents fraction of slots=
+ where the processor's Frontend undersupplies its Backend. Frontend denotes=
+ the first part of the processor core responsible to fetch operations that =
+are executed later on by the Backend part. Within the Frontend; a branch pr=
+edictor predicts the next address to fetch; cache-lines are fetched from th=
+e memory subsystem; parsed into instructions; and lastly decoded into micro=
+-operations (uops). Ideally the Frontend can issue Pipeline_Width uops ever=
+y cycle to the Backend. Frontend Bound denotes unutilized issue-slots when =
+there is no Backend stall; i.e. bubbles where Frontend delivered no uops wh=
+ile Backend could have accepted them. For example; stalls due to instructio=
+n-cache misses would be categorized under Frontend Bound. Sample with: FRON=
+TEND_RETIRED.LATENCY_GE_4_PS",
+>          "ScaleUnit": "100%"
+>      },
+> @@ -630,11 +637,12 @@
+>      },
+>      {
+>          "BriefDescription": "This metric represents fraction of slots wh=
+ere the CPU was retiring heavy-weight operations -- instructions that requi=
+re two or more uops or micro-coded sequences",
+> +        "DefaultMetricgroupName": "TopdownL2",
+>          "MetricExpr": "topdown\\-heavy\\-ops / (topdown\\-fe\\-bound + t=
+opdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) + 0 * tma_=
+info_thread_slots",
+> -        "MetricGroup": "Retire;TmaL2;TopdownL2;tma_L2_group;tma_retiring=
+_group",
+> +        "MetricGroup": "Default;Retire;TmaL2;TopdownL2;tma_L2_group;tma_=
+retiring_group",
+>          "MetricName": "tma_heavy_operations",
+>          "MetricThreshold": "tma_heavy_operations > 0.1",
+> -        "MetricgroupNoGroup": "TopdownL2",
+> +        "MetricgroupNoGroup": "TopdownL2;Default",
+>          "PublicDescription": "This metric represents fraction of slots w=
+here the CPU was retiring heavy-weight operations -- instructions that requ=
+ire two or more uops or micro-coded sequences. This highly-correlates with =
+the uop length of these instructions/sequences. Sample with: UOPS_RETIRED.H=
+EAVY",
+>          "ScaleUnit": "100%"
+>      },
+> @@ -1486,11 +1494,12 @@
+>      },
+>      {
+>          "BriefDescription": "This metric represents fraction of slots wh=
+ere the CPU was retiring light-weight operations -- instructions that requi=
+re no more than one uop (micro-operation)",
+> +        "DefaultMetricgroupName": "TopdownL2",
+>          "MetricExpr": "max(0, tma_retiring - tma_heavy_operations)",
+> -        "MetricGroup": "Retire;TmaL2;TopdownL2;tma_L2_group;tma_retiring=
+_group",
+> +        "MetricGroup": "Default;Retire;TmaL2;TopdownL2;tma_L2_group;tma_=
+retiring_group",
+>          "MetricName": "tma_light_operations",
+>          "MetricThreshold": "tma_light_operations > 0.6",
+> -        "MetricgroupNoGroup": "TopdownL2",
+> +        "MetricgroupNoGroup": "TopdownL2;Default",
+>          "PublicDescription": "This metric represents fraction of slots w=
+here the CPU was retiring light-weight operations -- instructions that requ=
+ire no more than one uop (micro-operation). This correlates with total numb=
+er of instructions used by the program. A uops-per-instruction (see UopPI m=
+etric) ratio of 1 or less should be expected for decently optimized softwar=
+e running on Intel Core/Xeon products. While this often indicates efficient=
+ X86 instructions were executed; high value does not necessarily mean bette=
+r performance cannot be achieved. Sample with: INST_RETIRED.PREC_DIST",
+>          "ScaleUnit": "100%"
+>      },
+> @@ -1540,11 +1549,12 @@
+>      },
+>      {
+>          "BriefDescription": "This metric represents fraction of slots th=
+e CPU has wasted due to Machine Clears",
+> +        "DefaultMetricgroupName": "TopdownL2",
+>          "MetricExpr": "max(0, tma_bad_speculation - tma_branch_mispredic=
+ts)",
+> -        "MetricGroup": "BadSpec;MachineClears;TmaL2;TopdownL2;tma_L2_gro=
+up;tma_bad_speculation_group;tma_issueMC;tma_issueSyncxn",
+> +        "MetricGroup": "BadSpec;Default;MachineClears;TmaL2;TopdownL2;tm=
+a_L2_group;tma_bad_speculation_group;tma_issueMC;tma_issueSyncxn",
+>          "MetricName": "tma_machine_clears",
+>          "MetricThreshold": "tma_machine_clears > 0.1 & tma_bad_speculati=
+on > 0.15",
+> -        "MetricgroupNoGroup": "TopdownL2",
+> +        "MetricgroupNoGroup": "TopdownL2;Default",
+>          "PublicDescription": "This metric represents fraction of slots t=
+he CPU has wasted due to Machine Clears.  These slots are either wasted by =
+uops fetched prior to the clear; or stalls the out-of-order portion of the =
+machine needs to recover its state after the clear. For example; this can h=
+appen due to memory ordering Nukes (e.g. Memory Disambiguation) or Self-Mod=
+ifying-Code (SMC) nukes. Sample with: MACHINE_CLEARS.COUNT. Related metrics=
+: tma_clears_resteers, tma_contested_accesses, tma_data_sharing, tma_false_=
+sharing, tma_l1_bound, tma_microcode_sequencer, tma_ms_switches, tma_remote=
+_cache",
+>          "ScaleUnit": "100%"
+>      },
+> @@ -1576,11 +1586,12 @@
+>      },
+>      {
+>          "BriefDescription": "This metric represents fraction of slots th=
+e Memory subsystem within the Backend was a bottleneck",
+> +        "DefaultMetricgroupName": "TopdownL2",
+>          "MetricExpr": "topdown\\-mem\\-bound / (topdown\\-fe\\-bound + t=
+opdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) + 0 * tma_=
+info_thread_slots",
+> -        "MetricGroup": "Backend;TmaL2;TopdownL2;tma_L2_group;tma_backend=
+_bound_group",
+> +        "MetricGroup": "Backend;Default;TmaL2;TopdownL2;tma_L2_group;tma=
+_backend_bound_group",
+>          "MetricName": "tma_memory_bound",
+>          "MetricThreshold": "tma_memory_bound > 0.2 & tma_backend_bound >=
+ 0.2",
+> -        "MetricgroupNoGroup": "TopdownL2",
+> +        "MetricgroupNoGroup": "TopdownL2;Default",
+>          "PublicDescription": "This metric represents fraction of slots t=
+he Memory subsystem within the Backend was a bottleneck.  Memory Bound esti=
+mates fraction of slots where pipeline is likely stalled due to demand load=
+ or store instructions. This accounts mainly for (1) non-completed in-fligh=
+t memory demand loads which coincides with execution units starvation; in a=
+ddition to (2) cases where stores could impose backpressure on the pipeline=
+ when many of them get buffered at the same time (less common out of the tw=
+o).",
+>          "ScaleUnit": "100%"
+>      },
+> @@ -1784,11 +1795,12 @@
+>      },
+>      {
+>          "BriefDescription": "This category represents fraction of slots =
+utilized by useful work i.e. issued uops that eventually get retired",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "topdown\\-retiring / (topdown\\-fe\\-bound + topd=
+own\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) + 0 * tma_inf=
+o_thread_slots",
+> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_retiring",
+>          "MetricThreshold": "tma_retiring > 0.7 | tma_heavy_operations > =
+0.1",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "PublicDescription": "This category represents fraction of slots=
+ utilized by useful work i.e. issued uops that eventually get retired. Idea=
+lly; all pipeline slots would be attributed to the Retiring category.  Reti=
+ring of 100% would indicate the maximum Pipeline_Width throughput was achie=
+ved.  Maximizing Retiring typically increases the Instructions-per-cycle (s=
+ee IPC metric). Note that a high Retiring value does not necessary mean the=
+re is no room for more performance.  For example; Heavy-operations or Micro=
+code Assists are categorized under Retiring. They often indicate suboptimal=
+ performance and can often be optimized or avoided. Sample with: UOPS_RETIR=
+ED.SLOTS",
+>          "ScaleUnit": "100%"
+>      },
+> diff --git a/tools/perf/pmu-events/arch/x86/tigerlake/tgl-metrics.json b/=
+tools/perf/pmu-events/arch/x86/tigerlake/tgl-metrics.json
+> index d0538a754288..83346911aa63 100644
+> --- a/tools/perf/pmu-events/arch/x86/tigerlake/tgl-metrics.json
+> +++ b/tools/perf/pmu-events/arch/x86/tigerlake/tgl-metrics.json
+> @@ -105,21 +105,23 @@
+>      },
+>      {
+>          "BriefDescription": "This category represents fraction of slots =
+where no uops are being delivered due to a lack of required resources for a=
+ccepting new uops in the Backend",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "topdown\\-be\\-bound / (topdown\\-fe\\-bound + to=
+pdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) + 5 * cpu@I=
+NT_MISC.RECOVERY_CYCLES\\,cmask\\=3D1\\,edge@ / tma_info_thread_slots",
+> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_backend_bound",
+>          "MetricThreshold": "tma_backend_bound > 0.2",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "PublicDescription": "This category represents fraction of slots=
+ where no uops are being delivered due to a lack of required resources for =
+accepting new uops in the Backend. Backend is the portion of the processor =
+core where the out-of-order scheduler dispatches ready uops into their resp=
+ective execution units; and once completed these uops get retired according=
+ to program order. For example; stalls due to data-cache misses or stalls d=
+ue to the divider unit being overloaded are both categorized under Backend =
+Bound. Backend Bound is further divided into two main categories: Memory Bo=
+und and Core Bound. Sample with: TOPDOWN.BACKEND_BOUND_SLOTS",
+>          "ScaleUnit": "100%"
+>      },
+>      {
+>          "BriefDescription": "This category represents fraction of slots =
+wasted due to incorrect speculations",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "max(1 - (tma_frontend_bound + tma_backend_bound +=
+ tma_retiring), 0)",
+> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_bad_speculation",
+>          "MetricThreshold": "tma_bad_speculation > 0.15",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "PublicDescription": "This category represents fraction of slots=
+ wasted due to incorrect speculations. This include slots used to issue uop=
+s that do not eventually get retired and slots for which the issue-pipeline=
+ was blocked due to recovery from earlier incorrect speculation. For exampl=
+e; wasted work due to miss-predicted branches are categorized under Bad Spe=
+culation category. Incorrect data speculation followed by Memory Ordering N=
+ukes is another example.",
+>          "ScaleUnit": "100%"
+>      },
+> @@ -366,11 +368,12 @@
+>      },
+>      {
+>          "BriefDescription": "This category represents fraction of slots =
+where the processor's Frontend undersupplies its Backend",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "topdown\\-fe\\-bound / (topdown\\-fe\\-bound + to=
+pdown\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) - INT_MISC.=
+UOP_DROPPING / tma_info_thread_slots",
+> -        "MetricGroup": "PGO;TmaL1;TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;PGO;TmaL1;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_frontend_bound",
+>          "MetricThreshold": "tma_frontend_bound > 0.15",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "PublicDescription": "This category represents fraction of slots=
+ where the processor's Frontend undersupplies its Backend. Frontend denotes=
+ the first part of the processor core responsible to fetch operations that =
+are executed later on by the Backend part. Within the Frontend; a branch pr=
+edictor predicts the next address to fetch; cache-lines are fetched from th=
+e memory subsystem; parsed into instructions; and lastly decoded into micro=
+-operations (uops). Ideally the Frontend can issue Pipeline_Width uops ever=
+y cycle to the Backend. Frontend Bound denotes unutilized issue-slots when =
+there is no Backend stall; i.e. bubbles where Frontend delivered no uops wh=
+ile Backend could have accepted them. For example; stalls due to instructio=
+n-cache misses would be categorized under Frontend Bound. Sample with: FRON=
+TEND_RETIRED.LATENCY_GE_4_PS",
+>          "ScaleUnit": "100%"
+>      },
+> @@ -1392,11 +1395,12 @@
+>      },
+>      {
+>          "BriefDescription": "This category represents fraction of slots =
+utilized by useful work i.e. issued uops that eventually get retired",
+> +        "DefaultMetricgroupName": "TopdownL1",
+>          "MetricExpr": "topdown\\-retiring / (topdown\\-fe\\-bound + topd=
+own\\-bad\\-spec + topdown\\-retiring + topdown\\-be\\-bound) + 0 * tma_inf=
+o_thread_slots",
+> -        "MetricGroup": "TmaL1;TopdownL1;tma_L1_group",
+> +        "MetricGroup": "Default;TmaL1;TopdownL1;tma_L1_group",
+>          "MetricName": "tma_retiring",
+>          "MetricThreshold": "tma_retiring > 0.7 | tma_heavy_operations > =
+0.1",
+> -        "MetricgroupNoGroup": "TopdownL1",
+> +        "MetricgroupNoGroup": "TopdownL1;Default",
+>          "PublicDescription": "This category represents fraction of slots=
+ utilized by useful work i.e. issued uops that eventually get retired. Idea=
+lly; all pipeline slots would be attributed to the Retiring category.  Reti=
+ring of 100% would indicate the maximum Pipeline_Width throughput was achie=
+ved.  Maximizing Retiring typically increases the Instructions-per-cycle (s=
+ee IPC metric). Note that a high Retiring value does not necessary mean the=
+re is no room for more performance.  For example; Heavy-operations or Micro=
+code Assists are categorized under Retiring. They often indicate suboptimal=
+ performance and can often be optimized or avoided. Sample with: UOPS_RETIR=
+ED.SLOTS",
+>          "ScaleUnit": "100%"
+>      },
+> --
+> 2.35.1
 >
-> > +	/*
-> > +	 * Enable to always turn on USB 2.0 TX driver
-> > +	 * when system is in USB 2.0 HS mode
-> > +	 */
-> > +	writel(USB2_0_TX_ENABLE, qphy->base + USB2PHY_USB_PHY_M31_XCFGI_1);
-> > +	/* Adjust Manual control ODT value to 45.02 Ohm */
-> > +	/* Adjust HSTX Pre-emphasis level to 0.55mA */
-> > +	writel(ODT_VALUE_45_02_OHM | HSTX_PRE_EMPHASIS_LEVEL_0_55MA,
-> > +		qphy->base + USB2PHY_USB_PHY_M31_XCFGI_5);
-> > +	udelay(4);
-> > +	writel(0x0, qphy->base + USB_PHY_UTMI_CTRL5);
-> > +	writel(USB2_SUSPEND_N | USB2_UTMI_CLK_EN,
-> > +		qphy->base + USB_PHY_HS_PHY_CTRL2);
-> > +}
-
-Will change the above to table based register init, based on
-compatible/data.
-
-> > +
-> > +static int m31usb_phy_init(struct usb_phy *phy)
-> > +{
-> > +	struct m31usb_phy *qphy = container_of(phy, struct m31usb_phy, phy);
-> > +
-> > +	/* Perform phy reset */
-> > +	m31usb_reset(qphy, CLK_RESET_ASSERT);
-> > +	usleep_range(1, 5);
-> https://www.kernel.org/doc/Documentation/timers/timers-howto.txt
->
-> this may not work as intended
-
-Will change it to udelay(5).
-
-> > +	m31usb_reset(qphy, CLK_RESET_DEASSERT);
-> > +
-> > +	/* configure for ULPI mode if requested */
-> > +	if (qphy->ulpi_mode)
-> > +		writel_relaxed(0x0, qphy->base + USB2PHY_PORT_UTMI_CTRL2);
-> > +
-> > +	/* Enable the PHY */
-> > +	writel_relaxed(POWER_UP, qphy->base + USB2PHY_PORT_POWERDOWN);
-> > +
-> > +	/* Make sure above write completed */
-> > +	wmb();
-> As you're calling wmb in the reset func, dropping _relaxed from the
-> ULPI and PORT_POWERDOWN writes should work the same
-
-Ok.
-
-> > +
-> > +	/* Turn on phy ref clock*/
-> > +	if (of_device_is_compatible(phy->dev->of_node,
-> > +					"qcom,ipq5332-m31-usb-hsphy"))
-> > +		ipq5332_m31usb_phy_enable_clock(qphy);
-> > +	else
-> > +		m31usb_phy_enable_clock(qphy);
-> This should be done using OF match data.
-
-Ok.
-
-> > +
-> > +	/* Set OTG VBUS Valid from HSPHY to controller */
-> > +	m31usb_write_readback(qphy->qscratch_base, HS_PHY_CTRL_REG,
-> > +				UTMI_OTG_VBUS_VALID, UTMI_OTG_VBUS_VALID);
-> > +	/* Indicate value is driven by UTMI_OTG_VBUS_VALID bit */
-> > +	m31usb_write_readback(qphy->qscratch_base, HS_PHY_CTRL_REG,
-> > +				SW_SESSVLD_SEL, SW_SESSVLD_SEL);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static void m31usb_phy_shutdown(struct usb_phy *phy)
-> > +{
-> > +	struct m31usb_phy *qphy = container_of(phy, struct m31usb_phy, phy);
-> > +
-> > +	/* Disable the PHY */
-> > +	writel_relaxed(POWER_DOWN, qphy->base + USB2PHY_PORT_POWERDOWN);
-> > +	/* Make sure above write completed */
-> > +	wmb();
-> > +}
-> > +
-> > +static void m31usb_write_readback(void *base, u32 offset,
-> > +					const u32 mask, u32 val)
-> The indentation here makes `const u32..` misaligned.
->
-> > +{
-> > +	u32 write_val, tmp = readl_relaxed(base + offset);
-> > +
-> > +	tmp &= ~mask; /* retain other bits */
-> > +	write_val = tmp | val;
-> > +
-> > +	writel_relaxed(write_val, base + offset);
-> > +	/* Make sure above write completed */
-> > +	wmb();
-> > +
-> > +	/* Read back to see if val was written */
-> > +	tmp = readl_relaxed(base + offset);
-> > +	tmp &= mask; /* clear other bits */
-> > +
-> > +	if (tmp != val)
-> > +		pr_err("%s: write: %x to QSCRATCH: %x FAILED\n",
-> > +			__func__, val, offset);
-> > +}
-> > +
-> > +static int m31usb_phy_notify_connect(struct usb_phy *phy,
-> > +					enum usb_device_speed speed)
-> > +{
-> > +	struct m31usb_phy *qphy = container_of(phy, struct m31usb_phy, phy);
-> > +
-> > +	qphy->cable_connected = true;
-> > +
-> > +	dev_dbg(phy->dev, " cable_connected=%d\n", qphy->cable_connected);
-> spurious space at the beginning of the string
->
-> > +
-> > +	/* Set OTG VBUS Valid from HSPHY to controller */
-> > +	m31usb_write_readback(qphy->qscratch_base, HS_PHY_CTRL_REG,
-> > +				UTMI_OTG_VBUS_VALID,
-> > +				UTMI_OTG_VBUS_VALID);
-> Please align the lines with the previous opening bracket
->
-> > +
-> > +	/* Indicate value is driven by UTMI_OTG_VBUS_VALID bit */
-> > +	m31usb_write_readback(qphy->qscratch_base, HS_PHY_CTRL_REG,
-> > +				SW_SESSVLD_SEL, SW_SESSVLD_SEL);
-> > +
-> > +	dev_dbg(phy->dev, "M31USB2 phy connect notification\n");
-> > +	return 0;
-> > +}
-> > +
-> > +static int m31usb_phy_notify_disconnect(struct usb_phy *phy,
-> > +					enum usb_device_speed speed)
-> > +{
-> > +	struct m31usb_phy *qphy = container_of(phy, struct m31usb_phy, phy);
-> > +
-> > +	qphy->cable_connected = false;
-> > +
-> > +	dev_dbg(phy->dev, " cable_connected=%d\n", qphy->cable_connected);
-> > +
-> > +	/* Set OTG VBUS Valid from HSPHY to controller */
-> > +	m31usb_write_readback(qphy->qscratch_base, HS_PHY_CTRL_REG,
-> > +				UTMI_OTG_VBUS_VALID, 0);
-> > +
-> > +	/* Indicate value is driven by UTMI_OTG_VBUS_VALID bit */
-> > +	m31usb_write_readback(qphy->qscratch_base, HS_PHY_CTRL_REG,
-> > +				SW_SESSVLD_SEL, 0);
-> > +
-> > +	dev_dbg(phy->dev, "M31USB2 phy disconnect notification\n");
-> > +	return 0;
-> > +}
-
-Will remove these functions. They are accessing 'qscratch' area that
-is part of the controller space. It doesn't belong in this driver.
-
-> > +static int m31usb_phy_probe(struct platform_device *pdev)
-> > +{
-> > +	struct m31usb_phy *qphy;
-> > +	struct device *dev = &pdev->dev;
-> > +	struct resource *res;
-> > +	int ret;
-> > +	const char *phy_type;
-> Please sort these in a reverse-Christmas-tree order.
-
-ok.
-
-> > +
-> > +	qphy = devm_kzalloc(dev, sizeof(*qphy), GFP_KERNEL);
-> > +	if (!qphy)
-> > +		return -ENOMEM;
-> > +
-> > +	qphy->phy.dev = dev;
-> > +
-> > +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
-> > +							"m31usb_phy_base");
-> > +	qphy->base = devm_ioremap_resource(dev, res);
-> devm_platform_get_and_ioremap_resource?
-
-ok.
-
-> > +	if (IS_ERR(qphy->base))
-> > +		return PTR_ERR(qphy->base);
-> > +
-> > +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
-> > +							"qscratch_base");
-> > +	if (res) {
-> Do we expect platforms without this register space?
->
-> > +		qphy->qscratch_base = devm_ioremap(dev, res->start,
-> > +							resource_size(res));
-> > +		if (IS_ERR(qphy->qscratch_base)) {
-> > +			dev_dbg(dev, "couldn't ioremap qscratch_base\n");
-> > +			qphy->qscratch_base = NULL;
-> > +		}
-> > +	}
-
-Will remove this qscratch code.
-
-> > +	qphy->phy_reset = devm_reset_control_get(dev, "usb2_phy_reset");
-> not _exclusive?
-
-Ok.
-
-> > +	if (IS_ERR(qphy->phy_reset))
-> > +		return PTR_ERR(qphy->phy_reset);
-> > +
-> > +	qphy->ulpi_mode = false;
-> > +	ret = of_property_read_string(dev->of_node, "phy_type", &phy_type);
-> of_usb_get_phy_mode?
-
-Ok.
-
-> > +
-> > +	if (!ret) {
-> > +		if (!strcasecmp(phy_type, "ulpi"))
-> > +			qphy->ulpi_mode = true;
-> > +	} else {
-> > +		dev_err(dev, "error reading phy_type property\n");
-> > +		return ret;
-> > +	}
-> > +
-> > +	platform_set_drvdata(pdev, qphy);
-> > +
-> > +	qphy->phy.label			= "qcom-m31usb-phy";
-> > +	qphy->phy.init			= m31usb_phy_init;
-> > +	qphy->phy.shutdown		= m31usb_phy_shutdown;
-> > +	qphy->phy.type			= USB_PHY_TYPE_USB2;
-> > +
-> > +	if (qphy->qscratch_base) {
-> > +		qphy->phy.notify_connect        = m31usb_phy_notify_connect;
-> > +		qphy->phy.notify_disconnect     = m31usb_phy_notify_disconnect;
-> > +	}
-> > +
-> > +	ret = usb_add_phy_dev(&qphy->phy);
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +static int m31usb_phy_remove(struct platform_device *pdev)
-> Please make this return void and pass it to .remove_new
-
-Ok.
-
-> > +{
-> > +	struct m31usb_phy *qphy = platform_get_drvdata(pdev);
-> > +
-> > +	usb_remove_phy(&qphy->phy);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static const struct of_device_id m31usb_phy_id_table[] = {
-> > +	{ .compatible = "qcom,m31-usb-hsphy",},
-> > +	{ .compatible = "qcom,ipq5332-m31-usb-hsphy",},
-> > +	{ },
-> > +};
-> > +MODULE_DEVICE_TABLE(of, m31usb_phy_id_table);
-> > +
-> > +static struct platform_driver m31usb_phy_driver = {
-> > +	.probe		= m31usb_phy_probe,
-> > +	.remove		= m31usb_phy_remove,
-> > +	.driver = {
-> > +		.name	= "qcom-m31usb-phy",
-> > +		.of_match_table = of_match_ptr(m31usb_phy_id_table),
-> of_match_ptr is unnecessary, this driver depends on OF.
-
-Ok.
-
-Thanks
-Varada
-
-> Konrad
-> > +	},
-> > +};
-> > +
-> > +module_platform_driver(m31usb_phy_driver);
-> > +
-> > +MODULE_DESCRIPTION("USB2 Qualcomm M31 HSPHY driver");
-> > +MODULE_LICENSE("GPL");
