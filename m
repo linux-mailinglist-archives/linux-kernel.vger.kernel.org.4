@@ -2,82 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC48730DBD
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 05:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0538A730D01
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 04:03:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237010AbjFODwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 14 Jun 2023 23:52:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52782 "EHLO
+        id S240660AbjFOCDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 14 Jun 2023 22:03:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238296AbjFODw1 (ORCPT
+        with ESMTP id S236965AbjFOCDJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 14 Jun 2023 23:52:27 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7D1211D;
-        Wed, 14 Jun 2023 20:52:26 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1a2c85ef3c2so6052911fac.0;
-        Wed, 14 Jun 2023 20:52:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686801145; x=1689393145;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Cb+dev0gi3mOMoRwFhsdS2OBBCly4pJkh/R4J7IbY+Y=;
-        b=HMGneszKZx3DqzPLVRN595fUIlQMoOFQ2J56MaxufPmvXS0GSk7iYI/Y413o+U8WSg
-         3m5z1Z7pA3YIuC9U+f7iTixOyu86MN6n6BFpoQGHM7MxYMcKi2QYMgjbEnIQtit7w5e+
-         gVS3WQLbjd8+e52iDqi8iKlHgihvS59TvHn1X5CLif0MTYKiB7/4wn0H5He6nP8+z2VX
-         HpqeNxJ2LkRDmYxHO5FOudd5jNTiMEkEDfCut2loLTffQ/54fU5pxQ598SuYZjbFMfTI
-         aP0OJt7MX7iUNd1yjIx0NnvetMXGv7R5lkye6tLEu9Mpz9rxkGRhTl0Zycv2WELM559s
-         CORA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686801145; x=1689393145;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cb+dev0gi3mOMoRwFhsdS2OBBCly4pJkh/R4J7IbY+Y=;
-        b=KnzSznMXE610lDEKX1aknPnyfLdjvzdoNtLXdqvlMAnnS5T7hsPghhazy5MqFkMZF6
-         QUlGCdMG2n5HKcCXK3qOif3V5rK8SdwELCnS/Ci0s8Y/74MI/crgqCBTJAgDPZqmZguO
-         LwZfkUvsrrBDM5IbfoG4emLMFSBX3t+LaZvZUgbtov4tA6RlIgXB/wnQA7Lqh1hdCqU0
-         Fkd8A+eTuLV8JN4flXYrKhtYl3+yq5VPaHdVSdHJINdBJe4L9ecqkJMsNPmZUi5O7YPE
-         2bnVuV36a5IVCodlgLJmiZ7BzPHDXPtnxeDxSPmIawEzCGqe1o4cw/Qc5/8kBhge+DqU
-         yGFg==
-X-Gm-Message-State: AC+VfDw/AiZO1KYKBjgQCS2Dagb6mkFBYQDMIGz/48KIAHPI8/U7WmDJ
-        ie4DRXR2eA9uHtpHUS/ASRE=
-X-Google-Smtp-Source: ACHHUZ6ObkR3NCdWKvmSDOzhkha4QMAJLH4kdLTv1KHz+3JqI8z5nQ/R2og8O4aQ3HTjlnYq808aOQ==
-X-Received: by 2002:a05:6870:c355:b0:1a6:67e2:6ea8 with SMTP id e21-20020a056870c35500b001a667e26ea8mr10791546oak.36.1686801145472;
-        Wed, 14 Jun 2023 20:52:25 -0700 (PDT)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id g17-20020a056870c39100b001726cfeea97sm9606098oao.29.2023.06.14.20.52.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 20:52:25 -0700 (PDT)
-Message-ID: <94de067c-e848-cc3d-406d-e9d7e14dbfd1@gmail.com>
-Date:   Wed, 14 Jun 2023 22:06:07 -0300
+        Wed, 14 Jun 2023 22:03:09 -0400
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67D21BD4;
+        Wed, 14 Jun 2023 19:03:07 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0Vl8U56V_1686794582;
+Received: from 30.240.112.107(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0Vl8U56V_1686794582)
+          by smtp.aliyun-inc.com;
+          Thu, 15 Jun 2023 10:03:03 +0800
+Message-ID: <fcb4a4a9-b266-6135-48f1-c00957ca4dc2@linux.alibaba.com>
+Date:   Thu, 15 Jun 2023 10:03:00 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 4/6] rust: types: make doctests compilable/testable
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.1
+Subject: Re: [PATCH 1/3] x86/MCE/AMD: Split amd_mce_is_memory_error()
 Content-Language: en-US
-To:     Miguel Ojeda <ojeda@kernel.org>, David Gow <davidgow@google.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Alice Ryhl <aliceryhl@google.com>,
-        Andreas Hindborg <nmi@metaspace.dk>,
-        Philip Li <philip.li@intel.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-References: <20230614180837.630180-1-ojeda@kernel.org>
- <20230614180837.630180-5-ojeda@kernel.org>
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <20230614180837.630180-5-ojeda@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+To:     Yazen Ghannam <yazen.ghannam@amd.com>, linux-edac@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, tony.luck@intel.com, x86@kernel.org,
+        muralidhara.mk@amd.com, joao.m.martins@oracle.com,
+        william.roche@oracle.com, boris.ostrovsky@oracle.com,
+        john.allen@amd.com, baolin.wang@linux.alibaba.com
+References: <20230613141142.36801-1-yazen.ghannam@amd.com>
+ <20230613141142.36801-2-yazen.ghannam@amd.com>
+ <9d0adc21-5b71-a949-fc6d-95dd7ef6f0a7@linux.alibaba.com>
+ <cd4fc492-074f-290f-81ac-cb65715c51b0@amd.com>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <cd4fc492-074f-290f-81ac-cb65715c51b0@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,14 +49,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/14/23 15:08, Miguel Ojeda wrote:
-> Rust documentation tests are going to be build/run-tested
-> with the KUnit integration added in a future patch, thus
-> update them to make them compilable/testable so that we
-> may start enforcing it.
-> 
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> ---
-> [...]
 
-Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+
+On 2023/6/14 23:06, Yazen Ghannam wrote:
+> On 6/13/2023 10:06 PM, Shuai Xue wrote:
+>>
+>>
+>> On 2023/6/13 22:11, Yazen Ghannam wrote:
+>>> Define helper functions for legacy and SMCA systems in order to reuse
+>>> individual checks in later changes.
+>>>
+>>> Describe what each function is checking for, and correct the XEC bitmask
+>>> for SMCA.
+>>>
+>>> No functional change intended.
+>>>
+>>> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+>>> ---
+>>>   arch/x86/kernel/cpu/mce/amd.c | 30 +++++++++++++++++++++++++-----
+>>>   1 file changed, 25 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+>>> index 5e74610b39e7..1ccfb0c9257f 100644
+>>> --- a/arch/x86/kernel/cpu/mce/amd.c
+>>> +++ b/arch/x86/kernel/cpu/mce/amd.c
+>>> @@ -713,17 +713,37 @@ void mce_amd_feature_init(struct cpuinfo_x86 *c)
+>>>           deferred_error_interrupt_enable(c);
+>>>   }
+>>>   -bool amd_mce_is_memory_error(struct mce *m)
+>>> +/*
+>>> + * DRAM ECC errors are reported in the Northbridge (bank 4) with
+>>> + * Extended Error Code 8.
+>>> + */
+>>> +static bool legacy_mce_is_memory_error(struct mce *m)
+>>> +{
+>>> +    return m->bank == 4 && XEC(m->status, 0x1f) == 8;
+>>> +}
+>>> +
+>>> +/*
+>>> + * DRAM ECC errors are reported in Unified Memory Controllers with
+>>> + * Extended Error Code 0.
+>>> + */
+>>> +static bool smca_mce_is_memory_error(struct mce *m)
+>>>   {
+>>>       enum smca_bank_types bank_type;
+>>> -    /* ErrCodeExt[20:16] */
+>>> -    u8 xec = (m->status >> 16) & 0x1f;
+>>> +
+>>> +    if (XEC(m->status, 0x3f))
+>>> +        return false;
+>>>         bank_type = smca_get_bank_type(m->extcpu, m->bank);
+>>> +
+>>> +    return bank_type == SMCA_UMC || bank_type == SMCA_UMC_V2;
+>>> +}
+>>> +
+>>> +bool amd_mce_is_memory_error(struct mce *m)
+>>> +{
+>>>       if (mce_flags.smca)
+>>> -        return (bank_type == SMCA_UMC || bank_type == SMCA_UMC_V2) && xec == 0x0;
+>>> +        return smca_mce_is_memory_error(m);
+>>>   -    return m->bank == 4 && xec == 0x8;
+>>> +    return legacy_mce_is_memory_error(m);
+>>>   }
+>>>     static void __log_error(unsigned int bank, u64 status, u64 addr, u64 misc)
+>>
+>> Hi, Yazen,
+>>
+>> Which tree are you working on? This patch can not be applied to Linus master ?
+>> (commit b6dad5178ceaf23f369c3711062ce1f2afc33644)
+>>
+> 
+> Hi Shuai,
+> 
+> I'm using tip/master as the base.
+> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/log/
+> 
+> Sorry, I forgot to mention this in the cover letter.
+
+Ok. This patch itself looks good to me.
+
+Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
+
+Thanks.
+Shuai
