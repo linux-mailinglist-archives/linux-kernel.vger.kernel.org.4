@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3124A731BA4
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3650731BA8
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:45:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241240AbjFOOoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 10:44:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59460 "EHLO
+        id S241462AbjFOOpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 10:45:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241034AbjFOOoh (ORCPT
+        with ESMTP id S1344299AbjFOOo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 10:44:37 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5012D2736;
-        Thu, 15 Jun 2023 07:44:35 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f5f728c4aaso1098132e87.0;
-        Thu, 15 Jun 2023 07:44:35 -0700 (PDT)
+        Thu, 15 Jun 2023 10:44:56 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A572948;
+        Thu, 15 Jun 2023 07:44:54 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f76a4c211dso2517044e87.3;
+        Thu, 15 Jun 2023 07:44:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686840273; x=1689432273;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3OVYFBud63oBmzgiKeGVku/0LMDSys68f5xBbeb6bPY=;
-        b=gvJvlhyz6mGHxA6nEwkgEECKteCPa2XcgRP0HBANaI9uGOK4+v7YqzECwuC3X++sJX
-         hmcfk1TB7MorQ53pXiXkFZwE2SnZ5yQzfR5IZkW3JROxBQKCJDev02f6ceBfUnJi/rAN
-         wgUhMIn1iEQYRglCfEFTaaeiIMNYZmsFK9TiX7QIXc44bPvXovr0hRQ92G1VaCWX5YtM
-         XKkpbbX6WZRNoclcYpz4CdcmOFpXy6eTajJ73BHS6wwvX8QG1gi2AvEEHO37TKs40+5l
-         WE76EUYGaOl1joKIc2rXgiudqb8+ZYuylTmuEG7i0D/Kjj1c2WBpnWX0BcZ8+9KeFqr+
-         ehGw==
+        d=gmail.com; s=20221208; t=1686840292; x=1689432292;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=01rML8QNhx1meW63X7YOChbwA/I11tVl46mShxzno8c=;
+        b=pvA/+HLk8vgyap9cUCFXxWzeUdNPB9Ek2np+gXBneOchgcRWdGUWKuRKGNmicfLkYe
+         nZmfLMgNIp8JoSlcrocdAVKe9CJ4b+2qcF6UJyPJuVcHgivOfeCZ5ZxczOmUbI0r4v3v
+         nsuRvyqRzSdalni1iFMt1adUhZZ1MyfTVKmQPX/GseW1tjDCDMprOVtMZ9CJQ2IbY81+
+         Y1zZKj2Yisrge/IDvfWds0v5868fQ+zTWWQpeU13l64gIRQYJTx4+XkSiLxR87/XyA8O
+         juOlTX8a+vBlj3qzIIU4zQJ9UdlN0lJLv69VnMZm9rAy7oHxRNrxZ1tMn7OyG+++oFp/
+         hOKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686840273; x=1689432273;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3OVYFBud63oBmzgiKeGVku/0LMDSys68f5xBbeb6bPY=;
-        b=VqNi7hgcrgKNKjZCMj+HSZaYL98fDrovt0tB4jzK8fInyV8EPymWbtE8MnE6tDdxGN
-         StcCRIsVvbbQxLaE3wIpsGahhhGuHhmovRSjNCgzQ9lYTCYJ6IlcWitB3LdwYFj8za5E
-         JzeOXb+xks1AQohK8pXoE75ogpRTWoZfnXcCEQwaZ4WWhpkeXz4/3lXBtqvB2TD3k0U4
-         Pg5EZm0pxPLfWi2zReH6cygnd35M4Fb3mjcWf4cZ//29r8QP3ZcSPIsx8513f7uk38Zw
-         jeMLzVybKUn5l8Oszaa8t1ZTV1KhG5/S4yGEtfsWKH+BrXAjBWzRiBQGefNiGyI/GeTX
-         FoVA==
-X-Gm-Message-State: AC+VfDyW6s1H2J+5Q+D85TTlJpgafJL6K/PxhXAiBAlrVavbMfHqpQ+B
-        vYowK2qwnxSXq5zzyBRYIvajQVmCAO5e/bKs0A==
-X-Google-Smtp-Source: ACHHUZ6DbPaMv5ulJSq95WK2pTU4k2Fu5q20+cJlSAw29Dpc0bbyrB4k2JLeuY6MVfaHWXKm0JpdEA==
-X-Received: by 2002:a19:645b:0:b0:4f4:2717:7e6f with SMTP id b27-20020a19645b000000b004f427177e6fmr1101587lfj.23.1686840272990;
-        Thu, 15 Jun 2023 07:44:32 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686840292; x=1689432292;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=01rML8QNhx1meW63X7YOChbwA/I11tVl46mShxzno8c=;
+        b=lqLpD0dXGiq0enYTYepW7aQG3P8tftW7kuNuV9mbJG6VC4UZkoxDqe2V2TL1/nqXmQ
+         FmdfPy/byNsk+3t6vIYflHANe/cElIgVCXN2oaNxedpnI6PIY7vzRh4J9GgJDMbBh9yu
+         yGONrDHqbbzyW03TYS/PKeiC1ELYDN6KD8slq8iH3OHO8UayHmsV+u/hqVrSHKMRPGu3
+         jrOpcyj9qoDiRYW7vNP0Mkq3P+CKgChDWtbMWpeKwZcvmkCY7vXGl3C2RyGK7n/l6P0b
+         Kc9NIHjdSxWqgYZxRpZ0deWMF0ufzXw+i67ItVkjpTIsxVtB9U/aENkNolicMjkyc7eI
+         7/YA==
+X-Gm-Message-State: AC+VfDzO9t+b6gSFZ15AQXn+Wr37s+ajkq4MnMt37Vyy36YOWYcCMSsh
+        t4Z2fJO8JGZ/YpSTIqKw5fZOgiunOWTE7M7gdA==
+X-Google-Smtp-Source: ACHHUZ6/hm0iRAbwO9RB4MJBdUYxGo5Dp355lzxZq305nEDV93dKD4eDiVGsuSNkZv6TfnO+Lpc3Qg==
+X-Received: by 2002:a19:641b:0:b0:4f8:451d:d2cf with SMTP id y27-20020a19641b000000b004f8451dd2cfmr1301114lfb.69.1686840291885;
+        Thu, 15 Jun 2023 07:44:51 -0700 (PDT)
 Received: from localhost.localdomain (mail.pulsar-telecom.ru. [94.181.180.60])
-        by smtp.gmail.com with ESMTPSA id h7-20020ac25967000000b004f13f4ec267sm244451lfp.186.2023.06.15.07.44.31
+        by smtp.gmail.com with ESMTPSA id h7-20020ac25967000000b004f13f4ec267sm244451lfp.186.2023.06.15.07.44.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 07:44:32 -0700 (PDT)
+        Thu, 15 Jun 2023 07:44:51 -0700 (PDT)
 From:   Aleksandr Shubin <privatesub2@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Aleksandr Shubin <privatesub2@gmail.com>,
@@ -65,14 +66,15 @@ Cc:     Aleksandr Shubin <privatesub2@gmail.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Maxime Ripard <mripard@kernel.org>, linux-pwm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-riscv@lists.infradead.org
-Subject: [PATCH v1 0/3] Add support for Allwinner PWM on D1/T113s/R329 SoCs
-Date:   Thu, 15 Jun 2023 17:43:55 +0300
-Message-Id: <20230615144423.828698-1-privatesub2@gmail.com>
+Subject: [PATCH v1 1/3] dt-bindings: pwm: Add binding for Allwinner D1/T113-S3/R329 PWM controller
+Date:   Thu, 15 Jun 2023 17:43:56 +0300
+Message-Id: <20230615144423.828698-2-privatesub2@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230615144423.828698-1-privatesub2@gmail.com>
+References: <20230615144423.828698-1-privatesub2@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -85,27 +87,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Allwinner's D1, T113-S3 and R329 SoCs have a new pwm
+controller witch is different from the previous pwm-sun4i.
 
-This series adds support for PWM controller on new
-Allwinner's SoCs, such as D1, T113s and R329. The implemented driver
-provides basic functionality for control PWM channels.
+D1 and T113s SoCs have one PWM controller with 8 channels.
+R329 SoC has two PWM controllers in both power domains, one of
+them has 9 channels (CPUX one) and the other has 6 (CPUS one).
 
-Aleksandr Shubin (3):
-  dt-bindings: pwm: Add binding for Allwinner D1/T113-S3/R329 PWM
-    controller
-  pwm: Add Allwinner's D1/T113-S3/R329 SoCs PWM support
-  riscv: dts: allwinner: d1: Add pwm node
+Add a device tree binding for them.
 
- .../bindings/pwm/allwinner,sun20i-pwm.yaml    |  70 ++++
- .../boot/dts/allwinner/sunxi-d1s-t113.dtsi    |  12 +
- drivers/pwm/Kconfig                           |  12 +
- drivers/pwm/Makefile                          |   1 +
- drivers/pwm/pwm-sun20i.c                      | 364 ++++++++++++++++++
- 5 files changed, 459 insertions(+)
+Signed-off-by: Aleksandr Shubin <privatesub2@gmail.com>
+---
+ .../bindings/pwm/allwinner,sun20i-pwm.yaml    | 70 +++++++++++++++++++
+ 1 file changed, 70 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/pwm/allwinner,sun20i-pwm.yaml
- create mode 100644 drivers/pwm/pwm-sun20i.c
 
+diff --git a/Documentation/devicetree/bindings/pwm/allwinner,sun20i-pwm.yaml b/Documentation/devicetree/bindings/pwm/allwinner,sun20i-pwm.yaml
+new file mode 100644
+index 000000000000..e5f9cb2d5c4f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pwm/allwinner,sun20i-pwm.yaml
+@@ -0,0 +1,70 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pwm/allwinner,sun20i-pwm.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Allwinner D1, T113-S3 and R329 PWM
++
++maintainers:
++  - Chen-Yu Tsai <wens@csie.org>
++  - Maxime Ripard <mripard@kernel.org>
++
++allOf:
++  - $ref: pwm.yaml#
++
++properties:
++  compatible:
++    const: allwinner,sun20i-d1-pwm
++
++  reg:
++    maxItems: 1
++
++  "#pwm-cells":
++    const: 3
++
++  clocks:
++    items:
++      - description: 24 MHz oscillator
++      - description: Bus Clock
++
++  clock-names:
++    items:
++      - const: hosc
++      - const: bus
++
++  resets:
++    items:
++      - description: module reset
++
++  allwinner,pwm-channels:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: The number of PWM channels configured for this instance
++
++required:
++  - compatible
++  - reg
++  - "#pwm-cells"
++  - clocks
++  - clock-names
++  - resets
++  - allwinner,pwm-channels
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/sun20i-d1-ccu.h>
++    #include <dt-bindings/reset/sun20i-d1-ccu.h>
++
++    pwm: pwm@2000c00 {
++      compatible = "allwinner,sun20i-d1-pwm";
++      reg = <0x02000c00 0x400>;
++      clocks = <&dcxo>, <&ccu CLK_BUS_PWM>;
++      clock-names = "hosc", "bus";
++      resets = <&ccu RST_BUS_PWM>;
++      allwinner,pwm-channels = <8>;
++      #pwm-cells = <0x3>;
++    };
++
++...
 -- 
 2.25.1
 
