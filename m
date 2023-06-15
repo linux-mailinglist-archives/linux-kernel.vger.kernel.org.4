@@ -2,74 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B595731052
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:16:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4FF73100A
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 09:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244767AbjFOHQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 03:16:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38900 "EHLO
+        id S238324AbjFOHBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 03:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245066AbjFOHPZ (ORCPT
+        with ESMTP id S244415AbjFOHB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 03:15:25 -0400
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E372B4692;
-        Thu, 15 Jun 2023 00:12:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1686812462; cv=none;
+        Thu, 15 Jun 2023 03:01:29 -0400
+X-Greylist: delayed 72 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Jun 2023 00:01:27 PDT
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D44E69;
+        Thu, 15 Jun 2023 00:01:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686812484; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=A7+OEOe2tKbtr0Wfk5CpOaVff+0K09lqCd/PqvcPh2jVucV7eUE45BmWIoVb3zWCYf
-    BryJ/xt7P43eKgFAfp+8X1sCAKzL8lVbBOpye1UQUNpTtcBJyoS34xhmfMAhWum6s+bz
-    ER+yhYcRmU7kcnjszSOw58oEUN0xWcJuCIInBvXOhglfm3uv0xr2Yfc738aFSztPersC
-    18aCfGnJZUy1fHvhJN7x+RafayHRUeo+u0OlcMWrs8+hYLXpbshwg6HECp4mxadE/4QA
-    h2ovQ+DSx0WMKJ3efOj5Ah9EVvHcIdHu1mKPOpYU2+JqPMMof+BsKIPekeyM4I062TTR
-    j5Gw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686812462;
+    b=Vb8J5hlpBpDscIpZvCg4fL5GPQw0Jyrxhg14slnomTWlIc3o0MkYNnPFi4//7BLF/U
+    Z87v+Z/xFtz1JOad3BNjoWKAf3hQm+L2xesOn+eSqObdSlF36OyeSVC4xa+fQe4F5oik
+    oSyBqasUqr04O80qhGV9r4gbtdYHKaWsnMH5HwUI3jS4Kb/zc+nuk6WNIC+9X+WtVCSB
+    24661gIQO1TIoSP/qUl2Ef5jPBnxDdyESalX5NrOzCa7yIy+V8QwCKV96sQFXbWzu0oA
+    HGpSvMwJyBZTHGt0qf7Zh6Mia3WyhCLh1CE+Yt/Uw7uNTN1fVMv/KvXx/YcRPU2fyoha
+    ZqVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686812484;
     s=strato-dkim-0002; d=strato.com;
     h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
     From:Subject:Sender;
-    bh=TDJy/nCvrrGgkIeB/WaaG50bfZku9SJeUReU+whMQHM=;
-    b=Qze99mfNNKROeAMDb9pHHvLhlTe3ooeVHYTRiNt0jqoX1tbEKaowG7HSnZSjxLVr9j
-    zBvcS9EkgnXHM6kTJjzw8PmrBuxj11upbwFHwMpV7f2pEAjhSF9cRId7vnr+4tMKJDXI
-    Evk4Vkh3wN8lsVk58MywyDriG1GVjLGxZ8f/+r/BrNkD94JNypyxlbIyzh7ZbeNdAEA4
-    iBLrZ7tqxK1heSXQieDXk+kmswAoHizjUhDgW0O5jTZeqyfqj7bbadGJBJRi6GhZa/Hl
-    NW7apQ7nga4eO7buYqpGPzgQNSvALcqtPhyKJfz3P3YdJa+823JVIcJieuozZCevsvUg
-    evUA==
+    bh=oqU6vtEUqUneCaoXlYhx1C1KT91EWd18pV4a4GHvvcA=;
+    b=CTtNwddp5loY/hLr+MJV+VEOS0YgFg49FuuIcFaw50jKQGhBeVIUzj7fRG+J8NBrCA
+    QnbNtqPeo4m+DjDbvZvVlpVzG4fxVHJpKNpg5l9eiTHeEvkdgl9sbwu3bOmVH2Fm/I5D
+    +kfSEuivU4Q2MlbK5U5cz0pmxh1Q3XEHxNF+NsEprjV72lGZBR2mHXelL9Tfadn19vC1
+    AZdhyQqpTMnnJRyAuJh9GRUbnFoe7t81QIwa6MpbtJQVZhlBgJWzb7W8FgqR/kTgKm3T
+    WHPKQ/XX3x9b7/Xbm1E6qBkJRPFbfA1Oe1iMKRuQvVMZU9XlbXjk7aE/7S9mywChVFR0
+    UMiQ==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
 X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686812462;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686812484;
     s=strato-dkim-0002; d=goldelico.com;
     h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
     From:Subject:Sender;
-    bh=TDJy/nCvrrGgkIeB/WaaG50bfZku9SJeUReU+whMQHM=;
-    b=TOOJyLeYcYS5BsZh7jMAykirrC2ykQROoRBe5dSkhNP7mlgxS9coH3uuFfNlXy74j9
-    TH/aJzAOlOTFg6xKr4VP+efWy1ZXRkfX1nUBLZuJO/BWmYyJqgy8OZB/wmUAcYE/EmhC
-    pIoIieaJnPTCKdSqpHM1fDOVPiXtS6S515WIeMAnrYdwkm3nlH/Hkb7vzKTEo/HWn1my
-    gKgUiVFm2gSwKm9W2bdkBtfEaZ2WGo7tzokb9al3/LWtw1DHginIkaF/My7TeVcME1P3
-    yj2gg2kZRzcM7N3GI5v/RQ9YVQ4ceCsBzvdkBFVtSJwUENmS3l2FAHoWjOZ/lO+mJlCT
-    AqgQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686812462;
+    bh=oqU6vtEUqUneCaoXlYhx1C1KT91EWd18pV4a4GHvvcA=;
+    b=NV/Jsex/nrPXZNb8IVjgwHQVO3+srUudwRsrfUBsVUZVvk+mFLwS5H8KSWsLyonsJ6
+    wr3C6V/z5cMIK79jVHwCPQ/s1ztjDHZuizz+pn0UTCMmYDq18cev1OjEpphrwDMZc/Tb
+    fnUG2vqOLhV+4mwBjSdKh5/4DUjlqo65tSO8x5hR0CSfKWhPv7g61wGIBuJKSj2iflew
+    yRH4CRTWKkMR4tFu9+mPCB6W0/m8W6x0fFOj3503p2gSEfwPM5OtaaDg30XuSRZFW7dq
+    yZpmmKhrI/3KZmH5R3hehPjSwa5ndoFCqsu3D8vGKiY8MRenhKN3x5Kg7yj422OhHSIW
+    +yDg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686812484;
     s=strato-dkim-0003; d=goldelico.com;
     h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
     From:Subject:Sender;
-    bh=TDJy/nCvrrGgkIeB/WaaG50bfZku9SJeUReU+whMQHM=;
-    b=1LVB8RGilMdBNbH1Ibn85Q47fByovt/rlfHl9hpXUn87z2NWBSdfLqdVh76W61v2PO
-    sdpmIhj2T+NQXKYiT3Dw==
+    bh=oqU6vtEUqUneCaoXlYhx1C1KT91EWd18pV4a4GHvvcA=;
+    b=QNzWB98CX3cvsRij7QRdmJvBW3fbWxnEeWk5UTVcdpGIaYc/VWSkTnm2V0AsSHdpd7
+    fezuBSQDOHbZYLspxuCw==
 X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Apz9PSN6LgsXcGeonQ="
 Received: from imac.fritz.box
     by smtp.strato.de (RZmta 49.6.0 DYNA|AUTH)
-    with ESMTPSA id jaf17fz5F71223U
+    with ESMTPSA id jaf17fz5F71O23n
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
         (Client did not present a certificate);
-    Thu, 15 Jun 2023 09:01:02 +0200 (CEST)
+    Thu, 15 Jun 2023 09:01:24 +0200 (CEST)
 Content-Type: text/plain;
         charset=us-ascii
 Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH 5/9] MIPS: DTS: CI20: Misc. cleanups
+Subject: Re: [PATCH 7/9] MIPS: DTS: CI20: Enable support for WiFi / Bluetooth
 From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <20230604145642.200577-6-paul@crapouillou.net>
-Date:   Thu, 15 Jun 2023 09:01:02 +0200
+In-Reply-To: <20230604145642.200577-8-paul@crapouillou.net>
+Date:   Thu, 15 Jun 2023 09:01:23 +0200
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -77,75 +78,196 @@ Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         list@opendingux.net
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <7895ACE7-2D31-4858-891A-44C2BC7B9D9D@goldelico.com>
+Message-Id: <0855AAAC-72E8-4A2D-8B30-C00986915AAB@goldelico.com>
 References: <20230604145642.200577-1-paul@crapouillou.net>
- <20230604145642.200577-6-paul@crapouillou.net>
+ <20230604145642.200577-8-paul@crapouillou.net>
 To:     Paul Cercueil <paul@crapouillou.net>
 X-Mailer: Apple Mail (2.3445.104.21)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please find a more useful subject.
+
 
 > Am 04.06.2023 um 16:56 schrieb Paul Cercueil <paul@crapouillou.net>:
 >=20
-> - Use the standard "ecc-engine" property instead of the custom
-> "ingenic,bch-controller" to get a handle to the BCH controller.
+> Wire the WiFi/Bluetooth chip properly in the Device Tree.
 >=20
-> - Respect cell sizes in the Ethernet controller node.
+> - Provide it with the correct regulators and clocks;
+> - Change the MMC I/O bus to 1.8V which seems to be enough;
+> - Change the MMC I/O bus frequency to 25 MHz as 50 MHz causes errors;
+> - Fix the Bluetooth powerdown GPIO being inverted and add reset GPIO;
+> - Convert host-wakeup-gpios to IRQ.
 >=20
-> - Use proper macro for interrupt type instead of hardcoding magic
->  values.
+> With these changes, the WiFi works properly with the latest firmware
+> provided by linux-firmware. The Bluetooth does not work very well =
+here,
+> as I cannot get my wireless keyboard to pair; but it does detect it, =
+and
+> it does see the key presses when I type the pairing code.
 >=20
 > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 > ---
-> arch/mips/boot/dts/ingenic/ci20.dts | 8 ++++----
-> 1 file changed, 4 insertions(+), 4 deletions(-)
+> arch/mips/boot/dts/ingenic/ci20.dts | 88 ++++++++++++++++++++++++-----
+> 1 file changed, 73 insertions(+), 15 deletions(-)
 >=20
 > diff --git a/arch/mips/boot/dts/ingenic/ci20.dts =
 b/arch/mips/boot/dts/ingenic/ci20.dts
-> index 7f6e7a4e3915..b7dbafa1f85d 100644
+> index bdbd064c90e1..cec0caa2350c 100644
 > --- a/arch/mips/boot/dts/ingenic/ci20.dts
 > +++ b/arch/mips/boot/dts/ingenic/ci20.dts
-> @@ -356,7 +356,7 @@ nandc: nand-controller@1 {
-> 		#address-cells =3D <1>;
-> 		#size-cells =3D <0>;
+> @@ -97,10 +97,15 @@ ir: ir {
+> 		gpios =3D <&gpe 3 GPIO_ACTIVE_LOW>;
+> 	};
 >=20
-> -		ingenic,bch-controller =3D <&bch>;
-> +		ecc-engine =3D <&bch>;
+> -	wlan0_power: fixedregulator-1 {
+> +	bt_power: fixedregulator-1 {
+> 		compatible =3D "regulator-fixed";
 >=20
-> 		ingenic,nemc-tAS =3D <10>;
-> 		ingenic,nemc-tAH =3D <5>;
-> @@ -422,8 +422,8 @@ dm9000@6 {
-> 		pinctrl-names =3D "default";
-> 		pinctrl-0 =3D <&pins_nemc_cs6>;
+> -		regulator-name =3D "wlan0_power";
+> +		regulator-name =3D "bt_power";
+> +		regulator-min-microvolt =3D <3300000>;
+> +		regulator-max-microvolt =3D <3300000>;
+> +		regulator-settling-time-us =3D <1400>;
+> +
+> +		vin-supply =3D <&vcc_50>;
 >=20
-> -		reg =3D <6 0 1   /* addr */
-> -		       6 2 1>; /* data */
-> +		reg =3D <6 0 1>, /* addr */
-> +		      <6 2 1>; /* data */
->=20
-> 		ingenic,nemc-tAS =3D <15>;
-> 		ingenic,nemc-tAH =3D <10>;
-> @@ -435,7 +435,7 @@ dm9000@6 {
-> 		vcc-supply =3D <&eth0_power>;
->=20
-> 		interrupt-parent =3D <&gpe>;
-> -		interrupts =3D <19 4>;
-> +		interrupts =3D <19 IRQ_TYPE_EDGE_RISING>;
->=20
-> 		nvmem-cells =3D <&eth0_addr>;
-> 		nvmem-cell-names =3D "mac-address";
+> 		gpio =3D <&gpb 19 0>;
+> 		enable-active-high;
+> @@ -116,6 +121,40 @@ otg_power: fixedregulator-2 {
+> 		gpio =3D <&gpf 15 0>;
+> 		enable-active-high;
+> 	};
+> +
+> +	wifi_power: fixedregulator-4 {
+> +		compatible =3D "regulator-fixed";
+> +
+> +		regulator-name =3D "wifi_power";
+> +
+> +		/*
+> +		 * Technically it's 5V, the WiFi chip has its own =
+internal
+> +		 * regulators; but the MMC/SD subsystem won't accept =
+such a
+> +		 * value.
+> +		 */
+> +		regulator-min-microvolt =3D <3300000>;
+> +		regulator-max-microvolt =3D <3300000>;
+> +		regulator-settling-time-us =3D <150000>;
+> +
+> +		vin-supply =3D <&bt_power>;
+> +	};
+> +
+> +	vcc_33v: fixedregulator-5 {
 
+why is this defined here? It is used earlier in [3/9] and not directly =
+related to WiFi / Bluetooth
 
-For better bisecting it would be helpful to split this into 3 patches.
+So please move into [3/9] or even before [3/9] as a separate patch.
 
-And they are not really related to WiFi/Bluetooth.
+> +		compatible =3D "regulator-fixed";
+> +
+> +		regulator-name =3D "vcc_33v";
+> +		regulator-min-microvolt =3D <3300000>;
+> +		regulator-max-microvolt =3D <3300000>;
+> +		regulator-always-on;
+> +	};
+> +
+> +	wifi_pwrseq: pwrseq {
+> +		compatible =3D "mmc-pwrseq-simple";
+> +		reset-gpios =3D <&gpf 7 GPIO_ACTIVE_LOW>;
+> +
+> +		clocks =3D <&rtc_dev>;
+> +		clock-names =3D "ext_clock";
+> +	};
+> };
+>=20
+> &ext {
+> @@ -161,24 +200,33 @@ &mmc0 {
+> 	pinctrl-0 =3D <&pins_mmc0>;
+>=20
+> 	cd-gpios =3D <&gpf 20 GPIO_ACTIVE_LOW>;
+> +	vmmc-supply =3D <&vcc_33v>;
+> +	vqmmc-supply =3D <&vcc_33v>;
+> };
+>=20
+> &mmc1 {
+> 	status =3D "okay";
+>=20
+> 	bus-width =3D <4>;
+> -	max-frequency =3D <50000000>;
+> +	max-frequency =3D <25000000>;
+> +	mmc-pwrseq =3D <&wifi_pwrseq>;
+> +	vmmc-supply =3D <&wifi_power>;
+> +	vqmmc-supply =3D <&wifi_io>;
+> 	non-removable;
+>=20
+> 	pinctrl-names =3D "default";
+> 	pinctrl-0 =3D <&pins_mmc1>;
+>=20
+> -	brcmf: wifi@1 {
+> -/*		reg =3D <4>;*/
+> -		compatible =3D "brcm,bcm4330-fmac";
+> -		vcc-supply =3D <&wlan0_power>;
+> -		device-wakeup-gpios =3D <&gpd 9 GPIO_ACTIVE_HIGH>;
+> -		shutdown-gpios =3D <&gpf 7 GPIO_ACTIVE_LOW>;
+> +	#address-cells =3D <1>;
+> +	#size-cells =3D <0>;
+> +
+> +	wifi@1 {
+> +		compatible =3D "brcm,bcm4329-fmac";
+> +		reg =3D <1>;
+> +
+> +		interrupt-parent =3D <&gpd>;
+> +		interrupts =3D <9 IRQ_TYPE_EDGE_FALLING>;
+> +		interrupt-names =3D "host-wake";
+> 	};
+> };
+>=20
+> @@ -205,11 +253,20 @@ &uart2 {
+>=20
+> 	bluetooth {
+> 		compatible =3D "brcm,bcm4330-bt";
+> -		reset-gpios =3D <&gpf 8 GPIO_ACTIVE_HIGH>;
+> -		vcc-supply =3D <&wlan0_power>;
+> +
+> +		vbat-supply =3D <&bt_power>;
+> +		vddio-supply =3D <&wifi_io>;
+> +
+> +		interrupt-parent =3D <&gpf>;
+> +		interrupts =3D <6 IRQ_TYPE_EDGE_RISING>;
+> +		interrupt-names =3D "host-wakeup";
+> +
+> +		clocks =3D <&rtc_dev>;
+> +		clock-names =3D "lpo";
+> +
+> +		reset-gpios =3D <&gpf 8 GPIO_ACTIVE_LOW>;
+> 		device-wakeup-gpios =3D <&gpf 5 GPIO_ACTIVE_HIGH>;
+> -		host-wakeup-gpios =3D <&gpf 6 GPIO_ACTIVE_HIGH>;
+> -		shutdown-gpios =3D <&gpf 4 GPIO_ACTIVE_LOW>;
+> +		shutdown-gpios =3D <&gpf 4 GPIO_ACTIVE_HIGH>;
+> 	};
+> };
+>=20
+> @@ -270,8 +327,9 @@ vcc_25: LDO5 {
+> 				regulator-always-on;
+> 			};
+> 			wifi_io: LDO6 {
+> -				regulator-min-microvolt =3D <2500000>;
+> -				regulator-max-microvolt =3D <2500000>;
+> +				regulator-min-microvolt =3D <1800000>;
+> +				regulator-max-microvolt =3D <1800000>;
+> +				regulator-settling-time-us =3D <150000>;
+> 				inl-supply =3D <&vcc_33v>;
+> 			};
+> 			cim_io_28: LDO7 {
+> --=20
+> 2.39.2
+>=20
 
