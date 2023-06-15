@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D6A37318A4
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7883D7318A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 14:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344803AbjFOMQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 08:16:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
+        id S1344821AbjFOMQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 08:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344750AbjFOMPQ (ORCPT
+        with ESMTP id S1344768AbjFOMPT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 08:15:16 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B581D268C
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 05:14:57 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-30c55d2b9f3so5694413f8f.2
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 05:14:57 -0700 (PDT)
+        Thu, 15 Jun 2023 08:15:19 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C902D51
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 05:14:58 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-31110aea814so1114327f8f.2
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 05:14:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1686831296; x=1689423296;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1686831297; x=1689423297;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JIUq/KnB1aQBhfWdwO+hMtLBQidCfb77pkBdwoOfDrM=;
-        b=XOrvB+DkaJ2BmTSr0lSZshMWKEw4mtpIGHKuQkQLKmbbQZ2V0UGWLokoeyBMI9OsUA
-         Li6Z0+afyrwXPQ6GMG/x+8VZHd4S94XrVpbU3KmL7xG+49aIg+dTSQ+AqkxeIldSxo2f
-         ArZEzfD6Wq+JU+1zQR0mKJDQi/RwnuM2w+p9n/3ZATGN0YPctre1++IjhzfneT8a20Xc
-         SXWpm8ojguW7SgcXqrppvk7dgzvvA+Q3I/CBuKMd5r4gO3xu1A2gNtL9Z5gTGnm5i/Pe
-         CAkLlSlhp1B31VtLf7NBMsM1PT4/310Yl68zkeuIhFFoHUhezQ9O5rbU0Avw8JjyNHcI
-         xCNA==
+        bh=djSwdyLw8xp+3Hm8dkeIbLA/6vtbTk1lxohdgQnQb6c=;
+        b=voL6yARI3T7BESw6fu3WYu7LQRi+f01mj9FxAL9Q0WEiSr8asEyWvikUsYqHfM+16k
+         JpOlzaL4OGJkuIVQ2eOXGoA01R6LqKnmii74OoaCqkO0joixrP+DltrOEyR9nEMJDJ1k
+         03cG044MR6Y/bcsQUWETrJoX9eMNjgCP51SbvePQnDt2+yGkXRuqHU/ucVnwUxoQFzZy
+         FXVg7MKOhsNB9O7NKc6LfonaL60arZP2BzT87tDCqvVTdLXKK1NngR2cYaXpU4ctSnOd
+         eCca02Uq6mqz1E4l1D0+jWtBHqnc77oqsQzoN8N6XR9fqCZf1G3+dDRu+jXC7bKLorLE
+         /JoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686831296; x=1689423296;
+        d=1e100.net; s=20221208; t=1686831297; x=1689423297;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JIUq/KnB1aQBhfWdwO+hMtLBQidCfb77pkBdwoOfDrM=;
-        b=eD9mM+2pFnnoB/kVGPtj+VvcBfvj8mijbi2XqhGZWUclvmttuX8UHqmj3YRqxqcrVj
-         /iyyamyuUnDaOtI/Z5tGMGLxc09SZ91VPbIqX/fa9ulOOpIM0Ql6LMEpBMoY5LyODnbS
-         Zssb60AzwqRacWQG3b0sSgsh6IRpDbQaoySbYqAJMZkY1kNk/UEdBcSGncn/+g0TwrMs
-         b8FS9n248PeNprK9YKYBGHxzE+HTtYofx1kX5sCd+Ql2aGnsBRtMiSEkQFU54w8Dq5Jx
-         jrkQRiD9v01GAT2/OYt27ytBrfwxMuYEhlv78er4BiAhC3y7njpSB8xEhjm6DNWtrMyw
-         kIHA==
-X-Gm-Message-State: AC+VfDzjNz4VVIwWthlHk42oFA6TQrkkKFB7LFDIUQEH+S8j25/10NFa
-        Vr7JzaWX85JcPbi0um5SNGRm0A==
-X-Google-Smtp-Source: ACHHUZ7cz1Lnuv+ZrNRPmXV/iE7QsI36JSR2liUOV4G8cw9WyScWMOZo4GGx6TjHbludU78fUMbGoA==
-X-Received: by 2002:a05:6000:1ccf:b0:306:3731:f73b with SMTP id bf15-20020a0560001ccf00b003063731f73bmr9828545wrb.43.1686831295908;
-        Thu, 15 Jun 2023 05:14:55 -0700 (PDT)
+        bh=djSwdyLw8xp+3Hm8dkeIbLA/6vtbTk1lxohdgQnQb6c=;
+        b=Nnqopk5/SuBJM1pjDe3izlqhe7MHUKGO1doiUXDiNmS7fkQhRJ19Vo/Uw5huVTdMGX
+         eTPGP2NS926QacV1akU/5+7KGgu+sroIEIYZMmMsvLVA0/t6aHOrknMW5mTppQe4Dg94
+         xD0PsqnCwFETrpuC/5f1iELESh2gaGMTXwEp2ayQXGpjQ59qstvqIWef49v5R6d45exp
+         dJsM1BiPJO+i4opQo7t/OIV+juDZhM8ES1v8vVQDiuw//2wAOmQ+Hrz6qwCdH2sjPBEt
+         jKkm6u7R7B7gYjjq6bQkWS8M/x08oEx2IDwzvX2T4vSiRSsSVjyo7ahYNEQXeT5zh170
+         VxWQ==
+X-Gm-Message-State: AC+VfDxdlonievsCNCvAnpoNE9VRY3o412EL1XlVYPf546sgL1jZ0WFM
+        Y3mX3w563puPi60R2M28bdBI6g==
+X-Google-Smtp-Source: ACHHUZ7DgrBhLpTk5UTTj6WsFW0ie3MEPaqnfhKlA2jBPqBEUe6hYk4aI7YYj6fOQC9/Tln+6mt0SQ==
+X-Received: by 2002:adf:cd11:0:b0:30e:58a8:d3f1 with SMTP id w17-20020adfcd11000000b0030e58a8d3f1mr12216197wrm.58.1686831297226;
+        Thu, 15 Jun 2023 05:14:57 -0700 (PDT)
 Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:2ad4:65a7:d9f3:a64e])
-        by smtp.gmail.com with ESMTPSA id k17-20020a5d4291000000b003047ea78b42sm20918012wrq.43.2023.06.15.05.14.54
+        by smtp.gmail.com with ESMTPSA id k17-20020a5d4291000000b003047ea78b42sm20918012wrq.43.2023.06.15.05.14.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 05:14:55 -0700 (PDT)
+        Thu, 15 Jun 2023 05:14:56 -0700 (PDT)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Vinod Koul <vkoul@kernel.org>,
         Bhupesh Sharma <bhupesh.sharma@linaro.org>,
@@ -73,9 +73,9 @@ Cc:     netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-stm32@st-md-mailman.stormreply.com,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH v2 17/23] dt-bindings: net: qcom,ethqos: add description for sa8775p
-Date:   Thu, 15 Jun 2023 14:14:13 +0200
-Message-Id: <20230615121419.175862-18-brgl@bgdev.pl>
+Subject: [PATCH v2 18/23] net: stmmac: dwmac-qcom-ethqos: add support for emac4 on sa8775p platforms
+Date:   Thu, 15 Jun 2023 14:14:14 +0200
+Message-Id: <20230615121419.175862-19-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230615121419.175862-1-brgl@bgdev.pl>
 References: <20230615121419.175862-1-brgl@bgdev.pl>
@@ -83,7 +83,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -92,92 +93,195 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Add the compatible for the MAC controller on sa8775p platforms. This MAC
-works with a single interrupt so add minItems to the interrupts property.
-The fourth clock's name is different here so change it. Enable relevant
-PHY properties. Add the relevant compatibles to the binding document for
-snps,dwmac as well.
+sa8775p uses EMAC version 4, add the relevant defines, rename the
+has_emac3 switch to has_emac_ge_3 (has emac greater-or-equal than 3)
+and add the new compatible.
 
 Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 ---
- .../devicetree/bindings/net/qcom,ethqos.yaml         | 12 +++++++++++-
- .../devicetree/bindings/net/snps,dwmac.yaml          |  3 +++
- 2 files changed, 14 insertions(+), 1 deletion(-)
+ .../stmicro/stmmac/dwmac-qcom-ethqos.c        | 65 +++++++++++++++----
+ 1 file changed, 51 insertions(+), 14 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/net/qcom,ethqos.yaml b/Documentation/devicetree/bindings/net/qcom,ethqos.yaml
-index 60a38044fb19..7bdb412a0185 100644
---- a/Documentation/devicetree/bindings/net/qcom,ethqos.yaml
-+++ b/Documentation/devicetree/bindings/net/qcom,ethqos.yaml
-@@ -20,6 +20,7 @@ properties:
-   compatible:
-     enum:
-       - qcom,qcs404-ethqos
-+      - qcom,sa8775p-ethqos
-       - qcom,sc8280xp-ethqos
-       - qcom,sm8150-ethqos
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
+index bdf59a179f87..fa0fc53c56a3 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
+@@ -88,8 +88,9 @@ struct ethqos_emac_driver_data {
+ 	const struct ethqos_emac_por *por;
+ 	unsigned int num_por;
+ 	bool rgmii_config_loopback_en;
+-	bool has_emac3;
++	bool has_emac_ge_3;
+ 	const char *link_clk_name;
++	bool has_integrated_pcs;
+ 	struct dwmac4_addrs dwmac4_addrs;
+ };
  
-@@ -32,11 +33,13 @@ properties:
-       - const: rgmii
+@@ -108,7 +109,7 @@ struct qcom_ethqos {
+ 	const struct ethqos_emac_por *por;
+ 	unsigned int num_por;
+ 	bool rgmii_config_loopback_en;
+-	bool has_emac3;
++	bool has_emac_ge_3;
+ };
  
-   interrupts:
-+    minItems: 1
-     items:
-       - description: Combined signal for various interrupt events
-       - description: The interrupt that occurs when Rx exits the LPI state
+ static int rgmii_readl(struct qcom_ethqos *ethqos, unsigned int offset)
+@@ -202,7 +203,7 @@ static const struct ethqos_emac_driver_data emac_v2_3_0_data = {
+ 	.por = emac_v2_3_0_por,
+ 	.num_por = ARRAY_SIZE(emac_v2_3_0_por),
+ 	.rgmii_config_loopback_en = true,
+-	.has_emac3 = false,
++	.has_emac_ge_3 = false,
+ };
  
-   interrupt-names:
-+    minItems: 1
-     items:
-       - const: macirq
-       - const: eth_lpi
-@@ -49,11 +52,18 @@ properties:
-       - const: stmmaceth
-       - const: pclk
-       - const: ptp_ref
--      - const: rgmii
-+      - enum:
-+          - rgmii
-+          - phyaux
+ static const struct ethqos_emac_por emac_v2_1_0_por[] = {
+@@ -218,7 +219,7 @@ static const struct ethqos_emac_driver_data emac_v2_1_0_data = {
+ 	.por = emac_v2_1_0_por,
+ 	.num_por = ARRAY_SIZE(emac_v2_1_0_por),
+ 	.rgmii_config_loopback_en = false,
+-	.has_emac3 = false,
++	.has_emac_ge_3 = false,
+ };
  
-   iommus:
-     maxItems: 1
- 
-+  phys: true
+ static const struct ethqos_emac_por emac_v3_0_0_por[] = {
+@@ -234,7 +235,41 @@ static const struct ethqos_emac_driver_data emac_v3_0_0_data = {
+ 	.por = emac_v3_0_0_por,
+ 	.num_por = ARRAY_SIZE(emac_v3_0_0_por),
+ 	.rgmii_config_loopback_en = false,
+-	.has_emac3 = true,
++	.has_emac_ge_3 = true,
++	.dwmac4_addrs = {
++		.dma_chan = 0x00008100,
++		.dma_chan_offset = 0x1000,
++		.mtl_chan = 0x00008000,
++		.mtl_chan_offset = 0x1000,
++		.mtl_ets_ctrl = 0x00008010,
++		.mtl_ets_ctrl_offset = 0x1000,
++		.mtl_txq_weight = 0x00008018,
++		.mtl_txq_weight_offset = 0x1000,
++		.mtl_send_slp_cred = 0x0000801c,
++		.mtl_send_slp_cred_offset = 0x1000,
++		.mtl_high_cred = 0x00008020,
++		.mtl_high_cred_offset = 0x1000,
++		.mtl_low_cred = 0x00008024,
++		.mtl_low_cred_offset = 0x1000,
++	},
++};
 +
-+  phy-names:
-+    const: serdes
++static const struct ethqos_emac_por emac_v4_0_0_por[] = {
++	{ .offset = RGMII_IO_MACRO_CONFIG,	.value = 0x40c01343 },
++	{ .offset = SDCC_HC_REG_DLL_CONFIG,	.value = 0x2004642c },
++	{ .offset = SDCC_HC_REG_DDR_CONFIG,	.value = 0x80040800 },
++	{ .offset = SDCC_HC_REG_DLL_CONFIG2,	.value = 0x00200000 },
++	{ .offset = SDCC_USR_CTL,		.value = 0x00010800 },
++	{ .offset = RGMII_IO_MACRO_CONFIG2,	.value = 0x00002060 },
++};
 +
- required:
-   - compatible
-   - clocks
-diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-index 363b3e3ea3a6..ddf9522a5dc2 100644
---- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-+++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-@@ -67,6 +67,7 @@ properties:
-         - loongson,ls2k-dwmac
-         - loongson,ls7a-dwmac
-         - qcom,qcs404-ethqos
-+        - qcom,sa8775p-ethqos
-         - qcom,sc8280xp-ethqos
-         - qcom,sm8150-ethqos
-         - renesas,r9a06g032-gmac
-@@ -582,6 +583,7 @@ allOf:
-               - ingenic,x1600-mac
-               - ingenic,x1830-mac
-               - ingenic,x2000-mac
-+              - qcom,sa8775p-ethqos
-               - qcom,sc8280xp-ethqos
-               - snps,dwmac-3.50a
-               - snps,dwmac-4.10a
-@@ -638,6 +640,7 @@ allOf:
-               - ingenic,x1830-mac
-               - ingenic,x2000-mac
-               - qcom,qcs404-ethqos
-+              - qcom,sa8775p-ethqos
-               - qcom,sc8280xp-ethqos
-               - qcom,sm8150-ethqos
-               - snps,dwmac-4.00
++static const struct ethqos_emac_driver_data emac_v4_0_0_data = {
++	.por = emac_v4_0_0_por,
++	.num_por = ARRAY_SIZE(emac_v3_0_0_por),
++	.rgmii_config_loopback_en = false,
++	.has_emac_ge_3 = true,
++	.link_clk_name = "phyaux",
++	.has_integrated_pcs = true,
+ 	.dwmac4_addrs = {
+ 		.dma_chan = 0x00008100,
+ 		.dma_chan_offset = 0x1000,
+@@ -275,7 +310,7 @@ static int ethqos_dll_configure(struct qcom_ethqos *ethqos)
+ 	rgmii_updatel(ethqos, SDCC_DLL_CONFIG_DLL_EN,
+ 		      SDCC_DLL_CONFIG_DLL_EN, SDCC_HC_REG_DLL_CONFIG);
+ 
+-	if (!ethqos->has_emac3) {
++	if (!ethqos->has_emac_ge_3) {
+ 		rgmii_updatel(ethqos, SDCC_DLL_MCLK_GATING_EN,
+ 			      0, SDCC_HC_REG_DLL_CONFIG);
+ 
+@@ -316,7 +351,7 @@ static int ethqos_dll_configure(struct qcom_ethqos *ethqos)
+ 	rgmii_updatel(ethqos, SDCC_DLL_CONFIG2_DDR_CAL_EN,
+ 		      SDCC_DLL_CONFIG2_DDR_CAL_EN, SDCC_HC_REG_DLL_CONFIG2);
+ 
+-	if (!ethqos->has_emac3) {
++	if (!ethqos->has_emac_ge_3) {
+ 		rgmii_updatel(ethqos, SDCC_DLL_CONFIG2_DLL_CLOCK_DIS,
+ 			      0, SDCC_HC_REG_DLL_CONFIG2);
+ 
+@@ -386,7 +421,7 @@ static int ethqos_rgmii_macro_init(struct qcom_ethqos *ethqos)
+ 		/* PRG_RCLK_DLY = TCXO period * TCXO_CYCLES_CNT / 2 * RX delay ns,
+ 		 * in practice this becomes PRG_RCLK_DLY = 52 * 4 / 2 * RX delay ns
+ 		 */
+-		if (ethqos->has_emac3) {
++		if (ethqos->has_emac_ge_3) {
+ 			/* 0.9 ns */
+ 			rgmii_updatel(ethqos, SDCC_DDR_CONFIG_PRG_RCLK_DLY,
+ 				      115, SDCC_HC_REG_DDR_CONFIG);
+@@ -421,7 +456,7 @@ static int ethqos_rgmii_macro_init(struct qcom_ethqos *ethqos)
+ 		rgmii_updatel(ethqos, RGMII_CONFIG2_RSVD_CONFIG15,
+ 			      0, RGMII_IO_MACRO_CONFIG2);
+ 
+-		if (ethqos->has_emac3)
++		if (ethqos->has_emac_ge_3)
+ 			rgmii_updatel(ethqos, RGMII_CONFIG2_RX_PROG_SWAP,
+ 				      RGMII_CONFIG2_RX_PROG_SWAP,
+ 				      RGMII_IO_MACRO_CONFIG2);
+@@ -461,7 +496,7 @@ static int ethqos_rgmii_macro_init(struct qcom_ethqos *ethqos)
+ 			      RGMII_IO_MACRO_CONFIG);
+ 		rgmii_updatel(ethqos, RGMII_CONFIG2_RSVD_CONFIG15,
+ 			      0, RGMII_IO_MACRO_CONFIG2);
+-		if (ethqos->has_emac3)
++		if (ethqos->has_emac_ge_3)
+ 			rgmii_updatel(ethqos, RGMII_CONFIG2_RX_PROG_SWAP,
+ 				      RGMII_CONFIG2_RX_PROG_SWAP,
+ 				      RGMII_IO_MACRO_CONFIG2);
+@@ -510,7 +545,7 @@ static int ethqos_configure_rgmii(struct qcom_ethqos *ethqos)
+ 	rgmii_updatel(ethqos, SDCC_DLL_CONFIG_PDN,
+ 		      SDCC_DLL_CONFIG_PDN, SDCC_HC_REG_DLL_CONFIG);
+ 
+-	if (ethqos->has_emac3) {
++	if (ethqos->has_emac_ge_3) {
+ 		if (ethqos->speed == SPEED_1000) {
+ 			rgmii_writel(ethqos, 0x1800000, SDCC_TEST_CTL);
+ 			rgmii_writel(ethqos, 0x2C010800, SDCC_USR_CTL);
+@@ -540,7 +575,7 @@ static int ethqos_configure_rgmii(struct qcom_ethqos *ethqos)
+ 			      SDCC_HC_REG_DLL_CONFIG);
+ 
+ 		/* Set USR_CTL bit 26 with mask of 3 bits */
+-		if (!ethqos->has_emac3)
++		if (!ethqos->has_emac_ge_3)
+ 			rgmii_updatel(ethqos, GENMASK(26, 24), BIT(26),
+ 				      SDCC_USR_CTL);
+ 
+@@ -719,7 +754,7 @@ static int qcom_ethqos_probe(struct platform_device *pdev)
+ 	ethqos->por = data->por;
+ 	ethqos->num_por = data->num_por;
+ 	ethqos->rgmii_config_loopback_en = data->rgmii_config_loopback_en;
+-	ethqos->has_emac3 = data->has_emac3;
++	ethqos->has_emac_ge_3 = data->has_emac_ge_3;
+ 
+ 	ethqos->link_clk = devm_clk_get(dev, data->link_clk_name ?: "rgmii");
+ 	if (IS_ERR(ethqos->link_clk)) {
+@@ -749,12 +784,13 @@ static int qcom_ethqos_probe(struct platform_device *pdev)
+ 	plat_dat->fix_mac_speed = ethqos_fix_mac_speed;
+ 	plat_dat->dump_debug_regs = rgmii_dump;
+ 	plat_dat->has_gmac4 = 1;
+-	if (ethqos->has_emac3)
++	if (ethqos->has_emac_ge_3)
+ 		plat_dat->dwmac4_addrs = &data->dwmac4_addrs;
+ 	plat_dat->pmt = 1;
+ 	plat_dat->tso_en = of_property_read_bool(np, "snps,tso");
+ 	if (of_device_is_compatible(np, "qcom,qcs404-ethqos"))
+ 		plat_dat->rx_clk_runs_in_lpi = 1;
++	plat_dat->has_integrated_pcs = data->has_integrated_pcs;
+ 
+ 	if (ethqos->serdes_phy) {
+ 		plat_dat->serdes_powerup = qcom_ethqos_serdes_powerup;
+@@ -775,6 +811,7 @@ static int qcom_ethqos_probe(struct platform_device *pdev)
+ 
+ static const struct of_device_id qcom_ethqos_match[] = {
+ 	{ .compatible = "qcom,qcs404-ethqos", .data = &emac_v2_3_0_data},
++	{ .compatible = "qcom,sa8775p-ethqos", .data = &emac_v4_0_0_data},
+ 	{ .compatible = "qcom,sc8280xp-ethqos", .data = &emac_v3_0_0_data},
+ 	{ .compatible = "qcom,sm8150-ethqos", .data = &emac_v2_1_0_data},
+ 	{ }
 -- 
 2.39.2
 
