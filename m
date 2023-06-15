@@ -2,141 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30EA2731B92
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:40:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D2C731B96
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 16:41:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345108AbjFOOkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 10:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57260 "EHLO
+        id S1345109AbjFOOlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 10:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345101AbjFOOkc (ORCPT
+        with ESMTP id S1345101AbjFOOlC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 10:40:32 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on20729.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5b::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 851EC2947;
-        Thu, 15 Jun 2023 07:40:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JUYm2l/jknbSfdr1faoKAn6nVTc6vd3TnQ6/zJ6LBd6DRwUetGL32QkcXvDNrT0g3E2RGSAv8XWiLiZHUgscnLU3bpbMbyJo7e/FEMfhzbtsIHd6dZUsDYzVMznbeFH9ljSaMhrZIbnkWNoXNX6h1KwEoPAd4a/lLuhdKGlXrjrxwRw6LC2bIMkzaTG1dFsgjY1T7QQzNZNVZTPN5fbPYMaJDrUllCGcRU2Xy977+4ie1d4Z0jL3Eqv4C82h6K1KTVjZ8cAulXiFU745VoKuh5tEVBqJhSFRNpzh6Gz6wlgtuHFGb/e8FlECBbJ7aukX9eAH5u2JztsIFUeko7wE5w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=I+ynb7zSs5VPYNedHqyaU+ZjmsvlKfFFdXa4N3KFvgs=;
- b=e6NUGA8htLRo1CZYeoaAZ2xj9p5BakGvZgAHdccaxJuf88kBsck93pVRxkUnrwyVoxNLxd1YNvqjGm8iSJcOlxota7h3PjhXNhNt+/KXLLkwBcyYwyDqlj4Y8LYac6QcX9k19wF23OCkf663OQOTfea/Z2QID9Ip2kBkN6aJd9OPiMfR/6WGlxVRVay5R66LHTTG7bgRK3go/f1YKPKqijcNYLVzauqXJTSDuE641arEzMhFxuW3tV4DrmRWB9wypXU+HS/8AYdeaFgas3ZXX+kZ9+A90TwhjLSSqpgModt6qqHZN/KfBC3dwWNo4CoPfNRQBUmpeSWkS7DVrl5MUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Thu, 15 Jun 2023 10:41:02 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7932952;
+        Thu, 15 Jun 2023 07:40:56 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f8d5262dc8so7039385e9.0;
+        Thu, 15 Jun 2023 07:40:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=I+ynb7zSs5VPYNedHqyaU+ZjmsvlKfFFdXa4N3KFvgs=;
- b=SpQHviDjQzqH6N7D9av/aBf8di1LKis5ei90MaZe/tVe3vN01vbao1xjqztjzzb/JRUHUzrpdhPnw89AssdcDAR2mJw6cbK3XcFsTGEMextnDAEm47nHGATIdzMUrXopM/FIlDIRpWjCcxXkBUmMUqRxvoGCgEY894rOK2diQwI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by BN0PR13MB4613.namprd13.prod.outlook.com (2603:10b6:408:12e::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.27; Thu, 15 Jun
- 2023 14:40:15 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e%5]) with mapi id 15.20.6500.025; Thu, 15 Jun 2023
- 14:40:15 +0000
-Date:   Thu, 15 Jun 2023 16:40:08 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc:     YueHaibing <yuehaibing@huawei.com>, bjorn@kernel.org,
-        magnus.karlsson@intel.com, jonathan.lemon@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
-        hawk@kernel.org, john.fastabend@gmail.com, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        maxtram95@gmail.com
-Subject: Re: [PATCH net-next] xsk: Remove unused inline function
- xsk_buff_discard()
-Message-ID: <ZIsiyKfr/WdzKlji@corigine.com>
-References: <20230615124612.37772-1-yuehaibing@huawei.com>
- <ZIsW47S1Pdzqxkxt@boxer>
- <ZIsXdcawAWc/9Izo@boxer>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZIsXdcawAWc/9Izo@boxer>
-X-ClientProxiedBy: AM3PR05CA0146.eurprd05.prod.outlook.com
- (2603:10a6:207:3::24) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=gmail.com; s=20221208; t=1686840055; x=1689432055;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Usc6x/BqXUwuzZHQ2o4g2n/2VrbmycWMBR5m/TRW5nE=;
+        b=V7nisqTclY6JQNhLF0D6wWbOY4hdbKdpYasOoeefJ+2Ve5775k+I6S6TZQIbYtmjdC
+         m1KiVz4IfuBQ53VkJiYo1NDJoEY9oOcLxMghcwvU89ucFxk57AhJy9+Q8EfjFKBPFl1P
+         xJA5aL/wM6ah+KZ/RLTyhuF/5NP6I3NYXSEiquH4oNFAuv6lgto202fe9oVdm1VI8PXU
+         r718meptj3IfkJk07IJvfJ2nRS1QlNmECMsRCr513PI4p7q0wt5oggslRjAlUuJDuy0O
+         LcAcwBb5On/cRotKINO1i2pQuqqN17z8N3fjLCRJJRzEmKAqaYDIh3yb54G610yDGs9+
+         AJ5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686840055; x=1689432055;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Usc6x/BqXUwuzZHQ2o4g2n/2VrbmycWMBR5m/TRW5nE=;
+        b=ec4zAYCbkOeo1ivVvlxGn2gOLsDXS2i+zsFB65id6WnckCzwPUYw8Dedztle97YqJG
+         xLrrABYV6Zrn7zsL+s235x0yM+1Je6QgevFKeP32nY4JqngjCgwp83GxTJWQD7hPBADw
+         /VtJGX4nnBwhboGAY+0zGjUk9VSjWhHnirXwZXHeMFHBs27Gy1ictYpyyD0ALM0MOM+p
+         w7RXPjZHvCeQXz3/+sFZimBj+ORDg/snPWubqU6+pSym+v957Fs1ic+JMkdDrwvPBAdi
+         CThMaA9yEFg7aqiweBX7b0CKEuzn8oOn+14l41qjjI50YWtxEHBxk+34mnCLfuCv6EIs
+         UGOw==
+X-Gm-Message-State: AC+VfDxxw4w6AwKtehpCJPHoYtg+m39IcYsKjg/K/3XJVIkP3ow35yXO
+        lxzdihl6EUiUF8Q6P8j6B9I=
+X-Google-Smtp-Source: ACHHUZ66E+Hx47+uO19xLpQ6m4shXXkkbZs1ZEIZ+3orsfrg2y2nhbnULL/HeCrMbqRpdDaT7xweow==
+X-Received: by 2002:a05:600c:4e87:b0:3f7:ec1d:21b3 with SMTP id f7-20020a05600c4e8700b003f7ec1d21b3mr4620285wmq.5.1686840054425;
+        Thu, 15 Jun 2023 07:40:54 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id t25-20020a1c7719000000b003f7eeec829asm20709865wmi.10.2023.06.15.07.40.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 07:40:53 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] usb: cdns2: Fix spelling mistake in a trace message "Wakupe" -> "Wakeup"
+Date:   Thu, 15 Jun 2023 15:40:52 +0100
+Message-Id: <20230615144052.2254528-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BN0PR13MB4613:EE_
-X-MS-Office365-Filtering-Correlation-Id: 23b307c7-52bb-49fb-b7de-08db6dae6e99
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lwBsg5S61cjwAd/RkOXd/r9oZHZiaAKAOSV9wFJ2FK5WaF6vgcL4WiVSfKGJ6pm8GTM7z2IC0Z58I/IopaGfM/iwjaEy+PsYE8+yfPS4KDj0BiNxgq0ns6QtwaqbVTskVtxxQn1bcVp7Zqb2JDNeIOzzm9U7At66E3mLRUU3sznDNQ8wtLf3I8qjY1RWSJDRO5i2XfXrzt6v55o2vUAIZfQ1stwGFKKX+W3vOv9AburUHcQbusiWS5i+9G15GGPyOMqbZpTngP+/XGcY60UyTR3Pk/d+k5nFnR1wmXbw2CK07ngc/qkEuCMmGxt7deAmSo8w/ZhvaqDHTEFrz83BrhrqQEQt7p6Qdbf0dakZ+tozBe/MgTQnuX8N5cDXIIXwYeGtQRnkdj3l2QyZB3njPuvCBREGsobxAFX1yVyzGoJ9TA6cNWGWINzGRkAPGjHVnNRCWoN6YXRPqsCigrSTVPUKICDdwJc6y0EKRfHCNCYm0Ku4iGdD32Wq4noNxhAtGFk1peXu/TncnAY1ZsswrumFHqO6fyfsEbxBIQjl6iXdIRNUm8VQWkMEkJK6Vtmo4xCvs0Xy5X2tJcxtoUMC9Ku/GOXpaTQx6tfideAqePo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(136003)(39840400004)(366004)(396003)(451199021)(5660300002)(38100700002)(2616005)(6506007)(186003)(2906002)(4744005)(6512007)(7416002)(44832011)(478600001)(66556008)(6916009)(66946007)(66476007)(316002)(6666004)(8936002)(6486002)(8676002)(41300700001)(86362001)(36756003)(4326008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/UH6LY1P5Mkf5Hg2GXjvaENbD8/LwuMfSdeh4hGRptgOrLTLeZfUgeCkxfNU?=
- =?us-ascii?Q?mUhAFfHTGz+A9wL0kfEXV3LbkQ7RrEoKRTlEF0RviF3kkZKxXvIHj6t2ydt2?=
- =?us-ascii?Q?24qSW7/WXL++y3wXac0gsgIf859Wk3fcAiDb4XtvsFPxMOcfQxqHioae8+na?=
- =?us-ascii?Q?xWLMpg4VJIaszyr/7ZHIpJecPTaFUxkRP4w4vSOsSqdUr3CzTtVkYdpJ1e4V?=
- =?us-ascii?Q?9/7YIqShjTPvOiRyoNLd/mYiB+DBL5STgj9JOcN6n2BAkSz7pNVZmmo1am6g?=
- =?us-ascii?Q?0NzuIJJZ64ApgEOR+jGy3iBvFlMbBzpKdFpaTwpjmzPnVP5WDH688S4RtduG?=
- =?us-ascii?Q?hcy27+mgDSRYmNdMY7DEjBZS9Nf8F0GUL0PoyT2MMu7LztK0p6K9XMDC3IHw?=
- =?us-ascii?Q?E47msvv7A5uqv/cS0zITIQNCNfhVUkEVttC7Q4Ox7tnbbrJHhp5BqjON4tXy?=
- =?us-ascii?Q?vvzkg+MQ/mpMU5vF4T8kXIDtrrFvkOLzQKk6FxeTlFxu6eJspaBaPbbDihc7?=
- =?us-ascii?Q?7bk2XDYNjj+h+nW+vo3jKRP4cWDCMaiHoDwN5MWaezyXW9mmwmSA7wXh08y+?=
- =?us-ascii?Q?rG+JS1EDQ01lbqdbAbSZCLhoF6ZF9Z0RC5Egzo7vyJQdnl2xV/kp6cRV24wT?=
- =?us-ascii?Q?I23r74LUM1DkZEH7KgPDdFR9eLWfNOfoF5AwhGvH06dhrT4R5n9QFGnqFfn2?=
- =?us-ascii?Q?kfb1mrJPjcgX99RvNb69hrkrQh7wytMjf6Nmpf9FeJY4dSdLNL619sfmr5ts?=
- =?us-ascii?Q?wWlDV9VSAr+Ihzh4g1YAWGide4dPGtqFlz1kc265hfh85c1z20mTJzZ+5lzF?=
- =?us-ascii?Q?82LhBpvu03FyayMgR6rriurcgmDf7Peg8AFqd0zewnChIJRR2Lr6LJ+0PM1h?=
- =?us-ascii?Q?3QjKeg0R6oYgQ9RAi+9nDB8gpLTrMrjHsKRRsYt5E4k7+fIAjqNwB+5JPWEr?=
- =?us-ascii?Q?mh8ZTQlCiL9bSJSB1p2jfDYeWtLnT+xj9a+fdYVa9fSS6HQZaOP4dyx5B5oh?=
- =?us-ascii?Q?TG357mgbz8+R/UXldONuJOXEDQQN/ApMl19nmbxMXPn4kMpwf333TkDQA5rk?=
- =?us-ascii?Q?+pVEeDwawRN3P6yW709uz4z19cvSTxsyQP7lod4DtYbsBkMmGCXGBjqiUINH?=
- =?us-ascii?Q?MccMlXoz4JXNh55RjADNacYuMdlZ90ksNboaQxEREo97rvnEI/+EjmGC2ZTA?=
- =?us-ascii?Q?OUC2nU1jyxKxq2ZlEDmbGYnV/Z/5pXX93TQZfaMT1Uj2kJSNo3SZs1U+Tm3Z?=
- =?us-ascii?Q?INUuI2fdedTxUJEMhLqJ6CDUPekFs40ktD5UZAmIuhGYa4L4poVeK7VH3cJ0?=
- =?us-ascii?Q?IHQSvd9o9/hGWPjgUHDqxbMeMaAJXHLGgXu80o8K59eTIxdiHAzBVlTqf9O6?=
- =?us-ascii?Q?b6uh+50DYr3trElwQtgnbR/j2zXRjYGLrp6fllxxo6lDRoUHhI4S14mOhK4o?=
- =?us-ascii?Q?WOlkHy3e5KWR11DHqqLNwubn+kf+2HQY+U0s2iyYV6dBVc0R9sr7R2Dgo1Yj?=
- =?us-ascii?Q?6nDMkGj44RqAJ27X2aXg5dnirWY7mIpqZyYMEiHxReFPVegr1SRuQfSVCFQk?=
- =?us-ascii?Q?VSlHUsM2AaiaPbjLCnUyayrLXin+m5VsHl8KjNi1L9PABsgGg2Ec/+zEwKSZ?=
- =?us-ascii?Q?+6khDgYk/UzxyKih2y66/viWJe+3Zjp2LiTSb4Iijomz2c2y9WySGIgWOzrt?=
- =?us-ascii?Q?1aCtVg=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 23b307c7-52bb-49fb-b7de-08db6dae6e99
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 14:40:15.1971
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OWwWXLJo1nO4FKpXRDSsgIOlKmUrpi8KWasZSgVikF1KHPR6OMdBxIqwwm6iKtqYXRixh7MepoklxRP3qACjzNheL+fMjmql4Jk6WP42wBo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR13MB4613
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 03:51:49PM +0200, Maciej Fijalkowski wrote:
-> On Thu, Jun 15, 2023 at 03:49:23PM +0200, Maciej Fijalkowski wrote:
-> > On Thu, Jun 15, 2023 at 08:46:12PM +0800, YueHaibing wrote:
-> > > commit f2f167583601 ("xsk: Remove unused xsk_buff_discard")
-> > > left behind this, remove it.
-> > > 
-> > > Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-> > 
-> > Yeah this is a stub for !CONFIG_XDP_SOCKETS...
-> 
-> Wait, I am not sure if this should go to bpf tree and have fixes tag
-> pointing to the cited commit?
-> 
-> Functionally this commit does not fix anything but it feels that
-> f2f167583601 was incomplete.
+There is a spelling mistake in a trace message. Fix it.
 
-FWIIW, I think that bpf-next is appropriate for this patch
-as it doesn't address a bug.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/usb/gadget/udc/cdns2/cdns2-debug.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/udc/cdns2/cdns2-debug.h b/drivers/usb/gadget/udc/cdns2/cdns2-debug.h
+index fd22ae949008..be9ae0d28a40 100644
+--- a/drivers/usb/gadget/udc/cdns2/cdns2-debug.h
++++ b/drivers/usb/gadget/udc/cdns2/cdns2-debug.h
+@@ -36,7 +36,7 @@ static inline const char *cdns2_decode_usb_irq(char *str, size_t size,
+ 	ret += snprintf(str + ret, size - ret, ", EXT: 0x%02x - ", ext_irq);
+ 
+ 	if (ext_irq & EXTIRQ_WAKEUP)
+-		ret += snprintf(str + ret, size - ret, "Wakupe ");
++		ret += snprintf(str + ret, size - ret, "Wakeup ");
+ 	if (ext_irq & EXTIRQ_VBUSFAULT_FALL)
+ 		ret += snprintf(str + ret, size - ret, "VBUS_FALL ");
+ 	if (ext_irq & EXTIRQ_VBUSFAULT_RISE)
+-- 
+2.39.2
+
