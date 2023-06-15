@@ -2,118 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70E4A731FA7
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 20:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77D7A731FAA
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 20:04:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234594AbjFOSDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 14:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57828 "EHLO
+        id S230423AbjFOSE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 14:04:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjFOSDN (ORCPT
+        with ESMTP id S230093AbjFOSEZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 14:03:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6152949;
-        Thu, 15 Jun 2023 11:03:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CF1362243;
-        Thu, 15 Jun 2023 18:03:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0504C433C0;
-        Thu, 15 Jun 2023 18:03:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686852191;
-        bh=2pj0TeYHvBeMLyFsjUdIZwPu4aw2LFARw1F9lkF8nA8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=P+b6hnjnj9qo5yXSvbeQA7uzmG7mKE0Q8w2EXG0KwOedKXFBf79EaCZWKwwmzzA9D
-         veAeWfRi/kxZ83n9lauUgX0y1Y1byh+v4MCxJExpgvEH13MDSezhA2HCbh++bb/+/b
-         ZnL0+Hi10VUaijzW/AQ8yJinh+e0Obnf0eVVfAtQdQVg7eWf8DnS/lzkb64D9F3vxH
-         BbQ1uVVZTccmNLUxgaE5H9kPR/W6EFOTie/eLNz9+o5hhdfDhrTZE2S4NXD5aPBtx4
-         /R7a0nJoijCVSXR9TqJZKA1FD9fkczEoIhPJHMy0DsraiuzNnrXM2K4GsBiiERco+c
-         ewFY5wBAbWNQQ==
-Date:   Thu, 15 Jun 2023 12:04:07 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Johannes Berg <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] wifi: wext-core: Fix -Wstringop-overflow warning in
- ioctl_standard_iw_point()
-Message-ID: <ZItSlzvIpjdjNfd8@work>
+        Thu, 15 Jun 2023 14:04:25 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE33C294A;
+        Thu, 15 Jun 2023 11:04:23 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id e9e14a558f8ab-33aa60f4094so4118675ab.1;
+        Thu, 15 Jun 2023 11:04:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686852263; x=1689444263;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/u+///EcupbIJP0wmwzWwwhqxbaWqaZ46VmaNSEFYns=;
+        b=NwXE6DH7KcGFqGahn7YCqVt/g6QP3KBqz0tDM1qLmE/9igLwfk2duRLPGN/GtJn6jU
+         Rwyg0UkRwZ1rz/JdQiDm+V0VodKkd0MvXTPpa9ZZmNdDnI2sed5D2pbzoHJdBrQt2WwN
+         3Zj3ibXFxp5Fw8jGzOI6gHa8hEFGFkWBsNEOXb7vv/sGK9ZvTPetn3VooYDBErUDVhMU
+         4uClS8KpJ7vDGKrUq9uKrsPJd6fMp0YcPgvDxwMNQwYCfZdpE8rWj/caC9Q7ZVBCsBjy
+         c+LD5iDkvLmzWguOcKUiWz/Ttna8GBYaLU9zh5khbuMGyqy5ZvbKkK44CrZaJIxGVYtg
+         sRDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686852263; x=1689444263;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/u+///EcupbIJP0wmwzWwwhqxbaWqaZ46VmaNSEFYns=;
+        b=g9C+73OTJQaedG0T/sQbjASxELabJ8FbzYTJ7lQyGuY7HQGVIfT9h1F+MMy/w6j9d+
+         Podoq7q9VKoXOcrMxANiYh+xhSlNFikKtBNBpgkBOG3JK4yB970g61PLjGsbkXadEJ1j
+         LGmu/uPwVskRw3xfyaGNEuBiL1DH5Xx9lIP/E94guZBcEn3P4/6bTTbr6UPl6O72WtM5
+         QINSGORrJQwqcgAtLprkfX8lJGyrOJ8luUeK+Ylso5ozwR/Yt0klmqeIrInQ4ooWeLrv
+         j2MSUU1NFh0ytUhZRFXkgbiOqemALza/KSuORiwuNxaRahZh0+caYIHqO6GvxuUKdwBP
+         0LFg==
+X-Gm-Message-State: AC+VfDxAuB4G9rJw6TljM1awSVGKCBv0WfRmnVHHfttieDnWNqVKVsCy
+        iB0pA1gf0eVA2qVotfnyi4U=
+X-Google-Smtp-Source: ACHHUZ7zHUNNjFwo+XUa1IpVOBDaASLdVU8eFLjZMuf3xpn0Ypd/YbViRraMO9er1ZfPRv82PKSxMg==
+X-Received: by 2002:a05:6e02:ca9:b0:341:df27:8a97 with SMTP id 9-20020a056e020ca900b00341df278a97mr781250ilg.12.1686852262994;
+        Thu, 15 Jun 2023 11:04:22 -0700 (PDT)
+Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
+        by smtp.gmail.com with ESMTPSA id a11-20020a92a30b000000b0033ce0ef231bsm3039027ili.23.2023.06.15.11.04.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 11:04:22 -0700 (PDT)
+From:   Azeem Shaikh <azeemshaikh38@gmail.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-hardening@vger.kernel.org,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Subject: [PATCH v2] tracing/boot: Replace strlcpy with strscpy
+Date:   Thu, 15 Jun 2023 18:04:20 +0000
+Message-ID: <20230615180420.400769-1-azeemshaikh38@gmail.com>
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--Wstringop-overflow is legitimately warning us about extra_size
-pontentially being zero at some point, hence potenially ending
-up _allocating_ zero bytes of memory for extra pointer and then
-trying to access such object in a call to copy_from_user().
+strlcpy() reads the entire source buffer first.
+This read may exceed the destination size limit.
+This is both inefficient and can lead to linear read
+overflows if a source string is not NUL-terminated [1].
+In an effort to remove strlcpy() completely [2], replace
+strlcpy() here with strscpy().
 
-Fix this by adding a sanity check to ensure we never end up
-trying to allocate zero bytes of data for extra pointer, before
-continue executing the rest of the code in the function.
+Direct replacement is safe here since return value of -errno
+is used to check for truncation instead of sizeof(dest).
 
-Address the following -Wstringop-overflow warning seen when built
-m68k architecture with allyesconfig configuration:
-                 from net/wireless/wext-core.c:11:
-In function '_copy_from_user',
-    inlined from 'copy_from_user' at include/linux/uaccess.h:183:7,
-    inlined from 'ioctl_standard_iw_point' at net/wireless/wext-core.c:825:7:
-arch/m68k/include/asm/string.h:48:25: warning: '__builtin_memset' writing 1 or more bytes into a region of size 0 overflows the destination [-Wstringop-overflow=]
-   48 | #define memset(d, c, n) __builtin_memset(d, c, n)
-      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~
-include/linux/uaccess.h:153:17: note: in expansion of macro 'memset'
-  153 |                 memset(to + (n - res), 0, res);
-      |                 ^~~~~~
-In function 'kmalloc',
-    inlined from 'kzalloc' at include/linux/slab.h:694:9,
-    inlined from 'ioctl_standard_iw_point' at net/wireless/wext-core.c:819:10:
-include/linux/slab.h:577:16: note: at offset 1 into destination object of size 0 allocated by '__kmalloc'
-  577 |         return __kmalloc(size, flags);
-      |                ^~~~~~~~~~~~~~~~~~~~~~
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+[2] https://github.com/KSPP/linux/issues/89
 
-This help with the ongoing efforts to globally enable
--Wstringop-overflow.
-
-Link: https://github.com/KSPP/linux/issues/315
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
 ---
- net/wireless/wext-core.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+v2:
+ * Use "< 0" instead of -E2BIG.
 
-diff --git a/net/wireless/wext-core.c b/net/wireless/wext-core.c
-index a125fd1fa134..a161c64d1765 100644
---- a/net/wireless/wext-core.c
-+++ b/net/wireless/wext-core.c
-@@ -815,6 +815,12 @@ static int ioctl_standard_iw_point(struct iw_point *iwp, unsigned int cmd,
- 		}
- 	}
+v1:
+ * https://lore.kernel.org/all/20230613004125.3539934-1-azeemshaikh38@gmail.com/
+
+ kernel/trace/trace_boot.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/trace/trace_boot.c b/kernel/trace/trace_boot.c
+index 778200dd8ede..7ccc7a8e155b 100644
+--- a/kernel/trace/trace_boot.c
++++ b/kernel/trace/trace_boot.c
+@@ -31,7 +31,7 @@ trace_boot_set_instance_options(struct trace_array *tr, struct xbc_node *node)
  
-+	/* Sanity-check to ensure we never end up _allocating_ zero
-+	 * bytes of data for extra.
-+	 */
-+	if (extra_size <= 0)
-+		return -EFAULT;
-+
- 	/* kzalloc() ensures NULL-termination for essid_compat. */
- 	extra = kzalloc(extra_size, GFP_KERNEL);
- 	if (!extra)
+ 	/* Common ftrace options */
+ 	xbc_node_for_each_array_value(node, "options", anode, p) {
+-		if (strlcpy(buf, p, ARRAY_SIZE(buf)) >= ARRAY_SIZE(buf)) {
++		if (strscpy(buf, p, ARRAY_SIZE(buf)) < 0) {
+ 			pr_err("String is too long: %s\n", p);
+ 			continue;
+ 		}
+@@ -87,7 +87,7 @@ trace_boot_enable_events(struct trace_array *tr, struct xbc_node *node)
+ 	const char *p;
+ 
+ 	xbc_node_for_each_array_value(node, "events", anode, p) {
+-		if (strlcpy(buf, p, ARRAY_SIZE(buf)) >= ARRAY_SIZE(buf)) {
++		if (strscpy(buf, p, ARRAY_SIZE(buf)) < 0) {
+ 			pr_err("String is too long: %s\n", p);
+ 			continue;
+ 		}
+@@ -486,7 +486,7 @@ trace_boot_init_one_event(struct trace_array *tr, struct xbc_node *gnode,
+ 
+ 	p = xbc_node_find_value(enode, "filter", NULL);
+ 	if (p && *p != '\0') {
+-		if (strlcpy(buf, p, ARRAY_SIZE(buf)) >= ARRAY_SIZE(buf))
++		if (strscpy(buf, p, ARRAY_SIZE(buf)) < 0)
+ 			pr_err("filter string is too long: %s\n", p);
+ 		else if (apply_event_filter(file, buf) < 0)
+ 			pr_err("Failed to apply filter: %s\n", buf);
+@@ -494,7 +494,7 @@ trace_boot_init_one_event(struct trace_array *tr, struct xbc_node *gnode,
+ 
+ 	if (IS_ENABLED(CONFIG_HIST_TRIGGERS)) {
+ 		xbc_node_for_each_array_value(enode, "actions", anode, p) {
+-			if (strlcpy(buf, p, ARRAY_SIZE(buf)) >= ARRAY_SIZE(buf))
++			if (strscpy(buf, p, ARRAY_SIZE(buf)) < 0)
+ 				pr_err("action string is too long: %s\n", p);
+ 			else if (trigger_process_regex(file, buf) < 0)
+ 				pr_err("Failed to apply an action: %s\n", p);
 -- 
-2.34.1
+2.41.0.162.gfafddb0af9-goog
+
 
