@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FED3731A1D
-	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A43A7731A26
+	for <lists+linux-kernel@lfdr.de>; Thu, 15 Jun 2023 15:36:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344293AbjFONfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 09:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44078 "EHLO
+        id S1344376AbjFONgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 09:36:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344574AbjFONfL (ORCPT
+        with ESMTP id S1344351AbjFONgU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 09:35:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A38C2960
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 06:34:30 -0700 (PDT)
+        Thu, 15 Jun 2023 09:36:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FD63582
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 06:35:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F5E4637EE
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EFC6633FE
         for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 13:34:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A30F5C43395;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB406C433CA;
         Thu, 15 Jun 2023 13:34:16 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1q9n79-000Tmx-28;
+        id 1q9n79-000TnV-2o;
         Thu, 15 Jun 2023 09:34:15 -0400
-Message-ID: <20230615133415.478015212@goodmis.org>
+Message-ID: <20230615133415.683635706@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Thu, 15 Jun 2023 09:05:35 -0400
+Date:   Thu, 15 Jun 2023 09:05:36 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
+        Beau Belgrave <beaub@linux.microsoft.com>,
         sunliming <sunliming@kylinos.cn>
-Subject: [for-linus][PATCH 04/15] tracing: Modify print_fields() for fields output order
+Subject: [for-linus][PATCH 05/15] tracing/user_events: Fix the incorrect trace record for empty
+ arguments events
 References: <20230615130531.200384328@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,39 +53,41 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: sunliming <sunliming@kylinos.cn>
 
-Now the print_fields() print trace event fields in reverse order. Modify
-it to the positive sequence.
+The user_events support events that has empty arguments. But the trace event
+is discarded and not really committed when the arguments is empty. Fix this
+by not attempting to copy in zero-length data.
 
-Example outputs for a user event:
-	test0 u32 count1; u32 count2
+Link: https://lkml.kernel.org/r/20230606062027.1008398-2-sunliming@kylinos.cn
 
-Output before:
-	example-2547    [000] .....   325.666387: test0: count2=0x2 (2) count1=0x1 (1)
-
-Output after:
-	example-2742    [002] .....   429.769370: test0: count1=0x1 (1) count2=0x2 (2)
-
-Link: https://lore.kernel.org/linux-trace-kernel/20230525085232.5096-1-sunliming@kylinos.cn
-
-Fixes: 80a76994b2d88 ("tracing: Add "fields" option to show raw trace event fields")
+Acked-by: Beau Belgrave <beaub@linux.microsoft.com>
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 Signed-off-by: sunliming <sunliming@kylinos.cn>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/trace/trace_output.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/trace/trace_events_user.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
-index 15f05faaae44..1e33f367783e 100644
---- a/kernel/trace/trace_output.c
-+++ b/kernel/trace/trace_output.c
-@@ -847,7 +847,7 @@ static void print_fields(struct trace_iterator *iter, struct trace_event_call *c
- 	int ret;
- 	void *pos;
+diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+index afe61dc86543..49914b6cb651 100644
+--- a/kernel/trace/trace_events_user.c
++++ b/kernel/trace/trace_events_user.c
+@@ -1432,7 +1432,7 @@ static void user_event_ftrace(struct user_event *user, struct iov_iter *i,
+ 	if (unlikely(!entry))
+ 		return;
  
--	list_for_each_entry(field, head, link) {
-+	list_for_each_entry_reverse(field, head, link) {
- 		trace_seq_printf(&iter->seq, " %s=", field->name);
- 		if (field->offset + field->size > iter->ent_size) {
- 			trace_seq_puts(&iter->seq, "<OVERFLOW>");
+-	if (unlikely(!copy_nofault(entry + 1, i->count, i)))
++	if (unlikely(i->count != 0 && !copy_nofault(entry + 1, i->count, i)))
+ 		goto discard;
+ 
+ 	if (!list_empty(&user->validators) &&
+@@ -1473,7 +1473,7 @@ static void user_event_perf(struct user_event *user, struct iov_iter *i,
+ 
+ 		perf_fetch_caller_regs(regs);
+ 
+-		if (unlikely(!copy_nofault(perf_entry + 1, i->count, i)))
++		if (unlikely(i->count != 0 && !copy_nofault(perf_entry + 1, i->count, i)))
+ 			goto discard;
+ 
+ 		if (!list_empty(&user->validators) &&
 -- 
 2.39.2
