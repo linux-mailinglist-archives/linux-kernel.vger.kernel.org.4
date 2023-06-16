@@ -2,103 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 697D97339FC
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 21:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E27B7339FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 21:35:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346246AbjFPTf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 15:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35990 "EHLO
+        id S1345543AbjFPTfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 15:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346193AbjFPTfZ (ORCPT
+        with ESMTP id S1346230AbjFPTfd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 15:35:25 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C2235A0;
-        Fri, 16 Jun 2023 12:35:23 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 213431C0E70; Fri, 16 Jun 2023 21:35:22 +0200 (CEST)
-Date:   Fri, 16 Jun 2023 21:35:21 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Osama Muhammad <osmtendev@gmail.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        krzysztof.kozlowski@linaro.org, netdev@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 4.14 4/6] nfcsim.c: Fix error checking for
- debugfs_create_dir
-Message-ID: <ZIy5ecuHQUP1wUu2@duo.ucw.cz>
-References: <20230615114016.649846-1-sashal@kernel.org>
- <20230615114016.649846-4-sashal@kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="pxvocpSbgigqWfO6"
-Content-Disposition: inline
-In-Reply-To: <20230615114016.649846-4-sashal@kernel.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Fri, 16 Jun 2023 15:35:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387F33AB0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 12:35:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B3F7561B8F
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 19:35:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1A1A6C433C8;
+        Fri, 16 Jun 2023 19:35:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686944127;
+        bh=ESUTyCi5EwCLGJ30KrlsfLr7gaBrJN1b8v1ohbJuktE=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=ufgVe0RaYqzR0q/3naVj33s4baVcalbQRgvnQ84FLYKAWbpmEhEdPanNLoQKtocR9
+         cqbnIxH/8gah1d+HuHzmNwK0F4i0CYe71rsGtVw8msxXqydJ+8PhUXi3m8Nb4PfRAf
+         AKETuCu+L1JxrzR7hXXe9YVidncMB4a3nPgEr0hwyLfChpk5XsYLW23kn267Ptn4te
+         Pig7QkcCtSLE0jGqD8bugibB/Mj3tsUOjeZwMo3OFWVgFWKnNOxqN8WPSp4LY1lt2G
+         yjinJ6HuT0KbjatiFaveWWXiGz8S0vtNEU9MHD14BeYciAYlLHr2HgficbbGqURWj+
+         gyPkhYtJ5AQRQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E9B48C395E0;
+        Fri, 16 Jun 2023 19:35:26 +0000 (UTC)
+Subject: Re: [GIT PULL] sound fixes for 6.4-rc7
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <87ttv77ry2.wl-tiwai@suse.de>
+References: <87ttv77ry2.wl-tiwai@suse.de>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <87ttv77ry2.wl-tiwai@suse.de>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.4-rc7
+X-PR-Tracked-Commit-Id: 227d2c3154a93f424503d3e4b7e157288848cf1b
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: b4af682124c5b892f554d7fa4d21216530d8da4b
+Message-Id: <168694412694.25417.7393469725558210268.pr-tracker-bot@kernel.org>
+Date:   Fri, 16 Jun 2023 19:35:26 +0000
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The pull request you sent on Fri, 16 Jun 2023 10:05:25 +0200:
 
---pxvocpSbgigqWfO6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.4-rc7
 
-Hi!
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/b4af682124c5b892f554d7fa4d21216530d8da4b
 
-> [ Upstream commit 9b9e46aa07273ceb96866b2e812b46f1ee0b8d2f ]
->=20
-> This patch fixes the error checking in nfcsim.c.
-> The DebugFS kernel API is developed in
-> a way that the caller can safely ignore the errors that
-> occur during the creation of DebugFS nodes.
+Thank you!
 
-I don't think this is good idea; user will wonder why he can't see
-debugfs files, and pr_err() is quite suitable way to handle this.
-
-Anyway, this does not really fix a bug, so we should not be putting it
-into stable.
-
-Best regards,
-								Pavel
-
->  drivers/nfc/nfcsim.c | 4 ----
->  1 file changed, 4 deletions(-)
->=20
-> diff --git a/drivers/nfc/nfcsim.c b/drivers/nfc/nfcsim.c
-> index 533e3aa6275cd..cf07b366500e9 100644
-> --- a/drivers/nfc/nfcsim.c
-> +++ b/drivers/nfc/nfcsim.c
-> @@ -345,10 +345,6 @@ static struct dentry *nfcsim_debugfs_root;
->  static void nfcsim_debugfs_init(void)
->  {
->  	nfcsim_debugfs_root =3D debugfs_create_dir("nfcsim", NULL);
-> -
-> -	if (!nfcsim_debugfs_root)
-> -		pr_err("Could not create debugfs entry\n");
-> -
->  }
-> =20
->  static void nfcsim_debugfs_remove(void)
-
---=20
-DENX Software Engineering GmbH,        Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---pxvocpSbgigqWfO6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZIy5eQAKCRAw5/Bqldv6
-8leTAJ0ThYWaZ8JRFKMl8B8izHMZGm82CQCgjlPLfPVE1r8QIS26e8qGShfD+CU=
-=Onr6
------END PGP SIGNATURE-----
-
---pxvocpSbgigqWfO6--
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
