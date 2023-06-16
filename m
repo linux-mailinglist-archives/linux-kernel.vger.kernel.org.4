@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F70732DB3
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:27:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E581C732DB4
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234889AbjFPK1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 06:27:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50132 "EHLO
+        id S1343990AbjFPK1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 06:27:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344132AbjFPK0d (ORCPT
+        with ESMTP id S1344011AbjFPK0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 06:26:33 -0400
+        Fri, 16 Jun 2023 06:26:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7843AAE;
-        Fri, 16 Jun 2023 03:25:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF693C02;
+        Fri, 16 Jun 2023 03:25:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F40B63591;
-        Fri, 16 Jun 2023 10:25:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A643C433CA;
-        Fri, 16 Jun 2023 10:25:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09B2363594;
+        Fri, 16 Jun 2023 10:25:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F38D1C433B8;
+        Fri, 16 Jun 2023 10:25:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686911148;
-        bh=dQfhVRkBunwTxmNqhiny34v4o5uLsp3NaqxXhfPS/kI=;
+        s=k20201202; t=1686911152;
+        bh=3gJBdkkoAodYuniUryayjLAqsHJEVzhZbdczoKm57UI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nhL4AIzwco1rhdf3bKn8YblI9lfkZ84oQ1Zns3IHd1yPfI8ZTiK2Z/HhDtliBP6/k
-         I2hfIFD8ywpUsGbpnjgrJLFF8I95GP5QwRCwrDvUgpe6HqSON8CLYdmH2trvXeILpp
-         ptDnJrfLNrsRz8ZzpMoyi8bua+tMcNfTN8Yq44Qu9pc9o9yfP+pbhsk0UjvbY5Cz0q
-         nzyBmDlrKju4r3oU3Zt4rvAo+Z0gzckg1vz5GDpzpg5urlshhG9BCp9rxAb+W6g7Rv
-         MeVEmCXgvNRn1d8AI2b2i5eeVmHgXolNJIb1TfdPhq574SGKF6MHcDxBNdkqDAP/wN
-         iwkcujyy9Bnmw==
+        b=eNw0yfMea/53qmKDgJ04BlSUJL8G4y18cm+ktFXU68qvA5LNQyYXQuXH5pTOHGcA6
+         KFMNRBRpttkgk6XjklE4/WKfLCCaNiu9hUQhE0jc0AinxkBEu/nYrCLmCbr3d1f8zL
+         QePVtZ8BqROeMvNzLmqLRIwcNlDPUdr+AEPEV6SUDeUeoYDRnVVQY2iXktpoc+n699
+         zLtWQOHDHf+5GhNH7hdinz/O6DtulSSrmml+1nQOxBvLTaIhBsyJAvetRifePWiuOH
+         x+lmYjnin1Gl0wqBMNJkkRKe7fOH6u5r4PDo/mCiPbhu5M8afN7+U1aejzq7As5B5F
+         DmiH00aSHtNGA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andreas Gruenbacher <agruenba@redhat.com>, Jan Kara <jack@suse.cz>,
-        Sasha Levin <sashal@kernel.org>, rpeterso@redhat.com,
-        cluster-devel@redhat.com
-Subject: [PATCH AUTOSEL 6.3 14/30] gfs2: Don't get stuck writing page onto itself under direct I/O
-Date:   Fri, 16 Jun 2023 06:25:02 -0400
-Message-Id: <20230616102521.673087-14-sashal@kernel.org>
+Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Sasha Levin <sashal@kernel.org>, hca@linux.ibm.com,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, masahiroy@kernel.org, nathan@kernel.org,
+        svens@linux.ibm.com, linux-s390@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.3 15/30] s390/purgatory: disable branch profiling
+Date:   Fri, 16 Jun 2023 06:25:03 -0400
+Message-Id: <20230616102521.673087-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230616102521.673087-1-sashal@kernel.org>
 References: <20230616102521.673087-1-sashal@kernel.org>
@@ -59,79 +63,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andreas Gruenbacher <agruenba@redhat.com>
+From: Alexander Gordeev <agordeev@linux.ibm.com>
 
-[ Upstream commit fa58cc888d67e640e354d8b3ceef877ea167b0cf ]
+[ Upstream commit 03c5c83b70dca3729a3eb488e668e5044bd9a5ea ]
 
-When a direct I/O write is performed, iomap_dio_rw() invalidates the
-part of the page cache which the write is going to before carrying out
-the write.  In the odd case, the direct I/O write will be reading from
-the same page it is writing to.  gfs2 carries out writes with page
-faults disabled, so it should have been obvious that this page
-invalidation can cause iomap_dio_rw() to never make any progress.
-Currently, gfs2 will end up in an endless retry loop in
-gfs2_file_direct_write() instead, though.
+Avoid linker error for randomly generated config file that
+has CONFIG_BRANCH_PROFILE_NONE enabled and make it similar
+to riscv, x86 and also to commit 4bf3ec384edf ("s390: disable
+branch profiling for vdso").
 
-Break this endless loop by limiting the number of retries and falling
-back to buffered I/O after that.
-
-Also simplify should_fault_in_pages() sightly and add a comment to make
-the above case easier to understand.
-
-Reported-by: Jan Kara <jack@suse.cz>
-Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
+Reviewed-by: Vasily Gorbik <gor@linux.ibm.com>
+Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/gfs2/file.c | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+ arch/s390/purgatory/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/gfs2/file.c b/fs/gfs2/file.c
-index 300844f50dcd2..cb62c8f07d1e7 100644
---- a/fs/gfs2/file.c
-+++ b/fs/gfs2/file.c
-@@ -784,9 +784,13 @@ static inline bool should_fault_in_pages(struct iov_iter *i,
- 	if (!user_backed_iter(i))
- 		return false;
- 
-+	/*
-+	 * Try to fault in multiple pages initially.  When that doesn't result
-+	 * in any progress, fall back to a single page.
-+	 */
- 	size = PAGE_SIZE;
- 	offs = offset_in_page(iocb->ki_pos);
--	if (*prev_count != count || !*window_size) {
-+	if (*prev_count != count) {
- 		size_t nr_dirtied;
- 
- 		nr_dirtied = max(current->nr_dirtied_pause -
-@@ -870,6 +874,7 @@ static ssize_t gfs2_file_direct_write(struct kiocb *iocb, struct iov_iter *from,
- 	struct gfs2_inode *ip = GFS2_I(inode);
- 	size_t prev_count = 0, window_size = 0;
- 	size_t written = 0;
-+	bool enough_retries;
- 	ssize_t ret;
- 
- 	/*
-@@ -913,11 +918,17 @@ static ssize_t gfs2_file_direct_write(struct kiocb *iocb, struct iov_iter *from,
- 	if (ret > 0)
- 		written = ret;
- 
-+	enough_retries = prev_count == iov_iter_count(from) &&
-+			 window_size <= PAGE_SIZE;
- 	if (should_fault_in_pages(from, iocb, &prev_count, &window_size)) {
- 		gfs2_glock_dq(gh);
- 		window_size -= fault_in_iov_iter_readable(from, window_size);
--		if (window_size)
--			goto retry;
-+		if (window_size) {
-+			if (!enough_retries)
-+				goto retry;
-+			/* fall back to buffered I/O */
-+			ret = 0;
-+		}
- 	}
- out_unlock:
- 	if (gfs2_holder_queued(gh))
+diff --git a/arch/s390/purgatory/Makefile b/arch/s390/purgatory/Makefile
+index 32573b4f9bd20..cc8cf5abea158 100644
+--- a/arch/s390/purgatory/Makefile
++++ b/arch/s390/purgatory/Makefile
+@@ -26,6 +26,7 @@ KBUILD_CFLAGS += -Wno-pointer-sign -Wno-sign-compare
+ KBUILD_CFLAGS += -fno-zero-initialized-in-bss -fno-builtin -ffreestanding
+ KBUILD_CFLAGS += -Os -m64 -msoft-float -fno-common
+ KBUILD_CFLAGS += -fno-stack-protector
++KBUILD_CFLAGS += -DDISABLE_BRANCH_PROFILING
+ KBUILD_CFLAGS += $(CLANG_FLAGS)
+ KBUILD_CFLAGS += $(call cc-option,-fno-PIE)
+ KBUILD_AFLAGS := $(filter-out -DCC_USING_EXPOLINE,$(KBUILD_AFLAGS))
 -- 
 2.39.2
 
