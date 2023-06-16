@@ -2,61 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D34D733ACF
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 22:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A680A733ADB
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 22:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbjFPU2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 16:28:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53024 "EHLO
+        id S229653AbjFPU3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 16:29:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233194AbjFPU1z (ORCPT
+        with ESMTP id S231403AbjFPU3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 16:27:55 -0400
+        Fri, 16 Jun 2023 16:29:07 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52F53AA8;
-        Fri, 16 Jun 2023 13:27:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121C635A6;
+        Fri, 16 Jun 2023 13:29:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F1FCF6111F;
-        Fri, 16 Jun 2023 20:27:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5511DC433C8;
-        Fri, 16 Jun 2023 20:27:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CFCD62C92;
+        Fri, 16 Jun 2023 20:29:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D28CC433C0;
+        Fri, 16 Jun 2023 20:29:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686947266;
-        bh=Csz7AYw+SYFqJ0XXgKmMeE5PEklNTVPGlubIPxkjLaw=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=sVoqsOr9cUAjopFEUQzIzHhtJf2t3y7CjDYMD7EVysk1K1iJagDr2jbzP+8aQLc4A
-         vZXX5HqTj85mG7MkGBSzIpSXUar/Mtm7Y8q2Yca8UDGlekSXZtjvibxRo8RSgAovD8
-         kgLtqS6kU0/64qxaXrGoaVelj8ZeH3W6ZOYrnXDqtYybfAPcOK3RHZ7H+6GsZDSAjO
-         jKCM8AxnTT3zAsw7rB//9VQARkYkpLqnwpBIxVpVFdLKURUr6nCEt+2xCDzPjqUyGV
-         7XBdtDxWDJJuk22fx8WwDvptKo9evm0wCAtsR0btB9zTF2Q94N/W01g9X8hk0juO4a
-         jIRB4ch3rx48g==
-Message-ID: <70c39db97475939719720ab1902aa1c1.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1686947343;
+        bh=gvd+AZX4jPfWnZ3uCqLoz9KHdUprTUE9ZWgZSJAJEeU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=pqbxAH6IMfvevBErMdfzPcFXUr9ietWlKM3lyqdp4aPvp6tq4RWgXVgk+W5QTwneX
+         lqr8Dib4Y8DezbaOcYxo0DAOlWTIFJv6+2epCmW/a/pXxl7GIoo45bpvrHqxNWY53J
+         irIJLGlmwP9G/lkjjdpMAzDaKemBNRb++f+W4xpE+FGy3vln+rtp53lFK7iO60oGuG
+         PLBOLpxnn+poJcE7cIz1Kwt/+CAGwSUrl+zPFN5wE6rq9xRqIPxFXb868VtHKy62dD
+         81lYxVYRzhAJz93dz9AVo1z+WxEFFm0KWEL6f4dS94AkiCBFGeEYU4ltvUEFfjcgVM
+         7MQ6QjOsNzgiQ==
+Date:   Fri, 16 Jun 2023 15:29:00 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        Stefan Roese <sr@denx.de>, Leon Romanovsky <leon@kernel.org>,
+        linux-rdma@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jim Wilson <wilson@tuliptree.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        David Abdurachmanov <david.abdurachmanov@gmail.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Lukas Wunner <lukas@wunner.de>, netdev@vger.kernel.org,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Saeed Mahameed <saeedm@nvidia.com>
+Subject: Re: [PATCH v9 00/14] pci: Work around ASMedia ASM2824 PCIe link
+ training failures
+Message-ID: <20230616202900.GA1540115@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <825f06c1-cf87-c0e3-a9fc-f4ec0edaa0f8@linaro.org>
-References: <20230526-topic-smd_icc-v6-0-263283111e66@linaro.org> <20230526-topic-smd_icc-v6-18-263283111e66@linaro.org> <e2afd4bde3e85db358d50553a60a744f.sboyd@kernel.org> <825f06c1-cf87-c0e3-a9fc-f4ec0edaa0f8@linaro.org>
-Subject: Re: [PATCH v6 18/22] clk: qcom: smd-rpm: Separate out interconnect bus clocks
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Evan Green <evgreen@chromium.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 16 Jun 2023 13:27:42 -0700
-User-Agent: alot/0.10
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.2306160431470.64925@angie.orcam.me.uk>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -67,25 +71,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Konrad Dybcio (2023-06-15 00:49:59)
-> On 15.06.2023 02:48, Stephen Boyd wrote:
-> > Quoting Konrad Dybcio (2023-06-14 11:04:37)
-> >> @@ -1332,6 +1275,15 @@ static int rpm_smd_clk_probe(struct platform_de=
-vice *pdev)
-> >>                         goto err;
-> >>         }
-> >> =20
-> >> +       for (i =3D 0; i < desc->num_icc_clks; i++) {
-> >> +               if (!desc->icc_clks[i])
-> >> +                       continue;
-> >> +
-> >> +               ret =3D clk_smd_rpm_handoff(desc->icc_clks[i]);
-> >=20
-> > This API can probably take a const struct clk_smd_rpm pointer as well.
-> It would be great, but ideally we want to set r->enabled in that func
-> for !bus clocks (for unused clk cleanup). I could probably introduce a
-> separate function for the icc clocks that takes const.
->=20
+On Fri, Jun 16, 2023 at 01:27:52PM +0100, Maciej W. Rozycki wrote:
+> On Thu, 15 Jun 2023, Bjorn Helgaas wrote:
 
-Sure. Or have this take const and in the clk driver set r->enabled after
-calling it. That's future code though, so just make it take const?
+>  As per my earlier remark:
+> 
+> > I think making a system halfway-fixed would make little sense, but with
+> > the actual fix actually made last as you suggested I think this can be
+> > split off, because it'll make no functional change by itself.
+> 
+> I am not perfectly happy with your rearrangement to fold the !PCI_QUIRKS 
+> stub into the change carrying the actual workaround and then have the 
+> reset path update with a follow-up change only, but I won't fight over it.  
+> It's only one tree revision that will be in this halfway-fixed state and 
+> I'll trust your judgement here.
+
+Thanks for raising this.  Here's my thought process:
+
+  12 PCI: Provide stub failed link recovery for device probing and hot plug
+  13 PCI: Add failed link recovery for device reset events
+  14 PCI: Work around PCIe link training failures
+
+Patch 12 [1] adds calls to pcie_failed_link_retrain(), which does
+nothing and returns false.  Functionally, it's a no-op, but the
+structure is important later.
+
+Patch 13 [2] claims to request failed link recovery after resets, but
+actually doesn't do anything yet because pcie_failed_link_retrain() is
+still a no-op, so this was a bit confusing.
+
+Patch 14 [3] implements pcie_failed_link_retrain(), so the recovery
+mentioned in 12 and 13 actually happens.  But this patch doesn't add
+the call to pcie_failed_link_retrain(), so it's a little bit hard to
+connect the dots.
+
+I agree that as I rearranged it, the workaround doesn't apply in all
+cases simultaneously.  Maybe not ideal, but maybe not terrible either.
+Looking at it again, maybe it would have made more sense to move the
+pcie_wait_for_link_delay() change to the last patch along with the
+pci_dev_wait() change.  I dunno.
+
+Bjorn
+
+[1] 12 https://lore.kernel.org/r/alpine.DEB.2.21.2306111619570.64925@angie.orcam.me.uk
+[2] 13 https://lore.kernel.org/r/alpine.DEB.2.21.2306111631050.64925@angie.orcam.me.uk
+[3] 14 https://lore.kernel.org/r/alpine.DEB.2.21.2305310038540.59226@angie.orcam.me.uk
