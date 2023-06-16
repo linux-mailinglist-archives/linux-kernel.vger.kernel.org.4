@@ -2,87 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED65E73272D
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 08:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F409732730
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 08:15:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232766AbjFPGNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 02:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51608 "EHLO
+        id S242890AbjFPGPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 02:15:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233966AbjFPGNE (ORCPT
+        with ESMTP id S229526AbjFPGPk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 02:13:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB90F2D61;
-        Thu, 15 Jun 2023 23:13:01 -0700 (PDT)
+        Fri, 16 Jun 2023 02:15:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAB0B5
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 23:15:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D05D62508;
-        Fri, 16 Jun 2023 06:13:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5238C433C0;
-        Fri, 16 Jun 2023 06:12:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686895980;
-        bh=pKKs+ikvQgBhv6OujYCF/JO0CWWZMx7/sLxq/+FmgdQ=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=vNRjrKr9yva3IsiQbnaBccQwUvpLA1Mgw8uGTj52RWGNiBcMHo5TPqwe/0GfYuVU7
-         sODW+rKfd7imcYUfgnAmV7X5fokV9FGT4idRwxYuzezDCjETiZ8vsNjZD/2CNM7yIi
-         XAp2tdoLzYlzESCvh81lxdN1g+UnXKZFD4JwZU8e7hKVrDE+7IUzcjhD7r1kp0wbJz
-         C0IPCSJHRRzCg4znmH0DERGNv0MJyfbSoI8zMvtsVA6hgDTINYsPXtftO8MKe2fO5v
-         zLRW8KfW067zj84LG93/RGiLAuEn/fVYKCjvjv/AdtJA3GE0UYAL36WIDNNRBWXIH1
-         ZPNlsSGJGLJkA==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Johannes Berg <johannes@sipsolutions.net>,
-        Toke =?utf-8?Q?H=C3=B8ilan?= =?utf-8?Q?d-J=C3=B8rgensen?= 
-        <toke@kernel.org>, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        regressions@lists.linux.dev
-Subject: Re: Closing down the wireless trees for a summer break?
-References: <87y1kncuh4.fsf@kernel.org> <871qifxm9b.fsf@toke.dk>
-        <20230613112834.7df36e95@kernel.org>
-        <ba933d6e3d360298e400196371e37735aef3b1eb.camel@sipsolutions.net>
-        <20230613195136.6815df9b@kernel.org>
-        <c7c9418bcd5ac1035a007d336004eff48994dde7.camel@sipsolutions.net>
-        <87a5x2ccao.fsf@kernel.org> <20230614122153.640292b9@kernel.org>
-Date:   Fri, 16 Jun 2023 09:12:55 +0300
-In-Reply-To: <20230614122153.640292b9@kernel.org> (Jakub Kicinski's message of
-        "Wed, 14 Jun 2023 12:21:53 -0700")
-Message-ID: <87h6r8aqag.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F77161C41
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 06:15:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87AF6C433C8;
+        Fri, 16 Jun 2023 06:15:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686896137;
+        bh=pSHUtIPNeAoJBpZnJ10TnS7e0ipk2OTBLnxkyx6KQn4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eAJ+U58FRimPokldpYgOcjg7Abu1gi3aPXYOX2Wd0b3bvOmwT3jSHLbAfAlx6go7o
+         S3yzF/YugGEWETvA8pf4X0KyDOU0RnBljGjKmxbAta663/pkfSAcaJ1PHigzm2EZnR
+         QXfGlZTjugfXGJMQ5+ALwB99efJQuCo31GYmR8L4=
+Date:   Fri, 16 Jun 2023 08:15:35 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Wang Ming <machel@vivo.com>
+Cc:     Christine Caulfield <ccaulfie@redhat.com>,
+        David Teigland <teigland@redhat.com>, cluster-devel@redhat.com,
+        linux-kernel@vger.kernel.org, opensource.kernel@vivo.com
+Subject: Re: [PATCH v1] fs:dlm:Fix potential null pointer dereference on
+ pointer
+Message-ID: <2023061623-goofiness-composed-8806@gregkh>
+References: <20230616024836.577-1-machel@vivo.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230616024836.577-1-machel@vivo.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jakub Kicinski <kuba@kernel.org> writes:
+On Fri, Jun 16, 2023 at 10:48:24AM +0800, Wang Ming wrote:
+> ________________________________
+> 本邮件及其附件内容可能含有机密和/或隐私信息，仅供指定个人或机构使用。若您非发件人指定收件人或其代理人，请勿使用、传播、复制或存储此邮件之任何内容或其附件。如您误收本邮件，请即以回复或电话方式通知发件人，并将原始邮件、附件及其所有复本删除。谢谢。
+> The contents of this message and any attachments may contain confidential and/or privileged information and are intended exclusively for the addressee(s). If you are not the intended recipient of this message or their agent, please note that any use, dissemination, copying, or storage of this message or its attachments is not allowed. If you receive this message in error, please notify the sender by reply the message or phone and delete this message, any attachments and any copies immediately.
+> Thank you
 
-> On Wed, 14 Jun 2023 18:07:43 +0300 Kalle Valo wrote:
->> But do note that above is _only_ for -next patches. For patches going to
->> -rc releases we apply the patches directly to wireless, no other trees
->> are involved. My proposal was that net maintainers would take only fixes
->> for -rc releases, my guess from history is that it would be maximum of
->> 10-15 patches. And once me and Johannes are back we would sort out -next
->> patches before the merge window. But of course you guys can do whatever
->> you think is best :)
->
-> Ah, good note, I would have guessed that fixes go via special trees,
-> too. In that case it should indeed be easy. We'll just look out for
-> maintainer acks on the list and ping people if in doubt.
-
-Sounds good. And do note that not all drivers have active maintainers,
-so you might have to take some patches without acks.
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Now deleted.
