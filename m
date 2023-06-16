@@ -2,95 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B6C573354F
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 18:01:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1909733551
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 18:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbjFPQBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 12:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32798 "EHLO
+        id S1345645AbjFPQBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 12:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345700AbjFPQBB (ORCPT
+        with ESMTP id S1344193AbjFPQBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 12:01:01 -0400
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03olkn2067.outbound.protection.outlook.com [40.92.58.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D362630E3;
-        Fri, 16 Jun 2023 09:00:58 -0700 (PDT)
+        Fri, 16 Jun 2023 12:01:13 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05olkn2035.outbound.protection.outlook.com [40.92.91.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B483AA3;
+        Fri, 16 Jun 2023 09:01:06 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mV0UG12F2k9aLiDlT6+hcH2jc2H2yD6rKbUNjsFY8wCgTJ4/8P/vxA6UoxnwYwOehc0CYy2epMndkHNMKYUQK0ilU6HuHhhpAN1qe4zgQW4669SabGvq6pFsREgGLZu7IJUiI+wdAPQa3bVxYkambMYQ/mjc7Gc2ZdxKyBzqBmu8ebs6EnVijbzAc5uvB6iK8HZimDrJfajL6HEBLwjVcmYnVMDovPnwadKdYFbb2XcbX1L8PuFdt5+L2WSFt8u/Z3WHlkdM3pgAHsaffkuZlps5RVxySx2VByr9hXXhSxXfoxXUtxh330XYx3zn4yGqUh55LGbe8zuZcav4ti3uVw==
+ b=luQ01OMzrUkPqfGR8WOhVbon0RFD4aA6rRQSB8IvkUHuy2K70gVS/fBUxR6DR3V0XEeGUmWnlPpqe94tl4m2mB+MEEyRtMxc9VZxMkKOf0s3FelZZ4wHhZRmS7nQzr+80/XFCGbHlENCMbp1bWdh/SvnCjVGUMl2HWxg0eYT4A4HJ8N4O5aOX1ZW0xw3Tb8dmzYG9TmYCsC9oWYNWo2jBRr4QcN0+myjXxkttYVLqR8U+LBkqEIMYHsJDyFGA7K0LXLwJlGXCUu6mhVAJ0UFoBPJ3KC48bTx/VmrYYiSgtBoKYEBFwr389XtdXaX1HpeZppGxCEET99kB0TEyYg+WA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wUjnQSrCoyHWD5oHNZu1W6aWvRlBuJ/UIoaxRYbWuBI=;
- b=f6AoY28j8MC4DmXvQJxPnSbQpxo34Z3qcMqTljje8HcDjaeF93sOriIvRai1x6ytHKQY2BxbsF/LQIyTP8roLPT0gFImIMyVUxBYUrHllA3mqXxNXNujb5ZUbFlxa1PoWwEHiCKgdWAGC8P2WV9DDgtmZrypB///lj+OcyH8C8zha06TNJL2/Of8NrOhok8kzLPSR4irFjijnj8Gm66kMihlLOeJm0L6ZqrFNz9YN02cR/ml6qRIjoyODCRto+H8IhA0oes68KcHV7C+fSg3vsOJa8/S68FY3eupznhaMcqEgy4DllzBeHf4oAKx5nJCFGnXf3LxSWC6n/QJ6Rjenw==
+ bh=Of3MSRoZQsE4iQhpOZGiEcdvt3oFHJp0hiZHk4tIwPA=;
+ b=B0MFOn093sJkn/1BvrcJCPTgeLc1CIs0WJh30Ld/IjiAJJbyiRRgaW8VI2y5N98qRdoatWyOWqfkwRRv4qnFbUOXkyFU6u1qd3hmevkmoFiHwF/vWWZRRZLEF+WxFOx/wN7kwaHa682pnoJPEDI/1PAmWJZ6YEw4Uxyqn60SBFrEP9YJWm1L9Q+IzLUdjZNqVcGygijp5Yb3B6kVlS1g0F5dHbWsClHx4w6Rxv6GitaOQ/OtpVVHqtWcAX2/8glr/f8FD24CFWz+i88JFjGNEMAZrU5YXaTPwB6hoa4IdtPTwFovNE3wprYgMkF/gymAOQW+pqgyHS7p1d/OPo+Xmw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wUjnQSrCoyHWD5oHNZu1W6aWvRlBuJ/UIoaxRYbWuBI=;
- b=s37f9VP40Hjh6906o8I36pOt1s4q53x0KtKTtCa5v0qVR5G+NBo8ZeaiAAsYmirD7nUcNLtbD2Mqyorgk5STCq74PK4vdewf1jjZZlhUGrChild1GzkH3dpFCnlUHEmojqOjtvXwirpsKl7F2smuTkEWHSGvYOcezFw+gqP7le3e5vFWnYh8syjah2tMXlH5Ps+KUgTB10W9llSly/hDMtxPXMeKBHEGmxCcXGgU0Ep3rZt9njoeE8mhAoX62MCLGTloBGCvbJ672Atw1e8cZb18TulRkJotJx9xU1iazjYHQsaC5w3xlSkRBQ7cTOiPALltrEDewWuiQTRQbfxebQ==
+ bh=Of3MSRoZQsE4iQhpOZGiEcdvt3oFHJp0hiZHk4tIwPA=;
+ b=ZyGCElTQ8QzbWz6DjbeYrG58sVz7IY/d2tcCsIIJ+FkG1zHReaTOwe5m6qOwkQAaYebIRZcxFzl8QJUG7thZjqhcL98TDZr4hJDeKGsCeL6JA1AJFym+2ajIebm5M1E2cVAvzRFwEK5fOyApxSndnZEuyNCayczA5EaHJlmLH+GlvSZKGZ7ljSrszpi1oEDulPHqS+zWien8vczsyih+U0aSNQlFqZGu6sho9UbenDaTcG182tXnTiUgdTEyI7hRe73AxFqgzQP7LJVbDO++LQxTvM14Fpv5NbSDw76LRLeG0Kv+kEjAEDWAUh85FfB+EmFcFwkHBf8B8RF/YzjISA==
 Received: from DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:383::21)
  by AS1PR10MB7959.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:471::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.29; Fri, 16 Jun
- 2023 16:00:56 +0000
+ 2023 16:01:04 +0000
 Received: from DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
  ([fe80::628a:d617:46f:2a88]) by DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
  ([fe80::628a:d617:46f:2a88%7]) with mapi id 15.20.6477.037; Fri, 16 Jun 2023
- 16:00:56 +0000
+ 16:01:04 +0000
 From:   JuenKit Yip <JuenKit_Yip@hotmail.com>
 To:     linux@roeck-us.net, jdelvare@suse.com
 Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
         JuenKit Yip <JuenKit_Yip@hotmail.com>
-Subject: [PATCH v2 2/6] hwmon: (sht3x)remove blocking_io property
-Date:   Sat, 17 Jun 2023 00:00:13 +0800
-Message-ID: <DB4PR10MB6261DA9202AF37B4F6ECDD6C9258A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+Subject: [PATCH v2 3/6] hwmon: (sht3x)replace "high-precision" property to "repeatability"
+Date:   Sat, 17 Jun 2023 00:00:14 +0800
+Message-ID: <DB4PR10MB626113BFFA66DE32C3479D229258A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230616160017.21228-1-JuenKit_Yip@hotmail.com>
 References: <20230616160017.21228-1-JuenKit_Yip@hotmail.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-TMN:  [f8TUa61pu9CL6hb+xCuc4MYEa/ca/+2H]
+X-TMN:  [7yZHOyOLKKKM+A8Y6kXBSA496cuFisWz]
 X-ClientProxiedBy: TY2PR04CA0009.apcprd04.prod.outlook.com
  (2603:1096:404:f6::21) To DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
  (2603:10a6:10:383::21)
-X-Microsoft-Original-Message-ID: <20230616160017.21228-2-JuenKit_Yip@hotmail.com>
+X-Microsoft-Original-Message-ID: <20230616160017.21228-3-JuenKit_Yip@hotmail.com>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DB4PR10MB6261:EE_|AS1PR10MB7959:EE_
-X-MS-Office365-Filtering-Correlation-Id: bac18c3f-a56f-457b-c422-08db6e82deca
-X-MS-Exchange-SLBlob-MailProps: AZnQBsB9XmrST/aUJU0/QQB6BlKfxJxwtL/a5+V7Wlmi3WmM+yesaGcSi1CYG5tytDB3PyIfnFVav7kv3kkdfWd5qkKpE+4tbOipqdSpYeZJI8qWL3xu39rtxhF9clk08WVj1P4cpioz6To60Ox/yaqVr1BLDU5Rw4lRbpTUJ40Szb85j1pQ9VryUDbWC7rYdBxyhhFcurpQRAQi5WC6pSe12A041WeBc0XgJrzNtuucm3LyQECJYibTwdylyQMjurM9K8M+jz4I4WymvKP6iWjOJ8b3BwJjc4pLTXqo28PpQl7oYx/A5Cd/WNMkZEyP6InJptRVzaAli6AkQMdCY2aon6bgtFBiHuG4/B3mvV5LiKephry/eTIqui8B9tvtPfWRK/PTr0GbjPe7PbY+whyuLGdKbq3Z6Imja3ink6Wut+cAbQJGzqwZWGBWB43t62MQB9+NYtxyZsAgjM0p9Mt8KJD4mMNP6m2FoKyDkaf/7lRS0YuySXeGy46YHZLEo/qn7m2vckhTSWTueRqA5eDkbusvOIbjsX95silZ/dL+ARLYdkwBgpCoM5MGxkv8UHXrowMoGpeILin1I5QZJ0jBAXlJnH+GZ+FlytgIYjeBBm2U/Ff+slvimNiYn9LeLLjZr0tdN6ZAl/+6FPOjLDfYNtPCZOm/hBrW95EcqBstZzdxwbSaWwK9yp7cFPHKe5w4HCERAElkoD/eSl2eE8FyT0o1KvgI9uBbtZhGq5yizYHp/f6pxISggHFJv2J3BwzpAKevEnc=
+X-MS-Office365-Filtering-Correlation-Id: d39db6f2-4a1b-42d4-9508-08db6e82e35f
+X-MS-Exchange-SLBlob-MailProps: AZnQBsB9XmrST/aUJU0/QQB6BlKfxJxwIUDlqYXA3VDxPZ0UqcuxpJun1s8ED3wRvwfzqA/OCz4lJZXt4vRmC40V3YOkqpxBhq1REbaH/S28u5ZSAiWND2n2acPUecUx2n7c/11ouaLXJ6BLvPUNXIkyYDin/x6Pj1ljiqUsuYSLBUk2yC7i1mlxJDUK2WcBATw+rPbaYvY35/NJEnUlaL5Mha5dUMNpV2l264qxc7zFseqi8MiNLfKLTXAJkPDZ4qIvfl8l42y2JO5jC0xfvq+fy1TqyMVB535yXfNY411I8+RSxCCBfHVGuRr1Zs3LbhWtyC61onvP4V6iXuRq3rIkbPLWXONwJvXtLFr8mHz4dLScsyAx1CWYA/tiib3g61fmw5HSVm6h9PZO0ZyLMw0q4Qz1uDw+7uvQaRG0B1nj6FsUg3nljERmxRNjE8vbeFC8qJU8JoivV8P8XUpHAF9rwqMAID68GSEkBjw5Dx0lMlhi/H+E/UvvmjE/YPSRzkUZMjRtJ3hGClYIC2UZPtvlqlrnAWDSmQ8n50r1igvwfyBML+rN8/4wEgF2E+M+GZMbDja+wmF/vFe/wSN3m7xaOAFSqkeMcT6wI6Npp8R6j66Y5Py6inVOGuXWjqLplrF4MpnmVwV8GCFD8FAaYbumNVTD/w8VC4SBbPSLNmJyH+GpaY7mWJHwa22Uo9/zhwYxNe75rv5PcEfWchQ14/L68GkNVLxxczfPRa1MajyalqziDfs5wp15shKP68xrYc8dntFpjqU=
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ynVyVQLVzyhcJ74hqPF1lTKPR+VRhDEyL/mx/jWH4OGuXJx5oKVWpeDQ+k6p9WIDAazzvLCWkjfzWAbWxVN7V7NcFEzlWWUeU1bfsMbaKv1cMYpY0sOWs/mzvaiCybgZ7ULMqFb3vBUtOUf44s3ecP2Cxhf5wejm8w7HHvT/5oclcglgX/BBOHJdybDR2irXw4y5W8kuFltaeaySnez86h3lGYjXGAzvOqCHHu+qSDhwE8opNanxPDqEVZLhdr8Qt1Uua3Y2N+5tz9C9yZnajzF1ZOsWOP4pj88ZAzqK7WV5anvbHgOI3yoMvxC9+9M+VlO4G4fhnQ3pG8P+ZVv1KfLjnZoDFHMPnT0Sa8E/92/bXcfZmTVhlaUMUIwtYzgADMGWEwwf2ro7Tkoz1H67uYbz9Tqyl1o6gCsvBlAeoN0fHd5kWabPSAbE+HqnvGABuPEBKC1BAsT7RIf3Q2BO+MiaN1fJUy2wa2E2mE3OTprUuVTfGxZq7Twc5TiOtDkroYmkepezCWTOmJOpzlojM078Yjd2PxZviZNcgC6HmrN541iIX0HzFpDKuOpo7hT7HHYnGbibkHBQXuHqRZiJegkCPkwJr6SKALNQ6FIXgn9CWwjHMy3R+ZHGzO5TV90v
+X-Microsoft-Antispam-Message-Info: Kmmp4z8Q2NptD+ZmKUCp7Q2+EI1RHAtynwntCOM4cW3bFhFDBLuy3Mfa1M4nrdI9O2q/+nHqSTqCiHGAgg4O7tyYgrQuqyTy6FBJtPGOKDBpMxcUjzHsmhGeWkHh6GQ2pyFD6rguzDv5WIjP0xCGa3pcp0sxZn1pIAosJVEEh89py97f3082Z6z5SKGgNYVI75/9H4j3wo/oN4H/WSwAUbKQoDZx89YouIA/4S6BqQiMQggVLGZo0AFdn1RVTS68+cDynvrO0/TLwbAt7d2jKbjkCKlz3h0BMOUFeHwak5FIkEwes2AY+ws2utmPZXpnGGGv4m80qzjqzgy/+5gP2Xs3TkKoqoL/FgOE0fOmP8abm6NNIjPbJ/XBiIQddAajCniWm+4x2wzeLgo+ccu9czHektGuM+p/QUporWHFlPuG5tjClubnG5+ZtpGU7U89vYn9cHGNGHA0mziWXGpSP/8VrY1HKmjMX7w7C7xqi0uJ82j0xxc3pBFijVp9B4ADMKQQfcX8XepmYnLVB7MSCzCpuO1S5l+/OSTHPTKWaFbhmuYMc+66pP/Nvt3hFcCSdlvP+yB6VF2lLmo++RRBlfMXiGkKRBEv0nD6U95B4Zc=
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fZoUcULFZwZkNkiJri59m45+qRHtDJGtwCoCeZuSdOd19wVkAdIgNstv5vLW?=
- =?us-ascii?Q?fl6lvCikrpzZP3daCaYXdfJWw0NZmTiOq56cS6we0jNf/iKptnQIM8aYSHK6?=
- =?us-ascii?Q?vzlKBCvmGHqkWl6AuBxFen2spiBBKh40nUDTWrVBBoU3spONnC5xspyVUGMp?=
- =?us-ascii?Q?IZEJOn2taOr+NHiS2mh5zia/A9jt+ujr7ujhCBf/rWfNwCLkDOb5viaIpzxB?=
- =?us-ascii?Q?AAS2iXp4M8JMycabffYcq+138MBNn8SPCH7qjQThh+f0ps9gHuxjBMJJWmeV?=
- =?us-ascii?Q?ZPBB7+D6Iq3FICKH8mP4Nf4ekucwSIKHooTUlOVlrX5WadcRjRJHvZKqAe0d?=
- =?us-ascii?Q?FRxGSPrL/pR0UDP0D6xAhgcml+UHmDXNFtnXyiZ/K1NJCFZCEnSsW1gLHr6h?=
- =?us-ascii?Q?yD2OCioN0HUmNs3CVVJ7iIPIFjbSF8LLuBrxk3RsPPrVhexVk5GUggHE9yZP?=
- =?us-ascii?Q?5ED3JKZAPAQLWzzaEaS3ApRzRnfFdBBTwV8J+RlAg2soAhRuF1RpaGC+4cgO?=
- =?us-ascii?Q?TGgciFilShrqC6PT22rUd6GICBorJGH7Lp8P1BkZ5mcsAjbJlv3ZfVOov3qZ?=
- =?us-ascii?Q?WaCkWQlTm3pgd8MG+i6dFs8UB+0s86hIZ/yp0TwdF8IA/9/SD/gMsuR4tRuH?=
- =?us-ascii?Q?bO4qXiX+bM6gzK9+TDHqPk3x1ESvmDs4cozAj2FJKhPBiw0YsAGXFOdWm4NP?=
- =?us-ascii?Q?Yvs91t6JJIWxtCIFnZEIQHoBKsnxvjq6TJ4pazCiTfQ1DfRbZvDLVg0J9ELt?=
- =?us-ascii?Q?FlC1sBqRRTZbadXYyBuiFEvd2Ojjg105RRc40tNl2iWLDz7gciVtcHe0Kk/o?=
- =?us-ascii?Q?75q0UZQd8q7pNOVCOL2HStJmDEohNgyK43blsSzGXoPBoCGSKhjn685+IAW8?=
- =?us-ascii?Q?ohRxib+O/KdQqADBVdJcu+Ujy3UInMsFEqDlEmUreaeBZQ4RyQo/62OFYmr2?=
- =?us-ascii?Q?0R2h4mk+OptWhuxDcyZBgMQU6efRzpHtwq/xOK7uuUiHPaQqNQ0rNL1a/QPb?=
- =?us-ascii?Q?OmqOLEjCXhpNriTDRR6pruicIDJmSDh0FYyCFo57t9E1V2pEwGQEmBs1v7g+?=
- =?us-ascii?Q?b97O10q7xmigrgtco9eYRRcLpx5OfZ99LaN80XKxTyjxyJnk8wKwIYE1hVL3?=
- =?us-ascii?Q?l/9UMgrrM68jeTHaA4vFAB9nWsci+9v/RNpnMB0THBqACLu7qiFJXhYGi0NP?=
- =?us-ascii?Q?Hxni/JoFu8FYGYwAb6cNomlNFFSGQwi2ozNoGYgul9DpqXmGdKnU31CSyYY?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?A+WmCzDgpRGdXqZ+EMTcpI0LwjK/OYuBBX/QMEq9dpTLIg6JsjKsRt9vgN0x?=
+ =?us-ascii?Q?Wt3ccC4g29IdBbggAbbIOrcCvwEN+0rh7yM83b5G6wvXou0cad54b8L4N+/N?=
+ =?us-ascii?Q?KVgfmhtfM9De4rg4E+eh+Hp9uiyc1v3mlVOQWoCEuLaE8l+ao0tkTu+b051o?=
+ =?us-ascii?Q?hhpSU55vQ4282yPJXKa8m3LEO45K93/+dPY6tdMpIlWKoXO7LEeBSI0+p6hW?=
+ =?us-ascii?Q?WG4DHJqp+jnjSuYnRfT9vTYM9MVjP5tNncqFmQIsWxRgoPu5oOJNagoXAl0f?=
+ =?us-ascii?Q?XgokUv59dth+yyExCiWzBI5mc9SJyH6YnB+zn2V/CaMfepHyuHkVkYCNPMry?=
+ =?us-ascii?Q?WsiPJESytFNj7KK8UbwxAdIqMaf/bJgHAQB6DB0NVvl4k6eEtvohi65r63s7?=
+ =?us-ascii?Q?MMVyvVYqCy6PM5+dmPJuFuZqy3QULtCnxzrXjC2jkJq5luSfjcu/MZYCJRxF?=
+ =?us-ascii?Q?62JcYrDXFFLRYml+Xg7KRYDIwGzqAf4UvdJbqXOhqePbyJJC6aqvqZxEk8oN?=
+ =?us-ascii?Q?X4gENV/8n9gPH6Jrg+hNXr2QAT09dkpyHqIvo4jVyqBvSFgb2RvRsiOKT6IS?=
+ =?us-ascii?Q?zILbKXKunAkBMbgJ8L50aSd9jAUc2biOKpqswSUBq21SCmY++yipZtOovMLc?=
+ =?us-ascii?Q?XJ6AbhTXXlG/axwsy+GrR+6SG2bSnt64aLrhYNQWgcFaRhwZenFCHjkTaRZv?=
+ =?us-ascii?Q?Xt4Nt/8mn92eF5/eMjaQpRNMRMYZgWrWJQqhk4MI1dJ2qE/HrawN0CJ2b8tA?=
+ =?us-ascii?Q?7yXSimHWjuLah1Mi6ZashdZr+AUI7efRmISSD6rVPyh8Cn4b1gKl6ag2/wFC?=
+ =?us-ascii?Q?JWiB4rGcmc2O0BUYSj5N9kA2lEHdPdClQQcP3HnLWktNWsaCnWiquVjx+n8+?=
+ =?us-ascii?Q?IAeAVMo9vNXrjrSxvMrv83qW5eFn51uzWmlbD2h3SjgPb8aQjOFXeFZuMUOd?=
+ =?us-ascii?Q?1VnYo6T9PAxWEAMnLw+cZH/b6y3RsUDXgpvdtEOFX+FNaM2jqAjlqZM0/QKh?=
+ =?us-ascii?Q?CqQTghO88LoWxXCqzsJtTcJUASrMbuGru7E4NP7W3WZX6f3383jPQRyGLJHv?=
+ =?us-ascii?Q?EikclUlmE8kOV0dOF6qK7tszSvNdePQsDJL/tZuiDv2zrLnP45ridZVl9Kqr?=
+ =?us-ascii?Q?6QpvbMfh5zG6WrtT/RZE3tn3BIc2caC9aVGncpsk5KGLc/VYUVNtB9aQRAc3?=
+ =?us-ascii?Q?BJ797EcsE5qgHJPkQEJY6ioOjV91wdxVfMIL5dPy8CB3wvcg0i3FsWSL7PU?=
  =?us-ascii?Q?=3D?=
 X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-6b909.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: bac18c3f-a56f-457b-c422-08db6e82deca
+X-MS-Exchange-CrossTenant-Network-Message-Id: d39db6f2-4a1b-42d4-9508-08db6e82e35f
 X-MS-Exchange-CrossTenant-AuthSource: DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 16:00:56.8462
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 16:01:04.6662
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -98,7 +98,7 @@ X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-0000
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR10MB7959
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -106,123 +106,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to no support on clock-strench, blocking mode was removed and
-now single-shot mode only uses non-blocking mode.
-
 Signed-off-by: JuenKit Yip <JuenKit_Yip@hotmail.com>
 ---
- Documentation/hwmon/sht3x.rst | 14 ++++++--------
- drivers/hwmon/sht3x.c         | 33 +++++++++++----------------------
- 2 files changed, 17 insertions(+), 30 deletions(-)
+ Documentation/hwmon/sht3x.rst |  2 +-
+ drivers/hwmon/sht3x.c         | 21 +++++++++++++--------
+ 2 files changed, 14 insertions(+), 9 deletions(-)
 
 diff --git a/Documentation/hwmon/sht3x.rst b/Documentation/hwmon/sht3x.rst
-index 31fd36b14..be70e2543 100644
+index be70e2543..b4aa561f0 100644
 --- a/Documentation/hwmon/sht3x.rst
 +++ b/Documentation/hwmon/sht3x.rst
-@@ -28,16 +28,14 @@ The device communicates with the I2C protocol. Sensors can have the I2C
- addresses 0x44 or 0x45, depending on the wiring. See
- Documentation/i2c/instantiating-devices.rst for methods to instantiate the device.
+@@ -30,7 +30,7 @@ Documentation/i2c/instantiating-devices.rst for methods to instantiate the devic
  
--There are two options configurable by means of sht3x_data:
--
--1. blocking (pull the I2C clock line down while performing the measurement) or
--   non-blocking mode. Blocking mode will guarantee the fastest result but
--   the I2C bus will be busy during that time. By default, non-blocking mode
--   is used. Make sure clock-stretching works properly on your device if you
--   want to use blocking mode.
--2. high or low accuracy. High accuracy is used by default and using it is
-+There is only one option configurable by means of sht3x_data:
-+
-+   high or low accuracy. High accuracy is used by default and using it is
+ There is only one option configurable by means of sht3x_data:
+ 
+-   high or low accuracy. High accuracy is used by default and using it is
++   repeatability: high repeatability is used by default and using it is
     strongly recommended.
  
-+Even if sht3x sensor supports clock-strech(blocking mode) and non-strench
-+(non-blocking mode) in single-shot mode, this driver only supports the latter.
-+
- The sht3x sensor supports a single shot mode as well as 5 periodic measure
- modes, which can be controlled with the update_interval sysfs interface.
- The allowed update_interval in milliseconds are as follows:
+ Even if sht3x sensor supports clock-strech(blocking mode) and non-strench
 diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
-index 580704d93..bbe556f44 100644
+index bbe556f44..ecc64febc 100644
 --- a/drivers/hwmon/sht3x.c
 +++ b/drivers/hwmon/sht3x.c
-@@ -22,12 +22,10 @@
+@@ -21,10 +21,10 @@
+ #include <linux/slab.h>
  #include <linux/jiffies.h>
  
- /* commands (high precision mode) */
--static const unsigned char sht3x_cmd_measure_blocking_hpm[]    = { 0x2c, 0x06 };
--static const unsigned char sht3x_cmd_measure_nonblocking_hpm[] = { 0x24, 0x00 };
-+static const unsigned char sht3x_cmd_measure_single_hpm[] = { 0x24, 0x00 };
+-/* commands (high precision mode) */
++/* commands (high repeatability mode) */
+ static const unsigned char sht3x_cmd_measure_single_hpm[] = { 0x24, 0x00 };
  
- /* commands (low power mode) */
--static const unsigned char sht3x_cmd_measure_blocking_lpm[]    = { 0x2c, 0x10 };
--static const unsigned char sht3x_cmd_measure_nonblocking_lpm[] = { 0x24, 0x16 };
-+static const unsigned char sht3x_cmd_measure_single_lpm[] = { 0x24, 0x16 };
+-/* commands (low power mode) */
++/* commands (low repeatability mode) */
+ static const unsigned char sht3x_cmd_measure_single_lpm[] = { 0x24, 0x16 };
  
  /* commands for periodic mode */
- static const unsigned char sht3x_cmd_measure_periodic_mode[]   = { 0xe0, 0x00 };
-@@ -41,9 +39,9 @@ static const unsigned char sht3x_cmd_heater_off[]              = { 0x30, 0x66 };
- static const unsigned char sht3x_cmd_read_status_reg[]         = { 0xf3, 0x2d };
- static const unsigned char sht3x_cmd_clear_status_reg[]        = { 0x30, 0x41 };
+@@ -66,9 +66,14 @@ enum sht3x_limits {
+ 	limit_min_hyst,
+ };
  
--/* delays for non-blocking i2c commands, both in us */
--#define SHT3X_NONBLOCKING_WAIT_TIME_HPM  15000
--#define SHT3X_NONBLOCKING_WAIT_TIME_LPM   4000
-+/* delays for single-shot mode i2c commands, both in us */
-+#define SHT3X_SINGLE_WAIT_TIME_HPM  15000
-+#define SHT3X_SINGLE_WAIT_TIME_LPM   4000
++enum sht3x_repeatability {
++	low_repeatability,
++	high_repeatability,
++};
++
+ DECLARE_CRC8_TABLE(sht3x_crc8_table);
  
- #define SHT3X_WORD_LEN         2
- #define SHT3X_CMD_LENGTH       2
-@@ -134,7 +132,6 @@ struct sht3x_data {
+-/* periodic measure commands (high precision mode) */
++/* periodic measure commands (high repeatability mode) */
+ static const char periodic_measure_commands_hpm[][SHT3X_CMD_LENGTH] = {
+ 	/* 0.5 measurements per second */
+ 	{0x20, 0x32},
+@@ -82,7 +87,7 @@ static const char periodic_measure_commands_hpm[][SHT3X_CMD_LENGTH] = {
+ 	{0x27, 0x37},
+ };
+ 
+-/* periodic measure commands (low power mode) */
++/* periodic measure commands (low repeatability mode) */
+ static const char periodic_measure_commands_lpm[][SHT3X_CMD_LENGTH] = {
+ 	/* 0.5 measurements per second */
+ 	{0x20, 0x2f},
+@@ -132,7 +137,7 @@ struct sht3x_data {
  	const unsigned char *command;
  	u32 wait_time;			/* in us*/
  	unsigned long last_update;	/* last update in periodic mode*/
--	bool blocking_io;
- 	bool high_precision;
+-	bool high_precision;
++	enum sht3x_repeatability repeatability;
  
  	/*
-@@ -432,26 +429,19 @@ static ssize_t humidity1_limit_store(struct device *dev,
- static void sht3x_select_command(struct sht3x_data *data)
- {
- 	/*
--	 * In blocking mode (clock stretching mode) the I2C bus
--	 * is blocked for other traffic, thus the call to i2c_master_recv()
--	 * will wait until the data is ready. For non blocking mode, we
--	 * have to wait ourselves.
-+	 * For single-shot mode, only non blocking mode is support,
-+	 * we have to wait ourselves for result.
- 	 */
- 	if (data->mode > 0) {
+ 	 * cached values for temperature and humidity and limits
+@@ -436,7 +441,7 @@ static void sht3x_select_command(struct sht3x_data *data)
  		data->command = sht3x_cmd_measure_periodic_mode;
  		data->wait_time = 0;
--	} else if (data->blocking_io) {
--		data->command = data->high_precision ?
--				sht3x_cmd_measure_blocking_hpm :
--				sht3x_cmd_measure_blocking_lpm;
--		data->wait_time = 0;
  	} else {
- 		if (data->high_precision) {
--			data->command = sht3x_cmd_measure_nonblocking_hpm;
--			data->wait_time = SHT3X_NONBLOCKING_WAIT_TIME_HPM;
-+			data->command = sht3x_cmd_measure_single_hpm;
-+			data->wait_time = SHT3X_SINGLE_WAIT_TIME_HPM;
+-		if (data->high_precision) {
++		if (data->repeatability == high_repeatability) {
+ 			data->command = sht3x_cmd_measure_single_hpm;
+ 			data->wait_time = SHT3X_SINGLE_WAIT_TIME_HPM;
  		} else {
--			data->command = sht3x_cmd_measure_nonblocking_lpm;
--			data->wait_time = SHT3X_NONBLOCKING_WAIT_TIME_LPM;
-+			data->command = sht3x_cmd_measure_single_lpm;
-+			data->wait_time = SHT3X_SINGLE_WAIT_TIME_LPM;
- 		}
+@@ -584,7 +589,7 @@ static ssize_t update_interval_store(struct device *dev,
  	}
- }
-@@ -689,7 +679,6 @@ static int sht3x_probe(struct i2c_client *client)
+ 
+ 	if (mode > 0) {
+-		if (data->high_precision)
++		if (data->repeatability == high_repeatability)
+ 			command = periodic_measure_commands_hpm[mode - 1];
+ 		else
+ 			command = periodic_measure_commands_lpm[mode - 1];
+@@ -679,7 +684,7 @@ static int sht3x_probe(struct i2c_client *client)
  	if (!data)
  		return -ENOMEM;
  
--	data->blocking_io = false;
- 	data->high_precision = true;
+-	data->high_precision = true;
++	data->repeatability = high_repeatability;
  	data->mode = 0;
  	data->last_update = jiffies - msecs_to_jiffies(3000);
+ 	data->client = client;
 -- 
 2.30.2
 
