@@ -2,148 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5FF4732537
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 04:22:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7440373253A
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 04:25:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240445AbjFPCWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 22:22:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44702 "EHLO
+        id S230090AbjFPCZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 22:25:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbjFPCWI (ORCPT
+        with ESMTP id S230004AbjFPCYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 22:22:08 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49926296A;
-        Thu, 15 Jun 2023 19:22:06 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-25e8b2931f2so250827a91.2;
-        Thu, 15 Jun 2023 19:22:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686882126; x=1689474126;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=5eZgw2S76QQ9i+Vu82FM8gCv7COjZdfQOZElNWsSHa0=;
-        b=DptmAA0dT/mFpOM144GNm5EXHhgGvC8YnD7ALkbKGVyTW60TZXh8ctQ4SmMfJjcFDL
-         yOzbnAfFRthjH8bW+yUA6D1tPCvpBgFsY7ehGK6z8JsxGo0y1121KBPhpyd3evlZ7o5a
-         TBxAzJrc9YEJb2FggvKk+a24da7KDo+3/9vwoHbU5uVUH6pFE1OMu+IjN3GP2V7QtjaW
-         9AQfTpgbBoqnvbxso6kFSz7JlnqqgUI1HQCG5xGGBzBE4cKnYlTXhLvDn6NCP+J1Jawn
-         Xs5SkHhXxyPdmauGcUM3/1QpOPP8uDrfAT38HUb5THkIkY5jMLGYXDfJc6yBc/RDma9v
-         LoBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686882126; x=1689474126;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5eZgw2S76QQ9i+Vu82FM8gCv7COjZdfQOZElNWsSHa0=;
-        b=bz3bcHA8Rotp0OAdKuQgpot5dBCXinioL6jvd/D4nBkvh+3HHWtHCFFqHRL0jmUJZg
-         W4iKRFG7qO5jdmSDla9Tscu7RDprDD2DHAz+QEhEoa58LIJCciIXWWWX/Rn8XL1Xf5dB
-         NLNGanjFvU02bi2hLvi/jZ7HvNUEjntpMUfmafeskSnY6cnLLgDO6JVx2IYa908ILCfi
-         RdoJ8Xz7u9F6ZPnuseelunZUQ/QlTEbtr1dFLuHGqmK3KviQBl+P+4afFmD1IZpsGHUm
-         W+wgQ52emXTIs1rQve/3J6kJtg5M7iUxTd9f4fO92es9i01RbeEI4l1vA1cP6B7H63Kh
-         C5ag==
-X-Gm-Message-State: AC+VfDwZa6JVOYYxJc1YFc5c+KwxycBm6qZEANO3+WBcuRInHjfkCC2N
-        5Bn5FamlqaCbYQ3mn+CPCtA=
-X-Google-Smtp-Source: ACHHUZ6tvqASSvnu0Sg/ZYy4sno9YLhlwDv5wGPsKX0UtNv/c8p0FitqDeAgEfxSWu3+1693oKvjcg==
-X-Received: by 2002:a17:90a:1d48:b0:25b:ba0c:ab7c with SMTP id u8-20020a17090a1d4800b0025bba0cab7cmr572128pju.27.1686882125636;
-        Thu, 15 Jun 2023 19:22:05 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e30-20020a17090a6fa100b002567501040csm280501pjk.42.2023.06.15.19.22.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 19:22:05 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <fa773f17-250f-d753-b15a-953efbe972ee@roeck-us.net>
-Date:   Thu, 15 Jun 2023 19:22:03 -0700
+        Thu, 15 Jun 2023 22:24:49 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E753189;
+        Thu, 15 Jun 2023 19:24:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686882253; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=ThTbYxS+YkPBZVOICscx8Cx48gU+WWhlvd4G/Jpf+XvRHhA/9If8msSniYmRei6vBuumT1DOOZ0fqrNooYD1Yu2rSu+ttQtnXR3RPLPG3SoywGynOgE8sIjpZoHHbYFW54zY/Diljoq2PwxDVeUTTewXL9afGNd6vaKKO/2Z+/A=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1686882253; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=0Z05yeYX7+OqP7ZF+oetG3YrbAARu6gYGPG6HQXvMuU=; 
+        b=RE/XsakSLfsKr0ZnKp/J0/orrwAqFf9HMVkmYp2DW9eyS1ChIqi1gFXmaOJROMPUzEP7qZM3G8pdq92z/tmVwP/hcXcmC9cvX/hgxxFRQbxadx6vg0nQeIR0bCTlhWZTYicUwBgOIvwkJ8/WZkkhzXm4fOK4Jh9g4AeBs61Gin4=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1686882253;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:From:From:To:To:Cc:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=0Z05yeYX7+OqP7ZF+oetG3YrbAARu6gYGPG6HQXvMuU=;
+        b=ZRU2sMFtFpn2AXpGqdg2/rCSawjW15wo42Z/MjD3EFNCGvitJ7+cdlEKdwunRi1q
+        IpKT53KajkvDaXkO5uaK3Qhh+BdRR3rwTG84dsJL5oA2FSxSBKqW4/162II1tBowpZl
+        S+/p6dK6p8nbm7PcFU02jPdpCiwubpL+bFUfvcOQ=
+Received: from [192.168.68.166] (athedsl-404045.home.otenet.gr [79.131.130.75]) by mx.zohomail.com
+        with SMTPS id 168688225180832.64444677104484; Thu, 15 Jun 2023 19:24:11 -0700 (PDT)
+Message-ID: <c7b0c22b-4132-4159-797b-c24e85b62d16@arinc9.com>
+Date:   Fri, 16 Jun 2023 05:24:05 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v2 5/6] hwmon: (k10temp) Define helper function to read
- CCD temp
+Subject: Re: [PATCH net v4 5/7] net: dsa: mt7530: fix handling of LLDP frames
 Content-Language: en-US
-To:     Yazen Ghannam <yazen.ghannam@amd.com>, x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        markgross@kernel.org, hdegoede@redhat.com,
-        Shyam-sundar.S-k@amd.com, linux-edac@vger.kernel.org,
-        clemens@ladisch.de, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        mario.limonciello@amd.com, babu.moger@amd.com
-References: <20230615160328.419610-1-yazen.ghannam@amd.com>
- <20230615160328.419610-6-yazen.ghannam@amd.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230615160328.419610-6-yazen.ghannam@amd.com>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+To:     Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Daniel Golle <daniel@makrotopia.org>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230612075945.16330-1-arinc.unal@arinc9.com>
+ <20230612075945.16330-6-arinc.unal@arinc9.com>
+ <ZInt8mmrZ6tCGy1N@shell.armlinux.org.uk>
+ <CABRLg09hXm3=mca70TdZLuxA1d8YzOcWj31NvFG0ZWoStn_w9Q@mail.gmail.com>
+ <0d57c035-b6da-08be-8f47-0afb5ddfec58@arinc9.com>
+In-Reply-To: <0d57c035-b6da-08be-8f47-0afb5ddfec58@arinc9.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/15/23 09:03, Yazen Ghannam wrote:
-> The CCD temperature register is read in two places. These reads are done
-> using an AMD SMN access, and a number of parameters are needed for the
-> operation.
+On 16.06.2023 04:53, Arınç ÜNAL wrote:
+> On 15.06.2023 15:45, Bartel Eerdekens wrote:
+>> On Wed, Jun 14, 2023 at 6:42 PM Russell King (Oracle)
+>> <linux@armlinux.org.uk> wrote:
+>>>
+>>> On Mon, Jun 12, 2023 at 10:59:43AM +0300, arinc9.unal@gmail.com wrote:
+>>>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>>>
+>>>> LLDP frames are link-local frames, therefore they must be trapped to 
+>>>> the
+>>>> CPU port. Currently, the MT753X switches treat LLDP frames as regular
+>>>> multicast frames, therefore flooding them to user ports. To fix 
+>>>> this, set
+>>>> LLDP frames to be trapped to the CPU port(s).
+>>>>
+>>>> The mt753x_bpdu_port_fw enum is universally used for trapping frames,
+>>>> therefore rename it and the values in it to mt753x_port_fw.
+>>>>
+>>>> For MT7530, LLDP frames received from a user port will be trapped to 
+>>>> the
+>>>> numerically smallest CPU port which is affine to the DSA conduit 
+>>>> interface
+>>>> that is up.
+>>>>
+>>>> For MT7531 and the switch on the MT7988 SoC, LLDP frames received 
+>>>> from a
+>>>> user port will be trapped to the CPU port that is affine to the user 
+>>>> port
+>>>> from which the frames are received.
+>>>>
+>>>> The bit for R0E_MANG_FR is 27. When set, the switch regards the 
+>>>> frames with
+>>>> :0E MAC DA as management (LLDP) frames. This bit is set to 1 after 
+>>>> reset on
+>>>> MT7530 and MT7531 according to the documents MT7620 Programming 
+>>>> Guide v1.0
+>>>> and MT7531 Reference Manual for Development Board v1.0, so there's 
+>>>> no need
+>>>> to deal with this bit. Since there's currently no public document 
+>>>> for the
+>>>> switch on the MT7988 SoC, I assume this is also the case for this 
+>>>> switch.
+>>>>
+>>>> Fixes: b8f126a8d543 ("net-next: dsa: add dsa support for Mediatek 
+>>>> MT7530 switch")
+>>>
+>>>
+>>> Patch 4 claims to be a fix for this commit, and introduces one of these
+>>> modifications to MT753X_BPC, which this patch then changes.
+>>
+>> Let me chime in on this one, as mentioned by Arinç, I am one of the
+>> requesters of having this patch (and patch 4).
+>> Patch 4 enables the trapping of BPDU's to the CPU, being STP (Spanning
+>> Tree) frames. Maybe that should be mentioned, to be clear.
 > 
-> Move the SMN access and parameter gathering into a helper function in
-> order to simply the code flow. This also has a benefit of centralizing
-> the hardware register access in a single place in case fixes or special
-> decoding is required.
-> 
-> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+> Sure, I can quote the first sentence on the wikipedia page "Bridge 
+> protocol data unit".
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+I changed my mind. There's no reason to describe BPDUs. The familiar 
+reader will know, the unfamiliar reader should just look it up. Like 
+Vladimir said, context helps but at the same time, less is more.
 
-> ---
-> Link:
-> https://lore.kernel.org/r/20230516202430.4157216-6-yazen.ghannam@amd.com
-> 
-> v1->v2:
-> * Address comments from Guenter.
-> 
->   drivers/hwmon/k10temp.c | 14 +++++++++-----
->   1 file changed, 9 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-> index 70f7b77e6ece..dfbba8b72f43 100644
-> --- a/drivers/hwmon/k10temp.c
-> +++ b/drivers/hwmon/k10temp.c
-> @@ -150,6 +150,13 @@ static void read_tempreg_nb_zen(struct pci_dev *pdev, u32 *regval)
->   		*regval = 0;
->   }
->   
-> +static int read_ccd_temp_reg(struct k10temp_data *data, int ccd, u32 *regval)
-> +{
-> +	u16 node_id = amd_pci_dev_to_node_id(data->pdev);
-> +
-> +	return amd_smn_read(node_id, ZEN_CCD_TEMP(data->ccd_offset, ccd), regval);
-> +}
-> +
->   static long get_raw_temp(struct k10temp_data *data)
->   {
->   	u32 regval;
-> @@ -215,9 +222,7 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
->   				*val = 0;
->   			break;
->   		case 2 ... 13:		/* Tccd{1-12} */
-> -			ret = amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
-> -					   ZEN_CCD_TEMP(data->ccd_offset, channel - 2),
-> -					   &regval);
-> +			ret = read_ccd_temp_reg(data, channel - 2, &regval);
->   
->   			if (ret)
->   				return ret;
-> @@ -389,8 +394,7 @@ static void k10temp_get_ccd_support(struct pci_dev *pdev,
->   		 * the register value. And this will incorrectly pass the TEMP_VALID
->   		 * bit check.
->   		 */
-> -		if (amd_smn_read(amd_pci_dev_to_node_id(pdev),
-> -				 ZEN_CCD_TEMP(data->ccd_offset, i), &regval))
-> +		if (read_ccd_temp_reg(data, i, &regval))
->   			continue;
->   
->   		if (regval & ZEN_CCD_TEMP_VALID)
-
+Arınç
