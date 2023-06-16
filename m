@@ -2,218 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3138873296B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 505E973296A
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241982AbjFPID6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 04:03:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48892 "EHLO
+        id S244263AbjFPIDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 04:03:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244639AbjFPIDv (ORCPT
+        with ESMTP id S244192AbjFPIDd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 04:03:51 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE132D68;
-        Fri, 16 Jun 2023 01:03:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1686902627; x=1718438627;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eTVc3XGM10yYGWejxI4OFNYMqxF1WUL6v6oHQydkLQ0=;
-  b=vRB0VwWfycZiz9HD5aiHXiSQZHY4NT46r8jvUEB4bfkoYkKbcTSy2wp7
-   J+hWOOILHue6XVOXSNY86unrj9JjCMNottwWn5tTw1f12fZRV+fb5PEW2
-   wHy99pnLY+krAXL2jhpdGWO5uVU/vPJ+6+MklQocK+VGB8RfN0zNo8cAv
-   0e+kt0mnZx3tyjMn+In2tCJNDBPgCdTaBGYn0ljl1ob2P1WG0BYiabZJz
-   WnIhI2CoqYiYxGYbqunU5Q7zri1WhBflj4nBvFKtBq+2vpOshYESni2A/
-   maQdvmeBLplBxsrWTngkan77XWtD0YkNUT4NkaCJdkq07au1MV/8OvUWY
-   g==;
-X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
-   d="asc'?scan'208";a="220566949"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Jun 2023 01:03:41 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 16 Jun 2023 01:03:41 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Fri, 16 Jun 2023 01:03:38 -0700
-Date:   Fri, 16 Jun 2023 09:03:12 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     zhuyinbo <zhuyinbo@loongson.cn>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <loongarch@lists.linux.dev>, Jianmin Lv <lvjianmin@loongson.cn>,
-        <wanghongliang@loongson.cn>, Liu Peibao <liupeibao@loongson.cn>,
-        <loongson-kernel@lists.loongnix.cn>
-Subject: Re: [PATCH v3 2/3] soc: dt-bindings: add loongson-2 pm
-Message-ID: <20230616-tablet-isotope-94749a2f8336@wendy>
-References: <20230615091757.24686-1-zhuyinbo@loongson.cn>
- <20230615091757.24686-3-zhuyinbo@loongson.cn>
- <20230616-entangled-cauterize-1cbde7401b91@wendy>
- <9a53089a-3c87-13e1-0bc4-29058ac0ec54@loongson.cn>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="7zoj86TvI4ME9JFK"
+        Fri, 16 Jun 2023 04:03:33 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2135.outbound.protection.outlook.com [40.107.212.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D712D62;
+        Fri, 16 Jun 2023 01:03:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YGYNUfZ3GhTrkTiwnXSieSJ9Y1WVRiDR86DA4Eaa3sipFZEfk1VZ/grrui0vO3U2zEfKuiuQBXsIXHwO4Zz5kCCfVUPjelrhzow3ePko5z23WbpBRhVflkDgtW2v10OLINwHugJoLZaLoihNjqsjUh3uSCjJkazghBi15ixGeg7YDg6kaftDz/tSBUpShwLNuySeYWmmZ7i17iGOYmumORN17Rp2m/nhPizY8Ds8kZm7OlS/9tQ4/hXHpVeePZd9FcqMT9OtCUy8SvUrz7eYAP43SqN4WtHhu91x0wBJvraud1dmnifk8M24D6zeF6pCgRiNLgL8VoQiq4H0fENcDQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=esWx+h2f9h/3Kl9nsAtZ9qtCBs05lm8pQgel7jARBUs=;
+ b=Xeo+7tq1UgO8u5wIKyDLf5M8yL31ebt6vSVi0b0b9ScVYuPYTk+eFbphXNGWdjS9fXR+WD3+QIi+sE9g3klpJzXn5ofV7ij2/rGvyyT6fPuwAWPM4KZh1hv+7VfrRPYW0udAp+IK1Y8+AAJ/tqZ+NkATjEYnmZf/rkEqxI3UMOyhAtkUE5Qo/kd4q66hweq6WnWQ6XS76p55ODOUmNmngB63iM2iEJEaKpCsMnw4kzxsX4vxcxU7GFbzOoaNF5rpOVDsLvwowDiInE4kwE9syf/hFHf3MMBiPq411IIVwA4a3zG9FSt37yUrznFB3PQGF8/vSKVOghQ3IC+/oSLxkw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=esWx+h2f9h/3Kl9nsAtZ9qtCBs05lm8pQgel7jARBUs=;
+ b=Aw+7TLjiLDbRjYs3UXoS+Kkc3wutLlJnIkcJ0XfwOZ+6DpZa9mQMuECVm2jBWudJx8LyGOAAvZElzjxlDh7+BJpmkvo2cwMqkXEyAaJirUsMjOfkkcp8mgsOeleAvUQTKzB9O6TzQ8LhJYJkTsFaDme54Dt1OuDLF2xiw7Rl7eM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by PH7PR13MB6116.namprd13.prod.outlook.com (2603:10b6:510:2b7::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.25; Fri, 16 Jun
+ 2023 08:03:24 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e%5]) with mapi id 15.20.6500.025; Fri, 16 Jun 2023
+ 08:03:24 +0000
+Date:   Fri, 16 Jun 2023 10:03:17 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     bjorn@kernel.org, magnus.karlsson@intel.com,
+        maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        maxtram95@gmail.com
+Subject: Re: [PATCH v2 bpf-next] xsk: Remove unused inline function
+ xsk_buff_discard()
+Message-ID: <ZIwXRSDCcp2bmjMb@corigine.com>
+References: <20230616062800.30780-1-yuehaibing@huawei.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9a53089a-3c87-13e1-0bc4-29058ac0ec54@loongson.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230616062800.30780-1-yuehaibing@huawei.com>
+X-ClientProxiedBy: AM3PR07CA0096.eurprd07.prod.outlook.com
+ (2603:10a6:207:6::30) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH7PR13MB6116:EE_
+X-MS-Office365-Filtering-Correlation-Id: b3a38f54-e03b-4db0-7ac2-08db6e4028c2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: K16gk9bOOMyA6M2gjXsm209OS2oXDb7gVl9zHg2yBB6I26QwVa42NlXv8o0id0XLRVn+cVPrLDwtwDhBHfXrgY+4s1FuJoVGlpS3LmHDWZn0o1ORFEdI5QnNKDCeQl+wR1KnenAB6Xg338BOjxxV5h1hL/lZs4mFmS7sX9zNh7KF7MR7X4WMxdNwNtJvP79ASJ7YUDIR4c4ql2V/8Xb5EERyxsFDvulTTGKNFtLXPqk6XOi6i4H42B1ialC3p2LdjCSOfzA72UH590xyVMxqkgwqdh7kseoOmLLQlCZpACWV4IIBJS9ycORNllUS82yRTSMAa2yWZYOOD2Zz/s8OVcenzygnK8zVtnkgoWmIhv4ty7EHKgSi8W5ipZKr7joWwmrNvt/ZUPjyyQdyxZqzMPZNPELBOzXrlxp3aE1olhZaH4BEdYDaRCgYgR1KlEdX7kpfTqbPDh1qfp5sGHH92hmNpvnIV9rjaUNM7a8IFH43F+Pmg01lpi6XMDNRn9UwDNWnqIwkHHZ/mYzDKCFbIHMWEZ/LbeuH8aHHTHTBK1+Em7jfputZ49Y8OdSqzPNmqd2z+xZmSXIycskYZBu2IIuHTmMJQqQTmKlCFfc6hnE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(346002)(136003)(376002)(39840400004)(451199021)(41300700001)(86362001)(66556008)(66946007)(316002)(6486002)(6916009)(8676002)(8936002)(6666004)(66476007)(4326008)(36756003)(478600001)(7416002)(6512007)(44832011)(5660300002)(6506007)(2906002)(4744005)(186003)(2616005)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mS84r7Pdpcbq/bbMuqoJHdRXA3MTfIk5YAKeu6+4jdEUfX8HWSbl3zxF7BRV?=
+ =?us-ascii?Q?CKR/f0DiCYF+y2VauuqCRfh2/vAcvYBq8xPBVJuePm+68fq0raNwpXTVQWe+?=
+ =?us-ascii?Q?meJ0gqSYhHrtuc+VYewSzVQlEzc5lqJCHNKkn2O16UespEII5+uDSpghyMMx?=
+ =?us-ascii?Q?ZbNSx44VKbq71V6hRCLM9glacY9v3eOsOE7VV15SeYsx3jgcR8zivob0cWXv?=
+ =?us-ascii?Q?7Y00VNz8lk1QvyYr1FAunrjO8c8ut4ISstJsl2C5ujM5mKg2l8G+SmLtn88r?=
+ =?us-ascii?Q?dite/rWQ4Y/MCSBaBtZ+xEV56/EvQI76/CahsKHRihKEzYV/KdgkTzGtSYPT?=
+ =?us-ascii?Q?kkh2sZvpRsYTO1XQksT1+4CZuDFHbJf0YeUwM5gjGoPYK+T/l/JlvINMuyBi?=
+ =?us-ascii?Q?w7Yp+67EifyK+4jlrEpjNXkFIxtQexn+9tm5k/p3ZWFxshnoqHp55+QW9P4x?=
+ =?us-ascii?Q?7ETJkH3x1wVorJvo4HDPcttTh42ZTEhJtqfILEjo6wH4O3eFaK9FgWc7hY6C?=
+ =?us-ascii?Q?PIPCYE2uV/qnJl7BsxDs1mZckhcD2whuk+pH6hlUzfxryjU0xtkdvPGPKGuO?=
+ =?us-ascii?Q?fj3PuG1t73CMoYtxzwg9ca+oZT4PkzUEx+9gMQyBd9eZaCm9nbsc28iysrhO?=
+ =?us-ascii?Q?C3XxDdcicwqUvwQ2gl4rDMaRBoPX2B8HW+sQUMx0y4dvO0axuqWpIWhBA3Rg?=
+ =?us-ascii?Q?A3y1px1V8QqkWuNip22SD2A0tkKzh40uxUbJZsI+ib41r9nPemKFpWNCL2Bf?=
+ =?us-ascii?Q?JcwEVh8eCSIkgOVibDS9oYTYRNEa9Xov3KyybHrM/WCUQf2g3oWqYO1glCTG?=
+ =?us-ascii?Q?d9mzKtjjU8LV6nVqb50as1pZh5qPn+q2kwNnYIqupZ/I/GsAiIZgYRnBT6jN?=
+ =?us-ascii?Q?xknRhhyGxjRJcimpLG6dkWmvmh7OoUGllx6PCBiUfvJVBmoHwD43UI4MG+mA?=
+ =?us-ascii?Q?cVbMPuB7aZjBO3PIdUCSegyqQVNhDnfV1gcZyzBt611usTDkHTjABHdiiKJf?=
+ =?us-ascii?Q?yVFqe0aGHrCYugrtsPrBNk2ftpZQXfbHRhONB31IUP1VfnoGmtoCkzb/w4JV?=
+ =?us-ascii?Q?y+BB00py82gzwCzyPwdwpOeUET3LxJlFR9+AbT1Xuk2fVCkqdRePP48W0CBb?=
+ =?us-ascii?Q?Oxr52IGnMI7j4PAgeU5pmsJp8pSNJ5rj44nacveixO52fU7AGE/kqVcpR0dL?=
+ =?us-ascii?Q?px+B1/xhDgoXbC3APszO6Jh3IxFGc6/nvezYoKFb7Z7zA8Fbx9pl3CBL06s5?=
+ =?us-ascii?Q?tbke6XahYMJeClfc/UwO2X+ppHFGwKLoU7DAE7dkRiuskn568iXWcBCR1uPe?=
+ =?us-ascii?Q?hDsXTeivtg729KKVbHlhIN81eGookYe/rfczk0fMUUa2p82nk1gs0tnEmE2Z?=
+ =?us-ascii?Q?Swu82dJbvy1LM6TdFTl1HCJHnvncsrAR1SecArR49Jvr+A/Hd9hXjgVtA5Lg?=
+ =?us-ascii?Q?MnD2U28htgIjkyAyioz4kA5PVlSG3wQ3vNTvYw17YwIQZJu9TGqiV89OZMP5?=
+ =?us-ascii?Q?ffv1+nXY8bjfPIPr7i0HiPCF07nqPBvUKoVqqXxAK18fwGWwmqhS4Lnll6mr?=
+ =?us-ascii?Q?SC8Cp2Gz8shmeEtPy+JW8oissgY4gPL/Xgke+LtjGshPT1wttOfkrNez2ygp?=
+ =?us-ascii?Q?5XyNhycj+jXR3c5vSX4r4rFX9lRArM7qpYdEoxjGl4W7hcFFcGFzEy0a5/cF?=
+ =?us-ascii?Q?cTLbwQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b3a38f54-e03b-4db0-7ac2-08db6e4028c2
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 08:03:24.5255
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vLB0gJNe3AWbvhpxeE04ujvrLxeIFTNHyWlu00K6f/2RcQ9dK0onymjArBm5h7N0tzhQNcuu/+Fhs7MR9c5R+02fq91R2Vxch/X52yTN09o=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR13MB6116
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---7zoj86TvI4ME9JFK
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Fri, Jun 16, 2023 at 02:28:00PM +0800, YueHaibing wrote:
+> commit f2f167583601 ("xsk: Remove unused xsk_buff_discard")
+> left behind this, remove it.
+> 
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-On Fri, Jun 16, 2023 at 03:53:38PM +0800, zhuyinbo wrote:
-> =E5=9C=A8 2023/6/16 =E4=B8=8B=E5=8D=882:58, Conor Dooley =E5=86=99=E9=81=
-=93:
-> >=20
-> > Rob, could you take a look at this please? On v2 while you were away I
-> > was kinda struggling w/ suspend-address & whether it made sense.
-> >=20
-> > The v2 & v1 are here:
-> > https://lore.kernel.org/all/20230522093156.7108-3-zhuyinbo@loongson.cn/
-> > https://lore.kernel.org/all/20230517073149.31980-3-zhuyinbo@loongson.cn/
-> >=20
-> > On Thu, Jun 15, 2023 at 05:17:56PM +0800, Yinbo Zhu wrote:
-> > > Add the Loongson-2 SoC Power Management Controller binding with DT
-> > > schema format using json-schema.
-> > >=20
-> > > Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> > > ---
-> > >   .../soc/loongson/loongson,ls2k-pmc.yaml       | 53 ++++++++++++++++=
-+++
-> > >   MAINTAINERS                                   |  6 +++
-> > >   2 files changed, 59 insertions(+)
-> > >   create mode 100644 Documentation/devicetree/bindings/soc/loongson/l=
-oongson,ls2k-pmc.yaml
-> > >=20
-> > > diff --git a/Documentation/devicetree/bindings/soc/loongson/loongson,=
-ls2k-pmc.yaml b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2=
-k-pmc.yaml
-> > > new file mode 100644
-> > > index 000000000000..32499bd10f8c
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pm=
-c.yaml
-> >=20
-> > The filename should ideally match one of the compatibles.
->=20
->=20
-> I learn about that yaml file name need match this compatible, but here
-> using a specific compatible as the name of the yaml file seems a bit
-> inappropriate . After all, this yaml file needs to cover lots of ls2k
-> series SoC rather than a specific SoC, and the yaml file naming in
-> kernel drivers is basically the same that use cover a series SoC's way.
->=20
-> >=20
-> > > @@ -0,0 +1,53 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/soc/loongson/loongson,ls2k-pmc.ya=
-ml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Loongson-2 Power Manager controller
-> > > +
-> > > +maintainers:
-> > > +  - Yinbo Zhu <zhuyinbo@loongson.cn>
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    oneOf:
-> > > +      - items:
-> > > +          - enum:
-> > > +              - loongson,ls2k1000-pmc
-> > > +              - loongson,ls2k0500-pmc
-> >=20
-> > I notice the driver only supports one of these two. Is there a reason
-> > for that?
->=20
->=20
-> The driver can support both of the above, and I will add another.
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-The driver only contains
-	static const struct of_device_id loongson2_pm_match[] =3D {
-	       { .compatible =3D "loongson,ls2k1000-pmc", },
-	       {},
-	};
-so it only supports the 2k1000 right now. Are the 2k1000 and 2k0500
-compatible with eachother?
-
-> > > +          - const: syscon
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +  interrupts:
-> > > +    maxItems: 1
-> > > +
-> > > +  suspend-address:
-> > > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > > +    description:
-> > > +      The "suspend-address" is a deep sleep state (Suspend To RAM)
-> > > +      firmware entry address which was jumped from kernel and it's
-> > > +      value was dependent on specific platform firmware code. In
-> > > +      addition, the PM need according to it to indicate that current
-> > > +      SoC whether support Suspend To RAM.
-> > > +
-> > > +required:
-> > > +  - compatible
-> > > +  - reg
-> > > +  - interrupts
-> > > +
-> > > +additionalProperties: false
-> > > +
-> > > +examples:
-> > > +  - |
-> > > +    #include <dt-bindings/interrupt-controller/irq.h>
-> > > +
-> > > +    pmc: pm@1fe27000 {
-> >         ^^^
-> >=20
-> > nit: this label isn't used, so you can drop it.
->=20
->=20
-> This lable need to be used by poweroff and reboot node but I don't add
-> these node that reference pmc here.
-
-Right, in the dts it might need those, but not in the example in the
-binding.
-
-Cheers,
-Conor.
-
-
---7zoj86TvI4ME9JFK
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIwXQAAKCRB4tDGHoIJi
-0hnNAQDgnHCPOhtgmUu8ZJOMwWCm+4EnosPKCPUNqu5+XfCavgEA/3SbSK6yfJke
-g2TIjSEMSVzsRSZR2bsJPYuDAarvaAk=
-=kgbC
------END PGP SIGNATURE-----
-
---7zoj86TvI4ME9JFK--
