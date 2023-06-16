@@ -2,46 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BBF2732DDF
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 741A0732DE5
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344117AbjFPK2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 06:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49670 "EHLO
+        id S1344466AbjFPK2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 06:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235162AbjFPK12 (ORCPT
+        with ESMTP id S1344149AbjFPK1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 06:27:28 -0400
+        Fri, 16 Jun 2023 06:27:38 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131172D79;
-        Fri, 16 Jun 2023 03:26:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F012230C7;
+        Fri, 16 Jun 2023 03:26:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B541635F7;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B5C90635FB;
+        Fri, 16 Jun 2023 10:26:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35876C433C8;
         Fri, 16 Jun 2023 10:26:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A5EDC433C0;
-        Fri, 16 Jun 2023 10:26:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686911163;
-        bh=+Mljsuej5wv46TxjC+eGYKwSemJD87R+3PYWElssA4c=;
+        s=k20201202; t=1686911165;
+        bh=X1aQh2/kWrgnsIHleJC02XwqsQMEyxzHpDqhA0Bokd8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q1O7PQs30DXRo1m3U48SOQF/Fq4Sbr5pYpgfOTpJB0lCQXI2JmukUo6coe3trgWPm
-         4sT4Phurt8TAORhpZjV49+LyiDw6UIuwi/AkQK5R/stWyP9LbU/llSmBYrVewaOiVj
-         ITDmso/GzYX+2uSaZeM8iE5zyqAPHPhzN3+KQoQgOI4sKLBkxnC6tPrw8RlECS4phy
-         U/jk57Gr41JlmwqG2SAgFYBmzfRLV5yGViSn6PayvB6vNfhWCt3isP6w9trN9PXzrw
-         I7nwvLPHM3pWjLSL2FizMFaHtVZKWmOilTp8b8qixd7f94VsbLEkIjc3fTg0l2RhNO
-         38fwoqbLeh4KQ==
+        b=GYX2RN3YRumCwrsTah8c0RDeb7SRBsPlVrHuEVZVI64ESwV4UAczmhY9FehzHo5RV
+         Lia7gnY8Ffcvx/eaKdHYBV0yRmPnVhCMkc8F0EzBIJU2T/SgVTO7jKRFKFiknHNV2f
+         N3HLBgl9VrlHIQ4UPIR4fkRSQL4Im1D8MQKNfvCrcZfNSmTmpcp+aVEebpZeCj8IwH
+         QRMZSVWTgxH9pMWOwKThETGPZKD1UE8aZdcX2neu6hQh1EHf+yYiBC+ssjqvof2Hji
+         ZGvGt5DnLbLoHOt8LmJGjeWE6wGwrAmqOQQEm3tktOBx1KRQ3m97yMrFt/TpYg6Im5
+         IHxu9Lu30satw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     David Zheng <david.zheng@intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        andi.shyti@kernel.org, linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 20/30] i2c: designware: fix idx_write_cnt in read loop
-Date:   Fri, 16 Jun 2023 06:25:08 -0400
-Message-Id: <20230616102521.673087-20-sashal@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>,
+        bcousson@baylibre.com, tony@atomide.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com, shawnguo@kernel.org,
+        linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.3 21/30] ARM: dts: Fix erroneous ADS touchscreen polarities
+Date:   Fri, 16 Jun 2023 06:25:09 -0400
+Message-Id: <20230616102521.673087-21-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230616102521.673087-1-sashal@kernel.org>
 References: <20230616102521.673087-1-sashal@kernel.org>
@@ -60,95 +64,175 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Zheng <david.zheng@intel.com>
+From: Linus Walleij <linus.walleij@linaro.org>
 
-[ Upstream commit 1acfc6e753ed978b36d722f54e57fe4d1e8a6ffa ]
+[ Upstream commit 4a672d500bfd6bb87092c33d5a2572c3d0a1cf83 ]
 
-With IC_INTR_RX_FULL slave interrupt handler reads data in a loop until
-RX FIFO is empty. When testing with the slave-eeprom, each transaction
-has 2 bytes for address/index and 1 byte for value, the address byte
-can be written as data byte due to dropping STOP condition.
+Several device tree files get the polarity of the pendown-gpios
+wrong: this signal is active low. Fix up all incorrect flags, so
+that operating systems can rely on the flag being correctly set.
 
-In the test below, the master continuously writes to the slave, first 2
-bytes are index, 3rd byte is value and follow by a STOP condition.
-
- i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D1-D1]
- i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D2-D2]
- i2c_write: i2c-3 #0 a=04b f=0000 l=3 [00-D3-D3]
-
-Upon receiving STOP condition slave eeprom would reset `idx_write_cnt` so
-next 2 bytes can be treated as buffer index for upcoming transaction.
-Supposedly the slave eeprom buffer would be written as
-
- EEPROM[0x00D1] = 0xD1
- EEPROM[0x00D2] = 0xD2
- EEPROM[0x00D3] = 0xD3
-
-When CPU load is high the slave irq handler may not read fast enough,
-the interrupt status can be seen as 0x204 with both DW_IC_INTR_STOP_DET
-(0x200) and DW_IC_INTR_RX_FULL (0x4) bits. The slave device may see
-the transactions below.
-
- 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
- 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
- 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
- 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1794 : INTR_STAT=0x204
- 0x1 STATUS SLAVE_ACTIVITY=0x0 : RAW_INTR_STAT=0x1790 : INTR_STAT=0x200
- 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
- 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
- 0x1 STATUS SLAVE_ACTIVITY=0x1 : RAW_INTR_STAT=0x1594 : INTR_STAT=0x4
-
-After `D1` is received, read loop continues to read `00` which is the
-first bype of next index. Since STOP condition is ignored by the loop,
-eeprom buffer index increased to `D2` and `00` is written as value.
-
-So the slave eeprom buffer becomes
-
- EEPROM[0x00D1] = 0xD1
- EEPROM[0x00D2] = 0x00
- EEPROM[0x00D3] = 0xD3
-
-The fix is to use `FIRST_DATA_BYTE` (bit 11) in `IC_DATA_CMD` to split
-the transactions. The first index byte in this case would have bit 11
-set. Check this indication to inject I2C_SLAVE_WRITE_REQUESTED event
-which will reset `idx_write_cnt` in slave eeprom.
-
-Signed-off-by: David Zheng <david.zheng@intel.com>
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Link: https://lore.kernel.org/r/20230510105156.1134320-1-linus.walleij@linaro.org
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-designware-core.h  | 1 +
- drivers/i2c/busses/i2c-designware-slave.c | 4 ++++
- 2 files changed, 5 insertions(+)
+ arch/arm/boot/dts/am57xx-cl-som-am57x.dts          | 2 +-
+ arch/arm/boot/dts/at91sam9261ek.dts                | 2 +-
+ arch/arm/boot/dts/imx7d-pico-hobbit.dts            | 2 +-
+ arch/arm/boot/dts/imx7d-sdb.dts                    | 2 +-
+ arch/arm/boot/dts/omap3-cm-t3x.dtsi                | 2 +-
+ arch/arm/boot/dts/omap3-devkit8000-lcd-common.dtsi | 2 +-
+ arch/arm/boot/dts/omap3-lilly-a83x.dtsi            | 2 +-
+ arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi    | 2 +-
+ arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi    | 2 +-
+ arch/arm/boot/dts/omap3-pandora-common.dtsi        | 2 +-
+ arch/arm/boot/dts/omap5-cm-t54.dts                 | 2 +-
+ 11 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-designware-core.h b/drivers/i2c/busses/i2c-designware-core.h
-index 050d8c63ad3c5..0164d92163308 100644
---- a/drivers/i2c/busses/i2c-designware-core.h
-+++ b/drivers/i2c/busses/i2c-designware-core.h
-@@ -40,6 +40,7 @@
- #define DW_IC_CON_BUS_CLEAR_CTRL		BIT(11)
+diff --git a/arch/arm/boot/dts/am57xx-cl-som-am57x.dts b/arch/arm/boot/dts/am57xx-cl-som-am57x.dts
+index 2fc9a5d5e0c0d..625b9b311b49d 100644
+--- a/arch/arm/boot/dts/am57xx-cl-som-am57x.dts
++++ b/arch/arm/boot/dts/am57xx-cl-som-am57x.dts
+@@ -527,7 +527,7 @@ touchscreen@1 {
  
- #define DW_IC_DATA_CMD_DAT			GENMASK(7, 0)
-+#define DW_IC_DATA_CMD_FIRST_DATA_BYTE		BIT(11)
+ 		interrupt-parent = <&gpio1>;
+ 		interrupts = <31 0>;
+-		pendown-gpio = <&gpio1 31 0>;
++		pendown-gpio = <&gpio1 31 GPIO_ACTIVE_LOW>;
  
- /*
-  * Registers offset
-diff --git a/drivers/i2c/busses/i2c-designware-slave.c b/drivers/i2c/busses/i2c-designware-slave.c
-index cec25054bb244..2e079cf20bb5b 100644
---- a/drivers/i2c/busses/i2c-designware-slave.c
-+++ b/drivers/i2c/busses/i2c-designware-slave.c
-@@ -176,6 +176,10 @@ static irqreturn_t i2c_dw_isr_slave(int this_irq, void *dev_id)
  
- 		do {
- 			regmap_read(dev->map, DW_IC_DATA_CMD, &tmp);
-+			if (tmp & DW_IC_DATA_CMD_FIRST_DATA_BYTE)
-+				i2c_slave_event(dev->slave,
-+						I2C_SLAVE_WRITE_REQUESTED,
-+						&val);
- 			val = tmp;
- 			i2c_slave_event(dev->slave, I2C_SLAVE_WRITE_RECEIVED,
- 					&val);
+ 		ti,x-min = /bits/ 16 <0x0>;
+diff --git a/arch/arm/boot/dts/at91sam9261ek.dts b/arch/arm/boot/dts/at91sam9261ek.dts
+index 88869ca874d1a..045cb253f23a6 100644
+--- a/arch/arm/boot/dts/at91sam9261ek.dts
++++ b/arch/arm/boot/dts/at91sam9261ek.dts
+@@ -156,7 +156,7 @@ tsc2046@2 {
+ 					compatible = "ti,ads7843";
+ 					interrupts-extended = <&pioC 2 IRQ_TYPE_EDGE_BOTH>;
+ 					spi-max-frequency = <3000000>;
+-					pendown-gpio = <&pioC 2 GPIO_ACTIVE_HIGH>;
++					pendown-gpio = <&pioC 2 GPIO_ACTIVE_LOW>;
+ 
+ 					ti,x-min = /bits/ 16 <150>;
+ 					ti,x-max = /bits/ 16 <3830>;
+diff --git a/arch/arm/boot/dts/imx7d-pico-hobbit.dts b/arch/arm/boot/dts/imx7d-pico-hobbit.dts
+index d917dc4f2f227..6ad39dca70096 100644
+--- a/arch/arm/boot/dts/imx7d-pico-hobbit.dts
++++ b/arch/arm/boot/dts/imx7d-pico-hobbit.dts
+@@ -64,7 +64,7 @@ ads7846@0 {
+ 		interrupt-parent = <&gpio2>;
+ 		interrupts = <7 0>;
+ 		spi-max-frequency = <1000000>;
+-		pendown-gpio = <&gpio2 7 0>;
++		pendown-gpio = <&gpio2 7 GPIO_ACTIVE_LOW>;
+ 		vcc-supply = <&reg_3p3v>;
+ 		ti,x-min = /bits/ 16 <0>;
+ 		ti,x-max = /bits/ 16 <4095>;
+diff --git a/arch/arm/boot/dts/imx7d-sdb.dts b/arch/arm/boot/dts/imx7d-sdb.dts
+index f483bc0afe5ea..234e5fc647b22 100644
+--- a/arch/arm/boot/dts/imx7d-sdb.dts
++++ b/arch/arm/boot/dts/imx7d-sdb.dts
+@@ -205,7 +205,7 @@ tsc2046@0 {
+ 		pinctrl-0 = <&pinctrl_tsc2046_pendown>;
+ 		interrupt-parent = <&gpio2>;
+ 		interrupts = <29 0>;
+-		pendown-gpio = <&gpio2 29 GPIO_ACTIVE_HIGH>;
++		pendown-gpio = <&gpio2 29 GPIO_ACTIVE_LOW>;
+ 		touchscreen-max-pressure = <255>;
+ 		wakeup-source;
+ 	};
+diff --git a/arch/arm/boot/dts/omap3-cm-t3x.dtsi b/arch/arm/boot/dts/omap3-cm-t3x.dtsi
+index e61b8a2bfb7de..51baedf1603bd 100644
+--- a/arch/arm/boot/dts/omap3-cm-t3x.dtsi
++++ b/arch/arm/boot/dts/omap3-cm-t3x.dtsi
+@@ -227,7 +227,7 @@ ads7846@0 {
+ 
+ 		interrupt-parent = <&gpio2>;
+ 		interrupts = <25 0>;		/* gpio_57 */
+-		pendown-gpio = <&gpio2 25 GPIO_ACTIVE_HIGH>;
++		pendown-gpio = <&gpio2 25 GPIO_ACTIVE_LOW>;
+ 
+ 		ti,x-min = /bits/ 16 <0x0>;
+ 		ti,x-max = /bits/ 16 <0x0fff>;
+diff --git a/arch/arm/boot/dts/omap3-devkit8000-lcd-common.dtsi b/arch/arm/boot/dts/omap3-devkit8000-lcd-common.dtsi
+index 3decc2d78a6ca..a7f99ae0c1fe9 100644
+--- a/arch/arm/boot/dts/omap3-devkit8000-lcd-common.dtsi
++++ b/arch/arm/boot/dts/omap3-devkit8000-lcd-common.dtsi
+@@ -54,7 +54,7 @@ ads7846@0 {
+ 
+ 		interrupt-parent = <&gpio1>;
+ 		interrupts = <27 0>;		/* gpio_27 */
+-		pendown-gpio = <&gpio1 27 GPIO_ACTIVE_HIGH>;
++		pendown-gpio = <&gpio1 27 GPIO_ACTIVE_LOW>;
+ 
+ 		ti,x-min = /bits/ 16 <0x0>;
+ 		ti,x-max = /bits/ 16 <0x0fff>;
+diff --git a/arch/arm/boot/dts/omap3-lilly-a83x.dtsi b/arch/arm/boot/dts/omap3-lilly-a83x.dtsi
+index c595afe4181d7..d310b5c7bac36 100644
+--- a/arch/arm/boot/dts/omap3-lilly-a83x.dtsi
++++ b/arch/arm/boot/dts/omap3-lilly-a83x.dtsi
+@@ -311,7 +311,7 @@ tsc2046@0 {
+ 		interrupt-parent = <&gpio1>;
+ 		interrupts = <8 0>;   /* boot6 / gpio_8 */
+ 		spi-max-frequency = <1000000>;
+-		pendown-gpio = <&gpio1 8 GPIO_ACTIVE_HIGH>;
++		pendown-gpio = <&gpio1 8 GPIO_ACTIVE_LOW>;
+ 		vcc-supply = <&reg_vcc3>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&tsc2048_pins>;
+diff --git a/arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi b/arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi
+index 1d6e88f99eb31..c3570acc35fad 100644
+--- a/arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi
++++ b/arch/arm/boot/dts/omap3-overo-common-lcd35.dtsi
+@@ -149,7 +149,7 @@ ads7846@0 {
+ 
+ 		interrupt-parent = <&gpio4>;
+ 		interrupts = <18 0>;			/* gpio_114 */
+-		pendown-gpio = <&gpio4 18 GPIO_ACTIVE_HIGH>;
++		pendown-gpio = <&gpio4 18 GPIO_ACTIVE_LOW>;
+ 
+ 		ti,x-min = /bits/ 16 <0x0>;
+ 		ti,x-max = /bits/ 16 <0x0fff>;
+diff --git a/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi b/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
+index 7e30f9d45790e..d95a0e130058c 100644
+--- a/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
++++ b/arch/arm/boot/dts/omap3-overo-common-lcd43.dtsi
+@@ -160,7 +160,7 @@ ads7846@0 {
+ 
+ 		interrupt-parent = <&gpio4>;
+ 		interrupts = <18 0>;			/* gpio_114 */
+-		pendown-gpio = <&gpio4 18 GPIO_ACTIVE_HIGH>;
++		pendown-gpio = <&gpio4 18 GPIO_ACTIVE_LOW>;
+ 
+ 		ti,x-min = /bits/ 16 <0x0>;
+ 		ti,x-max = /bits/ 16 <0x0fff>;
+diff --git a/arch/arm/boot/dts/omap3-pandora-common.dtsi b/arch/arm/boot/dts/omap3-pandora-common.dtsi
+index 559853764487f..4c3b6bab179cc 100644
+--- a/arch/arm/boot/dts/omap3-pandora-common.dtsi
++++ b/arch/arm/boot/dts/omap3-pandora-common.dtsi
+@@ -651,7 +651,7 @@ tsc2046@0 {
+ 		pinctrl-0 = <&penirq_pins>;
+ 		interrupt-parent = <&gpio3>;
+ 		interrupts = <30 IRQ_TYPE_NONE>;	/* GPIO_94 */
+-		pendown-gpio = <&gpio3 30 GPIO_ACTIVE_HIGH>;
++		pendown-gpio = <&gpio3 30 GPIO_ACTIVE_LOW>;
+ 		vcc-supply = <&vaux4>;
+ 
+ 		ti,x-min = /bits/ 16 <0>;
+diff --git a/arch/arm/boot/dts/omap5-cm-t54.dts b/arch/arm/boot/dts/omap5-cm-t54.dts
+index 2d87b9fc230ee..af288d63a26a4 100644
+--- a/arch/arm/boot/dts/omap5-cm-t54.dts
++++ b/arch/arm/boot/dts/omap5-cm-t54.dts
+@@ -354,7 +354,7 @@ ads7846@0 {
+ 
+ 		interrupt-parent = <&gpio1>;
+ 		interrupts = <15 0>;			/* gpio1_wk15 */
+-		pendown-gpio = <&gpio1 15 GPIO_ACTIVE_HIGH>;
++		pendown-gpio = <&gpio1 15 GPIO_ACTIVE_LOW>;
+ 
+ 
+ 		ti,x-min = /bits/ 16 <0x0>;
 -- 
 2.39.2
 
