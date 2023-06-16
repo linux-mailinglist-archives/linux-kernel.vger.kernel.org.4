@@ -2,105 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 668CE7330F7
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52B937330FC
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:17:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232680AbjFPMQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 08:16:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56264 "EHLO
+        id S243558AbjFPMR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 08:17:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjFPMQn (ORCPT
+        with ESMTP id S243808AbjFPMRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 08:16:43 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3C5294C
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 05:16:42 -0700 (PDT)
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C23443F10B
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 12:16:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1686917800;
-        bh=9khctnS3KGbhQfn/AhXw2BywtkyBNp99eLHZVmIExRI=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=j9WX8ngBKzxgqvog7gCOfDs0/xjxvE3/xqvK/Gx8pE2yz5Ou4qqZtHQm3H+O+4S1Z
-         H2A/9237Mx9VOVjLcKujtFc5o47mQoUKs4han0Vsryk8Acqsqyn6TRUsefyqceP0kV
-         ZPvo5aKP5aLCVANt4kTe3RcmKe03TbXzTwzvUfG3jAiqRz2Lmpn78J7sFu7SRrFN7I
-         WUOzX82zXoZtTOYSVDMAa7N2s6ddpg24WQZqDwkmRoioCOaZjhK98TYsgtF5F17Z3G
-         u02jHXhhrgfhwOtRz/9DxSX7EE68gXREHqpBq2QXvQj533Zfyndv0Wk26l8cAXXVKF
-         bL7NNhnRajJ9w==
-Received: by mail-lf1-f72.google.com with SMTP id 2adb3069b0e04-4f658076c93so501232e87.0
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 05:16:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686917799; x=1689509799;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9khctnS3KGbhQfn/AhXw2BywtkyBNp99eLHZVmIExRI=;
-        b=J8dgnLSS0zBiFcI32TNXJIm5H8B/7jDlMUTa69bF3d9CCvX33j7NESZKbGxELczUJO
-         spUXmZ/Se7BPGZc7mLYRFXPcSrUsOEspH5UNbOavnPz2/iSlHiMyuJRGH2amxP5uPUSN
-         ShsCiRauQKzJkDt/9w2D4vbETx8sBGzT+J5pdTnyRU/e3ei+WaLMaHzYqtZUlwk8vA7d
-         nPhxnrgCt7lVg0F+A48OTORQCTdEfArwMppS0KMQEjFRekQswO5Ou0xelZopXEB4SQZz
-         Rr/Mu3K0mTkhh4L+TJTrCYOinOJOVfx+h4bY7pR5/H95DZc6CUEy6CXeLWdxDO/eiIal
-         2gCw==
-X-Gm-Message-State: AC+VfDwQFH3jAsrr0xvruzVjzHJ3KnJgDp/nWfZT1GAb+MNcJebvrcdR
-        w/G9ssJhO7/zTW95V+H3ej8gd45UpsOuOIQNHaUavv2UsAhXAz2UBJy6T5bJGS0olACDzh8001e
-        RF0uv8sHANPDbw/FWPh7waEzgSFPmWscfde2qejqXsQ==
-X-Received: by 2002:a2e:90c5:0:b0:2af:23c0:ffe2 with SMTP id o5-20020a2e90c5000000b002af23c0ffe2mr1600560ljg.48.1686917799486;
-        Fri, 16 Jun 2023 05:16:39 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7A8o+IbZxCv/2DBlnwbGp11X9xuYSeDQtkg8plvKTfF7GfPMv6+pbOIWOLSRri7mw46WYb4w==
-X-Received: by 2002:a2e:90c5:0:b0:2af:23c0:ffe2 with SMTP id o5-20020a2e90c5000000b002af23c0ffe2mr1600543ljg.48.1686917799207;
-        Fri, 16 Jun 2023 05:16:39 -0700 (PDT)
-Received: from localhost ([194.191.244.86])
-        by smtp.gmail.com with ESMTPSA id f20-20020a7bcc14000000b003f8044b3436sm2033492wmh.23.2023.06.16.05.16.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jun 2023 05:16:38 -0700 (PDT)
-From:   Juerg Haefliger <juerg.haefliger@canonical.com>
-To:     ogabbay@kernel.org, dri-devel@lists.freedesktop.org
-Cc:     linux-kernel@vger.kernel.org, talcohen@habana.ai,
-        osharabi@habana.ai, dliberman@habana.ai, dhirschfeld@habana.ai,
-        Juerg Haefliger <juerg.haefliger@canonical.com>
-Subject: [PATCH] habanalabs/gaudi: Add MODULE_FIRMWARE macros
-Date:   Fri, 16 Jun 2023 14:16:37 +0200
-Message-Id: <20230616121637.1033074-1-juerg.haefliger@canonical.com>
-X-Mailer: git-send-email 2.37.2
+        Fri, 16 Jun 2023 08:17:51 -0400
+Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5313D30DF;
+        Fri, 16 Jun 2023 05:17:47 -0700 (PDT)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1qA8OU-003oRS-HY; Fri, 16 Jun 2023 20:17:35 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 16 Jun 2023 20:17:34 +0800
+Date:   Fri, 16 Jun 2023 20:17:34 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Franziska Naepelt <franziska.naepelt@googlemail.com>
+Cc:     bagasdotme@gmail.com, davem@davemloft.net,
+        franziska.naepelt@gmail.com, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.petersen@oracle.com,
+        tim.c.chen@linux.intel.com
+Subject: Re: [PATCH v2] crypto: crct10dif_common Add SPDX-License-Identifier
+ tag
+Message-ID: <ZIxS3pJ/GfTEGVtW@gondor.apana.org.au>
+References: <ZH8ntoGLJHQpZriL@debian.me>
+ <20230606180713.99460-1-franziska.naepelt@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230606180713.99460-1-franziska.naepelt@gmail.com>
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The module loads firmware so add MODULE_FIRMWARE macros to provide that
-information via modinfo.
+On Tue, Jun 06, 2023 at 08:07:13PM +0200, Franziska Naepelt wrote:
+> Fix the following checkpatch warning:
+> - WARNING: Missing or malformed SPDX-License-Identifier tag
+> 
+> Signed-off-by: Franziska Naepelt <franziska.naepelt@gmail.com>
+> ---
+> v2:
+>  - Remove GPL license boilerplate
+> ---
+>  crypto/crct10dif_common.c | 16 +---------------
+>  1 file changed, 1 insertion(+), 15 deletions(-)
+> 
+> diff --git a/crypto/crct10dif_common.c b/crypto/crct10dif_common.c
+> index b2fab366f518..28a0cdde9449 100644
+> --- a/crypto/crct10dif_common.c
+> +++ b/crypto/crct10dif_common.c
+> @@ -1,3 +1,4 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+>  /*
+>   * Cryptographic API.
+>   *
+> @@ -7,21 +8,6 @@
+>   * Written by Martin K. Petersen <martin.petersen@oracle.com>
+>   * Copyright (C) 2013 Intel Corporation
+>   * Author: Tim Chen <tim.c.chen@linux.intel.com>
+> - *
+> - * This program is free software; you can redistribute it and/or modify it
+> - * under the terms of the GNU General Public License as published by the Free
+> - * Software Foundation; either version 2 of the License, or (at your option)
+> - * any later version.
+> - *
+> - * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+> - * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+> - * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+> - * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+> - * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+> - * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+> - * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+> - * SOFTWARE.
+> - *
+>   */
 
-Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
----
- drivers/accel/habanalabs/gaudi/gaudi.c | 4 ++++
- 1 file changed, 4 insertions(+)
+As the text you removed does not match GPLv2 exactly I'm dropping
+this patch for now.
 
-diff --git a/drivers/accel/habanalabs/gaudi/gaudi.c b/drivers/accel/habanalabs/gaudi/gaudi.c
-index a29aa8f7b6f3..cd034e98128a 100644
---- a/drivers/accel/habanalabs/gaudi/gaudi.c
-+++ b/drivers/accel/habanalabs/gaudi/gaudi.c
-@@ -63,6 +63,10 @@
- #define GAUDI_LINUX_FW_FILE	"habanalabs/gaudi/gaudi-fit.itb"
- #define GAUDI_TPC_FW_FILE	"habanalabs/gaudi/gaudi_tpc.bin"
- 
-+MODULE_FIRMWARE(GAUDI_BOOT_FIT_FILE);
-+MODULE_FIRMWARE(GAUDI_LINUX_FW_FILE);
-+MODULE_FIRMWARE(GAUDI_TPC_FW_FILE);
-+
- #define GAUDI_DMA_POOL_BLK_SIZE		0x100 /* 256 bytes */
- 
- #define GAUDI_RESET_TIMEOUT_MSEC	2000		/* 2000ms */
+Thanks,
 -- 
-2.37.2
-
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
