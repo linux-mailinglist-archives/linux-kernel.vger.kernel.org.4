@@ -2,66 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C4EC733619
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 18:33:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5614773361D
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 18:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344104AbjFPQdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 12:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54484 "EHLO
+        id S1344679AbjFPQdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 12:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344589AbjFPQdZ (ORCPT
+        with ESMTP id S1344667AbjFPQdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 12:33:25 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69FA30FD
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 09:33:22 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-33c1fb9f2ecso3520425ab.1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 09:33:22 -0700 (PDT)
+        Fri, 16 Jun 2023 12:33:33 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C9630F5
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 09:33:31 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id ca18e2360f4ac-77a103c5ebbso30421839f.3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 09:33:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686933202; x=1689525202;
+        d=linaro.org; s=google; t=1686933211; x=1689525211;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=RMzvn7GrYNWa2uH46LDQF7EASLlBeuQBsdi7fubQl4U=;
-        b=e+aGlzUey3htPYGYAoUdpbynMOvWw3zXttEZF1XtfK7sS1B1e4GrxM6PhHgDXieC6L
-         Iay4DgUgYoaZBIxbUM3exb8LKtGRJ7Y2oHiG8HRZDaO83Bh/mMVuYpjyuSni3yMnRsZS
-         nVtN6ihboDt6vx7fgO0+5aSXv6PNuYiqnIqf+IaCRAoVIx2NTx1uqkjLJL5YzyQDqAJV
-         oddRpJ1RE+JllaLgO6B/H6ChzH5R30yrYUxAP0FydMgAMdYA4aQEkYCPVueRBQTSaISl
-         CmY/r3OPLfUn7ye4F4m1Smf/d+ZZ/d1nIhqjTyBlZ6j4oADLBH5k9jVEgi346DT3vI89
-         PmFA==
+        bh=resRWGkob1IQnmz+Wjwf9DcmrXuQQYleHyTWv5YGX1M=;
+        b=d+ESlMZdKPkUZM8iPGcfx21FG8PurrVCwQBO2SKwQFOVtG85fj0CJT7YVMcRX4N9lO
+         mZpMbuUOXJRc1TWsmBFKDIRH9d2P/CyWmsXLEbDJO76T0X9LRSHn15Fq0qIRcpDrvb0i
+         xm5WX2W+EDaPmSkzO/fqoRYRnvs3sVKwCYco6nW7p8kDD7X547YoyGu55QtO7DoGDaGF
+         3ip7BuosZdTSR5+1V6S+DdomCo8QwlD/xPsEbQde8YAJW2vIvA+I0+g4st3xElcOB9b8
+         74xDobCBCCbSPXAEsEaGSPY2PJLj1jgJxR9ZsYG6kwO+L7CeEM1d7xu1DUBgvztfeVe2
+         DrKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686933202; x=1689525202;
+        d=1e100.net; s=20221208; t=1686933211; x=1689525211;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RMzvn7GrYNWa2uH46LDQF7EASLlBeuQBsdi7fubQl4U=;
-        b=K3eONCIbOLhfj0A/s17rzarmjYjekV2Vd1+UTSX987r36UGhaMAY2BEA/euleRYTTG
-         oNjwCQ8TaPuJWY40kmE/s17Oe7mC+fU/j/oX9jCXrAkuM3zyni9XBK8Lmt2RhZDFXdvf
-         AdXMwMEIggOZRcUWH42+bSrcU1bVyx44AM3DU5U4OC5xgn9fAgbxW9x1veYpPGVuwXb5
-         JdfrCYVxEgb1Izpk79v109tG/4GJlCPuIpCEnjRP0qlmMMy+D1F4mOTSpOa11D6V9uXl
-         P3xKLOUioTeMXwDd3cS8auYVIYoaw+HvHWXnuiIk+GvLyg9WmTgiIjo1nCvOv3zXV7FY
-         3PAw==
-X-Gm-Message-State: AC+VfDxzRjCAUDgx8PMnkAg7Pej7GNWE8GiXDRbK5Awi3oaGyr/hJPmN
-        0lGLAHlKtJZdWryDxwSV3OhjCg==
-X-Google-Smtp-Source: ACHHUZ6e5eASUyr0HGn1xn6gEz4YA7CO7nmeBC8gUituZhZ5NYMcyuX+aO67GwddgognDc4sio5krw==
-X-Received: by 2002:a92:cacb:0:b0:340:8b48:8d71 with SMTP id m11-20020a92cacb000000b003408b488d71mr2981429ilq.13.1686933201911;
-        Fri, 16 Jun 2023 09:33:21 -0700 (PDT)
+        bh=resRWGkob1IQnmz+Wjwf9DcmrXuQQYleHyTWv5YGX1M=;
+        b=GV3h4elLXkDwsPCVWdB5iUwP6+XjXn+IH8BKW0KokTz5C7jhAwjP66VVYDy/B1BhmK
+         c3qPZ3gvRQDUJ9MY26NterLw6Mfs6OEfRV1idNHVlhvOItVIwsDwz0w7Z3Cz77zPH5zO
+         iZQPxp/8MVW29Mm2p3UglsZD6pCqWsTBzS6YvzAjRgBdS/U+LCZuUe+1VdrwYy48z4Kj
+         24nIsClADFptRVcIIyKFeBxSKJa61CVsUPErHjXL1JdwAhVJW4avRfpKfVnK0X+B5fzF
+         yLUhjevaa0QztGi3itmr29Slckm9bVakk5Huvhyxs7K8jLIh46ILYPaUUW4BqI/Q0nvu
+         EioA==
+X-Gm-Message-State: AC+VfDzT2mcjwdaoIKhfuKaKg+ztPmONFvtU/oHrfGytM6+JhRJvyZFD
+        1UVmV7I8QEWinaSdCrfCaDMxNg==
+X-Google-Smtp-Source: ACHHUZ6cLDCjP6nI3WGHS8UCPS7OSFUFU7DUbTbcv0TZ5hDyU9vGzkThXihOnW94C+nE4eWtHvs1tg==
+X-Received: by 2002:a05:6602:2992:b0:777:b364:bab9 with SMTP id o18-20020a056602299200b00777b364bab9mr2587068ior.6.1686933210677;
+        Fri, 16 Jun 2023 09:33:30 -0700 (PDT)
 Received: from [172.22.22.28] ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id i19-20020a02cc53000000b0041408b79f1esm6354501jaq.111.2023.06.16.09.33.20
+        by smtp.gmail.com with ESMTPSA id t12-20020a02c48c000000b0040f94261ab1sm6433067jam.12.2023.06.16.09.33.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jun 2023 09:33:21 -0700 (PDT)
-Message-ID: <4ad6d4e5-6653-1502-76f8-7b52c0d36db3@linaro.org>
-Date:   Fri, 16 Jun 2023 11:33:19 -0500
+        Fri, 16 Jun 2023 09:33:30 -0700 (PDT)
+Message-ID: <35cffc70-a04e-e049-1bdf-1c5a250bb84e@linaro.org>
+Date:   Fri, 16 Jun 2023 11:33:28 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v14 06/25] mailbox: Add Gunyah message queue mailbox
+Subject: Re: [PATCH v14 11/25] gunyah: vm_mgr: Add/remove user memory regions
 Content-Language: en-US
 To:     Elliot Berman <quic_eberman@quicinc.com>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jassi Brar <jassisinghbrar@gmail.com>
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
 Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
         Trilok Soni <quic_tsoni@quicinc.com>,
         Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
@@ -74,16 +72,18 @@ Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
         Bagas Sanjaya <bagasdotme@gmail.com>,
         Will Deacon <will@kernel.org>, Andy Gross <agross@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
 References: <20230613172054.3959700-1-quic_eberman@quicinc.com>
- <20230613172054.3959700-7-quic_eberman@quicinc.com>
+ <20230613172054.3959700-12-quic_eberman@quicinc.com>
 From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <20230613172054.3959700-7-quic_eberman@quicinc.com>
+In-Reply-To: <20230613172054.3959700-12-quic_eberman@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -97,361 +97,470 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 6/13/23 12:20 PM, Elliot Berman wrote:
-> Gunyah message queues are a unidirectional inter-VM pipe for messages up
-> to 1024 bytes. This driver supports pairing a receiver message queue and
-> a transmitter message queue to expose a single mailbox channel.
+> When launching a virtual machine, Gunyah userspace allocates memory for
+> the guest and informs Gunyah about these memory regions through
+> SET_USER_MEMORY_REGION ioctl.
 > 
-> Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> Co-developed-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+> Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
 > Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 
-Despite a small gripe this looks good.
+I have one trivial comment below.  This patch adds some complexity
+but this time around I'm going to assume I checked those things
+in some detail previously.  This time I'm doing more of a scan
+through the patch and I find it looks good.  (If you want me to
+spend more time on this, say so.)
 
 Reviewed-by: Alex Elder <elder@linaro.org>
 
 > ---
->   Documentation/virt/gunyah/message-queue.rst |   8 +
->   drivers/mailbox/Makefile                    |   2 +
->   drivers/mailbox/gunyah-msgq.c               | 219 ++++++++++++++++++++
->   include/linux/gunyah.h                      |  57 +++++
->   4 files changed, 286 insertions(+)
->   create mode 100644 drivers/mailbox/gunyah-msgq.c
+>   drivers/virt/gunyah/Makefile    |   2 +-
+>   drivers/virt/gunyah/vm_mgr.c    |  59 +++++++-
+>   drivers/virt/gunyah/vm_mgr.h    |  26 ++++
+>   drivers/virt/gunyah/vm_mgr_mm.c | 232 ++++++++++++++++++++++++++++++++
+>   include/uapi/linux/gunyah.h     |  37 +++++
+>   5 files changed, 352 insertions(+), 4 deletions(-)
+>   create mode 100644 drivers/virt/gunyah/vm_mgr_mm.c
 > 
-> diff --git a/Documentation/virt/gunyah/message-queue.rst b/Documentation/virt/gunyah/message-queue.rst
-> index b352918ae54b4..70d82a4ef32d7 100644
-> --- a/Documentation/virt/gunyah/message-queue.rst
-> +++ b/Documentation/virt/gunyah/message-queue.rst
-> @@ -61,3 +61,11 @@ vIRQ: two TX message queues will have two vIRQs (and two capability IDs).
->         |               |         |                 |         |               |
->         |               |         |                 |         |               |
->         +---------------+         +-----------------+         +---------------+
-> +
-> +Gunyah message queues are exposed as mailboxes. To create the mailbox, create
-> +a mbox_client and call `gh_msgq_init()`. On receipt of the RX_READY interrupt,
-> +all messages in the RX message queue are read and pushed via the `rx_callback`
-> +of the registered mbox_client.
-> +
-> +.. kernel-doc:: drivers/mailbox/gunyah-msgq.c
-> +   :identifiers: gh_msgq_init
-> diff --git a/drivers/mailbox/Makefile b/drivers/mailbox/Makefile
-> index fc93761171113..5f929bb55e9a5 100644
-> --- a/drivers/mailbox/Makefile
-> +++ b/drivers/mailbox/Makefile
-> @@ -55,6 +55,8 @@ obj-$(CONFIG_MTK_CMDQ_MBOX)	+= mtk-cmdq-mailbox.o
+> diff --git a/drivers/virt/gunyah/Makefile b/drivers/virt/gunyah/Makefile
+> index e47e25895299c..bacf78b8fa337 100644
+> --- a/drivers/virt/gunyah/Makefile
+> +++ b/drivers/virt/gunyah/Makefile
+> @@ -1,4 +1,4 @@
+>   # SPDX-License-Identifier: GPL-2.0
 >   
->   obj-$(CONFIG_ZYNQMP_IPI_MBOX)	+= zynqmp-ipi-mailbox.o
+> -gunyah-y += rsc_mgr.o rsc_mgr_rpc.o vm_mgr.o
+> +gunyah-y += rsc_mgr.o rsc_mgr_rpc.o vm_mgr.o vm_mgr_mm.o
+>   obj-$(CONFIG_GUNYAH) += gunyah.o
+> diff --git a/drivers/virt/gunyah/vm_mgr.c b/drivers/virt/gunyah/vm_mgr.c
+> index a43401cb34f7d..297427952b8c7 100644
+> --- a/drivers/virt/gunyah/vm_mgr.c
+> +++ b/drivers/virt/gunyah/vm_mgr.c
+> @@ -15,6 +15,8 @@
 >   
-> +obj-$(CONFIG_GUNYAH)		+= gunyah-msgq.o
+>   #include "vm_mgr.h"
+>   
+> +static void gh_vm_free(struct work_struct *work);
 > +
->   obj-$(CONFIG_SUN6I_MSGBOX)	+= sun6i-msgbox.o
+>   static __must_check struct gh_vm *gh_vm_alloc(struct gh_rm *rm)
+>   {
+>   	struct gh_vm *ghvm;
+> @@ -26,20 +28,72 @@ static __must_check struct gh_vm *gh_vm_alloc(struct gh_rm *rm)
+>   	ghvm->parent = gh_rm_get(rm);
+>   	ghvm->rm = rm;
 >   
->   obj-$(CONFIG_SPRD_MBOX)		+= sprd-mailbox.o
-> diff --git a/drivers/mailbox/gunyah-msgq.c b/drivers/mailbox/gunyah-msgq.c
+> +	mmgrab(current->mm);
+> +	ghvm->mm = current->mm;
+> +	mutex_init(&ghvm->mm_lock);
+> +	INIT_LIST_HEAD(&ghvm->memory_mappings);
+> +	INIT_WORK(&ghvm->free_work, gh_vm_free);
+> +
+>   	return ghvm;
+>   }
+>   
+> -static int gh_vm_release(struct inode *inode, struct file *filp)
+> +static long gh_vm_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+>   {
+>   	struct gh_vm *ghvm = filp->private_data;
+> +	void __user *argp = (void __user *)arg;
+> +	long r;
+
+Don't you use "ret" for return values most of the time?
+(Not a big deal, maybe there's another reason you used
+"r" here.)
+
+> +
+> +	switch (cmd) {
+> +	case GH_VM_SET_USER_MEM_REGION: {
+> +		struct gh_userspace_memory_region region;
+> +
+> +		/* only allow owner task to add memory */
+> +		if (ghvm->mm != current->mm)
+> +			return -EPERM;
+> +
+> +		if (copy_from_user(&region, argp, sizeof(region)))
+> +			return -EFAULT;
+> +
+> +		/* All other flag bits are reserved for future use */
+> +		if (region.flags & ~(GH_MEM_ALLOW_READ | GH_MEM_ALLOW_WRITE | GH_MEM_ALLOW_EXEC))
+> +			return -EINVAL;
+> +
+> +		r = gh_vm_mem_alloc(ghvm, &region);
+> +		break;
+> +	}
+> +	default:
+> +		r = -ENOTTY;
+> +		break;
+> +	}
+>   
+> +	return r;
+> +}
+> +
+> +static void gh_vm_free(struct work_struct *work)
+> +{
+> +	struct gh_vm *ghvm = container_of(work, struct gh_vm, free_work);
+> +
+> +	gh_vm_mem_reclaim(ghvm);
+>   	gh_rm_put(ghvm->rm);
+> +	mmdrop(ghvm->mm);
+>   	kfree(ghvm);
+> +}
+> +
+> +static int gh_vm_release(struct inode *inode, struct file *filp)
+> +{
+> +	struct gh_vm *ghvm = filp->private_data;
+> +
+> +	/* VM will be reset and make RM calls which can interruptible sleep.
+> +	 * Defer to a work so this thread can receive signal.
+> +	 */
+> +	schedule_work(&ghvm->free_work);
+>   	return 0;
+>   }
+>   
+>   static const struct file_operations gh_vm_fops = {
+>   	.owner = THIS_MODULE,
+> +	.unlocked_ioctl = gh_vm_ioctl,
+> +	.compat_ioctl	= compat_ptr_ioctl,
+>   	.release = gh_vm_release,
+>   	.llseek = noop_llseek,
+>   };
+> @@ -77,8 +131,7 @@ static long gh_dev_ioctl_create_vm(struct gh_rm *rm, unsigned long arg)
+>   err_put_fd:
+>   	put_unused_fd(fd);
+>   err_destroy_vm:
+> -	gh_rm_put(ghvm->rm);
+> -	kfree(ghvm);
+> +	gh_vm_free(&ghvm->free_work);
+>   	return err;
+>   }
+>   
+> diff --git a/drivers/virt/gunyah/vm_mgr.h b/drivers/virt/gunyah/vm_mgr.h
+> index 1e94b58d7d34d..434ef9f662a7a 100644
+> --- a/drivers/virt/gunyah/vm_mgr.h
+> +++ b/drivers/virt/gunyah/vm_mgr.h
+> @@ -7,14 +7,40 @@
+>   #define _GH_VM_MGR_H
+>   
+>   #include <linux/gunyah_rsc_mgr.h>
+> +#include <linux/list.h>
+> +#include <linux/miscdevice.h>
+> +#include <linux/mutex.h>
+>   
+>   #include <uapi/linux/gunyah.h>
+>   
+>   long gh_dev_vm_mgr_ioctl(struct gh_rm *rm, unsigned int cmd, unsigned long arg);
+>   
+> +enum gh_vm_mem_share_type {
+> +	VM_MEM_SHARE,
+> +	VM_MEM_LEND,
+> +};
+> +
+> +struct gh_vm_mem {
+> +	struct list_head list;
+> +	enum gh_vm_mem_share_type share_type;
+> +	struct gh_rm_mem_parcel parcel;
+> +
+> +	__u64 guest_phys_addr;
+> +	struct page **pages;
+> +	unsigned long npages;
+> +};
+> +
+>   struct gh_vm {
+>   	struct gh_rm *rm;
+>   	struct device *parent;
+> +
+> +	struct work_struct free_work;
+> +	struct mm_struct *mm; /* userspace tied to this vm */
+> +	struct mutex mm_lock;
+> +	struct list_head memory_mappings;
+>   };
+>   
+> +int gh_vm_mem_alloc(struct gh_vm *ghvm, struct gh_userspace_memory_region *region);
+> +void gh_vm_mem_reclaim(struct gh_vm *ghvm);
+> +
+>   #endif
+> diff --git a/drivers/virt/gunyah/vm_mgr_mm.c b/drivers/virt/gunyah/vm_mgr_mm.c
 > new file mode 100644
-> index 0000000000000..7f777339278eb
+> index 0000000000000..6974607f02edd
 > --- /dev/null
-> +++ b/drivers/mailbox/gunyah-msgq.c
-> @@ -0,0 +1,219 @@
+> +++ b/drivers/virt/gunyah/vm_mgr_mm.c
+> @@ -0,0 +1,232 @@
 > +// SPDX-License-Identifier: GPL-2.0-only
 > +/*
 > + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
 > + */
 > +
-> +#include <linux/mailbox_controller.h>
-> +#include <linux/module.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/gunyah.h>
-> +#include <linux/printk.h>
-> +#include <linux/init.h>
-> +#include <linux/slab.h>
-> +#include <linux/wait.h>
+> +#define pr_fmt(fmt) "gh_vm_mgr: " fmt
 > +
-> +#define mbox_chan_to_msgq(chan) (container_of(chan->mbox, struct gh_msgq, mbox))
+> +#include <linux/gunyah_rsc_mgr.h>
+> +#include <linux/mm.h>
 > +
-> +static irqreturn_t gh_msgq_rx_irq_handler(int irq, void *data)
+> +#include <uapi/linux/gunyah.h>
+> +
+> +#include "vm_mgr.h"
+> +
+> +static bool pages_are_mergeable(struct page *a, struct page *b)
 > +{
-> +	struct gh_msgq *msgq = data;
-> +	struct gh_msgq_rx_data rx_data;
-> +	enum gh_error gh_error;
-> +	bool ready = true;
-
-Since ready is true initially, you could use do...while ()
-and not bother pre-initializing it.
-
+> +	return page_to_pfn(a) + 1 == page_to_pfn(b);
+> +}
 > +
-> +	while (ready) {
-> +		gh_error = gh_hypercall_msgq_recv(msgq->rx_ghrsc->capid,
-> +				&rx_data.data, sizeof(rx_data.data),
-> +				&rx_data.length, &ready);
-> +		if (gh_error != GH_ERROR_OK) {
-> +			if (gh_error != GH_ERROR_MSGQUEUE_EMPTY)
-> +				dev_warn(msgq->mbox.dev, "Failed to receive data: %d\n", gh_error);
-> +			break;
-> +		}
-> +		if (likely(gh_msgq_chan(msgq)->cl))
-> +			mbox_chan_received_data(gh_msgq_chan(msgq), &rx_data);
+> +static bool gh_vm_mem_overlap(struct gh_vm_mem *a, u64 addr, u64 size)
+> +{
+> +	u64 a_end = a->guest_phys_addr + (a->npages << PAGE_SHIFT);
+> +	u64 end = addr + size;
+> +
+> +	return a->guest_phys_addr < end && addr < a_end;
+> +}
+> +
+> +static struct gh_vm_mem *__gh_vm_mem_find_by_label(struct gh_vm *ghvm, u32 label)
+> +	__must_hold(&ghvm->mm_lock)
+> +{
+> +	struct gh_vm_mem *mapping;
+> +
+> +	list_for_each_entry(mapping, &ghvm->memory_mappings, list)
+> +		if (mapping->parcel.label == label)
+> +			return mapping;
+> +
+> +	return NULL;
+> +}
+> +
+> +static void gh_vm_mem_reclaim_mapping(struct gh_vm *ghvm, struct gh_vm_mem *mapping)
+> +	__must_hold(&ghvm->mm_lock)
+> +{
+> +	int ret = 0;
+> +
+> +	if (mapping->parcel.mem_handle != GH_MEM_HANDLE_INVAL) {
+> +		ret = gh_rm_mem_reclaim(ghvm->rm, &mapping->parcel);
+> +		if (ret)
+> +			pr_warn("Failed to reclaim memory parcel for label %d: %d\n",
+> +				mapping->parcel.label, ret);
 > +	}
 > +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +/* Fired when message queue transitions from "full" to "space available" to send messages */
-> +static irqreturn_t gh_msgq_tx_irq_handler(int irq, void *data)
-> +{
-> +	struct gh_msgq *msgq = data;
-> +
-> +	mbox_chan_txdone(gh_msgq_chan(msgq), 0);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +/* Fired after sending message and hypercall told us there was more space available. */
-> +static void gh_msgq_txdone_tasklet(struct tasklet_struct *tasklet)
-> +{
-> +	struct gh_msgq *msgq = container_of(tasklet, struct gh_msgq, txdone_tasklet);
-> +
-> +	mbox_chan_txdone(gh_msgq_chan(msgq), msgq->last_ret);
-> +}
-> +
-> +static int gh_msgq_send_data(struct mbox_chan *chan, void *data)
-> +{
-> +	struct gh_msgq *msgq = mbox_chan_to_msgq(chan);
-> +	struct gh_msgq_tx_data *msgq_data = data;
-> +	u64 tx_flags = 0;
-> +	enum gh_error gh_error;
-> +	bool ready;
-> +
-> +	if (!msgq->tx_ghrsc)
-> +		return -EOPNOTSUPP;
-> +
-> +	if (msgq_data->push)
-> +		tx_flags |= GH_HYPERCALL_MSGQ_TX_FLAGS_PUSH;
-> +
-> +	gh_error = gh_hypercall_msgq_send(msgq->tx_ghrsc->capid, msgq_data->length, msgq_data->data,
-> +						tx_flags, &ready);
-> +
-> +	/**
-> +	 * unlikely because Linux tracks state of msgq and should not try to
-> +	 * send message when msgq is full.
-> +	 */
-> +	if (unlikely(gh_error == GH_ERROR_MSGQUEUE_FULL))
-> +		return -EAGAIN;
-> +
-> +	/**
-> +	 * Propagate all other errors to client. If we return error to mailbox
-> +	 * framework, then no other messages can be sent and nobody will know
-> +	 * to retry this message.
-> +	 */
-> +	msgq->last_ret = gh_error_remap(gh_error);
-> +
-> +	/**
-> +	 * This message was successfully sent, but message queue isn't ready to
-> +	 * accept more messages because it's now full. Mailbox framework
-> +	 * requires that we only report that message was transmitted when
-> +	 * we're ready to transmit another message. We'll get that in the form
-> +	 * of tx IRQ once the other side starts to drain the msgq.
-> +	 */
-
-I really dislike this mismatch between Gunyah and mailbox
-semantics.  Oh well.
-
-> +	if (gh_error == GH_ERROR_OK) {
-> +		if (!ready)
-> +			return 0;
-> +	} else {
-> +		dev_err(msgq->mbox.dev, "Failed to send data: %d (%d)\n", gh_error, msgq->last_ret);
+> +	if (!ret) {
+> +		unpin_user_pages(mapping->pages, mapping->npages);
+> +		account_locked_vm(ghvm->mm, mapping->npages, false);
 > +	}
 > +
-> +	/**
-> +	 * We can send more messages. Mailbox framework requires that tx done
-> +	 * happens asynchronously to sending the message. Gunyah message queues
-> +	 * tell us right away on the hypercall return whether we can send more
-> +	 * messages. To work around this, defer the txdone to a tasklet.
-> +	 */
-
-This mismatch too...
-
-> +	tasklet_schedule(&msgq->txdone_tasklet);
+> +	kfree(mapping->pages);
+> +	kfree(mapping->parcel.acl_entries);
+> +	kfree(mapping->parcel.mem_entries);
 > +
-> +	return 0;
+> +	list_del(&mapping->list);
 > +}
 > +
-> +static struct mbox_chan_ops gh_msgq_ops = {
-> +	.send_data = gh_msgq_send_data,
-> +};
-> +
-> +/**
-> + * gh_msgq_init() - Initialize a Gunyah message queue with an mbox_client
-> + * @parent: device parent used for the mailbox controller
-> + * @msgq: Pointer to the gh_msgq to initialize
-> + * @cl: A mailbox client to bind to the mailbox channel that the message queue creates
-> + * @tx_ghrsc: optional, the transmission side of the message queue
-> + * @rx_ghrsc: optional, the receiving side of the message queue
-> + *
-> + * At least one of tx_ghrsc and rx_ghrsc must be not NULL. Most message queue use cases come with
-> + * a pair of message queues to facilitate bidirectional communication. When tx_ghrsc is set,
-> + * the client can send messages with mbox_send_message(gh_msgq_chan(msgq), msg). When rx_ghrsc
-> + * is set, the mbox_client must register an .rx_callback() and the message queue driver will
-> + * deliver all available messages upon receiving the RX ready interrupt. The messages should be
-> + * consumed or copied by the client right away as the gh_msgq_rx_data will be replaced/destroyed
-> + * after the callback.
-> + *
-> + * Returns - 0 on success, negative otherwise
-> + */
-> +int gh_msgq_init(struct device *parent, struct gh_msgq *msgq, struct mbox_client *cl,
-> +		 struct gh_resource *tx_ghrsc, struct gh_resource *rx_ghrsc)
+> +void gh_vm_mem_reclaim(struct gh_vm *ghvm)
 > +{
-> +	int ret;
+> +	struct gh_vm_mem *mapping, *tmp;
 > +
-> +	/* Must have at least a tx_ghrsc or rx_ghrsc and that they are the right device types */
-> +	if ((!tx_ghrsc && !rx_ghrsc) ||
-> +	    (tx_ghrsc && tx_ghrsc->type != GH_RESOURCE_TYPE_MSGQ_TX) ||
-> +	    (rx_ghrsc && rx_ghrsc->type != GH_RESOURCE_TYPE_MSGQ_RX))
+> +	mutex_lock(&ghvm->mm_lock);
+> +
+> +	list_for_each_entry_safe(mapping, tmp, &ghvm->memory_mappings, list) {
+> +		gh_vm_mem_reclaim_mapping(ghvm, mapping);
+> +		kfree(mapping);
+> +	}
+> +
+> +	mutex_unlock(&ghvm->mm_lock);
+> +}
+> +
+> +int gh_vm_mem_alloc(struct gh_vm *ghvm, struct gh_userspace_memory_region *region)
+> +{
+> +	struct gh_vm_mem *mapping, *tmp_mapping;
+> +	struct page *curr_page, *prev_page;
+> +	struct gh_rm_mem_parcel *parcel;
+> +	int i, j, pinned, ret = 0;
+> +	unsigned int gup_flags;
+> +	size_t entry_size;
+> +	u16 vmid;
+> +
+> +	if (!region->memory_size || !PAGE_ALIGNED(region->memory_size) ||
+> +		!PAGE_ALIGNED(region->userspace_addr) ||
+> +		!PAGE_ALIGNED(region->guest_phys_addr))
 > +		return -EINVAL;
 > +
-> +	msgq->mbox.dev = parent;
-> +	msgq->mbox.ops = &gh_msgq_ops;
-> +	msgq->mbox.num_chans = 1;
-> +	msgq->mbox.txdone_irq = true;
-> +	msgq->mbox.chans = &msgq->mbox_chan;
+> +	if (overflows_type(region->guest_phys_addr + region->memory_size, u64))
+> +		return -EOVERFLOW;
 > +
-> +	ret = mbox_controller_register(&msgq->mbox);
+> +	ret = mutex_lock_interruptible(&ghvm->mm_lock);
 > +	if (ret)
 > +		return ret;
 > +
-> +	ret = mbox_bind_client(gh_msgq_chan(msgq), cl);
+> +	mapping = __gh_vm_mem_find_by_label(ghvm, region->label);
+> +	if (mapping) {
+> +		ret = -EEXIST;
+> +		goto unlock;
+> +	}
+> +
+> +	list_for_each_entry(tmp_mapping, &ghvm->memory_mappings, list) {
+> +		if (gh_vm_mem_overlap(tmp_mapping, region->guest_phys_addr,
+> +					region->memory_size)) {
+> +			ret = -EEXIST;
+> +			goto unlock;
+> +		}
+> +	}
+> +
+> +	mapping = kzalloc(sizeof(*mapping), GFP_KERNEL_ACCOUNT);
+> +	if (!mapping) {
+> +		ret = -ENOMEM;
+> +		goto unlock;
+> +	}
+> +
+> +	mapping->guest_phys_addr = region->guest_phys_addr;
+> +	mapping->npages = region->memory_size >> PAGE_SHIFT;
+> +	parcel = &mapping->parcel;
+> +	parcel->label = region->label;
+> +	parcel->mem_handle = GH_MEM_HANDLE_INVAL; /* to be filled later by mem_share/mem_lend */
+> +	parcel->mem_type = GH_RM_MEM_TYPE_NORMAL;
+> +
+> +	ret = account_locked_vm(ghvm->mm, mapping->npages, true);
 > +	if (ret)
-> +		goto err_mbox;
+> +		goto free_mapping;
 > +
-> +	if (tx_ghrsc) {
-> +		msgq->tx_ghrsc = tx_ghrsc;
-> +
-> +		ret = request_irq(msgq->tx_ghrsc->irq, gh_msgq_tx_irq_handler, 0, "gh_msgq_tx",
-> +				msgq);
-> +		if (ret)
-> +			goto err_tx_ghrsc;
-> +
-> +		enable_irq_wake(msgq->tx_ghrsc->irq);
-> +
-> +		tasklet_setup(&msgq->txdone_tasklet, gh_msgq_txdone_tasklet);
+> +	mapping->pages = kcalloc(mapping->npages, sizeof(*mapping->pages), GFP_KERNEL_ACCOUNT);
+> +	if (!mapping->pages) {
+> +		ret = -ENOMEM;
+> +		mapping->npages = 0; /* update npages for reclaim */
+> +		goto unlock_pages;
 > +	}
 > +
-> +	if (rx_ghrsc) {
-> +		msgq->rx_ghrsc = rx_ghrsc;
+> +	gup_flags = FOLL_LONGTERM;
+> +	if (region->flags & GH_MEM_ALLOW_WRITE)
+> +		gup_flags |= FOLL_WRITE;
 > +
-> +		ret = request_threaded_irq(msgq->rx_ghrsc->irq, NULL, gh_msgq_rx_irq_handler,
-> +						IRQF_ONESHOT, "gh_msgq_rx", msgq);
-> +		if (ret)
-> +			goto err_tx_irq;
-> +
-> +		enable_irq_wake(msgq->rx_ghrsc->irq);
+> +	pinned = pin_user_pages_fast(region->userspace_addr, mapping->npages,
+> +					gup_flags, mapping->pages);
+> +	if (pinned < 0) {
+> +		ret = pinned;
+> +		goto free_pages;
+> +	} else if (pinned != mapping->npages) {
+> +		ret = -EFAULT;
+> +		mapping->npages = pinned; /* update npages for reclaim */
+> +		goto unpin_pages;
 > +	}
 > +
+> +	parcel->n_acl_entries = 2;
+> +	mapping->share_type = VM_MEM_SHARE;
+> +	parcel->acl_entries = kcalloc(parcel->n_acl_entries, sizeof(*parcel->acl_entries),
+> +					GFP_KERNEL);
+> +	if (!parcel->acl_entries) {
+> +		ret = -ENOMEM;
+> +		goto unpin_pages;
+> +	}
+> +
+> +	/* acl_entries[0].vmid will be this VM's vmid. We'll fill it when the
+> +	 * VM is starting and we know the VM's vmid.
+> +	 */
+> +	if (region->flags & GH_MEM_ALLOW_READ)
+> +		parcel->acl_entries[0].perms |= GH_RM_ACL_R;
+> +	if (region->flags & GH_MEM_ALLOW_WRITE)
+> +		parcel->acl_entries[0].perms |= GH_RM_ACL_W;
+> +	if (region->flags & GH_MEM_ALLOW_EXEC)
+> +		parcel->acl_entries[0].perms |= GH_RM_ACL_X;
+> +
+> +	ret = gh_rm_get_vmid(ghvm->rm, &vmid);
+> +	if (ret)
+> +		goto free_acl;
+> +
+> +	parcel->acl_entries[1].vmid = cpu_to_le16(vmid);
+> +	/* Host assumed to have all these permissions. Gunyah will not
+> +	 * grant new permissions if host actually had less than RWX
+> +	 */
+> +	parcel->acl_entries[1].perms = GH_RM_ACL_R | GH_RM_ACL_W | GH_RM_ACL_X;
+> +
+> +	parcel->n_mem_entries = 1;
+> +	for (i = 1; i < mapping->npages; i++) {
+> +		if (!pages_are_mergeable(mapping->pages[i - 1], mapping->pages[i]))
+> +			parcel->n_mem_entries++;
+> +	}
+> +
+> +	parcel->mem_entries = kcalloc(parcel->n_mem_entries,
+> +					sizeof(parcel->mem_entries[0]),
+> +					GFP_KERNEL_ACCOUNT);
+> +	if (!parcel->mem_entries) {
+> +		ret = -ENOMEM;
+> +		goto free_acl;
+> +	}
+> +
+> +	/* reduce number of entries by combining contiguous pages into single memory entry */
+> +	prev_page = mapping->pages[0];
+> +	parcel->mem_entries[0].phys_addr = cpu_to_le64(page_to_phys(prev_page));
+> +	entry_size = PAGE_SIZE;
+> +	for (i = 1, j = 0; i < mapping->npages; i++) {
+> +		curr_page = mapping->pages[i];
+> +		if (pages_are_mergeable(prev_page, curr_page)) {
+> +			entry_size += PAGE_SIZE;
+> +		} else {
+> +			parcel->mem_entries[j].size = cpu_to_le64(entry_size);
+> +			j++;
+> +			parcel->mem_entries[j].phys_addr =
+> +				cpu_to_le64(page_to_phys(curr_page));
+> +			entry_size = PAGE_SIZE;
+> +		}
+> +
+> +		prev_page = curr_page;
+> +	}
+> +	parcel->mem_entries[j].size = cpu_to_le64(entry_size);
+> +
+> +	list_add(&mapping->list, &ghvm->memory_mappings);
+> +	mutex_unlock(&ghvm->mm_lock);
 > +	return 0;
-> +err_tx_irq:
-> +	if (msgq->tx_ghrsc)
-> +		free_irq(msgq->tx_ghrsc->irq, msgq);
-> +
-> +	msgq->rx_ghrsc = NULL;
-> +err_tx_ghrsc:
-> +	msgq->tx_ghrsc = NULL;
-> +err_mbox:
-> +	mbox_controller_unregister(&msgq->mbox);
+> +free_acl:
+> +	kfree(parcel->acl_entries);
+> +unpin_pages:
+> +	unpin_user_pages(mapping->pages, pinned);
+> +free_pages:
+> +	kfree(mapping->pages);
+> +unlock_pages:
+> +	account_locked_vm(ghvm->mm, mapping->npages, false);
+> +free_mapping:
+> +	kfree(mapping);
+> +unlock:
+> +	mutex_unlock(&ghvm->mm_lock);
 > +	return ret;
 > +}
-> +EXPORT_SYMBOL_GPL(gh_msgq_init);
-> +
-> +void gh_msgq_remove(struct gh_msgq *msgq)
-> +{
-> +	mbox_free_channel(gh_msgq_chan(msgq));
-> +
-> +	if (msgq->rx_ghrsc)
-> +		free_irq(msgq->rx_ghrsc->irq, msgq);
-> +
-> +	if (msgq->tx_ghrsc) {
-> +		tasklet_kill(&msgq->txdone_tasklet);
-> +		free_irq(msgq->tx_ghrsc->irq, msgq);
-> +	}
-> +
-> +	mbox_controller_unregister(&msgq->mbox);
-> +
-> +	msgq->rx_ghrsc = NULL;
-> +	msgq->tx_ghrsc = NULL;
-> +}
-> +EXPORT_SYMBOL_GPL(gh_msgq_remove);
-> +
-> +MODULE_LICENSE("GPL");
-> +MODULE_DESCRIPTION("Gunyah Message Queue Driver");
-> diff --git a/include/linux/gunyah.h b/include/linux/gunyah.h
-> index 01a6f202d037e..982e27d10d57f 100644
-> --- a/include/linux/gunyah.h
-> +++ b/include/linux/gunyah.h
-> @@ -8,11 +8,68 @@
+> diff --git a/include/uapi/linux/gunyah.h b/include/uapi/linux/gunyah.h
+> index 86b9cb60118dd..91d6dd26fcc89 100644
+> --- a/include/uapi/linux/gunyah.h
+> +++ b/include/uapi/linux/gunyah.h
+> @@ -20,4 +20,41 @@
+>    */
+>   #define GH_CREATE_VM			_IO(GH_IOCTL_TYPE, 0x0) /* Returns a Gunyah VM fd */
 >   
->   #include <linux/bitfield.h>
->   #include <linux/errno.h>
-> +#include <linux/interrupt.h>
->   #include <linux/limits.h>
-> +#include <linux/mailbox_controller.h>
-> +#include <linux/mailbox_client.h>
->   #include <linux/types.h>
->   
-> +/* Matches resource manager's resource types for VM_GET_HYP_RESOURCES RPC */
-> +enum gh_resource_type {
-> +	GH_RESOURCE_TYPE_BELL_TX	= 0,
-> +	GH_RESOURCE_TYPE_BELL_RX	= 1,
-> +	GH_RESOURCE_TYPE_MSGQ_TX	= 2,
-> +	GH_RESOURCE_TYPE_MSGQ_RX	= 3,
-> +	GH_RESOURCE_TYPE_VCPU		= 4,
-> +};
+> +/*
+> + * ioctls for VM fds
+> + */
 > +
-> +struct gh_resource {
-> +	enum gh_resource_type type;
-> +	u64 capid;
-> +	unsigned int irq;
+> +/**
+> + * enum gh_mem_flags - Possible flags on &struct gh_userspace_memory_region
+> + * @GH_MEM_ALLOW_READ: Allow guest to read the memory
+> + * @GH_MEM_ALLOW_WRITE: Allow guest to write to the memory
+> + * @GH_MEM_ALLOW_EXEC: Allow guest to execute instructions in the memory
+> + */
+> +enum gh_mem_flags {
+> +	GH_MEM_ALLOW_READ	= 1UL << 0,
+> +	GH_MEM_ALLOW_WRITE	= 1UL << 1,
+> +	GH_MEM_ALLOW_EXEC	= 1UL << 2,
 > +};
 > +
 > +/**
-> + * Gunyah Message Queues
+> + * struct gh_userspace_memory_region - Userspace memory descripion for GH_VM_SET_USER_MEM_REGION
+> + * @label: Identifer to the region which is unique to the VM.
+> + * @flags: Flags for memory parcel behavior. See &enum gh_mem_flags.
+> + * @guest_phys_addr: Location of the memory region in guest's memory space (page-aligned)
+> + * @memory_size: Size of the region (page-aligned)
+> + * @userspace_addr: Location of the memory region in caller (userspace)'s memory
+> + *
+> + * See Documentation/virt/gunyah/vm-manager.rst for further details.
 > + */
-> +
-> +#define GH_MSGQ_MAX_MSG_SIZE		240
-> +
-> +struct gh_msgq_tx_data {
-> +	size_t length;
-> +	bool push;
-> +	char data[];
+> +struct gh_userspace_memory_region {
+> +	__u32 label;
+> +	__u32 flags;
+> +	__u64 guest_phys_addr;
+> +	__u64 memory_size;
+> +	__u64 userspace_addr;
 > +};
 > +
-> +struct gh_msgq_rx_data {
-> +	size_t length;
-> +	char data[GH_MSGQ_MAX_MSG_SIZE];
-> +};
+> +#define GH_VM_SET_USER_MEM_REGION	_IOW(GH_IOCTL_TYPE, 0x1, \
+> +						struct gh_userspace_memory_region)
 > +
-> +struct gh_msgq {
-> +	struct gh_resource *tx_ghrsc;
-> +	struct gh_resource *rx_ghrsc;
-> +
-> +	/* msgq private */
-> +	int last_ret; /* Linux error, not GH_STATUS_* */
-> +	struct mbox_chan mbox_chan;
-> +	struct mbox_controller mbox;
-> +	struct tasklet_struct txdone_tasklet;
-> +};
-> +
-> +
-> +int gh_msgq_init(struct device *parent, struct gh_msgq *msgq, struct mbox_client *cl,
-> +		     struct gh_resource *tx_ghrsc, struct gh_resource *rx_ghrsc);
-> +void gh_msgq_remove(struct gh_msgq *msgq);
-> +
-> +static inline struct mbox_chan *gh_msgq_chan(struct gh_msgq *msgq)
-> +{
-> +	return &msgq->mbox.chans[0];
-> +}
-> +
->   /******************************************************************************/
->   /* Common arch-independent definitions for Gunyah hypercalls                  */
-> +
->   #define GH_CAPID_INVAL	U64_MAX
->   #define GH_VMID_ROOT_VM	0xff
->   
+>   #endif
 
