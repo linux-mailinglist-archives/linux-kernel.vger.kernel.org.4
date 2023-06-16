@@ -2,260 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA4A6733460
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 17:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2A3733462
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 17:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbjFPPKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 11:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34500 "EHLO
+        id S1345894AbjFPPKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 11:10:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345881AbjFPPJi (ORCPT
+        with ESMTP id S1345896AbjFPPJp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 11:09:38 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C794218;
-        Fri, 16 Jun 2023 08:09:20 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35GF94d9005293;
-        Fri, 16 Jun 2023 10:09:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1686928144;
-        bh=fSIOR21GyNGwrlLsCC1Pmti5aHVr60HCZep3gwVHG0w=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=kswZs73Y5WXfmVfFsN7TsgeTG1JnpsncXB1QO7rvGPlwCsFHiuK8XUmSfo45Qg4no
-         A3DDprAeli7I3knGW0qPA7WYpHdhLgq3UKTf6OgQ7HZc6ft29hSsR2eLCgP41m2vZG
-         2qOq3CGhe6SGKslnrUM2a4pki7rS7NwLqp7QVmg4=
-Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35GF94Fv005781
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 16 Jun 2023 10:09:04 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 16
- Jun 2023 10:09:04 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 16 Jun 2023 10:09:04 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35GF93hP091387;
-        Fri, 16 Jun 2023 10:09:03 -0500
-From:   Aradhya Bhatia <a-bhatia1@ti.com>
-To:     Tomi Valkeinen <tomba@kernel.org>, Jyri Sarha <jyri.sarha@iki.fi>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Jayesh Choudhary <j-choudhary@ti.com>,
-        Aradhya Bhatia <a-bhatia1@ti.com>
-Subject: [PATCH v9 2/2] drm/tidss: Add support for AM625 DSS
-Date:   Fri, 16 Jun 2023 20:39:00 +0530
-Message-ID: <20230616150900.6617-3-a-bhatia1@ti.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230616150900.6617-1-a-bhatia1@ti.com>
-References: <20230616150900.6617-1-a-bhatia1@ti.com>
+        Fri, 16 Jun 2023 11:09:45 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7B03AB9
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 08:09:30 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-77ad4f28a23so63728339f.3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 08:09:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686928169; x=1689520169;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Imb23EaY07Gm7MJa4Np4kGVuIs1+xNQBFZQNfFls+gM=;
+        b=IJWvJNEJ9DsWOo+wdL6yFH3mPwe4lV5ZBzuL3dgbbp7HYCFb3TfZpBewkolbOafOvo
+         N0+EKtxqQxY+kiGrqcyQ+X9XSd0j65rvHHdHFwBh9EewJMnDQ9MFpsz+R86Ki9OQIopU
+         mDXvuK2Xmm8yFddKTqXrLQ0PRqV/xKlu5/3TIpLklYsFRJBKq9ACQmm3Obl4n/Hic2TO
+         rySA7FFDySH8LUH6rXy5VpXCF7FlXhXFAdD21nv2FWZH8moHxEsFcs8cvUYgXOjm+2sv
+         BuDOj4HgZWZJZjKMC2jhsYf21ZXBp5qt2T9e47kHQk+lHcHEsS2KWqmKNQGmSYPOYIpQ
+         Fezw==
+X-Gm-Message-State: AC+VfDzmSs8ruwGgowOjrBSBicFg14vyhMca+/Sc3Ixa1izVm8D7khMa
+        9+dgo0yTLX+yGiGwmDQEIpEupNOPKTya42oglt5Gz/eBbFHA
+X-Google-Smtp-Source: ACHHUZ74+dXyvXDTGc+FFJWwCq4aB7E4QHdfr+P5b8tR/ce1Zt3HbjyX4nIZUMIKXW6jGatIamaZTBC88weu2rXjtpNJxD+nybqE
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:a119:0:b0:423:13e1:8092 with SMTP id
+ f25-20020a02a119000000b0042313e18092mr696867jag.5.1686928169697; Fri, 16 Jun
+ 2023 08:09:29 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 08:09:29 -0700
+In-Reply-To: <00000000000098289005dc17b71b@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000051087405fe4092cc@google.com>
+Subject: Re: [syzbot] [bluetooth?] possible deadlock in sco_conn_del
+From:   syzbot <syzbot+b825d87fe2d043e3e652@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, fgheet255t@gmail.com,
+        hdanton@sina.com, johan.hedberg@gmail.com, josephsih@chromium.org,
+        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lrh2000@pku.edu.cn,
+        luiz.dentz@gmail.com, luiz.von.dentz@intel.com,
+        marcel@holtmann.org, netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com, yinghsu@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the DSS controller on TI's AM625 SoC in the tidss
-driver.
+syzbot suspects this issue was fixed by commit:
 
-The AM625 DSS supports 2 video planes connecting to 2 video ports.
-The first plane is a full plane supporting all the features, while the
-2nd plane is a "lite" plane without scaling support.
+commit a2ac591cb4d83e1f2d4b4adb3c14b2c79764650a
+Author: Ruihan Li <lrh2000@pku.edu.cn>
+Date:   Wed May 3 13:39:36 2023 +0000
 
-The first video port in AM625 DSS internally provides DPI output to 2
-OLDI transmitters. Each OLDI TX outputs 4 differential lanes of video
-output and 1 of clock output.
+    Bluetooth: Fix UAF in hci_conn_hash_flush again
 
-This patch does not automatically enable the OLDI features of AM625 yet.
-That support for OLDI will be added subsequently.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13755717280000
+start commit:   e4cf7c25bae5 Merge tag 'kbuild-fixes-v6.2' of git://git.ke..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=555d27e379d75ff1
+dashboard link: https://syzkaller.appspot.com/bug?extid=b825d87fe2d043e3e652
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10052058480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1190687c480000
 
-The second video port outputs DPI data directly out of the SoC. It has
-24 data lines and can support a maximum of RGB888 output bus format.
+If the result looks correct, please mark the issue as fixed by replying with:
 
-Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
----
+#syz fix: Bluetooth: Fix UAF in hci_conn_hash_flush again
 
-Notes:
-
-  Changes from v8:
-  * Update commit message.
-  * Add Tomi Valkeinen's R-b tag.
-
-  Changes from v7:
-  * Drop all changes made after v3.
-    - Drop output bus type support. All outputs from DSS will be the
-      video port outptus.
-  * Make the first video port type as INTERNAL from OLDI.
-
- drivers/gpu/drm/tidss/tidss_dispc.c | 57 ++++++++++++++++++++++++++++-
- drivers/gpu/drm/tidss/tidss_dispc.h |  2 +
- drivers/gpu/drm/tidss/tidss_drv.c   |  1 +
- 3 files changed, 59 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/tidss/tidss_dispc.c b/drivers/gpu/drm/tidss/tidss_dispc.c
-index dca077411f77..484da1aa27bb 100644
---- a/drivers/gpu/drm/tidss/tidss_dispc.c
-+++ b/drivers/gpu/drm/tidss/tidss_dispc.c
-@@ -275,6 +275,55 @@ const struct dispc_features dispc_j721e_feats = {
- 	.vid_order = { 1, 3, 0, 2 },
- };
- 
-+const struct dispc_features dispc_am625_feats = {
-+	.max_pclk_khz = {
-+		[DISPC_VP_DPI] = 165000,
-+		[DISPC_VP_INTERNAL] = 170000,
-+	},
-+
-+	.scaling = {
-+		.in_width_max_5tap_rgb = 1280,
-+		.in_width_max_3tap_rgb = 2560,
-+		.in_width_max_5tap_yuv = 2560,
-+		.in_width_max_3tap_yuv = 4096,
-+		.upscale_limit = 16,
-+		.downscale_limit_5tap = 4,
-+		.downscale_limit_3tap = 2,
-+		/*
-+		 * The max supported pixel inc value is 255. The value
-+		 * of pixel inc is calculated like this: 1+(xinc-1)*bpp.
-+		 * The maximum bpp of all formats supported by the HW
-+		 * is 8. So the maximum supported xinc value is 32,
-+		 * because 1+(32-1)*8 < 255 < 1+(33-1)*4.
-+		 */
-+		.xinc_max = 32,
-+	},
-+
-+	.subrev = DISPC_AM625,
-+
-+	.common = "common",
-+	.common_regs = tidss_am65x_common_regs,
-+
-+	.num_vps = 2,
-+	.vp_name = { "vp1", "vp2" },
-+	.ovr_name = { "ovr1", "ovr2" },
-+	.vpclk_name =  { "vp1", "vp2" },
-+	.vp_bus_type = { DISPC_VP_INTERNAL, DISPC_VP_DPI },
-+
-+	.vp_feat = { .color = {
-+			.has_ctm = true,
-+			.gamma_size = 256,
-+			.gamma_type = TIDSS_GAMMA_8BIT,
-+		},
-+	},
-+
-+	.num_planes = 2,
-+	/* note: vid is plane_id 0 and vidl1 is plane_id 1 */
-+	.vid_name = { "vid", "vidl1" },
-+	.vid_lite = { false, true, },
-+	.vid_order = { 1, 0 },
-+};
-+
- static const u16 *dispc_common_regmap;
- 
- struct dss_vp_data {
-@@ -776,6 +825,7 @@ dispc_irq_t dispc_read_and_clear_irqstatus(struct dispc_device *dispc)
- 	switch (dispc->feat->subrev) {
- 	case DISPC_K2G:
- 		return dispc_k2g_read_and_clear_irqstatus(dispc);
-+	case DISPC_AM625:
- 	case DISPC_AM65X:
- 	case DISPC_J721E:
- 		return dispc_k3_read_and_clear_irqstatus(dispc);
-@@ -791,6 +841,7 @@ void dispc_set_irqenable(struct dispc_device *dispc, dispc_irq_t mask)
- 	case DISPC_K2G:
- 		dispc_k2g_set_irqenable(dispc, mask);
- 		break;
-+	case DISPC_AM625:
- 	case DISPC_AM65X:
- 	case DISPC_J721E:
- 		dispc_k3_set_irqenable(dispc, mask);
-@@ -1281,6 +1332,7 @@ void dispc_ovr_set_plane(struct dispc_device *dispc, u32 hw_plane,
- 		dispc_k2g_ovr_set_plane(dispc, hw_plane, hw_videoport,
- 					x, y, layer);
- 		break;
-+	case DISPC_AM625:
- 	case DISPC_AM65X:
- 		dispc_am65x_ovr_set_plane(dispc, hw_plane, hw_videoport,
- 					  x, y, layer);
-@@ -2199,6 +2251,7 @@ static void dispc_plane_init(struct dispc_device *dispc)
- 	case DISPC_K2G:
- 		dispc_k2g_plane_init(dispc);
- 		break;
-+	case DISPC_AM625:
- 	case DISPC_AM65X:
- 	case DISPC_J721E:
- 		dispc_k3_plane_init(dispc);
-@@ -2305,6 +2358,7 @@ static void dispc_vp_write_gamma_table(struct dispc_device *dispc,
- 	case DISPC_K2G:
- 		dispc_k2g_vp_write_gamma_table(dispc, hw_videoport);
- 		break;
-+	case DISPC_AM625:
- 	case DISPC_AM65X:
- 		dispc_am65x_vp_write_gamma_table(dispc, hw_videoport);
- 		break;
-@@ -2579,7 +2633,8 @@ int dispc_runtime_resume(struct dispc_device *dispc)
- 		REG_GET(dispc, DSS_SYSSTATUS, 2, 2),
- 		REG_GET(dispc, DSS_SYSSTATUS, 3, 3));
- 
--	if (dispc->feat->subrev == DISPC_AM65X)
-+	if (dispc->feat->subrev == DISPC_AM625 ||
-+	    dispc->feat->subrev == DISPC_AM65X)
- 		dev_dbg(dispc->dev, "OLDI RESETDONE %d,%d,%d\n",
- 			REG_GET(dispc, DSS_SYSSTATUS, 5, 5),
- 			REG_GET(dispc, DSS_SYSSTATUS, 6, 6),
-diff --git a/drivers/gpu/drm/tidss/tidss_dispc.h b/drivers/gpu/drm/tidss/tidss_dispc.h
-index 946ed769caaf..33ac5ad7a423 100644
---- a/drivers/gpu/drm/tidss/tidss_dispc.h
-+++ b/drivers/gpu/drm/tidss/tidss_dispc.h
-@@ -59,6 +59,7 @@ enum dispc_vp_bus_type {
- 
- enum dispc_dss_subrevision {
- 	DISPC_K2G,
-+	DISPC_AM625,
- 	DISPC_AM65X,
- 	DISPC_J721E,
- };
-@@ -86,6 +87,7 @@ struct dispc_features {
- };
- 
- extern const struct dispc_features dispc_k2g_feats;
-+extern const struct dispc_features dispc_am625_feats;
- extern const struct dispc_features dispc_am65x_feats;
- extern const struct dispc_features dispc_j721e_feats;
- 
-diff --git a/drivers/gpu/drm/tidss/tidss_drv.c b/drivers/gpu/drm/tidss/tidss_drv.c
-index 3f5f27fb6ebc..0a6f19314662 100644
---- a/drivers/gpu/drm/tidss/tidss_drv.c
-+++ b/drivers/gpu/drm/tidss/tidss_drv.c
-@@ -232,6 +232,7 @@ static void tidss_shutdown(struct platform_device *pdev)
- 
- static const struct of_device_id tidss_of_table[] = {
- 	{ .compatible = "ti,k2g-dss", .data = &dispc_k2g_feats, },
-+	{ .compatible = "ti,am625-dss", .data = &dispc_am625_feats, },
- 	{ .compatible = "ti,am65x-dss", .data = &dispc_am65x_feats, },
- 	{ .compatible = "ti,j721e-dss", .data = &dispc_j721e_feats, },
- 	{ }
--- 
-2.40.1
-
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
