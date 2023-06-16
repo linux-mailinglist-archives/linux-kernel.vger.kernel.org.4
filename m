@@ -2,158 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8EBD73378B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 19:40:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E6373378E
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 19:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232123AbjFPRkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 13:40:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34318 "EHLO
+        id S235046AbjFPRlA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 16 Jun 2023 13:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjFPRkk (ORCPT
+        with ESMTP id S234518AbjFPRk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 13:40:40 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4995F2943;
-        Fri, 16 Jun 2023 10:40:39 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35GFpnp9009504;
-        Fri, 16 Jun 2023 17:40:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=86D5yK9haAiJoVWC5YVv/Ei6Dy+jUUyFlwwgPuERXxU=;
- b=azTt0rrR6miSZO4mQUCTMrf2l91Sp4lEbdwMOok4EmEXG7U19cTDasqLEeyS56YxvUIH
- r7MCMXuXPHNfsO4k+DFpI1abxxmH/97QeHJ8aQZ6DA4pQlrK0GD8zE18Ur+NyEdYRomB
- rEG51x6GGFV8UUKHmQRK3flt3Om6Wexn8Fr9cyGvrrlsOgXODRtH+PEtNK2qlYGE47Cr
- UCaRy17E6eJF9v9zoDnok04D4HvG5Uagx9Om1fw1Y8f40m1AFQSEaedtcl89a55GwM5Z
- 96p0xa3snawgRQeSY5lKkceC3SRFCsCu07R9LY3/n2D24bukUwusXDmL36QH4jHTPVkH JQ== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r8axuj324-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Jun 2023 17:40:30 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35GHeTrM001451
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Jun 2023 17:40:29 GMT
-Received: from [10.71.110.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 16 Jun
- 2023 10:40:29 -0700
-Message-ID: <1e1eacff-7859-e704-07e1-aec8379fa55d@quicinc.com>
-Date:   Fri, 16 Jun 2023 10:40:05 -0700
+        Fri, 16 Jun 2023 13:40:59 -0400
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FF52D4C;
+        Fri, 16 Jun 2023 10:40:58 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-98273ae42d0so29556666b.0;
+        Fri, 16 Jun 2023 10:40:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686937256; x=1689529256;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7Zb2fdCvlXEJFveb4hOYKT1MsVDEIuHPNbjf8DIi/xM=;
+        b=eWrk+FAShktJ4aeS4QdZLuv3vi3UzTJXW2EzKtAzsGdzYlURrrZdxnfmBzf+5BXxa1
+         rPf+HVesnH9qZbdzV1Q4cWB6jH31c4lhhUBfIqqBVJFleuN3Wme+lFqHeHsOoDBXHG6s
+         ocB7lnSQsUiIxs5/s0n3xgKO0YNTUSfiDWiQ/kgjgj5fBx9ftR/bD01sdaY//fcj3nJG
+         taq83Xgprem4cweHbR6jL/ijtSqDV3n8utj2A242GNI0Ecr9kpHybrEKPaVDxOC4YbV+
+         65irO0UJ0Q2SaoM1BbHtonKq+y7qgBe79Msk6XB/7bcGVtxAhW+QBkrMjmNoS1tD2P3q
+         jv5Q==
+X-Gm-Message-State: AC+VfDyxNPomlERb5yxIlidQlPW1WtIzy8eFGNu6hLA/XLjYPJkTl6Ac
+        bVYmC9CaFAdJGXuEOnIT6b0Vqmri7wiYpWVhgl0J74VC
+X-Google-Smtp-Source: ACHHUZ7DCJcQBWoiJshIQx0/iXWzL53rwc3n/l/z55JtJ7q8MN7zln4I5gTZdrI84PakCd89MuGMvbXCRBE4Y9cvVM8=
+X-Received: by 2002:a17:906:4c:b0:987:2c00:edd0 with SMTP id
+ 12-20020a170906004c00b009872c00edd0mr61261ejg.6.1686937256452; Fri, 16 Jun
+ 2023 10:40:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] drm/msm/dsi: Enable BURST_MODE for command mode for DSI
- 6G v1.3+
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-CC:     Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, <quic_abhinavk@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20230608-b4-add-burst-mode-v1-1-55dfbcfada55@quicinc.com>
- <o57lsyxwzz5ihqlzq4ewnlnevj36rrq44ohyaxm3htnxzmomxn@fuv2sa5frph3>
-From:   Jessica Zhang <quic_jesszhan@quicinc.com>
-In-Reply-To: <o57lsyxwzz5ihqlzq4ewnlnevj36rrq44ohyaxm3htnxzmomxn@fuv2sa5frph3>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 085KwEHL97kE7_p0XQRB9QJr4BsXhZzD
-X-Proofpoint-GUID: 085KwEHL97kE7_p0XQRB9QJr4BsXhZzD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-16_12,2023-06-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- mlxscore=0 suspectscore=0 impostorscore=0 adultscore=0 bulkscore=0
- priorityscore=1501 clxscore=1015 phishscore=0 lowpriorityscore=0
- mlxlogscore=876 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306160159
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230530095536.61907-1-ulf.hansson@linaro.org>
+In-Reply-To: <20230530095536.61907-1-ulf.hansson@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 16 Jun 2023 19:40:45 +0200
+Message-ID: <CAJZ5v0i8kW=xY8dhn+N5AdT77xD7gDUtTFyfkYdkLpSBAwkzHQ@mail.gmail.com>
+Subject: Re: [PATCH] PM: domains: Move the verification of in-params from genpd_add_device()
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Kevin Hilman <khilman@kernel.org>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 30, 2023 at 11:55 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>
+> The commit f38d1a6d0025 ("PM: domains: Allocate governor data dynamically
+> based on a genpd governor") started to use the in-parameters in
+> genpd_add_device(), without first doing a verification of them.
+>
+> This isn't really a big problem, as most callers do a verification already.
+> Therefore, let's drop the verification from genpd_add_device() and make
+> sure all the callers take care of it instead.
+>
+> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+> Fixes: f38d1a6d0025 ("PM: domains: Allocate governor data dynamically based on a genpd governor")
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
+>  drivers/base/power/domain.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 51b9d4eaab5e..5cb2023581d4 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -1632,9 +1632,6 @@ static int genpd_add_device(struct generic_pm_domain *genpd, struct device *dev,
+>
+>         dev_dbg(dev, "%s()\n", __func__);
+>
+> -       if (IS_ERR_OR_NULL(genpd) || IS_ERR_OR_NULL(dev))
+> -               return -EINVAL;
+> -
+>         gpd_data = genpd_alloc_dev_data(dev, gd);
+>         if (IS_ERR(gpd_data))
+>                 return PTR_ERR(gpd_data);
+> @@ -1676,6 +1673,9 @@ int pm_genpd_add_device(struct generic_pm_domain *genpd, struct device *dev)
+>  {
+>         int ret;
+>
+> +       if (!genpd || !dev)
+> +               return -EINVAL;
+> +
+>         mutex_lock(&gpd_list_lock);
+>         ret = genpd_add_device(genpd, dev, dev);
+>         mutex_unlock(&gpd_list_lock);
+> @@ -2523,6 +2523,9 @@ int of_genpd_add_device(struct of_phandle_args *genpdspec, struct device *dev)
+>         struct generic_pm_domain *genpd;
+>         int ret;
+>
+> +       if (!dev)
+> +               return -EINVAL;
+> +
+>         mutex_lock(&gpd_list_lock);
+>
+>         genpd = genpd_get_from_provider(genpdspec);
+> --
 
-
-On 6/14/2023 2:43 AM, Marijn Suijten wrote:
-> On 2023-06-12 16:37:36, Jessica Zhang wrote:
->> During a frame transfer in command mode, there could be frequent
->> LP11 <-> HS transitions when multiple DCS commands are sent mid-frame or
->> if the DSI controller is running on slow clock and is throttled. To
->> minimize frame latency due to these transitions, it is recommended to
->> send the frame in a single burst.
->>
->> This feature is supported for DSI 6G 1.3 and above, thus enable burst
->> mode if supported.
->>
->> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
->> ---
->>   drivers/gpu/drm/msm/dsi/dsi_host.c | 5 +++++
->>   1 file changed, 5 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
->> index 744f2398a6d6..8254b06dca85 100644
->> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
->> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
->> @@ -994,6 +994,11 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
->>   		dsi_write(msm_host, REG_DSI_CMD_MDP_STREAM0_TOTAL,
->>   			DSI_CMD_MDP_STREAM0_TOTAL_H_TOTAL(hdisplay) |
->>   			DSI_CMD_MDP_STREAM0_TOTAL_V_TOTAL(mode->vdisplay));
->> +
->> +		if (msm_host->cfg_hnd->major == MSM_DSI_VER_MAJOR_6G &&
->> +				msm_host->cfg_hnd->minor >= MSM_DSI_6G_VER_MINOR_V1_3)
->> +			dsi_write(msm_host, REG_DSI_CMD_MODE_MDP_CTRL2,
->> +					DSI_CMD_MODE_MDP_CTRL2_BURST_MODE);
-> 
-> This is not part of the timing setup, and a similar BURST_MODE flag is
-> enabled for video-mode in dsi_ctrl_config() - should it be moved there?
-
-Hi Marijn,
-
-Sure, I can move the change to dsi_ctrl_enable() instead.
-
-> 
-> (There is a dsi_sw_reset() in between the calls to dsi_timing_setup()
->   and dsi_ctrl_cfg())
-> 
-> Note that that function sets up the CMD_CFG0 and CMD_CFG1 register, with
-> the former having a very similar layout to MDP_CTRL2... is there
-> documentation outlining the difference?
-
-I see what you mean, but unfortunately I'm not able to give you any 
-documentation about the differences between them.
-
-FWIW, I think the macros in dsi.xml.h should give you a sense of what's 
-within the registers and the slight differences between them.
-
-Thanks,
-
-Jessica Zhang
-
-> 
-> - Marijn
-> 
->>   	}
->>   }
->>   
->>
->> ---
->> base-commit: dd969f852ba4c66938c71889e826aa8e5300d2f2
->> change-id: 20230608-b4-add-burst-mode-a5bb144069fa
->>
->> Best regards,
->> -- 
->> Jessica Zhang <quic_jesszhan@quicinc.com>
->>
+Applied as 6.5 material, thanks!
