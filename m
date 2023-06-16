@@ -2,90 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA55A7326BF
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 07:45:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 827CC7326C4
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 07:48:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232791AbjFPFpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 01:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38914 "EHLO
+        id S230236AbjFPFsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 01:48:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbjFPFpV (ORCPT
+        with ESMTP id S229657AbjFPFsg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 01:45:21 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1BFC1715;
-        Thu, 15 Jun 2023 22:45:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
- s=s31663417; t=1686894282; x=1687499082; i=frank-w@public-files.de;
- bh=5eg7RXmJMtMZxqGRw8WILxedxtZ1RDfpgHRg3ABH2FY=;
- h=X-UI-Sender-Class:Date:From:To:CC:Subject:Reply-to:In-Reply-To:Referenc
- es;
- b=a4VetjATUhtGrviquK6iBUjQVmw+Q8WPcuBvm72jxETBCVAt8fKwmwn9Ia7JtaLXpGWeDOv
- gtCJurPNc0lY2OJUpPRBIzQ2FawN/2XZlczYqIjOOYUOptQBQISXNMAVw5seuH0ZfgUliPwFO
- xLgICPEHQyzyRH9+nE/2r1v+8vyQdakDYsIPnAJLETfWUZ21eF5f+MHTNL6QLqGrPOhSrROut
- 69zB2n/dpCtO8GmHyGNPwwgXF0UhG49bRHJt2fU26gFMIy+AYDfARviTSv4PbO68kE/pv8vgd
- f20WQesbrPeActVgBYr//+Kpno4K2TbM+pfp04ngvTrtZX4HIvhQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [127.0.0.1] ([217.61.152.78]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mzyya-1px9iO1nL4-00x58L; Fri, 16
- Jun 2023 07:44:42 +0200
-Date:   Fri, 16 Jun 2023 07:44:32 +0200
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     arinc9.unal@gmail.com,
-        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>
-CC:     Landen Chao <landen.chao@mediatek.com>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net v5 4/6] net: dsa: mt7530: fix handling of LLDP frames
-User-Agent: K-9 Mail for Android
-Reply-to: frank-w@public-files.de
-In-Reply-To: <20230616025327.12652-5-arinc.unal@arinc9.com>
-References: <20230616025327.12652-1-arinc.unal@arinc9.com> <20230616025327.12652-5-arinc.unal@arinc9.com>
-Message-ID: <CFD0E43B-1D0F-4BC3-8DB8-8CFA09F8AA94@public-files.de>
+        Fri, 16 Jun 2023 01:48:36 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE26270C
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 22:48:35 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id e9e14a558f8ab-3409d944009so67005ab.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 22:48:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686894515; x=1689486515;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZwQw4AmMsj8rS1EO+I7cEg+kMMUbG54Oey3YjSE5diw=;
+        b=ew+f7NHQuAVwZ6l9cHvNdo8Rj7TGVkbcYkaVPzglzvEspiDGM9BIAbB+nOI5BFRHxq
+         O3Rz+l8/avezmgajTEW6WlveMWCuo7Sr9PZARD5tSs5Hw1qgqUVZKHszLzfE3fl+JdvV
+         8QrTUXpxABeNTDNnTpc8AiCLiEvexxY9J/480urLRwCoo9bCCMk3iqQ67OQpYXw5ZQWi
+         g3RZ0eMDgMRMBaW5kOLu48MYKLnxD6Rr3YdTUu0oW7FlKFXy0i9oycnn1XuIU/oSPZPk
+         kgKliKYW/phvNL/OBA2viXxT+OIREPXeEWyGZQUNlIUtqlBoy3G7pjpHEj9EuOYGyS9d
+         YnkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686894515; x=1689486515;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZwQw4AmMsj8rS1EO+I7cEg+kMMUbG54Oey3YjSE5diw=;
+        b=kb++3gOgmVfKhqPSrw4N2C/Sy/PQCQEbDwPL5KBwcjhkeI3gr1tDclYhlNaYvufnMu
+         fNFOeMLa/NNSBFwin+QX8NU9mhrzW1UVpxGWYMOjAPaG5Qk9/lyTQr0jWL6tMt6idtJK
+         tjiLeeMLiQPyQ82IxvWiEAFUbIVBLmOK+Z2c0hOE/yKu1T34y6fALizPCzylbHDeCHvP
+         ey1EcYX6zZKRwNT48wuDv2nyxCWvwtMuCVQ7bZCMHOYfc9aL2L6AnSI3M2My4h2qanGn
+         BB5DVa2bVBKdAvqU+VUcgG36rWIvqS3kntepiGyeCdWiHYPuPfdcP1aCTULhm93uLS2R
+         4xQg==
+X-Gm-Message-State: AC+VfDzUlyLo+QEzywWho6b8CCoRHe6ra6u0JN5yWiiGa2c0BWBQbXXM
+        qYqguNoEmGos2M0RK0bEAPyEWCTzIDliNw6xHJdLfA==
+X-Google-Smtp-Source: ACHHUZ6+k9cqSN5v8etHs7GGPZ2xmMi9V0LTDQLaEsf/rzIWphENGiObZ4KJ0dLJo4Uo9R+yc3voVrQTjm4rGfUwm+c=
+X-Received: by 2002:a05:6e02:12e2:b0:33b:5343:c1be with SMTP id
+ l2-20020a056e0212e200b0033b5343c1bemr409461iln.29.1686894514956; Thu, 15 Jun
+ 2023 22:48:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+References: <20230616031420.3751973-1-kan.liang@linux.intel.com> <20230616031420.3751973-2-kan.liang@linux.intel.com>
+In-Reply-To: <20230616031420.3751973-2-kan.liang@linux.intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 15 Jun 2023 22:48:23 -0700
+Message-ID: <CAP-5=fVDouD85kvKeq252Zv1dL9r5QgpZBsh7uX5fOP7OR_x0A@mail.gmail.com>
+Subject: Re: [PATCH V4 1/5] perf metrics: Sort the Default metricgroup
+To:     kan.liang@linux.intel.com
+Cc:     acme@kernel.org, mingo@redhat.com, peterz@infradead.org,
+        namhyung@kernel.org, jolsa@kernel.org, adrian.hunter@intel.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ak@linux.intel.com, eranian@google.com, ahmad.yasin@intel.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:3lxl0MPex+u5xxfAzvrdcXVP4Drii4GQK9Qm1rbQCLkju9MzBb+
- bN5ner5fXtcDMmVpLVZB2/yGeNGdPyrMrJwqaNXL9CUN2tHfZPU/PqCn6p/hKkwYQBKakKX
- j3Ap68wuPAToJ6wEnzLUbeKt7xdcS8eB9DsZ92FGk8Is7Ic/JVbSsFweqa+7udI9t4qlQw4
- NST1bsMQSWjlAbbe4LR8Q==
-UI-OutboundReport: notjunk:1;M01:P0:drprUYgIsko=;lfwGdT9vdEHSO876eZlvpXiTruf
- bPKCupHUQU481noFTmxoTV+MAdHAdySN+LsY41W07L1W/ZwuyTr3HaZ4mBC0lTQY0RWfWS7DF
- jdoeKrWf+/BZ2VSWYIhDwiWOkq1oohhlxs7h1xwOqQR0j4hb6qopX4BJtuERvbY7eBdxwjkvI
- mrB1ou0/C7+iyqmYbXnbHFXwfzF4eF0dKaWaQbDQPFBHo8ju2vPZFBhvi+N6+hAt+T+vbRxQ9
- EOcaevb8UJ1w12/CvOEGZydfzbXNoUzstE+V8j2zSt6utty885YOLA1XWbAFskZ4nXFNbU+az
- yte4HmG2lZlskrCHk4plSMvAdqQeVHb8mdfG/L7HuVc1InlTCSTcJRLoz9qXf021Z2G+2qmwy
- y8oE4HfyzV9r3Jp3qIcJzny9i+w5Jmr8K/T2bmAB3R8Gpzpup8/1lWKGd1U+YSp7sY527tfgN
- FEM/m50nG7SJdcXQZURQKWyRo2UIhcygFfgOqZ9/AlBuQdsMZwShq5agFY/kxJrit9M0uOv/K
- f4JF53TYE8viqipgN7mg80n2tdpSR902jRiw4ZBmxFGXqsoCTncYsjVyPCVEN7y7qmSdAw70U
- +EN1kf8Pjx3mm8DDIKrKP7WqAH2dtEpr0wG/DtDKoSdqr9w+0HCXJ4ep9d4+iQ/bfbscOgqgA
- 4g0AYxdmQzXhNIJq0w0iYhQjwD9vKZX3IuImhfoo2ova1IgsWZAqR8fO8vWnxHoNeATjMSwYd
- GdLetfkFJ8zGshBpg0Mp0bpas6faP37TBZHKAcyE6HETF89/sJDSM/RSFL2tqshSSBt5//M8c
- /TgXyKZVY5oHgWjSeoFg8wjU2zfEceHkmuZAkJ4a2aMuWjVxRp4th50cPGNnSO2D2fe+rl8SO
- M2YkVLL/AcscZdnAipmVUI236Cy4IW3XMMSCXxrDZnNOS/ijV+qtTI+nwE/gGKwvhOBnK2bIZ
- zxOhs9A3On0k74n6U4jb8Bzd7X0=
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,54 +72,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 16=2E Juni 2023 04:53:25 MESZ schrieb arinc9=2Eunal@gmail=2Ecom:
->From: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc=2Eunal@arinc9=2Ecom>
+On Thu, Jun 15, 2023 at 8:14=E2=80=AFPM <kan.liang@linux.intel.com> wrote:
 >
->LLDP frames are link-local frames, therefore they must be trapped to the
->CPU port=2E Currently, the MT753X switches treat LLDP frames as regular
->multicast frames, therefore flooding them to user ports=2E To fix this, s=
-et
->LLDP frames to be trapped to the CPU port(s)=2E
+> From: Kan Liang <kan.liang@linux.intel.com>
 >
->Fixes: b8f126a8d543 ("net-next: dsa: add dsa support for Mediatek MT7530 =
-switch")
->Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc=2Eunal@arinc9=2Ecom>
->---
-> drivers/net/dsa/mt7530=2Ec | 8 ++++++++
-> drivers/net/dsa/mt7530=2Eh | 5 +++++
-> 2 files changed, 13 insertions(+)
+> The new default mode will print the metrics as a metric group. The
+> metrics from the same metric group must be adjacent to each other in the
+> metric list. But the metric_list_cmp() sorts metrics by the number of
+> events.
 >
->diff --git a/drivers/net/dsa/mt7530=2Ec b/drivers/net/dsa/mt7530=2Ec
->index 7b72cf3a0e30=2E=2Ec85876fd9107 100644
->--- a/drivers/net/dsa/mt7530=2Ec
->+++ b/drivers/net/dsa/mt7530=2Ec
->@@ -2266,6 +2266,10 @@ mt7530_setup(struct dsa_switch *ds)
-> 	mt7530_rmw(priv, MT753X_BPC, MT753X_BPDU_PORT_FW_MASK,
-> 		   MT753X_BPDU_CPU_ONLY);
->=20
->+	/* Trap LLDP frames with :0E MAC DA to the CPU port */
->+	mt7530_rmw(priv, MT753X_RGAC2, MT753X_R0E_PORT_FW_MASK,
->+		   MT753X_R0E_PORT_FW(MT753X_BPDU_CPU_ONLY));
->+
-> 	/* Enable and reset MIB counters */
-> 	mt7530_mib_reset(ds);
->=20
->@@ -2369,6 +2373,10 @@ mt7531_setup_common(struct dsa_switch *ds)
-> 	mt7530_rmw(priv, MT753X_BPC, MT753X_BPDU_PORT_FW_MASK,
-> 		   MT753X_BPDU_CPU_ONLY);
->=20
->+	/* Trap LLDP frames with :0E MAC DA to the CPU port(s) */
->+	mt7530_rmw(priv, MT753X_RGAC2, MT753X_R0E_PORT_FW_MASK,
->+		   MT753X_R0E_PORT_FW(MT753X_BPDU_CPU_ONLY));
->+
-> 	/* Enable and reset MIB counters */
-> 	mt7530_mib_reset(ds);
->=20
+> Add a new sort for the Default metricgroup, which sorts by
+> default_metricgroup_name and metric_name.
+>
+> Add is_default in the struct metric_event to indicate that it's from
+> the Default metricgroup.
+>
+> Store the displayed metricgroup name of the Default metricgroup into
+> the metric expr for output.
+>
+> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
 
+Reviewed-by: Ian Rogers <irogers@google.com>
 
-I though these 2 hunks should go into some common function as these are re=
-dundant or am i wrong?
+Thanks,
+Ian
 
-Btw=2Ethx for your work on this driver :)
+> ---
+>  tools/perf/util/metricgroup.c | 26 ++++++++++++++++++++++++++
+>  tools/perf/util/metricgroup.h |  3 +++
+>  2 files changed, 29 insertions(+)
+>
+> diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.=
+c
+> index 8b19644ade7d..a6a5ed44a679 100644
+> --- a/tools/perf/util/metricgroup.c
+> +++ b/tools/perf/util/metricgroup.c
+> @@ -79,6 +79,7 @@ static struct rb_node *metric_event_new(struct rblist *=
+rblist __maybe_unused,
+>                 return NULL;
+>         memcpy(me, entry, sizeof(struct metric_event));
+>         me->evsel =3D ((struct metric_event *)entry)->evsel;
+> +       me->is_default =3D false;
+>         INIT_LIST_HEAD(&me->head);
+>         return &me->nd;
+>  }
+> @@ -1160,6 +1161,25 @@ static int metric_list_cmp(void *priv __maybe_unus=
+ed, const struct list_head *l,
+>         return right_count - left_count;
+>  }
+>
+> +/**
+> + * default_metricgroup_cmp - Implements complex key for the Default metr=
+icgroup
 
-regards Frank
+nit: what is the meaning of complex key here?
+
+> + *                          that first sorts by default_metricgroup_name=
+, then
+> + *                          metric_name.
+> + */
+> +static int default_metricgroup_cmp(void *priv __maybe_unused,
+> +                                  const struct list_head *l,
+> +                                  const struct list_head *r)
+> +{
+> +       const struct metric *left =3D container_of(l, struct metric, nd);
+> +       const struct metric *right =3D container_of(r, struct metric, nd)=
+;
+> +       int diff =3D strcmp(right->default_metricgroup_name, left->defaul=
+t_metricgroup_name);
+> +
+> +       if (diff)
+> +               return diff;
+> +
+> +       return strcmp(right->metric_name, left->metric_name);
+> +}
+> +
+>  struct metricgroup__add_metric_data {
+>         struct list_head *list;
+>         const char *pmu;
+> @@ -1515,6 +1535,7 @@ static int parse_groups(struct evlist *perf_evlist,
+>         LIST_HEAD(metric_list);
+>         struct metric *m;
+>         bool tool_events[PERF_TOOL_MAX] =3D {false};
+> +       bool is_default =3D !strcmp(str, "Default");
+>         int ret;
+>
+>         if (metric_events_list->nr_entries =3D=3D 0)
+> @@ -1549,6 +1570,9 @@ static int parse_groups(struct evlist *perf_evlist,
+>                         goto out;
+>         }
+>
+> +       if (is_default)
+> +               list_sort(NULL, &metric_list, default_metricgroup_cmp);
+> +
+>         list_for_each_entry(m, &metric_list, nd) {
+>                 struct metric_event *me;
+>                 struct evsel **metric_events;
+> @@ -1637,6 +1661,8 @@ static int parse_groups(struct evlist *perf_evlist,
+>                 expr->metric_unit =3D m->metric_unit;
+>                 expr->metric_events =3D metric_events;
+>                 expr->runtime =3D m->pctx->sctx.runtime;
+> +               expr->default_metricgroup_name =3D m->default_metricgroup=
+_name;
+> +               me->is_default =3D is_default;
+>                 list_add(&expr->nd, &me->head);
+>         }
+>
+> diff --git a/tools/perf/util/metricgroup.h b/tools/perf/util/metricgroup.=
+h
+> index bf18274c15df..d5325c6ec8e1 100644
+> --- a/tools/perf/util/metricgroup.h
+> +++ b/tools/perf/util/metricgroup.h
+> @@ -22,6 +22,7 @@ struct cgroup;
+>  struct metric_event {
+>         struct rb_node nd;
+>         struct evsel *evsel;
+> +       bool is_default; /* the metric evsel from the Default metricgroup=
+ */
+>         struct list_head head; /* list of metric_expr */
+>  };
+>
+> @@ -55,6 +56,8 @@ struct metric_expr {
+>          * more human intelligible) and then add "MiB" afterward when dis=
+played.
+>          */
+>         const char *metric_unit;
+> +       /** Displayed metricgroup name of the Default metricgroup */
+> +       const char *default_metricgroup_name;
+>         /** Null terminated array of events used by the metric. */
+>         struct evsel **metric_events;
+>         /** Null terminated array of referenced metrics. */
+> --
+> 2.35.1
+>
