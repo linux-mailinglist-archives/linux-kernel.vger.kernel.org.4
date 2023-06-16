@@ -2,118 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 484A5732527
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 04:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DC08732529
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 04:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240466AbjFPCUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 22:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42992 "EHLO
+        id S240620AbjFPCUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 22:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbjFPCUF (ORCPT
+        with ESMTP id S240527AbjFPCUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 22:20:05 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B12C26B8
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 19:20:04 -0700 (PDT)
-Received: from kwepemm600020.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Qj2qZ3HbPzpWMt;
-        Fri, 16 Jun 2023 10:17:30 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.125) by
- kwepemm600020.china.huawei.com (7.193.23.147) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 16 Jun 2023 10:20:00 +0800
-From:   Peng Zhang <zhangpeng362@huawei.com>
-To:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-CC:     <hannes@cmpxchg.org>, <mhocko@kernel.org>,
-        <roman.gushchin@linux.dev>, <shakeelb@google.com>,
-        <muchun.song@linux.dev>, <akpm@linux-foundation.org>,
-        <wangkefeng.wang@huawei.com>, <sunnanyong@huawei.com>,
-        ZhangPeng <zhangpeng362@huawei.com>
-Subject: [PATCH] mm/memcg: remove return value of mem_cgroup_scan_tasks()
-Date:   Fri, 16 Jun 2023 10:19:55 +0800
-Message-ID: <20230616021955.872413-1-zhangpeng362@huawei.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600020.china.huawei.com (7.193.23.147)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 15 Jun 2023 22:20:14 -0400
+Received: from mail-m11876.qiye.163.com (mail-m11876.qiye.163.com [115.236.118.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D137A296E;
+        Thu, 15 Jun 2023 19:20:12 -0700 (PDT)
+Received: from localhost.localdomain (unknown [58.22.7.114])
+        by mail-m11876.qiye.163.com (Hmail) with ESMTPA id DC4B73C038F;
+        Fri, 16 Jun 2023 10:20:02 +0800 (CST)
+From:   Frank Wang <frank.wang@rock-chips.com>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, sebastian.reichel@collabora.com,
+        heiko@sntech.de
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
+        william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
+        yubing.zhang@rock-chips.com, wmc@rock-chips.com,
+        Frank Wang <frank.wang@rock-chips.com>
+Subject: usb: typec: tcpm: fix cc role at port reset
+Date:   Fri, 16 Jun 2023 10:20:01 +0800
+Message-Id: <20230616022001.25819-1-frank.wang@rock-chips.com>
+X-Mailer: git-send-email 2.17.1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQxofTlYaHh8YTh4fHx5PQkNVEwETFh
+        oSFyQUDg9ZV1kYEgtZQVlOQ1VJSVVMVUpKT1lXWRYaDxIVHRRZQVlPS0hVSk5MSUpJVUpLS1VKQl
+        kG
+X-HM-Tid: 0a88c200a91b2eb2kusndc4b73c038f
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PE06HRw4DT1LDBAxFiotIUo*
+        OhMKCTFVSlVKTUNNQ0NJS0tIQ0xDVTMWGhIXVR0JGhUQVQwaFRw7CRQYEFYYExILCFUYFBZFWVdZ
+        EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFJSUlCNwY+
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ZhangPeng <zhangpeng362@huawei.com>
+In the current implementation, the tcpm set CC1/CC2 role to open when
+it do port reset would cause the VBUS removed by the Type-C partner.
 
-No user checks the return value of mem_cgroup_scan_tasks(). Make the
-return value void.
+This sets CC1/CC2 according to the default state of port to fix it.
 
-Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
+Comments are suggested by Guenter Roeck.
+
+Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
 ---
- include/linux/memcontrol.h | 6 +++---
- mm/memcontrol.c            | 9 ++++-----
- 2 files changed, 7 insertions(+), 8 deletions(-)
+ drivers/usb/typec/tcpm/tcpm.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index 7738d8c0fa4f..c20375a77c07 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -820,8 +820,8 @@ struct mem_cgroup *mem_cgroup_iter(struct mem_cgroup *,
- 				   struct mem_cgroup *,
- 				   struct mem_cgroup_reclaim_cookie *);
- void mem_cgroup_iter_break(struct mem_cgroup *, struct mem_cgroup *);
--int mem_cgroup_scan_tasks(struct mem_cgroup *,
--			  int (*)(struct task_struct *, void *), void *);
-+void mem_cgroup_scan_tasks(struct mem_cgroup *memcg,
-+			   int (*)(struct task_struct *, void *), void *arg);
- 
- static inline unsigned short mem_cgroup_id(struct mem_cgroup *memcg)
- {
-@@ -1366,7 +1366,7 @@ static inline void mem_cgroup_iter_break(struct mem_cgroup *root,
- {
- }
- 
--static inline int mem_cgroup_scan_tasks(struct mem_cgroup *memcg,
-+static inline void mem_cgroup_scan_tasks(struct mem_cgroup *memcg,
- 		int (*fn)(struct task_struct *, void *), void *arg)
- {
- 	return 0;
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 0fe39ed857db..92a553b06f7a 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -1259,13 +1259,13 @@ static void invalidate_reclaim_iterators(struct mem_cgroup *dead_memcg)
-  *
-  * This function iterates over tasks attached to @memcg or to any of its
-  * descendants and calls @fn for each task. If @fn returns a non-zero
-- * value, the function breaks the iteration loop and returns the value.
-- * Otherwise, it will iterate over all tasks and return 0.
-+ * value, the function breaks the iteration loop. Otherwise, it will iterate
-+ * over all tasks and return 0.
-  *
-  * This function must not be called for the root memory cgroup.
-  */
--int mem_cgroup_scan_tasks(struct mem_cgroup *memcg,
--			  int (*fn)(struct task_struct *, void *), void *arg)
-+void mem_cgroup_scan_tasks(struct mem_cgroup *memcg,
-+			   int (*fn)(struct task_struct *, void *), void *arg)
- {
- 	struct mem_cgroup *iter;
- 	int ret = 0;
-@@ -1285,7 +1285,6 @@ int mem_cgroup_scan_tasks(struct mem_cgroup *memcg,
- 			break;
- 		}
- 	}
--	return ret;
- }
- 
- #ifdef CONFIG_DEBUG_VM
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 3c6b0c8e2d3ae..9f6aaa3e70ca8 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -4885,7 +4885,8 @@ static void run_state_machine(struct tcpm_port *port)
+ 		break;
+ 	case PORT_RESET:
+ 		tcpm_reset_port(port);
+-		tcpm_set_cc(port, TYPEC_CC_OPEN);
++		tcpm_set_cc(port, tcpm_default_state(port) == SNK_UNATTACHED ?
++			    TYPEC_CC_RD : tcpm_rp_cc(port));
+ 		tcpm_set_state(port, PORT_RESET_WAIT_OFF,
+ 			       PD_T_ERROR_RECOVERY);
+ 		break;
 -- 
-2.25.1
+2.17.1
 
