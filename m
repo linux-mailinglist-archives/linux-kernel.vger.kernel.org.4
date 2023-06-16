@@ -2,62 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92A4D733B4B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 23:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2950D733B4F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 23:07:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233461AbjFPVFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 17:05:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36328 "EHLO
+        id S236740AbjFPVHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 17:07:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjFPVFl (ORCPT
+        with ESMTP id S229928AbjFPVHA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 17:05:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306753596;
-        Fri, 16 Jun 2023 14:05:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B6A0961B11;
-        Fri, 16 Jun 2023 21:05:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7532C433C0;
-        Fri, 16 Jun 2023 21:05:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686949539;
-        bh=6cnCdUSqLz7VhNzN0lbB/Xqj6xFuU/O/NQabQhB7NiY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J7i0S9spk/rq86bSVG2EN5JaWksv1VMyqy/uqYZvc+hC7ysTe5TqccRM2AMZgC4Gb
-         6hwENrxSEFBxJluOcHgbDa0OWR3ILdeMYbHMHyoX2OCc9lCWFTZBrWvgPNdsGzfRNn
-         aV191+D8dJm0lWZwEBN67SJzMEFHZKTV13/HmKBR+g7Jd07SZKwN2XFltofW83J+P8
-         K0YGwMPdMkV2P6Gm5tunFN6kzHDp2DoJ876R+EtbmB8ty94hQRpldVLzmT2J2HhkXy
-         AbGjNxMNOS6br8EFkos9pjzwAQolUgXD503u5DY+0bquBHgRMkcbgnhK3ptEYP8v2c
-         ZsDo7r0cgzVLg==
-Date:   Fri, 16 Jun 2023 22:05:32 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Eric Lin <eric.lin@sifive.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, maz@kernel.org, chenhuacai@kernel.org,
-        baolu.lu@linux.intel.com, will@kernel.org,
-        kan.liang@linux.intel.com, nnac123@linux.ibm.com,
-        pierre.gondois@arm.com, huangguangbin2@huawei.com, jgross@suse.com,
-        chao.gao@intel.com, maobibo@loongson.cn,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dslin1010@gmail.com,
-        Nick Hu <nick.hu@sifive.com>, Zong Li <zong.li@sifive.com>
-Subject: Re: [PATCH 1/3] soc: sifive: Add SiFive private L2 cache support
-Message-ID: <20230616-errand-glutton-f64783da058c@spud>
-References: <20230616063210.19063-1-eric.lin@sifive.com>
- <20230616063210.19063-2-eric.lin@sifive.com>
+        Fri, 16 Jun 2023 17:07:00 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B664D8;
+        Fri, 16 Jun 2023 14:06:58 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35GKTG1s004082;
+        Fri, 16 Jun 2023 21:06:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=za7Wba2fM/qIMMUatKDGea50zMmcCuEOpPbahiJJj7U=;
+ b=HOKyVUOV1UfUXzD2/zA3/8BidtYYDu8GRfKRBgqdSPyqnac28z10ZgmccdGsyPPtnhuR
+ mfVvrTiwkviVO19JqrqyjbCjZezQlPl/9h82qg9MhgdONdZ5hJCEiNb1nqa/khcVBAcU
+ z/TW3IsBmE7s44fx3db7dlPC6DQS6p1ClDavAaXAjEz/vtuPRLzEvAnGAbhhpmbYQpm9
+ DEigdG+HgJMuJ2OFp7IC8+QRaVAH+0dFtZfl587qaX0UADqKn8qrAfQmEf6VP2SbCjj6
+ 1EDMa8dC++rEuyba2MIvT7jeiliTAmzW8r94Do+b3VzQBmAsx8aid9kdM6pz5R+OyJ05 pg== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r8mt0sgyd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Jun 2023 21:06:51 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35GL6n09006248
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Jun 2023 21:06:49 GMT
+Received: from [10.110.47.14] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 16 Jun
+ 2023 14:06:48 -0700
+Message-ID: <3791f18c-89f1-f066-38c4-d8d13a3ab611@quicinc.com>
+Date:   Fri, 16 Jun 2023 14:06:47 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="wC0nzxIhkPASdtVL"
-Content-Disposition: inline
-In-Reply-To: <20230616063210.19063-2-eric.lin@sifive.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/3] drm/msm/dpu: Add DPU_INTF_DATABUS_WIDEN feature flag
+ for DPU >= 5.0
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
+ <20230525-add-widebus-support-v1-1-c7069f2efca1@quicinc.com>
+ <wpjxrnhbcanbc5iatxnff25yrrdfrtmgb24sgwyo457dz2oyjz@e2docpcb6337>
+ <f4fb042c-1458-6077-3c49-8cc02638b27c@linaro.org>
+ <ycgei43x4kfmjk7g7gbeglehtiiinfbqmrjbdzcy56frxbtd2z@yk2f5kgrkbrt>
+ <i5trozzoexkm7taojob4c53sajm2w6tnasj2yfzjy3a77oqvw7@wadk7g7op2kp>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <i5trozzoexkm7taojob4c53sajm2w6tnasj2yfzjy3a77oqvw7@wadk7g7op2kp>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: aGrCF_1cbB0Bk6TJHXfvFuyKpruSru8c
+X-Proofpoint-GUID: aGrCF_1cbB0Bk6TJHXfvFuyKpruSru8c
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-16_14,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ priorityscore=1501 bulkscore=0 lowpriorityscore=0 phishscore=0
+ adultscore=0 clxscore=1015 mlxlogscore=423 malwarescore=0 spamscore=0
+ impostorscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306160191
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,149 +91,24 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---wC0nzxIhkPASdtVL
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hey Eric,
+On 6/14/2023 3:49 PM, Marijn Suijten wrote:
+> On 2023-06-14 14:23:38, Marijn Suijten wrote:
+> <snip>
+>> Tested this on SM8350 which actually has DSI 2.5, and it is also
+>> corrupted with this series so something else on this series might be
+>> broken.
+> 
+> Never mind, this was a bad conflict-resolve.  Jessica's original
+> BURST_MODE patch was RMW'ing MDP_CTRL2, but the upstreamed patch was
+> only writing, and the way I conflict-resolved that caused the write of
+> BURST_MODE to overwrite the RMW DATABUS_WIDEN.
+> 
+> If both are moved to dsi_ctrl_config(), we could do a read, add both
+> flags in conditionally, and write.
+> 
 
-On Fri, Jun 16, 2023 at 02:32:08PM +0800, Eric Lin wrote:
-> This adds SiFive private L2 cache driver which will show
-> cache config information when booting and add cpu hotplug
-> callback functions.
->=20
-> Signed-off-by: Eric Lin <eric.lin@sifive.com>
-> Signed-off-by: Nick Hu <nick.hu@sifive.com>
+So just to confirm, there is no issue on your 8350 setup with widebus 
+enabled right?
 
-Missing a Co-developed-by for Nick?
-
-
-> +static void pl2_config_read(void __iomem *pl2_base, int cpu)
-> +{
-> +	u32 regval, bank, way, set, cacheline;
-> +
-> +	regval =3D readl(pl2_base);
-> +	bank =3D regval & 0xff;
-> +	pr_info("in the CPU: %d\n", cpu);
-> +	pr_info("No. of Banks in the cache: %d\n", bank);
-> +	way =3D (regval & 0xff00) >> 8;
-> +	pr_info("No. of ways per bank: %d\n", way);
-> +	set =3D (regval & 0xff0000) >> 16;
-> +	pr_info("Total sets: %llu\n", (uint64_t)1 << set);
-> +	cacheline =3D (regval & 0xff000000) >> 24;
-> +	pr_info("Bytes per cache block: %llu\n", (uint64_t)1 << cacheline);
-> +	pr_info("Size: %d\n", way << (set + cacheline));
-> +}
-
-Isn't this basically all information that we get anyway in sysfs based
-on what gets put into the DT, except printed out once per CPU at
-boottime?
-If there's reason to keep it, please do as suggested by Ben and cut down
-the number of lines emitted. Look at the ccache one for comparison:
-	static void ccache_config_read(void)
-	{
-		u32 cfg;
-=09
-		cfg =3D readl(ccache_base + SIFIVE_CCACHE_CONFIG);
-		pr_info("%llu banks, %llu ways, sets/bank=3D%llu, bytes/block=3D%llu\n",
-			FIELD_GET(SIFIVE_CCACHE_CONFIG_BANK_MASK, cfg),
-			FIELD_GET(SIFIVE_CCACHE_CONFIG_WAYS_MASK, cfg),
-			BIT_ULL(FIELD_GET(SIFIVE_CCACHE_CONFIG_SETS_MASK, cfg)),
-			BIT_ULL(FIELD_GET(SIFIVE_CCACHE_CONFIG_BLKS_MASK, cfg)));
-=09
-		cfg =3D readl(ccache_base + SIFIVE_CCACHE_WAYENABLE);
-		pr_info("Index of the largest way enabled: %u\n", cfg);
-	}
-It'd also be good to print the same things as the ccache, no?
-
-> +static int sifive_pl2_cache_dev_probe(struct platform_device *pdev)
-> +{
-> +	struct resource *res;
-> +	int cpu, ret =3D -EINVAL;
-> +	struct device_node *cpu_node, *pl2_node;
-> +	struct sifive_pl2_state *pl2_state =3D NULL;
-> +	void __iomem *pl2_base;
-
-Please pick a sensible ordering for variables. IDC if it is reverse xmas
-tree, or sorting by types, but this just seems quite random..
-
-> +	/* Traverse all cpu nodes to find the one mapping to its pl2 node. */
-> +	for_each_cpu(cpu, cpu_possible_mask) {
-> +		cpu_node =3D of_cpu_device_node_get(cpu);
-> +		pl2_node =3D of_parse_phandle(cpu_node, "next-level-cache", 0);
-> +
-> +		/* Found it! */
-> +		if (dev_of_node(&pdev->dev) =3D=3D pl2_node) {
-> +			/* Use cpu to get its percpu data sifive_pl2_state. */
-> +			pl2_state =3D per_cpu_ptr(&sifive_pl2_state, cpu);
-> +			break;
-> +		}
-> +	}
-> +
-> +	if (!pl2_state) {
-> +		pr_err("Not found the corresponding cpu_node in dts.\n");
-
-I don't think this error message is going to be helpful in figuring out
-where the problem is on a machine with many of the caches. More
-information about *which* cache caused it would be good.
-Also it is not grammatically correct, it should read something like
-"Failed to find CPU node for cache@abc" or something along those lines.
-
-> +		goto early_err;
-
-early_err just returns ret. Why not just return the error directly?
-
-> +	}
-> +
-> +	/* Set base address of select and counter registers. */
-> +	pl2_base =3D devm_platform_get_and_ioremap_resource(pdev, 0, &res);
-> +	if (IS_ERR(pl2_base)) {
-> +		ret =3D PTR_ERR(pl2_base);
-> +		goto early_err;
-> +	}
-> +
-> +	/* Print pL2 configs. */
-> +	pl2_config_read(pl2_base, cpu);
-> +	pl2_state->pl2_base =3D pl2_base;
-> +
-> +	return 0;
-> +
-> +early_err:
-> +	return ret;
-> +}
-
-> +static struct platform_driver sifive_pl2_cache_driver =3D {
-> +	.driver =3D {
-> +		   .name =3D "SiFive-pL2-cache",
-> +		   .of_match_table =3D sifive_pl2_cache_of_ids,
-> +		   },
-> +	.probe =3D sifive_pl2_cache_dev_probe,
-> +};
-> +
-> +static int __init sifive_pl2_cache_init(void)
-> +{
-> +	int ret;
-> +
-> +	ret =3D cpuhp_setup_state(CPUHP_AP_RISCV_SIFIVE_PL2_ONLINE,
-> +				"soc/sifive/pl2:online",
-> +				      sifive_pl2_online_cpu,
-> +				      sifive_pl2_offline_cpu);
-
-Got some weird use of whitespace here & above, please remove the spaces.
-
-Cheers,
-Conor.
-
---wC0nzxIhkPASdtVL
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIzOnAAKCRB4tDGHoIJi
-0qXrAP9I4dkOKQEZhScuLXuEiX6wodn8UZXmdAIfrNoRy5PCeQD/S7nbJJrzxs/e
-2tvhVnxiJgt1PdRYTwuj6gILbgvnpwM=
-=fRw3
------END PGP SIGNATURE-----
-
---wC0nzxIhkPASdtVL--
+> - Marijn
