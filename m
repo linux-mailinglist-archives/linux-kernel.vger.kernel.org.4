@@ -2,145 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E03DC733114
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:22:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C6A733111
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:22:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344472AbjFPMWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 08:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60340 "EHLO
+        id S1344291AbjFPMWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 08:22:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235200AbjFPMWs (ORCPT
+        with ESMTP id S230494AbjFPMWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 08:22:48 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B2110EC;
-        Fri, 16 Jun 2023 05:22:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1686918164; x=1718454164;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ex0yt1i7Cbl/SX0kQYlhzclSAQPI9Tm8drVNJbKVxxQ=;
-  b=w4Mxx5ZnW/SdSSjQ/K+3q7iPckaR6LvluugbtMqcoBc2FiQLnXTDD69q
-   MtQyKNrgLE8NUdohqe3IJNaT8siEuYTfCC0knR/OJADweFNf/VddeRPcI
-   b5K6GoihaorfN1s28P8dTuZIb+7Qn6TkQoOI4hJ+VKRGsWKRxBFigkjYJ
-   lZFaVbBT1njdmYPszsKpqfhd6ZZHwWjFDvXy6tLKD+exSahW5dO2I0Ydd
-   6IDv+xfNwtnQT10Xm0922nnpx+hOTgWMyLDJKYZgsXjzS3TQIhLez9bYd
-   6gvEziF7fLahOXuBA8rg8srLYDU5QFeATWRBHpeHAHPGoxiZgI21jEQKU
-   A==;
-X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
-   d="asc'?scan'208";a="157265778"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Jun 2023 05:22:43 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 16 Jun 2023 05:22:37 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Fri, 16 Jun 2023 05:22:36 -0700
-Date:   Fri, 16 Jun 2023 13:22:10 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Ben Dooks <ben.dooks@codethink.co.uk>
-CC:     <linux-riscv@lists.infradead.org>, <kvm-riscv@lists.infradead.org>,
-        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <palmer@dabbelt.com>, <anup@brainfault.org>, <atishp@atishpatra.or>
-Subject: Re: [PATCH] riscv: kvm: define vcpu_sbi_ext_pmu in header
-Message-ID: <20230616-founder-speech-6f57f22e1412@wendy>
-References: <20230616115410.166244-1-ben.dooks@codethink.co.uk>
+        Fri, 16 Jun 2023 08:22:23 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D516B30DE
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 05:22:22 -0700 (PDT)
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 9F63F3F16F
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 12:22:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1686918141;
+        bh=zw1VmnyGgP9Z0XT+cVN9mnOntivZi1r272LyKdlNy7g=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=RIJNmJNTJGsGBEUUh6kft2PO2UUoeSN+hEuO41fYKU9WR2SLgTviKxk95QvwDFzCw
+         ooIUmY6BhQLcAR9ySnoI1iBGgfwgj82oNBrqMq70UadcJz06nq+t4NCTvBsaQxWXRX
+         4FuE7WUmu6pCz6sGZpR2+WufYIbTxlFXKq6dlrsCWWZ9u8TIPhS/LY9uRQMSg8o0dl
+         7bVHs/Z+o2OYFs4e0SWDbOdIFsMyImdUfjLKv5hTpQ1+QkySK7Mkx+qxyyMUy3eA7i
+         q58OAQX7tbR8NAiiRsR11ov//bTuwl3M+50KzoQCGn9GMlkQ2Jhy4wjqUJFVL/Sn2b
+         StQKy1QFHAc5Q==
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f8dde5535dso2541635e9.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 05:22:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686918141; x=1689510141;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zw1VmnyGgP9Z0XT+cVN9mnOntivZi1r272LyKdlNy7g=;
+        b=gnUqGa/3JMR8sZlrqUvs7IdZMpk7gvy2JK2LbP7lpBAkse3ABHIPMXqvIvDzDJjtdK
+         5LbJM0GPzfZABsqKWgkKWp7M0WQE8c545/cjfc5JIgt/60KF6bJBEtGZ7+NpV7FygRuw
+         zrBijwgLISdCNwrxrcwq6tXTsa+DlFdtR7gvQKODe3ud7OiQiZkMS1dQbqmQptdk0Wcs
+         4hG5maR1oFdTd1iAy6Ks8DacaUYreY5gVSMmdxsdA4k8HKy9HNSpj/l+xiZXtoz5c+w4
+         xmXp/Y5isQua53sjovTUF/XgrlW3OF0iQ1GNFKq8aRWvKrmEsMftg7/r+uQmsvkiVtCz
+         GQtA==
+X-Gm-Message-State: AC+VfDwbVrkjiD1HPfEap9zk8ka6x89dQisjnenazfHazJ5PC9ZH9aOD
+        63/lIBKRcpRU2n6cLx6rGBeV/9cyF+pNVOR3XGJAWNQGsfPN+4izZ9F8tYW5+04QrKvYbzTuDug
+        M9Tj7Kvcgm9cvsjlp5XcbGtnPRLnbGvr5YuhK45GUkA==
+X-Received: by 2002:a05:600c:2189:b0:3f6:7e6:44ea with SMTP id e9-20020a05600c218900b003f607e644eamr1430104wme.18.1686918141173;
+        Fri, 16 Jun 2023 05:22:21 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5rBUPHGh+Xrw+/lwEv6Boc48lL+634iJofytBHc16kHMsIMMUVbLAnK1MqG7zZ49WoCqz1ww==
+X-Received: by 2002:a05:600c:2189:b0:3f6:7e6:44ea with SMTP id e9-20020a05600c218900b003f607e644eamr1430100wme.18.1686918140883;
+        Fri, 16 Jun 2023 05:22:20 -0700 (PDT)
+Received: from localhost ([194.191.244.86])
+        by smtp.gmail.com with ESMTPSA id i1-20020adff301000000b002f28de9f73bsm23571315wro.55.2023.06.16.05.22.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 05:22:20 -0700 (PDT)
+From:   Juerg Haefliger <juerg.haefliger@canonical.com>
+To:     krzysztof.kozlowski@linaro.org, netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, davem@davemloft.net,
+        shangxiaojing@huawei.com, juerg.haefliger@canonical.com
+Subject: [PATCH] nfc: fdp: Add MODULE_FIRMWARE macros
+Date:   Fri, 16 Jun 2023 14:22:18 +0200
+Message-Id: <20230616122218.1036256-1-juerg.haefliger@canonical.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Q6rxVgS4vXEezT6x"
-Content-Disposition: inline
-In-Reply-To: <20230616115410.166244-1-ben.dooks@codethink.co.uk>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Q6rxVgS4vXEezT6x
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The module loads firmware so add MODULE_FIRMWARE macros to provide that
+information via modinfo.
 
-Hey Ben,
+Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
+---
+ drivers/nfc/fdp/fdp.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-On Fri, Jun 16, 2023 at 12:54:10PM +0100, Ben Dooks wrote:
-> Sparse is giving a warning about vcpu_sbi_ext_pmu not being
-> defined, so add a definition to the relevant header to fix
-> the following:
->=20
-> arch/riscv/kvm/vcpu_sbi_pmu.c:81:37: warning: symbol 'vcpu_sbi_ext_pmu' w=
-as not declared. Should it be static?
->=20
-> Fixes: 3e5e56c60a1477 ("riscv: kvm: move extern sbi_ext declarations to a=
- header")
+diff --git a/drivers/nfc/fdp/fdp.c b/drivers/nfc/fdp/fdp.c
+index f12f903a9dd1..da3e2dce8e70 100644
+--- a/drivers/nfc/fdp/fdp.c
++++ b/drivers/nfc/fdp/fdp.c
+@@ -762,3 +762,6 @@ EXPORT_SYMBOL(fdp_nci_remove);
+ MODULE_LICENSE("GPL");
+ MODULE_DESCRIPTION("NFC NCI driver for Intel Fields Peak NFC controller");
+ MODULE_AUTHOR("Robert Dolca <robert.dolca@intel.com>");
++
++MODULE_FIRMWARE(FDP_OTP_PATCH_NAME);
++MODULE_FIRMWARE(FDP_RAM_PATCH_NAME);
+-- 
+2.37.2
 
-You sure this is the right fixes tag? This code didn't exist when I
-wrote that commit, should the fixes tag not be
-	Fixes: cbddc4c4cb9e ("RISC-V: KVM: Add SBI PMU extension support")
-instead?
-
-Cheers,
-Conor.
-
-> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
-> ---
->  arch/riscv/include/asm/kvm_vcpu_sbi.h | 3 +++
->  arch/riscv/kvm/vcpu_sbi.c             | 4 +---
->  2 files changed, 4 insertions(+), 3 deletions(-)
->=20
-> diff --git a/arch/riscv/include/asm/kvm_vcpu_sbi.h b/arch/riscv/include/a=
-sm/kvm_vcpu_sbi.h
-> index 4278125a38a5..b94c7e958da7 100644
-> --- a/arch/riscv/include/asm/kvm_vcpu_sbi.h
-> +++ b/arch/riscv/include/asm/kvm_vcpu_sbi.h
-> @@ -66,4 +66,7 @@ extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext=
-_hsm;
->  extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_experimental;
->  extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_vendor;
-> =20
-> +#ifdef CONFIG_RISCV_PMU_SBI
-> +extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_pmu;
-> +#endif
->  #endif /* __RISCV_KVM_VCPU_SBI_H__ */
-> diff --git a/arch/riscv/kvm/vcpu_sbi.c b/arch/riscv/kvm/vcpu_sbi.c
-> index e52fde504433..c973d92a0ba5 100644
-> --- a/arch/riscv/kvm/vcpu_sbi.c
-> +++ b/arch/riscv/kvm/vcpu_sbi.c
-> @@ -20,9 +20,7 @@ static const struct kvm_vcpu_sbi_extension vcpu_sbi_ext=
-_v01 =3D {
->  };
->  #endif
-> =20
-> -#ifdef CONFIG_RISCV_PMU_SBI
-> -extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_pmu;
-> -#else
-> +#ifndef CONFIG_RISCV_PMU_SBI
->  static const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_pmu =3D {
->  	.extid_start =3D -1UL,
->  	.extid_end =3D -1UL,
-> --=20
-> 2.39.2
->=20
-
---Q6rxVgS4vXEezT6x
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIxT8gAKCRB4tDGHoIJi
-0vXrAPoDbIl7+BtIQL9RSKnHHl+qR6AC1t2fNpqK2vRdGsayQwEAktGck+kuaWVm
-Th3ycnNrUQaUtOO9UX0f+TD5F+ilKA4=
-=BTVw
------END PGP SIGNATURE-----
-
---Q6rxVgS4vXEezT6x--
