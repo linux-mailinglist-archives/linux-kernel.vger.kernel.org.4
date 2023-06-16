@@ -2,115 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 793E9732FE0
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F2B5732FE4
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245491AbjFPLbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 07:31:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49936 "EHLO
+        id S244585AbjFPLch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 07:32:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244732AbjFPLbC (ORCPT
+        with ESMTP id S235378AbjFPLce (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 07:31:02 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26D51FE2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:31:00 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f762b3227dso848116e87.1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:31:00 -0700 (PDT)
+        Fri, 16 Jun 2023 07:32:34 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3F02720
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:32:32 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f61b45ee0dso761053e87.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:32:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686915059; x=1689507059;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=//Qu3hiEpe4TLJdaTFZDC48BNT7ERszPyV1zXJ0yHKg=;
-        b=uxWtNsJwvZ7HF7KxfcW0YjH/M8cblUzouedbDzOZ5eXHgUJpgNiTjRXoU+hUgqwemw
-         jMoXOC8uFFVPzAofHyzci7EJgyYLj7JkLdhns5WCD7/vfpyb+ZwP8jGhtGfL8Salic0M
-         RP5YzhDCeGvQlDSNNEseyl+Swwja0XAemWdMwlmEWFM0ey1RETRNQbkP/pjKHwZOVqWl
-         6atqNG1hzyWuyfCCrUqs7cRFnnc1wmbTpnmyQhAYXVqUXSboQW1lXnnqXRSH4oCQE6tX
-         DNxSaGmd+/CsSwyF/nwX0tv7pKjJeIqYPoGtLiZvj6JmdbY+VrGBQRR7VEcAqF/ViLc3
-         dtzw==
+        d=linaro.org; s=google; t=1686915151; x=1689507151;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2nuyRQlcqUJ1I+sHmU3UQhaVpsWzNHbMeXA40SLBfto=;
+        b=DH5R7s1yTiVsAJI1g99s6OalFVFW9cM5DAnNDqJJfwlRotOUA96IF3DT5skABPinz5
+         E4IcsKOQ3I0Rl1kStGkLFAxRCwwg624eQLqtopcQdxXR3xBLUA2PpbggQ7ZzEgEqRcbe
+         zLF4TFVCygtMwuugGFfMrYnwW9LYL8yD4irsAG/DyJmz0CufETPyYE1jSdmH8wJwQ6tx
+         vSjOiWjZxCKLbz+1fw0d11obwbqVVFSHTsLjqc7E95c4rZrMb4MBr8n0fUJ+UFj2gDls
+         a5bE+ElDJi7ADNbMc9uGiuwj+Q1wcaJHUu12vHRDhSs8Nb7M2gleCC8WcLdhD9mV7s2o
+         YiUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686915059; x=1689507059;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=//Qu3hiEpe4TLJdaTFZDC48BNT7ERszPyV1zXJ0yHKg=;
-        b=AuG1uTTRoi/FA4H+x6ihxUrSMUegtDGcEw7i64djOu+GE3zfR8BDtaPtM8sPecyrBH
-         fqXuUxN56bvswWQl0X3UtHdvcNuqUyslaneOymbIlaN2YtVNL80Om5TbXzE1dlHHdfVW
-         vCKzdbdxNDyq5FyDrWSqu0YpCZp3QGGcrARODBhO33O+r4c0SKEUQ0aaPeW96iqXFnN3
-         6c/+q0Kaucm+5W0AtxCYTq0/A+Xgia/bNGpGkqI6SSCqPQzTVyRLNSdRrKzptJ0tZgMI
-         mg3bp1HJSNPAhBY15wiZdpGavP8wTGFmkZz4kQ00nQoUj1XQbSwPxu62pW9hYIaz+ch5
-         h9hg==
-X-Gm-Message-State: AC+VfDw3U88e9S4AGUXfQgPoEsAfzzKg08Pg35Zh3nAPmyGSQ8qPDZvC
-        6wQY0HgcMmqpNcJeS0pfL8dYxw==
-X-Google-Smtp-Source: ACHHUZ6xOEU9IxkNAKpDcdKP6bGtm30j0f0RiCE4/9TaVC12Vt+UWYvrK8C42wyXSoBUqZYplv9I7Q==
-X-Received: by 2002:a05:6512:52e:b0:4f6:3347:a044 with SMTP id o14-20020a056512052e00b004f63347a044mr660271lfc.26.1686915059114;
-        Fri, 16 Jun 2023 04:30:59 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id v27-20020ac2561b000000b004f2391fe9a6sm954063lfd.266.2023.06.16.04.30.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jun 2023 04:30:58 -0700 (PDT)
-Message-ID: <6a0a9fe7-d08e-4d1d-0085-f854f95c390f@linaro.org>
-Date:   Fri, 16 Jun 2023 13:30:57 +0200
+        d=1e100.net; s=20221208; t=1686915151; x=1689507151;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2nuyRQlcqUJ1I+sHmU3UQhaVpsWzNHbMeXA40SLBfto=;
+        b=NRQOa5Vvb8XaYm9G80avAejKTYf3N/g4KLuTnYZPiL6quljyOSLFboA/kmJ0HX2GX4
+         rp8iqwRxVVicGKMSlfsbw5jI8UYFarLituyCigRvA4KtS5uHSkMsdn9oeMfpsTEG7zhE
+         bdrJYtjmhK1SgdlFn4AUs6G3tWHWpum9knJMwIVLkFQ6LKlypTB0+n29GbtID1bbS9CI
+         +SaD6fGu6Ob0B+lCABQg+GzZTiS3P2DhA3JEl8OsJREsPvkqd2p4J40LVkDlScvV3j9i
+         TEHBVXmG6dUWpUrT/9TSbMgQm2Qp2O6FWZuUGNG5W38Nxbg2XQKWWuDAw6r60nRkQTmC
+         i8lg==
+X-Gm-Message-State: AC+VfDw9GrkmJV2Y4bRtS7t3Or8RZ2WE09YmuWDEIquj8ErAPBQpQGne
+        hh1DiXy6zliCwTG830QSBYbUvg==
+X-Google-Smtp-Source: ACHHUZ4vwQur9icwi+r14RxKea4abemDipKgtryepasg7loeFJIpKxEcaQTsVhSGPpckiB9/VJ/YOA==
+X-Received: by 2002:a19:4409:0:b0:4f3:b07e:7eb8 with SMTP id r9-20020a194409000000b004f3b07e7eb8mr1138136lfa.29.1686915150597;
+        Fri, 16 Jun 2023 04:32:30 -0700 (PDT)
+Received: from myrica (5750a5b3.skybroadband.com. [87.80.165.179])
+        by smtp.gmail.com with ESMTPSA id w21-20020a1cf615000000b003f8126bcf34sm1879491wmc.48.2023.06.16.04.32.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 04:32:29 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 12:32:32 +0100
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        Yi Liu <yi.l.liu@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        iommu@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCHES 00/17] IOMMUFD: Deliver IO page faults to user space
+Message-ID: <20230616113232.GA84678@myrica>
+References: <20230530053724.232765-1-baolu.lu@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [RESEND v6 7/8] arm64: dts: qcom: sc7280: Modify LPASS_MCC reg
- region size in the lpass_tlmm node
-Content-Language: en-US
-To:     Mohammad Rafi Shaik <quic_mohs@quicinc.com>,
-        krzysztof.kozlowski+dt@linaro.org, swboyd@chromium.org,
-        andersson@kernel.org, broonie@kernel.org, agross@kernel.org
-Cc:     robh+dt@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_rohkumar@quicinc.com, srinivas.kandagatla@linaro.org,
-        dianders@chromium.org, judyhsiao@chromium.org,
-        quic_visr@quicinc.com,
-        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-References: <20230616103534.4031331-1-quic_mohs@quicinc.com>
- <20230616103534.4031331-8-quic_mohs@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230616103534.4031331-8-quic_mohs@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530053724.232765-1-baolu.lu@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.06.2023 12:35, Mohammad Rafi Shaik wrote:
-> From: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> 
-> Modify LPASS_MCC register region size in "lpass_tlmm" node.
-> The pincntl driver requires access until slew-rate register region
-> and remaining register region related to the lpass_efuse register
-> is not required in pincntl driver as lpass_efuse register region is
-> required in adsp remoteproc driver.
-> 
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> Signed-off-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
-> ---
-Fixes tag?
+Hi Baolu,
 
-Konrad
->  arch/arm64/boot/dts/qcom/sc7280.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index 36f9edabb9d7..ec38f2feb9bf 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -2509,7 +2509,7 @@ lpass_ag_noc: interconnect@3c40000 {
->  		lpass_tlmm: pinctrl@33c0000 {
->  			compatible = "qcom,sc7280-lpass-lpi-pinctrl";
->  			reg = <0 0x033c0000 0x0 0x20000>,
-> -				<0 0x03550000 0x0 0x10000>;
-> +				<0 0x03550000 0x0 0xa100>;
->  			qcom,adsp-bypass-mode;
->  			gpio-controller;
->  			#gpio-cells = <2>;
+On Tue, May 30, 2023 at 01:37:07PM +0800, Lu Baolu wrote:
+> - The timeout value for the pending page fault messages. Ideally we
+>   should determine the timeout value from the device configuration, but
+>   I failed to find any statement in the PCI specification (version 6.x).
+>   A default 100 milliseconds is selected in the implementation, but it
+>   leave the room for grow the code for per-device setting.
+
+If it helps we had some discussions about this timeout [1]. It's useful to
+print out a warning for debugging, but I don't think completing the fault
+on timeout is correct, we should leave the fault pending. Given that the
+PCI spec does not indicate a timeout, the guest can wait as long as it
+wants to complete the fault (and 100ms may even be reasonable on an
+emulator, who knows how many layers and context switches the fault has to
+go through).
+
+
+Another outstanding issue was what to do for PASID stop. When the guest
+device driver stops using a PASID it issues a PASID stop request to the
+device (a device-specific mechanism). If the device is not using PRI stop
+markers it waits for pending PRs to complete and we're fine. Otherwise it
+sends a stop marker which is flushed to the PRI queue, but does not wait
+for pending PRs.
+
+Handling stop markers is annoying. If the device issues one, then the PRI
+queue contains stale faults, a stop marker, followed by valid faults for
+the next address space bound to this PASID. The next address space will
+get all the spurious faults because the fault handler doesn't know that
+there is a stop marker coming. Linux is probably alright with spurious
+faults, though maybe not in all cases, and other guests may not support
+them at all.
+
+We might need to revisit supporting stop markers: request that each device
+driver declares whether their device uses stop markers on unbind() ("This
+mechanism must indicate that a Stop Marker Message will be generated."
+says the spec, but doesn't say if the function always uses one or the
+other mechanism so it's per-unbind). Then we still have to synchronize
+unbind() with the fault handler to deal with the pending stop marker,
+which might have already gone through or be generated later.
+
+Currently we ignore all that and just flush the PRI queue, followed by the
+IOPF queue, to get rid of any stale fault before reassigning the PASID. A
+guest however would also need to first flush the HW PRI queue, but doesn't
+have a direct way to do that. If we want to support guests that don't deal
+with stop markers, the host needs to flush the PRI queue when a PASID is
+detached. I guess on Intel detaching the PASID goes through the host which
+can flush the host queue. On Arm we'll probably need to flush the queue
+when receiving a PASID cache invalidation, which the guest issues after
+clearing a PASID table entry.
+
+Thanks,
+Jean
+
+[1] https://lore.kernel.org/linux-iommu/20180423153622.GC38106@ostrya.localdomain/
+    Also unregistration, not sure if relevant here
+    https://lore.kernel.org/linux-iommu/20190605154553.0d00ad8d@jacob-builder/
