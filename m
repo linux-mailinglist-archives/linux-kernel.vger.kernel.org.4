@@ -2,91 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72860732859
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 09:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69567732863
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 09:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241292AbjFPHFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 03:05:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50666 "EHLO
+        id S234440AbjFPHHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 03:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244222AbjFPHEt (ORCPT
+        with ESMTP id S244163AbjFPHGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 03:04:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BF32702;
-        Fri, 16 Jun 2023 00:04:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 88B1262D80;
-        Fri, 16 Jun 2023 07:04:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD2C3C433C8;
-        Fri, 16 Jun 2023 07:04:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686899048;
-        bh=4KijB58FD/utAidUARnCXp0GEQshK43RRFgWQurzuuM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=uy0B7DiZwAGBrmxywQNk2pnvWSvFfHQLl4+PeIMfqCi4QfH8xUxQOECcEDeJzHxtR
-         8MdJbStE19EvRgLj723MlFku4CUDTJuCF+VD2JrM5Vljfk5+1DZSOlL7Cis69I+9Tk
-         gD2Gwci7BEoAPHYA7GKl01keafP/jVDjbVyZkNlb3gRu2YZUU4nVPbl3+qLKC1IonY
-         qP9O1HHvOFo6YVTrUh66AdyRzjPTToBVF9oLWtI1q2LosEDLd5TWhyiCBRGaMYW9Tg
-         Z1cw0tGhoLCi0HLkF9MowYUiD2B1IpH05zv+BRXMuesA6T454xQwMrX1P12oYPPonb
-         aeJp9BDQ4IgwA==
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2b41e700103so3768171fa.2;
-        Fri, 16 Jun 2023 00:04:08 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwDpfItZiRFoiNbri/fwIEl9fuI8145X/GCIlbGsOP5ibjRlR63
-        M55B06mYD5/MBSqz3qSEPxrs/92W1I8k36kuXCU=
-X-Google-Smtp-Source: ACHHUZ7L6gVX3PHQMfCR6c51it2riuiygFzCH2EaPFnUUzlseRMRoQEKMaZpX0YxYkiN1RFsRfJcj3McNjp4bmGF+wE=
-X-Received: by 2002:a05:651c:224:b0:2ad:bdb7:b4c3 with SMTP id
- z4-20020a05651c022400b002adbdb7b4c3mr1060544ljn.22.1686899046834; Fri, 16 Jun
- 2023 00:04:06 -0700 (PDT)
+        Fri, 16 Jun 2023 03:06:54 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A433359B
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 00:06:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686899191; x=1718435191;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=M0OygmRxLHAfZzm9jNjkf3WbF1uCya+4PDPVrbfQybk=;
+  b=KNMSy3ecGDIrEsR8yGwth22GyL0itpN3PKHoGVVKQ0kxhBcVL9JfEWPC
+   9Uy7yowLJ06PgiFHpMevqNgQGsGdBPn+Cx0K3bw8sdGajlwv6/8N9cp/1
+   TZzIDqzUCpQnW/wD/nL9dAgySZRTU5GFTrplchwx+v0rNeLfyrnryspJg
+   1FORgz1RpcNBZEI6SQazgai1j/4xq+zthhQegmITcxD3QgrkBQKboHCbt
+   1DOojfAILTG75kjKVifw9vlsfIPkS6B3l1NcQYrNO2uicvrA8KEK7wHcE
+   9F41LuP/1nbFUcSIuaTQlYPupNO0zbDas+A9h6chfTTyUt5lzJngxgDDB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="361668661"
+X-IronPort-AV: E=Sophos;i="6.00,246,1681196400"; 
+   d="scan'208";a="361668661"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 00:06:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="782783457"
+X-IronPort-AV: E=Sophos;i="6.00,246,1681196400"; 
+   d="scan'208";a="782783457"
+Received: from cpeng15-mobl.ccr.corp.intel.com (HELO yhuang6-mobl2.ccr.corp.intel.com) ([10.255.31.216])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 00:06:04 -0700
+From:   Huang Ying <ying.huang@intel.com>
+To:     linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Wei Xu <weixugc@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Rafael J Wysocki <rafael.j.wysocki@intel.com>
+Subject: [RFC 0/4] memory tiering: calculate abstract distance based on ACPI HMAT
+Date:   Fri, 16 Jun 2023 15:05:34 +0800
+Message-Id: <20230616070538.190042-1-ying.huang@intel.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230614084740.1493969-1-linan666@huaweicloud.com> <5c6ff37b-4285-f62a-c910-67401b0b9c1f@huaweicloud.com>
-In-Reply-To: <5c6ff37b-4285-f62a-c910-67401b0b9c1f@huaweicloud.com>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 16 Jun 2023 00:03:53 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW54rgL-b3e-oGPsxAdd4FAJ-eEFTcpkZRi8dNxsuAheow@mail.gmail.com>
-Message-ID: <CAPhsuW54rgL-b3e-oGPsxAdd4FAJ-eEFTcpkZRi8dNxsuAheow@mail.gmail.com>
-Subject: Re: [PATCH 0/3] md/raid10: record rdev/replacement in r10bio
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     linan666@huaweicloud.com, neilb@suse.de,
-        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linan122@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
-        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 8:31=E2=80=AFPM Yu Kuai <yukuai1@huaweicloud.com> w=
-rote:
->
-> Hi,
->
-> =E5=9C=A8 2023/06/14 16:47, linan666@huaweicloud.com =E5=86=99=E9=81=93:
-> > From: Li Nan <linan122@huawei.com>
-> >
-> > Replacement can replace rdev during replacement io pending.
-> > mirror->rdev/replacement might be changed during io pending. Get rdev f=
-rom
-> > it is risky. This patch series record rdev/replacement in r10bio, and g=
-et
-> > rdev from r10bio to fix bugs in normal write. And I want to do
-> > this for each io type later.
->
-> I personally don't like this, do things by half. I'm good with this
-> approch for raid10, but can you send a new version to use this for all
-> io?
+We have the explicit memory tiers framework to manage systems with
+multiple types of memory, e.g., DRAM in DIMM slots and CXL memory
+devices.  Where, same kind of memory devices will be grouped into
+memory types, then put into memory tiers.  To describe the performance
+of a memory type, abstract distance is defined.  Which is in direct
+proportion to the memory latency and inversely proportional to the
+memory bandwidth.  To keep the code as simple as possible, fixed
+abstract distance is used in dax/kmem to describe slow memory such as
+Optane DCPMM.
 
-Agreed. Please send the fix for all types.
+To support more memory types, in this series, we added the abstract
+distance calculation algorithm management mechanism, provided a
+algorithm implementation based on ACPI HMAT, and used the general
+abstract distance calculation interface in dax/kmem driver.  So,
+dax/kmem can support HBM (high bandwidth memory) in addition to the
+original Optane DCPMM.
 
-Thanks,
-Song
+Best Regards,
+Huang, Ying
