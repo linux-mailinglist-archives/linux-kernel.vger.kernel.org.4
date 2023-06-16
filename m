@@ -2,125 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E41C6733730
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 19:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AD04733732
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 19:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345794AbjFPRK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 13:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51890 "EHLO
+        id S1345998AbjFPRMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 13:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345304AbjFPRK0 (ORCPT
+        with ESMTP id S230327AbjFPRME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 13:10:26 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B4B1BE5
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 10:10:25 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id af79cd13be357-7623bd6933eso17802585a.1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 10:10:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686935424; x=1689527424;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=13Ub72LeNXocacDH8iq4dsRSC3PCfVbZC0BT5ktGknQ=;
-        b=K2++xF6Vx0ws0J6uj4X1wisvjM3l1xIveAWOl4e8+ZmaBcxl2KJFMRX1zv2Ry7JpzG
-         9+2RZsQY1ijumTVgctdxPIY1c0QMyWbastHlS0wIXF4T2df1S883+ivLHJbbO+WPr6/T
-         u1kl9G4+vq+KnRvA6kTpb+e9d26pE90sUOQjvp/OlBAy/CbbHrZ+KTRRPX2x2y3KzkWE
-         EpPedQJfPjWcRF5aRfx/5CIvpy1hNquop+wtUSRpk5oWBvzEX5lxD1xIBbQusErwtAq+
-         ns64wLHnszc2Q7Smw/uCWh1uRgT4y41L+S95OJXE15WYXJltPvllZ6SroP5bgIwTUPnL
-         LsVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686935424; x=1689527424;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=13Ub72LeNXocacDH8iq4dsRSC3PCfVbZC0BT5ktGknQ=;
-        b=dcN96Dq3ag3BpvVYP0ekLxbHmRISqqrZT+tUGvdxXL91mbpIEUmFbC/81XUaVzmHMD
-         KuiQID0kpDsWTFErPW7Ar8PPNQWO+TGKPbqSsgHbZddwY/hTZOD9Qhrb5iSct+mUEMkz
-         5drrWIS7TRsJu521uwDT6KSkiPQCBm7DSXjhRHuaM1hujEd82xKd8RydzldI9bbVWfST
-         rn8rGMcF1HVHe4zPng5+CLvo3DOX9IV9DaQyKcNWA8EdHaftTBO4luj1dIgtgLZgB0Y5
-         aJUKN8Vay64KWuola5DvX5nQOwW9WDlNn1cej45BB3Na2yrioSggZ9mY2VwXffXlon3G
-         bckA==
-X-Gm-Message-State: AC+VfDx+gScZUdUTOedIlBdffrcy06o/NOtaQO6pIcmj6ui/zqlVfS0p
-        UXfKijsCCdd9KfKvF+YZhRods8Em520juW8mGhKRow==
-X-Google-Smtp-Source: ACHHUZ6lpFZ09A9IHX3P4ygHt4+nMALCSy4x/x3LBageSe+7wXjEyTwO2TPHfFUg00vHZLl+yvNChqtDn2H/xoOW7GA=
-X-Received: by 2002:a05:6214:1c0a:b0:62d:ddeb:3770 with SMTP id
- u10-20020a0562141c0a00b0062dddeb3770mr8653889qvc.0.1686935424170; Fri, 16 Jun
- 2023 10:10:24 -0700 (PDT)
+        Fri, 16 Jun 2023 13:12:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A38C5;
+        Fri, 16 Jun 2023 10:12:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B896631A0;
+        Fri, 16 Jun 2023 17:12:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDC2AC433C8;
+        Fri, 16 Jun 2023 17:12:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686935521;
+        bh=L5y6zXF08tEbBhI51U9tyt9pakLlguN2cCvEZbd7tFo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fvlJYYh9UqgtrtbfwEHUD6d5Cxn22isE9KJvEunCabqSPiC0DwxlpKh62jWvavSjV
+         I2tvLb87GVwCfNDmbHdssss04W5FcmlKkru/Uicf4Hi8e4T3sRO8uQBYLb6ZDb1Z1f
+         G+5EQcBxalrp4c6jNaavq//anhGDXesOZM1qAcidDomfBmNPPNRUMTwcX19Iv+vYXW
+         0F0hC2uhm0vMxWcP2YiVGuHr3KuUGfqoRT64oPXlcd5GSk5F1wEze/Ui2KIQeiVut8
+         IS+83Ev7P0h2wJc2e5hhqitfyge2zKiqBUkAR1s586XRPtpgIcLD1skUhnnKLxUq/o
+         2Rh3ix9zoIv5A==
+Date:   Fri, 16 Jun 2023 10:11:59 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Andreas Hindborg <nmi@metaspace.dk>,
+        linux-kbuild@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        =?iso-8859-1?Q?Fran=E7ois?= Valenduc <francoisvalenduc@gmail.com>,
+        Alexandru Radovici <msg4alex@gmail.com>,
+        Matthew Leach <dev@mattleach.net>
+Subject: Re: [PATCH v2 05/11] kbuild: rust_is_available: add check for
+ `bindgen` invocation
+Message-ID: <20230616171159.GD3474164@dev-arch.thelio-3990X>
+References: <20230616001631.463536-1-ojeda@kernel.org>
+ <20230616001631.463536-6-ojeda@kernel.org>
 MIME-Version: 1.0
-References: <20230602161246.1855448-1-amit.pundir@linaro.org>
- <358c69ad-fa8a-7386-fe75-92369883ee48@leemhuis.info> <0f6c9dcb-b7f6-fff9-6bed-f4585ea8e487@linaro.org>
- <CAMi1Hd3Cv1i06NhpY6Jqu7OvMpOdzTj6nTEMJNWLrMwMLsugZA@mail.gmail.com>
- <CAMi1Hd0=KV7k82ARadF45nqX+Cv6zPLCxfDvOyAPeXiFd8jpVA@mail.gmail.com>
- <0ec6c988-d678-c96c-a7a2-af38e6701404@linaro.org> <CAMi1Hd33_Ccxkf9C5_QBO3tvOZcGnYh+_CKcACUtoY2qAuOzRA@mail.gmail.com>
- <12d6b687-5e5a-bd7c-ff5c-007a74753edb@linaro.org>
-In-Reply-To: <12d6b687-5e5a-bd7c-ff5c-007a74753edb@linaro.org>
-From:   Amit Pundir <amit.pundir@linaro.org>
-Date:   Fri, 16 Jun 2023 22:39:47 +0530
-Message-ID: <CAMi1Hd2H2aA6EYp5-46dWe0eu0_hAWUumoQbnk7WR0q9bhppog@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: qcom: sdm845-db845c: Move LVS regulator nodes up
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        Mark Brown <broonie@kernel.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        dt <devicetree@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230616001631.463536-6-ojeda@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Jun 16, 2023 at 02:16:25AM +0200, Miguel Ojeda wrote:
+> `scripts/rust_is_available.sh` calls `bindgen` with a special
+> header in order to check whether the `libclang` version in use
+> is suitable.
+> 
+> However, the invocation itself may fail if, for instance, `bindgen`
+> cannot locate `libclang`. This is fine for Kconfig (since the
+> script will still fail and therefore disable Rust as it should),
+> but it is pretty confusing for users of the `rustavailable` target
+> given the error will be unrelated:
+> 
+>     ./scripts/rust_is_available.sh: 21: arithmetic expression: expecting primary: "100000 *  + 100 *  + "
+>     make: *** [Makefile:1816: rustavailable] Error 2
+> 
+> Instead, run the `bindgen` invocation independently in a previous
+> step, saving its output and return code. If it fails, then show
+> the user a proper error message. Otherwise, continue as usual
+> with the saved output.
+> 
+> Since the previous patch we show a reference to the docs, and
+> the docs now explain how `bindgen` looks for `libclang`,
+> thus the error message can leverage the documentation, avoiding
+> duplication here (and making users aware of the setup guide in
+> the documentation).
+> 
+> Reported-by: Nick Desaulniers <ndesaulniers@google.com>
+> Link: https://lore.kernel.org/rust-for-linux/CAKwvOdm5JT4wbdQQYuW+RT07rCi6whGBM2iUAyg8A1CmLXG6Nw@mail.gmail.com/
+> Reported-by: François Valenduc <francoisvalenduc@gmail.com>
+> Closes: https://github.com/Rust-for-Linux/linux/issues/934
+> Reported-by: Alexandru Radovici <msg4alex@gmail.com>
+> Closes: https://github.com/Rust-for-Linux/linux/pull/921
+> Reported-by: Matthew Leach <dev@mattleach.net>
+> Closes: https://lore.kernel.org/rust-for-linux/20230507084116.1099067-1-dev@mattleach.net/
+> Fixes: 78521f3399ab ("scripts: add `rust_is_available.sh`")
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
-On Fri, 16 Jun 2023 at 13:57, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
->
-> So you have interconnect as module - this is not a supported setup. It
-> might work with if all the modules are loaded very early or might not.
-> Pinctrl is another driver which should be built-in.
->
-> With your defconfig I see regular issue - console and system dies
-> because of lack of interconnects, most likely. I don't see your WARNs -
-> I just see usual hang.
->
-> See:
-> https://lore.kernel.org/all/20221021032702.1340963-1-krzysztof.kozlowski@linaro.org/
->
-> If you want them to really be modules, then you need to fix all the
-> dependencies (SOFTDEP?), probe ordering glitches. It's not a problem of
-> DTS. Just because something can be built as module, does not mean it
-> will work. We don't test it, we don't work with them as modules.
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-I do somewhat agree with most of your arguments but not this one. If a
-driver doesn't work as a module then it shouldn't be allowed to build
-as a module. I took a quick look at the history of the interconnect
-driver and it is tristate from the beginning. And not converted to a
-modular build later-on like some of the other drivers to support GKI.
-
->
-> It's kind of the same as here:
-> https://lore.kernel.org/all/ac328b6a-a8e2-873d-4015-814cb4f5588e@canonical.com/
->
-> I understand that we might have here regression, if these were working
-> as modules, but I don't think we ever really committed to it. We can as
-> well make it non-module to solve the regression.
-
-Sure. But since v6.4 is around the corner, can we merge this
-workaround for now, while a proper fix is being worked upon.
-
-Regards,
-Amit Pundir
+> ---
+>  scripts/rust_is_available.sh | 22 +++++++++++++++++++++-
+>  1 file changed, 21 insertions(+), 1 deletion(-)
+> 
+> diff --git a/scripts/rust_is_available.sh b/scripts/rust_is_available.sh
+> index 6b8131d5b547..1bdff4472cbe 100755
+> --- a/scripts/rust_is_available.sh
+> +++ b/scripts/rust_is_available.sh
+> @@ -106,8 +106,28 @@ if [ "$rust_bindings_generator_cversion" -gt "$rust_bindings_generator_min_cvers
+>  fi
+>  
+>  # Check that the `libclang` used by the Rust bindings generator is suitable.
+> +#
+> +# In order to do that, first invoke `bindgen` to get the `libclang` version
+> +# found by `bindgen`. This step may already fail if, for instance, `libclang`
+> +# is not found, thus inform the user in such a case.
+> +bindgen_libclang_output=$( \
+> +	LC_ALL=C "$BINDGEN" $(dirname $0)/rust_is_available_bindgen_libclang.h 2>&1 >/dev/null
+> +) || bindgen_libclang_code=$?
+> +if [ -n "$bindgen_libclang_code" ]; then
+> +	echo >&2 "***"
+> +	echo >&2 "*** Running '$BINDGEN' to check the libclang version (used by the Rust"
+> +	echo >&2 "*** bindings generator) failed with code $bindgen_libclang_code. This may be caused by"
+> +	echo >&2 "*** a failure to locate libclang. See output and docs below for details:"
+> +	echo >&2 "***"
+> +	echo >&2 "$bindgen_libclang_output"
+> +	echo >&2 "***"
+> +	exit 1
+> +fi
+> +
+> +# `bindgen` returned successfully, thus use the output to check that the version
+> +# of the `libclang` found by the Rust bindings generator is suitable.
+>  bindgen_libclang_version=$( \
+> -	LC_ALL=C "$BINDGEN" $(dirname $0)/rust_is_available_bindgen_libclang.h 2>&1 >/dev/null \
+> +	echo "$bindgen_libclang_output" \
+>  		| grep -F 'clang version ' \
+>  		| grep -oE '[0-9]+\.[0-9]+\.[0-9]+' \
+>  		| head -n 1 \
+> -- 
+> 2.41.0
+> 
