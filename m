@@ -2,208 +2,348 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B83587326DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 07:53:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B6B7326DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 07:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241272AbjFPFxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 01:53:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41394 "EHLO
+        id S241440AbjFPFxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 01:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbjFPFxF (ORCPT
+        with ESMTP id S241268AbjFPFxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 01:53:05 -0400
+        Fri, 16 Jun 2023 01:53:08 -0400
 Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F212D58
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807162D5A
         for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 22:53:03 -0700 (PDT)
 Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 88E131A06B6;
-        Fri, 16 Jun 2023 07:43:04 +0200 (CEST)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 6EE931A033D;
+        Fri, 16 Jun 2023 07:43:05 +0200 (CEST)
 Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 260A41A05B8;
-        Fri, 16 Jun 2023 07:43:04 +0200 (CEST)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 0D9F61A05B8;
+        Fri, 16 Jun 2023 07:43:05 +0200 (CEST)
 Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 21477181D0C0;
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 094A61820F58;
         Fri, 16 Jun 2023 13:43:03 +0800 (+08)
 From:   Alison Wang <alison.wang@nxp.com>
 To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
 Cc:     leoyang.li@nxp.com, xuelin.shi@nxp.com, xiaofeng.ren@nxp.com,
         feng.guo@nxp.com, Alison Wang <alison.wang@nxp.com>
-Subject: [PATCH 3/8] ethosu: Add inference type option for model and op
-Date:   Fri, 16 Jun 2023 13:59:08 +0800
-Message-Id: <20230616055913.2360-4-alison.wang@nxp.com>
+Subject: [PATCH 4/8] ethosu: Add suspend/resume power management
+Date:   Fri, 16 Jun 2023 13:59:09 +0800
+Message-Id: <20230616055913.2360-5-alison.wang@nxp.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230616055913.2360-1-alison.wang@nxp.com>
 References: <20230616055913.2360-1-alison.wang@nxp.com>
 X-Virus-Scanned: ClamAV using ClamSMTP
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds inference type option for model and op.
+This patch adds suspend and resume power management support. The
+corresponding message will be sent to Cortex-M core via RPMsg protocol.
 
+Signed-off-by: Alison Wang <alison.wang@nxp.com>
 Signed-off-by: Feng Guo <feng.guo@nxp.com>
 Reviewed-by: Peng Fan <peng.fan@nxp.com>
 ---
- drivers/firmware/ethosu/ethosu_core_interface.h |  6 +++++-
- drivers/firmware/ethosu/ethosu_inference.c      | 14 +++++++++++++-
- drivers/firmware/ethosu/ethosu_inference.h      |  1 +
- drivers/firmware/ethosu/ethosu_rpmsg.c          |  4 +++-
- drivers/firmware/ethosu/ethosu_rpmsg.h          |  3 ++-
- drivers/firmware/ethosu/uapi/ethosu.h           | 11 ++++++++++-
- 6 files changed, 34 insertions(+), 5 deletions(-)
+ drivers/firmware/ethosu/ethosu_buffer.c       |  3 ++
+ .../firmware/ethosu/ethosu_core_interface.h   | 14 ++++++++
+ drivers/firmware/ethosu/ethosu_device.c       | 36 +++++++++++++++++++
+ drivers/firmware/ethosu/ethosu_device.h       | 10 ++++++
+ drivers/firmware/ethosu/ethosu_driver.c       | 29 +++++++++++++++
+ drivers/firmware/ethosu/ethosu_rpmsg.c        | 30 ++++++++++++++++
+ drivers/firmware/ethosu/ethosu_rpmsg.h        | 11 ++++++
+ 7 files changed, 133 insertions(+)
 
+diff --git a/drivers/firmware/ethosu/ethosu_buffer.c b/drivers/firmware/ethosu/ethosu_buffer.c
+index 43a433355f30..c8aa8031a8de 100644
+--- a/drivers/firmware/ethosu/ethosu_buffer.c
++++ b/drivers/firmware/ethosu/ethosu_buffer.c
+@@ -222,6 +222,9 @@ int ethosu_buffer_create(struct ethosu_device *edev,
+ 	struct ethosu_buffer *buf;
+ 	int ret = -ENOMEM;
+ 
++	if (!capacity)
++		return -EINVAL;
++
+ 	buf = devm_kzalloc(edev->dev, sizeof(*buf), GFP_KERNEL);
+ 	if (!buf)
+ 		return -ENOMEM;
 diff --git a/drivers/firmware/ethosu/ethosu_core_interface.h b/drivers/firmware/ethosu/ethosu_core_interface.h
-index ef63c3b55352..b60508e4792f 100644
+index b60508e4792f..9267e96aec9b 100644
 --- a/drivers/firmware/ethosu/ethosu_core_interface.h
 +++ b/drivers/firmware/ethosu/ethosu_core_interface.h
-@@ -35,13 +35,16 @@ namespace EthosU {
- #define ETHOSU_CORE_BUFFER_MAX 16
+@@ -60,6 +60,8 @@ enum ethosu_core_msg_type {
+ 	ETHOSU_CORE_MSG_VERSION_RSP,
+ 	ETHOSU_CORE_MSG_CAPABILITIES_REQ,
+ 	ETHOSU_CORE_MSG_CAPABILITIES_RSP,
++	ETHOSU_CORE_MSG_POWER_REQ,
++	ETHOSU_CORE_MSG_POWER_RSP,
+ 	ETHOSU_CORE_MSG_MAX
+ };
  
- /** Maximum number of PMU counters to be returned for inference */
--#define ETHOSU_CORE_PMU_MAX 8
-+#define ETHOSU_CORE_PMU_MAX 4
+@@ -161,6 +163,18 @@ struct ethosu_core_msg_capabilities_rsp {
+ 	uint32_t custom_dma;
+ };
  
- #define ETHOSU_CORE_MSG_MAGIC 0x41457631
- #define ETHOSU_CORE_MSG_VERSION_MAJOR 0
- #define ETHOSU_CORE_MSG_VERSION_MINOR 2
- #define ETHOSU_CORE_MSG_VERSION_PATCH 0
- 
-+#define ETHOSU_CORE_INFERENCE_MODEL 0
-+#define ETHOSU_CORE_INFERENCE_OP    1
++enum ethosu_core_power_req_type {
++	ETHOSU_CORE_POWER_REQ_SUSPEND = 0,
++	ETHOSU_CORE_POWER_REQ_RESUME
++};
 +
- /**
-  * enum ethosu_core_msg_type - Message types
-  *
-@@ -107,6 +110,7 @@ struct ethosu_core_inference_req {
- 	struct ethosu_core_buffer network;
- 	uint8_t                   pmu_event_config[ETHOSU_CORE_PMU_MAX];
- 	uint32_t                  pmu_cycle_counter_enable;
-+	uint32_t                  inference_type;
- };
- 
- struct ethosu_core_inference_rsp {
-diff --git a/drivers/firmware/ethosu/ethosu_inference.c b/drivers/firmware/ethosu/ethosu_inference.c
-index 853947a2334e..b5e94e19bce0 100644
---- a/drivers/firmware/ethosu/ethosu_inference.c
-+++ b/drivers/firmware/ethosu/ethosu_inference.c
-@@ -92,7 +92,8 @@ static int ethosu_inference_send(struct ethosu_inference *inf)
- 				       inf->net->buf,
- 				       inf->pmu_event_config,
- 				       ETHOSU_PMU_EVENT_MAX,
--				       inf->pmu_cycle_counter_enable);
-+				       inf->pmu_cycle_counter_enable,
-+				       inf->inference_type);
- 	if (ret)
- 		return ret;
- 
-@@ -233,6 +234,17 @@ int ethosu_inference_create(struct ethosu_device *edev,
- 	inf = devm_kzalloc(edev->dev, sizeof(*inf), GFP_KERNEL);
- 	if (!inf)
- 		return -ENOMEM;
-+	switch (uapi->inference_type) {
-+	case ETHOSU_UAPI_INFERENCE_MODEL:
-+		inf->inference_type = ETHOSU_CORE_INFERENCE_MODEL;
-+		break;
-+	case ETHOSU_UAPI_INFERENCE_OP:
-+		inf->inference_type = ETHOSU_CORE_INFERENCE_OP;
-+		break;
-+	default:
-+		inf->inference_type = ETHOSU_CORE_INFERENCE_MODEL;
-+		break;
-+	}
- 
- 	inf->edev = edev;
- 	inf->net = net;
-diff --git a/drivers/firmware/ethosu/ethosu_inference.h b/drivers/firmware/ethosu/ethosu_inference.h
-index 07370ca01f22..8414eadbda92 100644
---- a/drivers/firmware/ethosu/ethosu_inference.h
-+++ b/drivers/firmware/ethosu/ethosu_inference.h
-@@ -74,6 +74,7 @@ struct ethosu_inference {
- 	uint32_t                pmu_event_count[ETHOSU_PMU_EVENT_MAX];
- 	uint32_t                pmu_cycle_counter_enable;
- 	uint64_t                pmu_cycle_counter_count;
-+	uint32_t                inference_type;
- 	struct list_head        list;
- };
- 
-diff --git a/drivers/firmware/ethosu/ethosu_rpmsg.c b/drivers/firmware/ethosu/ethosu_rpmsg.c
-index cb7e4556f635..e4cf398468e4 100644
---- a/drivers/firmware/ethosu/ethosu_rpmsg.c
-+++ b/drivers/firmware/ethosu/ethosu_rpmsg.c
-@@ -107,7 +107,8 @@ int ethosu_rpmsg_inference(struct ethosu_rpmsg *erp,
- 			   struct ethosu_buffer *network,
- 			   uint8_t *pmu_event_config,
- 			   uint8_t pmu_event_config_count,
--			   uint8_t pmu_cycle_counter_enable)
-+			   uint8_t pmu_cycle_counter_enable,
-+			   uint32_t inference_type)
- {
- 	struct ethosu_core_msg msg = {
- 		.magic  = ETHOSU_CORE_MSG_MAGIC,
-@@ -132,6 +133,7 @@ int ethosu_rpmsg_inference(struct ethosu_rpmsg *erp,
- 	req.ifm_count = ifm_count;
- 	req.ofm_count = ofm_count;
- 	req.pmu_cycle_counter_enable = pmu_cycle_counter_enable;
-+	req.inference_type = inference_type;
- 
- 	for (i = 0; i < ifm_count; i++)
- 		ethosu_core_set_size(ifm[i], &req.ifm[i]);
-diff --git a/drivers/firmware/ethosu/ethosu_rpmsg.h b/drivers/firmware/ethosu/ethosu_rpmsg.h
-index dd08e0d7945b..a4a639997a26 100644
---- a/drivers/firmware/ethosu/ethosu_rpmsg.h
-+++ b/drivers/firmware/ethosu/ethosu_rpmsg.h
-@@ -63,7 +63,8 @@ int ethosu_rpmsg_inference(struct ethosu_rpmsg *erp,
- 			   struct ethosu_buffer *network,
- 			   uint8_t *pmu_event_config,
- 			   uint8_t pmu_event_config_count,
--			   uint8_t pmu_cycle_counter_enable
-+			   uint8_t pmu_cycle_counter_enable,
-+			   uint32_t inference_type
- 			   );
- 
- int ethosu_rpmsg_init(struct ethosu_rpmsg *erp,
-diff --git a/drivers/firmware/ethosu/uapi/ethosu.h b/drivers/firmware/ethosu/uapi/ethosu.h
-index 903316dff7b3..c4a0df67336c 100644
---- a/drivers/firmware/ethosu/uapi/ethosu.h
-+++ b/drivers/firmware/ethosu/uapi/ethosu.h
-@@ -62,7 +62,7 @@ namespace EthosU {
- #define ETHOSU_FD_MAX                   16
- 
- /* Maximum number of PMUs available */
--#define ETHOSU_PMU_EVENT_MAX             8
-+#define ETHOSU_PMU_EVENT_MAX             4
- 
- /****************************************************************************
-  * Types
-@@ -173,6 +173,14 @@ struct ethosu_uapi_device_capabilities {
- 	__u32                            driver_major_rev;
- };
- 
 +/**
-+ * enum ethosu_uapi_inference_type - Inference type
++ * struct ethosu_core_power_req - Message power request
 + */
-+enum ethosu_uapi_inference_type {
-+	ETHOSU_UAPI_INFERENCE_MODEL = 0,
-+	ETHOSU_UAPI_INFERENCE_OP
++struct ethosu_core_power_req {
++	enum ethosu_core_power_req_type type;
 +};
 +
  /**
-  * struct ethosu_uapi_inference_create - Create network request
-  * @ifm_count:		Number of IFM file descriptors
-@@ -185,6 +193,7 @@ struct ethosu_uapi_inference_create {
- 	__u32                         ifm_fd[ETHOSU_FD_MAX];
- 	__u32                         ofm_count;
- 	__u32                         ofm_fd[ETHOSU_FD_MAX];
-+	enum ethosu_uapi_inference_type inference_type;
- 	struct ethosu_uapi_pmu_config pmu_config;
+  * enum ethosu_core_msg_err_type - Error types
+  */
+diff --git a/drivers/firmware/ethosu/ethosu_device.c b/drivers/firmware/ethosu/ethosu_device.c
+index b2d4737080ac..1627f25c8a95 100644
+--- a/drivers/firmware/ethosu/ethosu_device.c
++++ b/drivers/firmware/ethosu/ethosu_device.c
+@@ -38,6 +38,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/of_reserved_mem.h>
++#include <linux/remoteproc.h>
+ #include <linux/uaccess.h>
+ #include <linux/slab.h>
+ 
+@@ -49,6 +50,8 @@
+ 
+ #define CAPABILITIES_RESP_TIMEOUT_MS 2000
+ 
++#define ETHOSU_FIRMWARE_NAME "ethosu_firmware"
++
+ /****************************************************************************
+  * Types
+  ****************************************************************************/
+@@ -161,6 +164,9 @@ static int ethosu_handle_msg(struct ethosu_device *edev, void *data)
+ 	case ETHOSU_CORE_MSG_PONG:
+ 		dev_info(edev->dev, "Msg: Pong\n");
+ 		break;
++	case ETHOSU_CORE_MSG_POWER_RSP:
++		dev_info(edev->dev, "Msg: Power response\n");
++		break;
+ 	case ETHOSU_CORE_MSG_INFERENCE_RSP:
+ 		if (header->length != sizeof(struct ethosu_core_inference_rsp)) {
+ 			dev_warn(edev->dev,
+@@ -243,11 +249,41 @@ static int ethosu_open(struct inode *inode,
+ {
+ 	struct ethosu_device *edev =
+ 		container_of(inode->i_cdev, struct ethosu_device, cdev);
++	phandle rproc_phandle;
++	struct rproc *rproc;
++	int ret = 0;
+ 
+ 	file->private_data = edev;
+ 
+ 	dev_info(edev->dev, "Opening device node.\n");
+ 
++	if (of_property_read_u32(edev->dev->of_node, "fsl,cm33-proc",
++				 &rproc_phandle)) {
++		dev_err(edev->dev, "could not get rproc phandle\n");
++		return -ENODEV;
++	}
++
++	rproc = rproc_get_by_phandle(rproc_phandle);
++	if (!rproc) {
++		dev_err(edev->dev, "could not get rproc handle\n");
++		return -EINVAL;
++	}
++
++	ret = rproc_set_firmware(rproc, ETHOSU_FIRMWARE_NAME);
++
++	if (!ret && atomic_read(&rproc->power) == 0) {
++		init_completion(&edev->erp.rpmsg_ready);
++		ret = rproc_boot(rproc);
++		if (ret)
++			dev_err(edev->dev, "could not boot a remote processor\n");
++		else
++			wait_for_completion_interruptible(&edev->erp.rpmsg_ready);
++	} else {
++		dev_err(edev->dev, "can't change firmware or remote processor is running\n");
++	}
++
++	edev->open = true;
++
+ 	return nonseekable_open(inode, file);
+ }
+ 
+diff --git a/drivers/firmware/ethosu/ethosu_device.h b/drivers/firmware/ethosu/ethosu_device.h
+index 3943c8df8f28..da470241b6a1 100644
+--- a/drivers/firmware/ethosu/ethosu_device.h
++++ b/drivers/firmware/ethosu/ethosu_device.h
+@@ -51,6 +51,7 @@ struct ethosu_device {
+ 	struct ethosu_rpmsg   erp;
+ 	struct list_head      capabilities_list;
+ 	struct list_head      inference_list;
++	bool                  open;
  };
  
+ /**
+@@ -83,4 +84,13 @@ int ethosu_dev_init(struct ethosu_device *edev,
+  */
+ void ethosu_dev_deinit(struct ethosu_device *edev);
+ 
++/**
++ * ethosu_suspend() - Suspend the device
++ */
++int ethosu_suspend(struct device *dev);
++/**
++ * ethosu_resume() - Resume the device
++ */
++int ethosu_resume(struct device *dev);
++
+ #endif /* ETHOSU_DEVICE_H */
+diff --git a/drivers/firmware/ethosu/ethosu_driver.c b/drivers/firmware/ethosu/ethosu_driver.c
+index 27931e9aa97c..d3306ef625ae 100644
+--- a/drivers/firmware/ethosu/ethosu_driver.c
++++ b/drivers/firmware/ethosu/ethosu_driver.c
+@@ -27,6 +27,7 @@
+ #include <linux/of_address.h>
+ #include <linux/platform_device.h>
+ 
++#include "ethosu_core_interface.h"
+ #include "ethosu_device.h"
+ 
+ /****************************************************************************
+@@ -101,6 +102,33 @@ static int ethosu_pdev_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++int ethosu_suspend(struct device *dev)
++{
++	struct ethosu_device *edev = dev->driver_data;
++	int ret = 0;
++
++	if (edev->open)
++		ret = ethosu_rpmsg_power_request(&edev->erp, ETHOSU_CORE_POWER_REQ_SUSPEND);
++
++	return ret;
++}
++
++int ethosu_resume(struct device *dev)
++{
++	struct ethosu_device *edev = dev->driver_data;
++	int ret = 0;
++
++	if (edev->open)
++		ret = ethosu_rpmsg_power_request(&edev->erp, ETHOSU_CORE_POWER_REQ_RESUME);
++
++	return ret;
++}
++
++struct dev_pm_ops ethosu_pm_ops = {
++	.suspend = ethosu_suspend,
++	.resume = ethosu_resume,
++};
++
+ static const struct of_device_id ethosu_pdev_match[] = {
+ 	{ .compatible = "arm,ethosu" },
+ 	{ /* Sentinel */ },
+@@ -115,6 +143,7 @@ static struct platform_driver ethosu_pdev_driver = {
+ 		.name           = ETHOSU_DRIVER_NAME,
+ 		.owner          = THIS_MODULE,
+ 		.of_match_table = of_match_ptr(ethosu_pdev_match),
++		.pm		= &ethosu_pm_ops,
+ 	},
+ };
+ 
+diff --git a/drivers/firmware/ethosu/ethosu_rpmsg.c b/drivers/firmware/ethosu/ethosu_rpmsg.c
+index e4cf398468e4..a0320b8407d1 100644
+--- a/drivers/firmware/ethosu/ethosu_rpmsg.c
++++ b/drivers/firmware/ethosu/ethosu_rpmsg.c
+@@ -98,6 +98,35 @@ int ethosu_rpmsg_capabilities_request(struct ethosu_rpmsg *erp, void *user_arg)
+ 	return 0;
+ }
+ 
++int ethosu_rpmsg_power_request(struct ethosu_rpmsg *erp,
++			       enum ethosu_core_power_req_type power_type)
++{
++	struct ethosu_core_msg msg = {
++		.magic  = ETHOSU_CORE_MSG_MAGIC,
++		.type   = ETHOSU_CORE_MSG_POWER_REQ,
++		.length = sizeof(struct ethosu_core_power_req)
++	};
++	struct ethosu_core_power_req req;
++	struct rpmsg_device *rpdev = erp->rpdev;
++	uint8_t data[sizeof(struct ethosu_core_msg) +
++		sizeof(struct ethosu_core_power_req)];
++	int ret;
++
++	req.type = power_type;
++	memcpy(data, &msg, sizeof(struct ethosu_core_msg));
++	memcpy(data + sizeof(struct ethosu_core_msg), &req,
++	       sizeof(struct ethosu_core_power_req));
++
++	ret = rpmsg_send(rpdev->ept, (void *)&data,
++			 sizeof(struct ethosu_core_msg) +
++			 sizeof(struct ethosu_core_power_req));
++	if (ret) {
++		dev_err(&rpdev->dev, "rpmsg_send failed: %d\n", ret);
++		return ret;
++	}
++	return 0;
++}
++
+ int ethosu_rpmsg_inference(struct ethosu_rpmsg *erp,
+ 			   void *user_arg,
+ 			   uint32_t ifm_count,
+@@ -193,6 +222,7 @@ static int ethosu_rpmsg_probe(struct rpmsg_device *rpdev)
+ 	if (ret) {
+ 		dev_err(&rpdev->dev, "rpmsg_send failed: %d\n", ret);
+ 	}
++	complete(&grp->rpmsg_ready);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/firmware/ethosu/ethosu_rpmsg.h b/drivers/firmware/ethosu/ethosu_rpmsg.h
+index a4a639997a26..cee3d96c7895 100644
+--- a/drivers/firmware/ethosu/ethosu_rpmsg.h
++++ b/drivers/firmware/ethosu/ethosu_rpmsg.h
+@@ -7,6 +7,8 @@
+ #define ETHOSU_RPMSG_H
+ 
+ #include <linux/types.h>
++#include <linux/completion.h>
++#include "ethosu_core_interface.h"
+ 
+ struct device;
+ struct ethosu_buffer;
+@@ -19,6 +21,7 @@ struct ethosu_rpmsg {
+ 	struct rpmsg_device	*rpdev;
+ 	ethosu_rpmsg_cb		callback;
+ 	void			*user_arg;
++	struct completion       rpmsg_ready;
+ };
+ /**
+  * ethosu_rpmsg_ping() - Send ping message
+@@ -49,6 +52,14 @@ int ethosu_rpmsg_version_request(struct ethosu_rpmsg *erp);
+ int ethosu_rpmsg_capabilities_request(struct ethosu_rpmsg *erp,
+ 				      void *user_arg);
+ 
++/**
++ * ethosu_rpmsg_power_request - Send power request
++ *
++ * Return: 0 on success, else error code
++ */
++int ethosu_rpmsg_power_request(struct ethosu_rpmsg *erp,
++			       enum ethosu_core_power_req_type power_type);
++
+ /**
+  * ethosu_rpmsg_inference() - Send inference
+  *
 -- 
 2.17.1
 
