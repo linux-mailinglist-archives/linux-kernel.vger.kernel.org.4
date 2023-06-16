@@ -2,120 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FDDF732A03
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC5F27329FA
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245717AbjFPIhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 04:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38438 "EHLO
+        id S245364AbjFPIhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 04:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245619AbjFPIho (ORCPT
+        with ESMTP id S242697AbjFPIg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 04:37:44 -0400
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30672194;
-        Fri, 16 Jun 2023 01:37:41 -0700 (PDT)
-Received: from [167.98.155.120] (helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1qA4xg-0000Wd-Io; Fri, 16 Jun 2023 10:37:40 +0200
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 2/2] hwrng: st - keep clock enabled while hwrng is registered
-Date:   Fri, 16 Jun 2023 09:36:18 +0100
-Message-Id: <20230616083618.1320824-3-martin@kaiser.cx>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230616083618.1320824-1-martin@kaiser.cx>
-References: <20230616083618.1320824-1-martin@kaiser.cx>
+        Fri, 16 Jun 2023 04:36:58 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57EE8ED;
+        Fri, 16 Jun 2023 01:36:57 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-666729f9093so564329b3a.1;
+        Fri, 16 Jun 2023 01:36:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686904617; x=1689496617;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=nUlEB85EedtTo7OUJk0cAfjzVwwMnBPTvHZqfkQyPPQ=;
+        b=VDDnrIpw3pzhevob8HGkFgTUouneIhx+sEiJKDzhrJ02OIZnMMBuWDmwfeUh9M0z3Z
+         JfcMSiUuJW/htSld08DMgr1rZ+oL/rA/miIF6T3cZYs0Ut4TnEpOJbW+xmm9eMDam9bm
+         Ba8rS/Q7IBwFFWjwXmCKgpAqJyLQcKuW2qwDDbLmM5EGhRhtkFwbO+X+W5cYjhWrZFA1
+         jvBC6tuTv5JBnApGykloAtYOi++oajLeLIgdfYUs92GI11FNhNkbd444Zc+iSMB7K0Bs
+         +ORiQEdCGZ+n2XfO7J0qCu5xaBjKtXB5f3+5OuUg1zKU8DG3+b5s2rIMEgrsIIozP7fZ
+         GV5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686904617; x=1689496617;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nUlEB85EedtTo7OUJk0cAfjzVwwMnBPTvHZqfkQyPPQ=;
+        b=PIg20hdIxd/7NNDmDVbSNwvYiIorVmOrM5K/0tJ//Y7DqmOMnS7iE1UUJzRBxxhLsH
+         t4+OBQxMJ2dRsT5NXM9jvBKVVZKFKVY5MyeEeuufhaqXPPACdxKSPVEsc7bvwy2InmNo
+         65MRHLl3GFXhcF8EH2RcLv0eeyS23TssKq6RZoRiyTWQgtYyTQI9btFkUagDOQbu123F
+         UFH87SmB3hY56plnMXOPNfkN+vKEpON8A/KWeZb4LxlRXAp9cMg66k8olEO6Par+0GPB
+         rKIRQ5CvxFGxEh1cxHZ+qxIk5foLtQ+zLUX+vQR563rlkO6dmLiJr/dmVQz+q9LXD/QB
+         YFqA==
+X-Gm-Message-State: AC+VfDyczOh3VN7+dCU01yEa4SHGvlGm24HBNUsRJieOIUg5DdouxeP3
+        9rvgLl2SdH/4xEDlinW8nKc=
+X-Google-Smtp-Source: ACHHUZ6nqK4iJUI8WPqvd41ASoWrx39rLHYtAhosJEBQ+9LNfrs4NjOhNzdcaUXV5CkIH3x0fpgH6Q==
+X-Received: by 2002:a05:6a00:1515:b0:658:8eae:a8de with SMTP id q21-20020a056a00151500b006588eaea8demr2130852pfu.4.1686904616766;
+        Fri, 16 Jun 2023 01:36:56 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 26-20020a63175a000000b0053f3797fc4asm13966589pgx.0.2023.06.16.01.36.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Jun 2023 01:36:56 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <df28b348-28c4-a1ef-1d7e-46a60911ebc4@roeck-us.net>
+Date:   Fri, 16 Jun 2023 01:36:54 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [v4,2/2] usb: typec: tcpm: add get max power support
+Content-Language: en-US
+To:     Frank Wang <frank.wang@rock-chips.com>,
+        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        sebastian.reichel@collabora.com, heiko@sntech.de
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
+        william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
+        yubing.zhang@rock-chips.com, wmc@rock-chips.com
+References: <20230616075241.27690-1-frank.wang@rock-chips.com>
+ <20230616075241.27690-2-frank.wang@rock-chips.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230616075241.27690-2-frank.wang@rock-chips.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The st-rng driver uses devres to register itself with the hwrng core,
-the driver will be unregistered from hwrng when its device goes out of
-scope. This happens after the driver's remove function is called.
+On 6/16/23 00:52, Frank Wang wrote:
+> Traverse fixed pdos to calculate the maximum power that the charger
+> can provide, and it can be get by POWER_SUPPLY_PROP_INPUT_POWER_LIMIT
+> property.
+> 
+> Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
 
-However, st-rng's clock is disabled in the remove function. There's a
-short timeframe where st-rng is still registered with the hwrng core
-although its clock is disabled. I suppose the clock must be active to
-access the hardware and serve requests from the hwrng core.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Switch to devm_clk_get_enabled and let devres handle both clock and hwrng
-registration. This avoids the race condition.
-
-Fixes: 3e75241be808 ("hwrng: drivers - Use device-managed registration API")
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
----
- drivers/char/hw_random/st-rng.c | 18 +-----------------
- 1 file changed, 1 insertion(+), 17 deletions(-)
-
-diff --git a/drivers/char/hw_random/st-rng.c b/drivers/char/hw_random/st-rng.c
-index 15ba1e6fae4d..7a4e439d34d7 100644
---- a/drivers/char/hw_random/st-rng.c
-+++ b/drivers/char/hw_random/st-rng.c
-@@ -42,7 +42,6 @@
- 
- struct st_rng_data {
- 	void __iomem	*base;
--	struct clk	*clk;
- 	struct hwrng	ops;
- };
- 
-@@ -85,19 +84,14 @@ static int st_rng_probe(struct platform_device *pdev)
- 	if (IS_ERR(base))
- 		return PTR_ERR(base);
- 
--	clk = devm_clk_get(&pdev->dev, NULL);
-+	clk = devm_clk_get_enabled(&pdev->dev, NULL);
- 	if (IS_ERR(clk))
- 		return PTR_ERR(clk);
- 
--	ret = clk_prepare_enable(clk);
--	if (ret)
--		return ret;
--
- 	ddata->ops.priv	= (unsigned long)ddata;
- 	ddata->ops.read	= st_rng_read;
- 	ddata->ops.name	= pdev->name;
- 	ddata->base	= base;
--	ddata->clk	= clk;
- 
- 	dev_set_drvdata(&pdev->dev, ddata);
- 
-@@ -113,15 +107,6 @@ static int st_rng_probe(struct platform_device *pdev)
- 	return 0;
- }
- 
--static int st_rng_remove(struct platform_device *pdev)
--{
--	struct st_rng_data *ddata = dev_get_drvdata(&pdev->dev);
--
--	clk_disable_unprepare(ddata->clk);
--
--	return 0;
--}
--
- static const struct of_device_id st_rng_match[] __maybe_unused = {
- 	{ .compatible = "st,rng" },
- 	{},
-@@ -134,7 +119,6 @@ static struct platform_driver st_rng_driver = {
- 		.of_match_table = of_match_ptr(st_rng_match),
- 	},
- 	.probe = st_rng_probe,
--	.remove = st_rng_remove
- };
- 
- module_platform_driver(st_rng_driver);
--- 
-2.30.2
+> ---
+> Changelog:
+> v4:
+>   - No change
+> 
+> v3:
+>   - Use Microwatts instead of Milliwatts to follow the ABI, commented by Sebastian Reichel.
+> 
+> v2:
+>   - No change
+> 
+> v1:
+>   - https://patchwork.kernel.org/project/linux-usb/patch/20230313025843.17162-4-frank.wang@rock-chips.com/
+> 
+>   drivers/usb/typec/tcpm/tcpm.c | 24 ++++++++++++++++++++++++
+>   1 file changed, 24 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 9f6aaa3e70ca8..829d75ebab422 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -6340,6 +6340,27 @@ static int tcpm_psy_get_current_now(struct tcpm_port *port,
+>   	return 0;
+>   }
+>   
+> +static int tcpm_psy_get_input_power_limit(struct tcpm_port *port,
+> +					  union power_supply_propval *val)
+> +{
+> +	unsigned int src_mv, src_ma, max_src_uw = 0;
+> +	unsigned int i, tmp;
+> +
+> +	for (i = 0; i < port->nr_source_caps; i++) {
+> +		u32 pdo = port->source_caps[i];
+> +
+> +		if (pdo_type(pdo) == PDO_TYPE_FIXED) {
+> +			src_mv = pdo_fixed_voltage(pdo);
+> +			src_ma = pdo_max_current(pdo);
+> +			tmp = src_mv * src_ma;
+> +			max_src_uw = tmp > max_src_uw ? tmp : max_src_uw;
+> +		}
+> +	}
+> +
+> +	val->intval = max_src_uw;
+> +	return 0;
+> +}
+> +
+>   static int tcpm_psy_get_prop(struct power_supply *psy,
+>   			     enum power_supply_property psp,
+>   			     union power_supply_propval *val)
+> @@ -6369,6 +6390,9 @@ static int tcpm_psy_get_prop(struct power_supply *psy,
+>   	case POWER_SUPPLY_PROP_CURRENT_NOW:
+>   		ret = tcpm_psy_get_current_now(port, val);
+>   		break;
+> +	case POWER_SUPPLY_PROP_INPUT_POWER_LIMIT:
+> +		tcpm_psy_get_input_power_limit(port, val);
+> +		break;
+>   	default:
+>   		ret = -EINVAL;
+>   		break;
 
