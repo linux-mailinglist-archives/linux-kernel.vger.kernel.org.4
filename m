@@ -2,155 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0856A73295B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 09:58:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B4BC732962
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:02:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbjFPH6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 03:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47194 "EHLO
+        id S243842AbjFPIBr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 16 Jun 2023 04:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbjFPH6N (ORCPT
+        with ESMTP id S242189AbjFPIBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 03:58:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEF62948
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 00:57:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686902243;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UmWx/AJ3S4UDmLUBVcPWvaOILz2i/efbrRdbV4jSGuI=;
-        b=C7yySTQQvurxrmcu7M1pc/XRYsXsQ04wOURCzb1e7ewVsWXbTTgCP9mUEWHDCCV7epEIuX
-        5bSetCiTZh3gEmI+GIZ+XqjEMdq6VqRXNy41dop5M+b7hF4Ob1Ppybl3aAZvXynn0ny0ME
-        j9Bkoi+xteiI3aKRTWyZaEjBfq51WZk=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-248-8AMOv_enMIio1FntDXwINQ-1; Fri, 16 Jun 2023 03:57:22 -0400
-X-MC-Unique: 8AMOv_enMIio1FntDXwINQ-1
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-30fbb0ac191so730558f8f.0
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 00:57:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686902241; x=1689494241;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UmWx/AJ3S4UDmLUBVcPWvaOILz2i/efbrRdbV4jSGuI=;
-        b=hJTJjMqHhVQ4pMhJ2Dpq6qLU7eCK9+4rs8B4RjbvGdZK6bxRxSNn3/fEpCBy/bE4Xq
-         9FL/yjrZRLYLFD163rFIWAsYhEHnafctbfZWui5n/OTzkqiCsIdHe0tpvGP9zh7ckz8I
-         lRLL+FxNCJRoNVf77qeJA1KRYoj7OaN3xG678O6hWR5/ExpyElqNi6c2t83tlBFWx0kf
-         dpW3T0aQNUCaIVPP8PShDKocq1k23y4ANMVzhNO2OnjkgtH6cdzTjVReIO9WVg9EM/cJ
-         IDOggl0gF2RdcfF8BNASv1GYeo47lUzNZhCYs3xpD72BdZyDqF32U5kkr1ltjBnOPzaO
-         V6RA==
-X-Gm-Message-State: AC+VfDwO3WxDOgiE7wYibZxwrZ8k78AH7muyXeMJxtxqO1JjCZ5SOk+k
-        zcLPbZS6JVYW3G6W/tAQtnmemBENLEjMTvI3FR+ySFS8vh0pXyKYl4DY785l7XMYyecnpd5Six/
-        4J2AbAg9hoN62lhaiEo3i2+QJ
-X-Received: by 2002:adf:f2cf:0:b0:30f:c4a7:8754 with SMTP id d15-20020adff2cf000000b0030fc4a78754mr5752997wrp.5.1686902240875;
-        Fri, 16 Jun 2023 00:57:20 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6d2AQLhsWO/3+dulLJxjLTJZMzdzmShBDo16xLLUx8cfuwi9Vw0TzqPvzhjMH0eEQQ1PY1Pw==
-X-Received: by 2002:adf:f2cf:0:b0:30f:c4a7:8754 with SMTP id d15-20020adff2cf000000b0030fc4a78754mr5752977wrp.5.1686902240460;
-        Fri, 16 Jun 2023 00:57:20 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:9800:59ba:1006:9052:fb40? (p200300cbc707980059ba10069052fb40.dip0.t-ipconnect.de. [2003:cb:c707:9800:59ba:1006:9052:fb40])
-        by smtp.gmail.com with ESMTPSA id 3-20020a05600c230300b003f7ea771b5dsm1487358wmo.1.2023.06.16.00.57.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jun 2023 00:57:20 -0700 (PDT)
-Message-ID: <576b7ba6-4dcd-48c9-3917-4e2a25aaa823@redhat.com>
-Date:   Fri, 16 Jun 2023 09:57:19 +0200
+        Fri, 16 Jun 2023 04:01:44 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825BA2945
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 01:01:42 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-12-wR-rwUJuOZepVZfHZ7CX4A-1; Fri, 16 Jun 2023 09:01:38 +0100
+X-MC-Unique: wR-rwUJuOZepVZfHZ7CX4A-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 16 Jun
+ 2023 09:01:35 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Fri, 16 Jun 2023 09:01:35 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'wuyonggang001@208suo.com'" <wuyonggang001@208suo.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hare@kernel.org" <hare@kernel.org>
+Subject: RE: [PATCH] scsi: myrs: Replacing snprintf with scnprintf
+Thread-Topic: [PATCH] scsi: myrs: Replacing snprintf with scnprintf
+Thread-Index: AQHZnoT513c9A1R2cUiaoES5niWIb6+NEQBg
+Date:   Fri, 16 Jun 2023 08:01:35 +0000
+Message-ID: <688a2c10bdd24db8a4bf86effdb52606@AcuMS.aculab.com>
+References: <20230613065350.39003-1-zhanglibing@cdjrlc.com>
+ <f82ebaeda200bc172cd1764b44fa1a0a@208suo.com>
+ <6d2c37de23facd0cd854bbaf6913ba3e@208suo.com>
+In-Reply-To: <6d2c37de23facd0cd854bbaf6913ba3e@208suo.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [External] Re: [RFC PATCH 1/3] zram: charge the compressed RAM to
- the page's memcgroup
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     Yosry Ahmed <yosryahmed@google.com>,
-        =?UTF-8?B?6LS65Lit5Z2k?= <hezhongkun.hzk@bytedance.com>
-Cc:     Yu Zhao <yuzhao@google.com>, minchan@kernel.org,
-        senozhatsky@chromium.org, mhocko@suse.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Fabian Deutsch <fdeutsch@redhat.com>
-References: <20230615034830.1361853-1-hezhongkun.hzk@bytedance.com>
- <CAOUHufZBUEm1P7gm0nFkPSFkNg2fPbs3v3qhL-R9m5yFNoW2YA@mail.gmail.com>
- <CA+PVUaTqNTSYkTy9yCFF=Y+xkimgM+3YQRF7EYr1UruesQnJrg@mail.gmail.com>
- <CAJD7tka-=ppaheVxn2-f6u0egBp8kOHYAK0bBudC62SKkZPk5w@mail.gmail.com>
- <CACSyD1MepXm4EL3o6OscAjRKQhAWZZ5xZKS8a0TXLAazUE+MpA@mail.gmail.com>
- <CAJD7tka4Uc1DhNzKbrj71vGyVVA12bJivPUQU7P0DOinunLgGg@mail.gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <CAJD7tka4Uc1DhNzKbrj71vGyVVA12bJivPUQU7P0DOinunLgGg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.06.23 09:37, Yosry Ahmed wrote:
-> On Thu, Jun 15, 2023 at 9:41 PM 贺中坤 <hezhongkun.hzk@bytedance.com> wrote:
->>
->>> Thanks Fabian for tagging me.
->>>
->>> I am not familiar with #1, so I will speak to #2. Zhongkun, There are
->>> a few parts that I do not understand -- hopefully you can help me out
->>> here:
->>>
->>> (1) If I understand correctly in this patch we set the active memcg
->>> trying to charge any pages allocated in a zspage to the current memcg,
->>> yet that zspage will contain multiple compressed object slots, not
->>> just the one used by this memcg. Aren't we overcharging the memcg?
->>> Basically the first memcg that happens to allocate the zspage will pay
->>> for all the objects in this zspage, even after it stops using the
->>> zspage completely?
->>
->> It will not overcharge.  As you said below, we are not using
->> __GFP_ACCOUNT and charging the compressed slots to the memcgs.
->>
->>>
->>> (2) Patch 3 seems to be charging the compressed slots to the memcgs,
->>> yet this patch is trying to charge the entire zspage. Aren't we double
->>> charging the zspage? I am guessing this isn't happening because (as
->>> Michal pointed out) we are not using __GFP_ACCOUNT here anyway, so
->>> this patch may be NOP, and the actual charging is coming from patch 3
->>> only.
->>
->> YES， the actual charging is coming from patch 3. This patch just
->> delivers the BIO page's  memcg to the current task which is not the
->> consumer.
->>
->>>
->>> (3) Zswap recently implemented per-memcg charging of compressed
->>> objects in a much simpler way. If your main interest is #2 (which is
->>> what I understand from the commit log), it seems like zswap might be
->>> providing this already? Why can't you use zswap? Is it the fact that
->>> zswap requires a backing swapfile?
->>
->> Thanks for your reply and review. Yes, the zswap requires a backing
->> swapfile. The I/O path is very complex, sometimes it will throttle the
->> whole system if some resources are short , so we hope to use zram.
+From: wuyonggang001@208suo.com
+> Sent: 14 June 2023 06:56
 > 
-> Is the only problem with zswap for you the requirement of a backing swapfile?
+> Fix the following coccicheck warning:
 > 
-> If yes, I am in the early stages of developing a solution to make
-> zswap work without a backing swapfile. This was discussed in LSF/MM
-> [1]. Would this make zswap usable in for your use case?
+> drivers/scsi/myrs.c:1411:8-16: WARNING: use scnprintf or sprintf
 
-Out of curiosity, are there any other known pros/cons when using 
-zswap-without-swap instead of zram?
+That is nothing like the world best commit message.
 
-I know that zram requires sizing (size of the virtual block device) and 
-consumes metadata, zswap doesn't.
+Also if any of the snprintf() actually overflow the terminating
+'\n' is lost - that will have unexpected effects over and above
+the truncation.
 
--- 
-Cheers,
+In fact all the buffer sizes are bogus - did you even look at the code.
+I think they should all be using sysfs_emit().
 
-David / dhildenb
+There is also this one:
+	char serial[17];
+
+	memcpy(serial, cs->ctlr_info->serial_number, 16);
+	serial[16] = '\0';
+	return snprintf(buf, 16, "%s\n", serial);
+A "%.16s\n" format will have the desired effect.
+But completely untested with long names because the 16 isn't big enough.
+
+	David
+
+
+> 
+> Signed-off-by: Yonggang Wu <wuyonggang001@208suo.com>
+> ---
+>   drivers/scsi/myrs.c | 22 +++++++++++-----------
+>   1 file changed, 11 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/scsi/myrs.c b/drivers/scsi/myrs.c
+> index a1eec65a9713..ced1d2fbd862 100644
+> --- a/drivers/scsi/myrs.c
+> +++ b/drivers/scsi/myrs.c
+> @@ -939,7 +939,7 @@ static ssize_t raid_state_show(struct device *dev,
+>       int ret;
+> 
+>       if (!sdev->hostdata)
+> -        return snprintf(buf, 16, "Unknown\n");
+> +        return scnprintf(buf, 16, "Unknown\n");
+> 
+>       if (sdev->channel >= cs->ctlr_info->physchan_present) {
+>           struct myrs_ldev_info *ldev_info = sdev->hostdata;
+> @@ -1058,7 +1058,7 @@ static ssize_t raid_level_show(struct device *dev,
+>       const char *name = NULL;
+> 
+>       if (!sdev->hostdata)
+> -        return snprintf(buf, 16, "Unknown\n");
+> +        return scnprintf(buf, 16, "Unknown\n");
+> 
+>       if (sdev->channel >= cs->ctlr_info->physchan_present) {
+>           struct myrs_ldev_info *ldev_info;
+> @@ -1086,7 +1086,7 @@ static ssize_t rebuild_show(struct device *dev,
+>       unsigned char status;
+> 
+>       if (sdev->channel < cs->ctlr_info->physchan_present)
+> -        return snprintf(buf, 32, "physical device - not rebuilding\n");
+> +        return scnprintf(buf, 32, "physical device - not
+> rebuilding\n");
+> 
+>       ldev_info = sdev->hostdata;
+>       ldev_num = ldev_info->ldev_num;
+> @@ -1190,7 +1190,7 @@ static ssize_t consistency_check_show(struct
+> device *dev,
+>       unsigned short ldev_num;
+> 
+>       if (sdev->channel < cs->ctlr_info->physchan_present)
+> -        return snprintf(buf, 32, "physical device - not checking\n");
+> +        return scnprintf(buf, 32, "physical device - not checking\n");
+> 
+>       ldev_info = sdev->hostdata;
+>       if (!ldev_info)
+> @@ -1303,7 +1303,7 @@ static ssize_t serial_show(struct device *dev,
+> 
+>       memcpy(serial, cs->ctlr_info->serial_number, 16);
+>       serial[16] = '\0';
+> -    return snprintf(buf, 16, "%s\n", serial);
+> +    return scnprintf(buf, 16, "%s\n", serial);
+>   }
+>   static DEVICE_ATTR_RO(serial);
+> 
+> @@ -1313,7 +1313,7 @@ static ssize_t ctlr_num_show(struct device *dev,
+>       struct Scsi_Host *shost = class_to_shost(dev);
+>       struct myrs_hba *cs = shost_priv(shost);
+> 
+> -    return snprintf(buf, 20, "%d\n", cs->host->host_no);
+> +    return scnprintf(buf, 20, "%d\n", cs->host->host_no);
+>   }
+>   static DEVICE_ATTR_RO(ctlr_num);
+> 
+> @@ -1388,7 +1388,7 @@ static ssize_t model_show(struct device *dev,
+>       struct Scsi_Host *shost = class_to_shost(dev);
+>       struct myrs_hba *cs = shost_priv(shost);
+> 
+> -    return snprintf(buf, 28, "%s\n", cs->model_name);
+> +    return scnprintf(buf, 28, "%s\n", cs->model_name);
+>   }
+>   static DEVICE_ATTR_RO(model);
+> 
+> @@ -1398,7 +1398,7 @@ static ssize_t ctlr_type_show(struct device *dev,
+>       struct Scsi_Host *shost = class_to_shost(dev);
+>       struct myrs_hba *cs = shost_priv(shost);
+> 
+> -    return snprintf(buf, 4, "%d\n", cs->ctlr_info->ctlr_type);
+> +    return scnprintf(buf, 4, "%d\n", cs->ctlr_info->ctlr_type);
+>   }
+>   static DEVICE_ATTR_RO(ctlr_type);
+> 
+> @@ -1408,7 +1408,7 @@ static ssize_t cache_size_show(struct device *dev,
+>       struct Scsi_Host *shost = class_to_shost(dev);
+>       struct myrs_hba *cs = shost_priv(shost);
+> 
+> -    return snprintf(buf, 8, "%d MB\n", cs->ctlr_info->cache_size_mb);
+> +    return scnprintf(buf, 8, "%d MB\n", cs->ctlr_info->cache_size_mb);
+>   }
+>   static DEVICE_ATTR_RO(cache_size);
+> 
+> @@ -1418,7 +1418,7 @@ static ssize_t firmware_show(struct device *dev,
+>       struct Scsi_Host *shost = class_to_shost(dev);
+>       struct myrs_hba *cs = shost_priv(shost);
+> 
+> -    return snprintf(buf, 16, "%d.%02d-%02d\n",
+> +    return scnprintf(buf, 16, "%d.%02d-%02d\n",
+>               cs->ctlr_info->fw_major_version,
+>               cs->ctlr_info->fw_minor_version,
+>               cs->ctlr_info->fw_turn_number);
+> @@ -1488,7 +1488,7 @@ static ssize_t
+> disable_enclosure_messages_show(struct device *dev,
+>       struct Scsi_Host *shost = class_to_shost(dev);
+>       struct myrs_hba *cs = shost_priv(shost);
+> 
+> -    return snprintf(buf, 3, "%d\n", cs->disable_enc_msg);
+> +    return scnprintf(buf, 3, "%d\n", cs->disable_enc_msg);
+>   }
+> 
+>   static ssize_t disable_enclosure_messages_store(struct device *dev,
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
