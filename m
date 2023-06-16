@@ -2,67 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A72FA733082
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB6B733084
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344864AbjFPL4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 07:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40526 "EHLO
+        id S1344266AbjFPL4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 07:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344958AbjFPLz4 (ORCPT
+        with ESMTP id S1344681AbjFPL4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 07:55:56 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917FC2944;
-        Fri, 16 Jun 2023 04:55:55 -0700 (PDT)
-X-GND-Sasl: gregory.clement@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686916554;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=v3VbCZZPj2MH0B0+AxaXEpesaRl2NPyrEf1VpNxwlIQ=;
-        b=j6qpC/T8VW1/ouaPpAkjq2VsAZfIQtkXFSdnWjuzAQS4RsC4Kw+gi590pUuYPb976fLsH1
-        3Q/+4HPwTOEjzQ1LXKm1DUDzc1JX6zs19JNVW1zg8wkXQZ1BTszQVJseVTdDvqQWuSKY+w
-        g7nO7Uw6b0YUF03aP6e3xYlUkkI46SZ52VVrfxDpqe27j7EPmfbJV6nS70ch8WCp5OOrwr
-        vg8dv3qpXhaakMbyfLaCvIdVfd5kapMes7HV7Ne3xneNVBXa8ie/FHATVuFKglJ6ZScQS0
-        /RqCVTJWZmi0U4x2FmA3w0E0YSqkIVqk5Rv6YvMkhfIN8xrhPf2rVGiLmy28cg==
-X-GND-Sasl: gregory.clement@bootlin.com
-X-GND-Sasl: gregory.clement@bootlin.com
-X-GND-Sasl: gregory.clement@bootlin.com
-X-GND-Sasl: gregory.clement@bootlin.com
-X-GND-Sasl: gregory.clement@bootlin.com
-X-GND-Sasl: gregory.clement@bootlin.com
-X-GND-Sasl: gregory.clement@bootlin.com
-X-GND-Sasl: gregory.clement@bootlin.com
-X-GND-Sasl: gregory.clement@bootlin.com
-X-GND-Sasl: gregory.clement@bootlin.com
-X-GND-Sasl: gregory.clement@bootlin.com
-X-GND-Sasl: gregory.clement@bootlin.com
-X-GND-Sasl: gregory.clement@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2BFC12000B;
-        Fri, 16 Jun 2023 11:55:52 +0000 (UTC)
-From:   Gregory CLEMENT <gregory.clement@bootlin.com>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        andrew@lunn.ch, sebastian.hesselbarth@gmail.com
-Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Vadym Kochan <vadym.kochan@plvision.eu>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: Re: [PATCH v9 1/3] arm64: dts: marvell: cp11x: Fix nand_controller
- node name according to YAML
-In-Reply-To: <20230615040447.3484564-2-chris.packham@alliedtelesis.co.nz>
-References: <20230615040447.3484564-1-chris.packham@alliedtelesis.co.nz>
- <20230615040447.3484564-2-chris.packham@alliedtelesis.co.nz>
-Date:   Fri, 16 Jun 2023 13:55:52 +0200
-Message-ID: <87o7lfhb93.fsf@BL-laptop>
+        Fri, 16 Jun 2023 07:56:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0D552D67
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:56:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47ED660EB0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 11:56:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67CA3C433C8;
+        Fri, 16 Jun 2023 11:56:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686916565;
+        bh=Cefq0nhQ5+KvwZkN7+opbg79I2XubmqBgE72Y6hj+rY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=a0Oq79zw6rjdIS59w8GBa8hCRA6XQ22iHGti0I4SUc8HJE67VHiY+6RqYZZVx3JWP
+         qqg4CFTHRtfRci/CeIlsuXGUwNetOJZ6HdlntcvnBqbBlz71poBAr7MxIISHB76wbZ
+         DjTEpml4uo09DSJRX7HzUZpoBZ3IY0kQxnoGg6/jryDz1ePpLJfdIoKIU4jRpEtk4B
+         LwSVT5EbqMiGPRGvlo3ykAnBWJa0a0Fm8ImLAmd5eP22N3x8z8dA9M4kv+TQ1XY3T0
+         V7D5UBo56g3KqZGCBZO9i6n2TIaWIrI0obUA5ybqu4pve9gq6oMYxA3w1qFjOefKeu
+         dAgPAWGAYBZrg==
+Date:   Fri, 16 Jun 2023 12:56:00 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Rander Wang <rander.wang@intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        =?iso-8859-1?Q?P=E9ter?= Ujfalusi 
+        <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+Subject: Re: sound/soc/soc-pcm.c:2089:5: warning: stack frame size (2064)
+ exceeds limit (2048) in 'dpcm_be_dai_trigger'
+Message-ID: <caea391c-f10a-4979-92c3-75964ed7497a@sirena.org.uk>
+References: <202306160240.ahGjvPqw-lkp@intel.com>
+ <c5ce23fc-db87-6f11-0708-85cc4ba2a46c@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="HCxw+tlxQuwCrK6z"
+Content-Disposition: inline
+In-Reply-To: <c5ce23fc-db87-6f11-0708-85cc4ba2a46c@linux.intel.com>
+X-Cookie: P-K4
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,53 +65,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Chris Packham <chris.packham@alliedtelesis.co.nz> writes:
 
-> From: Vadym Kochan <vadym.kochan@plvision.eu>
->
-> Marvell NAND controller has now YAML to validate it's DT bindings, so
-> change the node name of cp11x DTSI as it is required by nand-controller.yaml
->
-> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
+--HCxw+tlxQuwCrK6z
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Applied on mvebu/dt64
+On Fri, Jun 16, 2023 at 12:21:13PM +0200, Pierre-Louis Bossart wrote:
+> On 6/15/23 20:34, kernel test robot wrote:
 
-Thanks,
+> >>> sound/soc/soc-pcm.c:2089:5: warning: stack frame size (2064) exceeds limit (2048) in 'dpcm_be_dai_trigger' [-Wframe-larger-than]
+> >    int dpcm_be_dai_trigger(struct snd_soc_pcm_runtime *fe, int stream,
 
-Gregory
+> Not sure what causes this warning to show up, the code hasn't changed in
+> 1.2 years, nor what to do about it....
 
+One of the sanitisers is doing things which explodes the stack size.  I
+wouldn't worry about it, one of the toolchain people will probably get
+to it at some point if they didn't already (sometimes these things are
+done by tuning the compiler flags).
 
-> ---
->
-> Notes:
->     Changes in v9:
->     - None
->     Changes in v8:
->     - Add r-by from Miquel
->
->  arch/arm64/boot/dts/marvell/armada-cp11x.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/arm64/boot/dts/marvell/armada-cp11x.dtsi b/arch/arm64/boot/dts/marvell/armada-cp11x.dtsi
-> index 7d0043824f2a..982b180b33e6 100644
-> --- a/arch/arm64/boot/dts/marvell/armada-cp11x.dtsi
-> +++ b/arch/arm64/boot/dts/marvell/armada-cp11x.dtsi
-> @@ -468,7 +468,7 @@ CP11X_LABEL(uart3): serial@702300 {
->  			status = "disabled";
->  		};
->  
-> -		CP11X_LABEL(nand_controller): nand@720000 {
-> +		CP11X_LABEL(nand_controller): nand-controller@720000 {
->  			/*
->  			 * Due to the limitation of the pins available
->  			 * this controller is only usable on the CPM
-> -- 
-> 2.40.1
->
+--HCxw+tlxQuwCrK6z
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSMTc8ACgkQJNaLcl1U
+h9A7OAf6AgtQcEPXuFb0M6xmtaQTE76Xb+GZtm13l3OadG+W1Dt9iWZ7TkgsRJsn
+9SNNxVV4MNvTBDnMdaIub6laD2Z9ZVrJGl8LdzaKB9+knR8P728hF+w4XY1F20lc
+WqHIRocELOJocfPAta9UrJfzPlpKjtFysCsaEzwSkDz5pYuSwqvJ2bGgVy2cVaze
+Sn6jchA2BXu3D1n1+FPVvUrOFD7aLyCVJjh8eLT9rsAQDB02Ok9k3AXtfPj2BXw7
++6V25NqO/UGYYfwAFxPUNFiEkaqXh++eRwJs6rFkHTNej3GyxifySHfFGwojCXaH
+JJcS9oKg3P9+3CPmYoPQtExmpmujBQ==
+=9AO/
+-----END PGP SIGNATURE-----
+
+--HCxw+tlxQuwCrK6z--
