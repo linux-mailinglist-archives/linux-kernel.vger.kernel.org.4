@@ -2,223 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A4DB733ADF
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 22:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD39F733AE3
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 22:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbjFPU3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 16:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54232 "EHLO
+        id S231744AbjFPUc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 16:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbjFPU3r (ORCPT
+        with ESMTP id S229938AbjFPUc0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 16:29:47 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3DF235B8
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 13:29:45 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-977d55ac17bso164299966b.3
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 13:29:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686947384; x=1689539384;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=lAJJYNFFc8IT/vHtC2ZjekUTu3gsWCsBhPsAUbzPFWA=;
-        b=WvGfMjGQTQBc4JJ91CKVIaX/k58ocqaW26UdALAee0U7J6ETejHVniNgmOJW5yx/n/
-         9nJaJ+Atq2a7ZbJStMKExIl8lxl7YTDVFYVO95J3KWRhTPh4xrJBI/0HShIQkR/bQFna
-         RDAdXkK2QJbx5VlU0H4jGoEjIkobuIaMUh5lI/EMpPXmkbDyH/j0wi4rzJhv4Ztp140e
-         b+xKkPcj5fYet2si5mczTPivZzPjKaHRUDYPbgPjmIVZz0FfI4PgyY5T943m6udCZrHX
-         R2MDo9ydZP/G5sj/de7fARszLkvG9j1lcFtWXE7ti+Ngv5/UWc+pikE6RVMUAFrG3TeW
-         Y4lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686947384; x=1689539384;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lAJJYNFFc8IT/vHtC2ZjekUTu3gsWCsBhPsAUbzPFWA=;
-        b=Zn4Xq5MkniEit/lNInq7pDNDQc4UmWAF5MVM90o68ab2cx3zxBcDhHTLaZ+BWnMEh6
-         4U6uscvinN98X2qnZu0sig8/Ycmm+lUTT3wYG+wrYSV7tvNQWPDpfFiJgLFLFuEnb9CM
-         o8sVzgu2PjxwlFt/Gs32mEZm6is4y6RZjfdE0phkzBrLeAbsAfD5ZZ6fESYCFMrrsSY/
-         8AqwONo2r2wZYffRhN/fApzP5qMm0KJEBssLPrmZtFCDxz0uwRUVJ7SaghiOQ7eZTHL+
-         DTAqGFaLe4CHn+LfiJu6BNlZvdl2QSX8aGQhllOw+BUp69taYhvIUwWsvxpYC2Qnwi+2
-         tleQ==
-X-Gm-Message-State: AC+VfDx9DUvBkaddp6n7hBFviOd0+BagwrBnyEjVMn3veRgwt7QttFA/
-        EwO17LOtRjNcuKXpHmLMElr87z1rKymWonI5XMQ=
-X-Google-Smtp-Source: ACHHUZ6mZ+wKwqXLlQHDwPWYNpOJslTTh49rtVaJrzkNfIXoGuZ6g04DxonTKWVfDs1N+/qeypFhIsBmNRHxs9c1bGM=
-X-Received: by 2002:a17:907:320d:b0:974:1c90:b3d3 with SMTP id
- xg13-20020a170907320d00b009741c90b3d3mr2766774ejb.12.1686947383936; Fri, 16
- Jun 2023 13:29:43 -0700 (PDT)
+        Fri, 16 Jun 2023 16:32:26 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D3F3A91;
+        Fri, 16 Jun 2023 13:32:25 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 20:32:22 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1686947543;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=BqamN30uwioVV9z8bqlQUd/bYGXRjuLvuHgCeh9Wjmg=;
+        b=IyQDwPs/kz5HH35ns2xrQPYA3CiHmBcnLmCM2r/LCT86yc/OQQViC3DktI1fvjTpGfV356
+        LNhYKrxxNwl1CBABNlKzxP+RS0tskznyQ75pxj6RI1WxFqeX7Q5DNJiMQn5U/5ccMDXPme
+        SsnncOoKK1g1Q+f975i68zBmnDdVmdgjCiYCgIDI4QLq0M2ULl/2dkm4dSShEqrhvZcrKA
+        TjNsCbIWr9J4rjPoGIvjdGHSlP/zfpvOQapY7n92RgRCEWxKbF8g1YI/syiWj1TV3QhvU+
+        R8Rqsi1+9+wxZi7wZZ3Mea0nlDgMp+669tuAPU5BUo+VVl3lIQfxfFFrD+YS3A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1686947543;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=BqamN30uwioVV9z8bqlQUd/bYGXRjuLvuHgCeh9Wjmg=;
+        b=QaDl2b13pXjmTE57VQ/vFnQICyRQJaP23kXX/pTMPYES/JzPS6XkYuS4JOAIjVlVztFIus
+        tCHsa4yQmMCOE7DQ==
+From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/boot] x86/mem_encrypt: Unbreak the AMD_MEM_ENCRYPT=n build
+Cc:     kernel test robot <lkp@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Sat, 17 Jun 2023 06:29:31 +1000
-Message-ID: <CAPM=9txbkXVgrbDbqezqBVLVXdBx4+iwfJPTVWLzWuGtDsTT_w@mail.gmail.com>
-Subject: [git pull] drm fixes for 6.4-rc7
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <168694754244.404.18209616336431541908.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+The following commit has been merged into the x86/boot branch of tip:
 
-Bunch of misc fixes across the board, amdgpu is the usual bulk with a
-revert and other fixes, nouveau has a race fix that was causing a UAF
-that was hard hanging systems, otherwise some qaic, bridge and radeon.
+Commit-ID:     0a9567ac5e6a40cdd9c8cd15b19a62a15250f450
+Gitweb:        https://git.kernel.org/tip/0a9567ac5e6a40cdd9c8cd15b19a62a15250f450
+Author:        Thomas Gleixner <tglx@linutronix.de>
+AuthorDate:    Fri, 16 Jun 2023 22:15:31 +02:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Fri, 16 Jun 2023 22:23:27 +02:00
 
-Dave.
+x86/mem_encrypt: Unbreak the AMD_MEM_ENCRYPT=n build
 
-drm-fixes-2023-06-17:
-drm fixes for 6.4-rc7
+Moving mem_encrypt_init() broke the AMD_MEM_ENCRYPT=n because the
+declaration of that function was under #ifdef CONFIG_AMD_MEM_ENCRYPT and
+the obvious placement for the inline stub was the #else path.
 
-amdgpu:
-- GFX9 preemption fixes
-- Add missing radeon secondary PCI ID
-- vblflash fixes
-- SMU 13 fix
-- VCN 4.0 fix
-- Re-enable TOPDOWN flag for large BAR systems to fix regression
-- eDP fix
-- PSR hang fix
-- DPIA fix
+This is a leftover of commit 20f07a044a76 ("x86/sev: Move common memory
+encryption code to mem_encrypt.c") which made mem_encrypt_init() depend on
+X86_MEM_ENCRYPT without moving the prototype. That did not fail back then
+because there was no stub inline as the core init code had a weak function.
 
-radeon:
-- fbdev client warning fix
+Move both the declaration and the stub out of the CONFIG_AMD_MEM_ENCRYPT
+section and guard it with CONFIG_X86_MEM_ENCRYPT.
 
-qaic:
-- leak fix
-- null ptr deref fix
+Fixes: 439e17576eb4 ("init, x86: Move mem_encrypt_init() into arch_cpu_finalize_init()")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Closes: https://lore.kernel.org/oe-kbuild-all/202306170247.eQtCJPE8-lkp@intel.com/
+---
+ arch/x86/include/asm/mem_encrypt.h | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-nouveau:
-- use-after-free caused by fence race fix
-- runtime pm fix
-- NULL ptr checks
-
-bridge:
-- ti-sn65dsi86: Avoid possible buffer overflow
-The following changes since commit 858fd168a95c5b9669aac8db6c14a9aeab446375:
-
-  Linux 6.4-rc6 (2023-06-11 14:35:30 -0700)
-
-are available in the Git repository at:
-
-  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2023-06-17
-
-for you to fetch changes up to 9930f518b6a82ff10a3d13e0cbde05cce04f5930:
-
-  Merge tag 'drm-misc-fixes-2023-06-16' of
-git://anongit.freedesktop.org/drm/drm-misc into drm-fixes (2023-06-17
-06:11:59 +1000)
-
-----------------------------------------------------------------
-drm fixes for 6.4-rc7
-
-amdgpu:
-- GFX9 preemption fixes
-- Add missing radeon secondary PCI ID
-- vblflash fixes
-- SMU 13 fix
-- VCN 4.0 fix
-- Re-enable TOPDOWN flag for large BAR systems to fix regression
-- eDP fix
-- PSR hang fix
-- DPIA fix
-
-radeon:
-- fbdev client warning fix
-
-qaic:
-- leak fix
-- null ptr deref fix
-
-nouveau:
-- use-after-free caused by fence race fix
-- runtime pm fix
-- NULL ptr checks
-
-bridge:
-- ti-sn65dsi86: Avoid possible buffer overflow
-
-----------------------------------------------------------------
-Alex Deucher (1):
-      drm/amdgpu: add missing radeon secondary PCI ID
-
-Arunpravin Paneer Selvam (1):
-      Revert "drm/amdgpu: remove TOPDOWN flags when allocating VRAM in
-large bar system"
-
-Carl Vanderlip (1):
-      accel/qaic: Free user handle on interrupted mutex
-
-Dave Airlie (3):
-      Merge tag 'amd-drm-fixes-6.4-2023-06-14' of
-https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
-      nouveau: fix client work fence deletion race
-      Merge tag 'drm-misc-fixes-2023-06-16' of
-git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
-
-Hersen Wu (1):
-      drm/amd/display: edp do not add non-edid timings
-
-Jeffrey Hugo (1):
-      accel/qaic: Fix NULL pointer deref in qaic_destroy_drm_device()
-
-Jiadong Zhu (4):
-      drm/amdgpu: Reset CP_VMID_PREEMPT after trailing fence signaled
-      drm/amdgpu: Program gds backup address as zero if no gds allocated
-      drm/amdgpu: Modify indirect buffer packages for resubmission
-      drm/amdgpu: Implement gfx9 patch functions for resubmission
-
-Kenneth Feng (1):
-      drm/amd/pm: workaround for compute workload type on some skus
-
-Mario Limonciello (2):
-      drm/amd: Make sure image is written to trigger VBIOS image update flow
-      drm/amd: Tighten permissions on VBIOS flashing attributes
-
-Natalia Petrova (2):
-      drm/nouveau/dp: check for NULL nv_connector->native_mode
-      drm/nouveau: add nv_encoder pointer check for NULL
-
-Peichen Huang (1):
-      drm/amd/display: limit DPIA link rate to HBR3
-
-Ratchanan Srirattanamet (1):
-      drm/nouveau: don't detect DSM for non-NVIDIA device
-
-Sonny Jiang (1):
-      drm/amdgpu: vcn_4_0 set instance 0 init sched score to 1
-
-Su Hui (1):
-      drm/bridge: ti-sn65dsi86: Avoid possible buffer overflow
-
-Thomas Zimmermann (1):
-      drm/radeon: Disable outputs when releasing fbdev client
-
-Tom Chung (1):
-      drm/amd/display: fix the system hang while disable PSR
-
- drivers/accel/qaic/qaic_drv.c                      |   4 +
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c            |   1 +
- drivers/gpu/drm/amd/amdgpu/amdgpu_object.c         |   2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c            |   7 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_ring.c           |  18 ++++
- drivers/gpu/drm/amd/amdgpu/amdgpu_ring.h           |   9 ++
- drivers/gpu/drm/amd/amdgpu/amdgpu_ring_mux.c       |  60 ++++++++++++
- drivers/gpu/drm/amd/amdgpu/amdgpu_ring_mux.h       |  15 +++
- drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c              | 101 +++++++++++++++++++--
- drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c              |   6 +-
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c  |  18 +++-
- .../gpu/drm/amd/display/dc/link/link_detection.c   |   5 +
- .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c   |  33 ++++++-
- drivers/gpu/drm/bridge/ti-sn65dsi86.c              |   4 +
- drivers/gpu/drm/nouveau/nouveau_acpi.c             |   3 +
- drivers/gpu/drm/nouveau/nouveau_connector.c        |   7 +-
- drivers/gpu/drm/nouveau/nouveau_drm.c              |  14 ++-
- drivers/gpu/drm/radeon/radeon_fbdev.c              |   1 +
- 18 files changed, 281 insertions(+), 27 deletions(-)
+diff --git a/arch/x86/include/asm/mem_encrypt.h b/arch/x86/include/asm/mem_encrypt.h
+index 98ce265..7f97a8a 100644
+--- a/arch/x86/include/asm/mem_encrypt.h
++++ b/arch/x86/include/asm/mem_encrypt.h
+@@ -17,6 +17,12 @@
+ 
+ #include <asm/bootparam.h>
+ 
++#ifdef CONFIG_X86_MEM_ENCRYPT
++void __init mem_encrypt_init(void);
++#else
++static inline void mem_encrypt_init(void) { }
++#endif
++
+ #ifdef CONFIG_AMD_MEM_ENCRYPT
+ 
+ extern u64 sme_me_mask;
+@@ -51,8 +57,6 @@ void __init mem_encrypt_free_decrypted_mem(void);
+ 
+ void __init sev_es_init_vc_handling(void);
+ 
+-void __init mem_encrypt_init(void);
+-
+ #define __bss_decrypted __section(".bss..decrypted")
+ 
+ #else	/* !CONFIG_AMD_MEM_ENCRYPT */
+@@ -85,8 +89,6 @@ early_set_mem_enc_dec_hypercall(unsigned long vaddr, int npages, bool enc) {}
+ 
+ static inline void mem_encrypt_free_decrypted_mem(void) { }
+ 
+-static inline void mem_encrypt_init(void) { }
+-
+ #define __bss_decrypted
+ 
+ #endif	/* CONFIG_AMD_MEM_ENCRYPT */
