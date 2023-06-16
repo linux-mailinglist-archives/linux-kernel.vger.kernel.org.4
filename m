@@ -2,419 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C394D73302D
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:42:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 193AD733035
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:43:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345017AbjFPLmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 07:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57106 "EHLO
+        id S1344394AbjFPLnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 07:43:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344085AbjFPLlj (ORCPT
+        with ESMTP id S1344011AbjFPLnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 07:41:39 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28DD22D76;
-        Fri, 16 Jun 2023 04:41:34 -0700 (PDT)
-X-UUID: ba04266c0c3a11ee9cb5633481061a41-20230616
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=8iL5yJAAP7wn7QHozgPYkcvcYMlZHIfBzf9OeLY3Qt0=;
-        b=r8fIQWA3/ZMhYQwb0xalWlRb1vWGKnAb5pNiJ7cUmM6trt2gADg1dz8Ftm1sPtQPVliSXk3YjdfxILbG4rHe1ti663un9C5tAqvBEr/9hdevpnPwdKKdIUMBe8F3dCU0aP65ud2YewuI32U39u3nmo5LPDJxUVXZRzXjNqgx8lM=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.26,REQID:dd13710f-12e0-489d-ab9f-3842089a8590,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:cb9a4e1,CLOUDID:79544d6f-2f20-4998-991c-3b78627e4938,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: ba04266c0c3a11ee9cb5633481061a41-20230616
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <shawn.sung@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 853678070; Fri, 16 Jun 2023 19:41:26 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 16 Jun 2023 19:41:25 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Fri, 16 Jun 2023 19:41:25 +0800
-From:   Hsiao Chien Sung <shawn.sung@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Singo Chang <singo.chang@mediatek.com>,
-        Nancy Lin <nancy.lin@mediatek.com>,
-        Jason-JH Lin <jason-jh.lin@mediatek.com>,
-        Shawn Sung <shawn.sung@mediatek.com>
-Subject: [PATCH v3 13/13] drm/mediatek: Support MT8188 Padding in display driver
-Date:   Fri, 16 Jun 2023 19:41:11 +0800
-Message-ID: <20230616114111.17554-14-shawn.sung@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230616114111.17554-1-shawn.sung@mediatek.com>
-References: <20230616114111.17554-1-shawn.sung@mediatek.com>
+        Fri, 16 Jun 2023 07:43:31 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD35430F7;
+        Fri, 16 Jun 2023 04:42:59 -0700 (PDT)
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35G6P0Es019638;
+        Fri, 16 Jun 2023 11:41:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2023-03-30;
+ bh=DnV84vsDa1MeQ+sk28fo2b4O0+HVMtrd3jWdPwDB4hA=;
+ b=o2lYbW1LIbwBDdbFE6G04ELYwDdCCR2uIKakCGGsrkZQPeUzZOuSuRKA8Fmdk8SzotoW
+ 8SgbL2rT/8LeCYtiJLu7XbvCc1Oy8gz0kFEEGyrLzcJAnRf8FDH6Xyeq1ka862TD9Ols
+ 6G9ayxECee15zKhhxD43AxvMO2UQOhbFTpwPKPtAsd5FEHXJZluYdTSnb4+dPR9vnCZE
+ q7JXNrgh3/8wjkcdl4m5UdIbFtLm8UQb4kpkYRgcv290qzACD7IxrOjDnLDfIgxd7814
+ DPDLMS0XqhRaWrORlQsC1ZWUytBf733nNdIZ+23jVjbYRQweCvz9jhVXuj6ebuCB4iO8 qg== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r4g3bv56e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 16 Jun 2023 11:41:50 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35G9JMrm009578;
+        Fri, 16 Jun 2023 11:41:49 GMT
+Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2049.outbound.protection.outlook.com [104.47.57.49])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3r4fm8eje0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 16 Jun 2023 11:41:49 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TDkPgXDo8PusYp9KsD6zOtTajmNnGHvgyK4ArArANLZu+VpNt8iqqsLOCmMxRJP3YF6PzXM0X+3nUCKU9d63yThvIpf2JS1N56dj8T8/wrlvnvdDc+guQ1DYs0S86QZZKuVxZJ4STjAswhdgBV6WPB7Ds/QwitN6ZlSh15oFqQ6quuppNZLeU3miphuRFQkgfIEgQWc4yTHoXTHd8ASUQEJ752UZPDnFWSh5JZEDajzbwLz4vIWE/0ALsCnf7cGWR4ymEXQ+GP9DfIcgoiLtwzhIfgM2pmNqltyLRSp9fH7l0HN3XswVtjGNyLBKU1ajvbuTbi0V0jBzr4S6yzCrRw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DnV84vsDa1MeQ+sk28fo2b4O0+HVMtrd3jWdPwDB4hA=;
+ b=M+rrB7VJsG09jxJwaecy4HsDqcpS14XxogVcFHgUeKxn5+oYZ/hSv+BYBHd6uP7OVrYafFSOzOwQ8BKWwlq6uTbxsLkIx/NqSLfPt1Ft1S6okeJol2lcCuLaAk+HBVn1BM8jyBt59xeGHX6lInSouru+wMUyC2RJU2sW6CJCfYgynP2Qn01esEUabRcLPDZUAplYD0ZPMiL8VQOJ51dvWjsY9rbOuYpVadn+BHhJXn39i0JYkbiRm5vx/8mjyBhd4407iEbM3r9UjrE47Qc5lzSAQNslUOdifhNnJDW428PR/97PsHmi9gw8BVgrO0+DGw2RRSRmlXVsnoN3Tabtnw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DnV84vsDa1MeQ+sk28fo2b4O0+HVMtrd3jWdPwDB4hA=;
+ b=ZEg2fRGfyShSKm/B9C68xmeyaNDVXh/GYm1iKxs2aFvU17MS33pKV/xaI9tOFi6OPmT3qRFG08J8qnw9/hDWJ/4quKkVCTVzPl/cvyw97t1XAgqWvGP4AMoQiCPoU/5wo3ULPKjKkfmwR4nyVcySNXf8lPCVblXMSp9ViTw8RyQ=
+Received: from DM6PR10MB4313.namprd10.prod.outlook.com (2603:10b6:5:212::20)
+ by MN6PR10MB7542.namprd10.prod.outlook.com (2603:10b6:208:46d::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.29; Fri, 16 Jun
+ 2023 11:41:46 +0000
+Received: from DM6PR10MB4313.namprd10.prod.outlook.com
+ ([fe80::e38:5b81:b87f:c1eb]) by DM6PR10MB4313.namprd10.prod.outlook.com
+ ([fe80::e38:5b81:b87f:c1eb%7]) with mapi id 15.20.6500.026; Fri, 16 Jun 2023
+ 11:41:46 +0000
+Message-ID: <045a49c9-b9ae-bf0e-c4be-858d905bcc55@oracle.com>
+Date:   Fri, 16 Jun 2023 12:41:40 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v3 2/7] perf metric: Event "Compat" value supports
+ matching multiple identifiers
+To:     Jing Zhang <renyu.zj@linux.alibaba.com>,
+        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        Zhuo Song <zhuo.song@linux.alibaba.com>
+References: <1685438374-33287-1-git-send-email-renyu.zj@linux.alibaba.com>
+ <1685438374-33287-3-git-send-email-renyu.zj@linux.alibaba.com>
+ <c1d8ee9b-4839-1011-4dad-c4777d8f8224@oracle.com>
+ <452e724b-2a2c-52fd-274b-60db7a7f730e@linux.alibaba.com>
+ <c4b2fca8-602d-9c76-90a7-3eafd92da8bc@oracle.com>
+ <76fcb062-61a8-5f90-b39d-b5fb6da35652@linux.alibaba.com>
+ <5f38ef6c-8c50-5df9-19dd-c3c9fe590452@oracle.com>
+ <e4be7189-a1ba-7758-bff3-e7b8d8ff1419@linux.alibaba.com>
+ <892f57c7-8ce2-634c-26f3-4d4ab8b2f2ce@oracle.com>
+ <079d7920-2030-2e00-a833-5ec6d450f7dc@oracle.com>
+ <552eebae-76bb-a2fe-ccdc-11e8a01717da@linux.alibaba.com>
+Content-Language: en-US
+From:   John Garry <john.g.garry@oracle.com>
+Organization: Oracle Corporation
+In-Reply-To: <552eebae-76bb-a2fe-ccdc-11e8a01717da@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO2P265CA0154.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:9::22) To DM6PR10MB4313.namprd10.prod.outlook.com
+ (2603:10b6:5:212::20)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR10MB4313:EE_|MN6PR10MB7542:EE_
+X-MS-Office365-Filtering-Correlation-Id: efa7e95a-9f37-4059-45b3-08db6e5eaa19
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xyuc+q9KxXYtM8F0z5kjVD9D8jSnK9hgQ8D/oYB+3Qm2RozCXwrFwdYO+UoGqXyIXP55dxlrAy4vqRUBjThJRWWsTz976JdDywNFhqLyR9lrKcVkSJDb1hVVOfTksnWaq9mq40ku5YYJYst+fdSGlKUsOn+c1uPWDZhlZIc56feUUHrNk+530k2FRuVUr4k8uMIXSxDEQumwSbYwxmOWtATB6Yn2KUCXbQZAP+wuWGntR8FT5v2cdhqbg/rkMew/ulJvHTlUl0EGPoRrEZZILXTHwLhIymoRqo9laHiWQDM9ntcvV21bdIs/sQgV99MghNeyUhLbfiwV6u8F6Ma6SbGxC2GbkBMHkcQJo9p+50fKrPyp5NHhulusu12oSFEJb9tSU1jkGn8h4HBMLqSRi8vcK5x3KVcs3xlin0KUkutJ91w9c3O8iX0W5swuOzWpXx0KUq8/XsLu762+pWA87JuQGRh+SHw+ql7GS/piAiVFm5ZbPLR/gzD4I2r49MRj3UKSUkXS+5wdA3a12cK21tVg4eAFXMVlbmEkvJ8ryHZWEFSeN8M8kH7HfXlWXNli7lx+41nv7dHOXW6Ek2ml8l7UL7gXkmcie1Qfx6DWHkfp8e3KnXxBqXG6oAdm7YQHpGsuw17c28n8y93oY0KsIw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB4313.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(39860400002)(346002)(136003)(396003)(366004)(451199021)(478600001)(110136005)(54906003)(6666004)(36916002)(6486002)(5660300002)(8936002)(8676002)(41300700001)(2906002)(36756003)(31696002)(86362001)(7416002)(38100700002)(66476007)(66556008)(316002)(66946007)(4326008)(26005)(53546011)(6512007)(6506007)(186003)(31686004)(83380400001)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Y2QyaFdLT2s0MmlvaEtvTk9WckNKeXpaaXlrbWRWUGIxbnROYXdMcjdQTm1C?=
+ =?utf-8?B?dm05ckZMQ3BhNFpiN3NubDhwK0J2TjErWEdrZllZSkhSclVrZWtzSWxzWFNy?=
+ =?utf-8?B?UVZscGlxNnZ3ZitTWDVUenMrYmpGdWp3cXNHbSttZi96MGRaUnRvVU9yc2NN?=
+ =?utf-8?B?NVVzdlhrazRRc2RldkhVUkZxYnVvMkVFKzNicUhrV2U1QmxHTkdSeG11Um5r?=
+ =?utf-8?B?T2VRZEtTc2xtUXp6cTRjN0J3aUhtZFJQWFVmekxsdzAvMFN2WnVreUM3Z1Zn?=
+ =?utf-8?B?VndtbnE0akZkd2N6bG83S0hzbUlsZU9WTHlsR3FZNEZPWWtIbEgwWm1UVis1?=
+ =?utf-8?B?dDZKSExETWpFZktTVTRmNkxnL0lJOVZ4cSt5elhFcUhRRVIyZERXUW1aVVYx?=
+ =?utf-8?B?Vy9zK3FWZ05yamFZSURXY1hjWWZLWnAzeEV4SHlJamNTaFdlak8vRjhtdk95?=
+ =?utf-8?B?R01KRjI0ZDgxSVBkcUxOSE9tT2F2QUNFSWphQ3FYNDI2b0dKeGJrRHNZUmNY?=
+ =?utf-8?B?RU5lbWN5Z3FNM0tCcFhEVEVvaUIwMmRLd0I5Z3BCYVpYbHZYTFFnMVUzSVhh?=
+ =?utf-8?B?TllqeDBWTjNTN3VWZmRmRDgwWCsxeUlueFNtZlR3c1RvQkR2am52bXZYOURq?=
+ =?utf-8?B?QjloZW9raSt0bjE5ZW41ZnRlaGQ1Wjk4dyt3MkJPSWlIbE0wZzFNQnNBSDdy?=
+ =?utf-8?B?UkVvcVEvQ0FOL2xxM2dDRXJ6aEhYVkphTGEzZHpuZFJZOEoySDBBL3FFQmpW?=
+ =?utf-8?B?TmxNYUsyREM0RnBXdmRSVjZ1cVBtK1BISjdOWVYzMFgzWG1YOVhGQkd0YWNT?=
+ =?utf-8?B?and1aXVOeFRDdUVob3k5em1FN0daMDJTK0d4c2QxRDN2NW9VVzJIZWhPV215?=
+ =?utf-8?B?VjBaMWtiVTZVeTBxQjV4cnJLR2o5dkNmRmVVRWFYRDBBV2sxWmtEelZtY0FD?=
+ =?utf-8?B?cm53bWlLY2ZtWEY4NFROWGNzZVFYaGpPbks4T0NEN3l1ZmN3bG94bXhCWmMv?=
+ =?utf-8?B?MnpESVVFbW1uTlgwdlI3a3ROcW9TVDZ3aGs4bExVRXRrK2poS0MwYmNzQmU2?=
+ =?utf-8?B?ekpUSDNCN2R0OUtuMU1wNWIzRS9jRmlwRXVoMC9ycGhGY2NHMmJZVGw2eTJK?=
+ =?utf-8?B?cFNEbmRCNHd0ZFdJaUF6U1FnamcvemJHTjRNdkhvM2VKaDBVUGxKTHRyMjBx?=
+ =?utf-8?B?enBGTW5aT3FScWVXSmFGRHJyS0dkZnQ5UlM4ZkFTRFgvNTQ4NUxjWmt0Zzh5?=
+ =?utf-8?B?b2lRQjkvVUg1WVRzdVo4RGdrTnJFeFcveDRNTTVSUkZQYzJMSTFRSEMycTNm?=
+ =?utf-8?B?LzRDWFpqYlJaNDNvQWJzbWVTb09BaSthYys3dnpiWUlXWnhnRXp0SmtWaE9I?=
+ =?utf-8?B?amJVclUzSGNzUGxLQzBtSS9Cd3BCTys3UDZlY3FFZkpiQXpYKy9Cb0laUWtU?=
+ =?utf-8?B?Lysya3VzNXpLZlBlaVpjVUhGVGk4c0h0OUkxSjFlSE1wcktHTXNhZlgrQ3p3?=
+ =?utf-8?B?Tm01VTlBb0VneW9TNm5ySldRb1c1dWp3WkUvMm14NUhZTCt5aWFmUEtVSzgv?=
+ =?utf-8?B?NmZpMWtqNFZxRUE5WmxXTFBoQ3dmbGNXWWVuaWhxaGtsK0RRb3BhT2tmU2xh?=
+ =?utf-8?B?NGNpNlRmRVRHbzgvUlZ2aitMbFgvUjNMd2dCd3cyMkpDcURrdFhFQW9OUzV1?=
+ =?utf-8?B?aWs3TFFiaUtsU2pzUUovSUhoa0tvUUhnMkhBNVQ0SVc5Tk83VHJLWllZOEtL?=
+ =?utf-8?B?TzhVdU5tdW5iOC9JbWdaUGVlM3NxOE5iRmxuak1pNXkwVkZkdXFseHNYRVZT?=
+ =?utf-8?B?ZDhwTmdmdFdwTEVsTmhwZDRZODBYc2ptRjF4ampUWW9TdHNaa0hNT2k4ZmNG?=
+ =?utf-8?B?UVJWNnpKa0JLaVZMUnZSMWk4VFdsR0g5dnE0Wkh5YVNEaTVzWTlTNkduRVJP?=
+ =?utf-8?B?d0JncGNOMTFia3h1dU82Z3RMb1QyTm4zSzJUVEtiV2p5TUk0MDhzN3czVVVG?=
+ =?utf-8?B?d0Vobmd5WUlQK3MwUFkveUNBY3ZLbE50emhkcGI5SnFUdzcwTDdobnFvcklR?=
+ =?utf-8?B?SDZHbXJLZVY5Sk93R2U1ZUp2NkZnZm5TYlZHa0tZdmZIOEhJa0lOb2dNKzc0?=
+ =?utf-8?Q?RwGbvvVlcJOQtvAoMqz0D/xR6?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?RUNnaHB3K01XMzlmdER0MkRFNHdPdTNUMGpDZWZLQ3NKK2lnUG1XUVgyMXMz?=
+ =?utf-8?B?RnRyWitvN0lTdkxzR1JlYW1BdGF5cHEvSVE0TDdHRUVYNU9kblFLVnhST0w1?=
+ =?utf-8?B?S3RuWmRJMUZDOFJINHVQSjFNSGNoRDlLUWVWS1hzTVlqRlBwbDI1VTFObHJw?=
+ =?utf-8?B?WmtIS3hpVmVpZzZQTVZUNWpUR3c1RUtvVjk4VEdEanpUS1ZtMzVLMVRsY1pM?=
+ =?utf-8?B?T0pTVUNRS293cVlNbVp3N2M1Znc1MTVpaTZOREtVRlAwTWNvRDVxZm9VeGlR?=
+ =?utf-8?B?TTZJcy9zSWJLOVBTYTdEVFV2dzZSVzI5eWh6Ym5wSHFHNFFWSmNXYzA4TEUz?=
+ =?utf-8?B?MThKdnBpS2M5dUh4U3prOUNxTTZhNFcvZ2FKRGtKbnE2eXBydE14UW1DVnN0?=
+ =?utf-8?B?SU5FR00zSHFGZ05ySXQzb1VobzZ1T3dIUjhVWFJoUTQrQnVCWm9wRE4vYzZm?=
+ =?utf-8?B?KzRyYkw5azhoWG5kOFhIWHcwQnVndG96RnJLUHpETHJ6a3Y1R1hlN3dsR254?=
+ =?utf-8?B?TGROVHBsaW5DMUd0MEdhdW5RVnlHa2R6QVpVZVN5U0p3SWlkMTdtSlV1T0Zo?=
+ =?utf-8?B?ZDdpL3JPbVBJQ2hacHkrcmF5N1JmREhrVTU5M0ZmMTJLdjR5M0ExMldBYXJt?=
+ =?utf-8?B?UXNIMmZ2WHVWMDA0L3NxRGtwckRVWStTS2pZNS9BSmROY3lmNTdMb3F1NE5L?=
+ =?utf-8?B?UjNxdFNXc1dvVjVHY3dmUGhhNGZSTFZ4WUxUS0ZCdWxMcVFwQTZWRDZ5U2wz?=
+ =?utf-8?B?bzhmTE8rU0pFT2hFaWlqTWhlUEhCOFUvazBGamlmNW5hN2JsZHUvNzU4UTBw?=
+ =?utf-8?B?RVk1T2ZybUxBdGJZSXYxN3VPa3VISUtTcjBIT1BpN3Jta2lIMnJwRFhSdmpq?=
+ =?utf-8?B?NHVIYU82Tld3TGJKZEFxbUl1cGo5b0JXRWptZWlmaGF5NXJWaXlSZWZXWmNB?=
+ =?utf-8?B?ZjkxRTl4RTJ6dlFuZ3RsYXFaQ1dMdEtZajBuRWlkNmpLWFZROG9mV3FvOXVR?=
+ =?utf-8?B?eXZWKzdnYXJoKzhZbzFIK2ZwSzBYV3RBMEhhMDRtQmpMZmJpUTl4bkdHT2x0?=
+ =?utf-8?B?T0dGUXVKMWlvVGVTWXRXVzJFb3RHTG1xNk85a0w2SDJNNTV0OVcyT2M5QjNz?=
+ =?utf-8?B?eDZVM0h5YXhrcDRVQjlRdWlTSXplVlRIQVptWUNnYWdtUk5NK2hEVXRiVWZN?=
+ =?utf-8?B?bTIxclYyUVEvQkZDd3NhZW1jRXA3cmZJckhoTlZDYlBTeVdXR25RSFlESFRX?=
+ =?utf-8?B?T2tKOUtTeFdlUUU1dWJXaTN5ay9hV1dCMmVTdDRyOXFtL2RtTlUzTFA2SUdF?=
+ =?utf-8?B?SzhQWE9hY29kVjBqcTFHS2hmemhyT1dMaVJvYldyVHdPQ2pqdjVEY3hheEho?=
+ =?utf-8?B?WkR5VGpqRTd4cTRTZS94MzgrOWVTcVRiOEhRTzl2OHBUYm1iQVFuNDhiWkdi?=
+ =?utf-8?B?MFE4bU9LRktIeWlNeGRia0QwYnBLaHZENDZKUDNtTW9QK1lmRzZDRkF0d3Fw?=
+ =?utf-8?Q?kuVGFY=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: efa7e95a-9f37-4059-45b3-08db6e5eaa19
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB4313.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 11:41:46.7268
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: MvUhskzSAVl4EYOAN1l8Swvg3CCv1V9acJbzPrvkpypDWY5n+1qLI98XEPa7PuvIxgigKjTsGb8EFT//sxa4pg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR10MB7542
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-16_08,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 phishscore=0
+ mlxscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306160105
+X-Proofpoint-ORIG-GUID: AZ2l9RNwFE4uhIKXB6uizcf54Vr2E46z
+X-Proofpoint-GUID: AZ2l9RNwFE4uhIKXB6uizcf54Vr2E46z
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Padding is a new display module on MT8188, it provides ability
-to add pixels to width and height of a layer with specified colors.
+On 15/06/2023 03:18, Jing Zhang wrote:
+>>>>> Unit is the format of the event_source device name. We should match based on that as well as compat. I need to check the code again to understand how that is done... it has changed a good bit in 3 years.
+>>>>>
+>>>> This situation only happens on uncore metric. I happened to write wrong Unit, but the metric still matches.
+>>>>
+>>> I'm just double checking this now. I think any possible fix should be easy enough for current code but may be tricky for backport with lots of metric code changes.
+>> I also have code to re-work sys event metric support such that we don't require "compat" or "Unit" values for a metric when the metric is described in terms of event aliases. That code is 2 years old, so may take a bit of time to rebase. I'll look to do that now.
+>>
+> Sounds good!
 
-Due to hardware design, Mixer in VDOSYS1 requires width of a layer
-to be 2-pixel-align, or 4-pixel-align when ETHDR is enabled,
-we need Padding to deal with odd width.
+BTW, I am just looking at your cmn JSONs in this series, and we have 
+something like this:
 
-Please notice that even if the Padding is in bypass mode,
-settings in register must be cleared to 0,
-or undefined behaviors could happen.
-
-Signed-off-by: Hsiao Chien Sung <shawn.sung@mediatek.com>
----
- drivers/gpu/drm/mediatek/Makefile             |   3 +-
- drivers/gpu/drm/mediatek/mtk_disp_drv.h       |   3 +
- .../gpu/drm/mediatek/mtk_disp_ovl_adaptor.c   |  42 +++++-
- drivers/gpu/drm/mediatek/mtk_drm_drv.c        |   1 +
- drivers/gpu/drm/mediatek/mtk_drm_drv.h        |   2 +-
- drivers/gpu/drm/mediatek/mtk_padding.c        | 136 ++++++++++++++++++
- 6 files changed, 184 insertions(+), 3 deletions(-)
- create mode 100644 drivers/gpu/drm/mediatek/mtk_padding.c
-
-diff --git a/drivers/gpu/drm/mediatek/Makefile b/drivers/gpu/drm/mediatek/Makefile
-index d4d193f60271..5e4436403b8d 100644
---- a/drivers/gpu/drm/mediatek/Makefile
-+++ b/drivers/gpu/drm/mediatek/Makefile
-@@ -16,7 +16,8 @@ mediatek-drm-y := mtk_disp_aal.o \
- 		  mtk_dsi.o \
- 		  mtk_dpi.o \
- 		  mtk_ethdr.o \
--		  mtk_mdp_rdma.o
-+		  mtk_mdp_rdma.o \
-+		  mtk_padding.o
-
- obj-$(CONFIG_DRM_MEDIATEK) += mediatek-drm.o
-
-diff --git a/drivers/gpu/drm/mediatek/mtk_disp_drv.h b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
-index 2254038519e1..f9fdb1268aa5 100644
---- a/drivers/gpu/drm/mediatek/mtk_disp_drv.h
-+++ b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
-@@ -157,4 +157,7 @@ void mtk_mdp_rdma_config(struct device *dev, struct mtk_mdp_rdma_cfg *cfg,
- const u32 *mtk_mdp_rdma_get_formats(struct device *dev);
- size_t mtk_mdp_rdma_get_num_formats(struct device *dev);
-
-+int mtk_padding_clk_enable(struct device *dev);
-+void mtk_padding_clk_disable(struct device *dev);
-+void mtk_padding_config(struct device *dev, struct cmdq_pkt *cmdq_pkt);
- #endif
-diff --git a/drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c b/drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
-index a5f5a0f8ea85..58db0d4cb5b7 100644
---- a/drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
-+++ b/drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
-@@ -26,13 +26,22 @@
- #define MTK_OVL_ADAPTOR_LAYER_NUM 4
-
- enum mtk_ovl_adaptor_comp_type {
--	OVL_ADAPTOR_TYPE_RDMA = 0,
-+	OVL_ADAPTOR_TYPE_PADDING,
-+	OVL_ADAPTOR_TYPE_RDMA,
- 	OVL_ADAPTOR_TYPE_MERGE,
- 	OVL_ADAPTOR_TYPE_ETHDR,
- 	OVL_ADAPTOR_TYPE_NUM,
- };
-
- enum mtk_ovl_adaptor_comp_id {
-+	OVL_ADAPTOR_PADDING0,
-+	OVL_ADAPTOR_PADDING1,
-+	OVL_ADAPTOR_PADDING2,
-+	OVL_ADAPTOR_PADDING3,
-+	OVL_ADAPTOR_PADDING4,
-+	OVL_ADAPTOR_PADDING5,
-+	OVL_ADAPTOR_PADDING6,
-+	OVL_ADAPTOR_PADDING7,
- 	OVL_ADAPTOR_MDP_RDMA0,
- 	OVL_ADAPTOR_MDP_RDMA1,
- 	OVL_ADAPTOR_MDP_RDMA2,
-@@ -62,6 +71,7 @@ struct mtk_disp_ovl_adaptor {
- };
-
- static const char * const private_comp_stem[OVL_ADAPTOR_TYPE_NUM] = {
-+	[OVL_ADAPTOR_TYPE_PADDING]	= "padding",
- 	[OVL_ADAPTOR_TYPE_RDMA]		= "vdo1-rdma",
- 	[OVL_ADAPTOR_TYPE_MERGE]	= "merge",
- 	[OVL_ADAPTOR_TYPE_ETHDR]	= "ethdr",
-@@ -76,6 +86,14 @@ static const struct ovl_adaptor_comp_match comp_matches[OVL_ADAPTOR_ID_MAX] = {
- 	[OVL_ADAPTOR_MDP_RDMA5] = { OVL_ADAPTOR_TYPE_RDMA, DDP_COMPONENT_MDP_RDMA5, 5 },
- 	[OVL_ADAPTOR_MDP_RDMA6] = { OVL_ADAPTOR_TYPE_RDMA, DDP_COMPONENT_MDP_RDMA6, 6 },
- 	[OVL_ADAPTOR_MDP_RDMA7] = { OVL_ADAPTOR_TYPE_RDMA, DDP_COMPONENT_MDP_RDMA7, 7 },
-+	[OVL_ADAPTOR_PADDING0] = { OVL_ADAPTOR_TYPE_PADDING, DDP_COMPONENT_PADDING0, 0 },
-+	[OVL_ADAPTOR_PADDING1] = { OVL_ADAPTOR_TYPE_PADDING, DDP_COMPONENT_PADDING1, 1 },
-+	[OVL_ADAPTOR_PADDING2] = { OVL_ADAPTOR_TYPE_PADDING, DDP_COMPONENT_PADDING2, 2 },
-+	[OVL_ADAPTOR_PADDING3] = { OVL_ADAPTOR_TYPE_PADDING, DDP_COMPONENT_PADDING3, 3 },
-+	[OVL_ADAPTOR_PADDING4] = { OVL_ADAPTOR_TYPE_PADDING, DDP_COMPONENT_PADDING4, 4 },
-+	[OVL_ADAPTOR_PADDING5] = { OVL_ADAPTOR_TYPE_PADDING, DDP_COMPONENT_PADDING5, 5 },
-+	[OVL_ADAPTOR_PADDING6] = { OVL_ADAPTOR_TYPE_PADDING, DDP_COMPONENT_PADDING6, 6 },
-+	[OVL_ADAPTOR_PADDING7] = { OVL_ADAPTOR_TYPE_PADDING, DDP_COMPONENT_PADDING7, 7 },
- 	[OVL_ADAPTOR_MERGE0] = { OVL_ADAPTOR_TYPE_MERGE, DDP_COMPONENT_MERGE1, 1 },
- 	[OVL_ADAPTOR_MERGE1] = { OVL_ADAPTOR_TYPE_MERGE, DDP_COMPONENT_MERGE2, 2 },
- 	[OVL_ADAPTOR_MERGE2] = { OVL_ADAPTOR_TYPE_MERGE, DDP_COMPONENT_MERGE3, 3 },
-@@ -90,6 +108,8 @@ void mtk_ovl_adaptor_layer_config(struct device *dev, unsigned int idx,
- 	struct mtk_disp_ovl_adaptor *ovl_adaptor = dev_get_drvdata(dev);
- 	struct mtk_plane_pending_state *pending = &state->pending;
- 	struct mtk_mdp_rdma_cfg rdma_config = {0};
-+	struct device *padding_l;
-+	struct device *padding_r;
- 	struct device *rdma_l;
- 	struct device *rdma_r;
- 	struct device *merge;
-@@ -106,6 +126,8 @@ void mtk_ovl_adaptor_layer_config(struct device *dev, unsigned int idx,
- 		&pending->addr, (pending->pitch / fmt_info->cpp[0]),
- 		pending->x, pending->y, pending->width, pending->height);
-
-+	padding_l = ovl_adaptor->ovl_adaptor_comp[OVL_ADAPTOR_PADDING0 + 2 * idx];
-+	padding_r = ovl_adaptor->ovl_adaptor_comp[OVL_ADAPTOR_PADDING0 + 2 * idx + 1];
- 	rdma_l = ovl_adaptor->ovl_adaptor_comp[OVL_ADAPTOR_MDP_RDMA0 + 2 * idx];
- 	rdma_r = ovl_adaptor->ovl_adaptor_comp[OVL_ADAPTOR_MDP_RDMA0 + 2 * idx + 1];
- 	merge = ovl_adaptor->ovl_adaptor_comp[OVL_ADAPTOR_MERGE0 + idx];
-@@ -143,10 +165,15 @@ void mtk_ovl_adaptor_layer_config(struct device *dev, unsigned int idx,
- 	rdma_config.color_encoding = pending->color_encoding;
- 	mtk_mdp_rdma_config(rdma_l, &rdma_config, cmdq_pkt);
-
-+	if (padding_l)
-+		mtk_padding_config(padding_l, cmdq_pkt);
-+
- 	if (use_dual_pipe) {
- 		rdma_config.x_left = l_w;
- 		rdma_config.width = r_w;
- 		mtk_mdp_rdma_config(rdma_r, &rdma_config, cmdq_pkt);
-+		if (padding_r)
-+			mtk_padding_config(padding_r, cmdq_pkt);
- 	}
-
- 	mtk_merge_start_cmdq(merge, cmdq_pkt);
-@@ -209,6 +236,9 @@ int mtk_ovl_adaptor_clk_enable(struct device *dev)
- 			continue;
-
- 		switch (comp_matches[i].type) {
-+		case OVL_ADAPTOR_TYPE_PADDING:
-+			ret = mtk_padding_clk_enable(comp);
-+			break;
- 		case OVL_ADAPTOR_TYPE_RDMA:
- 			ret = mtk_mdp_rdma_clk_enable(comp);
- 			break;
-@@ -238,6 +268,9 @@ int mtk_ovl_adaptor_clk_enable(struct device *dev)
- 			continue;
-
- 		switch (comp_matches[i].type) {
-+		case OVL_ADAPTOR_TYPE_PADDING:
-+			mtk_padding_clk_disable(comp);
-+			break;
- 		case OVL_ADAPTOR_TYPE_RDMA:
- 			mtk_mdp_rdma_clk_disable(comp);
- 			break;
-@@ -277,6 +310,10 @@ void mtk_ovl_adaptor_clk_disable(struct device *dev)
- 			continue;
-
- 		switch (comp_matches[i].type) {
-+		case OVL_ADAPTOR_TYPE_PADDING:
-+			mtk_padding_clk_disable(comp);
-+			pm_runtime_put(comp);
-+			break;
- 		case OVL_ADAPTOR_TYPE_RDMA:
- 			mtk_mdp_rdma_clk_disable(comp);
- 			pm_runtime_put(comp);
-@@ -414,6 +451,9 @@ static int ovl_adaptor_comp_get_id(struct device *dev, struct device_node *node,
-
- static const struct of_device_id mtk_ovl_adaptor_comp_dt_ids[] = {
- 	{
-+		.compatible = "mediatek,mt8188-padding",
-+		.data = (void *)OVL_ADAPTOR_TYPE_PADDING,
-+	}, {
- 		.compatible = "mediatek,mt8195-vdo1-rdma",
- 		.data = (void *)OVL_ADAPTOR_TYPE_RDMA,
- 	}, {
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-index 613093068bb4..ed5b5b8d6c2e 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-@@ -977,6 +977,7 @@ static struct platform_driver * const mtk_drm_drivers[] = {
- 	&mtk_dsi_driver,
- 	&mtk_ethdr_driver,
- 	&mtk_mdp_rdma_driver,
-+	&mtk_padding_driver,
- };
-
- static int __init mtk_drm_init(void)
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.h b/drivers/gpu/drm/mediatek/mtk_drm_drv.h
-index eb2fd45941f0..562f2db47add 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_drv.h
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.h
-@@ -64,5 +64,5 @@ extern struct platform_driver mtk_dpi_driver;
- extern struct platform_driver mtk_dsi_driver;
- extern struct platform_driver mtk_ethdr_driver;
- extern struct platform_driver mtk_mdp_rdma_driver;
--
-+extern struct platform_driver mtk_padding_driver;
- #endif /* MTK_DRM_DRV_H */
-diff --git a/drivers/gpu/drm/mediatek/mtk_padding.c b/drivers/gpu/drm/mediatek/mtk_padding.c
-new file mode 100644
-index 000000000000..31b4efff968f
+index 0000000..e70ac1a
 --- /dev/null
-+++ b/drivers/gpu/drm/mediatek/mtk_padding.c
-@@ -0,0 +1,136 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2023 MediaTek Inc.
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/component.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/soc/mediatek/mtk-cmdq.h>
-+
-+#include "mtk_disp_drv.h"
-+#include "mtk_drm_crtc.h"
-+#include "mtk_drm_ddp_comp.h"
-+
-+/**
-+ * struct mtk_padding - basic information of Padding
-+ * @clk: Clock of the module
-+ * @regs: Virtual address of the Padding for CPU to access
-+ * @cmdq_reg: CMDQ setting of the Padding
-+ *
-+ * Every Padding should have different clock source, register base, and
-+ * CMDQ settings, we stored these differences all together.
-+ */
-+struct mtk_padding {
-+	struct clk		*clk;
-+	void __iomem		*regs;
-+	struct cmdq_client_reg	cmdq_reg;
-+};
-+
-+int mtk_padding_clk_enable(struct device *dev)
-+{
-+	struct mtk_padding *padding = dev_get_drvdata(dev);
-+
-+	return clk_prepare_enable(padding->clk);
-+}
-+
-+void mtk_padding_clk_disable(struct device *dev)
-+{
-+	struct mtk_padding *padding = dev_get_drvdata(dev);
-+
-+	clk_disable_unprepare(padding->clk);
-+}
-+
-+void mtk_padding_config(struct device *dev, struct cmdq_pkt *cmdq_pkt)
-+{
-+	struct mtk_padding *padding = dev_get_drvdata(dev);
-+
-+	/* bypass padding */
-+	mtk_ddp_write_mask(cmdq_pkt, GENMASK(1, 0), &padding->cmdq_reg, padding->regs, 0,
-+			   GENMASK(1, 0));
-+}
-+
-+static int mtk_padding_bind(struct device *dev, struct device *master, void *data)
-+{
-+	return 0;
-+}
-+
-+static void mtk_padding_unbind(struct device *dev, struct device *master, void *data)
-+{
-+}
-+
-+static const struct component_ops mtk_padding_component_ops = {
-+	.bind	= mtk_padding_bind,
-+	.unbind = mtk_padding_unbind,
-+};
-+
-+static int mtk_padding_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct mtk_padding *priv;
-+	struct resource *res;
-+	int ret;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->clk = devm_clk_get(dev, NULL);
-+	if (IS_ERR(priv->clk)) {
-+		dev_err(dev, "failed to get clk\n");
-+		return PTR_ERR(priv->clk);
-+	}
-+
-+	priv->regs = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
-+	if (IS_ERR(priv->regs)) {
-+		dev_err(dev, "failed to do ioremap\n");
-+		return PTR_ERR(priv->regs);
-+	}
-+
-+#if IS_REACHABLE(CONFIG_MTK_CMDQ)
-+	ret = cmdq_dev_get_client_reg(dev, &priv->cmdq_reg, 0);
-+	if (ret) {
-+		dev_err(dev, "failed to get gce client reg\n");
-+		return ret;
-+	}
-+#endif
-+
-+	platform_set_drvdata(pdev, priv);
-+
-+	ret = devm_pm_runtime_enable(dev);
-+	if (ret)
-+		return ret;
-+
-+	ret = component_add(dev, &mtk_padding_component_ops);
-+	if (ret) {
-+		pm_runtime_disable(dev);
-+		return dev_err_probe(dev, ret, "failed to add component\n");
-+	}
-+
-+	return 0;
-+}
-+
-+static int mtk_padding_remove(struct platform_device *pdev)
-+{
-+	component_del(&pdev->dev, &mtk_padding_component_ops);
-+	return 0;
-+}
-+
-+static const struct of_device_id mtk_padding_driver_dt_match[] = {
-+	{ .compatible = "mediatek,mt8188-padding" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, mtk_padding_driver_dt_match);
-+
-+struct platform_driver mtk_padding_driver = {
-+	.probe		= mtk_padding_probe,
-+	.remove		= mtk_padding_remove,
-+	.driver		= {
-+		.name	= "mediatek-disp-padding",
-+		.owner	= THIS_MODULE,
-+		.of_match_table = mtk_padding_driver_dt_match,
-+	},
-+};
---
-2.18.0
++++ b/tools/perf/pmu-events/arch/arm64/arm/cmn/sys/metrics.json
+@@ -0,0 +1,74 @@
++[
++	{
++		"MetricName": "slc_miss_rate",
++		"BriefDescription": "The system level cache miss rate include.",
++		"MetricGroup": "arm_cmn",
++		"MetricExpr": "hnf_cache_miss / hnf_slc_sf_cache_access",
+
+So this expression uses event aliases hnf_cache_miss and 
+hnf_slc_sf_cache_access - where are they defined in a JSON?
+
+I could not see them. If they are not needed, then I may be missing 
+something...
+
+Thanks,
+John
+
+
 
