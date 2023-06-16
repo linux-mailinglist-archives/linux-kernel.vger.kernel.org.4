@@ -2,132 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 862FB732F77
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4755D732F7F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345633AbjFPLI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 07:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60476 "EHLO
+        id S1344055AbjFPLL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 07:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344394AbjFPLIc (ORCPT
+        with ESMTP id S229913AbjFPLL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 07:08:32 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0263A3C28
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:07:05 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qA7Hy-0001BY-3g; Fri, 16 Jun 2023 13:06:46 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 9D4AB1DAC56;
-        Fri, 16 Jun 2023 11:06:43 +0000 (UTC)
-Date:   Fri, 16 Jun 2023 13:06:43 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Srinivas Goud <srinivas.goud@amd.com>
-Cc:     wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, gcnu.goud@gmail.com,
-        git@amd.com, michal.simek@xilinx.com, linux-can@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] can: xilinx_can: Add ECC support
-Message-ID: <20230616-expenses-regime-50bdd5f78eea-mkl@pengutronix.de>
-References: <1686570177-2836108-1-git-send-email-srinivas.goud@amd.com>
- <1686570177-2836108-3-git-send-email-srinivas.goud@amd.com>
+        Fri, 16 Jun 2023 07:11:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECAA5123
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:10:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686913842;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=rZB7JzdcM+W3WnooI0jXz6/MmOAa3ZILp9sqWdRbOG0=;
+        b=BVvTJmI3uIjLbysQYCnC7Ak6Tu7zWiikgEUBKJ//GibCVfYbM0TAMa7E5nVr1mZ5K+4Xi0
+        iTlvBWBm++BMQbnVirK/rc9c/AYP+9+tkEKADj2X1YSpazsa/4785iYtixhvVXTFMHVSU/
+        muNIEqq9BXLJ2Lw9Oy8Le+cfgI5TGJk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-675-uDkYus20Nqim4-FY4-BJ_Q-1; Fri, 16 Jun 2023 07:10:37 -0400
+X-MC-Unique: uDkYus20Nqim4-FY4-BJ_Q-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4867B3804501;
+        Fri, 16 Jun 2023 11:10:36 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.51])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A0E522166B25;
+        Fri, 16 Jun 2023 11:10:33 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+To:     netdev@vger.kernel.org, Herbert Xu <herbert@gondor.apana.org.au>
+cc:     dhowells@redhat.com,
+        syzbot+13a08c0bf4d212766c3c@syzkaller.appspotmail.com,
+        syzbot+14234ccf6d0ef629ec1a@syzkaller.appspotmail.com,
+        syzbot+4e2e47f32607d0f72d43@syzkaller.appspotmail.com,
+        syzbot+472626bb5e7c59fb768f@syzkaller.appspotmail.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v2] crypto: af_alg/hash: Fix recvmsg() after sendmsg(MSG_MORE) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uavg33o2ipzoq7yz"
-Content-Disposition: inline
-In-Reply-To: <1686570177-2836108-3-git-send-email-srinivas.goud@amd.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <427645.1686913832.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Fri, 16 Jun 2023 12:10:32 +0100
+Message-ID: <427646.1686913832@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+If an AF_ALG socket bound to a hashing algorithm is sent a zero-length
+message with MSG_MORE set and then recvmsg() is called without first
+sending another message without MSG_MORE set to end the operation, an oops
+will occur because the crypto context and result doesn't now get set up in
+advance because hash_sendmsg() now defers that as long as possible in the
+hope that it can use crypto_ahash_digest() - and then because the message
+is zero-length, it the data wrangling loop is skipped.
 
---uavg33o2ipzoq7yz
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fix this by handling zero-length sends at the top of the hash_sendmsg()
+function.  If we're not continuing the previous sendmsg(), then just ignor=
+e
+the send (hash_recvmsg() will invent something when called); if we are
+continuing, then we finalise the request at this point if MSG_MORE is not
+set to get any error here, otherwise the send is of no effect and can be
+ignored.
 
-On 12.06.2023 17:12:56, Srinivas Goud wrote:
-> Add ECC support for Xilinx CAN Controller, so this driver reports
-> 1bit/2bit ECC errors for FIFO's based on ECC error interrupt.
-> ECC feature for Xilinx CAN Controller selected through
-> 'xlnx,has-ecc' DT property
->=20
-> Signed-off-by: Srinivas Goud <srinivas.goud@amd.com>
-> ---
->  drivers/net/can/xilinx_can.c | 109 +++++++++++++++++++++++++++++++++++++=
-++++--
->  1 file changed, 104 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
-> index 43c812e..311e435 100644
-> --- a/drivers/net/can/xilinx_can.c
-> +++ b/drivers/net/can/xilinx_can.c
-> @@ -63,6 +63,12 @@ enum xcan_reg {
->  	XCAN_RXMSG_2_BASE_OFFSET	=3D 0x2100, /* RX Message Space */
->  	XCAN_AFR_2_MASK_OFFSET	=3D 0x0A00, /* Acceptance Filter MASK */
->  	XCAN_AFR_2_ID_OFFSET	=3D 0x0A04, /* Acceptance Filter ID */
-> +
-> +	/* only on AXI CAN cores */
-> +	XCAN_ECC_CFG_OFFSET	=3D 0xC8,	/* ECC Configuration */
-> +	XCAN_TXTLFIFO_ECC_OFFSET	=3D 0xCC, /* TXTL FIFO ECC error counter */
-> +	XCAN_TXOLFIFO_ECC_OFFSET	=3D 0xD0, /* TXOL FIFO ECC error counter */
-> +	XCAN_RXFIFO_ECC_OFFSET		=3D 0xD4, /* RX FIFO ECC error counter */
+Whilst we're at it, remove the code to create a kvmalloc'd scatterlist if
+we get more than ALG_MAX_PAGES - this shouldn't happen.
 
-Please keep the enum sorted by address.
+Fixes: c662b043cdca ("crypto: af_alg/hash: Support MSG_SPLICE_PAGES")
+Reported-by: syzbot+13a08c0bf4d212766c3c@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/r/000000000000b928f705fdeb873a@google.com/
+Reported-by: syzbot+14234ccf6d0ef629ec1a@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/r/000000000000c047db05fdeb8790@google.com/
+Reported-by: syzbot+4e2e47f32607d0f72d43@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/r/000000000000bcca3205fdeb87fb@google.com/
+Reported-by: syzbot+472626bb5e7c59fb768f@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/r/000000000000b55d8805fdeb8385@google.com/
+Signed-off-by: David Howells <dhowells@redhat.com>
+Reported-and-tested-by: syzbot+6efc50cc1f8d718d6cb7@syzkaller.appspotmail.=
+com
+cc: Herbert Xu <herbert@gondor.apana.org.au>
+cc: "David S. Miller" <davem@davemloft.net>
+cc: Eric Dumazet <edumazet@google.com>
+cc: Jakub Kicinski <kuba@kernel.org>
+cc: Paolo Abeni <pabeni@redhat.com>
+cc: Jens Axboe <axboe@kernel.dk>
+cc: Matthew Wilcox <willy@infradead.org>
+cc: linux-crypto@vger.kernel.org
+cc: netdev@vger.kernel.org
+---
+ crypto/algif_hash.c |   38 +++++++++++++++++++++++++-------------
+ 1 file changed, 25 insertions(+), 13 deletions(-)
 
->  };
-> =20
->  #define XCAN_FRAME_ID_OFFSET(frame_base)	((frame_base) + 0x00)
-> @@ -135,6 +141,17 @@ enum xcan_reg {
->  #define XCAN_2_FSR_RI_MASK		0x0000003F /* RX Read Index */
->  #define XCAN_DLCR_EDL_MASK		0x08000000 /* EDL Mask in DLC */
->  #define XCAN_DLCR_BRS_MASK		0x04000000 /* BRS Mask in DLC */
-> +#define XCAN_IXR_E2BERX_MASK		BIT(23) /* RX FIFO two bit ECC error */
-> +#define XCAN_IXR_E1BERX_MASK		BIT(22) /* RX FIFO one bit ECC error */
-> +#define XCAN_IXR_E2BETXOL_MASK		BIT(21) /* TXOL FIFO two bit ECC error */
-> +#define XCAN_IXR_E1BETXOL_MASK		BIT(20) /* TXOL FIFO One bit ECC error */
-> +#define XCAN_IXR_E2BETXTL_MASK		BIT(19) /* TXTL FIFO Two bit ECC error */
-> +#define XCAN_IXR_E1BETXTL_MASK		BIT(18) /* TXTL FIFO One bit ECC error */
+diff --git a/crypto/algif_hash.c b/crypto/algif_hash.c
+index dfb048cefb60..0ab43e149f0e 100644
+--- a/crypto/algif_hash.c
++++ b/crypto/algif_hash.c
+@@ -76,13 +76,30 @@ static int hash_sendmsg(struct socket *sock, struct ms=
+ghdr *msg,
+ =
 
-Please move the XCAN_IXR next to the other XCAN_IXR.
+ 	lock_sock(sk);
+ 	if (!continuing) {
+-		if ((msg->msg_flags & MSG_MORE))
+-			hash_free_result(sk, ctx);
++		/* Discard a previous request that wasn't marked MSG_MORE. */
++		hash_free_result(sk, ctx);
++		if (!msg_data_left(msg))
++			goto done; /* Zero-length; don't start new req */
+ 		need_init =3D true;
++	} else if (!msg_data_left(msg)) {
++		/*
++		 * No data - finalise the prev req if MSG_MORE so any error
++		 * comes out here.
++		 */
++		if (!(msg->msg_flags & MSG_MORE)) {
++			err =3D hash_alloc_result(sk, ctx);
++			if (err)
++				goto unlock_free;
++			ahash_request_set_crypt(&ctx->req, NULL,
++						ctx->result, 0);
++			err =3D crypto_wait_req(crypto_ahash_final(&ctx->req),
++					      &ctx->wait);
++			if (err)
++				goto unlock_free;
++		}
++		goto done_more;
+ 	}
+ =
 
-Marc
+-	ctx->more =3D false;
+-
+ 	while (msg_data_left(msg)) {
+ 		ctx->sgl.sgt.sgl =3D ctx->sgl.sgl;
+ 		ctx->sgl.sgt.nents =3D 0;
+@@ -93,15 +110,6 @@ static int hash_sendmsg(struct socket *sock, struct ms=
+ghdr *msg,
+ 		if (npages =3D=3D 0)
+ 			goto unlock_free;
+ =
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+-		if (npages > ARRAY_SIZE(ctx->sgl.sgl)) {
+-			err =3D -ENOMEM;
+-			ctx->sgl.sgt.sgl =3D
+-				kvmalloc(array_size(npages,
+-						    sizeof(*ctx->sgl.sgt.sgl)),
+-					 GFP_KERNEL);
+-			if (!ctx->sgl.sgt.sgl)
+-				goto unlock_free;
+-		}
+ 		sg_init_table(ctx->sgl.sgl, npages);
+ =
 
---uavg33o2ipzoq7yz
-Content-Type: application/pgp-signature; name="signature.asc"
+ 		ctx->sgl.need_unpin =3D iov_iter_extract_will_pin(&msg->msg_iter);
+@@ -150,7 +158,9 @@ static int hash_sendmsg(struct socket *sock, struct ms=
+ghdr *msg,
+ 		af_alg_free_sg(&ctx->sgl);
+ 	}
+ =
 
------BEGIN PGP SIGNATURE-----
++done_more:
+ 	ctx->more =3D msg->msg_flags & MSG_MORE;
++done:
+ 	err =3D 0;
+ unlock:
+ 	release_sock(sk);
+@@ -158,6 +168,8 @@ static int hash_sendmsg(struct socket *sock, struct ms=
+ghdr *msg,
+ =
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmSMQkAACgkQvlAcSiqK
-BOjbNgf/RxHDH+YCYClwCOaV6RhP831bA2t6dfotZERv4Ew6yibGZaSoSALn59Yo
-SomlFtQ5H80T9iIOM5qQXabM7KsLXiav7RN2hQNThrVFVi5vwk6iO3ZtVXkZ3vqj
-4ghQdSIQhwyoneV1RGX19KRTkw+J5/QIdHBU0VyG3ztT8BJB43+JIdAGllF/oBGC
-1RlQDYciowHLFiBevP62ZKFlulao2gmunSqad21OCIqbDW0gDGrErgOVqmWr7xG/
-J09VVdabpTZUaoJPoT3eGfIcXhA1oUhNaZiFCc0TSTXXdYQf6sf1PWuOblQ+IjTG
-2Z9WLAKN2xSAu79s1TTGulBoogS7Bw==
-=FHno
------END PGP SIGNATURE-----
+ unlock_free:
+ 	af_alg_free_sg(&ctx->sgl);
++	hash_free_result(sk, ctx);
++	ctx->more =3D false;
+ 	goto unlock;
+ }
+ =
 
---uavg33o2ipzoq7yz--
