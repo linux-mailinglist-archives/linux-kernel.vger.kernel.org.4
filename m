@@ -2,54 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 631AC73340B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 16:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3373973340D
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 16:59:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345573AbjFPO6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 10:58:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55888 "EHLO
+        id S1345342AbjFPO7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 10:59:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345756AbjFPO6A (ORCPT
+        with ESMTP id S230307AbjFPO7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 10:58:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8BE930DD;
-        Fri, 16 Jun 2023 07:57:59 -0700 (PDT)
+        Fri, 16 Jun 2023 10:59:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1676730DD
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 07:59:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 78B4B62FBB;
-        Fri, 16 Jun 2023 14:57:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61B3EC433CB;
-        Fri, 16 Jun 2023 14:57:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F8C562DC1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 14:59:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73531C433C8;
+        Fri, 16 Jun 2023 14:59:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686927478;
-        bh=VEgG/e8fspM0F601IZYMqwpkaszvh+z+6C3I9ZOUdPU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HO3j+fdwDlPrXg3XbH0O26oU15mWSLLDR2qPmFPbvajv34VOWB/sQQld0y23xbCj4
-         L4wRcf90mHcgw8kYasEMrNj/YsZs3OY5IVbQIJ4amINKsobefTlLIzAhnn0kW25Xnj
-         N9sNVT+BPpCmT45KGzy5arrBBufxwCI/KUi6+jR56gSeITKiaTRutVEaEhL0pqGFxO
-         ymS2vKOVQ68AUMUmOPTxjJAQJfZ2u/IiSjByXYdA8qm0BcDxdh3qQtiv4QCwaV1Alr
-         ji9EEm5AJaM3+RlaE1Yg7cG1qgKaRcQuE78JtWdZR6kSP4R2F8XDoICDL20szGiji5
-         J52n7UFrx7XJQ==
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v2 2/2] kbuild: respect GNU Make -w flag
-Date:   Fri, 16 Jun 2023 23:57:51 +0900
-Message-Id: <20230616145751.945864-2-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230616145751.945864-1-masahiroy@kernel.org>
-References: <20230616145751.945864-1-masahiroy@kernel.org>
+        s=k20201202; t=1686927550;
+        bh=ouesFuuU+y0Nvn7B/3cjuuMqNQ+7Jz9OIgReBwjtmnc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sVvupX0Mhe8XEIF2EqILhm9enJ7MK/A4hXQrN8N+O/fKkWnpKXxRbuDCAybnPlWVE
+         UosKsEJgUDE8EnqEYwiWhuy8vsoVdetOhpNSSSUGg4bf4f9A23svvGboeU6e8cCe7M
+         MfucQG6fjlucX4HaiU1IOOfo+zBt1nORKlFXuZetiokJgKfDQuGUE56dFg9C5fAXsR
+         k4+4GTyol9VIio0YAR8f5X/SHyhtnQxWuXD5jd14KjcgpYvRyppQ/p43fqnQ2SbZ6M
+         P0XHDOwJPpXBKIFUiTRJh7t/x84DkPbI/zvth9rqZtcujLX4AzERnTMs6MalgdOxi5
+         1O9XG5eXQERTw==
+Date:   Fri, 16 Jun 2023 15:59:06 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Martin Fuzzey <martin.fuzzey@flowbird.group>
+Cc:     Support Opensource <support.opensource@diasemi.com>,
+        Benjamin Bara <benjamin.bara@skidata.com>,
+        Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] regulator: da9063: fix null pointer deref with partial
+ DT config
+Message-ID: <49ba8434-f16e-415a-9059-1af532854cb0@sirena.org.uk>
+References: <20230616143736.2946173-1-martin.fuzzey@flowbird.group>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="G7fWAiFF1Z1ENwIb"
+Content-Disposition: inline
+In-Reply-To: <20230616143736.2946173-1-martin.fuzzey@flowbird.group>
+X-Cookie: P-K4
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,77 +60,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, -w (--print-directory) option is ignored, but it is better
-to respect the user's choice.
 
-This commit changes the behavior of "Entering directory ..." logging.
+--G7fWAiFF1Z1ENwIb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-If -w (or --print-directory) is given via the command line or the
-MAKEFLAGS environment variable, print "Entering directory ..." for every
-sub make.
+On Fri, Jun 16, 2023 at 04:36:28PM +0200, Martin Fuzzey wrote:
 
-If --no-print-directory is given via the command line or the MAKEFLAGS
-environment variable, suppress "Entering directory ..." completely.
+>  	const struct notification_limit *uv_l =3D &constr->under_voltage_limits;
+>  	const struct notification_limit *ov_l =3D &constr->over_voltage_limits;
+> =20
+> +	if (!config->init_data) /* No config in DT, pointers will be invalid */
+> +		return 0;
+> +
 
-If none of them is given, print "Entering directory ..." only when Kbuild
-changes the working directory. (default)
+We already dereferenced above when we were initialising the variables,
+the compiler might still generate dereferences before it does the checks
+here.
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+>  	/* make sure that only one severity is used to clarify if unchanged, en=
+abled or disabled */
+>  	if ((!!uv_l->prot + !!uv_l->err + !!uv_l->warn) > 1) {
+>  		dev_err(config->dev, "%s: at most one voltage monitoring severity allo=
+wed!\n",
+> --=20
+> 2.25.1
+>=20
 
-Changes in v2:
-  - new patch
+--G7fWAiFF1Z1ENwIb
+Content-Type: application/pgp-signature; name="signature.asc"
 
- Makefile | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/Makefile b/Makefile
-index 916c1a7984b0..3867cdc3de5d 100644
---- a/Makefile
-+++ b/Makefile
-@@ -38,6 +38,12 @@ __all:
- # descending is started. They are now explicitly listed as the
- # prepare rule.
- 
-+ifeq ($(filter 3.%,$(MAKE_VERSION)),)
-+short-opts := $(firstword -$(MAKEFLAGS))
-+else
-+short-opts := $(filter-out --%,$(MAKEFLAGS))
-+endif
-+
- ifneq ($(sub_make_done),1)
- 
- # Do not use make's built-in rules and variables
-@@ -91,12 +97,6 @@ endif
- # commands
- # make-4.0 (and later) keep single letter options in the 1st word of MAKEFLAGS.
- 
--ifeq ($(filter 3.%,$(MAKE_VERSION)),)
--short-opts := $(firstword -$(MAKEFLAGS))
--else
--short-opts := $(filter-out --%,$(MAKEFLAGS))
--endif
--
- ifneq ($(findstring s,$(short-opts)),)
- quiet=silent_
- override KBUILD_VERBOSE :=
-@@ -217,12 +217,16 @@ else
- need-sub-make := 1
- endif
- 
-+ifeq ($(findstring w, $(short-opts)),)
- ifeq ($(filter --no-print-directory, $(MAKEFLAGS)),)
- # If --no-print-directory is unset, recurse once again to set it.
- # You may end up with recursing into __sub-make twice. This is due to the
- # behavior change for GNU Make 4.4.1.
- need-sub-make := 1
- endif
-+else
-+no-print-directory :=
-+endif
- 
- ifeq ($(need-sub-make),1)
- 
--- 
-2.39.2
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSMeLkACgkQJNaLcl1U
+h9ARsAf/WXcWbB5wGqNklpDm3RFefRMp0Gw0WHwRklLY2iZf8u2D7MEevfYB6rVu
+g2fG5MPw8Bz1EyABS4NmVLBbqd/7spjvuSvSgfCCAjeHiCtE8OjuylZJdl/ZN/Du
+3otyM9JhTO2sBIkFW7OEfCZ2vDiPUP5zUrcrgFu/1Gh8pB3Hz9KQqnA09anoBewW
+8KseAkv+yM6t2YquHD2Q0ymAFznlf799VtKTMRJ6RUQdVdxUYh2tKu3NEyaAGa+R
+Jbv3uYYP8vL5z0+w7uGJokBNODaTs7seg0OYdEZGGXo658VG1qF+IKAHYIIzEyfg
+vTbiL2xiv9MRmuwgcp0rnihyO+hgcQ==
+=XvwL
+-----END PGP SIGNATURE-----
 
+--G7fWAiFF1Z1ENwIb--
