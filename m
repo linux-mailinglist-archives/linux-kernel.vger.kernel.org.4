@@ -2,118 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A31B732983
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:08:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F6A732985
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:10:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241547AbjFPIIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 04:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52114 "EHLO
+        id S243314AbjFPIJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 04:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjFPIIu (ORCPT
+        with ESMTP id S241031AbjFPIJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 04:08:50 -0400
-Received: from mail.nsr.re.kr (unknown [210.104.33.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0371F212B;
-        Fri, 16 Jun 2023 01:08:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; s=LIY0OQ3MUMW6182UNI14; d=nsr.re.kr; t=1686902797; c=relaxed/relaxed; h=content-type:date:from:message-id:mime-version:subject:to; bh=s18rNC9hcygyzIoceGZhyJtVKhz786JZVGmaML1N0+o=; b=dgMiNXcXzZL5u5H+z+64RXu/MZeExHHcOdGKBC/UvwHdS58bbFLx5FZHDTtiV9sREOfjfHkVzFAsf+4maDYLFgQRPqR6BJXYPwWRu+al1GaGRfingeq00VNSqgd1YQl5XISxqpJw+udm3fz091DMm0QXD81YdueOplrPTebz5N52+3so2mn3EewwkeWQKth3XFJHh/6oAdC5zr6aJ7vv0vVFx5b/r/wag1IWC9X8dcP2bxhTsEG0TencUBOx/FfP5CehYAlbACQYWSyieNos1dnWnLp8+t1aDy2f6W6uPp/gaRkPSxPQe1fqlHYdemkSAnR3bXOY55fulJ7OO0NTSg==
-Received: from 210.104.33.70 (nsr.re.kr)
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128 bits))
-        by mail.nsr.re.kr with SMTP; Fri, 16 Jun 2023 17:06:22 +0900
-Received: from 192.168.155.188 ([192.168.155.188])
-          by mail.nsr.re.kr (Crinity Message Backbone-7.0.1) with SMTP ID 855;
-          Fri, 16 Jun 2023 17:08:23 +0900 (KST)
-From:   Dongsoo Lee <letrhee@nsr.re.kr>
-To:     'Eric Biggers' <ebiggers@kernel.org>
-Cc:     'Herbert Xu' <herbert@gondor.apana.org.au>,
-        linux-crypto@vger.kernel.org, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, letrhee@gmail.com
-References: <20230525121301.722682-1-letrhee@nsr.re.kr> <ZHh1H3yKPU68J7Uv@gondor.apana.org.au> <008d01d99518$33db63f0$9b922bd0$@nsr.re.kr> <20230602213946.GD628@quark.localdomain> <005601d99ac9$954f0c70$bfed2550$@nsr.re.kr> <20230610021450.GA872@sol.localdomain>
-In-Reply-To: <20230610021450.GA872@sol.localdomain>
-Subject: RE: [PATCH v2 0/2] crypto: LEA block cipher implementation
-Date:   Fri, 16 Jun 2023 17:08:23 +0900
-Message-ID: <003801d9a029$b89228b0$29b67a10$@nsr.re.kr>
+        Fri, 16 Jun 2023 04:09:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A012117
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 01:08:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686902910;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Gr7a6v7Egyynk2whMDZ85Y4nh+6uiz4a8aewos3ecfU=;
+        b=dpyOtMEP/bqqeT4CMErhAS0owpqA1KGBEt7/kxhpg5otmrg7utDlmFVzjFTcrpTvsaAfuf
+        MtiAblYEu4HzQKgiYUAmhcP7l5KKkIbfFMv370nxlytnvKw9xnkKmoC3cH8XhIzEbAixdq
+        Nli3BCawVT7+4Yb1Hx2gnM3SJdj6bx8=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-177-X2LBpSXpNCa6seMZp0P03Q-1; Fri, 16 Jun 2023 04:08:29 -0400
+X-MC-Unique: X2LBpSXpNCa6seMZp0P03Q-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-30e4d85e1ffso538113f8f.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 01:08:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686902908; x=1689494908;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Gr7a6v7Egyynk2whMDZ85Y4nh+6uiz4a8aewos3ecfU=;
+        b=D8taFehTgHhb1pvulInUGidaR3rUw+5QucXBn3RbkkZrCXO/qEZeyWVpdBSs163ROm
+         cVPjHaPRyRSYImx54OJmaTZ/U2l22ZxBxpmclyIs03uRXAruI5mf1pKvrEu35mxpDMZV
+         NxhNhMh5PXGN1t1LLACAGIgP1fCNR+oJI8IUmKHIrqyKL6cW2ufcq0HzAkfLYN6PcpX5
+         lRWitqIAKHuqeqmrmhoYAD4wyWV7V4NmryPBN1rQX3Pzc5nyV2iTw7UCqz0HfhxPwC78
+         Eg11h+p8bP2nNkmjStWGy8cRf+LA7lXByGzq6nMbDYpZ6MV6xPKjFfoRfFEwwXUEC/dz
+         SU9Q==
+X-Gm-Message-State: AC+VfDyoswrppxNJ8XGhUyBAgqFZPV4UjbdQOWxYNDGevppDzyFwn2NE
+        anKB/U92Z3p5B+5eWnfpAvppEuJxHq0yIFqR0ET7030TarMUph+PeLkeBpTD3NOjWvGmlQzOwV5
+        6mjX/nz1J4lUtOuRlGekT4Fru
+X-Received: by 2002:adf:fe48:0:b0:311:1b34:a7c9 with SMTP id m8-20020adffe48000000b003111b34a7c9mr782832wrs.12.1686902908107;
+        Fri, 16 Jun 2023 01:08:28 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7poTm3R+mJyphj8XV8uoLBMWM2wgwZ2t8vqhpRIMaOFweUpkhxLxpRt8sELV1wUja3WEGZ+Q==
+X-Received: by 2002:adf:fe48:0:b0:311:1b34:a7c9 with SMTP id m8-20020adffe48000000b003111b34a7c9mr782815wrs.12.1686902907698;
+        Fri, 16 Jun 2023 01:08:27 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c707:9800:59ba:1006:9052:fb40? (p200300cbc707980059ba10069052fb40.dip0.t-ipconnect.de. [2003:cb:c707:9800:59ba:1006:9052:fb40])
+        by smtp.gmail.com with ESMTPSA id a8-20020a5d5088000000b0030f9c3219aasm20732258wrt.47.2023.06.16.01.08.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Jun 2023 01:08:27 -0700 (PDT)
+Message-ID: <9a4b168b-fb27-b4e4-94e9-5a2c1390aa2a@redhat.com>
+Date:   Fri, 16 Jun 2023 10:08:26 +0200
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 1/7] mm/hugetlb: Handle FOLL_DUMP well in
+ follow_page_mask()
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        James Houghton <jthoughton@google.com>,
+        Hugh Dickins <hughd@google.com>
+References: <20230613215346.1022773-1-peterx@redhat.com>
+ <20230613215346.1022773-2-peterx@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230613215346.1022773-2-peterx@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: ko
-Thread-Index: AQGzeUtGMegR59VrglJnt6HijaycHAEgJe7QAN4WbOYB+Jo+6wIyjprpAeW9SuivmOZGgA==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 13.06.23 23:53, Peter Xu wrote:
+> Firstly, the no_page_table() is meaningless for hugetlb which is a no-op
+> there, because a hugetlb page always satisfies:
+> 
+>    - vma_is_anonymous() == false
+>    - vma->vm_ops->fault != NULL
+> 
+> So we can already safely remove it in hugetlb_follow_page_mask(), alongside
+> with the page* variable.
+> 
+> Meanwhile, what we do in follow_hugetlb_page() actually makes sense for a
+> dump: we try to fault in the page only if the page cache is already
+> allocated.  Let's do the same here for follow_page_mask() on hugetlb.
+> 
+> It should so far has zero effect on real dumps, because that still goes
+> into follow_hugetlb_page().  But this may start to influence a bit on
+> follow_page() users who mimics a "dump page" scenario, but hopefully in a
+> good way.  This also paves way for unifying the hugetlb gup-slow.
+> 
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> ---
+>   mm/gup.c     | 9 ++-------
+>   mm/hugetlb.c | 9 +++++++++
+>   2 files changed, 11 insertions(+), 7 deletions(-)
+> 
+> diff --git a/mm/gup.c b/mm/gup.c
+> index dbe96d266670..aa0668505d61 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -781,7 +781,6 @@ static struct page *follow_page_mask(struct vm_area_struct *vma,
+>   			      struct follow_page_context *ctx)
+>   {
+>   	pgd_t *pgd;
+> -	struct page *page;
+>   	struct mm_struct *mm = vma->vm_mm;
+>   
+>   	ctx->page_mask = 0;
+> @@ -794,12 +793,8 @@ static struct page *follow_page_mask(struct vm_area_struct *vma,
+>   	 * hugetlb_follow_page_mask is only for follow_page() handling here.
+>   	 * Ordinary GUP uses follow_hugetlb_page for hugetlb processing.
+>   	 */
+> -	if (is_vm_hugetlb_page(vma)) {
+> -		page = hugetlb_follow_page_mask(vma, address, flags);
+> -		if (!page)
+> -			page = no_page_table(vma, flags);
+> -		return page;
+> -	}
+> +	if (is_vm_hugetlb_page(vma))
+> +		return hugetlb_follow_page_mask(vma, address, flags);
+>   
+>   	pgd = pgd_offset(mm, address);
+>   
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 270ec0ecd5a1..82dfdd96db4c 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -6501,6 +6501,15 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
+>   	spin_unlock(ptl);
+>   out_unlock:
+>   	hugetlb_vma_unlock_read(vma);
+> +
+> +	/*
+> +	 * Fixup retval for dump requests: if pagecache doesn't exist,
+> +	 * don't try to allocate a new page but just skip it.
+> +	 */
+> +	if (!page && (flags & FOLL_DUMP) &&
+> +	    !hugetlbfs_pagecache_present(h, vma, address))
+> +		page = ERR_PTR(-EFAULT);
+> +
+>   	return page;
+>   }
+>   
 
-Hello.
+Makes sense to me:
 
-On Fri, 9 Jun 2023 19:14:50 -0700, Eric Biggers wrote:
->Why are they having "great difficulties" when the kernel already supports
-two other "KCMVP-approved block ciphers", ARIA and SEED?  Why aren't they
-using dm-crypt with ARIA or SEED?
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-As you mentioned, the two KCMVP-approved block ciphers, ARIA and SEED, are
-supported by the kernel. Therefore, we can use dm-crypt with ARIA or SEED.
-However, LEA, being a relatively new algorithm, has distinct advantages over
-ARIA and SEED. LEA shows better performance, provides a clearer structure,
-and offers simpler implementation on SIMD, compared to ARIA and SEED.
-(Furthermore, SEED only provides up to 128-bit security.) Consequently,
-there are many products in Korea that use LEA as the default cipher.
+-- 
+Cheers,
 
-Considering these advantages, vendors may add LEA to the kernel of the Linux
-distribution by themselves to develop Linux products that supports LEA.
-(Some vendors are known to have already attempted this. However, definitely
-not all vendors have the capability to do so.) Furthermore, supporting the
-most recent and efficient KCMVP-approved block cipher, LEA, may be very
-helpful for the vendors to promote their products.
-
-It would cause problems if each vendor implements LEA in the kernel on its
-own. It may lead to fragmentation in kernel implementations, potentially
-causing compatibility issues among vendors and posing challenges for system
-maintenance when faced with major kernel changes.
-
-In addition, the data-at-rest encryption market is just beginning to grow in
-South Korea. Therefore, vendors may prefer to use LEA as the default cipher
-for data-at-rest encryption, since it is the most recent and efficient one
-of the KCMVP approved block ciphers (as mentioned earlier) and they do not
-need to worry about the compatibility issues.
-
-Lastly, although LEA-XTS may not outperform AES-XTS or Adiantum, it is still
-worthwhile to add LEA to the kernel, as it can be implemented on various
-platforms that support SIMD instructions, and it is also an ISO/IEC standard
-lightweight cipher.
-
-On Fri, 9 Jun 2023 19:14:50 -0700, Eric Biggers wrote:
->And does LEA (or SEED or ARIA) support in Linux actually solve that
-problem?
->Just adding support for these algorithms to Linux does not mean that Linux
-automatically becomes a "KCMVP validated cryptographic module", right? Do
-you have a complete plan that would actually solve the claimed problem?
-
-As you said, simply adding support for LEA in the kernel doesn't
-automatically solve the problem. Of course, additional efforts are needed to
-solve it.
-
-As you may know, KCMVP validates cryptographic modules, which means that
-when KCMVP validates a Linux-based cryptographic module, it validates the
-entire module, not just the Linux kernel inside the module. To obtain
-validation for a product, vendors need to develop various tools that can be
-used for required testings and write down required documentations.
-
-If LEA becomes available in the Linux kernel, we plan to implement
-data-at-rest encryption using LEA on the previously mentioned Gooroom
-platform. Vendors can then use it as a reference. We will also develop
-backporting codes for several LTS kernels, enabling vendors to utilize LEA
-in the Linux distribution that their product runs on. Additionally, we will
-implement and provide the necessary tools for KCMVP validation. This series
-of efforts, starting with adding LEA to the kernel, will assist vendors in
-developing their own KCMVP-validated products, which means the problem can
-be solved.
-
-Thank you.
+David / dhildenb
 
