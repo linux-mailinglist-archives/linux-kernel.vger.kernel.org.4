@@ -2,86 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0537E7329A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE28D7329AB
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243534AbjFPIWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 04:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56772 "EHLO
+        id S245160AbjFPIXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 04:23:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233557AbjFPIWk (ORCPT
+        with ESMTP id S233192AbjFPIXW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 04:22:40 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BFB62D58
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 01:22:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=g+dMlv4J1xRlgpvRpqQAxSAtw+C01A6qz1gs3blVCRI=; b=kGKr/VDYB8wmOoTJeQIl1fLdRA
-        pqwEbH3dHZz+Kyy/FNlx7bOs4JqZUVqhw6Il+mjPSb2j6AmG/n6avhBkVAiXwcO9ePn04Yh075owh
-        wSZasXBNLiFrtPdqS1FlO72MFyUI6EZfQ+1yCpgOodXTsc4tUiO0GCq3vyIp+SfaBjb91kNvgSiTP
-        Tg8WfJbk0v+rMt16SEzf8gAhI0q0iDLhwtJ4+ThZBsmpdv2aKmkQpUz3Z2mItP2dsHoEwi7kSArrZ
-        uCZulCtnbgHRrCVe+WojhKKxA4+ijqSms0HmPP6UQVIN/7Y9/k7L28uGtL9CNhec73HUiUi8lqN6t
-        xlI4f7kQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qA4ip-00CrFY-1d;
-        Fri, 16 Jun 2023 08:22:19 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B8CD1300188;
-        Fri, 16 Jun 2023 10:22:18 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9BC0D2B5B5B43; Fri, 16 Jun 2023 10:22:18 +0200 (CEST)
-Date:   Fri, 16 Jun 2023 10:22:18 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Zhang, Rui" <rui.zhang@intel.com>
-Cc:     "Tang, Feng" <feng.tang@intel.com>,
-        "Chen, Tim C" <tim.c.chen@intel.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [Patch v2 2/2] x86/tsc: use logical_packages as a better
- estimation of socket numbers
-Message-ID: <20230616082218.GN38236@hirez.programming.kicks-ass.net>
-References: <20230613052523.1106821-1-feng.tang@intel.com>
- <20230613052523.1106821-2-feng.tang@intel.com>
- <20230615092021.GE1683497@hirez.programming.kicks-ass.net>
- <d97fe59e47de77a36746107e4070e44ed46bf4d1.camel@intel.com>
- <20230616080231.GZ4253@hirez.programming.kicks-ass.net>
+        Fri, 16 Jun 2023 04:23:22 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1C2212B;
+        Fri, 16 Jun 2023 01:23:21 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id B394F1C0E6E; Fri, 16 Jun 2023 10:23:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1686903799;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uwqz7xaKAqzIwowJQBfMPTshEu7P5aPh8FrMKIEdGvM=;
+        b=sEmhATV/S6WM4B8Ta+dZo2CGYgFmBq01wuDJpjgmdWQs/K8Il8SAF4gGU3UX6GfYUZ/c0Q
+        1+57GmJmxCELS3Sdc/eQ1Kmp50Vl+VgJD3AJUX4zUo3f6f4wrFsuiH05MeaSMSCKACCGsY
+        MEtjVRfS16moMkaloaT1UIuY7jZKN7M=
+Date:   Fri, 16 Jun 2023 10:23:19 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        sre@kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 6.3 01/37] power: supply: ab8500: Fix
+ external_power_changed race
+Message-ID: <ZIwb98ptaEb01MC4@duo.ucw.cz>
+References: <20230615113654.648702-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="b+zKUwoCEUgmSd1B"
 Content-Disposition: inline
-In-Reply-To: <20230616080231.GZ4253@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230615113654.648702-1-sashal@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 10:02:31AM +0200, Peter Zijlstra wrote:
 
-> I can certainly give it a spin; it has IPMI serial-over-ethernet that
-> works. Brilliant dev machine.
+--b+zKUwoCEUgmSd1B
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-FWIW, I feel it should be illegal to sell a computer without working
-IPMI support.
+Hi!
 
-That Intel vPro shit is horrible. MeshCommander sorta works, but its
-horrific crap.
+I do not see complete series in my inbox (only see patches 1-6).
 
-</rant>
+But then I see another thread which seems to be complete.
+
+Date: Wed, 31 May 2023 09:39:43 -0400
+Subject: [PATCH AUTOSEL 6.3 01/37] power: supply: ab8500: Fix external_powe=
+r_changed race
+
+Best regards,
+								Pavel
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--b+zKUwoCEUgmSd1B
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZIwb9wAKCRAw5/Bqldv6
+8uh+AJsElO3pROJOHxyIrhQQLDNZKJimtgCghG4XlUIrXuqEWAjN+fwC+/m3tCE=
+=+NFY
+-----END PGP SIGNATURE-----
+
+--b+zKUwoCEUgmSd1B--
