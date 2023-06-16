@@ -2,71 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB4727334B6
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 17:28:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D704D7334C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 17:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345977AbjFPP22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 11:28:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46856 "EHLO
+        id S1345992AbjFPP32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 11:29:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245134AbjFPP21 (ORCPT
+        with ESMTP id S1345860AbjFPP30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 11:28:27 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E70270B;
-        Fri, 16 Jun 2023 08:28:26 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B030C21D85;
-        Fri, 16 Jun 2023 15:28:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1686929304; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Fri, 16 Jun 2023 11:29:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7FB270B
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 08:28:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686929322;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=0Kausdl49qJGfqu39jLtos4uf5kYOvO/lFvNKQ0Af1w=;
-        b=W+pmP7MwL/U/YnM7oawRQovQaVWhkNKeM6iNmCmjaTpzQv9vXxp2c8tIDX4plttkoy/w/z
-        nHA2FHYVip6S/o2bL4QPTK5ylIjsrTwbcKcWyVKVTNaCd7xrr1zw20ADayDe0OTJNrigMg
-        IJ5PVLM6hf+q4AfF8treZyyKYvdHqJE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1686929304;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0Kausdl49qJGfqu39jLtos4uf5kYOvO/lFvNKQ0Af1w=;
-        b=jjeFLEvXAN6LWxX6D+K19arDU9xpflBqH6voD4rCG+Du0GYpQfNZeQTEPql2atIsf5DrFN
-        eCFgDtEJGbDmRCCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=maoLH1+iFdOHtUfb3uVlDmFpd4ojetev/CDoWNYqeqE=;
+        b=cgNzMa7QiOpf+pFf4w28NVWxhDF7oTvZBjXdRekbIVbI9MQC2BiGnTyhdgS8QwsGrPeryh
+        gkDO4JEOzPzsGmlDffQLrN+VdBPIvdFa6GH7T1qt5/0zt/HwQ/IFtYqt83l360a+HuI+Rd
+        pEkeg6OY5a43X9xNtwy1UELsvVSaBpk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-277-VwVwMy6RNq2uvUCKs61D4w-1; Fri, 16 Jun 2023 11:28:36 -0400
+X-MC-Unique: VwVwMy6RNq2uvUCKs61D4w-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A09391330B;
-        Fri, 16 Jun 2023 15:28:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FHkvJ5h/jGSwAQAAMHmgww
-        (envelope-from <jack@suse.cz>); Fri, 16 Jun 2023 15:28:24 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 34F31A0755; Fri, 16 Jun 2023 17:28:24 +0200 (CEST)
-Date:   Fri, 16 Jun 2023 17:28:24 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     jack@suse.cz, linux-fsdevel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com, chengzhihao1@huawei.com,
-        yukuai3@huawei.com
-Subject: Re: [PATCH] quota: fix race condition between dqput() and
- dquot_mark_dquot_dirty()
-Message-ID: <20230616152824.ndpgvkegvvip2ahh@quack3>
-References: <20230616085608.42435-1-libaokun1@huawei.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A4AFF85A58A;
+        Fri, 16 Jun 2023 15:28:35 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.51])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C62E748FB01;
+        Fri, 16 Jun 2023 15:28:30 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <51161740e832334594960ed43430b868a6f892c3.camel@gmail.com>
+References: <51161740e832334594960ed43430b868a6f892c3.camel@gmail.com> <20230524153311.3625329-1-dhowells@redhat.com> <20230524153311.3625329-4-dhowells@redhat.com>
+To:     Alexander H Duyck <alexander.duyck@gmail.com>
+Cc:     dhowells@redhat.com, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Jeroen de Borst <jeroendb@google.com>,
+        Catherine Sullivan <csully@google.com>,
+        Shailend Chand <shailend@google.com>,
+        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-nvme@lists.infradead.org
+Subject: Re: [PATCH net-next 03/12] mm: Make the page_frag_cache allocator alignment param a pow-of-2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230616085608.42435-1-libaokun1@huawei.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <617058.1686929309.1@warthog.procyon.org.uk>
+Date:   Fri, 16 Jun 2023 16:28:29 +0100
+Message-ID: <617059.1686929309@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,119 +88,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Baokun!
+Alexander H Duyck <alexander.duyck@gmail.com> wrote:
 
-On Fri 16-06-23 16:56:08, Baokun Li wrote:
-> We ran into a problem that dqput() and dquot_mark_dquot_dirty() may race
-> like the function graph below, causing a released dquot to be added to the
-> dqi_dirty_list, and this leads to that dquot being released again in
-> dquot_writeback_dquots(), making two identical quotas in free_dquots.
-> 
->        cpu1              cpu2
-> _________________|_________________
-> wb_do_writeback         CHOWN(1)
->  ...
->   ext4_da_update_reserve_space
->    dquot_claim_block
->     ...
->      dquot_mark_dquot_dirty // try to dirty old quota
->       test_bit(DQ_ACTIVE_B, &dquot->dq_flags) // still ACTIVE
->       if (test_bit(DQ_MOD_B, &dquot->dq_flags))
->       // test no dirty, wait dq_list_lock
->                     ...
->                      dquot_transfer
->                       __dquot_transfer
->                       dqput_all(transfer_from) // rls old dquot
->                        dqput // last dqput
->                         dquot_release
->                          clear_bit(DQ_ACTIVE_B, &dquot->dq_flags)
->                         atomic_dec(&dquot->dq_count)
->                         put_dquot_last(dquot)
->                          list_add_tail(&dquot->dq_free, &free_dquots)
->                          // first add the dquot to free_dquots
->       if (!test_and_set_bit(DQ_MOD_B, &dquot->dq_flags))
->         add dqi_dirty_list // add freed dquot to dirty_list
-> P3:
-> ksys_sync
->  ...
->   dquot_writeback_dquots
->    WARN_ON(!test_bit(DQ_ACTIVE_B, &dquot->dq_flags))
->    dqgrab(dquot)
->     WARN_ON_ONCE(!atomic_read(&dquot->dq_count))
->     WARN_ON_ONCE(!test_bit(DQ_ACTIVE_B, &dquot->dq_flags))
->    dqput(dquot)
->     put_dquot_last(dquot)
->      list_add_tail(&dquot->dq_free, &free_dquots)
->      // Double add the dquot to free_dquots
-> 
-> This causes a list_del corruption when removing the entry from free_dquots,
-> and even trying to free the dquot twice in dqcache_shrink_scan triggers a
-> use-after-free.
-> 
-> A warning may also be triggered by a race like the function diagram below:
-> 
->        cpu1            cpu2           cpu3
-> ________________|_______________|________________
-> wb_do_writeback   CHOWN(1)        QUOTASYNC(1)
->  ...                              ...
->   ext4_da_update_reserve_space
->     ...           __dquot_transfer
->                    dqput // last dqput
->                     dquot_release
->                      dquot_is_busy
->                       if (test_bit(DQ_MOD_B, &dquot->dq_flags))
->                        // not dirty and still active
->      dquot_mark_dquot_dirty
->       if (!test_and_set_bit(DQ_MOD_B, &dquot->dq_flags))
->         add dqi_dirty_list
->                        clear_bit(DQ_ACTIVE_B, &dquot->dq_flags)
->                                    dquot_writeback_dquots
->                                     WARN_ON(!test_bit(DQ_ACTIVE_B))
-> 
-> To solve this problem, it is similar to the way dqget() avoids racing with
-> dquot_release(). First set the DQ_MOD_B flag, then execute wait_on_dquot(),
-> after this we know that either dquot_release() is already finished or it
-> will be canceled due to DQ_MOD_B flag test, at this point if the quota is
-> DQ_ACTIVE_B, then we can safely add the dquot to the dqi_dirty_list,
-> otherwise clear the DQ_MOD_B flag and exit directly.
-> 
-> Fixes: 4580b30ea887 ("quota: Do not dirty bad dquots")
-> Signed-off-by: Baokun Li <libaokun1@huawei.com>
-> ---
-> 
-> Hello Honza,
-> 
-> This problem can also be solved by modifying the reference count mechanism,
-> where dquots hold a reference count after they are allocated until they are
-> destroyed, i.e. the dquots in the free_dquots list have dq_count == 1. This
-> allows us to reduce the reference count as soon as we enter the dqput(),
-> and then add the dquot to the dqi_dirty_list only when dq_count > 1. This
-> also prevents the dquot in the dqi_dirty_list from not having the
-> DQ_ACTIVE_B flag, but this is a more impactful modification, so we chose to
-> refer to dqget() to avoid racing with dquot_release(). If you prefer this
-> solution by modifying the dq_count mechanism, I would be happy to send
-> another version of the patch.
+> The requirement should only be cache alignment, not power of 2
+> alignment.
 
-The way this *should* work is that dquot_mark_dquot_dirty() using dquot
-references from the inode should be protected by dquot_srcu. quota_off
-code takes care to call synchronize_srcu(&dquot_srcu) to not drop dquot
-references while they are used by other users. But you are right
-dquot_transfer() breaks this assumption. Most callers are fine since they
-are also protected by inode->i_lock but still I'd prefer to fix
-dquot_transfer() to follow the guarantees dquot_srcu should provide.
+Sure, but, upstream, page_frag_alloc_align() allows the specification of an
+alignment and applies that alignment by:
 
-Now calling synchronize_srcu() directly from dquot_transfer() is too
-expensive (and mostly unnecessary) so what I would rather suggest is to
-create another dquot list (use dq_free list_head inside struct dquot for
-it) and add dquot whose last reference should be dropped there. We'd then
-queue work item which would call synchronize_srcu() and after that perform
-the final cleanup of all the dquots on the list.
+	offset &= align_mask;
 
-Now this also needs some modifications to dqget() and to quotaoff code to
-handle various races with the new dqput() code so if you feel it is too
-complex for your taste, I can implement this myself.
+which doesn't really make sense unless the alignment boils down to being a
+power of two.  Now, it might make sense to kill off the align_mask parameter
+and just go with SMP_CACHE_BYTES (which will be a power of two).
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Note, though, that most users seem to use an align_mask of ~0u which feels a
+bit dodgy (it's not an unsigned long), but is probably fine.
+
+David
+
