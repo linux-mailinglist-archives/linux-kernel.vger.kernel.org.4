@@ -2,254 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C0A7732810
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 08:57:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F16F73281A
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 08:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238285AbjFPG5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 02:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46598 "EHLO
+        id S241663AbjFPG6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 02:58:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233680AbjFPG5k (ORCPT
+        with ESMTP id S240822AbjFPG6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 02:57:40 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61991FF5;
-        Thu, 15 Jun 2023 23:57:38 -0700 (PDT)
-Received: from [192.168.10.55] (unknown [119.155.33.163])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C34F56606F1A;
-        Fri, 16 Jun 2023 07:57:30 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686898657;
-        bh=Omzo0pLNcXzbmnJ6mj+hFNJQNMry5y1BPxh4GdO6tsE=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=fuhb4Evg3aejWQIX4CKPzco+2hgCL3d6CyC4qsV3igE3nOOZKISrKbp0AbrkKHnlX
-         ijAYqKE4+v19IQsFGYoAbaYk5GVXdvGlAcQza+BBCNqTQFJFNlUOyvPq4CQDxmAN7H
-         4CxItF6P4ZlHecWC2qfhrBIz2HmTDaabArJ8in7K8PiIRc3NYp6yIlnm9Fn0pUwIK1
-         /G2ZC8HkUSco0P4gTBMmvaOEH13ZrR8jeh0dbY1LU9MdvozBv829fCfOdKQlZs74XU
-         nKihSFE3NtHpqQg/sYM4j/Rvg5WJxlgKt5vJ+QMa7srQfrqTnECJ2ROQT7xdt9KF/G
-         eegFGSxYPvvrQ==
-Message-ID: <2e1b80f1-0385-0674-ae5f-9703a6ef975d@collabora.com>
-Date:   Fri, 16 Jun 2023 11:57:27 +0500
+        Fri, 16 Jun 2023 02:58:46 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2058.outbound.protection.outlook.com [40.107.95.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4004E2977;
+        Thu, 15 Jun 2023 23:58:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=k3mSfCJ1HAwf33BUYPx4wwpRxefpvnuVVkFjhMTo2l3NAK8FuubPLxqE+7CHdem3wFPSIWhRDdisz+Mrkk0GjVEWMB1WKudVKNWQgAc9AKJQf6aZ7r1ysENyg8yKnocjktA55wKTzCSUXkLr+zWYMObWHEXSm7MFHphI2JC5vMYFZ1oifL3UyJP8mdt8n7R0u2LEY8JnTbmENW8NNJhCBik3kpZBfXgSlG34WH5d7nDGwOFlHfvIzU9BRsJSmtOfdn/zP5qJX6o8Ytrtv9fjjt0LF51Esyq+qAt0b3uSGE+NtcroLZyGc8s6hBnmT+VK/r0eVIVO/1X104XgG9cX1Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jJDf4Hy6wji+mjAcc051sZRUQccDxPYxRWu0KEMFJQg=;
+ b=Wc30DU0OLQXIK/M4L9z+WHy0h4XyiD1sPjTPUgZ5q6Xhaquqxy9QqwHdcAm2s4WEkgJ4++ePbnNyajYuhrnNdzhDQ3EvX0Mmf0dr2ZxPbVW1qoaA+eF0Oo6n3SrcWw2pyn27ilXP+JcWFWTItkYuR396G9qhXrT+v7ICrKugWM00y4IGPP4pLVAJcAYeXcbZ7MU1/mq+jd8jZDIfKePgKxcd3w3caGUQCprbiAEF0SowVye2d0/3jdG0h/Wh0iRyJxrqugj9H0cWAHWUzv4TQgPeSLh6lkPPpn8deiwZhPAVaNgpGrQTXBDVtY9z36pK83OTH3/mWpRdqz9q+vopuQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jJDf4Hy6wji+mjAcc051sZRUQccDxPYxRWu0KEMFJQg=;
+ b=fOSub4XtxW+Qc4vnBd+dznofNc8O7Sj/IfsmAFry5y3UG9fGR7mXoKsR8ISoUkxpwUQnEOcYxDK+/ROFkXkykOErYiYHAHu4SsdooHtdrpYQ+U2BsbZI5n3xTz8IqX3sdoNx9F7mmmbBQ4R+83cG44p7jxo/Sp08bIapso5WzG4=
+Received: from BN9PR03CA0776.namprd03.prod.outlook.com (2603:10b6:408:13a::31)
+ by MN2PR12MB4471.namprd12.prod.outlook.com (2603:10b6:208:26f::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.27; Fri, 16 Jun
+ 2023 06:58:42 +0000
+Received: from BN8NAM11FT091.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:13a:cafe::b1) by BN9PR03CA0776.outlook.office365.com
+ (2603:10b6:408:13a::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.29 via Frontend
+ Transport; Fri, 16 Jun 2023 06:58:42 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT091.mail.protection.outlook.com (10.13.176.134) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6500.29 via Frontend Transport; Fri, 16 Jun 2023 06:58:42 +0000
+Received: from equan-buildpc.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 16 Jun
+ 2023 01:58:36 -0500
+From:   Evan Quan <evan.quan@amd.com>
+To:     <rafael@kernel.org>, <lenb@kernel.org>,
+        <Alexander.Deucher@amd.com>, <Christian.Koenig@amd.com>,
+        <Xinhui.Pan@amd.com>, <airlied@gmail.com>, <daniel@ffwll.ch>,
+        <kvalo@kernel.org>, <nbd@nbd.name>, <lorenzo@kernel.org>,
+        <ryder.lee@mediatek.com>, <shayne.chen@mediatek.com>,
+        <sean.wang@mediatek.com>, <matthias.bgg@gmail.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <Mario.Limonciello@amd.com>, <Lijo.Lazar@amd.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-wireless@vger.kernel.org>, Evan Quan <evan.quan@amd.com>
+Subject: [PATCH V3 0/7] Support Wifi RFI interference mitigation feature
+Date:   Fri, 16 Jun 2023 14:57:50 +0800
+Message-ID: <20230616065757.1054422-1-evan.quan@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v18 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-Content-Language: en-US
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-References: <20230613102905.2808371-1-usama.anjum@collabora.com>
- <20230613102905.2808371-3-usama.anjum@collabora.com>
- <CABb0KFHWnbrf2ythvO0OKsd1ZS9b4D9BNzwBCbn6g9OX4n6ZOg@mail.gmail.com>
- <0db01d90-09d6-08a4-bbb8-70670d3baa94@collabora.com>
- <CABb0KFEn5TU480A=YiN82nLRtGyKMABi8cZjuiGUU_jFZZo+8g@mail.gmail.com>
- <34203acf-7270-7ade-a60e-ae0f729dcf70@collabora.com>
- <CABb0KFFaXgJD99pWfx3MC+qrq5jUaPis_kZo6U8yL_8xdp0GJA@mail.gmail.com>
- <96b7cc00-d213-ad7d-1b48-b27f75b04d22@collabora.com>
- <CABb0KFEy_mRaT86TEOQ-BoTe_XOVw3Kp5VdzOfEEaiZJuT754g@mail.gmail.com>
- <39bc8212-9ee8-dbc1-d468-f6be438b683b@collabora.com>
- <CABb0KFHx2hV9M7oinCdKnagRmcrGHagH9eAO3TkVTQH+o9x=5A@mail.gmail.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <CABb0KFHx2hV9M7oinCdKnagRmcrGHagH9eAO3TkVTQH+o9x=5A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SORBS_WEB,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT091:EE_|MN2PR12MB4471:EE_
+X-MS-Office365-Filtering-Correlation-Id: a85935fe-bc41-4c82-3fff-08db6e371f0d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2P414eYWbX1C3GHQIGZOBfeO8difOgcbW+evqegs+ra2YK817cfxQCILD1YKZ+9PvFUE5pBVUvUt1s1c5MSq1sgSOPr86GqBJMvqmisqZIrRbZUFmZJgzGXCpkeW0O303r3wuHDxNiZo1bbRTvNqmqO2A/yszttNaRkA7GGa8d9f0uc4bt2cLL4zYj1lr1WDJ4lqyISv5mmt+uKMgxnhQ3lZf1dBB8H6AX3qsSxgOPCr6+/GzIhvqQvtjxZ/k6tDXlZ78BY1SUyUxXaZqwIPKBEjgtzMmeo76m6zLfsccUWZREh6MAp/rQZAsnLGRcitcd/nBn+1uamJgDyaTyd7WsmSu4Mm+I5E+LHLfd3xjGepW+tgHpPRK3pTZB+CjwQMcVMGyva1qy4+/hx/ewtZThTM81bR0RSDoFbMkTDd7rQYuiQJel5wwIafrgb+YZDkCdNiae7tGjSwtrVjrEgsiCMb54zXFxqQJASE4skDvCupORm74Y+0bwwOvQYTzbgrT3r3YoY1wuITVJUC9WHbVNqjsysT+V6CJUR/U+q98rUmitTJyWz36q4YvtzqfMh8WsCOhFmqs0pF8rsA2Z82RDBHWwPbQqCXCvQxb8EzyMbBws/hlBBIhXEu07ANOENwHIOvXfQ+ogZKSk9rgtJBVwGc9TGLHYxDx8pqyEkiFgOAWi3fevvGvE/DxZ8I9lsveseTvGU5vOvlk/hDICVJ2Ar7AqMjqupQ5AT9m6B71C2VxcDbE3n1i0SJyRCqTvUcb1aMVNaH/JM4IdNTNURPmit+YkmfM5PJwFvksUP6qWo=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(346002)(136003)(376002)(451199021)(46966006)(40470700004)(36840700001)(110136005)(54906003)(82310400005)(41300700001)(8676002)(86362001)(7696005)(8936002)(316002)(6666004)(70206006)(70586007)(4326008)(36756003)(6636002)(40460700003)(478600001)(36860700001)(7416002)(26005)(47076005)(44832011)(40480700001)(82740400003)(5660300002)(83380400001)(1076003)(426003)(16526019)(356005)(2906002)(186003)(81166007)(2616005)(336012)(921005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 06:58:42.5807
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a85935fe-bc41-4c82-3fff-08db6e371f0d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT091.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4471
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/16/23 1:07 AM, Michał Mirosław wrote:
-> On Thu, 15 Jun 2023 at 17:11, Muhammad Usama Anjum
-> <usama.anjum@collabora.com> wrote:
->> On 6/15/23 7:52 PM, Michał Mirosław wrote:
->>> On Thu, 15 Jun 2023 at 15:58, Muhammad Usama Anjum
->>> <usama.anjum@collabora.com> wrote:
->>>> I'll send next revision now.
->>>> On 6/14/23 11:00 PM, Michał Mirosław wrote:
->>>>> (A quick reply to answer open questions in case they help the next version.)
->>>>>
->>>>> On Wed, 14 Jun 2023 at 19:10, Muhammad Usama Anjum
->>>>> <usama.anjum@collabora.com> wrote:
->>>>>> On 6/14/23 8:14 PM, Michał Mirosław wrote:
->>>>>>> On Wed, 14 Jun 2023 at 15:46, Muhammad Usama Anjum
->>>>>>> <usama.anjum@collabora.com> wrote:
->>>>>>>>
->>>>>>>> On 6/14/23 3:36 AM, Michał Mirosław wrote:
->>>>>>>>> On Tue, 13 Jun 2023 at 12:29, Muhammad Usama Anjum
->>>>>>>>> <usama.anjum@collabora.com> wrote:
->>>>> [...]
->>>>>>>>>> +       if (cur_buf->bitmap == bitmap &&
->>>>>>>>>> +           cur_buf->start + cur_buf->len * PAGE_SIZE == addr) {
->>>>>>>>>> +               cur_buf->len += n_pages;
->>>>>>>>>> +               p->found_pages += n_pages;
->>>>>>>>>> +       } else {
->>>>>>>>>> +               if (cur_buf->len && p->vec_buf_index >= p->vec_buf_len)
->>>>>>>>>> +                       return -ENOMEM;
->>>>>>>>>
->>>>>>>>> Shouldn't this be -ENOSPC? -ENOMEM usually signifies that the kernel
->>>>>>>>> ran out of memory when allocating, not that there is no space in a
->>>>>>>>> user-provided buffer.
->>>>>>>> There are 3 kinds of return values here:
->>>>>>>> * PM_SCAN_FOUND_MAX_PAGES (1) ---> max_pages have been found. Abort the
->>>>>>>> page walk from next entry
->>>>>>>> * 0 ---> continue the page walk
->>>>>>>> * -ENOMEM --> Abort the page walk from current entry, user buffer is full
->>>>>>>> which is not error, but only a stop signal. This -ENOMEM is just
->>>>>>>> differentiater from (1). This -ENOMEM is for internal use and isn't
->>>>>>>> returned to user.
->>>>>>>
->>>>>>> But why ENOSPC is not good here? I was used before, I think.
->>>>>> -ENOSPC is being returned in form of true error from
->>>>>> pagemap_scan_hugetlb_entry(). So I'd to remove -ENOSPC from here as it
->>>>>> wasn't true error here, it was only a way to abort the walk immediately.
->>>>>> I'm liking the following erturn code from here now:
->>>>>>
->>>>>> #define PM_SCAN_BUFFER_FULL     (-256)
->>>>>
->>>>> I guess this will be reworked anyway, but I'd prefer this didn't need
->>>>> custom errors etc. If we agree to decoupling the selection and GET
->>>>> output, it could be:
->>>>>
->>>>> bool is_interesting_page(p, flags); // this one does the
->>>>> required/anyof/excluded match
->>>>> size_t output_range(p, start, len, flags); // this one fills the
->>>>> output vector and returns how many pages were fit
->>>>>
->>>>> In this setup, `is_interesting_page() && (n_out = output_range()) <
->>>>> n_pages` means this is the final range, no more will fit. And if
->>>>> `n_out == 0` then no pages fit and no WP is needed (no other special
->>>>> cases).
->>>> Right now, pagemap_scan_output() performs the work of both of these two
->>>> functions. The part can be broken into is_interesting_pages() and we can
->>>> leave the remaining part as it is.
->>>>
->>>> Saying that n_out < n_pages tells us the buffer is full covers one case.
->>>> But there is case of maximum pages have been found and walk needs to be
->>>> aborted.
->>>
->>> This case is exactly what `n_out < n_pages` will cover (if scan_output
->>> uses max_pages properly to limit n_out).
->>> Isn't it that when the buffer is full we want to abort the scan always
->>> (with WP if `n_out > 0`)?
->> Wouldn't it be duplication of condition if buffer is full inside
->> pagemap_scan_output() and just outside it. Inside pagemap_scan_output() we
->> check if we have space before putting data inside it. I'm using this same
->> condition to indicate that buffer is full.
-> 
-> I'm not sure what do you mean? The buffer-full conditions would be
-> checked in ..scan_output() and communicated to the caller by returning
-> N less than `n_pages` passed in. This is exactly how e.g. read()
-> works: if you get less than requested you've hit the end of the file.
-> If the file happens to have size that is equal to the provided buffer
-> length, the next read() will return 0.
-Right now we have:
+Due to electrical and mechanical constraints in certain platform designs there may
+be likely interference of relatively high-powered harmonics of the (G-)DDR memory
+clocks with local radio module frequency bands used by Wifi 6/6e/7. To mitigate
+possible RFI interference producers can advertise the frequencies in use and
+consumers can use this information to avoid using these frequencies for
+sensitive features.
 
-pagemap_scan_output():
-	if (p->vec_buf_index >= p->vec_buf_len)
-		return PM_SCAN_BUFFER_FULL;
-	if (p->found_pages == p->max_pages)
-		return PM_SCAN_FOUND_MAX_PAGES;
+The whole patch set is based on 6.4-rc3. With some brief introductions as below:
+Patch1:     Core ACPI interfaces needed to support WBRF feature.
+Patch2:     Enable WBRF support for wifi subsystem.
+Patch3 - 7: Enable WBRF support for AMD graphics driver.
 
-pagemap_scan_pmd_entry():
-	ret = pagemap_scan_output(bitmap, p, start, n_pages);
-	if (ret >= 0) // success
-		make_UFFD_WP and flush
-	else
-		buffer_error
+Evan Quan (5):
+  drm/amd/pm: update driver_if and ppsmc headers for coming wbrf feature
+  drm/amd/pm: setup the framework to support Wifi RFI mitigation feature
+  drm/amd/pm: add flood detection for wbrf events
+  drm/amd/pm: enable Wifi RFI mitigation feature support for SMU13.0.0
+  drm/amd/pm: enable Wifi RFI mitigation feature support for SMU13.0.7
 
-You are asking me to do:
+Mario Limonciello (2):
+  drivers/acpi: Add support for Wifi band RF mitigations
+  wifi: mac80211: Add support for ACPI WBRF
 
-pagemap_scan_output():
-	if (p->vec_buf_index >= p->vec_buf_len)
-		return 0;
-	if (p->found_pages == p->max_pages)
-		return PM_SCAN_FOUND_MAX_PAGES;
-
-pagemap_scan_pmd_entry():
-	ret = pagemap_scan_output(bitmap, p, start, n_pages);
-	if (ret > 0) // success
-		make_UFFD_WP and flush
-	else if (ret == 0) // buffer full
-		return PM_SCAN_BUFFER_FULL;	
-	else //other errors
-		buffer_error
-
-So you are asking me to go from consie code to write more lines of code. I
-would write more lines without any issue if it improves readability and
-logical sense. But I don't see here any benefit.
-
-> 
->>>>>>> While here, I wonder if we really need to fail the call if there are
->>>>>>> unknown bits in those masks set: if this bit set is expanded with
->>>>>>> another category flags, a newer userspace run on older kernel would
->>>>>>> get EINVAL even if the "treat unknown as 0" be what it requires.
->>>>>>> There is no simple way in the API to discover what bits the kernel
->>>>>>> supports. We could allow a no-op (no WP nor GET) call to help with
->>>>>>> that and then rejecting unknown bits would make sense.
->>>>>> I've not seen any examples of this. But I've seen examples of returning
->>>>>> error if kernel doesn't support a feature. Each new feature comes with a
->>>>>> kernel version, greater than this version support this feature. If user is
->>>>>> trying to use advanced feature which isn't present in a kernel, we should
->>>>>> return error and not proceed to confuse the user/kernel. In fact if we look
->>>>>> at userfaultfd_api(), we return error immediately if feature has some bit
->>>>>> set which kernel doesn't support.
->>>>>
->>>>> I think we should have a way of detecting the supported flags if we
->>>>> don't want a forward compatibility policy for flags here. Maybe it
->>>>> would be enough to allow all the no-op combinations for this purpose?
->>>> Again I don't think UFFD is doing anything like this.
->>>
->>> If it's cheap and easy to provide a user with a way to detect the
->>> supported features - why not do it?
->> I'm sorry. But it would bring up something new and iterations will be
->> needed to just play around. I like the UFFD way.
-> 
-> Let's then first agree on what would have to be changed. I guess we
-> could leverage that `scan_len = 0` doesn't make much sense otherwise
-> and let it be used to check the other fields for support.
-We are making things more and more complex. I don't like multi-plexing
-variables. Can you give examples where multi-plexing has been done on
-variables inside linux kernel? Muti-plexing means user gives input and
-takes output from same variable. It makes variable double meaning.
-
-> 
-> Best Regards
-> Michał Mirosław
+ drivers/acpi/Kconfig                          |   7 +
+ drivers/acpi/Makefile                         |   2 +
+ drivers/acpi/acpi_wbrf.c                      | 215 ++++++++++++++++++
+ drivers/gpu/drm/amd/amdgpu/amdgpu.h           |  26 +++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c      |  63 +++++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c       |  19 ++
+ drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c     | 204 +++++++++++++++++
+ drivers/gpu/drm/amd/pm/swsmu/inc/amdgpu_smu.h |  30 +++
+ .../inc/pmfw_if/smu13_driver_if_v13_0_0.h     |  14 +-
+ .../inc/pmfw_if/smu13_driver_if_v13_0_7.h     |  14 +-
+ .../pm/swsmu/inc/pmfw_if/smu_v13_0_0_ppsmc.h  |   3 +-
+ .../pm/swsmu/inc/pmfw_if/smu_v13_0_7_ppsmc.h  |   3 +-
+ drivers/gpu/drm/amd/pm/swsmu/inc/smu_types.h  |   3 +-
+ drivers/gpu/drm/amd/pm/swsmu/inc/smu_v13_0.h  |   3 +
+ .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c    |   9 +
+ .../drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c  |  60 +++++
+ .../drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c  |  59 +++++
+ drivers/gpu/drm/amd/pm/swsmu/smu_internal.h   |   3 +
+ include/linux/wbrf.h                          |  55 +++++
+ include/net/cfg80211.h                        |   8 +
+ net/mac80211/Makefile                         |   2 +
+ net/mac80211/chan.c                           |  11 +
+ net/mac80211/ieee80211_i.h                    |  19 ++
+ net/mac80211/main.c                           |   2 +
+ net/mac80211/wbrf.c                           | 137 +++++++++++
+ net/wireless/chan.c                           |   3 +-
+ 26 files changed, 968 insertions(+), 6 deletions(-)
+ create mode 100644 drivers/acpi/acpi_wbrf.c
+ create mode 100644 include/linux/wbrf.h
+ create mode 100644 net/mac80211/wbrf.c
 
 -- 
-BR,
-Muhammad Usama Anjum
+2.34.1
+
