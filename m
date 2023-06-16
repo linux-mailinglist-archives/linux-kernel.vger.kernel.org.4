@@ -2,48 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F15E3732F37
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5538732EEC
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345327AbjFPK5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 06:57:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52124 "EHLO
+        id S1345467AbjFPKiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 06:38:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345541AbjFPK5S (ORCPT
+        with ESMTP id S1345635AbjFPKfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 06:57:18 -0400
+        Fri, 16 Jun 2023 06:35:50 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753DB8682;
-        Fri, 16 Jun 2023 03:49:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1BC49D9;
+        Fri, 16 Jun 2023 03:29:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 62DE0635F3;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 11090636E9;
+        Fri, 16 Jun 2023 10:28:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CA9DC433C8;
         Fri, 16 Jun 2023 10:28:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2A5EC433C0;
-        Fri, 16 Jun 2023 10:28:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686911334;
-        bh=oSMXR/HjDE60lLaUFRyr17SQk8tUZHFVAN/RdtCRu3Q=;
-        h=From:To:Cc:Subject:Date:From;
-        b=jSCp6azbb59GRuBgttWXaMakWyX8Vx5k4d1xT7s7Ysgz6BWqZ8SC/n7ipfglPf9O1
-         r1v8xYL3MUge44hVseJdrLyGKQ4vvV+/eG4SKFy7CqzjWgciy6GZL22y1hQuOuN4m3
-         7ktrhb8AbBNS7TkRdcMLczg+EpSLeQWMEkrL+Md0xWHX0sjsRGSpsjoZC89+iO0Kv/
-         PaesfgHwpU4xrOTdZZasqfqzzhXN/vXIHJQwIM0AgLPNvmZdc8xOpjkYq1VmxrPF0I
-         mf8HXhB3/aU9SJC306jQ9bVfgStGKDODAzNYXlT3BCYUBymoiVg/tXiPddrM61Q+7g
-         mYLFDAMfD/ylw==
+        s=k20201202; t=1686911336;
+        bh=VQwq2GGlOeLSqeUbYh++6YIJ1yOtsEnLMmu1TMUlSKc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=W+ZhJv+YvggHLQX9h9CYl/1UIoVFvHwqjcfm6do2ZhnTvJGxxBqAWCuYPqeZsCcRs
+         f0Sf2lvkZh5I0oEuD1IS+2Q3unHocFOY8B4lSv7cbBMRLkdUq56HMqsz/UtZUnf8YO
+         4pOZ04PJm+2VUiOB+4ns1qU+0SPw2+dgyToqFfRPll/+VWZrjPFcY3rtjnCECU9CKL
+         fCj4lp7vPZCM7SEjwBDl6W7cIL18/bJWAn9UmsyX4LX3dPV9UuLxLHF2T07zNtSZQa
+         JCq7TNq9Qshsj4ihddY5zLqBbsKimFhhljkEe3H5UyFZnTWxiNQvi0FS+uCGk6MjoO
+         rOxI+V7MXAlCw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sasha Levin <sashal@kernel.org>, hca@linux.ibm.com,
-        gor@linux.ibm.com, linux-s390@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 1/5] s390/cio: unregister device when the only path is gone
-Date:   Fri, 16 Jun 2023 06:28:47 -0400
-Message-Id: <20230616102852.674366-1-sashal@kernel.org>
+Cc:     Inki Dae <inki.dae@samsung.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, sw0312.kim@samsung.com,
+        kyungmin.park@samsung.com, airlied@gmail.com, daniel@ffwll.ch,
+        krzysztof.kozlowski@linaro.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 2/5] drm/exynos: vidi: fix a wrong error return
+Date:   Fri, 16 Jun 2023 06:28:48 -0400
+Message-Id: <20230616102852.674366-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230616102852.674366-1-sashal@kernel.org>
+References: <20230616102852.674366-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -59,60 +63,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vineeth Vijayan <vneethv@linux.ibm.com>
+From: Inki Dae <inki.dae@samsung.com>
 
-[ Upstream commit 89c0c62e947a01e7a36b54582fd9c9e346170255 ]
+[ Upstream commit 4a059559809fd1ddbf16f847c4d2237309c08edf ]
 
-Currently, if the device is offline and all the channel paths are
-either configured or varied offline, the associated subchannel gets
-unregistered. Don't unregister the subchannel, instead unregister
-offline device.
+Fix a wrong error return by dropping an error return.
 
-Signed-off-by: Vineeth Vijayan <vneethv@linux.ibm.com>
-Reviewed-by: Peter Oberparleiter <oberpar@linux.ibm.com>
-Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
+When vidi driver is remvoed, if ctx->raw_edid isn't same as fake_edid_info
+then only what we have to is to free ctx->raw_edid so that driver removing
+can work correctly - it's not an error case.
+
+Signed-off-by: Inki Dae <inki.dae@samsung.com>
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/s390/cio/device.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/exynos/exynos_drm_vidi.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/s390/cio/device.c b/drivers/s390/cio/device.c
-index d2203cd178138..6721e984782db 100644
---- a/drivers/s390/cio/device.c
-+++ b/drivers/s390/cio/device.c
-@@ -1357,6 +1357,7 @@ void ccw_device_set_notoper(struct ccw_device *cdev)
- enum io_sch_action {
- 	IO_SCH_UNREG,
- 	IO_SCH_ORPH_UNREG,
-+	IO_SCH_UNREG_CDEV,
- 	IO_SCH_ATTACH,
- 	IO_SCH_UNREG_ATTACH,
- 	IO_SCH_ORPH_ATTACH,
-@@ -1389,7 +1390,7 @@ static enum io_sch_action sch_get_action(struct subchannel *sch)
+diff --git a/drivers/gpu/drm/exynos/exynos_drm_vidi.c b/drivers/gpu/drm/exynos/exynos_drm_vidi.c
+index 53e03f8af3d5e..f36d4df4d481d 100644
+--- a/drivers/gpu/drm/exynos/exynos_drm_vidi.c
++++ b/drivers/gpu/drm/exynos/exynos_drm_vidi.c
+@@ -480,8 +480,6 @@ static int vidi_remove(struct platform_device *pdev)
+ 	if (ctx->raw_edid != (struct edid *)fake_edid_info) {
+ 		kfree(ctx->raw_edid);
+ 		ctx->raw_edid = NULL;
+-
+-		return -EINVAL;
  	}
- 	if ((sch->schib.pmcw.pam & sch->opm) == 0) {
- 		if (ccw_device_notify(cdev, CIO_NO_PATH) != NOTIFY_OK)
--			return IO_SCH_UNREG;
-+			return IO_SCH_UNREG_CDEV;
- 		return IO_SCH_DISC;
- 	}
- 	if (device_is_disconnected(cdev))
-@@ -1451,6 +1452,7 @@ static int io_subchannel_sch_event(struct subchannel *sch, int process)
- 	case IO_SCH_ORPH_ATTACH:
- 		ccw_device_set_disconnected(cdev);
- 		break;
-+	case IO_SCH_UNREG_CDEV:
- 	case IO_SCH_UNREG_ATTACH:
- 	case IO_SCH_UNREG:
- 		if (!cdev)
-@@ -1484,6 +1486,7 @@ static int io_subchannel_sch_event(struct subchannel *sch, int process)
- 		if (rc)
- 			goto out;
- 		break;
-+	case IO_SCH_UNREG_CDEV:
- 	case IO_SCH_UNREG_ATTACH:
- 		spin_lock_irqsave(sch->lock, flags);
- 		if (cdev->private->flags.resuming) {
+ 
+ 	component_del(&pdev->dev, &vidi_component_ops);
 -- 
 2.39.2
 
