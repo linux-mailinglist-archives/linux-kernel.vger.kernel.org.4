@@ -2,146 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1734733852
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 20:48:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24830733856
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 20:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344997AbjFPSsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 14:48:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59918 "EHLO
+        id S240000AbjFPSuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 14:50:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233054AbjFPSsj (ORCPT
+        with ESMTP id S231308AbjFPSux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 14:48:39 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2079.outbound.protection.outlook.com [40.107.93.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D1A30FB;
-        Fri, 16 Jun 2023 11:48:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mvuNx5on5HcAfZ/yJIE83GA+jVsnsb7f4W4/c0s86z292nAHjLj8lDv4U6RgcB3CNOj5mqGpTNLbxWbor1ALVgoWuvBNrUkd2FFXSmSr45SDUTNLQYTKCKxycFMK4TP/WkY2aOR1WnVzKRBKj90Rfi02+6p+PFNr1TPHPz+8AkQefZeHhalm04afsnjritN3D0rRWJeCysHQWkZe5Uymu6ZF4XrqPDoKXWpIUyre3ZJsjAvl0+xyzEGnUoRXDUt6HqScZtHQitKmzgHzi0VngLrkpHfKQ7Ogb6I801egxqDF1RB2LTXwRd0Xx5awp+oZstsUmODiQsH1aQpIb8W/oA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yNlJyaYIOLJyx821FEg5s7yz07k/FQJ//h0jgiMXeIY=;
- b=oMUufT2+SaDyLoqtPFZbUiV/GQhdR+4cAGRJ1MXZSCZkMT0vIMg/c0wp8kQNSPKI61/Uo20KuIJH9HNYEQcBLFOXGW06RO/+6LCHfiqZql8Rm5CCQJGr6IYXqWnYs2TSCI9j2XEl5NGBC11c4DByT9VaiV/51OhAeOv6V1BgDXyGWXQI0zr/TNiZzqZOY4o6TOlB1S7p4fogKNr2xJY3849BxqHW4OfPa9+/5GFGZBdUDZWbeHwplFvBHIuE7FbLqivVMyaZM/6xJNILaeoWiuM1T+aLuEq7Y53PyNAhZIE7ii+LoCBAI4AxNnQflSuuDFljUewFlQnVgSjwVhcgXg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yNlJyaYIOLJyx821FEg5s7yz07k/FQJ//h0jgiMXeIY=;
- b=SfZxTsZiJVCyRx56UY730ebG9vsZ7skcrTDW7ioxHBM5H6dfPtnv6Ut/FEwEEn10IjUnzsXINoC6TMJcNKsa2m3jSBcy03ogcKuZSdJ4OtmETQAPaGF8Kb+q02kY1IwEqxqoXGax/1KQDCahrvKBB0kzl8r46U6O20Exk/+0ZUVWkekaVYU+vvj7qXV4BNvve7PWwBDKXkv8TJzCmCx6j0CTXlInU+dRykcNaYtx4rEYLKMdJC3U+fH7CF0vmn3dXA5CtIYQYSQjniP6RO/l/vw/aNC3qsg/Wo8u8zaacM2ZPJu5LY5bqW8jkOKPEvM4YUiNoTPzk0Vp6mvYIyauug==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by IA1PR12MB7711.namprd12.prod.outlook.com (2603:10b6:208:421::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.25; Fri, 16 Jun
- 2023 18:48:36 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab%7]) with mapi id 15.20.6477.037; Fri, 16 Jun 2023
- 18:48:36 +0000
-Date:   Fri, 16 Jun 2023 15:48:35 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Alexander Duyck <alexander.duyck@gmail.com>
-Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Baolu Lu <baolu.lu@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-Subject: Re: Question about reserved_regions w/ Intel IOMMU
-Message-ID: <ZIyug9KX9VHCxe5i@nvidia.com>
-References: <CAKgT0UezciLjHacOx372+v8MZkDf22D5Thn82n-07xxKy_0FTQ@mail.gmail.com>
- <CAKgT0UfMeVOz6AOqSvVvzpsedGDiXCNQrjM+4KDv7qJJ1orpsw@mail.gmail.com>
- <a1cff65b-b390-3872-25b5-dd6bbfb3524c@linux.intel.com>
- <b24a6c7b-27fc-41c0-5c82-15696b4a7dc1@arm.com>
- <ZIiRK2Dzl2/9Jqle@ziepe.ca>
- <BN9PR11MB52765C24405D2475CF3CBEBE8C58A@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZIxTmGU4a5dniEY3@nvidia.com>
- <CAKgT0UfmdOOPSD5YvpHnh1A02URn9zxVLbyXJM_67On7xojLcA@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKgT0UfmdOOPSD5YvpHnh1A02URn9zxVLbyXJM_67On7xojLcA@mail.gmail.com>
-X-ClientProxiedBy: MN2PR16CA0042.namprd16.prod.outlook.com
- (2603:10b6:208:234::11) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Fri, 16 Jun 2023 14:50:53 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 299AE35AD
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 11:50:52 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-98646e2fc70so155860466b.1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 11:50:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1686941450; x=1689533450;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fn/qWt62UcmmaaPkId4UDrJc21A6804tWR7mlup1U/g=;
+        b=bI88/h029pU5pmJdvUquADcF/Hv3Cn+FDaQYxd2XC5ACQIY2/p6Borz3hEMGKS2pY1
+         cskFCeIBlU4rmEuhjDPFVQwO4Icz3Bmkli6V7si6jhkgRZJ3Rr7ZggEDy1IOLUDgpoy6
+         3CgkFWXbuuL5mr2BHnEuOxuQolxs9qRGE7tlE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686941450; x=1689533450;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Fn/qWt62UcmmaaPkId4UDrJc21A6804tWR7mlup1U/g=;
+        b=CPctbE9o+bdeucooHyVBxp2D9q5D8B5NjiCQ3t8N9U7TZrVmTFpglDKmeqM8LB3akR
+         XS6d3ukYtgtzqVJlkeGlkg9hJ6Tc16jpHdC0piqHu5aECxRc8YFLhhyn3QinGKg77Fi/
+         dur4z6rz3YCcnmzZ+1AYlLvkOWRdQertaJEbltMS3mnR9tDGRBFSuHIQFWMldRxbXd3I
+         RJfrQffRaEnmUZpWwifrcJ4Qy+80fVafGgsZPtvQawtUKUzw8JVhpHuS1/6zGlME7aG4
+         P3BG++COzMxqyAe9VagLHSU2GcUujVzYJ13clsDtttvy5Ri7g35P/T41yjshpuiXmy7W
+         4McA==
+X-Gm-Message-State: AC+VfDwymnobRMBNV0Oq6nhn8vd/L5uS0MnjyMeMwhXy8AN0nZ039br1
+        IeZGGbX0UgI9kwvAyYSGefzE1fBFH65qppW086J8KPpO
+X-Google-Smtp-Source: ACHHUZ4Ye5ZbsNSug9jbHG9gCHCfmLM9In0NsrfVUg4SnZsHD/zEENQI4jn2WSl1JKEwftNjdy+I8A==
+X-Received: by 2002:a17:907:9703:b0:95e:ce3b:a471 with SMTP id jg3-20020a170907970300b0095ece3ba471mr3106171ejc.55.1686941450452;
+        Fri, 16 Jun 2023 11:50:50 -0700 (PDT)
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
+        by smtp.gmail.com with ESMTPSA id m15-20020a1709060d8f00b00982aa9db473sm2361530eji.55.2023.06.16.11.50.49
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Jun 2023 11:50:49 -0700 (PDT)
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-51a3e6a952aso1015515a12.3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 11:50:49 -0700 (PDT)
+X-Received: by 2002:aa7:cf19:0:b0:518:922a:bc38 with SMTP id
+ a25-20020aa7cf19000000b00518922abc38mr2364463edy.2.1686941448730; Fri, 16 Jun
+ 2023 11:50:48 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|IA1PR12MB7711:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2432cd68-2cbd-4443-767c-08db6e9a4a8f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gwcl0mLTUVo00WJGwjh5AlY5ZhaYII0czirSYwHJgAstOVTTOS66ewbE2LWKJG3wwvZC5dY1KKrvN4cTbLZSxxlFsEJLZIkvfb9g2cq5Hf/JMvEvpRLVyWOVuNVnvbhmJxczXHLE5zYr1laPjfsg/t1qnLI0PpSsADaPnmZWuWkLooO2CJerOfrBBA+2PUl7OYEiWy60geeKpDXk42X4AFcwNlJjqMoBX6b6ubj6aFwEyLxiBCXGCQq9tvye/JPh+1y4qR8Onz22LdysP7fs2YuMl6MeRxciLf+zUEBbviKd9JwBGDxd8JiHJckpAp5s6QOMJm2hL/J/8dm4AC+dr0wqrneF9lSy4LNC4IYDhzQbO3sgMIoLMd9LHKDjyZTDCGcfzPbV3C6UVG09LStM73wPf5O7WsZrhdv42Em3mLvngScBE32fUhMpBit9dxsVDzRhVZcFxJm59goVuUDo+/LaAx5YYtTZxvOF7Kv/WhaqElscnVw7REmWwwgO+LegxsCHXHnpacF2rQG9r5PH4x8RMu2SmWld6RV8qYogXtspzOgVx9AFShFAamhZaqk2
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(376002)(346002)(136003)(39860400002)(451199021)(54906003)(41300700001)(86362001)(66556008)(66946007)(6486002)(6916009)(8936002)(8676002)(66476007)(316002)(36756003)(4326008)(478600001)(6512007)(5660300002)(26005)(83380400001)(186003)(6506007)(4744005)(2906002)(38100700002)(2616005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jKZZ+oYb+Xc1du9QlEmeSxv71DWdp5gtdL0YGrd5rtuo7GpdqpAoi9KUQr10?=
- =?us-ascii?Q?JZtNPCfOvc9MtFugfgBH4qV9eajcUO9gXjW2qtlf2wTq8CMy0kFvkbyFkAXP?=
- =?us-ascii?Q?9jS+xmRqn0rYZ4a/dnJNPEz0NaliE9Vd6cp2OI3Es7ZWZd1lTliu6IHvNbBT?=
- =?us-ascii?Q?1GENaBbKAIFHoXKBx+X3z/g04W6GIR9k3MUOEuWsCqhcA1Q++36MuJbeakAa?=
- =?us-ascii?Q?XnNW/Q3rWQAV/HLmD0Z1QIIICxVxoBfrCLPEaD2BXIpk4uQ8eYrEYH9IVk9K?=
- =?us-ascii?Q?0rdsk6xP/UuKj5janTGy+tArNq0JfcTA8fksTK4JstSQMEERswEJs4ur0YNp?=
- =?us-ascii?Q?CPMe97z7NAr1uJRaALNMJoFNyGJd54eZ2lMr80/3N2f9GnIZxf3E0KgcW6x3?=
- =?us-ascii?Q?p4SfAJWhLNeqOPCFvTrMwB9NwQIGjVWidxC11VCWYecp2m8MZDmw55MhrD/9?=
- =?us-ascii?Q?AWYfaOe9WJsxMRrJbk3ZSsSzonIwqe99RIfIy/wERvw5pI3MtTczpvwrI+f6?=
- =?us-ascii?Q?6o5TvLHLEUQIHZQUEIo9YpCCZW7b8afF5/80mwlHwyAc7e06+VSafqxSNF1n?=
- =?us-ascii?Q?9oVdWG9IoBvd7cHgNo/ip9AsNQNNZF8f6mHzfqGIWdYT2QHyuq4GRdJpYEcw?=
- =?us-ascii?Q?1HzvMhNB27q2ACwwWTC2X04ylLbYX9JgaVzc5d1zTUQtkldHdV6Ja5vAmvXA?=
- =?us-ascii?Q?fVNOH8Q8CoUiYKNIEz2GGfkw12foxbzifIu0Ghydlfy60TmA7DDhyuAj+3sL?=
- =?us-ascii?Q?j7jnmYSk5Yzhz4UdncD/Is5oetW40p2wqRaay/RyG1JHpiVrvOjH/OjP5tw2?=
- =?us-ascii?Q?H5wMu9vDf6QZc7zR7rk2v/LarDOIiFOZIaHzcZPetHXsoAbSi7iJTaWIv8FI?=
- =?us-ascii?Q?yxaMPkT5T3fet64mvaDtF+3vEIcfd0U6/w0p5daF5zLRhZj7UVpbAUY0zrBs?=
- =?us-ascii?Q?zk+NW5ATnOBZue+oXbq+iGrPejhM81GYehYpt3SCJMHLizgOnGVoUU0WVs0V?=
- =?us-ascii?Q?v+LGgl4ql1jhTRd2GCI6gRkb11rKBozQ/QykzNdDPW9+Az0l5a+mQejN6MG1?=
- =?us-ascii?Q?eZnIyp7WXFVjj0DfXqD+3l+ksfy6ZQIzAfp1T1zYlBxiO8Uoj58t+oZQ4I7z?=
- =?us-ascii?Q?3te8Fw+YrbrW/+cA6T2R7ZVuXXBObhpH+itlJcQpLr0KKswfSwshWnYyrxG0?=
- =?us-ascii?Q?ZebIpDH96zC6FgPV5hMiORbfv0H9GQT48YZpO2w3zUkqfZB1LqUTqlFEsIyU?=
- =?us-ascii?Q?J8FLlkkp6vx4mamSzScT5mojVVD23RwbT9BiO8SwQXFUxgLxMxkHjq9t7G0q?=
- =?us-ascii?Q?ySzERXIav2iyU7cBY77vavAgB/6b3IfH14DpKG8w7AcI/opbYtMgcNI/R9KK?=
- =?us-ascii?Q?HQBKhvCZG5YRK1W8AaBdp5GUUFrclidbW8mE69fvBHFXmZvZmNmTarN34ewf?=
- =?us-ascii?Q?nuGgnzaVgE2YlrtoS9mC03aau0UYnsnAO3Pau8Q1YcXMZe3nWyFGTmXD62fq?=
- =?us-ascii?Q?R9wpl3j3lTFFoqqaU3WWpHS9eVlFYgl1SeQcwMtAbdA4t/g6kXXP7xBiDis2?=
- =?us-ascii?Q?n8iRi9xTTTmVb9PLf28=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2432cd68-2cbd-4443-767c-08db6e9a4a8f
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 18:48:35.9507
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5AoBEKZxeyGgxtaPqxZ6lrZ6DSVRJg0XdfVEWuQWTTvYnveN2AUMQxyS9JSNel19
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7711
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+References: <21bdc866-f9ae-4cda-a996-370bde183fd0@paulmck-laptop>
+In-Reply-To: <21bdc866-f9ae-4cda-a996-370bde183fd0@paulmck-laptop>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 16 Jun 2023 11:50:31 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiPA8d0z2K1huqP0jCKxfmjBG_VYnJtoADeQWsvWLv9UQ@mail.gmail.com>
+Message-ID: <CAHk-=wiPA8d0z2K1huqP0jCKxfmjBG_VYnJtoADeQWsvWLv9UQ@mail.gmail.com>
+Subject: Re: [GIT PULL] RCU regression fix for v6.4
+To:     paulmck@kernel.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        rcu@vger.kernel.org, jonathanh@nvidia.com, wenst@chromium.org,
+        angelogioacchino.delregno@collabora.com,
+        rafael.j.wysocki@intel.com, mirq-linux@rere.qmqm.pl,
+        dmitry.osipenko@collabora.com, sachinp@linux.ibm.com,
+        qiang.zhang1211@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 08:27:21AM -0700, Alexander Duyck wrote:
+On Fri, 16 Jun 2023 at 09:34, Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> Yes, it would be nice to abstract this somehow in order to hide it in
+> SRCU, but I still don't see a good way of doing this.
 
-> > > The problem is that the user may not open all the devices then
-> > > currently there is no way for it to know the windows on those
-> > > unopened devices.
-> > >
-> > > Curious why nobody complains about this gap before this thread...
-> >
-> > Probably because it only matters if you have a real PCIe switch in the
-> > system, which is pretty rare.
-> 
-> So just FYI I am pretty sure we have a partitioned PCIe switch that
-> has FW issues.
+Ehh - like we actually do spinlocks in general, perhaps?
 
-Yeah, that is pretty common :(
+Spinlocks always exist. On UP - with no spinlock debugging - it turns
+into a zero-sized data structure, and the spin lock/unlock operations
+are no-ops.
 
-But I think you've touched on a gap in the API.
+Why don't you just do the exact same thing with the "struct
+srcu_usage". For Tiny SRCU, just make it an empty struct, with an
+empty initializer.
 
-Jason
+IOW, don't "abstract it out". Abstract it IN. Make tiny-rcu still have
+it, just as a no-op.
+
+Anyway, I've pulled your fix, but maybe the above would have been the
+cleaner solution?
+
+          Linus
