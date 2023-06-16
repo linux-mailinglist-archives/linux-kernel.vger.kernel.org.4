@@ -2,207 +2,860 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35DCE733B7F
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 23:23:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB4BA733B80
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 23:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345662AbjFPVX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 17:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42226 "EHLO
+        id S244916AbjFPVYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 17:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345612AbjFPVXZ (ORCPT
+        with ESMTP id S232340AbjFPVX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 17:23:25 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFA83AB0;
-        Fri, 16 Jun 2023 14:23:20 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35GKSCAo032019;
-        Fri, 16 Jun 2023 21:23:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=T5Eon8Xr/1igKGrBue+/rFPakvVZZny6ZbKNWRjU/ro=;
- b=oEqx7hgiPiadzAZoDzbsr4CDUR+yUYsxW+DOat4vQpHBoGXZQkEYC+gYxG9qncbqYa6k
- YvIzCWgGlye0UO5KYLJyVE5/B2uN1JPLXRw+cphmHVseDAolEui2btYxBcK7RJzBlUCe
- EnOSGYIwa0nz2ZbS3gR4hIwZDPDaeW1wx5kp++X7eXdBIhVg6pcxJhXWcZLKCBM9tbv3
- 1ZKX/RSUz1OGaiby/TItDKeXZ+dfoVoZrN12Fee4UY0dXdx2ygojvDd84bQDrKE9syZo
- moS9NmcemrSnxpe8z+I9JQ+JI+k3lMeiFDqEk+EBTjmG/olO7imV4B++zRRpF6AqzT+e gw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r89dw2q3b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Jun 2023 21:23:14 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35GLNDDF024296
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Jun 2023 21:23:13 GMT
-Received: from [10.110.47.14] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 16 Jun
- 2023 14:23:12 -0700
-Message-ID: <ccda5b11-b074-5500-7c0e-ebb4b025d960@quicinc.com>
-Date:   Fri, 16 Jun 2023 14:23:11 -0700
+        Fri, 16 Jun 2023 17:23:58 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0238D35A4
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 14:23:56 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id 6a1803df08f44-62ffdbd6787so8533946d6.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 14:23:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1686950635; x=1689542635;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TgVWy4X1xN4AXsJirsL3J/sjVpnMmj0wy6rB2vxMO6U=;
+        b=mi9Xq7cWnsKnwx/igCo5n7CoP7G+oA3hAasXeSpxKXZPYMOB9qeq9M4JGm3hoE3evZ
+         G0VNlbgIR5kHvheD3glHGL8cJ41qZadiQ4FtRmJ3t9jNBtz2RgG1mRKHDafiXu/RNcP0
+         5hPnAVgBjcK8852P0HF7vEOP4wVN0unMAcR4A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686950635; x=1689542635;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TgVWy4X1xN4AXsJirsL3J/sjVpnMmj0wy6rB2vxMO6U=;
+        b=epW2wWXL1e4g6w3jMRiY9kD6X2OTxBaiOabSynLsf9EGebIopJP2hf/wZLK3OEL+by
+         y4djKq0UfXrSEcDuY9N4LSI6XxLiUua5HY9ZKzaWwHGPepsUUnGXnqVBpj8RMKp8Lfob
+         1FRizxkYicrtxpp47WR8fG8lI8zUANnskvg3Y2z3qtVlBshvCW1tCGsLz2E2skpLp5j6
+         8nACnFtFHtfKlkeGZRp86X5ohSq5R+SxttxetCGls72JNy9NsjCuw5lUZyUbNrs0TrEJ
+         h3VzA3VuHw4D3tMZLg4kzZyNdZ8wLp9qExTjR7x+mJwQWhsNmakm4HTtyLooF7Le08Hm
+         4LdA==
+X-Gm-Message-State: AC+VfDw/Idwc0dKkhLhLUOjZaIlnm22VVg1UoOUaHXGX3SKypwz51ZJo
+        FswFBLPXjNuObixsvqhnpjpG2g==
+X-Google-Smtp-Source: ACHHUZ6LUTcfx7VOeGVP/J16P/ba21yAgubSJvKCdwoJKp0kW+3vwT4EtaWnKEmJV2SWMPnAEJiKKw==
+X-Received: by 2002:a05:6214:501b:b0:62f:f23e:14f8 with SMTP id jo27-20020a056214501b00b0062ff23e14f8mr3708416qvb.42.1686950634830;
+        Fri, 16 Jun 2023 14:23:54 -0700 (PDT)
+Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id w17-20020a05620a129100b007621b1bcbbfsm1969948qki.102.2023.06.16.14.23.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 14:23:53 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 21:23:53 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@kernel.org, vincent.guittot@linaro.org,
+        linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
+        qyousef@layalina.io, chris.hyser@oracle.com,
+        patrick.bellasi@matbug.net, pjt@google.com, pavel@ucw.cz,
+        qperret@google.com, tim.c.chen@linux.intel.com, joshdon@google.com,
+        timj@gnu.org, kprateek.nayak@amd.com, yu.c.chen@intel.com,
+        youssefesmat@chromium.org, efault@gmx.de, tglx@linutronix.de
+Subject: Re: [PATCH 08/15] sched: Commit to EEVDF
+Message-ID: <20230616212353.GA628850@google.com>
+References: <20230531115839.089944915@infradead.org>
+ <20230531124604.137187212@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 3/3] drm/msm/dsi: Enable DATABUS_WIDEN for DSI command
- mode
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
- <20230525-add-widebus-support-v1-3-c7069f2efca1@quicinc.com>
- <3a6cc492-6b54-2c70-402e-995c0b003c01@linaro.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <3a6cc492-6b54-2c70-402e-995c0b003c01@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: oMOa4LJR31fSJZh_Ezx-iqP2HYK0GXW1
-X-Proofpoint-ORIG-GUID: oMOa4LJR31fSJZh_Ezx-iqP2HYK0GXW1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-16_14,2023-06-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- lowpriorityscore=0 impostorscore=0 adultscore=0 mlxscore=0 suspectscore=0
- priorityscore=1501 malwarescore=0 bulkscore=0 clxscore=1015
- mlxlogscore=852 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306160194
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230531124604.137187212@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/14/2023 12:49 AM, Dmitry Baryshkov wrote:
-> On 14/06/2023 04:57, Jessica Zhang wrote:
->> DSI 6G v2.5.x+ supports a data-bus widen mode that allows DSI to send
->> 48 bits of compressed data per pclk instead of 24.
->>
->> For all chipsets that support this mode, enable it whenever DSC is
->> enabled as recommend by the hardware programming guide.
->>
->> Only enable this for command mode as we are currently unable to validate
->> it for video mode.
->>
->> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
->> ---
->>
->> Note: The dsi.xml.h changes were generated using the headergen2 script in
->> envytools [1], but the changes to the copyright and rules-ng-ng source 
->> file
->> paths were dropped.
->>
->> [1] https://github.com/freedreno/envytools/
->>
->>   drivers/gpu/drm/msm/dsi/dsi.xml.h  |  1 +
->>   drivers/gpu/drm/msm/dsi/dsi_host.c | 19 ++++++++++++++++++-
->>   2 files changed, 19 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/gpu/drm/msm/dsi/dsi.xml.h 
->> b/drivers/gpu/drm/msm/dsi/dsi.xml.h
->> index a4a154601114..2a7d980e12c3 100644
->> --- a/drivers/gpu/drm/msm/dsi/dsi.xml.h
->> +++ b/drivers/gpu/drm/msm/dsi/dsi.xml.h
->> @@ -664,6 +664,7 @@ static inline uint32_t 
->> DSI_CMD_MODE_MDP_CTRL2_INPUT_RGB_SWAP(enum dsi_rgb_swap v
->>       return ((val) << DSI_CMD_MODE_MDP_CTRL2_INPUT_RGB_SWAP__SHIFT) & 
->> DSI_CMD_MODE_MDP_CTRL2_INPUT_RGB_SWAP__MASK;
->>   }
->>   #define DSI_CMD_MODE_MDP_CTRL2_BURST_MODE            0x00010000
->> +#define DSI_CMD_MODE_MDP_CTRL2_DATABUS_WIDEN            0x00100000
->>
->>   #define REG_DSI_CMD_MODE_MDP_STREAM2_CTRL            0x000001b8
->>   #define DSI_CMD_MODE_MDP_STREAM2_CTRL_DATA_TYPE__MASK        0x0000003f
->> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c 
->> b/drivers/gpu/drm/msm/dsi/dsi_host.c
->> index 5d7b4409e4e9..1da5238e7105 100644
->> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
->> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
->> @@ -927,6 +927,9 @@ static void dsi_timing_setup(struct msm_dsi_host 
->> *msm_host, bool is_bonded_dsi)
->>       u32 hdisplay = mode->hdisplay;
->>       u32 wc;
->>       int ret;
->> +    bool widebus_supported = msm_host->cfg_hnd->major == 
->> MSM_DSI_VER_MAJOR_6G &&
->> +            msm_host->cfg_hnd->minor >= MSM_DSI_6G_VER_MINOR_V2_5_0;
->> +
->>
->>       DBG("");
->>
->> @@ -973,8 +976,15 @@ static void dsi_timing_setup(struct msm_dsi_host 
->> *msm_host, bool is_bonded_dsi)
->>            *
->>            * hdisplay will be divided by 3 here to account for the fact
->>            * that DPU sends 3 bytes per pclk cycle to DSI.
->> +         *
->> +         * If widebus is supported, set DATABUS_WIDEN register and 
->> divide hdisplay by 6
->> +         * instead of 3
+On Wed, May 31, 2023 at 01:58:47PM +0200, Peter Zijlstra wrote:
+> EEVDF is a better defined scheduling policy, as a result it has less
+> heuristics/tunables. There is no compelling reason to keep CFS around.
 > 
-> This is useless, it is already obvious from the code below. Instead 
-> there should be something like "wide bus extends that to 6 bytes per 
-> pclk cycle"
-> 
->>            */
->> -        hdisplay = 
->> DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 3);
->> +        if (!(msm_host->mode_flags & MIPI_DSI_MODE_VIDEO) && 
->> widebus_supported)
->> +            hdisplay = 
->> DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 6);
->> +        else
->> +            hdisplay = 
->> DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 3);
->> +
->>           h_total += hdisplay;
->>           ha_end = ha_start + hdisplay;
->>       }
->> @@ -1027,6 +1037,13 @@ static void dsi_timing_setup(struct 
->> msm_dsi_host *msm_host, bool is_bonded_dsi)
->>           dsi_write(msm_host, REG_DSI_CMD_MDP_STREAM0_TOTAL,
->>               DSI_CMD_MDP_STREAM0_TOTAL_H_TOTAL(hdisplay) |
->>               DSI_CMD_MDP_STREAM0_TOTAL_V_TOTAL(mode->vdisplay));
->> +
->> +        if (msm_host->dsc && widebus_supported) {
->> +            u32 mdp_ctrl2 = dsi_read(msm_host, 
->> REG_DSI_CMD_MODE_MDP_CTRL2);
->> +
->> +            mdp_ctrl2 |= DSI_CMD_MODE_MDP_CTRL2_DATABUS_WIDEN;
->> +            dsi_write(msm_host, REG_DSI_CMD_MODE_MDP_CTRL2, mdp_ctrl2);
-> 
-> Is widebus applicable only to the CMD mode, or video mode can employ it 
-> too?
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  kernel/sched/debug.c    |    6 
+>  kernel/sched/fair.c     |  465 +++---------------------------------------------
 
-Video mode can employ it too but like Jessica said in the commit text, 
-we dont have a setup to validate this for DSI video mode so it was 
-restricted to cmd mode.
+Whether EEVDF helps us improve our CFS latency issues or not, I do like the
+merits of this diffstat alone and the lesser complexity and getting rid of
+those horrible knobs is kinda nice.
 
-We can leave a note here too.
+For ChromeOS, we are experimenting with RT as well for our high priority
+threads, and the PeterZ/Juri's patches on DL-server.
 
+One of the issues is, on small number of CPU systems and overloaded CPUs, the
+fair scheduler tends to eat up too much from high priority threads. That's
+where RT kind of shines in our testing because it just tells those lower
+priority CFS buggers to STFU.
+
+I believe EEVDF will still have those issues (as its still a fair scheduler
+if I'm not horribly mistaken).
+
+But hey, less CFS knobs is only a good thing! And most people say fair.c is
+one of the most complex beasts in the kernel so I'm all for this..
+
+thanks,
+
+ - Joel
+
+
+>  kernel/sched/features.h |   12 -
+>  kernel/sched/sched.h    |    5 
+>  4 files changed, 38 insertions(+), 450 deletions(-)
 > 
->> +        }
->>       }
->>   }
->>
->>
->> -- 
->> 2.40.1
->>
+> --- a/kernel/sched/debug.c
+> +++ b/kernel/sched/debug.c
+> @@ -347,10 +347,7 @@ static __init int sched_init_debug(void)
+>  	debugfs_create_file("preempt", 0644, debugfs_sched, NULL, &sched_dynamic_fops);
+>  #endif
+>  
+> -	debugfs_create_u32("latency_ns", 0644, debugfs_sched, &sysctl_sched_latency);
+>  	debugfs_create_u32("min_granularity_ns", 0644, debugfs_sched, &sysctl_sched_min_granularity);
+> -	debugfs_create_u32("idle_min_granularity_ns", 0644, debugfs_sched, &sysctl_sched_idle_min_granularity);
+> -	debugfs_create_u32("wakeup_granularity_ns", 0644, debugfs_sched, &sysctl_sched_wakeup_granularity);
+>  
+>  	debugfs_create_u32("latency_warn_ms", 0644, debugfs_sched, &sysctl_resched_latency_warn_ms);
+>  	debugfs_create_u32("latency_warn_once", 0644, debugfs_sched, &sysctl_resched_latency_warn_once);
+> @@ -865,10 +862,7 @@ static void sched_debug_header(struct se
+>  	SEQ_printf(m, "  .%-40s: %Ld\n", #x, (long long)(x))
+>  #define PN(x) \
+>  	SEQ_printf(m, "  .%-40s: %Ld.%06ld\n", #x, SPLIT_NS(x))
+> -	PN(sysctl_sched_latency);
+>  	PN(sysctl_sched_min_granularity);
+> -	PN(sysctl_sched_idle_min_granularity);
+> -	PN(sysctl_sched_wakeup_granularity);
+>  	P(sysctl_sched_child_runs_first);
+>  	P(sysctl_sched_features);
+>  #undef PN
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -58,22 +58,6 @@
+>  #include "autogroup.h"
+>  
+>  /*
+> - * Targeted preemption latency for CPU-bound tasks:
+> - *
+> - * NOTE: this latency value is not the same as the concept of
+> - * 'timeslice length' - timeslices in CFS are of variable length
+> - * and have no persistent notion like in traditional, time-slice
+> - * based scheduling concepts.
+> - *
+> - * (to see the precise effective timeslice length of your workload,
+> - *  run vmstat and monitor the context-switches (cs) field)
+> - *
+> - * (default: 6ms * (1 + ilog(ncpus)), units: nanoseconds)
+> - */
+> -unsigned int sysctl_sched_latency			= 6000000ULL;
+> -static unsigned int normalized_sysctl_sched_latency	= 6000000ULL;
+> -
+> -/*
+>   * The initial- and re-scaling of tunables is configurable
+>   *
+>   * Options are:
+> @@ -95,36 +79,11 @@ unsigned int sysctl_sched_min_granularit
+>  static unsigned int normalized_sysctl_sched_min_granularity	= 750000ULL;
+>  
+>  /*
+> - * Minimal preemption granularity for CPU-bound SCHED_IDLE tasks.
+> - * Applies only when SCHED_IDLE tasks compete with normal tasks.
+> - *
+> - * (default: 0.75 msec)
+> - */
+> -unsigned int sysctl_sched_idle_min_granularity			= 750000ULL;
+> -
+> -/*
+> - * This value is kept at sysctl_sched_latency/sysctl_sched_min_granularity
+> - */
+> -static unsigned int sched_nr_latency = 8;
+> -
+> -/*
+>   * After fork, child runs first. If set to 0 (default) then
+>   * parent will (try to) run first.
+>   */
+>  unsigned int sysctl_sched_child_runs_first __read_mostly;
+>  
+> -/*
+> - * SCHED_OTHER wake-up granularity.
+> - *
+> - * This option delays the preemption effects of decoupled workloads
+> - * and reduces their over-scheduling. Synchronous workloads will still
+> - * have immediate wakeup/sleep latencies.
+> - *
+> - * (default: 1 msec * (1 + ilog(ncpus)), units: nanoseconds)
+> - */
+> -unsigned int sysctl_sched_wakeup_granularity			= 1000000UL;
+> -static unsigned int normalized_sysctl_sched_wakeup_granularity	= 1000000UL;
+> -
+>  const_debug unsigned int sysctl_sched_migration_cost	= 500000UL;
+>  
+>  int sched_thermal_decay_shift;
+> @@ -279,8 +238,6 @@ static void update_sysctl(void)
+>  #define SET_SYSCTL(name) \
+>  	(sysctl_##name = (factor) * normalized_sysctl_##name)
+>  	SET_SYSCTL(sched_min_granularity);
+> -	SET_SYSCTL(sched_latency);
+> -	SET_SYSCTL(sched_wakeup_granularity);
+>  #undef SET_SYSCTL
+>  }
+>  
+> @@ -888,30 +845,6 @@ struct sched_entity *__pick_first_entity
+>  	return __node_2_se(left);
+>  }
+>  
+> -static struct sched_entity *__pick_next_entity(struct sched_entity *se)
+> -{
+> -	struct rb_node *next = rb_next(&se->run_node);
+> -
+> -	if (!next)
+> -		return NULL;
+> -
+> -	return __node_2_se(next);
+> -}
+> -
+> -static struct sched_entity *pick_cfs(struct cfs_rq *cfs_rq, struct sched_entity *curr)
+> -{
+> -	struct sched_entity *left = __pick_first_entity(cfs_rq);
+> -
+> -	/*
+> -	 * If curr is set we have to see if its left of the leftmost entity
+> -	 * still in the tree, provided there was anything in the tree at all.
+> -	 */
+> -	if (!left || (curr && entity_before(curr, left)))
+> -		left = curr;
+> -
+> -	return left;
+> -}
+> -
+>  /*
+>   * Earliest Eligible Virtual Deadline First
+>   *
+> @@ -1008,85 +941,15 @@ int sched_update_scaling(void)
+>  {
+>  	unsigned int factor = get_update_sysctl_factor();
+>  
+> -	sched_nr_latency = DIV_ROUND_UP(sysctl_sched_latency,
+> -					sysctl_sched_min_granularity);
+> -
+>  #define WRT_SYSCTL(name) \
+>  	(normalized_sysctl_##name = sysctl_##name / (factor))
+>  	WRT_SYSCTL(sched_min_granularity);
+> -	WRT_SYSCTL(sched_latency);
+> -	WRT_SYSCTL(sched_wakeup_granularity);
+>  #undef WRT_SYSCTL
+>  
+>  	return 0;
+>  }
+>  #endif
+>  
+> -/*
+> - * The idea is to set a period in which each task runs once.
+> - *
+> - * When there are too many tasks (sched_nr_latency) we have to stretch
+> - * this period because otherwise the slices get too small.
+> - *
+> - * p = (nr <= nl) ? l : l*nr/nl
+> - */
+> -static u64 __sched_period(unsigned long nr_running)
+> -{
+> -	if (unlikely(nr_running > sched_nr_latency))
+> -		return nr_running * sysctl_sched_min_granularity;
+> -	else
+> -		return sysctl_sched_latency;
+> -}
+> -
+> -static bool sched_idle_cfs_rq(struct cfs_rq *cfs_rq);
+> -
+> -/*
+> - * We calculate the wall-time slice from the period by taking a part
+> - * proportional to the weight.
+> - *
+> - * s = p*P[w/rw]
+> - */
+> -static u64 sched_slice(struct cfs_rq *cfs_rq, struct sched_entity *se)
+> -{
+> -	unsigned int nr_running = cfs_rq->nr_running;
+> -	struct sched_entity *init_se = se;
+> -	unsigned int min_gran;
+> -	u64 slice;
+> -
+> -	if (sched_feat(ALT_PERIOD))
+> -		nr_running = rq_of(cfs_rq)->cfs.h_nr_running;
+> -
+> -	slice = __sched_period(nr_running + !se->on_rq);
+> -
+> -	for_each_sched_entity(se) {
+> -		struct load_weight *load;
+> -		struct load_weight lw;
+> -		struct cfs_rq *qcfs_rq;
+> -
+> -		qcfs_rq = cfs_rq_of(se);
+> -		load = &qcfs_rq->load;
+> -
+> -		if (unlikely(!se->on_rq)) {
+> -			lw = qcfs_rq->load;
+> -
+> -			update_load_add(&lw, se->load.weight);
+> -			load = &lw;
+> -		}
+> -		slice = __calc_delta(slice, se->load.weight, load);
+> -	}
+> -
+> -	if (sched_feat(BASE_SLICE)) {
+> -		if (se_is_idle(init_se) && !sched_idle_cfs_rq(cfs_rq))
+> -			min_gran = sysctl_sched_idle_min_granularity;
+> -		else
+> -			min_gran = sysctl_sched_min_granularity;
+> -
+> -		slice = max_t(u64, slice, min_gran);
+> -	}
+> -
+> -	return slice;
+> -}
+> -
+>  static void clear_buddies(struct cfs_rq *cfs_rq, struct sched_entity *se);
+>  
+>  /*
+> @@ -1098,35 +961,25 @@ static void update_deadline(struct cfs_r
+>  	if ((s64)(se->vruntime - se->deadline) < 0)
+>  		return;
+>  
+> -	if (sched_feat(EEVDF)) {
+> -		/*
+> -		 * For EEVDF the virtual time slope is determined by w_i (iow.
+> -		 * nice) while the request time r_i is determined by
+> -		 * sysctl_sched_min_granularity.
+> -		 */
+> -		se->slice = sysctl_sched_min_granularity;
+> -
+> -		/*
+> -		 * The task has consumed its request, reschedule.
+> -		 */
+> -		if (cfs_rq->nr_running > 1) {
+> -			resched_curr(rq_of(cfs_rq));
+> -			clear_buddies(cfs_rq, se);
+> -		}
+> -	} else {
+> -		/*
+> -		 * When many tasks blow up the sched_period; it is possible
+> -		 * that sched_slice() reports unusually large results (when
+> -		 * many tasks are very light for example). Therefore impose a
+> -		 * maximum.
+> -		 */
+> -		se->slice = min_t(u64, sched_slice(cfs_rq, se), sysctl_sched_latency);
+> -	}
+> +	/*
+> +	 * For EEVDF the virtual time slope is determined by w_i (iow.
+> +	 * nice) while the request time r_i is determined by
+> +	 * sysctl_sched_min_granularity.
+> +	 */
+> +	se->slice = sysctl_sched_min_granularity;
+>  
+>  	/*
+>  	 * EEVDF: vd_i = ve_i + r_i / w_i
+>  	 */
+>  	se->deadline = se->vruntime + calc_delta_fair(se->slice, se);
+> +
+> +	/*
+> +	 * The task has consumed its request, reschedule.
+> +	 */
+> +	if (cfs_rq->nr_running > 1) {
+> +		resched_curr(rq_of(cfs_rq));
+> +		clear_buddies(cfs_rq, se);
+> +	}
+>  }
+>  
+>  #include "pelt.h"
+> @@ -5055,19 +4908,6 @@ static inline void update_misfit_status(
+>  
+>  #endif /* CONFIG_SMP */
+>  
+> -static void check_spread(struct cfs_rq *cfs_rq, struct sched_entity *se)
+> -{
+> -#ifdef CONFIG_SCHED_DEBUG
+> -	s64 d = se->vruntime - cfs_rq->min_vruntime;
+> -
+> -	if (d < 0)
+> -		d = -d;
+> -
+> -	if (d > 3*sysctl_sched_latency)
+> -		schedstat_inc(cfs_rq->nr_spread_over);
+> -#endif
+> -}
+> -
+>  static void
+>  place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
+>  {
+> @@ -5218,7 +5058,6 @@ enqueue_entity(struct cfs_rq *cfs_rq, st
+>  
+>  	check_schedstat_required();
+>  	update_stats_enqueue_fair(cfs_rq, se, flags);
+> -	check_spread(cfs_rq, se);
+>  	if (!curr)
+>  		__enqueue_entity(cfs_rq, se);
+>  	se->on_rq = 1;
+> @@ -5230,17 +5069,6 @@ enqueue_entity(struct cfs_rq *cfs_rq, st
+>  	}
+>  }
+>  
+> -static void __clear_buddies_last(struct sched_entity *se)
+> -{
+> -	for_each_sched_entity(se) {
+> -		struct cfs_rq *cfs_rq = cfs_rq_of(se);
+> -		if (cfs_rq->last != se)
+> -			break;
+> -
+> -		cfs_rq->last = NULL;
+> -	}
+> -}
+> -
+>  static void __clear_buddies_next(struct sched_entity *se)
+>  {
+>  	for_each_sched_entity(se) {
+> @@ -5252,27 +5080,10 @@ static void __clear_buddies_next(struct
+>  	}
+>  }
+>  
+> -static void __clear_buddies_skip(struct sched_entity *se)
+> -{
+> -	for_each_sched_entity(se) {
+> -		struct cfs_rq *cfs_rq = cfs_rq_of(se);
+> -		if (cfs_rq->skip != se)
+> -			break;
+> -
+> -		cfs_rq->skip = NULL;
+> -	}
+> -}
+> -
+>  static void clear_buddies(struct cfs_rq *cfs_rq, struct sched_entity *se)
+>  {
+> -	if (cfs_rq->last == se)
+> -		__clear_buddies_last(se);
+> -
+>  	if (cfs_rq->next == se)
+>  		__clear_buddies_next(se);
+> -
+> -	if (cfs_rq->skip == se)
+> -		__clear_buddies_skip(se);
+>  }
+>  
+>  static __always_inline void return_cfs_rq_runtime(struct cfs_rq *cfs_rq);
+> @@ -5330,45 +5141,6 @@ dequeue_entity(struct cfs_rq *cfs_rq, st
+>  		update_idle_cfs_rq_clock_pelt(cfs_rq);
+>  }
+>  
+> -/*
+> - * Preempt the current task with a newly woken task if needed:
+> - */
+> -static void
+> -check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
+> -{
+> -	unsigned long delta_exec;
+> -	struct sched_entity *se;
+> -	s64 delta;
+> -
+> -	delta_exec = curr->sum_exec_runtime - curr->prev_sum_exec_runtime;
+> -	if (delta_exec > curr->slice) {
+> -		resched_curr(rq_of(cfs_rq));
+> -		/*
+> -		 * The current task ran long enough, ensure it doesn't get
+> -		 * re-elected due to buddy favours.
+> -		 */
+> -		clear_buddies(cfs_rq, curr);
+> -		return;
+> -	}
+> -
+> -	/*
+> -	 * Ensure that a task that missed wakeup preemption by a
+> -	 * narrow margin doesn't have to wait for a full slice.
+> -	 * This also mitigates buddy induced latencies under load.
+> -	 */
+> -	if (delta_exec < sysctl_sched_min_granularity)
+> -		return;
+> -
+> -	se = __pick_first_entity(cfs_rq);
+> -	delta = curr->vruntime - se->vruntime;
+> -
+> -	if (delta < 0)
+> -		return;
+> -
+> -	if (delta > curr->slice)
+> -		resched_curr(rq_of(cfs_rq));
+> -}
+> -
+>  static void
+>  set_next_entity(struct cfs_rq *cfs_rq, struct sched_entity *se)
+>  {
+> @@ -5407,9 +5179,6 @@ set_next_entity(struct cfs_rq *cfs_rq, s
+>  	se->prev_sum_exec_runtime = se->sum_exec_runtime;
+>  }
+>  
+> -static int
+> -wakeup_preempt_entity(struct sched_entity *curr, struct sched_entity *se);
+> -
+>  /*
+>   * Pick the next process, keeping these things in mind, in this order:
+>   * 1) keep things fair between processes/task groups
+> @@ -5420,53 +5189,14 @@ wakeup_preempt_entity(struct sched_entit
+>  static struct sched_entity *
+>  pick_next_entity(struct cfs_rq *cfs_rq, struct sched_entity *curr)
+>  {
+> -	struct sched_entity *left, *se;
+> -
+> -	if (sched_feat(EEVDF)) {
+> -		/*
+> -		 * Enabling NEXT_BUDDY will affect latency but not fairness.
+> -		 */
+> -		if (sched_feat(NEXT_BUDDY) &&
+> -		    cfs_rq->next && entity_eligible(cfs_rq, cfs_rq->next))
+> -			return cfs_rq->next;
+> -
+> -		return pick_eevdf(cfs_rq);
+> -	}
+> -
+> -	se = left = pick_cfs(cfs_rq, curr);
+> -
+>  	/*
+> -	 * Avoid running the skip buddy, if running something else can
+> -	 * be done without getting too unfair.
+> +	 * Enabling NEXT_BUDDY will affect latency but not fairness.
+>  	 */
+> -	if (cfs_rq->skip && cfs_rq->skip == se) {
+> -		struct sched_entity *second;
+> +	if (sched_feat(NEXT_BUDDY) &&
+> +	    cfs_rq->next && entity_eligible(cfs_rq, cfs_rq->next))
+> +		return cfs_rq->next;
+>  
+> -		if (se == curr) {
+> -			second = __pick_first_entity(cfs_rq);
+> -		} else {
+> -			second = __pick_next_entity(se);
+> -			if (!second || (curr && entity_before(curr, second)))
+> -				second = curr;
+> -		}
+> -
+> -		if (second && wakeup_preempt_entity(second, left) < 1)
+> -			se = second;
+> -	}
+> -
+> -	if (cfs_rq->next && wakeup_preempt_entity(cfs_rq->next, left) < 1) {
+> -		/*
+> -		 * Someone really wants this to run. If it's not unfair, run it.
+> -		 */
+> -		se = cfs_rq->next;
+> -	} else if (cfs_rq->last && wakeup_preempt_entity(cfs_rq->last, left) < 1) {
+> -		/*
+> -		 * Prefer last buddy, try to return the CPU to a preempted task.
+> -		 */
+> -		se = cfs_rq->last;
+> -	}
+> -
+> -	return se;
+> +	return pick_eevdf(cfs_rq);
+>  }
+>  
+>  static bool check_cfs_rq_runtime(struct cfs_rq *cfs_rq);
+> @@ -5483,8 +5213,6 @@ static void put_prev_entity(struct cfs_r
+>  	/* throttle cfs_rqs exceeding runtime */
+>  	check_cfs_rq_runtime(cfs_rq);
+>  
+> -	check_spread(cfs_rq, prev);
+> -
+>  	if (prev->on_rq) {
+>  		update_stats_wait_start_fair(cfs_rq, prev);
+>  		/* Put 'current' back into the tree. */
+> @@ -5525,9 +5253,6 @@ entity_tick(struct cfs_rq *cfs_rq, struc
+>  			hrtimer_active(&rq_of(cfs_rq)->hrtick_timer))
+>  		return;
+>  #endif
+> -
+> -	if (!sched_feat(EEVDF) && cfs_rq->nr_running > 1)
+> -		check_preempt_tick(cfs_rq, curr);
+>  }
+>  
+>  
+> @@ -6561,8 +6286,7 @@ static void hrtick_update(struct rq *rq)
+>  	if (!hrtick_enabled_fair(rq) || curr->sched_class != &fair_sched_class)
+>  		return;
+>  
+> -	if (cfs_rq_of(&curr->se)->nr_running < sched_nr_latency)
+> -		hrtick_start_fair(rq, curr);
+> +	hrtick_start_fair(rq, curr);
+>  }
+>  #else /* !CONFIG_SCHED_HRTICK */
+>  static inline void
+> @@ -6603,17 +6327,6 @@ static int sched_idle_rq(struct rq *rq)
+>  			rq->nr_running);
+>  }
+>  
+> -/*
+> - * Returns true if cfs_rq only has SCHED_IDLE entities enqueued. Note the use
+> - * of idle_nr_running, which does not consider idle descendants of normal
+> - * entities.
+> - */
+> -static bool sched_idle_cfs_rq(struct cfs_rq *cfs_rq)
+> -{
+> -	return cfs_rq->nr_running &&
+> -		cfs_rq->nr_running == cfs_rq->idle_nr_running;
+> -}
+> -
+>  #ifdef CONFIG_SMP
+>  static int sched_idle_cpu(int cpu)
+>  {
+> @@ -8099,66 +7812,6 @@ balance_fair(struct rq *rq, struct task_
+>  }
+>  #endif /* CONFIG_SMP */
+>  
+> -static unsigned long wakeup_gran(struct sched_entity *se)
+> -{
+> -	unsigned long gran = sysctl_sched_wakeup_granularity;
+> -
+> -	/*
+> -	 * Since its curr running now, convert the gran from real-time
+> -	 * to virtual-time in his units.
+> -	 *
+> -	 * By using 'se' instead of 'curr' we penalize light tasks, so
+> -	 * they get preempted easier. That is, if 'se' < 'curr' then
+> -	 * the resulting gran will be larger, therefore penalizing the
+> -	 * lighter, if otoh 'se' > 'curr' then the resulting gran will
+> -	 * be smaller, again penalizing the lighter task.
+> -	 *
+> -	 * This is especially important for buddies when the leftmost
+> -	 * task is higher priority than the buddy.
+> -	 */
+> -	return calc_delta_fair(gran, se);
+> -}
+> -
+> -/*
+> - * Should 'se' preempt 'curr'.
+> - *
+> - *             |s1
+> - *        |s2
+> - *   |s3
+> - *         g
+> - *      |<--->|c
+> - *
+> - *  w(c, s1) = -1
+> - *  w(c, s2) =  0
+> - *  w(c, s3) =  1
+> - *
+> - */
+> -static int
+> -wakeup_preempt_entity(struct sched_entity *curr, struct sched_entity *se)
+> -{
+> -	s64 gran, vdiff = curr->vruntime - se->vruntime;
+> -
+> -	if (vdiff <= 0)
+> -		return -1;
+> -
+> -	gran = wakeup_gran(se);
+> -	if (vdiff > gran)
+> -		return 1;
+> -
+> -	return 0;
+> -}
+> -
+> -static void set_last_buddy(struct sched_entity *se)
+> -{
+> -	for_each_sched_entity(se) {
+> -		if (SCHED_WARN_ON(!se->on_rq))
+> -			return;
+> -		if (se_is_idle(se))
+> -			return;
+> -		cfs_rq_of(se)->last = se;
+> -	}
+> -}
+> -
+>  static void set_next_buddy(struct sched_entity *se)
+>  {
+>  	for_each_sched_entity(se) {
+> @@ -8170,12 +7823,6 @@ static void set_next_buddy(struct sched_
+>  	}
+>  }
+>  
+> -static void set_skip_buddy(struct sched_entity *se)
+> -{
+> -	for_each_sched_entity(se)
+> -		cfs_rq_of(se)->skip = se;
+> -}
+> -
+>  /*
+>   * Preempt the current task with a newly woken task if needed:
+>   */
+> @@ -8184,7 +7831,6 @@ static void check_preempt_wakeup(struct
+>  	struct task_struct *curr = rq->curr;
+>  	struct sched_entity *se = &curr->se, *pse = &p->se;
+>  	struct cfs_rq *cfs_rq = task_cfs_rq(curr);
+> -	int scale = cfs_rq->nr_running >= sched_nr_latency;
+>  	int next_buddy_marked = 0;
+>  	int cse_is_idle, pse_is_idle;
+>  
+> @@ -8200,7 +7846,7 @@ static void check_preempt_wakeup(struct
+>  	if (unlikely(throttled_hierarchy(cfs_rq_of(pse))))
+>  		return;
+>  
+> -	if (sched_feat(NEXT_BUDDY) && scale && !(wake_flags & WF_FORK)) {
+> +	if (sched_feat(NEXT_BUDDY) && !(wake_flags & WF_FORK)) {
+>  		set_next_buddy(pse);
+>  		next_buddy_marked = 1;
+>  	}
+> @@ -8248,44 +7894,16 @@ static void check_preempt_wakeup(struct
+>  	cfs_rq = cfs_rq_of(se);
+>  	update_curr(cfs_rq);
+>  
+> -	if (sched_feat(EEVDF)) {
+> -		/*
+> -		 * XXX pick_eevdf(cfs_rq) != se ?
+> -		 */
+> -		if (pick_eevdf(cfs_rq) == pse)
+> -			goto preempt;
+> -
+> -		return;
+> -	}
+> -
+> -	if (wakeup_preempt_entity(se, pse) == 1) {
+> -		/*
+> -		 * Bias pick_next to pick the sched entity that is
+> -		 * triggering this preemption.
+> -		 */
+> -		if (!next_buddy_marked)
+> -			set_next_buddy(pse);
+> +	/*
+> +	 * XXX pick_eevdf(cfs_rq) != se ?
+> +	 */
+> +	if (pick_eevdf(cfs_rq) == pse)
+>  		goto preempt;
+> -	}
+>  
+>  	return;
+>  
+>  preempt:
+>  	resched_curr(rq);
+> -	/*
+> -	 * Only set the backward buddy when the current task is still
+> -	 * on the rq. This can happen when a wakeup gets interleaved
+> -	 * with schedule on the ->pre_schedule() or idle_balance()
+> -	 * point, either of which can * drop the rq lock.
+> -	 *
+> -	 * Also, during early boot the idle thread is in the fair class,
+> -	 * for obvious reasons its a bad idea to schedule back to it.
+> -	 */
+> -	if (unlikely(!se->on_rq || curr == rq->idle))
+> -		return;
+> -
+> -	if (sched_feat(LAST_BUDDY) && scale && entity_is_task(se))
+> -		set_last_buddy(se);
+>  }
+>  
+>  #ifdef CONFIG_SMP
+> @@ -8486,8 +8104,6 @@ static void put_prev_task_fair(struct rq
+>  
+>  /*
+>   * sched_yield() is very simple
+> - *
+> - * The magic of dealing with the ->skip buddy is in pick_next_entity.
+>   */
+>  static void yield_task_fair(struct rq *rq)
+>  {
+> @@ -8503,23 +8119,19 @@ static void yield_task_fair(struct rq *r
+>  
+>  	clear_buddies(cfs_rq, se);
+>  
+> -	if (sched_feat(EEVDF) || curr->policy != SCHED_BATCH) {
+> -		update_rq_clock(rq);
+> -		/*
+> -		 * Update run-time statistics of the 'current'.
+> -		 */
+> -		update_curr(cfs_rq);
+> -		/*
+> -		 * Tell update_rq_clock() that we've just updated,
+> -		 * so we don't do microscopic update in schedule()
+> -		 * and double the fastpath cost.
+> -		 */
+> -		rq_clock_skip_update(rq);
+> -	}
+> -	if (sched_feat(EEVDF))
+> -		se->deadline += calc_delta_fair(se->slice, se);
+> +	update_rq_clock(rq);
+> +	/*
+> +	 * Update run-time statistics of the 'current'.
+> +	 */
+> +	update_curr(cfs_rq);
+> +	/*
+> +	 * Tell update_rq_clock() that we've just updated,
+> +	 * so we don't do microscopic update in schedule()
+> +	 * and double the fastpath cost.
+> +	 */
+> +	rq_clock_skip_update(rq);
+>  
+> -	set_skip_buddy(se);
+> +	se->deadline += calc_delta_fair(se->slice, se);
+>  }
+>  
+>  static bool yield_to_task_fair(struct rq *rq, struct task_struct *p)
+> @@ -8762,8 +8374,7 @@ static int task_hot(struct task_struct *
+>  	 * Buddy candidates are cache hot:
+>  	 */
+>  	if (sched_feat(CACHE_HOT_BUDDY) && env->dst_rq->nr_running &&
+> -			(&p->se == cfs_rq_of(&p->se)->next ||
+> -			 &p->se == cfs_rq_of(&p->se)->last))
+> +	    (&p->se == cfs_rq_of(&p->se)->next))
+>  		return 1;
+>  
+>  	if (sysctl_sched_migration_cost == -1)
+> --- a/kernel/sched/features.h
+> +++ b/kernel/sched/features.h
+> @@ -15,13 +15,6 @@ SCHED_FEAT(PLACE_DEADLINE_INITIAL, true)
+>  SCHED_FEAT(NEXT_BUDDY, false)
+>  
+>  /*
+> - * Prefer to schedule the task that ran last (when we did
+> - * wake-preempt) as that likely will touch the same data, increases
+> - * cache locality.
+> - */
+> -SCHED_FEAT(LAST_BUDDY, true)
+> -
+> -/*
+>   * Consider buddies to be cache hot, decreases the likeliness of a
+>   * cache buddy being migrated away, increases cache locality.
+>   */
+> @@ -93,8 +86,3 @@ SCHED_FEAT(UTIL_EST, true)
+>  SCHED_FEAT(UTIL_EST_FASTUP, true)
+>  
+>  SCHED_FEAT(LATENCY_WARN, false)
+> -
+> -SCHED_FEAT(ALT_PERIOD, true)
+> -SCHED_FEAT(BASE_SLICE, true)
+> -
+> -SCHED_FEAT(EEVDF, true)
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -576,8 +576,6 @@ struct cfs_rq {
+>  	 */
+>  	struct sched_entity	*curr;
+>  	struct sched_entity	*next;
+> -	struct sched_entity	*last;
+> -	struct sched_entity	*skip;
+>  
+>  #ifdef	CONFIG_SCHED_DEBUG
+>  	unsigned int		nr_spread_over;
+> @@ -2484,9 +2482,6 @@ extern const_debug unsigned int sysctl_s
+>  extern unsigned int sysctl_sched_min_granularity;
+>  
+>  #ifdef CONFIG_SCHED_DEBUG
+> -extern unsigned int sysctl_sched_latency;
+> -extern unsigned int sysctl_sched_idle_min_granularity;
+> -extern unsigned int sysctl_sched_wakeup_granularity;
+>  extern int sysctl_resched_latency_warn_ms;
+>  extern int sysctl_resched_latency_warn_once;
+>  
+> 
 > 
