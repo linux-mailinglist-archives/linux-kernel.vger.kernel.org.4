@@ -2,79 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AC82732C89
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:56:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19724732C8D
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234815AbjFPJ4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 05:56:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60908 "EHLO
+        id S244032AbjFPJ5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 05:57:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbjFPJ4w (ORCPT
+        with ESMTP id S242492AbjFPJ50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 05:56:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD97297E
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 02:56:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686909371;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LRrap5sa/SGfzSyFM8C7uu+zlqlVKh+fF2QdwlihjcY=;
-        b=XLHXKu5qkRqu8bTGnLbAnsMyLFIYysnvnUbmoXmzir8qaVLFFZrqaH/XJ3ag8k2dLFTFdx
-        Fa8pLknFmPdjcZ5dBJOIZ04baawyiy0diRR0GMDyUpdTGqo6qxE3+fUTg75ONhW5vnbK2m
-        ZjULZBbDVQ9xbjSIx33u/i9y7Zi+/Vg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-558-JeIIq2TmOLOvMpnKv8FXmQ-1; Fri, 16 Jun 2023 05:56:07 -0400
-X-MC-Unique: JeIIq2TmOLOvMpnKv8FXmQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 719CF101A52A;
-        Fri, 16 Jun 2023 09:56:07 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.51])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2508A40D1B60;
-        Fri, 16 Jun 2023 09:56:06 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20230615205014.8d7eb4457ca9bc676a79d2db@linux-foundation.org>
-References: <20230615205014.8d7eb4457ca9bc676a79d2db@linux-foundation.org> <20230616115856.3ce7682c@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     dhowells@redhat.com, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Jens Axboe <axboe@kernel.dk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Subject: Re: linux-next: manual merge of the block tree with the mm tree
+        Fri, 16 Jun 2023 05:57:26 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFEEE194;
+        Fri, 16 Jun 2023 02:57:24 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9786fc23505so67000566b.2;
+        Fri, 16 Jun 2023 02:57:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686909443; x=1689501443;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HHKi+C6Xmm6kghgu1V+wkpNpwNFPfp57Mi+RE1PFdr4=;
+        b=WZEJP2DgepngVFkH3kxp5QC7qX/d1SkRhp23Kp03X6HI9YyIgc0Zy8IiPQygVr+Baa
+         5z6sTpwczpWMtuIHXlB6vucMevN5TOy26ysxMJwziGsGtmaWTQDnfwyXCFlTaIH53kVq
+         OKlqsJbNKpyUB7uSyn8hd+jL9NlNH+QttSPlxgcf1NN4538JBlCUZEhzxUsckuI3L/ZZ
+         gKoK8rsoE2P7Sx/eiInbEax8q0SlcC9QSl7OC++OwOX9BTkAzVAUcf856u40qCt5TgZ9
+         fnUuI7qyzBTh2s40Ha+Fy2vsuTP1znKa2DDS7hidMN1VyLn2Un1q9cIUiHVW848t/+sx
+         KS9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686909443; x=1689501443;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HHKi+C6Xmm6kghgu1V+wkpNpwNFPfp57Mi+RE1PFdr4=;
+        b=OIzArkS2qDwa3X69FguQ9Y9T+YjJ8m2Vhy3E0CKdbGk0gFML0/NXK4TCeFbzQnP5EW
+         JitV8POfULOun+xvFD//DpvbWR81N4bLyz98+suxBNP32/Oulg07A1G/ef3f27aMEsNK
+         5WoPTL3kgOnxJ5N+rjt3oDDB6CpAMZpWs357pVACdx8erHEbcAKky9Ro6u4HxIOAPBX7
+         0XyVm/aH+BOUmnKlUs9+W5M/5Ap9QPIky+410n1eYNO2t4i/voTZ7zKbO3lHQZn5QMv/
+         +Kju08hdrOQoL9TxE2Rr2Wh+hbxo2mGx6suOTLgjIHJ55D4QsIbbnHro11ZewBSqI0h0
+         Z80g==
+X-Gm-Message-State: AC+VfDztMJm0hcmY1tqu41PRWLdx5dL94lGnrsSPwTammsMN6PA0A86s
+        vn5zNUPgm/G56kwwkskcoW0=
+X-Google-Smtp-Source: ACHHUZ4mCeeN3wIQ0AMXpA0qYnOMmCrkSJfP8NbdFwLramC2cKCERWK2hj9xYzOrhv6waeu+ugBEDw==
+X-Received: by 2002:a17:907:2da6:b0:974:1c91:a752 with SMTP id gt38-20020a1709072da600b009741c91a752mr1628908ejc.5.1686909442716;
+        Fri, 16 Jun 2023 02:57:22 -0700 (PDT)
+Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation.station (net-2-39-142-242.cust.vodafonedsl.it. [2.39.142.242])
+        by smtp.gmail.com with ESMTPSA id v22-20020a1709063bd600b0098314c30e8fsm1110083ejf.46.2023.06.16.02.57.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 02:57:22 -0700 (PDT)
+From:   Tommaso Merciai <tomm.merciai@gmail.com>
+Cc:     jacopo.mondi@ideasonboard.com, laurent.pinchart@ideasonboard.com,
+        martin.hecht@avnet.eu, michael.roeder@avnet.eu,
+        linuxfancy@googlegroups.com, hdegoede@redhat.com,
+        Tommaso Merciai <tomm.merciai@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Mikhail Rudenko <mike.rudenko@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
+        Nicholas Roth <nicholas@rothemail.net>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH v6 0/3] media: i2c: Add support for alvium camera
+Date:   Fri, 16 Jun 2023 11:56:58 +0200
+Message-Id: <20230616095713.187544-1-tomm.merciai@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <424128.1686909362.1@warthog.procyon.org.uk>
-Date:   Fri, 16 Jun 2023 10:56:02 +0100
-Message-ID: <424129.1686909362@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andrew Morton <akpm@linux-foundation.org> wrote:
+Hello All,
 
-> That's getting a bit nasty.  Maybe David's patches are in the wrong tree.
+This series add support for Allied Vision Alvium camera.
+The Alvium camera is shipped with sensor + isp in the same housing.
+The camera can be equipped with one out of various sensor and abstract
+the user from this. Camera is connected via MIPI CSI-2.
 
-You'd need to discuss that one with Jens.  The patches you'd have to transfer
-also touch a number of block-related files.  Looking at block/for-next, there
-don't seem to be many other patches touching those files, but I've seen
-patches from Christoph that will need to be applied on top of mine.
+Working on top of Ideas on Board (branch: ideasonboard/v6.2/isi)
+I'm able to test the driver on imx8mp-evk.
+I collect also some patches to enable HDMI on imx8mp-evk from Pengutronix
+(branch: pengutronix-imx8mp-hdmi)
 
-David
+I collect the patchset required to enable ISI + HDMI on imx8mp-evk into
+the following branch from Avnet Silica Software & Services EMEA [1].
+
+Some documentation on testing ISP and ISI of imx8mp-evk here [2].
+
+Thanks all for the great work!
+
+[1] - https://github.com/avs-sas/linux/tree/tm/ideasonboard/v6.4.0-rc2/isi/imx8mp_evk/alvium_drv_skel1e_v1
+[2] - https://gist.github.com/Scott31393/077a10024a6058536d3f2fdde476265a
+
+Tommaso Merciai (3):
+  dt-bindings: vendor-prefixes: Add prefix alliedvision
+  media: dt-bindings: alvium: add document YAML binding
+  media: i2c: Add support for alvium camera
+
+ .../media/i2c/alliedvision,alvium-csi2.yaml   |   97 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |    2 +
+ drivers/media/i2c/Kconfig                     |   11 +
+ drivers/media/i2c/Makefile                    |    1 +
+ drivers/media/i2c/alvium-csi2.c               | 3159 +++++++++++++++++
+ drivers/media/i2c/alvium-csi2.h               |  475 +++
+ 6 files changed, 3745 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/alliedvision,alvium-csi2.yaml
+ create mode 100644 drivers/media/i2c/alvium-csi2.c
+ create mode 100644 drivers/media/i2c/alvium-csi2.h
+
+-- 
+2.34.1
 
