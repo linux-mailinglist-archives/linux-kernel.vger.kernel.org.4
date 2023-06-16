@@ -2,148 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D72E9733C88
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 00:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17674733C89
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 00:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233467AbjFPWmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 18:42:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36264 "EHLO
+        id S232180AbjFPWnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 18:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233296AbjFPWmu (ORCPT
+        with ESMTP id S229696AbjFPWnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 18:42:50 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1E0359D;
-        Fri, 16 Jun 2023 15:42:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686955368; x=1718491368;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=WAHuZPkTpYdakcNyWlfRht9IrLNPfueKPRu2lmIxPy0=;
-  b=XUnUqMez2KqQ0JlaMGnpRMilyQvwYOrfUnluP0iLTpxrnFjMGB+rkiRH
-   h/hX8L0bwzDYlMclHJs/1bca4HXLxTZCBa4jUX80WK48oHQQyyGbNT+WJ
-   fNyUVH35pjOpu4IRmvVL2ST+SdUX578LQphcl0ApQ6bua68SpkpSbt1SP
-   mjl6NHr5beL7kSp0HYUKvOcpYEEPP9uuxx9Qiq1I6TKq1frQ7ySyImis2
-   5P9uAiDNpsKy5b8k6jdfpu1oUKeodLFk5UvKiH1mybSZ49W91uzgUcXZu
-   jb83sBxVujz4Cb67djbqfRdOVkP4drYaDXHH+sBvFbotxuTgjs0fOw1Y8
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="349036930"
-X-IronPort-AV: E=Sophos;i="6.00,248,1681196400"; 
-   d="scan'208";a="349036930"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 15:42:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="707251388"
-X-IronPort-AV: E=Sophos;i="6.00,248,1681196400"; 
-   d="scan'208";a="707251388"
-Received: from scc823097.zsc7.intel.com ([10.148.153.229])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 15:42:47 -0700
-From:   Peter Colberg <peter.colberg@intel.com>
-To:     hao.wu@intel.com, yilun.xu@intel.com, gregkh@linuxfoundation.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     aaron.j.grier@intel.com, tianfei.zhang@intel.com,
-        russell.h.weight@intel.com, matthew.gerlach@linux.intel.com,
-        marpagan@redhat.com, lgoncalv@redhat.com,
-        Peter Colberg <peter.colberg@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH] fpga: dfl: afu: use PFN_DOWN() and PFN_PHYS() helper macros
-Date:   Fri, 16 Jun 2023 18:42:09 -0400
-Message-Id: <20230616224209.20991-1-peter.colberg@intel.com>
-X-Mailer: git-send-email 2.28.0
+        Fri, 16 Jun 2023 18:43:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57012359D
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 15:43:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686955388;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xil8pYQHFvvvTl9T7ZZLQkZeu1j0WF7ytBjn1P1WCeA=;
+        b=VpqtiYrkk1WEwApRkU5EzodIPxzuJfyMBTADhkJn6jAOBY/XCuFa1tyWeo+GoCu1W+rVYT
+        N47WizLdlwk+CukPhl+edETOG9b8k3QkhT4gjMnxATmbbLqvKBJoSq+ZAEFrghjWb0FXc1
+        ptRre7vfQ+OHlFVzURAvU8k9PdiVD+o=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-607-zpiW6TjfOayuMdK63qkmJg-1; Fri, 16 Jun 2023 18:43:05 -0400
+X-MC-Unique: zpiW6TjfOayuMdK63qkmJg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 166873855576;
+        Fri, 16 Jun 2023 22:43:04 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.51])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 77724C1603B;
+        Fri, 16 Jun 2023 22:43:03 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20230608175031.9c534e7f554de89e3d972ab2@linux-foundation.org>
+References: <20230608175031.9c534e7f554de89e3d972ab2@linux-foundation.org> <20230607204120.89416-1-vishal.moola@gmail.com> <20230607204120.89416-2-vishal.moola@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     dhowells@redhat.com,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] afs: Fix waiting for writeback then skipping folio
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <702178.1686955382.1@warthog.procyon.org.uk>
+Date:   Fri, 16 Jun 2023 23:43:02 +0100
+Message-ID: <702179.1686955382@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace all shifts by PAGE_SHIFT with PFN_DOWN() and PFN_PHYS() helper
-macros to convert between physical addresses and page frame numbers.
+Andrew Morton <akpm@linux-foundation.org> wrote:
 
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Peter Colberg <peter.colberg@intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/fpga/dfl-afu-dma-region.c | 7 ++++---
- drivers/fpga/dfl-afu-main.c       | 5 +++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+> > Commit acc8d8588cb7 converted afs_writepages_region() to write back a
+> > folio batch. The function waits for writeback to a folio, but then
+> > proceeds to the rest of the batch without trying to write that folio
+> > again. This patch fixes has it attempt to write the folio again.
+> > 
+> > This has only been compile tested.
+> 
+> This seems fairly serious?
 
-diff --git a/drivers/fpga/dfl-afu-dma-region.c b/drivers/fpga/dfl-afu-dma-region.c
-index 02b60fde0430..e8d54cfbb301 100644
---- a/drivers/fpga/dfl-afu-dma-region.c
-+++ b/drivers/fpga/dfl-afu-dma-region.c
-@@ -10,6 +10,7 @@
-  */
- 
- #include <linux/dma-mapping.h>
-+#include <linux/pfn.h>
- #include <linux/sched/signal.h>
- #include <linux/uaccess.h>
- #include <linux/mm.h>
-@@ -34,7 +35,7 @@ void afu_dma_region_init(struct dfl_feature_platform_data *pdata)
- static int afu_dma_pin_pages(struct dfl_feature_platform_data *pdata,
- 			     struct dfl_afu_dma_region *region)
- {
--	int npages = region->length >> PAGE_SHIFT;
-+	int npages = PFN_DOWN(region->length);
- 	struct device *dev = &pdata->dev->dev;
- 	int ret, pinned;
- 
-@@ -82,7 +83,7 @@ static int afu_dma_pin_pages(struct dfl_feature_platform_data *pdata,
- static void afu_dma_unpin_pages(struct dfl_feature_platform_data *pdata,
- 				struct dfl_afu_dma_region *region)
- {
--	long npages = region->length >> PAGE_SHIFT;
-+	long npages = PFN_DOWN(region->length);
- 	struct device *dev = &pdata->dev->dev;
- 
- 	unpin_user_pages(region->pages, npages);
-@@ -101,7 +102,7 @@ static void afu_dma_unpin_pages(struct dfl_feature_platform_data *pdata,
-  */
- static bool afu_dma_check_continuous_pages(struct dfl_afu_dma_region *region)
- {
--	int npages = region->length >> PAGE_SHIFT;
-+	int npages = PFN_DOWN(region->length);
- 	int i;
- 
- 	for (i = 0; i < npages - 1; i++)
-diff --git a/drivers/fpga/dfl-afu-main.c b/drivers/fpga/dfl-afu-main.c
-index 7f621e96d3b8..048c9b418c8b 100644
---- a/drivers/fpga/dfl-afu-main.c
-+++ b/drivers/fpga/dfl-afu-main.c
-@@ -16,6 +16,7 @@
- 
- #include <linux/kernel.h>
- #include <linux/module.h>
-+#include <linux/pfn.h>
- #include <linux/uaccess.h>
- #include <linux/fpga-dfl.h>
- 
-@@ -816,7 +817,7 @@ static int afu_mmap(struct file *filp, struct vm_area_struct *vma)
- 
- 	pdata = dev_get_platdata(&pdev->dev);
- 
--	offset = vma->vm_pgoff << PAGE_SHIFT;
-+	offset = PFN_PHYS(vma->vm_pgoff);
- 	ret = afu_mmio_region_get_by_offset(pdata, offset, size, &region);
- 	if (ret)
- 		return ret;
-@@ -837,7 +838,7 @@ static int afu_mmap(struct file *filp, struct vm_area_struct *vma)
- 	vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
- 
- 	return remap_pfn_range(vma, vma->vm_start,
--			(region.phys + (offset - region.offset)) >> PAGE_SHIFT,
-+			PFN_DOWN(region.phys + (offset - region.offset)),
- 			size, vma->vm_page_prot);
- }
- 
--- 
-2.28.0
+We will try to write the again later, but sync()/fsync() might now have
+skipped it.
+
+> From my reading, we'll fail to write out the dirty data.  Presumably
+> not easily observable, as it will get written out again later on.
+
+As it's a network filesystem, interactions with third parties could cause
+apparent corruption.  Closing a file will flush it - but if there's a
+simultaneous op of some other kind, a bit of a flush or a sync may get missed
+and the copy visible to another user be temporarily missing that bit.
+
+> But we're also calling afs_write_back_from_locked_folio() with an unlocked
+> folio, which might cause mayhem.
+
+Without this patch, you mean?  There's a "continue" statement that should send
+us back to the top of the loop before we get as far as
+afs_write_back_from_locked_folio() - and then the folio_unlock() there would
+go bang.
+
+David
 
