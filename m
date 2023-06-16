@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A72732773
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 08:25:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B573373275C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 08:25:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241691AbjFPGWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 02:22:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55008 "EHLO
+        id S243894AbjFPGYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 02:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230227AbjFPGWL (ORCPT
+        with ESMTP id S240087AbjFPGWQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 02:22:11 -0400
+        Fri, 16 Jun 2023 02:22:16 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C45ADF
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 23:22:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48E726B6
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 23:22:15 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <sha@pengutronix.de>)
-        id 1qA2q8-0006ne-Ct; Fri, 16 Jun 2023 08:21:44 +0200
+        id 1qA2q9-0006qc-Kq; Fri, 16 Jun 2023 08:21:45 +0200
 Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <sha@pengutronix.de>)
-        id 1qA2q7-007kxq-FE; Fri, 16 Jun 2023 08:21:43 +0200
+        id 1qA2q8-007kyZ-Q8; Fri, 16 Jun 2023 08:21:44 +0200
 Received: from sha by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <sha@pengutronix.de>)
-        id 1qA2q5-003FVw-Mc; Fri, 16 Jun 2023 08:21:41 +0200
+        id 1qA2q5-003FW2-NS; Fri, 16 Jun 2023 08:21:41 +0200
 From:   Sascha Hauer <s.hauer@pengutronix.de>
 To:     linux-rockchip@lists.infradead.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -43,9 +43,9 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         Sascha Hauer <s.hauer@pengutronix.de>
-Subject: [PATCH v6 25/26] arm64: dts: rockchip: rk356x: Add DFI
-Date:   Fri, 16 Jun 2023 08:21:00 +0200
-Message-Id: <20230616062101.601837-26-s.hauer@pengutronix.de>
+Subject: [PATCH v6 26/26] arm64: dts: rockchip: rk3588s: Add DFI
+Date:   Fri, 16 Jun 2023 08:21:01 +0200
+Message-Id: <20230616062101.601837-27-s.hauer@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230616062101.601837-1-s.hauer@pengutronix.de>
 References: <20230616062101.601837-1-s.hauer@pengutronix.de>
@@ -65,32 +65,56 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 The DFI unit can be used to measure DRAM utilization using perf. Add the
-node to the device tree.
+node to the device tree. The DFI needs a rockchip,pmu phandle to the pmu
+containing registers for SDRAM configuration details. This is added in
+this patch as well.
 
-Link: https://lore.kernel.org/r/20230524083153.2046084-25-s.hauer@pengutronix.de
+Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Link: https://lore.kernel.org/r/20230524083153.2046084-26-s.hauer@pengutronix.de
 Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
 ---
- arch/arm64/boot/dts/rockchip/rk356x.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-index f62e0fd881a95..910d8a84ea8f2 100644
---- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-@@ -948,6 +948,13 @@ qos_vop_m1: qos@fe1a8100 {
- 		reg = <0x0 0xfe1a8100 0x0 0x20>;
+Notes:
+    Changes since v4:
+    - new patch
+
+ arch/arm64/boot/dts/rockchip/rk3588s.dtsi | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
+index 657c019d27fa9..4a445d8704c8f 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
+@@ -388,6 +388,11 @@ scmi_shmem: sram@0 {
+ 		};
  	};
  
-+	dfi: dfi@fe230000 {
-+		compatible = "rockchip,rk3568-dfi";
-+		reg = <0x00 0xfe230000 0x00 0x400>;
-+		interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
-+		rockchip,pmu = <&pmugrf>;
++	pmu1grf: syscon@fd58a000 {
++		compatible = "rockchip,rk3588-pmugrf", "syscon", "simple-mfd";
++		reg = <0x0 0xfd58a000 0x0 0x10000>;
 +	};
 +
- 	pcie2x1: pcie@fe260000 {
- 		compatible = "rockchip,rk3568-pcie";
- 		reg = <0x3 0xc0000000 0x0 0x00400000>,
+ 	sys_grf: syscon@fd58c000 {
+ 		compatible = "rockchip,rk3588-sys-grf", "syscon";
+ 		reg = <0x0 0xfd58c000 0x0 0x1000>;
+@@ -1112,6 +1117,17 @@ qos_vop_m1: qos@fdf82200 {
+ 		reg = <0x0 0xfdf82200 0x0 0x20>;
+ 	};
+ 
++	dfi: dfi@fe060000 {
++		reg = <0x00 0xfe060000 0x00 0x10000>;
++		compatible = "rockchip,rk3588-dfi";
++		interrupts = <GIC_SPI 28 IRQ_TYPE_LEVEL_HIGH 0>,
++			     <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH 0>,
++			     <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH 0>,
++			     <GIC_SPI 58 IRQ_TYPE_LEVEL_HIGH 0>;
++		interrupt-names = "ch0", "ch1", "ch2", "ch3";
++		rockchip,pmu = <&pmu1grf>;
++	};
++
+ 	gmac1: ethernet@fe1c0000 {
+ 		compatible = "rockchip,rk3588-gmac", "snps,dwmac-4.20a";
+ 		reg = <0x0 0xfe1c0000 0x0 0x10000>;
 -- 
 2.39.2
 
