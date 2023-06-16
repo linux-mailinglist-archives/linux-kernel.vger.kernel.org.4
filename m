@@ -2,139 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42113733A63
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 22:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2F1733A6C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 22:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245126AbjFPUFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 16:05:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45688 "EHLO
+        id S1343863AbjFPUGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 16:06:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbjFPUFp (ORCPT
+        with ESMTP id S230209AbjFPUGm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 16:05:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE4C1FF9;
-        Fri, 16 Jun 2023 13:05:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52207632AC;
-        Fri, 16 Jun 2023 20:05:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7A6EC433CB;
-        Fri, 16 Jun 2023 20:05:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686945943;
-        bh=WtL681uu0xgDuNDCtnoYcQSLjySma9uSe62fWHoJUhA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=f6jdPi0vbCVqLqgQDDmD+GO6OBfmTAAnNSnv31ejf0X579gkscpmfn1bTrsu+q2ra
-         40XK5tgjD4Pn3DEwgEMNXaNpAJoNV7jL4P4r8shZe9dBhyksUMC8rwkwFkvZkFVkCR
-         IGp3JmtLPxLnrzx47G+lStd1hKB4UgLYKewi3Ki/K5woVsZktBsRAZ2Di1MUFiXRWn
-         1YkJryPbn+hll4loxeYSz5PcOp11n7V/droF7ZpB0pqIuzSutJSGr0pq7VRjU9BgpD
-         r54x5CfpgaRK4fVGltSX9D3VAd0D4uJxrcV171/lcN7V+Y7pDOa0WYzp0o27UZTPXi
-         Y80FFy3waZkgA==
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-4f6370ddd27so1591514e87.0;
-        Fri, 16 Jun 2023 13:05:43 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxll20kBKAOmJdD0scrWKrC23RJCkpcNBQmT+5Y0lM5YvEt4xiF
-        Yi07xqmhGlL0o1XKTyDs8ix+PLGFK2YzBE+q8Dw=
-X-Google-Smtp-Source: ACHHUZ7v0OG7lj710Dpkky2x3Qwl+xOOMZ2WmKSKGrGJ24Aq4/yPm9YniFAuyGWs2DWPlG6NvD65kdAaVeIKyOd6PQ8=
-X-Received: by 2002:a19:644e:0:b0:4e9:9e45:3470 with SMTP id
- b14-20020a19644e000000b004e99e453470mr2381818lfj.3.1686945941704; Fri, 16 Jun
- 2023 13:05:41 -0700 (PDT)
+        Fri, 16 Jun 2023 16:06:42 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F55359E
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 13:06:41 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1a2c9f087f0so1231053fac.3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 13:06:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686946000; x=1689538000;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OUAOcJJgWeLKPM/xF2GkuGhpodootZffZ1w5UrUmM2A=;
+        b=SCP+UFTAEbi61pCdZMMomcocARY2TcdGTOInovhmvu9lJQPA5u0Jg0FfH9hS94x9LZ
+         a5fHkaOxXIZM1PTjzY6SV7qbJC8ozcPe7u3+tKgAWg8UM4K+4dkPG6BkpV7Rf5jMhSZT
+         kVV4tCydQ5aufNiRH539Q/F/j5pL0DaMqra+xpfcVLOv2rLnhsCASQEzPulILnYy382o
+         /LDMkLbMrW4bZ3QLoABvZ8kQWA1l0vdD6chKvhxxxi+6lclB7lw+eK51DlTBHIqKad3R
+         LIQPizamgh7ivl81+ZV+EF89XtZ1krd7N0ZVoVfk2mda4FVwWDaO5Aig2VQkzDMEj2hk
+         b/ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686946000; x=1689538000;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OUAOcJJgWeLKPM/xF2GkuGhpodootZffZ1w5UrUmM2A=;
+        b=Q67uCgT4z53B1vdpn4ccAd8dewXPZ9+b7/TPgT0xTKVIShgmYAzfvA3/fErlLFtg6t
+         zyzkRinrLTuF120dMEmnl3FC80ERQyB3B+3fVimby0mXSJVfcVmmYsAJdn9HfI7J2TRt
+         iFtMNh4jw/c69AEeN1frA9pYkz0HmiZLb6L+AkCqPGKCVIp0rhVemVo8bhmSsWEilnf/
+         jz1mKZQararIpxi542USQ85/Cxhw/9kZPTR22q11/KyYnvYvYE7X0uZGiWrnDNg6bTIH
+         KuhjcZjMZ2DPV3ssNt0xQvzFRq9QR50zao1JMoYH7/qT0+gfLNV5P27s3lULhHW4vgsJ
+         yZRA==
+X-Gm-Message-State: AC+VfDzYV2bVjtiLNi0FHlLF2aw2r7MrQ+3dMxS5U0quBG1sDN2hNOso
+        UMQ/9O1F0KQvlaZIER5JErHCcbR1rspvwO4MyFTkjA==
+X-Google-Smtp-Source: ACHHUZ75K3KBcIrOD/dTCPzbUfDJYBDcThDV31eSyMdQR30gv5EAxMrPJP3qrkBEZFYins48R5Wov/Uhfr+KXOuXKsU=
+X-Received: by 2002:a05:6870:2e04:b0:1a6:8fa1:10b4 with SMTP id
+ oi4-20020a0568702e0400b001a68fa110b4mr123529oab.37.1686946000401; Fri, 16 Jun
+ 2023 13:06:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230616085038.4121892-1-rppt@kernel.org> <20230616085038.4121892-8-rppt@kernel.org>
-In-Reply-To: <20230616085038.4121892-8-rppt@kernel.org>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 16 Jun 2023 13:05:29 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6BG2oVrGDOpCKyOEvU9fBOboYYhducv96KUBe276Mvng@mail.gmail.com>
-Message-ID: <CAPhsuW6BG2oVrGDOpCKyOEvU9fBOboYYhducv96KUBe276Mvng@mail.gmail.com>
-Subject: Re: [PATCH v2 07/12] arm64, execmem: extend execmem_params for
- generated code definitions
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Puranjay Mohan <puranjay12@gmail.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+References: <20230616035813.255062-1-jaswinder.singh@linaro.org>
+ <165dd295-1b3a-5062-772a-613a7bf6fd45@linaro.org> <CAJe_ZhdV3yaKUVD43duO4hkGMByJhq7x9bN+eBXJdBXdxgDneg@mail.gmail.com>
+ <e2b98d80-8e9a-6083-3bc5-677bef0d3263@linaro.org>
+In-Reply-To: <e2b98d80-8e9a-6083-3bc5-677bef0d3263@linaro.org>
+From:   Jassi Brar <jaswinder.singh@linaro.org>
+Date:   Fri, 16 Jun 2023 15:06:29 -0500
+Message-ID: <CAJe_ZhfeYmxjR7Hcht0F9rc97VG2JCFEEFB+S5kUhSCmsut3Cg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: arm: socionext: add bindings for the
+ Synquacer platform
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh@kernel.org,
+        ilias.apalodimas@linaro.org, masahisa.kojima@linaro.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 1:52=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wro=
-te:
+On Fri, 16 Jun 2023 at 11:47, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> On 16/06/2023 18:23, Jassi Brar wrote:
+> > On Fri, 16 Jun 2023 at 05:15, Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 16/06/2023 05:58, jaswinder.singh@linaro.org wrote:
+> >>> From: Jassi Brar <jaswinder.singh@linaro.org>
+> >>>
+> >>> Socionext's DeveloperBox is based on the SC2A11B SoC (Synquacer).
+> >>> Specify bindings for the platform and boards based on that.
+> >>
+> >> A nit, subject: drop second/last, redundant "bindings". The
+> >> "dt-bindings" prefix is already stating that these are bindings.
+> >>
+> > I can remove it, but I see many mentions like "Fix bindings for"  "Add
+> > binding for" etc in the subject line.
 >
-> The memory allocations for kprobes on arm64 can be placed anywhere in
-> vmalloc address space and currently this is implemented with an override
-> of alloc_insn_page() in arm64.
+> Can we fix them as well?
 >
-> Extend execmem_params with a range for generated code allocations and
-> make kprobes on arm64 use this extension rather than override
-> alloc_insn_page().
->
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> ---
->  arch/arm64/kernel/module.c         |  9 +++++++++
->  arch/arm64/kernel/probes/kprobes.c |  7 -------
->  include/linux/execmem.h            | 11 +++++++++++
->  mm/execmem.c                       | 14 +++++++++++++-
->  4 files changed, 33 insertions(+), 8 deletions(-)
->
-> diff --git a/arch/arm64/kernel/module.c b/arch/arm64/kernel/module.c
-> index c3d999f3a3dd..52b09626bc0f 100644
-> --- a/arch/arm64/kernel/module.c
-> +++ b/arch/arm64/kernel/module.c
-> @@ -30,6 +30,13 @@ static struct execmem_params execmem_params =3D {
->                         .alignment =3D MODULE_ALIGN,
->                 },
->         },
-> +       .jit =3D {
-> +               .text =3D {
-> +                       .start =3D VMALLOC_START,
-> +                       .end =3D VMALLOC_END,
-> +                       .alignment =3D 1,
-> +               },
-> +       },
->  };
+??
 
-This is growing fast. :) We have 3 now: text, data, jit. And it will be
-5 when we split data into rw data, ro data, ro after init data. I wonder
-whether we should still do some type enum here. But we can revisit
-this topic later.
 
-Other than that
+> >
+> >>
+> >> Binding without it's user is usually useless. Where is the user?
+> >>
+> > It is required for SystemReady-2.0 certification.
+>
+> For what? If there is no user, it is not required for SR. We don't
+> document compatibles for something which does not exist in the projects.
+>
+The dts/dtsi for synquacer will be added later.
+I am sure you are aware that there are countless bindings without
+actual use in any dts/dtsi. When exactly did it become mandatory to
+have dts/dtsi for the bindings to be merged upstream?
 
-Acked-by: Song Liu <song@kernel.org>
+-j
