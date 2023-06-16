@@ -2,87 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F182732FE9
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:33:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F638732FEE
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235285AbjFPLd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 07:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51908 "EHLO
+        id S234760AbjFPLe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 07:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234473AbjFPLdy (ORCPT
+        with ESMTP id S1344038AbjFPLeu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 07:33:54 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0308C2720
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:33:53 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-51a1d539ffaso1396996a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:33:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686915231; x=1689507231;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vnCBULjwaeoKSSjtKcAIMInnLKiE524xqLou3I4mzIY=;
-        b=BzjzuQgJYIshv6bcYud1qHQiywtb1eZ8d+MShkxuxN3EJDxICt070sEJ0JJL7EEZqt
-         u/pHAQ2DsV8ngkLgbpYKLS/D2PuXq0Wc5uhV4XxQzWecNdsJQmKfFl3h2T/ndhDWq90i
-         SxH3a6OkswRDlbuZ5UKmFpm0bwJWecwrCb3ou+GUVfA5dMQj1tWqNXc2WT/3977ka5+f
-         vI7eGEX97OQRjPg4ZY1XQYpDwSqHcII1L4JzlIoRUyAClKNuZlmWidjutaM1NKaLbHkJ
-         XfqIxSRJiCyCYD49u9Z5cXqTtls+ko5E0de6qSUDctt7lAU9e/8vUL0jx3n6PZvP01N4
-         N81w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686915231; x=1689507231;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vnCBULjwaeoKSSjtKcAIMInnLKiE524xqLou3I4mzIY=;
-        b=bf/dqcbUirBrmZBxAIwjHGXkh9gEQkJv4jnVToQtV+A0IjTahJYIe6gPL530NleBco
-         5V4tELjT5NJTdBWnkDBHLzm0I6Qqircxdna9eylOCzB4fI+PPvXtv10VVBlFJto9o4+T
-         hTeqxYetF7KDPS9eLJikA/Jz9gOiIKQdeS00KH4soRbxh1DPWJNSIHH5b6GsbdN78EA1
-         yWnnyZYsfkvn1wNhoU6d9MSabms9D6EFJ5Sf1cxtlAI6iDmuST0RGqLR/Gz5KNrDUww7
-         NHa+i0l++0EWHwg1qJBSI1vl3tKjFUi7OEhvM62WdJ1mhhQkJ19Owaf/SwtsUPFQmgiN
-         p6jQ==
-X-Gm-Message-State: AC+VfDyKiQ3eHW1JAiA0vZe1phHX25aS9JwTn4zljBKzGEyywn4pgkcV
-        /yXW30PlbwC620tos6k92fbf2g==
-X-Google-Smtp-Source: ACHHUZ5cEJy8okqiTA6pGSDD4tP30kklvbaWhufgQI9cqL7BYN2Ux0OGcf6oNZHMSOUjHxJKR+CmEw==
-X-Received: by 2002:a05:6402:5216:b0:514:a5cf:745b with SMTP id s22-20020a056402521600b00514a5cf745bmr7337833edd.3.1686915231435;
-        Fri, 16 Jun 2023 04:33:51 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id l14-20020aa7c30e000000b00514b0f6a75esm9684653edq.97.2023.06.16.04.33.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jun 2023 04:33:50 -0700 (PDT)
-Message-ID: <cee56c57-060a-2fce-a2af-25404b9afe48@linaro.org>
-Date:   Fri, 16 Jun 2023 13:33:48 +0200
+        Fri, 16 Jun 2023 07:34:50 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED9B2720;
+        Fri, 16 Jun 2023 04:34:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686915289; x=1718451289;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=AKKeQORNxyoIr55evresNhecisiAb3zFzExDFUiE9pw=;
+  b=YcG8Yg5pOPGzbscLUJ3zXBps2izdrd1CnfuIubRr5Q2+wqOrS+ifFdHL
+   10Y2SGu0g8NLa0Y+w8attK+JIGNp6LdI8h/OyAHCY3NUWHk0hMe25WSjV
+   rLcwCs+BO1e88lJskr+DmnQBAZuYyzWu5dv5dJyDe4BkC5RCAtILOSo7h
+   9nwCW/3gv8NfTIa478px2Gbk1DBXzwQziW//S6+LKp958qkBAvCxOESas
+   n7jnB/OsBChKvBRNtHlMkH+Vf5USf4UNeUfbSBngjq/lXDAzEBAowy2/3
+   v69E/GreIe01E+eJ4C8FG6iC8ZNYdn7G/bkMbJUaZyVQTsajYoX2l5Yq0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="445574753"
+X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
+   d="scan'208";a="445574753"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 04:34:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="782872274"
+X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
+   d="scan'208";a="782872274"
+Received: from youzhiji-mobl.ccr.corp.intel.com (HELO xiongzha-desk1.ccr.corp.intel.com) ([10.249.173.213])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 04:34:46 -0700
+From:   Xiong Zhang <xiong.y.zhang@intel.com>
+To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, peterz@infradead.org,
+        like.xu.linux@gmail.com, kan.liang@linux.intel.com,
+        zhenyuw@linux.intel.com, zhiyuan.lv@intel.com,
+        Xiong Zhang <xiong.y.zhang@intel.com>
+Subject: [PATCH 0/4] Part of fix for host and guest LBR event coexist
+Date:   Fri, 16 Jun 2023 19:33:49 +0800
+Message-Id: <20230616113353.45202-1-xiong.y.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 1/2] dt-bindings: clock: Update GCC clocks for QDU1000 and
- QRU1000 SoCs
-To:     Imran Shaik <quic_imrashai@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Melody Olvera <quic_molvera@quicinc.com>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jagadeesh Kona <quic_jkona@quicinc.com>,
-        Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
-        Ajit Pandey <quic_ajipan@quicinc.com>
-References: <20230616104941.921555-1-quic_imrashai@quicinc.com>
- <20230616104941.921555-2-quic_imrashai@quicinc.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230616104941.921555-2-quic_imrashai@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,54 +61,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/06/2023 12:49, Imran Shaik wrote:
-> Update the qcom GCC clock bindings and add v2 compatible string for QDU1000
-> and QRU1000 SoCs.
-> 
-> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
-> Signed-off-by: Imran Shaik <quic_imrashai@quicinc.com>
-> ---
->  .../devicetree/bindings/clock/qcom,qdu1000-gcc.yaml         | 6 +++++-
->  include/dt-bindings/clock/qcom,qdu1000-gcc.h                | 4 +++-
->  2 files changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,qdu1000-gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,qdu1000-gcc.yaml
-> index 767a9d03aa32..030953d258c1 100644
-> --- a/Documentation/devicetree/bindings/clock/qcom,qdu1000-gcc.yaml
-> +++ b/Documentation/devicetree/bindings/clock/qcom,qdu1000-gcc.yaml
-> @@ -8,6 +8,8 @@ title: Qualcomm Global Clock & Reset Controller for QDU1000 and QRU1000
->  
->  maintainers:
->    - Melody Olvera <quic_molvera@quicinc.com>
-> +  - Taniya Das <quic_tdas@quicinc.com>
-> +  - Imran Shaik <quic_imrashai@quicinc.com>
+Perf has four types of events: per cpu pinned event, per process pinned
+event, per cpu event, per process event, their priority are from high to
+low. This means higher priority event could premmpt lower prority event
+and owns hardware resource. Perf scheduler activates an event on specific
+cpu through sending ipi to the target cpu.
 
-I appreciate adding more maintainers, it is welcomed and needed.
+When guest access LBR msr at the first time, kvm will create a per process
+pinned vLBR event which take part in perf scheduler. When vLBR event is
+active, LBR will be owned by guest and guest could access LBR msr. When
+vLBR event is inactive, LBR is ownned by host and guest couldn't access LBR
+msr.
 
-However many of Qualcomm folks, including some of you, did not care
-enough to fix their old/incorrect email in existing entries, thus we
-have hundreds of wrong addresses and email bounces.
+But current vLBR event is always active even if LBR is owned by host higher
+prority per cpu pinned LBR event, this violates perf scheduler's rule. vLBR
+event is a kind of perf event and doesn't have any special for perf
+scheduler, it should follow perf scheduler's rule.
 
-We already raised this internally and publicly, with just small effect,
-so I am not sure what to do more. For me, allowing to have outdated
-email in maintainers is an easiest proof that maintainer does not care.
-Adding more maintainer entries, while maintainer does not care, would
-not feel right. Maybe let's start with fixing existing entries?
+This patchset try to fix this violation, make vLBR event not break host,
+and expects the following results when host and guest LBR event coexist:
+1. If host per cpu pinned LBR event is active when vm starts, guest vLBR
+event couldn't preempt LBR, so guest couldn't use LBR.
+2. If host other LBR events are active when vm starts, guest vLBR event
+could preempt LBR, so guest could use LBR.
+3. If host per cpu pinned LBR event begin active when guest vLBR event is
+active, guest vLBR event will lose LBR and guest couldn't use LBR anymore.
+4. If host other LBR events begin active when guest vLBR event is active,
+guest vLBR event keeps LBR, guest could still use LBR.
+5. If host per cpu pinned LBR event becomes inactive when guest vLBR event
+is inactive, guest vLBR event could be active and own LBR, so guest could
+use LBR.
 
->  
->  description: |
->    Qualcomm global clock control module which supports the clocks, resets and
-> @@ -17,7 +19,9 @@ description: |
->  
->  properties:
->    compatible:
-> -    const: qcom,qdu1000-gcc
-> +    enum:
-> +      - qcom,qdu1000-gcc
-> +      - qcom,qdu1000-gcc-v2
+In the first three commits, each commit fix an issue when host and guest
+LBR coexist, the fourth commit add a kernel selftests to cover the above
+cases when host and guest LBR coexist.
 
-It's the same block, isn't it? What is the "v2" exactly?
+Even with this patchset, the coexist of host and guest perf LBR events
+still has gap, actually this gap exists in vPMU arch when host and guest
+perf event coexist, kvm guest perf event could be inactive in two cases:
+1. Counter or hw resource is full at kvm guest perf event creataion.
+2. host higher priority event preempts kvm guest perf event in vm exit
+handler.
+But current guest couldn't get any notification about these failure, and
+guest think its PMU still works, then get wrong data. Maybe some PV
+interface is needed.
 
-Best regards,
-Krzysztof
+Perf command to create per cpu pinned LBR event:
+perf record -b -a -e instructions:D
+
+Xiong Zhang (4):
+  perf/x86/intel: Get shared reg constraints first for vLBR
+  KVM: VMX/pmu: Save host debugctlmsr just before vm entry
+  KVM: vmx/pmu: Enable inactive vLBR event in guest LBR MSR emulation
+  KVM:X86:selftests: Add test case for guest and host LBR preemption
+
+ arch/x86/events/intel/core.c                  |   6 +-
+ arch/x86/kvm/vmx/pmu_intel.c                  |   9 +-
+ arch/x86/kvm/vmx/vmx.c                        |   5 +-
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../selftests/kvm/include/ucall_common.h      |  17 ++
+ .../kvm/x86_64/pmu_event_filter_test.c        |  16 --
+ .../kvm/x86_64/vmx_pmu_lbr_contend.c          | 171 ++++++++++++++++++
+ 7 files changed, 201 insertions(+), 24 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/vmx_pmu_lbr_contend.c
+
+-- 
+2.25.1
 
