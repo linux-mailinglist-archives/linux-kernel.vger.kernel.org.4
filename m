@@ -2,58 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 155D37338AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 21:00:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE1B77338B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 21:01:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbjFPTAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 15:00:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40122 "EHLO
+        id S1345760AbjFPTBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 15:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345612AbjFPTA0 (ORCPT
+        with ESMTP id S1345700AbjFPTB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 15:00:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702543AA5
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 12:00:21 -0700 (PDT)
+        Fri, 16 Jun 2023 15:01:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245543C12;
+        Fri, 16 Jun 2023 12:01:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 075CF625A9
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 19:00:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 562B2C433C8;
-        Fri, 16 Jun 2023 19:00:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD690625A9;
+        Fri, 16 Jun 2023 19:01:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 855ADC433C0;
+        Fri, 16 Jun 2023 19:01:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686942020;
-        bh=teSmhnbNd2Y9ynIPY9m7ASM6Pzg+6PiTm476HdBc/ew=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=QUTV15MwnSbaI8/Ep78V2gld/Jg4fT+7pwWtLWQgjPXLU4/Vatv/6fgWGqq//bTYB
-         IQUKf1bO5FWTjCoL4Hbf4UIc3hCSDD4h1Q8rHmjrVGNmQWnYr+bV09HrLfwW4ZtRwA
-         i2oOABSvmS44htOFSY/tU2QlVQyL56YcZUHC6HXgQoaeeleGN1mw/8wM13uRVvLFyv
-         3LQeTxGGARC5o1hPL8AHu4vdzv7OovVV9pP1kNRjItTyJXUmgsB29HIrRE40t/mTm4
-         TnnsNvPN2fANQ6IgKRFU5RIYI4GLsBLDvS5DiEFcOkAyB9Ltc7pTpqsmpPxQjWWJPL
-         yvASbxJkJZ+AQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 33376E21EEA;
-        Fri, 16 Jun 2023 19:00:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1686942068;
+        bh=k7TL4/bEtYnlDoFIRBngv3fhHMXqUW4iN9W+YmmLUhY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aodvJaD58Y+8lUTMXpB+bGwpR4phhlnX+6Oh5PnMDn3MAiV5RYJFIv+KjZLQnAY0Y
+         IEW69W3BETBuIJatjMnz/A/Xeb6JidIvdDB2zGceX2LdWxPw5XDyD/HoZiae83A5EA
+         rFCGHggp6UO8oX+zbaJM1Pumsr4gBAT2YdfGbHTGf/T/5pVYFvOPZafZYn3PEUbc5w
+         Lk8k0PvJbAojM73H786e7KeJk75vSEh9JxatHIJTFPqnDB3RXNIW+DUN7rdHfem7Oi
+         68KrV5zWDb13L1BqzBWAplwxLJMFaRY9EMj4ejW3DLmU3QU8IZY8vwz/dexGHxzsQ2
+         spuA6P6lAoz9A==
+Date:   Fri, 16 Jun 2023 20:01:02 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Vincent Legoll <vincent.legoll@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: Re: [PATCH v6 23/26] dt-bindings: soc: rockchip: grf: add
+ rockchip,rk3588-pmugrf
+Message-ID: <20230616-gargle-spotless-9d04000106b0@spud>
+References: <20230616062101.601837-1-s.hauer@pengutronix.de>
+ <20230616062101.601837-24-s.hauer@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] ip, ip6: Fix splice to raw and ping sockets
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168694202020.4240.5219219028692952674.git-patchwork-notify@kernel.org>
-Date:   Fri, 16 Jun 2023 19:00:20 +0000
-References: <1410156.1686729856@warthog.procyon.org.uk>
-In-Reply-To: <1410156.1686729856@warthog.procyon.org.uk>
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org,
-        syzbot+d8486855ef44506fd675@syzkaller.appspotmail.com,
-        willemdebruijn.kernel@gmail.com, dsahern@kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, axboe@kernel.dk, willy@infradead.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="NpVXOp9NH7FQ7UcR"
+Content-Disposition: inline
+In-Reply-To: <20230616062101.601837-24-s.hauer@pengutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,30 +70,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+--NpVXOp9NH7FQ7UcR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 14 Jun 2023 09:04:16 +0100 you wrote:
-> Splicing to SOCK_RAW sockets may set MSG_SPLICE_PAGES, but in such a case,
-> __ip_append_data() will call skb_splice_from_iter() to access the 'from'
-> data, assuming it to point to a msghdr struct with an iter, instead of
-> using the provided getfrag function to access it.
-> 
-> In the case of raw_sendmsg(), however, this is not the case and 'from' will
-> point to a raw_frag_vec struct and raw_getfrag() will be the frag-getting
-> function.  A similar issue may occur with rawv6_sendmsg().
-> 
-> [...]
+On Fri, Jun 16, 2023 at 08:20:58AM +0200, Sascha Hauer wrote:
+> Add rockchip,rk3588-pmugrf compatible string.
+>=20
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
 
-Here is the summary with links:
-  - [net-next] ip, ip6: Fix splice to raw and ping sockets
-    https://git.kernel.org/netdev/net-next/c/5a6f6873606e
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Cheers,
+Conor.
 
+--NpVXOp9NH7FQ7UcR
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIyxbgAKCRB4tDGHoIJi
+0hRCAPwIBYDKio6eKwjALxf7btC6cRpqymJvrXVISsExsJ2rGgD/ZsjJuro0F/cO
+PcC1ID8rsPY3eXz6PZ75Cx2uYr3Dogo=
+=NrG2
+-----END PGP SIGNATURE-----
+
+--NpVXOp9NH7FQ7UcR--
