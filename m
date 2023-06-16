@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A5373347F
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 17:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D821B733480
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 17:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345653AbjFPPQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 11:16:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40158 "EHLO
+        id S1345908AbjFPPQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 11:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230027AbjFPPQo (ORCPT
+        with ESMTP id S231695AbjFPPQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 11:16:44 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55ABB273C;
+        Fri, 16 Jun 2023 11:16:45 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC24C30FF;
         Fri, 16 Jun 2023 08:16:43 -0700 (PDT)
-Date:   Fri, 16 Jun 2023 15:16:41 -0000
+Date:   Fri, 16 Jun 2023 15:16:42 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1686928602;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OhPj1jzUP7z+D2MYdptA9f+z018Cf2TbfZdtWXdgl8A=;
-        b=Llgvm61zlunkPGHzvxKJ8lt8dppLl30fk4joaGmYdKU3j6+qge6/PffLiE8O4YZ2/MrYVK
-        a9hTtlxG6ud6UdUoMZV0Vm0cDvzgze6syAhxrtq+KtV9NYahBXn2znhbSwOvEP2oDC56oj
-        HcvRI49Id9AAhotmZ8HARzTk3NFqih0eRGjCAstVfKI/5/CHbqtUKayGe6eRCpsfym4gc7
-        wWxfwJ2UJVYP338thK+czwToWwHpXiBcGd+41fKTEePETFmbBBNAth+hkoISR1WtS0OEkd
-        0kfDnfDqM0V4jyvn0AGmnzx/YFEu70OvUTRynFhYO92P7OEzjcTLIz4FlB6T5Q==
+        bh=f91D0xmWauZGJUDw/aEInTSPCvvm5F7WQVK8OGO4AMU=;
+        b=mWsjzbesIw6ijtKIY+z03FxLkxjejwaflhIsWVUPdCPgpHor+hEZQG33H1ejDAXUfBVgPI
+        39crKvqzEVEn4lfSTGYyXEa2HL2R23GkOP2Ox7QkeEZGpgg836bDjomwn7t0JoSfy5DfTR
+        nVc17Nzou5b6SVp/k1w/gjKMs6w+B4zb1ua6pHQiLb1hE8CxgnjJ1zPK8xKyH5NV6cLX0m
+        dejk1qOkJ+95OhVClNmNFqr2dFfB4YfJ/0vS09BV0lQh9g/RhHGEL3Ja8uKlm/o1keEZem
+        FoDqris0O3wRt/Ce3E4LMKkU1oSXQi0ocUjo9eRdPLiV1A8SbGr1znUrKOjVyw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1686928602;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,27 +36,26 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OhPj1jzUP7z+D2MYdptA9f+z018Cf2TbfZdtWXdgl8A=;
-        b=FXTLb0pmVUSdYdEgnikYKKrLsP+RJoL7SHJWMBxNkzDg8+pWXZILxUBN+l+GCqe7iceFLQ
-        pspR4piFcQ/t1hCw==
-From:   tip-bot2 for Arve =?utf-8?q?Hj=C3=B8nnev=C3=A5g?= 
-        <tip-bot2@linutronix.de>
+        bh=f91D0xmWauZGJUDw/aEInTSPCvvm5F7WQVK8OGO4AMU=;
+        b=HR9NDpAzdQZrQPDwSjLulFytNTUq+yszAXG6CRh7IcEcLDVCnjtYzAxJNCK6QfvdWFtcpV
+        GH1taWE11g0+utDg==
+From:   "tip-bot2 for Miaohe Lin" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/wait: Fix a kthread_park race with wait_woken()
-Cc:     arve@android.com, John Stultz <jstultz@google.com>,
+Subject: [tip: sched/core] sched/topology: Mark set_sched_topology() __init
+Cc:     Miaohe Lin <linmiaohe@huawei.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230602212350.535358-1-jstultz@google.com>
-References: <20230602212350.535358-1-jstultz@google.com>
+In-Reply-To: <20230603073645.1173332-1-linmiaohe@huawei.com>
+References: <20230603073645.1173332-1-linmiaohe@huawei.com>
 MIME-Version: 1.0
-Message-ID: <168692860128.404.10971094774968505077.tip-bot2@tip-bot2>
+Message-ID: <168692860207.404.4144241334175555026.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -69,93 +68,50 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     ef73d6a4ef0b35524125c3cfc6deafc26a0c966a
-Gitweb:        https://git.kernel.org/tip/ef73d6a4ef0b35524125c3cfc6deafc26a0=
-c966a
-Author:        Arve Hj=C3=B8nnev=C3=A5g <arve@android.com>
-AuthorDate:    Fri, 02 Jun 2023 21:23:46=20
+Commit-ID:     0cce0fde499a92c726cd2e24f7763644f7c9f971
+Gitweb:        https://git.kernel.org/tip/0cce0fde499a92c726cd2e24f7763644f7c9f971
+Author:        Miaohe Lin <linmiaohe@huawei.com>
+AuthorDate:    Sat, 03 Jun 2023 15:36:45 +08:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Fri, 16 Jun 2023 17:08:01 +02:00
 
-sched/wait: Fix a kthread_park race with wait_woken()
+sched/topology: Mark set_sched_topology() __init
 
-kthread_park and wait_woken have a similar race that
-kthread_stop and wait_woken used to have before it was fixed in
-commit cb6538e740d7 ("sched/wait: Fix a kthread race with
-wait_woken()"). Extend that fix to also cover kthread_park.
+All callers of set_sched_topology() are within __init section. Mark
+it __init too.
 
-[jstultz: Made changes suggested by Peter to optimize
- memory loads]
-
-Signed-off-by: Arve Hj=C3=B8nnev=C3=A5g <arve@android.com>
-Signed-off-by: John Stultz <jstultz@google.com>
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Reviewed-by: Valentin Schneider <vschneid@redhat.com>
-Link: https://lore.kernel.org/r/20230602212350.535358-1-jstultz@google.com
+Link: https://lore.kernel.org/r/20230603073645.1173332-1-linmiaohe@huawei.com
 ---
- include/linux/kthread.h |  1 +
- kernel/kthread.c        | 10 ++++++++++
- kernel/sched/wait.c     |  7 +------
- 3 files changed, 12 insertions(+), 6 deletions(-)
+ include/linux/sched/topology.h | 2 +-
+ kernel/sched/topology.c        | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/kthread.h b/include/linux/kthread.h
-index 30e5bec..f1f95a7 100644
---- a/include/linux/kthread.h
-+++ b/include/linux/kthread.h
-@@ -89,6 +89,7 @@ int kthread_stop(struct task_struct *k);
- bool kthread_should_stop(void);
- bool kthread_should_park(void);
- bool __kthread_should_park(struct task_struct *k);
-+bool kthread_should_stop_or_park(void);
- bool kthread_freezable_should_stop(bool *was_frozen);
- void *kthread_func(struct task_struct *k);
- void *kthread_data(struct task_struct *k);
-diff --git a/kernel/kthread.c b/kernel/kthread.c
-index 490792b..07a0570 100644
---- a/kernel/kthread.c
-+++ b/kernel/kthread.c
-@@ -182,6 +182,16 @@ bool kthread_should_park(void)
- }
- EXPORT_SYMBOL_GPL(kthread_should_park);
-=20
-+bool kthread_should_stop_or_park(void)
-+{
-+	struct kthread *kthread =3D __to_kthread(current);
-+
-+	if (!kthread)
-+		return false;
-+
-+	return kthread->flags & (BIT(KTHREAD_SHOULD_STOP) | BIT(KTHREAD_SHOULD_PARK=
-));
-+}
-+
- /**
-  * kthread_freezable_should_stop - should this freezable kthread return now?
-  * @was_frozen: optional out parameter, indicates whether %current was frozen
-diff --git a/kernel/sched/wait.c b/kernel/sched/wait.c
-index 133b747..48c53e4 100644
---- a/kernel/sched/wait.c
-+++ b/kernel/sched/wait.c
-@@ -425,11 +425,6 @@ int autoremove_wake_function(struct wait_queue_entry *wq=
-_entry, unsigned mode, i
- }
- EXPORT_SYMBOL(autoremove_wake_function);
-=20
--static inline bool is_kthread_should_stop(void)
--{
--	return (current->flags & PF_KTHREAD) && kthread_should_stop();
--}
--
- /*
-  * DEFINE_WAIT_FUNC(wait, woken_wake_func);
-  *
-@@ -459,7 +454,7 @@ long wait_woken(struct wait_queue_entry *wq_entry, unsign=
-ed mode, long timeout)
- 	 * or woken_wake_function() sees our store to current->state.
- 	 */
- 	set_current_state(mode); /* A */
--	if (!(wq_entry->flags & WQ_FLAG_WOKEN) && !is_kthread_should_stop())
-+	if (!(wq_entry->flags & WQ_FLAG_WOKEN) && !kthread_should_stop_or_park())
- 		timeout =3D schedule_timeout(timeout);
- 	__set_current_state(TASK_RUNNING);
-=20
+diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
+index 816df6c..67b573d 100644
+--- a/include/linux/sched/topology.h
++++ b/include/linux/sched/topology.h
+@@ -203,7 +203,7 @@ struct sched_domain_topology_level {
+ #endif
+ };
+ 
+-extern void set_sched_topology(struct sched_domain_topology_level *tl);
++extern void __init set_sched_topology(struct sched_domain_topology_level *tl);
+ 
+ #ifdef CONFIG_SCHED_DEBUG
+ # define SD_INIT_NAME(type)		.name = #type
+diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+index ca44722..cb92dc5 100644
+--- a/kernel/sched/topology.c
++++ b/kernel/sched/topology.c
+@@ -1681,7 +1681,7 @@ static struct sched_domain_topology_level *sched_domain_topology_saved;
+ #define for_each_sd_topology(tl)			\
+ 	for (tl = sched_domain_topology; tl->mask; tl++)
+ 
+-void set_sched_topology(struct sched_domain_topology_level *tl)
++void __init set_sched_topology(struct sched_domain_topology_level *tl)
+ {
+ 	if (WARN_ON_ONCE(sched_smp_initialized))
+ 		return;
