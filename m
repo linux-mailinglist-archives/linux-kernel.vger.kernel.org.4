@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF4E17336E4
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 18:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C03A37336E9
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 18:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346061AbjFPQ6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 12:58:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43570 "EHLO
+        id S1345987AbjFPQ6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 12:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343977AbjFPQ5n (ORCPT
+        with ESMTP id S1345966AbjFPQ5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 12:57:43 -0400
-Received: from sonic314-26.consmr.mail.ne1.yahoo.com (sonic314-26.consmr.mail.ne1.yahoo.com [66.163.189.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66504686
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 09:55:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1686934557; bh=FecLkrXox/1UtDMuj0YVSfxHtwMaEWW93HEIoUhvMVY=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=mmcZRF9YZI5VEGmyO+WaQtwlK2OyGjkLIM26SassX5sxpO+zIysBnWJsBcuSYNsDU5t3rim6GporegVy+qJE6P0QhU0i6wMK51jN+0+UO54ulOolL6j0MPNVhUrlpxZYpCK8zvW59a69yFvOk9HxITUMdVvoqy9+k9YixAyb0VHY9kE3aT70tXS+sOr0fAZZmNVFeD7ugtxk0tfH3eu3JXJ1e8CHtT5UAq/72ia3VnNAO6W5vY/G+1SSR82CjIo02ChYA85TMuIZcXN1W4z5zYnGN5AFfu0K3BY85PbL2J70VPosUvTaNrpduquSmjHR1tOXlkyWPj35rglEgUSe8Q==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1686934557; bh=6Nx1q2xRMO4tClgtvSWM7k/rLC7lQYxo8ewBA6OtKZa=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=GHN3JEjOi9UkqQpjF9PRqVzd+1M0++c6yMIfLp62iLZXlA4AkoRuEpbsL/00O//x4SNAfuDSFZNeO7E9kcNeRTKwSbVs+MshKQbhXQUXn/qzPBvWtZKzlRmbJctA1KI12vKWdga2dHTIVRmkAKfCOUqRO7o+DFA/rkwti6VGkRLZDmWyIsXEOLe7S+3bBQrHNk9PRKAf0luviqRXgc4Mpwy0t51IX2ueAJcA8uQt0n8e3FGT6NKjH8Qm3rnzSBcvkQr0V50vV+kdQyl6ihUueX9zXEj853ykLloWr/GIulojUt7hh2C7qQWWeQirZrmuQ4OXjkWlFAFRWafgjQUk8w==
-X-YMail-OSG: vYKTuTwVM1lL2xcygy9G9Z2GOhN_5cGkZ6.mumUfAr.yTfF.yx5XXY70jlb3Otg
- vjgocsbEkU7BxbWhh1abOLpCPmQhACN4NbyIcLYaFHX.AXHTbLkojBcr1lu6zaElqiOBmlkJlJpp
- qSu6S0fn_2rBo8TgsyT30ejZQfOXXygj2.yMXrzMUPPj3u7l0VUjJyRkfNhFcrSAQ1exLrjhZ_wv
- EIzIuVMChUtq_RB5_.aphwjGUeAyJaQIHLki5r3jQ1AkbVrpszJ8KXMRpa24iMRu48NfH82C2sAO
- nOh8SdKA7EgKznBRFKJr_IgKBGG0FsRuF7EqbYWW4KeWy4g5B76w2.1AW0FRYrX.0Af7k2WqLQg7
- g6X_gSJoC9YoMEbUcnpt70i0K7rsTTia4dZSMurwSEQRRVzo6tqIbbF6xcHoCldkUBj7g47bFa2F
- R7xgcXgRNJjI05eXtWmPBnYZn2a8atTOtJVY7X_LZDVGplF1zTJz7GdNjo.398GIJhwEzeq8LDm.
- qicX949XJyjZTwIbjUz_khiFw0cm9yCXHDkqDEKDdnVGqIsa0gsfV6snsWxnDLuScXLEHOxT0WpC
- 6tYhDLIdW4QUrvE8a8.5ojHwLTVtGzLPcxv6py5Vg8SoKfQTHyv7X1pWMTO3Ko3rwGyxK9wqkFwh
- rnh6eMtJu4McopSic5aUD3RlFFL_sYD3NSxwCpJkR21tgD2SfeSyiWzX9eR0JTBU3VSbYI98f_Rc
- adBGNIzaHPlYTu1yeZjTTG8MXSRhyqSwlKlg1J5.pZMqCGTmrieTv3WWz0id0QyI1yixtwhNNjhm
- v3vUemyKLBTmxhMilQQNsF_LTiWCC.Afzeo1QBRc.IRet.CVguXWhvWFHcdiM_5T86.wAjxnc1TX
- aoPi.c_LEUOF1k43HfJnbjpLSoU2pj11leb7bZwSPbXWddqTtEhMdIFVbZl4R2pzmfFkvGVPS5Py
- L8k5LcrSzZqrDQfcQm77hmvClBIxkM19KX1sXmfIGsmbIaVqzFvAdxAlW2oA.2e_3JiW2PBsXMXc
- fuMG_Bp_p7ryYfQftfcirt1.61mKGgv9uzy_n4BG9xvPPBnTVBPYRFHyCV7yETe960kB9HSW6Z24
- ajq8oolhokBPzxYU8O0UpsNb.vH0x5ncBrBb4prvFw7sl7drVW7dn2H6.cfWQZIl5aMV9d4HnMKe
- vvNN_aq.mk0bS7VK0uXmARykMi9MKPXnHlaaDDewOddQrLM1sRD6LLoGowTrZOhr_MEKVtTYHa9P
- Hwyx7O0VGrd720QeRcpO7TQ4tQrgzhRKf8dWZjTFQSPkRdKNrW3VfGEk6WDJQ4apBPsV4JCJtrv1
- lwfo.jHW4wfLja.4YwagGzFnAPMpEnAANfPOQ_d7rJ8IYtNAZrvb0TmwNxJD9q4FMSZa9Op61xU.
- 13Q5hMTXfxoSXyA.cdFBodTpy4G84lf7JipeHO6DrhdzIKvZFnnqnc3swRQFtZ4lVdVdfseH7WLZ
- 0M_2aka7kUX5soxOqanZXuUIpVC_Osd7mxm4dbw3rQsbPp_3khSNDX2n7LveeUIQ.r7t74La3cgp
- rRrXDnW2w.b6tkAUUIDESpZMsmUeMZo2nxWpc0JpSHdkA3l0ko7A4Ur9MxIZzDEQv.jUyu7T39Wv
- MS_mwu7Eg8O2GDS3zVsE4r9TcJGloucsGufpDXxk79Cf7ULqpv33e_XfpKCRS5N.rjyS_AOgv9d8
- zoKabaEkypFhmQQ7cB8s2Xaz3_U4rDQwVVrIeDAEZMZFHJpnFkQRm3I_rL1_V8aDFzUn.6t_d70A
- LqjOfLc29yaaz5hKL3qRmnFs0nawaaX74mJSdbZ2M2tBFg3uNhpydd1HE3n0fKx4Eggl9JiHnaFq
- MhZ1ljwf0D4AoHWecphe5DXDTiSjFHe3sWsL3Fxxoe.VjLOyoqcA1v0JkEFcabvntfv8c3i8W_GV
- 2GuwuOs._T4Wj53mT8nUWyXqNuo70mNR.QR_X8PASFQb2aGBojwLqeyA6NdIY09k.eiPmtEvzsCI
- JTWa52dtKt.g_fJSr8WP1dITBEr1hO49WA5q2miMN99QG0MMiJEq3iQp1eIWjh6ZJsdecE2PzyC1
- W01qX1Rc2Moom_JJinfgE6YMjeXO7leM2dYASSRZIc7q0FFrycPWxTFbNuUwzsYEefdicyENZtwO
- vVrLZRRCQ6PNNMl7n4t_eGeGsa5rsbv_lN_KXQHs.Ogmvzg01J22Ob0ycEaC8Dzh38BQV9cV164I
- bydt8zOU6B40Op8yjGQeoV1CW2Yx96EA7m3KtkAQDpsEnDO1Hzm_ksxoKZCl.DVGzEqaE5qlxSeA
- NM5aX_WMtkG7JUr_3sqvcTBOqtg--
+        Fri, 16 Jun 2023 12:57:44 -0400
+Received: from sonic311-30.consmr.mail.ne1.yahoo.com (sonic311-30.consmr.mail.ne1.yahoo.com [66.163.188.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A551468E
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 09:55:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1686934557; bh=3KfYzQZSdHbYQjB0V2Ilq3MFhzyKnWJ15K+bVlsg+sU=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=pW3koTkDB55Q7fKjgheLlFOImcUnn6twslQTVxnLBv0ijl9Fmk1ih2S/k9PTdQ8xNRUPTC5SEVnlhW6UiUHcebtHjIoSJrSjSuMhQKvyn2suPEyrw4z80gG7yDeiIlCjaL/kiUZ+ygunsblU1YcS46mX2WmCAdYGizfvX/SG98KrajOky/VU7cyQnZF/EMVNVVh+s6RvvZRHCROHLJ7j+8QxFo9WuWfL9LdKUCISlsBGsIPa9igEs0lK8R9plYXFLboxviF+1ZRBwrUWjfT6EMuJBDcuFcaFsEQwnxhSbqp+4RoKVOPf71Ev/ePXd11qkJzHy0SnQ0PqKZ9M1SVMrw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1686934557; bh=LYVqupBZG03jat7NE2oFGCjbV2g/Jb3wL5M/XTDh/FO=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=QQ4iZrcVJeJxR8BYDVnyGJixw+NvsSyqu5c0/lyfRSlLCM5qhzP7pAV1XJwQ2o2/xf2C0aix3/gohLjV+aQLF3jU03oECl48CrMPsrclX9vBDzyMyF6NSBjEe+rSwMfPs2BUyUMBeOkqAFPDgI0fjB1rDGfkB8TWC5FD22smNYt7aXqks3XsFB/CLLMgtDhlezB2ob1vPoRqXZdh0BcOFEg1aMdc5ifhLU+9p3LBjrMv3154JgaWsTS2Rf5Ww01kEZ6bVxjbgfumgKjCz9cnpwTCBkcgiVRCo/vFjtZOQoVZdT4/YCZQojqbVzdF9avLgeAJvocY+5/GS5EsDGWXIQ==
+X-YMail-OSG: iividokVM1m8tpceTRFA9lrwKdf1XkSt6oFM3b.y33AT3vVnUIlxzWjk1MTJQ.H
+ cRSn9yDVEWGezLn_beWFtuK.xnpaahRoaaYRcztSjk9TKr9ROJiL14fQ9v1JuEVhPHW9bpiSbeyD
+ 9_rtGOw_l.mCtppm5NRa_6Gg9W9Lo43tfJKIGKO.6G_LSr6_E.VL781yr8mEk1Ad0YhCdLd1U_Ff
+ Hf2oNxIR8SXwVMH7ioofKByX46HNGtmPhQfoEYhW8LV3Prq.NVpFrsbvOcpiKG_G9vkiINwlZTDR
+ JW8pNyBbhq0A7Vyks9ZNd7i6s.NWY1cx65k9BLd1jQbjfIq6Jfgisml80K3hnX1SYICbv.4rw6Ds
+ .RusM_0mDaDQFQT7CBgPmFcUbOvECV4KyFzyOQFNiMfdUPfX8H.bK09NDHDlXhpKxOHLwemExHVg
+ 2nNHKdIU0UtdMn6XOKrfRns.L4EArQaaaga_yICphvAW5mBHlYg5zFuuReGCdPMM2E8JKS36WmWK
+ lLk2AnQYviDbeedA1861.AQuYFg1O8lAhtp71ZVL2xqk2Ymw5_D7lS5wNYoYUfBlGyTUEWUl1I2d
+ 1r1LqV12UEGFZRvq6KOrjut3XVuZneeTsldphcaAzvZ6iNgYwmMgJDlhPGGx7xxvr7a2wb3VKdXb
+ rIIXKPu.4CXZiGhYnom6doA6lAu4414sXmRIoCPBJlFksskXDBPtEARBZB2ZPhvFyXtD52x96BDa
+ Wr_dBA_6vOKfUGhkneybjRgfaIVcWoop20ozJfInZLpTrBF43F0hXnoKOpc_bpi2tYe4sV_AWknG
+ A.o9TOVbi6VW1CtpLzpsExMAZmdj9jVCQUMpy_CDDS3nlQt_CBAwWM_EJbIT5g9VrAF0xfmRa_9W
+ o6CxARBE3dQAVBxvfnNJZ55NVjdlD0KUzH6UqyjGgOYadVhwysDZ7SD.xFDKg2UJ8xD1I5t3nO58
+ uRykReaey4OfjU43mXcIQWTS1dxaLmTm6v_dVhZ1w1O4bGkrX8W7BQqozirXasufUVbNVVTqxfJZ
+ bQF8ULWQrTls8awWKD9MKsEtC3j8N23uH.7iPuHWyAHV.sg8lLcqVzQh3_Q1CDeSuyUAege5SsL3
+ Co7VQUY6IY4mxy3.jQE_tlQwKE14KwnGeun0dvWcoKwkM2tB2VsI7rIuTlJVxo9TKP5bbhA0L3Gf
+ 21izp_HQulyUlUZi0L9IQrFovyeOcl7tVxgxsIZzjwHLkEmCAU6rQvD2jbHxiU0viIIn7DdIz9ab
+ 9OYT2pzzCfweSRzfBoJpPlPxnGvkUXqWENRyrIrdg7uj9XshIuujJQXmJsUN8nJiwDtrpQ958Gq4
+ ZOHiyghly3jkXwtDlx4QyAFAM7qG_CwGS4YbfJigYUySEXwYQgoQ3Gr5BP.W6dgolFH6HSQalD2s
+ B1SdycDQtrG0vmS6mD98McYIMdb1CV9Eym6qSPzNG0Zeig4O1fiR1eV3PXTujQCM5V2dJr2fgvBI
+ hcYefkerPzBIu5vZ9YwPPKUy1Oo4CKaI_JiVZ.p41Gm1bMB8yWGDNyIwmJkoXyhv7kF0kGmiXwcA
+ XRTxDOy6gZbSt7ly1h_UY3_o70MKkF1Pd6oDNcvsngH4Zy9Y_GstDXc3fw8hT0Lr8sdzSmlhLtSk
+ DDJnapfGGMbcbYf5_MbogXMsIPvQXa2HfKzASIvyIr.4dSnAlAjnCS6SDMFFXKarpzTcwF0Hzyuc
+ t3CEvbssiOfQMkJgmi6IVaq_ZSvkn0ryL1yKaYSBvg_IThAhw9A6i60j2ZnHH32MB1FAmDS6tiRR
+ ZhEFYiMPIjokzzAPW2EmWpnVPvDaX7YRH9MgQWZ9yd3LmdlJHvuPz95mS2vYVFkYYMDfwx_2ZYYL
+ fH0T1aTdlkHTHvIaGOg5qHlJx2WwXvjrQ47TTacXVFgOszKHBXNkuuwRhKlD4WieLc_ajqN7Ksw0
+ h_JnEwhwECQm.x_Qp9uXOnwOAvmWunrifI3CTczC1nm6az26b_i0iONpFrSK38q3JPISHTVjt.jj
+ .E8cFZ.PvnO_GoVW0xrI.teSkpe.DZ76AyBRcIkUtuVkUoz2NgLE01WQLJKt86Vr9SafyvLPhOPl
+ GEJNfy44QtVTTR9RkhfxSbqSGoeQEBa9HuTPk94XKF0qMlcZ1LZu91_1yxeO3a0F0iO59CZ7DymZ
+ onoCYT92SGwYZmbPmtHIAqKD26S5NMBLgeDtCwrR2nCuno8ZM.TINVjCC_Q_rlFohyRdAsH0cxRU
+ NtHb4C46BsjNabdGg5j2wVYujvYdSr0TwGK2Wdln.3L1pLtwhJXemWaKwvgSmVB2HkAUU1Bn3Hol
+ A1ogFVctPbQ82qvny.Q0TU1PDqC3C
 X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 01e9bdaa-6fbc-4341-9811-8352d54af609
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic314.consmr.mail.ne1.yahoo.com with HTTP; Fri, 16 Jun 2023 16:55:57 +0000
+X-Sonic-ID: 6ca35e08-3069-48c7-89e1-9e4c8c84f532
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Fri, 16 Jun 2023 16:55:57 +0000
 Received: by hermes--production-ne1-574d4b7954-tvjss (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 8aab4ebac04292db835fd6d81244177c;
-          Fri, 16 Jun 2023 16:55:52 +0000 (UTC)
+          Fri, 16 Jun 2023 16:55:53 +0000 (UTC)
 From:   Casey Schaufler <casey@schaufler-ca.com>
 To:     casey@schaufler-ca.com, paul@paul-moore.com,
         linux-security-module@vger.kernel.org
 Cc:     jmorris@namei.org, serge@hallyn.com, keescook@chromium.org,
         john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
         stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, mic@digikod.net
-Subject: [PATCH v11 09/11] AppArmor: Add selfattr hooks
-Date:   Fri, 16 Jun 2023 09:50:53 -0700
-Message-Id: <20230616165055.4705-10-casey@schaufler-ca.com>
+        linux-api@vger.kernel.org, mic@digikod.net, selinux@vger.kernel.org
+Subject: [PATCH v11 10/11] SELinux: Add selfattr hooks
+Date:   Fri, 16 Jun 2023 09:50:54 -0700
+Message-Id: <20230616165055.4705-11-casey@schaufler-ca.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230616165055.4705-1-casey@schaufler-ca.com>
 References: <20230616165055.4705-1-casey@schaufler-ca.com>
@@ -84,147 +84,203 @@ different from their setprocattr and getprocattr equivalents, and
 much of the code is shared.
 
 Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-Cc: John Johansen <john.johansen@canonical.com>
+Cc: selinux@vger.kernel.org
+Cc: Paul Moore <paul@paul-moore.com>
 ---
- security/apparmor/include/procattr.h |   2 +-
- security/apparmor/lsm.c              | 102 +++++++++++++++++++++++++--
- security/apparmor/procattr.c         |  10 +--
- 3 files changed, 103 insertions(+), 11 deletions(-)
+ security/selinux/hooks.c | 148 ++++++++++++++++++++++++++++++++-------
+ 1 file changed, 121 insertions(+), 27 deletions(-)
 
-diff --git a/security/apparmor/include/procattr.h b/security/apparmor/include/procattr.h
-index 31689437e0e1..03dbfdb2f2c0 100644
---- a/security/apparmor/include/procattr.h
-+++ b/security/apparmor/include/procattr.h
-@@ -11,7 +11,7 @@
- #ifndef __AA_PROCATTR_H
- #define __AA_PROCATTR_H
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index 49ec74bc006c..a4a536552717 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -6226,8 +6226,8 @@ static void selinux_d_instantiate(struct dentry *dentry, struct inode *inode)
+ 		inode_doinit_with_dentry(inode, dentry);
+ }
  
--int aa_getprocattr(struct aa_label *label, char **string);
-+int aa_getprocattr(struct aa_label *label, char **string, bool newline);
- int aa_setprocattr_changehat(char *args, size_t size, int flags);
+-static int selinux_getprocattr(struct task_struct *p,
+-			       const char *name, char **value)
++static int selinux_lsm_getattr(unsigned int attr, struct task_struct *p,
++			       char **value)
+ {
+ 	const struct task_security_struct *__tsec;
+ 	u32 sid;
+@@ -6244,20 +6244,27 @@ static int selinux_getprocattr(struct task_struct *p,
+ 			goto bad;
+ 	}
  
- #endif /* __AA_PROCATTR_H */
-diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
-index 308cb3a281c3..7d99d5be4c12 100644
---- a/security/apparmor/lsm.c
-+++ b/security/apparmor/lsm.c
-@@ -630,6 +630,54 @@ static int apparmor_sb_pivotroot(const struct path *old_path,
+-	if (!strcmp(name, "current"))
++	switch (attr) {
++	case LSM_ATTR_CURRENT:
+ 		sid = __tsec->sid;
+-	else if (!strcmp(name, "prev"))
++		break;
++	case LSM_ATTR_PREV:
+ 		sid = __tsec->osid;
+-	else if (!strcmp(name, "exec"))
++		break;
++	case LSM_ATTR_EXEC:
+ 		sid = __tsec->exec_sid;
+-	else if (!strcmp(name, "fscreate"))
++		break;
++	case LSM_ATTR_FSCREATE:
+ 		sid = __tsec->create_sid;
+-	else if (!strcmp(name, "keycreate"))
++		break;
++	case LSM_ATTR_KEYCREATE:
+ 		sid = __tsec->keycreate_sid;
+-	else if (!strcmp(name, "sockcreate"))
++		break;
++	case LSM_ATTR_SOCKCREATE:
+ 		sid = __tsec->sockcreate_sid;
+-	else {
+-		error = -EINVAL;
++		break;
++	default:
++		error = -EOPNOTSUPP;
+ 		goto bad;
+ 	}
+ 	rcu_read_unlock();
+@@ -6275,7 +6282,7 @@ static int selinux_getprocattr(struct task_struct *p,
  	return error;
  }
  
-+static int apparmor_getselfattr(unsigned int attr, struct lsm_ctx __user *lx,
-+				size_t *size, u32 flags)
-+{
-+	int error = -ENOENT;
-+	struct aa_task_ctx *ctx = task_ctx(current);
-+	struct aa_label *label = NULL;
-+	size_t total_len = 0;
-+	char *value;
-+
+-static int selinux_setprocattr(const char *name, void *value, size_t size)
++static int selinux_lsm_setattr(u64 attr, void *value, size_t size)
+ {
+ 	struct task_security_struct *tsec;
+ 	struct cred *new;
+@@ -6286,23 +6293,31 @@ static int selinux_setprocattr(const char *name, void *value, size_t size)
+ 	/*
+ 	 * Basic control over ability to set these attributes at all.
+ 	 */
+-	if (!strcmp(name, "exec"))
 +	switch (attr) {
-+	case LSM_ATTR_CURRENT:
-+		label = aa_get_newest_label(cred_label(current_cred()));
-+		break;
-+	case LSM_ATTR_PREV:
-+		if (ctx->previous)
-+			label = aa_get_newest_label(ctx->previous);
-+		break;
 +	case LSM_ATTR_EXEC:
-+		if (ctx->onexec)
-+			label = aa_get_newest_label(ctx->onexec);
+ 		error = avc_has_perm(mysid, mysid, SECCLASS_PROCESS,
+ 				     PROCESS__SETEXEC, NULL);
+-	else if (!strcmp(name, "fscreate"))
++		break;
++	case LSM_ATTR_FSCREATE:
+ 		error = avc_has_perm(mysid, mysid, SECCLASS_PROCESS,
+ 				     PROCESS__SETFSCREATE, NULL);
+-	else if (!strcmp(name, "keycreate"))
++		break;
++	case LSM_ATTR_KEYCREATE:
+ 		error = avc_has_perm(mysid, mysid, SECCLASS_PROCESS,
+ 				     PROCESS__SETKEYCREATE, NULL);
+-	else if (!strcmp(name, "sockcreate"))
++		break;
++	case LSM_ATTR_SOCKCREATE:
+ 		error = avc_has_perm(mysid, mysid, SECCLASS_PROCESS,
+ 				     PROCESS__SETSOCKCREATE, NULL);
+-	else if (!strcmp(name, "current"))
++		break;
++	case LSM_ATTR_CURRENT:
+ 		error = avc_has_perm(mysid, mysid, SECCLASS_PROCESS,
+ 				     PROCESS__SETCURRENT, NULL);
+-	else
+-		error = -EINVAL;
 +		break;
 +	default:
 +		error = -EOPNOTSUPP;
 +		break;
 +	}
-+
-+	if (label) {
-+		error = aa_getprocattr(label, &value, false);
-+		if (error > 0) {
-+			total_len = ALIGN(struct_size(lx, ctx, error), 8);
-+			if (total_len > *size)
-+				error = -E2BIG;
-+			else if (lx)
-+				error = lsm_fill_user_ctx(lx, value, error,
-+							  LSM_ID_APPARMOR, 0);
-+			else
-+				error = 1;
-+		}
-+	}
-+
-+	aa_put_label(label);
-+
-+	*size = total_len;
-+	if (error < 0)
-+		return error;
-+	return 1;
-+}
-+
- static int apparmor_getprocattr(struct task_struct *task, const char *name,
- 				char **value)
- {
-@@ -649,7 +697,7 @@ static int apparmor_getprocattr(struct task_struct *task, const char *name,
+ 	if (error)
+ 		return error;
+ 
+@@ -6314,13 +6329,14 @@ static int selinux_setprocattr(const char *name, void *value, size_t size)
+ 		}
+ 		error = security_context_to_sid(value, size,
+ 						&sid, GFP_KERNEL);
+-		if (error == -EINVAL && !strcmp(name, "fscreate")) {
++		if (error == -EINVAL && attr == LSM_ATTR_FSCREATE) {
+ 			if (!has_cap_mac_admin(true)) {
+ 				struct audit_buffer *ab;
+ 				size_t audit_size;
+ 
+-				/* We strip a nul only if it is at the end, otherwise the
+-				 * context contains a nul and we should audit that */
++				/* We strip a nul only if it is at the end,
++				 * otherwise the context contains a nul and
++				 * we should audit that */
+ 				if (str[size - 1] == '\0')
+ 					audit_size = size - 1;
+ 				else
+@@ -6331,7 +6347,8 @@ static int selinux_setprocattr(const char *name, void *value, size_t size)
+ 				if (!ab)
+ 					return error;
+ 				audit_log_format(ab, "op=fscreate invalid_context=");
+-				audit_log_n_untrustedstring(ab, value, audit_size);
++				audit_log_n_untrustedstring(ab, value,
++							    audit_size);
+ 				audit_log_end(ab);
+ 
+ 				return error;
+@@ -6354,11 +6371,11 @@ static int selinux_setprocattr(const char *name, void *value, size_t size)
+ 	   checks and may_create for the file creation checks. The
+ 	   operation will then fail if the context is not permitted. */
+ 	tsec = selinux_cred(new);
+-	if (!strcmp(name, "exec")) {
++	if (attr == LSM_ATTR_EXEC) {
+ 		tsec->exec_sid = sid;
+-	} else if (!strcmp(name, "fscreate")) {
++	} else if (attr == LSM_ATTR_FSCREATE) {
+ 		tsec->create_sid = sid;
+-	} else if (!strcmp(name, "keycreate")) {
++	} else if (attr == LSM_ATTR_KEYCREATE) {
+ 		if (sid) {
+ 			error = avc_has_perm(mysid, sid,
+ 					     SECCLASS_KEY, KEY__CREATE, NULL);
+@@ -6366,9 +6383,9 @@ static int selinux_setprocattr(const char *name, void *value, size_t size)
+ 				goto abort_change;
+ 		}
+ 		tsec->keycreate_sid = sid;
+-	} else if (!strcmp(name, "sockcreate")) {
++	} else if (attr == LSM_ATTR_SOCKCREATE) {
+ 		tsec->sockcreate_sid = sid;
+-	} else if (!strcmp(name, "current")) {
++	} else if (attr == LSM_ATTR_CURRENT) {
  		error = -EINVAL;
- 
- 	if (label)
--		error = aa_getprocattr(label, value);
-+		error = aa_getprocattr(label, value, true);
- 
- 	aa_put_label(label);
- 	put_cred(cred);
-@@ -657,8 +705,7 @@ static int apparmor_getprocattr(struct task_struct *task, const char *name,
+ 		if (sid == 0)
+ 			goto abort_change;
+@@ -6410,6 +6427,81 @@ static int selinux_setprocattr(const char *name, void *value, size_t size)
  	return error;
  }
  
--static int apparmor_setprocattr(const char *name, void *value,
--				size_t size)
-+static int do_setattr(u64 attr, void *value, size_t size)
- {
- 	char *command, *largs = NULL, *args = value;
- 	size_t arg_size;
-@@ -689,7 +736,7 @@ static int apparmor_setprocattr(const char *name, void *value,
- 		goto out;
- 
- 	arg_size = size - (args - (largs ? largs : (char *) value));
--	if (strcmp(name, "current") == 0) {
-+	if (attr == LSM_ATTR_CURRENT) {
- 		if (strcmp(command, "changehat") == 0) {
- 			error = aa_setprocattr_changehat(args, arg_size,
- 							 AA_CHANGE_NOFLAGS);
-@@ -704,7 +751,7 @@ static int apparmor_setprocattr(const char *name, void *value,
- 			error = aa_change_profile(args, AA_CHANGE_STACK);
- 		} else
- 			goto fail;
--	} else if (strcmp(name, "exec") == 0) {
-+	} else if (attr == LSM_ATTR_EXEC) {
- 		if (strcmp(command, "exec") == 0)
- 			error = aa_change_profile(args, AA_CHANGE_ONEXEC);
- 		else if (strcmp(command, "stack") == 0)
-@@ -724,13 +771,54 @@ static int apparmor_setprocattr(const char *name, void *value,
- 
- fail:
- 	aad(&sa)->label = begin_current_label_crit_section();
--	aad(&sa)->info = name;
-+	if (attr == LSM_ATTR_CURRENT)
-+		aad(&sa)->info = "current";
-+	else if (attr == LSM_ATTR_EXEC)
-+		aad(&sa)->info = "exec";
++static int selinux_getselfattr(unsigned int attr, struct lsm_ctx __user *ctx,
++			       size_t *size, u32 flags)
++{
++	char *value;
++	size_t total_len;
++	int len;
++	int rc;
++
++	len = selinux_lsm_getattr(attr, current, &value);
++	if (len < 0)
++		return len;
++
++	total_len = ALIGN(struct_size(ctx, ctx, len), 8);
++
++	if (total_len > *size)
++		rc = -E2BIG;
++	else if (ctx)
++		rc = lsm_fill_user_ctx(ctx, value, len, LSM_ID_SELINUX, 0);
 +	else
-+		aad(&sa)->info = "invalid";
- 	aad(&sa)->error = error = -EINVAL;
- 	aa_audit_msg(AUDIT_APPARMOR_DENIED, &sa, NULL);
- 	end_current_label_crit_section(aad(&sa)->label);
- 	goto out;
- }
- 
-+static int apparmor_setselfattr(unsigned int attr, struct lsm_ctx __user *ctx,
-+				size_t size, u32 flags)
++		rc = 1;
++
++	*size = total_len;
++	if (rc < 0)
++		return rc;
++	return 1;
++}
++
++static int selinux_setselfattr(unsigned int __user attr,
++			       struct lsm_ctx __user *ctx, size_t __user size,
++			       u32 __user flags)
 +{
 +	struct lsm_ctx *lctx;
 +	int rc;
-+
-+	if (attr != LSM_ATTR_CURRENT && attr != LSM_ATTR_EXEC)
-+		return -EOPNOTSUPP;
 +
 +	lctx = kmalloc(size, GFP_KERNEL);
 +	if (lctx == NULL)
@@ -235,7 +291,7 @@ index 308cb3a281c3..7d99d5be4c12 100644
 +	else if (lctx->ctx_len > size)
 +		rc = -EINVAL;
 +	else
-+		rc = do_setattr(attr, lctx->ctx, lctx->ctx_len);
++		rc = selinux_lsm_setattr(attr, lctx->ctx, lctx->ctx_len);
 +
 +	kfree(lctx);
 +	if (rc > 0)
@@ -243,65 +299,42 @@ index 308cb3a281c3..7d99d5be4c12 100644
 +	return rc;
 +}
 +
-+static int apparmor_setprocattr(const char *name, void *value,
-+				size_t size)
++static int selinux_getprocattr(struct task_struct *p,
++			       const char *name, char **value)
++{
++	unsigned int attr = lsm_name_to_attr(name);
++	int rc;
++
++	if (attr) {
++		rc = selinux_lsm_getattr(attr, p, value);
++		if (rc != -EOPNOTSUPP)
++			return rc;
++	}
++
++	return -EINVAL;
++}
++
++static int selinux_setprocattr(const char *name, void *value, size_t size)
 +{
 +	int attr = lsm_name_to_attr(name);
 +
 +	if (attr)
-+		return do_setattr(attr, value, size);
++		return selinux_lsm_setattr(attr, value, size);
 +	return -EINVAL;
 +}
 +
- /**
-  * apparmor_bprm_committing_creds - do task cleanup on committing new creds
-  * @bprm: binprm for the exec  (NOT NULL)
-@@ -1253,6 +1341,8 @@ static struct security_hook_list apparmor_hooks[] __ro_after_init = {
- 	LSM_HOOK_INIT(file_lock, apparmor_file_lock),
- 	LSM_HOOK_INIT(file_truncate, apparmor_file_truncate),
- 
-+	LSM_HOOK_INIT(getselfattr, apparmor_getselfattr),
-+	LSM_HOOK_INIT(setselfattr, apparmor_setselfattr),
- 	LSM_HOOK_INIT(getprocattr, apparmor_getprocattr),
- 	LSM_HOOK_INIT(setprocattr, apparmor_setprocattr),
- 
-diff --git a/security/apparmor/procattr.c b/security/apparmor/procattr.c
-index 197d41f9c32b..e3857e3d7c6c 100644
---- a/security/apparmor/procattr.c
-+++ b/security/apparmor/procattr.c
-@@ -20,6 +20,7 @@
-  * aa_getprocattr - Return the label information for @label
-  * @label: the label to print label info about  (NOT NULL)
-  * @string: Returns - string containing the label info (NOT NULL)
-+ * @newline: indicates that a newline should be added
-  *
-  * Requires: label != NULL && string != NULL
-  *
-@@ -27,7 +28,7 @@
-  *
-  * Returns: size of string placed in @string else error code on failure
-  */
--int aa_getprocattr(struct aa_label *label, char **string)
-+int aa_getprocattr(struct aa_label *label, char **string, bool newline)
+ static int selinux_ismaclabel(const char *name)
  {
- 	struct aa_ns *ns = labels_ns(label);
- 	struct aa_ns *current_ns = aa_get_current_ns();
-@@ -57,11 +58,12 @@ int aa_getprocattr(struct aa_label *label, char **string)
- 		return len;
- 	}
+ 	return (strcmp(name, XATTR_SELINUX_SUFFIX) == 0);
+@@ -7041,6 +7133,8 @@ static struct security_hook_list selinux_hooks[] __ro_after_init = {
  
--	(*string)[len] = '\n';
--	(*string)[len + 1] = 0;
-+	if (newline)
-+		(*string)[len++] = '\n';
-+	(*string)[len] = 0;
+ 	LSM_HOOK_INIT(d_instantiate, selinux_d_instantiate),
  
- 	aa_put_ns(current_ns);
--	return len + 1;
-+	return len;
- }
++	LSM_HOOK_INIT(getselfattr, selinux_getselfattr),
++	LSM_HOOK_INIT(setselfattr, selinux_setselfattr),
+ 	LSM_HOOK_INIT(getprocattr, selinux_getprocattr),
+ 	LSM_HOOK_INIT(setprocattr, selinux_setprocattr),
  
- /**
 -- 
 2.40.1
 
