@@ -2,127 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A69733CE2
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 01:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64A50733CE5
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 01:27:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233314AbjFPXY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 19:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44736 "EHLO
+        id S1345460AbjFPX1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 19:27:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjFPXYz (ORCPT
+        with ESMTP id S229585AbjFPX1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 19:24:55 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C771D2119
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 16:24:54 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-3fde1a16c3bso1649171cf.2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 16:24:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686957894; x=1689549894;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7mA8/+gVI/uxP4eDnGOq5iD8c5wr/uCZxwMQSNlOAN8=;
-        b=sHURqgBIzrJEhHWUVuaqXb8F/iRv3cXsxkyCBhBPibO6dLk4rbfm98rgPYlWNaFBQE
-         EsUsOJGGbpLQxPT4fc5hN12Hlccw88jNkoJG/bVgLF92phStwz7Tii3cmwvNlSizFxsy
-         a4j1+U8mfgIum1MaKY014grV5phRlboo4xKq8EFpbRgdmoiqW0iYYPItvoK8ikjPZcsU
-         TlTPCJWEhosa/WtYflQiH6F1XoQfv+Gd3fHuuT8X6/Ip3ZKGRq4KlU2zKgqYl5EKtRVh
-         PbET+obAgp7Hjzgbt0098xpPKrPMdMlb+M7UzyjuCkRYIItmePFm0lDUodaaiLmfw6JV
-         6nrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686957894; x=1689549894;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7mA8/+gVI/uxP4eDnGOq5iD8c5wr/uCZxwMQSNlOAN8=;
-        b=GhNFC+Da7RNLUjwtA9Xvw2tSj0s7Fsq7deOPmU2kWhjF+gdp6TDbPCb3+9g3t0F1SG
-         Ro0EG7OzHOU5EWJpNAq0ToceNGFp76MbIIpgY3N7Qjg72A4YMJWlq0ilYuzRf7CqXdvp
-         QRPXTm+CYNhdi11GTSHb6oSitBa60mDN+b+CSYXu0Yyd/nk+SWFzvAPIJWBJD91quMcy
-         8jylUHyWcweb2qnUhm1L6h14bYK9LQvAwDMBnd5w8MsODTxWyWtTfG77lJRGrH5DpEJB
-         Lqo1nAXmMj3a3WoPtkyJal7jRixaQpD/dakzX1kBvykKz/A9BM0EqjVt6Xxv4IdgavW7
-         4F8A==
-X-Gm-Message-State: AC+VfDwW9zs9rFtNiCEcsdxKN8PBa7uarloBMQDuLOsS6UOyM/eXa13B
-        PNS4SJdx8iGRgNeouVxFn1h75KVmsmoFzuvvUYDoViJprdXmxrlN1OM=
-X-Google-Smtp-Source: ACHHUZ4uXiPcPthkU1eyk6BGP9GBE7J6Gi0ykqapH2ZPw4YhVg1mi0n5Oxyq0yypO0x55BNU8YScX9gh/j/7NLm7wFk=
-X-Received: by 2002:a05:6214:301e:b0:625:af4b:415a with SMTP id
- ke30-20020a056214301e00b00625af4b415amr3407900qvb.19.1686957893796; Fri, 16
- Jun 2023 16:24:53 -0700 (PDT)
+        Fri, 16 Jun 2023 19:27:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60F03599
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 16:26:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686958012;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WY5Vy149BoEkkQUZaVVbx5XdSZR9rg2xiRp0ZWIjbCY=;
+        b=NPZkzVr+Z/nmMUk1D7KG8zKCLlfClWoCcpp2I0BMswJsX5gnK3QbB+0ctFkq1HqFgqsFcp
+        OwalOeqEVkFr4khc7KmPHTQS6oMJsppL+ETNwJEvWub8Iy+WsSBKWcmtDljNUVDVaxKI0T
+        tjMUSLwybNYsm23HBjamljr68bNyxII=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-347-Ow6ffnNVNRieoul6One7EA-1; Fri, 16 Jun 2023 19:26:47 -0400
+X-MC-Unique: Ow6ffnNVNRieoul6One7EA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3162A85A5A6;
+        Fri, 16 Jun 2023 23:26:47 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.51])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8F9E51C559;
+        Fri, 16 Jun 2023 23:26:46 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20230616162202.f46e1279d6b638406fd0eecd@linux-foundation.org>
+References: <20230616162202.f46e1279d6b638406fd0eecd@linux-foundation.org> <20230608175031.9c534e7f554de89e3d972ab2@linux-foundation.org> <20230607204120.89416-1-vishal.moola@gmail.com> <20230607204120.89416-2-vishal.moola@gmail.com> <702179.1686955382@warthog.procyon.org.uk>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     dhowells@redhat.com,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] afs: Fix waiting for writeback then skipping folio
 MIME-Version: 1.0
-References: <20230615193546.949657149@infradead.org>
-In-Reply-To: <20230615193546.949657149@infradead.org>
-From:   Sami Tolvanen <samitolvanen@google.com>
-Date:   Fri, 16 Jun 2023 16:24:17 -0700
-Message-ID: <CABCJKueEgA3UQUzeWP-T9fuo9KbfngCxaF2Uz7Xy2NX5=dpJgw@mail.gmail.com>
-Subject: Re: [PATCH 0/2] x86/cfi: Fix FineIBT
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, alyssa.milburn@linux.intel.com,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        jpoimboe@kernel.org, joao@overdrivepizza.com,
-        tim.c.chen@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <702770.1686958006.1@warthog.procyon.org.uk>
+Date:   Sat, 17 Jun 2023 00:26:46 +0100
+Message-ID: <702771.1686958006@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 12:40=E2=80=AFPM Peter Zijlstra <peterz@infradead.o=
-rg> wrote:
->
-> Hi!
->
-> Alyssa reported a FineIBT issue; these patches sort that.
->
-> Basically the morale of the story is that CALL_NOSPEC and JMP_NOSPEC are
-> suspect and likely not what you want. The remaining users are:
->
-> arch/x86/crypto/crc32c-pcl-intel-asm_64.S:      JMP_NOSPEC bufp
->
-> This is broken on anything IBT afaict.
->
-> arch/x86/include/asm/mshyperv.h:                             CALL_NOSPEC
-> arch/x86/include/asm/mshyperv.h:        __asm__ __volatile__(CALL_NOSPEC
-> arch/x86/include/asm/mshyperv.h:                __asm__ __volatile__(CALL=
-_NOSPEC
-> arch/x86/include/asm/mshyperv.h:                __asm__ __volatile__ (CAL=
-L_NOSPEC
-> arch/x86/include/asm/mshyperv.h:                                     CALL=
-_NOSPEC
-> arch/x86/include/asm/mshyperv.h:                __asm__ __volatile__ (CAL=
-L_NOSPEC
-> arch/x86/include/asm/xen/hypercall.h:   asm volatile(CALL_NOSPEC
->
-> These are hypercalls and supposedly the targets are having ENDBR on.
->
-> arch/x86/kernel/ftrace_64.S:    CALL_NOSPEC r8
->
-> The thing is !DYNAMIC_FTRACE only, which we can fix with a Kconfig
-> dependency I suppose.
->
-> arch/x86/kvm/emulate.c: asm("push %[flags]; popf; " CALL_NOSPEC
-> arch/x86/kvm/emulate.c: asm("push %[flags]; popf; " CALL_NOSPEC " ; pushf=
-; pop %[flags]\n"
->
-> calls into the magic fastop stuff and should be ok, those have explicit
-> ENDBR + IBT_NOSEAL() annotations.
->
-> arch/x86/kvm/vmx/vmenter.S:     VMX_DO_EVENT_IRQOFF CALL_NOSPEC _ASM_ARG1
->
-> calls the IDT vectors manually, so should be ok (gross, but not broken
-> from this pov).
->
-> arch/x86/platform/efi/efi_stub_64.S:    CALL_NOSPEC rdi
->
-> effectively a nocfi call, so should be ok.
+Andrew Morton <akpm@linux-foundation.org> wrote:
 
-Thanks, this looks good to me. For the series:
+> Well, what I'm really asking is the thing I ask seven times a day:
+> 
+> - what are the end-user visible effects of the bug
 
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+A third party might see an incomplete flush after they've done a sync - which
+amounts to temporary file corruption.
 
-Sami
+> - should be fix be backported into earlier kernels
+
+Yes.
+
+David
+
