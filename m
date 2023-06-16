@@ -2,215 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5084073285C
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 09:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9E32732857
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 09:06:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbjFPHF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 03:05:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48154 "EHLO
+        id S230440AbjFPHFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 03:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244389AbjFPHEY (ORCPT
+        with ESMTP id S244549AbjFPHEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 03:04:24 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2061b.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8a::61b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170983C06;
-        Fri, 16 Jun 2023 00:03:01 -0700 (PDT)
+        Fri, 16 Jun 2023 03:04:41 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2080.outbound.protection.outlook.com [40.107.93.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865CD3C29;
+        Fri, 16 Jun 2023 00:03:36 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KeRSfWNNlrykvp9sxBZTCxxuizc6FPDnsnRnnHuzvonqIX0wl1iOpLcVZPY1uwjb1lxJ+ZtnUZ0Zlh0b7xGK8iOOniKHhctWnr7KNYcQ0ioFNNNdkPmMPEHlIgCF/bdjLMFPR9Q+rw2rQ4680HZujUpUHQlJcvTeX7eft5yLfolmYpeFKCQu/Pt4XvggCPVY7IJ9QF1ccFZIbjDilPCEFr4RcwaX0KhdaGRcsaDdbPo0iMa8z8HBIRshUYlaVSTIFM4PVnTg+He70hf/d8Mnx2QoiaICyKRP/25XAfnp3SCaqEnYtc7SNIe6g9/LWZomOO1aneitcn2YLjGFzNNePQ==
+ b=Xru9jpJqVgT9bSHXh7EgdbvpDbSc6luxqUloRYfW/iS4zz8DMJksYdBN9y2CQIzD7aG+hUqn1zbH9UXyhgJFcI6ui8NA+YRRxSnpjSi0iQIEAik+czB8HqKNmmw6tCzpXn8SGQI4QoXOyE6xwzllYOr124PvaivEb2KhNg1ZuAlFCQ6b6AkV62lMOW1TtY/K2elxhTW+z6q2O10qegLjRyoz1qfLdt71BPzHXwxREPjiBK7RzLGZavAc9ORG58jApemYkTNHFh7wTV2uwzVntznNkFMNZZdYlJAG+EZLtedBil5pd0tEqcjucqVgmrId77ao3ff0tk9Ah3j8k66ccA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HtMOWh8JTT09HMeEl/GRwhKhR4m+65GTdqlAPDJw8Ts=;
- b=Ab3N1nX+1U4bnJotM/ajBgfh2qmVT27St2WAvtg1ddu/f0gtEUMJwMcYmvXqOi6y+W0qzUGETHTZRXdzE/DNiLHPxUG4gT1nT/NClct3xVcaoaEttiVGjmVN3SH4A3EKgQM1kiILR2iVlYa95xM3S1ePoPafeVQq8MJ46w6om8oy8V30nZZdgEaU2Jt5hRZlIE7mv+T5f2PCP6f2xFHMFz1hGDiM2OB7jjK0F0NqUWkvz0Hv7Zh6/AgsS6uiMc7gTTQTaJTOBMSLZ6JF6AP1ZwMhEPvIBSxh0vnAMKGy8DpMHjCOK07njeeIVO3+iUUv3V+NBwJF3FPx8wv9VcEzBg==
+ bh=Q4i2TjRBgtbgiBjPhAhhea8Isqp+2niXBEMOHs3dIs8=;
+ b=SmAH5Ob6d2E1UccavnK7QMZ0XZnYCOYPCDGU8YXSCEbpa4zqQ+VVhgq0x2yThqtkhFkbR7NcVzwHGUww/st9krCNQV7nwZz/ZwINC+7l2uSs3ekec4vuyLyF80R/brVcRfaBDo2HUsQsDjrDFCKJj91hdIzu9jplg9Wpq2XFlV5Ttp+h1ndpA+J+F1rXcWo9yqRNwkf6H3llHrUpgGm08H/vUD4/E/rNtEs2mvqC3feG0ccHJPiZAEJYq+3uZHIyXMmPG5ZbOBHoQjPi7YGH4+sBpzGI9d1uwEzedRs2jKgdelGPuWvz9z6ZdIWXeS2KeU1kAxWPL0lYl/yRIpH75A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HtMOWh8JTT09HMeEl/GRwhKhR4m+65GTdqlAPDJw8Ts=;
- b=J3tf3ACVmrEZDntGQtLxt2mS7zbXmE70iDU78UEUY5mo7vLmbtegNN9337b/wZT2MffXDM0FE+ugH6lnlxNCjaqGm49c7a89f206SMWtsyGlz/b6KX/k3MKMxk9+DbRDoaK6ZGZTeWmIBHUwvhFsEsR+0VBfHOB2yZoz2eerrx8=
+ bh=Q4i2TjRBgtbgiBjPhAhhea8Isqp+2niXBEMOHs3dIs8=;
+ b=kaw/adwl2I2aamWzA0Dj4a7K7lrrNjsSP5zgyUJBg0+eSVa/L5atuytxkcm2X8FFk0hPRbF/fK0nBvQfZYWfNxt120VQiXZtFr8EM3ewtIkXpLHJpFLhczLuNtnGkUzQjlYGeZXf53wKk7Kxmc8eqmzkDWt2W24nuByA9aADXIA=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
- by PH7PR12MB8778.namprd12.prod.outlook.com (2603:10b6:510:26b::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.29; Fri, 16 Jun
- 2023 07:02:57 +0000
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::b4a6:94bb:6895:645]) by PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::b4a6:94bb:6895:645%4]) with mapi id 15.20.6477.037; Fri, 16 Jun 2023
- 07:02:57 +0000
-Message-ID: <bc18bc42-3df8-30c9-10ff-8a4ba3d3d9f6@amd.com>
-Date:   Fri, 16 Jun 2023 12:32:40 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-From:   Ravi Bangoria <ravi.bangoria@amd.com>
-Subject: Re: [PATCH v3 1/3] perf test: Add metric value validation test
-To:     Weilin Wang <weilin.wang@intel.com>
-Cc:     Kan Liang <kan.liang@linux.intel.com>,
-        Samantha Alt <samantha.alt@intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ravi Bangoria <ravi.bangoria@amd.com>
-References: <CAP-5=fVixzBLLiWnim8x6qcDOKH7uVfEWojTCP_H531Fhy7j-g@mail.gmail.com>
- <20230614203824.2895333-1-weilin.wang@intel.com>
- <20230614203824.2895333-2-weilin.wang@intel.com>
-Content-Language: en-US
-In-Reply-To: <20230614203824.2895333-2-weilin.wang@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0072.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:99::19) To PH7PR12MB6588.namprd12.prod.outlook.com
- (2603:10b6:510:210::10)
+Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
+ DS0PR12MB8018.namprd12.prod.outlook.com (2603:10b6:8:149::12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6500.27; Fri, 16 Jun 2023 07:03:34 +0000
+Received: from DM5PR12MB2504.namprd12.prod.outlook.com
+ ([fe80::8a7:d4dc:7ac8:9017]) by DM5PR12MB2504.namprd12.prod.outlook.com
+ ([fe80::8a7:d4dc:7ac8:9017%5]) with mapi id 15.20.6500.029; Fri, 16 Jun 2023
+ 07:03:34 +0000
+Date:   Fri, 16 Jun 2023 15:03:09 +0800
+From:   Huang Rui <ray.huang@amd.com>
+To:     "Karny, Wyes" <Wyes.Karny@amd.com>
+Cc:     "rafael@kernel.org" <rafael@kernel.org>,
+        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Shenoy, Gautham Ranjal" <gautham.shenoy@amd.com>
+Subject: Re: [PATCH v2] cpufreq/amd-pstate: Write CPPC enable bit per-socket
+Message-ID: <ZIwJLbNa8qRDlkNn@amd.com>
+References: <20230530131348.4135-1-wyes.karny@amd.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530131348.4135-1-wyes.karny@amd.com>
+X-ClientProxiedBy: SI2PR01CA0046.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:193::18) To DM5PR12MB2504.namprd12.prod.outlook.com
+ (2603:10b6:4:b5::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB6588:EE_|PH7PR12MB8778:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2e2af3c8-0d4f-4d0e-36cf-08db6e37b663
+X-MS-TrafficTypeDiagnostic: DM5PR12MB2504:EE_|DS0PR12MB8018:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8051335e-741a-4ed7-f19c-08db6e37cc97
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dcWtqyJVjGAeDfSCu0/7m5APObggONO0c7Tqr5RyWN0Xxikb0Ul1yhuS78PADOVfvtAiVwrxbxM41r1q/LqA/HQaojbNsaI6Cbyua1HL6cUqkbnM8T6L1YeVyHfanCU1TtrCJx9CX+CFivsGOqVEs9iswiF3sS1HQoFtZS6+mZFBP7PVznc7WyjRTF4l54bWkK/07tzpRb4GHt20gjOH+uSTr2nZ5fEI9K0253t2Yflq6GtqQNi6IuqR8NkshZ66VolaSub+cBaBFrUdoPDMppRWo1Cf2tmdY6wCZPWiIAIzLcxB4Zzkf42rjPFtMTZWZWWJa67h0IZjj3bZDpIlZXQfQOYIkzvVgUi1wz/kDrJwP9YZ7rkO8iQG9TcGXm/kdbxR+qiR29fHc32GDi2xnjvY4TJhLs0r2WVhi3/CbQZm1+1J8hgaBZXFHcilykk8Yyl9NOj+nSwrKe3gPTnqtyCJnGlF8aCEgP47Xti0l3wAJn8i1vRhiBJ2JWC9Bf6mcqKlw+JjDktvi+tYpLhXZ9oni+bA9hFBeOz5ujqmEOIha6WrMrHDMZd1T3PuJY15os9S7GrcoJEYQm4liAtD50oUVOwcI/vmaqoJufYerSX8kYp0TaSTSTerRF4l3bjC2QnnmrwRDGmpOAsw1kbZYQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(136003)(396003)(376002)(346002)(451199021)(2616005)(83380400001)(2906002)(38100700002)(36756003)(41300700001)(6486002)(316002)(6916009)(66476007)(66556008)(6666004)(4326008)(86362001)(5660300002)(8936002)(8676002)(54906003)(478600001)(66946007)(31686004)(44832011)(31696002)(6512007)(6506007)(26005)(186003)(7416002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: sTWrvPmybBjXYuytJ0B6q8LJihQGP0CQbgqOKw97Sn4PUZl/Aj/XGR4TzwX//X00kiv/flojkdafc+tT9v/5oko4DfzCdnAYq6BbpKa6Mirb5F+ColqCIPCOR0xiCdmgHMQhw197bAnOQO+vtXP1x1ay90H/mrNbhyEE2IFGJGf8CjWK2afQDuQQipbA/jzQlF/pt9sAyo9jXk5DeUwdq9yzHROhCTiQu5mV04oBQEVqyXV/2h9dXnEh04FZJ8spGflJosDyCRYSowPfTM8hRbVBENp5dGV0AdqMxxPebyEMyeFooJj8b/efuObFTXW9rYHIZ87/GnbpYLQrlsHN2TWp+e27LmJoHO+j4WT+ExuD0/33DeYUS5gdwSSXAi03QAOMTtOhV7e5f9sM0jha3tKxMF1cLPfqJDY6hRdKKt0YMnf3DGm25fQ+/1q5XdqE5f5q4nP1zgBDd7WCjc4NQB7fzqh2JwE9llXqrq6Uy3pj7Co+0fepmAzEaLbtbBEZxydWEwedo4vNKcA3g4nopOR4ymCAn0iW6WscWZ4o6onqB0+nsqb7keWw2dkgdUcb
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(39860400002)(396003)(376002)(346002)(451199021)(5660300002)(8936002)(41300700001)(6862004)(8676002)(2906002)(66476007)(66556008)(66946007)(4326008)(316002)(6636002)(37006003)(54906003)(86362001)(38100700002)(478600001)(6486002)(6666004)(83380400001)(6512007)(26005)(186003)(36756003)(6506007)(2616005);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MENWTTFZZmhOZjFVUStxQ0dwNWtmRjVaU1VUcFZPeGVLZUJ5L3lKbHBhZTdP?=
- =?utf-8?B?bWNkQnBYaWJBajh0R1JZWWRIY0REc1hIaU5aOHNRUksxS2VwOGw4T1lYamp4?=
- =?utf-8?B?MGdodmZ2Y1FkQ1AxdWNNeFJCQlpRcFg3SjgzUWJwby9VTnRrVVVCRjA5MzZh?=
- =?utf-8?B?dXpVMW5ISkxUUkwvcXRORnh6RW5ET1plRXZBYUNoOTRLOTM2YTlGTEU1Zkpi?=
- =?utf-8?B?ZU1SbTh5YUxxcHFGZEU3SUZGQVlsVDBKR0xQMW5DTnpVelNsUkNUd05nR1lG?=
- =?utf-8?B?QU1tc0swSW9Jb3pzcEE3RTJlUlZKWG10eG15N2hocXhOaGZBQmdRVnNuV0RR?=
- =?utf-8?B?eWlZNXhOWW81YUhJUGhieVd6WC9JdU40bW5WVHJYc25Fc0dHMzRpU3Fkb09Z?=
- =?utf-8?B?WDY5SktKR0tiZnd0emYrdDJHTWNscE5LUkNIcGt6ZGFtUHg3N0ExdUk1UlYy?=
- =?utf-8?B?TE1EUVNuMVdJUXREWmRWNVNQenc5VUNOVTA1TlVJSmQybERZY2ZtMFJoQzVw?=
- =?utf-8?B?a3NaWTJudjhSckE0RzdoMjh0dkI2aVczSkZMYlhqTTJwNStXakF6Q3NQUmpq?=
- =?utf-8?B?K0NyZFpzamQ3OWtwTmJEd3ltbmExVUU0STJMOUlSSUcxRC84ZCsyRkZldlN6?=
- =?utf-8?B?ZEhYMy9iTUpyR21EQ3pVZEdzQjArQWdwL3hsNi93NUpZdW1HQ2UrSGlNemQ2?=
- =?utf-8?B?SForMU5TejVhUWJ0WXhzVnlHVmRNMjhQUjQwOEk3QnhZOTZPNFZqeUZza1Yw?=
- =?utf-8?B?Mi9rWjY3QmFtc1VWa1hCbyttbEtPeEdYUGZpNitES0Q4c1RHandiWGpVOGJO?=
- =?utf-8?B?V29kREJjSjZLRHNLdlJnRHlYWUd6cUcxTGxGbSs3OXl1cmRwb09PSVRyWjBO?=
- =?utf-8?B?SGRidGlnVW5yUGRpU2ZJUWR3QUtwZDE3YUQ3ZzlMbnVyM0VKWTNMVFB0TE9T?=
- =?utf-8?B?OWpHMVZuUTZVOGVLVGpyRjVTZHdkblpXLzh6VXJXbk8zSEROcTJ2bjJUWEs5?=
- =?utf-8?B?Slpwc1JnNUJ6OWErSVRzMEZPUlI2RzB5c1VKVnQxTDRFZ3JlcE83a2RTdTNR?=
- =?utf-8?B?cUR1WGthSnRFV1JqbUczNEx0cXQxL0huY0hHZFdreFQ2eXJEdmhkYXhZWDY0?=
- =?utf-8?B?MzZDYWJhL1p4Lys3cGd4YWd2c0diOG5NRnFCeXF1Q055UVRVSmJXM2k3a3lO?=
- =?utf-8?B?Uk5VUkpaQlZIQ1A3OWRQZ2FZSlBEeGNOSnE0ZkdqV2NjbjRIVXVUTis4cmpL?=
- =?utf-8?B?ZlZSUzEySzY2NFVyT2dDajkrckpqMjlPbTdKRFRaS0lkU2IwRjZTV25TeVVB?=
- =?utf-8?B?TTkrbU1JSStFdzV2VFo3U3dFSEZLZGk4Q2YvWXBvcEUybW5pdHZkdkJ1d0Nr?=
- =?utf-8?B?RkNDU216a1VRRVZjVVA1Nk5TVlRGTVJqdjczb2F6d2hvVHRERTF1dDlYa3Fp?=
- =?utf-8?B?TmUyWnZHMDJoZ2ZBNVNoNUZFN3l0NzcxRStoVUs2Qm1Mc0ZXMWthVTN4TFVU?=
- =?utf-8?B?NU9yK3FSeklVc1VpRk5lSnh4VEpldWpQQ0tvZ09NQzJ5Z2FGZVpPQjNkOVNO?=
- =?utf-8?B?MEtsbzlvYTA5eEhaemphVTZSOUg1UXMxaWU0QTlBNmEvcnhXUDIzRitiMGF0?=
- =?utf-8?B?dDd0VFVRMkQ4dGV3TmNqRXNYcU03czlNWEpWa2JnVWNuczl1R2xZczY5K3lO?=
- =?utf-8?B?RXMvZWlHRWlLR0Z3NVUyT2J4VDJMM2dBVFVtc1Fwa2N1R1EzNU5seCtYb0dD?=
- =?utf-8?B?Wlpkalc3Q0VPUGQ1Q1hyb21RRDk2cXV2cFJQTUkyOUNNcG1LU2szdkhOays3?=
- =?utf-8?B?d0ltN0phcTJzaEhhWWhjamtRMDh0eHh4bEpqRmViQkltWUJGQWRUTFRPV25N?=
- =?utf-8?B?U0FycVFKaU1nK3lOZWVyaDEvcDBlT1FDbUVGekREb2pubzd4aXRaT0NEc0ZP?=
- =?utf-8?B?WWNCemNGS1VyTUxTeTZFVG5IVXlCZFpDRVJqUWpWcXpYaDdQdC9Za2lDQXlP?=
- =?utf-8?B?bVBSQjJnVW1UcHpDV3crbGYwaWpEdFlYVm44MUtLbWM0NFZCMmJtb0NOdjIy?=
- =?utf-8?B?OE5aa0w3a3RwKzMvYzFXbGZrcXVUaTlycG1mTHpTamN3SGJmN3FSTElXK3hi?=
- =?utf-8?Q?r90ZJESM8wtp8s/rwYhS0jX8+?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?iT32N3D/cJL9yS+MigARB9ojN9ft6FN5Ybl8r+wq5UO22AHZatw+v+e67hEn?=
+ =?us-ascii?Q?50Nfgdtb0vfYq16HRzhSbcyhkQCBaZEGu9ZlEK7w0TuxZOdAoPGn4/LqSD7F?=
+ =?us-ascii?Q?P60NmsWvaR9BfEN1ZS8QrHqPCKkrDzbeurOFXNVnJQNezxxb3x1XA34AvODH?=
+ =?us-ascii?Q?nGFeYmKZBfefxc0GJcoFz/BgPU9RUGGROoDSs+QCYylGqc34is1656NqKDQm?=
+ =?us-ascii?Q?RbpbUTn6Z4BIk47UCYI7wzs4dhKUERtcMTB7J65A9mi3rVmALv2lPvqUMWF0?=
+ =?us-ascii?Q?NNVhHMN2DzhH0DwPk7rH5VvEM3UWycaYO+TQDO9xMidk5YnczsnEstyvczpU?=
+ =?us-ascii?Q?tGPef+tl5pKjFMn4fnSsppSolC+dqh19aXhVEDt0yXxEM2xthWNH+D1P282f?=
+ =?us-ascii?Q?kWciCWjgpugwm1A626szouR6k0NXpRrKo3ub4g03jT9CiF8Q9qqaSsfL5F/Q?=
+ =?us-ascii?Q?zrKmc3cIZClOATi3rWU7QXPnB9byCLDvYcOc9Tdfna5CZCpAmlRGWhBHEuKP?=
+ =?us-ascii?Q?9cE4RYk8SkXXdVPY8Zcln8DR4sXA+fhCA0NLqt3sJjOs0G12Se6qAE5pwTEF?=
+ =?us-ascii?Q?GQun1/ezIAp7+9GYw/qjphFzUsMg2tQybjOAxqzmokQHBQLvECO/hBoUj72c?=
+ =?us-ascii?Q?YVtWtqr5/DiPsmc/WnsZ57GBsPx+4y6yozW2kjWz+i7WYRbHGr7+rJldtIMc?=
+ =?us-ascii?Q?cbvJZiJhPn+TpT5eZxXSQZz1Bus5fG1wUEJwle7Gh/uEro/PsbOZjnZl1KcP?=
+ =?us-ascii?Q?VQ9fcxxbuwUt1bY9nRYL0PYbA6PdVspLHQYRn3LRx9So0R/CorQwOFqtdQAj?=
+ =?us-ascii?Q?upgBDAMEqSO2F94LHbOAs7Ffr7cHZDXw1g8qBeTuBLVSwsPObj68SL+XrnJp?=
+ =?us-ascii?Q?PkmcjGJjoMQIp8uYhSSoam7oCubaCY583I+k3uIqR3PY3IFXALSsQeFcxBhM?=
+ =?us-ascii?Q?OBZBT95TKYefyPlrh+KbPw66Mdth6z5ZBgIDthHTZ2zamEfOaAx8qH9Of9Wj?=
+ =?us-ascii?Q?dPEtw9E51pNBpYey+n6pJB50BUnJybaXvLLh87OpDc6UtGG+711QmUj3IvXQ?=
+ =?us-ascii?Q?B404uwqDeJt5yweHX5mxQT7Bpf4y3D1N20glfw3K3+KBMxxHQZxBGN6csXSH?=
+ =?us-ascii?Q?r8t13RJTdCrNLnrul1fxNGh6cUdFbjx3YlKyVFBWH3aqPmGHzgW5Zr3CBroH?=
+ =?us-ascii?Q?iRHFAPNO0sWayUERpVL7xJ1XQpDrbNghpkM0PyPY+aHj37QKSw1BxPhI2Lj9?=
+ =?us-ascii?Q?+hJapPEm9F8rW8isPWYBjXzQzf8RWvEE67qF0meaVZgUVI0xOVjGTeZjzTs+?=
+ =?us-ascii?Q?/DVo+ulgFSWhiE+T++FijOPx7LvZI5RhU/wAndoi/ayZTxpLZ0/rmEb8q5BB?=
+ =?us-ascii?Q?4l1a+yUszPn41H9hkW9HKE65Dyrsq34Yu+W51g5SS8Kg00R8Usx50vgaash9?=
+ =?us-ascii?Q?+DDUwrN9EqTJPF+jpH6gUPuD05GLS41Wm/2jx8Xdz9v2mgI3Mw4rN/ADhRTk?=
+ =?us-ascii?Q?OX4koS6yhOR2UAR8NPE+KH+eoj7+R64tUvxwLQYwJjaDruK6P940qaWGsvvP?=
+ =?us-ascii?Q?KqhMfGFB9vr9Xzocc8WYlTTpwrulEVMYbWmATgOS?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2e2af3c8-0d4f-4d0e-36cf-08db6e37b663
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8051335e-741a-4ed7-f19c-08db6e37cc97
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 07:02:56.9143
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 07:03:33.9597
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: O21bXYO8hUCq2lroRccGSfZ2/VbxMZ9e+EgKn7POrtGfXqVWE5l6On97jJqM4+XKYkAJZo1rkFis2naNUnSQ/Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB8778
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: G4qApQCgY6XFqTuP3+dkIHdsZVPzyr1s2pLEvnW+j9G9fNZdCX2Xc2ohLXTWPsz/ZPnS9RIjlPxRSid2gvwxQg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8018
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-> diff --git a/tools/perf/tests/shell/stat_metrics_values.sh b/tools/perf/tests/shell/stat_metrics_values.sh
-> new file mode 100755
-> index 000000000000..65a15c65eea7
-> --- /dev/null
-> +++ b/tools/perf/tests/shell/stat_metrics_values.sh
-> @@ -0,0 +1,30 @@
-> +#!/bin/bash
-> +# perf metrics value validation
-> +# SPDX-License-Identifier: GPL-2.0
-> +if [ "x$PYTHON" == "x" ]
-> +then
-> +	if which python3 > /dev/null
-> +	then
-> +		PYTHON=python3
-> +	else
-> +		echo Skipping test, python3 not detected please set environment variable PYTHON.
-> +		exit 2
-> +	fi
-> +fi
+On Tue, May 30, 2023 at 09:13:48PM +0800, Karny, Wyes wrote:
+> Currently amd_pstate sets CPPC enable bit in MSR_AMD_CPPC_ENABLE only
+> for the CPU where the module_init happened. But MSR_AMD_CPPC_ENABLE is
+> per-socket. This causes CPPC enable bit to set for only one socket for
+> servers with more than one physical packages. To fix this write
+> MSR_AMD_CPPC_ENABLE per-socket.
+> 
+> Also, handle duplicate calls for cppc_enable, because it's called from
+> per-policy/per-core callbacks and can result in duplicate MSR writes.
+> 
+> Before the fix:
+> amd@amd:~$ sudo rdmsr -a 0xc00102b1 | uniq --count
+> 	192 0
+>     192 1
+> 
+> After the fix:
+> amd@amd:~$ sudo rdmsr -a 0xc00102b1 | uniq --count
+>     384 1
+> 
+> Suggested-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+> Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+> ---
+> v1 -> v2:
+> - Made CPPC enable read/write per-socket
+> 
+>  drivers/cpufreq/amd-pstate.c | 28 +++++++++++++++++++++++++++-
+>  1 file changed, 27 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 5a3d4aa0f45a..45b9e359f638 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -63,6 +63,7 @@ static struct cpufreq_driver *current_pstate_driver;
+>  static struct cpufreq_driver amd_pstate_driver;
+>  static struct cpufreq_driver amd_pstate_epp_driver;
+>  static int cppc_state = AMD_PSTATE_DISABLE;
+> +static bool cppc_enabled;
+>  
+>  /*
+>   * AMD Energy Preference Performance (EPP)
+> @@ -228,7 +229,28 @@ static int amd_pstate_set_energy_pref_index(struct amd_cpudata *cpudata,
+>  
+>  static inline int pstate_enable(bool enable)
+>  {
+> -	return wrmsrl_safe(MSR_AMD_CPPC_ENABLE, enable);
+> +	int ret, cpu;
+> +	unsigned long logical_proc_id_mask = 0;
 > +
-> +grep -q Intel /proc/cpuinfo || (echo Skipping non-Intel; exit 2)
+> +	if (enable == cppc_enabled)
+> +		return 0;
+> +
+> +	for_each_present_cpu(cpu) {
+> +		unsigned long logical_id = topology_logical_die_id(cpu);
+> +
+> +		if (test_bit(logical_id, &logical_proc_id_mask))
+> +			continue;
+> +
+> +		set_bit(logical_id, &logical_proc_id_mask);
+> +
+> +		ret = wrmsrl_safe_on_cpu(cpu, MSR_AMD_CPPC_ENABLE,
+> +				enable);
 
-This check doesn't seem to be working. On my Zen3 AMD machine:
+Thanks Wyes, that makes a lot more sense to me. The MSR is per package on
+design. We should only write once per package.
 
-  $ sudo ./perf test -vvv 105
-  105: perf metrics value validation                                   :
-  --- start ---
-  test child forked, pid 518035
-  Skipping non-Intel
-  Launch python validation script ./tests/shell/lib/perf_metric_validation.py
-  Output will be stored in: /tmp/__perf_test.program.tnPoW
-  Starting perf collection
-  ...
+Patch is
 
-Interestingly, it passes :)
+Acked-by: Huang Rui <ray.huang@amd.com>
 
-  ...
-  Test validation finished. Final report:
-  [
-      {
-          "Workload": "perf bench futex hash -r 2 -s",
-          "Report": {
-              "Metric Validation Statistics": {
-                  "Total Rule Count": 2,
-                  "Passed Rule Count": 2
-              },
-              "Tests in Category": {
-                  "PositiveValueTest": {
-                      "Total Tests": 12,
-                      "Passed Tests": 12,
-                      "Failed Tests": []
-                  },
-                  "RelationshipTest": {
-                      "Total Tests": 0,
-                      "Passed Tests": 0,
-                      "Failed Tests": []
-                  },
-                  "SingleMetricTest": {
-                      "Total Tests": 2,
-                      "Passed Tests": 2,
-                      "Failed Tests": []
-                  }
-              },
-              "Errors": []
-          }
-      }
-  ]
-  test child finished with 0
-  ---- end ----
-  perf metrics value validation: Ok
-
-I haven't yet investigated whether it's genuine or false positive.
-
-Thanks,
-Ravi
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	cppc_enabled = enable;
+> +	return 0;
+>  }
+>  
+>  static int cppc_enable(bool enable)
+> @@ -236,6 +258,9 @@ static int cppc_enable(bool enable)
+>  	int cpu, ret = 0;
+>  	struct cppc_perf_ctrls perf_ctrls;
+>  
+> +	if (enable == cppc_enabled)
+> +		return 0;
+> +
+>  	for_each_present_cpu(cpu) {
+>  		ret = cppc_set_enable(cpu, enable);
+>  		if (ret)
+> @@ -251,6 +276,7 @@ static int cppc_enable(bool enable)
+>  		}
+>  	}
+>  
+> +	cppc_enabled = enable;
+>  	return ret;
+>  }
+>  
+> -- 
+> 2.34.1
+> 
