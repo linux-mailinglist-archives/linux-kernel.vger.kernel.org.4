@@ -2,389 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A15E2733B75
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 23:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A74AD733B7B
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 23:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236111AbjFPVTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 17:19:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41050 "EHLO
+        id S1345565AbjFPVXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 17:23:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232080AbjFPVTS (ORCPT
+        with ESMTP id S232006AbjFPVXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 17:19:18 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D3F359D
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 14:19:16 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-57059626276so14178787b3.3
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 14:19:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686950355; x=1689542355;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f8jo71L/wnw9C65fC3wBYtWb/3Td8mS5trrbwy3tbXE=;
-        b=GYluVuaGinGspU2FwWJC0g5IziWPPxovWsn11amKV4ZczetN3f3tAYIJsRmg/8XrHD
-         /OC6IYQ+NBOGSuuvrnpTavIJhrRbA9C2a8bcN6ccquT0HNTssMiWbqLqXRWrzTfUOZYc
-         AVU18m5xeWEP9I2gK5E5tIFzGuShDlTUDGrSbKejyoSX+51i8UhUz2yVXUinLYMJPPhE
-         ImMTfhxe+7j+AIIccrAd534coZ0c7IsY1seNS5BeFvruxybisB/YvxT9YNtgdS4DPjSv
-         u1JQIN3aP7zPE9hf7BoMYKcSv+Y/Jl/5wD/3OinbxIVWQxSgKqqHJDNp/R5gYcJ16Vc/
-         BIBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686950355; x=1689542355;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f8jo71L/wnw9C65fC3wBYtWb/3Td8mS5trrbwy3tbXE=;
-        b=hgsTjYXc7pOApkHUzzXLhn41ZUnDfq6YPDVWLHVgfnNfx/AC4luThqmgGX6Otp6Nuv
-         W49IAK1KbbFrKW7O2Y/h/GsElDO9Z0IDFHaLTEui77c74bO9KeKAdG0jmnxpvZQlVKVD
-         6hI71wYCy8qEJH/wr/ozhmMBwh+LJYKABMI/8CGFqZBFFHp1CuJT4PbGCMHhj6dzIAQz
-         1fV8JYuSvBYkGOl6t3mrV81cX9PpJXjyX0sJWOrN7qFjNw5awQhaxOs1fqhD4t0MB0dv
-         hu5vmvpLSfUTyEWm5osn78ZqtCzn+cPPAxxBpGUjVqPQkbnYd+4MXM/BkHkF32PCs60V
-         v4CQ==
-X-Gm-Message-State: AC+VfDzzGQ9zsDnqucHiJMO1w7intcPvBcBCKlUK+nF922Y80HRC1gFO
-        feXYFw5QatoiOihOUvPfmZm7PKKy9EZKPKx4mkUaow==
-X-Google-Smtp-Source: ACHHUZ60k8+tKuIRDhDO1Ssd92XbKRizuBCcQesr8d60QCeCm4LgTzC2PxMQUJHtak95xy3N+2L895DB7eknjeIxzyE=
-X-Received: by 2002:a81:8007:0:b0:56d:40da:1fc2 with SMTP id
- q7-20020a818007000000b0056d40da1fc2mr3278277ywf.50.1686950355285; Fri, 16 Jun
- 2023 14:19:15 -0700 (PDT)
+        Fri, 16 Jun 2023 17:23:04 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2050.outbound.protection.outlook.com [40.107.92.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9B935A4
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 14:23:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UNuuoDtkzLQzhKxq6OukWIDKpGnI7vpR4jmumm7IC8ax06VF9zEMHNwce7Oaxv6BexbNLf3bkq3MLgjdXW2SHgiHMujKnPTOLkxuaAC7babHT8H7lctAIsnf6qJlUhwdCTasYWh2osFRO0+en3kPPUscrzxy+AZRyi1ZOrJAc9l7rRf3qTMdofj9GXu+/veSo+X+dt6D/7mEv3ZCqEvhAfcV9+p4bpFrZwvt1N8plP2yLdGn8NgDVpftBayZ8qc/b9neTaiOh5Pe/Z5BwEl07AOZTf+FUyxMRXIM6YmwINqAGff2b4YYzCHTnozzvsrKgUSc05yakxgYV/LIhxEfBQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hHlr56+BQ+akgWPp2dv7cU/XNy38bRGVETHmBhTazgA=;
+ b=eezuF3T5OTDraomdyyekI+rnV1iGYoyFklGSe9XLot+p5Xt2zm09hgaDkR9p72G2xAo4weMpd8bQqTGEw81XXTiC1XypVY0fmtfwzocPXVqt5QzpFymG9uV3HOBqvZWyWH1kD2urNljBUMitLt7CIfEsVkcSeU1Vzn8SakkrOENxDDdXkOPNSH47fItfRhLDYCQrtSOTpmGafXe8cqRAQHHfjSLgNRuOM0wpjbxv1vCXrLkmRZaKZzjnIgPxHgo/xd6l/9mMSADflDPrh+zZZ9UbTIDg54iGjy6nffpYeUqVZUI9o9hxArZPxMWJhd5/GjToiVn1iTygL+hRiFx3FQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hHlr56+BQ+akgWPp2dv7cU/XNy38bRGVETHmBhTazgA=;
+ b=TF6qWp377FIB9+bruHtNvD3HOOfKIqT3emPW5rvJIDdPkXB8D4Ij4JjxAvy+6l+Cm616apfNlRcwy6Jz5OPbbuyxA9Ha4FDQO86OmhfQg2Qd5qSRznMgTwLZn9/8gkY0qRJvJy8Onh6/9cuDM2YImbhWQ4eyAIOPyBfvnAHFOeI=
+Received: from DM6PR04CA0001.namprd04.prod.outlook.com (2603:10b6:5:334::6) by
+ DM4PR12MB5866.namprd12.prod.outlook.com (2603:10b6:8:65::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6477.29; Fri, 16 Jun 2023 21:23:00 +0000
+Received: from CY4PEPF0000EE3A.namprd03.prod.outlook.com
+ (2603:10b6:5:334:cafe::a4) by DM6PR04CA0001.outlook.office365.com
+ (2603:10b6:5:334::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.27 via Frontend
+ Transport; Fri, 16 Jun 2023 21:23:00 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000EE3A.mail.protection.outlook.com (10.167.242.14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6500.27 via Frontend Transport; Fri, 16 Jun 2023 21:22:59 +0000
+Received: from BLR-L-DHSRIVAS.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 16 Jun
+ 2023 16:22:55 -0500
+From:   Dheeraj Kumar Srivastava <dheerajkumar.srivastava@amd.com>
+To:     <linux-kernel@vger.kernel.org>, <tglx@linutronix.de>,
+        <mingo@redhat.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
+        <x86@kernel.org>
+CC:     <hpa@zytor.com>, <gorcunov@openvz.org>,
+        <suresh.b.siddha@intel.com>,
+        Dheeraj Kumar Srivastava <dheerajkumar.srivastava@amd.com>,
+        "Kishon Vijay Abraham I" <kvijayab@amd.com>,
+        Vasant Hegde <vasant.hegde@amd.com>
+Subject: [PATCH v1] x86/apic: Fix kernel panic when "intremap=off" and "x2apic_phys" are set
+Date:   Sat, 17 Jun 2023 02:52:36 +0530
+Message-ID: <20230616212236.1389-1-dheerajkumar.srivastava@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230517160948.811355-1-jiaqiyan@google.com> <20230517160948.811355-2-jiaqiyan@google.com>
- <20230517235314.GB10757@monkey> <CACw3F52zNguJ-MvXOAJuMK+JfreLxorvHDPwO8w_gQdOzWj7eA@mail.gmail.com>
- <20230519224214.GB3581@monkey> <20230522044557.GA845371@hori.linux.bs1.fc.nec.co.jp>
- <CACw3F50rkrWkdMKo7yq35vDbGrcF4b0zohN3dORxL_h0KxZ7Bg@mail.gmail.com>
- <20230523024305.GA920098@hori.linux.bs1.fc.nec.co.jp> <CACw3F53C0f_Ph0etD+BgkAz4P8pX3YArjFgSPaLh_d6rUqMUCw@mail.gmail.com>
- <CACw3F52k=fhYpLpvDoVPcmKnOALLkPsGk08PdS_H0+miSYvhEQ@mail.gmail.com> <20230612041901.GA3083591@ik1-406-35019.vs.sakura.ne.jp>
-In-Reply-To: <20230612041901.GA3083591@ik1-406-35019.vs.sakura.ne.jp>
-From:   Jiaqi Yan <jiaqiyan@google.com>
-Date:   Fri, 16 Jun 2023 14:19:03 -0700
-Message-ID: <CACw3F51o1ZFSYZa+XLnk4Wwjy2w_q=Kn+aOQs0=qpfG-ZYDFKg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] mm/hwpoison: find subpage in hugetlb HWPOISON list
-To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>,
-        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
-        "shy828301@gmail.com" <shy828301@gmail.com>,
-        "linmiaohe@huawei.com" <linmiaohe@huawei.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "duenwen@google.com" <duenwen@google.com>,
-        "axelrasmussen@google.com" <axelrasmussen@google.com>,
-        "jthoughton@google.com" <jthoughton@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE3A:EE_|DM4PR12MB5866:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4547be4f-d844-4d87-4919-08db6eafdc7e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: H3iMB9PVU7R2l6/b1Zg1biAL4Nb1T3IzMdyFqwGP5Pe7kYfhGSTTF+npO5z4b21ksZIv7EiusxmyV0l98lIKsmgUAgY5owokANsQvcqdsc2FoeUMDSP5kcEFgWpQWlKS3H32VeYiBd0GYlPwE6uQJxyJFnrTzy2h3UCUG/HY5TAKl+bzyW3K5s5O0/tqQsVT0zSyhlOf9zn+EIdhESg5CV2r6j9+qTg8FW/ILDbGFTvp6b4ZI84rVfUsWMvF0Z3Rp8VmNr5yMFAIJfHSR0MOcUgdHtrbb6tP25IFtp41Ls0Rheifbk0bmCTzMF3FHuJBYypAAKAuAqEDZKS3qct6APqjhOBHBZ6CAo0n72iubuhrgUWjiFxH8lgt3lPgV/NXGZsFvEKHm0ixEH9oVMvdWLkxGR7tHW/l22xE5UITvFoSs+9M8amrOPhFnFb6DrAWxn6ClP5iN37n4yd04BVOLH2BQyHYTwSA3NYMJKo2wUiHuD4mst8CoRj5IKCMtdtbgC/Anj1HBBZzNw6KIaRCtDQSqRXMZ7pi3VxSyBdiCl/RMHvVQe0nQ1T6r7Xb4LFwQk3tH3aJswy69OkLyKzLz4srEk+wqxR0SoWaH1GaydqxogEWSmudXaFMwOKCWuT755B4P5kFbK6Cbu9c5aHczdlEL4wl8URhFjKWM+Q1NG1lrhWdLgtOhBPrnK+KEMXUvrZT+hL4mf89EtO7/3zRn5K3MnZCxBliFO/qt/dr1+Rz6e9b7MuegxhzSiTB4rBdZASxuHDtPySRQbwfV1hSSIPgdV+o/dhn6mdlLeruW7KBR5NJUbem0lEoHzPVbRUv
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(396003)(39860400002)(346002)(451199021)(40470700004)(46966006)(36840700001)(5660300002)(54906003)(478600001)(40480700001)(8936002)(41300700001)(7696005)(8676002)(316002)(186003)(110136005)(70586007)(70206006)(6666004)(4326008)(26005)(1076003)(16526019)(36860700001)(2616005)(47076005)(40460700003)(426003)(336012)(2906002)(83380400001)(82740400003)(356005)(81166007)(86362001)(82310400005)(36756003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 21:22:59.9559
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4547be4f-d844-4d87-4919-08db6eafdc7e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000EE3A.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5866
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 11, 2023 at 9:19=E2=80=AFPM Naoya Horiguchi
-<naoya.horiguchi@linux.dev> wrote:
->
-> On Fri, Jun 09, 2023 at 10:48:47PM -0700, Jiaqi Yan wrote:
-> > On Thu, May 25, 2023 at 5:28=E2=80=AFPM Jiaqi Yan <jiaqiyan@google.com>=
- wrote:
-> > >
-> > > On Mon, May 22, 2023 at 7:43=E2=80=AFPM HORIGUCHI NAOYA(=E5=A0=80=E5=
-=8F=A3=E3=80=80=E7=9B=B4=E4=B9=9F)
-> > > <naoya.horiguchi@nec.com> wrote:
-> > > >
-> > > > On Mon, May 22, 2023 at 11:22:49AM -0700, Jiaqi Yan wrote:
-> > > > > On Sun, May 21, 2023 at 9:50=E2=80=AFPM HORIGUCHI NAOYA(=E5=A0=80=
-=E5=8F=A3=E3=80=80=E7=9B=B4=E4=B9=9F)
-> > > > > <naoya.horiguchi@nec.com> wrote:
-> > > > > >
-> > > > > > On Fri, May 19, 2023 at 03:42:14PM -0700, Mike Kravetz wrote:
-> > > > > > > On 05/19/23 13:54, Jiaqi Yan wrote:
-> > > > > > > > On Wed, May 17, 2023 at 4:53=E2=80=AFPM Mike Kravetz <mike.=
-kravetz@oracle.com> wrote:
-> > > > > > > > >
-> > > > > > > > > On 05/17/23 16:09, Jiaqi Yan wrote:
-> > > > > > > > > > Adds the functionality to search a subpage's correspond=
-ing raw_hwp_page
-> > > > > > > > > > in hugetlb page's HWPOISON list. This functionality can=
- also tell if a
-> > > > > > > > > > subpage is a raw HWPOISON page.
-> > > > > > > > > >
-> > > > > > > > > > Exports this functionality to be immediately used in th=
-e read operation
-> > > > > > > > > > for hugetlbfs.
-> > > > > > > > > >
-> > > > > > > > > > Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
-> > > > > > > > > > ---
-> > > > > > > > > >  include/linux/mm.h  | 23 +++++++++++++++++++++++
-> > > > > > > > > >  mm/memory-failure.c | 26 ++++++++++++++++----------
-> > > > > > > > > >  2 files changed, 39 insertions(+), 10 deletions(-)
-> > > > > > > > > >
-> > > > > > > > > > diff --git a/include/linux/mm.h b/include/linux/mm.h
-> > > > > > > > > > index 27ce77080c79..f191a4119719 100644
-> > > > > > > > > > --- a/include/linux/mm.h
-> > > > > > > > > > +++ b/include/linux/mm.h
-> > > > > > > > >
-> > > > > > > > > Any reason why you decided to add the following to linux/=
-mm.h instead of
-> > > > > > > > > linux/hugetlb.h?  Since it is hugetlb specific I would ha=
-ve thought
-> > > > > > > > > hugetlb.h was more appropriate.
-> > > > > > > > >
-> > > > > > > > > > @@ -3683,6 +3683,29 @@ enum mf_action_page_type {
-> > > > > > > > > >   */
-> > > > > > > > > >  extern const struct attribute_group memory_failure_att=
-r_group;
-> > > > > > > > > >
-> > > > > > > > > > +#ifdef CONFIG_HUGETLB_PAGE
-> > > > > > > > > > +/*
-> > > > > > > > > > + * Struct raw_hwp_page represents information about "r=
-aw error page",
-> > > > > > > > > > + * constructing singly linked list from ->_hugetlb_hwp=
-oison field of folio.
-> > > > > > > > > > + */
-> > > > > > > > > > +struct raw_hwp_page {
-> > > > > > > > > > +     struct llist_node node;
-> > > > > > > > > > +     struct page *page;
-> > > > > > > > > > +};
-> > > > > > > > > > +
-> > > > > > > > > > +static inline struct llist_head *raw_hwp_list_head(str=
-uct folio *folio)
-> > > > > > > > > > +{
-> > > > > > > > > > +     return (struct llist_head *)&folio->_hugetlb_hwpo=
-ison;
-> > > > > > > > > > +}
-> > > > > > > > > > +
-> > > > > > > > > > +/*
-> > > > > > > > > > + * Given @subpage, a raw page in a hugepage, find its =
-location in @folio's
-> > > > > > > > > > + * _hugetlb_hwpoison list. Return NULL if @subpage is =
-not in the list.
-> > > > > > > > > > + */
-> > > > > > > > > > +struct raw_hwp_page *find_raw_hwp_page(struct folio *f=
-olio,
-> > > > > > > > > > +                                    struct page *subpa=
-ge);
-> > > > > > > > > > +#endif
-> > > > > > > > > > +
-> > > > > > > > > >  #if defined(CONFIG_TRANSPARENT_HUGEPAGE) || defined(CO=
-NFIG_HUGETLBFS)
-> > > > > > > > > >  extern void clear_huge_page(struct page *page,
-> > > > > > > > > >                           unsigned long addr_hint,
-> > > > > > > > > > diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> > > > > > > > > > index 5b663eca1f29..c49e6c2d1f07 100644
-> > > > > > > > > > --- a/mm/memory-failure.c
-> > > > > > > > > > +++ b/mm/memory-failure.c
-> > > > > > > > > > @@ -1818,18 +1818,24 @@ EXPORT_SYMBOL_GPL(mf_dax_kill_p=
-rocs);
-> > > > > > > > > >  #endif /* CONFIG_FS_DAX */
-> > > > > > > > > >
-> > > > > > > > > >  #ifdef CONFIG_HUGETLB_PAGE
-> > > > > > > > > > -/*
-> > > > > > > > > > - * Struct raw_hwp_page represents information about "r=
-aw error page",
-> > > > > > > > > > - * constructing singly linked list from ->_hugetlb_hwp=
-oison field of folio.
-> > > > > > > > > > - */
-> > > > > > > > > > -struct raw_hwp_page {
-> > > > > > > > > > -     struct llist_node node;
-> > > > > > > > > > -     struct page *page;
-> > > > > > > > > > -};
-> > > > > > > > > >
-> > > > > > > > > > -static inline struct llist_head *raw_hwp_list_head(str=
-uct folio *folio)
-> > > > > > > > > > +struct raw_hwp_page *find_raw_hwp_page(struct folio *f=
-olio,
-> > > > > > > > > > +                                    struct page *subpa=
-ge)
-> > > > > > > > > >  {
-> > > > > > > > > > -     return (struct llist_head *)&folio->_hugetlb_hwpo=
-ison;
-> > > > > > > > > > +     struct llist_node *t, *tnode;
-> > > > > > > > > > +     struct llist_head *raw_hwp_head =3D raw_hwp_list_=
-head(folio);
-> > > > > > > > > > +     struct raw_hwp_page *hwp_page =3D NULL;
-> > > > > > > > > > +     struct raw_hwp_page *p;
-> > > > > > > > > > +
-> > > > > > > > > > +     llist_for_each_safe(tnode, t, raw_hwp_head->first=
-) {
-> > > > > > > > >
-> > > > > > > > > IIUC, in rare error cases a hugetlb page can be poisoned =
-WITHOUT a
-> > > > > > > > > raw_hwp_list.  This is indicated by the hugetlb page spec=
-ific flag
-> > > > > > > > > RawHwpUnreliable or folio_test_hugetlb_raw_hwp_unreliable=
-().
-> > > > > > > > >
-> > > > > > > > > Looks like this routine does not consider that case.  See=
-ms like it should
-> > > > > > > > > always return the passed subpage if folio_test_hugetlb_ra=
-w_hwp_unreliable()
-> > > > > > > > > is true?
-> > > > > > > >
-> > > > > > > > Thanks for catching this. I wonder should this routine cons=
-ider
-> > > > > > > > RawHwpUnreliable or should the caller do.
-> > > > > > > >
-> > > > > > > > find_raw_hwp_page now returns raw_hwp_page* in the llist en=
-try to
-> > > > > > > > caller (valid one at the moment), but once RawHwpUnreliable=
- is set,
-> > > > > > > > all the raw_hwp_page in the llist will be kfree(), and the =
-returned
-> > > > > > > > value becomes dangling pointer to caller (if the caller hol=
-ds that
-> > > > > > > > caller long enough). Maybe returning a bool would be safer =
-to the
-> > > > > > > > caller? If the routine returns bool, then checking RawHwpUn=
-reliable
-> > > > > > > > can definitely be within the routine.
-> > > > > > >
-> > > > > > > I think the check for RawHwpUnreliable should be within this =
-routine.
-> > > > > > > Looking closer at the code, I do not see any way to synchroni=
-ze this.
-> > > > > > > It looks like manipulation in the memory-failure code would b=
-e
-> > > > > > > synchronized via the mf_mutex.  However, I do not see how tra=
-versal and
-> > > > > > > freeing of the raw_hwp_list  called from __update_and_free_hu=
-getlb_folio
-> > > > > > > is synchronized against memory-failure code modifying the lis=
-t.
-> > > > > > >
-> > > > > > > Naoya, can you provide some thoughts?
+x2APIC mode requires "Interrupt Remapping" to be enabled and the
+"physical x2apic" driver can be used only when x2APIC mode is enabled.
+However when "intremap=off" and "x2apic_phys" kernel command line
+parameters are passed, "physical x2apic" driver is being used even when
+x2APIC mode is disabled ("intremap=off" disables x2APIC mode).
+This results in the below kernel panic:
 
-Hi Mike,
+  unchecked MSR access error: RDMSR from 0x80f at rIP: 0xffffffff87eab4ec
+  (native_read_msr+0xc/0x40)
+  Call Trace:
+  <TASK>
+  native_apic_msr_read+0x1f/0x30
+  setup_local_APIC+0x4e/0x380
+  ? zen_untrain_ret+0x1/0x1
+  ? enable_IR_x2apic+0xe8/0x250
+  apic_intr_mode_init+0x4c/0x120
+  x86_late_time_init+0x28/0x40
+  start_kernel+0x626/0xa80
+  x86_64_start_reservations+0x1c/0x30
+  x86_64_start_kernel+0xbf/0x110
+  secondary_startup_64_no_verify+0x10b/0x10b
+  </TASK>
 
-Now looking again this, I think concurrent adding and deleting are
-fine with each other and with themselves, because raw_hwp_list is
-lock-less llist.
+This is due to an incorrect conditional check in x2apic_phys_probe().
+Fix it here by returning 0 when "x2apic_mode" is not set in
+x2apic_phys_probe(). This now prevents default_setup_apic_routing() from
+selecting "physical x2apic" driver.
 
-As for synchronizing traversal with adding and deleting, I wonder is
-it a good idea to make __update_and_free_hugetlb_folio hold
-hugetlb_lock before it folio_clear_hugetlb_hwpoison(which traverse +
-delete raw_hwp_list)? In hugetlb, get_huge_page_for_hwpoison already
-takes hugetlb_lock; it seems to me __update_and_free_hugetlb_folio is
-missing the lock.
+Fixes: 9ebd680bd029 ("x86, apic: Use probe routines to simplify apic selection")
+Reviewed-by: Kishon Vijay Abraham I <kvijayab@amd.com>
+Reviewed-by: Vasant Hegde <vasant.hegde@amd.com>
+Signed-off-by: Dheeraj Kumar Srivastava <dheerajkumar.srivastava@amd.com>
+---
+ arch/x86/kernel/apic/x2apic_phys.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-> > > > > >
-> > > > > > Thanks for elaborating the issue.  I think that making find_raw=
-_hwp_page() and
-> > > > > > folio_clear_hugetlb_hwpoison() do their works within mf_mutex c=
-an be one solution.
-> > > > > > try_memory_failure_hugetlb(), one of the callers of folio_clear=
-_hugetlb_hwpoison(),
-> > > > > > already calls it within mf_mutex, so some wrapper might be need=
-ed to implement
-> > > > > > calling path from __update_and_free_hugetlb_folio() to take mf_=
-mutex.
-> > > > > >
-> > > > > > It might be a concern that mf_mutex is a big lock to cover over=
-all hwpoison
-> > > > > > subsystem, but I think that the impact is not so big if the cha=
-nged code paths
-> > > > > > take mf_mutex only after checking hwpoisoned hugepage.  Maybe u=
-sing folio_lock
-> > > > > > to synchronize accesses to the raw_hwp_list could be possible, =
-but currently
-> > > > > > __get_huge_page_for_hwpoison() calls folio_set_hugetlb_hwpoison=
-() without
-> > > > > > folio_lock, so this approach needs update on locking rule and i=
-t sounds more
-> > > > > > error-prone to me.
-> > > > >
-> > > > > Thanks Naoya, since memory_failure is the main user of raw_hwp_li=
-st, I
-> > > > > agree mf_mutex could help to sync its two del_all operations (one=
- from
-> > > > > try_memory_failure_hugetlb and one from
-> > > > > __update_and_free_hugetlb_folio).
-> > > > >
-> > > > > I still want to ask a perhaps stupid question, somewhat related t=
-o how
-> > > > > to implement find_raw_hwp_page() correctly. It seems
-> > > > > llist_for_each_safe should only be used to traverse after list en=
-tries
-> > > > > already *deleted* via llist_del_all. But the llist_for_each_safe =
-calls
-> > > > > in memory_failure today is used *directly* on the raw_hwp_list. T=
-his
-> > > > > is quite different from other users of llist_for_each_safe (for
-> > > > > example, kernel/bpf/memalloc.c).
-> > > >
-> > > > Oh, I don't noticed that when writing the original code. (I just ch=
-ose
-> > > > llist_for_each_safe because I just wanted struct llist_node as a si=
-ngly
-> > > > linked list.)
-> > >
-> > > And maybe because you can avoid doing INIT_LIST_HEAD (which seems
-> > > doable in folio_set_hugetlb_hwpoison if hugepage is hwpoison-ed for
-> > > the first time)?
-> > >
-> > > >
-> > > > >  Why is it correct? I guess mostly
-> > > > > because they are sync-ed under mf_mutex (except the missing cover=
-age
-> > > > > on __update_and_free_hugetlb_folio)?
-> > > >
-> > > > Yes, and there seems no good reason to use the macro llist_for_each=
-_safe
-> > > > here.  I think it's OK to switch to simpler one like list_for_each =
-which
-> > > > should be supposed to be called directly.  To do this, struct raw_h=
-wp_page
-> > > > need to have @node (typed struct list_head instead of struct llist_=
-node).
-> >
-> > Hi Naoya, a maybe-stupid question on list vs llist: _hugetlb_hwpoison
-> > in folio is a void*. struct list_head is composed of two pointers to
-> > list_node (prev and next) so folio just can't hold a list_head in the
-> > _hugetlb_hwpoison field, right? llist_head on the other hand only
-> > contains one pointer to llist_node first. I wonder if this is one of
-> > the reason you picked llist instead of list in the first place.
->
-> Yes, that's one reason to use llist_head, and another (minor) reason is t=
-hat
-> we don't need doubly-linked list here.
-
-Hi Naoya,
-
-Even with hugetlb_lock, I think we should still fix
-__folio_free_raw_hwp: call llist_del_all first, then traverse the list
-and free raw_hwp_page entries. Then folio_clear_hugetlb_hwpoison from
-both memory_failure and hugetlb will be safe given llist_del_all on
-llist is safe with itself.
-
-In my v2, I tried both (1.taking hugetlb in
-__update_and_free_hugetlb_folio, 2. call llist_del_all first in
-__folio_free_raw_hwp). I also changed find_raw_hwp_page to
-is_raw_hwp_subpage (only returns bool, and takes hugetlb_lock for
-traversing raw_hwp_list). So far I didn't run into any problems with
-my selftest.
-
->
-> Thanks,
-> Naoya Horiguchi
->
-> >
-> > The reason I ask is while I was testing my refactor draft, I
-> > constantly see the refcount of the 3rd subpage in the folio got
-> > corrupted. I am not sure about the exact reason but it feels to me
-> > related to the above reason.
-> >
-> > >
-> > > I will start to work on a separate patch to switch to list_head, and
-> > > make sure operations from __update_and_free_hugetlb_folio and
-> > > memory_failure are serialized (hopefully without intro new locks and
-> > > just use mf_mutex).
-> > >
-> > > >
-> > > > Thanks,
-> > > > Naoya Horiguchi
-> >
-> >
+diff --git a/arch/x86/kernel/apic/x2apic_phys.c b/arch/x86/kernel/apic/x2apic_phys.c
+index 6bde05a86b4e..896bc41cb2ba 100644
+--- a/arch/x86/kernel/apic/x2apic_phys.c
++++ b/arch/x86/kernel/apic/x2apic_phys.c
+@@ -97,7 +97,10 @@ static void init_x2apic_ldr(void)
+ 
+ static int x2apic_phys_probe(void)
+ {
+-	if (x2apic_mode && (x2apic_phys || x2apic_fadt_phys()))
++	if (!x2apic_mode)
++		return 0;
++
++	if (x2apic_phys || x2apic_fadt_phys())
+ 		return 1;
+ 
+ 	return apic == &apic_x2apic_phys;
+-- 
+2.25.1
