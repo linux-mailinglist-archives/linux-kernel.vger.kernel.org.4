@@ -2,63 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF5B173342F
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 17:04:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA915733433
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 17:06:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230475AbjFPPEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 11:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57782 "EHLO
+        id S234709AbjFPPGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 11:06:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345857AbjFPPEE (ORCPT
+        with ESMTP id S230228AbjFPPGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 11:04:04 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1B23A89;
-        Fri, 16 Jun 2023 08:03:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686927835; x=1718463835;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=mFQp2Dp+OGh9bB+97IQPS3/rYYC1sOLLK8wCF9H2RG0=;
-  b=IiiyVsOh5ovozZE6NABV6SS/b8A8tSXrGCoL0K5uuxWFPAn6gSaj6AG2
-   uIOG6ZySHUNviQuREFafd7RK9VNWVfjxfFK/ImNgtJcqLxiJpHlrqeuhp
-   TteVhtcgZ+NaU+4VrSW28P7nqJJmPFEztcAgiu+FAZVEZOGz2SXq3Xp0V
-   kpq4IoiDPyhW9Z/0y02/sd/t50mJuHNh+fS1QQJGDlAj4qVmWr2XjeqG4
-   Xn63VhMwygF99xkzl0UeVKkqmpfVgYshtC9sIneb5auxSEShd/z4nkGZf
-   9Elk7nPKQGrXn0yvSJFnSFRAFyH/LOkI2l7CElvfWPyRlUbpF73gK3/uI
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="343970303"
-X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
-   d="scan'208";a="343970303"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 08:03:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="959650863"
-X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
-   d="scan'208";a="959650863"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 16 Jun 2023 08:02:26 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 9914F379; Fri, 16 Jun 2023 18:02:35 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] KVM: x86: Remove PRIx* definitions as they are solely for user space
-Date:   Fri, 16 Jun 2023 18:02:33 +0300
-Message-Id: <20230616150233.83813-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
+        Fri, 16 Jun 2023 11:06:41 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017AD1BD6;
+        Fri, 16 Jun 2023 08:06:38 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id AAD451F461;
+        Fri, 16 Jun 2023 15:06:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1686927997; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=qZ6VZQS2BN5LQfBVveeEUMRRjzGIEjqa48tMNDm1o3M=;
+        b=NflyOErmcWSy+bqbtbwYQTBDVsUvpIBLG317dBlbNwgfNzOSCxizJowUuCAURsAnkD7DwK
+        QoPX51bOLIvjmQTV4fFPPqGTczXM60o0DLmH1lfZlAyO1QpZtSAew7zY9nuuVJr4wdEqDU
+        xURFTUWprpCM15XrbRool9W6zsGrsJ0=
+Received: from alley.suse.cz (unknown [10.100.208.146])
+        by relay2.suse.de (Postfix) with ESMTP id 242E32C141;
+        Fri, 16 Jun 2023 15:06:36 +0000 (UTC)
+From:   Petr Mladek <pmladek@suse.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Douglas Anderson <dianders@chromium.org>
+Cc:     kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        sparclinux@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-perf-users@vger.kernel.org, Petr Mladek <pmladek@suse.com>
+Subject: [PATCH v2 0/6] watchdog/hardlockup: Cleanup configuration of hardlockup detectors
+Date:   Fri, 16 Jun 2023 17:06:12 +0200
+Message-Id: <20230616150618.6073-1-pmladek@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,30 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the Linux kernel we do not support PRI.64 specifiers.
-Moreover they seem not to be used anyway here. Drop them.
+Hi,
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- arch/x86/kvm/lapic.c | 5 -----
- 1 file changed, 5 deletions(-)
+this patchset is supposed to replace the last patch in the patchset cleaning
+up after introducing the buddy detector, see
+https://lore.kernel.org/r/20230526184139.10.I821fe7609e57608913fe05abd8f35b343e7a9aae@changeid
 
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index 3c300a196bdf..113ca9661ab2 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -51,11 +51,6 @@
- #define mod_64(x, y) ((x) % (y))
- #endif
- 
--#define PRId64 "d"
--#define PRIx64 "llx"
--#define PRIu64 "u"
--#define PRIo64 "o"
--
- /* 14 is the version for Xeon and Pentium 8.4.8*/
- #define APIC_VERSION			0x14UL
- #define LAPIC_MMIO_LENGTH		(1 << 12)
+Changes against v1:
+
+  + Better explained the C-like ordering in the 1st patch.
+
+  + Squashed patches for splitting and renaming HAVE_NMI_WATCHDOG,
+    updated commit message with the history and more facts.
+
+  + Updated comments about the sparc64 variant. It is not handled together
+    with the softlockup detector. In fact, it is always build. And it even
+    used to be always enabled until the commit 7a5c8b57cec93196b ("sparc:
+    implement watchdog_nmi_enable and watchdog_nmi_disable") added in
+    v4.10-rc1.
+
+    I realized this when updating the comment for the 4th patch. My original
+    statement in v1 patchset was based on code reading. I looked at it from
+    a bad side.
+
+  + Removed superfluous "default n"
+  + Fixed typos.
+
+Petr Mladek (6):
+  watchdog/hardlockup: Sort hardlockup detector related config values a
+    logical way
+  watchdog/hardlockup: Make the config checks more straightforward
+  watchdog/hardlockup: Declare arch_touch_nmi_watchdog() only in
+    linux/nmi.h
+  watchdog/hardlockup:  Make HAVE_NMI_WATCHDOG sparc64-specific
+  watchdog/sparc64: Define HARDLOCKUP_DETECTOR_SPARC64
+  watchdog/hardlockup: Define HARDLOCKUP_DETECTOR_ARCH
+
+ arch/Kconfig                   |  17 ++---
+ arch/powerpc/Kconfig           |   5 +-
+ arch/powerpc/include/asm/nmi.h |   2 -
+ arch/sparc/Kconfig             |   2 +-
+ arch/sparc/Kconfig.debug       |  14 ++++
+ arch/sparc/include/asm/nmi.h   |   1 -
+ include/linux/nmi.h            |  14 ++--
+ kernel/watchdog.c              |   2 +-
+ lib/Kconfig.debug              | 114 ++++++++++++++++++---------------
+ 9 files changed, 97 insertions(+), 74 deletions(-)
+
 -- 
-2.40.0.1.gaa8946217a0b
+2.35.3
 
