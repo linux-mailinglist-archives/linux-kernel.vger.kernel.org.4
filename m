@@ -2,137 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 020E77327C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 08:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B5577327CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 08:44:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242628AbjFPGmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 02:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40940 "EHLO
+        id S230053AbjFPGoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 02:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230378AbjFPGl7 (ORCPT
+        with ESMTP id S230378AbjFPGoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 02:41:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF251FE5;
-        Thu, 15 Jun 2023 23:41:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C95960C85;
-        Fri, 16 Jun 2023 06:41:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8BC1C433C8;
-        Fri, 16 Jun 2023 06:41:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686897717;
-        bh=Ro4WZCLClSIUhQJstNEKJQAQNJma+nBXsYqzw56HSbw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=mJHQAuLzg8rT6Rz5PoxBTo/ohMhhVqVbg40Xx+csbb4iN768rMIlFkO4J3mYuRxAd
-         HfIrY/ZiuY/JHBWzRzHnryUnOAn3CvJDoD7x7ekHfbN7luN0AABZcEuWGUnBEbXsjL
-         UYTZyRXcnL8xmlxCa0LogLOmdxCb9q8w2fBG/2qfjirYaUR1a4M9hGSkG3QGnE+cRN
-         8WS3djYEY2UyMRiWIG8dfU7EdT2MW6u7Wntcxon5VnfDrFAVVxMuR7SpXRvc6NgBE8
-         9S3eodvxlSFjoLXzU2y8VkwsrPKkq9HxiO9TB1RbUPXLIWBbqYlLuFe8orA13/ul8/
-         pyEMX9v2jc/zg==
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-4f76a4c211dso354913e87.3;
-        Thu, 15 Jun 2023 23:41:57 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxH2hVIiiAt7kJSKunxiH+53IJZMqp2It1YKk0MH0KPlOk7jIDB
-        IsY0jkC/l5okRoGTmlTECJYx3chQJzFxP6hXcWE=
-X-Google-Smtp-Source: ACHHUZ4Wg122FV+dsoalr3CT9nTUFfF3JCY4jxnldzEwjXLvc+KYP8fZMeQfaopTPmrrq1uIutQVSMBQWMKoG3YHqTQ=
-X-Received: by 2002:a19:660a:0:b0:4f6:424c:4fa8 with SMTP id
- a10-20020a19660a000000b004f6424c4fa8mr493140lfc.17.1686897715724; Thu, 15 Jun
- 2023 23:41:55 -0700 (PDT)
+        Fri, 16 Jun 2023 02:44:17 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404302118;
+        Thu, 15 Jun 2023 23:44:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686897856; x=1718433856;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=5hbSK8g7G9zu60nQd2Mz8toL8P7q0y+tNU5DH4UKOkY=;
+  b=fOQRGsZD67CylTyErQUaZcEEc6A1fqejejPq+99rVpp67OXgi9V2htzH
+   qqUhePrwreU03pOJ2C9yH9tZXN+ky+baVgWVhtuC9fvtY8TcDarn5ems9
+   0tTqZ1TMYxVGT87J7NOkaGt6ZKYI5hGg8VJU5+H31j42KH/xMtFgsZ9/w
+   barsH6rgOsB7+om+ZvOvoWRLDtjHpDNZgtPEicKtppnYEcGlz0jyG3nNN
+   XxkXm+N3cDTQrswV7yskn/tOBUSbCbt6F2kORhF1UP8PRYziJ6zWWjLBR
+   izpcMPxsyEDBNfoJ41pJPwjqWbDNV7aL5n9pIXzxzhiWwi4Rlqjn25qs5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="425076498"
+X-IronPort-AV: E=Sophos;i="6.00,246,1681196400"; 
+   d="scan'208";a="425076498"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 23:44:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="802717338"
+X-IronPort-AV: E=Sophos;i="6.00,246,1681196400"; 
+   d="scan'208";a="802717338"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 23:44:12 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Vishal Verma <vishal.l.verma@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <nvdimm@lists.linux.dev>,
+        <linux-cxl@vger.kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [PATCH 3/3] dax/kmem: Always enroll hotplugged memory for
+ memmap_on_memory
+References: <20230613-vv-kmem_memmap-v1-0-f6de9c6af2c6@intel.com>
+        <20230613-vv-kmem_memmap-v1-3-f6de9c6af2c6@intel.com>
+Date:   Fri, 16 Jun 2023 14:42:43 +0800
+In-Reply-To: <20230613-vv-kmem_memmap-v1-3-f6de9c6af2c6@intel.com> (Vishal
+        Verma's message of "Thu, 15 Jun 2023 16:00:25 -0600")
+Message-ID: <87zg4zewm4.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-References: <20230529132037.2124527-1-yukuai1@huaweicloud.com>
- <20230529132037.2124527-4-yukuai1@huaweicloud.com> <c96f2604-e1ef-c3ad-9d15-5e0efa5f222b@redhat.com>
- <254fc651-aa75-074d-f567-49bafc437e9c@huaweicloud.com>
-In-Reply-To: <254fc651-aa75-074d-f567-49bafc437e9c@huaweicloud.com>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 15 Jun 2023 23:41:42 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5nyv0=e3WR+B4gQmHo9O0cDBmzpEOZwXTLbvPzjX5iDw@mail.gmail.com>
-Message-ID: <CAPhsuW5nyv0=e3WR+B4gQmHo9O0cDBmzpEOZwXTLbvPzjX5iDw@mail.gmail.com>
-Subject: Re: [dm-devel] [PATCH -next v2 3/6] md: add a mutex to synchronize
- idle and frozen in action_store()
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     Xiao Ni <xni@redhat.com>, guoqing.jiang@linux.dev, agk@redhat.com,
-        snitzer@kernel.org, dm-devel@redhat.com, yi.zhang@huawei.com,
-        yangerkun@huawei.com, linux-kernel@vger.kernel.org,
-        linux-raid@vger.kernel.org, "yukuai (C)" <yukuai3@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 6:15=E2=80=AFPM Yu Kuai <yukuai1@huaweicloud.com> w=
-rote:
->
-> Hi,
->
-> =E5=9C=A8 2023/06/13 22:43, Xiao Ni =E5=86=99=E9=81=93:
-> >
-> > =E5=9C=A8 2023/5/29 =E4=B8=8B=E5=8D=889:20, Yu Kuai =E5=86=99=E9=81=93:
-> >> From: Yu Kuai <yukuai3@huawei.com>
-> >>
-> >> Currently, for idle and frozen, action_store will hold 'reconfig_mutex=
-'
-> >> and call md_reap_sync_thread() to stop sync thread, however, this will
-> >> cause deadlock (explained in the next patch). In order to fix the
-> >> problem, following patch will release 'reconfig_mutex' and wait on
-> >> 'resync_wait', like md_set_readonly() and do_md_stop() does.
-> >>
-> >> Consider that action_store() will set/clear 'MD_RECOVERY_FROZEN'
-> >> unconditionally, which might cause unexpected problems, for example,
-> >> frozen just set 'MD_RECOVERY_FROZEN' and is still in progress, while
-> >> 'idle' clear 'MD_RECOVERY_FROZEN' and new sync thread is started, whic=
-h
-> >> might starve in progress frozen. A mutex is added to synchronize idle
-> >> and frozen from action_store().
-> >>
-> >> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> >> ---
-> >>   drivers/md/md.c | 5 +++++
-> >>   drivers/md/md.h | 3 +++
-> >>   2 files changed, 8 insertions(+)
-> >>
-> >> diff --git a/drivers/md/md.c b/drivers/md/md.c
-> >> index 23e8e7eae062..63a993b52cd7 100644
-> >> --- a/drivers/md/md.c
-> >> +++ b/drivers/md/md.c
-> >> @@ -644,6 +644,7 @@ void mddev_init(struct mddev *mddev)
-> >>       mutex_init(&mddev->open_mutex);
-> >>       mutex_init(&mddev->reconfig_mutex);
-> >>       mutex_init(&mddev->delete_mutex);
-> >> +    mutex_init(&mddev->sync_mutex);
-> >>       mutex_init(&mddev->bitmap_info.mutex);
-> >>       INIT_LIST_HEAD(&mddev->disks);
-> >>       INIT_LIST_HEAD(&mddev->all_mddevs);
-> >> @@ -4785,14 +4786,18 @@ static void stop_sync_thread(struct mddev *mdd=
-ev)
-> >>   static void idle_sync_thread(struct mddev *mddev)
-> >>   {
-> >> +    mutex_lock(&mddev->sync_mutex);
-> >>       clear_bit(MD_RECOVERY_FROZEN, &mddev->recovery);
-> >>       stop_sync_thread(mddev);
-> >> +    mutex_unlock(&mddev->sync_mutex);
-> >>   }
-> >>   static void frozen_sync_thread(struct mddev *mddev)
-> >>   {
-> >> +    mutex_init(&mddev->delete_mutex);
-> >
-> >
-> > typo error? It should be mutex_lock(&mddev->sync_mutex); ?
-> >
->
-> Yes, and thanks for spotting this, this looks like I did this while
-> rebasing.
+Vishal Verma <vishal.l.verma@intel.com> writes:
 
-I fixed this one and applied the set to md-next.
+> With DAX memory regions originating from CXL memory expanders or
+> NVDIMMs, the kmem driver may be hot-adding huge amounts of system memory
+> on a system without enough 'regular' main memory to support the memmap
+> for it. To avoid this, ensure that all kmem managed hotplugged memory is
+> added with the MHP_MEMMAP_ON_MEMORY flag to place the memmap on the
+> new memory region being hot added.
+>
+> To do this, call add_memory() in chunks of memory_block_size_bytes() as
+> that is a requirement for memmap_on_memory. Additionally, Use the
+> mhp_flag to force the memmap_on_memory checks regardless of the
+> respective module parameter setting.
+>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Len Brown <lenb@kernel.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Oscar Salvador <osalvador@suse.de>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: Dave Jiang <dave.jiang@intel.com>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Huang Ying <ying.huang@intel.com>
+> Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
+> ---
+>  drivers/dax/kmem.c | 49 ++++++++++++++++++++++++++++++++++++-------------
+>  1 file changed, 36 insertions(+), 13 deletions(-)
+>
+> diff --git a/drivers/dax/kmem.c b/drivers/dax/kmem.c
+> index 7b36db6f1cbd..0751346193ef 100644
+> --- a/drivers/dax/kmem.c
+> +++ b/drivers/dax/kmem.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/mm.h>
+>  #include <linux/mman.h>
+>  #include <linux/memory-tiers.h>
+> +#include <linux/memory_hotplug.h>
+>  #include "dax-private.h"
+>  #include "bus.h"
+>  
+> @@ -105,6 +106,7 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
+>  	data->mgid = rc;
+>  
+>  	for (i = 0; i < dev_dax->nr_range; i++) {
+> +		u64 cur_start, cur_len, remaining;
+>  		struct resource *res;
+>  		struct range range;
+>  
+> @@ -137,21 +139,42 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
+>  		res->flags = IORESOURCE_SYSTEM_RAM;
+>  
+>  		/*
+> -		 * Ensure that future kexec'd kernels will not treat
+> -		 * this as RAM automatically.
+> +		 * Add memory in chunks of memory_block_size_bytes() so that
+> +		 * it is considered for MHP_MEMMAP_ON_MEMORY
+> +		 * @range has already been aligned to memory_block_size_bytes(),
+> +		 * so the following loop will always break it down cleanly.
+>  		 */
+> -		rc = add_memory_driver_managed(data->mgid, range.start,
+> -				range_len(&range), kmem_name, MHP_NID_IS_MGID);
+> +		cur_start = range.start;
+> +		cur_len = memory_block_size_bytes();
+> +		remaining = range_len(&range);
+> +		while (remaining) {
+> +			mhp_t mhp_flags = MHP_NID_IS_MGID;
+>  
+> -		if (rc) {
+> -			dev_warn(dev, "mapping%d: %#llx-%#llx memory add failed\n",
+> -					i, range.start, range.end);
+> -			remove_resource(res);
+> -			kfree(res);
+> -			data->res[i] = NULL;
+> -			if (mapped)
+> -				continue;
+> -			goto err_request_mem;
+> +			if (mhp_supports_memmap_on_memory(cur_len,
+> +							  MHP_MEMMAP_ON_MEMORY))
+> +				mhp_flags |= MHP_MEMMAP_ON_MEMORY;
+> +			/*
+> +			 * Ensure that future kexec'd kernels will not treat
+> +			 * this as RAM automatically.
+> +			 */
+> +			rc = add_memory_driver_managed(data->mgid, cur_start,
+> +						       cur_len, kmem_name,
+> +						       mhp_flags);
+> +
+> +			if (rc) {
+> +				dev_warn(dev,
+> +					 "mapping%d: %#llx-%#llx memory add failed\n",
+> +					 i, cur_start, cur_start + cur_len - 1);
+> +				remove_resource(res);
+> +				kfree(res);
+> +				data->res[i] = NULL;
+> +				if (mapped)
+> +					continue;
+> +				goto err_request_mem;
+> +			}
+> +
+> +			cur_start += cur_len;
+> +			remaining -= cur_len;
+>  		}
+>  		mapped++;
+>  	}
 
-Thanks,
-Song
+It appears that we need to hot-remove memory in the granularity of
+memory_block_size_bytes() too, according to try_remove_memory().  If so,
+it seems better to allocate one dax_kmem_data.res[] element for each
+memory block instead of dax region?
+
+Best Regards,
+Huang, Ying
