@@ -2,106 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2916E732EE6
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A50732EEF
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345424AbjFPKh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 06:37:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58312 "EHLO
+        id S1345487AbjFPKig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 06:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345387AbjFPKev (ORCPT
+        with ESMTP id S1345815AbjFPKgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 06:34:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A331E1A3;
-        Fri, 16 Jun 2023 03:29:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EE836364D;
-        Fri, 16 Jun 2023 10:29:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2818BC433CD;
-        Fri, 16 Jun 2023 10:29:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686911340;
-        bh=L+FYAyysL82MW2zB+dM/zpMrUXN7ZRSoB9sGeI/jDIA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VDZgR2ObLAH47STwcuU4fASgwtiw1NrmOgWdo3DXANTNX4W/vcfr/BwfK7sglOYja
-         tNr3aJn+RYsvtARwE0/LKM57BU0v75davo7nYM2olWltq4EFDsjXYmFZT3LKwXkKVU
-         v8XOc9dN8lPuBv0Oa4gtdtR2+PBmqrAzc3apQtNGcHXOrGvUgiD85pHawg52+8Er8i
-         C7jEeNXMJqgIcwjGfMmS/MN7x2VFsB1R9DuNnUjisueL5AxG+WFb8px1DrWJEtW0zL
-         6Kxd+fJVpgc87MmzQ/oLYkKKvLuNAWpWm+/qfahC8zG0hroc6pryQw3/mRVOO60lmh
-         w0AxeGzzGX6kA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Theodore Ts'o <tytso@mit.edu>, Sasha Levin <sashal@kernel.org>,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 5/5] ext4: only check dquot_initialize_needed() when debugging
-Date:   Fri, 16 Jun 2023 06:28:51 -0400
-Message-Id: <20230616102852.674366-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230616102852.674366-1-sashal@kernel.org>
-References: <20230616102852.674366-1-sashal@kernel.org>
+        Fri, 16 Jun 2023 06:36:12 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF866A48;
+        Fri, 16 Jun 2023 03:29:58 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-970028cfb6cso80162466b.1;
+        Fri, 16 Jun 2023 03:29:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686911355; x=1689503355;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=JWoW5IL6r7jB721BuhFKxOW5Wap3W5wMhPHSM+uYSlI=;
+        b=NkC/a6D+pzeIeQuTBTiX5xSElWEB8z2ovO+3YuyHCVT5teyTCpxx0pkFKeFCbLIiRR
+         BVfuiAmZcooipvYO5H1LGB7QH2Aqnh43eeihivIkkVtYSr2mtmFmxsPprSEBDKcflbvX
+         4QIzuCuPibmBAflnx8nerreiQMDow0MQEcBAcanloz9R61w0buRJvmt0YRlI/oz86kdz
+         FLxtRlwRPpnwm89ZUNzwEyQ/WRMh7AG+Fqf4QZB1MraPbqYhf4BTin4Hrq1OH2sD2cmU
+         Bfskg9TdvtnFbb3hZlF1pbTZuDA40xQbPIsMmLZKOUnXwE73e2r9qNkH9bSybCbgAarA
+         RyoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686911355; x=1689503355;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JWoW5IL6r7jB721BuhFKxOW5Wap3W5wMhPHSM+uYSlI=;
+        b=K8q0Yb4WQ1T0nGECp7tbkRLyT9ZTLHcHLixlQ5iuJQ0fiScaXpt8ZY39MS+RL77kpN
+         uWrEipAZesQjSpKN0URpqDjZBeJUYk/HXQLJtXvQMgLHUrZ/0hjMB7+AS53F7QEK6EJo
+         x4YQc+ibF83qTZs5YRcBxyTZdNbYwroCtV/gTtzbrsoYHilyk/bgDL3wggXEsboA3N/I
+         ehsKW3RD5ECV+s2nx6obrJkEAKv5SRVoMsvUaqcdRsDyvJ5f+iP2Bofxofr/2IenEoG/
+         bniv/GOTzKvP+ddo2ZzFSILjuUozbNc352kz8EAiHahbEix0Dk36ERzlMprQHWe4h5l+
+         Isbw==
+X-Gm-Message-State: AC+VfDyCWQnmIwpoenrM2CH6Y6lsfJK7BlLhh+HAOT0mWOpzgGxCOnY8
+        5j8iMs7YlbcfbRNuhK9oIc+JQgdUIKdPaA==
+X-Google-Smtp-Source: ACHHUZ7LGMhNvs63U9q0fGjlYOh+z8qasLJTG9D1GGTYftcX+jNyAYAGEizUJzekzjsEmixfjv79tw==
+X-Received: by 2002:a17:907:7e99:b0:978:930e:2279 with SMTP id qb25-20020a1709077e9900b00978930e2279mr1356987ejc.52.1686911354816;
+        Fri, 16 Jun 2023 03:29:14 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id lc20-20020a170906dff400b00970f0e2dab2sm10525868ejc.112.2023.06.16.03.29.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 03:29:14 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 13:29:11 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     arinc9.unal@gmail.com
+Cc:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net v5 2/6] net: dsa: mt7530: fix trapping frames on
+ non-MT7621 SoC MT7530 switch
+Message-ID: <20230616102911.yqwjjs6gezmhq72l@skbuf>
+References: <20230616025327.12652-1-arinc.unal@arinc9.com>
+ <20230616025327.12652-3-arinc.unal@arinc9.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.14.318
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230616025327.12652-3-arinc.unal@arinc9.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Theodore Ts'o <tytso@mit.edu>
+On Fri, Jun 16, 2023 at 05:53:23AM +0300, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+> 
+> The check for setting the CPU_PORT bits must include the non-MT7621 SoC
+> MT7530 switch variants to trap frames.
 
-[ Upstream commit dea9d8f7643fab07bf89a1155f1f94f37d096a5e ]
+I would add a simple "(identified by ID_MT7530)" to the commit message here.
 
-ext4_xattr_block_set() relies on its caller to call dquot_initialize()
-on the inode.  To assure that this has happened there are WARN_ON
-checks.  Unfortunately, this is subject to false positives if there is
-an antagonist thread which is flipping the file system at high rates
-between r/o and rw.  So only do the check if EXT4_XATTR_DEBUG is
-enabled.
+> Expand the check to include them.
+> 
+> Fixes: b8f126a8d543 ("net-next: dsa: add dsa support for Mediatek MT7530 switch")
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> ---
 
-Link: https://lore.kernel.org/r/20230608044056.GA1418535@mit.edu
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/ext4/xattr.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
 
-diff --git a/fs/ext4/xattr.c b/fs/ext4/xattr.c
-index e6c3bf7ad9b90..c2117b985d4af 100644
---- a/fs/ext4/xattr.c
-+++ b/fs/ext4/xattr.c
-@@ -2021,8 +2021,9 @@ ext4_xattr_block_set(handle_t *handle, struct inode *inode,
- 			else {
- 				u32 ref;
- 
-+#ifdef EXT4_XATTR_DEBUG
- 				WARN_ON_ONCE(dquot_initialize_needed(inode));
--
-+#endif
- 				/* The old block is released after updating
- 				   the inode. */
- 				error = dquot_alloc_block(inode,
-@@ -2090,8 +2091,9 @@ ext4_xattr_block_set(handle_t *handle, struct inode *inode,
- 			/* We need to allocate a new block */
- 			ext4_fsblk_t goal, block;
- 
-+#ifdef EXT4_XATTR_DEBUG
- 			WARN_ON_ONCE(dquot_initialize_needed(inode));
--
-+#endif
- 			goal = ext4_group_first_block_no(sb,
- 						EXT4_I(inode)->i_block_group);
- 			block = ext4_new_meta_blocks(handle, inode, goal, 0,
--- 
-2.39.2
-
+>  drivers/net/dsa/mt7530.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+> index 0a5237793209..e9fbe7ae6c2c 100644
+> --- a/drivers/net/dsa/mt7530.c
+> +++ b/drivers/net/dsa/mt7530.c
+> @@ -1007,7 +1007,7 @@ mt753x_cpu_port_enable(struct dsa_switch *ds, int port)
+>  		   UNU_FFP(BIT(port)));
+>  
+>  	/* Set CPU port number */
+> -	if (priv->id == ID_MT7621)
+> +	if (priv->id == ID_MT7530 || priv->id == ID_MT7621)
+>  		mt7530_rmw(priv, MT7530_MFC, CPU_MASK, CPU_EN | CPU_PORT(port));
+>  
+>  	/* Add the CPU port to the CPU port bitmap for MT7531 and the switch on
+> -- 
+> 2.39.2
+> 
