@@ -2,75 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5DB7732675
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 07:01:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B96E373267B
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 07:04:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233770AbjFPFB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 01:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59144 "EHLO
+        id S239284AbjFPFEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 01:04:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233655AbjFPFBY (ORCPT
+        with ESMTP id S229976AbjFPFEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 01:01:24 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9870326A9
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 22:01:22 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-77d825fd3bcso26334139f.0
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 22:01:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686891682; x=1689483682;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eGnwxdo2DEMIi7tpDl/sj1NsuPf/fjo1eZwFLbHh/oc=;
-        b=Sm8ByQ0C03TQn5m5rGLOGVVI9ZtQNJsMAxkSp1Wty+c/492581vJRBClQejiHWQXme
-         /UqwBZjwJeRwyUMy73B6AHrj0OYUqv3AKweee6grT6Eww972Gju8lnUsqL/cvwUv9foB
-         H8OPr4/qwKXwm+fPigIa0xdOM+31g2i+UY9Z/LF1VqjVnH5/9TMDrULWjGtHkqieh9P4
-         9n0PlRAsySc5eMsp0ig0mvVpCTV2dM8MggbTGoUY/Wbt26MOfKVihJlbNIikmz+Zyx2e
-         lXE30FO2dLCejwedvMRpsxSmV5s3zFC5VNOhQODCCc6InjShXnJtXGOwDUYC9chCJkTJ
-         BcUQ==
-X-Gm-Message-State: AC+VfDzp85L2m0MBH0T3+ydHWg4lukrbe1XCtijnaxF8HoCm5IxGAORw
-        tYeci2bH/wv5u5qnwOzfbCbhsHGbBao2uFDELb2i9kqqvAvr
-X-Google-Smtp-Source: ACHHUZ6chEzs+H370XGbzmOcYS60hX1wyOhuKQHSGSvTc8wzvYQfpRdk/s8FYqZChd2H1Q8CFppxMqo46ogMdIqov/rMlSBJIyS+
+        Fri, 16 Jun 2023 01:04:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F38269D
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 22:04:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C3301619D2
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 05:04:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1382C433C0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 05:04:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686891843;
+        bh=80QkVl+dt31i6iqcDzhy8sWS6Kv4Y0R7HM/LYiUY49k=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=TFuiB30iyO42j/JXKGDWucKVkPwqq5r1z1RdEG+Lywg+kXn553zudt9/N99RcfX74
+         vwECinP+PzskqbnjYu1T6M+Lx06XTrdNomt6oUNmJ1rSekfHyiIYl4KOBll768WjYa
+         f3CFSFalT80zWAeTXXsoNrauplKn79x/OZpuZDa8wknq1vO4UAali9SR1ttmcOpngx
+         5dyRkpROAk7RQh4E5rHkyXoxpIm3twEwvKT4SxIunValzkw8M7lkVVbNk8dADilVeK
+         EwjL15Pu5Bof3cTe44YzNLii/vGkhbng8QZ0HyrX1rTJb6G7VBhFr+vOd4LsiV/GPs
+         IuiSEcJgfsE2g==
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-55b78f40301so188508eaf.0
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 22:04:03 -0700 (PDT)
+X-Gm-Message-State: AC+VfDwuhEp0G0Cvt1LDQ8l8APJ/NSS/y/fYm6DyMrCeDMCzJOuW1TTg
+        +yvagweMSg8dle6mrmLNgzxOZEGIkrFUX7C2o+I=
+X-Google-Smtp-Source: ACHHUZ5UeobCq0L1QhAous1X74CB8QQx4r1NuucsLTGgun93B5fL80oWBNHtZtwoBFcebpgBvBAhCztZ/3QhYFs1kfQ=
+X-Received: by 2002:a4a:bc87:0:b0:555:2ba8:a75b with SMTP id
+ m7-20020a4abc87000000b005552ba8a75bmr1161300oop.1.1686891843222; Thu, 15 Jun
+ 2023 22:04:03 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a02:3319:0:b0:423:141e:f20b with SMTP id
- c25-20020a023319000000b00423141ef20bmr303599jae.2.1686891681994; Thu, 15 Jun
- 2023 22:01:21 -0700 (PDT)
-Date:   Thu, 15 Jun 2023 22:01:21 -0700
-In-Reply-To: <415439.1686877276@warthog.procyon.org.uk>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007adf2d05fe38132a@google.com>
-Subject: Re: [syzbot] [crypto?] general protection fault in shash_async_final
-From:   syzbot <syzbot+13a08c0bf4d212766c3c@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, dhowells@redhat.com,
-        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+References: <20230604042557.900590-1-masahiroy@kernel.org> <20230604042557.900590-2-masahiroy@kernel.org>
+ <20230615140010.GE3635807@google.com>
+In-Reply-To: <20230615140010.GE3635807@google.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 16 Jun 2023 14:03:27 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQjYQSMjNb4Cn_8NVxGhsJ96-JBeNChVzLjefQZ82aKVg@mail.gmail.com>
+Message-ID: <CAK7LNAQjYQSMjNb4Cn_8NVxGhsJ96-JBeNChVzLjefQZ82aKVg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] mfd: rsmu: turn rsmu-{core,i2c,spi} into
+ single-object modules
+To:     Lee Jones <lee@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Jun 15, 2023 at 11:00=E2=80=AFPM Lee Jones <lee@kernel.org> wrote:
+>
+> On Sun, 04 Jun 2023, Masahiro Yamada wrote:
+>
+> > With the previous fix, these modules are built from a single C file.
+> >
+> > Rename the source files so they match the module names.
+>
+> Should this be part of the previous patch?
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Reported-and-tested-by: syzbot+13a08c0bf4d212766c3c@syzkaller.appspotmail.com
+I do not know. It is up to the maintainer's preference (you).
 
-Tested on:
+If you want me to send a squashed patch, I will be
+happy to do so.
 
-commit:         97c5209b leds: trigger: netdev: uninitialized variable..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git main
-console output: https://syzkaller.appspot.com/x/log.txt?x=159c4d9b280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=526f919910d4a671
-dashboard link: https://syzkaller.appspot.com/bug?extid=13a08c0bf4d212766c3c
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=16962727280000
 
-Note: testing is done by a robot and is best-effort only.
+Masahiro
+
+
+
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
