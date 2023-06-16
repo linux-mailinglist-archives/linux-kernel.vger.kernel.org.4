@@ -2,150 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 213BD7334B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 17:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB4727334B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 17:28:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345968AbjFPP2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 11:28:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46600 "EHLO
+        id S1345977AbjFPP22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 11:28:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345470AbjFPP17 (ORCPT
+        with ESMTP id S245134AbjFPP21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 11:27:59 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52AA30C3;
-        Fri, 16 Jun 2023 08:27:58 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-25ea635570eso703809a91.3;
-        Fri, 16 Jun 2023 08:27:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686929278; x=1689521278;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=63uzoQ1syV2Wjj6k2aLXBVP/jt/qcihxF/TXUIXFfKY=;
-        b=R/vvsw6dO5+cd7ZMkmRQW1awaW1LiARa5ShXvyQZiznK439y0ndjzpS1hW4Q/NPfty
-         GujoNKgYSSFSbBaPbO+4OCa53Jobm17h0ZsAhjYFou+2QS2xVVcToyP066k1A3eKMGN+
-         loUIPuql9zflzJn5TL/6D8fKmyz9y89xShKxHGkCliPDd08iIqtt11jSW0teRSlFgLTR
-         3RWM4WfWaJ4wA6Ik1Zv9YqY1fwsRBTm8Q7+gsfJynbBzx7OL5tCfur7rw8EZdHVe3BKs
-         pL6iHWf+WkcF4LDp3osGs5E+yEmzl+hmV9OxXRuNaUo0sVMIavCb1Dnuk0Ymat0T9gqf
-         4uPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686929278; x=1689521278;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=63uzoQ1syV2Wjj6k2aLXBVP/jt/qcihxF/TXUIXFfKY=;
-        b=GZ1H8+CD8YkqulceAjmCwliQeje2N57gImZoBLc29RwMM2guIQOQqHPEawI854i3iL
-         4/shilEdDn66J5F3D4fdXtFVRdt2M0a6luZfqd/9NQWeryk1RYTMRBiEoFfrEyq1K9Fm
-         SFC+fW7iofYlr2dEB78qejX94FS1b/8HdJlz8Vrb5t/lkyH+hwFTU72Y61u5D0HbNA9i
-         5ybm4TlQzl9injx3ub6UmDIV08QWGUqZ+l6YHJ2AcZDIcB/GI5EbBS6sDYD6i4nRpuyi
-         tTx3cVU9yUN3rvPpl4v1YAFR7edlbe8na5NbYdgnD/GfdYaQAPmT9MCWEP+RZWAlWpcD
-         iS1Q==
-X-Gm-Message-State: AC+VfDxZZ2Fa68qXemg4zMhA4nmup7R/YP+8d/fjPz1UtjX5qFcD7atk
-        mpr8KQ750PrCscBzr8Ih9BnzFG1ku/GCd3ZJoZM=
-X-Google-Smtp-Source: ACHHUZ7ggszHILJHBCELxrQm3UBlmG1caxb6nfkSLisF+66VB9JrJhRoC4YcIxZ7claF4N14nncmru4ukHL/5Q8h3T4=
-X-Received: by 2002:a17:90a:6c63:b0:25b:fbdc:dd8 with SMTP id
- x90-20020a17090a6c6300b0025bfbdc0dd8mr1902431pjj.24.1686929277972; Fri, 16
- Jun 2023 08:27:57 -0700 (PDT)
+        Fri, 16 Jun 2023 11:28:27 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E70270B;
+        Fri, 16 Jun 2023 08:28:26 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B030C21D85;
+        Fri, 16 Jun 2023 15:28:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1686929304; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0Kausdl49qJGfqu39jLtos4uf5kYOvO/lFvNKQ0Af1w=;
+        b=W+pmP7MwL/U/YnM7oawRQovQaVWhkNKeM6iNmCmjaTpzQv9vXxp2c8tIDX4plttkoy/w/z
+        nHA2FHYVip6S/o2bL4QPTK5ylIjsrTwbcKcWyVKVTNaCd7xrr1zw20ADayDe0OTJNrigMg
+        IJ5PVLM6hf+q4AfF8treZyyKYvdHqJE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1686929304;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0Kausdl49qJGfqu39jLtos4uf5kYOvO/lFvNKQ0Af1w=;
+        b=jjeFLEvXAN6LWxX6D+K19arDU9xpflBqH6voD4rCG+Du0GYpQfNZeQTEPql2atIsf5DrFN
+        eCFgDtEJGbDmRCCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A09391330B;
+        Fri, 16 Jun 2023 15:28:24 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id FHkvJ5h/jGSwAQAAMHmgww
+        (envelope-from <jack@suse.cz>); Fri, 16 Jun 2023 15:28:24 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 34F31A0755; Fri, 16 Jun 2023 17:28:24 +0200 (CEST)
+Date:   Fri, 16 Jun 2023 17:28:24 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     jack@suse.cz, linux-fsdevel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com, chengzhihao1@huawei.com,
+        yukuai3@huawei.com
+Subject: Re: [PATCH] quota: fix race condition between dqput() and
+ dquot_mark_dquot_dirty()
+Message-ID: <20230616152824.ndpgvkegvvip2ahh@quack3>
+References: <20230616085608.42435-1-libaokun1@huawei.com>
 MIME-Version: 1.0
-References: <CAKgT0UezciLjHacOx372+v8MZkDf22D5Thn82n-07xxKy_0FTQ@mail.gmail.com>
- <CAKgT0UfMeVOz6AOqSvVvzpsedGDiXCNQrjM+4KDv7qJJ1orpsw@mail.gmail.com>
- <a1cff65b-b390-3872-25b5-dd6bbfb3524c@linux.intel.com> <b24a6c7b-27fc-41c0-5c82-15696b4a7dc1@arm.com>
- <ZIiRK2Dzl2/9Jqle@ziepe.ca> <BN9PR11MB52765C24405D2475CF3CBEBE8C58A@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZIxTmGU4a5dniEY3@nvidia.com>
-In-Reply-To: <ZIxTmGU4a5dniEY3@nvidia.com>
-From:   Alexander Duyck <alexander.duyck@gmail.com>
-Date:   Fri, 16 Jun 2023 08:27:21 -0700
-Message-ID: <CAKgT0UfmdOOPSD5YvpHnh1A02URn9zxVLbyXJM_67On7xojLcA@mail.gmail.com>
-Subject: Re: Question about reserved_regions w/ Intel IOMMU
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Baolu Lu <baolu.lu@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230616085608.42435-1-libaokun1@huawei.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 5:20=E2=80=AFAM Jason Gunthorpe <jgg@nvidia.com> wr=
-ote:
->
-> On Fri, Jun 16, 2023 at 08:39:46AM +0000, Tian, Kevin wrote:
-> > +Alex
-> >
-> > > From: Jason Gunthorpe <jgg@nvidia.com>
-> > > Sent: Tuesday, June 13, 2023 11:54 PM
-> > >
-> > > On Thu, Jun 08, 2023 at 04:28:24PM +0100, Robin Murphy wrote:
-> > >
-> > > > > The iova_reserve_pci_windows() you've seen is for kernel DMA inte=
-rfaces
-> > > > > which is not related to peer-to-peer accesses.
-> > > >
-> > > > Right, in general the IOMMU driver cannot be held responsible for
-> > > whatever
-> > > > might happen upstream of the IOMMU input.
-> > >
-> > > The driver yes, but..
-> > >
-> > > > The DMA layer carves PCI windows out of its IOVA space
-> > > > unconditionally because we know that they *might* be problematic,
-> > > > and we don't have any specific constraints on our IOVA layout so
-> > > > it's no big deal to just sacrifice some space for simplicity.
-> > >
-> > > This is a problem for everything using UNMANAGED domains. If the iomm=
-u
-> > > API user picks an IOVA it should be able to expect it to work. If the
-> > > intereconnect fails to allow it to work then this has to be discovere=
-d
-> > > otherwise UNAMANGED domains are not usable at all.
-> > >
-> > > Eg vfio and iommufd are also in trouble on these configurations.
-> > >
-> >
-> > If those PCI windows are problematic e.g. due to ACS they belong to
-> > a single iommu group. If a vfio user opens all the devices in that grou=
-p
-> > then it can discover and reserve those windows in its IOVA space.
->
-> How? We don't even exclude the single device's BAR if there is no ACS?
+Hello Baokun!
 
-The issue here was a defective ACS on a PCIe switch.
+On Fri 16-06-23 16:56:08, Baokun Li wrote:
+> We ran into a problem that dqput() and dquot_mark_dquot_dirty() may race
+> like the function graph below, causing a released dquot to be added to the
+> dqi_dirty_list, and this leads to that dquot being released again in
+> dquot_writeback_dquots(), making two identical quotas in free_dquots.
+> 
+>        cpu1              cpu2
+> _________________|_________________
+> wb_do_writeback         CHOWN(1)
+>  ...
+>   ext4_da_update_reserve_space
+>    dquot_claim_block
+>     ...
+>      dquot_mark_dquot_dirty // try to dirty old quota
+>       test_bit(DQ_ACTIVE_B, &dquot->dq_flags) // still ACTIVE
+>       if (test_bit(DQ_MOD_B, &dquot->dq_flags))
+>       // test no dirty, wait dq_list_lock
+>                     ...
+>                      dquot_transfer
+>                       __dquot_transfer
+>                       dqput_all(transfer_from) // rls old dquot
+>                        dqput // last dqput
+>                         dquot_release
+>                          clear_bit(DQ_ACTIVE_B, &dquot->dq_flags)
+>                         atomic_dec(&dquot->dq_count)
+>                         put_dquot_last(dquot)
+>                          list_add_tail(&dquot->dq_free, &free_dquots)
+>                          // first add the dquot to free_dquots
+>       if (!test_and_set_bit(DQ_MOD_B, &dquot->dq_flags))
+>         add dqi_dirty_list // add freed dquot to dirty_list
+> P3:
+> ksys_sync
+>  ...
+>   dquot_writeback_dquots
+>    WARN_ON(!test_bit(DQ_ACTIVE_B, &dquot->dq_flags))
+>    dqgrab(dquot)
+>     WARN_ON_ONCE(!atomic_read(&dquot->dq_count))
+>     WARN_ON_ONCE(!test_bit(DQ_ACTIVE_B, &dquot->dq_flags))
+>    dqput(dquot)
+>     put_dquot_last(dquot)
+>      list_add_tail(&dquot->dq_free, &free_dquots)
+>      // Double add the dquot to free_dquots
+> 
+> This causes a list_del corruption when removing the entry from free_dquots,
+> and even trying to free the dquot twice in dqcache_shrink_scan triggers a
+> use-after-free.
+> 
+> A warning may also be triggered by a race like the function diagram below:
+> 
+>        cpu1            cpu2           cpu3
+> ________________|_______________|________________
+> wb_do_writeback   CHOWN(1)        QUOTASYNC(1)
+>  ...                              ...
+>   ext4_da_update_reserve_space
+>     ...           __dquot_transfer
+>                    dqput // last dqput
+>                     dquot_release
+>                      dquot_is_busy
+>                       if (test_bit(DQ_MOD_B, &dquot->dq_flags))
+>                        // not dirty and still active
+>      dquot_mark_dquot_dirty
+>       if (!test_and_set_bit(DQ_MOD_B, &dquot->dq_flags))
+>         add dqi_dirty_list
+>                        clear_bit(DQ_ACTIVE_B, &dquot->dq_flags)
+>                                    dquot_writeback_dquots
+>                                     WARN_ON(!test_bit(DQ_ACTIVE_B))
+> 
+> To solve this problem, it is similar to the way dqget() avoids racing with
+> dquot_release(). First set the DQ_MOD_B flag, then execute wait_on_dquot(),
+> after this we know that either dquot_release() is already finished or it
+> will be canceled due to DQ_MOD_B flag test, at this point if the quota is
+> DQ_ACTIVE_B, then we can safely add the dquot to the dqi_dirty_list,
+> otherwise clear the DQ_MOD_B flag and exit directly.
+> 
+> Fixes: 4580b30ea887 ("quota: Do not dirty bad dquots")
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> ---
+> 
+> Hello Honza,
+> 
+> This problem can also be solved by modifying the reference count mechanism,
+> where dquots hold a reference count after they are allocated until they are
+> destroyed, i.e. the dquots in the free_dquots list have dq_count == 1. This
+> allows us to reduce the reference count as soon as we enter the dqput(),
+> and then add the dquot to the dqi_dirty_list only when dq_count > 1. This
+> also prevents the dquot in the dqi_dirty_list from not having the
+> DQ_ACTIVE_B flag, but this is a more impactful modification, so we chose to
+> refer to dqget() to avoid racing with dquot_release(). If you prefer this
+> solution by modifying the dq_count mechanism, I would be happy to send
+> another version of the patch.
 
-> > The problem is that the user may not open all the devices then
-> > currently there is no way for it to know the windows on those
-> > unopened devices.
-> >
-> > Curious why nobody complains about this gap before this thread...
->
-> Probably because it only matters if you have a real PCIe switch in the
-> system, which is pretty rare.
+The way this *should* work is that dquot_mark_dquot_dirty() using dquot
+references from the inode should be protected by dquot_srcu. quota_off
+code takes care to call synchronize_srcu(&dquot_srcu) to not drop dquot
+references while they are used by other users. But you are right
+dquot_transfer() breaks this assumption. Most callers are fine since they
+are also protected by inode->i_lock but still I'd prefer to fix
+dquot_transfer() to follow the guarantees dquot_srcu should provide.
 
-So just FYI I am pretty sure we have a partitioned PCIe switch that
-has FW issues. Specifically it doesn't seem to be honoring the
-Redirect Request bit so what is happening is that we are seeing
-requests that are supposed to be going to the root complex/IOMMU
-getting redirected to an NVMe device that was on the same physical
-PCIe switch. We are in the process of getting that sorted out now and
-are using the forcedac option in the meantime to keep the IOMMU out of
-the 32b address space that was causing the issue.
+Now calling synchronize_srcu() directly from dquot_transfer() is too
+expensive (and mostly unnecessary) so what I would rather suggest is to
+create another dquot list (use dq_free list_head inside struct dquot for
+it) and add dquot whose last reference should be dropped there. We'd then
+queue work item which would call synchronize_srcu() and after that perform
+the final cleanup of all the dquots on the list.
 
-The reason for my original request is more about the user experience
-of trying to figure out what is reserved and what isn't. It seems like
-the IOVA will have reservations that are not visible to the end user.
-So when I go looking through the reserved_regions in sysfs it just
-lists the MSI regions that are reserved, and maybe some regions such
-as the memory for USB. while in reality we may be reserving IOVA
-regions in iova_reserve_pci_windows that will not be exposed without
-having to add probes or adding some printk debugging.
+Now this also needs some modifications to dqget() and to quotaoff code to
+handle various races with the new dqput() code so if you feel it is too
+complex for your taste, I can implement this myself.
+
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
