@@ -2,121 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E896733AA2
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 22:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76AFB733AA5
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 22:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345234AbjFPUQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 16:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49524 "EHLO
+        id S232512AbjFPUQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 16:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245082AbjFPUQK (ORCPT
+        with ESMTP id S230022AbjFPUQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 16:16:10 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA683A8B
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 13:16:07 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-30fcde6a73cso866621f8f.2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 13:16:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1686946566; x=1689538566;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8vPnF45lwmBQE4hlXIcf9QZ1ECe0DnRUytPjxgA+AQk=;
-        b=sUGdkeuqPEE2kSpld6ncDRKJ6+AC1LNRuuN0SYX3zIXn54/gPZRGJRLMaMUDKYm7Dq
-         Qm3lBulGHA0F0NePogIXO0LKEZ30+KHhr20mDtez/n3mWueIXFuWsSbbuWx1YTiiY0NG
-         3bSqVkHI2ySmGrlsHwmD7PTAzYSeUCe4MLJI2dztws7394v4C42As2HtiQK4a9FIVbyz
-         1QZyAgkkZCltHOAL34PwIo4YsYIZ3qNkHPrbqpRu/I6CEkng4oXjsMbIekaDZP9ex81U
-         otgJ8MOy7oim5IqIkFVGaS5ka8jw1bZPHYrYsFM8mrh2Lettv0SZrfPmzQzcQ2LRkpe8
-         bg6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686946566; x=1689538566;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8vPnF45lwmBQE4hlXIcf9QZ1ECe0DnRUytPjxgA+AQk=;
-        b=a5ju9te02yVwQ9wC+ETTvO52KRssJAHD2aN/eU3UdwsRafCVP449jYgEoH37Up8A5u
-         8fXhlAozd+kOoJ39Vb/hpIoPnH9PzfZKcw6p4LENFATwEcL3jJ2tJeoG4EoO9xt1yx6J
-         WjnPKgbB7R5Z5FI6fb9rN+Aol/5+zR+yC7beZxw06zw5gw77hXzaMP3TdEWImLG+z3nG
-         kazg6+8KiA4bWoFgbKjmxphBixWPE8gK6ORGPzCqubSIJ1J1viKOsspkmSxw2poi3FYX
-         oYMaawb/AKWHN0smwdAoKOpOEgUzyposWMBgH338DicSQqBdVHpFvJPnzqts/SL2f595
-         nGGQ==
-X-Gm-Message-State: AC+VfDwAwL6Y4YGZ262FUzZQXnP5k9S20Q3GjJZzFKT2dqgnAm5sEdak
-        QrdcmiQWy3TN+Y3qTwcSn2q+1Q==
-X-Google-Smtp-Source: ACHHUZ5OzMuNb5xcKMSIbAKpHDQpCrRDCcux6ViOZUhjyjCD5lDQKaAxLzKc4F9Z03JahPsdXu/s/g==
-X-Received: by 2002:adf:fe11:0:b0:30f:cc8f:e48c with SMTP id n17-20020adffe11000000b0030fcc8fe48cmr2182422wrr.25.1686946566146;
-        Fri, 16 Jun 2023 13:16:06 -0700 (PDT)
-Received: from ?IPV6:2a02:578:8593:1200:a4fb:308c:d9af:9b31? ([2a02:578:8593:1200:a4fb:308c:d9af:9b31])
-        by smtp.gmail.com with ESMTPSA id v18-20020adfebd2000000b0030789698eebsm24445924wrn.89.2023.06.16.13.16.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jun 2023 13:16:05 -0700 (PDT)
-Message-ID: <83e6e41e-f665-0923-c723-be318987816c@tessares.net>
-Date:   Fri, 16 Jun 2023 22:16:04 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v4 4/4] selftests: net: fcnal-test: check if FIPS mode is
- enabled: manual merge
-Content-Language: en-GB
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-To:     Jakub Kicinski <kuba@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        shuah@kernel.org, dsahern@gmail.com, andrei.gherzan@canonical.com,
-        netdev@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Magali Lemes <magali.lemes@canonical.com>,
-        Guillaume Nault <gnault@redhat.com>
-References: <20230613123222.631897-1-magali.lemes@canonical.com>
- <20230613123222.631897-5-magali.lemes@canonical.com>
- <5007b52c-dd16-dbf6-8d64-b9701bfa498b@tessares.net>
-In-Reply-To: <5007b52c-dd16-dbf6-8d64-b9701bfa498b@tessares.net>
-Content-Type: text/plain; charset=UTF-8
+        Fri, 16 Jun 2023 16:16:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE2635BD
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 13:16:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1171463E33
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 20:16:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B24DC433C8;
+        Fri, 16 Jun 2023 20:16:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1686946600;
+        bh=r1/rE7q7B9G5wovZrruNQFK13c8rxM+QTwTPz01sOds=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CQQ0nM2W/E3WihKX0NzuD7GwsVcjouhHPg/g91HOOpEfR7CnzsBas+4HZEvy4671e
+         L+BXCS4lhiz7qZGBJ841n+xMxZC3dky2IZ6SDYvZx/4RE0HtVzklxm0m/DMa7Ioflm
+         OOeF/lkyACPF9a2h3KdaEN907rAdHS83g0MrjlFY=
+Date:   Fri, 16 Jun 2023 13:16:39 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org,
+        kernel test robot <yujie.liu@intel.com>,
+        Aaron Lu <aaron.lu@intel.com>,
+        Olivier Dion <odion@efficios.com>, michael.christie@oracle.com,
+        Feng Tang <feng.tang@intel.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>, Peter Xu <peterx@redhat.com>,
+        linux-mm@kvack.org
+Subject: Re: [PATCH] mm: Move mm_count into its own cache line
+Message-Id: <20230616131639.992998157fe696eb0e0589aa@linux-foundation.org>
+In-Reply-To: <20230515143536.114960-1-mathieu.desnoyers@efficios.com>
+References: <20230515143536.114960-1-mathieu.desnoyers@efficios.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jakub, Stephen,
+On Mon, 15 May 2023 10:35:36 -0400 Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
 
-On 16/06/2023 21:33, Matthieu Baerts wrote:
-> Hi Magali,
+> The mm_struct mm_count field is frequently updated by mmgrab/mmdrop
+> performed by context switch. This causes false-sharing for surrounding
+> mm_struct fields which are read-mostly.
 > 
-> On 13/06/2023 14:32, Magali Lemes wrote:
->> There are some MD5 tests which fail when the kernel is in FIPS mode,
->> since MD5 is not FIPS compliant. Add a check and only run those tests
->> if FIPS mode is not enabled.
->>
->> Fixes: f0bee1ebb5594 ("fcnal-test: Add TCP MD5 tests")
->> Fixes: 5cad8bce26e01 ("fcnal-test: Add TCP MD5 tests for VRF")
->> Reviewed-by: David Ahern <dsahern@kernel.org>
->> Signed-off-by: Magali Lemes <magali.lemes@canonical.com>
+> This has been observed on a 2sockets/112core/224cpu Intel Sapphire
+> Rapids server running hackbench, and by the kernel test robot
+> will-it-scale testcase.
 > 
-> Thank you for your patch!
+> Move the mm_count field into its own cache line to prevent false-sharing
+> with other mm_struct fields.
 > 
-> FYI, we got a small conflict when merging 'net' in 'net-next' in the
-> MPTCP tree due to this patch applied in 'net':
+> Move mm_count to the first field of mm_struct to minimize the amount of
+> padding required: rather than adding padding before and after the
+> mm_count field, padding is only added after mm_count.
+> 
+> Note that I noticed this odd comment in mm_struct:
+> 
+> commit 2e3025434a6b ("mm: relocate 'write_protect_seq' in struct mm_struct")
+> 
+>                 /*
+>                  * With some kernel config, the current mmap_lock's offset
+>                  * inside 'mm_struct' is at 0x120, which is very optimal, as
+>                  * its two hot fields 'count' and 'owner' sit in 2 different
+>                  * cachelines,  and when mmap_lock is highly contended, both
+>                  * of the 2 fields will be accessed frequently, current layout
+>                  * will help to reduce cache bouncing.
+>                  *
+>                  * So please be careful with adding new fields before
+>                  * mmap_lock, which can easily push the 2 fields into one
+>                  * cacheline.
+>                  */
+>                 struct rw_semaphore mmap_lock;
+> 
+> This comment is rather odd for a few reasons:
+> 
+> - It requires addition/removal of mm_struct fields to carefully consider
+>   field alignment of _other_ fields,
+> - It expresses the wish to keep an "optimal" alignment for a specific
+>   kernel config.
+> 
+> I suspect that the author of this comment may want to revisit this topic
+> and perhaps introduce a split-struct approach for struct rw_semaphore,
+> if the need is to place various fields of this structure in different
+> cache lines.
+> 
+> ...
+>
+> --- a/include/linux/mm_types.h
+> +++ b/include/linux/mm_types.h
+> @@ -583,6 +583,21 @@ struct mm_cid {
+>  struct kioctx_table;
+>  struct mm_struct {
+>  	struct {
+> +		/*
+> +		 * Fields which are often written to are placed in a separate
+> +		 * cache line.
+> +		 */
+> +		struct {
+> +			/**
+> +			 * @mm_count: The number of references to &struct
+> +			 * mm_struct (@mm_users count as 1).
+> +			 *
+> +			 * Use mmgrab()/mmdrop() to modify. When this drops to
+> +			 * 0, the &struct mm_struct is freed.
+> +			 */
+> +			atomic_t mm_count;
+> +		} ____cacheline_aligned_in_smp;
+> +
 
-Just in case, I'm starting to publish the Git rerere resolutions for the
-conflicts we have when syncing the MPTCP trees with Netdev's "net" and
-"net-next" trees. They are available there:
+Why add the anonymous struct?
 
-  https://github.com/multipath-tcp/mptcp-upstream-rr-cache
+	atomic_t mm_count ____cacheline_aligned_in_smp;
 
-For this specific conflict, the new files are available there:
+would suffice?
 
-  https://github.com/multipath-tcp/mptcp-upstream-rr-cache/commit/5091dd
+Secondly, the ____cacheline_aligned_in_smp doesn't actually do
+anything?  mm_count is at offset 0 which is cacheline aligned anyway. 
+The next field (mm_mt) will share a cacheline with mm_count.
 
-Don't hesitate to tell me if I need to change anything to this repo.
+If the plan is to put mm_count in "its own" cacheline then padding will
+be needed?
 
-Cheers,
-Matt
--- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+
