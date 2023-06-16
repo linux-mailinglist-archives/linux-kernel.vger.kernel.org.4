@@ -2,46 +2,482 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 641A07326DB
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 07:53:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6420B7326E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 07:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241221AbjFPFxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 01:53:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41360 "EHLO
+        id S229657AbjFPF4L convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 16 Jun 2023 01:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbjFPFxA (ORCPT
+        with ESMTP id S241506AbjFPF4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 01:53:00 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303DD2D50;
-        Thu, 15 Jun 2023 22:53:00 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id C99AF67373; Fri, 16 Jun 2023 07:52:56 +0200 (CEST)
-Date:   Fri, 16 Jun 2023 07:52:56 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Lu Hongfei <luhongfei@vivo.com>, Yangtao Li <frank.li@vivo.com>
-Subject: Re: linux-next: manual merge of the f2fs tree with the mm tree
-Message-ID: <20230616055256.GA28569@lst.de>
-References: <20230616102524.73bb5efb@canb.auug.org.au>
+        Fri, 16 Jun 2023 01:56:05 -0400
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484BE35A3;
+        Thu, 15 Jun 2023 22:55:07 -0700 (PDT)
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1b3c1730fc9so2550845ad.0;
+        Thu, 15 Jun 2023 22:55:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686894879; x=1689486879;
+        h=content-transfer-encoding:fcc:content-language:user-agent
+         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zIMo/fLw73fsOD8BQxcb2psKOzd8OUTA6Kfipb8yO6c=;
+        b=CxqZWdJIBlMwAuqy8sRTURNwaDmxCjmQiahRrvh7hizNbc6fsr8r0Yi8M1uM9ELWzI
+         inuWSSmLDtA/EwzFBELxTix6LxZSos8uf5Fa7IbgShU8MjRcX6H5AN/MkfN50a8lADkh
+         bDOAiXswtzvIJuaTjs51fY5j05LuqJvP+NBgkpi2j0uTr6zjvha9h4ZWmY96keygqMAs
+         se5Uf963YLHggf1P9Tr97xPa9TB4WYhf0zpx5dkhajT6RASJ6k8Qqq88nWgigluMUa0l
+         68ERaVurBPhXzGTov8urY75W0syDAnEa15LayExqJcm4lhS7P5EGYzOvHF7jexTi7Grm
+         IpEQ==
+X-Gm-Message-State: AC+VfDw1DC7J4huTKUI/Mr4KgdaXFkIpqPn4LnIdkjz+snNoAgYQwZIM
+        WE0+d4WRM36UNsPptL3GNR8=
+X-Google-Smtp-Source: ACHHUZ5c92bjTx35/rMUS2/H4Ga8GvbUYTxaqDUTRbBlLAk5hWTtBjqswtmI9AjOOeVxbEwzgAiugw==
+X-Received: by 2002:a17:902:ec8d:b0:1b3:8aea:cac8 with SMTP id x13-20020a170902ec8d00b001b38aeacac8mr868750plg.49.1686894878786;
+        Thu, 15 Jun 2023 22:54:38 -0700 (PDT)
+Received: from localhost ([2408:8453:744:15bc:516a:db79:5a16:2946])
+        by smtp.gmail.com with ESMTPSA id jo23-20020a170903055700b001993a1fce7bsm14908514plb.196.2023.06.15.22.54.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 22:54:38 -0700 (PDT)
+From:   Hongyu Xie <xiehongyu1@kylinos.cn>
+To:     linux@armlinux.org.uk, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, corbet@lwn.net
+Cc:     rdunlap@infradead.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xy521521@gmail.com,
+        oe-kbuild-all@lists.linux.dev, lkp@intel.com, bagasdotme@gmail.com,
+        Hongyu Xie <xiehongyu1@kylinos.cn>
+Subject: Re: [RESEND PATCH v4 -next] tty: serial: add panic serial helper
+Date:   Fri, 16 Jun 2023 13:54:33 +0800
+Message-Id: <cb984493-5353-db4b-a46b-37e6cb6e0ee9@kylinos.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <2023061502-submerge-preachy-4413@gregkh>
+References: <20230614025512.27746-1-xiehongyu1@kylinos.cn> <2023061502-submerge-preachy-4413@gregkh>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230616102524.73bb5efb@canb.auug.org.au>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Thunderbird/102.11.0
+Content-Language: en-US
+X-Mozilla-Draft-Info: internal/draft; vcard=0; receipt=0; DSN=0; uuencode=0; attachmentreminder=0; deliveryformat=1
+X-Identity-Key: id1
+Fcc:    imap://xiehongyu1%40kylinos.cn@imap.kylinos.cn/Sent
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The merge looks good to me, thanks.
+在 2023/6/15 18:17, Greg KH 写道:
+> On Wed, Jun 14, 2023 at 10:55:12AM +0800, Hongyu Xie wrote:
+>> It was inspired by kgdboc.
+>>
+>> This is a debug module that allows you to get all kernel logs
+>> after panic.
+>>
+>> Normally you need to attach a USB-to-UART tool or enable kdump
+>> before panic happens to get log from kernel after panic. If you
+>> didn't do that and kdump is not working, you can't get any log to
+>> know what happened before panic. If you have a USB-to-UART tool
+>> and the UART port on your computer is working. This module helps
+>> you to get all kernel log after panic() is called.
+>>
+>> To use this, see Documentation/dev-tools/panic_serial_helper.rst.
+>>
+>> Tested on an arm64 device.
+>>
+>> Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
+>> ---
+> 
+> Why  is this a RESEND?  What's wrong with the previous version?
+> 
+> 
+> 
+>>
+>> v4: fix some syntax problems in Documentation.
+>>
+>> v3: fix problems in Documentation reported by
+>> kernel test robot <lkp@intel.com>.
+>>
+>> v2: replace uart with UART for consistency.
+>>
+>>   Documentation/dev-tools/index.rst             |   1 +
+>>   .../dev-tools/panic_serial_helper.rst         | 138 ++++
+>>   MAINTAINERS                                   |   5 +
+>>   drivers/tty/serial/Kconfig                    |  25 +
+>>   drivers/tty/serial/Makefile                   |   1 +
+>>   drivers/tty/serial/panic_serial_helper.c      | 619 ++++++++++++++++++
+>>   include/linux/panic.h                         |   1 +
+>>   kernel/panic.c                                |  12 +
+>>   8 files changed, 802 insertions(+)
+>>   create mode 100644 Documentation/dev-tools/panic_serial_helper.rst
+>>   create mode 100644 drivers/tty/serial/panic_serial_helper.c
+>>
+>> diff --git a/Documentation/dev-tools/index.rst b/Documentation/dev-tools/index.rst
+>> index 6b0663075dc0..0655528e5a83 100644
+>> --- a/Documentation/dev-tools/index.rst
+>> +++ b/Documentation/dev-tools/index.rst
+>> @@ -34,6 +34,7 @@ Documentation/dev-tools/testing-overview.rst
+>>      kselftest
+>>      kunit/index
+>>      ktap
+>> +   panic_serial_helper
+>>   
+>>   
+>>   .. only::  subproject and html
+>> diff --git a/Documentation/dev-tools/panic_serial_helper.rst b/Documentation/dev-tools/panic_serial_helper.rst
+>> new file mode 100644
+>> index 000000000000..d3c177f56bc4
+>> --- /dev/null
+>> +++ b/Documentation/dev-tools/panic_serial_helper.rst
+>> @@ -0,0 +1,138 @@
+>> +.. SPDX-License-Identifier: GPL-2.0
+>> +
+>> +========================================================
+>> +Using panic serial helper to get kernel logs after panic
+>> +========================================================
+>> +
+>> +:Author: Hongyu Xie <xiehongyu1@kylinos.cn>
+>> +
+>> +What is this?
+>> +=============
+>> +
+>> +A debug module inspired by kgdboc that allows you to get all kernel logs
+>> +after panic.
+>> +
+>> +Why do you need it?
+>> +===================
+>> +
+>> +There are many debugging methods to know what was going on before panic.
+>> +
+>> +The firs is Kdump. When it is enabled, you can get a core image after
+>> +panic. Then use GDB or Crash to debug that core image to know what happened
+>> +before panic (see ``Documentation/admin-guide/kdump/kdump.rst`` for Kdump
+>> +documentation).
+>> +
+>> +Another way is to connect the UART side of a USB-to-UART tool to the
+>> +debugging UART port (normally a 3 pin slot on the motherborad or a RS232
+>> +port on the back panel of your PC) before panic happens. Then connect the
+>> +USB side of a USB-to-UART tool to another PC. You can read all the kernel
+>> +logs coming from that UART port through apps like minicom on another PC.
+>> +So when panic happens you'll know what was going on.
+>> +
+>> +What if Kdump hasn't been enabled? And people don't always connect an
+>> +USB-to-UART device while he/she is using the PC. When panic occurs, it's
+>> +too late to connect the USB-to-UART device.
+>> +
+>> +For both situations, you can use panic_serial_helper module to get all
+>> +necessary kernel logs once it is loaded.
+>> +
+>> +How to use it?
+>> +==============
+>> +
+>> +Prerequisites
+>> +--------------
+>> +
+>> +1. Same as kgdboc, the UART driver must implement two callbacks in the
+>> +   struct uart_ops. See Documentation/dev-tools/kgdb.rst for details.
+>> +
+>> +2. Your PC has an UART port and it's working.
+>> +
+>> +How
+>> +--------------
+>> +
+>> +First you need to enable ``CONFIG_PANIC_SERIAL_HELPER`` in your
+>> +config. To enable it go to
+>> +:menuselection:`Device Drivers-->Character devices-->Enable TTY (TTY [=y])-->Serial drivers`
+>> +and select :menuselection:`debug through UART after panic`.
+>> +
+>> +Then build and deploy the kernel as usual.
+>> +
+>> +When the panic occurs, you need to do the following:
+>> +
+>> +1. connect the UART side of an USB-to-UART tool to any UART
+>> +   port on your device (PC, server, Laptop, etc...).
+>> +   Connect the USB side of that tool to another PC. Open
+>> +   minicom (or other app) on that PC, and set "/dev/ttyUSB0"(or
+>> +   "/dev/ttyUSB1 if there is already another USB-to-UART tool
+>> +   connected to your device) with "115200 8N1".
+>> +
+>> +   It automatically selects the port where you first press the
+>> +   "Enter" key (some keyboard labeled this with "Return").
+>> +
+>> +2. Press Enter and the help menu will appear::
+>> +
+>> +    help:
+>> +
+>> +        -a      show all kernel msg
+>> +
+>> +        -3      show S3 msg
+>> +
+>> +        -4      show S4 msg
+>> +
+>> +        -filter-[string]        show msg containing [string]
+>> +
+>> +        -q-     quit
+>> +
+>> +see ``Help menu options`` for details.
+>> +
+>> +3. Select one of above options and happy hacking!
+>> +
+>> +Help menu options
+>> +-----------------
+>> +Available options:
+>> +
+>> + - a
+>> +
+>> +   Show all the messages starting from ``Booting Linux on ...``
+>> +
+>> + - 3
+>> +
+>> +   If STR happened before panic, this will show messages starting from
+>> +   ``PM: suspend entry...``
+>> +
+>> + - 4
+>> +
+>> +   If STD happened before panic, this will show messages starting from
+>> +   ``PM: hibernation entry...``
+>> +
+>> + - filter-[string]
+>> +
+>> +   Provide case-ignored filter matching. For example, if you'd like to see
+>> +   message lines that contain ``CPU`` or ``cpu``, you can pass either
+>> +   ``filter-CPU`` or ``filter-cpu``. The corresponding output would be
+>> +   like::
+>> +
+>> +     <6>[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x701f6633
+>> +     <6>[    0.000000] Detected PIPT I-cache on CPU0
+>> +     <6>[    0.000000] CPU features: detected: Kernel page table isolation (K
+>> +
+>> +     ...
+>> +
+>> +     <6>[    0.000000] GICv3: CPU0: using allocated LPI pending table @0x0000
+>> +     <6>[    0.002411] smp: Bringing up secondary CPUs ...
+>> +     <6>[    0.039105] Detected PIPT I-cache on CPU1
+>> +
+>> +     ...
+>> +
+>> +     <4>[    6.432129] CPU: 3 PID: 392 Comm: (crub_all) Tainted: G        W
+>> +     <4>[    6.560279] CPU: 2 PID: 478 Comm: (ostnamed) Tainted: G        W
+>> +
+>> +     ...
+>> +
+>> +     <4>[  225.297828] CPU: 4 PID: 0 Comm: swapper/4 Tainted: G        W
+>> +     <2>[  225.297909] SMP: stopping secondary CPUs
+>> +     <0>[  225.297919] CPU features: 0x000000,02000800,0400421b
+>> +
+>> + - q
+>> +
+>> +   Return to help menu.
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 74aeae10a151..73fcae8c2f39 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -15972,6 +15972,11 @@ L:	platform-driver-x86@vger.kernel.org
+>>   S:	Maintained
+>>   F:	drivers/platform/x86/panasonic-laptop.c
+>>   
+>> +PANIC SERIAL CONSOLE
+>> +M:	Hongyu Xie <xiehongyu1@kylinos.cn>
+>> +F:	drivers/tty/serial/panic_serial_helper.c
+>> +F:	drivers/tty/serial/panic_serial_helper.h
+>> +
+>>   PARALLAX PING IIO SENSOR DRIVER
+>>   M:	Andreas Klinger <ak@it-klinger.de>
+>>   L:	linux-iio@vger.kernel.org
+>> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+>> index 3e3fb377d90d..796441b58498 100644
+>> --- a/drivers/tty/serial/Kconfig
+>> +++ b/drivers/tty/serial/Kconfig
+>> @@ -198,6 +198,31 @@ config SERIAL_KGDB_NMI
+>>   
+>>   	  If unsure, say N.
+>>   
+>> +config PANIC_SERIAL_HELPER
+>> +	tristate "debug through UART after panic"
+>> +	depends on PANIC_TIMEOUT=0
+>> +	select CONSOLE_POLL
+>> +	help
+>> +	  This is a debug module that allows you to get all kernel logs
+>> +	  after panic.
+>> +
+>> +	  Normally you need to attach a USB-to-UART tool or enable kdump
+>> +	  before panic happens to get log from kernel after panic. If you
+>> +	  didn't do that and kdump is not working, you can't get any log to
+>> +	  know what happened before panic. If you have a USB-to-UART tool
+>> +	  and the UART port on your computer is working, this module helps
+>> +	  you to get all kernel log after panic() is called.
+>> +
+>> +	  This module uses serial port in poll mode, so it's more stable
+>> +	  than other debugging methods.
+>> +
+>> +	  Read <file:Documentation/dev-tools/panic_serial_helper.rst> for
+>> +	  usage.
+>> +
+>> +	  Say Y if you have a working UART port and you want to gather
+>> +	  kernel logs. To compile this as module (which will be called
+>> +	  panic_serial_helper), say M. If unsure, say N.
+>> +
+>>   config SERIAL_MESON
+>>   	tristate "Meson serial port support"
+>>   	depends on ARCH_MESON || COMPILE_TEST
+>> diff --git a/drivers/tty/serial/Makefile b/drivers/tty/serial/Makefile
+>> index 531ec3a19dae..d7f6fdc8913c 100644
+>> --- a/drivers/tty/serial/Makefile
+>> +++ b/drivers/tty/serial/Makefile
+>> @@ -93,3 +93,4 @@ obj-$(CONFIG_SERIAL_MCTRL_GPIO)	+= serial_mctrl_gpio.o
+>>   
+>>   obj-$(CONFIG_SERIAL_KGDB_NMI) += kgdb_nmi.o
+>>   obj-$(CONFIG_KGDB_SERIAL_CONSOLE) += kgdboc.o
+>> +obj-$(CONFIG_PANIC_SERIAL_HELPER) += panic_serial_helper.o
+>> diff --git a/drivers/tty/serial/panic_serial_helper.c b/drivers/tty/serial/panic_serial_helper.c
+>> new file mode 100644
+>> index 000000000000..1d3d57bc6340
+>> --- /dev/null
+>> +++ b/drivers/tty/serial/panic_serial_helper.c
+>> @@ -0,0 +1,619 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * panic_serial_helper.c Debug through UART when panic.
+>> + *
+>> + * Copyright (C) 2023 Xie Hongyu <xiehongyu1@kylinos.cn>
+>> + *
+>> + * Inspired by kgdboc.
+>> + *
+>> + */
+>> +
+>> +#define MODULE_NAME "panic_serial_helper"
+>> +#define pr_fmt(fmt) MODULE_NAME ": " fmt
+> 
+> KBUILD_NAME is all you need, right?
+> 
+>> +
+>> +#include <linux/kmsg_dump.h>
+>> +#include <linux/bsearch.h>
+>> +#include <linux/slab.h>
+>> +#include <linux/delay.h>
+>> +#include <linux/module.h>
+>> +#include <linux/tty_driver.h>
+>> +#include <linux/serial_core.h>
+>> +#include <linux/string.h>
+>> +
+>> +#define S3_ENTRY "PM: suspend entry"
+>> +#define S3_EXIT "PM: suspend exit"
+>> +#define S4_ENTRY "PM: hibernation entry"
+>> +#define S4_EXIT "PM: hibernation exit"
+> 
+> Why are these needed?  Why not just use strings where they are used as
+> you are only using these once.
+> 
+>> +
+>> +/* list to store msg lines */
+>> +static LIST_HEAD(psh_list);
+> 
+> That's going to get HUGE, right?  How much memory does this module take
+> up?
+> 
+>> +
+>> +/* msg line prototype */
+>> +struct dmesg_lines {
+>> +	struct list_head entry;
+>> +	char *buf;
+>> +	int size;
+> 
+> size of what?
+> 
+>> +};
+>> +
+>> +/* panic serial helper status*/
+> 
+> Odd formatting :(
+> 
+>> +enum PSHS {
+>> +	PSHS_INIT,
+>> +	PSHS_WAIT_HELP_INPUT,
+>> +};
+> 
+> What do these mean?
+> 
+>> +
+>> +/* panic serial helper msg type */
+>> +enum PSHM_TYPE {
+>> +	PSHM_TYPE_ALL,
+>> +	PSHM_TYPE_S3,
+>> +	PSHM_TYPE_S4,
+>> +	PSHM_TYPE_STRINGS,
+>> +	PSHM_TYPE_QUIT,
+> 
+> Why do you have message types?
+> 
+> But most importantly, why all of this at all?  Why not just tie into the
+> pstore infrastructure?  Wouldn't that handle the majority of this for
+> you?
+> 
+>> +};
+>> +
+>> +/* whether UART is dumping msg */
+>> +static bool dumping_msg;
+>> +
+>> +/* to filter msg */
+>> +static char filter[256] = {0};
+>> +
+>> +struct psh_buf {
+>> +#define PSH_BUF_SIZE 256
+>> +	char buf[PSH_BUF_SIZE];
+>> +	int cur;
+>> +};
+>> +
+>> +static const char psh_tty_types[][32] = {
+>> +	{"ttyAMA"},
+>> +	{"ttyS"},
+>> +	{"ttyPS"},
+>> +	{"ttyLP"},
+>> +	{"ttyARC"},
+>> +	{"ttyAL"},
+>> +	{"ttyUL"},
+> 
+> Sorry, but hard-coded tty port names are not going to go well.  Why did
+> you pick this tiny subset of valid tty names?
+Because these are the ones that implement poll_get_char and 
+poll_put_char, not all tty drivers implement these two callback.
+So, if there is a new tty driver with these two callback, all I have to 
+do is adding the name of the new tty driver in this array.
+> 
+> 
+>> +};
+>> +
+>> +#define TTY_OPS "115200n8n"
+> 
+> Why this default?
+> 
+> 
+>> +
+>> +struct psh_serial_dev {
+>> +	struct list_head entry;
+>> +	struct tty_driver *drv;
+>> +	struct psh_buf buf;
+>> +	enum PSHS psh_status;
+>> +	enum PSHM_TYPE psh_msg_type;
+>> +	int line;
+>> +};
+>> +
+>> +struct psh_serial_dev *psh_dev;
+>> +
+>> +/* char handler prototype */
+>> +struct c_handler {
+>> +	char c;
+>> +	int (*handler)(struct psh_serial_dev *dev, void *d);
+> 
+> Why do you need a handler when you only have one handler?
+> 
+> Anyway, please look at pstore and tie into that if you really want
+> something like this.
+> 
+> thanks,
+> 
+> greg k-h
+thanks,
 
+Hongyu Xie
