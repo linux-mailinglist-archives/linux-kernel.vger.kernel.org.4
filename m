@@ -2,115 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5E6373378E
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 19:41:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1F92733791
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 19:42:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235046AbjFPRlA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 16 Jun 2023 13:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34580 "EHLO
+        id S1344323AbjFPRmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 13:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234518AbjFPRk7 (ORCPT
+        with ESMTP id S234518AbjFPRmg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 13:40:59 -0400
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FF52D4C;
-        Fri, 16 Jun 2023 10:40:58 -0700 (PDT)
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-98273ae42d0so29556666b.0;
-        Fri, 16 Jun 2023 10:40:58 -0700 (PDT)
+        Fri, 16 Jun 2023 13:42:36 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735C22D4C
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 10:42:35 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-9786fc23505so134784266b.2
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 10:42:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686937354; x=1689529354;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kzife/Ga92KPfU7PxiFcBGMF+Tc4zP+RIFWwh5m1s7c=;
+        b=YG+LJ62WNuMOGkE6EoEI92oUfLgdHJgX/EjN8Ld80jfUl3qvIpuHcDgeWC6/XEhr3O
+         h3HPKixTNv7Fz3j1bptLYcdX2mvA9RFci62+MiCmi+g1Xa1WKGCe1GPj3vBqEpVOnVwS
+         LPdLApPxHldnVRsZdm3q+Cw0BFB3K7dyy64wWq54vzhUMHCh4my2/IjxLhi2xZ75KBhX
+         nKKZet2AysRtYyOtEJZaBa6eOb50qF5TrB6qEUk8O37us/lOQiYOe/wwaXXdASn6z18O
+         rwnx21Qzu1CFiVM+kItVQ3zKRnJu3Z9vpIFxR2KHSYxquDSzjp0lAz6T9lPT/9YhYhIM
+         TMCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686937256; x=1689529256;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7Zb2fdCvlXEJFveb4hOYKT1MsVDEIuHPNbjf8DIi/xM=;
-        b=eWrk+FAShktJ4aeS4QdZLuv3vi3UzTJXW2EzKtAzsGdzYlURrrZdxnfmBzf+5BXxa1
-         rPf+HVesnH9qZbdzV1Q4cWB6jH31c4lhhUBfIqqBVJFleuN3Wme+lFqHeHsOoDBXHG6s
-         ocB7lnSQsUiIxs5/s0n3xgKO0YNTUSfiDWiQ/kgjgj5fBx9ftR/bD01sdaY//fcj3nJG
-         taq83Xgprem4cweHbR6jL/ijtSqDV3n8utj2A242GNI0Ecr9kpHybrEKPaVDxOC4YbV+
-         65irO0UJ0Q2SaoM1BbHtonKq+y7qgBe79Msk6XB/7bcGVtxAhW+QBkrMjmNoS1tD2P3q
-         jv5Q==
-X-Gm-Message-State: AC+VfDyxNPomlERb5yxIlidQlPW1WtIzy8eFGNu6hLA/XLjYPJkTl6Ac
-        bVYmC9CaFAdJGXuEOnIT6b0Vqmri7wiYpWVhgl0J74VC
-X-Google-Smtp-Source: ACHHUZ7DCJcQBWoiJshIQx0/iXWzL53rwc3n/l/z55JtJ7q8MN7zln4I5gTZdrI84PakCd89MuGMvbXCRBE4Y9cvVM8=
-X-Received: by 2002:a17:906:4c:b0:987:2c00:edd0 with SMTP id
- 12-20020a170906004c00b009872c00edd0mr61261ejg.6.1686937256452; Fri, 16 Jun
- 2023 10:40:56 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686937354; x=1689529354;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kzife/Ga92KPfU7PxiFcBGMF+Tc4zP+RIFWwh5m1s7c=;
+        b=f4FpvraAAYaAHWTHVDRdJPff6t+wpieTImg16g1GC7z8a/q756pl7TwB+VnlM1+xAx
+         8kqJSgJgFutyZV/L+dtZ1Sjbwr9Mo4b2Dw84Dh4lbz+CduSIFJdh9TR2TY2RhFKqMtKR
+         UadWWtupHRXgzyuQV6Pn0PgOWf38rBIaBxcE8B36g3zqyD7A/QMayQDgFdyLkwTFP//r
+         hF5mdmM/u1yuYo1abirCRCJ3A6oBmJqGCSgP2eTB21dnCt9U0rNwS9jHz81EfrCEg7rx
+         HkxPtrFiqoNBOzf6w9s8yefziHkcp7Ns6k2VduoGdLAF4dwRpt54+JtX7Qw9lSVx3lBa
+         vR6g==
+X-Gm-Message-State: AC+VfDyVrtT3he9a2XVqhpa32EyCL82ywF++rPhoqKGPHr86PWG6sI9G
+        tWajpuLYemEtTv8DLW0aqLr+KA==
+X-Google-Smtp-Source: ACHHUZ4Y3n61KROIK4ccOC0xSeZQmjKQhp+TTdrpdIlIthZMT4ClAAb9Rw2x5HyJ0MEYGpLLlXWi6A==
+X-Received: by 2002:a17:906:a8f:b0:957:48c8:b081 with SMTP id y15-20020a1709060a8f00b0095748c8b081mr2181445ejf.24.1686937353847;
+        Fri, 16 Jun 2023 10:42:33 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id a13-20020a170906684d00b009828dac8425sm3043094ejs.105.2023.06.16.10.42.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Jun 2023 10:42:33 -0700 (PDT)
+Message-ID: <fbe7d37d-8a22-6d34-660b-70f177c001d9@linaro.org>
+Date:   Fri, 16 Jun 2023 19:42:31 +0200
 MIME-Version: 1.0
-References: <20230530095536.61907-1-ulf.hansson@linaro.org>
-In-Reply-To: <20230530095536.61907-1-ulf.hansson@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 16 Jun 2023 19:40:45 +0200
-Message-ID: <CAJZ5v0i8kW=xY8dhn+N5AdT77xD7gDUtTFyfkYdkLpSBAwkzHQ@mail.gmail.com>
-Subject: Re: [PATCH] PM: domains: Move the verification of in-params from genpd_add_device()
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Kevin Hilman <khilman@kernel.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v6 00/11] arm64: qcom: Enable Crypto Engine for a few
+ Qualcomm SoCs
+Content-Language: en-US
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        bhupesh.sharma@linaro.org
+Cc:     agross@kernel.org, andersson@kernel.org, bhupesh.linux@gmail.com,
+        devicetree@vger.kernel.org, djakov@kernel.org,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        neil.armstrong@linaro.org, rfoss@kernel.org, robh+dt@kernel.org,
+        vladimir.zapolskiy@linaro.org, lkft-triage@lists.linaro.org,
+        anders.roxell@linaro.org,
+        Linux Kernel Functional Testing <lkft@linaro.org>
+References: <20230405072836.1690248-1-bhupesh.sharma@linaro.org>
+ <20230412115532.300516-1-naresh.kamboju@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230412115532.300516-1-naresh.kamboju@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 11:55 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> The commit f38d1a6d0025 ("PM: domains: Allocate governor data dynamically
-> based on a genpd governor") started to use the in-parameters in
-> genpd_add_device(), without first doing a verification of them.
->
-> This isn't really a big problem, as most callers do a verification already.
-> Therefore, let's drop the verification from genpd_add_device() and make
-> sure all the callers take care of it instead.
->
-> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-> Fixes: f38d1a6d0025 ("PM: domains: Allocate governor data dynamically based on a genpd governor")
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> ---
->  drivers/base/power/domain.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 51b9d4eaab5e..5cb2023581d4 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -1632,9 +1632,6 @@ static int genpd_add_device(struct generic_pm_domain *genpd, struct device *dev,
->
->         dev_dbg(dev, "%s()\n", __func__);
->
-> -       if (IS_ERR_OR_NULL(genpd) || IS_ERR_OR_NULL(dev))
-> -               return -EINVAL;
-> -
->         gpd_data = genpd_alloc_dev_data(dev, gd);
->         if (IS_ERR(gpd_data))
->                 return PTR_ERR(gpd_data);
-> @@ -1676,6 +1673,9 @@ int pm_genpd_add_device(struct generic_pm_domain *genpd, struct device *dev)
->  {
->         int ret;
->
-> +       if (!genpd || !dev)
-> +               return -EINVAL;
-> +
->         mutex_lock(&gpd_list_lock);
->         ret = genpd_add_device(genpd, dev, dev);
->         mutex_unlock(&gpd_list_lock);
-> @@ -2523,6 +2523,9 @@ int of_genpd_add_device(struct of_phandle_args *genpdspec, struct device *dev)
->         struct generic_pm_domain *genpd;
->         int ret;
->
-> +       if (!dev)
-> +               return -EINVAL;
-> +
->         mutex_lock(&gpd_list_lock);
->
->         genpd = genpd_get_from_provider(genpdspec);
-> --
+On 12/04/2023 13:55, Naresh Kamboju wrote:
+> 
+>  > This patchset enables Crypto Engine support for Qualcomm SoCs like
+>  > SM6115, SM8150, SM8250, SM8350 and SM8450.
+>  > 
+>  > Note that:
+>  > - SM8250 crypto engine patch utilizes the work already done by myself and
+>  >   Vladimir.
+>  > - SM8350 crypto engine patch utilizes the work already done by Robert.
+>  > - SM8450 crypto engine patch utilizes the work already done by Neil.
+>  > 
+>  > Also this patchset is rebased on linux-next/master.
+> 
+> These patches tested on top of Linux next-20230406.
+> 
+> 
+> Tested-by: Anders Roxell <anders.roxell@linaro.org>
+> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Applied as 6.5 material, thanks!
+
+You provided the tags for entire patchset but it includes different
+boards. On what boards did you test it?
+
+Best regards,
+Krzysztof
+
