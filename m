@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE2627331BA
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 509DB7331BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345511AbjFPM54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 08:57:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48988 "EHLO
+        id S1345537AbjFPM6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 08:58:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345507AbjFPM5x (ORCPT
+        with ESMTP id S1345509AbjFPM5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 16 Jun 2023 08:57:53 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8CA2133
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD1C26BA
         for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 05:57:52 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B940021A25;
-        Fri, 16 Jun 2023 12:57:50 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3C05E22052;
+        Fri, 16 Jun 2023 12:57:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1686920270; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1686920271; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=HnsyB1P/ICCV757zk+6euS2EyB47mj2mUlXSxGGY818=;
-        b=mMPwEUKUKo16qmq3bYFPzOSUdQDMHVtJnDG4oUlBcIDYN5D9EYrvkj7rXVhdP38MCpsYCq
-        zyVBtUn4Pg1OiWnq9gm8pBiZWhGvIe3zPghHk+GwSkuSX8/uw39dIvAjzaoDB548mLqFyX
-        F9SDZW2pRXcyCUwNhIpEtBaHYj3vURg=
+        bh=UjZMXe7XUwr7XJBQb9D0eQ2WRPP3zvIKg1MTtxvQAMk=;
+        b=rb5KhNTxBde2R2mBz/01edW3FHloIJGcvecNUE4im6kB3saGCS1WGLr4MZDhvWU56ERYig
+        L/J7EWs0r1XiP80fUfrzEpfFRH7O5/iqcnPvGYw6ckc8vO4tyWmmxOs0G+AQSFS1fJez6U
+        6J0+5h3ItST2hK5GkOni2nShFJFr5FY=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 62D221330B;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CB3E51330B;
         Fri, 16 Jun 2023 12:57:50 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id gNN4FU5cjGTjNwAAMHmgww
+        id 2AbZLk5cjGTjNwAAMHmgww
         (envelope-from <nik.borisov@suse.com>); Fri, 16 Jun 2023 12:57:50 +0000
 From:   Nikolay Borisov <nik.borisov@suse.com>
 To:     x86@kernel.org
 Cc:     linux-kernel@vger.kernel.org, mhocko@suse.com, jslaby@suse.cz,
         Nikolay Borisov <nik.borisov@suse.com>
-Subject: [PATCH v3 1/5] x86: Make IA32_EMULATION boot time configurable
-Date:   Fri, 16 Jun 2023 15:57:26 +0300
-Message-Id: <20230616125730.1164989-2-nik.borisov@suse.com>
+Subject: [PATCH v3 2/5] x86/entry: Rename ignore_sysret
+Date:   Fri, 16 Jun 2023 15:57:27 +0300
+Message-Id: <20230616125730.1164989-3-nik.borisov@suse.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230616125730.1164989-1-nik.borisov@suse.com>
 References: <20230616125730.1164989-1-nik.borisov@suse.com>
@@ -62,127 +62,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Distributions would like to reduce their attack surface as much as
-possible but at the same time they'd want to retain flexibility to cater
-to a variety of legacy software. One such avenue where a balance has to
-be struck is in supporting 32bit syscalls/processes on 64bit kernels. Ideally
-it should be possible for the distribution to set their own policy and
-give users the ability to override those policies as appropriate.
-
-In order to support this usecase, introduce
-CONFIG_IA32_EMULATION_DEFAULT_DISABLED compile time option, which
-controls whether 32bit processes/syscalls should be allowed or not. This
-allows distributions to set their preferred default behavior in their
-kernel configs.
-
-On the other hand, in order to allow users to override the distro's
-policy, introduce the 'ia32_mode' parameter which allows overriding
-CONFIG_IA32_EMULATION_DEFAULT_DISABLED state at boot time.
+Give ignore_sysret() a more descriptive name as it's actually used to make
+32bit syscalls return ENOSYS, rather than doing anything specific with
+regards to sysret.
 
 Signed-off-by: Nikolay Borisov <nik.borisov@suse.com>
 ---
- Documentation/admin-guide/kernel-parameters.txt |  5 +++++
- arch/x86/Kconfig                                |  9 +++++++++
- arch/x86/entry/common.c                         | 16 ++++++++++++++++
- arch/x86/include/asm/ia32.h                     | 16 +++++++++++++++-
- 4 files changed, 45 insertions(+), 1 deletion(-)
+ arch/x86/entry/entry_64.S        | 4 ++--
+ arch/x86/include/asm/processor.h | 2 +-
+ arch/x86/kernel/cpu/common.c     | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 9e5bab29685f..59b1e86ecd9d 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -1865,6 +1865,11 @@
- 			 0 -- machine default
- 			 1 -- force brightness inversion
- 
-+	ia32_mode=		[X86-64]
-+			Format: ia32_mode=disabled, ia32_mode=enabled
-+			Allows overriding the compile-time state of
-+			IA32_EMULATION_DEFAULT_DISABLED at boot time
-+
- 	icn=		[HW,ISDN]
- 			Format: <io>[,<membase>[,<icn_id>[,<icn_id2>]]]
- 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 53bab123a8ee..8bec431c97ce 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -3038,6 +3038,15 @@ config IA32_EMULATION
- 	  64-bit kernel. You should likely turn this on, unless you're
- 	  100% sure that you don't have any 32-bit programs left.
- 
-+config IA32_EMULATION_DEFAULT_DISABLED
-+	bool "IA32 emulation disabled by default"
-+	default n
-+	depends on IA32_EMULATION
-+	help
-+	  Make IA32 emulation disabled by default. This prevents loading 32bit
-+	  processes and access to 32bit syscalls. If unsure, leave it to its
-+	  default value.
-+
- config X86_X32_ABI
- 	bool "x32 ABI for 64-bit mode"
- 	depends on X86_64
-diff --git a/arch/x86/entry/common.c b/arch/x86/entry/common.c
-index 6c2826417b33..35bacf2f8be5 100644
---- a/arch/x86/entry/common.c
-+++ b/arch/x86/entry/common.c
-@@ -19,6 +19,7 @@
- #include <linux/nospec.h>
- #include <linux/syscalls.h>
- #include <linux/uaccess.h>
-+#include <linux/init.h>
- 
- #ifdef CONFIG_XEN_PV
- #include <xen/xen-ops.h>
-@@ -96,6 +97,21 @@ static __always_inline int syscall_32_enter(struct pt_regs *regs)
- 	return (int)regs->orig_ax;
- }
- 
-+#ifdef CONFIG_IA32_EMULATION
-+bool __ia32_enabled = !IS_ENABLED(CONFIG_IA32_EMULATION_DEFAULT_DISABLED);
-+
-+static int ia32_mode_override_cmdline(char *arg)
-+{
-+	if (!strcmp(arg, "disabled"))
-+		__ia32_enabled = false;
-+	else if (!strcmp(arg, "enabled"))
-+		__ia32_enabled = true;
-+
-+	return 1;
-+}
-+__setup("ia32_mode=", ia32_mode_override_cmdline);
-+#endif
-+
- /*
-  * Invoke a 32-bit syscall.  Called with IRQs on in CONTEXT_KERNEL.
+diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+index f31e286c2977..ccce0ccd8589 100644
+--- a/arch/x86/entry/entry_64.S
++++ b/arch/x86/entry/entry_64.S
+@@ -1519,12 +1519,12 @@ SYM_CODE_END(asm_exc_nmi)
+  * This handles SYSCALL from 32-bit code.  There is no way to program
+  * MSRs to fully disable 32-bit SYSCALL.
   */
-diff --git a/arch/x86/include/asm/ia32.h b/arch/x86/include/asm/ia32.h
-index fada857f0a1e..c35e4a6d3317 100644
---- a/arch/x86/include/asm/ia32.h
-+++ b/arch/x86/include/asm/ia32.h
-@@ -68,6 +68,20 @@ extern void ia32_pick_mmap_layout(struct mm_struct *mm);
- 
+-SYM_CODE_START(ignore_sysret)
++SYM_CODE_START(entry_SYSCALL32_ignore)
+ 	UNWIND_HINT_END_OF_STACK
+ 	ENDBR
+ 	mov	$-ENOSYS, %eax
+ 	sysretl
+-SYM_CODE_END(ignore_sysret)
++SYM_CODE_END(entry_SYSCALL32_ignore)
  #endif
  
--#endif /* CONFIG_IA32_EMULATION */
-+extern bool __ia32_enabled;
-+
-+static inline bool ia32_enabled(void)
-+{
-+	return __ia32_enabled;
-+}
-+
-+#else /* CONFIG_IA32_EMULATION */
-+
-+static inline bool ia32_enabled(void)
-+{
-+	return IS_ENABLED(CONFIG_X86_32);
-+}
-+
-+#endif
+ .pushsection .text, "ax"
+diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+index a1e4fa58b357..61c10b4e3e35 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -399,7 +399,7 @@ static inline unsigned long cpu_kernelmode_gs_base(int cpu)
+ 	return (unsigned long)per_cpu(fixed_percpu_data.gs_base, cpu);
+ }
  
- #endif /* _ASM_X86_IA32_H */
+-extern asmlinkage void ignore_sysret(void);
++extern asmlinkage void entry_SYSCALL32_ignore(void);
+ 
+ /* Save actual FS/GS selectors and bases to current->thread */
+ void current_save_fsgs(void);
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 80710a68ef7d..b20774181e1a 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -2066,7 +2066,7 @@ void syscall_init(void)
+ 		    (unsigned long)(cpu_entry_stack(smp_processor_id()) + 1));
+ 	wrmsrl_safe(MSR_IA32_SYSENTER_EIP, (u64)entry_SYSENTER_compat);
+ #else
+-	wrmsrl_cstar((unsigned long)ignore_sysret);
++	wrmsrl_cstar((unsigned long)entry_SYSCALL32_ignore);
+ 	wrmsrl_safe(MSR_IA32_SYSENTER_CS, (u64)GDT_ENTRY_INVALID_SEG);
+ 	wrmsrl_safe(MSR_IA32_SYSENTER_ESP, 0ULL);
+ 	wrmsrl_safe(MSR_IA32_SYSENTER_EIP, 0ULL);
 -- 
 2.34.1
 
