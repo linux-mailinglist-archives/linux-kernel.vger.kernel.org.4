@@ -2,111 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2F1733A6C
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 22:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D55E733A72
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 22:09:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343863AbjFPUGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 16:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
+        id S245658AbjFPUJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 16:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbjFPUGm (ORCPT
+        with ESMTP id S231856AbjFPUJA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 16:06:42 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F55359E
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 13:06:41 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1a2c9f087f0so1231053fac.3
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 13:06:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686946000; x=1689538000;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OUAOcJJgWeLKPM/xF2GkuGhpodootZffZ1w5UrUmM2A=;
-        b=SCP+UFTAEbi61pCdZMMomcocARY2TcdGTOInovhmvu9lJQPA5u0Jg0FfH9hS94x9LZ
-         a5fHkaOxXIZM1PTjzY6SV7qbJC8ozcPe7u3+tKgAWg8UM4K+4dkPG6BkpV7Rf5jMhSZT
-         kVV4tCydQ5aufNiRH539Q/F/j5pL0DaMqra+xpfcVLOv2rLnhsCASQEzPulILnYy382o
-         /LDMkLbMrW4bZ3QLoABvZ8kQWA1l0vdD6chKvhxxxi+6lclB7lw+eK51DlTBHIqKad3R
-         LIQPizamgh7ivl81+ZV+EF89XtZ1krd7N0ZVoVfk2mda4FVwWDaO5Aig2VQkzDMEj2hk
-         b/ug==
+        Fri, 16 Jun 2023 16:09:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8975830DD
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 13:08:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686946096;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9FHIShx3ok7ttiJLXRHQNT2AZWHVgsob1KG47xjdjeI=;
+        b=WtRbrUAyO+m3eICftPmvarLYZUAf7mkoXsDZ17qid9CGwz8ZomVIDweKN+OuBQGhaJajaN
+        wdrAvOxqKA7PsN07qGZu0uHAVCmuyOZAgVCJ4mVgk3S+5sCuBeETSouHwDqnMByajBIMmY
+        POHRAEdXncd8uRakzy7mLAwrq1tqscw=
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
+ [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-57-FdbquxTJNJGUPsSWP9s5jw-1; Fri, 16 Jun 2023 16:08:14 -0400
+X-MC-Unique: FdbquxTJNJGUPsSWP9s5jw-1
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-76998d984b0so88354239f.2
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 13:08:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686946000; x=1689538000;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OUAOcJJgWeLKPM/xF2GkuGhpodootZffZ1w5UrUmM2A=;
-        b=Q67uCgT4z53B1vdpn4ccAd8dewXPZ9+b7/TPgT0xTKVIShgmYAzfvA3/fErlLFtg6t
-         zyzkRinrLTuF120dMEmnl3FC80ERQyB3B+3fVimby0mXSJVfcVmmYsAJdn9HfI7J2TRt
-         iFtMNh4jw/c69AEeN1frA9pYkz0HmiZLb6L+AkCqPGKCVIp0rhVemVo8bhmSsWEilnf/
-         jz1mKZQararIpxi542USQ85/Cxhw/9kZPTR22q11/KyYnvYvYE7X0uZGiWrnDNg6bTIH
-         KuhjcZjMZ2DPV3ssNt0xQvzFRq9QR50zao1JMoYH7/qT0+gfLNV5P27s3lULhHW4vgsJ
-         yZRA==
-X-Gm-Message-State: AC+VfDzYV2bVjtiLNi0FHlLF2aw2r7MrQ+3dMxS5U0quBG1sDN2hNOso
-        UMQ/9O1F0KQvlaZIER5JErHCcbR1rspvwO4MyFTkjA==
-X-Google-Smtp-Source: ACHHUZ75K3KBcIrOD/dTCPzbUfDJYBDcThDV31eSyMdQR30gv5EAxMrPJP3qrkBEZFYins48R5Wov/Uhfr+KXOuXKsU=
-X-Received: by 2002:a05:6870:2e04:b0:1a6:8fa1:10b4 with SMTP id
- oi4-20020a0568702e0400b001a68fa110b4mr123529oab.37.1686946000401; Fri, 16 Jun
- 2023 13:06:40 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686946093; x=1689538093;
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9FHIShx3ok7ttiJLXRHQNT2AZWHVgsob1KG47xjdjeI=;
+        b=dMc2axFtFyD29hNYhzdXay+hTIEA9MruH/jZ0FsWQ83NQBiLnOW75sqhsLtkkB6YeW
+         lBp8Y+L9bnfk5vNaNx3naRWkh1ymoa95ytJUDExCL+LannHrP86KfIt0dZ0IdCNb8x7Q
+         kb9d7LlPAlM4XYD+YOCuM2a0df2H4l9I2DB+DBAJRWwF1qCYEYes7nzBqvPefmdVmnhy
+         3oq2H3hQbwVwxp1ozWk0gX/njAeA/OQJMvIfCSutLTUalSkfFTk6A/2Ve+nc1Nqc3Ffy
+         nw4O1kVvdh7vx4nywH5aqrIGbg9AfJz8GRDwg1cYWpCytkc3GyM1ooIjmgzwQu+eoIBZ
+         JpPA==
+X-Gm-Message-State: AC+VfDwIgXw/Wxn6pxXIBtG+yqvKhuvgxOjf777mNm4PwpbPSBbr4qwF
+        HF6F7u9hZ4kORCh667OewaY1DQPo36K0c4tSY21ZxaOn9hoIY6YxhvXBLFGFRl/mBWRdX7QpEKb
+        Uy4buYE2Tq6mahkoM/QSieCnZ
+X-Received: by 2002:a5e:a918:0:b0:76c:785f:8f82 with SMTP id c24-20020a5ea918000000b0076c785f8f82mr215181iod.6.1686946093473;
+        Fri, 16 Jun 2023 13:08:13 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ62AjDXsrpmoKuXzeKWjRip2U0KfskgmXJGtEvG25rkOe8Yfqf6qCIZQe8RWyPyKG/yPo2gRA==
+X-Received: by 2002:a5e:a918:0:b0:76c:785f:8f82 with SMTP id c24-20020a5ea918000000b0076c785f8f82mr215166iod.6.1686946093279;
+        Fri, 16 Jun 2023 13:08:13 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id s17-20020a6bdc11000000b007635e28bc11sm6820694ioc.6.2023.06.16.13.08.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 13:08:12 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 14:08:11 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Nipun Gupta <nipun.gupta@amd.com>
+Cc:     <jgg@ziepe.ca>, <linux-kernel@vger.kernel.org>,
+        <kvm@vger.kernel.org>, <masahiroy@kernel.org>, <nathan@kernel.org>,
+        <ndesaulniers@google.com>, <nicolas@fjasle.eu>, <git@amd.com>,
+        <harpreet.anand@amd.com>, <pieter.jansen-van-vuuren@amd.com>,
+        <nikhil.agarwal@amd.com>, <michal.simek@amd.com>
+Subject: Re: [PATCH v7] vfio/cdx: add support for CDX bus
+Message-ID: <20230616140811.548d2c92.alex.williamson@redhat.com>
+In-Reply-To: <20230531124557.11009-1-nipun.gupta@amd.com>
+References: <20230531124557.11009-1-nipun.gupta@amd.com>
+Organization: Red Hat
 MIME-Version: 1.0
-References: <20230616035813.255062-1-jaswinder.singh@linaro.org>
- <165dd295-1b3a-5062-772a-613a7bf6fd45@linaro.org> <CAJe_ZhdV3yaKUVD43duO4hkGMByJhq7x9bN+eBXJdBXdxgDneg@mail.gmail.com>
- <e2b98d80-8e9a-6083-3bc5-677bef0d3263@linaro.org>
-In-Reply-To: <e2b98d80-8e9a-6083-3bc5-677bef0d3263@linaro.org>
-From:   Jassi Brar <jaswinder.singh@linaro.org>
-Date:   Fri, 16 Jun 2023 15:06:29 -0500
-Message-ID: <CAJe_ZhfeYmxjR7Hcht0F9rc97VG2JCFEEFB+S5kUhSCmsut3Cg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: arm: socionext: add bindings for the
- Synquacer platform
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh@kernel.org,
-        ilias.apalodimas@linaro.org, masahisa.kojima@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Jun 2023 at 11:47, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 16/06/2023 18:23, Jassi Brar wrote:
-> > On Fri, 16 Jun 2023 at 05:15, Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>
-> >> On 16/06/2023 05:58, jaswinder.singh@linaro.org wrote:
-> >>> From: Jassi Brar <jaswinder.singh@linaro.org>
-> >>>
-> >>> Socionext's DeveloperBox is based on the SC2A11B SoC (Synquacer).
-> >>> Specify bindings for the platform and boards based on that.
-> >>
-> >> A nit, subject: drop second/last, redundant "bindings". The
-> >> "dt-bindings" prefix is already stating that these are bindings.
-> >>
-> > I can remove it, but I see many mentions like "Fix bindings for"  "Add
-> > binding for" etc in the subject line.
->
-> Can we fix them as well?
->
-??
+On Wed, 31 May 2023 18:15:57 +0530
+Nipun Gupta <nipun.gupta@amd.com> wrote:
 
+> vfio-cdx driver enables IOCTLs for user space to query
+> MMIO regions for CDX devices and mmap them. This change
+> also adds support for reset of CDX devices. With VFIO
+> enabled on CDX devices, user-space applications can also
+> exercise DMA securely via IOMMU on these devices.
+> 
+> This change adds the VFIO CDX driver and enables the following
+> ioctls for CDX devices:
+>  - VFIO_DEVICE_GET_INFO:
+>  - VFIO_DEVICE_GET_REGION_INFO
+>  - VFIO_DEVICE_RESET
+> 
+> Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
+> Reviewed-by: Pieter Jansen van Vuuren <pieter.jansen-van-vuuren@amd.com>
+> Tested-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
+> ---
+> 
+> Changed to support driver managed dma in CDX bus has been
+> submitted at:
+> https://lore.kernel.org/lkml/20230117134139.1298-1-nipun.gupta@amd.com/T/
+> 
+> Changes v6->v7:
+> - updated GFP_KERNEL to GFP_KERNEL_ACCOUNT in kcalloc
+> - remove redundant error condition
+> - updated return codes
 
-> >
-> >>
-> >> Binding without it's user is usually useless. Where is the user?
-> >>
-> > It is required for SystemReady-2.0 certification.
->
-> For what? If there is no user, it is not required for SR. We don't
-> document compatibles for something which does not exist in the projects.
->
-The dts/dtsi for synquacer will be added later.
-I am sure you are aware that there are countless bindings without
-actual use in any dts/dtsi. When exactly did it become mandatory to
-have dts/dtsi for the bindings to be merged upstream?
+Applied to vfio next branch for v6.5.  Thanks,
 
--j
+Alex
+
