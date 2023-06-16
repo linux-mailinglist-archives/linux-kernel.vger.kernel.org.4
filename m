@@ -2,83 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96C857339C1
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 21:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42DE57339FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 21:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346252AbjFPTXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 15:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49354 "EHLO
+        id S1346179AbjFPTfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 15:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346251AbjFPTXD (ORCPT
+        with ESMTP id S1345543AbjFPTfI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 15:23:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0109D46BB;
-        Fri, 16 Jun 2023 12:21:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE0BE60B66;
-        Fri, 16 Jun 2023 19:21:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29BCEC433C0;
-        Fri, 16 Jun 2023 19:21:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686943264;
-        bh=jxqqA8hKbX1P+MGFD6r0FL7uvDc4IVAgHOvqUjiaLD4=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=cmCJnDxvweAkTJuxcJHrETAjNXl0iPu4lQukowFXXRonO4we27DpflLjuC0O7oQd0
-         k3DE+oKEc/ln302jaTTsSQHo20oI3NjhbdrLdcYxQj8I4uLlASaFdrgcajXByKMrKO
-         x1a8O9Sj+QO+bDD9bx8NUiXMC50HkbW1IidRNnlKFBP7+HV2WD3XIEM05FyLnJfsOe
-         o/OjRzdsiNjoSPX2gUpDMqHo1kBSAhPahLFz2LE9Gww4Y0F0Ow6mkR0zG1Ksqul99U
-         VRkaxj6j0japH1Ea7FTS2Ydu/aMaIHHXVj/VrFFah6KuThb1oSxv1E7MpZ3+J3DvWz
-         Kl4BAYOzzI3NA==
-Message-ID: <c38a32fce0d3642b6be85efd46d8c358.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        Fri, 16 Jun 2023 15:35:08 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451D610D8;
+        Fri, 16 Jun 2023 12:35:06 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id BD8B11C0E70; Fri, 16 Jun 2023 21:21:23 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1686943283;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2+gFMPS9WwhZRw1F6SzcR7U1vGuPtvHeVgBGYeYYC6A=;
+        b=oNRyRkePJgSlMzbW/yS+aAyMbho0lBjCJwyurekTctOfEfRAx15dy6j7FHqSjMevssX0Ql
+        1ap5vluAvbu75Qt0nOUHXXQ4PxKRB9G5EVWP0tEG/UYYWcEYLOm0Q7XP/2VPEbSKMRe5wz
+        9MBB1tmohhmvRfrxN5nChDwkUiszbWc=
+Date:   Fri, 16 Jun 2023 21:21:23 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        YongSu Yoo <yongsuyoo0215@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>, v4bel@theori.io,
+        linma@zju.edu.cn, linux-media@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 6.3 23/67] media: dvb_ca_en50221: fix a size
+ write bug
+Message-ID: <ZIy2MxIvrIABE1vX@duo.ucw.cz>
+References: <20230525183144.1717540-1-sashal@kernel.org>
+ <20230525183144.1717540-23-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230615122051.546985-2-angelogioacchino.delregno@collabora.com>
-References: <20230615122051.546985-1-angelogioacchino.delregno@collabora.com> <20230615122051.546985-2-angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH 1/3] clk: mediatek: clk-mtk: Grab iomem pointer for divider clocks
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     mturquette@baylibre.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, wenst@chromium.org,
-        u.kleine-koenig@pengutronix.de, msp@baylibre.com,
-        miles.chen@mediatek.com, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Date:   Fri, 16 Jun 2023 12:21:01 -0700
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="hOGZ+jrDjYq/U51m"
+Content-Disposition: inline
+In-Reply-To: <20230525183144.1717540-23-sashal@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting AngeloGioacchino Del Regno (2023-06-15 05:20:49)
-> In the rare case in which one of the clock drivers has divider clocks
-> but not composite clocks, mtk_clk_simple_probe() would not io(re)map,
-> hence passing a NULL pointer to mtk_clk_register_dividers().
->=20
-> To fix this issue, extend the `if` conditional to also check if any
-> divider clocks are present. While at it, also make sure the iomem
-> pointer is NULL if no composite/divider clocks are declared, as we
-> are checking for that when iounmapping it in the error path.
->=20
-> This hasn't been seen on any MediaTek clock driver as the current ones
-> always declare composite clocks along with divider clocks, but this is
-> still an important fix for a future potential KP.
->=20
-> Fixes: 1fe074b1f112 ("clk: mediatek: Add divider clocks to mtk_clk_simple=
-_{probe,remove}()")
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
-> ---
 
-Applied to clk-next
+--hOGZ+jrDjYq/U51m
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi!
+
+I believe you have typo in the comment:
+
+
+> @@ -778,11 +778,13 @@ static int dvb_ca_en50221_read_data(struct dvb_ca_p=
+rivate *ca, int slot,
+>   * @buf: The data in this buffer is treated as a complete link-level pac=
+ket to
+>   *	 be written.
+>   * @bytes_write: Size of ebuf.
+> + * @size_write_flag: A flag on Command Register which says whether the l=
+ink size
+> + * information will be writen or not.
+
+writen -> written.
+
+Best regards,
+								Pavel
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--hOGZ+jrDjYq/U51m
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZIy2MwAKCRAw5/Bqldv6
+8n+aAJ94LmLIJ0u61qZEHYBeFOXVlNJvDgCeJY1rg6J/8A0srzUeUam9rJSfzcw=
+=Zt1d
+-----END PGP SIGNATURE-----
+
+--hOGZ+jrDjYq/U51m--
