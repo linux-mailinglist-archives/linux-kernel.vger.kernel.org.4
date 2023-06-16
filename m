@@ -2,104 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85B077333D1
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 16:41:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAECD7333D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 16:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344824AbjFPOl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 10:41:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47448 "EHLO
+        id S1345654AbjFPOmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 10:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjFPOl2 (ORCPT
+        with ESMTP id S230368AbjFPOmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 10:41:28 -0400
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448B4294C
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 07:41:27 -0700 (PDT)
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1b3f66dda65so6493165ad.1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 07:41:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686926487; x=1689518487;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JhDvGLDecFh2hF/zpCcDPD4K9B9uog+prVasKVM7Xmo=;
-        b=MDTQ7ANRWIiXzg5h8fCohIWoAoixXYml+pO2exDoIuhM4wBKSS7EO2wxKgY98H0RWE
-         QAgkEidW1tTuEBs8BY36uq5SzTfD16Trp87mlhLWJ5Wu/KmWJJjVGdX2ie+jLGlelyJ0
-         W0R6JGW9MabgxB/AfERYkFFG2ZkF+r6fUBQYxzOtA3K7hd8LUX2iqjBRU6dHVWjFoU2O
-         ob+XgJfUDgxmKY4KG/5BZf3om0LCSIL3fOh58wJSbhGElYM6Q6Mm+bW2knd1viR2D8+U
-         EGon4s0u8C7dSCyOFxFzvzN5ITuE9XJSpfN7NpqOTp6uFMaa7/KPpPnfLSWVmxpSHU7n
-         BBIA==
-X-Gm-Message-State: AC+VfDyEbRfmDUT41pnTvJtwbgsNCtpBWGvu7aZ4XKtz1tD86L/EF7vC
-        GUJU+mNGC+h+OOnp+klow20=
-X-Google-Smtp-Source: ACHHUZ58lCyOp+aPzRk52Fu4JqV51QalmeDbHIy4DrAKBWlgE514D4Rh88sJcxwAQvvdXuZJzIc6RQ==
-X-Received: by 2002:a17:902:d482:b0:1b2:1942:9117 with SMTP id c2-20020a170902d48200b001b219429117mr2186093plg.45.1686926486544;
-        Fri, 16 Jun 2023 07:41:26 -0700 (PDT)
-Received: from [192.168.50.14] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id n9-20020a170902968900b001b3c7e5ed8csm5373707plp.74.2023.06.16.07.41.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jun 2023 07:41:25 -0700 (PDT)
-Message-ID: <829a3198-1b18-c566-20ee-3e4f23ddbffe@acm.org>
-Date:   Fri, 16 Jun 2023 07:41:25 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] sched/cputime: Make IRQ time accounting configurable at
- boot time
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-References: <20230615203745.1259-1-bvanassche@acm.org>
- <20230616074518.GW4253@hirez.programming.kicks-ass.net>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20230616074518.GW4253@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Fri, 16 Jun 2023 10:42:38 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5603730F3;
+        Fri, 16 Jun 2023 07:42:35 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 178FF5C01AA;
+        Fri, 16 Jun 2023 10:42:32 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 16 Jun 2023 10:42:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1686926552; x=1687012952; bh=4V
+        GcUvtGEtw5RjxdkUnMC4EdyRen1ofbtMRBLCbhZxI=; b=ocdcBE3F46DzA6dg9C
+        SfDfRt0GTts1Qt1RyXWYtzbnfZt1E5amhSiKHlX+aLFdbamOntr5ZuqDZghOhfY1
+        mpbGXeodcqbPc2TQxxH1L7Px+nepEcH7a2Whx/qFga3WBsfxcNudt3X6aFRwUEk7
+        KtuskHiMd55lww3dta/SyCP76MEAR1eK55gxBpNElt7e1C76jwhXEGG7haW2yWiv
+        cxhfX3nXb2zwkEsWUujquiy4WR++oZYb9nA2k74QejLxfO5j3Y+0yJRRq41KAOdh
+        7EKEdIzem7+EcNBFmAHnGe0tMI6cvg5Eg3iZA0/ip+u5Uyh2KN1nxHYOPVk3i9bI
+        FbUg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1686926552; x=1687012952; bh=4VGcUvtGEtw5R
+        jxdkUnMC4EdyRen1ofbtMRBLCbhZxI=; b=ENMlyKe0rLiO7AjUzkgxdJAWtZ3Ix
+        NurGOr3ec7kD8JWlrJyE3KppO0u5rN4hIJRqyUPRsieAQbXzmmZ2WIxfx8rX2Emf
+        jsgNSxJiUAf9ZMWm9FfPL6DJ+RSp+warATmJsgqyl50Xs5GxAYUgpzZyjP0ooOo/
+        Pgch7FIvvbrQlXeGGSxW5uDCPnineM40v0BNlsxXuX4w40OsByelhALpnMj8/9gH
+        BF6hqcjT2PqP67kCt+g6JJ3tGFQMF6obsk7lCglNHM1eegFinTz545INKNSHB17L
+        Sl0pu11w9IX+mBIPAgsKtXVMbqSU8jTbMi+wW4J8erKKB1x3DKymfjWkw==
+X-ME-Sender: <xms:13SMZHOjKdgeY8RqeGIuRpQTnAHItlvYFWKb85KFnAaMjI04n5SKkA>
+    <xme:13SMZB8GjiIEV1m1NP_lPUfit9vVqivOy7L-UJ1JOsYpGKMsn6mRpbxnxIVuHHohn
+    OTGa86XyCIJ5blVE8A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedvgedgkedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:13SMZGTN7M1QUZviaLNC3wZAgX5Du_qMaTzLp5BhvsEuOVfX_jN5tA>
+    <xmx:13SMZLu3bsPg8QVPRAsD5MaNNl3O_NuQypbsiCZJGtHE1UI7WkScZg>
+    <xmx:13SMZPcA3nUlAsZll98ljVPOeCEI_x9jdKKOkgMxSRRNxXjwtcyggQ>
+    <xmx:2HSMZK0t0DvXikhafboeUF2PfwlrewSk155sWP66D9OIJoeJzFqBNw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 386D4B60086; Fri, 16 Jun 2023 10:42:31 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-496-g8c46984af0-fm-20230615.001-g8c46984a
+Mime-Version: 1.0
+Message-Id: <6742b2ce-02f1-43c1-811f-de7fd0a74f6a@app.fastmail.com>
+In-Reply-To: <CAKYAXd-j6mJ91hZUZi86HnGJahekHHgYz4ngWfF81QmYigGqVw@mail.gmail.com>
+References: <20230616090749.2646749-1-arnd@kernel.org>
+ <CAKYAXd-j6mJ91hZUZi86HnGJahekHHgYz4ngWfF81QmYigGqVw@mail.gmail.com>
+Date:   Fri, 16 Jun 2023 16:42:09 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Namjae Jeon" <linkinjeon@kernel.org>,
+        "Arnd Bergmann" <arnd@kernel.org>
+Cc:     "Steve French" <sfrench@samba.org>,
+        "Sergey Senozhatsky" <senozhatsky@chromium.org>,
+        "Tom Talpey" <tom@talpey.com>,
+        "Nathan Chancellor" <nathan@kernel.org>,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        "Tom Rix" <trix@redhat.com>,
+        "Christian Brauner" <brauner@kernel.org>,
+        "Dave Chinner" <dchinner@redhat.com>,
+        "Kees Cook" <keescook@chromium.org>,
+        =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+        "Ronnie Sahlberg" <lsahlber@redhat.com>,
+        "Hyunchul Lee" <hyc.lee@gmail.com>, linux-cifs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] smb: avoid field overflow warning
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/16/23 00:45, Peter Zijlstra wrote:
-> On Thu, Jun 15, 2023 at 01:37:26PM -0700, Bart Van Assche wrote:
->> Some producers of Android devices want IRQ time accounting enabled while
->> others want IRQ time accounting disabled. Hence, make IRQ time accounting
->> configurable at boot time.
-> 
-> Why would they want this disabled? IRQ time accounting avoids a number
-> of issues under high irq/softirq pressure.
-> 
-> Disabling this makes no sense.
+On Fri, Jun 16, 2023, at 16:40, Namjae Jeon wrote:
+> 2023-06-16 18:07 GMT+09:00, Arnd Bergmann <arnd@kernel.org>:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>
+>> clang warns about a possible field overflow in a memcpy:
+>>
+>> In file included from fs/smb/server/smb_common.c:7:
+>> include/linux/fortify-string.h:583:4: error: call to
+>> '__write_overflow_field' declared with 'warning' attribute: detected write
+>> beyond size of field (1st parameter); maybe use struct_group()?
+>> [-Werror,-Wattribute-warning]
+>>                         __write_overflow_field(p_size_field, size);
+>>
+>> It appears to interpret the "&out[baselen + 4]" as referring to a single
+>> byte of the character array, while the equivalen "out + baselen + 4" is
+>> seen as an offset into the array.
+>>
+>> I don't see that kind of warning elsewhere, so just go with the simple
+>> rework.
+>>
+>> Fixes: e2f34481b24db ("cifsd: add server-side procedures for SMB3")
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>> ---
+>>  fs/smb/server/smb_common.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/fs/smb/server/smb_common.c b/fs/smb/server/smb_common.c
+>> index a7e81067bc991..e3273fa640b07 100644
+>> --- a/fs/smb/server/smb_common.c
+>> +++ b/fs/smb/server/smb_common.c
+>> @@ -536,7 +536,7 @@ int ksmbd_extract_shortname(struct ksmbd_conn *conn,
+>> const char *longname,
+>>  	out[baselen + 3] = PERIOD;
+>>
+>>  	if (dot_present)
+>> -		memcpy(&out[baselen + 4], extension, 4);
+>> +		memcpy(out + baselen + 4, extension, 1);
+> Is there any reason to change copy bytes from 4 bytes to 1 byte?
+>
 
-This is why disabling IRQ time accounting makes a ton of sense to me:
-* If disabling IRQ time accounting would not be useful, there wouldn't
-   be a kernel configuration option that controls whether it is enabled
-   or disabled - it would be enabled all the time.
-* If enabling IRQ time accounting would be essential, all Linux
-   distributors would enable it. In the x86 kernels I checked, IRQ time
-   accounting is disabled (Debian and openSUSE).
-* For x86 there is already a kernel parameter for disabling IRQ time
-   accounting (tsc=noirqtime).
-* Modern hardware, e.g. UFSHCI 4.0 controllers, supports sending the
-   completion interrupt to the CPU core that submitted the I/O. With such
-   hardware IRQ overload (100% spent in IRQ handlers and 0% outside IRQ
-   handlers) is impossible because the submitter is slowed down by the
-   completion interrupts.
-* The performance overhead of CONFIG_IRQ_TIME_ACCOUNTING is
-   unacceptable. A quick test in an x86 VM shows that enabling
-   CONFIG_IRQ_TIME_ACCOUNTING reduces IOPS by 10% (220K -> 200K). On an
-   Android setup I measured an IOPS reduction of 40% (100K -> 60K) due
-   to CONFIG_IRQ_TIME_ACCOUNTING. This is not acceptable.
+No, that was an accident, this patch is wrong.
 
-Thanks,
+I have to revisit this one and check if my change actually still works
+after I change it back to the correct length.
 
-Bart.
+      Arnd
