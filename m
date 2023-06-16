@@ -2,58 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D987333F4
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 16:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C35F37333F6
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 16:50:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345721AbjFPOuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 10:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
+        id S1345745AbjFPOuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 10:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345713AbjFPOuW (ORCPT
+        with ESMTP id S229706AbjFPOue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 10:50:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA0030EB
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 07:50:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 16 Jun 2023 10:50:34 -0400
+Received: from sonata.ens-lyon.org (domu-toccata.ens-lyon.fr [140.77.166.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E64F30E7;
+        Fri, 16 Jun 2023 07:50:32 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by sonata.ens-lyon.org (Postfix) with ESMTP id 2D6EE20135;
+        Fri, 16 Jun 2023 16:50:30 +0200 (CEST)
+Received: from sonata.ens-lyon.org ([127.0.0.1])
+        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id h_zPkR2w8rQC; Fri, 16 Jun 2023 16:50:30 +0200 (CEST)
+Received: from begin (nat-inria-interne-52-gw-01-bso.bordeaux.inria.fr [194.199.1.52])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 43C6A63CFD
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 14:50:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA777C433C0;
-        Fri, 16 Jun 2023 14:50:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686927020;
-        bh=aEGQIyQH+ng6zCmITf21YgP8Yf+bC5Kk7ngJnR9VmGQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=pskvSaL4qUT8OQmfocSE2D1oC123LHsXjhHwQI5qJhBT+4LUCNli2MN3wz1DiJKr1
-         a0LK82Ju/N+XJU2mFfMyRtSamYBUETjRK3zOvDm2Ujs4Va5Kiw59vpV9IDi0DgNoov
-         D2+C5y9pROF6ouIwrWYnM5iHu2D6rt4P/5RXxpS/XJ2EeCX7NlUyqLqcZ7Nfjt5EZn
-         THclYP5FJzESYRA+aaBD9Hl2YnULHKI9i84J1r2xiA16HjNHJUz6ExOGdubllAKCJG
-         MkNZjByS4xpuFE3zjKBYAl+LhLsXWshaI30ii80oezdg4fB8LSg/Q3uWnAfAyyS8P2
-         zRjS609bP/LRA==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Julien Panis <jpanis@baylibre.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Tony Krowiak <akrowiak@linux.ibm.com>,
-        Mark Rutland <mark.rutland@arm.com>, Hao Ge <gehao@kylinos.cn>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Florent Revest <revest@chromium.org>,
+        by sonata.ens-lyon.org (Postfix) with ESMTPSA id 80AA220107;
+        Fri, 16 Jun 2023 16:50:29 +0200 (CEST)
+Received: from samy by begin with local (Exim 4.96)
+        (envelope-from <samuel.thibault@ens-lyon.org>)
+        id 1qAAmS-006jR9-2M;
+        Fri, 16 Jun 2023 16:50:28 +0200
+Date:   Fri, 16 Jun 2023 16:50:28 +0200
+From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     William Hubbs <w.d.hubbs@gmail.com>,
+        Chris Brannon <chris@the-brannons.com>,
+        Kirk Reiser <kirk@reisers.ca>, kernel@collabora.com,
+        kernel-janitors@vger.kernel.org, speakup@linux-speakup.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] samples: pfsm: add CC_CAN_LINK dependency
-Date:   Fri, 16 Jun 2023 16:50:10 +0200
-Message-Id: <20230616145013.3889906-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+Subject: Re: [PATCH] accessibility: speakup: remove linux/version.h
+Message-ID: <20230616145028.7rzrbqfj7wmoenj6@begin>
+Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        William Hubbs <w.d.hubbs@gmail.com>,
+        Chris Brannon <chris@the-brannons.com>,
+        Kirk Reiser <kirk@reisers.ca>, kernel@collabora.com,
+        kernel-janitors@vger.kernel.org, speakup@linux-speakup.org,
+        linux-kernel@vger.kernel.org
+References: <20230303125152.2030241-1-usama.anjum@collabora.com>
+ <fb6121fc-101f-0779-b752-ac8202eb761e@collabora.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <fb6121fc-101f-0779-b752-ac8202eb761e@collabora.com>
+Organization: I am not organized
+User-Agent: NeoMutt/20170609 (1.8.3)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,31 +66,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Muhammad Usama Anjum, le ven. 16 juin 2023 17:53:12 +0500, a ecrit:
+> Soft reminder.
 
-When no libc for the target architecture is available, cross-compiling
-the same cannot work:
+It somehow hadn't appeared in my inbox.
 
-samples/pfsm/pfsm-wakeup.c:12:10: fatal error: fcntl.h: No such file or directory
+> On 3/3/23 5:51 PM, Muhammad Usama Anjum wrote:
+> > make versioncheck reports the following:
+> > ./drivers/accessibility/speakup/genmap.c: 13 linux/version.h not needed.
+> > ./drivers/accessibility/speakup/makemapdata.c: 13 linux/version.h not needed.
+> > 
+> > So remove linux/version.h from both of these files.
+> > 
+> > Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-Fixes: 9e66fb5244953 ("samples: Add userspace example for TI TPS6594 PFSM")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- samples/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Reviewed-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
 
-diff --git a/samples/Kconfig b/samples/Kconfig
-index 3edf73a3dc9bf..bf49ed0d73623 100644
---- a/samples/Kconfig
-+++ b/samples/Kconfig
-@@ -256,6 +256,7 @@ config SAMPLE_INTEL_MEI
- config SAMPLE_TPS6594_PFSM
- 	bool "Build example program working with TPS6594 PFSM driver"
- 	depends on HEADERS_INSTALL
-+	depends on CC_CAN_LINK
- 	help
- 	  Build a sample program to work with PFSM devices.
- 
+Thanks!
+
+> > ---
+> >  drivers/accessibility/speakup/genmap.c      | 1 -
+> >  drivers/accessibility/speakup/makemapdata.c | 1 -
+> >  2 files changed, 2 deletions(-)
+> > 
+> > diff --git a/drivers/accessibility/speakup/genmap.c b/drivers/accessibility/speakup/genmap.c
+> > index 0125000e00d9..0882bab10fb8 100644
+> > --- a/drivers/accessibility/speakup/genmap.c
+> > +++ b/drivers/accessibility/speakup/genmap.c
+> > @@ -10,7 +10,6 @@
+> >  #include <stdio.h>
+> >  #include <libgen.h>
+> >  #include <string.h>
+> > -#include <linux/version.h>
+> >  #include <ctype.h>
+> >  #include "utils.h"
+> >  
+> > diff --git a/drivers/accessibility/speakup/makemapdata.c b/drivers/accessibility/speakup/makemapdata.c
+> > index d7d41bb9b05f..55e4ef8a93dc 100644
+> > --- a/drivers/accessibility/speakup/makemapdata.c
+> > +++ b/drivers/accessibility/speakup/makemapdata.c
+> > @@ -10,7 +10,6 @@
+> >  #include <stdio.h>
+> >  #include <libgen.h>
+> >  #include <string.h>
+> > -#include <linux/version.h>
+> >  #include <ctype.h>
+> >  #include "utils.h"
+> >  
+> 
+> -- 
+> BR,
+> Muhammad Usama Anjum
+> 
+
 -- 
-2.39.2
-
+Samuel
+---
+Pour une évaluation indépendante, transparente et rigoureuse !
+Je soutiens la Commission d'Évaluation de l'Inria.
