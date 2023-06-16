@@ -2,62 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FA2D73272A
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 08:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED65E73272D
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 08:13:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242750AbjFPGMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 02:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51404 "EHLO
+        id S232766AbjFPGNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 02:13:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233966AbjFPGMp (ORCPT
+        with ESMTP id S233966AbjFPGNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 02:12:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5B4269E;
-        Thu, 15 Jun 2023 23:12:44 -0700 (PDT)
+        Fri, 16 Jun 2023 02:13:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB90F2D61;
+        Thu, 15 Jun 2023 23:13:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A35F0622C0;
-        Fri, 16 Jun 2023 06:12:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E064BC433C8;
-        Fri, 16 Jun 2023 06:12:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D05D62508;
+        Fri, 16 Jun 2023 06:13:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5238C433C0;
+        Fri, 16 Jun 2023 06:12:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686895962;
-        bh=JiyaFCT5XlQ5cdqxzxNN/QD3/0qLm+DuVjJw4o9ljwQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pUBf/xg8lWvY3+0lGdY5WnLFtxkq7oE3dmIMKdkCq6tsljGxUjfc2/YZCSCodv9yj
-         5llG8LKlBHGDIreDK/9G5kKp4q9BMl7he/Mi7P+wOvJrNq2Og4x4eBmTNutf5iPAPa
-         fVPLd/OaotbcSwMu+fJOMGRlCwS7WiwhyEFEycJhmL+f9EAAY2yEbrUlVuvj7eDXDQ
-         TnC2av6PSpuSWlTepzY9fXUpuAS+Of8fWpD92iJhogBFlFWcWlMpq/5+V4X43LG7kI
-         vv/hQT+aB0QoLr6b1HnCymvZO09Q8tB7Z+AjdEnRxuwhXWYyJ12mkY9BY4o/iY14Sr
-         LFdfVAkiPuI+A==
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2b44d77e56bso7128661fa.1;
-        Thu, 15 Jun 2023 23:12:42 -0700 (PDT)
-X-Gm-Message-State: AC+VfDw/GzR+16Ck9y8EVcSwsmdIdrik82or2PsMniiLQ5iMxWbC8AR1
-        80OD/t9C6s3j9cIt21k5q7GD8tGI2HIeWEq3PoQ=
-X-Google-Smtp-Source: ACHHUZ4AA/u7+Ga1juEQ6ZdLwCv/lFl4xR4NDPTHT326ul+mLNEOxL+uAVnKdNgfu/jR9xuhLC6dlFxg8XZ413kt1QQ=
-X-Received: by 2002:a2e:9b01:0:b0:2a2:ac00:4de4 with SMTP id
- u1-20020a2e9b01000000b002a2ac004de4mr241405lji.22.1686895960931; Thu, 15 Jun
- 2023 23:12:40 -0700 (PDT)
+        s=k20201202; t=1686895980;
+        bh=pKKs+ikvQgBhv6OujYCF/JO0CWWZMx7/sLxq/+FmgdQ=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=vNRjrKr9yva3IsiQbnaBccQwUvpLA1Mgw8uGTj52RWGNiBcMHo5TPqwe/0GfYuVU7
+         sODW+rKfd7imcYUfgnAmV7X5fokV9FGT4idRwxYuzezDCjETiZ8vsNjZD/2CNM7yIi
+         XAp2tdoLzYlzESCvh81lxdN1g+UnXKZFD4JwZU8e7hKVrDE+7IUzcjhD7r1kp0wbJz
+         C0IPCSJHRRzCg4znmH0DERGNv0MJyfbSoI8zMvtsVA6hgDTINYsPXtftO8MKe2fO5v
+         zLRW8KfW067zj84LG93/RGiLAuEn/fVYKCjvjv/AdtJA3GE0UYAL36WIDNNRBWXIH1
+         ZPNlsSGJGLJkA==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Johannes Berg <johannes@sipsolutions.net>,
+        Toke =?utf-8?Q?H=C3=B8ilan?= =?utf-8?Q?d-J=C3=B8rgensen?= 
+        <toke@kernel.org>, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        regressions@lists.linux.dev
+Subject: Re: Closing down the wireless trees for a summer break?
+References: <87y1kncuh4.fsf@kernel.org> <871qifxm9b.fsf@toke.dk>
+        <20230613112834.7df36e95@kernel.org>
+        <ba933d6e3d360298e400196371e37735aef3b1eb.camel@sipsolutions.net>
+        <20230613195136.6815df9b@kernel.org>
+        <c7c9418bcd5ac1035a007d336004eff48994dde7.camel@sipsolutions.net>
+        <87a5x2ccao.fsf@kernel.org> <20230614122153.640292b9@kernel.org>
+Date:   Fri, 16 Jun 2023 09:12:55 +0300
+In-Reply-To: <20230614122153.640292b9@kernel.org> (Jakub Kicinski's message of
+        "Wed, 14 Jun 2023 12:21:53 -0700")
+Message-ID: <87h6r8aqag.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20230609094320.2397604-1-linan666@huaweicloud.com>
-In-Reply-To: <20230609094320.2397604-1-linan666@huaweicloud.com>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 15 Jun 2023 23:12:28 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6imRp9jseup660xQiV7optVwk-vPWz77aG3=4niUrMRQ@mail.gmail.com>
-Message-ID: <CAPhsuW6imRp9jseup660xQiV7optVwk-vPWz77aG3=4niUrMRQ@mail.gmail.com>
-Subject: Re: [PATCH] md/raid10: Only check QUEUE_FLAG_IO_STAT when issuing io
-To:     linan666@huaweicloud.com
-Cc:     jgq516@gmail.com, linux-raid@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linan122@huawei.com,
-        yukuai3@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
-        yangerkun@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,66 +64,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 2:47=E2=80=AFAM <linan666@huaweicloud.com> wrote:
->
-> From: Li Nan <linan122@huawei.com>
->
-> /sys/block/[device]/queue/iostats is used to control whether to count io
-> stat. Write 0 to it will clear queue_flags QUEUE_FLAG_IO_STAT which means
-> iostats is disabled. If we disable iostats and later endable it, the io
-> issued during this period will be counted incorrectly, inflight will be
-> decreased to -1.
->
->   //T1 set iostats
->   echo 0 > /sys/block/md0/queue/iostats
->    clear QUEUE_FLAG_IO_STAT
->
->                         //T2 issue io
->                         if (QUEUE_FLAG_IO_STAT) -> false
->                          bio_start_io_acct
->                           inflight++
->
->   echo 1 > /sys/block/md0/queue/iostats
->    set QUEUE_FLAG_IO_STAT
->
->                                         //T3 io end
->                                         if (QUEUE_FLAG_IO_STAT) -> true
->                                          bio_end_io_acct
->                                           inflight--    -> -1
->
-> Also, if iostats is enabled while issuing io but disabled while io end,
-> inflight will never be decreased.
->
-> Fix it by checking start_time when io end. Only check QUEUE_FLAG_IO_STAT
-> while issuing io, just like request based devices.
->
-> Fixes: 528bc2cf2fcc ("md/raid10: enable io accounting")
-> Signed-off-by: Li Nan <linan122@huawei.com>
+Jakub Kicinski <kuba@kernel.org> writes:
 
-The subject and commit log is a little confusing. I updated it a little
-bit and applied to md-next.
-
-Thanks,
-Song
-
-
-> ---
->  drivers/md/raid10.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> On Wed, 14 Jun 2023 18:07:43 +0300 Kalle Valo wrote:
+>> But do note that above is _only_ for -next patches. For patches going to
+>> -rc releases we apply the patches directly to wireless, no other trees
+>> are involved. My proposal was that net maintainers would take only fixes
+>> for -rc releases, my guess from history is that it would be maximum of
+>> 10-15 patches. And once me and Johannes are back we would sort out -next
+>> patches before the merge window. But of course you guys can do whatever
+>> you think is best :)
 >
-> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-> index 381c21f7fb06..bf9dca5c25c3 100644
-> --- a/drivers/md/raid10.c
-> +++ b/drivers/md/raid10.c
-> @@ -325,7 +325,7 @@ static void raid_end_bio_io(struct r10bio *r10_bio)
->         if (!test_bit(R10BIO_Uptodate, &r10_bio->state))
->                 bio->bi_status =3D BLK_STS_IOERR;
->
-> -       if (blk_queue_io_stat(bio->bi_bdev->bd_disk->queue))
-> +       if (r10_bio->start_time)
->                 bio_end_io_acct(bio, r10_bio->start_time);
->         bio_endio(bio);
->         /*
-> --
-> 2.39.2
->
+> Ah, good note, I would have guessed that fixes go via special trees,
+> too. In that case it should indeed be easy. We'll just look out for
+> maintainer acks on the list and ping people if in doubt.
+
+Sounds good. And do note that not all drivers have active maintainers,
+so you might have to take some patches without acks.
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
