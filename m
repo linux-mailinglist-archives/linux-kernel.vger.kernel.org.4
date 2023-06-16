@@ -2,145 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C68D732FFB
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:36:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA41732FFC
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343614AbjFPLgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 07:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53980 "EHLO
+        id S245552AbjFPLgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 07:36:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245552AbjFPLgg (ORCPT
+        with ESMTP id S231782AbjFPLgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 07:36:36 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676D92D5F
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:36:27 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b3424edd5fso7715341fa.0
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:36:27 -0700 (PDT)
+        Fri, 16 Jun 2023 07:36:37 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91AC930D1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:36:29 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2b344476313so7449241fa.3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:36:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686915385; x=1689507385;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8nd2+y5FOD0js54Jlzt9YMY1XXmMWttJihYBEi7eAis=;
-        b=F99eWGrob74bUKUxo4SyMxapCXfyZPWkFbu6a2GblQM3ogA3pokM2aXFQlvCpRKWX0
-         ywE/JVZjVIuzOHi/vDX1JXyI2oOiMkdPeg4mlsLTCkbWBxl9nP4DE4gV6OxPjVAewZ6k
-         fvym5yh1HRii9IF3Z95Pcl6VDcVvZVJMFFZVQznKV38yPXxEb3d9418nlSwO0u0YL4FG
-         OU+8TSyB9erYQbQrRe4xvWCJZSPFqczWBg/a5hGU580UqmoNPHQ54MZSNSjaS1g+ftY0
-         NgZ07BcFIJlToMqgxnShu6JKX9uEhr5WvTTKkdG2WSXmZsWcTRSqQj0UnzXOD4xVU16I
-         ZL0Q==
+        d=linaro.org; s=google; t=1686915388; x=1689507388;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Bj3/Cr8bx142cZ0HMiJJZaOQvFwE/cQ/HR9pNIVtdQ4=;
+        b=zvjOxT5aVhulmeL1zKnzbSugk7MTTEODWhYwMNSZHCEmhNfRcLYS9wNMnuCvsk6MnJ
+         ewf9X60yNTVfWn9kpUf5768p4vfev5JY9tOYkUvtJ7sOpQbmj7BOAwlG/fyaxyuj08+i
+         PlfxbvspExt5AYvGw+2vNb0ogtP67eYngaMaGHg4IQFScSCgLhK9BfV/tw3G8ue7n0i8
+         MiRsYu0icJJEICHYTkvGB6/x7LVJGJrlGJn5frLR+Ngsj352ytK/o2L9xZmP2Htzbvk7
+         POroCX9IWD6xHgs8mhVfAi/Io50ZfMK5FXrjNs2u90dil6yxAoo9C4TPPFYwACIHdnTN
+         cvoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686915385; x=1689507385;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1686915388; x=1689507388;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8nd2+y5FOD0js54Jlzt9YMY1XXmMWttJihYBEi7eAis=;
-        b=UaoFRbgGXwUT6VXB1cKuFVo97obR7pDpTWxjzZhzphPHLddWVd8I6my1eaSASaS6hA
-         kjZS9vMG/BrJIH62c4PB1sMWGNdAZszqyJ+MBjXDLSZYxJqMfQTf3dNfWje3Qbl/k3G7
-         Ze4vl8ByNBwnQ0RMhj1xlGsVsjABvzUVcvCzuIqZ06VGLBEQ23GBtvdlHCHeincKYTo0
-         R5/0l6r8ZqcBVSTTgGetQZCnQbYSKiMlEFHmUcHPGo4ALJlh7MNXCL7aSbsiU907Sn8a
-         VQtfYFX06p2esKgJU+Aoctjk+8igilzsEqXeDVFlz0doZHHvOUH+pdENdNaacTMQlbIE
-         ji1w==
-X-Gm-Message-State: AC+VfDxAU0wQ7NRB0la/Ivvl0LWAW+6dOtpGlS9YQhARgBHU/2rz4yrh
-        +YZxuGYLyiO2eQwe6jdRwyZmQA==
-X-Google-Smtp-Source: ACHHUZ4VHuScWcMmQmkl2PxwRNO9kvdY7q8r8qdMqxMXbSEiD+xFQg91cfPbsiev/FMUIypDdi/0Tg==
-X-Received: by 2002:a05:651c:22d:b0:2b1:d19a:f190 with SMTP id z13-20020a05651c022d00b002b1d19af190mr1522620ljn.49.1686915385658;
-        Fri, 16 Jun 2023 04:36:25 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id w25-20020a2e9599000000b002b34735dc72sm1300665ljh.108.2023.06.16.04.36.24
+        bh=Bj3/Cr8bx142cZ0HMiJJZaOQvFwE/cQ/HR9pNIVtdQ4=;
+        b=kEbaHurDmPCqQQOEmYCKeC3JIz90e3YJaxNa0uQSe4C9H1fvklNcU8iF1F5cicF2Q/
+         mRrK6Es5GTwQGhCRhKXa/5oUeXEPJlzYHFxfQpJDQkpBLtKkHF4btjgT5Zn5YETWiyiw
+         GAh6i8jjv9dYpofC8YrKw3/5kZZYAqxL7u49mgDLYZGYjWYe4wdixLjdn1y+WdWg7oW/
+         kbjYBKZV5ZAX+fLxNyOwwtRrwF/38FV4qpvBX/hAt89PK9JmppFABtlHAgVJlptbc1G6
+         6rLWBaGa6oofOOBopfhq59UVTcL43nY+0G3WXBcYyPcAcwcyRIZHN+8IDAigzOvXiO3k
+         vlxw==
+X-Gm-Message-State: AC+VfDwrs2kO5mtzQLofrNiNBNP/OUTtNx+/nagDDQJ94hR6CIdvNYvs
+        vZP9hNJh1cGXJGlcrbkbGyfBnZ7rAxcSkmTPzuM=
+X-Google-Smtp-Source: ACHHUZ4ZU0lJCnLp7LVEi8gIf4pfdlo1b0c8gGHv53BG3JU2p7CDlyixqvN8TH4H/NXDgvG973RF4w==
+X-Received: by 2002:a2e:834b:0:b0:2ac:70fa:fb7b with SMTP id l11-20020a2e834b000000b002ac70fafb7bmr1582777ljh.18.1686915387773;
+        Fri, 16 Jun 2023 04:36:27 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id c7-20020a056402120700b00514b99afa57sm9837710edw.44.2023.06.16.04.36.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jun 2023 04:36:25 -0700 (PDT)
-Message-ID: <b2553058-bd78-6d9f-dcd0-d1c086b4fc3b@linaro.org>
-Date:   Fri, 16 Jun 2023 13:36:23 +0200
+        Fri, 16 Jun 2023 04:36:27 -0700 (PDT)
+Message-ID: <a9098664-ac16-eddb-3e2d-78eb08ac973f@linaro.org>
+Date:   Fri, 16 Jun 2023 13:36:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 2/3] dt-bindings: arm: Add SolidRun LX2162A SoM & Clearfog
+ Board
 Content-Language: en-US
-To:     Mohammad Rafi Shaik <quic_mohs@quicinc.com>,
-        krzysztof.kozlowski+dt@linaro.org, swboyd@chromium.org,
-        andersson@kernel.org, broonie@kernel.org, agross@kernel.org
-Cc:     robh+dt@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_rohkumar@quicinc.com, srinivas.kandagatla@linaro.org,
-        dianders@chromium.org, judyhsiao@chromium.org,
-        quic_visr@quicinc.com,
-        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-References: <20230616103534.4031331-1-quic_mohs@quicinc.com>
- <20230616103534.4031331-9-quic_mohs@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: Re: [RESEND v6 8/8] arm64: dts: qcom: sc7280: Add qcom,adsp-pil-mode
- property in clock nodes
-In-Reply-To: <20230616103534.4031331-9-quic_mohs@quicinc.com>
+To:     Josua Mayer <josua@solid-run.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Li Yang <leoyang.li@nxp.com>, Marek Vasut <marex@denx.de>,
+        Fabio Estevam <festevam@denx.de>,
+        Stefan Wahren <stefan.wahren@chargebyte.com>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Andreas Kemnade <andreas@kemnade.info>
+References: <20230616110610.32173-1-josua@solid-run.com>
+ <20230616110610.32173-3-josua@solid-run.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230616110610.32173-3-josua@solid-run.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.06.2023 12:35, Mohammad Rafi Shaik wrote:
-> From: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+On 16/06/2023 13:06, Josua Mayer wrote:
+> Add DT compatible for SolidRun LX2162A SoM and Clearfog board.
 > 
-> Add "qcom,adsp-pil-mode" property in clock nodes for herobrine
-> crd revision 3 board specific device tree.
-> This is to register clocks conditionally by differentiating ADSP
-> based platforms and legacy path platforms.
-> Also disable lpass_core clock, as it is creating conflict
-> with ADSP clocks and it is not required for ADSP based platforms.
-> 
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> Signed-off-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+> Signed-off-by: Josua Mayer <josua@solid-run.com>
 > ---
->  .../qcom/sc7280-herobrine-audioreach-wcd9385.dtsi    | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
+>  Documentation/devicetree/bindings/arm/fsl.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
-> index c02ca393378f..876a29178d46 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
-> @@ -197,6 +197,14 @@ q6prmcc: clock-controller {
->  	};
->  };
->  
-> +&lpass_aon {
-> +	qcom,adsp-pil-mode;
-That's a whole bunch of hacky bindings that makes no sense..
+> diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+> index 15d411084065..438a4ece8157 100644
+> --- a/Documentation/devicetree/bindings/arm/fsl.yaml
+> +++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+> @@ -1373,9 +1373,11 @@ properties:
+>        - description: SolidRun LX2160A based Boards
+>          items:
+>            - enum:
+> +              - solidrun,clearfog
+>                - solidrun,clearfog-cx
+>                - solidrun,honeycomb
+>            - const: solidrun,lx2160a-cex7
+> +          - const: solidrun,lx2162a-som
+>            - const: fsl,lx2160a
 
-What should have been done from the beginning is:
+You change existing entries, breaking boards and changing the meaning,
+without any explanation in commit msg. That's not how it is done. Please
+provide rationale in commit msg.
 
-- all clocks should be registered inside the clock driver, unconditionally
-  as far as .c code is concerned
+Best regards,
+Krzysztof
 
-- the regmap properties within should reflect the actual max register
-  range within the hardware block
-
-- device-tree should contain protected-clocks, which omits registering
-  specified clks (I guess in the ADSP-less case you could probably even
-  register all of them and it wouldn't hurt)
-
-
-> +};
-> +
-> +&lpass_core {
-> +	status = "disabled";
-status = "reserved";
-
-Konrad
-> +};
-> +
->  &lpass_rx_macro {
->  	/delete-property/ power-domains;
->  	/delete-property/ power-domain-names;
-> @@ -239,3 +247,7 @@ &lpass_va_macro {
->  
->  	status = "okay";
->  };
-> +
-> +&lpasscc {
-> +	qcom,adsp-pil-mode;
-> +};
