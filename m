@@ -2,134 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71F79733AEB
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 22:35:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED68A733AF4
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 22:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230499AbjFPUfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 16:35:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55400 "EHLO
+        id S231820AbjFPUhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 16:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344607AbjFPUfA (ORCPT
+        with ESMTP id S229950AbjFPUhE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 16:35:00 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72ECB3A91
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 13:34:59 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-51a2661614cso1472769a12.2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 13:34:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686947698; x=1689539698;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KPciauT2QE+r+9lPV/ArLvmRHIsbGYI6J36uwE1SK3s=;
-        b=tzI76SnwGN2grvcKVqSpepKEWgKrUW1SNuotlWK9BAKuyMZ1PDa9TDwfZE2u2xxtfs
-         QNg+KpErfRBMOKpDZYKTSigvSSkYad2TYtWPmTS+n17vRFIvMxxsbxKkwEefNhduBNON
-         K96UOTkHsOmAN4NRScKsE8XgbMQ+USkp1wO2mbA+bGnmlThdaCxNn/KpUvAD6NArals1
-         j9uPW7R8uu0roT71oeAO9vL3tUJL4dyS+Un5f9aW/Zhjc4PoJTil9NBp50dpZu/na7f+
-         hRACYzqvGuPbKyWk9sDXDBWsgVe6G7a2YWGg5FE7jrbqfJtFSnHlT/Cq/pzi1ozcNbN4
-         uY0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686947698; x=1689539698;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KPciauT2QE+r+9lPV/ArLvmRHIsbGYI6J36uwE1SK3s=;
-        b=AaVGl+O/QT813eYk10SndQoL9dz5zKKHOhRE4LTzPyP9cAJQOmyzwaEiXFaMO5KPdu
-         aaUnv/m7gztqf05DFVrB1O1w0cuGhdaRqefRdK1Cnikgi4SpCw2A2E636nj2do4MJ6c8
-         To1QGJ2eYLcKTnb08cgb0B5ZwtL6bPTvM8WoZ9jkROmkCRGa0He4+FVc8p23ArDlxE/9
-         02PZ2Wq/X6eB3CNy8r8E0FdZmVwWkR1+WbL8jNS0SvPu+A28EdzQPG7Ly2qdJLAW2B5d
-         EbVmp227rcMCq9b40K+QMx4vgcZn0AI5h5z5EVUYpR5ybZzZvCPgd7ICZjrMqtQaZt0V
-         b5Pw==
-X-Gm-Message-State: AC+VfDw/IjPVL0HyPMAiDaS0GOqCPf1or+lhGLuYoHnEq+XYHtqltC2V
-        woJWExFEUr6EPi193qpFbovTJg==
-X-Google-Smtp-Source: ACHHUZ6MFwaKuaowdB54DzIZdqpHn6rF59OVRLvCKB0x0gHdXUT+84yk9XF1cDFHDrxhczAJSa0gcw==
-X-Received: by 2002:aa7:d459:0:b0:510:8ee2:2b05 with SMTP id q25-20020aa7d459000000b005108ee22b05mr2280600edr.38.1686947697808;
-        Fri, 16 Jun 2023 13:34:57 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id k5-20020aa7c045000000b005184a51c03fsm5758571edo.2.2023.06.16.13.34.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jun 2023 13:34:57 -0700 (PDT)
-Message-ID: <661800ab-c363-49f2-4889-c458a7b298c4@linaro.org>
-Date:   Fri, 16 Jun 2023 22:34:55 +0200
+        Fri, 16 Jun 2023 16:37:04 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695FC3AA2;
+        Fri, 16 Jun 2023 13:37:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=P0TseeKmmyEXnEwa8PR9QMT+rT2HFHcuV2+UK3I323E=; b=eN1tvXysldMMhU48xwBkwDR343
+        0CZrCRsEYCiwlAG+tRobBmVNy8fQlIDmr9bDDgGaIcFO6R5sNoHJO7sGTlkcbD2nTArKyoiunCgm/
+        ussQ9yACX2BNG1VWPeiGVARbCDvTKJlGvqk3VpngfCt5RaxZDT/sEv8tGH6dZtPrv2n8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1qAGBa-00Gl04-OZ; Fri, 16 Jun 2023 22:36:46 +0200
+Date:   Fri, 16 Jun 2023 22:36:46 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     "Radu Pirea (NXP OSS)" <radu-nicolae.pirea@oss.nxp.com>
+Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        richardcochran@gmail.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sebastian.tobuschat@nxp.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH net-next v1 01/14] net: phy: nxp-c45-tja11xx: fix the PTP
+ interrupt enablig/disabling
+Message-ID: <5f47ee8c-6a84-4449-9331-1895e4a612d9@lunn.ch>
+References: <20230616135323.98215-1-radu-nicolae.pirea@oss.nxp.com>
+ <20230616135323.98215-2-radu-nicolae.pirea@oss.nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] dt-bindings: arm: socionext: add bindings for the
- Synquacer platform
-Content-Language: en-US
-To:     Jassi Brar <jaswinder.singh@linaro.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh@kernel.org,
-        ilias.apalodimas@linaro.org, masahisa.kojima@linaro.org
-References: <20230616035813.255062-1-jaswinder.singh@linaro.org>
- <165dd295-1b3a-5062-772a-613a7bf6fd45@linaro.org>
- <CAJe_ZhdV3yaKUVD43duO4hkGMByJhq7x9bN+eBXJdBXdxgDneg@mail.gmail.com>
- <e2b98d80-8e9a-6083-3bc5-677bef0d3263@linaro.org>
- <CAJe_ZhfeYmxjR7Hcht0F9rc97VG2JCFEEFB+S5kUhSCmsut3Cg@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAJe_ZhfeYmxjR7Hcht0F9rc97VG2JCFEEFB+S5kUhSCmsut3Cg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230616135323.98215-2-radu-nicolae.pirea@oss.nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/06/2023 22:06, Jassi Brar wrote:
-> On Fri, 16 Jun 2023 at 11:47, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 16/06/2023 18:23, Jassi Brar wrote:
->>> On Fri, 16 Jun 2023 at 05:15, Krzysztof Kozlowski
->>> <krzysztof.kozlowski@linaro.org> wrote:
->>>>
->>>> On 16/06/2023 05:58, jaswinder.singh@linaro.org wrote:
->>>>> From: Jassi Brar <jaswinder.singh@linaro.org>
->>>>>
->>>>> Socionext's DeveloperBox is based on the SC2A11B SoC (Synquacer).
->>>>> Specify bindings for the platform and boards based on that.
->>>>
->>>> A nit, subject: drop second/last, redundant "bindings". The
->>>> "dt-bindings" prefix is already stating that these are bindings.
->>>>
->>> I can remove it, but I see many mentions like "Fix bindings for"  "Add
->>> binding for" etc in the subject line.
->>
->> Can we fix them as well?
->>
-> ??
-
-What else I can say to such argument?
-
+On Fri, Jun 16, 2023 at 04:53:10PM +0300, Radu Pirea (NXP OSS) wrote:
+> .config_intr() handles only the link event interrupt and should
+> disable/enable the PTP interrupt also.
 > 
+> It's safe to disable/enable the PTP irq even if the egress ts irq
+> is disabled. This interrupt, the PTP one, acts as a global switch for all
+> PTP irqs.
 > 
->>>
->>>>
->>>> Binding without it's user is usually useless. Where is the user?
->>>>
->>> It is required for SystemReady-2.0 certification.
->>
->> For what? If there is no user, it is not required for SR. We don't
->> document compatibles for something which does not exist in the projects.
->>
-> The dts/dtsi for synquacer will be added later.
-> I am sure you are aware that there are countless bindings without
-> actual use in any dts/dtsi.
+> Fixes: 514def5dd339 ("phy: nxp-c45-tja11xx: add timestamping support")
+> CC: stable@vger.kernel.org # 5.15+
+> Signed-off-by: Radu Pirea (NXP OSS) <radu-nicolae.pirea@oss.nxp.com>
 
-Bindings without user (so no DTSI and no driver)? Just few, not countless.
+Please don't mix fixes and development work in one patchset. Please
+post this to applying to net, not net-next.
 
-> When exactly did it become mandatory to
-> have dts/dtsi for the bindings to be merged upstream?
+>  static int nxp_c45_config_intr(struct phy_device *phydev)
+>  {
+> -	if (phydev->interrupts == PHY_INTERRUPT_ENABLED)
+> +	/* The return value is ignored on purpose. It might be < 0.
+> +	 * 0x807A register is not present on SJA1110 PHYs.
+> +	 */
+> +	if (phydev->interrupts == PHY_INTERRUPT_ENABLED) {
+> +		phy_set_bits_mmd(phydev, MDIO_MMD_VEND1,
+> +				 VEND1_PORT_FUNC_IRQ_EN, PTP_IRQS);
+>  		return phy_set_bits_mmd(phydev, MDIO_MMD_VEND1,
+>  					VEND1_PHY_IRQ_EN, PHY_IRQ_LINK_EVENT);
 
-It was always. We do not want/need to document downstream stuff or
-anything  just because it is somewhere there.
+phy_set_bits_mmd() will not return an error if the register does not
+exist. There is no such indication for MDIO. This is going to do a
+read/modify/write. That read might get 0xffff, or random junk. And
+then the write back will be successful. The only time
+phy_read()/phy_write return error is when there is a problem within
+the bus master, like its clock gets turned off and the transfer times
+out.
 
-Best regards,
-Krzysztof
+So it is good to document you are accessing a register which might not
+exist, but there is no need to ignore the return code.
 
+       Andrew
