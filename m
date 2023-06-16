@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B361732B6B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA25A732B72
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344285AbjFPJZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 05:25:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41382 "EHLO
+        id S1344286AbjFPJ0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 05:26:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344090AbjFPJYx (ORCPT
+        with ESMTP id S1344133AbjFPJYz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 05:24:53 -0400
+        Fri, 16 Jun 2023 05:24:55 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF062700;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4CA270E;
         Fri, 16 Jun 2023 02:24:51 -0700 (PDT)
-Date:   Fri, 16 Jun 2023 09:24:46 -0000
+Date:   Fri, 16 Jun 2023 09:24:47 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686907486;
+        s=2020; t=1686907487;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GyhfjxTwhAKHG4iVITF4i9TPy0D9uGIskaBvaU0vr0A=;
-        b=vYhNrkiHxq0P4RdrMJMD7tPChuXcr8LbxQm5fs3iXh0N0qUnyJojvjey7AR8toCkYtuReF
-        HIt9GVWtIGBqp1se+j+zFzr2VHZRowpQ5LJG6G+dR8PvIT6DeZwX4XiPdBxUoFluXtVb+j
-        Qfa1oN84tje1QraUSuyP1K+CIwgvWQRBUipSVcLjryLo3dM33nGVr5cuzTkObxus0FotHe
-        XgOCjmLhDtmz0YKZgMxiuTgs2Y+EljbZHnpCcnkKiEv/EA2b7czjYmHyfGfIM9GjJE0pE0
-        +D3y19nZ9ozPC9gU1pIMTdA6kz+tIq9rUAlQW+s2ynqN93Wa7wzBkxjUj9ZU2Q==
+        bh=AV6KkFtgrM2z233LjJh0pvjZzz7p2tEBabShKhguHIU=;
+        b=GltytqPbDYjI3ykBmgF4MUl+rFPEKlZlZqaSB5tIh+sHOCmrTjatQKzQBL7DKxoVf/wfcd
+        G/psAhq5DCW7UfgOYdtmq2FH4uuqmCqFSAmreIDY1k+fTo5YyhGjA6ACsrq3igm13sE4/L
+        dNJ1PNIsJRkaCo5I+KKDxXoYfTvPVnNElsnDMo0sCZfAXXgVTYfVkS+Gl4L5BT6hpVcV4a
+        ciTeDjJox7pQ9hNJesEle/olNE79RvOmg0ldtkAHchdknPlhVLdlDllo4yVP4hwYc8w4bY
+        rtMJzVlWFWEiAfpk4z/CDkBeT/aWlOXBUa2GRcQ3bU/XcfdwfOK38mDnHtDlwQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686907486;
+        s=2020e; t=1686907487;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GyhfjxTwhAKHG4iVITF4i9TPy0D9uGIskaBvaU0vr0A=;
-        b=F8IlrR13f64aHqK6r09Ea2PB6N/PB2xyj90nJvIeCAAl1Mf7b2kS+PmJyRDUTRHxRcsx8S
-        yquhZh7nOgROc+Cg==
+        bh=AV6KkFtgrM2z233LjJh0pvjZzz7p2tEBabShKhguHIU=;
+        b=PLCqIyRcb6jQuPir0pVr8YZ6N1hZbBXIaFWZmMTFZs7bD13LA56mQINzr99JJ4KFDv0dL1
+        85Rpoj4WFYjowICw==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/boot] sparc/cpu: Switch to arch_cpu_finalize_init()
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Sam Ravnborg <sam@ravnborg.org>, x86@kernel.org,
+Subject: [tip: x86/boot] sh/cpu: Switch to arch_cpu_finalize_init()
+Cc:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230613224545.431995857@linutronix.de>
-References: <20230613224545.431995857@linutronix.de>
+In-Reply-To: <20230613224545.371697797@linutronix.de>
+References: <20230613224545.371697797@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <168690748642.404.16664989239465546956.tip-bot2@tip-bot2>
+Message-ID: <168690748709.404.14314407199380002907.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,14 +66,14 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/boot branch of tip:
 
-Commit-ID:     44ade508e3bfac45ae97864587de29eb1a881ec0
-Gitweb:        https://git.kernel.org/tip/44ade508e3bfac45ae97864587de29eb1a881ec0
+Commit-ID:     01eb454e9bfe593f320ecbc9aaec60bf87cd453d
+Gitweb:        https://git.kernel.org/tip/01eb454e9bfe593f320ecbc9aaec60bf87cd453d
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Wed, 14 Jun 2023 01:39:35 +02:00
+AuthorDate:    Wed, 14 Jun 2023 01:39:33 +02:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Fri, 16 Jun 2023 10:16:00 +02:00
 
-sparc/cpu: Switch to arch_cpu_finalize_init()
+sh/cpu: Switch to arch_cpu_finalize_init()
 
 check_bugs() is about to be phased out. Switch over to the new
 arch_cpu_finalize_init() implementation.
@@ -82,64 +81,201 @@ arch_cpu_finalize_init() implementation.
 No functional change.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
-Link: https://lore.kernel.org/r/20230613224545.431995857@linutronix.de
+Link: https://lore.kernel.org/r/20230613224545.371697797@linutronix.de
 
 ---
- arch/sparc/Kconfig            |  1 +
- arch/sparc/include/asm/bugs.h | 18 ------------------
- arch/sparc/kernel/setup_32.c  |  7 +++++++
- 3 files changed, 8 insertions(+), 18 deletions(-)
- delete mode 100644 arch/sparc/include/asm/bugs.h
+ arch/sh/Kconfig                 |  1 +-
+ arch/sh/include/asm/bugs.h      | 74 +--------------------------------
+ arch/sh/include/asm/processor.h |  2 +-
+ arch/sh/kernel/idle.c           |  1 +-
+ arch/sh/kernel/setup.c          | 55 ++++++++++++++++++++++++-
+ 5 files changed, 59 insertions(+), 74 deletions(-)
+ delete mode 100644 arch/sh/include/asm/bugs.h
 
-diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
-index 8535e19..36fd488 100644
---- a/arch/sparc/Kconfig
-+++ b/arch/sparc/Kconfig
-@@ -52,6 +52,7 @@ config SPARC
- config SPARC32
- 	def_bool !64BIT
- 	select ARCH_32BIT_OFF_T
-+	select ARCH_HAS_CPU_FINALIZE_INIT if !SMP
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU
- 	select CLZ_TAB
- 	select DMA_DIRECT_REMAP
-diff --git a/arch/sparc/include/asm/bugs.h b/arch/sparc/include/asm/bugs.h
+diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
+index 9652d36..e339745 100644
+--- a/arch/sh/Kconfig
++++ b/arch/sh/Kconfig
+@@ -6,6 +6,7 @@ config SUPERH
+ 	select ARCH_ENABLE_MEMORY_HOTREMOVE if SPARSEMEM && MMU
+ 	select ARCH_HAVE_NMI_SAFE_CMPXCHG if (GUSA_RB || CPU_SH4A)
+ 	select ARCH_HAS_BINFMT_FLAT if !MMU
++	select ARCH_HAS_CPU_FINALIZE_INIT
+ 	select ARCH_HAS_CURRENT_STACK_POINTER
+ 	select ARCH_HAS_GIGANTIC_PAGE
+ 	select ARCH_HAS_GCOV_PROFILE_ALL
+diff --git a/arch/sh/include/asm/bugs.h b/arch/sh/include/asm/bugs.h
 deleted file mode 100644
-index 02fa369..0000000
---- a/arch/sparc/include/asm/bugs.h
+index fe52abb..0000000
+--- a/arch/sh/include/asm/bugs.h
 +++ /dev/null
-@@ -1,18 +0,0 @@
+@@ -1,74 +0,0 @@
 -/* SPDX-License-Identifier: GPL-2.0 */
--/* include/asm/bugs.h:  Sparc probes for various bugs.
+-#ifndef __ASM_SH_BUGS_H
+-#define __ASM_SH_BUGS_H
+-
+-/*
+- * This is included by init/main.c to check for architecture-dependent bugs.
 - *
-- * Copyright (C) 1996, 2007 David S. Miller (davem@davemloft.net)
+- * Needs:
+- *	void check_bugs(void);
 - */
 -
--#ifdef CONFIG_SPARC32
--#include <asm/cpudata.h>
--#endif
+-/*
+- * I don't know of any Super-H bugs yet.
+- */
 -
--extern unsigned long loops_per_jiffy;
+-#include <asm/processor.h>
+-
+-extern void select_idle_routine(void);
 -
 -static void __init check_bugs(void)
 -{
--#if defined(CONFIG_SPARC32) && !defined(CONFIG_SMP)
--	cpu_data(0).udelay_val = loops_per_jiffy;
+-	extern unsigned long loops_per_jiffy;
+-	char *p = &init_utsname()->machine[2]; /* "sh" */
+-
+-	select_idle_routine();
+-
+-	current_cpu_data.loops_per_jiffy = loops_per_jiffy;
+-
+-	switch (current_cpu_data.family) {
+-	case CPU_FAMILY_SH2:
+-		*p++ = '2';
+-		break;
+-	case CPU_FAMILY_SH2A:
+-		*p++ = '2';
+-		*p++ = 'a';
+-		break;
+-	case CPU_FAMILY_SH3:
+-		*p++ = '3';
+-		break;
+-	case CPU_FAMILY_SH4:
+-		*p++ = '4';
+-		break;
+-	case CPU_FAMILY_SH4A:
+-		*p++ = '4';
+-		*p++ = 'a';
+-		break;
+-	case CPU_FAMILY_SH4AL_DSP:
+-		*p++ = '4';
+-		*p++ = 'a';
+-		*p++ = 'l';
+-		*p++ = '-';
+-		*p++ = 'd';
+-		*p++ = 's';
+-		*p++ = 'p';
+-		break;
+-	case CPU_FAMILY_UNKNOWN:
+-		/*
+-		 * Specifically use CPU_FAMILY_UNKNOWN rather than
+-		 * default:, so we're able to have the compiler whine
+-		 * about unhandled enumerations.
+-		 */
+-		break;
+-	}
+-
+-	printk("CPU: %s\n", get_cpu_subtype(&current_cpu_data));
+-
+-#ifndef __LITTLE_ENDIAN__
+-	/* 'eb' means 'Endian Big' */
+-	*p++ = 'e';
+-	*p++ = 'b';
 -#endif
+-	*p = '\0';
 -}
-diff --git a/arch/sparc/kernel/setup_32.c b/arch/sparc/kernel/setup_32.c
-index c8e0dd9..c9d1ba4 100644
---- a/arch/sparc/kernel/setup_32.c
-+++ b/arch/sparc/kernel/setup_32.c
-@@ -412,3 +412,10 @@ static int __init topology_init(void)
- }
+-#endif /* __ASM_SH_BUGS_H */
+diff --git a/arch/sh/include/asm/processor.h b/arch/sh/include/asm/processor.h
+index 85a6c1c..73fba7c 100644
+--- a/arch/sh/include/asm/processor.h
++++ b/arch/sh/include/asm/processor.h
+@@ -166,6 +166,8 @@ extern unsigned int instruction_size(unsigned int insn);
+ #define instruction_size(insn)	(2)
+ #endif
  
- subsys_initcall(topology_init);
++void select_idle_routine(void);
 +
-+#if defined(CONFIG_SPARC32) && !defined(CONFIG_SMP)
+ #endif /* __ASSEMBLY__ */
+ 
+ #include <asm/processor_32.h>
+diff --git a/arch/sh/kernel/idle.c b/arch/sh/kernel/idle.c
+index d662503..045d93f 100644
+--- a/arch/sh/kernel/idle.c
++++ b/arch/sh/kernel/idle.c
+@@ -15,6 +15,7 @@
+ #include <linux/irqflags.h>
+ #include <linux/smp.h>
+ #include <linux/atomic.h>
++#include <asm/processor.h>
+ #include <asm/smp.h>
+ #include <asm/bl_bit.h>
+ 
+diff --git a/arch/sh/kernel/setup.c b/arch/sh/kernel/setup.c
+index af977ec..cf7c0f7 100644
+--- a/arch/sh/kernel/setup.c
++++ b/arch/sh/kernel/setup.c
+@@ -43,6 +43,7 @@
+ #include <asm/smp.h>
+ #include <asm/mmu_context.h>
+ #include <asm/mmzone.h>
++#include <asm/processor.h>
+ #include <asm/sparsemem.h>
+ #include <asm/platform_early.h>
+ 
+@@ -354,3 +355,57 @@ int test_mode_pin(int pin)
+ {
+ 	return sh_mv.mv_mode_pins() & pin;
+ }
++
 +void __init arch_cpu_finalize_init(void)
 +{
-+	cpu_data(0).udelay_val = loops_per_jiffy;
-+}
++	char *p = &init_utsname()->machine[2]; /* "sh" */
++
++	select_idle_routine();
++
++	current_cpu_data.loops_per_jiffy = loops_per_jiffy;
++
++	switch (current_cpu_data.family) {
++	case CPU_FAMILY_SH2:
++		*p++ = '2';
++		break;
++	case CPU_FAMILY_SH2A:
++		*p++ = '2';
++		*p++ = 'a';
++		break;
++	case CPU_FAMILY_SH3:
++		*p++ = '3';
++		break;
++	case CPU_FAMILY_SH4:
++		*p++ = '4';
++		break;
++	case CPU_FAMILY_SH4A:
++		*p++ = '4';
++		*p++ = 'a';
++		break;
++	case CPU_FAMILY_SH4AL_DSP:
++		*p++ = '4';
++		*p++ = 'a';
++		*p++ = 'l';
++		*p++ = '-';
++		*p++ = 'd';
++		*p++ = 's';
++		*p++ = 'p';
++		break;
++	case CPU_FAMILY_UNKNOWN:
++		/*
++		 * Specifically use CPU_FAMILY_UNKNOWN rather than
++		 * default:, so we're able to have the compiler whine
++		 * about unhandled enumerations.
++		 */
++		break;
++	}
++
++	pr_info("CPU: %s\n", get_cpu_subtype(&current_cpu_data));
++
++#ifndef __LITTLE_ENDIAN__
++	/* 'eb' means 'Endian Big' */
++	*p++ = 'e';
++	*p++ = 'b';
 +#endif
++	*p = '\0';
++}
