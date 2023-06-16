@@ -2,191 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1D63732AB5
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:58:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 939B2732AA7
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:56:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243272AbjFPI6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 04:58:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51286 "EHLO
+        id S244128AbjFPI42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 04:56:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233756AbjFPI6S (ORCPT
+        with ESMTP id S242847AbjFPI40 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 04:58:18 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9917910F6;
-        Fri, 16 Jun 2023 01:58:16 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QjCfN57KjzGplF;
-        Fri, 16 Jun 2023 16:55:08 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by dggpeml500021.china.huawei.com
- (7.185.36.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 16 Jun
- 2023 16:58:14 +0800
-From:   Baokun Li <libaokun1@huawei.com>
-To:     <jack@suse.cz>
-CC:     <linux-fsdevel@vger.kernel.org>, <linux-ext4@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        <yangerkun@huawei.com>, <chengzhihao1@huawei.com>,
-        <yukuai3@huawei.com>, <libaokun1@huawei.com>
-Subject: [PATCH] quota: fix race condition between dqput() and dquot_mark_dquot_dirty()
-Date:   Fri, 16 Jun 2023 16:56:08 +0800
-Message-ID: <20230616085608.42435-1-libaokun1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Fri, 16 Jun 2023 04:56:26 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67AE826A2;
+        Fri, 16 Jun 2023 01:56:24 -0700 (PDT)
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35G8p3jR007233;
+        Fri, 16 Jun 2023 08:56:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=9z3tMyvgoNrYBEOFFAQ+HLSRNHIqHXEfc6q8uZ5rIUE=;
+ b=mmYvBYx9bwnHsjwk/oHLhSlLhlq7WXZn5l8a5FOS6JGsOemNFB56lQoIOXH4rLJIrOPY
+ mU2UWXuOu8zxO/2Se9GXf4BOlSWA+bzgUg/PcidJE8fmCorKMTBJ5vBoZwwX4GBKFA4F
+ nnStSmh2DBnPi4NGi47khSl9+CkYB7ZasIm3oOyVhxpnFPcjDcf7GbO50LUbTL4SaFPN
+ jvd9XjiY3sAImuN5UZAxBkDCMCMsuy8h8TFGjHmsCkNhSOQKf3UZxJovDnExw8rZfMzC
+ xbu3CcaWNX40YTjoYzIftAcL/YoI5OnycZXpmegTe4080UVi+V7U4OZFGuyHlwu0VS18 Lw== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r8mfu0dgt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Jun 2023 08:56:23 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35G5jioS024210;
+        Fri, 16 Jun 2023 08:56:21 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3r4gedu4sc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Jun 2023 08:56:21 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35G8uHFr20382460
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 16 Jun 2023 08:56:17 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CD37220043;
+        Fri, 16 Jun 2023 08:56:17 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7856320040;
+        Fri, 16 Jun 2023 08:56:17 +0000 (GMT)
+Received: from [9.179.5.100] (unknown [9.179.5.100])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 16 Jun 2023 08:56:17 +0000 (GMT)
+Message-ID: <08ed39eb-b1cf-7c15-83a4-dd59cc29732b@linux.ibm.com>
+Date:   Fri, 16 Jun 2023 10:56:17 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.1
+Subject: Re: [PATCH v5 1/7] s390/uv: Always export uv_info
+To:     Steffen Eiden <seiden@linux.ibm.com>, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>
+References: <20230615100533.3996107-1-seiden@linux.ibm.com>
+ <20230615100533.3996107-2-seiden@linux.ibm.com>
+Content-Language: en-US
+From:   Janosch Frank <frankja@linux.ibm.com>
+In-Reply-To: <20230615100533.3996107-2-seiden@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: rSK6T5LhdkXwFqRf0825EV8BGdNPrD2K
+X-Proofpoint-ORIG-GUID: rSK6T5LhdkXwFqRf0825EV8BGdNPrD2K
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-16_05,2023-06-15_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ adultscore=0 mlxlogscore=999 suspectscore=0 impostorscore=0 malwarescore=0
+ priorityscore=1501 mlxscore=0 bulkscore=0 lowpriorityscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306160076
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We ran into a problem that dqput() and dquot_mark_dquot_dirty() may race
-like the function graph below, causing a released dquot to be added to the
-dqi_dirty_list, and this leads to that dquot being released again in
-dquot_writeback_dquots(), making two identical quotas in free_dquots.
+On 6/15/23 12:05, Steffen Eiden wrote:
+> KVM needs the struct's values to be able to provide PV support.
+> 
+> The uvdevice is currently guest only and will need the struct's values
+> for call support checking and potential future expansions.
+> 
+> As uv.c is only compiled with CONFIG_PGSTE or
+> CONFIG_PROTECTED_VIRTUALIZATION_GUEST we don't need a second check in
+> the code. Users of uv_info will need to fence for these two config
+> options for the time being.
+> 
+> Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
+> 
+Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
 
-       cpu1              cpu2
-_________________|_________________
-wb_do_writeback         CHOWN(1)
- ...
-  ext4_da_update_reserve_space
-   dquot_claim_block
-    ...
-     dquot_mark_dquot_dirty // try to dirty old quota
-      test_bit(DQ_ACTIVE_B, &dquot->dq_flags) // still ACTIVE
-      if (test_bit(DQ_MOD_B, &dquot->dq_flags))
-      // test no dirty, wait dq_list_lock
-                    ...
-                     dquot_transfer
-                      __dquot_transfer
-                      dqput_all(transfer_from) // rls old dquot
-                       dqput // last dqput
-                        dquot_release
-                         clear_bit(DQ_ACTIVE_B, &dquot->dq_flags)
-                        atomic_dec(&dquot->dq_count)
-                        put_dquot_last(dquot)
-                         list_add_tail(&dquot->dq_free, &free_dquots)
-                         // first add the dquot to free_dquots
-      if (!test_and_set_bit(DQ_MOD_B, &dquot->dq_flags))
-        add dqi_dirty_list // add freed dquot to dirty_list
-P3:
-ksys_sync
- ...
-  dquot_writeback_dquots
-   WARN_ON(!test_bit(DQ_ACTIVE_B, &dquot->dq_flags))
-   dqgrab(dquot)
-    WARN_ON_ONCE(!atomic_read(&dquot->dq_count))
-    WARN_ON_ONCE(!test_bit(DQ_ACTIVE_B, &dquot->dq_flags))
-   dqput(dquot)
-    put_dquot_last(dquot)
-     list_add_tail(&dquot->dq_free, &free_dquots)
-     // Double add the dquot to free_dquots
-
-This causes a list_del corruption when removing the entry from free_dquots,
-and even trying to free the dquot twice in dqcache_shrink_scan triggers a
-use-after-free.
-
-A warning may also be triggered by a race like the function diagram below:
-
-       cpu1            cpu2           cpu3
-________________|_______________|________________
-wb_do_writeback   CHOWN(1)        QUOTASYNC(1)
- ...                              ...
-  ext4_da_update_reserve_space
-    ...           __dquot_transfer
-                   dqput // last dqput
-                    dquot_release
-                     dquot_is_busy
-                      if (test_bit(DQ_MOD_B, &dquot->dq_flags))
-                       // not dirty and still active
-     dquot_mark_dquot_dirty
-      if (!test_and_set_bit(DQ_MOD_B, &dquot->dq_flags))
-        add dqi_dirty_list
-                       clear_bit(DQ_ACTIVE_B, &dquot->dq_flags)
-                                   dquot_writeback_dquots
-                                    WARN_ON(!test_bit(DQ_ACTIVE_B))
-
-To solve this problem, it is similar to the way dqget() avoids racing with
-dquot_release(). First set the DQ_MOD_B flag, then execute wait_on_dquot(),
-after this we know that either dquot_release() is already finished or it
-will be canceled due to DQ_MOD_B flag test, at this point if the quota is
-DQ_ACTIVE_B, then we can safely add the dquot to the dqi_dirty_list,
-otherwise clear the DQ_MOD_B flag and exit directly.
-
-Fixes: 4580b30ea887 ("quota: Do not dirty bad dquots")
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
----
-
-Hello Honza,
-
-This problem can also be solved by modifying the reference count mechanism,
-where dquots hold a reference count after they are allocated until they are
-destroyed, i.e. the dquots in the free_dquots list have dq_count == 1. This
-allows us to reduce the reference count as soon as we enter the dqput(),
-and then add the dquot to the dqi_dirty_list only when dq_count > 1. This
-also prevents the dquot in the dqi_dirty_list from not having the
-DQ_ACTIVE_B flag, but this is a more impactful modification, so we chose to
-refer to dqget() to avoid racing with dquot_release(). If you prefer this
-solution by modifying the dq_count mechanism, I would be happy to send
-another version of the patch.
-
-Thanks,
-Baokun.
-
- fs/quota/dquot.c | 23 +++++++++++++++++++----
- 1 file changed, 19 insertions(+), 4 deletions(-)
-
-diff --git a/fs/quota/dquot.c b/fs/quota/dquot.c
-index e3e4f4047657..2a04cd74c7c5 100644
---- a/fs/quota/dquot.c
-+++ b/fs/quota/dquot.c
-@@ -362,11 +362,26 @@ int dquot_mark_dquot_dirty(struct dquot *dquot)
- 		return 1;
- 
- 	spin_lock(&dq_list_lock);
--	if (!test_and_set_bit(DQ_MOD_B, &dquot->dq_flags)) {
-+	ret = test_and_set_bit(DQ_MOD_B, &dquot->dq_flags);
-+	if (ret)
-+		goto out_lock;
-+	spin_unlock(&dq_list_lock);
-+
-+	/*
-+	 * Wait for dq_lock - after this we know that either dquot_release() is
-+	 * already finished or it will be canceled due to DQ_MOD_B flag test.
-+	 */
-+	wait_on_dquot(dquot);
-+	spin_lock(&dq_list_lock);
-+	if (!test_bit(DQ_ACTIVE_B, &dquot->dq_flags)) {
-+		clear_bit(DQ_MOD_B, &dquot->dq_flags);
-+		goto out_lock;
-+	}
-+	/* DQ_MOD_B is cleared means that the dquot has been written back */
-+	if (test_bit(DQ_MOD_B, &dquot->dq_flags))
- 		list_add(&dquot->dq_dirty, &sb_dqopt(dquot->dq_sb)->
- 				info[dquot->dq_id.type].dqi_dirty_list);
--		ret = 0;
--	}
-+out_lock:
- 	spin_unlock(&dq_list_lock);
- 	return ret;
- }
-@@ -791,7 +806,7 @@ void dqput(struct dquot *dquot)
- 		return;
- 	}
- 	/* Need to release dquot? */
--	if (dquot_dirty(dquot)) {
-+	if (test_bit(DQ_ACTIVE_B, &dquot->dq_flags) && dquot_dirty(dquot)) {
- 		spin_unlock(&dq_list_lock);
- 		/* Commit dquot before releasing */
- 		ret = dquot->dq_sb->dq_op->write_dquot(dquot);
--- 
-2.31.1
+In the long term we'll remove the config checks and always compile uv.o 
+in kernel/ and boot/ so we won't be running in these issues again.
 
