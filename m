@@ -2,143 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB942733008
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A43C7733017
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:41:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344118AbjFPLkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 07:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56212 "EHLO
+        id S1344301AbjFPLlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 07:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244952AbjFPLjp (ORCPT
+        with ESMTP id S245757AbjFPLlh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 07:39:45 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEA42D5D;
-        Fri, 16 Jun 2023 04:39:44 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-30adc51b65cso441186f8f.0;
-        Fri, 16 Jun 2023 04:39:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686915583; x=1689507583;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+HsF8RgsrNQZ4KBY+cF3uOkWXNRFDW/Y+5wfIoYhuBc=;
-        b=h+dp9cYrtIAB6w3LprJ4on7eTSjRzY9dDwel2ciFQhsWL2traVr08k9PFJh8jgLuPG
-         W+LNqS0ug7++7NPXqC0eVDAWo7ONCc6X4Cco3zsdrramRYlu44B4Bxb5X0FVv1/DnM2S
-         Bgi241DovJs8xSSD4cP9iGkecKnJJ4zLH6jl3igUtMtdUdRoKPSnf/+zqyy8tzPu9oa8
-         xc+Ofw1V7hytnPPXKAzO32e7L0R0kNivqAlSzPV3xym6W+WvrYXjMQ6o+uYNAvK9e2ws
-         6cBhU8VOECEVTTO4FwdbaboCYD9JXQpG+WQT+rcV95B5R0GreOQXFAzCmpV0+0DqMiWG
-         Ephg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686915583; x=1689507583;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+HsF8RgsrNQZ4KBY+cF3uOkWXNRFDW/Y+5wfIoYhuBc=;
-        b=SuPy6gWfQYk3qiw2dGh4hNidFDcr67PxIV8ADGyMqSfjj6i70K9pu2qSpq4w8MrzaQ
-         N3bVj5xr9hGOjIVpuPAfP24y+1eJHbLMq5yZSy4T1bRqoyzyIMkHaydKZIuT7NIn2YV8
-         /8pUGvfbDL5dHyHI68YJlWeNsYl44QNzotQyMwTG/DFgUjn7o2DUjdN5lRy1CxEP+3+W
-         dClhpDNRqEYZ2Ne215+6t2nYzNdkVPwZNWaa4vu6ZZMBlidZuyIA2YSlwQa00f5Exzeg
-         EnuhwT22dI04LQXBVjM1uelJEXfBaHW8nstbCSuElvepz4+91dsZvkYco0JX2kdy+wWW
-         povw==
-X-Gm-Message-State: AC+VfDyPqzliLAmgmVHCPAlNRY/RSVe2yzh9g9E4tLElHM9ThFjoRct3
-        P27KztEeMBfBFyvteSNITU+4MRlVH50=
-X-Google-Smtp-Source: ACHHUZ7mGzhTRTMBnWM/tcZFXNIq/6YeZ2DDobf0R6YYCXET5cm4AD1spP7gt20rTuI7bDQ19eG1sQ==
-X-Received: by 2002:adf:f601:0:b0:311:d9f:46b4 with SMTP id t1-20020adff601000000b003110d9f46b4mr1243833wrp.14.1686915582775;
-        Fri, 16 Jun 2023 04:39:42 -0700 (PDT)
-Received: from [192.168.1.122] (cpc159313-cmbg20-2-0-cust161.5-4.cable.virginm.net. [82.0.78.162])
-        by smtp.gmail.com with ESMTPSA id t12-20020adfeb8c000000b0030ae6432504sm23470331wrn.38.2023.06.16.04.39.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jun 2023 04:39:42 -0700 (PDT)
-Subject: Re: [PATCH 2/2] sfc: add CONFIG_INET dependency for TC offload
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alejandro Lucero <alejandro.lucero-palau@amd.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Pieter Jansen van Vuuren <pieter.jansen-van-vuuren@amd.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        netdev@vger.kernel.org, linux-net-drivers@amd.com,
-        linux-kernel@vger.kernel.org
-References: <20230616090844.2677815-1-arnd@kernel.org>
- <20230616090844.2677815-2-arnd@kernel.org>
-From:   Edward Cree <ecree.xilinx@gmail.com>
-Message-ID: <2fa7c4a5-79cb-b504-2381-08cb629d473d@gmail.com>
-Date:   Fri, 16 Jun 2023 12:39:41 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 16 Jun 2023 07:41:37 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26CE22D5D;
+        Fri, 16 Jun 2023 04:41:30 -0700 (PDT)
+X-UUID: b80fa4620c3a11ee9cb5633481061a41-20230616
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=9gbOvB7q8q392u42dGMOEsDpaw5fuy+nAHeD+N0xwDs=;
+        b=g1UwukhDwNJLMI28KsnoWONH2zg+H3ffNKu3Z6LyUY3tWv1KQvLHFTS7tkhq7lP86CgC6zPum6RmEGoaL1xD6JWXw+W5xqlhmH2XXqXTH03qmU3MU8FoE0b08ev6EB5hbF9KmEi++hrf7qDzi4LLOiQnReNJzDhAqkSYGs6cCsU=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.26,REQID:24be0465-4768-4d51-9d9e-d07bbea70d19,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.26,REQID:24be0465-4768-4d51-9d9e-d07bbea70d19,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:cb9a4e1,CLOUDID:5fb9a83e-de1e-4348-bc35-c96f92f1dcbb,B
+        ulkID:230616194124TTAM72C7,BulkQuantity:0,Recheck:0,SF:29|28|17|19|48|38,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_SNR,TF_CID_SPAM_SDM,
+        TF_CID_SPAM_ASC
+X-UUID: b80fa4620c3a11ee9cb5633481061a41-20230616
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
+        (envelope-from <shawn.sung@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1125751740; Fri, 16 Jun 2023 19:41:23 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 16 Jun 2023 19:41:20 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Fri, 16 Jun 2023 19:41:20 +0800
+From:   Hsiao Chien Sung <shawn.sung@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Singo Chang <singo.chang@mediatek.com>,
+        Nancy Lin <nancy.lin@mediatek.com>,
+        Jason-JH Lin <jason-jh.lin@mediatek.com>,
+        Shawn Sung <shawn.sung@mediatek.com>
+Subject: [PATCH v3 00/13] Add display driver for MT8188 VDOSYS1
+Date:   Fri, 16 Jun 2023 19:40:58 +0800
+Message-ID: <20230616114111.17554-1-shawn.sung@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-In-Reply-To: <20230616090844.2677815-2-arnd@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/06/2023 10:08, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The driver now fails to link when CONFIG_INET is disabled, so
-> add an explicit Kconfig dependency:
-> 
-> ld.lld: error: undefined symbol: ip_route_output_flow
->>>> referenced by tc_encap_actions.c
->>>>               drivers/net/ethernet/sfc/tc_encap_actions.o:(efx_tc_flower_create_encap_md) in archive vmlinux.a
-> 
-> ld.lld: error: undefined symbol: ip_send_check
->>>> referenced by tc_encap_actions.c
->>>>               drivers/net/ethernet/sfc/tc_encap_actions.o:(efx_gen_encap_header) in archive vmlinux.a
->>>> referenced by tc_encap_actions.c
->>>>               drivers/net/ethernet/sfc/tc_encap_actions.o:(efx_gen_encap_header) in archive vmlinux.a
-> 
-> ld.lld: error: undefined symbol: arp_tbl
->>>> referenced by tc_encap_actions.c
->>>>               drivers/net/ethernet/sfc/tc_encap_actions.o:(efx_tc_netevent_event) in archive vmlinux.a
->>>> referenced by tc_encap_actions.c
->>>>               drivers/net/ethernet/sfc/tc_encap_actions.o:(efx_tc_netevent_event) in archive vmlinux.a
-> 
-> Fixes: a1e82162af0b8 ("sfc: generate encap headers for TC offload")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Support MT8188 VDOSYS1 in display driver.
 
-Reviewed-by: Edward Cree <ecree.xilinx@gmail.com>
- and I think you also need
-Fixes: 7e5e7d800011 ("sfc: neighbour lookup for TC encap action offload")
- since that added the references to ip_route_output_flow and arp_tbl (the
- commit in your Fixes: added the ip_send_check reference on top of that).
+v3:
+- Define macro MMSYS_RST_NR in mtk-mmsys.h and update reset table
+- Fix typos (ETDHR -> ETHDR, VSNYC -> VSYNC)
+- Rebase dt-bindings on linux-next
+- Refine description of Padding
+- Squash reset bit map commits into one
 
-You also might want to add the Closes: tag from [1], I don't know how
- that works but I assume it'll make someone's regression-bot happy.
+v2:
+- Remove redundant compatibles of MT8188 because it shares the same
+  configuration with MT8195
+- Separate dt-bindings by modules
+- Support reset bit mapping in mmsys driver
 
--ed
+Hsiao Chien Sung (13):
+  dt-bindings: display: mediatek: ethdr: Add compatible for MT8188
+  dt-bindings: display: mediatek: mdp-rdma: Add compatible for MT8188
+  dt-bindings: display: mediatek: merge: Add compatible for MT8188
+  dt-bindings: display: mediatek: padding: Add MT8188
+  dt-bindings: arm: mediatek: Add compatible for MT8188
+  dt-bindings: reset: mt8188: Add VDOSYS reset control bits
+  soc: mediatek: Support MT8188 VDOSYS1 in mtk-mmsys
+  soc: mediatek: Support MT8188 VDOSYS1 Padding in mtk-mmsys
+  soc: mediatek: Support reset bit mapping in mmsys driver
+  soc: mediatek: Add MT8188 VDOSYS reset bit map
+  drm/mediatek: Support MT8188 VDOSYS1 in display driver
+  drm/mediatek: Improve compatibility of display driver
+  drm/mediatek: Support MT8188 Padding in display driver
 
-[1] https://lore.kernel.org/oe-kbuild-all/202306151656.yttECVTP-lkp@intel.com/
+ .../bindings/arm/mediatek/mediatek,mmsys.yaml |   1 +
+ .../display/mediatek/mediatek,ethdr.yaml      |   6 +-
+ .../display/mediatek/mediatek,mdp-rdma.yaml   |   6 +-
+ .../display/mediatek/mediatek,merge.yaml      |   3 +
+ .../display/mediatek/mediatek,padding.yaml    |  81 +++++++
+ drivers/gpu/drm/mediatek/Makefile             |   3 +-
+ drivers/gpu/drm/mediatek/mtk_disp_drv.h       |   3 +
+ .../gpu/drm/mediatek/mtk_disp_ovl_adaptor.c   | 170 +++++++++-----
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c        |   4 +
+ drivers/gpu/drm/mediatek/mtk_drm_drv.h        |   2 +-
+ drivers/gpu/drm/mediatek/mtk_padding.c        | 136 +++++++++++
+ drivers/soc/mediatek/mt8188-mmsys.h           | 211 ++++++++++++++++++
+ drivers/soc/mediatek/mtk-mmsys.c              |  26 +++
+ drivers/soc/mediatek/mtk-mmsys.h              |  32 +++
+ drivers/soc/mediatek/mtk-mutex.c              |  51 +++++
+ include/dt-bindings/reset/mt8188-resets.h     |  75 +++++++
+ include/linux/soc/mediatek/mtk-mmsys.h        |   8 +
+ 17 files changed, 763 insertions(+), 55 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,padding.yaml
+ create mode 100644 drivers/gpu/drm/mediatek/mtk_padding.c
 
-> ---
->  drivers/net/ethernet/sfc/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/net/ethernet/sfc/Kconfig b/drivers/net/ethernet/sfc/Kconfig
-> index 4af36ba8906ba..3eb55dcfa8a61 100644
-> --- a/drivers/net/ethernet/sfc/Kconfig
-> +++ b/drivers/net/ethernet/sfc/Kconfig
-> @@ -50,6 +50,7 @@ config SFC_MCDI_MON
->  config SFC_SRIOV
->  	bool "Solarflare SFC9100-family SR-IOV support"
->  	depends on SFC && PCI_IOV
-> +	depends on INET
->  	default y
->  	help
->  	  This enables support for the Single Root I/O Virtualization
-> 
+--
+2.18.0
 
