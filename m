@@ -2,60 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8240C73318A
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 372AA733190
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:47:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234801AbjFPMpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 08:45:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43138 "EHLO
+        id S1345399AbjFPMrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 08:47:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245258AbjFPMpu (ORCPT
+        with ESMTP id S1344140AbjFPMre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 08:45:50 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB7330E8;
-        Fri, 16 Jun 2023 05:45:49 -0700 (PDT)
-Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D8FE9AB;
-        Fri, 16 Jun 2023 14:45:14 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1686919515;
-        bh=2O2xVR59QzjwM/PsDbH94LJv9nRecygjI3jFJiv0M9c=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NE5CFNNeNDwgKdnO30Y9Hs2VgQr/YGXXKDlw7dwVAC6ikh2T7efriqzFFvxQIAsRv
-         LW/zYloy0dBkDud71550qVUyhvrCY5wyiN36vfJrfdSTh1xBgVAJYC4dNPuw+zMb34
-         YSXY6KWChBh0daZBOWo47Vuba7kn+xMICpmqWS90=
-Message-ID: <2de29abb-4c1f-9c5e-564a-ac29d953f0a1@ideasonboard.com>
-Date:   Fri, 16 Jun 2023 15:45:43 +0300
+        Fri, 16 Jun 2023 08:47:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81459358C
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 05:46:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686919603;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3oE/aox+P5EI2fK8L6+t8Yc5hZ1jrOyHxepshYMemZM=;
+        b=UZtGc+VnrKW7IhNyv7i+AKXsOcNYmznKbms8mv0gOc2ZRnbvGPnV85SUcSmfhp8jqLfKik
+        ZZE1GtIahgivRRi7IjBibho5RLJ/PMhl5f5Msm3Lx93EhbYQsB037i+C812cxuRrtiXkjh
+        QXtb22P6DDioSXqtczPq65awWjBrvkM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-400-Xd0nxM93NbKbzl57Q992Hw-1; Fri, 16 Jun 2023 08:46:38 -0400
+X-MC-Unique: Xd0nxM93NbKbzl57Q992Hw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 86E31280D588;
+        Fri, 16 Jun 2023 12:46:37 +0000 (UTC)
+Received: from localhost (ovpn-13-2.pek2.redhat.com [10.72.13.2])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6140A422DE;
+        Fri, 16 Jun 2023 12:46:36 +0000 (UTC)
+Date:   Fri, 16 Jun 2023 20:46:33 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Mike Rapoport <rppt@kernel.org>, kernel test robot <lkp@intel.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, arnd@arndb.de, christophe.leroy@csgroup.eu,
+        hch@lst.de, willy@infradead.org, agordeev@linux.ibm.com,
+        wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
+        David.Laight@aculab.com, shorne@gmail.com, deller@gmx.de,
+        Brian Cain <bcain@quicinc.com>, linux-hexagon@vger.kernel.org
+Subject: Re: [PATCH v6 02/19] hexagon: mm: Convert to GENERIC_IOREMAP
+Message-ID: <ZIxZqd85xWRriAW4@MiWiFi-R3L-srv>
+References: <20230609075528.9390-3-bhe@redhat.com>
+ <202306091859.NhlW2nny-lkp@intel.com>
+ <ZIQzrRo0JhfBLDes@MiWiFi-R3L-srv>
+ <20230611054019.GL52412@kernel.org>
+ <ZIV+bD1ksJz0CTz2@MiWiFi-R3L-srv>
+ <20230612160237.GA199007@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v8 1/2] dt-bindings: display: ti,am65x-dss: Add am625 dss
- compatible
-Content-Language: en-US
-To:     Aradhya Bhatia <a-bhatia1@ti.com>, Jyri Sarha <jyri.sarha@iki.fi>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     DRI Development List <dri-devel@lists.freedesktop.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Jayesh Choudhary <j-choudhary@ti.com>
-References: <20230608163734.2578-1-a-bhatia1@ti.com>
- <20230608163734.2578-2-a-bhatia1@ti.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <20230608163734.2578-2-a-bhatia1@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230612160237.GA199007@dev-arch.thelio-3990X>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,21 +72,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/06/2023 19:37, Aradhya Bhatia wrote:
-> The DSS controller on TI's AM625 SoC is an update from that on TI's
-> AM65X SoC. The former has an additional OLDI TX on its first video port
-> that helps output cloned video or WUXGA (1920x1200@60fps) resolution
-> video output over a dual-link mode to reduce the required OLDI clock
-> output.
+On 06/12/23 at 09:02am, Nathan Chancellor wrote:
+> On Sun, Jun 11, 2023 at 03:57:32PM +0800, Baoquan He wrote:
+> > On 06/11/23 at 08:40am, Mike Rapoport wrote:
+> > > Hi Baoquan,
+> > > 
+> > > On Sat, Jun 10, 2023 at 04:26:21PM +0800, Baoquan He wrote:
+> > > > On 06/09/23 at 07:09pm, kernel test robot wrote:
+> > > > > Hi Baoquan,
+> > > > > 
+> > > > > kernel test robot noticed the following build errors:
+> > > > > 
+> > > > > [auto build test ERROR on akpm-mm/mm-everything]
+> > > > > 
+> > > > > url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/asm-generic-iomap-h-remove-ARCH_HAS_IOREMAP_xx-macros/20230609-160014
+> > > > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> > > > > patch link:    https://lore.kernel.org/r/20230609075528.9390-3-bhe%40redhat.com
+> > > > > patch subject: [PATCH v6 02/19] hexagon: mm: Convert to GENERIC_IOREMAP
+> > > > > config: hexagon-randconfig-r041-20230608 (https://download.01.org/0day-ci/archive/20230609/202306091859.NhlW2nny-lkp@intel.com/config)
+> > > > > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> > > > > reproduce (this is a W=1 build):
+> > > > >         mkdir -p ~/bin
+> > > > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> > > > >         chmod +x ~/bin/make.cross
+> > > > >         git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
+> > > > >         git fetch akpm-mm mm-everything
+> > > > >         git checkout akpm-mm/mm-everything
+> > > > >         b4 shazam https://lore.kernel.org/r/20230609075528.9390-3-bhe@redhat.com
+> > > > >         # save the config file
+> > > > >         mkdir build_dir && cp config build_dir/.config
+> > > > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+> > > > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon prepare
+> > > > > 
+> > > > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > > > > the same patch/commit), kindly add following tags
+> > > > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > > > | Closes: https://lore.kernel.org/oe-kbuild-all/202306091859.NhlW2nny-lkp@intel.com/
+> > > > 
+> > > > Thanks for reporting. I reproduced them on my local machine. Below patch
+> > > > can fix them. And by the way, I also saw the clone3 warning, and have to 
+> > > > made change in scripts/checksyscalls.sh to mute it, wondering how you
+> > > > handle it in your testing.
+> > > 
+> > > I think the warning kbuild reported is rather this one:
+> > > 
+> > > >> include/asm-generic/io.h:1078:6: error: conflicting types for 'iounmap'
+> > >     1078 | void iounmap(volatile void __iomem *addr);
+> > >          |      ^
+> > 
+> > This one is reported as error. The old iounmap() declaration has a const,
+> > while the standard one doesn't have. So I just remove the old one to use
+> > the standard one.
+> > 
+> > Another one is warning about PCI_IOBASE. Because inb/w/l and outb/w/l is
+> > redefined in asm-generic/io.h, and it uses PCI_IOBASE which is defniend
+> > as NULL in asm-generic/io.h if ARCH doesn't have its own PCI_IOBASE
+> > definition. Then the warning is triggered. So I define macro to override
+> > the standard inb/w/l and outb/w/l.
+> > 
+> > #ifndef PCI_IOBASE
+> > #define PCI_IOBASE ((void __iomem *)0)
+> > #endif
 > 
-> The second video port is same from AM65x DSS and it outputs DPI video
-> data. It can support 2K resolutions @ 60fps, independently.
+> I believe that this series [1] by Niklas Schnelle should take care of
+> the PCI_IOBASE warnings (which are not Hexagon specific), so there is no
+> need to worry about them when they show up in build reports.
 > 
-> Add the new controller's compatible and update descriptions.
-> 
-> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
+> [1]: https://lore.kernel.org/20230522105049.1467313-1-schnelle@linux.ibm.com/
 
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+That's great, then I can skip the fixing of PCI_IOBASE warnings, only
+wrap the fixing of iounmap() declaration issue into the new post. Thanks
+a lot for the information, Nathan.
 
-  Tomi
+Thanks
+Baoquan
 
