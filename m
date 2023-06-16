@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF9F732D4B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:18:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6EAF732D6F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343643AbjFPKSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 06:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43478 "EHLO
+        id S1344181AbjFPKVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 06:21:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343595AbjFPKSQ (ORCPT
+        with ESMTP id S232377AbjFPKUK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 06:18:16 -0400
+        Fri, 16 Jun 2023 06:20:10 -0400
 Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A8B3A9E;
-        Fri, 16 Jun 2023 03:18:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F047AC;
+        Fri, 16 Jun 2023 03:19:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
         Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
         Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
         List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ldYgwDt7voxDOksHBbsKUYFGw63dx52D9aj9AQa3YSg=; b=0+liBd742WkgK8Mdlp4lP6ky1Z
-        mwbmgUC+sDSAA7CM8Q8EOPIq7cF39x1/cbeQ73mLiZDnQIpbgu3Z2r1CL4tQnZFIcwWO03mecTh5A
-        JfAl5V3Is1NfjAMg8g0SkaR0cFzU4FlpVpuAqA+t4fMJX3XQhWm/Wsl/1LIe4Hp/b0ZKP/8rV3A0X
-        Ma2Kfi1bcRhi5e72QP1sBwwuHs4QVoKP+lMacig1m+3pups2ggSs7WlYcWMgusypgbOgL9aCzwy6/
-        C3SjPly7/QQokDFuVgR8vx0224Jswndt21p0I+loXubSlc1MD/jbfRMcBFdEjL3BV/A41g6y6pPIA
-        wqkcWFJg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33540)
+        bh=sK1OkILI3tCCKrHsANJ/lF6HcUCMTaIXmnshn6ttAEk=; b=lyBGCl/4UEreZscOrhXlDdFEY4
+        8/SdOD5RAX1cvJtX4AUwvr6vRfY4GQ9uQpyTdDVJDXg3tnQfumKhfUUU6x+mkJ3aTBCBzvQUmaE2T
+        v+rsBLj++yRFKRbhNvB4++SLl+/O8uvxvbBqOHH+vo/A4u4148LxHnd5EvPMik6IMxy1pHOAk2QG0
+        OxMZrQ2IXmCRx3k2QsO/FjYT3itl3JMOpPnqOenIQamEqLlWL9xgwcnog9t+gMovtoNzQEYoS1ppV
+        mfM2ieIDwipcSKqGgGsvYft6Y/C8QyJZXEhynQR/ZxEshY8qY+hDCrEXTYpBj0HUV3zNfJ+C7lkmU
+        9ED59txA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:45520)
         by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <linux@armlinux.org.uk>)
-        id 1qA6Wk-0004lz-BV; Fri, 16 Jun 2023 11:17:58 +0100
+        id 1qA6Y3-0004mw-QS; Fri, 16 Jun 2023 11:19:19 +0100
 Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
         (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1qA6Wg-0002QQ-6G; Fri, 16 Jun 2023 11:17:54 +0100
-Date:   Fri, 16 Jun 2023 11:17:54 +0100
+        id 1qA6Y2-0002QX-ND; Fri, 16 Jun 2023 11:19:18 +0100
+Date:   Fri, 16 Jun 2023 11:19:18 +0100
 From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
 To:     Vladimir Oltean <olteanv@gmail.com>
 Cc:     arinc9.unal@gmail.com,
@@ -59,17 +59,19 @@ Cc:     arinc9.unal@gmail.com,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net v5 2/6] net: dsa: mt7530: fix trapping frames on
- non-MT7621 SoC MT7530 switch
-Message-ID: <ZIw20jmqI1d/W+YY@shell.armlinux.org.uk>
+Subject: Re: [PATCH net v5 3/6] net: dsa: mt7530: fix handling of BPDUs on
+ MT7530 switch
+Message-ID: <ZIw3JiJlnNZYf0/Z@shell.armlinux.org.uk>
 References: <20230616025327.12652-1-arinc.unal@arinc9.com>
- <20230616025327.12652-3-arinc.unal@arinc9.com>
- <20230616100314.x2qak6t7uxo2qnja@skbuf>
+ <20230616025327.12652-1-arinc.unal@arinc9.com>
+ <20230616025327.12652-4-arinc.unal@arinc9.com>
+ <20230616025327.12652-4-arinc.unal@arinc9.com>
+ <20230616101108.wq5aote3yjpekilu@skbuf>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230616100314.x2qak6t7uxo2qnja@skbuf>
+In-Reply-To: <20230616101108.wq5aote3yjpekilu@skbuf>
 Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
@@ -81,37 +83,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 01:03:14PM +0300, Vladimir Oltean wrote:
-> On Fri, Jun 16, 2023 at 05:53:23AM +0300, arinc9.unal@gmail.com wrote:
+On Fri, Jun 16, 2023 at 01:11:08PM +0300, Vladimir Oltean wrote:
+> On Fri, Jun 16, 2023 at 05:53:24AM +0300, arinc9.unal@gmail.com wrote:
 > > From: Arınç ÜNAL <arinc.unal@arinc9.com>
 > > 
-> > The check for setting the CPU_PORT bits must include the non-MT7621 SoC
-> > MT7530 switch variants to trap frames. Expand the check to include them.
+> > BPDUs are link-local frames, therefore they must be trapped to the CPU
+> > port. Currently, the MT7530 switch treats BPDUs as regular multicast
+> > frames, therefore flooding them to user ports. To fix this, set BPDUs to be
+> > trapped to the CPU port.
 > > 
 > > Fixes: b8f126a8d543 ("net-next: dsa: add dsa support for Mediatek MT7530 switch")
 > > Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 > > ---
+> >  drivers/net/dsa/mt7530.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+> > index e9fbe7ae6c2c..7b72cf3a0e30 100644
+> > --- a/drivers/net/dsa/mt7530.c
+> > +++ b/drivers/net/dsa/mt7530.c
+> > @@ -2262,6 +2262,10 @@ mt7530_setup(struct dsa_switch *ds)
+> >  
+> >  	priv->p6_interface = PHY_INTERFACE_MODE_NA;
+> >  
+> > +	/* Trap BPDUs to the CPU port */
+> > +	mt7530_rmw(priv, MT753X_BPC, MT753X_BPDU_PORT_FW_MASK,
+> > +		   MT753X_BPDU_CPU_ONLY);
+> > +
+> >  	/* Enable and reset MIB counters */
+> >  	mt7530_mib_reset(ds);
+> >  
+> > -- 
+> > 2.39.2
+> > 
 > 
-> why do you say non-MT7621 when the change specifically includes MT7621?
-> What is the affected SoC then?
+> Ok, so this issue dates back to v4.12, but the patch won't apply that
+> far due to the difference in patch context.
+> 
+> Since the definition itself of the MT753X_BPC register was added as part
+> of commit c288575f7810 ("net: dsa: mt7530: Add the support of MT7531
+> switch") - dated v5.10 - then this patch cannot be practically be
+> backported beyond that.
+> 
+> So I see no possible objection to the request I'm about to make, which is:
+> please group this and the identical logic from mt7531_setup() into a
+> common function and call that.
 
-Thanks for falling into one of the issues that makes reviewing these
-patches difficult. :/
-
-> > -	if (priv->id == ID_MT7621)
-> > +	if (priv->id == ID_MT7530 || priv->id == ID_MT7621)
-> >  		mt7530_rmw(priv, MT7530_MFC, CPU_MASK, CPU_EN | CPU_PORT(port));
-
-I *think* what the commit message should be saying is that the setup
-for the CPU port(*) is necessary not only for MT7621, but also for
-MT7530 variants as well.
-
-That can be construed from the commit message, but it doesn't easily
-read that way.
-
-* - in this case, it's the CPU port field and the CPU enable bit.
-Note that CPU_MASK only covers CPU_PORT() and not CPU_EN, but this
-doesn't matter for mt7530_rmw().
+I agree.
 
 -- 
 RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
