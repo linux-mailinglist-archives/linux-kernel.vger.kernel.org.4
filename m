@@ -2,110 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB73273337D
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 16:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32670733381
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 16:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345390AbjFPOYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 10:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37874 "EHLO
+        id S1345419AbjFPOYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 10:24:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjFPOYX (ORCPT
+        with ESMTP id S1345416AbjFPOYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 10:24:23 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0440730E7;
-        Fri, 16 Jun 2023 07:24:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686925462; x=1718461462;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=oeSczsDxX7dgG1qanbCD5eUTqofXJ4ON1bXoul1eVY8=;
-  b=UsmxdsCdDW4latAvu8eJXLJPvakIuD0OcAiN0dhnrIo+JPs4AFTGzXFm
-   fegacz7EX7Im/f3d8Rq8iAKbRKWjI0O+pB1aUpeh6npfZ2xDnHbcmbtZr
-   HzoeTDezaYMXhskZB9AaIal6pYA9PzPvb4f+TUJkThR59/UgjJPPvJxHe
-   4Y1HSgGX3SHtsM5VKdaqFX3OjiFIFIJdZCwhGaCmtRi56XsiCt7bNBdCC
-   kvShqAUS4+eirGo2zIgOvd84R9zKj6scVHR6Aqu72IrL/N4yGONpH8Gok
-   PGo7wWwnZgw9+Zn1OWkumGP37rOxLgj+qHGXoj5YPTxRGC1fJ6LRK0Q9I
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="359232974"
-X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
-   d="scan'208";a="359232974"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 07:24:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="742689320"
-X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
-   d="scan'208";a="742689320"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008.jf.intel.com with ESMTP; 16 Jun 2023 07:24:16 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1qAAN3-004Iob-2s;
-        Fri, 16 Jun 2023 17:24:13 +0300
-Date:   Fri, 16 Jun 2023 17:24:13 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>
-Subject: Re: [PATCH v14 13/18] media: i2c: ds90ub953: Use
- v4l2_fwnode_endpoint_parse()
-Message-ID: <ZIxwjebnV/1JaoXt@smile.fi.intel.com>
-References: <20230616135922.442979-1-tomi.valkeinen@ideasonboard.com>
- <20230616135922.442979-14-tomi.valkeinen@ideasonboard.com>
+        Fri, 16 Jun 2023 10:24:45 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E3530E4;
+        Fri, 16 Jun 2023 07:24:43 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 47C9737A;
+        Fri, 16 Jun 2023 14:24:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 47C9737A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1686925483; bh=vpQWUMHiAcSLt1/qfwUoz3VdeI6B9m6HY5SkCx0pxT8=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=mRY+AsZrucUhtkOwRlu1zyYmzbz0BizP5+fMXDrMA121rLRfz640Uayi+nRx43I2V
+         zdRQViJhrFRG1Z8yj+hSJN4LgsBzFan9q4D9hmdv3kzf8BPukY9k7i2sSw1gt34DZc
+         Zl3EcVtwy8yERrFMxTpSlCLedPklI4Z1EB4C+XWN7HlEZVt6MBpobFmYDAauXXiCED
+         rnki1SQ7IEJl36HHhstsMTAG9UpMJvlbJZyx6nkQ6yFUIfkpsukErT8Ev5izdzk07N
+         K60tRARjoRPhk73mw49DyEq0KzYpvOIJg1nWp2gAeGMnaVYg+DMWIcdyUkuowdTH1G
+         xO4eYBloaR+Lw==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Suraj Jitindar Singh <sjitindarsingh@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Alexander Graf <agraf@suse.de>,
+        Andrew Jones <drjones@redhat.com>,
+        Christoffer Dall <cdall@linaro.org>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH 0/4] Documentation: KVM: multiple editing corrections
+In-Reply-To: <20230612030810.23376-1-rdunlap@infradead.org>
+References: <20230612030810.23376-1-rdunlap@infradead.org>
+Date:   Fri, 16 Jun 2023 08:24:42 -0600
+Message-ID: <875y7nzdqt.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230616135922.442979-14-tomi.valkeinen@ideasonboard.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 04:59:17PM +0300, Tomi Valkeinen wrote:
-> Use v4l2_fwnode_endpoint_parse() to parse the sink endpoint parameters.
+Randy Dunlap <rdunlap@infradead.org> writes:
 
-> +	nlanes = vep.bus.mipi_csi2.num_data_lanes;
->  
+> Fix various issues in KVM documentation files (grammar, spelling,
+> punctuation, file path, wording, hyphenation, and the location of
+> module parameters).
+>
+>
+>  [PATCH 1/4] Documentation: KVM: make corrections to halt-polling.rst
+>  [PATCH 2/4] Documentation: KVM: make corrections to locking.rst
+>  [PATCH 3/4] Documentation: KVM: make corrections to ppc-pv.rst
+>  [PATCH 4/4] Documentation: KVM: make corrections to vcpu-requests.rst
+>
+>  Documentation/virt/kvm/halt-polling.rst  |   10 +++++-----
+>  Documentation/virt/kvm/locking.rst       |   18 +++++++++---------
+>  Documentation/virt/kvm/ppc-pv.rst        |    8 ++++----
+>  Documentation/virt/kvm/vcpu-requests.rst |    6 +++---
+>  4 files changed, 21 insertions(+), 21 deletions(-)
 
-I would also drop this blank line now.
+I've applied the set, thanks.
 
-> -	if (ret != 1 && ret != 2 && ret != 4)
-> +	if (nlanes != 1 && nlanes != 2 && nlanes != 4)
-
-Isn't the following cleaner?
-
-	if (!is_power_of_2(nlanes) || nlanes > 4)
-
->  		return dev_err_probe(dev, -EINVAL,
-> -				     "bad number of data-lanes: %d\n", ret);
-> +				     "bad number of data-lanes: %d\n", nlanes);
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+jon
