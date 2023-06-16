@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF6273343A
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 17:07:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4EA673343C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 17:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344623AbjFPPHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 11:07:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33522 "EHLO
+        id S1345192AbjFPPHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 11:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345192AbjFPPHD (ORCPT
+        with ESMTP id S1344708AbjFPPHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 11:07:03 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2682358E;
-        Fri, 16 Jun 2023 08:07:00 -0700 (PDT)
+        Fri, 16 Jun 2023 11:07:15 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5A730F1;
+        Fri, 16 Jun 2023 08:07:11 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 30B1821DDD;
-        Fri, 16 Jun 2023 15:06:59 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTP id 17D711F74C;
+        Fri, 16 Jun 2023 15:07:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1686928019; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1686928030; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Qs3x2K2fN4Rc+9wdA/hzCmlI9lCgzVLyvsrpfjT43/4=;
-        b=LEG+bB3o0Khdv+53gaAhOEX6/7RB9Mv9sdwSpdZHkVetvIqSxuVfsxC9Fe0YD/ZSKqPSnX
-        Z8leGrahQanAmW0jmQjRn/3fcGAnPw2sZ9T6Yf0iUzFhUwcbj8ijO/ZEwIViqJekTNQ0My
-        G5uUa2qpb1IpKgV6I+8ci6IzZtLWGY8=
+        bh=P8rPtQgN6vSoW8VvCYmw0+AJGTAHRLGVOe7N7gs1tSc=;
+        b=WcE6bts402dB0qd+B0JwNUcM215ujMBrjbLGulyEpRpZahfabZxrV3e+htSPXqkev4clah
+        IQznN1Kr0G6ZtraGh62ZmO5lpnl9+7T53PQyqvPHtCV7UFV4ejpAPMUYB14+unZNlTuUhD
+        kM07aBFUhfA+5gWs2cUsAYby7QRAbUE=
 Received: from alley.suse.cz (unknown [10.100.208.146])
-        by relay2.suse.de (Postfix) with ESMTP id AA8002C141;
-        Fri, 16 Jun 2023 15:06:58 +0000 (UTC)
+        by relay2.suse.de (Postfix) with ESMTP id 715CE2C141;
+        Fri, 16 Jun 2023 15:07:09 +0000 (UTC)
 From:   Petr Mladek <pmladek@suse.com>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Douglas Anderson <dianders@chromium.org>
@@ -41,9 +41,9 @@ Cc:     kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org,
         sparclinux@vger.kernel.org,
         "David S . Miller" <davem@davemloft.net>,
         linux-perf-users@vger.kernel.org, Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v2 2/6] watchdog/hardlockup: Make the config checks more straightforward
-Date:   Fri, 16 Jun 2023 17:06:14 +0200
-Message-Id: <20230616150618.6073-3-pmladek@suse.com>
+Subject: [PATCH v2 3/6] watchdog/hardlockup: Declare arch_touch_nmi_watchdog() only in linux/nmi.h
+Date:   Fri, 16 Jun 2023 17:06:15 +0200
+Message-Id: <20230616150618.6073-4-pmladek@suse.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20230616150618.6073-1-pmladek@suse.com>
 References: <20230616150618.6073-1-pmladek@suse.com>
@@ -59,211 +59,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are four possible variants of hardlockup detectors:
+arch_touch_nmi_watchdog() needs a different implementation for various
+hardlockup detector implementations. And it does nothing when
+any hardlockup detector is not built at all.
 
-  + buddy: available when SMP is set.
+arch_touch_nmi_watchdog() is declared via linux/nmi.h. And it must be
+defined as an empty function when there is no hardlockup detector.
+It is done directly in this header file for the perf and buddy detectors.
+And it is done in the included asm/linux.h for arch specific detectors.
 
-  + perf: available when HAVE_HARDLOCKUP_DETECTOR_PERF is set.
+The reason probably is that the arch specific variants build the code
+using another conditions. For example, powerpc64/sparc64 builds the code
+when CONFIG_PPC_WATCHDOG is enabled.
 
-  + arch-specific: available when HAVE_HARDLOCKUP_DETECTOR_ARCH is set.
+Another reason might be that these architectures define more functions
+in asm/nmi.h anyway.
 
-  + sparc64 special variant: available when HAVE_NMI_WATCHDOG is set
-	and HAVE_HARDLOCKUP_DETECTOR_ARCH is not set.
+However the generic code actually knows when the function will be
+implemented. It happens when some full featured or the sparc64-specific
+hardlockup detector is built.
 
-The check for the sparc64 variant is more complicated because
-HAVE_NMI_WATCHDOG is used to #ifdef code used by both arch-specific
-and sparc64 specific variant. Therefore it is automatically
-selected with HAVE_HARDLOCKUP_DETECTOR_ARCH.
+In particular, CONFIG_HARDLOCKUP_DETECTOR can be enabled only when
+a generic or arch-specific full featured hardlockup detector is available.
+The only exception is sparc64 which can be built even when the global
+HARDLOCKUP_DETECTOR switch is disabled.
 
-This complexity is partly hidden in HAVE_HARDLOCKUP_DETECTOR_NON_ARCH.
-It reduces the size of some checks but it makes them harder to follow.
+The information about sparc64 is a bit complicated. The hardlockup
+detector is built there when CONFIG_HAVE_NMI_WATCHDOG is set and
+CONFIG_HAVE_HARDLOCKUP_DETECTOR_ARCH is not set.
 
-Finally, the other temporary variable HARDLOCKUP_DETECTOR_NON_ARCH
-is used to re-compute HARDLOCKUP_DETECTOR_PERF/BUDDY when the global
-HARDLOCKUP_DETECTOR switch is enabled/disabled.
+People might wonder whether this change really makes things easier.
+The motivation is:
 
-Make the logic more straightforward by the following changes:
+  + The current logic in linux/nmi.h is far from obvious.
+    For example, arch_touch_nmi_watchdog() is defined as {} when
+    neither CONFIG_HARDLOCKUP_DETECTOR_COUNTS_HRTIMER nor
+    CONFIG_HAVE_NMI_WATCHDOG is defined.
 
-  + Better explain the role of HAVE_HARDLOCKUP_DETECTOR_ARCH and
-    HAVE_NMI_WATCHDOG in comments.
+  + The change synchronizes the checks in lib/Kconfig.debug and
+    in the generic code.
 
-  + Add HAVE_HARDLOCKUP_DETECTOR_BUDDY so that there is separate
-    HAVE_* for all four hardlockup detector variants.
+  + It is a step that will help cleaning HAVE_NMI_WATCHDOG related
+    checks.
 
-    Use it in the other conditions instead of SMP. It makes it
-    clear that it is about the buddy detector.
-
-  + Open code HAVE_HARDLOCKUP_DETECTOR_NON_ARCH in HARDLOCKUP_DETECTOR
-    and HARDLOCKUP_DETECTOR_PREFER_BUDDY. It helps to understand
-    the conditions between the four hardlockup detector variants.
-
-  + Define the exact conditions when HARDLOCKUP_DETECTOR_PERF/BUDDY
-    can be enabled. It explains the dependency on the other
-    hardlockup detector variants.
-
-    Also it allows to remove HARDLOCKUP_DETECTOR_NON_ARCH by using "imply".
-    It triggers re-evaluating HARDLOCKUP_DETECTOR_PERF/BUDDY when
-    the global HARDLOCKUP_DETECTOR switch is changed.
-
-  + Add dependency on HARDLOCKUP_DETECTOR so that the affected variables
-    disappear when the hardlockup detectors are disabled.
-
-    Another nice side effect is that HARDLOCKUP_DETECTOR_PREFER_BUDDY
-    value is not preserved when the global switch is disabled.
-    The user has to make the decision again when it gets re-enabled.
+The change should not change the existing behavior.
 
 Signed-off-by: Petr Mladek <pmladek@suse.com>
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
 ---
- arch/Kconfig      | 23 +++++++++++++-----
- lib/Kconfig.debug | 62 +++++++++++++++++++++++++++--------------------
- 2 files changed, 53 insertions(+), 32 deletions(-)
+ arch/powerpc/include/asm/nmi.h |  2 --
+ arch/sparc/include/asm/nmi.h   |  1 -
+ include/linux/nmi.h            | 13 ++++++++++---
+ 3 files changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 422f0ffa269e..77e5af5fda3f 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -404,17 +404,28 @@ config HAVE_NMI_WATCHDOG
- 	depends on HAVE_NMI
- 	bool
- 	help
--	  The arch provides a low level NMI watchdog. It provides
--	  asm/nmi.h, and defines its own watchdog_hardlockup_probe() and
--	  arch_touch_nmi_watchdog().
-+	  The arch provides its own hardlockup detector implementation instead
-+	  of the generic ones.
+diff --git a/arch/powerpc/include/asm/nmi.h b/arch/powerpc/include/asm/nmi.h
+index 43bfd4de868f..ce25318c3902 100644
+--- a/arch/powerpc/include/asm/nmi.h
++++ b/arch/powerpc/include/asm/nmi.h
+@@ -3,11 +3,9 @@
+ #define _ASM_NMI_H
+ 
+ #ifdef CONFIG_PPC_WATCHDOG
+-extern void arch_touch_nmi_watchdog(void);
+ long soft_nmi_interrupt(struct pt_regs *regs);
+ void watchdog_hardlockup_set_timeout_pct(u64 pct);
+ #else
+-static inline void arch_touch_nmi_watchdog(void) {}
+ static inline void watchdog_hardlockup_set_timeout_pct(u64 pct) {}
+ #endif
+ 
+diff --git a/arch/sparc/include/asm/nmi.h b/arch/sparc/include/asm/nmi.h
+index 90ee7863d9fe..920dc23f443f 100644
+--- a/arch/sparc/include/asm/nmi.h
++++ b/arch/sparc/include/asm/nmi.h
+@@ -8,7 +8,6 @@ void nmi_adjust_hz(unsigned int new_hz);
+ 
+ extern atomic_t nmi_active;
+ 
+-void arch_touch_nmi_watchdog(void);
+ void start_nmi_watchdog(void *unused);
+ void stop_nmi_watchdog(void *unused);
+ 
+diff --git a/include/linux/nmi.h b/include/linux/nmi.h
+index b5d0b7ab52fb..b9e816bde14a 100644
+--- a/include/linux/nmi.h
++++ b/include/linux/nmi.h
+@@ -7,6 +7,8 @@
+ 
+ #include <linux/sched.h>
+ #include <asm/irq.h>
 +
-+	  Sparc64 defines this variable without HAVE_HARDLOCKUP_DETECTOR_ARCH.
-+	  It is the last arch-specific implementation which was developed before
-+	  adding the common infrastructure for handling hardlockup detectors.
-+	  It is always built. It does _not_ use the common command line
-+	  parameters and sysctl interface, except for
-+	  /proc/sys/kernel/nmi_watchdog.
++/* Arch specific watchdogs might need to share extra watchdog-related APIs. */
+ #if defined(CONFIG_HAVE_NMI_WATCHDOG)
+ #include <asm/nmi.h>
+ #endif
+@@ -89,12 +91,17 @@ extern unsigned int hardlockup_panic;
+ static inline void hardlockup_detector_disable(void) {}
+ #endif
  
- config HAVE_HARDLOCKUP_DETECTOR_ARCH
- 	bool
- 	select HAVE_NMI_WATCHDOG
- 	help
--	  The arch chooses to provide its own hardlockup detector, which is
--	  a superset of the HAVE_NMI_WATCHDOG. It also conforms to config
--	  interfaces and parameters provided by hardlockup detector subsystem.
-+	  The arch provides its own hardlockup detector implementation instead
-+	  of the generic ones.
+-#if defined(CONFIG_HARDLOCKUP_DETECTOR_COUNTS_HRTIMER)
++/* Sparc64 has special implemetantion that is always enabled. */
++#if defined(CONFIG_HARDLOCKUP_DETECTOR) || \
++    (defined(CONFIG_HAVE_NMI_WATCHDOG) && !defined(CONFIG_HAVE_HARDLOCKUP_DETECTOR_ARCH))
+ void arch_touch_nmi_watchdog(void);
++#else
++static inline void arch_touch_nmi_watchdog(void) { }
++#endif
 +
-+	  It uses the same command line parameters, and sysctl interface,
-+	  as the generic hardlockup detectors.
-+
-+	  HAVE_NMI_WATCHDOG is selected to build the code shared with
-+	  the sparc64 specific implementation.
++#if defined(CONFIG_HARDLOCKUP_DETECTOR_COUNTS_HRTIMER)
+ void watchdog_hardlockup_touch_cpu(unsigned int cpu);
+ void watchdog_hardlockup_check(unsigned int cpu, struct pt_regs *regs);
+-#elif !defined(CONFIG_HAVE_NMI_WATCHDOG)
+-static inline void arch_touch_nmi_watchdog(void) { }
+ #endif
  
- config HAVE_PERF_REGS
- 	bool
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 3e91fa33c7a0..a0b0c4decb89 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1035,16 +1035,33 @@ config BOOTPARAM_SOFTLOCKUP_PANIC
- 
- 	  Say N if unsure.
- 
-+config HAVE_HARDLOCKUP_DETECTOR_BUDDY
-+	bool
-+	depends on SMP
-+	default y
-+
- #
--# arch/ can define HAVE_HARDLOCKUP_DETECTOR_ARCH to provide their own hard
--# lockup detector rather than the perf based detector.
-+# Global switch whether to build a hardlockup detector at all. It is available
-+# only when the architecture supports at least one implementation. There are
-+# two exceptions. The hardlockup detector is never enabled on:
-+#
-+#	s390: it reported many false positives there
-+#
-+#	sparc64: has a custom implementation which is not using the common
-+#		hardlockup command line options and sysctl interface.
-+#
-+# Note that HAVE_NMI_WATCHDOG is used to distinguish the sparc64 specific
-+# implementaion. It is automatically enabled also for other arch-specific
-+# variants which set HAVE_HARDLOCKUP_DETECTOR_ARCH. It makes the check
-+# of avaialable and supported variants quite tricky.
- #
- config HARDLOCKUP_DETECTOR
- 	bool "Detect Hard Lockups"
- 	depends on DEBUG_KERNEL && !S390
--	depends on HAVE_HARDLOCKUP_DETECTOR_NON_ARCH || HAVE_HARDLOCKUP_DETECTOR_ARCH
-+	depends on ((HAVE_HARDLOCKUP_DETECTOR_PERF || HAVE_HARDLOCKUP_DETECTOR_BUDDY) && !HAVE_NMI_WATCHDOG) || HAVE_HARDLOCKUP_DETECTOR_ARCH
-+	imply HARDLOCKUP_DETECTOR_PERF
-+	imply HARDLOCKUP_DETECTOR_BUDDY
- 	select LOCKUP_DETECTOR
--	select HARDLOCKUP_DETECTOR_NON_ARCH if HAVE_HARDLOCKUP_DETECTOR_NON_ARCH
- 
- 	help
- 	  Say Y here to enable the kernel to act as a watchdog to detect
-@@ -1055,9 +1072,14 @@ config HARDLOCKUP_DETECTOR
- 	  chance to run.  The current stack trace is displayed upon detection
- 	  and the system will stay locked up.
- 
-+#
-+# Note that arch-specific variants are always preferred.
-+#
- config HARDLOCKUP_DETECTOR_PREFER_BUDDY
- 	bool "Prefer the buddy CPU hardlockup detector"
--	depends on HAVE_HARDLOCKUP_DETECTOR_PERF && SMP
-+	depends on HARDLOCKUP_DETECTOR
-+	depends on HAVE_HARDLOCKUP_DETECTOR_PERF && HAVE_HARDLOCKUP_DETECTOR_BUDDY
-+	depends on !HAVE_NMI_WATCHDOG
- 	help
- 	  Say Y here to prefer the buddy hardlockup detector over the perf one.
- 
-@@ -1071,39 +1093,27 @@ config HARDLOCKUP_DETECTOR_PREFER_BUDDY
- 
- config HARDLOCKUP_DETECTOR_PERF
- 	bool
--	depends on HAVE_HARDLOCKUP_DETECTOR_PERF
-+	depends on HARDLOCKUP_DETECTOR
-+	depends on HAVE_HARDLOCKUP_DETECTOR_PERF && !HARDLOCKUP_DETECTOR_PREFER_BUDDY
-+	depends on !HAVE_NMI_WATCHDOG
- 	select HARDLOCKUP_DETECTOR_COUNTS_HRTIMER
- 
- config HARDLOCKUP_DETECTOR_BUDDY
- 	bool
--	depends on SMP
-+	depends on HARDLOCKUP_DETECTOR
-+	depends on HAVE_HARDLOCKUP_DETECTOR_BUDDY
-+	depends on !HAVE_HARDLOCKUP_DETECTOR_PERF || HARDLOCKUP_DETECTOR_PREFER_BUDDY
-+	depends on !HAVE_NMI_WATCHDOG
- 	select HARDLOCKUP_DETECTOR_COUNTS_HRTIMER
- 
-+#
- # Both the "perf" and "buddy" hardlockup detectors count hrtimer
- # interrupts. This config enables functions managing this common code.
-+#
- config HARDLOCKUP_DETECTOR_COUNTS_HRTIMER
- 	bool
- 	select SOFTLOCKUP_DETECTOR
- 
--# For hardlockup detectors you can have one directly provided by the arch
--# or use a "non-arch" one. If you're using a "non-arch" one that is
--# further divided the perf hardlockup detector (which, confusingly, needs
--# arch-provided perf support) and the buddy hardlockup detector (which just
--# needs SMP). In either case, using the "non-arch" code conflicts with
--# the NMI watchdog code (which is sometimes used directly and sometimes used
--# by the arch-provided hardlockup detector).
--config HAVE_HARDLOCKUP_DETECTOR_NON_ARCH
--	bool
--	depends on (HAVE_HARDLOCKUP_DETECTOR_PERF || SMP) && !HAVE_NMI_WATCHDOG
--	default y
--
--# This will select the appropriate non-arch hardlockdup detector
--config HARDLOCKUP_DETECTOR_NON_ARCH
--	bool
--	depends on HAVE_HARDLOCKUP_DETECTOR_NON_ARCH
--	select HARDLOCKUP_DETECTOR_BUDDY if !HAVE_HARDLOCKUP_DETECTOR_PERF || HARDLOCKUP_DETECTOR_PREFER_BUDDY
--	select HARDLOCKUP_DETECTOR_PERF if HAVE_HARDLOCKUP_DETECTOR_PERF && !HARDLOCKUP_DETECTOR_PREFER_BUDDY
--
- #
- # Enables a timestamp based low pass filter to compensate for perf based
- # hard lockup detection which runs too fast due to turbo modes.
+ #if defined(CONFIG_HARDLOCKUP_DETECTOR_PERF)
 -- 
 2.35.3
 
