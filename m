@@ -2,159 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AAA1733BA1
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 23:46:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E72733BA9
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 23:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbjFPVqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 17:46:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46630 "EHLO
+        id S230148AbjFPVvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 17:51:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjFPVq2 (ORCPT
+        with ESMTP id S229561AbjFPVvk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 17:46:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A8F30F7;
-        Fri, 16 Jun 2023 14:46:27 -0700 (PDT)
+        Fri, 16 Jun 2023 17:51:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596E2195;
+        Fri, 16 Jun 2023 14:51:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB5FC6170D;
-        Fri, 16 Jun 2023 21:46:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08445C433C8;
-        Fri, 16 Jun 2023 21:46:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA29160B6C;
+        Fri, 16 Jun 2023 21:51:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EA82C433C8;
+        Fri, 16 Jun 2023 21:51:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686951986;
-        bh=8nS29JYBi41s0ToV/0PJ3m2jNI34TvMWq3ncjUsYJFw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UiZHuqb74A4KH7S/TqILosH546SKIh4GCoCfo8ScpR/2OQ9Oq3ryk6A3g0z0Hwp4U
-         P83baFZPFsgTUnxIwBKmNddprlQGY1BbQQglBIJHCK7+LDrX5e0qi37N2EVUJe1u6G
-         66USXDlabr2BkFRkay5jo4/ZDQdoyS7X2xf0Dflhnt4ybhOlNtGd/7eOpulA55D7vF
-         IhRBbwAGr3L3Q0LsPVq77PwlcKKwwZF/yUbgP7vKTEPYmT3YVLh2nKwlLXgOjxvzmH
-         ytGfWiZBItF4zMje5wlXtZMJ+SlVUTRAoOtO74yrJ/BS2/HSgkSyqa4V/mxWZz2h3V
-         hgg+UuljknnFA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id A7FC240692; Fri, 16 Jun 2023 18:46:23 -0300 (-03)
-Date:   Fri, 16 Jun 2023 18:46:23 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Thomas Richter <tmricht@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        sumanthk@linux.ibm.com, hca@linux.ibm.com, svens@linux.ibm.com,
-        gor@linux.ibm.com
-Subject: Re: [PATCH] perf test: fix failing test cases on linux-next for s390
-Message-ID: <ZIzYL2TXf4OqwLaP@kernel.org>
-References: <20230616081437.1932003-1-tmricht@linux.ibm.com>
- <ZIxf7A1jPiDUUdDt@kernel.org>
- <CAP-5=fXZFgVFMALts+r03c=Xjnv1_iKAx=jqcmRSDU4sDzxSWg@mail.gmail.com>
+        s=k20201202; t=1686952298;
+        bh=X6Tyl8npNW2BvMT/du++yO66g9Ogapsy3IijkJ5r2dA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=S2amo9atQcujUd1/72ehaZMgewtPSKZ+JZa62csrZkyyetkiNxM2ynY8KDtT2VCWs
+         ULT49eqMsZLYRuGYBTay49qRaVIczjasNa7Xx41/y3mM02VNs+ETjff4b/ZzEwW/8s
+         Oe6ELvHSASRxC5ieB5uVXVRLxC96Q1OA+bEhA894oe+OyB+7dN679Vwc5ba6eZUeT6
+         f7v//RLUaYmnuHJ+lo2bYhQ9Y/H3ToqwfqloN3vr7+O1A+oypaXU0oiq5zO/yL5hVq
+         bSXdTYCh27JgTqMVL8bZqDTL4jnNLaAjkZyIlNWptzPG3oHZtX3bBjMkfai022MiqQ
+         xD1NYLSIjK+PA==
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Chuck Lever <chuck.lever@oracle.com>, Neil Brown <neilb@suse.de>,
+        Olga Kornievskaia <kolga@netapp.com>,
+        Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>
+Cc:     Eirik Fuller <efuller@redhat.com>, linux-nfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] nfsd: move init of percpu reply_cache_stats counters back to nfsd_init_net
+Date:   Fri, 16 Jun 2023 17:51:34 -0400
+Message-Id: <20230616215136.230801-1-jlayton@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fXZFgVFMALts+r03c=Xjnv1_iKAx=jqcmRSDU4sDzxSWg@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Jun 16, 2023 at 01:48:45PM -0700, Ian Rogers escreveu:
-> On Fri, Jun 16, 2023 at 6:13 AM Arnaldo Carvalho de Melo
-> <acme@kernel.org> wrote:
-> >
-> > Em Fri, Jun 16, 2023 at 10:14:37AM +0200, Thomas Richter escreveu:
-> > > In linux-next tree the many test cases fail on s390x when running the
-> > > perf test suite, sometime the perf tool dumps core.
-> > >
-> > > Output before:
-> > >   6.1: Test event parsing                               : FAILED!
-> > >  10.3: Parsing of PMU event table metrics               : FAILED!
-> > >  10.4: Parsing of PMU event table metrics with fake PMUs: FAILED!
-> > >  17: Setup struct perf_event_attr                       : FAILED!
-> > >  24: Number of exit events of a simple workload         : FAILED!
-> > >  26: Object code reading                                : FAILED!
-> > >  28: Use a dummy software event to keep tracking        : FAILED!
-> > >  35: Track with sched_switch                            : FAILED!
-> > >  42.3: BPF prologue generation                          : FAILED!
-> > >  66: Parse and process metrics                          : FAILED!
-> > >  68: Event expansion for cgroups                        : FAILED!
-> > >  69.2: Perf time to TSC                                 : FAILED!
-> > >  74: build id cache operations                          : FAILED!
-> > >  86: Zstd perf.data compression/decompression           : FAILED!
-> > >  87: perf record tests                                  : FAILED!
-> > > 106: Test java symbol                                   : FAILED!
-> > >
-> > > The reason for all these failure is a missing PMU. On s390x
-> > > the PMU is named cpum_cf which is not detected as core PMU.
-> > > A similar patch was added before, see
-> > > commit 9bacbced0e32 ("perf list: Add s390 support for detailed PMU event description")
-> > > which got lost during the recent reworks. Add it again.
-> > >
-> > > Output after:
-> > >  10.2: PMU event map aliases                            : FAILED!
-> > >  42.3: BPF prologue generation                          : FAILED!
-> > >
-> > > Most test cases now work and there is not core dump anymore.
-> >
-> > So you're not fixing 'perf test', that is just what detects the problem,
-> > the part being fixed is the PMU code, so I'm rewriting the patch subject
-> > to:
-> >
-> > [PATCH] perf pmu: Fix core PMU detection on s/390
-> >
-> > Have you bisected the problem to the first patch where this problem
-> > appears?
-> 
-> I suspect:
-> https://lore.kernel.org/all/20230527072210.2900565-30-irogers@google.com/
-> 9d6a1df9b2ee ("perf pmus: Allow just core PMU scanning")
-> 
-> Acked-by: Ian Rogers <irogers@google.com>
+f5f9d4a314da moved the initialization of the reply cache into the nfsd
+startup, but didn't account for the stats counters, which can be
+accessed before nfsd is ever started. The result can be a NULL pointer
+dereference when someone accesses /proc/fs/nfsd/reply_cache_stats while
+nfsd is still shut down.
 
-I already pushed to perf-tools-next, but this acked/fixes is reachable
-via the Link tag.
+This is easy to trigger on some arches (like aarch64), but on x86_64,
+calling this_cpu_ptr(NULL) evidently returns a pointer to the
+fixed_percpu_data. That struct looks just enough like a newly
+initialized percpu var to allow nfsd_reply_cache_stats_show to access it
+without Oopsing.
 
-Thanks for checking and acking!
+Move the initialization of the per-net+per-cpu reply-cache counters back
+into nfsd_init_net, while leaving the rest of the reply cache
+allocations to be done at nfsd startup time. Also, add kerneldoc
+comments over some of the confusingly-named functions involved with
+per-net initialization and server startup.
 
-- Arnaldo
+Kudos to Eirik who did most of the legwork to track this down.
+
+Fixes: f5f9d4a314da ("nfsd: move reply cache initialization into nfsd startup")
+Reported-and-tested-by: Eirik Fuller <efuller@redhat.com>
+Link: https://bugzilla.redhat.com/show_bug.cgi?id=2215429
+Signed-off-by: Jeff Layton <jlayton@kernel.org>
+---
+ fs/nfsd/cache.h    |  2 ++
+ fs/nfsd/nfscache.c | 27 +++++++++++++++++----------
+ fs/nfsd/nfsctl.c   | 18 +++++++++++++++++-
+ fs/nfsd/nfssvc.c   | 10 ++++++++++
+ 4 files changed, 46 insertions(+), 11 deletions(-)
+
+diff --git a/fs/nfsd/cache.h b/fs/nfsd/cache.h
+index f21259ead64b..a4b12d6c41d3 100644
+--- a/fs/nfsd/cache.h
++++ b/fs/nfsd/cache.h
+@@ -80,6 +80,8 @@ enum {
  
-> Thanks,
-> Ian
-> 
-> > - Arnaldo
-> >
-> > > Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
-> > > Cc: Ian Rogers <irogers@google.com>
-> > > ---
-> > >  tools/perf/util/pmu.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-> > > index fe64ad292d36..6142e4710a2f 100644
-> > > --- a/tools/perf/util/pmu.c
-> > > +++ b/tools/perf/util/pmu.c
-> > > @@ -1419,7 +1419,7 @@ void perf_pmu__del_formats(struct list_head *formats)
-> > >
-> > >  bool is_pmu_core(const char *name)
-> > >  {
-> > > -     return !strcmp(name, "cpu") || is_sysfs_pmu_core(name);
-> > > +     return !strcmp(name, "cpu") || !strcmp(name, "cpum_cf") || is_sysfs_pmu_core(name);
-> > >  }
-> > >
-> > >  bool perf_pmu__supports_legacy_cache(const struct perf_pmu *pmu)
-> > > --
-> > > 2.39.2
-> > >
-> >
-> > --
-> >
-> > - Arnaldo
-
+ int	nfsd_drc_slab_create(void);
+ void	nfsd_drc_slab_free(void);
++int	nfsd_reply_cache_stats_init(struct nfsd_net *nn);
++void	nfsd_reply_cache_stats_destroy(struct nfsd_net *nn);
+ int	nfsd_reply_cache_init(struct nfsd_net *);
+ void	nfsd_reply_cache_shutdown(struct nfsd_net *);
+ int	nfsd_cache_lookup(struct svc_rqst *);
+diff --git a/fs/nfsd/nfscache.c b/fs/nfsd/nfscache.c
+index 041faa13b852..5b86e5b495fc 100644
+--- a/fs/nfsd/nfscache.c
++++ b/fs/nfsd/nfscache.c
+@@ -148,12 +148,26 @@ void nfsd_drc_slab_free(void)
+ 	kmem_cache_destroy(drc_slab);
+ }
+ 
+-static int nfsd_reply_cache_stats_init(struct nfsd_net *nn)
++/**
++ * nfsd_reply_cache_stats_init - initialize the reply cache stats
++ * @nn: nfsd_net to initialize
++ *
++ * Initialize the fields in the nfsd_net that are used for reply cache
++ * stats tracking.
++ */
++int nfsd_reply_cache_stats_init(struct nfsd_net *nn)
+ {
+ 	return nfsd_percpu_counters_init(nn->counter, NFSD_NET_COUNTERS_NUM);
+ }
+ 
+-static void nfsd_reply_cache_stats_destroy(struct nfsd_net *nn)
++/**
++ * nfsd_reply_cache_stats_destroy - destroy the reply cache stats
++ * @nn: nfsd_net to initialize
++ *
++ * Free the fields in the nfsd_net that are used for reply cache
++ * stats tracking.
++ */
++void nfsd_reply_cache_stats_destroy(struct nfsd_net *nn)
+ {
+ 	nfsd_percpu_counters_destroy(nn->counter, NFSD_NET_COUNTERS_NUM);
+ }
+@@ -169,17 +183,13 @@ int nfsd_reply_cache_init(struct nfsd_net *nn)
+ 	hashsize = nfsd_hashsize(nn->max_drc_entries);
+ 	nn->maskbits = ilog2(hashsize);
+ 
+-	status = nfsd_reply_cache_stats_init(nn);
+-	if (status)
+-		goto out_nomem;
+-
+ 	nn->nfsd_reply_cache_shrinker.scan_objects = nfsd_reply_cache_scan;
+ 	nn->nfsd_reply_cache_shrinker.count_objects = nfsd_reply_cache_count;
+ 	nn->nfsd_reply_cache_shrinker.seeks = 1;
+ 	status = register_shrinker(&nn->nfsd_reply_cache_shrinker,
+ 				   "nfsd-reply:%s", nn->nfsd_name);
+ 	if (status)
+-		goto out_stats_destroy;
++		return status;
+ 
+ 	nn->drc_hashtbl = kvzalloc(array_size(hashsize,
+ 				sizeof(*nn->drc_hashtbl)), GFP_KERNEL);
+@@ -195,9 +205,6 @@ int nfsd_reply_cache_init(struct nfsd_net *nn)
+ 	return 0;
+ out_shrinker:
+ 	unregister_shrinker(&nn->nfsd_reply_cache_shrinker);
+-out_stats_destroy:
+-	nfsd_reply_cache_stats_destroy(nn);
+-out_nomem:
+ 	printk(KERN_ERR "nfsd: failed to allocate reply cache\n");
+ 	return -ENOMEM;
+ }
+diff --git a/fs/nfsd/nfsctl.c b/fs/nfsd/nfsctl.c
+index 1489e0b703b4..a21a3f24c567 100644
+--- a/fs/nfsd/nfsctl.c
++++ b/fs/nfsd/nfsctl.c
+@@ -1494,6 +1494,14 @@ static int create_proc_exports_entry(void)
+ 
+ unsigned int nfsd_net_id;
+ 
++/**
++ * nfsd_init_net - initialize the nfsd_net struct
++ * @net: net namespace to be initialized
++ *
++ * Initialize the nfsd_net struct that is associated with @net. This
++ * is called whenever nfsd.ko is plugged in, or when a new net
++ * namespace is created.
++ */
+ static __net_init int nfsd_init_net(struct net *net)
+ {
+ 	int retval;
+@@ -1505,6 +1513,9 @@ static __net_init int nfsd_init_net(struct net *net)
+ 	retval = nfsd_idmap_init(net);
+ 	if (retval)
+ 		goto out_idmap_error;
++	retval = nfsd_reply_cache_stats_init(nn);
++	if (retval)
++		goto out_repcache_error;
+ 	nn->nfsd_versions = NULL;
+ 	nn->nfsd4_minorversions = NULL;
+ 	nfsd4_init_leases_net(nn);
+@@ -1513,6 +1524,8 @@ static __net_init int nfsd_init_net(struct net *net)
+ 
+ 	return 0;
+ 
++out_repcache_error:
++	nfsd_idmap_shutdown(net);
+ out_idmap_error:
+ 	nfsd_export_shutdown(net);
+ out_export_error:
+@@ -1521,9 +1534,12 @@ static __net_init int nfsd_init_net(struct net *net)
+ 
+ static __net_exit void nfsd_exit_net(struct net *net)
+ {
++	struct nfsd_net *nn = net_generic(net, nfsd_net_id);
++
++	nfsd_reply_cache_stats_destroy(nn);
+ 	nfsd_idmap_shutdown(net);
+ 	nfsd_export_shutdown(net);
+-	nfsd_netns_free_versions(net_generic(net, nfsd_net_id));
++	nfsd_netns_free_versions(nn);
+ }
+ 
+ static struct pernet_operations nfsd_net_ops = {
+diff --git a/fs/nfsd/nfssvc.c b/fs/nfsd/nfssvc.c
+index 9c7b1ef5be40..77f686180891 100644
+--- a/fs/nfsd/nfssvc.c
++++ b/fs/nfsd/nfssvc.c
+@@ -402,6 +402,16 @@ void nfsd_reset_write_verifier(struct nfsd_net *nn)
+ 	write_sequnlock(&nn->writeverf_lock);
+ }
+ 
++/**
++ * nfsd_startup_net - per-net specific nfsd startup
++ * @net: net namespace
++ * @cred: task credential
++ *
++ * Given @net, do the necessary work to start up nfsd in the namespace. This
++ * is invoked when a task writes to the "threads" file for the first time. The
++ * credential used for socket creation, etc. is inherited from the task that
++ * is writing to "threads".
++ */
+ static int nfsd_startup_net(struct net *net, const struct cred *cred)
+ {
+ 	struct nfsd_net *nn = net_generic(net, nfsd_net_id);
 -- 
+2.40.1
 
-- Arnaldo
