@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED694732EB7
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:37:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B59732E7C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345337AbjFPKep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 06:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58340 "EHLO
+        id S1345087AbjFPKcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 06:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345241AbjFPKdv (ORCPT
+        with ESMTP id S1344979AbjFPKbJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 06:33:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AAA044B6;
-        Fri, 16 Jun 2023 03:28:32 -0700 (PDT)
+        Fri, 16 Jun 2023 06:31:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58AB95258;
+        Fri, 16 Jun 2023 03:27:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC7986361A;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 300E2636CF;
+        Fri, 16 Jun 2023 10:27:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E07EC433CA;
         Fri, 16 Jun 2023 10:27:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 791A9C433CB;
-        Fri, 16 Jun 2023 10:27:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686911268;
-        bh=g4LJPoNAxXv3km4cVxyDvAQf9LGpZoVWVGmzNVK1ysU=;
+        s=k20201202; t=1686911269;
+        bh=dn5j7Vy0jR4DMgOQyC3ikE20OKqZTT31zJIwWxDUmwE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nusFBbBL6dnXyruwQGWYxGcTMjq79VNgJHavSPaJXy5eb+KtOmt6GWAx1iDoiQLv2
-         7GcaVFH3JRUCsaVhy8VkVkrHFaRNxPx5KJxaMgcJSFRzDMCzR8Wkl5TQvP6yy0HBka
-         X2NxF8zDBLBMrsi2p6uXZPP6GrbBSNucwtc379I16vOxpw1Gc3HdALV0YiSGcqI0qH
-         r7RlGSNUR/3AIF96UQi9RdXtTN77poTfpIGkw7oh+XXteK0sKTGLlnLWPD+e2RZaQQ
-         R0l0UesAcAOVjO6zZ2/hcOwST6S+RRYkQp7o+8bUF8fjtIU2NLwyvsLmMvqSPRITJq
-         hPYhmGq0Od/Ug==
+        b=kJoHwIKvL3mzgti39/RXbbstgFIYYnawMpVWcLu5Ky6yfUEUoNmaS12NI/HWhK8la
+         KTlcZ3rQD0NdX+W/T5f1/kXumGcXh19HfFNte38LRz1ayLK32Sv8TfC/ZjoGHuVcvd
+         HQmE94W6lxKIG7Tpyc8vRELJzNn045RRkwY4mPQMFWvIKSL5UeDn1STAEIZN4fahY6
+         +mriVQ4rEo6AuS+k6n1uWt/I3lhEmjfvBdXBuYLZ2zOYIECupGieHlLpNb6LjN8lE8
+         sRnnFt9le4kSDu8Bdy7XTf9wpn23hVN5Znf5yFzDrbA6HwJRP46vuYwuRq8Q0cYAHI
+         b/12vRATueGGA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Theodore Ts'o <tytso@mit.edu>, Sasha Levin <sashal@kernel.org>,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 14/16] ext4: only check dquot_initialize_needed() when debugging
-Date:   Fri, 16 Jun 2023 06:27:17 -0400
-Message-Id: <20230616102721.673775-14-sashal@kernel.org>
+Cc:     Shannon Nelson <shannon.nelson@amd.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 15/16] vhost_vdpa: tell vqs about the negotiated
+Date:   Fri, 16 Jun 2023 06:27:18 -0400
+Message-Id: <20230616102721.673775-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230616102721.673775-1-sashal@kernel.org>
 References: <20230616102721.673775-1-sashal@kernel.org>
@@ -48,8 +51,8 @@ X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 5.15.117
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,50 +61,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Theodore Ts'o <tytso@mit.edu>
+From: Shannon Nelson <shannon.nelson@amd.com>
 
-[ Upstream commit dea9d8f7643fab07bf89a1155f1f94f37d096a5e ]
+[ Upstream commit 376daf317753ccb6b1ecbdece66018f7f6313a7f ]
 
-ext4_xattr_block_set() relies on its caller to call dquot_initialize()
-on the inode.  To assure that this has happened there are WARN_ON
-checks.  Unfortunately, this is subject to false positives if there is
-an antagonist thread which is flipping the file system at high rates
-between r/o and rw.  So only do the check if EXT4_XATTR_DEBUG is
-enabled.
+As is done in the net, iscsi, and vsock vhost support, let the vdpa vqs
+know about the features that have been negotiated.  This allows vhost
+to more safely make decisions based on the features, such as when using
+PACKED vs split queues.
 
-Link: https://lore.kernel.org/r/20230608044056.GA1418535@mit.edu
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Shannon Nelson <shannon.nelson@amd.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
+Message-Id: <20230424225031.18947-2-shannon.nelson@amd.com>
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/xattr.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/vhost/vdpa.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/fs/ext4/xattr.c b/fs/ext4/xattr.c
-index 55d6eb9319f57..6c982869f1011 100644
---- a/fs/ext4/xattr.c
-+++ b/fs/ext4/xattr.c
-@@ -2006,8 +2006,9 @@ ext4_xattr_block_set(handle_t *handle, struct inode *inode,
- 			else {
- 				u32 ref;
+diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+index 299a995326185..1f9670e6ecec2 100644
+--- a/drivers/vhost/vdpa.c
++++ b/drivers/vhost/vdpa.c
+@@ -278,7 +278,10 @@ static long vhost_vdpa_set_features(struct vhost_vdpa *v, u64 __user *featurep)
+ {
+ 	struct vdpa_device *vdpa = v->vdpa;
+ 	const struct vdpa_config_ops *ops = vdpa->config;
++	struct vhost_dev *d = &v->vdev;
++	u64 actual_features;
+ 	u64 features;
++	int i;
  
-+#ifdef EXT4_XATTR_DEBUG
- 				WARN_ON_ONCE(dquot_initialize_needed(inode));
--
-+#endif
- 				/* The old block is released after updating
- 				   the inode. */
- 				error = dquot_alloc_block(inode,
-@@ -2070,8 +2071,9 @@ ext4_xattr_block_set(handle_t *handle, struct inode *inode,
- 			/* We need to allocate a new block */
- 			ext4_fsblk_t goal, block;
+ 	/*
+ 	 * It's not allowed to change the features after they have
+@@ -293,6 +296,16 @@ static long vhost_vdpa_set_features(struct vhost_vdpa *v, u64 __user *featurep)
+ 	if (vdpa_set_features(vdpa, features))
+ 		return -EINVAL;
  
-+#ifdef EXT4_XATTR_DEBUG
- 			WARN_ON_ONCE(dquot_initialize_needed(inode));
--
-+#endif
- 			goal = ext4_group_first_block_no(sb,
- 						EXT4_I(inode)->i_block_group);
- 			block = ext4_new_meta_blocks(handle, inode, goal, 0,
++	/* let the vqs know what has been configured */
++	actual_features = ops->get_driver_features(vdpa);
++	for (i = 0; i < d->nvqs; ++i) {
++		struct vhost_virtqueue *vq = d->vqs[i];
++
++		mutex_lock(&vq->mutex);
++		vq->acked_features = actual_features;
++		mutex_unlock(&vq->mutex);
++	}
++
+ 	return 0;
+ }
+ 
 -- 
 2.39.2
 
