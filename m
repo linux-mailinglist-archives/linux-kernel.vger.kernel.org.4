@@ -2,136 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F2B5732FE4
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F182732FE9
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244585AbjFPLch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 07:32:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
+        id S235285AbjFPLd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 07:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235378AbjFPLce (ORCPT
+        with ESMTP id S234473AbjFPLdy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 07:32:34 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3F02720
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:32:32 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f61b45ee0dso761053e87.0
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:32:32 -0700 (PDT)
+        Fri, 16 Jun 2023 07:33:54 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0308C2720
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:33:53 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-51a1d539ffaso1396996a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:33:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686915151; x=1689507151;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2nuyRQlcqUJ1I+sHmU3UQhaVpsWzNHbMeXA40SLBfto=;
-        b=DH5R7s1yTiVsAJI1g99s6OalFVFW9cM5DAnNDqJJfwlRotOUA96IF3DT5skABPinz5
-         E4IcsKOQ3I0Rl1kStGkLFAxRCwwg624eQLqtopcQdxXR3xBLUA2PpbggQ7ZzEgEqRcbe
-         zLF4TFVCygtMwuugGFfMrYnwW9LYL8yD4irsAG/DyJmz0CufETPyYE1jSdmH8wJwQ6tx
-         vSjOiWjZxCKLbz+1fw0d11obwbqVVFSHTsLjqc7E95c4rZrMb4MBr8n0fUJ+UFj2gDls
-         a5bE+ElDJi7ADNbMc9uGiuwj+Q1wcaJHUu12vHRDhSs8Nb7M2gleCC8WcLdhD9mV7s2o
-         YiUA==
+        d=linaro.org; s=google; t=1686915231; x=1689507231;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vnCBULjwaeoKSSjtKcAIMInnLKiE524xqLou3I4mzIY=;
+        b=BzjzuQgJYIshv6bcYud1qHQiywtb1eZ8d+MShkxuxN3EJDxICt070sEJ0JJL7EEZqt
+         u/pHAQ2DsV8ngkLgbpYKLS/D2PuXq0Wc5uhV4XxQzWecNdsJQmKfFl3h2T/ndhDWq90i
+         SxH3a6OkswRDlbuZ5UKmFpm0bwJWecwrCb3ou+GUVfA5dMQj1tWqNXc2WT/3977ka5+f
+         vI7eGEX97OQRjPg4ZY1XQYpDwSqHcII1L4JzlIoRUyAClKNuZlmWidjutaM1NKaLbHkJ
+         XfqIxSRJiCyCYD49u9Z5cXqTtls+ko5E0de6qSUDctt7lAU9e/8vUL0jx3n6PZvP01N4
+         N81w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686915151; x=1689507151;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2nuyRQlcqUJ1I+sHmU3UQhaVpsWzNHbMeXA40SLBfto=;
-        b=NRQOa5Vvb8XaYm9G80avAejKTYf3N/g4KLuTnYZPiL6quljyOSLFboA/kmJ0HX2GX4
-         rp8iqwRxVVicGKMSlfsbw5jI8UYFarLituyCigRvA4KtS5uHSkMsdn9oeMfpsTEG7zhE
-         bdrJYtjmhK1SgdlFn4AUs6G3tWHWpum9knJMwIVLkFQ6LKlypTB0+n29GbtID1bbS9CI
-         +SaD6fGu6Ob0B+lCABQg+GzZTiS3P2DhA3JEl8OsJREsPvkqd2p4J40LVkDlScvV3j9i
-         TEHBVXmG6dUWpUrT/9TSbMgQm2Qp2O6FWZuUGNG5W38Nxbg2XQKWWuDAw6r60nRkQTmC
-         i8lg==
-X-Gm-Message-State: AC+VfDw9GrkmJV2Y4bRtS7t3Or8RZ2WE09YmuWDEIquj8ErAPBQpQGne
-        hh1DiXy6zliCwTG830QSBYbUvg==
-X-Google-Smtp-Source: ACHHUZ4vwQur9icwi+r14RxKea4abemDipKgtryepasg7loeFJIpKxEcaQTsVhSGPpckiB9/VJ/YOA==
-X-Received: by 2002:a19:4409:0:b0:4f3:b07e:7eb8 with SMTP id r9-20020a194409000000b004f3b07e7eb8mr1138136lfa.29.1686915150597;
-        Fri, 16 Jun 2023 04:32:30 -0700 (PDT)
-Received: from myrica (5750a5b3.skybroadband.com. [87.80.165.179])
-        by smtp.gmail.com with ESMTPSA id w21-20020a1cf615000000b003f8126bcf34sm1879491wmc.48.2023.06.16.04.32.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jun 2023 04:32:29 -0700 (PDT)
-Date:   Fri, 16 Jun 2023 12:32:32 +0100
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        Yi Liu <yi.l.liu@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        iommu@lists.linux.dev, linux-kselftest@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCHES 00/17] IOMMUFD: Deliver IO page faults to user space
-Message-ID: <20230616113232.GA84678@myrica>
-References: <20230530053724.232765-1-baolu.lu@linux.intel.com>
+        d=1e100.net; s=20221208; t=1686915231; x=1689507231;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vnCBULjwaeoKSSjtKcAIMInnLKiE524xqLou3I4mzIY=;
+        b=bf/dqcbUirBrmZBxAIwjHGXkh9gEQkJv4jnVToQtV+A0IjTahJYIe6gPL530NleBco
+         5V4tELjT5NJTdBWnkDBHLzm0I6Qqircxdna9eylOCzB4fI+PPvXtv10VVBlFJto9o4+T
+         hTeqxYetF7KDPS9eLJikA/Jz9gOiIKQdeS00KH4soRbxh1DPWJNSIHH5b6GsbdN78EA1
+         yWnnyZYsfkvn1wNhoU6d9MSabms9D6EFJ5Sf1cxtlAI6iDmuST0RGqLR/Gz5KNrDUww7
+         NHa+i0l++0EWHwg1qJBSI1vl3tKjFUi7OEhvM62WdJ1mhhQkJ19Owaf/SwtsUPFQmgiN
+         p6jQ==
+X-Gm-Message-State: AC+VfDyKiQ3eHW1JAiA0vZe1phHX25aS9JwTn4zljBKzGEyywn4pgkcV
+        /yXW30PlbwC620tos6k92fbf2g==
+X-Google-Smtp-Source: ACHHUZ5cEJy8okqiTA6pGSDD4tP30kklvbaWhufgQI9cqL7BYN2Ux0OGcf6oNZHMSOUjHxJKR+CmEw==
+X-Received: by 2002:a05:6402:5216:b0:514:a5cf:745b with SMTP id s22-20020a056402521600b00514a5cf745bmr7337833edd.3.1686915231435;
+        Fri, 16 Jun 2023 04:33:51 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id l14-20020aa7c30e000000b00514b0f6a75esm9684653edq.97.2023.06.16.04.33.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Jun 2023 04:33:50 -0700 (PDT)
+Message-ID: <cee56c57-060a-2fce-a2af-25404b9afe48@linaro.org>
+Date:   Fri, 16 Jun 2023 13:33:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530053724.232765-1-baolu.lu@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 1/2] dt-bindings: clock: Update GCC clocks for QDU1000 and
+ QRU1000 SoCs
+To:     Imran Shaik <quic_imrashai@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Melody Olvera <quic_molvera@quicinc.com>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
+        Ajit Pandey <quic_ajipan@quicinc.com>
+References: <20230616104941.921555-1-quic_imrashai@quicinc.com>
+ <20230616104941.921555-2-quic_imrashai@quicinc.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230616104941.921555-2-quic_imrashai@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Baolu,
+On 16/06/2023 12:49, Imran Shaik wrote:
+> Update the qcom GCC clock bindings and add v2 compatible string for QDU1000
+> and QRU1000 SoCs.
+> 
+> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+> Signed-off-by: Imran Shaik <quic_imrashai@quicinc.com>
+> ---
+>  .../devicetree/bindings/clock/qcom,qdu1000-gcc.yaml         | 6 +++++-
+>  include/dt-bindings/clock/qcom,qdu1000-gcc.h                | 4 +++-
+>  2 files changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/qcom,qdu1000-gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,qdu1000-gcc.yaml
+> index 767a9d03aa32..030953d258c1 100644
+> --- a/Documentation/devicetree/bindings/clock/qcom,qdu1000-gcc.yaml
+> +++ b/Documentation/devicetree/bindings/clock/qcom,qdu1000-gcc.yaml
+> @@ -8,6 +8,8 @@ title: Qualcomm Global Clock & Reset Controller for QDU1000 and QRU1000
+>  
+>  maintainers:
+>    - Melody Olvera <quic_molvera@quicinc.com>
+> +  - Taniya Das <quic_tdas@quicinc.com>
+> +  - Imran Shaik <quic_imrashai@quicinc.com>
 
-On Tue, May 30, 2023 at 01:37:07PM +0800, Lu Baolu wrote:
-> - The timeout value for the pending page fault messages. Ideally we
->   should determine the timeout value from the device configuration, but
->   I failed to find any statement in the PCI specification (version 6.x).
->   A default 100 milliseconds is selected in the implementation, but it
->   leave the room for grow the code for per-device setting.
+I appreciate adding more maintainers, it is welcomed and needed.
 
-If it helps we had some discussions about this timeout [1]. It's useful to
-print out a warning for debugging, but I don't think completing the fault
-on timeout is correct, we should leave the fault pending. Given that the
-PCI spec does not indicate a timeout, the guest can wait as long as it
-wants to complete the fault (and 100ms may even be reasonable on an
-emulator, who knows how many layers and context switches the fault has to
-go through).
+However many of Qualcomm folks, including some of you, did not care
+enough to fix their old/incorrect email in existing entries, thus we
+have hundreds of wrong addresses and email bounces.
 
+We already raised this internally and publicly, with just small effect,
+so I am not sure what to do more. For me, allowing to have outdated
+email in maintainers is an easiest proof that maintainer does not care.
+Adding more maintainer entries, while maintainer does not care, would
+not feel right. Maybe let's start with fixing existing entries?
 
-Another outstanding issue was what to do for PASID stop. When the guest
-device driver stops using a PASID it issues a PASID stop request to the
-device (a device-specific mechanism). If the device is not using PRI stop
-markers it waits for pending PRs to complete and we're fine. Otherwise it
-sends a stop marker which is flushed to the PRI queue, but does not wait
-for pending PRs.
+>  
+>  description: |
+>    Qualcomm global clock control module which supports the clocks, resets and
+> @@ -17,7 +19,9 @@ description: |
+>  
+>  properties:
+>    compatible:
+> -    const: qcom,qdu1000-gcc
+> +    enum:
+> +      - qcom,qdu1000-gcc
+> +      - qcom,qdu1000-gcc-v2
 
-Handling stop markers is annoying. If the device issues one, then the PRI
-queue contains stale faults, a stop marker, followed by valid faults for
-the next address space bound to this PASID. The next address space will
-get all the spurious faults because the fault handler doesn't know that
-there is a stop marker coming. Linux is probably alright with spurious
-faults, though maybe not in all cases, and other guests may not support
-them at all.
+It's the same block, isn't it? What is the "v2" exactly?
 
-We might need to revisit supporting stop markers: request that each device
-driver declares whether their device uses stop markers on unbind() ("This
-mechanism must indicate that a Stop Marker Message will be generated."
-says the spec, but doesn't say if the function always uses one or the
-other mechanism so it's per-unbind). Then we still have to synchronize
-unbind() with the fault handler to deal with the pending stop marker,
-which might have already gone through or be generated later.
+Best regards,
+Krzysztof
 
-Currently we ignore all that and just flush the PRI queue, followed by the
-IOPF queue, to get rid of any stale fault before reassigning the PASID. A
-guest however would also need to first flush the HW PRI queue, but doesn't
-have a direct way to do that. If we want to support guests that don't deal
-with stop markers, the host needs to flush the PRI queue when a PASID is
-detached. I guess on Intel detaching the PASID goes through the host which
-can flush the host queue. On Arm we'll probably need to flush the queue
-when receiving a PASID cache invalidation, which the guest issues after
-clearing a PASID table entry.
-
-Thanks,
-Jean
-
-[1] https://lore.kernel.org/linux-iommu/20180423153622.GC38106@ostrya.localdomain/
-    Also unregistration, not sure if relevant here
-    https://lore.kernel.org/linux-iommu/20190605154553.0d00ad8d@jacob-builder/
