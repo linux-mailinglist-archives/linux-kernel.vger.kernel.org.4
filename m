@@ -2,51 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97CC3732F8C
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:12:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A000732F90
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:13:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345021AbjFPLMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 07:12:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35326 "EHLO
+        id S1344785AbjFPLNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 07:13:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344767AbjFPLMf (ORCPT
+        with ESMTP id S1344729AbjFPLNN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 07:12:35 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0222297D
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:12:24 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qA7NE-0001v0-5f; Fri, 16 Jun 2023 13:12:12 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id BD13B1DAC62;
-        Fri, 16 Jun 2023 11:12:10 +0000 (UTC)
-Date:   Fri, 16 Jun 2023 13:12:10 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Srinivas Goud <srinivas.goud@amd.com>
-Cc:     wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, gcnu.goud@gmail.com,
-        git@amd.com, michal.simek@xilinx.com, linux-can@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] can: xilinx_can: Add ECC feature support
-Message-ID: <20230616-unneeded-denote-eaa4053514d8-mkl@pengutronix.de>
-References: <1686570177-2836108-1-git-send-email-srinivas.goud@amd.com>
+        Fri, 16 Jun 2023 07:13:13 -0400
+Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01426195;
+        Fri, 16 Jun 2023 04:13:11 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 11:12:59 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1686913987; x=1687173187;
+        bh=hwa4RzwbOoukv59i8gRCTS8obOBodrvYgH1zylyxQNs=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=GsZLeP+1y01B8aDMn1LZl+uObnYw0SpM/hdB2CUlYMti5FJOtg6RgHMRa1MthCMLj
+         UxqvrIKF6YURbliOf9rS2PdoVoItvbObImpKVdSB7IyI4e8maYfprk76ARJ1vg/6H2
+         8lVvaYyN2CXCG116DKVcra0qimAN5HKrUZJ2wDimeWn6KKkDW2PU/CQQLjvinruUX8
+         VnL/n02i6PSDECmElLlCrqEtMdpusXrNWG3NvEaRGl6ZXwNa8LZHky0noSbZ+VbTP6
+         gkU/tJ6APV4hEUewsRjCtTy2YXQ7CBGiMLFs/3Yznj2WnXk2LCCoq6Q8P3SHgwq17D
+         RguEWvKM5KY9w==
+To:     Miguel Ojeda <ojeda@kernel.org>
+From:   =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Cc:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Andreas Hindborg <nmi@metaspace.dk>,
+        Philip Li <philip.li@intel.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH 1/6] rust: init: make doctests compilable/testable
+Message-ID: <xXR-61xWAVXlzdw6FRPCd9oIO4sbjDfRC3hreooJx7zXYgA2C93c2PpTG60ewEK1arQydz_iz33115RW4baniEtrI8_fWwNrEj28La74SfI=@protonmail.com>
+In-Reply-To: <20230614180837.630180-2-ojeda@kernel.org>
+References: <20230614180837.630180-1-ojeda@kernel.org> <20230614180837.630180-2-ojeda@kernel.org>
+Feedback-ID: 27884398:user:proton
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="e3lc5j2mdmuoewkc"
-Content-Disposition: inline
-In-Reply-To: <1686570177-2836108-1-git-send-email-srinivas.goud@amd.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,51 +59,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+------- Original Message -------
+On Wednesday, June 14th, 2023 at 20:08, Miguel Ojeda <ojeda@kernel.org> wro=
+te:
 
---e3lc5j2mdmuoewkc
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Rust documentation tests are going to be build/run-tested
+> with the KUnit integration added in a future patch, thus
+> update them to make them compilable/testable so that we
+> may start enforcing it.
+>=20
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> ---
+>  rust/kernel/init.rs | 25 ++++++++++++++++---------
+>  1 file changed, 16 insertions(+), 9 deletions(-)
+>=20
+> diff --git a/rust/kernel/init.rs b/rust/kernel/init.rs
+> index b4332a4ec1f4..1073515ed40e 100644
+> --- a/rust/kernel/init.rs
+> +++ b/rust/kernel/init.rs
+> @@ -120,14 +120,23 @@
+>  //!   `slot` gets called.
+>  //!
+>  //! ```rust
+> -//! use kernel::{prelude::*, init};
+> +//! # #![allow(unreachable_pub, clippy::disallowed_names)]
+> +//! use kernel::{prelude::*, init, types::Opaque};
+>  //! use core::{ptr::addr_of_mut, marker::PhantomPinned, pin::Pin};
+>  //! # mod bindings {
+> +//! #     #![allow(non_camel_case_types)]
+>  //! #     pub struct foo;
+>  //! #     pub unsafe fn init_foo(_ptr: *mut foo) {}
+>  //! #     pub unsafe fn destroy_foo(_ptr: *mut foo) {}
+>  //! #     pub unsafe fn enable_foo(_ptr: *mut foo, _flags: u32) -> i32 {=
+ 0 }
+>  //! # }
+> +//! # trait FromErrno {
+> +//! #     fn from_errno(errno: core::ffi::c_int) -> Error {
+> +//! #         // Dummy error that can be constructed outside the `kernel=
+` crate.
+> +//! #         Error::from(core::fmt::Error)
+> +//! #     }
+> +//! # }
+> +//! # impl FromErrno for Error {}
+>  //! /// # Invariants
+>  //! ///
+>  //! /// `foo` is always initialized
+> @@ -158,7 +167,7 @@
+>  //!                 if err !=3D 0 {
+>  //!                     // Enabling has failed, first clean up the foo a=
+nd then return the error.
+>  //!                     bindings::destroy_foo(Opaque::raw_get(foo));
+> -//!                     return Err(Error::from_kernel_errno(err));
+> +//!                     return Err(Error::from_errno(err));
+>  //!                 }
+>  //!
+>  //!                 // All fields of `RawFoo` have been initialized, sin=
+ce `_p` is a ZST.
+> @@ -226,8 +235,7 @@
+>  ///
+>  /// ```rust
+>  /// # #![allow(clippy::disallowed_names, clippy::new_ret_no_self)]
+> -/// # use kernel::{init, pin_init, stack_pin_init, init::*, sync::Mutex,=
+ new_mutex};
+> -/// # use macros::pin_data;
+> +/// # use kernel::{init, macros::pin_data, pin_init, stack_pin_init, ini=
+t::*, sync::Mutex, new_mutex};
+>  /// # use core::pin::Pin;
+>  /// #[pin_data]
+>  /// struct Foo {
+> @@ -277,7 +285,7 @@ macro_rules! stack_pin_init {
+>  ///
+>  /// # Examples
+>  ///
+> -/// ```rust
+> +/// ```rust,ignore
+>  /// # #![allow(clippy::disallowed_names, clippy::new_ret_no_self)]
+>  /// # use kernel::{init, pin_init, stack_try_pin_init, init::*, sync::Mu=
+tex, new_mutex};
+>  /// # use macros::pin_data;
+> @@ -303,7 +311,7 @@ macro_rules! stack_pin_init {
+>  /// pr_info!("a: {}", &*foo.a.lock());
+>  /// ```
+>  ///
+> -/// ```rust
+> +/// ```rust,ignore
+>  /// # #![allow(clippy::disallowed_names, clippy::new_ret_no_self)]
+>  /// # use kernel::{init, pin_init, stack_try_pin_init, init::*, sync::Mu=
+tex, new_mutex};
+>  /// # use macros::pin_data;
+> @@ -513,8 +521,7 @@ macro_rules! stack_try_pin_init {
+>  /// For instance:
+>  ///
+>  /// ```rust
+> -/// # use kernel::pin_init;
+> -/// # use macros::pin_data;
+> +/// # use kernel::{macros::pin_data, pin_init};
+>  /// # use core::{ptr::addr_of_mut, marker::PhantomPinned};
+>  /// #[pin_data]
+>  /// struct Buf {
+> @@ -841,7 +848,7 @@ macro_rules! init {
+>  /// # Examples
+>  ///
+>  /// ```rust
+> -/// use kernel::{init::PinInit, error::Error, InPlaceInit};
+> +/// use kernel::{init::{PinInit, zeroed}, error::Error};
+>  /// struct BigBuf {
+>  ///     big: Box<[u8; 1024 * 1024 * 1024]>,
+>  ///     small: [u8; 1024 * 1024],
+> --=20
+> 2.41.0
 
-On 12.06.2023 17:12:54, Srinivas Goud wrote:
-> ECC feature added to Tx and Rx FIFO=E2=80=99s for Xilinx CAN Controller.
-> Part of this feature configuration and counter registers added=20
-> in Xilinx CAN Controller for 1bit/2bit ECC errors count and reset.
-> Please find more details in PG096 v5.1 document.
-
-The document "PG096 (v5.1) May 16, 2023 CAN v5.1" [1] lists the
-XCAN_ECC_CFG_OFFSET as reserved, although it has a section "ECC
-Configuration Register".
-
-[1] https://docs.xilinx.com/viewer/book-attachment/Bv6XZP9HRonCGi58fl10dw/c=
-h1ZLpOt4UKWNub7DXjJ7Q
-
-The other registers (XCAN_TXTLFIFO_ECC_OFFSET, XCAN_TXOLFIFO_ECC_OFFSET,
-XCAN_TXOLFIFO_ECC_OFFSET) are also listed as reserved and not even
-mentioned on the document. Am I missing something?
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---e3lc5j2mdmuoewkc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmSMQ4cACgkQvlAcSiqK
-BOif0gf9ENiFw1zub+JvpO4Z15pvxtf+Ge2LoyL6btmGQClJQngT0seWbZwx+qw/
-3HsN9fpCmDNQuRiujWa+1otoTC8VnFsbTewdIl3LNGe676uECIytmeptA2SFQN6J
-DGSaR4rMdK7yzVlj9Ku0vQxIs8zCEdEFRXsJ4mkgfW2enDNy6CZOd4cYMd8PfaI7
-0mXfcuUi4AYXqPWRZMR+ufem1daUvBBHPH77I6JzAtZKF3cc4SgFhrn1e6ywEduP
-GCwTUhP4cNVHAGxTVNlXPV+uXe5wwV9WTjtTTPuMhXiAyIz1sDhm2nPaXXnKQoQi
-jDvSFgZQlq+i2YRY8lOK4/f0V/FLUg==
-=9ddr
------END PGP SIGNATURE-----
-
---e3lc5j2mdmuoewkc--
+Reviewed-by: Bj=C3=B6rn Roy Baron <bjorn3_gh@protonmail.com>
