@@ -2,114 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 259427333A1
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 16:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBBE57333AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 16:34:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344586AbjFPOdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 10:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41732 "EHLO
+        id S1345504AbjFPOeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 10:34:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjFPOdY (ORCPT
+        with ESMTP id S1345180AbjFPOe3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 10:33:24 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C9C30E7;
-        Fri, 16 Jun 2023 07:33:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686926003; x=1718462003;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bvGpNDLA3a0FFTGl0eVY+fodubNpqqXghduB4BJyHyg=;
-  b=lMbLfizi9C+rva15GSFUPQboSfuPo0os/zih35nUvpG/tosrS3DwlNIg
-   5Jh/AT8BZEuwXdZHoEejn8AXZ4aiDsOwftCWjJ6Y+J5gDzXtCzpPoF3QF
-   s+gu5FcqlIed1aFGQY+ojak8IpggztllsYTnQ8Jaz7RPH8zxuDiE5I7Gl
-   pvPHgjgT7gQKOgLuFLFQVrT3EZfIqeoq8hjnm0YB+RU3coo++y8W2tA2c
-   D74b2rMGm8HihqhJvqxUHQnPZQ4hGzAvyboI+64qPxo8R/mw3HE9aUSv1
-   0AkdB7l7T0jjK70NBZgchJu3zEjIaAQo85n8ji6maI+a5ABQYy+Uypr/1
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="338843656"
-X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
-   d="scan'208";a="338843656"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 07:33:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="742691961"
-X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
-   d="scan'208";a="742691961"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008.jf.intel.com with ESMTP; 16 Jun 2023 07:33:16 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1qAAVl-004Iuf-1D;
-        Fri, 16 Jun 2023 17:33:13 +0300
-Date:   Fri, 16 Jun 2023 17:33:13 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>
-Subject: Re: [PATCH v14 15/18] media: i2c: ds90ub953: Handle
- V4L2_MBUS_CSI2_NONCONTINUOUS_CLOCK
-Message-ID: <ZIxyqTdEsS40emBV@smile.fi.intel.com>
-References: <20230616135922.442979-1-tomi.valkeinen@ideasonboard.com>
- <20230616135922.442979-16-tomi.valkeinen@ideasonboard.com>
+        Fri, 16 Jun 2023 10:34:29 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94EA230E7
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 07:34:27 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-31109cd8d8cso546790f8f.2
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 07:34:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686926066; x=1689518066;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j0BhKifrGZP5OZWlKIsZeamhkVEABjFj9lFeY4ksW7M=;
+        b=h3W0Zy4f2HUF8wotQ3ce709URxdY0hAEyJb3M8k3yMQpdG4hGYwZUKMzASKXcXcWEL
+         oUsFDqyOTegR8JitFcYwQP6qxITaijXonMpq8MVsCzcHd7SOSa+BkaFeoNx54AyGmpem
+         TF5rtlc2tL9/It1QdOCJ+rw7PxOM7KuSuNsvLIq9gXjy1OBhGbdIk6ThwGmvjWI1Fcf+
+         IQpcCJKx/XG8DmsDoasfUluoJRmQGidogDWVh5UslgkDV9o4w+Qw4YN17/vJpbZpNaYl
+         BGje+1RQuRo/isJqqwETpbOC6merAbWVddQIB1Lj9advMPKe/dZFB0jtwj07kgYpCdTK
+         lXng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686926066; x=1689518066;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j0BhKifrGZP5OZWlKIsZeamhkVEABjFj9lFeY4ksW7M=;
+        b=RGQ1IquIHUNNNAxV5OKGSgx5fQt18HE9YeLY7nX4ItlXtMXZ4JDFeOPXP3xqWgXBmu
+         521F5X1ZkrDsQQ29YPbYsqNBBVCwnRbvUJSSyEQT3COTh5LRpYKj6Ufw0jUpMm2ODs9v
+         kakb64jFnBf3aeeCu5LwiM1Tvm3WYOyzz0Vvts1+3xPm4gA4Is97nr69VwfJCoYgn38j
+         F0D9d+KGjgIGlD6m5EJKgOzmiusxQmSra9EItTMCpeJNbm9nsWHZ3gNWRsUBK7ee1xfW
+         NVU1mEsxLe5oNDRHPNAo27FyZ3LUVycyKTa6t9bL8V6ZyDKPsiJyOeYFpC3gTxxgJSCT
+         sC/A==
+X-Gm-Message-State: AC+VfDyEN0zhYEr3UohlbfwOLCtUgqy3mEM56z96YGY55531cbJT1CJH
+        HFflU21VwmnYcpW2FURkdKEaaA==
+X-Google-Smtp-Source: ACHHUZ7B9eVOhaXE4pBU+0rUh8FmNUqYijle3OGMXnKhyXSI8Yi1/tNByxXskqTrhcpUfklt3TEmJg==
+X-Received: by 2002:adf:de8a:0:b0:30f:bc8f:6d49 with SMTP id w10-20020adfde8a000000b0030fbc8f6d49mr1814518wrl.13.1686926065921;
+        Fri, 16 Jun 2023 07:34:25 -0700 (PDT)
+Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:4aa0:8c56:eebe:c05c])
+        by smtp.gmail.com with ESMTPSA id k6-20020a5d6286000000b0030903371ef9sm23626149wru.22.2023.06.16.07.34.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 07:34:25 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     zhuyinbo@loongson.cn
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org,
+        loongson-kernel@lists.loongnix.cn, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        zhanghongchen <zhanghongchen@loongson.cn>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Subject: [PATCH] thermal/drivers/loongson2: Fix thermal zone private data access
+Date:   Fri, 16 Jun 2023 16:34:07 +0200
+Message-Id: <20230616143407.689515-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <8ca44091-35fd-cc24-9896-0317772c5620@loongson.cn>
+References: <8ca44091-35fd-cc24-9896-0317772c5620@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230616135922.442979-16-tomi.valkeinen@ideasonboard.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 04:59:19PM +0300, Tomi Valkeinen wrote:
-> Handle V4L2_MBUS_CSI2_NONCONTINUOUS_CLOCK flag to configure the CSI-2 RX
-> continuous/non-continuous clock register.
+The thermal zone device won't be accessible directly anymore.
 
-...
+Use the private data accessor.
 
->  	struct regmap		*regmap;
+Cc: zhuyinbo <zhuyinbo@loongson.cn>
+Cc: Yinbo Zhu <zhuyinbo@loongson.cn>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/thermal/loongson2_thermal.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-I forgot if we discussed this along with i2c_client *client nearby. Since I
-reviewed Hans' patches the pure struct device *dev (instead of *client) might
-make more sense, despite being duplicative with regmap associated device.
-
->  	u32			num_data_lanes;
-> +	bool			non_cont_clk;
->  
->  	struct gpio_chip	gpio_chip;
-
-And also try to place this as a first member and see (by using bloat-o-meter,
-for example) if it saves bytes.
-
-I'm wondering if we have tools like pahole but which suggests the better layout
-based on the code generation... Maybe something along with clang?
-
+diff --git a/drivers/thermal/loongson2_thermal.c b/drivers/thermal/loongson2_thermal.c
+index 6a338e6e490e..9a07409c3bd2 100644
+--- a/drivers/thermal/loongson2_thermal.c
++++ b/drivers/thermal/loongson2_thermal.c
+@@ -56,7 +56,7 @@ static int loongson2_thermal_set(struct loongson2_thermal_data *data,
+ static int loongson2_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+ {
+ 	u32 reg_val;
+-	struct loongson2_thermal_data *data = tz->devdata;
++	struct loongson2_thermal_data *data = thermal_zone_device_priv(tz);
+ 
+ 	reg_val = readl(data->regs + LOONGSON2_TSENSOR_OUT);
+ 	*temp = ((reg_val & 0xff) - 100) * 1000;
+@@ -67,7 +67,7 @@ static int loongson2_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+ static irqreturn_t loongson2_thermal_irq_thread(int irq, void *dev)
+ {
+ 	struct thermal_zone_device *tzd = dev;
+-	struct loongson2_thermal_data *data = tzd->devdata;
++	struct loongson2_thermal_data *data = thermal_zone_device_priv(tzd);
+ 
+ 	/* clear interrupt */
+ 	writeb(0x3, data->regs + LOONGSON2_TSENSOR_STATUS);
+@@ -79,7 +79,7 @@ static irqreturn_t loongson2_thermal_irq_thread(int irq, void *dev)
+ 
+ static int loongson2_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
+ {
+-	struct loongson2_thermal_data *data = tz->devdata;
++	struct loongson2_thermal_data *data = thermal_zone_device_priv(tz);
+ 
+ 	return loongson2_thermal_set(data, low/1000, high/1000, true);
+ }
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.34.1
 
