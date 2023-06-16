@@ -2,102 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56D557337A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 19:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 216E87337AE
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 19:55:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230386AbjFPRuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 13:50:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38438 "EHLO
+        id S232619AbjFPRys convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 16 Jun 2023 13:54:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjFPRuA (ORCPT
+        with ESMTP id S229863AbjFPRyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 13:50:00 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C0AE5D
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 10:49:59 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-98377c5d53eso136673866b.0
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 10:49:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686937798; x=1689529798;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RkOHGgjFE12H6+MF6X5h/ixC045uFWknBhtoxLlJyVs=;
-        b=p7wDqkGq7FKf8ahCriXk9pNRJOV2d2ZDRGS2rG7sWhplEvuiYU/53ceSAZTusBzHoe
-         FHHqh1c234nfFustyplRUiovb9V8n32sPcnr2bMG/MHaknV+df4R0X6e0t1X03GMR5lr
-         U2bm9odM7xn7F1rEl6rdJDSw1SZWTKMWhS4VoeJT9yxQqvdOzvQPocahV/aZ1ztqmkdx
-         NOM417ZlgZNsIHLOyugwIuAYHJneX4jfQS60B/jqt338XMoqxFU3agTkZVHzVETI+7Yo
-         1UjnfIFSEJMZ5aPzieoosbw8bG27Jz5TbwsZbWQShVeziHWcu52ERe5Wyar/2F+uda9i
-         ZnNw==
+        Fri, 16 Jun 2023 13:54:45 -0400
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E71E5D;
+        Fri, 16 Jun 2023 10:54:43 -0700 (PDT)
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-31125a0a7daso137096f8f.1;
+        Fri, 16 Jun 2023 10:54:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686937798; x=1689529798;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RkOHGgjFE12H6+MF6X5h/ixC045uFWknBhtoxLlJyVs=;
-        b=VjZCbdofKnas9/uXa97Tdy4ibgf/bSqyEp0rCjEkY1kwzlQc63gF3bI5X5PDX14OH0
-         JvgsksuadLAdp1pufFHl1ETcFysGHi1pPfHsMzS0Ys1RVi3Xpu4/6CAjT75DDF0lhQ/j
-         POhq9Zl48CSzNzSrE9t98FEVcnWN+D0B21cTC/S8xuIfut8LcB33c4EyZeZZtrqdtWKm
-         sdXVvEcar7p+D+/DueUi29+Mk0MTMLmOqshkwk/E6wP7p+c/fqHoAF34HWAHDySu7OCN
-         Is5Awh1k7WouCXfBaSwUFjrZKH0WqE+B+f9MzYhz6qxf6M+pnoDNg5E7Te8CTc9k5bjo
-         +yqA==
-X-Gm-Message-State: AC+VfDwLoDL2ANYHN6YrUIKn8NZCPtSPeNlwZJM2WsOIdndlI9aeBqwQ
-        5ihvTp577bZzXKbdYr08Soc9gw==
-X-Google-Smtp-Source: ACHHUZ5UAHXiMMVvDvUDkN0RPG9NDnACQFm/5dOHncSz2T7Uj0IE22LEd7yJLy2oPDJlENf9U/IYSA==
-X-Received: by 2002:a17:907:7204:b0:982:2967:cdb8 with SMTP id dr4-20020a170907720400b009822967cdb8mr2644524ejc.71.1686937798120;
-        Fri, 16 Jun 2023 10:49:58 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id qn18-20020a170907211200b00982c33ea394sm1928309ejb.97.2023.06.16.10.49.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jun 2023 10:49:57 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] arm64: dts: qcom: sm8450: correct crypto unit address
-Date:   Fri, 16 Jun 2023 19:49:55 +0200
-Message-Id: <20230616174955.1783652-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20221208; t=1686938082; x=1689530082;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LhkAUTROFaUUjEikGXHSVm/YcnJD9DlZT+Y4hJhL+z0=;
+        b=bXO2KpTppHAXQY9E+7yWBxxyz9Fc1LH7zjxiyMHG8VHxkpHstwod4OIKuGmP7CfIaf
+         m0ZitTkeWmgEoilFBECNYBj85eXn2n0CpZOfjl4W6y4vR47/4SnTz7Qs8wMQyFY6/+65
+         r0cUpbUvxsOmYR3L4N23UqNizmLAWkmRX07e964QikSK6n6yjVizzddXuv6GFoYm81fk
+         K/vrOD9qOw3KK1ZkfMPUIIe/QS0fencltimJwUZF8BfpvMr9RgqM2u8rE4Fmq/4bNDXE
+         Csb7bUTlIwLNoeFy+gK64euVG82o+oj5f3uC68sMCiqCwzfVBVadMud4ep1lrUW39Ona
+         qRhw==
+X-Gm-Message-State: AC+VfDz7EA8DhNrWEPMmOXBPnxLUBvFTri+c7rqyfN1AvKNe3JbS66co
+        6tMV9j43cDQEjtmwsZqr93+CRSPDPD1P3fcju18s09GD
+X-Google-Smtp-Source: ACHHUZ4GozFfjQAmS8xt49p7A3EIRv01rkC6sJDZtVGaVOtCaOHFoLidDYrSkZ6JkgutziWs+L3bB26lPLKrX1fH/cs=
+X-Received: by 2002:a5d:5259:0:b0:2f8:15d8:e627 with SMTP id
+ k25-20020a5d5259000000b002f815d8e627mr1801898wrc.7.1686938082205; Fri, 16 Jun
+ 2023 10:54:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230616174723.148532-1-wyes.karny@amd.com>
+In-Reply-To: <20230616174723.148532-1-wyes.karny@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 16 Jun 2023 19:54:30 +0200
+Message-ID: <CAJZ5v0j+sdo+_3W1xkgSUTshGhTSzjgZpYK=gApUc9f4+dr5Jg@mail.gmail.com>
+Subject: Re: [PATCH] amd-pstate: Make amd-pstate epp driver name hyphenated
+To:     Wyes Karny <wyes.karny@amd.com>
+Cc:     rafael@kernel.org, ray.huang@amd.com, viresh.kumar@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gautham.shenoy@amd.com, Mario.Limonciello@amd.com,
+        Perry.Yuan@amd.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Crypto node unit address should match reg.
+On Fri, Jun 16, 2023 at 7:47 PM Wyes Karny <wyes.karny@amd.com> wrote:
+>
+> amd-pstate passive mode driver is hyphenated. So make amd-pstate active
+> mode driver consistent with that rename "amd_pstate_epp" to
+> "amd-pstate-epp".
+>
+> Cc: stable@vger.kernel.org
+> Fixes: ffa5096a7c33 ("cpufreq: amd-pstate: implement Pstate EPP support for the AMD processors")
+> Acked-by: Huang Rui <ray.huang@amd.com>
+> Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+> Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+> ---
+>  drivers/cpufreq/amd-pstate.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index ddd346a239e0..a5764946434c 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -1356,7 +1356,7 @@ static struct cpufreq_driver amd_pstate_epp_driver = {
+>         .online         = amd_pstate_epp_cpu_online,
+>         .suspend        = amd_pstate_epp_suspend,
+>         .resume         = amd_pstate_epp_resume,
+> -       .name           = "amd_pstate_epp",
+> +       .name           = "amd-pstate-epp",
+>         .attr           = amd_pstate_epp_attr,
+>  };
+>
+> --
 
-Fixes: b92b0d2f7582 ("arm64: dts: qcom: sm8450: add crypto nodes")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8450.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-index 5cd7296c7660..1c71c0a2cd81 100644
---- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -4212,7 +4212,7 @@ cryptobam: dma-controller@1dc4000 {
- 				 <&apps_smmu 0x59f 0x0>;
- 		};
- 
--		crypto: crypto@1de0000 {
-+		crypto: crypto@1dfa000 {
- 			compatible = "qcom,sm8450-qce", "qcom,sm8150-qce", "qcom,qce";
- 			reg = <0 0x01dfa000 0 0x6000>;
- 			dmas = <&cryptobam 4>, <&cryptobam 5>;
--- 
-2.34.1
-
+I've already applied the one you sent previously.
