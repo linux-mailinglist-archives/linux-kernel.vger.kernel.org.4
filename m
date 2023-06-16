@@ -2,105 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6AB4732ADB
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:01:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FF56732AE4
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344069AbjFPJAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 05:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52376 "EHLO
+        id S245649AbjFPJBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 05:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343894AbjFPI7t (ORCPT
+        with ESMTP id S243117AbjFPJAj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 04:59:49 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E412030D1;
-        Fri, 16 Jun 2023 01:59:38 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-9827bd8e0afso65792566b.1;
-        Fri, 16 Jun 2023 01:59:38 -0700 (PDT)
+        Fri, 16 Jun 2023 05:00:39 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D3FB3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 02:00:37 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-75d558c18d0so53382985a.1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 02:00:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686905977; x=1689497977;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=NQxUeJluDhZ+zh34p6pOl/CaDE/BAEwaqQwArt1volI=;
-        b=k0GAcc9btQyliotFHtDvEDISAxjC7DcQiR1ZLq2ExuUjnNYFK5ai2g/z88gEzQb6M0
-         BVsvK7suBVOC3zoI8uwrSa9SbJGgSUM+jN3p71mGbDTZa6V1/DTjN9tEYOJ8bYId7WGC
-         XlNVd7kdxsTVw4x0ZhWgjpDMHBnKuk4lJ6QMr8SsSnWbayBRDt18QlY97tygqYOUs894
-         zKAuk/mi/uERJCmjVBJ91K7soX2EJP2zferNy+seNen5bA5l1x54VYv+4myNfIqADZ7H
-         IkLFDnM0WnU6GGLNL7HIh59sadaPy1LEtbqPGzCgStvyyID3JHBkjDvosxNm20zjysGr
-         2arA==
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1686906037; x=1689498037;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QfA2+PKowVWnFmtQcmcI94eXp8KLOiEHUTtNf0iYmNc=;
+        b=zk5Q6ZFoM2Wchg5beTouETIegNxWUNkCZR0oHoThZVtlGi7deHzXGsGQj64giSnfIW
+         o5N3FUtfhLiLhUNKU7510u9f00olQ1i5qpVUk1eaYdKCTi+Ye5vD5XsV62fnTCDpgc2J
+         l160cllw0jXvsMBzqqEPyVn6RINTrWSUBCjoPMTbTSRPyLNZwtH8WnQseXghsR6Mvy+Z
+         eZxhQJJeMHA/CJOJ8hjbUPQ7wqK12Z+KwbiwoHkVCYQg3dbSzlcMlu8DAhQ9rJCd+Cf9
+         WOuMeg8yTnUUXhjO7lAaLANYUibzszWcd/k1jHj05XvvvRxtoT6KdPGyCRZmsxWyu4sX
+         m54g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686905977; x=1689497977;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NQxUeJluDhZ+zh34p6pOl/CaDE/BAEwaqQwArt1volI=;
-        b=lRzq/BIWz/12qNGsgFIEMk3K/naEHRSDw6Q7OCIxeL5XA31JOOxlJqZyD8znyYpCEI
-         Avc/Rs0hqiV/ZqdvivB22kEFiyefYuOEr8RHn/PnYaM58svF9l1v/1WAX57H2HSwZ4fb
-         wwVNElUAfSSxrIa4v6Z4QR6LfcFfTXWm15wSV5o29l3mFrssrg1I9JuGtVIxsWZGjFNk
-         Kk5IdurmphOMhrvhePwTkppqCqkr8PKqh1OOVWsIJ+VsakRFVwPQ4HfYnNnkvW081E8N
-         2bqp7YpUrUJUVnMhMe7p1fTxc9+MhanyOlr4E1O2GmbHJUQOPXEMLp3j46C8v8IbuR61
-         M3zQ==
-X-Gm-Message-State: AC+VfDxKK0LMRjGkEphSAg0bcGoSZyYVwRucmakimcf3o4EiPEkJCMMJ
-        A8EBGNZ28vK5L1PVcaaxPP8=
-X-Google-Smtp-Source: ACHHUZ4xiz4jftf6X9cpZn7GcY35ix4lZRoU57wKfH73RnCZYWSJPQEriDhCEFl170zL/hBvndfrrQ==
-X-Received: by 2002:a17:907:783:b0:982:c8d0:683f with SMTP id xd3-20020a170907078300b00982c8d0683fmr1256009ejb.18.1686905977096;
-        Fri, 16 Jun 2023 01:59:37 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id oq19-20020a170906cc9300b00977e0bcff1esm10578129ejb.10.2023.06.16.01.59.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jun 2023 01:59:36 -0700 (PDT)
-Date:   Fri, 16 Jun 2023 11:59:33 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     frank-w@public-files.de, arinc9.unal@gmail.com,
-        Daniel Golle <daniel@makrotopia.org>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net v5 4/6] net: dsa: mt7530: fix handling of LLDP frames
-Message-ID: <20230616085933.3im44mrpeduhmvqt@skbuf>
-References: <20230616025327.12652-1-arinc.unal@arinc9.com>
- <20230616025327.12652-5-arinc.unal@arinc9.com>
- <CFD0E43B-1D0F-4BC3-8DB8-8CFA09F8AA94@public-files.de>
- <44531D5A-9219-44CC-9197-DD59E9506453@arinc9.com>
+        d=1e100.net; s=20221208; t=1686906037; x=1689498037;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QfA2+PKowVWnFmtQcmcI94eXp8KLOiEHUTtNf0iYmNc=;
+        b=jLBiiWbu75Zc28/9iIU71LkUY58kxK4wYA5ykR2qGG9LbCCaKs24Vl8ysqey/VAsIJ
+         eWQ5o1Z7kylcjy+PApYTtn4YTiYH7OvPTuXD7rdljkWI1YjQVlyuuUOERYUk37yekVSq
+         s+1zSFrL/2fdqLroZzKy7SJIIz6nDrUsbhFUJCQ8BJEFNB5CUBPjtbSOH5Hs/S0mA7WU
+         cU3OxOM5mBoCxdRpeVpwk/12dUFNJzz/4etIhQ9ym3M6Kv3sZdvSKfPeFH9HP6f/7GrG
+         ed5Ww+n4H6eL/k8hP4TbbQWygGqG2vZsnc9mp6xdxX9vyF/cYviH7ZMBqxKAtwv1GW3r
+         cmaA==
+X-Gm-Message-State: AC+VfDytwlvGF13Jnq7KOapEGHHvm7/MRRkAQ1vdENcTD3B2QXigulAW
+        Z0JZHG2XwgrNsgik4Mw7H1XAr2uGhWyuOf5Ln1L2cKqSTEGwyull
+X-Google-Smtp-Source: ACHHUZ7e+R7mXzqeL8J8PJ/VKESbKvX+0rlaG0kmR8fYR+mOZB0JPcGQ8kdCUOAGldHsfTuqdSPUhoHlYE+drMvV+w0=
+X-Received: by 2002:ae9:f447:0:b0:762:148:6d68 with SMTP id
+ z7-20020ae9f447000000b0076201486d68mr970467qkl.9.1686906037026; Fri, 16 Jun
+ 2023 02:00:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <44531D5A-9219-44CC-9197-DD59E9506453@arinc9.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230615132023.13801-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230615132023.13801-1-andriy.shevchenko@linux.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Fri, 16 Jun 2023 11:00:26 +0200
+Message-ID: <CAMRc=Me1Gy6rpKQ=7LZ3qZG+TdBbpsQ=QGQqZ0G6tJnp1HqtSQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/5] gpio: aggregator: Incorporate gpio-delay functionality
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Andy Shevchenko <andy@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 09:21:40AM +0300, Arınç ÜNAL wrote:
-> On 16 June 2023 08:44:32 GMT+03:00, Frank Wunderlich <frank-w@public-files.de> wrote:
-> >Am 16. Juni 2023 04:53:25 MESZ schrieb arinc9.unal@gmail.com:
-> >I though these 2 hunks should go into some common function
-> 
-> Like I said, I will do that on my net-next patch series.
-> 
-> Arınç
+On Thu, Jun 15, 2023 at 3:51=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> The newly appeared gpio-delay module enables external signal delay lines
+> that may be connected to the GPIOs. But at the same time it copies the
+> GPIO forwarder functionality. Besides that the approach does not scale.
+> If we would have another external component, we would need yet another
+> driver. That's why I think, and seems others support me, better to
+> enable such a functionality inside GPIO aggregator driver.
+>
+> Patch 1 is a cleanup that may be applied independently on the decision
+> about the rest.
+>
+> Please, test and comment! Alexander, I would appreciate your tag.
+>
+> In v3:
+> - added new patch 3 to prevent device removal from sysfs
+> - switched to feature in driver data instead of "compatible" (Geert)
+> - applied tags (Geert, Linus)
+> - left DT bindings untouched, can be amended later on
+>
+> In v2:
+> - split as a series
+> - covered CONFIG_OF_GPIO=3Dn case
+> - removed the gpio-delay
+> - moved gpio-delay Kconfig help to the comment in the code
+> - left udelay() call untouched as recommended by documentation
+>
+> Andy Shevchenko (5):
+>   gpio: aggregator: Remove CONFIG_OF and of_match_ptr() protections
+>   gpio: aggregator: Support delay for setting up individual GPIOs
+>   gpio: aggregator: Prevent collisions between DT and user device IDs
+>   gpio: aggregator: Set up a parser of delay line parameters
+>   gpio: delay: Remove duplicative functionality
+>
+>  drivers/gpio/Kconfig           |   9 --
+>  drivers/gpio/Makefile          |   1 -
+>  drivers/gpio/gpio-aggregator.c | 113 +++++++++++++++++++++--
+>  drivers/gpio/gpio-delay.c      | 164 ---------------------------------
+>  4 files changed, 106 insertions(+), 181 deletions(-)
+>  delete mode 100644 drivers/gpio/gpio-delay.c
+>
+> --
+> 2.40.0.1.gaa8946217a0b
+>
 
-Please create a common function now.
+Applied patches 1, 2, 4 and 5. Thanks!
+
+Bart
