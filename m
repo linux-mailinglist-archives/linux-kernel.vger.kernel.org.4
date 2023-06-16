@@ -2,210 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 332A2733231
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 15:30:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 731D0733239
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 15:32:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbjFPNas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 09:30:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
+        id S245385AbjFPNcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 09:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232711AbjFPNao (ORCPT
+        with ESMTP id S229912AbjFPNcL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 09:30:44 -0400
-Received: from h7.fbrelay.privateemail.com (h7.fbrelay.privateemail.com [162.0.218.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7B93592;
-        Fri, 16 Jun 2023 06:30:42 -0700 (PDT)
-Received: from MTA-08-3.privateemail.com (unknown [198.54.122.141])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by h7.fbrelay.privateemail.com (Postfix) with ESMTPSA id 32AFF60605;
-        Fri, 16 Jun 2023 09:30:36 -0400 (EDT)
-Received: from mta-08.privateemail.com (localhost [127.0.0.1])
-        by mta-08.privateemail.com (Postfix) with ESMTP id 0A23818000AA;
-        Fri, 16 Jun 2023 09:30:34 -0400 (EDT)
-Received: from [192.168.2.177] (unknown [174.93.80.116])
-        by mta-08.privateemail.com (Postfix) with ESMTPA id 330F918000B0;
-        Fri, 16 Jun 2023 09:30:30 -0400 (EDT)
-Date:   Fri, 16 Jun 2023 09:30:20 -0400
-From:   Hamza Mahfooz <someguy@effective-light.com>
-Subject: Re: KVM page-fault on Kernel 6.3.8
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     kvm@vger.kernel.org, regressions@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Message-Id: <KILCWR.RYN9YNJ7Y2UK@effective-light.com>
-In-Reply-To: <ZIxaRLIfCQ6IK8S1@debian.me>
-References: <L2ZBWR.TERFR10NPZ281@effective-light.com>
-        <ZIxaRLIfCQ6IK8S1@debian.me>
-X-Mailer: geary/43.0
+        Fri, 16 Jun 2023 09:32:11 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2058.outbound.protection.outlook.com [40.107.8.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF4F1993;
+        Fri, 16 Jun 2023 06:32:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=l/ghjbNLz2DTXM61G4fA8xbjtGvCl7ynT9mVvWwymM5P+bT2mdu4/Je7ZjDe8JiFRkEY599xczETfkxwU5AYNPsWRIkEQiyv1IB8to93yKDToUFmNqDcLavQ7V46K7MnfBaL84cERT3cVak4Lzx0hD5tLs1CH2HreLBeErvX4v30mgYvzAOpe+LPwLfIC110XpA25hxZC2dCHyNdMk81hMqWc84BnsMP1qBv+zgLTg/stumK7sT8KTgZBswxaVeSNjghnGiVZcxEi4aP+b6Z4gBljUVmDqvt4+POjVzykQ5EVfTMfarJnFmhuvUAeD57nTyOeFumE66qbZvehnzPcA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NOQCXQXiXnBl4TV9sBNUJ2fekKMtpCDtdbNmNIODdt0=;
+ b=J0BIV60c+iguX2UeuyENk4ASbg3Z+lWlrqeYFXnzWoQzzmzoz24IuHFk4OOrFDbHAlAj3D4wE5/YBE0MYFMYbMY9tUzlbXEiyu6fXqsGngIMcuKbPD6eTMPvwBidp4GXEhheTHGsAwkJMkiyOGLuQfqHn9IRdkWWx9IKtOzdgxtl88ZspEK308UwjwZ360nw05LvYiUaGXFyzgHzE1yU6r+g5oN6uWofDZnmXZ0nUGRGQy4mdaqD9wVLjmemPWy77t4drjbQVuN/URsvH9GoqG03YiVPwo2VCEBBWpSxuwxH3zlxJ+s4Lo1GlaZUOPJpqUZlNRC/DHmS84+53ZKI9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=solid-run.com; dmarc=pass action=none
+ header.from=solid-run.com; dkim=pass header.d=solid-run.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=solidrn.onmicrosoft.com; s=selector1-solidrn-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NOQCXQXiXnBl4TV9sBNUJ2fekKMtpCDtdbNmNIODdt0=;
+ b=qJenMIASjEca2y7S13YXABXuMdX3vn7XI3NnpcP6Gt08P7KD7fEBDteWu1L/hL9A2x0QRjneywphHtQ1GGqWN8hPPuSJt5mj51gnH2SNfVXyON/6rDioop4cjmY0FhAsUs8gyncGdpVRB+qLjd+sDkAQhl0/urcRxao4MgBSEH4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=solid-run.com;
+Received: from AS8PR04MB8963.eurprd04.prod.outlook.com (2603:10a6:20b:42e::18)
+ by AM7PR04MB6840.eurprd04.prod.outlook.com (2603:10a6:20b:10f::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.29; Fri, 16 Jun
+ 2023 13:32:07 +0000
+Received: from AS8PR04MB8963.eurprd04.prod.outlook.com
+ ([fe80::5a4:421d:f180:9105]) by AS8PR04MB8963.eurprd04.prod.outlook.com
+ ([fe80::5a4:421d:f180:9105%6]) with mapi id 15.20.6500.025; Fri, 16 Jun 2023
+ 13:32:07 +0000
+Message-ID: <5139b72e-cccb-43b3-ba37-35f0011e4a2b@solid-run.com>
+Date:   Fri, 16 Jun 2023 16:32:01 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 2/3] dt-bindings: arm: Add SolidRun LX2162A SoM & Clearfog
+ Board
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Li Yang <leoyang.li@nxp.com>, Marek Vasut <marex@denx.de>,
+        Fabio Estevam <festevam@denx.de>,
+        Stefan Wahren <stefan.wahren@chargebyte.com>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Andreas Kemnade <andreas@kemnade.info>
+References: <20230616110610.32173-1-josua@solid-run.com>
+ <20230616110610.32173-3-josua@solid-run.com>
+ <a9098664-ac16-eddb-3e2d-78eb08ac973f@linaro.org>
+From:   Josua Mayer <josua@solid-run.com>
+In-Reply-To: <a9098664-ac16-eddb-3e2d-78eb08ac973f@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR2P281CA0075.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9a::17) To AS8PR04MB8963.eurprd04.prod.outlook.com
+ (2603:10a6:20b:42e::18)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS8PR04MB8963:EE_|AM7PR04MB6840:EE_
+X-MS-Office365-Filtering-Correlation-Id: acbaa567-7786-4868-7210-08db6e6e1462
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: oQva8IGnayGJoEI1EXUpLvGMtcE8ByfE8KcuF6iEBnD2en4QfQjcesbGjtd/2ItLwyFEQbL8Z02PDrTuxsxgqlUAsN0jbVu3OESFAwdFj7yDtn3M2gSaNCOBj6yUdcgoJ7yjFOuuU8APnvr0wNUn0HZAY6aPN/KGIT2a8oVKsUU6qc93UuHap/sj4+6LB/t7Zu4rk3ytvF2OIex/DUhmeVBeh2t4oMCuWi2ZQtcl+Bm7SjmQ5SyDnyI4VdCk/K9LHPuAdVhHbjLM+ZrgrWyPay5Tq+3uKH2XqStKmZxRSIAAdnnpW5lVfN7mEpfEFWkYBEX5+2jIxyptts2SSSaU67GjUVADmSEXiAwW6rnqBPbBVugT/heKQBPA0QO9TinCDvU5PSleoLXlsXRDVEsGpbff9PwpJBXy6FH2YzLO1ozCV58Jz2X+wyFos8Ur3S9SB+zpLLaF4Wg4ZJLudDunv4w5jeZWkG+Gg/8M3SValwlF3EVeY1riI6hlOqkWfnyAt3xN6JvjANIufiakGElPvc7xn9Goqm2k6yEKsiYwGEY6R4NuarJNJ4xbjcgc+nXKiQEKpeBNsWOFTP+h/vql5zywfsXMlpAmmxhQcTwUNaoCpsZa2fa29VUmB6nUN4nPW/40WAtLnSNO4zNkSGGAnQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8963.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(136003)(396003)(346002)(39830400003)(366004)(451199021)(38100700002)(2616005)(83380400001)(2906002)(36756003)(8936002)(6486002)(8676002)(41300700001)(316002)(6666004)(5660300002)(54906003)(4326008)(66556008)(66476007)(66946007)(31686004)(478600001)(86362001)(53546011)(6506007)(186003)(7416002)(31696002)(6512007)(26005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cDgxZFJjUElWM3A4U3BHeUkzVnZheUtmcUJ2Zk55c2VXZnptNW9oRm55M2kz?=
+ =?utf-8?B?YjhxWEU1UmR4ajluSWJxYUpTWmlhY2szaHkyUVJoa2FtdGkwQThFT3ZDT09a?=
+ =?utf-8?B?MTAvcEx2cm1yM0Y1MmlNSDc2d3dnbEttcGovMG1hSTVUNGVkMWpqRFF6eU0z?=
+ =?utf-8?B?U2dIUmtWMDdHS0pnMFJwUXpRQ2JlUDEyTVhWRm02WFdmNnRPMnZVOGFkdUgw?=
+ =?utf-8?B?bnZMUDVxeUlDaW9OdjRxWnFYalhKby8yRk9RZElVWXNlM0tNYmpETlhhSFFu?=
+ =?utf-8?B?VnIrcFhTeDhmSGREYWxVR0pCVWNEaEZVZ3g2K0o3QmFzTldNaDlVSzhGOThG?=
+ =?utf-8?B?cVZsQ0pRU1docUxSV1I1TzQwYWpkaVgvVWhiWjhtNHRwOHhING9BVGtZYS84?=
+ =?utf-8?B?ekJRV0NnNVA4RlYybWNxNHk2M2NaRTVaeFBMdFdjME9XdUFjMkJORVZWVmkz?=
+ =?utf-8?B?TE53OHJ2ekw1eW5wZmFSTmR6NGtRZWZrSElZNXBFR29OLysvd1FLWjZWKzM3?=
+ =?utf-8?B?VXdYT0dVRWZkb1piZTlubkE2Y1RHdHFySk1KZm9lWWRmYlZBdDRiRXlYdUJk?=
+ =?utf-8?B?R0dsenN1M0V0Q1VRZFpyZ2FUYWFET3B3Tzk5T0lROEllbGpBK05jSU1hb2pO?=
+ =?utf-8?B?RzBRYlZ3WllpZnAzSmhPdXNKSTNsY1FLZm41cVFzakdxODVzaDlmWWxPdG1h?=
+ =?utf-8?B?dkU2c3J6ald1STRIUWRyaTRpQUtkZFYwZGUvTjV5U1JUajA3NmgxeWJtRUtz?=
+ =?utf-8?B?OXQ5WWd4aERXVWpvM25mRmU1VXRPUndUcXZrNnEvM0g2SnFOVUhPQUNMRlhS?=
+ =?utf-8?B?RkhoT3RNVFpxcGRBRGJRL2pQNzdZOUZZSjdHdDlPZEgzQm9EOUVBODlxa3p4?=
+ =?utf-8?B?THdObUlyWm0rOSt1aW81YVlKcFJXMy95b212S2pPOU5YSkQzdzU2dWMzVHhh?=
+ =?utf-8?B?ckxENElIOCtCZXMxZW1XU1R0cm9mVDNlNjA4b3Bqbzl5TzR3QUxUVm5DcWxV?=
+ =?utf-8?B?dEJnOCtRVktXbmVpT3AzdTRCemVMRW9EQnB5NXZaWWR1VURjTCsxb0FZdGJR?=
+ =?utf-8?B?U1E3L0JFTlBlazZESkQvN0w2eHNhZkplSFdITEozVFpjc3NjRW5kdjhCL2NY?=
+ =?utf-8?B?YnRRZXB4cUNFcVhFQk1hc3kyVTVGQlBGQ3hCWngrc1RUU2FWQXFjajRwOTJy?=
+ =?utf-8?B?VUdtRWhUSU84NXRocDFiUElILzRLeU9NVVkxcElFRTRkYndHdkZ6b0VPTHZW?=
+ =?utf-8?B?ckZXRzlhTlJ6a05jK0FUdnYxeXN0R3RDZERzYkpPWkFsSnVpbkxzSFZrMEFB?=
+ =?utf-8?B?NThpZjBuOHpzYzB0dFRtTXVjKzNJU3J0dmhMeXBHK1VGSkpFS1pMSDRYZTd4?=
+ =?utf-8?B?YjgxN3lFL1hIU1ErbjVLV1BwMG9VVlZVVEFQVzlhVEdpSXY5ZkNwMGRyc0o5?=
+ =?utf-8?B?Uy9WQmtETVJwUWJpOXl6RjF3VTFobmV3dHRMTUdYZUNNOUJXRjFaT3daWHNF?=
+ =?utf-8?B?cGxGMnMrL1grU24xbGYwWjZ0dGNjRXNCdFdSMnRzTHVVV09vbHFCV1l5QU5W?=
+ =?utf-8?B?aWIvcmU0SVFOeGEwSlFaODJtd3drQ1k3djdOdzdjRDRBbzNHYnRxWlN5ZUM4?=
+ =?utf-8?B?VGtpc29jWG9nQ0oxTWV6NTBvSnBleEJpQ1Y0VWFzZW5YZVNJUktGemY3ZGZQ?=
+ =?utf-8?B?dDhqSU85L2JVQmxGdDVCZVEzN1NzS2k2U0k3OEVRQWtxZ1F4UVNGVlAzb3ZX?=
+ =?utf-8?B?SkRGT1I0b2NQbngyTGJZZllMRTBHTTVSUDM0b1lrZFU1WXB2TVkyTGZPa0FQ?=
+ =?utf-8?B?ZFZodmVpR2pBVVZTelc0OVhhcDJ6aUZYaWFYRUxtTXVZdVlKdTFDUWpoYko0?=
+ =?utf-8?B?d2I4NG9YOG85NHJ6MC9xNE9NSEwzcW45enFRVGh3Z0FJVWZWZUVSNm1mWHlh?=
+ =?utf-8?B?ai9SRWZCK09iWlhDNks4VEJtbzRqOHo3dXVCSkU0TG5CQXE3cGFSaHAvRjBs?=
+ =?utf-8?B?QnE5VGw4SWxpMXRVUWVDVWxtM3ViSWpZNVBnVkg4SXlGRWNNR3hReksyNDFx?=
+ =?utf-8?B?VXN3WTJwUlhxWmZWQU51ZE5YM0tOVktNbC9DNk15KzZYTStjbHBBb09FQVRW?=
+ =?utf-8?Q?lJ1GjRlNrLPpHp97MOhbRWkPX?=
+X-OriginatorOrg: solid-run.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: acbaa567-7786-4868-7210-08db6e6e1462
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8963.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 13:32:07.2958
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: a4a8aaf3-fd27-4e27-add2-604707ce5b82
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: O21qSd2Vn6WZyi1iCDpTEidfYEMi5w/iLO4Cvn7N8fZwfGtkrbi8UuaFPtJJSOBb0GFFYcfjj/bFqb43jntJKA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6840
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+HI Krzysztof,
 
-On Fri, Jun 16 2023 at 07:49:08 PM +07:00:00, Bagas Sanjaya 
-<bagasdotme@gmail.com> wrote:
-> On Fri, Jun 16, 2023 at 01:25:33AM -0400, Hamza Mahfooz wrote:
->>  I am seeing the following page-fault on the latest stable kernel:
->> 
->>  BUG: unable to handle page fault for address: ffffb4ff0cd20034
->>  #PF: supervisor read access in kernel mode
->>  #PF: error_code(0x0000) - not-present page
->>  PGD 10002a067 P4D 10002a067 PUD 0
->>  Oops: 0000 [#1] PREEMPT SMP NOPTI
->>  CPU: 7 PID: 2675 Comm: CPU 7/KVM Not tainted 6.3.8-arch1-1 #1
->>  a1d299e746aebdb27c523dd3bd94aba6f54915c7
->>  Hardware name: ASUS System Product Name/ProArt X670E-CREATOR WIFI, 
->> BIOS 1303
->>  04/27/2023
->>  RIP: 0010:try_grab_folio+0x14f/0x370
->>  Code: 83 f8 04 75 6f 44 89 ee 4c 89 e7 e8 6b bc 0b 00 84 c0 74 60 
->> 4c 8b 63
->>  08 41 f6 c4 01 0f 85 b0 01 00 00 0f 1f 44 00 00 49 89 dc <41> 8b 44 
->> 24 34 85
->>  c0 0f 88 f8 00 00 00 41 8b 44 24 34 85 c0 74 58
->>  RSP: 0018:ffff9fa98504b948 EFLAGS: 00010086
->>  RAX: 0000000000000002 RBX: fffff4ff0cd21480 RCX: 0000000000000000
->>  RDX: 0000000000000003 RSI: 0000000000000001 RDI: fffff4ff0cd21480
->>  RBP: 0000000000000000 R08: ffff8b2edb510980 R09: 00007f5624253000
->>  R10: 80000003348008e7 R11: 00007f5624253000 R12: ffffb4ff0cd20000
->>  R13: 0000000000000001 R14: 0000000000000003 R15: 0000000000000001
->>  FS: 00007f548a7fc6c0(0000) GS:ffff8b35f83c0000(0000) 
->> knlGS:0000000000000000
->>  CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>  CR2: ffffb4ff0cd20034 CR3: 0000000113e70000 CR4: 0000000000750ee0
->>  PKRU: 55555554
->>  Call Trace:
->>  <TASK>
->>  ? __die+0x23/0x70
->>  ? page_fault_oops+0x171/0x4e0
->>  ? exc_page_fault+0x172/0x180
->>  ? asm_exc_page_fault+0x26/0x30
->>  ? try_grab_folio+0x14f/0x370
->>  internal_get_user_pages_fast+0x883/0x1150
->>  __iov_iter_get_pages_alloc+0xdd/0x780
->>  ? kmem_cache_alloc+0x16f/0x330
->>  ? bio_associate_blkg_from_css+0xcd/0x340
->>  iov_iter_get_pages+0x1d/0x40
->>  bio_iov_iter_get_pages+0xa1/0x480
->>  __blkdev_direct_IO_async+0xc5/0x1b0
->>  blkdev_read_iter+0x127/0x1d0
->>  aio_read+0x132/0x210
->>  ? io_submit_one+0x46a/0x8b0
->>  io_submit_one+0x46a/0x8b0
->>  ? kvm_arch_vcpu_put+0x128/0x190 [kvm
->>  711ceda1c40511ce22d1f99f4e9e574def76b25e]
->>  ? kvm_arch_vcpu_ioctl_run+0x579/0x1770 [kvm
->>  711ceda1c40511ce22d1f99f4e9e574def76b25e]
->>  __x64_sys_io_submit+0xad/0x190
->>  do_syscall_64+0x5d/0x90
->>  ? __x64_sys_ioctl+0xac/0xd0
->>  ? syscall_exit_to_user_mode+0x1b/0x40
->>  ? do_syscall_64+0x6c/0x90
->>  ? syscall_exit_to_user_mode+0x1b/0x40
->>  ? do_syscall_64+0x6c/0x90
->>  ? syscall_exit_to_user_mode+0x1b/0x40
->>  ? do_syscall_64+0x6c/0x90
->>  ? syscall_exit_to_user_mode+0x1b/0x40
->>  ? do_syscall_64+0x6c/0x90
->>  ? do_syscall_64+0x6c/0x90
->>  entry_SYSCALL_64_after_hwframe+0x72/0xdc
->>  RIP: 0033:0x7f57ac0912ed
->>  Code: 5d c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 48 89 f8 
->> 48 89 f7
->>  48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 
->> f0 ff ff
->>  73 01 c3 48 8b 0d 3b 7a 0d 00 f7 d8 64 89 01 48
->>  RSP: 002b:00007f5427ab97b8 EFLAGS: 00000246 ORIG_RAX: 
->> 00000000000000d1
->>  RAX: ffffffffffffffda RBX: 00007f548a7fc1d0 RCX: 00007f57ac0912ed
->>  RDX: 00007f5427ab9800 RSI: 0000000000000001 RDI: 00007f57a9d24000
->>  RBP: 00007f57a9d24000 R08: 0000000000000001 R09: 0000000000000001
->>  R10: 00007f54740044f0 R11: 0000000000000246 R12: 0000000000000001
->>  R13: 0000000000000004 R14: 00007f5427ab9800 R15: 000000000000000e
->>  </TASK>
->>  Modules linked in: hid_playstation led_class_multicolor ff_memless 
->> tun
->>  snd_seq_dummy snd_hrtimer snd_seq xt_CHECKSUM xt_MASQUERADE 
->> xt_conntrack
->>  ipt_REJECT nf_reject_ipv4 xt_tcpudp nft_compat nft_chain_nat nf_nat
->>  nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 nf_tables libcrc32c 
->> nfnetlink
->>  bridge stp llc vfat fat snd_hda_codec_realtek snd_hda_codec_generic 
->> mt7921e
->>  snd_hda_codec_hdmi mt7921_common snd_usb_audio intel_rapl_msr
->>  mt76_connac_lib snd_hda_intel intel_rapl_common snd_intel_dspcfg 
->> mt76
->>  snd_usbmidi_lib btusb snd_intel_sdw_acpi edac_mce_amd snd_rawmidi 
->> btrtl
->>  snd_hda_codec btbcm snd_seq_device btintel snd_hda_core kvm_amd mc 
->> snd_hwdep
->>  eeepc_wmi btmtk snd_pcm asus_wmi kvm mac80211 bluetooth 
->> ledtrig_audio
->>  atlantic snd_timer i8042 sparse_keymap libarc4 ecdh_generic rapl
->>  platform_profile serio intel_wmi_thunderbolt i2c_piix4 wmi_bmof 
->> pcspkr
->>  k10temp thunderbolt snd igc ucsi_acpi macsec soundcore cfg80211 
->> typec_ucsi
->>  mousedev joydev typec roles rfkill gpio_amdpt acpi_cpufreq 
->> gpio_generic
->>  mac_hid dm_multipath
->>  crypto_user fuse loop bpf_preload ip_tables x_tables ext4 
->> crc32c_generic
->>  crc16 mbcache jbd2 dm_crypt cbc encrypted_keys trusted asn1_encoder 
->> tee
->>  dm_mod hid_logitech_hidpp hid_logitech_dj usbhid amdgpu 
->> crct10dif_pclmul
->>  crc32_pclmul crc32c_intel polyval_clmulni polyval_generic 
->> i2c_algo_bit
->>  drm_ttm_helper gf128mul nvme ghash_clmulni_intel ttm sha512_ssse3 
->> drm_buddy
->>  aesni_intel gpu_sched crypto_simd nvme_core drm_display_helper 
->> cryptd ccp
->>  xhci_pci cec nvme_common xhci_pci_renesas video wmi vfio_pci 
->> vfio_pci_core
->>  irqbypass vfio_iommu_type1 vfio iommufd
->>  CR2: ffffb4ff0cd20034
->>  ---[ end trace 0000000000000000 ]---
->>  RIP: 0010:try_grab_folio+0x14f/0x370
->>  Code: 83 f8 04 75 6f 44 89 ee 4c 89 e7 e8 6b bc 0b 00 84 c0 74 60 
->> 4c 8b 63
->>  08 41 f6 c4 01 0f 85 b0 01 00 00 0f 1f 44 00 00 49 89 dc <41> 8b 44 
->> 24 34 85
->>  c0 0f 88 f8 00 00 00 41 8b 44 24 34 85 c0 74 58
->>  RSP: 0018:ffff9fa98504b948 EFLAGS: 00010086
->>  RAX: 0000000000000002 RBX: fffff4ff0cd21480 RCX: 0000000000000000
->>  RDX: 0000000000000003 RSI: 0000000000000001 RDI: fffff4ff0cd21480
->>  RBP: 0000000000000000 R08: ffff8b2edb510980 R09: 00007f5624253000
->>  R10: 80000003348008e7 R11: 00007f5624253000 R12: ffffb4ff0cd20000
->>  R13: 0000000000000001 R14: 0000000000000003 R15: 0000000000000001
->>  FS: 00007f548a7fc6c0(0000) GS:ffff8b35f83c0000(0000) 
->> knlGS:0000000000000000
->>  CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>  CR2: ffffb4ff0cd20034 CR3: 0000000113e70000 CR4: 0000000000750ee0
->>  PKRU: 55555554
->>  note: CPU 7/KVM[2675] exited with irqs disabled
->> 
->>  It seems to appear randomly, so bisecting it would probably be
->>  difficult. Also, as far as I can tell it seems to be a recent
->>  regression (i.e. it was introduced in one of the 6.3.y releases).
->> 
->> 
-> 
-> So v6.2.y looks fine (doesn't have this regression)?
+Am 16.06.23 um 14:36 schrieb Krzysztof Kozlowski:
+> On 16/06/2023 13:06, Josua Mayer wrote:
+>> Add DT compatible for SolidRun LX2162A SoM and Clearfog board.
+>>
+>> Signed-off-by: Josua Mayer <josua@solid-run.com>
+>> ---
+>>   Documentation/devicetree/bindings/arm/fsl.yaml | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+>> index 15d411084065..438a4ece8157 100644
+>> --- a/Documentation/devicetree/bindings/arm/fsl.yaml
+>> +++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+>> @@ -1373,9 +1373,11 @@ properties:
+>>         - description: SolidRun LX2160A based Boards
+>>           items:
+>>             - enum:
+>> +              - solidrun,clearfog
+>>                 - solidrun,clearfog-cx
+>>                 - solidrun,honeycomb
+>>             - const: solidrun,lx2160a-cex7
+>> +          - const: solidrun,lx2162a-som
+>>             - const: fsl,lx2160a
+> You change existing entries, breaking boards and changing the meaning,
+> without any explanation in commit msg. That's not how it is done. Please
+> provide rationale in commit msg.
 
-Yes, I didn't see this issue on v6.2.y.
+I'm sorry. Given your comment I think I did not understand how these 
+entries are supposed to work.
+So perhaps you can provide some guidance based on my explanation?:
 
-> 
-> --
-> An old man doll... just what I always wanted! - Clara
+- NXP LX2162 is a smaller physical package of the same LX2160 SoC, with 
+reduced IOs and some silicon blocks disabled.
+- SolidRun LX2162 SoM is essentially a different form factor of LX2160 CEX
+- SolidRun LX2162 Clearfog is the reference platform for the SoM. 
+Despite it's naming similarity to clearfog-cx, it has a different 
+feature set more similar to SolidRun Armada 388 Clearfog Pro
 
+So I believed I could just add to the existing entry "SolidRun LX2160A 
+based Boards" also the new LX2162 Board & SoM.
+I see now that adding a fourth const messes upthe existing 3-part 
+compatible for those already existing boards.
 
+Please can you confirm if it would have been more correct to replace 
+"const: solidrun,lx2160a-cex7" with an enum?:
+enum:
+   - solidrun,lx2160a-cex7
+   - solidrun,lx2162a-som
+
+Finally, is it okay to add a "solidrun,clearfog" given my explanation 
+above, or should it be more specific "solidrun,lx2162a-clearfog"?
+
+> Best regards,
+> Krzysztof
+Sincerely
+Josua Mayer
