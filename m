@@ -2,53 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D269973398F
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 21:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA38F73398C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 21:19:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231985AbjFPTTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 15:19:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
+        id S1346160AbjFPTTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 15:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346024AbjFPTRM (ORCPT
+        with ESMTP id S1346005AbjFPTRL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 15:17:12 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF7735BE;
+        Fri, 16 Jun 2023 15:17:11 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3573F35A7;
         Fri, 16 Jun 2023 12:17:05 -0700 (PDT)
 Date:   Fri, 16 Jun 2023 19:17:03 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686943024;
+        s=2020; t=1686943023;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=/PkYnwZHvA9R0Rr8RRhOMXpM27E9VSJU1o+FvZVv4N0=;
-        b=CWR/2lhEPeuCobe0pSA1wWkoItZVL/MShcpAMFjSL1o266nu3aMJSBmX4yNnc8nLfbq0pJ
-        FdOe3yP0csf3PhDpwLknzWvBOXoeHIAEy2duINs1FeWZT+zG/+Kir5tqi1Q4866v8SMfkQ
-        025cEjQJ3V8B02GvDlGVs/51pV0ICyTzvkMucKWQo7a3cFoGxHakVcy7PxvTeQns3aLbce
-        evtNsS509R7I2mIsu4R2h/wKwQ6k1JnkLz850xHIgN1oIlUszzSYU5gPsMEiEdDb9MQrJE
-        6Qe17kfHYnZJWkld5FdeiNgl4Lyhq8IRy2elVR1loqtfLDsCms+2cRkkyEEzHg==
+        bh=BYKFeatUBoOPBvwxlIsSnk4Tb5+E9gS0xg4pcEolCM8=;
+        b=s3zyMKQs5qadjoAxqNan5FqTshvHBULaLv1BvKrLCYWiEYSiD1wvLdl8lRvYVuI0I/TE9d
+        o6CwInak3jw3rAcA0LCznFqR3q4TfLTY+RoWcbZXIon1AnPvocrWYeuYO8QPNH5H/nI+6L
+        1Sab8SVKOHo3hJfi367hrKDBEtVruAFCLNmDXmChjOp2ErrcKBWo9LzUGBc+KWqyISWBZy
+        6/8V6dKUHW4eiS8mumt11CbejYty19PfYroSLBuhJ9LsI4/MjRRDIYMBLP7xnzHV2YmtjC
+        XdfhM9IqUc3Vn97Jx0vE6pI3aXGuEHZJ8wWfzhEO7pjCaCwJ68tM1HMlaHf/yQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686943024;
+        s=2020e; t=1686943023;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=/PkYnwZHvA9R0Rr8RRhOMXpM27E9VSJU1o+FvZVv4N0=;
-        b=TWcoTihV4Rvb/GxYDCsENifh3wOSD+tsf+5sjeWxGaC+j+H8aV5g1nVofSHLvkJ+iabOsC
-        mXDXJ7eSTCgK6FDw==
+        bh=BYKFeatUBoOPBvwxlIsSnk4Tb5+E9gS0xg4pcEolCM8=;
+        b=lzJpGUNQyzbZ6/cHLFrXn2+pzq3vHq7wgh8sduZt7KxquLNy6a0Nmh7gU5j01NgNuiDUzD
+        Z5hWBBtyMHrLW3Cw==
 From:   "tip-bot2 for Rick Edgecombe" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/shstk] x86/mm: Introduce _PAGE_SAVED_DIRTY
+Subject: [tip: x86/shstk] x86/mm: Update ptep/pmdp_set_wrprotect() for
+ _PAGE_SAVED_DIRTY
 Cc:     "Yu-cheng Yu" <yu-cheng.yu@intel.com>,
         Rick Edgecombe <rick.p.edgecombe@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
         Pengfei Xu <pengfei.xu@intel.com>,
         John Allen <john.allen@amd.com>,
         Kees Cook <keescook@chromium.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Message-ID: <168694302378.404.8310967220069151361.tip-bot2@tip-bot2>
+Message-ID: <168694302336.404.16379064029653101571.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -65,266 +67,95 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/shstk branch of tip:
 
-Commit-ID:     0b02a82082c5c177afa5bb26b61919858b38878e
-Gitweb:        https://git.kernel.org/tip/0b02a82082c5c177afa5bb26b61919858b38878e
+Commit-ID:     75c1d1854306f4c978105bafe3ec1e030548cec5
+Gitweb:        https://git.kernel.org/tip/75c1d1854306f4c978105bafe3ec1e030548cec5
 Author:        Rick Edgecombe <rick.p.edgecombe@intel.com>
-AuthorDate:    Mon, 12 Jun 2023 17:10:36 -07:00
+AuthorDate:    Mon, 12 Jun 2023 17:10:37 -07:00
 Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Thu, 15 Jun 2023 16:31:29 -07:00
+CommitterDate: Thu, 15 Jun 2023 16:31:33 -07:00
 
-x86/mm: Introduce _PAGE_SAVED_DIRTY
+x86/mm: Update ptep/pmdp_set_wrprotect() for _PAGE_SAVED_DIRTY
 
-Some OSes have a greater dependence on software available bits in PTEs than
-Linux. That left the hardware architects looking for a way to represent a
-new memory type (shadow stack) within the existing bits. They chose to
-repurpose a lightly-used state: Write=0,Dirty=1. So in order to support
-shadow stack memory, Linux should avoid creating memory with this PTE bit
-combination unless it intends for it to be shadow stack.
+When shadow stack is in use, Write=0,Dirty=1 PTE are preserved for
+shadow stack. Copy-on-write PTEs then have Write=0,SavedDirty=1.
 
-The reason it's lightly used is that Dirty=1 is normally set by HW
-_before_ a write. A write with a Write=0 PTE would typically only generate
-a fault, not set Dirty=1. Hardware can (rarely) both set Dirty=1 *and*
-generate the fault, resulting in a Write=0,Dirty=1 PTE. Hardware which
-supports shadow stacks will no longer exhibit this oddity.
+When a PTE goes from Write=1,Dirty=1 to Write=0,SavedDirty=1, it could
+become a transient shadow stack PTE in two cases:
 
-So that leaves Write=0,Dirty=1 PTEs created in software. To avoid
-inadvertently created shadow stack memory, in places where Linux normally
-creates Write=0,Dirty=1, it can use the software-defined _PAGE_SAVED_DIRTY
-in place of the hardware _PAGE_DIRTY. In other words, whenever Linux needs
-to create Write=0,Dirty=1, it instead creates Write=0,SavedDirty=1 except
-for shadow stack, which is Write=0,Dirty=1.
+1. Some processors can start a write but end up seeing a Write=0 PTE by
+   the time they get to the Dirty bit, creating a transient shadow stack
+   PTE. However, this will not occur on processors supporting shadow
+   stack, and a TLB flush is not necessary.
 
-There are six bits left available to software in the 64-bit PTE after
-consuming a bit for _PAGE_SAVED_DIRTY. For 32 bit, the same bit as
-_PAGE_BIT_UFFD_WP is used, since user fault fd is not supported on 32
-bit. This leaves one unused software bit on 32 bit (_PAGE_BIT_SOFT_DIRTY,
-as this is also not supported on 32 bit).
+2. When _PAGE_DIRTY is replaced with _PAGE_SAVED_DIRTY non-atomically, a
+   transient shadow stack PTE can be created as a result.
 
-Implement only the infrastructure for _PAGE_SAVED_DIRTY. Changes to
-actually begin creating _PAGE_SAVED_DIRTY PTEs will follow once other
-pieces are in place.
+Prevent the second case when doing a write protection and Dirty->SavedDirty
+shift at the same time with a CMPXCHG loop. The first case
 
-Since this SavedDirty shifting is done for all x86 CPUs, this leaves
-the possibility for the hardware oddity to still create Write=0,Dirty=1
-PTEs in rare cases. Since these CPUs also don't support shadow stack, this
-will be harmless as it was before the introduction of SavedDirty.
+Note, in the PAE case CMPXCHG will need to operate on 8 byte, but
+try_cmpxchg() will not use CMPXCHG8B, so it cannot operate on a full PAE
+PTE. However the exiting logic is not operating on a full 8 byte region
+either, and relies on the fact that the Write bit is in the first 4
+bytes when doing the clear_bit(). Since both the Dirty, SavedDirty and
+Write bits are in the first 4 bytes, casting to a long will be similar to
+the existing behavior which also casts to a long.
 
-Implement the shifting logic to be branchless. Embed the logic of whether
-to do the shifting (including checking the Write bits) so that it can be
-called by future callers that would otherwise need additional branching
-logic. This efficiency allows the logic of when to do the shifting to be
-centralized, making the code easier to reason about.
+Dave Hansen, Jann Horn, Andy Lutomirski, and Peter Zijlstra provided many
+insights to the issue. Jann Horn provided the CMPXCHG solution.
 
 Co-developed-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
 Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 Tested-by: John Allen <john.allen@amd.com>
 Tested-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/all/20230613001108.3040476-11-rick.p.edgecombe%40intel.com
+Link: https://lore.kernel.org/all/20230613001108.3040476-12-rick.p.edgecombe%40intel.com
 ---
- arch/x86/include/asm/pgtable.h       | 83 +++++++++++++++++++++++++++-
- arch/x86/include/asm/pgtable_types.h | 34 +++++++++--
- arch/x86/include/asm/tlbflush.h      |  3 +-
- 3 files changed, 115 insertions(+), 5 deletions(-)
+ arch/x86/include/asm/pgtable.h | 24 ++++++++++++++++++++++--
+ 1 file changed, 22 insertions(+), 2 deletions(-)
 
 diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index 768ee46..a1883d8 100644
+index a1883d8..13fdad2 100644
 --- a/arch/x86/include/asm/pgtable.h
 +++ b/arch/x86/include/asm/pgtable.h
-@@ -301,6 +301,53 @@ static inline pte_t pte_clear_flags(pte_t pte, pteval_t clear)
- 	return native_make_pte(v & ~clear);
+@@ -1189,7 +1189,17 @@ static inline pte_t ptep_get_and_clear_full(struct mm_struct *mm,
+ static inline void ptep_set_wrprotect(struct mm_struct *mm,
+ 				      unsigned long addr, pte_t *ptep)
+ {
+-	clear_bit(_PAGE_BIT_RW, (unsigned long *)&ptep->pte);
++	/*
++	 * Avoid accidentally creating shadow stack PTEs
++	 * (Write=0,Dirty=1).  Use cmpxchg() to prevent races with
++	 * the hardware setting Dirty=1.
++	 */
++	pte_t old_pte, new_pte;
++
++	old_pte = READ_ONCE(*ptep);
++	do {
++		new_pte = pte_wrprotect(old_pte);
++	} while (!try_cmpxchg((long *)&ptep->pte, (long *)&old_pte, *(long *)&new_pte));
  }
  
-+/*
-+ * Write protection operations can result in Dirty=1,Write=0 PTEs. But in the
-+ * case of X86_FEATURE_USER_SHSTK, these PTEs denote shadow stack memory. So
-+ * when creating dirty, write-protected memory, a software bit is used:
-+ * _PAGE_BIT_SAVED_DIRTY. The following functions take a PTE and transition the
-+ * Dirty bit to SavedDirty, and vice-vesra.
-+ *
-+ * This shifting is only done if needed. In the case of shifting
-+ * Dirty->SavedDirty, the condition is if the PTE is Write=0. In the case of
-+ * shifting SavedDirty->Dirty, the condition is Write=1.
-+ */
-+static inline pgprotval_t mksaveddirty_shift(pgprotval_t v)
-+{
-+	pgprotval_t cond = (~v >> _PAGE_BIT_RW) & 1;
-+
-+	v |= ((v >> _PAGE_BIT_DIRTY) & cond) << _PAGE_BIT_SAVED_DIRTY;
-+	v &= ~(cond << _PAGE_BIT_DIRTY);
-+
-+	return v;
-+}
-+
-+static inline pgprotval_t clear_saveddirty_shift(pgprotval_t v)
-+{
-+	pgprotval_t cond = (v >> _PAGE_BIT_RW) & 1;
-+
-+	v |= ((v >> _PAGE_BIT_SAVED_DIRTY) & cond) << _PAGE_BIT_DIRTY;
-+	v &= ~(cond << _PAGE_BIT_SAVED_DIRTY);
-+
-+	return v;
-+}
-+
-+static inline pte_t pte_mksaveddirty(pte_t pte)
-+{
-+	pteval_t v = native_pte_val(pte);
-+
-+	v = mksaveddirty_shift(v);
-+	return native_make_pte(v);
-+}
-+
-+static inline pte_t pte_clear_saveddirty(pte_t pte)
-+{
-+	pteval_t v = native_pte_val(pte);
-+
-+	v = clear_saveddirty_shift(v);
-+	return native_make_pte(v);
-+}
-+
- static inline pte_t pte_wrprotect(pte_t pte)
+ #define flush_tlb_fix_spurious_fault(vma, address, ptep) do { } while (0)
+@@ -1241,7 +1251,17 @@ static inline pud_t pudp_huge_get_and_clear(struct mm_struct *mm,
+ static inline void pmdp_set_wrprotect(struct mm_struct *mm,
+ 				      unsigned long addr, pmd_t *pmdp)
  {
- 	return pte_clear_flags(pte, _PAGE_RW);
-@@ -413,6 +460,24 @@ static inline pmd_t pmd_clear_flags(pmd_t pmd, pmdval_t clear)
- 	return native_make_pmd(v & ~clear);
+-	clear_bit(_PAGE_BIT_RW, (unsigned long *)pmdp);
++	/*
++	 * Avoid accidentally creating shadow stack PTEs
++	 * (Write=0,Dirty=1).  Use cmpxchg() to prevent races with
++	 * the hardware setting Dirty=1.
++	 */
++	pmd_t old_pmd, new_pmd;
++
++	old_pmd = READ_ONCE(*pmdp);
++	do {
++		new_pmd = pmd_wrprotect(old_pmd);
++	} while (!try_cmpxchg((long *)pmdp, (long *)&old_pmd, *(long *)&new_pmd));
  }
  
-+/* See comments above mksaveddirty_shift() */
-+static inline pmd_t pmd_mksaveddirty(pmd_t pmd)
-+{
-+	pmdval_t v = native_pmd_val(pmd);
-+
-+	v = mksaveddirty_shift(v);
-+	return native_make_pmd(v);
-+}
-+
-+/* See comments above mksaveddirty_shift() */
-+static inline pmd_t pmd_clear_saveddirty(pmd_t pmd)
-+{
-+	pmdval_t v = native_pmd_val(pmd);
-+
-+	v = clear_saveddirty_shift(v);
-+	return native_make_pmd(v);
-+}
-+
- static inline pmd_t pmd_wrprotect(pmd_t pmd)
- {
- 	return pmd_clear_flags(pmd, _PAGE_RW);
-@@ -484,6 +549,24 @@ static inline pud_t pud_clear_flags(pud_t pud, pudval_t clear)
- 	return native_make_pud(v & ~clear);
- }
- 
-+/* See comments above mksaveddirty_shift() */
-+static inline pud_t pud_mksaveddirty(pud_t pud)
-+{
-+	pudval_t v = native_pud_val(pud);
-+
-+	v = mksaveddirty_shift(v);
-+	return native_make_pud(v);
-+}
-+
-+/* See comments above mksaveddirty_shift() */
-+static inline pud_t pud_clear_saveddirty(pud_t pud)
-+{
-+	pudval_t v = native_pud_val(pud);
-+
-+	v = clear_saveddirty_shift(v);
-+	return native_make_pud(v);
-+}
-+
- static inline pud_t pud_mkold(pud_t pud)
- {
- 	return pud_clear_flags(pud, _PAGE_ACCESSED);
-diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
-index 447d4be..91062b4 100644
---- a/arch/x86/include/asm/pgtable_types.h
-+++ b/arch/x86/include/asm/pgtable_types.h
-@@ -21,7 +21,8 @@
- #define _PAGE_BIT_SOFTW2	10	/* " */
- #define _PAGE_BIT_SOFTW3	11	/* " */
- #define _PAGE_BIT_PAT_LARGE	12	/* On 2MB or 1GB pages */
--#define _PAGE_BIT_SOFTW4	58	/* available for programmer */
-+#define _PAGE_BIT_SOFTW4	57	/* available for programmer */
-+#define _PAGE_BIT_SOFTW5	58	/* available for programmer */
- #define _PAGE_BIT_PKEY_BIT0	59	/* Protection Keys, bit 1/4 */
- #define _PAGE_BIT_PKEY_BIT1	60	/* Protection Keys, bit 2/4 */
- #define _PAGE_BIT_PKEY_BIT2	61	/* Protection Keys, bit 3/4 */
-@@ -34,6 +35,13 @@
- #define _PAGE_BIT_SOFT_DIRTY	_PAGE_BIT_SOFTW3 /* software dirty tracking */
- #define _PAGE_BIT_DEVMAP	_PAGE_BIT_SOFTW4
- 
-+#ifdef CONFIG_X86_64
-+#define _PAGE_BIT_SAVED_DIRTY	_PAGE_BIT_SOFTW5 /* Saved Dirty bit */
-+#else
-+/* Shared with _PAGE_BIT_UFFD_WP which is not supported on 32 bit */
-+#define _PAGE_BIT_SAVED_DIRTY	_PAGE_BIT_SOFTW2 /* Saved Dirty bit */
-+#endif
-+
- /* If _PAGE_BIT_PRESENT is clear, we use these: */
- /* - if the user mapped it with PROT_NONE; pte_present gives true */
- #define _PAGE_BIT_PROTNONE	_PAGE_BIT_GLOBAL
-@@ -117,6 +125,18 @@
- #define _PAGE_SOFTW4	(_AT(pteval_t, 0))
- #endif
- 
-+/*
-+ * The hardware requires shadow stack to be Write=0,Dirty=1. However,
-+ * there are valid cases where the kernel might create read-only PTEs that
-+ * are dirty (e.g., fork(), mprotect(), uffd-wp(), soft-dirty tracking). In
-+ * this case, the _PAGE_SAVED_DIRTY bit is used instead of the HW-dirty bit,
-+ * to avoid creating a wrong "shadow stack" PTEs. Such PTEs have
-+ * (Write=0,SavedDirty=1,Dirty=0) set.
-+ */
-+#define _PAGE_SAVED_DIRTY	(_AT(pteval_t, 1) << _PAGE_BIT_SAVED_DIRTY)
-+
-+#define _PAGE_DIRTY_BITS (_PAGE_DIRTY | _PAGE_SAVED_DIRTY)
-+
- #define _PAGE_PROTNONE	(_AT(pteval_t, 1) << _PAGE_BIT_PROTNONE)
- 
- /*
-@@ -125,9 +145,9 @@
-  * instance, and is *not* included in this mask since
-  * pte_modify() does modify it.
-  */
--#define _PAGE_CHG_MASK	(PTE_PFN_MASK | _PAGE_PCD | _PAGE_PWT |		\
--			 _PAGE_SPECIAL | _PAGE_ACCESSED | _PAGE_DIRTY |	\
--			 _PAGE_SOFT_DIRTY | _PAGE_DEVMAP | _PAGE_ENC |  \
-+#define _PAGE_CHG_MASK	(PTE_PFN_MASK | _PAGE_PCD | _PAGE_PWT |		     \
-+			 _PAGE_SPECIAL | _PAGE_ACCESSED | _PAGE_DIRTY_BITS | \
-+			 _PAGE_SOFT_DIRTY | _PAGE_DEVMAP | _PAGE_ENC |	     \
- 			 _PAGE_UFFD_WP)
- #define _HPAGE_CHG_MASK (_PAGE_CHG_MASK | _PAGE_PSE)
- 
-@@ -188,10 +208,16 @@ enum page_cache_mode {
- 
- #define __PAGE_KERNEL		 (__PP|__RW|   0|___A|__NX|___D|   0|___G)
- #define __PAGE_KERNEL_EXEC	 (__PP|__RW|   0|___A|   0|___D|   0|___G)
-+
-+/*
-+ * Page tables needs to have Write=1 in order for any lower PTEs to be
-+ * writable. This includes shadow stack memory (Write=0, Dirty=1)
-+ */
- #define _KERNPG_TABLE_NOENC	 (__PP|__RW|   0|___A|   0|___D|   0|   0)
- #define _KERNPG_TABLE		 (__PP|__RW|   0|___A|   0|___D|   0|   0| _ENC)
- #define _PAGE_TABLE_NOENC	 (__PP|__RW|_USR|___A|   0|___D|   0|   0)
- #define _PAGE_TABLE		 (__PP|__RW|_USR|___A|   0|___D|   0|   0| _ENC)
-+
- #define __PAGE_KERNEL_RO	 (__PP|   0|   0|___A|__NX|___D|   0|___G)
- #define __PAGE_KERNEL_ROX	 (__PP|   0|   0|___A|   0|___D|   0|___G)
- #define __PAGE_KERNEL_NOCACHE	 (__PP|__RW|   0|___A|__NX|___D|   0|___G| __NC)
-diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
-index 75bfaa4..965659d 100644
---- a/arch/x86/include/asm/tlbflush.h
-+++ b/arch/x86/include/asm/tlbflush.h
-@@ -293,7 +293,8 @@ static inline bool pte_flags_need_flush(unsigned long oldflags,
- 	const pteval_t flush_on_clear = _PAGE_DIRTY | _PAGE_PRESENT |
- 					_PAGE_ACCESSED;
- 	const pteval_t software_flags = _PAGE_SOFTW1 | _PAGE_SOFTW2 |
--					_PAGE_SOFTW3 | _PAGE_SOFTW4;
-+					_PAGE_SOFTW3 | _PAGE_SOFTW4 |
-+					_PAGE_SAVED_DIRTY;
- 	const pteval_t flush_on_change = _PAGE_RW | _PAGE_USER | _PAGE_PWT |
- 			  _PAGE_PCD | _PAGE_PSE | _PAGE_GLOBAL | _PAGE_PAT |
- 			  _PAGE_PAT_LARGE | _PAGE_PKEY_BIT0 | _PAGE_PKEY_BIT1 |
+ #ifndef pmdp_establish
