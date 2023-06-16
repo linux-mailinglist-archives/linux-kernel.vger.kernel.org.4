@@ -2,88 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A95F733A81
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 22:10:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75DFF733A8B
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 22:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345570AbjFPUKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 16:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47728 "EHLO
+        id S1345227AbjFPUMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 16:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231781AbjFPUKB (ORCPT
+        with ESMTP id S230122AbjFPUMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 16:10:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B76430DD;
-        Fri, 16 Jun 2023 13:10:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D54CE61A33;
-        Fri, 16 Jun 2023 20:09:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48066C433D9;
-        Fri, 16 Jun 2023 20:09:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686946199;
-        bh=WUwJ/CcnS7KQMIGc+n1lO6t7DBapdJHs3PtzN2L5DOs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=TK7lwF2dgyhLjZz3axawLmkbuign1yOCHmc3Tx1v0nJMLzHE4AMIBuiBwMBtxulD8
-         Z3Vut6IBWtk2ssQ8ijhfs8vBi+Qy0HXySzPTA15IW8YrnEaB7IlHu2VlzDPnGeCZmI
-         K6M5pS/g15siuIekZ5t1I3/fk6k5aKAJaEj6SrOz/PCsDCt5E2f7BsT9bm6PGwrWgg
-         43Q6XfEEqBYd9YLn7kuhpOmt+nKESiRp8navYHM6l1x9CJMp/jkfUZ7Re+m79aLMHD
-         kbDq8gJyNG5Gays0CHzsM1Js8nifxRWQM5ErJCnC9FUIgd0MSE3JJ4Wb0UcNmLCkft
-         Ujy1yQtMOaDZQ==
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-4f762b3227dso1482607e87.1;
-        Fri, 16 Jun 2023 13:09:59 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxnGmwARsmvlN+BebDLZcp92GaeS8oe6MzbebP6N92K1Svg8lL5
-        QIX8BTHOVcMGoqeGC6KLFpf3otMVMH3+9o+2Vew=
-X-Google-Smtp-Source: ACHHUZ7ituqSYIn1SCVORmrSh+1n8O6ydQ9eZHh9b53aIx4zqNf09sKQF/S2prJ95SKqvJfHTGetd9Upy9eJLOlNi04=
-X-Received: by 2002:a05:6512:3052:b0:4f7:47bb:2ce0 with SMTP id
- b18-20020a056512305200b004f747bb2ce0mr3066562lfb.4.1686946197316; Fri, 16 Jun
- 2023 13:09:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230616085038.4121892-1-rppt@kernel.org> <20230616085038.4121892-10-rppt@kernel.org>
-In-Reply-To: <20230616085038.4121892-10-rppt@kernel.org>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 16 Jun 2023 13:09:45 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6TmwsBmP4NQroE5OEFsaHh+S9zweXa4Fs_ZeJURguqAg@mail.gmail.com>
-Message-ID: <CAPhsuW6TmwsBmP4NQroE5OEFsaHh+S9zweXa4Fs_ZeJURguqAg@mail.gmail.com>
-Subject: Re: [PATCH v2 09/12] powerpc: extend execmem_params for kprobes allocations
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Puranjay Mohan <puranjay12@gmail.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Fri, 16 Jun 2023 16:12:17 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A690A30DD;
+        Fri, 16 Jun 2023 13:12:12 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 3B0865C0267;
+        Fri, 16 Jun 2023 16:12:11 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 16 Jun 2023 16:12:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1686946331; x=1687032731; bh=Rm
+        LztWLM37AdaYSXw8tQ2a76FOwFNZm7vLlBDDTP5Ow=; b=2VBUCoze57ug/WQZWE
+        +fRGxJti20jG+9NX5klMvd4/zlggCW8ZTBsEEZS86jjUOBS+mcUohBfIRpH+z6iU
+        K8QXGs185V2K+pG/8QQ8wXhGcKL0pmzS+NtFh69kPGd/b6wMbgC4tqff/mkv2WPY
+        4BfdCQsnKZ894zHPSU2uTRn14v1XcDUBYKfKREORjBdloWGIjzOzRkgf+Fq7dwTA
+        KJn2kpfhlHqFBQhbb57pzvDAMkrkcHj+vp7pUB7h1jIva7oiFMHJThun9sKXgaqf
+        AgERsM44EIrH5Jl/rudgQ9IPhkGR+OaaEauHNV/ALe7WLttoAhp1GS0MWEd3ZHer
+        HBDA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1686946331; x=1687032731; bh=RmLztWLM37Ada
+        YSXw8tQ2a76FOwFNZm7vLlBDDTP5Ow=; b=VFax/KJrWvA5Q4DLXaZGCDsdITX/4
+        degmUN9PFETQl/lctiIheD/gaCKCDFd0JAejKx7d2tu7RAGTf8zlZnYG1lnYg0XA
+        c2BBfDm0zF790m4S5AWVbcOaBllwSwQVs/J5+RGwTQVTYFvAsrWCA/nqHQsRGbPh
+        hbdHhmjCDaK4MDNBn5UdwfsuMo/zyOCvhX/Efgvts9gkrqS3gi28MFLKk3xfSJhJ
+        Aax2ZhnjA35aI0r4zWUKDZhX4EBTdotPp/XhjwbzvSeqmq/K5oqrD+GK2wOkRxh9
+        33DyuH4KWFMgT57Rjj9ycQ2HxdCBWq1dVbFxUsOpRtw0a+U15Ir+Vu7Dg==
+X-ME-Sender: <xms:GsKMZFRwcuowJFOS9ieO4BJQhOObnNcwosn0l8BPTzevlTUKV1r9TQ>
+    <xme:GsKMZOxnC1GNPqFtR946esg8mFf2wYicm9Tv9Rb_xhAS6wwOHkNLcosP1nNpEc5nr
+    iCTLT9B7ZW6LOSL_Sc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedvgedgudegiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:G8KMZK2fKS6_HCgZWP8RAItexCfIsRH_-25wBI-IC2yND9Hjh1csdg>
+    <xmx:G8KMZNDWjYssAQLldSmdP9qQmK5mNQpt6vjQ5sL_2ClAJRK7BRPKdA>
+    <xmx:G8KMZOgaZ37AaanX7y3cNwlB__gaBaT5YNwyjTPvkmL9Kw6Oz_x1BQ>
+    <xmx:G8KMZCbsGm2LNedV9FGwbYZzzhAWG6hECy1ROF43YFa6UIHJ4GXjDA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id DAC82B60086; Fri, 16 Jun 2023 16:12:10 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-496-g8c46984af0-fm-20230615.001-g8c46984a
+Mime-Version: 1.0
+Message-Id: <c2f3656f-b831-4009-8ee6-a2430c4ac8c7@app.fastmail.com>
+In-Reply-To: <20230616183120.1706378-1-sohil.mehta@intel.com>
+References: <20230616183120.1706378-1-sohil.mehta@intel.com>
+Date:   Fri, 16 Jun 2023 22:11:49 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Sohil Mehta" <sohil.mehta@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH] syscalls: Fix file path names in the header comments
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,89 +84,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 1:52=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wro=
-te:
+On Fri, Jun 16, 2023, at 20:31, Sohil Mehta wrote:
+> Some of the syscall definitions have moved due to the original source
+> file being moved into a sub-directory. Update the file path names to
+> reflect that.
 >
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> A couple of syscalls such as lookup_dcookie() and nfsservctl() don't
+> have a syscall definition anymore. Clear the filename and leave the
+> original subsystem name intact for reference.
 >
-> powerpc overrides kprobes::alloc_insn_page() to remove writable
-> permissions when STRICT_MODULE_RWX is on.
->
-> Add definition of jit area to execmem_params to allow using the generic
-> kprobes::alloc_insn_page() with the desired permissions.
->
-> As powerpc uses breakpoint instructions to inject kprobes, it does not
-> need to constrain kprobe allocations to the modules area and can use the
-> entire vmalloc address space.
->
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
 
-Acked-by: Song Liu <song@kernel.org>
+Thanks for going through these!
 
+> Arguably, having filenames in comments might not be the best idea.  If the
+> intention is to make it easier to find a syscall definition, it is probably
+> faster to just use 'git grep SYSCALL_DEFINE | grep <syscall_name>'.  Please let
+> me know if it would be preferable to just get rid of these comments all
+> together.
 
-> ---
->  arch/powerpc/kernel/kprobes.c | 14 --------------
->  arch/powerpc/kernel/module.c  | 13 +++++++++++++
->  2 files changed, 13 insertions(+), 14 deletions(-)
->
-> diff --git a/arch/powerpc/kernel/kprobes.c b/arch/powerpc/kernel/kprobes.=
-c
-> index 5db8df5e3657..14c5ddec3056 100644
-> --- a/arch/powerpc/kernel/kprobes.c
-> +++ b/arch/powerpc/kernel/kprobes.c
-> @@ -126,20 +126,6 @@ kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned lo=
-ng addr, unsigned long offse
->         return (kprobe_opcode_t *)(addr + offset);
->  }
->
-> -void *alloc_insn_page(void)
-> -{
-> -       void *page;
-> -
-> -       page =3D jit_text_alloc(PAGE_SIZE);
-> -       if (!page)
-> -               return NULL;
-> -
-> -       if (strict_module_rwx_enabled())
-> -               set_memory_rox((unsigned long)page, 1);
-> -
-> -       return page;
-> -}
-> -
->  int arch_prepare_kprobe(struct kprobe *p)
->  {
->         int ret =3D 0;
-> diff --git a/arch/powerpc/kernel/module.c b/arch/powerpc/kernel/module.c
-> index 4c6c15bf3947..8e5b379d6da1 100644
-> --- a/arch/powerpc/kernel/module.c
-> +++ b/arch/powerpc/kernel/module.c
-> @@ -96,6 +96,11 @@ static struct execmem_params execmem_params =3D {
->                         .alignment =3D 1,
->                 },
->         },
-> +       .jit =3D {
-> +               .text =3D {
-> +                       .alignment =3D 1,
-> +               },
-> +       },
->  };
->
->
-> @@ -131,5 +136,13 @@ struct execmem_params __init *execmem_arch_params(vo=
-id)
->
->         execmem_params.modules.text.pgprot =3D prot;
->
-> +       execmem_params.jit.text.start =3D VMALLOC_START;
-> +       execmem_params.jit.text.end =3D VMALLOC_END;
-> +
-> +       if (strict_module_rwx_enabled())
-> +               execmem_params.jit.text.pgprot =3D PAGE_KERNEL_ROX;
-> +       else
-> +               execmem_params.jit.text.pgprot =3D PAGE_KERNEL_EXEC;
-> +
->         return &execmem_params;
->  }
-> --
-> 2.35.1
->
+It's probably not worth trying to keep the comments in sync, I'd be in
+favor of just removing them all.
+
+     Arnd
