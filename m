@@ -2,159 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC29732876
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 09:10:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46B78732965
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:03:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244220AbjFPHKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 03:10:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50740 "EHLO
+        id S244091AbjFPIDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 04:03:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244968AbjFPHJw (ORCPT
+        with ESMTP id S244149AbjFPIDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 03:09:52 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5147A35A8
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 00:09:42 -0700 (PDT)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230616070939epoutp032cf580f3b43af4933a8b729d5e4ae44b~pEgxc59T20808608086epoutp03z
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 07:09:39 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230616070939epoutp032cf580f3b43af4933a8b729d5e4ae44b~pEgxc59T20808608086epoutp03z
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1686899379;
-        bh=ESo4Qrt4/UzE/PV3aK8PFaKJ3Kztgy5rxcClb0hRKmc=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=jnXAOL2dM+MhjPSMkYXqlPLmvKiLfVbeuucEjd1t2hY4M8nXBp4qeHdkGQI3nvnwR
-         MoEhS3g81fYMK2I5XfOOzFImdM1oOb7D+tmdCteKpqFwC32xNed8x1aYKAgu+4QnVc
-         p1Np0pQgm6Aj5N/0WjMYKrs+Z3HHx/EDNaKAmeew=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20230616070939epcas5p14d6eff9fa2c61884ebf49ea566b64ce7~pEgw0I_8D0795507955epcas5p1h;
-        Fri, 16 Jun 2023 07:09:39 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.178]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4Qj9Jc60MBz4x9Px; Fri, 16 Jun
-        2023 07:09:36 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        4F.F6.44881.0BA0C846; Fri, 16 Jun 2023 16:09:36 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20230616030739epcas5p31e705be33bf080f988702d42534ad32f~pBNek5lzt0688706887epcas5p3t;
-        Fri, 16 Jun 2023 03:07:39 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230616030739epsmtrp283d0995d1319be1df91759e62bebc516~pBNej8Gzx0328103281epsmtrp2h;
-        Fri, 16 Jun 2023 03:07:39 +0000 (GMT)
-X-AuditID: b6c32a4a-c47ff7000001af51-79-648c0ab0f079
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        56.31.27706.BF1DB846; Fri, 16 Jun 2023 12:07:39 +0900 (KST)
-Received: from ubuntu.. (unknown [109.105.118.54]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20230616030738epsmtip2e4561c1f033fd4eb8ba466cd88c6fa6e~pBNdM9Vog3041530415epsmtip2w;
-        Fri, 16 Jun 2023 03:07:38 +0000 (GMT)
-From:   "min15.li" <min15.li@samsung.com>
-To:     axboe@kernel.dk, willy@infradead.org, hch@lst.de,
-        dlemoal@kernel.org, gregkh@linuxfoundation.org, wsa@kernel.org,
-        vkoul@kernel.org
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "min15.li" <min15.li@samsung.com>
-Subject: [PATCH v2] block: add capacity validation in bdev_add_partition()
-Date:   Fri, 16 Jun 2023 11:05:57 +0000
-Message-Id: <20230616110557.12106-1-min15.li@samsung.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 16 Jun 2023 04:03:05 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EB92726;
+        Fri, 16 Jun 2023 01:03:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686902584; x=1718438584;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   in-reply-to:mime-version;
+  bh=5x7yYFQKs3wnhavpnrFlCngeVgZCB6RXmcSNbgiXP84=;
+  b=C6QaYrD2Aol/gFKN9eXibAcv18Gdxr4a++xqtbFZxAgL1G1coROfB6Fq
+   gJakD3taNOrNKDnQBcLX2Nx+X/iE+gl2RiNgmhnVbkqNK+j3S1gt0ztJa
+   Jg9cdMA11AXcbeti5M8IeuWka/Sc35fS3HsC+jDLtU4pCp5FNT1UKJ0JI
+   3suEVd5TKC8g7fNkP1TPLmpc2aBfYE35jsyW8/ZxvmM1oIKaz7ClzNUe4
+   JM1SftvLhrLJc+MOvxY8Z+cZDQ+jOFev36zPGT1p8kFkrRY9BboAjKzdL
+   kXrHLn3NIWh+iceleaS5TBTMf+ZiBDrOcEMRPi2JoG1r0qrb2spUOHWm8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="343896503"
+X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
+   d="scan'208";a="343896503"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 01:02:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="959536589"
+X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
+   d="scan'208";a="959536589"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga006.fm.intel.com with ESMTP; 16 Jun 2023 01:02:55 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 16 Jun 2023 01:02:55 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 16 Jun 2023 01:02:54 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Fri, 16 Jun 2023 01:02:54 -0700
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.44) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Fri, 16 Jun 2023 01:02:54 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TbEHODdKPzWrkiH3ZS2bY9dJsOwpCVD83+chjk2eJkFDuGD6Z9fVrNoBgtc9+kGch4Hu5YH4LIY/S15TxbaPGtptubdOYYLHUjZdS44AL8CjEaknITB1Ode9D+tUR0QvQeCvy3F2ylQWNw0oq38Sg2tuHrE65XBh/1W2TAIrKGrd8lTYuRwLjOGa1AFVpZET7/Gbvmm8xn9Lyc80vj7Sm2Yc/Q3zg6PGXrydocpvBYVr0HZVa4WlcwWdjHMrO+CEhRBLNdxFBmYEUhkz7pOV12djN6NGZ73PaiaUqMSzYNakw222fo304lTPFwdlw3nwPzo8GvpKJex3c4ahtTfnLA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uSQt9h+Q4f6kmyKh4eqAm8SATKNv/W6EPEzGZiwxahU=;
+ b=RXo2hWwjkXLPC9LRsqutCGQATwq9k3DMaUsWVoqugePAZRuXhY1NLWKK/6OStXJGgzVaOiYrVCDqsUjMMnaSOJGxig/9R62EJQywvPVb/0KGCC8d8Eo7dYP8sRpG4ouMxkuUNlXdq9SRcsbCE+zPeS8ZgqwNVeHPn8tg7vhdNiG4nZ0rh1dHC1lds7iSxfde3M2+dKb39AToXJHZHCmrUL+2HYiQWvgr6u7AupHL4k1cdBPRMjDWt/6psdTCEIz5ks10cEbQ010biRxWsPuBRevBKgLaskhdxSPS8sTIbjEWLz1k2uwCshQcqFAEvfzhywo7z/o7PSYZW934vYoBSg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS7PR11MB5966.namprd11.prod.outlook.com (2603:10b6:8:71::6) by
+ CO1PR11MB4881.namprd11.prod.outlook.com (2603:10b6:303:91::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6477.37; Fri, 16 Jun 2023 08:02:46 +0000
+Received: from DS7PR11MB5966.namprd11.prod.outlook.com
+ ([fe80::9f93:c41e:2b80:1d6]) by DS7PR11MB5966.namprd11.prod.outlook.com
+ ([fe80::9f93:c41e:2b80:1d6%7]) with mapi id 15.20.6500.026; Fri, 16 Jun 2023
+ 08:02:46 +0000
+Date:   Fri, 16 Jun 2023 15:37:29 +0800
+From:   Yan Zhao <yan.y.zhao@intel.com>
+To:     Yuan Yao <yuan.yao@linux.intel.com>
+CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <pbonzini@redhat.com>, <seanjc@google.com>, <chao.gao@intel.com>,
+        <kai.huang@intel.com>, <robert.hoo.linux@gmail.com>
+Subject: Re: [PATCH v3 09/11] KVM: x86/mmu: serialize vCPUs to zap gfn when
+ guest MTRRs are honored
+Message-ID: <ZIwROWti5d0sCFwT@yzhao56-desk.sh.intel.com>
+Reply-To: Yan Zhao <yan.y.zhao@intel.com>
+References: <20230616023101.7019-1-yan.y.zhao@intel.com>
+ <20230616023945.7570-1-yan.y.zhao@intel.com>
+ <20230616074550.g2ikzbni2rjy7dfw@yy-desk-7060>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230616074550.g2ikzbni2rjy7dfw@yy-desk-7060>
+X-ClientProxiedBy: SI2PR01CA0040.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:193::14) To DS7PR11MB5966.namprd11.prod.outlook.com
+ (2603:10b6:8:71::6)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrOJsWRmVeSWpSXmKPExsWy7bCmhu4Grp4Ug5aj+har7/azWTzYb2/R
-        vHg9m8WN4++YLea+vsRisXL1USaLvbe0LS7vmsNmsXxVB5PF2QkfWC123jnBbPH7B1Ds7v65
-        jBY31l1lceDz2LxCy+Py2VKPTas62Tz2z13D7rH7ZgObR9+WVYwenzfJBbBHZdtkpCampBYp
-        pOYl56dk5qXbKnkHxzvHm5oZGOoaWlqYKynkJeam2iq5+AToumXmAN2rpFCWmFMKFApILC5W
-        0rezKcovLUlVyMgvLrFVSi1IySkwKdArTswtLs1L18tLLbEyNDAwMgUqTMjOeLetkbXgCGfF
-        z+tSDYzX2bsYOTkkBEwkPvYtYwaxhQR2M0p037TpYuQCsj8xSmx4OpsdwvnGKLGnezojTMfU
-        Lf2sEB17GSXuTneGsJ8DFZ0Bi7MJqEsc+HgUbIOIQAejxJajnCA2s0CSxIxlv9lAbGEBL4l5
-        L06C1bMIqErMnnkUbD6vgKVE994PzBC75CX2HzzLDBEXlDg58wkLxBx5ieats5lBjpMQ6OWQ
-        aPz9HOo4F4nZn34zQdjCEq+Ob4F6U0ri87u9QIs5gOxiiZc/wiDCNRK7v92GKreW2LZ+HRNI
-        CbOApsT6XfoQYVmJqafWMUGs5ZPo/f0EqpxXYsc8GFtJ4u+Fc1AXSEgs3v+QFWKTh8T2fnNI
-        6MRKPPzWxjKBUX4WkmdmIXlmFsLiBYzMqxglUwuKc9NTi00LjPJSy+Fxmpyfu4kRnGK1vHYw
-        PnzwQe8QIxMH4yFGCQ5mJRHeZSe6UoR4UxIrq1KL8uOLSnNSiw8xmgJDeCKzlGhyPjDJ55XE
-        G5pYGpiYmZmZWBqbGSqJ86rbnkwWEkhPLEnNTk0tSC2C6WPi4JRqYJq9atWkggNLL9eHTm95
-        7jAn5O2sNebKZ5hMJE0vPTzIVzR/P3+aUOSi896WF/IiRea73r7rcOLa9tDfEovKfly8fK3y
-        QODah19vcjS7G+2wEUuq2yTfNP9KvLWyyR61ymnMq2KnNodz3Xj7uN64tuuTt8Aqp0WB8Xo6
-        5lvbgm2f6z+YKvio69rJlXV7bsyRflrwaMaByjUlviU7XqxLnvT9/5ZVsU+qb/tlmi1dKMnH
-        2Rn1ZULRnowrldc+Pz767SPjtmPdktmf3WxmOj/dtmhrLp/yVNmzwlbK/lo5TD9V52hd2a4i
-        sN3x5v10tuMlPzZ/1ptl6LO2dfe/oAmvP79qEImetynbMCRh707Od6mWSizFGYmGWsxFxYkA
-        KjEAsToEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrBLMWRmVeSWpSXmKPExsWy7bCSvO7vi90pBnMuKlisvtvPZvFgv71F
-        8+L1bBY3jr9jtpj7+hKLxcrVR5ks9t7Stri8aw6bxfJVHUwWZyd8YLXYeecEs8XvH0Cxu/vn
-        MlrcWHeVxYHPY/MKLY/LZ0s9Nq3qZPPYP3cNu8fumw1sHn1bVjF6fN4kF8AexWWTkpqTWZZa
-        pG+XwJXxblsja8ERzoqf16UaGK+zdzFyckgImEhM3dLP2sXIxSEksJtRYu/fG0wQCQmJ8/N+
-        sUHYwhIr/z1nhyh6yijxc8ljFpAEm4C6xIGPR8ESIgKTGCXuX3jNCpJgFkiRuLK0E2yFsICX
-        xLwXJ8HiLAKqErNnHmUEsXkFLCW6935ghtggL7H/4FlmiLigxMmZT1gg5shLNG+dzTyBkW8W
-        ktQsJKkFjEyrGCVTC4pz03OLDQsM81LL9YoTc4tL89L1kvNzNzGCA19Lcwfj9lUf9A4xMnEw
-        HmKU4GBWEuFddqIrRYg3JbGyKrUoP76oNCe1+BCjNAeLkjjvha6T8UIC6YklqdmpqQWpRTBZ
-        Jg5OqQam5Cm5T9f9zVm4+/eUCVfEVobNunN4+9S5/3/sYXkXeu38kxJml57D/yp1uWWOr93r
-        6Kh95LzZ151WK51OaLnu223RKe0csvlW1OSW2woNxVZyjBt/Zzz5HuvTvIYhLK22eQpDa8bb
-        GweUD2+1jNl0q7yGYRtvkf+6fy/kM3o6fit76Gws7elo/h8zcY6N0s951/ru9q/7+/H9ruCO
-        TLVI+9XiB14IRH0WvVi2pWvqJPHz8hpsFl9+exnvS7p39l/x2b2nrHL4TspFJTLKGpRmL52e
-        8PvWWbvOD1nyVyziLyfk6eybKfu5Y/pDrf/ravQ+zPvTu6XryLQ1U1ilrq05rp/7JnvC/q9s
-        Glz/VFek2SixFGckGmoxFxUnAgChOTjy6wIAAA==
-X-CMS-MailID: 20230616030739epcas5p31e705be33bf080f988702d42534ad32f
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230616030739epcas5p31e705be33bf080f988702d42534ad32f
-References: <CGME20230616030739epcas5p31e705be33bf080f988702d42534ad32f@epcas5p3.samsung.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_03_06,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR11MB5966:EE_|CO1PR11MB4881:EE_
+X-MS-Office365-Filtering-Correlation-Id: bee7f926-bc03-4e34-ad0b-08db6e4011ae
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vCfbBL462TvdGkvQ0xLcWZrBTrCdJWHS1aPriNdo9vCsLrcB3uz2p6/IT5IOczXCnCxCJo62/bUl2SA9jnM3ZNp3O++lUXtn6tLgfNKl9hgBHdRJQVbFrylTWPrwfB/+//UtnwaMxHDFrW7DP61ehynxm2bSlHB8WSv1e37qPH4MRHzelgRx0fRy5ba9ttmMltlbxvboG8FVa1opJzg7+odfbwudcDBz1IF5iUSf0VyQqafvmwk/8lvMOCZ5bKATZmlg4SVgrMcgnt0zbpazdfgpPHEe4DhiMiBBVgh0G3zn/7UMGiMtd4YjN3ndM0IrJkKQMbCLaqycgGryuRbZLn3WMGUL+0OmxLpAZMLoFGk37X6lygMFUs/8L/138TZeQzbAjL4/Nh9VGxK80cIvWKc+L235zQ+wJ3daz1975d1P+IhObRKe8PTnezn+H9rZv68QONYSyn7dE0XMsQ72x75Q/cWvKxsmyGKVDwhQ/bhaDE9tPcQj8qALghqiKGQpvQRm6crsPUZIIoMbjQ2k7hXSAk0VfoEe5Rh5D8iogyZmZYzlTOihOjRV+/APhJR3
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR11MB5966.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(366004)(376002)(346002)(39860400002)(136003)(451199021)(186003)(2906002)(3450700001)(38100700002)(86362001)(6512007)(26005)(83380400001)(6506007)(82960400001)(4326008)(316002)(6486002)(66476007)(66556008)(6666004)(6916009)(66946007)(478600001)(41300700001)(54906003)(8676002)(5660300002)(8936002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5E6G7mJozrkNT1fJfohaexcUWCmKCI5NUrDBcU4y2Vd7EtI60jPR0D86k5bH?=
+ =?us-ascii?Q?T7b+E5tMu9lsA8UUEt7dG1EoKxnNhVzc0z0dwCOdpl2kkQyxIfRSyli0u6kl?=
+ =?us-ascii?Q?r+cZffndBAk6yHRBhc2TgzHyZ9Hw7mu2JhOGDm+k1mWmxQro6j44JvgmaH/N?=
+ =?us-ascii?Q?s/f0aoMKyNFtuLMJRvHe6yMZjqq+2qFTJBk7/T3QpY/W2NXPVxIWug6GQ17l?=
+ =?us-ascii?Q?DM9RuizBmU1pgY7Z/Yr373y3biUnqfoBWEPeDNkIb7bKYgpV/6B0/yqoF1EW?=
+ =?us-ascii?Q?bYjIQ5dr/GzKqS/oZLQbk324qlsRUPBIl3Qkb6Aj6FcQ5H3bPpuqapsYYPks?=
+ =?us-ascii?Q?fAILY5JdUWNRYY/aQADVlRctAWdxtLNGfX76uEpcxtBdqUCmNuftwLF1hvfj?=
+ =?us-ascii?Q?y/zlwhJtLa3iq6pnzbp8K0TA3nBSpzA8jdFmBYcuPSj7Nyxmk9wij8OqGHYk?=
+ =?us-ascii?Q?zqF1ownvtBRmr31a0YCBdRNHszHs+2eBY3288P65Ctt9pS+lLh/Au9+IyVym?=
+ =?us-ascii?Q?YnLLpvvkrI3OFTt82UTE2FwXjB28nkX1CYnnI+nLjqWzzjFbHFDwhUCcgIUy?=
+ =?us-ascii?Q?R0+HcxyoBGmmq7zHM6vDXrVVOLjSg8xs2ShE0nVxqij/D82CF9DHiAMvGJU9?=
+ =?us-ascii?Q?4OyBJ4U8u7X1nnN1xF9fMXEfLIdJTffQrTAxcO4RnzWsxQj3T5pt4RCFKxRT?=
+ =?us-ascii?Q?N9Qr7u5VG+mKsObgqt6fWyBzZo1vOwi32KpTqIt6GmKdJqSRUKQzpojjI7Ad?=
+ =?us-ascii?Q?bzjo67bqOqR1gJvm4aSoNJY1m2raxDKqjbAgguGpxhGWmgc4q5u3iTxZZgzq?=
+ =?us-ascii?Q?maZZXlmzzTciXKnPW37D8OLh1RFzCigtIiuApAwiNmvgUW0rWhXnnRb91uwb?=
+ =?us-ascii?Q?czN7qi/cIpXTD9KlS+RwW3mwwpAJVDSN9LgElsyAYhPaTXWvUyxB4JSPT3SM?=
+ =?us-ascii?Q?f6BuM/1e/VJffLNbkeheXRejlD4q0Pj6/RcI+mJ8dOufRRgM/LucnIH5nFCa?=
+ =?us-ascii?Q?rkwP20+yHC8dWF0jdiIKKfwAutw4OY/daJNfXXUTHKHOk35+XsEm4ADYQkcr?=
+ =?us-ascii?Q?ZFBKeISH1B03rtzz0m0cDvCeYSlRMuLGiEjNnO2zQiYExsDAVK6rXTO1vOWB?=
+ =?us-ascii?Q?+53IpnkBdjrhPadOHtSKYyiPWzn9Fwr00HQc6/0/45d0FGtIPYiVmwv+bqz2?=
+ =?us-ascii?Q?5s8JlfVqk1xelTov5XZdxYPMeajsVuJqrq6bLWomKC+VqDtEI0osmuy49qQX?=
+ =?us-ascii?Q?khLji5TdTLNzYEkA7IP1wbrFLC8EPp5mJS60DRRn6DkBYYeULLYKGcuw+qCT?=
+ =?us-ascii?Q?cNHHhmeDrB5bvTFQjqcgJ3rMBrI6v8Qwj/fFCC2Csu0e9bT4eSnIKDDI9eeA?=
+ =?us-ascii?Q?2ja0tv11gxOao5ZEBLB5JPJBcChoFdPJ45I6CO0HBMlIXPOxCMUZs6YK5nuQ?=
+ =?us-ascii?Q?ZGAUH9wTodmPI/xIcnp6OM4APwgojyQw7u/aqliBm2zaZLWKcf1NsyH/8rJR?=
+ =?us-ascii?Q?Q6w2dAVg+JZOhcnlh05Gi6/R35bH4dMGHPc37Tg5NuxczUPeI6G9NIWE9nyW?=
+ =?us-ascii?Q?whK//YQsLe31O8Z+l04VC4Q9CRV0Jh0p3LfZEW2w?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: bee7f926-bc03-4e34-ad0b-08db6e4011ae
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR11MB5966.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 08:02:46.5979
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hNf6Gjtn4GNmeoK+Wh3tV95nXm3yH1NvCWGQR6rad3dHALONMtX9Czd9oreEEp6m8mil9UhYaESYBBQEBhKQSg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4881
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the function bdev_add_partition(),there is no check that the start
-and end sectors exceed the size of the disk before calling add_partition.
-When we call the block's ioctl interface directly to add a partition,
-and the capacity of the disk is set to 0 by driver,the command will
-continue to execute.
-v1->v2: check for overflows of the start + length value and put
-the capacity check at the beginning of the function.
+On Fri, Jun 16, 2023 at 03:45:50PM +0800, Yuan Yao wrote:
+> > +/*
+> > + * Add @range into kvm->arch.mtrr_zap_list and sort the list in
+> > + * "length" ascending + "start" descending order, so that
+> > + * ranges consuming more zap cycles can be dequeued later and their
+> > + * chances of being found duplicated are increased.
+> > + */
+> > +static void kvm_add_mtrr_zap_list(struct kvm *kvm, struct mtrr_zap_range *range)
+> > +{
+> > +	struct list_head *head = &kvm->arch.mtrr_zap_list;
+> > +	u64 len = range->end - range->start;
+> > +	struct mtrr_zap_range *cur, *n;
+> > +	bool added = false;
+> > +
+> > +	spin_lock(&kvm->arch.mtrr_zap_list_lock);
+> > +
+> > +	if (list_empty(head)) {
+> > +		list_add(&range->node, head);
+> > +		spin_unlock(&kvm->arch.mtrr_zap_list_lock);
+> > +		return;
+> > +	}
+> > +
+> > +	list_for_each_entry_safe(cur, n, head, node) {
+> > +		u64 cur_len = cur->end - cur->start;
+> > +
+> > +		if (len < cur_len)
+> > +			break;
+> > +
+> > +		if (len > cur_len)
+> > +			continue;
+> > +
+> > +		if (range->start > cur->start)
+> > +			break;
+> > +
+> > +		if (range->start < cur->start)
+> > +			continue;
+> > +
+> > +		/* equal len & start, no need to add */
+> > +		added = true;
+> 
+> Possible/worth to ignore the range already covered
+> by queued range ?
 
-Signed-off-by: min15.li <min15.li@samsung.com>
----
- block/partitions/core.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+I may not get you correctly, but
+the "added" here means an queued range with exactly same start + len
+found, so free and drop adding the new range here.
 
-diff --git a/block/partitions/core.c b/block/partitions/core.c
-index 49e0496ff23c..3546b43d5124 100644
---- a/block/partitions/core.c
-+++ b/block/partitions/core.c
-@@ -438,8 +438,20 @@ int bdev_add_partition(struct gendisk *disk, int partno, sector_t start,
- {
- 	struct block_device *part;
- 	int ret;
-+	sector_t end;
-+	sector_t capacity = get_capacity(disk);
- 
- 	mutex_lock(&disk->open_mutex);
-+	if (check_add_overflow(start, length, &end)) {
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
-+	if (start >= capacity || end > capacity) {
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
- 	if (!disk_live(disk)) {
- 		ret = -ENXIO;
- 		goto out;
--- 
-2.34.1
+> 
+> > +		kfree(range);
+> > +		break;
+> > +	}
+> > +
+> > +	if (!added)
+> > +		list_add_tail(&range->node, &cur->node);
+> > +
+> > +	spin_unlock(&kvm->arch.mtrr_zap_list_lock);
+> > +}
+> > +
+> > +static void kvm_zap_mtrr_zap_list(struct kvm *kvm)
+> > +{
+> > +	struct list_head *head = &kvm->arch.mtrr_zap_list;
+> > +	struct mtrr_zap_range *cur = NULL;
+> > +
+> > +	spin_lock(&kvm->arch.mtrr_zap_list_lock);
+> > +
+> > +	while (!list_empty(head)) {
+> > +		u64 start, end;
+> > +
+> > +		cur = list_first_entry(head, typeof(*cur), node);
+> > +		start = cur->start;
+> > +		end = cur->end;
+> > +		list_del(&cur->node);
+> > +		kfree(cur);
+> > +		spin_unlock(&kvm->arch.mtrr_zap_list_lock);
+> > +
+> > +		kvm_zap_gfn_range(kvm, start, end);
+> > +
+> > +		spin_lock(&kvm->arch.mtrr_zap_list_lock);
+> > +	}
+> > +
+> > +	spin_unlock(&kvm->arch.mtrr_zap_list_lock);
+> > +}
+> > +
+> > +static void kvm_zap_or_wait_mtrr_zap_list(struct kvm *kvm)
+> > +{
+> > +	if (atomic_cmpxchg_acquire(&kvm->arch.mtrr_zapping, 0, 1) == 0) {
+> > +		kvm_zap_mtrr_zap_list(kvm);
+> > +		atomic_set_release(&kvm->arch.mtrr_zapping, 0);
+> > +		return;
+> > +	}
+> > +
+> > +	while (atomic_read(&kvm->arch.mtrr_zapping))
+> > +		cpu_relax();
+> > +}
+> > +
+> > +static void kvm_mtrr_zap_gfn_range(struct kvm_vcpu *vcpu,
+> > +				   gfn_t gfn_start, gfn_t gfn_end)
+> > +{
+> > +	struct mtrr_zap_range *range;
+> > +
+> > +	range = kmalloc(sizeof(*range), GFP_KERNEL_ACCOUNT);
+> > +	if (!range)
+> > +		goto fail;
+> > +
+> > +	range->start = gfn_start;
+> > +	range->end = gfn_end;
+> > +
+> > +	kvm_add_mtrr_zap_list(vcpu->kvm, range);
+> > +
+> > +	kvm_zap_or_wait_mtrr_zap_list(vcpu->kvm);
+> > +	return;
+> > +
+> > +fail:
+> > +	kvm_clear_mtrr_zap_list(vcpu->kvm);
+> A very small chance race condition that incorrectly
+> clear the queued ranges which have not been zapped by another thread ?
+> Like below:
+> 
+> Thread A                         |  Thread B
+> kvm_add_mtrr_zap_list()          |
+>                                  |  kvm_clear_mtrr_zap_list()
+> kvm_zap_or_wait_mtrr_zap_list()  |
+> 
+> Call kvm_clear_mtrr_zap_list() here looks unnecessary, other
+> threads(B here) who put thing in the queue will take care them well.
 
+> > +   kvm_zap_gfn_range(vcpu->kvm, gfn_start, gfn_end); 
+
+Yes, if gfn_start and gfn_end here are not 0 and ~0ULL, the
+kvm_clear_mtrr_zap_list() is not necessary.
+Though in reality, they are always 0-~0ULL, I agree dropping the
+kvm_clear_mtrr_zap_list() here is better.
+
+Thanks!
