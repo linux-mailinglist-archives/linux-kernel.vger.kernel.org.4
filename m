@@ -2,54 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BFA9732ED6
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:37:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C281732EF3
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345313AbjFPKh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 06:37:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57924 "EHLO
+        id S1345559AbjFPKi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 06:38:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345205AbjFPKeO (ORCPT
+        with ESMTP id S1345566AbjFPKfo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 06:34:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9DFE468E;
-        Fri, 16 Jun 2023 03:28:39 -0700 (PDT)
+        Fri, 16 Jun 2023 06:35:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C0165FF9;
+        Fri, 16 Jun 2023 03:29:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C258D636EE;
-        Fri, 16 Jun 2023 10:28:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C8AEC433C0;
-        Fri, 16 Jun 2023 10:28:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FD436371E;
+        Fri, 16 Jun 2023 10:28:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68B85C433C9;
+        Fri, 16 Jun 2023 10:28:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686911319;
-        bh=YVgJO37I3EgOmZmGI7Zc9twjOxg7krpsbaAAJsiurHQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MCRWA68k5/9RgeF/KV7psskHokDE0jJRF8ekRxlFdZxRav+z/zTssc3Erw3VCck4R
-         3F3ka0AYnTyDIG4jMLsx0XsvHf3qSr+S0HStfzKf59k+BB8FpapBO0eXSVmwfz0k97
-         y107BZUmFU0eMKfpjTpKW9esJhY4wQ4krv8KF+D8oqCR2/Lz+z5DvyJVuHCmrFtuTL
-         yacjPK8NK11hd5gIw6DvgA5pSKTYMfV9qR38HVTbos/RFhOsFGG2n7veinWmylfC3y
-         Wb7+t/CGPp4F+REpu1PNC2EvT678eqsVJMAi5NZ9Ipv8B6e0WSoPUddVGH2C2pyYcx
-         KyZ9onlwvi6hQ==
+        s=k20201202; t=1686911322;
+        bh=zLFmXR4yc5DU/V5y29p2DeWsmiV4dH7qGzetBSpoCIg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=VMVmbaKUDh8fX3VSXJ7SRf4UbkWqfwvnVPjxzjEGxfh+M8St4e/fiSAwR/QRivqny
+         O5h2+AeMaXKjesDsl22i7EIEoiqL6BkbKM17P6wxQPyFYDmCF6kYin7ZbC+2jWxBlt
+         nIWSrA1E26vVT54hpXX4rjJ/+Y6tu4X2Xw2nN28VvCL2wSQdrKa33NT/+4QvYrSSxn
+         +BGJJs+TPMtu+jxqTCYZoNITgesdyeIj0KMprJu60oKD30KB50Co+Yus1YlEvAmUYV
+         jdh+3uYMZhUX5rsvx28n9DbUjwf98YRq28+i+g3QpVakNS7l95WXRxfRgEV+7o0XdC
+         FBwxJhWG0RQ1w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Theodore Ts'o <tytso@mit.edu>, Sasha Levin <sashal@kernel.org>,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 8/8] ext4: only check dquot_initialize_needed() when debugging
-Date:   Fri, 16 Jun 2023 06:28:21 -0400
-Message-Id: <20230616102821.674153-8-sashal@kernel.org>
+Cc:     Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sasha Levin <sashal@kernel.org>, hca@linux.ibm.com,
+        gor@linux.ibm.com, linux-s390@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 1/6] s390/cio: unregister device when the only path is gone
+Date:   Fri, 16 Jun 2023 06:28:34 -0400
+Message-Id: <20230616102839.674283-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230616102821.674153-1-sashal@kernel.org>
-References: <20230616102821.674153-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.4.247
+X-stable-base: Linux 4.19.286
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,50 +59,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Theodore Ts'o <tytso@mit.edu>
+From: Vineeth Vijayan <vneethv@linux.ibm.com>
 
-[ Upstream commit dea9d8f7643fab07bf89a1155f1f94f37d096a5e ]
+[ Upstream commit 89c0c62e947a01e7a36b54582fd9c9e346170255 ]
 
-ext4_xattr_block_set() relies on its caller to call dquot_initialize()
-on the inode.  To assure that this has happened there are WARN_ON
-checks.  Unfortunately, this is subject to false positives if there is
-an antagonist thread which is flipping the file system at high rates
-between r/o and rw.  So only do the check if EXT4_XATTR_DEBUG is
-enabled.
+Currently, if the device is offline and all the channel paths are
+either configured or varied offline, the associated subchannel gets
+unregistered. Don't unregister the subchannel, instead unregister
+offline device.
 
-Link: https://lore.kernel.org/r/20230608044056.GA1418535@mit.edu
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Vineeth Vijayan <vneethv@linux.ibm.com>
+Reviewed-by: Peter Oberparleiter <oberpar@linux.ibm.com>
+Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/xattr.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/s390/cio/device.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/fs/ext4/xattr.c b/fs/ext4/xattr.c
-index 3440cddb5ffb8..79d13811c5be2 100644
---- a/fs/ext4/xattr.c
-+++ b/fs/ext4/xattr.c
-@@ -2016,8 +2016,9 @@ ext4_xattr_block_set(handle_t *handle, struct inode *inode,
- 			else {
- 				u32 ref;
- 
-+#ifdef EXT4_XATTR_DEBUG
- 				WARN_ON_ONCE(dquot_initialize_needed(inode));
--
-+#endif
- 				/* The old block is released after updating
- 				   the inode. */
- 				error = dquot_alloc_block(inode,
-@@ -2079,8 +2080,9 @@ ext4_xattr_block_set(handle_t *handle, struct inode *inode,
- 			/* We need to allocate a new block */
- 			ext4_fsblk_t goal, block;
- 
-+#ifdef EXT4_XATTR_DEBUG
- 			WARN_ON_ONCE(dquot_initialize_needed(inode));
--
-+#endif
- 			goal = ext4_group_first_block_no(sb,
- 						EXT4_I(inode)->i_block_group);
- 			block = ext4_new_meta_blocks(handle, inode, goal, 0,
+diff --git a/drivers/s390/cio/device.c b/drivers/s390/cio/device.c
+index c9bc9a6bd73b7..ee4338158ae2e 100644
+--- a/drivers/s390/cio/device.c
++++ b/drivers/s390/cio/device.c
+@@ -1353,6 +1353,7 @@ void ccw_device_set_notoper(struct ccw_device *cdev)
+ enum io_sch_action {
+ 	IO_SCH_UNREG,
+ 	IO_SCH_ORPH_UNREG,
++	IO_SCH_UNREG_CDEV,
+ 	IO_SCH_ATTACH,
+ 	IO_SCH_UNREG_ATTACH,
+ 	IO_SCH_ORPH_ATTACH,
+@@ -1385,7 +1386,7 @@ static enum io_sch_action sch_get_action(struct subchannel *sch)
+ 	}
+ 	if ((sch->schib.pmcw.pam & sch->opm) == 0) {
+ 		if (ccw_device_notify(cdev, CIO_NO_PATH) != NOTIFY_OK)
+-			return IO_SCH_UNREG;
++			return IO_SCH_UNREG_CDEV;
+ 		return IO_SCH_DISC;
+ 	}
+ 	if (device_is_disconnected(cdev))
+@@ -1447,6 +1448,7 @@ static int io_subchannel_sch_event(struct subchannel *sch, int process)
+ 	case IO_SCH_ORPH_ATTACH:
+ 		ccw_device_set_disconnected(cdev);
+ 		break;
++	case IO_SCH_UNREG_CDEV:
+ 	case IO_SCH_UNREG_ATTACH:
+ 	case IO_SCH_UNREG:
+ 		if (!cdev)
+@@ -1480,6 +1482,7 @@ static int io_subchannel_sch_event(struct subchannel *sch, int process)
+ 		if (rc)
+ 			goto out;
+ 		break;
++	case IO_SCH_UNREG_CDEV:
+ 	case IO_SCH_UNREG_ATTACH:
+ 		spin_lock_irqsave(sch->lock, flags);
+ 		if (cdev->private->flags.resuming) {
 -- 
 2.39.2
 
