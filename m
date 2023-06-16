@@ -2,120 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE3973294B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 09:53:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59B8E73294C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 09:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241131AbjFPHw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 03:52:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
+        id S241229AbjFPHxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 03:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231332AbjFPHwx (ORCPT
+        with ESMTP id S241423AbjFPHxa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 03:52:53 -0400
-Received: from mail-m11879.qiye.163.com (mail-m11879.qiye.163.com [115.236.118.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E47272A;
-        Fri, 16 Jun 2023 00:52:51 -0700 (PDT)
-Received: from localhost.localdomain (unknown [58.22.7.114])
-        by mail-m11879.qiye.163.com (Hmail) with ESMTPA id 850126804B5;
-        Fri, 16 Jun 2023 15:52:44 +0800 (CST)
-From:   Frank Wang <frank.wang@rock-chips.com>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, sebastian.reichel@collabora.com,
-        heiko@sntech.de
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
-        william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
-        yubing.zhang@rock-chips.com, wmc@rock-chips.com,
-        Frank Wang <frank.wang@rock-chips.com>
-Subject: [v4,2/2] usb: typec: tcpm: add get max power support
-Date:   Fri, 16 Jun 2023 15:52:41 +0800
-Message-Id: <20230616075241.27690-2-frank.wang@rock-chips.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230616075241.27690-1-frank.wang@rock-chips.com>
-References: <20230616075241.27690-1-frank.wang@rock-chips.com>
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQ0wdTlYYHUodHklKQxlDGUJVEwETFh
-        oSFyQUDg9ZV1kYEgtZQVlOQ1VJSVVMVUpKT1lXWRYaDxIVHRRZQVlPS0hVSkpLT0tDVUpLS1VLWQ
-        Y+
-X-HM-Tid: 0a88c33140312eb5kusn850126804b5
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MBg6LQw6ET1DIhceSy4tCwJJ
-        LRpPCk9VSlVKTUNNQktKQk1OTklPVTMWGhIXVR0JGhUQVQwaFRw7CRQYEFYYExILCFUYFBZFWVdZ
-        EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFISExDNwY+
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Fri, 16 Jun 2023 03:53:30 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F3C2945
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 00:53:29 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1686902006;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9b6qw+LHebz7nR4cWWGa+NO6HGr0qxaMmVU9cknHmz4=;
+        b=C7dD/USolukk70IWDymfETxoeF+U+0vqNksrcoHbl1TpuOMoNDyJEERfCwVGeMq6Y7j4cy
+        lELcs9ijuLTmoWcM75LSzYxXIqW3LeegkXH8Wu1Ej/qMiMuTHZ25YpJ89fSbHiERQ4E6Pz
+        fUcUdfPbKQu3jUPi5cIxOt7GRgVBGBsSCWbmoxsIyb/qJkrMaEoxc+B3nNKaC+gmT8cSbG
+        P2RudCqSzQywd5F/KmAb0k8l4dPC33Ly66xtv1Hb6hhfokRvykp3IBIEN0KSSs0Tt0hoie
+        nWAAx2g05IYrhM6MStfxTODwZm/eNXXT8DEQfVTlh8rPY9QTJGl5I4+PkGJzzw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1686902006;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9b6qw+LHebz7nR4cWWGa+NO6HGr0qxaMmVU9cknHmz4=;
+        b=/N6drVnGjXE3ToifwBluN6n6bULNdI6653PyhAQckRyQ77U+VT1lJEP/i1+vipl3zxatKu
+        llWPIjkQD6relHBQ==
+To:     Ashok Raj <ashok.raj@intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Tony Battersby <tonyb@cybernetics.com>,
+        Ashok Raj <ashok.raj@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Ashok Raj <ashok.raj@intel.com>
+Subject: Re: [patch v3 1/7] x86/smp: Make stop_other_cpus() more robust
+In-Reply-To: <ZIvByEFqiJZOyau2@a4bf019067fa.jf.intel.com>
+References: <20230615190036.898273129@linutronix.de>
+ <20230615193330.263684884@linutronix.de>
+ <ZIvByEFqiJZOyau2@a4bf019067fa.jf.intel.com>
+Date:   Fri, 16 Jun 2023 09:53:25 +0200
+Message-ID: <87mt0z7si2.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Traverse fixed pdos to calculate the maximum power that the charger
-can provide, and it can be get by POWER_SUPPLY_PROP_INPUT_POWER_LIMIT
-property.
+On Thu, Jun 15 2023 at 18:58, Ashok Raj wrote:
+> On Thu, Jun 15, 2023 at 10:33:50PM +0200, Thomas Gleixner wrote:
+>> +			dm = apic->dest_mode_logical ? APIC_DEST_LOGICAL : APIC_DEST_PHYSICAL;
+>> +			dm |= APIC_DM_NMI;
+>> +
+>> +			for_each_cpu(cpu, &cpus_stop_mask) {
+>> +				u32 apicid = apic->cpu_present_to_apicid(cpu);
+>> +
+>> +				apic_icr_write(dm, apicid);
+>> +				apic_wait_icr_idle();
+>
+> can we simplify this by just apic->send_IPI(cpu, NMI_VECTOR); ??
 
-Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
----
-Changelog:
-v4:
- - No change
+That would not set APIC_DM_NMI in delivery mode and the IPI would be
+sent with APIC_DM_FIXED.
 
-v3:
- - Use Microwatts instead of Milliwatts to follow the ABI, commented by Sebastian Reichel.
+Unfortunately we don't have apic->send_NMI() ...
 
-v2:
- - No change
+Thanks,
 
-v1:
- - https://patchwork.kernel.org/project/linux-usb/patch/20230313025843.17162-4-frank.wang@rock-chips.com/
-
- drivers/usb/typec/tcpm/tcpm.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
-
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 9f6aaa3e70ca8..829d75ebab422 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -6340,6 +6340,27 @@ static int tcpm_psy_get_current_now(struct tcpm_port *port,
- 	return 0;
- }
- 
-+static int tcpm_psy_get_input_power_limit(struct tcpm_port *port,
-+					  union power_supply_propval *val)
-+{
-+	unsigned int src_mv, src_ma, max_src_uw = 0;
-+	unsigned int i, tmp;
-+
-+	for (i = 0; i < port->nr_source_caps; i++) {
-+		u32 pdo = port->source_caps[i];
-+
-+		if (pdo_type(pdo) == PDO_TYPE_FIXED) {
-+			src_mv = pdo_fixed_voltage(pdo);
-+			src_ma = pdo_max_current(pdo);
-+			tmp = src_mv * src_ma;
-+			max_src_uw = tmp > max_src_uw ? tmp : max_src_uw;
-+		}
-+	}
-+
-+	val->intval = max_src_uw;
-+	return 0;
-+}
-+
- static int tcpm_psy_get_prop(struct power_supply *psy,
- 			     enum power_supply_property psp,
- 			     union power_supply_propval *val)
-@@ -6369,6 +6390,9 @@ static int tcpm_psy_get_prop(struct power_supply *psy,
- 	case POWER_SUPPLY_PROP_CURRENT_NOW:
- 		ret = tcpm_psy_get_current_now(port, val);
- 		break;
-+	case POWER_SUPPLY_PROP_INPUT_POWER_LIMIT:
-+		tcpm_psy_get_input_power_limit(port, val);
-+		break;
- 	default:
- 		ret = -EINVAL;
- 		break;
--- 
-2.17.1
-
+        tglx
