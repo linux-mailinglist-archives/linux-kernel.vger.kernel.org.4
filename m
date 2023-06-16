@@ -2,122 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FF56732AE4
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:01:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE51732AF5
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:04:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245649AbjFPJBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 05:01:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52738 "EHLO
+        id S1343774AbjFPJE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 05:04:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243117AbjFPJAj (ORCPT
+        with ESMTP id S244352AbjFPJDy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 05:00:39 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D3FB3
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 02:00:37 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-75d558c18d0so53382985a.1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 02:00:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1686906037; x=1689498037;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QfA2+PKowVWnFmtQcmcI94eXp8KLOiEHUTtNf0iYmNc=;
-        b=zk5Q6ZFoM2Wchg5beTouETIegNxWUNkCZR0oHoThZVtlGi7deHzXGsGQj64giSnfIW
-         o5N3FUtfhLiLhUNKU7510u9f00olQ1i5qpVUk1eaYdKCTi+Ye5vD5XsV62fnTCDpgc2J
-         l160cllw0jXvsMBzqqEPyVn6RINTrWSUBCjoPMTbTSRPyLNZwtH8WnQseXghsR6Mvy+Z
-         eZxhQJJeMHA/CJOJ8hjbUPQ7wqK12Z+KwbiwoHkVCYQg3dbSzlcMlu8DAhQ9rJCd+Cf9
-         WOuMeg8yTnUUXhjO7lAaLANYUibzszWcd/k1jHj05XvvvRxtoT6KdPGyCRZmsxWyu4sX
-         m54g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686906037; x=1689498037;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QfA2+PKowVWnFmtQcmcI94eXp8KLOiEHUTtNf0iYmNc=;
-        b=jLBiiWbu75Zc28/9iIU71LkUY58kxK4wYA5ykR2qGG9LbCCaKs24Vl8ysqey/VAsIJ
-         eWQ5o1Z7kylcjy+PApYTtn4YTiYH7OvPTuXD7rdljkWI1YjQVlyuuUOERYUk37yekVSq
-         s+1zSFrL/2fdqLroZzKy7SJIIz6nDrUsbhFUJCQ8BJEFNB5CUBPjtbSOH5Hs/S0mA7WU
-         cU3OxOM5mBoCxdRpeVpwk/12dUFNJzz/4etIhQ9ym3M6Kv3sZdvSKfPeFH9HP6f/7GrG
-         ed5Ww+n4H6eL/k8hP4TbbQWygGqG2vZsnc9mp6xdxX9vyF/cYviH7ZMBqxKAtwv1GW3r
-         cmaA==
-X-Gm-Message-State: AC+VfDytwlvGF13Jnq7KOapEGHHvm7/MRRkAQ1vdENcTD3B2QXigulAW
-        Z0JZHG2XwgrNsgik4Mw7H1XAr2uGhWyuOf5Ln1L2cKqSTEGwyull
-X-Google-Smtp-Source: ACHHUZ7e+R7mXzqeL8J8PJ/VKESbKvX+0rlaG0kmR8fYR+mOZB0JPcGQ8kdCUOAGldHsfTuqdSPUhoHlYE+drMvV+w0=
-X-Received: by 2002:ae9:f447:0:b0:762:148:6d68 with SMTP id
- z7-20020ae9f447000000b0076201486d68mr970467qkl.9.1686906037026; Fri, 16 Jun
- 2023 02:00:37 -0700 (PDT)
+        Fri, 16 Jun 2023 05:03:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73A54493
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 02:02:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E71262C11
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 09:02:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6EF3C433C0;
+        Fri, 16 Jun 2023 09:02:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686906122;
+        bh=cVzo/h1du6EG71YMJA69ZOvL8XUo5XXroakRB2KzZho=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FtywWfZtgsSj9FFvkPXXwo6WbvZLGQh+2L5ouZeJCIRq8qf+btEr6ccuQbacsOeo5
+         zwEcUnUrGyBg3M7mYLmj3cE9cC1xiuvjCZp7K09Tb3tPZ/LsFmp3t5T3SNEoGRhI4u
+         A7Tv6H/7geI+qr66OvZ9gksTWXwg4/qycNf1TuY8IHG2a+GHYcrQBn6Yu7KYRicyuf
+         svss8ubY8wrRBMqSn5QcK2POSanpEJmhtb3oE9N9i3FZAOi7EqUY+EcGNmBkB3ZfDs
+         X6nfcGOd+NhgLFFkNEChAnaX2f7MdfxAX3OM/yXJOB+5EezGd6CHIao4CSb4XxqlZ+
+         PNkWceMMoDYXw==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Ryan Lee <ryans.lee@analog.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/4] ASoC: max98388: fix unused function warnings
+Date:   Fri, 16 Jun 2023 11:00:37 +0200
+Message-Id: <20230616090156.2347850-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230615132023.13801-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230615132023.13801-1-andriy.shevchenko@linux.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 16 Jun 2023 11:00:26 +0200
-Message-ID: <CAMRc=Me1Gy6rpKQ=7LZ3qZG+TdBbpsQ=QGQqZ0G6tJnp1HqtSQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/5] gpio: aggregator: Incorporate gpio-delay functionality
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Andy Shevchenko <andy@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 3:51=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> The newly appeared gpio-delay module enables external signal delay lines
-> that may be connected to the GPIOs. But at the same time it copies the
-> GPIO forwarder functionality. Besides that the approach does not scale.
-> If we would have another external component, we would need yet another
-> driver. That's why I think, and seems others support me, better to
-> enable such a functionality inside GPIO aggregator driver.
->
-> Patch 1 is a cleanup that may be applied independently on the decision
-> about the rest.
->
-> Please, test and comment! Alexander, I would appreciate your tag.
->
-> In v3:
-> - added new patch 3 to prevent device removal from sysfs
-> - switched to feature in driver data instead of "compatible" (Geert)
-> - applied tags (Geert, Linus)
-> - left DT bindings untouched, can be amended later on
->
-> In v2:
-> - split as a series
-> - covered CONFIG_OF_GPIO=3Dn case
-> - removed the gpio-delay
-> - moved gpio-delay Kconfig help to the comment in the code
-> - left udelay() call untouched as recommended by documentation
->
-> Andy Shevchenko (5):
->   gpio: aggregator: Remove CONFIG_OF and of_match_ptr() protections
->   gpio: aggregator: Support delay for setting up individual GPIOs
->   gpio: aggregator: Prevent collisions between DT and user device IDs
->   gpio: aggregator: Set up a parser of delay line parameters
->   gpio: delay: Remove duplicative functionality
->
->  drivers/gpio/Kconfig           |   9 --
->  drivers/gpio/Makefile          |   1 -
->  drivers/gpio/gpio-aggregator.c | 113 +++++++++++++++++++++--
->  drivers/gpio/gpio-delay.c      | 164 ---------------------------------
->  4 files changed, 106 insertions(+), 181 deletions(-)
->  delete mode 100644 drivers/gpio/gpio-delay.c
->
-> --
-> 2.40.0.1.gaa8946217a0b
->
+From: Arnd Bergmann <arnd@arndb.de>
 
-Applied patches 1, 2, 4 and 5. Thanks!
+The PM functions are never referenced when CONFIG_PM_SLEEP is
+disabled:
 
-Bart
+sound/soc/codecs/max98388.c:854:12: error: unused function 'max98388_suspend' [-Werror,-Wunused-function]
+static int max98388_suspend(struct device *dev)
+           ^
+sound/soc/codecs/max98388.c:864:12: error: unused function 'max98388_resume' [-Werror,-Wunused-function]
+static int max98388_resume(struct device *dev)
+
+Fix this by using the modern SYSTEM_SLEEP_PM_OPS() macro in place of
+the deprecated SET_SYSTEM_SLEEP_PM_OPS() version, and use pm_sleep_ptr()
+to hide the entire structure as well.
+
+On a related note, the of_match_ptr() and ACPI_PTR() macros have the same
+problem and would cause the device id table to be unused when the driver
+is built-in and the respective subsystems are disabled. This does not
+cause warnings unless -Wunused-const-variable is passed to the compiler,
+but it's better to just not use the macros at all here.
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ sound/soc/codecs/max98388.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/sound/soc/codecs/max98388.c b/sound/soc/codecs/max98388.c
+index 8062a71150074..3d03c4bac6c55 100644
+--- a/sound/soc/codecs/max98388.c
++++ b/sound/soc/codecs/max98388.c
+@@ -873,7 +873,7 @@ static int max98388_resume(struct device *dev)
+ }
+ 
+ static const struct dev_pm_ops max98388_pm = {
+-	SET_SYSTEM_SLEEP_PM_OPS(max98388_suspend, max98388_resume)
++	SYSTEM_SLEEP_PM_OPS(max98388_suspend, max98388_resume)
+ };
+ 
+ static const struct regmap_config max98388_regmap = {
+@@ -998,9 +998,9 @@ MODULE_DEVICE_TABLE(acpi, max98388_acpi_match);
+ static struct i2c_driver max98388_i2c_driver = {
+ 	.driver = {
+ 		.name = "max98388",
+-		.of_match_table = of_match_ptr(max98388_of_match),
+-		.acpi_match_table = ACPI_PTR(max98388_acpi_match),
+-		.pm = &max98388_pm,
++		.of_match_table = max98388_of_match,
++		.acpi_match_table = max98388_acpi_match,
++		.pm = pm_sleep_ptr(&max98388_pm),
+ 	},
+ 	.probe = max98388_i2c_probe,
+ 	.id_table = max98388_i2c_id,
+-- 
+2.39.2
+
