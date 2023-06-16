@@ -2,74 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05CEB732D2C
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:15:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E5A6732D39
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230318AbjFPKPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 06:15:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42456 "EHLO
+        id S243762AbjFPKRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 06:17:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244305AbjFPKPm (ORCPT
+        with ESMTP id S245746AbjFPKRM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 06:15:42 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB8D1B2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 03:15:40 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-978863fb00fso75044666b.3
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 03:15:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686910539; x=1689502539;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zwScczYRHDuS+uM/rfmKO4C5p7n2XSuTcTw270MNkk4=;
-        b=zu3fjlKDUVErA66PTf6isUYRnsi7raaRLUcMH8ROUwv9ap/uu6U8BdfBi0HWSg1D0n
-         jIWXf8WKfMLoFoD/HMSIyr7h6cSx6mUIQTUDx1ojxopOqHpnY/Cd5fsYjkXjbpflKhGs
-         /Bxj7GTAXk/eFTPgRZWgEENN33IOxXjFPSsnTAyrHupI8Ch+8Fqh83+tMGqRQZZfMdd5
-         7i+BEgnvwp9iQTSkb4JDIBqygGSSCdPzRO8NWfQxEDShRtk5NcREle6gpZ3WbytjaUMJ
-         +xKCckYV9aXSmfRRr5fCGpJ7S1ucHVhegy4U97iGyCgKIna2QnwMnbnz1JRNNuD+1Tw2
-         Nevw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686910539; x=1689502539;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zwScczYRHDuS+uM/rfmKO4C5p7n2XSuTcTw270MNkk4=;
-        b=jXSIohU1OFy0OHqfvCWHt6T73W+GmJcQGFh+IUr39aWG2CgmSvQPncsykzBX80mRaf
-         UCflfWI8Bt+fUtJBoLo4qzGh44gsmMhUlQKb7z760En7bA1GwZdgXMCiTearroNXd7qH
-         mO9IuN+pNwC+OX8bjF9BR+vemsIkB3Hnx/Aes+BKXHK/NhGmN49wJsqtt9ybnuTBEyUc
-         89XzvNXkC3kRmaz5Op9ubMBSh1FazrYIwjDzOSqim5tEgQSZEdPxH8nlDkgYBBMoOhlt
-         ZhTAmrLHbBdrVVqO73E5BkR25BQT6ri7wuaZFnWjGjIEpWRUM8+GRe2bi6MdYsH9dUux
-         EQ9Q==
-X-Gm-Message-State: AC+VfDwGxJMpj4NRaU9Llj4hCSpoMpKFVNLydGxrRyaDyCW4r/y002Eq
-        IExWJlI8V1Ma72w+EcEC8XFNXQ==
-X-Google-Smtp-Source: ACHHUZ6a9+a+UtZA5+MxGsJZ0KNpW4rSE+S0VhL127tZfNrsWcrP79KtqNmz573hlr6hcjvmtpqGYQ==
-X-Received: by 2002:a17:907:9621:b0:982:8a28:ba24 with SMTP id gb33-20020a170907962100b009828a28ba24mr1789141ejc.63.1686910539290;
-        Fri, 16 Jun 2023 03:15:39 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id x5-20020a1709060a4500b00982a60f2c0asm1926383ejf.74.2023.06.16.03.15.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jun 2023 03:15:38 -0700 (PDT)
-Message-ID: <165dd295-1b3a-5062-772a-613a7bf6fd45@linaro.org>
-Date:   Fri, 16 Jun 2023 12:15:37 +0200
+        Fri, 16 Jun 2023 06:17:12 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A086137;
+        Fri, 16 Jun 2023 03:17:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1686910625; x=1718446625;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+yZ1J9TkgeUwFYSmwgGhVFWjrw27DTlM8sQsMjgV3EI=;
+  b=iZo0eA5WrEXvrGcwLdFvX54VznAgI+HcsJ3nKs4Y6B03NzH64U505pE2
+   s/yjndYVBj1Z7f6fHVLAH1sTPcvamzS//Rj421B/W1Gkl76hzQueYeo99
+   Syt/NWGt496VX3ZWhcTDEUFP6P04X28yY4TlfYGsuwgJPZwD8pv5ZE60Z
+   5XnK4J47JZpx6Z1rWUPIDe+CpGLS5sOqcHjhof1613jcnpxuou3hbOCvr
+   HELztu8b7UOjSKmWj/DGEpUz7RGOZcaCuszhmZyDK0sK8gb8f7VrHgmxN
+   7i3fnXCaoYqGK/X5PSpyil2vbDHjmvoGqQiVBz8h6qcDQJ52K+vFGvI1H
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
+   d="scan'208";a="218860839"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Jun 2023 03:17:04 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 16 Jun 2023 03:17:03 -0700
+Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Fri, 16 Jun 2023 03:17:00 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <sre@kernel.org>, <conor+dt@kernel.org>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH v3 0/4] dt-bindings: power: reset: at91: convert to YAML
+Date:   Fri, 16 Jun 2023 13:16:42 +0300
+Message-ID: <20230616101646.879480-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] dt-bindings: arm: socionext: add bindings for the
- Synquacer platform
-Content-Language: en-US
-To:     jaswinder.singh@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     krzysztof.kozlowski+dt@linaro.org, robh@kernel.org,
-        ilias.apalodimas@linaro.org, masahisa.kojima@linaro.org
-References: <20230616035813.255062-1-jaswinder.singh@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230616035813.255062-1-jaswinder.singh@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,19 +65,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/06/2023 05:58, jaswinder.singh@linaro.org wrote:
-> From: Jassi Brar <jaswinder.singh@linaro.org>
-> 
-> Socionext's DeveloperBox is based on the SC2A11B SoC (Synquacer).
-> Specify bindings for the platform and boards based on that.
+Hi,
 
-A nit, subject: drop second/last, redundant "bindings". The
-"dt-bindings" prefix is already stating that these are bindings.
+Series convert AT91 shutdown controllers documentation to YAML.
+Along with it device trees were updated and also entries to
+MAINTAINERS with documentation files.
 
-> 
+Thank you,
+Claudiu
 
-Binding without it's user is usually useless. Where is the user?
+Changes in v3:
+- do not define properties in allOf section
+- used additionalProperties instead of unevaluatedProperties
+- fixed compatible list of patch 3/4
+- s/Atmel/Microchip AT91/g in title and description sections of YAML files
+  and in commit description
+- collected tags
 
-Best regards,
-Krzysztof
+Changes in v2:
+- use minimum, maximum on uint32 enums instead of all possible values
+- change commit description for patch 3/4 to explain why there is a
+  syscon along with microchip,sama7g5-shdwc
+- remove | near description entries
+
+Claudiu Beznea (4):
+  ARM: dts: at91: use generic name for shutdown controller
+  dt-bindings: power: reset: atmel,at91sam9260-shdwc: convert to yaml
+  dt-bindings: power: reset: atmel,sama5d2-shdwc: convert to yaml
+  MAINTAINERS: add documentation file for Microchip SAMA5D2 shutdown
+    controller
+
+ .../devicetree/bindings/arm/atmel-sysregs.txt |  94 ---------------
+ .../power/reset/atmel,at91sam9260-shdwc.yaml  |  82 +++++++++++++
+ .../power/reset/atmel,sama5d2-shdwc.yaml      | 114 ++++++++++++++++++
+ MAINTAINERS                                   |   1 +
+ arch/arm/boot/dts/at91-qil_a9260.dts          |   2 +-
+ arch/arm/boot/dts/at91-sama5d27_som1_ek.dts   |   2 +-
+ arch/arm/boot/dts/at91-sama5d2_ptc_ek.dts     |   2 +-
+ arch/arm/boot/dts/at91-sama5d2_xplained.dts   |   2 +-
+ arch/arm/boot/dts/at91sam9260.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9260ek.dts           |   2 +-
+ arch/arm/boot/dts/at91sam9261.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9263.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9g20ek_common.dtsi   |   2 +-
+ arch/arm/boot/dts/at91sam9g45.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9n12.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9rl.dtsi             |   2 +-
+ arch/arm/boot/dts/at91sam9x5.dtsi             |   2 +-
+ arch/arm/boot/dts/sam9x60.dtsi                |   2 +-
+ arch/arm/boot/dts/sama5d2.dtsi                |   2 +-
+ arch/arm/boot/dts/sama5d3.dtsi                |   2 +-
+ arch/arm/boot/dts/sama5d4.dtsi                |   2 +-
+ arch/arm/boot/dts/sama7g5.dtsi                |   2 +-
+ arch/arm/boot/dts/usb_a9260.dts               |   2 +-
+ arch/arm/boot/dts/usb_a9263.dts               |   2 +-
+ 24 files changed, 217 insertions(+), 114 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/reset/atmel,at91sam9260-shdwc.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.yaml
+
+-- 
+2.34.1
 
