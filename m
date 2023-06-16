@@ -2,349 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57BB67336DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 18:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F4E27336F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 18:59:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346042AbjFPQ5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 12:57:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42544 "EHLO
+        id S1345740AbjFPQ7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 12:59:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345962AbjFPQ5I (ORCPT
+        with ESMTP id S1345619AbjFPQ6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 12:57:08 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770544C37;
-        Fri, 16 Jun 2023 09:55:11 -0700 (PDT)
+        Fri, 16 Jun 2023 12:58:49 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7310A558E;
+        Fri, 16 Jun 2023 09:56:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686934511; x=1718470511;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=kEpmcXqvu9bcRZE7eSxcLWpsLyANqUirm2sGpkDahsA=;
-  b=JiaNN0BTXrK4I1JOzRXaFl9iR3DoALa5hmn6orUkoMV1USESBldYrNLO
-   ER8DQPFQQmdLcYvEAUIM6lRIqtCHD2DRkij4B+kfX0R2Y90DXFaBXL0yL
-   JMVskBtJuulnYKUFMHYTnYmPCcOiVqYq9/Fj+C1CqNlkKDpTIjeJWKVI/
-   V3UMb7ZEHmzE8Pt5qpKxIJiQhDq86rRKhw/WsmyQqi4neG4wO1B+7NkM4
-   nUQABMdUgNZQspLtRTprtj6XPX+DO2Xi4kW0gElM8jhuQYHonTvMwgsbr
-   2YXl/7uEi0W2wb6GN+rBpoNBE/y0yX+XTmMZlXB/pnWYxOfdmfA8O2XbC
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="338877179"
+  t=1686934615; x=1718470615;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=Js61kklOp4BQ1rwerQRjlhJ3sV165mZhQX0vvO8dy+U=;
+  b=f9ONZQI7iyhNzlxv/blEoRBENm1wlVs/q3+fxagg9IqSl5xi+k2zBxQl
+   0y1O8A5GQWc0kP9LBKRKtQEgln9JPjmMfToS1dpnRlgelEI9jCKsFnWbt
+   p1B0+z/Om4+/Pz2mw5OJdKQC+dYMFMkUEsrHKDx0L4P0wkyZsX6Qe5XIf
+   jcG9nW3Fc02W26zZpx5/nYsRfjcfKKOxMn2mZe9jbf1iXjoexsI9Er/ov
+   4NycKPqbgi0AH73opd51CMTVBEUxchyLbE9fYKYKJH1+O48YFCzQOAji4
+   C2N8oIu1sKaUkPkyy4Ar112Nz45upAbrumTjuADNerXIJU3KsoA2bacSC
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="388029676"
 X-IronPort-AV: E=Sophos;i="6.00,248,1681196400"; 
-   d="scan'208";a="338877179"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 09:54:56 -0700
+   d="scan'208";a="388029676"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 09:55:59 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="837089615"
+X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="690308661"
 X-IronPort-AV: E=Sophos;i="6.00,248,1681196400"; 
-   d="scan'208";a="837089615"
-Received: from jbonds-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.56.162])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 09:54:55 -0700
-Message-ID: <5617a6975ff1ac62739697bf315fb34b8b874aec.camel@linux.intel.com>
-Subject: Re: [PATCH 2/2] platform/x86/intel/tpmi: Add debugfs interface
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Ilpo =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     hdegoede@redhat.com, markgross@kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date:   Fri, 16 Jun 2023 09:54:55 -0700
-In-Reply-To: <7e269676-6e0-6470-f9f3-4f66dde88e2a@linux.intel.com>
-References: <20230615193302.2507338-1-srinivas.pandruvada@linux.intel.com>
-         <20230615193302.2507338-3-srinivas.pandruvada@linux.intel.com>
-         <7e269676-6e0-6470-f9f3-4f66dde88e2a@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+   d="scan'208";a="690308661"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga006.jf.intel.com with ESMTP; 16 Jun 2023 09:55:58 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 16 Jun 2023 09:55:57 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 16 Jun 2023 09:55:57 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Fri, 16 Jun 2023 09:55:57 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Fri, 16 Jun 2023 09:55:57 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GLFm7Ts/De8RA8GmO6FLJQKRIVWusJVHr6s+fqv/EeCdguWQNuWrOVnNfdryqbyG365gk51qGQYq44uluAF6B0tXjnqS8wv3pXEsxkpBDqejK4mxoTx51q1LcWKm6LpKgLN3OLxBMz2Jt5j4ecV4JgfTjtz7ncCF0v9TrsjJzzNmUjxIKCGQETBBugoagWzxpotQffXMLzDyPY+6HFx5KcSDm8rTaq9S2rpENT+twKiMGdxQzLAH4BeKFF7OBzi55hTEGPmgLN3reZl8oATWxy6DtuXf9uSBDZE0+DMp9+9zHuknSPpYr4iKdInSSsvEd1cjsLSLDJ8gsRVBbAt3PA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Js61kklOp4BQ1rwerQRjlhJ3sV165mZhQX0vvO8dy+U=;
+ b=OScAWFPfVesu83HbP6tyN3+R3jZvs6O8YrxYDjOcYFI1b7LC1mfGiMr1z88h1i7t9pIXdqG+cbv8eLEQygrbPEGlpu8uwB+gYeRIMene/VU9DyCNRwuXjaxaJ0ZldlXYZIrPMRIvdIwDrQqD2r6VG1VqFH2zAw4Lgk7RTXdWS5SngXeRpWI/bdkzi4cwkK5St0Kyf8FUxsvctQALOS4mT4WjHZ2F81XZb6gXbsFwDmV7bhzebuv1Y7dpdZFkEL5PTn0HlOyHDwPDPnle2aDePkXNg0l244xnmrQedEN5KZ39sl0cA+lC9I6wXimNr8W6ZC+9omft/6bbc2DD8lBfxw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from MN0PR11MB5963.namprd11.prod.outlook.com (2603:10b6:208:372::10)
+ by MW3PR11MB4697.namprd11.prod.outlook.com (2603:10b6:303:2c::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.29; Fri, 16 Jun
+ 2023 16:55:55 +0000
+Received: from MN0PR11MB5963.namprd11.prod.outlook.com
+ ([fe80::6984:19a5:fe1c:dfec]) by MN0PR11MB5963.namprd11.prod.outlook.com
+ ([fe80::6984:19a5:fe1c:dfec%7]) with mapi id 15.20.6500.029; Fri, 16 Jun 2023
+ 16:55:54 +0000
+From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rppt@kernel.org" <rppt@kernel.org>
+CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "deller@gmx.de" <deller@gmx.de>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "kent.overstreet@linux.dev" <kent.overstreet@linux.dev>,
+        "puranjay12@gmail.com" <puranjay12@gmail.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "dinguyen@kernel.org" <dinguyen@kernel.org>,
+        "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "song@kernel.org" <song@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Subject: Re: [PATCH v2 06/12] mm/execmem: introduce execmem_data_alloc()
+Thread-Topic: [PATCH v2 06/12] mm/execmem: introduce execmem_data_alloc()
+Thread-Index: AQHZoC/TR3JgcIuStE2G0Xd9KghheK+NpnKA
+Date:   Fri, 16 Jun 2023 16:55:53 +0000
+Message-ID: <90a64b6f040491da16af0694172a6cbdaba33669.camel@intel.com>
+References: <20230616085038.4121892-1-rppt@kernel.org>
+         <20230616085038.4121892-7-rppt@kernel.org>
+In-Reply-To: <20230616085038.4121892-7-rppt@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.44.4-0ubuntu1 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN0PR11MB5963:EE_|MW3PR11MB4697:EE_
+x-ms-office365-filtering-correlation-id: 5b3da7c8-1546-4167-f029-08db6e8a8c34
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 55tymwny0+p9AJrKuV6Lw9CTmKI2ItrnVOstrECWigv9Z8cjWvqSfeaHWQSUGW5VU+mfWIG70rMyttZ4EwUgfMSBR60zyCn9smiGC8YCcUF9fASq/sC8Cf2dDIhithsBz5Pv3FICtzSk8YB9Zy6t+fjAjTY3WFEcUEpLYsXokYmKWva3797Cuef1kpDYCqUXOwnCkMsyPHXxoOjJ9K8kxRC5IZQs/sp1uhaQ96/0lfABWqm8JzoRMTX4njLk8N8x7zKahweTPSQQpeIJZlqaPehuz+tjJWsFaOaBpCf/9MxW2f/Zdg34HyKEakHRwPelRpxZTl6XnoAfILl4qjk7VHWnEIn45mflQ88cnbto+XP8To0FsI7A9yitE7wAos5Z/Nhitl0w/BDdicTSi9b00kfMVBLSNw1qutwPd7+O6rqImZeoBea0Izxc7C00bjhNQBI3I4BrR3icZ/8zLO+vFqr15e/7HLRkTZoKRQF00ZsutWPPAA7Lq/Sld7ITjrMrLcU3r7xzpraFc1dU+lhwUDI8PERloI68A5kU3/DKilTBOiDW/cjVfh1sRC8Yh34F/bABmj8G78GVUV/+ee6mjIdta/q3/kArkkrK2q1g/VDGIkmd2VetbOxFwzTPjuL1
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB5963.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(136003)(366004)(396003)(346002)(376002)(451199021)(2616005)(71200400001)(26005)(186003)(6506007)(6512007)(54906003)(478600001)(110136005)(6486002)(38070700005)(82960400001)(38100700002)(86362001)(122000001)(7406005)(8676002)(8936002)(7416002)(41300700001)(5660300002)(76116006)(316002)(4326008)(66946007)(66446008)(66476007)(66556008)(4744005)(2906002)(64756008)(91956017)(36756003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VlNzbFFxSis4ZmpHV0ZCYXQyTFNsVFY2NnVoOHV1OXpnSjVxTVVNVlg4VlNX?=
+ =?utf-8?B?ejdRVnZJWFVMUmpuM2ZxbXZvd2hNdlN4aWxCV2VuTGE3WU8xSXpzVWJvY2xR?=
+ =?utf-8?B?bVU4cE0wSitZMms2SEFURzlwN2NDTnQ3TnBCNEhodkdtYkdETTVGWjA1emVY?=
+ =?utf-8?B?VlgvTGRHU3JRRnc3NEJ0eUp4Skdpd0x6VXYrRitKS1dFM3VGMk5yZWxWbmxB?=
+ =?utf-8?B?SklVUENkaXJjY0tGRmxZNmRKNi9hQnJHa040WUFYamZmZzFmRklaZVRBNkc4?=
+ =?utf-8?B?dkhZOGdTb052NHUrYkM0VE9rOExuQXJjeXlERllVeWNENDllMWgrc2FwUDhG?=
+ =?utf-8?B?STEwSzdUVDR0bVhiOGZXdjZTV2JWdy9GY0VLeXA1V1grNE1ZVldnNGIybUJr?=
+ =?utf-8?B?ajFycDVEd3RrSXBUZHhCeVR3R2JLWXB5ZWFnU2NsS3AxY0c0UlB4S3hrUDJP?=
+ =?utf-8?B?OWJhTWRtaU0wSXloc0sxek01cFp3VXMyc21QV2ZIa1BObjRNdkwyVHJXTmo4?=
+ =?utf-8?B?WFhUa1lNKzZLem9nbnJEVk9NQ0loWHJ2RE13U0J3aUV6eEMrRnFTWEQwMlg5?=
+ =?utf-8?B?ZjJ4WjhDU0U4WDUwNEJpWU9wcXBwcm04NVJ2VEJsTXVBVzNaSVJBSENjWTR6?=
+ =?utf-8?B?VGdnaDNlTWNURzJNd1dvUnliaUQzUVlHZHVOalUxaDhtdk94UEVtZ2NaWk9a?=
+ =?utf-8?B?M1FFa3dDVEllK205NnlKd3VPTVMwNm1oZ2o5RVIrcjlsWGpYa2hDNkx4WEM2?=
+ =?utf-8?B?cVZiaHRGbEZ2T3JvVE1aQ2ZhQ2NETkpONEVmT0w2Z3FZTXVwZUVZT2lzeUF1?=
+ =?utf-8?B?N3orcnhNZ2ZyYVQ5aTVHdUM5R2Y1UmxjWHdQdFd1ckhoM1JYbnZ5QzVVeWlv?=
+ =?utf-8?B?Z3Y0UWlHb3ZHb1NWNkVIL3dvZVF4T21pRGRtZnRGT01idDE4Q0pTTVMzY0gw?=
+ =?utf-8?B?QzJaWUR5eERKSzRsNStsZ3oxeFd4Tm1uazNuWDNpTnJMdnFIV1pOVnFyMnhF?=
+ =?utf-8?B?M3FaeFBLRkd6bEt0Y1FNTkE5ZlZmWWVEdEx3N1ZBR3hUWUFYRzVob2ZKSy9U?=
+ =?utf-8?B?Nkt3TWtCbDFWd0thdGFLMGN1NmpnMGxBUTZ6S21wVldZejRCeUR2YUw1aTNz?=
+ =?utf-8?B?aE81elRTSVVQejlRZGpKL2Z4Nk05ZjluVUUyWHBGaUV4cXJTTWxlWWZZUWFo?=
+ =?utf-8?B?WUJVTVFTeWhHZEJoWG50Ykg1QTRkaDdwa1dOU0VBZnIrNHZMSUo1Y1VQbDFP?=
+ =?utf-8?B?SExGWmFUbkcxMmVQTW5EU3psNTg1ZTVVbExMT1lUdkRlTHNLakl4azBYM0JI?=
+ =?utf-8?B?T2RBQ2tsWisyUU1VTzNFMW1VeFQvRWVvWEh3NXp5Tjl3SE9HK3AxZmNqVXhs?=
+ =?utf-8?B?Q3RkdSt6djh4TkFLeU1sZWcvMnlvVWNIOWRTSjkzQnN3ZXI4WUkrd1FXZXBG?=
+ =?utf-8?B?UmRtWVBmSnAzSjZ5UU93M2VabU1PS2FPbi9vVnhzR25vSjducmJ6V0cvUXlJ?=
+ =?utf-8?B?S1dPQldkRitHTUxpUHlHUVN3ZUU0TTkxQmFlOUMrcTIyU2FWMjVPcHh5K0ZP?=
+ =?utf-8?B?aGRWUCtJOEFzdUFlVjMrZ0t0RWxLSHZGNElvWDNXYitjTGxiZEVzblZVQW5Y?=
+ =?utf-8?B?S3RLRis1aVYrbnhsRjdrcE13YnI3MGxGb2xjL2xpY2RtVVVNcXBaeUVSUlZn?=
+ =?utf-8?B?azFod1BHUmZKSmNiTWp4V1ZWOHJFeUVVMHlCNlAvWTFtU085WC9yTFM3dEpH?=
+ =?utf-8?B?dkk5MmpCTDBiZ2pLZlhaVkh4K1VUZTBrY3NiVXVpL2lpZ2lMWXJ6ZmMxYjJs?=
+ =?utf-8?B?SEJ0ZEs2cFNESjZLdjBWOEJmS1FFRkdndU9YNG8wUEpocXBhZ2ljeDZxSVJR?=
+ =?utf-8?B?MXVObHYyOTBrR2xHNGdZZVlDd1JpanlXYnlGYWE3OG53K1B4dFlOaDgrRnlZ?=
+ =?utf-8?B?RHpiY1Z3cTFsSk9Bc0NDVlhkSjlmYmlvbWQzYjMwOFpVMzZPNTlYSGMxdDdB?=
+ =?utf-8?B?dVRoWlJjMDVEa1Q3K3dNQU1NeVp6SStycVI0ZEZmdmU2dGNvaXRPdTRtbmlO?=
+ =?utf-8?B?WHZwOTB1ZGZYN0phUjJFMGlTSC90OFIyVHFpN2R6YUI0RllGN1QvY3h2OEo4?=
+ =?utf-8?B?aks1d2JhQUFETThkWUJCK3crOUFZeEl5VGcwY3F3RkIxc1ZyR1hXSGp2Nm95?=
+ =?utf-8?B?OHc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <296480AEB1784F438AF55677428C8428@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB5963.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5b3da7c8-1546-4167-f029-08db6e8a8c34
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jun 2023 16:55:53.8380
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: djtwhzK5rIuDoNODv1diC0gNewajiVZ3/uT8OfCTcgK3MGfFfnfk6NQh4QGrKI8Mn/9WaTKi1BcoE2Fi1Wv+cbhC/2Z1m3nfYDGQ4vxU7DA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR11MB4697
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-06-16 at 10:46 +0300, Ilpo Järvinen wrote:
-> On Thu, 15 Jun 2023, Srinivas Pandruvada wrote:
-> 
-> > 
-
-[...]
-
-> > +       seq_puts(s, help);
-> 
-> The appropriate place to this kinda information would seem to be:
-> 
-> Documentation/ABI/testing/debugfs-... file.
-
-I prefer to add to Documentation.
-But this is for validation folks, who struggle to get documentation,
-will ask you 10 question before using. Hence added here.
-
-But I don't have strong preference here. I can move to doc area.
-
-
-> 
-> > +
-> > +       return 0;
-> > +}
-> > +DEFINE_SHOW_ATTRIBUTE(tpmi_help);
-> > +
-> > +static int tpmi_pfs_dbg_show(struct seq_file *s, void *unused)
-> > +{
-> > +       struct intel_tpmi_info *tpmi_info = s->private;
-> > +       int i, ret;
-> > +
-> > +       seq_printf(s, "tpmi PFS start offset 0x:%llx\n", tpmi_info-
-> > >pfs_start);
-> > +       seq_puts(s,
-> > "tpmi_id\t\tnum_entries\tentry_size\t\tcap_offset\tattribute\tfull_
-> > base_pointer_for_memmap\tlocked\tdisabled\n");
-> > +       for (i = 0; i < tpmi_info->feature_count; ++i) {
-> > +               struct intel_tpmi_pm_feature *pfs;
-> > +               int locked, disabled;
-> > +
-> > +               pfs = &tpmi_info->tpmi_features[i];
-> > +               ret = tpmi_read_feature_status(tpmi_info, pfs-
-> > >pfs_header.tpmi_id, &locked, &disabled);
-> > +               if (ret) {
-> > +                       locked = 'U';
-> > +                       disabled = 'U';
-> > +               } else {
-> > +                       disabled = disabled ? 'Y' : 'N';
-> > +                       locked = locked ? 'Y' : 'N';
-> > +               }
-> > +               seq_printf(s,
-> > "0x%02x\t\t0x%02x\t\t0x%06x\t\t0x%04x\t\t0x%02x\t\t0x%x\t\t\t%c\t%c
-> > \n",
-> 
-> The last hex is just %x (not %08x), is it intentional?
-Not intentional.
-
-> 
-> > +                          pfs->pfs_header.tpmi_id, pfs-
-> > >pfs_header.num_entries, pfs->pfs_header.entry_size,
-> > +                          pfs->pfs_header.cap_offset, pfs-
-> > >pfs_header.attribute, pfs->vsec_offset, locked, disabled);
-> 
-> Please split parameters to 100 columns (I'm okay with the string 
-> exceeding it).
-> 
-> It would help here if you add pointer also to pfs_header struct. ;-)
-> 
-Will think about it if useful.
-
-> > +       }
-> > +
-> > +       return 0;
-> > +}
-> > +DEFINE_SHOW_ATTRIBUTE(tpmi_pfs_dbg);
-> > +
-> > +#define MEM_DUMP_COLUMN_COUNT  8
-> > +
-> > +static int tpmi_mem_dump_show(struct seq_file *s, void *unused)
-> > +{
-> > +       size_t row_size = MEM_DUMP_COLUMN_COUNT * sizeof(u32);
-> > +       struct intel_tpmi_pm_feature *pfs = s->private;
-> > +       int count, ret = 0;
-> > +       void __iomem *mem;
-> > +       u16 size;
-> > +       u32 off;
-> > +
-> > +       off = pfs->vsec_offset;
-> > +
-> > +       mutex_lock(&tpmi_dev_lock);
-> > +
-> > +       for (count = 0; count < pfs->pfs_header.num_entries;
-> > ++count) {
-> > +               u8 *buffer;
-> 
-> Why only this is declared here? I see no consistency based on 
-> variable usage/scope.
-I will fix this.
-
-> 
-> > +               size = pfs->pfs_header.entry_size * sizeof(u32);
-> 
-> Can this overflow?
-No. Coming from a trusted architectural source. The system will not
-pass BIOS if they are wrong.
-
-> 
-> > +               buffer = kmalloc(size, GFP_KERNEL);
-> > +               if (!buffer) {
-> > +                       ret = -ENOMEM;
-> > +                       goto done_mem_show;
-> > +               }
-> > +
-> > +               seq_printf(s, "TPMI Instance:%d offset:0x%x\n",
-> > count, off);
-> > +
-> > +               mem = ioremap(off, size);
-> > +               if (!mem) {
-> > +                       ret = -ENOMEM;
-> > +                       kfree(buffer);
-> > +                       goto done_mem_show;
-> > +               }
-> > +
-> > +               memcpy_fromio(buffer, mem, size);
-> > +
-> > +               seq_hex_dump(s, " ", DUMP_PREFIX_OFFSET, row_size,
-> > sizeof(u32), buffer, size, false);
-> > +
-> > +               iounmap(mem);
-> > +               kfree(buffer);
-> > +
-> > +               off += size;
-> > +       }
-> > +
-> > +done_mem_show:
-> > +       mutex_unlock(&tpmi_dev_lock);
-> > +
-> > +       return ret;
-> > +}
-> > +DEFINE_SHOW_ATTRIBUTE(tpmi_mem_dump);
-> > +
-> > +static ssize_t mem_write(struct file *file, const char __user
-> > *userbuf, size_t len, loff_t *ppos)
-> > +{
-> > +       struct seq_file *m = file->private_data;
-> > +       struct intel_tpmi_pm_feature *pfs = m->private;
-> > +       u32 addr, value, punit;
-> > +       u32 num_elems, *array;
-> > +       void __iomem *mem;
-> > +       u16 size;
-> > +       int ret;
-> > +
-> > +       ret = parse_int_array_user(userbuf, len, (int **)&array);
-> > +       if (ret < 0)
-> > +               return ret;
-> > +
-> > +       num_elems = *array;
-> > +       if (num_elems != 3) {
-> > +               ret = -EINVAL;
-> > +               goto exit_write;
-> > +       }
-> > +
-> > +       punit = array[1];
-> > +       addr = array[2];
-> > +       value = array[3];
-> > +
-> > +       if (punit >= pfs->pfs_header.num_entries) {
-> > +               ret = -EINVAL;
-> > +               goto exit_write;
-> > +       }
-> > +
-> > +       size = pfs->pfs_header.entry_size * sizeof(u32);
-> 
-> There's no consistency in the code, some places do: entry_size * 4
-> and 
-> here it's entry_size * sizeof(u32). Please convert all of them to the
-> latter one. You need to do one additional patch to convert the
-> existing 
-> users but that's perfectly fine as an additional cleanup patch (don't
-> try to put it either of these patches "while at it").
-Good idea.
-
-> 
-> > +       if (addr >= size) {
-> > +               ret = -EINVAL;
-> > +               goto exit_write;
-> > +       }
-> > +
-> > +       mutex_lock(&tpmi_dev_lock);
-> > +
-> > +       mem = ioremap(pfs->vsec_offset + (punit * size), size);
-> 
-> Unnecessary parenthesis.
-ok
-
-> 
-> > +       if (!mem) {
-> > +               ret = -ENOMEM;
-> > +               goto unlock_mem_write;
-> > +       }
-> > +
-> > +       writel(value, mem + addr);
-> > +
-> > +       iounmap(mem);
-> > +
-> > +       ret = len;
-> > +
-> > +unlock_mem_write:
-> > +       mutex_unlock(&tpmi_dev_lock);
-> > +
-> > +exit_write:
-> > +       kfree(array);
-> > +
-> > +       return ret;
-> > +}
-> > +
-> > +static int mem_write_show(struct seq_file *s, void *unused)
-> > +{
-> > +       return 0;
-> > +}
-> > +
-> > +static int mem_write_open(struct inode *inode, struct file *file)
-> > +{
-> > +       return single_open(file, mem_write_show, inode->i_private);
-> > +}
-> > +
-> > +static const struct file_operations mem_write_ops = {
-> > +       .open           = mem_write_open,
-> > +       .read           = seq_read,
-> > +       .write          = mem_write,
-> > +       .llseek         = seq_lseek,
-> > +       .release        = single_release,
-> > +};
-> > +
-> > +#define tpmi_to_dev(info)      (&info->vsec_dev->pcidev->dev)
-> > +
-> > +static void tpmi_dbgfs_register(struct intel_tpmi_info *tpmi_info)
-> > +{
-> > +       struct dentry *top_dir;
-> > +       char name[64];
-> > +       int i;
-> > +
-> > +       snprintf(name, sizeof(name), "tpmi-%s",
-> > dev_name(tpmi_to_dev(tpmi_info)));
-> > +       top_dir = debugfs_create_dir(name, NULL);
-> > +       if (IS_ERR_OR_NULL(top_dir))
-> > +               return;
-> > +
-> > +       tpmi_info->dbgfs_dir = top_dir;
-> > +
-> > +       debugfs_create_file("pfs_dump", 0444, top_dir, tpmi_info,
-> > +                           &tpmi_pfs_dbg_fops);
-> 
-> One line.
-OK
-
-> 
-> > +       debugfs_create_file("help", 0444, top_dir, NULL,
-> > &tpmi_help_fops);
-> > +       for (i = 0; i < tpmi_info->feature_count; ++i) {
-> > +               struct intel_tpmi_pm_feature *pfs;
-> > +               struct dentry *dir;
-> > +
-> > +               pfs = &tpmi_info->tpmi_features[i];
-> > +               snprintf(name, sizeof(name), "tpmi-id-%02x", pfs-
-> > >pfs_header.tpmi_id);
-> > +               dir = debugfs_create_dir(name, top_dir);
-> > +
-> > +               debugfs_create_file("mem_dump", 0444, dir, pfs,
-> > +                                   &tpmi_mem_dump_fops);
-> > +               debugfs_create_file("mem_write", 0644, dir, pfs,
-> > +                                   &mem_write_ops);
-> 
-> These too can be put to one line.
-> 
-OK
-
-Thanks,
-Srinivas
-
-> 
-
+T24gRnJpLCAyMDIzLTA2LTE2IGF0IDExOjUwICswMzAwLCBNaWtlIFJhcG9wb3J0IHdyb3RlOg0K
+PiBGcm9tOiAiTWlrZSBSYXBvcG9ydCAoSUJNKSIgPHJwcHRAa2VybmVsLm9yZz4NCj4gDQo+IERh
+dGEgcmVsYXRlZCB0byBjb2RlIGFsbG9jYXRpb25zLCBzdWNoIGFzIG1vZHVsZSBkYXRhIHNlY3Rp
+b24sIG5lZWQNCj4gdG8NCj4gY29tcGx5IHdpdGggYXJjaGl0ZWN0dXJlIGNvbnN0cmFpbnRzIGZv
+ciBpdHMgcGxhY2VtZW50IGFuZCBpdHMNCj4gYWxsb2NhdGlvbiByaWdodCBub3cgd2FzIGRvbmUg
+dXNpbmcgZXhlY21lbV90ZXh0X2FsbG9jKCkuDQo+IA0KPiBDcmVhdGUgYSBkZWRpY2F0ZWQgQVBJ
+IGZvciBhbGxvY2F0aW5nIGRhdGEgcmVsYXRlZCB0byBjb2RlDQo+IGFsbG9jYXRpb25zDQo+IGFu
+ZCBhbGxvdyBhcmNoaXRlY3R1cmVzIHRvIGRlZmluZSBhZGRyZXNzIHJhbmdlcyBmb3IgZGF0YQ0K
+PiBhbGxvY2F0aW9ucy4NCg0KUmlnaHQgbm93IHRoZSBjcm9zcy1hcmNoIHdheSB0byBzcGVjaWZ5
+IGtlcm5lbCBtZW1vcnkgcGVybWlzc2lvbnMgaXMNCmVuY29kZWQgaW4gdGhlIGZ1bmN0aW9uIG5h
+bWVzIG9mIGFsbCB0aGUgc2V0X21lbW9yeV9mb28oKSdzLiBZb3UgY2FuJ3QNCmp1c3QgaGF2ZSB1
+bmlmaWVkIHByb3QgbmFtZXMgYmVjYXVzZSBzb21lIGFyY2gncyBoYXZlIE5YIGFuZCBzb21lIGhh
+dmUNClggYml0cywgZXRjLiBDUEEgd291bGRuJ3Qga25vdyBpZiBpdCBuZWVkcyB0byBzZXQgb3Ig
+dW5zZXQgYSBiaXQgaWYgeW91DQpwYXNzIGluIGEgUFJPVC4NCg0KQnV0IHRoZW4geW91IGVuZCB1
+cCB3aXRoIGEgbmV3IGZ1bmN0aW9uIGZvciAqZWFjaCogY29tYmluYXRpb24gKGkuZS4NCnNldF9t
+ZW1vcnlfcm94KCkpLiBJIHdpc2ggQ1BBIGhhcyBmbGFncyBsaWtlIG1tYXAoKSBkb2VzLCBhbmQg
+SSB3b25kZXINCmlmIGl0IG1ha2VzIHNlbnNlIGhlcmUgaW5zdGVhZCBvZiBleGVjbWVtX2RhdGFf
+YWxsb2MoKS4NCg0KTWF5YmUgdGhhdCBpcyBhbiBvdmVyaGF1bCBmb3IgYW5vdGhlciBkYXkgdGhv
+dWdoLi4uDQo=
