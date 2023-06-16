@@ -2,130 +2,549 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 505E973296A
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:03:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E59732972
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:04:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244263AbjFPIDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 04:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48728 "EHLO
+        id S243699AbjFPIEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 04:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244192AbjFPIDd (ORCPT
+        with ESMTP id S245042AbjFPIEK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 04:03:33 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2135.outbound.protection.outlook.com [40.107.212.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D712D62;
-        Fri, 16 Jun 2023 01:03:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YGYNUfZ3GhTrkTiwnXSieSJ9Y1WVRiDR86DA4Eaa3sipFZEfk1VZ/grrui0vO3U2zEfKuiuQBXsIXHwO4Zz5kCCfVUPjelrhzow3ePko5z23WbpBRhVflkDgtW2v10OLINwHugJoLZaLoihNjqsjUh3uSCjJkazghBi15ixGeg7YDg6kaftDz/tSBUpShwLNuySeYWmmZ7i17iGOYmumORN17Rp2m/nhPizY8Ds8kZm7OlS/9tQ4/hXHpVeePZd9FcqMT9OtCUy8SvUrz7eYAP43SqN4WtHhu91x0wBJvraud1dmnifk8M24D6zeF6pCgRiNLgL8VoQiq4H0fENcDQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=esWx+h2f9h/3Kl9nsAtZ9qtCBs05lm8pQgel7jARBUs=;
- b=Xeo+7tq1UgO8u5wIKyDLf5M8yL31ebt6vSVi0b0b9ScVYuPYTk+eFbphXNGWdjS9fXR+WD3+QIi+sE9g3klpJzXn5ofV7ij2/rGvyyT6fPuwAWPM4KZh1hv+7VfrRPYW0udAp+IK1Y8+AAJ/tqZ+NkATjEYnmZf/rkEqxI3UMOyhAtkUE5Qo/kd4q66hweq6WnWQ6XS76p55ODOUmNmngB63iM2iEJEaKpCsMnw4kzxsX4vxcxU7GFbzOoaNF5rpOVDsLvwowDiInE4kwE9syf/hFHf3MMBiPq411IIVwA4a3zG9FSt37yUrznFB3PQGF8/vSKVOghQ3IC+/oSLxkw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=esWx+h2f9h/3Kl9nsAtZ9qtCBs05lm8pQgel7jARBUs=;
- b=Aw+7TLjiLDbRjYs3UXoS+Kkc3wutLlJnIkcJ0XfwOZ+6DpZa9mQMuECVm2jBWudJx8LyGOAAvZElzjxlDh7+BJpmkvo2cwMqkXEyAaJirUsMjOfkkcp8mgsOeleAvUQTKzB9O6TzQ8LhJYJkTsFaDme54Dt1OuDLF2xiw7Rl7eM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by PH7PR13MB6116.namprd13.prod.outlook.com (2603:10b6:510:2b7::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.25; Fri, 16 Jun
- 2023 08:03:24 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e%5]) with mapi id 15.20.6500.025; Fri, 16 Jun 2023
- 08:03:24 +0000
-Date:   Fri, 16 Jun 2023 10:03:17 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     bjorn@kernel.org, magnus.karlsson@intel.com,
-        maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
-        hawk@kernel.org, john.fastabend@gmail.com, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        maxtram95@gmail.com
-Subject: Re: [PATCH v2 bpf-next] xsk: Remove unused inline function
- xsk_buff_discard()
-Message-ID: <ZIwXRSDCcp2bmjMb@corigine.com>
-References: <20230616062800.30780-1-yuehaibing@huawei.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230616062800.30780-1-yuehaibing@huawei.com>
-X-ClientProxiedBy: AM3PR07CA0096.eurprd07.prod.outlook.com
- (2603:10a6:207:6::30) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Fri, 16 Jun 2023 04:04:10 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825BD2D68
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 01:03:54 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qA4Qh-0004eP-9N; Fri, 16 Jun 2023 10:03:35 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qA4Qc-007m4w-5h; Fri, 16 Jun 2023 10:03:30 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qA4Qb-00Eget-5c; Fri, 16 Jun 2023 10:03:29 +0200
+Date:   Fri, 16 Jun 2023 10:03:26 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Aleksandr Shubin <privatesub2@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Maxime Ripard <mripard@kernel.org>, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v1 2/3] pwm: Add Allwinner's D1/T113-S3/R329 SoCs PWM
+ support
+Message-ID: <20230616080326.2vtkfeyzwx542hk7@pengutronix.de>
+References: <20230615144423.828698-1-privatesub2@gmail.com>
+ <20230615144423.828698-3-privatesub2@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH7PR13MB6116:EE_
-X-MS-Office365-Filtering-Correlation-Id: b3a38f54-e03b-4db0-7ac2-08db6e4028c2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: K16gk9bOOMyA6M2gjXsm209OS2oXDb7gVl9zHg2yBB6I26QwVa42NlXv8o0id0XLRVn+cVPrLDwtwDhBHfXrgY+4s1FuJoVGlpS3LmHDWZn0o1ORFEdI5QnNKDCeQl+wR1KnenAB6Xg338BOjxxV5h1hL/lZs4mFmS7sX9zNh7KF7MR7X4WMxdNwNtJvP79ASJ7YUDIR4c4ql2V/8Xb5EERyxsFDvulTTGKNFtLXPqk6XOi6i4H42B1ialC3p2LdjCSOfzA72UH590xyVMxqkgwqdh7kseoOmLLQlCZpACWV4IIBJS9ycORNllUS82yRTSMAa2yWZYOOD2Zz/s8OVcenzygnK8zVtnkgoWmIhv4ty7EHKgSi8W5ipZKr7joWwmrNvt/ZUPjyyQdyxZqzMPZNPELBOzXrlxp3aE1olhZaH4BEdYDaRCgYgR1KlEdX7kpfTqbPDh1qfp5sGHH92hmNpvnIV9rjaUNM7a8IFH43F+Pmg01lpi6XMDNRn9UwDNWnqIwkHHZ/mYzDKCFbIHMWEZ/LbeuH8aHHTHTBK1+Em7jfputZ49Y8OdSqzPNmqd2z+xZmSXIycskYZBu2IIuHTmMJQqQTmKlCFfc6hnE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(346002)(136003)(376002)(39840400004)(451199021)(41300700001)(86362001)(66556008)(66946007)(316002)(6486002)(6916009)(8676002)(8936002)(6666004)(66476007)(4326008)(36756003)(478600001)(7416002)(6512007)(44832011)(5660300002)(6506007)(2906002)(4744005)(186003)(2616005)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mS84r7Pdpcbq/bbMuqoJHdRXA3MTfIk5YAKeu6+4jdEUfX8HWSbl3zxF7BRV?=
- =?us-ascii?Q?CKR/f0DiCYF+y2VauuqCRfh2/vAcvYBq8xPBVJuePm+68fq0raNwpXTVQWe+?=
- =?us-ascii?Q?meJ0gqSYhHrtuc+VYewSzVQlEzc5lqJCHNKkn2O16UespEII5+uDSpghyMMx?=
- =?us-ascii?Q?ZbNSx44VKbq71V6hRCLM9glacY9v3eOsOE7VV15SeYsx3jgcR8zivob0cWXv?=
- =?us-ascii?Q?7Y00VNz8lk1QvyYr1FAunrjO8c8ut4ISstJsl2C5ujM5mKg2l8G+SmLtn88r?=
- =?us-ascii?Q?dite/rWQ4Y/MCSBaBtZ+xEV56/EvQI76/CahsKHRihKEzYV/KdgkTzGtSYPT?=
- =?us-ascii?Q?kkh2sZvpRsYTO1XQksT1+4CZuDFHbJf0YeUwM5gjGoPYK+T/l/JlvINMuyBi?=
- =?us-ascii?Q?w7Yp+67EifyK+4jlrEpjNXkFIxtQexn+9tm5k/p3ZWFxshnoqHp55+QW9P4x?=
- =?us-ascii?Q?7ETJkH3x1wVorJvo4HDPcttTh42ZTEhJtqfILEjo6wH4O3eFaK9FgWc7hY6C?=
- =?us-ascii?Q?PIPCYE2uV/qnJl7BsxDs1mZckhcD2whuk+pH6hlUzfxryjU0xtkdvPGPKGuO?=
- =?us-ascii?Q?fj3PuG1t73CMoYtxzwg9ca+oZT4PkzUEx+9gMQyBd9eZaCm9nbsc28iysrhO?=
- =?us-ascii?Q?C3XxDdcicwqUvwQ2gl4rDMaRBoPX2B8HW+sQUMx0y4dvO0axuqWpIWhBA3Rg?=
- =?us-ascii?Q?A3y1px1V8QqkWuNip22SD2A0tkKzh40uxUbJZsI+ib41r9nPemKFpWNCL2Bf?=
- =?us-ascii?Q?JcwEVh8eCSIkgOVibDS9oYTYRNEa9Xov3KyybHrM/WCUQf2g3oWqYO1glCTG?=
- =?us-ascii?Q?d9mzKtjjU8LV6nVqb50as1pZh5qPn+q2kwNnYIqupZ/I/GsAiIZgYRnBT6jN?=
- =?us-ascii?Q?xknRhhyGxjRJcimpLG6dkWmvmh7OoUGllx6PCBiUfvJVBmoHwD43UI4MG+mA?=
- =?us-ascii?Q?cVbMPuB7aZjBO3PIdUCSegyqQVNhDnfV1gcZyzBt611usTDkHTjABHdiiKJf?=
- =?us-ascii?Q?yVFqe0aGHrCYugrtsPrBNk2ftpZQXfbHRhONB31IUP1VfnoGmtoCkzb/w4JV?=
- =?us-ascii?Q?y+BB00py82gzwCzyPwdwpOeUET3LxJlFR9+AbT1Xuk2fVCkqdRePP48W0CBb?=
- =?us-ascii?Q?Oxr52IGnMI7j4PAgeU5pmsJp8pSNJ5rj44nacveixO52fU7AGE/kqVcpR0dL?=
- =?us-ascii?Q?px+B1/xhDgoXbC3APszO6Jh3IxFGc6/nvezYoKFb7Z7zA8Fbx9pl3CBL06s5?=
- =?us-ascii?Q?tbke6XahYMJeClfc/UwO2X+ppHFGwKLoU7DAE7dkRiuskn568iXWcBCR1uPe?=
- =?us-ascii?Q?hDsXTeivtg729KKVbHlhIN81eGookYe/rfczk0fMUUa2p82nk1gs0tnEmE2Z?=
- =?us-ascii?Q?Swu82dJbvy1LM6TdFTl1HCJHnvncsrAR1SecArR49Jvr+A/Hd9hXjgVtA5Lg?=
- =?us-ascii?Q?MnD2U28htgIjkyAyioz4kA5PVlSG3wQ3vNTvYw17YwIQZJu9TGqiV89OZMP5?=
- =?us-ascii?Q?ffv1+nXY8bjfPIPr7i0HiPCF07nqPBvUKoVqqXxAK18fwGWwmqhS4Lnll6mr?=
- =?us-ascii?Q?SC8Cp2Gz8shmeEtPy+JW8oissgY4gPL/Xgke+LtjGshPT1wttOfkrNez2ygp?=
- =?us-ascii?Q?5XyNhycj+jXR3c5vSX4r4rFX9lRArM7qpYdEoxjGl4W7hcFFcGFzEy0a5/cF?=
- =?us-ascii?Q?cTLbwQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b3a38f54-e03b-4db0-7ac2-08db6e4028c2
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 08:03:24.5255
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vLB0gJNe3AWbvhpxeE04ujvrLxeIFTNHyWlu00K6f/2RcQ9dK0onymjArBm5h7N0tzhQNcuu/+Fhs7MR9c5R+02fq91R2Vxch/X52yTN09o=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR13MB6116
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="omtys6jenmiw526p"
+Content-Disposition: inline
+In-Reply-To: <20230615144423.828698-3-privatesub2@gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 02:28:00PM +0800, YueHaibing wrote:
-> commit f2f167583601 ("xsk: Remove unused xsk_buff_discard")
-> left behind this, remove it.
-> 
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-> Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+--omtys6jenmiw526p
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Hello,
+
+this isn't a complete review, just a first quick look. Up to you if you
+follow up with a v2 fixing the things here. If you don't I will take a
+deeper look at a later time.
+
+On Thu, Jun 15, 2023 at 05:43:57PM +0300, Aleksandr Shubin wrote:
+> Allwinner's D1, T113-S3 and R329 SoCs have a quite different PWM
+> controllers with ones supported by pwm-sun4i driver.
+>=20
+> This patch adds a PWM controller driver for Allwinner's D1,
+> T113-S3 and R329 SoCs. The main difference between these SoCs
+> is the number of channels defined by the DT property.
+>=20
+> Signed-off-by: Aleksandr Shubin <privatesub2@gmail.com>
+> ---
+>  drivers/pwm/Kconfig      |  12 ++
+>  drivers/pwm/Makefile     |   1 +
+>  drivers/pwm/pwm-sun20i.c | 364 +++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 377 insertions(+)
+>  create mode 100644 drivers/pwm/pwm-sun20i.c
+>=20
+> diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
+> index 8df861b1f4a3..b435e50fbd3e 100644
+> --- a/drivers/pwm/Kconfig
+> +++ b/drivers/pwm/Kconfig
+> @@ -594,6 +594,18 @@ config PWM_SUN4I
+>  	  To compile this driver as a module, choose M here: the module
+>  	  will be called pwm-sun4i.
+> =20
+> +config PWM_SUN20I
+> +	tristate "Allwinner D1/T113s/R329 PWM support"
+> +	depends on ARCH_SUNXI || COMPILE_TEST
+> +	depends on COMMON_CLK
+> +	help
+> +	  Generic PWM framework driver for Allwinner D1/T113s/R329 SoCs.
+> +	  The main difference between these SoCs is the number of
+> +	  channels defined by the DT property.
+
+That is a detail that better fits into a code comment in the driver. The
+user choosing if they should enable PWM_SUN20I or not, don't need to
+know that.
+
+> +	  To compile this driver as a module, choose M here: the module
+> +	  will be called pwm-sun20i.
+> +
+>  config PWM_SUNPLUS
+>  	tristate "Sunplus PWM support"
+>  	depends on ARCH_SUNPLUS || COMPILE_TEST
+> [...]
+> diff --git a/drivers/pwm/pwm-sun20i.c b/drivers/pwm/pwm-sun20i.c
+> new file mode 100644
+> index 000000000000..100b0f3bcec0
+> --- /dev/null
+> +++ b/drivers/pwm/pwm-sun20i.c
+> @@ -0,0 +1,364 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * PWM Controller Driver for sunxi platforms (D1, T113-S3 and R329)
+> + *
+> + * Copyright (c) 2023 Aleksandr Shubin <privatesub2@gmail.com>
+> + */
+
+Please add a "Limitations" section here answering the following
+questions:
+
+ - Is a currently running period completed when a new pwm_state is
+   applied that has .enabled =3D true? What about .enabled =3D false?
+ - How does the PWM behave when disabled? Typical behaviours are: drives
+   to inactive level, just freezes or goes HIGH-Z.
+
+Stick to the format that is used in other drivers to make this easily
+grepable.
+
+> +#include <linux/err.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/pwm.h>
+> +#include <linux/clk.h>
+> +#include <linux/reset.h>
+
+alphabetic ordering please
+
+> +#define PWM_CLK_CFG_REG(chan)		(0x20 + (((chan) >> 1) * 0x4))
+> +#define PWM_CLK_SRC			7
+> +#define PWM_CLK_SRC_MASK		GENMASK(8, PWM_CLK_SRC)
+> +#define PWM_CLK_DIV_M			0
+> +#define PWM_CLK_DIV_M_MASK		GENMASK(3, PWM_CLK_DIV_M)
+> +
+> +#define PWM_CLK_GATE_REG		0x40
+> +#define PWM_CLK_GATING(chan)		BIT(chan)
+> +
+> +#define PWM_ENABLE_REG			0x80
+> +#define PWM_EN(chan)			BIT(chan)
+> +
+> +#define PWM_CTL_REG(chan)		(0x100 + (chan) * 0x20)
+> +#define PWM_ACT_STA			BIT(8)
+> +#define PWM_PRESCAL_K			0
+> +#define PWM_PRESCAL_K_MASK		GENMASK(7, PWM_PRESCAL_K)
+> +
+> +#define PWM_PERIOD_REG(chan)		(0x104 + (chan) * 0x20)
+> +#define PWM_ENTIRE_CYCLE		16
+> +#define PWM_ENTIRE_CYCLE_MASK		GENMASK(31, PWM_ENTIRE_CYCLE)
+> +#define PWM_ACT_CYCLE			0
+> +#define PWM_ACT_CYCLE_MASK		GENMASK(15, PWM_ACT_CYCLE)
+> +
+> +#define SET_VALUE(reg_val, val, name) \
+> +		 (reg_val =3D (((reg_val) & ~name##_MASK) | ((val) << (name))))
+> +#define GET_VALUE(reg_val, name) \
+> +		 (((reg_val) & ~name##_MASK) >> (name))
+
+Please use FIELD_GET here instead. This works nice with dropping
+PWM_PRESCAL_K and renaming PWM_PRESCAL_K_MASK to PWM_PRESCAL_K.
+
+> [...]
+> +static int sun20i_pwm_get_state(struct pwm_chip *chip,
+> +				struct pwm_device *pwm,
+> +				struct pwm_state *state)
+> +{
+> +	struct sun20i_pwm_chip *sun20i_chip =3D to_sun20i_pwm_chip(chip);
+> +	u64 clk_rate, tmp;
+> +	u32 val;
+> +	u16 clk_div, act_cycle;
+> +	u8 prescal, div_id;
+> +	u8 chn =3D pwm->hwpwm;
+> +
+> +	mutex_lock(&sun20i_chip->mutex);
+> +
+> +	val =3D sun20i_pwm_readl(sun20i_chip, PWM_CLK_CFG_REG(pwm->hwpwm));
+> +	div_id =3D GET_VALUE(val, PWM_CLK_DIV_M);
+> +	if (GET_VALUE(val, PWM_CLK_SRC) =3D=3D 0)
+> +		clk_rate =3D clk_get_rate(sun20i_chip->clk_hosc);
+> +	else
+> +		clk_rate =3D clk_get_rate(sun20i_chip->clk_bus);
+> +
+> +	val =3D sun20i_pwm_readl(sun20i_chip, PWM_CTL_REG(pwm->hwpwm));
+> +	if (PWM_ACT_STA & val)
+> +		state->polarity =3D PWM_POLARITY_NORMAL;
+> +	else
+> +		state->polarity =3D PWM_POLARITY_INVERSED;
+> +
+> +	prescal =3D PWM_PRESCAL_K & val;
+> +
+> +	val =3D sun20i_pwm_readl(sun20i_chip, PWM_ENABLE_REG);
+> +	if (PWM_EN(chn) & val)
+> +		state->enabled =3D true;
+> +	else
+> +		state->enabled =3D false;
+> +
+> +	val =3D sun20i_pwm_readl(sun20i_chip, PWM_PERIOD_REG(pwm->hwpwm));
+> +	act_cycle =3D GET_VALUE(val, PWM_ACT_CYCLE);
+> +	clk_div =3D GET_VALUE(val, PWM_ENTIRE_CYCLE);
+> +
+> +	tmp =3D act_cycle * prescal * (1U << div_id) * NSEC_PER_SEC;
+> +	state->duty_cycle =3D DIV_ROUND_CLOSEST_ULL(tmp, clk_rate);
+> +	tmp =3D clk_div * prescal * (1U << div_id) * NSEC_PER_SEC;
+> +	state->period =3D DIV_ROUND_CLOSEST_ULL(tmp, clk_rate);
+
+You have to use ROUND_UP here to make
+
+	.get_state(mypwm, &state);
+	.apply(mypwm, &state);
+
+idempotent. Test your driver with PWM_DEBUG enabled. With an appropriate
+test sequence this should tell you such things. Test with something
+like:
+
+	for i in some_range:
+		pwm_apply_state(mypwm, { .enabled =3D true, .period =3D i, .duty_cycle =
+=3D 0 })
+	for i in reversed(some_range):
+		pwm_apply_state(mypwm, { .enabled =3D true, .period =3D i, .duty_cycle =
+=3D 0 })
+
+	for i in [0, someperiod]:
+		pwm_apply_state(mypwm, { .enabled =3D true, .period =3D someperiod, .duty=
+_cycle =3D i })
+	for i in reversed([0, someperiod]):
+		pwm_apply_state(mypwm, { .enabled =3D true, .period =3D someperiod, .duty=
+_cycle =3D i })
+
+> +	mutex_unlock(&sun20i_chip->mutex);
+> +
+> +	return 0;
+> +}
+> +
+> +static int sun20i_pwm_apply(struct pwm_chip *chip, struct pwm_device *pw=
+m,
+> +			    const struct pwm_state *state)
+> +{
+> +	struct pwm_state curstate;
+> +	int ret =3D 0;
+> +	u32 clk_gate, clk_cfg, pwm_en, ctl, period;
+> +	u64 bus_rate, hosc_rate, clk_div, val, clk_rate;
+> +	u16 prescaler, div_m;
+> +	bool use_bus_clk;
+> +	struct sun20i_pwm_chip *sun20i_chip =3D to_sun20i_pwm_chip(chip);
+> +
+> +	mutex_lock(&sun20i_chip->mutex);
+> +	pwm_get_state(pwm, &curstate);
+
+Don't call pwm API functions in lowlevel driver. Even less while holding
+a lock. If you need the previous state, using pwm->state is fine.
+
+> +	pwm_en =3D sun20i_pwm_readl(sun20i_chip, PWM_ENABLE_REG);
+> +	if (state->polarity !=3D curstate.polarity ||
+> +	    state->duty_cycle !=3D curstate.duty_cycle ||
+> +	    state->period !=3D curstate.period) {
+> +		ctl =3D sun20i_pwm_readl(sun20i_chip, PWM_CTL_REG(pwm->hwpwm));
+> +		clk_cfg =3D sun20i_pwm_readl(sun20i_chip, PWM_CLK_CFG_REG(pwm->hwpwm));
+> +		hosc_rate =3D clk_get_rate(sun20i_chip->clk_hosc);
+> +		bus_rate =3D clk_get_rate(sun20i_chip->clk_bus);
+> +
+> +		if (pwm_en & PWM_EN(pwm->hwpwm ^ 1)) {
+> +			/* check period only */
+> +			if (GET_VALUE(clk_cfg, PWM_CLK_SRC) =3D=3D 0)
+> +				clk_rate =3D hosc_rate;
+> +			else
+> +				clk_rate =3D bus_rate;
+> +
+> +			val =3D state->period * clk_rate;
+
+This might overflow.
+
+> +			do_div(val, NSEC_PER_SEC);
+> +
+> +			div_m =3D GET_VALUE(clk_cfg, PWM_CLK_DIV_M);
+> +
+> +			/* calculate and set prescaler, PWM entire cycle */
+> +			clk_div =3D val;
+> +			for (prescaler =3D 0; clk_div > 65535; prescaler++) {
+> +				if (prescaler >=3D 256) {
+> +					dev_err(sun20i_chip->chip.dev, "Period is too long\n");
+
+dev_err in .apply() isn't a good idea. Please fail silently.
+
+Also you should configure the biggest period the hardware can support
+that isn't bigger than state->period. So the requested period cannot be
+too long.
+
+> +					ret =3D -EINVAL;
+> +					goto unlock_mutex;
+> +				}
+> +
+> +				clk_div =3D val;
+> +				do_div(clk_div, 1U << div_m);
+
+This can be simplified to clk_div >> div_m.
+
+> +				do_div(clk_div, prescaler + 1);
+> +			}
+
+I wonder if prescaler can be calculated without a loop.
+
+> +		} else {
+> +			/* check period and select clock source */
+> +			use_bus_clk =3D false;
+> +			val =3D state->period * hosc_rate;
+> +			do_div(val, NSEC_PER_SEC);
+> +			if (val <=3D 1) {
+> +				use_bus_clk =3D true;
+> +				val =3D state->period * bus_rate;
+> +				do_div(val, NSEC_PER_SEC);
+> +				if (val <=3D 1) {
+> +					dev_err(sun20i_chip->chip.dev, "Period is too small\n");
+> +					ret =3D -EINVAL;
+> +					goto unlock_mutex;
+> +				}
+> +			}
+> +
+> +			if (use_bus_clk)
+> +				SET_VALUE(clk_cfg, 1, PWM_CLK_SRC);
+> +			else
+> +				SET_VALUE(clk_cfg, 0, PWM_CLK_SRC);
+> +
+> +			/* calculate and set prescaler, M factor, PWM entire cycle */
+> +			clk_div =3D val;
+> +			for (prescaler =3D div_m =3D 0; clk_div > 65535; prescaler++) {
+> +				if (prescaler >=3D 256) {
+> +					prescaler =3D 0;
+> +					div_m++;
+> +					if (div_m >=3D 9) {
+> +						dev_err(sun20i_chip->chip.dev, "Period is too long\n");
+> +						ret =3D -EINVAL;
+> +						goto unlock_mutex;
+> +					}
+> +				}
+> +
+> +				clk_div =3D val;
+> +				do_div(clk_div, 1U << div_m);
+> +				do_div(clk_div, prescaler + 1);
+> +			}
+> +
+> +			/* set up the M factor */
+> +			SET_VALUE(clk_cfg, div_m, PWM_CLK_DIV_M);
+> +
+> +			sun20i_pwm_writel(sun20i_chip, clk_cfg, PWM_CLK_CFG_REG(pwm->hwpwm));
+> +		}
+> +
+> +		period =3D sun20i_pwm_readl(sun20i_chip, PWM_PERIOD_REG(pwm->hwpwm));
+> +
+> +		SET_VALUE(period, clk_div, PWM_ENTIRE_CYCLE);
+> +		SET_VALUE(ctl, prescaler, PWM_PRESCAL_K);
+
+Are there any fields in PWM_PERIOD_REG(pwm->hwpwm) you're not
+recalculating? If not, you can skip reading the register and use
+FIELD_PREP instead of SET_VALUE.
+
+> +
+> +		/* set duty cycle */
+> +		val =3D state->period;
+> +		do_div(val, clk_div);
+> +		clk_div =3D state->duty_cycle;
+> +		do_div(clk_div, val);
+> +		if (clk_div > 65535)
+> +			clk_div =3D 65535;
+> +
+> +		SET_VALUE(period, clk_div, PWM_ACT_CYCLE);
+> +		sun20i_pwm_writel(sun20i_chip, period, PWM_PERIOD_REG(pwm->hwpwm));
+> +
+> +		if (state->polarity =3D=3D PWM_POLARITY_NORMAL)
+> +			ctl |=3D PWM_ACT_STA;
+> +		else
+> +			ctl &=3D ~PWM_ACT_STA;
+> +
+> +		sun20i_pwm_writel(sun20i_chip, ctl, PWM_CTL_REG(pwm->hwpwm));
+> +	}
+> +
+> +	if (state->enabled !=3D curstate.enabled) {
+> +		clk_gate =3D sun20i_pwm_readl(sun20i_chip, PWM_CLK_GATE_REG);
+> +
+> +		if (state->enabled) {
+> +			clk_gate |=3D PWM_CLK_GATING(pwm->hwpwm);
+> +			pwm_en |=3D PWM_EN(pwm->hwpwm);
+> +		} else {
+> +			clk_gate &=3D ~PWM_CLK_GATING(pwm->hwpwm);
+> +			pwm_en &=3D ~PWM_EN(pwm->hwpwm);
+> +		}
+
+Disabling (probably) needs to be handled earlier. Consider your PWM is
+enabled with say .period =3D 5000 and .duty_cycle =3D 0. If now
+
+	pwm_apply_state(&mypwm, &(struct pwm_state){ .period =3D 5000, .duty_cycle=
+ =3D 5000, .enabled =3D false })
+
+is called, the output might become active before gating becomes
+effective. It's not always possible to prevent such spikes, but if it
+is, please do.
+
+> +		sun20i_pwm_writel(sun20i_chip, pwm_en, PWM_ENABLE_REG);
+> +		sun20i_pwm_writel(sun20i_chip, clk_gate, PWM_CLK_GATE_REG);
+> +	}
+> +
+> +unlock_mutex:
+> +	mutex_unlock(&sun20i_chip->mutex);
+> +
+> +	return ret;
+> +}
+> [...]
+> +static int sun20i_pwm_probe(struct platform_device *pdev)
+> +{
+> +	struct sun20i_pwm_chip *sun20i_chip;
+> +	int ret;
+> +
+> +	sun20i_chip =3D devm_kzalloc(&pdev->dev, sizeof(*sun20i_chip), GFP_KERN=
+EL);
+> +	if (!sun20i_chip)
+> +		return -ENOMEM;
+> +
+> +	sun20i_chip->base =3D devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(sun20i_chip->base))
+> +		return PTR_ERR(sun20i_chip->base);
+> +
+> +	sun20i_chip->clk_bus =3D devm_clk_get(&pdev->dev, "bus");
+
+consider using devm_clk_get_enabled()
+
+> +	if (IS_ERR(sun20i_chip->clk_bus)) {
+> +		dev_err(&pdev->dev, "Failed to get bus clock\n");
+> +		return PTR_ERR(sun20i_chip->clk_bus);
+
+Please make this:
+
+	return dev_err_probe(&pdev->dev, PTR_ERR(sun20i_chip->clk_bus),
+			     "Failed to get bus clock\n");
+
+ditto for the other error paths.
+
+> +	}
+> +
+> +	sun20i_chip->clk_hosc =3D devm_clk_get(&pdev->dev, "hosc");
+> +	if (IS_ERR(sun20i_chip->clk_hosc)) {
+> +		dev_err(&pdev->dev, "Failed to get hosc clock\n");
+> +		return PTR_ERR(sun20i_chip->clk_hosc);
+> +	}
+> +
+> +	sun20i_chip->rst =3D devm_reset_control_get(&pdev->dev, NULL);
+> +	if (IS_ERR(sun20i_chip->rst)) {
+> +		dev_err(&pdev->dev, "Failed to get bus reset\n");
+> +		return PTR_ERR(sun20i_chip->rst);
+> +	}
+> +
+> +	/* Deassert reset */
+> +	ret =3D reset_control_deassert(sun20i_chip->rst);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "Failed to deassert reset\n");
+> +		return ret;
+> +	}
+> +
+> +	ret =3D clk_prepare_enable(sun20i_chip->clk_bus);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "Failed to ungate bus clock\n");
+> +		goto err_bus;
+> +	}
+> +
+> +	ret =3D of_property_read_u32(pdev->dev.of_node,
+> +				   "allwinner,pwm-channels",
+> +				   &sun20i_chip->chip.npwm);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "Can't get pwm-channels\n");
+> +		goto err_pwm_add;
+> +	}
+> +
+> +	sun20i_chip->chip.dev =3D &pdev->dev;
+> +	sun20i_chip->chip.ops =3D &sun20i_pwm_ops;
+> +
+> +	mutex_init(&sun20i_chip->mutex);
+
+If the hardware is enabled, please make sure that the needed clocks are
+not disabled.
+
+> +	ret =3D pwmchip_add(&sun20i_chip->chip);
+> +	if (ret < 0) {
+> +		dev_err(&pdev->dev, "Failed to add PWM chip: %d\n", ret);
+> +		goto err_pwm_add;
+> +	}
+> +
+> +	platform_set_drvdata(pdev, sun20i_chip);
+> +
+> +	return 0;
+> +
+> +err_pwm_add:
+> +	clk_disable_unprepare(sun20i_chip->clk_bus);
+> +err_bus:
+> +	reset_control_assert(sun20i_chip->rst);
+> +	return ret;
+> +}
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--omtys6jenmiw526p
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSMF00ACgkQj4D7WH0S
+/k7sEQgAspa88ofdGgi7mlHIUrSkqDb6X5/7Ym54FYjTv3Wyt8CfohvpsJWpXJIl
+5vmZXy1DNM41IQSd7wfDOHb+BNhZQJS1PwSAL1bnon0/KaU6PlYB8OLY0FKtPMee
+GYQ8DSkeFbmdSWQJtHLHQFdKvhCnVkQ0799cifI8sFqm1bqQr9BU4Ix88V1G6aV5
+HERtfPLsemBbDvTpVXp+bUn2rOuWtJSWx816HeeV2kqkKiJPuUS23cvhnrVo16i/
+wUiMGcg0JXxvXW7AfOWOSSY3Wf2b0n3yW1r5EyxVDQlbw2axp/Ld4DiXjiRy44cp
+0u1IHdt/q/k0WmAdiEPkZQkykxbhbg==
+=p5z5
+-----END PGP SIGNATURE-----
+
+--omtys6jenmiw526p--
