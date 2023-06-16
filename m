@@ -2,57 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C68FD7339CA
+	by mail.lfdr.de (Postfix) with ESMTP id EDAB47339CB
 	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 21:26:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345871AbjFPT0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 15:26:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55492 "EHLO
+        id S229779AbjFPT0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 15:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346295AbjFPTY4 (ORCPT
+        with ESMTP id S1346138AbjFPTYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 15:24:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233A6449D;
-        Fri, 16 Jun 2023 12:23:04 -0700 (PDT)
+        Fri, 16 Jun 2023 15:24:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1FB4222;
+        Fri, 16 Jun 2023 12:22:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BA7D661EFA;
-        Fri, 16 Jun 2023 19:21:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CC29C433CA;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA93362E38;
+        Fri, 16 Jun 2023 19:21:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D73FC433C0;
         Fri, 16 Jun 2023 19:21:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686943301;
-        bh=L4njF+AvSfGwSpC5S8bdEJXRtDhN9ofxkN4Ykn9oo1Q=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=N3z0gpe9AP8MGv+Wq25q5CH0qG+PR2ZNZCAUqZ+I2Q+Q+XqKyNnIL+R4E0EiApVeT
-         amBJxxB0JBgi6xUqb8ZeNle+BAu4/8TegliuntSSHjLE3VSAbiLmODnx+W3v5Ck+7i
-         r229GOM8FQ/YZHJBqGH3idkZoAvER629V0FpGTFg0a957q7GIEpMletFYkApvwisF7
-         oiY7LDHeS8EeFDIf4nMItdj0sE72N3hsKJWb60I6NnoZlPX39mJmpRukgHW+Wks1TF
-         K6ju6Exmdz3FQCYxosfZg9JW9KgOdQYA9utQlZN9tWy7hwD16ZOHs6LYoYVJY4mHhK
-         ETet3taf21zaQ==
-Message-ID: <2f59dfceaac859591b4b97b6fe928b62.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1686943302;
+        bh=hUURytXlMcDfitAbduozrB5DyB72nWHC+HvK485KkJY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Ad6swJdWo1IwISr5c/t9icf18UMj2lCExyhlgLv+O+KgaYu/qZg8ZZ19ks7CRln5E
+         th4SmFbPGuTwMIGWdBPmtnkEM1h2OX6Nib1afv4AR2f2DybEiJNrBhoHPj7vetKS+D
+         RcEols5/yqQmNho1ySddtpAimBACwAUt7LSdNXjRvv3zf2+ztH5QxDP7FrFynityCd
+         WEcYDgO2xfbntUyjU4vDS/KZxH/Y5WpDdFnzn7ZNIBTuOYk7HBxSz12lldH6KT9VV4
+         FIMWxf5Rxd7oFaVbCxDughxs/4yROiz12DdTIU7tVLWKYHhXtEt8eESRjH8vAEURe4
+         nw+TGWsF+9gZg==
+Date:   Fri, 16 Jun 2023 12:21:40 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Jesper Dangaard Brouer <jbrouer@redhat.com>
+Cc:     Alexander Duyck <alexander.duyck@gmail.com>,
+        Yunsheng Lin <linyunsheng@huawei.com>, brouer@redhat.com,
+        davem@davemloft.net, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        hariprasad <hkelam@marvell.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net-next v4 4/5] page_pool: remove PP_FLAG_PAGE_FRAG
+ flag
+Message-ID: <20230616122140.6e889357@kernel.org>
+In-Reply-To: <72ccf224-7b45-76c5-5ca9-83e25112c9c6@redhat.com>
+References: <20230612130256.4572-1-linyunsheng@huawei.com>
+        <20230612130256.4572-5-linyunsheng@huawei.com>
+        <20230614101954.30112d6e@kernel.org>
+        <8c544cd9-00a3-2f17-bd04-13ca99136750@huawei.com>
+        <20230615095100.35c5eb10@kernel.org>
+        <CAKgT0Uc6Xoyh3Edgt+83b+HTM5j4JDr3fuxcyL9qDk+Wwt9APg@mail.gmail.com>
+        <908b8b17-f942-f909-61e6-276df52a5ad5@huawei.com>
+        <CAKgT0UeZfbxDYaeUntrQpxHmwCh6zy0dEpjxghiCNxPxv=kdoQ@mail.gmail.com>
+        <72ccf224-7b45-76c5-5ca9-83e25112c9c6@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230615122051.546985-4-angelogioacchino.delregno@collabora.com>
-References: <20230615122051.546985-1-angelogioacchino.delregno@collabora.com> <20230615122051.546985-4-angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH 3/3] clk: mediatek: clk-mt8173-apmixedsys: Fix iomap not released issue
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     mturquette@baylibre.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, wenst@chromium.org,
-        u.kleine-koenig@pengutronix.de, msp@baylibre.com,
-        miles.chen@mediatek.com, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Date:   Fri, 16 Jun 2023 12:21:39 -0700
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,14 +89,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting AngeloGioacchino Del Regno (2023-06-15 05:20:51)
-> In case of error after of_ioremap() the resource must be released:
-> call iounmap() where appropriate to fix that.
->=20
-> Fixes: 41138fbf876c ("clk: mediatek: mt8173: Migrate to platform driver a=
-nd common probe")
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
-> ---
+On Fri, 16 Jun 2023 20:59:12 +0200 Jesper Dangaard Brouer wrote:
+> +       if (mem_type == MEM_TYPE_PP_NETMEM)
+> +               pp_netmem_put_page(pp, page, allow_direct);
+> +       else
+> +               page_pool_put_full_page(pp, page, allow_direct);
 
-Applied to clk-next
+Interesting, what is the netmem type? I was thinking about extending
+page pool for other mem providers and what came to mind was either
+optionally replacing the free / alloc with a function pointer:
+
+https://github.com/torvalds/linux/commit/578ebda5607781c0abb26c1feae7ec8b83840768
+
+or wrapping the PP calls with static inlines which can direct to 
+a different implementation completely (like zctap / io_uring zc).
+
+Former is better for huge pages, latter is better for IO mem
+(peer-to-peer DMA). I wonder if you have different use case which
+requires a different model :(
