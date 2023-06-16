@@ -2,126 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6746C733621
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 18:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FC51733626
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 18:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344784AbjFPQe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 12:34:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55344 "EHLO
+        id S1344858AbjFPQeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 12:34:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244776AbjFPQeY (ORCPT
+        with ESMTP id S232080AbjFPQe1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 12:34:24 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480983592;
-        Fri, 16 Jun 2023 09:34:11 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b4470e1500so13043871fa.1;
-        Fri, 16 Jun 2023 09:34:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686933249; x=1689525249;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ciLmmISBnAmBNpL57ZkiVLZdSgI5RvZx0KnVLxEMLQA=;
-        b=rZLz4t1BzNZQb2SDswJNFyGKJ8WIjGulQ96rA0XoBDm4CuASgdXM+yqAoyEvUyqtHT
-         HQWx1TQ+0gU2JHhVssNB+mTm91uyQi9uuNjL+RXBTzL2nZbUgpD2W8KqgnSGCWQx6lfw
-         7Pl0ZXWHfB796z+BD7TlgijK0JO2Di1hrwUCddN/eAihOU9J7fWczr35jdc6zE790oiB
-         XPFOD+noWYH9QUkPeCRdEpHxFKrmZEXzbZD6Sve+moKkU1bsgRsLXeFPntmOZ9EOQhrM
-         Co/guy3EFea7xzzxX/oJT+42XAeaPS0tKXNAB+jSEQzhDW4YSmkv6iro7T8Fb7uBEPZE
-         WvFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686933249; x=1689525249;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ciLmmISBnAmBNpL57ZkiVLZdSgI5RvZx0KnVLxEMLQA=;
-        b=QjkhlluKxFXFalHT1yyj3JpXGfaT/Z/FuSlQOiS245TrUuB0dSnnceCsInm9T4bQIx
-         2cYWX1gNgZL9qpBApISC9FpXxP42ih446Q8gvFmUnOmZAKqvfodpHfvSovNKX1JpXy2A
-         5qfK2L7XC0mWl/rOFqLHof6FBORt9BnAYFL4NC5ZVel5OQEfmVcqkldi9RaKTfqfPSR0
-         +FiPqjd/RBf+g491P7uiN+jFDgdlo83+wzPTAQFSp2JNd3uUtQs/CXXcQBHhyU3lWToO
-         YJmMvUluynlgyocpShQRftdgFYPO61BO9tn8BuSAEwj9A810NMIol5eMg08LYcqUuVl0
-         VvjA==
-X-Gm-Message-State: AC+VfDyb49F18n9U3XqJmyS4EnoSq0fTfLsUssVg/FHVN3Dyzz7tabMV
-        KqokagEMZlVEY+Kj0N/3Z8Gmz4AK2qcgqcsSQAo=
-X-Google-Smtp-Source: ACHHUZ5J3J6BmXsqJ/ro7uibmi2MV6S2YWYrzOXs8CKYMYul39VCGUXxT/xgg7e42mm0CbGF5mxSq8p5ebcL5iOaLn4=
-X-Received: by 2002:a2e:8756:0:b0:2b1:ae75:2781 with SMTP id
- q22-20020a2e8756000000b002b1ae752781mr2023912ljj.27.1686933249196; Fri, 16
- Jun 2023 09:34:09 -0700 (PDT)
+        Fri, 16 Jun 2023 12:34:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC7C30F7;
+        Fri, 16 Jun 2023 09:34:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BFFB960EA5;
+        Fri, 16 Jun 2023 16:34:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28108C433C8;
+        Fri, 16 Jun 2023 16:34:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686933256;
+        bh=qE1OJbXrmRnZC4ivwx7brjgLHKgk/qZxmdlw3ZmqxXY=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=E1URUOUraeyHzD/HPBb+XiBDLh+qnt7uQJhsay356i/Ij2MF+jQaE1bBFq5h++Y8T
+         4KZII45WI7QrCcNBXvYaN228uIIRm1VKuMOkYKKMfblnk0ajl/dV9V+9Gs/kiTchkG
+         emlEbg+idTJFtVRHCpbbE7clP2IEdJBQDPC22CgR08jyeoD8l94r+RdcoNtWOVAPg4
+         hi4/wf06lWSOvJxzpn2dN8Yw/WHuOU8YF9SP+gImQ5L8NeCnLrQEs+m0UBHBU3H14H
+         2UjeafmZGA0jYdtpkK3uA5E3eTcywtAc0wY1Lm/8bN+eRWupwzwlJgg96YYZFa2L4N
+         vavFBdlMuTh3w==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id BDEF8CE0BB2; Fri, 16 Jun 2023 09:34:15 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 09:34:15 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        rcu@vger.kernel.org, jonathanh@nvidia.com, wenst@chromium.org,
+        angelogioacchino.delregno@collabora.com,
+        rafael.j.wysocki@intel.com, mirq-linux@rere.qmqm.pl,
+        dmitry.osipenko@collabora.com, sachinp@linux.ibm.com,
+        qiang.zhang1211@gmail.com
+Subject: [GIT PULL] RCU regression fix for v6.4
+Message-ID: <21bdc866-f9ae-4cda-a996-370bde183fd0@paulmck-laptop>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
-References: <20230614073443.4894-1-zhanglibing@cdjrlc.com> <7f34bd3ce377d9d89626c2df8fa584e0@208suo.com>
- <0b12a94a-e3e9-e2a2-389e-48a588d5ad6b@meta.com>
-In-Reply-To: <0b12a94a-e3e9-e2a2-389e-48a588d5ad6b@meta.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 16 Jun 2023 09:33:57 -0700
-Message-ID: <CAEf4BzZYF=WMuhPTdRaDEhrhR10gu-G_U-=9keq+pimoGq41EQ@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: Fix the address is NULL
-To:     Yonghong Song <yhs@meta.com>
-Cc:     wuyonggang001@208suo.com, andrii@kernel.org, shuah@kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URG_BIZ autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 7:09=E2=80=AFAM Yonghong Song <yhs@meta.com> wrote:
->
->
->
-> On 6/14/23 12:42 AM, wuyonggang001@208suo.com wrote:
-> > Fix the following coccicheck error:
-> >
-> > tools/testing/selftests/bpf/progs/test_ksyms_weak.c:53:6-20: ERROR: tes=
-t
-> > of a variable/field address
->
-> I didn't see clang/gcc compiler warns about this. Maybe need some
-> additional flags beyond what current selftest/bpf already has
-> in order to trigger this warning?
-> If you feel this warning has some merit, could you propose
-> it to gcc/llvm community?
+Hello, Linus,
 
-bpf_link_fops2 is a weak symbol, this check is totally valid and reasonable=
-.
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
-There are two problems here, though:
+  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
 
-a) coccicheck shouldn't warn about "test of a variable/field address"
-for weak symbols, because they can be NULL.
+are available in the Git repository at:
 
-b) this patch is not even fixing that warning, it does a no-op change
-from implicit non-NULL check to explicit non-NULL check. And the
-former is actually the preferred style.
+  git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/urgent-rcu.2023.06.11a
 
-So this patch is doubly wrong.
+for you to fetch changes up to de29a96acceae732c68a4094d08dc49079eefa02:
 
->
-> >
-> > Signed-off-by: Yonggang Wu <wuyonggang001@208suo.com>
-> > ---
-> >   tools/testing/selftests/bpf/progs/test_ksyms_weak.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/progs/test_ksyms_weak.c
-> > b/tools/testing/selftests/bpf/progs/test_ksyms_weak.c
-> > index d00268c91e19..768a4d6ee6f5 100644
-> > --- a/tools/testing/selftests/bpf/progs/test_ksyms_weak.c
-> > +++ b/tools/testing/selftests/bpf/progs/test_ksyms_weak.c
-> > @@ -50,7 +50,7 @@ int pass_handler(const void *ctx)
-> >       /* tests non-existent symbols. */
-> >       out__non_existent_typed =3D (__u64)&bpf_link_fops2;
-> >
-> > -    if (&bpf_link_fops2) /* can't happen */
-> > +    if (&bpf_link_fops2 !=3D NULL) /* can't happen */
-> >           out__non_existent_typed =3D
-> > (__u64)bpf_per_cpu_ptr(&bpf_link_fops2, 0);
-> >
-> >       if (!bpf_ksym_exists(bpf_task_acquire))
-> >
+  notifier: Initialize new struct srcu_usage field (2023-06-07 13:42:02 -0700)
+
+----------------------------------------------------------------
+Urgent RCU pull request for v6.4
+
+This commit fixes a spinlock-initialization regression in SRCU that causes
+the SRCU notifier to fail.  The fix simply adds the initialization,
+but introduces a #ifdef because there is no spinlock to initialize for
+the Tiny SRCU used in !SMP builds.
+
+Yes, it would be nice to abstract this somehow in order to hide it in
+SRCU, but I still don't see a good way of doing this.
+
+----------------------------------------------------------------
+Chen-Yu Tsai (1):
+      notifier: Initialize new struct srcu_usage field
+
+ include/linux/notifier.h | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
