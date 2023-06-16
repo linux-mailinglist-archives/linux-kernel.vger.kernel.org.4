@@ -2,94 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F0507325B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 05:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 810C27325AE
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 05:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239118AbjFPDK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 23:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37284 "EHLO
+        id S241720AbjFPDKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 23:10:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241771AbjFPDKa (ORCPT
+        with ESMTP id S242181AbjFPDKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 23:10:30 -0400
-Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD46B2D4E
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 20:10:23 -0700 (PDT)
-Received: by mail-vk1-xa33.google.com with SMTP id 71dfb90a1353d-46e4ba859c5so71177e0c.2
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 20:10:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686885023; x=1689477023;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Y6kUQJ2oaECsBSDSAayXfsHXsy3gCQva2UbjpQg9ET4=;
-        b=VdN+gFfGuR0v7U1J1avatXEFmDHfZHhOEPFcWuLwzL6e6adjM1gQQHvPclBAMCk/no
-         aUiYWiB03T+1hr1VHDKhuV9/nRRPWccnJA+Rfc9a/2FSuy0P2tfsNMEKN59pdmFV1B38
-         E9mYq70J8vHpnVxM8kB4Vd39XkG4SjDCVR5YI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686885023; x=1689477023;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y6kUQJ2oaECsBSDSAayXfsHXsy3gCQva2UbjpQg9ET4=;
-        b=IZWcs/r5o5S8Tr5TUPpkT9iV1V0k2nxXehRNtlketdROHVF4zy1iM3jW+NkzCdb1lA
-         4LlXtsx/mwaJYsnB0AhhGaqljS+3uNgHnT4g/SnMGh42y6T5kClhoXLvGNbyxpSZzpAa
-         04r1H/WRMR7LWuhi+A0u1tcuvPD0XSj6rQdCHI9efs+dpYhWy69s/bHBYyPhoZnmeYpJ
-         Rx5C2Xr9rp3DzJ0UMZ0lkQugkxv/wQattS5WeiaVRkNhJWybBsqmbgWkTMwtLjkAtBGa
-         VHZJhtqDzFSmBBARmnr7zvyRVADGXdXaihCjIwVURW9zVj2+V9lPi4b6U4ENeOVIMqml
-         lLCQ==
-X-Gm-Message-State: AC+VfDz97Hh7pphPn1Ka1ZFlxT4AYD6Vo+/pYtnjKLjLTexyQ14C9Q78
-        LPA4h8wOX4gIZf54nZljVkhdSIT5ZJ8blYK9T9KYqA==
-X-Google-Smtp-Source: ACHHUZ42bq99goI2vYAn8G1x741PYuq1KwDgq8h3oTYnQQH0OCj46O1bAJilLIhOQfyAObO3VAs0i/h38h8LBeAvpcI=
-X-Received: by 2002:a1f:45c1:0:b0:471:17be:ba8d with SMTP id
- s184-20020a1f45c1000000b0047117beba8dmr1120129vka.3.1686885022864; Thu, 15
- Jun 2023 20:10:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230615122051.546985-1-angelogioacchino.delregno@collabora.com> <20230615122051.546985-2-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230615122051.546985-2-angelogioacchino.delregno@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 16 Jun 2023 11:10:11 +0800
-Message-ID: <CAGXv+5GTcHYe3K98Hy7wos6m3271Y6PYyADcbt91SUKv25UFvw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] clk: mediatek: clk-mtk: Grab iomem pointer for
- divider clocks
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     sboyd@kernel.org, mturquette@baylibre.com, matthias.bgg@gmail.com,
-        u.kleine-koenig@pengutronix.de, msp@baylibre.com,
-        miles.chen@mediatek.com, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 15 Jun 2023 23:10:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E696F297F;
+        Thu, 15 Jun 2023 20:10:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 753AB624E3;
+        Fri, 16 Jun 2023 03:10:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B0808C433C0;
+        Fri, 16 Jun 2023 03:10:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686885017;
+        bh=Urkn7w/gCujuzVzsD62vYANPn6pMOymn6mnoP0nXIik=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=uXA2+6bfg+tHCk2ZqZ4D7q2qfkdej2qfMLFScZpx99OsavxSypitJ8cdS943hkZFF
+         yNP4BVYU7TGHX7e/RPkyIsJ+3LexmRzulxwQdvfjG9WrH0uPZYp8e4+VQGue5Dw2tE
+         k0lp92HbzNsxeGN39Kuv5uWctHTZI5+jcpC1Q0n86Q2Bq9gX2IfPGQY1abyV0Kbe7G
+         4nfWVahsJdRJQunJ3TNp/lufuF5Yg6I2bSPabLFOczQogQw1CGLwlBDvEJpvjHB79z
+         yhZ9xyfSoWhU0vBa/sScrhDZrEuKgNuUq2MKk7SP8EVrkyYrlNAWhe6JIAeuJc1voG
+         uraI9K7YAIydA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 90485C3274B;
+        Fri, 16 Jun 2023 03:10:17 +0000 (UTC)
+Subject: Re: [GIT PULL for v6.4-rc5] media fixes
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230604140137.1f160782@sal.lan>
+References: <20230604140137.1f160782@sal.lan>
+X-PR-Tracked-List-Id: <linux-media.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230604140137.1f160782@sal.lan>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.4-4
+X-PR-Tracked-Commit-Id: 899e373ef0b0d3f1c2712a849f019de4f46bfa02
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 4b0a5014ee2b0984f2410d657dc582a8387585ae
+Message-Id: <168688501757.31465.7761977128116634058.pr-tracker-bot@kernel.org>
+Date:   Fri, 16 Jun 2023 03:10:17 +0000
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 8:21=E2=80=AFPM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> In the rare case in which one of the clock drivers has divider clocks
-> but not composite clocks, mtk_clk_simple_probe() would not io(re)map,
-> hence passing a NULL pointer to mtk_clk_register_dividers().
->
-> To fix this issue, extend the `if` conditional to also check if any
-> divider clocks are present. While at it, also make sure the iomem
-> pointer is NULL if no composite/divider clocks are declared, as we
-> are checking for that when iounmapping it in the error path.
->
-> This hasn't been seen on any MediaTek clock driver as the current ones
-> always declare composite clocks along with divider clocks, but this is
-> still an important fix for a future potential KP.
->
-> Fixes: 1fe074b1f112 ("clk: mediatek: Add divider clocks to mtk_clk_simple=
-_{probe,remove}()")
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
+The pull request you sent on Sun, 4 Jun 2023 14:01:37 +0100:
 
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+> git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.4-4
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/4b0a5014ee2b0984f2410d657dc582a8387585ae
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
