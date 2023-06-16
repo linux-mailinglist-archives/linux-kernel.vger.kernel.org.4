@@ -2,63 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C691E733BA7
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 23:49:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87555733B9A
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 23:40:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbjFPVte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 17:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47312 "EHLO
+        id S232738AbjFPVke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 17:40:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjFPVtb (ORCPT
+        with ESMTP id S229627AbjFPVkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 17:49:31 -0400
-X-Greylist: delayed 597 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 16 Jun 2023 14:49:29 PDT
-Received: from proxima.lasnet.de (proxima.lasnet.de [78.47.171.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF9F195;
-        Fri, 16 Jun 2023 14:49:29 -0700 (PDT)
-Received: from [IPV6:2003:e9:d710:7c92:fc77:12a4:52e5:4e01] (p200300e9d7107c92fc7712a452e54e01.dip0.t-ipconnect.de [IPv6:2003:e9:d710:7c92:fc77:12a4:52e5:4e01])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: stefan@datenfreihafen.org)
-        by proxima.lasnet.de (Postfix) with ESMTPSA id C1744C0144;
-        Fri, 16 Jun 2023 23:32:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=datenfreihafen.org;
-        s=2021; t=1686951170;
+        Fri, 16 Jun 2023 17:40:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FFA530DF
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 14:39:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686951583;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sdxCqBl7J5TyGt6xLYgsGc0Y2cygd5RnxZTzgOT8fsk=;
-        b=l73Fxqs3erVsnGjPoX7NAxYqG0JEv76CcAcfhhW2xcAembKT2Li4D7bADb3FBjwqQ9MA6U
-        ssT03A0wNVHJf/ONu4jEGiuHR1y1F/bbHFYw/+JEC0idlX2rymcD16ccDqEKGxhRdrVzvz
-        xHrISZCbQypEzsQ96LOHOdqkykITe6xZ5xHCzMtIEojAtXXEVA7cpYpMSsr6pRIT2gvUqT
-        e1bgKpJSRfkJdX1ESnnOOtBoSqnbWJRtlr2zF8yM1BBme2gD7ITUoZjlIIa8YD5Fi1jfjn
-        IiOT/uk9yb3MszqQHD+aeAMgns1i3yygAeGx/FtB0XDeO1edELEAD6drSjqG1g==
-Message-ID: <6ec8cf42-aff0-a832-87f2-1526ff00c42d@datenfreihafen.org>
-Date:   Fri, 16 Jun 2023 23:32:48 +0200
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=zJIOldJuy+fu1YXH3vSoQYSg40ebqezMIIE6YitueZk=;
+        b=Cf4VYG2TZCuJ1x0p1conmy/QdLPAffsvWqZJEGFlAb3njHP2u9mwVO/V2Jf+2qGivdyTLh
+        gYX5UxvbuFUk49He/zwQgw+ch/ltDcO3vNLmZ1FrWm1NY+L2uB6oMJrto/KEfvaadMeQEW
+        xLRo3/5ghK6u4th9Q9bXR9u4fE+SxVU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-295-5SsXz7YIN9K9CA5JBJ3zRQ-1; Fri, 16 Jun 2023 17:39:41 -0400
+X-MC-Unique: 5SsXz7YIN9K9CA5JBJ3zRQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6A4F61C07266;
+        Fri, 16 Jun 2023 21:39:41 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.51])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9E283175AE;
+        Fri, 16 Jun 2023 21:39:40 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+To:     torvalds@linux-foundation.org
+cc:     dhowells@redhat.com, Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] afs: Fix vlserver probe RTT handling
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] ieee802154: Replace strlcpy with strscpy
-To:     Azeem Shaikh <azeemshaikh38@gmail.com>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     linux-hardening@vger.kernel.org, linux-wpan@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-References: <20230613003326.3538391-1-azeemshaikh38@gmail.com>
-Content-Language: en-US
-From:   Stefan Schmidt <stefan@datenfreihafen.org>
-In-Reply-To: <20230613003326.3538391-1-azeemshaikh38@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <697563.1686951579.1@warthog.procyon.org.uk>
+Date:   Fri, 16 Jun 2023 22:39:39 +0100
+Message-ID: <697564.1686951579@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,58 +62,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
+Hi Linus,
 
-On 13.06.23 02:33, Azeem Shaikh wrote:
-> strlcpy() reads the entire source buffer first.
-> This read may exceed the destination size limit.
-> This is both inefficient and can lead to linear read
-> overflows if a source string is not NUL-terminated [1].
-> In an effort to remove strlcpy() completely [2], replace
-> strlcpy() here with strscpy().
-> 
-> Direct replacement is safe here since the return values
-> from the helper macros are ignored by the callers.
-> 
-> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-> [2] https://github.com/KSPP/linux/issues/89
-> 
-> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
-> ---
->   net/ieee802154/trace.h |    2 +-
->   net/mac802154/trace.h  |    2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/net/ieee802154/trace.h b/net/ieee802154/trace.h
-> index e5d8439b9e45..c16db0b326fa 100644
-> --- a/net/ieee802154/trace.h
-> +++ b/net/ieee802154/trace.h
-> @@ -13,7 +13,7 @@
->   
->   #define MAXNAME		32
->   #define WPAN_PHY_ENTRY	__array(char, wpan_phy_name, MAXNAME)
-> -#define WPAN_PHY_ASSIGN	strlcpy(__entry->wpan_phy_name,	 \
-> +#define WPAN_PHY_ASSIGN	strscpy(__entry->wpan_phy_name,	 \
->   				wpan_phy_name(wpan_phy), \
->   				MAXNAME)
->   #define WPAN_PHY_PR_FMT	"%s"
-> diff --git a/net/mac802154/trace.h b/net/mac802154/trace.h
-> index 689396d6c76a..1574ecc48075 100644
-> --- a/net/mac802154/trace.h
-> +++ b/net/mac802154/trace.h
-> @@ -14,7 +14,7 @@
->   
->   #define MAXNAME		32
->   #define LOCAL_ENTRY	__array(char, wpan_phy_name, MAXNAME)
-> -#define LOCAL_ASSIGN	strlcpy(__entry->wpan_phy_name, \
-> +#define LOCAL_ASSIGN	strscpy(__entry->wpan_phy_name, \
->   				wpan_phy_name(local->hw.phy), MAXNAME)
->   #define LOCAL_PR_FMT	"%s"
->   #define LOCAL_PR_ARG	__entry->wpan_phy_name
+Could you apply this, please?
 
+Thanks,
+David
+---
 
-This patch has been applied to the wpan tree and will be
-part of the next pull request to net. Thanks!
+In the same spirit as commit ca57f02295f1 ("afs: Fix fileserver
+probe RTT handling"), don't rule out using a vlserver just because
+there haven't been enough packets yet to calculate a real rtt.
+Always set the server's probe rtt from the estimate provided by
+rxrpc_kernel_get_srtt, which is capped at 1 second.
 
-regards
-Stefan Schmidt
+This could lead to EDESTADDRREQ errors when accessing a cell for
+the first time, even though the vl servers are known and have
+responded to a probe.
+
+Fixes: 1d4adfaf6574 ("rxrpc: Make rxrpc_kernel_get_srtt() indicate validity")
+Signed-off-by: Marc Dionne <marc.dionne@auristor.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: linux-afs@lists.infradead.org
+Link: http://lists.infradead.org/pipermail/linux-afs/2023-June/006746.html
+---
+ fs/afs/vl_probe.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/fs/afs/vl_probe.c b/fs/afs/vl_probe.c
+index d1c7068b4346..58452b86e672 100644
+--- a/fs/afs/vl_probe.c
++++ b/fs/afs/vl_probe.c
+@@ -115,8 +115,8 @@ void afs_vlserver_probe_result(struct afs_call *call)
+ 		}
+ 	}
+ 
+-	if (rxrpc_kernel_get_srtt(call->net->socket, call->rxcall, &rtt_us) &&
+-	    rtt_us < server->probe.rtt) {
++	rxrpc_kernel_get_srtt(call->net->socket, call->rxcall, &rtt_us);
++	if (rtt_us < server->probe.rtt) {
+ 		server->probe.rtt = rtt_us;
+ 		server->rtt = rtt_us;
+ 		alist->preferred = index;
+
