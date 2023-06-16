@@ -2,169 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4927F733059
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:47:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5BF733062
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:49:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245052AbjFPLr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 07:47:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35300 "EHLO
+        id S1343703AbjFPLtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 07:49:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344168AbjFPLrx (ORCPT
+        with ESMTP id S1344337AbjFPLtO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 07:47:53 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2121.outbound.protection.outlook.com [40.107.220.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877C2294C;
-        Fri, 16 Jun 2023 04:47:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MMiSP64pdeyWDNekkTqakLw/tgH25IDaUo+vIWmS8oTSPwpVApgN9vu3BOtLpFrfqFcP9L1NFyVtrRSDmUICwRM1SFXVu3rRTNg9rFoRQA3cFxtWKtwLkpYFshHjiCrx8F6i4tCkAEWf3810Zk4kVJ4XDqHOqhwyvLZzdgkQBFcAp6+J/T5YyQi5UiOovlncBGHvspCjSnwc/UDAA5idH3M8y0CiDNgFgyf2a/j+0CPc19jg/qRHGH1WAjMjkRX3JrqKW5DV+msvQyzfBwLUkd1MJoNdzun0I5Akz9VF96TgLDy2PsJ+KVatapBiV2c8vm55PvtnyaS16KvM4ZNWKg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=brcZfK4cFuE8FHxY/O8yTFVyQ9t1og+0gPD8DFv0izs=;
- b=Nyax3zi15Yp39iIlOqbvAfVzlEmlzL9Fo4vEMCmTr5hMwuwBZE+LP+ICW83eaNIbQpKsqz5a7geyInNkprEJFvKCDoTMuEysnXl/VHDcEYZUPS6KSM+uV2PKdBxSYr1Vzcv9tTxPSx5zkcqIw6WsTiSPjjqT52RAhNKE4MHm9zvuMLvGUgrPyeNXLFIm+4/wPQ0Sol02wyrJwp+hivI0mNfqdqGasj4eFJF6z8Sd6RmARYSXyIh4n2HuMX+GpfJy2RzSD7pdic4RVBaUDHb1B1UfX82EmmUf2Obj1tsikEaEJr3+0y4SpHRYWfwsbdUI2zCQ+WdG6x3ouS53D0Kitg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Fri, 16 Jun 2023 07:49:14 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2F92D60
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:49:04 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-570282233ceso7062027b3.1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:49:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=brcZfK4cFuE8FHxY/O8yTFVyQ9t1og+0gPD8DFv0izs=;
- b=Rt7ZStuFkesh+ImUj4l+aemB5Jt3GuPIuQMt0CGy9/VhGlna1U194YBSQQqKdeaxGUVcelyfbYl1LRJzRcUuM7Zz4aSr2MHgo5Nhk5xIXWJDYGr1eCh0nmTGUmr/DMnaJQYBe1yaqong8CN4rGxCR35P0vm4tGcWOF2Bhi2Hw30=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by PH0PR13MB5684.namprd13.prod.outlook.com (2603:10b6:510:113::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.36; Fri, 16 Jun
- 2023 11:47:45 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e%5]) with mapi id 15.20.6500.025; Fri, 16 Jun 2023
- 11:47:45 +0000
-Date:   Fri, 16 Jun 2023 13:47:35 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?utf-8?B?UmFtw7Nu?= Nordin Rodriguez 
-        <ramon.nordin.rodriguez@ferroamp.se>,
-        Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>,
-        Frank Sae <Frank.Sae@motor-comm.com>,
-        Michael Walle <michael@walle.cc>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Piergiorgio Beruto <piergiorgio.beruto@gmail.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] net: phy: mediatek: fix compile-test dependencies
-Message-ID: <ZIxL16HWci5dd7Ah@corigine.com>
-References: <20230616093009.3511692-1-arnd@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230616093009.3511692-1-arnd@kernel.org>
-X-ClientProxiedBy: AS4P192CA0021.EURP192.PROD.OUTLOOK.COM
- (2603:10a6:20b:5e1::15) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=linaro.org; s=google; t=1686916143; x=1689508143;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=uBENnlCBnEhufAnVuw+D3JGJ02jgGoa7hpaAB7hRNak=;
+        b=xzNmgz7PTzYm+ZtJ4D0RC//YrnsN/UzT4jWuMkskjfXV8kRGJLcq8hh3bu5IeeY9Hg
+         3/v3d9r1To28I8ZzYRXT12NDhnifOmUI780kmtUgnSD6sdtV8b2uaikUITa3CB978jzP
+         KysSc6zpnNYgfHDriFA9L/RKS1YY8jk1XtCJrDWyee/IeDHlBtWDqd+GlEsGxe78lMVa
+         NrAubJe5TCeCl/NUJ+yap/jO5UmvXzI0m1uziPlkVdVSS4HyxJX7GFfiHT7kHBx/bZV6
+         coIOeDPP3LjeW1sygZOms271LwZoyIHy3ppsuvmTKZCeRmYNb39ERXVhryck0WwDMUYQ
+         lpAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686916143; x=1689508143;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uBENnlCBnEhufAnVuw+D3JGJ02jgGoa7hpaAB7hRNak=;
+        b=jH36dS4gx6gb37v90eKIUTep87HkHyb6uAf5ftyxcRCfOdhOfti9waN2rFNtT626Lu
+         3Z80OEsWSd+KTWwroARvCTFyS63/mkI188Z77Oz1awVZr+xqsyRzPc5w5hw44fXYjJ08
+         MV84BM/6zZAwAM8EPZO673VB6xG2/PdtXtrQeSM0ZpUUN/i1MkY3j/xp7IxTLoHD/Q97
+         rVQROHK8uq3P93kJfCGjfY0gOH0hvTI/BQ0j7vNrQiwAHCF5ZMdmY3pWEECsVnBUTrZi
+         6NSAsYvvlnnLO7qsRWcZQceJ+e6EWXt6Bio5L4ikMAx171N5rYFIi9FlVwpRqyOKrd7R
+         LB1g==
+X-Gm-Message-State: AC+VfDxAjN4CraUnqrYm2xkG8+rJUPNe789X0Pb8e0Odt9EXkyvZLOMO
+        aSsqzK6QUvaUnfM/dRm/ZSF7ylnop4elkki8Is7RHA==
+X-Google-Smtp-Source: ACHHUZ4wzr+01cdOuLafOhfNu3jhsS6jDdtPFQ6Ei5279VT+EIup/mDYSg4VKWw0E5ijIwT9qylQc9gkSW0cVwiQaec=
+X-Received: by 2002:a0d:fe86:0:b0:570:48db:890 with SMTP id
+ o128-20020a0dfe86000000b0057048db0890mr1409278ywf.6.1686916143226; Fri, 16
+ Jun 2023 04:49:03 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH0PR13MB5684:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6b4decf8-fc1c-46c2-49e1-08db6e5f7ffd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zEzoVFq5opPdh0qzzCcvbjYdmUy40okL97WBQzYuQBhMmVUAHok2SbMlY3WW1Tf5pA2g7gIJmn3KnI0evi2oUeLrRzbk90F2CKXGJDHqqcHx5M1iPWOBlew+HJCWjPip6tmfs7PLrke2Qmf4ywCiCcBRtkEjRh1Kls5BCXV5BnDyW1K2tGp/9HnAQu28RAUPxTRnyccaS5VawQWhEJ6xg7xGM0jaQZPodDum6eCj8cEnep443HOJuxT7d12GaCgG17vD3AIwIrZExXmhZXVzUlnycCvT2bDMA31OYk+gXT3Wmwhx35PvmI0LOQUNDGufMiX8NFfOnWlBTAxqgDyu9ITXw5lIFNbB5PAge8KAeNuRvhjk6TNYIgfTRwXKSs8JtuaB6GeMIJA5Ieb/iNn0d5pDLFPVIUrJXeIQJ/Y1tl/qgMXWWSqzA+9VWGcgc9045XbkqppF+loPxQ5ta3vFVV8r/NfDBaZti3wOMp1TvaQr/ZF/3aYEZxTYCBaziNOrU5XQs7c/vziJYFYDEieC47MxNgtwuB4v0PWJ4w3uY7BluEkmpfj83AXYBV7E4Rzm
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(136003)(346002)(396003)(39840400004)(451199021)(316002)(6486002)(41300700001)(83380400001)(2616005)(186003)(44832011)(6506007)(6512007)(2906002)(86362001)(7416002)(38100700002)(5660300002)(36756003)(8936002)(8676002)(66946007)(478600001)(54906003)(66556008)(6916009)(6666004)(66476007)(4326008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PCqoKms2CVFTCCdFTI1RbP/UFQ5gLflmVqkZjfJVG8IAhNq+/J1Ufz3A41ur?=
- =?us-ascii?Q?cSBV0oo2zwn93CQ2ipB4oXY9MMkR9y2HTAAJnbOz/I+I8F103AnGmFhF+O0p?=
- =?us-ascii?Q?88dmpGdUHszjufoA5widvl+KbVRZBowgKolw1rVwQuWuj5IY+tcMndVoDlq9?=
- =?us-ascii?Q?R8F/bOVk9JhrJbTg8ksdYZq+2/xBWcUcNyrSUWFSgYlZLu9R+KYwOMCQmCug?=
- =?us-ascii?Q?BGYjLEE/yOimd8KAs3dFeEC2aIN9VDI0cHkI+aayvw2nw4NG1TbMgXX14wdz?=
- =?us-ascii?Q?DURqX6TFIvLzAbwPBMwyZI07uK9h7tYzu4FJbhWG2TAAxlz115eJtl4vWeCh?=
- =?us-ascii?Q?Ffqsm8EC6C3RNHeMWQWUa32DvxF+ZkKY9kiDNEBbBJ41Jy/mgSpGmG4Y7SQD?=
- =?us-ascii?Q?gStvWoFbpUid7+vUSuR6o0N+JVOfFrTIAYoBMVaWTKGgEb2kkHL6QHxUSLny?=
- =?us-ascii?Q?cadAH8LC8MkCFK8oWvj+iZOob4JGvH/xLTjuihXFC+kJ81ZBHnglhOiR+T1t?=
- =?us-ascii?Q?Ei9pe3DZ8DcaEgx3v2z/5JCO/495YRSJ8eBdg3cX8Bknhc9UPGK4mwYP9jNQ?=
- =?us-ascii?Q?QalevnkPCXp+rYbyQljqqS3yyXX5JWosX13meoyo+wicMAZS0IL2f5rWnp6A?=
- =?us-ascii?Q?0U2K9+vdrF5EhUasE5MVZuuKCsM/DdIHn0+jCT1Qrhu2Q6qK5FHVWtFdPjg5?=
- =?us-ascii?Q?T1FR5fkplm8U5tbdRp/nS2iTlrRNo+XHMwEDZGCWBpqp4u5hPtN6ITMYpwAd?=
- =?us-ascii?Q?Ovosc1OPFOGp/V/LzCWyEXGKsntTYOWzQ43EWC92hTnzQEkKUTngEJGWRMGT?=
- =?us-ascii?Q?Td/PKciOmVueN6clYKHp/BuP1AooxEyisGMrVvIhY6zFH+gDxWNacFk8yCis?=
- =?us-ascii?Q?WIXI0J9YksTuwontJa/FZwhhQLPqf2Shr5zVFyCAgIHOkKHKExxWHIWWmnYm?=
- =?us-ascii?Q?sAFr8G3w5PEfVhLrwWWASG2bDt04plxL/OE6ykOBXX5HaQ0D58UaABrRC3VX?=
- =?us-ascii?Q?IR5/g0XHgBvWJJ596vM09pnPfZPYQgJJu+GeWrbBGRUHNQJlUvs5WKhkx4dT?=
- =?us-ascii?Q?9k2ODaWs4wLyZGoCLUHal7QBh8MczIVX+FhkoE/7AVIzD9WtI7UFsmOuXkPP?=
- =?us-ascii?Q?2ccAOGjx2uUsjV1JjHfJ3+uFF+OFSOck+ZItMM7mVD2/jH71qdLB/WAnYAtv?=
- =?us-ascii?Q?riq24QwlHCYsXZlrmX9M1bQeWeksje84lny/0YNlJp99uHjHh/97RDXtaoPc?=
- =?us-ascii?Q?hZZo4rX+dtXIOdmIqL5Lc03nUVMT9MKceGK86wQ/9PYPvuSxnKGxXBVYMUjN?=
- =?us-ascii?Q?TO7+AeyYVAVnj7+7OXgCPiMmkCuF62wKANSoxTZFXNKIXNwHn6bzC4cNXIIs?=
- =?us-ascii?Q?Ygx5z6/xulNssm5uEnStS8youQeBjS3epsK2c9JLuMhXhAgAi6ryi5blxCnt?=
- =?us-ascii?Q?BAaRlsXWDN5T993CnKnROcvzvv7Ti/cdaJb3oa5aGWrR+25Oe7FN9j4SwDPK?=
- =?us-ascii?Q?RtudIqS3UnFAuZhevOd3hs5Bp9+ATe3yEknHmVmBONScRpIWjZ/ZGURZ+D2T?=
- =?us-ascii?Q?mk5FSO9A/YdzgWbOh3uSl2OIgBaG8CK2Djnz0Z4whHC1HhzaxYGQmx6X6uTT?=
- =?us-ascii?Q?5Fp7+6il5Xb47/IvG1bLy8NHTLpDkDI934DJ02ffXlCr9D1aDMMmwvQIPiyO?=
- =?us-ascii?Q?UZ5N/w=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6b4decf8-fc1c-46c2-49e1-08db6e5f7ffd
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 11:47:45.3163
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /4v0fAIDmie2yOzCDCYiNVcuG9iwaJOiH/dKPaszZit1x+OPTWyZR6pa2dJiq+7wLThe2HCUJHLWyLAEa1xj3xOAA2blAYzwR74jpw7wB9I=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB5684
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230607124628.157465-1-ulf.hansson@linaro.org>
+ <20230607124628.157465-10-ulf.hansson@linaro.org> <20230615084430.boamsz56kqqi3n6h@bogus>
+ <CAPDyKFoiL47wadabh1jcOr4q4uwJm1UyhHHMnmVcys=bBBVcXQ@mail.gmail.com> <20230615133020.pomw53jrzehbwahd@bogus>
+In-Reply-To: <20230615133020.pomw53jrzehbwahd@bogus>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 16 Jun 2023 13:48:27 +0200
+Message-ID: <CAPDyKFoWcyznGM7EYkuhSAB+6nNBvsPt77o5B3hyL06pwiFYMA@mail.gmail.com>
+Subject: Re: [PATCH 09/16] dt-bindings: firmware: arm,scmi: Extend bindings
+ for protocol@13
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Cristian Marussi <cristian.marussi@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 11:29:54AM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The new phy driver attempts to select a driver from another subsystem,
-> but that fails when the NVMEM subsystem is disabled:
-> 
-> WARNING: unmet direct dependencies detected for NVMEM_MTK_EFUSE
->   Depends on [n]: NVMEM [=n] && (ARCH_MEDIATEK [=n] || COMPILE_TEST [=y]) && HAS_IOMEM [=y]
->   Selected by [y]:
->   - MEDIATEK_GE_SOC_PHY [=y] && NETDEVICES [=y] && PHYLIB [=y] && (ARM64 && ARCH_MEDIATEK [=n] || COMPILE_TEST [=y])
-> 
-> I could not see an actual compile time dependency, so presumably this
-> is only needed for for working correctly but not technically a dependency
+On Thu, 15 Jun 2023 at 15:30, Sudeep Holla <sudeep.holla@arm.com> wrote:
+>
+> On Thu, Jun 15, 2023 at 11:39:06AM +0200, Ulf Hansson wrote:
+> > On Thu, 15 Jun 2023 at 10:44, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> > >
+> > > On Wed, Jun 07, 2023 at 02:46:21PM +0200, Ulf Hansson wrote:
+> > > > The protocol@13 node is describing the performance scaling option for the
+> > > > ARM SCMI interface, as a clock provider. This is unnecessary limiting, as
+> > > > performance scaling is in many cases not limited to switching a clock's
+> > > > frequency.
+> > > >
+> > > > Therefore, let's extend the binding so the interface can be modelled as a
+> > > > generic "performance domain" too. The common way to describe this, is to
+> > > > use the "power-domain" bindings, so let's use that.
+> > > >
+> > > > Cc: Rob Herring <robh+dt@kernel.org>
+> > > > Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> > > > Cc: Conor Dooley <conor+dt@kernel.org>
+> > > > Cc: devicetree@vger.kernel.org
+> > > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > > > ---
+> > > >  Documentation/devicetree/bindings/firmware/arm,scmi.yaml | 4 ++--
+> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+> > > > index 5824c43e9893..cff9d1e4cea1 100644
+> > > > --- a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+> > > > +++ b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+> > > > @@ -145,8 +145,8 @@ properties:
+> > > >        '#clock-cells':
+> > > >          const: 1
+> > > >
+> > > > -    required:
+> > > > -      - '#clock-cells'
+> > >
+> > > I am yet to look at the patches, just looked at this binding changes for now.
+> > >
+> > > Won't this break compatibility with existing DTBs. IMO, this is strict
+> > > no no, you can't drop #clock-cells. I wanted to add performance-domains
+> > > here as alternative but decided to not as I knew you were working on this.
+> >
+> > Thanks for reviewing!
+> >
+> > The point with the suggested change was to allow any kind of
+> > combination of using #clock-cells and/or #power-domain-cells. Honestly
+> > I didn't really know how to best express that in the binding, but
+> > maybe someone can help me out here?
+> >
+>
+> Even I don't know exact details, but there are rules like if this
+> property is present, some other property can't be there or something
+> on the similar lines. I have vague idea/recollection from my previous
+> experiments which probably was not needed then and hence I can't just
+> point to any examples unless I go and search myself.
 
-nit: for for -> for
-     or
-     for for working correctly -> for correct operation
+I will figure it out, np!
 
-> on that particular nvmem driver implementation, so it would likely
-> be safe to remove the select for compile testing.
-> 
-> To keep the spirit of the original 'select', just replace this with a
-> 'depends on' that ensures that the driver will work but does not get in
-> the way of build testing.
-> 
-> Fixes: 98c485eaf509b ("net: phy: add driver for MediaTek SoC built-in GE PHYs")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>
+> > I think enforcing #clock-cells to be used is unnecessary. Making it
+> > optional should not break existing DTBs, right?
+>
+> Correct. That is what I meant, it is either #clock-cells or
+> #power-domain-cells
 
-I don't know the answer to the question of if this dependency is needed or
-not. But I do agree that it does what it says on the box.
+Should we allow both? Or maybe that is just confusing?
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+In either case, I am converting the scmi cpufreq driver to cope with
+using #power-domain-cells too, as that is useful regardless I think.
+However, that's a separate series on top of $subject series.
 
+>
+> >
+> > Moreover, currently it seems to be only Juno that uses "protocol@13"
+> > and the "#clock-cells" (at least by looking at the DTSes in-kernel).
+>
+> Yes only one that has upstream DTS changes, but for sure it is used on
+> couple of other platforms. So for we are still far away from deprecate it
+> but we can eventually once users of it are ready to use new binding.
+
+Okay, let's discuss when to deprecate it, but let's do that later on.
+
+>
+> > So, I wonder if it's really such a big deal to update the DT bindings
+> > for "protocol@13" at this point, but I may not have the complete
+> > picture.
+> >
+>
+> Yes it does break compatibility. Yes I know Juno is not a production
+> platform, but associating DT with kernel change makes is hard to switch
+> to older stable kernel versions without DT change which I really hate as
+> I will be wondering which SCMI perf is not working with stable kernel few
+> months down the line. So yes, we are not dropping the support for old
+> bindings even if it just for Juno(though I am sure it is not the only one).
+> I have spent time on such silly things when we were in the process of
+> pushing these bindings initially upstream. I prefer not to repeat that.
+
+Okay, thanks for sharing the information. Let's simply follow the
+regular path of how we deal with deprecating DT bindings then.
+
+Kind regards
+Uffe
