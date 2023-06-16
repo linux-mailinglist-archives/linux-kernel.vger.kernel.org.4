@@ -2,281 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 947E2732655
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 06:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B57C9732657
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 06:51:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232793AbjFPErh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 00:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55080 "EHLO
+        id S230493AbjFPEvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 00:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjFPEr0 (ORCPT
+        with ESMTP id S230171AbjFPEve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 00:47:26 -0400
-Received: from BN6PR00CU002.outbound.protection.outlook.com (mail-eastus2azon11021015.outbound.protection.outlook.com [52.101.57.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E6F02D5E;
-        Thu, 15 Jun 2023 21:47:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GAOVsmocBBCPLPfkMsH6bmpeWnS5i8+ngn1xG7WWP5dESFMZlAUhFP7/nDfd2eLxrbVyYbfBw7Lm+/jXpvRMGDwdMVvCz2ozTYoWe/te8/4mmRqkNBZr9w5/+LOiya9I3tsT4BCunD4ey/Vsuc7gBQvjkkfyTLWigy++ZNvz5En59XRLksYYjYFqll6BABGtXkxhn9s/O6rjOM4VuR8NapOCJ3KwJ3T4Qg7GPtaKB8ozgcJsYc8tJGzypxtqqUgrBXUVkRKfkRGNHV9tk0o106OV4BHJ6IX2JBG5VYjpjAgUO0yocAhFSeqn2wGDZGkMJzyFlvYSKlSmwodYSpWzSg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6QZS07VMT8YTKzlEOKl3OsPkDSLbUqrzjdJ8lnP0iQQ=;
- b=OgbM0pXF8uQ/MEmHGC0Q6miG/tw21qjAYG4WWpUkAEdefoBjlay2Kf80hWK0jCZS9VkG83q52is7f54UcpdN0Ug7dsZ4tpJD63txzQcKoDUhG2yZvVdb/UR5SwRpCk/yH2C1tsYktvdFjIxeCpTbibLSG6s5/QgSOnzAxvllo5KnhCERj87EBe9GqARE1ukS3Wn1zXansikDhRgIYqjCqsUz09uV7bBzg9y2cPG60yLKjScAf+Z+nicJX3WImhC8S2z3XSDUKXFJl1AzFBCThC9tKGni5MB4BWyEwn6vfasPq5XgE8HGG90yIB+AOsBT7xgzeQRvWXqR/TOGrIZkhA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6QZS07VMT8YTKzlEOKl3OsPkDSLbUqrzjdJ8lnP0iQQ=;
- b=EWm/syNizs5bFJ9RA5NX9mMcTfXCeqlZl4cw/ILEyB2n9z+1G84XLCAI9Qo9xkqqs7xS0sSm6Ipbysi2YVUAVEBHZhYG/LpbJo2vEk/vrNZsMLJCu5aZaHl/bHyGakFPmsDLjRMah202Q3F0fg1OJruiOFztKu3qciZua4uhRYo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-Received: from BL0PR2101MB1092.namprd21.prod.outlook.com
- (2603:10b6:207:30::23) by LV2PR21MB3158.namprd21.prod.outlook.com
- (2603:10b6:408:174::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.6; Fri, 16 Jun
- 2023 04:47:22 +0000
-Received: from BL0PR2101MB1092.namprd21.prod.outlook.com
- ([fe80::e673:bfeb:d3c1:7682]) by BL0PR2101MB1092.namprd21.prod.outlook.com
- ([fe80::e673:bfeb:d3c1:7682%3]) with mapi id 15.20.6521.013; Fri, 16 Jun 2023
- 04:47:22 +0000
-From:   Dexuan Cui <decui@microsoft.com>
-To:     ak@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        brijesh.singh@amd.com, dan.j.williams@intel.com,
-        dave.hansen@intel.com, dave.hansen@linux.intel.com,
-        haiyangz@microsoft.com, hpa@zytor.com, jane.chu@oracle.com,
-        kirill.shutemov@linux.intel.com, kys@microsoft.com,
-        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        luto@kernel.org, mingo@redhat.com, peterz@infradead.org,
-        rostedt@goodmis.org, sathyanarayanan.kuppuswamy@linux.intel.com,
-        seanjc@google.com, tglx@linutronix.de, tony.luck@intel.com,
-        wei.liu@kernel.org, x86@kernel.org, mikelley@microsoft.com
-Cc:     linux-kernel@vger.kernel.org, Tianyu.Lan@microsoft.com,
-        rick.p.edgecombe@intel.com, Dexuan Cui <decui@microsoft.com>
-Subject: [PATCH v7 2/2] x86/tdx: Support vmalloc() for tdx_enc_status_changed()
-Date:   Thu, 15 Jun 2023 21:47:01 -0700
-Message-Id: <20230616044701.15888-3-decui@microsoft.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230616044701.15888-1-decui@microsoft.com>
-References: <20230616044701.15888-1-decui@microsoft.com>
-Content-Type: text/plain
-X-ClientProxiedBy: SA9PR03CA0010.namprd03.prod.outlook.com
- (2603:10b6:806:20::15) To BL0PR2101MB1092.namprd21.prod.outlook.com
- (2603:10b6:207:30::23)
+        Fri, 16 Jun 2023 00:51:34 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52342D60
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 21:51:30 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f81b83b8d5so38965e9.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 21:51:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686891089; x=1689483089;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y3vCXP/afZBOc7VwarDHzgRHJ+kYPm10EgqyF9PZg5E=;
+        b=YiB3VceDzXPa/QV7mz8TG2dhi0UVuJ7qLz0FyuYOStM1MvvUuKE1Pgh12EdTSyO5BY
+         WS9P1W5L4V8Degm5UZTicZ6tdkqA61XY7h4P7Iy/EA1X+Fox3trFoYcZz3HJH1jQYt0U
+         5ehd4O3FqY2Nao7DloUqMFoJXywezoHmncMqLyLOldni/Fch8rivADRCGYfxcPXuus2A
+         hM3IRC7p9/YKN24TtylvRIC4a4A7cSLtJgCxxi+eY//F4ZkGveWn+wijz8v+UVdAxj6t
+         FJB2xvm5uZnbFuvS5rVBUNZ66OoVaoTJLdupeQlc4rkxygt5QMtmB4YCQQAR8MyqDCDP
+         BNqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686891089; x=1689483089;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Y3vCXP/afZBOc7VwarDHzgRHJ+kYPm10EgqyF9PZg5E=;
+        b=FTgaB7dtobbdGqh26IPi1R5IcVUK6usX5SAdocoa7y0ZgR4+s3nWooGKjR+NxDF1Tz
+         KI+eKje8rTr2bj1ZTksHbzvfj7jJ23Xn0E8u4oA2VjDA52N7EmHuDjSdZ/UN/vhlIFeK
+         7M20OlnPWAg02CrOHg0wWwtvT2KAz08dzsW9XmOR4pZCeBeNnKfF535nyLMpADKdi4o4
+         ve7q917DRf++oKOYOOoN1CC4M22s9eYS1tj5FAgC47hkjGuxN4Sy+3nDzQlkKWVwg6JB
+         m07osUbxkJzdLMju9VXbAUJ9NYUCSB5Hou5GSSUilZ14QzHOR9tW+3izMT43rYyTWKOb
+         OfxQ==
+X-Gm-Message-State: AC+VfDwdkcwj7fN5X6WkY2GwBr4cFSAKYRUzTy9D3Pp5+RAlS1XxYKV2
+        dy2+hxwT8xBUt6kAPmLAZ7S3OUku40DdCtKrxnd0wQ==
+X-Google-Smtp-Source: ACHHUZ7FR3MPBinMMBNYI1cpnVFLVNY1HWK/H3/0/hgiIgUYEYCAqFHD2AIQ7yOQiQsq3WJSFAR3iKQKYM9g/iLtAog=
+X-Received: by 2002:a05:600c:4e52:b0:3f7:e4d8:2569 with SMTP id
+ e18-20020a05600c4e5200b003f7e4d82569mr328353wmq.5.1686891089101; Thu, 15 Jun
+ 2023 21:51:29 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL0PR2101MB1092:EE_|LV2PR21MB3158:EE_
-X-MS-Office365-Filtering-Correlation-Id: 39c518d8-4640-488f-3f85-08db6e24c5ff
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cb0/l/KI7R4ai8f+cu6WmHaACiKrVaJh+ZXWyE8v3qxz78u9ANnMZGT6i9IK27Mqu03byJjKO/f1GfFrq9RzKqJ2PvASx/omxqIPTpqdeZnwQF58oPGMB6WzWy0XTaZHAqJYVRb9EB8PsEanQPnPaVGWxJGAUHnIILulTrVA3XOImQL/LafzkgPASGqMYcJig+mwTr4TQQu7cxrY8h1jig8mzgRIGxdlDNufc/026GfpmcRfAJn3pO1Pyb6SXIe8JqZ8wivS+4c/a3pHNnw4D04bSALFi/xvDbSbFGN9BJGFF82g9pIas9JEO5ddTivOO6Kr6qK//KA9yg2s1OhK4LuCI8B0HCjyYYf/uK36eLY8FojfAQTSeMoGOctSR+imG3FeZ9fRcrsow77u78bmTyXQVWVRkzYQDIDFDbbMUNOQP5e2DOsuC7uZOIoPxrgb3W+hpEcSm/S1EbrtgqE05+PsrbHs3cvLNA5jJILVvTV74SGX6uXEAOwiCxwZOb36eTv6E7zEVUaFzQLlUaFKEN2uX9XGVfqvh0F4iMqzf5kKI9Q4gNCCvfbEz2a5jtIGRz/tKC+zDXf9Gq5XilVZUjyJxqB5Ta+aIZRo1mBmMfeuv5it4gfs7grWOQ3pvssBKr7Ft4YSlITy6iyAMH20RQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR2101MB1092.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(376002)(366004)(396003)(136003)(451199021)(921005)(38100700002)(82960400001)(82950400001)(10290500003)(66476007)(478600001)(66556008)(66946007)(6666004)(86362001)(36756003)(1076003)(6486002)(52116002)(186003)(6512007)(107886003)(6506007)(316002)(4326008)(8676002)(2906002)(7416002)(6636002)(8936002)(5660300002)(83380400001)(2616005)(41300700001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dpcXccLaMwqU4bVpaQUu2nKq3ah3UlwKYyoyI+JXT6tuAc95OUclN9lZDTuv?=
- =?us-ascii?Q?iBqHabPziC/lRaVXWVjjVH/IJyu9UXkLL0K5P6vBIWWgQKVEVIN2j9w167Lu?=
- =?us-ascii?Q?LXEwv3d0R4Dtyuee9eNWqFHN5dgRavvtUGlAS1bGZcRB8+pYTYjx8jQbed3S?=
- =?us-ascii?Q?OgidhLVPveFts3z/qIDvR694KHMK8Mf4l4e7KNZSd86qAPaGmu5CQI4+DLyK?=
- =?us-ascii?Q?PZEz7g1ZyEavMVrqzv7U3FS4my3hDOUhclDA375BzT3ZOSQX6VeAhw2PFEcg?=
- =?us-ascii?Q?rkw5tCXn5RqVetYM40YMSkRvoelrcm6VyhpHWHTNuFuLWkOaZt74POeHRaV6?=
- =?us-ascii?Q?8EJSCnv4mB99bH9hFgsVfG2yS4yufrx8qK16S5ZV5qFhokLIMtyfsrfxZO9K?=
- =?us-ascii?Q?IawuQKcHMuHxLZFt72Nw/JjFloq1K1KHnQoRHmmjg7TWUaunACyPNW2qENhy?=
- =?us-ascii?Q?CjkyXdnespUCNg/NjMsYyTi4WBIsM+hpaK7lSllFky/gi85k9oTD+7sf/ZtY?=
- =?us-ascii?Q?C6dE3JGtXrJaiWHljcBlEeKpo5uxCYK04U/iYK482TEXlZaV1rEjha5JliFM?=
- =?us-ascii?Q?BZWboxc2NLnXGNUL5kyt8Z74QioS2Z85A/4R8ydgHAft+zGqVz+xOAFLc0Id?=
- =?us-ascii?Q?NU/7A8DPqAYYPqrxJSlC5TB9fidBxd3c2El99ZXZ8rm/E0c6rpaqnVcFwzRu?=
- =?us-ascii?Q?gfxMxd126UEnCneshpPjUOdXZRYY/hFS1rMcamWtT9/Clf2x1gmnxL7xrJdH?=
- =?us-ascii?Q?dmJPClz3UD/QRgOTnHaW/i37fIr37WQOP07lnvuqm2fA8FSnweWFohBAlEtW?=
- =?us-ascii?Q?gfnP/bfm06XSdyT+W4YjDITs4mLivhOcqk0Vfit/Br/4KRpsctKq7fOuuNgC?=
- =?us-ascii?Q?0QVnRoJ5gWQxMSXLh/TNdtI8mL0RSBxZO7YBR3eA9F/yQnpgs+DDdqqZvQMx?=
- =?us-ascii?Q?tx08uwPnGu5VQ817CcM8pHxIquqKKUGZimt1SYLJHpVpdpSJWzVyPLcFib0x?=
- =?us-ascii?Q?cAMZTDs2UiBPmSQ7XEUodf7WmHTPzXVfZXI8EncVZ8a60gGK2eK5nke3Xul0?=
- =?us-ascii?Q?HkUaJnfUqMb36LSpTDzxc1ENoRlk/Jn62aznfIrR9lO2jrtXU94NePBpccZe?=
- =?us-ascii?Q?+hAwA7sa30TCB2x7yhBiiXkIv+xEdyP0D6EfSm605C695vdcOQT8erJA1J9h?=
- =?us-ascii?Q?A0I3SzFJuOyHveEx3yYst5WJkHLw2RU2H6kteobZgLVQJIG8i5rLaDC6XvXq?=
- =?us-ascii?Q?JUk9afYUC2JZ4BClZjMs7/l+cpFMWgItgZomZyHI/TB8fbrWEXCsRZ093k6A?=
- =?us-ascii?Q?q6Hm+BmhgK4Zih62Xdd4a7cmEe6kQah9qhnyaoO1DpfEpmsI+VNGjUssorHE?=
- =?us-ascii?Q?diQomXl72cBRI1CEY9+155HyBD4/V0lheW8s3SQzufHlwczMu99R1VM9DeGm?=
- =?us-ascii?Q?1ZkVVwmAck60sP4NFCp5SUmE1Z23Gq7THpzhue4kj5bElI5HG7tu1E6xvmFK?=
- =?us-ascii?Q?qYUnHp8Q72lc59wRXdIy7mbn1d8R0Rg9bOes6P/pagqE1p2loKU+GC4uJjEq?=
- =?us-ascii?Q?b9Rxlq6PNqlgiIckw5u4Od0F91StUsXFiaGleFXA5GtCCYkaTk3pqwc865iQ?=
- =?us-ascii?Q?Qk3WjrDP0/O/lHFq39E9g9EC9UVfU5H8auQ6RTy+dUC0?=
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 39c518d8-4640-488f-3f85-08db6e24c5ff
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR2101MB1092.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 04:47:22.4402
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YaSizP/uT5sgk/08FbXToZw+rlmwQgGGkFujDvNPiyruw+MqavsRK3awbn/Noshb7e1fOPRqi1cSlQT97dI3LA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR21MB3158
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20230614180837.630180-1-ojeda@kernel.org>
+In-Reply-To: <20230614180837.630180-1-ojeda@kernel.org>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 16 Jun 2023 12:51:15 +0800
+Message-ID: <CABVgOSnprvxzi-z42KFjOZsiRUv7u7E2poVGJNmTfS2OU4x4AA@mail.gmail.com>
+Subject: Re: [PATCH 0/6] KUnit integration for Rust doctests
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Andreas Hindborg <nmi@metaspace.dk>,
+        Philip Li <philip.li@intel.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000002a9deb05fe37f07c"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a TDX guest runs on Hyper-V, the hv_netvsc driver's netvsc_init_buf()
-allocates buffers using vzalloc(), and needs to share the buffers with the
-host OS by calling set_memory_decrypted(), which is not working for
-vmalloc() yet. Add the support by handling the pages one by one.
+--0000000000002a9deb05fe37f07c
+Content-Type: text/plain; charset="UTF-8"
 
-Co-developed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-Signed-off-by: Dexuan Cui <decui@microsoft.com>
----
- arch/x86/coco/tdx/tdx.c | 76 ++++++++++++++++++++++++++++-------------
- 1 file changed, 52 insertions(+), 24 deletions(-)
+On Thu, 15 Jun 2023 at 02:09, Miguel Ojeda <ojeda@kernel.org> wrote:
+>
+> This is the initial KUnit integration for running Rust documentation
+> tests within the kernel.
+>
+> Thank you to the KUnit team for all the input and feedback on this
+> over the months, as well as the Intel LKP 0-Day team!
+>
+> This may be merged through either the KUnit or the Rust trees. If
+> the KUnit team wants to merge it, then that would be great.
+>
+> Please see the message in the main commit for the details.
+>
+>
 
+Thanks very much for putting this together! I've been looking forward
+to it, and it works well here.
 
-Changes in v2:
-  Changed tdx_enc_status_changed() in place.
+I've been running it on linux-next to get both the pending KUnit and
+Rust changes, and it works well apart from needing to fix a couple of
+conflicts from
+https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=kunit&id=260755184cbdb267a046e7ffd397c1d2ba09bb5e
 
-Changes in v3:
-  No change since v2.
+In particular, the tests run with:
+./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_RUST=y
+--make_options LLVM=1 'rust_doctests_kernel'
 
-Changes in v4:
-  Added Kirill's Co-developed-by since Kirill helped to improve the
-    code by adding tdx_enc_status_changed_phys().
+And also under QEMU / x86_64 with:
+./tools/testing/kunit/kunit.py run --arch x86_64 --kconfig_add
+CONFIG_RUST=y --make_options LLVM=1 'rust_doctests_kernel'
 
-  Thanks Kirill for the clarification on load_unaligned_zeropad()!
+(And I'm looking forward to trying out the other architecture support
+patches with it, too)
 
-Changes in v5:
-  Added Kirill's Signed-off-by.
-  Added Michael's Reviewed-by.
+The doctests also run nicely as part of the default test suite when
+CONFIG_RUST=y. At some point, we might want to add a Rust-specific
+.kunitconfig to make it easier to just run Rust-related test suites,
+but it's not a big deal for just these.
 
-Changes in v6: None.
+I assume we'll take this in via the kselftest/kunit tree for 6.6, but
+if you'd rather take them via the Rust tree, that's fine too.
 
-Changes in v7: None.
-  Note: there was a race between set_memory_encrypted() and
-  load_unaligned_zeropad(), which has been fixed by the 3 patches of
-  Kirill in the x86/tdx branch of the tip tree.
+Cheers,
+-- David
 
+> Miguel Ojeda (6):
+>   rust: init: make doctests compilable/testable
+>   rust: str: make doctests compilable/testable
+>   rust: sync: make doctests compilable/testable
+>   rust: types: make doctests compilable/testable
+>   rust: support running Rust documentation tests as KUnit ones
+>   MAINTAINERS: add Rust KUnit files to the KUnit entry
+>
+>  MAINTAINERS                       |   2 +
+>  lib/Kconfig.debug                 |  13 +++
+>  rust/.gitignore                   |   2 +
+>  rust/Makefile                     |  29 ++++++
+>  rust/bindings/bindings_helper.h   |   1 +
+>  rust/helpers.c                    |   7 ++
+>  rust/kernel/init.rs               |  25 +++--
+>  rust/kernel/kunit.rs              | 156 ++++++++++++++++++++++++++++
+>  rust/kernel/lib.rs                |   2 +
+>  rust/kernel/str.rs                |   4 +-
+>  rust/kernel/sync/arc.rs           |   9 +-
+>  rust/kernel/sync/lock/mutex.rs    |   1 +
+>  rust/kernel/sync/lock/spinlock.rs |   1 +
+>  rust/kernel/types.rs              |   6 +-
+>  scripts/.gitignore                |   2 +
+>  scripts/Makefile                  |   4 +
+>  scripts/rustdoc_test_builder.rs   |  73 ++++++++++++++
+>  scripts/rustdoc_test_gen.rs       | 162 ++++++++++++++++++++++++++++++
+>  18 files changed, 484 insertions(+), 15 deletions(-)
+>  create mode 100644 rust/kernel/kunit.rs
+>  create mode 100644 scripts/rustdoc_test_builder.rs
+>  create mode 100644 scripts/rustdoc_test_gen.rs
+>
+>
+> base-commit: d2e3115d717197cb2bc020dd1f06b06538474ac3
+> --
+> 2.41.0
+>
 
-diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-index 5b62a1f5bd79..8b2a2dcb2efd 100644
---- a/arch/x86/coco/tdx/tdx.c
-+++ b/arch/x86/coco/tdx/tdx.c
-@@ -7,6 +7,7 @@
- #include <linux/cpufeature.h>
- #include <linux/export.h>
- #include <linux/io.h>
-+#include <linux/mm.h>
- #include <asm/coco.h>
- #include <asm/tdx.h>
- #include <asm/vmx.h>
-@@ -778,6 +779,34 @@ static bool try_accept_one(phys_addr_t *start, unsigned long len,
- 	return true;
- }
- 
-+static bool try_accept_page(phys_addr_t start, phys_addr_t end)
-+{
-+	/*
-+	 * For shared->private conversion, accept the page using
-+	 * TDX_ACCEPT_PAGE TDX module call.
-+	 */
-+	while (start < end) {
-+		unsigned long len = end - start;
-+
-+		/*
-+		 * Try larger accepts first. It gives chance to VMM to keep
-+		 * 1G/2M SEPT entries where possible and speeds up process by
-+		 * cutting number of hypercalls (if successful).
-+		 */
-+
-+		if (try_accept_one(&start, len, PG_LEVEL_1G))
-+			continue;
-+
-+		if (try_accept_one(&start, len, PG_LEVEL_2M))
-+			continue;
-+
-+		if (!try_accept_one(&start, len, PG_LEVEL_4K))
-+			return false;
-+	}
-+
-+	return true;
-+}
-+
- /*
-  * Notify the VMM about page mapping conversion. More info about ABI
-  * can be found in TDX Guest-Host-Communication Interface (GHCI),
-@@ -828,6 +857,19 @@ static bool tdx_map_gpa(phys_addr_t start, phys_addr_t end, bool enc)
- 	return false;
- }
- 
-+static bool tdx_enc_status_changed_phys(phys_addr_t start, phys_addr_t end,
-+					bool enc)
-+{
-+	if (!tdx_map_gpa(start, end, enc))
-+		return false;
-+
-+	/* private->shared conversion requires only MapGPA call */
-+	if (!enc)
-+		return true;
-+
-+	return try_accept_page(start, end);
-+}
-+
- /*
-  * Inform the VMM of the guest's intent for this physical page: shared with
-  * the VMM or private to the guest. The VMM is expected to change its mapping
-@@ -835,37 +877,23 @@ static bool tdx_map_gpa(phys_addr_t start, phys_addr_t end, bool enc)
-  */
- static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
- {
--	phys_addr_t start = __pa(vaddr);
--	phys_addr_t end   = __pa(vaddr + numpages * PAGE_SIZE);
-+	unsigned long start = vaddr;
-+	unsigned long end = start + numpages * PAGE_SIZE;
- 
--	if (!tdx_map_gpa(start, end, enc))
-+	if (offset_in_page(start) != 0)
- 		return false;
- 
--	/* private->shared conversion  requires only MapGPA call */
--	if (!enc)
--		return true;
-+	if (!is_vmalloc_addr((void *)start))
-+		return tdx_enc_status_changed_phys(__pa(start), __pa(end), enc);
- 
--	/*
--	 * For shared->private conversion, accept the page using
--	 * TDX_ACCEPT_PAGE TDX module call.
--	 */
- 	while (start < end) {
--		unsigned long len = end - start;
-+		phys_addr_t start_pa = slow_virt_to_phys((void *)start);
-+		phys_addr_t end_pa = start_pa + PAGE_SIZE;
- 
--		/*
--		 * Try larger accepts first. It gives chance to VMM to keep
--		 * 1G/2M SEPT entries where possible and speeds up process by
--		 * cutting number of hypercalls (if successful).
--		 */
--
--		if (try_accept_one(&start, len, PG_LEVEL_1G))
--			continue;
--
--		if (try_accept_one(&start, len, PG_LEVEL_2M))
--			continue;
--
--		if (!try_accept_one(&start, len, PG_LEVEL_4K))
-+		if (!tdx_enc_status_changed_phys(start_pa, end_pa, enc))
- 			return false;
-+
-+		start += PAGE_SIZE;
- 	}
- 
- 	return true;
--- 
-2.25.1
+--0000000000002a9deb05fe37f07c
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+9IGQSBx2i4m+hGXJpET+MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQCRI3Z4cAidgFcv
+Usqdz765x6KMZSfg/WtFrYg8ewsP2NpCxVM2+EhPyyEQ0k0DhtzdtGoI/Ug+jdFDyCKB9P2+EPLh
+iMjMnFILp7Zs4r18ECHlvZuDZfH9m0BchXIxu5jLIuQyKUWrCRDZZEDNr510ZhhVfYSFPA8ms1nk
+jyzYFOHYQyv5IfML/3IBFKlON5OZa+V8EZYULYcNkp03DdWglafj7SXZ1/XgAbVYrC381UvrsYN8
+jndVvoa1GWwe+NVlIIK7Q3uAjV3qLEDQpaNPg1rr0oAn6YmvTccjVMqj2YNwN+RHhKNzgRGxY5ct
+FaN+8fXZhRhpv3bVbAWuPZXoMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBh
+brAPq8qwowPYpxbubQesKqsKSMPOB3lxN08UqPGxxDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA2MTYwNDUxMjlaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAc9R1iFjzspMO7nbxCAhO
+3MFy0KH6RDo6pHQHqT7ZF/OK5QxG/ws+Qs0pQmWKaAJUHjsLM+mqNS8SqKZbzASP27S7f7j6KOk4
+dkuhRqoOs6i8xNT6VdBCiUXT4bzUsU8l7RWUdq1Rn2N9C8UAfdOqBBrlAlUOCmyR5656B+cayImE
+lcB5WW3JE7c+vbDOOBHUd0mrZHHtYjsNUf5Ebr04h6EICAU8XCZp/WmjOM45Gx420XEaGigoOnZg
+t8S0GWd7T4Wqn41v9YzqNI+v6DMpjTi+ezpX2zo79Vd7AT9/luC69khIkyLTOrE3JH4p980uG4kI
+mEXTmwrD15dTnw0CqA==
+--0000000000002a9deb05fe37f07c--
