@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CA7C7331BD
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F171F7331BF
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345550AbjFPM6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 08:58:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49018 "EHLO
+        id S1344543AbjFPM6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 08:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345513AbjFPM5y (ORCPT
+        with ESMTP id S1345514AbjFPM5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 16 Jun 2023 08:57:54 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898F5358C
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADAD358E
         for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 05:57:53 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 071211F8AC;
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 6E7D31F8B2;
         Fri, 16 Jun 2023 12:57:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
         t=1686920272; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=uebKOiOaouuF4hP+m2W8QMLwwo8lvdplmN5LTEefmQs=;
-        b=ApQssAVDFiBkb791JaTp+XIxktjd23BYoBaEWhjnIkcR4UR6Ziljlnuq8PkAWp36ZWfp7h
-        jRcdbUm7Ja7zjBEJRkdn4nGYBEExEXV4DKGne1uxAa6iUzNJXHCIvyNcaMiWdhX2FpuraS
-        puIfvomTJiZ+hOjOPGeaATq5oWT8POs=
+        bh=r5l0I7eBFBkp7pUTsqoXpH4MWyzhP0CIq3tLVPiIHsU=;
+        b=cvjqFwbIX1EbCJBxsJDSHICFEY49CCSjHjsusezFZX0nf8PgWIwcdUmwr8BkGMiI/8Z3Om
+        GMYT8BXRO8KlstTDTqOECV2KYZWP0yN/rfJF07NP2ZIIqScSVeUss66l9S3qf/gGGNWS1q
+        biozn1b7AL5yTmeST4U4XgBfxYF5DhA=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A41371330B;
-        Fri, 16 Jun 2023 12:57:51 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 19CBA1330B;
+        Fri, 16 Jun 2023 12:57:52 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id aHRnJU9cjGTjNwAAMHmgww
-        (envelope-from <nik.borisov@suse.com>); Fri, 16 Jun 2023 12:57:51 +0000
+        id kEWaA1BcjGTjNwAAMHmgww
+        (envelope-from <nik.borisov@suse.com>); Fri, 16 Jun 2023 12:57:52 +0000
 From:   Nikolay Borisov <nik.borisov@suse.com>
 To:     x86@kernel.org
 Cc:     linux-kernel@vger.kernel.org, mhocko@suse.com, jslaby@suse.cz,
         Nikolay Borisov <nik.borisov@suse.com>
-Subject: [PATCH v3 4/5] x86/elf: Make loading of 32bit processes depend on ia32_enabled()
-Date:   Fri, 16 Jun 2023 15:57:29 +0300
-Message-Id: <20230616125730.1164989-5-nik.borisov@suse.com>
+Subject: [PATCH v3 5/5] x86/entry: Make IA32 syscalls' availability depend on ia32_enabled()
+Date:   Fri, 16 Jun 2023 15:57:30 +0300
+Message-Id: <20230616125730.1164989-6-nik.borisov@suse.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230616125730.1164989-1-nik.borisov@suse.com>
 References: <20230616125730.1164989-1-nik.borisov@suse.com>
@@ -62,38 +62,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Major aspect of ia32 emulation is the ability to load 32bit processes.
-That's currently decided (among others) by compat_elf_check_arch().
+Another major aspect of supporting running of 32bit processes is the
+ability to access 32bit syscalls. Such syscalls are invoked either by
+using the legacy int 0x80 call gate interface or via the newer sysenter
+instruction.
 
-Make this macro also consider the runtime state of ia32 emulation before
-allowing to load a 32bit process.
+Ensure that if ia32 emulation is disabled (either at compile time or
+runtime) then those 2 syscall mechanisms are also disabled.
 
 Signed-off-by: Nikolay Borisov <nik.borisov@suse.com>
 ---
- arch/x86/include/asm/elf.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/proto.h |  3 +++
+ arch/x86/kernel/cpu/common.c | 37 ++++++++++++++++++------------------
+ arch/x86/kernel/idt.c        | 10 ++++++++++
+ 3 files changed, 32 insertions(+), 18 deletions(-)
 
-diff --git a/arch/x86/include/asm/elf.h b/arch/x86/include/asm/elf.h
-index 18fd06f7936a..a0234dfd1031 100644
---- a/arch/x86/include/asm/elf.h
-+++ b/arch/x86/include/asm/elf.h
-@@ -7,6 +7,7 @@
-  */
- #include <linux/thread_info.h>
+diff --git a/arch/x86/include/asm/proto.h b/arch/x86/include/asm/proto.h
+index 12ef86b19910..1241d27fc4a6 100644
+--- a/arch/x86/include/asm/proto.h
++++ b/arch/x86/include/asm/proto.h
+@@ -36,6 +36,9 @@ void entry_INT80_compat(void);
+ #ifdef CONFIG_XEN_PV
+ void xen_entry_INT80_compat(void);
+ #endif
++#else /* #CONFIG_IA32_EMULATION */
++#define entry_SYSCALL_compat NULL
++#define entry_SYSENTER_compat NULL
+ #endif
  
+ void x86_configure_nx(void);
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index b20774181e1a..aafb83d1b3a7 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -59,6 +59,7 @@
+ #include <asm/intel-family.h>
+ #include <asm/cpu_device_id.h>
+ #include <asm/uv/uv.h>
 +#include <asm/ia32.h>
- #include <asm/ptrace.h>
- #include <asm/user.h>
- #include <asm/auxvec.h>
-@@ -149,7 +150,7 @@ do {						\
- 	((x)->e_machine == EM_X86_64)
+ #include <asm/sigframe.h>
+ #include <asm/traps.h>
+ #include <asm/sev.h>
+@@ -2053,24 +2054,24 @@ void syscall_init(void)
+ 	wrmsr(MSR_STAR, 0, (__USER32_CS << 16) | __KERNEL_CS);
+ 	wrmsrl(MSR_LSTAR, (unsigned long)entry_SYSCALL_64);
  
- #define compat_elf_check_arch(x)					\
--	(elf_check_arch_ia32(x) ||					\
-+	((elf_check_arch_ia32(x) && ia32_enabled()) ||			\
- 	 (IS_ENABLED(CONFIG_X86_X32_ABI) && (x)->e_machine == EM_X86_64))
+-#ifdef CONFIG_IA32_EMULATION
+-	wrmsrl_cstar((unsigned long)entry_SYSCALL_compat);
+-	/*
+-	 * This only works on Intel CPUs.
+-	 * On AMD CPUs these MSRs are 32-bit, CPU truncates MSR_IA32_SYSENTER_EIP.
+-	 * This does not cause SYSENTER to jump to the wrong location, because
+-	 * AMD doesn't allow SYSENTER in long mode (either 32- or 64-bit).
+-	 */
+-	wrmsrl_safe(MSR_IA32_SYSENTER_CS, (u64)__KERNEL_CS);
+-	wrmsrl_safe(MSR_IA32_SYSENTER_ESP,
+-		    (unsigned long)(cpu_entry_stack(smp_processor_id()) + 1));
+-	wrmsrl_safe(MSR_IA32_SYSENTER_EIP, (u64)entry_SYSENTER_compat);
+-#else
+-	wrmsrl_cstar((unsigned long)entry_SYSCALL32_ignore);
+-	wrmsrl_safe(MSR_IA32_SYSENTER_CS, (u64)GDT_ENTRY_INVALID_SEG);
+-	wrmsrl_safe(MSR_IA32_SYSENTER_ESP, 0ULL);
+-	wrmsrl_safe(MSR_IA32_SYSENTER_EIP, 0ULL);
+-#endif
++	if (ia32_enabled()) {
++		wrmsrl_cstar((unsigned long)entry_SYSCALL_compat);
++		/*
++		 * This only works on Intel CPUs.
++		 * On AMD CPUs these MSRs are 32-bit, CPU truncates MSR_IA32_SYSENTER_EIP.
++		 * This does not cause SYSENTER to jump to the wrong location, because
++		 * AMD doesn't allow SYSENTER in long mode (either 32- or 64-bit).
++		 */
++		wrmsrl_safe(MSR_IA32_SYSENTER_CS, (u64)__KERNEL_CS);
++		wrmsrl_safe(MSR_IA32_SYSENTER_ESP,
++			    (unsigned long)(cpu_entry_stack(smp_processor_id()) + 1));
++		wrmsrl_safe(MSR_IA32_SYSENTER_EIP, (u64)entry_SYSENTER_compat);
++	} else {
++		wrmsrl_cstar((unsigned long)entry_SYSCALL32_ignore);
++		wrmsrl_safe(MSR_IA32_SYSENTER_CS, (u64)GDT_ENTRY_INVALID_SEG);
++		wrmsrl_safe(MSR_IA32_SYSENTER_ESP, 0ULL);
++		wrmsrl_safe(MSR_IA32_SYSENTER_EIP, 0ULL);
++	}
  
- static inline void elf_common_init(struct thread_struct *t,
+ 	/*
+ 	 * Flags to clear on syscall; clear as much as possible
+diff --git a/arch/x86/kernel/idt.c b/arch/x86/kernel/idt.c
+index a58c6bc1cd68..c76953656212 100644
+--- a/arch/x86/kernel/idt.c
++++ b/arch/x86/kernel/idt.c
+@@ -10,6 +10,7 @@
+ #include <asm/proto.h>
+ #include <asm/desc.h>
+ #include <asm/hw_irq.h>
++#include <asm/ia32.h>
+ #include <asm/idtentry.h>
+ 
+ #define DPL0		0x0
+@@ -116,6 +117,9 @@ static const __initconst struct idt_data def_idts[] = {
+ #endif
+ 
+ 	SYSG(X86_TRAP_OF,		asm_exc_overflow),
++};
++
++static const struct idt_data ia32_idt[] __initconst = {
+ #if defined(CONFIG_IA32_EMULATION)
+ 	SYSG(IA32_SYSCALL_VECTOR,	entry_INT80_compat),
+ #elif defined(CONFIG_X86_32)
+@@ -226,6 +230,12 @@ void __init idt_setup_early_traps(void)
+ void __init idt_setup_traps(void)
+ {
+ 	idt_setup_from_table(idt_table, def_idts, ARRAY_SIZE(def_idts), true);
++
++	if (ia32_enabled()) {
++		idt_setup_from_table(idt_table, ia32_idt, ARRAY_SIZE(ia32_idt),
++				     true);
++	}
++
+ }
+ 
+ #ifdef CONFIG_X86_64
 -- 
 2.34.1
 
