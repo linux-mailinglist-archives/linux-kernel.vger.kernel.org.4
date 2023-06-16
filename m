@@ -2,123 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9FD732CA5
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C24DE732BF0
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234096AbjFPKBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 06:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
+        id S245741AbjFPJhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 05:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232377AbjFPKBg (ORCPT
+        with ESMTP id S230415AbjFPJhR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 06:01:36 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E5F2D54;
-        Fri, 16 Jun 2023 03:01:35 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-982b1a18daeso75107766b.2;
-        Fri, 16 Jun 2023 03:01:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686909694; x=1689501694;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=CTD9FM9Vp+btRQLrVajymg/zAFnLC/qJq3qRO1vQtsE=;
-        b=p5uAOLuXx71MLpQNhpn4N0FFQkpI9/UNwpzCa9npQZiimQMI+dTK57ix5hFZ8pL0iT
-         eM/jU6DLqslcFv9S5cRKyJ9DyVWLOZDOsZAJjclG0miP0XzxBdljxz8Qs9DT0KVGuV4Y
-         hDovP96Nx4G7raTQV5C6TOMlOfhGf/8kfUdMhmnNfKxmL0Ztl3oKrW+hk5bGtznskvvt
-         p7HID9ouqKpIcGhsKqjiSn1ewQgqCUuvnmBj9paMo59IT5jrcCml2vXZ59EwDBgF8l+d
-         92iNKDZTIBfZENDuXm1n40jOV8d0uypVfXB1kp9BFqsdjwVJbTWwXGrjN46LD85/qiXN
-         6how==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686909694; x=1689501694;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CTD9FM9Vp+btRQLrVajymg/zAFnLC/qJq3qRO1vQtsE=;
-        b=Hi0H+Z+b8dkZh5MIoM/s+8je4IpGWCOusalvjpF1Chog+u+yS5dnMi0faYQbmxxv39
-         RWNj/OoJAzmC8Ft5wk0/4c8vLO9W9O1vTrEZAa4EvESdaFTIe1N7Kvbr3hQDRMQN8zmO
-         IDRj5w6Ad1jCU0OQ/RY92+8ew0jsXD6G2BM3kPww5ODBcDzPFXeuSkXmTfxyKie4fQKe
-         GPby8Vp/UbENiu9QOK0gYBMo5ThBscoAkJuEHhy1vtxVIBrZT+J/uRFwNsHPSTOdPixm
-         zoiT+qyoIqFKRh2Bwg8Cbsl2kq0Mu7WJuL9Qk7CYB2ijlCW0nQ5FRnPtNu3xQUDo7d9g
-         hZHA==
-X-Gm-Message-State: AC+VfDw8op6Kpmqt5FjIHCD9uuMgMpB66NzgGxf5x0m/vnK6wZ3hKh0t
-        ufikRDZGpN9bwghgSvgXlq0=
-X-Google-Smtp-Source: ACHHUZ6AASGe9oOuSxFdSZcLgURQh/Q6I24jkt2GFQJgseqvnYOxE88CzRrIgflJ/3f+8NFpganRgg==
-X-Received: by 2002:a17:906:8688:b0:97a:bd0f:ac74 with SMTP id g8-20020a170906868800b0097abd0fac74mr1180635ejx.26.1686909693612;
-        Fri, 16 Jun 2023 03:01:33 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id h22-20020a170906111600b009828bb40444sm2647818eja.51.2023.06.16.03.01.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jun 2023 03:01:33 -0700 (PDT)
-Date:   Fri, 16 Jun 2023 13:01:30 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     arinc9.unal@gmail.com
-Cc:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net v5 1/6] net: dsa: mt7530: set all CPU ports in
- MT7531_CPU_PMAP
-Message-ID: <20230616100130.f7mjociopsgd6pe4@skbuf>
-References: <20230616025327.12652-1-arinc.unal@arinc9.com>
- <20230616025327.12652-1-arinc.unal@arinc9.com>
- <20230616025327.12652-2-arinc.unal@arinc9.com>
- <20230616025327.12652-2-arinc.unal@arinc9.com>
+        Fri, 16 Jun 2023 05:37:17 -0400
+Received: from forward502a.mail.yandex.net (forward502a.mail.yandex.net [178.154.239.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9752117;
+        Fri, 16 Jun 2023 02:37:13 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-production-main-55.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-55.vla.yp-c.yandex.net [IPv6:2a02:6b8:c2a:210:0:640:45a:0])
+        by forward502a.mail.yandex.net (Yandex) with ESMTP id 061735EA2B;
+        Fri, 16 Jun 2023 12:37:09 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-55.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id 6bZ0FPBDcOs0-YwIwcfPo;
+        Fri, 16 Jun 2023 12:37:08 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1686908228;
+        bh=ULF/TtnZNYokyyjXxQGcSPKNWj6sLoNSPxteRiEyMoY=;
+        h=References:Date:In-Reply-To:Cc:To:From:Subject:Message-ID;
+        b=LHs7sZhCMQnjyekXO06mp0vuGkhMGkLelGJTRwoEtsWSeivsCn3bKb1GMaB31bAJk
+         /CE+2eLI4TNFvbba7eRPzu1iTJtXX/1dDufzd4RAEZN49kLtz6jPIVKnz31M0k+yBr
+         QxvoX5qZK312G7cqu5/pCJnZMjz98oVMvy/xp2R8=
+Authentication-Results: mail-nwsmtp-smtp-production-main-55.vla.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
+Message-ID: <b51d416312bda72d4825e6fded4f1dabc5fe12e6.camel@maquefel.me>
+Subject: Re: [PATCH 33/43] gpio: ep93xx: add DT support for gpio-ep93xx
+From:   Nikita Shubin <nikita.shubin@maquefel.me>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 16 Jun 2023 15:37:02 +0300
+In-Reply-To: <CAMRc=Mf1UYEBrGYic7VxzaqHcydHaOnH7MN49c6_B6tnu=pYpg@mail.gmail.com>
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+         <20230424123522.18302-34-nikita.shubin@maquefel.me>
+         <CAMRc=Mf1UYEBrGYic7VxzaqHcydHaOnH7MN49c6_B6tnu=pYpg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230616025327.12652-2-arinc.unal@arinc9.com>
- <20230616025327.12652-2-arinc.unal@arinc9.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 05:53:22AM +0300, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
-> 
-> MT7531_CPU_PMAP represents the destination port mask for trapped-to-CPU
-> frames (further restricted by PCR_MATRIX).
-> 
-> Currently the driver sets the first CPU port as the single port in this bit
-> mask, which works fine regardless of whether the device tree defines port
-> 5, 6 or 5+6 as CPU ports. This is because the logic coincides with DSA's
-> logic of picking the first CPU port as the CPU port that all user ports are
-> affine to, by default.
-> 
-> An upcoming change would like to influence DSA's selection of the default
-> CPU port to no longer be the first one, and in that case, this logic needs
-> adaptation.
-> 
-> Since there is no observed leakage or duplication of frames if all CPU
-> ports are defined in this bit mask, simply include them all.
-> 
-> Suggested-by: Russell King (Oracle) <linux@armlinux.org.uk>
-> Suggested-by: Vladimir Oltean <olteanv@gmail.com>
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
+Hi Bart!
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+On Fri, 2023-06-16 at 11:18 +0200, Bartosz Golaszewski wrote:
+> On Mon, Apr 24, 2023 at 11:36=E2=80=AFAM Nikita Shubin
+> <nikita.shubin@maquefel.me> wrote:
+> >=20
+> > Add match table.
+> >=20
+> > Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> > ---
+> > =C2=A0drivers/gpio/gpio-ep93xx.c | 6 ++++++
+> > =C2=A01 file changed, 6 insertions(+)
+> >=20
+> > diff --git a/drivers/gpio/gpio-ep93xx.c b/drivers/gpio/gpio-
+> > ep93xx.c
+> > index ca508c7c4f2f..4e3d01fab012 100644
+> > --- a/drivers/gpio/gpio-ep93xx.c
+> > +++ b/drivers/gpio/gpio-ep93xx.c
+> > @@ -363,9 +363,15 @@ static int ep93xx_gpio_probe(struct
+> > platform_device *pdev)
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return devm_gpiochip_add_dat=
+a(&pdev->dev, gc, egc);
+> > =C2=A0}
+> >=20
+> > +static const struct of_device_id ep93xx_gpio_match[] =3D {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 { .compatible =3D "cirrus,ep9301-=
+gpio" },
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 { /* end of table */ },
+> > +};
+> > +
+> > =C2=A0static struct platform_driver ep93xx_gpio_driver =3D {
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .driver=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 =3D {
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 .name=C2=A0=C2=A0 =3D "gpio-ep93xx",
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 .of_match_table =3D ep93xx_gpio_match,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 },
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .probe=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =3D ep93xx_gpio_probe,
+> > =C2=A0};
+> > --
+> > 2.39.2
+> >=20
+>=20
+> I guess this depends on patch 1/43 from this series? Are you going to
+> send a v2?
+
+Yes it depends, the splitting was done to adapt driver to splitted
+platform data one for each port i.e. probe is called for each port
+instance with 1/43.
+
+Definitely there will be a v2 (actually b4 considers it a v3 version -
+so be it), and may be some next series also.
+
+
+>=20
+> Bart
+
