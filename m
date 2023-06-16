@@ -2,100 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64C6A733111
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:22:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4FC733119
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:23:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344291AbjFPMWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 08:22:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60032 "EHLO
+        id S1344563AbjFPMXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 08:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbjFPMWX (ORCPT
+        with ESMTP id S235200AbjFPMX2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 08:22:23 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D516B30DE
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 05:22:22 -0700 (PDT)
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 9F63F3F16F
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 12:22:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1686918141;
-        bh=zw1VmnyGgP9Z0XT+cVN9mnOntivZi1r272LyKdlNy7g=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=RIJNmJNTJGsGBEUUh6kft2PO2UUoeSN+hEuO41fYKU9WR2SLgTviKxk95QvwDFzCw
-         ooIUmY6BhQLcAR9ySnoI1iBGgfwgj82oNBrqMq70UadcJz06nq+t4NCTvBsaQxWXRX
-         4FuE7WUmu6pCz6sGZpR2+WufYIbTxlFXKq6dlrsCWWZ9u8TIPhS/LY9uRQMSg8o0dl
-         7bVHs/Z+o2OYFs4e0SWDbOdIFsMyImdUfjLKv5hTpQ1+QkySK7Mkx+qxyyMUy3eA7i
-         q58OAQX7tbR8NAiiRsR11ov//bTuwl3M+50KzoQCGn9GMlkQ2Jhy4wjqUJFVL/Sn2b
-         StQKy1QFHAc5Q==
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f8dde5535dso2541635e9.0
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 05:22:21 -0700 (PDT)
+        Fri, 16 Jun 2023 08:23:28 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBA930DD;
+        Fri, 16 Jun 2023 05:23:27 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id ca18e2360f4ac-77b6e2f0c9fso21361839f.1;
+        Fri, 16 Jun 2023 05:23:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686918206; x=1689510206;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dZhz7YgM6JWkeN2t67VeqyPX8iJ9vmsDBYbVnAPaL3g=;
+        b=QY+V/f+bBr4PSt/2Ht9ot0Pj7xPZSgS9tVHbR9hM9bW2P7gxbWhIsdYOsAA5bhxT4g
+         FRnIoATqDvRWV/doaQxv7UlK8n0Is/d4y+zaT09Q04M+rHhvyRmWVbuXAdEUTq1wmnX5
+         k7O6cViMk3YnaX8lf0Q+iDibpkrRFIGBxGHhEcO/J8pFGMPxp4xDqLkG9JlWoOmvw/mS
+         3T3qPmNOdQOQKQCYkHxAB+xtUQxgIdz2t6wLlooEurHATTY7Zpa1YC2RMSRXSLFmZ+tb
+         4qfM42pqXK2ezqhsOZZJg213skJido04lgsvo0PNwfZI7EvjHDnv85UQT5zeCTSXYu7A
+         p5PA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686918141; x=1689510141;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zw1VmnyGgP9Z0XT+cVN9mnOntivZi1r272LyKdlNy7g=;
-        b=gnUqGa/3JMR8sZlrqUvs7IdZMpk7gvy2JK2LbP7lpBAkse3ABHIPMXqvIvDzDJjtdK
-         5LbJM0GPzfZABsqKWgkKWp7M0WQE8c545/cjfc5JIgt/60KF6bJBEtGZ7+NpV7FygRuw
-         zrBijwgLISdCNwrxrcwq6tXTsa+DlFdtR7gvQKODe3ud7OiQiZkMS1dQbqmQptdk0Wcs
-         4hG5maR1oFdTd1iAy6Ks8DacaUYreY5gVSMmdxsdA4k8HKy9HNSpj/l+xiZXtoz5c+w4
-         xmXp/Y5isQua53sjovTUF/XgrlW3OF0iQ1GNFKq8aRWvKrmEsMftg7/r+uQmsvkiVtCz
-         GQtA==
-X-Gm-Message-State: AC+VfDwbVrkjiD1HPfEap9zk8ka6x89dQisjnenazfHazJ5PC9ZH9aOD
-        63/lIBKRcpRU2n6cLx6rGBeV/9cyF+pNVOR3XGJAWNQGsfPN+4izZ9F8tYW5+04QrKvYbzTuDug
-        M9Tj7Kvcgm9cvsjlp5XcbGtnPRLnbGvr5YuhK45GUkA==
-X-Received: by 2002:a05:600c:2189:b0:3f6:7e6:44ea with SMTP id e9-20020a05600c218900b003f607e644eamr1430104wme.18.1686918141173;
-        Fri, 16 Jun 2023 05:22:21 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5rBUPHGh+Xrw+/lwEv6Boc48lL+634iJofytBHc16kHMsIMMUVbLAnK1MqG7zZ49WoCqz1ww==
-X-Received: by 2002:a05:600c:2189:b0:3f6:7e6:44ea with SMTP id e9-20020a05600c218900b003f607e644eamr1430100wme.18.1686918140883;
-        Fri, 16 Jun 2023 05:22:20 -0700 (PDT)
-Received: from localhost ([194.191.244.86])
-        by smtp.gmail.com with ESMTPSA id i1-20020adff301000000b002f28de9f73bsm23571315wro.55.2023.06.16.05.22.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jun 2023 05:22:20 -0700 (PDT)
-From:   Juerg Haefliger <juerg.haefliger@canonical.com>
-To:     krzysztof.kozlowski@linaro.org, netdev@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, davem@davemloft.net,
-        shangxiaojing@huawei.com, juerg.haefliger@canonical.com
-Subject: [PATCH] nfc: fdp: Add MODULE_FIRMWARE macros
-Date:   Fri, 16 Jun 2023 14:22:18 +0200
-Message-Id: <20230616122218.1036256-1-juerg.haefliger@canonical.com>
-X-Mailer: git-send-email 2.37.2
+        d=1e100.net; s=20221208; t=1686918206; x=1689510206;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dZhz7YgM6JWkeN2t67VeqyPX8iJ9vmsDBYbVnAPaL3g=;
+        b=FCtB6gWIeJfmaaVTcivMBBydwZ09Ac5WzP/FfwTtarYRsfA1rAzJTh3VbuAX/91BJ7
+         230SDg81NoU+SzNr7Lza1SDso7gDqL14A6LKQrbilAxcHW1HEOClwWbgWAdJpZxU2G1l
+         m8OpRHbNFk47i2v4pjmL8li9ADuSKJtG7TJ9kNRCfUDpjEHKVahVDLGAQ+uO0phTVBys
+         rsM6b0MHQMfNmCghWSbB+6QAnrOP/RlYSU46BFAAqkCycBoKUkUYEwhwjjnMep1P3tdu
+         y4AU8JwYDXR3ofScPQAVBFGmQF+CDAKuY30xIl0zbrZf2Xgvlv1OOvHAhnkaUtZsz3Eq
+         6d6A==
+X-Gm-Message-State: AC+VfDzczsnrRYbpzyz5L5K5zmtPomiABN17dVRY2WKGYttbXuvHzpqB
+        anw9KLDjqeNt7AUVEdmPkWFMEtYHG5oLpTAjvDg=
+X-Google-Smtp-Source: ACHHUZ6UP2QhxkudXsSJQadW+DwhGcn3wuF7ALSz5Z8Exzm26iTW42trlXQmqDsa51Wcscjd25D4r1uRN9wS/MYetew=
+X-Received: by 2002:a6b:6d0d:0:b0:77a:c494:b4b9 with SMTP id
+ a13-20020a6b6d0d000000b0077ac494b4b9mr1932815iod.20.1686918206451; Fri, 16
+ Jun 2023 05:23:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230614104759.228372-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20230614104759.228372-4-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdWApGKsS8DU7-=6j6WaRBDZ8Amig2NtA8f8=PbGKoFQjQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdWApGKsS8DU7-=6j6WaRBDZ8Amig2NtA8f8=PbGKoFQjQ@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Fri, 16 Jun 2023 13:23:00 +0100
+Message-ID: <CA+V-a8sLmqy0h5vKq5u-f1rsBo7HGhYg-m3vMO+UxSk1EiynDQ@mail.gmail.com>
+Subject: Re: [PATCH v9 3/6] riscv: mm: dma-noncoherent: nonstandard cache
+ operations support
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-riscv@lists.infradead.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The module loads firmware so add MODULE_FIRMWARE macros to provide that
-information via modinfo.
+Hi Geert,
 
-Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
----
- drivers/nfc/fdp/fdp.c | 3 +++
- 1 file changed, 3 insertions(+)
+Thank you for the review.
 
-diff --git a/drivers/nfc/fdp/fdp.c b/drivers/nfc/fdp/fdp.c
-index f12f903a9dd1..da3e2dce8e70 100644
---- a/drivers/nfc/fdp/fdp.c
-+++ b/drivers/nfc/fdp/fdp.c
-@@ -762,3 +762,6 @@ EXPORT_SYMBOL(fdp_nci_remove);
- MODULE_LICENSE("GPL");
- MODULE_DESCRIPTION("NFC NCI driver for Intel Fields Peak NFC controller");
- MODULE_AUTHOR("Robert Dolca <robert.dolca@intel.com>");
-+
-+MODULE_FIRMWARE(FDP_OTP_PATCH_NAME);
-+MODULE_FIRMWARE(FDP_RAM_PATCH_NAME);
--- 
-2.37.2
+On Wed, Jun 14, 2023 at 1:53=E2=80=AFPM Geert Uytterhoeven <geert@linux-m68=
+k.org> wrote:
+>
+> Hi Prabhakar,
+>
+> On Wed, Jun 14, 2023 at 12:48=E2=80=AFPM Prabhakar <prabhakar.csengg@gmai=
+l.com> wrote:
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+> > Introduce support for nonstandard noncoherent systems in the RISC-V
+> > architecture. It enables function pointer support to handle cache
+> > management in such systems.
+> >
+> > This patch adds a new configuration option called
+> > "RISCV_NONSTANDARD_CACHE_OPS." This option is a boolean flag that
+> > depends on "RISCV_DMA_NONCOHERENT" and enables the function pointer
+> > support for cache management in nonstandard noncoherent systems.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> > v8 -> v9
+> > * New patch
+>
+> Thanks for your patch!
+>
+> > --- /dev/null
+> > +++ b/arch/riscv/include/asm/dma-noncoherent.h
+> > @@ -0,0 +1,28 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +/*
+> > + * Copyright (C) 2023 Renesas Electronics Corp.
+> > + */
+> > +
+> > +#ifndef __ASM_DMA_NONCOHERENT_H
+> > +#define __ASM_DMA_NONCOHERENT_H
+> > +
+> > +#include <linux/dma-direct.h>
+> > +
+> > +/*
+> > + * struct riscv_cache_ops - Structure for CMO function pointers
+> > + *
+> > + * @clean: Function pointer for clean cache
+> > + * @inval: Function pointer for invalidate cache
+> > + * @flush: Function pointer for flushing the cache
+> > + */
+> > +struct riscv_cache_ops {
+> > +       void (*clean)(phys_addr_t paddr, unsigned long size);
+> > +       void (*inval)(phys_addr_t paddr, unsigned long size);
+> > +       void (*flush)(phys_addr_t paddr, unsigned long size);
+> > +};
+>
+> I guess the naming can be improved?
+>
+> .clean() is used by arch_dma_cache_wback() / arch_wb_cache_pmem(),
+> .inval() is used by arch_dma_cache_inv() / arch_invalidate_pmem(),
+> .flush() is used by arch_dma_cache_wback_inv() / arch_dma_prep_coherent()=
+.
+>
+> Perhaps .wback(), .inv(), .wback_inv() are more clear?
+>
+Ok I will update pointer names in the next version.
 
+Cheers,
+Prabhakar
