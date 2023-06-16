@@ -2,79 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43ADB733134
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:28:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2403A73313F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:31:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344979AbjFPM2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 08:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35300 "EHLO
+        id S1344054AbjFPMbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 08:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235564AbjFPM2W (ORCPT
+        with ESMTP id S229558AbjFPMbh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 08:28:22 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375E01FFF
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 05:28:20 -0700 (PDT)
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 9003A3F36A
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 12:28:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1686918498;
-        bh=7aIuaUbJc/mQS9T0aBfOHsiM7MOxneztv9jcxZlcdiI=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=gmkAFbkAgV36mjnQXD+lL00eadH3cL2iws4TOzpi7053Tf2wJt5nulPlls1Ezb015
-         bAcmkX8kwYpCATpZkQgAo03SXmLbksUkX7zMAbwF86Inur98lYzEZXUEm4wwBh9u1O
-         lSPAsJjPW+vv/bNL4gO6HgJeeg3FttkBE+e5dioK2qGIflTkUAJQtuTwrm3vEkLIcC
-         qBbOhaiHn8OjnoBDfaPTyKTvE1g3dcN17VY4Z0d7h49+wZhutkHC47JnDS2PhGPNon
-         JOssCEYQT6kU9Aecm/ismeMLrOBu+5tpfcGB3N7A/C2ZeCE4UGZUc0xxCBeC70tyMp
-         vDs9UQTkt8hKA==
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-30e4d11a413so840726f8f.1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 05:28:18 -0700 (PDT)
+        Fri, 16 Jun 2023 08:31:37 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E411FCC;
+        Fri, 16 Jun 2023 05:31:37 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-6664a9f0b10so614623b3a.0;
+        Fri, 16 Jun 2023 05:31:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686918696; x=1689510696;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lm26FPRdEuF0YwkxWbrT+z8zY664CKlz4NjHENy56Us=;
+        b=a05oQ1ePVVw5aKhJV/qcSzr4QWznhaIZ5pzXjcJZTHAoK67+GdFkyd52kBiq+Xo5wy
+         6v1lgAXd26LTOw0MuJGgkxHAsBktMM5/FqTLDTBv8BsDm/4yeY3E4dSsIaQy8HzaRvKu
+         T1X3PkRzIOldSrE79Wwb8PrnlmPYoht0PRGJStEaET7Vd8T1ex9uoFBuxawzlipL8ME0
+         7KBy8VO24fCQwuwLxSfYZ6WsPFnfj/f/6QdfogmNw1jIU1SGKByaKcLudiMAOe/0TtMA
+         AoPb3bdhIorOHE0u1wQ+Lu5gR5mPWGLqvhuqelZZdVlVinrCHh8GRZNsd8PuVJ8u7k/I
+         Zt6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686918498; x=1689510498;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7aIuaUbJc/mQS9T0aBfOHsiM7MOxneztv9jcxZlcdiI=;
-        b=g3E5IqbTwE4SH02OrStMsZeUMrk3qlzKi9cbEMwe/oXHicC81V95RjoaiyvEVg7bCB
-         DYC+Nh5tnw1wJN1GbV7/hw3VliiTV/eIaO9q8xKqEXvz1CpAm/PfNnu2ROrQoTRS9qIe
-         c1cN4elrAfaSVlPic89r+lsvpVCKHUkPdB6KDTp48EjyK0VcB15cRS+jViL25RdQwP7+
-         Gupo3+wiTQQP5RbjY9hDH9MlpGGkC3obneU7MC0jJzAmsWCJKwm4tNPe+WkmdTiM49/w
-         IVYNe8hwnpu2Lq9grLeohaNdigaKmaqJ7Ye1aTu846oA8T7K25GyUUt52z7LlmfRtHXf
-         Qy/g==
-X-Gm-Message-State: AC+VfDxluLmvbk9fCgBnyK0S0Cs42Cqh1b2umtO344OhrSe792Nlwvwy
-        ibIiWLeMsC8vGo01fCDaErispOscvRP7BySq/hd1E0jes51h34l6Muyl7cr8rGBzaC2UHHZ1N51
-        mIBT8LYGaQE4hl8iKX5LBTiJQmHOLpXfvU5xINpQdpBYxNsq2Lxh3
-X-Received: by 2002:a5d:540a:0:b0:30f:b0de:f100 with SMTP id g10-20020a5d540a000000b0030fb0def100mr1688698wrv.23.1686918497894;
-        Fri, 16 Jun 2023 05:28:17 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7unBLWvn7eu+/rOTRKqs5JmWynktPc0fpo3fUsOeWbUBSx9ckKi/1QQo/F4AC7I4VtmMb2rQ==
-X-Received: by 2002:a5d:540a:0:b0:30f:b0de:f100 with SMTP id g10-20020a5d540a000000b0030fb0def100mr1688671wrv.23.1686918497538;
-        Fri, 16 Jun 2023 05:28:17 -0700 (PDT)
-Received: from localhost ([194.191.244.86])
-        by smtp.gmail.com with ESMTPSA id cr4-20020a05600004e400b003063a92bbf5sm23726788wrb.70.2023.06.16.05.28.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jun 2023 05:28:17 -0700 (PDT)
-From:   Juerg Haefliger <juerg.haefliger@canonical.com>
-To:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
-        dmitry.baryshkov@linaro.org, sean@poorly.run, airlied@gmail.com,
-        daniel@ffwll.ch, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org
-Cc:     linux-kernel@vger.kernel.org, johan+linaro@kernel.org,
-        konrad.dybcio@linaro.org, quic_akhilpo@quicinc.com,
-        ribalda@chromium.org, joel@joelfernandes.org,
-        juerg.haefliger@canonical.com
-Subject: [PATCH] drm/msm/adreno: Update MODULE_FIRMWARE macros
-Date:   Fri, 16 Jun 2023 14:28:15 +0200
-Message-Id: <20230616122815.1037425-1-juerg.haefliger@canonical.com>
-X-Mailer: git-send-email 2.37.2
+        d=1e100.net; s=20221208; t=1686918696; x=1689510696;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lm26FPRdEuF0YwkxWbrT+z8zY664CKlz4NjHENy56Us=;
+        b=gLVgNE8dtkFOyLUu8s7DP/A1u/cOfchQUwDGu/d48XWDl90ixs7YXl95oZsJOqvghp
+         v6NfDWnYgytzJ7aPJ0lxl5zQcolhY/2J2RJcvv/hdJTYaq0aMpAA98J/K12oLh5CtXF9
+         IMhArOrZtBrCX0fdL442ynEkgI8oNrJFIiAAsv6t0wc4PkZ7OGBJ4ONidho/Jcgp912o
+         fq3kSOeYGvbO+BgF7HCpgroR+yvYjdlVpIvDTyEAFIPV5KgssdiPz9dNfmYzxGsu80so
+         BHMDzkl2vAiOKIKzald9WU49fDsYMoZOxeUhb3UFyFo0DYugaj2xs+fn1N9KIMtcF34Z
+         JawQ==
+X-Gm-Message-State: AC+VfDxVmPUDHW1DLtfP5gfyBqowPdEcNExmzjZ00N7HtP41SoWga55U
+        7BElWn17yTOOzR/cUw/+clJMQ/1+riLRiDXjmqOZ35h12FM=
+X-Google-Smtp-Source: ACHHUZ4v59zC84NLCUrSS490QCKZGfzTuz9JmKYtcJPuSOdbHRtJu6+cZfkZCOvoJv1GUV6IauD+v8rwbtxKcgsidRE=
+X-Received: by 2002:a17:90a:656:b0:259:343:86b5 with SMTP id
+ q22-20020a17090a065600b00259034386b5mr1338940pje.47.1686918696408; Fri, 16
+ Jun 2023 05:31:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230607151127.1542024-1-pavacic.p@gmail.com> <20230607151127.1542024-4-pavacic.p@gmail.com>
+ <CACRpkdbrEA54qmfTKSsFRG9ZS4u8hM6P5TXtOjRAiW+TD_v-fQ@mail.gmail.com>
+ <CAO9szn00vRFm+iM1m7KgkW0WRuKyJEgVU4tVx4f5tF6KPnE=2w@mail.gmail.com> <CACRpkdaw8M3dSkmiV5QDOt3BBB7Jo6NxT0Og=zvA4REMA_7y9g@mail.gmail.com>
+In-Reply-To: <CACRpkdaw8M3dSkmiV5QDOt3BBB7Jo6NxT0Og=zvA4REMA_7y9g@mail.gmail.com>
+From:   Paulo Pavacic <pavacic.p@gmail.com>
+Date:   Fri, 16 Jun 2023 14:31:25 +0200
+Message-ID: <CAO9szn29A0qCABG0ACni42UGpsGKLwG7OT1y_ho3DgQ0WLvfmw@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] drm/panel-fannal-c3004: Add fannal c3004 DSI panel
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     neil.armstrong@linaro.org, sam@ravnborg.org, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,55 +74,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing MODULE_FIRMWARE macros and remove some for firmwares that
-the driver no longer references.
+pet, 16. lip 2023. u 13:44 Linus Walleij <linus.walleij@linaro.org> napisao=
+ je:
+>
+> On Fri, Jun 16, 2023 at 11:57=E2=80=AFAM Paulo Pavacic <pavacic.p@gmail.c=
+om> wrote:
+> > =C4=8Det, 15. lip 2023. u 21:55 Linus Walleij <linus.walleij@linaro.org=
+> napisao je:
+> > >
+> > > I doubt that the display controller is actually by Fannal, but I gues=
+s
+> > > you tried to find out? We usually try to identify the underlying disp=
+lay
+> > > controller so the driver can be named after it and reused for more
+> > > display panels.
+> >
+> > Yes, of course, the controller is ST7701S.
+>
+> Hm did you try to just refactor
+> drivers/gpu/drm/panel/panel-sitronix-st7701.c
+> to support your new panel?
+>
 
-Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
----
- drivers/gpu/drm/msm/adreno/adreno_device.c | 23 ++++++++++++++++++----
- 1 file changed, 19 insertions(+), 4 deletions(-)
+Yes I have tried, but there are too many changes needed and I wasn't
+sure whether I would be breaking compatibility with st7701 based
+panels.
 
-diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
-index 8cff86e9d35c..9f70d7c1a72a 100644
---- a/drivers/gpu/drm/msm/adreno/adreno_device.c
-+++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
-@@ -364,17 +364,32 @@ MODULE_FIRMWARE("qcom/a330_pm4.fw");
- MODULE_FIRMWARE("qcom/a330_pfp.fw");
- MODULE_FIRMWARE("qcom/a420_pm4.fw");
- MODULE_FIRMWARE("qcom/a420_pfp.fw");
-+MODULE_FIRMWARE("qcom/a506_zap.mdt");
-+MODULE_FIRMWARE("qcom/a508_zap.mdt");
-+MODULE_FIRMWARE("qcom/a512_zap.mdt");
- MODULE_FIRMWARE("qcom/a530_pm4.fw");
- MODULE_FIRMWARE("qcom/a530_pfp.fw");
- MODULE_FIRMWARE("qcom/a530v3_gpmu.fw2");
- MODULE_FIRMWARE("qcom/a530_zap.mdt");
--MODULE_FIRMWARE("qcom/a530_zap.b00");
--MODULE_FIRMWARE("qcom/a530_zap.b01");
--MODULE_FIRMWARE("qcom/a530_zap.b02");
-+MODULE_FIRMWARE("qcom/a540_gpmu.fw2");
-+MODULE_FIRMWARE("qcom/a540_zap.mdt");
-+MODULE_FIRMWARE("qcom/a615_zap.mdt");
- MODULE_FIRMWARE("qcom/a619_gmu.bin");
- MODULE_FIRMWARE("qcom/a630_sqe.fw");
- MODULE_FIRMWARE("qcom/a630_gmu.bin");
--MODULE_FIRMWARE("qcom/a630_zap.mbn");
-+MODULE_FIRMWARE("qcom/a630_zap.mdt");
-+MODULE_FIRMWARE("qcom/a640_gmu.bin");
-+MODULE_FIRMWARE("qcom/a640_zap.mdt");
-+MODULE_FIRMWARE("qcom/a650_gmu.bin");
-+MODULE_FIRMWARE("qcom/a650_sqe.fw");
-+MODULE_FIRMWARE("qcom/a650_zap.mdt");
-+MODULE_FIRMWARE("qcom/a660_gmu.bin");
-+MODULE_FIRMWARE("qcom/a660_sqe.fw");
-+MODULE_FIRMWARE("qcom/a660_zap.mdt");
-+MODULE_FIRMWARE("qcom/leia_pfp_470.fw");
-+MODULE_FIRMWARE("qcom/leia_pm4_470.fw");
-+MODULE_FIRMWARE("qcom/yamato_pfp.fw");
-+MODULE_FIRMWARE("qcom/yamato_pm4.fw");
- 
- static inline bool _rev_match(uint8_t entry, uint8_t id)
- {
--- 
-2.37.2
+> One major reason would be that that driver knows what
+> commands actually mean and have #defines for them.
+>
+> Yours,
+> Linus Walleij
 
+Best regards,
+Paulo
