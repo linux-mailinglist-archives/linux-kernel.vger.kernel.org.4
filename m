@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FB28732E5F
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FDF2732E6C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:32:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345079AbjFPKbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 06:31:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50752 "EHLO
+        id S1344949AbjFPKce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 06:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345098AbjFPKa1 (ORCPT
+        with ESMTP id S1344871AbjFPKbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 06:30:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E454A4EE6;
-        Fri, 16 Jun 2023 03:27:32 -0700 (PDT)
+        Fri, 16 Jun 2023 06:31:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8414217;
+        Fri, 16 Jun 2023 03:27:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BEC8F6364D;
-        Fri, 16 Jun 2023 10:27:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F19CAC433C8;
-        Fri, 16 Jun 2023 10:27:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E92A7635F3;
+        Fri, 16 Jun 2023 10:27:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1446DC433C9;
+        Fri, 16 Jun 2023 10:27:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686911252;
-        bh=e0FqgMXuLmowGZmYZK4dy55udaFDEqsCTjD3af4rmvQ=;
+        s=k20201202; t=1686911255;
+        bh=8WpkNaqlzrCdWtc0ZiYsBRXoIZPGOkQUBjDAFyzepYU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WRmD4bj0VFYlL4vJzZd0FhhvDurUMzJygdzdgn1cVRLpJfSXFnl8nMwwdrwDf+PZg
-         ZTt4Dl14MIJHYoYnO746QVTLrOUwVplHmg7eFaSeZ+QFXJ0VPLiw+NRZc0DTRf7u9T
-         8LWSs5bHHVU4FC/rcraU13ISnQz7K1BiexNdlUKEDw7jgg7Jk8y+3EtD4STq0Y91up
-         G+IhDRN5Am6lq7tCoqMEx6ye8mHhpDehk811DDDW4X+wzbBX3XZ8XLs62ygrESxHkl
-         ncd3O4HLdpqDGl9AN54mYA9FoWKmkB8qBseGVBiG1CC3EDRz1sbZUnXDhtetMNDXVf
-         YGaG8qyxljudQ==
+        b=R9JicIN5jq7XzGzdOkIoM76kBFUYfqFQ5QCocQq+w8+LFvLG+E0FssK23to+LTFBV
+         MWEuqgUUL7vWjRbPKzr7oHbydtTXf6tZvLdtaIFbcHOwIyjfvgrYPc9t6UZrbsmxHg
+         97G7ce2Ltlsqh2dKf/qZgGT3I9PDVeeT+MCbYqyVrsCflGR0+mPaSCZL8pRgDaqIqG
+         jblPcz50JQw8pRGREZTyrMmv3T/JybJ9gVXg3DldjgGZy6tX3vB167r8lffurKqSq2
+         ZmFjygCG7odigSEpYHD9y5toTsHd15eOwa9A9s3PGBm8ok5DBv2vFKp4/5RVJkc/E/
+         ZUEYwV5xtL5NQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        agross@kernel.org, andersson@kernel.org,
-        yung-chuan.liao@linux.intel.com, linux-arm-msm@vger.kernel.org,
+Cc:     Edson Juliano Drosdeck <edson.drosdeck@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
+        perex@perex.cz, tiwai@suse.com, savagecin@gmail.com,
+        SJLIN0@nuvoton.com, ckeepax@opensource.cirrus.com,
         alsa-devel@alsa-project.org
-Subject: [PATCH AUTOSEL 5.15 06/16] soundwire: qcom: add proper error paths in qcom_swrm_startup()
-Date:   Fri, 16 Jun 2023 06:27:09 -0400
-Message-Id: <20230616102721.673775-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 07/16] ASoC: nau8824: Add quirk to active-high jack-detect
+Date:   Fri, 16 Jun 2023 06:27:10 -0400
+Message-Id: <20230616102721.673775-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230616102721.673775-1-sashal@kernel.org>
 References: <20230616102721.673775-1-sashal@kernel.org>
@@ -52,8 +52,8 @@ X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 5.15.117
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,61 +62,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Edson Juliano Drosdeck <edson.drosdeck@gmail.com>
 
-[ Upstream commit 99e09b9c0ab43346c52f2787ca4e5c4b1798362e ]
+[ Upstream commit e384dba03e3294ce7ea69e4da558e9bf8f0e8946 ]
 
-Reverse actions in qcom_swrm_startup() error paths to avoid leaking
-stream memory and keeping runtime PM unbalanced.
+Add  entries for Positivo laptops: CW14Q01P, K1424G, N14ZP74G to the
+DMI table, so that  active-high jack-detect will work properly on
+these laptops.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Link: https://lore.kernel.org/r/20230517163736.997553-1-krzysztof.kozlowski@linaro.org
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Edson Juliano Drosdeck <edson.drosdeck@gmail.com>
+Link: https://lore.kernel.org/r/20230529181911.632851-1-edson.drosdeck@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soundwire/qcom.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+ sound/soc/codecs/nau8824.c | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
-index 2ba0911f5d0cc..64b157f5f80db 100644
---- a/drivers/soundwire/qcom.c
-+++ b/drivers/soundwire/qcom.c
-@@ -1026,8 +1026,10 @@ static int qcom_swrm_startup(struct snd_pcm_substream *substream,
- 	int ret, i;
+diff --git a/sound/soc/codecs/nau8824.c b/sound/soc/codecs/nau8824.c
+index 27589900f4fbf..f7ff130a9485d 100644
+--- a/sound/soc/codecs/nau8824.c
++++ b/sound/soc/codecs/nau8824.c
+@@ -1866,6 +1866,30 @@ static const struct dmi_system_id nau8824_quirk_table[] = {
+ 		},
+ 		.driver_data = (void *)(NAU8824_JD_ACTIVE_HIGH),
+ 	},
++	{
++		/* Positivo CW14Q01P */
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Positivo Tecnologia SA"),
++			DMI_MATCH(DMI_BOARD_NAME, "CW14Q01P"),
++		},
++		.driver_data = (void *)(NAU8824_JD_ACTIVE_HIGH),
++	},
++	{
++		/* Positivo K1424G */
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Positivo Tecnologia SA"),
++			DMI_MATCH(DMI_BOARD_NAME, "K1424G"),
++		},
++		.driver_data = (void *)(NAU8824_JD_ACTIVE_HIGH),
++	},
++	{
++		/* Positivo N14ZP74G */
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Positivo Tecnologia SA"),
++			DMI_MATCH(DMI_BOARD_NAME, "N14ZP74G"),
++		},
++		.driver_data = (void *)(NAU8824_JD_ACTIVE_HIGH),
++	},
+ 	{}
+ };
  
- 	sruntime = sdw_alloc_stream(dai->name);
--	if (!sruntime)
--		return -ENOMEM;
-+	if (!sruntime) {
-+		ret = -ENOMEM;
-+		goto err_alloc;
-+	}
- 
- 	ctrl->sruntime[dai->id] = sruntime;
- 
-@@ -1037,12 +1039,19 @@ static int qcom_swrm_startup(struct snd_pcm_substream *substream,
- 		if (ret < 0 && ret != -ENOTSUPP) {
- 			dev_err(dai->dev, "Failed to set sdw stream on %s\n",
- 				codec_dai->name);
--			sdw_release_stream(sruntime);
--			return ret;
-+			goto err_set_stream;
- 		}
- 	}
- 
- 	return 0;
-+
-+err_set_stream:
-+	sdw_release_stream(sruntime);
-+err_alloc:
-+	pm_runtime_mark_last_busy(ctrl->dev);
-+	pm_runtime_put_autosuspend(ctrl->dev);
-+
-+	return ret;
- }
- 
- static void qcom_swrm_shutdown(struct snd_pcm_substream *substream,
 -- 
 2.39.2
 
