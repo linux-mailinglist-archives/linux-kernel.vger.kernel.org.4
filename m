@@ -2,92 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC4E7330B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:05:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C4817330BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:05:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345104AbjFPMFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 08:05:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48174 "EHLO
+        id S1345190AbjFPMFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 08:05:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344705AbjFPMFU (ORCPT
+        with ESMTP id S1345178AbjFPMFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 08:05:20 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2C6295B
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 05:05:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=BMWKQx/mtkx2lMD06UOMU56OLs1sHtFnRGm3UCPFjUg=; b=gohQ/wSu9j4t99gn/TB0YXjDpa
-        503CS3oJJ3m1ISuk2gWHLB5f3x3SPkRcxzHn2p4g2ZjRlVd61IAfQK1mFlXp0Gk7un2gRROKTY8lw
-        OdukHnqfIIqrCbVxMJ2vmVnupEH0+EVFm7x43ROf1YTf0OIAbpn80SLhYuDs7rxNn07fkhMzDu2bE
-        4wR/SwZ0WRGFmp2UhDKH5q+pnKQ3mmoUZndO4WFXaJtf5eAeDrFM4D236NjYkJNqShndn3w41AiXe
-        uEANT1yjVxB0DxkL7DvzJmcTCIJNFotE3Pmr8Y1E+5oeRNNm+n/y70iUXcCAf9jWEqBgP24C8vFMl
-        2sxwCmyQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qA8CS-00CuY0-18;
-        Fri, 16 Jun 2023 12:05:08 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Fri, 16 Jun 2023 08:05:43 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBAF30DD
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 05:05:40 -0700 (PDT)
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com [209.85.167.71])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D3C7530020B;
-        Fri, 16 Jun 2023 14:05:07 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 901F32C16E13D; Fri, 16 Jun 2023 14:05:07 +0200 (CEST)
-Date:   Fri, 16 Jun 2023 14:05:07 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Luca Abeni <luca.abeni@santannapisa.it>,
-        Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vineeth Pillai <vineeth@bitbyteword.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [RFC PATCH V3 6/6] sched/fair: Implement starvation monitor
-Message-ID: <20230616120507.GM83892@hirez.programming.kicks-ass.net>
-References: <cover.1686239016.git.bristot@kernel.org>
- <bd9977efff8cc3e002c4b2db02f611167905a99f.1686239016.git.bristot@kernel.org>
- <CAEXW_YT0DmvQo_gfCq5uzpZpf36HmfzXozo9+=sYJp-hZx4qTQ@mail.gmail.com>
- <b2cd0072-d226-4adb-ddf5-958d9635f881@kernel.org>
- <CAEXW_YR9Tfw5KyFU7TQtYE02k+DpaMXH=osx9Ws5w_j1YpHxhg@mail.gmail.com>
- <841849b5-1f9c-4f0e-2de8-1da278256888@kernel.org>
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 1E4433F10B
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 12:05:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1686917139;
+        bh=m7ySH3JrcTV8+yw7ueBFG47cxZsJ9e+MajPgheIKd1w=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=sgvBiES5LemzjKmE5arXKRcu7Tc5bUYOste+4GM84XMboqjj399vY+XAcF+GxVqLr
+         J+YhN/FibZAZUhdkseItgGZNB74pE+o9t5A1zcfycYX693rh1/o3FEUO3vtohA+2gj
+         nR/MiSi480xNUKe0zUl6e7TJ5aOFeKJAIpDpn1y4khNo17oF0GhXVeSP4rcQ8J5Dfx
+         fO4p2VvrUTT0GA966CJ5h8efNMnbqq6hlWRABd+W42PBKcrmRU3P+0oQttw8UhZHkU
+         CQLIuLC0SCH4EqQ/BMgCwPjJOxJYswOuti07KghoNB3bUZxCUaBCJxhZAGRLxryCdD
+         F/h6C/LSKDUQw==
+Received: by mail-lf1-f71.google.com with SMTP id 2adb3069b0e04-4edb90ccaadso481873e87.3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 05:05:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686917138; x=1689509138;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m7ySH3JrcTV8+yw7ueBFG47cxZsJ9e+MajPgheIKd1w=;
+        b=cWj0QZBY6AQgtiUle8nXhpLla55tHHskll5+y9zU6kKtdvVvaC9Q4YeGdcUC+t2zTH
+         cZp0/5aXIbLmP+8xBwyYYhSQ2/x8PKkeCKl5dO0MTEnn8MHmjws1EHAlg9qZvONP6PNq
+         QB7WNkfl5tX94AndBYBoVu5FNJ2VKaPHgBndrfH3/KpcXGPTK9Coufv8cJIQvCDARfGO
+         Fihz8xKwELW7bKR/br7kG2F6ze72XoHVOBft2Qrvtuh+tP9xsxUWFElV9dKGBkBfhBQy
+         E+Ru7gw2A5/w7JsJe9tMLMH98TsVkxM14EFcLZCvMQrphmk+0ZnnPhGPZPWTeE4JOTus
+         uG2g==
+X-Gm-Message-State: AC+VfDyeL5kQt3sdiXdi1aHTb4s51BEaiv7ILhz9ZSrTI7MAiIU93raI
+        jk0NtSrQK8yUQUfyQv50waUZtxs8S4EAezwuf+G/eB3/AJ24dilqmAONerOi2i1amB5iiQLFgyb
+        pjih4T0MYSVtUiG97yJcZZ1bbhwQ43dKjt03YnwjBfw==
+X-Received: by 2002:ac2:5f9b:0:b0:4f3:78c2:2a6d with SMTP id r27-20020ac25f9b000000b004f378c22a6dmr1288645lfe.3.1686917138629;
+        Fri, 16 Jun 2023 05:05:38 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ75fXyeKCuznl3pidwrqckduT+X32ZYDJY7P5oHI98szTnf3jjwPSD9DqOJGAXHWnqzY1XyWA==
+X-Received: by 2002:ac2:5f9b:0:b0:4f3:78c2:2a6d with SMTP id r27-20020ac25f9b000000b004f378c22a6dmr1288629lfe.3.1686917138336;
+        Fri, 16 Jun 2023 05:05:38 -0700 (PDT)
+Received: from localhost ([194.191.244.86])
+        by smtp.gmail.com with ESMTPSA id c25-20020a05600c0ad900b003f18b942338sm2068082wmr.3.2023.06.16.05.05.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 05:05:37 -0700 (PDT)
+From:   Juerg Haefliger <juerg.haefliger@canonical.com>
+To:     deller@gmx.de, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Cc:     linux-kernel@vger.kernel.org, juerg.haefliger@canonical.com,
+        u.kleine-koenig@pengutronix.de
+Subject: [PATCH] fbdev: metronomefb: Add MODULE_FIRMWARE macro
+Date:   Fri, 16 Jun 2023 14:05:29 +0200
+Message-Id: <20230616120529.1028798-1-juerg.haefliger@canonical.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <841849b5-1f9c-4f0e-2de8-1da278256888@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 03:41:30PM +0200, Daniel Bristot de Oliveira wrote:
+The module loads firmware so add a MODULE_FIRMWARE macro to provide that
+information via modinfo.
 
-> In an 0-laxity scheduler, the server would run at 0-laxity, jumping in
-> front of DL tasks... that would break EDF. It would be mixing two
-> schedulers in one. It is not required and likely not a good idea either.
+Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
+---
+ drivers/video/fbdev/metronomefb.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-I did consider a hybrid 0-laxity and EDF scheduler for mixed
-criticality, as have others like Ted Baker IIRC. IIRC it can be done
-using an augmented tree, but none of that solves the problems 0-laxity
-has (like over preemption and the general problem of playing chicken by
-doing things at the *VERY* last possible moment).
+diff --git a/drivers/video/fbdev/metronomefb.c b/drivers/video/fbdev/metronomefb.c
+index bbdbf463f0c8..4e50882d080c 100644
+--- a/drivers/video/fbdev/metronomefb.c
++++ b/drivers/video/fbdev/metronomefb.c
+@@ -778,3 +778,5 @@ MODULE_PARM_DESC(user_wfm_size, "Set custom waveform size");
+ MODULE_DESCRIPTION("fbdev driver for Metronome controller");
+ MODULE_AUTHOR("Jaya Kumar");
+ MODULE_LICENSE("GPL");
++
++MODULE_FIRMWARE("metronome.wbf");
+-- 
+2.37.2
 
-I think I did a talk at OSPERT on this at some point many years ago.
-Luckily some bright fellow had this semi-partitioned stuff that would
-make live much simpler :-)
