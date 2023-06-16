@@ -2,59 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F16E732DF4
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:28:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A563A732E2A
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:29:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234694AbjFPK2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 06:28:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51006 "EHLO
+        id S1344239AbjFPK3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 06:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344000AbjFPK1x (ORCPT
+        with ESMTP id S1344337AbjFPK2w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 06:27:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3724681;
-        Fri, 16 Jun 2023 03:26:23 -0700 (PDT)
+        Fri, 16 Jun 2023 06:28:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6551249C2;
+        Fri, 16 Jun 2023 03:26:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 06EDE635B4;
-        Fri, 16 Jun 2023 10:26:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BDB9C433CC;
-        Fri, 16 Jun 2023 10:26:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 25F7663594;
+        Fri, 16 Jun 2023 10:26:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2AF5C433C0;
+        Fri, 16 Jun 2023 10:26:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686911174;
-        bh=ad9mJNWY2ATqiIvDKYUCVrrn+8LgbBm8sw+UrkCnxFI=;
+        s=k20201202; t=1686911175;
+        bh=yyMkuSvMcqUN5Xcn8/UO4a1EkxnHD84xXl8Cc96JEkg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y5pmRdhOqlNo5TIvm6xDtkBBH2G6zzErddjOSeXS0lHIpjuyDW3rQPL9bzm3uWYtg
-         QEmelHw4m5x6CCJsNCF8E59fam1BBqlJbkdvM5k8y7lfCBMfIGSRf3qSCjYBXhVWhV
-         +9sGzCgpiTjZmoz2vtqsT1yeoLC+mDJN6ITfoHTPQGnBJPbGASqT/SS4YaKBGPfQB6
-         BYawp9PcQtGB2VybWjumHv4eN82IMfcRoY6ooqL1y4EuNwnM3O5krOvzw0lTjgCI+b
-         C6xax5dKotyvXeXLwL9VjU4HoEMqcMo+5L3C+yaPwjXPmMDfOuvnDlmjM0v15DP1E3
-         BIXs+Y1qn8afw==
+        b=NLY4ClPSQD1QlkGp/IAW+whsGyLyV6w7nuFRwvWejk2+uZbmSS12DLG+you2lG13g
+         AuIsErSmCt8L3w+9bdTphgEBcwl/NYpFxN3pGpn0WfbBwERdSoMYWVG9oX67fXPUct
+         pEtaSp2nGhq+U/BjihT85i75jkBudBk0ljw/No0vfIlGYidnlAXyqUBS+BEEBHBqJG
+         +e35JDTbOr/1LL+8bBLmVU9YDaQ78z6BJU8w7XikAqR85qUoHOepDsBQjxMtalk7uJ
+         9a8zSjK7Mh7lDjZKA9xkNcH3gusASDT02GyMjRb3jS6hWc8F6MUloKIvYIgLjM64EG
+         XAMunt4T2UaDQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Min Li <lm0963hack@gmail.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>, Xinhui.Pan@amd.com,
-        airlied@gmail.com, daniel@ffwll.ch, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH AUTOSEL 6.3 25/30] drm/radeon: fix race condition UAF in radeon_gem_set_domain_ioctl
-Date:   Fri, 16 Jun 2023 06:25:13 -0400
-Message-Id: <20230616102521.673087-25-sashal@kernel.org>
+Cc:     Theodore Ts'o <tytso@mit.edu>, Sasha Levin <sashal@kernel.org>,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 26/30] Revert "ext4: don't clear SB_RDONLY when remounting r/w until quota is re-enabled"
+Date:   Fri, 16 Jun 2023 06:25:14 -0400
+Message-Id: <20230616102521.673087-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230616102521.673087-1-sashal@kernel.org>
 References: <20230616102521.673087-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.3.8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,49 +58,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Min Li <lm0963hack@gmail.com>
+From: Theodore Ts'o <tytso@mit.edu>
 
-[ Upstream commit 982b173a6c6d9472730c3116051977e05d17c8c5 ]
+[ Upstream commit 1b29243933098cdbc31b579b5616e183b4275e2f ]
 
-Userspace can race to free the gobj(robj converted from), robj should not
-be accessed again after drm_gem_object_put, otherwith it will result in
-use-after-free.
+This reverts commit a44be64bbecb15a452496f60db6eacfee2b59c79.
 
-Reviewed-by: Christian König <christian.koenig@amd.com>
-Signed-off-by: Min Li <lm0963hack@gmail.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Link: https://lore.kernel.org/r/653b3359-2005-21b1-039d-c55ca4cffdcc@gmail.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/radeon/radeon_gem.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ fs/ext4/super.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/radeon/radeon_gem.c b/drivers/gpu/drm/radeon/radeon_gem.c
-index 261fcbae88d78..75d79c3110389 100644
---- a/drivers/gpu/drm/radeon/radeon_gem.c
-+++ b/drivers/gpu/drm/radeon/radeon_gem.c
-@@ -459,7 +459,6 @@ int radeon_gem_set_domain_ioctl(struct drm_device *dev, void *data,
- 	struct radeon_device *rdev = dev->dev_private;
- 	struct drm_radeon_gem_set_domain *args = data;
- 	struct drm_gem_object *gobj;
--	struct radeon_bo *robj;
- 	int r;
+diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+index 1f222c396932e..9c987bdbab334 100644
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -6354,7 +6354,6 @@ static int __ext4_remount(struct fs_context *fc, struct super_block *sb)
+ 	struct ext4_mount_options old_opts;
+ 	ext4_group_t g;
+ 	int err = 0;
+-	int enable_rw = 0;
+ #ifdef CONFIG_QUOTA
+ 	int enable_quota = 0;
+ 	int i, j;
+@@ -6541,7 +6540,7 @@ static int __ext4_remount(struct fs_context *fc, struct super_block *sb)
+ 			if (err)
+ 				goto restore_opts;
  
- 	/* for now if someone requests domain CPU -
-@@ -472,13 +471,12 @@ int radeon_gem_set_domain_ioctl(struct drm_device *dev, void *data,
- 		up_read(&rdev->exclusive_lock);
- 		return -ENOENT;
- 	}
--	robj = gem_to_radeon_bo(gobj);
+-			enable_rw = 1;
++			sb->s_flags &= ~SB_RDONLY;
+ 			if (ext4_has_feature_mmp(sb)) {
+ 				err = ext4_multi_mount_protect(sb,
+ 						le64_to_cpu(es->s_mmp_block));
+@@ -6588,9 +6587,6 @@ static int __ext4_remount(struct fs_context *fc, struct super_block *sb)
+ 	if (!test_opt(sb, BLOCK_VALIDITY) && sbi->s_system_blks)
+ 		ext4_release_system_zone(sb);
  
- 	r = radeon_gem_set_domain(gobj, args->read_domains, args->write_domain);
- 
- 	drm_gem_object_put(gobj);
- 	up_read(&rdev->exclusive_lock);
--	r = radeon_gem_handle_lockup(robj->rdev, r);
-+	r = radeon_gem_handle_lockup(rdev, r);
- 	return r;
- }
- 
+-	if (enable_rw)
+-		sb->s_flags &= ~SB_RDONLY;
+-
+ 	/*
+ 	 * Reinitialize lazy itable initialization thread based on
+ 	 * current settings
 -- 
 2.39.2
 
