@@ -2,105 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3170273250D
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 04:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BABCC732510
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 04:12:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232849AbjFPCLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 22:11:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40002 "EHLO
+        id S237077AbjFPCMa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 15 Jun 2023 22:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjFPCL2 (ORCPT
+        with ESMTP id S229588AbjFPCM2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 22:11:28 -0400
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830532962
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 19:11:26 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VlDwYUZ_1686881481;
-Received: from 30.221.130.155(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0VlDwYUZ_1686881481)
-          by smtp.aliyun-inc.com;
-          Fri, 16 Jun 2023 10:11:22 +0800
-Message-ID: <bb92b1f4-8433-de5c-0ce1-b23e693b8ad5@linux.alibaba.com>
-Date:   Fri, 16 Jun 2023 10:11:21 +0800
+        Thu, 15 Jun 2023 22:12:28 -0400
+Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC372965;
+        Thu, 15 Jun 2023 19:12:24 -0700 (PDT)
+X-QQ-mid: Yeas50t1686881504t089t25183
+Received: from 3DB253DBDE8942B29385B9DFB0B7E889 (jiawenwu@trustnetic.com [183.159.171.58])
+X-QQ-SSF: 00400000000000F0FPF000000000000
+From:   =?utf-8?b?Smlhd2VuIFd1?= <jiawenwu@trustnetic.com>
+X-BIZMAIL-ID: 6584627287116177339
+To:     "'Andy Shevchenko'" <andy.shevchenko@gmail.com>,
+        "'Michael Walle'" <michael@walle.cc>
+Cc:     <linus.walleij@linaro.org>, <brgl@bgdev.pl>,
+        <shreeya.patel@collabora.com>, <linux-gpio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230607081803.778223-1-jiawenwu@trustnetic.com> <CAHp75Vdbq3uHOyrfT-KFYRSj6v+s9GgOQjQ9a8mGn-4HSCpB9Q@mail.gmail.com> <15e2fc098a1e63317368f4812290ca35@walle.cc> <010401d99f6f$26d41600$747c4200$@trustnetic.com> <b9af98d801d2808de3460c9e4fec8bdd@walle.cc> <CAHp75VcgAhaSARXMnRzsDE3x57AjnwS6Ep25Mz7SnizUccG6BA@mail.gmail.com>
+In-Reply-To: <CAHp75VcgAhaSARXMnRzsDE3x57AjnwS6Ep25Mz7SnizUccG6BA@mail.gmail.com>
+Subject: RE: [PATCH v2] gpiolib: Fix GPIO chip IRQ initialization restriction
+Date:   Fri, 16 Jun 2023 10:11:43 +0800
+Message-ID: <012b01d99ff7$e51075e0$af3161a0$@trustnetic.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.2
-Subject: Re: [BUG] ocfs2/dlm: possible data races in
- dlm_drop_lockres_ref_done() and dlm_get_lock_resource()
-To:     Tuo Li <islituo@gmail.com>, mark@fasheh.com, jlbec@evilplan.org,
-        akpm@linux-foundation.org
-Cc:     ocfs2-devel@oss.oracle.com,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        baijiaju1990@outlook.com
-References: <CADm8TekHVfLHzKBLRfj7TwZiw=eL=VSgPpuhdpx_FSjNUXNtHQ@mail.gmail.com>
-Content-Language: en-US
-From:   Joseph Qi <joseph.qi@linux.alibaba.com>
-In-Reply-To: <CADm8TekHVfLHzKBLRfj7TwZiw=eL=VSgPpuhdpx_FSjNUXNtHQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+        charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: zh-cn
+Thread-Index: AQJryWnquP8Y9u98p8GNjzLx69HVGQGrRNiSAZtbv08BxPTBjAH/YNofAf5b6aOuIA5BEA==
+X-QQ-SENDSIZE: 520
+Feedback-ID: Yeas:trustnetic.com:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FROM_EXCESS_BASE64,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thursday, June 15, 2023 9:56 PM, Andy Shevchenko wrote:
+> On Thu, Jun 15, 2023 at 1:45 PM Michael Walle <michael@walle.cc> wrote:
+> > > BTW, I wonder if it has problems when unregistering gpio-regmap.
+> > > Call Trace of irq_domain_remove() always exits in my test:
+> > > https://lore.kernel.org/all/011c01d98d3d$99e6c6e0$cdb454a0$@trustnetic.com/
+> > >
+> > > Of course, it could be because there was something wrong with my
+> > > test code. But I want to be clear about this.
+> >
+> > Mh, you've said you don't use the devm_ variant of
+> > regmap_add_irq_chip(),
+> > correct? Do you call regmap_del_irq_chip() yourself?
 
-On 6/13/23 4:23 PM, Tuo Li wrote:
-> Hello,
-> 
-> Our static analysis tool finds some possible data races in the OCFS2 file
-> system in Linux 6.4.0-rc6.
-> 
-> In most calling contexts, the variables  such as res->lockname.name and
-> res->owner are accessed with holding the lock res->spinlock. Here is an
-> example:
-> 
->   lockres_seq_start() --> Line 539 in dlmdebug.c
->     spin_lock(&res->spinlock); --> Line 574 in dlmdebug.c (Lock
-> res->spinlock)
->     dump_lockres(res, ...); --> Line 575 in fs/ocfs2/dlm/dlmdebug.c
->       stringify_lockname(res->lockname.name, ...);  --> Line 493 in
-> dlmdebug.c (Access res->lockname.name)
->       scnprintf(..., res->owner, ...);  -->Line 498 in dlmdebug.c (Access
-> res->owner)
-> 
-> However, in the following calling contexts:
-> 
->   dlm_deref_lockres_worker() --> Line 2439 in dlmmaster.c
->     dlm_drop_lockres_ref_done() --> Line 2459 in dlmmaster.c
->       lockname = res->lockname.name; --> Line 2416 in dlmmaster.c (Access
-> res->lockname.name)
+Yes, devm_regmap_del_irq_chip() also led to a call trace. I thought it
+might be the order of release, so I called it myself without devm_.
 
-lockname won't changed during the lockres lifecycle.
-So this won't cause any real problem since now it holds a reference.
+> > It seems that gpiolib is already removing the domain itself. Mh.
+> > I guess if the the domain is set via gpiochip_irqchip_add_domain()
+> > gpiolib must not call irq_domain_remove() because the domain resource
+> > is handled externally (i.e. gpiolib doesn't allocate the domain
+> > itself) in our case.
+> >
+> > Nice finding! Looks like it has been broken since the beginning
+> > when I've introduced the gpiochip_irqchip_add_domain(). Will you
+> > do another fixes patch for that? 
 
-> 
->   dlm_get_lock_resource() --> Line 701 in dlmmaster.c
->     if (res->owner != dlm->node_num) --> Line 1023 in dlmmaster.c (Access
-> res->owner)
+I used to be rough at fixing in my test, I tried to set gc->irq.domain = NULL
+after calling irq_domain_remove() in gpiochip_irqchip_remove(). But
+there seemed to be some other issue that was causing my device to not
+work, so I didn't go further. I wonder what risks such fix introduces.
 
-Do you mean in dlm_wait_for_lock_mastery()?
-Even if owner changes suddenly, it will recheck, so I think it is also fine.
+Sorry I may not be able to do the fix patch for a while. I'm working on
+other patches, this test will disrupt my work.
 
-Thanks,
-Joseph
+> > I'm not sure where to store
+> > that information though. Maybe a new bool "no_domain_free"
+> > in struct gpio_irq_chip?
+> 
+> While reading this I also thought about flag, but please use positive
+> notation, e.g. "irq_domain_is_ext".
 
-> 
-> The variables res->lockname.name and res->owner are accessed respectively
-> without holding the lock res->spinlock, and thus data races can occur.
-> 
-> I am not quite sure whether these possible data races are real and how to
-> fix
-> them if they are real.
-> 
-> Any feedback would be appreciated, thanks!
-> 
-> Reported-by: BassCheck <bass@buaa.edu.cn> <bass@buaa.edu.cn>
-> 
-> Best wishes,
-> Tuo Li
-> 
+
