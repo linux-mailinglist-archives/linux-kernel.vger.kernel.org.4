@@ -2,113 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D83A973312F
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43ADB733134
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344896AbjFPM2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 08:28:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34932 "EHLO
+        id S1344979AbjFPM2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 08:28:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344192AbjFPM17 (ORCPT
+        with ESMTP id S235564AbjFPM2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 08:27:59 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A4EF30DE;
-        Fri, 16 Jun 2023 05:27:56 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 1B84492009C; Fri, 16 Jun 2023 14:27:53 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 13F8F92009B;
-        Fri, 16 Jun 2023 13:27:53 +0100 (BST)
-Date:   Fri, 16 Jun 2023 13:27:52 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        Stefan Roese <sr@denx.de>, Leon Romanovsky <leon@kernel.org>,
-        linux-rdma@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jim Wilson <wilson@tuliptree.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        David Abdurachmanov <david.abdurachmanov@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Lukas Wunner <lukas@wunner.de>, netdev@vger.kernel.org,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: Re: [PATCH v9 00/14] pci: Work around ASMedia ASM2824 PCIe link
- training failures
-In-Reply-To: <20230615183754.GA1483387@bhelgaas>
-Message-ID: <alpine.DEB.2.21.2306160431470.64925@angie.orcam.me.uk>
-References: <20230615183754.GA1483387@bhelgaas>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Fri, 16 Jun 2023 08:28:22 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375E01FFF
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 05:28:20 -0700 (PDT)
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 9003A3F36A
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 12:28:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1686918498;
+        bh=7aIuaUbJc/mQS9T0aBfOHsiM7MOxneztv9jcxZlcdiI=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=gmkAFbkAgV36mjnQXD+lL00eadH3cL2iws4TOzpi7053Tf2wJt5nulPlls1Ezb015
+         bAcmkX8kwYpCATpZkQgAo03SXmLbksUkX7zMAbwF86Inur98lYzEZXUEm4wwBh9u1O
+         lSPAsJjPW+vv/bNL4gO6HgJeeg3FttkBE+e5dioK2qGIflTkUAJQtuTwrm3vEkLIcC
+         qBbOhaiHn8OjnoBDfaPTyKTvE1g3dcN17VY4Z0d7h49+wZhutkHC47JnDS2PhGPNon
+         JOssCEYQT6kU9Aecm/ismeMLrOBu+5tpfcGB3N7A/C2ZeCE4UGZUc0xxCBeC70tyMp
+         vDs9UQTkt8hKA==
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-30e4d11a413so840726f8f.1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 05:28:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686918498; x=1689510498;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7aIuaUbJc/mQS9T0aBfOHsiM7MOxneztv9jcxZlcdiI=;
+        b=g3E5IqbTwE4SH02OrStMsZeUMrk3qlzKi9cbEMwe/oXHicC81V95RjoaiyvEVg7bCB
+         DYC+Nh5tnw1wJN1GbV7/hw3VliiTV/eIaO9q8xKqEXvz1CpAm/PfNnu2ROrQoTRS9qIe
+         c1cN4elrAfaSVlPic89r+lsvpVCKHUkPdB6KDTp48EjyK0VcB15cRS+jViL25RdQwP7+
+         Gupo3+wiTQQP5RbjY9hDH9MlpGGkC3obneU7MC0jJzAmsWCJKwm4tNPe+WkmdTiM49/w
+         IVYNe8hwnpu2Lq9grLeohaNdigaKmaqJ7Ye1aTu846oA8T7K25GyUUt52z7LlmfRtHXf
+         Qy/g==
+X-Gm-Message-State: AC+VfDxluLmvbk9fCgBnyK0S0Cs42Cqh1b2umtO344OhrSe792Nlwvwy
+        ibIiWLeMsC8vGo01fCDaErispOscvRP7BySq/hd1E0jes51h34l6Muyl7cr8rGBzaC2UHHZ1N51
+        mIBT8LYGaQE4hl8iKX5LBTiJQmHOLpXfvU5xINpQdpBYxNsq2Lxh3
+X-Received: by 2002:a5d:540a:0:b0:30f:b0de:f100 with SMTP id g10-20020a5d540a000000b0030fb0def100mr1688698wrv.23.1686918497894;
+        Fri, 16 Jun 2023 05:28:17 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7unBLWvn7eu+/rOTRKqs5JmWynktPc0fpo3fUsOeWbUBSx9ckKi/1QQo/F4AC7I4VtmMb2rQ==
+X-Received: by 2002:a5d:540a:0:b0:30f:b0de:f100 with SMTP id g10-20020a5d540a000000b0030fb0def100mr1688671wrv.23.1686918497538;
+        Fri, 16 Jun 2023 05:28:17 -0700 (PDT)
+Received: from localhost ([194.191.244.86])
+        by smtp.gmail.com with ESMTPSA id cr4-20020a05600004e400b003063a92bbf5sm23726788wrb.70.2023.06.16.05.28.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 05:28:17 -0700 (PDT)
+From:   Juerg Haefliger <juerg.haefliger@canonical.com>
+To:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
+        dmitry.baryshkov@linaro.org, sean@poorly.run, airlied@gmail.com,
+        daniel@ffwll.ch, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org
+Cc:     linux-kernel@vger.kernel.org, johan+linaro@kernel.org,
+        konrad.dybcio@linaro.org, quic_akhilpo@quicinc.com,
+        ribalda@chromium.org, joel@joelfernandes.org,
+        juerg.haefliger@canonical.com
+Subject: [PATCH] drm/msm/adreno: Update MODULE_FIRMWARE macros
+Date:   Fri, 16 Jun 2023 14:28:15 +0200
+Message-Id: <20230616122815.1037425-1-juerg.haefliger@canonical.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Jun 2023, Bjorn Helgaas wrote:
+Add missing MODULE_FIRMWARE macros and remove some for firmwares that
+the driver no longer references.
 
-> >  If doing it this way, which I actually like, I think it would be a little 
-> > bit better performance- and style-wise if this was written as:
-> > 
-> > 	if (pci_is_pcie(dev)) {
-> > 		bridge = pci_upstream_bridge(dev);
-> > 		retrain = !!bridge;
-> > 	}
-> > 
-> > (or "retrain = bridge != NULL" if you prefer this style), and then we 
-> > don't have to repeatedly check two variables iff (pcie && !bridge) in the 
-> > loop below:
-> 
-> Done, thanks, I do like that better.  I did:
-> 
->   bridge = pci_upstream_bridge(dev);
->   if (bridge)
->     retrain = true;
-> 
-> because it seems like it flows more naturally when reading.
+Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
+---
+ drivers/gpu/drm/msm/adreno/adreno_device.c | 23 ++++++++++++++++++----
+ 1 file changed, 19 insertions(+), 4 deletions(-)
 
- Perfect, and good timing too, as I have just started checking your tree 
-as your message arrived.  I ran my usual tests with and w/o PCI_QUIRKS 
-enabled and results were as expected.  As before I didn't check hot plug 
-and reset paths as these features are awkward with the HiFive Unmatched 
-system involved.
+diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
+index 8cff86e9d35c..9f70d7c1a72a 100644
+--- a/drivers/gpu/drm/msm/adreno/adreno_device.c
++++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
+@@ -364,17 +364,32 @@ MODULE_FIRMWARE("qcom/a330_pm4.fw");
+ MODULE_FIRMWARE("qcom/a330_pfp.fw");
+ MODULE_FIRMWARE("qcom/a420_pm4.fw");
+ MODULE_FIRMWARE("qcom/a420_pfp.fw");
++MODULE_FIRMWARE("qcom/a506_zap.mdt");
++MODULE_FIRMWARE("qcom/a508_zap.mdt");
++MODULE_FIRMWARE("qcom/a512_zap.mdt");
+ MODULE_FIRMWARE("qcom/a530_pm4.fw");
+ MODULE_FIRMWARE("qcom/a530_pfp.fw");
+ MODULE_FIRMWARE("qcom/a530v3_gpmu.fw2");
+ MODULE_FIRMWARE("qcom/a530_zap.mdt");
+-MODULE_FIRMWARE("qcom/a530_zap.b00");
+-MODULE_FIRMWARE("qcom/a530_zap.b01");
+-MODULE_FIRMWARE("qcom/a530_zap.b02");
++MODULE_FIRMWARE("qcom/a540_gpmu.fw2");
++MODULE_FIRMWARE("qcom/a540_zap.mdt");
++MODULE_FIRMWARE("qcom/a615_zap.mdt");
+ MODULE_FIRMWARE("qcom/a619_gmu.bin");
+ MODULE_FIRMWARE("qcom/a630_sqe.fw");
+ MODULE_FIRMWARE("qcom/a630_gmu.bin");
+-MODULE_FIRMWARE("qcom/a630_zap.mbn");
++MODULE_FIRMWARE("qcom/a630_zap.mdt");
++MODULE_FIRMWARE("qcom/a640_gmu.bin");
++MODULE_FIRMWARE("qcom/a640_zap.mdt");
++MODULE_FIRMWARE("qcom/a650_gmu.bin");
++MODULE_FIRMWARE("qcom/a650_sqe.fw");
++MODULE_FIRMWARE("qcom/a650_zap.mdt");
++MODULE_FIRMWARE("qcom/a660_gmu.bin");
++MODULE_FIRMWARE("qcom/a660_sqe.fw");
++MODULE_FIRMWARE("qcom/a660_zap.mdt");
++MODULE_FIRMWARE("qcom/leia_pfp_470.fw");
++MODULE_FIRMWARE("qcom/leia_pm4_470.fw");
++MODULE_FIRMWARE("qcom/yamato_pfp.fw");
++MODULE_FIRMWARE("qcom/yamato_pm4.fw");
+ 
+ static inline bool _rev_match(uint8_t entry, uint8_t id)
+ {
+-- 
+2.37.2
 
- I have skimmed over the changes as committed to pci/enumeration and found 
-nothing suspicious.  I have verified that the tree builds as at each of 
-them with my configuration.
-
- As per my earlier remark:
-
-> I think making a system halfway-fixed would make little sense, but with
-> the actual fix actually made last as you suggested I think this can be
-> split off, because it'll make no functional change by itself.
-
-I am not perfectly happy with your rearrangement to fold the !PCI_QUIRKS 
-stub into the change carrying the actual workaround and then have the 
-reset path update with a follow-up change only, but I won't fight over it.  
-It's only one tree revision that will be in this halfway-fixed state and 
-I'll trust your judgement here.
-
- Let me know if anything pops up related to these changes anytime and I'll 
-be happy to look into it.  The system involved is nearing two years since 
-its deployment already, but hopefully it has many years to go yet and will 
-continue being ready to verify things.  It's not that there's lots of real 
-RISC-V hardware available, let alone with PCI/e connectivity.
-
- Thank you for staying with me and reviewing this patch series through all 
-the iterations.
-
-  Maciej
