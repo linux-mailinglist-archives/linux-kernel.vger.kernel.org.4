@@ -2,115 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA50A73308A
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 027D273308B
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344958AbjFPL5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 07:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41234 "EHLO
+        id S1344982AbjFPL5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 07:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344031AbjFPL5H (ORCPT
+        with ESMTP id S235804AbjFPL5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 07:57:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA7AE4
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:57:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 92E33626D0
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 11:57:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D832FC433C8;
-        Fri, 16 Jun 2023 11:57:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686916624;
-        bh=V0DRlFK3AQHSP+IaBlA3ARM+1W62ukpytdibQSonB2g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=rDKWC8U/o+bXGYc3MVuzAecbQgCr1fYHSKD0YOnGoa3pglmUWNCBxsIiZWUfuZE/I
-         300rlTPfAGuH0O/0+xPpJuuXw/Tef07d29GpVv5AnsEAyCRV4Z/YavHjFaltV/YTv0
-         mTzeoiveyYpNSGKrPUEBc67mTLtvm9ot4aP7yHu89WejplBRNYqrA5aNUJF7dUOT5l
-         obuAUuRMDEHZniFVk1lb6znNTsnqchyzRBZ+Ieqo5PPwWf8MPCKZ6oGf3pvvCX85Qo
-         F1irHTyLPQLPiDjP0jMhdKEUR0qMPdAziYp/oZtDlJzmwaRs7MlKjObhuMCrO8a0le
-         RUVXwxAkdCOGQ==
-Received: from disco-boy.misterjones.org ([217.182.43.188] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1qA84c-005sXh-M3;
-        Fri, 16 Jun 2023 12:57:02 +0100
+        Fri, 16 Jun 2023 07:57:25 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED28030EA;
+        Fri, 16 Jun 2023 04:57:16 -0700 (PDT)
+Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QjHcx0gb6zMpB5;
+        Fri, 16 Jun 2023 19:54:09 +0800 (CST)
+Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 16 Jun
+ 2023 19:57:14 +0800
+Subject: Re: [PATCH net-next v3 3/4] page_pool: introduce page_pool_alloc()
+ API
+To:     Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        Alexander Duyck <alexander.duyck@gmail.com>
+CC:     <brouer@redhat.com>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Maryam Tahhan <mtahhan@redhat.com>, bpf <bpf@vger.kernel.org>
+References: <20230609131740.7496-1-linyunsheng@huawei.com>
+ <20230609131740.7496-4-linyunsheng@huawei.com>
+ <CAKgT0UfVwQ=ri7ZDNnsATH2RQpEz+zDBBb6YprvniMEWGdw+dQ@mail.gmail.com>
+ <36366741-8df2-1137-0dd9-d498d0f770e4@huawei.com>
+ <CAKgT0UdXTSv1fDHBX4UC6Ok9NXKMJ_9F88CEv5TK+mpzy0N21g@mail.gmail.com>
+ <c06f6f59-6c35-4944-8f7a-7f6f0e076649@huawei.com>
+ <CAKgT0UccmDe+CE6=zDYQHi1=3vXf5MptzDo+BsPrKdmP5j9kgQ@mail.gmail.com>
+ <0ba1bf9c-2e45-cd44-60d3-66feeb3268f3@redhat.com>
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <dcc9db4c-207b-e118-3d84-641677cd3d80@huawei.com>
+Date:   Fri, 16 Jun 2023 19:57:14 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-Date:   Fri, 16 Jun 2023 12:57:02 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Reiji Watanabe <reijiw@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v2] perf/core: Drop __weak attribute from
- arch_perf_update_userpage() prototype
-In-Reply-To: <20230616114831.3186980-1-maz@kernel.org>
-References: <20230616114831.3186980-1-maz@kernel.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <c0749f348a362ce54e466b7ce02c06a9@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+In-Reply-To: <0ba1bf9c-2e45-cd44-60d3-66feeb3268f3@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 217.182.43.188
-X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, reijiw@google.com, mark.rutland@arm.com, peterz@infradead.org, will@kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-16 12:48, Marc Zyngier wrote:
-> Reiji reports that the arm64 implementation of 
-> arch_perf_update_userpage()
-> is now ignored and replaced by the dummy stub in core code.
-> This seems to happen since the PMUv3 driver was moved to driver/perf.
-> 
-> As it turns out, dropping the __weak attribute from the *prototype*
-> of the function solves the problem. You're right, this doesn't seem
-> to make much sense. And yet... It appears that both symbols get
-> flagged as weak, and that the first one to appear in the link order
-> wins:
-> 
-> $ nm drivers/perf/arm_pmuv3.o|grep arch_perf_update_userpage
-> 0000000000001db0 W arch_perf_update_userpage
-> 
-> Dropping the attribute from the prototype restores the expected
-> behaviour, and arm64 is able to enjoy arch_perf_update_userpage()
-> again.
-> 
-> Fixes: 7755cec63ade ("arm64: perf: Move PMUv3 driver to drivers/perf")
-> Fixes: f1ec3a517b43 ("kernel/events: Add a missing prototype for
-> arch_perf_update_userpage()")
-> Reported-by: Reiji Watanabe <reijiw@google.com>
-> Tested-by: Reiji Watanabe <reijiw@google.com>
-> Acked-by: Mark Rutland <mark.rutland@arm.com>
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Will Deacon <will@kernel.org>
+On 2023/6/16 0:19, Jesper Dangaard Brouer wrote:
 
-And of course I forgot to pass --notes to git-send-email...
+...
 
-     v2: Added fixes tags, both for the commit that introduce the 
-breakage
-         on arm64, and for the commit introducing the offending 
-prototype.
-         I did not Cc stable on purpose, as nothing appears to be broken
-         in other architectures.
+> You have mentioned veth as the use-case. I know I acked adding page_pool
+> use-case to veth, for when we need to convert an SKB into an
+> xdp_buff/xdp-frame, but maybe it was the wrong hammer(?).
+> In this case in veth, the size is known at the page allocation time.
+> Thus, using the page_pool API is wasting memory.  We did this for
+> performance reasons, but we are not using PP for what is was intended
+> for.  We mostly use page_pool, because it an existing recycle return
+> path, and we were too lazy to add another alloc-type (see enum
+> xdp_mem_type).
+> 
+> Maybe you/we can extend veth to use this dynamic size API, to show us
+> that this is API is a better approach.  I will signup for benchmarking
+> this (and coordinating with CC Maryam as she came with use-case we
+> improved on).
 
-Thanks,
+Thanks, let's find out if page pool is the right hammer for the
+veth XDP case.
 
-         M.
--- 
-Jazz is not dead. It just smells funny...
+Below is the change for veth using the new api in this patch.
+Only compile test as I am not familiar enough with veth XDP and
+testing environment for it.
+Please try it if it is helpful.
+
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index 614f3e3efab0..8850394f1d29 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -736,7 +736,7 @@ static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
+        if (skb_shared(skb) || skb_head_is_locked(skb) ||
+            skb_shinfo(skb)->nr_frags ||
+            skb_headroom(skb) < XDP_PACKET_HEADROOM) {
+-               u32 size, len, max_head_size, off;
++               u32 size, len, max_head_size, off, truesize, page_offset;
+                struct sk_buff *nskb;
+                struct page *page;
+                int i, head_off;
+@@ -752,12 +752,15 @@ static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
+                if (skb->len > PAGE_SIZE * MAX_SKB_FRAGS + max_head_size)
+                        goto drop;
+
++               size = min_t(u32, skb->len, max_head_size);
++               truesize = size;
++
+                /* Allocate skb head */
+-               page = page_pool_dev_alloc_pages(rq->page_pool);
++               page = page_pool_dev_alloc(rq->page_pool, &page_offset, &truesize);
+                if (!page)
+                        goto drop;
+
+-               nskb = napi_build_skb(page_address(page), PAGE_SIZE);
++               nskb = napi_build_skb(page_address(page) + page_offset, truesize);
+                if (!nskb) {
+                        page_pool_put_full_page(rq->page_pool, page, true);
+                        goto drop;
+@@ -767,7 +770,6 @@ static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
+                skb_copy_header(nskb, skb);
+                skb_mark_for_recycle(nskb);
+
+-               size = min_t(u32, skb->len, max_head_size);
+                if (skb_copy_bits(skb, 0, nskb->data, size)) {
+                        consume_skb(nskb);
+                        goto drop;
+@@ -782,14 +784,17 @@ static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
+                len = skb->len - off;
+
+                for (i = 0; i < MAX_SKB_FRAGS && off < skb->len; i++) {
+-                       page = page_pool_dev_alloc_pages(rq->page_pool);
++                       size = min_t(u32, len, PAGE_SIZE);
++                       truesize = size;
++
++                       page = page_pool_dev_alloc(rq->page_pool, &page_offset,
++                                                  &truesize);
+                        if (!page) {
+                                consume_skb(nskb);
+                                goto drop;
+                        }
+
+-                       size = min_t(u32, len, PAGE_SIZE);
+-                       skb_add_rx_frag(nskb, i, page, 0, size, PAGE_SIZE);
++                       skb_add_rx_frag(nskb, i, page, page_offset, size, truesize);
+                        if (skb_copy_bits(skb, off, page_address(page),
+                                          size)) {
+                                consume_skb(nskb);
+
+
+> 
+> --Jesper
+> 
+> .
+> 
