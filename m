@@ -2,97 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF8A6733244
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 15:34:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6134573324A
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 15:34:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344385AbjFPNd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 09:33:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
+        id S1345163AbjFPNee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 09:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344043AbjFPNdy (ORCPT
+        with ESMTP id S1345254AbjFPNe2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 09:33:54 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5245A359E;
-        Fri, 16 Jun 2023 06:33:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686922432; x=1718458432;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4rPdsxf+B69gRS+K2VE3MCran6ryOKf8Z1G6PlTJ9XE=;
-  b=dO+s58PQKkD4hBg16McNM2n4anwEIqwWqjbwZJAzkFhIlfSjmGaI4TyZ
-   CK3LtKs7uSU/SyotxExEFiyK3szG2PZ6GUZrMPiEeCDrrFfPHUCGJBSSb
-   yNzOEcM8aQ3vvfRaXK8/BPeQjzWx9rVmvl0trjBX22ileDoPyw6OtvG0O
-   PaLBzzEr1B+0OTP7r0wfq9a3tfBbt+d4BPPqqi9n+D3TNb6BzKbFss60i
-   LcVsj8hY7FvTbFQAZnR1EKzgyoW7uuGiQYm1A6mJjpK2gXpRg9tFw/7B6
-   tNoDRr3/7xs+kPoxV9YMp9e0WD58msRFxGRFj/rLGyGe30JpHnNFhpfYH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="361745297"
-X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
-   d="scan'208";a="361745297"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 06:33:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="825748967"
-X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
-   d="scan'208";a="825748967"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP; 16 Jun 2023 06:33:49 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qA9aF-004FzL-2J;
-        Fri, 16 Jun 2023 16:33:47 +0300
-Date:   Fri, 16 Jun 2023 16:33:47 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: Re: [PATCH v3 0/5] gpio: aggregator: Incorporate gpio-delay
- functionality
-Message-ID: <ZIxku9jFT9tOY7cY@smile.fi.intel.com>
-References: <20230615132023.13801-1-andriy.shevchenko@linux.intel.com>
- <4392854.e9J7NaK4W3@steina-w>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        Fri, 16 Jun 2023 09:34:28 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2092.outbound.protection.outlook.com [40.107.223.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35DE3C05;
+        Fri, 16 Jun 2023 06:34:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Rj13uQkjD0Q8KuX1JdcMhGPftR0iWvyLNsfFyCwU3h5SH+uXElSmOtUf2g8lt5ih1khWqBPEulHXIkXGfF1zjo9L5bGBDSp9QVh8xsEoMaBMm5BJhS19BMT1DXmL71uISpTStejidB4t2pZGnyysQrp2asJhHFO217hXxQW/D8EI2FOj76Kv/KUjOxaVkIV8BnbU/C/lCssUBR9eKsKtTXCF+grrd5spGvHlTLU4FHH9QlosVeZTA2t0frJfSfSxKnafLAgu08tNW4lby6dSjve7Spy2klzWYGAucbaneWtaizRKK4F3IstyaM/fAArvyxkSVfgmDf1ismmZOQ3Qvg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MDGLgsnVK2pDQSL+JffKvAe970DrwfRVp4XtOdPqoUw=;
+ b=HDF2gjBCx57wfnlcMd4v5sELAHYKSNPNtWxNlO2/i1enZTOCH/HzJHgfciufiEL1OKmfn3af6jXnQ6k2Xr4iHvA4kdN9Ma5Qimw9uS0ddhdDZyEiaIoYycGuhkBMsxb0AziLOeMEV9TaBchxGnLApioZMp/Wcxgnjhn6tsyIJIvQkUmxGNdoOYyDlFGf4dgBHresfQp4vC2Q40EmGkcv0lyZU2owDzXl1rSBjqbbgs/TjTi5O70ebmcRsryjvln6Cyodtrms0oKm/edWYJA0BTBauIwD+3URlJS3ksBLzR8yv5gSCzpRuR8hWa3PeVOzuxYB21oluOjMtruBN9OgQA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MDGLgsnVK2pDQSL+JffKvAe970DrwfRVp4XtOdPqoUw=;
+ b=Djqoadl/JB5sBKU8rBF/hujmHhRSlEH1x5Zr/SS/dRsWgh8FPz57DxvPLBx/Slt01BtBfT3SqGXUVOvl3i3/EzURp7qLxe4TW4nkqdYDV/4C2x0bjKdH2DfDmUj5WWNEtjpas+m7b+Wz7MxPJ/Lyp4US0c8dso9gWVPnKvb5yeA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by BN0PR13MB4741.namprd13.prod.outlook.com (2603:10b6:408:115::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.29; Fri, 16 Jun
+ 2023 13:34:09 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e%5]) with mapi id 15.20.6500.025; Fri, 16 Jun 2023
+ 13:34:09 +0000
+Date:   Fri, 16 Jun 2023 15:34:01 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     alexis.lothore@bootlin.com
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Nicolas Carrier <nicolas.carrier@nav-timing.safrangroup.com>
+Subject: Re: [PATCH net-next 3/8] net: stmmac: move PTP interrupt handling to
+ IP-specific DWMAC file
+Message-ID: <ZIxkyfRIuVcmCzmD@corigine.com>
+References: <20230616100409.164583-1-alexis.lothore@bootlin.com>
+ <20230616100409.164583-4-alexis.lothore@bootlin.com>
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <4392854.e9J7NaK4W3@steina-w>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230616100409.164583-4-alexis.lothore@bootlin.com>
+X-ClientProxiedBy: AM0PR10CA0120.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:208:e6::37) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BN0PR13MB4741:EE_
+X-MS-Office365-Filtering-Correlation-Id: 99287348-1802-447b-ce56-08db6e6e5d5f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: X0UMqj5KhexdE1v9+qug3hTBJSoXWmvve8HcAxkMddVK6IwkLLtjdav+dAFLU072pFA+HtPwq4bWhnofAg0l9gp6Gw/MfebLZxy5+ZEWIFfRGJTg/ErgQtd5ZEbRC/S/lTlf1TbQMtPobmZCF5elOZ92hfYmmpzc2RsMVd0eeklQk9Oun5gJ16K1UEE3wFLZ67YLHWUe7RsFGdL4aa1rgAW6ygGi1HbpAY8TEYNj5DGePtuPsemq5uVygEktB3jvwyTxkktoLe+kUMYy4iqVSpxaLiUdGDd775hBor/pPAQ43oLO3rwONYyU1FIP6vi3gVpCIEXkwnSgXXDE1pPqC8NN+fAiR8qU9Pd7dga6QKEw/R5TOfGvkS6I1pEYS0az63q5oGTzDtbDc4BcRCMX9/GVPA657lHZz1AygyQ7ZTX110Zf9ElZEaaTepsCGUUjKM8IJYAmbUP/keepUYvp4HYCuWglsSPetTYdsq1HCuQP5VtGOckU1ry34nChZ7JzwbMLjoN8kJEJBPDZEM8XNTgFYFS8xLM6CARTr6NF0+s7TlEy3IrQktsDbAKN5KR9DZ08nc2L7l6L6bYBqke0skrxYFajTH57AZ1hAETVefc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(39840400004)(366004)(136003)(396003)(451199021)(6512007)(6506007)(186003)(6916009)(4326008)(66946007)(316002)(66476007)(66556008)(2616005)(83380400001)(6666004)(6486002)(54906003)(478600001)(38100700002)(7416002)(44832011)(8936002)(5660300002)(86362001)(41300700001)(8676002)(2906002)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a05zb0lVVmUzT0N6QTVhWWF6N2lIUVp4RFBwSUxudUdhVStRS21SbEJqcWo3?=
+ =?utf-8?B?NWQ0M0tLa2tLRHZzRTFZb1Z1MU9xeTlFc0szUXR6L0hXOTdZdG51c21NRDJK?=
+ =?utf-8?B?SFNGZVlYY2hUdENrdVVoQVdOZW5VcUlVZ1VGbGF6ME82RkdMSEtaNGw1Q2tm?=
+ =?utf-8?B?WlMwNVBQS2xWRTdaRGVWVS9HdkNWQldYUVVnZno4ekEvM0hhS1BFQUNSRlBm?=
+ =?utf-8?B?MDZFZEZiUWlOVUlmUjFSYkxlM1pMV0Exck0yWXJGKy9TbGFUTXZoM29lRlhH?=
+ =?utf-8?B?ZXdpNEcrZTlDejRuRkVnd1MraXFaOUhoZ2xsQis3M21zeDhkb0hJcUd0SUxa?=
+ =?utf-8?B?YjJJVi9za2w3TFhxMmpoaUJGYlc1TGI5dXpNdWRuRjVydUIzaTdBaWFsd1Ji?=
+ =?utf-8?B?b056MDBPK2N1UGo2eEpZSGVRK210eEMyNG9TZG0xeVNmbkE0VVEzcmcza1k1?=
+ =?utf-8?B?MkFVRjMyN2l1M0ExditVWlZOekZUOE5CVzlqakN1UG9YSUs5NC9JS3lYem9I?=
+ =?utf-8?B?OHJVUHBqcDlOa3VhWkFyT0RoNkNTcmdkeVJWR0tRc2tncytGUVNYZE1mOW5J?=
+ =?utf-8?B?cWJORFpMNGpJQzh5eTViWURKSEVJbXQ1SGVweHdOc24zYkRwQ0l0UG5lWWRn?=
+ =?utf-8?B?RWJRdHFlZCtQYzZ4Ukl4Smk3SWtpVGlMVGpzOEVibzdlcFZiQ1ZVUklUMUxO?=
+ =?utf-8?B?eGxRazlFL1pJZ0w3QSt2SVpmeDFBMnBzNTFUYVJTZE1ZamdzZmFoY0tTb1BJ?=
+ =?utf-8?B?bXdKdVJjckF5QVlGWXlYaE9LVnFRNkRIQWtDNU5LT3pTVDBGenVvUjBNWDlT?=
+ =?utf-8?B?K0piNkM4WEExNTJuNmRPS08zU25ua1NBbmp3S1p3b3hhOGJLVVlBZFR6U2tT?=
+ =?utf-8?B?WDN0RlN0MnFpSHF6MVM1UnZmVHBFMWJHa2tIaUR4VjE2VVlPaUswdDkwZVJn?=
+ =?utf-8?B?bktONVc2anZpNHdYR0xUNm1KUUNEZEt3bkVCbmNwaGwzQWxNSWcvTWZwQnJi?=
+ =?utf-8?B?d01XdjJ5bWlaRmdzWkJ3elllaW9wSDJtbGR6Lzd6ejFDamppZG41RjEzS1Zp?=
+ =?utf-8?B?aVFrNU9nQmxBVTlkR1V6U3IzbU1CQWxIRkVxakx0SWpzNmlIYzB5OWcwZ083?=
+ =?utf-8?B?TG1mT1Z4RUNCY0dTMzI3Q01XeStObW15bVpwbVpiOXBYWXNIV3RNN2pCN1lj?=
+ =?utf-8?B?MlpqUlRJSUxGRSt4VmZ3SW50R1J3ZTdFTUFPOW53OHF1cXd4enZQVnc5aWRz?=
+ =?utf-8?B?dEVHaXBaeEpQMU5waUwwVndaY3pPU0xFMEVrRzl1YzArN3p4TVMxdStGVHln?=
+ =?utf-8?B?eDdaT21hWFY4VzgzNGNtYWJoQjBWb21MbTB6MStMWEZHTStKb2NQRisvNTJG?=
+ =?utf-8?B?WHBadVBib0hEQTlZQng3WlpvdVVNaDJxOWVDa3dOR1FMbjBNNGg1MzEvQTd4?=
+ =?utf-8?B?ZjJEN0FDb0VKWmNTckFKWUJYMmhnQmxSOU1rL2UraFBMbWcxQ2xMeWlBSU93?=
+ =?utf-8?B?N04zUy9RdmVDMnNkeldSRU03b3BmRXkwR01PM3BuMnZvNjJXQnVJR25OVFVE?=
+ =?utf-8?B?WTZUcnQvTmc3L244ZnZFSlpIQlFQL0ZtN0Q3S3BETmZrNFp6U0x3TUM3cjRs?=
+ =?utf-8?B?NjkwZjNyNnZIOE1aV3Z0d1ZnKzZtTS9tdmhmbFJuU0NyTjVwOWFTcUNZQSt3?=
+ =?utf-8?B?WnI0TzFPc0t0N2paY3hhVzFRWWs1VElNYzZnbVFFd3RXUXgrUjZTSnIyUFAv?=
+ =?utf-8?B?OFErUkFIYm1mWk9mV2V2YU1HNUgwUzgwV3pCbndtVyt6bVg1Um1UUEZvVlk1?=
+ =?utf-8?B?NTdTS2hnUWpwa29uVU1oWFU1QmxXRjlMNjlabHNPaG5sNGNvSXk3b0VlUitT?=
+ =?utf-8?B?bTN4Tm0wQUVGMmNoekFNY0hQU0luNktjUFVJS2JHdytzUTlNbGlGL3Bib3Vi?=
+ =?utf-8?B?TzA4THhwL2ExNy90MWpvMFlVSjFiZHhkOWJnOG9JYUtHbVBmWW1uNTluMUpL?=
+ =?utf-8?B?OWlNZTNYeTd1bngwWHd4QncxVTdiTHNxb0RpN1M0Q25kMHlkQXVlcVNKVkJB?=
+ =?utf-8?B?TDZkT0VoQ2RScjZjU2JVRzRHUmppcElLbTNtRzJDRTNGR2tSMG4zTGdMc3Vq?=
+ =?utf-8?B?cGR2T3ppS2lJUXdZZm1nQTU2NXdNTDJNYUhveGxWTklVclFuSVRjeWZvWkov?=
+ =?utf-8?B?UFIyekd3ZVFNcWUwSGx2ejlJVDNwSVNpd2dMaGlSTGJqejhOaWRqZTFHbFVP?=
+ =?utf-8?B?YXBLOGZZNFMwV3RNVFFmcDJqelJBPT0=?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 99287348-1802-447b-ce56-08db6e6e5d5f
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 13:34:09.6730
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jqBudurq9dnoXiUo/HTgJOgR3H7rzSl/+Od22PTRe4KvHDrE/GOyZIPPySSkIPN9+NViBFPd7F/zvN/+PEN5VQga7erDTKCW9dcoAfo4DH0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR13MB4741
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 11:01:17AM +0200, Alexander Stein wrote:
-> Am Donnerstag, 15. Juni 2023, 15:20:18 CEST schrieb Andy Shevchenko:
-> > The newly appeared gpio-delay module enables external signal delay lines
-> > that may be connected to the GPIOs. But at the same time it copies the
-> > GPIO forwarder functionality. Besides that the approach does not scale.
-> > If we would have another external component, we would need yet another
-> > driver. That's why I think, and seems others support me, better to
-> > enable such a functionality inside GPIO aggregator driver.
-> > 
-> > Patch 1 is a cleanup that may be applied independently on the decision
-> > about the rest.
-> > 
-> > Please, test and comment! Alexander, I would appreciate your tag.
+On Fri, Jun 16, 2023 at 12:04:04PM +0200, alexis.lothore@bootlin.com wrote:
+> From: Alexis Lothoré <alexis.lothore@bootlin.com>
 > 
-> This works on my platform:
-> Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> As for auxiliary snapshot triggers configuration, reading snapshots depends
+> on specific registers addresses and layout. As a consequence, move
+> PTP-specific part of stmmac interrupt handling to specific DWMAC IP file
+> 
+> Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
 
-Thank you!
+Hi Alexis,
 
--- 
-With Best Regards,
-Andy Shevchenko
+thanks for your patch.
 
+...
+
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c b/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c
+> index 01c0822d37e6..b36fbb0fa5da 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c
+
+...
+
+> +static void dwmac4_ptp_isr(struct stmmac_priv *priv)
+> +{
+> +	u32 num_snapshot, ts_status;
+> +	struct ptp_clock_event event;
+> +	unsigned long flags;
+> +	u64 ptp_time;
+> +	int i;
+
+Please use reverse xmas tree - longest line to shortest - for new
+Networking code.
+
+	struct ptp_clock_event event;
+	u32 num_snapshot, ts_status;
+	unsigned long flags;
+	u64 ptp_time;
+	int i;
+
+...
+
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.h b/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.h
+> index 9e0ff2cec352..92ed421702b9 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.h
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_ptp.h
+> @@ -23,9 +23,6 @@
+>  #define	PTP_STSUR	0x10	/* System Time – Seconds Update Reg */
+>  #define	PTP_STNSUR	0x14	/* System Time – Nanoseconds Update Reg */
+>  #define	PTP_TAR		0x18	/* Timestamp Addend Reg */
+> -#define	PTP_ACR		0x40	/* Auxiliary Control Reg */
+
+Unfortunately this seems to break the build of
+drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
+on an x86_64 alllodconfig, as PTP_ACR is used in that file.
+
+> -#define	PTP_ATNR	0x48	/* Auxiliary Timestamp - Nanoseconds Reg */
+> -#define	PTP_ATSR	0x4c	/* Auxiliary Timestamp - Seconds Reg */
+>  
+>  #define	PTP_STNSUR_ADDSUB_SHIFT	31
+>  #define	PTP_DIGITAL_ROLLOVER_MODE	0x3B9ACA00	/* 10e9-1 ns */
+
+--
+pw-bot: changes-requested
 
