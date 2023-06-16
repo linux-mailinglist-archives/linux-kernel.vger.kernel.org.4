@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 953E4732B68
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A20F732B61
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343607AbjFPJZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 05:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41320 "EHLO
+        id S1344233AbjFPJZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 05:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344013AbjFPJYu (ORCPT
+        with ESMTP id S1344017AbjFPJYu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 16 Jun 2023 05:24:50 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F16270B;
-        Fri, 16 Jun 2023 02:24:44 -0700 (PDT)
-Date:   Fri, 16 Jun 2023 09:24:42 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A48B2117;
+        Fri, 16 Jun 2023 02:24:45 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 09:24:43 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1686907483;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fxx0RCeiy6dviDtKxpkuqCnwNAMerbl/5Xrn8t4hSfI=;
-        b=Vbosa4fEQnUQoxrubEOMLme/iPI/p1ltj8yIK6I4ultZOLQ6ABdijFuJss6c9RgrstkxoJ
-        ODITBOWT/FAfwnwUxZniKVcAZDsXjIUJ9vr1GaSpxZ0D+wil3p1p+59L6tMbdrO6L+htX3
-        ivHu9FlOnfl7t/NOaboDGFr+B5ciNmgFc1HIxuBVzZ2uTnvIYOzb5E53Kn9IyteSoXpka1
-        f5zSTKjqe5aoQ7sYo2PvmXYCIbHeTxKGbflbsyTR+WfP/7nTrWyDUrQjotM8ExekMZ/Ls3
-        IGG9sdGe1kOl0riBYXlJR6bfsHlah2JgNR0yI2Rm8kixTtiXDqjlMZh4OsPMeA==
+        bh=n8JjCGMZg2aquHdshBmUxYgzLMNz9foabYDHjHRLCmw=;
+        b=IWR7Mc5o118rmqaS3z1ueZAQl5gq34xv3g/Ux8i5BQSijVLAzU28Il0eeGAnGepLQrrQS0
+        QX0imLGSoFt1bRnmFkmWae4Xli42yJhIxO645g1IQ9n8Q7s/PzeWQMJWc3IlXBApmWpSjy
+        JueLuMz+C5taWHsu4e9Eg7V6cwfBIvK823vZYlQ+SyF/pUIY3r0OqPolukn1msXOks1cWL
+        66jT2VkHcc2kJY0/DMYC5AZpcvinBPc25QJFDJ3w9I3aA7I5vCVeF2pgsLjXe7L9++XpTm
+        yhnbksN/Syyb3s9WNI7CsCUKmiJLXS92lqeKEauWlKOrZZL0+gjHvDQtMDYugg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1686907483;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,20 +36,20 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fxx0RCeiy6dviDtKxpkuqCnwNAMerbl/5Xrn8t4hSfI=;
-        b=MBq6okTPzj+u2vszI0WRZs2fpVOjpW8kWNHUzMWExTAb2LtckRqEcMrnwN48nVYjs5/WMz
-        E4DxQmcEF4bdGJDA==
+        bh=n8JjCGMZg2aquHdshBmUxYgzLMNz9foabYDHjHRLCmw=;
+        b=Yn2P/wpO8JAk2MIdUbUdR/CYq4Jle/S8mcqM0mEc5Zej1hTEvrDtSoAbeH2Fjj1RfR4MDT
+        PX0OM1KX5ynYtrBA==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/boot] x86/fpu: Remove cpuinfo argument from init functions
+Subject: [tip: x86/boot] x86/init: Initialize signal frame size late
 Cc:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230613224545.783704297@linutronix.de>
-References: <20230613224545.783704297@linutronix.de>
+In-Reply-To: <20230613224545.727330699@linutronix.de>
+References: <20230613224545.727330699@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <168690748250.404.15732608028451702185.tip-bot2@tip-bot2>
+Message-ID: <168690748312.404.1213636159310165530.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,75 +66,80 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/boot branch of tip:
 
-Commit-ID:     1f34bb2a24643e0087652d81078e4f616562738d
-Gitweb:        https://git.kernel.org/tip/1f34bb2a24643e0087652d81078e4f616562738d
+Commit-ID:     54d9a91a3d6713d1332e93be13b4eaf0fa54349d
+Gitweb:        https://git.kernel.org/tip/54d9a91a3d6713d1332e93be13b4eaf0fa54349d
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Wed, 14 Jun 2023 01:39:43 +02:00
+AuthorDate:    Wed, 14 Jun 2023 01:39:42 +02:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Fri, 16 Jun 2023 10:16:01 +02:00
+CommitterDate: Fri, 16 Jun 2023 10:16:00 +02:00
 
-x86/fpu: Remove cpuinfo argument from init functions
+x86/init: Initialize signal frame size late
 
-Nothing in the call chain requires it
+No point in doing this during really early boot. Move it to an early
+initcall so that it is set up before possible user mode helpers are started
+during device initialization.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/20230613224545.783704297@linutronix.de
+Link: https://lore.kernel.org/r/20230613224545.727330699@linutronix.de
 
 ---
- arch/x86/include/asm/fpu/api.h | 2 +-
- arch/x86/kernel/cpu/common.c   | 2 +-
- arch/x86/kernel/fpu/init.c     | 6 +++---
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ arch/x86/include/asm/sigframe.h | 2 --
+ arch/x86/kernel/cpu/common.c    | 3 ---
+ arch/x86/kernel/signal.c        | 4 +++-
+ 3 files changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/include/asm/fpu/api.h b/arch/x86/include/asm/fpu/api.h
-index 503a577..b475d9a 100644
---- a/arch/x86/include/asm/fpu/api.h
-+++ b/arch/x86/include/asm/fpu/api.h
-@@ -109,7 +109,7 @@ extern void fpu_reset_from_exception_fixup(void);
+diff --git a/arch/x86/include/asm/sigframe.h b/arch/x86/include/asm/sigframe.h
+index 5b1ed65..84eab27 100644
+--- a/arch/x86/include/asm/sigframe.h
++++ b/arch/x86/include/asm/sigframe.h
+@@ -85,6 +85,4 @@ struct rt_sigframe_x32 {
  
- /* Boot, hotplug and resume */
- extern void fpu__init_cpu(void);
--extern void fpu__init_system(struct cpuinfo_x86 *c);
-+extern void fpu__init_system(void);
- extern void fpu__init_check_bugs(void);
- extern void fpu__resume_cpu(void);
+ #endif /* CONFIG_X86_64 */
  
+-void __init init_sigframe_size(void);
+-
+ #endif /* _ASM_X86_SIGFRAME_H */
 diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index b8a4db1..2807e5b 100644
+index 5ee8b31..b8a4db1 100644
 --- a/arch/x86/kernel/cpu/common.c
 +++ b/arch/x86/kernel/cpu/common.c
-@@ -1604,7 +1604,7 @@ static void __init early_identify_cpu(struct cpuinfo_x86 *c)
+@@ -64,7 +64,6 @@
+ #include <asm/cpu_device_id.h>
+ #include <asm/uv/uv.h>
+ #include <asm/set_memory.h>
+-#include <asm/sigframe.h>
+ #include <asm/traps.h>
+ #include <asm/sev.h>
  
- 	sld_setup(c);
+@@ -1607,8 +1606,6 @@ static void __init early_identify_cpu(struct cpuinfo_x86 *c)
  
--	fpu__init_system(c);
-+	fpu__init_system();
+ 	fpu__init_system(c);
  
+-	init_sigframe_size();
+-
  #ifdef CONFIG_X86_32
  	/*
-diff --git a/arch/x86/kernel/fpu/init.c b/arch/x86/kernel/fpu/init.c
-index 851eb13..5001df9 100644
---- a/arch/x86/kernel/fpu/init.c
-+++ b/arch/x86/kernel/fpu/init.c
-@@ -71,7 +71,7 @@ static bool fpu__probe_without_cpuid(void)
- 	return fsw == 0 && (fcw & 0x103f) == 0x003f;
+ 	 * Regardless of whether PCID is enumerated, the SDM says
+diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
+index 004cb30..cfeec3e 100644
+--- a/arch/x86/kernel/signal.c
++++ b/arch/x86/kernel/signal.c
+@@ -182,7 +182,7 @@ get_sigframe(struct ksignal *ksig, struct pt_regs *regs, size_t frame_size,
+ static unsigned long __ro_after_init max_frame_size;
+ static unsigned int __ro_after_init fpu_default_state_size;
+ 
+-void __init init_sigframe_size(void)
++static int __init init_sigframe_size(void)
+ {
+ 	fpu_default_state_size = fpu__get_fpstate_size();
+ 
+@@ -194,7 +194,9 @@ void __init init_sigframe_size(void)
+ 	max_frame_size = round_up(max_frame_size, FRAME_ALIGNMENT);
+ 
+ 	pr_info("max sigframe size: %lu\n", max_frame_size);
++	return 0;
  }
++early_initcall(init_sigframe_size);
  
--static void fpu__init_system_early_generic(struct cpuinfo_x86 *c)
-+static void fpu__init_system_early_generic(void)
+ unsigned long get_sigframe_size(void)
  {
- 	if (!boot_cpu_has(X86_FEATURE_CPUID) &&
- 	    !test_bit(X86_FEATURE_FPU, (unsigned long *)cpu_caps_cleared)) {
-@@ -211,10 +211,10 @@ static void __init fpu__init_system_xstate_size_legacy(void)
-  * Called on the boot CPU once per system bootup, to set up the initial
-  * FPU state that is later cloned into all processes:
-  */
--void __init fpu__init_system(struct cpuinfo_x86 *c)
-+void __init fpu__init_system(void)
- {
- 	fpstate_reset(&current->thread.fpu);
--	fpu__init_system_early_generic(c);
-+	fpu__init_system_early_generic();
- 
- 	/*
- 	 * The FPU has to be operational for some of the
