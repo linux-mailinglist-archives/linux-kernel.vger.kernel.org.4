@@ -2,89 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 447A4732D32
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:16:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05CEB732D2C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:15:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244790AbjFPKQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 06:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42850 "EHLO
+        id S230318AbjFPKPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 06:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245134AbjFPKQO (ORCPT
+        with ESMTP id S244305AbjFPKPm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 06:16:14 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE6C2D6B;
-        Fri, 16 Jun 2023 03:16:09 -0700 (PDT)
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QjFPg3843zLljW;
-        Fri, 16 Jun 2023 18:14:15 +0800 (CST)
-Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
- (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 16 Jun
- 2023 18:16:07 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
-        <changfengnan@bytedance.com>, <yuehaibing@huawei.com>
-CC:     <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] ext4: Remove used function ext4_journal_callback_try_del()
-Date:   Fri, 16 Jun 2023 18:15:04 +0800
-Message-ID: <20230616101504.32520-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        Fri, 16 Jun 2023 06:15:42 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB8D1B2
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 03:15:40 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-978863fb00fso75044666b.3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 03:15:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686910539; x=1689502539;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zwScczYRHDuS+uM/rfmKO4C5p7n2XSuTcTw270MNkk4=;
+        b=zu3fjlKDUVErA66PTf6isUYRnsi7raaRLUcMH8ROUwv9ap/uu6U8BdfBi0HWSg1D0n
+         jIWXf8WKfMLoFoD/HMSIyr7h6cSx6mUIQTUDx1ojxopOqHpnY/Cd5fsYjkXjbpflKhGs
+         /Bxj7GTAXk/eFTPgRZWgEENN33IOxXjFPSsnTAyrHupI8Ch+8Fqh83+tMGqRQZZfMdd5
+         7i+BEgnvwp9iQTSkb4JDIBqygGSSCdPzRO8NWfQxEDShRtk5NcREle6gpZ3WbytjaUMJ
+         +xKCckYV9aXSmfRRr5fCGpJ7S1ucHVhegy4U97iGyCgKIna2QnwMnbnz1JRNNuD+1Tw2
+         Nevw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686910539; x=1689502539;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zwScczYRHDuS+uM/rfmKO4C5p7n2XSuTcTw270MNkk4=;
+        b=jXSIohU1OFy0OHqfvCWHt6T73W+GmJcQGFh+IUr39aWG2CgmSvQPncsykzBX80mRaf
+         UCflfWI8Bt+fUtJBoLo4qzGh44gsmMhUlQKb7z760En7bA1GwZdgXMCiTearroNXd7qH
+         mO9IuN+pNwC+OX8bjF9BR+vemsIkB3Hnx/Aes+BKXHK/NhGmN49wJsqtt9ybnuTBEyUc
+         89XzvNXkC3kRmaz5Op9ubMBSh1FazrYIwjDzOSqim5tEgQSZEdPxH8nlDkgYBBMoOhlt
+         ZhTAmrLHbBdrVVqO73E5BkR25BQT6ri7wuaZFnWjGjIEpWRUM8+GRe2bi6MdYsH9dUux
+         EQ9Q==
+X-Gm-Message-State: AC+VfDwGxJMpj4NRaU9Llj4hCSpoMpKFVNLydGxrRyaDyCW4r/y002Eq
+        IExWJlI8V1Ma72w+EcEC8XFNXQ==
+X-Google-Smtp-Source: ACHHUZ6a9+a+UtZA5+MxGsJZ0KNpW4rSE+S0VhL127tZfNrsWcrP79KtqNmz573hlr6hcjvmtpqGYQ==
+X-Received: by 2002:a17:907:9621:b0:982:8a28:ba24 with SMTP id gb33-20020a170907962100b009828a28ba24mr1789141ejc.63.1686910539290;
+        Fri, 16 Jun 2023 03:15:39 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id x5-20020a1709060a4500b00982a60f2c0asm1926383ejf.74.2023.06.16.03.15.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Jun 2023 03:15:38 -0700 (PDT)
+Message-ID: <165dd295-1b3a-5062-772a-613a7bf6fd45@linaro.org>
+Date:   Fri, 16 Jun 2023 12:15:37 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.174.179.215]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500007.china.huawei.com (7.192.104.62)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] dt-bindings: arm: socionext: add bindings for the
+ Synquacer platform
+Content-Language: en-US
+To:     jaswinder.singh@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, robh@kernel.org,
+        ilias.apalodimas@linaro.org, masahisa.kojima@linaro.org
+References: <20230616035813.255062-1-jaswinder.singh@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230616035813.255062-1-jaswinder.singh@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit a015434480dc ("ext4: send parallel discards on commit completions")
-removed its last caller so drop it.
+On 16/06/2023 05:58, jaswinder.singh@linaro.org wrote:
+> From: Jassi Brar <jaswinder.singh@linaro.org>
+> 
+> Socionext's DeveloperBox is based on the SC2A11B SoC (Synquacer).
+> Specify bindings for the platform and boards based on that.
 
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- fs/ext4/ext4_jbd2.h | 21 ---------------------
- 1 file changed, 21 deletions(-)
+A nit, subject: drop second/last, redundant "bindings". The
+"dt-bindings" prefix is already stating that these are bindings.
 
-diff --git a/fs/ext4/ext4_jbd2.h b/fs/ext4/ext4_jbd2.h
-index 0c77697d5e90..33b9d328ca9e 100644
---- a/fs/ext4/ext4_jbd2.h
-+++ b/fs/ext4/ext4_jbd2.h
-@@ -185,27 +185,6 @@ static inline void ext4_journal_callback_add(handle_t *handle,
- 	spin_unlock(&sbi->s_md_lock);
- }
- 
--
--/**
-- * ext4_journal_callback_del: delete a registered callback
-- * @handle: active journal transaction handle on which callback was registered
-- * @jce: registered journal callback entry to unregister
-- * Return true if object was successfully removed
-- */
--static inline bool ext4_journal_callback_try_del(handle_t *handle,
--					     struct ext4_journal_cb_entry *jce)
--{
--	bool deleted;
--	struct ext4_sb_info *sbi =
--			EXT4_SB(handle->h_transaction->t_journal->j_private);
--
--	spin_lock(&sbi->s_md_lock);
--	deleted = !list_empty(&jce->jce_list);
--	list_del_init(&jce->jce_list);
--	spin_unlock(&sbi->s_md_lock);
--	return deleted;
--}
--
- int
- ext4_mark_iloc_dirty(handle_t *handle,
- 		     struct inode *inode,
--- 
-2.34.1
+> 
+
+Binding without it's user is usually useless. Where is the user?
+
+Best regards,
+Krzysztof
 
