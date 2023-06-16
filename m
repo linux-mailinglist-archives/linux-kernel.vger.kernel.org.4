@@ -2,64 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36EB4733481
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 17:16:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A61733486
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 17:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345919AbjFPPQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 11:16:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40174 "EHLO
+        id S230517AbjFPPRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 11:17:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345700AbjFPPQq (ORCPT
+        with ESMTP id S232085AbjFPPRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 11:16:46 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980B03590;
-        Fri, 16 Jun 2023 08:16:44 -0700 (PDT)
-Date:   Fri, 16 Jun 2023 15:16:42 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686928603;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=T2X08GY+8je3qIgAuEB7aoFUINAb3BIhnuWZ+7W6UHM=;
-        b=1mS2+hNsg8EjxouaUGM6POvlbWuURlGOeAXX/6Z7a9wsO1HzzFqNyCUp1PaRJNGZInT1I0
-        qizOSEhLKAW2KWrGznlc2xd4N4vWqx/tVZBlQiCK2Xy4MfU3r9Z23GCk6AAViOrw8D5Lbg
-        ZnBkC8pdn9QD2PVGSeSywRRwVIi1FVUKm4yEKm72v6x6S4NIc1eWTXgNfw22mVxOSmoN8O
-        090/3FjitJBJDU7+joI/GG1mG4XPkslVLAFlUBJQoyWXmEBtEk6HY3fNaVAJX6r1SrLJ+e
-        K8HBBj7XBRC39NaE+ihkQ1Fiy3Aj6G5GJfALmiH6ivOghoje6vTmFumU56W26Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686928603;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=T2X08GY+8je3qIgAuEB7aoFUINAb3BIhnuWZ+7W6UHM=;
-        b=cVkHiXdcXgRkHiGge5BLxf9ikfsxikbq6nu2VxzWvXaoeUgOlC8jzvBD/MbXhKCqW45+YA
-        BPi1r8h3JKOLCrAQ==
-From:   "tip-bot2 for Tom Rix" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/fair: Rename variable cpu_util eff_util
-Cc:     Tom Rix <trix@redhat.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230611122535.183654-1-trix@redhat.com>
-References: <20230611122535.183654-1-trix@redhat.com>
+        Fri, 16 Jun 2023 11:17:41 -0400
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE7B2D4E;
+        Fri, 16 Jun 2023 08:17:40 -0700 (PDT)
+Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-77af8476cd4so29525439f.1;
+        Fri, 16 Jun 2023 08:17:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686928659; x=1689520659;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8hr09IJTZlwSUbPk2/1Wb+ALEzpCoAzJqAu6w5jI53E=;
+        b=b+zF8Q34ZWFpfYUM+E9qTvFtxDT4PJBeVhAnGOmFH5rBw/tEX6iLPPBceRl0ZyDRr0
+         h9dRF2q16KdesvE4camH9zuZQXbohjQJT+W//cg/mOZanhiPX26/O0YAt1wivzqk3/BG
+         WA4lVq9Yz9vpf6jOCOuve7GqImMJnxA8JX0QUtvSgLeFfXlKM09a+4YSQVkBx94tfOfO
+         MvXLGWpofd1z6LF7pa438WtkdfVYCXkpxzbE+2KuxlSEGxvsSIdloV6P539oFBhvQXkA
+         TomPTINTD0jAHPOTfd14cjUEJH9yVjImi1dlZG3+NsGb0hCBqK8XGuXpztl+dlTJkQci
+         tg3g==
+X-Gm-Message-State: AC+VfDxu8hzrTputLcF70G9iFwsdRqCq//teROMYi6ybNj1F3JysrdO8
+        wp1UAcUdNACKHgl/WN/QDA==
+X-Google-Smtp-Source: ACHHUZ4yyc48/MBGsIaSwJMSrIIBOVmk5aGfk0RJg9fKb9qWkHVh8375Ybh7RxU7l93EBjwdqgAong==
+X-Received: by 2002:a6b:dd16:0:b0:77a:d862:242f with SMTP id f22-20020a6bdd16000000b0077ad862242fmr2380653ioc.21.1686928659358;
+        Fri, 16 Jun 2023 08:17:39 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id ed4-20020a056638290400b00424e5091bf8sm211022jab.94.2023.06.16.08.17.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 08:17:38 -0700 (PDT)
+Received: (nullmailer pid 431745 invoked by uid 1000);
+        Fri, 16 Jun 2023 15:17:36 -0000
+Date:   Fri, 16 Jun 2023 09:17:36 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH v3 2/3] soc: dt-bindings: add loongson-2 pm
+Message-ID: <20230616151736.GA296030-robh@kernel.org>
+References: <20230615091757.24686-1-zhuyinbo@loongson.cn>
+ <20230615091757.24686-3-zhuyinbo@loongson.cn>
 MIME-Version: 1.0
-Message-ID: <168692860274.404.124512830013535834.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230615091757.24686-3-zhuyinbo@loongson.cn>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,54 +73,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/core branch of tip:
+On Thu, Jun 15, 2023 at 05:17:56PM +0800, Yinbo Zhu wrote:
+> Add the Loongson-2 SoC Power Management Controller binding with DT
+> schema format using json-schema.
+> 
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> ---
+>  .../soc/loongson/loongson,ls2k-pmc.yaml       | 53 +++++++++++++++++++
+>  MAINTAINERS                                   |  6 +++
+>  2 files changed, 59 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
+> new file mode 100644
+> index 000000000000..32499bd10f8c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
+> @@ -0,0 +1,53 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/loongson/loongson,ls2k-pmc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Loongson-2 Power Manager controller
+> +
+> +maintainers:
+> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - loongson,ls2k1000-pmc
+> +              - loongson,ls2k0500-pmc
+> +          - const: syscon
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  suspend-address:
 
-Commit-ID:     a707df30c9438a9d4d0a43ae7f22b59b078f94c4
-Gitweb:        https://git.kernel.org/tip/a707df30c9438a9d4d0a43ae7f22b59b078f94c4
-Author:        Tom Rix <trix@redhat.com>
-AuthorDate:    Sun, 11 Jun 2023 08:25:35 -04:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Fri, 16 Jun 2023 17:08:01 +02:00
+loongson,suspend-address
 
-sched/fair: Rename variable cpu_util eff_util
+> +    $ref: /schemas/types.yaml#/definitions/uint32
 
-cppcheck reports
-kernel/sched/fair.c:7436:17: style: Local variable 'cpu_util' shadows outer function [shadowFunction]
-  unsigned long cpu_util;
-                ^
+Isn't this a 64-bit platform? Probably better if this is a 64-bit value 
+in case that's needed in the future.
 
-Clean this up by renaming the variable to eff_util
-
-Signed-off-by: Tom Rix <trix@redhat.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Valentin Schneider <vschneid@redhat.com>
-Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Link: https://lore.kernel.org/r/20230611122535.183654-1-trix@redhat.com
----
- kernel/sched/fair.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 6189d1a..7666dbc 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -7433,7 +7433,7 @@ eenv_pd_max_util(struct energy_env *eenv, struct cpumask *pd_cpus,
- 	for_each_cpu(cpu, pd_cpus) {
- 		struct task_struct *tsk = (cpu == dst_cpu) ? p : NULL;
- 		unsigned long util = cpu_util(cpu, p, dst_cpu, 1);
--		unsigned long cpu_util;
-+		unsigned long eff_util;
- 
- 		/*
- 		 * Performance domain frequency: utilization clamping
-@@ -7442,8 +7442,8 @@ eenv_pd_max_util(struct energy_env *eenv, struct cpumask *pd_cpus,
- 		 * NOTE: in case RT tasks are running, by default the
- 		 * FREQUENCY_UTIL's utilization can be max OPP.
- 		 */
--		cpu_util = effective_cpu_util(cpu, util, FREQUENCY_UTIL, tsk);
--		max_util = max(max_util, cpu_util);
-+		eff_util = effective_cpu_util(cpu, util, FREQUENCY_UTIL, tsk);
-+		max_util = max(max_util, eff_util);
- 	}
- 
- 	return min(max_util, eenv->cpu_cap);
+> +    description:
+> +      The "suspend-address" is a deep sleep state (Suspend To RAM)
+> +      firmware entry address which was jumped from kernel and it's
+> +      value was dependent on specific platform firmware code. In
+> +      addition, the PM need according to it to indicate that current
+> +      SoC whether support Suspend To RAM.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    pmc: pm@1fe27000 {
+> +        compatible = "loongson,ls2k1000-pmc", "syscon";
+> +        reg = <0x1fe27000 0x58>;
+> +        interrupt-parent = <&liointc1>;
+> +        interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
+> +        suspend-address = <0x1c000500>;
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 7a91f14cad2e..bcd05f1fa5c1 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12190,6 +12190,12 @@ S:	Maintained
+>  F:	Documentation/devicetree/bindings/hwinfo/loongson,ls2k-chipid.yaml
+>  F:	drivers/soc/loongson/loongson2_guts.c
+>  
+> +LOONGSON-2 SOC SERIES PM DRIVER
+> +M:	Yinbo Zhu <zhuyinbo@loongson.cn>
+> +L:	linux-pm@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
+> +
+>  LOONGSON-2 SOC SERIES PINCTRL DRIVER
+>  M:	zhanghongchen <zhanghongchen@loongson.cn>
+>  M:	Yinbo Zhu <zhuyinbo@loongson.cn>
+> -- 
+> 2.20.1
+> 
