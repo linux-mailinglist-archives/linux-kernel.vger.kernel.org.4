@@ -2,206 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D3A7329BF
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:28:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FEB87329C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245377AbjFPI2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 04:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59694 "EHLO
+        id S244163AbjFPI20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 04:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233149AbjFPI2K (ORCPT
+        with ESMTP id S242529AbjFPI2Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 04:28:10 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2044.outbound.protection.outlook.com [40.107.7.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3295C2D69
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 01:28:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WBQRk/Ea4S0fLwFQo7V5alDd4RYQKuMAGFUmkMNT0youHyWu3cr9MuFoK6VZom4n5+XLDIKYks3C3Y4iN2OD8tVO4j50Ukyf2MqmINiMGwqjFBF+BQ9/AM3+VU5o2p+PM8Ubk7X3GKlNNBLEymSSwKJionFFYtNAUU+vA0F4QvrpQ9iZaagpGvuYbss/SNECR75wdQWf3DJ3Vmw3AdXs1zGJ2KfKSurZjhc8ntt2QLRz/tCCNoL6EkONgZEG04Wu9/puz7JE3eFr/AYFdt3SfMhyx6u6M+P8Txjmv4PqeADRqFMC1SrOmFnlCHLK7MGup6nMfypqkPVYKNr93EwR1A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2TDQSyu5QOQk2J654aSu8ybSzCtQyVYRYh2vUdE0khs=;
- b=DzA6/3FMZqdvaVBU+sOJUQSwrpRwfGqVRuqN0tAEEn4F6bbGl4Y7dsR0NKHkuiJZ/duRxeZUFz1DKQc1NZy/zBwBXUhZD2byDOcPNMladdjJKiPqU2pUloabPfsRINoNSkJdqjZCgBFZdGtI2nCp53ggPIHrIPcI3Ao6+s6yCho1inm/UDUjcVXQgEaeYeqTVy46GtpVV8ovnExlEAfYA+C/jbcAk+qifLsV+VBd5SMB69+6m3C1ZBNrH49TmyyTrTQWqbBDkh6wEqhGLMITJqL8aS3FRENIuub6fMWyG4RQOcqE/PY4w2RGPimVVVixXzA93DNyH4Rm1ulrjQ9qtw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2TDQSyu5QOQk2J654aSu8ybSzCtQyVYRYh2vUdE0khs=;
- b=beN1p1CvAM/810o6LFpV1jA6GBTMIolwqVoS13aWgZAXFD0+xLy7v3fS5H8ylxdnWKL0QMszJe0uzC4yokWSepnQZ5ha2+6NlBTYMzNoEH2N4v8F5ZlpcuKwGhnaYh2inqSe3PQvU//EAwixlx/eCRQYHaojIwSq696E4bgE+s8=
-Received: from AM9PR04MB8907.eurprd04.prod.outlook.com (2603:10a6:20b:40a::22)
- by VI1PR04MB6813.eurprd04.prod.outlook.com (2603:10a6:803:13c::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.29; Fri, 16 Jun
- 2023 08:28:06 +0000
-Received: from AM9PR04MB8907.eurprd04.prod.outlook.com
- ([fe80::95c3:f23e:1b24:e99e]) by AM9PR04MB8907.eurprd04.prod.outlook.com
- ([fe80::95c3:f23e:1b24:e99e%7]) with mapi id 15.20.6500.029; Fri, 16 Jun 2023
- 08:28:06 +0000
-From:   Alison Wang <alison.wang@nxp.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Leo Li <leoyang.li@nxp.com>, Forrest Shi <xuelin.shi@nxp.com>,
-        "X.F. Ren" <xiaofeng.ren@nxp.com>, Feng Guo <feng.guo@nxp.com>
-Subject: RE: [EXT] Re: [PATCH 1/8] ethosu: Add Arm Ethos-U driver
-Thread-Topic: [EXT] Re: [PATCH 1/8] ethosu: Add Arm Ethos-U driver
-Thread-Index: AQHZoBVsg6habxYIbEmfvjjh7HkyA6+M9moAgAARzFA=
-Date:   Fri, 16 Jun 2023 08:28:05 +0000
-Message-ID: <AM9PR04MB8907E5BF0A7F6448B2F7DF6DF458A@AM9PR04MB8907.eurprd04.prod.outlook.com>
-References: <20230616055913.2360-1-alison.wang@nxp.com>
- <20230616055913.2360-2-alison.wang@nxp.com>
- <2023061616-sacrifice-mollusk-737f@gregkh>
-In-Reply-To: <2023061616-sacrifice-mollusk-737f@gregkh>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM9PR04MB8907:EE_|VI1PR04MB6813:EE_
-x-ms-office365-filtering-correlation-id: 87e7c1c9-0e6b-4e6e-be02-08db6e439bdc
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: miHMY3lh/p3EUiHUTQQ02RXnOafzPtvSGVrce8DEd7z9wm4oKa0adY+bHdW0UMZUmvd/mBQx2Pc4WrSwyPxjitgCn3OSggEiX5PxgVYmS3LsMbXBUEkONcYuNDuK3cCcpdIKIt4uSfWQfx8tHX6kAys/BX+R9fuIo/98bK2QEzYmcss8KvQHpBlBpeWPKlbTrDGYWdkApvNie3QXohoxL4FYylyc/FlQ4QzScW6JCUDRYXqEtserv+SO6L6grG4HSoW3EygzGA/5efbjCXGZYsmd6MBiGk5muYLRB9ZWd1P+rT4k2qCpf1ZrG6WzqziYzgnN+BwQMElJh06MVOsuJOe+jd2yvI/CVvJz258z/PQrMsoMwaLbsx7wI9t4qaZVV+sabX+smfFpQycyG68mOyZKMluJSteC7hIVK6U+McbMrMbfL9SN1fBXMBaOLtTfXYDjrr2VCjsjh8dgAkJJB2tYIeWO9vtovTTXTozvGgtS/7N+6wvG7s4/ZQwPNndzGofvPSBW/fz+/YgzZDMWci25FbFWUx/KdLdsz2S2AlNKWR+SSsbhLHfF4EBnH5WBnyQC0/nIV/gz+ma6syPnuBocBKNUVUML9FtDJGsTmXZbMAR0G1lzN1Bh4P4Pl26m
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8907.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(346002)(39860400002)(376002)(396003)(451199021)(71200400001)(9686003)(6916009)(4326008)(66946007)(66476007)(316002)(66556008)(64756008)(66446008)(66574015)(76116006)(6506007)(83380400001)(186003)(26005)(45080400002)(122000001)(7696005)(966005)(54906003)(478600001)(55016003)(38100700002)(44832011)(52536014)(8936002)(5660300002)(38070700005)(86362001)(8676002)(41300700001)(33656002)(2906002)(2004002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?zctHAZv+Y+KE5DbVkmQmKdbG/TSvtrcKmMQG+v/9xoRbEjZhKatVIx1KMl?=
- =?iso-8859-1?Q?m2Yhu+7DroJKoD+WnH8qH2WxgPkTkak62RJyPQQCaWN0UoAXdHgqLEaJdF?=
- =?iso-8859-1?Q?mttqVJRMVl3I0YXJmQfjhw8012zBOqZPUKEM6iLX/I9TGNaF72hAZIvoSS?=
- =?iso-8859-1?Q?oWDMKyXY98KOe2r44191gG7Q7WST/zSzEfoWS4KDy9/A6CMVZwq20XeQPt?=
- =?iso-8859-1?Q?nfItVTcqnUTGnKtgzuBMFGmHzRJOgpJk9PZRWSqdiqxJasIzygzMse6w7M?=
- =?iso-8859-1?Q?l4wywN99jH6/pfYCO6yjjsB7IrHi8ViJj8U1QWqqiytpUq4gMWm6I14DwF?=
- =?iso-8859-1?Q?BG1CrJvjbYFJjAU/vt+ghBEr7V677JJMjMSvirzeJRLf4kIVtVu2BoCgAk?=
- =?iso-8859-1?Q?w8P1tSf82uSIP9NH3V5yPoK/UVgGbSwpR3ZL35Z7YHijTAq3TE7cRELWDQ?=
- =?iso-8859-1?Q?n3noQ+CfrE5Z+YLVGquPVJtunyUSP7YbMEKnUWRXIKyeJzz0Tp+1fVhmU9?=
- =?iso-8859-1?Q?whGx75C1QKKAsOU/lFpKbEMZST/wbW9VuIus9iOa/8o2mejWcpYfA9/Y0x?=
- =?iso-8859-1?Q?yU4YyPNMP2PIZrPmINnOiTsDPEW45tf5zAtl+qmqB9ejj1x+HAr/Q4WUU6?=
- =?iso-8859-1?Q?+LNJIIQ8i4g7R0ZuV+qq0pTs0NraJH4b7i2M2yTc69yHgoqheDUIZ1gY7G?=
- =?iso-8859-1?Q?9Qdsaa8Fg/OjMV9TGz86yXIFjosN5X8T1ktswEhWsAVX49B2Fv7ZYDiDDM?=
- =?iso-8859-1?Q?EHAktu80McoyBGydgQD3qGBY0yzmidAlZ0J8eqeBDNMp6syqV9swxseXgk?=
- =?iso-8859-1?Q?daWAVYk6u0KNkdc2O71dt0ZyIxk7ujHt6xA+dMFeeCURkjUmERMIW+dvtE?=
- =?iso-8859-1?Q?rEwEv4wBVAk4l+zqmTWSLuEv/AWTiaJ4tHcAK6XHibM9jv/KHmkNaR01Bd?=
- =?iso-8859-1?Q?i9Yn1ZZwdnC+kDq6O/o2rGHl5l/vQfJau6qXZOY2oVu1eSlhKDhKOdE1ZU?=
- =?iso-8859-1?Q?ngYhcjhOZglrrfqEXpL48lvsPJ+JBtCjHey93xFO5XEIKTnA7ud4hJfhM/?=
- =?iso-8859-1?Q?ytSfE/7DARYFwUSi+gjvTOVjjFSSVAYxqiyaEDtRp5DW9vvQ4lZM3eMQku?=
- =?iso-8859-1?Q?0vhFrIVnGGkQNkzS3SGg5TsEc+v4zxaIGl8FSIgZAOh0gShQoWiN51lADM?=
- =?iso-8859-1?Q?CuJ2VH9Zg6ktRTrG3c41vc4Gs2FR8RX1vwCet9uBVALROYP2j3VOlWHKQ3?=
- =?iso-8859-1?Q?u3H8TnV2Bu8Jltew6VXB51fMDkbq91BCO4jR+cQ6E1VJIiad8MXGu0QlGL?=
- =?iso-8859-1?Q?VZ4/GRPlcbyXU8UsJ3y59u7ZpJ1AeutkngocCqxCgVzzIqFdhnsqcdoTA/?=
- =?iso-8859-1?Q?BV93aRtoc3clqbUbnRL5ahI37G3e7EfAQ5HXB4p9oouEabjlmgcB+PR48/?=
- =?iso-8859-1?Q?Pf/iexW65+I7C5KLyLL5B8TXtpvJEBLPawAz07DJZ+08Kjvtp3J3ejVV3s?=
- =?iso-8859-1?Q?HIu6EK4p1dG9TtcFFnK1tDR7dmi+GSZkiAF4/IRhCPnnx86kAvKbCraSrG?=
- =?iso-8859-1?Q?sV5PL4PpvpKtAHPShtFybx1coSJB3xvoxJBdMUyq9+Ys5+YSHxFv1U5ZFF?=
- =?iso-8859-1?Q?VFWLfvHNyPnukOen/atqO+4qkXh9mWpc0x?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 16 Jun 2023 04:28:25 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BEB42D79
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 01:28:23 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b445512846so4848651fa.2
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 01:28:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google; t=1686904101; x=1689496101;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LZCqAGjRKDvEoatemozoXx1FoWJTpUzjMGwy/qF8g/8=;
+        b=JwldKiQ0TB5xwMKUZIM3Sewt0gaaQKVVgk21JApvEvBQYPpsTN2Zqr4JqgFbWYFNmL
+         tzhVTu0yvEsEb4QsfVkIiDOD3KW80NFwC3yVhgsF9V3kZX6VLlQqjCMB0zlZtZK93yr3
+         alc0LbjCSWLj3u/pIpWKtOfZ2jAoqnO4GxYl4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686904101; x=1689496101;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LZCqAGjRKDvEoatemozoXx1FoWJTpUzjMGwy/qF8g/8=;
+        b=UcR6SdW32nG+5nyBXgvMwFXH0oI4itX7XEKgzMmJ0ocw+iKBFJDUaTRnwyTjOWGh7d
+         UlwjUPT8Ky9NYxENeXTRZIFZ+QK6ELTZZw/Yzl0rGtN/oml1hqQdVcc4OHY/gl6cSFMW
+         KitGpdQ3L5IZOieK8QzpDEKfi1Vl8AZIvEzBsI04vECASlrxCbPnuasGWgvSyHkHmwIv
+         JNY90KxqMTccnNE0mXhk/pkQm3f4DfWEW1fbH0BWCT1c2Qvovg9YPO+pcRqauLsxHcmo
+         Bshu7tchtosdllgN7XmKvDYb4Zqz0EVmaldiaPaUGVO6tQeOviUP9QIZRYcQUiQigsye
+         NPiA==
+X-Gm-Message-State: AC+VfDzeIlnmdKkvLVHPRqLucTxEexNZ7PD2+YK/0GW60yHA4BAGQziu
+        CUzNWOtjsyc2+pC89dounkxZ1R9JvwNYz/6LapEb
+X-Google-Smtp-Source: ACHHUZ56TziHoZxjzqlSenTHxGQzrOu7m8nSQ8jAwhCsCTSWZVoNUnVvDh+QFfMtHzF5cXvsWIqhYxl5XU8WgpNfj9Y=
+X-Received: by 2002:a2e:330f:0:b0:2a8:bd1f:a377 with SMTP id
+ d15-20020a2e330f000000b002a8bd1fa377mr1210632ljc.20.1686904101308; Fri, 16
+ Jun 2023 01:28:21 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8907.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 87e7c1c9-0e6b-4e6e-be02-08db6e439bdc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jun 2023 08:28:05.9804
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: t6ikwbcCwlAzu+0j/GFrRA4a0ZH6OD+Ys1qbyp1WoSwGWVp2lGc4LKp+a0bwPyUco+NFYbCZeKnjYWdbNR6bmg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6813
+References: <20230512085321.13259-1-alexghiti@rivosinc.com> <20230512085321.13259-6-alexghiti@rivosinc.com>
+In-Reply-To: <20230512085321.13259-6-alexghiti@rivosinc.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Fri, 16 Jun 2023 01:28:09 -0700
+Message-ID: <CAOnJCUL8t-BMfLX0uvjbFK9TFVyqEdCnkYN9aE0hB4NXEtRHZw@mail.gmail.com>
+Subject: Re: [PATCH v2 05/10] riscv: Prepare for user-space perf event mmap support
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 01:59:06PM +0800, Alison Wang wrote:
-> Ethos-U Linux driver is to provide an example of how a rich operating
-> system like Linux can dispatch inferences to an Arm Cortex-M
-> subsystem, consisting of an Arm Cortex-M and an Arm Ethos-U NPU.
+On Fri, May 12, 2023 at 1:58=E2=80=AFAM Alexandre Ghiti <alexghiti@rivosinc=
+.com> wrote:
 >
-> Link:
-> https://git/.
-> mlplatform.org%2Fml%2Fethos-u%2Fethos-u-linux-driver-stack.git&data=3D05
-> %7C01%7Calison.wang%40nxp.com%7C4b1681cd19b9450e832208db6e32709b%7C686
-> ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C638224935139578328%7CUnknown%7
-> CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXV
-> CI6Mn0%3D%7C3000%7C%7C%7C&sdata=3Djwhvw5i1Q2M%2FOLID8TsOOnaI9LqD6y%2BMnn
-> jzdvdCXcw%3D&reserved=3D0
-> Tag: 22.02
-
-What does "Tag:" mean?
-
+> Provide all the necessary bits in the generic riscv pmu driver to be
+> able to mmap perf events in userspace: the heavy lifting lies in the
+> driver backend, namely the legacy and sbi implementations.
 >
-> Signed-off-by: Kristofer Jonsson <kristofer.jonsson@arm.com>
-> Signed-off-by: Per Astrand <per.astrand@arm.com>
-> Signed-off-by: Jonny Sv=E4rd <jonny.svaerd@arm.com>
-> Signed-off-by: Lior Dekel <Lior.dekel@arm.com>
-> Signed-off-by: Henrik Hoglind <henrik.hoglind@arm.com>
-> Signed-off-by: Davide Grohmann <davide.grohmann@arm.com>
-> Signed-off-by: Alison Wang <alison.wang@nxp.com>
-
-If this many people signed off on this, it better be correct :)
-[Alison Wang] The source codes of this patch come from the kernel folder of=
- https://git.mlplatform.org/ml/ethos-u/ethos-u-linux-driver-stack.git, the =
-detailed tag is 22.02.
-So the source codes of this patch are written by Arm guys. The above people=
- are all the authors. I list them all to avoid any missing.
-
+> Note that arch_perf_update_userpage is almost a copy of arm64 code.
+>
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> ---
+>  arch/riscv/kernel/Makefile     |  2 +-
+>  arch/riscv/kernel/perf_event.c | 58 ++++++++++++++++++++++++++++++++++
+>  drivers/perf/riscv_pmu.c       | 41 ++++++++++++++++++++++++
+>  include/linux/perf/riscv_pmu.h |  4 +++
+>  4 files changed, 104 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/riscv/kernel/perf_event.c
+>
+> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+> index 4cf303a779ab..0d215fd9860d 100644
+> --- a/arch/riscv/kernel/Makefile
+> +++ b/arch/riscv/kernel/Makefile
+> @@ -70,7 +70,7 @@ obj-$(CONFIG_DYNAMIC_FTRACE)  +=3D mcount-dyn.o
+>
+>  obj-$(CONFIG_TRACE_IRQFLAGS)   +=3D trace_irq.o
+>
+> -obj-$(CONFIG_PERF_EVENTS)      +=3D perf_callchain.o
+> +obj-$(CONFIG_PERF_EVENTS)      +=3D perf_callchain.o perf_event.o
+>  obj-$(CONFIG_HAVE_PERF_REGS)   +=3D perf_regs.o
+>  obj-$(CONFIG_RISCV_SBI)                +=3D sbi.o
+>  ifeq ($(CONFIG_RISCV_SBI), y)
+> diff --git a/arch/riscv/kernel/perf_event.c b/arch/riscv/kernel/perf_even=
+t.c
+> new file mode 100644
+> index 000000000000..94174a0fc251
 > --- /dev/null
-> +++ b/drivers/firmware/ethosu/Kconfig
-> @@ -0,0 +1,24 @@
-> +#
-> +# (C) COPYRIGHT 2020 ARM Limited. All rights reserved.
-
-It's not 2020 anymore.
-
-> +#
-> +# This program is free software and is provided to you under the
-> +terms of the # GNU General Public License version 2 as published by
-> +the Free Software # Foundation, and any use by you of this program is
-> +subject to the terms # of such GNU licence.
-> +#
-> +# This program is distributed in the hope that it will be useful, #
-> +but WITHOUT ANY WARRANTY; without even the implied warranty of #
-> +MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the # GNU
-> +General Public License for more details.
-> +#
-> +# You should have received a copy of the GNU General Public License #
-> +along with this program; if not, you can access it online at #
-> +http://www.gnu.org/licenses/gpl-2.0.html.
-> +#
-> +# SPDX-License-Identifier: GPL-2.0-only #
+> +++ b/arch/riscv/kernel/perf_event.c
+> @@ -0,0 +1,58 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +#include <linux/sched_clock.h>
 > +
-> +config ETHOSU
-> +    tristate "Arm Ethos-U NPU support"
-> +    help
-> +      Arm Ethos-U NPU driver.
+> +void arch_perf_update_userpage(struct perf_event *event,
+> +                              struct perf_event_mmap_page *userpg, u64 n=
+ow)
+> +{
+> +       struct clock_read_data *rd;
+> +       unsigned int seq;
+> +       u64 ns;
+> +
+> +       userpg->cap_user_time =3D 0;
+> +       userpg->cap_user_time_zero =3D 0;
+> +       userpg->cap_user_time_short =3D 0;
+> +       userpg->cap_user_rdpmc =3D
+> +               !!(event->hw.flags & PERF_EVENT_FLAG_USER_READ_CNT);
+> +
+> +       userpg->pmc_width =3D 64;
+> +
 
-{sigh}
+The counter width is 64 for cycle & instret. Other hpmcounter can have
+different width.
+This information should retrieved from counter info.
 
-With all of those people, NO ONE ran checkpatch.pl on the thing?
+> +       do {
+> +               rd =3D sched_clock_read_begin(&seq);
+> +
+> +               userpg->time_mult =3D rd->mult;
+> +               userpg->time_shift =3D rd->shift;
+> +               userpg->time_zero =3D rd->epoch_ns;
+> +               userpg->time_cycles =3D rd->epoch_cyc;
+> +               userpg->time_mask =3D rd->sched_clock_mask;
+> +
+> +               /*
+> +                * Subtract the cycle base, such that software that
+> +                * doesn't know about cap_user_time_short still 'works'
+> +                * assuming no wraps.
+> +                */
+> +               ns =3D mul_u64_u32_shr(rd->epoch_cyc, rd->mult, rd->shift=
+);
+> +               userpg->time_zero -=3D ns;
+> +
+> +       } while (sched_clock_read_retry(seq));
+> +
+> +       userpg->time_offset =3D userpg->time_zero - now;
+> +
+> +       /*
+> +        * time_shift is not expected to be greater than 31 due to
+> +        * the original published conversion algorithm shifting a
+> +        * 32-bit value (now specifies a 64-bit value) - refer
+> +        * perf_event_mmap_page documentation in perf_event.h.
+> +        */
+> +       if (userpg->time_shift =3D=3D 32) {
+> +               userpg->time_shift =3D 31;
+> +               userpg->time_mult >>=3D 1;
+> +       }
+> +
+> +       /*
+> +        * Internal timekeeping for enabled/running/stopped times
+> +        * is always computed with the sched_clock.
+> +        */
+> +       userpg->cap_user_time =3D 1;
+> +       userpg->cap_user_time_zero =3D 1;
+> +       userpg->cap_user_time_short =3D 1;
+> +}
+> diff --git a/drivers/perf/riscv_pmu.c b/drivers/perf/riscv_pmu.c
+> index ebca5eab9c9b..af69da268246 100644
+> --- a/drivers/perf/riscv_pmu.c
+> +++ b/drivers/perf/riscv_pmu.c
+> @@ -171,6 +171,8 @@ int riscv_pmu_event_set_period(struct perf_event *eve=
+nt)
+>
+>         local64_set(&hwc->prev_count, (u64)-left);
+>
+> +       perf_event_update_userpage(event);
+> +
+>         return overflow;
+>  }
+>
+> @@ -267,6 +269,9 @@ static int riscv_pmu_event_init(struct perf_event *ev=
+ent)
+>         hwc->idx =3D -1;
+>         hwc->event_base =3D mapped_event;
+>
+> +       if (rvpmu->event_init)
+> +               rvpmu->event_init(event);
+> +
+>         if (!is_sampling_event(event)) {
+>                 /*
+>                  * For non-sampling runs, limit the sample_period to half
+> @@ -283,6 +288,39 @@ static int riscv_pmu_event_init(struct perf_event *e=
+vent)
+>         return 0;
+>  }
+>
+> +static int riscv_pmu_event_idx(struct perf_event *event)
+> +{
+> +       struct riscv_pmu *rvpmu =3D to_riscv_pmu(event->pmu);
+> +
+> +       if (!(event->hw.flags & PERF_EVENT_FLAG_USER_READ_CNT))
+> +               return 0;
+> +
+> +       if (rvpmu->csr_index)
+> +               return rvpmu->csr_index(event) + 1;
+> +
+> +       return 0;
+> +}
+> +
+> +static void riscv_pmu_event_mapped(struct perf_event *event, struct mm_s=
+truct *mm)
+> +{
+> +       struct riscv_pmu *rvpmu =3D to_riscv_pmu(event->pmu);
+> +
+> +       if (rvpmu->event_mapped) {
+> +               rvpmu->event_mapped(event, mm);
+> +               perf_event_update_userpage(event);
+> +       }
+> +}
+> +
+> +static void riscv_pmu_event_unmapped(struct perf_event *event, struct mm=
+_struct *mm)
+> +{
+> +       struct riscv_pmu *rvpmu =3D to_riscv_pmu(event->pmu);
+> +
+> +       if (rvpmu->event_unmapped) {
+> +               rvpmu->event_unmapped(event, mm);
+> +               perf_event_update_userpage(event);
+> +       }
+> +}
+> +
+>  struct riscv_pmu *riscv_pmu_alloc(void)
+>  {
+>         struct riscv_pmu *pmu;
+> @@ -307,6 +345,9 @@ struct riscv_pmu *riscv_pmu_alloc(void)
+>         }
+>         pmu->pmu =3D (struct pmu) {
+>                 .event_init     =3D riscv_pmu_event_init,
+> +               .event_mapped   =3D riscv_pmu_event_mapped,
+> +               .event_unmapped =3D riscv_pmu_event_unmapped,
+> +               .event_idx      =3D riscv_pmu_event_idx,
+>                 .add            =3D riscv_pmu_add,
+>                 .del            =3D riscv_pmu_del,
+>                 .start          =3D riscv_pmu_start,
+> diff --git a/include/linux/perf/riscv_pmu.h b/include/linux/perf/riscv_pm=
+u.h
+> index 9f70d94942e0..1452c8af3b67 100644
+> --- a/include/linux/perf/riscv_pmu.h
+> +++ b/include/linux/perf/riscv_pmu.h
+> @@ -55,6 +55,10 @@ struct riscv_pmu {
+>         void            (*ctr_start)(struct perf_event *event, u64 init_v=
+al);
+>         void            (*ctr_stop)(struct perf_event *event, unsigned lo=
+ng flag);
+>         int             (*event_map)(struct perf_event *event, u64 *confi=
+g);
+> +       void            (*event_init)(struct perf_event *event);
+> +       void            (*event_mapped)(struct perf_event *event, struct =
+mm_struct *mm);
+> +       void            (*event_unmapped)(struct perf_event *event, struc=
+t mm_struct *mm);
+> +       uint8_t         (*csr_index)(struct perf_event *event);
+>
+>         struct cpu_hw_events    __percpu *hw_events;
+>         struct hlist_node       node;
+> --
+> 2.37.2
+>
 
-I'm stopping here, please go do that, fix up the obvious issues it tells yo=
-u about (hint, no SPDX line and drop the huge license "boiler plate"
-texts)
 
-And also provide a REAL configuration help text, 4 words for this is just n=
-ot acceptable, what would you do if you were asked to review this?
-[Alison Wang] So sorry, I didn't do any change for the issues you mentioned=
- above for this patch.
-My previous idea is the first patch comes from Arm guys and the other patch=
-es are written by NXP guys. It seems this is not a good idea.
-I will change this way in the next version.
-
-Thanks a lot for your review.
-
-thanks,
-
-greg k-h
+--=20
+Regards,
+Atish
