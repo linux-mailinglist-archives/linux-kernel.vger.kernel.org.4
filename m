@@ -2,180 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791267339B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 21:21:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D02987339FA
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 21:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346224AbjFPTVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 15:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49046 "EHLO
+        id S231681AbjFPTfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 15:35:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbjFPTVW (ORCPT
+        with ESMTP id S232824AbjFPTfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 15:21:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF32524A;
-        Fri, 16 Jun 2023 12:19:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 99902634BF;
-        Fri, 16 Jun 2023 19:17:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 382D2C433C8;
-        Fri, 16 Jun 2023 19:17:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686943067;
-        bh=CAmP+Lx0wzqgHUs9vsC25lJNjq99NNhM1Mo48RueGyc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ZETvxHndWQKmZsWWEKvvXIR1NvhG0E+JQ9XMa5/v0HqoF1ZdzNxZ/GXDMO1LaUO4z
-         dTo8UADnCGD6UZuvo5lDy70OAvdWz0SEcdnue4m1STiOYVAY/m8pN9g8X7LsAjmFCV
-         zok7BR7RRfuq5+ikc05b+FO7Rmn7O0Pbe+upHOn3mYLkVA10AGC4zNbpMXNNioCN16
-         1PTOFhDX5zn5YaV8YcoVZgp0uT2FEmQOco1kT6lgBXkuDqdNO3Mnf7uVEjoZB0QGZs
-         qujzgPiXMdTyhI6XZL1nnpWuTmGkiAdXp5cymmX88O+lp0TYmei3kIU55NqFC4tDn4
-         VeQ7NL4ofgUqw==
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Chuck Lever <chuck.lever@oracle.com>, Neil Brown <neilb@suse.de>,
-        Olga Kornievskaia <kolga@netapp.com>,
-        Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>
-Cc:     stable@vger.kernel.org, Eirik Fuller <efuller@redhat.com>,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] nfsd: move init of percpu reply_cache_stats counters back to nfsd_init_net
-Date:   Fri, 16 Jun 2023 15:17:43 -0400
-Message-Id: <20230616191744.202292-1-jlayton@kernel.org>
-X-Mailer: git-send-email 2.40.1
+        Fri, 16 Jun 2023 15:35:07 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436D812B;
+        Fri, 16 Jun 2023 12:35:06 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 1BADC1C0AB3; Fri, 16 Jun 2023 21:20:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1686943225;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=y2rk4kvRju7aOubnhyw279OvS/0R0h16k1UJKj1ECT0=;
+        b=EKnmzidIIuwAvSs73weaxKF/7sTzsUp22pM97tkv98yWE6urggNR4x5pYkrZfoo8rSBE6S
+        LPVSByzdO3HPAp+rc/6AZP+qSCK6SrbgZOjeYtNKTApiDl8Uzc5txtXTf4AV+BlxwWzVlW
+        IKN16Az1LunExwuA+Q+M8pnVPNTNIro=
+Date:   Fri, 16 Jun 2023 21:20:24 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Wei Chen <harperchen1110@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>, serjk@netup.ru,
+        aospan@netup.ru, linux-media@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 4.14 09/20] media: netup_unidvb: fix irq init by
+ register it at the end of probe
+Message-ID: <ZIy1+CA55P2YC4xA@duo.ucw.cz>
+References: <20230525184520.2004878-1-sashal@kernel.org>
+ <20230525184520.2004878-9-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="WUFgJ3P2V9We42OX"
+Content-Disposition: inline
+In-Reply-To: <20230525184520.2004878-9-sashal@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-f5f9d4a314da moved the initialization of the reply cache into the nfsd
-startup, but it didn't account for the stats counters which can be
-accessed before nfsd is ever started, causing a NULL pointer
-dereference.
 
-This is easy to trigger on some arches (like aarch64), but on x86_64,
-calling this_cpu_ptr(NULL) evidently returns a pointer to the
-fixed_percpu_data, which I guess this looks just enough like a newly
-initialized percpu var to allow nfsd_reply_cache_stats_show to access it
-without Oopsing.
+--WUFgJ3P2V9We42OX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Move the initialization of the per-net+per-cpu reply-cache counters back
-into nfsd_init_net, while leaving the rest of the reply cache
-allocations to be done at nfsd startup time.
+Hi!
 
-Kudos to Eirik who did most of the legwork to track this down.
+> [ Upstream commit e6ad6233592593079db5c8fa592c298e51bc1356 ]
+>=20
+> IRQ handler netup_spi_interrupt() takes spinlock spi->lock. The lock
+> is initialized in netup_spi_init(). However, irq handler is registered
+> before initializing the lock.
+>=20
+> Spinlock dma->lock and i2c->lock suffer from the same problem.
+>=20
+> Fix this by registering the irq at the end of probe.
 
-Cc: stable@vger.kernel.org # v6.3+
-Fixes: f5f9d4a314da ("nfsd: move reply cache initialization into nfsd startup")
-Reported-and-Tested-by: Eirik Fuller <efuller@redhat.com>
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
----
- fs/nfsd/cache.h    |  2 ++
- fs/nfsd/nfscache.c | 13 +++----------
- fs/nfsd/nfsctl.c   |  8 ++++++++
- 3 files changed, 13 insertions(+), 10 deletions(-)
+Are you sure you got the error handling right? AFAICT
+netup_unidvb_dma_fini(ndev, 0/1); is needed here.
 
-diff --git a/fs/nfsd/cache.h b/fs/nfsd/cache.h
-index f21259ead64b..a4b12d6c41d3 100644
---- a/fs/nfsd/cache.h
-+++ b/fs/nfsd/cache.h
-@@ -80,6 +80,8 @@ enum {
- 
- int	nfsd_drc_slab_create(void);
- void	nfsd_drc_slab_free(void);
-+int	nfsd_reply_cache_stats_init(struct nfsd_net *nn);
-+void	nfsd_reply_cache_stats_destroy(struct nfsd_net *nn);
- int	nfsd_reply_cache_init(struct nfsd_net *);
- void	nfsd_reply_cache_shutdown(struct nfsd_net *);
- int	nfsd_cache_lookup(struct svc_rqst *);
-diff --git a/fs/nfsd/nfscache.c b/fs/nfsd/nfscache.c
-index 041faa13b852..b696dc629c0b 100644
---- a/fs/nfsd/nfscache.c
-+++ b/fs/nfsd/nfscache.c
-@@ -148,12 +148,12 @@ void nfsd_drc_slab_free(void)
- 	kmem_cache_destroy(drc_slab);
- }
- 
--static int nfsd_reply_cache_stats_init(struct nfsd_net *nn)
-+int nfsd_reply_cache_stats_init(struct nfsd_net *nn)
- {
- 	return nfsd_percpu_counters_init(nn->counter, NFSD_NET_COUNTERS_NUM);
- }
- 
--static void nfsd_reply_cache_stats_destroy(struct nfsd_net *nn)
-+void nfsd_reply_cache_stats_destroy(struct nfsd_net *nn)
- {
- 	nfsd_percpu_counters_destroy(nn->counter, NFSD_NET_COUNTERS_NUM);
- }
-@@ -169,17 +169,13 @@ int nfsd_reply_cache_init(struct nfsd_net *nn)
- 	hashsize = nfsd_hashsize(nn->max_drc_entries);
- 	nn->maskbits = ilog2(hashsize);
- 
--	status = nfsd_reply_cache_stats_init(nn);
--	if (status)
--		goto out_nomem;
--
- 	nn->nfsd_reply_cache_shrinker.scan_objects = nfsd_reply_cache_scan;
- 	nn->nfsd_reply_cache_shrinker.count_objects = nfsd_reply_cache_count;
- 	nn->nfsd_reply_cache_shrinker.seeks = 1;
- 	status = register_shrinker(&nn->nfsd_reply_cache_shrinker,
- 				   "nfsd-reply:%s", nn->nfsd_name);
- 	if (status)
--		goto out_stats_destroy;
-+		return status;
- 
- 	nn->drc_hashtbl = kvzalloc(array_size(hashsize,
- 				sizeof(*nn->drc_hashtbl)), GFP_KERNEL);
-@@ -195,9 +191,6 @@ int nfsd_reply_cache_init(struct nfsd_net *nn)
- 	return 0;
- out_shrinker:
- 	unregister_shrinker(&nn->nfsd_reply_cache_shrinker);
--out_stats_destroy:
--	nfsd_reply_cache_stats_destroy(nn);
--out_nomem:
- 	printk(KERN_ERR "nfsd: failed to allocate reply cache\n");
- 	return -ENOMEM;
- }
-diff --git a/fs/nfsd/nfsctl.c b/fs/nfsd/nfsctl.c
-index 1489e0b703b4..7c837afcf615 100644
---- a/fs/nfsd/nfsctl.c
-+++ b/fs/nfsd/nfsctl.c
-@@ -1505,6 +1505,9 @@ static __net_init int nfsd_init_net(struct net *net)
- 	retval = nfsd_idmap_init(net);
- 	if (retval)
- 		goto out_idmap_error;
-+	retval = nfsd_reply_cache_stats_init(nn);
-+	if (retval)
-+		goto out_repcache_error;
- 	nn->nfsd_versions = NULL;
- 	nn->nfsd4_minorversions = NULL;
- 	nfsd4_init_leases_net(nn);
-@@ -1513,6 +1516,8 @@ static __net_init int nfsd_init_net(struct net *net)
- 
- 	return 0;
- 
-+out_repcache_error:
-+	nfsd_idmap_shutdown(net);
- out_idmap_error:
- 	nfsd_export_shutdown(net);
- out_export_error:
-@@ -1521,6 +1526,9 @@ static __net_init int nfsd_init_net(struct net *net)
- 
- static __net_exit void nfsd_exit_net(struct net *net)
- {
-+	struct nfsd_net *nn = net_generic(net, nfsd_net_id);
-+
-+	nfsd_reply_cache_stats_destroy(nn);
- 	nfsd_idmap_shutdown(net);
- 	nfsd_export_shutdown(net);
- 	nfsd_netns_free_versions(net_generic(net, nfsd_net_id));
--- 
-2.40.1
+Best regards,
+								Pavel
 
+> +++ b/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
+> @@ -943,6 +938,14 @@ static int netup_unidvb_initdev(struct pci_dev *pci_=
+dev,
+>  		dev_err(&pci_dev->dev, "netup_unidvb: DMA setup failed\n");
+>  		goto dma_setup_err;
+>  	}
+> +
+> +	if (request_irq(pci_dev->irq, netup_unidvb_isr, IRQF_SHARED,
+> +			"netup_unidvb", pci_dev) < 0) {
+> +		dev_err(&pci_dev->dev,
+> +			"%s(): can't get IRQ %d\n", __func__, pci_dev->irq);
+> +		goto dma_setup_err;
+> +	}
+> +
+>  	dev_info(&pci_dev->dev,
+>  		"netup_unidvb: device has been initialized\n");
+>  	return 0;
+> @@ -961,8 +964,6 @@ static int netup_unidvb_initdev(struct pci_dev *pci_d=
+ev,
+>  	dma_free_coherent(&pci_dev->dev, ndev->dma_size,
+>  			ndev->dma_virt, ndev->dma_phys);
+>  dma_alloc_err:
+> -	free_irq(pci_dev->irq, pci_dev);
+> -irq_request_err:
+>  	iounmap(ndev->lmmio1);
+>  pci_bar1_error:
+>  	iounmap(ndev->lmmio0);
+
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--WUFgJ3P2V9We42OX
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZIy1+AAKCRAw5/Bqldv6
+8gDrAKCvBjMhvOg8OA9Ur99mEYfRHtkahgCfdlhmTq7oTObM0PyEosH8Lwk13Nk=
+=9xtk
+-----END PGP SIGNATURE-----
+
+--WUFgJ3P2V9We42OX--
