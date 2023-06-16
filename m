@@ -2,71 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4DF8732884
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 09:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C99373288C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 09:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242097AbjFPHLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 03:11:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53968 "EHLO
+        id S231661AbjFPHNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 03:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234495AbjFPHLM (ORCPT
+        with ESMTP id S229952AbjFPHNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 03:11:12 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A59E3170E;
-        Fri, 16 Jun 2023 00:11:09 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8Cx+ekMC4xkouAFAA--.12557S3;
-        Fri, 16 Jun 2023 15:11:08 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxZuQLC4xk+_0cAA--.16734S3;
-        Fri, 16 Jun 2023 15:11:07 +0800 (CST)
-Message-ID: <3c1c86ab-96ea-aa1c-c9c5-9a4012644fd6@loongson.cn>
-Date:   Fri, 16 Jun 2023 15:11:07 +0800
+        Fri, 16 Jun 2023 03:13:43 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F95171F;
+        Fri, 16 Jun 2023 00:13:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686899621; x=1718435621;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=+UeIrKXrwilfMfT6nkR/bG4+9ddgWSC6eTl4dg+OmKU=;
+  b=mqAcwP1F4N6IesRCIsRTs93CQhx+patRQopVPN9wPu42mIj9gGxMm6qW
+   8d/ifARxEh5Uwh3DAYRpTYwtk52RmafkA4daVHW+EwIEGWl3MbmmQytZT
+   hAT4E0tgZzoVFji/hW4plWNYeKimVv8r6oRFBUaOxk1E2pw3FCOpryMPN
+   cWp9pPS8ISxgaTcb12HHtKJk3ktTRMmHckw5Y8YfdQPWG6PVG7M3e2rrU
+   dvTjgOc1cAc9F5ww2dvRxGbDXp87iTMR9fzN1fC+5LdlvYX0STGIsQkci
+   zStOscnR+QtQSYCjghcyqfWCWWb96WVzZaz5iTk5EHLFUiMEmah8TTw46
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="445527851"
+X-IronPort-AV: E=Sophos;i="6.00,246,1681196400"; 
+   d="scan'208";a="445527851"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 00:13:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="802727047"
+X-IronPort-AV: E=Sophos;i="6.00,246,1681196400"; 
+   d="scan'208";a="802727047"
+Received: from ijarvine-mobl2.ger.corp.intel.com ([10.251.211.240])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 00:13:39 -0700
+Date:   Fri, 16 Jun 2023 10:13:37 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+cc:     hdegoede@redhat.com, markgross@kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH 1/2] platform/x86/intel/tpmi: Read feature control
+ status
+In-Reply-To: <20230615193302.2507338-2-srinivas.pandruvada@linux.intel.com>
+Message-ID: <f7a0db17-dfe6-f8e0-4aed-6a198fde6dea@linux.intel.com>
+References: <20230615193302.2507338-1-srinivas.pandruvada@linux.intel.com> <20230615193302.2507338-2-srinivas.pandruvada@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v7 2/8] PCI/VGA: Deal only with VGA class devices
-Content-Language: en-US
-To:     Alex Deucher <alexdeucher@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Sui Jingfeng <15330273260@189.cn>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-fbdev@vger.kernel.org, kvm@vger.kernel.org,
-        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org, linux-pci@vger.kernel.org
-References: <20230613030151.216625-1-15330273260@189.cn>
- <20230613030151.216625-3-15330273260@189.cn>
- <dbf0d89f-717a-1f78-aef2-f30506751d4d@loongson.cn>
- <CADnq5_N6vVtzH6tzguZdHnP_TdRoG1G-Cr94O+X03jvtk=vhag@mail.gmail.com>
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <CADnq5_N6vVtzH6tzguZdHnP_TdRoG1G-Cr94O+X03jvtk=vhag@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxZuQLC4xk+_0cAA--.16734S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoW3Xw1Utryrury5AF4rCFyrKrX_yoW7Ar48pF
-        WrCay5KrW8JFy7C342qr1kXFyYv3sYya4rJF4rK3sakFZ0yr98WryrKry5u3yxGrZ5GF1I
-        vw4UJF9rua9YqagCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        XVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
-        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67
-        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
-        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
-        v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jOa93UUU
-        UU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,187 +63,267 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, 15 Jun 2023, Srinivas Pandruvada wrote:
 
-On 2023/6/16 05:11, Alex Deucher wrote:
-> On Wed, Jun 14, 2023 at 6:50 AM Sui Jingfeng <suijingfeng@loongson.cn> wrote:
->> Hi,
->>
->> On 2023/6/13 11:01, Sui Jingfeng wrote:
->>> From: Sui Jingfeng <suijingfeng@loongson.cn>
->>>
->>> Deal only with the VGA devcie(pdev->class == 0x0300), so replace the
->>> pci_get_subsys() function with pci_get_class(). Filter the non-PCI display
->>> device(pdev->class != 0x0300) out. There no need to process the non-display
->>> PCI device.
->>>
->>> Cc: Bjorn Helgaas <bhelgaas@google.com>
->>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->>> ---
->>>    drivers/pci/vgaarb.c | 22 ++++++++++++----------
->>>    1 file changed, 12 insertions(+), 10 deletions(-)
->>>
->>> diff --git a/drivers/pci/vgaarb.c b/drivers/pci/vgaarb.c
->>> index c1bc6c983932..22a505e877dc 100644
->>> --- a/drivers/pci/vgaarb.c
->>> +++ b/drivers/pci/vgaarb.c
->>> @@ -754,10 +754,6 @@ static bool vga_arbiter_add_pci_device(struct pci_dev *pdev)
->>>        struct pci_dev *bridge;
->>>        u16 cmd;
->>>
->>> -     /* Only deal with VGA class devices */
->>> -     if ((pdev->class >> 8) != PCI_CLASS_DISPLAY_VGA)
->>> -             return false;
->>> -
->> Hi, here is probably a bug fixing.
->>
->> For an example, nvidia render only GPU typically has 0x0380.
->>
->> as its PCI class number, but render only GPU should not participate in
->> the arbitration.
->>
->> As it shouldn't snoop the legacy fixed VGA address.
->>
->> It(render only GPU) can not display anything.
->>
->>
->> But 0x0380 >> 8 = 0x03, the filter  failed.
->>
->>
->>>        /* Allocate structure */
->>>        vgadev = kzalloc(sizeof(struct vga_device), GFP_KERNEL);
->>>        if (vgadev == NULL) {
->>> @@ -1500,7 +1496,9 @@ static int pci_notify(struct notifier_block *nb, unsigned long action,
->>>        struct pci_dev *pdev = to_pci_dev(dev);
->>>        bool notify = false;
->>>
->>> -     vgaarb_dbg(dev, "%s\n", __func__);
->>> +     /* Only deal with VGA class devices */
->>> +     if (pdev->class != PCI_CLASS_DISPLAY_VGA << 8)
->>> +             return 0;
->> So here we only care 0x0300, my initial intent is to make an optimization,
->>
->> nowadays sane display graphic card should all has 0x0300 as its PCI
->> class number, is this complete right?
->>
->> ```
->>
->> #define PCI_BASE_CLASS_DISPLAY        0x03
->> #define PCI_CLASS_DISPLAY_VGA        0x0300
->> #define PCI_CLASS_DISPLAY_XGA        0x0301
->> #define PCI_CLASS_DISPLAY_3D        0x0302
->> #define PCI_CLASS_DISPLAY_OTHER        0x0380
->>
->> ```
->>
->> Any ideas ?
-> I'm not quite sure what you are asking about here.
+> Some of the PM features can be locked or disabled. In that case, write
+> interface can be locked.
+> 
+> This status is read via a mailbox. There is one TPMI ID which provides
+> base address for interface and data register for mail box operation.
+> The mailbox operations is defined in the TPMI specification. Refer to
+> https://github.com/intel/tpmi_power_management/ for TPMI specifications.
+> 
+> An API is exposed to feature drivers to read feature control status.
+> 
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+> As suggested by Dan Williams changed ioremap to devm_ioremap() after
+> review by Andy.
+> 
+>  drivers/platform/x86/intel/tpmi.c | 147 ++++++++++++++++++++++++++++++
+>  include/linux/intel_tpmi.h        |   2 +
+>  2 files changed, 149 insertions(+)
+> 
+> diff --git a/drivers/platform/x86/intel/tpmi.c b/drivers/platform/x86/intel/tpmi.c
+> index a5227951decc..9545e9cdb924 100644
+> --- a/drivers/platform/x86/intel/tpmi.c
+> +++ b/drivers/platform/x86/intel/tpmi.c
+> @@ -47,8 +47,11 @@
+>   */
+>  
+>  #include <linux/auxiliary_bus.h>
+> +#include <linux/bitfield.h>
+> +#include <linux/delay.h>
+>  #include <linux/intel_tpmi.h>
+>  #include <linux/io.h>
+> +#include <linux/iopoll.h>
+>  #include <linux/module.h>
+>  #include <linux/pci.h>
+>  
+> @@ -98,6 +101,7 @@ struct intel_tpmi_pm_feature {
+>   * @feature_count:	Number of TPMI of TPMI instances pointed by tpmi_features
+>   * @pfs_start:		Start of PFS offset for the TPMI instances in this device
+>   * @plat_info:		Stores platform info which can be used by the client drivers
+> + * @tpmi_control_mem:	Memory mapped IO for getting control information
+>   *
+>   * Stores the information for all TPMI devices enumerated from a single PCI device.
+>   */
+> @@ -107,6 +111,7 @@ struct intel_tpmi_info {
+>  	int feature_count;
+>  	u64 pfs_start;
+>  	struct intel_tpmi_plat_info plat_info;
+> +	void __iomem *tpmi_control_mem;
+>  };
+>  
+>  /**
+> @@ -139,6 +144,7 @@ enum intel_tpmi_id {
+>  	TPMI_ID_PEM = 1, /* Power and Perf excursion Monitor */
+>  	TPMI_ID_UNCORE = 2, /* Uncore Frequency Scaling */
+>  	TPMI_ID_SST = 5, /* Speed Select Technology */
+> +	TPMI_CONTROL_ID = 0x80, /* Special ID for getting feature status */
+>  	TPMI_INFO_ID = 0x81, /* Special ID for PCI BDF and Package ID information */
+>  };
+>  
+> @@ -175,6 +181,144 @@ struct resource *tpmi_get_resource_at_index(struct auxiliary_device *auxdev, int
+>  }
+>  EXPORT_SYMBOL_NS_GPL(tpmi_get_resource_at_index, INTEL_TPMI);
+>  
+> +/* TPMI Control Interface */
+> +
+> +#define TPMI_CONTROL_STATUS_OFFSET	0x00
+> +#define TPMI_COMMAND_OFFSET		0x08
+> +#define TPMI_DATA_OFFSET		0x0C
+> +/*
+> + * Spec is calling for max 1 seconds to get ownership at the worst
+> + * case. Read at 10 ms timeouts and repeat up to 1 second.
+> + */
+> +#define TPMI_CONTROL_TIMEOUT_US		(10 * USEC_PER_MSEC)
+> +#define TPMI_CONTROL_TIMEOUT_MAX_US	USEC_PER_SEC
+> +
+> +#define TPMI_RB_TIMEOUT_US		(10 * USEC_PER_MSEC)
+> +#define TPMI_RB_TIMEOUT_MAX_US		USEC_PER_SEC
+> +
+> +#define TPMI_OWNER_NONE			0
+> +#define TPMI_OWNER_IN_BAND		1
+> +
+> +#define TPMI_GENMASK_OWNER	GENMASK_ULL(5, 4)
+> +#define TPMI_GENMASK_STATUS	GENMASK_ULL(15, 8)
+> +
+> +#define TPMI_GET_STATE_CMD		0x10
+> +#define TPMI_GET_STATE_CMD_DATA_OFFSET	8
+> +#define TPMI_CMD_DATA_OFFSET		32
+> +#define TPMI_CMD_PKT_LEN_OFFSET		16
+> +#define TPMI_CMD_PKT_LEN		2
+> +#define TPMI_CONTROL_RB_BIT		0
+> +#define TPMI_CONTROL_CPL_BIT		6
+> +#define TPMI_CMD_STATUS_SUCCESS		0x40
+> +#define TPMI_GET_STATUS_BIT_ENABLE	0
+> +#define TPMI_GET_STATUS_BIT_LOCKED	31
+> +
+> +/* Mutex to complete get feature status without interruption */
+> +static DEFINE_MUTEX(tpmi_dev_lock);
+> +
+> +static int tpmi_wait_for_owner(struct intel_tpmi_info *tpmi_info, u8 owner)
+> +{
+> +	u64 control;
+> +
+> +	return read_poll_timeout(readq, control, owner == FIELD_GET(TPMI_GENMASK_OWNER, control),
+> +				 TPMI_CONTROL_TIMEOUT_US, TPMI_CONTROL_TIMEOUT_MAX_US, false,
+> +				 tpmi_info->tpmi_control_mem + TPMI_CONTROL_STATUS_OFFSET);
+> +}
+> +
+> +static int tpmi_read_feature_status(struct intel_tpmi_info *tpmi_info, int feature_id,
+> +				    int *locked, int *disabled)
+> +{
+> +	u64 control, data;
+> +	int ret;
+> +
+> +	if (!tpmi_info->tpmi_control_mem)
+> +		return -EFAULT;
+> +
+> +	mutex_lock(&tpmi_dev_lock);
+> +
+> +	ret = tpmi_wait_for_owner(tpmi_info, TPMI_OWNER_NONE);
+> +	if (ret)
+> +		goto err_unlock;
+> +
+> +	/* set command id to 0x10 for TPMI_GET_STATE */
+> +	data = TPMI_GET_STATE_CMD;
+> +	/* 32 bits for DATA offset and +8 for feature_id field */
+> +	data |= ((u64)feature_id << (TPMI_CMD_DATA_OFFSET + TPMI_GET_STATE_CMD_DATA_OFFSET));
 
-To be honest, I'm worried about the PCI devices which has a
+This looks like you should add the GENMASK_ULL() for the fields and use 
+FIELD_PREP() instead of adding all those OFFSET defines + custom shifting.
 
-PCI_CLASS_DISPLAY_XGA as its PCI class number.
+> +
+> +	/* Write at command offset for qword access */
+> +	writeq(data, tpmi_info->tpmi_control_mem + TPMI_COMMAND_OFFSET);
+> +
+> +	ret = tpmi_wait_for_owner(tpmi_info, TPMI_OWNER_IN_BAND);
+> +	if (ret)
+> +		goto err_unlock;
+> +
+> +	/* Set Run Busy and packet length of 2 dwords */
+> +	writeq(BIT_ULL(TPMI_CONTROL_RB_BIT) | (TPMI_CMD_PKT_LEN << TPMI_CMD_PKT_LEN_OFFSET),
 
-As those devices are very uncommon in the real world.
+Define using BIT_ULL(0) instead. Use FIELD_PREP().
 
+I'd drop _BIT from the define name but I leave it up to you, it just 
+makes your lines longer w/o much added value.
 
-$ find . -name "*.c" -type f | xargs grep "PCI_CLASS_DISPLAY_XGA"
+> +	       tpmi_info->tpmi_control_mem + TPMI_CONTROL_STATUS_OFFSET);
+> +
+> +	ret = read_poll_timeout(readq, control, !(control & BIT_ULL(TPMI_CONTROL_RB_BIT)),
+> +				TPMI_RB_TIMEOUT_US, TPMI_RB_TIMEOUT_MAX_US, false,
+> +				tpmi_info->tpmi_control_mem + TPMI_CONTROL_STATUS_OFFSET);
+> +	if (ret)
+> +		goto done_proc;
+> +
+> +	control = FIELD_GET(TPMI_GENMASK_STATUS, control);
+> +	if (control != TPMI_CMD_STATUS_SUCCESS) {
+> +		ret = -EBUSY;
+> +		goto done_proc;
+> +	}
+> +
+> +	data = readq(tpmi_info->tpmi_control_mem + TPMI_COMMAND_OFFSET);
+> +	data >>= TPMI_CMD_DATA_OFFSET; /* Upper 32 bits are for TPMI_DATA */
 
+Define the field with GENMASK() and use FIELD_GET().
 
-Grep the "PCI_CLASS_DISPLAY_XGA" in the linux kernel tree got ZERO,
+> +
+> +	*disabled = 0;
+> +	*locked = 0;
+> +
+> +	if (!(data & BIT_ULL(TPMI_GET_STATUS_BIT_ENABLE)))
 
-there no code reference this macro. So I think it seems safe to ignore 
-the XGA ?
+Put BIT_ULL() into the define.
 
+Perhaps drop _BIT_ from the name.
 
-PCI_CLASS_DISPLAY_3D and PCI_CLASS_DISPLAY_OTHER are used to annotate 
-the render-only GPU.
+> +		*disabled = 1;
+> +
+> +	if (data & BIT_ULL(TPMI_GET_STATUS_BIT_LOCKED))
 
-And render-only GPU can't decode the fixed VGA address space, it is safe 
-to ignore them.
+Ditto.
 
+> +		*locked = 1;
+> +
+> +	ret = 0;
+> +
+> +done_proc:
+> +	/* SET CPL "completion"bit */
 
->   For vga_arb, we
-> only care about VGA class devices since those should be on the only
-> ones that might have VGA routed to them.
+Missing space.
 
->   However, as VGA gets deprecated,
+> +	writeq(BIT_ULL(TPMI_CONTROL_CPL_BIT),
 
-We need the vgaarb for a system with multiple video card.
+BIT_ULL() to define.
 
-Not only because some Legacy VGA devices implemented
+> +	       tpmi_info->tpmi_control_mem + TPMI_CONTROL_STATUS_OFFSET);
+> +
+> +err_unlock:
+> +	mutex_unlock(&tpmi_dev_lock);
+> +
+> +	return ret;
+> +}
+> +
+> +int tpmi_get_feature_status(struct auxiliary_device *auxdev, int feature_id,
+> +			    int *locked, int *disabled)
+> +{
+> +	struct intel_vsec_device *intel_vsec_dev = dev_to_ivdev(auxdev->dev.parent);
+> +	struct intel_tpmi_info *tpmi_info = auxiliary_get_drvdata(&intel_vsec_dev->auxdev);
+> +
+> +	return tpmi_read_feature_status(tpmi_info, feature_id, locked, disabled);
+> +}
+> +EXPORT_SYMBOL_NS_GPL(tpmi_get_feature_status, INTEL_TPMI);
+> +
+> +static void tpmi_set_control_base(struct auxiliary_device *auxdev,
+> +				  struct intel_tpmi_info *tpmi_info,
+> +				  struct intel_tpmi_pm_feature *pfs)
+> +{
+> +	void __iomem *mem;
+> +	u16 size;
+> +
+> +	size = pfs->pfs_header.num_entries * pfs->pfs_header.entry_size * 4;
 
-on PCI will typically have the same "hard-decoded" addresses;
+Can this overflow u16? Where does pfs_header content originate from? If 
+from HW, how is it the input validated?
 
-But also these video card need to participate in the arbitration,
-
-determine the default boot device.
-
-
-Nowadays, the 'VGA devices' here is stand for the Graphics card
-
-which is capable of display something on the screen.
-
-We still need vgaarb to select the default boot device.
-
-
-> you'll have more non VGA PCI classes for devices which
-> could be the pre-OS console device.
-
-Ah, we still want  do this(by applying this patch) first,
-
-and then we will have the opportunity to see who will crying if 
-something is broken. Will know more then.
-
-But drop this patch or revise it with more consideration is also 
-acceptable.
-
-
-I asking about suggestion and/or review.
-
-> Alex
->
->>>        /* For now we're only intereted in devices added and removed. I didn't
->>>         * test this thing here, so someone needs to double check for the
->>> @@ -1510,6 +1508,8 @@ static int pci_notify(struct notifier_block *nb, unsigned long action,
->>>        else if (action == BUS_NOTIFY_DEL_DEVICE)
->>>                notify = vga_arbiter_del_pci_device(pdev);
->>>
->>> +     vgaarb_dbg(dev, "%s: action = %lu\n", __func__, action);
->>> +
->>>        if (notify)
->>>                vga_arbiter_notify_clients();
->>>        return 0;
->>> @@ -1534,8 +1534,8 @@ static struct miscdevice vga_arb_device = {
->>>
->>>    static int __init vga_arb_device_init(void)
->>>    {
->>> +     struct pci_dev *pdev = NULL;
->>>        int rc;
->>> -     struct pci_dev *pdev;
->>>
->>>        rc = misc_register(&vga_arb_device);
->>>        if (rc < 0)
->>> @@ -1545,11 +1545,13 @@ static int __init vga_arb_device_init(void)
->>>
->>>        /* We add all PCI devices satisfying VGA class in the arbiter by
->>>         * default */
->>> -     pdev = NULL;
->>> -     while ((pdev =
->>> -             pci_get_subsys(PCI_ANY_ID, PCI_ANY_ID, PCI_ANY_ID,
->>> -                            PCI_ANY_ID, pdev)) != NULL)
->>> +     while (1) {
->>> +             pdev = pci_get_class(PCI_CLASS_DISPLAY_VGA << 8, pdev);
->>> +             if (!pdev)
->>> +                     break;
->>> +
->>>                vga_arbiter_add_pci_device(pdev);
->>> +     }
->>>
->>>        pr_info("loaded\n");
->>>        return rc;
->> --
->> Jingfeng
->>
 -- 
-Jingfeng
+ i.
 
+
+> +	mem = devm_ioremap(&auxdev->dev, pfs->vsec_offset, size);
+> +	if (!mem)
+> +		return;
+> +
+> +	/* mem is pointing to TPMI CONTROL base */
+> +	tpmi_info->tpmi_control_mem = mem;
+> +}
+> +
+>  static const char *intel_tpmi_name(enum intel_tpmi_id id)
+>  {
+>  	switch (id) {
+> @@ -367,6 +511,9 @@ static int intel_vsec_tpmi_init(struct auxiliary_device *auxdev)
+>  		 */
+>  		if (pfs->pfs_header.tpmi_id == TPMI_INFO_ID)
+>  			tpmi_process_info(tpmi_info, pfs);
+> +
+> +		if (pfs->pfs_header.tpmi_id == TPMI_CONTROL_ID)
+> +			tpmi_set_control_base(auxdev, tpmi_info, pfs);
+>  	}
+>  
+>  	tpmi_info->pfs_start = pfs_start;
+> diff --git a/include/linux/intel_tpmi.h b/include/linux/intel_tpmi.h
+> index f505788c05da..04d937ad4dc4 100644
+> --- a/include/linux/intel_tpmi.h
+> +++ b/include/linux/intel_tpmi.h
+> @@ -27,4 +27,6 @@ struct intel_tpmi_plat_info *tpmi_get_platform_data(struct auxiliary_device *aux
+>  struct resource *tpmi_get_resource_at_index(struct auxiliary_device *auxdev, int index);
+>  int tpmi_get_resource_count(struct auxiliary_device *auxdev);
+>  
+> +int tpmi_get_feature_status(struct auxiliary_device *auxdev, int feature_id, int *locked,
+> +			    int *disabled);
+>  #endif
+> 
