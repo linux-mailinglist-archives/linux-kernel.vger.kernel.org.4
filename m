@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D61733722
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 19:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52830733724
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 19:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343945AbjFPRGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 13:06:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50102 "EHLO
+        id S1345528AbjFPRHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 13:07:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjFPRGl (ORCPT
+        with ESMTP id S229912AbjFPRHF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 13:06:41 -0400
+        Fri, 16 Jun 2023 13:07:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976DC12B;
-        Fri, 16 Jun 2023 10:06:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2A81BC3;
+        Fri, 16 Jun 2023 10:07:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0ADE761197;
-        Fri, 16 Jun 2023 17:06:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B20FC433C8;
-        Fri, 16 Jun 2023 17:06:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 10A8761EFB;
+        Fri, 16 Jun 2023 17:07:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A4DDC433C0;
+        Fri, 16 Jun 2023 17:07:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686935198;
-        bh=oYugvKskX3ycARRns+Q3JNVdPtAXrA9xWAu5PokkPE8=;
+        s=k20201202; t=1686935223;
+        bh=ANYkmBJGUK3gxGc6i6+SY4srcN3mW7UlL+HWDMqvql4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hMUJcv2t/x02kV/m7nNOUJwHVJEaLLhow/G6fH/doP3rZh9yEnsv183P8uXt+ehz8
-         UYhI7Z4DnuH0mIJAHievM0a/l+qNYLsN3ceKcYWAOZIDNw7Ah46pdKhpzQ77dJ41bG
-         RPX58IoAqk8r2i3lGq/uVkQcZY8l5Qe+iQNiMMqWKeiQdffGGyL/ZyfurOw6WW0OsG
-         44igd7J8EPxrurdFwKyv87foQPddzTzExiWyYPH5k/cZHpQ/7Y2lQmp6ErxQIYDxkx
-         Drgy5pTTUusBjL7wOoqBck4/8Nd2EMqlFoenuVByatGkzKWfRuQBsb8JAhp6dK8dhQ
-         x986XhM85j/fw==
-Date:   Fri, 16 Jun 2023 10:06:35 -0700
+        b=tkwlJyy+ithOeGX55qP22gsPP8xYfhBsmhhjjzi1BAu26df1sHKyOdzmQJjopZEts
+         Ke16g5xnhJ95uYc8EGRdG0h5R7jrEPkAx1lseksGYwRWCSK6WAV0KwtRrkrwC+C8dl
+         8SMzwnGIy5+5eRx/FIydAdNDT7ea13hzI0KSyObCzhfGwswwloAqYTRcr96YRWDasI
+         DXy23rokJ31kdc4/TkBwUkLoYePPfABueB8t3/QWAeZah9URjt6wx5Owy6LbJgDDRJ
+         YSxUA4CGAqOTwW3tBb82tYKws6ZXeCsh2HT0ZZFPzxGT5iflr+eQly5iwGip0E6J68
+         f4UmAd8oVJWgw==
+Date:   Fri, 16 Jun 2023 10:07:00 -0700
 From:   Nathan Chancellor <nathan@kernel.org>
 To:     Miguel Ojeda <ojeda@kernel.org>
 Cc:     Masahiro Yamada <masahiroy@kernel.org>,
@@ -47,17 +47,16 @@ Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         Alice Ryhl <aliceryhl@google.com>,
         Andreas Hindborg <nmi@metaspace.dk>,
         linux-kbuild@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Russell Currey <ruscur@russell.cc>
-Subject: Re: [PATCH v2 02/11] kbuild: rust_is_available: fix version check
- when CC has multiple arguments
-Message-ID: <20230616170635.GA3474164@dev-arch.thelio-3990X>
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH v2 03/11] docs: rust: add paragraph about finding a
+ suitable `libclang`
+Message-ID: <20230616170700.GB3474164@dev-arch.thelio-3990X>
 References: <20230616001631.463536-1-ojeda@kernel.org>
- <20230616001631.463536-3-ojeda@kernel.org>
+ <20230616001631.463536-4-ojeda@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230616001631.463536-3-ojeda@kernel.org>
+In-Reply-To: <20230616001631.463536-4-ojeda@kernel.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -68,48 +67,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 02:16:22AM +0200, Miguel Ojeda wrote:
-> From: Russell Currey <ruscur@russell.cc>
+On Fri, Jun 16, 2023 at 02:16:23AM +0200, Miguel Ojeda wrote:
+> Sometimes users need to tweak the finding process of `libclang`
+> for `bindgen` via the `clang-sys`-provided environment variables.
 > 
-> rust_is_available.sh uses cc-version.sh to identify which C compiler is
-> in use, as scripts/Kconfig.include does.  cc-version.sh isn't designed to
-> be able to handle multiple arguments in one variable, i.e. "ccache clang".
-> Its invocation in rust_is_available.sh quotes "$CC", which makes
-> $1 == "ccache clang" instead of the intended $1 == ccache & $2 == clang.
+> Thus add a paragraph to the setting up guide, including a reference
+> to `clang-sys`'s relevant documentation.
 > 
-> cc-version.sh could also be changed to handle having "ccache clang" as one
-> argument, but it only has the one consumer upstream, making it simpler to
-> fix the caller here.
-> 
-> Signed-off-by: Russell Currey <ruscur@russell.cc>
-> Fixes: 78521f3399ab ("scripts: add `rust_is_available.sh`")
-> Link: https://github.com/Rust-for-Linux/linux/pull/873
-> [ Reworded title prefix and reflow line to 75 columns. ]
+> Link: https://lore.kernel.org/rust-for-linux/CAKwvOdm5JT4wbdQQYuW+RT07rCi6whGBM2iUAyg8A1CmLXG6Nw@mail.gmail.com/
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 > Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
 Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
 > ---
->  scripts/rust_is_available.sh | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  Documentation/rust/quick-start.rst | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
 > 
-> diff --git a/scripts/rust_is_available.sh b/scripts/rust_is_available.sh
-> index f43a010eaf30..0c9be438e4cd 100755
-> --- a/scripts/rust_is_available.sh
-> +++ b/scripts/rust_is_available.sh
-> @@ -113,10 +113,10 @@ fi
->  #
->  # In the future, we might be able to perform a full version check, see
->  # https://github.com/rust-lang/rust-bindgen/issues/2138.
-> -cc_name=$($(dirname $0)/cc-version.sh "$CC" | cut -f1 -d' ')
-> +cc_name=$($(dirname $0)/cc-version.sh $CC | cut -f1 -d' ')
->  if [ "$cc_name" = Clang ]; then
->  	clang_version=$( \
-> -		LC_ALL=C "$CC" --version 2>/dev/null \
-> +		LC_ALL=C $CC --version 2>/dev/null \
->  			| sed -nE '1s:.*version ([0-9]+\.[0-9]+\.[0-9]+).*:\1:p'
->  	)
->  	if [ "$clang_version" != "$bindgen_libclang_version" ]; then
+> diff --git a/Documentation/rust/quick-start.rst b/Documentation/rust/quick-start.rst
+> index 13b7744b1e27..a635be69e062 100644
+> --- a/Documentation/rust/quick-start.rst
+> +++ b/Documentation/rust/quick-start.rst
+> @@ -100,6 +100,23 @@ Install it via (note that this will download and build the tool from source)::
+>  
+>  	cargo install --locked --version $(scripts/min-tool-version.sh bindgen) bindgen
+>  
+> +``bindgen`` needs to find a suitable ``libclang`` in order to work. If it is
+> +not found (or a different ``libclang`` than the one found should be used),
+> +the process can be tweaked using the environment variables understood by
+> +``clang-sys`` (the Rust bindings crate that ``bindgen`` uses to access
+> +``libclang``):
+> +
+> +* ``LLVM_CONFIG_PATH`` can be pointed to an ``llvm-config`` executable.
+> +
+> +* Or ``LIBCLANG_PATH`` can be pointed to a ``libclang`` shared library
+> +  or to the directory containing it.
+> +
+> +* Or ``CLANG_PATH`` can be pointed to a ``clang`` executable.
+> +
+> +For details, please see ``clang-sys``'s documentation at:
+> +
+> +	https://github.com/KyleMayes/clang-sys#environment-variables
+> +
+>  
+>  Requirements: Developing
+>  ------------------------
 > -- 
 > 2.41.0
 > 
