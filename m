@@ -2,122 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E79A73338C
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 16:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0754573338E
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 16:26:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345375AbjFPO0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 10:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39272 "EHLO
+        id S1345478AbjFPO0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 10:26:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbjFPO0E (ORCPT
+        with ESMTP id S1345434AbjFPO0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 10:26:04 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0B330D3;
-        Fri, 16 Jun 2023 07:26:02 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35GEPh48037867;
-        Fri, 16 Jun 2023 09:25:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1686925543;
-        bh=Pvjp0zpmxsyuufHh7izfqxh0vKwlbuqJ0cxBzxOE1HE=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=y1ZTPJL+wEFXp3CZbtgCoafIvbOaB/e64sWqx/XPgZOrKwbBN12flulCRctHP2XX6
-         j4gY2NmU3GsH+oXm+6uu3fpT5oK1gEwhjsoioFTQWFXBstGaf7jTMkONl2R+KOnsXW
-         SVBVwrxWEi61uMIH92SSZ08mXRl52EgGUWrOO++E=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35GEPhev001555
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 16 Jun 2023 09:25:43 -0500
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 16
- Jun 2023 09:25:43 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 16 Jun 2023 09:25:43 -0500
-Received: from [172.24.217.203] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35GEPc20009741;
-        Fri, 16 Jun 2023 09:25:38 -0500
-Message-ID: <04785de2-6096-95ea-71fe-428796a4d65a@ti.com>
-Date:   Fri, 16 Jun 2023 19:55:37 +0530
+        Fri, 16 Jun 2023 10:26:13 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BC230E3;
+        Fri, 16 Jun 2023 07:26:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686925571; x=1718461571;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=jbvx+fzCk6wuoZXDOskZS3VFaadcPZdfZkhrwY1ULLc=;
+  b=lPYbMMdPn16dDXSSud8doBGuw+4pB1fxXcWMrTmIYmPVIIasgccFYdRN
+   W2r0LAgibmZvQ9eZar0E0RSFBn+4oipgbfXsLppaLJpzL5DPiG4EGbKrK
+   krZ2nlO1UXjMxJ2mpyHRc3mQKrydzAuz6p46Eb4xBfWaElBfJbYBqIwdl
+   wefvLozWVDvAgFNd3m0tKYxZ1TyiGXrz7AEp/0FYDnD/0DZAn+y0vxknq
+   dT3sIiOu3Nv1wL/gGP7i/LCnblQvka8B92UDiqYKiG5GF+DKRwCZdAOqm
+   S1Xvg/apXfCKdUI0ELZ9fPhbmCMwENnYZuoiTARIkESOB96Q+fPVNOvQT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="348934347"
+X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
+   d="scan'208";a="348934347"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 07:26:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="716043859"
+X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
+   d="scan'208";a="716043859"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga007.fm.intel.com with ESMTP; 16 Jun 2023 07:26:08 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id BC90E379; Fri, 16 Jun 2023 17:26:17 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] pktcdvd: Use clamp_val() instead of min()+max()
+Date:   Fri, 16 Jun 2023 17:26:14 +0300
+Message-Id: <20230616142614.36206-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v8 2/2] drm/tidss: Add support for AM625 DSS
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Jayesh Choudhary <j-choudhary@ti.com>
-References: <20230608163734.2578-1-a-bhatia1@ti.com>
- <20230608163734.2578-3-a-bhatia1@ti.com>
- <5eb55b7d-f1e9-0dbe-cbbf-bd27ae521e5f@ideasonboard.com>
-Content-Language: en-US
-From:   Aradhya Bhatia <a-bhatia1@ti.com>
-In-Reply-To: <5eb55b7d-f1e9-0dbe-cbbf-bd27ae521e5f@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tomi,
+In a couple of places replace min()+max() pair by clamp_val().
 
-Thank you for the reviews!
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/block/pktcdvd.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-On 16-Jun-23 18:15, Tomi Valkeinen wrote:
-> Hi,
-> 
-> On 08/06/2023 19:37, Aradhya Bhatia wrote:
->> Add support for the DSS controller on TI's AM625 SoC in the tidss
->> driver.
->>
->> The AM625 DSS supports 2 video planes connecting to 2 video ports.
->> The first plane is a full plane supporting all the features, while the
->> 2nd plane is a "lite" plane without scaling support.
-> 
-> The DRM planes are reversed compared to the HW planes, aren't they? Is
-> the above referring to HW planes?
+diff --git a/drivers/block/pktcdvd.c b/drivers/block/pktcdvd.c
+index a1428538bda5..18a960bb6165 100644
+--- a/drivers/block/pktcdvd.c
++++ b/drivers/block/pktcdvd.c
+@@ -208,14 +208,11 @@ static DEVICE_ATTR_RO(size);
+ static void init_write_congestion_marks(int* lo, int* hi)
+ {
+ 	if (*hi > 0) {
+-		*hi = max(*hi, 500);
+-		*hi = min(*hi, 1000000);
++		*hi = clamp_val(*hi, 500, 1000000);
+ 		if (*lo <= 0)
+ 			*lo = *hi - 100;
+-		else {
+-			*lo = min(*lo, *hi - 100);
+-			*lo = max(*lo, 100);
+-		}
++		else
++			*lo = clamp_val(*lo, 100, *hi - 100);
+ 	} else {
+ 		*hi = -1;
+ 		*lo = -1;
+-- 
+2.40.0.1.gaa8946217a0b
 
-Yes, I am referring to the HW planes, and the DRM planes reversed as
-well. =)
-
-> 
->> The first video port in AM625 DSS internally provides DPI output to 2
->> OLDI transmitters. Each OLDI TX outputs 4 differential lanes of video
->> output and 1 of clock output.
-> 
-> I think it should be explained that OLDI is not supported in this
-> version, but will be added later.
-
-Okay, I will make the change.
-
-Regards
-Aradhya
-
-> 
-> Other than that:
-> 
-> Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> 
->  Tomi
-> 
