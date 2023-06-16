@@ -2,252 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB0C7333D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 16:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B077333D1
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 16:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345610AbjFPOkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 10:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46586 "EHLO
+        id S1344824AbjFPOl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 10:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345593AbjFPOkh (ORCPT
+        with ESMTP id S229471AbjFPOl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 10:40:37 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5159F3598;
-        Fri, 16 Jun 2023 07:40:30 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-6668208bd4eso841366b3a.0;
-        Fri, 16 Jun 2023 07:40:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686926430; x=1689518430;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ECePMHFylJkWTWaDbGM6MAlprGNj5IxPPrQMrQr2/2Q=;
-        b=g0O3syPJNPOzCmtaE4H+GYVYjQb4ElntfOK5rBDm3jwR3xnsZq/bCP5/+8hr3UcpEL
-         Tkewt82a5az5UvsYyCgBZQLq8ixPVLchRuE2fwPchZeU3RGCQhZZVAaGhrm3lUcvFNV1
-         pxDbNMRI9B5Qo8U6jTIrjRESw26heKO0xhqe+PCgStR0b6xq2x0LpZvp7shPi94LC7iM
-         MnMByUeP7+lUBRxMKrBHUFw1joq4QIk+c1UA1TFcRxET1tliIPt66mkspixgaPa1k3r8
-         MD/cb7tFWLHCVRPGGPr2/IATuPnKo39OMEMD3HErDlsn1xU0diuZ4zQnc4o+4aoOlzw8
-         k3HA==
+        Fri, 16 Jun 2023 10:41:28 -0400
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448B4294C
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 07:41:27 -0700 (PDT)
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1b3f66dda65so6493165ad.1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 07:41:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686926430; x=1689518430;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ECePMHFylJkWTWaDbGM6MAlprGNj5IxPPrQMrQr2/2Q=;
-        b=B2zSeYAzzYxgbJ3gNcDPL7i4gLT4kudfVqNaDhegidDD7aOREXsePw5OlIZL0Iy5T3
-         ZVIrN6dV2m6PLSCPct1Qz/BvOkH8wTu295tF+ULGHMvM+FPZL8cTbxqsChRBqnt4Z8ts
-         F1khjc1RlCBZvI9ch4MvPpdxuUIkgKqGeh9k3u/DGM2alk3YBgj2n4Nyz7zswB0yNvcm
-         J5orcBMUT/7WZ1n2ZUoG0OG5sR9wzrnCo/WoJSUfubtRKUdzwii9X+AJ2Qi8xOK/Ojt6
-         WaWnJy5YBRBCTxFMl3MeFiNmisrEkS+zn9kbETdypuRL9bLfoz3eEDrmOvxfZNxp/lK4
-         RqTg==
-X-Gm-Message-State: AC+VfDwn/DW7i24EjwzE6tOkqaYyWfWF3sPgVgeweID4UEBOAPvKBHVU
-        fP1/eFGVzBXPZ9KV4J1oLjc=
-X-Google-Smtp-Source: ACHHUZ40CGQUnIqfgSCwbPCUZIyqRlk0987ljQYEBf+YAFQAJ51LkdVNYPmhgAL7NnXEogo7N2iy7Q==
-X-Received: by 2002:a05:6a00:240f:b0:64b:256:204c with SMTP id z15-20020a056a00240f00b0064b0256204cmr2523397pfh.20.1686926429649;
-        Fri, 16 Jun 2023 07:40:29 -0700 (PDT)
-Received: from localhost.localdomain ([103.116.245.58])
-        by smtp.gmail.com with ESMTPSA id v19-20020a62a513000000b0065da94fe921sm13430528pfm.50.2023.06.16.07.40.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jun 2023 07:40:29 -0700 (PDT)
-From:   Jianhui Zhao <zhaojh329@gmail.com>
-To:     andrew@lunn.ch, hkallweit1@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     linux@armlinux.org.uk, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianhui Zhao <zhaojh329@gmail.com>
-Subject: [PATCH V5] net: phy: Add sysfs attribute for PHY c45 identifiers.
-Date:   Fri, 16 Jun 2023 22:40:17 +0800
-Message-Id: <20230616144017.12483-1-zhaojh329@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20221208; t=1686926487; x=1689518487;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JhDvGLDecFh2hF/zpCcDPD4K9B9uog+prVasKVM7Xmo=;
+        b=MDTQ7ANRWIiXzg5h8fCohIWoAoixXYml+pO2exDoIuhM4wBKSS7EO2wxKgY98H0RWE
+         QAgkEidW1tTuEBs8BY36uq5SzTfD16Trp87mlhLWJ5Wu/KmWJJjVGdX2ie+jLGlelyJ0
+         W0R6JGW9MabgxB/AfERYkFFG2ZkF+r6fUBQYxzOtA3K7hd8LUX2iqjBRU6dHVWjFoU2O
+         ob+XgJfUDgxmKY4KG/5BZf3om0LCSIL3fOh58wJSbhGElYM6Q6Mm+bW2knd1viR2D8+U
+         EGon4s0u8C7dSCyOFxFzvzN5ITuE9XJSpfN7NpqOTp6uFMaa7/KPpPnfLSWVmxpSHU7n
+         BBIA==
+X-Gm-Message-State: AC+VfDyEbRfmDUT41pnTvJtwbgsNCtpBWGvu7aZ4XKtz1tD86L/EF7vC
+        GUJU+mNGC+h+OOnp+klow20=
+X-Google-Smtp-Source: ACHHUZ58lCyOp+aPzRk52Fu4JqV51QalmeDbHIy4DrAKBWlgE514D4Rh88sJcxwAQvvdXuZJzIc6RQ==
+X-Received: by 2002:a17:902:d482:b0:1b2:1942:9117 with SMTP id c2-20020a170902d48200b001b219429117mr2186093plg.45.1686926486544;
+        Fri, 16 Jun 2023 07:41:26 -0700 (PDT)
+Received: from [192.168.50.14] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id n9-20020a170902968900b001b3c7e5ed8csm5373707plp.74.2023.06.16.07.41.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Jun 2023 07:41:25 -0700 (PDT)
+Message-ID: <829a3198-1b18-c566-20ee-3e4f23ddbffe@acm.org>
+Date:   Fri, 16 Jun 2023 07:41:25 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] sched/cputime: Make IRQ time accounting configurable at
+ boot time
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+References: <20230615203745.1259-1-bvanassche@acm.org>
+ <20230616074518.GW4253@hirez.programming.kicks-ass.net>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230616074518.GW4253@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a phydevice use c45, its phy_id property is always 0, so
-this adds a c45_ids sysfs attribute group contains mmd id
-attributes from mmd0 to mmd31 to MDIO devices. Note that only
-mmd with valid value will exist. This attribute group can be
-useful when debugging problems related to phy drivers.
+On 6/16/23 00:45, Peter Zijlstra wrote:
+> On Thu, Jun 15, 2023 at 01:37:26PM -0700, Bart Van Assche wrote:
+>> Some producers of Android devices want IRQ time accounting enabled while
+>> others want IRQ time accounting disabled. Hence, make IRQ time accounting
+>> configurable at boot time.
+> 
+> Why would they want this disabled? IRQ time accounting avoids a number
+> of issues under high irq/softirq pressure.
+> 
+> Disabling this makes no sense.
 
-Likes this:
-/sys/bus/mdio_bus/devices/mdio-bus:05/c45_ids/mmd1
-/sys/bus/mdio_bus/devices/mdio-bus:05/c45_ids/mmd2
-...
-/sys/bus/mdio_bus/devices/mdio-bus:05/c45_ids/mmd31
+This is why disabling IRQ time accounting makes a ton of sense to me:
+* If disabling IRQ time accounting would not be useful, there wouldn't
+   be a kernel configuration option that controls whether it is enabled
+   or disabled - it would be enabled all the time.
+* If enabling IRQ time accounting would be essential, all Linux
+   distributors would enable it. In the x86 kernels I checked, IRQ time
+   accounting is disabled (Debian and openSUSE).
+* For x86 there is already a kernel parameter for disabling IRQ time
+   accounting (tsc=noirqtime).
+* Modern hardware, e.g. UFSHCI 4.0 controllers, supports sending the
+   completion interrupt to the CPU core that submitted the I/O. With such
+   hardware IRQ overload (100% spent in IRQ handlers and 0% outside IRQ
+   handlers) is impossible because the submitter is slowed down by the
+   completion interrupts.
+* The performance overhead of CONFIG_IRQ_TIME_ACCOUNTING is
+   unacceptable. A quick test in an x86 VM shows that enabling
+   CONFIG_IRQ_TIME_ACCOUNTING reduces IOPS by 10% (220K -> 200K). On an
+   Android setup I measured an IOPS reduction of 40% (100K -> 60K) due
+   to CONFIG_IRQ_TIME_ACCOUNTING. This is not acceptable.
 
-Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Reviewed-by: Russell King <linux@armlinux.org.uk>
----
-V4 -> V5: Remove cast operation and use macro to convert attribute to a phy_c45_devid_attribute.
-V3 -> V4: Only mmd with valid value will exist.
-V2 -> V3: Use the most efficient implementation.
-V1 -> V2: putting all 32 values in a subdirectory, one file per MMD
+Thanks,
 
- .../ABI/testing/sysfs-class-net-phydev        |  10 ++
- drivers/net/phy/phy_device.c                  | 124 +++++++++++++++++-
- 2 files changed, 133 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/ABI/testing/sysfs-class-net-phydev b/Documentation/ABI/testing/sysfs-class-net-phydev
-index ac722dd5e694..58a0a150229d 100644
---- a/Documentation/ABI/testing/sysfs-class-net-phydev
-+++ b/Documentation/ABI/testing/sysfs-class-net-phydev
-@@ -63,3 +63,13 @@ Description:
- 		only used internally by the kernel and their placement are
- 		not meant to be stable across kernel versions. This is intended
- 		for facilitating the debugging of PHY drivers.
-+
-+What:		/sys/class/mdio_bus/<bus>/<device>/c45_ids/mmd<n>
-+Date:		November 2023
-+KernelVersion:	6.4
-+Contact:	netdev@vger.kernel.org
-+Description:
-+		This attribute group c45_ids contains mmd id attributes from mmd0 to mmd31
-+		as reported by the device during bus enumeration, encoded in hexadecimal.
-+		Note that only mmd with valid value will exist. This ID is used to match
-+		the device with the appropriate driver.
-diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
-index 17d0d0555a79..39f663c2ad1a 100644
---- a/drivers/net/phy/phy_device.c
-+++ b/drivers/net/phy/phy_device.c
-@@ -602,7 +602,129 @@ static struct attribute *phy_dev_attrs[] = {
- 	&dev_attr_phy_dev_flags.attr,
- 	NULL,
- };
--ATTRIBUTE_GROUPS(phy_dev);
-+
-+static const struct attribute_group phy_dev_group = {
-+	.attrs = phy_dev_attrs
-+};
-+
-+struct phy_c45_devid_attribute {
-+	struct device_attribute attr;
-+	int index;
-+};
-+
-+#define to_phy_c45_devid_attr(ptr) \
-+	container_of(ptr, struct phy_c45_devid_attribute, attr.attr)
-+
-+static ssize_t phy_c45_id_show(struct device *dev,
-+			       struct device_attribute *attr, char *buf)
-+{
-+	struct phy_c45_devid_attribute *devattr = to_phy_c45_devid_attr(&attr->attr);
-+	struct phy_device *phydev = to_phy_device(dev);
-+
-+	return sprintf(buf, "0x%.8lx\n",
-+		(unsigned long)phydev->c45_ids.device_ids[devattr->index]);
-+}
-+
-+#define DEVICE_ATTR_C45_ID(i) \
-+static struct phy_c45_devid_attribute dev_attr_phy_c45_id##i = { \
-+	.attr = { \
-+		.attr = { .name = __stringify(mmd##i), .mode = 0444 }, \
-+		.show = phy_c45_id_show \
-+	}, \
-+	.index = i, \
-+}
-+
-+DEVICE_ATTR_C45_ID(0);
-+DEVICE_ATTR_C45_ID(1);
-+DEVICE_ATTR_C45_ID(2);
-+DEVICE_ATTR_C45_ID(3);
-+DEVICE_ATTR_C45_ID(4);
-+DEVICE_ATTR_C45_ID(5);
-+DEVICE_ATTR_C45_ID(6);
-+DEVICE_ATTR_C45_ID(7);
-+DEVICE_ATTR_C45_ID(8);
-+DEVICE_ATTR_C45_ID(9);
-+DEVICE_ATTR_C45_ID(10);
-+DEVICE_ATTR_C45_ID(11);
-+DEVICE_ATTR_C45_ID(12);
-+DEVICE_ATTR_C45_ID(13);
-+DEVICE_ATTR_C45_ID(14);
-+DEVICE_ATTR_C45_ID(15);
-+DEVICE_ATTR_C45_ID(16);
-+DEVICE_ATTR_C45_ID(17);
-+DEVICE_ATTR_C45_ID(18);
-+DEVICE_ATTR_C45_ID(19);
-+DEVICE_ATTR_C45_ID(20);
-+DEVICE_ATTR_C45_ID(21);
-+DEVICE_ATTR_C45_ID(22);
-+DEVICE_ATTR_C45_ID(23);
-+DEVICE_ATTR_C45_ID(24);
-+DEVICE_ATTR_C45_ID(25);
-+DEVICE_ATTR_C45_ID(26);
-+DEVICE_ATTR_C45_ID(27);
-+DEVICE_ATTR_C45_ID(28);
-+DEVICE_ATTR_C45_ID(29);
-+DEVICE_ATTR_C45_ID(30);
-+DEVICE_ATTR_C45_ID(31);
-+
-+static struct attribute *phy_c45_id_attrs[] = {
-+	&dev_attr_phy_c45_id0.attr.attr,
-+	&dev_attr_phy_c45_id1.attr.attr,
-+	&dev_attr_phy_c45_id2.attr.attr,
-+	&dev_attr_phy_c45_id3.attr.attr,
-+	&dev_attr_phy_c45_id4.attr.attr,
-+	&dev_attr_phy_c45_id5.attr.attr,
-+	&dev_attr_phy_c45_id6.attr.attr,
-+	&dev_attr_phy_c45_id7.attr.attr,
-+	&dev_attr_phy_c45_id8.attr.attr,
-+	&dev_attr_phy_c45_id9.attr.attr,
-+	&dev_attr_phy_c45_id10.attr.attr,
-+	&dev_attr_phy_c45_id11.attr.attr,
-+	&dev_attr_phy_c45_id12.attr.attr,
-+	&dev_attr_phy_c45_id13.attr.attr,
-+	&dev_attr_phy_c45_id14.attr.attr,
-+	&dev_attr_phy_c45_id15.attr.attr,
-+	&dev_attr_phy_c45_id16.attr.attr,
-+	&dev_attr_phy_c45_id17.attr.attr,
-+	&dev_attr_phy_c45_id18.attr.attr,
-+	&dev_attr_phy_c45_id19.attr.attr,
-+	&dev_attr_phy_c45_id20.attr.attr,
-+	&dev_attr_phy_c45_id21.attr.attr,
-+	&dev_attr_phy_c45_id22.attr.attr,
-+	&dev_attr_phy_c45_id23.attr.attr,
-+	&dev_attr_phy_c45_id24.attr.attr,
-+	&dev_attr_phy_c45_id25.attr.attr,
-+	&dev_attr_phy_c45_id26.attr.attr,
-+	&dev_attr_phy_c45_id27.attr.attr,
-+	&dev_attr_phy_c45_id28.attr.attr,
-+	&dev_attr_phy_c45_id29.attr.attr,
-+	&dev_attr_phy_c45_id30.attr.attr,
-+	&dev_attr_phy_c45_id31.attr.attr,
-+	NULL,
-+};
-+
-+static umode_t phy_dev_c45_visible(struct kobject *kobj, struct attribute *attr, int foo)
-+{
-+	struct phy_c45_devid_attribute *devattr = to_phy_c45_devid_attr(attr);
-+	struct phy_device *phydev = to_phy_device(kobj_to_dev(kobj));
-+
-+	if (!phydev->is_c45 || phydev->c45_ids.device_ids[devattr->index] == 0xffffffff)
-+		return 0;
-+
-+	return attr->mode;
-+}
-+
-+static const struct attribute_group phy_dev_c45_ids_group = {
-+	.name = "c45_ids",
-+	.attrs = phy_c45_id_attrs,
-+	.is_visible = phy_dev_c45_visible
-+};
-+
-+static const struct attribute_group *phy_dev_groups[] = {
-+	&phy_dev_group,
-+	&phy_dev_c45_ids_group,
-+	NULL,
-+};
- 
- static const struct device_type mdio_bus_phy_type = {
- 	.name = "PHY",
--- 
-2.34.1
-
+Bart.
