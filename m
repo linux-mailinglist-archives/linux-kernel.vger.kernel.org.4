@@ -2,73 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D084F7333F7
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 16:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D987333F4
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 16:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345757AbjFPOts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 10:49:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52876 "EHLO
+        id S1345721AbjFPOuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 10:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345713AbjFPOtq (ORCPT
+        with ESMTP id S1345713AbjFPOuW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 10:49:46 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA8930F1;
-        Fri, 16 Jun 2023 07:49:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=VO5W5mFkgLXJm6gyeqxnjpMRqTtw3g3R0G84ncCKgdE=; b=ypHqV6En7mX+pLKENt2maPqGdc
-        vDyiKOGPmCbVwmIJptuuNzLqUDoF76l9WKuTKUK6b2uiU+dKiNMmz1Vj2k8gGVxQVdEo8A4+aLaBu
-        OMv1XAl78qNpGmLshByifOhrcY4l/sXbGuPf9CxPqizt9eFSaAv/hxg6S0H3ciCzgTSg=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1qAAlY-00GjHv-Sf; Fri, 16 Jun 2023 16:49:32 +0200
-Date:   Fri, 16 Jun 2023 16:49:32 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Jianhui Zhao <zhaojh329@gmail.com>
-Cc:     hkallweit1@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux@armlinux.org.uk,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V5] net: phy: Add sysfs attribute for PHY c45 identifiers.
-Message-ID: <661044f3-9447-45c7-8bda-b9f6a667385a@lunn.ch>
-References: <20230616144017.12483-1-zhaojh329@gmail.com>
+        Fri, 16 Jun 2023 10:50:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA0030EB
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 07:50:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43C6A63CFD
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 14:50:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA777C433C0;
+        Fri, 16 Jun 2023 14:50:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686927020;
+        bh=aEGQIyQH+ng6zCmITf21YgP8Yf+bC5Kk7ngJnR9VmGQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pskvSaL4qUT8OQmfocSE2D1oC123LHsXjhHwQI5qJhBT+4LUCNli2MN3wz1DiJKr1
+         a0LK82Ju/N+XJU2mFfMyRtSamYBUETjRK3zOvDm2Ujs4Va5Kiw59vpV9IDi0DgNoov
+         D2+C5y9pROF6ouIwrWYnM5iHu2D6rt4P/5RXxpS/XJ2EeCX7NlUyqLqcZ7Nfjt5EZn
+         THclYP5FJzESYRA+aaBD9Hl2YnULHKI9i84J1r2xiA16HjNHJUz6ExOGdubllAKCJG
+         MkNZjByS4xpuFE3zjKBYAl+LhLsXWshaI30ii80oezdg4fB8LSg/Q3uWnAfAyyS8P2
+         zRjS609bP/LRA==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Julien Panis <jpanis@baylibre.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Mark Rutland <mark.rutland@arm.com>, Hao Ge <gehao@kylinos.cn>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] samples: pfsm: add CC_CAN_LINK dependency
+Date:   Fri, 16 Jun 2023 16:50:10 +0200
+Message-Id: <20230616145013.3889906-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230616144017.12483-1-zhaojh329@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 10:40:17PM +0800, Jianhui Zhao wrote:
-> If a phydevice use c45, its phy_id property is always 0, so
-> this adds a c45_ids sysfs attribute group contains mmd id
-> attributes from mmd0 to mmd31 to MDIO devices. Note that only
-> mmd with valid value will exist. This attribute group can be
-> useful when debugging problems related to phy drivers.
-> 
-> Likes this:
-> /sys/bus/mdio_bus/devices/mdio-bus:05/c45_ids/mmd1
-> /sys/bus/mdio_bus/devices/mdio-bus:05/c45_ids/mmd2
-> ...
-> /sys/bus/mdio_bus/devices/mdio-bus:05/c45_ids/mmd31
-> 
-> Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
-> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-> Reviewed-by: Russell King <linux@armlinux.org.uk>
+From: Arnd Bergmann <arnd@arndb.de>
 
-Did you read Russells comments? And Jakubs? Please don't ignore them.
+When no libc for the target architecture is available, cross-compiling
+the same cannot work:
 
-    Andrew
+samples/pfsm/pfsm-wakeup.c:12:10: fatal error: fcntl.h: No such file or directory
 
+Fixes: 9e66fb5244953 ("samples: Add userspace example for TI TPS6594 PFSM")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
-pw-bot: cr
+ samples/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/samples/Kconfig b/samples/Kconfig
+index 3edf73a3dc9bf..bf49ed0d73623 100644
+--- a/samples/Kconfig
++++ b/samples/Kconfig
+@@ -256,6 +256,7 @@ config SAMPLE_INTEL_MEI
+ config SAMPLE_TPS6594_PFSM
+ 	bool "Build example program working with TPS6594 PFSM driver"
+ 	depends on HEADERS_INSTALL
++	depends on CC_CAN_LINK
+ 	help
+ 	  Build a sample program to work with PFSM devices.
+ 
+-- 
+2.39.2
+
