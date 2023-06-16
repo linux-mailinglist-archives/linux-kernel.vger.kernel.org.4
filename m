@@ -2,113 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2950D733B4F
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 23:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07018733B54
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 23:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236740AbjFPVHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 17:07:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36726 "EHLO
+        id S1344895AbjFPVHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 17:07:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbjFPVHA (ORCPT
+        with ESMTP id S229928AbjFPVHS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 17:07:00 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B664D8;
-        Fri, 16 Jun 2023 14:06:58 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35GKTG1s004082;
-        Fri, 16 Jun 2023 21:06:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=za7Wba2fM/qIMMUatKDGea50zMmcCuEOpPbahiJJj7U=;
- b=HOKyVUOV1UfUXzD2/zA3/8BidtYYDu8GRfKRBgqdSPyqnac28z10ZgmccdGsyPPtnhuR
- mfVvrTiwkviVO19JqrqyjbCjZezQlPl/9h82qg9MhgdONdZ5hJCEiNb1nqa/khcVBAcU
- z/TW3IsBmE7s44fx3db7dlPC6DQS6p1ClDavAaXAjEz/vtuPRLzEvAnGAbhhpmbYQpm9
- DEigdG+HgJMuJ2OFp7IC8+QRaVAH+0dFtZfl587qaX0UADqKn8qrAfQmEf6VP2SbCjj6
- 1EDMa8dC++rEuyba2MIvT7jeiliTAmzW8r94Do+b3VzQBmAsx8aid9kdM6pz5R+OyJ05 pg== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r8mt0sgyd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Jun 2023 21:06:51 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35GL6n09006248
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Jun 2023 21:06:49 GMT
-Received: from [10.110.47.14] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 16 Jun
- 2023 14:06:48 -0700
-Message-ID: <3791f18c-89f1-f066-38c4-d8d13a3ab611@quicinc.com>
-Date:   Fri, 16 Jun 2023 14:06:47 -0700
+        Fri, 16 Jun 2023 17:07:18 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461D53AAE
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 14:07:15 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f61b45ee0dso1683553e87.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 14:07:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686949633; x=1689541633;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RFFb3YxfGmJK2b87DqbF/ilD0Ztmd558ixt8ExIHkww=;
+        b=ihaNUkKwifBCoU6PT2SM5pEpEi1ielXvwNdbMGfl5EdHaKXO+Qo9rrmITND1HE41Cm
+         J+zFGjIHeL8KG2Sb/3/KUNcCNL6Ches1yz+OzZpi0OC0i3YtnpY9ePDLglKYcKPy2BN0
+         O5vKG42sQM4U+AC/vNCvRUZ6QnHG0SrRwH/xxZJaTJ1ZOkFTzx5tv7t62VKeNhKAhiyU
+         /8jqNfAML6QhtNuRbNNGNNNLMlxoZOqdiwuQ33uUR6zm72QrpLqML1ieE8VpBGijhH5v
+         2gXlwP+7kOPRx9j3RRbil4ehgyStIJAD4uOLvoSO47LR1HnMkg/tio1UtA6rN3FTcHz7
+         uTEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686949633; x=1689541633;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RFFb3YxfGmJK2b87DqbF/ilD0Ztmd558ixt8ExIHkww=;
+        b=FrhmMF5QvSF6Mm71kyBaCnvNhVcKTnhLTJFERFFFhJDN7QiGdiZADiJG47dLCEu2sP
+         QKV2cqOtUGzJIshaI9GE8p/+bgUIfba6qsBl6QcSaflygiwK218JHiJJgS7KeF/oiOGy
+         7qKfFPXFTuq4FYBpdTgAA2hPUrkiPo6j3YyleKqY/Xii4cQytJzifu03VwZqniQ5LwIF
+         HsDJGG9+BB5nz2cx9DTDBm1DAQYENoex4QDVeoCQFlxXexNfWhMI0g4iJWepLAtH62lp
+         FchtmzNOKKp5AQTJB6iF+iRT+KAP8NgoK4wCNK+L5K/aiGxCKWNLW0GjZK4KMtx6nunK
+         lmMA==
+X-Gm-Message-State: AC+VfDw2CtJMyAdvXUm8sY/LYcfzLL8NdktJV1L8au/9edhOpoyu5zCy
+        KTUGpFp7Gft/hus1vHIl8+lQBg==
+X-Google-Smtp-Source: ACHHUZ5blRCZnKqsQFllh31kgK8mRTbs3vZ1iFksdiHDQ/EZMzyNTnk0F3AHdmS/Nd05QsBgej6RgQ==
+X-Received: by 2002:a19:654c:0:b0:4f8:4aed:b489 with SMTP id c12-20020a19654c000000b004f84aedb489mr2364662lfj.18.1686949632960;
+        Fri, 16 Jun 2023 14:07:12 -0700 (PDT)
+Received: from [127.0.1.1] ([85.235.12.238])
+        by smtp.gmail.com with ESMTPSA id r12-20020ac24d0c000000b004f4ce9c9338sm3180909lfi.283.2023.06.16.14.07.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 14:07:12 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH v2 0/2] Fix up the boe-tv101wum-nl6 panel driver
+Date:   Fri, 16 Jun 2023 23:07:10 +0200
+Message-Id: <20230615-fix-boe-tv101wum-nl6-v2-0-457d7ece4590@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/3] drm/msm/dpu: Add DPU_INTF_DATABUS_WIDEN feature flag
- for DPU >= 5.0
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
- <20230525-add-widebus-support-v1-1-c7069f2efca1@quicinc.com>
- <wpjxrnhbcanbc5iatxnff25yrrdfrtmgb24sgwyo457dz2oyjz@e2docpcb6337>
- <f4fb042c-1458-6077-3c49-8cc02638b27c@linaro.org>
- <ycgei43x4kfmjk7g7gbeglehtiiinfbqmrjbdzcy56frxbtd2z@yk2f5kgrkbrt>
- <i5trozzoexkm7taojob4c53sajm2w6tnasj2yfzjy3a77oqvw7@wadk7g7op2kp>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <i5trozzoexkm7taojob4c53sajm2w6tnasj2yfzjy3a77oqvw7@wadk7g7op2kp>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: aGrCF_1cbB0Bk6TJHXfvFuyKpruSru8c
-X-Proofpoint-GUID: aGrCF_1cbB0Bk6TJHXfvFuyKpruSru8c
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-16_14,2023-06-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- priorityscore=1501 bulkscore=0 lowpriorityscore=0 phishscore=0
- adultscore=0 clxscore=1015 mlxlogscore=423 malwarescore=0 spamscore=0
- impostorscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306160191
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-B4-Tracking: v=1; b=H4sIAP/OjGQC/4WNTQ6CMBCFr0K6dkxbfuPKexgWUxygCbRkilVDu
+ LuFC7j83st73yYCsaUgbtkmmKIN1rsE+pKJbkQ3ENhnYqGlzmWlSujtB4wnWKOS6v2awU0VVIh
+ 5j0ZrUxQiTQ0GAsPouvEYzxhW4qNYmNLB6Xu0iUcbVs/fUx/Vkf4xRQUSGuzyuilk2Zv6PlmH7
+ K+eB9Hu+/4DZrLTptIAAAA=
+To:     Ruihai Zhou <zhouruihai@huaqin.corp-partner.google.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        yangcong <yangcong5@huaqin.corp-partner.google.com>,
+        Jitao Shi <jitao.shi@mediatek.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+X-Mailer: b4 0.12.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is two patches fixing things I would normally complain about
+in reviews, but alas I missed this one, so I go in and fix it up
+myself.
 
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+Changes in v2:
+- Fix a missed static keyword
+- Link to v1: https://lore.kernel.org/r/20230615-fix-boe-tv101wum-nl6-v1-0-8ac378405fb7@linaro.org
 
-On 6/14/2023 3:49 PM, Marijn Suijten wrote:
-> On 2023-06-14 14:23:38, Marijn Suijten wrote:
-> <snip>
->> Tested this on SM8350 which actually has DSI 2.5, and it is also
->> corrupted with this series so something else on this series might be
->> broken.
-> 
-> Never mind, this was a bad conflict-resolve.  Jessica's original
-> BURST_MODE patch was RMW'ing MDP_CTRL2, but the upstreamed patch was
-> only writing, and the way I conflict-resolved that caused the write of
-> BURST_MODE to overwrite the RMW DATABUS_WIDEN.
-> 
-> If both are moved to dsi_ctrl_config(), we could do a read, add both
-> flags in conditionally, and write.
-> 
+---
+Linus Walleij (2):
+      drm/panel: boe-tv101wum-nl6: Drop macros and open code sequences
+      drm/panel: boe-tv101wum-nl6: Drop surplus prepare tracking
 
-So just to confirm, there is no issue on your 8350 setup with widebus 
-enabled right?
+ drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c | 2420 ++++++++++++------------
+ 1 file changed, 1193 insertions(+), 1227 deletions(-)
+---
+base-commit: ac9a78681b921877518763ba0e89202254349d1b
+change-id: 20230615-fix-boe-tv101wum-nl6-6aa3fab22b44
 
-> - Marijn
+Best regards,
+-- 
+Linus Walleij <linus.walleij@linaro.org>
+
