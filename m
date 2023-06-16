@@ -2,406 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DCA373327D
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 15:48:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36DBB733280
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 15:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344536AbjFPNsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 09:48:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42646 "EHLO
+        id S230161AbjFPNtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 09:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344368AbjFPNs1 (ORCPT
+        with ESMTP id S1344976AbjFPNsj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 09:48:27 -0400
-Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF5130DE
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 06:48:25 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
-        by localhost (Postfix) with ESMTP id 4QjL8l0BHtz9s12;
-        Fri, 16 Jun 2023 15:48:23 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 1067xZSW2GWH; Fri, 16 Jun 2023 15:48:22 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4QjL8g6fQdz9s0s;
-        Fri, 16 Jun 2023 15:48:19 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id DFC958B77D;
-        Fri, 16 Jun 2023 15:48:19 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 66P6jqudVMmj; Fri, 16 Jun 2023 15:48:19 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.18])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id B09E78B764;
-        Fri, 16 Jun 2023 15:48:19 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 35GDmB0X1175663
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Fri, 16 Jun 2023 15:48:11 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 35GDmACk1175661;
-        Fri, 16 Jun 2023 15:48:10 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sathvika Vasireddy <sv@linux.ibm.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [RFC PATCH v1 3/3] powerpc: WIP draft support to objtool check
-Date:   Fri, 16 Jun 2023 15:47:52 +0200
-Message-Id: <8fbf16dd6a89e1b5b05244bd5e0746410674829e.1686922583.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <cover.1686922583.git.christophe.leroy@csgroup.eu>
-References: <cover.1686922583.git.christophe.leroy@csgroup.eu>
+        Fri, 16 Jun 2023 09:48:39 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8893A92;
+        Fri, 16 Jun 2023 06:48:34 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35GCip8O004492;
+        Fri, 16 Jun 2023 13:48:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2023-03-30;
+ bh=i8eZLcMqRhNuAfctc4M3C5eIlS9stGSKnPtUFnxUqCo=;
+ b=lA2HeOTrW0eQFAQ+QpaHPSUWnA2QMizmeelWMJNVvw1M8hZ4l5JMHYpAjthocMUV+DVT
+ DK6bSp3Ov6/e3+yiu3nvm2+FxsQtzJsGT0Mh0CH61/HKHUk0cVtmw8BQOIWptMdFx85Z
+ fkCG3jE8IybTNHYCTNaWrWdMG/tLG/xQb19Tv7Rj+/Q3CVwDsIu9NA8oiuRsE5KhDU4l
+ 6KKBW/db5qorBwnwQHi2P8gzHxkuUgvFSrJ+MUcu4T90W34iSX/9vk+eiLK6uEdSu3IW
+ lbr23+0exHuPd/t4i+tKmwwCgkQ4Ch5TUA8YTUSk0azVnCeQdn+7hPJ3b+MJPUGlS9AU XA== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r4fs24an8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 16 Jun 2023 13:48:17 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35GCIcdG040511;
+        Fri, 16 Jun 2023 13:48:16 GMT
+Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam02lp2045.outbound.protection.outlook.com [104.47.51.45])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3r4fm7yg45-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 16 Jun 2023 13:48:16 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UkHMcA9tsMdKm7YPXMPmGOvhKb+YsUD4HpsuHR66iogLlksfCL/cAwEuyuibm8GU1Cq4vZ4oSRP2TfxjnsyLEmgg1TbrDlLj2oayavYWB6UZVaFTee6r2HXjCgEGxQ/anz8n5jkkyWTocmrB/VLfRLfSF0HvwRvMaUaBJr1yvE4qGhytJ9ug9dVBcYpwdwWsNwRmIiEmHqKbeCGJ/9y1i/RtFTFTYecfB9wBOGniS9SFYwK6heidYRsAltw2B1YvbUwHwAtobcc6XK2yMKbXQ2KqDrKsR567HdSWZ24JJ4AsYXN3jpkpaowj7+pCgzuk+Vpp8avFEpDTjIl+wo0XZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=i8eZLcMqRhNuAfctc4M3C5eIlS9stGSKnPtUFnxUqCo=;
+ b=MHpYJpaAGoT/ckvu5PCYdJrrHRzN5ubNo35D5YAVZJTUg/Ad6wXS5kVp8GQZXDn9gYhMcoClR2xgl9uO7HyFvMkBlN3uRAo91A2FT31ONWEj1NJmAmAMI4opIoHyHE/LhSZnjJiIsdiH1goPQZpfM92LMOvvK2bovTA5rFZNeOMHOOB1MLOTVjCX0Kens9BHBOzd159pPQdSJPuzgiGa8YeedV3EzwYDlmiYNILhhl1DZSNg15sM0tucD7xaZ5HXPrYGnz6mddtaiLoCgRYx/snT2FBTn+zB9tI5j0ZIRTMOk/nKeyQ7yOjxUUqSEzikGPgZfwg4eH/XpshsemxmSw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=i8eZLcMqRhNuAfctc4M3C5eIlS9stGSKnPtUFnxUqCo=;
+ b=mcbJJKPgGmLtKcURerSh9w5AkXESbufl7tLHQ5+zEIxBlURUEocmY4gZnAYypGEOnuH/ZQimTBisGQJU4uukQyGak+bHF3+r3bXCH4B4zVW10l0YisPEjOMjGFxrmcnmFU1hdvjE9DyJjZJW4N35WcxTWYIIhL4GCP0Qu8poA8M=
+Received: from DM6PR10MB4313.namprd10.prod.outlook.com (2603:10b6:5:212::20)
+ by PH0PR10MB4422.namprd10.prod.outlook.com (2603:10b6:510:38::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.29; Fri, 16 Jun
+ 2023 13:48:14 +0000
+Received: from DM6PR10MB4313.namprd10.prod.outlook.com
+ ([fe80::e38:5b81:b87f:c1eb]) by DM6PR10MB4313.namprd10.prod.outlook.com
+ ([fe80::e38:5b81:b87f:c1eb%7]) with mapi id 15.20.6500.026; Fri, 16 Jun 2023
+ 13:48:14 +0000
+Message-ID: <d92494e1-37e2-36d6-6edd-a2f1093f63b9@oracle.com>
+Date:   Fri, 16 Jun 2023 14:48:08 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH V4 5/5] perf vendor events arm64: Add default tags for
+ Hisi hip08 L1 metrics
+To:     kan.liang@linux.intel.com, acme@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, irogers@google.com, namhyung@kernel.org,
+        jolsa@kernel.org, adrian.hunter@intel.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     ak@linux.intel.com, eranian@google.com, ahmad.yasin@intel.com
+References: <20230616031420.3751973-1-kan.liang@linux.intel.com>
+ <20230616031420.3751973-6-kan.liang@linux.intel.com>
+Content-Language: en-US
+From:   John Garry <john.g.garry@oracle.com>
+Organization: Oracle Corporation
+In-Reply-To: <20230616031420.3751973-6-kan.liang@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P123CA0504.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:1ab::23) To DM6PR10MB4313.namprd10.prod.outlook.com
+ (2603:10b6:5:212::20)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1686923268; l=11701; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=Wg1RgV9ghOKrFYk6CuUre0qE0meV8NHuNie239IWks0=; b=FzMQ7Ae/8RiM/prENbOAaI8UYe39viWv5CyvyTyvNOMCIJ7zsvdOWo2adpJfHwPrEP+bSwnCO msOtJNs3NKkBrcvxGsAabMDI6BvlTu4q+4EJw6RtmC3T7ezsnI8WLrH
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR10MB4313:EE_|PH0PR10MB4422:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6f77cc27-8953-4a5f-bc53-08db6e7054a6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Hp/gV+MHoa8/1ULOK20eVzY26j8T2N+brYcVM617cqP9++diRTiuFv0eURNU0RsFWqrRVv3ZQi0u0JV7FMvj0R9wxgjJBoACy9oMmKbcpJc3UO+SWY7uj8pd8Wk8g/DGwUmXnDKQ0+c495EE5nsdUNvyEH2me0yAB68P82x6F6bAy4+yd0MPNoJrf0e9TOdIzWdpwpCPfhRFshpsVi5muSYLcYq8gd2VRZAZrdTspPUBQYUPEjt5003qMxNNhYIfePJxXshZNM8TMik940MnwqhFu0rMyltRGMEd3REGfRw+RtCrNXsN9brfsRLMY8+YkBF0Dxbi1bW2gV4DRiXbluikUTiBlv1tbLil3zDOQyeHNacySYTuMHBeGr3O6WCKgVBi/vFN+S9LKEyg00pW5Pmq74HXembYbBHhimZn5mviHW/HadMNRW5Clo73bnjJMNAWdG7aUPX/XjB9EhWjv9is9GhGX3+Ps/2sW/SmfKQ77rA/aWMwKJlZ3JTQJQO5YZXwz9me6KdUHSJ9dHKFyLxHTwE1f7ftO7kvYbGHFMWWJUZVHy6Prf2m3p3EgYi9hT47bxczDQIrbN2xB5apNaOMjrXufDqhUkOM4uEDKO0rmL4T3HupbWihpBeIWLxvi/uzagyIjrfDSy+LH1+1bGvl8PTNU2doHHrkjh4XD0s=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB4313.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(396003)(136003)(346002)(39860400002)(376002)(451199021)(53546011)(6512007)(6506007)(26005)(66946007)(4326008)(316002)(66476007)(66556008)(2616005)(31686004)(186003)(36916002)(6486002)(6666004)(921005)(478600001)(38100700002)(7416002)(8676002)(8936002)(5660300002)(86362001)(558084003)(31696002)(41300700001)(2906002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aWdqNnF0b3BQQ0h1T21kZE4rTnA1MFVzcGRwbS9lWlJFRWsrVCtFM1dYR2xM?=
+ =?utf-8?B?em5hQmZZR3o1cWc5NkYzNXVENnBPMDBiZ2ZWRkZ5NzJEelQwVnR3Y0cyTE81?=
+ =?utf-8?B?MlpwMFVCUW9GVC9tZEFYa01hbklaVFFtRHh0cXJjbENFVWZyT3MvQjVZUEZ2?=
+ =?utf-8?B?Tm03QjZjTm9nYWpwTlc2YUlTYlRkQkNwd1c0dlJOc0dnZzNUUTR3KzhHN1J1?=
+ =?utf-8?B?WHJwZzdwVFZVT2lFV1h2TnhnVHJRRVhWclVrK2FudWk2cTR6MFdDeWljZUQ0?=
+ =?utf-8?B?OGllSmhzNkpiRWdBU2M2Mk9WcWtuTFM0eDRMM2R2WUV6WVZvcHJ0aFdETlVC?=
+ =?utf-8?B?Q21DTWYyUGRTSnRRVFRYeDA5WTJVV1dqMGNvell3MEF1K3BKK2pTL1JZVnpj?=
+ =?utf-8?B?NlJPOUJ6ZEtUanltemV6dXNQQ2pLNEZXckxLVEg1T0ZuQ1pJWUlwRGZOTWZa?=
+ =?utf-8?B?RGgxVzBOUi9JOHB2cTEreEl5d21qTzJsbVMxc2xlOVBIbG5BdWNVMWU5Q2JY?=
+ =?utf-8?B?Z2V5YmhhZXprZndCOFZLa0JKc1kvKzcycExBdExwdnRQdTB0MFRRVXNvWHJs?=
+ =?utf-8?B?UlRjNG9FSG1BclBsKzc0ZklQZHpPZm11VDkzNUx6K2xTaFN6bVMvZkdqQnVP?=
+ =?utf-8?B?ZFIzaTY1ODdsUUJaNGxiTDlBcDRTMmtXMTlNQm9RcXFFZkRMK1plUE4wVDVo?=
+ =?utf-8?B?VEpPK0drUTBJdTM3WFE5ay9Kc0lJSXlZNmJ3MURBRTlqNmhFUG1SL1hFak80?=
+ =?utf-8?B?VG5Ybk81eE1Kb3Nia09nS2FVTmJiUjd1NXpZN1FSMFZnakRvdHBDdStFNjha?=
+ =?utf-8?B?SGh5ZExrZm4wQmI3cjNmZ1RzalJod3BxQlI0SkhldGhLNVJyMkhQb3RJTVlS?=
+ =?utf-8?B?T0swMTdNYndMU3JRSzJVT1NZcGpWOVZYQ3pIa0ZvcDdTVjNWZDVxcmRBNTM0?=
+ =?utf-8?B?WHdDbHBWYVlkR096VUsrclFIU1FvY1VWeXBVb2U0bmttS0RVYThHbUhtMito?=
+ =?utf-8?B?YXhLQ1grc0hlaFBwZ1JrbHFydjk0QUVoeVQ5SVhmWkEyVmdiNFRsSXFmdU0v?=
+ =?utf-8?B?T3VWTDdKaUpRRElHSkN5R3B0cldpdHJQeUhYT1AyRkovU1oxU2FyckJzRkVy?=
+ =?utf-8?B?Mi9RYnZESE1ZbUtqZmU1QlVNaTRWcW9oK2l4amlTMjFPc3RHQlp6eS9tVUxX?=
+ =?utf-8?B?cUl4cUZkdURneHk0ZGpSVzlKVERnZUMyNmc1NHVOTndPTlJ2OVJGODFzUnpG?=
+ =?utf-8?B?cERTVkE2UDNBcElYd21icXNsOHNsZC9QVnJ6bXNSMDdSeDdUTFRiam5CUHNl?=
+ =?utf-8?B?S1M0WjduMmR4RW1xRkE0Rmt2dkVYd0ptU0ZqaDNFc1UvcS9EV0I5Nzk1aW9Q?=
+ =?utf-8?B?eVovNm1mMEord1JTNTlBZVo1TU1XRGJCQXpvdWNzSEQwYUdMWmpja1Rwdm4v?=
+ =?utf-8?B?SS9wTjhHeHZhU25yZnFnSGRBYlBZbEYvZXJGOFRibndtVkJIb05aS0FNR3d5?=
+ =?utf-8?B?aGlGc2xpTmtSSTRaZ2hSTTFzYWNlNVdROFRERXIxaHRJTjB6L0dac21KK1pH?=
+ =?utf-8?B?R3ZCNnVBby90M0ZIZGQ5ZXhIMk5YNEg1dVl2RE9YOU1nckxwcFczK2pDOWRR?=
+ =?utf-8?B?ekhYeUlzeDMvTDNma2l6U2s3SzlOYSttbWhENDJJSXpOWHFQOEFVL1RVUDhY?=
+ =?utf-8?B?TFlJaVExdE5yUjVGbnUwM1NMbkZHYkt4NFJRU3RMYy82eWc1bTVOWlBwdTJW?=
+ =?utf-8?B?b2FUaXYvNTU4T3RiWTJmVTVHMTJsK25VdGJSMEdCZ3R4d1N1VXkwWVJpV29E?=
+ =?utf-8?B?V3J1K29PRVFVWGFDbmM1NnQyVW1DWnJIaEdsb3hwTTRnUFpUb0RJL2g4aU5m?=
+ =?utf-8?B?UmdiYTJWeGdyMllveHUwNGxhTEYwTXZuT00zNlRmZTRZN2ZEYXl4ZDMyVnBn?=
+ =?utf-8?B?MmJkNEFFRkJObkh6U1NPaXdaVWZSazNwcDJiMUN5WlROZFB4Y2UzclN4VWk5?=
+ =?utf-8?B?enF2eHVqbU0yV05lYStwendleXZLNk1naHhWMTAvTzkwK2dsTjZyNXNqamVL?=
+ =?utf-8?B?ekhDSFVFQTNpY09aNDlDZUgrYU9qSExXNkFkNVBxUzVmMDl1VG1ZM3o1Q1hm?=
+ =?utf-8?Q?c6Vxm554K2h2W5TkcNQsUHVVj?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?d0VEOWptbW9yUWRWSlA4anc1ZjcwSG96bWZiRm1lU3NIcHBuRHNBWThld3ZO?=
+ =?utf-8?B?U3l1MFdjd2ZueitrUVl6eXJhMXY5OVhmdHUrcUd3UU45TGRia3o2ZVZQTWtN?=
+ =?utf-8?B?ZHJFNzMxSGRWcXhNbDBaU1ZQYUZjSVZHWmxQUzQvSWdlYlh0WTFZa3kzNkV5?=
+ =?utf-8?B?eld3d094Z1VGRDYrcklaOEdQdXUzcWVsOEh4emhWbzJmeWlSWjdTL3lOdWpn?=
+ =?utf-8?B?dDdNSE5hQ3YyMmIycnpnYmtybkI1LzZCMGRlZU84Y2Y0NC9MR1hLK1RRNzE0?=
+ =?utf-8?B?VHJRVjA1RElpbzJSaTdPbkZ3amNtbnZoY1hRNHN0NERGTWFsSmk3ekZBeS9a?=
+ =?utf-8?B?UmxZNTcxVE02VTNqc1cwZFlOV2JDK2tBcXFHeFZ4UXNWdFNZblJ5NHB6ejNi?=
+ =?utf-8?B?SzZZSmZpUzc2VFhYS0l5UkhDQ1h3MVNJWWNvZXhiZDIxRU1LOUFkZDFQRDdw?=
+ =?utf-8?B?TlhjTHk5MnkxNytJOXlhLy9XU0xGR1U5bUJQZlRZRDg5b1VmWXN5WEFkRlZU?=
+ =?utf-8?B?UmQ2R1lLRGdQSUFGT0dYRmdqcUlGazUvV1dodGNIVXRXZlY4eEg1S2t3Q1Zp?=
+ =?utf-8?B?TmVmRWtKVVNOZHoxMkNueWYxUTlldWlaUWhOaWt3UWdYRGZlM3ZxdWFaMEg4?=
+ =?utf-8?B?d2hYS3BpTHdNM3ZyT0tRaWt3bmJSemRYdjF1Z1lYTFJiemVMNlY1MjFoMktL?=
+ =?utf-8?B?WUtWS3dxZzVFNUYyQi9EMjhuRGMzVC9KSkVJekZxNlVxaXFSRUV5aExIRTNX?=
+ =?utf-8?B?QXd6OHoyN0RCaEJuQmltM1JMemtyeE5vUTg4NDlzQ2pnd3ZUY0hKSUNYWHZ4?=
+ =?utf-8?B?M050MXloSmJzY0haSHF1ZEVreG1xNFd6QU5vbHF5MEp3bFNrZ203dFk2Ykkw?=
+ =?utf-8?B?WHMrN0lZS2w2UmVDNVY4bS9SSUt4aG0zN2lmM1grWGhNSUloeGtXZkRySDNG?=
+ =?utf-8?B?bDR5aGdXLzUvNXU4NzZaTDBhRDRHWHhrTGlSYnNYWVZ4NFlJdzNVTFREdG11?=
+ =?utf-8?B?TWlmd3ZaZi9TN2lzbjFncktIL08xRFBVN3R1QzN5TjNLdmlFK1dybkk1SHhF?=
+ =?utf-8?B?TjFBY0pPVHBTeGRtN0NvZ3lnUXdTU0pzMmF3MnZNaTVmUW1Hdm41MDZkZGpD?=
+ =?utf-8?B?WW0xZC9kMlZDNTQyUmNOSk5lbFdzQlc2cVF3NlcvVjRhZHBTUFpEb29ZQjR2?=
+ =?utf-8?B?S20zYnFkUG5lY0pwcVVDT21lY3lFK2wwLzBxQXREU2ZyL1gzLzZqVjRWdHFT?=
+ =?utf-8?B?TU5UN3c1S3VLMWY4NWtHZXJ2cmJsM1ZOTnUxMGJkODFNb3VYUT09?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6f77cc27-8953-4a5f-bc53-08db6e7054a6
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB4313.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 13:48:14.1308
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 51POcw8hnUxhG/8vEMRqiug2jmSj77MD3kyTx559UzKPP9JLPcVVvzEzyP2xT7YaFLeSMq9Rin4S5RukCfcb8A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB4422
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-16_08,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0
+ suspectscore=0 mlxlogscore=999 mlxscore=0 phishscore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306160124
+X-Proofpoint-GUID: DrImtSe-i-cW-aBPRzUicznaNn3zQaJJ
+X-Proofpoint-ORIG-GUID: DrImtSe-i-cW-aBPRzUicznaNn3zQaJJ
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This draft messy patch is first try to add support of objtool
-check for powerpc. This is in preparation of doing uaccess
-validation for powerpc.
+On 16/06/2023 04:14, kan.liang@linux.intel.com wrote:
+> From: Kan Liang<kan.liang@linux.intel.com>
+> 
+> Add the default tags for Hisi hip08 as well.
+> 
+> Signed-off-by: Kan Liang<kan.liang@linux.intel.com>
+> Cc: John Garry<john.g.garry@oracle.com>
 
-For the time being, this is implemented for PPC32 only breaking
-support for other targets eventually. Will be reworked to be more
-generic once a final working status has been achieved.
-
-All assembly files have been deactivated as they require huge
-work and are not really needed at the first place for uaccess validation.
-
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/Kconfig                          |  1 +
- scripts/Makefile.lib                          |  2 +-
- tools/objtool/arch/powerpc/decode.c           | 60 +++++++++++++++++--
- .../arch/powerpc/include/arch/special.h       |  2 +-
- tools/objtool/arch/powerpc/special.c          | 44 +++++++++++++-
- tools/objtool/check.c                         | 29 +++++----
- tools/objtool/include/objtool/elf.h           |  1 +
- tools/objtool/include/objtool/special.h       |  2 +-
- 8 files changed, 118 insertions(+), 23 deletions(-)
-
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 542be1c3c315..3bd244784af1 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -259,6 +259,7 @@ config PPC
- 	select HAVE_OPTPROBES
- 	select HAVE_OBJTOOL			if PPC32 || MPROFILE_KERNEL
- 	select HAVE_OBJTOOL_MCOUNT		if HAVE_OBJTOOL
-+	select HAVE_UACCESS_VALIDATION		if HAVE_OBJTOOL
- 	select HAVE_PERF_EVENTS
- 	select HAVE_PERF_EVENTS_NMI		if PPC64
- 	select HAVE_PERF_REGS
-diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index 100a386fcd71..298e2656e911 100644
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -267,7 +267,7 @@ objtool-args-$(CONFIG_RETHUNK)				+= --rethunk
- objtool-args-$(CONFIG_SLS)				+= --sls
- objtool-args-$(CONFIG_STACK_VALIDATION)			+= --stackval
- objtool-args-$(CONFIG_HAVE_STATIC_CALL_INLINE)		+= --static-call
--objtool-args-$(CONFIG_HAVE_UACCESS_VALIDATION)		+= --uaccess
-+objtool-args-$(CONFIG_HAVE_UACCESS_VALIDATION)		+= --uaccess --sec-address
- objtool-args-$(CONFIG_GCOV_KERNEL)			+= --no-unreachable
- objtool-args-$(CONFIG_PREFIX_SYMBOLS)			+= --prefix=$(CONFIG_FUNCTION_PADDING_BYTES)
- 
-diff --git a/tools/objtool/arch/powerpc/decode.c b/tools/objtool/arch/powerpc/decode.c
-index 53b55690f320..e95c0470e34b 100644
---- a/tools/objtool/arch/powerpc/decode.c
-+++ b/tools/objtool/arch/powerpc/decode.c
-@@ -43,24 +43,72 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
- 			    unsigned long offset, unsigned int maxlen,
- 			    struct instruction *insn)
- {
--	unsigned int opcode;
-+	unsigned int opcode, xop;
-+	unsigned int rs, ra, rb, bo, bi, to, uimm, l;
- 	enum insn_type typ;
- 	unsigned long imm;
- 	u32 ins;
- 
- 	ins = bswap_if_needed(file->elf, *(u32 *)(sec->data->d_buf + offset));
- 	opcode = ins >> 26;
--	typ = INSN_OTHER;
--	imm = 0;
-+	xop = (ins >> 1) & 0x3ff;
-+	rs = bo = to = (ins >> 21) & 0x1f;
-+	ra = bi = (ins >> 16) & 0x1f;
-+	rb = (ins >> 11) & 0x1f;
-+	uimm = (ins >> 0) & 0xffff;
-+	l = ins & 1;
- 
- 	switch (opcode) {
-+	case 16: /* bc[l][a] */
-+		if (ins & 1)	/* bcl[a] */
-+			typ = INSN_OTHER;
-+		else		/* bc[a] */
-+			typ = INSN_JUMP_CONDITIONAL;
-+
-+		imm = ins & 0xfffc;
-+		if (imm & 0x8000)
-+			imm -= 0x10000;
-+		imm |= ins & 2;	/* AA flag */
-+		insn->immediate = imm;
-+		break;
- 	case 18: /* b[l][a] */
--		if ((ins & 3) == 1) /* bl */
-+		if (ins & 1)	/* bl[a] */
- 			typ = INSN_CALL;
-+		else		/* b[a] */
-+			typ = INSN_JUMP_UNCONDITIONAL;
- 
- 		imm = ins & 0x3fffffc;
- 		if (imm & 0x2000000)
- 			imm -= 0x4000000;
-+		imm |= ins & 2;	/* AA flag */
-+		insn->immediate = imm;
-+		break;
-+	case 19:
-+		if (xop == 16 && bo == 20 && bi == 0)	/* blr */
-+			typ = INSN_RETURN;
-+		else if (xop == 50)	/* rfi */
-+			typ = INSN_JUMP_DYNAMIC;
-+		else if (xop == 528 && bo == 20 && bi ==0 && !l)	/* bctr */
-+			typ = INSN_JUMP_DYNAMIC;
-+		else if (xop == 528 && bo == 20 && bi ==0 && l)		/* bctrl */
-+			typ = INSN_CALL_DYNAMIC;
-+		else
-+			typ = INSN_OTHER;
-+		break;
-+	case 24:
-+		if (rs == 0 && ra == 0 && uimm == 0)
-+			typ = INSN_NOP;
-+		else
-+			typ = INSN_OTHER;
-+		break;
-+	case 31:
-+		if (xop == 4 && to == 31 && ra == 0 && rb == 0) /* trap */
-+			typ = INSN_BUG;
-+		else
-+			typ = INSN_OTHER;
-+		break;
-+	default:
-+		typ = INSN_OTHER;
- 		break;
- 	}
- 
-@@ -70,13 +118,15 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
- 		insn->len = 4;
- 
- 	insn->type = typ;
--	insn->immediate = imm;
- 
- 	return 0;
- }
- 
- unsigned long arch_jump_destination(struct instruction *insn)
- {
-+	if (insn->immediate & 2)
-+		return insn->immediate & ~2;
-+
- 	return insn->offset + insn->immediate;
- }
- 
-diff --git a/tools/objtool/arch/powerpc/include/arch/special.h b/tools/objtool/arch/powerpc/include/arch/special.h
-index ffef9ada7133..a679b36307a9 100644
---- a/tools/objtool/arch/powerpc/include/arch/special.h
-+++ b/tools/objtool/arch/powerpc/include/arch/special.h
-@@ -6,7 +6,7 @@
- #define EX_ORIG_OFFSET 0
- #define EX_NEW_OFFSET 4
- 
--#define JUMP_ENTRY_SIZE 16
-+#define JUMP_ENTRY_SIZE 12
- #define JUMP_ORIG_OFFSET 0
- #define JUMP_NEW_OFFSET 4
- #define JUMP_KEY_OFFSET 8
-diff --git a/tools/objtool/arch/powerpc/special.c b/tools/objtool/arch/powerpc/special.c
-index d33868147196..0e301b3a5b71 100644
---- a/tools/objtool/arch/powerpc/special.c
-+++ b/tools/objtool/arch/powerpc/special.c
-@@ -13,7 +13,47 @@ bool arch_support_alt_relocation(struct special_alt *special_alt,
- }
- 
- struct reloc *arch_find_switch_table(struct objtool_file *file,
--				    struct instruction *insn)
-+				    struct instruction *insn, bool *is_rel)
- {
--	exit(-1);
-+	struct reloc  *text_reloc, *rodata_reloc;
-+	struct section *table_sec;
-+	unsigned long table_offset;
-+
-+	/* look for a relocation which references .rodata */
-+	text_reloc = find_reloc_by_dest_range(file->elf, insn->sec,
-+					      insn->offset, insn->len);
-+	if (!text_reloc || text_reloc->sym->type != STT_SECTION ||
-+	    !text_reloc->sym->sec->rodata)
-+		return NULL;
-+
-+	table_offset = text_reloc->addend;
-+	table_sec = text_reloc->sym->sec;
-+
-+	/*
-+	 * Make sure the .rodata address isn't associated with a
-+	 * symbol.  GCC jump tables are anonymous data.
-+	 *
-+	 * Also support C jump tables which are in the same format as
-+	 * switch jump tables.  For objtool to recognize them, they
-+	 * need to be placed in the C_JUMP_TABLE_SECTION section.  They
-+	 * have symbols associated with them.
-+	 */
-+	if (find_symbol_containing(table_sec, table_offset)) {
-+		*is_rel = false;
-+		if (strcmp(table_sec->name, C_JUMP_TABLE_SECTION))
-+			return NULL;
-+	} else {
-+		*is_rel = true;
-+	}
-+
-+	/*
-+	 * Each table entry has a rela associated with it.  The rela
-+	 * should reference text in the same function as the original
-+	 * instruction.
-+	 */
-+	rodata_reloc = find_reloc_by_dest(file->elf, table_sec, table_offset);
-+	if (!rodata_reloc)
-+		return NULL;
-+
-+	return rodata_reloc;
- }
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 0fcf99c91400..f945fe271706 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -236,6 +236,7 @@ static bool __dead_end_function(struct objtool_file *file, struct symbol *func,
- 		"x86_64_start_reservations",
- 		"xen_cpu_bringup_again",
- 		"xen_start_kernel",
-+		"longjmp",
- 	};
- 
- 	if (!func)
-@@ -2060,13 +2061,12 @@ static int add_jump_table(struct objtool_file *file, struct instruction *insn,
- 	 * instruction.
- 	 */
- 	list_for_each_entry_from(reloc, &table->sec->reloc_list, list) {
--
- 		/* Check for the end of the table: */
- 		if (reloc != table && reloc->jump_table_start)
- 			break;
- 
- 		/* Make sure the table entries are consecutive: */
--		if (prev_offset && reloc->offset != prev_offset + 8)
-+		if (prev_offset && reloc->offset != prev_offset + 4)
- 			break;
- 
- 		/* Detect function pointers from contiguous objects: */
-@@ -2074,7 +2074,10 @@ static int add_jump_table(struct objtool_file *file, struct instruction *insn,
- 		    reloc->addend == pfunc->offset)
- 			break;
- 
--		dest_insn = find_insn(file, reloc->sym->sec, reloc->addend);
-+		if (table->jump_table_is_rel)
-+			dest_insn = find_insn(file, reloc->sym->sec, reloc->addend + table->offset - reloc->offset);
-+		else
-+			dest_insn = find_insn(file, reloc->sym->sec, reloc->addend);
- 		if (!dest_insn)
- 			break;
- 
-@@ -2108,7 +2111,7 @@ static int add_jump_table(struct objtool_file *file, struct instruction *insn,
-  */
- static struct reloc *find_jump_table(struct objtool_file *file,
- 				      struct symbol *func,
--				      struct instruction *insn)
-+				      struct instruction *insn, bool *is_rel)
- {
- 	struct reloc *table_reloc;
- 	struct instruction *dest_insn, *orig_insn = insn;
-@@ -2125,14 +2128,7 @@ static struct reloc *find_jump_table(struct objtool_file *file,
- 		if (insn != orig_insn && insn->type == INSN_JUMP_DYNAMIC)
- 			break;
- 
--		/* allow small jumps within the range */
--		if (insn->type == INSN_JUMP_UNCONDITIONAL &&
--		    insn->jump_dest &&
--		    (insn->jump_dest->offset <= insn->offset ||
--		     insn->jump_dest->offset > orig_insn->offset))
--		    break;
--
--		table_reloc = arch_find_switch_table(file, insn);
-+		table_reloc = arch_find_switch_table(file, insn, is_rel);
- 		if (!table_reloc)
- 			continue;
- 		dest_insn = find_insn(file, table_reloc->sym->sec, table_reloc->addend);
-@@ -2154,6 +2150,7 @@ static void mark_func_jump_tables(struct objtool_file *file,
- {
- 	struct instruction *insn, *last = NULL;
- 	struct reloc *reloc;
-+	bool is_rel;
- 
- 	func_for_each_insn(file, func, insn) {
- 		if (!last)
-@@ -2176,9 +2173,10 @@ static void mark_func_jump_tables(struct objtool_file *file,
- 		if (insn->type != INSN_JUMP_DYNAMIC)
- 			continue;
- 
--		reloc = find_jump_table(file, func, insn);
-+		reloc = find_jump_table(file, func, insn, &is_rel);
- 		if (reloc) {
- 			reloc->jump_table_start = true;
-+			reloc->jump_table_is_rel = is_rel;
- 			insn->_jump_table = reloc;
- 		}
- 	}
-@@ -4024,6 +4022,11 @@ static bool ignore_unreachable_insn(struct objtool_file *file, struct instructio
- 	if (insn->ignore || insn->type == INSN_NOP || insn->type == INSN_TRAP)
- 		return true;
- 
-+	/* powerpc relocatable files have a word in front of each relocatable function */
-+	if ((file->elf->ehdr.e_machine == EM_PPC || file->elf->ehdr.e_machine == EM_PPC64) &&
-+	    (file->elf->ehdr.e_flags & EF_PPC_RELOCATABLE_LIB) &&
-+	    insn_func(next_insn_same_sec(file, insn)))
-+		return true;
- 	/*
- 	 * Ignore alternative replacement instructions.  This can happen
- 	 * when a whitelisted function uses one of the ALTERNATIVE macros.
-diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
-index e1ca588eb69d..64aac87a4825 100644
---- a/tools/objtool/include/objtool/elf.h
-+++ b/tools/objtool/include/objtool/elf.h
-@@ -80,6 +80,7 @@ struct reloc {
- 	s64 addend;
- 	int idx;
- 	bool jump_table_start;
-+	bool jump_table_is_rel;
- };
- 
- #define ELF_HASH_BITS	20
-diff --git a/tools/objtool/include/objtool/special.h b/tools/objtool/include/objtool/special.h
-index 86d4af9c5aa9..803c6d3ba389 100644
---- a/tools/objtool/include/objtool/special.h
-+++ b/tools/objtool/include/objtool/special.h
-@@ -38,5 +38,5 @@ bool arch_support_alt_relocation(struct special_alt *special_alt,
- 				 struct instruction *insn,
- 				 struct reloc *reloc);
- struct reloc *arch_find_switch_table(struct objtool_file *file,
--				    struct instruction *insn);
-+				    struct instruction *insn, bool *is_rel);
- #endif /* _SPECIAL_H */
--- 
-2.40.1
-
+Reviewed-by: John Garry <john.g.garry@oracle.com>
