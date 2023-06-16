@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C90732B6F
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92FE2732B70
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344338AbjFPJZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 05:25:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
+        id S1344344AbjFPJ0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 05:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344143AbjFPJYz (ORCPT
+        with ESMTP id S1344140AbjFPJYz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 16 Jun 2023 05:24:55 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D0D2695;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AE72719;
         Fri, 16 Jun 2023 02:24:52 -0700 (PDT)
 Date:   Fri, 16 Jun 2023 09:24:49 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686907489;
+        s=2020; t=1686907490;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=CiZpTVxnUZzuczFQxKQSaLnqyVa2i6IQpsTInmTvxTA=;
-        b=wOr7wbXRVwz61K1UkEMKsjSCXjeBOeG6EeOoYfwIJGTzZVZn0JHTH0jcCldpT0HQ8rnCS3
-        LTF+LJFNGFTqSx9LpR5ws5D+wNaIMKE5JZZyJcI1LRSdsU//1z8LrYyHWV9tEBjLBIrJSv
-        0VP+ReNgJWYT/IPKlR5gouf7OIFg3bWizSI209oihXsfkgI05xkDexkildzCfSBE4zqt0K
-        Au7rGpl95JNee1PfxzzS5vPhCw60ESVNeTW1g+ztaJgEJgyA8+Tl4L6PglDjKvEwysl3de
-        ubO7HXxo5DJ7RfzzSaNBxXnqmrtsSFrl7PPginu1S8FMq+upJb0L8BvYcExYqQ==
+        bh=2h5647/jSFIONuj4MZl2GP0+HmxtrgKzcVIh+TWijOs=;
+        b=D6//SuwQ1nFT9DwaAGLvy90WurOUneDUZpNS7QyvV4RjOS4ct1P3CqnIVikE912QffjDp1
+        IWAngEDKd/tmxdRFIw17fHnYaw8rxBMbdm8yvQhy3PHjpjfH9owjRdFido58NbhLAoovvl
+        xjepqOWwZS9/JTZs0sAS1e9xTPLw7I11O+wFcVAXmEeGarE25qpJEqbaaRcnaUcqGtvq6d
+        YrtKeKAqNsC1zImrAsL+VmkofrqmPGKPvQnt47Rug/4aaX5tWMSGh3tXd2ogusItMV53hj
+        +iZvS9ZBBugSEtbJN6mCDHR1mci8DPUDN0S/cjrQaIcplFmDFH+Aw/MqYEJJww==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686907489;
+        s=2020e; t=1686907490;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=CiZpTVxnUZzuczFQxKQSaLnqyVa2i6IQpsTInmTvxTA=;
-        b=APPAoGqe3FZ7EM2Vu5vK9SM3arJijq8aVUf6aUXIQWt0/QHU54yJAjgSX77v0D31UtnFTk
-        x0nUTZHien37akBw==
+        bh=2h5647/jSFIONuj4MZl2GP0+HmxtrgKzcVIh+TWijOs=;
+        b=bRK7sSQx8CYCBP3dBTA5zpCABRyOOTQ/G/jKss5077lseWFQNqMFjXVMDGioKLyXA+md+q
+        XGgjiU/TgM1OH9BA==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/boot] loongarch/cpu: Switch to arch_cpu_finalize_init()
+Subject: [tip: x86/boot] ia64/cpu: Switch to arch_cpu_finalize_init()
 Cc:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230613224545.195288218@linutronix.de>
-References: <20230613224545.195288218@linutronix.de>
+In-Reply-To: <20230613224545.137045745@linutronix.de>
+References: <20230613224545.137045745@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <168690748908.404.7577532475575258816.tip-bot2@tip-bot2>
+Message-ID: <168690748968.404.14167135207073680726.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,14 +66,14 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/boot branch of tip:
 
-Commit-ID:     9841c423164787feb8f1442f922b7d80a70c82f1
-Gitweb:        https://git.kernel.org/tip/9841c423164787feb8f1442f922b7d80a70c82f1
+Commit-ID:     6c38e3005621800263f117fb00d6787a76e16de7
+Gitweb:        https://git.kernel.org/tip/6c38e3005621800263f117fb00d6787a76e16de7
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Wed, 14 Jun 2023 01:39:28 +02:00
+AuthorDate:    Wed, 14 Jun 2023 01:39:27 +02:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Fri, 16 Jun 2023 10:15:59 +02:00
 
-loongarch/cpu: Switch to arch_cpu_finalize_init()
+ia64/cpu: Switch to arch_cpu_finalize_init()
 
 check_bugs() is about to be phased out. Switch over to the new
 arch_cpu_finalize_init() implementation.
@@ -81,74 +81,64 @@ arch_cpu_finalize_init() implementation.
 No functional change.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/20230613224545.195288218@linutronix.de
+Link: https://lore.kernel.org/r/20230613224545.137045745@linutronix.de
 
 ---
- arch/loongarch/Kconfig            |  1 +
- arch/loongarch/include/asm/bugs.h | 15 ---------------
- arch/loongarch/kernel/setup.c     |  4 ++--
- 3 files changed, 3 insertions(+), 17 deletions(-)
- delete mode 100644 arch/loongarch/include/asm/bugs.h
+ arch/ia64/Kconfig            |  1 +
+ arch/ia64/include/asm/bugs.h | 20 --------------------
+ arch/ia64/kernel/setup.c     |  3 +--
+ 3 files changed, 2 insertions(+), 22 deletions(-)
+ delete mode 100644 arch/ia64/include/asm/bugs.h
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index d38b066..cbab4f9 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -10,6 +10,7 @@ config LOONGARCH
- 	select ARCH_ENABLE_MEMORY_HOTPLUG
- 	select ARCH_ENABLE_MEMORY_HOTREMOVE
- 	select ARCH_HAS_ACPI_TABLE_UPGRADE	if ACPI
+diff --git a/arch/ia64/Kconfig b/arch/ia64/Kconfig
+index 21fa63c..2cd93e6 100644
+--- a/arch/ia64/Kconfig
++++ b/arch/ia64/Kconfig
+@@ -9,6 +9,7 @@ menu "Processor type and features"
+ config IA64
+ 	bool
+ 	select ARCH_BINFMT_ELF_EXTRA_PHDRS
 +	select ARCH_HAS_CPU_FINALIZE_INIT
- 	select ARCH_HAS_FORTIFY_SOURCE
- 	select ARCH_HAS_NMI_SAFE_THIS_CPU_OPS
- 	select ARCH_HAS_PTE_SPECIAL
-diff --git a/arch/loongarch/include/asm/bugs.h b/arch/loongarch/include/asm/bugs.h
+ 	select ARCH_HAS_DMA_MARK_CLEAN
+ 	select ARCH_HAS_STRNCPY_FROM_USER
+ 	select ARCH_HAS_STRNLEN_USER
+diff --git a/arch/ia64/include/asm/bugs.h b/arch/ia64/include/asm/bugs.h
 deleted file mode 100644
-index 9839653..0000000
---- a/arch/loongarch/include/asm/bugs.h
+index 0d6b9bd..0000000
+--- a/arch/ia64/include/asm/bugs.h
 +++ /dev/null
-@@ -1,15 +0,0 @@
+@@ -1,20 +0,0 @@
 -/* SPDX-License-Identifier: GPL-2.0 */
 -/*
 - * This is included by init/main.c to check for architecture-dependent bugs.
 - *
-- * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+- * Needs:
+- *	void check_bugs(void);
+- *
+- * Based on <asm-alpha/bugs.h>.
+- *
+- * Modified 1998, 1999, 2003
+- *	David Mosberger-Tang <davidm@hpl.hp.com>,  Hewlett-Packard Co.
 - */
--#ifndef _ASM_BUGS_H
--#define _ASM_BUGS_H
+-#ifndef _ASM_IA64_BUGS_H
+-#define _ASM_IA64_BUGS_H
 -
--#include <asm/cpu.h>
--#include <asm/cpu-info.h>
+-#include <asm/processor.h>
 -
--extern void check_bugs(void);
+-extern void check_bugs (void);
 -
--#endif /* _ASM_BUGS_H */
-diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
-index 4444b13..78a0035 100644
---- a/arch/loongarch/kernel/setup.c
-+++ b/arch/loongarch/kernel/setup.c
-@@ -12,6 +12,7 @@
-  */
- #include <linux/init.h>
- #include <linux/acpi.h>
-+#include <linux/cpu.h>
- #include <linux/dmi.h>
- #include <linux/efi.h>
- #include <linux/export.h>
-@@ -37,7 +38,6 @@
- #include <asm/addrspace.h>
- #include <asm/alternative.h>
- #include <asm/bootinfo.h>
--#include <asm/bugs.h>
- #include <asm/cache.h>
- #include <asm/cpu.h>
- #include <asm/dma.h>
-@@ -87,7 +87,7 @@ const char *get_system_type(void)
- 	return "generic-loongson-machine";
+-#endif /* _ASM_IA64_BUGS_H */
+diff --git a/arch/ia64/kernel/setup.c b/arch/ia64/kernel/setup.c
+index c057280..9009f18 100644
+--- a/arch/ia64/kernel/setup.c
++++ b/arch/ia64/kernel/setup.c
+@@ -1067,8 +1067,7 @@ cpu_init (void)
+ 	}
  }
  
--void __init check_bugs(void)
+-void __init
+-check_bugs (void)
 +void __init arch_cpu_finalize_init(void)
  {
- 	alternative_instructions();
- }
+ 	ia64_patch_mckinley_e9((unsigned long) __start___mckinley_e9_bundles,
+ 			       (unsigned long) __end___mckinley_e9_bundles);
