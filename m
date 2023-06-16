@@ -2,264 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71CB6732A8F
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:53:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA804732A3A
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343786AbjFPIxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 04:53:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46556 "EHLO
+        id S1343769AbjFPIvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 04:51:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344036AbjFPIxD (ORCPT
+        with ESMTP id S244286AbjFPIvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 04:53:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5D630C1;
-        Fri, 16 Jun 2023 01:52:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 58478627FC;
-        Fri, 16 Jun 2023 08:52:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56BDBC433B7;
-        Fri, 16 Jun 2023 08:52:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686905576;
-        bh=SlBOw3U7lsp9qLHlWO7lhIx8iQG/0zpTGMZK7G5/it8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hYgQUzoC3B593p/Dgn3+TPdeozzDLlm25AwOJLKar+VYJDrbbr1SdOshPlvaqnZ8s
-         oK4MqcxpbnUG6MN7D2/qW05fsNi7mGmQ8dkORzT35xnDbj/W36F4FOLgzNY6M4PcNO
-         R3dJCpZ2E2H3cOtS1aHqXGRpmTKYKqXX++q6sKyIgoNy1Dep39n7ShkhJ3lsnlw8th
-         aR1/N9N5ytcJ2bDrtfUkFPDUA8Szf79x0wrzFCuYoJoIX5C0i1dhO9TiZnBW1OemBT
-         RXhSF4tkazIA43z1geCwwCrTDTs/h4A7kL6naX8kmJ5EqzOEA8QYfISw3S41ve05F0
-         LFf/ib3wO4hbg==
-From:   Mike Rapoport <rppt@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mike Rapoport <rppt@kernel.org>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Puranjay Mohan <puranjay12@gmail.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Song Liu <song@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: [PATCH v2 12/12] kprobes: remove dependcy on CONFIG_MODULES
-Date:   Fri, 16 Jun 2023 11:50:38 +0300
-Message-Id: <20230616085038.4121892-13-rppt@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230616085038.4121892-1-rppt@kernel.org>
-References: <20230616085038.4121892-1-rppt@kernel.org>
+        Fri, 16 Jun 2023 04:51:09 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C06D30C1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 01:51:08 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-51a324beca6so587575a12.1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 01:51:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1686905467; x=1689497467;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q+CFo3A2Oynws7qBN6wqUi/Hm2JvW7rwW8Ek/sxYPrA=;
+        b=xp+d4kWfW2lh8gA77lSwp+QpbjTsV6q8Chpk1g+OOPT7jvm9j0hhEn5/zQyN8BMPaH
+         Dx2bQ5+TGTXAw/zpARqubUyMZgBszWnv4veggKJz9RfWh7RkgQP6mfLwdH6jk0w3AnUs
+         3436FebMYZiTWzmtGAk+UCTsjzgMUCfYUGOFCLFRxlL3N8H29vn6lUmJgKmSPpmv1BPI
+         hWpK+rEVGqCDPK70jg7+wtLMSqDFdq9Er+wrcBFQ5wnvM4GvL7g8qp/d7uRM3bBwUv+3
+         5OFS1PCnsw9tf03kxXhrJdcvIPp680F7DvrERMaOiX8RVMKLQxKgSUt/kpOaFHwoObC8
+         TiRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686905467; x=1689497467;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q+CFo3A2Oynws7qBN6wqUi/Hm2JvW7rwW8Ek/sxYPrA=;
+        b=SH3gQJFRkDzh0VkqwYW+t9d/6Njr8hRCBl8VTLtZ+cZA8NI45GAEnuwa33BD4oGl2j
+         AP0m1xI4K1DXuYOLnvqKfQbZ62+e8/qGV+O/PsO8fycIkJb6Q8uchfdRJJ0B3wQU93WS
+         9r7jmWU8IjZetafra8GLifUgpJ25xLYk7tOJdhBF8rubK6JjycaPwPL+umcpapC5a+cq
+         5V7P9QYnaqvH9MPYEQbhkRQjqLnM2GEBeu+H6X+QNgRNBH4/UsMhSx13QJlr6Jtb7aM6
+         HJm1sfqedyXOB82jevzv7NhF6L1228keP8gveW8duKJbBax5oRzZhqSaNxHQ7JQaHvNp
+         TJLA==
+X-Gm-Message-State: AC+VfDzNC2VJsFvCbQZ/dASUghEmLXIc2s1tMT/WFrQ2Q+poYiL2B8Yr
+        esN9WmbcENbitiEop2G4SVW6xQ==
+X-Google-Smtp-Source: ACHHUZ5s6nb5u3oL/lmxvtKXzM48Gt46GFv/+kYzbWM9jRdu4S9zR7XWN3Sq4RQHkGz+l1oAr9mspw==
+X-Received: by 2002:aa7:c314:0:b0:516:3261:17d with SMTP id l20-20020aa7c314000000b005163261017dmr723581edq.20.1686905466853;
+        Fri, 16 Jun 2023 01:51:06 -0700 (PDT)
+Received: from blmsp ([2001:4090:a245:802c:7f03:2fe0:bd27:d746])
+        by smtp.gmail.com with ESMTPSA id h23-20020a50ed97000000b0051a409e752asm5628edr.17.2023.06.16.01.51.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 01:51:06 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 10:51:04 +0200
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     sboyd@kernel.org, mturquette@baylibre.com, matthias.bgg@gmail.com,
+        wenst@chromium.org, u.kleine-koenig@pengutronix.de,
+        miles.chen@mediatek.com, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH 3/3] clk: mediatek: clk-mt8173-apmixedsys: Fix iomap not
+ released issue
+Message-ID: <20230616085104.mjlt63e24ebzslsz@blmsp>
+References: <20230615122051.546985-1-angelogioacchino.delregno@collabora.com>
+ <20230615122051.546985-4-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230615122051.546985-4-angelogioacchino.delregno@collabora.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+Hi Angelo,
 
-kprobes depended on CONFIG_MODULES because it has to allocate memory for
-code.
+On Thu, Jun 15, 2023 at 02:20:51PM +0200, AngeloGioacchino Del Regno wrote:
+> In case of error after of_ioremap() the resource must be released:
+> call iounmap() where appropriate to fix that.
+> 
+> Fixes: 41138fbf876c ("clk: mediatek: mt8173: Migrate to platform driver and common probe")
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/clk/mediatek/clk-mt8173-apmixedsys.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/mediatek/clk-mt8173-apmixedsys.c b/drivers/clk/mediatek/clk-mt8173-apmixedsys.c
+> index ba1386e70a24..1bbb21ab1786 100644
+> --- a/drivers/clk/mediatek/clk-mt8173-apmixedsys.c
+> +++ b/drivers/clk/mediatek/clk-mt8173-apmixedsys.c
+> @@ -151,8 +151,10 @@ static int clk_mt8173_apmixed_probe(struct platform_device *pdev)
+>  		return -ENOMEM;
+>  
+>  	clk_data = mtk_alloc_clk_data(CLK_APMIXED_NR_CLK);
+> -	if (IS_ERR_OR_NULL(clk_data))
+> +	if (IS_ERR_OR_NULL(clk_data)) {
+> +		iounmap(base);
+>  		return -ENOMEM;
 
-Since code allocations are now implemented with execmem, kprobes can be
-enabled in non-modular kernels.
+More of a nitpick, but I would prefer if you would use the same error
+catching style as the rest of the probe function:
 
-Add #ifdef CONFIG_MODULE guards for the code dealing with kprobes inside
-modules, make CONFIG_KPROBES select CONFIG_EXECMEM and drop the
-dependency of CONFIG_KPROBES on CONFIG_MODULES.
+		if (IS_ERR_OR_NULL(clk_data)) {
+			r = -ENOMEM;
+			goto unmap_io;
+		}
+	...
+	unmap_io:
+		iounmap(base)
+		return r;
 
-Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
----
- arch/Kconfig                |  2 +-
- kernel/kprobes.c            | 43 +++++++++++++++++++++----------------
- kernel/trace/trace_kprobe.c | 11 ++++++++++
- 3 files changed, 37 insertions(+), 19 deletions(-)
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 205fd23e0cad..f2e9f82c7d0d 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -39,9 +39,9 @@ config GENERIC_ENTRY
- 
- config KPROBES
- 	bool "Kprobes"
--	depends on MODULES
- 	depends on HAVE_KPROBES
- 	select KALLSYMS
-+	select EXECMEM
- 	select TASKS_RCU if PREEMPTION
- 	help
- 	  Kprobes allows you to trap at almost any kernel address and
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index 37c928d5deaf..2c2ba29d3f9a 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -1568,6 +1568,7 @@ static int check_kprobe_address_safe(struct kprobe *p,
- 		goto out;
- 	}
- 
-+#ifdef CONFIG_MODULES
- 	/* Check if 'p' is probing a module. */
- 	*probed_mod = __module_text_address((unsigned long) p->addr);
- 	if (*probed_mod) {
-@@ -1591,6 +1592,8 @@ static int check_kprobe_address_safe(struct kprobe *p,
- 			ret = -ENOENT;
- 		}
- 	}
-+#endif
-+
- out:
- 	preempt_enable();
- 	jump_label_unlock();
-@@ -2484,24 +2487,6 @@ int kprobe_add_area_blacklist(unsigned long start, unsigned long end)
- 	return 0;
- }
- 
--/* Remove all symbols in given area from kprobe blacklist */
--static void kprobe_remove_area_blacklist(unsigned long start, unsigned long end)
--{
--	struct kprobe_blacklist_entry *ent, *n;
--
--	list_for_each_entry_safe(ent, n, &kprobe_blacklist, list) {
--		if (ent->start_addr < start || ent->start_addr >= end)
--			continue;
--		list_del(&ent->list);
--		kfree(ent);
--	}
--}
--
--static void kprobe_remove_ksym_blacklist(unsigned long entry)
--{
--	kprobe_remove_area_blacklist(entry, entry + 1);
--}
--
- int __weak arch_kprobe_get_kallsym(unsigned int *symnum, unsigned long *value,
- 				   char *type, char *sym)
- {
-@@ -2566,6 +2551,25 @@ static int __init populate_kprobe_blacklist(unsigned long *start,
- 	return ret ? : arch_populate_kprobe_blacklist();
- }
- 
-+#ifdef CONFIG_MODULES
-+/* Remove all symbols in given area from kprobe blacklist */
-+static void kprobe_remove_area_blacklist(unsigned long start, unsigned long end)
-+{
-+	struct kprobe_blacklist_entry *ent, *n;
-+
-+	list_for_each_entry_safe(ent, n, &kprobe_blacklist, list) {
-+		if (ent->start_addr < start || ent->start_addr >= end)
-+			continue;
-+		list_del(&ent->list);
-+		kfree(ent);
-+	}
-+}
-+
-+static void kprobe_remove_ksym_blacklist(unsigned long entry)
-+{
-+	kprobe_remove_area_blacklist(entry, entry + 1);
-+}
-+
- static void add_module_kprobe_blacklist(struct module *mod)
- {
- 	unsigned long start, end;
-@@ -2667,6 +2671,7 @@ static struct notifier_block kprobe_module_nb = {
- 	.notifier_call = kprobes_module_callback,
- 	.priority = 0
- };
-+#endif
- 
- void kprobe_free_init_mem(void)
- {
-@@ -2726,8 +2731,10 @@ static int __init init_kprobes(void)
- 	err = arch_init_kprobes();
- 	if (!err)
- 		err = register_die_notifier(&kprobe_exceptions_nb);
-+#ifdef CONFIG_MODULES
- 	if (!err)
- 		err = register_module_notifier(&kprobe_module_nb);
-+#endif
- 
- 	kprobes_initialized = (err == 0);
- 	kprobe_sysctls_init();
-diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-index 59cda19a9033..cf804e372554 100644
---- a/kernel/trace/trace_kprobe.c
-+++ b/kernel/trace/trace_kprobe.c
-@@ -111,6 +111,7 @@ static nokprobe_inline bool trace_kprobe_within_module(struct trace_kprobe *tk,
- 	return strncmp(module_name(mod), name, len) == 0 && name[len] == ':';
- }
- 
-+#ifdef CONFIG_MODULES
- static nokprobe_inline bool trace_kprobe_module_exist(struct trace_kprobe *tk)
- {
- 	char *p;
-@@ -129,6 +130,12 @@ static nokprobe_inline bool trace_kprobe_module_exist(struct trace_kprobe *tk)
- 
- 	return ret;
- }
-+#else
-+static inline bool trace_kprobe_module_exist(struct trace_kprobe *tk)
-+{
-+	return false;
-+}
-+#endif
- 
- static bool trace_kprobe_is_busy(struct dyn_event *ev)
- {
-@@ -670,6 +677,7 @@ static int register_trace_kprobe(struct trace_kprobe *tk)
- 	return ret;
- }
- 
-+#ifdef CONFIG_MODULES
- /* Module notifier call back, checking event on the module */
- static int trace_kprobe_module_callback(struct notifier_block *nb,
- 				       unsigned long val, void *data)
-@@ -704,6 +712,7 @@ static struct notifier_block trace_kprobe_module_nb = {
- 	.notifier_call = trace_kprobe_module_callback,
- 	.priority = 1	/* Invoked after kprobe module callback */
- };
-+#endif
- 
- static int __trace_kprobe_create(int argc, const char *argv[])
- {
-@@ -1797,8 +1806,10 @@ static __init int init_kprobe_trace_early(void)
- 	if (ret)
- 		return ret;
- 
-+#ifdef CONFIG_MODULES
- 	if (register_module_notifier(&trace_kprobe_module_nb))
- 		return -EINVAL;
-+#endif
- 
- 	return 0;
- }
--- 
-2.35.1
-
+Best,
+Markus
