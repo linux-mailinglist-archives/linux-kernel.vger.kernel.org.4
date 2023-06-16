@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39EF4733453
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 17:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED5A733452
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 17:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345948AbjFPPJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 11:09:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35322 "EHLO
+        id S1344061AbjFPPI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 11:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345846AbjFPPIp (ORCPT
+        with ESMTP id S1345884AbjFPPIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 16 Jun 2023 11:08:45 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62310358C;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6208430EB;
         Fri, 16 Jun 2023 08:08:43 -0700 (PDT)
-Date:   Fri, 16 Jun 2023 15:08:40 -0000
+Date:   Fri, 16 Jun 2023 15:08:41 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1686928121;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=MWN9/UVJSfR8UNKg5ncnrUXsrX5NsjGgJXK/AFJEOIU=;
-        b=0bE4Ms5rZYj/Ya7VR/VM2vqJn6G9RfZ5d+VdljhLagkZXz6smXDdSnXsj80bET+r49GHa6
-        v0zcFOIX6i5l5U3LiTTq2BvEurboGW8NBkol4tcH+DxURITI7mczOG2HR94jK0e160OKSR
-        IEQGPC4Qo4w6d5ia48bG2zj2X1xSa1BmiMtW/I+bGHpmsuenS4PZ6bssDRwSLt1om7An4/
-        QdhxDRYvwLu3DN+hW/P0hr1TNbz66H00U49IaXEwVRty2x+ECbPMbybgmkMF+Rnjap6HD3
-        2bPUoIR59NFbaa9GOVDSeYhZUhdAJWl2e3oOOGqdOx3b2avnNPDzAyvLxDK7Bg==
+        bh=iXB+cKgSU3o8/scNiCQIc4BV8pTRs/x28lCF92PTRuI=;
+        b=a1hwy88DZhY5VM9TtZDohFeAJDSX/qYnJBLu4TS6QqhaBCwujBrfeflQJ0OBv75j26pt0R
+        DbhMNwrj5tJ/CsqpSrLLFpi12D2xrwBR/kqoIGrBGnJV5ICuRaAyQ+ut3iTM2u/u+c41/B
+        N6E+H02SuNrEcsdlzvFWiHaqa+zWJNWCuLcfYlbUBUK7fzH89ilwi3kb5UAkDmz4qPxl9Z
+        fSytWBwsKb8POgQ6kHSQ1G+c1Pe8eRUQSA8bG2Ph5m8c6H+AcOMU9n/nNmDjfp+0uD6PnT
+        AnyCJIG1qt3qh7hMTF0yYU2CVKqCAX4RuXkq2XkX5dpzWpqnh/eTByFRlDiQaw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1686928121;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,22 +36,23 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=MWN9/UVJSfR8UNKg5ncnrUXsrX5NsjGgJXK/AFJEOIU=;
-        b=mDFCWnYOqeaKx4iNd1H/UoIwXlJfwnJXK2vQaNbjJjR5U1pOGCx1Is+eO+C+avWvcEx9C1
-        dBI2gtFljm3sFjCw==
-From:   "tip-bot2 for Kan Liang" <tip-bot2@linutronix.de>
+        bh=iXB+cKgSU3o8/scNiCQIc4BV8pTRs/x28lCF92PTRuI=;
+        b=ZTeS2yGYvb4CeOJw9XsXEzHIQWBNOVz+Nz73uhPwi/MUlErht4Ry7mXYKio024kVoe19RH
+        yUMVCgwevTTF4mCg==
+From:   "tip-bot2 for Marc Zyngier" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/urgent] perf/x86/intel: Fix the FRONTEND encoding on GNR and MTL
-Cc:     Kan Liang <kan.liang@linux.intel.com>,
+Subject: [tip: perf/urgent] perf/core: Drop __weak attribute from
+ arch_perf_update_userpage() prototype
+Cc:     Reiji Watanabe <reijiw@google.com>, Marc Zyngier <maz@kernel.org>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        stable@vger.kernel.org, x86@kernel.org,
+        Mark Rutland <mark.rutland@arm.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230615173242.3726364-1-kan.liang@linux.intel.com>
-References: <20230615173242.3726364-1-kan.liang@linux.intel.com>
+In-Reply-To: <20230616114831.3186980-1-maz@kernel.org>
+References: <20230616114831.3186980-1-maz@kernel.org>
 MIME-Version: 1.0
-Message-ID: <168692812071.404.11837107430102881683.tip-bot2@tip-bot2>
+Message-ID: <168692812141.404.12009878705497041085.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,76 +69,58 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the perf/urgent branch of tip:
 
-Commit-ID:     a6742cb90b567f952a95efa27dee345748d09fc7
-Gitweb:        https://git.kernel.org/tip/a6742cb90b567f952a95efa27dee345748d09fc7
-Author:        Kan Liang <kan.liang@linux.intel.com>
-AuthorDate:    Thu, 15 Jun 2023 10:32:42 -07:00
+Commit-ID:     b50f26a44887f3f71ff5457135ee1d5f1d542d7d
+Gitweb:        https://git.kernel.org/tip/b50f26a44887f3f71ff5457135ee1d5f1d542d7d
+Author:        Marc Zyngier <maz@kernel.org>
+AuthorDate:    Fri, 16 Jun 2023 12:48:31 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Fri, 16 Jun 2023 16:46:33 +02:00
 
-perf/x86/intel: Fix the FRONTEND encoding on GNR and MTL
+perf/core: Drop __weak attribute from arch_perf_update_userpage() prototype
 
-When counting a FRONTEND event, the MSR_PEBS_FRONTEND is not correctly
-set on GNR and MTL p-core.
+Reiji reports that the arm64 implementation of arch_perf_update_userpage()
+is now ignored and replaced by the dummy stub in core code.
+This seems to happen since the PMUv3 driver was moved to driver/perf.
 
-The umask value for the FRONTEND events is changed on GNR and MTL. The
-new umask is missing in the extra_regs[] table.
+As it turns out, dropping the __weak attribute from the *prototype*
+of the function solves the problem. You're right, this doesn't seem
+to make much sense. And yet... It appears that both symbols get
+flagged as weak, and that the first one to appear in the link order
+wins:
 
-Add a dedicated intel_gnr_extra_regs[] for GNR and MTL p-core.
+$ nm drivers/perf/arm_pmuv3.o|grep arch_perf_update_userpage
+0000000000001db0 W arch_perf_update_userpage
 
-Fixes: bc4000fdb009 ("perf/x86/intel: Add Granite Rapids")
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+Dropping the attribute from the prototype restores the expected
+behaviour, and arm64 is able to enjoy arch_perf_update_userpage()
+again.
+
+Fixes: 7755cec63ade ("arm64: perf: Move PMUv3 driver to drivers/perf")
+Fixes: f1ec3a517b43 ("kernel/events: Add a missing prototype for arch_perf_update_userpage()")
+Reported-by: Reiji Watanabe <reijiw@google.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Cc: stable@vger.kernel.org
-Link: https://lkml.kernel.org/r/20230615173242.3726364-1-kan.liang@linux.intel.com
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+Tested-by: Reiji Watanabe <reijiw@google.com>
+Link: https://lkml.kernel.org/r/20230616114831.3186980-1-maz@kernel.org
 ---
- arch/x86/events/intel/core.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+ include/linux/perf_event.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index 89b9c1c..27f3a7b 100644
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -349,6 +349,16 @@ static struct event_constraint intel_spr_event_constraints[] = {
- 	EVENT_CONSTRAINT_END
- };
+diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+index d5628a7..c8dcfdb 100644
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -1845,9 +1845,9 @@ int perf_event_exit_cpu(unsigned int cpu);
+ #define perf_event_exit_cpu	NULL
+ #endif
  
-+static struct extra_reg intel_gnr_extra_regs[] __read_mostly = {
-+	INTEL_UEVENT_EXTRA_REG(0x012a, MSR_OFFCORE_RSP_0, 0x3fffffffffull, RSP_0),
-+	INTEL_UEVENT_EXTRA_REG(0x012b, MSR_OFFCORE_RSP_1, 0x3fffffffffull, RSP_1),
-+	INTEL_UEVENT_PEBS_LDLAT_EXTRA_REG(0x01cd),
-+	INTEL_UEVENT_EXTRA_REG(0x02c6, MSR_PEBS_FRONTEND, 0x9, FE),
-+	INTEL_UEVENT_EXTRA_REG(0x03c6, MSR_PEBS_FRONTEND, 0x7fff1f, FE),
-+	INTEL_UEVENT_EXTRA_REG(0x40ad, MSR_PEBS_FRONTEND, 0x7, FE),
-+	INTEL_UEVENT_EXTRA_REG(0x04c2, MSR_PEBS_FRONTEND, 0x8, FE),
-+	EVENT_EXTRA_END
-+};
+-extern void __weak arch_perf_update_userpage(struct perf_event *event,
+-					     struct perf_event_mmap_page *userpg,
+-					     u64 now);
++extern void arch_perf_update_userpage(struct perf_event *event,
++				      struct perf_event_mmap_page *userpg,
++				      u64 now);
  
- EVENT_ATTR_STR(mem-loads,	mem_ld_nhm,	"event=0x0b,umask=0x10,ldlat=3");
- EVENT_ATTR_STR(mem-loads,	mem_ld_snb,	"event=0xcd,umask=0x1,ldlat=3");
-@@ -6496,6 +6506,7 @@ __init int intel_pmu_init(void)
- 	case INTEL_FAM6_SAPPHIRERAPIDS_X:
- 	case INTEL_FAM6_EMERALDRAPIDS_X:
- 		x86_pmu.flags |= PMU_FL_MEM_LOADS_AUX;
-+		x86_pmu.extra_regs = intel_spr_extra_regs;
- 		fallthrough;
- 	case INTEL_FAM6_GRANITERAPIDS_X:
- 	case INTEL_FAM6_GRANITERAPIDS_D:
-@@ -6506,7 +6517,8 @@ __init int intel_pmu_init(void)
- 
- 		x86_pmu.event_constraints = intel_spr_event_constraints;
- 		x86_pmu.pebs_constraints = intel_spr_pebs_event_constraints;
--		x86_pmu.extra_regs = intel_spr_extra_regs;
-+		if (!x86_pmu.extra_regs)
-+			x86_pmu.extra_regs = intel_gnr_extra_regs;
- 		x86_pmu.limit_period = spr_limit_period;
- 		x86_pmu.pebs_ept = 1;
- 		x86_pmu.pebs_aliases = NULL;
-@@ -6650,6 +6662,7 @@ __init int intel_pmu_init(void)
- 		pmu->pebs_constraints = intel_grt_pebs_event_constraints;
- 		pmu->extra_regs = intel_grt_extra_regs;
- 		if (is_mtl(boot_cpu_data.x86_model)) {
-+			x86_pmu.hybrid_pmu[X86_HYBRID_PMU_CORE_IDX].extra_regs = intel_gnr_extra_regs;
- 			x86_pmu.pebs_latency_data = mtl_latency_data_small;
- 			extra_attr = boot_cpu_has(X86_FEATURE_RTM) ?
- 				mtl_hybrid_extra_attr_rtm : mtl_hybrid_extra_attr;
+ #ifdef CONFIG_MMU
+ extern __weak u64 arch_perf_get_page_size(struct mm_struct *mm, unsigned long addr);
