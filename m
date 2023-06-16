@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A33B3732D9F
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:26:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1B1732DA6
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241316AbjFPK0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 06:26:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49570 "EHLO
+        id S1344001AbjFPK0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 06:26:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241493AbjFPKZu (ORCPT
+        with ESMTP id S1343990AbjFPKZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 06:25:50 -0400
+        Fri, 16 Jun 2023 06:25:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4391E30D1;
-        Fri, 16 Jun 2023 03:25:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7271430E9;
+        Fri, 16 Jun 2023 03:25:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFC9D62DD8;
-        Fri, 16 Jun 2023 10:25:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C6ACC433CD;
-        Fri, 16 Jun 2023 10:25:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 019FD63591;
+        Fri, 16 Jun 2023 10:25:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01979C433B9;
+        Fri, 16 Jun 2023 10:25:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686911139;
-        bh=oL/zh7i/hSXwrGKNTavv9AXBuIVM0dmjjSCpdnWImu4=;
+        s=k20201202; t=1686911143;
+        bh=FxyDFM80gAodbMr/Zh0mljDGdPjue49EbrEZmedq9oU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MrUhy+Kd5H3GUFYo6Q13nyxdS+bcLpof2g4D4TdPtFDpYkzM+iqeKlYUNH2wJpV+s
-         Bpp9Mf5ETilFzBrbyPyEvy3gy0WErqk03ma/apESo9JuihSRLSX27Dds5xOVudo226
-         KN2b51x7xwv8kQAliy7owskdbMNsPN8ee0eE1WeoO7w4CpV/41+o55+klox4clrfU5
-         ClTiWs37hNzvoLxAvha50kJ84fUGZKSeIDzxPnNDvpKjFb6G7QljZJAW4o8hHHlSVd
-         /BXryBKHaVzhXBXlksA+TZ7Yo2t01lpSMKqDmmA7o9rvqecC+celmIU8o7sdjMXMjv
-         ptfoBvWR0bKOQ==
+        b=M0RuRNNDUMdQGvaF9gRU6orIC8OhPpBFxX9IjIs/OY9NmUxPSlhqGhlo4cwWtKm7T
+         XlaE/Y4FlSC7w5WWsJk29WdOc7tZbmoik9uFCFr5sHOpZ8mH86aGgvgDWxPfweFp3d
+         Cpj8mO1c0hZvNZmkOmn6UB/haMTcTwTDoJ2zO0SEBKsZqFitTTA9lIvBz1r4tTzevq
+         NT1mfVkkOUG6Hdjs25fA/K5cznHrsoszVGTiZnR1qjkgYRYhMqrN9Hv3uMiFdXFvT9
+         abYlEGDome3uUDpTeB7gbb6gD6j6q7hr2o6UherofwXqLS/EmAD1TFz+/G/nAdQVpB
+         spM0VSAGkvuQg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hao Yao <hao.yao@intel.com>, Bingbu Cao <bingbu.cao@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, djrscally@gmail.com,
-        markgross@kernel.org, platform-driver-x86@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 10/30] platform/x86: int3472: Avoid crash in unregistering regulator gpio
-Date:   Fri, 16 Jun 2023 06:24:58 -0400
-Message-Id: <20230616102521.673087-10-sashal@kernel.org>
+Cc:     Edson Juliano Drosdeck <edson.drosdeck@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
+        perex@perex.cz, tiwai@suse.com, ckeepax@opensource.cirrus.com,
+        savagecin@gmail.com, SJLIN0@nuvoton.com,
+        alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 6.3 11/30] ASoC: nau8824: Add quirk to active-high jack-detect
+Date:   Fri, 16 Jun 2023 06:24:59 -0400
+Message-Id: <20230616102521.673087-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230616102521.673087-1-sashal@kernel.org>
 References: <20230616102521.673087-1-sashal@kernel.org>
@@ -60,56 +62,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hao Yao <hao.yao@intel.com>
+From: Edson Juliano Drosdeck <edson.drosdeck@gmail.com>
 
-[ Upstream commit fb109fba728407fa4a84d659b5cb87cd8399d7b3 ]
+[ Upstream commit e384dba03e3294ce7ea69e4da558e9bf8f0e8946 ]
 
-When int3472 is loaded before GPIO driver, acpi_get_and_request_gpiod()
-failed but the returned gpio descriptor is not NULL, it will cause panic
-in later gpiod_put(), so set the gpio_desc to NULL in register error
-handling to avoid such crash.
+Add  entries for Positivo laptops: CW14Q01P, K1424G, N14ZP74G to the
+DMI table, so that  active-high jack-detect will work properly on
+these laptops.
 
-Signed-off-by: Hao Yao <hao.yao@intel.com>
-Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
-Link: https://lore.kernel.org/r/20230524035135.90315-1-bingbu.cao@intel.com
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Edson Juliano Drosdeck <edson.drosdeck@gmail.com>
+Link: https://lore.kernel.org/r/20230529181911.632851-1-edson.drosdeck@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../platform/x86/intel/int3472/clk_and_regulator.c  | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ sound/soc/codecs/nau8824.c | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/drivers/platform/x86/intel/int3472/clk_and_regulator.c b/drivers/platform/x86/intel/int3472/clk_and_regulator.c
-index 1086c3d834945..399f0623ca1b5 100644
---- a/drivers/platform/x86/intel/int3472/clk_and_regulator.c
-+++ b/drivers/platform/x86/intel/int3472/clk_and_regulator.c
-@@ -101,9 +101,11 @@ int skl_int3472_register_clock(struct int3472_discrete_device *int3472,
+diff --git a/sound/soc/codecs/nau8824.c b/sound/soc/codecs/nau8824.c
+index 4f19fd9b65d11..5a4db8944d06a 100644
+--- a/sound/soc/codecs/nau8824.c
++++ b/sound/soc/codecs/nau8824.c
+@@ -1903,6 +1903,30 @@ static const struct dmi_system_id nau8824_quirk_table[] = {
+ 		},
+ 		.driver_data = (void *)(NAU8824_MONO_SPEAKER),
+ 	},
++	{
++		/* Positivo CW14Q01P */
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Positivo Tecnologia SA"),
++			DMI_MATCH(DMI_BOARD_NAME, "CW14Q01P"),
++		},
++		.driver_data = (void *)(NAU8824_JD_ACTIVE_HIGH),
++	},
++	{
++		/* Positivo K1424G */
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Positivo Tecnologia SA"),
++			DMI_MATCH(DMI_BOARD_NAME, "K1424G"),
++		},
++		.driver_data = (void *)(NAU8824_JD_ACTIVE_HIGH),
++	},
++	{
++		/* Positivo N14ZP74G */
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Positivo Tecnologia SA"),
++			DMI_MATCH(DMI_BOARD_NAME, "N14ZP74G"),
++		},
++		.driver_data = (void *)(NAU8824_JD_ACTIVE_HIGH),
++	},
+ 	{}
+ };
  
- 	int3472->clock.ena_gpio = acpi_get_and_request_gpiod(path, agpio->pin_table[0],
- 							     "int3472,clk-enable");
--	if (IS_ERR(int3472->clock.ena_gpio))
--		return dev_err_probe(int3472->dev, PTR_ERR(int3472->clock.ena_gpio),
--				     "getting clk-enable GPIO\n");
-+	if (IS_ERR(int3472->clock.ena_gpio)) {
-+		ret = PTR_ERR(int3472->clock.ena_gpio);
-+		int3472->clock.ena_gpio = NULL;
-+		return dev_err_probe(int3472->dev, ret, "getting clk-enable GPIO\n");
-+	}
- 
- 	if (polarity == GPIO_ACTIVE_LOW)
- 		gpiod_toggle_active_low(int3472->clock.ena_gpio);
-@@ -199,8 +201,9 @@ int skl_int3472_register_regulator(struct int3472_discrete_device *int3472,
- 	int3472->regulator.gpio = acpi_get_and_request_gpiod(path, agpio->pin_table[0],
- 							     "int3472,regulator");
- 	if (IS_ERR(int3472->regulator.gpio)) {
--		dev_err(int3472->dev, "Failed to get regulator GPIO line\n");
--		return PTR_ERR(int3472->regulator.gpio);
-+		ret = PTR_ERR(int3472->regulator.gpio);
-+		int3472->regulator.gpio = NULL;
-+		return dev_err_probe(int3472->dev, ret, "getting regulator GPIO\n");
- 	}
- 
- 	/* Ensure the pin is in output mode and non-active state */
 -- 
 2.39.2
 
