@@ -2,123 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4AC3732928
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 09:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C5E573291F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 09:45:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245488AbjFPHp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 03:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40060 "EHLO
+        id S245324AbjFPHpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 03:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245370AbjFPHpr (ORCPT
+        with ESMTP id S244284AbjFPHpb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 03:45:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979802942
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 00:44:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686901495;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wHh80tHevfpfGpsYLMJr0xWQFhLc1pRS6PbFj4Uk1xM=;
-        b=drFc/Zch9l9sUv5vXMu0WMzWJSZczsSP3P1R3fPg3u+ijB4VHi5pKJFrbUcZjxbJyepX4N
-        oiJsLU3ZlNwyP7HWYh3HkL3/tGZ5h2WMZ89D+CqQM+JBcGSTE1ohHRyvJWariNWEAGLuMV
-        mWON2sxe8/0IgV7SBoPIxCA8RXHwy/w=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-219-3GFhf2fkNnWpcxHF1Omu3w-1; Fri, 16 Jun 2023 03:44:54 -0400
-X-MC-Unique: 3GFhf2fkNnWpcxHF1Omu3w-1
-Received: by mail-lf1-f71.google.com with SMTP id 2adb3069b0e04-4f60dd5ab21so296667e87.3
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 00:44:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686901493; x=1689493493;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :content-language:references:cc:to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wHh80tHevfpfGpsYLMJr0xWQFhLc1pRS6PbFj4Uk1xM=;
-        b=j6FZ9M+xPeDiZ5oDs58qnyYVy+TPfwp0biJ6TrW4ZHInnlLzGfnzMjrgPCvj3bvjLJ
-         sudixBYoti739GIG9ErlRK1zinbO9vR1g7k1dZE3Wc1WfGFjthR/idOdLIHSvuPifZkh
-         VY/iB6RyZQvcApbgcDW8AW2Vndyt5J3usuOxyiZ9/Zc0jmY2mijJT2arc2Dz8kxb6394
-         pTqdcxJaka8+lZ2TZydt/hJB0rYTJaFDi7wP/I//qC/K3+j7lPHJT4ookgDha/xhtNh1
-         1ASq9qb5yMkStEK6koHyLSSnSwVlYzB3ejoKUeAKWFH1TgZXiXou/AcQa+OAHBP8N5+H
-         NkBQ==
-X-Gm-Message-State: AC+VfDyQl/umVNwU/DVZuGBbIjxjj0j9IuWwQR7MPHIOj4ckEzkuVZAt
-        kAiOnPwtBPdz0E//B8xMGvQlmcbNyKZoj96stUbMpVdsUe7JB0ao2cBkJxYXf8goiUB/7832nEz
-        tGoGtJIF85tgiLA5znuzWYnRH9WFbkw9p
-X-Received: by 2002:ac2:4d93:0:b0:4f8:4961:7610 with SMTP id g19-20020ac24d93000000b004f849617610mr755639lfe.43.1686901492815;
-        Fri, 16 Jun 2023 00:44:52 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4V2KwN13A0iu+AAg7e0iRwh6yMnxJrHrSMfwNZ/+rksVbEc+zvz9ZHK23cYpe/zyiH2IoeHg==
-X-Received: by 2002:ac2:4d93:0:b0:4f8:4961:7610 with SMTP id g19-20020ac24d93000000b004f849617610mr755629lfe.43.1686901492450;
-        Fri, 16 Jun 2023 00:44:52 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:9800:59ba:1006:9052:fb40? (p200300cbc707980059ba10069052fb40.dip0.t-ipconnect.de. [2003:cb:c707:9800:59ba:1006:9052:fb40])
-        by smtp.gmail.com with ESMTPSA id q3-20020adff503000000b002ca864b807csm22936582wro.0.2023.06.16.00.44.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jun 2023 00:44:52 -0700 (PDT)
-Message-ID: <29c9b998-f453-59f2-5084-9b4482b489cf@redhat.com>
-Date:   Fri, 16 Jun 2023 09:44:50 +0200
+        Fri, 16 Jun 2023 03:45:31 -0400
+Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8212719;
+        Fri, 16 Jun 2023 00:45:29 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 07:45:14 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1686901527; x=1687160727;
+        bh=hja84EESOQ9EaSxRMOYXkxBe5bRgfXkY/dr6HfkUDdw=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=UnCtG/TNYW/c2hj1iuYW9BVFSfc3MamSO/1GgW7QqhNODpOPMihdMKcBs8DQWb1bU
+         WCTXOl33qmyXRQCwlks+omoyqIERsvq8bx0GHcrX2XXRekrygTToo9b7nQOLl93wvi
+         s0g1RVSfM0r1etX2g+I2G51pE3aAfp6i57KuU3EYnYoOq6IMG+TGLGteFMmYo8SqQn
+         /hAn32YyLE79hytYP7ZMkmizIMDMNuewLYqK8mSu6a93diwnjuNMWwyx7Wnu0NcAVp
+         mY9ZKfcaVGUdomoUm1RdipPoBDbfIUp3NVY2K/GfSaXr8LHl7j7jhwvGStJsGvhzYt
+         I1En8JyAiEX8A==
+To:     Miguel Ojeda <ojeda@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>
+From:   Heghedus Razvan <heghedus.razvan@protonmail.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Andreas Hindborg <nmi@metaspace.dk>,
+        linux-kbuild@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH v2 00/11] `scripts/rust_is_available.sh` improvements
+Message-ID: <CTDWNRIZBWCN.CJEV9K20D9OI@pc-server>
+In-Reply-To: <20230616001631.463536-1-ojeda@kernel.org>
+References: <20230616001631.463536-1-ojeda@kernel.org>
+Feedback-ID: 1233518:user:proton
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-To:     Vishal Verma <vishal.l.verma@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, nvdimm@lists.linux.dev,
-        linux-cxl@vger.kernel.org, Huang Ying <ying.huang@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-References: <20230613-vv-kmem_memmap-v1-0-f6de9c6af2c6@intel.com>
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH 0/3] mm: use memmap_on_memory semantics for dax/kmem
-In-Reply-To: <20230613-vv-kmem_memmap-v1-0-f6de9c6af2c6@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.06.23 00:00, Vishal Verma wrote:
-> The dax/kmem driver can potentially hot-add large amounts of memory
-> originating from CXL memory expanders, or NVDIMMs, or other 'device
-> memories'. There is a chance there isn't enough regular system memory
-> available to fit ythe memmap for this new memory. It's therefore
-> desirable, if all other conditions are met, for the kmem managed memory
-> to place its memmap on the newly added memory itself.
-> 
-> Arrange for this by first allowing for a module parameter override for
-> the mhp_supports_memmap_on_memory() test using a flag, adjusting the
-> only other caller of this interface in dirvers/acpi/acpi_memoryhotplug.c,
-> exporting the symbol so it can be called by kmem.c, and finally changing
-> the kmem driver to add_memory() in chunks of memory_block_size_bytes().
+On Fri Jun 16, 2023 at 3:16 AM EEST, Miguel Ojeda wrote:
+> This is the patch series to improve `scripts/rust_is_available.sh`.
+>
+> The major addition in v2 is the test suite in the last commit. I added
+> it because I wanted to have a proper way to test any further changes to
+> it (such as the suggested `set --` idea to avoid forking by Masahiro),
+> and so that adding new checks was easier to justify too (i.e. vs. the
+> added complexity).
+>
+> In addition, there are also a few new checks in the script, to cover for
+> even some more cases, which hopefully make problematic setups easier to
+> identify and solve by users building the kernel. For instance, running
+> the script externally gives:
+>
+>     $ scripts/rust_is_available.sh
+>     ***
+>     *** Environment variable 'RUSTC' is not set.
+>     ***
+>     *** This script is intended to be called from Kbuild.
+>     *** Please use the 'rustavailable' target to call it instead.
+>     *** Otherwise, the results may not be meaningful.
+>     ***
+>     *** Please see Documentation/rust/quick-start.rst for details
+>     *** on how to set up the Rust support.
+>     ***
+>
+> I also changed it to avoid setting `-e` as Masahiro suggested.
+> Similarly, I now check for `$RUSTC`, `$BINDGEN` and `$CC`, instead of
+> `$MAKEFLAGS`, as he also suggested (but I gave it their own error
+> message rather than use the `${CC?: is not set}` approach. This goes in
+> line with the reasons outlined above, i.e. trying to give users a clear
+> error of what step exactly failed).
+>
+> In the test suite I included previously problematic compiler version
+> strings we got reports for. The test suite covers all current branches
+> in the script, and we should keep it that way in the future.
+>
+> The patch series also include Masahiro's patch to remove the `-v`
+> option, as well as Russell's patch for supporting multiple arguments
+> in `$CC`.
+>
+> All in all, this should solve all the issues we got so far (unless I
+> have missed something) and improve things further with the new checks
+> plus the test suite to hopefully have an easier time in the future.
+>
+> Testers for this one are appreciated, especially if you have uncommon or
+> custom setups for building the kernel.
 
-1) Why is the override a requirement here? Just let the admin configure 
-it then then add conditional support for kmem.
+I gave this patch series a spin and is a nice improvement when trying to
+use a broken setup.
 
-2) I recall that there are cases where we don't want the memmap to land 
-on slow memory (which online_movable would achieve). Just imagine the 
-slow PMEM case. So this might need another configuration knob on the 
-kmem side.
+When previously I had:
+./scripts/rust_is_available.sh: line 21: 100000 *  + 100 *  + : syntax erro=
+r: operand expected (error token is "+ ")
+make: *** [Makefile:1883: rustavailable] Error 1
 
+Now I have:
 
-I recall some discussions on doing that chunk handling internally (so 
-kmem can just perform one add_memory() and we'd split that up internally).
+***
+*** Running 'bindgen' to check the libclang version (used by the Rust
+*** bindings generator) failed with code 101. This may be caused by
+*** a failure to locate libclang. See output and docs below for details:
+***
+thread 'main' panicked at 'Unable to find libclang: "the `libclang` shared =
+library at /opt/sdk/sysroots/x86_64-pokysdk-linux/usr/lib/libclang.so.14.0.=
+3 could not be opened: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.34=
+' not found (required by /opt/idc23/sysroots/x86_64-pokysdk-linux/usr/lib/l=
+ibclang.so.14.0.3)"', /home/heghedusrazvan/.cargo/registry/src/github.com-1=
+ecc6299db9ec823/bindgen-0.56.0/src/lib.rs:1922:31
+note: run with `RUST_BACKTRACE=3D1` environment variable to display a backt=
+race
+***
+***
+*** Please see Documentation/rust/quick-start.rst for details
+*** on how to set up the Rust support.
+***
+make: *** [Makefile:1883: rustavailable] Error 1
 
--- 
-Cheers,
+or:
 
-David / dhildenb
+***
+*** Rust compiler 'rustc' is too new. This may or may not work.
+***   Your version:     1.70.0
+***   Expected version: 1.68.2
+***
+***
+*** Running 'bindgen' to check the libclang version (used by the Rust
+*** bindings generator) failed with code 101. This may be caused by
+*** a failure to locate libclang. See output and docs below for details:
+***
+thread 'main' panicked at 'Unable to find libclang: "the `libclang` shared =
+library at /opt/sdk/sysroots/x86_64-pokysdk-linux/usr/lib/libclang.so.14.0.=
+3 could not be opened: libncurses.so.5: cannot open shared object file: No =
+such file or directory"', /root/.cargo/registry/src/index.crates.io-6f17d22=
+bba15001f/bindgen-0.56.0/src/lib.rs:1922:31
+note: run with `RUST_BACKTRACE=3D1` environment variable to display a backt=
+race
+***
+***
+*** Please see Documentation/rust/quick-start.rst for details
+*** on how to set up the Rust support.
+***
+make: *** [Makefile:1883: rustavailable] Error 1
+
+-- Razvan
+>
+> This could go through either the Kbuild or the Rust tree.
+>
+> Masahiro Yamada (1):
+>   kbuild: rust_is_available: remove -v option
+>
+> Miguel Ojeda (9):
+>   docs: rust: add paragraph about finding a suitable `libclang`
+>   kbuild: rust_is_available: print docs reference
+>   kbuild: rust_is_available: add check for `bindgen` invocation
+>   kbuild: rust_is_available: check that environment variables are set
+>   kbuild: rust_is_available: fix confusion when a version appears in the
+>     path
+>   kbuild: rust_is_available: normalize version matching
+>   kbuild: rust_is_available: handle failures calling `$RUSTC`/`$BINDGEN`
+>   kbuild: rust_is_available: check that output looks as expected
+>   kbuild: rust_is_available: add test suite
+>
+> Russell Currey (1):
+>   kbuild: rust_is_available: fix version check when CC has multiple
+>     arguments
+>
+>  Documentation/rust/quick-start.rst |  17 ++
+>  Makefile                           |   4 +-
+>  scripts/rust_is_available.sh       | 233 +++++++++++++------
+>  scripts/rust_is_available_test.py  | 346 +++++++++++++++++++++++++++++
+>  4 files changed, 532 insertions(+), 68 deletions(-)
+>  create mode 100755 scripts/rust_is_available_test.py
+>
+>
+> base-commit: 858fd168a95c5b9669aac8db6c14a9aeab446375
+> --
+> 2.41.0
+
 
