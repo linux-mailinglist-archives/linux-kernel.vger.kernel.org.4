@@ -2,69 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C35F07331CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 15:01:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA9657331CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 15:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344926AbjFPNBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 09:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52230 "EHLO
+        id S1344996AbjFPNDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 09:03:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjFPNBH (ORCPT
+        with ESMTP id S232355AbjFPNDB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 09:01:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE85F2133
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 06:01:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DA3E60E75
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 13:01:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A4E2C433C8;
-        Fri, 16 Jun 2023 13:00:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686920463;
-        bh=VDhR3aHja601dxfffGSb2Hxfy5D9ToFNcA+dY/sI3ok=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=UYTSwFWoOo7Upc91ExoaXialN89psxS6/Peaore+CVr+a1+ThiM0oNKY+RHlgWzKc
-         fdvI6YA5G2VnpnMFXq05VZFd6EY9xT/9R23flvyMruvC/+YVPdYyvdd8NpTPEPAKet
-         lXDIpT+PhY8sya4VbInwK5UjNYV3NMcCIZMobOqZ1ygcMGBlxhF54pWtOIoGO6p5q+
-         lEp/9romh4+yIXbN6yss/Nr77ru7V+bwgAMuSdne3g/3idAp7QCRD1ecg9+jtWMXTH
-         mmTjVX0IGgp0bjRUSJ9YGCqgqQCuQarHDzmIJKL2cMsJlumdr3Dix1n6VS8jnFcnhH
-         Idtzb/V6Fkrqg==
-Message-ID: <c8a48cd8-b3bf-743c-55c5-f942fbe08792@kernel.org>
-Date:   Fri, 16 Jun 2023 15:00:57 +0200
+        Fri, 16 Jun 2023 09:03:01 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D0612D79
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 06:03:00 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-56ce61769b7so7772767b3.3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 06:03:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686920579; x=1689512579;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Hqh0ctcZSSNyRLU8FT9+ClAUkk1xdpX2MQLPP/RnayY=;
+        b=MG+hTnXbncvoRz+RslD756hmGsI9/fqykFQTy5fbp1tlF1qi+rqV4AmAIqlg1ObZnf
+         E3+Lr0rsmac4Ia424Mzgn3mZjwsZj+GCBgWkoAbVN/vl56kuQPJF6C6W/sfMqnM3XPRk
+         byvVqHqtcM8kylTJPORWCFe88lkV8GsTPnUCaZiM14ur5BIlNuyt2qiVo13Sf1mlmdWp
+         gpR/6b7kYn8UkPcZyq8s0UEgkrRgCutNUWxVo3kAkc/gRefTZZjcQjevSlqi08lYDAZX
+         bP9UaFyfjz/CdKJG13M2tPs02KHVeaFG0sPmhzOzDqGDgAvb+hAPAXuNRy+ux5tAC7ub
+         XBmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686920579; x=1689512579;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Hqh0ctcZSSNyRLU8FT9+ClAUkk1xdpX2MQLPP/RnayY=;
+        b=JoUFMdIBMLFSBuE+orCVMnFkziXywwqnYCScQ1t21EpYI1cy4yCi1SGaJaeH+jFdsG
+         hhQLGYYcB050an5OkklOwd5PIXyqJJZfD+tCuklcwfV6EKMTJEIg8pZ7X3VMbiXRNjYa
+         tO2XA8n0lsY9KnPmowvjrUuOl00Mu2YjOLGbUYGJXF6l7of9FO9hSIzgltsXF/rkTIlw
+         RDopHWqhDfhbr1e9iU7DS/rNmpKIzG1PIWp3uHageTidkEvfS7sH0hMqzM1yzxrs0oXT
+         lojnWsOLS/airHigINzrJJ9dRmYZe8fH8yy3CxzBNV78gaPQTQHJEWqnYp1kv6yoEyd5
+         asCg==
+X-Gm-Message-State: AC+VfDy6d9+dJRdKaBauze2/2P0jZac58eC4O7fxsO6hi5H+aJlPb88I
+        DArnrLm8eU01nnVSg4v4JM3FxmoB/nv8Yjt0ZDmu/w==
+X-Google-Smtp-Source: ACHHUZ59gNYfqxe5wJoZ5aeX4/NRY0zwtgWn80m7CZIDDHhc+6i/AOmOKSKeO/cec1lNrwDw7sPggb4LRnOvt1mVU2E=
+X-Received: by 2002:a25:26d0:0:b0:ba7:86c2:d95c with SMTP id
+ m199-20020a2526d0000000b00ba786c2d95cmr1656110ybm.64.1686920579272; Fri, 16
+ Jun 2023 06:02:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [RFC PATCH V3 5/6] sched/fair: Add trivial fair server
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Luca Abeni <luca.abeni@santannapisa.it>,
-        Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Vineeth Pillai <vineeth@bitbyteword.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <cover.1686239016.git.bristot@kernel.org>
- <8db5a49ea92ad8b875d331d6136721645a382fe8.1686239016.git.bristot@kernel.org>
- <20230616125946.GN83892@hirez.programming.kicks-ass.net>
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <20230616125946.GN83892@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20230615105333.585304-1-claudiu.beznea@microchip.com>
+In-Reply-To: <20230615105333.585304-1-claudiu.beznea@microchip.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 16 Jun 2023 15:02:48 +0200
+Message-ID: <CACRpkdat1MLPfsosci2anWSsr80PLCJXN1=jTfKUi4QYnwBbSw@mail.gmail.com>
+Subject: Re: [PATCH 0/3] pinctrl: check memory returned by devm_kasprintf()
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     ludovic.desroches@microchip.com, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, lars.povlsen@microchip.com,
+        Steen.Hegelund@microchip.com, daniel.machon@microchip.com,
+        UNGLinuxDriver@microchip.com, andriy.shevchenko@linux.intel.com,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,23 +73,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/16/23 14:59, Peter Zijlstra wrote:
-> On Thu, Jun 08, 2023 at 05:58:17PM +0200, Daniel Bristot de Oliveira wrote:
->> +void fair_server_init(struct rq *rq)
->> +{
->> +	struct sched_dl_entity *dl_se = &rq->fair_server;
->> +
->> +	init_dl_entity(dl_se);
->> +
->> +	dl_se->dl_runtime = TICK_NSEC;
->> +	dl_se->dl_deadline = 20 * TICK_NSEC;
->> +	dl_se->dl_period = 20 * TICK_NSEC;
->> +
->> +	dl_server_init(dl_se, rq, fair_server_has_tasks, fair_server_pick);
->> +}
-> 
-> These here numbers should obviously become a tunable somewhere... :-)
+Hi Claudiu,
 
-From sched_rt_runtime and sched_rt_period, no?
+thanks for your patches!
 
--- Daniel
+On Thu, Jun 15, 2023 at 12:53=E2=80=AFPM Claudiu Beznea
+<claudiu.beznea@microchip.com> wrote:
+
+> While browsing some code I noticed that there are places where pointer
+> returned by devm_kasprintf() or kasprintf() is not checked. Thus I've
+> tooked the chance and fixed this (by updating kmerr.cocci script,
+> changes published at [1]).
+
+I applied patch 2/3 and 3/3 you only need to resent the first patch
+after looking into the comments from Andy.
+
+Yours,
+Linus Walleij
