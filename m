@@ -2,102 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D593732BE6
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:34:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60D8B732BEB
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343922AbjFPJep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 05:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
+        id S1344245AbjFPJfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 05:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344315AbjFPJeX (ORCPT
+        with ESMTP id S1344984AbjFPJfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 05:34:23 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D972D62;
-        Fri, 16 Jun 2023 02:33:51 -0700 (PDT)
-Date:   Fri, 16 Jun 2023 09:33:07 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686907987;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kW1jugq60sJfmx5RfQMRVtnFU9KKTkP8DmbB1EN9IiU=;
-        b=edMt7iXvYdR1moI7O2unZMnhyO+0xZhvW4XonRhiwbxWn+R5U6d15OrQG7x/8van3sR1bY
-        FKGjOtEs6QDgysAAWKlZLSQADMR2dmq0Ft3sAUPhM9Bk6k1fa9zSNaYGuooNWiNWSUG71a
-        7UZlYUwXwobnfBiazECuiQK+ubIGcTOMxi3IJO4HM6S/GhD0P/xBbkbeRIzbwQ8nRyIkql
-        POkl1L93LycS4WS4m4lc7ywXiJuNcxZP5RFxKFU2Y5LHl6P+wzBOMf2JndAEPWDPZcYprm
-        dhweDRNk/j7fYNUintA9vi8fTLSeXOnXqB38SA0ZniJPjbZRZoAZzK9KuwK1Mw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686907987;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kW1jugq60sJfmx5RfQMRVtnFU9KKTkP8DmbB1EN9IiU=;
-        b=ox6jh+jwcFax4dCRiidd4Go72eTEzdSM8jZG/aCyybTqFH5FtUbyCQ9CtW8RwrFr+LJrj2
-        6vHLIb9EeCRhbeBQ==
-From:   "tip-bot2 for Juergen Gross" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/mtrr] x86/xen: Set default memory type for PV guests to WB
-Cc:     Juergen Gross <jgross@suse.com>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230615123959.12298-1-jgross@suse.com>
-References: <20230615123959.12298-1-jgross@suse.com>
+        Fri, 16 Jun 2023 05:35:23 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E1230F1;
+        Fri, 16 Jun 2023 02:34:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1686908097; x=1718444097;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=7fUinrxNf0MsjqefM35xcVOtugPMdveh6egjO57sMYk=;
+  b=RHbnqvApZgTPqnk6IU8csYaP4+PJ1P/nh9dpFGIvZHikSzqJDfU0zV21
+   NMdfafwnx6kfzjrUN57xATbOdqFJvmOmnB0OYsj6fL8RNSXPFCL85ARqJ
+   uLuoMTxkSEUw6ZOPqIZsqVQUvzoprGLBwLahNVUjdRqrlqzcGH5oS0kCS
+   tvS5ROPJRLzBfWZCKm/fpXh/A/nGST6XfVketOHD/XIAv0iQxO16+3V0x
+   h/rbOdarMNovRXD+xWn7HCQspcc//mwfCS4bPL1mwpSk5aThBL4Ifv6YM
+   6ApMDln/gEF9a770BHb2usJ/sMJbcRKI+OrpKBJ0EsOhaGCffwII0cMvI
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,247,1681164000"; 
+   d="scan'208";a="31462666"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 16 Jun 2023 11:34:35 +0200
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id A19C0280082;
+        Fri, 16 Jun 2023 11:34:35 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, festevam@gmail.com, vkoul@kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org
+Cc:     oliver.brown@nxp.com, Sandor.yu@nxp.com, linux-imx@nxp.com,
+        kernel@pengutronix.de, Sandor Yu <Sandor.yu@nxp.com>
+Subject: Re: [PATCH v6 6/8] dt-bindings: phy: Add Freescale iMX8MQ DP and HDMI PHY
+Date:   Fri, 16 Jun 2023 11:34:37 +0200
+Message-ID: <5009063.iIbC2pHGDl@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <2ccb849de420ced29b3f9be38e12664e1919b631.1686729444.git.Sandor.yu@nxp.com>
+References: <cover.1686729444.git.Sandor.yu@nxp.com> <2ccb849de420ced29b3f9be38e12664e1919b631.1686729444.git.Sandor.yu@nxp.com>
 MIME-Version: 1.0
-Message-ID: <168690798706.404.5612585523577062985.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/mtrr branch of tip:
+Hi Sandor,
 
-Commit-ID:     30d65d1b19850c9bc8c17dba8ebe9be5e0c17054
-Gitweb:        https://git.kernel.org/tip/30d65d1b19850c9bc8c17dba8ebe9be5e0c17054
-Author:        Juergen Gross <jgross@suse.com>
-AuthorDate:    Thu, 15 Jun 2023 14:39:59 +02:00
-Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Fri, 16 Jun 2023 11:22:33 +02:00
+Am Donnerstag, 15. Juni 2023, 03:38:16 CEST schrieb Sandor Yu:
+> Add bindings for Freescale iMX8MQ DP and HDMI PHY.
+>=20
+> Signed-off-by: Sandor Yu <Sandor.yu@nxp.com>
+> ---
+>  .../bindings/phy/fsl,imx8mq-dp-hdmi-phy.yaml  | 53 +++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+>  create mode 100644
+> Documentation/devicetree/bindings/phy/fsl,imx8mq-dp-hdmi-phy.yaml
+>=20
+> diff --git
+> a/Documentation/devicetree/bindings/phy/fsl,imx8mq-dp-hdmi-phy.yaml
+> b/Documentation/devicetree/bindings/phy/fsl,imx8mq-dp-hdmi-phy.yaml new
+> file mode 100644
+> index 000000000000..917f113503dc
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/fsl,imx8mq-dp-hdmi-phy.yaml
+> @@ -0,0 +1,53 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/phy/fsl,imx8mq-dp-hdmi-phy.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Cadence HDP-TX DP/HDMI PHY for Freescale i.MX8MQ SoC
+> +
+> +maintainers:
+> +  - Sandor Yu <sandor.yu@nxp.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - fsl,imx8mq-dp-phy
+> +      - fsl,imx8mq-hdmi-phy
 
-x86/xen: Set default memory type for PV guests to WB
+How is it intended to select DP or HDMI? E.g. provide a single default dp-p=
+hy=20
+node in imx8mq.dtsi and change the compatible to HDMI on board-level?
 
-When running as an unprivileged PV guest under Xen (not dom0), the
-default MTRR memory type should be write-back.
+Best regards,
+Alexander
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Link: https://lore.kernel.org/r/20230615123959.12298-1-jgross@suse.com
----
- arch/x86/xen/enlighten_pv.c | 2 ++
- 1 file changed, 2 insertions(+)
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: PHY reference clock.
+> +      - description: APB clock.
+> +
+> +  clock-names:
+> +    items:
+> +      - const: ref
+> +      - const: apb
+> +
+> +  "#phy-cells":
+> +    const: 0
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - "#phy-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/imx8mq-clock.h>
+> +    #include <dt-bindings/phy/phy.h>
+> +    dp_phy: phy@32c00000 {
+> +        compatible =3D "fsl,imx8mq-dp-phy";
+> +        reg =3D <0x32c00000 0x100000>;
+> +        #phy-cells =3D <0>;
+> +        clocks =3D <&hdmi_phy_27m>, <&clk IMX8MQ_CLK_DISP_APB_ROOT>;
+> +        clock-names =3D "ref", "apb";
+> +    };
 
-diff --git a/arch/x86/xen/enlighten_pv.c b/arch/x86/xen/enlighten_pv.c
-index 8732b85..93b6582 100644
---- a/arch/x86/xen/enlighten_pv.c
-+++ b/arch/x86/xen/enlighten_pv.c
-@@ -187,6 +187,8 @@ static void __init xen_pv_init_platform(void)
- 
- 	if (xen_initial_domain())
- 		xen_set_mtrr_data();
-+	else
-+		mtrr_overwrite_state(NULL, 0, MTRR_TYPE_WRBACK);
- }
- 
- static void __init xen_pv_guest_late_init(void)
+
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
+
+
