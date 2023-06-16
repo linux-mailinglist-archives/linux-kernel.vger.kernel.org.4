@@ -2,194 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3F4B73280A
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 08:57:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C0A7732810
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 08:57:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231247AbjFPG5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 02:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46424 "EHLO
+        id S238285AbjFPG5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 02:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240822AbjFPG47 (ORCPT
+        with ESMTP id S233680AbjFPG5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 02:56:59 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43AB71FE8;
-        Thu, 15 Jun 2023 23:56:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686898618; x=1718434618;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=3ULNT7A1MT5NGpv4sQJRzs8cJ4D9Azrw+arYJsjHQpU=;
-  b=M1yrkzfoeYYDRSvNbm9C9CFyLA4cTLNxDjnKRcy9rTDTWKk3WipHJ3ef
-   1hkJWB0WBrF2p1qeihRTNow1jnkHFQStgg2f2+4Dkkd3EjwfipZLhXFju
-   I88hYysVF60WX8xSxeARTS1RNNiyhtGV4fhJjMN183PkiVz5zd1ZJMJji
-   ZKFWZFUBiupfY747JDZpX6bx3wLzFg16txrwWpuhkr8NB/3uv1GAwXK/l
-   cwJe2c6hpOfz4gqdsbuRA5r4JVmlfXQN1UOWMFRO/Y5ofcUohojK9lOEN
-   Ogen7CyS7lW1hbVEq+eLL0+tghhc87AkQqAvXFz1uMV1jpdN5MxX3fjMY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="343884139"
-X-IronPort-AV: E=Sophos;i="6.00,246,1681196400"; 
-   d="scan'208";a="343884139"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 23:56:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="706976748"
-X-IronPort-AV: E=Sophos;i="6.00,246,1681196400"; 
-   d="scan'208";a="706976748"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga007.jf.intel.com with ESMTP; 15 Jun 2023 23:56:45 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 15 Jun 2023 23:56:44 -0700
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 15 Jun 2023 23:56:44 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Thu, 15 Jun 2023 23:56:44 -0700
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.41) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Thu, 15 Jun 2023 23:56:40 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m1g8xZNiRD2v2fPUwPjb1qinkIH00e9TIVEp2fVzrW+OGkUBBWeZuMPAUVuglj6bMg/XmX7tl37vFP9C7Aywj4ww5La/gpBYhrCsCcwmTEZfvmwVYlIyjttxuRpSPtprZ/TRTAVi1U0Xco/t+4tz+fOgDsveJGPVYS2bD77JDzq11gXQi8O3asAGbiKvHxybHIVgXVfg+4kSNnTxdh/5rFEi8U9eH0E9ZcvaykdH1P49gJls9OWfpgBKvDoFC5X4FGvM32lou7vAsIqsYgsQPlj1d/yqfQLGxWovYcUtePh8WKxjdMgr6BftkEK80mY4/WLBJnZX2uD0RTUvwXJHCA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=K5xuEb/MQaXNnLLQYIm2Pq9vNUr43h/qBliHl9rHWj8=;
- b=O2EKOx4NNCWOF2bX6ZhByBSsNmwg7EVvA0aZ/cY4ZH32JYg1ul7oqU698GLyawO49kD24mi7sWxy1xkj0UkfMahpXW1mw4jJSoD880sM0IdTmNm9JTNEmaJMiIJrGNQ/eKfvk5S0J4Kyhwwk8uLHykvrFzWxF1Mv2NEILxE/lZIn5/D5SNVPc1pVLaOng6BdiuTYwvMDUh4PQmxjpBf0ooswaBZmSHqdQ1bJfSsLlIonEHE0xJE8IRroV59qf/a7ugqzjffLw2M3TY2mnnkWjVa3dDfJrYcyvJ5zWB7Y2jDQrVNw2XRr3vaZAzxqvyPOudwtiKBVv360EjbLjWIZ0A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH0PR11MB4965.namprd11.prod.outlook.com (2603:10b6:510:34::7)
- by DM4PR11MB5567.namprd11.prod.outlook.com (2603:10b6:5:39a::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.29; Fri, 16 Jun
- 2023 06:56:31 +0000
-Received: from PH0PR11MB4965.namprd11.prod.outlook.com
- ([fe80::4707:8818:a403:f7a9]) by PH0PR11MB4965.namprd11.prod.outlook.com
- ([fe80::4707:8818:a403:f7a9%6]) with mapi id 15.20.6500.029; Fri, 16 Jun 2023
- 06:56:31 +0000
-Message-ID: <dfdf6d93-a68c-bb07-e59e-8d888dd6ebb6@intel.com>
-Date:   Fri, 16 Jun 2023 14:56:20 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v3 10/21] KVM:x86: Add #CP support in guest exception
- classification
-To:     Sean Christopherson <seanjc@google.com>
-CC:     Chao Gao <chao.gao@intel.com>, <pbonzini@redhat.com>,
-        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <peterz@infradead.org>, <rppt@kernel.org>,
-        <binbin.wu@linux.intel.com>, <rick.p.edgecombe@intel.com>,
-        <john.allen@amd.com>
-References: <20230511040857.6094-1-weijiang.yang@intel.com>
- <20230511040857.6094-11-weijiang.yang@intel.com>
- <ZH73kDx6VCaBFiyh@chao-email>
- <21568052-eb0f-a8d6-5225-3b422e9470e9@intel.com>
- <ZIulniryqlj0hLnt@google.com>
-Content-Language: en-US
-From:   "Yang, Weijiang" <weijiang.yang@intel.com>
-In-Reply-To: <ZIulniryqlj0hLnt@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG3P274CA0003.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:be::15)
- To PH0PR11MB4965.namprd11.prod.outlook.com (2603:10b6:510:34::7)
+        Fri, 16 Jun 2023 02:57:40 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61991FF5;
+        Thu, 15 Jun 2023 23:57:38 -0700 (PDT)
+Received: from [192.168.10.55] (unknown [119.155.33.163])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C34F56606F1A;
+        Fri, 16 Jun 2023 07:57:30 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686898657;
+        bh=Omzo0pLNcXzbmnJ6mj+hFNJQNMry5y1BPxh4GdO6tsE=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=fuhb4Evg3aejWQIX4CKPzco+2hgCL3d6CyC4qsV3igE3nOOZKISrKbp0AbrkKHnlX
+         ijAYqKE4+v19IQsFGYoAbaYk5GVXdvGlAcQza+BBCNqTQFJFNlUOyvPq4CQDxmAN7H
+         4CxItF6P4ZlHecWC2qfhrBIz2HmTDaabArJ8in7K8PiIRc3NYp6yIlnm9Fn0pUwIK1
+         /G2ZC8HkUSco0P4gTBMmvaOEH13ZrR8jeh0dbY1LU9MdvozBv829fCfOdKQlZs74XU
+         nKihSFE3NtHpqQg/sYM4j/Rvg5WJxlgKt5vJ+QMa7srQfrqTnECJ2ROQT7xdt9KF/G
+         eegFGSxYPvvrQ==
+Message-ID: <2e1b80f1-0385-0674-ae5f-9703a6ef975d@collabora.com>
+Date:   Fri, 16 Jun 2023 11:57:27 +0500
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR11MB4965:EE_|DM4PR11MB5567:EE_
-X-MS-Office365-Filtering-Correlation-Id: effa9b63-fc97-4b75-9605-08db6e36d03e
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jFBgdItGTpyYHcUiMC0BabHhz5pImEXP8HFmAOJcZQJXsIEWKmSekpFL1sGzWaLpqgRJUL+ydflKaKQmWmcWKGPZB+0ir2J5bHfNInEtLucJJfL71aSCZPlKMYmZ9mfZz4mita1bmg/zmN8qUDwWLVgXwZu1lX8fkh1BI2GATIwhTDJKdiktoPAFUQ9xHQ2HVtNbqaZ7LZU6zFHIfevbcW72TpPL3nsmXaoi19eOmTNk91rHFeOlWpnTFURhvUxGHgtXDYaR9fxi1AJEMuHQlsUKvZdh8NKRObwgU0oue4zwlsM1NwVnvTt/1tj9WJJoK7ESSqffZe7QTFBSKA3+B9fqCJo519pt+gS9clch9ZcGEKm1DekuUJYHpalHfFGcqUxogInE7UVLjV04xVBJU/E/f8wEoFjQgNh6KeNrq2U8/3Nz2inmUb9s+0BcUNYGEysnAULJTIDRbOOvPEcBL9Pcx33mXscD5oU2PaZN3N5pA8WPYx6fLz6Hyl5mibFmfA3IJKdhroJ6p5B7XvjNwXcZMjw9ioZZOR/MAGuRDAqKdvxVcoFF/O7n73+3If8fK3n5ouIRfvWES+VMlUTZCXQgNVwKYWyC+cgYfvXk1EgQVaIdRg1afoN8x5m3x9XHMEOtR5hM2ZwaGrGhYb4aSg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4965.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(396003)(346002)(376002)(136003)(39860400002)(451199021)(5660300002)(8936002)(41300700001)(6486002)(8676002)(316002)(6666004)(186003)(53546011)(6506007)(6512007)(31696002)(26005)(478600001)(31686004)(4326008)(66556008)(66946007)(6916009)(66476007)(86362001)(82960400001)(38100700002)(2616005)(83380400001)(36756003)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SWdpQWdWMWpJSldnM2VML21sR1ZBeldLNEpvSjRvWkRQZzVNcXVCeThHRmRM?=
- =?utf-8?B?R2pvcElsRU1qcGZ1U3RJckZGb091dWk0M2dGNjV1Y0NtQVM2TzdYNllXM1pH?=
- =?utf-8?B?d3FveEFhQUk2TDZMYWhkbnR2My9UV3Qzblc0ZjBkamtmS0U3Z256RTFzMEcz?=
- =?utf-8?B?elFLN0svMlRGWEhnUkpxd1JwMjhMQkRlSE83RXhCVExQN1NiUHd3Z256Q3N1?=
- =?utf-8?B?ekZSTlJRWlBhTzUvaTJhS2RzWFRrKzFleTRoSURvaERhSlpCVVJScy9hTUln?=
- =?utf-8?B?dm9aZ1VRTExNd0l4UGNhTGRyUUhhbU5HcGpaaE0xZjZrZmFBbzU0V2Z6UXhB?=
- =?utf-8?B?cFhOKzlURnZ3ZXlvVmhra2NvbWFNT1ZzOGttdmI1VytZTXM5eVVSeE1haVhq?=
- =?utf-8?B?UkhkZCtEN3V6ZzZIU1g0OVF6TlNOZkJxU2hnY2twWGVBMFdUZ0d6aFNSc3Zo?=
- =?utf-8?B?SitEZjNWUTVwRlRQRzZxNlRLMmc4V0dPYmx1UW4wSGRxUmJYZWNBT21wNFdG?=
- =?utf-8?B?a1JwajNrbS9jQmVRZTI0T3NEUytaemxrQlFzOElydURqSDE4bHZjSlVURUdu?=
- =?utf-8?B?Z01GeCtVQmc3MWNya2c2OUk3K2N1TTZIOVNYZ1Y2R3dJRzRBdDhiWXIzcExQ?=
- =?utf-8?B?eUQxdFRxY1FXc2E0WjAzdWlkamVvUWhENitJSTYxb3NwZFBFTHgzeU9KY2wr?=
- =?utf-8?B?aVVPVEQ3WVNwQkR1a2FCWkYzV3VvMkNkeU0xa2hJb2ZVcURWM3d6VytaWFQ3?=
- =?utf-8?B?cGJ1UjFyMHQ4UnZXSDNkMmdya3dTSlRzclZhSC9nTUJLbmIzT1d3czJQL1la?=
- =?utf-8?B?b1lQMW1OcitTVFBBSUpKelBaeFgxSEFHM0pMci9zTVNhL0V3RllrNDV2NENv?=
- =?utf-8?B?eEJDWkU1ZnpmUThCVlFrVzZ1ZDBXWmZUMjJJbzVUSkhBVStUdXo2ZFg4anAr?=
- =?utf-8?B?VXRyQVhHT2pDNk5SVU95OTUrQ0wwZTBnTDhIL1NkQUFFWVorVERPNUgzRFEw?=
- =?utf-8?B?a1hreGUyb2xJcktwS01WUDNnWWdtNVpIR1dNZllHanQ2ejVZeExDOC9zaWZ6?=
- =?utf-8?B?b09iVy90RDFhUnlGK25WRGw4Qmh3Sis2SkwvS0Nxb2dmdm11SGRpdllucFNo?=
- =?utf-8?B?T3hyd3hQdXcwOG9ZUnpqRTRYK2xJWVFJKzJDNmxuYnhNNk9yNmJEVFVvWG1F?=
- =?utf-8?B?Ty9hR09vUXRtZ3hLOUJuV2xBeTI0OFpFRExneXRQQjlobS9PaTYwNFJxcWtt?=
- =?utf-8?B?S2dDMk0rd0Y0OGQxY201TlVVOUM5ZGJLZk9nK1FoU0NsWU9MQk5mRitWa0Jx?=
- =?utf-8?B?dkF2UHpleitMNzA1cERjclErQlI0S3F3OGRKRGdiNlJlUDBSdThOZGo5ZC80?=
- =?utf-8?B?WkZVd0Z5TEFVVlRIWmNjdVhSMjhaZ0FlMGRGTFppdmtCbWRTRjR2MFN4RHhQ?=
- =?utf-8?B?a2FzQjJ1a0pNbk5YYjMwa1A5U21KMDIwTDRyQTdlc0hhRmZZSzhOdGRscjBK?=
- =?utf-8?B?UXd3NjNvVjdQZTlPUEdQQXBHK3E5dnF2WDB1RWZ0eTNnVkFJNlAvdnlFL1dJ?=
- =?utf-8?B?SkNsMEZKTDFlUExUMGtqNGRVQk1naFpQbFA2a3czYm1vS0Q4bGNha1R2UUxl?=
- =?utf-8?B?SXNNQXU0OHRDMUxpU1RUdFpiRlg4L3dNTE81UUtuT0R5czJxUFUyc250YSt3?=
- =?utf-8?B?bGNKRzZ0Szl2d2h3R3RySHRNenJjTGF4SHYrWWtFUmVxUHdKd2lGaWp3dzJY?=
- =?utf-8?B?TUIrOStQTTRBVVdhYTVxb3ZTSWFkMWludG1XZEwvbFg2cU9NMEpJY3pKZ1FQ?=
- =?utf-8?B?L3VqQTg2WG9XaXdkcFp3dElVeWJIbiszSzI3TWFWcjcxdjRtaXdGMXkwcTEr?=
- =?utf-8?B?OEdZei8xRk5TU0VVYW1KbFArYS9RbHlYRnJBUTNOY0RoZ2VjUjE0eFZEVExJ?=
- =?utf-8?B?ZXNLckRRc2d1ZUEyVmt6cGJNZFFRK1RyMEI3WW81WkZCUkJHZlJybWx0b1ZP?=
- =?utf-8?B?MG1CTjBjNUhueXVzSEpaTWZ0eVhVcitRSEkrMElweVJmRjJmQkh0RVhZVm1W?=
- =?utf-8?B?aXFXZmlBNUduRGJYTGcweEdkYkZSSDhiM0dXK1ZQZ2FYQkErNGYyeTZoU1Az?=
- =?utf-8?B?WGxoTFR0a2ppMC8rOWFHeElqS1JvMGtCOHp2SWNybHZ5b3M2VVZZa2l4L1RV?=
- =?utf-8?B?eXc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: effa9b63-fc97-4b75-9605-08db6e36d03e
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4965.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 06:56:30.7771
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: v/L2Ks2LtWayjo3VTYkqWEoznz2MzaZ6j1OknfUtHDSjBog1VcD6RBTX/eM1Yc8Yfo9BAvr+vZJAfe+Hf306MA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5567
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v18 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Content-Language: en-US
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+References: <20230613102905.2808371-1-usama.anjum@collabora.com>
+ <20230613102905.2808371-3-usama.anjum@collabora.com>
+ <CABb0KFHWnbrf2ythvO0OKsd1ZS9b4D9BNzwBCbn6g9OX4n6ZOg@mail.gmail.com>
+ <0db01d90-09d6-08a4-bbb8-70670d3baa94@collabora.com>
+ <CABb0KFEn5TU480A=YiN82nLRtGyKMABi8cZjuiGUU_jFZZo+8g@mail.gmail.com>
+ <34203acf-7270-7ade-a60e-ae0f729dcf70@collabora.com>
+ <CABb0KFFaXgJD99pWfx3MC+qrq5jUaPis_kZo6U8yL_8xdp0GJA@mail.gmail.com>
+ <96b7cc00-d213-ad7d-1b48-b27f75b04d22@collabora.com>
+ <CABb0KFEy_mRaT86TEOQ-BoTe_XOVw3Kp5VdzOfEEaiZJuT754g@mail.gmail.com>
+ <39bc8212-9ee8-dbc1-d468-f6be438b683b@collabora.com>
+ <CABb0KFHx2hV9M7oinCdKnagRmcrGHagH9eAO3TkVTQH+o9x=5A@mail.gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CABb0KFHx2hV9M7oinCdKnagRmcrGHagH9eAO3TkVTQH+o9x=5A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SORBS_WEB,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 6/16/2023 7:58 AM, Sean Christopherson wrote:
-> On Thu, Jun 08, 2023, Weijiang Yang wrote:
->> On 6/6/2023 5:08 PM, Chao Gao wrote:
->>> On Thu, May 11, 2023 at 12:08:46AM -0400, Yang Weijiang wrote:
->>>> Add handling for Control Protection (#CP) exceptions(vector 21).
->>>> The new vector is introduced for Intel's Control-Flow Enforcement
->>>> Technology (CET) relevant violation cases.
+On 6/16/23 1:07 AM, Michał Mirosław wrote:
+> On Thu, 15 Jun 2023 at 17:11, Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+>> On 6/15/23 7:52 PM, Michał Mirosław wrote:
+>>> On Thu, 15 Jun 2023 at 15:58, Muhammad Usama Anjum
+>>> <usama.anjum@collabora.com> wrote:
+>>>> I'll send next revision now.
+>>>> On 6/14/23 11:00 PM, Michał Mirosław wrote:
+>>>>> (A quick reply to answer open questions in case they help the next version.)
+>>>>>
+>>>>> On Wed, 14 Jun 2023 at 19:10, Muhammad Usama Anjum
+>>>>> <usama.anjum@collabora.com> wrote:
+>>>>>> On 6/14/23 8:14 PM, Michał Mirosław wrote:
+>>>>>>> On Wed, 14 Jun 2023 at 15:46, Muhammad Usama Anjum
+>>>>>>> <usama.anjum@collabora.com> wrote:
+>>>>>>>>
+>>>>>>>> On 6/14/23 3:36 AM, Michał Mirosław wrote:
+>>>>>>>>> On Tue, 13 Jun 2023 at 12:29, Muhammad Usama Anjum
+>>>>>>>>> <usama.anjum@collabora.com> wrote:
+>>>>> [...]
+>>>>>>>>>> +       if (cur_buf->bitmap == bitmap &&
+>>>>>>>>>> +           cur_buf->start + cur_buf->len * PAGE_SIZE == addr) {
+>>>>>>>>>> +               cur_buf->len += n_pages;
+>>>>>>>>>> +               p->found_pages += n_pages;
+>>>>>>>>>> +       } else {
+>>>>>>>>>> +               if (cur_buf->len && p->vec_buf_index >= p->vec_buf_len)
+>>>>>>>>>> +                       return -ENOMEM;
+>>>>>>>>>
+>>>>>>>>> Shouldn't this be -ENOSPC? -ENOMEM usually signifies that the kernel
+>>>>>>>>> ran out of memory when allocating, not that there is no space in a
+>>>>>>>>> user-provided buffer.
+>>>>>>>> There are 3 kinds of return values here:
+>>>>>>>> * PM_SCAN_FOUND_MAX_PAGES (1) ---> max_pages have been found. Abort the
+>>>>>>>> page walk from next entry
+>>>>>>>> * 0 ---> continue the page walk
+>>>>>>>> * -ENOMEM --> Abort the page walk from current entry, user buffer is full
+>>>>>>>> which is not error, but only a stop signal. This -ENOMEM is just
+>>>>>>>> differentiater from (1). This -ENOMEM is for internal use and isn't
+>>>>>>>> returned to user.
+>>>>>>>
+>>>>>>> But why ENOSPC is not good here? I was used before, I think.
+>>>>>> -ENOSPC is being returned in form of true error from
+>>>>>> pagemap_scan_hugetlb_entry(). So I'd to remove -ENOSPC from here as it
+>>>>>> wasn't true error here, it was only a way to abort the walk immediately.
+>>>>>> I'm liking the following erturn code from here now:
+>>>>>>
+>>>>>> #define PM_SCAN_BUFFER_FULL     (-256)
+>>>>>
+>>>>> I guess this will be reworked anyway, but I'd prefer this didn't need
+>>>>> custom errors etc. If we agree to decoupling the selection and GET
+>>>>> output, it could be:
+>>>>>
+>>>>> bool is_interesting_page(p, flags); // this one does the
+>>>>> required/anyof/excluded match
+>>>>> size_t output_range(p, start, len, flags); // this one fills the
+>>>>> output vector and returns how many pages were fit
+>>>>>
+>>>>> In this setup, `is_interesting_page() && (n_out = output_range()) <
+>>>>> n_pages` means this is the final range, no more will fit. And if
+>>>>> `n_out == 0` then no pages fit and no WP is needed (no other special
+>>>>> cases).
+>>>> Right now, pagemap_scan_output() performs the work of both of these two
+>>>> functions. The part can be broken into is_interesting_pages() and we can
+>>>> leave the remaining part as it is.
 >>>>
->>>> Although #CP belongs contributory exception class, but the actual
->>>> effect is conditional on CET being exposed to guest. If CET is not
->>>> available to guest, #CP falls back to non-contributory and doesn't
->>>> have an error code.
->>> This sounds weird. is this the hardware behavior? If yes, could you
->>> point us to where this behavior is documented?
->> It's not SDM documented behavior.
-> The #CP behavior needs to be documented.  Please pester whoever you need to in
-> order to make that happen.
+>>>> Saying that n_out < n_pages tells us the buffer is full covers one case.
+>>>> But there is case of maximum pages have been found and walk needs to be
+>>>> aborted.
+>>>
+>>> This case is exactly what `n_out < n_pages` will cover (if scan_output
+>>> uses max_pages properly to limit n_out).
+>>> Isn't it that when the buffer is full we want to abort the scan always
+>>> (with WP if `n_out > 0`)?
+>> Wouldn't it be duplication of condition if buffer is full inside
+>> pagemap_scan_output() and just outside it. Inside pagemap_scan_output() we
+>> check if we have space before putting data inside it. I'm using this same
+>> condition to indicate that buffer is full.
+> 
+> I'm not sure what do you mean? The buffer-full conditions would be
+> checked in ..scan_output() and communicated to the caller by returning
+> N less than `n_pages` passed in. This is exactly how e.g. read()
+> works: if you get less than requested you've hit the end of the file.
+> If the file happens to have size that is equal to the provided buffer
+> length, the next read() will return 0.
+Right now we have:
 
-Do you mean documentation for #CP as an generic exception or the 
-behavior in KVM as
+pagemap_scan_output():
+	if (p->vec_buf_index >= p->vec_buf_len)
+		return PM_SCAN_BUFFER_FULL;
+	if (p->found_pages == p->max_pages)
+		return PM_SCAN_FOUND_MAX_PAGES;
 
-this patch shows?
+pagemap_scan_pmd_entry():
+	ret = pagemap_scan_output(bitmap, p, start, n_pages);
+	if (ret >= 0) // success
+		make_UFFD_WP and flush
+	else
+		buffer_error
 
+You are asking me to do:
+
+pagemap_scan_output():
+	if (p->vec_buf_index >= p->vec_buf_len)
+		return 0;
+	if (p->found_pages == p->max_pages)
+		return PM_SCAN_FOUND_MAX_PAGES;
+
+pagemap_scan_pmd_entry():
+	ret = pagemap_scan_output(bitmap, p, start, n_pages);
+	if (ret > 0) // success
+		make_UFFD_WP and flush
+	else if (ret == 0) // buffer full
+		return PM_SCAN_BUFFER_FULL;	
+	else //other errors
+		buffer_error
+
+So you are asking me to go from consie code to write more lines of code. I
+would write more lines without any issue if it improves readability and
+logical sense. But I don't see here any benefit.
+
+> 
+>>>>>>> While here, I wonder if we really need to fail the call if there are
+>>>>>>> unknown bits in those masks set: if this bit set is expanded with
+>>>>>>> another category flags, a newer userspace run on older kernel would
+>>>>>>> get EINVAL even if the "treat unknown as 0" be what it requires.
+>>>>>>> There is no simple way in the API to discover what bits the kernel
+>>>>>>> supports. We could allow a no-op (no WP nor GET) call to help with
+>>>>>>> that and then rejecting unknown bits would make sense.
+>>>>>> I've not seen any examples of this. But I've seen examples of returning
+>>>>>> error if kernel doesn't support a feature. Each new feature comes with a
+>>>>>> kernel version, greater than this version support this feature. If user is
+>>>>>> trying to use advanced feature which isn't present in a kernel, we should
+>>>>>> return error and not proceed to confuse the user/kernel. In fact if we look
+>>>>>> at userfaultfd_api(), we return error immediately if feature has some bit
+>>>>>> set which kernel doesn't support.
+>>>>>
+>>>>> I think we should have a way of detecting the supported flags if we
+>>>>> don't want a forward compatibility policy for flags here. Maybe it
+>>>>> would be enough to allow all the no-op combinations for this purpose?
+>>>> Again I don't think UFFD is doing anything like this.
+>>>
+>>> If it's cheap and easy to provide a user with a way to detect the
+>>> supported features - why not do it?
+>> I'm sorry. But it would bring up something new and iterations will be
+>> needed to just play around. I like the UFFD way.
+> 
+> Let's then first agree on what would have to be changed. I guess we
+> could leverage that `scan_len = 0` doesn't make much sense otherwise
+> and let it be used to check the other fields for support.
+We are making things more and more complex. I don't like multi-plexing
+variables. Can you give examples where multi-plexing has been done on
+variables inside linux kernel? Muti-plexing means user gives input and
+takes output from same variable. It makes variable double meaning.
+
+> 
+> Best Regards
+> Michał Mirosław
+
+-- 
+BR,
+Muhammad Usama Anjum
