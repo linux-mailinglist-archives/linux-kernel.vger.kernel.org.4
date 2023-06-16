@@ -2,293 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FEB87329C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:28:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 818D77329C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244163AbjFPI20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 04:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59928 "EHLO
+        id S245461AbjFPI2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 04:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242529AbjFPI2Z (ORCPT
+        with ESMTP id S245405AbjFPI2u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 04:28:25 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BEB42D79
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 01:28:23 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b445512846so4848651fa.2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 01:28:23 -0700 (PDT)
+        Fri, 16 Jun 2023 04:28:50 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3B730CB
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 01:28:43 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b512309c86so4022705ad.1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 01:28:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google; t=1686904101; x=1689496101;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=shopee.com; s=shopee.com; t=1686904123; x=1689496123;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LZCqAGjRKDvEoatemozoXx1FoWJTpUzjMGwy/qF8g/8=;
-        b=JwldKiQ0TB5xwMKUZIM3Sewt0gaaQKVVgk21JApvEvBQYPpsTN2Zqr4JqgFbWYFNmL
-         tzhVTu0yvEsEb4QsfVkIiDOD3KW80NFwC3yVhgsF9V3kZX6VLlQqjCMB0zlZtZK93yr3
-         alc0LbjCSWLj3u/pIpWKtOfZ2jAoqnO4GxYl4=
+        bh=oDUVlxr6MIHuvrj4qFPZKLZUZbfg4Er9rrj+u7M45oY=;
+        b=RqRoDM6U9yZrXYYLMxuPkioIiUXPKKv4f1voJfglrx856kDWQ4InU3T953oGyFvEx1
+         VCtzXMmCfz2+nWM1hHGDbWfIyg+YohWISPrJ5C+isy1rxB3x9zqYAvfFMek7vUt6E5S7
+         +xQ53ddcA0Eg7evsHfFGzfTvHPys0n4GIOGNfx7/l1est+VX3BIJwFflM2GRNFBa+Ahf
+         NaGx4nl3WpfAIN3qCg4iI8BwXen7OGXZAm6fFB0SUQcRBBy3GOVkWtQXAlZGsqJ1EbAr
+         nIFds4nKrdg9MSVAYMPWte1TiPY7Pwd8QwhS56xYzDSu8T+hJAv+A706RnxIh9M4W+NK
+         DtiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686904101; x=1689496101;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LZCqAGjRKDvEoatemozoXx1FoWJTpUzjMGwy/qF8g/8=;
-        b=UcR6SdW32nG+5nyBXgvMwFXH0oI4itX7XEKgzMmJ0ocw+iKBFJDUaTRnwyTjOWGh7d
-         UlwjUPT8Ky9NYxENeXTRZIFZ+QK6ELTZZw/Yzl0rGtN/oml1hqQdVcc4OHY/gl6cSFMW
-         KitGpdQ3L5IZOieK8QzpDEKfi1Vl8AZIvEzBsI04vECASlrxCbPnuasGWgvSyHkHmwIv
-         JNY90KxqMTccnNE0mXhk/pkQm3f4DfWEW1fbH0BWCT1c2Qvovg9YPO+pcRqauLsxHcmo
-         Bshu7tchtosdllgN7XmKvDYb4Zqz0EVmaldiaPaUGVO6tQeOviUP9QIZRYcQUiQigsye
-         NPiA==
-X-Gm-Message-State: AC+VfDzeIlnmdKkvLVHPRqLucTxEexNZ7PD2+YK/0GW60yHA4BAGQziu
-        CUzNWOtjsyc2+pC89dounkxZ1R9JvwNYz/6LapEb
-X-Google-Smtp-Source: ACHHUZ56TziHoZxjzqlSenTHxGQzrOu7m8nSQ8jAwhCsCTSWZVoNUnVvDh+QFfMtHzF5cXvsWIqhYxl5XU8WgpNfj9Y=
-X-Received: by 2002:a2e:330f:0:b0:2a8:bd1f:a377 with SMTP id
- d15-20020a2e330f000000b002a8bd1fa377mr1210632ljc.20.1686904101308; Fri, 16
- Jun 2023 01:28:21 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686904123; x=1689496123;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=oDUVlxr6MIHuvrj4qFPZKLZUZbfg4Er9rrj+u7M45oY=;
+        b=O4KgbF20xhMNU+nHRKypWQvVS1QFchvBaD2/A2AVYCNDS/cJZjnTtMeaitG4kolIKy
+         VKsHrOK0z/PErAeIheAAAyBOR6SaqE0XCfx2+0FneBz6BDMs7swSP6cu55sfqJO73QP+
+         MsgK6Y4s70sAw53XsfMXhcsZApvPnHzWX1wUrSEbp6qHGJvEBU02rjZkD0i8MUukdsXw
+         6pWPlS0rjX5UZ8yFUiQc9DVC7EEvGBZdFbvkak2sUqBGAQ8VLyP9DWqeaBFxPoNT5vbu
+         7i5EmbG2BxSjee+LibHaCUzF+vclwmIXPKzta0V10fTL3cu9PF/J9MEcseW1NrlE+E3p
+         HBEw==
+X-Gm-Message-State: AC+VfDw+1rYFwhlZ3G7u04IA0UF8Vxs5bfSGYVf5x6zPABcG5ZpivXOh
+        QvxiuGHwhjNjSYFTFb3GY/vl7HttByFGkjROHtOkCzHa
+X-Google-Smtp-Source: ACHHUZ4KH7TA4LKpFW6ObfZvJDADk1NeKn28oSeId8Ezlgfso5K4plJhA7iHfjiDF40xU3dWhpUmCA==
+X-Received: by 2002:a17:903:2310:b0:1b3:bf70:4ed4 with SMTP id d16-20020a170903231000b001b3bf704ed4mr10285440plh.23.1686904123425;
+        Fri, 16 Jun 2023 01:28:43 -0700 (PDT)
+Received: from [10.54.24.10] (static-ip-148-99-134-202.rev.dyxnet.com. [202.134.99.148])
+        by smtp.gmail.com with ESMTPSA id jf3-20020a170903268300b001b24857d1f2sm6625845plb.188.2023.06.16.01.28.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Jun 2023 01:28:43 -0700 (PDT)
+Message-ID: <47119364-30ac-cb57-7fd8-d9aa4b230478@shopee.com>
+Date:   Fri, 16 Jun 2023 16:28:38 +0800
 MIME-Version: 1.0
-References: <20230512085321.13259-1-alexghiti@rivosinc.com> <20230512085321.13259-6-alexghiti@rivosinc.com>
-In-Reply-To: <20230512085321.13259-6-alexghiti@rivosinc.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Fri, 16 Jun 2023 01:28:09 -0700
-Message-ID: <CAOnJCUL8t-BMfLX0uvjbFK9TFVyqEdCnkYN9aE0hB4NXEtRHZw@mail.gmail.com>
-Subject: Re: [PATCH v2 05/10] riscv: Prepare for user-space perf event mmap support
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.2
+Subject: Re: [PATCH 1/2] mm/memcontrol: do not tweak node in mem_cgroup_init()
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     roman.gushchin@linux.dev, hannes@cmpxchg.org, shakeelb@google.com,
+        akpm@linux-foundation.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230615073226.1343-1-haifeng.xu@shopee.com>
+ <ZIrIb7pgRXln27nv@dhcp22.suse.cz>
+From:   Haifeng Xu <haifeng.xu@shopee.com>
+In-Reply-To: <ZIrIb7pgRXln27nv@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 1:58=E2=80=AFAM Alexandre Ghiti <alexghiti@rivosinc=
-.com> wrote:
->
-> Provide all the necessary bits in the generic riscv pmu driver to be
-> able to mmap perf events in userspace: the heavy lifting lies in the
-> driver backend, namely the legacy and sbi implementations.
->
-> Note that arch_perf_update_userpage is almost a copy of arm64 code.
->
-> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> ---
->  arch/riscv/kernel/Makefile     |  2 +-
->  arch/riscv/kernel/perf_event.c | 58 ++++++++++++++++++++++++++++++++++
->  drivers/perf/riscv_pmu.c       | 41 ++++++++++++++++++++++++
->  include/linux/perf/riscv_pmu.h |  4 +++
->  4 files changed, 104 insertions(+), 1 deletion(-)
->  create mode 100644 arch/riscv/kernel/perf_event.c
->
-> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-> index 4cf303a779ab..0d215fd9860d 100644
-> --- a/arch/riscv/kernel/Makefile
-> +++ b/arch/riscv/kernel/Makefile
-> @@ -70,7 +70,7 @@ obj-$(CONFIG_DYNAMIC_FTRACE)  +=3D mcount-dyn.o
->
->  obj-$(CONFIG_TRACE_IRQFLAGS)   +=3D trace_irq.o
->
-> -obj-$(CONFIG_PERF_EVENTS)      +=3D perf_callchain.o
-> +obj-$(CONFIG_PERF_EVENTS)      +=3D perf_callchain.o perf_event.o
->  obj-$(CONFIG_HAVE_PERF_REGS)   +=3D perf_regs.o
->  obj-$(CONFIG_RISCV_SBI)                +=3D sbi.o
->  ifeq ($(CONFIG_RISCV_SBI), y)
-> diff --git a/arch/riscv/kernel/perf_event.c b/arch/riscv/kernel/perf_even=
-t.c
-> new file mode 100644
-> index 000000000000..94174a0fc251
-> --- /dev/null
-> +++ b/arch/riscv/kernel/perf_event.c
-> @@ -0,0 +1,58 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +#include <linux/sched_clock.h>
-> +
-> +void arch_perf_update_userpage(struct perf_event *event,
-> +                              struct perf_event_mmap_page *userpg, u64 n=
-ow)
-> +{
-> +       struct clock_read_data *rd;
-> +       unsigned int seq;
-> +       u64 ns;
-> +
-> +       userpg->cap_user_time =3D 0;
-> +       userpg->cap_user_time_zero =3D 0;
-> +       userpg->cap_user_time_short =3D 0;
-> +       userpg->cap_user_rdpmc =3D
-> +               !!(event->hw.flags & PERF_EVENT_FLAG_USER_READ_CNT);
-> +
-> +       userpg->pmc_width =3D 64;
-> +
-
-The counter width is 64 for cycle & instret. Other hpmcounter can have
-different width.
-This information should retrieved from counter info.
-
-> +       do {
-> +               rd =3D sched_clock_read_begin(&seq);
-> +
-> +               userpg->time_mult =3D rd->mult;
-> +               userpg->time_shift =3D rd->shift;
-> +               userpg->time_zero =3D rd->epoch_ns;
-> +               userpg->time_cycles =3D rd->epoch_cyc;
-> +               userpg->time_mask =3D rd->sched_clock_mask;
-> +
-> +               /*
-> +                * Subtract the cycle base, such that software that
-> +                * doesn't know about cap_user_time_short still 'works'
-> +                * assuming no wraps.
-> +                */
-> +               ns =3D mul_u64_u32_shr(rd->epoch_cyc, rd->mult, rd->shift=
-);
-> +               userpg->time_zero -=3D ns;
-> +
-> +       } while (sched_clock_read_retry(seq));
-> +
-> +       userpg->time_offset =3D userpg->time_zero - now;
-> +
-> +       /*
-> +        * time_shift is not expected to be greater than 31 due to
-> +        * the original published conversion algorithm shifting a
-> +        * 32-bit value (now specifies a 64-bit value) - refer
-> +        * perf_event_mmap_page documentation in perf_event.h.
-> +        */
-> +       if (userpg->time_shift =3D=3D 32) {
-> +               userpg->time_shift =3D 31;
-> +               userpg->time_mult >>=3D 1;
-> +       }
-> +
-> +       /*
-> +        * Internal timekeeping for enabled/running/stopped times
-> +        * is always computed with the sched_clock.
-> +        */
-> +       userpg->cap_user_time =3D 1;
-> +       userpg->cap_user_time_zero =3D 1;
-> +       userpg->cap_user_time_short =3D 1;
-> +}
-> diff --git a/drivers/perf/riscv_pmu.c b/drivers/perf/riscv_pmu.c
-> index ebca5eab9c9b..af69da268246 100644
-> --- a/drivers/perf/riscv_pmu.c
-> +++ b/drivers/perf/riscv_pmu.c
-> @@ -171,6 +171,8 @@ int riscv_pmu_event_set_period(struct perf_event *eve=
-nt)
->
->         local64_set(&hwc->prev_count, (u64)-left);
->
-> +       perf_event_update_userpage(event);
-> +
->         return overflow;
->  }
->
-> @@ -267,6 +269,9 @@ static int riscv_pmu_event_init(struct perf_event *ev=
-ent)
->         hwc->idx =3D -1;
->         hwc->event_base =3D mapped_event;
->
-> +       if (rvpmu->event_init)
-> +               rvpmu->event_init(event);
-> +
->         if (!is_sampling_event(event)) {
->                 /*
->                  * For non-sampling runs, limit the sample_period to half
-> @@ -283,6 +288,39 @@ static int riscv_pmu_event_init(struct perf_event *e=
-vent)
->         return 0;
->  }
->
-> +static int riscv_pmu_event_idx(struct perf_event *event)
-> +{
-> +       struct riscv_pmu *rvpmu =3D to_riscv_pmu(event->pmu);
-> +
-> +       if (!(event->hw.flags & PERF_EVENT_FLAG_USER_READ_CNT))
-> +               return 0;
-> +
-> +       if (rvpmu->csr_index)
-> +               return rvpmu->csr_index(event) + 1;
-> +
-> +       return 0;
-> +}
-> +
-> +static void riscv_pmu_event_mapped(struct perf_event *event, struct mm_s=
-truct *mm)
-> +{
-> +       struct riscv_pmu *rvpmu =3D to_riscv_pmu(event->pmu);
-> +
-> +       if (rvpmu->event_mapped) {
-> +               rvpmu->event_mapped(event, mm);
-> +               perf_event_update_userpage(event);
-> +       }
-> +}
-> +
-> +static void riscv_pmu_event_unmapped(struct perf_event *event, struct mm=
-_struct *mm)
-> +{
-> +       struct riscv_pmu *rvpmu =3D to_riscv_pmu(event->pmu);
-> +
-> +       if (rvpmu->event_unmapped) {
-> +               rvpmu->event_unmapped(event, mm);
-> +               perf_event_update_userpage(event);
-> +       }
-> +}
-> +
->  struct riscv_pmu *riscv_pmu_alloc(void)
->  {
->         struct riscv_pmu *pmu;
-> @@ -307,6 +345,9 @@ struct riscv_pmu *riscv_pmu_alloc(void)
->         }
->         pmu->pmu =3D (struct pmu) {
->                 .event_init     =3D riscv_pmu_event_init,
-> +               .event_mapped   =3D riscv_pmu_event_mapped,
-> +               .event_unmapped =3D riscv_pmu_event_unmapped,
-> +               .event_idx      =3D riscv_pmu_event_idx,
->                 .add            =3D riscv_pmu_add,
->                 .del            =3D riscv_pmu_del,
->                 .start          =3D riscv_pmu_start,
-> diff --git a/include/linux/perf/riscv_pmu.h b/include/linux/perf/riscv_pm=
-u.h
-> index 9f70d94942e0..1452c8af3b67 100644
-> --- a/include/linux/perf/riscv_pmu.h
-> +++ b/include/linux/perf/riscv_pmu.h
-> @@ -55,6 +55,10 @@ struct riscv_pmu {
->         void            (*ctr_start)(struct perf_event *event, u64 init_v=
-al);
->         void            (*ctr_stop)(struct perf_event *event, unsigned lo=
-ng flag);
->         int             (*event_map)(struct perf_event *event, u64 *confi=
-g);
-> +       void            (*event_init)(struct perf_event *event);
-> +       void            (*event_mapped)(struct perf_event *event, struct =
-mm_struct *mm);
-> +       void            (*event_unmapped)(struct perf_event *event, struc=
-t mm_struct *mm);
-> +       uint8_t         (*csr_index)(struct perf_event *event);
->
->         struct cpu_hw_events    __percpu *hw_events;
->         struct hlist_node       node;
-> --
-> 2.37.2
->
 
 
---=20
-Regards,
-Atish
+On 2023/6/15 16:14, Michal Hocko wrote:
+> On Thu 15-06-23 07:32:25, Haifeng Xu wrote:
+>> mem_cgroup_init() request for allocations from each possible node, and
+>> it's used to be a problem because NODE_DATA is not allocated for offline
+>> node. Things have already changed since commit 09f49dca570a9 ("mm: handle
+>> uninitialized numa nodes gracefully"), so it's unnecessary to check for
+>> !node_online nodes here.
+> 
+> How have you tested this patch?
+
+Start with one empty node:
+
+qemu-system-x86_64 \
+  -kernel vmlinux \
+  -initrd full.rootfs.cpio.gz \
+  -append "console=ttyS0,115200 root=/dev/ram0 nokaslr earlyprintk=serial oops=panic panic_on_warn" \
+  -drive format=qcow2,file=vm_disk.qcow2,media=disk,if=ide \
+  -enable-kvm \
+  -cpu host \
+  -m 8G,slots=2,maxmem=16G \
+  -smp cores=4,threads=1,sockets=2  \
+  -object memory-backend-ram,id=mem0,size=4G \
+  -object memory-backend-ram,id=mem1,size=4G \
+  -numa node,memdev=mem0,cpus=0-3,nodeid=0 \
+  -numa node,memdev=mem1,cpus=4-7,nodeid=1 \
+  -numa node,nodeid=2 \
+  -net nic,model=virtio,macaddr=52:54:00:12:34:58 \
+  -net user \
+  -nographic \
+  -rtc base=localtime \
+  -gdb tcp::6000
+
+Guest state when booting:
+[    0.048881] NUMA: Node 0 [mem 0x00000000-0x0009ffff] + [mem 0x00100000-0xbfffffff] -> [mem 0x00000000-0xbfffffff]
+[    0.050489] NUMA: Node 0 [mem 0x00000000-0xbfffffff] + [mem 0x100000000-0x13fffffff] -> [mem 0x00000000-0x13fffffff]
+[    0.052173] NODE_DATA(0) allocated [mem 0x13fffc000-0x13fffffff]
+[    0.053164] NODE_DATA(1) allocated [mem 0x23fffa000-0x23fffdfff]
+[    0.054187] Zone ranges:
+[    0.054587]   DMA      [mem 0x0000000000001000-0x0000000000ffffff]
+[    0.055551]   DMA32    [mem 0x0000000001000000-0x00000000ffffffff]
+[    0.056515]   Normal   [mem 0x0000000100000000-0x000000023fffffff]
+[    0.057484] Movable zone start for each node
+[    0.058149] Early memory node ranges
+[    0.058705]   node   0: [mem 0x0000000000001000-0x000000000009efff]
+[    0.059679]   node   0: [mem 0x0000000000100000-0x00000000bffdffff]
+[    0.060659]   node   0: [mem 0x0000000100000000-0x000000013fffffff]
+[    0.061649]   node   1: [mem 0x0000000140000000-0x000000023fffffff]
+[    0.062638] Initmem setup node 0 [mem 0x0000000000001000-0x000000013fffffff]
+[    0.063745] Initmem setup node 1 [mem 0x0000000140000000-0x000000023fffffff]
+[    0.064855]   DMA zone: 158 reserved pages exceeds freesize 0
+[    0.065746] Initializing node 2 as memoryless
+[    0.066437] Initmem setup node 2 as memoryless
+[    0.067132]   DMA zone: 158 reserved pages exceeds freesize 0
+[    0.068037] On node 0, zone DMA: 1 pages in unavailable ranges
+[    0.068265] On node 0, zone DMA: 97 pages in unavailable ranges
+[    0.124755] On node 0, zone Normal: 32 pages in unavailable ranges
+
+
+cat /sys/devices/system/node/online
+0-1
+cat /sys/devices/system/node/possible
+0-2
+
+In addition, I add a debug meesage:
+
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 7ebf64e48b25..3d786281377d 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -7424,7 +7424,7 @@ static int __init mem_cgroup_init(void)
+                rtpn = kzalloc_node(sizeof(*rtpn), GFP_KERNEL, node);
+                if (!rtpn)
+                        continue;
+-
++               pr_info("allocate rtpn node %d.\n", node);
+                rtpn->rb_root = RB_ROOT;
+                rtpn->rb_rightmost = NULL;
+                spin_lock_init(&rtpn->lock);
+
+
+[    0.561420] allocate rtpn node 0.
+[    0.562324] allocate rtpn node 1.
+[    0.563322] allocate rtpn node 2.
+
+
+> 
+> I am not saying it is wrong and it looks like the right thing to do. But
+> the early init code has proven to be more subtle than expected so it is
+> definitely good to know that this has been tested on memory less setup
+> and passed.
+> 
+>> Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
+>> ---
+>>  mm/memcontrol.c | 3 +--
+>>  1 file changed, 1 insertion(+), 2 deletions(-)
+>>
+>> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+>> index 4b27e245a055..c73c5fb33f65 100644
+>> --- a/mm/memcontrol.c
+>> +++ b/mm/memcontrol.c
+>> @@ -7421,8 +7421,7 @@ static int __init mem_cgroup_init(void)
+>>  	for_each_node(node) {
+>>  		struct mem_cgroup_tree_per_node *rtpn;
+>>  
+>> -		rtpn = kzalloc_node(sizeof(*rtpn), GFP_KERNEL,
+>> -				    node_online(node) ? node : NUMA_NO_NODE);
+>> +		rtpn = kzalloc_node(sizeof(*rtpn), GFP_KERNEL, node);
+>>  
+>>  		rtpn->rb_root = RB_ROOT;
+>>  		rtpn->rb_rightmost = NULL;
+>> -- 
+>> 2.25.1
+> 
