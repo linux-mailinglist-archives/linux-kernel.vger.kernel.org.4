@@ -2,235 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B600B732958
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 09:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0683A73295A
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 09:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243186AbjFPHz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 03:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
+        id S241709AbjFPH5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 03:57:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245440AbjFPHzN (ORCPT
+        with ESMTP id S230420AbjFPH5S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 03:55:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F47294A
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 00:54:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686902067;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LCwXsPaPd7Dj5AMUAfbDa6LnAHzyeLCA6sw8/b3X0Ho=;
-        b=TrBVdBrw/YqjDI3ib3UBG5Sx/cN+fM2sHSwk6JlKLCJdqhWKEAPRynstg1/wmmFVt43Lqf
-        h3ubpcYwDlX3RM1InXjUT6XIFUDiByeePsU+vnABcOnP2o5B/GTyCqZ+Kb3iSLvhm3NEz5
-        s/TJEdr0McVcKYU+UBh5/vBaoYt5A6I=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-612-bZ28bRPvORe0zKw9bPGWvw-1; Fri, 16 Jun 2023 03:54:25 -0400
-X-MC-Unique: bZ28bRPvORe0zKw9bPGWvw-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f7e8c24a92so1327055e9.0
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 00:54:25 -0700 (PDT)
+        Fri, 16 Jun 2023 03:57:18 -0400
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC9D2733
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 00:56:51 -0700 (PDT)
+Received: by mail-ot1-x331.google.com with SMTP id 46e09a7af769-6b426eb7e81so437680a34.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 00:56:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1686902210; x=1689494210;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7akWJfKU7KySEaAy2Be+qsghvShSh0LwGIoacaHng2E=;
+        b=Jq4b520gd1ciax7vITpPQfEwnbciLU2pm7HpcD9DReUj0khZjz5cCCYpF5+FHE6qXo
+         g/XZUbfT9QBfaB5KFGNxsa8GgG7+mL67FTiMxeoT3/flA4UaPTFw544HHJkciE/7Pguk
+         Iir9TcdpX758EjuPjTrZU3jjEm58aQS8ic7gbMz64vdEG78uNP3AGpJD3DwXM2Vu5zIr
+         vETFv9fBz9OcPXZ13nRlPkcKYYkeXvjwps8yZlJ9P7STmDsdKuE9oIpEmRf0ghXbwmmQ
+         KjyWqkW8n4uCwNJMqYRY993jDa7P8euMuK5HvL1Qw9CwghZAgv9PaxjU4pD4ywiBTAbE
+         IGQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686902064; x=1689494064;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LCwXsPaPd7Dj5AMUAfbDa6LnAHzyeLCA6sw8/b3X0Ho=;
-        b=ZBPfqCMMDZssQGuMl28Y/gSPkij36M79Csi3FHuc97P8ICwR8wNyLL8DtS91iEKs8n
-         d/0STc6mfff0ub1vURF6Nw7Y7UYhAc33SBL2tY0iIogRoiBJXwPPCkilH+5atklZn+B5
-         v4Fw/haW4VDwkNnm2ASoReErrcOcaFa2KnkxaInlR6AjPXQmRX2wsRQoxapm6gDItS0I
-         lpKnNlBdXIOZCYvIh8ZtQNWETq4nLToTdqdJzisW7iSjer1R6FDdAVJyc2B/wr8xl5/3
-         Oy0nWxb7y6YsxehLStB7JI2h/Kv/9jdsESeUfwRBgcCm2jvUXCPvsTiyrsQ1wT0oDeFs
-         RSjQ==
-X-Gm-Message-State: AC+VfDw4Q871kDwHzce2STr+gneIEXUKzh8k3u2uZxarp5A7MZFBe6xL
-        Jk1cbevEJBq0JY0/JtUVFZFQJBr/tPHwrQehUahnybyaqSpe6sXXsrXOJv8vtbDlNIPIPgCvWRo
-        n29MG9OFqnZzktRNwapCh+O2M
-X-Received: by 2002:a7b:ce85:0:b0:3f8:c5a6:7a8d with SMTP id q5-20020a7bce85000000b003f8c5a67a8dmr1006467wmj.12.1686902064528;
-        Fri, 16 Jun 2023 00:54:24 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ57hUFJkB9ARA1uPg7u8sBxFriDIGC6XvjqrvDb1WUHap8aii1g0Wt8HyS0VoMZ5iYl6OcUQw==
-X-Received: by 2002:a7b:ce85:0:b0:3f8:c5a6:7a8d with SMTP id q5-20020a7bce85000000b003f8c5a67a8dmr1006449wmj.12.1686902064164;
-        Fri, 16 Jun 2023 00:54:24 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:9800:59ba:1006:9052:fb40? (p200300cbc707980059ba10069052fb40.dip0.t-ipconnect.de. [2003:cb:c707:9800:59ba:1006:9052:fb40])
-        by smtp.gmail.com with ESMTPSA id o8-20020a05600c378800b003f195d540d9sm1431039wmr.14.2023.06.16.00.54.23
+        d=1e100.net; s=20221208; t=1686902210; x=1689494210;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=7akWJfKU7KySEaAy2Be+qsghvShSh0LwGIoacaHng2E=;
+        b=ErOxnzoldNrY34nz4+iRMyRBu1T+iwA53nwziHY0VUH/1OS9YV3r9RfacR5H+mMr8Z
+         10pJ836vmBymfiz9qK5NaOY36v/n1gVKuky/hhm2MEOAEcvsR7n2RmPq1Xjp28Dl3tUz
+         HbTh4NeVkcw1irIDyyqJcgMJJ54sPN+kHObyzxU6USN44lK16U1P65edFnFMyRv5+dE8
+         28ThddYka6qcoUxUrR0M+5bXDJ16907flLZCkHIj9CTWac93y3wZxoTYTD0vh0k9JNhI
+         FckkW8Ytf9Mbotht5DeXObvx1AfMUsNlGraDaaI0UwciDuapN1bCqUNyYR3VI8b2hp4/
+         GIMw==
+X-Gm-Message-State: AC+VfDwmMUjjclBasj4pFZQOh5cwUbRPRSfIur5SDBMMWVe6XT2hRI3u
+        lmFxnOFlA283XEvj0+0xEIHAVQ==
+X-Google-Smtp-Source: ACHHUZ5G3nD6xClYa3QpJaDyRFs2bk6/3sZnAbfDwrk9tBjIYVOyspubda3QgR80DZZpEv69QApchw==
+X-Received: by 2002:a54:4884:0:b0:39a:bdc8:d4d2 with SMTP id r4-20020a544884000000b0039abdc8d4d2mr1611893oic.5.1686902210563;
+        Fri, 16 Jun 2023 00:56:50 -0700 (PDT)
+Received: from ?IPV6:fdbd:ff1:ce00:11b7:189f:bf83:942e:7892? ([240e:694:e21:b::2])
+        by smtp.gmail.com with ESMTPSA id x6-20020a17090a6b4600b0025bda194e5esm767598pjl.31.2023.06.16.00.56.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jun 2023 00:54:23 -0700 (PDT)
-Message-ID: <aadbedeb-424d-a146-392d-d56680263691@redhat.com>
-Date:   Fri, 16 Jun 2023 09:54:22 +0200
+        Fri, 16 Jun 2023 00:56:50 -0700 (PDT)
+Message-ID: <b4fcf354-f6ee-be68-1608-8b874511785a@bytedance.com>
+Date:   Fri, 16 Jun 2023 15:56:25 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Content-Language: en-US
-To:     Vishal Verma <vishal.l.verma@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, nvdimm@lists.linux.dev,
-        linux-cxl@vger.kernel.org, Huang Ying <ying.huang@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-References: <20230613-vv-kmem_memmap-v1-0-f6de9c6af2c6@intel.com>
- <20230613-vv-kmem_memmap-v1-3-f6de9c6af2c6@intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH 3/3] dax/kmem: Always enroll hotplugged memory for
- memmap_on_memory
-In-Reply-To: <20230613-vv-kmem_memmap-v1-3-f6de9c6af2c6@intel.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [External] Re: [PATCH v5 2/4] sched/core: Avoid double calling
+ update_rq_clock() in __balance_push_cpu_stop()
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@redhat.com, mingo@kernel.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        mgorman@techsingularity.net, linux-kernel@vger.kernel.org
+References: <20230613082012.49615-1-jiahao.os@bytedance.com>
+ <20230613082012.49615-3-jiahao.os@bytedance.com>
+ <20230615123950.GF1683497@hirez.programming.kicks-ass.net>
+From:   Hao Jia <jiahao.os@bytedance.com>
+In-Reply-To: <20230615123950.GF1683497@hirez.programming.kicks-ass.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.06.23 00:00, Vishal Verma wrote:
-> With DAX memory regions originating from CXL memory expanders or
-> NVDIMMs, the kmem driver may be hot-adding huge amounts of system memory
-> on a system without enough 'regular' main memory to support the memmap
-> for it. To avoid this, ensure that all kmem managed hotplugged memory is
-> added with the MHP_MEMMAP_ON_MEMORY flag to place the memmap on the
-> new memory region being hot added.
+
+
+On 2023/6/15 Peter Zijlstra wrote:
+> On Tue, Jun 13, 2023 at 04:20:10PM +0800, Hao Jia wrote:
+>> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+>> index a8be5415daba..1eca36299d8b 100644
+>> --- a/kernel/sched/core.c
+>> +++ b/kernel/sched/core.c
+>> @@ -2398,7 +2398,6 @@ static struct rq *__migrate_task(struct rq *rq, struct rq_flags *rf,
+>>   	if (!is_cpu_allowed(p, dest_cpu))
+>>   		return rq;
+>>   
+>> -	update_rq_clock(rq);
+>>   	rq = move_queued_task(rq, rf, p, dest_cpu);
+>>   
+>>   	return rq;
+>> @@ -2456,10 +2455,12 @@ static int migration_cpu_stop(void *data)
+>>   				goto out;
+>>   		}
+>>   
+>> -		if (task_on_rq_queued(p))
+>> +		if (task_on_rq_queued(p)) {
+>> +			update_rq_clock(rq);
+>>   			rq = __migrate_task(rq, &rf, p, arg->dest_cpu);
+>> -		else
+>> +		} else {
+>>   			p->wake_cpu = arg->dest_cpu;
+>> +		}
+>>   
+>>   		/*
+>>   		 * XXX __migrate_task() can fail, at which point we might end
 > 
-> To do this, call add_memory() in chunks of memory_block_size_bytes() as
-> that is a requirement for memmap_on_memory. Additionally, Use the
-> mhp_flag to force the memmap_on_memory checks regardless of the
-> respective module parameter setting.
+> So now you've got update_rq_clock() in both callers, why not remove it
+> from __balance_push_cpu_stop() ?
 > 
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Len Brown <lenb@kernel.org>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Oscar Salvador <osalvador@suse.de>
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: Dave Jiang <dave.jiang@intel.com>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: Huang Ying <ying.huang@intel.com>
-> Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
+> Afaict nothing actually needs it before __migrate_task().
+> 
+
+Thanks for your review.
+I'm afraid not, the rq clock also needs to be updated before
+select_fallback_rq() is called.
+
+
 > ---
->   drivers/dax/kmem.c | 49 ++++++++++++++++++++++++++++++++++++-------------
->   1 file changed, 36 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/dax/kmem.c b/drivers/dax/kmem.c
-> index 7b36db6f1cbd..0751346193ef 100644
-> --- a/drivers/dax/kmem.c
-> +++ b/drivers/dax/kmem.c
-> @@ -12,6 +12,7 @@
->   #include <linux/mm.h>
->   #include <linux/mman.h>
->   #include <linux/memory-tiers.h>
-> +#include <linux/memory_hotplug.h>
->   #include "dax-private.h"
->   #include "bus.h"
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -9435,8 +9435,6 @@ static int __balance_push_cpu_stop(void
+>   	raw_spin_lock_irq(&p->pi_lock);
+>   	rq_lock(rq, &rf);
 >   
-> @@ -105,6 +106,7 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
->   	data->mgid = rc;
->   
->   	for (i = 0; i < dev_dax->nr_range; i++) {
-> +		u64 cur_start, cur_len, remaining;
->   		struct resource *res;
->   		struct range range;
->   
-> @@ -137,21 +139,42 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
->   		res->flags = IORESOURCE_SYSTEM_RAM;
->   
->   		/*
-> -		 * Ensure that future kexec'd kernels will not treat
-> -		 * this as RAM automatically.
-> +		 * Add memory in chunks of memory_block_size_bytes() so that
-> +		 * it is considered for MHP_MEMMAP_ON_MEMORY
-> +		 * @range has already been aligned to memory_block_size_bytes(),
-> +		 * so the following loop will always break it down cleanly.
->   		 */
-> -		rc = add_memory_driver_managed(data->mgid, range.start,
-> -				range_len(&range), kmem_name, MHP_NID_IS_MGID);
-> +		cur_start = range.start;
-> +		cur_len = memory_block_size_bytes();
-> +		remaining = range_len(&range);
-> +		while (remaining) {
-> +			mhp_t mhp_flags = MHP_NID_IS_MGID;
->   
-> -		if (rc) {
-> -			dev_warn(dev, "mapping%d: %#llx-%#llx memory add failed\n",
-> -					i, range.start, range.end);
-> -			remove_resource(res);
-> -			kfree(res);
-> -			data->res[i] = NULL;
-> -			if (mapped)
-> -				continue;
-> -			goto err_request_mem;
-> +			if (mhp_supports_memmap_on_memory(cur_len,
-> +							  MHP_MEMMAP_ON_MEMORY))
-> +				mhp_flags |= MHP_MEMMAP_ON_MEMORY;
-> +			/*
-> +			 * Ensure that future kexec'd kernels will not treat
-> +			 * this as RAM automatically.
-> +			 */
-> +			rc = add_memory_driver_managed(data->mgid, cur_start,
-> +						       cur_len, kmem_name,
-> +						       mhp_flags);
-> +
-> +			if (rc) {
-> +				dev_warn(dev,
-> +					 "mapping%d: %#llx-%#llx memory add failed\n",
-> +					 i, cur_start, cur_start + cur_len - 1);
-> +				remove_resource(res);
-> +				kfree(res);
-> +				data->res[i] = NULL;
-> +				if (mapped)
-> +					continue;
-> +				goto err_request_mem;
-> +			}
-> +
-> +			cur_start += cur_len;
-> +			remaining -= cur_len;
->   		}
->   		mapped++;
->   	}
-> 
+> -	update_rq_clock(rq);
+> -
+>   	if (task_rq(p) == rq && task_on_rq_queued(p)) {
+>   		cpu = select_fallback_rq(rq->cpu, p);
+>   		rq = __migrate_task(rq, &rf, p, cpu);
 
-Maybe the better alternative is teach 
-add_memory_resource()/try_remove_memory() to do that internally.
-
-In the add_memory_resource() case, it might be a loop around that 
-memmap_on_memory + arch_add_memory code path (well, and the error path 
-also needs adjustment):
-
-	/*
-	 * Self hosted memmap array
-	 */
-	if (mhp_flags & MHP_MEMMAP_ON_MEMORY) {
-		if (!mhp_supports_memmap_on_memory(size)) {
-			ret = -EINVAL;
-			goto error;
-		}
-		mhp_altmap.free = PHYS_PFN(size);
-		mhp_altmap.base_pfn = PHYS_PFN(start);
-		params.altmap = &mhp_altmap;
-	}
-
-	/* call arch's memory hotadd */
-	ret = arch_add_memory(nid, start, size, &params);
-	if (ret < 0)
-		goto error;
+If we just remove update_rq_clock() from __balance_push_cpu_stop(), we 
+will get this warning.
 
 
-Note that we want to handle that on a per memory-block basis, because we 
-don't want the vmemmap of memory block #2 to end up on memory block #1. 
-It all gets messy with memory onlining/offlining etc otherwise ...
+[ 1260.960166] rq->clock_update_flags < RQCF_ACT_SKIP
+[ 1260.960170] WARNING: CPU: 25 PID: 196 at kernel/sched/sched.h:1496 
+update_curr+0xf6/0x1f0
 
--- 
-Cheers,
+[ 1260.960318] Call Trace:
+[ 1260.960320]  <TASK>
+[ 1260.960323]  ? show_regs+0x5b/0x60
+[ 1260.960327]  ? __warn+0x89/0x140
+[ 1260.960331]  ? update_curr+0xf6/0x1f0
+[ 1260.960334]  ? report_bug+0x1b7/0x1e0
+[ 1260.960338]  ? __wake_up_klogd.part.25+0x5a/0x80
+[ 1260.960342]  ? handle_bug+0x45/0x80
+[ 1260.960346]  ? exc_invalid_op+0x18/0x70
+[ 1260.960348]  ? asm_exc_invalid_op+0x1b/0x20
+[ 1260.960354]  ? update_curr+0xf6/0x1f0
+[ 1260.960356]  ? update_curr+0xf6/0x1f0
+[ 1260.960359]  dequeue_entity+0x3b/0x410
+[ 1260.960361]  dequeue_task_fair+0xc7/0x3c0
+[ 1260.960363]  dequeue_task+0x30/0xf0
+[ 1260.960365]  __do_set_cpus_allowed+0x94/0x130
+[ 1260.960366]  do_set_cpus_allowed+0x38/0x60
+[ 1260.960368]  cpuset_cpus_allowed_fallback+0x70/0x80
+[ 1260.960372]  select_fallback_rq+0x20f/0x250            <----
+[ 1260.960374]  __balance_push_cpu_stop+0x13f/0x1a0
+[ 1260.960377]  ? migration_cpu_stop+0x2b0/0x2b0
+[ 1260.960379]  cpu_stopper_thread+0xaf/0x140
+[ 1260.960382]  smpboot_thread_fn+0x158/0x220
+[ 1260.960387]  ? sort_range+0x30/0x30
+[ 1260.960390]  kthread+0xfe/0x130
+[ 1260.960392]  ? kthread_complete_and_exit+0x20/0x20
+[ 1260.960394]  ret_from_fork+0x1f/0x30
+[ 1260.960399]  </TASK>
 
-David / dhildenb
-
+Thanks,
+Hao
