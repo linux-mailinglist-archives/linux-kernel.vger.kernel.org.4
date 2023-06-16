@@ -2,196 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB8E1733ABD
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 22:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2E28733AC9
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 22:27:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbjFPUVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 16:21:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51558 "EHLO
+        id S233128AbjFPU12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 16:27:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245204AbjFPUVO (ORCPT
+        with ESMTP id S231881AbjFPU1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 16:21:14 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F42930DD;
-        Fri, 16 Jun 2023 13:21:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1686946867; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=RDhlvKviJcIJZZ+e8/63pZ7BoQH6Ms2if5eOoegECQ3OvW7ONUbbLvR8rwtoVW0bkG
-    hv9ZySLIw4FIbWi9ijdr5pCPg+eqGcKNhrmOOZxdZ5btbUZCgySCgaCxwsbEzfEy52v3
-    g7jDCQyQDGuq903qLmW4Y706q+D9UB4SYNgK5cMBXdTLq+4Rpn2GOPdJaUz6MehCeyxY
-    UAqptKx6VcMw+8ERoDHNXpMvJsAnYtFvtHQfA+arpLfx6ls2i5WxYR9JAa4gksfdaRTK
-    z6btof5BfE2vA653w9jEgqScWDgZg3nQpE4mDJHCyBpqmNaFyV+xfKe6a7m8lGSI9+YM
-    d1/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686946867;
-    s=strato-dkim-0002; d=strato.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=CvIsHqQnmjr0eGXnWhVaV9/eTMH/5xXtMixI9v/UBwU=;
-    b=Hc32MS90aJbqtDKHt0BHyT+8qWPrnld52SGf3KJNzI0AEUfNQplMdTHhnm6A1NmLHe
-    hoAjxqbh8FNUwbFp7NnGK2VquGpmOKqa6Av105lyDfAeVoCatcuLCj4iWR3S0GZWC8Pg
-    Q41Ej2fL2zpOpbOhc+efvHQ181mKZbJsJp4syoDbIbv1Au/OKowZzROPerE9Q0yWIpUQ
-    l5VHn2PfJdYbHLfuzbqIWc2GfZdR8cdnwl7h4ZbeXInchSMuxboHMjv/KrPGcqcIGLmq
-    HkcZ75jta09dE59xdwU/ylL4oZHnWC5e/hFF9XP1z7qde8EF0SnHm2h8rNlSBz8T3CQc
-    EN3Q==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686946867;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=CvIsHqQnmjr0eGXnWhVaV9/eTMH/5xXtMixI9v/UBwU=;
-    b=lHFH0t4sD0RMKNjQzdIYilqY0G8/Z2lBDtNry+33zFAZQhMI5OXYw5XW0CKAhyCgfX
-    /5a57sDtdMCrONMiOgt3A0ayBRnFA2KuHqs8kiyTRo8gou32lTJUygtQZSl0AafPPcHx
-    L7ixFBCtCx1OPw+d2ty66cy+g62vWHRmByO7/PUhPphX60qDYvbSgVf0/+dujUVnOeHI
-    bLH+GDf5kCn5zFBNv2QD8arUhG4nU0qg0XLqcoHL49RlAsb0o0zk0xrTl6Z2IWQoihrS
-    lShbZUuAEvcSNyqS1RHPKs6BSAampnGNRFRB3AhoejIocf++d5EsCbOgSFpKGZ4xzKiE
-    wn3Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686946867;
-    s=strato-dkim-0003; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=CvIsHqQnmjr0eGXnWhVaV9/eTMH/5xXtMixI9v/UBwU=;
-    b=5Q9Pj2P8L8MPgaoGeK+2pgSxK1bbbgd7AqV5o+W/PNE25TZ9YXyKsy4ITRFGtGoEpU
-    FxoBKh/cEMMbzf6mjWDQ==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Apz9PSN6LgsXcGYkv8="
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 49.6.0 DYNA|AUTH)
-    with ESMTPSA id jaf17fz5GKL7A5f
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Fri, 16 Jun 2023 22:21:07 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH 0/9] MIPS: CI20: Add WiFi / Bluetooth support
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <AA802E24-A97B-42B6-90A4-5ECB1E4D9294@goldelico.com>
-Date:   Fri, 16 Jun 2023 22:21:06 +0200
-Cc:     list@opendingux.net, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <5EF6B0D2-2B84-4C98-B799-88062E035EC1@goldelico.com>
-References: <20230615084006.79194526F801@goldelico.com>
- <C1924536-FA97-4E75-9D22-99E5AF24EE5B@goldelico.com>
- <A8EBCBA4-D9BA-4C2F-9C91-38128D06EDBA@goldelico.com>
- <AA802E24-A97B-42B6-90A4-5ECB1E4D9294@goldelico.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 16 Jun 2023 16:27:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 673B73A82;
+        Fri, 16 Jun 2023 13:27:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F147D6325B;
+        Fri, 16 Jun 2023 20:27:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E4C6C433CA;
+        Fri, 16 Jun 2023 20:27:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686947242;
+        bh=plXJiqvgKkOVdiaa7vvfF88BboasQSb668iEyQIZC1Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=alXKApDh90s8xLc047aLm94D3eEm5j24keQKaObyqUsdhhXzdxVtAqGUGEIGLptGu
+         1UfbtNPdFKMvw0PL6FmNtX0rPZVwTbM9c4cYJzWH7reX1SowOPPCG2dlAa4S8iGLO8
+         6pjX2Wk36NJOyRLKTkyzjdg7oOB6tvd8Q/pKtabCCZZsZl4eFV7MeEz/Qya+TdLg1I
+         oZA1sZjMaZ9Ff3K5a0ar0jDcBLzwwiTuTZcnNSfPvIavXQejSk8brbPSSBAfW/sL0L
+         wZVqv3Ia8+S8Cqhq/8M9JdQl9yJ2wWsRHPHLF5Lb4DnzD+d++l9B5Zwufo+I45Q5+P
+         Wvi8OLUA39b/A==
+Date:   Fri, 16 Jun 2023 16:27:19 -0400
+From:   Chuck Lever <cel@kernel.org>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Chuck Lever <chuck.lever@oracle.com>, Neil Brown <neilb@suse.de>,
+        Olga Kornievskaia <kolga@netapp.com>,
+        Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
+        stable@vger.kernel.org, Eirik Fuller <efuller@redhat.com>,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] nfsd: move init of percpu reply_cache_stats counters
+ back to nfsd_init_net
+Message-ID: <ZIzFp3ViiU2SCi6J@manet.1015granger.net>
+References: <20230616191744.202292-1-jlayton@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230616191744.202292-1-jlayton@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+Thanks Eirik and Jeff.
 
->=20
->>>> Since this patch will actually make the various ACT8600 regulators =
-work at their specified voltage, maybe the voltage on one of the updated =
-regulators is wrong?
->>>>=20
->>>> Maybe change the regulators one by one back to their old name, =
-until you find the one that is problematic? That may give us more info.
->>>=20
->>> That is what I also have thought about but have not yet done.
->>> Will try as soon as I find a time slot.
->>=20
->> I have reverted the whole patch (had only a conflict in wifi_io / =
-LDO6) and now I can boot.
->>=20
->> But do not see a WiFi or Bluetooth interface.
->>=20
->> So it looks as if the CI20 variants are indeed different. Which would =
-also explain why we
->> originally came up with two different solutions to add WiFi.
->>=20
->> Next I will try to bisect the individual changes...
->=20
-> It is this and not the regulator names:
->=20
-> diff --git a/arch/mips/boot/dts/ingenic/ci20.dts =
-b/arch/mips/boot/dts/ingenic/ci20.dts
-> index e2221d44e4269..391be48e6427a 100644
-> --- a/arch/mips/boot/dts/ingenic/ci20.dts
-> +++ b/arch/mips/boot/dts/ingenic/ci20.dts
-> @@ -295,7 +295,6 @@ &i2c0 {
->        act8600: act8600@5a {
->                compatible =3D "active-semi,act8600";
->                reg =3D <0x5a>;
-> -               status =3D "okay";
->=20
->                regulators {
->                        vddcore: SUDCDC1 {
->=20
->=20
-> Now I wonder how it works without status =3D "okay" for you but not =
-for me.
+At this point in the release cycle, I plan to apply this for the
+next merge window (6.5).
 
-I have not found a reason for this and it was difficult to repeat. =
-Potentially a bisect
-with failed boot and wrong setup of some voltages may have damaged the =
-file system on my
-SD card (see below). At least I had to fsck -f after running the bisect, =
-but I did not
-do it for every bisect step. Sometimes bisecting is difficult if =
-hardware effects are
-involved...
+A few cosmetic remarks below. I can take this as-is and make
+adjustments, or you can redrive. Just let me know.
 
-So I started with the series + a revert of the offending patch, added =
-some more logging
-to the kernel and printk() in the driver.
 
-Results:
+On Fri, Jun 16, 2023 at 03:17:43PM -0400, Jeff Layton wrote:
+> f5f9d4a314da moved the initialization of the reply cache into the nfsd
+> startup, but it didn't account for the stats counters which can be
+> accessed before nfsd is ever started, causing a NULL pointer
+> dereference.
+> 
+> This is easy to trigger on some arches (like aarch64), but on x86_64,
+> calling this_cpu_ptr(NULL) evidently returns a pointer to the
+> fixed_percpu_data, which I guess this looks just enough like a newly
+> initialized percpu var to allow nfsd_reply_cache_stats_show to access it
+> without Oopsing.
+> 
+> Move the initialization of the per-net+per-cpu reply-cache counters back
+> into nfsd_init_net, while leaving the rest of the reply cache
+> allocations to be done at nfsd startup time.
+> 
+> Kudos to Eirik who did most of the legwork to track this down.
+> 
+> Cc: stable@vger.kernel.org # v6.3+
+> Fixes: f5f9d4a314da ("nfsd: move reply cache initialization into nfsd startup")
 
-- driver is always loaded, so the status =3D "okay" was spurious and not =
-the problem.
+Why both Fixes: and Cc: stable?
 
-- Adding/Removing the regulator names also does not make a difference.
 
-- But renaming the DT nodes (e.g. SUDCDC1 -> DCDC1) (with or without =
-regulator_name) makes
-boot hang with strange errors which indicate that the processor power =
-supply is not stable.
-Once a while it did even automatically reboot. In most cases there are =
-some EXT4 errors
-afterwards.
+> Reported-and-Tested-by: Eirik Fuller <efuller@redhat.com>
 
-Example:
+Link: https://bugzilla.redhat.com/show_bug.cgi?id=2215429  ?
 
-[    3.003096] EXT4-fs error (device mmcblk0p1): =
-ext4_mb_generate_buddy:1100: group 81, block bitmap and bg descriptor =
-inconsistent: 30994 vs 31229 free clusters
-/sbin/init: error while loading shared libraries: /lib/mipsel-li
-[    3.291901] Kernel panic - not syncing: Attempted to kill init! =
-exitcode=3D0x00007f00
-[    3.305122] Rebooting in 10 seconds..
 
-I have not found a reason but it appears that if the DT nodes do match =
-the
-struct regulator_desc list, it is different from having them not match.
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> ---
+>  fs/nfsd/cache.h    |  2 ++
+>  fs/nfsd/nfscache.c | 13 +++----------
+>  fs/nfsd/nfsctl.c   |  8 ++++++++
+>  3 files changed, 13 insertions(+), 10 deletions(-)
+> 
+> diff --git a/fs/nfsd/cache.h b/fs/nfsd/cache.h
+> index f21259ead64b..a4b12d6c41d3 100644
+> --- a/fs/nfsd/cache.h
+> +++ b/fs/nfsd/cache.h
+> @@ -80,6 +80,8 @@ enum {
+>  
+>  int	nfsd_drc_slab_create(void);
+>  void	nfsd_drc_slab_free(void);
+> +int	nfsd_reply_cache_stats_init(struct nfsd_net *nn);
+> +void	nfsd_reply_cache_stats_destroy(struct nfsd_net *nn);
+>  int	nfsd_reply_cache_init(struct nfsd_net *);
+>  void	nfsd_reply_cache_shutdown(struct nfsd_net *);
+>  int	nfsd_cache_lookup(struct svc_rqst *);
+> diff --git a/fs/nfsd/nfscache.c b/fs/nfsd/nfscache.c
+> index 041faa13b852..b696dc629c0b 100644
+> --- a/fs/nfsd/nfscache.c
+> +++ b/fs/nfsd/nfscache.c
+> @@ -148,12 +148,12 @@ void nfsd_drc_slab_free(void)
+>  	kmem_cache_destroy(drc_slab);
+>  }
+>  
+> -static int nfsd_reply_cache_stats_init(struct nfsd_net *nn)
+> +int nfsd_reply_cache_stats_init(struct nfsd_net *nn)
 
-At least the result of regulator_of_get_init_data() is NULL if there is =
-no
-match and then some other code path is followed in regulator_register().
+As part of making these two functions into a more public API, I
+would prefer to rename this nfsd_net_reply_cache_init(), and it
+should include a KDOC comment out front.
 
-So at the moment I think that matching DT node names with the =
-act8600_regulators[] list
-changes something in the chip initialization which has influence =
-depending on hardware
-variation. Maybe your board is simply more robust than mine to that.
+I'm having some trouble easily distinguishing between the purpose of
 
-Deeper analysis will reveal the issue and indicate a solution...
+   static __net_init int nfsd_init_net(struct net *net)
 
-BR,
-Nikolaus
+and
 
+   static int nfsd_startup_net(struct net *net, const struct cred *cred)
+
+The former is invoked when a net namespace is created. The latter is
+called by write_threads, therefore /proc/fs/nfsd/ must already be
+mounted.
+
+The function names are confusingly similar and there's no KDOC to be
+found. I might add a clean-up patch to this one.
+
+>  {
+>  	return nfsd_percpu_counters_init(nn->counter, NFSD_NET_COUNTERS_NUM);
+>  }
+>  
+> -static void nfsd_reply_cache_stats_destroy(struct nfsd_net *nn)
+> +void nfsd_reply_cache_stats_destroy(struct nfsd_net *nn)
+
+Ditto, rename this nfsd_net_reply_cache_destroy(), plus KDOC.
+
+
+>  {
+>  	nfsd_percpu_counters_destroy(nn->counter, NFSD_NET_COUNTERS_NUM);
+>  }
+> @@ -169,17 +169,13 @@ int nfsd_reply_cache_init(struct nfsd_net *nn)
+>  	hashsize = nfsd_hashsize(nn->max_drc_entries);
+>  	nn->maskbits = ilog2(hashsize);
+>  
+> -	status = nfsd_reply_cache_stats_init(nn);
+> -	if (status)
+> -		goto out_nomem;
+> -
+>  	nn->nfsd_reply_cache_shrinker.scan_objects = nfsd_reply_cache_scan;
+>  	nn->nfsd_reply_cache_shrinker.count_objects = nfsd_reply_cache_count;
+>  	nn->nfsd_reply_cache_shrinker.seeks = 1;
+>  	status = register_shrinker(&nn->nfsd_reply_cache_shrinker,
+>  				   "nfsd-reply:%s", nn->nfsd_name);
+>  	if (status)
+> -		goto out_stats_destroy;
+> +		return status;
+>  
+>  	nn->drc_hashtbl = kvzalloc(array_size(hashsize,
+>  				sizeof(*nn->drc_hashtbl)), GFP_KERNEL);
+> @@ -195,9 +191,6 @@ int nfsd_reply_cache_init(struct nfsd_net *nn)
+>  	return 0;
+>  out_shrinker:
+>  	unregister_shrinker(&nn->nfsd_reply_cache_shrinker);
+> -out_stats_destroy:
+> -	nfsd_reply_cache_stats_destroy(nn);
+> -out_nomem:
+>  	printk(KERN_ERR "nfsd: failed to allocate reply cache\n");
+>  	return -ENOMEM;
+>  }
+> diff --git a/fs/nfsd/nfsctl.c b/fs/nfsd/nfsctl.c
+> index 1489e0b703b4..7c837afcf615 100644
+> --- a/fs/nfsd/nfsctl.c
+> +++ b/fs/nfsd/nfsctl.c
+> @@ -1505,6 +1505,9 @@ static __net_init int nfsd_init_net(struct net *net)
+>  	retval = nfsd_idmap_init(net);
+>  	if (retval)
+>  		goto out_idmap_error;
+> +	retval = nfsd_reply_cache_stats_init(nn);
+> +	if (retval)
+> +		goto out_repcache_error;
+>  	nn->nfsd_versions = NULL;
+>  	nn->nfsd4_minorversions = NULL;
+>  	nfsd4_init_leases_net(nn);
+> @@ -1513,6 +1516,8 @@ static __net_init int nfsd_init_net(struct net *net)
+>  
+>  	return 0;
+>  
+> +out_repcache_error:
+> +	nfsd_idmap_shutdown(net);
+>  out_idmap_error:
+>  	nfsd_export_shutdown(net);
+>  out_export_error:
+> @@ -1521,6 +1526,9 @@ static __net_init int nfsd_init_net(struct net *net)
+>  
+>  static __net_exit void nfsd_exit_net(struct net *net)
+>  {
+> +	struct nfsd_net *nn = net_generic(net, nfsd_net_id);
+> +
+> +	nfsd_reply_cache_stats_destroy(nn);
+>  	nfsd_idmap_shutdown(net);
+>  	nfsd_export_shutdown(net);
+>  	nfsd_netns_free_versions(net_generic(net, nfsd_net_id));
+
+We should update this nfsd_netns_free_versions() call site to take
+the new @nn variable.
+
+
+> -- 
+> 2.40.1
+> 
