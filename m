@@ -2,54 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E04A7733681
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 18:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3663C733684
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 18:51:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244925AbjFPQu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 12:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37178 "EHLO
+        id S229577AbjFPQvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 12:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjFPQu4 (ORCPT
+        with ESMTP id S1343594AbjFPQu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 12:50:56 -0400
+        Fri, 16 Jun 2023 12:50:59 -0400
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD06E4B;
-        Fri, 16 Jun 2023 09:50:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D53E4B;
+        Fri, 16 Jun 2023 09:50:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686934254; x=1718470254;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=JV3Ih4xi78ad21rCtTYTfrA/GPg5mfGBUmug2pPsszI=;
-  b=DAVz64YLape/nV15P9iBdyuQ6SZBR4ji+6V+MacfKMqSg/E5Dx8AP8JT
-   /uXE2SOxO/yQswkUpi5trsPNmozoTM6jjJqgeynw8BpNq2BCIKGRck7Wm
-   +a/Q7bwNixhe+DyHqot7TgDD7iY3VqhUIVHPkSSGpIhh5d3Jkm3MEoiK5
-   AyxAIrA3+L6G6Kwx0CWIuxizZXesmRnbv9u9mxmkHdASKefNrJwmWYevU
-   Y//pUWB8Yx+lbw/iNxgb3nuPqU6Xa+XgDuC0D8BSibNLpdobDOCOox39M
-   uc0Ru5DyN+1zSgdhWI+X3bt93deB93dFS6FoF3LPlAn9QjqF5Jr0Md87q
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="422912930"
+  t=1686934257; x=1718470257;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=8UvyzPcfXTAF64SpSK/iQMRURHuN5IiuY8+/vdbpQTg=;
+  b=VGeUntbeYs6L4U9yD9ODOzD7AVAYB7Uo1At2/BqcWvlhSsSUTXd/HcVn
+   jPmPB48OCu5XqPRDZIzzmlkV+iLMNbzl55GXFB6hq60UNckBHQSYgQVSJ
+   hkbFd6ZfoBNxtroAc+NCO+3+wozcJ7BXLZ+H7LnvFhivq1xxDeNykKC9E
+   Pf1aYo3kodeufOiKGm/rp6632YJyZF1wGWH6s6p0rAikHtCfJVlpMORgV
+   asZXq0yPIj6mgpSoUirr0W3n+yN/GI+8Rnzt13G8pZj9J82rpOrb4PmDV
+   YTwZ5c9g0qZa6oBt+ncfDTWbO5uPO95vZCx3CD7wRZqSz+1PZ8oh5ZN28
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="422912944"
 X-IronPort-AV: E=Sophos;i="6.00,248,1681196400"; 
-   d="scan'208";a="422912930"
+   d="scan'208";a="422912944"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 09:50:53 -0700
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 09:50:57 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="707154075"
+X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="707154086"
 X-IronPort-AV: E=Sophos;i="6.00,248,1681196400"; 
-   d="scan'208";a="707154075"
+   d="scan'208";a="707154086"
 Received: from powerlab.fi.intel.com ([10.237.71.25])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 09:50:49 -0700
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 09:50:53 -0700
 From:   Michal Wilczynski <michal.wilczynski@intel.com>
 To:     linux-acpi@vger.kernel.org
 Cc:     rafael@kernel.org, dan.j.williams@intel.com,
         vishal.l.verma@intel.com, lenb@kernel.org, dave.jiang@intel.com,
         ira.weiny@intel.com, rui.zhang@intel.com,
         linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev,
-        Michal Wilczynski <michal.wilczynski@intel.com>
-Subject: [PATCH v5 00/10] Remove .notify callback in acpi_device_ops
-Date:   Fri, 16 Jun 2023 19:50:24 +0300
-Message-ID: <20230616165034.3630141-1-michal.wilczynski@intel.com>
+        Michal Wilczynski <michal.wilczynski@intel.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH v5 01/10] acpi/bus: Introduce wrappers for ACPICA event handler install/remove
+Date:   Fri, 16 Jun 2023 19:50:25 +0300
+Message-ID: <20230616165034.3630141-2-michal.wilczynski@intel.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230616165034.3630141-1-michal.wilczynski@intel.com>
+References: <20230616165034.3630141-1-michal.wilczynski@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -62,61 +65,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-*** IMPORTANT ***
-This is part 1 - only drivers in acpi directory to ease up review
-process. Rest of the drivers will be handled in separate patchsets.
+Introduce new acpi_dev_install_notify_handler() and
+acpi_dev_remove_notify_handler(). Those functions are replacing old
+installers, and after all drivers switch to the new model, old installers
+will be removed.
 
-Currently drivers support ACPI event handlers by defining .notify
-callback in acpi_device_ops. This solution is suboptimal as event
-handler installer installs intermediary function acpi_notify_device as a
-handler in every driver. Also this approach requires extra variable
-'flags' for specifying event types that the driver want to subscribe to.
-Additionally this is a pre-work required to align acpi_driver with
-platform_driver and eventually replace acpi_driver with platform_driver.
+Make acpi_dev_install_notify_handler() and acpi_dev_remove_notify_handler()
+non-static, and export symbols. This will allow the drivers to call them
+directly, instead of relying on .notify callback.
 
-Remove .notify callback from the acpi_device_ops. Replace it with each
-driver installing and removing it's event handlers.
+Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Michal Wilczynski <michal.wilczynski@intel.com>
+---
+ drivers/acpi/bus.c      | 26 ++++++++++++++++++++++++++
+ include/acpi/acpi_bus.h |  6 ++++++
+ 2 files changed, 32 insertions(+)
 
-v5:
- - rebased on top of Rafael changes [1], they're not merged yet
- - fixed rollback in multiple drivers so they don't leak resources on
-   failure
- - made this part 1, meaning only drivers in acpi directory, rest of
-   the drivers will be handled in separate patchsets to ease up review
-
-v4:
- - added one commit for previously missed driver sony-laptop,
-   refactored return statements, added NULL check for event installer
-v3:
- - lkp still reported some failures for eeepc, fujitsu and
-   toshiba_bluetooth, fix those
-v2:
- - fix compilation errors for drivers
-
-[1]: https://lore.kernel.org/linux-acpi/1847933.atdPhlSkOF@kreacher/
-
-Michal Wilczynski (10):
-  acpi/bus: Introduce wrappers for ACPICA event handler install/remove
-  acpi/bus: Set driver_data to NULL every time .add() fails
-  acpi/ac: Move handler installing logic to driver
-  acpi/video: Move handler installing logic to driver
-  acpi/battery: Move handler installing logic to driver
-  acpi/hed: Move handler installing logic to driver
-  acpi/nfit: Move acpi_nfit_notify() before acpi_nfit_add()
-  acpi/nfit: Improve terminator line in acpi_nfit_ids
-  acpi/nfit: Move handler installing logic to driver
-  acpi/thermal: Move handler installing logic to driver
-
- drivers/acpi/ac.c         | 33 ++++++++++++++++++++++++---------
- drivers/acpi/acpi_video.c | 26 ++++++++++++++++++++++----
- drivers/acpi/battery.c    | 30 ++++++++++++++++++++++++------
- drivers/acpi/bus.c        | 30 +++++++++++++++++++++++++++++-
- drivers/acpi/hed.c        | 17 ++++++++++++++---
- drivers/acpi/nfit/core.c  | 32 ++++++++++++++++++++++----------
- drivers/acpi/thermal.c    | 28 ++++++++++++++++++++++------
- include/acpi/acpi_bus.h   |  6 ++++++
- 8 files changed, 163 insertions(+), 39 deletions(-)
-
+diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
+index b6ab3608d782..22468589c551 100644
+--- a/drivers/acpi/bus.c
++++ b/drivers/acpi/bus.c
+@@ -557,6 +557,32 @@ static void acpi_device_remove_notify_handler(struct acpi_device *device,
+ 	acpi_os_wait_events_complete();
+ }
+ 
++int acpi_dev_install_notify_handler(struct acpi_device *adev,
++				    u32 handler_type,
++				    acpi_notify_handler handler)
++{
++	acpi_status status;
++
++	status = acpi_install_notify_handler(adev->handle,
++					     handler_type,
++					     handler,
++					     adev);
++	if (ACPI_FAILURE(status))
++		return -ENODEV;
++
++	return 0;
++}
++EXPORT_SYMBOL(acpi_dev_install_notify_handler);
++
++void acpi_dev_remove_notify_handler(struct acpi_device *adev,
++				    u32 handler_type,
++				    acpi_notify_handler handler)
++{
++	acpi_remove_notify_handler(adev->handle, handler_type, handler);
++	acpi_os_wait_events_complete();
++}
++EXPORT_SYMBOL(acpi_dev_remove_notify_handler);
++
+ /* Handle events targeting \_SB device (at present only graceful shutdown) */
+ 
+ #define ACPI_SB_NOTIFY_SHUTDOWN_REQUEST 0x81
+diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
+index c941d99162c0..23fbe4a16972 100644
+--- a/include/acpi/acpi_bus.h
++++ b/include/acpi/acpi_bus.h
+@@ -515,6 +515,12 @@ void acpi_bus_private_data_handler(acpi_handle, void *);
+ int acpi_bus_get_private_data(acpi_handle, void **);
+ int acpi_bus_attach_private_data(acpi_handle, void *);
+ void acpi_bus_detach_private_data(acpi_handle);
++int acpi_dev_install_notify_handler(struct acpi_device *adev,
++				    u32 handler_type,
++				    acpi_notify_handler handler);
++void acpi_dev_remove_notify_handler(struct acpi_device *adev,
++				    u32 handler_type,
++				    acpi_notify_handler handler);
+ extern int acpi_notifier_call_chain(struct acpi_device *, u32, u32);
+ extern int register_acpi_notifier(struct notifier_block *);
+ extern int unregister_acpi_notifier(struct notifier_block *);
 -- 
 2.41.0
 
