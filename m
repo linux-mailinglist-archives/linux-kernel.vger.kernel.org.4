@@ -2,176 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0683A73295A
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 09:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0856A73295B
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 09:58:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241709AbjFPH5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 03:57:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47134 "EHLO
+        id S230171AbjFPH6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 03:58:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbjFPH5S (ORCPT
+        with ESMTP id S230420AbjFPH6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 03:57:18 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC9D2733
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 00:56:51 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id 46e09a7af769-6b426eb7e81so437680a34.0
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 00:56:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1686902210; x=1689494210;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7akWJfKU7KySEaAy2Be+qsghvShSh0LwGIoacaHng2E=;
-        b=Jq4b520gd1ciax7vITpPQfEwnbciLU2pm7HpcD9DReUj0khZjz5cCCYpF5+FHE6qXo
-         g/XZUbfT9QBfaB5KFGNxsa8GgG7+mL67FTiMxeoT3/flA4UaPTFw544HHJkciE/7Pguk
-         Iir9TcdpX758EjuPjTrZU3jjEm58aQS8ic7gbMz64vdEG78uNP3AGpJD3DwXM2Vu5zIr
-         vETFv9fBz9OcPXZ13nRlPkcKYYkeXvjwps8yZlJ9P7STmDsdKuE9oIpEmRf0ghXbwmmQ
-         KjyWqkW8n4uCwNJMqYRY993jDa7P8euMuK5HvL1Qw9CwghZAgv9PaxjU4pD4ywiBTAbE
-         IGQg==
+        Fri, 16 Jun 2023 03:58:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEF62948
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 00:57:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686902243;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UmWx/AJ3S4UDmLUBVcPWvaOILz2i/efbrRdbV4jSGuI=;
+        b=C7yySTQQvurxrmcu7M1pc/XRYsXsQ04wOURCzb1e7ewVsWXbTTgCP9mUEWHDCCV7epEIuX
+        5bSetCiTZh3gEmI+GIZ+XqjEMdq6VqRXNy41dop5M+b7hF4Ob1Ppybl3aAZvXynn0ny0ME
+        j9Bkoi+xteiI3aKRTWyZaEjBfq51WZk=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-248-8AMOv_enMIio1FntDXwINQ-1; Fri, 16 Jun 2023 03:57:22 -0400
+X-MC-Unique: 8AMOv_enMIio1FntDXwINQ-1
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-30fbb0ac191so730558f8f.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 00:57:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686902210; x=1689494210;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7akWJfKU7KySEaAy2Be+qsghvShSh0LwGIoacaHng2E=;
-        b=ErOxnzoldNrY34nz4+iRMyRBu1T+iwA53nwziHY0VUH/1OS9YV3r9RfacR5H+mMr8Z
-         10pJ836vmBymfiz9qK5NaOY36v/n1gVKuky/hhm2MEOAEcvsR7n2RmPq1Xjp28Dl3tUz
-         HbTh4NeVkcw1irIDyyqJcgMJJ54sPN+kHObyzxU6USN44lK16U1P65edFnFMyRv5+dE8
-         28ThddYka6qcoUxUrR0M+5bXDJ16907flLZCkHIj9CTWac93y3wZxoTYTD0vh0k9JNhI
-         FckkW8Ytf9Mbotht5DeXObvx1AfMUsNlGraDaaI0UwciDuapN1bCqUNyYR3VI8b2hp4/
-         GIMw==
-X-Gm-Message-State: AC+VfDwmMUjjclBasj4pFZQOh5cwUbRPRSfIur5SDBMMWVe6XT2hRI3u
-        lmFxnOFlA283XEvj0+0xEIHAVQ==
-X-Google-Smtp-Source: ACHHUZ5G3nD6xClYa3QpJaDyRFs2bk6/3sZnAbfDwrk9tBjIYVOyspubda3QgR80DZZpEv69QApchw==
-X-Received: by 2002:a54:4884:0:b0:39a:bdc8:d4d2 with SMTP id r4-20020a544884000000b0039abdc8d4d2mr1611893oic.5.1686902210563;
-        Fri, 16 Jun 2023 00:56:50 -0700 (PDT)
-Received: from ?IPV6:fdbd:ff1:ce00:11b7:189f:bf83:942e:7892? ([240e:694:e21:b::2])
-        by smtp.gmail.com with ESMTPSA id x6-20020a17090a6b4600b0025bda194e5esm767598pjl.31.2023.06.16.00.56.42
+        d=1e100.net; s=20221208; t=1686902241; x=1689494241;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UmWx/AJ3S4UDmLUBVcPWvaOILz2i/efbrRdbV4jSGuI=;
+        b=hJTJjMqHhVQ4pMhJ2Dpq6qLU7eCK9+4rs8B4RjbvGdZK6bxRxSNn3/fEpCBy/bE4Xq
+         9FL/yjrZRLYLFD163rFIWAsYhEHnafctbfZWui5n/OTzkqiCsIdHe0tpvGP9zh7ckz8I
+         lRLL+FxNCJRoNVf77qeJA1KRYoj7OaN3xG678O6hWR5/ExpyElqNi6c2t83tlBFWx0kf
+         dpW3T0aQNUCaIVPP8PShDKocq1k23y4ANMVzhNO2OnjkgtH6cdzTjVReIO9WVg9EM/cJ
+         IDOggl0gF2RdcfF8BNASv1GYeo47lUzNZhCYs3xpD72BdZyDqF32U5kkr1ltjBnOPzaO
+         V6RA==
+X-Gm-Message-State: AC+VfDwO3WxDOgiE7wYibZxwrZ8k78AH7muyXeMJxtxqO1JjCZ5SOk+k
+        zcLPbZS6JVYW3G6W/tAQtnmemBENLEjMTvI3FR+ySFS8vh0pXyKYl4DY785l7XMYyecnpd5Six/
+        4J2AbAg9hoN62lhaiEo3i2+QJ
+X-Received: by 2002:adf:f2cf:0:b0:30f:c4a7:8754 with SMTP id d15-20020adff2cf000000b0030fc4a78754mr5752997wrp.5.1686902240875;
+        Fri, 16 Jun 2023 00:57:20 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6d2AQLhsWO/3+dulLJxjLTJZMzdzmShBDo16xLLUx8cfuwi9Vw0TzqPvzhjMH0eEQQ1PY1Pw==
+X-Received: by 2002:adf:f2cf:0:b0:30f:c4a7:8754 with SMTP id d15-20020adff2cf000000b0030fc4a78754mr5752977wrp.5.1686902240460;
+        Fri, 16 Jun 2023 00:57:20 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c707:9800:59ba:1006:9052:fb40? (p200300cbc707980059ba10069052fb40.dip0.t-ipconnect.de. [2003:cb:c707:9800:59ba:1006:9052:fb40])
+        by smtp.gmail.com with ESMTPSA id 3-20020a05600c230300b003f7ea771b5dsm1487358wmo.1.2023.06.16.00.57.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jun 2023 00:56:50 -0700 (PDT)
-Message-ID: <b4fcf354-f6ee-be68-1608-8b874511785a@bytedance.com>
-Date:   Fri, 16 Jun 2023 15:56:25 +0800
+        Fri, 16 Jun 2023 00:57:20 -0700 (PDT)
+Message-ID: <576b7ba6-4dcd-48c9-3917-4e2a25aaa823@redhat.com>
+Date:   Fri, 16 Jun 2023 09:57:19 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [External] Re: [PATCH v5 2/4] sched/core: Avoid double calling
- update_rq_clock() in __balance_push_cpu_stop()
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, mingo@kernel.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        mgorman@techsingularity.net, linux-kernel@vger.kernel.org
-References: <20230613082012.49615-1-jiahao.os@bytedance.com>
- <20230613082012.49615-3-jiahao.os@bytedance.com>
- <20230615123950.GF1683497@hirez.programming.kicks-ass.net>
-From:   Hao Jia <jiahao.os@bytedance.com>
-In-Reply-To: <20230615123950.GF1683497@hirez.programming.kicks-ass.net>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [External] Re: [RFC PATCH 1/3] zram: charge the compressed RAM to
+ the page's memcgroup
+Content-Language: en-US
+To:     Yosry Ahmed <yosryahmed@google.com>,
+        =?UTF-8?B?6LS65Lit5Z2k?= <hezhongkun.hzk@bytedance.com>
+Cc:     Yu Zhao <yuzhao@google.com>, minchan@kernel.org,
+        senozhatsky@chromium.org, mhocko@suse.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Fabian Deutsch <fdeutsch@redhat.com>
+References: <20230615034830.1361853-1-hezhongkun.hzk@bytedance.com>
+ <CAOUHufZBUEm1P7gm0nFkPSFkNg2fPbs3v3qhL-R9m5yFNoW2YA@mail.gmail.com>
+ <CA+PVUaTqNTSYkTy9yCFF=Y+xkimgM+3YQRF7EYr1UruesQnJrg@mail.gmail.com>
+ <CAJD7tka-=ppaheVxn2-f6u0egBp8kOHYAK0bBudC62SKkZPk5w@mail.gmail.com>
+ <CACSyD1MepXm4EL3o6OscAjRKQhAWZZ5xZKS8a0TXLAazUE+MpA@mail.gmail.com>
+ <CAJD7tka4Uc1DhNzKbrj71vGyVVA12bJivPUQU7P0DOinunLgGg@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <CAJD7tka4Uc1DhNzKbrj71vGyVVA12bJivPUQU7P0DOinunLgGg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/6/15 Peter Zijlstra wrote:
-> On Tue, Jun 13, 2023 at 04:20:10PM +0800, Hao Jia wrote:
->> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
->> index a8be5415daba..1eca36299d8b 100644
->> --- a/kernel/sched/core.c
->> +++ b/kernel/sched/core.c
->> @@ -2398,7 +2398,6 @@ static struct rq *__migrate_task(struct rq *rq, struct rq_flags *rf,
->>   	if (!is_cpu_allowed(p, dest_cpu))
->>   		return rq;
->>   
->> -	update_rq_clock(rq);
->>   	rq = move_queued_task(rq, rf, p, dest_cpu);
->>   
->>   	return rq;
->> @@ -2456,10 +2455,12 @@ static int migration_cpu_stop(void *data)
->>   				goto out;
->>   		}
->>   
->> -		if (task_on_rq_queued(p))
->> +		if (task_on_rq_queued(p)) {
->> +			update_rq_clock(rq);
->>   			rq = __migrate_task(rq, &rf, p, arg->dest_cpu);
->> -		else
->> +		} else {
->>   			p->wake_cpu = arg->dest_cpu;
->> +		}
->>   
->>   		/*
->>   		 * XXX __migrate_task() can fail, at which point we might end
+On 16.06.23 09:37, Yosry Ahmed wrote:
+> On Thu, Jun 15, 2023 at 9:41 PM 贺中坤 <hezhongkun.hzk@bytedance.com> wrote:
+>>
+>>> Thanks Fabian for tagging me.
+>>>
+>>> I am not familiar with #1, so I will speak to #2. Zhongkun, There are
+>>> a few parts that I do not understand -- hopefully you can help me out
+>>> here:
+>>>
+>>> (1) If I understand correctly in this patch we set the active memcg
+>>> trying to charge any pages allocated in a zspage to the current memcg,
+>>> yet that zspage will contain multiple compressed object slots, not
+>>> just the one used by this memcg. Aren't we overcharging the memcg?
+>>> Basically the first memcg that happens to allocate the zspage will pay
+>>> for all the objects in this zspage, even after it stops using the
+>>> zspage completely?
+>>
+>> It will not overcharge.  As you said below, we are not using
+>> __GFP_ACCOUNT and charging the compressed slots to the memcgs.
+>>
+>>>
+>>> (2) Patch 3 seems to be charging the compressed slots to the memcgs,
+>>> yet this patch is trying to charge the entire zspage. Aren't we double
+>>> charging the zspage? I am guessing this isn't happening because (as
+>>> Michal pointed out) we are not using __GFP_ACCOUNT here anyway, so
+>>> this patch may be NOP, and the actual charging is coming from patch 3
+>>> only.
+>>
+>> YES， the actual charging is coming from patch 3. This patch just
+>> delivers the BIO page's  memcg to the current task which is not the
+>> consumer.
+>>
+>>>
+>>> (3) Zswap recently implemented per-memcg charging of compressed
+>>> objects in a much simpler way. If your main interest is #2 (which is
+>>> what I understand from the commit log), it seems like zswap might be
+>>> providing this already? Why can't you use zswap? Is it the fact that
+>>> zswap requires a backing swapfile?
+>>
+>> Thanks for your reply and review. Yes, the zswap requires a backing
+>> swapfile. The I/O path is very complex, sometimes it will throttle the
+>> whole system if some resources are short , so we hope to use zram.
 > 
-> So now you've got update_rq_clock() in both callers, why not remove it
-> from __balance_push_cpu_stop() ?
+> Is the only problem with zswap for you the requirement of a backing swapfile?
 > 
-> Afaict nothing actually needs it before __migrate_task().
-> 
+> If yes, I am in the early stages of developing a solution to make
+> zswap work without a backing swapfile. This was discussed in LSF/MM
+> [1]. Would this make zswap usable in for your use case?
 
-Thanks for your review.
-I'm afraid not, the rq clock also needs to be updated before
-select_fallback_rq() is called.
+Out of curiosity, are there any other known pros/cons when using 
+zswap-without-swap instead of zram?
 
+I know that zram requires sizing (size of the virtual block device) and 
+consumes metadata, zswap doesn't.
 
-> ---
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -9435,8 +9435,6 @@ static int __balance_push_cpu_stop(void
->   	raw_spin_lock_irq(&p->pi_lock);
->   	rq_lock(rq, &rf);
->   
-> -	update_rq_clock(rq);
-> -
->   	if (task_rq(p) == rq && task_on_rq_queued(p)) {
->   		cpu = select_fallback_rq(rq->cpu, p);
->   		rq = __migrate_task(rq, &rf, p, cpu);
+-- 
+Cheers,
 
-If we just remove update_rq_clock() from __balance_push_cpu_stop(), we 
-will get this warning.
+David / dhildenb
 
-
-[ 1260.960166] rq->clock_update_flags < RQCF_ACT_SKIP
-[ 1260.960170] WARNING: CPU: 25 PID: 196 at kernel/sched/sched.h:1496 
-update_curr+0xf6/0x1f0
-
-[ 1260.960318] Call Trace:
-[ 1260.960320]  <TASK>
-[ 1260.960323]  ? show_regs+0x5b/0x60
-[ 1260.960327]  ? __warn+0x89/0x140
-[ 1260.960331]  ? update_curr+0xf6/0x1f0
-[ 1260.960334]  ? report_bug+0x1b7/0x1e0
-[ 1260.960338]  ? __wake_up_klogd.part.25+0x5a/0x80
-[ 1260.960342]  ? handle_bug+0x45/0x80
-[ 1260.960346]  ? exc_invalid_op+0x18/0x70
-[ 1260.960348]  ? asm_exc_invalid_op+0x1b/0x20
-[ 1260.960354]  ? update_curr+0xf6/0x1f0
-[ 1260.960356]  ? update_curr+0xf6/0x1f0
-[ 1260.960359]  dequeue_entity+0x3b/0x410
-[ 1260.960361]  dequeue_task_fair+0xc7/0x3c0
-[ 1260.960363]  dequeue_task+0x30/0xf0
-[ 1260.960365]  __do_set_cpus_allowed+0x94/0x130
-[ 1260.960366]  do_set_cpus_allowed+0x38/0x60
-[ 1260.960368]  cpuset_cpus_allowed_fallback+0x70/0x80
-[ 1260.960372]  select_fallback_rq+0x20f/0x250            <----
-[ 1260.960374]  __balance_push_cpu_stop+0x13f/0x1a0
-[ 1260.960377]  ? migration_cpu_stop+0x2b0/0x2b0
-[ 1260.960379]  cpu_stopper_thread+0xaf/0x140
-[ 1260.960382]  smpboot_thread_fn+0x158/0x220
-[ 1260.960387]  ? sort_range+0x30/0x30
-[ 1260.960390]  kthread+0xfe/0x130
-[ 1260.960392]  ? kthread_complete_and_exit+0x20/0x20
-[ 1260.960394]  ret_from_fork+0x1f/0x30
-[ 1260.960399]  </TASK>
-
-Thanks,
-Hao
