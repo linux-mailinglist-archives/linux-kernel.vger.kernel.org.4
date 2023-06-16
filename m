@@ -2,57 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 269F0732B2A
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:11:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9894732B2E
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:11:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232983AbjFPJLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 05:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58516 "EHLO
+        id S1343963AbjFPJL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 05:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344095AbjFPJLN (ORCPT
+        with ESMTP id S1343779AbjFPJLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 05:11:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F2AF35AA
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 02:09:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 157BD61199
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 09:09:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2457C433C9;
-        Fri, 16 Jun 2023 09:09:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686906578;
-        bh=2YXvEte0tHvF2Un7MoBdoKftmOVsekrDTNUHt5cOEDI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=YYX3cJ4ianisLazJgdikgP155Wib9XYqSbKA2QwXMR7ujm8QXtx7Favmp76BalGzh
-         up411kYjoZn7deAEgja1U0Q80VurO5KBOm433islAMN8gbElUJbxwlTDMo4Ah3Hovz
-         KHsVggBR5LThQvatMUAVD0FUCQOSaUsqwJt1qfmsvbkVCjFG/WKlx9MiKo4kDOJnI5
-         4wouy+SJgmpM3u54ID5lTz+I6w+DjHOGQLszNQFdPCQOGy0IAKN7MuAujk9kxJzOcm
-         TgyqxIwvIpwpk1zSh0hEKRl5M60EuRlZdSaEhP7IJ4xrVtCKjtzxLAEMHFFPdZ3f7H
-         XNYGbDcwfG8kQ==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        =?UTF-8?q?P=C3=A9ter=20Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
-        Rander Wang <rander.wang@intel.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] soundwire: intel_ace2x: fix SND_SOC_SOF_HDA_MLINK dependency
-Date:   Fri, 16 Jun 2023 11:09:24 +0200
-Message-Id: <20230616090932.2714714-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Fri, 16 Jun 2023 05:11:30 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB8D2738
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 02:10:17 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id ada2fe7eead31-43b3b30bd55so102306137.3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 02:10:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1686906616; x=1689498616;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wwoZWPuITfV7xtUPTayl5YgWaHXdGysybtbFzh1Z+XI=;
+        b=z/NAXZXkCrcc8sa5iqtoksP8Bl6lvx6g85Fo610HsC3ZpAiNY7VBRRMgG1q/WenVpd
+         adb2O6tskm/auS9Eav9jCsa9i9ZXqUh37QyR3MjTHn4C4r/NaScZdX6KbpK3DfUHFGsW
+         x52C24QurUNv+C0We5di/1aFWum3pmGLgrvw3Yf1tU35jZihlv7f4z2xhOVlIrdcafze
+         26wx0v6ww9TCLgHsn6Rr6vdMr7DlGij0mkfVJ0z8wTWrgxhPYJ2dnj3/TOnUegKtzZlq
+         YUGSzcShl2ye9uj94tro/cynv7bmBumaqMsTtW/H20BNJmYlLVTLv4gVG1YU9sgwB3cr
+         EWOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686906616; x=1689498616;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wwoZWPuITfV7xtUPTayl5YgWaHXdGysybtbFzh1Z+XI=;
+        b=kyvN0lSRGDb9Q3svtmfP6Z4A4vWKvlp8ZsbgoT4D/GMst1zk9GHtJUoIOnHGRu3wtu
+         MEK+tXv/64WLOnlMN7yUQYOjxFRH8wHdIodhJJcFkk60Cwpt3pJqRKx56X4u6a6LkUxl
+         8lfZifvDpORmLnl8ND/YVMTqvIJXxaRwzsTMDr89RXBSls9acE3oVMqT7cKainHF4nHh
+         mCEfERJVlLKx5/FJy+vQQfm/wPXlwal2E+iD9cn90QyQd1GYzzYHv9wq1vpOWF6zkZm4
+         4bzLT0aBymgXOVp6Ap+9XBLPn8JIvrtpexWJ1ppkwvjkGXB1nYW5ZflQRU5743108J+L
+         wy7A==
+X-Gm-Message-State: AC+VfDwawE/+NwV/vJfAKqsYa4K9xVbKqYRGdciaUSlW5c7THayMrDgh
+        XD1ePfPMvo4yV8+YjoD/be3NU7KnX4YD/RFhr2CyCg==
+X-Google-Smtp-Source: ACHHUZ6C8sKhop3/ZyD3wgfQleYWH3WAE/H+n9ASg9+lsIcVmjyFmGIsh8+9xg61H2PzwGsam4GmlfnYNysqPmFrglY=
+X-Received: by 2002:a67:f655:0:b0:43f:527e:8082 with SMTP id
+ u21-20020a67f655000000b0043f527e8082mr952919vso.21.1686906615944; Fri, 16 Jun
+ 2023 02:10:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230411171521.29678-1-andriy.shevchenko@linux.intel.com> <20230411171521.29678-2-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230411171521.29678-2-andriy.shevchenko@linux.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Fri, 16 Jun 2023 11:10:05 +0200
+Message-ID: <CAMRc=MfOSsZ=d0m41HEvt1ZwFjwSk=_AyOarnSPMANeUtG5Crg@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] selftests: gpio: gpio-sim: Use same variable name
+ for sysfs pathname
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bamvor Jian Zhang <bamv2005@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,41 +73,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Tue, Apr 11, 2023 at 7:15=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> SYSFS_PATH can be used locally and globally, especially that has
+> the same content.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  tools/testing/selftests/gpio/gpio-sim.sh | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/testing/selftests/gpio/gpio-sim.sh b/tools/testing/sel=
+ftests/gpio/gpio-sim.sh
+> index fa2ce2b9dd5f..6fb66a687f17 100755
+> --- a/tools/testing/selftests/gpio/gpio-sim.sh
+> +++ b/tools/testing/selftests/gpio/gpio-sim.sh
+> @@ -152,9 +152,9 @@ sysfs_set_pull() {
+>         local PULL=3D$4
+>         local DEVNAME=3D`configfs_dev_name $DEV`
+>         local CHIPNAME=3D`configfs_chip_name $DEV $BANK`
+> -       local SYSFSPATH=3D"/sys/devices/platform/$DEVNAME/$CHIPNAME/sim_g=
+pio$OFFSET/pull"
+> +       local SYSFS_PATH=3D"/sys/devices/platform/$DEVNAME/$CHIPNAME/sim_=
+gpio$OFFSET/pull"
+>
+> -       echo $PULL > $SYSFSPATH || fail "Unable to set line pull in sysfs=
+"
+> +       echo $PULL > $SYSFS_PATH || fail "Unable to set line pull in sysf=
+s"
+>  }
+>
+>  # Load the gpio-sim module. This will pull in configfs if needed too.
+> --
+> 2.40.0.1.gaa8946217a0b
+>
 
-The ace2x driver can be build with or without mlink support, but
-when SND_SOC_SOF_HDA_MLINK is set to =m and soundwire is built-in,
-it fails with a link error:
+Applied, thanks!
 
-ld.lld: error: undefined symbol: hdac_bus_eml_sdw_wait_syncpu_unlocked
->>> referenced by intel_ace2x.c
->>>               drivers/soundwire/intel_ace2x.o:(intel_link_power_up) in archive vmlinux.a
-
-ld.lld: error: undefined symbol: hdac_bus_eml_sdw_sync_arm_unlocked
->>> referenced by intel_ace2x.c
->>>               drivers/soundwire/intel_ace2x.o:(intel_sync_arm) in archive vmlinux.a
-
-Add a Kconfig dependency that prevents that broken configuration but
-still allows soundwire to be a loadable module instead.
-
-Fixes: 4d1e2464a1104 ("soundwire: intel_ace2x: add sync_arm/sync_go helpers")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/soundwire/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/soundwire/Kconfig b/drivers/soundwire/Kconfig
-index fa71c9a36df7a..4d8f3b7024ae5 100644
---- a/drivers/soundwire/Kconfig
-+++ b/drivers/soundwire/Kconfig
-@@ -37,6 +37,7 @@ config SOUNDWIRE_INTEL
- 	select SOUNDWIRE_GENERIC_ALLOCATION
- 	select AUXILIARY_BUS
- 	depends on ACPI && SND_SOC
-+	depends on SND_SOC_SOF_HDA_MLINK || !SND_SOC_SOF_HDA_MLINK
- 	help
- 	  SoundWire Intel Master driver.
- 	  If you have an Intel platform which has a SoundWire Master then
--- 
-2.39.2
-
+Bart
