@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B44E7325A1
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 05:07:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CE657325A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 05:08:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241649AbjFPDHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 23:07:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35480 "EHLO
+        id S241673AbjFPDIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 23:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241642AbjFPDHi (ORCPT
+        with ESMTP id S232839AbjFPDIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 23:07:38 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FDD92D67;
-        Thu, 15 Jun 2023 20:07:27 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b1acd41ad2so1830801fa.3;
-        Thu, 15 Jun 2023 20:07:27 -0700 (PDT)
+        Thu, 15 Jun 2023 23:08:40 -0400
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEF62D40
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 20:08:39 -0700 (PDT)
+Received: by mail-ua1-x936.google.com with SMTP id a1e0cc1a2514c-78676ca8435so1060631241.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 20:08:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686884845; x=1689476845;
+        d=chromium.org; s=google; t=1686884918; x=1689476918;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eT9UpcbwWO2JnIYIfjcX5Jd0IBCHYSti9NZENcHY/tk=;
-        b=dmoE23iSIi92vpqibKIWHcNdfWvs3eBID/BVsDizNXrKkgufw5qcI/CpLFD68JvlM+
-         JUiakZpOdGoRQmOYBS8/BzSXbkfXonHtwbYbwcqHGXNkldt3t1lxeQ2PfyfLLEKejsa4
-         zYIqkOdLpHNd5dJas0KacV/V+S9kuyJOtL3sX9HsM3I/+sq75D0IFe3dWaxTReCyvCvQ
-         IEk4mtt04oaHDnzIm7bBLpHqBaWp+OMczYLtJj8s839oEgnrlAGYMEaB8Mz0UpOL57+L
-         1wkhmbsjG4RlFmQQFw9w6AVls8hIdcTWCPjltntl5JsFeDYw24KGtpjQVlB3QTRlRBEO
-         KbOw==
+        bh=cJrTLod3qq+bnrpFVtyiXrm6GhPtv1R+1GYPqh4OiIk=;
+        b=Vz3fYT8uYGp/hNgMCPra7gF03IJMxHTvjK2anSwVV5xo7W56I77Zz0RIkn1NddfV0G
+         3mv8TTYuJCVZa55q2jN57gg5h5jziec4LrwiQTqLh0AHUVo2JpvjP1etY/DZ7jMz/dea
+         cONJI7sVwyS7OjiSVJhQvEbQlxpUZYdx8z7qA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686884845; x=1689476845;
+        d=1e100.net; s=20221208; t=1686884918; x=1689476918;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=eT9UpcbwWO2JnIYIfjcX5Jd0IBCHYSti9NZENcHY/tk=;
-        b=O7kRnOF0HVLEOD+uxSgBRuWfzNkIPh6G1lsgJYw4A+xVubk8nOAp/e1WyLqNSMzQTv
-         0lfPvWgDUTXdLM7Fi7Zzt+gmGC9f97sP2E7b1xzIj/3yRw/B0Wmr82kyw4A5A5wjWaHU
-         h6jiY6Lztet2epMDib8lwdNZRdSko/lFpUZPuDn/h6Rf1CMpiQDYaFFUEJJ++qBb8WJf
-         nZQLwDt2z5CbmBpzLT/I0jdM5mC8TGDHoZJnneu+v3ImFUaNRLTElLHM0SpFfHEe1cSV
-         l9/ZRTqNixhmUDBvvCoYRwkPusZKOIqt3zlARObTt2s7RqgXXJvho6Ho4PpGL8KiRdSv
-         YKyA==
-X-Gm-Message-State: AC+VfDxNgkJP10fo0FQG46MyX1g1yGh8yzLtcqgX7IUhvpQ1Y69PNWdg
-        b+hwDxOgVQuAFgMaVaqVb1ePnyQREyzOL8i4A5IoTFUMPH0=
-X-Google-Smtp-Source: ACHHUZ6T/TCtii78HO+6RKGkS0+MK104OEkjrz1nJ/B9+r3DADBkcNhGs6OSnP9uxhMH3q5nzELnP0bbGwUHyaRzEzA=
-X-Received: by 2002:a2e:914a:0:b0:2b1:eb93:ecb1 with SMTP id
- q10-20020a2e914a000000b002b1eb93ecb1mr773236ljg.26.1686884845321; Thu, 15 Jun
- 2023 20:07:25 -0700 (PDT)
+        bh=cJrTLod3qq+bnrpFVtyiXrm6GhPtv1R+1GYPqh4OiIk=;
+        b=ge9oO8hWEa0wLdMg2ca1xmPR1KD43f00DBgJoXrnnxjTr7lE3LlA09Dk0TSpEWO779
+         xiauGJIS5KBBiRCKEJQUPLjewxYxOkBC7m+gbrMVyN/A2G0GtzDqC/aqKuMe6TrgVP9m
+         BZ/lvow68AktzHMNJblBlLIny9tliDTfLrIKRs6JWYM1nIKpucK3YHWq2b5WdcPQs07m
+         QnvRsWd/h02lEiWOwnERnoSOLxOS834Ur6nwS0YKZS/P5Dys/FkkJDT3LDRPaTmLXR5z
+         lheXDetDlbFJzyh4FSG4dc7UN3h4wmcdfXJMuxxHcvP4uSjvaSw9pcdIsMOflZaR8YrS
+         fHxg==
+X-Gm-Message-State: AC+VfDxKk+Vkg1Lw8KNK/Rx6kpnIQ/eswlxf1traOz8nbrZhWdArRoUs
+        XC8hrkwXs4cEpelKvnldCm2ZNAFg26XRXAx4VOcGRg==
+X-Google-Smtp-Source: ACHHUZ4TgeTe/0Pyvf4eaD0+Nxq/kvS8KgwFWXt1dBOkYhgFCqsCJoOwRLozdRCin/hWZ94S95bTZacH0ku+oOFt+iI=
+X-Received: by 2002:a1f:c110:0:b0:464:7d75:fa58 with SMTP id
+ r16-20020a1fc110000000b004647d75fa58mr302529vkf.0.1686884918653; Thu, 15 Jun
+ 2023 20:08:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230615013645.7297-1-liangchen.linux@gmail.com>
- <20230614212031.7e1b6893@kernel.org> <b28b0e3e-87e4-5a02-c172-2d1424405a5a@redhat.com>
-In-Reply-To: <b28b0e3e-87e4-5a02-c172-2d1424405a5a@redhat.com>
-From:   Liang Chen <liangchen.linux@gmail.com>
-Date:   Fri, 16 Jun 2023 11:07:12 +0800
-Message-ID: <CAKhg4t+Xehzuy2Y-M7DBY3HU4y_rFpz_7P-kuX2kjxpKP20qFw@mail.gmail.com>
-Subject: Re: [PATCH net-next] page pool: not return page to alloc cache during
- pool destruction
-To:     Jesper Dangaard Brouer <jbrouer@redhat.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, brouer@redhat.com,
-        hawk@kernel.org, ilias.apalodimas@linaro.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com
+References: <20230615122051.546985-1-angelogioacchino.delregno@collabora.com> <20230615122051.546985-3-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230615122051.546985-3-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 16 Jun 2023 11:08:27 +0800
+Message-ID: <CAGXv+5Hh8=LGNfOUakfYwxw=pv4MxRBXgz=mJjPXte+WtvnGGA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] clk: mediatek: clk-mt8173-apmixedsys: Fix return
+ value for of_iomap() error
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     sboyd@kernel.org, mturquette@baylibre.com, matthias.bgg@gmail.com,
+        u.kleine-koenig@pengutronix.de, msp@baylibre.com,
+        miles.chen@mediatek.com, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,90 +71,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 10:00=E2=80=AFPM Jesper Dangaard Brouer
-<jbrouer@redhat.com> wrote:
+On Thu, Jun 15, 2023 at 8:21=E2=80=AFPM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
 >
+> The of_iomap() function returns NULL in case of error so usage of
+> PTR_ERR() is wrong!
+> Change that to return -ENOMEM in case of failure.
 >
->
-> On 15/06/2023 06.20, Jakub Kicinski wrote:
-> > On Thu, 15 Jun 2023 09:36:45 +0800 Liang Chen wrote:
-> >> When destroying a page pool, the alloc cache and recycle ring are empt=
-ied.
-> >> If there are inflight pages, the retry process will periodically check=
- the
-> >> recycle ring for recently returned pages, but not the alloc cache (all=
-oc
-> >> cache is only emptied once). As a result, any pages returned to the al=
-loc
-> >> cache after the page pool destruction will be stuck there and cause th=
-e
-> >> retry process to continuously look for inflight pages and report warni=
-ngs.
-> >>
-> >> To safeguard against this situation, any pages returning to the alloc =
-cache
-> >> after pool destruction should be prevented.
-> >
-> > Let's hear from the page pool maintainers but I think the driver
-> > is supposed to prevent allocations while pool is getting destroyed.
->
-> Yes, this is a driver API violation. Direct returns (allow_direct) can
-> only happen from drivers RX path, e.g while driver is active processing
-> packets (in NAPI).  When driver is shutting down a page_pool, it MUST
-> have stopped RX path and NAPI (napi_disable()) before calling
-> page_pool_destroy()  Thus, this situation cannot happen and if it does
-> it is a driver bug.
->
-> > Perhaps we can add DEBUG_NET_WARN_ON_ONCE() for this condition to
-> > prevent wasting cycles in production builds?
-> >
->
-> For this page_pool code path ("allow_direct") it is extremely important
-> we avoid wasting cycles in production.  As this is used for XDP_DROP
-> use-cases for 100Gbit/s NICs.
->
-> At 100Gbit/s with 64 bytes Ethernet frames (84 on wire), the wirespeed
-> is 148.8Mpps which gives CPU 6.72 nanosec to process each packet.
-> The microbench[1] shows (below signature) that page_pool_alloc_pages() +
-> page_pool_recycle_direct() cost 4.041 ns (or 14 cycles(tsc)).
-> Thus, for this code fast-path every cycle counts.
->
-> In practice PCIe transactions/sec seems limit total system to 108Mpps
-> (with multiple RX-queues + descriptor compression) thus 9.26 nanosec to
-> process each packet. Individual hardware RX queues seems be limited to
-> around 36Mpps thus 27.77 nanosec to process each packet.
->
-> Adding a DEBUG_NET_WARN_ON_ONCE will be annoying as I like to run my
-> testlab kernels with CONFIG_DEBUG_NET, which will change this extreme
-> fash-path slightly (adding some unlikely's affecting code layout to the
-> mix).
->
-> Question to Liang Chen: Did you hit this bug in practice?
->
-> --Jesper
->
+> Fixes: 41138fbf876c ("clk: mediatek: mt8173: Migrate to platform driver a=
+nd common probe")
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
+abora.com>
 
-Yeah, we hit this problem while implementing page pool support for
-virtio_net driver, where we only enable page pool for xdp path, i.e.
-turning on/off page pool when xdp is enabled/disabled. The problem
-turns up when the xdp program is uninstalled, and there are still
-inflight page pool page buffers. Then napi is enabled again, the
-driver starts to process those inflight page pool buffers. So we will
-need to be aware of the state of the page pool (if it is being
-destructed) while returning the pages back. That's what motivated us
-to add this check to __page_pool_put_page.
-
-Thanks,
-Liang
-
-
-
-> CPU E5-1650 v4 @ 3.60GHz
->   tasklet_page_pool01_fast_path Per elem:  14 cycles(tsc)  4.041 ns
->   tasklet_page_pool02_ptr_ring  Per elem:  49 cycles(tsc) 13.622 ns
->   tasklet_page_pool03_slow      Per elem: 162 cycles(tsc) 45.198 ns
->
-> [1]
-> https://github.com/netoptimizer/prototype-kernel/blob/master/kernel/lib/b=
-ench_page_pool_simple.c
->
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
