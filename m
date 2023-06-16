@@ -2,128 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B73D732571
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 04:54:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB280732580
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 04:59:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241275AbjFPCyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 22:54:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54368 "EHLO
+        id S239559AbjFPC7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 22:59:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240087AbjFPCxr (ORCPT
+        with ESMTP id S229509AbjFPC7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 22:53:47 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728652D5E;
-        Thu, 15 Jun 2023 19:53:45 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f8d5262dc8so2172205e9.0;
-        Thu, 15 Jun 2023 19:53:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686884024; x=1689476024;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AIVXF0NWT+mxXgpNldoq9Ep8Ze5GWaI0IQCYTwDNGis=;
-        b=TH8+LNShLJl+lN5lR3SXIDRE6PtqXnSRNJweWN236P/MIEYjkQOt20OHZTs3m/gqdE
-         zGyNyeyEJdBx+dDNx5guLPyWxxlKbcQrK1dGm0+PRkP8vzVZw0VR7U/siln+azfbtHPU
-         k93f+NVbO2n6Ef4quOJ7b/4G42caGRJ8M0l1r+m2XLHiEIMAilxsHB2VBBCWgSjsAv+J
-         JoShn7VsdcB0zX9lG+rpOb42TpOo2PyDg8xI9398Pw/0HZsklD6MIoo3T/YdEK6YwnkO
-         iFKCeCEe3kJHnVKxPkYWlJLdwtg+3HJhzQbeW4Kv0g16bWumcpwS8EEU7sq6Sm2Lq7lu
-         sqIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686884024; x=1689476024;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AIVXF0NWT+mxXgpNldoq9Ep8Ze5GWaI0IQCYTwDNGis=;
-        b=N0tB3VB246iK866MCD/wVuTcy8BQL0iMHtrLfEZgcqeQytDw2qPHxzh6fGG07rycvG
-         z3x+jQMoNYh/2e+wG1JktvXm4i2CwDpTkfZryNH+Ye2Bv+H2h7vPva3DL4N4L6Iohddq
-         wm8Kt1sffY3myA1RXKtWHbc9Mc/nwPxHJ2M5ys5O9tS71njJTZE37T1iSzRNLn2F9u3g
-         psavJgjhEK4Bj6zivWRj7DnUlFEw/CRs9opxva7NLRhWAnDDsyG4f/B/oHP6xNJw1vV/
-         9xOYDnuvUWxlJyRmZlf5Fw9egiddFK8EtIKyiOKB+5hdYdwteD4bZiVCkGJ1J2E6ul2b
-         c6IQ==
-X-Gm-Message-State: AC+VfDzrBX0Myi8ExcrZi2rii4dm7IjdlpsoR+3L7oSDi0LPf+Nrm/iH
-        z58QnMhfDtT2hH47w4paBKM=
-X-Google-Smtp-Source: ACHHUZ5eszUdRCoqVl0XnO8o0Flzro58U4rSrS2wesjQ3rQNHV27XtmHlB1V/EdEpBfOJF4FMCoUPQ==
-X-Received: by 2002:a05:600c:3657:b0:3f6:8ba:6ea2 with SMTP id y23-20020a05600c365700b003f608ba6ea2mr410986wmq.15.1686884023787;
-        Thu, 15 Jun 2023 19:53:43 -0700 (PDT)
-Received: from arinc9-Xeront.. (athedsl-404045.home.otenet.gr. [79.131.130.75])
-        by smtp.gmail.com with ESMTPSA id v15-20020a1cf70f000000b003f8d770e935sm890328wmh.0.2023.06.15.19.53.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 19:53:43 -0700 (PDT)
-From:   arinc9.unal@gmail.com
-X-Google-Original-From: arinc.unal@arinc9.com
-To:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     Landen Chao <landen.chao@mediatek.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH net v5 6/6] MAINTAINERS: add me as maintainer of MEDIATEK SWITCH DRIVER
-Date:   Fri, 16 Jun 2023 05:53:27 +0300
-Message-Id: <20230616025327.12652-7-arinc.unal@arinc9.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230616025327.12652-1-arinc.unal@arinc9.com>
-References: <20230616025327.12652-1-arinc.unal@arinc9.com>
+        Thu, 15 Jun 2023 22:59:44 -0400
+Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 648252953;
+        Thu, 15 Jun 2023 19:59:41 -0700 (PDT)
+X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
+        LIVER,40,3)
+Received: from 192.168.10.46
+        by mg.richtek.com with MailGates ESMTP Server V5.0(18395:0:AUTH_RELAY)
+        (envelope-from <cy_huang@richtek.com>); Fri, 16 Jun 2023 10:59:25 +0800 (CST)
+Received: from ex4.rt.l (192.168.10.47) by ex3.rt.l (192.168.10.46) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Fri, 16 Jun
+ 2023 10:59:25 +0800
+Received: from linuxcarl2.richtek.com (192.168.10.154) by ex4.rt.l
+ (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
+ Transport; Fri, 16 Jun 2023 10:59:25 +0800
+From:   <cy_huang@richtek.com>
+To:     <broonie@kernel.org>
+CC:     <tony@atomide.com>, <lgirdwood@gmail.com>, <jneanne@baylibre.com>,
+        <linux-omap@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        ChiYuan Huang <cy_huang@richtek.com>
+Subject: [PATCH] regulator: tps65219: Fix pointer assignment in tps65219_get_rdev_by_name()
+Date:   Fri, 16 Jun 2023 10:59:24 +0800
+Message-ID: <1686884364-31447-1-git-send-email-cy_huang@richtek.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arınç ÜNAL <arinc.unal@arinc9.com>
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-Add me as a maintainer of the MediaTek MT7530 DSA subdriver.
+For the pointer assignment in function body, double pointer must be used as
+the input parameter.
 
-List maintainers in alphabetical order by first name.
-
-Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+Fixes: c12ac5fc3e0a ("regulator: drivers: Add TI TPS65219 PMIC regulators support")
+Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
 ---
- MAINTAINERS | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Hi,
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a73e5a98503a..c58d7fbb40ed 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13259,10 +13259,11 @@ F:	drivers/memory/mtk-smi.c
- F:	include/soc/mediatek/smi.h
+I try to fix W=1 build warning for tps65219-regulator.
+
+W=1
+    warning: parameter ‘dev’ set but not used [-Wunused-but-set-parameter]
+    struct regulator_dev *dev)
+                         ^~~~~
+But the issue is not what the warning message described.
+
+In tps65219_get_rdev_by_name(), it must return the found rdev and assign it
+in 'dev' pointer. Due to pointer assignment issue, it doesn't.
+
+The original code may not cause any problem. But it always takes the last
+registered regulator rdev for all tps65219 regulator interrupts.
+---
+ drivers/regulator/tps65219-regulator.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/regulator/tps65219-regulator.c b/drivers/regulator/tps65219-regulator.c
+index b1719ee990ab..8971b507a79a 100644
+--- a/drivers/regulator/tps65219-regulator.c
++++ b/drivers/regulator/tps65219-regulator.c
+@@ -289,13 +289,13 @@ static irqreturn_t tps65219_regulator_irq_handler(int irq, void *data)
  
- MEDIATEK SWITCH DRIVER
--M:	Sean Wang <sean.wang@mediatek.com>
-+M:	Arınç ÜNAL <arinc.unal@arinc9.com>
-+M:	Daniel Golle <daniel@makrotopia.org>
- M:	Landen Chao <Landen.Chao@mediatek.com>
- M:	DENG Qingfang <dqfext@gmail.com>
--M:	Daniel Golle <daniel@makrotopia.org>
-+M:	Sean Wang <sean.wang@mediatek.com>
- L:	netdev@vger.kernel.org
- S:	Maintained
- F:	drivers/net/dsa/mt7530-mdio.c
+ static int tps65219_get_rdev_by_name(const char *regulator_name,
+ 				     struct regulator_dev *rdevtbl[7],
+-				     struct regulator_dev *dev)
++				     struct regulator_dev **dev)
+ {
+ 	int i;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(regulators); i++) {
+ 		if (strcmp(regulator_name, regulators[i].name) == 0) {
+-			dev = rdevtbl[i];
++			*dev = rdevtbl[i];
+ 			return 0;
+ 		}
+ 	}
+@@ -348,7 +348,7 @@ static int tps65219_regulator_probe(struct platform_device *pdev)
+ 		irq_data[i].dev = tps->dev;
+ 		irq_data[i].type = irq_type;
+ 
+-		tps65219_get_rdev_by_name(irq_type->regulator_name, rdevtbl, rdev);
++		tps65219_get_rdev_by_name(irq_type->regulator_name, rdevtbl, &rdev);
+ 		if (IS_ERR(rdev)) {
+ 			dev_err(tps->dev, "Failed to get rdev for %s\n",
+ 				irq_type->regulator_name);
 -- 
-2.39.2
+2.40.1
 
