@@ -2,71 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C80773286B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 09:08:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E8D73286D
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 09:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244595AbjFPHHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 03:07:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50882 "EHLO
+        id S244731AbjFPHJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 03:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244213AbjFPHG7 (ORCPT
+        with ESMTP id S244573AbjFPHIu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 03:06:59 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47CD35A7
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 00:06:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686899200; x=1718435200;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=RTaDfZ9VPFX57fvR1Dzfk2rQNkh7YYvcsGhFjCOwvYY=;
-  b=DrVHYQVsrS9SNvXu1Xu8wOZnOy9U3DrxuL2anlKEpN79UtZXvl+4dq8D
-   zyEArjfMgCFsh8rh3M6FpS2jdklU/2PFvuU04VodKuLkCSliY1tPQUmVR
-   Zuzk5nZmkgjR5nUQ2f+sp4Y/ZaHA5VigCy1qkRSshE6RIe8btdTdebYDB
-   XdgpgxD0boXzzhPLsFiv8Il+O8c4dOewtq3MGLNs1/ab1GROixZBkVVLT
-   7Xx5aKhuoKuy4AZ0vliuZY92VaAi2qCelgHqC8P+5UNRTgK4fmLTS6u1Z
-   8YvJqC3UfJUAGcBrixa7Yw5O7SyCpTAKUFby2QTZiObl5PynGuYX1SDOn
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="361668883"
-X-IronPort-AV: E=Sophos;i="6.00,246,1681196400"; 
-   d="scan'208";a="361668883"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 00:06:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="782784018"
-X-IronPort-AV: E=Sophos;i="6.00,246,1681196400"; 
-   d="scan'208";a="782784018"
-Received: from cpeng15-mobl.ccr.corp.intel.com (HELO yhuang6-mobl2.ccr.corp.intel.com) ([10.255.31.216])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 00:06:19 -0700
-From:   Huang Ying <ying.huang@intel.com>
-To:     linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Huang Ying <ying.huang@intel.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Wei Xu <weixugc@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Rafael J Wysocki <rafael.j.wysocki@intel.com>
-Subject: [RFC 4/4] dax, kmem: calculate abstract distance with general interface
-Date:   Fri, 16 Jun 2023 15:05:38 +0800
-Message-Id: <20230616070538.190042-5-ying.huang@intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230616070538.190042-1-ying.huang@intel.com>
-References: <20230616070538.190042-1-ying.huang@intel.com>
+        Fri, 16 Jun 2023 03:08:50 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2089.outbound.protection.outlook.com [40.107.93.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CC33C25;
+        Fri, 16 Jun 2023 00:08:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=goDrKolMvhndk3Tnq4qikrFNVP7jv1aTMXQHCTp2Kr69bKD1bmSBPc4KGl5I4+57eQlPeYkj3rFz4nQV0EBcjkWmgKWeEQ0NtTube18nOSp1sg8lc0IcnLTqWFEd+QF/9YUZ47uqgDds7Cmf5QRN33jmXg+SWQKZzZn6itQknk/2d54dEaj98ICKc62IRgWJkNi1Hwao129LsfxeufGjDmGf3ACYDj8UQ5yob5dVQ0dzyP4SC4yXyidjxdkVlfqFcwlarQRzScSgEaB8ldRHoJds2FvAsdI8oaUwkN6dI9Z7OUcOfa5bB9N+pwcBpGf5jwISvEwxGJbXbhEgsnDdgw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CQ75dtYu2Wg9oeqECdIS6IEnb+v7X8xo9+v8PE/j1TQ=;
+ b=nkzWopkaStwPwgGkotNHeECc/0TJP67/pUE+qEHASdbFbCiz3W1iHJKlgkOFDajcvRYdj0b31Wwkl/a+EBPBt3q48XMoopNhMTZqJe4SbHvDy5E0QI/gFpdRi1CE35xmRSkcYhoM5o22k74DitZmDcn3WmA+u8vcH5+H6F4c2bkmC9C4flWmWPI52eSZ1Om+SSASm8z16bgJkRIBbtyeNjCvR9sZl9SFgGpUxTA+dazyhYSE+mj2oiCvN9V9kxEnx4ygJp8f9DrgtyE5q82pbNMYEZctXl6rvDA8hxpj5s3pxmggiF3eLUAiZXyv0/Zt9egWHdccrmnj1IxCokin3Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CQ75dtYu2Wg9oeqECdIS6IEnb+v7X8xo9+v8PE/j1TQ=;
+ b=dfFq0CilPtpErTzmW3EknxS2xq2OlONYrw76sbR7kxzwEjMETHvxxKolsoYYV/fsOGvcP0FJchNVkrCP5OfTvTY2dZi+dSY+k/KnREMaeHXbn00DHrSjG3m1cW/Wz5bzWkb2CnnzupSHWp2oPBuDI6xeC0cmEnys4oMRKDEQMXY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
+ DS0PR12MB8018.namprd12.prod.outlook.com (2603:10b6:8:149::12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6500.27; Fri, 16 Jun 2023 07:07:58 +0000
+Received: from DM5PR12MB2504.namprd12.prod.outlook.com
+ ([fe80::8a7:d4dc:7ac8:9017]) by DM5PR12MB2504.namprd12.prod.outlook.com
+ ([fe80::8a7:d4dc:7ac8:9017%5]) with mapi id 15.20.6500.029; Fri, 16 Jun 2023
+ 07:07:58 +0000
+Date:   Fri, 16 Jun 2023 15:07:32 +0800
+From:   Huang Rui <ray.huang@amd.com>
+To:     "Karny, Wyes" <Wyes.Karny@amd.com>
+Cc:     "rafael@kernel.org" <rafael@kernel.org>,
+        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
+        "trenn@suse.com" <trenn@suse.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "Shenoy, Gautham Ranjal" <gautham.shenoy@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH 1/6] amd-pstate: Make amd-pstate epp driver name
+ hyphenated
+Message-ID: <ZIwKNI6OvhZles5F@amd.com>
+References: <20230612113615.205353-1-wyes.karny@amd.com>
+ <20230612113615.205353-2-wyes.karny@amd.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230612113615.205353-2-wyes.karny@amd.com>
+X-ClientProxiedBy: SGBP274CA0018.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b0::30)
+ To DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM5PR12MB2504:EE_|DS0PR12MB8018:EE_
+X-MS-Office365-Filtering-Correlation-Id: c4274686-20f1-4041-74e3-08db6e386a44
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: secWXcePXS17dmhhIEusLZFZFheQbMjRHMC7UwKAh3Onxajm+i/HfsYu68QX6j2rzraX2fpqr7HgV7SASbYS8V+nAvKVtnlV7ST85RmsiiBL/zLhqL5NVyWfZgi3BTO/+2n2woTnahu5JWFs2FZ+rlI2+vjYIICi10xxMcF/QX3bUTs+5hJ90lh7KSIVBCyE2QO7QDctgo5JNYUfD404r7FXaxwDjWTlsXtLwQsnK7fYIjUIEQ+sliLEXW+Wubohw/9xHmN7yJGUmLN87tsU5sSIa6QLxLhxYrR2Lq/XCsyZVqaMJg+2xGNZyUUwvVv2wMctpFJUgzB3ecITi+uMcwIyU/2ElHmWrAep80KwxVAKUzWN3c+QKJZVn35dTXwCL+rS7pMGNhAlt3Ew/8LBC1UX5OLbcyKYgHSAAA2bRBdDmj33hthWfUrqc3e3lXcAppXGkU97JolQRnNiULgr/baZoHS3rw9EpEIqx0jGMxoN/muj+kDbapucXRFr6sR2+jJjp4thqt6BOQc4/cIZbGwq+J6oR5qOvlNlyslWOtIl7Y2NU8rEVdF+q37zBpnv
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(39860400002)(396003)(376002)(346002)(451199021)(5660300002)(8936002)(41300700001)(6862004)(8676002)(2906002)(66476007)(66556008)(66946007)(4326008)(316002)(6636002)(37006003)(54906003)(86362001)(38100700002)(478600001)(6486002)(6666004)(83380400001)(6512007)(26005)(186003)(36756003)(6506007)(2616005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LWAihQUS4nJVYCxPIAaqSzyxQqVCd36C1J91JyojzrZQ2xiHM0e+PPMMvdZ6?=
+ =?us-ascii?Q?sxSvoFZjlA0mcBIT/xq2Adja/XeA+7mQGms9q66VRjeuxWGOUTi5lx4SqN2J?=
+ =?us-ascii?Q?eaiiPv4ug7CO4uLhkMRKRMX8yFzn40XvWq1jqCNdutgYgTbWheSbE1Qe7DK8?=
+ =?us-ascii?Q?T9cUbtiNyXl9ryM5wDZvF0tTdc1x0ojsVFSvNpJ1oqlLRpqzHS6Vs1u70djP?=
+ =?us-ascii?Q?8lYCmOJqPRd3vQcOfoGNnXG90MJ3SORLrIIbNwYSkU36vPDa2ht2Dnu9R30d?=
+ =?us-ascii?Q?T3h7ZibgW33uWA+SX+KiVETvOG7lfflT6fkLHmmj76sAD2vUbFRWGxmvN/vD?=
+ =?us-ascii?Q?t7i8YDgYyWiSWwhI6qjzUQsJy+CUpswOTmxj85+GwWdgGkRbQulbMFBj3e2G?=
+ =?us-ascii?Q?LWVQFjJXK5glt4RI+S0svDGwqeH86Mp31+ywD/nnUYq5HRR9HlG7qp2BrHvY?=
+ =?us-ascii?Q?yim2edXU3G64wGPVmlKnrYoVinZOp0M6eIUhH2YMMW9MJ9pUT9WHG1dXV4Qh?=
+ =?us-ascii?Q?YzN6NUTsBoKS1FrUMuV/gf7oNoSTHPE1/nxCe5F8MXXdJznksD55upm/RrAw?=
+ =?us-ascii?Q?De8xRBEvKjkgyRgSU2jhy6x7tsugMbjF+DLF1hH+OJH0B2D7kdLOSEkQsHCN?=
+ =?us-ascii?Q?dM7GP8eLWxzFfDRiMKOi15MOhfZ9rM7lM/MaUG4E15fHDcSihB/jXeXVY7S4?=
+ =?us-ascii?Q?FNeJ6OfzfJ6s5CJ0bY3tIn9dH5ZWv1U29p3eIns3LFJoilhY637Kjfzus+rj?=
+ =?us-ascii?Q?xxDGCgTTjgXcRJvIQOVMVFASLvm/yoMETxJIqBysXEdLAwjimZMSa+qT4bY2?=
+ =?us-ascii?Q?kaAtON39m/pYkA8DRFulRwc1hKNfQ+NrLvRKfVIDcV2z9Qfn/h+/cX9S1p7t?=
+ =?us-ascii?Q?jS2l3OQXWcBcyRPgrQNuW3DvWhfu0E+i/jL4zx+IK6HfxE5K4FR4i5BAHmUE?=
+ =?us-ascii?Q?Pj4XaGm2qhXphskesoBCkZFO7SpeitO+miyDY0ibl1hQX3jqvhICCtgXbHS2?=
+ =?us-ascii?Q?DhfEyVJiVtzEOdr/8mMsBPMdMUNqeZKbkSNuB+JzlJv8GiqE2nS0GHVhpltM?=
+ =?us-ascii?Q?HogMR7W9HNRE/HTtnN5hOjsb8mJRkRBrgzcF3GUPnF9nBDTqZQRF1ZQE7Fhy?=
+ =?us-ascii?Q?42PZPeL76UmV7mokzA+zDvj26HPGuZSAipaAOPfp9wWXHtUX4nqa/rBVvks9?=
+ =?us-ascii?Q?B9Lrx8fEYErb4v5nB+l5RQZIZ26IyCYI8VnHG9ndjjHYWOjOfbDKgIEAn2Es?=
+ =?us-ascii?Q?MyB5BhCzyTf/2WvFXjEydAXDXMH7a2hsIDLZ74GyPPg/xq8cTws8s7+xPpz1?=
+ =?us-ascii?Q?82V74JcE+/XD/ZS6Ts8IlB2RYmQ5P9lfuC6vhMXjnyMsXQgeczElXA0Rq89b?=
+ =?us-ascii?Q?405il/9oVhlDL7cbgzhQFjXhYISy1H0k6aLZufb6f/Bi9mC7NOsziTsveH4Q?=
+ =?us-ascii?Q?Yr5SzZkXUHnioXFvKngUFjm5SOBl0rmWiPnrCgsix+m2mpHLZdmOx5BfflXv?=
+ =?us-ascii?Q?hXkaYy7gilkvEqNwe5ll8HVlbl0h+pUX8Fv+Tdbt3ihW/S/l8Df1dmvmyh5K?=
+ =?us-ascii?Q?wum3Y4rGXw797sztzszngyWrwzcrB/jr10WtLepa?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c4274686-20f1-4041-74e3-08db6e386a44
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 07:07:58.5346
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3KsdnPVXMT2KLF2TaKGbKdu062gQbwG4O7DYQ5BF8RoVCYOmD8NV/xUKEPf3DE7IoFLWsT1PnN9QOdwCQssypQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8018
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,187 +121,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously, a fixed abstract distance MEMTIER_DEFAULT_DAX_ADISTANCE is
-used for slow memory type in kmem driver.  This limits the usage of
-kmem driver, for example, it cannot be used for HBM (high bandwidth
-memory).
+On Mon, Jun 12, 2023 at 07:36:10PM +0800, Karny, Wyes wrote:
+> amd-pstate passive mode driver is hyphenated. So make amd-pstate active
+> mode driver consistent with that rename "amd_pstate_epp" to
+> "amd-pstate-epp".
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: ffa5096a7c33 ("cpufreq: amd-pstate: implement Pstate EPP support for the AMD processors")
+> Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+> Signed-off-by: Wyes Karny <wyes.karny@amd.com>
 
-So, we use the general abstract distance calculation mechanism in kmem
-drivers to get more accurate abstract distance on systems with proper
-support.  The original MEMTIER_DEFAULT_DAX_ADISTANCE is used as
-fallback only.
+Acked-by: Huang Rui <ray.huang@amd.com>
 
-Now, multiple memory types may be managed by kmem.  These memory types
-are put into the "kmem_memory_types" list and protected by
-kmem_memory_type_lock.
+And yes, we should seprate it from cpupower as Rafael mentioned. cpupower
+tool may go to another repo.
 
-Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-Cc: Wei Xu <weixugc@google.com>
-Cc: Alistair Popple <apopple@nvidia.com>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Dave Hansen <dave.hansen@intel.com>
-Cc: Davidlohr Bueso <dave@stgolabs.net>
-Cc: Johannes Weiner <hannes@cmpxchg.org>
-Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: Michal Hocko <mhocko@kernel.org>
-Cc: Yang Shi <shy828301@gmail.com>
-Cc: Rafael J Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/dax/kmem.c           | 54 +++++++++++++++++++++++++++---------
- include/linux/memory-tiers.h |  2 ++
- mm/memory-tiers.c            |  2 +-
- 3 files changed, 44 insertions(+), 14 deletions(-)
+Thanks,
+Ray
 
-diff --git a/drivers/dax/kmem.c b/drivers/dax/kmem.c
-index 7b36db6f1cbd..079f53315562 100644
---- a/drivers/dax/kmem.c
-+++ b/drivers/dax/kmem.c
-@@ -49,14 +49,40 @@ struct dax_kmem_data {
- 	struct resource *res[];
- };
- 
--static struct memory_dev_type *dax_slowmem_type;
-+static DEFINE_MUTEX(kmem_memory_type_lock);
-+static LIST_HEAD(kmem_memory_types);
-+
-+static struct memory_dev_type *kmem_find_alloc_memorty_type(int adist)
-+{
-+	bool found = false;
-+	struct memory_dev_type *mtype;
-+
-+	mutex_lock(&kmem_memory_type_lock);
-+	list_for_each_entry(mtype, &kmem_memory_types, list) {
-+		if (mtype->adistance == adist) {
-+			found = true;
-+			break;
-+		}
-+	}
-+	if (!found) {
-+		mtype = alloc_memory_type(adist);
-+		if (!IS_ERR(mtype))
-+			list_add(&mtype->list, &kmem_memory_types);
-+	}
-+	mutex_unlock(&kmem_memory_type_lock);
-+
-+	return mtype;
-+}
-+
- static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
- {
- 	struct device *dev = &dev_dax->dev;
- 	unsigned long total_len = 0;
- 	struct dax_kmem_data *data;
-+	struct memory_dev_type *mtype;
- 	int i, rc, mapped = 0;
- 	int numa_node;
-+	int adist = MEMTIER_DEFAULT_DAX_ADISTANCE;
- 
- 	/*
- 	 * Ensure good NUMA information for the persistent memory.
-@@ -71,6 +97,11 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
- 		return -EINVAL;
- 	}
- 
-+	mt_calc_adistance(numa_node, &adist);
-+	mtype = kmem_find_alloc_memorty_type(adist);
-+	if (IS_ERR(mtype))
-+		return PTR_ERR(mtype);
-+
- 	for (i = 0; i < dev_dax->nr_range; i++) {
- 		struct range range;
- 
-@@ -88,7 +119,7 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
- 		return -EINVAL;
- 	}
- 
--	init_node_memory_type(numa_node, dax_slowmem_type);
-+	init_node_memory_type(numa_node, mtype);
- 
- 	rc = -ENOMEM;
- 	data = kzalloc(struct_size(data, res, dev_dax->nr_range), GFP_KERNEL);
-@@ -167,7 +198,7 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
- err_res_name:
- 	kfree(data);
- err_dax_kmem_data:
--	clear_node_memory_type(numa_node, dax_slowmem_type);
-+	clear_node_memory_type(numa_node, mtype);
- 	return rc;
- }
- 
-@@ -219,7 +250,7 @@ static void dev_dax_kmem_remove(struct dev_dax *dev_dax)
- 		 * for that. This implies this reference will be around
- 		 * till next reboot.
- 		 */
--		clear_node_memory_type(node, dax_slowmem_type);
-+		clear_node_memory_type(node, NULL);
- 	}
- }
- #else
-@@ -251,12 +282,6 @@ static int __init dax_kmem_init(void)
- 	if (!kmem_name)
- 		return -ENOMEM;
- 
--	dax_slowmem_type = alloc_memory_type(MEMTIER_DEFAULT_DAX_ADISTANCE);
--	if (IS_ERR(dax_slowmem_type)) {
--		rc = PTR_ERR(dax_slowmem_type);
--		goto err_dax_slowmem_type;
--	}
--
- 	rc = dax_driver_register(&device_dax_kmem_driver);
- 	if (rc)
- 		goto error_dax_driver;
-@@ -264,18 +289,21 @@ static int __init dax_kmem_init(void)
- 	return rc;
- 
- error_dax_driver:
--	destroy_memory_type(dax_slowmem_type);
--err_dax_slowmem_type:
- 	kfree_const(kmem_name);
- 	return rc;
- }
- 
- static void __exit dax_kmem_exit(void)
- {
-+	struct memory_dev_type *mtype, *mtn;
-+
- 	dax_driver_unregister(&device_dax_kmem_driver);
- 	if (!any_hotremove_failed)
- 		kfree_const(kmem_name);
--	destroy_memory_type(dax_slowmem_type);
-+	list_for_each_entry_safe(mtype, mtn, &kmem_memory_types, list) {
-+		list_del(&mtype->list);
-+		destroy_memory_type(mtype);
-+	}
- }
- 
- MODULE_AUTHOR("Intel Corporation");
-diff --git a/include/linux/memory-tiers.h b/include/linux/memory-tiers.h
-index 9377239c8d34..aca22220cb5c 100644
---- a/include/linux/memory-tiers.h
-+++ b/include/linux/memory-tiers.h
-@@ -24,6 +24,8 @@ struct memory_tier;
- struct memory_dev_type {
- 	/* list of memory types that are part of same tier as this type */
- 	struct list_head tier_sibiling;
-+	/* list of memory types that are managed by one driver */
-+	struct list_head list;
- 	/* abstract distance for this specific memory type */
- 	int adistance;
- 	/* Nodes of same abstract distance */
-diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
-index 3aabc7240402..8a763a765238 100644
---- a/mm/memory-tiers.c
-+++ b/mm/memory-tiers.c
-@@ -582,7 +582,7 @@ EXPORT_SYMBOL_GPL(init_node_memory_type);
- void clear_node_memory_type(int node, struct memory_dev_type *memtype)
- {
- 	mutex_lock(&memory_tier_lock);
--	if (node_memory_types[node].memtype == memtype)
-+	if (node_memory_types[node].memtype == memtype || !memtype)
- 		node_memory_types[node].map_count--;
- 	/*
- 	 * If we umapped all the attached devices to this node,
--- 
-2.39.2
-
+> ---
+>  drivers/cpufreq/amd-pstate.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index ddd346a239e0..a5764946434c 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -1356,7 +1356,7 @@ static struct cpufreq_driver amd_pstate_epp_driver = {
+>  	.online		= amd_pstate_epp_cpu_online,
+>  	.suspend	= amd_pstate_epp_suspend,
+>  	.resume		= amd_pstate_epp_resume,
+> -	.name		= "amd_pstate_epp",
+> +	.name		= "amd-pstate-epp",
+>  	.attr		= amd_pstate_epp_attr,
+>  };
+>  
+> -- 
+> 2.34.1
+> 
