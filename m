@@ -2,139 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43236732A15
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E60732A1A
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:43:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343510AbjFPImx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 04:42:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41772 "EHLO
+        id S1343597AbjFPIn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 04:43:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjFPImu (ORCPT
+        with ESMTP id S1343566AbjFPInU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 04:42:50 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E13313E;
-        Fri, 16 Jun 2023 01:42:49 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B38831FD6B;
-        Fri, 16 Jun 2023 08:42:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1686904967; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ftqQxEyXprQeOR6akOe/4MsCo2o6FrnRrf5983ERKLo=;
-        b=VV5M0MksasB5tNcC7sIZMcywp0knL6LvM7lfzJlFDnZU6EFlbhIDIm7qy01BIoB6wCYhIa
-        NW6l1Mzasvo1uZCPKRuk0B92JuRHDzM+nfGMIaWUv0Q/mqQEn9AY6eUCvq+Ifxg6MLhWcK
-        PBLS3Gm/QYO29GuX2iDK4z13XDDG5f4=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 937AC138E8;
-        Fri, 16 Jun 2023 08:42:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id sH/mIIcgjGRQNQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Fri, 16 Jun 2023 08:42:47 +0000
-Date:   Fri, 16 Jun 2023 10:42:46 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Haifeng Xu <haifeng.xu@shopee.com>
-Cc:     roman.gushchin@linux.dev, hannes@cmpxchg.org, shakeelb@google.com,
-        akpm@linux-foundation.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] mm/memcontrol: do not tweak node in mem_cgroup_init()
-Message-ID: <ZIwghl18d45vPNpd@dhcp22.suse.cz>
-References: <20230615073226.1343-1-haifeng.xu@shopee.com>
- <ZIrIb7pgRXln27nv@dhcp22.suse.cz>
- <47119364-30ac-cb57-7fd8-d9aa4b230478@shopee.com>
+        Fri, 16 Jun 2023 04:43:20 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A978030C3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 01:43:18 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-5149aafef44so526637a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 01:43:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1686904997; x=1689496997;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ze8cwbEimRlhZaK9EBJVsnPzOeV3nshtg9J9yVTNzbA=;
+        b=0CwPdM23oJvOKoQrf2K1oFtch1GUVvuQqMOPzi5DMDq0TjmyNC8LGVZg6WCwDXV1Vs
+         NYGCTgf0wcd3f2jgapURz07b342frjb+t+j0LfpkA2rqE50GyGKVze91Wk4/mY6fDOlb
+         m+dv9X2ENUCWaTbwtJXXtyFzVTs52sG0Kg0nRkdqeD+LTQSAVHemhVAtdGQScTED246S
+         Hvz+wXORJe7+Lc/uj4YV8LoS9SKCFE4KGTnYl0nB9EwZfT2eDN/Q2dRaqk61HeHPcyW+
+         Hv+78e1DOE69nDXeWq9ZwFkvZpI36XyvNpoodqGxYmoz2DND6kIBR9uSFjHPn2ZKj2iD
+         T+jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686904997; x=1689496997;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ze8cwbEimRlhZaK9EBJVsnPzOeV3nshtg9J9yVTNzbA=;
+        b=AuNqenSlTbKRFc0XDtgPwk8I9llQxbB/Y+uRx4dOK+13LjJeuEO/11auZfleaKp/BM
+         ilWY+FIn0LurHqLtro1AMhAGW7lLofAJERaDoCEDaWQNHXkeNZseX+ozNG01KHmxe6P0
+         co6YtPYKUDgNSnQIvy7ymDkcREvnuSF9OPf23TSOMgvNtXPzK0uFHsU0r2nvhxRHcF0r
+         ktQ107G7a4NYLd6qHQdadYqq/rMpcic/FWrutH3RIJ6AJ1rzq4SBe6pl4fZM3pcN5L9U
+         KBflLodUE38KhnxO7GCCOci/OOuBpvDG/vYYTpDjmdXkmk62qxhxNhFEO86xf0zt72+x
+         WUZg==
+X-Gm-Message-State: AC+VfDzNYRH7/GUNFrhNYlTss27Rt/YNkunGl9DzmC7wg3zIlPc/X6O8
+        tZl+Abd42WO2S1FiJV0PvxnECw==
+X-Google-Smtp-Source: ACHHUZ7MWFdjFMx/4EedaJmP35jyhkR6ud9o/ugYs5MNHQ34vWYGN4HLEeom/PdQ5fLBLp+o2C6xZg==
+X-Received: by 2002:aa7:d6d3:0:b0:518:79da:911e with SMTP id x19-20020aa7d6d3000000b0051879da911emr665898edr.39.1686904996944;
+        Fri, 16 Jun 2023 01:43:16 -0700 (PDT)
+Received: from blmsp ([2001:4090:a245:802c:7f03:2fe0:bd27:d746])
+        by smtp.gmail.com with ESMTPSA id c13-20020aa7c74d000000b0051823c1a10bsm8004786eds.54.2023.06.16.01.43.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 01:43:16 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 10:43:14 +0200
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     sboyd@kernel.org, mturquette@baylibre.com, matthias.bgg@gmail.com,
+        wenst@chromium.org, u.kleine-koenig@pengutronix.de,
+        miles.chen@mediatek.com, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH 1/3] clk: mediatek: clk-mtk: Grab iomem pointer for
+ divider clocks
+Message-ID: <20230616084314.vfx5gcoxupcq3mgl@blmsp>
+References: <20230615122051.546985-1-angelogioacchino.delregno@collabora.com>
+ <20230615122051.546985-2-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <47119364-30ac-cb57-7fd8-d9aa4b230478@shopee.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230615122051.546985-2-angelogioacchino.delregno@collabora.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 16-06-23 16:28:38, Haifeng Xu wrote:
+On Thu, Jun 15, 2023 at 02:20:49PM +0200, AngeloGioacchino Del Regno wrote:
+> In the rare case in which one of the clock drivers has divider clocks
+> but not composite clocks, mtk_clk_simple_probe() would not io(re)map,
+> hence passing a NULL pointer to mtk_clk_register_dividers().
 > 
+> To fix this issue, extend the `if` conditional to also check if any
+> divider clocks are present. While at it, also make sure the iomem
+> pointer is NULL if no composite/divider clocks are declared, as we
+> are checking for that when iounmapping it in the error path.
 > 
-> On 2023/6/15 16:14, Michal Hocko wrote:
-> > On Thu 15-06-23 07:32:25, Haifeng Xu wrote:
-> >> mem_cgroup_init() request for allocations from each possible node, and
-> >> it's used to be a problem because NODE_DATA is not allocated for offline
-> >> node. Things have already changed since commit 09f49dca570a9 ("mm: handle
-> >> uninitialized numa nodes gracefully"), so it's unnecessary to check for
-> >> !node_online nodes here.
-> > 
-> > How have you tested this patch?
+> This hasn't been seen on any MediaTek clock driver as the current ones
+> always declare composite clocks along with divider clocks, but this is
+> still an important fix for a future potential KP.
 > 
-> Start with one empty node:
-> 
-> qemu-system-x86_64 \
->   -kernel vmlinux \
->   -initrd full.rootfs.cpio.gz \
->   -append "console=ttyS0,115200 root=/dev/ram0 nokaslr earlyprintk=serial oops=panic panic_on_warn" \
->   -drive format=qcow2,file=vm_disk.qcow2,media=disk,if=ide \
->   -enable-kvm \
->   -cpu host \
->   -m 8G,slots=2,maxmem=16G \
->   -smp cores=4,threads=1,sockets=2  \
->   -object memory-backend-ram,id=mem0,size=4G \
->   -object memory-backend-ram,id=mem1,size=4G \
->   -numa node,memdev=mem0,cpus=0-3,nodeid=0 \
->   -numa node,memdev=mem1,cpus=4-7,nodeid=1 \
->   -numa node,nodeid=2 \
->   -net nic,model=virtio,macaddr=52:54:00:12:34:58 \
->   -net user \
->   -nographic \
->   -rtc base=localtime \
->   -gdb tcp::6000
-> 
-> Guest state when booting:
-> [    0.048881] NUMA: Node 0 [mem 0x00000000-0x0009ffff] + [mem 0x00100000-0xbfffffff] -> [mem 0x00000000-0xbfffffff]
-> [    0.050489] NUMA: Node 0 [mem 0x00000000-0xbfffffff] + [mem 0x100000000-0x13fffffff] -> [mem 0x00000000-0x13fffffff]
-> [    0.052173] NODE_DATA(0) allocated [mem 0x13fffc000-0x13fffffff]
-> [    0.053164] NODE_DATA(1) allocated [mem 0x23fffa000-0x23fffdfff]
-> [    0.054187] Zone ranges:
-> [    0.054587]   DMA      [mem 0x0000000000001000-0x0000000000ffffff]
-> [    0.055551]   DMA32    [mem 0x0000000001000000-0x00000000ffffffff]
-> [    0.056515]   Normal   [mem 0x0000000100000000-0x000000023fffffff]
-> [    0.057484] Movable zone start for each node
-> [    0.058149] Early memory node ranges
-> [    0.058705]   node   0: [mem 0x0000000000001000-0x000000000009efff]
-> [    0.059679]   node   0: [mem 0x0000000000100000-0x00000000bffdffff]
-> [    0.060659]   node   0: [mem 0x0000000100000000-0x000000013fffffff]
-> [    0.061649]   node   1: [mem 0x0000000140000000-0x000000023fffffff]
-> [    0.062638] Initmem setup node 0 [mem 0x0000000000001000-0x000000013fffffff]
-> [    0.063745] Initmem setup node 1 [mem 0x0000000140000000-0x000000023fffffff]
-> [    0.064855]   DMA zone: 158 reserved pages exceeds freesize 0
-> [    0.065746] Initializing node 2 as memoryless
-> [    0.066437] Initmem setup node 2 as memoryless
-> [    0.067132]   DMA zone: 158 reserved pages exceeds freesize 0
-> [    0.068037] On node 0, zone DMA: 1 pages in unavailable ranges
-> [    0.068265] On node 0, zone DMA: 97 pages in unavailable ranges
-> [    0.124755] On node 0, zone Normal: 32 pages in unavailable ranges
-> 
-> 
-> cat /sys/devices/system/node/online
-> 0-1
-> cat /sys/devices/system/node/possible
-> 0-2
+> Fixes: 1fe074b1f112 ("clk: mediatek: Add divider clocks to mtk_clk_simple_{probe,remove}()")
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Excellent! Please extend the changelog by this information. Feel free to
-add
-Acked-by: Michal Hocko <mhocko@suse.com>
+Reviewed-by: Markus Schneider-Pargmann <msp@baylibre.com>
 
-Thanks!
--- 
-Michal Hocko
-SUSE Labs
+> ---
+>  drivers/clk/mediatek/clk-mtk.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/clk/mediatek/clk-mtk.c b/drivers/clk/mediatek/clk-mtk.c
+> index cf3514c8e97e..b00ef4213335 100644
+> --- a/drivers/clk/mediatek/clk-mtk.c
+> +++ b/drivers/clk/mediatek/clk-mtk.c
+> @@ -469,7 +469,7 @@ static int __mtk_clk_simple_probe(struct platform_device *pdev,
+>  	const struct platform_device_id *id;
+>  	const struct mtk_clk_desc *mcd;
+>  	struct clk_hw_onecell_data *clk_data;
+> -	void __iomem *base;
+> +	void __iomem *base = NULL;
+>  	int num_clks, r;
+>  
+>  	mcd = device_get_match_data(&pdev->dev);
+> @@ -483,8 +483,8 @@ static int __mtk_clk_simple_probe(struct platform_device *pdev,
+>  			return -EINVAL;
+>  	}
+>  
+> -	/* Composite clocks needs us to pass iomem pointer */
+> -	if (mcd->composite_clks) {
+> +	/* Composite and divider clocks needs us to pass iomem pointer */
+> +	if (mcd->composite_clks || mcd->divider_clks) {
+>  		if (!mcd->shared_io)
+>  			base = devm_platform_ioremap_resource(pdev, 0);
+>  		else
+> -- 
+> 2.40.1
+> 
