@@ -2,110 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B960732557
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 04:41:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CD1F7325A2
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 05:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239478AbjFPClm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 22:41:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
+        id S241668AbjFPDHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 23:07:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbjFPCll (ORCPT
+        with ESMTP id S241646AbjFPDHi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 22:41:41 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1062C296F;
-        Thu, 15 Jun 2023 19:41:40 -0700 (PDT)
+        Thu, 15 Jun 2023 23:07:38 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C8F2D40;
+        Thu, 15 Jun 2023 20:07:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686883300; x=1718419300;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=2IEe3NTPJuFhMZdWIJvLWj0KlVJtmwWgVB33dSk7gXc=;
-  b=bkFy9XwBQqa5SVul2W8TsSmw9pzfMsnjQpXTbMh6F72LDmm5JfRiuhM9
-   vjRRLrXxSQszvErLz7tzIbflBm3rkwgi6V7XIYHkTCCd4DjMPc2REuKf7
-   5hZzVe5xc2gM9E9FseZC5jsoPx/Q8GBResDPx76GiqhZXYnJIO5izOkeU
-   gjIJFH2q3jvQn/yZDA4DkUbgkuqzU06tmTD8RW5bMv9hXaSnFmJsw2LaG
-   e1EgNt+YiHcBKfawntxmsrbXrTGY5vAvRnm9h/Yp4KvW8GPQv+hLWKHp8
-   lJ+tMdLagdmyVZSXKkaQANK811puLyNDVz3oXPWjXaPoiW4osdasbdmZT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="425029165"
+  t=1686884846; x=1718420846;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=0qVLWf99lh56KC7DV9RlLyblgh+kyME9c2tLdLIauOU=;
+  b=cIfU7OqXRv4tSSIg6RzmWDwBxNdocnnBfmbPh5goFNgwEiQHQGPMwzJT
+   RPIm+bVBzkkuKwdTrwzKQIobQ0C6JUP0Vil7uM6ml0jAwlQIIbEJcagLE
+   1thwxWiKnbTln/zFLb00fdZO2VMO3KHv3suOUkAuq09YFGLJ8jp7tpbOo
+   zs49FiaRmpvGaJrUvuyXoR6KM9lEELZLxksLhlk4NUQyaNQ0D3Fo/8SeB
+   QmD6awNgGLROs+bp9hI2sUWc1RI/3UnL4q7tVe4+OwvZYagZn+LHzX0E2
+   kP2omGVAnI13R9o2pYNdjummuH0nDS11XK28UKW51ts1GICPcTGnEFfXg
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="387736540"
 X-IronPort-AV: E=Sophos;i="6.00,246,1681196400"; 
-   d="scan'208";a="425029165"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 19:41:39 -0700
+   d="scan'208";a="387736540"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 20:07:26 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="706909551"
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="742483474"
 X-IronPort-AV: E=Sophos;i="6.00,246,1681196400"; 
-   d="scan'208";a="706909551"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga007.jf.intel.com with ESMTP; 15 Jun 2023 19:41:39 -0700
-Received: from [10.209.76.72] (kliang2-mobl1.ccr.corp.intel.com [10.209.76.72])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id E9780580919;
-        Thu, 15 Jun 2023 19:41:37 -0700 (PDT)
-Message-ID: <49d5b8f0-7c48-495b-beda-33cbff8e5ef0@linux.intel.com>
-Date:   Thu, 15 Jun 2023 22:41:36 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH V3 0/8] New metricgroup output in perf stat default mode
-Content-Language: en-US
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, irogers@google.com,
-        namhyung@kernel.org, jolsa@kernel.org, adrian.hunter@intel.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ak@linux.intel.com, eranian@google.com, ahmad.yasin@intel.com
-References: <20230615135315.3662428-1-kan.liang@linux.intel.com>
- <ZIu61WSa17DvVtgt@kernel.org>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <ZIu61WSa17DvVtgt@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+   d="scan'208";a="742483474"
+Received: from yzhao56-desk.sh.intel.com ([10.239.159.62])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 20:07:23 -0700
+From:   Yan Zhao <yan.y.zhao@intel.com>
+To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, chao.gao@intel.com,
+        kai.huang@intel.com, robert.hoo.linux@gmail.com,
+        Yan Zhao <yan.y.zhao@intel.com>
+Subject: [PATCH v3 11/11] KVM: x86/mmu: split a single gfn zap range when guest MTRRs are honored
+Date:   Fri, 16 Jun 2023 10:42:13 +0800
+Message-Id: <20230616024213.7706-1-yan.y.zhao@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20230616023101.7019-1-yan.y.zhao@intel.com>
+References: <20230616023101.7019-1-yan.y.zhao@intel.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Split a single gfn zap range (specifially range [0, ~0UL)) to smaller
+ranges according to current memslot layout when guest MTRRs are honored.
 
+Though vCPUs have been serialized to perform kvm_zap_gfn_range() for MTRRs
+updates and CR0.CD toggles, contention caused rescheduling cost is still
+huge when there're concurrent page fault caused read locks of
+kvm->mmu_lock.
 
-On 2023-06-15 9:28 p.m., Arnaldo Carvalho de Melo wrote:
-> Em Thu, Jun 15, 2023 at 06:53:07AM -0700, kan.liang@linux.intel.com escreveu:
->> The patch proposes a new output format which only outputting the value
->> of each metric and the metricgroup name. It can brings a clean and
->> consistent output format among ARCHs and generations.
->>
->> The first patche is a bug fix for the current code.
->>
->> The patches 2-5 introduce the new metricgroup output.
->>
->> The patches 6-8 improve the tests to cover the default mode.
-> 
-> I cherry picked 1-3 and 6, and pushed to the tmp.perf-tools-next branch
-> at both my usual repository at:
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tmp.perf-tools-next
-> 
-> And also at the one we're transitioning to, and that Namhyung Kim has
-> write access and will update while I'm in vacation in the next two
-> weeks.
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git tmp.perf-tools-next
-> 
-> Tomorrow I'll do more tests with it and then transition to
-> perf-tools-next in both git repositories.
-> 
-> Please prefer
-> git://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git
-> from now on.
-> 
+Split a single huge zap range according to the actual memslot layout can
+reduce unnecessary transversal and scheduling cost in tdp mmu.
+Also, it can increase the chances for larger ranges to find existing ranges
+to zap in zap list.
 
-Thanks Arnaldo!
+Signed-off-by: Yan Zhao <yan.y.zhao@intel.com>
+---
+ arch/x86/kvm/mtrr.c | 31 +++++++++++++++++++++++++------
+ 1 file changed, 25 insertions(+), 6 deletions(-)
 
-Kan
+diff --git a/arch/x86/kvm/mtrr.c b/arch/x86/kvm/mtrr.c
+index e2a097822a62..b83abd14ccb1 100644
+--- a/arch/x86/kvm/mtrr.c
++++ b/arch/x86/kvm/mtrr.c
+@@ -917,21 +917,40 @@ static void kvm_zap_or_wait_mtrr_zap_list(struct kvm *kvm)
+ static void kvm_mtrr_zap_gfn_range(struct kvm_vcpu *vcpu,
+ 				   gfn_t gfn_start, gfn_t gfn_end)
+ {
++	int idx = srcu_read_lock(&vcpu->kvm->srcu);
++	const struct kvm_memory_slot *memslot;
+ 	struct mtrr_zap_range *range;
++	struct kvm_memslot_iter iter;
++	struct kvm_memslots *slots;
++	gfn_t start, end;
++	int i;
++
++	for (i = 0; i < KVM_ADDRESS_SPACE_NUM; i++) {
++		slots = __kvm_memslots(vcpu->kvm, i);
++		kvm_for_each_memslot_in_gfn_range(&iter, slots, gfn_start, gfn_end) {
++			memslot = iter.slot;
++			start = max(gfn_start, memslot->base_gfn);
++			end = min(gfn_end, memslot->base_gfn + memslot->npages);
++			if (WARN_ON_ONCE(start >= end))
++				continue;
+ 
+-	range = kmalloc(sizeof(*range), GFP_KERNEL_ACCOUNT);
+-	if (!range)
+-		goto fail;
++			range = kmalloc(sizeof(*range), GFP_KERNEL_ACCOUNT);
++			if (!range)
++				goto fail;
+ 
+-	range->start = gfn_start;
+-	range->end = gfn_end;
++			range->start = start;
++			range->end = end;
+ 
+-	kvm_add_mtrr_zap_list(vcpu->kvm, range);
++			kvm_add_mtrr_zap_list(vcpu->kvm, range);
++		}
++	}
++	srcu_read_unlock(&vcpu->kvm->srcu, idx);
+ 
+ 	kvm_zap_or_wait_mtrr_zap_list(vcpu->kvm);
+ 	return;
+ 
+ fail:
++	srcu_read_unlock(&vcpu->kvm->srcu, idx);
+ 	kvm_clear_mtrr_zap_list(vcpu->kvm);
+ 	kvm_zap_gfn_range(vcpu->kvm, gfn_start, gfn_end);
+ }
+-- 
+2.17.1
 
