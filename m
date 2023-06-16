@@ -2,91 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7375A7330A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:01:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 536877330A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344945AbjFPMBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 08:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45002 "EHLO
+        id S1344923AbjFPMBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 08:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233955AbjFPMBP (ORCPT
+        with ESMTP id S233955AbjFPMBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 08:01:15 -0400
-Received: from mail11.truemail.it (mail11.truemail.it [IPv6:2001:4b7e:0:8::81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49677273F;
-        Fri, 16 Jun 2023 05:01:12 -0700 (PDT)
-Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-        by mail11.truemail.it (Postfix) with ESMTPA id 345E22168C;
-        Fri, 16 Jun 2023 14:01:08 +0200 (CEST)
-Date:   Fri, 16 Jun 2023 14:01:02 +0200
-From:   Francesco Dolcini <francesco@dolcini.it>
-To:     Judith Mendez <jm@ti.com>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Schuyler Patton <spatton@ti.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 4/4] DO_NOT_MERGE arm64: dts: ti: Enable MCU MCANs for
- AM62x
-Message-ID: <ZIxO/uo7FICKsmdb@francesco-nb.int.toradex.com>
-References: <20230419223323.20384-1-jm@ti.com>
- <20230419223323.20384-5-jm@ti.com>
+        Fri, 16 Jun 2023 08:01:41 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A964295B
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 05:01:40 -0700 (PDT)
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 432963F16F
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 12:01:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1686916899;
+        bh=CoEbYkXLM9I6EtHl3o7AoX98I0DHZFRUcIFR7I6STKc=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=dImRJiLqPSETtDzvnwcaU1VywvPtshMFg7qidLX41ihwpO/PyDXY3VX6vdASmA1IC
+         EMUjy5Oyo6dV1Rombc/b8brDKtIn9EKNTh229v5BEhRcMGXs+QbnItnqs1gToyUesW
+         fFhzQPg7chFqi/S1vEIPvt4/UzPrWB35ThadbbW/x0NzBcdo7F1UC6tI12r/gvC4Pd
+         mgIg8V83QA6X5mZlt1Ztl9ZfuvOdzEmPI1YMf5/sRt65gGUctRAKSqTaURBh6sJ1U+
+         T1GI7k+8yTxwNRcRuDEcx3DZ50im1Y7971NQO2qlQIG+IEjW4qBR5IXs9mvHAFjeh/
+         8I6o+Wun91JOg==
+Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-4ec790b902bso530629e87.1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 05:01:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686916898; x=1689508898;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CoEbYkXLM9I6EtHl3o7AoX98I0DHZFRUcIFR7I6STKc=;
+        b=OiUC6EBFV6qHKyLASQKIk1dg4obMmikMBdIPXJHRZ2HCxcM79GTBSXaLxjurE0nZDk
+         Ex2c3lGxG2oa+mv0AayquR+1DxY7llWTPnoNmv1sk7O69O/qOYpdJQ9aNufi6xRXeJVS
+         yEQJUzXfXj9l8a3Z8VZQBc5qGQB6RNqRwSmm2za/xGLrUizVN28Z0Ljl0gwRxKe21R32
+         kODk7NOhpJJe0HTlrbVtjrQnpV09t54HfaOdxXzthk8wXY3gCewLzuTKi+HG+JXhrcmi
+         gCpWOKKbmRXr0Yhsy/puTpcB2nEvrYVkIfGEOsTREaFiFn+fLeVlTVhzYweIbkkH+P8E
+         PPhw==
+X-Gm-Message-State: AC+VfDwgtKN1ULpISEfGEB/BCZ97U79CumH4JIK5UCzw05GvhzwtG02j
+        573gEpgOmKTT/gbUSXrhZ0C98lFEdG7G39/gqZKXQr4ozrKrghGrBatyAo1VL5bR54KpDSQXemu
+        MGHNcQzOb+5G9U8rSaOc+u1H+UU8xIQUeWkU0r87ohA==
+X-Received: by 2002:a05:6512:68:b0:4f6:3ab6:3d9e with SMTP id i8-20020a056512006800b004f63ab63d9emr996448lfo.59.1686916898655;
+        Fri, 16 Jun 2023 05:01:38 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ46BRoTvYftQUooYitnHE0Wunvse1BgfFdrCF5EEZxKPT3kX15gcTmGR7Csi/n4zMFHple5qQ==
+X-Received: by 2002:a05:6512:68:b0:4f6:3ab6:3d9e with SMTP id i8-20020a056512006800b004f63ab63d9emr996436lfo.59.1686916898314;
+        Fri, 16 Jun 2023 05:01:38 -0700 (PDT)
+Received: from localhost ([194.191.244.86])
+        by smtp.gmail.com with ESMTPSA id f19-20020a7bc8d3000000b003f7f87ba116sm2026642wml.19.2023.06.16.05.01.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 05:01:37 -0700 (PDT)
+From:   Juerg Haefliger <juerg.haefliger@canonical.com>
+To:     s.nawrocki@samsung.com, andrzej.hajda@intel.com,
+        mchehab@kernel.org, linux-media@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Juerg Haefliger <juerg.haefliger@canonical.com>
+Subject: [PATCH] media: s5k5baf: Add MODULE_FIRMWARE macro
+Date:   Fri, 16 Jun 2023 14:01:35 +0200
+Message-Id: <20230616120136.1026390-1-juerg.haefliger@canonical.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230419223323.20384-5-jm@ti.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 05:33:23PM -0500, Judith Mendez wrote:
-> On AM62x there are no hardware interrupts routed to GIC interrupt
-> controller for MCU MCAN IP, A53 Linux cannot receive hardware
-> interrupts. Since an hrtimer will be used to generate software
-> interrupts, add MCU MCAN nodes to dtsi and default to disabled.
-> 
-> AM62x does not carry on-board CAN transceivers, so instead of
-> changing DTB permanently use an overlay to enable MCU MCANs and to
-> add CAN transceiver nodes.
-> 
-> If an hrtimer is used to generate software interrupts, the two
-> required interrupt attributes in the MCAN node do not have to be
-> included.
-> 
-> Signed-off-by: Judith Mendez <jm@ti.com>
+The module loads firmware so add a MODULE_FIRMWARE macro to provide that
+information via modinfo.
 
-[...]
+Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
+---
+ drivers/media/i2c/s5k5baf.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> +	mcu_mcan1: can@4e00000 {
-this should be mcu_mcan0
+diff --git a/drivers/media/i2c/s5k5baf.c b/drivers/media/i2c/s5k5baf.c
+index 960fbf6428ea..69a3bad54530 100644
+--- a/drivers/media/i2c/s5k5baf.c
++++ b/drivers/media/i2c/s5k5baf.c
+@@ -2031,3 +2031,5 @@ module_i2c_driver(s5k5baf_i2c_driver);
+ MODULE_DESCRIPTION("Samsung S5K5BAF(X) UXGA camera driver");
+ MODULE_AUTHOR("Andrzej Hajda <a.hajda@samsung.com>");
+ MODULE_LICENSE("GPL v2");
++
++MODULE_FIRMWARE(S5K5BAF_FW_FILENAME);
+-- 
+2.37.2
 
-> +		compatible = "bosch,m_can";
-> +		reg = <0x00 0x4e00000 0x00 0x8000>,
-> +			  <0x00 0x4e08000 0x00 0x200>;
-
-[...]
-
-> +	mcu_mcan2: can@4e10000 {
-mcu_mcan1
-
-> +		compatible = "bosch,m_can";
-> +		reg = <0x00 0x4e10000 0x00 0x8000>,
-> +			  <0x00 0x4e18000 0x00 0x200>;
-
-Francesco
