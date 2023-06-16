@@ -2,213 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 992CD733676
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 18:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F2E73367F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 18:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbjFPQs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 12:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35510 "EHLO
+        id S245155AbjFPQt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 12:49:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345658AbjFPQsZ (ORCPT
+        with ESMTP id S1345382AbjFPQtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 12:48:25 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C519358C
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 09:48:22 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-97881a996a0so136029066b.0
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 09:48:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686934100; x=1689526100;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Tr5g+LR86poa7vi9trOMIJcQmYHg1BLUYh+fDHbbZ4k=;
-        b=mw9VZJyFnadMrJUUtmiTBfqkJU/ZTf8r+H20SF4OKP5jmUmk0shC7PyCCoQvHlFXtW
-         DUfg5zFRKNRihsnMoC8brrxS4uD2pU9RaVEme7hDE0VA38JyrIIMVSR4n7/DOPZ21gFB
-         4FZS2PtxAkQAjHNAt+j9faQzeEmssXiTCVYZ4=
+        Fri, 16 Jun 2023 12:49:45 -0400
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BACFC3599
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 09:49:40 -0700 (PDT)
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-311183ef595so687344f8f.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 09:49:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686934100; x=1689526100;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Tr5g+LR86poa7vi9trOMIJcQmYHg1BLUYh+fDHbbZ4k=;
-        b=eBlCkOxLahiUA2hDm0U3bXaICAEOOIT77xD548+jys/v6JXLKomBrurJmTG24gvbzf
-         +OCr8JyELQbWfGknOBmTuBH27TUJeF8eIcF/wmT08Rg8tK/k0n0MDyLq/AYqNrblFLOr
-         2OX1eGF9rRez5Nb60WKNvpsZ4cmeYpFJvE/UHPTBCkF2ARjfE17b+3JF6bYkIt0JhGDy
-         Yry4rYDfqnvewUU91Sr8o2nSBnqe4yOOSdaoG0rPg337cRJfBdV5AGBbkRiP6YIOYj9Y
-         nWctUB+/j8V6cxaSPQwvPWYglqm2Z+I+VIEFILEPqKbFPdAmCp2qxr7Pa++BjJbsQqRU
-         vnUg==
-X-Gm-Message-State: AC+VfDyzE9HnVvGL49kP82swIyTYDOPz17uUEQ5XJvvD3bdRZfmDBI6J
-        /x03E8KrWrv8UTQ/ewCUOysrzpHviuYFM6bFDPqtGhO1
-X-Google-Smtp-Source: ACHHUZ44wRzmKdeXSRD3iIgOFAstgnt194j7TtQlLYa5GgsvYm9AYf9ZlkwShUOyVWpTaoagTyMC1w==
-X-Received: by 2002:a17:907:3188:b0:966:5a6c:752d with SMTP id xe8-20020a170907318800b009665a6c752dmr2209895ejb.20.1686934099783;
-        Fri, 16 Jun 2023 09:48:19 -0700 (PDT)
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
-        by smtp.gmail.com with ESMTPSA id l17-20020a170906939100b0098664ceabf4sm674126ejx.57.2023.06.16.09.48.19
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jun 2023 09:48:19 -0700 (PDT)
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-513ea2990b8so184a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 09:48:19 -0700 (PDT)
-X-Received: by 2002:a50:999d:0:b0:516:6453:1b76 with SMTP id
- m29-20020a50999d000000b0051664531b76mr240103edb.5.1686934098700; Fri, 16 Jun
- 2023 09:48:18 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686934179; x=1689526179;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7uhzZuJe360nFGAcunJNwjhI8gCVocTqioPQqrIFFiQ=;
+        b=DsLgA1fLkx4QAIY4ds8anmyBbyqUPAskgnvF85pgrxBkZc4j4bdAt4Q3+SREdOtgfl
+         wF0g5M0KRmcBwUwJ8HWr4048uT6AoPmRrVUqgTixwK9Dz00A0ts2Ecn3bKMslAMt/IAL
+         UxTIqCex5kzN0SbwORwyx+mXO/LJaSCoOziRPt7yJGn6E6nWY0bddJLQSWbgpzkGsPiD
+         jiEac83CDUVbvXrqS340shJ5IVVt8EkEsUUi7lB/jNNpvenvk3ezQMTI9KjDfi2q7P1O
+         9DAaXLy/I30up2bf1rhp9TR0WTUZDOJcPGyIIG0r/bztCxCTs8czW4M4H1lYcOA30cuw
+         SDAw==
+X-Gm-Message-State: AC+VfDxzIIHqKDoFwVQTysIXW0ECIF2m19imqGx5Z8s3lWaMIypDaTUR
+        CF++f6J6eZSk/6dm1ocq0cs=
+X-Google-Smtp-Source: ACHHUZ7nSX1DziSv47VUmpy7d9dJJlRYkRRezh9hhMtxnPr6pAciww+ES3f3LduDaKH+kUECLJB3vg==
+X-Received: by 2002:adf:d0c8:0:b0:2ee:f77f:3d02 with SMTP id z8-20020adfd0c8000000b002eef77f3d02mr1756166wrh.0.1686934178869;
+        Fri, 16 Jun 2023 09:49:38 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-005.fbsv.net. [2a03:2880:31ff:5::face:b00c])
+        by smtp.gmail.com with ESMTPSA id r17-20020a5d52d1000000b002c71b4d476asm24041377wrv.106.2023.06.16.09.49.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 09:49:38 -0700 (PDT)
+From:   Breno Leitao <leitao@debian.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc:     leit@fb.com,
+        linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND
+        64-BIT))
+Subject: [PATCH v2] x86/bugs: Break down mitigations configurations
+Date:   Fri, 16 Jun 2023 09:48:50 -0700
+Message-Id: <20230616164851.2559415-1-leitao@debian.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230616150618.6073-1-pmladek@suse.com> <20230616150618.6073-5-pmladek@suse.com>
-In-Reply-To: <20230616150618.6073-5-pmladek@suse.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 16 Jun 2023 09:48:06 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=U=ox4ApMbDL7v=ivNF6x=UyG=dd4MU_Dt0rppNCEwCpw@mail.gmail.com>
-Message-ID: <CAD=FV=U=ox4ApMbDL7v=ivNF6x=UyG=dd4MU_Dt0rppNCEwCpw@mail.gmail.com>
-Subject: Re: [PATCH v2 4/6] watchdog/hardlockup: Make HAVE_NMI_WATCHDOG sparc64-specific
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        sparclinux@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+There is no way to disable MDS, TAA, MMIO Stale data mitigation today at
+compilation time. These mitigations are enabled even if
+CONFIG_SPECULATION_MITIGATIONS is unset.
 
-On Fri, Jun 16, 2023 at 8:07=E2=80=AFAM Petr Mladek <pmladek@suse.com> wrot=
-e:
->
-> There are several hardlockup detector implementations and several Kconfig
-> values which allow selection and build of the preferred one.
->
-> CONFIG_HARDLOCKUP_DETECTOR was introduced by the commit 23637d477c1f53acb
-> ("lockup_detector: Introduce CONFIG_HARDLOCKUP_DETECTOR") in v2.6.36.
-> It was a preparation step for introducing the new generic perf hardlockup
-> detector.
->
-> The existing arch-specific variants did not support the to-be-created
-> generic build configurations, sysctl interface, etc. This distinction
-> was made explicit by the commit 4a7863cc2eb5f98 ("x86, nmi_watchdog:
-> Remove ARCH_HAS_NMI_WATCHDOG and rely on CONFIG_HARDLOCKUP_DETECTOR")
-> in v2.6.38.
->
-> CONFIG_HAVE_NMI_WATCHDOG was introduced by the commit d314d74c695f967e105
-> ("nmi watchdog: do not use cpp symbol in Kconfig") in v3.4-rc1. It replac=
-ed
-> the above mentioned ARCH_HAS_NMI_WATCHDOG. At that time, it was still use=
-d
-> by three architectures, namely blackfin, mn10300, and sparc.
->
-> The support for blackfin and mn10300 architectures has been completely
-> dropped some time ago. And sparc is the only architecture with the histor=
-ic
-> NMI watchdog at the moment.
->
-> And the old sparc implementation is really special. It is always built on
-> sparc64. It used to be always enabled until the commit 7a5c8b57cec93196b
-> ("sparc: implement watchdog_nmi_enable and watchdog_nmi_disable") added
-> in v4.10-rc1.
->
-> There are only few locations where the sparc64 NMI watchdog interacts
-> with the generic hardlockup detectors code:
->
->   + implements arch_touch_nmi_watchdog() which is called from the generic
->     touch_nmi_watchdog()
->
->   + implements watchdog_hardlockup_enable()/disable() to support
->     /proc/sys/kernel/nmi_watchdog
->
->   + is always preferred over other generic watchdogs, see
->     CONFIG_HARDLOCKUP_DETECTOR
->
->   + includes asm/nmi.h into linux/nmi.h because some sparc-specific
->     functions are needed in sparc-specific code which includes
->     only linux/nmi.h.
->
-> The situation became more complicated after the commit 05a4a95279311c3
-> ("kernel/watchdog: split up config options") and commit 2104180a53698df5
-> ("powerpc/64s: implement arch-specific hardlockup watchdog") in v4.13-rc1=
-.
-> They introduced HAVE_HARDLOCKUP_DETECTOR_ARCH. It was used for powerpc
-> specific hardlockup detector. It was compatible with the perf one
-> regarding the general boot, sysctl, and programming interfaces.
->
-> HAVE_HARDLOCKUP_DETECTOR_ARCH was defined as a superset of
-> HAVE_NMI_WATCHDOG. It made some sense because all arch-specific
-> detectors had some common requirements, namely:
->
->   + implemented arch_touch_nmi_watchdog()
->   + included asm/nmi.h into linux/nmi.h
->   + defined the default value for /proc/sys/kernel/nmi_watchdog
->
-> But it actually has made things pretty complicated when the generic
-> buddy hardlockup detector was added. Before the generic perf detector
-> was newer supported together with an arch-specific one. But the buddy
-> detector could work on any SMP system. It means that an architecture
-> could support both the arch-specific and buddy detector.
->
-> As a result, there are few tricky dependencies. For example,
-> CONFIG_HARDLOCKUP_DETECTOR depends on:
->
->   ((HAVE_HARDLOCKUP_DETECTOR_PERF || HAVE_HARDLOCKUP_DETECTOR_BUDDY) && !=
-HAVE_NMI_WATCHDOG) || HAVE_HARDLOCKUP_DETECTOR_ARCH
->
-> The problem is that the very special sparc implementation is defined as:
->
->   HAVE_NMI_WATCHDOG && !HAVE_HARDLOCKUP_DETECTOR_ARCH
->
-> Another problem is that the meaning of HAVE_NMI_WATCHDOG is far from clea=
-r
-> without reading understanding the history.
->
-> Make the logic less tricky and more self-explanatory by making
-> HAVE_NMI_WATCHDOG specific for the sparc64 implementation. And rename it =
-to
-> HAVE_HARDLOCKUP_DETECTOR_SPARC64.
->
-> Note that HARDLOCKUP_DETECTOR_PREFER_BUDDY, HARDLOCKUP_DETECTOR_PERF,
-> and HARDLOCKUP_DETECTOR_BUDDY may conflict only with
-> HAVE_HARDLOCKUP_DETECTOR_ARCH. They depend on HARDLOCKUP_DETECTOR
-> and it is not longer enabled when HAVE_NMI_WATCHDOG is set.
->
-> Signed-off-by: Petr Mladek <pmladek@suse.com>
->
-> watchdog/sparc64: Rename HAVE_NMI_WATCHDOG to HAVE_HARDLOCKUP_WATCHDOG_SP=
-ARC64
->
-> The configuration variable HAVE_NMI_WATCHDOG has a generic name but
-> it is selected only for SPARC64.
->
-> It should _not_ be used in general because it is not integrated with
-> the other hardlockup detectors. Namely, it does not support the hardlocku=
-p
-> specific command line parameters and systcl interface. Instead, it is
-> enabled/disabled together with the softlockup detector by the global
-> "watchdog" sysctl.
->
-> Rename it to HAVE_HARDLOCKUP_WATCHDOG_SPARC64 to make the special
-> behavior more clear.
->
-> Also the variable is set only on sparc64. Move the definition
-> from arch/Kconfig to arch/sparc/Kconfig.debug.
->
-> Signed-off-by: Petr Mladek <pmladek@suse.com>
+Create a new KCONFIG option for each mitigation under
+CONFIG_SPECULATION_MITIGATIONS that allows these
+mitigations to be disabled by default at compilation time.
 
-I think you goofed up when squashing the patches. You've now got a
-second patch subject after your first Signed-off-by and then a second
-Signed-off-by... I assume everything after the first Signed-off-by
-should be dropped?
+It is still possible to enable these mitigations by passing kernel
+parameters, even if they are disabled by default.
 
-Other than that:
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+V1->V2: Change the default value of the global mitigation flag, other
+	than disabling at the function itself, so, it could be
+	re-enabled/overwritten if a parameter is passed.
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+---
+ arch/x86/Kconfig           | 31 +++++++++++++++++++++++++++++++
+ arch/x86/kernel/cpu/bugs.c | 12 ++++++++++++
+ 2 files changed, 43 insertions(+)
+
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 53bab123a8ee..ba64f7c9b08d 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -2649,6 +2649,37 @@ config SLS
+ 	  against straight line speculation. The kernel image might be slightly
+ 	  larger.
+ 
++config MITIGATE_MDS
++	bool "Mitigate Microarchitectural Data Sampling (MDS) hardware bug"
++	depends on CPU_SUP_INTEL && X86_64
++	default y
++	help
++	  Enable mitigation for Microarchitectural Data Sampling (MDS). MDS is
++	  a hardware vulnerability which allows unprivileged speculative access
++	  to data which is available in various CPU internal buffer. Deeper
++	  technical information is available in the MDS specific x86 architecture
++	  section: Documentation/arch/x86/mds.rst.
++
++config MITIGATE_TAA
++	bool "Mitigate TSX Asynchronous Abort (TAA) hardware bug"
++	depends on CPU_SUP_INTEL && X86_64
++	default y
++	help
++	  Enable mitigation for TSX Asynchronous Abort (TAA). TAA is a hardware
++	  vulnerability that allows unprivileged speculative access to data
++	  which is available in various CPU internal buffers by using
++	  asynchronous aborts within an Intel TSX transactional region.
++
++config MITIGATE_MMIO_STALE_DATA
++	bool "Mitigate MMIO Stale Data hardware bug"
++	depends on CPU_SUP_INTEL && X86_64
++	default y
++	help
++	  Enable mitigation for MMIO Stale Data hardware bugs.  Processor MMIO
++	  Stale Data Vulnerabilities are a class of memory-mapped I/O (MMIO)
++	  vulnerabilities that can expose data. The vulnerabilities require the
++	  attacker to have access to MMIO.
++
+ endif
+ 
+ config ARCH_HAS_ADD_PAGES
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index 182af64387d0..ba653830796f 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -267,7 +267,11 @@ static void x86_amd_ssb_disable(void)
+ #define pr_fmt(fmt)	"MDS: " fmt
+ 
+ /* Default mitigation for MDS-affected CPUs */
++#if IS_ENABLED(CONFIG_MITIGATE_MDS)
+ static enum mds_mitigations mds_mitigation __ro_after_init = MDS_MITIGATION_FULL;
++#else
++static enum mds_mitigations mds_mitigation __ro_after_init = MDS_MITIGATION_OFF;
++#endif
+ static bool mds_nosmt __ro_after_init = false;
+ 
+ static const char * const mds_strings[] = {
+@@ -327,7 +331,11 @@ enum taa_mitigations {
+ };
+ 
+ /* Default mitigation for TAA-affected CPUs */
++#if IS_ENABLED(CONFIG_MITIGATE_TAA)
+ static enum taa_mitigations taa_mitigation __ro_after_init = TAA_MITIGATION_VERW;
++#else
++static enum taa_mitigations taa_mitigation __ro_after_init = TAA_MITIGATION_OFF;
++#endif
+ static bool taa_nosmt __ro_after_init;
+ 
+ static const char * const taa_strings[] = {
+@@ -428,7 +436,11 @@ enum mmio_mitigations {
+ };
+ 
+ /* Default mitigation for Processor MMIO Stale Data vulnerabilities */
++#if IS_ENABLED(CONFIG_MITIGATE_MMIO_STALE_DATA)
+ static enum mmio_mitigations mmio_mitigation __ro_after_init = MMIO_MITIGATION_VERW;
++#else
++static enum mmio_mitigations mmio_mitigation __ro_after_init = MMIO_MITIGATION_OFF;
++#endif
+ static bool mmio_nosmt __ro_after_init = false;
+ 
+ static const char * const mmio_strings[] = {
+-- 
+2.34.1
+
