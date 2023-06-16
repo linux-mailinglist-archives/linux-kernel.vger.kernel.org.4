@@ -2,70 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A12E973282F
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 08:59:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 555A1732847
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 09:02:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241631AbjFPG7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 02:59:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47566 "EHLO
+        id S244155AbjFPHCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 03:02:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242498AbjFPG7O (ORCPT
+        with ESMTP id S243196AbjFPHBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 02:59:14 -0400
+        Fri, 16 Jun 2023 03:01:17 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC5F2D69;
-        Thu, 15 Jun 2023 23:59:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8937D30FB;
+        Fri, 16 Jun 2023 00:00:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1686898739; x=1718434739;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=B24fwtB2ICXWiKb2YjOOU9xiIvWffWyp4EDuSS+K2kM=;
-  b=HRMaxPE/OZtvLI/8grXIBIbFVJXVTQibEpru4DvOeFxLMWUHDrz5nOf3
-   qJCJmpTN0XjAkSPwaYL1h24FOo2j2IFNq3nmW/X6pPmQlrJfrwHTD1pmF
-   u3sfljDVKbp1syA+omFj7yt9kwGbJ0oPSZtRnYEZadOaMqhYfJqYnmjtO
-   T+QLbUBAvsqZSxkC8gMgDfxEHhmSSPtDen07JXOeDo3jhhIrDhqQJQ6Oz
-   9b6Ciar9T+jjpduwqOGLohtu/hhQMJmWAe1j7qPJGNks/hlbu4hbNdbW4
-   LQ+cybo7LBOeOTsEsbdV5NZQP1y3MIwCogGWf6p2KMuDkL0Zc10GoaABG
-   A==;
+  t=1686898842; x=1718434842;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=MmKqtmrlh+EYKLQqFwRe8hMCaqMpX+dV2NfE6pRnra0=;
+  b=AoFSNwAkxgTsL7UhAHqLcdB6Zx7uJtjKY9669xixrI1bbrorLBwyZGPo
+   RoUglJC+Kzt74mwI1LeBgCt0RKqGdnUHVx2Zg7Wl+PPCfmMqi3cAMibMP
+   BzO1Ijdfo/bAgDG+LD/9uSByqbtfUdnvZhjFXRR624Jxtn1kLNsIdQCUB
+   KvPr3ILFsfwscp1sQ5eu7aw7LTC1ePFetftTgx47Uq/+LDFhEJWtCNL15
+   ihRgBRA1cTgUIDK4X88LM4erI7pgpgaA5Ar1YBW8tekeKZF8ZaeDgO7Vw
+   2pVdHMkwzigQgMiyAjz/y9xWcoFlB/wqiy0BowjThNXSSkycWSAq87FHi
+   g==;
 X-IronPort-AV: E=Sophos;i="6.00,246,1681196400"; 
-   d="asc'?scan'208";a="218830239"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+   d="scan'208";a="218830621"
+X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Jun 2023 23:58:58 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Jun 2023 00:00:41 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 15 Jun 2023 23:58:58 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Thu, 15 Jun 2023 23:58:55 -0700
-Date:   Fri, 16 Jun 2023 07:58:29 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <loongarch@lists.linux.dev>, Jianmin Lv <lvjianmin@loongson.cn>,
-        <wanghongliang@loongson.cn>, Liu Peibao <liupeibao@loongson.cn>,
-        <loongson-kernel@lists.loongnix.cn>
-Subject: Re: [PATCH v3 2/3] soc: dt-bindings: add loongson-2 pm
-Message-ID: <20230616-entangled-cauterize-1cbde7401b91@wendy>
-References: <20230615091757.24686-1-zhuyinbo@loongson.cn>
- <20230615091757.24686-3-zhuyinbo@loongson.cn>
+ 15.1.2507.21; Fri, 16 Jun 2023 00:00:41 -0700
+Received: from den-dk-m31857.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Fri, 16 Jun 2023 00:00:37 -0700
+Message-ID: <3225c5197b80960a66c89214b4823080388963d2.camel@microchip.com>
+Subject: Re: [PATCH v7 01/22] net/tcp: Prepare tcp_md5sig_pool for TCP-AO
+From:   Steen Hegelund <steen.hegelund@microchip.com>
+To:     Dmitry Safonov <dima@arista.com>
+CC:     David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        <linux-kernel@vger.kernel.org>,
+        "Andy Lutomirski" <luto@amacapital.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "Bob Gilligan" <gilligan@arista.com>,
+        Dan Carpenter <error27@gmail.com>,
+        "David Laight" <David.Laight@aculab.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Donald Cassidy <dcassidy@redhat.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Francesco Ruggeri <fruggeri05@gmail.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "Hideaki YOSHIFUJI" <yoshfuji@linux-ipv6.org>,
+        Ivan Delalande <colona@arista.com>,
+        Leonard Crestez <cdleonard@gmail.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        <netdev@vger.kernel.org>
+Date:   Fri, 16 Jun 2023 09:00:36 +0200
+In-Reply-To: <21845b01-a915-d80a-8b87-85c6987c7691@arista.com>
+References: <20230614230947.3954084-1-dima@arista.com>
+         <20230614230947.3954084-2-dima@arista.com>
+         <255b4de132365501c6e1e97246c30d9729860546.camel@microchip.com>
+         <21845b01-a915-d80a-8b87-85c6987c7691@arista.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.48.3 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="pKwHiKupU1CL+x6/"
-Content-Disposition: inline
-In-Reply-To: <20230615091757.24686-3-zhuyinbo@loongson.cn>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -76,111 +86,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---pKwHiKupU1CL+x6/
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+SGkgRG1pdHJ5LAoKT24gVGh1LCAyMDIzLTA2LTE1IGF0IDE3OjQ0ICswMTAwLCBEbWl0cnkgU2Fm
+b25vdiB3cm90ZToKPiBFWFRFUk5BTCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4g
+YXR0YWNobWVudHMgdW5sZXNzIHlvdSBrbm93IHRoZQo+IGNvbnRlbnQgaXMgc2FmZQo+IAo+IEhp
+IFN0ZWVuLAo+IAo+IE9uIDYvMTUvMjMgMTE6NDUsIFN0ZWVuIEhlZ2VsdW5kIHdyb3RlOgo+ID4g
+SGkgRG1pdHJ5LAo+ID4gCj4gPiBPbiBUaHUsIDIwMjMtMDYtMTUgYXQgMDA6MDkgKzAxMDAsIERt
+aXRyeSBTYWZvbm92IHdyb3RlOgo+IFsuLl0KPiA+ID4gKy8qKgo+ID4gPiArICogdGNwX3NpZ3Bv
+b2xfYWxsb2NfYWhhc2ggLSBhbGxvY2F0ZXMgcG9vbCBmb3IgYWhhc2ggcmVxdWVzdHMKPiA+ID4g
+KyAqIEBhbGc6IG5hbWUgb2YgYXN5bmMgaGFzaCBhbGdvcml0aG0KPiA+ID4gKyAqIEBzY3JhdGNo
+X3NpemU6IHJlc2VydmUgYSB0Y3Bfc2lncG9vbDo6c2NyYXRjaCBidWZmZXIgb2YgdGhpcyBzaXpl
+Cj4gPiA+ICsgKi8KPiA+ID4gK2ludCB0Y3Bfc2lncG9vbF9hbGxvY19haGFzaChjb25zdCBjaGFy
+ICphbGcsIHNpemVfdCBzY3JhdGNoX3NpemUpCj4gPiA+ICt7Cj4gPiA+ICvCoMKgwqDCoMKgwqAg
+aW50IGksIHJldDsKPiA+ID4gKwo+ID4gPiArwqDCoMKgwqDCoMKgIC8qIHNsb3ctcGF0aCAqLwo+
+ID4gPiArwqDCoMKgwqDCoMKgIG11dGV4X2xvY2soJmNwb29sX211dGV4KTsKPiA+ID4gK8KgwqDC
+oMKgwqDCoCByZXQgPSBzaWdwb29sX3Jlc2VydmVfc2NyYXRjaChzY3JhdGNoX3NpemUpOwo+ID4g
+PiArwqDCoMKgwqDCoMKgIGlmIChyZXQpCj4gPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgIGdvdG8gb3V0Owo+ID4gPiArwqDCoMKgwqDCoMKgIGZvciAoaSA9IDA7IGkgPCBjcG9vbF9w
+b3B1bGF0ZWQ7IGkrKykgewo+ID4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpZiAo
+IWNwb29sW2ldLmFsZykKPiA+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgIGNvbnRpbnVlOwo+ID4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBp
+ZiAoc3RyY21wKGNwb29sW2ldLmFsZywgYWxnKSkKPiA+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGNvbnRpbnVlOwo+ID4gPiArCj4gPiA+ICvCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgIGlmIChrcmVmX3JlYWQoJmNwb29sW2ldLmtyZWYpID4gMCkK
+PiA+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGtyZWZf
+Z2V0KCZjcG9vbFtpXS5rcmVmKTsKPiA+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+ZWxzZQo+ID4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+a3JlZl9pbml0KCZjcG9vbFtpXS5rcmVmKTsKPiA+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqAgcmV0ID0gaTsKPiA+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZ290byBv
+dXQ7Cj4gPiA+ICvCoMKgwqDCoMKgwqAgfQo+ID4gCj4gPiBIZXJlIGl0IGxvb2tzIHRvIG1lIGxp
+a2UgeW91IHdpbGwgbmV2ZXIgZ2V0IHRvIHRoaXMgcGFydCBvZiB0aGUgY29kZSBzaW5jZQo+ID4g
+eW91Cj4gPiBhbHdheXMgZW5kIHVwIGdvaW5nIHRvIHRoZSBvdXQgbGFiZWwgaW4gdGhlIHByZXZp
+b3VzIGxvb3AuCj4gCj4gV2VsbCwgbm90IGV4YWN0bHk6IHRoaXMgcGFydCBpcyBsb29raW5nIGlm
+IHRoZSBjcnlwdG8gYWxnb3JpdGhtIGlzCj4gYWxyZWFkeSBpbiB0aGlzIHBvb2wsIHNvIHRoYXQg
+aXQgY2FuIGluY3JlbWVudCByZWZjb3VudGVyIHJhdGhlciB0aGFuCj4gaW5pdGlhbGl6ZSBhIG5l
+dyB0Zm0uIEluIGNhc2Ugc3RyY21wKGNwb29sW2ldLmFsZywgYWxnKSBmYWlscywgdGhpcyBsb29w
+Cj4gd2lsbCBuZXZlciBnb3RvIG91dC4KCkFoLCByaWdodCwgeW91IG5ldmVyIGZpbmQgYW55IGFs
+Z28gYW5kIHRoZW4gZ2V0IG91dCBhdCB0aGUgZW5kIG9mIHRoZSBsaXN0LgoKPiAKPiBJLmUuLCB5
+b3UgaXNzdWVkIHByZXZpb3VzbHkgc2V0c29ja29wdCgpcyBmb3IgVENQLU1ENSBhbmQgVENQLUFP
+IHdpdGgKPiBITUFDLVNIQTEsIHNvIGluIHRoaXMgcG9vbCB0aGVyZSdsbCBiZSB0d28gYWxnb3Jp
+dGhtczogIm1kNSIgYW5kCj4gImhtYWMoc2hhMSkiLiBOb3cgaWYgeW91IHdhbnQgdG8gdXNlIFRD
+UC1BTyB3aXRoICJjbWFjKGFlczEyOCkiIG9yCj4gImhtYWMoc2hhMjU2KSIsIHlvdSB3b24ndCBm
+aW5kIHRoZW0gaW4gdGhlIHBvb2wgeWV0Lgo+IAo+ID4gCj4gPiA+ICsKPiA+ID4gK8KgwqDCoMKg
+wqDCoCBmb3IgKGkgPSAwOyBpIDwgY3Bvb2xfcG9wdWxhdGVkOyBpKyspIHsKPiA+ID4gK8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgaWYgKCFjcG9vbFtpXS5hbGcpCj4gPiA+ICvCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBicmVhazsKPiA+ID4gK8KgwqDC
+oMKgwqDCoCB9Cj4gPiA+ICvCoMKgwqDCoMKgwqAgaWYgKGkgPj0gQ1BPT0xfU0laRSkgewo+ID4g
+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXQgPSAtRU5PU1BDOwo+ID4gPiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBnb3RvIG91dDsKPiA+ID4gK8KgwqDCoMKgwqDCoCB9
+Cj4gPiA+ICsKPiA+ID4gK8KgwqDCoMKgwqDCoCByZXQgPSBfX2Nwb29sX2FsbG9jX2FoYXNoKCZj
+cG9vbFtpXSwgYWxnKTsKPiA+ID4gK8KgwqDCoMKgwqDCoCBpZiAoIXJldCkgewo+ID4gPiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXQgPSBpOwo+ID4gPiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCBpZiAoaSA9PSBjcG9vbF9wb3B1bGF0ZWQpCj4gPiA+ICvCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjcG9vbF9wb3B1bGF0ZWQrKzsKPiA+
+ID4gK8KgwqDCoMKgwqDCoCB9Cj4gPiA+ICtvdXQ6Cj4gPiA+ICvCoMKgwqDCoMKgwqAgbXV0ZXhf
+dW5sb2NrKCZjcG9vbF9tdXRleCk7Cj4gPiA+ICvCoMKgwqDCoMKgwqAgcmV0dXJuIHJldDsKPiA+
+ID4gK30KPiA+ID4gK0VYUE9SVF9TWU1CT0xfR1BMKHRjcF9zaWdwb29sX2FsbG9jX2FoYXNoKTsK
+PiA+ID4gKwo+ID4gCj4gPiAuLi4gc25pcCAuLi4KPiA+IAo+ID4gCj4gPiA+IMKgY2xlYXJfaGFz
+aDoKPiA+ID4gLcKgwqDCoMKgwqDCoCB0Y3BfcHV0X21kNXNpZ19wb29sKCk7Cj4gPiA+IC1jbGVh
+cl9oYXNoX25vcHV0Ogo+ID4gPiArwqDCoMKgwqDCoMKgIHRjcF9zaWdwb29sX2VuZCgmaHApOwo+
+ID4gPiArY2xlYXJfaGFzaF9ub3N0YXJ0Ogo+ID4gPiDCoMKgwqDCoMKgwqDCoCBtZW1zZXQobWQ1
+X2hhc2gsIDAsIDE2KTsKPiA+ID4gwqDCoMKgwqDCoMKgwqAgcmV0dXJuIDE7Cj4gPiA+IMKgfQo+
+IFRoYW5rcywKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIERtaXRyeQo+IAoKUmV2aWV3ZWQtYnk6
+IFN0ZWVuIEhlZ2VsdW5kIDxTdGVlbi5IZWdlbHVuZEBtaWNyb2NoaXAuY29tPgoKQlIKU3RlZW4K
 
-Hey,
 
-Rob, could you take a look at this please? On v2 while you were away I
-was kinda struggling w/ suspend-address & whether it made sense.
-
-The v2 & v1 are here:
-https://lore.kernel.org/all/20230522093156.7108-3-zhuyinbo@loongson.cn/
-https://lore.kernel.org/all/20230517073149.31980-3-zhuyinbo@loongson.cn/
-
-On Thu, Jun 15, 2023 at 05:17:56PM +0800, Yinbo Zhu wrote:
-> Add the Loongson-2 SoC Power Management Controller binding with DT
-> schema format using json-schema.
->=20
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> ---
->  .../soc/loongson/loongson,ls2k-pmc.yaml       | 53 +++++++++++++++++++
->  MAINTAINERS                                   |  6 +++
->  2 files changed, 59 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/loongson/loongs=
-on,ls2k-pmc.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k=
--pmc.yaml b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pm=
-c.yaml
-> new file mode 100644
-> index 000000000000..32499bd10f8c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.ya=
-ml
-
-The filename should ideally match one of the compatibles.
-
-> @@ -0,0 +1,53 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/soc/loongson/loongson,ls2k-pmc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Loongson-2 Power Manager controller
-> +
-> +maintainers:
-> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - loongson,ls2k1000-pmc
-> +              - loongson,ls2k0500-pmc
-
-I notice the driver only supports one of these two. Is there a reason
-for that?
-
-> +          - const: syscon
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  suspend-address:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      The "suspend-address" is a deep sleep state (Suspend To RAM)
-> +      firmware entry address which was jumped from kernel and it's
-> +      value was dependent on specific platform firmware code. In
-> +      addition, the PM need according to it to indicate that current
-> +      SoC whether support Suspend To RAM.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    pmc: pm@1fe27000 {
-       ^^^
-
-nit: this label isn't used, so you can drop it.
-
-Cheers,
-Conor.
-
---pKwHiKupU1CL+x6/
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIwIFQAKCRB4tDGHoIJi
-0j0SAP4yEcxiKsuqkTFGnDCYoyr/wDXBuBcURftefENgTTZaRAEA4utfLQgRdtBs
-jlzXhgfdNIcQkw/4ENO94EAQ69eyfQs=
-=cZGJ
------END PGP SIGNATURE-----
-
---pKwHiKupU1CL+x6/--
