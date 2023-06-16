@@ -2,57 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A052473299A
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:13:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBED073298B
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:11:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244920AbjFPIN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 04:13:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54836 "EHLO
+        id S243554AbjFPILG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 04:11:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242564AbjFPIN0 (ORCPT
+        with ESMTP id S234405AbjFPILE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 04:13:26 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCD22962
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 01:13:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686903206; x=1718439206;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=6ItNP+JKSJICj4eyo+r6suaHTPScQyJ1JFtXO/FOP/0=;
-  b=Q9fhaTqgipqVwUG3xsWDKuT9eKdmAR2EyYTO5s0opmgC/gFnkrIhzQax
-   s045mqUZtE1eEuYB2PDywTsRFVgNRUd3pPC4p+0W7ygcRzAX/AdBbzDOV
-   KF9ofTRhcBRk7OIhluzYaDa8VSc1DrjxpVc99nnK/A1Clct0aiA/gTurE
-   f3mq58Knrafs2jz4ZOQZLYAx0PVjZB+oRSdPodow+awEnJCJHYJl0fWR7
-   DkEgln4UqH1+cI+I+8Jys1ckaKYlztguZmI2J+OwW+VgN9PPtlkg6Khw8
-   BnCOj+4ZDTTV40ovy6vFb3krSmBWpgd5p/N+ka7X8tm+ceglcQlNlLJp3
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="343898449"
-X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
-   d="scan'208";a="343898449"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 01:13:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="959538546"
-X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
-   d="scan'208";a="959538546"
-Received: from tower.bj.intel.com ([10.238.157.62])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 01:13:21 -0700
-From:   Yanfei Xu <yanfei.xu@intel.com>
-To:     dwmw2@infradead.org, baolu.lu@linux.intel.com, joro@8bytes.org,
-        will@kernel.org, robin.murphy@arm.com, tina.zhang@intel.com
-Cc:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        yanfei.xu@intel.com
-Subject: [PATCH v2] iommu/vt-d: Fix to flush cache of PASID directory table
-Date:   Fri, 16 Jun 2023 16:10:45 +0800
-Message-Id: <20230616081045.721873-1-yanfei.xu@intel.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 16 Jun 2023 04:11:04 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7E2295B
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 01:11:03 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-977d4a1cf0eso51891766b.1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 01:11:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686903062; x=1689495062;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Q+nb5C/fzCmkNH4tFkgENtFMDkmGCOR2QUSuKVrANoM=;
+        b=a2Mlb03zrr9JJo0Q+0A43GCTfWHuVRjCiS/gF7JyjDz88V4vbA0ia7lc9aFr+zYAHP
+         mjZnYFtMIAX7sTsI8nHAhX3q4+3tc8qfOgLpnZ5uKhQN9Jkq1eEQioOZ1VTLmszIuQAC
+         5hyXUj7UplGMDJtzrRggEETAHM3bbWJ6ppB3SbWH13IHZxy9I71Sc3EWKKwH2eUxukg4
+         0Qe1Xp900MGM5mJ573ZkonCWD9YDBkcLMkkDq8ezH38qSJAHTrJtPNP78nKBiPYRyySw
+         vSxPwvarRlNopMoccbz9uYqn4ihPdbAiqcaMvIPPjlCa0d3eBD0qcyFU1QVrRPoGYrt9
+         a89w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686903062; x=1689495062;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q+nb5C/fzCmkNH4tFkgENtFMDkmGCOR2QUSuKVrANoM=;
+        b=G2r+Ox30VBtgbaUdHR1yt7E3rgX6WtUhWg/w29Z8KJnkqCOt+GXpOE19T9S6jal3kV
+         K8kEgGT/EaZx1/psSiu7rfvC6SElN2Y07t+FrK0PJu8zr7ENflql3QZSm3ddK2qLg3XM
+         MsSSiBp6QeiXCU99144pqdDv5GUiML6ALJIIkwDIOJDrviVm0xXaX/keewTFhKGG8n+f
+         Zk1uuQOMJ0kh05TlC7llpGHVWW42brxOg+ZvrxEfhGeL62gEC/l7O5kIJH+SZvfd85nV
+         rweDXSVqjNG1ISvA5HjxMwCKiUP08ikLrZpnXNsZS8tAEZxY4OsF2MnavctyKDqwo9ri
+         hImA==
+X-Gm-Message-State: AC+VfDysmbJcKxVAQwYK6xEe0f6qg7apDGReoKcrCJOvDaAHA/2omPdf
+        Ak3gsp0mzXsnGqP+1Gx0eD9bHw==
+X-Google-Smtp-Source: ACHHUZ6DK25zXtnnsSAW02R2ilsBGImwvgHJkzYxnvXxZVHh9u1UxrheNHyrTDscWNmMYQ0v4zqmVw==
+X-Received: by 2002:a17:907:928b:b0:973:cc48:f19c with SMTP id bw11-20020a170907928b00b00973cc48f19cmr1002834ejc.56.1686903062144;
+        Fri, 16 Jun 2023 01:11:02 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id s24-20020a1709060c1800b00969f25b96basm10347260ejf.204.2023.06.16.01.11.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Jun 2023 01:11:01 -0700 (PDT)
+Message-ID: <de774e98-0ae1-28b4-c0e1-6dc79905498f@linaro.org>
+Date:   Fri, 16 Jun 2023 10:10:59 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 1/2] dt-bindings: interconnect: qcom,bwmon: Document
+ SC7180 BWMONs
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        cros-qcom-dts-watchers@chromium.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Nikita Travkin <nikita@trvn.ru>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230616-topic-sc7180_bwmons-v1-0-4ddb96f9a6cd@linaro.org>
+ <20230616-topic-sc7180_bwmons-v1-1-4ddb96f9a6cd@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230616-topic-sc7180_bwmons-v1-1-4ddb96f9a6cd@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,38 +86,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Even the PCI devices don't support pasid capability, PASID
-table is mandatory for a PCI device in scalable mode. However
-flushing cache of pasid directory table for these devices are
-not taken after pasid table is allocated as the "size" of
-table is zero. Fix it by calculating the size by page order.
+On 16/06/2023 01:46, Konrad Dybcio wrote:
+> SC7180 - just like SC7280 - has a BWMONv4 for CPU-LLCC and a BWMONv5
+> for DDR-LLCC paths. Document them.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
 
-Found this when reading the code, no actual problem encountered
-for now
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Fixes: 194b3348bdbb ("iommu/vt-d: Fix PASID directory pointer coherency")
-Suggested-by: Lu Baolu <baolu.lu@linux.intel.com>
-Signed-off-by: Yanfei Xu <yanfei.xu@intel.com>
----
-v1->v2:
-  use variable "order" to calculate the table size (Suggested by baolu)
-
- drivers/iommu/intel/pasid.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/iommu/intel/pasid.c b/drivers/iommu/intel/pasid.c
-index c5d479770e12..49fc5a038a14 100644
---- a/drivers/iommu/intel/pasid.c
-+++ b/drivers/iommu/intel/pasid.c
-@@ -129,7 +129,7 @@ int intel_pasid_alloc_table(struct device *dev)
- 	info->pasid_table = pasid_table;
- 
- 	if (!ecap_coherent(info->iommu->ecap))
--		clflush_cache_range(pasid_table->table, size);
-+		clflush_cache_range(pasid_table->table, (1 << order) * PAGE_SIZE);
- 
- 	return 0;
- }
--- 
-2.34.1
+Best regards,
+Krzysztof
 
