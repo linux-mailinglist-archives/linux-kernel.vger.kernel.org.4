@@ -2,107 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18B44732EA5
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F71C732E8C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:33:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345194AbjFPKeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 06:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56710 "EHLO
+        id S1344953AbjFPKdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 06:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344993AbjFPKdO (ORCPT
+        with ESMTP id S1344926AbjFPKcd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 06:33:14 -0400
-Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1888059C1;
-        Fri, 16 Jun 2023 03:28:19 -0700 (PDT)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1qA6fY-003lEH-TO; Fri, 16 Jun 2023 18:27:05 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 16 Jun 2023 18:27:04 +0800
-Date:   Fri, 16 Jun 2023 18:27:04 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org,
-        syzbot+13a08c0bf4d212766c3c@syzkaller.appspotmail.com,
-        syzbot+14234ccf6d0ef629ec1a@syzkaller.appspotmail.com,
-        syzbot+4e2e47f32607d0f72d43@syzkaller.appspotmail.com,
-        syzbot+472626bb5e7c59fb768f@syzkaller.appspotmail.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] crypto: af_alg/hash: Fix recvmsg() after
- sendmsg(MSG_MORE)
-Message-ID: <ZIw4+Go7ZIth+CsY@gondor.apana.org.au>
-References: <1679829.1686785273@warthog.procyon.org.uk>
+        Fri, 16 Jun 2023 06:32:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B83C44A4;
+        Fri, 16 Jun 2023 03:28:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5146563628;
+        Fri, 16 Jun 2023 10:27:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDD34C433C8;
+        Fri, 16 Jun 2023 10:27:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686911243;
+        bh=tJx8afwHV6Ld0IeRrbLffo1EPhLFV0Glp6NzQDUm3Ns=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kt3xP/y1fsa8saq0O+ZRa5JBm4HjbpK1Ct12lF/nyMPtUGMSAM9vJVFSsw6lMG6fy
+         40apq9Svf0ejId8+H6o92QJuanYVLGSMtf4dfByVZwmr6Gt4011JcP5/hrrYl7shLA
+         S69HBdQbJi3gD9tAZbH6Tr5XxPyhD8B5zo5CUBtb2XNBegwMIsaVaqrHGPHOD45EgE
+         UO2YUtxO3wWAQrYN7O1mE6yfEcuy3AotOgZ/VcW21D5Ba4e1flw2Ytno/+IGS8d/Aq
+         xSwRqPTVZgHbtmazr4idj8HTBG9LLQltviAOUE/1Yxk1Hb8BkogzhHoGiNbUTMmjUg
+         36X4hEfPaGBdw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sasha Levin <sashal@kernel.org>, linux-input@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 01/16] Input: soc_button_array - add invalid acpi_index DMI quirk handling
+Date:   Fri, 16 Jun 2023 06:27:04 -0400
+Message-Id: <20230616102721.673775-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1679829.1686785273@warthog.procyon.org.uk>
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
-        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: **
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 5.15.117
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 12:27:53AM +0100, David Howells wrote:
->     
-> If an AF_ALG socket bound to a hashing algorithm is sent a zero-length
-> message with MSG_MORE set and then recvmsg() is called without first
-> sending another message without MSG_MORE set to end the operation, an oops
-> will occur because the crypto context and result doesn't now get set up in
-> advance because hash_sendmsg() now defers that as long as possible in the
-> hope that it can use crypto_ahash_digest() - and then because the message
-> is zero-length, it the data wrangling loop is skipped.
-> 
-> Fix this by always making a pass of the loop, even in the case that no data
-> is provided to the sendmsg().
-> 
-> Fix also extract_iter_to_sg() to handle a zero-length iterator by returning
-> 0 immediately.
-> 
-> Whilst we're at it, remove the code to create a kvmalloc'd scatterlist if
-> we get more than ALG_MAX_PAGES - this shouldn't happen.
-> 
-> Fixes: c662b043cdca ("crypto: af_alg/hash: Support MSG_SPLICE_PAGES")
-> Reported-by: syzbot+13a08c0bf4d212766c3c@syzkaller.appspotmail.com
-> Link: https://lore.kernel.org/r/000000000000b928f705fdeb873a@google.com/
-> Reported-by: syzbot+14234ccf6d0ef629ec1a@syzkaller.appspotmail.com
-> Link: https://lore.kernel.org/r/000000000000c047db05fdeb8790@google.com/
-> Reported-by: syzbot+4e2e47f32607d0f72d43@syzkaller.appspotmail.com
-> Link: https://lore.kernel.org/r/000000000000bcca3205fdeb87fb@google.com/
-> Reported-by: syzbot+472626bb5e7c59fb768f@syzkaller.appspotmail.com
-> Link: https://lore.kernel.org/r/000000000000b55d8805fdeb8385@google.com/
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> Tested-by: syzbot+13a08c0bf4d212766c3c@syzkaller.appspotmail.com
-> Tested-by: syzbot+14234ccf6d0ef629ec1a@syzkaller.appspotmail.com
-> Tested-by: syzbot+4e2e47f32607d0f72d43@syzkaller.appspotmail.com
-> Tested-by: syzbot+472626bb5e7c59fb768f@syzkaller.appspotmail.com
-> cc: Herbert Xu <herbert@gondor.apana.org.au>
-> cc: "David S. Miller" <davem@davemloft.net>
-> cc: Eric Dumazet <edumazet@google.com>
-> cc: Jakub Kicinski <kuba@kernel.org>
-> cc: Paolo Abeni <pabeni@redhat.com>
-> cc: Jens Axboe <axboe@kernel.dk>
-> cc: Matthew Wilcox <willy@infradead.org>
-> cc: linux-crypto@vger.kernel.org
-> cc: netdev@vger.kernel.org
-> ---
->  crypto/algif_hash.c |   21 +++++----------------
->  lib/scatterlist.c   |    2 +-
->  2 files changed, 6 insertions(+), 17 deletions(-)
+From: Hans de Goede <hdegoede@redhat.com>
 
-Acked-by: Herbert Xu <herbert@gondor.apana.org.au>
+[ Upstream commit 20a99a291d564a559cc2fd013b4824a3bb3f1db7 ]
 
-Thanks,
+Some devices have a wrong entry in their button array which points to
+a GPIO which is required in another driver, so soc_button_array must
+not claim it.
+
+A specific example of this is the Lenovo Yoga Book X90F / X90L,
+where the PNP0C40 home button entry points to a GPIO which is not
+a home button and which is required by the lenovo-yogabook driver.
+
+Add a DMI quirk table which can specify an ACPI GPIO resource index which
+should be skipped; and add an entry for the Lenovo Yoga Book X90F / X90L
+to this new DMI quirk table.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Link: https://lore.kernel.org/r/20230414072116.4497-1-hdegoede@redhat.com
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/input/misc/soc_button_array.c | 30 +++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+
+diff --git a/drivers/input/misc/soc_button_array.c b/drivers/input/misc/soc_button_array.c
+index 31c02c2019c1c..67a134c8448d2 100644
+--- a/drivers/input/misc/soc_button_array.c
++++ b/drivers/input/misc/soc_button_array.c
+@@ -108,6 +108,27 @@ static const struct dmi_system_id dmi_use_low_level_irq[] = {
+ 	{} /* Terminating entry */
+ };
+ 
++/*
++ * Some devices have a wrong entry which points to a GPIO which is
++ * required in another driver, so this driver must not claim it.
++ */
++static const struct dmi_system_id dmi_invalid_acpi_index[] = {
++	{
++		/*
++		 * Lenovo Yoga Book X90F / X90L, the PNP0C40 home button entry
++		 * points to a GPIO which is not a home button and which is
++		 * required by the lenovo-yogabook driver.
++		 */
++		.matches = {
++			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Intel Corporation"),
++			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "CHERRYVIEW D1 PLATFORM"),
++			DMI_EXACT_MATCH(DMI_PRODUCT_VERSION, "YETI-11"),
++		},
++		.driver_data = (void *)1l,
++	},
++	{} /* Terminating entry */
++};
++
+ /*
+  * Get the Nth GPIO number from the ACPI object.
+  */
+@@ -137,6 +158,8 @@ soc_button_device_create(struct platform_device *pdev,
+ 	struct platform_device *pd;
+ 	struct gpio_keys_button *gpio_keys;
+ 	struct gpio_keys_platform_data *gpio_keys_pdata;
++	const struct dmi_system_id *dmi_id;
++	int invalid_acpi_index = -1;
+ 	int error, gpio, irq;
+ 	int n_buttons = 0;
+ 
+@@ -154,10 +177,17 @@ soc_button_device_create(struct platform_device *pdev,
+ 	gpio_keys = (void *)(gpio_keys_pdata + 1);
+ 	n_buttons = 0;
+ 
++	dmi_id = dmi_first_match(dmi_invalid_acpi_index);
++	if (dmi_id)
++		invalid_acpi_index = (long)dmi_id->driver_data;
++
+ 	for (info = button_info; info->name; info++) {
+ 		if (info->autorepeat != autorepeat)
+ 			continue;
+ 
++		if (info->acpi_index == invalid_acpi_index)
++			continue;
++
+ 		error = soc_button_lookup_gpio(&pdev->dev, info->acpi_index, &gpio, &irq);
+ 		if (error || irq < 0) {
+ 			/*
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+2.39.2
+
