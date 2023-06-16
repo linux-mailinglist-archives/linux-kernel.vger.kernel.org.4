@@ -2,98 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B51F57326A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 07:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FDB47326A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 07:31:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240852AbjFPFar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 01:30:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35556 "EHLO
+        id S241020AbjFPFbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 01:31:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240942AbjFPFa1 (ORCPT
+        with ESMTP id S230378AbjFPFbf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 01:30:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AAAE2D6A;
-        Thu, 15 Jun 2023 22:30:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Fri, 16 Jun 2023 01:31:35 -0400
+Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E4E2943;
+        Thu, 15 Jun 2023 22:31:33 -0700 (PDT)
+Received: from authenticated-user (box.trvn.ru [194.87.146.52])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9CD561DA9;
-        Fri, 16 Jun 2023 05:30:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E6EF4C433C9;
-        Fri, 16 Jun 2023 05:30:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686893423;
-        bh=r4MmrsvbionKD2QAyPaftFnsfjcVFtcE4wKGX9A+nyg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=rbNYM5iOqMZwA0fvSJKEHMPeMs+wOHMqX03lVuV5evWb2i2XECQKFLGniibVI3duN
-         IDRY9QXhQMJDO+DCS8HUZX8xAZSLz7i+tanQTlnpTgMtU14oIT43oTJNCcVA1ra1fS
-         U6RhX8GciNo+dzkPNx7ZlVizYl/mesE15VxoD4CQpfi8DHnYpXVN2Rs2J9zp9safBK
-         jPOZRsxPgS79jGir7MfDyV5JLUFVqI1pKvJaI3RHEtrEi+AK++Qr7fHCPew2eD1p7p
-         AwSOumVYrRQGyB1mFUb6FTjI2gOfMn/Y3NpFE4CTzilYmTj7+1K8By9HdWNQwVq1+F
-         aZKJEosZCpOmg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C50DCC3274B;
-        Fri, 16 Jun 2023 05:30:22 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by box.trvn.ru (Postfix) with ESMTPSA id 58B3A40901;
+        Fri, 16 Jun 2023 10:31:28 +0500 (+05)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
+        t=1686893489; bh=W3BlNMaiG3cHQL4Ng0ytzSXIonyV1hxmRIBmdcXY2DA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=43O0re6ckxF+pQP5jc8kmicy2CjfzN4Fztdb4MQIovS2GMHHP8RD0DnSF5ofvMito
+         +IoGeQLlyTHvVsZULfGobaaTH4nJ1uUP/wcMUSbtHYkZyYI20779H8OVPHSBWiaTDq
+         sY4nLro8MukesWGvHnLi+vtRdvufQShqqaiNVNNc0JUQi758R4M5WCk+/njE5d6qnE
+         wYsX7iBx6KEo6pYa3PVzesoYOIOrbSkUdpyx/LSc2JLc3hJl30CT/8Hnln37YEqw5H
+         9VDr5IDYReVyTTRRn8CCVeP98XqMaKjmNj3YulIF3gnUGAYDIBBk+vHXnpVNFAsoLS
+         K8sesLLznxnUQ==
 MIME-Version: 1.0
+Date:   Fri, 16 Jun 2023 10:31:26 +0500
+From:   Nikita Travkin <nikita@trvn.ru>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: venus: core: Set up secure memory ranges for
+ SC7180
+In-Reply-To: <20230616-topic-sc7180_venus_lawp-v1-1-15a8f44d474e@linaro.org>
+References: <20230616-topic-sc7180_venus_lawp-v1-1-15a8f44d474e@linaro.org>
+Message-ID: <8adfa758ba13e70a3cd28a9c8a45738f@trvn.ru>
+X-Sender: nikita@trvn.ru
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v4 0/4] Check if FIPS mode is enabled when running selftests
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168689342279.5522.4120374614331476094.git-patchwork-notify@kernel.org>
-Date:   Fri, 16 Jun 2023 05:30:22 +0000
-References: <20230613123222.631897-1-magali.lemes@canonical.com>
-In-Reply-To: <20230613123222.631897-1-magali.lemes@canonical.com>
-To:     Magali Lemes <magali.lemes@canonical.com>
-Cc:     davem@davemloft.net, dsahern@gmail.com, edumazet@google.com,
-        keescook@chromium.org, kuba@kernel.org, pabeni@redhat.com,
-        shuah@kernel.org, tianjia.zhang@linux.alibaba.com,
-        vfedorenko@novek.ru, andrei.gherzan@canonical.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Tue, 13 Jun 2023 09:32:18 -0300 you wrote:
-> Some test cases from net/tls, net/fcnal-test and net/vrf-xfrm-tests
-> that rely on cryptographic functions to work and use non-compliant FIPS
-> algorithms fail in FIPS mode.
+Konrad Dybcio писал(а) 16.06.2023 04:36:
+> Not all SC7180 devices ship with ChromeOS firmware. WoA devices use
+> Android-like TZ, which uses PAS for image authentication. That requires
+> the predefined virtual address ranges to be passed via scm calls.
+> Define them to enable Venus on non-CrOS SC7180 devices.
 > 
-> In order to allow these tests to pass in a wider set of kernels,
->  - for net/tls, skip the test variants that use the ChaCha20-Poly1305
-> and SM4 algorithms, when FIPS mode is enabled;
->  - for net/fcnal-test, skip the MD5 tests, when FIPS mode is enabled;
->  - for net/vrf-xfrm-tests, replace the algorithms that are not
-> FIPS-compliant with compliant ones.
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+This does indeed bring up the venus for me now. Thanks! 
+
+Tested-by: Nikita Travkin <nikita@trvn.ru> # Aspire 1
+
+> ---
+>  drivers/media/platform/qcom/venus/core.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> [...]
-
-Here is the summary with links:
-  - [v4,1/4] selftests/harness: allow tests to be skipped during setup
-    https://git.kernel.org/netdev/net/c/372b304c1e51
-  - [v4,2/4] selftests: net: tls: check if FIPS mode is enabled
-    https://git.kernel.org/netdev/net/c/d113c395c67b
-  - [v4,3/4] selftests: net: vrf-xfrm-tests: change authentication and encryption algos
-    https://git.kernel.org/netdev/net/c/cb43c60e64ca
-  - [v4,4/4] selftests: net: fcnal-test: check if FIPS mode is enabled
-    https://git.kernel.org/netdev/net/c/d7a2fc1437f7
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+> index 2ae867cb4c48..bee1b4c98060 100644
+> --- a/drivers/media/platform/qcom/venus/core.c
+> +++ b/drivers/media/platform/qcom/venus/core.c
+> @@ -760,6 +760,10 @@ static const struct venus_resources sc7180_res = {
+>  	.vmem_size = 0,
+>  	.vmem_addr = 0,
+>  	.dma_mask = 0xe0000000 - 1,
+> +	.cp_start = 0,
+> +	.cp_size = 0x70800000,
+> +	.cp_nonpixel_start = 0x1000000,
+> +	.cp_nonpixel_size = 0x24800000,
+>  	.fwname = "qcom/venus-5.4/venus.mdt",
+>  };
+>  
+> 
+> ---
+> base-commit: 925294c9aa184801cc0a451b69a18dd0fe7d847d
+> change-id: 20230616-topic-sc7180_venus_lawp-965e5fd18c7a
+> 
+> Best regards,
