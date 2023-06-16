@@ -2,211 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D807873254B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 04:30:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 549E873257B
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 04:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241051AbjFPCa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 22:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47964 "EHLO
+        id S241167AbjFPC4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 22:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240254AbjFPCa1 (ORCPT
+        with ESMTP id S229509AbjFPC4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 22:30:27 -0400
-Received: from out-12.mta0.migadu.com (out-12.mta0.migadu.com [91.218.175.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30846297A
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 19:30:26 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1686882624;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=4AulDYoE3pAHZf4DySsjoslFcIuvn9gDgjSjn9hQRpg=;
-        b=lUns9qrRG5dfZ9WL7/8dbCUKFyvh2GDPdEBJOsT0sfmn4HOIghJVJCuiumKzOSWrCNwWdn
-        cHpKfsBtLbxyMUfqlN8qwaOJPGLM5f6guXxNSlTT4sZzhH6nbRuM61xGUJYDIiaSXHsGEW
-        2ZD3fcz5S6RgsfHKRlGpYiG99Cru8/0=
-From:   Yajun Deng <yajun.deng@linux.dev>
-To:     akpm@linux-foundation.org, rppt@kernel.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Yajun Deng <yajun.deng@linux.dev>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v2] mm: pass nid to reserve_bootmem_region()
-Date:   Fri, 16 Jun 2023 10:30:11 +0800
-Message-Id: <20230616023011.2952211-1-yajun.deng@linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 15 Jun 2023 22:56:23 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0442953;
+        Thu, 15 Jun 2023 19:56:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686884182; x=1718420182;
+  h=from:to:cc:subject:date:message-id;
+  bh=8VIZmxQ4ewUIEgXvqW8D+CvNYsj9X/EEEf+Oj1jPeU8=;
+  b=JMeNA8N02PUowU8lAkp3tV+1tMiWX+VTj8jqqG2bRD5nXuwtiGNHkGps
+   QBMeEVVRx6NbWWlxAT/X9ZFccppgDOszxliGr1Bj2Mmpqe3WjXQS5c6rw
+   R3KnPMezH3eSdqDB9s82E5F4+v3LuKRX8phFoYQGRSsfDbbMF06zdsDjI
+   4ajKAin4DIBLv5SejKz4Vz20oNG6HvRlogn/7XVXqzb8/4YtmVL9VbX4E
+   cgG2a7Adc3rpurEgLX02swGpzZcZEFlziw5PXx9XUv2+q4pRLgDGEuUs4
+   FuTueYXFWlLD+XrZPse8n7kzFvnnD1AH1DQXp0k80eLiGeBvcYimcoiiK
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="425030927"
+X-IronPort-AV: E=Sophos;i="6.00,246,1681196400"; 
+   d="scan'208";a="425030927"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 19:56:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="706912916"
+X-IronPort-AV: E=Sophos;i="6.00,246,1681196400"; 
+   d="scan'208";a="706912916"
+Received: from yzhao56-desk.sh.intel.com ([10.239.159.62])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 19:56:19 -0700
+From:   Yan Zhao <yan.y.zhao@intel.com>
+To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, chao.gao@intel.com,
+        kai.huang@intel.com, robert.hoo.linux@gmail.com,
+        Yan Zhao <yan.y.zhao@intel.com>
+Subject: [PATCH v3 00/11] KVM: x86/mmu: refine memtype related mmu zap
+Date:   Fri, 16 Jun 2023 10:31:01 +0800
+Message-Id: <20230616023101.7019-1-yan.y.zhao@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-early_pfn_to_nid() is called frequently in init_reserved_page(), it
-returns the node id of the PFN. These PFN are probably from the same
-memory region, they have the same node id. It's not necessary to call
-early_pfn_to_nid() for each PFN.
+This series refines mmu zap caused by EPT memory type update when guest
+MTRRs are honored.
 
-Pass nid to eserve_bootmem_region() and drop the call to
-early_pfn_to_nid() in init_reserved_page().
+The first 5 patches revolve around utilizing helper functions to check if
+KVM TDP honors guest MTRRs, so that TDP zap and page fault max_level
+reduction are only targeted to TDPs that honor guest MTRRs.
 
-The most beneficial function is memmap_init_reserved_pages() if define
-CONFIG_DEFERRED_STRUCT_PAGE_INIT.
-The following data was tested on x86 machine, it has 190GB RAM,
+-The 5th patch will trigger zapping of TDP leaf entries if non-coherent
+ DMA devices count goes from 0 to 1 or from 1 to 0.
 
-before:
-memmap_init_reserved_pages()  67ms
+The last 6 patches are fixes and optimizations for mmu zaps happen when
+guest MTRRs are honored. Those mmu zaps are usually triggered from all
+vCPUs in bursts on all GFN ranges, intending to remove stale memtypes of
+TDP entries.
 
-after:
-memmap_init_reserved_pages()  20ms
+- The 6th patch places TDP zap to when CR0.CD toggles and when guest MTRRs
+  update under CR0.CD=0.
 
-Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202306160145.juJMr3Bi-lkp@intel.com
----
- include/linux/mm.h |  3 ++-
- mm/memblock.c      |  9 ++++++---
- mm/mm_init.c       | 31 +++++++++++++++++++------------
- 3 files changed, 27 insertions(+), 16 deletions(-)
+- The 7th-8th patches refine KVM_X86_QUIRK_CD_NW_CLEARED by removing the
+  IPAT bit in EPT memtype when CR0.CD=1 and guest MTRRs are honored.
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 17317b1673b0..39e72ca6bf22 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2964,7 +2964,8 @@ extern unsigned long free_reserved_area(void *start, void *end,
- 
- extern void adjust_managed_page_count(struct page *page, long count);
- 
--extern void reserve_bootmem_region(phys_addr_t start, phys_addr_t end);
-+extern void reserve_bootmem_region(phys_addr_t start,
-+				   phys_addr_t end, int nid);
- 
- /* Free the reserved page into the buddy system, so it gets managed. */
- static inline void free_reserved_page(struct page *page)
-diff --git a/mm/memblock.c b/mm/memblock.c
-index ff0da1858778..6dc51dc845e5 100644
---- a/mm/memblock.c
-+++ b/mm/memblock.c
-@@ -2091,18 +2091,21 @@ static void __init memmap_init_reserved_pages(void)
- {
- 	struct memblock_region *region;
- 	phys_addr_t start, end;
-+	int nid;
- 	u64 i;
- 
- 	/* initialize struct pages for the reserved regions */
--	for_each_reserved_mem_range(i, &start, &end)
--		reserve_bootmem_region(start, end);
-+	__for_each_mem_range(i, &memblock.reserved, NULL, NUMA_NO_NODE,
-+			     MEMBLOCK_NONE, &start, &end, &nid)
-+		reserve_bootmem_region(start, end, nid);
- 
- 	/* and also treat struct pages for the NOMAP regions as PageReserved */
- 	for_each_mem_region(region) {
- 		if (memblock_is_nomap(region)) {
- 			start = region->base;
- 			end = start + region->size;
--			reserve_bootmem_region(start, end);
-+			nid = memblock_get_region_node(region);
-+			reserve_bootmem_region(start, end, nid);
- 		}
- 	}
- }
-diff --git a/mm/mm_init.c b/mm/mm_init.c
-index d393631599a7..1499efbebc6f 100644
---- a/mm/mm_init.c
-+++ b/mm/mm_init.c
-@@ -646,10 +646,8 @@ static inline void pgdat_set_deferred_range(pg_data_t *pgdat)
- }
- 
- /* Returns true if the struct page for the pfn is initialised */
--static inline bool __meminit early_page_initialised(unsigned long pfn)
-+static inline bool __meminit early_page_initialised(unsigned long pfn, int nid)
- {
--	int nid = early_pfn_to_nid(pfn);
--
- 	if (node_online(nid) && pfn >= NODE_DATA(nid)->first_deferred_pfn)
- 		return false;
- 
-@@ -695,15 +693,14 @@ defer_init(int nid, unsigned long pfn, unsigned long end_pfn)
- 	return false;
- }
- 
--static void __meminit init_reserved_page(unsigned long pfn)
-+static void __meminit init_reserved_page(unsigned long pfn, int nid)
- {
- 	pg_data_t *pgdat;
--	int nid, zid;
-+	int zid;
- 
--	if (early_page_initialised(pfn))
-+	if (early_page_initialised(pfn, nid))
- 		return;
- 
--	nid = early_pfn_to_nid(pfn);
- 	pgdat = NODE_DATA(nid);
- 
- 	for (zid = 0; zid < MAX_NR_ZONES; zid++) {
-@@ -717,7 +714,7 @@ static void __meminit init_reserved_page(unsigned long pfn)
- #else
- static inline void pgdat_set_deferred_range(pg_data_t *pgdat) {}
- 
--static inline bool early_page_initialised(unsigned long pfn)
-+static inline bool early_page_initialised(unsigned long pfn, int nid)
- {
- 	return true;
- }
-@@ -727,7 +724,7 @@ static inline bool defer_init(int nid, unsigned long pfn, unsigned long end_pfn)
- 	return false;
- }
- 
--static inline void init_reserved_page(unsigned long pfn)
-+static inline void init_reserved_page(unsigned long pfn, int nid)
- {
- }
- #endif /* CONFIG_DEFERRED_STRUCT_PAGE_INIT */
-@@ -738,16 +735,20 @@ static inline void init_reserved_page(unsigned long pfn)
-  * marks the pages PageReserved. The remaining valid pages are later
-  * sent to the buddy page allocator.
-  */
--void __meminit reserve_bootmem_region(phys_addr_t start, phys_addr_t end)
-+void __meminit reserve_bootmem_region(phys_addr_t start,
-+				      phys_addr_t end, int nid)
- {
- 	unsigned long start_pfn = PFN_DOWN(start);
- 	unsigned long end_pfn = PFN_UP(end);
- 
-+	if (nid == MAX_NUMNODES)
-+		nid = first_online_node;
-+
- 	for (; start_pfn < end_pfn; start_pfn++) {
- 		if (pfn_valid(start_pfn)) {
- 			struct page *page = pfn_to_page(start_pfn);
- 
--			init_reserved_page(start_pfn);
-+			init_reserved_page(start_pfn, nid);
- 
- 			/* Avoid false-positive PageTail() */
- 			INIT_LIST_HEAD(&page->lru);
-@@ -2579,7 +2580,13 @@ void __init set_dma_reserve(unsigned long new_dma_reserve)
- void __init memblock_free_pages(struct page *page, unsigned long pfn,
- 							unsigned int order)
- {
--	if (!early_page_initialised(pfn))
-+	int nid = 0;
-+
-+#ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
-+	nid = early_pfn_to_nid(pfn);
-+#endif
-+
-+	if (!early_page_initialised(pfn, nid))
- 		return;
- 	if (!kmsan_memblock_free_pages(page, order)) {
- 		/* KMSAN will take care of these pages. */
+- The 9th-11th patches are optimizations of the mmu zap when guest MTRRs
+  are honored by serializing vCPUs' gfn zap requests and calculating of
+  precise fine-grained ranges to zap.
+  They are put in mtrr.c because the optimizations are related to when
+  guest MTRRs are honored and because it requires to read guest MTRRs
+  for fine-grained ranges.
+  Calls to kvm_unmap_gfn_range() are not included into the optimization,
+  because they are not triggered from all vCPUs in bursts and not all of
+  them are blockable. They usually happen at memslot removal and thus do
+  not affect the mmu zaps when guest MTRRs are honored. Also, current
+  performance data shows that there's no observable performance difference
+  to mmu zaps by turning on/off auto numa balancing triggered
+  kvm_unmap_gfn_range().
+
+A reference performance data for last 6 patches as below:
+
+Base: base code before patch 6
+C6-8: includes base code + patches 6 + 7 + 8
+      patch 6: move TDP zaps from guest MTRRs update to CR0.CD toggling
+      patch 7: drop IPAT in memtype when CD=1 for
+               KVM_X86_QUIRK_CD_NW_CLEARED
+      patch 8: move vmx code to get EPT memtype when CR0.CD=1 to x86 common
+               code
+C9:   includes C6-8 + patch 9
+      patch 9: serialize vCPUs to zap gfn when guest MTRRs are honored
+C10:  includes C9 + patch 10
+      patch 10: fine-grained gfn zap when guest MTRRs are honored
+C11:  includes C10 + patch 11
+      patch 11: split a single gfn zap range when guest MTRRs are honored
+
+vCPUs cnt: 8,  guest memory: 16G
+Physical CPU frequency: 3100 MHz
+
+     |              OVMF            |             Seabios          |
+     | EPT zap cycles | EPT zap cnt | EPT zap cycles | EPT zap cnt |
+Base |    3444.97M    |      84     |      61.29M    |      50     |
+C6-8 |    4343.68M    |      74     |     503.04M    |      42     |*     
+ C9  |     261.45M    |      74     |     106.64M    |      42     |     
+ C10 |     157.42M    |      74     |      71.04M    |      42     |     
+ C11 |      33.95M    |      74     |      24.04M    |      42     |     
+
+* With C8, EPT zap cnt are reduced because there are some MTRR updates
+  under CR0.CD=1.
+  EPT zap cycles increases a bit (especially true in case of Seabios)
+  because concurrency is more intense when CR0.CD toggles than when
+  guest MTRRs update.
+  (patch 7/8 are neglectable in performance)
+
+Changelog:
+v2 --> v3:
+1. Updated patch 1 about definition of honor guest MTRRs helper. (Sean)
+2. Added patch 2 to use honor guest MTRRs helper in kvm_tdp_page_fault().
+   (Sean)
+3. Remove unnecessary calculation of MTRR ranges.
+   (Chao Gao, Kai Huang, Sean)
+4. Updated patches 3-5 to use the helper. (Chao Gao, Kai Huang, Sean)
+5. Added patches 6,7 to reposition TDP zap and drop IPAT bit. (Sean)
+6. Added patch 8 to prepare for patch 10's memtype calculation when
+   CR0.CD=1.
+7. Added patches 9-11 to speed up MTRR update /CD0 toggle when guest
+   MTRRs are honored. (Sean)
+8. Dropped per-VM based MTRRs in v2 (Sean)
+
+v1 --> v2:
+1. Added a helper to skip non EPT case in patch 1
+2. Added patch 2 to skip mmu zap when guest CR0_CD changes if EPT is not
+   enabled. (Chao Gao)
+3. Added patch 3 to skip mmu zap when guest MTRR changes if EPT is not
+   enabled.
+4. Do not mention TDX in patch 4 as the code is not merged yet (Chao Gao)
+5. Added patches 5-6 to reduce EPT zap during guest bootup.
+
+v2:
+https://lore.kernel.org/all/20230509134825.1523-1-yan.y.zhao@intel.com/
+
+v1:
+https://lore.kernel.org/all/20230508034700.7686-1-yan.y.zhao@intel.com/
+
+Yan Zhao (11):
+  KVM: x86/mmu: helpers to return if KVM honors guest MTRRs
+  KVM: x86/mmu: Use KVM honors guest MTRRs helper in
+    kvm_tdp_page_fault()
+  KVM: x86/mmu: Use KVM honors guest MTRRs helper when CR0.CD toggles
+  KVM: x86/mmu: Use KVM honors guest MTRRs helper when update mtrr
+  KVM: x86/mmu: zap KVM TDP when noncoherent DMA assignment starts/stops
+  KVM: x86/mmu: move TDP zaps from guest MTRRs update to CR0.CD toggling
+  KVM: VMX: drop IPAT in memtype when CD=1 for
+    KVM_X86_QUIRK_CD_NW_CLEARED
+  KVM: x86: move vmx code to get EPT memtype when CR0.CD=1 to x86 common
+    code
+  KVM: x86/mmu: serialize vCPUs to zap gfn when guest MTRRs are honored
+  KVM: x86/mmu: fine-grained gfn zap when guest MTRRs are honored
+  KVM: x86/mmu: split a single gfn zap range when guest MTRRs are
+    honored
+
+ arch/x86/include/asm/kvm_host.h |   4 +
+ arch/x86/kvm/mmu.h              |   7 +
+ arch/x86/kvm/mmu/mmu.c          |  18 +-
+ arch/x86/kvm/mtrr.c             | 286 +++++++++++++++++++++++++++++++-
+ arch/x86/kvm/vmx/vmx.c          |  11 +-
+ arch/x86/kvm/x86.c              |  25 ++-
+ arch/x86/kvm/x86.h              |   2 +
+ 7 files changed, 333 insertions(+), 20 deletions(-)
+
+
+base-commit: 24ff4c08e5bbdd7399d45f940f10fed030dfadda
 -- 
-2.25.1
+2.17.1
 
