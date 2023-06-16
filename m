@@ -2,72 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94DC973244D
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 02:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 831B3732453
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 02:41:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232139AbjFPAhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 20:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46336 "EHLO
+        id S232315AbjFPAls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 20:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjFPAhP (ORCPT
+        with ESMTP id S229480AbjFPAlq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 20:37:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82672962;
-        Thu, 15 Jun 2023 17:37:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BC85611DD;
-        Fri, 16 Jun 2023 00:37:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E836C433C0;
-        Fri, 16 Jun 2023 00:37:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686875833;
-        bh=J55ESfNtGwwnrR+cNXZIBNS0rU9QKWNkSjf07aIrJEQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iyfDZSJFtZ2hl+gEx08XuqQZYJbKs9nmgyKESWbNzvnUE1dtWMAwRPLIP/D4VMvuO
-         9KxIfRXXj7amb7jFeM7ZDcfzoRxKw7f/TsjJ9bU5l3fLJyoM3SgsCtQnIghCizTVDv
-         ztQB7PTqMLmx1tNFAIVuxOMU6FZbMPpHa8IslPLPIVoc5Tdc0sFhfLcIHgVVBpe01e
-         NA0v1+/orrFhyqNr5ePIaEZyn10l7ml8gMoh/74Fq4sgqd6eALMeFpL0FCnPRkiBbJ
-         Ydvn9Nk0yFeGtMUFlAt71Myl/R/I4Ai4UXTUm8f1yqdjkTGLlaZ545d8PwsgOvm0pe
-         167t8SGNre9rA==
-Received: by mercury (Postfix, from userid 1000)
-        id D47AD1060EDC; Fri, 16 Jun 2023 02:37:10 +0200 (CEST)
-Date:   Fri, 16 Jun 2023 02:37:10 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        =?utf-8?Q?Fern=C3=A1ndez?= Rojas <noltari@gmail.com>,
-        Marek Vasut <marex@denx.de>, Suman Anna <s-anna@ti.com>,
-        - <devicetree-spec@vger.kernel.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Remove last usage of "binding" or "schema"
- in titles
-Message-ID: <20230616003710.arsee2k3732kdhfk@mercury.elektranox.org>
-References: <20230615213154.1753313-1-robh@kernel.org>
+        Thu, 15 Jun 2023 20:41:46 -0400
+Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C3E1BD4;
+        Thu, 15 Jun 2023 17:41:46 -0700 (PDT)
+Received: by mail-vk1-xa29.google.com with SMTP id 71dfb90a1353d-460eb67244eso43887e0c.1;
+        Thu, 15 Jun 2023 17:41:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686876105; x=1689468105;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qol4pW950bVrPxMcx9m5G6bgEMEiZH+6L8x+VD8KC8A=;
+        b=hzT1SI9cDM7BqgPvmr2VaaxDdIxGT2vQ0D2KW1SseHaFxTrV/HGVivpT4WRGzJRlyh
+         4gDwz6Hul54N+HOohx0FuMXuMSfO+rfU8xq3HbMnhgkeCLZp3LzQHSofoCRfjeXxToH6
+         M41xOOerk71Y0CBKnCEELEUVkKGpizsfoW6JHSRgAwsTdz14dkWNBZDOzLGD75kf6JlT
+         jAlSYACo+rJO3d8VWNDbz0qd6l1lCqNFM7XMBhW9v7Kwrq1FpDFisEYoLsVovIdkqI+C
+         GruRNrp67pOlWemOlNK2PRpMVq9QZD/lnl29e8Xn7W8ngF6uquf1qH0fyExAjubvgUpn
+         8nJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686876105; x=1689468105;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Qol4pW950bVrPxMcx9m5G6bgEMEiZH+6L8x+VD8KC8A=;
+        b=YcbjTSFhkPceNMjhSxnJojD04UWTd7Z1/fo+Tc68vyKiQcnyYPAblrB/GhKcB9aqLd
+         HfeOyCxtvn1JlWq8invSQ92wwLIzsyUj/fit1sC8SkGHmG16Q0Dsvge9V1Ko+xi9J+2a
+         LTiQXt3rzKFFXdCRVsgkvqIDvVnbs+ZOPLB1BwKoE4tte2Oj9s9JLk8fYqdphjKHf/ie
+         Ceu+nkN2Qt62i2XxvfIOiaSRZPZDX7hi8/O0KSCiajkaknwW0IRfuWh2KVPlANYogxDB
+         WKR27a4C7vJ+jx3LblRGU65j/bAgvGF35OsdX9ZHnKPg+KmmKaMxzFOA2a8AqBlHwKD+
+         OM9Q==
+X-Gm-Message-State: AC+VfDx4YwIzfV0V3VZN5x6cgZkbZ//JZ+RwqRR0ia3nx1X8TkUfFg4+
+        68Cd4RswERbH4pctBnQLI54XxIRZilIv1H+vzL8=
+X-Google-Smtp-Source: ACHHUZ4dpaBRKjiODf3+MZwId8nX7G6NUoJYnfE5Hq4PElCSsMM0Nqc+53GZ0BMXmjNyDcRXMeaeQFSmN0jJgsK2aus=
+X-Received: by 2002:a1f:5546:0:b0:443:6db9:24e with SMTP id
+ j67-20020a1f5546000000b004436db9024emr707946vkb.15.1686876105146; Thu, 15 Jun
+ 2023 17:41:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="po5r3akfx43ntm5u"
-Content-Disposition: inline
-In-Reply-To: <20230615213154.1753313-1-robh@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230528131802.6390-1-ethan.twardy@gmail.com> <20230528131802.6390-2-ethan.twardy@gmail.com>
+ <525fee98-c694-6a38-cd1e-dd7efd806620@gmail.com> <CTCD11G9NVTB.3SYR2GFA5VAB3@hackbook>
+In-Reply-To: <CTCD11G9NVTB.3SYR2GFA5VAB3@hackbook>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Fri, 16 Jun 2023 02:41:34 +0200
+Message-ID: <CANiq72=YQyqtpXZ+Hp9oySwfmBS6OJ1ik-zxXx4mSF34hruqbQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] scripts/rust_is_available: Fix clang version check
+To:     "Ethan D. Twardy" <ethan.twardy@gmail.com>
+Cc:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Tiago Lam <tiagolam@gmail.com>,
+        Kees Cook <keescook@chromium.org>, Finn Behrens <me@kloenk.de>,
+        "open list:RUST" <rust-for-linux@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:CLANG/LLVM BUILD SUPPORT" <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,70 +82,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 14, 2023 at 2:08=E2=80=AFPM Ethan D. Twardy <ethan.twardy@gmail=
+.com> wrote:
+>
+> Thanks very much for your testing and review. Do I need to take any
+> further action to make this patch ready for review? I sent out a v3
+> version of the patch, where the only change was adding Reviewed-By and
+> Tested-By tags to my git commit--since this is my first time
+> contributing to this community, I wasn't sure whether I needed to do
+> that. Thanks!
 
---po5r3akfx43ntm5u
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+You did everything well! The patch looked fine to me, and the commit
+message is detailed. The tags are all fine too. Thanks a lot for the
+effort!
 
-Hi,
+I had v2 of the script improvement patch series in my backlog, which
+normalizes to `sed` (rather than use `grep`/`cut` etc.), adds a test
+suite, and a few other things; but otherwise we could have easily
+taken this one, because it is well done.
 
-On Thu, Jun 15, 2023 at 03:31:54PM -0600, Rob Herring wrote:
-> The Devicetree bindings document does not have to say in the title that
-> it is a "Devicetree binding", but instead just describe the hardware.
->=20
-> Most of these have been fixed already, so fix the handful that snuck in.
-> With this, a meta-schema check can be enabled to catch these
-> automatically.
->=20
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/clock/brcm,bcm63268-timer-clocks.yaml   | 2 +-
->  Documentation/devicetree/bindings/clock/imx8mp-audiomix.yaml    | 2 +-
->  .../devicetree/bindings/power/reset/restart-handler.yaml        | 2 +-
->  .../devicetree/bindings/remoteproc/ti,pru-consumer.yaml         | 2 +-
->  .../devicetree/bindings/reserved-memory/framebuffer.yaml        | 2 +-
->  5 files changed, 5 insertions(+), 5 deletions(-)
+So, you did everything right, and you are more than welcome to send
+more patches like that :)
 
-=2E..
-
-> diff --git a/Documentation/devicetree/bindings/power/reset/restart-handle=
-r.yaml b/Documentation/devicetree/bindings/power/reset/restart-handler.yaml
-> index 1f9a2aac53c0..f2ffdd29d52a 100644
-> --- a/Documentation/devicetree/bindings/power/reset/restart-handler.yaml
-> +++ b/Documentation/devicetree/bindings/power/reset/restart-handler.yaml
-> @@ -4,7 +4,7 @@
->  $id: http://devicetree.org/schemas/power/reset/restart-handler.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
-> =20
-> -title: Restart and shutdown handler generic binding
-> +title: Restart and shutdown handler Common Properties
-> =20
->  maintainers:
->    - Sebastian Reichel <sre@kernel.org>
-
-Acked-by: Sebastian Reichel <sre@kernel.org>
-
--- Sebastian
-
---po5r3akfx43ntm5u
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSLrrAACgkQ2O7X88g7
-+ppshA//WlBWN4mcN0Kg9SD3Ko+IPfh7SzWZCTvjwXzfW1GBH5T5FIJDYgGMesO1
-YIq0TI4Afr3wWEQxYbNR4PBDnflE/gtkrK7Pwr59d1ft4yid54na8T0Ax6S8R3Ru
-FTW1dufmjQ7pT0QuqIyOH5GPTt5VPZNOGrh0ph9Un09PO2y3IzJ3BJ4XO8vEB4sc
-cN2UebftqaC6UcsHKl5Ux9BdrS8bI83/e7SbvMwdsaGN6CPrGgyZdmroD5MKRw/4
-SgswJZkElUnUlAisaO9h9ii7WlTlD1L90mr8xrNAfvuMg46HtRWP1z8xEkfsnj+N
-cnwBW+hhCXUq7jEW4Yw9ShgAYvxi74gxKGglnBNCdSjEFxMOQWqCeGlzg1ta+AAm
-bpVzc7M9OG1I/qjUVWlAQm4jgPSo9Vy7M55rwjzkxdXe2UsKeCxxbqx1gZsEgg/C
-e7QHGixSMhh1Q+UagP2UF1M15qdHL+gV2FoAyU9Al4oPIb/+N+tcM1yVbdf2oAJk
-8esyAD88tMZant9M6musxltBcaqS67X8xR7j44nFTnp3sbN5Y8WX9B6IyKOc6p9F
-xhH70cEACDHpbNQBpv70U51dR36gnf4UIFoDKHMqqIUsG0muvKldcu596zu/IR96
-xYrnu+5SUIla3pxG2ZJ5nhmLjoToTOHPSNduRFArX4EYNr+hwaM=
-=bwes
------END PGP SIGNATURE-----
-
---po5r3akfx43ntm5u--
+Cheers,
+Miguel
