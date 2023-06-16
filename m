@@ -2,145 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52E56732FDC
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:30:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB6B73305C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:48:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241161AbjFPLag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 07:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
+        id S1344204AbjFPLsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 07:48:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235091AbjFPLab (ORCPT
+        with ESMTP id S1343966AbjFPLsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 07:30:31 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55BA32977
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:30:29 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b44200367bso7462591fa.2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:30:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686915027; x=1689507027;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hWaj8V26e6AndVXAhP1UnOZRtCJHb24nNyQJnL1KfpQ=;
-        b=qsMcLbqWpaDKn5jJ3a7lh2l7ZEoQMihWU/D9Xl/C041+aVh8oEnvGGYPYeWgI//piH
-         8RKB9TSLG+GDqdw1aeL7PACdlLO5VCCDB8NLuLoXYEdPbZ4PEHZJdfVMrU0ZPbiqmCPx
-         VVQ15Kwq+qOIGF/AsyhY3pvyC1lFN4JqKcZuc7rkCxLRVEryb7uIJiyUtvBuGSw14hZ3
-         KqgKogpwOPt802SJKBQty6rmzQBRW1InBZSIkacyo/IjUeRjU+SR995A/qgHZ2heQYqp
-         mIQ5G6qeN0AlcwrWw9vGaDIdB0sLriKHrGiYMp8xxCMcztgfndwKHCBiWrGJj6Qq6CS+
-         Adig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686915027; x=1689507027;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hWaj8V26e6AndVXAhP1UnOZRtCJHb24nNyQJnL1KfpQ=;
-        b=FYtHH8c/MTwGrmwi9Z0DjceP0eRipt1GDg9EWtuZ4bBqOIWu0FaYcUjiPtSJoPwMPa
-         b+ExHcN1cX4mMcfBhQHy7yAjgQBZsxJaSI1quT+EJs9KjAj7aIsrsTaNgj/NFB84drn/
-         pVui1h/TjaRyfF3T/oZTGZFKodxAVIUtpo0fzYdJUHDWWK5HGWlWDdUYuVQKRB1X/jL6
-         BdINLLcn2NOMh6lfd18YgRskSRjIkGFj5Qg6vQk2LKp7dDHr1C6dTaaR0cpYL8IdIiEV
-         ORA5tX5MhlNvZuWE1EhNeV1scq802/F9qchwT5pRDYPqygmCfJPB+0xKSYIv73ADpzCs
-         PVOQ==
-X-Gm-Message-State: AC+VfDyKpHKWwB3+CeoaPBPwY6fRUabMszXbUNxEUBoeetQpRhds5lJG
-        YcKIVgIg+tF1dcbw2zC7PRvKsA==
-X-Google-Smtp-Source: ACHHUZ7fM7XuMr8WhrpLTJWyagGKaUPyrMK77XcC+7GWq+uy60ZRqPMZkECck0Zt0Hymekne24sv4w==
-X-Received: by 2002:a2e:9206:0:b0:2b0:259d:f670 with SMTP id k6-20020a2e9206000000b002b0259df670mr1487873ljg.4.1686915027509;
-        Fri, 16 Jun 2023 04:30:27 -0700 (PDT)
-Received: from [192.168.1.151] (85-76-68-127-nat.elisa-mobile.fi. [85.76.68.127])
-        by smtp.gmail.com with ESMTPSA id j6-20020a2eb706000000b002b34f9cfc7asm1072257ljo.90.2023.06.16.04.30.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jun 2023 04:30:27 -0700 (PDT)
-Message-ID: <8d5870f8-e530-fa8f-444a-3d3ccf716d48@linaro.org>
-Date:   Fri, 16 Jun 2023 14:30:20 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 0/3] Add support for databus widen mode
-Content-Language: en-GB
-To:     Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     quic_abhinavk@quicinc.com, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 16 Jun 2023 07:48:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3A6191
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:48:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BD2763A54
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 11:48:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DE7DC433C8;
+        Fri, 16 Jun 2023 11:48:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686916123;
+        bh=Gu9eecKhwulAiLYwWWHF7aXAoWbaPi+TPo2xQGysYiQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tOZvmd91cT7Pb+3PP3/EjvWh9I0Jfsur7j3XZwSx+0f6C7mh1yz2S45OmEPEBDlkx
+         nIBY0LwJq09xvVxS9gNA9YTcab0DX4NaLuiMRS4aF1TlueQkcEpFFXruok6889lEQc
+         E/0lR9zbFbfwmH71xHaFAPqYfCP8f6kSQVqhWiZofPIrRYexCDYAJBQt71KvFaEYlp
+         SrBVOI6UOOZ6cKqM/woDNXr4MX9sEDDwbdy7AERFfRKXWqW6UwQpdb0cwfFliNO/UY
+         aH1H2n5PHJIdrlobkrq3wnngMxvOS8kLHCyiC5oN2UopcNqk8rrxz/AMAYYjPWVnVq
+         Qt/cEZtx9ex3g==
+Received: from [85.160.26.232] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1qA7fT-005ruA-RG;
+        Fri, 16 Jun 2023 12:31:04 +0100
+Date:   Fri, 16 Jun 2023 12:30:56 +0100
+Message-ID: <875y7nr6dr.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Gowans, James" <jgowans@amazon.com>
+Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "liaochang1@huawei.com" <liaochang1@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 0/3] Resend GIC-v3 LPIs on concurrent invoke
+In-Reply-To: <d08bc249fcf25ab88ded1578e79997a25ab6ba93.camel@amazon.com>
+References: <20230608120021.3273400-1-jgowans@amazon.com>
+        <d08bc249fcf25ab88ded1578e79997a25ab6ba93.camel@amazon.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 85.160.26.232
+X-SA-Exim-Rcpt-To: jgowans@amazon.com, tglx@linutronix.de, liaochang1@huawei.com, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/06/2023 04:57, Jessica Zhang wrote:
-> DPU 5.x+ and DSI 6G 2.5.x+ support a databus-widen mode that allows for
-> more compressed data to be transferred per pclk.
+On Fri, 16 Jun 2023 09:32:30 +0100,
+"Gowans, James" <jgowans@amazon.com> wrote:
 > 
-> This series adds support for enabling this feature for both DPU and DSI
-> by doing the following:
-> 
-> 1. Add a DPU_INTF_DATABUS_WIDEN feature flag
-> 2. Add a DPU INTF op to set the DATABUS_WIDEN register
-> 3. Set the DATABUS_WIDEN register and do the proper hdisplay
->     calculations in DSI when applicable
+> Hi Marc and Tomas,
+> Just a ping on this series; would be great to get any more feedback, or
+> get this merged.
 
-As I was writing the documentation patch, another thought stroke me wrt 
-this patchset. Could you please add a check to DSI's mode_valid 
-disallowing all modes if DSI_BPP > 8 & !widebus. Technically this check 
-does not filter modes per se, but in my opinion ending up with empty 
-modes list would be a better user experience compared to having a list 
-of modes, from which none can be selected.
+Just did, after converting everything to BIT() and massaging the
+commit messages to my own liking.
 
-And if we ever get dynamic mode/dsc_config setup, this would allow us to 
-filter unsupported modes via their DSC confiuration.
-
-Abhinav, I remember, that you told me that adding drm_dsc_config to drm 
-modes was forbidden already. However this looks like a valid reason to 
-maybe restart the discussion: we want to filter modes basing on the 
-corresponding DSC data rather than allowing the mode in mode_valid() and 
-then failing it in the atomic_check().
-
-> 
-> Note: This series will only enable the databus-widen mode for command
-> mode as we are currently unable to validate it on video mode.
-> 
-> Depends on: "Add DSC v1.2 Support for DSI" [1]
-> 
-> [1] https://patchwork.freedesktop.org/series/117219/
-> 
-> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
-
-Nit: there is no need to sign-off the cover letters.
-
-> ---
-> Jessica Zhang (3):
->        drm/msm/dpu: Add DPU_INTF_DATABUS_WIDEN feature flag for DPU >= 5.0
->        drm/msm/dpu: Set DATABUS_WIDEN on command mode encoders
->        drm/msm/dsi: Enable DATABUS_WIDEN for DSI command mode
-> 
->   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c |  3 +++
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c       |  3 ++-
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h       |  2 ++
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c          | 12 ++++++++++++
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h          |  3 +++
->   drivers/gpu/drm/msm/dsi/dsi.xml.h                    |  1 +
->   drivers/gpu/drm/msm/dsi/dsi_host.c                   | 19 ++++++++++++++++++-
->   7 files changed, 41 insertions(+), 2 deletions(-)
-> ---
-> base-commit: 1981c2c0c05f5d7fe4d4552d4f352cb46840e51e
-> change-id: 20230525-add-widebus-support-f785546ee751
-> 
-> Best regards,
+	M.
 
 -- 
-With best wishes
-Dmitry
-
+Without deviation from the norm, progress is not possible.
