@@ -2,110 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA6717334A1
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 17:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D28973349C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 17:21:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343896AbjFPPWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 11:22:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43770 "EHLO
+        id S1345697AbjFPPVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 11:21:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345940AbjFPPV4 (ORCPT
+        with ESMTP id S231775AbjFPPVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 11:21:56 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25EA32720
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 08:21:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686928914; x=1718464914;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IrUB3wm5B53SwR3zC4PoaeRdFH3cGoQDoG6SRA6sz5g=;
-  b=hmsOhJKhicxCzHI2N/8REDIHqQLFHDGECAM+ETUUKSSeh41hDI6BDhpl
-   UZ5nz+lNw4i7hhe+0zg1eXFDikfn4WQ6TN1ftJHNjAJqARCz96bBSD+7a
-   YWAOz+XFRa3GubggsJUa7Y3k4Bt1jB6pa+Po8GweTWUSFcp9cdGLJI041
-   sxa0pj7z0VA1iI86vhrENXwOePImYKOT2SBoVY7D2mUCGQvyamANCn02Z
-   dP88PJk6piplwcTIS62f1psjGY07DA+MjLaryvF+QpqmwKi0XPjQjcvVl
-   3ZQ+2Vr/6CBx9saU6Z1TOotMRAMs+ikbsnfK29kyUsuCZ+U/lIAxLNMPy
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="445617589"
-X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
-   d="scan'208";a="445617589"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 08:21:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="742709717"
-X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
-   d="scan'208";a="742709717"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 16 Jun 2023 08:21:38 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qABGb-0001TA-2W;
-        Fri, 16 Jun 2023 15:21:37 +0000
-Date:   Fri, 16 Jun 2023 23:21:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Foley <pefoley2@pefoley.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Richard Weinberger <richard@nod.at>
-Subject: arch/um/drivers/pcap_kern.c:18:6: warning: no previous prototype for
- 'pcap_init_kern'
-Message-ID: <202306162327.v3SoLRFC-lkp@intel.com>
+        Fri, 16 Jun 2023 11:21:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BDDB359E;
+        Fri, 16 Jun 2023 08:21:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27186625B9;
+        Fri, 16 Jun 2023 15:21:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 194DEC433CA;
+        Fri, 16 Jun 2023 15:21:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686928874;
+        bh=I2J3TfKfw0KbmKhAvN4x6gXOdCm+sLoYTy4d6M0UgYg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Im9aBa4xcR8gQ6dmW9Xxz5aoqBqjyxRplkHfMhEvD4QjzYI4DrhpGWP4YPN1uazDZ
+         qq5yNgeRZkMCs/EBZaTRitycXMfcL2GoxKP1FitXhb4zOEaQpYgLbsyKYctIUSoK1i
+         91rVQ9Rq4uiAIrTiTIb/62YYzXyo3GCFfJHRNHfvmkQ+jMi/tE/uTalJM/KshKhxpT
+         IPMlKk34ulVtPtrTT3+15Bzn/dNzXdpBCC5zIew3VdddtWG4thE2BPJZsW33GCVm53
+         XEv0tE4diFx4eVa2elrM9TA48UaJSmch7z5LhtszNz1Opjh5PTxqUsuYAErmmD5Xjg
+         XiMqVhG7rrPmw==
+Date:   Fri, 16 Jun 2023 10:21:12 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     sharath.kumar.d.m@intel.com
+Cc:     lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
+        bhelgaas@google.com, linux-pci@vger.kernel.org,
+        dinguyen@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] pci: agilex_pci: add pcie rootport support for agilex
+Message-ID: <20230616152112.GA1534746@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230616063313.862996-2-sharath.kumar.d.m@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   40f71e7cd3c6ac04293556ab0504a372393838ff
-commit: 2c4d3841a82b88ae8a7b518dc6206f84f68e705a um: Avoid pcap multiple definition errors
-date:   4 months ago
-config: um-randconfig-r036-20230616 (https://download.01.org/0day-ci/archive/20230616/202306162327.v3SoLRFC-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20230616/202306162327.v3SoLRFC-lkp@intel.com/reproduce)
+Thanks for your patch.  If/when you revise it, run "git log --oneline
+drivers/pci/controller/pcie-altera.c" and match the style of subject
+lines, e.g.,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306162327.v3SoLRFC-lkp@intel.com/
+  PCI: altera: Add Intel Agilex support
 
-All warnings (new ones prefixed by >>):
+On Fri, Jun 16, 2023 at 12:03:13PM +0530, sharath.kumar.d.m@intel.com wrote:
+> From: D M Sharath Kumar <sharath.kumar.d.m@intel.com>
 
->> arch/um/drivers/pcap_kern.c:18:6: warning: no previous prototype for 'pcap_init_kern' [-Wmissing-prototypes]
-      18 | void pcap_init_kern(struct net_device *dev, void *data)
-         |      ^~~~~~~~~~~~~~
-   arch/um/drivers/pcap_kern.c:53:5: warning: no previous prototype for 'pcap_setup' [-Wmissing-prototypes]
-      53 | int pcap_setup(char *str, char **mac_out, void *data)
-         |     ^~~~~~~~~~
+Also, please include a commit log.
 
+Probably should also update the Kconfig help text to mention Agilex in
+addition to Altera.
 
-vim +/pcap_init_kern +18 arch/um/drivers/pcap_kern.c
+> +#include <linux/bitops.h>
 
-    17	
-  > 18	void pcap_init_kern(struct net_device *dev, void *data)
-    19	{
-    20		struct uml_net_private *pri;
-    21		struct pcap_data *ppri;
-    22		struct pcap_init *init = data;
-    23	
-    24		pri = netdev_priv(dev);
-    25		ppri = (struct pcap_data *) pri->user;
-    26		ppri->host_if = init->host_if;
-    27		ppri->promisc = init->promisc;
-    28		ppri->optimize = init->optimize;
-    29		ppri->filter = init->filter;
-    30	
-    31		printk("pcap backend, host interface %s\n", ppri->host_if);
-    32	}
-    33	
+I don't think this is needed.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> +static int aglx_rp_read_cfg(struct altera_pcie *pcie, int where,
+> +			   int size, u32 *value)
+> +{
+> +	void __iomem *addr = AGLX_RP_CFG_ADDR(pcie, where);
+> +
+> +	switch (size) {
+> +	case 1:
+> +		*value = readb(addr);
+> +		break;
+> +	case 2:
+> +		*value = readw(addr);
+> +		break;
+> +	default:
+> +		*value = readl(addr);
+> +		break;
+> +	}
+> +
+> +	if (where == 0x3d)
+> +		*value = 0x01;
+> +	if (where == 0x3c)
+> +		*value |= 0x0100;
+
+This magic needs a comment.  Apparently it works around some hardware
+defect?  What happens if this is a single byte read?  Looks like it
+may set more than one byte of *value.
+
+> +static int aglx_ep_write_cfg(struct altera_pcie *pcie, u8 busno,
+> +		unsigned int devfn, int where, int size, u32 value)
+> +{
+> +	cs_writel(pcie, ((busno << 8) | devfn), AGLX_BDF_REG);
+> +	if (busno > AGLX_RP_SECONDARY(pcie)) {
+> +		/* type 1 */
+> +		switch (size) {
+> +		case 1:
+> +			cs_writeb(pcie, value, ((1 << 12) | where));
+> +			break;
+> +		case 2:
+> +			cs_writew(pcie, value, ((1 << 12) | where));
+> +			break;
+> +		default:
+> +			cs_writel(pcie, value, ((1 << 12) | where));
+> +			break;
+> +		}
+> +	} else {
+> +		/* type 0 */
+> +		switch (size) {
+> +		case 1:
+> +			cs_writeb(pcie, value, where);
+> +			break;
+> +		case 2:
+> +			cs_writew(pcie, value, where);
+> +			break;
+> +		default:
+> +			cs_writel(pcie, value, where);
+> +				break;
+> +		}
+> +	}
+
+These switches could be combined, e.g.,
+
+  if (busno > AGLX_RP_SECONDARY(pcie))
+    where |= 1 << 12;
+
+> +	if (status & CFG_AER) {
+> +		ret = generic_handle_domain_irq(pcie->irq_domain, 0);
+> +		if (ret)
+> +			dev_err_ratelimited(dev, "unexpected IRQ,\n");
+
+Spurious "," at end of line.
+
+> @@ -692,11 +904,27 @@ static int altera_pcie_parse_dt(struct altera_pcie *pcie)
+>  {
+>  	struct platform_device *pdev = pcie->pdev;
+>  
+> -	pcie->cra_base = devm_platform_ioremap_resource_byname(pdev, "Cra");
+> -	if (IS_ERR(pcie->cra_base))
+> -		return PTR_ERR(pcie->cra_base);
+> +	if ((pcie->pcie_data->version == ALTERA_PCIE_V1) ||
+> +		(pcie->pcie_data->version == ALTERA_PCIE_V2)) {
+> +		pcie->cra_base =
+> +			devm_platform_ioremap_resource_byname(pdev, "Cra");
+> +		if (IS_ERR(pcie->cra_base))
+> +			return PTR_ERR(pcie->cra_base);
+> +	}
+
+Should be a separate introductory patch since it's not directly
+related to Agilex.
+
+> -	if (pcie->pcie_data->version == ALTERA_PCIE_V2) {
+> +	if (pcie->pcie_data->version == ALTERA_PCIE_V3) {
+> +		pcie->cs_base =
+> +			devm_platform_ioremap_resource_byname(pdev, "Cs");
+> +		if (IS_ERR(pcie->cs_base))
+> +			return PTR_ERR(pcie->cs_base);
+> +		of_property_read_u32(pcie->pdev->dev.of_node, "port_conf_stat",
+> +				&port_conf_off);
+> +		dev_info(&pcie->pdev->dev, "port_conf_stat_off =%x\n",
+> +			port_conf_off);
+> +	}
+> +
+> +	if ((pcie->pcie_data->version == ALTERA_PCIE_V2) ||
+> +		(pcie->pcie_data->version == ALTERA_PCIE_V3)) {
+
+Ditto.
+
+>  		pcie->hip_base =
+>  			devm_platform_ioremap_resource_byname(pdev, "Hip");
+>  		if (IS_ERR(pcie->hip_base))
+> @@ -708,7 +936,8 @@ static int altera_pcie_parse_dt(struct altera_pcie *pcie)
+>  	if (pcie->irq < 0)
+>  		return pcie->irq;
+>  
+> -	irq_set_chained_handler_and_data(pcie->irq, altera_pcie_isr, pcie);
+> +	irq_set_chained_handler_and_data(pcie->irq,
+> +		pcie->pcie_data->ops->rp_isr, pcie);
+
+Ditto (including the new .rp_isr initializations below).
+
+> @@ -721,6 +950,7 @@ static const struct altera_pcie_ops altera_pcie_ops_1_0 = {
+>  	.tlp_read_pkt = tlp_read_packet,
+>  	.tlp_write_pkt = tlp_write_packet,
+>  	.get_link_status = altera_pcie_link_up,
+> +	.rp_isr = altera_pcie_isr,
+>  };
+
+> @@ -793,11 +1045,17 @@ static int altera_pcie_probe(struct platform_device *pdev)
+>  		return ret;
+>  	}
+>  
+> -	/* clear all interrupts */
+> -	cra_writel(pcie, P2A_INT_STS_ALL, P2A_INT_STATUS);
+> -	/* enable all interrupts */
+> -	cra_writel(pcie, P2A_INT_ENA_ALL, P2A_INT_ENABLE);
+> -	altera_pcie_host_init(pcie);
+> +	if ((pcie->pcie_data->version == ALTERA_PCIE_V1) ||
+> +		(pcie->pcie_data->version == ALTERA_PCIE_V2)) {
+> +		/* clear all interrupts */
+> +		cra_writel(pcie, P2A_INT_STS_ALL, P2A_INT_STATUS);
+> +		/* enable all interrupts */
+> +		cra_writel(pcie, P2A_INT_ENA_ALL, P2A_INT_ENABLE);
+> +		altera_pcie_host_init(pcie);
+
+Ditto.
+
+> +	} else if (pcie->pcie_data->version == ALTERA_PCIE_V3) {
+> +		writel(CFG_AER, (pcie->hip_base + port_conf_off
+> +			+ AGLX_ROOT_PORT_IRQ_ENABLE));
+> +	}
+>  
+>  	bridge->sysdata = pcie;
+>  	bridge->busnr = pcie->root_bus_nr;
+> -- 
+> 2.34.1
+> 
