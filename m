@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1FA4732B73
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5C90732B6F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344399AbjFPJ0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 05:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41400 "EHLO
+        id S1344338AbjFPJZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 05:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344134AbjFPJYz (ORCPT
+        with ESMTP id S1344143AbjFPJYz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 16 Jun 2023 05:24:55 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B775EA;
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D0D2695;
         Fri, 16 Jun 2023 02:24:52 -0700 (PDT)
-Date:   Fri, 16 Jun 2023 09:24:48 -0000
+Date:   Fri, 16 Jun 2023 09:24:49 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686907488;
+        s=2020; t=1686907489;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7CRZ/I+UHhDqzwb3VMqBS3zXkZGutnO/KuKUuPRDd4w=;
-        b=iiRuaZqg+ML8Y7P/U4IvPnWsPvt360b1m4qJFPRXIHUgtSZI311SDLKRN9z/snR5Vs6YRx
-        ODimoHNTpntc6LXvwIooI02dtPgSfhyYMLmSUa0GrRzl7qkNn32giLW1j1An7hjm8g1eCk
-        WEKSwzM3epB2vckajyFbSTxykloq9eUHXjeMMMyqy726iTeG5OrHpWaIpVctQPpwDqqbZt
-        bQwddA3VxXV0tPotH2RuZ2mSOAFocyaKixA41DJVjgWyZIsZk7AmTITm2neOY3E/Yp3X1n
-        3ZpN/co2UavIGMC7iJf6EkKYg+Jd3F+2ogsa+OHk0jsJ2eyGDLfhC1xpyp/igw==
+        bh=CiZpTVxnUZzuczFQxKQSaLnqyVa2i6IQpsTInmTvxTA=;
+        b=wOr7wbXRVwz61K1UkEMKsjSCXjeBOeG6EeOoYfwIJGTzZVZn0JHTH0jcCldpT0HQ8rnCS3
+        LTF+LJFNGFTqSx9LpR5ws5D+wNaIMKE5JZZyJcI1LRSdsU//1z8LrYyHWV9tEBjLBIrJSv
+        0VP+ReNgJWYT/IPKlR5gouf7OIFg3bWizSI209oihXsfkgI05xkDexkildzCfSBE4zqt0K
+        Au7rGpl95JNee1PfxzzS5vPhCw60ESVNeTW1g+ztaJgEJgyA8+Tl4L6PglDjKvEwysl3de
+        ubO7HXxo5DJ7RfzzSaNBxXnqmrtsSFrl7PPginu1S8FMq+upJb0L8BvYcExYqQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686907488;
+        s=2020e; t=1686907489;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7CRZ/I+UHhDqzwb3VMqBS3zXkZGutnO/KuKUuPRDd4w=;
-        b=3CIbApYBXKikxfE00QRM4Djn93HFAAzVRCmFv2xTNrWupP7Opn+bCmFHzSUGisOY1rnwdw
-        6CZ0/7rGs17BK/Dw==
+        bh=CiZpTVxnUZzuczFQxKQSaLnqyVa2i6IQpsTInmTvxTA=;
+        b=APPAoGqe3FZ7EM2Vu5vK9SM3arJijq8aVUf6aUXIQWt0/QHU54yJAjgSX77v0D31UtnFTk
+        x0nUTZHien37akBw==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/boot] m68k/cpu: Switch to arch_cpu_finalize_init()
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>, x86@kernel.org,
+Subject: [tip: x86/boot] loongarch/cpu: Switch to arch_cpu_finalize_init()
+Cc:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230613224545.254342916@linutronix.de>
-References: <20230613224545.254342916@linutronix.de>
+In-Reply-To: <20230613224545.195288218@linutronix.de>
+References: <20230613224545.195288218@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <168690748843.404.10599176474859670498.tip-bot2@tip-bot2>
+Message-ID: <168690748908.404.7577532475575258816.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,14 +66,14 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/boot branch of tip:
 
-Commit-ID:     9ceecc2589b9d7cef6b321339ed8de484eac4b20
-Gitweb:        https://git.kernel.org/tip/9ceecc2589b9d7cef6b321339ed8de484eac4b20
+Commit-ID:     9841c423164787feb8f1442f922b7d80a70c82f1
+Gitweb:        https://git.kernel.org/tip/9841c423164787feb8f1442f922b7d80a70c82f1
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Wed, 14 Jun 2023 01:39:30 +02:00
+AuthorDate:    Wed, 14 Jun 2023 01:39:28 +02:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Fri, 16 Jun 2023 10:15:59 +02:00
 
-m68k/cpu: Switch to arch_cpu_finalize_init()
+loongarch/cpu: Switch to arch_cpu_finalize_init()
 
 check_bugs() is about to be phased out. Switch over to the new
 arch_cpu_finalize_init() implementation.
@@ -82,73 +81,74 @@ arch_cpu_finalize_init() implementation.
 No functional change.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Link: https://lore.kernel.org/r/20230613224545.254342916@linutronix.de
+Link: https://lore.kernel.org/r/20230613224545.195288218@linutronix.de
 
 ---
- arch/m68k/Kconfig            |  1 +
- arch/m68k/include/asm/bugs.h | 21 ---------------------
- arch/m68k/kernel/setup_mm.c  |  3 ++-
- 3 files changed, 3 insertions(+), 22 deletions(-)
- delete mode 100644 arch/m68k/include/asm/bugs.h
+ arch/loongarch/Kconfig            |  1 +
+ arch/loongarch/include/asm/bugs.h | 15 ---------------
+ arch/loongarch/kernel/setup.c     |  4 ++--
+ 3 files changed, 3 insertions(+), 17 deletions(-)
+ delete mode 100644 arch/loongarch/include/asm/bugs.h
 
-diff --git a/arch/m68k/Kconfig b/arch/m68k/Kconfig
-index 40198a1..dc792b3 100644
---- a/arch/m68k/Kconfig
-+++ b/arch/m68k/Kconfig
-@@ -4,6 +4,7 @@ config M68K
- 	default y
- 	select ARCH_32BIT_OFF_T
- 	select ARCH_HAS_BINFMT_FLAT
-+	select ARCH_HAS_CPU_FINALIZE_INIT if MMU
- 	select ARCH_HAS_CURRENT_STACK_POINTER
- 	select ARCH_HAS_DMA_PREP_COHERENT if HAS_DMA && MMU && !COLDFIRE
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE if HAS_DMA
-diff --git a/arch/m68k/include/asm/bugs.h b/arch/m68k/include/asm/bugs.h
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index d38b066..cbab4f9 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -10,6 +10,7 @@ config LOONGARCH
+ 	select ARCH_ENABLE_MEMORY_HOTPLUG
+ 	select ARCH_ENABLE_MEMORY_HOTREMOVE
+ 	select ARCH_HAS_ACPI_TABLE_UPGRADE	if ACPI
++	select ARCH_HAS_CPU_FINALIZE_INIT
+ 	select ARCH_HAS_FORTIFY_SOURCE
+ 	select ARCH_HAS_NMI_SAFE_THIS_CPU_OPS
+ 	select ARCH_HAS_PTE_SPECIAL
+diff --git a/arch/loongarch/include/asm/bugs.h b/arch/loongarch/include/asm/bugs.h
 deleted file mode 100644
-index 7455306..0000000
---- a/arch/m68k/include/asm/bugs.h
+index 9839653..0000000
+--- a/arch/loongarch/include/asm/bugs.h
 +++ /dev/null
-@@ -1,21 +0,0 @@
+@@ -1,15 +0,0 @@
 -/* SPDX-License-Identifier: GPL-2.0 */
--/*
-- *  include/asm-m68k/bugs.h
-- *
-- *  Copyright (C) 1994  Linus Torvalds
-- */
--
 -/*
 - * This is included by init/main.c to check for architecture-dependent bugs.
 - *
-- * Needs:
-- *	void check_bugs(void);
+- * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
 - */
+-#ifndef _ASM_BUGS_H
+-#define _ASM_BUGS_H
 -
--#ifdef CONFIG_MMU
--extern void check_bugs(void);	/* in arch/m68k/kernel/setup.c */
--#else
--static void check_bugs(void)
--{
--}
--#endif
-diff --git a/arch/m68k/kernel/setup_mm.c b/arch/m68k/kernel/setup_mm.c
-index fbff1ce..6f1ae01 100644
---- a/arch/m68k/kernel/setup_mm.c
-+++ b/arch/m68k/kernel/setup_mm.c
-@@ -10,6 +10,7 @@
+-#include <asm/cpu.h>
+-#include <asm/cpu-info.h>
+-
+-extern void check_bugs(void);
+-
+-#endif /* _ASM_BUGS_H */
+diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
+index 4444b13..78a0035 100644
+--- a/arch/loongarch/kernel/setup.c
++++ b/arch/loongarch/kernel/setup.c
+@@ -12,6 +12,7 @@
   */
- 
- #include <linux/kernel.h>
+ #include <linux/init.h>
+ #include <linux/acpi.h>
 +#include <linux/cpu.h>
- #include <linux/mm.h>
- #include <linux/sched.h>
- #include <linux/delay.h>
-@@ -504,7 +505,7 @@ static int __init proc_hardware_init(void)
- module_init(proc_hardware_init);
- #endif
+ #include <linux/dmi.h>
+ #include <linux/efi.h>
+ #include <linux/export.h>
+@@ -37,7 +38,6 @@
+ #include <asm/addrspace.h>
+ #include <asm/alternative.h>
+ #include <asm/bootinfo.h>
+-#include <asm/bugs.h>
+ #include <asm/cache.h>
+ #include <asm/cpu.h>
+ #include <asm/dma.h>
+@@ -87,7 +87,7 @@ const char *get_system_type(void)
+ 	return "generic-loongson-machine";
+ }
  
--void check_bugs(void)
+-void __init check_bugs(void)
 +void __init arch_cpu_finalize_init(void)
  {
- #if defined(CONFIG_FPU) && !defined(CONFIG_M68KFPU_EMU)
- 	if (m68k_fputype == 0) {
+ 	alternative_instructions();
+ }
