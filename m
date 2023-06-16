@@ -2,126 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EEF8732566
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 04:50:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3A1F73256A
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 04:53:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235820AbjFPCuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 22:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53436 "EHLO
+        id S233550AbjFPCxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 22:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232101AbjFPCuo (ORCPT
+        with ESMTP id S229581AbjFPCxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 22:50:44 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 75F1D294A;
-        Thu, 15 Jun 2023 19:50:42 -0700 (PDT)
-Received: from loongson.cn (unknown [10.40.46.158])
-        by gateway (Coremail) with SMTP id _____8AxHusAzotkFc4FAA--.12391S3;
-        Fri, 16 Jun 2023 10:50:40 +0800 (CST)
-Received: from [192.168.124.126] (unknown [10.40.46.158])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxluT+zYtkSMgcAA--.16273S3;
-        Fri, 16 Jun 2023 10:50:38 +0800 (CST)
-Subject: Re: [PATCH v13 30/30] LoongArch: KVM: Add maintainers for LoongArch
- KVM
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
-        Xi Ruoyao <xry111@xry111.site>, tangyouling@loongson.cn
-References: <20230609090518.2130926-1-zhaotianrui@loongson.cn>
- <20230609090518.2130926-31-zhaotianrui@loongson.cn>
- <CAAhV-H6ddLNgMocmE7UtpLmrqsCUYYbwxqhFJ6OOGCUCLTXAhg@mail.gmail.com>
-From:   zhaotianrui <zhaotianrui@loongson.cn>
-Message-ID: <7306f3a7-42c3-1e9b-8515-7e7613b60f4f@loongson.cn>
-Date:   Fri, 16 Jun 2023 10:50:37 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Thu, 15 Jun 2023 22:53:34 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 641E92953;
+        Thu, 15 Jun 2023 19:53:33 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f62cf9755eso177154e87.1;
+        Thu, 15 Jun 2023 19:53:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686884011; x=1689476011;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5kFgu8FWM4Gf6hm5nPlre0K9PgbWZtv1AsAuuIyVNe4=;
+        b=q5+Utgokxvif9/N22sEUcN6nL79Azu+IUrd+5OfrEL/EpRPDSK3xLEYFdQUT2KcCk3
+         mu5lXN3UZjYK3Wt9yOW7uVwrO3CiO1QOXIkQBqfT+J5WoM0fR1VXZkHyECQsXjhN0mlU
+         su2NJPbsc37uBxuNXdtXntu+UjngUBGhEn4ZDs00XgQL8yqnSt3ApsSkJ6gKYe1DWAzQ
+         V5SsnLoymI1vET1P4g6dQ0ceu/l6KmUvcwRto8dsXJoeMdp+M37wM7aPDZGJKsVHYMF6
+         FkPY8BRS3HkcnDoBTheWzKFBrdlRihUmdD7pDMhUahCwmVEN7H4yv0CTSV+DDxNNpFVV
+         WLQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686884011; x=1689476011;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5kFgu8FWM4Gf6hm5nPlre0K9PgbWZtv1AsAuuIyVNe4=;
+        b=XWA559beib/bP+c6kUXcKb1HN3n0RjO187GNSidvr2qt/C5Z5nkJDQMqtfxDMgz+hw
+         ypSuGq3qpx4X11LzE0ryJvTuTp8g9nmDmf2dESnKP4F0JajxVgGZRJgZV0dRiFqolXMQ
+         vkN7gDdPMBw8J/WUgfk8/Qi5yoj9UudyozO1vqN2r+li10dRNxoFByv0iJFm43mjbumh
+         px6X5NOuhdvKjoK5Jnzo++1u4dHtH9LxTjHPC/lrcmJccvfSz+Y8vOXWB4r3rxDq1FWB
+         RylK2s3NPZhFDAPIyjQQAnf8YyOwPm8Ejgk4zkT6Z0Gfr7AtkL1eJSM9q/PHQRD3iwQO
+         Ogrw==
+X-Gm-Message-State: AC+VfDyq1Up+z9YjQLy9taz0IvBhtnvBsE5AgTOgUz57i4pOodlRjjY1
+        ZDNxNM7uTPB/KtZSlcudKkM=
+X-Google-Smtp-Source: ACHHUZ5ebDOQw0QiINFOr/jhMlWot9TCSLb7tYwG1tgN3cqvI+jQcmJFsciUE1fYE1pvNeHAFBEB8w==
+X-Received: by 2002:a05:6512:328c:b0:4f3:b49b:e246 with SMTP id p12-20020a056512328c00b004f3b49be246mr323458lfe.5.1686884011259;
+        Thu, 15 Jun 2023 19:53:31 -0700 (PDT)
+Received: from arinc9-Xeront.. (athedsl-404045.home.otenet.gr. [79.131.130.75])
+        by smtp.gmail.com with ESMTPSA id v15-20020a1cf70f000000b003f8d770e935sm890328wmh.0.2023.06.15.19.53.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 19:53:30 -0700 (PDT)
+From:   arinc9.unal@gmail.com
+X-Google-Original-From: arinc.unal@arinc9.com
+To:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     Landen Chao <landen.chao@mediatek.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH net v5 0/6] net: dsa: mt7530: fix multiple CPU ports, BPDU and LLDP handling
+Date:   Fri, 16 Jun 2023 05:53:21 +0300
+Message-Id: <20230616025327.12652-1-arinc.unal@arinc9.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H6ddLNgMocmE7UtpLmrqsCUYYbwxqhFJ6OOGCUCLTXAhg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID: AQAAf8DxluT+zYtkSMgcAA--.16273S3
-X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoW7AFWrtw48CF4rJryfJw1UurX_yoW8XFW5pF
-        4kAF4kCFs7Gr4xAwsrKasI9a43XrykCr12qasxK348Zr1DWw1kXrWUt3Z09FZ0qasYgF40
-        vwn3Kw129F4UXrXCm3ZEXasCq-sJn29KB7ZKAUJUUUUf529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        tVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
-        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67
-        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
-        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14
-        v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWx
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4BHqDU
-        UUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi.
 
-在 2023/6/15 下午5:27, Huacai Chen 写道:
-> Hi, Tianrui,
->
-> On Fri, Jun 9, 2023 at 5:06 PM Tianrui Zhao <zhaotianrui@loongson.cn> wrote:
->> Add maintainers for LoongArch KVM.
->>
->> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
->> ---
->>   MAINTAINERS | 12 ++++++++++++
->>   1 file changed, 12 insertions(+)
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 27ef11624748..c2fbfd6ad4e5 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -11357,6 +11357,18 @@ F:     include/kvm/arm_*
->>   F:     tools/testing/selftests/kvm/*/aarch64/
->>   F:     tools/testing/selftests/kvm/aarch64/
->>
->> +KERNEL VIRTUAL MACHINE FOR LOONGARCH (KVM/LoongArch)
->> +M:     Tianrui Zhao <zhaotianrui@loongson.cn>
->> +M:     Bibo Mao <maobibo@loongson.cn>
->> +M:     Huacai Chen <chenhuacai@kernel.org>
->> +L:     kvm@vger.kernel.org
->> +L:     loongarch@lists.linux.dev
->> +S:     Maintained
->> +T:     git https://github.com/loongson/linux-loongarch-kvm
-> I'm not sure, but I think this should be a tree which can be used to
-> send PR for upstream maintainers. If no other selection, we should use
-> git git://git.kernel.org/pub/scm/virt/kvm/kvm.git
->
-> Huacai
+This patch series fixes hopefully all issues regarding multiple CPU ports
+and the handling of LLDP frames and BPDUs.
 
-Thanks, I will use this kvm source link.
+I am adding me as a maintainer, I've got some code improvements on the way.
+I will keep an eye on this driver and the patches submitted for it in the
+future.
 
-Tianrui Zhao
+Arınç
 
->> +F:     arch/loongarch/include/asm/kvm*
->> +F:     arch/loongarch/include/uapi/asm/kvm*
->> +F:     arch/loongarch/kvm/
->> +
->>   KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)
->>   M:     Huacai Chen <chenhuacai@kernel.org>
->>   M:     Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
->> --
->> 2.39.1
->>
->>
+v5:
+- Change the comment in the diff on the first patch with Russell's words.
+- Change the patch log of the first patch to state that the patch is just
+  preparatory work for change "net: dsa: introduce
+  preferred_default_local_cpu_port and use on MT7530" and not a fix to an
+  existing problem on the code base.
+- Remove the "net: dsa: mt7530: fix trapping frames with multiple CPU ports
+  on MT7530" patch. It fixes a theoretical issue, therefore it is net-next
+  material.
+- Remove unnecessary information from the patch logs. Remove the enum
+  renaming change.
+- Strengthen the point of the "net: dsa: introduce
+  preferred_default_local_cpu_port and use on MT7530" patch.
+
+v4: Make the patch logs and my comments in the code easier to understand.
+v3: Fix the from header on the patches. Write a cover letter.
+v2: Add patches to fix the handling of LLDP frames and BPDUs.
+
+Arınç ÜNAL (6):
+  net: dsa: mt7530: set all CPU ports in MT7531_CPU_PMAP
+  net: dsa: mt7530: fix trapping frames on non-MT7621 SoC MT7530 switch
+  net: dsa: mt7530: fix handling of BPDUs on MT7530 switch
+  net: dsa: mt7530: fix handling of LLDP frames
+  net: dsa: introduce preferred_default_local_cpu_port and use on MT7530
+  MAINTAINERS: add me as maintainer of MEDIATEK SWITCH DRIVER
+
+ MAINTAINERS              |  5 +++--
+ drivers/net/dsa/mt7530.c | 44 +++++++++++++++++++++++++++++++++++--------
+ drivers/net/dsa/mt7530.h |  6 ++++++
+ include/net/dsa.h        |  8 ++++++++
+ net/dsa/dsa.c            | 24 ++++++++++++++++++++++-
+ 5 files changed, 76 insertions(+), 11 deletions(-)
+
 
