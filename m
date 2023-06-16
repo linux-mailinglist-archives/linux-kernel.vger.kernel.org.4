@@ -2,73 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B265732A27
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:47:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 175A1732A2B
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:47:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343674AbjFPIrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 04:47:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44108 "EHLO
+        id S1343791AbjFPIrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 04:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231383AbjFPIrY (ORCPT
+        with ESMTP id S1343764AbjFPIrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 04:47:24 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B3D1FEC
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 01:47:22 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-25e8b2931f2so415462a91.2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 01:47:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shopee.com; s=shopee.com; t=1686905242; x=1689497242;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=14jtraihfDQYuZKnWqtYB4vhXjv2bj/la1fKtOJoayo=;
-        b=d+2AVHZsTy1E9KJtZsJvVVIyla7VzuCveJTq0FID83gOrCC7aVgr8vXcIuC65p7y+t
-         HYPlVbzUYU+h2icnfnip4UwI5FywmONNI/kPFPFF9vEj5fRZqpJto8QVv7mdi7rS3MHK
-         W7KuNCQkLcdtegaVBZfWp4lrUveeUdg658RxbJ34/yLhNlXG/c4U8fEcYhZo838ulhVy
-         WDHZ1HXAlUmVqKGCI+DDDEw1E35RTcqsghoZOYqGHbPZgXWCsXKHUGVBCn9e1liIIzGd
-         TBbUtCAJxZ1XmbK4m0E4CTseD8E3dPQoVkuN312wIj9IxC05IkX7dpdKJL2xuH6fjvRo
-         VUNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686905242; x=1689497242;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=14jtraihfDQYuZKnWqtYB4vhXjv2bj/la1fKtOJoayo=;
-        b=QERU0cacAuMBBCz7EVqTQEsUqf6TOPYhd5lKxS8ulRvgal5VB3EwbqiI0MJvTt9pfj
-         blaj6efoJNVPnKZurFpc1hHgIpqVy8iD1STK8kDq8+OG7VtZnS1M9dqRhiRdvXY9NpEd
-         vZIp6J0cN5/cqmYs2QVdcXUpfwp1JBd5F1+dSkDBoNlAWGAvRhqnozaaa3LRr6ftbyVn
-         liAPZ1K/Uic15SKdxN9KqlXLln7Nas74mlH9zGj7Cs7OMdTuvJD0895FyMs12Ofn8XTE
-         QhNjwcUPkBwAYvet1Rzj3wHYWiUiJMEOu1Q6dLY/hQqjXKAhtpjaB4kF7CgPHFV6MV68
-         XPHA==
-X-Gm-Message-State: AC+VfDxwFJ8M+JuY7m1gc/goQOzZPjUX9Nd1sZ/bFGDV16b6DIvNVqJB
-        41+AxiM8Niu/ych9T0xErFFX9GErMJzAEods95u352c5
-X-Google-Smtp-Source: ACHHUZ4mlwtlcw7qmHw9X64xtozPVzjrxFtFRk+MgSU1GT/TXSW1rB9S5VYSXnTACzY4ffxsNkgzLg==
-X-Received: by 2002:a17:90b:368b:b0:258:d910:6196 with SMTP id mj11-20020a17090b368b00b00258d9106196mr1188311pjb.14.1686905242108;
-        Fri, 16 Jun 2023 01:47:22 -0700 (PDT)
-Received: from [10.54.24.10] ([143.92.118.3])
-        by smtp.gmail.com with ESMTPSA id t191-20020a6381c8000000b0054fe07d2f3dsm3373691pgd.11.2023.06.16.01.47.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jun 2023 01:47:21 -0700 (PDT)
-Message-ID: <69cea432-f784-a734-f93e-50b0f897767c@shopee.com>
-Date:   Fri, 16 Jun 2023 16:47:17 +0800
+        Fri, 16 Jun 2023 04:47:40 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 307ED30CF;
+        Fri, 16 Jun 2023 01:47:33 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8DxSuqjIYxkOOgFAA--.12459S3;
+        Fri, 16 Jun 2023 16:47:31 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxjcqgIYxk+REdAA--.8656S3;
+        Fri, 16 Jun 2023 16:47:29 +0800 (CST)
+Subject: Re: [PATCH v3 2/3] soc: dt-bindings: add loongson-2 pm
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230615091757.24686-1-zhuyinbo@loongson.cn>
+ <20230615091757.24686-3-zhuyinbo@loongson.cn>
+ <20230616-entangled-cauterize-1cbde7401b91@wendy>
+ <9a53089a-3c87-13e1-0bc4-29058ac0ec54@loongson.cn>
+ <20230616-tablet-isotope-94749a2f8336@wendy>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <810c82f2-d7af-b7c4-ce35-ddd135ac1813@loongson.cn>
+Date:   Fri, 16 Jun 2023 16:47:28 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.2
-Subject: Re: [PATCH 2/2] mm/memcontrol: add check for allocation failure in
- mem_cgroup_init()
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     roman.gushchin@linux.dev, hannes@cmpxchg.org, shakeelb@google.com,
-        akpm@linux-foundation.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20230615073226.1343-2-haifeng.xu@shopee.com>
- <ZIrLLmb+o77Wy2sY@dhcp22.suse.cz>
-From:   Haifeng Xu <haifeng.xu@shopee.com>
-In-Reply-To: <ZIrLLmb+o77Wy2sY@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20230616-tablet-isotope-94749a2f8336@wendy>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxjcqgIYxk+REdAA--.8656S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+        nUUI43ZEXa7xR_UUUUUUUUU==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,48 +66,127 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2023/6/15 16:26, Michal Hocko wrote:
-> On Thu 15-06-23 07:32:26, Haifeng Xu wrote:
->> If mem_cgroup_init() fails to allocate mem_cgroup_tree_per_node, we
->> should not try to initilaize it. Add check for this case to avoid
->> potential NULL pointer dereference.
-> 
-> Technically yes and it seems that all users of soft_limit_tree.rb_tree_per_node
-> correctly check for NULL so this would be graceful failure handling. At
-> least superficially because the feature itself would be semi-broken when
-> used. But more practically this is a 24B allocation and if we fail to
-> allocate that early during the boot we are screwed anyway. Would such
-> a system have any chance to boot all the way to userspace? Woul any
-> userspace actually work?
-> 
-
-The memory request is too small and It's unlikely to fail during early init.
-If it fails, I think the system won't work.
-
-> Is this patch motivated by a code reading or is there any actual
-> practical upside of handling the error here?
->  
-
-There is no real world problem, just from code review.
-
->> Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
->> ---
->>  mm/memcontrol.c | 2 ++
->>  1 file changed, 2 insertions(+)
+在 2023/6/16 下午4:03, Conor Dooley 写道:
+> On Fri, Jun 16, 2023 at 03:53:38PM +0800, zhuyinbo wrote:
+>> 在 2023/6/16 下午2:58, Conor Dooley 写道:
+>>>
+>>> Rob, could you take a look at this please? On v2 while you were away I
+>>> was kinda struggling w/ suspend-address & whether it made sense.
+>>>
+>>> The v2 & v1 are here:
+>>> https://lore.kernel.org/all/20230522093156.7108-3-zhuyinbo@loongson.cn/
+>>> https://lore.kernel.org/all/20230517073149.31980-3-zhuyinbo@loongson.cn/
+>>>
+>>> On Thu, Jun 15, 2023 at 05:17:56PM +0800, Yinbo Zhu wrote:
+>>>> Add the Loongson-2 SoC Power Management Controller binding with DT
+>>>> schema format using json-schema.
+>>>>
+>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>>>> ---
+>>>>    .../soc/loongson/loongson,ls2k-pmc.yaml       | 53 +++++++++++++++++++
+>>>>    MAINTAINERS                                   |  6 +++
+>>>>    2 files changed, 59 insertions(+)
+>>>>    create mode 100644 Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..32499bd10f8c
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
+>>>
+>>> The filename should ideally match one of the compatibles.
 >>
->> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
->> index c73c5fb33f65..7ebf64e48b25 100644
->> --- a/mm/memcontrol.c
->> +++ b/mm/memcontrol.c
->> @@ -7422,6 +7422,8 @@ static int __init mem_cgroup_init(void)
->>  		struct mem_cgroup_tree_per_node *rtpn;
->>  
->>  		rtpn = kzalloc_node(sizeof(*rtpn), GFP_KERNEL, node);
->> +		if (!rtpn)
->> +			continue;
->>  
->>  		rtpn->rb_root = RB_ROOT;
->>  		rtpn->rb_rightmost = NULL;
->> -- 
->> 2.25.1
+>>
+>> I learn about that yaml file name need match this compatible, but here
+>> using a specific compatible as the name of the yaml file seems a bit
+>> inappropriate . After all, this yaml file needs to cover lots of ls2k
+>> series SoC rather than a specific SoC, and the yaml file naming in
+>> kernel drivers is basically the same that use cover a series SoC's way.
+>>
+>>>
+>>>> @@ -0,0 +1,53 @@
+>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: http://devicetree.org/schemas/soc/loongson/loongson,ls2k-pmc.yaml#
+>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>> +
+>>>> +title: Loongson-2 Power Manager controller
+>>>> +
+>>>> +maintainers:
+>>>> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+>>>> +
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    oneOf:
+>>>> +      - items:
+>>>> +          - enum:
+>>>> +              - loongson,ls2k1000-pmc
+>>>> +              - loongson,ls2k0500-pmc
+>>>
+>>> I notice the driver only supports one of these two. Is there a reason
+>>> for that?
+>>
+>>
+>> The driver can support both of the above, and I will add another.
 > 
+> The driver only contains
+> 	static const struct of_device_id loongson2_pm_match[] = {
+> 	       { .compatible = "loongson,ls2k1000-pmc", },
+> 	       {},
+> 	};
+> so it only supports the 2k1000 right now. Are the 2k1000 and 2k0500
+> compatible with eachother?
+
+
+They are not completely compatible, 2k500 may still require some work to
+be done, but I can confirm this driver was can compatible 2k0500 and
+2k1000. for match yaml file, and I can add 2k0500 compatible in driver.
+
+> 
+>>>> +          - const: syscon
+>>>> +
+>>>> +  reg:
+>>>> +    maxItems: 1
+>>>> +
+>>>> +  interrupts:
+>>>> +    maxItems: 1
+>>>> +
+>>>> +  suspend-address:
+>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>>> +    description:
+>>>> +      The "suspend-address" is a deep sleep state (Suspend To RAM)
+>>>> +      firmware entry address which was jumped from kernel and it's
+>>>> +      value was dependent on specific platform firmware code. In
+>>>> +      addition, the PM need according to it to indicate that current
+>>>> +      SoC whether support Suspend To RAM.
+>>>> +
+>>>> +required:
+>>>> +  - compatible
+>>>> +  - reg
+>>>> +  - interrupts
+>>>> +
+>>>> +additionalProperties: false
+>>>> +
+>>>> +examples:
+>>>> +  - |
+>>>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>>>> +
+>>>> +    pmc: pm@1fe27000 {
+>>>          ^^^
+>>>
+>>> nit: this label isn't used, so you can drop it.
+>>
+>>
+>> This lable need to be used by poweroff and reboot node but I don't add
+>> these node that reference pmc here.
+> 
+> Right, in the dts it might need those, but not in the example in the
+> binding.
+
+
+okay, I got it.
+
+Thanks,
+Yinbo
+
