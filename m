@@ -2,82 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36BB0733125
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D83A973312F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:28:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344696AbjFPMZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 08:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33774 "EHLO
+        id S1344896AbjFPM2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 08:28:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344192AbjFPMZU (ORCPT
+        with ESMTP id S1344192AbjFPM17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 08:25:20 -0400
-Received: from smtp-fw-52005.amazon.com (smtp-fw-52005.amazon.com [52.119.213.156])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB97D30E1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 05:25:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1686918319; x=1718454319;
-  h=from:to:cc:date:message-id:references:in-reply-to:
-   content-id:content-transfer-encoding:mime-version:subject;
-  bh=n05DoyrBHXKDdlB35pLlTDm+2JJfGoE+jXQtDXhbJms=;
-  b=cTvzxs3/l+VBMDCbwE524IztZ2FgzQ02AY3CfDVJ9lZftzi8Kq662KLE
-   rdB+WUD7pO2WutE/BM/LIU8pcAjGdr80qu1IZQwApWtYjOBF4m2yG0Doi
-   uvwfsWXU6XAng3ITmOOF4vpwdzZg1QwqcaTIU8UZedYvtsM9DMz8gwERF
-   U=;
-X-IronPort-AV: E=Sophos;i="6.00,247,1681171200"; 
-   d="scan'208";a="587719517"
-Subject: Re: [PATCH 0/3] Resend GIC-v3 LPIs on concurrent invoke
-Thread-Topic: [PATCH 0/3] Resend GIC-v3 LPIs on concurrent invoke
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-93c3b254.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-52005.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 12:25:17 +0000
-Received: from EX19D014EUC003.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1a-m6i4x-93c3b254.us-east-1.amazon.com (Postfix) with ESMTPS id 7EBEFE0DD3;
-        Fri, 16 Jun 2023 12:25:15 +0000 (UTC)
-Received: from EX19D014EUC004.ant.amazon.com (10.252.51.182) by
- EX19D014EUC003.ant.amazon.com (10.252.51.184) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 16 Jun 2023 12:25:14 +0000
-Received: from EX19D014EUC004.ant.amazon.com ([fe80::76dd:4020:4ff2:1e41]) by
- EX19D014EUC004.ant.amazon.com ([fe80::76dd:4020:4ff2:1e41%3]) with mapi id
- 15.02.1118.026; Fri, 16 Jun 2023 12:25:14 +0000
-From:   "Gowans, James" <jgowans@amazon.com>
-To:     "maz@kernel.org" <maz@kernel.org>
-CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "liaochang1@huawei.com" <liaochang1@huawei.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Thread-Index: AQHZmgEKR/AD3FMNjkCRB6yMZRAtzK+NJh6AgAAx5wCAAA8qAA==
-Date:   Fri, 16 Jun 2023 12:25:14 +0000
-Message-ID: <653de2e448ebe0e525cf31dd8feb269671a6350a.camel@amazon.com>
-References: <20230608120021.3273400-1-jgowans@amazon.com>
-         <d08bc249fcf25ab88ded1578e79997a25ab6ba93.camel@amazon.com>
-         <875y7nr6dr.wl-maz@kernel.org>
-In-Reply-To: <875y7nr6dr.wl-maz@kernel.org>
-Accept-Language: en-ZA, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.146.13.222]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <3E6BDA3873643D4DA41F76E566CA7712@amazon.com>
-Content-Transfer-Encoding: base64
+        Fri, 16 Jun 2023 08:27:59 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A4EF30DE;
+        Fri, 16 Jun 2023 05:27:56 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 1B84492009C; Fri, 16 Jun 2023 14:27:53 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 13F8F92009B;
+        Fri, 16 Jun 2023 13:27:53 +0100 (BST)
+Date:   Fri, 16 Jun 2023 13:27:52 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        Stefan Roese <sr@denx.de>, Leon Romanovsky <leon@kernel.org>,
+        linux-rdma@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jim Wilson <wilson@tuliptree.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        David Abdurachmanov <david.abdurachmanov@gmail.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Lukas Wunner <lukas@wunner.de>, netdev@vger.kernel.org,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        Saeed Mahameed <saeedm@nvidia.com>
+Subject: Re: [PATCH v9 00/14] pci: Work around ASMedia ASM2824 PCIe link
+ training failures
+In-Reply-To: <20230615183754.GA1483387@bhelgaas>
+Message-ID: <alpine.DEB.2.21.2306160431470.64925@angie.orcam.me.uk>
+References: <20230615183754.GA1483387@bhelgaas>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCAyMDIzLTA2LTE2IGF0IDEyOjMwICswMTAwLCBNYXJjIFp5bmdpZXIgd3JvdGU6DQo+
-IE9uIEZyaSwgMTYgSnVuIDIwMjMgMDk6MzI6MzAgKzAxMDAsDQo+ICJHb3dhbnMsIEphbWVzIiA8
-amdvd2Fuc0BhbWF6b24uY29tPiB3cm90ZToNCj4gPiBIaSBNYXJjIGFuZCBUb21hcywNCj4gPiBK
-dXN0IGEgcGluZyBvbiB0aGlzIHNlcmllczsgd291bGQgYmUgZ3JlYXQgdG8gZ2V0IGFueSBtb3Jl
-IGZlZWRiYWNrLCBvcg0KPiA+IGdldCB0aGlzIG1lcmdlZC4NCj4gDQo+IEp1c3QgZGlkLCBhZnRl
-ciBjb252ZXJ0aW5nIGV2ZXJ5dGhpbmcgdG8gQklUKCkgYW5kIG1hc3NhZ2luZyB0aGUNCj4gY29t
-bWl0IG1lc3NhZ2VzIHRvIG15IG93biBsaWtpbmcuDQoNClRoZSBjb21taXQgbWVzc2FnZSBpbXBy
-b3ZlbWVudHMgYXJlIGZhbnRhc3RpYyEgVGhhbmtzIGZvciBtZXJnaW5nIGl0DQpNYXJjLg0KDQpD
-aGVlcnMsDQpKRw0K
+On Thu, 15 Jun 2023, Bjorn Helgaas wrote:
+
+> >  If doing it this way, which I actually like, I think it would be a little 
+> > bit better performance- and style-wise if this was written as:
+> > 
+> > 	if (pci_is_pcie(dev)) {
+> > 		bridge = pci_upstream_bridge(dev);
+> > 		retrain = !!bridge;
+> > 	}
+> > 
+> > (or "retrain = bridge != NULL" if you prefer this style), and then we 
+> > don't have to repeatedly check two variables iff (pcie && !bridge) in the 
+> > loop below:
+> 
+> Done, thanks, I do like that better.  I did:
+> 
+>   bridge = pci_upstream_bridge(dev);
+>   if (bridge)
+>     retrain = true;
+> 
+> because it seems like it flows more naturally when reading.
+
+ Perfect, and good timing too, as I have just started checking your tree 
+as your message arrived.  I ran my usual tests with and w/o PCI_QUIRKS 
+enabled and results were as expected.  As before I didn't check hot plug 
+and reset paths as these features are awkward with the HiFive Unmatched 
+system involved.
+
+ I have skimmed over the changes as committed to pci/enumeration and found 
+nothing suspicious.  I have verified that the tree builds as at each of 
+them with my configuration.
+
+ As per my earlier remark:
+
+> I think making a system halfway-fixed would make little sense, but with
+> the actual fix actually made last as you suggested I think this can be
+> split off, because it'll make no functional change by itself.
+
+I am not perfectly happy with your rearrangement to fold the !PCI_QUIRKS 
+stub into the change carrying the actual workaround and then have the 
+reset path update with a follow-up change only, but I won't fight over it.  
+It's only one tree revision that will be in this halfway-fixed state and 
+I'll trust your judgement here.
+
+ Let me know if anything pops up related to these changes anytime and I'll 
+be happy to look into it.  The system involved is nearing two years since 
+its deployment already, but hopefully it has many years to go yet and will 
+continue being ready to verify things.  It's not that there's lots of real 
+RISC-V hardware available, let alone with PCI/e connectivity.
+
+ Thank you for staying with me and reviewing this patch series through all 
+the iterations.
+
+  Maciej
