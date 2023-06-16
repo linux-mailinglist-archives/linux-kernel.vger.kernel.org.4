@@ -2,326 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3695732585
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 05:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D38F73258B
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 05:01:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241234AbjFPDAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 23:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57944 "EHLO
+        id S241344AbjFPDBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 23:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241663AbjFPDAJ (ORCPT
+        with ESMTP id S241272AbjFPDBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 23:00:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC57E2953;
-        Thu, 15 Jun 2023 20:00:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 15 Jun 2023 23:01:19 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4962D4D
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 20:01:18 -0700 (PDT)
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com [209.85.161.70])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 299D56185A;
-        Fri, 16 Jun 2023 03:00:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48CFBC433CC;
-        Fri, 16 Jun 2023 03:00:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686884406;
-        bh=lfknHlYVl7xYkxb20nhhhSp7zufa8esHt6mjikj4vqA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=jAE+1Tp6FNYqMrl7Sxh8YTj9tilMjgVk8MyERRzcj3kzTrleZvA9WqHiNQ//0MFMk
-         tS8hZEaMMH5TPzHB4kchfhuDhnqDn0TPYAQce+ik5fB79T3MJIvgR5f3WC8GcSBzhz
-         qxfSIlKEVJjp0hiBtZlgPjFcbysOE0QxO3Qrm8SzPVr70H8VZPwKB9ENJp9bMkF131
-         D9ISjsQO+hrU9KXk8tlG6QlGRcZEWXp5M9RiXlSUy+DoFN/PuCetbGR2StY9lesoj6
-         GPWpRsopvg96bNzeViL+EMMJizczute1OgIHudHHwhbf/zZOwoRE+QhWHBbcGaoLru
-         qDR+6ll+mt8XA==
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5149c76f4dbso268299a12.1;
-        Thu, 15 Jun 2023 20:00:06 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxq1jlhWhNuyVj1YZJtV2OST3DrdzkT7yVLHTQiQCsHMpZKKqJD
-        1rZ6KKXALVMNXRZyEQsqFPfg5nSR3s91r9GfZXs=
-X-Google-Smtp-Source: ACHHUZ5YlVtj9U+gMDENeI3z8rcpk0Dp+squ/fpq8PSfXMLm1CWuIGmvmXfhmbRGTdSDlXdjOBxSJUgmbBRxNaOsnOk=
-X-Received: by 2002:a17:906:8590:b0:974:1ef1:81fb with SMTP id
- v16-20020a170906859000b009741ef181fbmr514160ejx.22.1686884404345; Thu, 15 Jun
- 2023 20:00:04 -0700 (PDT)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 3D2B33F266
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 03:01:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1686884476;
+        bh=7ZYEzNSLdKSltgga6/IkaUhroC8RDaOM51oFnDh3NIk=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=d1bf+lA29hHYOtVLrzOdd4p9GtPQ8bbvb3cf6gT8I84VaT+jXGJajvFHl8cmkWfvb
+         2WXJNpxRv6MCAilaGhBNco0uVi1FR1PwMxxBePOfx6ojYdj7toC6jtHZ5HM8MzfdEL
+         uEntzp65SdYu8FI2b7NK9kVI1XEoVCYKcwxz6eMJHQOrVGAc4rKmjbw3pRRUdoLxt7
+         w6h4LKl5xV2QHOqzTxyqVDMMGfQIRvUnM7/sgCin3nMpPB+CFJv7TEB89gAQn2y40x
+         abJ+k2b2srUynLSeAHeQYWhEcwJNz2zK0NBVt3XyWPQ2P2xF8O6vdA5A6HgL226TKS
+         w1nYnkxu6tHyQ==
+Received: by mail-oo1-f70.google.com with SMTP id 006d021491bc7-558ae609dedso168577eaf.3
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 20:01:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686884475; x=1689476475;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7ZYEzNSLdKSltgga6/IkaUhroC8RDaOM51oFnDh3NIk=;
+        b=cy+/xY9XoEcUMLfnbVm3S8GslofNdn3eO9leAiPyWr1WpJAs9uMe8LD8xWP2VtIELs
+         yHFSQFTjgt8SBcIlVRM3MAXGvg/zL9YVnOkOorpZQL9gVKffqZzQ0ahHND+6NOgn8WM6
+         DqgoT+Wixzya1JjFLBy6S3m1tUZzb+Le7kTkEiPJwRyMOa1yXUwmRFl04MtUwNdElzB0
+         ohASjf5cVJBBTypbybkrAyiWCGGQ6416MFh8RnwhfhmpcEm7aEnwCgLntxu9yyYi6FS5
+         SMz50fhpfOh3vwgF8bEbUeofYtHOYxW1bKuP/cWhFHm6bfw/Yc2Sjdfzi0KQQxGQUnYJ
+         NhYw==
+X-Gm-Message-State: AC+VfDwhYJ66bG2d5usCN2ggjjh0y2DaCSuDKmoCR63eosFn5ltYXEhO
+        c5h0KE69lWvs3JwcLE/Wcc66II9RU+UrufxWHo4ZoMfudNgii/OnucLTDEAJTNa/Ta7B5uEuyHd
+        4Gjq+iXyYd671juZS4tTI0PHVwly2yzXbZX9M/4FBoe88Aknrbkx/kpOYSA==
+X-Received: by 2002:a05:6808:2110:b0:397:ee94:ab5f with SMTP id r16-20020a056808211000b00397ee94ab5fmr1246046oiw.14.1686884475146;
+        Thu, 15 Jun 2023 20:01:15 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7bd3LX9Rd0LwrYxKpDLtGRtKRLp4TTMxZczpmLqMQjzYQTKHQkXo7l1m+FoKaHvqELZEM5sAUatUEfl8C8jlU=
+X-Received: by 2002:a05:6808:2110:b0:397:ee94:ab5f with SMTP id
+ r16-20020a056808211000b00397ee94ab5fmr1246027oiw.14.1686884474904; Thu, 15
+ Jun 2023 20:01:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230609090832.2131037-1-zhaotianrui@loongson.cn>
- <20230609090832.2131037-30-zhaotianrui@loongson.cn> <CAAhV-H4rzRZQpfxFBANFJyUshsNHYqmZmLnZfHA+McPyQ3m4-w@mail.gmail.com>
- <749abd01-c717-3a4c-238e-cda1bb74f25c@loongson.cn>
-In-Reply-To: <749abd01-c717-3a4c-238e-cda1bb74f25c@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 16 Jun 2023 10:59:51 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6KtyaJ8rCt+ZkvOD0seN-PjULSVw+f+zSBw6=hkvyAGg@mail.gmail.com>
-Message-ID: <CAAhV-H6KtyaJ8rCt+ZkvOD0seN-PjULSVw+f+zSBw6=hkvyAGg@mail.gmail.com>
-Subject: Re: [PATCH v13 29/30] LoongArch: KVM: Supplement kvm document about
- LoongArch-specific part
-To:     zhaotianrui <zhaotianrui@loongson.cn>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
-        Xi Ruoyao <xry111@xry111.site>, tangyouling@loongson.cn
+References: <20230615070421.1704133-1-kai.heng.feng@canonical.com> <20230615171229.GA1478685@bhelgaas>
+In-Reply-To: <20230615171229.GA1478685@bhelgaas>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Fri, 16 Jun 2023 11:01:03 +0800
+Message-ID: <CAAd53p7o496+WRgYggMcCOAGmA=tV0-M7HnURXGysFjCHxSuKg@mail.gmail.com>
+Subject: Re: [PATCH] PCI/ASPM: Enable ASPM on external PCIe devices
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     bhelgaas@google.com, Mario Limonciello <mario.limonciello@amd.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Michael Bottini <michael.a.bottini@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 10:39=E2=80=AFAM zhaotianrui <zhaotianrui@loongson.=
-cn> wrote:
+On Fri, Jun 16, 2023 at 1:12=E2=80=AFAM Bjorn Helgaas <helgaas@kernel.org> =
+wrote:
 >
->
-> =E5=9C=A8 2023/6/15 =E4=B8=8B=E5=8D=885:42, Huacai Chen =E5=86=99=E9=81=
-=93:
-> > Hi, Tianrui,
+> On Thu, Jun 15, 2023 at 03:04:20PM +0800, Kai-Heng Feng wrote:
+> > When a PCIe device is hotplugged to a Thunderbolt port, ASPM is not
+> > enabled for that device. However, when the device is plugged preboot,
+> > ASPM is enabled by default.
 > >
-> > On Fri, Jun 9, 2023 at 5:09=E2=80=AFPM Tianrui Zhao <zhaotianrui@loongs=
-on.cn> wrote:
-> >> Supplement kvm document about LoongArch-specific part, such as add
-> >> api introduction for GET/SET_ONE_REG, GET/SET_FPU, GET/SET_MP_STATE,
-> >> etc.
-> >>
-> >> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
-> >> ---
-> >>   Documentation/virt/kvm/api.rst | 71 +++++++++++++++++++++++++++++---=
---
-> >>   1 file changed, 62 insertions(+), 9 deletions(-)
-> >>
-> >> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/a=
-pi.rst
-> >> index add067793b90..ad8e13eab48d 100644
-> >> --- a/Documentation/virt/kvm/api.rst
-> >> +++ b/Documentation/virt/kvm/api.rst
-> >> @@ -416,6 +416,12 @@ Reads the general purpose registers from the vcpu=
-.
-> >>          __u64 pc;
-> >>     };
-> >>
-> >> +  /* LoongArch */
-> >> +  struct kvm_regs {
-> > Add a " /* out (KVM_GET_REGS) / in (KVM_SET_REGS) */" line as others he=
-re?
->
-> Thanks, I will add this comment here.
->
-> Tianrui Zhao
->
-> >> +        unsigned long gpr[32];
-> >> +        unsigned long pc;
-> >> +  };
-> >> +
-> >>
-> >>   4.12 KVM_SET_REGS
-> >>   -----------------
-> >> @@ -506,7 +512,7 @@ translation mode.
-> >>   ------------------
-> >>
-> >>   :Capability: basic
-> >> -:Architectures: x86, ppc, mips, riscv
-> >> +:Architectures: x86, ppc, mips, riscv, loongarch
-> >>   :Type: vcpu ioctl
-> >>   :Parameters: struct kvm_interrupt (in)
-> >>   :Returns: 0 on success, negative on failure.
-> >> @@ -592,6 +598,14 @@ b) KVM_INTERRUPT_UNSET
-> >>
-> >>   This is an asynchronous vcpu ioctl and can be invoked from any threa=
-d.
-> >>
-> >> +LOONGARCH:
-> >> +^^^^^^^^^^
-> >> +
-> >> +Queues an external interrupt to be injected into the virtual CPU. A n=
-egative
-> >> +interrupt number dequeues the interrupt.
-> >> +
-> >> +This is an asynchronous vcpu ioctl and can be invoked from any thread=
-.
-> >> +
-> >>
-> >>   4.17 KVM_DEBUG_GUEST
-> >>   --------------------
-> >> @@ -737,7 +751,7 @@ signal mask.
-> >>   ----------------
-> >>
-> >>   :Capability: basic
-> >> -:Architectures: x86
-> >> +:Architectures: x86, loongarch
-> >>   :Type: vcpu ioctl
-> >>   :Parameters: struct kvm_fpu (out)
-> >>   :Returns: 0 on success, -1 on error
-> >> @@ -746,7 +760,7 @@ Reads the floating point state from the vcpu.
-> >>
-> >>   ::
-> >>
-> >> -  /* for KVM_GET_FPU and KVM_SET_FPU */
-> >> +  /* x86: for KVM_GET_FPU and KVM_SET_FPU */
-> >>     struct kvm_fpu {
-> >>          __u8  fpr[8][16];
-> >>          __u16 fcw;
-> >> @@ -761,12 +775,22 @@ Reads the floating point state from the vcpu.
-> >>          __u32 pad2;
-> >>     };
-> >>
-> >> +  /* LoongArch: for KVM_GET_FPU and KVM_SET_FPU */
-> >> +  struct kvm_fpu {
-> >> +        __u32 fcsr;
-> >> +        __u32 none;
-> > Maybe use pad1 as x86 is better.
+> > The disparity happens because BIOS doesn't have the ability to program
+> > ASPM on hotplugged devices.
 > >
-> > Huacai
+> > So enable ASPM by default for external connected PCIe devices so ASPM
+> > settings are consitent between preboot and hotplugged.
+> >
+> > On HP Thunderbolt Dock G4, enable ASPM can also fix BadDLLP error:
+> > pcieport 0000:00:1d.0: AER: Corrected error received: 0000:07:04.0
+> > pcieport 0000:07:04.0: PCIe Bus Error: severity=3DCorrected, type=3DDat=
+a Link Layer, (Receiver ID)
+> > pcieport 0000:07:04.0:   device [8086:0b26] error status/mask=3D0000008=
+0/00002000
+> > pcieport 0000:07:04.0:    [ 7] BadDLLP
+> >
+> > The root cause is still unclear, but quite likely because the I225 on
+> > the dock supports PTM, where ASPM timing is precalculated for the PTM.
+> >
+> > Cc: Mario Limonciello <mario.limonciello@amd.com>
+> > Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D217557
+> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > ---
+> >  drivers/pci/pcie/aspm.c | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+> > index 66d7514ca111..613b0754c9bb 100644
+> > --- a/drivers/pci/pcie/aspm.c
+> > +++ b/drivers/pci/pcie/aspm.c
+> > @@ -119,7 +119,9 @@ static int policy_to_aspm_state(struct pcie_link_st=
+ate *link)
+> >               /* Enable Everything */
+> >               return ASPM_STATE_ALL;
+> >       case POLICY_DEFAULT:
+> > -             return link->aspm_default;
+> > +             return dev_is_removable(&link->downstream->dev) ?
+> > +                     link->aspm_capable :
+> > +                     link->aspm_default;
 >
-> Thanks, this 'none' variable is meaningless, and I will remove it. As
-> this have already been removed in the actually kvm_fpu structure.
-Why remove? I think it is for alignment, just like pad1 for x86.
+> I'm a little hesitant because dev_is_removable() is a convenient test
+> that covers the current issue, but it doesn't seem tightly connected
+> from a PCIe architecture perspective.
+>
+> I think the current model of compile-time ASPM policy selection:
+>
+>   CONFIG_PCIEASPM_DEFAULT          /* BIOS default setting */
+>   CONFIG_PCIEASPM_PERFORMANCE      /* disable L0s and L1 */
+>   CONFIG_PCIEASPM_POWERSAVE        /* enable L0s and L1 */
+>   CONFIG_PCIEASPM_POWER_SUPERSAVE  /* enable L1 substates */
+>
+> is flawed.  As far as I know, there's no technical reason we have to
+> select this at kernel build-time.  I suspect the original reason was
+> risk avoidance, i.e., we were worried that we might expose hardware
+> defects if we enabled ASPM states that BIOS hadn't already enabled.
+>
+> How do we get out of that model?  We do have sysfs knobs that should
+> cover all the functionality (set overall policy as above via
+> /sys/module/pcie_aspm/parameters/policy; set device-level exceptions
+> via /sys/bus/pci/devices/.../link/*_aspm).
 
-Huacai
+Agree. Build-time policy can be obsoleted by boot-time argument.
+
 >
-> Tianrui Zhao
+> In my opinion, the cleanest solution would be to enable all ASPM
+> functionality whenever possible and let users disable it if they need
+> to for performance.  If there are device defects when something is
+> enabled, deal with it via quirks, as we do for other PCI features.
 >
-> >> +        __u64 fcc;
-> >> +        struct kvm_fpureg {
-> >> +                __u64 val64[4];
-> >> +        }fpr[32];
-> >> +  };
-> >> +
-> >>
-> >>   4.23 KVM_SET_FPU
-> >>   ----------------
-> >>
-> >>   :Capability: basic
-> >> -:Architectures: x86
-> >> +:Architectures: x86, loongarch
-> >>   :Type: vcpu ioctl
-> >>   :Parameters: struct kvm_fpu (in)
-> >>   :Returns: 0 on success, -1 on error
-> >> @@ -775,7 +799,7 @@ Writes the floating point state to the vcpu.
-> >>
-> >>   ::
-> >>
-> >> -  /* for KVM_GET_FPU and KVM_SET_FPU */
-> >> +  /* x86: for KVM_GET_FPU and KVM_SET_FPU */
-> >>     struct kvm_fpu {
-> >>          __u8  fpr[8][16];
-> >>          __u16 fcw;
-> >> @@ -790,6 +814,16 @@ Writes the floating point state to the vcpu.
-> >>          __u32 pad2;
-> >>     };
-> >>
-> >> +  /* LoongArch: for KVM_GET_FPU and KVM_SET_FPU */
-> >> +  struct kvm_fpu {
-> >> +        __u32 fcsr;
-> >> +        __u32 none;
+> That feels a little risky, but let's have a conversation about where
+> we want to go in the long term.  It's good to avoid risk, but too much
+> avoidance leads to its own complexity and an inability to change
+> things.
+
+I think we should separate the situation into two cases:
+- When BIOS/system firmware has the ability to program ASPM, honor it.
+This applies to most "internal" PCI devices.
+- When BIOS/system can't program ASPM, enable ASPM for whatever it's
+capable of. Most notable case is Intel VMD controller, and this patch
+for devices connected through TBT.
+
+Enabling all ASPM functionality regardless of what's being
+pre-programmed by BIOS is way too risky.
+Disabling ASPM to workaround issues and defects are still quite common
+among hardware manufacturers.
+
+Kai-Heng
+
 >
-> I will also remove this 'none' variable.
->
-> Tianrui Zhao
->
-> >> +        __u64 fcc;
-> >> +        struct kvm_fpureg {
-> >> +                __u64 val64[4];
-> >> +        }fpr[32];
-> >> +  };
-> >> +
-> >>
-> >>   4.24 KVM_CREATE_IRQCHIP
-> >>   -----------------------
-> >> @@ -1387,7 +1421,7 @@ documentation when it pops into existence).
-> >>   -------------------
-> >>
-> >>   :Capability: KVM_CAP_ENABLE_CAP
-> >> -:Architectures: mips, ppc, s390, x86
-> >> +:Architectures: mips, ppc, s390, x86, loongarch
-> >>   :Type: vcpu ioctl
-> >>   :Parameters: struct kvm_enable_cap (in)
-> >>   :Returns: 0 on success; -1 on error
-> >> @@ -1442,7 +1476,7 @@ for vm-wide capabilities.
-> >>   ---------------------
-> >>
-> >>   :Capability: KVM_CAP_MP_STATE
-> >> -:Architectures: x86, s390, arm64, riscv
-> >> +:Architectures: x86, s390, arm64, riscv, loongarch
-> >>   :Type: vcpu ioctl
-> >>   :Parameters: struct kvm_mp_state (out)
-> >>   :Returns: 0 on success; -1 on error
-> >> @@ -1460,7 +1494,7 @@ Possible values are:
-> >>
-> >>      =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D    =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
-> >>      KVM_MP_STATE_RUNNABLE         the vcpu is currently running
-> >> -                                 [x86,arm64,riscv]
-> >> +                                 [x86,arm64,riscv,loongarch]
-> >>      KVM_MP_STATE_UNINITIALIZED    the vcpu is an application processo=
-r (AP)
-> >>                                    which has not yet received an INIT =
-signal [x86]
-> >>      KVM_MP_STATE_INIT_RECEIVED    the vcpu has received an INIT signa=
-l, and is
-> >> @@ -1516,11 +1550,14 @@ For riscv:
-> >>   The only states that are valid are KVM_MP_STATE_STOPPED and
-> >>   KVM_MP_STATE_RUNNABLE which reflect if the vcpu is paused or not.
-> >>
-> >> +On LoongArch, only the KVM_MP_STATE_RUNNABLE state is used to reflect
-> >> +whether the vcpu is runnable.
-> >> +
-> >>   4.39 KVM_SET_MP_STATE
-> >>   ---------------------
-> >>
-> >>   :Capability: KVM_CAP_MP_STATE
-> >> -:Architectures: x86, s390, arm64, riscv
-> >> +:Architectures: x86, s390, arm64, riscv, loongarch
-> >>   :Type: vcpu ioctl
-> >>   :Parameters: struct kvm_mp_state (in)
-> >>   :Returns: 0 on success; -1 on error
-> >> @@ -1538,6 +1575,9 @@ For arm64/riscv:
-> >>   The only states that are valid are KVM_MP_STATE_STOPPED and
-> >>   KVM_MP_STATE_RUNNABLE which reflect if the vcpu should be paused or =
-not.
-> >>
-> >> +On LoongArch, only the KVM_MP_STATE_RUNNABLE state is used to reflect
-> >> +whether the vcpu is runnable.
-> >> +
-> >>   4.40 KVM_SET_IDENTITY_MAP_ADDR
-> >>   ------------------------------
-> >>
-> >> @@ -2839,6 +2879,19 @@ Following are the RISC-V D-extension registers:
-> >>     0x8020 0000 0600 0020 fcsr      Floating point control and status =
-register
-> >>   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
-> >>
-> >> +LoongArch registers are mapped using the lower 32 bits. The upper 16 =
-bits of
-> >> +that is the register group type.
-> >> +
-> >> +LoongArch csr registers are used to control guest cpu or get status o=
-f guest
-> >> +cpu, and they have the following id bit patterns::
-> >> +
-> >> +  0x9030 0000 0001 00 <reg:5> <sel:3>   (64-bit)
-> >> +
-> >> +LoongArch KVM control registers are used to implement some new define=
-d functions
-> >> +such as set vcpu counter or reset vcpu, and they have the following i=
-d bit patterns::
-> >> +
-> >> +  0x9030 0000 0002 <reg:16>
-> >> +
-> >>
-> >>   4.69 KVM_GET_ONE_REG
-> >>   --------------------
-> >> --
-> >> 2.39.1
-> >>
-> >>
->
+> Bjorn
