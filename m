@@ -2,95 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BD04733268
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 15:44:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8601E73326A
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 15:45:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344090AbjFPNoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 09:44:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
+        id S1344232AbjFPNpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 09:45:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjFPNoK (ORCPT
+        with ESMTP id S229482AbjFPNpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 09:44:10 -0400
-Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA39189
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 06:44:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
-  t=1686923049; x=1718459049;
-  h=from:to:cc:subject:date:message-id:content-id:
-   mime-version:content-transfer-encoding;
-  bh=KdIdoo7uQlZPTCnStzw05pk0oLk6LJ2S9Hb5yTnotOg=;
-  b=KRhT/aHL2oUImTNCQ9A0Q4XdUf3oE2a9HAkc3nz9qXatwd/pxBJlmleJ
-   bf6Ld+ziw+FPM8OPiBqaahDANNnJ2NPZ32aCHKdhi0UB3kKNC9MuYFC3q
-   6GeRFBvpLoOMFjMEndPaw+NXjMzSxujZXnQO1tK5zHF+vUIeiyUXn74/I
-   s=;
-X-IronPort-AV: E=Sophos;i="6.00,247,1681171200"; 
-   d="scan'208";a="1137949321"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-f253a3a3.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 13:44:03 +0000
-Received: from EX19D010EUA001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2b-m6i4x-f253a3a3.us-west-2.amazon.com (Postfix) with ESMTPS id 436DE80680;
-        Fri, 16 Jun 2023 13:44:03 +0000 (UTC)
-Received: from EX19D041EUA001.ant.amazon.com (10.252.50.169) by
- EX19D010EUA001.ant.amazon.com (10.252.50.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 16 Jun 2023 13:44:02 +0000
-Received: from EX19D002EUC004.ant.amazon.com (10.252.51.230) by
- EX19D041EUA001.ant.amazon.com (10.252.50.169) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 16 Jun 2023 13:44:01 +0000
-Received: from EX19D002EUC004.ant.amazon.com ([fe80::fa57:3c1:c670:f520]) by
- EX19D002EUC004.ant.amazon.com ([fe80::fa57:3c1:c670:f520%3]) with mapi id
- 15.02.1118.026; Fri, 16 Jun 2023 13:44:01 +0000
-From:   "Manthey, Norbert" <nmanthey@amazon.de>
-To:     "keescook@chromium.org" <keescook@chromium.org>
-CC:     "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "Stieger, Andreas" <astieger@amazon.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Linux kernel Coverity model file
-Thread-Topic: Linux kernel Coverity model file
-Thread-Index: AQHZoFibzqo0BF01BE6byHjjEo/FFQ==
-Date:   Fri, 16 Jun 2023 13:44:01 +0000
-Message-ID: <ccca1437bf0885924619271a3f3ddd17af018149.camel@amazon.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.1.212.5]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <75096B68E8F1C54C8AB2F1732497D759@amazon.com>
+        Fri, 16 Jun 2023 09:45:36 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C63189;
+        Fri, 16 Jun 2023 06:45:35 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1qA9lY-0004cA-UG; Fri, 16 Jun 2023 15:45:28 +0200
+Message-ID: <bfe90a36-f7ef-7ea7-da4c-f04da2700fbd@leemhuis.info>
+Date:   Fri, 16 Jun 2023 15:45:28 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/2] sfc: add CONFIG_INET dependency for TC offload
+Content-Language: en-US, de-DE
+To:     Edward Cree <ecree.xilinx@gmail.com>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alejandro Lucero <alejandro.lucero-palau@amd.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Pieter Jansen van Vuuren <pieter.jansen-van-vuuren@amd.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        netdev@vger.kernel.org, linux-net-drivers@amd.com,
+        linux-kernel@vger.kernel.org
+References: <20230616090844.2677815-1-arnd@kernel.org>
+ <20230616090844.2677815-2-arnd@kernel.org>
+ <2fa7c4a5-79cb-b504-2381-08cb629d473d@gmail.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <2fa7c4a5-79cb-b504-2381-08cb629d473d@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1686923135;602a25fd;
+X-HE-SMSGID: 1qA9lY-0004cA-UG
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RGVhciBLZWVzLA0KDQpzb21lIHRpbWUgYWdvIHlvdSBwb2ludGVkIG1lIGF0IHRoZSBnaXRodWIg
-Y29weSBvZiB0aGUgQ292ZXJpdHkgbW9kZWwNCnRoYXQgaXMgdXNlZCBmb3IgdGhlIExpbnV4IGtl
-cm5lbCBhbmFseXNpcyBbMV0uDQoNCkkgaW52ZXN0aWdhdGVkIHRoZSBlZmZlY3Qgb2YgdXNpbmcg
-dGhpcyBtb2RlbCwgYW5kIGNvbXBhcmVkIGRlZmVjdHMNCnJlcG9ydGVkIHdpdGggYW5kIHdpdGhv
-dXQgdGhlIG1vZGVsLiBCZWZvcmUgSSBkZWVwIGRpdmUgaW50bw0KbW9kaWZpY2F0aW9ucywgSSB3
-YW50ZWQgdG8gdW5kZXJzdGFuZCB3aGV0aGVyIHRoZXJlIGlzIGEgbW9yZSByZWNlbnQNCnZlcnNp
-b24gKHRoZSBjdXJyZW50IG9uZSBpcyBhYm91dCA0IHllYXJzIG9sZCkuIEkgY3VycmVudGx5IGhh
-dmUgbm8NCmFjY2VzcyB0byB0aGUgcHVibGljIGxpbnV4IGRhc2hib2FyZCB0byBkaXJlY3RseSBj
-aGVjayB0aGUgZWZmZWN0DQp0aGVyZS4NCg0KSW4gY2FzZSB0aGVyZSBpcyBhIG1vcmUgcmVjZW50
-IG1vZGVsIGZpbGUsIGNhbiB5b3UgcGxlYXNlIHVwZGF0ZSB0aGUNCmdpdGh1YiByZXBvc2l0b3J5
-Pw0KDQpJbiBjYXNlIEkgZmluZCBhZGRpdGlvbnMsIGlzIHRoZSBmb2xsb3dpbmcgYSBnb29kIHBy
-b2NlZHVyZSB0byBzaGFyZQ0KbW9kZWwgdXBkYXRlcz8gSSB3b3VsZCBydW4gYW4gYW5hbHlzaXMg
-b24gYSBkZWZpbmVkIExpbnV4IGNvbW1pdCB3aXRoDQp0aGUgY3VycmVudCBtb2RlbCBhbmQgdGhl
-IHByb3Bvc2VkIGFkZGl0aW9ucywgYW5kIHdvdWxkIHJlcG9ydCB0aGUNCmVmZmVjdCBvbiB0aGUg
-cmVwb3J0ZWQgZGVmZWN0cy4gSXMgdGhlcmUgYW55dGhpbmcgZWxzZSBJIGFtIG1pc3Npbmc/DQoN
-CkJlc3QsDQpOb3JiZXJ0DQoNCg0KWzFdIGh0dHBzOi8vZ2l0aHViLmNvbS9rZWVzL2NvdmVyaXR5
-LWxpbnV4DQoKCgpBbWF6b24gRGV2ZWxvcG1lbnQgQ2VudGVyIEdlcm1hbnkgR21iSApLcmF1c2Vu
-c3RyLiAzOAoxMDExNyBCZXJsaW4KR2VzY2hhZWZ0c2Z1ZWhydW5nOiBDaHJpc3RpYW4gU2NobGFl
-Z2VyLCBKb25hdGhhbiBXZWlzcwpFaW5nZXRyYWdlbiBhbSBBbXRzZ2VyaWNodCBDaGFybG90dGVu
-YnVyZyB1bnRlciBIUkIgMTQ5MTczIEIKU2l0ejogQmVybGluClVzdC1JRDogREUgMjg5IDIzNyA4
-NzkKCgo=
+On 16.06.23 13:39, Edward Cree wrote:
+> On 16/06/2023 10:08, Arnd Bergmann wrote:
+>>
+>> Fixes: a1e82162af0b8 ("sfc: generate encap headers for TC offload")
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> 
+> Reviewed-by: Edward Cree <ecree.xilinx@gmail.com>
+>  and I think you also need
+> Fixes: 7e5e7d800011 ("sfc: neighbour lookup for TC encap action offload")
+>  since that added the references to ip_route_output_flow and arp_tbl (the
+>  commit in your Fixes: added the ip_send_check reference on top of that).
+> 
+> You also might want to add the Closes: tag from [1], I don't know how
+>  that works but I assume it'll make someone's regression-bot happy.
+>
+> [1] https://lore.kernel.org/oe-kbuild-all/202306151656.yttECVTP-lkp@intel.com/
 
+FWIW, yes, regression tracking relies on them (for now Link: and the
+newly introduced Closes: work; the latter came up totally independent of
+regression tracking). And I have no problem with being the bad guy here. :-D
+
+But for completeness, in case anyone cares:
+
+It's Linus that for many years already wants these links. He a while ago
+mentioned that in a few posts I bookmarked:
+
+https://lore.kernel.org/all/CAHk-=wjMmSZzMJ3Xnskdg4+GGz=5p5p+GSYyFBTh0f-DgvdBWg@mail.gmail.com/
+https://lore.kernel.org/all/CAHk-=wgs38ZrfPvy=nOwVkVzjpM3VFU1zobP37Fwd_h9iAD5JQ@mail.gmail.com/
+https://lore.kernel.org/all/CAHk-=wjxzafG-=J8oT30s7upn4RhBs6TX-uVFZ5rME+L5_DoJA@mail.gmail.com/
+
+But that's nothing new: Documentation/process/submitting-patches.rst
+explained this usage for many years already (I just made this more
+explicit a while a go).
+
+Ciao, Thorsten
