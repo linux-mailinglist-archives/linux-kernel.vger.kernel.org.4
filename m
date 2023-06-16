@@ -2,149 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EF9A732A24
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1369732A28
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343724AbjFPIo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 04:44:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43048 "EHLO
+        id S1343729AbjFPIr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 04:47:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343824AbjFPIoJ (ORCPT
+        with ESMTP id S1343576AbjFPIrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 04:44:09 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B81A2D79;
-        Fri, 16 Jun 2023 01:44:05 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686905044;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=124xCR73FJ7My9bUcYqnyZtkRBH/lUy5drQixPZ+QjI=;
-        b=dCZABiwoUuGPAgpnhhcFhWhfm2UmADaqppObF3tQyWgbT2m7C6UrA8VZy5IN9GJ8/Ym67M
-        b1eJaMQBaTKSUIMnFnAWpAmqH4t6WqZXsPidzUx5nBGwVATHF9TQWNZz5OgUGiTNkHa615
-        MNo0ba7YmnaW/rhDYtTNse0K3k9ObZKY7ckjm7XpAW42rzreBR2SSsxpQiExTGtbDJbyOX
-        Of+UP+5MYlP2Pp/DO8KEjC/0r+2ayKg4qLmpF4jsPlscRvOgyoZ7mnh/QGD7K6Yw9Gxb6R
-        pnQb+At8OL6MkMe9/iwgzFUpSK5noRNyUbzH3K6pPBwJeqKu/ClNixEyI9FFxw==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2B13D1BF203;
-        Fri, 16 Jun 2023 08:44:01 +0000 (UTC)
-Date:   Fri, 16 Jun 2023 10:44:01 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
-        "richard@nod.at" <richard@nod.at>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "andrew@lunn.ch" <andrew@lunn.ch>,
-        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Vadym Kochan <vadym.kochan@plvision.eu>
-Subject: Re: [PATCH v9 3/3] dt-bindings: mtd: marvell-nand: Convert to YAML
- DT scheme
-Message-ID: <20230616104401.5ca2b4de@xps-13>
-In-Reply-To: <29a9f4a4-b205-d341-bc34-10829af2996a@linaro.org>
-References: <20230615040447.3484564-1-chris.packham@alliedtelesis.co.nz>
-        <20230615040447.3484564-4-chris.packham@alliedtelesis.co.nz>
-        <f16e742f-e6f2-9761-e70d-e0e7cadcba4a@linaro.org>
-        <1863cd53-9846-def2-ee5f-f4a51160ed8d@alliedtelesis.co.nz>
-        <781c1db2-ecca-901a-4e11-7f7c68cf744d@linaro.org>
-        <20230616102414.222dde21@xps-13>
-        <29a9f4a4-b205-d341-bc34-10829af2996a@linaro.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 16 Jun 2023 04:47:24 -0400
+Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F6F2D77
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 01:47:23 -0700 (PDT)
+Received: by mail-ed1-x549.google.com with SMTP id 4fb4d7f45d1cf-5161e17f374so2159325a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 01:47:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686905242; x=1689497242;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FKEKESc4AkV9rAsszbWOey8fmNPkT7FXplfrJZXxX+U=;
+        b=IlK980kWCNICjfKrrTBqfNBOy2ngNzKlBH5J8ZNjzAlxzSZ70V5egpF9l/28oI4ihn
+         rHIpVYKfGbx+goAV1yFDIhXvhXiDi+q+kiWpT0A70A+7sts7NUSrSm3CXRBmqbWIhg2O
+         p3bsdpRMEhqAwrg1OaAPVmb/ob0ogxR1eJf3Jw35PIWLoHZNh/TrJSkTlhmDOCLeulNd
+         dhPpfXzEawLi1lRByDz1oo3ixu14ngesajRFQY9lOkY5YYzH/xAdUQS9B2tjqcTnE6Ln
+         LilpYOaSFNP49H7VWslhbt8+dSzupEGzi/K7esSAMW3MHq5ao0JUQQlb6HBhy8sYWlLt
+         RnEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686905242; x=1689497242;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FKEKESc4AkV9rAsszbWOey8fmNPkT7FXplfrJZXxX+U=;
+        b=hLWzSl6QCrv9kptcf7c1z47VaSK/EYI3QIkr6elqEl6KLXgFhFD2zgVm71+pT/UUmI
+         8HCDWpZBENw9lX9pQGp9Y8EGKGGkLArh+vTq/7HJVrzocXyV5/sh63ZTmfuzzYFxPQWs
+         fiLosJ7yWC2pUABcvGFFq8ea/rFVObY0sCOQCA7AObaChzvNT3wlTBTQk+1t3/VPPkwq
+         GXUAHxcVVkr4nj2jjgTXNF43CV+HcTe/6eCRdJcmNxbf+87b0g6RvOxlAykbRxQWFy4P
+         aj06th5pJJHUq/UGTkIqQHRe6qzQCc/w3Q6Av0HWixhR5Li9gtcuSp18Qa74dcnlj0RM
+         jJzw==
+X-Gm-Message-State: AC+VfDxBVx5ND9IQEna6HmsGI4pZg2rC4m3T7hedrbPJFyLofBd3qwVq
+        E+JXelpmcwszP+jTxCfaHx/vDvFXsc4=
+X-Google-Smtp-Source: ACHHUZ71wc6xWaoy16jUQQ0QE7u0n5tVk0bHOfEkPepBiDCFO23lce+NodeJTR1g4yI9uyG350M0J3i0FZM=
+X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:2ca9:7c8d:9bb2:b0c4])
+ (user=glider job=sendgmr) by 2002:a50:9f2c:0:b0:518:71e4:bf0b with SMTP id
+ b41-20020a509f2c000000b0051871e4bf0bmr224527edf.3.1686905242133; Fri, 16 Jun
+ 2023 01:47:22 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 10:47:15 +0200
+In-Reply-To: <CAHk-=wgrdOm8RwO+u8bydrbgs0wXJV_9mBYAtzX9d9hEY7a25A@mail.gmail.com>
+Mime-Version: 1.0
+References: <CAHk-=wgrdOm8RwO+u8bydrbgs0wXJV_9mBYAtzX9d9hEY7a25A@mail.gmail.com>
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Message-ID: <20230616084715.2140984-1-glider@google.com>
+Subject: Re: [GIT PULL] x86/mm for 6.4
+From:   Alexander Potapenko <glider@google.com>
+To:     torvalds@linux-foundation.org
+Cc:     dave.hansen@linux.intel.com, kirill.shutemov@linux.intel.com,
+        linux-kernel@vger.kernel.org, peterz@infradead.org, x86@kernel.org,
+        Alexander Potapenko <glider@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+Hi Linus,
 
-krzysztof.kozlowski@linaro.org wrote on Fri, 16 Jun 2023 10:38:38 +0200:
+>  static bool ex_handler_uaccess(const struct exception_table_entry *fixup,
+> -			       struct pt_regs *regs, int trapnr)
+> +			       struct pt_regs *regs, int trapnr,
+> +			       unsigned long fault_address)
+>  {
+> -	WARN_ONCE(trapnr == X86_TRAP_GP, "General protection fault in user access. Non-canonical address?");
+> +	WARN_ONCE(trapnr == X86_TRAP_GP && !gp_fault_address_ok(fault_address),
+> +		"General protection fault in user access. Non-canonical address?");
+>  	return ex_handler_default(fixup, regs);
+>  }
 
-> On 16/06/2023 10:24, Miquel Raynal wrote:
-> > Hi Krzysztof,
-> >=20
-> > krzysztof.kozlowski@linaro.org wrote on Fri, 16 Jun 2023 10:15:31 +0200:
-> >  =20
-> >> On 15/06/2023 23:06, Chris Packham wrote: =20
-> >>>>   =20
-> >>>>> +
-> >>>>> +properties:
-> >>>>> +  compatible:
-> >>>>> +    oneOf:
-> >>>>> +      - items:
-> >>>>> +          - const: marvell,armada-8k-nand-controller
-> >>>>> +          - const: marvell,armada370-nand-controller
-> >>>>> +      - enum:
-> >>>>> +          - marvell,armada-8k-nand-controller   =20
-> >>>> This is wrong. 8k cannot be both: compatible and not compatible with
-> >>>> 370. It's not someone's cat to be in both states at the same time...=
-   =20
-> >>>
-> >>> The correct state (IMHO, Miquel correct me if I'm wrong) is `compatib=
-le=20
-> >>> =3D "marvell,armada-8k-nand-controller";`=C2=A0 as there are some 8K =
-specific=20
-> >>> requirements that aren't present on the 370 (specifically the=20
-> >>> system-controller and the 2nd clock).    =20
-> >>
-> >> Presence of specific requirements does not invalidate compatibility. T=
-wo
-> >> devices are compatible if the 8k can bind and work with 370 compatible
-> >> string, even if this means some lower performance or less features (e.=
-g.
-> >> subset of features). =20
-> >=20
-> > Quoting myself from 2019 (comment in the driver):
-> > "Some SoCs like A7k/A8k need to enable manually the NAND controller,
-> > gated clocks and reset bits to avoid being bootloader dependent."
-> >=20
-> > So can the 8k controller work using a 370 compatible : yes, if the
-> > booloader enabled the NAND controller already, no otherwise. But in
-> > practice it is the same controller.
-> >=20
-> > Given this information I don't know whether it makes sense to qualify
-> > the 8k controller compatible with the 370 compatible or not. =20
->=20
-> Indeed, a bit tricky decision. For me they could stay compatible,
-> because apparently programming model is the same or similar.
+Shouldn't ex_handler_copy() be fixed in the same way?
+Looks like it's still possible for a tagged userspace address to be passed to it and trigger a warning.
 
-Agreed, the programming model wrt the controller itself is the same. So
-we will expect 8k controllers to be described with both 8k and 370
-compatible strings then.
-
-Thanks for your feedback.
-
-Cheers,
-Miqu=C3=A8l
+Alex
