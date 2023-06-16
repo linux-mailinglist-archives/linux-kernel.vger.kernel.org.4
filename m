@@ -2,50 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D33733BD0
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 00:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2380733C0B
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 00:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232827AbjFPWAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 18:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
+        id S233019AbjFPWBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 18:01:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231690AbjFPWAG (ORCPT
+        with ESMTP id S229952AbjFPWBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 18:00:06 -0400
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [5.144.164.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE49E2967
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 15:00:05 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        Fri, 16 Jun 2023 18:01:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8379D297E;
+        Fri, 16 Jun 2023 15:01:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id B9B7740F37;
-        Sat, 17 Jun 2023 00:00:03 +0200 (CEST)
-Date:   Sat, 17 Jun 2023 00:00:02 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] drm/msm/dpu: Add DPU_INTF_DATABUS_WIDEN feature flag
- for DPU >= 5.0
-Message-ID: <uvfqlaez2jxiacacl7ndhuj4oqjtuboqz42sacxlavcxd3vqtf@hl7rajyglvc2>
-References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
- <20230525-add-widebus-support-v1-1-c7069f2efca1@quicinc.com>
- <wpjxrnhbcanbc5iatxnff25yrrdfrtmgb24sgwyo457dz2oyjz@e2docpcb6337>
- <f4fb042c-1458-6077-3c49-8cc02638b27c@linaro.org>
- <ycgei43x4kfmjk7g7gbeglehtiiinfbqmrjbdzcy56frxbtd2z@yk2f5kgrkbrt>
- <i5trozzoexkm7taojob4c53sajm2w6tnasj2yfzjy3a77oqvw7@wadk7g7op2kp>
- <3791f18c-89f1-f066-38c4-d8d13a3ab611@quicinc.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B5F9A61F51;
+        Fri, 16 Jun 2023 22:01:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7494C433C8;
+        Fri, 16 Jun 2023 22:01:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686952888;
+        bh=lor+9CzJuJ16UAG83X/TrSjJxGuaeIWyzZ4JuzMH5fQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=lZPkTGzs39ZHNiZkaoRWItQiE0QwvxE957VSI9JWquQq4mV90qHPQptOpsBAx+lze
+         xfiHf2HcLRwfopB8TRTD6qhV4NHGBjs+mtLNFejEWYk0sl6RIxowOwbXT8GJzlivg8
+         wpw+MI/FVXVsuxy1n3sqLrOSjqD4HsBX/hbU20KB0vepY8onDtXm4vyrajS0dcR8Ub
+         th22LqZDDA1LOI55A6huIW9/QZ9MeQc6sptqeKTvTdZON67TGfxJdxH+QJH1tGssol
+         +Whion7zGtqqG5VJbz9TjDVzpYXZ/t8hvrEUMtynD+jz9KQw69B6w3xNw4N7TxLMAP
+         naFyJtKNzxD4w==
+Date:   Fri, 16 Jun 2023 17:01:25 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     bhelgaas@google.com, Mario Limonciello <mario.limonciello@amd.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Michael Bottini <michael.a.bottini@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI/ASPM: Enable ASPM on external PCIe devices
+Message-ID: <20230616220125.GA1555182@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3791f18c-89f1-f066-38c4-d8d13a3ab611@quicinc.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+In-Reply-To: <20230615070421.1704133-1-kai.heng.feng@canonical.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,29 +60,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-16 14:06:47, Abhinav Kumar wrote:
-> On 6/14/2023 3:49 PM, Marijn Suijten wrote:
-> > On 2023-06-14 14:23:38, Marijn Suijten wrote:
-> > <snip>
-> >> Tested this on SM8350 which actually has DSI 2.5, and it is also
-> >> corrupted with this series so something else on this series might be
-> >> broken.
-> > 
-> > Never mind, this was a bad conflict-resolve.  Jessica's original
-> > BURST_MODE patch was RMW'ing MDP_CTRL2, but the upstreamed patch was
-> > only writing, and the way I conflict-resolved that caused the write of
-> > BURST_MODE to overwrite the RMW DATABUS_WIDEN.
-> > 
-> > If both are moved to dsi_ctrl_config(), we could do a read, add both
-> > flags in conditionally, and write.
-> > 
+On Thu, Jun 15, 2023 at 03:04:20PM +0800, Kai-Heng Feng wrote:
+> When a PCIe device is hotplugged to a Thunderbolt port, ASPM is not
+> enabled for that device. However, when the device is plugged preboot,
+> ASPM is enabled by default.
 > 
-> So just to confirm, there is no issue on your 8350 setup with widebus 
-> enabled right?
+> The disparity happens because BIOS doesn't have the ability to program
+> ASPM on hotplugged devices.
+> 
+> So enable ASPM by default for external connected PCIe devices so ASPM
+> settings are consitent between preboot and hotplugged.
+> 
+> On HP Thunderbolt Dock G4, enable ASPM can also fix BadDLLP error:
+> pcieport 0000:00:1d.0: AER: Corrected error received: 0000:07:04.0
+> pcieport 0000:07:04.0: PCIe Bus Error: severity=Corrected, type=Data Link Layer, (Receiver ID)
+> pcieport 0000:07:04.0:   device [8086:0b26] error status/mask=00000080/00002000
+> pcieport 0000:07:04.0:    [ 7] BadDLLP
+> 
+> The root cause is still unclear, but quite likely because the I225 on
+> the dock supports PTM, where ASPM timing is precalculated for the PTM.
 
-After properly conflict-resolving both series so that they either both
-RMW, or combine the two bit-sets (the same you just discussed _not_
-doing on the DPU side for DATABUS_WIDEN|COMPRESSION...) before a single
-write, it works fine!
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217557
 
-- Marijn
+I know you said this isn't clear yet, but I don't see a connection
+between ASPM being enabled and PTM.  If anything, *disabling* ASPM
+should be safer if there's a timing issue.  
+
+I assume the ASPM timing you refer to is the LTR snoop/no snoop
+latency, since that's the only timing difference I see in the lspci
+output in bugzilla?
+
+I don't see any PTM differences there.
+
+Bjorn
