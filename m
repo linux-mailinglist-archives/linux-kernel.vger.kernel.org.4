@@ -2,96 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D2DC733358
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 16:18:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E16A73335F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 16:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245090AbjFPOSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 10:18:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34788 "EHLO
+        id S1344052AbjFPOUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 10:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233955AbjFPOS2 (ORCPT
+        with ESMTP id S230209AbjFPOUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 10:18:28 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B47C30FE;
-        Fri, 16 Jun 2023 07:18:15 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 8B3E737A;
-        Fri, 16 Jun 2023 14:18:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 8B3E737A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1686925095; bh=odIBNqPoiXABW0BduiorRVrDpZ9WhVwG1HBETs6UEj0=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=VApDqHGxFeRQbNFHqcj7wJ3XU1Dz9qbFqzOY/0R81SLyCuv0xK7ookFgJsLatgLNR
-         dFMUBkvBLuHDO+v3ilU8c/6ubrngmALU81ruVgoHEe4eL0vtxi1/eoht9pW1LRj2US
-         wU5Nm049QR3wBTksUN9D2kuhsijm2eItrKHKhGeLAdZq/dy7wuH59w6tKtESvv/wU1
-         gC2TYYvnxys4fita/3U7tsYu/XljzuNPFb1egu+IaR2x4Yzu3XDazPKscEkJaTsG8y
-         G9141Ce3ZAF65fXMs0PQlwbz8lE8S6WpUpuDWWSzFK3e/x0xVtiXDDi998b09/ewun
-         OOnQqMNYhclYQ==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Marcelo Tosatti <mtosatti@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH] Documentation: virt: correct location of haltpoll
- module params
-In-Reply-To: <ZIcqkSzHGTZB6spQ@tpad>
-References: <20230610054302.6223-1-rdunlap@infradead.org>
- <ZIcqkSzHGTZB6spQ@tpad>
-Date:   Fri, 16 Jun 2023 08:18:14 -0600
-Message-ID: <87a5wzze1l.fsf@meer.lwn.net>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 16 Jun 2023 10:20:11 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 209FA30DE
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 07:20:10 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-53f06f7cc74so562485a12.1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 07:20:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686925209; x=1689517209;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7kkXzW7flFmwwNgdmJOF/Bq45kulQkYYDELv7ovIE0s=;
+        b=RiJzto8bqF5mS6jDezs9b1trpJIIMu8WiPtaI/dBqSOaUte3g34NBpJY00M2wZETCw
+         JuxbHe+ZjSkjRKKokqNagwHyDvhgOXDcX6lAwiPANdNiITZUZnUA6KwH6xZvNzD4m7Gn
+         nyPdjZCFacInQQZD5E5HdGRqJvTIoqFFl448zQW6enBqgtdBXTg/J0wnfT1Imkel50q9
+         2yXQ7JrbSFVw6B8glsYOlTI7GkLE/PzN6oZhFebXaVE/eyvYcTcqsTTf5LA3/OO1ynhX
+         ubOgJk2lgj9u43PqdyPqFgjacd7vzw2bmw+h0AaxUTkKWlRoiS7U0tXjrV+lNqLdIHq1
+         VpTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686925209; x=1689517209;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7kkXzW7flFmwwNgdmJOF/Bq45kulQkYYDELv7ovIE0s=;
+        b=fBJ8nJyh37aZ6JskcrErcPdkYDYTMa+hfYv+MuIe+XRW9jJGRhED86Vbzrvv45vIAp
+         IjpOFFPoaeAO5I5f1Be6xD3e/vDcEbVLo6bF/vul+bbT0QHVbsHTpAYte4F1/csyglUP
+         aqtDvgZkwHc/fy08fQ3pRDwAJnDoxpaWF9x0mtXaMY8el2j5KUpYhtZ5fpg++2GVB/90
+         wgP5UK6ooz9e912rWmUACe0AnMIGdT45iWh3LfhW3Ri8krik2Y2Cu9t4Z7pdM5GLjuQD
+         jx7fNg9l0IbIWBGcVxcGitg9kJrsvApHnYVVawfO9LFek8aI967KjisjkkBatb4FUai5
+         QRmQ==
+X-Gm-Message-State: AC+VfDzliggnlpCGxrXeTuh2GgYx8hsCGxZQVeC9bDNpP0SvECGWhLTJ
+        W7NjYX9qmd5hkywTeLefNczfKFJf9qc=
+X-Google-Smtp-Source: ACHHUZ5k5s1Dv3E8j8iPdrphFfLSmc9JW7weBGs7UOX1rIhuKWrjsGwis9n9lFua0MhUrP1Y+iyk5Js0+pY=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a63:3d05:0:b0:53f:9a37:c199 with SMTP id
+ k5-20020a633d05000000b0053f9a37c199mr633876pga.1.1686925209547; Fri, 16 Jun
+ 2023 07:20:09 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 07:20:07 -0700
+In-Reply-To: <2cfa3122-6b54-aab5-8a61-41c08853286b@semihalf.com>
+Mime-Version: 1.0
+References: <20230612164727.3935657-1-carlos.bilbao@amd.com>
+ <ZIihRqZljMaMRGcK@google.com> <2cfa3122-6b54-aab5-8a61-41c08853286b@semihalf.com>
+Message-ID: <ZIxvl4sMH6N8TrAL@google.com>
+Subject: Re: [PATCH v2] docs: security: Confidential computing intro and
+ threat model for x86 virtualization
+From:   Sean Christopherson <seanjc@google.com>
+To:     Dmytro Maluka <dmy@semihalf.com>
+Cc:     Carlos Bilbao <carlos.bilbao@amd.com>, corbet@lwn.net,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ardb@kernel.org, kraxel@redhat.com, dovmurik@linux.ibm.com,
+        elena.reshetova@intel.com, dave.hansen@linux.intel.com,
+        Dhaval.Giani@amd.com, michael.day@amd.com,
+        pavankumar.paluri@amd.com, David.Kaplan@amd.com,
+        Reshma.Lal@amd.com, Jeremy.Powell@amd.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        alexander.shishkin@linux.intel.com, thomas.lendacky@amd.com,
+        tglx@linutronix.de, dgilbert@redhat.com,
+        gregkh@linuxfoundation.org, dinechin@redhat.com,
+        linux-coco@lists.linux.dev, berrange@redhat.com, mst@redhat.com,
+        tytso@mit.edu, jikos@kernel.org, joro@8bytes.org, leon@kernel.org,
+        richard.weinberger@gmail.com, lukas@wunner.de, jejb@linux.ibm.com,
+        cdupontd@redhat.com, jasowang@redhat.com, sameo@rivosinc.com,
+        bp@alien8.de, security@kernel.org,
+        Larry Dewey <larry.dewey@amd.com>, android-kvm@google.com,
+        Dmitry Torokhov <dtor@google.com>,
+        Allen Webb <allenwebb@google.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        Patryk Duda <pdk@semihalf.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Marcelo Tosatti <mtosatti@redhat.com> writes:
+On Fri, Jun 16, 2023, Dmytro Maluka wrote:
+> On 6/13/23 19:03, Sean Christopherson wrote:
+> > On Mon, Jun 12, 2023, Carlos Bilbao wrote:
+> >> +well as CoCo technology specific hypercalls, if present. Additionally, the
+> >> +host in a CoCo system typically controls the process of creating a CoCo
+> >> +guest: it has a method to load into a guest the firmware and bootloader
+> >> +images, the kernel image together with the kernel command line. All of this
+> >> +data should also be considered untrusted until its integrity and
+> >> +authenticity is established via attestation.
+> > 
+> > Attestation is SNP and TDX specific.  AIUI, none of SEV, SEV-ES, or pKVM (which
+> > doesn't even really exist on x86 yet), have attestation of their own, e.g. the
+> > proposed pKVM support would rely on Secure Boot of the original "full" host kernel.
+> 
+> Seems to be a bit of misunderstanding here. Secure Boot verifies the
+> host kernel, which is indeed also important, since the pKVM hypervisor
+> is a part of the host kernel image. But when it comes to verifying the
+> guests, it's a different story: a protected pKVM guest is started by the
+> (untrusted) host at an arbitrary moment in time, not before the early
+> kernel deprivileging when the host is still considered trusted.
+> (Moreover, in practice the guest is started by a userspace VMM, i.e. not
+> exactly the most trusted part of the host stack.) So the host can
+> maliciously or mistakenly load a wrong guest image for running as a
+> protected guest, so we do need attestation for protected guests.
+> 
+> This attestation is not implemented in pKVM on x86 yet (you are right
+> that pKVM on x86 is little more than a proposal at this point). But in
+> pKVM on ARM it is afaik already working, it is software based (ensured
+> by pKVM hypervisor + a tiny generic guest bootloader which verifies the
+> guest image before jumping to the guest) and architecture-independent,
+> so it should be possible to adopt it for x86 as is.
 
-> On Fri, Jun 09, 2023 at 10:43:02PM -0700, Randy Dunlap wrote:
->> Module parameters are located in sysfs, not debugfs, so correct the
->> statement.
->> 
->> Fixes: 2cffe9f6b96f ("cpuidle: add haltpoll governor")
->> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->> Cc: Marcelo Tosatti <mtosatti@redhat.com>
->> Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
->> Cc: Jonathan Corbet <corbet@lwn.net>
->> Cc: linux-doc@vger.kernel.org
->> ---
->>  Documentation/virt/guest-halt-polling.rst |    2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->> 
->> diff -- a/Documentation/virt/guest-halt-polling.rst b/Documentation/virt/guest-halt-polling.rst
->> --- a/Documentation/virt/guest-halt-polling.rst
->> +++ b/Documentation/virt/guest-halt-polling.rst
->> @@ -72,7 +72,7 @@ high once achieves global guest_halt_pol
->>  
->>  Default: Y
->>  
->> -The module parameters can be set from the debugfs files in::
->> +The module parameters can be set from the sysfs files in::
->>  
->>  	/sys/module/haltpoll/parameters/
->>  
->> 
->> 
->
-> Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
+Sorry, instead of "Attestation is SNP and TDX specific", I should have said, "The
+form of attestation described here is SNP and TDX specific".
 
-I'm not sure why you're offering a signoff for Randy's patch...?
+pKVM's "attestation", effectively has its root of trust in the pKVM hypervisor,
+which is in turn attested via Secure Boot.  I.e. the guest payload is verified
+*before* it is launched.
 
-In any case, I've taken this as an ack and applied it.
+That is different from SNP and TDX where guest code and data is controlled by the
+*untrusted* host.  The initial payload is measured by trusted firmware, but it is
+not verified, and so that measurement must be attested after the guest boots,
+before any sensitive data is provisioned to the guest.
 
-Thanks,
+Specifically, with "untrusted" inserted by me for clarification, my understanding
+is that this doesn't hold true for pKVM when splitting hairs:
 
-jon
+  Additionally, the **untrusted** host in a CoCo system typically controls the
+  process of creating a CoCo guest: it has a method to load into a guest the
+  firmware and bootloader images, the kernel image together with the kernel
+  command line. All of this data should also be considered untrusted until its
+  integrity and authenticity is established via attestation.
+
+because the guest firmware comes from a trusted entity, not the untrusted host.
