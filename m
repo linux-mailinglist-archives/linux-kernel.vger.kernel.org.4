@@ -2,117 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA804732A3A
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:51:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FD44732A3F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343769AbjFPIvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 04:51:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45342 "EHLO
+        id S1343821AbjFPIvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 04:51:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244286AbjFPIvJ (ORCPT
+        with ESMTP id S1343804AbjFPIvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 04:51:09 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C06D30C1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 01:51:08 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-51a324beca6so587575a12.1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 01:51:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1686905467; x=1689497467;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q+CFo3A2Oynws7qBN6wqUi/Hm2JvW7rwW8Ek/sxYPrA=;
-        b=xp+d4kWfW2lh8gA77lSwp+QpbjTsV6q8Chpk1g+OOPT7jvm9j0hhEn5/zQyN8BMPaH
-         Dx2bQ5+TGTXAw/zpARqubUyMZgBszWnv4veggKJz9RfWh7RkgQP6mfLwdH6jk0w3AnUs
-         3436FebMYZiTWzmtGAk+UCTsjzgMUCfYUGOFCLFRxlL3N8H29vn6lUmJgKmSPpmv1BPI
-         hWpK+rEVGqCDPK70jg7+wtLMSqDFdq9Er+wrcBFQ5wnvM4GvL7g8qp/d7uRM3bBwUv+3
-         5OFS1PCnsw9tf03kxXhrJdcvIPp680F7DvrERMaOiX8RVMKLQxKgSUt/kpOaFHwoObC8
-         TiRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686905467; x=1689497467;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q+CFo3A2Oynws7qBN6wqUi/Hm2JvW7rwW8Ek/sxYPrA=;
-        b=SH3gQJFRkDzh0VkqwYW+t9d/6Njr8hRCBl8VTLtZ+cZA8NI45GAEnuwa33BD4oGl2j
-         AP0m1xI4K1DXuYOLnvqKfQbZ62+e8/qGV+O/PsO8fycIkJb6Q8uchfdRJJ0B3wQU93WS
-         9r7jmWU8IjZetafra8GLifUgpJ25xLYk7tOJdhBF8rubK6JjycaPwPL+umcpapC5a+cq
-         5V7P9QYnaqvH9MPYEQbhkRQjqLnM2GEBeu+H6X+QNgRNBH4/UsMhSx13QJlr6Jtb7aM6
-         HJm1sfqedyXOB82jevzv7NhF6L1228keP8gveW8duKJbBax5oRzZhqSaNxHQ7JQaHvNp
-         TJLA==
-X-Gm-Message-State: AC+VfDzNC2VJsFvCbQZ/dASUghEmLXIc2s1tMT/WFrQ2Q+poYiL2B8Yr
-        esN9WmbcENbitiEop2G4SVW6xQ==
-X-Google-Smtp-Source: ACHHUZ5s6nb5u3oL/lmxvtKXzM48Gt46GFv/+kYzbWM9jRdu4S9zR7XWN3Sq4RQHkGz+l1oAr9mspw==
-X-Received: by 2002:aa7:c314:0:b0:516:3261:17d with SMTP id l20-20020aa7c314000000b005163261017dmr723581edq.20.1686905466853;
-        Fri, 16 Jun 2023 01:51:06 -0700 (PDT)
-Received: from blmsp ([2001:4090:a245:802c:7f03:2fe0:bd27:d746])
-        by smtp.gmail.com with ESMTPSA id h23-20020a50ed97000000b0051a409e752asm5628edr.17.2023.06.16.01.51.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jun 2023 01:51:06 -0700 (PDT)
-Date:   Fri, 16 Jun 2023 10:51:04 +0200
-From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     sboyd@kernel.org, mturquette@baylibre.com, matthias.bgg@gmail.com,
-        wenst@chromium.org, u.kleine-koenig@pengutronix.de,
-        miles.chen@mediatek.com, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
-Subject: Re: [PATCH 3/3] clk: mediatek: clk-mt8173-apmixedsys: Fix iomap not
- released issue
-Message-ID: <20230616085104.mjlt63e24ebzslsz@blmsp>
-References: <20230615122051.546985-1-angelogioacchino.delregno@collabora.com>
- <20230615122051.546985-4-angelogioacchino.delregno@collabora.com>
+        Fri, 16 Jun 2023 04:51:13 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 20D0530D0;
+        Fri, 16 Jun 2023 01:51:09 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8DxzOp8IoxkjegFAA--.12616S3;
+        Fri, 16 Jun 2023 16:51:08 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxluR4IoxknxIdAA--.17041S3;
+        Fri, 16 Jun 2023 16:51:05 +0800 (CST)
+Subject: Re: [PATCH v3 2/3] soc: dt-bindings: add loongson-2 pm
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230615091757.24686-1-zhuyinbo@loongson.cn>
+ <20230615091757.24686-3-zhuyinbo@loongson.cn>
+ <efdd8e66-a8dc-1a7e-6ac3-fdbe0ba45204@linaro.org>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <5f50f83d-52f4-276b-1e99-6fef461df80a@loongson.cn>
+Date:   Fri, 16 Jun 2023 16:51:04 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230615122051.546985-4-angelogioacchino.delregno@collabora.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <efdd8e66-a8dc-1a7e-6ac3-fdbe0ba45204@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxluR4IoxknxIdAA--.17041S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+        nUUI43ZEXa7xR_UUUUUUUUU==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Angelo,
 
-On Thu, Jun 15, 2023 at 02:20:51PM +0200, AngeloGioacchino Del Regno wrote:
-> In case of error after of_ioremap() the resource must be released:
-> call iounmap() where appropriate to fix that.
+
+在 2023/6/16 下午4:03, Krzysztof Kozlowski 写道:
+> On 15/06/2023 11:17, Yinbo Zhu wrote:
+>> Add the Loongson-2 SoC Power Management Controller binding with DT
+>> schema format using json-schema.
+>>
+>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>> ---
+>>   .../soc/loongson/loongson,ls2k-pmc.yaml       | 53 +++++++++++++++++++
+>>   MAINTAINERS                                   |  6 +++
+>>   2 files changed, 59 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
+>> new file mode 100644
+>> index 000000000000..32499bd10f8c
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
+>> @@ -0,0 +1,53 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/soc/loongson/loongson,ls2k-pmc.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Loongson-2 Power Manager controller
+>> +
+>> +maintainers:
+>> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    oneOf:
 > 
-> Fixes: 41138fbf876c ("clk: mediatek: mt8173: Migrate to platform driver and common probe")
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/clk/mediatek/clk-mt8173-apmixedsys.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+> Drop oneOf, you don't have here many choices.
+
+
+okay, I got it.
+
 > 
-> diff --git a/drivers/clk/mediatek/clk-mt8173-apmixedsys.c b/drivers/clk/mediatek/clk-mt8173-apmixedsys.c
-> index ba1386e70a24..1bbb21ab1786 100644
-> --- a/drivers/clk/mediatek/clk-mt8173-apmixedsys.c
-> +++ b/drivers/clk/mediatek/clk-mt8173-apmixedsys.c
-> @@ -151,8 +151,10 @@ static int clk_mt8173_apmixed_probe(struct platform_device *pdev)
->  		return -ENOMEM;
->  
->  	clk_data = mtk_alloc_clk_data(CLK_APMIXED_NR_CLK);
-> -	if (IS_ERR_OR_NULL(clk_data))
-> +	if (IS_ERR_OR_NULL(clk_data)) {
-> +		iounmap(base);
->  		return -ENOMEM;
+>> +      - items:
+>> +          - enum:
+>> +              - loongson,ls2k1000-pmc
+>> +              - loongson,ls2k0500-pmc
+>> +          - const: syscon
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  suspend-address:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description:
+>> +      The "suspend-address" is a deep sleep state (Suspend To RAM)
+>> +      firmware entry address which was jumped from kernel and it's
+>> +      value was dependent on specific platform firmware code. In
+>> +      addition, the PM need according to it to indicate that current
+>> +      SoC whether support Suspend To RAM.
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - interrupts
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>> +
+>> +    pmc: pm@1fe27000 {
+> 
+> Node name: system-controller or power-pamanagement
+> 
+> With these two:
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-More of a nitpick, but I would prefer if you would use the same error
-catching style as the rest of the probe function:
 
-		if (IS_ERR_OR_NULL(clk_data)) {
-			r = -ENOMEM;
-			goto unmap_io;
-		}
-	...
-	unmap_io:
-		iounmap(base)
-		return r;
+okay, I will do it.
 
+Thanks,
+Yinbo
 
-Best,
-Markus
