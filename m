@@ -2,227 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 408FC733B93
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 23:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C691E733BA7
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 23:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233280AbjFPVax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 17:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43942 "EHLO
+        id S231191AbjFPVte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 17:49:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjFPVav (ORCPT
+        with ESMTP id S229482AbjFPVtb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 17:30:51 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844D535A5;
-        Fri, 16 Jun 2023 14:30:50 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b448b24a61so16692461fa.1;
-        Fri, 16 Jun 2023 14:30:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686951048; x=1689543048;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SlSbhPNbssIprDpHNOXePwMeZq9BONqa1optZho/VFA=;
-        b=X2Oqo9eS3GakYna+Mz41cEIe+tLHSdc9nn9qX81F6dp1fe84pLTVlOKyUUKnleimWG
-         d6G5FZPKEA9F1BJ2xInh7TSoGWeNJXcCRtD0D8y28iUNRojahSZZIvjg2ZmTegnQHZFE
-         EtQJd7Cgbd8wALKiFqcDgijigm6JDhUtXaR9np0bIoBM0QMDappFhgj4l9yeFvXhMe2V
-         JUYNJ6jplFilgm9wjP3yPV00CMaVIQXCjB8kYST6dwL/njBHL25N6BG2Tn95VfF0NTsF
-         KuAadI8k7MFvjaruxjbeQq+LnTmuJaKW19E3b8vgFt6sMeANA/bYlp60TAh+gVQIyYv/
-         AC1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686951048; x=1689543048;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SlSbhPNbssIprDpHNOXePwMeZq9BONqa1optZho/VFA=;
-        b=E8ye0TKkTLD6ieUrPNmEZnVtmietSx22ZrAdSm6WJgveDyOvMKFMN7niAM8xqIPyCl
-         GlLF1BQq8v3bfD8P5/p8W//jEKTN+CcKRHypu+scWPa8MG686QcIlq/mD35z4YVEVP9J
-         kcm1LYn9watMlYzNRvS6SGoHP7JlSSaCG6XwklQ9hgTZgfCIIFcKW6biAcdLKOcUG1bc
-         q7xnQrgsT7xajoGouXa9Mz6t9HyrbnySMHQ3xIr2onSpdpynBc6N7BWHz8LKVL3J+DLb
-         qyZQI4HZGqjGPRW632dtpMvrB8EimCNo39rAsnH6q+WWFC3sY20pN4XagGrhJLepHN3r
-         Rb/g==
-X-Gm-Message-State: AC+VfDxPk62AInqTVRrnrjBkTp97Bw5s8BRIw6LRUszGX+xqF3VEt/or
-        4wtNVZocjplbO4hqw777y68=
-X-Google-Smtp-Source: ACHHUZ4AzhyGOtF7rvB9gv6YHMUR1Zu3KGBIF9HNAkK08t5zoh8CJKAb9ppOvrCPtQ5asfg4HI9Ilg==
-X-Received: by 2002:a2e:3306:0:b0:2b4:5b21:a94e with SMTP id d6-20020a2e3306000000b002b45b21a94emr1951020ljc.7.1686951047501;
-        Fri, 16 Jun 2023 14:30:47 -0700 (PDT)
-Received: from localhost.lan (031011218106.poznan.vectranet.pl. [31.11.218.106])
-        by smtp.gmail.com with ESMTPSA id o18-20020a2e90d2000000b002b445237affsm1060608ljg.58.2023.06.16.14.30.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jun 2023 14:30:46 -0700 (PDT)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH] dt-bindings: nvmem: fixed-cell: add compatibles for MAC cells
-Date:   Fri, 16 Jun 2023 23:30:33 +0200
-Message-Id: <20230616213033.8451-1-zajec5@gmail.com>
-X-Mailer: git-send-email 2.35.3
+        Fri, 16 Jun 2023 17:49:31 -0400
+X-Greylist: delayed 597 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 16 Jun 2023 14:49:29 PDT
+Received: from proxima.lasnet.de (proxima.lasnet.de [78.47.171.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF9F195;
+        Fri, 16 Jun 2023 14:49:29 -0700 (PDT)
+Received: from [IPV6:2003:e9:d710:7c92:fc77:12a4:52e5:4e01] (p200300e9d7107c92fc7712a452e54e01.dip0.t-ipconnect.de [IPv6:2003:e9:d710:7c92:fc77:12a4:52e5:4e01])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: stefan@datenfreihafen.org)
+        by proxima.lasnet.de (Postfix) with ESMTPSA id C1744C0144;
+        Fri, 16 Jun 2023 23:32:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=datenfreihafen.org;
+        s=2021; t=1686951170;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sdxCqBl7J5TyGt6xLYgsGc0Y2cygd5RnxZTzgOT8fsk=;
+        b=l73Fxqs3erVsnGjPoX7NAxYqG0JEv76CcAcfhhW2xcAembKT2Li4D7bADb3FBjwqQ9MA6U
+        ssT03A0wNVHJf/ONu4jEGiuHR1y1F/bbHFYw/+JEC0idlX2rymcD16ccDqEKGxhRdrVzvz
+        xHrISZCbQypEzsQ96LOHOdqkykITe6xZ5xHCzMtIEojAtXXEVA7cpYpMSsr6pRIT2gvUqT
+        e1bgKpJSRfkJdX1ESnnOOtBoSqnbWJRtlr2zF8yM1BBme2gD7ITUoZjlIIa8YD5Fi1jfjn
+        IiOT/uk9yb3MszqQHD+aeAMgns1i3yygAeGx/FtB0XDeO1edELEAD6drSjqG1g==
+Message-ID: <6ec8cf42-aff0-a832-87f2-1526ff00c42d@datenfreihafen.org>
+Date:   Fri, 16 Jun 2023 23:32:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] ieee802154: Replace strlcpy with strscpy
+To:     Azeem Shaikh <azeemshaikh38@gmail.com>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     linux-hardening@vger.kernel.org, linux-wpan@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+References: <20230613003326.3538391-1-azeemshaikh38@gmail.com>
+Content-Language: en-US
+From:   Stefan Schmidt <stefan@datenfreihafen.org>
+In-Reply-To: <20230613003326.3538391-1-azeemshaikh38@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+Hello.
 
-A lot of home routers have NVMEM fixed cells containing MAC address that
-need some further processing. In ~99% cases MAC needs to be:
-1. Optionally parsed from ASCII format
-2. Increased by a vendor-picked value
+On 13.06.23 02:33, Azeem Shaikh wrote:
+> strlcpy() reads the entire source buffer first.
+> This read may exceed the destination size limit.
+> This is both inefficient and can lead to linear read
+> overflows if a source string is not NUL-terminated [1].
+> In an effort to remove strlcpy() completely [2], replace
+> strlcpy() here with strscpy().
+> 
+> Direct replacement is safe here since the return values
+> from the helper macros are ignored by the callers.
+> 
+> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+> [2] https://github.com/KSPP/linux/issues/89
+> 
+> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+> ---
+>   net/ieee802154/trace.h |    2 +-
+>   net/mac802154/trace.h  |    2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/net/ieee802154/trace.h b/net/ieee802154/trace.h
+> index e5d8439b9e45..c16db0b326fa 100644
+> --- a/net/ieee802154/trace.h
+> +++ b/net/ieee802154/trace.h
+> @@ -13,7 +13,7 @@
+>   
+>   #define MAXNAME		32
+>   #define WPAN_PHY_ENTRY	__array(char, wpan_phy_name, MAXNAME)
+> -#define WPAN_PHY_ASSIGN	strlcpy(__entry->wpan_phy_name,	 \
+> +#define WPAN_PHY_ASSIGN	strscpy(__entry->wpan_phy_name,	 \
+>   				wpan_phy_name(wpan_phy), \
+>   				MAXNAME)
+>   #define WPAN_PHY_PR_FMT	"%s"
+> diff --git a/net/mac802154/trace.h b/net/mac802154/trace.h
+> index 689396d6c76a..1574ecc48075 100644
+> --- a/net/mac802154/trace.h
+> +++ b/net/mac802154/trace.h
+> @@ -14,7 +14,7 @@
+>   
+>   #define MAXNAME		32
+>   #define LOCAL_ENTRY	__array(char, wpan_phy_name, MAXNAME)
+> -#define LOCAL_ASSIGN	strlcpy(__entry->wpan_phy_name, \
+> +#define LOCAL_ASSIGN	strscpy(__entry->wpan_phy_name, \
+>   				wpan_phy_name(local->hw.phy), MAXNAME)
+>   #define LOCAL_PR_FMT	"%s"
+>   #define LOCAL_PR_ARG	__entry->wpan_phy_name
 
-There was already an attempt to design a binding for that at NVMEM
-device level in the past. It wasn't accepted though as it didn't really
-fit NVMEM device layer.
 
-The introduction of NVMEM fixed-cells layout seems to be an opportunity
-to provide a relevant binding in a clean way.
+This patch has been applied to the wpan tree and will be
+part of the next pull request to net. Thanks!
 
-This commit adds two *generic* compatible strings: "mac-base" and
-"mac-ascii". As always those need to be carefully reviewed.
-
-OpenWrt project currently supports ~300 home routers that would benefit
-from the "mac-base" binding. Those devices are manufactured by multiple
-vendors. There are TP-Link devices (76 of them), Netgear (19),
-D-Link (11), OpenMesh (9), EnGenius (8), GL.iNet (8), ZTE (7),
-Xiaomi (5), Ubiquiti (6) and more. Those devices don't share an
-architecture or SoC.
-
-Amount of devices to benefit from the "mac-ascii" is hard to determine
-as not all of them were converted to DT yet. There are at least 200 of
-such devices.
-
-It would be impractical to provide unique "compatible" strings for NVMEM
-layouts of all those devices. It seems like a valid case for allowing a
-generic binding instead. Even if this binding will not be sufficient for
-some further devices it seems to be useful enough as it is.
-
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
-If this binding gets approved I will still need a minor help with YAML.
-
-For some reason my conditions in fixed-cell.yaml don't seem to work as
-expected. I tried to make "#nvmem-cell-cells" required only for the
-"mac-base" but it seems it got required for all cells:
-
-  DTC_CHK Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.example.dtb
-Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.example.dtb: nvmem-layout: calibration@4000: '#nvmem-cell-cells' is a required property
-        From schema: Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml
-
-Cell "calibration" doesn't have any "compatible" so it shouldn't require
-"#nvmem-cell-cells".
-Can someone hint me what I did wrong, please?
----
- .../bindings/nvmem/layouts/fixed-cell.yaml    | 35 +++++++++++++++++++
- .../bindings/nvmem/layouts/fixed-layout.yaml  | 12 +++++++
- .../devicetree/bindings/nvmem/nvmem.yaml      |  5 ++-
- 3 files changed, 51 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/nvmem/layouts/fixed-cell.yaml b/Documentation/devicetree/bindings/nvmem/layouts/fixed-cell.yaml
-index e698098450e1..047e42438a4f 100644
---- a/Documentation/devicetree/bindings/nvmem/layouts/fixed-cell.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/layouts/fixed-cell.yaml
-@@ -11,6 +11,17 @@ maintainers:
-   - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
- 
- properties:
-+  compatible:
-+    oneOf:
-+      - const: mac-base
-+        description: >
-+          Cell with base MAC address to be used for calculating extra relative
-+          addresses.
-+      - const: mac-ascii
-+        description: >
-+          Cell with base MAC address stored in an ASCII format (like
-+          "00:11:22:33:44:55").
-+
-   reg:
-     maxItems: 1
- 
-@@ -25,6 +36,30 @@ properties:
-         description:
-           Size in bit within the address range specified by reg.
- 
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: mac-base
-+    then:
-+      properties:
-+        "#nvmem-cell-cells":
-+          description: The first argument is a MAC address offset.
-+          const: 1
-+      required:
-+        - "#nvmem-cell-cells"
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: mac-ascii
-+    then:
-+      properties:
-+        "#nvmem-cell-cells":
-+          description: The first argument is a MAC address offset.
-+          const: 1
-+
- required:
-   - reg
- 
-diff --git a/Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml b/Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml
-index c271537d0714..05b8230cd18c 100644
---- a/Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/layouts/fixed-layout.yaml
-@@ -44,6 +44,18 @@ examples:
-         #address-cells = <1>;
-         #size-cells = <1>;
- 
-+        mac@100 {
-+            compatible = "mac-base";
-+            reg = <0x100 0xc>;
-+            #nvmem-cell-cells = <1>;
-+        };
-+
-+        mac@110 {
-+            compatible = "mac-ascii";
-+            reg = <0x110 0x11>;
-+            #nvmem-cell-cells = <1>;
-+        };
-+
-         calibration@4000 {
-             reg = <0x4000 0x100>;
-         };
-diff --git a/Documentation/devicetree/bindings/nvmem/nvmem.yaml b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-index 980244100690..9f921d940142 100644
---- a/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-@@ -49,7 +49,10 @@ properties:
- patternProperties:
-   "@[0-9a-f]+(,[0-7])?$":
-     type: object
--    $ref: layouts/fixed-cell.yaml
-+    allOf:
-+      - $ref: layouts/fixed-cell.yaml
-+      - properties:
-+          compatible: false
-     deprecated: true
- 
- additionalProperties: true
--- 
-2.35.3
-
+regards
+Stefan Schmidt
