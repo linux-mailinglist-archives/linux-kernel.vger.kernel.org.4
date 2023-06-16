@@ -2,175 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEDAC733A47
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 22:02:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B03A6733A4D
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 22:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345683AbjFPUBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 16:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43882 "EHLO
+        id S1345736AbjFPUCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 16:02:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbjFPUBZ (ORCPT
+        with ESMTP id S1344428AbjFPUB6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 16:01:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1221735A3;
-        Fri, 16 Jun 2023 13:01:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B4F962E05;
-        Fri, 16 Jun 2023 20:01:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E208FC433C0;
-        Fri, 16 Jun 2023 20:01:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686945682;
-        bh=NNR06pawYLcrluh/DT0ZjxTIOvEpuKGIsr6P52TLsXk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=B2x9p0bw9e1c5FEiElfS0dqOB9kBN1XvLc3rdRIjWsCJR6DEA+8/fPzx0tD0XRds9
-         xnUob2gqF2SwBz+B8m0N3hPtdbY9Zjp4OWtxr5mJ453zMkqDfQfhs3Bk0NKVLLnJ8T
-         YRFinBI4ZyqxgEMzd4FvqZ96m1iAvyUW5PzZ9IkU7jzJf2O+Uh3mAZnkJkvCh4Irzi
-         y8m2OdBztq5JFis9yBA+hEUTNF3tMD5RAOz5rdpO89Y54dunPa4NAr9k6faBzowxQk
-         AVRlbo+pV0l2tH94RtPSD4Alk/lhusm0f9qKVWPhAsHRvmHc3DaWJj06DslGvi6t1A
-         z4M//Xaki6glw==
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-4f766777605so1569607e87.1;
-        Fri, 16 Jun 2023 13:01:22 -0700 (PDT)
-X-Gm-Message-State: AC+VfDyVb1J0jxb7ByxdQPFCoN6rG5PynZqV/6xLihGaBnsDfgruhCon
-        IUH8GAu3x/TSlzsgzzJMcx1NcvAGKA32lec/Nr8=
-X-Google-Smtp-Source: ACHHUZ5JqRMNnpRMFCyZiMjc+UWPs6A2cx1mTw/2r3SQw3woyTfRJjaUEkhnoXK7xbHKeHI/ilSSCGbka/vlr73Fo7g=
-X-Received: by 2002:a05:6512:60a:b0:4f8:5635:2ccf with SMTP id
- b10-20020a056512060a00b004f856352ccfmr2048673lfe.8.1686945680955; Fri, 16 Jun
- 2023 13:01:20 -0700 (PDT)
+        Fri, 16 Jun 2023 16:01:58 -0400
+Received: from sender3-of-o58.zoho.com (sender3-of-o58.zoho.com [136.143.184.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B31B1FF9;
+        Fri, 16 Jun 2023 13:01:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686945673; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=Aed/zMdm/a0Ego3xS007SykTRZ1uBPGmfiR7ovHozkZZfpquuf+SBMRqy0CxSSJHOQEfehym8UJ2ullyI82ueLw/Oh4CR256DpM6aq0wCm1WwUcsDwqox2LG0Gllruhumjw/bJxYWWjHOFjFCLWcqqdLw9C3jY7RCO8+wOD+TMo=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1686945673; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=d4POYnDYEYq4KXRMXuAAYuuj2EQrVKJPKhALdERs4yU=; 
+        b=NHlsO1vZcYl3mvWCl4Pyt9EfBxVkHNq0gAhH0L1VTcpCDMNuF+WJgaY2UKhzh/8OjM+cnTJzqt80HBwlOv4Y/SzCYMeRcKdGcHHP6CRRaE52mQK7/K115rZlNgfhGMyS7s0QaVcAAHarZFvBrrVXSwyHlE9vs1btcT9/JlvIDis=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=apertussolutions.com;
+        spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
+        dmarc=pass header.from=<dpsmith@apertussolutions.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1686945673;
+        s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
+        h=Message-ID:Date:Date:MIME-Version:To:To:Cc:Cc:References:From:From:Subject:Subject:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=d4POYnDYEYq4KXRMXuAAYuuj2EQrVKJPKhALdERs4yU=;
+        b=sZPVrW+DORFJNiWvzg6tCQUEvK3+up5RgGCEt9nURrHbNLlrQiX+pUzJYY4ks5pX
+        ZYV9s/f5b3ylUKE3Iv/VyAP444QANslTUmNgrdHR1il51QR6H3AncpxviBh0b40wTGP
+        WGIy1byLFzuekBVvpFoLZM8TVOS4aUfW7Cfbz+a8=
+Received: from [10.10.1.138] (static-72-81-132-2.bltmmd.fios.verizon.net [72.81.132.2]) by mx.zohomail.com
+        with SMTPS id 1686945672512692.7552950489951; Fri, 16 Jun 2023 13:01:12 -0700 (PDT)
+Message-ID: <eda6da3a-00fe-21c5-5a3d-3e06d21179f4@apertussolutions.com>
+Date:   Fri, 16 Jun 2023 16:01:09 -0400
 MIME-Version: 1.0
-References: <20230616085038.4121892-1-rppt@kernel.org> <20230616085038.4121892-7-rppt@kernel.org>
-In-Reply-To: <20230616085038.4121892-7-rppt@kernel.org>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 16 Jun 2023 13:01:08 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4J+rFvh9WJVWLZxFHtcYxahYk=NoKYdU9FMibZU8986w@mail.gmail.com>
-Message-ID: <CAPhsuW4J+rFvh9WJVWLZxFHtcYxahYk=NoKYdU9FMibZU8986w@mail.gmail.com>
-Subject: Re: [PATCH v2 06/12] mm/execmem: introduce execmem_data_alloc()
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Puranjay Mohan <puranjay12@gmail.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-US
+To:     Matthew Garrett <mjg59@srcf.ucam.org>
+Cc:     Ross Philipson <ross.philipson@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
+        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        ardb@kernel.org, James.Bottomley@hansenpartnership.com,
+        luto@amacapital.net, nivedita@alum.mit.edu,
+        kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
+References: <20230504145023.835096-1-ross.philipson@oracle.com>
+ <20230504145023.835096-5-ross.philipson@oracle.com>
+ <20230512105554.GB14461@srcf.ucam.org>
+ <30d5891d-4747-8d67-2667-ff07628740bd@apertussolutions.com>
+ <20230515212206.GA2162@srcf.ucam.org>
+ <df9d1260-41dd-034b-9dc6-14173c6c0d25@apertussolutions.com>
+ <20230516014310.GA5403@srcf.ucam.org>
+From:   "Daniel P. Smith" <dpsmith@apertussolutions.com>
+Subject: Re: [PATCH v6 04/14] x86: Secure Launch Resource Table header file
+In-Reply-To: <20230516014310.GA5403@srcf.ucam.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 1:51=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wro=
-te:
->
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
->
-> Data related to code allocations, such as module data section, need to
-> comply with architecture constraints for its placement and its
-> allocation right now was done using execmem_text_alloc().
->
-> Create a dedicated API for allocating data related to code allocations
-> and allow architectures to define address ranges for data allocations.
->
-> Since currently this is only relevant for powerpc variants that use the
-> VMALLOC address space for module data allocations, automatically reuse
-> address ranges defined for text unless address range for data is
-> explicitly defined by an architecture.
->
-> With separation of code and data allocations, data sections of the
-> modules are now mapped as PAGE_KERNEL rather than PAGE_KERNEL_EXEC which
-> was a default on many architectures.
->
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-[...]
->  static void free_mod_mem(struct module *mod)
-> diff --git a/mm/execmem.c b/mm/execmem.c
-> index a67acd75ffef..f7bf496ad4c3 100644
-> --- a/mm/execmem.c
-> +++ b/mm/execmem.c
-> @@ -63,6 +63,20 @@ void *execmem_text_alloc(size_t size)
->                              fallback_start, fallback_end, kasan);
->  }
->
-> +void *execmem_data_alloc(size_t size)
-> +{
-> +       unsigned long start =3D execmem_params.modules.data.start;
-> +       unsigned long end =3D execmem_params.modules.data.end;
-> +       pgprot_t pgprot =3D execmem_params.modules.data.pgprot;
-> +       unsigned int align =3D execmem_params.modules.data.alignment;
-> +       unsigned long fallback_start =3D execmem_params.modules.data.fall=
-back_start;
-> +       unsigned long fallback_end =3D execmem_params.modules.data.fallba=
-ck_end;
-> +       bool kasan =3D execmem_params.modules.flags & EXECMEM_KASAN_SHADO=
-W;
-> +
-> +       return execmem_alloc(size, start, end, align, pgprot,
-> +                            fallback_start, fallback_end, kasan);
-> +}
-> +
->  void execmem_free(void *ptr)
->  {
->         /*
-> @@ -101,6 +115,28 @@ static bool execmem_validate_params(struct execmem_p=
-arams *p)
->         return true;
->  }
->
-> +static void execmem_init_missing(struct execmem_params *p)
+On 5/15/23 21:43, Matthew Garrett wrote:
+> On Mon, May 15, 2023 at 08:41:00PM -0400, Daniel P. Smith wrote:
+>> On 5/15/23 17:22, Matthew Garrett wrote:
+>>> What if I don't use grub, but use something that behaves equivalently?
+>>> Which value should be used here?
+>>
+>> Generally we would request that the bootloader submit a request to register
+>> for a value to be reserved in the spec. That aside, the intent here is to
+>> allow for the possibility for the DLE handler to be independent from the
+>> bootloader, but this does not have to be this way. If a non-open entity
+>> decides to produce their own implementation, they can freely use a
+>> unallocated value at their own risk that it could be allocated to another
+>> bootloader in the future. Though in this scenario it likely would not matter
+>> as the non-open DLE handler would only be present when the non-open
+>> bootloader was present.
+> 
+> Is the expectation that the DLE will always be shipped with the
+> bootloader? I think I'm not entirely clear on what's consuming this and
+> why.
+> 
 
-Shall we call this execmem_default_init_data?
-
-> +{
-> +       struct execmem_modules_range *m =3D &p->modules;
-> +
-> +       if (!pgprot_val(execmem_params.modules.data.pgprot))
-> +               execmem_params.modules.data.pgprot =3D PAGE_KERNEL;
-
-Do we really need to check each of these? IOW, can we do:
-
-if (!pgprot_val(execmem_params.modules.data.pgprot)) {
-       execmem_params.modules.data.pgprot =3D PAGE_KERNEL;
-       execmem_params.modules.data.alignment =3D m->text.alignment;
-       execmem_params.modules.data.start =3D m->text.start;
-       execmem_params.modules.data.end =3D m->text.end;
-       execmem_params.modules.data.fallback_start =3D m->text.fallback_star=
-t;
-      execmem_params.modules.data.fallback_end =3D m->text.fallback_end;
-}
-
-Thanks,
-Song
-
-[...]
+No, in fact, an early idea proposed by a pair of us in the TrenchBoot 
+community was to have it live either as a Runtime Service that was 
+loaded by a UEFI app or in the coreboot UEFI payload.
