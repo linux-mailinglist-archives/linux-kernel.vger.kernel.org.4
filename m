@@ -2,95 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A7C773323E
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 15:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF8A6733244
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 15:34:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344184AbjFPNdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 09:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36732 "EHLO
+        id S1344385AbjFPNd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 09:33:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344061AbjFPNds (ORCPT
+        with ESMTP id S1344043AbjFPNdy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 09:33:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3E13593
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 06:33:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53AA461CE8
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 13:33:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED924C433C8;
-        Fri, 16 Jun 2023 13:33:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686922425;
-        bh=b8f51cqluu5JQHKo6Ft3l/k4ksx9H0q8esoFN35GWAk=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=lbCchXxccR1Uchf4dCU35MYDMGNcS1c2C92VAJD+sT2DHSrLfGw7Ff4URfnfXV239
-         AO3UDIBJjMYM1FXTvEOwKNVRknnTs6yZ8FmUF2IXBPY1Nb9/dYQRz/x+T2KnwyAsZ6
-         iBkKEIYKxezd5iGTJqKTEWrQMzBqJ+F9WAw9Yrnu14re0t6E6efENTXkrhnIL8P7q9
-         rsDGQsU0Fi8wTd9dEk0m5S7EAQxTE8pMGF7hoePWC4YQd0NcDECMxwleobmcHZ9CXC
-         rtG5SfR3UfYmKXjAT1jQuO9yBjYQmwIX2pD7htfT1HgNvD8fcC9Dl80Znwtr5hezgb
-         Fs06u59//HpEg==
-From:   Mark Brown <broonie@kernel.org>
-To:     cy_huang@richtek.com
-Cc:     lgirdwood@gmail.com, linux-kernel@vger.kernel.org
-In-Reply-To: <1686881298-28333-1-git-send-email-cy_huang@richtek.com>
-References: <1686881298-28333-1-git-send-email-cy_huang@richtek.com>
-Subject: Re: [PATCH] regulator: helper: Document ramp_delay parameter of
- regulator_set_ramp_delay_regmap()
-Message-Id: <168692242468.238679.12950223549204587682.b4-ty@kernel.org>
-Date:   Fri, 16 Jun 2023 14:33:44 +0100
+        Fri, 16 Jun 2023 09:33:54 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5245A359E;
+        Fri, 16 Jun 2023 06:33:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686922432; x=1718458432;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4rPdsxf+B69gRS+K2VE3MCran6ryOKf8Z1G6PlTJ9XE=;
+  b=dO+s58PQKkD4hBg16McNM2n4anwEIqwWqjbwZJAzkFhIlfSjmGaI4TyZ
+   CK3LtKs7uSU/SyotxExEFiyK3szG2PZ6GUZrMPiEeCDrrFfPHUCGJBSSb
+   yNzOEcM8aQ3vvfRaXK8/BPeQjzWx9rVmvl0trjBX22ileDoPyw6OtvG0O
+   PaLBzzEr1B+0OTP7r0wfq9a3tfBbt+d4BPPqqi9n+D3TNb6BzKbFss60i
+   LcVsj8hY7FvTbFQAZnR1EKzgyoW7uuGiQYm1A6mJjpK2gXpRg9tFw/7B6
+   tNoDRr3/7xs+kPoxV9YMp9e0WD58msRFxGRFj/rLGyGe30JpHnNFhpfYH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="361745297"
+X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
+   d="scan'208";a="361745297"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 06:33:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="825748967"
+X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
+   d="scan'208";a="825748967"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP; 16 Jun 2023 06:33:49 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qA9aF-004FzL-2J;
+        Fri, 16 Jun 2023 16:33:47 +0300
+Date:   Fri, 16 Jun 2023 16:33:47 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: Re: [PATCH v3 0/5] gpio: aggregator: Incorporate gpio-delay
+ functionality
+Message-ID: <ZIxku9jFT9tOY7cY@smile.fi.intel.com>
+References: <20230615132023.13801-1-andriy.shevchenko@linux.intel.com>
+ <4392854.e9J7NaK4W3@steina-w>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-c6835
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4392854.e9J7NaK4W3@steina-w>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Jun 2023 10:08:18 +0800, cy_huang@richtek.com wrote:
-> With W=1:
+On Fri, Jun 16, 2023 at 11:01:17AM +0200, Alexander Stein wrote:
+> Am Donnerstag, 15. Juni 2023, 15:20:18 CEST schrieb Andy Shevchenko:
+> > The newly appeared gpio-delay module enables external signal delay lines
+> > that may be connected to the GPIOs. But at the same time it copies the
+> > GPIO forwarder functionality. Besides that the approach does not scale.
+> > If we would have another external component, we would need yet another
+> > driver. That's why I think, and seems others support me, better to
+> > enable such a functionality inside GPIO aggregator driver.
+> > 
+> > Patch 1 is a cleanup that may be applied independently on the decision
+> > about the rest.
+> > 
+> > Please, test and comment! Alexander, I would appreciate your tag.
 > 
->     drivers/regulator/helpers.c:947: warning: Function parameter or member 'ramp_delay' not described in 'regulator_set_ramp_delay_regmap'
-> 
-> Fix it by documenting the parameter.
-> 
-> 
-> [...]
+> This works on my platform:
+> Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 
-Applied to
+Thank you!
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Thanks!
-
-[1/1] regulator: helper: Document ramp_delay parameter of regulator_set_ramp_delay_regmap()
-      commit: d3b555e563a0ac80383b66f4ffd8bee2f6272779
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
