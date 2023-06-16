@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 176B1732B6C
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:25:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B361732B6B
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344297AbjFPJZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 05:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41380 "EHLO
+        id S1344285AbjFPJZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 05:25:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344095AbjFPJYx (ORCPT
+        with ESMTP id S1344090AbjFPJYx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 16 Jun 2023 05:24:53 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD2626AF;
-        Fri, 16 Jun 2023 02:24:50 -0700 (PDT)
-Date:   Fri, 16 Jun 2023 09:24:45 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF062700;
+        Fri, 16 Jun 2023 02:24:51 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 09:24:46 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686907485;
+        s=2020; t=1686907486;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YZTWS/SmuIy5BfPauwJpZ7bZrTkvmO1D/YACfu7OakQ=;
-        b=SxulI0rgwigPjRLa7nAPVIh1QuFoK0TvA7ycEVUcVRypRFJ40Gg88QhLVOGoifJjP/RoNG
-        LW/EHwjnBN1L0nzGM3gJMQ00cWxpt8NZ038k7jGqh6mUUflGDIaN5oXd/d4OqSg29tgBtx
-        Y7epxMmaWHJS25/jwLr4iCPBJgFYEBvTX64oSGi8SZs5SH4eLwlh5/blECAPkx71ORnvO4
-        apc6Ch1PxenELWvBqGOJAPTVGMmqH4KOzyL6o7BG3KVTkzge2buClMEA9wTKQE6r5EYQIB
-        OKgBuxCWcAJItbKqFjh2vFBIFL5h0lJ0T2WdOBqbmZXSp40DRhc3z9MyhiycmA==
+        bh=GyhfjxTwhAKHG4iVITF4i9TPy0D9uGIskaBvaU0vr0A=;
+        b=vYhNrkiHxq0P4RdrMJMD7tPChuXcr8LbxQm5fs3iXh0N0qUnyJojvjey7AR8toCkYtuReF
+        HIt9GVWtIGBqp1se+j+zFzr2VHZRowpQ5LJG6G+dR8PvIT6DeZwX4XiPdBxUoFluXtVb+j
+        Qfa1oN84tje1QraUSuyP1K+CIwgvWQRBUipSVcLjryLo3dM33nGVr5cuzTkObxus0FotHe
+        XgOCjmLhDtmz0YKZgMxiuTgs2Y+EljbZHnpCcnkKiEv/EA2b7czjYmHyfGfIM9GjJE0pE0
+        +D3y19nZ9ozPC9gU1pIMTdA6kz+tIq9rUAlQW+s2ynqN93Wa7wzBkxjUj9ZU2Q==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686907485;
+        s=2020e; t=1686907486;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YZTWS/SmuIy5BfPauwJpZ7bZrTkvmO1D/YACfu7OakQ=;
-        b=ng9chCFjclTqUn0+iuDeLO4cP/nycSjn8GZHXEgy0cHIDXGsE2YBfU8EmlEi4uo7IpHBB3
-        nq+6iBJUMsUHeBCw==
+        bh=GyhfjxTwhAKHG4iVITF4i9TPy0D9uGIskaBvaU0vr0A=;
+        b=F8IlrR13f64aHqK6r09Ea2PB6N/PB2xyj90nJvIeCAAl1Mf7b2kS+PmJyRDUTRHxRcsx8S
+        yquhZh7nOgROc+Cg==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/boot] init: Remove check_bugs() leftovers
+Subject: [tip: x86/boot] sparc/cpu: Switch to arch_cpu_finalize_init()
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230613224545.553215951@linutronix.de>
-References: <20230613224545.553215951@linutronix.de>
+        Sam Ravnborg <sam@ravnborg.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230613224545.431995857@linutronix.de>
+References: <20230613224545.431995857@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <168690748517.404.6670831625304458737.tip-bot2@tip-bot2>
+Message-ID: <168690748642.404.16664989239465546956.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,171 +67,79 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/boot branch of tip:
 
-Commit-ID:     61235b24b9cb37c13fcad5b9596d59a1afdcec30
-Gitweb:        https://git.kernel.org/tip/61235b24b9cb37c13fcad5b9596d59a1afdcec30
+Commit-ID:     44ade508e3bfac45ae97864587de29eb1a881ec0
+Gitweb:        https://git.kernel.org/tip/44ade508e3bfac45ae97864587de29eb1a881ec0
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Wed, 14 Jun 2023 01:39:38 +02:00
+AuthorDate:    Wed, 14 Jun 2023 01:39:35 +02:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Fri, 16 Jun 2023 10:16:00 +02:00
 
-init: Remove check_bugs() leftovers
+sparc/cpu: Switch to arch_cpu_finalize_init()
 
-Everything is converted over to arch_cpu_finalize_init(). Remove the
-check_bugs() leftovers including the empty stubs in asm-generic, alpha,
-parisc, powerpc and xtensa.
+check_bugs() is about to be phased out. Switch over to the new
+arch_cpu_finalize_init() implementation.
+
+No functional change.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Richard Henderson <richard.henderson@linaro.org>
-Link: https://lore.kernel.org/r/20230613224545.553215951@linutronix.de
+Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
+Link: https://lore.kernel.org/r/20230613224545.431995857@linutronix.de
 
 ---
- arch/alpha/include/asm/bugs.h   | 20 --------------------
- arch/parisc/include/asm/bugs.h  | 20 --------------------
- arch/powerpc/include/asm/bugs.h | 15 ---------------
- arch/xtensa/include/asm/bugs.h  | 18 ------------------
- include/asm-generic/bugs.h      | 11 -----------
- init/main.c                     |  5 -----
- 6 files changed, 89 deletions(-)
- delete mode 100644 arch/alpha/include/asm/bugs.h
- delete mode 100644 arch/parisc/include/asm/bugs.h
- delete mode 100644 arch/powerpc/include/asm/bugs.h
- delete mode 100644 arch/xtensa/include/asm/bugs.h
- delete mode 100644 include/asm-generic/bugs.h
+ arch/sparc/Kconfig            |  1 +
+ arch/sparc/include/asm/bugs.h | 18 ------------------
+ arch/sparc/kernel/setup_32.c  |  7 +++++++
+ 3 files changed, 8 insertions(+), 18 deletions(-)
+ delete mode 100644 arch/sparc/include/asm/bugs.h
 
-diff --git a/arch/alpha/include/asm/bugs.h b/arch/alpha/include/asm/bugs.h
+diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
+index 8535e19..36fd488 100644
+--- a/arch/sparc/Kconfig
++++ b/arch/sparc/Kconfig
+@@ -52,6 +52,7 @@ config SPARC
+ config SPARC32
+ 	def_bool !64BIT
+ 	select ARCH_32BIT_OFF_T
++	select ARCH_HAS_CPU_FINALIZE_INIT if !SMP
+ 	select ARCH_HAS_SYNC_DMA_FOR_CPU
+ 	select CLZ_TAB
+ 	select DMA_DIRECT_REMAP
+diff --git a/arch/sparc/include/asm/bugs.h b/arch/sparc/include/asm/bugs.h
 deleted file mode 100644
-index 78030d1..0000000
---- a/arch/alpha/include/asm/bugs.h
-+++ /dev/null
-@@ -1,20 +0,0 @@
--/*
-- *  include/asm-alpha/bugs.h
-- *
-- *  Copyright (C) 1994  Linus Torvalds
-- */
--
--/*
-- * This is included by init/main.c to check for architecture-dependent bugs.
-- *
-- * Needs:
-- *	void check_bugs(void);
-- */
--
--/*
-- * I don't know of any alpha bugs yet.. Nice chip
-- */
--
--static void check_bugs(void)
--{
--}
-diff --git a/arch/parisc/include/asm/bugs.h b/arch/parisc/include/asm/bugs.h
-deleted file mode 100644
-index 0a7f9db..0000000
---- a/arch/parisc/include/asm/bugs.h
-+++ /dev/null
-@@ -1,20 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--/*
-- *  include/asm-parisc/bugs.h
-- *
-- *  Copyright (C) 1999	Mike Shaver
-- */
--
--/*
-- * This is included by init/main.c to check for architecture-dependent bugs.
-- *
-- * Needs:
-- *	void check_bugs(void);
-- */
--
--#include <asm/processor.h>
--
--static inline void check_bugs(void)
--{
--//	identify_cpu(&boot_cpu_data);
--}
-diff --git a/arch/powerpc/include/asm/bugs.h b/arch/powerpc/include/asm/bugs.h
-deleted file mode 100644
-index 01b8f6c..0000000
---- a/arch/powerpc/include/asm/bugs.h
-+++ /dev/null
-@@ -1,15 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--#ifndef _ASM_POWERPC_BUGS_H
--#define _ASM_POWERPC_BUGS_H
--
--/*
-- */
--
--/*
-- * This file is included by 'init/main.c' to check for
-- * architecture-dependent bugs.
-- */
--
--static inline void check_bugs(void) { }
--
--#endif	/* _ASM_POWERPC_BUGS_H */
-diff --git a/arch/xtensa/include/asm/bugs.h b/arch/xtensa/include/asm/bugs.h
-deleted file mode 100644
-index 69b29d1..0000000
---- a/arch/xtensa/include/asm/bugs.h
+index 02fa369..0000000
+--- a/arch/sparc/include/asm/bugs.h
 +++ /dev/null
 @@ -1,18 +0,0 @@
--/*
-- * include/asm-xtensa/bugs.h
-- *
-- * This is included by init/main.c to check for architecture-dependent bugs.
-- *
-- * Xtensa processors don't have any bugs.  :)
-- *
-- * This file is subject to the terms and conditions of the GNU General
-- * Public License.  See the file "COPYING" in the main directory of
-- * this archive for more details.
-- */
--
--#ifndef _XTENSA_BUGS_H
--#define _XTENSA_BUGS_H
--
--static void check_bugs(void) { }
--
--#endif /* _XTENSA_BUGS_H */
-diff --git a/include/asm-generic/bugs.h b/include/asm-generic/bugs.h
-deleted file mode 100644
-index 6902183..0000000
---- a/include/asm-generic/bugs.h
-+++ /dev/null
-@@ -1,11 +0,0 @@
 -/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef __ASM_GENERIC_BUGS_H
--#define __ASM_GENERIC_BUGS_H
--/*
-- * This file is included by 'init/main.c' to check for
-- * architecture-dependent bugs.
+-/* include/asm/bugs.h:  Sparc probes for various bugs.
+- *
+- * Copyright (C) 1996, 2007 David S. Miller (davem@davemloft.net)
 - */
 -
--static inline void check_bugs(void) { }
--
--#endif	/* __ASM_GENERIC_BUGS_H */
-diff --git a/init/main.c b/init/main.c
-index 77d5316..389ac62 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -103,7 +103,6 @@
- #include <net/net_namespace.h>
- 
- #include <asm/io.h>
--#include <asm/bugs.h>
- #include <asm/setup.h>
- #include <asm/sections.h>
- #include <asm/cacheflush.h>
-@@ -1079,10 +1078,6 @@ asmlinkage __visible void __init __no_sanitize_address __noreturn start_kernel(v
- 	delayacct_init();
- 
- 	arch_cpu_finalize_init();
--	/* Temporary conditional until everything has been converted */
--#ifndef CONFIG_ARCH_HAS_CPU_FINALIZE_INIT
--	check_bugs();
+-#ifdef CONFIG_SPARC32
+-#include <asm/cpudata.h>
 -#endif
+-
+-extern unsigned long loops_per_jiffy;
+-
+-static void __init check_bugs(void)
+-{
+-#if defined(CONFIG_SPARC32) && !defined(CONFIG_SMP)
+-	cpu_data(0).udelay_val = loops_per_jiffy;
+-#endif
+-}
+diff --git a/arch/sparc/kernel/setup_32.c b/arch/sparc/kernel/setup_32.c
+index c8e0dd9..c9d1ba4 100644
+--- a/arch/sparc/kernel/setup_32.c
++++ b/arch/sparc/kernel/setup_32.c
+@@ -412,3 +412,10 @@ static int __init topology_init(void)
+ }
  
- 	acpi_subsystem_init();
- 	arch_post_acpi_subsys_init();
+ subsys_initcall(topology_init);
++
++#if defined(CONFIG_SPARC32) && !defined(CONFIG_SMP)
++void __init arch_cpu_finalize_init(void)
++{
++	cpu_data(0).udelay_val = loops_per_jiffy;
++}
++#endif
