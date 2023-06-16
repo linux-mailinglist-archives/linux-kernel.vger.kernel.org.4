@@ -2,148 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 372AA733190
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3F1733193
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:47:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345399AbjFPMrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 08:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44318 "EHLO
+        id S1345423AbjFPMrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 08:47:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344140AbjFPMre (ORCPT
+        with ESMTP id S1344910AbjFPMrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 08:47:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81459358C
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 05:46:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686919603;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3oE/aox+P5EI2fK8L6+t8Yc5hZ1jrOyHxepshYMemZM=;
-        b=UZtGc+VnrKW7IhNyv7i+AKXsOcNYmznKbms8mv0gOc2ZRnbvGPnV85SUcSmfhp8jqLfKik
-        ZZE1GtIahgivRRi7IjBibho5RLJ/PMhl5f5Msm3Lx93EhbYQsB037i+C812cxuRrtiXkjh
-        QXtb22P6DDioSXqtczPq65awWjBrvkM=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-400-Xd0nxM93NbKbzl57Q992Hw-1; Fri, 16 Jun 2023 08:46:38 -0400
-X-MC-Unique: Xd0nxM93NbKbzl57Q992Hw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 86E31280D588;
-        Fri, 16 Jun 2023 12:46:37 +0000 (UTC)
-Received: from localhost (ovpn-13-2.pek2.redhat.com [10.72.13.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6140A422DE;
-        Fri, 16 Jun 2023 12:46:36 +0000 (UTC)
-Date:   Fri, 16 Jun 2023 20:46:33 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Mike Rapoport <rppt@kernel.org>, kernel test robot <lkp@intel.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, arnd@arndb.de, christophe.leroy@csgroup.eu,
-        hch@lst.de, willy@infradead.org, agordeev@linux.ibm.com,
-        wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
-        David.Laight@aculab.com, shorne@gmail.com, deller@gmx.de,
-        Brian Cain <bcain@quicinc.com>, linux-hexagon@vger.kernel.org
-Subject: Re: [PATCH v6 02/19] hexagon: mm: Convert to GENERIC_IOREMAP
-Message-ID: <ZIxZqd85xWRriAW4@MiWiFi-R3L-srv>
-References: <20230609075528.9390-3-bhe@redhat.com>
- <202306091859.NhlW2nny-lkp@intel.com>
- <ZIQzrRo0JhfBLDes@MiWiFi-R3L-srv>
- <20230611054019.GL52412@kernel.org>
- <ZIV+bD1ksJz0CTz2@MiWiFi-R3L-srv>
- <20230612160237.GA199007@dev-arch.thelio-3990X>
+        Fri, 16 Jun 2023 08:47:35 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF66C2977;
+        Fri, 16 Jun 2023 05:47:34 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35GBQDug032641;
+        Fri, 16 Jun 2023 12:47:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=sxXe8Cc7Ys5J6Z/+6o8vSxnTtxZO1/mICBViqzUPqBo=;
+ b=iL6+N/JJ5b6gbRLBnN3xYsnL6b3FBYvrgXEery3gRswHPduRmocD3Cj7aaj/tx2VT3+Z
+ oY8XuBnwRjcDsjP3YMCVHDdxOAXw6B+CNnsf+NQBJ64XuZ2EEs0OqRvmRsIbSGCNe7mI
+ mlvXLRz98IyysMbKtFORJVUTWdS4m6JAyBnS8oKwdmq4iF3pXdx6zBFobbdRD/ox1gzj
+ DVKCz/GH+Ql8AkBKtGjR5bg9Cb5lguWZN5chmcfm3cCn+1x2NzRwhX4bjFsIRBCXaKRw
+ 8SPhGyDSmJEHMM7U6+a/S4rzTN2qEWedh7kpto0BO6RQjzZwxxiinWxsuH3ykloPj75O 3A== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r83p9ad3d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Jun 2023 12:47:31 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35GClUOL003326
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Jun 2023 12:47:30 GMT
+Received: from [10.216.44.30] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 16 Jun
+ 2023 05:47:23 -0700
+Message-ID: <83aa1135-8e66-b153-ab5c-a23df2bce5f5@quicinc.com>
+Date:   Fri, 16 Jun 2023 18:17:19 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612160237.GA199007@dev-arch.thelio-3990X>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: ipq9574: Enable WPS buttons
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_poovendh@quicinc.com>
+References: <20230614085040.22071-1-quic_anusha@quicinc.com>
+ <20230614085040.22071-3-quic_anusha@quicinc.com>
+ <4dede8d5-e665-1cf4-ea27-b2ba99f820e2@linaro.org>
+From:   Anusha Canchi <quic_anusha@quicinc.com>
+In-Reply-To: <4dede8d5-e665-1cf4-ea27-b2ba99f820e2@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Z8hrxytxiASmqE1drnaNzbIUwjdGA228
+X-Proofpoint-GUID: Z8hrxytxiASmqE1drnaNzbIUwjdGA228
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-16_08,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 phishscore=0 bulkscore=0 mlxlogscore=999 mlxscore=0
+ suspectscore=0 adultscore=0 clxscore=1015 spamscore=0 priorityscore=1501
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306160115
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/12/23 at 09:02am, Nathan Chancellor wrote:
-> On Sun, Jun 11, 2023 at 03:57:32PM +0800, Baoquan He wrote:
-> > On 06/11/23 at 08:40am, Mike Rapoport wrote:
-> > > Hi Baoquan,
-> > > 
-> > > On Sat, Jun 10, 2023 at 04:26:21PM +0800, Baoquan He wrote:
-> > > > On 06/09/23 at 07:09pm, kernel test robot wrote:
-> > > > > Hi Baoquan,
-> > > > > 
-> > > > > kernel test robot noticed the following build errors:
-> > > > > 
-> > > > > [auto build test ERROR on akpm-mm/mm-everything]
-> > > > > 
-> > > > > url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/asm-generic-iomap-h-remove-ARCH_HAS_IOREMAP_xx-macros/20230609-160014
-> > > > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> > > > > patch link:    https://lore.kernel.org/r/20230609075528.9390-3-bhe%40redhat.com
-> > > > > patch subject: [PATCH v6 02/19] hexagon: mm: Convert to GENERIC_IOREMAP
-> > > > > config: hexagon-randconfig-r041-20230608 (https://download.01.org/0day-ci/archive/20230609/202306091859.NhlW2nny-lkp@intel.com/config)
-> > > > > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-> > > > > reproduce (this is a W=1 build):
-> > > > >         mkdir -p ~/bin
-> > > > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > > > >         chmod +x ~/bin/make.cross
-> > > > >         git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
-> > > > >         git fetch akpm-mm mm-everything
-> > > > >         git checkout akpm-mm/mm-everything
-> > > > >         b4 shazam https://lore.kernel.org/r/20230609075528.9390-3-bhe@redhat.com
-> > > > >         # save the config file
-> > > > >         mkdir build_dir && cp config build_dir/.config
-> > > > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-> > > > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon prepare
-> > > > > 
-> > > > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > > > > the same patch/commit), kindly add following tags
-> > > > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > > > | Closes: https://lore.kernel.org/oe-kbuild-all/202306091859.NhlW2nny-lkp@intel.com/
-> > > > 
-> > > > Thanks for reporting. I reproduced them on my local machine. Below patch
-> > > > can fix them. And by the way, I also saw the clone3 warning, and have to 
-> > > > made change in scripts/checksyscalls.sh to mute it, wondering how you
-> > > > handle it in your testing.
-> > > 
-> > > I think the warning kbuild reported is rather this one:
-> > > 
-> > > >> include/asm-generic/io.h:1078:6: error: conflicting types for 'iounmap'
-> > >     1078 | void iounmap(volatile void __iomem *addr);
-> > >          |      ^
-> > 
-> > This one is reported as error. The old iounmap() declaration has a const,
-> > while the standard one doesn't have. So I just remove the old one to use
-> > the standard one.
-> > 
-> > Another one is warning about PCI_IOBASE. Because inb/w/l and outb/w/l is
-> > redefined in asm-generic/io.h, and it uses PCI_IOBASE which is defniend
-> > as NULL in asm-generic/io.h if ARCH doesn't have its own PCI_IOBASE
-> > definition. Then the warning is triggered. So I define macro to override
-> > the standard inb/w/l and outb/w/l.
-> > 
-> > #ifndef PCI_IOBASE
-> > #define PCI_IOBASE ((void __iomem *)0)
-> > #endif
-> 
-> I believe that this series [1] by Niklas Schnelle should take care of
-> the PCI_IOBASE warnings (which are not Hexagon specific), so there is no
-> need to worry about them when they show up in build reports.
-> 
-> [1]: https://lore.kernel.org/20230522105049.1467313-1-schnelle@linux.ibm.com/
 
-That's great, then I can skip the fixing of PCI_IOBASE warnings, only
-wrap the fixing of iounmap() declaration issue into the new post. Thanks
-a lot for the information, Nathan.
 
-Thanks
-Baoquan
+On 6/14/2023 4:12 PM, Konrad Dybcio wrote:
+>
+> On 14.06.2023 10:50, Anusha Rao wrote:
+>> Add support for wps buttons on GPIO 37.
+>>
+>> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+>> ---
+>>   .../boot/dts/qcom/ipq9574-rdp-common.dtsi     | 23 +++++++++++++++++++
+>>   1 file changed, 23 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp-common.dtsi b/arch/arm64/boot/dts/qcom/ipq9574-rdp-common.dtsi
+>> index 999902bc70bd..fd5326dc1773 100644
+>> --- a/arch/arm64/boot/dts/qcom/ipq9574-rdp-common.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp-common.dtsi
+>> @@ -8,6 +8,8 @@
+>>   
+>>   /dts-v1/;
+>>   
+>> +#include <dt-bindings/gpio/gpio.h>
+>> +#include <dt-bindings/input/input.h>
+>>   #include "ipq9574.dtsi"
+>>   
+>>   / {
+>> @@ -18,6 +20,20 @@
+>>   	chosen {
+>>   		stdout-path = "serial0:115200n8";
+>>   	};
+>> +
+>> +	gpio-keys {
+>> +		compatible = "gpio-keys";
+>> +		pinctrl-0 = <&gpio_keys_default>;
+>> +		pinctrl-names = "default";
+>> +
+>> +		button-wps {
+>> +			label = "wps";
+>> +			linux,code = <KEY_WPS_BUTTON>;
+>> +			gpios = <&tlmm 37 GPIO_ACTIVE_LOW>;
+>> +			linux,input-type = <1>;
+> This line is unnecessary, it's set to 'key' by default. With that:
+Okay, will address in the next patch.
+
+Thanks,
+Anusha
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>
+> Konrad
+>> +			debounce-interval = <60>;
+>> +		};
+>> +	};
+>>   };
+>>   
+>>   &blsp1_spi0 {
+>> @@ -114,6 +130,13 @@
+>>   		drive-strength = <8>;
+>>   		bias-disable;
+>>   	};
+>> +
+>> +	gpio_keys_default: gpio-keys-default-state {
+>> +		pins = "gpio37";
+>> +		function = "gpio";
+>> +		drive-strength = <8>;
+>> +		bias-pull-up;
+>> +	};
+>>   };
+>>   
+>>   &xo_board_clk {
 
