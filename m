@@ -2,298 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28188733D11
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 01:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D29A9733D14
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 01:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233349AbjFPXzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 19:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54414 "EHLO
+        id S234227AbjFPX7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 19:59:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbjFPXzt (ORCPT
+        with ESMTP id S232460AbjFPX7k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 19:55:49 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E1D52D4C
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 16:55:47 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-be49e41a3d6so1068567276.1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 16:55:47 -0700 (PDT)
+        Fri, 16 Jun 2023 19:59:40 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A8B30EF
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 16:59:38 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-65a971d7337so868929b3a.1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 16:59:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686959747; x=1689551747;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=L7c6vdsDMgEhg/4Dt7iJwihFwCqLkr9cdfGj229y85U=;
-        b=SgxHfeWXtovRTx0Zp13Coj9JDCk2062f1OJ8xF7q3AXQSRe4L48Vnr2kYXYL88GzzJ
-         EHbp0NSmUUt65eWWhCFBVxjBxZh/nNwIwnbwkf/h6P+niL4BRi5NmUQG/JA0gDlMAYGL
-         U4xXsBgIktX5oZbPUFB7fA/GZE2qdhlHzCJnA=
+        d=google.com; s=20221208; t=1686959978; x=1689551978;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6Tyi5NvBCdObx5n/3Re/Q/kvImIofGDhcRiJ1XSSKt8=;
+        b=LBVfQ6qB8MRyGOFDthEwgb+mDi3yl+ygzebAfT0EvpCoMtwjIqMa9CpxIvATalnAaA
+         TujQEdOfd7SUtpBm/VzaUSFtKVnyncjVURiBgIA78muqQ4PO12wzLbCTgo20DqKIBJyZ
+         e8KU5aB1Jm6J+EylrZ6bk3mnqIQFoqUE1cD/bBlYFtPyia2BO4B/uNP/RHThlNgGLVlw
+         hncimEFbCfQGkgQgd0y7S4ujRQ6lvso4gDdqwuCYwqzyr1dAHraqpbZFNM8j+4Sragv/
+         XxHCeIJzD9lH0chNoFcTWPwUNR0+spAhgNeit1x+JyhJEKG/ltywOjZyK7yd96T0NIDW
+         AciA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686959747; x=1689551747;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=L7c6vdsDMgEhg/4Dt7iJwihFwCqLkr9cdfGj229y85U=;
-        b=IuJfFLUiNnnNuvHXwzmxvEO+O8Lr29uiPkBuddceHQKSpZ7tBDAfQ8psRDITuweb1d
-         MYEPQHblYQlHaX94LbkEaab2ka+iYWoc9sTEqucWnObY1+/8ogfWuM6ILb7/aezHTB/M
-         5c1gY44G7Nil3thrpuBfsI2N1rtcvHdJbSAJHNnDs/VNcxmEaposl0PHsv19pDu1IO+f
-         cm3R5Yr9Ngnp5/dqyGZiPyEwOTC2gV0usO88oOOAv0goS40xUyI8X1rIJ9mQ9Znw1+gU
-         FEdTz0td7nq3V68SqGNDKCcg5MBhEYaTzkGyWufvc6yneWUvW+WoYo2PAWpByUQt2GEU
-         9JJg==
-X-Gm-Message-State: AC+VfDyBTz8okluDEjJa/Qxud14Tnut7K7tW4dOOqMh0C/tBBWAK01Ym
-        eCkl/Ivw0Kastj9OjxrgsgWLiw==
-X-Google-Smtp-Source: ACHHUZ494+LF9dHu8iWrChEGlIR80hEFdqBTzDAXJuZrJmvMeRhfSCPkiPjjmsQi6UZaol5OL5s7Sw==
-X-Received: by 2002:a25:583:0:b0:bc8:5eff:9767 with SMTP id 125-20020a250583000000b00bc85eff9767mr491558ybf.33.1686959746682;
-        Fri, 16 Jun 2023 16:55:46 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:27ce:4d20:94c5:fde0])
-        by smtp.gmail.com with ESMTPSA id w5-20020a17090aea0500b002562cfb81dfsm1862496pjy.28.2023.06.16.16.55.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jun 2023 16:55:45 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Pin-yen Lin <treapking@chromium.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-mediatek@lists.infradead.org,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Icenowy Zheng <uwu@icenowy.me>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] drm/bridge: ps8640: Drop the ability of ps8640 to fetch the EDID
-Date:   Fri, 16 Jun 2023 16:55:17 -0700
-Message-ID: <20230616165517.v2.1.I7b8f60b3fbfda068f9bf452d584dc934494bfbfa@changeid>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        d=1e100.net; s=20221208; t=1686959978; x=1689551978;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6Tyi5NvBCdObx5n/3Re/Q/kvImIofGDhcRiJ1XSSKt8=;
+        b=fYYUvTbZw1VvE9LenEkRG1j3WQY7doYOwdvOVzneyJJCR/nGrD2hei11Q+P56Bom6o
+         +p5xsHO7BPRco8LM4rqZftyH7TUp4C4PDo1YBJmy77ykct7vfjDlIXHzRQ+Cstyvwl9/
+         fZK1QZYpb+RfSv4fm/Y7pysxqaC5i/h7bjmJTzq2nDyC49TP1UP+IrfG95UCDi+TDV0f
+         f4mGwRzfd4JRP2S4Fi1KGgl5du4746/VvGm943W/f5wWGmsejwiMUcgLkEaRbL1sqsni
+         ZUXwOhp8HewcoTCR6VrcWl3BdlA723b9KMnMOfs4T+oSngqOAwgX8ZYc5CPfp/LBNIuh
+         2E5g==
+X-Gm-Message-State: AC+VfDweftJuDBvmNwfuO0aoifWqO+guQ5UfGd4MPtioee3c+2WmusJe
+        rEb2X7v9zQvn94MzGFJ8whLWdKWxLtw=
+X-Google-Smtp-Source: ACHHUZ7L8YlNjgZ81sYbrHSahdGE/awnFga/QkZVoxKfgeaO9m4lH+09VpPhX8qESaY34TUHJ2MHAE4PApE=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:13a8:b0:64f:5406:d5a2 with SMTP id
+ t40-20020a056a0013a800b0064f5406d5a2mr914557pfg.0.1686959977963; Fri, 16 Jun
+ 2023 16:59:37 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 16:59:36 -0700
+In-Reply-To: <L2ZBWR.TERFR10NPZ281@effective-light.com>
+Mime-Version: 1.0
+References: <L2ZBWR.TERFR10NPZ281@effective-light.com>
+Message-ID: <ZIz3aPL3K6ZagyJ2@google.com>
+Subject: Re: KVM page-fault on Kernel 6.3.8
+From:   Sean Christopherson <seanjc@google.com>
+To:     Hamza Mahfooz <someguy@effective-light.com>
+Cc:     kvm@vger.kernel.org, regressions@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to read the EDID from an eDP panel, you not only need to
-power on the bridge chip itself but also the panel. In the ps8640
-driver, this was made to work by having the bridge chip manually power
-the panel on by calling pre_enable() on everything connectorward on
-the bridge chain. This worked OK, but...
+On Fri, Jun 16, 2023, Hamza Mahfooz wrote:
+> I am seeing the following page-fault on the latest stable kernel:
 
-...when trying to do the same thing on ti-sn65dsi86, feedback was that
-this wasn't a great idea. As a result, we designed the "DP AUX"
-bus. With the design we ended up with the panel driver itself was in
-charge of reading the EDID. The panel driver could power itself on and
-the bridge chip was able to power itself on because it implemented the
-DP AUX bus.
+What makes you think this is KVM related?  I don't see anything KVM related in
+the splat.  The !PRESENT #PF is coming from aio_read(), not from KVM.  The
+?kvm_arch_vcpu_put line is just mispeculation from the unwinder.
 
-Despite the fact that we came up with a new scheme, implemented in on
-ti-sn65dsi86, and even implemented it on parade-ps8640, we still kept
-the old code around. This was because the new scheme required a DT
-change. Previously the panel was a simple "platform_device" and in DT
-at the top level. With the new design the panel needs to be listed in
-DT under the DP controller node. The old code allowed us to properly
-fetch EDIDs with ps8640 with the old DTs.
-
-Unfortunately, the old code stopped working as of commit 102e80d1fa2c
-("drm/bridge: ps8640: Use atomic variants of drm_bridge_funcs"). There
-are cases at bootup where connector->state->state is NULL and the
-kernel crashed at:
-* drm_atomic_bridge_chain_pre_enable
-* drm_atomic_get_old_bridge_state
-* drm_atomic_get_old_private_obj_state
-
-The crash went away at commit 4fb912e5e190 ("drm/bridge: Introduce
-pre_enable_prev_first to alter bridge init order") which added a NULL
-check. However, even though we were no longer crashing the end result
-was that we weren't actually powering the panel on when we thought we
-were. Things could end up working (despite warning splats) if
-userspace was persistent and tried to get the mode again, but it
-wasn't great.
-
-A bit of digging was done to see if there was an easy fix but there
-was nothing obvious. Instead, the only device using ps8640 the "old"
-way had its DT updated so that the panel was no longer a simple
-"platform_deice". See commit c2d94f72140a ("arm64: dts: mediatek:
-mt8173-elm: Move display to ps8640 auxiliary bus") and commit
-113b5cc06f44 ("arm64: dts: mediatek: mt8173-elm: remove panel model
-number in DT").
-
-Let's delete the old broken code so nobody gets tempted to copy it or
-figure out how it works (since it doesn't).
-
-NOTE: from a device tree "purist" point of view, we're supposed to
-keep old device trees working and this patch is technically "against
-policy". Reasons I'm still proposing it anyway:
-1. Officially, old mt8173-elm device trees worked via the "little
-   white lie" approach. The DT would list an arbitrary/representative
-   panel that would be used for power sequencing. The mode information
-   in the panel driver would then be ignored / overridden by the EDID
-   reading code in ps8640. I don't feel too terrible breaking DTs that
-   contained the wrong "compatible" string to begin with. NOTE that
-   any old device trees that _didn't_ lie about their compatible will
-   still work because the mode information will come from the
-   hardcoded panels in panel-edp.
-2. The only users of the old code were Chromebooks and Chromebooks
-   don't bake their DTs into the BIOS (they are bundled with the
-   kernel). Thus we don't need to worry about breaking someone using
-   an old DT with a new kernel.
-3. The old code was broken anyway. If someone wants to fix the old
-   code instead of deleting it then they have my blessing, but without
-   a proper fix the old code isn't useful.
-
-Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
-
-Changes in v2:
-- Removed "Fixes" tag as per discussion on v1.
-- Adjusted commit message since commit 4fb912e5e190 made things not crash.
-
- drivers/gpu/drm/bridge/parade-ps8640.c | 79 --------------------------
- 1 file changed, 79 deletions(-)
-
-diff --git a/drivers/gpu/drm/bridge/parade-ps8640.c b/drivers/gpu/drm/bridge/parade-ps8640.c
-index 8801cdd033b5..8161b1a1a4b1 100644
---- a/drivers/gpu/drm/bridge/parade-ps8640.c
-+++ b/drivers/gpu/drm/bridge/parade-ps8640.c
-@@ -105,7 +105,6 @@ struct ps8640 {
- 	struct gpio_desc *gpio_reset;
- 	struct gpio_desc *gpio_powerdown;
- 	struct device_link *link;
--	struct edid *edid;
- 	bool pre_enabled;
- 	bool need_post_hpd_delay;
- };
-@@ -155,23 +154,6 @@ static inline struct ps8640 *aux_to_ps8640(struct drm_dp_aux *aux)
- 	return container_of(aux, struct ps8640, aux);
- }
- 
--static bool ps8640_of_panel_on_aux_bus(struct device *dev)
--{
--	struct device_node *bus, *panel;
--
--	bus = of_get_child_by_name(dev->of_node, "aux-bus");
--	if (!bus)
--		return false;
--
--	panel = of_get_child_by_name(bus, "panel");
--	of_node_put(bus);
--	if (!panel)
--		return false;
--	of_node_put(panel);
--
--	return true;
--}
--
- static int _ps8640_wait_hpd_asserted(struct ps8640 *ps_bridge, unsigned long wait_us)
- {
- 	struct regmap *map = ps_bridge->regmap[PAGE2_TOP_CNTL];
-@@ -539,50 +521,6 @@ static void ps8640_bridge_detach(struct drm_bridge *bridge)
- 		device_link_del(ps_bridge->link);
- }
- 
--static struct edid *ps8640_bridge_get_edid(struct drm_bridge *bridge,
--					   struct drm_connector *connector)
--{
--	struct ps8640 *ps_bridge = bridge_to_ps8640(bridge);
--	struct device *dev = &ps_bridge->page[PAGE0_DP_CNTL]->dev;
--	bool poweroff = !ps_bridge->pre_enabled;
--
--	if (!ps_bridge->edid) {
--		/*
--		 * When we end calling get_edid() triggered by an ioctl, i.e
--		 *
--		 *   drm_mode_getconnector (ioctl)
--		 *     -> drm_helper_probe_single_connector_modes
--		 *        -> drm_bridge_connector_get_modes
--		 *           -> ps8640_bridge_get_edid
--		 *
--		 * We need to make sure that what we need is enabled before
--		 * reading EDID, for this chip, we need to do a full poweron,
--		 * otherwise it will fail.
--		 */
--		if (poweroff)
--			drm_atomic_bridge_chain_pre_enable(bridge,
--							   connector->state->state);
--
--		ps_bridge->edid = drm_get_edid(connector,
--					       ps_bridge->page[PAGE0_DP_CNTL]->adapter);
--
--		/*
--		 * If we call the get_edid() function without having enabled the
--		 * chip before, return the chip to its original power state.
--		 */
--		if (poweroff)
--			drm_atomic_bridge_chain_post_disable(bridge,
--							     connector->state->state);
--	}
--
--	if (!ps_bridge->edid) {
--		dev_err(dev, "Failed to get EDID\n");
--		return NULL;
--	}
--
--	return drm_edid_duplicate(ps_bridge->edid);
--}
--
- static void ps8640_runtime_disable(void *data)
- {
- 	pm_runtime_dont_use_autosuspend(data);
-@@ -592,7 +530,6 @@ static void ps8640_runtime_disable(void *data)
- static const struct drm_bridge_funcs ps8640_bridge_funcs = {
- 	.attach = ps8640_bridge_attach,
- 	.detach = ps8640_bridge_detach,
--	.get_edid = ps8640_bridge_get_edid,
- 	.atomic_post_disable = ps8640_atomic_post_disable,
- 	.atomic_pre_enable = ps8640_atomic_pre_enable,
- 	.atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
-@@ -705,14 +642,6 @@ static int ps8640_probe(struct i2c_client *client)
- 	ps_bridge->bridge.of_node = dev->of_node;
- 	ps_bridge->bridge.type = DRM_MODE_CONNECTOR_eDP;
- 
--	/*
--	 * In the device tree, if panel is listed under aux-bus of the bridge
--	 * node, panel driver should be able to retrieve EDID by itself using
--	 * aux-bus. So let's not set DRM_BRIDGE_OP_EDID here.
--	 */
--	if (!ps8640_of_panel_on_aux_bus(&client->dev))
--		ps_bridge->bridge.ops = DRM_BRIDGE_OP_EDID;
--
- 	/*
- 	 * Get MIPI DSI resources early. These can return -EPROBE_DEFER so
- 	 * we want to get them out of the way sooner.
-@@ -777,13 +706,6 @@ static int ps8640_probe(struct i2c_client *client)
- 	return ret;
- }
- 
--static void ps8640_remove(struct i2c_client *client)
--{
--	struct ps8640 *ps_bridge = i2c_get_clientdata(client);
--
--	kfree(ps_bridge->edid);
--}
--
- static const struct of_device_id ps8640_match[] = {
- 	{ .compatible = "parade,ps8640" },
- 	{ }
-@@ -792,7 +714,6 @@ MODULE_DEVICE_TABLE(of, ps8640_match);
- 
- static struct i2c_driver ps8640_driver = {
- 	.probe = ps8640_probe,
--	.remove = ps8640_remove,
- 	.driver = {
- 		.name = "ps8640",
- 		.of_match_table = ps8640_match,
--- 
-2.41.0.162.gfafddb0af9-goog
-
+> BUG: unable to handle page fault for address: ffffb4ff0cd20034
+> #PF: supervisor read access in kernel mode
+> #PF: error_code(0x0000) - not-present page
+> PGD 10002a067 P4D 10002a067 PUD 0
+> Oops: 0000 [#1] PREEMPT SMP NOPTI
+> CPU: 7 PID: 2675 Comm: CPU 7/KVM Not tainted 6.3.8-arch1-1 #1
+> a1d299e746aebdb27c523dd3bd94aba6f54915c7
+> Hardware name: ASUS System Product Name/ProArt X670E-CREATOR WIFI, BIOS 1303
+> 04/27/2023
+> RIP: 0010:try_grab_folio+0x14f/0x370
+> Code: 83 f8 04 75 6f 44 89 ee 4c 89 e7 e8 6b bc 0b 00 84 c0 74 60 4c 8b 63
+> 08 41 f6 c4 01 0f 85 b0 01 00 00 0f 1f 44 00 00 49 89 dc <41> 8b 44 24 34 85
+> c0 0f 88 f8 00 00 00 41 8b 44 24 34 85 c0 74 58
+> RSP: 0018:ffff9fa98504b948 EFLAGS: 00010086
+> RAX: 0000000000000002 RBX: fffff4ff0cd21480 RCX: 0000000000000000
+> RDX: 0000000000000003 RSI: 0000000000000001 RDI: fffff4ff0cd21480
+> RBP: 0000000000000000 R08: ffff8b2edb510980 R09: 00007f5624253000
+> R10: 80000003348008e7 R11: 00007f5624253000 R12: ffffb4ff0cd20000
+> R13: 0000000000000001 R14: 0000000000000003 R15: 0000000000000001
+> FS: 00007f548a7fc6c0(0000) GS:ffff8b35f83c0000(0000) knlGS:0000000000000000
+> CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: ffffb4ff0cd20034 CR3: 0000000113e70000 CR4: 0000000000750ee0
+> PKRU: 55555554
+> Call Trace:
+> <TASK>
+> ? __die+0x23/0x70
+> ? page_fault_oops+0x171/0x4e0
+> ? exc_page_fault+0x172/0x180
+> ? asm_exc_page_fault+0x26/0x30
+> ? try_grab_folio+0x14f/0x370
+> internal_get_user_pages_fast+0x883/0x1150
+> __iov_iter_get_pages_alloc+0xdd/0x780
+> ? kmem_cache_alloc+0x16f/0x330
+> ? bio_associate_blkg_from_css+0xcd/0x340
+> iov_iter_get_pages+0x1d/0x40
+> bio_iov_iter_get_pages+0xa1/0x480
+> __blkdev_direct_IO_async+0xc5/0x1b0
+> blkdev_read_iter+0x127/0x1d0
+> aio_read+0x132/0x210
+> ? io_submit_one+0x46a/0x8b0
+> io_submit_one+0x46a/0x8b0
+> ? kvm_arch_vcpu_put+0x128/0x190 [kvm
+> 711ceda1c40511ce22d1f99f4e9e574def76b25e]
+> ? kvm_arch_vcpu_ioctl_run+0x579/0x1770 [kvm
+> 711ceda1c40511ce22d1f99f4e9e574def76b25e]
+> __x64_sys_io_submit+0xad/0x190
+> do_syscall_64+0x5d/0x90
+> ? __x64_sys_ioctl+0xac/0xd0
+> ? syscall_exit_to_user_mode+0x1b/0x40
+> ? do_syscall_64+0x6c/0x90
+> ? syscall_exit_to_user_mode+0x1b/0x40
+> ? do_syscall_64+0x6c/0x90
+> ? syscall_exit_to_user_mode+0x1b/0x40
+> ? do_syscall_64+0x6c/0x90
+> ? syscall_exit_to_user_mode+0x1b/0x40
+> ? do_syscall_64+0x6c/0x90
+> ? do_syscall_64+0x6c/0x90
+> entry_SYSCALL_64_after_hwframe+0x72/0xdc
+> RIP: 0033:0x7f57ac0912ed
+> Code: 5d c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 48 89 f8 48 89 f7
+> 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff
+> 73 01 c3 48 8b 0d 3b 7a 0d 00 f7 d8 64 89 01 48
+> RSP: 002b:00007f5427ab97b8 EFLAGS: 00000246 ORIG_RAX: 00000000000000d1
+> RAX: ffffffffffffffda RBX: 00007f548a7fc1d0 RCX: 00007f57ac0912ed
+> RDX: 00007f5427ab9800 RSI: 0000000000000001 RDI: 00007f57a9d24000
+> RBP: 00007f57a9d24000 R08: 0000000000000001 R09: 0000000000000001
+> R10: 00007f54740044f0 R11: 0000000000000246 R12: 0000000000000001
+> R13: 0000000000000004 R14: 00007f5427ab9800 R15: 000000000000000e
