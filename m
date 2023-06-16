@@ -2,94 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03DE6732D1A
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F1E732D1F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233299AbjFPKLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 06:11:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40416 "EHLO
+        id S241144AbjFPKNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 06:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232372AbjFPKLP (ORCPT
+        with ESMTP id S233557AbjFPKN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 06:11:15 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04C4AC;
-        Fri, 16 Jun 2023 03:11:13 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-5183101690cso3497286a12.0;
-        Fri, 16 Jun 2023 03:11:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686910272; x=1689502272;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Od2IJ/bp8ubdmr1qWPt3A6bQBmcWuN4Gw3pOBhx9Hiw=;
-        b=h+xwRePmzfLx6oR4GHRIbt2NUcewWAQ3UsEqc2SFYI5EmFlvbpXoYaF1U84AkRkpuL
-         gGTiPUmfOLEqtMifptKGU9e5Wqnq9BY5I3mESXYnha4dzDClfGJf3Urtn/oN0hsuj/Kh
-         Ngt2MqY2tEtPvuj6xw5/8ibVisxhu1mTE7UN1lnSKfmqcOMrm3QkMX1L2sx3pIZmqZqC
-         b3tY9QxZVREwkYYxba9H7/wl6X+zMOCentjRbyU5ORTTsa/X9Wz13jYV/X18rOczhL5O
-         NQA9QG++vwgC7AIxC7ChlaVKC+bNx2b8Mbq9xTN1rgoH3/XuNRDEG1DS6eX/EandPKS1
-         dl/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686910272; x=1689502272;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Od2IJ/bp8ubdmr1qWPt3A6bQBmcWuN4Gw3pOBhx9Hiw=;
-        b=kwk71qsjQHHxPKJD/+zq1CerynUoiu+Ndq64Iij/1/6mJt8/W5hdf4flR1qyUXIKZ6
-         UFOg/7HAW86PhCXCjH0T2a+hBZgWVvVmJDFGPaGaw3/29BiTPulu/EoM5F7Lh3fX9LXC
-         pAyTt2Hp/MRHTBXzbMzw7WdRqUiQhuB6zbo/esDragkj1hOPItbG2hgS2koWJrvPiDOq
-         4ZTD9Jrue1Q2bcIigxpKf/7b9W94s/poOzokBjIyvR7sJ7jV4zTOZyfH6k3NcYkhTie6
-         q2JuXz3xQ5VlVJA5LFRJdUSTmr3h3K17zPZTqiMDu9Wgf3rZIvJPMoWFCLmETm2fSLpq
-         JfJA==
-X-Gm-Message-State: AC+VfDzhy9mPXoQP1AgQe7sMdQ/zfgEuJvKxw1oUiQCx77ONGVD87ha+
-        jOU+/vgjdnYYRryB33M1sDY=
-X-Google-Smtp-Source: ACHHUZ4Xo2qDnOAqwgzL1CIulKn7qYv3IxxCekqKWRXtSp06XCuA7NcvBy15p4nVG0n2wKltyqPYXg==
-X-Received: by 2002:a05:6402:1008:b0:51a:1f11:41e0 with SMTP id c8-20020a056402100800b0051a1f1141e0mr1170918edu.1.1686910272095;
-        Fri, 16 Jun 2023 03:11:12 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id u10-20020a056402064a00b0051a318c0120sm842562edx.28.2023.06.16.03.11.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jun 2023 03:11:11 -0700 (PDT)
-Date:   Fri, 16 Jun 2023 13:11:08 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     arinc9.unal@gmail.com
-Cc:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net v5 3/6] net: dsa: mt7530: fix handling of BPDUs on
- MT7530 switch
-Message-ID: <20230616101108.wq5aote3yjpekilu@skbuf>
-References: <20230616025327.12652-1-arinc.unal@arinc9.com>
- <20230616025327.12652-1-arinc.unal@arinc9.com>
- <20230616025327.12652-4-arinc.unal@arinc9.com>
- <20230616025327.12652-4-arinc.unal@arinc9.com>
+        Fri, 16 Jun 2023 06:13:29 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBA5AC;
+        Fri, 16 Jun 2023 03:13:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1686910408; x=1718446408;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YpSM1w+IYXXoUKSojagF+UoCf/8hiOK0HsM860yz38E=;
+  b=x8GaDBO93AJNI8beGQfsCylbIlpJpJ1JtTbkYnJJ2VixP1g/c5tHwlEj
+   mwOZMy22M9szW7tj+PWRko9VdMntMEmJFxSQpEQ4Xsni6N08QnyrdPoED
+   whnePP9zBT/opuxDiSo4b9Ny+Yk0MtQKtAPnLrsb1C6YBl4WmampdEPFn
+   yvsGfErYNlmY+mUPjHVyKvQaMY5hH48//RmX0EDWaqsGz+8V7I7wUs1hs
+   oOQQo2zb74lZjeIAuHA4Xkwbz5TGKPPauPSyMeLyaUqSm3E5m7hWXtzUi
+   3Xj+AC/Of7TGmjYdIX3lrYtQ4GuMEbhWxoyPzdcztwmRfZpEQHId0OqsP
+   w==;
+X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
+   d="asc'?scan'208";a="157251792"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Jun 2023 03:13:27 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 16 Jun 2023 03:13:27 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Fri, 16 Jun 2023 03:13:23 -0700
+Date:   Fri, 16 Jun 2023 11:12:57 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Eric Lin <eric.lin@sifive.com>
+CC:     <conor@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <palmer@dabbelt.com>,
+        <paul.walmsley@sifive.com>, <aou@eecs.berkeley.edu>,
+        <maz@kernel.org>, <chenhuacai@kernel.org>,
+        <baolu.lu@linux.intel.com>, <will@kernel.org>,
+        <kan.liang@linux.intel.com>, <nnac123@linux.ibm.com>,
+        <pierre.gondois@arm.com>, <huangguangbin2@huawei.com>,
+        <jgross@suse.com>, <chao.gao@intel.com>, <maobibo@loongson.cn>,
+        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <dslin1010@gmail.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Zong Li <zong.li@sifive.com>, Nick Hu <nick.hu@sifive.com>
+Subject: Re: [PATCH 2/3] soc: sifive: Add SiFive private L2 cache PMU driver
+Message-ID: <20230616-revision-speed-a83dc926b334@wendy>
+References: <20230616063210.19063-1-eric.lin@sifive.com>
+ <20230616063210.19063-3-eric.lin@sifive.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ElvD8fTDzec/LOV5"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230616025327.12652-4-arinc.unal@arinc9.com>
- <20230616025327.12652-4-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20230616063210.19063-3-eric.lin@sifive.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,47 +76,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 05:53:24AM +0300, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
-> 
-> BPDUs are link-local frames, therefore they must be trapped to the CPU
-> port. Currently, the MT7530 switch treats BPDUs as regular multicast
-> frames, therefore flooding them to user ports. To fix this, set BPDUs to be
-> trapped to the CPU port.
-> 
-> Fixes: b8f126a8d543 ("net-next: dsa: add dsa support for Mediatek MT7530 switch")
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+--ElvD8fTDzec/LOV5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Jun 16, 2023 at 02:32:09PM +0800, Eric Lin wrote:
+> From: Greentime Hu <greentime.hu@sifive.com>
+>=20
+> This adds SiFive private L2 cache PMU driver. User
+> can use perf tool to profile by event name and event id.
+>=20
+> Example:
+> $ perf stat -C 0 -e /sifive_pl2_pmu/inner_acquire_block_btot/
+>                 -e /sifive_pl2_pmu/inner_acquire_block_ntob/
+>                 -e /sifive_pl2_pmu/inner_acquire_block_ntot/ ls
+>=20
+>  Performance counter stats for 'CPU(s) 0':
+>=20
+>                300      sifive_pl2_pmu/inner_acquire_block_btot/
+>              17801      sifive_pl2_pmu/inner_acquire_block_ntob/
+>               5253      sifive_pl2_pmu/inner_acquire_block_ntot/
+>=20
+>        0.088917326 seconds time elapsed
+>=20
+> $ perf stat -C 0 -e /sifive_pl2_pmu/event=3D0x10001/
+>                 -e /sifive_pl2_pmu/event=3D0x4001/
+>                 -e /sifive_pl2_pmu/event=3D0x8001/ ls
+>=20
+>  Performance counter stats for 'CPU(s) 0':
+>=20
+>                251      sifive_pl2_pmu/event=3D0x10001/
+>               2620      sifive_pl2_pmu/event=3D0x4001/
+>                644      sifive_pl2_pmu/event=3D0x8001/
+>=20
+>        0.092827110 seconds time elapsed
+>=20
+> Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
+> Signed-off-by: Eric Lin <eric.lin@sifive.com>
+> Reviewed-by: Zong Li <zong.li@sifive.com>
+> Reviewed-by: Nick Hu <nick.hu@sifive.com>
 > ---
->  drivers/net/dsa/mt7530.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-> index e9fbe7ae6c2c..7b72cf3a0e30 100644
-> --- a/drivers/net/dsa/mt7530.c
-> +++ b/drivers/net/dsa/mt7530.c
-> @@ -2262,6 +2262,10 @@ mt7530_setup(struct dsa_switch *ds)
->  
->  	priv->p6_interface = PHY_INTERFACE_MODE_NA;
->  
-> +	/* Trap BPDUs to the CPU port */
-> +	mt7530_rmw(priv, MT753X_BPC, MT753X_BPDU_PORT_FW_MASK,
-> +		   MT753X_BPDU_CPU_ONLY);
-> +
->  	/* Enable and reset MIB counters */
->  	mt7530_mib_reset(ds);
->  
-> -- 
-> 2.39.2
-> 
+>  drivers/soc/sifive/Kconfig            |   9 +
+>  drivers/soc/sifive/Makefile           |   1 +
+>  drivers/soc/sifive/sifive_pl2.h       |  20 +
+>  drivers/soc/sifive/sifive_pl2_cache.c |  16 +
+>  drivers/soc/sifive/sifive_pl2_pmu.c   | 669 ++++++++++++++++++++++++++
 
-Ok, so this issue dates back to v4.12, but the patch won't apply that
-far due to the difference in patch context.
+Perf drivers should be in drivers/perf, no?
 
-Since the definition itself of the MT753X_BPC register was added as part
-of commit c288575f7810 ("net: dsa: mt7530: Add the support of MT7531
-switch") - dated v5.10 - then this patch cannot be practically be
-backported beyond that.
+Cheers,
+Conor.
 
-So I see no possible objection to the request I'm about to make, which is:
-please group this and the identical logic from mt7531_setup() into a
-common function and call that.
+--ElvD8fTDzec/LOV5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIw1qQAKCRB4tDGHoIJi
+0q20AP0SJ+XMu+AbrLQcuJNmsYqvVW9wc6xBagHa9pzRoEw0mwD+K5s2+gB8wow+
+BqnI6l1BRUx8VsrF6VfTnTaE4ZlUJQM=
+=YDC2
+-----END PGP SIGNATURE-----
+
+--ElvD8fTDzec/LOV5--
