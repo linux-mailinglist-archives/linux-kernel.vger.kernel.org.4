@@ -2,91 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0239673355D
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 18:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 833F77335AD
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 18:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245258AbjFPQCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 12:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34386 "EHLO
+        id S1345470AbjFPQQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 12:16:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245660AbjFPQCf (ORCPT
+        with ESMTP id S1345788AbjFPQPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 12:02:35 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA344204;
-        Fri, 16 Jun 2023 09:02:16 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35GBVHcm018156;
-        Fri, 16 Jun 2023 11:01:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=aM4qTlg66psxyt7MvUaMTfjlMOxNt1M83BDXPCVlrdE=;
- b=Gh3KuXRDek8q+xUxmtZtD1eBuOoymuBv7/v6TC3Q3rw9DjPFyFWQfxvt14FXP35N7ocU
- IJzdxdCW/niSf4ilGW4rwaXVqv8impUnXd41HsmIyLPn5/O+qevvEWZma6Qc8YUbULUg
- +2zO0FYvO7g3USZ4F4bnEjct8yrT/3exot0scjSqDSHq6bBzS+1MugdrLA/3ZjZZq0XI
- /vKqk/l8UENa4vl3YPGB80AG19ukpvTAoAjkCO6jKUI2Sd6+N1p7Qo/jr6HRCPDduKMt
- ETh9dJ+cdkEROG/CtJ44Mn1KG+2wSP9c8CHiZnK8XeY39bJKr0VG82wZPKhjNYH8rmCS uw== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3r4pk0ejjh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Jun 2023 11:01:58 -0500
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Fri, 16 Jun
- 2023 17:01:56 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
- Transport; Fri, 16 Jun 2023 17:01:56 +0100
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id AEE3615A4;
-        Fri, 16 Jun 2023 16:01:56 +0000 (UTC)
-Date:   Fri, 16 Jun 2023 16:01:56 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     <andy.shevchenko@gmail.com>
-CC:     <broonie@kernel.org>, <lee@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <linus.walleij@linaro.org>,
-        <vkoul@kernel.org>, <robh+dt@kernel.org>, <conor+dt@kernel.org>,
-        <lgirdwood@gmail.com>, <yung-chuan.liao@linux.intel.com>,
-        <sanyog.r.kale@intel.com>, <pierre-louis.bossart@linux.intel.com>,
-        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
-        <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 1/6] soundwire: bus: Allow SoundWire peripherals to
- register IRQ handlers
-Message-ID: <20230616160156.GT68926@ediswmail.ad.cirrus.com>
-References: <20230605125504.2570158-1-ckeepax@opensource.cirrus.com>
- <20230605125504.2570158-2-ckeepax@opensource.cirrus.com>
- <ZIuNXQIB3j6YjYa7@surfacebook>
+        Fri, 16 Jun 2023 12:15:03 -0400
+X-Greylist: delayed 4200 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 16 Jun 2023 09:14:40 PDT
+Received: from mail.purtolebiz.com (mail.purtolebiz.com [38.242.205.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40BD4495
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 09:14:40 -0700 (PDT)
+Received: by mail.purtolebiz.com (Postfix, from userid 1001)
+        id B1E39301B9D; Fri, 16 Jun 2023 10:01:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=purtolebiz.com;
+        s=mail; t=1686902468;
+        bh=kwwKurQZ1RuEG5hkiwOU//DQTAbymO8bblrpwhD4ihw=;
+        h=Date:From:To:Subject:From;
+        b=O06P9WaKVStqDkwnBWQXYl11KLjWZdBXErmpKnmgXC62uSM/qJjveY+jZ8Ctsl3nO
+         mILAWUs2pL1TO5xK9rLfjQ4mnlwhaTjgnesRQWUd8/IW87aTB0737dNUZ+kLCSax8A
+         6LN/1OCcTTweURPhIeqGTKH/RZe+R6IspVLtQVIcUVKOZQjOTSRMfXHRNEgD8RIUtF
+         NIFQy/2LxAQOcxSUvbedLpOCS05ij0t5MZHlI7kJq69g8Hr9L1jwhiVOKhXH2TxYDg
+         9BpqA8nRstSHiUClmKfv/4o3bSvmvSIEpbL3wOdKjhGIvC6GqyQ+P3ADvYMa0hrxoe
+         pYAvOOfWTMsRw==
+Received: by mail.purtolebiz.com for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 08:01:02 GMT
+Message-ID: <20230616084500-0.1.72.137lc.0.ucf63lbdk4@purtolebiz.com>
+Date:   Fri, 16 Jun 2023 08:01:02 GMT
+From:   "Antonio Valverde" <antonio.valverde@purtolebiz.com>
+To:     <linux-kernel@vger.kernel.org>
+Subject: Consumo de combustible
+X-Mailer: mail.purtolebiz.com
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZIuNXQIB3j6YjYa7@surfacebook>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-ORIG-GUID: g_ZbuS0378fNogebm1OeP16CyalPar6e
-X-Proofpoint-GUID: g_ZbuS0378fNogebm1OeP16CyalPar6e
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,URIBL_CSS_A,URIBL_DBL_SPAM
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
+        *      blocklist
+        *      [URIs: purtolebiz.com]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [38.242.205.154 listed in zen.spamhaus.org]
+        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
+        *      blocklist
+        *      [URIs: purtolebiz.com]
+        * -0.0 BAYES_20 BODY: Bayes spam probability is 5 to 20%
+        *      [score: 0.0697]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
+        *      blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [URIs: purtolebiz.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 01:14:53AM +0300, andy.shevchenko@gmail.com wrote:
-> Mon, Jun 05, 2023 at 01:54:59PM +0100, Charles Keepax kirjoitti:
-> > From: Lucas Tanure <tanureal@opensource.cirrus.com>
-> > +	bus->irq_chip.name = dev_name(bus->dev);
-> > +	bus->domain = irq_domain_add_linear(NULL, SDW_MAX_DEVICES, &sdw_domain_ops, bus);
-> 
-> I'm wondering why you are not using existing fwnode, if any
-> (e.g. from parent device).
+Buenos dias
 
-I think that is just an oversight, I will fixup for the next
-version.
+Le escribo sobre la gesti=C3=B3n de los autom=C3=B3viles de la empresa.
 
-Thanks,
-Charles
+Gracias a las abundantes funcionalidades de la herramienta GPS, que monit=
+orea cada autom=C3=B3vil de manera continua, puede registrar la posici=C3=
+=B3n, el tiempo y el kilometraje de los autom=C3=B3viles en tiempo real.
+
+Como resultado, los costos de mantenimiento de la flota de la compa=C3=B1=
+=C3=ADa se reducen en un 20% y el tiempo de viaje o la planificaci=C3=B3n=
+ de la entrega se reduce significativamente. 49 mil est=C3=A1n detr=C3=A1=
+s del =C3=A9xito de nuestras soluciones. Empresas que cooperan con nosotr=
+os.
+
+Si el tema le parece interesante, cont=C3=A1ctame.
+
+
+Atentamente,
+Antonio Valverde
