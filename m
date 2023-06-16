@@ -2,99 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D3FA733277
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 15:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E67BE73327C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 15:48:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344273AbjFPNrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 09:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42264 "EHLO
+        id S1344540AbjFPNs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 09:48:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230238AbjFPNrn (ORCPT
+        with ESMTP id S1344440AbjFPNsX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 09:47:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C5D2702
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 06:47:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 241D262C50
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 13:47:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A886C43395
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 13:47:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686923261;
-        bh=e3Rn9wSp0yBzOPdTFOU/3C0NFGTIC9+SG2QGu/MQAiI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Fwp/B2s6/1SMHXRYeVOqtSkxp17GBTzZ9lvprmabfaWKOBVM7I2+iCqNf2YnjPyXk
-         yhjB7NhUuEAQEh5JGsUHNYWINtu6W4dBn1C/+1HwahCTnusYOENpybWKC91OQ37Udn
-         z7A8TMgHrOboK7mdbFR8OS56LyY72J3p06xXgsy0auR17x5xhLjIYBI7mWMof9xphg
-         L4k/g1sx0tIYT0Je/d+AmjqWzrOsa9pW56HpEEpelcQN9J5XhuLDpHbqu4C/FltLin
-         zqYw7HQBYk04qC2AGZPLGYBozvhK3gkZtC71+9krbCmC62eysTcvyHSjC2AjgFAW75
-         uQktPBuoaOdZg==
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1b52fd56b7aso4011605ad.2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 06:47:41 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwT8v9SlLPEhRw8sNcnLY/mJMZWcPOIWZDPzMTicj+TitVl7/wh
-        Ht8VHv8Twb5HBy26a5r0rPa7BGZKJIbv88r6IylzRA==
-X-Google-Smtp-Source: ACHHUZ6S6xDb9UwuivCY3/VT2rSDFUreEKhVsbql4uCpIS5aTfqDe0VsnssVVihzjlCFyZXmoDBshHzfwGBE6X1ZLjQ=
-X-Received: by 2002:a17:903:1112:b0:1af:a293:e155 with SMTP id
- n18-20020a170903111200b001afa293e155mr2017620plh.16.1686923260691; Fri, 16
- Jun 2023 06:47:40 -0700 (PDT)
+        Fri, 16 Jun 2023 09:48:23 -0400
+Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A02330E0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 06:48:22 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
+        by localhost (Postfix) with ESMTP id 4QjL8Z2XWrz9s2J;
+        Fri, 16 Jun 2023 15:48:14 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 8giTzWa4F7S1; Fri, 16 Jun 2023 15:48:14 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4QjL8W0LS1z9s1G;
+        Fri, 16 Jun 2023 15:48:11 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 051FC8B781;
+        Fri, 16 Jun 2023 15:48:11 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id PXLWrfkVSk2n; Fri, 16 Jun 2023 15:48:10 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.18])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id C14D18B764;
+        Fri, 16 Jun 2023 15:48:10 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 35GDm4i21175650
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Fri, 16 Jun 2023 15:48:04 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 35GDm0FV1175646;
+        Fri, 16 Jun 2023 15:48:00 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sathvika Vasireddy <sv@linux.ibm.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [RFC PATCH v1 0/3] powerpc/objtool: First step towards uaccess validation (v1)
+Date:   Fri, 16 Jun 2023 15:47:49 +0200
+Message-Id: <cover.1686922583.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230616121341.1032187-1-juerg.haefliger@canonical.com>
-In-Reply-To: <20230616121341.1032187-1-juerg.haefliger@canonical.com>
-From:   Robert Foss <rfoss@kernel.org>
-Date:   Fri, 16 Jun 2023 15:47:29 +0200
-X-Gmail-Original-Message-ID: <CAN6tsi4jdDD20DY5sKL+ALC_Mk2UHRArOrQnjzKoyF30QZi8jw@mail.gmail.com>
-Message-ID: <CAN6tsi4jdDD20DY5sKL+ALC_Mk2UHRArOrQnjzKoyF30QZi8jw@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge: lt9611uxc: Add MODULE_FIRMWARE macro
-To:     Juerg Haefliger <juerg.haefliger@canonical.com>
-Cc:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
-        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, airlied@gmail.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1686923268; l=3187; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=A1u6ADmaDLt4PC3Ez60heNCY/BgdxUOWGXdUy2kyQ/E=; b=wlVJoF5RAtYZPAopVtD/HPmHr2OSX6EeUqL0HkNxk+4vZlF7Q0yW/YlqO5szOXZ68pBWnOOIJ sqsI2hfURbjAk7qLMEOR+fSCrWe2b/Mx4q0i69MAhwKLjiFNggRi9I9
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 2:13=E2=80=AFPM Juerg Haefliger
-<juerg.haefliger@canonical.com> wrote:
->
-> The module loads firmware so add a MODULE_FIRMWARE macro to provide that
-> information via modinfo.
->
-> Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
-> ---
->  drivers/gpu/drm/bridge/lontium-lt9611uxc.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/gpu/drm/bridge/lontium-lt9611uxc.c b/drivers/gpu/drm=
-/bridge/lontium-lt9611uxc.c
-> index 583daacf3705..6b2a4f8d6f78 100644
-> --- a/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
-> +++ b/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
-> @@ -1019,3 +1019,5 @@ module_i2c_driver(lt9611uxc_driver);
->
->  MODULE_AUTHOR("Dmitry Baryshkov <dmitry.baryshkov@linaro.org>");
->  MODULE_LICENSE("GPL v2");
-> +
-> +MODULE_FIRMWARE("lt9611uxc_fw.bin");
-> --
-> 2.37.2
->
+This RFC is a first step towards the validation of userspace accesses.
 
-Can filename string be made into a macro, as it is used in two locations?
+For the time being it targets only PPC32 and includes hacks directly in
+core part of objtool.
 
-With that fixed, please add my r-b.
+It doesn't yet include handling of uaccess at all but is a first step
+to support objtool validation.
 
+Assembly files have been kept aside as they require a huge work before
+being ready for objtool validation and are not directly relevant for
+uaccess validation.
 
-Rob.
+Please have a look and hold hand if I'm going in the wrong direction.
+
+For the few hacks done directly in the core part of objtool don't
+hesitate to suggest ways to make it more generic.
+
+Christophe Leroy (3):
+  Revert "powerpc/bug: Provide better flexibility to
+    WARN_ON/__WARN_FLAGS() with asm goto"
+  powerpc: Mark all .S files invalid for objtool
+  powerpc: WIP draft support to objtool check
+
+ arch/powerpc/Kconfig                          |  1 +
+ arch/powerpc/boot/Makefile                    | 17 +++++
+ arch/powerpc/crypto/Makefile                  | 13 ++++
+ arch/powerpc/include/asm/book3s/64/kup.h      |  2 +-
+ arch/powerpc/include/asm/bug.h                | 67 +++----------------
+ arch/powerpc/include/asm/extable.h            | 14 ----
+ arch/powerpc/include/asm/ppc_asm.h            | 11 ++-
+ arch/powerpc/kernel/Makefile                  | 44 ++++++++++++
+ arch/powerpc/kernel/misc_32.S                 |  2 +-
+ arch/powerpc/kernel/trace/Makefile            |  4 ++
+ arch/powerpc/kernel/traps.c                   |  9 +--
+ arch/powerpc/kernel/vdso/Makefile             | 11 +++
+ arch/powerpc/kexec/Makefile                   |  2 +
+ arch/powerpc/kvm/Makefile                     | 13 ++++
+ arch/powerpc/lib/Makefile                     | 25 +++++++
+ arch/powerpc/mm/book3s32/Makefile             |  3 +
+ arch/powerpc/mm/nohash/Makefile               |  3 +
+ arch/powerpc/perf/Makefile                    |  2 +
+ arch/powerpc/platforms/44x/Makefile           |  2 +
+ arch/powerpc/platforms/52xx/Makefile          |  3 +
+ arch/powerpc/platforms/83xx/Makefile          |  2 +
+ arch/powerpc/platforms/cell/spufs/Makefile    |  3 +
+ arch/powerpc/platforms/pasemi/Makefile        |  2 +
+ arch/powerpc/platforms/powermac/Makefile      |  3 +
+ arch/powerpc/platforms/powernv/Makefile       |  3 +
+ arch/powerpc/platforms/ps3/Makefile           |  2 +
+ arch/powerpc/platforms/pseries/Makefile       |  2 +
+ arch/powerpc/purgatory/Makefile               |  3 +
+ arch/powerpc/sysdev/Makefile                  |  3 +
+ arch/powerpc/xmon/Makefile                    |  3 +
+ scripts/Makefile.lib                          |  2 +-
+ tools/objtool/arch/powerpc/decode.c           | 60 +++++++++++++++--
+ .../arch/powerpc/include/arch/special.h       |  2 +-
+ tools/objtool/arch/powerpc/special.c          | 44 +++++++++++-
+ tools/objtool/check.c                         | 29 ++++----
+ tools/objtool/include/objtool/elf.h           |  1 +
+ tools/objtool/include/objtool/special.h       |  2 +-
+ .../powerpc/primitives/asm/extable.h          |  1 -
+ 38 files changed, 311 insertions(+), 104 deletions(-)
+ delete mode 120000 tools/testing/selftests/powerpc/primitives/asm/extable.h
+
+-- 
+2.40.1
+
