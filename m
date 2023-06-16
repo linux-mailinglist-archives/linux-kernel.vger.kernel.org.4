@@ -2,117 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABD6D732B32
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:13:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAA03732B34
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245676AbjFPJM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 05:12:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34226 "EHLO
+        id S242017AbjFPJNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 05:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245164AbjFPJMm (ORCPT
+        with ESMTP id S1344083AbjFPJMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 05:12:42 -0400
-Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166B71BC3
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 02:11:52 -0700 (PDT)
-Received: by mail-vk1-xa2a.google.com with SMTP id 71dfb90a1353d-46e4d4081beso167360e0c.0
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 02:11:52 -0700 (PDT)
+        Fri, 16 Jun 2023 05:12:54 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBB8359F
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 02:12:10 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-57028539aadso5996777b3.2
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 02:12:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1686906711; x=1689498711;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0oqvpHuky3o/OIEpfkiGgScVkGrIGuIy6RNzuijY+qs=;
-        b=rUCLzO1b7gZ+tVZY2Ct4fdtj3f/CwHfzUlX8hvEakDwWDZvbkYuuBW6oM/wtCBjaqT
-         8JjmJUJqclevQMtyFwyZR5ayCmUZX2L3hFVZq2wuItRX2vloqO5mpE8NVyrjS9coVhGV
-         lNeGMv8u72nCBo2604qfV7Gor8nB5a8GcjHf9OhmEzd78EYAEXX4X6gJIRSe22YsIqcg
-         DS1dDs+nKkfZKyjFFgEysbpRFdMi1pzxThFmlKQjv5U5VpNuaX4iBi8kwxU/Sf1hFEaP
-         4UOVP03FGvupsRCS8HzwuFMfwYKOmKWiiT9/teQqlI0duu1AYQXDgfz3KWNkAus0pGyb
-         5hwA==
+        d=broadcom.com; s=google; t=1686906729; x=1689498729;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MFOLq/LdjxsQ0YRGGsBOX84Vqd4oLcNgeYvXrDhw58c=;
+        b=PtAFbmscX2ahWM+tZZ/G2LkcuEiGYAOn1V42NWWoNtRUwjyb3MpxfQlR0SREx/mzhY
+         40GUGNyG2+JG6yf7sJYzdJkz4PPxmPhn3b6mpiaSkY8Sm8FWtComerH+cqjiBijxixJt
+         tZcoA6G1WebutBABUyAY4sA3kllEPKL2rTfJE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686906711; x=1689498711;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0oqvpHuky3o/OIEpfkiGgScVkGrIGuIy6RNzuijY+qs=;
-        b=jGqGQY/8oc3xjJBLLxG7mSGAjpAUZo9Np5wWz1VayCNVyyv19dtnQQm0g4Fg80Ej8w
-         XdhSx0uDfq2Dj5J8iNlD+oJaDse8pMVZQ+asauof7fouatSi/EF6Q9UEcQHYrIEhHHAc
-         DBMVYRykarSq1LvQseXd9pAleqX+GU26HCsGIsP9i1Hr1T/A/6tnVqSfH5XO6qjNYjfW
-         e2HPRm/Jgmwn1q0Gn2bkaFu9/2yHKkhlJ3i4J1t126BGahiM/FxgcN6PIRF2u6xeic2h
-         WHZA/Pp9yEC8YJYNU72095e3QqvtOvt1tA/gEkVRFkAfHvFlPU5ht1stArymMIAphNej
-         OLKA==
-X-Gm-Message-State: AC+VfDxP+mZWhpTeGsfmRircdzPNu4LMUUzAm2m9uWjIe+02hamBpXBh
-        6/u5VPyQVyCTAWdfcs+DjCdqFuEeTRZpC8cl3Q61+g==
-X-Google-Smtp-Source: ACHHUZ5WPbVfg0vbv9rDKDvOk3h+oGuMTyDAnPBcoyCX3HySRPLHmIG9VA2BXI5ZQ+CPrJvQb/NXObIGmtkRGZ263IU=
-X-Received: by 2002:a1f:5e07:0:b0:46e:97e8:f68c with SMTP id
- s7-20020a1f5e07000000b0046e97e8f68cmr1561546vkb.2.1686906711172; Fri, 16 Jun
- 2023 02:11:51 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686906729; x=1689498729;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MFOLq/LdjxsQ0YRGGsBOX84Vqd4oLcNgeYvXrDhw58c=;
+        b=SUzOY822r7EYGVzmnd7RhB674nuElG4lLIvAbH3FL2D4JQJ7YNLMCtjDJZTtxrw/z9
+         EdUKakOO5PSpccHVNabcW1xOyFal5cIh4bryi20G0zeXQCcvWOBZjb3ibqG1ZYoKus0H
+         xjm38rWWUyd34+REEmY5uWbGROb47Cs2ZVniBFPlyMTm76wBZSAYj4fyj/42BauXElbu
+         jO8oOKQgY7C1vXjjS0wKy79XW+1qmedYshYLdPlqkb7PAtt0wLudErKN3ocDP54xw9iq
+         j5GZ6q+zrYZXSIJre2uYuoGNHdwwJD48qFwOUDpJ14MEP0qWU4dbw9rJhP9HuEecli6E
+         jwlg==
+X-Gm-Message-State: AC+VfDw8JC2NCxeqcGDAVYpINjyrl/ZAffugniMW4pBO1RJl9Q6tSNFL
+        s7vr+87CUVrgepZ2/USjvyVddC5b0cmJ+WbAGOU94A==
+X-Google-Smtp-Source: ACHHUZ65rRhRCKuwF1xGI3+PDZPaJ+xw1a7PkBFWEewmz0r7VZRR2YuWUzuEkulbJh5XNEByabnhf0Ly9Td8p0fW92Y=
+X-Received: by 2002:a25:7308:0:b0:b9e:889:420f with SMTP id
+ o8-20020a257308000000b00b9e0889420fmr1743075ybc.12.1686906729161; Fri, 16 Jun
+ 2023 02:12:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230601230200.6128-1-msmulski2@gmail.com> <20230601230200.6128-2-msmulski2@gmail.com>
-In-Reply-To: <20230601230200.6128-2-msmulski2@gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 16 Jun 2023 11:11:40 +0200
-Message-ID: <CAMRc=MePZW6NGjav1VcW1uDxfk0Zy=yypurPz8kmUkR8V0LMQQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] gpio: mpc8xxx: latch GPIOs state on module load
- when configured as output
-To:     msmulski2@gmail.com
-Cc:     linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Michal Smulski <michal.smulski@ooma.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230616090546.2555077-1-arnd@kernel.org>
+In-Reply-To: <20230616090546.2555077-1-arnd@kernel.org>
+From:   Selvin Xavier <selvin.xavier@broadcom.com>
+Date:   Fri, 16 Jun 2023 14:41:56 +0530
+Message-ID: <CA+sbYW27mGMdRu_YN_ye3W3ZXqtLwS=D3vYJ9P7Y_P8NREtJ9A@mail.gmail.com>
+Subject: Re: [PATCH] [BUGREPORT] RDMA/bnxt_re: avoid unintialized variable use
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kalesh AP <kalesh-anakkur.purayil@broadcom.com>,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000006749d705fe3b942a"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 1:02=E2=80=AFAM <msmulski2@gmail.com> wrote:
+--0000000000006749d705fe3b942a
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Jun 16, 2023 at 2:35=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
+te:
 >
-> From: Michal Smulski <michal.smulski@ooma.com>
+> From: Arnd Bergmann <arnd@arndb.de>
 >
-> Qoriq and related devices allow reading out state of GPIO set as output.
-> However, currently on driver's init, all outputs are configured as driven
-> low. So, any changes to GPIO confiuration will drive all pins (configured
-> as output) as output-low.
-> This patch latches state of output GPIOs before any GPIO configuration
-> takes place. This preserves any output settings done prior to loading
-> the driver (for example, by u-boot).
+> The newly added opcode variable is not initialized anywhere:
 >
-> Signed-off-by: Michal Smulski <michal.smulski@ooma.com>
+> drivers/infiniband/hw/bnxt_re/qplib_rcfw.c:322:18: error: variable 'opcod=
+e' is uninitialized when used here [-Werror,-Wuninitialized]
+>         crsqe->opcode =3D opcode;
+
+This is already fixed and merged
+https://lore.kernel.org/r/6ad1e44be2b560986da6fdc6b68da606413e9026.16866441=
+05.git.leonro@nvidia.com
+
+Thanks
+
+>
+> Not sure what the intention was here, but this is clearly pointless, so
+> instead use 0 in place of the variable.
+>
+> Fixes: bcfee4ce3e013 ("RDMA/bnxt_re: remove redundant cmdq_bitmap")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->  drivers/gpio/gpio-mpc8xxx.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+> This is likely not the correct fix, so treat this as a bug report,
+> the patch is what I applied as a temporary workaround in my randconfig
+> tree.
+> ---
+>  drivers/infiniband/hw/bnxt_re/qplib_rcfw.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 >
-> diff --git a/drivers/gpio/gpio-mpc8xxx.c b/drivers/gpio/gpio-mpc8xxx.c
-> index 3eb08cd1fdc0..6340e738c912 100644
-> --- a/drivers/gpio/gpio-mpc8xxx.c
-> +++ b/drivers/gpio/gpio-mpc8xxx.c
-> @@ -375,8 +375,12 @@ static int mpc8xxx_probe(struct platform_device *pde=
-v)
->         if (of_device_is_compatible(np, "fsl,qoriq-gpio") ||
->             of_device_is_compatible(np, "fsl,ls1028a-gpio") ||
->             of_device_is_compatible(np, "fsl,ls1088a-gpio") ||
-> -           is_acpi_node(fwnode))
-> +           is_acpi_node(fwnode)) {
->                 gc->write_reg(mpc8xxx_gc->regs + GPIO_IBE, 0xffffffff);
-> +               /* Also, latch state of GPIOs configured as output by boo=
-tloader. */
-> +               gc->bgpio_data =3D gc->read_reg(mpc8xxx_gc->regs + GPIO_D=
-AT) &
-> +                       gc->read_reg(mpc8xxx_gc->regs + GPIO_DIR);
-> +       }
+> diff --git a/drivers/infiniband/hw/bnxt_re/qplib_rcfw.c b/drivers/infinib=
+and/hw/bnxt_re/qplib_rcfw.c
+> index bb5aebafe1622..8d349d6a633fa 100644
+> --- a/drivers/infiniband/hw/bnxt_re/qplib_rcfw.c
+> +++ b/drivers/infiniband/hw/bnxt_re/qplib_rcfw.c
+> @@ -285,7 +285,6 @@ static int __send_message(struct bnxt_qplib_rcfw *rcf=
+w,
+>         struct pci_dev *pdev;
+>         unsigned long flags;
+>         u16 cookie;
+> -       u8 opcode;
+>         u8 *preq;
 >
->         ret =3D devm_gpiochip_add_data(&pdev->dev, gc, mpc8xxx_gc);
->         if (ret) {
+>         cmdq =3D &rcfw->cmdq;
+> @@ -319,7 +318,7 @@ static int __send_message(struct bnxt_qplib_rcfw *rcf=
+w,
+>         crsqe->is_internal_cmd =3D false;
+>         crsqe->is_waiter_alive =3D true;
+>         crsqe->is_in_used =3D true;
+> -       crsqe->opcode =3D opcode;
+> +       crsqe->opcode =3D 0;
+>
+>         crsqe->req_size =3D __get_cmdq_base_cmd_size(msg->req, msg->req_s=
+z);
+>         if (__get_cmdq_base_resp_size(msg->req, msg->req_sz) && msg->sb) =
+{
 > --
-> 2.34.1
+> 2.39.2
 >
 
-Applied, thanks!
+--0000000000006749d705fe3b942a
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-Bart
+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
+FYMZp2DojLAq9f4Oi2OBetbnWxo0WGycXpmq/jC4PUx2u9mazQ79i80VLagGRshWniESXuf+SYG8
++zBimjld9ZZnwm7itHAZdtme4YYFxx+EHa4PUxPV8t+hPHhsiIjirPa1pVXPbQIDAQABo4IB2zCC
+AdcwDgYDVR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDov
+L3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAu
+Y3J0MEEGCCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29u
+YWxzaWduMmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0
+cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBA
+MD6gPKA6hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2Ey
+MDIwLmNybDAlBgNVHREEHjAcgRpzZWx2aW4ueGF2aWVyQGJyb2FkY29tLmNvbTATBgNVHSUEDDAK
+BggrBgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQU3TaH
+dsgUhTW3LwObmZ20fj+8Xj8wDQYJKoZIhvcNAQELBQADggEBAAbt6Sptp6ZlTnhM2FDhkVXks68/
+iqvfL/e8wSPVdBxOuiP+8EXGLV3E72KfTTJXMbkcmFpK2K11poBDQJhz0xyOGTESjXNnN6Eqq+iX
+hQtF8xG2lzPq8MijKI4qXk5Vy5DYfwsVfcF0qJw5AhC32nU9uuIPJq8/mQbZfqmoanV/yadootGr
+j1Ze9ndr+YDXPpCymOsynmmw0ErHZGGW1OmMpAEt0A+613glWCURLDlP8HONi1wnINV6aDiEf0ad
+9NMGxDsp+YWiRXD3txfo2OMQbpIxM90QfhKKacX8t1J1oAAWxDrLVTJBXBNvz5tr+D1sYwuye93r
+hImmkM1unboxggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWdu
+IG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIw
+Agxy+Cu4x/7lM0zxY7cwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIK+J8zWRc0wc
+tO2VpD7Jmif3xurMmTBtS5ysv0I88pZGMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZI
+hvcNAQkFMQ8XDTIzMDYxNjA5MTIwOVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJ
+YIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcN
+AQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQDfVSE9xKqZP9n5nGV2bjajFPLEWqzr
+NY0m51x6PWv97MnNW4PPRmcGJZd/cWVFca3RlceywmJjMfX4Gx9o/5RZA2gQ5b9DP36Kx7UskV6v
+bHRJ1h+sYI8Jxq8PxR+bZ/3gCbaEEg+wRBABDDUhhIRd6VV75Jgy+1ThATSHhtARqxnGahTjInjY
+4QlHBl3Zx+v1ftKCgRfW8Bh+MUKY0KX8raU7YjW2golBZ/gKXUs6Oi55KL6Ha5qsNQwdp425UOus
+TnPuntMq1svzNbrlSxIt/q5D4OP0KA+C+Se0Z08RnYJQut2pB8qNenDHfgzwM5Lx7FDYDnYVsDwi
+hWfcHO6x
+--0000000000006749d705fe3b942a--
