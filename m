@@ -2,109 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70AF573273B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 08:20:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A5A6732747
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 08:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243228AbjFPGUF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 16 Jun 2023 02:20:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54012 "EHLO
+        id S232317AbjFPGWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 02:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243365AbjFPGT4 (ORCPT
+        with ESMTP id S229756AbjFPGWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 02:19:56 -0400
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCF8269D;
-        Thu, 15 Jun 2023 23:19:55 -0700 (PDT)
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1b50e309602so3267675ad.0;
-        Thu, 15 Jun 2023 23:19:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686896394; x=1689488394;
-        h=content-transfer-encoding:fcc:content-language:user-agent
-         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o/pa9zy1PtKHGNvngP6qHVNDaGkPbLnoGxIcEw3KeKA=;
-        b=Z2Bug4JWMXvF64S7RfrmEdjxXc5PZ0sUkoGVF+WEH0+gf4S+M7U3QNBodcJkHNZu/C
-         bgF+6Y3IU9thurUxPeOafqvTK22jTCT86MHP9Fi18jD0rulRIUGLy4KFOqdUKgZkF7MJ
-         JJ6UaQIrl7HyLgBZMB28y1IK+qgu4h+h0120+r53OvNnRM9gasllgV0osb/hysMOJ4pS
-         fS78ulpsOTej137BGd9tS651cir9HkVoeKZC55CE/V287ZodcM3IEaqF8LVdyBmCZWRR
-         0TdufDeIhjPMO7FtPmyXb+4eZ1Wvq47wJm2paLySeXJKMfSl5aPg87iIXN+YPDSj3LPl
-         EELg==
-X-Gm-Message-State: AC+VfDxx6av/4MH+5XHWW21adQiQw4KTobn3rCW2ErSWWLGvA0gGLWhG
-        JLluBIQq29mn6Uhavaftz34=
-X-Google-Smtp-Source: ACHHUZ6wr9ey9/YwC8SQsIxnhTKv+OU8p5VbqgUn+kt7WC8pvZ5LGXWOmxB5kAy5cZs1l4GQ2Voh9A==
-X-Received: by 2002:a17:902:ead2:b0:1b0:5304:5b48 with SMTP id p18-20020a170902ead200b001b053045b48mr1089927pld.0.1686896394472;
-        Thu, 15 Jun 2023 23:19:54 -0700 (PDT)
-Received: from localhost ([2408:8453:744:15bc:1d2e:7d4e:2024:8394])
-        by smtp.gmail.com with ESMTPSA id t13-20020a1709027fcd00b001b3df3ae3f8sm349306plb.281.2023.06.15.23.19.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 23:19:54 -0700 (PDT)
-From:   Hongyu Xie <xiehongyu1@kylinos.cn>
-To:     linux@armlinux.org.uk, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, corbet@lwn.net
-Cc:     rdunlap@infradead.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xy521521@gmail.com,
-        oe-kbuild-all@lists.linux.dev, lkp@intel.com, bagasdotme@gmail.com,
-        Hongyu Xie <xiehongyu1@kylinos.cn>
-Subject: Re: [RESEND PATCH v4 -next] tty: serial: add panic serial helper
-Date:   Fri, 16 Jun 2023 14:19:50 +0800
-Message-Id: <32e022c7-f041-3bf2-2f68-3ed2119c951d@kylinos.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <2023061606-hunk-overdraft-8d04@gregkh>
-References: <20230614025512.27746-1-xiehongyu1@kylinos.cn> <2023061502-submerge-preachy-4413@gregkh> <fbfbbad5-2418-5c1a-87f1-dc2ca20204aa@kylinos.cn> <2023061606-hunk-overdraft-8d04@gregkh>
+        Fri, 16 Jun 2023 02:22:09 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B091510E9
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 23:22:07 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1qA2q7-0006nW-VS; Fri, 16 Jun 2023 08:21:44 +0200
+Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <sha@pengutronix.de>)
+        id 1qA2q4-007kx7-Vu; Fri, 16 Jun 2023 08:21:40 +0200
+Received: from sha by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <sha@pengutronix.de>)
+        id 1qA2q4-003FTv-7U; Fri, 16 Jun 2023 08:21:40 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     linux-rockchip@lists.infradead.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Vincent Legoll <vincent.legoll@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Subject: [PATCH v6 00/26] Add perf support to the rockchip-dfi driver
+Date:   Fri, 16 Jun 2023 08:20:35 +0200
+Message-Id: <20230616062101.601837-1-s.hauer@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Thunderbird/102.11.0
-Content-Language: en-US
-X-Mozilla-Draft-Info: internal/draft; vcard=0; receipt=0; DSN=0; uuencode=0; attachmentreminder=0; deliveryformat=1
-X-Identity-Key: id1
-Fcc:    imap://xiehongyu1%40kylinos.cn@imap.kylinos.cn/Sent
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2023/6/16 14:03, Greg KH 写道:
-> On Fri, Jun 16, 2023 at 10:31:15AM +0800, Hongyu Xie wrote:
->> 在 2023/6/15 18:17, Greg KH 写道:
->>> On Wed, Jun 14, 2023 at 10:55:12AM +0800, Hongyu Xie wrote:
->>>> It was inspired by kgdboc.
->>>>
->>>> This is a debug module that allows you to get all kernel logs
->>>> after panic.
->>>>
->>>> Normally you need to attach a USB-to-UART tool or enable kdump
->>>> before panic happens to get log from kernel after panic. If you
->>>> didn't do that and kdump is not working, you can't get any log to
->>>> know what happened before panic. If you have a USB-to-UART tool
->>>> and the UART port on your computer is working. This module helps
->>>> you to get all kernel log after panic() is called.
->>>>
->>>> To use this, see Documentation/dev-tools/panic_serial_helper.rst.
->>>>
->>>> Tested on an arm64 device.
->>>>
->>>> Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
->>>> ---
->>>
->>> Why  is this a RESEND?  What's wrong with the previous version?
->> Nobody review v4 for over a week.
-> 
-> That's fine, but you need to say _why_ this is being resent, otherwise
-> we have no idea, and this just moves to the bottom of our review queue.
-"Nobody review v4 for over a week." was the reason. I should resubmit 
-the same patch or ping instead of using "RESEND", is that what you mean?
+This contains only small changes to the last version, but in one case
+a really important one: As Sebastian noted there is sometimes wrong data
+reported. This is fixed in this version.
 
-> 
-> thanks,
-> 
-> greg k-h
-thanks,
+Other than that there are only small changes, see below in the changelog.
 
-Hongyu Xie
+Overall I think this series this series is ready for primetime now.
+
+Sascha
+
+Changes since v5:
+- Add missing initialization of &dfi->last_perf_count which resulted
+  in wrong data sometimes
+- Drop interrupt-names property from binding
+- Add patch to add rockchip,rk3588-pmugrf to dt-bindings
+- Add more reviewed-by tags
+
+Changes since v4:
+- Add device tree changes for RK3588
+- Use seqlock to protect perf counter values from hrtimer
+- Unconditionally enable DFI when perf is enabled
+- Bring back changes to dts/binding patches that were lost in v4
+
+Changes since v3:
+- Add RK3588 support
+
+Changes since v2:
+- Fix broken reference to binding
+- Add Reviewed-by from Rob
+
+Changes since v1:
+- Fix example to actually match the binding and fix the warnings resulted thereof
+- Make addition of rockchip,rk3568-dfi an extra patch
+
+Sascha Hauer (26):
+  PM / devfreq: rockchip-dfi: Make pmu regmap mandatory
+  PM / devfreq: rockchip-dfi: Embed desc into private data struct
+  PM / devfreq: rockchip-dfi: use consistent name for private data
+    struct
+  PM / devfreq: rockchip-dfi: Add SoC specific init function
+  PM / devfreq: rockchip-dfi: dfi store raw values in counter struct
+  PM / devfreq: rockchip-dfi: Use free running counter
+  PM / devfreq: rockchip-dfi: introduce channel mask
+  PM / devfreq: rk3399_dmc,dfi: generalize DDRTYPE defines
+  PM / devfreq: rockchip-dfi: Clean up DDR type register defines
+  PM / devfreq: rockchip-dfi: Add RK3568 support
+  PM / devfreq: rockchip-dfi: Handle LPDDR2 correctly
+  PM / devfreq: rockchip-dfi: Handle LPDDR4X
+  PM / devfreq: rockchip-dfi: Pass private data struct to internal
+    functions
+  PM / devfreq: rockchip-dfi: Prepare for multiple users
+  PM / devfreq: rockchip-dfi: give variable a better name
+  PM / devfreq: rockchip-dfi: Add perf support
+  PM / devfreq: rockchip-dfi: make register stride SoC specific
+  PM / devfreq: rockchip-dfi: account for multiple DDRMON_CTRL registers
+  PM / devfreq: rockchip-dfi: add support for RK3588
+  dt-bindings: devfreq: event: convert Rockchip DFI binding to yaml
+  dt-bindings: devfreq: event: rockchip,dfi: Add rk3568 support
+  dt-bindings: devfreq: event: rockchip,dfi: Add rk3588 support
+  dt-bindings: soc: rockchip: grf: add rockchip,rk3588-pmugrf
+  arm64: dts: rockchip: rk3399: Enable DFI
+  arm64: dts: rockchip: rk356x: Add DFI
+  arm64: dts: rockchip: rk3588s: Add DFI
+
+ .../bindings/devfreq/event/rockchip,dfi.yaml  |  74 ++
+ .../bindings/devfreq/event/rockchip-dfi.txt   |  18 -
+ .../rockchip,rk3399-dmc.yaml                  |   2 +-
+ .../devicetree/bindings/soc/rockchip/grf.yaml |   1 +
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi      |   1 -
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi      |   7 +
+ arch/arm64/boot/dts/rockchip/rk3588s.dtsi     |  16 +
+ drivers/devfreq/event/rockchip-dfi.c          | 799 +++++++++++++++---
+ drivers/devfreq/rk3399_dmc.c                  |  10 +-
+ include/soc/rockchip/rk3399_grf.h             |   9 +-
+ include/soc/rockchip/rk3568_grf.h             |  13 +
+ include/soc/rockchip/rk3588_grf.h             |  18 +
+ include/soc/rockchip/rockchip_grf.h           |  18 +
+ 13 files changed, 848 insertions(+), 138 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
+ delete mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
+ create mode 100644 include/soc/rockchip/rk3568_grf.h
+ create mode 100644 include/soc/rockchip/rk3588_grf.h
+ create mode 100644 include/soc/rockchip/rockchip_grf.h
+
+-- 
+2.39.2
+
