@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 307FB732762
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 08:25:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C0D73274C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 08:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244551AbjFPGYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 02:24:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
+        id S240514AbjFPGWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 02:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243418AbjFPGWp (ORCPT
+        with ESMTP id S229906AbjFPGWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 02:22:45 -0400
+        Fri, 16 Jun 2023 02:22:09 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F3F2D69
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 23:22:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39381269E
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 23:22:08 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <sha@pengutronix.de>)
-        id 1qA2q8-0006pP-W3; Fri, 16 Jun 2023 08:21:45 +0200
+        id 1qA2qA-0006tq-EM; Fri, 16 Jun 2023 08:21:46 +0200
 Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <sha@pengutronix.de>)
-        id 1qA2q8-007kxw-5Y; Fri, 16 Jun 2023 08:21:44 +0200
+        id 1qA2q9-007kyw-Ms; Fri, 16 Jun 2023 08:21:45 +0200
 Received: from sha by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <sha@pengutronix.de>)
-        id 1qA2q5-003FVM-Dv; Fri, 16 Jun 2023 08:21:41 +0200
+        id 1qA2q5-003FVQ-Fu; Fri, 16 Jun 2023 08:21:41 +0200
 From:   Sascha Hauer <s.hauer@pengutronix.de>
 To:     linux-rockchip@lists.infradead.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -43,10 +43,10 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v6 19/26] PM / devfreq: rockchip-dfi: add support for RK3588
-Date:   Fri, 16 Jun 2023 08:20:54 +0200
-Message-Id: <20230616062101.601837-20-s.hauer@pengutronix.de>
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v6 20/26] dt-bindings: devfreq: event: convert Rockchip DFI binding to yaml
+Date:   Fri, 16 Jun 2023 08:20:55 +0200
+Message-Id: <20230616062101.601837-21-s.hauer@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230616062101.601837-1-s.hauer@pengutronix.de>
 References: <20230616062101.601837-1-s.hauer@pengutronix.de>
@@ -57,104 +57,138 @@ X-SA-Exim-Mail-From: sha@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the RK3588 to the driver. The RK3588 has four DDR
-channels with a register stride of 0x4000 between the channel
-registers, also it has a DDRMON_CTRL register per channel.
+Convert the Rockchip DFI binding to yaml.
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-Link: https://lore.kernel.org/r/20230524083153.2046084-20-s.hauer@pengutronix.de
+Link: https://lore.kernel.org/r/20230524083153.2046084-21-s.hauer@pengutronix.de
 Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
 ---
- drivers/devfreq/event/rockchip-dfi.c | 30 +++++++++++++++++++++++++++-
- include/soc/rockchip/rk3588_grf.h    | 18 +++++++++++++++++
- 2 files changed, 47 insertions(+), 1 deletion(-)
- create mode 100644 include/soc/rockchip/rk3588_grf.h
 
-diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event/rockchip-dfi.c
-index 2362d3953ba40..9854d4093e186 100644
---- a/drivers/devfreq/event/rockchip-dfi.c
-+++ b/drivers/devfreq/event/rockchip-dfi.c
-@@ -26,8 +26,9 @@
- #include <soc/rockchip/rockchip_grf.h>
- #include <soc/rockchip/rk3399_grf.h>
- #include <soc/rockchip/rk3568_grf.h>
-+#include <soc/rockchip/rk3588_grf.h>
- 
--#define DMC_MAX_CHANNELS	2
-+#define DMC_MAX_CHANNELS	4
- 
- #define HIWORD_UPDATE(val, mask)	((val) | (mask) << 16)
- 
-@@ -714,9 +715,36 @@ static int rk3568_dfi_init(struct rockchip_dfi *dfi)
- 	return 0;
- };
- 
-+static int rk3588_dfi_init(struct rockchip_dfi *dfi)
-+{
-+	struct regmap *regmap_pmu = dfi->regmap_pmu;
-+	u32 reg2, reg3, reg4;
-+
-+	regmap_read(regmap_pmu, RK3588_PMUGRF_OS_REG2, &reg2);
-+	regmap_read(regmap_pmu, RK3588_PMUGRF_OS_REG3, &reg3);
-+	regmap_read(regmap_pmu, RK3588_PMUGRF_OS_REG4, &reg4);
-+
-+	dfi->ddr_type = FIELD_GET(RK3588_PMUGRF_OS_REG2_DRAMTYPE_INFO, reg2);
-+
-+	if (FIELD_GET(RK3588_PMUGRF_OS_REG3_SYSREG_VERSION, reg3) >= 0x3)
-+		dfi->ddr_type |= FIELD_GET(RK3588_PMUGRF_OS_REG3_DRAMTYPE_INFO_V3, reg3) << 3;
-+
-+	dfi->buswidth[0] = FIELD_GET(RK3588_PMUGRF_OS_REG2_BW_CH0, reg2) == 0 ? 4 : 2;
-+	dfi->buswidth[1] = FIELD_GET(RK3588_PMUGRF_OS_REG2_BW_CH1, reg2) == 0 ? 4 : 2;
-+	dfi->buswidth[2] = FIELD_GET(RK3568_PMUGRF_OS_REG2_BW_CH0, reg4) == 0 ? 4 : 2;
-+	dfi->buswidth[3] = FIELD_GET(RK3588_PMUGRF_OS_REG2_BW_CH1, reg4) == 0 ? 4 : 2;
-+	dfi->channel_mask = FIELD_GET(RK3588_PMUGRF_OS_REG2_CH_INFO, reg2) |
-+			    FIELD_GET(RK3588_PMUGRF_OS_REG2_CH_INFO, reg4) << 2;
-+
-+	dfi->ddrmon_stride = 0x4000;
-+
-+	return 0;
-+};
-+
- static const struct of_device_id rockchip_dfi_id_match[] = {
- 	{ .compatible = "rockchip,rk3399-dfi", .data = rk3399_dfi_init },
- 	{ .compatible = "rockchip,rk3568-dfi", .data = rk3568_dfi_init },
-+	{ .compatible = "rockchip,rk3588-dfi", .data = rk3588_dfi_init },
- 	{ },
- };
- 
-diff --git a/include/soc/rockchip/rk3588_grf.h b/include/soc/rockchip/rk3588_grf.h
+Notes:
+    Changes since v4:
+    
+    - Revert to state of v3 (changes were lost in v4)
+
+ .../bindings/devfreq/event/rockchip,dfi.yaml  | 61 +++++++++++++++++++
+ .../bindings/devfreq/event/rockchip-dfi.txt   | 18 ------
+ .../rockchip,rk3399-dmc.yaml                  |  2 +-
+ 3 files changed, 62 insertions(+), 19 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
+ delete mode 100644 Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
+
+diff --git a/Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml b/Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
 new file mode 100644
-index 0000000000000..630b35a550640
+index 0000000000000..7a82f6ae0701e
 --- /dev/null
-+++ b/include/soc/rockchip/rk3588_grf.h
-@@ -0,0 +1,18 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
-+#ifndef __SOC_RK3588_GRF_H
-+#define __SOC_RK3588_GRF_H
++++ b/Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
+@@ -0,0 +1,61 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/devfreq/event/rockchip,dfi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+#define RK3588_PMUGRF_OS_REG2		0x208
-+#define RK3588_PMUGRF_OS_REG2_DRAMTYPE_INFO		GENMASK(15, 13)
-+#define RK3588_PMUGRF_OS_REG2_BW_CH0			GENMASK(3, 2)
-+#define RK3588_PMUGRF_OS_REG2_BW_CH1                    GENMASK(19, 18)
-+#define RK3588_PMUGRF_OS_REG2_CH_INFO                   GENMASK(29, 28)
++title: Rockchip DFI
 +
-+#define RK3588_PMUGRF_OS_REG3		0x20c
-+#define RK3588_PMUGRF_OS_REG3_DRAMTYPE_INFO_V3		GENMASK(13, 12)
-+#define RK3588_PMUGRF_OS_REG3_SYSREG_VERSION		GENMASK(31, 28)
++maintainers:
++  - Sascha Hauer <s.hauer@pengutronix.de>
 +
-+#define RK3588_PMUGRF_OS_REG4           0x210
-+#define RK3588_PMUGRF_OS_REG5           0x214
++properties:
++  compatible:
++    enum:
++      - rockchip,rk3399-dfi
 +
-+#endif /* __SOC_RK3588_GRF_H */
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    items:
++      - const: pclk_ddr_mon
++
++  interrupts:
++    maxItems: 1
++
++  reg:
++    maxItems: 1
++
++  rockchip,pmu:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      Phandle to the syscon managing the "PMU general register files".
++
++required:
++  - compatible
++  - clocks
++  - clock-names
++  - interrupts
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/rk3308-cru.h>
++
++    bus {
++      #address-cells = <2>;
++      #size-cells = <2>;
++
++      dfi: dfi@ff630000 {
++        compatible = "rockchip,rk3399-dfi";
++        reg = <0x00 0xff630000 0x00 0x4000>;
++        interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH 0>;
++        rockchip,pmu = <&pmugrf>;
++        clocks = <&cru PCLK_DDR_MON>;
++        clock-names = "pclk_ddr_mon";
++      };
++    };
+diff --git a/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt b/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
+deleted file mode 100644
+index 148191b0fc158..0000000000000
+--- a/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
++++ /dev/null
+@@ -1,18 +0,0 @@
+-
+-* Rockchip rk3399 DFI device
+-
+-Required properties:
+-- compatible: Must be "rockchip,rk3399-dfi".
+-- reg: physical base address of each DFI and length of memory mapped region
+-- rockchip,pmu: phandle to the syscon managing the "pmu general register files"
+-- clocks: phandles for clock specified in "clock-names" property
+-- clock-names : the name of clock used by the DFI, must be "pclk_ddr_mon";
+-
+-Example:
+-	dfi: dfi@ff630000 {
+-		compatible = "rockchip,rk3399-dfi";
+-		reg = <0x00 0xff630000 0x00 0x4000>;
+-		rockchip,pmu = <&pmugrf>;
+-		clocks = <&cru PCLK_DDR_MON>;
+-		clock-names = "pclk_ddr_mon";
+-	};
+diff --git a/Documentation/devicetree/bindings/memory-controllers/rockchip,rk3399-dmc.yaml b/Documentation/devicetree/bindings/memory-controllers/rockchip,rk3399-dmc.yaml
+index fb4920397d08e..aba8649aaeb10 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/rockchip,rk3399-dmc.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/rockchip,rk3399-dmc.yaml
+@@ -18,7 +18,7 @@ properties:
+     $ref: /schemas/types.yaml#/definitions/phandle
+     description:
+       Node to get DDR loading. Refer to
+-      Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt.
++      Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml.
+ 
+   clocks:
+     maxItems: 1
 -- 
 2.39.2
 
