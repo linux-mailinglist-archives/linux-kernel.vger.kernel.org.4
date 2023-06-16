@@ -2,142 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4457324E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 03:54:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C59F17324EA
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 03:54:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236445AbjFPBy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 21:54:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33436 "EHLO
+        id S238927AbjFPBym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 21:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjFPBy1 (ORCPT
+        with ESMTP id S229991AbjFPByi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 21:54:27 -0400
-Received: from sender3-op-o17.zoho.com (sender3-op-o17.zoho.com [136.143.184.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97AA11AA;
-        Thu, 15 Jun 2023 18:54:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1686880419; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=m+nnBfugsNBznT7IutrdBGotmA+2gZJZusj3kV8dAdwgR58dJtKViavtiMrUaNhIN0g/4P+xi0/f3tx216Cr9LBhMrtUEtUXnutoLUWAqTPWf6SB9XIkOSleQUr6+hVCZfPEqyTxYsTgBQh9xt+CU3d3k6Et4vfNoCYXhfX7MCE=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1686880419; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=5iC11FXcCYPbKNk31aFC8ArpZJL4rMW3qp7yEOxRpQ8=; 
-        b=EpwBGrtHpG7E0eA/PSpEGMZ4bMtONx6/vJNDZ2ZCK/GQPfhZCqC0K7CbTvMC7m78sWzdalRWClsCBR9P6Ukt6YeClTbQKk9O1ArwNqHWKsIYNVwP5JLtw1dMQ2SeRNg1k1quDC50PA8iZcHlq3fiEEXEQyaK3G2RbRd7fahzM3s=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1686880419;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=5iC11FXcCYPbKNk31aFC8ArpZJL4rMW3qp7yEOxRpQ8=;
-        b=HVK/JeR9CfAt2gOActnJdBtByysaM07nrkvskmhtqwC7oUnYgrtIoNd0D+jJBS7E
-        +wZrnbZrh6JoR85q494XWwpbYs+S9TAvdi7smlpwovB6FzDKYaSPpMeIDhZgEVhdy1h
-        3TMIHIJBWf7+SW+vCsQAVmNpQ7DvKBqyh9TjL47s=
-Received: from [192.168.68.166] (athedsl-404045.home.otenet.gr [79.131.130.75]) by mx.zohomail.com
-        with SMTPS id 1686880416484951.0122965686879; Thu, 15 Jun 2023 18:53:36 -0700 (PDT)
-Message-ID: <0d57c035-b6da-08be-8f47-0afb5ddfec58@arinc9.com>
-Date:   Fri, 16 Jun 2023 04:53:29 +0300
+        Thu, 15 Jun 2023 21:54:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4F5297A;
+        Thu, 15 Jun 2023 18:54:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 233CA61F69;
+        Fri, 16 Jun 2023 01:54:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68FC9C433CC;
+        Fri, 16 Jun 2023 01:54:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686880476;
+        bh=89sT52+ElbRUq2ljt/SlcehdmzT2f6dY9ia7tDc3ZUU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=DDk3vNefAAdE8fmCiwbxgDnRfTxu6cX8Z2N8p3BMnMagIWIwhmTp6nya/kk0Wf1ti
+         VTUVpBdq0CUBJa1UahVc21souPJYuPmFIOlBWGz543H2olNRCsuAHpq9K+/z7nxQdZ
+         aJXWe1xmxXkeruhmVArdqrrjQfCkziNFezEkqBlTTRPBWO7CO/9EiwOReodIJnmt61
+         NJ0qtAKmdsST9aeBBJRmAcMiEUbPn+qnIoZz2v2IP/7e+0d6rehev73bshn4qbIUfc
+         lGrAfQdJIl4AZvskzLWe3WP4fYHW3KU7dHuAPiKcf2ysDmSG3X34kNvkbFwdM841S2
+         OEmrGXsZ3yhwg==
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-51496f57e59so176131a12.2;
+        Thu, 15 Jun 2023 18:54:36 -0700 (PDT)
+X-Gm-Message-State: AC+VfDwasivu8VqMHtJyFq2Y3Nq8kM5ZZl6+cdV2RYR7QxM86XuICLfF
+        RJhB+4i6F5FxHt+DFnDHdYjFtGBpVBnbK4YvoZA=
+X-Google-Smtp-Source: ACHHUZ4Fmo8R9P8CS9FnrCz8uNEsWJLds6OhZ8ooaetttwKsO4qx/QpKi9Xw4DkOKXTwUl7dBloJJiG3JqfOPlcY5n4=
+X-Received: by 2002:a05:6402:1118:b0:514:9ab4:3524 with SMTP id
+ u24-20020a056402111800b005149ab43524mr293544edv.7.1686880474611; Thu, 15 Jun
+ 2023 18:54:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH net v4 5/7] net: dsa: mt7530: fix handling of LLDP frames
-To:     Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Daniel Golle <daniel@makrotopia.org>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230612075945.16330-1-arinc.unal@arinc9.com>
- <20230612075945.16330-6-arinc.unal@arinc9.com>
- <ZInt8mmrZ6tCGy1N@shell.armlinux.org.uk>
- <CABRLg09hXm3=mca70TdZLuxA1d8YzOcWj31NvFG0ZWoStn_w9Q@mail.gmail.com>
-Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <CABRLg09hXm3=mca70TdZLuxA1d8YzOcWj31NvFG0ZWoStn_w9Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230615091757.24686-1-zhuyinbo@loongson.cn> <968b7c81-a24e-1e0d-31a4-f633a82d17b0@loongson.cn>
+ <CAAhV-H4Z13wpOsj5GxkuwMK1D6N6=sArQ52yHjcdiEen=dUpjg@mail.gmail.com>
+ <9edfe58a-7901-c2d1-8e01-5f10b3a51287@loongson.cn> <a9292d85-83b5-5b43-6c2a-7e393213c6c9@loongson.cn>
+In-Reply-To: <a9292d85-83b5-5b43-6c2a-7e393213c6c9@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Fri, 16 Jun 2023 09:54:22 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4-LCryuQKJrwE65w5BZ66a6PQAq+ZT8mqE7vHa7L3_zw@mail.gmail.com>
+Message-ID: <CAAhV-H4-LCryuQKJrwE65w5BZ66a6PQAq+ZT8mqE7vHa7L3_zw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] soc: loongson2_pm: add power management support
+To:     zhuyinbo <zhuyinbo@loongson.cn>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15.06.2023 15:45, Bartel Eerdekens wrote:
-> On Wed, Jun 14, 2023 at 6:42 PM Russell King (Oracle)
-> <linux@armlinux.org.uk> wrote:
->>
->> On Mon, Jun 12, 2023 at 10:59:43AM +0300, arinc9.unal@gmail.com wrote:
->>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
->>>
->>> LLDP frames are link-local frames, therefore they must be trapped to the
->>> CPU port. Currently, the MT753X switches treat LLDP frames as regular
->>> multicast frames, therefore flooding them to user ports. To fix this, set
->>> LLDP frames to be trapped to the CPU port(s).
->>>
->>> The mt753x_bpdu_port_fw enum is universally used for trapping frames,
->>> therefore rename it and the values in it to mt753x_port_fw.
->>>
->>> For MT7530, LLDP frames received from a user port will be trapped to the
->>> numerically smallest CPU port which is affine to the DSA conduit interface
->>> that is up.
->>>
->>> For MT7531 and the switch on the MT7988 SoC, LLDP frames received from a
->>> user port will be trapped to the CPU port that is affine to the user port
->>> from which the frames are received.
->>>
->>> The bit for R0E_MANG_FR is 27. When set, the switch regards the frames with
->>> :0E MAC DA as management (LLDP) frames. This bit is set to 1 after reset on
->>> MT7530 and MT7531 according to the documents MT7620 Programming Guide v1.0
->>> and MT7531 Reference Manual for Development Board v1.0, so there's no need
->>> to deal with this bit. Since there's currently no public document for the
->>> switch on the MT7988 SoC, I assume this is also the case for this switch.
->>>
->>> Fixes: b8f126a8d543 ("net-next: dsa: add dsa support for Mediatek MT7530 switch")
->>
->>
->> Patch 4 claims to be a fix for this commit, and introduces one of these
->> modifications to MT753X_BPC, which this patch then changes.
-> 
-> Let me chime in on this one, as mentioned by Arinç, I am one of the
-> requesters of having this patch (and patch 4).
-> Patch 4 enables the trapping of BPDU's to the CPU, being STP (Spanning
-> Tree) frames. Maybe that should be mentioned, to be clear.
+Hi, Yinbo,
 
-Sure, I can quote the first sentence on the wikipedia page "Bridge 
-protocol data unit".
+On Fri, Jun 16, 2023 at 9:45=E2=80=AFAM zhuyinbo <zhuyinbo@loongson.cn> wro=
+te:
+>
+>
+> Hi huacai,
+>
+>
+> =E5=9C=A8 2023/6/15 =E4=B8=8B=E5=8D=887:15, zhuyinbo =E5=86=99=E9=81=93:
+> >
+> >
+> > =E5=9C=A8 2023/6/15 =E4=B8=8B=E5=8D=886:00, Huacai Chen =E5=86=99=E9=81=
+=93:
+> >
+> >>> +static void loongson2_pm_status_clear(void)
+> >>> +{
+> >>> +       u16 value;
+> >>> +
+> >>> +       value =3D loongson2_pm_readw(LOONGSON2_PM1_STS_REG);
+> >>> +       value |=3D (LOONGSON2_PM1_PWRBTN_STS |
+> >>> LOONGSON2_PM1_PCIEXP_WAKE_STS |
+> >>> +                 LOONGSON2_PM1_WAKE_STS);
+> >>> +       loongson2_pm_writew(value, LOONGSON2_PM1_STS_REG);
+> >>> +       loongson2_pm_writel(loongson2_pm_readl(LOONGSON2_GPE0_STS_REG=
+),
+> >>> +                           LOONGSON2_GPE0_STS_REG);
+> >> Long-line warnings is removed in latest kernel, so you don't need to
+> >> split here.
+> >
+> >
+> > okay, I got it.
+> >
+> >>
+> >>> +}
+> >>> +
+> >>> +static void loongson2_power_button_irq_enable(void)
+> >>
+> >> Using loongson2_pm_irq_enable is a little better.
+> >
+> >
+>
+> Previously, you suggested that I combine loongson2_pm_irq_enable() and
+> power button irq enable code as loongson2_power_button_irq_enable, then
+> I remove the function loongson2_pm_irq_enable, in this case that I won't
+> be able to call loongson2_pm_irq_enable, so have I misunderstood your
+> meaning ? or only rename loongson2_power_button_irq_enable as
+> loongson2_pm_irq_enable ?
+I'm very sorry for that. At first I only wanted to combine two
+functions, but then I found the name  loongson2_pm_irq_enable is
+better. So just rename is OK. Thanks.
 
-> 
->>
->> On the face of it, it seems this patch is actually a fix to patch 4 as
->> well as the original patch, so does that mean that patch 4 only half
->> fixes a problem?
-> 
-> This patch then also adds trapping for LLDP frames (Link Layer
-> Discovery Protocol) which is a completely different protocol.
-> But both rely on trapping frames, instead of forwarding them.
-
-Flooding is a better term. "Trapped" frames are still forwarded, the 
-difference is they are forwarded only to the CPU port.
-
-Arınç
+Huacai
+>
+> Thanks,
+> Yinbo
+>
+> >
+> > ...
+> >
+> >>> +static int loongson2_suspend_valid_state(suspend_state_t state)
+> >>> +{
+> >>> +       if (state =3D=3D PM_SUSPEND_MEM)
+> >>> +               return 1;
+> >>> +
+> >>> +       return 0;
+> >> "return (state =3D=3D PM_SUSPEND_MEM)" is enough.
+> >
+> >
+> > okay, I got it.
+> >
+> >
+> > Thanks,
+> > Yinbo
+> >
+>
+>
