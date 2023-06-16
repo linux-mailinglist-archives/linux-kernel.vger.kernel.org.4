@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E0DA7333ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 16:49:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD35F7333EF
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 16:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345235AbjFPOtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 10:49:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52132 "EHLO
+        id S1345727AbjFPOtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 10:49:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230517AbjFPOtF (ORCPT
+        with ESMTP id S1345342AbjFPOtO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 10:49:05 -0400
+        Fri, 16 Jun 2023 10:49:14 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039C630E7;
-        Fri, 16 Jun 2023 07:49:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A227330E7;
+        Fri, 16 Jun 2023 07:49:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 71A9863DCE;
-        Fri, 16 Jun 2023 14:49:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E387DC433C8;
-        Fri, 16 Jun 2023 14:48:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 109A763DDD;
+        Fri, 16 Jun 2023 14:49:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D60DFC433B8;
+        Fri, 16 Jun 2023 14:49:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686926942;
-        bh=8PHm9QC8vIhbyTtp0cJ+k53orRmf0g+m7GbXYTsDqoM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=nOqxJkOV7qE4jg5x4HRQDLiMypRFcXeisOQMHsuoQd/mdYhyYyLs7zCQw9+Ly6I37
-         rJVg1SMFN6QtkE4xwZrUWCpnKN3bvEMEi9JbMWTbEwPAwV7pQYcRT/nJcI5oCMX0Db
-         LN9KxA7zAFEdvDeohI14t2WFwdyaUh3t86ekomcrEDmLivsp58UWLc+wf9P6xobh1x
-         HAMK+KOMiEqeAehgZbI7oA4H6xln8FQD+ualLaWVlDJ9x3WYoTMfbDrk6EhILRku1a
-         zC3X17HvXEk4CpDVo/zDAJzUHjD6NNzNj1IbGFeIpFlFmtj+P6QTuwzDwsVHGbw//o
-         FVyipDF9zaRwQ==
+        s=k20201202; t=1686926952;
+        bh=1KvFAAQU1+L5HUAtuWrVsUkiPz9t3gmo7pU+oiCZjyw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=OvEyonDPGOx33cBftoNfwsXfLTXLECm4bO9XvAdMxPEU2Kqmw34jxyldFM/RXhYwr
+         p4MxRjN5nMMHpNgkqHg2cT6FYzBNZM7slH17qPE2E5Y22W+2WMeABq3pK8aRLN5C5k
+         txfTdDybPsgPL99VlJY5onKGqBvbFVgR/cqL8+8USNDln0lRoSDyXid0y/DJStiU+S
+         qo8Q72TKBKOc1Wuq5fscq53JugILKF22CuRlHAlfABmtImFrNVLOorlkpxjOtptVg8
+         iWHeS6RMDhxn9+VUqbTkPK7aUAASnIuTJPFeh9KEgookx0Z3rCKJqsyW9D1mzHYV3F
+         /ZaKhhaNpQVLw==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] media: verisilicon: fix excessive stack usage
-Date:   Fri, 16 Jun 2023 16:48:47 +0200
-Message-Id: <20230616144854.3818934-1-arnd@kernel.org>
+Subject: [PATCH 2/2] media: verisilicon: change confusingly named relaxed register access
+Date:   Fri, 16 Jun 2023 16:48:48 +0200
+Message-Id: <20230616144854.3818934-2-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230616144854.3818934-1-arnd@kernel.org>
+References: <20230616144854.3818934-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -62,117 +64,91 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-In some configurations, gcc decides not to inline the register accessor functions,
-which in turn leads to lots of temporary hantro_reg structures on the stack that
-cannot be eliminated because they escape into an uninlined function:
+The register abstraction has wrappers around both the normal writel()
+and its writel_relaxed() counterpart, but this has led to a lot of users
+ending up with the relaxed version.
 
-drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c:1022:1: warning: the frame size of 1112 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+There is sometimes a need to intentionally pick the relaxed accessor for
+performance critical functions, but I noticed that each hantro_reg_write()
+call also contains a non-relaxed readl(), which is typically much more
+expensive than a writel, so there is little benefit here but an added
+risk of missing a serialization against DMA.
 
-Mark all of these as __always_inline so the compiler is able to completely
-eliminate the temporary structures instead, which brings the stack usage
-back down to just the normal local variables.
+To make this behave like other interfaces, use the normal accessor by
+default and only provide the relaxed version as an alternative for
+performance critical code. hantro_postproc.c is the only place that
+used both the relaxed and normal writel, but this does not seem
+cricital either, so change it all to the normal ones.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202306151506.goHEegOd-lkp@intel.com/
-Fixes: 727a400686a2c ("media: verisilicon: Add Rockchip AV1 decoder")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/media/platform/verisilicon/hantro.h | 22 ++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+I did not look whether there is an actual bug here, just noticed this
+when I debugged the excessive stack usage.
+---
+ drivers/media/platform/verisilicon/hantro.h          |  6 +++---
+ drivers/media/platform/verisilicon/hantro_postproc.c | 12 ++++++------
+ 2 files changed, 9 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/platform/verisilicon/hantro.h
-index 6523ffb748812..6c5e56ce5b351 100644
+index 6c5e56ce5b351..a481d957fef93 100644
 --- a/drivers/media/platform/verisilicon/hantro.h
 +++ b/drivers/media/platform/verisilicon/hantro.h
-@@ -370,26 +370,26 @@ extern int hantro_debug;
- 	pr_err("%s:%d: " fmt, __func__, __LINE__, ##args)
- 
- /* Structure access helpers. */
--static inline struct hantro_ctx *fh_to_ctx(struct v4l2_fh *fh)
-+static __always_inline struct hantro_ctx *fh_to_ctx(struct v4l2_fh *fh)
- {
- 	return container_of(fh, struct hantro_ctx, fh);
- }
- 
- /* Register accessors. */
--static inline void vepu_write_relaxed(struct hantro_dev *vpu,
-+static __always_inline void vepu_write_relaxed(struct hantro_dev *vpu,
- 				      u32 val, u32 reg)
- {
- 	vpu_debug(6, "0x%04x = 0x%08x\n", reg / 4, val);
- 	writel_relaxed(val, vpu->enc_base + reg);
- }
- 
--static inline void vepu_write(struct hantro_dev *vpu, u32 val, u32 reg)
-+static __always_inline void vepu_write(struct hantro_dev *vpu, u32 val, u32 reg)
- {
- 	vpu_debug(6, "0x%04x = 0x%08x\n", reg / 4, val);
- 	writel(val, vpu->enc_base + reg);
- }
- 
--static inline u32 vepu_read(struct hantro_dev *vpu, u32 reg)
-+static __always_inline u32 vepu_read(struct hantro_dev *vpu, u32 reg)
- {
- 	u32 val = readl(vpu->enc_base + reg);
- 
-@@ -397,27 +397,27 @@ static inline u32 vepu_read(struct hantro_dev *vpu, u32 reg)
- 	return val;
- }
- 
--static inline void vdpu_write_relaxed(struct hantro_dev *vpu,
-+static __always_inline void vdpu_write_relaxed(struct hantro_dev *vpu,
- 				      u32 val, u32 reg)
- {
- 	vpu_debug(6, "0x%04x = 0x%08x\n", reg / 4, val);
- 	writel_relaxed(val, vpu->dec_base + reg);
- }
- 
--static inline void vdpu_write(struct hantro_dev *vpu, u32 val, u32 reg)
-+static __always_inline void vdpu_write(struct hantro_dev *vpu, u32 val, u32 reg)
- {
- 	vpu_debug(6, "0x%04x = 0x%08x\n", reg / 4, val);
- 	writel(val, vpu->dec_base + reg);
- }
- 
--static inline void hantro_write_addr(struct hantro_dev *vpu,
-+static __always_inline void hantro_write_addr(struct hantro_dev *vpu,
- 				     unsigned long offset,
- 				     dma_addr_t addr)
- {
- 	vdpu_write(vpu, addr & 0xffffffff, offset);
- }
- 
--static inline u32 vdpu_read(struct hantro_dev *vpu, u32 reg)
-+static __always_inline u32 vdpu_read(struct hantro_dev *vpu, u32 reg)
- {
- 	u32 val = readl(vpu->dec_base + reg);
- 
-@@ -425,7 +425,7 @@ static inline u32 vdpu_read(struct hantro_dev *vpu, u32 reg)
- 	return val;
- }
- 
--static inline u32 vdpu_read_mask(struct hantro_dev *vpu,
-+static __always_inline u32 vdpu_read_mask(struct hantro_dev *vpu,
- 				 const struct hantro_reg *reg,
- 				 u32 val)
- {
-@@ -437,14 +437,14 @@ static inline u32 vdpu_read_mask(struct hantro_dev *vpu,
- 	return v;
- }
- 
--static inline void hantro_reg_write(struct hantro_dev *vpu,
-+static __always_inline void hantro_reg_write(struct hantro_dev *vpu,
+@@ -441,14 +441,14 @@ static __always_inline void hantro_reg_write(struct hantro_dev *vpu,
  				    const struct hantro_reg *reg,
  				    u32 val)
  {
- 	vdpu_write_relaxed(vpu, vdpu_read_mask(vpu, reg, val), reg->base);
+-	vdpu_write_relaxed(vpu, vdpu_read_mask(vpu, reg, val), reg->base);
++	vdpu_write(vpu, vdpu_read_mask(vpu, reg, val), reg->base);
  }
  
--static inline void hantro_reg_write_s(struct hantro_dev *vpu,
-+static __always_inline void hantro_reg_write_s(struct hantro_dev *vpu,
+-static __always_inline void hantro_reg_write_s(struct hantro_dev *vpu,
++static __always_inline void hantro_reg_write_relaxed(struct hantro_dev *vpu,
  				      const struct hantro_reg *reg,
  				      u32 val)
  {
+-	vdpu_write(vpu, vdpu_read_mask(vpu, reg, val), reg->base);
++	vdpu_write_relaxed(vpu, vdpu_read_mask(vpu, reg, val), reg->base);
+ }
+ 
+ void *hantro_get_ctrl(struct hantro_ctx *ctx, u32 id);
+diff --git a/drivers/media/platform/verisilicon/hantro_postproc.c b/drivers/media/platform/verisilicon/hantro_postproc.c
+index c977d64105b18..0224ff68ab3fc 100644
+--- a/drivers/media/platform/verisilicon/hantro_postproc.c
++++ b/drivers/media/platform/verisilicon/hantro_postproc.c
+@@ -21,11 +21,11 @@
+ 			 val); \
+ }
+ 
+-#define HANTRO_PP_REG_WRITE_S(vpu, reg_name, val) \
++#define HANTRO_PP_REG_WRITE_RELAXED(vpu, reg_name, val) \
+ { \
+-	hantro_reg_write_s(vpu, \
+-			   &hantro_g1_postproc_regs.reg_name, \
+-			   val); \
++	hantro_reg_write_relaxed(vpu, \
++				 &hantro_g1_postproc_regs.reg_name, \
++				 val); \
+ }
+ 
+ #define VPU_PP_IN_YUYV			0x0
+@@ -72,7 +72,7 @@ static void hantro_postproc_g1_enable(struct hantro_ctx *ctx)
+ 	dma_addr_t dst_dma;
+ 
+ 	/* Turn on pipeline mode. Must be done first. */
+-	HANTRO_PP_REG_WRITE_S(vpu, pipeline_en, 0x1);
++	HANTRO_PP_REG_WRITE(vpu, pipeline_en, 0x1);
+ 
+ 	src_pp_fmt = VPU_PP_IN_NV12;
+ 
+@@ -242,7 +242,7 @@ static void hantro_postproc_g1_disable(struct hantro_ctx *ctx)
+ {
+ 	struct hantro_dev *vpu = ctx->dev;
+ 
+-	HANTRO_PP_REG_WRITE_S(vpu, pipeline_en, 0x0);
++	HANTRO_PP_REG_WRITE(vpu, pipeline_en, 0x0);
+ }
+ 
+ static void hantro_postproc_g2_disable(struct hantro_ctx *ctx)
 -- 
 2.39.2
 
