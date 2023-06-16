@@ -2,215 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EB2B732984
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:10:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0F52732989
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:10:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243295AbjFPIJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 04:09:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52322 "EHLO
+        id S242614AbjFPIK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 04:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242492AbjFPIJW (ORCPT
+        with ESMTP id S232043AbjFPIKY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 04:09:22 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E9D2684;
-        Fri, 16 Jun 2023 01:09:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686902961; x=1718438961;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FIZHMugeg2xPHdpjXSgKrP/iomfabUS8UnyZHeA6vAc=;
-  b=ZdwSuFmLTFV5cEUXGj6RLwqtoAwmCmcDc/ejbM8Bq5PiVtwO/2A3EdHt
-   nXAihHm3hAql2RoUecuA0U+hU36efKFLSGHga5C4PxOnI+mxRKuu0zoFD
-   O6Zd4Qdl6+g+YwcqyO0AWLjAAn09Yh8t0NFn0r34Zx9cH6sIV3K8UQZHu
-   CikIXTup6w4e8jaWiBUg96RNInyNOkA5JGWRTR6c2ONJSK1U9Kov1WGex
-   aGHoUDGqa8shveQJH7jScqKg3kqUl0HcSaizBXSGc87JrD0k8PO6FcF+/
-   9Bn1LyTUTkK7c1rWDP7DtrrrnFB2QieyAEX8YHu4XNnuFuAYY1xEa+yfI
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="361682426"
-X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
-   d="scan'208";a="361682426"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 01:09:21 -0700
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="746106659"
-X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
-   d="scan'208";a="746106659"
-Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
-  by orsmga001.jf.intel.com with ESMTP; 16 Jun 2023 01:09:18 -0700
-Date:   Fri, 16 Jun 2023 16:09:17 +0800
-From:   Yuan Yao <yuan.yao@linux.intel.com>
-To:     Yan Zhao <yan.y.zhao@intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pbonzini@redhat.com, seanjc@google.com, chao.gao@intel.com,
-        kai.huang@intel.com, robert.hoo.linux@gmail.com
-Subject: Re: [PATCH v3 09/11] KVM: x86/mmu: serialize vCPUs to zap gfn when
- guest MTRRs are honored
-Message-ID: <20230616080917.fhekzs2fyhqtbitx@yy-desk-7060>
-References: <20230616023101.7019-1-yan.y.zhao@intel.com>
- <20230616023945.7570-1-yan.y.zhao@intel.com>
- <20230616074550.g2ikzbni2rjy7dfw@yy-desk-7060>
- <ZIwROWti5d0sCFwT@yzhao56-desk.sh.intel.com>
+        Fri, 16 Jun 2023 04:10:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489F42965;
+        Fri, 16 Jun 2023 01:10:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 91BA061E90;
+        Fri, 16 Jun 2023 08:10:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D3F50C433C9;
+        Fri, 16 Jun 2023 08:10:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686903020;
+        bh=rDiQIeucbPgkCAlc+8wcWwStmLWvape2wbhKI1y9/9U=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=U2+s70IKODe14P1cEtfhYn4e2x67GQIUbfvoNDute5161yJULjWNGAArb9i9LfBie
+         +63op26gnJWArVbzikq7bY9T0fvRdvVi53WVaRM/AU6SJCJ3oNR7TUNbsx2UFoaE/E
+         nhCkpLx2g9gkXpNbmX+A38gwZIc4twmwQAmjdJ4FkZt9pF1b5e/UzGqDspGpZGarK8
+         tAoW/5C0m65d3enrSwQ8fzEy9pwMgxkCxTugm+szl3f3Q/EtJ/BG8+SW7UQejlwAjG
+         keVXIbrOpgGY+ef+UgZ3qwK4GtqwkMyFr9y7NydoRKN8Hbyu2I2Lmk/7b6IJ/8g2uz
+         pQ2YEbfA0GBLg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B23CDE49BBF;
+        Fri, 16 Jun 2023 08:10:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZIwROWti5d0sCFwT@yzhao56-desk.sh.intel.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] s390/net: lcs: use IS_ENABLED() for kconfig detection
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168690302072.8823.785077843270614259.git-patchwork-notify@kernel.org>
+Date:   Fri, 16 Jun 2023 08:10:20 +0000
+References: <20230615222152.13250-1-rdunlap@infradead.org>
+In-Reply-To: <20230615222152.13250-1-rdunlap@infradead.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, wintera@linux.ibm.com,
+        wenjia@linux.ibm.com, linux-s390@vger.kernel.org,
+        netdev@vger.kernel.org, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 03:37:29PM +0800, Yan Zhao wrote:
-> On Fri, Jun 16, 2023 at 03:45:50PM +0800, Yuan Yao wrote:
-> > > +/*
-> > > + * Add @range into kvm->arch.mtrr_zap_list and sort the list in
-> > > + * "length" ascending + "start" descending order, so that
-> > > + * ranges consuming more zap cycles can be dequeued later and their
-> > > + * chances of being found duplicated are increased.
-> > > + */
-> > > +static void kvm_add_mtrr_zap_list(struct kvm *kvm, struct mtrr_zap_range *range)
-> > > +{
-> > > +	struct list_head *head = &kvm->arch.mtrr_zap_list;
-> > > +	u64 len = range->end - range->start;
-> > > +	struct mtrr_zap_range *cur, *n;
-> > > +	bool added = false;
-> > > +
-> > > +	spin_lock(&kvm->arch.mtrr_zap_list_lock);
-> > > +
-> > > +	if (list_empty(head)) {
-> > > +		list_add(&range->node, head);
-> > > +		spin_unlock(&kvm->arch.mtrr_zap_list_lock);
-> > > +		return;
-> > > +	}
-> > > +
-> > > +	list_for_each_entry_safe(cur, n, head, node) {
-> > > +		u64 cur_len = cur->end - cur->start;
-> > > +
-> > > +		if (len < cur_len)
-> > > +			break;
-> > > +
-> > > +		if (len > cur_len)
-> > > +			continue;
-> > > +
-> > > +		if (range->start > cur->start)
-> > > +			break;
-> > > +
-> > > +		if (range->start < cur->start)
-> > > +			continue;
-> > > +
-> > > +		/* equal len & start, no need to add */
-> > > +		added = true;
-> >
-> > Possible/worth to ignore the range already covered
-> > by queued range ?
->
-> I may not get you correctly, but
-> the "added" here means an queued range with exactly same start + len
-> found, so free and drop adding the new range here.
+Hello:
 
-I mean drop adding three B below if A already in the queue:
+This patch was applied to netdev/net-next.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-|------A--------|
-|----B----|
+On Thu, 15 Jun 2023 15:21:52 -0700 you wrote:
+> When CONFIG_ETHERNET=m or CONFIG_FDDI=m, lcs.s has build errors or
+> warnings:
+> 
+> ../drivers/s390/net/lcs.c:40:2: error: #error Cannot compile lcs.c without some net devices switched on.
+>    40 | #error Cannot compile lcs.c without some net devices switched on.
+> ../drivers/s390/net/lcs.c: In function 'lcs_startlan_auto':
+> ../drivers/s390/net/lcs.c:1601:13: warning: unused variable 'rc' [-Wunused-variable]
+>  1601 |         int rc;
+> 
+> [...]
 
-|------A--------|
-      |----B----|
+Here is the summary with links:
+  - s390/net: lcs: use IS_ENABLED() for kconfig detection
+    https://git.kernel.org/netdev/net-next/c/128272336120
 
-|------A--------|
-  |----B----|
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
->
-> >
-> > > +		kfree(range);
-> > > +		break;
-> > > +	}
-> > > +
-> > > +	if (!added)
-> > > +		list_add_tail(&range->node, &cur->node);
-> > > +
-> > > +	spin_unlock(&kvm->arch.mtrr_zap_list_lock);
-> > > +}
-> > > +
-> > > +static void kvm_zap_mtrr_zap_list(struct kvm *kvm)
-> > > +{
-> > > +	struct list_head *head = &kvm->arch.mtrr_zap_list;
-> > > +	struct mtrr_zap_range *cur = NULL;
-> > > +
-> > > +	spin_lock(&kvm->arch.mtrr_zap_list_lock);
-> > > +
-> > > +	while (!list_empty(head)) {
-> > > +		u64 start, end;
-> > > +
-> > > +		cur = list_first_entry(head, typeof(*cur), node);
-> > > +		start = cur->start;
-> > > +		end = cur->end;
-> > > +		list_del(&cur->node);
-> > > +		kfree(cur);
-> > > +		spin_unlock(&kvm->arch.mtrr_zap_list_lock);
-> > > +
-> > > +		kvm_zap_gfn_range(kvm, start, end);
-> > > +
-> > > +		spin_lock(&kvm->arch.mtrr_zap_list_lock);
-> > > +	}
-> > > +
-> > > +	spin_unlock(&kvm->arch.mtrr_zap_list_lock);
-> > > +}
-> > > +
-> > > +static void kvm_zap_or_wait_mtrr_zap_list(struct kvm *kvm)
-> > > +{
-> > > +	if (atomic_cmpxchg_acquire(&kvm->arch.mtrr_zapping, 0, 1) == 0) {
-> > > +		kvm_zap_mtrr_zap_list(kvm);
-> > > +		atomic_set_release(&kvm->arch.mtrr_zapping, 0);
-> > > +		return;
-> > > +	}
-> > > +
-> > > +	while (atomic_read(&kvm->arch.mtrr_zapping))
-> > > +		cpu_relax();
-> > > +}
-> > > +
-> > > +static void kvm_mtrr_zap_gfn_range(struct kvm_vcpu *vcpu,
-> > > +				   gfn_t gfn_start, gfn_t gfn_end)
-> > > +{
-> > > +	struct mtrr_zap_range *range;
-> > > +
-> > > +	range = kmalloc(sizeof(*range), GFP_KERNEL_ACCOUNT);
-> > > +	if (!range)
-> > > +		goto fail;
-> > > +
-> > > +	range->start = gfn_start;
-> > > +	range->end = gfn_end;
-> > > +
-> > > +	kvm_add_mtrr_zap_list(vcpu->kvm, range);
-> > > +
-> > > +	kvm_zap_or_wait_mtrr_zap_list(vcpu->kvm);
-> > > +	return;
-> > > +
-> > > +fail:
-> > > +	kvm_clear_mtrr_zap_list(vcpu->kvm);
-> > A very small chance race condition that incorrectly
-> > clear the queued ranges which have not been zapped by another thread ?
-> > Like below:
-> >
-> > Thread A                         |  Thread B
-> > kvm_add_mtrr_zap_list()          |
-> >                                  |  kvm_clear_mtrr_zap_list()
-> > kvm_zap_or_wait_mtrr_zap_list()  |
-> >
-> > Call kvm_clear_mtrr_zap_list() here looks unnecessary, other
-> > threads(B here) who put thing in the queue will take care them well.
->
-> > > +   kvm_zap_gfn_range(vcpu->kvm, gfn_start, gfn_end);
->
-> Yes, if gfn_start and gfn_end here are not 0 and ~0ULL, the
-> kvm_clear_mtrr_zap_list() is not necessary.
-> Though in reality, they are always 0-~0ULL, I agree dropping the
-> kvm_clear_mtrr_zap_list() here is better.
->
-> Thanks!
+
