@@ -2,74 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C869273315C
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:37:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE9973316A
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344300AbjFPMhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 08:37:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38954 "EHLO
+        id S245378AbjFPMkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 08:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344783AbjFPMhL (ORCPT
+        with ESMTP id S231286AbjFPMkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 08:37:11 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACF030ED
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 05:37:09 -0700 (PDT)
-Date:   Fri, 16 Jun 2023 14:37:04 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686919027;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8OtrdfBcjyOOddFpGarokVYXJ6xauAxchjGuvxmZWCY=;
-        b=OTtnIn475Dbyi1Dr+PJkdeI/m43b55pQBX/RA1Y3l1qpIukjl/8710tgbPmebJnDQH3ODi
-        ByR6nz0yqJpLgGJOKuamGQPZaOysbh0Fo02GPOOmCA7WvKtXyZYCwBbYXjMyHZ5votLhoU
-        j4/8SB9O+64QFd8Zn49PtK/N7+XEgI9OIqwsgLXcHZ39fJkFU8Gn7GmI8cMIl8gadLKb7I
-        K0a/g+tj+H26JHuW9xsvclkJ4SuNCovug7sAWNXAa/6BGJ+gpMRGUm76gdWdUxrOKWDGmz
-        +7OQdw65moT9twELsLLzgZHS/qeeetkcEAnbCb9NmWSrIoOmQ6U5DsaKdLpZCQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686919027;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8OtrdfBcjyOOddFpGarokVYXJ6xauAxchjGuvxmZWCY=;
-        b=/VCzuUGMvGYPHo1m7t2IRhjSV67rJKWyc569G3hrCedu5TFbi1Nk8NKmRcXkoTe87LF49n
-        cxOpLB0o5fMTd1Bw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Crystal Wood <swood@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        John Stultz <jstultz@google.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v2 1/4] sched/core: Provide sched_rtmutex() and expose
- sched work helpers
-Message-ID: <20230616123704.lXQeCRiJ@linutronix.de>
-References: <20230427111937.2745231-1-bigeasy@linutronix.de>
- <20230427111937.2745231-2-bigeasy@linutronix.de>
- <20230503132051.GB1676736@hirez.programming.kicks-ass.net>
- <20230510150415.6BXNs0I1@linutronix.de>
- <20230511134308.GV4253@hirez.programming.kicks-ass.net>
- <20230525152505.obklNijZ@linutronix.de>
+        Fri, 16 Jun 2023 08:40:37 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E25268A;
+        Fri, 16 Jun 2023 05:40:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686919236; x=1718455236;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=rr9Wv//YevBMNTQkmKpej7PgJmFxPrLjzfxfxWBHxKY=;
+  b=leVTWwraRfup8gixHvAZ3eOnQd786B1G0WtC+q5tLKRovrg6yWwmyPxl
+   8XsLI0mHNDrPH3NoBFxZXRfInruJCyFgZ2n9nI1ue3PkBulx9gqKZjptE
+   b6ef8HSbmhNPpmOeFBsjilZE9+ObRkZosG1pqilf93ouCG69nFe/NkaqO
+   5JMpvVNGxVnSQQkfolMe9NJKmpamca0NwcAEHsZXqwG1QAIt4XvDwT+du
+   YY6AkoYKOAbqcmWV+L/sMcYO1exNPQRqNW2ajH/yPjhl3ezoEEUjLVnb+
+   aVEM71Ojmhh33/LDLC3j/N9rrKIYOAFPytxnzqni/y6/9LSh6gfIozh5j
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="425140073"
+X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
+   d="scan'208";a="425140073"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 05:40:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="716005263"
+X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
+   d="scan'208";a="716005263"
+Received: from ijarvine-mobl2.ger.corp.intel.com ([10.251.211.240])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 05:40:32 -0700
+Date:   Fri, 16 Jun 2023 15:40:29 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Martin Fuzzey <martin.fuzzey@flowbird.group>
+cc:     linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Marek Vasut <marex@denx.de>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tty: serial: imx: fix rs485 rx after tx
+In-Reply-To: <20230616104838.2729694-1-martin.fuzzey@flowbird.group>
+Message-ID: <c3e02d8-fba8-5ae3-15f3-fe378567932@linux.intel.com>
+References: <20230616104838.2729694-1-martin.fuzzey@flowbird.group>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230525152505.obklNijZ@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: multipart/mixed; boundary="8323329-799842524-1686919234=:3967"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,26 +63,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-25 17:25:07 [+0200], To Peter Zijlstra wrote:
-> > if that works out this worry goes away.
-> >=20
-> > If we get PROVE_RAW_LOCK_NESTING usable, something like the below might
-> > help out with the validation part...
->=20
-> Okay. So if I don't collide with workqueue do you buy this or do you
-> ask for something else. I'm not sure=E2=80=A6
->=20
-> Regarding PROVE_RAW_LOCK_NESTING: If I boot -rc3 with `quiet' then I
-> don't see any complains.
-> Otherwise it is printk during boot (caller is holding raw_spinlock_t and
-> then printk() calls to serial driver with spinlock_t).
-> From time to time ppl send "fixes" for PROVE_RAW_LOCK_NESTING splats so
-> I would guess they boot with `quiet' and there isn't much else. So we
-> are getting close here I guess.
->=20
-> Do you want me to test the suggested validation map somewhere? Because
-> if it works, it could be queued.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Do you want just the validation map or is there something I'm missing?
+--8323329-799842524-1686919234=:3967
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
 
-Sebastian
+On Fri, 16 Jun 2023, Martin Fuzzey wrote:
+
+> Since commit 79d0224f6bf2 ("tty: serial: imx: Handle RS485 DE signal
+> active high") RS485 reception no longer works after a transmission.
+> 
+> The following scenario shows the problem:
+> 	1) Open a port in RS485 mode
+> 	2) Receive data from remote (OK)
+> 	3) Transmit data to remote (OK)
+> 	4) Receive data from remote (Nothing received)
+> 
+> In RS485 mode, imx_uart_start_tx() calls imx_uart_stop_rx() and, when the
+> transmission is complete, imx_uart_stop_tx() calls imx_uart_start_rx().
+> 
+> Since the above commit imx_uart_stop_rx() now sets the loopback bit but
+> imx_uart_start_rx() does not clear it causing the hardware to remain in
+> loopback mode and not receive external data.
+> 
+> Fix this by moving the existing loopback disable code to a helper function
+> and calling it from imx_uart_start_rx() too.
+> 
+> Fixes: 79d0224f6bf2 ("tty: serial: imx: Handle RS485 DE signal active high")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Martin Fuzzey <martin.fuzzey@flowbird.group>
+> ---
+>  drivers/tty/serial/imx.c | 18 +++++++++++++-----
+>  1 file changed, 13 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+> index c5e17569c3ad..3fe8ff241522 100644
+> --- a/drivers/tty/serial/imx.c
+> +++ b/drivers/tty/serial/imx.c
+> @@ -369,6 +369,16 @@ static void imx_uart_soft_reset(struct imx_port *sport)
+>  	sport->idle_counter = 0;
+>  }
+>  
+> +static void imx_uart_disable_loopback_rs485(struct imx_port *sport)
+> +{
+> +	unsigned int uts;
+> +
+> +	/* See SER_RS485_ENABLED/UTS_LOOP comment in imx_uart_probe() */
+> +	uts = imx_uart_readl(sport, imx_uart_uts_reg(sport));
+> +	uts &= ~UTS_LOOP;
+> +	imx_uart_writel(sport, uts, imx_uart_uts_reg(sport));
+> +}
+> +
+>  /* called with port.lock taken and irqs off */
+>  static void imx_uart_start_rx(struct uart_port *port)
+>  {
+> @@ -390,6 +400,7 @@ static void imx_uart_start_rx(struct uart_port *port)
+>  	/* Write UCR2 first as it includes RXEN */
+>  	imx_uart_writel(sport, ucr2, UCR2);
+>  	imx_uart_writel(sport, ucr1, UCR1);
+> +	imx_uart_disable_loopback_rs485(sport);
+>  }
+>  
+>  /* called with port.lock taken and irqs off */
+> @@ -1422,7 +1433,7 @@ static int imx_uart_startup(struct uart_port *port)
+>  	int retval;
+>  	unsigned long flags;
+>  	int dma_is_inited = 0;
+> -	u32 ucr1, ucr2, ucr3, ucr4, uts;
+> +	u32 ucr1, ucr2, ucr3, ucr4;
+>  
+>  	retval = clk_prepare_enable(sport->clk_per);
+>  	if (retval)
+> @@ -1521,10 +1532,7 @@ static int imx_uart_startup(struct uart_port *port)
+>  		imx_uart_writel(sport, ucr2, UCR2);
+>  	}
+>  
+> -	/* See SER_RS485_ENABLED/UTS_LOOP comment in imx_uart_probe() */
+> -	uts = imx_uart_readl(sport, imx_uart_uts_reg(sport));
+> -	uts &= ~UTS_LOOP;
+> -	imx_uart_writel(sport, uts, imx_uart_uts_reg(sport));
+> +	imx_uart_disable_loopback_rs485(sport);
+>  
+>  	spin_unlock_irqrestore(&sport->port.lock, flags);
+
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+
+-- 
+ i.
+
+--8323329-799842524-1686919234=:3967--
