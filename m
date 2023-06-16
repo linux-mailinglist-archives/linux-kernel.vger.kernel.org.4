@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12214733C32
+	by mail.lfdr.de (Postfix) with ESMTP id 5CA4A733C33
 	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 00:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345841AbjFPWOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 18:14:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54016 "EHLO
+        id S1345310AbjFPWOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 18:14:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345770AbjFPWOe (ORCPT
+        with ESMTP id S1345788AbjFPWOf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 18:14:34 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248DE1FF5
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 15:14:32 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1b52132181aso8394765ad.2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 15:14:32 -0700 (PDT)
+        Fri, 16 Jun 2023 18:14:35 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4AF30F8
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 15:14:34 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1b52864b701so9610695ad.3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 15:14:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1686953671; x=1689545671;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z6oa4ojHaJiKA1bo4SVrpoak1kvworCpEq0F/N/U0ig=;
-        b=DV7fJl9giBNwcy/5l0YS+sQgKWJpMMHp7PkT5IRK0L99mqS0WZRmszszlxi2ZImfGe
-         rWhFmokzlJmp56Nmh/TFhpdJGLUkAvgbRLBp8b6KKDkKoVnzGc/y7hQmG6lJHeoEKhWn
-         Erk+wjqoNMH9VhhhKWBj9hVgEW1/LLmizUkEU=
+        d=broadcom.com; s=google; t=1686953673; x=1689545673;
+        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=0Vxp/xeVDQRhZaBC0bFaNG4rAHNskaJ9ho6wwwAvcBw=;
+        b=TNJw0fhq5D5GTljbq4nOTpNk7BHyURqB9ILUiHdwb9ipi5zO0x33OQ5r5mM82s92ZS
+         QHTVbMaeZ1SAHkzmWWJ77TBMQQnAF23h03IBodkG2KRquv6pecpRdsti9GLhkVhbWCS6
+         MKfar8ROrtiwAV2qkqGTkrNnbKNKiLXf+GTms=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686953671; x=1689545671;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=z6oa4ojHaJiKA1bo4SVrpoak1kvworCpEq0F/N/U0ig=;
-        b=Tms2idGLkWb7GN5u47JnUAaGNDcU8cyS5lKXjzBwYPmaSaj6NZsOcw7bnpXxwbc1Ir
-         DyyKL0ZKquEY50i/jwHvtYE21ceKZ2IlIyzjD1A9sYmglL+1YNlwtE4JS4KNLd8i6r/T
-         K14o616sQwSYb1coISXnSy2rxUk8iqjSYL1+ClGwogQT3caU5eaH2jxVKQfa4N0xJCwa
-         zWzuwbrzwgMH0fJL64tRHIOh9pdonDyXapl2m++pZvo/3rsbh10O3moJrAKVjDkA8NLY
-         28kH2GtAZAhN/HIe10HoxhjiwJn1Uope+0jRuak0u4SU5uHd2g7OKhn+pCwbwlqVRwRQ
-         x6Mg==
-X-Gm-Message-State: AC+VfDzfAuctlPynZFTmpkVEs2E3GPfuQzttXp0ueZgQRpv3UK+22Ibb
-        Be/eQkrIi791b73nK/JUY9IGhJmT5ESNyx+gU2duIQ==
-X-Google-Smtp-Source: ACHHUZ7hgtxe/zvvLMm6Et1lIefNxjJAVfuQZDM+sBvbAISvmz88zBv06fcqbGEGBJyOIhk+0RL0ow==
-X-Received: by 2002:a17:903:428d:b0:1b1:7336:2634 with SMTP id ju13-20020a170903428d00b001b173362634mr2380502plb.57.1686953671448;
-        Fri, 16 Jun 2023 15:14:31 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686953673; x=1689545673;
+        h=references:in-reply-to:message-id:date:subject:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0Vxp/xeVDQRhZaBC0bFaNG4rAHNskaJ9ho6wwwAvcBw=;
+        b=ggF+McJGztgapaXCxnd/n/OWMOHUbpcJ2EELmw4ISipSeEhnbugfZnW+YkStxkYO5D
+         4KFcCsx+Qgl2vg3DzX+HeG6OV2VwiU5PxkprZtB6Ij/fP11nCtOxUJJBtq2mpf3rvg1h
+         yRn7uB4xGq7R3tQf7T4QrQd4NJt7j1ZXobHzPrIo6knuQ/C3najrE7JBwu79rcq0SJw0
+         hsn7KKMtxLJIBhuj0USk1cTTuBywdIEu53gqqQOngbVq5kWHIv4hpSMnD74LXv8oDPJ5
+         XngdkXfXG4XMjHyTBzSrWKpSi+E+UQyjwQzhPOZQOnl4byBASDnmNn2+WqvCu/La4iJk
+         vrFw==
+X-Gm-Message-State: AC+VfDxsw1sR43sQLZbe4OXUNUtThJhf60I3ep3W48S3sfBITb36n/Sg
+        zmUjaqOjaZfs5FaNxUdkxgo+PA==
+X-Google-Smtp-Source: ACHHUZ6OS+/tO8Rkm6dhJt0iLLumgOyilLlQHn38iCzQIWJbn7wG33r6Gs6Jlg6o4wYI4PUx0ti5HA==
+X-Received: by 2002:a17:903:11cc:b0:1b0:1608:d7eb with SMTP id q12-20020a17090311cc00b001b01608d7ebmr3901053plh.5.1686953673597;
+        Fri, 16 Jun 2023 15:14:33 -0700 (PDT)
 Received: from stbirv-lnx-2.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id f12-20020a170902ab8c00b001aaed524541sm16220860plr.227.2023.06.16.15.14.28
+        by smtp.gmail.com with ESMTPSA id f12-20020a170902ab8c00b001aaed524541sm16220860plr.227.2023.06.16.15.14.31
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 16 Jun 2023 15:14:30 -0700 (PDT)
+        Fri, 16 Jun 2023 15:14:33 -0700 (PDT)
 From:   Justin Chen <justin.chen@broadcom.com>
 To:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
@@ -57,71 +57,55 @@ Cc:     florian.fainelli@broadcom.com, davem@davemloft.net,
         richardcochran@gmail.com, sumit.semwal@linaro.org,
         christian.koenig@amd.com, simon.horman@corigine.com,
         Justin Chen <justin.chen@broadcom.com>
-Subject: [PATCH net-next v8 00/11] Brcm ASP 2.0 Ethernet Controller
-Date:   Fri, 16 Jun 2023 15:14:13 -0700
-Message-Id: <1686953664-17498-1-git-send-email-justin.chen@broadcom.com>
+Subject: [PATCH net-next v8 01/11] dt-bindings: net: brcm,unimac-mdio: Add asp-v2.0
+Date:   Fri, 16 Jun 2023 15:14:14 -0700
+Message-Id: <1686953664-17498-2-git-send-email-justin.chen@broadcom.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1686953664-17498-1-git-send-email-justin.chen@broadcom.com>
+References: <1686953664-17498-1-git-send-email-justin.chen@broadcom.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000005d47ba05fe4682de"
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        boundary="0000000000007c799805fe468281"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        MIME_HEADER_CTYPE_ONLY,MIME_NO_TEXT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,T_TVD_MIME_NO_HEADERS,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+        MIME_HEADER_CTYPE_ONLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_TVD_MIME_NO_HEADERS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000005d47ba05fe4682de
+--0000000000007c799805fe468281
 
-Add support for the Broadcom ASP 2.0 Ethernet controller which is first
-introduced with 72165.
+The ASP 2.0 Ethernet controller uses a brcm unimac.
 
-Florian Fainelli (2):
-  dt-bindings: net: Brcm ASP 2.0 Ethernet controller
-  net: phy: bcm7xxx: Add EPHY entry for 74165
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+Signed-off-by: Justin Chen <justin.chen@broadcom.com>
+---
+ Documentation/devicetree/bindings/net/brcm,unimac-mdio.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Justin Chen (9):
-  dt-bindings: net: brcm,unimac-mdio: Add asp-v2.0
-  net: bcmasp: Add support for ASP2.0 Ethernet controller
-  net: bcmasp: Add support for WoL magic packet
-  net: bcmasp: Add support for wake on net filters
-  net: bcmasp: Add support for eee mode
-  net: bcmasp: Add support for ethtool standard stats
-  net: bcmasp: Add support for ethtool driver stats
-  net: phy: mdio-bcm-unimac: Add asp v2.0 support
-  MAINTAINERS: ASP 2.0 Ethernet driver maintainers
-
- .../devicetree/bindings/net/brcm,asp-v2.0.yaml     |  155 +++
- .../devicetree/bindings/net/brcm,unimac-mdio.yaml  |    2 +
- MAINTAINERS                                        |    9 +
- drivers/net/ethernet/broadcom/Kconfig              |   11 +
- drivers/net/ethernet/broadcom/Makefile             |    1 +
- drivers/net/ethernet/broadcom/asp2/Makefile        |    2 +
- drivers/net/ethernet/broadcom/asp2/bcmasp.c        | 1471 ++++++++++++++++++++
- drivers/net/ethernet/broadcom/asp2/bcmasp.h        |  587 ++++++++
- .../net/ethernet/broadcom/asp2/bcmasp_ethtool.c    |  503 +++++++
- drivers/net/ethernet/broadcom/asp2/bcmasp_intf.c   | 1430 +++++++++++++++++++
- .../net/ethernet/broadcom/asp2/bcmasp_intf_defs.h  |  257 ++++
- drivers/net/mdio/mdio-bcm-unimac.c                 |    2 +
- drivers/net/phy/bcm7xxx.c                          |    1 +
- include/linux/brcmphy.h                            |    1 +
- 14 files changed, 4432 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
- create mode 100644 drivers/net/ethernet/broadcom/asp2/Makefile
- create mode 100644 drivers/net/ethernet/broadcom/asp2/bcmasp.c
- create mode 100644 drivers/net/ethernet/broadcom/asp2/bcmasp.h
- create mode 100644 drivers/net/ethernet/broadcom/asp2/bcmasp_ethtool.c
- create mode 100644 drivers/net/ethernet/broadcom/asp2/bcmasp_intf.c
- create mode 100644 drivers/net/ethernet/broadcom/asp2/bcmasp_intf_defs.h
-
+diff --git a/Documentation/devicetree/bindings/net/brcm,unimac-mdio.yaml b/Documentation/devicetree/bindings/net/brcm,unimac-mdio.yaml
+index 0be426ee1e44..6684810fcbf0 100644
+--- a/Documentation/devicetree/bindings/net/brcm,unimac-mdio.yaml
++++ b/Documentation/devicetree/bindings/net/brcm,unimac-mdio.yaml
+@@ -22,6 +22,8 @@ properties:
+       - brcm,genet-mdio-v3
+       - brcm,genet-mdio-v4
+       - brcm,genet-mdio-v5
++      - brcm,asp-v2.0-mdio
++      - brcm,asp-v2.1-mdio
+       - brcm,unimac-mdio
+ 
+   reg:
 -- 
 2.7.4
 
 
---0000000000005d47ba05fe4682de
+--0000000000007c799805fe468281
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -192,13 +176,13 @@ sDL+OV16G+F9CkNMN3txsym8Nnx5WAYZb6+rBUIhMGz70V05xsHQfzvo2s7f0J1tJ5BoRlPPhL0h
 VOnWA3h71u9TfSsv+PXVm3P21TfOS2uc1hbzEqyENCP4i5XQ0rv0TmPW42GZ0o4xggJtMIICaQIB
 ATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhH
 bG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwj8BKLXNpALfemdRAwDQYJ
-YIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIGMl312tMC81brC6EgWnOgcRxMa665HY9Foo
-ZhJhsC8aMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDYxNjIy
-MTQzMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFl
+YIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEINAcq15A6mFf9q6u2xJbqVsioTkozB6uouzx
+A9tu0tHlMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDYxNjIy
+MTQzM1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFl
 AwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATAN
-BgkqhkiG9w0BAQEFAASCAQCux7n8BXVg3Bh+7uf5bBaPV9NbKOcgnph/CpHnIJLzhzzz5vhIiFyx
-/SqcTVJnJtvuB5YF2Vvy11Gj2qSluluBdmtyI07dk38rxuBQyh2eduaSMNp5J0nmfCGV+EuHlO6w
-VsGJo+7q/YtwJ9XFtKWt6TApH/soMsgDvvx5cjwHyt2bpu1kzN2S69RAuINkxh4Hx+RvLd0nQryC
-9nRrR0ioW/HmkMxWgliSlLcLv/BTPPSIPFKf6Qkakb23SH8ZSc77VI+ECCmZTStXAhKXVb50K1eX
-zy1Tk2gdTRgH++xHFPCOLsvJ+DWL3xfyKksIPFMpq5Wf0D/rCDvBTUhomMew
---0000000000005d47ba05fe4682de--
+BgkqhkiG9w0BAQEFAASCAQBtp7pl/1UBJv/BnZxiFCeJwD87/avyy7XUrUBDhDmWRdhXj/W3P0O7
+0C9DxoNXhpSlQCSVOn9aB+JtZ0fl9BYyxykR7ZTRIpe+eKHqpx4yzNmbIUZGW3IN3yMi64xmKr1u
+0fgjSZ/eOdYUwyqv4Rq6z5rNOd3uBdu+h4CKTi8rD7Ga9JtmvUgM6N9MPx1HFoZnFU2/HPtYyPJV
+8FjhNzlQk40Pljq9OwmzDWR0XQhGOf5p//9mbqplUv7yp6PEHyaYbYYmWdowxhbM4rZmpljOg6rE
+GXUsy1a+6Z9NCi0KMID68MAVqoeyhXOT2NXREtPcAET2+RgkJJNspU9J9Jjb
+--0000000000007c799805fe468281--
