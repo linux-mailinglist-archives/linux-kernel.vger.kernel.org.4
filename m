@@ -2,185 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2C5E733499
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 17:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA6717334A1
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 17:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345489AbjFPPVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 11:21:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42934 "EHLO
+        id S1343896AbjFPPWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 11:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbjFPPVA (ORCPT
+        with ESMTP id S1345940AbjFPPV4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 11:21:00 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A975C3581
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 08:20:57 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-3110a5f2832so1558333f8f.1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 08:20:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686928856; x=1689520856;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nwl0LNhJUMmewFF0gr0xbjGPARcgwNZ+TwWnvyZN5TM=;
-        b=y6d7G/bcZeVfhtOwzWnupZfcpOIbpWqUETtVqEcRoO7agztBlbsJ6YPPP9rYTnGqzZ
-         GaMK7QstokUuhf97rxF7jzZwOYgriGRPuzTUvT48ELnphBNOYsBb9D1DTICnOs6M8OKE
-         afYvikew/Y7RqAZhLpRwdqewU9DxCRMUyvx1k9copwZaX3/AxPMwFqa4eAl8AmUC6O/L
-         MYjLAIxrTSG/+UJT2GjtFggqqIRQGnBl/iecVw42bxB5r48bywnIAXXWp/0rTY8uKtm7
-         ke1QekA/keSjnmIm/uc4gQQ3Nlc4tvOymz/gtGs1v9pBcUMWaFozL8jLveLpXomgA4m+
-         ONAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686928856; x=1689520856;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nwl0LNhJUMmewFF0gr0xbjGPARcgwNZ+TwWnvyZN5TM=;
-        b=j1TboWa95wFObdQ+B/U0UxJfPJeOC9K3r+LeB358eDq5HEb0OB5vfPC9RTfeLqcxo5
-         h0B22Qhb3LAzkZQ+fTgdgXfstLDi4oa55IrfrhKW36elTwgP7sHDsi1eiXKfMh0DvMyT
-         SGDlrez1bZrF9zG6lH/jABh7ryHpEWv4Ho7peh2MBbw3YDgjiyo9Vypi7UqyAhgELxqD
-         4uEOVWqwYQXncGsYljuY6nomdKc2y+5fcMgu5vZj5rYMOnamdzZ180OY/vGYJYF1/KS9
-         g2tQA81TA02qY4agqzxnU7wJ8/hEcH1WyOlruXUAqdihNvVR3R8pt9zxdlBi4qriD2Rm
-         NBEg==
-X-Gm-Message-State: AC+VfDw7UXuDa2nYxGumFWxatpzumrgdo04R7dpVm+sNtNwH9gfvRyU/
-        +6jeGDUtfZVhUrowyYqTt0h3JZwTVMtyawRjgnJnzQ==
-X-Google-Smtp-Source: ACHHUZ7Wieql98Qo7JahSqyBzgeFyTeWSzVEw0p2WQO9ukcNU4vWKZ3JzJ0l9v2deSmbwPenZ18DpHRCFahcErhiCN0=
-X-Received: by 2002:adf:e4cb:0:b0:311:f11:4c55 with SMTP id
- v11-20020adfe4cb000000b003110f114c55mr2252797wrm.13.1686928856105; Fri, 16
- Jun 2023 08:20:56 -0700 (PDT)
+        Fri, 16 Jun 2023 11:21:56 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25EA32720
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 08:21:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686928914; x=1718464914;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IrUB3wm5B53SwR3zC4PoaeRdFH3cGoQDoG6SRA6sz5g=;
+  b=hmsOhJKhicxCzHI2N/8REDIHqQLFHDGECAM+ETUUKSSeh41hDI6BDhpl
+   UZ5nz+lNw4i7hhe+0zg1eXFDikfn4WQ6TN1ftJHNjAJqARCz96bBSD+7a
+   YWAOz+XFRa3GubggsJUa7Y3k4Bt1jB6pa+Po8GweTWUSFcp9cdGLJI041
+   sxa0pj7z0VA1iI86vhrENXwOePImYKOT2SBoVY7D2mUCGQvyamANCn02Z
+   dP88PJk6piplwcTIS62f1psjGY07DA+MjLaryvF+QpqmwKi0XPjQjcvVl
+   3ZQ+2Vr/6CBx9saU6Z1TOotMRAMs+ikbsnfK29kyUsuCZ+U/lIAxLNMPy
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="445617589"
+X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
+   d="scan'208";a="445617589"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 08:21:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="742709717"
+X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
+   d="scan'208";a="742709717"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 16 Jun 2023 08:21:38 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qABGb-0001TA-2W;
+        Fri, 16 Jun 2023 15:21:37 +0000
+Date:   Fri, 16 Jun 2023 23:21:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Foley <pefoley2@pefoley.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Richard Weinberger <richard@nod.at>
+Subject: arch/um/drivers/pcap_kern.c:18:6: warning: no previous prototype for
+ 'pcap_init_kern'
+Message-ID: <202306162327.v3SoLRFC-lkp@intel.com>
 MIME-Version: 1.0
-References: <20230615213154.1753313-1-robh@kernel.org>
-In-Reply-To: <20230615213154.1753313-1-robh@kernel.org>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Fri, 16 Jun 2023 09:20:45 -0600
-Message-ID: <CANLsYkx_cd7QxMpE8OKe+jJT-tSt23Ub0p8ceAuKbchLtQmKcg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Remove last usage of "binding" or "schema"
- in titles
-To:     Rob Herring <robh@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        =?UTF-8?Q?Fern=C3=A1ndez_Rojas?= <noltari@gmail.com>,
-        Marek Vasut <marex@denx.de>, Suman Anna <s-anna@ti.com>,
-        - <devicetree-spec@vger.kernel.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Jun 2023 at 15:32, Rob Herring <robh@kernel.org> wrote:
->
-> The Devicetree bindings document does not have to say in the title that
-> it is a "Devicetree binding", but instead just describe the hardware.
->
-> Most of these have been fixed already, so fix the handful that snuck in.
-> With this, a meta-schema check can be enabled to catch these
-> automatically.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/clock/brcm,bcm63268-timer-clocks.yaml   | 2 +-
->  Documentation/devicetree/bindings/clock/imx8mp-audiomix.yaml    | 2 +-
->  .../devicetree/bindings/power/reset/restart-handler.yaml        | 2 +-
->  .../devicetree/bindings/remoteproc/ti,pru-consumer.yaml         | 2 +-
->  .../devicetree/bindings/reserved-memory/framebuffer.yaml        | 2 +-
->  5 files changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/clock/brcm,bcm63268-timer-=
-clocks.yaml b/Documentation/devicetree/bindings/clock/brcm,bcm63268-timer-c=
-locks.yaml
-> index 199818b2fb6d..cd0d763ce2f3 100644
-> --- a/Documentation/devicetree/bindings/clock/brcm,bcm63268-timer-clocks.=
-yaml
-> +++ b/Documentation/devicetree/bindings/clock/brcm,bcm63268-timer-clocks.=
-yaml
-> @@ -4,7 +4,7 @@
->  $id: http://devicetree.org/schemas/clock/brcm,bcm63268-timer-clocks.yaml=
-#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->
-> -title: Broadcom BCM63268 Timer Clock and Reset Device Tree Bindings
-> +title: Broadcom BCM63268 Timer Clock and Reset
->
->  maintainers:
->    - =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
-> diff --git a/Documentation/devicetree/bindings/clock/imx8mp-audiomix.yaml=
- b/Documentation/devicetree/bindings/clock/imx8mp-audiomix.yaml
-> index ff9600474df2..0a6dc1a6e122 100644
-> --- a/Documentation/devicetree/bindings/clock/imx8mp-audiomix.yaml
-> +++ b/Documentation/devicetree/bindings/clock/imx8mp-audiomix.yaml
-> @@ -4,7 +4,7 @@
->  $id: http://devicetree.org/schemas/clock/imx8mp-audiomix.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->
-> -title: NXP i.MX8MP AudioMIX Block Control Binding
-> +title: NXP i.MX8MP AudioMIX Block Control
->
->  maintainers:
->    - Marek Vasut <marex@denx.de>
-> diff --git a/Documentation/devicetree/bindings/power/reset/restart-handle=
-r.yaml b/Documentation/devicetree/bindings/power/reset/restart-handler.yaml
-> index 1f9a2aac53c0..f2ffdd29d52a 100644
-> --- a/Documentation/devicetree/bindings/power/reset/restart-handler.yaml
-> +++ b/Documentation/devicetree/bindings/power/reset/restart-handler.yaml
-> @@ -4,7 +4,7 @@
->  $id: http://devicetree.org/schemas/power/reset/restart-handler.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->
-> -title: Restart and shutdown handler generic binding
-> +title: Restart and shutdown handler Common Properties
->
->  maintainers:
->    - Sebastian Reichel <sre@kernel.org>
-> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer=
-.yaml b/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
-> index c6d86964b72a..35f0bb38f7b2 100644
-> --- a/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
-> +++ b/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
-> @@ -4,7 +4,7 @@
->  $id: http://devicetree.org/schemas/remoteproc/ti,pru-consumer.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->
-> -title: Common TI PRU Consumer Binding
-> +title: TI PRU Consumer Common Properties
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   40f71e7cd3c6ac04293556ab0504a372393838ff
+commit: 2c4d3841a82b88ae8a7b518dc6206f84f68e705a um: Avoid pcap multiple definition errors
+date:   4 months ago
+config: um-randconfig-r036-20230616 (https://download.01.org/0day-ci/archive/20230616/202306162327.v3SoLRFC-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20230616/202306162327.v3SoLRFC-lkp@intel.com/reproduce)
 
-Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306162327.v3SoLRFC-lkp@intel.com/
 
->  maintainers:
->    - Suman Anna <s-anna@ti.com>
-> diff --git a/Documentation/devicetree/bindings/reserved-memory/framebuffe=
-r.yaml b/Documentation/devicetree/bindings/reserved-memory/framebuffer.yaml
-> index 05b6648b3458..851ec24d6142 100644
-> --- a/Documentation/devicetree/bindings/reserved-memory/framebuffer.yaml
-> +++ b/Documentation/devicetree/bindings/reserved-memory/framebuffer.yaml
-> @@ -4,7 +4,7 @@
->  $id: http://devicetree.org/schemas/reserved-memory/framebuffer.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->
-> -title: /reserved-memory framebuffer node bindings
-> +title: /reserved-memory framebuffer node
->
->  maintainers:
->    - devicetree-spec@vger.kernel.org
-> --
-> 2.39.2
->
+All warnings (new ones prefixed by >>):
+
+>> arch/um/drivers/pcap_kern.c:18:6: warning: no previous prototype for 'pcap_init_kern' [-Wmissing-prototypes]
+      18 | void pcap_init_kern(struct net_device *dev, void *data)
+         |      ^~~~~~~~~~~~~~
+   arch/um/drivers/pcap_kern.c:53:5: warning: no previous prototype for 'pcap_setup' [-Wmissing-prototypes]
+      53 | int pcap_setup(char *str, char **mac_out, void *data)
+         |     ^~~~~~~~~~
+
+
+vim +/pcap_init_kern +18 arch/um/drivers/pcap_kern.c
+
+    17	
+  > 18	void pcap_init_kern(struct net_device *dev, void *data)
+    19	{
+    20		struct uml_net_private *pri;
+    21		struct pcap_data *ppri;
+    22		struct pcap_init *init = data;
+    23	
+    24		pri = netdev_priv(dev);
+    25		ppri = (struct pcap_data *) pri->user;
+    26		ppri->host_if = init->host_if;
+    27		ppri->promisc = init->promisc;
+    28		ppri->optimize = init->optimize;
+    29		ppri->filter = init->filter;
+    30	
+    31		printk("pcap backend, host interface %s\n", ppri->host_if);
+    32	}
+    33	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
