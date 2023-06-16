@@ -2,104 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CCA87331C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:59:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E705E7331C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 15:00:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244645AbjFPM73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 08:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50766 "EHLO
+        id S1343843AbjFPNAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 09:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232489AbjFPM70 (ORCPT
+        with ESMTP id S1345604AbjFPNAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 08:59:26 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33EA83581;
-        Fri, 16 Jun 2023 05:59:15 -0700 (PDT)
+        Fri, 16 Jun 2023 09:00:05 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233AC1BF8
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 06:00:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=xc0rFww4DDidrWoBZkAi7FUYLAiSH50b8oCJnfR9dZ4=; b=j2z5IAKHx+iYyWyLz2HFE50zJ/
-        Jhh4tgKe4YJEQr6oI0WEHTxShrKgtDl8stsJaY/dOoZ9vna81ZCN4XwQplvFkW8/haHb6omkttGT+
-        UpOAo65ikQVFI1E7A47AistDWYV+VSIJUM2w8KE3GAzCu0tRCkBbdT0zscpvs6e5krwZNRZCe9RZe
-        uTQhd7AkCWHdwfHmX69TV0jzW+xKMUcdOdy4WIDRHcssEkkCVFZz3UGQKXanUtM8VAAAcZB3SgLu5
-        FPAxg7yRIIpo4TFPZIHwX+GMBJm0AR/zz7RKHRFhztKcC9TsW/wysILWTFx6leAC4utwq81CNMGZ1
-        blemVp9Q==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qA92m-000crn-1T;
-        Fri, 16 Jun 2023 12:59:12 +0000
-Message-ID: <c6696073-7882-bdac-32da-c90f181a2804@infradead.org>
-Date:   Fri, 16 Jun 2023 05:59:11 -0700
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=gqK+3KsGUGOMq8M8tTFeaLnp1A2G//WBIl2/x8oKhVE=; b=GGJxhuENkgCZS/h4JJhbgI8Vu1
+        ezHgFnloGG/Zw+bqxn2bgIpzjpdrtEqW7o5PCDC+/g6L3oLVaOq529I3K2D/093u5VHnZZ7VZ63XV
+        ndjBUQwpR5Dkybg+xkPAnxpZhd/mFGtUUeVVPhQ1bolqdex1g4oq+l6pcp+AP1v1ocvarCvg/+ARS
+        xKwf5S9+eR4oSkXHRUwD31gqtOLarquq/92XZvTUXxz4zFySu109Hg0nLSYXoj5/3ohbvMHnxopxo
+        A5jPfZBWeXl3e6/TGS6oPwoRxqZgXUvH8JKLidi/CZByKeztRRsaAT5uqT3Nj9bshWGB7w8EsiFQ2
+        c3ffp0/A==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qA93M-0091BP-Dn; Fri, 16 Jun 2023 12:59:48 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BC29430020B;
+        Fri, 16 Jun 2023 14:59:46 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 791E327438941; Fri, 16 Jun 2023 14:59:46 +0200 (CEST)
+Date:   Fri, 16 Jun 2023 14:59:46 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Luca Abeni <luca.abeni@santannapisa.it>,
+        Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Vineeth Pillai <vineeth@bitbyteword.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [RFC PATCH V3 5/6] sched/fair: Add trivial fair server
+Message-ID: <20230616125946.GN83892@hirez.programming.kicks-ass.net>
+References: <cover.1686239016.git.bristot@kernel.org>
+ <8db5a49ea92ad8b875d331d6136721645a382fe8.1686239016.git.bristot@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 1/1] cdrom: Fix spectre-v1 gadget
-Content-Language: en-US
-To:     Jordy Zomer <jordyzomer@google.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc:     Phillip Potter <phil@philpotter.co.uk>,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
-References: <20230612110040.849318-1-jordyzomer@google.com>
- <20230612110040.849318-2-jordyzomer@google.com>
- <20230615163125.td3aodpfwth5n4mc@desk> <ZIufZn+reW0rza1H@equinox>
- <20230616031447.yslq6ep7lxe6sjv4@desk>
- <CABjM8Zc4WU-QXVDDtfKtGPnsHOhjXYufg+HZ=cdSudXYeKS7YQ@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CABjM8Zc4WU-QXVDDtfKtGPnsHOhjXYufg+HZ=cdSudXYeKS7YQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8db5a49ea92ad8b875d331d6136721645a382fe8.1686239016.git.bristot@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 08, 2023 at 05:58:17PM +0200, Daniel Bristot de Oliveira wrote:
+> +void fair_server_init(struct rq *rq)
+> +{
+> +	struct sched_dl_entity *dl_se = &rq->fair_server;
+> +
+> +	init_dl_entity(dl_se);
+> +
+> +	dl_se->dl_runtime = TICK_NSEC;
+> +	dl_se->dl_deadline = 20 * TICK_NSEC;
+> +	dl_se->dl_period = 20 * TICK_NSEC;
+> +
+> +	dl_server_init(dl_se, rq, fair_server_has_tasks, fair_server_pick);
+> +}
 
-
-On 6/16/23 02:39, Jordy Zomer wrote:
-> Thanks for the explanation Pawan, a little bit off-topic for this patch but
-> shall I send a patch to add this to the documentation of array_index_nospec()
-> and fix other calls to that function where the upper bound is not a constant? :)
-> 
-
-Yes, please. We don't want to lose that info.
-
-Thanks.
-
-> On Fri, Jun 16, 2023 at 5:15 AM Pawan Gupta
-> <pawan.kumar.gupta@linux.intel.com> wrote:
->>
->> On Fri, Jun 16, 2023 at 12:31:50AM +0100, Phillip Potter wrote:
->>> I've now looked at this. It is possible for cdi->capacity to be > 1, as
->>> it is set via get_capabilities() -> cdrom_number_of_slots(), if the
->>> device is an individual or cartridge changer.
->>
->> Ohk. Is there an upper limit to cdi->capacity? If not, we are left with
->> barrier_nospec().
->>
->>> Therefore, I think using CDI_MAX_CAPACITY of 1 is not the correct
->>> approach. Jordy's V2 patch is fine therefore, but perhaps using
->>> array_index_nospec() with cdi->capacity is still better than a
->>> do/while loop from a performance perspective, given it would be cached
->>> etc. at that point, so possibly quicker. Thoughts? (I'm no expert on
->>> spectre-v1 I'll admit).
->>
->> array_index_nospec() can only clip the arg correctly if the upper bound
->> is correct. Problem with array_index_nospec(arg, cdi->capacity) is
->> cdi->capacity is not a constant, so it suffers from the same problem as
->> arg i.e. cdi->capacity could also be speculated. Although having to
->> control 2 loads makes the attack difficult, but does not rules out
->> completely.
->>
->> barrier_nospec() makes the CPU wait for all previous loads to retire
->> before executing following instructions speculatively. This causes the
->> conditional branch to resolve correctly. I hope this does not fall into
->> a hotpath.
-
--- 
-~Randy
+These here numbers should obviously become a tunable somewhere... :-)
