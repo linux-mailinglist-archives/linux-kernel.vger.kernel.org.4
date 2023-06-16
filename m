@@ -2,117 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10B3B732E5A
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:31:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18B44732EA5
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:34:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345058AbjFPKbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 06:31:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50906 "EHLO
+        id S1345194AbjFPKeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 06:34:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344989AbjFPKaS (ORCPT
+        with ESMTP id S1344993AbjFPKdO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 06:30:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A944C31;
-        Fri, 16 Jun 2023 03:27:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D674635A2;
-        Fri, 16 Jun 2023 10:27:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09345C43397;
-        Fri, 16 Jun 2023 10:27:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686911237;
-        bh=kIsf8AbSmXSzhxQYkllhPv2Z+84eoqLgyPp+vctmyI8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Akw9uytdR0MNllkRhU5ErvSA8IN9Kgejjbc0pXGZQcqN2ftmMpgySTSKc8cynauoz
-         O6mzFjXOIX2QfDBLFn/77UFxqI9VqfVuc+5bgpJP6ty9mN7UEmnTlY9GnxyZXfBU8P
-         z810hm2WOAr+Cpvk94MupGRy5HayiK2ba4HjG/2JFRmIyS4zvbSy+IKCt+KC062fW9
-         FQeuoUwYxq9dxbgam4a7R7kDQDkhDwrjXP9tgvjScq0Xnd1vyNlrEQcEB9/z7vQFF8
-         31wS/94LMA41YMLa6hituhpDB8CnsQMYrTVkL6z92oGC+JhtAAY9hC8ugr7/8VvqJD
-         a+tAmpK6/oeSw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andrey Smetanin <asmetanin@yandex-team.ru>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 26/26] vhost_net: revert upend_idx only on retriable error
-Date:   Fri, 16 Jun 2023 06:26:23 -0400
-Message-Id: <20230616102625.673454-26-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230616102625.673454-1-sashal@kernel.org>
-References: <20230616102625.673454-1-sashal@kernel.org>
+        Fri, 16 Jun 2023 06:33:14 -0400
+Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1888059C1;
+        Fri, 16 Jun 2023 03:28:19 -0700 (PDT)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1qA6fY-003lEH-TO; Fri, 16 Jun 2023 18:27:05 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 16 Jun 2023 18:27:04 +0800
+Date:   Fri, 16 Jun 2023 18:27:04 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     David Howells <dhowells@redhat.com>
+Cc:     netdev@vger.kernel.org,
+        syzbot+13a08c0bf4d212766c3c@syzkaller.appspotmail.com,
+        syzbot+14234ccf6d0ef629ec1a@syzkaller.appspotmail.com,
+        syzbot+4e2e47f32607d0f72d43@syzkaller.appspotmail.com,
+        syzbot+472626bb5e7c59fb768f@syzkaller.appspotmail.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next] crypto: af_alg/hash: Fix recvmsg() after
+ sendmsg(MSG_MORE)
+Message-ID: <ZIw4+Go7ZIth+CsY@gondor.apana.org.au>
+References: <1679829.1686785273@warthog.procyon.org.uk>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.34
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1679829.1686785273@warthog.procyon.org.uk>
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrey Smetanin <asmetanin@yandex-team.ru>
+On Thu, Jun 15, 2023 at 12:27:53AM +0100, David Howells wrote:
+>     
+> If an AF_ALG socket bound to a hashing algorithm is sent a zero-length
+> message with MSG_MORE set and then recvmsg() is called without first
+> sending another message without MSG_MORE set to end the operation, an oops
+> will occur because the crypto context and result doesn't now get set up in
+> advance because hash_sendmsg() now defers that as long as possible in the
+> hope that it can use crypto_ahash_digest() - and then because the message
+> is zero-length, it the data wrangling loop is skipped.
+> 
+> Fix this by always making a pass of the loop, even in the case that no data
+> is provided to the sendmsg().
+> 
+> Fix also extract_iter_to_sg() to handle a zero-length iterator by returning
+> 0 immediately.
+> 
+> Whilst we're at it, remove the code to create a kvmalloc'd scatterlist if
+> we get more than ALG_MAX_PAGES - this shouldn't happen.
+> 
+> Fixes: c662b043cdca ("crypto: af_alg/hash: Support MSG_SPLICE_PAGES")
+> Reported-by: syzbot+13a08c0bf4d212766c3c@syzkaller.appspotmail.com
+> Link: https://lore.kernel.org/r/000000000000b928f705fdeb873a@google.com/
+> Reported-by: syzbot+14234ccf6d0ef629ec1a@syzkaller.appspotmail.com
+> Link: https://lore.kernel.org/r/000000000000c047db05fdeb8790@google.com/
+> Reported-by: syzbot+4e2e47f32607d0f72d43@syzkaller.appspotmail.com
+> Link: https://lore.kernel.org/r/000000000000bcca3205fdeb87fb@google.com/
+> Reported-by: syzbot+472626bb5e7c59fb768f@syzkaller.appspotmail.com
+> Link: https://lore.kernel.org/r/000000000000b55d8805fdeb8385@google.com/
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> Tested-by: syzbot+13a08c0bf4d212766c3c@syzkaller.appspotmail.com
+> Tested-by: syzbot+14234ccf6d0ef629ec1a@syzkaller.appspotmail.com
+> Tested-by: syzbot+4e2e47f32607d0f72d43@syzkaller.appspotmail.com
+> Tested-by: syzbot+472626bb5e7c59fb768f@syzkaller.appspotmail.com
+> cc: Herbert Xu <herbert@gondor.apana.org.au>
+> cc: "David S. Miller" <davem@davemloft.net>
+> cc: Eric Dumazet <edumazet@google.com>
+> cc: Jakub Kicinski <kuba@kernel.org>
+> cc: Paolo Abeni <pabeni@redhat.com>
+> cc: Jens Axboe <axboe@kernel.dk>
+> cc: Matthew Wilcox <willy@infradead.org>
+> cc: linux-crypto@vger.kernel.org
+> cc: netdev@vger.kernel.org
+> ---
+>  crypto/algif_hash.c |   21 +++++----------------
+>  lib/scatterlist.c   |    2 +-
+>  2 files changed, 6 insertions(+), 17 deletions(-)
 
-[ Upstream commit 1f5d2e3bab16369d5d4b4020a25db4ab1f4f082c ]
+Acked-by: Herbert Xu <herbert@gondor.apana.org.au>
 
-Fix possible virtqueue used buffers leak and corresponding stuck
-in case of temporary -EIO from sendmsg() which is produced by
-tun driver while backend device is not up.
-
-In case of no-retriable error and zcopy do not revert upend_idx
-to pass packet data (that is update used_idx in corresponding
-vhost_zerocopy_signal_used()) as if packet data has been
-transferred successfully.
-
-v2: set vq->heads[ubuf->desc].len equal to VHOST_DMA_DONE_LEN
-in case of fake successful transmit.
-
-Signed-off-by: Andrey Smetanin <asmetanin@yandex-team.ru>
-Message-Id: <20230424204411.24888-1-asmetanin@yandex-team.ru>
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-Signed-off-by: Andrey Smetanin <asmetanin@yandex-team.ru>
-Acked-by: Jason Wang <jasowang@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/vhost/net.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
-index 4c538b30fd76d..4418192ab8aaa 100644
---- a/drivers/vhost/net.c
-+++ b/drivers/vhost/net.c
-@@ -934,13 +934,18 @@ static void handle_tx_zerocopy(struct vhost_net *net, struct socket *sock)
- 
- 		err = sock->ops->sendmsg(sock, &msg, len);
- 		if (unlikely(err < 0)) {
-+			bool retry = err == -EAGAIN || err == -ENOMEM || err == -ENOBUFS;
-+
- 			if (zcopy_used) {
- 				if (vq->heads[ubuf->desc].len == VHOST_DMA_IN_PROGRESS)
- 					vhost_net_ubuf_put(ubufs);
--				nvq->upend_idx = ((unsigned)nvq->upend_idx - 1)
--					% UIO_MAXIOV;
-+				if (retry)
-+					nvq->upend_idx = ((unsigned)nvq->upend_idx - 1)
-+						% UIO_MAXIOV;
-+				else
-+					vq->heads[ubuf->desc].len = VHOST_DMA_DONE_LEN;
- 			}
--			if (err == -EAGAIN || err == -ENOMEM || err == -ENOBUFS) {
-+			if (retry) {
- 				vhost_discard_vq_desc(vq, 1);
- 				vhost_net_enable_vq(net, vq);
- 				break;
+Thanks,
 -- 
-2.39.2
-
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
