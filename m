@@ -2,268 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9476C7328D7
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 09:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C969F7328DD
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 09:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244746AbjFPH3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 03:29:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33380 "EHLO
+        id S245012AbjFPH3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 03:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbjFPH3B (ORCPT
+        with ESMTP id S242794AbjFPH3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 03:29:01 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2056.outbound.protection.outlook.com [40.107.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2508C170E;
-        Fri, 16 Jun 2023 00:29:00 -0700 (PDT)
+        Fri, 16 Jun 2023 03:29:18 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2057.outbound.protection.outlook.com [40.107.7.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947F526A1;
+        Fri, 16 Jun 2023 00:29:15 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=i7SADbqHtd8h6/LKgXWbx7Pyi9XCyeOVHSzSG3RhpLJAgHf0ngiBABUWWMNXoso8xxzgev4fZjj+CczdU7bPWYIdhjxxyzqwW8ob20EjjZ+xaYPoc5+R8EHDLLhBpINCb151PcpvnVFFPJj1ahctkoXzeMkLsb+7FordMs7syyD+4tSk8b8ZzFr87gEohe9JH5piDyOmqH1wqYrTrsCxVQrGh2D3FgHXCZawVitUfdApbIOWyH5zJhZb42G61Fnsc3GhUZk+htdusGEgV9Yc87ObWnWuxk4jtaKWqeybBVvev0IXAOVVn/muB8wazLpRURFNxJW/zvBgEyHMdqsbhQ==
+ b=O1VKfpJa/YQ6k+SDQ29CAXqb3NivSl76ralwE4y8ldSRkblymxlxAH9R/s4qFJZ8rF7UGlFrUgY4n8CT4ivMKkmsS+H+da4kfWydhqgcBDr3Id3aqqYTdkuhEThFw9r1Axz8oU5fJS0ICp1VoddS58KV9xhjOfOuPgu3bzJNoaf6I3+QfaAWHrTwzcp1j4xDWd1F4QdwOgdZBdCSMSh5DNRBa5mluyguE+Taod3aNXW7PEG5NKnwlQUmu7WhCmUP3/59OnWMKij0uomE8RNQ/b/KNZ6U1Hjnk6Uh/uNsPtZO13IjrwErGoM75jddtpHEW7z+bxOqWshX6CsZYqyDHw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=o+ckomhIUlsz8l6xurXJ+ixBnjy7b9f4Ax87jLvzQ8o=;
- b=E9fehLgrAr0nEAcJF5bA36FwLXDWKXYqd2ak/ID1l7ryl+3RgZkjvuHzOU1Tbavg4HOvGtDW0lYzE1eOK4rxICDbs5YLCLxLDNV7jJCRYXdULjS9Z7aKZ5DLfzOstc+CnCrtLVqOTxAkRU+sKNDzyY6PvS4icEgDYyO1ClBJVzub1/KZSBbGaTEsM3wPVxOpQGg8BpmhW6s1Bcu4MVINDRQN45IbxqjFu6O5YqLQCPV8KewmDuyDDd4KD3sOUiih6WCunizqcsKzRiw7x88RFem/qwjGMeKGlA2N6QM7V8p9g2xgCjPWJb34Mw3R3wU7CmnegrH/aAHzQ8jLc1n5Kw==
+ bh=rZZ02nBwROclrbIOV+nWq5Qc43lnwrePpPOoP1llooc=;
+ b=ASf9RM32lzfCigIqTflnulkrkYa5cAHGl0cKG1axCp5GHU4JB/3Ynhr23eNxbc+sthr7vYP7o6adXSebghHGfq6httzoDcwkkDCuqK2VVLe3KqSNOb3bvulJs72vJjYGk7Jz1YgvR4AkqbzUBOZ0GwKG/R1EDTDGVzxNjzYQPMf3w5OyeBeTO2q7sJhAgW4lCuHgHSSU6U4rVfcSMIzgBLEwWBhFEhoZ50gSWQ5OFTs80e4DzRa2E75x1ndhWW4STvkULJ/ZskmdhS1G8DVkFSthxE/v0tUXq1eZBLKf/JeMgAi+AeUX7UbkG0XcGbfp82HIY9kKGvm5blWC04pPRg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=wolfvision.net; dmarc=pass action=none
+ header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=o+ckomhIUlsz8l6xurXJ+ixBnjy7b9f4Ax87jLvzQ8o=;
- b=1M7vPizZ+54u9DJk0xtDLZ+e2EBFHmzxBgkE2X5Y1LIE5F/8a/Q9H5CZ7YKgCIPDzhqRAEmaglWC+TfJ387Kt4G0qxVIYS/R7nf0x+1SCgLjdqexsc5YvPocB9ukGrUcy0sT2FyVwBxkakicqcIyJxQctka7ObQXOsjTcx6W18Q=
+ bh=rZZ02nBwROclrbIOV+nWq5Qc43lnwrePpPOoP1llooc=;
+ b=b0x0RgWq9mLuOqF+Alfpos22uy8phEjvvvP2WiRcjzFR6zrdrL9j+1R93HrhOE6xUef4LbCbmV0edoIyfSYffFXdaaPG9yO+cVVAGJR2/j72+J+HEOe5v+eOPGo2iMmDvUUzV5q7cnUSLpLbbYgjPbwnYONC4drhVTNqlxaUSD4=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
- BY5PR12MB4226.namprd12.prod.outlook.com (2603:10b6:a03:203::24) with
+ header.d=none;dmarc=none action=none header.from=wolfvision.net;
+Received: from VE1PR08MB4974.eurprd08.prod.outlook.com (2603:10a6:803:111::15)
+ by GV1PR08MB9916.eurprd08.prod.outlook.com (2603:10a6:150:a6::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.27; Fri, 16 Jun
- 2023 07:28:57 +0000
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::8a7:d4dc:7ac8:9017]) by DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::8a7:d4dc:7ac8:9017%5]) with mapi id 15.20.6500.029; Fri, 16 Jun 2023
- 07:28:57 +0000
-Date:   Fri, 16 Jun 2023 15:28:33 +0800
-From:   Huang Rui <ray.huang@amd.com>
-To:     "Karny, Wyes" <Wyes.Karny@amd.com>
-Cc:     "rafael@kernel.org" <rafael@kernel.org>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "trenn@suse.com" <trenn@suse.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "Shenoy, Gautham Ranjal" <gautham.shenoy@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 5/6] cpupower: Add support for amd_pstate mode change
-Message-ID: <ZIwPIeby2TD1drZE@amd.com>
-References: <20230612113615.205353-1-wyes.karny@amd.com>
- <20230612113615.205353-6-wyes.karny@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612113615.205353-6-wyes.karny@amd.com>
-X-ClientProxiedBy: SI2PR02CA0054.apcprd02.prod.outlook.com
- (2603:1096:4:196::13) To DM5PR12MB2504.namprd12.prod.outlook.com
- (2603:10b6:4:b5::19)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.37; Fri, 16 Jun
+ 2023 07:29:09 +0000
+Received: from VE1PR08MB4974.eurprd08.prod.outlook.com
+ ([fe80::bd0e:a139:9e67:b86d]) by VE1PR08MB4974.eurprd08.prod.outlook.com
+ ([fe80::bd0e:a139:9e67:b86d%4]) with mapi id 15.20.6477.037; Fri, 16 Jun 2023
+ 07:29:09 +0000
+From:   Javier Carrasco <javier.carrasco@wolfvision.net>
+Subject: [PATCH v3 0/4] Input: support overlay objects on touchscreens
+Date:   Fri, 16 Jun 2023 09:28:50 +0200
+Message-Id: <20230510-feature-ts_virtobj_patch-v3-0-b4fb7fc4bab7@wolfvision.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADIPjGQC/42PQQ6CMBBFr0K6tqQtUIgr72EMmdap1BhK2lo1h
+ LtbcOmG5ZvJf39mJgG9xUCOxUw8JhusGzNUh4LoAcYbUnvNTAQTFWs4owYhPj3SGPpkfXTq3k8
+ Q9UBRyLapGQC2NclxBQGp8jDqYRUkWdbUa76uJo/GvrfW8yXzYEN0/rMdkfg63dGXOGW0AWyw4
+ 0oLWZ9e7mF+H5QjRrKak9hrE9lmZAdSGWyBmT/bsixf+OvRpi4BAAA=
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        Bastian Hecht <hechtb@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Javier Carrasco <javier.carrasco@wolfvision.net>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1686900549; l=2693;
+ i=javier.carrasco@wolfvision.net; s=20230509; h=from:subject:message-id;
+ bh=nJCmx7+oAnKcJw3blXkcdeozwxmBFkx/bSwLYf7svx4=;
+ b=mo73cXEERdQ3eH2i4lT7XpWxtUTiuBvHJ0/QTR1Qqhcfdn0EQawhMY6my1rBj7YNoEfT6tdmg
+ Gz+8RsU5NYqAtLVWajZskcIMgg/R225z12irx1LQ76M9MPFeYN1R0H6
+X-Developer-Key: i=javier.carrasco@wolfvision.net; a=ed25519;
+ pk=tIGJV7M+tCizagNijF0eGMBGcOsPD+0cWGfKjl4h6K8=
+X-ClientProxiedBy: VI1PR07CA0197.eurprd07.prod.outlook.com
+ (2603:10a6:802:3f::21) To VE1PR08MB4974.eurprd08.prod.outlook.com
+ (2603:10a6:803:111::15)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR12MB2504:EE_|BY5PR12MB4226:EE_
-X-MS-Office365-Filtering-Correlation-Id: e88ba3ed-9fcf-4355-79f7-08db6e3b58b1
+X-MS-TrafficTypeDiagnostic: VE1PR08MB4974:EE_|GV1PR08MB9916:EE_
+X-MS-Office365-Filtering-Correlation-Id: f6c5d8a1-9c04-41fe-2376-08db6e3b5fd0
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sddwj5bumkVYabsG4dyBdxHrdeWOpWvM376jLu19bxOQxrPp6PBBLE+x9jJBSdWiH2c5y4qk2tidW7PHUtRCmQELBjMonfcdN7UH0PzdW3Xl8iEfkS9yF3QehXV9uOGDrjd/B1PTMy7Tsvghb9To5vyHVLzmd8UjtcR1C0id1xJssYTFRYpOsNh1FR1PpWzo2WLodgnnvqDfUFrxWeY5MMf7WGplesIRQLS22HNiSJGGSbtHBAKbgcvOI9ZqwjNTaamg6j4MYOHslMYwfpVXWkSzsrtBoEnh75XFONkxFzdP5ptR92ineo2iTD3ao5esVjiJVrK0b6WE7kijC1Ur8Zw7nwWV6GpvvEz1IIDBzrCf3LzMv8U+g2EpATbcEq55onFGvE1uw7jp8O3wWTu6bbXpX/qWNzUX3otUZxFODH+O71M+OWzC3EixZoy9ZL8xt84NRiqrBgozp4bUZ5/vpRrqOhKxwh7DTHbg1ImK0+wBBkIVoFhm5KDqOEMzMQNj9TEPYd1QxzBalJwCdHIyHNG3StEDCs0WZM471fDUb5vCm8aPFYi8fr+h4AIXqBd9
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(396003)(346002)(376002)(366004)(451199021)(38100700002)(6506007)(26005)(6512007)(8676002)(2906002)(6862004)(83380400001)(5660300002)(86362001)(8936002)(186003)(6666004)(6486002)(2616005)(36756003)(37006003)(54906003)(66476007)(4326008)(6636002)(66556008)(316002)(41300700001)(478600001)(66946007);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: ukH8ff34TNoPTgM02naoEVJtmt+RYFLpx6MSEwNUCi/G6883qmyTtGaVrRw8tI+PYViln+qczGAkQ80lWRadGP+SqjCvehDkWkcp7TcxSiW8jEWc5cBdUXZV8kbuvbQT0k6ruhc9C0/F1AQhcmT9/XtrcIaEUn7P2MoDIMwNtI2kGbXq/B/PkeikWkaNbM4EsW9bLCxuTCcmnYTHlCoeKcBmwqmuNMrBC/HqUHfo3IgRlrU0g8GwF8oSsLgPyeLLKRV4nJAfwBdd8208SjirOUVevaZ2G49Vmzag3vF1MHmkfHVogm+nv9eXm2KAMXMWaSHLGnJkewui2VgtyD3xMy8SZwqWebLN0Ukj8KYePbjSFjfjI5IsVNd8ichCZW3GE60Tl2N1PzufSOFJtPegDPdXwbxzeyiV8B0/2+CVSC5d51u7Gz9aB0bg9aEd/zmIfYaPy+6VnKgujg5rG7sLpq4CAAkCyejqhxUzucpsjcj9eayU3l7EAiDAfseNGjanmqcWf5QCMMea+teycf0gzaSVBnpT+0GVubEF/RgbpypdVJDzZTvRGRJSdtI3n6SrAXe6Sh0hLFmrlX95tlzSFO+TbSmlAM5TSAJbYrxaYIfzurgYuXw/teaAJsIIw0rOk/Yo3kVzhLLR+9Pch6YAbA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4974.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(396003)(366004)(39850400004)(346002)(451199021)(36756003)(86362001)(2906002)(44832011)(66899021)(83380400001)(6486002)(6666004)(186003)(52116002)(107886003)(6512007)(6506007)(26005)(6636002)(66476007)(966005)(110136005)(316002)(41300700001)(38100700002)(4326008)(66556008)(2616005)(38350700002)(66946007)(5660300002)(478600001)(8676002)(8936002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OwYhZNZ9cJxU0mtlbpprzsz8HUifbwkwSkJs4MD80LpeIEZf2OFHfmFvNdq1?=
- =?us-ascii?Q?ei+RD+UHffmbDzoKXdKIkRas7d3hbC7nJ2zd/GghlFOOdOv/4fRspPbaD7U1?=
- =?us-ascii?Q?/fvRuRVfcT7ZgBcfiy7m58K+XR27PczvI4cIDaC01XsHt4K5/pf6Se4DuEaW?=
- =?us-ascii?Q?FSGX28f6bPLnj1/KdPwxxtkSrOV0dzF1iF4dWF/NXiFc3SPJuHwDoxYlzPuN?=
- =?us-ascii?Q?Y4Df0Uog6Unu7b3HJ2LkmzLHfHV2BML7LxhbtD945xzg164yWi7W8b1+P9d6?=
- =?us-ascii?Q?0HkIlHdtZawu4U+LI8OJwzsgivLJSwM3WAD76rrYdNZj2pqIynEHjbEdvFr8?=
- =?us-ascii?Q?Fj/15JUbhoNV3p4inf9WNDAxPcctvLFXd1KwfZnT+fwQhtyNBuEyk4ZYhXBL?=
- =?us-ascii?Q?LZzG57qHXoUprFkDUHZ2K6vLzuSGtxseN2i36lax48KrVZb6dOSwiQJA1l75?=
- =?us-ascii?Q?vuHk2JR1GRFyMmUW812USQ61fXMYRgW+lB8OLuupx6bMwRPxdS32BG4EQu+g?=
- =?us-ascii?Q?4fQwbb4UAWkcjpQ1OP9Ji9LItzDgJ3Pg6gs9ePWJBVu7YKUAJ8I+Cfx8DavZ?=
- =?us-ascii?Q?jFeX76PAaPHijamsuJkXfIUQhg1ejB6znrDcP9sWqmbREpbkuLbVggXdfBiH?=
- =?us-ascii?Q?MKtX1iMT+1lhUqYg8kq8eI2voqSU1tPKKZHRTKPpcTPFwJKoECyB6jk5sTny?=
- =?us-ascii?Q?QdThuGTi4WeXol6STpbhPywSFPniSttRz2TSTLzuq3lJ/zTtdNS1PFehlAdn?=
- =?us-ascii?Q?4fKGtF3KA5t57+hegBnRHytoisCL5TdxouYBwWZir6xP4pmnJNdqhE4mjXxY?=
- =?us-ascii?Q?hpdzFs9XYpP+RDzqnboQcDomk9PKjiipc7C7UwpqzFBb9VrlvggDm/TzLoSH?=
- =?us-ascii?Q?jHDCyPKlhn+rRRfVaO741Jw37H9SNnNx39Wdl9Xle2VgfOwLlhevZT/AzRfT?=
- =?us-ascii?Q?JsKM8PRyQPFqJI2zQRKb+xaMWVlpRPCl3rnal0AjUFKEX7n6PURoXS1CDOuI?=
- =?us-ascii?Q?IYiKjDZ7Ruup2c0+G3o3L34lVbWx036zIdfz9gCQY4IdNavhAmLDCK7KqbqA?=
- =?us-ascii?Q?oBP7dKP//jR1kfGsq6TNxiK8RXbKo/sMKG3CUpsunrQX6KqGSLLPud6j85tx?=
- =?us-ascii?Q?kXqUQqD67sLR2is8pFwxyeXQL7B6UteIZJ2wYQ8ryOp+lvXnMPRGeZmjV7tx?=
- =?us-ascii?Q?CIuDnbfUESZ87zQ9fn++It26iMrw+h37FS4nYC39qk4ehKqMY4wioBx7xTcx?=
- =?us-ascii?Q?Od/ZtvAHopZJKc9BY7dvZN53hPQNV9blTAqY160GX7GjY4jzmsfopU4BIbXI?=
- =?us-ascii?Q?6IReB0K44Bsl0We3zGSpdjtoPO5pHRpEghtSVeyom/hiSJlse50eaBKb0yfd?=
- =?us-ascii?Q?pq61SMB6Tx+LlNV7Xy9uoWtP10g4Bgng2A7chjTS/p4oCaQ4x8IPGqFlxsIT?=
- =?us-ascii?Q?JIkdVGSFKLZ8H3n1+ETDZPYceex9vmX2a0jRd/G8pWAqa6Rp1VdZ5+X10Dep?=
- =?us-ascii?Q?3W5gUioo8UP34XnDmZhZAxQBdrFXIHl3D0/zE0cRmCJypDwYNKa4SjBDgCML?=
- =?us-ascii?Q?jEklKjGnvkYoa9H0sy7YKokEfBPdIblgPkUmawQM?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e88ba3ed-9fcf-4355-79f7-08db6e3b58b1
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dERFb0ZIZUR2VTdpUWJiSi91akVhdTFIdE5zTjQrU2I0azgvOFM2c1ArR0Y3?=
+ =?utf-8?B?dTU1cS9zQmovRXN1M01SWDBROXJoTS9rdWtFRWRhYmRrMnFObUM4RGFsVXNJ?=
+ =?utf-8?B?TDYwNUVKT2FnVkkxT1REWThzYmhISks4dWJueUxUYklNeUNuYUluMEZBdEZJ?=
+ =?utf-8?B?YmIxMW9kcnByNVZiUlR2dytDeVJ5QUk2aUR2VXBCUW83YlFTMC9oUkJCUmg2?=
+ =?utf-8?B?NHlza1NjeWNnSHhQN2s1ZGFhaHZzd0tsMmFaUGh1OU9aa2M5bnVvTDM2dmYr?=
+ =?utf-8?B?VEV0UEVlc21mcDQzb0psRW9xVEN6YWluckxxNHpFS2JMaXNhMmM2eGwrc2pk?=
+ =?utf-8?B?aWlOU1lQeW9NY1AvNDhMTWpsRTl5SGx6dVB1SUJ5WkVXczhaYVBnTE11S3Az?=
+ =?utf-8?B?c3dUUm5WSnRnT0hNY2h0Q1ZMTitMRkxoM1M2V2xYZk5CMDh4SWU5Q3lFWlZX?=
+ =?utf-8?B?SXBldmJhaVVqSFErYis0bHBndkJJcXdmcEJGN2xWK3d0MUtDbVV6TjI1NXZh?=
+ =?utf-8?B?cHBucFlzQzFVQUZmRWp3YmU2OW5MbDAyZWtsQ1lDRk5kZVdjaTB6WkhhUlFh?=
+ =?utf-8?B?QzcyUC9id1paYjBOa3pVbmJOYXpqWGZQY0gwWHNrNWc0dlNRYTlMcEhoUVlF?=
+ =?utf-8?B?MHBtV3hyaWFSOVU1cENIMG5EWmU1ajAwazkrcGFjWlNMZjBXZldWS00yQlJR?=
+ =?utf-8?B?VC9WV0g0dGVhT2I2RE9zQ0RXRmRFYlFVN1RPUm5Dd2lRaFJ4blJFOEhoZklh?=
+ =?utf-8?B?UHFHcmE2aDVmQlo1dzNVSnJndmhCZkJFNjBSL25rdDNzR3ZDMDhpWXBDaFcw?=
+ =?utf-8?B?bWg3VmtZMXpnZVBCRElibVVjN2poUHdDRmtUUjRXaE1SSklUQzF3WHZWbFRu?=
+ =?utf-8?B?VHQzQUVJTzhGV1l6STZoYTR3aFI4K2JXOEtWNlJZcHNnUjBwcmZJcW1kTUc4?=
+ =?utf-8?B?Q2RPWnM2VXhWVG9kdUJuVklEd2tqNVVJSm5BOWRTQlFFeG1GL0pjc1hweWo2?=
+ =?utf-8?B?ZitEZzNQWm9wMTd4U0c2NHRUbThEdGVsMElRS3MzSjRQVWI1T3RZamdKem1F?=
+ =?utf-8?B?aHRqNEtTSTdUM1NOQkUrMVlKUjhiY2s5YmIzdS9zUHQ4dW5zTTNSY3dCajRQ?=
+ =?utf-8?B?VURWdVZyYXF2ZThJK0JhMkpab3FSUy9EQ2h6K0RTZ0VaaFpPNW1ZdkpBbFZ5?=
+ =?utf-8?B?bWpMMHFoVDZoRHhrNHkxUmRwcFJOcldKSkVOblVnTEZMOUQ5bDBVb2hjdDFt?=
+ =?utf-8?B?TFZpM1lrK2l3bHR0b2FwdUZFQURlclpScFY5anVyRmFEVU9jemp5RzZvYklo?=
+ =?utf-8?B?UGMrOGI5WVZwUms3LzE1OVowbXpXRUhsdmZVellhUHNKTUE1UjlHV1FBMTZC?=
+ =?utf-8?B?NThxTW8vM0FOWnBtL215RENVb0IxYWJTaWhkdnpnUjBKZ0lGWjJDUC9OdFFj?=
+ =?utf-8?B?SXFTczJPeUJ1RUNPaTV3OVd6Vy9ZdGtXenkvejlDeGozY3RLZ0FsZmlQdGFT?=
+ =?utf-8?B?WmlLK0xhVjdrTzl2MTNzbjZNdzZJa1ZURjU3eE9zbHNVdHUvQXliaUdmanV1?=
+ =?utf-8?B?L1VEaWxVVGZJOWFYWUN6Zzk0VnczUnBsMk9FM1FvQ0RxeWZ5WXhoUWpEWXNC?=
+ =?utf-8?B?d3l4TDFTbis3ejZvWlZ3cGdwcU1abmJzY0YrTnRCRkJ6QnhIWXYwYzg0TC85?=
+ =?utf-8?B?WlcxZFRxMTVlWFJiVnBRbkpLUDB2bHVIbGUxaGZzS1pDRnJQeVFQL3JuejZz?=
+ =?utf-8?B?TkVwek1PVDV5YWpGdjNrUVhQMDVvblZYY3V1QmlibmFQYllOMGxiRGtYbzBm?=
+ =?utf-8?B?R2ZCYnkzRWRacjdQcDd0MUtrMGd2djNtMW9iMzVtNzBKRDRzVUZhanFVM3c3?=
+ =?utf-8?B?eXZWZ0RiWHJsd1BCMmViSEVkQW1JcHhtWStrdU82eUtibmtXTnFNY3JIcG9m?=
+ =?utf-8?B?WDNmaWUwbVJJTGZ2SVYraWFPM1AvR1ZGWFZpR1pkaVdyWFl2ZUVkbnorUC9E?=
+ =?utf-8?B?WStqWlJKYlQ0SjJaclBTYmh6NGFKc0llVElHSFZacTlqaCt2b3JobExLVHJm?=
+ =?utf-8?B?dld4Z0VXMHN4ZUR2THB6U1lubjg2dzZ6b2ZsOWFrdi8rcENqaXdlZ0Y0M3Rq?=
+ =?utf-8?B?UzFsaGxkV1V1b1cyY2lBSU5XY3VvcUdla2I3blJ6WGNmQW9BUm4yWGxYZGVI?=
+ =?utf-8?B?S1E9PQ==?=
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: f6c5d8a1-9c04-41fe-2376-08db6e3b5fd0
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4974.eurprd08.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 07:28:57.4442
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 07:29:09.3829
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ubKn0tlmlMfROEuqV2lxtQUj/YITZ9/qUnfMa8SSNG4dD9/RoO58uVuBT9SpA5WMJ+AqjVdOunHaH1xtr3SD6w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4226
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4pAG2fegUuT27JC8plROeHJKfZdlWk9QzU7SOJTwa7h6YNB96x7/KaAqBntlVZyWZ9w//qdCcMpDcj2PRyDXsA2zwyFDoGmahD9TuS5Aeg4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR08MB9916
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 07:36:14PM +0800, Karny, Wyes wrote:
-> amd_pstate supports changing of its mode dynamically via `status` sysfs
-> file. Add the same capability in cpupower. To change the mode to active
-> mode use below command:
-> 
-> cpupower set --amd-pstate-mode active
-> 
-> Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
-> Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+Some touchscreens are shipped with a physical layer on top of them where
+a number of buttons and a resized touchscreen surface might be available.
 
-Acked-by: Huang Rui <ray.huang@amd.com>
+In order to generate proper key events by overlay buttons and adjust the
+touch events to a clipped surface, these patches offer a documented,
+device-tree-based solution by means of helper functions.
+An implementation for a specific touchscreen driver is also included.
 
-> ---
->  tools/power/cpupower/utils/cpupower-set.c    | 24 ++++++++++++++++++--
->  tools/power/cpupower/utils/helpers/helpers.h |  3 +++
->  tools/power/cpupower/utils/helpers/misc.c    | 18 +++++++++++++++
->  3 files changed, 43 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/power/cpupower/utils/cpupower-set.c b/tools/power/cpupower/utils/cpupower-set.c
-> index a789b123dbd4..c2ba69b7ea54 100644
-> --- a/tools/power/cpupower/utils/cpupower-set.c
-> +++ b/tools/power/cpupower/utils/cpupower-set.c
-> @@ -19,6 +19,7 @@
->  static struct option set_opts[] = {
->  	{"perf-bias", required_argument, NULL, 'b'},
->  	{"epp", required_argument, NULL, 'e'},
-> +	{"amd-pstate-mode", required_argument, NULL, 'm'},
->  	{ },
->  };
->  
-> @@ -39,12 +40,13 @@ int cmd_set(int argc, char **argv)
->  		struct {
->  			int perf_bias:1;
->  			int epp:1;
-> +			int mode:1;
->  		};
->  		int params;
->  	} params;
->  	int perf_bias = 0;
->  	int ret = 0;
-> -	char epp[30];
-> +	char epp[30], mode[20];
->  
->  	ret = uname(&uts);
->  	if (!ret && (!strcmp(uts.machine, "ppc64le") ||
-> @@ -58,7 +60,7 @@ int cmd_set(int argc, char **argv)
->  
->  	params.params = 0;
->  	/* parameter parsing */
-> -	while ((ret = getopt_long(argc, argv, "b:e:",
-> +	while ((ret = getopt_long(argc, argv, "b:e:m:",
->  						set_opts, NULL)) != -1) {
->  		switch (ret) {
->  		case 'b':
-> @@ -81,6 +83,17 @@ int cmd_set(int argc, char **argv)
->  			}
->  			params.epp = 1;
->  			break;
-> +		case 'm':
-> +			if (cpupower_cpu_info.vendor != X86_VENDOR_AMD)
-> +				print_wrong_arg_exit();
-> +			if (params.mode)
-> +				print_wrong_arg_exit();
-> +			if (sscanf(optarg, "%19s", mode) != 1) {
-> +				print_wrong_arg_exit();
-> +				return -EINVAL;
-> +			}
-> +			params.mode = 1;
-> +			break;
->  		default:
->  			print_wrong_arg_exit();
->  		}
-> @@ -89,6 +102,12 @@ int cmd_set(int argc, char **argv)
->  	if (!params.params)
->  		print_wrong_arg_exit();
->  
-> +	if (params.mode) {
-> +		ret = cpupower_set_amd_pstate_mode(mode);
-> +		if (ret)
-> +			fprintf(stderr, "Error setting mode\n");
-> +	}
-> +
->  	/* Default is: set all CPUs */
->  	if (bitmask_isallclear(cpus_chosen))
->  		bitmask_setall(cpus_chosen);
-> @@ -123,6 +142,7 @@ int cmd_set(int argc, char **argv)
->  				break;
->  			}
->  		}
-> +
->  	}
->  	return ret;
->  }
-> diff --git a/tools/power/cpupower/utils/helpers/helpers.h b/tools/power/cpupower/utils/helpers/helpers.h
-> index 5d998de2d291..d35596631eef 100644
-> --- a/tools/power/cpupower/utils/helpers/helpers.h
-> +++ b/tools/power/cpupower/utils/helpers/helpers.h
-> @@ -117,6 +117,7 @@ extern int cpupower_intel_get_perf_bias(unsigned int cpu);
->  extern unsigned long long msr_intel_get_turbo_ratio(unsigned int cpu);
->  
->  extern int cpupower_set_epp(unsigned int cpu, char *epp);
-> +extern int cpupower_set_amd_pstate_mode(char *mode);
->  
->  /* Read/Write msr ****************************/
->  
-> @@ -177,6 +178,8 @@ static inline unsigned long long msr_intel_get_turbo_ratio(unsigned int cpu)
->  
->  static inline int cpupower_set_epp(unsigned int cpu, char *epp)
->  { return -1; };
-> +static inline int cpupower_set_amd_pstate_mode(char *mode)
-> +{ return -1; };
->  
->  /* Read/Write msr ****************************/
->  
-> diff --git a/tools/power/cpupower/utils/helpers/misc.c b/tools/power/cpupower/utils/helpers/misc.c
-> index 63c3f26ef874..9df9af8a969e 100644
-> --- a/tools/power/cpupower/utils/helpers/misc.c
-> +++ b/tools/power/cpupower/utils/helpers/misc.c
-> @@ -106,6 +106,24 @@ int cpupower_set_epp(unsigned int cpu, char *epp)
->  	return 0;
->  }
->  
-> +int cpupower_set_amd_pstate_mode(char *mode)
-> +{
-> +	char path[SYSFS_PATH_MAX];
-> +	char linebuf[20] = {};
-> +
-> +	snprintf(path, sizeof(path), PATH_TO_CPU "amd_pstate/status");
-> +
-> +	if (!is_valid_path(path))
-> +		return -1;
-> +
-> +	snprintf(linebuf, sizeof(linebuf), "%s\n", mode);
-> +
-> +	if (cpupower_write_sysfs(path, linebuf, 20) <= 0)
-> +		return -1;
-> +
-> +	return 0;
-> +}
-> +
->  bool cpupower_amd_pstate_enabled(void)
->  {
->  	char *driver = cpufreq_get_driver(0);
-> -- 
-> 2.34.1
-> 
+The functions in ts-overlay provide a simple workflow to acquire
+physical objects from the device tree, map them into the device driver
+structures as overlay objects and generate events according to
+the object descriptions.
+
+This feature has been tested with a JT240MHQS-E3 display, which consists
+of an st1624 as the base touchscreen and an overlay with two buttons and
+a frame that clips its effective surface mounted on it.
+
+Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
+---
+Changes in v3:
+- General: rename "virtobj" and "virtual" to "overlay"
+- PATCH 1/4: Make feature bool instead of tristate (selected by
+  supported touchscreens)
+- Link to v2: https://lore.kernel.org/r/20230510-feature-ts_virtobj_patch-v2-0-f68a6bfe7a0f@wolfvision.net
+
+Changes in v2:
+- PATCH 1/4: remove preprocessor directives (the module is selected by
+  the drivers that support the feature). Typo in the commit message.
+- PATCH 2/4: more detailed documentation. Images and examples were added.
+- PATCH 3/4: select ts-virtobj automatically.
+- Link to v1: https://lore.kernel.org/r/20230510-feature-ts_virtobj_patch-v1-0-5ae5e81bc264@wolfvision.net
+
+---
+Javier Carrasco (4):
+      Input: ts-overlay - Add touchscreen overlay object handling
+      dt-bindings: touchscreen: add overlay-touchscreen and overlay-buttons properties
+      Input: st1232 - add overlay touchscreen and buttons handling
+      dt-bindings: input: touchscreen: st1232: add example with ts-overlay
+
+ .../input/touchscreen/sitronix,st1232.yaml         |  40 +++
+ .../bindings/input/touchscreen/touchscreen.yaml    | 139 ++++++++
+ MAINTAINERS                                        |   7 +
+ drivers/input/touchscreen/Kconfig                  |  10 +
+ drivers/input/touchscreen/Makefile                 |   1 +
+ drivers/input/touchscreen/st1232.c                 |  87 +++--
+ drivers/input/touchscreen/ts-overlay.c             | 356 +++++++++++++++++++++
+ include/linux/input/ts-overlay.h                   |  43 +++
+ 8 files changed, 665 insertions(+), 18 deletions(-)
+---
+base-commit: ac9a78681b921877518763ba0e89202254349d1b
+change-id: 20230510-feature-ts_virtobj_patch-e267540aae74
+
+Best regards,
+-- 
+Javier Carrasco <javier.carrasco@wolfvision.net>
+
