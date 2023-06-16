@@ -2,41 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 580447339F8
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 21:35:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF85A7339DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 21:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345593AbjFPTfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 15:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35812 "EHLO
+        id S234156AbjFPT3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 15:29:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232355AbjFPTfH (ORCPT
+        with ESMTP id S1346228AbjFPT2u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 15:35:07 -0400
+        Fri, 16 Jun 2023 15:28:50 -0400
 Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484291715;
-        Fri, 16 Jun 2023 12:35:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B3E44B3;
+        Fri, 16 Jun 2023 12:27:52 -0700 (PDT)
 Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 3B2201C0E71; Fri, 16 Jun 2023 21:24:55 +0200 (CEST)
-Date:   Fri, 16 Jun 2023 21:24:54 +0200
+        id A234B1C0E72; Fri, 16 Jun 2023 21:27:39 +0200 (CEST)
+Date:   Fri, 16 Jun 2023 21:27:39 +0200
 From:   Pavel Machek <pavel@denx.de>
 To:     Sasha Levin <sashal@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        lgirdwood@gmail.com, peter.ujfalusi@linux.intel.com,
-        yung-chuan.liao@linux.intel.com, ranjani.sridharan@linux.intel.com,
-        daniel.baluta@nxp.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, sound-open-firmware@alsa-project.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH AUTOSEL 6.1 28/57] ASoC: SOF: sof-client-probes: fix
- pm_runtime imbalance in error handling
-Message-ID: <ZIy3BsIKVkfuolO6@duo.ucw.cz>
+        Xin Long <lucien.xin@gmail.com>, Jon Maloy <jmaloy@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>, ying.xue@windriver.com,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, tipc-discussion@lists.sourceforge.net
+Subject: Re: [PATCH AUTOSEL 6.1 30/57] tipc: add tipc_bearer_min_mtu to
+ calculate min mtu
+Message-ID: <ZIy3q/R6olw/6lNY@duo.ucw.cz>
 References: <20230525183607.1793983-1-sashal@kernel.org>
- <20230525183607.1793983-28-sashal@kernel.org>
+ <20230525183607.1793983-30-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="2zJgghhj21IUPJmD"
+        protocol="application/pgp-signature"; boundary="pOcNN0TIb0EnTA2m"
 Content-Disposition: inline
-In-Reply-To: <20230525183607.1793983-28-sashal@kernel.org>
+In-Reply-To: <20230525183607.1793983-30-sashal@kernel.org>
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
@@ -47,26 +45,47 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---2zJgghhj21IUPJmD
+--pOcNN0TIb0EnTA2m
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-There are problems with sign-off chain:
+Hi!
 
-> When an error occurs, we need to make sure the device can pm_runtime
-> suspend instead of keeping it active.
+> From: Xin Long <lucien.xin@gmail.com>
 >=20
-> Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com
-> Reviewed-by: Daniel Baluta <daniel.baluta@nxp.com
-> Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com
-> Signed-off-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com
-> Link: https://lore.kernel.org/r/20230512103315.8921-4-peter.ujfalusi@linu=
-x.intel.com
-> Signed-off-by: Mark Brown <broonie@kernel.org
+> [ Upstream commit 3ae6d66b605be604644d4bb5708a7ffd9cf1abe8 ]
+>=20
+> As different media may requires different min mtu, and even the
+> same media with different net family requires different min mtu,
+> add tipc_bearer_min_mtu() to calculate min mtu accordingly.
+>=20
+> This API will be used to check the new mtu when doing the link
+> mtu negotiation in the next patch.
 
-">" is missing at the end of lines. Same issue exist with patch 29 in
-the series.
+Ok, but we don't have the next patch queued with the AUTOSEL, so do we
+need this?
+
+> +++ b/net/tipc/bearer.c
+> @@ -541,6 +541,19 @@ int tipc_bearer_mtu(struct net *net, u32 bearer_id)
+>  	return mtu;
+>  }
+> =20
+> +int tipc_bearer_min_mtu(struct net *net, u32 bearer_id)
+> +{
+> +	int mtu =3D TIPC_MIN_BEARER_MTU;
+> +	struct tipc_bearer *b;
+> +
+> +	rcu_read_lock();
+> +	b =3D bearer_get(net, bearer_id);
+> +	if (b)
+> +		mtu +=3D b->encap_hlen;
+> +	rcu_read_unlock();
+> +	return mtu;
+> +}
+> +
+
+AFAICT this function is unused.
 
 Best regards,
 								Pavel
@@ -74,14 +93,14 @@ Best regards,
 DENX Software Engineering GmbH,        Managing Director: Erika Unter
 HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
 
---2zJgghhj21IUPJmD
+--pOcNN0TIb0EnTA2m
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZIy3BgAKCRAw5/Bqldv6
-8sX6AKCEkTFkpXdc6+RUh29AoVqI5UUGowCgrlkOt6/IHkzOxXnDBB5R0J0aT2s=
-=ZGl3
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZIy3qwAKCRAw5/Bqldv6
+8k+uAJ46xZVMPMS2L/yZhPiLRpnzuQRsVgCfQpI/MrXuf63XQEISIzq40yFfyVQ=
+=NHQn
 -----END PGP SIGNATURE-----
 
---2zJgghhj21IUPJmD--
+--pOcNN0TIb0EnTA2m--
