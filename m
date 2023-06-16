@@ -2,111 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1BE9732512
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 04:12:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8DDC732518
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 04:16:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240217AbjFPCMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 22:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40396 "EHLO
+        id S240284AbjFPCQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 22:16:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240076AbjFPCMe (ORCPT
+        with ESMTP id S240288AbjFPCQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 22:12:34 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 923B62967;
-        Thu, 15 Jun 2023 19:12:32 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.116])
-        by gateway (Coremail) with SMTP id _____8Cxd+kPxYtkhMsFAA--.10389S3;
-        Fri, 16 Jun 2023 10:12:31 +0800 (CST)
-Received: from [10.20.42.116] (unknown [10.20.42.116])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxauUNxYtkj8AcAA--.16275S3;
-        Fri, 16 Jun 2023 10:12:30 +0800 (CST)
-Subject: Re: [PATCH pci] PCI: don't skip probing entire device if first fn OF
- node has status = "disabled"
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Liu Peibao <liupeibao@loongson.cn>,
-        Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org,
-        netdev@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh@kernel.org>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Michael Walle <michael@walle.cc>, linux-kernel@vger.kernel.org,
-        Binbin Zhou <zhoubinbin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>
-References: <20230601163335.6zw4ojbqxz2ws6vx@skbuf>
- <ZHjaq+TDW/RFcoxW@bhelgaas> <20230601221532.2rfcda4sg5nl7pzp@skbuf>
- <dc430271-8511-e6e4-041b-ede197e7665d@loongson.cn>
- <7a7f78ae-7fd8-b68d-691c-609a38ab3161@loongson.cn>
- <20230602101628.jkgq3cmwccgsfb4c@skbuf>
- <87f2b231-2e16-e7b8-963b-fc86c407bc96@loongson.cn>
- <20230604085500.ioaos3ydehvqq24i@skbuf>
- <ad969019-e763-b06f-d557-be4e672c68db@loongson.cn>
- <20230605093459.gpwtsr5h73eonxt5@skbuf>
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-Message-ID: <ec5039c1-61d7-6958-ef92-bf5b8c8db64d@loongson.cn>
-Date:   Fri, 16 Jun 2023 10:12:29 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Thu, 15 Jun 2023 22:16:10 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E78296B
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 19:16:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686881766; x=1718417766;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=fU0lLudBphp5iZvj7Ivutn5Srt0z2bVmbg0LGVBVbGM=;
+  b=Y7YSkg2c/IlI2yB2Wk7f+sNvM8/g4tzw0qx9UGyoUr/yPyqrOiOld7dD
+   nofPb6yQNO7YKoKjFYMTZbeuMblbhLnmfZmYBgw2H+4YpfFlBjOf0rN5o
+   WC6i5dhbTGT8+cGwkvXRhUtQpBqyW1wdSe3E56hKb2hXOjEs2A8yKdojm
+   e5/M6TfX8/+JahinRJVTv7Ov7RH2O6LYyYbfyrUaqhucsRg53XxZhMzcL
+   6Bz43pvUJUQKUrqL5z2LnlgmI4ldXNu94Z9WHPhWGlBwRBxL9bnzwzoCQ
+   iZJvKUF7xi5P7D9meDCnKnRDRTIaYRZ1mHl4HWLjk532Egfpnd8MlCIbD
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="343833750"
+X-IronPort-AV: E=Sophos;i="6.00,246,1681196400"; 
+   d="scan'208";a="343833750"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 19:16:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="1042909682"
+X-IronPort-AV: E=Sophos;i="6.00,246,1681196400"; 
+   d="scan'208";a="1042909682"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
+  by fmsmga005.fm.intel.com with ESMTP; 15 Jun 2023 19:16:03 -0700
+Message-ID: <ecdf9b68-ed90-9d8b-12e8-46e77c456890@linux.intel.com>
+Date:   Fri, 16 Jun 2023 10:14:53 +0800
 MIME-Version: 1.0
-In-Reply-To: <20230605093459.gpwtsr5h73eonxt5@skbuf>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Cc:     baolu.lu@linux.intel.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Venkata Rao Kakani <quic_vkakani@quicinc.com>,
+        Vagdhan Kumar <quic_vagdhank@quicinc.com>
+Subject: Re: [PATCH] iommu: export iommu_set_default_translated function
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxauUNxYtkj8AcAA--.16275S3
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBj93XoW7Ar1UWF43CF4DKw4kXFW3CFX_yoW8Ww15pF
-        43AF4SkFn8Gr4Sy34DZw4ruFyfua93Xw45Jr48J34v93y5WFySvrWYqa1Iqay7Gr18AF1a
-        vFWjqw1vk3WDWagCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUvYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-        02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAF
-        wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4
-        CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
-        67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MI
-        IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
-        14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
-        W8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j1WlkU
-        UUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Anvesh Jain P <quic_ajainp@quicinc.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>
+References: <20230615093308.24989-1-quic_ajainp@quicinc.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230615093308.24989-1-quic_ajainp@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/6/5 下午5:34, Vladimir Oltean wrote:
-> On Mon, Jun 05, 2023 at 08:59:23AM +0800, Jianmin Lv wrote:
->> For a multi-function device, if func 0 is not allowed to be scanned, as I
->> said in way of 2, the other funcs of the device will be described as
->> platform devices instead of pci and be not scanned either, which is
->> acceptable for Loongson. The main goal by any way for us is to resolve the
->> problem that shared pins can not be used simultaneously by devices sharing
->> them. IMO, configure them in DT one by one may be reasonable, but adapting
->> each driver will be bothered.
+On 6/15/23 5:33 PM, Anvesh Jain P wrote:
+> export iommu_set_default_translated function to be used by other modules.
 > 
-> Could you give an example of PCIe functions being described as platform
-> devices, and how does that work for Loongson? Are you saying that there
-> will be 2 drivers for the same hardware, one pci_driver and one platform_driver?
-> In the case of the platform_driver, who will do the PCI-specific stuff
-> required by the IP, like function level reset and enabling the memory space?
+> Signed-off-by: Anvesh Jain P <quic_ajainp@quicinc.com>
+> Signed-off-by: Venkata Rao Kakani <quic_vkakani@quicinc.com>
+> Signed-off-by: Vagdhan Kumar <quic_vagdhank@quicinc.com>
+> ---
+>   drivers/iommu/iommu.c | 1 +
+>   1 file changed, 1 insertion(+)
 > 
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index f1dcfa3f1a1b..1b4a5db58d66 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -2730,6 +2730,7 @@ void iommu_set_default_translated(bool cmd_line)
+>   		iommu_cmd_line |= IOMMU_CMD_LINE_DMA_API;
+>   	iommu_def_domain_type = IOMMU_DOMAIN_DMA;
+>   }
+> +EXPORT_SYMBOL_GPL(iommu_set_default_translated);
 
-E.g. there are two functions , func0 is HDA controller and func1 is I2S 
-controller and they have shared pins.
-When HDA or I2S is used, both are disabled for PCI enumeration in BIOS 
-(e.g. by filling PCI header with 0xffffffff), and mem space has been 
-reserved from host bridge window for them in BIOS, of cause, reserved 
-space will not be seen by kernel because it has been removed in host 
-bridge mem range when passed to kernel in DT. Then the reserved mem base 
-is passed into kernel by DT, CPU will use remapped address of the mem 
-base, and these devices will not be enumerated in PCI bus. The way is 
-only used for PCI devices (share common pins and exist on bus 0) 
-integrated in Loongson CPU or chipset.
+Exporting a symbol without using it is meaningless. It is better to
+export and use it in a single series.
 
+Additionally, there is a restriction on the use of this helper. Calling
+it after the iommu probe has no effect.
+
+>   
+>   bool iommu_default_passthrough(void)
+>   {
+> 
+> base-commit: b6dad5178ceaf23f369c3711062ce1f2afc33644
+
+Best regards,
+baolu
