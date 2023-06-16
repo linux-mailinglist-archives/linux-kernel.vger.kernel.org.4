@@ -2,73 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 495FC733051
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:47:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A779C733052
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235162AbjFPLrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 07:47:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34418 "EHLO
+        id S1343903AbjFPLrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 07:47:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbjFPLrD (ORCPT
+        with ESMTP id S241426AbjFPLrI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 07:47:03 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C73E191
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:47:03 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f62cf9755eso789146e87.1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:47:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686916021; x=1689508021;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZDRidZeWtbMLH7b4xJ98NwS0EsAG7cnBvb2BCw1AnjM=;
-        b=VWlsqATPjp+PX4I2BpqLbs/LMcoBT2rm66yWyrxf55NP/aW6sy9m883MMVJ7xFIZS5
-         +7JRchws9XdfMTvQgC3Ljb0kaUpZSrZpLGHJqeUzp5wiGB1mfO6ziCaDGRSYA7h4gJrT
-         g8pG2T73w4Ga9XjpbZeub5Y7X+Mj8yF8qIal8gwf3/M6EKGdwejxfi3+7vND1ybbkMAG
-         15rNSrCW6a6PCPenINu+ubmOjHPFVoeDhxTk+S3xshjjDM3N/n0ofRSmqkJkoPhnytl4
-         64lDsxsWRZN/NKcxSoDJEiWmcxe4/zokGDcReN86sNKJz6TH+u0Bn3RxwO23APP+k4lh
-         xouw==
+        Fri, 16 Jun 2023 07:47:08 -0400
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561C22944
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:47:07 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-3f7378a75c0so4479305e9.3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:47:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686916021; x=1689508021;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZDRidZeWtbMLH7b4xJ98NwS0EsAG7cnBvb2BCw1AnjM=;
-        b=fLC7B+pJdgDLspfOiZa151Iz+/DxwACZGj+jA+y4KPpkB8Nn1xgh/pz2qomQ37YzDG
-         9WKxQQ5p36s4FwdkVkbHQMOsniM+CZUkm8vOgiVgpFP8viunVzM7RLmeRJ44r3VAzkpC
-         L5DVOSGTDFtTBU6tMR/sqabw6PEwZZpOMvDPD41O0Q4uDLxZK076Ph5GRl489ESysH0r
-         L8p+hmT/mBM/FFydVrixNl4FAcjiR+LTVIgelyPQeY6FqWnRTYBq/X4ExhCQVEWpr9NG
-         qrPHFP4E1Rm59sZs6F6AhbRcByFXSIFIyT+/TtmIo/C4rEUyPL6yRqJxSAlIJuVlg7to
-         PZ1w==
-X-Gm-Message-State: AC+VfDzpk8Msewv2pzFBSTQO25AJZa6KRVhs7DkmvUebHj9oRqg1CtR0
-        N+z4KnDt7NevYQxC9Js1oko5juY/SsPtCFJfWxk=
-X-Google-Smtp-Source: ACHHUZ64iumPvzc6aUZ3U+tAcPRG9WNR3r4G4IbfFjAZiqKEj1u1RVnpjJObusYbcHP7VRxlUPPX/2E9OURDjzJ9hiQ=
-X-Received: by 2002:a19:790a:0:b0:4f8:4aee:1fac with SMTP id
- u10-20020a19790a000000b004f84aee1facmr1074471lfc.66.1686916021120; Fri, 16
- Jun 2023 04:47:01 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686916026; x=1689508026;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zqnO9DvolFFI8feND6ugT07HkB5AUpc6lt0eNZnKtgY=;
+        b=JPpjaQ+J1IpLmEztSRAoQm2iAGvPOWh6eSkW9ueJX0gAQM6VHbBv5LU2RaOwYtzDHJ
+         h7XjXs0UmbHETID29NHQyP5rXEQKoxw2k0dNeEzFLis7MingaN3DHZby6M4Z36Q61bHY
+         Z443M/zFkpkGJKKs63uJeQ7klsmYHreFXLlWsyyIAlBl58KThAaIZy7ppljrEVjhsV63
+         AfovxBTECY6KhpKAVyocxKlt62IXoJntuSPnM94KB1Tcpfazdb+zVUiCyuMc3A72keI9
+         a8wh/sO83k0sUNyBzIt7gZxHgvaC8LgLA8HUGa9uUvWo4QFogm4xGVisBONG2X8kzwm3
+         qwGA==
+X-Gm-Message-State: AC+VfDwHgxEyQ/jbuw0wMAKKTay6maL8l+/hLfux9Ge3sC40DqMY5WHy
+        /tjkenTfFgoS3iuWfvvE7jk=
+X-Google-Smtp-Source: ACHHUZ4xVJ2wecBCqmofNyTNY/0sRy0IBb1byhodmQO8Ofxup9qLMGH7CDRsPvqSSQfPMRMxIc263A==
+X-Received: by 2002:a05:600c:3782:b0:3f8:d66f:db3b with SMTP id o2-20020a05600c378200b003f8d66fdb3bmr1555902wmr.30.1686916025541;
+        Fri, 16 Jun 2023 04:47:05 -0700 (PDT)
+Received: from gmail.com (fwdproxy-cln-019.fbsv.net. [2a03:2880:31ff:13::face:b00c])
+        by smtp.gmail.com with ESMTPSA id o25-20020a1c7519000000b003f427687ba7sm1961517wmc.41.2023.06.16.04.47.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 04:47:05 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 04:47:03 -0700
+From:   Breno Leitao <leitao@debian.org>
+To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc:     jpoimboe@kernel.org, peterz@infradead.org, tglx@linutronix.de,
+        bp@alien8.de, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, leit@fb.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] x86/bugs: Create an option to disable MDS
+Message-ID: <ZIxLt3/vWyoB/UIK@gmail.com>
+References: <20230615164417.3588162-1-leitao@debian.org>
+ <20230615164417.3588162-2-leitao@debian.org>
+ <20230615221347.6ghb4d33tituxht4@desk>
 MIME-Version: 1.0
-Received: by 2002:a05:6504:505b:b0:229:e220:750 with HTTP; Fri, 16 Jun 2023
- 04:47:00 -0700 (PDT)
-Reply-To: michellegoodman45@gmail.com
-From:   Michelle Goodman <sarahtage24@gmail.com>
-Date:   Fri, 16 Jun 2023 11:47:00 +0000
-Message-ID: <CAK7Gz5yn+EONFHb8SHeUst5J49wp8dRrXuUug9rRK8CGXooqSw@mail.gmail.com>
-Subject: From Michelle
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230615221347.6ghb4d33tituxht4@desk>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FSL_HELO_FAKE,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, I hope you got my message.
-I need a quick response
+On Thu, Jun 15, 2023 at 03:13:47PM -0700, Pawan Gupta wrote:
+> On Thu, Jun 15, 2023 at 09:44:12AM -0700, Breno Leitao wrote:
+> > diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+> > index 182af64387d0..50f12829dce9 100644
+> > --- a/arch/x86/kernel/cpu/bugs.c
+> > +++ b/arch/x86/kernel/cpu/bugs.c
+> > @@ -269,6 +269,7 @@ static void x86_amd_ssb_disable(void)
+> >  /* Default mitigation for MDS-affected CPUs */
+> >  static enum mds_mitigations mds_mitigation __ro_after_init = MDS_MITIGATION_FULL;
+> >  static bool mds_nosmt __ro_after_init = false;
+> > +#define MDS_WARN_MSG "WARNING: Microarchitectural Data Sampling (MDS) speculative mitigation disabled!\n"
+> >  
+> >  static const char * const mds_strings[] = {
+> >  	[MDS_MITIGATION_OFF]	= "Vulnerable",
+> > @@ -278,11 +279,17 @@ static const char * const mds_strings[] = {
+> >  
+> >  static void __init mds_select_mitigation(void)
+> >  {
+> > -	if (!boot_cpu_has_bug(X86_BUG_MDS) || cpu_mitigations_off()) {
+> > +	if (!boot_cpu_has_bug(X86_BUG_MDS)) {
+> >  		mds_mitigation = MDS_MITIGATION_OFF;
+> >  		return;
+> >  	}
+> >  
+> > +	if (cpu_mitigations_off() || !IS_ENABLED(CONFIG_MITIGATE_MDS)) {
+> > +		mds_mitigation = MDS_MITIGATION_OFF;
+> > +		pr_err(MDS_WARN_MSG);
+> > +		return;
+> 
+> Why does compile time config needs to be so restrictive that it does not
+> allow runtime override with mds= cmdline?
+> 
+> I believe Kconfig should only be setting the mitigation default,
+> allowing users to select mitigation at runtime:
 
-Thank you so much.
-Michelle
+Sure, that is doable as well. If no one has any opposition to it, I will
+implemented as suggested.
