@@ -2,112 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5045673279D
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 08:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE0127327A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 08:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242990AbjFPGby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 02:31:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60620 "EHLO
+        id S241252AbjFPGdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 02:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344065AbjFPGbV (ORCPT
+        with ESMTP id S241493AbjFPGc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 02:31:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219532D79;
-        Thu, 15 Jun 2023 23:31:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A749A61FD4;
-        Fri, 16 Jun 2023 06:31:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04035C433CB;
-        Fri, 16 Jun 2023 06:31:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686897068;
-        bh=I6y571LHiMxKVXP0TWJXM4f3J4zGZxDC3DJMVqBBmBM=;
-        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-        b=pLOR2gkSe39D520vRGnFsns0F036Hc79Ccagpkg1yG3yblwRC3IbvqOSO68rSgc3B
-         TYBncfH4lShnG7nDhAWAeaxX1QFOBxQwn/TOgZZby3eEccc+Ge9syI0Mun+EnPefru
-         yXSjk93N3/B2D2pVYO7lYNmsXzm/MG5mnMSdpwzNn+Y40LZk8BxPY8q4j2Vho5YIGu
-         +h4mUTWq95GUuB58Snhz1/eXxUpM2DryNkj2J/IHQHaic7QQaa9SH7acr4l1gZUaye
-         qoyRuTo9mApqSv8NDD6cxUjKYMkESZqUgY+iygSA0zeQB5bssJPvFCsZpMFrxIYh45
-         kSNS3t0vwwqEA==
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-1a6b7060862so487587fac.2;
-        Thu, 15 Jun 2023 23:31:07 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzyFq6b5RhZ2QNSX+GXdrus0F/6ZkzepjD0IGO9jLcHH0fH+coU
-        UZnPeIPF1k38MafiB6zMwGP4Q1YtsqYHvgm4pyo=
-X-Google-Smtp-Source: ACHHUZ41f41CQLRnM2Vk3qiZGX7SKetPHx2X9RhJ1NOvob8oHp1q3dcKa3Qgzsp7zpOC5xGMo7Y1MTTmVbJvME843Ks=
-X-Received: by 2002:a05:6870:8785:b0:19e:b8e0:1434 with SMTP id
- r5-20020a056870878500b0019eb8e01434mr1337961oam.8.1686897067174; Thu, 15 Jun
- 2023 23:31:07 -0700 (PDT)
+        Fri, 16 Jun 2023 02:32:59 -0400
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8ED272C
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 23:32:58 -0700 (PDT)
+Received: by mail-ot1-x333.google.com with SMTP id 46e09a7af769-6b2c3ec38f0so308686a34.1
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 23:32:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1686897178; x=1689489178;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HEiGxc0bcdVFmhzsmXnMFSNPzbdJ2fxyVgUq2gtSOwE=;
+        b=ZEUbV1U8ywhzF6zZSbsVdixkSlHUxOenMtDi96SPl0SdnGOIaDTE0g5g8UT1RY2pTq
+         FB2t+uIWA58e9GImiWa095pOZ3OeSoinzAhrIW1XFiXjdvFA/ltPsi0wdnhCxeQO8/js
+         izdWofuS19L3NMGgU4bK4a8VFcuFo2MELZmhoHs44Ed/LLlCPVGrWazX2HyIhFu0n2fX
+         oUEaaQSVvU7ccnRynvkKu5ybdXSW9+91c4NP40V9DXfalCrxOFtERndPUcCHZry13zTq
+         RonR0T31oPEfHoN3X7wIzPAeBn4MdJtd7qn7REyadamETF3JhK6oc5esOTbSI1f+Uy5H
+         WNQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686897178; x=1689489178;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HEiGxc0bcdVFmhzsmXnMFSNPzbdJ2fxyVgUq2gtSOwE=;
+        b=eSVHvWm3CDJS6iQFlvKySLNqC+6vpUhWTeuNpX+KrKkz1QnfatpH0vOtcuGN9cUrFB
+         VPtqPhcL203mHfOhISatOYR+LiAR/aSx9vsIMqiBRPcDzi1qHg3re7Dkg5StkcN8IAuc
+         CgQ+PEI1r8YEc/etGWt9ZH5RTkG7gVklg0nVY7pwFGXFWQsZQgIye8SLBVoqXeR52kx6
+         ROJIUIghmutvfRF3ouMyMOHVixgNzpVRt8Ku3p70m6bXp9SWY3SsMLkgVidrkwkGsB6b
+         F8ga8dx3793XjpjzQ2M0mCDeJzMGYNQZzgypdLE1LWGpHELLTnf+EjGvs3zlv82mZo2+
+         z35Q==
+X-Gm-Message-State: AC+VfDyxn9AUFLStNK2eNfx7c3k4xTGfc6FxxiytDl2Mrip2nHW4Fcj7
+        P71pXkkGpaX0f3duvJmI1IQVYA==
+X-Google-Smtp-Source: ACHHUZ6U4/yV5VCV2rWE460G/Hqxnl14VCk7M+s4/0nl5oxkQImHZBZU9znPhxC1siwCN2ygVbz09g==
+X-Received: by 2002:a05:6808:221d:b0:39a:aa6d:b9e0 with SMTP id bd29-20020a056808221d00b0039aaa6db9e0mr1387108oib.45.1686897178071;
+        Thu, 15 Jun 2023 23:32:58 -0700 (PDT)
+Received: from hsinchu16.internal.sifive.com (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
+        by smtp.gmail.com with ESMTPSA id u11-20020a17090a410b00b0025023726fc4sm617596pjf.26.2023.06.15.23.32.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 23:32:57 -0700 (PDT)
+From:   Eric Lin <eric.lin@sifive.com>
+To:     conor@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, aou@eecs.berkeley.edu, maz@kernel.org,
+        chenhuacai@kernel.org, baolu.lu@linux.intel.com, will@kernel.org,
+        kan.liang@linux.intel.com, nnac123@linux.ibm.com,
+        pierre.gondois@arm.com, huangguangbin2@huawei.com, jgross@suse.com,
+        chao.gao@intel.com, maobibo@loongson.cn,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dslin1010@gmail.com
+Cc:     Eric Lin <eric.lin@sifive.com>
+Subject: [PATCH 0/3] Add SiFive Private L2 cache and PMU driver
+Date:   Fri, 16 Jun 2023 14:32:07 +0800
+Message-Id: <20230616063210.19063-1-eric.lin@sifive.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Received: by 2002:a8a:7cb:0:b0:4df:6fd3:a469 with HTTP; Thu, 15 Jun 2023
- 23:31:06 -0700 (PDT)
-In-Reply-To: <CAKYAXd96UE4T91ODspie4d6jr0FAPN13ke7XehXk5Qv6LcXfSQ@mail.gmail.com>
-References: <20230614122808.1350-1-machel@vivo.com> <CAKYAXd96UE4T91ODspie4d6jr0FAPN13ke7XehXk5Qv6LcXfSQ@mail.gmail.com>
-From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Fri, 16 Jun 2023 15:31:06 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd-QYPjSofLAB1gys30M-xQ=TvtN=TSJCdLaZYxfMzeUng@mail.gmail.com>
-Message-ID: <CAKYAXd-QYPjSofLAB1gys30M-xQ=TvtN=TSJCdLaZYxfMzeUng@mail.gmail.com>
-Subject: Re: [PATCH v1] fs:smb:server:Fix unsigned compared with less than zero
-To:     Wang Ming <machel@vivo.com>
-Cc:     Steve French <sfrench@samba.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Tom Talpey <tom@talpey.com>, linux-cifs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, opensource.kernel@vivo.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2023-06-15 15:01 GMT+09:00, Namjae Jeon <linkinjeon@kernel.org>:
-> 2023-06-14 21:27 GMT+09:00, Wang Ming <machel@vivo.com>:
->> The return value of the ksmbd_vfs_getcasexattr() is long.
->> However, the return value is being assigned to an unsignef
->> long variable 'v_len',so making 'v_len' to long.
->>
->> silence the warning:
->> ./fs/smb/server/vfs.c:433:6-11:WARNING: Unsigned expression compared
->> with zero: v_len > 0
->>
->> Signed-off-by: Wang Ming <machel@vivo.com>
-> Acked-by: Namjae Jeon <linkinjeon@kernel.org>
-Hi Wang,
+This patch series adds the SiFive Private L2 cache controller
+driver and Performance Monitoring Unit (PMU) driver.
 
-Your patch seems to be corrupted.
+The Private L2 cache communicates with both the upstream L1
+caches and downstream L3 cache or memory, enabling a high-
+performance cache subsystem. It is also responsible for managing
+requests from the L1 instruction and data caches of the core.
 
-ERROR: patch seems to be corrupt (line wrapped?)
-#107: FILE: fs/smb/server/vfs.c:399:
-, char *buf, loff_t *pos,
+The Private L2 Performance Monitoring Unit (PMU) consists of a
+set of event-programmable counters and their event selector registers.
+The registers are available to control the behavior of the counters.
 
-WARNING: please, no spaces at the start of a line
-#112: FILE: fs/smb/server/vfs.c:403:
-+       size_t size;$
+Eric Lin (2):
+  soc: sifive: Add SiFive private L2 cache support
+  dt-bindings: riscv: sifive: Add SiFive Private L2 cache controller
 
-WARNING: please, no spaces at the start of a line
-#113: FILE: fs/smb/server/vfs.c:404:
-+       ssize_t v_len;$
+Greentime Hu (1):
+  soc: sifive: Add SiFive private L2 cache PMU driver
 
-WARNING: please, no spaces at the start of a line
-#123: FILE: fs/smb/server/vfs.c:421:
-+       if (v_len < 0) {$
+ .../bindings/riscv/sifive,pL2Cache0.yaml      |  81 +++
+ drivers/soc/sifive/Kconfig                    |  17 +
+ drivers/soc/sifive/Makefile                   |   2 +
+ drivers/soc/sifive/sifive_pl2.h               |  45 ++
+ drivers/soc/sifive/sifive_pl2_cache.c         | 218 ++++++
+ drivers/soc/sifive/sifive_pl2_pmu.c           | 669 ++++++++++++++++++
+ include/linux/cpuhotplug.h                    |   2 +
+ 7 files changed, 1034 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/riscv/sifive,pL2Cache0.yaml
+ create mode 100644 drivers/soc/sifive/sifive_pl2.h
+ create mode 100644 drivers/soc/sifive/sifive_pl2_cache.c
+ create mode 100644 drivers/soc/sifive/sifive_pl2_pmu.c
 
-WARNING: suspect code indent for conditional statements (7, 15)
-#123: FILE: fs/smb/server/vfs.c:421:
-+       if (v_len < 0) {
-                pr_err("not found stream in xattr : %zd\n", v_len);
+-- 
+2.40.1
 
-total: 1 errors, 4 warnings, 19 lines checked
-
-Can you send the patch using git send-email or attach the patch file
-on this mail ?
->
-> Thanks!
->
