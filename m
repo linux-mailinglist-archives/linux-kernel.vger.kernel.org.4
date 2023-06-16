@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20B487339A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 21:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D73227339A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 21:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346200AbjFPTTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 15:19:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48104 "EHLO
+        id S1346022AbjFPTTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 15:19:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346015AbjFPTRR (ORCPT
+        with ESMTP id S1346032AbjFPTRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 16 Jun 2023 15:17:17 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39CAB3ABD;
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE4F3C0C;
         Fri, 16 Jun 2023 12:17:07 -0700 (PDT)
 Date:   Fri, 16 Jun 2023 19:17:05 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686943025;
+        s=2020; t=1686943026;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=tEGuSOITWg8nd8mM8LPCQxDgOwYbQE3nR/mcg2nahDo=;
-        b=EXiJ5yYffryHC8jPYKhmXAwmkB94s4WPD8TfOlsPT7gMdTmjnW7UspfKeF0j7v9jHMzkMX
-        aajKl2ZlUf4GmMEJJfkusXpoHYLE9DJCWyYfOEEsB1PyXeRBSP4ZqP3ahdh9ysb7EQAITS
-        mxpQliryltESso8VvkTEGAXpQeQeXhYvTZqHY2D9EMN1in4uqsnbYxvvuwt5VQ2XlCZcNU
-        eoOKAVBzst+Ktdh02+PxHdBzckVm77qHy1F7q6v5f85wja4CEdyS9ClN5ZdPBLVK6wuM0k
-        Asp6NaoVZJIqep6Zn5I19D76mC3YVBirsMV0Jc3CRHAInXSm+v1zgBIuFN8mRg==
+        bh=/hAFkO4NOEoER8CL9Q/AGPB5LbRC/8Ycn9rCGt2ZoqY=;
+        b=xsOE2Sf5w8kZAw22ij4qb4/pI8OICio0+mQZ/qylFhGsUcLQZe48nw3ZhoJXE8iXPXcbi7
+        Yopbg1I5XVgOPbC8NxOv3DDaEVWQdysjPRi7cLhZ/rLaKpPzYyAjXEhHYCptQgsFkpqB03
+        s9U9rEBSiqvrT6cAMsRDzQLmtISL3fXvGMdw9XtHPeKas6IYIshz8ET33vbl1yD7YQzpW3
+        fJp3/HOOLDtgz7IcWbOpPGQIrOBibbe4OJjooOSRR2bM9XQQQ7bdS9Zhg6M2UZTZ+5eFgk
+        6pLi4iEB0/bADEYKLoUxm35i3ltoSvF7Nj0oMJB1a8jEFAegT/QR51gILwEmJw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686943025;
+        s=2020e; t=1686943026;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=tEGuSOITWg8nd8mM8LPCQxDgOwYbQE3nR/mcg2nahDo=;
-        b=XxTH9NjallFVOJrV/QYJw682si5PnlQTPJ9ZtyH4V88gaH3IksQOxk3VGlGl5h/bgVE72g
-        iQD9GD8WFEDiCnCQ==
-From:   "tip-bot2 for Rick Edgecombe" <tip-bot2@linutronix.de>
+        bh=/hAFkO4NOEoER8CL9Q/AGPB5LbRC/8Ycn9rCGt2ZoqY=;
+        b=+ZwxYiT7TlI5fLF3t5QBMPCATdL1h0J3DKA83I2mGonRz2Ng/A8UhI06mQrs38X3kKVlDA
+        HikyIg7zijxsrUAw==
+From:   "tip-bot2 for Yu-cheng Yu" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/shstk] x86/shstk: Add Kconfig option for shadow stack
+Subject: [tip: x86/shstk] mm: Move VM_UFFD_MINOR_BIT from 37 to 38
 Cc:     "Yu-cheng Yu" <yu-cheng.yu@intel.com>,
         Rick Edgecombe <rick.p.edgecombe@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         "Borislav Petkov (AMD)" <bp@alien8.de>,
         Kees Cook <keescook@chromium.org>,
+        Axel Rasmussen <axelrasmussen@google.com>,
         "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Peter Xu <peterx@redhat.com>,
         Pengfei Xu <pengfei.xu@intel.com>,
         John Allen <john.allen@amd.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Message-ID: <168694302537.404.6595741646175597230.tip-bot2@tip-bot2>
+Message-ID: <168694302574.404.15745410316250224679.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,101 +69,54 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/shstk branch of tip:
 
-Commit-ID:     76aced427011fe790520b191186b0fc9b47c841b
-Gitweb:        https://git.kernel.org/tip/76aced427011fe790520b191186b0fc9b47c841b
-Author:        Rick Edgecombe <rick.p.edgecombe@intel.com>
-AuthorDate:    Mon, 12 Jun 2023 17:10:32 -07:00
+Commit-ID:     da6031de051337fc7ace0738553d509fd26cc85c
+Gitweb:        https://git.kernel.org/tip/da6031de051337fc7ace0738553d509fd26cc85c
+Author:        Yu-cheng Yu <yu-cheng.yu@intel.com>
+AuthorDate:    Mon, 12 Jun 2023 17:10:31 -07:00
 Committer:     Dave Hansen <dave.hansen@linux.intel.com>
 CommitterDate: Thu, 15 Jun 2023 16:31:00 -07:00
 
-x86/shstk: Add Kconfig option for shadow stack
+mm: Move VM_UFFD_MINOR_BIT from 37 to 38
 
-Shadow stack provides protection for applications against function return
-address corruption. It is active when the processor supports it, the
-kernel has CONFIG_X86_SHADOW_STACK enabled, and the application is built
-for the feature. This is only implemented for the 64-bit kernel. When it
-is enabled, legacy non-shadow stack applications continue to work, but
-without protection.
+The x86 Control-flow Enforcement Technology (CET) feature includes a new
+type of memory called shadow stack. This shadow stack memory has some
+unusual properties, which requires some core mm changes to function
+properly.
 
-Since there is another feature that utilizes CET (Kernel IBT) that will
-share implementation with shadow stacks, create CONFIG_CET to signify
-that at least one CET feature is configured.
+Future patches will introduce a new VM flag VM_SHADOW_STACK that will be
+VM_HIGH_ARCH_BIT_5. VM_HIGH_ARCH_BIT_1 through VM_HIGH_ARCH_BIT_4 are
+bits 32-36, and bit 37 is the unrelated VM_UFFD_MINOR_BIT. For the sake
+of order, make all VM_HIGH_ARCH_BITs stay together by moving
+VM_UFFD_MINOR_BIT from 37 to 38. This will allow VM_SHADOW_STACK to be
+introduced as 37.
 
-Co-developed-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
 Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
 Reviewed-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
 Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+Acked-by: Peter Xu <peterx@redhat.com>
 Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 Tested-by: John Allen <john.allen@amd.com>
 Tested-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/all/20230613001108.3040476-7-rick.p.edgecombe%40intel.com
+Link: https://lore.kernel.org/all/20230613001108.3040476-6-rick.p.edgecombe%40intel.com
 ---
- arch/x86/Kconfig           | 24 ++++++++++++++++++++++++
- arch/x86/Kconfig.assembler |  5 +++++
- 2 files changed, 29 insertions(+)
+ include/linux/mm.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 53bab12..ce460d6 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1852,6 +1852,11 @@ config CC_HAS_IBT
- 		  (CC_IS_CLANG && CLANG_VERSION >= 140000)) && \
- 		  $(as-instr,endbr64)
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 9ec20cb..6f52c1e 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -370,7 +370,7 @@ extern unsigned int kobjsize(const void *objp);
+ #endif
  
-+config X86_CET
-+	def_bool n
-+	help
-+	  CET features configured (Shadow stack or IBT)
-+
- config X86_KERNEL_IBT
- 	prompt "Indirect Branch Tracking"
- 	def_bool y
-@@ -1859,6 +1864,7 @@ config X86_KERNEL_IBT
- 	# https://github.com/llvm/llvm-project/commit/9d7001eba9c4cb311e03cd8cdc231f9e579f2d0f
- 	depends on !LD_IS_LLD || LLD_VERSION >= 140000
- 	select OBJTOOL
-+	select X86_CET
- 	help
- 	  Build the kernel with support for Indirect Branch Tracking, a
- 	  hardware support course-grain forward-edge Control Flow Integrity
-@@ -1952,6 +1958,24 @@ config X86_SGX
- 
- 	  If unsure, say N.
- 
-+config X86_USER_SHADOW_STACK
-+	bool "X86 userspace shadow stack"
-+	depends on AS_WRUSS
-+	depends on X86_64
-+	select ARCH_USES_HIGH_VMA_FLAGS
-+	select X86_CET
-+	help
-+	  Shadow stack protection is a hardware feature that detects function
-+	  return address corruption.  This helps mitigate ROP attacks.
-+	  Applications must be enabled to use it, and old userspace does not
-+	  get protection "for free".
-+
-+	  CPUs supporting shadow stacks were first released in 2020.
-+
-+	  See Documentation/x86/shstk.rst for more information.
-+
-+	  If unsure, say N.
-+
- config EFI
- 	bool "EFI runtime service support"
- 	depends on ACPI
-diff --git a/arch/x86/Kconfig.assembler b/arch/x86/Kconfig.assembler
-index b88f784..8ad41da 100644
---- a/arch/x86/Kconfig.assembler
-+++ b/arch/x86/Kconfig.assembler
-@@ -24,3 +24,8 @@ config AS_GFNI
- 	def_bool $(as-instr,vgf2p8mulb %xmm0$(comma)%xmm1$(comma)%xmm2)
- 	help
- 	  Supported by binutils >= 2.30 and LLVM integrated assembler
-+
-+config AS_WRUSS
-+	def_bool $(as-instr,wrussq %rax$(comma)(%rbx))
-+	help
-+	  Supported by binutils >= 2.31 and LLVM integrated assembler
+ #ifdef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
+-# define VM_UFFD_MINOR_BIT	37
++# define VM_UFFD_MINOR_BIT	38
+ # define VM_UFFD_MINOR		BIT(VM_UFFD_MINOR_BIT)	/* UFFD minor faults */
+ #else /* !CONFIG_HAVE_ARCH_USERFAULTFD_MINOR */
+ # define VM_UFFD_MINOR		VM_NONE
