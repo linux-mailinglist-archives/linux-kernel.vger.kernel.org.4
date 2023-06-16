@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 821E0732BE1
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D593732BE6
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:34:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244853AbjFPJdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 05:33:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48290 "EHLO
+        id S1343922AbjFPJep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 05:34:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344292AbjFPJdZ (ORCPT
+        with ESMTP id S1344315AbjFPJeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 05:33:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54F73C2B
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 02:32:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA04C633B4
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 09:32:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6C7BC433C0;
-        Fri, 16 Jun 2023 09:32:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686907925;
-        bh=RyvbZ8xLNLVCEWUqE0qfmWc1Llk+X9g8qHjmNGYKLVM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=aql41gS/+jx94TAWvh8KlZ36Fle4QLGqn4B5xNnEimBQx7Cd3FU9uPP7Q/YRQ12ot
-         1AXM14STUqfR1eCiaTBhac+CKJXSwcBroJAVdoknmp5M2NHBhGE/SVVA7ykLMEGYHP
-         HEyt50zxwBm8YNFGIcCJe+Mu26PCyZrRHm0spOjxcr3aOR1uLyy9tuh0nIJeCFlFIC
-         NY1dTlUWtcNT9HZuKXS6xYKGaEqJedzVrRUWVtyo7M5EYvZAyYALT1vv+6UIp3g9gF
-         7XP69Nce6j7JGcbwivO1adEkkUXZ/vkS5w3cylg65qOsU+V2Sfvb+3lNDOvDiMic2m
-         gtSCeuughd6Hg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Andi Shyti <andi.shyti@linux.intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Imre Deak <imre.deak@intel.com>,
-        Alan Previn <alan.previn.teres.alexis@intel.com>,
-        Anshuman Gupta <anshuman.gupta@intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Fri, 16 Jun 2023 05:34:23 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D972D62;
+        Fri, 16 Jun 2023 02:33:51 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 09:33:07 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1686907987;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kW1jugq60sJfmx5RfQMRVtnFU9KKTkP8DmbB1EN9IiU=;
+        b=edMt7iXvYdR1moI7O2unZMnhyO+0xZhvW4XonRhiwbxWn+R5U6d15OrQG7x/8van3sR1bY
+        FKGjOtEs6QDgysAAWKlZLSQADMR2dmq0Ft3sAUPhM9Bk6k1fa9zSNaYGuooNWiNWSUG71a
+        7UZlYUwXwobnfBiazECuiQK+ubIGcTOMxi3IJO4HM6S/GhD0P/xBbkbeRIzbwQ8nRyIkql
+        POkl1L93LycS4WS4m4lc7ywXiJuNcxZP5RFxKFU2Y5LHl6P+wzBOMf2JndAEPWDPZcYprm
+        dhweDRNk/j7fYNUintA9vi8fTLSeXOnXqB38SA0ZniJPjbZRZoAZzK9KuwK1Mw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1686907987;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kW1jugq60sJfmx5RfQMRVtnFU9KKTkP8DmbB1EN9IiU=;
+        b=ox6jh+jwcFax4dCRiidd4Go72eTEzdSM8jZG/aCyybTqFH5FtUbyCQ9CtW8RwrFr+LJrj2
+        6vHLIb9EeCRhbeBQ==
+From:   "tip-bot2 for Juergen Gross" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/mtrr] x86/xen: Set default memory type for PV guests to WB
+Cc:     Juergen Gross <jgross@suse.com>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/i915: make i915_drm_client_fdinfo() reference conditional again
-Date:   Fri, 16 Jun 2023 11:31:47 +0200
-Message-Id: <20230616093158.3568480-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230615123959.12298-1-jgross@suse.com>
+References: <20230615123959.12298-1-jgross@suse.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Message-ID: <168690798706.404.5612585523577062985.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,49 +66,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+The following commit has been merged into the x86/mtrr branch of tip:
 
-The function is only defined if CONFIG_PROC_FS is enabled:
+Commit-ID:     30d65d1b19850c9bc8c17dba8ebe9be5e0c17054
+Gitweb:        https://git.kernel.org/tip/30d65d1b19850c9bc8c17dba8ebe9be5e0c17054
+Author:        Juergen Gross <jgross@suse.com>
+AuthorDate:    Thu, 15 Jun 2023 14:39:59 +02:00
+Committer:     Borislav Petkov (AMD) <bp@alien8.de>
+CommitterDate: Fri, 16 Jun 2023 11:22:33 +02:00
 
-ld.lld: error: undefined symbol: i915_drm_client_fdinfo
->>> referenced by i915_driver.c
->>>               drivers/gpu/drm/i915/i915_driver.o:(i915_drm_driver) in archive vmlinux.a
+x86/xen: Set default memory type for PV guests to WB
 
-Use the PTR_IF() helper to make the reference NULL otherwise.
+When running as an unprivileged PV guest under Xen (not dom0), the
+default MTRR memory type should be write-back.
 
-Fixes: e894b724c316d ("drm/i915: Use the fdinfo helper")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Link: https://lore.kernel.org/r/20230615123959.12298-1-jgross@suse.com
 ---
- drivers/gpu/drm/i915/i915_driver.c     | 2 +-
- drivers/gpu/drm/i915/i915_drm_client.h | 2 --
- 2 files changed, 1 insertion(+), 3 deletions(-)
+ arch/x86/xen/enlighten_pv.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/gpu/drm/i915/i915_driver.c b/drivers/gpu/drm/i915/i915_driver.c
-index 75cbc43b326dd..0ad0c5885ec27 100644
---- a/drivers/gpu/drm/i915/i915_driver.c
-+++ b/drivers/gpu/drm/i915/i915_driver.c
-@@ -1816,7 +1816,7 @@ static const struct drm_driver i915_drm_driver = {
- 	.open = i915_driver_open,
- 	.lastclose = i915_driver_lastclose,
- 	.postclose = i915_driver_postclose,
--	.show_fdinfo = i915_drm_client_fdinfo,
-+	.show_fdinfo = PTR_IF(IS_ENABLED(CONFIG_PROC_FS), i915_drm_client_fdinfo),
+diff --git a/arch/x86/xen/enlighten_pv.c b/arch/x86/xen/enlighten_pv.c
+index 8732b85..93b6582 100644
+--- a/arch/x86/xen/enlighten_pv.c
++++ b/arch/x86/xen/enlighten_pv.c
+@@ -187,6 +187,8 @@ static void __init xen_pv_init_platform(void)
  
- 	.prime_handle_to_fd = drm_gem_prime_handle_to_fd,
- 	.prime_fd_to_handle = drm_gem_prime_fd_to_handle,
-diff --git a/drivers/gpu/drm/i915/i915_drm_client.h b/drivers/gpu/drm/i915/i915_drm_client.h
-index 4c18b99e10a4e..67816c912bca1 100644
---- a/drivers/gpu/drm/i915/i915_drm_client.h
-+++ b/drivers/gpu/drm/i915/i915_drm_client.h
-@@ -47,8 +47,6 @@ static inline void i915_drm_client_put(struct i915_drm_client *client)
+ 	if (xen_initial_domain())
+ 		xen_set_mtrr_data();
++	else
++		mtrr_overwrite_state(NULL, 0, MTRR_TYPE_WRBACK);
+ }
  
- struct i915_drm_client *i915_drm_client_alloc(void);
- 
--#ifdef CONFIG_PROC_FS
- void i915_drm_client_fdinfo(struct drm_printer *p, struct drm_file *file);
--#endif
- 
- #endif /* !__I915_DRM_CLIENT_H__ */
--- 
-2.39.2
-
+ static void __init xen_pv_guest_late_init(void)
