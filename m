@@ -2,160 +2,490 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A8CB734216
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 17:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF167342A1
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 19:28:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235508AbjFQP4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 11:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40160 "EHLO
+        id S1346384AbjFQR2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 13:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjFQP4i (ORCPT
+        with ESMTP id S1346374AbjFQR2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 11:56:38 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBBC51B7;
-        Sat, 17 Jun 2023 08:56:37 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-666e3b15370so818930b3a.0;
-        Sat, 17 Jun 2023 08:56:37 -0700 (PDT)
+        Sat, 17 Jun 2023 13:28:16 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C85410C0;
+        Sat, 17 Jun 2023 10:28:13 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-3110a5f2832so2176706f8f.1;
+        Sat, 17 Jun 2023 10:28:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687017397; x=1689609397;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=M2COyOP1exeRBDMmo4rM7FwSDhLMO5a8kz6768+vnkU=;
-        b=SpEEBxX4kYnmtdRVsJn1Hdig/pUGCQkmzukP/YKs7RJRdC/XeW65tEwXZwQKOOTrv4
-         3l0/hxCJ7ogLvdn3+/VigRxeaHEKL4LMIAaUhUP40ZVgZ2Xs3xv38OJJGUgrDjij6Lju
-         JvjDfvWFUB+rgyk2Psy8MwQ/KZ5Zf8ajsQ6RjQQN+5sWejdfF/8R71v4/cUIV395MRrQ
-         WRjEg82xClsodUyfAb1OgqdcjsL0OJ+3XE3Y2hWKHxyIifz8mReGW2Rv3KI8aoQ1Xvri
-         SKwIpi3BHLzNezH1xweazmte6lN/wH91kan44KZGLkv5nKHHQ2n1OE28r5KI+k4LWSmK
-         NKnQ==
+        d=gmail.com; s=20221208; t=1687022891; x=1689614891;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=pRpy2AnhH2ZMjGAfpIPfEpDanD+6NbvOfkr4t+kxdoQ=;
+        b=RgW2uOXY+mvivcHDQE7eECiEwIestzNrWj0lXiPxd1G+d5aWDF/DjJTUYHZRtum8vU
+         dDmxurXIiyqU/FyXt8/64qjGhLDNmlNbQp0V3gy83CXJt0drurgmns5KrrGgJ0Xf4+J8
+         v/sEWApg1v/vjZeGIYyXXpArMTxDIEYDcwnUZUUudDU186b5HYXabgvrdtt4AhjxnfoO
+         YkTXaQHBjQj4RA0UBoxZ1GuAspYpfi9dwhFpvhFKZgFQ6s0x2n+Ftb0MI7gsb8+UtVdV
+         L9roPqpMLj1UfiUik3WrJ5MMsOkElt/8brTNQZQZ/8BH2y3QUIORbXDwfi1g1iPahZTe
+         VMIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687017397; x=1689609397;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=M2COyOP1exeRBDMmo4rM7FwSDhLMO5a8kz6768+vnkU=;
-        b=PSu3nwGXFBtVCmj3wrhASnQ4X7uJqK2fAFDkUosOJJs1svaTK8RrxD98o9jptYxtUH
-         oqpj4NvQUxcTs20CAUZ12Fc7O3jlK3njqoWmIvhNrBPgFxK3nMm5UTBysLwvzxhf5J6g
-         R6HfWVl25zXN69evK4DJcrwD0H4CIE2rUdeQGwhcvBrxD7sbPFUa6krcw0u9Q2CQoJt0
-         UeRJ8Nf4FmYGUdql5irDPJqvxHm2iJUApIZMA6dNPMQ1X89czJ2pzbmB8zBodhOhlW3s
-         IQAcdM0TW5NXqKvApfl+xW5h+T29uwFo4SSpEHSsqjAyN7jouXLCfZRJbp5V0XQnJaDW
-         JgvQ==
-X-Gm-Message-State: AC+VfDyk7bQYe71V30g7JhDze3cbElokTRPuvVwvQrLqlwlfWs2T296r
-        1+pT324REXT4hUD+VWwOhaU=
-X-Google-Smtp-Source: ACHHUZ5jMBhnaGcqOHTyqFC2dkmTbVkm1yASjZFRPiHqxDGNrZhqrbNGNc0yI0qe/3o6WgV8kneQyw==
-X-Received: by 2002:a05:6a00:2313:b0:64f:835c:a9ff with SMTP id h19-20020a056a00231300b0064f835ca9ffmr4427961pfh.12.1687017397131;
-        Sat, 17 Jun 2023 08:56:37 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u11-20020a63df0b000000b0053491d92b65sm16294624pgg.84.2023.06.17.08.56.36
+        d=1e100.net; s=20221208; t=1687022891; x=1689614891;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pRpy2AnhH2ZMjGAfpIPfEpDanD+6NbvOfkr4t+kxdoQ=;
+        b=U9DQf/STkCjq7Cl/EI4vr+C1VH7R1M90RcrTAcjz68FYjun0NXAzisereaSv2LoEnW
+         zOZVGHGSauilsNrBIAZWovRAbcN64VlJB5UegqPbXoCXX7SolpgD/4AnZ/BsOvaqUR2A
+         sS9vOZ59SdwnwVBSPzUY/c1Xfflxbb3BWDhuhkcKLlgvK31hAjZCoRU31f15VJcE0ZZ8
+         PhDz8d7dNcimzuxVaU0YPcsdc6wyH2NZwr8RlPB4rP4wwyAlAPE1n3eIpR0Z9QPNur7W
+         6mA1/jxZtt0QhkaA1ejljTPiDb4lIOYCiR0lsu6dQbiWh2zzdlRkjGuKcPyyW15GVrmh
+         nTmg==
+X-Gm-Message-State: AC+VfDwg9xaOM589ldptcAtDAxbIgrW+IQ1/Tijq4df0JaIHMIF4er3E
+        /tLfHqDPSz+usnRliW4AnP8=
+X-Google-Smtp-Source: ACHHUZ4XWsVdF0C2JhD0W5qfz10nT0gPbz9KjfgHWFIqC7kc3M+xVBXaKrKxjAC7ViSlnQ4JuP3ytg==
+X-Received: by 2002:a5d:430d:0:b0:30f:d052:2edb with SMTP id h13-20020a5d430d000000b0030fd0522edbmr7884535wrq.35.1687022891209;
+        Sat, 17 Jun 2023 10:28:11 -0700 (PDT)
+Received: from Ansuel-xps. (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
+        by smtp.gmail.com with ESMTPSA id r18-20020adfce92000000b0031128382ed0sm2999839wrn.83.2023.06.17.10.28.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Jun 2023 08:56:36 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 17 Jun 2023 08:56:35 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     JuenKit Yip <JuenKit_Yip@hotmail.com>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/6] hwmon: (sht3x)add medium repeatability support
-Message-ID: <1ef59ee2-432e-4cc6-aca0-2c5f41b93714@roeck-us.net>
-References: <20230616160017.21228-1-JuenKit_Yip@hotmail.com>
- <DB4PR10MB6261A70CD0444248ADDCC3219258A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+        Sat, 17 Jun 2023 10:28:10 -0700 (PDT)
+Message-ID: <648ded2a.df0a0220.b78de.4603@mx.google.com>
+X-Google-Original-Message-ID: <ZIzT3yBcHdmuGKi4@Ansuel-xps.>
+Date:   Fri, 16 Jun 2023 23:27:59 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Sebastian Gottschall <s.gottschall@dd-wrt.com>,
+        Steve deRosier <derosier@cal-sierra.com>,
+        Stefan Lippers-Hollmann <s.l-h@gmx.de>
+Subject: Re: [PATCH v14] ath10k: add LED and GPIO controlling support for
+ various chipsets
+References: <20230611080505.17393-1-ansuelsmth@gmail.com>
+ <878rcjbaqs.fsf@kernel.org>
+ <648cdebb.5d0a0220.be7f8.a096@mx.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/mixed; boundary="ISiK3ICplRRKwxPi"
 Content-Disposition: inline
-In-Reply-To: <DB4PR10MB6261A70CD0444248ADDCC3219258A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <648cdebb.5d0a0220.be7f8.a096@mx.google.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 12:00:15AM +0800, JuenKit Yip wrote:
-> add medium repeatability support for matching datasheet
+
+--ISiK3ICplRRKwxPi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Fri, Jun 16, 2023 at 01:35:04PM +0200, Christian Marangi wrote:
+> On Fri, Jun 16, 2023 at 08:03:23PM +0300, Kalle Valo wrote:
+> > Christian Marangi <ansuelsmth@gmail.com> writes:
+> > 
+> > > From: Sebastian Gottschall <s.gottschall@dd-wrt.com>
+> > >
+> > > Adds LED and GPIO Control support for 988x, 9887, 9888, 99x0, 9984
+> > > based chipsets with on chipset connected led's using WMI Firmware API.
+> > > The LED device will get available named as "ath10k-phyX" at sysfs and
+> > > can be controlled with various triggers.
+> > > Adds also debugfs interface for gpio control.
+> > >
+> > > Signed-off-by: Sebastian Gottschall <s.gottschall@dd-wrt.com>
+> > > Reviewed-by: Steve deRosier <derosier@cal-sierra.com>
+> > > [kvalo: major reorg and cleanup]
+> > > Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
+> > > [ansuel: rebase and small cleanup]
+> > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > > Tested-by: Stefan Lippers-Hollmann <s.l-h@gmx.de>
+> > > ---
+> > >
+> > > Hi,
+> > > this is a very old patch from 2018 that somehow was talked till 2020
+> > > with Kavlo asked to rebase and resubmit and nobody did.
+> > > So here we are in 2023 with me trying to finally have this upstream.
+> > >
+> > > A summarize of the situation.
+> > > - The patch is from years in OpenWRT. Used by anything that has ath10k
+> > >   card and a LED connected.
+> > > - This patch is also used by the fw variant from Candela Tech with no
+> > >   problem reported.
+> > > - It was pointed out that this caused some problem with ipq4019 SoC
+> > >   but the problem was actually caused by a different bug related to
+> > >   interrupts.
+> > >
+> > > I honestly hope we can have this feature merged since it's really
+> > > funny to have something that was so near merge and jet still not
+> > > present and with devices not supporting this simple but useful
+> > > feature.
+> > 
+> > Indeed, we should finally get this in. Thanks for working on it.
+> > 
+> > I did some minor changes to the patch, they are in my pending branch:
+> > 
+> > https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git/commit/?h=pending&id=686464864538158f22842dc49eddea6fa50e59c1
+> > 
+> > My comments below, please review my changes. No need to resend because
+> > of these.
+> >
 > 
-> Signed-off-by: JuenKit Yip <JuenKit_Yip@hotmail.com>
-
-Applied to hwmon-next.
-
-Thanks,
-Guenter
-
-> ---
->  drivers/hwmon/sht3x.c | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
+> Hi,
+> very happy this is going further.
 > 
-> diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
-> index ecc64febc..6174b8fa7 100644
-> --- a/drivers/hwmon/sht3x.c
-> +++ b/drivers/hwmon/sht3x.c
-> @@ -24,6 +24,9 @@
->  /* commands (high repeatability mode) */
->  static const unsigned char sht3x_cmd_measure_single_hpm[] = { 0x24, 0x00 };
->  
-> +/* commands (medium repeatability mode) */
-> +static const unsigned char sht3x_cmd_measure_single_mpm[] = { 0x24, 0x0b };
-> +
->  /* commands (low repeatability mode) */
->  static const unsigned char sht3x_cmd_measure_single_lpm[] = { 0x24, 0x16 };
->  
-> @@ -41,6 +44,7 @@ static const unsigned char sht3x_cmd_clear_status_reg[]        = { 0x30, 0x41 };
->  
->  /* delays for single-shot mode i2c commands, both in us */
->  #define SHT3X_SINGLE_WAIT_TIME_HPM  15000
-> +#define SHT3X_SINGLE_WAIT_TIME_MPM   6000
->  #define SHT3X_SINGLE_WAIT_TIME_LPM   4000
->  
->  #define SHT3X_WORD_LEN         2
-> @@ -68,6 +72,7 @@ enum sht3x_limits {
->  
->  enum sht3x_repeatability {
->  	low_repeatability,
-> +	medium_repeatability,
->  	high_repeatability,
->  };
->  
-> @@ -87,6 +92,20 @@ static const char periodic_measure_commands_hpm[][SHT3X_CMD_LENGTH] = {
->  	{0x27, 0x37},
->  };
->  
-> +/* periodic measure commands (medium repeatability) */
-> +static const char periodic_measure_commands_mpm[][SHT3X_CMD_LENGTH] = {
-> +	/* 0.5 measurements per second */
-> +	{0x20, 0x24},
-> +	/* 1 measurements per second */
-> +	{0x21, 0x26},
-> +	/* 2 measurements per second */
-> +	{0x22, 0x20},
-> +	/* 4 measurements per second */
-> +	{0x23, 0x22},
-> +	/* 10 measurements per second */
-> +	{0x27, 0x21},
-> +};
-> +
->  /* periodic measure commands (low repeatability mode) */
->  static const char periodic_measure_commands_lpm[][SHT3X_CMD_LENGTH] = {
->  	/* 0.5 measurements per second */
-> @@ -444,6 +463,9 @@ static void sht3x_select_command(struct sht3x_data *data)
->  		if (data->repeatability == high_repeatability) {
->  			data->command = sht3x_cmd_measure_single_hpm;
->  			data->wait_time = SHT3X_SINGLE_WAIT_TIME_HPM;
-> +		} else if (data->repeatability ==  medium_repeatability) {
-> +			data->command = sht3x_cmd_measure_single_mpm;
-> +			data->wait_time = SHT3X_SINGLE_WAIT_TIME_MPM;
->  		} else {
->  			data->command = sht3x_cmd_measure_single_lpm;
->  			data->wait_time = SHT3X_SINGLE_WAIT_TIME_LPM;
-> @@ -591,6 +613,8 @@ static ssize_t update_interval_store(struct device *dev,
->  	if (mode > 0) {
->  		if (data->repeatability == high_repeatability)
->  			command = periodic_measure_commands_hpm[mode - 1];
-> +		else if (data->repeatability == medium_repeatability)
-> +			command = periodic_measure_commands_mpm[mode - 1];
->  		else
->  			command = periodic_measure_commands_lpm[mode - 1];
->  
+> > > --- a/drivers/net/wireless/ath/ath10k/Kconfig
+> > > +++ b/drivers/net/wireless/ath/ath10k/Kconfig
+> > > @@ -67,6 +67,23 @@ config ATH10K_DEBUGFS
+> > >  
+> > >  	  If unsure, say Y to make it easier to debug problems.
+> > >  
+> > > +config ATH10K_LEDS
+> > > +	bool "Atheros ath10k LED support"
+> > > +	depends on ATH10K
+> > > +	select MAC80211_LEDS
+> > > +	select LEDS_CLASS
+> > > +	select NEW_LEDS
+> > > +	default y
+> > > +	help
+> > > +	  This option enables LEDs support for chipset LED pins.
+> > > +	  Each pin is connected via GPIO and can be controlled using
+> > > +	  WMI Firmware API.
+> > > +
+> > > +	  The LED device will get available named as "ath10k-phyX" at sysfs and
+> > > +    	  can be controlled with various triggers.
+> > > +
+> > > +	  Say Y, if you have LED pins connected to the ath10k wireless card.
+> > 
+> > I'm not sure anymore if we should ask anything from the user, better to
+> > enable automatically if LED support is enabled in the kernel. So I
+> > simplified this to:
+> > 
+> > config ATH10K_LEDS
+> > 	bool
+> > 	depends on ATH10K
+> > 	depends on LEDS_CLASS=y || LEDS_CLASS=MAC80211
+> > 	default y
+> > 
+> > This follows what mt76 does:
+> > 
+> > config MT76_LEDS
+> > 	bool
+> > 	depends on MT76_CORE
+> > 	depends on LEDS_CLASS=y || MT76_CORE=LEDS_CLASS
+> > 	default y
+> > 
+> 
+> I remember there was the same discussion in a previous series. OK for me
+> for making this by default, only concern is any buildbot error (if any)
+> 
+> Anyway OK for the change.
+> 
+> > > @@ -65,6 +66,7 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
+> > >  		.dev_id = QCA988X_2_0_DEVICE_ID,
+> > >  		.bus = ATH10K_BUS_PCI,
+> > >  		.name = "qca988x hw2.0",
+> > > +		.led_pin = 1,
+> > >  		.patch_load_addr = QCA988X_HW_2_0_PATCH_LOAD_ADDR,
+> > >  		.uart_pin = 7,
+> > >  		.cc_wraparound_type = ATH10K_HW_CC_WRAP_SHIFTED_ALL,
+> > 
+> > I prefer following the field order from struct ath10k_hw_params
+> > declaration and also setting fields explicitly to zero (even though
+> > there are gaps still) so I changed that for every entry.
+> > 
+> 
+> Thanks for the change, np for me.
+> 
+> > > +int ath10k_leds_register(struct ath10k *ar)
+> > > +{
+> > > +	int ret;
+> > > +
+> > > +	if (ar->hw_params.led_pin == 0)
+> > > +		/* leds not supported */
+> > > +		return 0;
+> > > +
+> > > +	snprintf(ar->leds.label, sizeof(ar->leds.label), "ath10k-%s",
+> > > +		 wiphy_name(ar->hw->wiphy));
+> > > +	ar->leds.wifi_led.active_low = 1;
+> > > +	ar->leds.wifi_led.gpio = ar->hw_params.led_pin;
+> > > +	ar->leds.wifi_led.name = ar->leds.label;
+> > > +	ar->leds.wifi_led.default_state = LEDS_GPIO_DEFSTATE_KEEP;
+> > > +
+> > > +	ar->leds.cdev.name = ar->leds.label;
+> > > +	ar->leds.cdev.brightness_set_blocking = ath10k_leds_set_brightness_blocking;
+> > > +
+> > > +	/* FIXME: this assignment doesn't make sense as it's NULL, remove it? */
+> > > +	ar->leds.cdev.default_trigger = ar->leds.wifi_led.default_trigger;
+> > 
+> > But what to do with this FIXME?
+> >
+> 
+> It was pushed by you in v13.
+> 
+> I could be wrong but your idea was to prepare for future support of
+> other patch that would set the default_trigger to the mac80211 tpt.
+> 
+> We might got both confused by default_trigger and default_state.
+> default_trigger is actually never set and is NULL (actually it's 0)
+> 
+> We have other 2 patch that adds tpt rates for the mac80211 LED trigger
+> and set this trigger as the default one but honestly I would chose a
+> different implementation than hardcoding everything.
+> 
+> If it's ok for you, I would drop the comment and the default_trigger and
+> I will send a follow-up patch to this adding DT support by using
+> led_classdev_register_ext and defining init_data.
+> (and this indirectly would permit better LED naming and defining of
+> default-trigger in DT)
+> 
+> Also ideally I will also send a patch for default_state following
+> standard LED implementation. (to set default_state in DT)
+> 
+> I would prefer this approach as the LED patch already took way too much
+> time and I think it's better to merge this initial version and then
+> improve it.
+
+If you want to check out I attached the 2 patch (one dt-bindings and the
+one for the code) that I will submit when this will be merged (the
+change is with the assumption that the FIXME line is dropped)
+
+Tested and works correctly with my use case of wifi card attached with
+pcie. This implementation permits to declare the default trigger in DT
+instead of hardcoding.
+
+-- 
+	Ansuel
+
+--ISiK3ICplRRKwxPi
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0001-dt-bindings-net-wireless-qcom-ath10k-Document-LED-no.patch"
+
+From d1e1a93fbfcbe711659f7ed7480633bf4d382377 Mon Sep 17 00:00:00 2001
+From: Christian Marangi <ansuelsmth@gmail.com>
+Date: Fri, 16 Jun 2023 22:58:20 +0200
+Subject: [PATCH 1/3] dt-bindings: net: wireless: qcom: ath10k: Document LED
+ node support
+
+Ath10k based wifi cards can support a LED connected via GPIO internally.
+The LED is configured used WMI call. Document support for the LED node
+controllable standard LED bindings.
+
+While at it adds also an example for PCIe where LED is commonly
+connected and used on routers.
+
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
+ .../bindings/net/wireless/qcom,ath10k.yaml    | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/net/wireless/qcom,ath10k.yaml b/Documentation/devicetree/bindings/net/wireless/qcom,ath10k.yaml
+index c85ed330426d..7528ece8eff7 100644
+--- a/Documentation/devicetree/bindings/net/wireless/qcom,ath10k.yaml
++++ b/Documentation/devicetree/bindings/net/wireless/qcom,ath10k.yaml
+@@ -157,6 +157,11 @@ properties:
+   vdd-3.3-ch1-supply:
+     description: Secondary Wi-Fi antenna supply
+ 
++  led:
++    $ref: /schemas/leds/common.yaml#
++
++    unevaluatedProperties: false
++
+ required:
+   - compatible
+   - reg
+@@ -258,6 +263,43 @@ allOf:
+         - interrupts
+ 
+ examples:
++  # PCIe
++  - |
++    #include <dt-bindings/leds/common.h>
++
++    pci@1b500000 {
++      reg = <0x1b500000 0x1000
++             0x1b502000 0x80
++             0x1b600000 0x100
++             0x0ff00000 0x100000>;
++      device_type = "pci";
++      #address-cells = <3>;
++      #size-cells = <2>;
++
++      ranges = <0x81000000 0x0 0x00000000 0x0fe00000 0x0 0x00010000   /* I/O */
++                0x82000000 0x0 0x08000000 0x08000000 0x0 0x07e00000>; /* MEM */
++
++      /* ... */
++
++      bridge@0,0 {
++        reg = <0x00000000 0 0 0 0>;
++        #address-cells = <3>;
++        #size-cells = <2>;
++        ranges;
++
++        wifi@1,0 {
++          compatible = "qcom,ath10k";
++          reg = <0x00010000 0 0 0 0>;
++
++          led {
++            default-state = "keep";
++            color = <LED_COLOR_ID_WHITE>;
++            function = LED_FUNCTION_WLAN;
++          };
++        };
++      };
++    };
++
+   # SNoC
+   - |
+     #include <dt-bindings/clock/qcom,rpmcc.h>
+-- 
+2.40.1
+
+
+--ISiK3ICplRRKwxPi
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0002-wifi-ath10k-start-LED-with-the-previous-defined-cdev.patch"
+
+From 1e867963acbc7dd744fb07949928bc493244ee81 Mon Sep 17 00:00:00 2001
+From: Christian Marangi <ansuelsmth@gmail.com>
+Date: Fri, 16 Jun 2023 23:22:28 +0200
+Subject: [PATCH 2/3] wifi: ath10k: start LED with the previous defined cdev
+ brightness
+
+In preparation for DT support for LED, change ath10k_leds_start to init
+the LED to the previous defined cdev brightness.
+
+The LED is set to OFF by default since we can't understand the previous
+state of the LED due to a limitation in the WMI calls exposed by the fw.
+
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
+ drivers/net/wireless/ath/ath10k/leds.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/ath/ath10k/leds.c b/drivers/net/wireless/ath/ath10k/leds.c
+index 6146d4d69013..b3b3025b4a38 100644
+--- a/drivers/net/wireless/ath/ath10k/leds.c
++++ b/drivers/net/wireless/ath/ath10k/leds.c
+@@ -48,7 +48,8 @@ int ath10k_leds_start(struct ath10k *ar)
+ 	 */
+ 	ath10k_wmi_gpio_config(ar, ar->hw_params.led_pin, 0,
+ 			       WMI_GPIO_PULL_NONE, WMI_GPIO_INTTYPE_DISABLE);
+-	ath10k_wmi_gpio_output(ar, ar->hw_params.led_pin, 1);
++	ath10k_wmi_gpio_output(ar, ar->hw_params.led_pin,
++			       ar->leds.cdev.brightness ^ ar->leds.wifi_led.active_low);
+ 
+ 	return 0;
+ }
+@@ -69,6 +70,8 @@ int ath10k_leds_register(struct ath10k *ar)
+ 	ar->leds.wifi_led.default_state = LEDS_GPIO_DEFSTATE_KEEP;
+ 
+ 	ar->leds.cdev.name = ar->leds.label;
++	/* By default LED is set OFF */
++	ar->leds.cdev.brightness = 0;
+ 	ar->leds.cdev.brightness_set_blocking = ath10k_leds_set_brightness_blocking;
+ 
+ 	ret = led_classdev_register(wiphy_dev(ar->hw->wiphy), &ar->leds.cdev);
+-- 
+2.40.1
+
+
+--ISiK3ICplRRKwxPi
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0003-wifi-ath10k-add-DT-support-for-LED-definition.patch"
+
+From 9437101f4ab7e06118be83180be6c8f471c1f804 Mon Sep 17 00:00:00 2001
+From: Christian Marangi <ansuelsmth@gmail.com>
+Date: Fri, 16 Jun 2023 23:02:26 +0200
+Subject: [PATCH 3/3] wifi: ath10k: add DT support for LED definition
+
+If supported, the LED definition for the ath10k wifi card is all
+hardcoded with static names, triggers and default-state.
+
+Add DT support for the supported LED to permit custom names, define a
+default state and a default trigger.
+
+To identify these special LED, devname_mandatory is set to true and each
+LED is prefixed with ath10k- and the wireless phy name.
+
+The non-DT implementation is still supported and DT definition is not
+mandatory.
+
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
+ drivers/net/wireless/ath/ath10k/leds.c | 38 +++++++++++++++++++++++++-
+ 1 file changed, 37 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/ath/ath10k/leds.c b/drivers/net/wireless/ath/ath10k/leds.c
+index b3b3025b4a38..f2f31eb26b8e 100644
+--- a/drivers/net/wireless/ath/ath10k/leds.c
++++ b/drivers/net/wireless/ath/ath10k/leds.c
+@@ -54,8 +54,39 @@ int ath10k_leds_start(struct ath10k *ar)
+ 	return 0;
+ }
+ 
++static int ath10k_leds_of_init(struct ath10k *ar, struct led_init_data *init_data)
++{
++	struct fwnode_handle *led = NULL;
++	enum led_default_state state;
++
++	led = device_get_named_child_node(ar->dev, "led");
++	if (!led)
++		return -ENOENT;
++
++	/* LED will be init on ath10k core start. */
++	state = led_init_default_state_get(led);
++	switch (state) {
++	case LEDS_DEFSTATE_ON:
++		ar->leds.cdev.brightness = 1;
++		break;
++	/* KEEP will start the LED to OFF by default */
++	case LEDS_DEFSTATE_KEEP:
++	default:
++		ar->leds.cdev.brightness = 0;
++	}
++
++	init_data->default_label = "wifi";
++	init_data->fwnode  = led;
++	init_data->devname_mandatory = true;
++	init_data->devicename = ar->leds.label;
++
++	return 0;
++}
++
+ int ath10k_leds_register(struct ath10k *ar)
+ {
++	struct led_init_data *init_data_ptr = NULL;
++	struct led_init_data init_data = { };
+ 	int ret;
+ 
+ 	if (ar->hw_params.led_pin == 0)
+@@ -74,7 +105,12 @@ int ath10k_leds_register(struct ath10k *ar)
+ 	ar->leds.cdev.brightness = 0;
+ 	ar->leds.cdev.brightness_set_blocking = ath10k_leds_set_brightness_blocking;
+ 
+-	ret = led_classdev_register(wiphy_dev(ar->hw->wiphy), &ar->leds.cdev);
++	/* Support DT defined led. init_data_ptr is NULL if DT is not supported. */
++	if (!ath10k_leds_of_init(ar, &init_data))
++		init_data_ptr = &init_data;
++
++	ret = led_classdev_register_ext(wiphy_dev(ar->hw->wiphy), &ar->leds.cdev,
++					init_data_ptr);
+ 	if (ret)
+ 		return ret;
+ 
+-- 
+2.40.1
+
+
+--ISiK3ICplRRKwxPi--
