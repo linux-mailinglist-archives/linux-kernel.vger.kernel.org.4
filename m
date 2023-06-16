@@ -2,123 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F31E73276F
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 08:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A6E73273D
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 08:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbjFPGY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 02:24:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55154 "EHLO
+        id S230480AbjFPGU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 02:20:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241507AbjFPGWX (ORCPT
+        with ESMTP id S231727AbjFPGU4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 02:22:23 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2F030CD
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 23:22:20 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1qA2q8-0006pK-WC; Fri, 16 Jun 2023 08:21:45 +0200
-Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <sha@pengutronix.de>)
-        id 1qA2q8-007kxx-5a; Fri, 16 Jun 2023 08:21:44 +0200
-Received: from sha by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <sha@pengutronix.de>)
-        id 1qA2q5-003FVD-Ab; Fri, 16 Jun 2023 08:21:41 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     linux-rockchip@lists.infradead.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Vincent Legoll <vincent.legoll@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v6 17/26] PM / devfreq: rockchip-dfi: make register stride SoC specific
-Date:   Fri, 16 Jun 2023 08:20:52 +0200
-Message-Id: <20230616062101.601837-18-s.hauer@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230616062101.601837-1-s.hauer@pengutronix.de>
-References: <20230616062101.601837-1-s.hauer@pengutronix.de>
+        Fri, 16 Jun 2023 02:20:56 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7972269D
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 23:20:55 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-666779dcc8aso485871b3a.0
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 23:20:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686896455; x=1689488455;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jT5QJMHUlKyOi0ccezfwrtf5oaRbI1qxEANvrycJT+E=;
+        b=AzXs/l5asQk/BullAh/Lyuva2zkfgzHlfR8TTF8OwZCq44joG3RcFFZlNe1iJZCSSF
+         aedI5SLk+p2XWh4UEKBGrvog8j+AGezFjdgIvS3qJlOinTTjd8vqmEE7QPkSIid4D4C4
+         IMeSgRutMcL08902HDvgOo6/aU3Al158EhcgUlYLP6LkFaQQmkDqH1CSt//0/PrpNzOh
+         oRuihxeS0K2nzE4Dij2H03itPP4i5ybWqFsqOMLHbzQvLId5fHyywRdijPPIh8UUINEC
+         AvlXLsK0tJLkcFaVBfLqTf/W2x2TETMmp8RS0VVCy4YoapdsoOibnfNyAgSelvSCkHN5
+         gfYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686896455; x=1689488455;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jT5QJMHUlKyOi0ccezfwrtf5oaRbI1qxEANvrycJT+E=;
+        b=KY0Niq8zXvZyDZ+7/AdXREnQpzk/ckVdY74U1uxki8N0Gwlp56iZbx329EZfjOyH8g
+         1qEzZKOHce5qlZBEc/L/edb8MB3sr2I8PUdPDtA3CVkN+09QcV1nG5DYck0wCbMdX7JL
+         uOchYjr5aLHFdXVGA2AxwZtMEVQR15Vp5u5JBDmBsPPWPUmChriRazL7E3R22rhPPgMp
+         /Tm03oUYPtMz2lugJj0jMC2DluzuxOdpmStofTDn7p0/YuU8ULuu3/+WWwxZa1kQI12r
+         PfPljvaDpitkiAdueDngWplutPVFCz9rrWav1RLx8aD5z4JzjU1uWJ0Y5EFKU38zmT2Q
+         VnSA==
+X-Gm-Message-State: AC+VfDyIlCMoMuWWNzqBGQjnNFlX+s6GOoZVQm8pwNP2GiGyUKAQTv0o
+        l83vChtrtThkQ/AROciX0bwYOQ==
+X-Google-Smtp-Source: ACHHUZ5qq6stex9qWvMjJHuCyLv5KnNj9STgCB64id8p2WAJxx+1Fi5yN8JaFku201SQwfcVrBukSQ==
+X-Received: by 2002:a05:6a00:2d84:b0:650:d9c:cfca with SMTP id fb4-20020a056a002d8400b006500d9ccfcamr1673553pfb.5.1686896455214;
+        Thu, 15 Jun 2023 23:20:55 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id 5-20020aa79245000000b0065a1b05193asm11302090pfp.185.2023.06.15.23.20.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 23:20:54 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 11:50:52 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] OPP: Simplify the over-designed pstate <-> level
+ dance
+Message-ID: <20230616062052.orvudxqfwirv3eqj@vireshk-i7>
+References: <5437756c65c79f9520886bc54321d39c022c8638.1686739018.git.viresh.kumar@linaro.org>
+ <af0fd0fd64f33809875335a9cc2761085c3bd66f.1686739018.git.viresh.kumar@linaro.org>
+ <CAPDyKFpA2+-aCYGfRQa3PokuYLTCKHufxSUXpktap43aoRu4NA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFpA2+-aCYGfRQa3PokuYLTCKHufxSUXpktap43aoRu4NA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The currently supported RK3399 has a stride of 20 between the channel
-specific registers. Upcoming RK3588 has a different stride, so put
-the stride into driver data to make it configurable.
-While at it convert decimal 20 to hex 0x14 for consistency with RK3588
-which has a register stride 0x4000 and we want to write that in hex
-as well.
+On 14-06-23, 14:37, Ulf Hansson wrote:
+> On Wed, 14 Jun 2023 at 12:37, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> >
+> > While adding support for "performance states" in the OPP and genpd core,
+> > it was decided to set the `pstate` field via genpd's
+> > pm_genpd_opp_to_performance_state() helper, to allow platforms to set
+> > `pstate` even if they don't have a corresponding `level` field in the DT
+> > OPP tables (More details are present in commit 6e41766a6a50 ("PM /
+> > Domain: Implement of_genpd_opp_to_performance_state()")).
+> >
+> > Revisiting that five years later clearly suggests that it was
+> > over-designed as all current users are eventually using the `level`
+> > value only.
+> >
+> > The previous commit already added necessary checks to make sure pstate
+> > is only used for genpd tables. Lets now simplify this a little, and use
+> > `level` directly and remove `pstate` field altogether.
+> >
+> > Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> 
+> Again, thanks for improving this code!
+> 
+> Only a minor thing below and after that, feel free to add:
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-Link: https://lore.kernel.org/r/20230524083153.2046084-18-s.hauer@pengutronix.de
-Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
----
- drivers/devfreq/event/rockchip-dfi.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+Done.
 
-diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event/rockchip-dfi.c
-index 969b62f071b83..85ec93fd41858 100644
---- a/drivers/devfreq/event/rockchip-dfi.c
-+++ b/drivers/devfreq/event/rockchip-dfi.c
-@@ -112,6 +112,7 @@ struct rockchip_dfi {
- 	int active_events;
- 	int burst_len;
- 	int buswidth[DMC_MAX_CHANNELS];
-+	int ddrmon_stride;
- };
- 
- static int rockchip_dfi_enable(struct rockchip_dfi *dfi)
-@@ -189,13 +190,13 @@ static void rockchip_dfi_read_counters(struct rockchip_dfi *dfi, struct dmc_coun
- 		if (!(dfi->channel_mask & BIT(i)))
- 			continue;
- 		c->c[i].read_access = readl_relaxed(dfi_regs +
--				DDRMON_CH0_RD_NUM + i * 20);
-+				DDRMON_CH0_RD_NUM + i * dfi->ddrmon_stride);
- 		c->c[i].write_access = readl_relaxed(dfi_regs +
--				DDRMON_CH0_WR_NUM + i * 20);
-+				DDRMON_CH0_WR_NUM + i * dfi->ddrmon_stride);
- 		c->c[i].access = readl_relaxed(dfi_regs +
--				DDRMON_CH0_DFI_ACCESS_NUM + i * 20);
-+				DDRMON_CH0_DFI_ACCESS_NUM + i * dfi->ddrmon_stride);
- 		c->c[i].clock_cycles = readl_relaxed(dfi_regs +
--				DDRMON_CH0_COUNT_NUM + i * 20);
-+				DDRMON_CH0_COUNT_NUM + i * dfi->ddrmon_stride);
- 	}
- }
- 
-@@ -664,6 +665,8 @@ static int rk3399_dfi_init(struct rockchip_dfi *dfi)
- 	dfi->buswidth[0] = FIELD_GET(RK3399_PMUGRF_OS_REG2_BW_CH0, val) == 0 ? 4 : 2;
- 	dfi->buswidth[1] = FIELD_GET(RK3399_PMUGRF_OS_REG2_BW_CH1, val) == 0 ? 4 : 2;
- 
-+	dfi->ddrmon_stride = 0x14;
-+
- 	return 0;
- };
- 
 -- 
-2.39.2
-
+viresh
