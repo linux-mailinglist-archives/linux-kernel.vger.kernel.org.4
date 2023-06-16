@@ -2,49 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7E27327B6
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 08:35:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEC8A7327BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 08:37:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233287AbjFPGfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 02:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37628 "EHLO
+        id S233613AbjFPGhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 02:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233557AbjFPGfG (ORCPT
+        with ESMTP id S233680AbjFPGhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 02:35:06 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FCC2713;
-        Thu, 15 Jun 2023 23:34:55 -0700 (PDT)
-X-QQ-mid: bizesmtp80t1686897289tpepxrqb
-Received: from linux-lab-host.localdomain ( [116.30.128.97])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 16 Jun 2023 14:34:48 +0800 (CST)
-X-QQ-SSF: 00200000000000D0V000000A0000000
-X-QQ-FEAT: 3M0okmaRx3iREJ5lnYaDqqM4+04IMqux9Ah0gOBvfj2Y69UC1s6BhbgKVLLuG
-        NPijFSGCVcoH89fMsKVosOAFKdxmoGNY1CYWLLGH5BbPgon+uIGWeXEGKUa3xVONkw6qU/q
-        HwJTCzvgKm7mTH4r8ewGpQYUk3VMp0VCMlchCtPo1vT/j5UEr3Syg5TvDCQ92x7FkIjVyOC
-        +RULS07OVpQ0M9Ev+hv9zP2kd+hnHJdktYdJUo1FWVSV4anFWrgJPuv8r5lLmZm8D5cLser
-        nqOX3qbWrYR0jBjafK+4DlwS6ingv8XFuo1ppSbRO6+xk9VDwcRQ9IBFqQZ+/p2kVUgsQJT
-        LXUJkZJ1WfzrBqlWJ4aoyRfRhZQtg==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 4452696690556417832
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     wuyonggang001@208suo.com
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, w@1wt.eu
-Subject: [PATCH] selftests/nolibc: Remove unneeded variable
-Date:   Fri, 16 Jun 2023 14:34:48 +0800
-Message-Id: <20230616063448.14099-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <f964d3dbc6362c2cae56bdbdc05befea@208suo.com>
-References: <f964d3dbc6362c2cae56bdbdc05befea@208suo.com>
+        Fri, 16 Jun 2023 02:37:11 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C7C273C;
+        Thu, 15 Jun 2023 23:37:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686897430; x=1718433430;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=lhxN1g1baqKTY5d9KGHAVK+vUiIK8HZoj801iDtHTbg=;
+  b=MHH2AvhuPxW2cgond/YG5dqrSJuEAYFMTbASEHVTOyA6+dNUqFNc9cF7
+   9p2Pu83ZmAkuXMpmi8l3Li2Hokvi4a8RGsCCv9akzWS++DTeZAqm6xBm2
+   YYR9mUgWlngmtHehnlaAedN4kX38zZSsxurR9Tu0fqOYZUxqq9MCf9ykk
+   ZEpHjXX8j6MXNpSW5UX8ef1tQ5TbaNIpJbW5YdUepjf4G3nTSmkyPdeaH
+   JRardPHzjo7dLK1RFvL2egWiHxGMvDP6DHaddJqNAQ+7PvPbWOUzLep/y
+   MQNG9noCgmomhNkuUzxNG78AfrnF9pI7fdMaq32xjsITXBbldscTc5PZd
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="387807156"
+X-IronPort-AV: E=Sophos;i="6.00,246,1681196400"; 
+   d="scan'208";a="387807156"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 23:37:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="742548150"
+X-IronPort-AV: E=Sophos;i="6.00,246,1681196400"; 
+   d="scan'208";a="742548150"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 23:37:06 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Vishal Verma <vishal.l.verma@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <nvdimm@lists.linux.dev>,
+        <linux-cxl@vger.kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [PATCH 1/3] mm/memory_hotplug: Allow an override for the
+ memmap_on_memory param
+References: <20230613-vv-kmem_memmap-v1-0-f6de9c6af2c6@intel.com>
+        <20230613-vv-kmem_memmap-v1-1-f6de9c6af2c6@intel.com>
+Date:   Fri, 16 Jun 2023 14:35:32 +0800
+In-Reply-To: <20230613-vv-kmem_memmap-v1-1-f6de9c6af2c6@intel.com> (Vishal
+        Verma's message of "Thu, 15 Jun 2023 16:00:23 -0600")
+Message-ID: <874jn7gbij.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,114 +74,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Yonggang
+Hi, Vishal,
 
-The 'ret' variable is extractly used by the macros to record the
-failures, removing it would directly break the compiling.
+Thanks for your patch!
 
-    $ gcc -o nolibc-test tools/testing/selftests/nolibc/nolibc-test.c
-    tools/testing/selftests/nolibc/nolibc-test.c: In function ‘run_syscall’:
-    tools/testing/selftests/nolibc/nolibc-test.c:285:57: error: ‘ret’ undeclared (first use in this function)
-      285 |  do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_sysne(expr, llen, val); } while (0)
+Vishal Verma <vishal.l.verma@intel.com> writes:
 
-You can re-check all of the used 'ret' like this:
-
-    $ grep "ret += expect" -ur tools/testing/selftests/nolibc/nolibc-test.c
-
-To avoid sending such patches, simple local tests are required, for this patch,
-the 'libc-test' or 'nolibc-test' target may help us to find the above compile
-error:
-
-    $ cd tools/testing/selftests/nolibc/
-    $ make libc-test
-    or
-    $ make nolibc-test
-
-Thanks,
-Zhangjin
-
-> Fix the following coccicheck warning:
-> 
-> tools/testing/selftests/nolibc/nolibc-test.c:646:5-8: Unneeded variable: 
-> "ret". Return "0"
-> 
-> Signed-off-by: Yonggang Wu <wuyonggang001@208suo.com>
+> For memory hotplug to consider MHP_MEMMAP_ON_MEMORY behavior, the
+> 'memmap_on_memory' module parameter was a hard requirement.
+>
+> In preparation for the dax/kmem driver to use memmap_on_memory
+> semantics, arrange for the module parameter check to be bypassed via the
+> appropriate mhp_flag.
+>
+> Recall that the kmem driver could contribute huge amounts of hotplugged
+> memory originating from special purposes devices such as CXL memory
+> expanders. In some cases memmap_on_memory may be the /only/ way this new
+> memory can be hotplugged. Hence it makes sense for kmem to have a way to
+> force memmap_on_memory without depending on a module param, if all the
+> other conditions for it are met.
+>
+> The only other user of this interface is acpi/acpi_memoryhotplug.c,
+> which only enables the mhp_flag if an initial
+> mhp_supports_memmap_on_memory() test passes. Maintain the existing
+> behavior and semantics for this by performing the initial check from
+> acpi without the MHP_MEMMAP_ON_MEMORY flag, so its decision falls back
+> to the module parameter.
+>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Len Brown <lenb@kernel.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Oscar Salvador <osalvador@suse.de>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: Dave Jiang <dave.jiang@intel.com>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Huang Ying <ying.huang@intel.com>
+> Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
 > ---
->   tools/testing/selftests/nolibc/nolibc-test.c | 15 ++++++---------
->   1 file changed, 6 insertions(+), 9 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c 
-> b/tools/testing/selftests/nolibc/nolibc-test.c
-> index 486334981e60..2b723354e085 100644
-> --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> @@ -546,7 +546,6 @@ int run_syscall(int min, int max)
->       int proc;
->       int test;
->       int tmp;
-> -    int ret = 0;
->       void *p1, *p2;
-> 
->       /* <proc> indicates whether or not /proc is mounted */
-> @@ -632,18 +631,17 @@ int run_syscall(int min, int max)
->           CASE_TEST(syscall_noargs);    EXPECT_SYSEQ(1, 
-> syscall(__NR_getpid), getpid()); break;
->           CASE_TEST(syscall_args);      EXPECT_SYSER(1, 
-> syscall(__NR_statx, 0, NULL, 0, 0, NULL), -1, EFAULT); break;
->           case __LINE__:
-> -            return ret; /* must be last */
-> +            return 0; /* must be last */
->           /* note: do not set any defaults so as to permit holes above */
->           }
->       }
-> -    return ret;
-> +    return 0;
->   }
-> 
->   int run_stdlib(int min, int max)
->   {
->       int test;
->       int tmp;
-> -    int ret = 0;
->       void *p1, *p2;
-> 
->       for (test = min; test >= 0 && test <= max; test++) {
-> @@ -726,11 +724,11 @@ int run_stdlib(int min, int max)
->   # warning "__SIZEOF_LONG__ is undefined"
->   #endif /* __SIZEOF_LONG__ */
->           case __LINE__:
-> -            return ret; /* must be last */
-> +            return 0; /* must be last */
->           /* note: do not set any defaults so as to permit holes above */
->           }
->       }
-> -    return ret;
-> +    return 0;
->   }
-> 
->   #define EXPECT_VFPRINTF(c, expected, fmt, ...)                \
-> @@ -790,7 +788,6 @@ static int run_vfprintf(int min, int max)
->   {
->       int test;
->       int tmp;
-> -    int ret = 0;
->       void *p1, *p2;
-> 
->       for (test = min; test >= 0 && test <= max; test++) {
-> @@ -810,11 +807,11 @@ static int run_vfprintf(int min, int max)
->           CASE_TEST(hex);          EXPECT_VFPRINTF(1, "f", "%x", 0xf); 
-> break;
->           CASE_TEST(pointer);      EXPECT_VFPRINTF(3, "0x1", "%p", (void 
-> *) 0x1); break;
->           case __LINE__:
-> -            return ret; /* must be last */
-> +            return 0; /* must be last */
->           /* note: do not set any defaults so as to permit holes above */
->           }
->       }
-> -    return ret;
-> +    return 0;
->   }
-> 
->   static int smash_stack(void)
-> 
+>  include/linux/memory_hotplug.h |  2 +-
+>  drivers/acpi/acpi_memhotplug.c |  2 +-
+>  mm/memory_hotplug.c            | 24 ++++++++++++++++--------
+>  3 files changed, 18 insertions(+), 10 deletions(-)
+>
+> diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
+> index 9fcbf5706595..c9ddcd3cad70 100644
+> --- a/include/linux/memory_hotplug.h
+> +++ b/include/linux/memory_hotplug.h
+> @@ -358,7 +358,7 @@ extern struct zone *zone_for_pfn_range(int online_type, int nid,
+>  extern int arch_create_linear_mapping(int nid, u64 start, u64 size,
+>  				      struct mhp_params *params);
+>  void arch_remove_linear_mapping(u64 start, u64 size);
+> -extern bool mhp_supports_memmap_on_memory(unsigned long size);
+> +extern bool mhp_supports_memmap_on_memory(unsigned long size, mhp_t mhp_flags);
+>  #endif /* CONFIG_MEMORY_HOTPLUG */
+>  
+>  #endif /* __LINUX_MEMORY_HOTPLUG_H */
+> diff --git a/drivers/acpi/acpi_memhotplug.c b/drivers/acpi/acpi_memhotplug.c
+> index 24f662d8bd39..119d3bb49753 100644
+> --- a/drivers/acpi/acpi_memhotplug.c
+> +++ b/drivers/acpi/acpi_memhotplug.c
+> @@ -211,7 +211,7 @@ static int acpi_memory_enable_device(struct acpi_memory_device *mem_device)
+>  		if (!info->length)
+>  			continue;
+>  
+> -		if (mhp_supports_memmap_on_memory(info->length))
+> +		if (mhp_supports_memmap_on_memory(info->length, 0))
+>  			mhp_flags |= MHP_MEMMAP_ON_MEMORY;
+>  		result = __add_memory(mgid, info->start_addr, info->length,
+>  				      mhp_flags);
+> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+> index 8e0fa209d533..bb3845830922 100644
+> --- a/mm/memory_hotplug.c
+> +++ b/mm/memory_hotplug.c
+> @@ -1283,15 +1283,21 @@ static int online_memory_block(struct memory_block *mem, void *arg)
+>  	return device_online(&mem->dev);
+>  }
+>  
+> -bool mhp_supports_memmap_on_memory(unsigned long size)
+> +bool mhp_supports_memmap_on_memory(unsigned long size, mhp_t mhp_flags)
+>  {
+>  	unsigned long nr_vmemmap_pages = size / PAGE_SIZE;
+>  	unsigned long vmemmap_size = nr_vmemmap_pages * sizeof(struct page);
+>  	unsigned long remaining_size = size - vmemmap_size;
+>  
+>  	/*
+> -	 * Besides having arch support and the feature enabled at runtime, we
+> -	 * need a few more assumptions to hold true:
+> +	 * The MHP_MEMMAP_ON_MEMORY flag indicates a caller that wants to force
+> +	 * memmap_on_memory (if other conditions are met), regardless of the
+> +	 * module parameter. drivers/dax/kmem.c is an example, where large
+> +	 * amounts of hotplug memory may come from, and the only option to
+> +	 * successfully online all of it is to place the memmap on this memory.
+> +	 *
+> +	 * Besides having arch support and the feature enabled at runtime or
+> +	 * via the mhp_flag, we need a few more assumptions to hold true:
+>  	 *
+>  	 * a) We span a single memory block: memory onlining/offlinin;g happens
+>  	 *    in memory block granularity. We don't want the vmemmap of online
+> @@ -1315,10 +1321,12 @@ bool mhp_supports_memmap_on_memory(unsigned long size)
+>  	 *       altmap as an alternative source of memory, and we do not exactly
+>  	 *       populate a single PMD.
+>  	 */
+> -	return mhp_memmap_on_memory() &&
+> -	       size == memory_block_size_bytes() &&
+> -	       IS_ALIGNED(vmemmap_size, PMD_SIZE) &&
+> -	       IS_ALIGNED(remaining_size, (pageblock_nr_pages << PAGE_SHIFT));
+> +
+> +	if ((mhp_flags & MHP_MEMMAP_ON_MEMORY) || mhp_memmap_on_memory())
+> +		return size == memory_block_size_bytes() &&
+> +		       IS_ALIGNED(vmemmap_size, PMD_SIZE) &&
+> +		       IS_ALIGNED(remaining_size, (pageblock_nr_pages << PAGE_SHIFT));
+> +	return false;
+>  }
+>  
+>  /*
+> @@ -1375,7 +1383,7 @@ int __ref add_memory_resource(int nid, struct resource *res, mhp_t mhp_flags)
+>  	 * Self hosted memmap array
+>  	 */
+>  	if (mhp_flags & MHP_MEMMAP_ON_MEMORY) {
+> -		if (!mhp_supports_memmap_on_memory(size)) {
+> +		if (!mhp_supports_memmap_on_memory(size, mhp_flags)) {
+>  			ret = -EINVAL;
+>  			goto error;
+>  		}
+
+It appears that we need to deal with the hot-remove path too.
+try_remove_memory() will call mhp_memmap_on_memory() and only work with
+MHP_MEMMAP_ON_MEMORY properly if it returns true.
+
+Best Regards,
+Huang, Ying
