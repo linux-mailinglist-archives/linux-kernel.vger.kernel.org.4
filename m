@@ -2,48 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C61A732DEA
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C813732E33
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:30:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344258AbjFPK2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 06:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
+        id S1344884AbjFPKaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 06:30:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344225AbjFPK1l (ORCPT
+        with ESMTP id S1344634AbjFPK25 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 06:27:41 -0400
+        Fri, 16 Jun 2023 06:28:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4636144A4;
-        Fri, 16 Jun 2023 03:26:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABDD49D7;
+        Fri, 16 Jun 2023 03:26:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 190B5635F3;
-        Fri, 16 Jun 2023 10:26:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA3D4C433CC;
-        Fri, 16 Jun 2023 10:26:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0418E635C2;
+        Fri, 16 Jun 2023 10:26:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64108C433C9;
+        Fri, 16 Jun 2023 10:26:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686911176;
-        bh=bB8juP0KocRjws94PN5b3ffyZ73RXJO1xLmffa/eCZ0=;
+        s=k20201202; t=1686911179;
+        bh=/jy0jdXDEhOY3t3DIBzvRMyMooNFsh+AkjgnCmlVeMY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pshow7Q6Ri8nTCPrlpAaFKzqVXMLU8oCZQDoTi0cqDGN3ystSgz+iVu9ilS51oReH
-         Iu/9ESbDarvR/tI0yX+iYMwo2j7FpoInupZc1kX/l7lVXEfxwSTw2SAcfOJM8f88rw
-         f5DIJnz1H0sFQDWRKBnr9vuAwS04qUQ7xdJYx8ImcEpgseRCOywWxE8NKdAqaGSo2H
-         u6P2UqPGKPirO+TQNelh7CTf+DLWbP5sFBNUrCag9I2h25/pHTzqdxe79kuCfADmS7
-         uO2+CXcZXjt9Z+Qhm5Yn1uKz7VfhhUifNjez+SHfCPFsKlqolP5dEhnqbes4W9IUmk
-         EhjHpMRbysvNA==
+        b=hTcNX5jfdQc9y9NWYht5nmJtzmBkgnwYQZ27VlZ17cXSQ0UHJ0say2s7zlirhqWzv
+         r+TAJQrGQW/Fz5lolM3lzMn8yYmgZuHO1JDT7yqcJTlqNuAe5GVM3YL2/ZjPnm5BTj
+         kwZPl2KnalKn/UcitheiY3UfxL01jCWjkz6Lk3xtFthQS8FTIInNOA6NTfCgsvOKFL
+         8tLS84YGuOpCW3kabnw/YO5I6eWuyDS01scGb2mHazQRjj4X76zeDr/ZoRz3qRPcdw
+         yrr+kWDpIIQDigIfIQtoVHNyU2YHoDuCDoCHtYyGTdLOXp8wn6xNPZjRVULTl38o/6
+         zlupUoKO8Q2qA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Theodore Ts'o <tytso@mit.edu>, Sasha Levin <sashal@kernel.org>,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 27/30] ext4: only check dquot_initialize_needed() when debugging
-Date:   Fri, 16 Jun 2023 06:25:15 -0400
-Message-Id: <20230616102521.673087-27-sashal@kernel.org>
+Cc:     Rong Tao <rongtao@cestc.cn>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, jasowang@redhat.com,
+        xuanzhuo@linux.alibaba.com, dave@stgolabs.net,
+        virtualization@lists.linux-foundation.org
+Subject: [PATCH AUTOSEL 6.3 28/30] tools/virtio: Fix arm64 ringtest compilation error
+Date:   Fri, 16 Jun 2023 06:25:16 -0400
+Message-Id: <20230616102521.673087-28-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230616102521.673087-1-sashal@kernel.org>
 References: <20230616102521.673087-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.3.8
@@ -58,50 +62,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Theodore Ts'o <tytso@mit.edu>
+From: Rong Tao <rongtao@cestc.cn>
 
-[ Upstream commit dea9d8f7643fab07bf89a1155f1f94f37d096a5e ]
+[ Upstream commit 57380fd1249b20ef772549af2c58ef57b21faba7 ]
 
-ext4_xattr_block_set() relies on its caller to call dquot_initialize()
-on the inode.  To assure that this has happened there are WARN_ON
-checks.  Unfortunately, this is subject to false positives if there is
-an antagonist thread which is flipping the file system at high rates
-between r/o and rw.  So only do the check if EXT4_XATTR_DEBUG is
-enabled.
+Add cpu_relax() for arm64 instead of directly assert(), and add assert.h
+header file. Also, add smp_wmb and smp_mb for arm64.
 
-Link: https://lore.kernel.org/r/20230608044056.GA1418535@mit.edu
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Compilation error as follows, avoid __always_inline undefined.
+
+    $ make
+    cc -Wall -pthread -O2 -ggdb -flto -fwhole-program -c -o ring.o ring.c
+    In file included from ring.c:10:
+    main.h: In function ‘busy_wait’:
+    main.h:99:21: warning: implicit declaration of function ‘assert’
+    [-Wimplicit-function-declaration]
+    99 | #define cpu_relax() assert(0)
+        |                     ^~~~~~
+    main.h:107:17: note: in expansion of macro ‘cpu_relax’
+    107 |                 cpu_relax();
+        |                 ^~~~~~~~~
+    main.h:12:1: note: ‘assert’ is defined in header ‘<assert.h>’; did you
+    forget to ‘#include <assert.h>’?
+    11 | #include <stdbool.h>
+    +++ |+#include <assert.h>
+    12 |
+    main.h: At top level:
+    main.h:143:23: error: expected ‘;’ before ‘void’
+    143 | static __always_inline
+        |                       ^
+        |                       ;
+    144 | void __read_once_size(const volatile void *p, void *res, int
+    size)
+        | ~~~~
+    main.h:158:23: error: expected ‘;’ before ‘void’
+    158 | static __always_inline void __write_once_size(volatile void *p,
+    void *res, int size)
+        |                       ^~~~~
+        |                       ;
+    make: *** [<builtin>: ring.o] Error 1
+
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
+Message-Id: <tencent_F53E159DD7925174445D830DA19FACF44B07@qq.com>
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/xattr.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ tools/virtio/ringtest/main.h | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/fs/ext4/xattr.c b/fs/ext4/xattr.c
-index 6fa38707163b1..7421ca1d968b0 100644
---- a/fs/ext4/xattr.c
-+++ b/fs/ext4/xattr.c
-@@ -2057,8 +2057,9 @@ ext4_xattr_block_set(handle_t *handle, struct inode *inode,
- 			else {
- 				u32 ref;
+diff --git a/tools/virtio/ringtest/main.h b/tools/virtio/ringtest/main.h
+index b68920d527503..d18dd317e27f9 100644
+--- a/tools/virtio/ringtest/main.h
++++ b/tools/virtio/ringtest/main.h
+@@ -8,6 +8,7 @@
+ #ifndef MAIN_H
+ #define MAIN_H
  
-+#ifdef EXT4_XATTR_DEBUG
- 				WARN_ON_ONCE(dquot_initialize_needed(inode));
--
-+#endif
- 				/* The old block is released after updating
- 				   the inode. */
- 				error = dquot_alloc_block(inode,
-@@ -2121,8 +2122,9 @@ ext4_xattr_block_set(handle_t *handle, struct inode *inode,
- 			/* We need to allocate a new block */
- 			ext4_fsblk_t goal, block;
++#include <assert.h>
+ #include <stdbool.h>
  
-+#ifdef EXT4_XATTR_DEBUG
- 			WARN_ON_ONCE(dquot_initialize_needed(inode));
--
+ extern int param;
+@@ -95,6 +96,8 @@ extern unsigned ring_size;
+ #define cpu_relax() asm ("rep; nop" ::: "memory")
+ #elif defined(__s390x__)
+ #define cpu_relax() barrier()
++#elif defined(__aarch64__)
++#define cpu_relax() asm ("yield" ::: "memory")
+ #else
+ #define cpu_relax() assert(0)
+ #endif
+@@ -112,6 +115,8 @@ static inline void busy_wait(void)
+ 
+ #if defined(__x86_64__) || defined(__i386__)
+ #define smp_mb()     asm volatile("lock; addl $0,-132(%%rsp)" ::: "memory", "cc")
++#elif defined(__aarch64__)
++#define smp_mb()     asm volatile("dmb ish" ::: "memory")
+ #else
+ /*
+  * Not using __ATOMIC_SEQ_CST since gcc docs say they are only synchronized
+@@ -136,10 +141,16 @@ static inline void busy_wait(void)
+ 
+ #if defined(__i386__) || defined(__x86_64__) || defined(__s390x__)
+ #define smp_wmb() barrier()
++#elif defined(__aarch64__)
++#define smp_wmb() asm volatile("dmb ishst" ::: "memory")
+ #else
+ #define smp_wmb() smp_release()
+ #endif
+ 
++#ifndef __always_inline
++#define __always_inline inline __attribute__((always_inline))
 +#endif
- 			goal = ext4_group_first_block_no(sb,
- 						EXT4_I(inode)->i_block_group);
- 			block = ext4_new_meta_blocks(handle, inode, goal, 0,
++
+ static __always_inline
+ void __read_once_size(const volatile void *p, void *res, int size)
+ {
 -- 
 2.39.2
 
