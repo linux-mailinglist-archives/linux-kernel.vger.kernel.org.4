@@ -2,106 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87555733B9A
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 23:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A14A733B9C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 23:41:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232738AbjFPVke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 17:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44884 "EHLO
+        id S233156AbjFPVlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 17:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjFPVkc (ORCPT
+        with ESMTP id S229627AbjFPVlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 17:40:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FFA530DF
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 14:39:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686951583;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=zJIOldJuy+fu1YXH3vSoQYSg40ebqezMIIE6YitueZk=;
-        b=Cf4VYG2TZCuJ1x0p1conmy/QdLPAffsvWqZJEGFlAb3njHP2u9mwVO/V2Jf+2qGivdyTLh
-        gYX5UxvbuFUk49He/zwQgw+ch/ltDcO3vNLmZ1FrWm1NY+L2uB6oMJrto/KEfvaadMeQEW
-        xLRo3/5ghK6u4th9Q9bXR9u4fE+SxVU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-295-5SsXz7YIN9K9CA5JBJ3zRQ-1; Fri, 16 Jun 2023 17:39:41 -0400
-X-MC-Unique: 5SsXz7YIN9K9CA5JBJ3zRQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6A4F61C07266;
-        Fri, 16 Jun 2023 21:39:41 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.51])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9E283175AE;
-        Fri, 16 Jun 2023 21:39:40 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     torvalds@linux-foundation.org
-cc:     dhowells@redhat.com, Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] afs: Fix vlserver probe RTT handling
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <697563.1686951579.1@warthog.procyon.org.uk>
-Date:   Fri, 16 Jun 2023 22:39:39 +0100
-Message-ID: <697564.1686951579@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 16 Jun 2023 17:41:07 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1488030F7
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 14:41:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686951663; x=1718487663;
+  h=date:from:to:cc:subject:message-id;
+  bh=h1KtKKQwxWh1hEsaB3VaddkcsufyI7eoM65/MQPckzk=;
+  b=V02lzqS0rFabmO7MW7l7/Z/KXzRZygeDfjWdBHBA+1m5D4dJXvnrtHOj
+   bhLKDQZgy6eahm9dTAuAQw5iKLByTRMwWnMg5ETVV8ul0YzB9B77n6584
+   SOJp6MAG6Zb3naeqG8dbM2PiBDqjoiGVwSrWMq8jSceFLecjWKoFMSMIM
+   q2DuRnmpRgtpMDrtgczxgWlK/hidu+iXZ+gw0c9aFOlgQXE4wn/kYFdqG
+   5v7mGfBZFcsGYmYiVL+ra+jcttjqHI+onDOtgkky89OCEQmsneSdDLYs/
+   K9wI7m+QLQLUKp7+4FvZGSRkhBBvbjAqMxQERoipepSc2q9IVQaQlu0oe
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="361853398"
+X-IronPort-AV: E=Sophos;i="6.00,248,1681196400"; 
+   d="scan'208";a="361853398"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 14:40:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="716179325"
+X-IronPort-AV: E=Sophos;i="6.00,248,1681196400"; 
+   d="scan'208";a="716179325"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 16 Jun 2023 14:40:54 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qAHBe-0001pw-10;
+        Fri, 16 Jun 2023 21:40:54 +0000
+Date:   Sat, 17 Jun 2023 05:40:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/mtrr] BUILD SUCCESS
+ 30d65d1b19850c9bc8c17dba8ebe9be5e0c17054
+Message-ID: <202306170551.hWYeNPlq-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/mtrr
+branch HEAD: 30d65d1b19850c9bc8c17dba8ebe9be5e0c17054  x86/xen: Set default memory type for PV guests to WB
 
-Could you apply this, please?
+elapsed time: 721m
 
-Thanks,
-David
----
+configs tested: 127
+configs skipped: 8
 
-In the same spirit as commit ca57f02295f1 ("afs: Fix fileserver
-probe RTT handling"), don't rule out using a vlserver just because
-there haven't been enough packets yet to calculate a real rtt.
-Always set the server's probe rtt from the estimate provided by
-rxrpc_kernel_get_srtt, which is capped at 1 second.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-This could lead to EDESTADDRREQ errors when accessing a cell for
-the first time, even though the vl servers are known and have
-responded to a probe.
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r002-20230615   gcc  
+alpha                randconfig-r034-20230615   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r022-20230616   gcc  
+arc                  randconfig-r031-20230615   gcc  
+arc                  randconfig-r036-20230616   gcc  
+arc                  randconfig-r043-20230615   gcc  
+arc                  randconfig-r043-20230616   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r006-20230616   gcc  
+arm                  randconfig-r021-20230616   clang
+arm                  randconfig-r025-20230616   clang
+arm                  randconfig-r033-20230616   gcc  
+arm                  randconfig-r046-20230615   gcc  
+arm                  randconfig-r046-20230616   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r003-20230615   gcc  
+hexagon              randconfig-r025-20230615   clang
+hexagon              randconfig-r041-20230615   clang
+hexagon              randconfig-r041-20230616   clang
+hexagon              randconfig-r045-20230615   clang
+hexagon              randconfig-r045-20230616   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r005-20230614   clang
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230616   clang
+i386                 randconfig-i002-20230616   clang
+i386                 randconfig-i003-20230616   clang
+i386                 randconfig-i004-20230616   clang
+i386                 randconfig-i005-20230616   clang
+i386                 randconfig-i006-20230616   clang
+i386                 randconfig-i011-20230616   gcc  
+i386                 randconfig-i012-20230616   gcc  
+i386                 randconfig-i013-20230616   gcc  
+i386                 randconfig-i014-20230616   gcc  
+i386                 randconfig-i015-20230616   gcc  
+i386                 randconfig-i016-20230616   gcc  
+i386                 randconfig-r005-20230616   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r003-20230616   gcc  
+loongarch            randconfig-r015-20230614   gcc  
+loongarch            randconfig-r024-20230615   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r023-20230615   gcc  
+microblaze   buildonly-randconfig-r002-20230614   gcc  
+microblaze           randconfig-r005-20230615   gcc  
+microblaze           randconfig-r026-20230616   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2        buildonly-randconfig-r003-20230614   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r032-20230616   gcc  
+nios2                randconfig-r034-20230616   gcc  
+openrisc             randconfig-r002-20230616   gcc  
+openrisc             randconfig-r012-20230616   gcc  
+openrisc             randconfig-r026-20230615   gcc  
+parisc                           allyesconfig   gcc  
+parisc       buildonly-randconfig-r001-20230614   gcc  
+parisc       buildonly-randconfig-r004-20230614   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r011-20230614   gcc  
+powerpc              randconfig-r021-20230615   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r011-20230616   gcc  
+riscv                randconfig-r014-20230614   gcc  
+riscv                randconfig-r016-20230616   gcc  
+riscv                randconfig-r042-20230615   clang
+riscv                randconfig-r042-20230616   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r001-20230615   gcc  
+s390                 randconfig-r012-20230614   gcc  
+s390                 randconfig-r044-20230615   clang
+s390                 randconfig-r044-20230616   gcc  
+sh                               allmodconfig   gcc  
+sh           buildonly-randconfig-r006-20230614   gcc  
+sh                   randconfig-r004-20230616   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r015-20230616   gcc  
+sparc                randconfig-r031-20230616   gcc  
+sparc64              randconfig-r006-20230615   gcc  
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                   randconfig-r035-20230616   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230616   clang
+x86_64               randconfig-a002-20230616   clang
+x86_64               randconfig-a003-20230616   clang
+x86_64               randconfig-a004-20230616   clang
+x86_64               randconfig-a005-20230616   clang
+x86_64               randconfig-a006-20230616   clang
+x86_64               randconfig-a011-20230616   gcc  
+x86_64               randconfig-a012-20230616   gcc  
+x86_64               randconfig-a013-20230616   gcc  
+x86_64               randconfig-a014-20230616   gcc  
+x86_64               randconfig-a015-20230616   gcc  
+x86_64               randconfig-a016-20230616   gcc  
+x86_64               randconfig-r024-20230616   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r014-20230616   gcc  
+xtensa               randconfig-r016-20230614   gcc  
+xtensa               randconfig-r022-20230615   gcc  
 
-Fixes: 1d4adfaf6574 ("rxrpc: Make rxrpc_kernel_get_srtt() indicate validity")
-Signed-off-by: Marc Dionne <marc.dionne@auristor.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: linux-afs@lists.infradead.org
-Link: http://lists.infradead.org/pipermail/linux-afs/2023-June/006746.html
----
- fs/afs/vl_probe.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/fs/afs/vl_probe.c b/fs/afs/vl_probe.c
-index d1c7068b4346..58452b86e672 100644
---- a/fs/afs/vl_probe.c
-+++ b/fs/afs/vl_probe.c
-@@ -115,8 +115,8 @@ void afs_vlserver_probe_result(struct afs_call *call)
- 		}
- 	}
- 
--	if (rxrpc_kernel_get_srtt(call->net->socket, call->rxcall, &rtt_us) &&
--	    rtt_us < server->probe.rtt) {
-+	rxrpc_kernel_get_srtt(call->net->socket, call->rxcall, &rtt_us);
-+	if (rtt_us < server->probe.rtt) {
- 		server->probe.rtt = rtt_us;
- 		server->rtt = rtt_us;
- 		alist->preferred = index;
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
