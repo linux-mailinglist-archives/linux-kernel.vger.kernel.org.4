@@ -2,131 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 317DC7331F6
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 15:13:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8969C733208
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 15:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345588AbjFPNNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 09:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56834 "EHLO
+        id S1345615AbjFPNTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 09:19:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345557AbjFPNN0 (ORCPT
+        with ESMTP id S1345597AbjFPNTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 09:13:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB2B3A92;
-        Fri, 16 Jun 2023 06:13:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 732D263C50;
-        Fri, 16 Jun 2023 13:13:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 800B0C433C8;
-        Fri, 16 Jun 2023 13:13:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686921199;
-        bh=mQm8hu9ITzU2NnF6fwNpK5hC+oeccBOVUYKjkOQl508=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ACaJscHfqIULZp47slEzmb9Dku3lxAQzfhrqTCEzB3OaGvVZ8QubRrlnMHMJ/D177
-         ziiM2D08uxue+nX1YDXdgPjKiaxya3utOZd5TuaNucfNEW2VjwlJFe5ti6N2cM5rkW
-         wyFh5fMBAAQn6b0gciExzqnOLnIZwxzv599bF/kqIDdA/FQdjr7W7ypn6ZPdUSX5LL
-         4jXUvy9DiWh7WjWlKG4UTa7h2mdOw1au654inCAoRBIDYdOF/UB9NsKt9ftec9idB8
-         3kzrPLljxydEpRqzhrY3827HCH9LIa1Ox/CJ91KoyM9vkWlXGXAU+0ZMRQwFZBhn66
-         j6kMyW2l500zw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id B91E240692; Fri, 16 Jun 2023 10:13:16 -0300 (-03)
-Date:   Fri, 16 Jun 2023 10:13:16 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Thomas Richter <tmricht@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        irogers@google.com, sumanthk@linux.ibm.com, hca@linux.ibm.com,
-        svens@linux.ibm.com, gor@linux.ibm.com
-Subject: Re: [PATCH] perf test: fix failing test cases on linux-next for s390
-Message-ID: <ZIxf7A1jPiDUUdDt@kernel.org>
-References: <20230616081437.1932003-1-tmricht@linux.ibm.com>
+        Fri, 16 Jun 2023 09:19:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02592D6B
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 06:18:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686921511;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wLIOb+a2wstZ29K3bzTPcm77FOoyIKi9zKAYbmzihy0=;
+        b=SFgFPIxYKR4gTCHVnXaKLEM+kVwUsf7kWmBi7NFrta52NpWBYTQL+UvhbbR9kXrjJSMf/+
+        ReSPwy7jz4QnAHhpwk0Sf1z602qjhnzLTfU+g/2zCGR+LewrDtXSfchOqL1yhZEQN57vDE
+        rvTiNLR/cAKR+AlYCb+isQE7ZpyxkbY=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-226-PTUkPYLoPeyQBc2X6cQgWw-1; Fri, 16 Jun 2023 09:18:26 -0400
+X-MC-Unique: PTUkPYLoPeyQBc2X6cQgWw-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-98655eb409aso34452866b.2
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 06:18:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686921505; x=1689513505;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wLIOb+a2wstZ29K3bzTPcm77FOoyIKi9zKAYbmzihy0=;
+        b=K3VG2gQhoNGfXG029WyIdNOyHKzbqijD8hqLavm+rpTbql97mNNaX/gUxTINIIKePS
+         N9Vb68qacrre//dDwMm0pBlErqfx8I+iLeD9Wa5XYK0Tw/6xoQOvNqEUXUp0vyqaSbHA
+         eOgK6adP2P1RmW4KfKMBBpOwoXPJA/co/Un6UNXUejXVhfFJ73AOPgMSLDevybDKOSdR
+         q/+h3YgrPR0waYf60ba8mqLNUhRjf+52wbwp1kPiohYU/+STjxhlZux1vSXVuz536Yg0
+         jDLxT3etgVvMR1+taX3O3T9mFPQuTL+NExCvytYmMh7D1vTtHn54K1IUJnxCXGKbbkTZ
+         9r/A==
+X-Gm-Message-State: AC+VfDzKhg2IVj5yaUoDHFXliUKCVV2Nj4fLOv8uwgDPMUnPkQvYlC4o
+        m7EwLOokjkilUGQwe1thy55zRkIrtQBv7IebJtCdCM2+b3QK+PJcyQf/GugrbxEL6PjyTqfhDhE
+        WKQzHxJY1HoNc+o+dcfWa2gqK
+X-Received: by 2002:a17:907:62a1:b0:977:befe:d888 with SMTP id nd33-20020a17090762a100b00977befed888mr2069601ejc.13.1686921505552;
+        Fri, 16 Jun 2023 06:18:25 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7KyRgk64pRdV+kUcpS375HlH5soMGx18ivEQqrRikgMzb/QTnLolrS9/BwR2Dl3tXp3BDLpA==
+X-Received: by 2002:a17:907:62a1:b0:977:befe:d888 with SMTP id nd33-20020a17090762a100b00977befed888mr2069590ejc.13.1686921505268;
+        Fri, 16 Jun 2023 06:18:25 -0700 (PDT)
+Received: from [192.168.0.224] (host-79-49-207-213.retail.telecomitalia.it. [79.49.207.213])
+        by smtp.gmail.com with ESMTPSA id n4-20020a17090625c400b00982cfe1fe5dsm1405234ejb.65.2023.06.16.06.18.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Jun 2023 06:18:24 -0700 (PDT)
+Message-ID: <01191fe9-72f5-e9a3-ea11-2f0ce8a2933b@redhat.com>
+Date:   Fri, 16 Jun 2023 15:18:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230616081437.1932003-1-tmricht@linux.ibm.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [RFC PATCH V3 5/6] sched/fair: Add trivial fair server
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Luca Abeni <luca.abeni@santannapisa.it>,
+        Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Vineeth Pillai <vineeth@bitbyteword.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <cover.1686239016.git.bristot@kernel.org>
+ <8db5a49ea92ad8b875d331d6136721645a382fe8.1686239016.git.bristot@kernel.org>
+ <20230616125946.GN83892@hirez.programming.kicks-ass.net>
+ <c8a48cd8-b3bf-743c-55c5-f942fbe08792@kernel.org>
+ <20230616131243.GO83892@hirez.programming.kicks-ass.net>
+From:   Daniel Bristot de Oliveira <bristot@redhat.com>
+In-Reply-To: <20230616131243.GO83892@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Jun 16, 2023 at 10:14:37AM +0200, Thomas Richter escreveu:
-> In linux-next tree the many test cases fail on s390x when running the
-> perf test suite, sometime the perf tool dumps core.
+On 6/16/23 15:12, Peter Zijlstra wrote:
+> On Fri, Jun 16, 2023 at 03:00:57PM +0200, Daniel Bristot de Oliveira wrote:
+>> On 6/16/23 14:59, Peter Zijlstra wrote:
+>>> On Thu, Jun 08, 2023 at 05:58:17PM +0200, Daniel Bristot de Oliveira wrote:
+>>>> +void fair_server_init(struct rq *rq)
+>>>> +{
+>>>> +	struct sched_dl_entity *dl_se = &rq->fair_server;
+>>>> +
+>>>> +	init_dl_entity(dl_se);
+>>>> +
+>>>> +	dl_se->dl_runtime = TICK_NSEC;
+>>>> +	dl_se->dl_deadline = 20 * TICK_NSEC;
+>>>> +	dl_se->dl_period = 20 * TICK_NSEC;
+>>>> +
+>>>> +	dl_server_init(dl_se, rq, fair_server_has_tasks, fair_server_pick);
+>>>> +}
+>>>
+>>> These here numbers should obviously become a tunable somewhere... :-)
+>>
+>> From sched_rt_runtime and sched_rt_period, no?
 > 
-> Output before:
->   6.1: Test event parsing                               : FAILED!
->  10.3: Parsing of PMU event table metrics               : FAILED!
->  10.4: Parsing of PMU event table metrics with fake PMUs: FAILED!
->  17: Setup struct perf_event_attr                       : FAILED!
->  24: Number of exit events of a simple workload         : FAILED!
->  26: Object code reading                                : FAILED!
->  28: Use a dummy software event to keep tracking        : FAILED!
->  35: Track with sched_switch                            : FAILED!
->  42.3: BPF prologue generation                          : FAILED!
->  66: Parse and process metrics                          : FAILED!
->  68: Event expansion for cgroups                        : FAILED!
->  69.2: Perf time to TSC                                 : FAILED!
->  74: build id cache operations                          : FAILED!
->  86: Zstd perf.data compression/decompression           : FAILED!
->  87: perf record tests                                  : FAILED!
-> 106: Test java symbol                                   : FAILED!
+> Well, probably new names. IIRC those are also limits on the whole
+> rt-cgroup mess, so e can't trivially change it without also ripping all
+> that out, and that's a little bit more work.
 > 
-> The reason for all these failure is a missing PMU. On s390x
-> the PMU is named cpum_cf which is not detected as core PMU.
-> A similar patch was added before, see
-> commit 9bacbced0e32 ("perf list: Add s390 support for detailed PMU event description")
-> which got lost during the recent reworks. Add it again.
-> 
-> Output after:
->  10.2: PMU event map aliases                            : FAILED!
->  42.3: BPF prologue generation                          : FAILED!
-> 
-> Most test cases now work and there is not core dump anymore.
-
-So you're not fixing 'perf test', that is just what detects the problem,
-the part being fixed is the PMU code, so I'm rewriting the patch subject
-to:
-
-[PATCH] perf pmu: Fix core PMU detection on s/390
-
-Have you bisected the problem to the first patch where this problem
-appears?
-
-- Arnaldo
- 
-> Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
-> Cc: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/util/pmu.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-> index fe64ad292d36..6142e4710a2f 100644
-> --- a/tools/perf/util/pmu.c
-> +++ b/tools/perf/util/pmu.c
-> @@ -1419,7 +1419,7 @@ void perf_pmu__del_formats(struct list_head *formats)
->  
->  bool is_pmu_core(const char *name)
->  {
-> -	return !strcmp(name, "cpu") || is_sysfs_pmu_core(name);
-> +	return !strcmp(name, "cpu") || !strcmp(name, "cpum_cf") || is_sysfs_pmu_core(name);
->  }
->  
->  bool perf_pmu__supports_legacy_cache(const struct perf_pmu *pmu)
-> -- 
-> 2.39.2
+> Ripping out the basic throttle is much simpler than replacing all that
+> and should be done earlier.
 > 
 
--- 
+Life is easier then. Should them be a sysctl?
 
-- Arnaldo
+Like:
+  kernel.sched_other_min_runtime_us ?
+  kernel.sched_other_min_period_us ?
+
+I bet you can come up with better names.
+
+-- Daniel
+
+
+
