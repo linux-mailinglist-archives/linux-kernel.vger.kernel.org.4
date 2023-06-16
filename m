@@ -2,125 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1D63733077
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87060733079
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:53:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344773AbjFPLxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 07:53:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38604 "EHLO
+        id S1344905AbjFPLxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 07:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344397AbjFPLxB (ORCPT
+        with ESMTP id S1344895AbjFPLxX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 07:53:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C55191;
-        Fri, 16 Jun 2023 04:52:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8799763810;
-        Fri, 16 Jun 2023 11:52:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 538D6C433C9;
-        Fri, 16 Jun 2023 11:52:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686916378;
-        bh=vLi/Ctgz4882UqtH6fdv5YzHK0VG2XkpSMNA82BO34A=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JZ4veK4EM7+Drhrqe3EyyEUcnY6OgSUIEC7RF1MHwJu+WzBt9DEbjvnkfxJe79VN+
-         Ou6mweWotByj1Kulm6TEnmAvJkLNzSFElkCx0xCySJShFtFaejz95r8dXwVj6X7HiR
-         lFvLJx1TsvYupHgIbqKsaj051h8g8zA7tzAowgCc/jLmFTHNXzwG3d6dfXAuWMo4bV
-         ipYTECvuzi4e2N/EOKcQkF4BAC1WROnIVxG7p/1zfmOzXQZl7McORump73TNOxkpk6
-         CYGRPzKA5CBgUKflc2qZm4tOrw0xyr5owilv4yiWPgMMdpj+RNMEeGdhGPTCituBpT
-         JtaEAN/3B8l2w==
-Message-ID: <5b0eaf1d-60b1-532e-7d12-c67810541902@kernel.org>
-Date:   Fri, 16 Jun 2023 20:52:55 +0900
+        Fri, 16 Jun 2023 07:53:23 -0400
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A74B30CF;
+        Fri, 16 Jun 2023 04:53:20 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-311153ec442so507936f8f.1;
+        Fri, 16 Jun 2023 04:53:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686916399; x=1689508399;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K7xAAjbq425WmYDF4eeJ0EL9NFPdHLP90wUaRqnBZNg=;
+        b=VVKAefyzUkhucd2zTeHlApagVyGIzoaYmHllvLtwtLKqhsQdGadoO6/n/a3KL0XMJ3
+         O40hvTcKLHyGCuiljhOd/P+7q5A6n9XyzREKNwl4V0A8ph2ryGdFFmMtjhdjdBcW8TRg
+         w+OhCNxrlruv8K8GoqhG/zxhpkJzLGl+d+akHhUBDMGkwN6nVpldTeHQZcohEr488oGD
+         SBiA78KIMqTMe9bfFxzfzsyZUy78NnBryk7XrQ+oOgAzEtQWH7MXjB34r1MDyx1QMw+w
+         uAUQH4bzKYmyevKeYLxSa3ZT3qe8WOMi1260ruPbyAOX5Qy/AuHCTyOqHSICEDXeiFbi
+         Fysg==
+X-Gm-Message-State: AC+VfDy1gHNULGgDFRX+OLDobNKPap93wwe/W3aUqkgm2Y85wJ8chFnp
+        YyQ3lmaWitGDohIFecK9KlI=
+X-Google-Smtp-Source: ACHHUZ4C/WnNCIQ/pEnyVUy8SsHLNOVG9gCLKC/TtXe77N0MNds+3hMpNKMB/fTZ31cAn5v5Awd4Fw==
+X-Received: by 2002:adf:e4c1:0:b0:30f:c71a:1b28 with SMTP id v1-20020adfe4c1000000b0030fc71a1b28mr6558770wrm.28.1686916398618;
+        Fri, 16 Jun 2023 04:53:18 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-111.fbsv.net. [2a03:2880:31ff:6f::face:b00c])
+        by smtp.gmail.com with ESMTPSA id u24-20020a05600c00d800b003f7ead9be7fsm1954267wmm.38.2023.06.16.04.53.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 04:53:17 -0700 (PDT)
+From:   Breno Leitao <leitao@debian.org>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sandipan Das <sandipan.das@amd.com>
+Cc:     leit@fb.com, dcostantino@meta.com,
+        linux-perf-users@vger.kernel.org (open list:PERFORMANCE EVENTS
+        SUBSYSTEM),
+        linux-kernel@vger.kernel.org (open list:PERFORMANCE EVENTS SUBSYSTEM)
+Subject: [PATCH] perf/x86/amd: Do not WARN on every IRQ
+Date:   Fri, 16 Jun 2023 04:53:15 -0700
+Message-Id: <20230616115316.3652155-1-leitao@debian.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v3] block: add capacity validation in bdev_add_partition()
-Content-Language: en-US
-To:     "min.li" <min15.li@samsung.com>, axboe@kernel.dk,
-        willy@infradead.org, hch@lst.de, gregkh@linuxfoundation.org,
-        wsa@kernel.org, vkoul@kernel.org
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <CGME20230616092054epcas5p340e977377808d2df7210dc4a7d6c1d8e@epcas5p3.samsung.com>
- <20230616171913.13045-1-min15.li@samsung.com>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <20230616171913.13045-1-min15.li@samsung.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/17/23 02:19, min.li wrote:
-> In the function bdev_add_partition(),there is no check that the start
-> and end sectors exceed the size of the disk before calling add_partition.
-> When we call the block's ioctl interface directly to add a partition,
-> and the capacity of the disk is set to 0 by driver,the command will
-> continue to execute.
-> 
-> Signed-off-by: min.li <min15.li@samsung.com>
+On some systems, the Performance Counter Global Status Register is
+coming with reserved bits set, which causes the system to be unusable
+if a simple `perf top` runs. The system hits the WARN() thousands times
+while perf runs.
 
-I am guessing this should be:
+WARNING: CPU: 18 PID: 20608 at arch/x86/events/amd/core.c:944 amd_pmu_v2_handle_irq+0x1be/0x2b0
 
-Signed-off-by: Min Li <min15.li@samsung.com>
+This happens because the "Performance Counter Global Status Register"
+(PerfCntGlobalStatus) MSR has bit 7 set. Bit 7 should be reserved according
+to the documentation (Figure 13-12 from "AMD64 Architecture Programmer’s
+Manual, Volume 2: System Programming, 24593"[1]
 
-No ? The signed-off-by tag, and any other tag, must have your full name
-correctly written.
+WARN_ONCE if any reserved bit is set, and sanitize the value to what the
+code is handling, so the overflow events continue to be handled for the
+number of events that are known to be sane.
 
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> 
-> ---
-> Changes from v1:
-> 
-> - Check for overflows of the start + length value.
-> - Place the capacity check at the beginning of the function.
-> 
-> Changes from v2:
-> 
-> - Place the assignment on the first line and merge the two lines into one.
-> - Modify the singed name.
-> ---
->  block/partitions/core.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/block/partitions/core.c b/block/partitions/core.c
-> index 49e0496ff23c..b511f88bf558 100644
-> --- a/block/partitions/core.c
-> +++ b/block/partitions/core.c
-> @@ -436,10 +436,21 @@ static bool partition_overlaps(struct gendisk *disk, sector_t start,
->  int bdev_add_partition(struct gendisk *disk, int partno, sector_t start,
->  		sector_t length)
->  {
-> +	sector_t capacity = get_capacity(disk), end;
->  	struct block_device *part;
->  	int ret;
->  
->  	mutex_lock(&disk->open_mutex);
-> +	if (check_add_overflow(start, length, &end)) {
-> +		ret = -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	if (start >= capacity || end > capacity) {
-> +		ret = -EINVAL;
-> +		goto out;
-> +	}
-> +
->  	if (!disk_live(disk)) {
->  		ret = -ENXIO;
->  		goto out;
+Signed-off-by: Breno Leitao <leitao@debian.org>
+Fixes: 7685665c390d ("perf/x86/amd/core: Add PerfMonV2 overflow handling")
 
+[1] Link: https://www.amd.com/system/files/TechDocs/24593.pdf
+---
+ arch/x86/events/amd/core.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
+index bccea57dee81..809ddb15c122 100644
+--- a/arch/x86/events/amd/core.c
++++ b/arch/x86/events/amd/core.c
+@@ -909,6 +909,10 @@ static int amd_pmu_v2_handle_irq(struct pt_regs *regs)
+ 		status &= ~GLOBAL_STATUS_LBRS_FROZEN;
+ 	}
+ 
++	amd_pmu_global_cntr_mask = (1ULL << x86_pmu.num_counters) - 1;
++	WARN_ON_ONCE(status & ~amd_pmu_global_cntr_mask);
++	status &= amd_pmu_global_cntr_mask;
++
+ 	for (idx = 0; idx < x86_pmu.num_counters; idx++) {
+ 		if (!test_bit(idx, cpuc->active_mask))
+ 			continue;
 -- 
-Damien Le Moal
-Western Digital Research
+2.34.1
 
