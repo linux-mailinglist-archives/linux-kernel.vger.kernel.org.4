@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEFD97335DB
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 18:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E613E7335DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 18:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235804AbjFPQUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 12:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42114 "EHLO
+        id S1344762AbjFPQUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 12:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345156AbjFPQTd (ORCPT
+        with ESMTP id S1345302AbjFPQTe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 12:19:33 -0400
+        Fri, 16 Jun 2023 12:19:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4030E44B8
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 09:17:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D564683
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 09:18:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D39DF63D27
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 16:17:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4D71C433C8;
-        Fri, 16 Jun 2023 16:17:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E658061737
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 16:17:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB3B1C433C9;
+        Fri, 16 Jun 2023 16:17:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686932222;
-        bh=A9dVxzPM4+M/LW7dRokXamx4CMKnxAHX0prWOssGKe8=;
+        s=k20201202; t=1686932224;
+        bh=2kVal/nzSVsBGlkTLFoOeXQi1g+H/v+1G/o1A1F/w8M=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=eUdJTbVWTJLBumVi1LLoxtOd7p+BeND7e5aQ3hlkbMUUcYMWTdYdq0rKAzvRf7ctJ
-         38LFfRh4Q7t/KWnT9vEfhg8YrGs9Ac0xD6DjaqFcrnYarR9Oo35IDNohoF1qKZVm4C
-         13TZ35bYOpKL65CxW3QIhv3cPFQqszNBiBMOLYg3fI7yxdW2K3iO9JWu30z4/Eby6c
-         RSvRpiiaCYAgZBhRikALAviHI6bNtiGvlj5f6V2aWEIGjck2B8SyGzGMA4xYfVML5b
-         pQQx5yDe6RAti+XfSrEBfytDfAYJLXDUN5s1lLObdgWzmv7RcmdPWk9AxkZIHkEn8i
-         x/QNTUcTloJcA==
+        b=GrVEVq1bRU5Mg0ACZT55lDnFZeiTMf+M6dru4Wh+DSqNh7s4Vhw5B9PdIFes+ZDNr
+         dfQtRh4VGI6oh6z8mmWKmcub2E4Ex18wP+8ZNHzEjzMho8/RQOYQngw8gBoBzpMF7k
+         QwOTbsYe3qgzdApg00VJ9HS48KDfRhAG0Y1oDNdyRcE6mZIOIdBL2+zz5BUQIUauoZ
+         OwF0FpoVVQMd4Kxk99NkNKgpbui0GCyGvDvBbV9GYMSzS3W1Ygr1ujQ0N00uHH8WAN
+         G/mKEJjPiDj5SBAA2T5x79mzLD/MOSctCSPaA54vvu1tAWPtbQwrfCIupIeNYjPRas
+         YWHg0p7GlGJgA==
 From:   Mark Brown <broonie@kernel.org>
-To:     oder_chiou@realtek.com, lgirdwood@gmail.com, perex@perex.cz,
-        tiwai@suse.com, alsa-devel@alsa-project.org,
+To:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
         Juerg Haefliger <juerg.haefliger@canonical.com>
-Cc:     linux-kernel@vger.kernel.org
-In-Reply-To: <20230616115549.1011903-1-juerg.haefliger@canonical.com>
-References: <20230616115549.1011903-1-juerg.haefliger@canonical.com>
-Subject: Re: [PATCH] ASoC: rt5677: Add MODULE_FIRMWARE macro
-Message-Id: <168693222059.298269.16346280609105415774.b4-ty@kernel.org>
-Date:   Fri, 16 Jun 2023 17:17:00 +0100
+Cc:     linux-kernel@vger.kernel.org, ckeepax@opensource.cirrus.com
+In-Reply-To: <20230616115432.1011707-1-juerg.haefliger@canonical.com>
+References: <20230616115432.1011707-1-juerg.haefliger@canonical.com>
+Subject: Re: [PATCH] ASoC: codecs: wm0010: Add MODULE_FIRMWARE macros
+Message-Id: <168693222248.298269.5546880276593537709.b4-ty@kernel.org>
+Date:   Fri, 16 Jun 2023 17:17:02 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -57,8 +57,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Jun 2023 13:55:49 +0200, Juerg Haefliger wrote:
-> The module loads firmware so add a MODULE_FIRMWARE macro to provide that
+On Fri, 16 Jun 2023 13:54:32 +0200, Juerg Haefliger wrote:
+> The module loads firmware so add MODULE_FIRMWARE macros to provide that
 > information via modinfo.
 > 
 > 
@@ -69,8 +69,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: rt5677: Add MODULE_FIRMWARE macro
-      commit: 0f9c14e57818d077ceca060b8a0d0ee5ed3abd95
+[1/1] ASoC: codecs: wm0010: Add MODULE_FIRMWARE macros
+      commit: 60e07fa49b3201d7201cdd7286e7d51e8d937a28
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
