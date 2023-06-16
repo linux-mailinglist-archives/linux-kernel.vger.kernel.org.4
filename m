@@ -2,108 +2,326 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB280732580
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 04:59:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3695732585
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 05:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239559AbjFPC7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 22:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
+        id S241234AbjFPDAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 23:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjFPC7o (ORCPT
+        with ESMTP id S241663AbjFPDAJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 22:59:44 -0400
-Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 648252953;
-        Thu, 15 Jun 2023 19:59:41 -0700 (PDT)
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 192.168.10.46
-        by mg.richtek.com with MailGates ESMTP Server V5.0(18395:0:AUTH_RELAY)
-        (envelope-from <cy_huang@richtek.com>); Fri, 16 Jun 2023 10:59:25 +0800 (CST)
-Received: from ex4.rt.l (192.168.10.47) by ex3.rt.l (192.168.10.46) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Fri, 16 Jun
- 2023 10:59:25 +0800
-Received: from linuxcarl2.richtek.com (192.168.10.154) by ex4.rt.l
- (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
- Transport; Fri, 16 Jun 2023 10:59:25 +0800
-From:   <cy_huang@richtek.com>
-To:     <broonie@kernel.org>
-CC:     <tony@atomide.com>, <lgirdwood@gmail.com>, <jneanne@baylibre.com>,
-        <linux-omap@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        ChiYuan Huang <cy_huang@richtek.com>
-Subject: [PATCH] regulator: tps65219: Fix pointer assignment in tps65219_get_rdev_by_name()
-Date:   Fri, 16 Jun 2023 10:59:24 +0800
-Message-ID: <1686884364-31447-1-git-send-email-cy_huang@richtek.com>
-X-Mailer: git-send-email 1.8.3.1
+        Thu, 15 Jun 2023 23:00:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC57E2953;
+        Thu, 15 Jun 2023 20:00:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 299D56185A;
+        Fri, 16 Jun 2023 03:00:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48CFBC433CC;
+        Fri, 16 Jun 2023 03:00:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686884406;
+        bh=lfknHlYVl7xYkxb20nhhhSp7zufa8esHt6mjikj4vqA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=jAE+1Tp6FNYqMrl7Sxh8YTj9tilMjgVk8MyERRzcj3kzTrleZvA9WqHiNQ//0MFMk
+         tS8hZEaMMH5TPzHB4kchfhuDhnqDn0TPYAQce+ik5fB79T3MJIvgR5f3WC8GcSBzhz
+         qxfSIlKEVJjp0hiBtZlgPjFcbysOE0QxO3Qrm8SzPVr70H8VZPwKB9ENJp9bMkF131
+         D9ISjsQO+hrU9KXk8tlG6QlGRcZEWXp5M9RiXlSUy+DoFN/PuCetbGR2StY9lesoj6
+         GPWpRsopvg96bNzeViL+EMMJizczute1OgIHudHHwhbf/zZOwoRE+QhWHBbcGaoLru
+         qDR+6ll+mt8XA==
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5149c76f4dbso268299a12.1;
+        Thu, 15 Jun 2023 20:00:06 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxq1jlhWhNuyVj1YZJtV2OST3DrdzkT7yVLHTQiQCsHMpZKKqJD
+        1rZ6KKXALVMNXRZyEQsqFPfg5nSR3s91r9GfZXs=
+X-Google-Smtp-Source: ACHHUZ5YlVtj9U+gMDENeI3z8rcpk0Dp+squ/fpq8PSfXMLm1CWuIGmvmXfhmbRGTdSDlXdjOBxSJUgmbBRxNaOsnOk=
+X-Received: by 2002:a17:906:8590:b0:974:1ef1:81fb with SMTP id
+ v16-20020a170906859000b009741ef181fbmr514160ejx.22.1686884404345; Thu, 15 Jun
+ 2023 20:00:04 -0700 (PDT)
 MIME-Version: 1.0
+References: <20230609090832.2131037-1-zhaotianrui@loongson.cn>
+ <20230609090832.2131037-30-zhaotianrui@loongson.cn> <CAAhV-H4rzRZQpfxFBANFJyUshsNHYqmZmLnZfHA+McPyQ3m4-w@mail.gmail.com>
+ <749abd01-c717-3a4c-238e-cda1bb74f25c@loongson.cn>
+In-Reply-To: <749abd01-c717-3a4c-238e-cda1bb74f25c@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Fri, 16 Jun 2023 10:59:51 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6KtyaJ8rCt+ZkvOD0seN-PjULSVw+f+zSBw6=hkvyAGg@mail.gmail.com>
+Message-ID: <CAAhV-H6KtyaJ8rCt+ZkvOD0seN-PjULSVw+f+zSBw6=hkvyAGg@mail.gmail.com>
+Subject: Re: [PATCH v13 29/30] LoongArch: KVM: Supplement kvm document about
+ LoongArch-specific part
+To:     zhaotianrui <zhaotianrui@loongson.cn>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
+        Xi Ruoyao <xry111@xry111.site>, tangyouling@loongson.cn
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ChiYuan Huang <cy_huang@richtek.com>
+On Fri, Jun 16, 2023 at 10:39=E2=80=AFAM zhaotianrui <zhaotianrui@loongson.=
+cn> wrote:
+>
+>
+> =E5=9C=A8 2023/6/15 =E4=B8=8B=E5=8D=885:42, Huacai Chen =E5=86=99=E9=81=
+=93:
+> > Hi, Tianrui,
+> >
+> > On Fri, Jun 9, 2023 at 5:09=E2=80=AFPM Tianrui Zhao <zhaotianrui@loongs=
+on.cn> wrote:
+> >> Supplement kvm document about LoongArch-specific part, such as add
+> >> api introduction for GET/SET_ONE_REG, GET/SET_FPU, GET/SET_MP_STATE,
+> >> etc.
+> >>
+> >> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
+> >> ---
+> >>   Documentation/virt/kvm/api.rst | 71 +++++++++++++++++++++++++++++---=
+--
+> >>   1 file changed, 62 insertions(+), 9 deletions(-)
+> >>
+> >> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/a=
+pi.rst
+> >> index add067793b90..ad8e13eab48d 100644
+> >> --- a/Documentation/virt/kvm/api.rst
+> >> +++ b/Documentation/virt/kvm/api.rst
+> >> @@ -416,6 +416,12 @@ Reads the general purpose registers from the vcpu=
+.
+> >>          __u64 pc;
+> >>     };
+> >>
+> >> +  /* LoongArch */
+> >> +  struct kvm_regs {
+> > Add a " /* out (KVM_GET_REGS) / in (KVM_SET_REGS) */" line as others he=
+re?
+>
+> Thanks, I will add this comment here.
+>
+> Tianrui Zhao
+>
+> >> +        unsigned long gpr[32];
+> >> +        unsigned long pc;
+> >> +  };
+> >> +
+> >>
+> >>   4.12 KVM_SET_REGS
+> >>   -----------------
+> >> @@ -506,7 +512,7 @@ translation mode.
+> >>   ------------------
+> >>
+> >>   :Capability: basic
+> >> -:Architectures: x86, ppc, mips, riscv
+> >> +:Architectures: x86, ppc, mips, riscv, loongarch
+> >>   :Type: vcpu ioctl
+> >>   :Parameters: struct kvm_interrupt (in)
+> >>   :Returns: 0 on success, negative on failure.
+> >> @@ -592,6 +598,14 @@ b) KVM_INTERRUPT_UNSET
+> >>
+> >>   This is an asynchronous vcpu ioctl and can be invoked from any threa=
+d.
+> >>
+> >> +LOONGARCH:
+> >> +^^^^^^^^^^
+> >> +
+> >> +Queues an external interrupt to be injected into the virtual CPU. A n=
+egative
+> >> +interrupt number dequeues the interrupt.
+> >> +
+> >> +This is an asynchronous vcpu ioctl and can be invoked from any thread=
+.
+> >> +
+> >>
+> >>   4.17 KVM_DEBUG_GUEST
+> >>   --------------------
+> >> @@ -737,7 +751,7 @@ signal mask.
+> >>   ----------------
+> >>
+> >>   :Capability: basic
+> >> -:Architectures: x86
+> >> +:Architectures: x86, loongarch
+> >>   :Type: vcpu ioctl
+> >>   :Parameters: struct kvm_fpu (out)
+> >>   :Returns: 0 on success, -1 on error
+> >> @@ -746,7 +760,7 @@ Reads the floating point state from the vcpu.
+> >>
+> >>   ::
+> >>
+> >> -  /* for KVM_GET_FPU and KVM_SET_FPU */
+> >> +  /* x86: for KVM_GET_FPU and KVM_SET_FPU */
+> >>     struct kvm_fpu {
+> >>          __u8  fpr[8][16];
+> >>          __u16 fcw;
+> >> @@ -761,12 +775,22 @@ Reads the floating point state from the vcpu.
+> >>          __u32 pad2;
+> >>     };
+> >>
+> >> +  /* LoongArch: for KVM_GET_FPU and KVM_SET_FPU */
+> >> +  struct kvm_fpu {
+> >> +        __u32 fcsr;
+> >> +        __u32 none;
+> > Maybe use pad1 as x86 is better.
+> >
+> > Huacai
+>
+> Thanks, this 'none' variable is meaningless, and I will remove it. As
+> this have already been removed in the actually kvm_fpu structure.
+Why remove? I think it is for alignment, just like pad1 for x86.
 
-For the pointer assignment in function body, double pointer must be used as
-the input parameter.
-
-Fixes: c12ac5fc3e0a ("regulator: drivers: Add TI TPS65219 PMIC regulators support")
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
----
-Hi,
-
-I try to fix W=1 build warning for tps65219-regulator.
-
-W=1
-    warning: parameter ‘dev’ set but not used [-Wunused-but-set-parameter]
-    struct regulator_dev *dev)
-                         ^~~~~
-But the issue is not what the warning message described.
-
-In tps65219_get_rdev_by_name(), it must return the found rdev and assign it
-in 'dev' pointer. Due to pointer assignment issue, it doesn't.
-
-The original code may not cause any problem. But it always takes the last
-registered regulator rdev for all tps65219 regulator interrupts.
----
- drivers/regulator/tps65219-regulator.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/regulator/tps65219-regulator.c b/drivers/regulator/tps65219-regulator.c
-index b1719ee990ab..8971b507a79a 100644
---- a/drivers/regulator/tps65219-regulator.c
-+++ b/drivers/regulator/tps65219-regulator.c
-@@ -289,13 +289,13 @@ static irqreturn_t tps65219_regulator_irq_handler(int irq, void *data)
- 
- static int tps65219_get_rdev_by_name(const char *regulator_name,
- 				     struct regulator_dev *rdevtbl[7],
--				     struct regulator_dev *dev)
-+				     struct regulator_dev **dev)
- {
- 	int i;
- 
- 	for (i = 0; i < ARRAY_SIZE(regulators); i++) {
- 		if (strcmp(regulator_name, regulators[i].name) == 0) {
--			dev = rdevtbl[i];
-+			*dev = rdevtbl[i];
- 			return 0;
- 		}
- 	}
-@@ -348,7 +348,7 @@ static int tps65219_regulator_probe(struct platform_device *pdev)
- 		irq_data[i].dev = tps->dev;
- 		irq_data[i].type = irq_type;
- 
--		tps65219_get_rdev_by_name(irq_type->regulator_name, rdevtbl, rdev);
-+		tps65219_get_rdev_by_name(irq_type->regulator_name, rdevtbl, &rdev);
- 		if (IS_ERR(rdev)) {
- 			dev_err(tps->dev, "Failed to get rdev for %s\n",
- 				irq_type->regulator_name);
--- 
-2.40.1
-
+Huacai
+>
+> Tianrui Zhao
+>
+> >> +        __u64 fcc;
+> >> +        struct kvm_fpureg {
+> >> +                __u64 val64[4];
+> >> +        }fpr[32];
+> >> +  };
+> >> +
+> >>
+> >>   4.23 KVM_SET_FPU
+> >>   ----------------
+> >>
+> >>   :Capability: basic
+> >> -:Architectures: x86
+> >> +:Architectures: x86, loongarch
+> >>   :Type: vcpu ioctl
+> >>   :Parameters: struct kvm_fpu (in)
+> >>   :Returns: 0 on success, -1 on error
+> >> @@ -775,7 +799,7 @@ Writes the floating point state to the vcpu.
+> >>
+> >>   ::
+> >>
+> >> -  /* for KVM_GET_FPU and KVM_SET_FPU */
+> >> +  /* x86: for KVM_GET_FPU and KVM_SET_FPU */
+> >>     struct kvm_fpu {
+> >>          __u8  fpr[8][16];
+> >>          __u16 fcw;
+> >> @@ -790,6 +814,16 @@ Writes the floating point state to the vcpu.
+> >>          __u32 pad2;
+> >>     };
+> >>
+> >> +  /* LoongArch: for KVM_GET_FPU and KVM_SET_FPU */
+> >> +  struct kvm_fpu {
+> >> +        __u32 fcsr;
+> >> +        __u32 none;
+>
+> I will also remove this 'none' variable.
+>
+> Tianrui Zhao
+>
+> >> +        __u64 fcc;
+> >> +        struct kvm_fpureg {
+> >> +                __u64 val64[4];
+> >> +        }fpr[32];
+> >> +  };
+> >> +
+> >>
+> >>   4.24 KVM_CREATE_IRQCHIP
+> >>   -----------------------
+> >> @@ -1387,7 +1421,7 @@ documentation when it pops into existence).
+> >>   -------------------
+> >>
+> >>   :Capability: KVM_CAP_ENABLE_CAP
+> >> -:Architectures: mips, ppc, s390, x86
+> >> +:Architectures: mips, ppc, s390, x86, loongarch
+> >>   :Type: vcpu ioctl
+> >>   :Parameters: struct kvm_enable_cap (in)
+> >>   :Returns: 0 on success; -1 on error
+> >> @@ -1442,7 +1476,7 @@ for vm-wide capabilities.
+> >>   ---------------------
+> >>
+> >>   :Capability: KVM_CAP_MP_STATE
+> >> -:Architectures: x86, s390, arm64, riscv
+> >> +:Architectures: x86, s390, arm64, riscv, loongarch
+> >>   :Type: vcpu ioctl
+> >>   :Parameters: struct kvm_mp_state (out)
+> >>   :Returns: 0 on success; -1 on error
+> >> @@ -1460,7 +1494,7 @@ Possible values are:
+> >>
+> >>      =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D    =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+> >>      KVM_MP_STATE_RUNNABLE         the vcpu is currently running
+> >> -                                 [x86,arm64,riscv]
+> >> +                                 [x86,arm64,riscv,loongarch]
+> >>      KVM_MP_STATE_UNINITIALIZED    the vcpu is an application processo=
+r (AP)
+> >>                                    which has not yet received an INIT =
+signal [x86]
+> >>      KVM_MP_STATE_INIT_RECEIVED    the vcpu has received an INIT signa=
+l, and is
+> >> @@ -1516,11 +1550,14 @@ For riscv:
+> >>   The only states that are valid are KVM_MP_STATE_STOPPED and
+> >>   KVM_MP_STATE_RUNNABLE which reflect if the vcpu is paused or not.
+> >>
+> >> +On LoongArch, only the KVM_MP_STATE_RUNNABLE state is used to reflect
+> >> +whether the vcpu is runnable.
+> >> +
+> >>   4.39 KVM_SET_MP_STATE
+> >>   ---------------------
+> >>
+> >>   :Capability: KVM_CAP_MP_STATE
+> >> -:Architectures: x86, s390, arm64, riscv
+> >> +:Architectures: x86, s390, arm64, riscv, loongarch
+> >>   :Type: vcpu ioctl
+> >>   :Parameters: struct kvm_mp_state (in)
+> >>   :Returns: 0 on success; -1 on error
+> >> @@ -1538,6 +1575,9 @@ For arm64/riscv:
+> >>   The only states that are valid are KVM_MP_STATE_STOPPED and
+> >>   KVM_MP_STATE_RUNNABLE which reflect if the vcpu should be paused or =
+not.
+> >>
+> >> +On LoongArch, only the KVM_MP_STATE_RUNNABLE state is used to reflect
+> >> +whether the vcpu is runnable.
+> >> +
+> >>   4.40 KVM_SET_IDENTITY_MAP_ADDR
+> >>   ------------------------------
+> >>
+> >> @@ -2839,6 +2879,19 @@ Following are the RISC-V D-extension registers:
+> >>     0x8020 0000 0600 0020 fcsr      Floating point control and status =
+register
+> >>   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+> >>
+> >> +LoongArch registers are mapped using the lower 32 bits. The upper 16 =
+bits of
+> >> +that is the register group type.
+> >> +
+> >> +LoongArch csr registers are used to control guest cpu or get status o=
+f guest
+> >> +cpu, and they have the following id bit patterns::
+> >> +
+> >> +  0x9030 0000 0001 00 <reg:5> <sel:3>   (64-bit)
+> >> +
+> >> +LoongArch KVM control registers are used to implement some new define=
+d functions
+> >> +such as set vcpu counter or reset vcpu, and they have the following i=
+d bit patterns::
+> >> +
+> >> +  0x9030 0000 0002 <reg:16>
+> >> +
+> >>
+> >>   4.69 KVM_GET_ONE_REG
+> >>   --------------------
+> >> --
+> >> 2.39.1
+> >>
+> >>
+>
