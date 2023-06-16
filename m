@@ -2,115 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63A9D732C80
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:53:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AC82732C89
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:56:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243398AbjFPJx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 05:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60242 "EHLO
+        id S234815AbjFPJ4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 05:56:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjFPJxY (ORCPT
+        with ESMTP id S230420AbjFPJ4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 05:53:24 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 72A26297E;
-        Fri, 16 Jun 2023 02:53:23 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D4E41FB;
-        Fri, 16 Jun 2023 02:54:07 -0700 (PDT)
-Received: from e120325.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1817B3F5A1;
-        Fri, 16 Jun 2023 02:53:19 -0700 (PDT)
-Date:   Fri, 16 Jun 2023 10:53:11 +0100
-From:   Beata Michalska <beata.michalska@arm.com>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-        mark.rutland@arm.com, will@kernel.org, rafael@kernel.org,
-        viresh.kumar@linaro.org, sudeep.holla@arm.com,
-        ionela.voinescu@arm.com, yang@os.amperecomputing.com,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH] arm64: Provide an AMU-based version of
- arch_freq_get_on_cpu
-Message-ID: <ZIwxB5ao96pVPaCc@e120325.cambridge.arm.com>
-References: <20230606155754.245998-1-beata.michalska@arm.com>
- <8e755438-4b1f-b3d6-b2b8-a5efcca813bc@nvidia.com>
+        Fri, 16 Jun 2023 05:56:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD97297E
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 02:56:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686909371;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LRrap5sa/SGfzSyFM8C7uu+zlqlVKh+fF2QdwlihjcY=;
+        b=XLHXKu5qkRqu8bTGnLbAnsMyLFIYysnvnUbmoXmzir8qaVLFFZrqaH/XJ3ag8k2dLFTFdx
+        Fa8pLknFmPdjcZ5dBJOIZ04baawyiy0diRR0GMDyUpdTGqo6qxE3+fUTg75ONhW5vnbK2m
+        ZjULZBbDVQ9xbjSIx33u/i9y7Zi+/Vg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-558-JeIIq2TmOLOvMpnKv8FXmQ-1; Fri, 16 Jun 2023 05:56:07 -0400
+X-MC-Unique: JeIIq2TmOLOvMpnKv8FXmQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 719CF101A52A;
+        Fri, 16 Jun 2023 09:56:07 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.51])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2508A40D1B60;
+        Fri, 16 Jun 2023 09:56:06 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20230615205014.8d7eb4457ca9bc676a79d2db@linux-foundation.org>
+References: <20230615205014.8d7eb4457ca9bc676a79d2db@linux-foundation.org> <20230616115856.3ce7682c@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     dhowells@redhat.com, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Jens Axboe <axboe@kernel.dk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+Subject: Re: linux-next: manual merge of the block tree with the mm tree
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8e755438-4b1f-b3d6-b2b8-a5efcca813bc@nvidia.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <424128.1686909362.1@warthog.procyon.org.uk>
+Date:   Fri, 16 Jun 2023 10:56:02 +0100
+Message-ID: <424129.1686909362@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 12:29:57AM +0530, Sumit Gupta wrote:
-> 
-> 
-> On 06/06/23 21:27, Beata Michalska wrote:
-> > External email: Use caution opening links or attachments
-> > 
-> > 
-> > With the Frequency Invariance Engine (FIE) being already wired up with
-> > sched tick and making use of relevant (core counter and constant
-> > counter) AMU counters, getting the current frequency for a given CPU
-> > on supported platforms, can be achieved by utilizing the frequency scale
-> > factor which reflects an average CPU frequency for the last tick period
-> > length.
-> > 
-> > With that at hand, arch_freq_get_on_cpu dedicated implementation
-> > gets enrolled into cpuinfo_cur_freq policy sysfs attribute handler,
-> > which is expected to represent the current frequency of a given CPU,
-> > as obtained by the hardware. This is exactly the type of feedback that
-> > cycle counters provide.
-> > 
-> > In order to avoid calling arch_freq_get_on_cpu from the scaling_cur_freq
-> > attribute handler for platforms that do provide cpuinfo_cur_freq, and
-> > yet keeping things intact for those platform that do not, its use gets
-> > conditioned on the presence of cpufreq_driver (*get) callback (which also
-> > seems to be the case for creating cpuinfo_cur_freq attribute).
-> > 
-> 
-> Tested the change with frequency switch stress test but was getting big
-> delta between set and get freq.
-Would you mind sharing some more data re your testing ?
-The arch_freq_get_on_cpu will provided an average freq for last tick period,
-with an updated occurring on each sched tick so the differences between set
-and get might show up. With your stress testing, if the frequency change comes
-at the end of current tick period, it might not be reflected until next one
-elapses.
-In case of idle states - if the CPU for which the current frequency is being
-requested is in idle mode, the frequency returned will be the last one before
-entering idle, which seems reasonable (?).
-I guess the question here would be what is your tolerance level for those
-differences.
-> After passing "nohz=off" and commenting "wfi" in "cpu_do_idle()", the
-> delta is less. This confirms that more delta is due to AMU counters
-> stopping at "WFI".
-> 
->   +++ b/arch/arm64/kernel/idle.c
->   @@ -27,7 +27,7 @@ void noinstr cpu_do_idle(void)
->           arm_cpuidle_save_irq_context(&context);
-> 
->           dsb(sy);
->   -       wfi();
->   +//     wfi();
-> 
-> I am not sure if the expected behavior here is right.
-Both CPU_CYCLES and CNT_CYCLES are not incremented in WFI.
-> In our tests, we compare the last set frequency against the re-generated
-> value from counters to confirm that the CPU is actually running at the
-> requested frequency and the counters are working correct. But that won't
-> happen with this change.
-> 
-> In [1] and later in the updated patch within [2], we are busy looping
-> on the target CPU and avoid WFI to get the actual frequency.
-> 
-> Please share what you think is the right expected behavior.
-> 
-> [1] https://lore.kernel.org/lkml/20230418113459.12860-7-sumitg@nvidia.com/
-> [2] https://lore.kernel.org/lkml/cde1d8a9-3a21-e82b-7895-40603a14d898@nvidia.com/T/#mb898a75fd0c72d166b26b04da3ad162afe068a82
+Andrew Morton <akpm@linux-foundation.org> wrote:
+
+> That's getting a bit nasty.  Maybe David's patches are in the wrong tree.
+
+You'd need to discuss that one with Jens.  The patches you'd have to transfer
+also touch a number of block-related files.  Looking at block/for-next, there
+don't seem to be many other patches touching those files, but I've seen
+patches from Christoph that will need to be applied on top of mine.
+
+David
+
