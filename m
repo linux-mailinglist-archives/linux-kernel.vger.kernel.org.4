@@ -2,101 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1398733567
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 18:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31178733569
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 18:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231782AbjFPQHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 12:07:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36724 "EHLO
+        id S229778AbjFPQIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 12:08:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230258AbjFPQHk (ORCPT
+        with ESMTP id S229540AbjFPQIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 12:07:40 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B192D5D
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 09:07:39 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id ca18e2360f4ac-760dff4b701so10227339f.0
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 09:07:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1686931658; x=1689523658;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lBiz/Mt5xWYRFji0Ec1DEEBKtDnpmQmcZ7A3+2PxUAM=;
-        b=fseNIKgGtGh/yQpHAf7O0q1/PqxDuAyDIjFrgrZHnQ2iu7jD8UZjnjtcHHG+GvMemZ
-         C8u4Z6BfJ4oKB005waeqrzvWXol32cpK221xxlxLCJYz1Jfqk0e5zuK5s/vC1FxqHSkj
-         UHQhmBXvy3K4ZZ3IXHZmCDJkgKT2J0Q+BOj4xK2wenDvuyqDDsZX3oxqG/2AYTs338u3
-         DFF5IZP2oMNi3MBosSoZDCOp8AJqBKdc2LDBM2AJ2lXk7g2II29M6H74Vdm6Bm86fkRi
-         OkY4D3uRVtkAt/fK51v7m9G21RygdwsPlBoXBAdG0DrYHthIycpKhMB16OHLkyNvzM/t
-         yG9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686931658; x=1689523658;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lBiz/Mt5xWYRFji0Ec1DEEBKtDnpmQmcZ7A3+2PxUAM=;
-        b=OiGWBWlghkDpCLSkfj5Yca9EDKY3iRpipWTMG4YKBIHijN53oXcYYPze8DlD+Y8UtF
-         adeb96f362KNGYiLdZqWS5F8VLtRD7Vr8eX+rtSRpLJZbOS0l/101NxzuAUH3GfJdbdH
-         9q+pBMUPIFIN0/jq2gvF09+a8iVGg68isZFNm8SGim2mi08u+1zzyETH+utguvFzWysU
-         w+z92Cy9opvNcRsHmchi5hD8o7UABHo4e9q62lvpMHTgJO4Sl/C5BCBTYBqmBs6eSwVO
-         4k2olXDiWEiFP7WAtzw//yTVKbjHOczn3fbNowL/5TDSNteuJqfOveS8my2q5CVPn3vv
-         QJZQ==
-X-Gm-Message-State: AC+VfDxTA01Ljawkd/Rp+kX4Z/Mwhe/koencuBg3D8ch/5vf/3y2nq3o
-        kV4esz9BRLTGgBsxedrW4r+dpg==
-X-Google-Smtp-Source: ACHHUZ4ykMsGxl3b0JpxqzrQSJ0WPNS/m1X/Lg9u0n4XlXZ7r1WDBYg03nhOe2qA3mZ/h4hM5qI/VQ==
-X-Received: by 2002:a6b:b744:0:b0:77e:23a7:c9eb with SMTP id h65-20020a6bb744000000b0077e23a7c9ebmr92463iof.0.1686931658573;
-        Fri, 16 Jun 2023 09:07:38 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id ed13-20020a056638290d00b004161870da90sm6387967jab.151.2023.06.16.09.07.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jun 2023 09:07:37 -0700 (PDT)
-Message-ID: <dded1115-c7e1-486f-2564-a5c6ea013bcd@kernel.dk>
-Date:   Fri, 16 Jun 2023 10:07:36 -0600
+        Fri, 16 Jun 2023 12:08:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970042D6A;
+        Fri, 16 Jun 2023 09:08:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F4D661B65;
+        Fri, 16 Jun 2023 16:08:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 086DBC433C8;
+        Fri, 16 Jun 2023 16:08:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686931698;
+        bh=vVuSAFNQlOZX+Auz50QNpcWFgO5PYw/fJf95j9d31YU=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=RuDwj04ZKml+dl36jOTJShLy5/xBoVEk1rhZiKqWuxCijtWWzyMSVgiIc/RjPZAQp
+         oSBet9sxE/j6zetiANLE0iDfGVtAjBR8DTs+Vtm+qg02EmvQTzykBV1L/zXy9du+Gp
+         MnwrnfH9z5FeM5NYaClb2AuIBGu3LoRho6P0MUW5nmouN4efYH1WzyJe61iof0zHLn
+         KMzXN1WllJ0wf1kaKG6KljOMbzoANYlq4dGcNr10jdblm+is6OlRXrJ4cGUZdYJRH+
+         /oce8xywinTajZ27SGwFlXTtujYpEE9CgPlKchKLRBL73YGQmjmHSTyf9iFNm4PPlw
+         qYEj3DZIj8yBg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: linux-next: manual merge of the block tree with the mm tree
-Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-References: <20230615205014.8d7eb4457ca9bc676a79d2db@linux-foundation.org>
- <20230616115856.3ce7682c@canb.auug.org.au>
- <424129.1686909362@warthog.procyon.org.uk>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <424129.1686909362@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH 1/3] wifi: ath11k: Add missing ops config for IPQ5018 in
+ ath11k_ahb_probe()
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <TYZPR01MB5556D7AA10ABEDDDD2D8F39EC953A@TYZPR01MB5556.apcprd01.prod.exchangelabs.com>
+References: <TYZPR01MB5556D7AA10ABEDDDD2D8F39EC953A@TYZPR01MB5556.apcprd01.prod.exchangelabs.com>
+To:     Ziyang Huang <hzyitc@outlook.com>
+Cc:     quic_srirrama@quicinc.com, quic_kathirve@quicinc.com,
+        ath11k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ziyang Huang <hzyitc@outlook.com>
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <168693169253.12400.8675945776351103304.kvalo@kernel.org>
+Date:   Fri, 16 Jun 2023 16:08:16 +0000 (UTC)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/16/23 3:56?AM, David Howells wrote:
-> Andrew Morton <akpm@linux-foundation.org> wrote:
-> 
->> That's getting a bit nasty.  Maybe David's patches are in the wrong
->> tree.
-> 
-> You'd need to discuss that one with Jens.  The patches you'd have to
-> transfer also touch a number of block-related files.  Looking at
-> block/for-next, there don't seem to be many other patches touching
-> those files, but I've seen patches from Christoph that will need to be
-> applied on top of mine.
+Ziyang Huang <hzyitc@outlook.com> wrote:
 
-It's definitely a bit of a mess now, but for-6.5/block also depends on
-these changes and make further tweaks on the block front.
+> Without this patch, the IPQ5018 WiFi will fail and print the following
+> logs:
+> 
+>         [   11.033179] ath11k c000000.wifi: unsupported device type 7
+>         [   11.033223] ath11k: probe of c000000.wifi failed with error -95
+> 
+> Fixes: 25edca7bb18a ("wifi: ath11k: add ipq5018 device support")
+> Signed-off-by: Ziyang Huang <hzyitc@outlook.com>
+> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
 
-for-6.5/splice is stable, so just pull that in?
+3 patches applied to ath-next branch of ath.git, thanks.
+
+469ddb20cae6 wifi: ath11k: Add missing ops config for IPQ5018 in ath11k_ahb_probe()
+80c5390e1f5e wifi: ath11k: Restart firmware after cold boot calibration for IPQ5018
+ce282d8de71f wifi: ath11k: Add missing hw_ops->get_ring_selector() for IPQ5018
 
 -- 
-Jens Axboe
+https://patchwork.kernel.org/project/linux-wireless/patch/TYZPR01MB5556D7AA10ABEDDDD2D8F39EC953A@TYZPR01MB5556.apcprd01.prod.exchangelabs.com/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
