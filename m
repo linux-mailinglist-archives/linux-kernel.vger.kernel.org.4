@@ -2,81 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D633E7331D4
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 15:05:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30D6C7331D3
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 15:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345154AbjFPNFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 09:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53394 "EHLO
+        id S1344768AbjFPNFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 09:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245134AbjFPNFI (ORCPT
+        with ESMTP id S232355AbjFPNFH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 09:05:08 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF7D2D77
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 06:05:07 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id 46e09a7af769-6b29c972e00so649501a34.1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 06:05:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686920706; x=1689512706;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uCWwAxyqGz0dxVXdN4x1E9m1cKBoRvQl+WOQKo4Ngkc=;
-        b=bRIswQGjLCf4y769A4u1naT+GmdQ7J9gqc/qYPwOG9iZLIg8+p8+TFhbysRY4yLagf
-         PCwjS/lmcpP3s6vbvMDu+sUUT2q/SCzff0NyY2je/HimhrKySASex85fx0+NaiDrNxS4
-         45yfAbnr1AAciLpEzdK9il8dxT62VDZaOnk/ZKXq3Pyew9zWerTYfvxPravHnsYJHu0Z
-         RSd3aDRCdMkm7QzOcd22Svqcr6N7tc/bcLO4vLYlFqUrOROKkPzEfMaCKnzqbJNupmjM
-         eVn+ZAb4I6hPa8Hzj2/T924Kog+B9QPc6wqVApa9g9Y3Lqe1Q6lv+OYvx22LuMvt3YMh
-         sA2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686920706; x=1689512706;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uCWwAxyqGz0dxVXdN4x1E9m1cKBoRvQl+WOQKo4Ngkc=;
-        b=Uim709ZmDkhsWB8Wz+oDIfqcifAtkZVF/Ej4NTfnY7fQzQ0CA9oozXjxokhr5JBIMm
-         VOmYdabLEVnC0hdiVWL/SavXBgtsyuWqecMUnFx2qgS+EOcTuMwhOewC/+8AUIFMjrAR
-         tKOLiQWZ4Q/smeqwzkerl5nn8NCIRtlW9JTS8psVKyu+AczK1LDzoiKEZClI97R9VDwm
-         l0/DSHu0W/a8t7w6NnAhugaVeW0kDNGeL3J6t2IWalE9bcrQeekFP2gWbZr/j9GSLAWo
-         FCZriKyW5I2LPfJlcCowQNZRzPAFLyUcqOHbWkG9yMxv5FZJl8Nd3soLIHz9QbcFY3t0
-         xXOg==
-X-Gm-Message-State: AC+VfDzz7VPek02egsxzbv/6A9+4ACXvsKmlQRZcXYy+Vtj/G4+FvJvV
-        XXR/yrHWF7SkGGOfGPB9PCZldmyxVC5vER3LTfhJ2JA0Yf0BBUrb
-X-Google-Smtp-Source: ACHHUZ5++cXvffXo4HJKBt1su21q2bNr/RxKNcZzN+Mrk92uq/9o7JMH+fwk3dYR3jVUGdS4GcAQ6LwWi1XJY7iQ3BE=
-X-Received: by 2002:a9d:7410:0:b0:6ad:da5d:5357 with SMTP id
- n16-20020a9d7410000000b006adda5d5357mr1789424otk.38.1686920706256; Fri, 16
- Jun 2023 06:05:06 -0700 (PDT)
+        Fri, 16 Jun 2023 09:05:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48C72D76;
+        Fri, 16 Jun 2023 06:05:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5120B60C3C;
+        Fri, 16 Jun 2023 13:05:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A142C433C0;
+        Fri, 16 Jun 2023 13:05:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686920705;
+        bh=SrO0CeEasmWz37MEWDUcwNmCFCb0teNkDoI5J3qhx4c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PGcQcMvEoVks3aMm/p5sUZangLQuMC4WBjKavKMF8tYvL5uw5QDalT/rvnIeOyegJ
+         FdZPc7CODn20x7zxuex+qlTdIp6I3X3hnDkcYfdiij7QQ5RLAJkh8mWURZJR2o3AH+
+         3FVLv0E9/KrZOVq+mdnkfMpdL2cpvsEHhWvD/wKmT3qVLyRyVbkgxOeuDOJV0dVGM/
+         T9K1b3F9sMyVQQRQ8t+96Dgo3Y6giwkqgj8lUjj6SZP0M9O4frX/ExwsT58EuPuzR0
+         sqOqmrb+IMyVkJdpi5zwRiNg9709EeTI7YH/qglKOPNy/qlksvizrT/oL/cT0K9U7g
+         eYBGxI4DDn9qw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id B7A9540692; Fri, 16 Jun 2023 10:05:02 -0300 (-03)
+Date:   Fri, 16 Jun 2023 10:05:02 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Vincent Whitchurch <Vincent.Whitchurch@axis.com>
+Cc:     "peterz@infradead.org" <peterz@infradead.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "jolsa@kernel.org" <jolsa@kernel.org>,
+        "namhyung@kernel.org" <namhyung@kernel.org>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        kernel <kernel@axis.com>,
+        "alexander.shishkin@linux.intel.com" 
+        <alexander.shishkin@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] perf annotate: Work with vmlinux outside symfs
+Message-ID: <ZIxd/kINrMLfZ8cD@kernel.org>
+References: <20221125114210.2353820-1-vincent.whitchurch@axis.com>
+ <28e5680b86806cb97f832f5646a0e2e9d8ee68f7.camel@axis.com>
 MIME-Version: 1.0
-References: <20230615164204.25462-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230615164204.25462-1-andriy.shevchenko@linux.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 16 Jun 2023 15:04:55 +0200
-Message-ID: <CACRpkdZdLYT8Uoi0CU3cO71dNXOJxWwf0Y72msMnz1ct6pMSCA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] pinctrl: lantiq: Remove unused of_gpio.h inclusion
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Aleksander Jan Bajkowski <olek2@wp.pl>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <28e5680b86806cb97f832f5646a0e2e9d8ee68f7.camel@axis.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 6:42=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+Em Fri, Jun 16, 2023 at 10:21:52AM +0000, Vincent Whitchurch escreveu:
+> On Fri, 2022-11-25 at 12:42 +0100, Vincent Whitchurch wrote:
+> > It is currently possible to use --symfs along with a vmlinux which lies
+> > outside of the symfs by passing an absolute path to --vmlinux, thanks to
+> > the check in dso__load_vmlinux() which handles this explicitly.
+> > 
+> > However, the annotate code lacks this check and thus perf annotate does
+> > not work ("Internal error: Invalid -1 error code") for kernel functions
+> > with this combination.  Add the missing handling.
+> > 
+> > Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> 
+> This patch was not merged and I did not receive any comments on it
+> either.  Should I resend it?  It still applies cleanly to current
+> mainline.  Thanks.
 
-> The of_gpio.h is not and shouldn't be used in the drivers. Remove it.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Thanks for the ping, I checked  dso__load_vmlinux() and it has:
 
-Patch applied!
+        if (vmlinux[0] == '/')
+                snprintf(symfs_vmlinux, sizeof(symfs_vmlinux), "%s", vmlinux);
+        else
+                symbol__join_symfs(symfs_vmlinux, vmlinux)
 
-Yours,
-Linus Walleij
+Exactly as you pointed out, applied.
+
+- Arnaldo
