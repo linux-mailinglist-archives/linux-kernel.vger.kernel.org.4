@@ -2,83 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9E1E733A9C
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 22:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E896733AA2
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 22:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232931AbjFPUPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 16:15:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48952 "EHLO
+        id S1345234AbjFPUQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 16:16:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjFPUPR (ORCPT
+        with ESMTP id S245082AbjFPUQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 16:15:17 -0400
-Received: from cavan.codon.org.uk (cavan.codon.org.uk [176.126.240.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D4430DD;
-        Fri, 16 Jun 2023 13:15:14 -0700 (PDT)
-Received: by cavan.codon.org.uk (Postfix, from userid 1000)
-        id 74F3540A72; Fri, 16 Jun 2023 21:15:13 +0100 (BST)
-Date:   Fri, 16 Jun 2023 21:15:13 +0100
-From:   Matthew Garrett <mjg59@srcf.ucam.org>
-To:     "Daniel P. Smith" <dpsmith@apertussolutions.com>
-Cc:     Ross Philipson <ross.philipson@oracle.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
-        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        ardb@kernel.org, James.Bottomley@hansenpartnership.com,
-        luto@amacapital.net, nivedita@alum.mit.edu,
-        kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
-Subject: Re: [PATCH v6 04/14] x86: Secure Launch Resource Table header file
-Message-ID: <20230616201513.GA30963@srcf.ucam.org>
-References: <20230504145023.835096-1-ross.philipson@oracle.com>
- <20230504145023.835096-5-ross.philipson@oracle.com>
- <20230512105554.GB14461@srcf.ucam.org>
- <30d5891d-4747-8d67-2667-ff07628740bd@apertussolutions.com>
- <20230515212206.GA2162@srcf.ucam.org>
- <df9d1260-41dd-034b-9dc6-14173c6c0d25@apertussolutions.com>
- <20230516014310.GA5403@srcf.ucam.org>
- <eda6da3a-00fe-21c5-5a3d-3e06d21179f4@apertussolutions.com>
+        Fri, 16 Jun 2023 16:16:10 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA683A8B
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 13:16:07 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-30fcde6a73cso866621f8f.2
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 13:16:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google; t=1686946566; x=1689538566;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8vPnF45lwmBQE4hlXIcf9QZ1ECe0DnRUytPjxgA+AQk=;
+        b=sUGdkeuqPEE2kSpld6ncDRKJ6+AC1LNRuuN0SYX3zIXn54/gPZRGJRLMaMUDKYm7Dq
+         Qm3lBulGHA0F0NePogIXO0LKEZ30+KHhr20mDtez/n3mWueIXFuWsSbbuWx1YTiiY0NG
+         3bSqVkHI2ySmGrlsHwmD7PTAzYSeUCe4MLJI2dztws7394v4C42As2HtiQK4a9FIVbyz
+         1QZyAgkkZCltHOAL34PwIo4YsYIZ3qNkHPrbqpRu/I6CEkng4oXjsMbIekaDZP9ex81U
+         otgJ8MOy7oim5IqIkFVGaS5ka8jw1bZPHYrYsFM8mrh2Lettv0SZrfPmzQzcQ2LRkpe8
+         bg6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686946566; x=1689538566;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8vPnF45lwmBQE4hlXIcf9QZ1ECe0DnRUytPjxgA+AQk=;
+        b=a5ju9te02yVwQ9wC+ETTvO52KRssJAHD2aN/eU3UdwsRafCVP449jYgEoH37Up8A5u
+         8fXhlAozd+kOoJ39Vb/hpIoPnH9PzfZKcw6p4LENFATwEcL3jJ2tJeoG4EoO9xt1yx6J
+         WjnPKgbB7R5Z5FI6fb9rN+Aol/5+zR+yC7beZxw06zw5gw77hXzaMP3TdEWImLG+z3nG
+         kazg6+8KiA4bWoFgbKjmxphBixWPE8gK6ORGPzCqubSIJ1J1viKOsspkmSxw2poi3FYX
+         oYMaawb/AKWHN0smwdAoKOpOEgUzyposWMBgH338DicSQqBdVHpFvJPnzqts/SL2f595
+         nGGQ==
+X-Gm-Message-State: AC+VfDwAwL6Y4YGZ262FUzZQXnP5k9S20Q3GjJZzFKT2dqgnAm5sEdak
+        QrdcmiQWy3TN+Y3qTwcSn2q+1Q==
+X-Google-Smtp-Source: ACHHUZ5OzMuNb5xcKMSIbAKpHDQpCrRDCcux6ViOZUhjyjCD5lDQKaAxLzKc4F9Z03JahPsdXu/s/g==
+X-Received: by 2002:adf:fe11:0:b0:30f:cc8f:e48c with SMTP id n17-20020adffe11000000b0030fcc8fe48cmr2182422wrr.25.1686946566146;
+        Fri, 16 Jun 2023 13:16:06 -0700 (PDT)
+Received: from ?IPV6:2a02:578:8593:1200:a4fb:308c:d9af:9b31? ([2a02:578:8593:1200:a4fb:308c:d9af:9b31])
+        by smtp.gmail.com with ESMTPSA id v18-20020adfebd2000000b0030789698eebsm24445924wrn.89.2023.06.16.13.16.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Jun 2023 13:16:05 -0700 (PDT)
+Message-ID: <83e6e41e-f665-0923-c723-be318987816c@tessares.net>
+Date:   Fri, 16 Jun 2023 22:16:04 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <eda6da3a-00fe-21c5-5a3d-3e06d21179f4@apertussolutions.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v4 4/4] selftests: net: fcnal-test: check if FIPS mode is
+ enabled: manual merge
+Content-Language: en-GB
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        shuah@kernel.org, dsahern@gmail.com, andrei.gherzan@canonical.com,
+        netdev@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Magali Lemes <magali.lemes@canonical.com>,
+        Guillaume Nault <gnault@redhat.com>
+References: <20230613123222.631897-1-magali.lemes@canonical.com>
+ <20230613123222.631897-5-magali.lemes@canonical.com>
+ <5007b52c-dd16-dbf6-8d64-b9701bfa498b@tessares.net>
+In-Reply-To: <5007b52c-dd16-dbf6-8d64-b9701bfa498b@tessares.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 04:01:09PM -0400, Daniel P. Smith wrote:
-> On 5/15/23 21:43, Matthew Garrett wrote:
-> > On Mon, May 15, 2023 at 08:41:00PM -0400, Daniel P. Smith wrote:
-> > > On 5/15/23 17:22, Matthew Garrett wrote:
-> > > > What if I don't use grub, but use something that behaves equivalently?
-> > > > Which value should be used here?
-> > > 
-> > > Generally we would request that the bootloader submit a request to register
-> > > for a value to be reserved in the spec. That aside, the intent here is to
-> > > allow for the possibility for the DLE handler to be independent from the
-> > > bootloader, but this does not have to be this way. If a non-open entity
-> > > decides to produce their own implementation, they can freely use a
-> > > unallocated value at their own risk that it could be allocated to another
-> > > bootloader in the future. Though in this scenario it likely would not matter
-> > > as the non-open DLE handler would only be present when the non-open
-> > > bootloader was present.
-> > 
-> > Is the expectation that the DLE will always be shipped with the
-> > bootloader? I think I'm not entirely clear on what's consuming this and
-> > why.
-> > 
-> 
-> No, in fact, an early idea proposed by a pair of us in the TrenchBoot
-> community was to have it live either as a Runtime Service that was loaded by
-> a UEFI app or in the coreboot UEFI payload.
+Hi Jakub, Stephen,
 
-Ok, then I think I'm still confused. If I want to write a new bootloader 
-but make use of the existing DLE, what contract am I establishing and 
-what value should I be putting in here?
+On 16/06/2023 21:33, Matthieu Baerts wrote:
+> Hi Magali,
+> 
+> On 13/06/2023 14:32, Magali Lemes wrote:
+>> There are some MD5 tests which fail when the kernel is in FIPS mode,
+>> since MD5 is not FIPS compliant. Add a check and only run those tests
+>> if FIPS mode is not enabled.
+>>
+>> Fixes: f0bee1ebb5594 ("fcnal-test: Add TCP MD5 tests")
+>> Fixes: 5cad8bce26e01 ("fcnal-test: Add TCP MD5 tests for VRF")
+>> Reviewed-by: David Ahern <dsahern@kernel.org>
+>> Signed-off-by: Magali Lemes <magali.lemes@canonical.com>
+> 
+> Thank you for your patch!
+> 
+> FYI, we got a small conflict when merging 'net' in 'net-next' in the
+> MPTCP tree due to this patch applied in 'net':
+
+Just in case, I'm starting to publish the Git rerere resolutions for the
+conflicts we have when syncing the MPTCP trees with Netdev's "net" and
+"net-next" trees. They are available there:
+
+  https://github.com/multipath-tcp/mptcp-upstream-rr-cache
+
+For this specific conflict, the new files are available there:
+
+  https://github.com/multipath-tcp/mptcp-upstream-rr-cache/commit/5091dd
+
+Don't hesitate to tell me if I need to change anything to this repo.
+
+Cheers,
+Matt
+-- 
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
