@@ -2,126 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0137C7329E8
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3B9B7329EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 10:34:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244471AbjFPIeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 04:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35430 "EHLO
+        id S229976AbjFPIek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 04:34:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245581AbjFPId4 (ORCPT
+        with ESMTP id S245747AbjFPIeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 04:33:56 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A16D30E4;
-        Fri, 16 Jun 2023 01:33:52 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1b3be39e666so4165345ad.0;
-        Fri, 16 Jun 2023 01:33:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686904432; x=1689496432;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=r7W2YpiCgw7oCQ3PCXW/fc0lvN+XnDETz4eXDeHajPk=;
-        b=QBJDcX12ahEDU3oiRXfENkwYtpK2H41lfLNbf5z4n8fAx0GbHhTHQeTMOPmQJOQ5o/
-         v7o8KTdwIZ338wTpTtNspXxI7Ss1m/w80pcuy0nI1emMF4RN/YQ/3AQNM4C+bQoTYZky
-         5ubuEv2PBXdndvb69o5a6WfmhMuKVkadAe77zVFmf3oblwNI92wqXrugLR1nM2wC8UNm
-         mVYorbvsubd+cbyhToHv6sXz8z1Mk5Ifw7RfxGSEEk1AouVZ4Ir3byN87dZIwsd472O4
-         qU6LcivUTWvUqKZfvuq00wCs8kNpsjOvPeGR8DwEO2sfwNN5fQUQzDN3+dEl/M0eWTpB
-         2v1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686904432; x=1689496432;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=r7W2YpiCgw7oCQ3PCXW/fc0lvN+XnDETz4eXDeHajPk=;
-        b=LLDOWXOnBix/qbH5U3HXXk+dBgs50Tnz988nxOiNfz9aGVXEUZXecuepUkm6CwvIu0
-         HT3uQYoJfkwA/MQy8ZNpmORpjrxnjcNeSdIUPuOib9hws7NcBmOjQjcD8CbcqTQK7Ec6
-         k5Z/DEjcUxwi2P67h++AoJOaCvhfUcn6FaeDc8JydrRa8xlbtOoiElWCMWbxwGtM7rUp
-         d/I2z2REru0dxqAkOG876182gG+8Qu4gMLmmDR4zro7qjwCoRQUWtajdMSRYpocnq23q
-         02lsHwHXfsEZjktl/Soy/WRBD6zOrD7PfDKXr4rAdB/srC46QGfotDJHlFuRP+2oqskQ
-         G7JA==
-X-Gm-Message-State: AC+VfDxNu8vpkVTgQA+gcQo7N0zPSDWO/yD2g6qt+fbLjQqNGVEbWrfd
-        UpExoXTFuzcxxtSiruHC37o=
-X-Google-Smtp-Source: ACHHUZ6yofeCZMkq0H9Y2b1OS2wkY+A5CbNG2Lnz4QU7gP9mrnYimT8A3DEGmtJef4zs1Tm4UTLRdg==
-X-Received: by 2002:a17:902:f90d:b0:1b5:b28:2ff1 with SMTP id kw13-20020a170902f90d00b001b50b282ff1mr7130875plb.10.1686904431733;
-        Fri, 16 Jun 2023 01:33:51 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h3-20020a170902680300b001ab12ccc2a7sm15411335plk.98.2023.06.16.01.33.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jun 2023 01:33:50 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b11a278d-8098-a1f0-7aae-9dc882ab48c4@roeck-us.net>
-Date:   Fri, 16 Jun 2023 01:33:48 -0700
+        Fri, 16 Jun 2023 04:34:23 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02EF30C6;
+        Fri, 16 Jun 2023 01:34:19 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35G8AL9l005003;
+        Fri, 16 Jun 2023 03:34:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=2dz9DgNzyWe3yiG4rHa+kXpGJErXQgVqdkaqIVGndHc=;
+ b=KS9gAvulVnsMKFjUZvhRoqUNld3TfblP0Q4uTXJ4Ny4t477RJ94kUMNWOET9x76+6/rH
+ Bb+mdwFQa2NH8IVxnJprNohBeJINvOKPB1QECIMEPZXEQReY0SMZdl2FCcnjTMLEWZEJ
+ QJlMsVAzbH48+DMV01YQn9k7TkMa9MCDdY481Dbjt5MV6IMH0VAobqGFUmWIqMxvx3lM
+ 0u1UPt/8Gn7D3zqqJvNEgUfgDQz5vjetN2FVmWcK6SvbXtoFhN8Q4Cpa640bVN/n7nM2
+ xKCeRfqhQM8NnoQABAXRSwzX4p1aX8x/+b/z29hFdN5RiMcqeZ7il91NXBJAdZ8DfEGQ cA== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3r75nub1h7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Jun 2023 03:34:06 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Fri, 16 Jun
+ 2023 09:34:05 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Fri, 16 Jun 2023 09:34:05 +0100
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id F2A09468;
+        Fri, 16 Jun 2023 08:34:04 +0000 (UTC)
+Date:   Fri, 16 Jun 2023 08:34:04 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Lee Jones <lee@kernel.org>
+CC:     <broonie@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linus.walleij@linaro.org>, <vkoul@kernel.org>,
+        <robh+dt@kernel.org>, <conor+dt@kernel.org>, <lgirdwood@gmail.com>,
+        <yung-chuan.liao@linux.intel.com>, <sanyog.r.kale@intel.com>,
+        <pierre-louis.bossart@linux.intel.com>,
+        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 3/6] mfd: cs42l43: Add support for cs42l43 core driver
+Message-ID: <20230616083404.GR68926@ediswmail.ad.cirrus.com>
+References: <20230605125504.2570158-1-ckeepax@opensource.cirrus.com>
+ <20230605125504.2570158-4-ckeepax@opensource.cirrus.com>
+ <20230615171124.GL3635807@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [v4,1/2] usb: typec: tcpm: fix cc role at port reset
-Content-Language: en-US
-To:     Frank Wang <frank.wang@rock-chips.com>,
-        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-        sebastian.reichel@collabora.com, heiko@sntech.de
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
-        william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
-        yubing.zhang@rock-chips.com, wmc@rock-chips.com
-References: <20230616075241.27690-1-frank.wang@rock-chips.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230616075241.27690-1-frank.wang@rock-chips.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230615171124.GL3635807@google.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-ORIG-GUID: QHC_Qh8S3mj10330FjaGceC4g3StgGJg
+X-Proofpoint-GUID: QHC_Qh8S3mj10330FjaGceC4g3StgGJg
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/16/23 00:52, Frank Wang wrote:
-> In the current implementation, the tcpm set CC1/CC2 role to open when
-> it do port reset would cause the VBUS removed by the Type-C partner.
+On Thu, Jun 15, 2023 at 06:11:24PM +0100, Lee Jones wrote:
+> On Mon, 05 Jun 2023, Charles Keepax wrote:
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +//
+> > +// CS42L43 I2C driver
+> > +//
+> > +// Copyright (C) 2022-2023 Cirrus Logic, Inc. and
+> > +//                         Cirrus Logic International Semiconductor Ltd.
+> > +
 > 
-> This sets CC1/CC2 according to the default state of port to fix it.
+> I realise there is some precedent for this already in MFD.
 > 
-> Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
+> However, I'd rather headers used C style multi-line comments.
+> 
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Apologies but just to be super clear you want this to look like:
 
-> ---
-> Changelog:
-> (no changes since v3)
-> 
-> v2:
->   - Make some tweaking based on the default state of port, commented by Guenter Roeck.
-> 
-Specifically: Do not set the state to TYPEC_CC_RD unconditionally
-but make it dependent on the port's default state.
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * CS42L43 I2C driver
+ *
+ * Copyright (C) 2022-2023 Cirrus Logic, Inc. and
+ *                         Cirrus Logic International Semiconductor Ltd.
+ */
 
-Guenter
+Just clarifying since you want to get rid of all the // comments,
+but the SPDX stuff specifically requires one according to
+Documentation/process/license-rules.rst.
 
-> v1:
->   - https://patchwork.kernel.org/project/linux-usb/patch/20230313025843.17162-2-frank.wang@rock-chips.com/
+> > +	// I2C is always attached by definition
 > 
->   drivers/usb/typec/tcpm/tcpm.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
+> C please.  And everywhere else.
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 3c6b0c8e2d3ae..9f6aaa3e70ca8 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -4885,7 +4885,8 @@ static void run_state_machine(struct tcpm_port *port)
->   		break;
->   	case PORT_RESET:
->   		tcpm_reset_port(port);
-> -		tcpm_set_cc(port, TYPEC_CC_OPEN);
-> +		tcpm_set_cc(port, tcpm_default_state(port) == SNK_UNATTACHED ?
-> +			    TYPEC_CC_RD : tcpm_rp_cc(port));
->   		tcpm_set_state(port, PORT_RESET_WAIT_OFF,
->   			       PD_T_ERROR_RECOVERY);
->   		break;
 
+Can do.
+
+> > +static struct i2c_device_id cs42l43_i2c_id[] = {
+> > +	{ "cs42l43", 0 },
+> > +	{}
+> > +};
+> > +MODULE_DEVICE_TABLE(i2c, cs42l43_i2c_id);
+> 
+> Is this required anymore?
+> 
+
+I was not aware of it not being required, I think it will still
+be used for the purposes of module naming. Perhaps someone more
+knowledgable than me can comment?
+
+> > +#if IS_ENABLED(CONFIG_MFD_CS42L43_I2C)
+> > +const struct regmap_config cs42l43_i2c_regmap = {
+> > +	.reg_bits		= 32,
+> > +	.reg_stride		= 4,
+> > +	.val_bits		= 32,
+> > +	.reg_format_endian	= REGMAP_ENDIAN_BIG,
+> > +	.val_format_endian	= REGMAP_ENDIAN_BIG,
+> > +
+> > +	.max_register		= CS42L43_MCU_RAM_MAX,
+> > +	.readable_reg		= cs42l43_readable_register,
+> > +	.volatile_reg		= cs42l43_volatile_register,
+> > +	.precious_reg		= cs42l43_precious_register,
+> > +
+> > +	.cache_type		= REGCACHE_RBTREE,
+> > +	.reg_defaults		= cs42l43_reg_default,
+> > +	.num_reg_defaults	= ARRAY_SIZE(cs42l43_reg_default),
+> > +};
+> > +EXPORT_SYMBOL_NS_GPL(cs42l43_i2c_regmap, MFD_CS42L43);
+> > +#endif
+> 
+> We don't tend to like #ifery in C files.
+> 
+> Why is it required?
+> 
+> And why not just put them were they're consumed?
+
+The trouble is the cs42l43_reg_default array and the array size.
+There is no good way to statically initialise those two fields
+from a single array in both the I2C and SDW modules.
+
+> > +static int cs42l43_soft_reset(struct cs42l43 *cs42l43)
+> > +{
+> > +	static const struct reg_sequence reset[] = {
+> > +		{ CS42L43_SFT_RESET, 0x5A000000 },
+> > +	};
+> > +	unsigned long time;
+> > +
+> > +	dev_dbg(cs42l43->dev, "Soft resetting\n");
+> 
+> How often are you realistically going to enable these?  Can you do
+> without them and just add some printks when debugging?  Seems a shame to
+> dirty the code-base with seldom used / questionably helpful LoC.
+
+I mean I use them all the time they are very helpful. But yeah I
+can just add them each time I need them its just a pain, but I
+guess since you are the second person to comment I will accept
+that wanting to easily turn on debug is not a feature we are keen
+on.
+
+> > +	reinit_completion(&cs42l43->device_detach);
+> > +
+> > +	/* apply cache only as the device will also fall off the soundwire bus */
+> 
+> Grammar please.  Some capital letters missing there.
+> 
+
+No problem.
+
+> > +	regcache_cache_only(cs42l43->regmap, true);
+> > +	regmap_multi_reg_write_bypassed(cs42l43->regmap, reset, ARRAY_SIZE(reset));
+> > +
+> > +	msleep(20);
+> 
+> Why 20?
+> 
+
+Because that is what the hardware needs, I assume this will be
+covered when I turn all number in to defines.
+
+> > +static int cs42l43_mcu_stage_2_3(struct cs42l43 *cs42l43, bool shadow)
+> > +{
+> > +	unsigned int need_reg = CS42L43_NEED_CONFIGS;
+> > +	unsigned int val;
+> > +	int ret;
+> > +
+> > +	if (shadow)
+> 
+> What's shadow?  Comment please.
+> 
+
+Yeah can add a comment for that.
+
+> > +		need_reg = CS42L43_FW_SH_BOOT_CFG_NEED_CONFIGS;
+> > +
+> > +	regmap_write(cs42l43->regmap, need_reg, 0x0);
+> > +
+> > +	ret = regmap_read_poll_timeout(cs42l43->regmap, CS42L43_BOOT_STATUS,
+> > +				       val, (val == 3), 5000, 20000);
+> 
+> Defines are easier to read than magic numbers.
+> 
+
+Can do.
+
+> > +	if (ret) {
+> > +		dev_err(cs42l43->dev, "Failed to move to stage 3: %d, 0x%x\n", ret, val);
+> 
+> Stage 3 what?
+> 
+
+Of the MCU boot.
+
+> Perhaps some simple function headers would help?
+> 
+
+You mean add some kernel doc for these functions, right? Assuming
+that is what you mean, will do.
+
+Thanks,
+Charles
