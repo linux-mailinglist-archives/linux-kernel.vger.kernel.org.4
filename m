@@ -2,169 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7837732950
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 09:54:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B600B732958
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 09:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241978AbjFPHxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 03:53:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45558 "EHLO
+        id S243186AbjFPHz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 03:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241423AbjFPHxq (ORCPT
+        with ESMTP id S245440AbjFPHzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 03:53:46 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB17A2945;
-        Fri, 16 Jun 2023 00:53:43 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8Dxh+kFFYxkC+QFAA--.10690S3;
-        Fri, 16 Jun 2023 15:53:41 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxKeUCFYxkjAgdAA--.16252S3;
-        Fri, 16 Jun 2023 15:53:38 +0800 (CST)
-Subject: Re: [PATCH v3 2/3] soc: dt-bindings: add loongson-2 pm
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230615091757.24686-1-zhuyinbo@loongson.cn>
- <20230615091757.24686-3-zhuyinbo@loongson.cn>
- <20230616-entangled-cauterize-1cbde7401b91@wendy>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <9a53089a-3c87-13e1-0bc4-29058ac0ec54@loongson.cn>
-Date:   Fri, 16 Jun 2023 15:53:38 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Fri, 16 Jun 2023 03:55:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F47294A
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 00:54:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686902067;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LCwXsPaPd7Dj5AMUAfbDa6LnAHzyeLCA6sw8/b3X0Ho=;
+        b=TrBVdBrw/YqjDI3ib3UBG5Sx/cN+fM2sHSwk6JlKLCJdqhWKEAPRynstg1/wmmFVt43Lqf
+        h3ubpcYwDlX3RM1InXjUT6XIFUDiByeePsU+vnABcOnP2o5B/GTyCqZ+Kb3iSLvhm3NEz5
+        s/TJEdr0McVcKYU+UBh5/vBaoYt5A6I=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-612-bZ28bRPvORe0zKw9bPGWvw-1; Fri, 16 Jun 2023 03:54:25 -0400
+X-MC-Unique: bZ28bRPvORe0zKw9bPGWvw-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f7e8c24a92so1327055e9.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 00:54:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686902064; x=1689494064;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LCwXsPaPd7Dj5AMUAfbDa6LnAHzyeLCA6sw8/b3X0Ho=;
+        b=ZBPfqCMMDZssQGuMl28Y/gSPkij36M79Csi3FHuc97P8ICwR8wNyLL8DtS91iEKs8n
+         d/0STc6mfff0ub1vURF6Nw7Y7UYhAc33SBL2tY0iIogRoiBJXwPPCkilH+5atklZn+B5
+         v4Fw/haW4VDwkNnm2ASoReErrcOcaFa2KnkxaInlR6AjPXQmRX2wsRQoxapm6gDItS0I
+         lpKnNlBdXIOZCYvIh8ZtQNWETq4nLToTdqdJzisW7iSjer1R6FDdAVJyc2B/wr8xl5/3
+         Oy0nWxb7y6YsxehLStB7JI2h/Kv/9jdsESeUfwRBgcCm2jvUXCPvsTiyrsQ1wT0oDeFs
+         RSjQ==
+X-Gm-Message-State: AC+VfDw4Q871kDwHzce2STr+gneIEXUKzh8k3u2uZxarp5A7MZFBe6xL
+        Jk1cbevEJBq0JY0/JtUVFZFQJBr/tPHwrQehUahnybyaqSpe6sXXsrXOJv8vtbDlNIPIPgCvWRo
+        n29MG9OFqnZzktRNwapCh+O2M
+X-Received: by 2002:a7b:ce85:0:b0:3f8:c5a6:7a8d with SMTP id q5-20020a7bce85000000b003f8c5a67a8dmr1006467wmj.12.1686902064528;
+        Fri, 16 Jun 2023 00:54:24 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ57hUFJkB9ARA1uPg7u8sBxFriDIGC6XvjqrvDb1WUHap8aii1g0Wt8HyS0VoMZ5iYl6OcUQw==
+X-Received: by 2002:a7b:ce85:0:b0:3f8:c5a6:7a8d with SMTP id q5-20020a7bce85000000b003f8c5a67a8dmr1006449wmj.12.1686902064164;
+        Fri, 16 Jun 2023 00:54:24 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c707:9800:59ba:1006:9052:fb40? (p200300cbc707980059ba10069052fb40.dip0.t-ipconnect.de. [2003:cb:c707:9800:59ba:1006:9052:fb40])
+        by smtp.gmail.com with ESMTPSA id o8-20020a05600c378800b003f195d540d9sm1431039wmr.14.2023.06.16.00.54.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Jun 2023 00:54:23 -0700 (PDT)
+Message-ID: <aadbedeb-424d-a146-392d-d56680263691@redhat.com>
+Date:   Fri, 16 Jun 2023 09:54:22 +0200
 MIME-Version: 1.0
-In-Reply-To: <20230616-entangled-cauterize-1cbde7401b91@wendy>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxKeUCFYxkjAgdAA--.16252S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-        nUUI43ZEXa7xR_UUUUUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Vishal Verma <vishal.l.verma@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oscar Salvador <osalvador@suse.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, nvdimm@lists.linux.dev,
+        linux-cxl@vger.kernel.org, Huang Ying <ying.huang@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+References: <20230613-vv-kmem_memmap-v1-0-f6de9c6af2c6@intel.com>
+ <20230613-vv-kmem_memmap-v1-3-f6de9c6af2c6@intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH 3/3] dax/kmem: Always enroll hotplugged memory for
+ memmap_on_memory
+In-Reply-To: <20230613-vv-kmem_memmap-v1-3-f6de9c6af2c6@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2023/6/16 下午2:58, Conor Dooley 写道:
-> Hey,
+On 16.06.23 00:00, Vishal Verma wrote:
+> With DAX memory regions originating from CXL memory expanders or
+> NVDIMMs, the kmem driver may be hot-adding huge amounts of system memory
+> on a system without enough 'regular' main memory to support the memmap
+> for it. To avoid this, ensure that all kmem managed hotplugged memory is
+> added with the MHP_MEMMAP_ON_MEMORY flag to place the memmap on the
+> new memory region being hot added.
 > 
-> Rob, could you take a look at this please? On v2 while you were away I
-> was kinda struggling w/ suspend-address & whether it made sense.
+> To do this, call add_memory() in chunks of memory_block_size_bytes() as
+> that is a requirement for memmap_on_memory. Additionally, Use the
+> mhp_flag to force the memmap_on_memory checks regardless of the
+> respective module parameter setting.
 > 
-> The v2 & v1 are here:
-> https://lore.kernel.org/all/20230522093156.7108-3-zhuyinbo@loongson.cn/
-> https://lore.kernel.org/all/20230517073149.31980-3-zhuyinbo@loongson.cn/
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Len Brown <lenb@kernel.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Oscar Salvador <osalvador@suse.de>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: Dave Jiang <dave.jiang@intel.com>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Huang Ying <ying.huang@intel.com>
+> Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
+> ---
+>   drivers/dax/kmem.c | 49 ++++++++++++++++++++++++++++++++++++-------------
+>   1 file changed, 36 insertions(+), 13 deletions(-)
 > 
-> On Thu, Jun 15, 2023 at 05:17:56PM +0800, Yinbo Zhu wrote:
->> Add the Loongson-2 SoC Power Management Controller binding with DT
->> schema format using json-schema.
->>
->> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->> ---
->>   .../soc/loongson/loongson,ls2k-pmc.yaml       | 53 +++++++++++++++++++
->>   MAINTAINERS                                   |  6 +++
->>   2 files changed, 59 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
->> new file mode 100644
->> index 000000000000..32499bd10f8c
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
+> diff --git a/drivers/dax/kmem.c b/drivers/dax/kmem.c
+> index 7b36db6f1cbd..0751346193ef 100644
+> --- a/drivers/dax/kmem.c
+> +++ b/drivers/dax/kmem.c
+> @@ -12,6 +12,7 @@
+>   #include <linux/mm.h>
+>   #include <linux/mman.h>
+>   #include <linux/memory-tiers.h>
+> +#include <linux/memory_hotplug.h>
+>   #include "dax-private.h"
+>   #include "bus.h"
+>   
+> @@ -105,6 +106,7 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
+>   	data->mgid = rc;
+>   
+>   	for (i = 0; i < dev_dax->nr_range; i++) {
+> +		u64 cur_start, cur_len, remaining;
+>   		struct resource *res;
+>   		struct range range;
+>   
+> @@ -137,21 +139,42 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
+>   		res->flags = IORESOURCE_SYSTEM_RAM;
+>   
+>   		/*
+> -		 * Ensure that future kexec'd kernels will not treat
+> -		 * this as RAM automatically.
+> +		 * Add memory in chunks of memory_block_size_bytes() so that
+> +		 * it is considered for MHP_MEMMAP_ON_MEMORY
+> +		 * @range has already been aligned to memory_block_size_bytes(),
+> +		 * so the following loop will always break it down cleanly.
+>   		 */
+> -		rc = add_memory_driver_managed(data->mgid, range.start,
+> -				range_len(&range), kmem_name, MHP_NID_IS_MGID);
+> +		cur_start = range.start;
+> +		cur_len = memory_block_size_bytes();
+> +		remaining = range_len(&range);
+> +		while (remaining) {
+> +			mhp_t mhp_flags = MHP_NID_IS_MGID;
+>   
+> -		if (rc) {
+> -			dev_warn(dev, "mapping%d: %#llx-%#llx memory add failed\n",
+> -					i, range.start, range.end);
+> -			remove_resource(res);
+> -			kfree(res);
+> -			data->res[i] = NULL;
+> -			if (mapped)
+> -				continue;
+> -			goto err_request_mem;
+> +			if (mhp_supports_memmap_on_memory(cur_len,
+> +							  MHP_MEMMAP_ON_MEMORY))
+> +				mhp_flags |= MHP_MEMMAP_ON_MEMORY;
+> +			/*
+> +			 * Ensure that future kexec'd kernels will not treat
+> +			 * this as RAM automatically.
+> +			 */
+> +			rc = add_memory_driver_managed(data->mgid, cur_start,
+> +						       cur_len, kmem_name,
+> +						       mhp_flags);
+> +
+> +			if (rc) {
+> +				dev_warn(dev,
+> +					 "mapping%d: %#llx-%#llx memory add failed\n",
+> +					 i, cur_start, cur_start + cur_len - 1);
+> +				remove_resource(res);
+> +				kfree(res);
+> +				data->res[i] = NULL;
+> +				if (mapped)
+> +					continue;
+> +				goto err_request_mem;
+> +			}
+> +
+> +			cur_start += cur_len;
+> +			remaining -= cur_len;
+>   		}
+>   		mapped++;
+>   	}
 > 
-> The filename should ideally match one of the compatibles.
+
+Maybe the better alternative is teach 
+add_memory_resource()/try_remove_memory() to do that internally.
+
+In the add_memory_resource() case, it might be a loop around that 
+memmap_on_memory + arch_add_memory code path (well, and the error path 
+also needs adjustment):
+
+	/*
+	 * Self hosted memmap array
+	 */
+	if (mhp_flags & MHP_MEMMAP_ON_MEMORY) {
+		if (!mhp_supports_memmap_on_memory(size)) {
+			ret = -EINVAL;
+			goto error;
+		}
+		mhp_altmap.free = PHYS_PFN(size);
+		mhp_altmap.base_pfn = PHYS_PFN(start);
+		params.altmap = &mhp_altmap;
+	}
+
+	/* call arch's memory hotadd */
+	ret = arch_add_memory(nid, start, size, &params);
+	if (ret < 0)
+		goto error;
 
 
-I learn about that yaml file name need match this compatible, but here
-using a specific compatible as the name of the yaml file seems a bit
-inappropriate . After all, this yaml file needs to cover lots of ls2k
-series SoC rather than a specific SoC, and the yaml file naming in
-kernel drivers is basically the same that use cover a series SoC's way.
+Note that we want to handle that on a per memory-block basis, because we 
+don't want the vmemmap of memory block #2 to end up on memory block #1. 
+It all gets messy with memory onlining/offlining etc otherwise ...
 
-> 
->> @@ -0,0 +1,53 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/soc/loongson/loongson,ls2k-pmc.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Loongson-2 Power Manager controller
->> +
->> +maintainers:
->> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
->> +
->> +properties:
->> +  compatible:
->> +    oneOf:
->> +      - items:
->> +          - enum:
->> +              - loongson,ls2k1000-pmc
->> +              - loongson,ls2k0500-pmc
-> 
-> I notice the driver only supports one of these two. Is there a reason
-> for that?
+-- 
+Cheers,
 
-
-The driver can support both of the above, and I will add another.
-
-> 
->> +          - const: syscon
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  suspend-address:
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    description:
->> +      The "suspend-address" is a deep sleep state (Suspend To RAM)
->> +      firmware entry address which was jumped from kernel and it's
->> +      value was dependent on specific platform firmware code. In
->> +      addition, the PM need according to it to indicate that current
->> +      SoC whether support Suspend To RAM.
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - interrupts
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/interrupt-controller/irq.h>
->> +
->> +    pmc: pm@1fe27000 {
->         ^^^
-> 
-> nit: this label isn't used, so you can drop it.
-
-
-This lable need to be used by poweroff and reboot node but I don't add
-these node that reference pmc here.
-
-Thanks,
-Yinbo
+David / dhildenb
 
