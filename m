@@ -2,101 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EB6B733084
+	by mail.lfdr.de (Postfix) with ESMTP id 69D8D733085
 	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344266AbjFPL4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 07:56:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40580 "EHLO
+        id S1344936AbjFPL4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 07:56:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344681AbjFPL4H (ORCPT
+        with ESMTP id S1344943AbjFPL4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 07:56:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0D552D67
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:56:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 47ED660EB0
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 11:56:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67CA3C433C8;
-        Fri, 16 Jun 2023 11:56:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686916565;
-        bh=Cefq0nhQ5+KvwZkN7+opbg79I2XubmqBgE72Y6hj+rY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a0Oq79zw6rjdIS59w8GBa8hCRA6XQ22iHGti0I4SUc8HJE67VHiY+6RqYZZVx3JWP
-         qqg4CFTHRtfRci/CeIlsuXGUwNetOJZ6HdlntcvnBqbBlz71poBAr7MxIISHB76wbZ
-         DjTEpml4uo09DSJRX7HzUZpoBZ3IY0kQxnoGg6/jryDz1ePpLJfdIoKIU4jRpEtk4B
-         LwSVT5EbqMiGPRGvlo3ykAnBWJa0a0Fm8ImLAmd5eP22N3x8z8dA9M4kv+TQ1XY3T0
-         V7D5UBo56g3KqZGCBZO9i6n2TIaWIrI0obUA5ybqu4pve9gq6oMYxA3w1qFjOefKeu
-         dAgPAWGAYBZrg==
-Date:   Fri, 16 Jun 2023 12:56:00 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Rander Wang <rander.wang@intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        =?iso-8859-1?Q?P=E9ter?= Ujfalusi 
-        <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Subject: Re: sound/soc/soc-pcm.c:2089:5: warning: stack frame size (2064)
- exceeds limit (2048) in 'dpcm_be_dai_trigger'
-Message-ID: <caea391c-f10a-4979-92c3-75964ed7497a@sirena.org.uk>
-References: <202306160240.ahGjvPqw-lkp@intel.com>
- <c5ce23fc-db87-6f11-0708-85cc4ba2a46c@linux.intel.com>
+        Fri, 16 Jun 2023 07:56:11 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4000E2D67;
+        Fri, 16 Jun 2023 04:56:10 -0700 (PDT)
+X-GND-Sasl: gregory.clement@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686916568;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6QaZnoro0oU0BUT67Qd+xO/fbwDMI8KTckqLRYFBC1A=;
+        b=F4yISwuao80Yq+BfiQHCmYOpMnGAeJxFSVfrWuqpY/P6HLjFFCoFhz0lo96y1NyGig0eWj
+        sDErek1g/skSmiysKMh7RQDKWRKllmMsl0byx0C4xXIa1v5Tby/m81i9EzeHKKo1KAI2Xh
+        jZ5tKuFuRxaWWQG453O6K/oKdgppll19PVojTDpxeFWSMErJZtnmraOglde5qpBlcMGWft
+        DNlCpRYwy6ADtML0ewRZrsx0fbSSdbXFbmPowV63AFelyzYBmgbci1OvpG92FVKlrxx6pC
+        6nEgNgBeuOGKW4E/ssMzNDlRlcW2bccMh4vCSvY54g+o1EJV9RgOFnY59bE7Ow==
+X-GND-Sasl: gregory.clement@bootlin.com
+X-GND-Sasl: gregory.clement@bootlin.com
+X-GND-Sasl: gregory.clement@bootlin.com
+X-GND-Sasl: gregory.clement@bootlin.com
+X-GND-Sasl: gregory.clement@bootlin.com
+X-GND-Sasl: gregory.clement@bootlin.com
+X-GND-Sasl: gregory.clement@bootlin.com
+X-GND-Sasl: gregory.clement@bootlin.com
+X-GND-Sasl: gregory.clement@bootlin.com
+X-GND-Sasl: gregory.clement@bootlin.com
+X-GND-Sasl: gregory.clement@bootlin.com
+X-GND-Sasl: gregory.clement@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 398F92000C;
+        Fri, 16 Jun 2023 11:56:08 +0000 (UTC)
+From:   Gregory CLEMENT <gregory.clement@bootlin.com>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        andrew@lunn.ch, sebastian.hesselbarth@gmail.com
+Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: Re: [PATCH v9 2/3] ARM: dts: mvebu: align MTD partition nodes to
+ dtschema
+In-Reply-To: <20230615040447.3484564-3-chris.packham@alliedtelesis.co.nz>
+References: <20230615040447.3484564-1-chris.packham@alliedtelesis.co.nz>
+ <20230615040447.3484564-3-chris.packham@alliedtelesis.co.nz>
+Date:   Fri, 16 Jun 2023 13:56:07 +0200
+Message-ID: <87legjhb8o.fsf@BL-laptop>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="HCxw+tlxQuwCrK6z"
-Content-Disposition: inline
-In-Reply-To: <c5ce23fc-db87-6f11-0708-85cc4ba2a46c@linux.intel.com>
-X-Cookie: P-K4
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Chris Packham <chris.packham@alliedtelesis.co.nz> writes:
 
---HCxw+tlxQuwCrK6z
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> Update the node names for the SPI NOR and NAND partitions to conform to
+> the partition properties in the relevant dtschema.
+>
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
 
-On Fri, Jun 16, 2023 at 12:21:13PM +0200, Pierre-Louis Bossart wrote:
-> On 6/15/23 20:34, kernel test robot wrote:
+Applied on mvebu/dt
 
-> >>> sound/soc/soc-pcm.c:2089:5: warning: stack frame size (2064) exceeds limit (2048) in 'dpcm_be_dai_trigger' [-Wframe-larger-than]
-> >    int dpcm_be_dai_trigger(struct snd_soc_pcm_runtime *fe, int stream,
+Thanks,
 
-> Not sure what causes this warning to show up, the code hasn't changed in
-> 1.2 years, nor what to do about it....
+Gregory
 
-One of the sanitisers is doing things which explodes the stack size.  I
-wouldn't worry about it, one of the toolchain people will probably get
-to it at some point if they didn't already (sometimes these things are
-done by tuning the compiler flags).
 
---HCxw+tlxQuwCrK6z
-Content-Type: application/pgp-signature; name="signature.asc"
+> ---
+>
+> Notes:
+>     Changes in v9:
+>     - None
+>     Changes in v8:
+>     - Add r-by from Miquel
+>
+>  arch/arm/boot/dts/armada-385-atl-x530.dts | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+>
+> diff --git a/arch/arm/boot/dts/armada-385-atl-x530.dts b/arch/arm/boot/dts/armada-385-atl-x530.dts
+> index 241f5d7c80e9..5a9ab8410b7b 100644
+> --- a/arch/arm/boot/dts/armada-385-atl-x530.dts
+> +++ b/arch/arm/boot/dts/armada-385-atl-x530.dts
+> @@ -179,19 +179,19 @@ partitions {
+>  			compatible = "fixed-partitions";
+>  			#address-cells = <1>;
+>  			#size-cells = <1>;
+> -			partition@u-boot {
+> +			partition@0 {
+>  				reg = <0x00000000 0x00100000>;
+>  				label = "u-boot";
+>  			};
+> -			partition@u-boot-env {
+> +			partition@100000 {
+>  				reg = <0x00100000 0x00040000>;
+>  				label = "u-boot-env";
+>  			};
+> -			partition@unused {
+> +			partition@140000 {
+>  				reg = <0x00140000 0x00e80000>;
+>  				label = "unused";
+>  			};
+> -			partition@idprom {
+> +			partition@fc0000 {
+>  				reg = <0x00fc0000 0x00040000>;
+>  				label = "idprom";
+>  			};
+> @@ -216,16 +216,16 @@ partitions {
+>  			compatible = "fixed-partitions";
+>  			#address-cells = <1>;
+>  			#size-cells = <1>;
+> -			partition@user {
+> +			partition@0 {
+>  				reg = <0x00000000 0x0f000000>;
+>  				label = "user";
+>  			};
+> -			partition@errlog {
+> +			partition@f000000 {
+>  				/* Maximum mtdoops size is 8MB, so set to that. */
+>  				reg = <0x0f000000 0x00800000>;
+>  				label = "errlog";
+>  			};
+> -			partition@nand-bbt {
+> +			partition@f800000 {
+>  				reg = <0x0f800000 0x00800000>;
+>  				label = "nand-bbt";
+>  			};
+> -- 
+> 2.40.1
+>
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSMTc8ACgkQJNaLcl1U
-h9A7OAf6AgtQcEPXuFb0M6xmtaQTE76Xb+GZtm13l3OadG+W1Dt9iWZ7TkgsRJsn
-9SNNxVV4MNvTBDnMdaIub6laD2Z9ZVrJGl8LdzaKB9+knR8P728hF+w4XY1F20lc
-WqHIRocELOJocfPAta9UrJfzPlpKjtFysCsaEzwSkDz5pYuSwqvJ2bGgVy2cVaze
-Sn6jchA2BXu3D1n1+FPVvUrOFD7aLyCVJjh8eLT9rsAQDB02Ok9k3AXtfPj2BXw7
-+6V25NqO/UGYYfwAFxPUNFiEkaqXh++eRwJs6rFkHTNej3GyxifySHfFGwojCXaH
-JJcS9oKg3P9+3CPmYoPQtExmpmujBQ==
-=9AO/
------END PGP SIGNATURE-----
-
---HCxw+tlxQuwCrK6z--
+-- 
+Gregory Clement, Bootlin
+Embedded Linux and Kernel engineering
+http://bootlin.com
