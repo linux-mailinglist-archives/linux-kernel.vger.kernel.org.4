@@ -2,171 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 517D9732F95
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:14:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31511732F98
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:14:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344987AbjFPLO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 07:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37206 "EHLO
+        id S1345262AbjFPLOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 07:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244798AbjFPLO0 (ORCPT
+        with ESMTP id S1345078AbjFPLOc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 07:14:26 -0400
-X-Greylist: delayed 76 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 16 Jun 2023 04:14:25 PDT
-Received: from mail-40141.protonmail.ch (mail-40141.protonmail.ch [185.70.40.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF5C119
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:14:25 -0700 (PDT)
-Date:   Fri, 16 Jun 2023 11:14:04 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1686914063; x=1687173263;
-        bh=K8zwE/89jLmnuxpuNw+S5SHrPmwSUdNY8GcOH7EyUOE=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=RpliA5Cvtu2XFnz6VCS9qwq36tF6QmERzkI+K+tW98dx7C6vg6Rz/5HILV8c7rnEG
-         8jNjxzMuIaAuA2zGHFc3btOBrYTeAdCF02XHBSvgrPaoUmIW6tQptom3HuHyhoI9eo
-         lwOKJUeiFqq8G+YyvcwfNnFHYG7XF4+UFAMShwwPSadD/CnTTY1UGOmfsAAMTIOnQf
-         q9HxIZsvG7VZDNssEpej+7sMJs5aZQvv0IL2ZuSnz/fD3amzqJFyPFBj8TAPtrsrIg
-         8CJU51l7xim49KodUKRwqRIfPthuhV4m8BBM3Grhoes55Cbo+vvoBNYd/0c9YMw6/w
-         Ezwv/u9j8eyvg==
-To:     Miguel Ojeda <ojeda@kernel.org>
-From:   =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Cc:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Alice Ryhl <aliceryhl@google.com>,
-        Andreas Hindborg <nmi@metaspace.dk>,
-        Philip Li <philip.li@intel.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH 3/6] rust: sync: make doctests compilable/testable
-Message-ID: <BlurLQzIVAVc1TilZfkOwtHd_jenh64E_Zb4sXczlga-q3uYqfyafFEhXuk4GEbUoxToZKDgXssuvFSOWCwxSsKIS0Q5G-9sr_ADs6wdCEM=@protonmail.com>
-In-Reply-To: <20230614180837.630180-4-ojeda@kernel.org>
-References: <20230614180837.630180-1-ojeda@kernel.org> <20230614180837.630180-4-ojeda@kernel.org>
-Feedback-ID: 27884398:user:proton
+        Fri, 16 Jun 2023 07:14:32 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2080.outbound.protection.outlook.com [40.107.6.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5593413E;
+        Fri, 16 Jun 2023 04:14:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CSAM4DBWEwLull/mQa2CKpZnjj7yswRYp9BbLVoFuROcDKBcVq9VWoECYnH2Fswefcvztxm9n11s/1lVnDiyVOXZ8fJoEptwZnVavySqO1/fzcC1ft8jTwh9wyHBOC1dVWsEsxv1wu5LkIS7M9ey5XILwVcEUUTvVKVYy69eQhHPyxAOH4CFSPMunkS1+IUI8F7ly98YhGOwuhreyJ/UL8Mpxz4Lzeqasu8qfVYaG5xW7dbke/xvEDgjTbFePhDIn0/oG8yx0Xfayf3jmq6i0rz55IznvyUxJCBr/y6TIlm9Y9DWXI1Rv4z6yG3A+0RaHeaxDrM5KiqL38xZ3emtOA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Zi///9VArwf/g5asxXvmxXXw8gbc/2TDISEdzhgBNWs=;
+ b=fClILJQd3IQVIl2MjDTZvq5ot3dURBdgiWqu64X8OlnfhwxIZZB0iXLHLtwSb/hw1nzetxi5RucYfS7nbFTimN4798/eaSiPHyNRv9KHB6P5yvCce9fsBtj/bHXCg9IuD6geCTrPgESsCinm0UISzpcUNpnu0j5SWYko1gTMIEgoESDEHe2kfMC63Z9clvG3gyLj+r9OsCeRg3a04behxgApgZp6EMDWZBr2I+ZzfoMfBtPiBCy4kDv9kN8hWkHDTIKd8mQKJ3qaUT/MU9BaFOukLuyYMCnwMLe+z/hthxSC9ilsnNKQeE7zMhlifXEWQollBlzXRJCF8D10njlvmQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=solid-run.com; dmarc=pass action=none
+ header.from=solid-run.com; dkim=pass header.d=solid-run.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=solidrn.onmicrosoft.com; s=selector1-solidrn-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Zi///9VArwf/g5asxXvmxXXw8gbc/2TDISEdzhgBNWs=;
+ b=aDQM/6/7DlBDidclKwYPXkFdqcjbJANQOe0OB+F4G6hywG7Rmk2rOc7IcE6isILbY3nagRw337ZIewLRhBSoMvdeEC07CP2MTU5voxGCCN1tRHbcbOkfckJ363qeCZ/0KmIUqdWF96uXOhLce5vABxNeuF/XpXUgnoPTlyIujs4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=solid-run.com;
+Received: from AS8PR04MB8963.eurprd04.prod.outlook.com (2603:10a6:20b:42e::18)
+ by AM9PR04MB8258.eurprd04.prod.outlook.com (2603:10a6:20b:3e2::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.29; Fri, 16 Jun
+ 2023 11:14:28 +0000
+Received: from AS8PR04MB8963.eurprd04.prod.outlook.com
+ ([fe80::5a4:421d:f180:9105]) by AS8PR04MB8963.eurprd04.prod.outlook.com
+ ([fe80::5a4:421d:f180:9105%6]) with mapi id 15.20.6500.025; Fri, 16 Jun 2023
+ 11:14:28 +0000
+From:   Josua Mayer <josua@solid-run.com>
+To:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Josua Mayer <josua@solid-run.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>
+Subject: [PATCH] net: dpaa2-mac: add 25gbase-r support
+Date:   Fri, 16 Jun 2023 14:14:14 +0300
+Message-Id: <20230616111414.1578-1-josua@solid-run.com>
+X-Mailer: git-send-email 2.35.3
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: FR0P281CA0059.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:49::7) To AS8PR04MB8963.eurprd04.prod.outlook.com
+ (2603:10a6:20b:42e::18)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS8PR04MB8963:EE_|AM9PR04MB8258:EE_
+X-MS-Office365-Filtering-Correlation-Id: 75a75f73-6fab-4797-81f2-08db6e5ad98f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4v8sFP3gQm9BKtmz+d3+c7LpNOjMjjeadOkbohcaIBHsY8vgEAFyELPYcOAnWFnI+pTxaw4y8NzAYO2bBRJYFSfp5cqsAWw7iG1CsTPIPogsx/z/fJV/1ji0nfrypGn8goGwB4A7XhLNx79C4ml5JiOEx8QuZdJUA1lgAb+V/5fJt0B/3kqRusbsvYJXfLvah9I+oiikdQPvgJCMNAD5xxG8Ol2nXuedPgpAt+F7U5Y9hPGunfpDByH2+ghqzIhprTnpNIB3Rhq9M0mCo53g6aRu4cwolrz4PbW1xvP53a83y4xnGCxUSohnkrzchKBUqe7R+KwDLqjebWYA1uv2QtTiO4xd8Uu2ZW1ZLHRfDbquFipw6MTzLNEZT9PBRxwab4NdmMvqqTuZt6pyQSkeTaR0g3EyYk5TG6gVdNH6rw0c6rucf7tjzmvjriO/wLUBQ7gEYwVv/6jXpAUJV+bCo/RaBiIr86Wa//if5uHlmomCNSj2czV2HzC+/qttVFlXnFoTtKVNkNuIFe+1hHQuF/rRt6HOPShPRG2/Pr5nuFYwEHfpzCfAt3Zz6MRnMVx5PA5uNJ/lIyr0xTRFRdj01B0Kh7WcYgFPMKVP5uz9GEFTP+GtI0xvA1cWHjlAirsC
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8963.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(39840400004)(366004)(136003)(376002)(396003)(451199021)(8936002)(8676002)(86362001)(5660300002)(38350700002)(38100700002)(83380400001)(316002)(41300700001)(66476007)(66946007)(66556008)(4326008)(54906003)(2616005)(186003)(478600001)(6506007)(1076003)(6512007)(36756003)(26005)(6666004)(2906002)(6486002)(52116002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9IdozhtO53jeNeWEy53pbjW3Eld2CKnpaMwAgzfnFpJ2Q8g0g91qUpyV9MeC?=
+ =?us-ascii?Q?pn00ji3XlXoHc4dim+wg8AYAtEhq+v3BGtromDOvhKAzCCMVbL/rVKYn5xyB?=
+ =?us-ascii?Q?shp6FAxpdTSA6yx4Hddi3p7GelfmW172VoBjA4U7IcgKLOoHAD8jz9WjaxPF?=
+ =?us-ascii?Q?ivJdkOXHfNe5Rr1qScMP02wgbiiTH8Q13Y2nX14DAdhxlPf7O5Bb/dXWs+lk?=
+ =?us-ascii?Q?nY6E9olnFWTIycqikkKYfKXU9u2RpK44gSGH+14XlislGEQnHuRXYQk6LoOx?=
+ =?us-ascii?Q?JwuxG7URCFZiT7NdznhhpIIeOm7F9ET+ZcBL1OBPoNa4fL/d18gHklfaHIpc?=
+ =?us-ascii?Q?MVE7rFouooQjECmtdZKO3L7P8LPpK71r6VLdQIDYQj8Fg+M1wZzSEO5s+qBV?=
+ =?us-ascii?Q?rANwhau5VZC65ajqAeZKioxEJ4t+mQEI02AvEwcZPGRYcLu3taT+HQWMP3+A?=
+ =?us-ascii?Q?IrWUAwE0I+1MLU0sw+SQQrrWL8kJTJc6qB+qLWf7zIYn6L4NJbe+HgUuCraO?=
+ =?us-ascii?Q?fxEMQo1SaqFsCZnN9ioKALNdSNe0X1cIt5Hh/O88MkcdWMF7eL1R2sLTJpiQ?=
+ =?us-ascii?Q?ppihhvzUd82sQUQgbFWvZ/0OrYaKjHif+7g32syuvbM6LYX7LRNAEdzGXNCg?=
+ =?us-ascii?Q?OzEMc8I2a0UwsLngvq3nG9k15ljr7FOKQQHdOnHC2UihccUcLOxOLMrWcg9t?=
+ =?us-ascii?Q?4UG5zn7SAtUbEYyhP4hptcbe58jshCPF5u6TQCKCu/QJ3e0U2DNRYCBZzg8v?=
+ =?us-ascii?Q?EQzbfzj+BdDGt4VO6EAYjeT9JJcQdHcv+t00plqP+WNoqs1jKe0ErnFKjLab?=
+ =?us-ascii?Q?kCLAeUj7nhloq6j+e75IZhkyI6+4c7PXQGni2cGMUKQ2THfryo9rtFvE+XME?=
+ =?us-ascii?Q?FmWKoMTHOGGLlFLKtGnFkfAMqYuFfSHDJsggLFWFGUBaRuol/M/3xl/+oaFR?=
+ =?us-ascii?Q?D3jv082JO9gklIgQh6rP9ysEea2MoSSgFyF3+UpUVXAwOL4YYFixeDB7rhf2?=
+ =?us-ascii?Q?yUr6TNl3CifcJ+XH/hiVJNzEYWruRHmR26+8zRTXUsxHZQBRMZI5NBF9CeJ4?=
+ =?us-ascii?Q?itwrtixVOA2bfBunWdti9dPUvS/fZJzpBBWLJvQohQJveiXJlYP6AFuqTqf4?=
+ =?us-ascii?Q?nW5RZOZRtqTiQf0ZFtccqIzTSD/5I1H7oyb/95E2mCLqxCd2a3yBLMlIwhG8?=
+ =?us-ascii?Q?+nPfjCxbKABF7mAQn3umUY6XrvBu4HXwer2j9Mn2ONSu3FvXG46YMWDGrSwV?=
+ =?us-ascii?Q?04ZDEhgHu6yw+EiooaidvsX+co8yKtMBd/s/eP9XOI1JvtLm+4wlFGK7dVY+?=
+ =?us-ascii?Q?DlZhfix8TRzZ+bzM3TPOheypZo0sB+cQmKdR6Qf6G79eh2ikisobE2+FyQnm?=
+ =?us-ascii?Q?XUWM7kn2y7TuKL+sUWU1e7n5UzjBWaiMssVAez48H6646ApWrO/sT3+TmDCA?=
+ =?us-ascii?Q?JnnDwITgOwI6nZc+zLIDNVp1odLk0WCRwZtDoY4/DuHSZMVscCb/V6UM7kNM?=
+ =?us-ascii?Q?ym9y79WSiuegUo1WWmPoP9xcfC4b8FUaH/l9ETD76x3rvChItpZXtSJIS5wm?=
+ =?us-ascii?Q?PxYrT97OkoHQAvx/hmJKZ/dyg2BXhN4rJsf+xVCt?=
+X-OriginatorOrg: solid-run.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 75a75f73-6fab-4797-81f2-08db6e5ad98f
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8963.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 11:14:28.0553
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: a4a8aaf3-fd27-4e27-add2-604707ce5b82
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ym3RpefY9CpQIPKpwizJFXVO40bhVmDLQn/4poK+1O8WcLkC+KqbHMzSBK0aLHJ9Ubwb4pTUcqQ8P+N59EH5Vg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8258
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-------- Original Message -------
-On Wednesday, June 14th, 2023 at 20:08, Miguel Ojeda <ojeda@kernel.org> wro=
-te:
+Layerscape MACs support 25Gbps network speed with dpmac "CAUI" mode.
+Add the mappings between DPMAC_ETH_IF_* and HY_INTERFACE_MODE_*, as well
+as the 25000 mac capability.
 
-> Rust documentation tests are going to be build/run-tested
-> with the KUnit integration added in a future patch, thus
-> update them to make them compilable/testable so that we
-> may start enforcing it.
->=20
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> ---
->  rust/kernel/sync/arc.rs           | 9 +++++++--
->  rust/kernel/sync/lock/mutex.rs    | 1 +
->  rust/kernel/sync/lock/spinlock.rs | 1 +
->  3 files changed, 9 insertions(+), 2 deletions(-)
->=20
-> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-> index a89843cacaad..1ecb2efab51e 100644
-> --- a/rust/kernel/sync/arc.rs
-> +++ b/rust/kernel/sync/arc.rs
-> @@ -73,6 +73,7 @@
->  /// assert_eq!(cloned.b, 20);
->  ///
->  /// // The refcount drops to zero when `cloned` goes out of scope, and t=
-he memory is freed.
-> +/// # Ok::<(), Error>(())
->  /// ```
->  ///
->  /// Using `Arc<T>` as the type of `self`:
-> @@ -98,6 +99,7 @@
->  /// let obj =3D Arc::try_new(Example { a: 10, b: 20 })?;
->  /// obj.use_reference();
->  /// obj.take_over();
-> +/// # Ok::<(), Error>(())
->  /// ```
->  ///
->  /// Coercion from `Arc<Example>` to `Arc<dyn MyTrait>`:
-> @@ -121,6 +123,7 @@
->  ///
->  /// // `coerced` has type `Arc<dyn MyTrait>`.
->  /// let coerced: Arc<dyn MyTrait> =3D obj;
-> +/// # Ok::<(), Error>(())
->  /// ```
->  pub struct Arc<T: ?Sized> {
->      ptr: NonNull<ArcInner<T>>,
-> @@ -337,7 +340,7 @@ fn from(item: Pin<UniqueArc<T>>) -> Self {
->  /// # Example
->  ///
->  /// ```
-> -/// use crate::sync::{Arc, ArcBorrow};
-> +/// use kernel::sync::{Arc, ArcBorrow};
->  ///
->  /// struct Example;
->  ///
-> @@ -350,12 +353,13 @@ fn from(item: Pin<UniqueArc<T>>) -> Self {
->  ///
->  /// // Assert that both `obj` and `cloned` point to the same underlying =
-object.
->  /// assert!(core::ptr::eq(&*obj, &*cloned));
-> +/// # Ok::<(), Error>(())
->  /// ```
->  ///
->  /// Using `ArcBorrow<T>` as the type of `self`:
->  ///
->  /// ```
-> -/// use crate::sync::{Arc, ArcBorrow};
-> +/// use kernel::sync::{Arc, ArcBorrow};
->  ///
->  /// struct Example {
->  ///     a: u32,
-> @@ -370,6 +374,7 @@ fn from(item: Pin<UniqueArc<T>>) -> Self {
->  ///
->  /// let obj =3D Arc::try_new(Example { a: 10, b: 20 })?;
->  /// obj.as_arc_borrow().use_reference();
-> +/// # Ok::<(), Error>(())
->  /// ```
->  pub struct ArcBorrow<'a, T: ?Sized + 'a> {
->      inner: NonNull<ArcInner<T>>,
-> diff --git a/rust/kernel/sync/lock/mutex.rs b/rust/kernel/sync/lock/mutex=
-.rs
-> index 923472f04af4..09276fedc091 100644
-> --- a/rust/kernel/sync/lock/mutex.rs
-> +++ b/rust/kernel/sync/lock/mutex.rs
-> @@ -63,6 +63,7 @@ macro_rules! new_mutex {
->  /// assert_eq!(e.c, 10);
->  /// assert_eq!(e.d.lock().a, 20);
->  /// assert_eq!(e.d.lock().b, 30);
-> +/// # Ok::<(), Error>(())
->  /// ```
->  ///
->  /// The following example shows how to use interior mutability to modify=
- the contents of a struct
-> diff --git a/rust/kernel/sync/lock/spinlock.rs b/rust/kernel/sync/lock/sp=
-inlock.rs
-> index 979b56464a4e..91eb2c9e9123 100644
-> --- a/rust/kernel/sync/lock/spinlock.rs
-> +++ b/rust/kernel/sync/lock/spinlock.rs
-> @@ -61,6 +61,7 @@ macro_rules! new_spinlock {
->  /// assert_eq!(e.c, 10);
->  /// assert_eq!(e.d.lock().a, 20);
->  /// assert_eq!(e.d.lock().b, 30);
-> +/// # Ok::<(), Error>(())
->  /// ```
->  ///
->  /// The following example shows how to use interior mutability to modify=
- the contents of a struct
-> --=20
-> 2.41.0
+Tested on SolidRun LX2162a Clearfog, serdes 1 protocol 18.
 
-Reviewed-by: Bj=C3=B6rn Roy Baron <bjorn3_gh@protonmail.com>
+Signed-off-by: Josua Mayer <josua@solid-run.com>
+---
+ drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c
+index d860d9fe73af..a69bb22c37ea 100644
+--- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c
++++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c
+@@ -54,6 +54,9 @@ static int phy_mode(enum dpmac_eth_if eth_if, phy_interface_t *if_mode)
+ 	case DPMAC_ETH_IF_XFI:
+ 		*if_mode = PHY_INTERFACE_MODE_10GBASER;
+ 		break;
++	case DPMAC_ETH_IF_CAUI:
++		*if_mode = PHY_INTERFACE_MODE_25GBASER;
++		break;
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -79,6 +82,8 @@ static enum dpmac_eth_if dpmac_eth_if_mode(phy_interface_t if_mode)
+ 		return DPMAC_ETH_IF_XFI;
+ 	case PHY_INTERFACE_MODE_1000BASEX:
+ 		return DPMAC_ETH_IF_1000BASEX;
++	case PHY_INTERFACE_MODE_25GBASER:
++		return DPMAC_ETH_IF_CAUI;
+ 	default:
+ 		return DPMAC_ETH_IF_MII;
+ 	}
+@@ -415,7 +420,7 @@ int dpaa2_mac_connect(struct dpaa2_mac *mac)
+ 
+ 	mac->phylink_config.mac_capabilities = MAC_SYM_PAUSE | MAC_ASYM_PAUSE |
+ 		MAC_10FD | MAC_100FD | MAC_1000FD | MAC_2500FD | MAC_5000FD |
+-		MAC_10000FD;
++		MAC_10000FD | MAC_25000FD;
+ 
+ 	dpaa2_mac_set_supported_interfaces(mac);
+ 
+-- 
+2.35.3
+
