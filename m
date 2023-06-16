@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D821B733480
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 17:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36EB4733481
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 17:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345908AbjFPPQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 11:16:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40166 "EHLO
+        id S1345919AbjFPPQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 11:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231695AbjFPPQp (ORCPT
+        with ESMTP id S1345700AbjFPPQq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 11:16:45 -0400
+        Fri, 16 Jun 2023 11:16:46 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC24C30FF;
-        Fri, 16 Jun 2023 08:16:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980B03590;
+        Fri, 16 Jun 2023 08:16:44 -0700 (PDT)
 Date:   Fri, 16 Jun 2023 15:16:42 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686928602;
+        s=2020; t=1686928603;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=f91D0xmWauZGJUDw/aEInTSPCvvm5F7WQVK8OGO4AMU=;
-        b=mWsjzbesIw6ijtKIY+z03FxLkxjejwaflhIsWVUPdCPgpHor+hEZQG33H1ejDAXUfBVgPI
-        39crKvqzEVEn4lfSTGYyXEa2HL2R23GkOP2Ox7QkeEZGpgg836bDjomwn7t0JoSfy5DfTR
-        nVc17Nzou5b6SVp/k1w/gjKMs6w+B4zb1ua6pHQiLb1hE8CxgnjJ1zPK8xKyH5NV6cLX0m
-        dejk1qOkJ+95OhVClNmNFqr2dFfB4YfJ/0vS09BV0lQh9g/RhHGEL3Ja8uKlm/o1keEZem
-        FoDqris0O3wRt/Ce3E4LMKkU1oSXQi0ocUjo9eRdPLiV1A8SbGr1znUrKOjVyw==
+        bh=T2X08GY+8je3qIgAuEB7aoFUINAb3BIhnuWZ+7W6UHM=;
+        b=1mS2+hNsg8EjxouaUGM6POvlbWuURlGOeAXX/6Z7a9wsO1HzzFqNyCUp1PaRJNGZInT1I0
+        qizOSEhLKAW2KWrGznlc2xd4N4vWqx/tVZBlQiCK2Xy4MfU3r9Z23GCk6AAViOrw8D5Lbg
+        ZnBkC8pdn9QD2PVGSeSywRRwVIi1FVUKm4yEKm72v6x6S4NIc1eWTXgNfw22mVxOSmoN8O
+        090/3FjitJBJDU7+joI/GG1mG4XPkslVLAFlUBJQoyWXmEBtEk6HY3fNaVAJX6r1SrLJ+e
+        K8HBBj7XBRC39NaE+ihkQ1Fiy3Aj6G5GJfALmiH6ivOghoje6vTmFumU56W26Q==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686928602;
+        s=2020e; t=1686928603;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=f91D0xmWauZGJUDw/aEInTSPCvvm5F7WQVK8OGO4AMU=;
-        b=HR9NDpAzdQZrQPDwSjLulFytNTUq+yszAXG6CRh7IcEcLDVCnjtYzAxJNCK6QfvdWFtcpV
-        GH1taWE11g0+utDg==
-From:   "tip-bot2 for Miaohe Lin" <tip-bot2@linutronix.de>
+        bh=T2X08GY+8je3qIgAuEB7aoFUINAb3BIhnuWZ+7W6UHM=;
+        b=cVkHiXdcXgRkHiGge5BLxf9ikfsxikbq6nu2VxzWvXaoeUgOlC8jzvBD/MbXhKCqW45+YA
+        BPi1r8h3JKOLCrAQ==
+From:   "tip-bot2 for Tom Rix" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/topology: Mark set_sched_topology() __init
-Cc:     Miaohe Lin <linmiaohe@huawei.com>,
+Subject: [tip: sched/core] sched/fair: Rename variable cpu_util eff_util
+Cc:     Tom Rix <trix@redhat.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
+        Valentin Schneider <vschneid@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230603073645.1173332-1-linmiaohe@huawei.com>
-References: <20230603073645.1173332-1-linmiaohe@huawei.com>
+In-Reply-To: <20230611122535.183654-1-trix@redhat.com>
+References: <20230611122535.183654-1-trix@redhat.com>
 MIME-Version: 1.0
-Message-ID: <168692860207.404.4144241334175555026.tip-bot2@tip-bot2>
+Message-ID: <168692860274.404.124512830013535834.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,50 +69,52 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     0cce0fde499a92c726cd2e24f7763644f7c9f971
-Gitweb:        https://git.kernel.org/tip/0cce0fde499a92c726cd2e24f7763644f7c9f971
-Author:        Miaohe Lin <linmiaohe@huawei.com>
-AuthorDate:    Sat, 03 Jun 2023 15:36:45 +08:00
+Commit-ID:     a707df30c9438a9d4d0a43ae7f22b59b078f94c4
+Gitweb:        https://git.kernel.org/tip/a707df30c9438a9d4d0a43ae7f22b59b078f94c4
+Author:        Tom Rix <trix@redhat.com>
+AuthorDate:    Sun, 11 Jun 2023 08:25:35 -04:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Fri, 16 Jun 2023 17:08:01 +02:00
 
-sched/topology: Mark set_sched_topology() __init
+sched/fair: Rename variable cpu_util eff_util
 
-All callers of set_sched_topology() are within __init section. Mark
-it __init too.
+cppcheck reports
+kernel/sched/fair.c:7436:17: style: Local variable 'cpu_util' shadows outer function [shadowFunction]
+  unsigned long cpu_util;
+                ^
 
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+Clean this up by renaming the variable to eff_util
+
+Signed-off-by: Tom Rix <trix@redhat.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Reviewed-by: Valentin Schneider <vschneid@redhat.com>
-Link: https://lore.kernel.org/r/20230603073645.1173332-1-linmiaohe@huawei.com
+Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Link: https://lore.kernel.org/r/20230611122535.183654-1-trix@redhat.com
 ---
- include/linux/sched/topology.h | 2 +-
- kernel/sched/topology.c        | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ kernel/sched/fair.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
-index 816df6c..67b573d 100644
---- a/include/linux/sched/topology.h
-+++ b/include/linux/sched/topology.h
-@@ -203,7 +203,7 @@ struct sched_domain_topology_level {
- #endif
- };
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 6189d1a..7666dbc 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -7433,7 +7433,7 @@ eenv_pd_max_util(struct energy_env *eenv, struct cpumask *pd_cpus,
+ 	for_each_cpu(cpu, pd_cpus) {
+ 		struct task_struct *tsk = (cpu == dst_cpu) ? p : NULL;
+ 		unsigned long util = cpu_util(cpu, p, dst_cpu, 1);
+-		unsigned long cpu_util;
++		unsigned long eff_util;
  
--extern void set_sched_topology(struct sched_domain_topology_level *tl);
-+extern void __init set_sched_topology(struct sched_domain_topology_level *tl);
+ 		/*
+ 		 * Performance domain frequency: utilization clamping
+@@ -7442,8 +7442,8 @@ eenv_pd_max_util(struct energy_env *eenv, struct cpumask *pd_cpus,
+ 		 * NOTE: in case RT tasks are running, by default the
+ 		 * FREQUENCY_UTIL's utilization can be max OPP.
+ 		 */
+-		cpu_util = effective_cpu_util(cpu, util, FREQUENCY_UTIL, tsk);
+-		max_util = max(max_util, cpu_util);
++		eff_util = effective_cpu_util(cpu, util, FREQUENCY_UTIL, tsk);
++		max_util = max(max_util, eff_util);
+ 	}
  
- #ifdef CONFIG_SCHED_DEBUG
- # define SD_INIT_NAME(type)		.name = #type
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index ca44722..cb92dc5 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -1681,7 +1681,7 @@ static struct sched_domain_topology_level *sched_domain_topology_saved;
- #define for_each_sd_topology(tl)			\
- 	for (tl = sched_domain_topology; tl->mask; tl++)
- 
--void set_sched_topology(struct sched_domain_topology_level *tl)
-+void __init set_sched_topology(struct sched_domain_topology_level *tl)
- {
- 	if (WARN_ON_ONCE(sched_smp_initialized))
- 		return;
+ 	return min(max_util, eenv->cpu_cap);
