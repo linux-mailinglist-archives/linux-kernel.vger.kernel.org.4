@@ -2,56 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8358C733243
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 15:34:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7C773323E
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 15:33:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245581AbjFPNdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 09:33:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
+        id S1344184AbjFPNdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 09:33:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344375AbjFPNdx (ORCPT
+        with ESMTP id S1344061AbjFPNds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 09:33:53 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECB13592;
-        Fri, 16 Jun 2023 06:33:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=M46nk+xQMnki5q5tHbFlZVxQ1c0fpeb+0aLvaugATU4=; b=k72XIuyD++1/InJ/SNgA55+1eF
-        9ddkF00eZerFQBQOXWtRjZ9tpWHfBJb0tpYPfS5IVjcuSMzaulsiC3mtZ27MMy7sS8euTCtXpgE+Q
-        2/359qTlEf6g6rmYtSv/gU3f2nZqEYqXlt6vn9fYhreTH2bQsvixUcj64Iy4Q2KEY6ZsAZE4B5YhB
-        EEXE0gJ8LcWz4PrjD2n5tzWEDJg7TQinzGgUKfib8O2d+xZNuafVX+1Y7UMtSPVRT6TNWiOCpRoY5
-        kLAGShKWDjZWG8L2XiLOmpvyvC8wDfFFtb+Bg+s8jTII7pVr2wqG5nGLrMaPY1nqq2iMVj04PjNYx
-        1AqA4sng==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35844)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1qA9aD-0005En-2a; Fri, 16 Jun 2023 14:33:45 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1qA9aB-0002YG-6P; Fri, 16 Jun 2023 14:33:43 +0100
-Date:   Fri, 16 Jun 2023 14:33:43 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Jianhui Zhao <zhaojh329@gmail.com>
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V4] net: phy: Add sysfs attribute for PHY c45 identifiers.
-Message-ID: <ZIxkt3VmmNY2zs1m@shell.armlinux.org.uk>
-References: <20230616131246.41989-1-zhaojh329@gmail.com>
+        Fri, 16 Jun 2023 09:33:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3E13593
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 06:33:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 53AA461CE8
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 13:33:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED924C433C8;
+        Fri, 16 Jun 2023 13:33:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686922425;
+        bh=b8f51cqluu5JQHKo6Ft3l/k4ksx9H0q8esoFN35GWAk=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=lbCchXxccR1Uchf4dCU35MYDMGNcS1c2C92VAJD+sT2DHSrLfGw7Ff4URfnfXV239
+         AO3UDIBJjMYM1FXTvEOwKNVRknnTs6yZ8FmUF2IXBPY1Nb9/dYQRz/x+T2KnwyAsZ6
+         iBkKEIYKxezd5iGTJqKTEWrQMzBqJ+F9WAw9Yrnu14re0t6E6efENTXkrhnIL8P7q9
+         rsDGQsU0Fi8wTd9dEk0m5S7EAQxTE8pMGF7hoePWC4YQd0NcDECMxwleobmcHZ9CXC
+         rtG5SfR3UfYmKXjAT1jQuO9yBjYQmwIX2pD7htfT1HgNvD8fcC9Dl80Znwtr5hezgb
+         Fs06u59//HpEg==
+From:   Mark Brown <broonie@kernel.org>
+To:     cy_huang@richtek.com
+Cc:     lgirdwood@gmail.com, linux-kernel@vger.kernel.org
+In-Reply-To: <1686881298-28333-1-git-send-email-cy_huang@richtek.com>
+References: <1686881298-28333-1-git-send-email-cy_huang@richtek.com>
+Subject: Re: [PATCH] regulator: helper: Document ramp_delay parameter of
+ regulator_set_ramp_delay_regmap()
+Message-Id: <168692242468.238679.12950223549204587682.b4-ty@kernel.org>
+Date:   Fri, 16 Jun 2023 14:33:44 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230616131246.41989-1-zhaojh329@gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-c6835
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,40 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 09:12:46PM +0800, Jianhui Zhao wrote:
-> +static umode_t phy_dev_c45_visible(struct kobject *kobj, struct attribute *attr, int foo)
-> +{
-> +	struct phy_c45_devid_attribute *devattr =
-> +		(struct phy_c45_devid_attribute *)container_of(attr, struct device_attribute, attr);
+On Fri, 16 Jun 2023 10:08:18 +0800, cy_huang@richtek.com wrote:
+> With W=1:
+> 
+>     drivers/regulator/helpers.c:947: warning: Function parameter or member 'ramp_delay' not described in 'regulator_set_ramp_delay_regmap'
+> 
+> Fix it by documenting the parameter.
+> 
+> 
+> [...]
 
-1. (struct phy_c45_devid_attribute *) cast is not required.
-2. we now have two places that we convert the attribute to a
-   phy_c45_devid_attribute, it's time for a macro to do that.
+Applied to
 
-> +	struct phy_device *phydev = to_phy_device(kobj_to_dev(kobj));
-> +
-> +	if (!phydev->is_c45 || phydev->c45_ids.device_ids[devattr->index] == 0xffffffff)
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
-	if (!phydev->is_c45 ||
-	    phydev->c45_ids.device_ids[devattr->index] == 0xffffffff)
+Thanks!
 
-And lastly... please don't be so quick to post a new version.
+[1/1] regulator: helper: Document ramp_delay parameter of regulator_set_ramp_delay_regmap()
+      commit: d3b555e563a0ac80383b66f4ffd8bee2f6272779
 
-https://www.kernel.org/doc/html/v6.1/process/maintainer-netdev.html#i-have-received-review-feedback-when-should-i-post-a-revised-version-of-the-patches
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Particularly the bit about "Do not post a new version of the code if the
-discussion about the previous version is still ongoing, unless directly
-instructed by a reviewer." is relevent.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-You have not given enough time for Andrew to respond to my suggestion
-which I invited him to (by "Andrew, any opinions?"), instead rushing
-out v4 that implements my suggestion without first waiting to see if
-Andrew agrees with it.
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-This seems to be becoming common place, so I think it's about time I
-created a vim macro to insert a boilerplate explaining this process in
-every review. :(
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Thanks,
+Mark
+
