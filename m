@@ -2,153 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C59F17324EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 03:54:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C6E7324EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 03:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238927AbjFPBym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 21:54:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33534 "EHLO
+        id S239131AbjFPB4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 21:56:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjFPByi (ORCPT
+        with ESMTP id S229509AbjFPB4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 21:54:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4F5297A;
-        Thu, 15 Jun 2023 18:54:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 233CA61F69;
-        Fri, 16 Jun 2023 01:54:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68FC9C433CC;
-        Fri, 16 Jun 2023 01:54:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686880476;
-        bh=89sT52+ElbRUq2ljt/SlcehdmzT2f6dY9ia7tDc3ZUU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DDk3vNefAAdE8fmCiwbxgDnRfTxu6cX8Z2N8p3BMnMagIWIwhmTp6nya/kk0Wf1ti
-         VTUVpBdq0CUBJa1UahVc21souPJYuPmFIOlBWGz543H2olNRCsuAHpq9K+/z7nxQdZ
-         aJXWe1xmxXkeruhmVArdqrrjQfCkziNFezEkqBlTTRPBWO7CO/9EiwOReodIJnmt61
-         NJ0qtAKmdsST9aeBBJRmAcMiEUbPn+qnIoZz2v2IP/7e+0d6rehev73bshn4qbIUfc
-         lGrAfQdJIl4AZvskzLWe3WP4fYHW3KU7dHuAPiKcf2ysDmSG3X34kNvkbFwdM841S2
-         OEmrGXsZ3yhwg==
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-51496f57e59so176131a12.2;
-        Thu, 15 Jun 2023 18:54:36 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwasivu8VqMHtJyFq2Y3Nq8kM5ZZl6+cdV2RYR7QxM86XuICLfF
-        RJhB+4i6F5FxHt+DFnDHdYjFtGBpVBnbK4YvoZA=
-X-Google-Smtp-Source: ACHHUZ4Fmo8R9P8CS9FnrCz8uNEsWJLds6OhZ8ooaetttwKsO4qx/QpKi9Xw4DkOKXTwUl7dBloJJiG3JqfOPlcY5n4=
-X-Received: by 2002:a05:6402:1118:b0:514:9ab4:3524 with SMTP id
- u24-20020a056402111800b005149ab43524mr293544edv.7.1686880474611; Thu, 15 Jun
- 2023 18:54:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230615091757.24686-1-zhuyinbo@loongson.cn> <968b7c81-a24e-1e0d-31a4-f633a82d17b0@loongson.cn>
- <CAAhV-H4Z13wpOsj5GxkuwMK1D6N6=sArQ52yHjcdiEen=dUpjg@mail.gmail.com>
- <9edfe58a-7901-c2d1-8e01-5f10b3a51287@loongson.cn> <a9292d85-83b5-5b43-6c2a-7e393213c6c9@loongson.cn>
-In-Reply-To: <a9292d85-83b5-5b43-6c2a-7e393213c6c9@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 16 Jun 2023 09:54:22 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4-LCryuQKJrwE65w5BZ66a6PQAq+ZT8mqE7vHa7L3_zw@mail.gmail.com>
-Message-ID: <CAAhV-H4-LCryuQKJrwE65w5BZ66a6PQAq+ZT8mqE7vHa7L3_zw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] soc: loongson2_pm: add power management support
-To:     zhuyinbo <zhuyinbo@loongson.cn>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 15 Jun 2023 21:56:16 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CCCB3AC;
+        Thu, 15 Jun 2023 18:56:14 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8DxSuo9wYtkVcoFAA--.12199S3;
+        Fri, 16 Jun 2023 09:56:13 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxC8o8wYtkjL0cAA--.6837S2;
+        Fri, 16 Jun 2023 09:56:13 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Leo Yan <leo.yan@linaro.org>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Subject: [PATCH] perf tools: Use "grep -F" instead of "fgrep"
+Date:   Fri, 16 Jun 2023 09:56:07 +0800
+Message-Id: <1686880567-30017-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8BxC8o8wYtkjL0cAA--.6837S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7CFW7Kr4DCF1fJw1DGFy7twc_yoW8GF43pF
+        Z8Ca47tr4rJa4ktFZrCrsFqF47tr93ZFy8Cr1YgrsrJFn5X3WxJr13JF45uF15XFZYv3yF
+        ka97KF43GrW2vagCm3ZEXasCq-sJn29KB7ZKAUJUUUUk529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUBFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+        6r4j6r4UJwAaw2AFwI0_Jw0_GFyle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
+        Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_
+        WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+        xGrwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWU
+        JVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
+        vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IY
+        x2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26c
+        xKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAF
+        wI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jTq2NUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Yinbo,
+There exists the following warning when execute perf test
+record+probe_libc_inet_pton.sh:
 
-On Fri, Jun 16, 2023 at 9:45=E2=80=AFAM zhuyinbo <zhuyinbo@loongson.cn> wro=
-te:
->
->
-> Hi huacai,
->
->
-> =E5=9C=A8 2023/6/15 =E4=B8=8B=E5=8D=887:15, zhuyinbo =E5=86=99=E9=81=93:
-> >
-> >
-> > =E5=9C=A8 2023/6/15 =E4=B8=8B=E5=8D=886:00, Huacai Chen =E5=86=99=E9=81=
-=93:
-> >
-> >>> +static void loongson2_pm_status_clear(void)
-> >>> +{
-> >>> +       u16 value;
-> >>> +
-> >>> +       value =3D loongson2_pm_readw(LOONGSON2_PM1_STS_REG);
-> >>> +       value |=3D (LOONGSON2_PM1_PWRBTN_STS |
-> >>> LOONGSON2_PM1_PCIEXP_WAKE_STS |
-> >>> +                 LOONGSON2_PM1_WAKE_STS);
-> >>> +       loongson2_pm_writew(value, LOONGSON2_PM1_STS_REG);
-> >>> +       loongson2_pm_writel(loongson2_pm_readl(LOONGSON2_GPE0_STS_REG=
-),
-> >>> +                           LOONGSON2_GPE0_STS_REG);
-> >> Long-line warnings is removed in latest kernel, so you don't need to
-> >> split here.
-> >
-> >
-> > okay, I got it.
-> >
-> >>
-> >>> +}
-> >>> +
-> >>> +static void loongson2_power_button_irq_enable(void)
-> >>
-> >> Using loongson2_pm_irq_enable is a little better.
-> >
-> >
->
-> Previously, you suggested that I combine loongson2_pm_irq_enable() and
-> power button irq enable code as loongson2_power_button_irq_enable, then
-> I remove the function loongson2_pm_irq_enable, in this case that I won't
-> be able to call loongson2_pm_irq_enable, so have I misunderstood your
-> meaning ? or only rename loongson2_power_button_irq_enable as
-> loongson2_pm_irq_enable ?
-I'm very sorry for that. At first I only wanted to combine two
-functions, but then I found the name  loongson2_pm_irq_enable is
-better. So just rename is OK. Thanks.
+  fgrep: warning: fgrep is obsolescent; using grep -F
 
-Huacai
->
-> Thanks,
-> Yinbo
->
-> >
-> > ...
-> >
-> >>> +static int loongson2_suspend_valid_state(suspend_state_t state)
-> >>> +{
-> >>> +       if (state =3D=3D PM_SUSPEND_MEM)
-> >>> +               return 1;
-> >>> +
-> >>> +       return 0;
-> >> "return (state =3D=3D PM_SUSPEND_MEM)" is enough.
-> >
-> >
-> > okay, I got it.
-> >
-> >
-> > Thanks,
-> > Yinbo
-> >
->
->
+This is tested on Fedora 38, the version of grep is 3.8,
+the latest version of grep claims the fgrep is obsolete,
+use "grep -F" instead of "fgrep" to silence the warning.
+
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ tools/perf/tests/shell/record+probe_libc_inet_pton.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/perf/tests/shell/record+probe_libc_inet_pton.sh b/tools/perf/tests/shell/record+probe_libc_inet_pton.sh
+index 0934fb0..89214a6 100755
+--- a/tools/perf/tests/shell/record+probe_libc_inet_pton.sh
++++ b/tools/perf/tests/shell/record+probe_libc_inet_pton.sh
+@@ -14,7 +14,7 @@
+ . "$(dirname "$0")/lib/probe_vfs_getname.sh"
+ 
+ libc=$(grep -w libc /proc/self/maps | head -1 | sed -r 's/.*[[:space:]](\/.*)/\1/g')
+-nm -Dg $libc 2>/dev/null | fgrep -q inet_pton || exit 254
++nm -Dg $libc 2>/dev/null | grep -F -q inet_pton || exit 254
+ 
+ event_pattern='probe_libc:inet_pton(\_[[:digit:]]+)?'
+ 
+@@ -94,7 +94,7 @@ delete_libc_inet_pton_event() {
+ }
+ 
+ # Check for IPv6 interface existence
+-ip a sh lo | fgrep -q inet6 || exit 2
++ip a sh lo | grep -F -q inet6 || exit 2
+ 
+ skip_if_no_perf_probe && \
+ add_libc_inet_pton_event && \
+-- 
+2.1.0
+
