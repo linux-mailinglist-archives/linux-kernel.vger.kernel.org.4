@@ -2,57 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC9087324F7
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 04:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F02F27324F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 03:59:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232031AbjFPCAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 22:00:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36112 "EHLO
+        id S231739AbjFPB70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 21:59:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239559AbjFPCAF (ORCPT
+        with ESMTP id S229662AbjFPB7Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 22:00:05 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B0F297A
-        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 19:00:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686880802; x=1718416802;
-  h=date:from:to:cc:subject:message-id;
-  bh=pU/vp+mdeM5evozVcHrLJeiQxao1D2IhOqGCi+6gptQ=;
-  b=G9p2u62EIE1ua/HQgu0/L6k9wZQ2WgjLvOn3SmAZn6F0Bjpnzai7d3uo
-   z/CqFgk0xzWyrhvLXNSIGch9irV/ukfyg3lJS9fhOgygdTgWAMC9xC1mT
-   R6r4RojYn/caHw69l5bz+/pHGTyfYw7nUqGaTizS+/7tKZcH5BPFWQ9Yv
-   AYMS3nk4KeFAlXGEBPZ+l2hNL9w5TJRbsjhq7b7b5U5iCBL62X1aJDHjW
-   wmOXm43kDyHtO3MeKJbjcjzslX2QASPZ82kHFbcDLD+MBU7tHuWm0ZN5r
-   QYO33GMp9h3+mmpF3DFBdWgVyW7CMmOI/pLDts2sGHIKCbLo9qHOW/Op8
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="357965902"
-X-IronPort-AV: E=Sophos;i="6.00,246,1681196400"; 
-   d="scan'208";a="357965902"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2023 19:00:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="1042904394"
-X-IronPort-AV: E=Sophos;i="6.00,246,1681196400"; 
-   d="scan'208";a="1042904394"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 15 Jun 2023 19:00:01 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q9ykr-0000eL-0H;
-        Fri, 16 Jun 2023 02:00:01 +0000
+        Thu, 15 Jun 2023 21:59:24 -0400
+Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693AC296E;
+        Thu, 15 Jun 2023 18:59:16 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VlDx9Js_1686880751;
+Received: from 30.240.112.107(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VlDx9Js_1686880751)
+          by smtp.aliyun-inc.com;
+          Fri, 16 Jun 2023 09:59:12 +0800
+Message-ID: <5428166a-2a27-b400-f013-541309dcee5c@linux.alibaba.com>
 Date:   Fri, 16 Jun 2023 09:59:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:testing/fam01-next20230615] BUILD SUCCESS
- 5741c9ffd3b9c6a16a262f95c72e1215419df435
-Message-ID: <202306160906.WjllDD7C-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.1
+Subject: Re: [PATCH 2/3] x86/mce: Define amd_mce_usable_address()
+Content-Language: en-US
+To:     Yazen Ghannam <yazen.ghannam@amd.com>, linux-edac@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, tony.luck@intel.com, x86@kernel.org,
+        muralidhara.mk@amd.com, joao.m.martins@oracle.com,
+        william.roche@oracle.com, boris.ostrovsky@oracle.com,
+        john.allen@amd.com, baolin.wang@linux.alibaba.com
+References: <20230613141142.36801-1-yazen.ghannam@amd.com>
+ <20230613141142.36801-3-yazen.ghannam@amd.com>
+ <31fdaacc-cc2b-5ea5-8a0e-e5ccfe674834@linux.alibaba.com>
+ <1e9b1a0c-564d-6a3c-c253-1b1da1773ecc@amd.com>
+ <31816165-e3fc-5bb2-71ad-6fe77ecd64a7@linux.alibaba.com>
+ <1171078d-fec3-297e-05f3-dc2e58bf2886@amd.com>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <1171078d-fec3-297e-05f3-dc2e58bf2886@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,141 +51,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/fam01-next20230615
-branch HEAD: 5741c9ffd3b9c6a16a262f95c72e1215419df435  cgroup: Avoid -Wstringop-overflow warnings
 
-elapsed time: 723m
 
-configs tested: 122
-configs skipped: 3
+On 2023/6/15 23:15, Yazen Ghannam wrote:
+> On 6/14/2023 10:12 PM, Shuai Xue wrote:
+>>
+>>
+>> On 2023/6/14 23:09, Yazen Ghannam wrote:
+>>> On 6/13/2023 10:19 PM, Shuai Xue wrote:
+>>>>
+>>>>
+>>>> On 2023/6/13 22:11, Yazen Ghannam wrote:
+>>>>> Currently, all valid MCA_ADDR values are assumed to be usable on AMD
+>>>>> systems. However, this is not correct in most cases. Notifiers expecting
+>>>>> usable addresses may then operate on inappropriate values.
+>>>>>
+>>>>> Define a helper function to do AMD-specific checks for a usable memory
+>>>>> address. List out all known cases.
+>>>>>
+>>>>> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+>>>>> ---
+>>>>>    arch/x86/kernel/cpu/mce/amd.c      | 38 ++++++++++++++++++++++++++++++
+>>>>>    arch/x86/kernel/cpu/mce/core.c     |  3 +++
+>>>>>    arch/x86/kernel/cpu/mce/internal.h |  2 ++
+>>>>>    3 files changed, 43 insertions(+)
+>>>>>
+>>>>> diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+>>>>> index 1ccfb0c9257f..ca79fa10b844 100644
+>>>>> --- a/arch/x86/kernel/cpu/mce/amd.c
+>>>>> +++ b/arch/x86/kernel/cpu/mce/amd.c
+>>>>> @@ -746,6 +746,44 @@ bool amd_mce_is_memory_error(struct mce *m)
+>>>>>        return legacy_mce_is_memory_error(m);
+>>>>>    }
+>>>>>    +/*
+>>>>> + * AMD systems do not have an explicit indicator that the value in MCA_ADDR is
+>>>>> + * a system physical address. Therefore individual cases need to be detected.
+>>>>> + * Future cases and checks will be added as needed.
+>>>>> + *
+>>>>> + * 1) General case
+>>>>> + *    a) Assume address is not usable.
+>>>>> + * 2) "Poison" errors
+>>>>> + *    a) Indicated by MCA_STATUS[43]: POISON. Defined for all banks except legacy
+>>>>> + *       Northbridge (bank 4).
+>>>>> + *    b) Refers to poison consumption in the Core. Does not include "no action",
+>>>>> + *       "action optional", or "deferred" error severities.
+>>>>> + *    c) Will include a usuable address so that immediate action can be taken.
+>>>>> + * 3) Northbridge DRAM ECC errors
+>>>>> + *    a) Reported in legacy bank 4 with XEC 8.
+>>>>> + *    b) MCA_STATUS[43] is *not* defined as POISON in legacy bank 4. Therefore,
+>>>>> + *       this bit should not be checked.
+>>>> [nit]
+>>>>
+>>>>> + *
+>>>>> + * NOTE: SMCA UMC memory errors fall into case #1.
+>>>>
+>>>> hi, Yazen
+>>>>
+>>>> The address for SMCA UMC memory error is not system physical address, it make sense
+>>>> to be not usable. But how we deal with the SMCA address? The MCE chain like
+>>>> uc_decode_notifier will do a sanity check with mce_usable_address and it will not
+>>>> handle SMCA address.
+>>>>
+>>>
+>>> Hi Shuai,
+>>>
+>>> That's correct.
+>>>
+>>> There isn't a good solution today. This will be handled in future changes.
+>>
+>> Hi, Yazen,
+>>
+>> Do you have plan to address it? If not, I can help. We meet this problem in our products.
+>>
+> 
+> Yes, definitely. The first step is to update the address translation code; this is progress. Afterwards, we can find a way to leverage this in the MCE notifier flows.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Look forward to it.
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                        nsimosci_defconfig   gcc  
-arc                  randconfig-r043-20230615   gcc  
-arc                           tb10x_defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm          buildonly-randconfig-r003-20230615   gcc  
-arm                        clps711x_defconfig   gcc  
-arm                                 defconfig   gcc  
-arm                          gemini_defconfig   gcc  
-arm                      integrator_defconfig   gcc  
-arm                            mmp2_defconfig   clang
-arm                  randconfig-r046-20230615   gcc  
-arm                        spear6xx_defconfig   gcc  
-arm                           sunxi_defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky         buildonly-randconfig-r002-20230615   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r006-20230615   gcc  
-hexagon      buildonly-randconfig-r005-20230615   clang
-hexagon              randconfig-r024-20230615   clang
-hexagon              randconfig-r025-20230615   clang
-hexagon              randconfig-r041-20230615   clang
-hexagon              randconfig-r045-20230615   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230615   gcc  
-i386                 randconfig-i002-20230615   gcc  
-i386                 randconfig-i003-20230615   gcc  
-i386                 randconfig-i004-20230615   gcc  
-i386                 randconfig-i005-20230615   gcc  
-i386                 randconfig-i006-20230615   gcc  
-i386                 randconfig-i011-20230615   clang
-i386                 randconfig-i012-20230615   clang
-i386                 randconfig-i013-20230615   clang
-i386                 randconfig-i014-20230615   clang
-i386                 randconfig-i015-20230615   clang
-i386                 randconfig-i016-20230615   clang
-i386                 randconfig-r004-20230615   gcc  
-i386                 randconfig-r015-20230615   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r013-20230615   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r005-20230615   gcc  
-m68k                 randconfig-r012-20230615   gcc  
-m68k                 randconfig-r016-20230615   gcc  
-m68k                        stmark2_defconfig   gcc  
-m68k                           virt_defconfig   gcc  
-microblaze           randconfig-r036-20230615   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                    maltaup_xpa_defconfig   gcc  
-mips                        omega2p_defconfig   clang
-mips                 randconfig-r023-20230615   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r014-20230615   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r011-20230615   gcc  
-parisc               randconfig-r021-20230615   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc      buildonly-randconfig-r004-20230615   clang
-powerpc                     kilauea_defconfig   clang
-powerpc                      makalu_defconfig   gcc  
-powerpc                      ppc6xx_defconfig   gcc  
-powerpc              randconfig-r033-20230615   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r031-20230615   gcc  
-riscv                randconfig-r042-20230615   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r003-20230615   gcc  
-s390                 randconfig-r026-20230615   clang
-s390                 randconfig-r044-20230615   clang
-sh                               allmodconfig   gcc  
-sh           buildonly-randconfig-r001-20230615   gcc  
-sh                               j2_defconfig   gcc  
-sh                 kfr2r09-romimage_defconfig   gcc  
-sh                          landisk_defconfig   gcc  
-sh                   randconfig-r035-20230615   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64              randconfig-r001-20230615   gcc  
-sparc64              randconfig-r022-20230615   gcc  
-sparc64              randconfig-r032-20230615   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r006-20230615   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230615   gcc  
-x86_64               randconfig-a002-20230615   gcc  
-x86_64               randconfig-a003-20230615   gcc  
-x86_64               randconfig-a004-20230615   gcc  
-x86_64               randconfig-a005-20230615   gcc  
-x86_64               randconfig-a006-20230615   gcc  
-x86_64               randconfig-a011-20230615   clang
-x86_64               randconfig-a012-20230615   clang
-x86_64               randconfig-a013-20230615   clang
-x86_64               randconfig-a014-20230615   clang
-x86_64               randconfig-a015-20230615   clang
-x86_64               randconfig-a016-20230615   clang
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r034-20230615   gcc  
+> 
+> Just curious, how big is the benefit of this preemptive page offline in your use cases? That is, compared to page offline as part of poison data consumption.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+There are three aspects of benefits if SMCA address detected by scrubber is offlined
+in advance:
+
+- Free page: it should be isolated and not allocated by buddy so that the poison data
+  will never be consumed.
+- In-use page: the heath VMs could be migrated into other heath node if many UCE occurs.
+- Mitigate the possibility of nested MCE which is a fatal error.
+
+Thank you.
+
+Best Regards,
+Shuai.
