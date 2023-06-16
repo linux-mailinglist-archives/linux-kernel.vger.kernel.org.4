@@ -2,55 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ADCB7324E4
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 03:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D4457324E6
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 03:54:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238043AbjFPBvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 21:51:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60468 "EHLO
+        id S236445AbjFPBy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 21:54:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236513AbjFPBvj (ORCPT
+        with ESMTP id S229509AbjFPBy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 21:51:39 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3685110F7;
-        Thu, 15 Jun 2023 18:51:38 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Bx4OgowItk6skFAA--.10462S3;
-        Fri, 16 Jun 2023 09:51:36 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxPMolwItke7wcAA--.6951S4;
-        Fri, 16 Jun 2023 09:51:35 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Subject: [PATCH 2/2] module: Make is_valid_name() return bool
-Date:   Fri, 16 Jun 2023 09:51:33 +0800
-Message-Id: <1686880293-29594-3-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1686880293-29594-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1686880293-29594-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf8AxPMolwItke7wcAA--.6951S4
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj9xXoW7Wr1fCr1rJr43tr4kuF1ruFX_yoWfuFc_C3
-        s2vw1IqF1xAwnY9a10qa13JFyUGw4Utw48Xa4ktw47C34akw45Gas7AFn3Ary7ur45WrW5
-        CF9F9r4Iyr1xWosvyTuYvTs0mTUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvT
-        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-        cSsGvfJTRUUUb7xYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-        vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8
-        JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4
-        xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v2
-        6r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwI
-        xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
-        Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7
-        IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k2
-        6cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07josjUUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        Thu, 15 Jun 2023 21:54:27 -0400
+Received: from sender3-op-o17.zoho.com (sender3-op-o17.zoho.com [136.143.184.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97AA11AA;
+        Thu, 15 Jun 2023 18:54:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686880419; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=m+nnBfugsNBznT7IutrdBGotmA+2gZJZusj3kV8dAdwgR58dJtKViavtiMrUaNhIN0g/4P+xi0/f3tx216Cr9LBhMrtUEtUXnutoLUWAqTPWf6SB9XIkOSleQUr6+hVCZfPEqyTxYsTgBQh9xt+CU3d3k6Et4vfNoCYXhfX7MCE=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1686880419; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=5iC11FXcCYPbKNk31aFC8ArpZJL4rMW3qp7yEOxRpQ8=; 
+        b=EpwBGrtHpG7E0eA/PSpEGMZ4bMtONx6/vJNDZ2ZCK/GQPfhZCqC0K7CbTvMC7m78sWzdalRWClsCBR9P6Ukt6YeClTbQKk9O1ArwNqHWKsIYNVwP5JLtw1dMQ2SeRNg1k1quDC50PA8iZcHlq3fiEEXEQyaK3G2RbRd7fahzM3s=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1686880419;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=5iC11FXcCYPbKNk31aFC8ArpZJL4rMW3qp7yEOxRpQ8=;
+        b=HVK/JeR9CfAt2gOActnJdBtByysaM07nrkvskmhtqwC7oUnYgrtIoNd0D+jJBS7E
+        +wZrnbZrh6JoR85q494XWwpbYs+S9TAvdi7smlpwovB6FzDKYaSPpMeIDhZgEVhdy1h
+        3TMIHIJBWf7+SW+vCsQAVmNpQ7DvKBqyh9TjL47s=
+Received: from [192.168.68.166] (athedsl-404045.home.otenet.gr [79.131.130.75]) by mx.zohomail.com
+        with SMTPS id 1686880416484951.0122965686879; Thu, 15 Jun 2023 18:53:36 -0700 (PDT)
+Message-ID: <0d57c035-b6da-08be-8f47-0afb5ddfec58@arinc9.com>
+Date:   Fri, 16 Jun 2023 04:53:29 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net v4 5/7] net: dsa: mt7530: fix handling of LLDP frames
+To:     Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Daniel Golle <daniel@makrotopia.org>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230612075945.16330-1-arinc.unal@arinc9.com>
+ <20230612075945.16330-6-arinc.unal@arinc9.com>
+ <ZInt8mmrZ6tCGy1N@shell.armlinux.org.uk>
+ <CABRLg09hXm3=mca70TdZLuxA1d8YzOcWj31NvFG0ZWoStn_w9Q@mail.gmail.com>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <CABRLg09hXm3=mca70TdZLuxA1d8YzOcWj31NvFG0ZWoStn_w9Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,33 +83,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of is_valid_name() is true or false,
-so change its type to reflect that.
+On 15.06.2023 15:45, Bartel Eerdekens wrote:
+> On Wed, Jun 14, 2023 at 6:42 PM Russell King (Oracle)
+> <linux@armlinux.org.uk> wrote:
+>>
+>> On Mon, Jun 12, 2023 at 10:59:43AM +0300, arinc9.unal@gmail.com wrote:
+>>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>>
+>>> LLDP frames are link-local frames, therefore they must be trapped to the
+>>> CPU port. Currently, the MT753X switches treat LLDP frames as regular
+>>> multicast frames, therefore flooding them to user ports. To fix this, set
+>>> LLDP frames to be trapped to the CPU port(s).
+>>>
+>>> The mt753x_bpdu_port_fw enum is universally used for trapping frames,
+>>> therefore rename it and the values in it to mt753x_port_fw.
+>>>
+>>> For MT7530, LLDP frames received from a user port will be trapped to the
+>>> numerically smallest CPU port which is affine to the DSA conduit interface
+>>> that is up.
+>>>
+>>> For MT7531 and the switch on the MT7988 SoC, LLDP frames received from a
+>>> user port will be trapped to the CPU port that is affine to the user port
+>>> from which the frames are received.
+>>>
+>>> The bit for R0E_MANG_FR is 27. When set, the switch regards the frames with
+>>> :0E MAC DA as management (LLDP) frames. This bit is set to 1 after reset on
+>>> MT7530 and MT7531 according to the documents MT7620 Programming Guide v1.0
+>>> and MT7531 Reference Manual for Development Board v1.0, so there's no need
+>>> to deal with this bit. Since there's currently no public document for the
+>>> switch on the MT7988 SoC, I assume this is also the case for this switch.
+>>>
+>>> Fixes: b8f126a8d543 ("net-next: dsa: add dsa support for Mediatek MT7530 switch")
+>>
+>>
+>> Patch 4 claims to be a fix for this commit, and introduces one of these
+>> modifications to MT753X_BPC, which this patch then changes.
+> 
+> Let me chime in on this one, as mentioned by Arinç, I am one of the
+> requesters of having this patch (and patch 4).
+> Patch 4 enables the trapping of BPDU's to the CPU, being STP (Spanning
+> Tree) frames. Maybe that should be mentioned, to be clear.
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- scripts/mod/modpost.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Sure, I can quote the first sentence on the wikipedia page "Bridge 
+protocol data unit".
 
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index d4531d0..e079418 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -1122,12 +1122,12 @@ static int secref_whitelist(const struct sectioncheck *mismatch,
-  * only by merging __exit and __init sections into __text, bloating
-  * the kernel (which is especially evil on embedded platforms).
-  */
--static inline int is_valid_name(struct elf_info *elf, Elf_Sym *sym)
-+static inline bool is_valid_name(struct elf_info *elf, Elf_Sym *sym)
- {
- 	const char *name = elf->strtab + sym->st_name;
- 
- 	if (!name || !strlen(name))
--		return 0;
-+		return false;
- 	return !is_mapping_symbol(name);
- }
- 
--- 
-2.1.0
+> 
+>>
+>> On the face of it, it seems this patch is actually a fix to patch 4 as
+>> well as the original patch, so does that mean that patch 4 only half
+>> fixes a problem?
+> 
+> This patch then also adds trapping for LLDP frames (Link Layer
+> Discovery Protocol) which is a completely different protocol.
+> But both rely on trapping frames, instead of forwarding them.
 
+Flooding is a better term. "Trapped" frames are still forwarded, the 
+difference is they are forwarded only to the CPU port.
+
+Arınç
