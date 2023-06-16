@@ -2,144 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E16A73335F
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 16:20:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4E74733360
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 16:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344052AbjFPOUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 10:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
+        id S1345075AbjFPOUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 10:20:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbjFPOUL (ORCPT
+        with ESMTP id S229482AbjFPOUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 10:20:11 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 209FA30DE
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 07:20:10 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-53f06f7cc74so562485a12.1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 07:20:10 -0700 (PDT)
+        Fri, 16 Jun 2023 10:20:13 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E77B130D1;
+        Fri, 16 Jun 2023 07:20:12 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f8cc04c287so6514805e9.0;
+        Fri, 16 Jun 2023 07:20:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686925209; x=1689517209;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7kkXzW7flFmwwNgdmJOF/Bq45kulQkYYDELv7ovIE0s=;
-        b=RiJzto8bqF5mS6jDezs9b1trpJIIMu8WiPtaI/dBqSOaUte3g34NBpJY00M2wZETCw
-         JuxbHe+ZjSkjRKKokqNagwHyDvhgOXDcX6lAwiPANdNiITZUZnUA6KwH6xZvNzD4m7Gn
-         nyPdjZCFacInQQZD5E5HdGRqJvTIoqFFl448zQW6enBqgtdBXTg/J0wnfT1Imkel50q9
-         2yXQ7JrbSFVw6B8glsYOlTI7GkLE/PzN6oZhFebXaVE/eyvYcTcqsTTf5LA3/OO1ynhX
-         ubOgJk2lgj9u43PqdyPqFgjacd7vzw2bmw+h0AaxUTkKWlRoiS7U0tXjrV+lNqLdIHq1
-         VpTQ==
+        d=gmail.com; s=20221208; t=1686925211; x=1689517211;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6n+zCd171C8WV43Pb8fKtEBT7M8Z3ZhCd57gUNvYhvE=;
+        b=eeXqpUVDzV+Mw7rLr2cyAx+rsaohyEDUCURUwby2so4enYHtlYBjTnDwSPfRk6/r8z
+         v9teaBJ682YMiTwF1PuqjWDK0g+nBFdfJ5axDB/vFYsIk6Sn9kUyWJGuWyfRc/QNlFN9
+         R1IdG5iWw46WB6Ca6+THP/kerTnH+3vyZDxZstxq+ISIBco63FXi1c5Y3q+9JCHiOWWw
+         ReZWpTbFObecIA9wcdL9+TzghPhi5C0bADHF8TtUwkVtVRCHZaNGOIvWYICvAGE63SMh
+         I+Y/bFEOHhuwvJNDd3Ht/ASiYnF3GZoAIqGNICeYLHHoW0IjvY6jSFKd7F1RYuviQNDN
+         KLhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686925209; x=1689517209;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7kkXzW7flFmwwNgdmJOF/Bq45kulQkYYDELv7ovIE0s=;
-        b=fBJ8nJyh37aZ6JskcrErcPdkYDYTMa+hfYv+MuIe+XRW9jJGRhED86Vbzrvv45vIAp
-         IjpOFFPoaeAO5I5f1Be6xD3e/vDcEbVLo6bF/vul+bbT0QHVbsHTpAYte4F1/csyglUP
-         aqtDvgZkwHc/fy08fQ3pRDwAJnDoxpaWF9x0mtXaMY8el2j5KUpYhtZ5fpg++2GVB/90
-         wgP5UK6ooz9e912rWmUACe0AnMIGdT45iWh3LfhW3Ri8krik2Y2Cu9t4Z7pdM5GLjuQD
-         jx7fNg9l0IbIWBGcVxcGitg9kJrsvApHnYVVawfO9LFek8aI967KjisjkkBatb4FUai5
-         QRmQ==
-X-Gm-Message-State: AC+VfDzliggnlpCGxrXeTuh2GgYx8hsCGxZQVeC9bDNpP0SvECGWhLTJ
-        W7NjYX9qmd5hkywTeLefNczfKFJf9qc=
-X-Google-Smtp-Source: ACHHUZ5k5s1Dv3E8j8iPdrphFfLSmc9JW7weBGs7UOX1rIhuKWrjsGwis9n9lFua0MhUrP1Y+iyk5Js0+pY=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:3d05:0:b0:53f:9a37:c199 with SMTP id
- k5-20020a633d05000000b0053f9a37c199mr633876pga.1.1686925209547; Fri, 16 Jun
- 2023 07:20:09 -0700 (PDT)
-Date:   Fri, 16 Jun 2023 07:20:07 -0700
-In-Reply-To: <2cfa3122-6b54-aab5-8a61-41c08853286b@semihalf.com>
-Mime-Version: 1.0
-References: <20230612164727.3935657-1-carlos.bilbao@amd.com>
- <ZIihRqZljMaMRGcK@google.com> <2cfa3122-6b54-aab5-8a61-41c08853286b@semihalf.com>
-Message-ID: <ZIxvl4sMH6N8TrAL@google.com>
-Subject: Re: [PATCH v2] docs: security: Confidential computing intro and
- threat model for x86 virtualization
-From:   Sean Christopherson <seanjc@google.com>
-To:     Dmytro Maluka <dmy@semihalf.com>
-Cc:     Carlos Bilbao <carlos.bilbao@amd.com>, corbet@lwn.net,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ardb@kernel.org, kraxel@redhat.com, dovmurik@linux.ibm.com,
-        elena.reshetova@intel.com, dave.hansen@linux.intel.com,
-        Dhaval.Giani@amd.com, michael.day@amd.com,
-        pavankumar.paluri@amd.com, David.Kaplan@amd.com,
-        Reshma.Lal@amd.com, Jeremy.Powell@amd.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        alexander.shishkin@linux.intel.com, thomas.lendacky@amd.com,
-        tglx@linutronix.de, dgilbert@redhat.com,
-        gregkh@linuxfoundation.org, dinechin@redhat.com,
-        linux-coco@lists.linux.dev, berrange@redhat.com, mst@redhat.com,
-        tytso@mit.edu, jikos@kernel.org, joro@8bytes.org, leon@kernel.org,
-        richard.weinberger@gmail.com, lukas@wunner.de, jejb@linux.ibm.com,
-        cdupontd@redhat.com, jasowang@redhat.com, sameo@rivosinc.com,
-        bp@alien8.de, security@kernel.org,
-        Larry Dewey <larry.dewey@amd.com>, android-kvm@google.com,
-        Dmitry Torokhov <dtor@google.com>,
-        Allen Webb <allenwebb@google.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Patryk Duda <pdk@semihalf.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1686925211; x=1689517211;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6n+zCd171C8WV43Pb8fKtEBT7M8Z3ZhCd57gUNvYhvE=;
+        b=R2dgSC/O8fQYUhgoTFkjLjUmDHey38MB/1SbuCyJrajzvwuUYsEwyNd+lH0LLSvRaH
+         OUVYYy0HvS3m6+iWfGlwjojFYTBkmQHmgoJDdUbI/ug9f0J48gYq4FPJ1s/n7cyZWukG
+         ddBs9WK0u8OS30jnk2i7PO99YYwE5jyuhIl4JgsuP5Sz5oDGqwUIixSDXqZh8YCSs9zp
+         PjNbMXKVmbeNHp6gRHYakvFIbHiq3diJ7Mk5QuDz4pHmKsniEkYX9PhVOjFJkM9iUTmE
+         jKpCPDs5K+4PWI3pdF2wtaSaYYj7+UGVEG06AmlufXbNgRDOJyN4t1djM6yStemaHgOU
+         /pPQ==
+X-Gm-Message-State: AC+VfDyHKmY9dpzMEP7F1L/5J2yR3MfAD2Ol2lJ8cs+1ETU9Mb3TCyQD
+        TCMH+9l/PxckVnGJHNnVok4=
+X-Google-Smtp-Source: ACHHUZ76uljn5+k12odkTj+XuWoqO28oSLovWPZrDliLxUPuB2ilG33B0qBVNpEa9SmkG8qmYrEZow==
+X-Received: by 2002:a7b:cd88:0:b0:3f8:fa2e:efc1 with SMTP id y8-20020a7bcd88000000b003f8fa2eefc1mr1009104wmj.15.1686925211164;
+        Fri, 16 Jun 2023 07:20:11 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id k15-20020a7bc40f000000b003f7eafe9d76sm2321608wmi.37.2023.06.16.07.20.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 07:20:10 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+        linux-f2fs-devel@lists.sourceforge.net
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] f2fs: remove redundant assignment to variable err
+Date:   Fri, 16 Jun 2023 15:20:09 +0100
+Message-Id: <20230616142009.2332411-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023, Dmytro Maluka wrote:
-> On 6/13/23 19:03, Sean Christopherson wrote:
-> > On Mon, Jun 12, 2023, Carlos Bilbao wrote:
-> >> +well as CoCo technology specific hypercalls, if present. Additionally, the
-> >> +host in a CoCo system typically controls the process of creating a CoCo
-> >> +guest: it has a method to load into a guest the firmware and bootloader
-> >> +images, the kernel image together with the kernel command line. All of this
-> >> +data should also be considered untrusted until its integrity and
-> >> +authenticity is established via attestation.
-> > 
-> > Attestation is SNP and TDX specific.  AIUI, none of SEV, SEV-ES, or pKVM (which
-> > doesn't even really exist on x86 yet), have attestation of their own, e.g. the
-> > proposed pKVM support would rely on Secure Boot of the original "full" host kernel.
-> 
-> Seems to be a bit of misunderstanding here. Secure Boot verifies the
-> host kernel, which is indeed also important, since the pKVM hypervisor
-> is a part of the host kernel image. But when it comes to verifying the
-> guests, it's a different story: a protected pKVM guest is started by the
-> (untrusted) host at an arbitrary moment in time, not before the early
-> kernel deprivileging when the host is still considered trusted.
-> (Moreover, in practice the guest is started by a userspace VMM, i.e. not
-> exactly the most trusted part of the host stack.) So the host can
-> maliciously or mistakenly load a wrong guest image for running as a
-> protected guest, so we do need attestation for protected guests.
-> 
-> This attestation is not implemented in pKVM on x86 yet (you are right
-> that pKVM on x86 is little more than a proposal at this point). But in
-> pKVM on ARM it is afaik already working, it is software based (ensured
-> by pKVM hypervisor + a tiny generic guest bootloader which verifies the
-> guest image before jumping to the guest) and architecture-independent,
-> so it should be possible to adopt it for x86 as is.
+The assignment to variable err is redundant since the code jumps to
+label next and err is then re-assigned a new value on the call to
+sanity_check_node_chain. Remove the assignment.
 
-Sorry, instead of "Attestation is SNP and TDX specific", I should have said, "The
-form of attestation described here is SNP and TDX specific".
+Cleans up clang scan build warning:
+fs/f2fs/recovery.c:464:6: warning: Value stored to 'err' is never read [deadcode.DeadStores]
 
-pKVM's "attestation", effectively has its root of trust in the pKVM hypervisor,
-which is in turn attested via Secure Boot.  I.e. the guest payload is verified
-*before* it is launched.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ fs/f2fs/recovery.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-That is different from SNP and TDX where guest code and data is controlled by the
-*untrusted* host.  The initial payload is measured by trusted firmware, but it is
-not verified, and so that measurement must be attested after the guest boots,
-before any sensitive data is provisioned to the guest.
+diff --git a/fs/f2fs/recovery.c b/fs/f2fs/recovery.c
+index f0cf1538389c..4e7d4ceeb084 100644
+--- a/fs/f2fs/recovery.c
++++ b/fs/f2fs/recovery.c
+@@ -460,10 +460,8 @@ static int find_fsync_dnodes(struct f2fs_sb_info *sbi, struct list_head *head,
+ 								quota_inode);
+ 			if (IS_ERR(entry)) {
+ 				err = PTR_ERR(entry);
+-				if (err == -ENOENT) {
+-					err = 0;
++				if (err == -ENOENT)
+ 					goto next;
+-				}
+ 				f2fs_put_page(page, 1);
+ 				break;
+ 			}
+-- 
+2.39.2
 
-Specifically, with "untrusted" inserted by me for clarification, my understanding
-is that this doesn't hold true for pKVM when splitting hairs:
-
-  Additionally, the **untrusted** host in a CoCo system typically controls the
-  process of creating a CoCo guest: it has a method to load into a guest the
-  firmware and bootloader images, the kernel image together with the kernel
-  command line. All of this data should also be considered untrusted until its
-  integrity and authenticity is established via attestation.
-
-because the guest firmware comes from a trusted entity, not the untrusted host.
