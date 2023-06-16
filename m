@@ -2,260 +2,371 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A6C6733CF3
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 01:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E97733CF4
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 01:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345649AbjFPXen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 19:34:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47802 "EHLO
+        id S232080AbjFPXfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 19:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231690AbjFPXeg (ORCPT
+        with ESMTP id S231690AbjFPXfi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 19:34:36 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2051.outbound.protection.outlook.com [40.107.93.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC5093AA4;
-        Fri, 16 Jun 2023 16:34:32 -0700 (PDT)
+        Fri, 16 Jun 2023 19:35:38 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F41335A6
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 16:35:30 -0700 (PDT)
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35GKsf5V005979;
+        Fri, 16 Jun 2023 23:34:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type :
+ content-transfer-encoding : in-reply-to : mime-version; s=corp-2023-03-30;
+ bh=22z6XRrTrjKRHosvQl01/ZyfwuJEYKo2abuYT70hyv4=;
+ b=Fd01m28Uj8d4SLXizDWGaw/9IohiYF48K8zvjMSr844SRPT9VoYlEMJchTkfLoixaei1
+ lbjCYt9a4ZbwHTDRA/tR+Ag6pPgL2dZn9JJjqhX3c87AOvh+BGHUk2e6dDZmm5QivU55
+ CKOxjf3s5dgZ3IhJeWOSvlo0nZuqh/DhZGKaU3zjzqZBt0X7jzvgtSl440I7tSqO2sYR
+ QEMOIvE9YDDer3Fhal152WLpdFxPjIvLwMgTEE+Ot8B8bdPBR+kMpy+JVNX35NRJO3Eu
+ RN98XyV+y63gVizGZ4IsZTq0YDWCEWwACBiOSHnXYSDeAhzXF5TEiAzDPc45PeWzoKl1 KA== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r4h7dd95r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 16 Jun 2023 23:34:55 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35GMUjbk033532;
+        Fri, 16 Jun 2023 23:34:54 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2109.outbound.protection.outlook.com [104.47.58.109])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3r4fm8tew0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 16 Jun 2023 23:34:54 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TG5e04RGViv786NvQgkv3flaMzwMsS6ArscIkg8mbZdqkgLVtBXewFGOQsu2LlmzW+9dpjtQ6B2cgriVxt7ewFExS3Dv8YVCeD81huH22P2uBKyiVBeuJyoe7oD36pliPA06RuagGoUNZACwMpJ2ZF4K49lOJukcxEHW+HiGTO92FK06A6MTEPdyAW+LuGnRLiNqwKVhsuCj/7/hy+xi8rzmduXNK/v33vNUlU2d1mYbqNv/VNZ2Ds1Do/CYjaVYvRXdQNf03a/2+gca1HswWkX62aQ2nK0r2F3oCHd+0/t7IXOFk3oBLaC94Ick/ksaUVgER6dIUk5z9Q8wQMRa3Q==
+ b=kgdG0N5h6P/p6ScjE+BE1Oct8oYm88aMRwycmGsHYaXY00QG9ZIcwTgesVLGQUkmxjTAfvQ01BMnNt1OSdUxp8kYHly8IFU+rxl/kK0ErNwqrUPuUPkzqQiNYwhIFS0KAgSTLaTBHDi5PBajttfEXPOJwZvqS03mdH8A8zjFl6vWEtcjBmPc9YgIc/5BbEXErhZjPyEaT3wcjK7xy4WIxoXAY7V2eGfwmwA3qRhnACPqbR/2NVgOSnB2heZau3Eyh66lAhJ+LoMPzJEmGnAqoS76qJfqKctvNTWE4xQ8j2CqjgUl4NGQyC1DnslIOpZK5mcfXuNIm4I8G6eBuyIRFA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WwsehjKgBn8EwaVslg7LCYMbkXi7VBekSL9rG/F2FMQ=;
- b=f/3JUrdDcfnoPUd+7kp/Qhxig+Jya6lvtp7aRbqu9td9+8EyBxUMLunNnUlrCFdXQxgZP4FIvxfCTqYvRNF0xLPN2vpHlB3pzPLgkhTe/gUtcFM0591bm93lM5wSWl29uDnCUpUSrZjzZf0niF7Li7LHbLVc3S6XCymwzOG4ZAUblzJ/rCPTkt5+GN6DQlFH7rl2s0K6Ioxlxgr0ohNExD8vo8xDK+SJvDX4aV7dhOksFMUQVFt7RPfstH5gxv6goEMOaeiSNoS+rxveQlx1bb66vQK7DNpPL4iHC0BWvjipELSOuScQYcgwa+Y1Nmtf9ttNv4M/9qTqoRL/M9e7lg==
+ bh=22z6XRrTrjKRHosvQl01/ZyfwuJEYKo2abuYT70hyv4=;
+ b=S+WF/DIZd6Rd7T1RgJgdas0SEwXPhnfGDSkbvN5k2DuUGgWz87FDmVKzCRwvnzPEv8X6+q2pFQi4HGci13LJNOA/aXI1lKr1aGG5j+33d/igZLWql/Z7v44Rut4Zmtos6ed1C+O7CsaDzrbEtYMOLMDcv4WPKR2eI4Hj8g1QbaNPkCavPiLpkre+xsb75IOks36oSinAENUpA3bPAxFL5oX/GM4hzA/8LhbG4L7WB25OtiT2RL1K1CV3X9L9pNVMYJmE+zKlovRiz0zfxnalShc/qEguVPF2xjh9fAWYgcKEzISVZqZZDW59TYlk7tnDHxHFkdz59c5i1s6Y9Xbt9g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WwsehjKgBn8EwaVslg7LCYMbkXi7VBekSL9rG/F2FMQ=;
- b=C/JDpBGbV0gEYNSZQUUR2Pz1+V5H03r2midkeconHkw9IDYJAOsBpROkHoq3i8vZC/GYBTleOwu17vr+7hLJbPRG2bu+IIvjJkPGxjWk2KpF9wLnf97sSgereGOBSlnZMFTv8mcKGMqKXglvg6FZzjlekOQWxEwxhcX1m1gFOAE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BYAPR12MB2869.namprd12.prod.outlook.com (2603:10b6:a03:132::30)
- by PH0PR12MB8798.namprd12.prod.outlook.com (2603:10b6:510:28d::13) with
+ bh=22z6XRrTrjKRHosvQl01/ZyfwuJEYKo2abuYT70hyv4=;
+ b=EZa68LoPqziU1vEV1DyzpoM+34XBza4I5OpFkVjIgr9nzcvpuW+0XdzbwLEh6muqZq0KsKQvLtcrakKFDFAZ10rdQaJixGCTptXHvoxnl3AtN37xo+bTUsYhc3UzH5z7p4nhdIqbiwIikQdKaPbpIqQB/3HSZFxgDOfN+17XBQY=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by CO1PR10MB4657.namprd10.prod.outlook.com (2603:10b6:303:96::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.27; Fri, 16 Jun
- 2023 23:34:29 +0000
-Received: from BYAPR12MB2869.namprd12.prod.outlook.com
- ([fe80::b616:6941:8855:93ad]) by BYAPR12MB2869.namprd12.prod.outlook.com
- ([fe80::b616:6941:8855:93ad%5]) with mapi id 15.20.6500.029; Fri, 16 Jun 2023
- 23:34:29 +0000
-Message-ID: <d9cf3451-c0c1-ab86-0528-2c05982e7872@amd.com>
-Date:   Fri, 16 Jun 2023 16:34:27 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/2] PCI: pciehp: Clear the optional capabilities in
- DEVCTL2 on a hot-plug
-Content-Language: en-US
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>, oohall@gmail.com,
-        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Fontenot Nathan <Nathan.Fontenot@amd.com>
-References: <20230418210526.36514-1-Smita.KoralahalliChannabasappa@amd.com>
- <20230418210526.36514-3-Smita.KoralahalliChannabasappa@amd.com>
- <20230511111902.GA10720@wunner.de>
- <cc36bb5b-6a4a-258b-6707-4d019154e019@amd.com>
- <20230616182409.GA8894@wunner.de>
-From:   Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-In-Reply-To: <20230616182409.GA8894@wunner.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0032.namprd03.prod.outlook.com
- (2603:10b6:a03:33e::7) To BYAPR12MB2869.namprd12.prod.outlook.com
- (2603:10b6:a03:132::30)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.29; Fri, 16 Jun
+ 2023 23:34:52 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::4a17:13b0:2876:97f2]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::4a17:13b0:2876:97f2%7]) with mapi id 15.20.6500.029; Fri, 16 Jun 2023
+ 23:34:52 +0000
+Date:   Fri, 16 Jun 2023 16:34:47 -0700
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     Jiaqi Yan <jiaqiyan@google.com>
+Cc:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        HORIGUCHI =?utf-8?B?TkFPWUEo5aCA5Y+jIOebtOS5nyk=?= 
+        <naoya.horiguchi@nec.com>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "shy828301@gmail.com" <shy828301@gmail.com>,
+        "linmiaohe@huawei.com" <linmiaohe@huawei.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "duenwen@google.com" <duenwen@google.com>,
+        "axelrasmussen@google.com" <axelrasmussen@google.com>,
+        "jthoughton@google.com" <jthoughton@google.com>
+Subject: Re: [PATCH v1 1/3] mm/hwpoison: find subpage in hugetlb HWPOISON list
+Message-ID: <20230616233447.GB7371@monkey>
+References: <20230517235314.GB10757@monkey>
+ <CACw3F52zNguJ-MvXOAJuMK+JfreLxorvHDPwO8w_gQdOzWj7eA@mail.gmail.com>
+ <20230519224214.GB3581@monkey>
+ <20230522044557.GA845371@hori.linux.bs1.fc.nec.co.jp>
+ <CACw3F50rkrWkdMKo7yq35vDbGrcF4b0zohN3dORxL_h0KxZ7Bg@mail.gmail.com>
+ <20230523024305.GA920098@hori.linux.bs1.fc.nec.co.jp>
+ <CACw3F53C0f_Ph0etD+BgkAz4P8pX3YArjFgSPaLh_d6rUqMUCw@mail.gmail.com>
+ <CACw3F52k=fhYpLpvDoVPcmKnOALLkPsGk08PdS_H0+miSYvhEQ@mail.gmail.com>
+ <20230612041901.GA3083591@ik1-406-35019.vs.sakura.ne.jp>
+ <CACw3F51o1ZFSYZa+XLnk4Wwjy2w_q=Kn+aOQs0=qpfG-ZYDFKg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACw3F51o1ZFSYZa+XLnk4Wwjy2w_q=Kn+aOQs0=qpfG-ZYDFKg@mail.gmail.com>
+X-ClientProxiedBy: MW3PR06CA0005.namprd06.prod.outlook.com
+ (2603:10b6:303:2a::10) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB2869:EE_|PH0PR12MB8798:EE_
-X-MS-Office365-Filtering-Correlation-Id: 97148ce2-933e-46e8-363d-08db6ec23aa4
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|CO1PR10MB4657:EE_
+X-MS-Office365-Filtering-Correlation-Id: d77fd93c-033c-45da-34d0-08db6ec247bb
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2yw/QHJdlUzzjlU8JgUc3A3qAG4juWzRV66soQE4RFsqyjjEkp/kjR+gAEg4UYEJbncE4TT1Y6/Ve8G1nZ9vkmdDe4/l9CFkc+6liM4XhRpwehZqBoEAqU0Akc2d80R4AvmCqh8xTxMm1chn0ctXfTw0PepUJTcbix3fHj/O31vyTycx2aqiObnPXrF9ui2vibK93Mqj8zyEKEVJ1XRER9P7AK63BmxwG9wkn7lD8GFyrN9UBuSWwjsESTxhmrKLNSYj/CCFi/0Nbew52/bVdNE9XWQ2UWlTw9/1PIcM7IM3xCcl7F+WkltKhcJDRQ0+El71MorLlGA0LpvvCWkB6+pvyPH8AAE1PbIK9feVjtNFce3KxTCKZ8RiqRBI8WRcHhSgj/+LPcQalHI0/EAI9WTqgnS03jnpsu1/jTVFyorg51Lr1txtSu80klIfxEtNaE1BHifiGl1qi0peRcHAeZUYAXLyhEWnWjvyLKfirVgm4lJRZjh+RYqnvlOZftnTDGrg9G3Md0lYLzNgAcqfVZV2ryUMJcv/9TPJQysj08G+tIiQJKCIX9kAvoAKOcGWkqKdQh4MH0Ie2XbAioC9f8ZvvO6o8QkNlzgRqB+J5+zhS0NA0zq5q4a8JCHIyWoIzGArlzu6ZTUJ7RGPnXPsvg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB2869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(366004)(136003)(396003)(346002)(451199021)(5660300002)(31686004)(54906003)(2906002)(41300700001)(8936002)(8676002)(66899021)(66556008)(4326008)(6916009)(66946007)(66476007)(316002)(36756003)(478600001)(6486002)(38100700002)(53546011)(2616005)(86362001)(31696002)(6506007)(186003)(26005)(83380400001)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Gkm3ENFDXD5hIg8bb0EaViSWkVjpZ93WD1zTPt6p00knLRNA9ho9PqT5saTqoJfWXOMaNyw0RVA1ENjcfMn5TyJFgAFVoasOlKPhShvjm4uyLZs6XMS/VB4rqcsWjUi9UOkFTcyxxibUQ37XYUsjC2hNUSUdzJqw8N5jp5hspY+lpbmWlUd9qzyoQWhcRvp3RV4WUuw1oQeRbf07Zopowf5KBqdOhAfU4wHaL3Ga9kQzE6KApNjwUJ8ZqrNfIJsTRlXggUFl/N3EQUttKC4HR16eoQUQ/lWoulrW8vH8oBJOmBmoSCMEp1XjyrvSIi7/QAudZRhXBhwfEPj4o3XHgp844rP5s+59msORcSD8fcHYzlW6V1m6QzvmxWXuIrD2lk1+NRI6MVX0SL+IdMIho9e1lmm33bkLmki2QLKMmzXyAxPUcJyixA8Mx1vxMBvLGSWhcLYvqPz/nwIAKKl4NQIdwRLddsSsEl6qzLVK7hZ0qERgfaTFcK07vhRhCQj50d+W6vaDbmDL3aWNyMbFRsBcXlCDvFk9qkhnWF2SRvqA40AjlB22V6lrJJ6WA+qk
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(366004)(376002)(136003)(346002)(396003)(39860400002)(451199021)(53546011)(6512007)(26005)(9686003)(6506007)(1076003)(186003)(478600001)(6486002)(6666004)(2906002)(33716001)(316002)(41300700001)(44832011)(86362001)(5660300002)(8936002)(8676002)(7416002)(38100700002)(83380400001)(54906003)(66556008)(66946007)(33656002)(4326008)(66476007)(6916009);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UnBDdlhZR1IwMXdTUkY4cjdrblBDeXNaRjF5d1ZiZnRmT2duYjFWWlcrM25S?=
- =?utf-8?B?SSs0OU1aMEJMOGU4UjNUSEZCSEZBbTU4R1RBUkU2SjJ2K09mUjFGbURSUUt3?=
- =?utf-8?B?NWJDTWRNSE9hOE9CVWFKT3YwTTBObDdlUy9sR1R0UXE4WXlMU2tXaHZVV1lu?=
- =?utf-8?B?SmhMaVpGTytlVDhHNXpMVnAxbVVlZ3lnbjlPZGxIOUxvdWVQOHQrZkFaV1Mw?=
- =?utf-8?B?WDFCdVZEMmlsU2V5QXY5Q09qTTlMMDR2MTNReUtNWERSVFZ2bEpidXFiZzZz?=
- =?utf-8?B?b3djbTJVNGZtZlptS09qVzU0WEx3SlJMVjdKK1E5TWZtSmdQS09BRWFIRVVq?=
- =?utf-8?B?NUVIU05seitXcVN4NUZLTFIrVHpobHVrREsyc2U4M3pVS01oaGFSZjh6amxD?=
- =?utf-8?B?NzRmTWFwdWRabU92Z1lTUHFVM1orZUNsNSt1VWRrckFBVW44UE1vSWNOeFFk?=
- =?utf-8?B?b2hIQ0l1OW9vZXltTm5ORjVFR28xTmhMejdoRmZUOVljSVh1d1pmYkxIZkpU?=
- =?utf-8?B?TldQK2VYK0hVZGNYQmtqYnNNUnBibGR0YStianBNTVFnUWduNXB5MlpoTzlh?=
- =?utf-8?B?K0V0RTd5NElVNVp5SUF2Q3NqR0k2N2EvNnZmV1FMVTAvZzZCN09xZERXb1I1?=
- =?utf-8?B?Vmc0RXlTN0FYa1VpN0NzVC93L1BOZVFlOGZGL3RhZ2xtaFd5VjMyenJiSXNs?=
- =?utf-8?B?SGFwZndYc3JxM3pCcmlGSlY5anJQcDl3a1ZIUjNKeUlVY1haZ1REY09sb2R4?=
- =?utf-8?B?L1J0L3BzMHBiSG95VzNyZm9KeENGVGM1ZjhkLys5a1Z5RDFnOVdGT1RhNm5N?=
- =?utf-8?B?TzMwR1d0UTdNeEZldmhNUjFDSE9nVGRvOEpLZ1JNOHZ4NCs1RVdLeVFYYlhj?=
- =?utf-8?B?MHhLdFVpWk9VUTM2U1IraGp2ZVBxQytyZ0NLSXlJRDIwUzlFdzZYaVhhUGFl?=
- =?utf-8?B?NjNZQW9nWHk2TERXdDlpZjF0eUNnSW5ZUVFwWmtwSXF5b29EaUM4V1k3cWMz?=
- =?utf-8?B?U2R5Z3QzSzFlZ09uWWNsT2dZblNaUFNRYkc2OFAvTzJ0ZHR2ai8zakZ4cHVP?=
- =?utf-8?B?b0Zkbzl4ZGNOa3QxNi9wZ0VNYXI5ampZMnVJVThoL0VDVmRLRkdvNU9jakpX?=
- =?utf-8?B?YzN0K2RzSk0zbTRvQ0RZMEhxWmlQODFiejByT0VMTnE2dy9ybzRpcE15eHg4?=
- =?utf-8?B?WFhORWtpY3FJdGtCT29zYVdJbW9PazN6Wmg2Wk9YN041cGVZV0tmNnEyb1Jt?=
- =?utf-8?B?OWNtUi91MkppUlR1TTJ6RTRISGVqdkNFOVFuZlFDTlBNUld0cHJCaHlZUEFo?=
- =?utf-8?B?azNlZXA4VFVsTFZZNHo3bExySlh6SHR4eXdVdHZ1VEdxaE5YQlJ1T2tMaTNQ?=
- =?utf-8?B?TmFFODM0b29rUFhORGZndnRhMTA1bEpnY3oralNFN3RtM29xSHYrMHB2dlMr?=
- =?utf-8?B?M2tVVElzNEVqSDhZcHlPVDY2SUIxbjBFTlJlSVBCSDBxZTEvNUQzWEJYcnpK?=
- =?utf-8?B?SitVaFJWcVJYNFJmZjBreWlEWW9DamtTeURTK081M3NyY01OU2dHOHpEK2xu?=
- =?utf-8?B?TTNrM2JvRWovSjIvS2xvQTBYQllNOHdMODlzSnFDZmZlZjFLNUtET251dTVz?=
- =?utf-8?B?ZXBTZm1Wai9jZkVPcGdBcU8vM2ZlZk9ScHRUWVBRUjl1QWhiWllFSmdISUZ3?=
- =?utf-8?B?ZXI2c25oL2dtSFVFN1FOcWkwRkl1NDBPbFhENTZjSmV4TXA4azluT1V3UWp3?=
- =?utf-8?B?UjNVcmVYODBPSURrMURsdlBWVks1N0NPci8wYmFZamkxcXZuaHRZWUJMYXBy?=
- =?utf-8?B?SnBCeTR5RnQ0ZVp2V1RDUmtENDN2TVM1WFRidTJIVHdBMStscVdYNHhqV0hW?=
- =?utf-8?B?R0Q0NWcwT3lBdFM3Y21nZE9RUEtNMXBHcnJSUUtHOTN4VXAvVVFOeVUwUmtk?=
- =?utf-8?B?NnRlS1VSejdwSkE5bjZqYjFPR2t2bXBLTEVsVThRWWNNZjdQTVRuVDRPRVFr?=
- =?utf-8?B?c3hyc1RvU1B2V294a1g0RElDRnI3OGpGNFMzMkMzUldoQmxCOXhqQ1hISG9h?=
- =?utf-8?B?eXhUQ2tDSFZvWVBBelZtUFU4NjBtM0NIMXlBZWRXY08xSXZDOUgzNlpKVTgr?=
- =?utf-8?Q?JwE57hd3g7Mg1oM439eQ+XX5+?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 97148ce2-933e-46e8-363d-08db6ec23aa4
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB2869.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SjB4cDNjdTV0SzF0anNIQXlZeDJiYWFTNzlGOTR5N2NzNWV3WnppamFtZFFK?=
+ =?utf-8?B?ZWVMTkF5MGNzSEtGNkdHWWY2WUVwYXVFcU9qbnpQN3pyenhxVDJqK29NaXdU?=
+ =?utf-8?B?OWVqT3ByNUF5bGprMHVnZ2xjTnozWW90bVR6b3d2SEZBeSt4S1dnSlFZajVY?=
+ =?utf-8?B?alBWNnNPZHRnWis0eGpzN0dSZHdzazB6WXR2U0ZGcWt5M255aSttVGY0RUd1?=
+ =?utf-8?B?bkJDVUNMWFJRTXB4WjBoMFMwRm84SHNIalJBZ3JZbzZ5RWhZUHJBVXAyMDk5?=
+ =?utf-8?B?eS9qY0dlcFJWVWJhOXRrNDFySSszQ0tDUGdSMXdObGhXYUh0b1AySjg5MkNE?=
+ =?utf-8?B?Y3JMcU9qQ1h4VnN3UzhTREI4eTN3NDNMTWhBTkRZcHNTZlVYWE5KNFQ3L0dw?=
+ =?utf-8?B?dGluMmVRUzFxT3BDTThKZnhYcUEzV1cwN3huQ3hHNWJUemhxMGswMUtsbjBR?=
+ =?utf-8?B?RHVHeWhDUTZvcTQySjdqZFVEdXlaYmlxdmU3UnJ6anozeStJRVVpczg0Q1J4?=
+ =?utf-8?B?MGJwOHRpbVR5bTQ1MFE4cFk4TlBFWHZ2RTBNM2dQWWl5MmZFeFRkSTVIMTRt?=
+ =?utf-8?B?UkNnU1J0UXdZbjZJS1ZlZVM3djgvdXJ1VkRwd1dCRG9QaFR4c00wVUFWY1Jr?=
+ =?utf-8?B?aUNCTmp4Y0tJUHFlQnBJalBuYlJTczlGSWk5bGZiWm9ZRmNnOG5tTU5ybDRl?=
+ =?utf-8?B?Vzd4a0JSUDcxRWphdFNteVRDRGkyQnJjNjFLY2FFcEo3ZmFUVlFQNTM4a0Uy?=
+ =?utf-8?B?NXdEM3dBVFlaTXZReGgydjB5Vm9EZ0NJb2lUQ2l3M2xjLzd2VSsrZ21sRDd0?=
+ =?utf-8?B?bzlRcWJjcWZSWEpHekhFMXlpb1g0TDlUcDRpYW1sdjhoWVRkUmE1VmY3YnJo?=
+ =?utf-8?B?VG04MU1mZTZ5K1g5bU1VMUxnY2hwdzcyK1RuTkR0VTV1QmxUczYrTFFEYjlI?=
+ =?utf-8?B?TXZ4aGRDQzdjdlVuVjN4ZU15Zi9VbDNkSnBvTmNWeFd4QTZaVkJSbnFlUzNL?=
+ =?utf-8?B?VjFkeFYySjdSeVZQeGh2MWYrd0dEWUVXYktINjJWUDRpWWMwRE1YQXpDRThN?=
+ =?utf-8?B?TklvNVBMNzFya0xvZnR4NmVKMGZMZVpwckl2QXNRd3F1b1g5VXR3a1hsMWJx?=
+ =?utf-8?B?R0tZTnBYNVIwUkRxNmQ0VFJIS2dpdGV0SXFyd2EyY211ZWE3R0hVWE9GVjdH?=
+ =?utf-8?B?RFozWGdHbldNMDNpQzI4TjlROXFnN2pBTkkvSXlOTlpsOW83d1NtQWk1OWM2?=
+ =?utf-8?B?dGhSU3dTU0c4YjEzNWFlRDU4dzhweGtyNUZEalRaNVRuYUswR1NOOUNtM3lI?=
+ =?utf-8?B?NWVUcW1INlp5bW5HUmZrN2RvRUZjbVpKeC9LeTc4N3g4emNYNlpldGdFM1BN?=
+ =?utf-8?B?am12eG95M2p3Y3ZCbWIrWFVMV1BBUEpueWR6clBFTk0xbkVGZTg0NXV6NlRU?=
+ =?utf-8?B?N3ZZMmNiemNUYU9tUDNZZjVyRXhhN3EzaitZMTFvWVFrQ3dJaXM1dzlpemtV?=
+ =?utf-8?B?OGJsZWs2bUZCOGwrdDRDTzk4T0hkMDRJM0JqVi9QRzVMK0IrVDdTZEFEM3Va?=
+ =?utf-8?B?NUw4dTMrVThTL3dZU1JsNlVodFVzT3RicWpEdkhLODFxRXR2UW03VFdnYTEv?=
+ =?utf-8?B?c2V3ajdXSEFnaUt2bHlqU0xmV2R2U2tUSHJwVGdFNmVCT05sdFI2Y3NaNytR?=
+ =?utf-8?B?OHc0Z0oxVkFIK2NCWFNDd05yb2FWdEM2dlozcERIRFJaMVh5UytUUEVLdUhs?=
+ =?utf-8?B?MUVzOTRxK1pSbFJHdzN3OHZyT0xRL0dicU9oaTNPWndiUXE4Mm1xb0NuYlNL?=
+ =?utf-8?B?SnBET1NuMVZWaWpQRVVGbVdvZnUwdkxjUGZQUnhoMHE0MnlCZVpPN1I1Z2FD?=
+ =?utf-8?B?UVUzWFZZNEZiWEhZMXMwU2lWd2NSVHZYSmZySkIzS1dJLy9jQWFBcWZBOTRO?=
+ =?utf-8?B?L2M5QUV2RVFKS2c2TkJYWmZFZ0J0NG5Bc1pvVDBqRUdMbksvb3hwWXZybWQ0?=
+ =?utf-8?B?eFl1SXdKOXVNV0dvWHl3ZHdLYWw4YkorQk44S21aS3N2dkFkV2dtRmpETEdK?=
+ =?utf-8?B?RUVUS3pJaXVDTU5ad2RTV1o5SVZ2Nm5MMk5IdCtnTmp0cnlnZTZhWDUxUmhr?=
+ =?utf-8?Q?gQjS7oo++9i0tq9hxZa2M8L9x?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?ZCtVclI1TWJTYmNIL0F5TklxZVpXd3NxVXpJWXVEaDNhSWtBSE1zeUM5bCtl?=
+ =?utf-8?B?TDloUEN3bGRlVW5MUzR4YWh5MUUxWk5LVnFON2RUelhxMEwvMUxXdDBJUXZ5?=
+ =?utf-8?B?Qm40N2kwMitjN2JDaW9DM3lxSFUrM1pmTlRDcjhBazdSdlkwNzJyb0VsT1c5?=
+ =?utf-8?B?aklreTV4aCtZVUZ3MGtuT1VEWTdnL3l3S3FNbFVkYnhIbHFSNjA0WFVQUUY5?=
+ =?utf-8?B?VmF6MlJ1R1IxM1ZJSlRKV2xOczZtcGhleUxyNG5QS0ZHOVpHWDBYUlFPQW5n?=
+ =?utf-8?B?bXRKM3ZwRDlWYnZXOGFVQWc2UG5KK1NqTGZjeG1RbWR2RzExL3lBYjhXcUZT?=
+ =?utf-8?B?cjVLY0hHemlMK0tLREdrNkNFUlgxTm1aQzlma0N5bmQvOFI2TUNPK0RldUdz?=
+ =?utf-8?B?M3I4eC93OU42eS90RGJ6YVZ5c3pOSlc3cnNzbE1aRHJ0K2IyTTcwS053N3pG?=
+ =?utf-8?B?MWoremhKNlFDcVhOOU9WL01XSCtmKy84TmVMZ3JsMzNNWWNsRDBIYnlvQWxu?=
+ =?utf-8?B?TVliL0QzTWdOcDRzU0lZaW1vZVBod0lNVjhRd0FVZFBXM3ZTOERrRWdmbi9o?=
+ =?utf-8?B?SDNHTEFiWTJrQjk0M3pzNk55RXByeVh4YzVSemhRQUJORUEvZmZjU2VtMWtw?=
+ =?utf-8?B?NnRHL2lqcmlGcHFVT0tJaUw2Q0VCUzJnaXVMSVFuWFhOK0Uxd0ZWaURDOCtw?=
+ =?utf-8?B?V0hXa1FDYVp5Z2NVRVRsb3pTYkhhUCtCQlBQT00yaUlDNXg5VXBTNTZNOVg1?=
+ =?utf-8?B?aTZRTjQ0L2hSbTArSkRwQW1aazAzdENBbG1rYlpwbHhQYlhEdk9KWUZ2K1Y5?=
+ =?utf-8?B?VXdrZllQUzZ4VmpIYzd5d2dsSDVoTmlYU3B5YkIzYXhDQmIwUjduNnZEcldH?=
+ =?utf-8?B?K0FZMkNiMEY5WkU5bHZRdFhaN1FjdFpScTVYL3kwYVZoOFU0c0JIYS9lc2Jw?=
+ =?utf-8?B?L1BUZEQ2RyszWWlkVnVNQmcrcnFBWEdXNTFrc3hQS1FIWjlLcUF3U09pNjQr?=
+ =?utf-8?B?LzN2TXYwUUJ5MU1zVXlLVXZ3YlJpM0Y3d2JHRngxMit2U2dlWkxNcXl0b0lw?=
+ =?utf-8?B?S3RidnAvTnM1QjVFSmphNnVGUzJ2cDB1eGVQZStqYnhYVTVRMW56RWd1VEhl?=
+ =?utf-8?B?UGFFT2RXbjJUU29qeGlHVGVOUzVGQzNqTjlwa0lsNklCRUVFb0Q5MGl5UDl3?=
+ =?utf-8?B?RFhnMlNQbVNWUjd4SDR2Tm9CdFVIQXpReTB2YVFFYktCY0JmME5jUkpoTWsr?=
+ =?utf-8?B?WURWRVNRNWhRSHVDZE1EOGY4bngvMDhieUZEMzluQVhyTXFackYvb0JWclA5?=
+ =?utf-8?B?bE1NZlRPQzJnNGllV3IzLzV0eVFhWGEwMitNdU9VVHJVb2NaNFZPUyt6R0o1?=
+ =?utf-8?B?NmxQOGRIbzBQWmc9PQ==?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d77fd93c-033c-45da-34d0-08db6ec247bb
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 23:34:29.0928
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 23:34:52.0140
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: h2Q08c0mzQQvL61o3rcsV5NYbGzka1/bvv4ac2YX4Fq48iNEFxAZy9/595auJYY3/h5ZCB4psoF8mYiUbbsT9Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB8798
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: moy9LPbIVuDsUikvc7cE4w31TPeE9Bhq7d+PkdmClKCHurCA1Jtl6YcvqXcqkgOwljixpXy+VCW8bzGzCUauVg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR10MB4657
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-16_14,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxscore=0 phishscore=0
+ suspectscore=0 mlxlogscore=999 bulkscore=0 spamscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306160215
+X-Proofpoint-ORIG-GUID: Mu78y7U0dredMeWOubiHKPCqAvAO_Kjg
+X-Proofpoint-GUID: Mu78y7U0dredMeWOubiHKPCqAvAO_Kjg
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lukas,
+On 06/16/23 14:19, Jiaqi Yan wrote:
+> On Sun, Jun 11, 2023 at 9:19 PM Naoya Horiguchi
+> <naoya.horiguchi@linux.dev> wrote:
+> >
+> > On Fri, Jun 09, 2023 at 10:48:47PM -0700, Jiaqi Yan wrote:
+> > > On Thu, May 25, 2023 at 5:28 PM Jiaqi Yan <jiaqiyan@google.com> wrote:
+> > > >
+> > > > On Mon, May 22, 2023 at 7:43 PM HORIGUCHI NAOYA(堀口　直也)
+> > > > <naoya.horiguchi@nec.com> wrote:
+> > > > >
+> > > > > On Mon, May 22, 2023 at 11:22:49AM -0700, Jiaqi Yan wrote:
+> > > > > > On Sun, May 21, 2023 at 9:50 PM HORIGUCHI NAOYA(堀口　直也)
+> > > > > > <naoya.horiguchi@nec.com> wrote:
+> > > > > > >
+> > > > > > > On Fri, May 19, 2023 at 03:42:14PM -0700, Mike Kravetz wrote:
+> > > > > > > > On 05/19/23 13:54, Jiaqi Yan wrote:
+> > > > > > > > > On Wed, May 17, 2023 at 4:53 PM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+> > > > > > > > > >
+> > > > > > > > > > On 05/17/23 16:09, Jiaqi Yan wrote:
+> > > > > > > > > > > Adds the functionality to search a subpage's corresponding raw_hwp_page
+> > > > > > > > > > > in hugetlb page's HWPOISON list. This functionality can also tell if a
+> > > > > > > > > > > subpage is a raw HWPOISON page.
+> > > > > > > > > > >
+> > > > > > > > > > > Exports this functionality to be immediately used in the read operation
+> > > > > > > > > > > for hugetlbfs.
+> > > > > > > > > > >
+> > > > > > > > > > > Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
+> > > > > > > > > > > ---
+> > > > > > > > > > >  include/linux/mm.h  | 23 +++++++++++++++++++++++
+> > > > > > > > > > >  mm/memory-failure.c | 26 ++++++++++++++++----------
+> > > > > > > > > > >  2 files changed, 39 insertions(+), 10 deletions(-)
+> > > > > > > > > > >
+> > > > > > > > > > > diff --git a/include/linux/mm.h b/include/linux/mm.h
+> > > > > > > > > > > index 27ce77080c79..f191a4119719 100644
+> > > > > > > > > > > --- a/include/linux/mm.h
+> > > > > > > > > > > +++ b/include/linux/mm.h
+> > > > > > > > > >
+> > > > > > > > > > Any reason why you decided to add the following to linux/mm.h instead of
+> > > > > > > > > > linux/hugetlb.h?  Since it is hugetlb specific I would have thought
+> > > > > > > > > > hugetlb.h was more appropriate.
+> > > > > > > > > >
+> > > > > > > > > > > @@ -3683,6 +3683,29 @@ enum mf_action_page_type {
+> > > > > > > > > > >   */
+> > > > > > > > > > >  extern const struct attribute_group memory_failure_attr_group;
+> > > > > > > > > > >
+> > > > > > > > > > > +#ifdef CONFIG_HUGETLB_PAGE
+> > > > > > > > > > > +/*
+> > > > > > > > > > > + * Struct raw_hwp_page represents information about "raw error page",
+> > > > > > > > > > > + * constructing singly linked list from ->_hugetlb_hwpoison field of folio.
+> > > > > > > > > > > + */
+> > > > > > > > > > > +struct raw_hwp_page {
+> > > > > > > > > > > +     struct llist_node node;
+> > > > > > > > > > > +     struct page *page;
+> > > > > > > > > > > +};
+> > > > > > > > > > > +
+> > > > > > > > > > > +static inline struct llist_head *raw_hwp_list_head(struct folio *folio)
+> > > > > > > > > > > +{
+> > > > > > > > > > > +     return (struct llist_head *)&folio->_hugetlb_hwpoison;
+> > > > > > > > > > > +}
+> > > > > > > > > > > +
+> > > > > > > > > > > +/*
+> > > > > > > > > > > + * Given @subpage, a raw page in a hugepage, find its location in @folio's
+> > > > > > > > > > > + * _hugetlb_hwpoison list. Return NULL if @subpage is not in the list.
+> > > > > > > > > > > + */
+> > > > > > > > > > > +struct raw_hwp_page *find_raw_hwp_page(struct folio *folio,
+> > > > > > > > > > > +                                    struct page *subpage);
+> > > > > > > > > > > +#endif
+> > > > > > > > > > > +
+> > > > > > > > > > >  #if defined(CONFIG_TRANSPARENT_HUGEPAGE) || defined(CONFIG_HUGETLBFS)
+> > > > > > > > > > >  extern void clear_huge_page(struct page *page,
+> > > > > > > > > > >                           unsigned long addr_hint,
+> > > > > > > > > > > diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> > > > > > > > > > > index 5b663eca1f29..c49e6c2d1f07 100644
+> > > > > > > > > > > --- a/mm/memory-failure.c
+> > > > > > > > > > > +++ b/mm/memory-failure.c
+> > > > > > > > > > > @@ -1818,18 +1818,24 @@ EXPORT_SYMBOL_GPL(mf_dax_kill_procs);
+> > > > > > > > > > >  #endif /* CONFIG_FS_DAX */
+> > > > > > > > > > >
+> > > > > > > > > > >  #ifdef CONFIG_HUGETLB_PAGE
+> > > > > > > > > > > -/*
+> > > > > > > > > > > - * Struct raw_hwp_page represents information about "raw error page",
+> > > > > > > > > > > - * constructing singly linked list from ->_hugetlb_hwpoison field of folio.
+> > > > > > > > > > > - */
+> > > > > > > > > > > -struct raw_hwp_page {
+> > > > > > > > > > > -     struct llist_node node;
+> > > > > > > > > > > -     struct page *page;
+> > > > > > > > > > > -};
+> > > > > > > > > > >
+> > > > > > > > > > > -static inline struct llist_head *raw_hwp_list_head(struct folio *folio)
+> > > > > > > > > > > +struct raw_hwp_page *find_raw_hwp_page(struct folio *folio,
+> > > > > > > > > > > +                                    struct page *subpage)
+> > > > > > > > > > >  {
+> > > > > > > > > > > -     return (struct llist_head *)&folio->_hugetlb_hwpoison;
+> > > > > > > > > > > +     struct llist_node *t, *tnode;
+> > > > > > > > > > > +     struct llist_head *raw_hwp_head = raw_hwp_list_head(folio);
+> > > > > > > > > > > +     struct raw_hwp_page *hwp_page = NULL;
+> > > > > > > > > > > +     struct raw_hwp_page *p;
+> > > > > > > > > > > +
+> > > > > > > > > > > +     llist_for_each_safe(tnode, t, raw_hwp_head->first) {
+> > > > > > > > > >
+> > > > > > > > > > IIUC, in rare error cases a hugetlb page can be poisoned WITHOUT a
+> > > > > > > > > > raw_hwp_list.  This is indicated by the hugetlb page specific flag
+> > > > > > > > > > RawHwpUnreliable or folio_test_hugetlb_raw_hwp_unreliable().
+> > > > > > > > > >
+> > > > > > > > > > Looks like this routine does not consider that case.  Seems like it should
+> > > > > > > > > > always return the passed subpage if folio_test_hugetlb_raw_hwp_unreliable()
+> > > > > > > > > > is true?
+> > > > > > > > >
+> > > > > > > > > Thanks for catching this. I wonder should this routine consider
+> > > > > > > > > RawHwpUnreliable or should the caller do.
+> > > > > > > > >
+> > > > > > > > > find_raw_hwp_page now returns raw_hwp_page* in the llist entry to
+> > > > > > > > > caller (valid one at the moment), but once RawHwpUnreliable is set,
+> > > > > > > > > all the raw_hwp_page in the llist will be kfree(), and the returned
+> > > > > > > > > value becomes dangling pointer to caller (if the caller holds that
+> > > > > > > > > caller long enough). Maybe returning a bool would be safer to the
+> > > > > > > > > caller? If the routine returns bool, then checking RawHwpUnreliable
+> > > > > > > > > can definitely be within the routine.
+> > > > > > > >
+> > > > > > > > I think the check for RawHwpUnreliable should be within this routine.
+> > > > > > > > Looking closer at the code, I do not see any way to synchronize this.
+> > > > > > > > It looks like manipulation in the memory-failure code would be
+> > > > > > > > synchronized via the mf_mutex.  However, I do not see how traversal and
+> > > > > > > > freeing of the raw_hwp_list  called from __update_and_free_hugetlb_folio
+> > > > > > > > is synchronized against memory-failure code modifying the list.
+> > > > > > > >
+> > > > > > > > Naoya, can you provide some thoughts?
+> 
+> Hi Mike,
+> 
+> Now looking again this, I think concurrent adding and deleting are
+> fine with each other and with themselves, because raw_hwp_list is
+> lock-less llist.
 
-Thanks for reviewing my patch
+Correct.
 
-On 6/16/2023 11:24 AM, Lukas Wunner wrote:
-> Hi Smita,
-> 
-> My apologies for the delay!
-> 
-> On Mon, May 22, 2023 at 03:23:31PM -0700, Smita Koralahalli wrote:
->> On 5/11/2023 4:19 AM, Lukas Wunner wrote:
->>> On Tue, Apr 18, 2023 at 09:05:26PM +0000, Smita Koralahalli wrote:
->>>> Clear all capabilities in Device Control 2 register as they are optional
->>>> and it is not determined whether the next device inserted will support
->>>> these capabilities. Moreover, Section 6.13 of the PCIe Base
->>>> Specification [1], recommends clearing the ARI Forwarding Enable bit on
->>>> a hot-plug event as its not guaranteed that the newly added component
->>>> is in fact an ARI device.
->>>
->>> Clearing ARI Forwarding Enable sounds reasonable, but I don't see
->>> why all the other bits in the Device Control 2 register need to be
->>> cleared.  If there isn't a reason to clear them, I'd be in favor of
->>> leaving them alone.
->>
->> I understand. The SPEC doesn't "clearly" state to clear the other bits
->> except ARI on a hot-plug event.
->>
->> But, we came across issues when a device with 10-bit tags was removed and
->> replaced with a device that didn't support 10-bit tags. The device became
->> inaccessible and the port was not able to be recovered without a system
->> reset. So, we thought it would be better to cherry pick all bits that were
->> negotiated between endpoint and root port and decided that we should clear
->> them all on removal. Hence, my first revision of this patch series had aimed
->> to clear only ARI, AtomicOp Requestor and 10 bit tags as these were the
->> negotiated settings between endpoint and root port. Ideally, these settings
->> should be re-negotiated and set up for optimal operation on a hot add.
-> 
-> Makes total sense.  I like the approach of clearing only these three
-> bits, as you did in v1 of the patch.  I also appreciate the detailed
-> explanation that you've provided.  Much of your e-mail can be copy-pasted
-> to the commit message, in my opinion it's valuable information to any
-> reviewer and future reader of the commit.
-> 
-> 
->> We had some internal discussions to understand if SPEC has it documented
->> somewhere. And we could see in Section 2.2.6.2, it implies that:
->> [i] If a Requester sends a 10-Bit Tag Request to a Completer that lacks
->> 10-Bit Completer capability, the returned Completion(s) will have Tags with
->> Tag[9:8] equal to 00b. Since the Requester is forbidden to generate these
->> Tag values for 10-Bit Tags, such Completions will be handled as Unexpected
->> Completions, which by default are Advisory Non-Fatal Errors. The Requester
->> must follow standard PCI Express error handling requirements.
->> [ii] In configurations where a Requester with 10-Bit Tag Requester
->> capability needs to target multiple Completers, one needs to ensure that the
->> Requester sends 10-Bit Tag Requests only to Completers that have 10-Bit Tag
->> Completer capability.
->>
->> Now, we might wonder, why clear them (especially 10-bit tags and AtomicOps)
->> if Linux hasn't enabled them at all as the "10-Bit Tag Requester Enable" bit
->> is not defined in Linux currently. But, these features might be enabled by
->> Platform FW for "performance reasons" if the endpoint supports and now it is
->> the responsibility of the operating system to disable it on a hot remove
->> event.
-> 
-> Again, makes total sense.
-> 
-> 
->> According to implementation notes in 2.2.6.2: "For platforms where the RC
->> supports 10-Bit Tag Completer capability, it is highly recommended for
->> platform firmware or operating software that configures PCIe hierarchies to
->> Set the 10-Bit Tag Requester Enable bit automatically in Endpoints with
->> 10-Bit Tag Requester capability. This enables the important class of 10-Bit
->> Tag capable adapters that send Memory Read Requests only to host memory." So
->> if the endpoint and root port both support 10-bit tags BIOS is enabling it
->> at boot time..
->>
->> I ran a quick check to see how DEV_CTL2 registers for root port look on a
->> 10-bit tag supported NVMe device.
->>
->> pci 0000:80:05.1: DEVCTL2 0x1726 (Bit 12: 10-bit tag is enabled..)
->> pci 0000:80:05.1: DEVCAP2 0x7f19ff
->>
->> So, it seems like BIOS has enabled 10-bit tags at boot time even though
->> Linux hasn't enabled it.
->>
->> Some couple of ways we think could be:
->> [1] Check if these bits are enabled by Platform at boot time, clear them
->> only it is set during hotplug flow.
->> [2] Clear them unconditionally as I did..
->> [3] Enable 10-bits tags in Linux when a device is probed just like how we do
->> for ARI..
->>
->> Similarly call pci_enable_atomic_ops_to_root() during a hot add..
-> 
-> Personally I'm fine with option [2].  If you or Bjorn prefer option [3],
-> I'm fine with that as well.
+> As for synchronizing traversal with adding and deleting, I wonder is
+> it a good idea to make __update_and_free_hugetlb_folio hold
+> hugetlb_lock before it folio_clear_hugetlb_hwpoison(which traverse +
+> delete raw_hwp_list)? In hugetlb, get_huge_page_for_hwpoison already
+> takes hugetlb_lock; it seems to me __update_and_free_hugetlb_folio is
+> missing the lock.
 
-Looking forward for Bjorn comments!
+I do not think the lock is needed.  However, while looking more closely
+at this I think I discovered another issue.
+This is VERY subtle.
+Perhaps Naoya can help verify if my reasoning below is correct.
 
-Thanks,
-Smita
-> 
-> 
->>> As for clearing ARI Forwarding Enable, it seems commit b0cc6020e1cc
->>> ("PCI: Enable ARI if dev and upstream bridge support it; disable
->>> otherwise") already solved this problem.  Quoth its commit message:
-> [...]
->>> My superficial understanding of that patch is that we do find function 0,
->>> while enumerating it we clear the ARI Forwarding Enable bit and thus the
->>> remaining functions become accessible and are subsequently enumerated.
->>>
->>> Are you seeing issues when removing an ARI-capable endpoint from a
->>> hotplug slot and replacing it with a non-ARI-capable device?
->>> If you do, the question is why the above-quoted commit doesn't avoid them.
->>
->> Yeah! Sorry I missed this. ARI is already checked and enabled during device
->> initialization.
-> 
-> It doesn't hurt to additionally clear on hot-removal.
-> 
-> Thanks,
-> 
-> Lukas
+In __update_and_free_hugetlb_folio we are not operating on a hugetlb page.
+Why is this?
+Before calling update_and_free_hugetlb_folio we call remove_hugetlb_folio.
+The purpose of remove_hugetlb_folio is to remove the huge page from the
+list AND compound page destructor indicating this is a hugetlb page is changed.
+This is all done while holding the hugetlb lock.  So, the test for
+folio_test_hugetlb(folio) is false.
 
+We have technically a compound non-hugetlb page with a non-null raw_hwp_list.
+
+Important note: at this time we have not reallocated vmemmap pages if
+hugetlb page was vmemmap optimized.  That is done later in
+__update_and_free_hugetlb_folio.
+
+The 'good news' is that after this point get_huge_page_for_hwpoison will
+not recognize this as a hugetlb page, so nothing will be added to the
+list.  There is no need to worry about entries being added to the list
+during traversal.
+
+The 'bad news' is that if we get a memory error at this time we will
+treat it as a memory error on a regular compound page.  So,
+TestSetPageHWPoison(p) in memory_failure() may try to write a read only
+struct page. :(
+-- 
+Mike Kravetz
