@@ -2,87 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E705E7331C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 15:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B957331C8
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 15:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343843AbjFPNAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 09:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51460 "EHLO
+        id S1344439AbjFPNAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 09:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345604AbjFPNAF (ORCPT
+        with ESMTP id S1345281AbjFPNA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 09:00:05 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233AC1BF8
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 06:00:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=gqK+3KsGUGOMq8M8tTFeaLnp1A2G//WBIl2/x8oKhVE=; b=GGJxhuENkgCZS/h4JJhbgI8Vu1
-        ezHgFnloGG/Zw+bqxn2bgIpzjpdrtEqW7o5PCDC+/g6L3oLVaOq529I3K2D/093u5VHnZZ7VZ63XV
-        ndjBUQwpR5Dkybg+xkPAnxpZhd/mFGtUUeVVPhQ1bolqdex1g4oq+l6pcp+AP1v1ocvarCvg/+ARS
-        xKwf5S9+eR4oSkXHRUwD31gqtOLarquq/92XZvTUXxz4zFySu109Hg0nLSYXoj5/3ohbvMHnxopxo
-        A5jPfZBWeXl3e6/TGS6oPwoRxqZgXUvH8JKLidi/CZByKeztRRsaAT5uqT3Nj9bshWGB7w8EsiFQ2
-        c3ffp0/A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qA93M-0091BP-Dn; Fri, 16 Jun 2023 12:59:48 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BC29430020B;
-        Fri, 16 Jun 2023 14:59:46 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 791E327438941; Fri, 16 Jun 2023 14:59:46 +0200 (CEST)
-Date:   Fri, 16 Jun 2023 14:59:46 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Luca Abeni <luca.abeni@santannapisa.it>,
-        Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Vineeth Pillai <vineeth@bitbyteword.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [RFC PATCH V3 5/6] sched/fair: Add trivial fair server
-Message-ID: <20230616125946.GN83892@hirez.programming.kicks-ass.net>
-References: <cover.1686239016.git.bristot@kernel.org>
- <8db5a49ea92ad8b875d331d6136721645a382fe8.1686239016.git.bristot@kernel.org>
+        Fri, 16 Jun 2023 09:00:29 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463793A87
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 06:00:26 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-bc4651e3838so569978276.2
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 06:00:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686920425; x=1689512425;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qvdWMVWle3D0jO0S4SA/HhQT1FHM2fbq6dlchswpFvQ=;
+        b=Hx0wJI5o0/Ql3BsLN/+xlaxPAaYG1vT0wNGM833HXlLHTV4nFSvJwjL06xrMfUDkaE
+         +qawKe3EliuGv8MhIVu6FQQmnth06j73ZoHKjhT7xs6bhghiawdCS6VzLvoM1JVuA+IM
+         xlPVWcxgYcGtwgDXG1yJJJMKAEQNLFmP+ub+1s9H4tyepnPk9ze6+PMEOHyaLEChBe0a
+         f5E5TraslYewcPNlC6i3U7waaJQnW2nenVfaixr8AWZPMGoVgbCJfUSh+M62KSc40xBQ
+         +jxsA/5DhAF3DPJl+XbTUPGH1rRnKa7tMIbMe2gv663TVs7hIoyJhLDe73LgRonnmRqQ
+         afNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686920425; x=1689512425;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qvdWMVWle3D0jO0S4SA/HhQT1FHM2fbq6dlchswpFvQ=;
+        b=c9YULhbrXmP6UQ2Lg/heZ/3fermh6bqm1cPHNfU3RHzGkag8XTyofv8ln+78bSy1co
+         R+m5db5dp/5PCrWOg8ZgYZvYhIBFWNMS35UKEogKrDTO3vQjvruTr5aW4VxBPDRBlV6N
+         4Z93p/ABerBoA9oLqIeJYMP+xMp1/bchtnoc0qc5pH/MfYu2/tF2EZgQRQe+pb4b34Mm
+         sdut5e1fz2fq9lXbN3Rcwb/sR4N0MC58Fq2Zgbk5Af8aWUklzlJ6J7Fl6W1k7WxTzhXR
+         JtDxOdoz5c7iUgFcSIfmlJwTuARXwf3x76B3n1VuJzyhVG9ZVmRb6uiDU/cplyXkVOcI
+         mFmQ==
+X-Gm-Message-State: AC+VfDyXXPjLC1OqN4iQYXDpiybtB3wcN34QxgzuWLKKZR2JpTXmycU+
+        7pmxfW+YeeqxDW873lOjc4gY6RPC5k5Js6lMCb6Hlg==
+X-Google-Smtp-Source: ACHHUZ7qjLee8UemepLrygtLsZQpGNhbY9ZvMJVXMC8Mih33ncS0FsCdggjbyBeUEMLxw22yEeijYtiXPtuxj6l8ehU=
+X-Received: by 2002:a25:8908:0:b0:bd4:e6d6:2b8e with SMTP id
+ e8-20020a258908000000b00bd4e6d62b8emr1267863ybl.50.1686920425258; Fri, 16 Jun
+ 2023 06:00:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8db5a49ea92ad8b875d331d6136721645a382fe8.1686239016.git.bristot@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230504233736.3766296-1-xiaolei.wang@windriver.com>
+In-Reply-To: <20230504233736.3766296-1-xiaolei.wang@windriver.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 16 Jun 2023 15:00:14 +0200
+Message-ID: <CACRpkdbHzO-Tc7s0aGMy7QxHMQ1NhN0tXF5U_ZdnVcUGn8rjwg@mail.gmail.com>
+Subject: Re: [v4][PATCH] pinctrl: freescale: Fix a memory out of bounds when
+ num_configs is 1
+To:     Xiaolei Wang <xiaolei.wang@windriver.com>
+Cc:     aisheng.dong@nxp.com, festevam@gmail.com, shawnguo@kernel.org,
+        ping.bai@nxp.com, kernel@pengutronix.de, peng.fan@nxp.com,
+        shenwei.wang@nxp.com, bartosz.golaszewski@linaro.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 05:58:17PM +0200, Daniel Bristot de Oliveira wrote:
-> +void fair_server_init(struct rq *rq)
-> +{
-> +	struct sched_dl_entity *dl_se = &rq->fair_server;
-> +
-> +	init_dl_entity(dl_se);
-> +
-> +	dl_se->dl_runtime = TICK_NSEC;
-> +	dl_se->dl_deadline = 20 * TICK_NSEC;
-> +	dl_se->dl_period = 20 * TICK_NSEC;
-> +
-> +	dl_server_init(dl_se, rq, fair_server_has_tasks, fair_server_pick);
-> +}
+On Fri, May 5, 2023 at 1:38=E2=80=AFAM Xiaolei Wang <xiaolei.wang@windriver=
+.com> wrote:
 
-These here numbers should obviously become a tunable somewhere... :-)
+> The config passed in by pad wakeup is 1, when num_configs is 1,
+> Configuration [1] should not be fetched, which will be detected
+> by KASAN as a memory out of bounds condition. Modify to get
+> configs[1] when num_configs is 2.
+>
+> Fixes: f60c9eac54af ("gpio: mxc: enable pad wakeup on i.MX8x platforms")
+> Signed-off-by: Xiaolei Wang <xiaolei.wang@windriver.com>
+> ---
+> Changes since  v3:
+>  - update commit log, delete call trace
+
+Patch applied.
+
+Right now I have applied it for the merge window for kernel v6.5,
+tell me if it is really urgent and should rather go in for fixes.
+
+Yours,
+Linus Walleij
