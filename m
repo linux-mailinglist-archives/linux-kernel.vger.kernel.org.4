@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA25A732B72
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:26:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A68E732B6D
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344286AbjFPJ0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 05:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
+        id S1344298AbjFPJZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 05:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344133AbjFPJYz (ORCPT
+        with ESMTP id S1344127AbjFPJYy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 05:24:55 -0400
+        Fri, 16 Jun 2023 05:24:54 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4CA270E;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1F72117;
         Fri, 16 Jun 2023 02:24:51 -0700 (PDT)
 Date:   Fri, 16 Jun 2023 09:24:47 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686907487;
+        s=2020; t=1686907488;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=AV6KkFtgrM2z233LjJh0pvjZzz7p2tEBabShKhguHIU=;
-        b=GltytqPbDYjI3ykBmgF4MUl+rFPEKlZlZqaSB5tIh+sHOCmrTjatQKzQBL7DKxoVf/wfcd
-        G/psAhq5DCW7UfgOYdtmq2FH4uuqmCqFSAmreIDY1k+fTo5YyhGjA6ACsrq3igm13sE4/L
-        dNJ1PNIsJRkaCo5I+KKDxXoYfTvPVnNElsnDMo0sCZfAXXgVTYfVkS+Gl4L5BT6hpVcV4a
-        ciTeDjJox7pQ9hNJesEle/olNE79RvOmg0ldtkAHchdknPlhVLdlDllo4yVP4hwYc8w4bY
-        rtMJzVlWFWEiAfpk4z/CDkBeT/aWlOXBUa2GRcQ3bU/XcfdwfOK38mDnHtDlwQ==
+        bh=0YP2kHDR/RRBhpHIspG6GUx9Bu4B0kEf4CcC1mI43Ag=;
+        b=mCG2X1H9CH2cBkjM0FPZUbEhVYmSBFZlS4ceF5PYJTDYLq9dbslJKtTbAJHqKeY1NxbBxW
+        FCKE/vDXcxr/ICQ/pJ3Pb9Wj0/Ax6bZhXJFDo1eF2Tvxe7IXKQVvEZGM+E4XTbA+QJ4qK9
+        FyrGUcdDEaA5jBKAZNO6GTGdeE236fVTQMljtKCAQWzmEy5rdYX9NCyIxuQhvE9aM1tSrQ
+        vqBpVTA2ouZ3ohTQei4jJ/r6PVtDU7FX3uQRPJeBIK+j+eT/xSc5SINEYJsbKa4cJGeuzt
+        xBtJvv6wuOsmcKdgmFgcWZKftsnPnxxStejTYH/kNuTOY+z2OmvdrrYfq7eAyA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686907487;
+        s=2020e; t=1686907488;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=AV6KkFtgrM2z233LjJh0pvjZzz7p2tEBabShKhguHIU=;
-        b=PLCqIyRcb6jQuPir0pVr8YZ6N1hZbBXIaFWZmMTFZs7bD13LA56mQINzr99JJ4KFDv0dL1
-        85Rpoj4WFYjowICw==
+        bh=0YP2kHDR/RRBhpHIspG6GUx9Bu4B0kEf4CcC1mI43Ag=;
+        b=I8EcI07D5scnvQLvHEw6tJ91EASapwE2fhkgJZUFtMhSAUSJ1Fg8ApV7JqGhr4gUlc7UBB
+        +zPWM7haek0RwJDg==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/boot] sh/cpu: Switch to arch_cpu_finalize_init()
+Subject: [tip: x86/boot] mips/cpu: Switch to arch_cpu_finalize_init()
 Cc:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230613224545.371697797@linutronix.de>
-References: <20230613224545.371697797@linutronix.de>
+In-Reply-To: <20230613224545.312438573@linutronix.de>
+References: <20230613224545.312438573@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <168690748709.404.14314407199380002907.tip-bot2@tip-bot2>
+Message-ID: <168690748776.404.1793381056612048285.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,14 +66,14 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/boot branch of tip:
 
-Commit-ID:     01eb454e9bfe593f320ecbc9aaec60bf87cd453d
-Gitweb:        https://git.kernel.org/tip/01eb454e9bfe593f320ecbc9aaec60bf87cd453d
+Commit-ID:     7f066a22fe353a827a402ee2835e81f045b1574d
+Gitweb:        https://git.kernel.org/tip/7f066a22fe353a827a402ee2835e81f045b1574d
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Wed, 14 Jun 2023 01:39:33 +02:00
+AuthorDate:    Wed, 14 Jun 2023 01:39:32 +02:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Fri, 16 Jun 2023 10:16:00 +02:00
 
-sh/cpu: Switch to arch_cpu_finalize_init()
+mips/cpu: Switch to arch_cpu_finalize_init()
 
 check_bugs() is about to be phased out. Switch over to the new
 arch_cpu_finalize_init() implementation.
@@ -81,201 +81,91 @@ arch_cpu_finalize_init() implementation.
 No functional change.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/20230613224545.371697797@linutronix.de
+Link: https://lore.kernel.org/r/20230613224545.312438573@linutronix.de
 
 ---
- arch/sh/Kconfig                 |  1 +-
- arch/sh/include/asm/bugs.h      | 74 +--------------------------------
- arch/sh/include/asm/processor.h |  2 +-
- arch/sh/kernel/idle.c           |  1 +-
- arch/sh/kernel/setup.c          | 55 ++++++++++++++++++++++++-
- 5 files changed, 59 insertions(+), 74 deletions(-)
- delete mode 100644 arch/sh/include/asm/bugs.h
+ arch/mips/Kconfig            |  1 +
+ arch/mips/include/asm/bugs.h | 17 -----------------
+ arch/mips/kernel/setup.c     | 13 +++++++++++++
+ 3 files changed, 14 insertions(+), 17 deletions(-)
 
-diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
-index 9652d36..e339745 100644
---- a/arch/sh/Kconfig
-+++ b/arch/sh/Kconfig
-@@ -6,6 +6,7 @@ config SUPERH
- 	select ARCH_ENABLE_MEMORY_HOTREMOVE if SPARSEMEM && MMU
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG if (GUSA_RB || CPU_SH4A)
- 	select ARCH_HAS_BINFMT_FLAT if !MMU
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index c2f5498..023d3bd 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -4,6 +4,7 @@ config MIPS
+ 	default y
+ 	select ARCH_32BIT_OFF_T if !64BIT
+ 	select ARCH_BINFMT_ELF_STATE if MIPS_FP_SUPPORT
 +	select ARCH_HAS_CPU_FINALIZE_INIT
- 	select ARCH_HAS_CURRENT_STACK_POINTER
- 	select ARCH_HAS_GIGANTIC_PAGE
- 	select ARCH_HAS_GCOV_PROFILE_ALL
-diff --git a/arch/sh/include/asm/bugs.h b/arch/sh/include/asm/bugs.h
-deleted file mode 100644
-index fe52abb..0000000
---- a/arch/sh/include/asm/bugs.h
-+++ /dev/null
-@@ -1,74 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef __ASM_SH_BUGS_H
--#define __ASM_SH_BUGS_H
--
--/*
+ 	select ARCH_HAS_CURRENT_STACK_POINTER if !CC_IS_CLANG || CLANG_VERSION >= 140000
+ 	select ARCH_HAS_DEBUG_VIRTUAL if !64BIT
+ 	select ARCH_HAS_FORTIFY_SOURCE
+diff --git a/arch/mips/include/asm/bugs.h b/arch/mips/include/asm/bugs.h
+index 653f78f..84be74a 100644
+--- a/arch/mips/include/asm/bugs.h
++++ b/arch/mips/include/asm/bugs.h
+@@ -1,17 +1,11 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+ /*
 - * This is included by init/main.c to check for architecture-dependent bugs.
+- *
+  * Copyright (C) 2007  Maciej W. Rozycki
 - *
 - * Needs:
 - *	void check_bugs(void);
-- */
--
--/*
-- * I don't know of any Super-H bugs yet.
-- */
--
--#include <asm/processor.h>
--
--extern void select_idle_routine(void);
--
--static void __init check_bugs(void)
--{
--	extern unsigned long loops_per_jiffy;
--	char *p = &init_utsname()->machine[2]; /* "sh" */
--
--	select_idle_routine();
--
--	current_cpu_data.loops_per_jiffy = loops_per_jiffy;
--
--	switch (current_cpu_data.family) {
--	case CPU_FAMILY_SH2:
--		*p++ = '2';
--		break;
--	case CPU_FAMILY_SH2A:
--		*p++ = '2';
--		*p++ = 'a';
--		break;
--	case CPU_FAMILY_SH3:
--		*p++ = '3';
--		break;
--	case CPU_FAMILY_SH4:
--		*p++ = '4';
--		break;
--	case CPU_FAMILY_SH4A:
--		*p++ = '4';
--		*p++ = 'a';
--		break;
--	case CPU_FAMILY_SH4AL_DSP:
--		*p++ = '4';
--		*p++ = 'a';
--		*p++ = 'l';
--		*p++ = '-';
--		*p++ = 'd';
--		*p++ = 's';
--		*p++ = 'p';
--		break;
--	case CPU_FAMILY_UNKNOWN:
--		/*
--		 * Specifically use CPU_FAMILY_UNKNOWN rather than
--		 * default:, so we're able to have the compiler whine
--		 * about unhandled enumerations.
--		 */
--		break;
--	}
--
--	printk("CPU: %s\n", get_cpu_subtype(&current_cpu_data));
--
--#ifndef __LITTLE_ENDIAN__
--	/* 'eb' means 'Endian Big' */
--	*p++ = 'e';
--	*p++ = 'b';
--#endif
--	*p = '\0';
--}
--#endif /* __ASM_SH_BUGS_H */
-diff --git a/arch/sh/include/asm/processor.h b/arch/sh/include/asm/processor.h
-index 85a6c1c..73fba7c 100644
---- a/arch/sh/include/asm/processor.h
-+++ b/arch/sh/include/asm/processor.h
-@@ -166,6 +166,8 @@ extern unsigned int instruction_size(unsigned int insn);
- #define instruction_size(insn)	(2)
- #endif
+  */
+ #ifndef _ASM_BUGS_H
+ #define _ASM_BUGS_H
  
-+void select_idle_routine(void);
-+
- #endif /* __ASSEMBLY__ */
- 
- #include <asm/processor_32.h>
-diff --git a/arch/sh/kernel/idle.c b/arch/sh/kernel/idle.c
-index d662503..045d93f 100644
---- a/arch/sh/kernel/idle.c
-+++ b/arch/sh/kernel/idle.c
-@@ -15,6 +15,7 @@
- #include <linux/irqflags.h>
+ #include <linux/bug.h>
+-#include <linux/delay.h>
  #include <linux/smp.h>
- #include <linux/atomic.h>
-+#include <asm/processor.h>
- #include <asm/smp.h>
- #include <asm/bl_bit.h>
  
-diff --git a/arch/sh/kernel/setup.c b/arch/sh/kernel/setup.c
-index af977ec..cf7c0f7 100644
---- a/arch/sh/kernel/setup.c
-+++ b/arch/sh/kernel/setup.c
-@@ -43,6 +43,7 @@
- #include <asm/smp.h>
- #include <asm/mmu_context.h>
- #include <asm/mmzone.h>
-+#include <asm/processor.h>
- #include <asm/sparsemem.h>
- #include <asm/platform_early.h>
+ #include <asm/cpu.h>
+@@ -24,17 +18,6 @@ extern void check_bugs64_early(void);
+ extern void check_bugs32(void);
+ extern void check_bugs64(void);
  
-@@ -354,3 +355,57 @@ int test_mode_pin(int pin)
+-static inline void __init check_bugs(void)
+-{
+-	unsigned int cpu = smp_processor_id();
+-
+-	cpu_data[cpu].udelay_val = loops_per_jiffy;
+-	check_bugs32();
+-
+-	if (IS_ENABLED(CONFIG_CPU_R4X00_BUGS64))
+-		check_bugs64();
+-}
+-
+ static inline int r4k_daddiu_bug(void)
  {
- 	return sh_mv.mv_mode_pins() & pin;
+ 	if (!IS_ENABLED(CONFIG_CPU_R4X00_BUGS64))
+diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+index febdc55..07a1518 100644
+--- a/arch/mips/kernel/setup.c
++++ b/arch/mips/kernel/setup.c
+@@ -11,6 +11,8 @@
+  * Copyright (C) 2000, 2001, 2002, 2007	 Maciej W. Rozycki
+  */
+ #include <linux/init.h>
++#include <linux/cpu.h>
++#include <linux/delay.h>
+ #include <linux/ioport.h>
+ #include <linux/export.h>
+ #include <linux/screen_info.h>
+@@ -840,3 +842,14 @@ static int __init setnocoherentio(char *str)
  }
+ early_param("nocoherentio", setnocoherentio);
+ #endif
 +
 +void __init arch_cpu_finalize_init(void)
 +{
-+	char *p = &init_utsname()->machine[2]; /* "sh" */
++	unsigned int cpu = smp_processor_id();
 +
-+	select_idle_routine();
++	cpu_data[cpu].udelay_val = loops_per_jiffy;
++	check_bugs32();
 +
-+	current_cpu_data.loops_per_jiffy = loops_per_jiffy;
-+
-+	switch (current_cpu_data.family) {
-+	case CPU_FAMILY_SH2:
-+		*p++ = '2';
-+		break;
-+	case CPU_FAMILY_SH2A:
-+		*p++ = '2';
-+		*p++ = 'a';
-+		break;
-+	case CPU_FAMILY_SH3:
-+		*p++ = '3';
-+		break;
-+	case CPU_FAMILY_SH4:
-+		*p++ = '4';
-+		break;
-+	case CPU_FAMILY_SH4A:
-+		*p++ = '4';
-+		*p++ = 'a';
-+		break;
-+	case CPU_FAMILY_SH4AL_DSP:
-+		*p++ = '4';
-+		*p++ = 'a';
-+		*p++ = 'l';
-+		*p++ = '-';
-+		*p++ = 'd';
-+		*p++ = 's';
-+		*p++ = 'p';
-+		break;
-+	case CPU_FAMILY_UNKNOWN:
-+		/*
-+		 * Specifically use CPU_FAMILY_UNKNOWN rather than
-+		 * default:, so we're able to have the compiler whine
-+		 * about unhandled enumerations.
-+		 */
-+		break;
-+	}
-+
-+	pr_info("CPU: %s\n", get_cpu_subtype(&current_cpu_data));
-+
-+#ifndef __LITTLE_ENDIAN__
-+	/* 'eb' means 'Endian Big' */
-+	*p++ = 'e';
-+	*p++ = 'b';
-+#endif
-+	*p = '\0';
++	if (IS_ENABLED(CONFIG_CPU_R4X00_BUGS64))
++		check_bugs64();
 +}
