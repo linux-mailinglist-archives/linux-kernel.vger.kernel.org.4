@@ -2,93 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E2D8732C5D
+	by mail.lfdr.de (Postfix) with ESMTP id E9C53732C5E
 	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232796AbjFPJnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 05:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55262 "EHLO
+        id S240382AbjFPJnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 05:43:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233027AbjFPJmt (ORCPT
+        with ESMTP id S1343992AbjFPJnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 05:42:49 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E145535AC
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 02:42:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=FjlqcYJGIQpM+LDDKrAWJRVmI0gvOSH4UoJ30kFsvvI=; b=mnf1nibw5F7DTpBYYfvqspdlcD
-        NoZMDOIPaLNMMHFkLEzZ+tpa0f5JAkYX82AK5asqjHiIP6dZtg/A6GsR1A7Lo4wyRY610vZc+pJAu
-        dy/V1eonVbW+gXlc7edYRkquqkHh7uDC3gCtKDyMzlSlRVfHOfqz+7tKAynjTz5YCm28BWJu87jVy
-        tYbPA6/8paqciv9rVL25frQv7/vN8Q70uPbJoTaQY9mlzJmgZHH1YvPRzBlzEmc8V5g/Ge00KaMK3
-        zD+H3sDMw5c5/sazkQliFhvMJ6GC8qFLNQtMH6T5lWvQr7vlN1eVTn0n+LDmOWcJZ/M2kesMH4Kyj
-        ZGcSmX3g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qA5y2-00CsUh-0z;
-        Fri, 16 Jun 2023 09:42:06 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Fri, 16 Jun 2023 05:43:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5694B35A6
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 02:42:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 97714300188;
-        Fri, 16 Jun 2023 11:42:05 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 700C126A3BE87; Fri, 16 Jun 2023 11:42:05 +0200 (CEST)
-Date:   Fri, 16 Jun 2023 11:42:05 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Zhang, Rui" <rui.zhang@intel.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Tang, Feng" <feng.tang@intel.com>,
-        "Chen, Tim C" <tim.c.chen@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>
-Subject: Re: [Patch v2 2/2] x86/tsc: use logical_packages as a better
- estimation of socket numbers
-Message-ID: <20230616094205.GC4253@hirez.programming.kicks-ass.net>
-References: <20230613052523.1106821-1-feng.tang@intel.com>
- <20230613052523.1106821-2-feng.tang@intel.com>
- <20230615092021.GE1683497@hirez.programming.kicks-ass.net>
- <d97fe59e47de77a36746107e4070e44ed46bf4d1.camel@intel.com>
- <20230616080231.GZ4253@hirez.programming.kicks-ass.net>
- <20230616081025.GM38236@hirez.programming.kicks-ass.net>
- <d100b30d381b9d28b6fceab5e9c5042c3ca79ba8.camel@intel.com>
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E31F0622FD
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 09:42:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB1C2C433C8;
+        Fri, 16 Jun 2023 09:42:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686908549;
+        bh=rxl9WNpdQaFx+v8wGSg69Z2lyVAacmS4JhNCAHoWDOI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MwGM7LIaRDDDbxKY1qYW2lCDKF4L1WpD6d0WtyNrgRgFqJlTYCdNi/w9Hspnjw3bs
+         pRRbYvUpnqMJai/bJv4VuGlvMIkwffLYcqbD75pBd3WCRqNv1Yn4aI58vFfllbrWw6
+         +YD2ZAfjfmoDKTMbDjllzN9ET2PN+V1rzG30SDUY=
+Date:   Fri, 16 Jun 2023 11:42:26 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Wang Ming <machel@vivo.com>
+Cc:     linyunsheng@huawei.com, opensource.kernel@vivo.com,
+        Sunil Goutham <sgoutham@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] drivers:net:ethernet:Add missing fwnode_handle_put()
+Message-ID: <2023061616-wincing-unhealthy-86e5@gregkh>
+References: <20230616092820.1756-1-machel@vivo.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <d100b30d381b9d28b6fceab5e9c5042c3ca79ba8.camel@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230616092820.1756-1-machel@vivo.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 09:19:18AM +0000, Zhang, Rui wrote:
+On Fri, Jun 16, 2023 at 05:27:39PM +0800, Wang Ming wrote:
+> ________________________________
+> 本邮件及其附件内容可能含有机密和/或隐私信息，仅供指定个人或机构使用。若您非发件人指定收件人或其代理人，请勿使用、传播、复制或存储此邮件之任何内容或其附件。如您误收本邮件，请即以回复或电话方式通知发件人，并将原始邮件、附件及其所有复本删除。谢谢。
+> The contents of this message and any attachments may contain confidential and/or privileged information and are intended exclusively for the addressee(s). If you are not the intended recipient of this message or their agent, please note that any use, dissemination, copying, or storage of this message or its attachments is not allowed. If you receive this message in error, please notify the sender by reply the message or phone and delete this message, any attachments and any copies immediately.
+> Thank you
 
-> According to the MADT, there are indeed 40 valid CPUs. And then 80 CPUs
-> with 
-> 
-> APIC ID		: FF
-> enabled		: 0
-> Online capable	: 0
-> 
-> a dumb question, why are these CPUs added into the possible_mask?
-> I can dig into this later but I just don't have a quick answer at the
-> moment.
-
-I really don't know.. I've not gotten around to reading that part of the
-x86 code yet.
-
-
+Now deleted.
