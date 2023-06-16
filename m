@@ -2,139 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0890732B16
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 367E4732B17
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 11:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240654AbjFPJIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 05:08:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58086 "EHLO
+        id S1343902AbjFPJIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 05:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243492AbjFPJIR (ORCPT
+        with ESMTP id S234125AbjFPJIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 05:08:17 -0400
-Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938BF3AB5;
-        Fri, 16 Jun 2023 02:06:37 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        Fri, 16 Jun 2023 05:08:20 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF213C00
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 02:06:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=b++CNjLUS/0LmSGyySsEgsZjcL5GFL38dvM7EjtSaH8=; b=TyRg4k2e6fMBdxJlIHyY3BTOGa
+        AzkKNS0nYz9pQZWeb/gHB8sPvTOtIESjefkQ8uSUDvq0koEwjSVSVTh4WBMn68SoQxDAppq2S3IQN
+        PRwOsGnIAfXM1M66uW7vHWUD5dXofHGTVkgkq0n/5/m1qbSIEANB0o0KYHITxKDyyLm0j7RIUQRb/
+        noCqF0Ttz+GLEU5xrtv+8u1bbkNmjeXrzE+M8Kdzf6i5Hc/u0uPlXEVIbrVVbm4/AhDV4IgRMf8au
+        gIbA9yf0L65CHbWncKMfkl+B1lO/nZ0kaYtjnWJPF61tUC3yr7AKVEA1nCxtksegkX31U8aDbW2En
+        CH8iHcZQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qA5Pi-008nV4-42; Fri, 16 Jun 2023 09:06:38 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
-        by bmailout1.hostsharing.net (Postfix) with ESMTPS id 9252030004531;
-        Fri, 16 Jun 2023 11:06:35 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 8535B11DB42; Fri, 16 Jun 2023 11:06:35 +0200 (CEST)
-Date:   Fri, 16 Jun 2023 11:06:35 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Subject: Re: [PATCH v1] PCI: pciehp: Make sure DPC trigger status is reset in
- PDC handler
-Message-ID: <20230616090635.GA17565@wunner.de>
-References: <20230615062559.1268404-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20230615183550.GA9773@wunner.de>
- <713d71dc-c4a5-cd7b-2deb-343c244dd14d@linux.intel.com>
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BBE913002F0;
+        Fri, 16 Jun 2023 11:06:37 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 7C5E5245F1E45; Fri, 16 Jun 2023 11:06:37 +0200 (CEST)
+Date:   Fri, 16 Jun 2023 11:06:37 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
+        Reiji Watanabe <reijiw@google.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH] perf/core: Drop __weak attribute from
+ arch_perf_update_userpage() prototype
+Message-ID: <20230616090637.GB4253@hirez.programming.kicks-ass.net>
+References: <20230603082519.1088285-1-maz@kernel.org>
+ <ZIcarHx0qbfC2iyy@FVFF77S0Q05N>
+ <20230612145423.GC83892@hirez.programming.kicks-ass.net>
+ <86r0qgbu4j.wl-maz@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <713d71dc-c4a5-cd7b-2deb-343c244dd14d@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <86r0qgbu4j.wl-maz@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[cc += Smita]
-
-On Thu, Jun 15, 2023 at 04:03:54PM -0700, Sathyanarayanan Kuppuswamy wrote:
-> On 6/15/23 11:35 AM, Lukas Wunner wrote:
-> > On Wed, Jun 14, 2023 at 11:25:59PM -0700, Kuppuswamy Sathyanarayanan wrote:
-> > > During the EDR-based DPC recovery process, for devices with persistent
-> > > issues, the firmware may choose not to handle the DPC error and leave
-> > > the port in DPC triggered state. In such scenarios, if the user
-> > > replaces the faulty device with a new one, the OS is expected to clear
-> > > the DPC trigger status in the hotplug error handler to enable the new
-> > > device enumeration.
-[...]
+On Mon, Jun 12, 2023 at 04:03:24PM +0100, Marc Zyngier wrote:
+> On Mon, 12 Jun 2023 15:54:23 +0100,
+> Peter Zijlstra <peterz@infradead.org> wrote:
 > > 
-> > pciehp_unconfigure_device() seems like a more appropriate place to me.
+> > On Mon, Jun 12, 2023 at 02:16:28PM +0100, Mark Rutland wrote:
+> > > On Sat, Jun 03, 2023 at 09:25:19AM +0100, Marc Zyngier wrote:
+> > > > Reiji reports that the arm64 implementation of arch_perf_update_userpage()
+> > > > is now ignored and replaced by the dummy stub in core code.
+> > > > This seems to happen since the PMUv3 driver was moved to driver/perf.
+> > > 
+> > > I guess we should have a Cc stable then?
+> > > 
+> > > The below implies this has always been on dodgy ground, and so it's probably
+> > > inaccurate to give this a Fixes tag pointing to the move.
+> > > 
+> > > > As it turns out, dropping the __weak attribute from the *prototype*
+> > > > of the function solves the problem. You're right, this doesn't seem
+> > > > to make much sense. And yet... It appears that both symbols get
+> > > > flagged as weak, and that the first one to appear in the link order
+> > > > wins:
+> > > > 
+> > > > $ nm drivers/perf/arm_pmuv3.o|grep arch_perf_update_userpage
+> > > > 0000000000001db0 W arch_perf_update_userpage
+> > > 
+> > > Ah, so having it on th *declaration* will apply to any *definition*. :/
 > > 
-> 
-> I initially thought to add it there. Spec also recommends clearing it
-> when removing the device. But I wasn't sure if pciehp_unconfigure_device()
-> would be called only during device removal.
-
-It is.
-
-
-> > > More details about this issue can be found in PCIe
-> > > firmware specification, r3.3, sec titled "DPC Event Handling"
-> > > Implementation note.
+> > Yikes..
 > > 
-> > That Implementation Note contains a lot of text and a fairly complex
-> > flow chart. If you could point to specific paragraphs or numbers in
-> > the Implementation Note that would make life easier for a reviewer
-> > to make the connection between your code and the spec.
+> > > That suggests this is a bad pattern generally, and we should probably remove
+> > > the other __weak instances in headers. Lukcily it seems there aren't that many:
+> > > 
+> > > [mark@lakrids:~/src/linux]% git grep __weak -- **/*.h | wc -l
+> > > 50
+> > > 
+> > > IMO we'd should aim to remove __weak entirely; it causes a number of weird
+> > > things like this and it'd be much easier to manage with a small amount of
+> > > ifdeffery.
+> > > 
+> > > Peter, thoughts?
+> > 
+> > Not a fan of __weak myself, after having had to deal with how the
+> > compilers actually make it work.
+> > 
+> > Where do I queue this? perf/urgent?
 > 
-> It is the text at the end of the flowchart. Copied it here for reference.
-> 
-> For devices with persistent errors, a port may be kept in the DPC triggered
-> state (disabled) to keep those devices from continuing to generate errors.
-> For hot-plug slots, the errant device may be removed and replaced with a new
-> device.
-> If the DPC trigger state is not cleared, then the port above the newly
-> inserted device will still be disabled and will be non-operational.
-> Therefore, operating systems may need to modify their hot-plug interrupt
-> handling code to clear DPC Trigger Status when a device is removed so that
-> a subsequent insertion will succeed.
+> That'd be my preference, as arm64 is currently a bit broken and I'd
+> like 6.4 to be functional.
 
-Please add that excerpt to the commit message.
-
-
-> > This may run concurrently to dpc_reset_link(), so I'd expect that
-> > you need some kind of serialization.  What happens if pciehp clears
-> > trigger status behind the DPC driver's back while it is handling an
-> > error?
-> 
-> Currently, we only call pci_dpc_reset_trigger() in PDC interrupt handler.
-> 
-> Do you think there would be a race between error handler and PDC handler?
-
-Yes I think so.
-
-We need to differentiate between two cases:
-
-(1) DPC handled by firmware, hotplug handled by OS:
-
-    In this case clearing DPC trigger status from pciehp device removal
-    code path seems reasonable.  But it must be constrained to
-    !host_bridge->native_dpc.
-
-(2) DPC handled by OS:
-
-    In this case clearing DPC trigger status from pciehp could race with
-    the dpc interrupt handler so must not be done.  Instead, I recommend
-    clearing trigger status from the dpc interrupt handler.  You should
-    see a Surprise Down error handled by the dpc interrupt handler.
-    Make sure DPC trigger status is *always* cleared in that case.
-    
-    Note that Smita Koralahalli is currently working on something similar:
-    
-    https://lore.kernel.org/linux-pci/20230418210526.36514-2-Smita.KoralahalliChannabasappa@amd.com/
-
-    (@Smita sorry for the delay, I'll get to your patches ASAP.)
-
-I recommend splitting the two cases above into two commits, one for
-firmware-handled DPC and one for OS-native DPC.  IIUC, you only need
-the former to address Dell's finding.
-
-Thanks,
-
-Lukas
+Can I get a Fixes tag?
