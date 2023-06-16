@@ -2,109 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47489732491
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 03:17:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF7673249C
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 03:20:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232021AbjFPBRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 21:17:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52114 "EHLO
+        id S233210AbjFPBUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 21:20:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjFPBRs (ORCPT
+        with ESMTP id S232642AbjFPBT6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 21:17:48 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC55296E;
-        Thu, 15 Jun 2023 18:17:46 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-bc572dbef27so115289276.3;
-        Thu, 15 Jun 2023 18:17:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686878266; x=1689470266;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sdIy7jSOg3ethacnumUBPvWejcfHFalmOPOBjrVdXdQ=;
-        b=kBwZ05CBDLxjIrRYgqoIXWfL0UbeC7kwpuV8BFsmp7kcBqCA0tx46AUIxk1A1QXlxK
-         v02tcUfSLHzLv1pDLIomzv0KtAgca/cFvTGHytvEVkHAlX5h8D9kbhkO8ktRdEQuPVjq
-         HfwEsdIU1AMz8lBLQwJKJLZVQ7VVeU2vVP/JTo1zbOMJ4UpPjtvGOPvC2sQ9q/A2FnYh
-         d4EmhgZm6b2UY0D4v13UO7jvdE0eoTE24czmWVmEpQzwNeT+o5qkuj7gpVrDXHR6T+ON
-         nZ8plfxOibOeu0G5v972jINKgtMzd78Cs0rbUg1Zx4UdBl5hYMzcCxGK9fceUCktqfXb
-         RZbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686878266; x=1689470266;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sdIy7jSOg3ethacnumUBPvWejcfHFalmOPOBjrVdXdQ=;
-        b=YKYzr4iX71FmcNze5gUbTmp4abTQuYluVudHzNH4owPcq/r0rMJao+rnUd6p9qgmLG
-         PQ+bGAqE+4aP2/9bOKbRsSe41CkCds8k5539N1GuvgCTgScxLqK6z0XBLUP+ZTC+6ORM
-         Y8KcZeMsQpS8YRnaYTbaTBZcrYURRHgXTkSN+KfTEyRNCZHNofh9hP/ueM/9gGeD36wp
-         F1xGANCXkzBbv6SVx59KDLCkeuPVhGf2Ib0lXAXroJvShzX9pZvmfZZ9iG7OSvJPh24n
-         C3ZONDyw44yThNPwuuf6EEh9yExJbyUalmbUgvEQhKwPzrjpFyzFJ/5BxLAI0xLmC+kq
-         pPIw==
-X-Gm-Message-State: AC+VfDwsSvyTcAeU7z2MpkqpEdd2r5MBExLbyGy3lITV+spo1n4DaTlu
-        5F0FzdVVoX/qlOQcA2y/15gZvz1uJiwGuPxTQ5k=
-X-Google-Smtp-Source: ACHHUZ5zSagMGyLza7Ji3+DO98qUCN5SyhfjlFbIS+MtpIjO9clCFc2uavdDu2fbokkcRYSOfIXXfN1/J2N/r2sEw14=
-X-Received: by 2002:a25:dd8:0:b0:bab:e88b:1dac with SMTP id
- 207-20020a250dd8000000b00babe88b1dacmr207511ybn.46.1686878265936; Thu, 15 Jun
- 2023 18:17:45 -0700 (PDT)
+        Thu, 15 Jun 2023 21:19:58 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 220682959;
+        Thu, 15 Jun 2023 18:19:56 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8AxEem7uItkrccFAA--.10325S3;
+        Fri, 16 Jun 2023 09:19:55 +0800 (CST)
+Received: from [10.130.0.149] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx+OS6uItkdrMcAA--.15819S3;
+        Fri, 16 Jun 2023 09:19:54 +0800 (CST)
+Subject: Re: [PATCH] csky: uprobes: Restore thread.trap_no
+To:     Oleg Nesterov <oleg@redhat.com>
+References: <20230424152815.GA32615@redhat.com>
+ <93544487-4015-f89f-44cd-754670c354e5@loongson.cn>
+ <20230615165636.GA3886@redhat.com>
+Cc:     guoren@kernel.org, linux-csky@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
+        srikar@linux.vnet.ibm.com
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <0e3c5e6a-084c-d417-4582-651eeca8ed32@loongson.cn>
+Date:   Fri, 16 Jun 2023 09:19:54 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-References: <PAXP190MB1631B7C90A99FCEBB1594AAE8B4DA@PAXP190MB1631.EURP190.PROD.OUTLOOK.COM>
-In-Reply-To: <PAXP190MB1631B7C90A99FCEBB1594AAE8B4DA@PAXP190MB1631.EURP190.PROD.OUTLOOK.COM>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Fri, 16 Jun 2023 03:17:35 +0200
-Message-ID: <CANiq72kf=VktsDS6ctLxVt70EGtkSwfx+Z2=qNMdyQf81pQ3dA@mail.gmail.com>
-Subject: Re: [PATCH] lib/Kconfig.debug: fix grammar in RUST_BUILD_ASSERT_ALLOW
-To:     timo.gr@hotmail.de
-Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230615165636.GA3886@redhat.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8Bx+OS6uItkdrMcAA--.15819S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
+        BjDU0xBIdaVrnRJUUUBab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
+        xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
+        j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxV
+        AFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
+        wI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv
+        67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
+        AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCF54CYxVAaw2AFwI0_Jrv_JF1l4I8I3I0E4IkC
+        6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j1WlkUUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 5, 2023 at 6:12=E2=80=AFPM <timo.gr@hotmail.de> wrote:
+
+
+On 06/16/2023 12:56 AM, Oleg Nesterov wrote:
+> Hi Tiezhu,
 >
-> From: Timgrau <timo.gr@hotmail.de>
+> I think you should ask arch/csky maintainers ;)
+
+Yes, thank you, sorry to trouble you.
+
 >
-> Just a grammar fix in lib/Kconfig.debug, under the config option RUST_BUI=
-LD_ASSERT_ALLOW.
->
-> Signed-off-by: Timgrau <timo.gr@hotmail.de>
-> Suggested-by: Miguel Ojeda <ojeda@kernel.org>
-> Link: https://github.com/Rust-for-Linux/linux/issues/1006#issue-169631840=
-6
-> Closes: https://github.com/Rust-for-Linux/linux/issues/1006#issue-1696318=
-406
+> On 06/15, Tiezhu Yang wrote:
+>>
+>> ping, what is the status of this patch which has been received Acked-by:
+>>
+>> https://lore.kernel.org/linux-csky/1682213987-3708-1-git-send-email-yangtiezhu@loongson.cn/
 
-Thanks for the patch!
+Maybe Guo Ren (the maintainer of C-SKY ARCHITECTURE) could
+take a look at it, thank you.
 
-A few notes:
+Thanks,
+Tiezhu
 
-  - From a quick look, I think "Timgrau" is not a known identity to
-the kernel, right? (e.g. I couldn't find any other commit on that
-name). Assuming I am not mistaken, could you please instead your real
-name?
-
-  - When I wrote the report, I wrongly suggested `Suggested-by` +
-`Link` because I didn't consider this a "bug". But you are probably
-right that should be considered a fix anyway, so instead we should use
-`Reported-by` and `Closes`. So could you please remove the `Link` and
-change the `Suggested` to `Reported`?
-
-  - Also, since this is now a fix, could you please also add the `Fixes:` t=
-ag?
-
-  - For the `Closes`, you can remove the URL fragment part, i.e.
-`#issue-1696318406`, since it is anyway the first comment.
-
-If you could change those bits and send a v2, that would be great. Thanks!
-
-Cheers,
-Miguel
