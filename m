@@ -2,236 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8AB733B68
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 23:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1507733B64
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 23:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345658AbjFPVLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 17:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38926 "EHLO
+        id S1345452AbjFPVLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 17:11:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345662AbjFPVLd (ORCPT
+        with ESMTP id S1345430AbjFPVLX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 17:11:33 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613943AB0;
-        Fri, 16 Jun 2023 14:11:28 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35GKVGih017805;
-        Fri, 16 Jun 2023 21:11:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=WybqwD3LdE6iohZiEMzeb39BK8oODrswWPFn4HPsnFY=;
- b=d4WZwsPYDyRd3JXZevf2NyoqwJHjtxh4B6b7eA+Wh3qr3OATlphhtqlHSWCTrK7ql4fk
- WAtPO1YWTUBK3qBLHOEMOXjamQr4K1lBcOcEifB32PteEj0z0kydyyY/RawMueLnFp+P
- g5z277DmhnVDtAxc0eFkEtmg2ynxmvlYjrg1fuk7IjbQdQSYvO+FniNvoyvUTlN4uYGF
- f+2eMEFaJ0QzR+8uRsXR+w76CC+IrUTVJuYwqZ1JSQWyLWTVuYx0j5qblG2dU71D9A/m
- 4UBX51JtnkCa7rfRmmoNQXBFeF7qR4b/THWq4Iesl9zKvqI5FvuRMC8IhG6aapBePjwR AA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r83p9bj33-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Jun 2023 21:11:21 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35GLBKOI000810
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Jun 2023 21:11:20 GMT
-Received: from [10.110.47.14] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 16 Jun
- 2023 14:10:46 -0700
-Message-ID: <827875ad-a446-10e7-6608-f9b0fa830a00@quicinc.com>
-Date:   Fri, 16 Jun 2023 14:10:45 -0700
+        Fri, 16 Jun 2023 17:11:23 -0400
+Received: from sonic301-22.consmr.mail.ir2.yahoo.com (sonic301-22.consmr.mail.ir2.yahoo.com [77.238.176.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCB3359D
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 14:11:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1686949880; bh=GNws8JqhI1syhONxm9VFF5xmbPy95z3gs9cgYJvfAXw=; h=From:To:Cc:Subject:Date:References:From:Subject:Reply-To; b=lRPkFImCcmJBL/XyEaTF1icEXm5P/I+XcuVf6vS6cPQfgt3qqtFGgJaBFBZRT6u8RCmgxOHknDl+V33ncl3BwJtBDbMPNzybApwtJzsF4mRCxfj9jCDP6MBznW4Ll0bs0VnC2fi3ff43vxdbXi5iwisZTbzTJJEj4dmtUo+Gxox05/PSuEteVahahz6zucrsvFoM2BtUmhmNhRL2kxBuDv+KAILstxVmrPU2gE5LZx7skka52RAfM9esyyoFIe/Cc2gQYu6b01QNVLlKH+z/2qV2hANRWjqJp0x3cS352pKSEpY4AHmjvg3c/WFBAI64BuT6u5oGO4HiHdqGERDBzA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1686949880; bh=INBTJ5UOPVoKkiBDPrIgd04zR/zK15ksy6pKMr72xsh=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=DZYSmZkRrpK4h7Px24yBydwLIbwTTj8bHMuOpV74ERcxv/pDbFp91K/LCH6Mggr7+DQYjj+b76Ap90NLEZw0WEtz3+V2QeftWMPNK0926L/vHMNzb2Icv0JKZMmXAy94E06EyDJXe3Egkays+p362+NMm+4bA8OGV7a4Ql8btqqA2Yke67hAGHByKbvzxZmEPIagU6JJOuLw5NQK8wQbxB8D6ax12nvM4azt7Sl4gyoVQ01UfTbc7iSgED8Gnh1Uot7OktxRsAspQzavxnWcH06ZEPEEOwH2/a8XHZlUOgrtDawBXFiJkVr3x9spML1s1QnTVbDYuDYletR1m6gdYw==
+X-YMail-OSG: TU3BL_4VM1ndNiGo.VTvovAWBLDENUB4DeHYOGNbYrbj0TjThkxZYXBqfhKKTVx
+ pAADlkVsF08mKQkkQ2a1oLm_VGlY7gFjki_QUDL4dHdTa8GvF7pyVcNi42u9e5fXMoM6yilyiYag
+ lod8V.V.xaLdy6tMJ8FmRvl0LI0T_u8SkE0BS8XUhNrw0BevDtuuwmITD7E00gM1Hr7JiJ56hZmf
+ s2XAB_0R57eckv5HcdPk.cNh6mBiVBy2_irBOd6dGnfPxrkuolPo4EpExni7gIOtsxnDygdM8RnE
+ kpd3Cgj74i9P4IDqhkj2kkZgWxPgTQ7s9f0Ym7bGAkZTU5Ym8wrq4bq8D45I9OTlTTp6ZuXAyCl5
+ UFNJ33VSZ39pwy9MilXHGIe.vLxiyUPRmiR9VxwvaA2wX1FS3as7Q761i7YIkZpH4c8VtnXHC618
+ Rsu3Z87ANu8ClY3rqsn95.HkIByM.btxrPyhKETljrfLoHSONRbuYi5cGGkJpRMXf2gJiKSlRBtu
+ MFRRJgTFyW1Rot5Kz1mXHOTB9MBw3UrpIwMVVgJLsD_doB9uZXFWINn4MHEnR_bPnGcMkeqStQCs
+ 3meOFjNiKzRTvjapjFEGzLc026KOWbbw.4BDi2qeXdsxSGrGzMXyuN4Ny_lZF991LafHPch_got0
+ wQ1ee2kfmKKXLojjQ7T_YH4Fl4mzeCnmIKpx7wiSy6xe8X565F65ETbd_8kr5jz9Eo8Pl4hZ4mpX
+ P9Zqx.aRKpPOy6M_o_RSFWFRDj8TlgHa7boaNeFietMBGzToGUZje.Xzv09P4XpeBmbcEC0Z1OF0
+ rxXQNd2AFjyASkny5sZ9OKn9jj1_EgIsl.uCh0dhPrm3FcUt2WhVMJkfgXc1dxYbNZ3IiigUrhs.
+ WYbT.8sO53evYGSJTQTOno1eRgrLbizKvvoSkjYkMCQPYqZu3rBhHzMljre2DuMs.gni3YYXxtam
+ wCpBgPGc.8mmmIZyG9Y04yypIJiMcWCv_v4U3Lg49DJE0Xl5jFPcB1rH5twg_lLw308xFBO6vu_b
+ hpSVVSqVOd62lhYr5lZCVapzQtRzUS5lp0pbY7ruHKe49fjBLiT5pt6zU86_ACsnmNjtqeRZHxYE
+ bmiaaUB5le9OBaXenvit3uMMQD7PCBVVmb9c41_o6stZxzBv2Ek1ZPjEJO17jPzXNe4d2mlIrquw
+ Vp4Dk5LmSiyaSNYt26V7Qdc3WhaZA1NWsCdFIEsk9OXGmoAlZMKDYWgNOUfbmCJ0C0XiyoguqHn7
+ JfDfifJvScH6oOmj1yUE9SfZkWwnRpMMwHeP3xzrKb4AfVeH8c2SjqAg3KsJidZelUm8cT8ddrmm
+ DWnIrvyjTEm2zbo3QJLG7jt3aAgXqWYECuJ8vG3PYFLYOEwpe0Tgb97pqniJCOpWkoOib.D3zlc6
+ 4KlUgJ8cwoW6XAv7YciHv1UBFZQ7ZffmKxATCXS1gENI2vdnrJSqBBeGJdz8NzCgPUp2TR_C_eO8
+ 9Tf0p4TIFyJV05gPMXdn2Bie80nWzKQuBvknkBeAylxlS5_7qK8_UrNYgPNQxDPMLkWbSjwEKMKk
+ KrrjEylbx6ef6QcSRraccVY8m6AyW7YoSIdbtCH7W30UCDM53ofIJitTmk9DzFOrEByJR5GpOi_v
+ wSb7JhPNv3Fc4sYCYCT9tWY3znLxNYhOD9JYMmPtwCT9xVcu5QfbKmbzuJX_tX1t8sDY_BGsGLKN
+ _n61NRKVdKY58HvL8IHzWx9sYxAlZxCZ8cwuasT.XkYFoaVC6V96TsP2M49ejUwiOulfa2DqpocI
+ XI8EBc4pi5v7JZ02Ie_epdb2nwZpZc_n7.LplFTl8M5u5LNUiQkENUrdO9VIyYVE59rNKxmzOL58
+ r6jEQozMKR4IBZst1Oo3WnqP459JCY6K7vgUlq0RxYEb97VjqIVeAyEmrXAAaLRySrazcXUu_8Zf
+ lYs7jMIG.dfcIiyqZptu4LMqzbz2rtPqIAlGRJQ0BjxcB0zb8MZjCWtgzgeFcokiPb3mhfuq3Csm
+ YMgMa9M20n6kGpXVvPwH2a9dMNcJ1CxQQdqbfTVjq_WiZ89CBIJH7U5Ek04MBJ.kpChQdzny9ipQ
+ bq.GcE8xF4DEcy0EUjSobMCzA1ktKlPtas12phv0jWVKfrcSAUrOu64xLfjhdJrxgpE.DTJ9A03D
+ a2qRXYrdACYyly6bbvP6e5qbdgpXZPLcW064_V.h0GiSozwn.9smQIKGH3jvc46tstvzNwdXeNSF
+ JPVWhGcMlh63TbQ2W_ImxfXC.nUNdvRCUj0OY3n6C6zeRfM0qLCjARg28XglAGTKOlMSpsPbG31y
+ kubn7sBg0YxKWZV5gKQp382EOlOWdkSM1
+X-Sonic-MF: <jahau@rocketmail.com>
+X-Sonic-ID: 50239dfa-8d14-4e9b-a02d-f9422d0bfe68
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.ir2.yahoo.com with HTTP; Fri, 16 Jun 2023 21:11:20 +0000
+Received: by hermes--production-ir2-7867f454fc-gg9x8 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID c618d34c94eed5ad1e4505ee686233db;
+          Fri, 16 Jun 2023 21:11:16 +0000 (UTC)
+From:   Jakob Hauser <jahau@rocketmail.com>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Lee Jones <lee@kernel.org>,
+        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        Henrik Grimler <henrik@grimler.se>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Jakob Hauser <jahau@rocketmail.com>
+Subject: [PATCH 0/2] Clean-up RT5033 charger "rt5033_charger_data" and probe "&pdev->dev"
+Date:   Fri, 16 Jun 2023 23:10:46 +0200
+Message-Id: <cover.1686948074.git.jahau@rocketmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [Freedreno] [PATCH 1/3] drm/msm/dpu: Add DPU_INTF_DATABUS_WIDEN
- feature flag for DPU >= 5.0
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-CC:     <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        "Jessica Zhang" <quic_jesszhan@quicinc.com>,
-        Sean Paul <sean@poorly.run>
-References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
- <20230525-add-widebus-support-v1-1-c7069f2efca1@quicinc.com>
- <wpjxrnhbcanbc5iatxnff25yrrdfrtmgb24sgwyo457dz2oyjz@e2docpcb6337>
- <f4fb042c-1458-6077-3c49-8cc02638b27c@linaro.org>
- <ycgei43x4kfmjk7g7gbeglehtiiinfbqmrjbdzcy56frxbtd2z@yk2f5kgrkbrt>
- <e23de804-060d-3278-5045-1ed03f0de80d@quicinc.com>
- <c5cfc132-effb-8269-ac5d-ed8c988d1a16@quicinc.com>
- <08b6aaf4-6edd-4f41-5d98-11ffc27e766e@quicinc.com>
- <6d11e420-1b95-0029-ec7a-17fbc8acb5ca@linaro.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <6d11e420-1b95-0029-ec7a-17fbc8acb5ca@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 8PXDdM262BxBcTLMs8G8Sx8annPxkNM9
-X-Proofpoint-GUID: 8PXDdM262BxBcTLMs8G8Sx8annPxkNM9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-16_14,2023-06-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 phishscore=0 bulkscore=0 mlxlogscore=999 mlxscore=0
- suspectscore=0 adultscore=0 clxscore=1015 spamscore=0 priorityscore=1501
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306160192
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1686948074.git.jahau.ref@rocketmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+During the review of the series "Add RT5033 charger device driver" [1] I
+noticed two things I'd like to clean up. Additionally, in v5 of that series,
+Christophe Jaillet pointed out an unclean error handling of function
+"rt5033_charger_data" [2]. The clean-up solves this as well. As I didn't want
+to disturb the review process of the series in its late phase, I now add these
+clean-ups as a follow-up series.
 
+I was a bit surprised about the patchset "Add RT5033 charger device driver"
+being added via the mfd subsystem. This clean-up series affects the charger
+driver, which is actually part of the power supply subsystem. I'm not
+fully sure what the series should be based on and how it will be applied
+best.
 
-On 6/14/2023 1:43 PM, Dmitry Baryshkov wrote:
-> On 14/06/2023 23:39, Abhinav Kumar wrote:
->>
->>
->> On 6/14/2023 12:54 PM, Abhinav Kumar wrote:
->>>
->>>
->>> On 6/14/2023 12:35 PM, Abhinav Kumar wrote:
->>>>
->>>>
->>>> On 6/14/2023 5:23 AM, Marijn Suijten wrote:
->>>>> On 2023-06-14 15:01:59, Dmitry Baryshkov wrote:
->>>>>> On 14/06/2023 14:42, Marijn Suijten wrote:
->>>>>>> On 2023-06-13 18:57:11, Jessica Zhang wrote:
->>>>>>>> DPU 5.x+ supports a databus widen mode that allows more data to 
->>>>>>>> be sent
->>>>>>>> per pclk. Enable this feature flag on all relevant chipsets.
->>>>>>>>
->>>>>>>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
->>>>>>>> ---
->>>>>>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 3 ++-
->>>>>>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h | 2 ++
->>>>>>>>    2 files changed, 4 insertions(+), 1 deletion(-)
->>>>>>>>
->>>>>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c 
->>>>>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>>>>>> index 36ba3f58dcdf..0be7bf0bfc41 100644
->>>>>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>>>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>>>>>> @@ -103,7 +103,8 @@
->>>>>>>>        (BIT(DPU_INTF_INPUT_CTRL) | \
->>>>>>>>         BIT(DPU_INTF_TE) | \
->>>>>>>>         BIT(DPU_INTF_STATUS_SUPPORTED) | \
->>>>>>>> -     BIT(DPU_DATA_HCTL_EN))
->>>>>>>> +     BIT(DPU_DATA_HCTL_EN) | \
->>>>>>>> +     BIT(DPU_INTF_DATABUS_WIDEN))
->>>>>>>
->>>>>>> This doesn't work.  DPU 5.0.0 is SM8150, which has DSI 6G 2.3.  
->>>>>>> In the
->>>>>>> last patch for DSI you state and enable widebus for DSI 6G 2.5+ 
->>>>>>> only,
->>>>>>> meaning DPU and DSI are now desynced, and the output is completely
->>>>>>> corrupted.
->>>>>
->>
->> I looked at the internal docs and also this change. This change is 
->> incorrect because this will try to enable widebus for DPU >= 5.0 and 
->> DSI  >= 2.5
->>
->> That was not the intended right condition as thats not what the docs say.
->>
->> We should enable for DPU >= 7.0 and DSI >= 2.5
->>
->> Is there any combination where this compatibility is broken? That 
->> would be the strange thing for me ( not DPU 5.0 and DSI 2.5 as that 
->> was incorrect)
->>
->> Part of this confusion is because of catalog macro re-use again.
->>
->> This series is a good candidate and infact I think we should only do 
->> core_revision based check on DPU and DSI to avoid bringing the catalog 
->> mess into this.
-> 
-> I have just a single request here: can we please have the same approach 
-> for both DSI and DP? I don't mind changing DP code if it makes it 
-> better. If you don't have better reasons, I like the idea of DSI/DP 
-> dictating whether wide bus should be used on the particular interface. 
-> It allows us to handle possible errata or corner cases there. Another 
-> option would be to make DPU tell DSI / DP whether the wide bus is 
-> enabled or not, but I'd say, this is slightly worse solution.
-> 
+Additionally I just realized that in the immutable branch "ib-mfd-power-v6.5"
+of kernel/git/lee/mfd.git one patch of the previous series is missing. Because
+of this, I currently can't use linux-next or mfd.git as a base. Instead I based
+this clean-up patchset right on top of the previous patchset. An instance of
+that base can be seen on my GitHub page [3][4].
 
-Today, DP's widebus does not check if DPU supports that or not.
+[1] https://lore.kernel.org/linux-pm/cover.1684182964.git.jahau@rocketmail.com/T/#u
+[2] https://lore.kernel.org/linux-pm/20230514123130.41172-1-jahau@rocketmail.com/T/#mbe33ab528f3d8ae136f01b13f45a9be35c0ad061
+[3] https://github.com/Jakko3/linux/commits/rt5033-charger_v6
+[4] https://github.com/Jakko3/linux/blob/rt5033-charger_v6/drivers/power/supply/rt5033_charger.c
 
-DPU encoder queries the DP whether widebus is available and enables it.
+Jakob Hauser (2):
+  power: supply: rt5033_charger: Simplify initialization of
+    rt5033_charger_data
+  power: supply: rt5033_charger: Replace "&pdev->dev" by "charger->dev"
+    in probe
 
-We can also do the same thing for DSI.
+ drivers/power/supply/rt5033_charger.c | 43 ++++++++++++---------------
+ 1 file changed, 19 insertions(+), 24 deletions(-)
 
-So for intf_type of DSI, DPU encoder will query DSI if it supports widebus.
+-- 
+2.39.2
 
-Then DSI will do its version checks and for DSC it will say yes.
-
-This way, we will never check for the DPU's core revision for DSI and 
-purely rely of DP/DSI's hw revisions.
-
-Thats fine with me because that way we again just rely on the hw 
-revision to enable the feature.
-
-But as a result I am still going to drop this patch which adds widebus 
-to the catalog as a dpu cap which I always wanted to do anyway as we 
-will just rely on the DSI and DP hw revisions.
-
->>
->>>>> Tested this on SM8350 which actually has DSI 2.5, and it is also
->>>>> corrupted with this series so something else on this series might be
->>>>> broken.
->>>>>
->>>
->>> Missed this response. That seems strange.
->>>
->>> This series was tested on SM8350 HDK with a command mode panel.
->>>
->>> We will fix the DPU-DSI handshake and post a v2 but your issue needs 
->>> investigation in parallel.
->>>
->>> So another bug to track that would be great.
->>>
->>>>>>> Is the bound in dsi_host wrong, or do DPU and DSI need to 
->>>>>>> communicate
->>>>>>> when widebus will be enabled, based on DPU && DSI supporting it?
->>>>>>
->>>>>> I'd prefer to follow the second approach, as we did for DP. DPU 
->>>>>> asks the
->>>>>> actual video output driver if widebus is to be enabled.
->>>>>
->>>>
->>>> I was afraid of this. This series was made on an assumption that the 
->>>> DPU version of widebus and DSI version of widebus would be 
->>>> compatible but looks like already SM8150 is an outlier.
->>>>
->>>> Yes, I think we have to go with second approach.
->>>>
->>>> DPU queries DSI if it supports widebus and enables it.
->>>>
->>>> Thanks for your responses. We will post a v2.
->>>>
->>>>> Doesn't it seem very strange that DPU 5.x+ comes with a widebus 
->>>>> feature,
->>>>> but the DSI does not until two revisions later?  Or is this 
->>>>> available on
->>>>> every interface, but only for a different (probably DP) encoder block?
->>>>>
->>>>
->>>> Yes its strange.
->>>>
->>
->> I have clarified this above. Its not strange but appeared strange 
->> because we were checking wrong conditions.
->>
->>
->>>>> - Marijn
-> 
