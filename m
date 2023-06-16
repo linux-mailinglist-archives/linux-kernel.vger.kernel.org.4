@@ -2,82 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31178733569
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 18:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 017C573356F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 18:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjFPQIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 12:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
+        id S244717AbjFPQI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 12:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjFPQIU (ORCPT
+        with ESMTP id S229526AbjFPQIw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 12:08:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970042D6A;
-        Fri, 16 Jun 2023 09:08:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F4D661B65;
-        Fri, 16 Jun 2023 16:08:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 086DBC433C8;
-        Fri, 16 Jun 2023 16:08:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686931698;
-        bh=vVuSAFNQlOZX+Auz50QNpcWFgO5PYw/fJf95j9d31YU=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=RuDwj04ZKml+dl36jOTJShLy5/xBoVEk1rhZiKqWuxCijtWWzyMSVgiIc/RjPZAQp
-         oSBet9sxE/j6zetiANLE0iDfGVtAjBR8DTs+Vtm+qg02EmvQTzykBV1L/zXy9du+Gp
-         MnwrnfH9z5FeM5NYaClb2AuIBGu3LoRho6P0MUW5nmouN4efYH1WzyJe61iof0zHLn
-         KMzXN1WllJ0wf1kaKG6KljOMbzoANYlq4dGcNr10jdblm+is6OlRXrJ4cGUZdYJRH+
-         /oce8xywinTajZ27SGwFlXTtujYpEE9CgPlKchKLRBL73YGQmjmHSTyf9iFNm4PPlw
-         qYEj3DZIj8yBg==
-Content-Type: text/plain; charset="utf-8"
+        Fri, 16 Jun 2023 12:08:52 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 320602132;
+        Fri, 16 Jun 2023 09:08:51 -0700 (PDT)
+Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 6925A20FF4EB;
+        Fri, 16 Jun 2023 09:08:50 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6925A20FF4EB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1686931730;
+        bh=Edk+Pe6dwWUZBN6lSPEQX7bkpxex/hiXHOA1uOpPkwE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=E5LoPW3oKOYnFRFodgCb2JIWTgMcTLH+kzuuAzQFIzAoYif9rLOtJ69ZTYldyOOu2
+         eSIbQFTVEF5xrcRPAqPP2/GT6JBqSv3a+FPtKZOQZlX4PdgzyiYAkyQnCGrfOlRZTA
+         NtAGF2gtuCz/14xwYnf34enPt5hm3fLTvm1t6ms0=
+Date:   Fri, 16 Jun 2023 09:08:45 -0700
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     sunliming <sunliming@kylinos.cn>
+Cc:     mhiramat@kernel.org, rostedt@goodmis.org, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kelulanainsley@gmail.com
+Subject: Re: [PATCH v2 1/3] tracing/user_events: Fix incorrect return value
+ for writing operation when events are disabled
+Message-ID: <20230616160845.GA88@W11-BEAU-MD.localdomain>
+References: <20230609030302.1278716-1-sunliming@kylinos.cn>
+ <20230609030302.1278716-2-sunliming@kylinos.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH 1/3] wifi: ath11k: Add missing ops config for IPQ5018 in
- ath11k_ahb_probe()
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <TYZPR01MB5556D7AA10ABEDDDD2D8F39EC953A@TYZPR01MB5556.apcprd01.prod.exchangelabs.com>
-References: <TYZPR01MB5556D7AA10ABEDDDD2D8F39EC953A@TYZPR01MB5556.apcprd01.prod.exchangelabs.com>
-To:     Ziyang Huang <hzyitc@outlook.com>
-Cc:     quic_srirrama@quicinc.com, quic_kathirve@quicinc.com,
-        ath11k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ziyang Huang <hzyitc@outlook.com>
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <168693169253.12400.8675945776351103304.kvalo@kernel.org>
-Date:   Fri, 16 Jun 2023 16:08:16 +0000 (UTC)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230609030302.1278716-2-sunliming@kylinos.cn>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ziyang Huang <hzyitc@outlook.com> wrote:
-
-> Without this patch, the IPQ5018 WiFi will fail and print the following
-> logs:
+On Fri, Jun 09, 2023 at 11:03:00AM +0800, sunliming wrote:
+> The writing operation return the count of writes whether events are
+> enabled or disabled. This is incorrect when events are disabled. Fix
+> this by just return -ENOENT when events are disabled.
 > 
->         [   11.033179] ath11k c000000.wifi: unsupported device type 7
->         [   11.033223] ath11k: probe of c000000.wifi failed with error -95
+
+When testing this patch locally I found that we would occasionally get
+-ENOENT when events were enabled, but then become disabled, since writes
+do not have any locking around the tracepoint checks for performance
+reasons.
+
+I've asked a few peers of mine their thoughts on this, whether an error
+should result when there are no enabled events. The consensus I've heard
+back is that they would not consider this case an actual error, just as
+writing to /dev/null does not actually return an error.
+
+However, if you feel strongly we need this and have a good use case, it
+seems better to enable this logic behind a flag instead of having it
+default based on my conversations with others.
+
+Thanks,
+-Beau
+
+> Signed-off-by: sunliming <sunliming@kylinos.cn>
+> ---
+>  kernel/trace/trace_events_user.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> Fixes: 25edca7bb18a ("wifi: ath11k: add ipq5018 device support")
-> Signed-off-by: Ziyang Huang <hzyitc@outlook.com>
-> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-
-3 patches applied to ath-next branch of ath.git, thanks.
-
-469ddb20cae6 wifi: ath11k: Add missing ops config for IPQ5018 in ath11k_ahb_probe()
-80c5390e1f5e wifi: ath11k: Restart firmware after cold boot calibration for IPQ5018
-ce282d8de71f wifi: ath11k: Add missing hw_ops->get_ring_selector() for IPQ5018
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/TYZPR01MB5556D7AA10ABEDDDD2D8F39EC953A@TYZPR01MB5556.apcprd01.prod.exchangelabs.com/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-
+> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+> index 1ac5ba5685ed..92204bbe79da 100644
+> --- a/kernel/trace/trace_events_user.c
+> +++ b/kernel/trace/trace_events_user.c
+> @@ -1957,7 +1957,8 @@ static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
+>  
+>  		if (unlikely(faulted))
+>  			return -EFAULT;
+> -	}
+> +	} else
+> +		return -ENOENT;
+>  
+>  	return ret;
+>  }
+> -- 
+> 2.25.1
