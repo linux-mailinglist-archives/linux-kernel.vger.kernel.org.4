@@ -2,130 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD82A733930
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 21:05:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20DBF733932
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 21:05:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbjFPTFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 15:05:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43944 "EHLO
+        id S245369AbjFPTFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 15:05:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345801AbjFPTEy (ORCPT
+        with ESMTP id S245744AbjFPTF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 15:04:54 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA57AC3
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 12:04:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686942293; x=1718478293;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=F1TfEzcUbojNghVVm/GpXjNXv2VKSOR6h4VURdK/67E=;
-  b=NwTJqn9YMzUDEFJSoQQLeF7bwVZpm3LAC5TrXF1EPHNagQnGlOLPsKS2
-   T784IoYFtECBAHFGLjJulqKNbk7hP1qtIfAypLee3FFaX/+BmS1nwrfKk
-   FNnqBNb4PYCC0Nt6KiECFxdINuzqXqdUd+//QuBgeOEhpdUFTOX5m6OTL
-   m+zqEygwGr58hF1OsS+ebGBsbuDRMCsK0aY8GQqZpaUniDhiCqdEQ15Fc
-   LQn5LevguVZfLmh/NUb/t6HrzSUg+4sZbmb2dH4GEO9TsTlUKHIRJkKrD
-   fEpk1B2fCKzbp+M9y/pvdqxFohR75PDV7TeP6lc5iMuRTvhEZKLird7ZK
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="425228759"
-X-IronPort-AV: E=Sophos;i="6.00,248,1681196400"; 
-   d="scan'208";a="425228759"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 12:04:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="825844107"
-X-IronPort-AV: E=Sophos;i="6.00,248,1681196400"; 
-   d="scan'208";a="825844107"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 16 Jun 2023 12:04:51 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qAEkc-0001jI-13;
-        Fri, 16 Jun 2023 19:04:50 +0000
-Date:   Sat, 17 Jun 2023 03:04:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: [tip:x86/boot 13/17] arch/x86/mm/mem_encrypt.c:79:6: warning:
- attribute declaration must precede definition
-Message-ID: <202306170247.eQtCJPE8-lkp@intel.com>
+        Fri, 16 Jun 2023 15:05:27 -0400
+Received: from smtp.smtpout.orange.fr (smtp-27.smtpout.orange.fr [80.12.242.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 760BB2D5F
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 12:05:26 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id AEl3qsN0azGOZAEl3qbxZO; Fri, 16 Jun 2023 21:05:24 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1686942324;
+        bh=/1NDZljZnmXw+wvMypf9in+CWgaJ6Ha7fof+KMEWXkA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=L1UHQQdov53KIZubtn8++RpOhsQ336Ta3YPRBhRuX+L5tPvyLagPQfB5+mOFL66hO
+         ZdKc16v0XbvRm3X8+bPz6G2+CG7tdKOqAmJh2pT9xIRa959Pw4eXeNRGbn3lQ4yjPj
+         dp7ttXFUrwPSQJF08JZflCBCFkXtuUO1Wj01VGMcDfBwI8F5evSGqQDsx490s3tPPx
+         CcWi/aIYBk7nWVuCyg+R1RY3I+/R0XZJ3hQvAZFNpdjJsDFy08URyIiitMJw58wNZD
+         qY6d6yPcosQpXXPf/3sf+1e8wlXlYN0U0Bf55QZAaBuukY4Bt2T3APgG+WFl4IYl9o
+         0jtudusahc8SA==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 16 Jun 2023 21:05:24 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <ae77d0ce-9a54-d779-daa2-c429631c8bb7@wanadoo.fr>
+Date:   Fri, 16 Jun 2023 21:05:17 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 2/3] soc: sifive: Add SiFive private L2 cache PMU driver
+Content-Language: fr
+To:     Eric Lin <eric.lin@sifive.com>, conor@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        palmer@dabbelt.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, maz@kernel.org, chenhuacai@kernel.org,
+        baolu.lu@linux.intel.com, will@kernel.org,
+        kan.liang@linux.intel.com, nnac123@linux.ibm.com,
+        pierre.gondois@arm.com, huangguangbin2@huawei.com, jgross@suse.com,
+        chao.gao@intel.com, maobibo@loongson.cn,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dslin1010@gmail.com
+Cc:     Greentime Hu <greentime.hu@sifive.com>,
+        Zong Li <zong.li@sifive.com>, Nick Hu <nick.hu@sifive.com>
+References: <20230616063210.19063-1-eric.lin@sifive.com>
+ <20230616063210.19063-3-eric.lin@sifive.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20230616063210.19063-3-eric.lin@sifive.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+Le 16/06/2023 à 08:32, Eric Lin a écrit :
+> From: Greentime Hu <greentime.hu@sifive.com>
+> 
+> This adds SiFive private L2 cache PMU driver. User
+> can use perf tool to profile by event name and event id.
+> 
+> Example:
+> $ perf stat -C 0 -e /sifive_pl2_pmu/inner_acquire_block_btot/
+>                  -e /sifive_pl2_pmu/inner_acquire_block_ntob/
+>                  -e /sifive_pl2_pmu/inner_acquire_block_ntot/ ls
+> 
+>   Performance counter stats for 'CPU(s) 0':
+> 
+>                 300      sifive_pl2_pmu/inner_acquire_block_btot/
+>               17801      sifive_pl2_pmu/inner_acquire_block_ntob/
+>                5253      sifive_pl2_pmu/inner_acquire_block_ntot/
+> 
+>         0.088917326 seconds time elapsed
+> 
+> $ perf stat -C 0 -e /sifive_pl2_pmu/event=0x10001/
+>                  -e /sifive_pl2_pmu/event=0x4001/
+>                  -e /sifive_pl2_pmu/event=0x8001/ ls
+> 
+>   Performance counter stats for 'CPU(s) 0':
+> 
+>                 251      sifive_pl2_pmu/event=0x10001/
+>                2620      sifive_pl2_pmu/event=0x4001/
+>                 644      sifive_pl2_pmu/event=0x8001/
+> 
+>         0.092827110 seconds time elapsed
+> 
+> Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
+> Signed-off-by: Eric Lin <eric.lin@sifive.com>
+> Reviewed-by: Zong Li <zong.li@sifive.com>
+> Reviewed-by: Nick Hu <nick.hu@sifive.com>
+> ---
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+[...]
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/boot
-head:   b81fac906a8f9e682e513ddd95697ec7a20878d4
-commit: 439e17576eb47f26b78c5bbc72e344d4206d2327 [13/17] init, x86: Move mem_encrypt_init() into arch_cpu_finalize_init()
-config: x86_64-randconfig-a005-20230616 (https://download.01.org/0day-ci/archive/20230617/202306170247.eQtCJPE8-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230617/202306170247.eQtCJPE8-lkp@intel.com/reproduce)
+> +int sifive_pl2_pmu_probe(struct device_node	*pl2_node,
+> +			 void __iomem *pl2_base, int cpu)
+> +{
+> +	struct sifive_pl2_pmu_event *ptr = per_cpu_ptr(&sifive_pl2_pmu_event, cpu);
+> +	int ret = -EINVAL;
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306170247.eQtCJPE8-lkp@intel.com/
+Nit: no need to init
 
-All warnings (new ones prefixed by >>):
+> +
+> +	/* Get counter numbers. */
+> +	ret = of_property_read_u32(pl2_node, "sifive,perfmon-counters", &ptr->counters);
+> +	if (ret) {
+> +		pr_err("Not found sifive,perfmon-counters property\n");
+> +		goto early_err;
+> +	}
+> +	pr_info("perfmon-counters: %d for CPU %d\n", ptr->counters, cpu);
+> +
+> +	/* Allocate perf_event. */
+> +	ptr->events = kcalloc(ptr->counters, sizeof(struct perf_event), GFP_KERNEL);
+> +	if (!ptr->events)
+> +		return -ENOMEM;
+> +
+> +	ptr->event_select_base = pl2_base + SIFIVE_PL2_SELECT_BASE_OFFSET;
+> +	ptr->event_counter_base = pl2_base + SIFIVE_PL2_COUNTER_BASE_OFFSET;
+> +
+> +	if (!pl2pmu_init_done) {
+> +		ret = perf_pmu_register(sifive_pl2_pmu.pmu, sifive_pl2_pmu.pmu->name, -1);
+> +		if (ret) {
+> +			cpuhp_state_remove_instance(CPUHP_AP_PERF_RISCV_SIFIVE_PL2_PMU_ONLINE,
+> +						    &sifive_pl2_pmu.node);
+> +			pr_err("Failed to register sifive_pl2_pmu.pmu: %d\n", ret);
+> +		}
+> +		sifive_pl2_pmu_pm_init();
+> +		pl2pmu_init_done = true;
+> +	}
+> +
+> +	return 0;
+> +
+> +early_err:
+> +	return ret;
+> +}
+> +
+> +int sifive_pl2_pmu_init(void)
+> +{
+> +	int ret = 0;
 
->> arch/x86/mm/mem_encrypt.c:79:6: warning: attribute declaration must precede definition [-Wignored-attributes]
-   void __init mem_encrypt_init(void)
-        ^
-   include/linux/init.h:52:17: note: expanded from macro '__init'
-   #define __init          __section(".init.text") __cold  __latent_entropy __noinitretpoline
-                           ^
-   include/linux/compiler_attributes.h:303:56: note: expanded from macro '__section'
-   #define __section(section)              __attribute__((__section__(section)))
-                                                          ^
-   arch/x86/include/asm/mem_encrypt.h:88:20: note: previous definition is here
-   static inline void mem_encrypt_init(void) { }
-                      ^
->> arch/x86/mm/mem_encrypt.c:79:6: warning: attribute declaration must precede definition [-Wignored-attributes]
-   void __init mem_encrypt_init(void)
-        ^
-   include/linux/init.h:52:41: note: expanded from macro '__init'
-   #define __init          __section(".init.text") __cold  __latent_entropy __noinitretpoline
-                                                   ^
-   include/linux/compiler_types.h:104:34: note: expanded from macro '__cold'
-   #define __cold                          __attribute__((__cold__))
-                                                          ^
-   arch/x86/include/asm/mem_encrypt.h:88:20: note: previous definition is here
-   static inline void mem_encrypt_init(void) { }
-                      ^
-   arch/x86/mm/mem_encrypt.c:79:13: error: redefinition of 'mem_encrypt_init'
-   void __init mem_encrypt_init(void)
-               ^
-   arch/x86/include/asm/mem_encrypt.h:88:20: note: previous definition is here
-   static inline void mem_encrypt_init(void) { }
-                      ^
-   2 warnings and 1 error generated.
+Nit: no need to init
 
+> +
+> +	ret = cpuhp_setup_state_multi(CPUHP_AP_PERF_RISCV_SIFIVE_PL2_PMU_ONLINE,
+> +				      "perf/sifive/pl2pmu:online",
+> +				      sifive_pl2_pmu_online_cpu,
+> +				      sifive_pl2_pmu_offline_cpu);
+> +	if (ret)
+> +		pr_err("Failed to register CPU hotplug notifier %d\n", ret);
+> +
+> +	ret = cpuhp_state_add_instance(CPUHP_AP_PERF_RISCV_SIFIVE_PL2_PMU_ONLINE,
+> +				       &sifive_pl2_pmu.node);
+> +	if (ret)
+> +		pr_err("Failed to add hotplug instance: %d\n", ret);
+> +
+> +	return ret;
 
-vim +79 arch/x86/mm/mem_encrypt.c
+Nit: return 0;
 
-20f07a044a76ae Kirill A. Shutemov 2021-12-06  77  
-20f07a044a76ae Kirill A. Shutemov 2021-12-06  78  /* Architecture __weak replacement functions */
-20f07a044a76ae Kirill A. Shutemov 2021-12-06 @79  void __init mem_encrypt_init(void)
+> +}
 
-:::::: The code at line 79 was first introduced by commit
-:::::: 20f07a044a76aebaaa0603038857229b5c460d69 x86/sev: Move common memory encryption code to mem_encrypt.c
+[...]
 
-:::::: TO: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-:::::: CC: Borislav Petkov <bp@suse.de>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
