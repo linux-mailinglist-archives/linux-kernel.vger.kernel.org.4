@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E8A273279F
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 08:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C10073279E
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 08:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232659AbjFPGbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 02:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59898 "EHLO
+        id S241935AbjFPGbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 02:31:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245279AbjFPGaM (ORCPT
+        with ESMTP id S1344016AbjFPGbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 02:30:12 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1F3421C;
-        Thu, 15 Jun 2023 23:28:37 -0700 (PDT)
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Qj8HP4czyzqTRC;
-        Fri, 16 Jun 2023 14:23:29 +0800 (CST)
-Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
- (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 16 Jun
- 2023 14:28:29 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <bjorn@kernel.org>, <magnus.karlsson@intel.com>,
-        <maciej.fijalkowski@intel.com>, <jonathan.lemon@gmail.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <hawk@kernel.org>, <john.fastabend@gmail.com>
-CC:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <maxtram95@gmail.com>,
-        <simon.horman@corigine.com>, YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH v2 bpf-next] xsk: Remove unused inline function xsk_buff_discard()
-Date:   Fri, 16 Jun 2023 14:28:00 +0800
-Message-ID: <20230616062800.30780-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        Fri, 16 Jun 2023 02:31:18 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699632D68
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 23:30:49 -0700 (PDT)
+Received: from kwepemm600020.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Qj8L30xhkz18Lbg;
+        Fri, 16 Jun 2023 14:25:47 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.125) by
+ kwepemm600020.china.huawei.com (7.193.23.147) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 16 Jun 2023 14:30:45 +0800
+From:   Peng Zhang <zhangpeng362@huawei.com>
+To:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+CC:     <hannes@cmpxchg.org>, <mhocko@kernel.org>,
+        <roman.gushchin@linux.dev>, <shakeelb@google.com>,
+        <muchun.song@linux.dev>, <akpm@linux-foundation.org>,
+        <wangkefeng.wang@huawei.com>, <sunnanyong@huawei.com>,
+        ZhangPeng <zhangpeng362@huawei.com>
+Subject: [PATCH v2] mm/memcg: remove return value of mem_cgroup_scan_tasks()
+Date:   Fri, 16 Jun 2023 14:30:30 +0800
+Message-ID: <20230616063030.977586-1-zhangpeng362@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.174.179.215]
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
 X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500007.china.huawei.com (7.192.104.62)
+ kwepemm600020.china.huawei.com (7.193.23.147)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -50,32 +49,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit f2f167583601 ("xsk: Remove unused xsk_buff_discard")
-left behind this, remove it.
+From: ZhangPeng <zhangpeng362@huawei.com>
 
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
----
-v2: resend to bpf-next tree
----
- include/net/xdp_sock_drv.h | 4 ----
- 1 file changed, 4 deletions(-)
+No user checks the return value of mem_cgroup_scan_tasks(). Make the
+return value void.
 
-diff --git a/include/net/xdp_sock_drv.h b/include/net/xdp_sock_drv.h
-index 9c0d860609ba..c243f906ebed 100644
---- a/include/net/xdp_sock_drv.h
-+++ b/include/net/xdp_sock_drv.h
-@@ -255,10 +255,6 @@ static inline void xsk_buff_free(struct xdp_buff *xdp)
+Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
+---
+v2:
+- drop redundant return 0 per kernel test robot
+
+ include/linux/memcontrol.h | 7 +++----
+ mm/memcontrol.c            | 9 ++++-----
+ 2 files changed, 7 insertions(+), 9 deletions(-)
+
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index c3d3a0c09315..5818af8eca5a 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -820,8 +820,8 @@ struct mem_cgroup *mem_cgroup_iter(struct mem_cgroup *,
+ 				   struct mem_cgroup *,
+ 				   struct mem_cgroup_reclaim_cookie *);
+ void mem_cgroup_iter_break(struct mem_cgroup *, struct mem_cgroup *);
+-int mem_cgroup_scan_tasks(struct mem_cgroup *,
+-			  int (*)(struct task_struct *, void *), void *);
++void mem_cgroup_scan_tasks(struct mem_cgroup *memcg,
++			   int (*)(struct task_struct *, void *), void *arg);
+ 
+ static inline unsigned short mem_cgroup_id(struct mem_cgroup *memcg)
+ {
+@@ -1364,10 +1364,9 @@ static inline void mem_cgroup_iter_break(struct mem_cgroup *root,
  {
  }
  
--static inline void xsk_buff_discard(struct xdp_buff *xdp)
--{
--}
--
- static inline void xsk_buff_set_size(struct xdp_buff *xdp, u32 size)
+-static inline int mem_cgroup_scan_tasks(struct mem_cgroup *memcg,
++static inline void mem_cgroup_scan_tasks(struct mem_cgroup *memcg,
+ 		int (*fn)(struct task_struct *, void *), void *arg)
  {
+-	return 0;
  }
+ 
+ static inline unsigned short mem_cgroup_id(struct mem_cgroup *memcg)
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index cf06b1c9b3bb..a834b1edcde9 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -1259,13 +1259,13 @@ static void invalidate_reclaim_iterators(struct mem_cgroup *dead_memcg)
+  *
+  * This function iterates over tasks attached to @memcg or to any of its
+  * descendants and calls @fn for each task. If @fn returns a non-zero
+- * value, the function breaks the iteration loop and returns the value.
+- * Otherwise, it will iterate over all tasks and return 0.
++ * value, the function breaks the iteration loop. Otherwise, it will iterate
++ * over all tasks and return 0.
+  *
+  * This function must not be called for the root memory cgroup.
+  */
+-int mem_cgroup_scan_tasks(struct mem_cgroup *memcg,
+-			  int (*fn)(struct task_struct *, void *), void *arg)
++void mem_cgroup_scan_tasks(struct mem_cgroup *memcg,
++			   int (*fn)(struct task_struct *, void *), void *arg)
+ {
+ 	struct mem_cgroup *iter;
+ 	int ret = 0;
+@@ -1285,7 +1285,6 @@ int mem_cgroup_scan_tasks(struct mem_cgroup *memcg,
+ 			break;
+ 		}
+ 	}
+-	return ret;
+ }
+ 
+ #ifdef CONFIG_DEBUG_VM
 -- 
-2.34.1
+2.25.1
 
