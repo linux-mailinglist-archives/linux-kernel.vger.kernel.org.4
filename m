@@ -2,91 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0BCE732D42
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81898732D49
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245580AbjFPKRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 06:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43344 "EHLO
+        id S1343670AbjFPKR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 06:17:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243664AbjFPKRU (ORCPT
+        with ESMTP id S245369AbjFPKRh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 06:17:20 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986B72120;
-        Fri, 16 Jun 2023 03:17:19 -0700 (PDT)
+        Fri, 16 Jun 2023 06:17:37 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAFDB170E
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 03:17:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1686910640; x=1718446640;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=1EF0J3XTU84QK19mrIrzhm1/XzHKeM/G1C/GTKLV/tc=;
-  b=myxlqNmzSTi3FP3Sc4joHpFxR5Ifk22fbKxsTnFL1VPx07CMRqdZbEZE
-   G5Ot0LmE+O9ldwGAxFk5x/5CRjdtH9no4CPAHDpu1WuRWN5kIlnw9Z3jj
-   jKY1992YtBBHxjFjbOn1fBhXIv7uCri4uBFmfzVnSI5WOh2Pm/n/XyXCc
-   RrXCIS6wdZwkdEDf0Gy+rTidXUwPgOrX5wPDsbwoBrBlFhmK9m6uvNcAS
-   buUR+lJwQxK0/sZgdU8zRFIxN/f6EOs5wtdHNYXAJN7MzohJYEQ7UWDRr
-   59UfGgezBKVkyzU5C3JCwr07Mq4fyaDye5zM2a8BvnC+ZVx/yKALr8a8s
-   g==;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686910656; x=1718446656;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=p9l3rC4lvWmIcDE6S4P319s7+1UjqTQtD/uy17dtOa4=;
+  b=JDfCEv9x87ZHFbDf6wLDpEgYDlNqH2qEEqsB+42JnZZCzSmA2NYC/3ml
+   E01yIn3A+o0pqKk6/4J8KqgOvVx0VifuqSEupe1JAoWHLCp3W36YCHxEf
+   rqdmG08CEyj8kwa9IetAoATj3JCdRiH7+Ebh/V4u95goIzoEe3V4dCI96
+   18nx4jv8vFJ1h65HyUZD/ARktzw61WaU/tV6vkgiyAydxTtIEw1q2EB+P
+   BjsrFjNvuxrTV2nDLhuw/bKRyL5GhZjkbSZ+sFi1XQ4rZGwcFjEoZ8XVT
+   xI2+JY0a8P4CpEEbZDXw8bOQVlP7cP0Po8YJmJS4cArr2CX+Xg92r4fIJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="445560375"
 X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
-   d="scan'208";a="218860857"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Jun 2023 03:17:20 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 16 Jun 2023 03:17:18 -0700
-Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Fri, 16 Jun 2023 03:17:14 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <sre@kernel.org>, <conor+dt@kernel.org>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH v3 4/4] MAINTAINERS: add documentation file for Microchip SAMA5D2 shutdown controller
-Date:   Fri, 16 Jun 2023 13:16:46 +0300
-Message-ID: <20230616101646.879480-5-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230616101646.879480-1-claudiu.beznea@microchip.com>
-References: <20230616101646.879480-1-claudiu.beznea@microchip.com>
+   d="scan'208";a="445560375"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 03:16:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="742618866"
+X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
+   d="scan'208";a="742618866"
+Received: from vyashin-mobl1.ger.corp.intel.com (HELO intel.com) ([10.252.36.124])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 03:16:53 -0700
+Date:   Fri, 16 Jun 2023 12:16:49 +0200
+From:   Andi Shyti <andi.shyti@linux.intel.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Imre Deak <imre.deak@intel.com>,
+        Alan Previn <alan.previn.teres.alexis@intel.com>,
+        Anshuman Gupta <anshuman.gupta@intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/i915: make i915_drm_client_fdinfo() reference
+ conditional again
+Message-ID: <ZIw2kdx9+DCmUZUV@ashyti-mobl2.lan>
+References: <20230616093158.3568480-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230616093158.3568480-1-arnd@kernel.org>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add documentation file for SAMA5D2 shutdown controller.
+Hi Arnd,
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+On Fri, Jun 16, 2023 at 11:31:47AM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The function is only defined if CONFIG_PROC_FS is enabled:
+> 
+> ld.lld: error: undefined symbol: i915_drm_client_fdinfo
+> >>> referenced by i915_driver.c
+> >>>               drivers/gpu/drm/i915/i915_driver.o:(i915_drm_driver) in archive vmlinux.a
+> 
+> Use the PTR_IF() helper to make the reference NULL otherwise.
+> 
+> Fixes: e894b724c316d ("drm/i915: Use the fdinfo helper")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/gpu/drm/i915/i915_driver.c     | 2 +-
+>  drivers/gpu/drm/i915/i915_drm_client.h | 2 --
+>  2 files changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/i915_driver.c b/drivers/gpu/drm/i915/i915_driver.c
+> index 75cbc43b326dd..0ad0c5885ec27 100644
+> --- a/drivers/gpu/drm/i915/i915_driver.c
+> +++ b/drivers/gpu/drm/i915/i915_driver.c
+> @@ -1816,7 +1816,7 @@ static const struct drm_driver i915_drm_driver = {
+>  	.open = i915_driver_open,
+>  	.lastclose = i915_driver_lastclose,
+>  	.postclose = i915_driver_postclose,
+> -	.show_fdinfo = i915_drm_client_fdinfo,
+> +	.show_fdinfo = PTR_IF(IS_ENABLED(CONFIG_PROC_FS), i915_drm_client_fdinfo),
+>  
+>  	.prime_handle_to_fd = drm_gem_prime_handle_to_fd,
+>  	.prime_fd_to_handle = drm_gem_prime_fd_to_handle,
+> diff --git a/drivers/gpu/drm/i915/i915_drm_client.h b/drivers/gpu/drm/i915/i915_drm_client.h
+> index 4c18b99e10a4e..67816c912bca1 100644
+> --- a/drivers/gpu/drm/i915/i915_drm_client.h
+> +++ b/drivers/gpu/drm/i915/i915_drm_client.h
+> @@ -47,8 +47,6 @@ static inline void i915_drm_client_put(struct i915_drm_client *client)
+>  
+>  struct i915_drm_client *i915_drm_client_alloc(void);
+>  
+> -#ifdef CONFIG_PROC_FS
+>  void i915_drm_client_fdinfo(struct drm_printer *p, struct drm_file *file);
+> -#endif
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 74a6b6b13d84..cdf4b41cf62b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13811,6 +13811,7 @@ F:	include/dt-bindings/iio/adc/at91-sama5d2_adc.h
- MICROCHIP SAMA5D2-COMPATIBLE SHUTDOWN CONTROLLER
- M:	Claudiu Beznea <claudiu.beznea@microchip.com>
- S:	Supported
-+F:	Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.yaml
- F:	drivers/power/reset/at91-sama5d2_shdwc.c
- 
- MICROCHIP SPI DRIVER
--- 
-2.34.1
+nice! This is becoming the new trend now.
 
+Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com> 
+
+Andi
