@@ -2,144 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6AC732D82
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:25:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34018732E07
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:29:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245458AbjFPKZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 06:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49470 "EHLO
+        id S1344649AbjFPK27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 06:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231782AbjFPKZ1 (ORCPT
+        with ESMTP id S1344398AbjFPK17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 06:25:27 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62FF137;
-        Fri, 16 Jun 2023 03:25:25 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-51a1d539ffaso1278672a12.0;
-        Fri, 16 Jun 2023 03:25:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686911124; x=1689503124;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=A5xA3WpiWD7/SJz12VfIiDnQC9qfWts98XdM2oognM0=;
-        b=GgAJGkNHzUN5nGMb3pM6DX4PWANxQZwcU/HS6COioHphK2zTPH5/1y6x9pFqKfpnA0
-         b0nHbiWbdbZZuN0/OEgwhQ/uN7Y2N5pfk5/9wKnanUKkSEvZ+vX1VB7Z/tqCpo/Aju6z
-         LnbfhSbOFcKAmo/xsnWjVbA/tjTTVH2ISxJGQxjtsm+GUXKNkKFgjwT8OG+Pgf3YgKps
-         6vyQOP/v/PbF9dbrVETq+uqseS4r9Y7WoKy4Us8bmjdAnFYJbQsCR4Qoj94u7VCNndOr
-         T3b6lla8591dp2GOpXjSUOYucBLNpkYDwtrU82H8bKTYSgPxvNhinCr1MwpmL51Ng2xu
-         J1lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686911124; x=1689503124;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A5xA3WpiWD7/SJz12VfIiDnQC9qfWts98XdM2oognM0=;
-        b=ChTczWc2QtVLtzCyb+HVta1WgB0YYz/I+s1rrbUkHBRuAn7/vE2xsGQGJcH3Mn8yE9
-         /cFdU2HHnsDt12je1Wxb/8bzaidOYmeEK//Vrc3+4ULJ3N44CdThbLzQeCh2BekVi7Ik
-         F8zl2nh9DI4/BEs7LoAdth56dg9zPz1VLTWQVvGp3qbuwTfMnN8Av1LhqZyCL7zpcJEf
-         cuHTvTB3ojdfV9bQJbY9roRPcoWMdWz1+cWkwT/bfB4a5UVHIFyMHgO+i/hUVEOAGdJH
-         4J20somiCn8BhyrFWctskMCI9UgTGYq6W3RbmYxrphkDjA26PCd7nntji2vULapvIzbG
-         2SQA==
-X-Gm-Message-State: AC+VfDw8ity0NTSAAbiI4pnQyQERWIQmlZaQ6DscIt1wI7cR4PvY4Pqr
-        lo21zX2GtZrdOZNLYUHIjg4=
-X-Google-Smtp-Source: ACHHUZ4NHpdm+Rw5V7Fqw2OSVcV0DEjRQSxtenZ0W+4iofjpObAu4Lv75YsiFyCEWztfWpmcqQOcYA==
-X-Received: by 2002:a05:6402:4409:b0:51a:409f:a0bd with SMTP id y9-20020a056402440900b0051a409fa0bdmr310207eda.19.1686911124006;
-        Fri, 16 Jun 2023 03:25:24 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id s13-20020aa7cb0d000000b005163a6c9f18sm9721634edt.53.2023.06.16.03.25.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jun 2023 03:25:23 -0700 (PDT)
-Date:   Fri, 16 Jun 2023 13:25:20 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     arinc9.unal@gmail.com,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net v5 2/6] net: dsa: mt7530: fix trapping frames on
- non-MT7621 SoC MT7530 switch
-Message-ID: <20230616102520.4uvuhywkcpk5ljtk@skbuf>
-References: <20230616025327.12652-1-arinc.unal@arinc9.com>
- <20230616025327.12652-3-arinc.unal@arinc9.com>
- <20230616100314.x2qak6t7uxo2qnja@skbuf>
- <ZIw20jmqI1d/W+YY@shell.armlinux.org.uk>
+        Fri, 16 Jun 2023 06:27:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8924699;
+        Fri, 16 Jun 2023 03:26:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB094635C4;
+        Fri, 16 Jun 2023 10:26:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 503A6C433C9;
+        Fri, 16 Jun 2023 10:26:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686911188;
+        bh=0CVterN2oNR0snu/uDzo3u9HlQDH7EmEEvZabB0r2sE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Q7TrR2KEc1rTOORDCMa7Btb9mPNqrBNwuRGEyZOyunqhM4MhR5OjRrqclgCqqP8a6
+         bxvqc/t+66se3YW2ICmYV1F87jZI0nSWTF78fPo+MN4pkIn3diip2uCaVnbERfurLV
+         Qc59adtatsPfiezK6uRLzG1ZJWjgebS29r8OKSzDdCxr59WOSI+oRZ8PwnNhGKC7BM
+         wLoMeyhfavLTDQrYYg8j8p2aQEj06WPmtROPQ/ZF0YXGL0Sq7SVxWbhHfpoYyk9bK5
+         EhT7CIZ7lgLk1A14vWFlYcsz7zR3oBIUe4PN1cgtXlj7p1rn1yMcLg2a55lgLF9MRJ
+         UP+1jXNg99F9A==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sasha Levin <sashal@kernel.org>, linux-input@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 01/26] Input: soc_button_array - add invalid acpi_index DMI quirk handling
+Date:   Fri, 16 Jun 2023 06:25:58 -0400
+Message-Id: <20230616102625.673454-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.1.34
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZIw20jmqI1d/W+YY@shell.armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 11:17:54AM +0100, Russell King (Oracle) wrote:
-> On Fri, Jun 16, 2023 at 01:03:14PM +0300, Vladimir Oltean wrote:
-> > On Fri, Jun 16, 2023 at 05:53:23AM +0300, arinc9.unal@gmail.com wrote:
-> > > From: Arınç ÜNAL <arinc.unal@arinc9.com>
-> > > 
-> > > The check for setting the CPU_PORT bits must include the non-MT7621 SoC
-> > > MT7530 switch variants to trap frames. Expand the check to include them.
-> > > 
-> > > Fixes: b8f126a8d543 ("net-next: dsa: add dsa support for Mediatek MT7530 switch")
-> > > Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> > > ---
-> > 
-> > why do you say non-MT7621 when the change specifically includes MT7621?
-> > What is the affected SoC then?
-> 
-> Thanks for falling into one of the issues that makes reviewing these
-> patches difficult. :/
-> 
-> > > -	if (priv->id == ID_MT7621)
-> > > +	if (priv->id == ID_MT7530 || priv->id == ID_MT7621)
-> > >  		mt7530_rmw(priv, MT7530_MFC, CPU_MASK, CPU_EN | CPU_PORT(port));
-> 
-> I *think* what the commit message should be saying is that the setup
-> for the CPU port(*) is necessary not only for MT7621, but also for
-> MT7530 variants as well.
-> 
-> That can be construed from the commit message, but it doesn't easily
-> read that way.
-> 
-> * - in this case, it's the CPU port field and the CPU enable bit.
-> Note that CPU_MASK only covers CPU_PORT() and not CPU_EN, but this
-> doesn't matter for mt7530_rmw().
-> 
-> -- 
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+From: Hans de Goede <hdegoede@redhat.com>
 
-Ah, no, I just misread the patch, because the new term was added to the
-left of the existing one, and not to the right as I would have expected.
-I though it was this:
+[ Upstream commit 20a99a291d564a559cc2fd013b4824a3bb3f1db7 ]
 
-> > > -	if (priv->id == ID_MT7530)
-> > > +	if (priv->id == ID_MT7530 || priv->id == ID_MT7621)
+Some devices have a wrong entry in their button array which points to
+a GPIO which is required in another driver, so soc_button_array must
+not claim it.
 
-thus my confusion and my question.
+A specific example of this is the Lenovo Yoga Book X90F / X90L,
+where the PNP0C40 home button entry points to a GPIO which is not
+a home button and which is required by the lenovo-yogabook driver.
 
-I'm okay with the change now.
+Add a DMI quirk table which can specify an ACPI GPIO resource index which
+should be skipped; and add an entry for the Lenovo Yoga Book X90F / X90L
+to this new DMI quirk table.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Link: https://lore.kernel.org/r/20230414072116.4497-1-hdegoede@redhat.com
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/input/misc/soc_button_array.c | 30 +++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+
+diff --git a/drivers/input/misc/soc_button_array.c b/drivers/input/misc/soc_button_array.c
+index 09489380afda7..e79f5497948b8 100644
+--- a/drivers/input/misc/soc_button_array.c
++++ b/drivers/input/misc/soc_button_array.c
+@@ -108,6 +108,27 @@ static const struct dmi_system_id dmi_use_low_level_irq[] = {
+ 	{} /* Terminating entry */
+ };
+ 
++/*
++ * Some devices have a wrong entry which points to a GPIO which is
++ * required in another driver, so this driver must not claim it.
++ */
++static const struct dmi_system_id dmi_invalid_acpi_index[] = {
++	{
++		/*
++		 * Lenovo Yoga Book X90F / X90L, the PNP0C40 home button entry
++		 * points to a GPIO which is not a home button and which is
++		 * required by the lenovo-yogabook driver.
++		 */
++		.matches = {
++			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Intel Corporation"),
++			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "CHERRYVIEW D1 PLATFORM"),
++			DMI_EXACT_MATCH(DMI_PRODUCT_VERSION, "YETI-11"),
++		},
++		.driver_data = (void *)1l,
++	},
++	{} /* Terminating entry */
++};
++
+ /*
+  * Get the Nth GPIO number from the ACPI object.
+  */
+@@ -137,6 +158,8 @@ soc_button_device_create(struct platform_device *pdev,
+ 	struct platform_device *pd;
+ 	struct gpio_keys_button *gpio_keys;
+ 	struct gpio_keys_platform_data *gpio_keys_pdata;
++	const struct dmi_system_id *dmi_id;
++	int invalid_acpi_index = -1;
+ 	int error, gpio, irq;
+ 	int n_buttons = 0;
+ 
+@@ -154,10 +177,17 @@ soc_button_device_create(struct platform_device *pdev,
+ 	gpio_keys = (void *)(gpio_keys_pdata + 1);
+ 	n_buttons = 0;
+ 
++	dmi_id = dmi_first_match(dmi_invalid_acpi_index);
++	if (dmi_id)
++		invalid_acpi_index = (long)dmi_id->driver_data;
++
+ 	for (info = button_info; info->name; info++) {
+ 		if (info->autorepeat != autorepeat)
+ 			continue;
+ 
++		if (info->acpi_index == invalid_acpi_index)
++			continue;
++
+ 		error = soc_button_lookup_gpio(&pdev->dev, info->acpi_index, &gpio, &irq);
+ 		if (error || irq < 0) {
+ 			/*
+-- 
+2.39.2
+
