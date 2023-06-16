@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1BFA732E9A
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CBED732E5E
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:31:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345155AbjFPKdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 06:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56072 "EHLO
+        id S1344497AbjFPKbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 06:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345065AbjFPKcq (ORCPT
+        with ESMTP id S1345075AbjFPKaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 06:32:46 -0400
+        Fri, 16 Jun 2023 06:30:25 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 994AF5599;
-        Fri, 16 Jun 2023 03:28:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758DB4ED8;
+        Fri, 16 Jun 2023 03:27:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B606D6363F;
-        Fri, 16 Jun 2023 10:27:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7682BC433C9;
-        Fri, 16 Jun 2023 10:27:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 02EEF6361A;
+        Fri, 16 Jun 2023 10:27:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15D88C433C8;
+        Fri, 16 Jun 2023 10:27:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686911246;
-        bh=CBc4GKNO1MRLJg1eKVWqxkEoP1h79fxST86ixGuqN60=;
+        s=k20201202; t=1686911249;
+        bh=nTI7pPgS7BOpSuI/AM4DnIKQQrlTz4muk9KdSoreDN4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a2y3TJavAjCV4iK4skrNCrlvArcojUdBWOwXOl6Tv+lYB+ZbLx9AxLuFVF9HrIOPK
-         7oq1rw+MYYmrtTJv6/N1yWoGK7bNM/SFCoHTfOT1x9oV48fHKLIFwgUIm3tDiQenXe
-         65/Tpt8bOTsQHsxUfEdg3K2jEfBGHIkQdi5/mmmvZdOvSEnEWqPPm+yc3CZcJJjJ8A
-         boEZpMNIT9bMrG+J/sFeIcD1T8ITO37DLJTfJM1tvGmsMoiuv/IqZeC7zeI+SZTmX5
-         ++dY3lJUA+cijYj3m9YwM7B+0CgTZjJhENSIi3bny83o40japh0US2xWvHqx4ZbGQn
-         0ozLwji7oblVg==
+        b=VZGdjBOXBp2HCbB8u3vI1pzP6i4fLb+uGOsvVPFI5H6it9OR7orxxeCe2NhXrpF77
+         pqSZHdPgWbW8j4xlEYneUzVZ5EJt1e2PNJODqOlg3WbNtsTjiagevHDb1PbYMnGj0F
+         Gk4VRVhMNLBqDgNjguASG3EAcvpBIBe95jEvFHEjWLQzlBm7j6oxOFPlgyOv2N5MUM
+         ngEXD/uNpBypLtcMq6fXZI2wn8LfBHMXQqc4a1xidVp349g+cjFtStIdbFztavAVQ/
+         W/hDwtsa42pmf/tXclPD01s0URj1Auchs0HVo7jhl+5Oy+vVukMcPXY5Xa8sesLTjQ
+         qxXoNYaErsoTQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Clark Wang <xiaoning.wang@nxp.com>,
+Cc:     Herve Codina <herve.codina@bootlin.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
         Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 03/16] spi: lpspi: disable lpspi module irq in DMA mode
-Date:   Fri, 16 Jun 2023 06:27:06 -0400
-Message-Id: <20230616102721.673775-3-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
+        perex@perex.cz, tiwai@suse.com, astrid.rost@axis.com,
+        aidanmacdonald.0x0@gmail.com, alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 5.15 04/16] ASoC: simple-card: Add missing of_node_put() in case of error
+Date:   Fri, 16 Jun 2023 06:27:07 -0400
+Message-Id: <20230616102721.673775-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230616102721.673775-1-sashal@kernel.org>
 References: <20230616102721.673775-1-sashal@kernel.org>
@@ -59,43 +62,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Clark Wang <xiaoning.wang@nxp.com>
+From: Herve Codina <herve.codina@bootlin.com>
 
-[ Upstream commit 9728fb3ce11729aa8c276825ddf504edeb00611d ]
+[ Upstream commit 8938f75a5e35c597a647c28984a0304da7a33d63 ]
 
-When all bits of IER are set to 0, we still can observe the lpspi irq events
-when using DMA mode to transfer data.
+In the error path, a of_node_put() for platform is missing.
+Just add it.
 
-So disable irq to avoid the too much irq events.
-
-Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
-Link: https://lore.kernel.org/r/20230505063557.3962220-1-xiaoning.wang@nxp.com
+Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+Acked-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Link: https://lore.kernel.org/r/20230523151223.109551-9-herve.codina@bootlin.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-fsl-lpspi.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ sound/soc/generic/simple-card.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
-index 5d98611dd999d..c5ff6e8c45be0 100644
---- a/drivers/spi/spi-fsl-lpspi.c
-+++ b/drivers/spi/spi-fsl-lpspi.c
-@@ -906,9 +906,14 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
- 	ret = fsl_lpspi_dma_init(&pdev->dev, fsl_lpspi, controller);
- 	if (ret == -EPROBE_DEFER)
- 		goto out_pm_get;
--
- 	if (ret < 0)
- 		dev_err(&pdev->dev, "dma setup error %d, use pio\n", ret);
-+	else
-+		/*
-+		 * disable LPSPI module IRQ when enable DMA mode successfully,
-+		 * to prevent the unexpected LPSPI module IRQ events.
-+		 */
-+		disable_irq(irq);
+diff --git a/sound/soc/generic/simple-card.c b/sound/soc/generic/simple-card.c
+index bc3e24c6a28a8..283aa21879aa5 100644
+--- a/sound/soc/generic/simple-card.c
++++ b/sound/soc/generic/simple-card.c
+@@ -417,6 +417,7 @@ static int __simple_for_each_link(struct asoc_simple_priv *priv,
  
- 	ret = devm_spi_register_controller(&pdev->dev, controller);
- 	if (ret < 0) {
+ 			if (ret < 0) {
+ 				of_node_put(codec);
++				of_node_put(plat);
+ 				of_node_put(np);
+ 				goto error;
+ 			}
 -- 
 2.39.2
 
