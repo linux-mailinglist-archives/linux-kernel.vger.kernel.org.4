@@ -2,125 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 550D77333CD
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 16:40:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAB0C7333D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 16:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345659AbjFPOkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 10:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46390 "EHLO
+        id S1345610AbjFPOkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 10:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjFPOkI (ORCPT
+        with ESMTP id S1345593AbjFPOkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 10:40:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7012700;
-        Fri, 16 Jun 2023 07:40:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 13CA062CD6;
-        Fri, 16 Jun 2023 14:40:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 173E8C43395;
-        Fri, 16 Jun 2023 14:40:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686926406;
-        bh=LmQ0A+9O9O846YKQ9SkKO3tmg56GUE4m1YrLD2TzUKQ=;
-        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-        b=EvENScLdZ2899SCUlEib3TpooSqIrCtaEXZzsD1BE1WIVTLGsud+qlbOU2R/70Chw
-         bVtUjCBmb7msknzEaW5MevV/CFQBx0qFRiOjHZ7CLLp6nRCMzbAkHeuh6tz3C2YY2x
-         gIPd8Ozt7OMBe8OvEmFvRWqIo8oO+gSq03PszmfHZhd30q64iQBjFNq2/q+OytalAv
-         89Yj9aC0EDcLz2ksTAkRNCavGQCS4CT6Zn+JEC2/FeT7DRLqhsDxjePTfnOboQJCY4
-         FL153lVpC1R36Ndn/6pkh46PQAEh9VehBT00JaOqO+u50SDTRyCIZaq2RfKwpp7kQC
-         6T4vx1n6+9VDg==
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-555508fd7f9so467618eaf.3;
-        Fri, 16 Jun 2023 07:40:06 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwXTp9v3gcRYNvmkt2AA3QpQbA+LYFsgjeaStH8Gsd+4miorLM4
-        QBB/n3xQD5PFiwbG50j05SKNCN2X1FwSPrGW0HA=
-X-Google-Smtp-Source: ACHHUZ6z8GA1qZV8cYgrktvFU8j0O2B9+u9zyzznMrSz3BZZRqGJ81uDTG5XgaLcvQipbezYj8K+9eZ0Q4y7eufjbkk=
-X-Received: by 2002:a4a:d786:0:b0:558:bb12:da9f with SMTP id
- c6-20020a4ad786000000b00558bb12da9fmr1811379oou.2.1686926405144; Fri, 16 Jun
- 2023 07:40:05 -0700 (PDT)
+        Fri, 16 Jun 2023 10:40:37 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5159F3598;
+        Fri, 16 Jun 2023 07:40:30 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-6668208bd4eso841366b3a.0;
+        Fri, 16 Jun 2023 07:40:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686926430; x=1689518430;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ECePMHFylJkWTWaDbGM6MAlprGNj5IxPPrQMrQr2/2Q=;
+        b=g0O3syPJNPOzCmtaE4H+GYVYjQb4ElntfOK5rBDm3jwR3xnsZq/bCP5/+8hr3UcpEL
+         Tkewt82a5az5UvsYyCgBZQLq8ixPVLchRuE2fwPchZeU3RGCQhZZVAaGhrm3lUcvFNV1
+         pxDbNMRI9B5Qo8U6jTIrjRESw26heKO0xhqe+PCgStR0b6xq2x0LpZvp7shPi94LC7iM
+         MnMByUeP7+lUBRxMKrBHUFw1joq4QIk+c1UA1TFcRxET1tliIPt66mkspixgaPa1k3r8
+         MD/cb7tFWLHCVRPGGPr2/IATuPnKo39OMEMD3HErDlsn1xU0diuZ4zQnc4o+4aoOlzw8
+         k3HA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686926430; x=1689518430;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ECePMHFylJkWTWaDbGM6MAlprGNj5IxPPrQMrQr2/2Q=;
+        b=B2zSeYAzzYxgbJ3gNcDPL7i4gLT4kudfVqNaDhegidDD7aOREXsePw5OlIZL0Iy5T3
+         ZVIrN6dV2m6PLSCPct1Qz/BvOkH8wTu295tF+ULGHMvM+FPZL8cTbxqsChRBqnt4Z8ts
+         F1khjc1RlCBZvI9ch4MvPpdxuUIkgKqGeh9k3u/DGM2alk3YBgj2n4Nyz7zswB0yNvcm
+         J5orcBMUT/7WZ1n2ZUoG0OG5sR9wzrnCo/WoJSUfubtRKUdzwii9X+AJ2Qi8xOK/Ojt6
+         WaWnJy5YBRBCTxFMl3MeFiNmisrEkS+zn9kbETdypuRL9bLfoz3eEDrmOvxfZNxp/lK4
+         RqTg==
+X-Gm-Message-State: AC+VfDwn/DW7i24EjwzE6tOkqaYyWfWF3sPgVgeweID4UEBOAPvKBHVU
+        fP1/eFGVzBXPZ9KV4J1oLjc=
+X-Google-Smtp-Source: ACHHUZ40CGQUnIqfgSCwbPCUZIyqRlk0987ljQYEBf+YAFQAJ51LkdVNYPmhgAL7NnXEogo7N2iy7Q==
+X-Received: by 2002:a05:6a00:240f:b0:64b:256:204c with SMTP id z15-20020a056a00240f00b0064b0256204cmr2523397pfh.20.1686926429649;
+        Fri, 16 Jun 2023 07:40:29 -0700 (PDT)
+Received: from localhost.localdomain ([103.116.245.58])
+        by smtp.gmail.com with ESMTPSA id v19-20020a62a513000000b0065da94fe921sm13430528pfm.50.2023.06.16.07.40.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 07:40:29 -0700 (PDT)
+From:   Jianhui Zhao <zhaojh329@gmail.com>
+To:     andrew@lunn.ch, hkallweit1@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     linux@armlinux.org.uk, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianhui Zhao <zhaojh329@gmail.com>
+Subject: [PATCH V5] net: phy: Add sysfs attribute for PHY c45 identifiers.
+Date:   Fri, 16 Jun 2023 22:40:17 +0800
+Message-Id: <20230616144017.12483-1-zhaojh329@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Received: by 2002:a8a:7cb:0:b0:4df:6fd3:a469 with HTTP; Fri, 16 Jun 2023
- 07:40:04 -0700 (PDT)
-In-Reply-To: <20230616090749.2646749-1-arnd@kernel.org>
-References: <20230616090749.2646749-1-arnd@kernel.org>
-From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Fri, 16 Jun 2023 23:40:04 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd-j6mJ91hZUZi86HnGJahekHHgYz4ngWfF81QmYigGqVw@mail.gmail.com>
-Message-ID: <CAKYAXd-j6mJ91hZUZi86HnGJahekHHgYz4ngWfF81QmYigGqVw@mail.gmail.com>
-Subject: Re: [PATCH] smb: avoid field overflow warning
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Steve French <sfrench@samba.org>, Arnd Bergmann <arnd@arndb.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Tom Talpey <tom@talpey.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Hyunchul Lee <hyc.lee@gmail.com>, linux-cifs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2023-06-16 18:07 GMT+09:00, Arnd Bergmann <arnd@kernel.org>:
-> From: Arnd Bergmann <arnd@arndb.de>
-Hi Arnd,
+If a phydevice use c45, its phy_id property is always 0, so
+this adds a c45_ids sysfs attribute group contains mmd id
+attributes from mmd0 to mmd31 to MDIO devices. Note that only
+mmd with valid value will exist. This attribute group can be
+useful when debugging problems related to phy drivers.
 
->
-> clang warns about a possible field overflow in a memcpy:
->
-> In file included from fs/smb/server/smb_common.c:7:
-> include/linux/fortify-string.h:583:4: error: call to
-> '__write_overflow_field' declared with 'warning' attribute: detected write
-> beyond size of field (1st parameter); maybe use struct_group()?
-> [-Werror,-Wattribute-warning]
->                         __write_overflow_field(p_size_field, size);
->
-> It appears to interpret the "&out[baselen + 4]" as referring to a single
-> byte of the character array, while the equivalen "out + baselen + 4" is
-> seen as an offset into the array.
->
-> I don't see that kind of warning elsewhere, so just go with the simple
-> rework.
->
-> Fixes: e2f34481b24db ("cifsd: add server-side procedures for SMB3")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  fs/smb/server/smb_common.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/fs/smb/server/smb_common.c b/fs/smb/server/smb_common.c
-> index a7e81067bc991..e3273fa640b07 100644
-> --- a/fs/smb/server/smb_common.c
-> +++ b/fs/smb/server/smb_common.c
-> @@ -536,7 +536,7 @@ int ksmbd_extract_shortname(struct ksmbd_conn *conn,
-> const char *longname,
->  	out[baselen + 3] = PERIOD;
->
->  	if (dot_present)
-> -		memcpy(&out[baselen + 4], extension, 4);
-> +		memcpy(out + baselen + 4, extension, 1);
-Is there any reason to change copy bytes from 4 bytes to 1 byte?
+Likes this:
+/sys/bus/mdio_bus/devices/mdio-bus:05/c45_ids/mmd1
+/sys/bus/mdio_bus/devices/mdio-bus:05/c45_ids/mmd2
+...
+/sys/bus/mdio_bus/devices/mdio-bus:05/c45_ids/mmd31
 
-Thanks!
->  	else
->  		out[baselen + 4] = '\0';
->  	smbConvertToUTF16((__le16 *)shortname, out, PATH_MAX,
-> --
-> 2.39.2
->
->
+Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Reviewed-by: Russell King <linux@armlinux.org.uk>
+---
+V4 -> V5: Remove cast operation and use macro to convert attribute to a phy_c45_devid_attribute.
+V3 -> V4: Only mmd with valid value will exist.
+V2 -> V3: Use the most efficient implementation.
+V1 -> V2: putting all 32 values in a subdirectory, one file per MMD
+
+ .../ABI/testing/sysfs-class-net-phydev        |  10 ++
+ drivers/net/phy/phy_device.c                  | 124 +++++++++++++++++-
+ 2 files changed, 133 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/ABI/testing/sysfs-class-net-phydev b/Documentation/ABI/testing/sysfs-class-net-phydev
+index ac722dd5e694..58a0a150229d 100644
+--- a/Documentation/ABI/testing/sysfs-class-net-phydev
++++ b/Documentation/ABI/testing/sysfs-class-net-phydev
+@@ -63,3 +63,13 @@ Description:
+ 		only used internally by the kernel and their placement are
+ 		not meant to be stable across kernel versions. This is intended
+ 		for facilitating the debugging of PHY drivers.
++
++What:		/sys/class/mdio_bus/<bus>/<device>/c45_ids/mmd<n>
++Date:		November 2023
++KernelVersion:	6.4
++Contact:	netdev@vger.kernel.org
++Description:
++		This attribute group c45_ids contains mmd id attributes from mmd0 to mmd31
++		as reported by the device during bus enumeration, encoded in hexadecimal.
++		Note that only mmd with valid value will exist. This ID is used to match
++		the device with the appropriate driver.
+diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
+index 17d0d0555a79..39f663c2ad1a 100644
+--- a/drivers/net/phy/phy_device.c
++++ b/drivers/net/phy/phy_device.c
+@@ -602,7 +602,129 @@ static struct attribute *phy_dev_attrs[] = {
+ 	&dev_attr_phy_dev_flags.attr,
+ 	NULL,
+ };
+-ATTRIBUTE_GROUPS(phy_dev);
++
++static const struct attribute_group phy_dev_group = {
++	.attrs = phy_dev_attrs
++};
++
++struct phy_c45_devid_attribute {
++	struct device_attribute attr;
++	int index;
++};
++
++#define to_phy_c45_devid_attr(ptr) \
++	container_of(ptr, struct phy_c45_devid_attribute, attr.attr)
++
++static ssize_t phy_c45_id_show(struct device *dev,
++			       struct device_attribute *attr, char *buf)
++{
++	struct phy_c45_devid_attribute *devattr = to_phy_c45_devid_attr(&attr->attr);
++	struct phy_device *phydev = to_phy_device(dev);
++
++	return sprintf(buf, "0x%.8lx\n",
++		(unsigned long)phydev->c45_ids.device_ids[devattr->index]);
++}
++
++#define DEVICE_ATTR_C45_ID(i) \
++static struct phy_c45_devid_attribute dev_attr_phy_c45_id##i = { \
++	.attr = { \
++		.attr = { .name = __stringify(mmd##i), .mode = 0444 }, \
++		.show = phy_c45_id_show \
++	}, \
++	.index = i, \
++}
++
++DEVICE_ATTR_C45_ID(0);
++DEVICE_ATTR_C45_ID(1);
++DEVICE_ATTR_C45_ID(2);
++DEVICE_ATTR_C45_ID(3);
++DEVICE_ATTR_C45_ID(4);
++DEVICE_ATTR_C45_ID(5);
++DEVICE_ATTR_C45_ID(6);
++DEVICE_ATTR_C45_ID(7);
++DEVICE_ATTR_C45_ID(8);
++DEVICE_ATTR_C45_ID(9);
++DEVICE_ATTR_C45_ID(10);
++DEVICE_ATTR_C45_ID(11);
++DEVICE_ATTR_C45_ID(12);
++DEVICE_ATTR_C45_ID(13);
++DEVICE_ATTR_C45_ID(14);
++DEVICE_ATTR_C45_ID(15);
++DEVICE_ATTR_C45_ID(16);
++DEVICE_ATTR_C45_ID(17);
++DEVICE_ATTR_C45_ID(18);
++DEVICE_ATTR_C45_ID(19);
++DEVICE_ATTR_C45_ID(20);
++DEVICE_ATTR_C45_ID(21);
++DEVICE_ATTR_C45_ID(22);
++DEVICE_ATTR_C45_ID(23);
++DEVICE_ATTR_C45_ID(24);
++DEVICE_ATTR_C45_ID(25);
++DEVICE_ATTR_C45_ID(26);
++DEVICE_ATTR_C45_ID(27);
++DEVICE_ATTR_C45_ID(28);
++DEVICE_ATTR_C45_ID(29);
++DEVICE_ATTR_C45_ID(30);
++DEVICE_ATTR_C45_ID(31);
++
++static struct attribute *phy_c45_id_attrs[] = {
++	&dev_attr_phy_c45_id0.attr.attr,
++	&dev_attr_phy_c45_id1.attr.attr,
++	&dev_attr_phy_c45_id2.attr.attr,
++	&dev_attr_phy_c45_id3.attr.attr,
++	&dev_attr_phy_c45_id4.attr.attr,
++	&dev_attr_phy_c45_id5.attr.attr,
++	&dev_attr_phy_c45_id6.attr.attr,
++	&dev_attr_phy_c45_id7.attr.attr,
++	&dev_attr_phy_c45_id8.attr.attr,
++	&dev_attr_phy_c45_id9.attr.attr,
++	&dev_attr_phy_c45_id10.attr.attr,
++	&dev_attr_phy_c45_id11.attr.attr,
++	&dev_attr_phy_c45_id12.attr.attr,
++	&dev_attr_phy_c45_id13.attr.attr,
++	&dev_attr_phy_c45_id14.attr.attr,
++	&dev_attr_phy_c45_id15.attr.attr,
++	&dev_attr_phy_c45_id16.attr.attr,
++	&dev_attr_phy_c45_id17.attr.attr,
++	&dev_attr_phy_c45_id18.attr.attr,
++	&dev_attr_phy_c45_id19.attr.attr,
++	&dev_attr_phy_c45_id20.attr.attr,
++	&dev_attr_phy_c45_id21.attr.attr,
++	&dev_attr_phy_c45_id22.attr.attr,
++	&dev_attr_phy_c45_id23.attr.attr,
++	&dev_attr_phy_c45_id24.attr.attr,
++	&dev_attr_phy_c45_id25.attr.attr,
++	&dev_attr_phy_c45_id26.attr.attr,
++	&dev_attr_phy_c45_id27.attr.attr,
++	&dev_attr_phy_c45_id28.attr.attr,
++	&dev_attr_phy_c45_id29.attr.attr,
++	&dev_attr_phy_c45_id30.attr.attr,
++	&dev_attr_phy_c45_id31.attr.attr,
++	NULL,
++};
++
++static umode_t phy_dev_c45_visible(struct kobject *kobj, struct attribute *attr, int foo)
++{
++	struct phy_c45_devid_attribute *devattr = to_phy_c45_devid_attr(attr);
++	struct phy_device *phydev = to_phy_device(kobj_to_dev(kobj));
++
++	if (!phydev->is_c45 || phydev->c45_ids.device_ids[devattr->index] == 0xffffffff)
++		return 0;
++
++	return attr->mode;
++}
++
++static const struct attribute_group phy_dev_c45_ids_group = {
++	.name = "c45_ids",
++	.attrs = phy_c45_id_attrs,
++	.is_visible = phy_dev_c45_visible
++};
++
++static const struct attribute_group *phy_dev_groups[] = {
++	&phy_dev_group,
++	&phy_dev_c45_ids_group,
++	NULL,
++};
+ 
+ static const struct device_type mdio_bus_phy_type = {
+ 	.name = "PHY",
+-- 
+2.34.1
+
