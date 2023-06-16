@@ -2,292 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE289732728
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 08:12:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FA2D73272A
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 08:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242596AbjFPGMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 02:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50964 "EHLO
+        id S242750AbjFPGMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 02:12:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233966AbjFPGMO (ORCPT
+        with ESMTP id S233966AbjFPGMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 02:12:14 -0400
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED115B5;
-        Thu, 15 Jun 2023 23:12:12 -0700 (PDT)
-Received: by mail-ot1-x333.google.com with SMTP id 46e09a7af769-6b29c972e00so360897a34.1;
-        Thu, 15 Jun 2023 23:12:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686895932; x=1689487932;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0CSaXs0eFLJ36oQsTTT9AFk9l+dE317zySSzaD6qHgs=;
-        b=cnVWKBe5LJv1ezLSjmN7drpWFhndVUocnLO8oo/0xO0wPy/iJWsvfq+xliFdkIzMWr
-         mt4jCQZwHxinDisi0v1FD7WIhyU2rc6r3J40QFZB4UYbAHvJKVCamXePyrtqrpCoUa+I
-         fnmM4/oM/b7guUok0tTofDsQkJGrw9fXwL9TpcAtTB1y7U4rnmGabB47KXXJDPVxuC1U
-         Nn/1fIpPZ9gVw1BaM/Vi11YXlZxvYeItCY+lIOnjLQTWB/5Ci8ywKcVCBBzzG74vxrcI
-         ZjaWcD39mpWHKLQ6nVvKjNeS5pTpEK3BPkFcXRlbqr9+cMyvwLW5JZilFCqr2ldKz7Mk
-         yn5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686895932; x=1689487932;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0CSaXs0eFLJ36oQsTTT9AFk9l+dE317zySSzaD6qHgs=;
-        b=LkmNXds280XCewznCbSPGxp8rHfh9tT231XgDJ0pRipBvwLI/uHKwwk1RhBJB4UMRn
-         +B/WHkNvR2lTCzaX0B78cPFNrolawlbKAAAf7J9TvjFhl9lm9w97uepYhZOggv46dQTs
-         n3BRZp9JVPDtl9hCCyLYXWeHpm4yGyk03nyJQ/gPWwruOFhvn9vnlvJlgpi1f0jemL+m
-         GnL27Tu36SVwuSDxxxJ8CjYU8R8LAYzwf7HHBuxOvHahIIZsx7GGFR3eScAnfOAJR32Y
-         Mt83D68bm5o/zcAqqWOr2l0L6RVZuCC6x40/tVUmMN+03RlrzqCvAGosNRYSXgJlp04A
-         2JFg==
-X-Gm-Message-State: AC+VfDyuHTGBTrc45peFgDq9rI/CJAJm9cYiWbACxYuwZqcPvpTUSuDi
-        vvtgdI6Rnyc6m6iwf+OSVp9AFb8lUbbx0uX3FqIaCydF
-X-Google-Smtp-Source: ACHHUZ5hWP4DO7juzhR2qpohpE+ro+/WLkTS5zWNFX/FHZn5K4YovziUWdH7oW9MRDWHS6n7AUele8zeDqj/jH22z1M=
-X-Received: by 2002:a05:6870:d8b1:b0:1a9:a12d:f7b8 with SMTP id
- dv49-20020a056870d8b100b001a9a12df7b8mr985454oab.41.1686895931804; Thu, 15
- Jun 2023 23:12:11 -0700 (PDT)
+        Fri, 16 Jun 2023 02:12:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5B4269E;
+        Thu, 15 Jun 2023 23:12:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A35F0622C0;
+        Fri, 16 Jun 2023 06:12:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E064BC433C8;
+        Fri, 16 Jun 2023 06:12:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686895962;
+        bh=JiyaFCT5XlQ5cdqxzxNN/QD3/0qLm+DuVjJw4o9ljwQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=pUBf/xg8lWvY3+0lGdY5WnLFtxkq7oE3dmIMKdkCq6tsljGxUjfc2/YZCSCodv9yj
+         5llG8LKlBHGDIreDK/9G5kKp4q9BMl7he/Mi7P+wOvJrNq2Og4x4eBmTNutf5iPAPa
+         fVPLd/OaotbcSwMu+fJOMGRlCwS7WiwhyEFEycJhmL+f9EAAY2yEbrUlVuvj7eDXDQ
+         TnC2av6PSpuSWlTepzY9fXUpuAS+Of8fWpD92iJhogBFlFWcWlMpq/5+V4X43LG7kI
+         vv/hQT+aB0QoLr6b1HnCymvZO09Q8tB7Z+AjdEnRxuwhXWYyJ12mkY9BY4o/iY14Sr
+         LFdfVAkiPuI+A==
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2b44d77e56bso7128661fa.1;
+        Thu, 15 Jun 2023 23:12:42 -0700 (PDT)
+X-Gm-Message-State: AC+VfDw/GzR+16Ck9y8EVcSwsmdIdrik82or2PsMniiLQ5iMxWbC8AR1
+        80OD/t9C6s3j9cIt21k5q7GD8tGI2HIeWEq3PoQ=
+X-Google-Smtp-Source: ACHHUZ4AA/u7+Ga1juEQ6ZdLwCv/lFl4xR4NDPTHT326ul+mLNEOxL+uAVnKdNgfu/jR9xuhLC6dlFxg8XZ413kt1QQ=
+X-Received: by 2002:a2e:9b01:0:b0:2a2:ac00:4de4 with SMTP id
+ u1-20020a2e9b01000000b002a2ac004de4mr241405lji.22.1686895960931; Thu, 15 Jun
+ 2023 23:12:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230418090312.2818879-1-sergio.paracuellos@gmail.com>
- <CAMhs-H_yn_76RAFNk4ux_-rn9FdKna9Vsu0raFQXfr3ykkRWPw@mail.gmail.com> <CAMhs-H_NxauVCL7Sc7SWBk4dTQ8CyqLbPnTZO66VAqycPoOyTw@mail.gmail.com>
-In-Reply-To: <CAMhs-H_NxauVCL7Sc7SWBk4dTQ8CyqLbPnTZO66VAqycPoOyTw@mail.gmail.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Fri, 16 Jun 2023 08:12:00 +0200
-Message-ID: <CAMhs-H8R4oz=Hs8y=3-R15hkySPEO4scookZ_shPzEbQoAyTKA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/9] mips: ralink: add complete clock and reset driver
- for mtmips SoCs
-To:     linux-clk@vger.kernel.org
-Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
-        john@phrozen.org, linux-kernel@vger.kernel.org,
-        p.zabel@pengutronix.de, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, devicetree@vger.kernel.org,
-        arinc.unal@arinc9.com
+References: <20230609094320.2397604-1-linan666@huaweicloud.com>
+In-Reply-To: <20230609094320.2397604-1-linan666@huaweicloud.com>
+From:   Song Liu <song@kernel.org>
+Date:   Thu, 15 Jun 2023 23:12:28 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW6imRp9jseup660xQiV7optVwk-vPWz77aG3=4niUrMRQ@mail.gmail.com>
+Message-ID: <CAPhsuW6imRp9jseup660xQiV7optVwk-vPWz77aG3=4niUrMRQ@mail.gmail.com>
+Subject: Re: [PATCH] md/raid10: Only check QUEUE_FLAG_IO_STAT when issuing io
+To:     linan666@huaweicloud.com
+Cc:     jgq516@gmail.com, linux-raid@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linan122@huawei.com,
+        yukuai3@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
+        yangerkun@huawei.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 11:47=E2=80=AFAM Sergio Paracuellos
-<sergio.paracuellos@gmail.com> wrote:
+On Fri, Jun 9, 2023 at 2:47=E2=80=AFAM <linan666@huaweicloud.com> wrote:
 >
-> On Thu, May 4, 2023 at 4:48=E2=80=AFPM Sergio Paracuellos
-> <sergio.paracuellos@gmail.com> wrote:
-> >
-> > On Tue, Apr 18, 2023 at 11:03=E2=80=AFAM Sergio Paracuellos
-> > <sergio.paracuellos@gmail.com> wrote:
-> > >
-> > > Hi all!
-> > >
-> > > This patchset is a big effort to properly implement a clock and reset
-> > > driver for old ralink SoCs. This allow to properly define clocks in
-> > > device tree and avoid to use fixed-clocks directly from 'arch/mips/ra=
-link'
-> > > architecture directory code.
-> > >
-> > > Device tree 'sysc' node will be both clock and reset provider using
-> > > 'clock-cells' and 'reset-cells' properties.
-> > >
-> > > The ralink SoCs we are taking about are RT2880, RT3050, RT3052, RT335=
-0,
-> > > RT3352, RT3883, RT5350, MT7620, MT7628 and MT7688. Mostly the code in
-> > > this new driver has been extracted from 'arch/mips/ralink' and cleanl=
-y
-> > > put using kernel clock and reset driver APIs. The clock plans for thi=
-s
-> > > SoCs only talks about relation between CPU frequency and BUS frequenc=
-y.
-> > > This relation is different depending on the particular SoC. CPU clock=
- is
-> > > derived from XTAL frequencies.
-> > >
-> > >  Depending on the SoC we have the following frequencies:
-> > >  * RT2880 SoC:
-> > >      - XTAL: 40 MHz.
-> > >      - CPU: 250, 266, 280 or 300 MHz.
-> > >      - BUS: CPU / 2 MHz.
-> > >   * RT3050, RT3052, RT3350:
-> > >      - XTAL: 40 MHz.
-> > >      - CPU: 320 or 384 MHz.
-> > >      - BUS: CPU / 3 MHz.
-> > >   * RT3352:
-> > >      - XTAL: 40 MHz.
-> > >      - CPU: 384 or 400 MHz.
-> > >      - BUS: CPU / 3 MHz.
-> > >      - PERIPH: 40 MHz.
-> > >   * RT3383:
-> > >      - XTAL: 40 MHz.
-> > >      - CPU: 250, 384, 480 or 500 MHz.
-> > >      - BUS: Depends on RAM Type and CPU:
-> > >        + RAM DDR2: 125. ELSE 83 MHz.
-> > >        + RAM DDR2: 128. ELSE 96 MHz.
-> > >        + RAM DDR2: 160. ELSE 120 MHz.
-> > >        + RAM DDR2: 166. ELSE 125 MHz.
-> > >   * RT5350:
-> > >       - XTAL: 40 MHz.
-> > >       - CPU: 300, 320 or 360 MHz.
-> > >       - BUS: CPU / 3, CPU / 4, CPU / 3 MHz.
-> > >       - PERIPH: 40 MHz.
-> > >   * MT7628 and MT7688:
-> > >      - XTAL: 20 MHz or 40 MHz.
-> > >      - CPU: 575 or 580 MHz.
-> > >      - BUS: CPU / 3.
-> > >      - PCMI2S: 480 MHz.
-> > >      - PERIPH: 40 MHz.
-> > >   * MT7620:
-> > >      - XTAL: 20 MHz or 40 MHz.
-> > >      - PLL: XTAL, 480, 600 MHz.
-> > >      - CPU: depends on PLL and some mult and dividers.
-> > >      - BUS: depends on PLL and some mult and dividers.
-> > >      - PERIPH: 40 or XTAL MHz.
-> > >
-> > > MT7620 is a bit more complex deriving CPU clock from a PLL and an bun=
-ch of
-> > > register reads and predividers. To derive CPU and BUS frequencies in =
-the
-> > > MT7620 SoC 'mt7620_calc_rate()' helper is used.
-> > > In the case XTAL can have different frequencies and we need a differe=
-nt
-> > > clock frequency for peripherals 'periph' clock in introduced.
-> > > The rest of the peripherals present in the SoC just follow their pare=
-nt
-> > > frequencies.
-> > >
-> > > I am using 'mtmips' inside for ralink clock driver. This is aligned w=
-ith
-> > > pinctrl series recently merged through pinctrl git tree [0].
-> > >
-> > > I am maintaining ralink as prefix for compatible strings after discus=
-sions
-> > > between Rob and Arinc in v2 of this series [1].
-> > >
-> > > Changes have been compile tested for:
-> > > - RT2880
-> > > - RT3883
-> > > - MT7620
-> > >
-> > > Changes have been properly tested in RT5350 SoC based board (ALL5003 =
-board)
-> > > resulting in a working platform.
-> > >
-> > > Dts files for these SoCs in-tree except MT7621 are incomplete. We are
-> > > planning to align with openWRT files at some point and add extra need=
-ed
-> > > changes. Hence I am not touching them at all in these series. If this=
- is
-> > > a problem, please let me know and I will update them.
-> > >
-> > > Talking about merging this series I'd like all of the patches going t=
-hrough
-> > > the MIPS tree if possible.
-> > >
-> > > Thanks in advance for your time.
-> > >
-> > > Best regards,
-> > >     Sergio Paracuellos
-> > >
-> > > Changes in v3:
-> > > - Address Stephen comments in v2:
-> > >     + Drop unsused include '<linux/clk.h>'.
-> > >     + Add fixed and factor clocks when it makes sense.
-> > >     + Make 'mtmips_periph_clk_ops' named variable.
-> > >     + WARN_ON -> WARN_ON_ONCE.
-> > >     + Avoid CONFIG_USB dependent code. Introduce new 'mtmips_clk_regs=
-_init'.
-> > >     + Don't validate the bindings in the driver.
-> > >     + Make const 'struct clk_init_data' used inside macros.
-> > >     + do_div -> div_u64.
-> > >     + Make use of dev_err_probe.
-> >
-> > Hi Stephen,
-> >
-> > Does anything else need to be addressed to have all of these added?
-> >
-> > Philipp, can you please review the reset related code in PATCH 2/9 of
-> > these series?
-> >
-> > Thanks in advance for your time!
-> >
-> > Best regards,
-> >     Sergio Paracuellos
+> From: Li Nan <linan122@huawei.com>
 >
-> Gentle ping for this series :-)
+> /sys/block/[device]/queue/iostats is used to control whether to count io
+> stat. Write 0 to it will clear queue_flags QUEUE_FLAG_IO_STAT which means
+> iostats is disabled. If we disable iostats and later endable it, the io
+> issued during this period will be counted incorrectly, inflight will be
+> decreased to -1.
+>
+>   //T1 set iostats
+>   echo 0 > /sys/block/md0/queue/iostats
+>    clear QUEUE_FLAG_IO_STAT
+>
+>                         //T2 issue io
+>                         if (QUEUE_FLAG_IO_STAT) -> false
+>                          bio_start_io_acct
+>                           inflight++
+>
+>   echo 1 > /sys/block/md0/queue/iostats
+>    set QUEUE_FLAG_IO_STAT
+>
+>                                         //T3 io end
+>                                         if (QUEUE_FLAG_IO_STAT) -> true
+>                                          bio_end_io_acct
+>                                           inflight--    -> -1
+>
+> Also, if iostats is enabled while issuing io but disabled while io end,
+> inflight will never be decreased.
+>
+> Fix it by checking start_time when io end. Only check QUEUE_FLAG_IO_STAT
+> while issuing io, just like request based devices.
+>
+> Fixes: 528bc2cf2fcc ("md/raid10: enable io accounting")
+> Signed-off-by: Li Nan <linan122@huawei.com>
 
-Another gentle ping for this series :-)
+The subject and commit log is a little confusing. I updated it a little
+bit and applied to md-next.
 
 Thanks,
-    Sergio Paracuellos
+Song
+
+
+> ---
+>  drivers/md/raid10.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> Thanks,
->     Sergio Paracuellos
-> >
-> > >
-> > > Changes in v2:
-> > > - Address bindings documentation changes pointed out by Krzysztof:
-> > >     + Rename the file into 'mediatek,mtmips-sysc.yaml'.
-> > >     + Redo commit subject and log message.
-> > >     + Order compatibles alphabetically.
-> > >     + Redo bindings description taking into account this is a system
-> > >       controller node which provides both clocks and resets to the wo=
-rld.
-> > >     + Drop label from example.
-> > >     + Use 'syscon' as node name in example.
-> > >     + Drop no sense 'ralink,rt2880-reset' compatible string
-> > > - Squash patches 6 and 7 together as pointed out by Stephen Boyd.
-> > >
-> > > Previoous series:
-> > > v2: https://lore.kernel.org/linux-clk/CAMhs-H-BfZb3mD8E=3DLeJ4vT22uib=
-Q1DnaZsfTrtRxSiv=3D8L5RA@mail.gmail.com/T/#t
-> > > v1: https://lore.kernel.org/linux-clk/20230320161823.1424278-1-sergio=
-.paracuellos@gmail.com/T/#t
-> > >
-> > > [0]: https://lore.kernel.org/linux-gpio/e9e6ad87-2db5-9767-ff39-64a30=
-2b06185@arinc9.com/T/#t
-> > > [1]: https://lore.kernel.org/linux-clk/CAMhs-H-BfZb3mD8E=3DLeJ4vT22ui=
-bQ1DnaZsfTrtRxSiv=3D8L5RA@mail.gmail.com/T/#mfe725b6e3382c6fb09736472a846cb=
-bc84f264dc
-> > >
-> > > Sergio Paracuellos (9):
-> > >   dt-bindings: clock: add mtmips SoCs system controller
-> > >   clk: ralink: add clock and reset driver for MTMIPS SoCs
-> > >   mips: ralink: rt288x: remove clock related code
-> > >   mips: ralink: rt305x: remove clock related code
-> > >   mips: ralink: rt3883: remove clock related code
-> > >   mips: ralink: mt7620: remove clock related code
-> > >   mips: ralink: remove reset related code
-> > >   mips: ralink: get cpu rate from new driver code
-> > >   MAINTAINERS: add Mediatek MTMIPS Clock maintainer
-> > >
-> > >  .../bindings/clock/mediatek,mtmips-sysc.yaml  |   65 +
-> > >  MAINTAINERS                                   |    6 +
-> > >  arch/mips/include/asm/mach-ralink/mt7620.h    |   35 -
-> > >  arch/mips/include/asm/mach-ralink/rt288x.h    |   10 -
-> > >  arch/mips/include/asm/mach-ralink/rt305x.h    |   21 -
-> > >  arch/mips/include/asm/mach-ralink/rt3883.h    |    8 -
-> > >  arch/mips/ralink/clk.c                        |   26 +-
-> > >  arch/mips/ralink/common.h                     |    5 -
-> > >  arch/mips/ralink/mt7620.c                     |  226 ----
-> > >  arch/mips/ralink/of.c                         |    4 -
-> > >  arch/mips/ralink/reset.c                      |   61 -
-> > >  arch/mips/ralink/rt288x.c                     |   31 -
-> > >  arch/mips/ralink/rt305x.c                     |   78 --
-> > >  arch/mips/ralink/rt3883.c                     |   44 -
-> > >  drivers/clk/ralink/Kconfig                    |    7 +
-> > >  drivers/clk/ralink/Makefile                   |    1 +
-> > >  drivers/clk/ralink/clk-mtmips.c               | 1134 +++++++++++++++=
-++
-> > >  17 files changed, 1232 insertions(+), 530 deletions(-)
-> > >  create mode 100644 Documentation/devicetree/bindings/clock/mediatek,=
-mtmips-sysc.yaml
-> > >  create mode 100644 drivers/clk/ralink/clk-mtmips.c
-> > >
-> > > --
-> > > 2.25.1
-> > >
+> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
+> index 381c21f7fb06..bf9dca5c25c3 100644
+> --- a/drivers/md/raid10.c
+> +++ b/drivers/md/raid10.c
+> @@ -325,7 +325,7 @@ static void raid_end_bio_io(struct r10bio *r10_bio)
+>         if (!test_bit(R10BIO_Uptodate, &r10_bio->state))
+>                 bio->bi_status =3D BLK_STS_IOERR;
+>
+> -       if (blk_queue_io_stat(bio->bi_bdev->bd_disk->queue))
+> +       if (r10_bio->start_time)
+>                 bio_end_io_acct(bio, r10_bio->start_time);
+>         bio_endio(bio);
+>         /*
+> --
+> 2.39.2
+>
