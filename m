@@ -2,55 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38DC47326D1
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 07:50:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1DFF7326D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 07:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232204AbjFPFu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 01:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40104 "EHLO
+        id S241053AbjFPFug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 01:50:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232712AbjFPFuX (ORCPT
+        with ESMTP id S231283AbjFPFuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 16 Jun 2023 01:50:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2493C2702;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3A8270C;
         Thu, 15 Jun 2023 22:50:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 73BFE61138;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CE3D61FEB;
         Fri, 16 Jun 2023 05:50:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AD033C433CA;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D233BC433C9;
         Fri, 16 Jun 2023 05:50:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1686894620;
-        bh=vPvaMx7LQ5tK+7m2aafkX3FWMbfT4memLCs/OWWMj0k=;
+        bh=KHvh2Gsa3DU3AZSLt/p36r6qy8qgkrrpfX/DHpT75es=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ahUumr4ZTjdJ071pWpWg5d1VWOaJ0UgaciMrjALOcbNDyhYyiy5D3OsnX/ATgrXVa
-         NwJTe0h8oRww2xnzzmCeOTgkccjC8z7FOiyGaMHgqPEdWp66OawQZBbVT1V0NlN7Xx
-         icok10Am3xK+8B/0tmY8aejTzrI+WWkvFcjZ62Yg2XOhIfCSRAA8UaUiPfex+Ilovl
-         7Y8rmzVzdZ4AD0KGCVsH2NR24G8O5UVBzb1T2xzii7aIi+O9ZoNAqoHkgY/2BAAxOU
-         OBRrNZrGf1zP9D2BrV1ICFLUItKZ9A07gdi45B7kQCe9b7LF67ifvI0Pkc2euNZIDr
-         kRmgGPqTlECeQ==
+        b=bHvhdhRtvxuUerithl4frahycEgwfsvl8On33BtJGXqywFDa5BueffdGSRR18xl4m
+         X2sUh7X1gM5XkhVgqEihX2AfYt9rvsNC8rcy7n3aAeN4F7rFVpJpR+t2skR/wrDUlT
+         xz36ZBVYQJpXajCe0hBktfrMyCs9NmzbaIqSr8E69YYr032MlclwL+K9JqIhZUOxT9
+         2pI2s8huFVtk4TvRkK69hqax1tCtmTi+gNeHaSYUTh9EELek5DMl/0gmjU2hYtlNlR
+         HIuFXS4o/uiY0QHX26YLdBc0EPqM0GPHnrQO1vcn5LPmmeQWYt7e+69eszP5PALOrC
+         fvHwdq1m7vmJA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8E718E49BBF;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A9725E49FAA;
         Fri, 16 Jun 2023 05:50:20 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: linux-next: build failure after merge of the net-next tree
+Subject: Re: [PATCH net-next v7] net: ioctl: Use kernel memory on protocol ioctl
+ callbacks
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168689462057.26047.14551601662113522861.git-patchwork-notify@kernel.org>
+Message-Id: <168689462068.26047.7995810161651055390.git-patchwork-notify@kernel.org>
 Date:   Fri, 16 Jun 2023 05:50:20 +0000
-References: <20230613164639.164b2991@canb.auug.org.au>
-In-Reply-To: <20230613164639.164b2991@canb.auug.org.au>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20230609152800.830401-1-leitao@debian.org>
+In-Reply-To: <20230609152800.830401-1-leitao@debian.org>
+To:     Breno Leitao <leitao@debian.org>
+Cc:     courmisch@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, alex.aring@gmail.com,
+        stefan@datenfreihafen.org, miquel.raynal@bootlin.com,
+        dsahern@kernel.org, willemdebruijn.kernel@gmail.com,
+        matthieu.baerts@tessares.net, martineau@kernel.org,
+        marcelo.leitner@gmail.com, lucien.xin@gmail.com, axboe@kernel.dk,
+        asml.silence@gmail.com, leit@fb.com, willemb@google.com,
+        martin.lau@kernel.org, ast@kernel.org, kuniyu@amazon.com,
+        kernelxing@tencent.com, joannelkoong@gmail.com, hbh25y@gmail.com,
+        wojciech.drewek@intel.com, andrea.righi@canonical.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        dccp@vger.kernel.org, linux-wpan@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-sctp@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,26 +75,22 @@ Hello:
 This patch was applied to netdev/net-next.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Tue, 13 Jun 2023 16:46:39 +1000 you wrote:
-> Hi all,
+On Fri,  9 Jun 2023 08:27:42 -0700 you wrote:
+> Most of the ioctls to net protocols operates directly on userspace
+> argument (arg). Usually doing get_user()/put_user() directly in the
+> ioctl callback.  This is not flexible, because it is hard to reuse these
+> functions without passing userspace buffers.
 > 
-> After merging the net-next tree, today's linux-next build (sparc64
-> defconfig) failed like this:
-> 
-> drivers/net/ethernet/sun/sunvnet_common.c: In function 'vnet_handle_offloads':
-> drivers/net/ethernet/sun/sunvnet_common.c:1277:16: error: implicit declaration of function 'skb_gso_segment'; did you mean 'skb_gso_reset'? [-Werror=implicit-function-declaration]
->  1277 |         segs = skb_gso_segment(skb, dev->features & ~NETIF_F_TSO);
->       |                ^~~~~~~~~~~~~~~
->       |                skb_gso_reset
-> drivers/net/ethernet/sun/sunvnet_common.c:1277:14: warning: assignment to 'struct sk_buff *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
->  1277 |         segs = skb_gso_segment(skb, dev->features & ~NETIF_F_TSO);
->       |              ^
+> Change the "struct proto" ioctls to avoid touching userspace memory and
+> operate on kernel buffers, i.e., all protocol's ioctl callbacks is
+> adapted to operate on a kernel memory other than on userspace (so, no
+> more {put,get}_user() and friends being called in the ioctl callback).
 > 
 > [...]
 
 Here is the summary with links:
-  - linux-next: build failure after merge of the net-next tree
-    https://git.kernel.org/netdev/net-next/c/d9ffa069e006
+  - [net-next,v7] net: ioctl: Use kernel memory on protocol ioctl callbacks
+    https://git.kernel.org/netdev/net-next/c/e1d001fa5b47
 
 You are awesome, thank you!
 -- 
