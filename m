@@ -2,112 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB552733246
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 15:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D1067331BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 14:58:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345010AbjFPNeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 09:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36962 "EHLO
+        id S1345522AbjFPM57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 08:57:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345163AbjFPNeA (ORCPT
+        with ESMTP id S1345503AbjFPM5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 09:34:00 -0400
-X-Greylist: delayed 2316 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 16 Jun 2023 06:33:57 PDT
-Received: from imap5.colo.codethink.co.uk (imap5.colo.codethink.co.uk [78.40.148.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD3435AC;
-        Fri, 16 Jun 2023 06:33:57 -0700 (PDT)
-Received: from [167.98.27.226] (helo=[10.35.6.111])
-        by imap5.colo.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
-        id 1qA8yv-009RVR-6E; Fri, 16 Jun 2023 13:55:14 +0100
-Message-ID: <f0026ebc-aa35-6242-fab2-02ee35afa8b2@codethink.co.uk>
-Date:   Fri, 16 Jun 2023 13:55:13 +0100
+        Fri, 16 Jun 2023 08:57:53 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02251BF8
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 05:57:51 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 50C241F8AB;
+        Fri, 16 Jun 2023 12:57:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1686920270; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=UUblm1SLH8JXbxs3N8jNcwJvhuYGSYIY3MAUPHTUEXI=;
+        b=P+EKUSAwUOrNKY6sk+VCTMfVT45yeH/Xpdx83vR7sjnTL3K+o4jTOGPrEDaLJGJ321AZQm
+        aqMm3JfVNzh385bRLsxM+sOSHReH2PgKp5eRJf6zcCv1KNhNZ+i8xzvn7lrmeWj4EbJp2U
+        CZFkDVv3uVsL/1M3MWUrjkOXyjJ5r9g=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B350E1330B;
+        Fri, 16 Jun 2023 12:57:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id XW8RKU1cjGTjNwAAMHmgww
+        (envelope-from <nik.borisov@suse.com>); Fri, 16 Jun 2023 12:57:49 +0000
+From:   Nikolay Borisov <nik.borisov@suse.com>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, mhocko@suse.com, jslaby@suse.cz,
+        Nikolay Borisov <nik.borisov@suse.com>
+Subject: [PATCH v3 0/5] Make IA32_EMULATION boot time overridable
+Date:   Fri, 16 Jun 2023 15:57:25 +0300
+Message-Id: <20230616125730.1164989-1-nik.borisov@suse.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] riscv: kvm: define vcpu_sbi_ext_pmu in header
-Content-Language: en-GB
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     linux-riscv@lists.infradead.org, kvm-riscv@lists.infradead.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        palmer@dabbelt.com, anup@brainfault.org, atishp@atishpatra.or
-References: <20230616115410.166244-1-ben.dooks@codethink.co.uk>
- <20230616-founder-speech-6f57f22e1412@wendy>
-From:   Ben Dooks <ben.dooks@codethink.co.uk>
-Organization: Codethink Limited.
-In-Reply-To: <20230616-founder-speech-6f57f22e1412@wendy>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/06/2023 13:22, Conor Dooley wrote:
-> Hey Ben,
-> 
-> On Fri, Jun 16, 2023 at 12:54:10PM +0100, Ben Dooks wrote:
->> Sparse is giving a warning about vcpu_sbi_ext_pmu not being
->> defined, so add a definition to the relevant header to fix
->> the following:
->>
->> arch/riscv/kvm/vcpu_sbi_pmu.c:81:37: warning: symbol 'vcpu_sbi_ext_pmu' was not declared. Should it be static?
->>
->> Fixes: 3e5e56c60a1477 ("riscv: kvm: move extern sbi_ext declarations to a header")
-> 
-> You sure this is the right fixes tag? This code didn't exist when I
-> wrote that commit, should the fixes tag not be
-> 	Fixes: cbddc4c4cb9e ("RISC-V: KVM: Add SBI PMU extension support")
-> instead?
+[Sending you to to gather a round of internals reviews before sending upstream]
 
-I think you're right there.
+Here's v3 of the patchset making IA32_EMULATION a boot time overridable switch.
 
-> Cheers,
-> Conor.
-> 
->> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
->> ---
->>   arch/riscv/include/asm/kvm_vcpu_sbi.h | 3 +++
->>   arch/riscv/kvm/vcpu_sbi.c             | 4 +---
->>   2 files changed, 4 insertions(+), 3 deletions(-)
->>
->> diff --git a/arch/riscv/include/asm/kvm_vcpu_sbi.h b/arch/riscv/include/asm/kvm_vcpu_sbi.h
->> index 4278125a38a5..b94c7e958da7 100644
->> --- a/arch/riscv/include/asm/kvm_vcpu_sbi.h
->> +++ b/arch/riscv/include/asm/kvm_vcpu_sbi.h
->> @@ -66,4 +66,7 @@ extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_hsm;
->>   extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_experimental;
->>   extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_vendor;
->>   
->> +#ifdef CONFIG_RISCV_PMU_SBI
->> +extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_pmu;
->> +#endif
->>   #endif /* __RISCV_KVM_VCPU_SBI_H__ */
->> diff --git a/arch/riscv/kvm/vcpu_sbi.c b/arch/riscv/kvm/vcpu_sbi.c
->> index e52fde504433..c973d92a0ba5 100644
->> --- a/arch/riscv/kvm/vcpu_sbi.c
->> +++ b/arch/riscv/kvm/vcpu_sbi.c
->> @@ -20,9 +20,7 @@ static const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_v01 = {
->>   };
->>   #endif
->>   
->> -#ifdef CONFIG_RISCV_PMU_SBI
->> -extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_pmu;
->> -#else
->> +#ifndef CONFIG_RISCV_PMU_SBI
->>   static const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_pmu = {
->>   	.extid_start = -1UL,
->>   	.extid_end = -1UL,
->> -- 
->> 2.39.2
->>
+Changes since v2:
 
--- 
-Ben Dooks				http://www.codethink.co.uk/
-Senior Engineer				Codethink - Providing Genius
+* Re-worded the commit message of the first patch (tglx)
+* Added help description for the newly introduces IA32_EMULATION_DEFAULT_DISABLED (rdunlap)
+* Change the order of the last 2 patches (brgerst)
+* Reworked the way ia32_enabled state is being checked - introduced a function
+and eliminated code duplication (tglx)
+* Reworked the way the idt table is being initialized (tglx)
+* Split the rename and unconditional compile of of ignore_sysret (tglx)
 
-https://www.codethink.co.uk/privacy.html
+Nikolay Borisov (5):
+  x86: Make IA32_EMULATION boot time configurable
+  x86/entry: Rename ignore_sysret
+  x86/entry: Compile entry_SYSCALL32_ignore unconditionally
+  x86/elf: Predicate loading of 32bit processes on ia32_enabled()
+  x86/entry: Make IA32 syscalls availability depend on ia32_enabled()
+
+ .../admin-guide/kernel-parameters.txt         |  5 +++
+ arch/x86/Kconfig                              |  9 +++++
+ arch/x86/entry/common.c                       | 16 ++++++++
+ arch/x86/entry/entry_64.S                     |  6 +--
+ arch/x86/include/asm/elf.h                    |  3 +-
+ arch/x86/include/asm/ia32.h                   | 17 ++++++++-
+ arch/x86/include/asm/processor.h              |  2 +-
+ arch/x86/include/asm/proto.h                  |  3 ++
+ arch/x86/kernel/cpu/common.c                  | 37 ++++++++++---------
+ arch/x86/kernel/idt.c                         | 10 +++++
+ 10 files changed, 82 insertions(+), 26 deletions(-)
+
+--
+2.34.1
 
