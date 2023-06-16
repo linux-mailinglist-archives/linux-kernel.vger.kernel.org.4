@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2076732D92
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:26:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B19AA732D93
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 12:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241613AbjFPK0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 06:26:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49670 "EHLO
+        id S245222AbjFPK0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 06:26:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343817AbjFPKZj (ORCPT
+        with ESMTP id S1343895AbjFPKZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 06:25:39 -0400
+        Fri, 16 Jun 2023 06:25:41 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBFB1732;
-        Fri, 16 Jun 2023 03:25:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3011E2D67;
+        Fri, 16 Jun 2023 03:25:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A2E57634C5;
-        Fri, 16 Jun 2023 10:25:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2CD3C433CB;
-        Fri, 16 Jun 2023 10:25:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA71A63592;
+        Fri, 16 Jun 2023 10:25:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3E6EC433BB;
+        Fri, 16 Jun 2023 10:25:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686911132;
-        bh=9/v84xVX9Fh50n5P16H8hP2KaHmXMwGYY7S3patTJbk=;
+        s=k20201202; t=1686911136;
+        bh=HGNwtmBNEq7tGVmoFyJY42ip5IfyHQ8hZyNAmVrk+UU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KawVhXQY+jLjXMWyCkjNF2z3m+EmPrGDG6a/M9MnK8z6HjqgXIswTdKhAwNszK0H7
-         7XJDKmzhKF+cc67gnqxIm5tkB4tj+csjYOEaHVdwCHusQhxjildiuFGkZbKs2Ddxk0
-         Hrj4unEwdJq6k/ehph1LxE13duU9drSA9zzViqrzqqLIM5EyBaRjehiJv1xbSvDdCw
-         z+Df+QChOe0bGLgmPfyc+I7uoXN9jxk3oO04MXC6Rw6q8QHVQLDVINwc3MnvuWsjfY
-         9sYL61nV8eyu3rdY3NpKAn4aYVpA6iisQi6pfjKcweErYr1IJio1khX8JK91aJl9B9
-         A62OR7GRBwVhA==
+        b=EeWY8L2uFlhp+pZETakACn5Sr9Szf0XYMv6k5REymx0OLgxm5TLglapLc+TE/Eq6e
+         EE1QHVO/9yFLbL+6Dau0+POEnhDgHnhXLc9dFM36jZQ2fj2UeEt6oC0JHChbSnPlkd
+         JHYbpigYnuEKKXURqlYr1we+Olg3mpXh9RP2ZG8pJoPrrsfNJAw2Xs2oAavcokWC+t
+         LUWRBMV8Ts7t8zDYHgscONxagzm/RC0sz62LgvRcJMioNBjKpi2T7Y74xzWaZhGMa6
+         NRkLOritWRuZyapsEgTIlOX4BZet7EiL7D+Xn1aFPP62zlPafS+qKxWjegwUulBgkb
+         JLJw8MfhbuldA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+Cc:     Herve Codina <herve.codina@bootlin.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
-        perex@perex.cz, tiwai@suse.com, krzysztof.kozlowski@linaro.org,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org
-Subject: [PATCH AUTOSEL 6.3 06/30] ASoC: codecs: wcd938x-sdw: do not set can_multi_write flag
-Date:   Fri, 16 Jun 2023 06:24:54 -0400
-Message-Id: <20230616102521.673087-6-sashal@kernel.org>
+        perex@perex.cz, tiwai@suse.com, astrid.rost@axis.com,
+        spujar@nvidia.com, aidanmacdonald.0x0@gmail.com,
+        alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 6.3 07/30] ASoC: simple-card: Add missing of_node_put() in case of error
+Date:   Fri, 16 Jun 2023 06:24:55 -0400
+Message-Id: <20230616102521.673087-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230616102521.673087-1-sashal@kernel.org>
 References: <20230616102521.673087-1-sashal@kernel.org>
@@ -61,36 +63,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+From: Herve Codina <herve.codina@bootlin.com>
 
-[ Upstream commit 2d7c2f9272de6347a9cec0fc07708913692c0ae3 ]
+[ Upstream commit 8938f75a5e35c597a647c28984a0304da7a33d63 ]
 
-regmap-sdw does not support multi register writes, so there is
-no point in setting this flag. This also leads to incorrect
-programming of WSA codecs with regmap_multi_reg_write() call.
+In the error path, a of_node_put() for platform is missing.
+Just add it.
 
-This invalid configuration should have been rejected by regmap-sdw.
-
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Link: https://lore.kernel.org/r/20230523165414.14560-1-srinivas.kandagatla@linaro.org
+Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+Acked-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Link: https://lore.kernel.org/r/20230523151223.109551-9-herve.codina@bootlin.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/wcd938x-sdw.c | 1 -
- 1 file changed, 1 deletion(-)
+ sound/soc/generic/simple-card.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/sound/soc/codecs/wcd938x-sdw.c b/sound/soc/codecs/wcd938x-sdw.c
-index 402286dfaea44..9c10200ff34b2 100644
---- a/sound/soc/codecs/wcd938x-sdw.c
-+++ b/sound/soc/codecs/wcd938x-sdw.c
-@@ -1190,7 +1190,6 @@ static const struct regmap_config wcd938x_regmap_config = {
- 	.readable_reg = wcd938x_readable_register,
- 	.writeable_reg = wcd938x_writeable_register,
- 	.volatile_reg = wcd938x_volatile_register,
--	.can_multi_write = true,
- };
+diff --git a/sound/soc/generic/simple-card.c b/sound/soc/generic/simple-card.c
+index e98932c167542..5f8468ff36562 100644
+--- a/sound/soc/generic/simple-card.c
++++ b/sound/soc/generic/simple-card.c
+@@ -416,6 +416,7 @@ static int __simple_for_each_link(struct asoc_simple_priv *priv,
  
- static const struct sdw_slave_ops wcd9380_slave_ops = {
+ 			if (ret < 0) {
+ 				of_node_put(codec);
++				of_node_put(plat);
+ 				of_node_put(np);
+ 				goto error;
+ 			}
 -- 
 2.39.2
 
