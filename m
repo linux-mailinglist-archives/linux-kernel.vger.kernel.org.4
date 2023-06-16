@@ -2,328 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C99373288C
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 09:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E624173288F
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 09:14:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231661AbjFPHNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 03:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55294 "EHLO
+        id S234495AbjFPHOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 03:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbjFPHNn (ORCPT
+        with ESMTP id S234125AbjFPHOI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 03:13:43 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F95171F;
-        Fri, 16 Jun 2023 00:13:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686899621; x=1718435621;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=+UeIrKXrwilfMfT6nkR/bG4+9ddgWSC6eTl4dg+OmKU=;
-  b=mqAcwP1F4N6IesRCIsRTs93CQhx+patRQopVPN9wPu42mIj9gGxMm6qW
-   8d/ifARxEh5Uwh3DAYRpTYwtk52RmafkA4daVHW+EwIEGWl3MbmmQytZT
-   hAT4E0tgZzoVFji/hW4plWNYeKimVv8r6oRFBUaOxk1E2pw3FCOpryMPN
-   cWp9pPS8ISxgaTcb12HHtKJk3ktTRMmHckw5Y8YfdQPWG6PVG7M3e2rrU
-   dvTjgOc1cAc9F5ww2dvRxGbDXp87iTMR9fzN1fC+5LdlvYX0STGIsQkci
-   zStOscnR+QtQSYCjghcyqfWCWWb96WVzZaz5iTk5EHLFUiMEmah8TTw46
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="445527851"
-X-IronPort-AV: E=Sophos;i="6.00,246,1681196400"; 
-   d="scan'208";a="445527851"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 00:13:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10742"; a="802727047"
-X-IronPort-AV: E=Sophos;i="6.00,246,1681196400"; 
-   d="scan'208";a="802727047"
-Received: from ijarvine-mobl2.ger.corp.intel.com ([10.251.211.240])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 00:13:39 -0700
-Date:   Fri, 16 Jun 2023 10:13:37 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-cc:     hdegoede@redhat.com, markgross@kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH 1/2] platform/x86/intel/tpmi: Read feature control
- status
-In-Reply-To: <20230615193302.2507338-2-srinivas.pandruvada@linux.intel.com>
-Message-ID: <f7a0db17-dfe6-f8e0-4aed-6a198fde6dea@linux.intel.com>
-References: <20230615193302.2507338-1-srinivas.pandruvada@linux.intel.com> <20230615193302.2507338-2-srinivas.pandruvada@linux.intel.com>
+        Fri, 16 Jun 2023 03:14:08 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2074.outbound.protection.outlook.com [40.107.20.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE74171F;
+        Fri, 16 Jun 2023 00:14:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZjOPzluFAXS9WqVSI/Dnaq2fx44/2SVabLVAI+dm5fIjUjt2VmN7do1e/mG44T7E61AFN3YjO8tr9H6UVIey153Yrt1s3JWtjzm3jsCER94qV3yJ5/CYXpdtXDJ1+TCXng9TZW6V1pOm+VssuzIMyShFVftG0vT3WCzmcL/PMWYoWkaJuymnX9xDnybSG9g+xBUCEg37EUchgYv2nfz7ZRs8U5r+f2k4d0PqeEe3u8l9aoQQqyXdVQE50RhrTaWXXLD13aaZE+75g2KfQZt//34Kn1cp1MKr4MYVeFCZgKeRxYwTX+LP9OoqK2AXnUnAcjN8jok+NAX3ssRhUW1VaQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=684CEngxMLDoGn6N4o1ky5K9QhDvkkZszbq1RqD7Kpc=;
+ b=DlO5ydP2Xq1jX6oNQT1s34x7YVPBeE87jrpz9ZIViEn1DTEy9ySq8TCV5JQOnUs+XVPYDNKfVbrMmtfm9tj9waEL0cg3os4qk5BQnJFIC2sQRD2tgwFKXxRAR0Oj8SKJXDVG5Wo5zOeKtxnI3VvkFZpxmI/yQOHYtvCZS+ocAjq6vb+yP8xLu7aO+DgCU6fD0Fjhcwol26BjjWDO39hLDQGyDxtuNeR0G+ALNzGVcVjnWn9vR3kLy5fq4oEDOuwTrCRyT06fbKnV/AZHu4aLakOkyA1tDtD+mHFdoHUDKsABGquuCShuB2aWc9ekoR0HrbExgXFUBYc6Ga7NxOWkDA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=684CEngxMLDoGn6N4o1ky5K9QhDvkkZszbq1RqD7Kpc=;
+ b=sdFU+fDULH0Teh08UMkfkTi7RpLHLT9acoi2icvPeauRfubzybHA4hcjU1EeK7agLcg0hugToaGFZFlsnWzi8z7b0FOPdmY8pxVfeW00HCrO7FGKnXPpfyLrLpHt8QvUOMC8i1zFuco6gJt6qnat+bKoRn1LGg+XZWZrep001kA=
+Received: from PAXPR04MB9448.eurprd04.prod.outlook.com (2603:10a6:102:2b1::21)
+ by AS1PR04MB9681.eurprd04.prod.outlook.com (2603:10a6:20b:480::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.37; Fri, 16 Jun
+ 2023 07:13:57 +0000
+Received: from PAXPR04MB9448.eurprd04.prod.outlook.com
+ ([fe80::8af8:59df:c8ab:ff51]) by PAXPR04MB9448.eurprd04.prod.outlook.com
+ ([fe80::8af8:59df:c8ab:ff51%5]) with mapi id 15.20.6477.037; Fri, 16 Jun 2023
+ 07:13:56 +0000
+From:   Sandor Yu <sandor.yu@nxp.com>
+To:     Sam Ravnborg <sam@ravnborg.org>
+CC:     "andrzej.hajda@intel.com" <andrzej.hajda@intel.com>,
+        "neil.armstrong@linaro.org" <neil.armstrong@linaro.org>,
+        "robert.foss@linaro.org" <robert.foss@linaro.org>,
+        "Laurent.pinchart@ideasonboard.com" 
+        <Laurent.pinchart@ideasonboard.com>,
+        "jonas@kwiboo.se" <jonas@kwiboo.se>,
+        "jernej.skrabec@gmail.com" <jernej.skrabec@gmail.com>,
+        "airlied@gmail.com" <airlied@gmail.com>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        Oliver Brown <oliver.brown@nxp.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>
+Subject: RE: [EXT] Re: [PATCH v6 3/8] drm: bridge: Cadence: Add MHDP8501 DP
+ driver
+Thread-Topic: [EXT] Re: [PATCH v6 3/8] drm: bridge: Cadence: Add MHDP8501 DP
+ driver
+Thread-Index: AQHZnyaVOp3VLStRVUaOGqNURseKhq+MD9UAgAD0dsA=
+Date:   Fri, 16 Jun 2023 07:13:56 +0000
+Message-ID: <PAXPR04MB9448680E4F589E1F722ADD2CF458A@PAXPR04MB9448.eurprd04.prod.outlook.com>
+References: <cover.1686729444.git.Sandor.yu@nxp.com>
+ <67f54be91e91f6291c4ad3f5155598d699b8bc09.1686729444.git.Sandor.yu@nxp.com>
+ <20230615163308.GA1588386@ravnborg.org>
+In-Reply-To: <20230615163308.GA1588386@ravnborg.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PAXPR04MB9448:EE_|AS1PR04MB9681:EE_
+x-ms-office365-filtering-correlation-id: 0db8404a-4dd1-4405-29d6-08db6e393fdd
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Mxnzv0IpsXIDigCT0qVWgq9q/Ftkz4rG9sNNGt5FgcSu8HnGIBkdHcXnXImuFdpEDPA5f5w+7k92w/EJyhZtH68SPo+JMaS9gRJNCyTjBF1aJ0vxehKYoUkqSYpmVxJ4RzoYK53zjGnLngfAFbdEYsyfi41TkJMDM5Co5zLFQtZkg+TxMumAvHoyIDhjQFDmQqEYOENIvrB/xWGsHxyhu5EslKx2PvuRKcJKkLosQ8ReJR1tXkCIdWQKeIieSceHcYsOp3HKVtr9sIiJDthTIkC02pSmyzUObETygxflJCMccav3gk0vJZ5BBHtgK3+LxQZrSRIqKAhtoYCMty1qIaUX8SW1mpl7d3Z5K44dQJ7SLlyIMOEEe8eAwc5F2tsbK6+O4gr9rlmGGhGrHb9aZCIKKeEb/c+weyAfOZnY14PyFja3mv89vGjvqyVBDndeL/iHM2CutM4kGBhYMELOCdpz+lmqPgO/dRIGvYLbFPguCWDJ7p/kMtQTkY3wTZ1/GM+3yWh3Hv/8WaoYH2VhVKAulr40vWP6sAKCgYBu8allOPPSCxduUZ3qMxzmSyRJI5PpbHx1oVWpgMIs/Q55uZ4IBGdpkl0xoXIMo+V/p3NIu82xU4UFg4l6lKfEpd1m
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9448.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(376002)(346002)(39860400002)(136003)(451199021)(186003)(38070700005)(2906002)(33656002)(38100700002)(44832011)(7416002)(86362001)(53546011)(26005)(83380400001)(55016003)(9686003)(6506007)(122000001)(66446008)(4326008)(316002)(66476007)(64756008)(71200400001)(76116006)(66556008)(6916009)(7696005)(66946007)(478600001)(41300700001)(54906003)(8676002)(5660300002)(8936002)(52536014);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?gb2312?B?SEZIaWxSSkFsT3FLNjZXdkZMcHRuSElMRmwwckdYaEhTdkNyTUJuelIwL3NQ?=
+ =?gb2312?B?d3hHMU10Y2gxTFlUckt3YWtodzcweWhNY1YyUWtSWGpSdTZVbFFLZmZxY1dW?=
+ =?gb2312?B?a1RTOUlKSFk3WlMwWEY0Vlhmd3NhMWpnTEo2UmgzeHY0eUhSeFBGVUpoZHZW?=
+ =?gb2312?B?aUhwWHBMRmNKMW9JTEN3c0JSK3Q5dENseldwaHozVTVLVXQwMmw0UTlWSyto?=
+ =?gb2312?B?RWNrUVVZOHIzNHJoU01SYkFoanQvcmxnT1BlRUQydTVoTXU5WjQ3bjZvK1Bv?=
+ =?gb2312?B?alBKOXV0cGhPVnhRcEZONzQ0RE1la2JXamxyRWJ5MEM3MWxNMkovWWlWQ0Nk?=
+ =?gb2312?B?OTRycFFpclI5ZjJmWG9yTXFINjFPblpFbVZONDh1MktwVDhQYklYY2NFZHdW?=
+ =?gb2312?B?L21TSDhWeHVyWDhMTmxLdlN5VXJsajhHcHA0aWZxb0dUdSt5R2lmUENveWxu?=
+ =?gb2312?B?ai8zcWdhN2J5dkFaWllUWU1EaDBWNFRRZVBQRVJaVjBSK0FBRGtCUmFHUFl1?=
+ =?gb2312?B?TUpyU2tIVElzMjZKWUdLWG1ZQUJDZk12WENENXl0ak9oQ1R2TDR2eHF1NFJO?=
+ =?gb2312?B?YkJaZjhNMkVKYnNleGxtNGVEaGY2bks1ZWoyVFRZbVNBcExNd2NDRGVNcVFi?=
+ =?gb2312?B?cGcrT0ZUcndQMlpyQ1Z0ajlPMVd6cHpMY25Ec21ONEFnSEZ4ZTZ6OFoxcWp5?=
+ =?gb2312?B?T2ZWVmdzOHBucENtcnhzenV1Mk44OVlNVS9EYytGQXc5K3N0dHMyNmg5YjNm?=
+ =?gb2312?B?azFsNjM3TUcrRVBzL0I1a0pMQ0dPY01ZbWVMekxqMS9Zd3AxRXloRVFvSTJH?=
+ =?gb2312?B?d1dUTUNEWnBhR3lzNVZjZC9BeWdGdElEMTZMSU9pZzdvWUFhWHhDTEQ4RHJS?=
+ =?gb2312?B?THhjeHc4Zjkrb0lSVmM1VUJycDIybFdYdVhFMTI3NXBESkpkVlZXS3pzY1RB?=
+ =?gb2312?B?TjJscnd4bFpBQXd6N0l4dVhua2I4TnRJcmJHbUhCUFJaTVp0a3ZxOHNNTm8y?=
+ =?gb2312?B?NVR5UXBvR2tVUlVYRnQyd3JpekFvbWlaTTZxUC9xT3pPMjNiVlQreTQ4Mm15?=
+ =?gb2312?B?bzNzK050M0pkVGJzWkpZMXlBS25FTld3TDZvMGc1UDBnVHFReXpLdm5UeXVt?=
+ =?gb2312?B?V3YwZ0w5elU2T1hVSzc0T0FTcTRUU0x1empnTklwcG1DNGpob05Ub3Jwa0JK?=
+ =?gb2312?B?anp5SkEySGZkLzUwNk1ReW45Y1VKQklUM2s5czAwdmJNRTR0Slkxc1F1WUJz?=
+ =?gb2312?B?NzRrSzZGWXJjS3BYVVFrT3RJRmMwTEpsZ0VJdW01SUNPS2xlajFSQ0JKOU9M?=
+ =?gb2312?B?eUNBbkI3ajRYY0hZVUpBSTRvVGNIc2NyRDNudU5mN1lWMmMzdnFZZm13Y2Fk?=
+ =?gb2312?B?OGJtVm9tdVJydTRzMXIzS0QvQXBXWkJadThNYXp0SEVZNjgrYzRHVHdOaGQw?=
+ =?gb2312?B?Rkk4b2U2aHYyU0JtTFpOaTQyeUl5bnVhRmVZUXdOellJM3JtR3pKYWdldzY3?=
+ =?gb2312?B?THhMWEt5ekd5L1NTTTJxNndvWG1LaFhKZ0RMZmpFUURqUVJuajVNdkYzYWg2?=
+ =?gb2312?B?OS9Qd3RwcTh5MXk5eDJwN0xIWlFqaVhvOGtLTGQ1NCtrZTVnUGhvODlxb0RV?=
+ =?gb2312?B?bk85SjZzby9Da1lhSGdWUzFTbjgyL3hYdEJuUEhwZGZxbkJvKzBwYnJtWC9u?=
+ =?gb2312?B?ZThiVDFsWk9UblF6WU1FMWRxeFlkZ3d6Wm1ZUzhmL1Ztdm41aVFydXgydFY1?=
+ =?gb2312?B?eWhoTVhKR3dQRVVnWUVwRmJUd0pHZldCejVHV0xNMjBkMlEvVEtJNEpwcmRY?=
+ =?gb2312?B?MUQvWURnTWg4SDUvQzhKQ2NpZlZ3NlBKT0xvQzZLUG00dGpyUVJseTJ1VmFh?=
+ =?gb2312?B?S3o4Tko0VWF3ck9IamxPaUkxSHhPaDVoRzlKYWwySy9FUjdEUU5kZXd3YkVq?=
+ =?gb2312?B?VjB4VlNOQytuOGJjQmVIdzR6TUs3RWhDZ29XRE8relZRdWZpR1ZTck9PNExr?=
+ =?gb2312?B?K0tOUVllNGY2ekZEMW9XQ1R3aW16QTI5VXFsL01aSzRpdCticEE5YkE5UjFz?=
+ =?gb2312?B?eGpvZ0VjTFUyemMxUk1qazFwNXc4OXlJbWtGblJ1OFNlUFF0b0VZNURVZGhD?=
+ =?gb2312?Q?bD4M=3D?=
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9448.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0db8404a-4dd1-4405-29d6-08db6e393fdd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jun 2023 07:13:56.6427
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: krIJOTWHhMrzUruK+lv2d+yu3m4Wj0llVgfc6VPMb2La7vdXdYlJYoJojg4SZClB7y3X4mrQUdqIICIHivSjBw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR04MB9681
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Jun 2023, Srinivas Pandruvada wrote:
-
-> Some of the PM features can be locked or disabled. In that case, write
-> interface can be locked.
-> 
-> This status is read via a mailbox. There is one TPMI ID which provides
-> base address for interface and data register for mail box operation.
-> The mailbox operations is defined in the TPMI specification. Refer to
-> https://github.com/intel/tpmi_power_management/ for TPMI specifications.
-> 
-> An API is exposed to feature drivers to read feature control status.
-> 
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> As suggested by Dan Williams changed ioremap to devm_ioremap() after
-> review by Andy.
-> 
->  drivers/platform/x86/intel/tpmi.c | 147 ++++++++++++++++++++++++++++++
->  include/linux/intel_tpmi.h        |   2 +
->  2 files changed, 149 insertions(+)
-> 
-> diff --git a/drivers/platform/x86/intel/tpmi.c b/drivers/platform/x86/intel/tpmi.c
-> index a5227951decc..9545e9cdb924 100644
-> --- a/drivers/platform/x86/intel/tpmi.c
-> +++ b/drivers/platform/x86/intel/tpmi.c
-> @@ -47,8 +47,11 @@
->   */
->  
->  #include <linux/auxiliary_bus.h>
-> +#include <linux/bitfield.h>
-> +#include <linux/delay.h>
->  #include <linux/intel_tpmi.h>
->  #include <linux/io.h>
-> +#include <linux/iopoll.h>
->  #include <linux/module.h>
->  #include <linux/pci.h>
->  
-> @@ -98,6 +101,7 @@ struct intel_tpmi_pm_feature {
->   * @feature_count:	Number of TPMI of TPMI instances pointed by tpmi_features
->   * @pfs_start:		Start of PFS offset for the TPMI instances in this device
->   * @plat_info:		Stores platform info which can be used by the client drivers
-> + * @tpmi_control_mem:	Memory mapped IO for getting control information
->   *
->   * Stores the information for all TPMI devices enumerated from a single PCI device.
->   */
-> @@ -107,6 +111,7 @@ struct intel_tpmi_info {
->  	int feature_count;
->  	u64 pfs_start;
->  	struct intel_tpmi_plat_info plat_info;
-> +	void __iomem *tpmi_control_mem;
->  };
->  
->  /**
-> @@ -139,6 +144,7 @@ enum intel_tpmi_id {
->  	TPMI_ID_PEM = 1, /* Power and Perf excursion Monitor */
->  	TPMI_ID_UNCORE = 2, /* Uncore Frequency Scaling */
->  	TPMI_ID_SST = 5, /* Speed Select Technology */
-> +	TPMI_CONTROL_ID = 0x80, /* Special ID for getting feature status */
->  	TPMI_INFO_ID = 0x81, /* Special ID for PCI BDF and Package ID information */
->  };
->  
-> @@ -175,6 +181,144 @@ struct resource *tpmi_get_resource_at_index(struct auxiliary_device *auxdev, int
->  }
->  EXPORT_SYMBOL_NS_GPL(tpmi_get_resource_at_index, INTEL_TPMI);
->  
-> +/* TPMI Control Interface */
-> +
-> +#define TPMI_CONTROL_STATUS_OFFSET	0x00
-> +#define TPMI_COMMAND_OFFSET		0x08
-> +#define TPMI_DATA_OFFSET		0x0C
-> +/*
-> + * Spec is calling for max 1 seconds to get ownership at the worst
-> + * case. Read at 10 ms timeouts and repeat up to 1 second.
-> + */
-> +#define TPMI_CONTROL_TIMEOUT_US		(10 * USEC_PER_MSEC)
-> +#define TPMI_CONTROL_TIMEOUT_MAX_US	USEC_PER_SEC
-> +
-> +#define TPMI_RB_TIMEOUT_US		(10 * USEC_PER_MSEC)
-> +#define TPMI_RB_TIMEOUT_MAX_US		USEC_PER_SEC
-> +
-> +#define TPMI_OWNER_NONE			0
-> +#define TPMI_OWNER_IN_BAND		1
-> +
-> +#define TPMI_GENMASK_OWNER	GENMASK_ULL(5, 4)
-> +#define TPMI_GENMASK_STATUS	GENMASK_ULL(15, 8)
-> +
-> +#define TPMI_GET_STATE_CMD		0x10
-> +#define TPMI_GET_STATE_CMD_DATA_OFFSET	8
-> +#define TPMI_CMD_DATA_OFFSET		32
-> +#define TPMI_CMD_PKT_LEN_OFFSET		16
-> +#define TPMI_CMD_PKT_LEN		2
-> +#define TPMI_CONTROL_RB_BIT		0
-> +#define TPMI_CONTROL_CPL_BIT		6
-> +#define TPMI_CMD_STATUS_SUCCESS		0x40
-> +#define TPMI_GET_STATUS_BIT_ENABLE	0
-> +#define TPMI_GET_STATUS_BIT_LOCKED	31
-> +
-> +/* Mutex to complete get feature status without interruption */
-> +static DEFINE_MUTEX(tpmi_dev_lock);
-> +
-> +static int tpmi_wait_for_owner(struct intel_tpmi_info *tpmi_info, u8 owner)
-> +{
-> +	u64 control;
-> +
-> +	return read_poll_timeout(readq, control, owner == FIELD_GET(TPMI_GENMASK_OWNER, control),
-> +				 TPMI_CONTROL_TIMEOUT_US, TPMI_CONTROL_TIMEOUT_MAX_US, false,
-> +				 tpmi_info->tpmi_control_mem + TPMI_CONTROL_STATUS_OFFSET);
-> +}
-> +
-> +static int tpmi_read_feature_status(struct intel_tpmi_info *tpmi_info, int feature_id,
-> +				    int *locked, int *disabled)
-> +{
-> +	u64 control, data;
-> +	int ret;
-> +
-> +	if (!tpmi_info->tpmi_control_mem)
-> +		return -EFAULT;
-> +
-> +	mutex_lock(&tpmi_dev_lock);
-> +
-> +	ret = tpmi_wait_for_owner(tpmi_info, TPMI_OWNER_NONE);
-> +	if (ret)
-> +		goto err_unlock;
-> +
-> +	/* set command id to 0x10 for TPMI_GET_STATE */
-> +	data = TPMI_GET_STATE_CMD;
-> +	/* 32 bits for DATA offset and +8 for feature_id field */
-> +	data |= ((u64)feature_id << (TPMI_CMD_DATA_OFFSET + TPMI_GET_STATE_CMD_DATA_OFFSET));
-
-This looks like you should add the GENMASK_ULL() for the fields and use 
-FIELD_PREP() instead of adding all those OFFSET defines + custom shifting.
-
-> +
-> +	/* Write at command offset for qword access */
-> +	writeq(data, tpmi_info->tpmi_control_mem + TPMI_COMMAND_OFFSET);
-> +
-> +	ret = tpmi_wait_for_owner(tpmi_info, TPMI_OWNER_IN_BAND);
-> +	if (ret)
-> +		goto err_unlock;
-> +
-> +	/* Set Run Busy and packet length of 2 dwords */
-> +	writeq(BIT_ULL(TPMI_CONTROL_RB_BIT) | (TPMI_CMD_PKT_LEN << TPMI_CMD_PKT_LEN_OFFSET),
-
-Define using BIT_ULL(0) instead. Use FIELD_PREP().
-
-I'd drop _BIT from the define name but I leave it up to you, it just 
-makes your lines longer w/o much added value.
-
-> +	       tpmi_info->tpmi_control_mem + TPMI_CONTROL_STATUS_OFFSET);
-> +
-> +	ret = read_poll_timeout(readq, control, !(control & BIT_ULL(TPMI_CONTROL_RB_BIT)),
-> +				TPMI_RB_TIMEOUT_US, TPMI_RB_TIMEOUT_MAX_US, false,
-> +				tpmi_info->tpmi_control_mem + TPMI_CONTROL_STATUS_OFFSET);
-> +	if (ret)
-> +		goto done_proc;
-> +
-> +	control = FIELD_GET(TPMI_GENMASK_STATUS, control);
-> +	if (control != TPMI_CMD_STATUS_SUCCESS) {
-> +		ret = -EBUSY;
-> +		goto done_proc;
-> +	}
-> +
-> +	data = readq(tpmi_info->tpmi_control_mem + TPMI_COMMAND_OFFSET);
-> +	data >>= TPMI_CMD_DATA_OFFSET; /* Upper 32 bits are for TPMI_DATA */
-
-Define the field with GENMASK() and use FIELD_GET().
-
-> +
-> +	*disabled = 0;
-> +	*locked = 0;
-> +
-> +	if (!(data & BIT_ULL(TPMI_GET_STATUS_BIT_ENABLE)))
-
-Put BIT_ULL() into the define.
-
-Perhaps drop _BIT_ from the name.
-
-> +		*disabled = 1;
-> +
-> +	if (data & BIT_ULL(TPMI_GET_STATUS_BIT_LOCKED))
-
-Ditto.
-
-> +		*locked = 1;
-> +
-> +	ret = 0;
-> +
-> +done_proc:
-> +	/* SET CPL "completion"bit */
-
-Missing space.
-
-> +	writeq(BIT_ULL(TPMI_CONTROL_CPL_BIT),
-
-BIT_ULL() to define.
-
-> +	       tpmi_info->tpmi_control_mem + TPMI_CONTROL_STATUS_OFFSET);
-> +
-> +err_unlock:
-> +	mutex_unlock(&tpmi_dev_lock);
-> +
-> +	return ret;
-> +}
-> +
-> +int tpmi_get_feature_status(struct auxiliary_device *auxdev, int feature_id,
-> +			    int *locked, int *disabled)
-> +{
-> +	struct intel_vsec_device *intel_vsec_dev = dev_to_ivdev(auxdev->dev.parent);
-> +	struct intel_tpmi_info *tpmi_info = auxiliary_get_drvdata(&intel_vsec_dev->auxdev);
-> +
-> +	return tpmi_read_feature_status(tpmi_info, feature_id, locked, disabled);
-> +}
-> +EXPORT_SYMBOL_NS_GPL(tpmi_get_feature_status, INTEL_TPMI);
-> +
-> +static void tpmi_set_control_base(struct auxiliary_device *auxdev,
-> +				  struct intel_tpmi_info *tpmi_info,
-> +				  struct intel_tpmi_pm_feature *pfs)
-> +{
-> +	void __iomem *mem;
-> +	u16 size;
-> +
-> +	size = pfs->pfs_header.num_entries * pfs->pfs_header.entry_size * 4;
-
-Can this overflow u16? Where does pfs_header content originate from? If 
-from HW, how is it the input validated?
-
--- 
- i.
-
-
-> +	mem = devm_ioremap(&auxdev->dev, pfs->vsec_offset, size);
-> +	if (!mem)
-> +		return;
-> +
-> +	/* mem is pointing to TPMI CONTROL base */
-> +	tpmi_info->tpmi_control_mem = mem;
-> +}
-> +
->  static const char *intel_tpmi_name(enum intel_tpmi_id id)
->  {
->  	switch (id) {
-> @@ -367,6 +511,9 @@ static int intel_vsec_tpmi_init(struct auxiliary_device *auxdev)
->  		 */
->  		if (pfs->pfs_header.tpmi_id == TPMI_INFO_ID)
->  			tpmi_process_info(tpmi_info, pfs);
-> +
-> +		if (pfs->pfs_header.tpmi_id == TPMI_CONTROL_ID)
-> +			tpmi_set_control_base(auxdev, tpmi_info, pfs);
->  	}
->  
->  	tpmi_info->pfs_start = pfs_start;
-> diff --git a/include/linux/intel_tpmi.h b/include/linux/intel_tpmi.h
-> index f505788c05da..04d937ad4dc4 100644
-> --- a/include/linux/intel_tpmi.h
-> +++ b/include/linux/intel_tpmi.h
-> @@ -27,4 +27,6 @@ struct intel_tpmi_plat_info *tpmi_get_platform_data(struct auxiliary_device *aux
->  struct resource *tpmi_get_resource_at_index(struct auxiliary_device *auxdev, int index);
->  int tpmi_get_resource_count(struct auxiliary_device *auxdev);
->  
-> +int tpmi_get_feature_status(struct auxiliary_device *auxdev, int feature_id, int *locked,
-> +			    int *disabled);
->  #endif
-> 
+SGkgU2FtLA0KDQpUaGFua3MgeW91ciBjb21tZW50cywNCg0KRm9yIGkuTVg4TVEsIHRoZSBkaXNw
+bGF5IGRyaXZlciBEQ1NTIGhhZCBjcmVhdGUgaXRzIG93biBjb25uZWN0b3IuDQpJIHdpbGwgZHJv
+cCB0aGUgY29kZSBpbiB0aGUgbmV4dCB2ZXJzaW9uIHJldmlldyBwYXRjaCBzZXQuDQoNClRoYW5r
+cw0KU2FuZG9yDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogU2FtIFJh
+dm5ib3JnIDxzYW1AcmF2bmJvcmcub3JnPg0KPiBTZW50OiAyMDIzxOo21MIxNsjVIDA6MzMNCj4g
+VG86IFNhbmRvciBZdSA8c2FuZG9yLnl1QG54cC5jb20+DQo+IENjOiBhbmRyemVqLmhhamRhQGlu
+dGVsLmNvbTsgbmVpbC5hcm1zdHJvbmdAbGluYXJvLm9yZzsNCj4gcm9iZXJ0LmZvc3NAbGluYXJv
+Lm9yZzsgTGF1cmVudC5waW5jaGFydEBpZGVhc29uYm9hcmQuY29tOw0KPiBqb25hc0Brd2lib28u
+c2U7IGplcm5lai5za3JhYmVjQGdtYWlsLmNvbTsgYWlybGllZEBnbWFpbC5jb207DQo+IGRhbmll
+bEBmZndsbC5jaDsgcm9iaCtkdEBrZXJuZWwub3JnOyBrcnp5c3p0b2Yua296bG93c2tpK2R0QGxp
+bmFyby5vcmc7DQo+IHNoYXduZ3VvQGtlcm5lbC5vcmc7IHMuaGF1ZXJAcGVuZ3V0cm9uaXguZGU7
+IGZlc3RldmFtQGdtYWlsLmNvbTsNCj4gdmtvdWxAa2VybmVsLm9yZzsgZHJpLWRldmVsQGxpc3Rz
+LmZyZWVkZXNrdG9wLm9yZzsNCj4gZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWFy
+bS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZzsNCj4gbGludXgta2VybmVsQHZnZXIua2VybmVs
+Lm9yZzsgbGludXgtcGh5QGxpc3RzLmluZnJhZGVhZC5vcmc7IE9saXZlciBCcm93bg0KPiA8b2xp
+dmVyLmJyb3duQG54cC5jb20+OyBkbC1saW51eC1pbXggPGxpbnV4LWlteEBueHAuY29tPjsNCj4g
+a2VybmVsQHBlbmd1dHJvbml4LmRlDQo+IFN1YmplY3Q6IFtFWFRdIFJlOiBbUEFUQ0ggdjYgMy84
+XSBkcm06IGJyaWRnZTogQ2FkZW5jZTogQWRkIE1IRFA4NTAxIERQDQo+IGRyaXZlcg0KPiANCj4g
+Q2F1dGlvbjogVGhpcyBpcyBhbiBleHRlcm5hbCBlbWFpbC4gUGxlYXNlIHRha2UgY2FyZSB3aGVu
+IGNsaWNraW5nIGxpbmtzIG9yDQo+IG9wZW5pbmcgYXR0YWNobWVudHMuIFdoZW4gaW4gZG91YnQs
+IHJlcG9ydCB0aGUgbWVzc2FnZSB1c2luZyB0aGUgJ1JlcG9ydA0KPiB0aGlzIGVtYWlsJyBidXR0
+b24NCj4gDQo+IA0KPiBIaSBTYW5kb3IsDQo+IA0KPiBPbiBUaHUsIEp1biAxNSwgMjAyMyBhdCAw
+OTozODoxM0FNICswODAwLCBTYW5kb3IgWXUgd3JvdGU6DQo+ID4gQWRkIGEgbmV3IERSTSBEaXNw
+bGF5UG9ydCBicmlkZ2UgZHJpdmVyIGZvciBDYW5kZW5jZSBNSERQODUwMSB1c2VkIGluDQo+ID4g
+aS5NWDhNUSBTT0MuIE1IRFA4NTAxIGNvdWxkIHN1cHBvcnQgSERNSSBvciBEaXNwbGF5UG9ydCBz
+dGFuZGFyZHMNCj4gPiBhY2NvcmRpbmcgZW1iZWRkZWQgRmlybXdhcmUgcnVubmluZyBpbiB0aGUg
+dUNQVS4NCj4gPg0KPiA+IEZvciBpTVg4TVEgU09DLCB0aGUgRGlzcGxheVBvcnQgRlcgd2FzIGxv
+YWRlZCBhbmQgYWN0aXZhdGVkIGJ5IFNPQw0KPiBST00NCj4gPiBjb2RlLiBCb290bG9hZCBiaW5h
+cnkgaW5jbHVkZWQgSERNSSBGVyB3YXMgcmVxdWlyZWQgZm9yIHRoZSBkcml2ZXIuDQo+IA0KPiBU
+aGUgYnJpZGdlIGRyaXZlciBzdXBwb3J0cyBjcmVhdGluZyBhIGNvbm5lY3RvciwgYnV0IGlzIHRo
+aXMgcmVhbGx5IG5lY2Vzc2FyeT8NCj4gDQo+IFRoaXMgcGFydDoNCj4gPiArc3RhdGljIGNvbnN0
+IHN0cnVjdCBkcm1fY29ubmVjdG9yX2Z1bmNzIGNkbnNfZHBfY29ubmVjdG9yX2Z1bmNzID0gew0K
+PiA+ICsgICAgIC5maWxsX21vZGVzID0gZHJtX2hlbHBlcl9wcm9iZV9zaW5nbGVfY29ubmVjdG9y
+X21vZGVzLA0KPiA+ICsgICAgIC5kZXN0cm95ID0gZHJtX2Nvbm5lY3Rvcl9jbGVhbnVwLA0KPiA+
+ICsgICAgIC5yZXNldCA9IGRybV9hdG9taWNfaGVscGVyX2Nvbm5lY3Rvcl9yZXNldCwNCj4gPiAr
+ICAgICAuYXRvbWljX2R1cGxpY2F0ZV9zdGF0ZSA9DQo+IGRybV9hdG9taWNfaGVscGVyX2Nvbm5l
+Y3Rvcl9kdXBsaWNhdGVfc3RhdGUsDQo+ID4gKyAgICAgLmF0b21pY19kZXN0cm95X3N0YXRlID0N
+Cj4gPiArZHJtX2F0b21pY19oZWxwZXJfY29ubmVjdG9yX2Rlc3Ryb3lfc3RhdGUsDQo+ID4gK307
+DQo+ID4gKw0KPiA+ICtzdGF0aWMgY29uc3Qgc3RydWN0IGRybV9jb25uZWN0b3JfaGVscGVyX2Z1
+bmNzDQo+IGNkbnNfZHBfY29ubmVjdG9yX2hlbHBlcl9mdW5jcyA9IHsNCj4gPiArICAgICAuZ2V0
+X21vZGVzID0gY2Ruc19kcF9jb25uZWN0b3JfZ2V0X21vZGVzLCB9Ow0KPiA+ICsNCj4gPiArc3Rh
+dGljIGludCBjZG5zX2RwX2JyaWRnZV9hdHRhY2goc3RydWN0IGRybV9icmlkZ2UgKmJyaWRnZSwN
+Cj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZW51bSBkcm1fYnJpZGdlX2F0dGFj
+aF9mbGFncyBmbGFncykNCj4gew0KPiA+ICsgICAgIHN0cnVjdCBjZG5zX21oZHBfZGV2aWNlICpt
+aGRwID0gYnJpZGdlLT5kcml2ZXJfcHJpdmF0ZTsNCj4gPiArICAgICBzdHJ1Y3QgZHJtX2VuY29k
+ZXIgKmVuY29kZXIgPSBicmlkZ2UtPmVuY29kZXI7DQo+ID4gKyAgICAgc3RydWN0IGRybV9jb25u
+ZWN0b3IgKmNvbm5lY3RvciA9ICZtaGRwLT5jb25uZWN0b3I7DQo+ID4gKyAgICAgaW50IHJldDsN
+Cj4gPiArDQo+ID4gKyAgICAgaWYgKCEoZmxhZ3MgJiBEUk1fQlJJREdFX0FUVEFDSF9OT19DT05O
+RUNUT1IpKSB7DQo+ID4gKyAgICAgICAgICAgICBjb25uZWN0b3ItPmludGVybGFjZV9hbGxvd2Vk
+ID0gMDsNCj4gPiArDQo+ID4gKyAgICAgICAgICAgICBjb25uZWN0b3ItPnBvbGxlZCA9IERSTV9D
+T05ORUNUT1JfUE9MTF9IUEQ7DQo+ID4gKw0KPiA+ICsgICAgICAgICAgICAgZHJtX2Nvbm5lY3Rv
+cl9oZWxwZXJfYWRkKGNvbm5lY3RvciwNCj4gPiArICZjZG5zX2RwX2Nvbm5lY3Rvcl9oZWxwZXJf
+ZnVuY3MpOw0KPiA+ICsNCj4gPiArICAgICAgICAgICAgIGRybV9jb25uZWN0b3JfaW5pdChicmlk
+Z2UtPmRldiwgY29ubmVjdG9yLA0KPiAmY2Ruc19kcF9jb25uZWN0b3JfZnVuY3MsDQo+ID4gKw0K
+PiBEUk1fTU9ERV9DT05ORUNUT1JfRGlzcGxheVBvcnQpOw0KPiA+ICsNCj4gPiArICAgICAgICAg
+ICAgIGRybV9jb25uZWN0b3JfYXR0YWNoX2VuY29kZXIoY29ubmVjdG9yLCBlbmNvZGVyKTsNCj4g
+PiArICAgICB9DQo+IA0KPiBVbmxlc3MgeW91IGhhdmUgYSBkaXNwbGF5IGRyaXZlciB0aGF0IGRv
+IG5vdCBjcmVhdGUgdGhlaXIgb3duIGNvbm5lY3RvciB0aGVuDQo+IGRyb3AgdGhlIGFib3ZlIGFu
+ZCBlcnJvciBvdXQgaWYgRFJNX0JSSURHRV9BVFRBQ0hfTk9fQ09OTkVDVE9SIGlzDQo+IG5vdCBz
+ZXQuDQo+IEl0IGlzIGVuY291cmFnZWQgdGhhdCBkaXNwbGF5IGRyaXZlcnMgY3JlYXRlIHRoZWly
+IG93biBjb25uZWN0b3IuDQo+IA0KPiBUaGlzIHdhcyB0aGUgb25seSBkZXRhaWwgSSBsb29rZWQg
+Zm9yIGluIHRoZSBkcml2ZXIsIEkgaG9wZSBzb21lIGVsc2Ugdm9sdW50ZWVyDQo+IHRvIHJldmll
+dyBpdC4NCj4gDQo+ICAgICAgICAgU2FtDQo=
