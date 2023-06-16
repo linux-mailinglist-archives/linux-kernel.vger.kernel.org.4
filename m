@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA38F73398C
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 21:19:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 353E27339AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 21:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346160AbjFPTTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 15:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48112 "EHLO
+        id S1346015AbjFPTTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 15:19:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346005AbjFPTRL (ORCPT
+        with ESMTP id S1345975AbjFPTRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 15:17:11 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3573F35A7;
-        Fri, 16 Jun 2023 12:17:05 -0700 (PDT)
-Date:   Fri, 16 Jun 2023 19:17:03 -0000
+        Fri, 16 Jun 2023 15:17:17 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDDB3ABC;
+        Fri, 16 Jun 2023 12:17:07 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 19:17:04 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686943023;
+        s=2020; t=1686943025;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=BYKFeatUBoOPBvwxlIsSnk4Tb5+E9gS0xg4pcEolCM8=;
-        b=s3zyMKQs5qadjoAxqNan5FqTshvHBULaLv1BvKrLCYWiEYSiD1wvLdl8lRvYVuI0I/TE9d
-        o6CwInak3jw3rAcA0LCznFqR3q4TfLTY+RoWcbZXIon1AnPvocrWYeuYO8QPNH5H/nI+6L
-        1Sab8SVKOHo3hJfi367hrKDBEtVruAFCLNmDXmChjOp2ErrcKBWo9LzUGBc+KWqyISWBZy
-        6/8V6dKUHW4eiS8mumt11CbejYty19PfYroSLBuhJ9LsI4/MjRRDIYMBLP7xnzHV2YmtjC
-        XdfhM9IqUc3Vn97Jx0vE6pI3aXGuEHZJ8wWfzhEO7pjCaCwJ68tM1HMlaHf/yQ==
+        bh=zk8bNeb/HVzhu+VkQCBXkbL/CuPxVozvpdryx3JR3kk=;
+        b=2wWN+MOy/MMeeJ8mpKVY8G9XePnQpJU3zSvRb7vOn8Hem+dEpZvDx+0oR7Y306Hq8HvjjC
+        TH+Hzi+aCrkMWnJYxs3woaNOSRIfuqaIsNAEf+A/Z5dyo5FlFxoB+PTvZG+ym4/1GdssEq
+        gO0pilAmnXzfertj11tLWEHUkK/hWoJ8n8ihPRcREDGz04Ore98M1lU9800xaFpv8eMWhF
+        UqBpafOo7Ur237j2CXgiIofu48CTs/peWttLXgckrOylzqh1TS9mkQ0r3l85GkQeFzkhIF
+        QmUD3150ILx3XmDmwPnlbpqErBodBqcCFHSsHHCUdEH61pUT+aNG7s9nO6OZdg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686943023;
+        s=2020e; t=1686943025;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=BYKFeatUBoOPBvwxlIsSnk4Tb5+E9gS0xg4pcEolCM8=;
-        b=lzJpGUNQyzbZ6/cHLFrXn2+pzq3vHq7wgh8sduZt7KxquLNy6a0Nmh7gU5j01NgNuiDUzD
-        Z5hWBBtyMHrLW3Cw==
+        bh=zk8bNeb/HVzhu+VkQCBXkbL/CuPxVozvpdryx3JR3kk=;
+        b=myR0DoSTbfmDGRYOtangoC9vXof1/wxzXHnkqlwIedNmLOyd0SgG1V00ZlPArfLzBd6MNh
+        wvFJPSKjmV6K6rCw==
 From:   "tip-bot2 for Rick Edgecombe" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/shstk] x86/mm: Update ptep/pmdp_set_wrprotect() for
- _PAGE_SAVED_DIRTY
-Cc:     "Yu-cheng Yu" <yu-cheng.yu@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+Subject: [tip: x86/shstk] x86/traps: Move control protection handler to separate file
+Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>,
+        Kees Cook <keescook@chromium.org>,
         "Mike Rapoport (IBM)" <rppt@kernel.org>,
         Pengfei Xu <pengfei.xu@intel.com>,
-        John Allen <john.allen@amd.com>,
-        Kees Cook <keescook@chromium.org>, x86@kernel.org,
+        John Allen <john.allen@amd.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Message-ID: <168694302336.404.16379064029653101571.tip-bot2@tip-bot2>
+Message-ID: <168694302497.404.7743562386735342979.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,95 +66,216 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/shstk branch of tip:
 
-Commit-ID:     75c1d1854306f4c978105bafe3ec1e030548cec5
-Gitweb:        https://git.kernel.org/tip/75c1d1854306f4c978105bafe3ec1e030548cec5
+Commit-ID:     e17535957e6abd561790778fba0f8205eb0d4c50
+Gitweb:        https://git.kernel.org/tip/e17535957e6abd561790778fba0f8205eb0d4c50
 Author:        Rick Edgecombe <rick.p.edgecombe@intel.com>
-AuthorDate:    Mon, 12 Jun 2023 17:10:37 -07:00
+AuthorDate:    Mon, 12 Jun 2023 17:10:33 -07:00
 Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Thu, 15 Jun 2023 16:31:33 -07:00
+CommitterDate: Thu, 15 Jun 2023 16:31:00 -07:00
 
-x86/mm: Update ptep/pmdp_set_wrprotect() for _PAGE_SAVED_DIRTY
+x86/traps: Move control protection handler to separate file
 
-When shadow stack is in use, Write=0,Dirty=1 PTE are preserved for
-shadow stack. Copy-on-write PTEs then have Write=0,SavedDirty=1.
+Today the control protection handler is defined in traps.c and used only
+for the kernel IBT feature. To reduce ifdeffery, move it to it's own file.
+In future patches, functionality will be added to make this handler also
+handle user shadow stack faults. So name the file cet.c.
 
-When a PTE goes from Write=1,Dirty=1 to Write=0,SavedDirty=1, it could
-become a transient shadow stack PTE in two cases:
+No functional change.
 
-1. Some processors can start a write but end up seeing a Write=0 PTE by
-   the time they get to the Dirty bit, creating a transient shadow stack
-   PTE. However, this will not occur on processors supporting shadow
-   stack, and a TLB flush is not necessary.
-
-2. When _PAGE_DIRTY is replaced with _PAGE_SAVED_DIRTY non-atomically, a
-   transient shadow stack PTE can be created as a result.
-
-Prevent the second case when doing a write protection and Dirty->SavedDirty
-shift at the same time with a CMPXCHG loop. The first case
-
-Note, in the PAE case CMPXCHG will need to operate on 8 byte, but
-try_cmpxchg() will not use CMPXCHG8B, so it cannot operate on a full PAE
-PTE. However the exiting logic is not operating on a full 8 byte region
-either, and relies on the fact that the Write bit is in the first 4
-bytes when doing the clear_bit(). Since both the Dirty, SavedDirty and
-Write bits are in the first 4 bytes, casting to a long will be similar to
-the existing behavior which also casts to a long.
-
-Dave Hansen, Jann Horn, Andy Lutomirski, and Peter Zijlstra provided many
-insights to the issue. Jann Horn provided the CMPXCHG solution.
-
-Co-developed-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
 Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 Tested-by: John Allen <john.allen@amd.com>
 Tested-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/all/20230613001108.3040476-12-rick.p.edgecombe%40intel.com
+Link: https://lore.kernel.org/all/20230613001108.3040476-8-rick.p.edgecombe%40intel.com
 ---
- arch/x86/include/asm/pgtable.h | 24 ++++++++++++++++++++++--
- 1 file changed, 22 insertions(+), 2 deletions(-)
+ arch/x86/kernel/Makefile |  2 +-
+ arch/x86/kernel/cet.c    | 76 +++++++++++++++++++++++++++++++++++++++-
+ arch/x86/kernel/traps.c  | 75 +--------------------------------------
+ 3 files changed, 78 insertions(+), 75 deletions(-)
+ create mode 100644 arch/x86/kernel/cet.c
 
-diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index a1883d8..13fdad2 100644
---- a/arch/x86/include/asm/pgtable.h
-+++ b/arch/x86/include/asm/pgtable.h
-@@ -1189,7 +1189,17 @@ static inline pte_t ptep_get_and_clear_full(struct mm_struct *mm,
- static inline void ptep_set_wrprotect(struct mm_struct *mm,
- 				      unsigned long addr, pte_t *ptep)
- {
--	clear_bit(_PAGE_BIT_RW, (unsigned long *)&ptep->pte);
-+	/*
-+	 * Avoid accidentally creating shadow stack PTEs
-+	 * (Write=0,Dirty=1).  Use cmpxchg() to prevent races with
-+	 * the hardware setting Dirty=1.
-+	 */
-+	pte_t old_pte, new_pte;
+diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+index 4070a01..abee056 100644
+--- a/arch/x86/kernel/Makefile
++++ b/arch/x86/kernel/Makefile
+@@ -145,6 +145,8 @@ obj-$(CONFIG_CFI_CLANG)			+= cfi.o
+ 
+ obj-$(CONFIG_CALL_THUNKS)		+= callthunks.o
+ 
++obj-$(CONFIG_X86_CET)			+= cet.o
 +
-+	old_pte = READ_ONCE(*ptep);
-+	do {
-+		new_pte = pte_wrprotect(old_pte);
-+	} while (!try_cmpxchg((long *)&ptep->pte, (long *)&old_pte, *(long *)&new_pte));
+ ###
+ # 64 bit specific files
+ ifeq ($(CONFIG_X86_64),y)
+diff --git a/arch/x86/kernel/cet.c b/arch/x86/kernel/cet.c
+new file mode 100644
+index 0000000..7ad22b7
+--- /dev/null
++++ b/arch/x86/kernel/cet.c
+@@ -0,0 +1,76 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/ptrace.h>
++#include <asm/bugs.h>
++#include <asm/traps.h>
++
++static __ro_after_init bool ibt_fatal = true;
++
++extern void ibt_selftest_ip(void); /* code label defined in asm below */
++
++enum cp_error_code {
++	CP_EC        = (1 << 15) - 1,
++
++	CP_RET       = 1,
++	CP_IRET      = 2,
++	CP_ENDBR     = 3,
++	CP_RSTRORSSP = 4,
++	CP_SETSSBSY  = 5,
++
++	CP_ENCL	     = 1 << 15,
++};
++
++DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
++{
++	if (!cpu_feature_enabled(X86_FEATURE_IBT)) {
++		pr_err("Unexpected #CP\n");
++		BUG();
++	}
++
++	if (WARN_ON_ONCE(user_mode(regs) || (error_code & CP_EC) != CP_ENDBR))
++		return;
++
++	if (unlikely(regs->ip == (unsigned long)&ibt_selftest_ip)) {
++		regs->ax = 0;
++		return;
++	}
++
++	pr_err("Missing ENDBR: %pS\n", (void *)instruction_pointer(regs));
++	if (!ibt_fatal) {
++		printk(KERN_DEFAULT CUT_HERE);
++		__warn(__FILE__, __LINE__, (void *)regs->ip, TAINT_WARN, regs, NULL);
++		return;
++	}
++	BUG();
++}
++
++/* Must be noinline to ensure uniqueness of ibt_selftest_ip. */
++noinline bool ibt_selftest(void)
++{
++	unsigned long ret;
++
++	asm ("	lea ibt_selftest_ip(%%rip), %%rax\n\t"
++	     ANNOTATE_RETPOLINE_SAFE
++	     "	jmp *%%rax\n\t"
++	     "ibt_selftest_ip:\n\t"
++	     UNWIND_HINT_FUNC
++	     ANNOTATE_NOENDBR
++	     "	nop\n\t"
++
++	     : "=a" (ret) : : "memory");
++
++	return !ret;
++}
++
++static int __init ibt_setup(char *str)
++{
++	if (!strcmp(str, "off"))
++		setup_clear_cpu_cap(X86_FEATURE_IBT);
++
++	if (!strcmp(str, "warn"))
++		ibt_fatal = false;
++
++	return 1;
++}
++
++__setup("ibt=", ibt_setup);
+diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+index 58b1f20..6f666df 100644
+--- a/arch/x86/kernel/traps.c
++++ b/arch/x86/kernel/traps.c
+@@ -213,81 +213,6 @@ DEFINE_IDTENTRY(exc_overflow)
+ 	do_error_trap(regs, 0, "overflow", X86_TRAP_OF, SIGSEGV, 0, NULL);
  }
  
- #define flush_tlb_fix_spurious_fault(vma, address, ptep) do { } while (0)
-@@ -1241,7 +1251,17 @@ static inline pud_t pudp_huge_get_and_clear(struct mm_struct *mm,
- static inline void pmdp_set_wrprotect(struct mm_struct *mm,
- 				      unsigned long addr, pmd_t *pmdp)
- {
--	clear_bit(_PAGE_BIT_RW, (unsigned long *)pmdp);
-+	/*
-+	 * Avoid accidentally creating shadow stack PTEs
-+	 * (Write=0,Dirty=1).  Use cmpxchg() to prevent races with
-+	 * the hardware setting Dirty=1.
-+	 */
-+	pmd_t old_pmd, new_pmd;
-+
-+	old_pmd = READ_ONCE(*pmdp);
-+	do {
-+		new_pmd = pmd_wrprotect(old_pmd);
-+	} while (!try_cmpxchg((long *)pmdp, (long *)&old_pmd, *(long *)&new_pmd));
- }
- 
- #ifndef pmdp_establish
+-#ifdef CONFIG_X86_KERNEL_IBT
+-
+-static __ro_after_init bool ibt_fatal = true;
+-
+-extern void ibt_selftest_ip(void); /* code label defined in asm below */
+-
+-enum cp_error_code {
+-	CP_EC        = (1 << 15) - 1,
+-
+-	CP_RET       = 1,
+-	CP_IRET      = 2,
+-	CP_ENDBR     = 3,
+-	CP_RSTRORSSP = 4,
+-	CP_SETSSBSY  = 5,
+-
+-	CP_ENCL	     = 1 << 15,
+-};
+-
+-DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
+-{
+-	if (!cpu_feature_enabled(X86_FEATURE_IBT)) {
+-		pr_err("Unexpected #CP\n");
+-		BUG();
+-	}
+-
+-	if (WARN_ON_ONCE(user_mode(regs) || (error_code & CP_EC) != CP_ENDBR))
+-		return;
+-
+-	if (unlikely(regs->ip == (unsigned long)&ibt_selftest_ip)) {
+-		regs->ax = 0;
+-		return;
+-	}
+-
+-	pr_err("Missing ENDBR: %pS\n", (void *)instruction_pointer(regs));
+-	if (!ibt_fatal) {
+-		printk(KERN_DEFAULT CUT_HERE);
+-		__warn(__FILE__, __LINE__, (void *)regs->ip, TAINT_WARN, regs, NULL);
+-		return;
+-	}
+-	BUG();
+-}
+-
+-/* Must be noinline to ensure uniqueness of ibt_selftest_ip. */
+-noinline bool ibt_selftest(void)
+-{
+-	unsigned long ret;
+-
+-	asm ("	lea ibt_selftest_ip(%%rip), %%rax\n\t"
+-	     ANNOTATE_RETPOLINE_SAFE
+-	     "	jmp *%%rax\n\t"
+-	     "ibt_selftest_ip:\n\t"
+-	     UNWIND_HINT_FUNC
+-	     ANNOTATE_NOENDBR
+-	     "	nop\n\t"
+-
+-	     : "=a" (ret) : : "memory");
+-
+-	return !ret;
+-}
+-
+-static int __init ibt_setup(char *str)
+-{
+-	if (!strcmp(str, "off"))
+-		setup_clear_cpu_cap(X86_FEATURE_IBT);
+-
+-	if (!strcmp(str, "warn"))
+-		ibt_fatal = false;
+-
+-	return 1;
+-}
+-
+-__setup("ibt=", ibt_setup);
+-
+-#endif /* CONFIG_X86_KERNEL_IBT */
+-
+ #ifdef CONFIG_X86_F00F_BUG
+ void handle_invalid_op(struct pt_regs *regs)
+ #else
