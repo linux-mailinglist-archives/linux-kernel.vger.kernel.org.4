@@ -2,98 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D935732FAB
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62BD3732F99
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 13:15:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345335AbjFPLSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 07:18:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39844 "EHLO
+        id S1344904AbjFPLPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 07:15:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343968AbjFPLSQ (ORCPT
+        with ESMTP id S1345292AbjFPLPJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 07:18:16 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93FC213F
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:18:12 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f8d2bfed53so4909565e9.1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 04:18:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686914291; x=1689506291;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rzzz9+MQDy1v7mf6h8LKh2I0EdtZCpgt3033bmxFLt4=;
-        b=xO9S4qPH++KwL3bqmpqNIouOhxbgRJ6SxHNQK/ye2vn8zyZyyVWE0A8Fp12TPe5UEm
-         auhGwcNjhXlWmq7Z/IdqpdZbQkKk8Dml+ZcRR44APMB4R0kI3zvQIXbdbpPDxieV8yy3
-         YUN8nNjIG63V6OC1046j6gB2kYhjfS3Yi4uV54gq2eRTC7+ihj6Ja8OPu3PIWiKMjPjH
-         G5wW5UmtxjC9eoDQvYkHUMmCLvuG6T8Ls2v1sidokHKLWLLYphoIclz567/lbDY8nQgm
-         MC1xP36ucCdyTuIXwAZbqlb6aX3l8SyGtYlvJdvuYY239/r5sjTXPcmnRUVtUw6qLzH9
-         u1Ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686914291; x=1689506291;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rzzz9+MQDy1v7mf6h8LKh2I0EdtZCpgt3033bmxFLt4=;
-        b=VJGoBn2JAn9oPEH5yajA/JrMrPe9eP+2DhuxmCoUCBqonKPTcLdRH6bMUVu69opJZR
-         h3oPH2tPsuMyMPmdfphGOr59vYNMP12MNMggGiwlby/hKgjS6zd6t8qmgrUvD2sJOp46
-         n4lHrBwald2Q7xHLlMOpY5blLdMBCsgWYsfxN/m3ha5zazDH2kExcv8nEUj5fqRSaVi6
-         8EZSzJMNbMw4nHIzmn6fZXl6mC+Nx3gbGO7zPXLr5P+4Q923+iCpHX/YCnpBC23kFMG3
-         Ipt+bkjBp6bsaeny4pyun05xQLDPU0Oa/EW7MvzA9ScpY5YhOILEwQo3nwTt1TtP/alf
-         TqvQ==
-X-Gm-Message-State: AC+VfDycjcrDbkl+BeqARFaF3/oPaCtjdN3ETw2Gl0QOCw+r8xtnuKZP
-        LScv1Z3JcfatXtVgvHNzJH8WMkzlIDxIPnv3L58=
-X-Google-Smtp-Source: ACHHUZ4dQlbHeAuRZeLC4Y8OzZsImTHLTf2rFlPkoywMcf0wXUYdWyJ5nI7ueJAs67y7U7OWDEJTlg==
-X-Received: by 2002:a05:600c:329d:b0:3f6:eae:7417 with SMTP id t29-20020a05600c329d00b003f60eae7417mr6554134wmp.1.1686914291372;
-        Fri, 16 Jun 2023 04:18:11 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id n16-20020a7bc5d0000000b003f739a8bcc8sm1917075wmk.19.2023.06.16.04.18.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jun 2023 04:18:09 -0700 (PDT)
-Date:   Fri, 16 Jun 2023 14:18:03 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>, tools@linux.kernel.org,
-        kernel-janitors@vger.kernel.org
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Dan Carpenter <error27@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, smatch@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH] spi: spi-geni-qcom: correctly handle -EPROBE_DEFER from
- dma_request_chan()
-Message-ID: <7466cb8d-85d9-4583-af2c-3616209e97e3@moroto.mountain>
-References: <20230615-topic-sm8550-upstream-fix-spi-geni-qcom-probe-v1-1-6da9bf2db4a4@linaro.org>
- <b82b8041-7bc5-433c-98bc-4ac6fcf5ae9d@kadam.mountain>
+        Fri, 16 Jun 2023 07:15:09 -0400
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042A413E;
+        Fri, 16 Jun 2023 04:15:07 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QjGlp5Fk4z4f48vB;
+        Fri, 16 Jun 2023 19:15:02 +0800 (CST)
+Received: from ubuntu20.huawei.com (unknown [10.67.174.33])
+        by APP1 (Coremail) with SMTP id cCh0CgDHLCcnRIxkwOG9LA--.4088S2;
+        Fri, 16 Jun 2023 19:15:01 +0800 (CST)
+From:   "GONG, Ruiqi" <gongruiqi@huaweicloud.com>
+To:     Vlastimil Babka <vbabka@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        David Rientjes <rientjes@google.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Christoph Lameter <cl@linux.com>, Tejun Heo <tj@kernel.org>,
+        Dennis Zhou <dennis@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Pedro Falcato <pedro.falcato@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Wang Weiyang <wangweiyang2@huawei.com>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>, linux-mm@kvack.org,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gongruiqi1@huawei.com
+Subject: [PATCH v3 0/1] Randomized slab caches for kmalloc()
+Date:   Fri, 16 Jun 2023 19:18:42 +0800
+Message-Id: <20230616111843.3677378-1-gongruiqi@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b82b8041-7bc5-433c-98bc-4ac6fcf5ae9d@kadam.mountain>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: cCh0CgDHLCcnRIxkwOG9LA--.4088S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tF13WrWfZr1DCFW3XF1DWrg_yoW8GrWkpF
+        y8Gw45uF4rJryfCw4fCw1jqry5Xan5GFyxW342g345Cr45tF10grn7Kr109FyUGF97K3Wf
+        WrZIyr1qgryqv37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
+        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: pjrqw2pxltxq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 06:12:03PM +0300, Dan Carpenter wrote:
-> Here is the command to search for all the KTODO items added
-> in the last six months.
-> 
-> lei q https://lore.kernel.org/all/ -o ~/Mail/KTODO --dedupe=mid 'KTODO AND rt:6.month.ago..'
-> 
+I adapted the v2 patch to the latest linux-next tree and made the v3
+patch without "RFC", since this idea seems to be acceptable in general
+based on previous dicussion with mm and hardening folks. Please check
+the link specified below for more details of the discussion, and further
+suggestions are welcome.
 
-I guess you need the -I option here.  I'm not sure what -I does.  I had
-thought it might mean case insensitive search but that's not it.
+v3:
+  - Replace SLAB_RANDOMSLAB with the new existing SLAB_NO_MERGE flag.
+  - Shorten long code lines by wrapping and renaming.
+  - Update commit message with latest perf benchmark and additional
+    theorectical explanation.
 
-lei q -I https://lore.kernel.org/all/ -o ~/Mail/KTODO --dedupe=mid 'KTODO AND rt:6.month.ago..'
+v2:
+  - Use hash_64() and a per-boot random seed to select kmalloc() caches.
+  - Change acceptable # of caches from [4,16] to {2,4,8,16}, which is
+    more compatible with hashing.
+  - Supplement results of performance and memory overhead tests.
+  - Link: https://lore.kernel.org/all/20230508075507.1720950-1-gongruiqi1@huawei.com/
 
-Then grep ^KTODO ~/Mail/KTODO -R and cat the filename you want.
+v1:
+  - Link: https://lore.kernel.org/all/20230315095459.186113-1-gongruiqi1@huawei.com/
 
-regards,
-dan carpenter
+GONG, Ruiqi (1):
+  Randomized slab caches for kmalloc()
+
+ include/linux/percpu.h  | 12 ++++++---
+ include/linux/slab.h    | 20 ++++++++++++---
+ mm/Kconfig              | 49 ++++++++++++++++++++++++++++++++++++
+ mm/kfence/kfence_test.c |  6 +++--
+ mm/slab.c               |  2 +-
+ mm/slab.h               |  2 +-
+ mm/slab_common.c        | 55 +++++++++++++++++++++++++++++++++++++----
+ 7 files changed, 130 insertions(+), 16 deletions(-)
+
+-- 
+2.25.1
 
