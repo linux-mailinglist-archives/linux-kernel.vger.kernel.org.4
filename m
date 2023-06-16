@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1735B732430
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 02:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3537B732436
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 02:19:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240607AbjFPAS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 20:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40930 "EHLO
+        id S232675AbjFPATC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 20:19:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240813AbjFPAR7 (ORCPT
+        with ESMTP id S240744AbjFPAS3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 20:17:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F882D42;
-        Thu, 15 Jun 2023 17:17:29 -0700 (PDT)
+        Thu, 15 Jun 2023 20:18:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB83F30E2;
+        Thu, 15 Jun 2023 17:17:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF672625AC;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DB1361C41;
+        Fri, 16 Jun 2023 00:17:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87B9EC433CD;
         Fri, 16 Jun 2023 00:17:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 642A7C433CC;
-        Fri, 16 Jun 2023 00:17:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686874646;
-        bh=nRivV3zrCLYT47fKlzn6TTMrDbuRNBwLfZj2lP+tctE=;
+        s=k20201202; t=1686874650;
+        bh=cWinNtrRNqE72MtzHUXpxkJuCIniJrJ/uXuToYRgE8M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L6/+ClNPTjQGAFtca0C1JEL2tzhvY36Ml/gV0PQp/e6aZGgVXadUjX/adcFLlq3Ya
-         RX5p03CQEwY06y1FIlRj0MFG1HtVJ4427ppqq9bscXtvMKQ2YnETnBebAX0QjLDliV
-         ySY3hvsxDKTXJ6rM/Wc37aqXnwi43VVUZuGdaQUgWwWGCv+RX2ITV+nNxlyLjygRhz
-         fqk7IZWBevcdIgF9Y7f9z+l/6qZWxuDlWMopaMaxExeyxL35sAHFd8JZOTzzaZX+IT
-         to/zrLflCo50kkIqx6ZQuZ7azDdY4QUyQgxUFfvCL2vrbk01TTdyhmnjUsgUPMNN4S
-         jy1g13fpMqmKA==
+        b=U4pjlbreSJh9xy6s1BVW1nZNWwe/mqd4ae8t1KeqbwB3Ysvqq1EGaav9keNOgmjsP
+         ovdjamLawMDqyYPc60zbyVGqeE6ksaaCP0+QsqurNC3ln7zmMY3453C1HjzVqF6jg7
+         4Dn/mw1QLIjnJ52Xp9kyOq15f6CPoYYu///mZ7jnEP+8Jf42Y78bqCwJ6YIDcCDr9Q
+         V64YSPbKv0IeJLlbaqJxfbXUknmCoGJ0CtfQlCn1y86nX7FobYO2NgY21J5VBtbrEp
+         Sj/WTRvG7JKTfCXw06IkuhgXSJf1K3J4coLC6kmuh4qwjKcL2atUexEQ3Wif7z7ydl
+         50hQVfO2T/qEg==
 From:   Miguel Ojeda <ojeda@kernel.org>
 To:     Masahiro Yamada <masahiroy@kernel.org>,
         Miguel Ojeda <ojeda@kernel.org>,
@@ -47,19 +47,16 @@ Cc:     Nathan Chancellor <nathan@kernel.org>,
         Alice Ryhl <aliceryhl@google.com>,
         Andreas Hindborg <nmi@metaspace.dk>,
         linux-kbuild@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Jordan Isaacs <mail@jdisaacs.com>,
-        "Ethan D . Twardy" <ethan.twardy@gmail.com>,
-        Tiago Lam <tiagolam@gmail.com>
-Subject: [PATCH v2 07/11] kbuild: rust_is_available: fix confusion when a version appears in the path
-Date:   Fri, 16 Jun 2023 02:16:27 +0200
-Message-ID: <20230616001631.463536-8-ojeda@kernel.org>
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: [PATCH v2 08/11] kbuild: rust_is_available: normalize version matching
+Date:   Fri, 16 Jun 2023 02:16:28 +0200
+Message-ID: <20230616001631.463536-9-ojeda@kernel.org>
 In-Reply-To: <20230616001631.463536-1-ojeda@kernel.org>
 References: <20230616001631.463536-1-ojeda@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,47 +65,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-`bindgen`'s output for `libclang`'s version check contains paths, which
-in turn may contain strings that look like version numbers [1][2]:
+In order to match the version string, `sed` is used in a couple
+cases, and `grep` and `head` in a couple others.
 
-    .../6.1.0-dev/.../rust_is_available_bindgen_libclang.h:2:9: warning: clang version 11.1.0  [-W#pragma-messages], err: false
+Make the script more consistent and easier to understand by
+using the same method, `sed`, for all of them.
 
-which the script will pick up as the version instead of the latter.
+This makes the version matching also a bit more strict for
+the changed cases, since the strings `rustc ` and `bindgen `
+will now be required, which should be fine since `rustc`
+complains if one attempts to call it with another program
+name, and `bindgen` uses a hardcoded string.
 
-It is also the case that versions may appear after the actual version
-(e.g. distribution's version text), which was the reason behind `head` [3]:
+In addition, clarify why one of the existing `sed` commands
+does not provide an address like the others.
 
-    .../rust-is-available-bindgen-libclang.h:2:9: warning: clang version 13.0.0 (Fedora 13.0.0-3.fc35) [-W#pragma-messages], err: false
-
-Thus instead ask for a match after the `clang version` string.
-
-Reported-by: Jordan Isaacs <mail@jdisaacs.com>
-Closes: https://github.com/Rust-for-Linux/linux/issues/942 [1]
-Reported-by: Ethan D. Twardy <ethan.twardy@gmail.com>
-Closes: https://lore.kernel.org/rust-for-linux/20230528131802.6390-2-ethan.twardy@gmail.com/ [2]
-Reported-by: Tiago Lam <tiagolam@gmail.com>
-Closes: https://github.com/Rust-for-Linux/linux/pull/789 [3]
-Fixes: 78521f3399ab ("scripts: add `rust_is_available.sh`")
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
- scripts/rust_is_available.sh | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ scripts/rust_is_available.sh | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/scripts/rust_is_available.sh b/scripts/rust_is_available.sh
-index 7e0368babe64..810691af66eb 100755
+index 810691af66eb..b7e0781fdea9 100755
 --- a/scripts/rust_is_available.sh
 +++ b/scripts/rust_is_available.sh
-@@ -157,9 +157,7 @@ fi
+@@ -83,8 +83,7 @@ fi
+ # Non-stable and distributions' versions may have a version suffix, e.g. `-dev`.
+ rust_compiler_version=$( \
+ 	LC_ALL=C "$RUSTC" --version 2>/dev/null \
+-		| head -n 1 \
+-		| grep -oE '[0-9]+\.[0-9]+\.[0-9]+' \
++		| sed -nE '1s:.*rustc ([0-9]+\.[0-9]+\.[0-9]+).*:\1:p'
+ )
+ rust_compiler_min_version=$($min_tool_version rustc)
+ rust_compiler_cversion=$(get_canonical_version $rust_compiler_version)
+@@ -111,8 +110,7 @@ fi
+ # Non-stable and distributions' versions may have a version suffix, e.g. `-dev`.
+ rust_bindings_generator_version=$( \
+ 	LC_ALL=C "$BINDGEN" --version 2>/dev/null \
+-		| head -n 1 \
+-		| grep -oE '[0-9]+\.[0-9]+\.[0-9]+' \
++		| sed -nE '1s:.*bindgen ([0-9]+\.[0-9]+\.[0-9]+).*:\1:p'
+ )
+ rust_bindings_generator_min_version=$($min_tool_version bindgen)
+ rust_bindings_generator_cversion=$(get_canonical_version $rust_bindings_generator_version)
+@@ -155,6 +153,9 @@ fi
+ 
+ # `bindgen` returned successfully, thus use the output to check that the version
  # of the `libclang` found by the Rust bindings generator is suitable.
++#
++# Unlike other version checks, note that this one does not necessarily appear
++# in the first line of the output, thus no `sed` address is provided.
  bindgen_libclang_version=$( \
  	echo "$bindgen_libclang_output" \
--		| grep -F 'clang version ' \
--		| grep -oE '[0-9]+\.[0-9]+\.[0-9]+' \
--		| head -n 1 \
-+		| sed -nE 's:.*clang version ([0-9]+\.[0-9]+\.[0-9]+).*:\1:p'
- )
- bindgen_libclang_min_version=$($min_tool_version llvm)
- bindgen_libclang_cversion=$(get_canonical_version $bindgen_libclang_version)
+ 		| sed -nE 's:.*clang version ([0-9]+\.[0-9]+\.[0-9]+).*:\1:p'
 -- 
 2.41.0
 
