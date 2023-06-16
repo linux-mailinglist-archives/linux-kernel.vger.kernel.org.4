@@ -2,112 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46FB77338AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 21:01:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D441A7338A8
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 21:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345831AbjFPTBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 15:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39664 "EHLO
+        id S1345626AbjFPTAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 15:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345747AbjFPTAp (ORCPT
+        with ESMTP id S1345411AbjFPTAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 15:00:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BBE73C0B
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 11:59:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686941958;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zjmzfQ64PaDZl/zNxOmcx+GiAABq8ykFQF94nXy/DjI=;
-        b=NzTV6gHDPyONhhUZKz+N997WYZihaqA7MfvUITCUs6nnMEJZwCmtzSgHJ/nNS0AwXanJzD
-        fBeqFWkmtVYfxOwimk4hVX2jUEcAIgs6URTBm5VNKLdAJ2q7y3LAbFVgeCmah9MExPQaaP
-        K0Kg4pv/Ec/UOjZdCy3HLrwj0vdaL/I=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-62-4XSnxDWzMGm7TkKchIXB8g-1; Fri, 16 Jun 2023 14:59:16 -0400
-X-MC-Unique: 4XSnxDWzMGm7TkKchIXB8g-1
-Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-51a33cee83fso602615a12.2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 11:59:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686941955; x=1689533955;
-        h=content-transfer-encoding:in-reply-to:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zjmzfQ64PaDZl/zNxOmcx+GiAABq8ykFQF94nXy/DjI=;
-        b=ZvqrBjipsELI2eAnGKEUCvZmaPcfuVOpCfQkL21HSCYAXd+r5+eYnp1pUkkBK/Ly1n
-         lWoUzPKCLmEsll3O0qbB6fL5aZA4f7tdx4L0qC16KgPtpRcrBQwR5bj0+zpE1QCfhv4Y
-         7sNoSwZI6W7YpOKFFE4p4woz7ec4//ht0F3nrQd7W3zsNjdi0DVEsue26MrfMH4ogB1s
-         HEAYAt1YB8nUBCP3jVEzr8jOJ+yMuuW+mCV/OeMbxXX2346msbdyq5jRBEHGcEw49A9R
-         HSUv4hmeo6MEYq8yMyVgybsKuz7z2rWKlCmZw2aOaNCMuOBCEKvHYogxVqFlSEot3RlK
-         pQ7w==
-X-Gm-Message-State: AC+VfDw9eJdv/isbQ4JOTVwgqXL76Ej4vKJMw6hxgG1/PnCflfxgSRsn
-        VnH4zG4X09Bw2A+5nsk4lZ75K0rlhWoL78lnUxIrn6z+yE5W9S2hf0gXWzHz1VoCRZ1JZBCqyrJ
-        AXqoFZASldUCS1qM/uN+QAclf
-X-Received: by 2002:a05:6402:28c:b0:518:6bb9:1d5e with SMTP id l12-20020a056402028c00b005186bb91d5emr2072092edv.8.1686941955583;
-        Fri, 16 Jun 2023 11:59:15 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7vlBCAtmkvYL1Wt50Zt/pUXvHXtQyLrJjFLIR+365bedhzoAme9s2GbKhNhGuAwS9jK5D0SQ==
-X-Received: by 2002:a05:6402:28c:b0:518:6bb9:1d5e with SMTP id l12-20020a056402028c00b005186bb91d5emr2072085edv.8.1686941955188;
-        Fri, 16 Jun 2023 11:59:15 -0700 (PDT)
-Received: from [192.168.42.222] (194-45-78-10.static.kviknet.net. [194.45.78.10])
-        by smtp.gmail.com with ESMTPSA id b13-20020aa7c90d000000b0051879590e06sm495742edt.24.2023.06.16.11.59.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jun 2023 11:59:14 -0700 (PDT)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <72ccf224-7b45-76c5-5ca9-83e25112c9c6@redhat.com>
-Date:   Fri, 16 Jun 2023 20:59:12 +0200
+        Fri, 16 Jun 2023 15:00:14 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2061.outbound.protection.outlook.com [40.107.223.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87C23AB3;
+        Fri, 16 Jun 2023 11:59:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RPe/b8OwqDy2tfhA1EWxhAOxpLcoFoilfEbitU3qBjGmu8wl7DQTEzswWc6Zd8kZtS94JMHwD52PbAtQkCCBYyA5NO4Q94DPm6ZPo4MO//frvMQL+aUfqI0UxIVgfv7uJxDPqPR40g4OdM+23EhWCEkHjkf2xcnUf/np0G0PFTWCloNtc5hLBBKtmvtXWjpCavsw1G0qY5tckecHhq6B/06p6vbfp7w8dwXfX5LCDjqqVDmousv3FgLb88tgdmbBUZBEPltlwlvQwuEWMzr1gq7BwP0FrjDZdpdN23eUnLpgzGCcaqGdptUOdeTOXa2oPaGKX8mNnHP0elwKhVf0hw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6JqHcoGBkTXzH6ZI8nOj9r3mU5BopKx6N7pQIPhoG9k=;
+ b=Foh4hZfMuzCHt/jmrgo1AxvKdRgz+SXweXNn/Orpxe7QlBM0utKo0tvkQ++vh8B+xYznHWoR7Y//wvoeP1UpdKb4OKDbIoMPrP9Egig/sRAsFZBae+RG00OUlsMD0OwHWHcpAnxWU1R9XH4t65pQzzcZDnatwbo1zCUgltoJSu29odmfCDR9cluYih8KLsKuaMhMuSLR3Qu0TR2yFg6zLeLcsDgqhgNXQn4q2uPYEqiPPg4RIEtT/z+d6KlKl2ijzulVWBZphdNi+7DR8cKlbwSvznikdZef9NkpT+0XoWtTsFOTEps5Iew2+A9bcBKWlwgao2huX1iYvR8goMqzEw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6JqHcoGBkTXzH6ZI8nOj9r3mU5BopKx6N7pQIPhoG9k=;
+ b=UEuRixGPEHrxMwfqHC32ESSOmL/b0+JcUzpv/EWAqaJ5peCJt6TOWR+BLqSLCt6pF1L2w4bXT91jV6lB3OaM+q7AwlQH4hzLxWLGN17xm9N6Wcl7bI2yd5NTWHyiDSQIOl6WQpDhaU1d3F/XtaH+Ue+J0wPzKRnGqvgedCzc2sYu5UcFDv9B9h/JLv4XfOL2JrIi4IkqadcBBy7aZ/8Zjhk3XecRHevucCxpBcZgUtEHziW5KKCI61pKivXXg6CLwLYzcgydctWKSLl/TQsyetm91EZU+2sxMT8OxUVi4sTulE8YzM5UgWZ28vR9HP+dPQ9uYczXfaDktGcdQOeuSg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DS0PR12MB8198.namprd12.prod.outlook.com (2603:10b6:8:f2::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.29; Fri, 16 Jun
+ 2023 18:59:35 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab%7]) with mapi id 15.20.6477.037; Fri, 16 Jun 2023
+ 18:59:35 +0000
+Date:   Fri, 16 Jun 2023 15:59:34 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Alexander Duyck <alexander.duyck@gmail.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Baolu Lu <baolu.lu@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+Subject: Re: Question about reserved_regions w/ Intel IOMMU
+Message-ID: <ZIyxFpzh3WG+ifws@nvidia.com>
+References: <CAKgT0UezciLjHacOx372+v8MZkDf22D5Thn82n-07xxKy_0FTQ@mail.gmail.com>
+ <CAKgT0UfMeVOz6AOqSvVvzpsedGDiXCNQrjM+4KDv7qJJ1orpsw@mail.gmail.com>
+ <a1cff65b-b390-3872-25b5-dd6bbfb3524c@linux.intel.com>
+ <b24a6c7b-27fc-41c0-5c82-15696b4a7dc1@arm.com>
+ <ZIiRK2Dzl2/9Jqle@ziepe.ca>
+ <BN9PR11MB52765C24405D2475CF3CBEBE8C58A@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZIxTmGU4a5dniEY3@nvidia.com>
+ <CAKgT0UfmdOOPSD5YvpHnh1A02URn9zxVLbyXJM_67On7xojLcA@mail.gmail.com>
+ <520e2be4-726f-c680-c010-a308cdddbae0@arm.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <520e2be4-726f-c680-c010-a308cdddbae0@arm.com>
+X-ClientProxiedBy: BLAPR05CA0048.namprd05.prod.outlook.com
+ (2603:10b6:208:335::29) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Cc:     brouer@redhat.com, Jakub Kicinski <kuba@kernel.org>,
-        davem@davemloft.net, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        hariprasad <hkelam@marvell.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net-next v4 4/5] page_pool: remove PP_FLAG_PAGE_FRAG flag
-Content-Language: en-US
-To:     Alexander Duyck <alexander.duyck@gmail.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>
-References: <20230612130256.4572-1-linyunsheng@huawei.com>
- <20230612130256.4572-5-linyunsheng@huawei.com>
- <20230614101954.30112d6e@kernel.org>
- <8c544cd9-00a3-2f17-bd04-13ca99136750@huawei.com>
- <20230615095100.35c5eb10@kernel.org>
- <CAKgT0Uc6Xoyh3Edgt+83b+HTM5j4JDr3fuxcyL9qDk+Wwt9APg@mail.gmail.com>
- <908b8b17-f942-f909-61e6-276df52a5ad5@huawei.com>
- <CAKgT0UeZfbxDYaeUntrQpxHmwCh6zy0dEpjxghiCNxPxv=kdoQ@mail.gmail.com>
-In-Reply-To: <CAKgT0UeZfbxDYaeUntrQpxHmwCh6zy0dEpjxghiCNxPxv=kdoQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DS0PR12MB8198:EE_
+X-MS-Office365-Filtering-Correlation-Id: b10601ca-f360-4b71-adac-08db6e9bd38f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: p9xroGKhyO7U6I6ZMe+rWoIqNfIRaDPcyHPvM/hp52jo3jra4ICjJZwjnpcsay9AFzfkD6k0eT5CQbCx+qwUJA85pEyBM8CCsf2x18DMIYA4jBvylE+whsI3cKdWqIRHvJrdCTGbArIH8pfA6Kn/fzZPMfejwi5AtIC9dxF6e4tpiM0x2uKkg6q1m6i1twJxr2EUxL4+W7+YAQreR3L/U3p448gaYPGbCj7KWHXJC26PyQzx9Nii8unBExkyralMw87JW2F/jkbKcX32t+8oE3PJCm1rguSndTB4xs2b4f+uzh1cYB6ZB6cQuZ5ioR4FdB8iYhjAfcC1kZD8Jb8mP71ppJyjZ3bpiJtPPNIYW5QgBny24DpNuDqa1tQWJJm95E6odzQpU8Ul7b3I6uEsfpcPYiuJT1cWidNKOV4RBViPSseAMFDIQMPA9AbhutFgHU9//abFSPJoNEeq33X/ciBXAR6HMYzPs+dkQlNMIV7a5js2GICE0qIwvXf477HPCR6JAEJ5j087VXEsRGMFymm9akpshgTH0wB5MxIJrX+oenWCrlkCqCW6Vs++VnMEblFDG7z4lpvtY4j8IT92IsBP+sIq63WfpUlioL0QjGM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(39860400002)(136003)(396003)(366004)(451199021)(5660300002)(54906003)(41300700001)(6486002)(8676002)(8936002)(316002)(6506007)(6512007)(26005)(186003)(86362001)(4326008)(66556008)(6916009)(66476007)(66946007)(478600001)(2906002)(2616005)(36756003)(38100700002)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FGh51jfh5Qva2j4XBN0HfBCDNVDdhLBOLB0IAiciA3NduRDlgM5/LmRfltew?=
+ =?us-ascii?Q?Cd3aYax1IZQGG0ww6ClYtObEBiq0lwQqn1YzWNAhCXMJtWiIDAQ+4+L23P/R?=
+ =?us-ascii?Q?vKdORQZnWgYUWpWF0fjaJleW16gfGTX9mzZ1E/6S9OVS87Mq36gkz0sdC1zX?=
+ =?us-ascii?Q?itO4ThhFEsfom9KfZmpLp/PGVCwvkIw12sD+Zpyia1XmE++G9nEOuDSGEQdA?=
+ =?us-ascii?Q?TbhACBicTg6gINyn2q+6CksOKIRJ8VPnK4lyAne6V5CoHhbovwOKJ/sjj1ct?=
+ =?us-ascii?Q?KD1rd6HBVkyRTYgtKNx1Ha7pHvAq18RD7nGJS7PXku96abGo9XUp0D9UYvYP?=
+ =?us-ascii?Q?Ftaa5tz2CerhuRVhFD1/LekONDkJZd3+STgQhA4Xo0L5jDKKIZ1QwZZWl/VP?=
+ =?us-ascii?Q?5FgbI+pLwvbrJLMbwwWUozpWxqogn2ykZEVVojaMpMUwjLJF4zxBVeAlhFH+?=
+ =?us-ascii?Q?j75ujSaAkavXBJxixwfsuQQDfXK92kHK5qTs36FycFDlV6BVZJzMZYUZ/DJq?=
+ =?us-ascii?Q?MVFXdrRLcbn4Wf0G53mOFYRse6MCwt7sHiCRpl7Lk2Wyt7MjUGwLQgPWlayM?=
+ =?us-ascii?Q?thexaY0JyLaK2vgMGJxzzJdcGWSAsF/riiODHthTjfMFGmSpaJ8YWd1Fw6Dy?=
+ =?us-ascii?Q?FZ5NzKXzVeDwh0Dr0qSfevuHhLVb6zE8JrMIr/CoL4TXz+7VfEMZPYkyOu/S?=
+ =?us-ascii?Q?5nqXPn6xeGajPweho/F6jnqltpv/8NVXgzXGRPgi4RrGeS7yxlUyieYJB+Md?=
+ =?us-ascii?Q?t6DPfqZXhhJWSxBhQ19PXKh+kK9gi1HAaZJY5+WUe079dRNm5Asvjd0q0FT2?=
+ =?us-ascii?Q?AztRKAE3iiBw8LcdrsVMW1ReBH13Ppm0/SuDT0gOml40CdA4li1n/2LJ3BT/?=
+ =?us-ascii?Q?398LYrfi/LL1q7kIu1gp81CAnuabW9GzfU4QiwVM9WpCv5oqA1oDQEOIo8Ta?=
+ =?us-ascii?Q?p4xcoW83P4yNatCjCBPMjX9uX2NefhJ08YbpMq9ypmsdZFyam8KsVQ+ILq+5?=
+ =?us-ascii?Q?2OMUjNvkOYCVrJFNpc0BNsxK04SNuzlCqNMjBKjg4GonEC5zMc41W4ypPHNc?=
+ =?us-ascii?Q?V5Jlde1X66Xa4Xh2D+4VljoGs9vyDGelLa8iNTeD1wgn3+m/8e4HjZZSt95p?=
+ =?us-ascii?Q?XR2PHJhX9gnoBvprqwJslrZio3RyrPcR1HZ2KLO8nkPne3/Mj+ywUtROyD/j?=
+ =?us-ascii?Q?mgot9QSiQnpd+gSmPOpdllRZl53t8+OU1RA3ipS6FrZbb7vYmL+lLkOBAyau?=
+ =?us-ascii?Q?wqBDGx/g2P9p+Zd1XLTWFchyPWJt01KV2zW8qZmb/3H2nO3JglP335kaLscq?=
+ =?us-ascii?Q?FHgdUJ2cSwq8ZDtqaqRoGPoH58i/ja4XhGe9XK9lhNt5vhqGYrpyT+P4BRBT?=
+ =?us-ascii?Q?f0k7thGPt81g6uxiN027QiA7Blg8yhPXAxuk53jBc0zRrzWVmkZaICO4ALjN?=
+ =?us-ascii?Q?KyjeSqlCEn1RXvh7Dj0S2toer5G/XUJsGoPc2pqTiQTzPXCXwrpGkUYlIOyn?=
+ =?us-ascii?Q?zfd//Scod/ULyX8fOPQKITWN/4OxbOUlHiMPoaijGPAm0FxU1pwi+QcgoR3Z?=
+ =?us-ascii?Q?BzmAjC7Xap9QbFacoc8U7O8aO/4ytc4Wl5Ad/HMy?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b10601ca-f360-4b71-adac-08db6e9bd38f
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 18:59:35.2582
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +hALvXLeXYicB90u54D4UrsfGo2KZXEM0JuHaJBfbL/jse/3Kl6K4F/5oR1sHo5m
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8198
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -115,167 +127,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 16/06/2023 17.01, Alexander Duyck wrote:
-> On Fri, Jun 16, 2023 at 5:21 AM Yunsheng Lin <linyunsheng@huawei.com> wrote:
->>
->> On 2023/6/16 2:26, Alexander Duyck wrote:
->>> On Thu, Jun 15, 2023 at 9:51 AM Jakub Kicinski <kuba@kernel.org> wrote:
->>>>
->>>> On Thu, 15 Jun 2023 15:17:39 +0800 Yunsheng Lin wrote:
-[...]
->>>>
->>>> I like your patches as they isolate the drivers from having to make the
->>>> fragmentation decisions based on the system page size (4k vs 64k but
->>>> we're hearing more and more about ARM w/ 16k pages). For that use case
->>>> this is great.
-
-+1
-
-[...]
->>>
->>> In the case of the standard page size being 4K a standard page would
->>> just have to take on the CPU overhead of the atomic_set and
->>> atomic_read for pp_ref_count (new name) which should be minimal as on
->>> most sane systems those just end up being a memory write and read.
->>
->> If I understand you correctly, I think what you are trying to do
->> may break some of Jesper' benchmarking:)
->>
->> [1] https://github.com/netoptimizer/prototype-kernel/blob/master/kernel/lib/bench_page_pool_simple.c
+On Fri, Jun 16, 2023 at 05:34:53PM +0100, Robin Murphy wrote:
 > 
-> So? If it breaks an out-of-tree benchmark the benchmark can always be
-> fixed. 
+> If the system has working ACS configured correctly, then this issue should
+> be moot;
 
-It doesn't matter if this is out-of-tree (I should have upstreamed it 
-when AKPM asked me to.)
+Yes
 
-Point is don't break my page_pool fast-path!!! :-P
+> if it doesn't, then a VFIO user is going to get a whole group of
+> peer devices if they're getting anything at all, so it doesn't seem entirely
+> unreasonable to leave it up to them to check that all those devices'
+> resources play well with their expected memory map. 
 
-> The point is enabling a use case that can add value across the
-> board instead of trying to force the community to support a niche use
-> case.
+I think the kernel should be helping here.. 'go figure it out from
+lspci' is a very convoluted and obscure uAPI, and I don't see things
+like DPDK actually doing that.
 
-I'm all for creating a new API, lets call it netmem, that takes care of 
-this use-case.
-I'm *not* okay with this new API slowing down the page_pool fast-path.
+IMHO the uAPI expectation is that the kernel informs userspace what
+the usable IOVA is, if bridge windows and lack of ACS are rendering
+address space unusable then VFIO/iommufd should return it as excluded
+as well.
 
-Why not multiplex on a MEM_TYPE, like XDP_MEM_TYPE is prepared for?!?
-Meaning the caller can choose which is the correct API call.
-(thus, we can stay away from adding code to fast-path case)
+If we are going to do that then all UNAMANGED domain users should
+follow the same logic.
 
-See below, copy-paste of code that shows what I mean by multiplex on a 
-MEM_TYPE.
+We probably have avoided bug reports because of how rare it would be
+to see a switch and an UNMANAGED domain using scenario together -
+especially with ACS turned off.
 
-> 
-> Ideally we should get away from using the pages directly for most
-> cases in page pool. In my mind the page pool should start operating
-> more like __get_free_pages where what you get is a virtual address
-> instead of the actual page. That way we could start abstracting it
-> away and eventually get to something more like a true page_pool api
-> instead of what feels like a set of add-ons for the page allocator.
+So it is really narrow niche.. Obscure enough I'm not going to make
+patches :)
 
-Yes, I agree with Alex Duyck here.
-Like when I looked at veth proposed changes, it also felt like a virtual 
-address would be better than a page.
-
-  addr = netmem_alloc(rq->page_pool, &truesize);
-
-> Although at the end of the day this still feels more like we are just
-> reimplementing slab so it is hard for me to say this is necessarily
-> the best solution either.
-
-Yes, we have to be careful not to re-implement the MM layer in network 
-land ;-)
-
-(below code copy-paste broke whitespaces)
-
-$ git show
-commit fe38c642d629f8361f76b25aa8732e5e331d0925 (HEAD -> pp_rm_workqueue04)
-Author: Jesper Dangaard Brouer <brouer@redhat.com>
-Date:   Fri Jun 16 20:54:08 2023 +0200
-
-     page_pool: code examplifying multiplexing on mem_type
-
-     Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
-
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index d1c5381fc95f..c02ac82a1d79 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -42,6 +42,7 @@ enum xdp_mem_type {
-         MEM_TYPE_PAGE_ORDER0,     /* Orig XDP full page model */
-         MEM_TYPE_PAGE_POOL,
-         MEM_TYPE_XSK_BUFF_POOL,
-+       MEM_TYPE_PP_NETMEM,
-         MEM_TYPE_MAX,
-  };
-
-diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-index d03448a4c411..68be76efef00 100644
---- a/net/core/page_pool.c
-+++ b/net/core/page_pool.c
-@@ -353,7 +353,7 @@ static void page_pool_set_pp_info(struct page_pool 
-*pool,
-                                   struct page *page)
-  {
-         page->pp = pool;
--       page->pp_magic |= PP_SIGNATURE;
-+       page->pp_magic |= PP_SIGNATURE | (MEM_TYPE_PAGE_POOL << 8);
-         if (pool->p.init_callback)
-                 pool->p.init_callback(page, pool->p.init_arg);
-  }
-@@ -981,6 +981,7 @@ bool page_pool_return_skb_page(struct page *page, 
-bool napi_safe)
-         struct napi_struct *napi;
-         struct page_pool *pp;
-         bool allow_direct;
-+       int mem_type;
-
-         page = compound_head(page);
-
-@@ -991,9 +992,10 @@ bool page_pool_return_skb_page(struct page *page, 
-bool napi_safe)
-          * and page_is_pfmemalloc() is checked in __page_pool_put_page()
-          * to avoid recycling the pfmemalloc page.
-          */
--       if (unlikely((page->pp_magic & ~0x3UL) != PP_SIGNATURE))
-+       if (unlikely((page->pp_magic & ~0xF03UL) != PP_SIGNATURE))
-                 return false;
-
-+       mem_type = (page->pp_magic & 0xF00) >> 8;
-         pp = page->pp;
-
-         /* Allow direct recycle if we have reasons to believe that we are
-@@ -1009,7 +1011,10 @@ bool page_pool_return_skb_page(struct page *page, 
-bool napi_safe)
-          * The page will be returned to the pool here regardless of the
-          * 'flipped' fragment being in use or not.
-          */
--       page_pool_put_full_page(pp, page, allow_direct);
-+       if (mem_type == MEM_TYPE_PP_NETMEM)
-+               pp_netmem_put_page(pp, page, allow_direct);
-+       else
-+               page_pool_put_full_page(pp, page, allow_direct);
-
-         return true;
-  }
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index 41e5ca8643ec..dc4bfbe8f002 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -380,6 +380,11 @@ void __xdp_return(void *data, struct xdp_mem_info 
-*mem, bool napi_direct,
-         struct page *page;
-
-         switch (mem->type) {
-+       case MEM_TYPE_PP_NETMEM:
-+               if (napi_direct && xdp_return_frame_no_direct())
-+                       napi_direct = false;
-+               pp_netmem_put(page->pp, data, napi_direct);
-+               break;
-         case MEM_TYPE_PAGE_POOL:
-                 page = virt_to_head_page(data);
-                 if (napi_direct && xdp_return_frame_no_direct())
-
+Jason
