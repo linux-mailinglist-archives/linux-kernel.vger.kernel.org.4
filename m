@@ -2,84 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D64B7324F9
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 04:00:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D2F87324D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 03:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239537AbjFPCAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 15 Jun 2023 22:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36306 "EHLO
+        id S232912AbjFPBsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 15 Jun 2023 21:48:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjFPCAP (ORCPT
+        with ESMTP id S229530AbjFPBse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 15 Jun 2023 22:00:15 -0400
-X-Greylist: delayed 711 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Jun 2023 19:00:06 PDT
-Received: from mail-m11876.qiye.163.com (mail-m11876.qiye.163.com [115.236.118.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1F02D61;
-        Thu, 15 Jun 2023 19:00:05 -0700 (PDT)
-Received: from [172.16.12.33] (unknown [58.22.7.114])
-        by mail-m11876.qiye.163.com (Hmail) with ESMTPA id AAFE03C02BE;
-        Fri, 16 Jun 2023 09:48:00 +0800 (CST)
-Message-ID: <2a833dc5-569b-d7e0-eb93-385f03af81b1@rock-chips.com>
-Date:   Fri, 16 Jun 2023 09:48:00 +0800
+        Thu, 15 Jun 2023 21:48:34 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C5610F7
+        for <linux-kernel@vger.kernel.org>; Thu, 15 Jun 2023 18:48:32 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Qj29T20dRzTkqW;
+        Fri, 16 Jun 2023 09:47:57 +0800 (CST)
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 16 Jun 2023 09:48:30 +0800
+Message-ID: <f0aa8017-9136-0c77-291c-0db5c3c6fde3@huawei.com>
+Date:   Fri, 16 Jun 2023 09:48:30 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3] usb: typec: tcpm: add get max power support
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     sebastian.reichel@collabora.com, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, heiko@sntech.de,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
-        william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
-        yubing.zhang@rock-chips.com, wmc@rock-chips.com
-References: <20230322093120.8686-1-frank.wang@rock-chips.com>
- <2023061551-gumminess-clasp-6285@gregkh>
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] mm/damon/core-test: add a test for damon_set_attrs()
 Content-Language: en-US
-From:   Frank Wang <frank.wang@rock-chips.com>
-In-Reply-To: <2023061551-gumminess-clasp-6285@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     SeongJae Park <sj@kernel.org>, <akpm@linux-foundation.org>
+CC:     <damon@lists.linux.dev>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230615183323.87561-1-sj@kernel.org>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <20230615183323.87561-1-sj@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGU9MSFZLQk5DGR9CH0gZHUhVEwETFh
-        oSFyQUDg9ZV1kYEgtZQVlOQ1VJSVVMVUpKT1lXWRYaDxIVHRRZQVlPS0hVSk5MSUpJVUpLS1VKQl
-        kG
-X-HM-Tid: 0a88c1e3550e2eb2kusnaafe03c02be
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PEk6Fhw5Cz1OFBAeECwvFz5I
-        FhdPCTNVSlVKTUNNQ0NLS0NKTUlDVTMWGhIXVR0JGhUQVQwaFRw7CRQYEFYYExILCFUYFBZFWVdZ
-        EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFJT0hNNwY+
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
 
-On 2023/6/15 17:39, Greg KH wrote:
-> On Wed, Mar 22, 2023 at 05:31:20PM +0800, Frank Wang wrote:
->> Traverse fixed pdos to calculate the maximum power that the charger
->> can provide, and it can be get by POWER_SUPPLY_PROP_INPUT_POWER_LIMIT
->> property.
->>
->> Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
->> ---
->>   drivers/usb/typec/tcpm/tcpm.c | 24 ++++++++++++++++++++++++
->>   1 file changed, 24 insertions(+)
-> What ever happened to this patch?
->
-> Frank, can you rebase it and resubmit?
 
-Thanks for your reply, I shall resubmit it later.
+On 2023/6/16 2:33, SeongJae Park wrote:
+> Commit 5ff6e2fff88e ("mm/damon/core: fix divide error in
+> damon_nr_accesses_to_accesses_bp()") fixed a bug by adding arguments
+> validation in damon_set_attrs().  Add a unit test for the added
+> validation to ensure the bug cannot occur again.
+> 
+> Signed-off-by: SeongJae Park <sj@kernel.org>
 
-BR.
-Frank
 
-> thanks,
->
-> greg k-h
+Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 
+> ---
+>   mm/damon/core-test.h | 24 ++++++++++++++++++++++++
+>   1 file changed, 24 insertions(+)
+> 
+> diff --git a/mm/damon/core-test.h b/mm/damon/core-test.h
+> index fae64d32b925..c11210124344 100644
+> --- a/mm/damon/core-test.h
+> +++ b/mm/damon/core-test.h
+> @@ -318,6 +318,29 @@ static void damon_test_update_monitoring_result(struct kunit *test)
+>   	KUNIT_EXPECT_EQ(test, r->age, 20);
+>   }
+>   
+> +static void damon_test_set_attrs(struct kunit *test)
+> +{
+> +	struct damon_ctx ctx;
+> +	struct damon_attrs valid_attrs = {
+> +		.min_nr_regions = 10, .max_nr_regions = 1000,
+> +		.sample_interval = 5000, .aggr_interval = 100000,};
+> +	struct damon_attrs invalid_attrs;
+> +
+> +	KUNIT_EXPECT_EQ(test, damon_set_attrs(&ctx, &valid_attrs), 0);
+> +
+> +	invalid_attrs = valid_attrs;
+> +	invalid_attrs.min_nr_regions = 1;
+> +	KUNIT_EXPECT_EQ(test, damon_set_attrs(&ctx, &invalid_attrs), -EINVAL);
+> +
+> +	invalid_attrs = valid_attrs;
+> +	invalid_attrs.max_nr_regions = 9;
+> +	KUNIT_EXPECT_EQ(test, damon_set_attrs(&ctx, &invalid_attrs), -EINVAL);
+> +
+> +	invalid_attrs = valid_attrs;
+> +	invalid_attrs.aggr_interval = 4999;
+> +	KUNIT_EXPECT_EQ(test, damon_set_attrs(&ctx, &invalid_attrs), -EINVAL);
+> +}
+> +
+>   static struct kunit_case damon_test_cases[] = {
+>   	KUNIT_CASE(damon_test_target),
+>   	KUNIT_CASE(damon_test_regions),
+> @@ -329,6 +352,7 @@ static struct kunit_case damon_test_cases[] = {
+>   	KUNIT_CASE(damon_test_ops_registration),
+>   	KUNIT_CASE(damon_test_set_regions),
+>   	KUNIT_CASE(damon_test_update_monitoring_result),
+> +	KUNIT_CASE(damon_test_set_attrs),
+>   	{},
+>   };
+>   
