@@ -2,79 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55470733A3B
-	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 21:56:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEDAC733A47
+	for <lists+linux-kernel@lfdr.de>; Fri, 16 Jun 2023 22:02:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231190AbjFPT4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 15:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43002 "EHLO
+        id S1345683AbjFPUBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 16:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbjFPT4j (ORCPT
+        with ESMTP id S230420AbjFPUBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 15:56:39 -0400
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4AE2359D;
-        Fri, 16 Jun 2023 12:56:38 -0700 (PDT)
-Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-77ac2eb07a3so39207639f.2;
-        Fri, 16 Jun 2023 12:56:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686945398; x=1689537398;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qS/HVMvqz+3lSoqw9RtE/dO2ukSdMAzMn+pgkdvUh6w=;
-        b=QEGDNs6bloovdRE9Vnx9fVwOXd/Ih0hFt3VejJyexUtf331RonA4c2IbJsVussc/U+
-         KLm0ALZW4EzC9kSrLNifgNyYhEDi308TQE3runAWS/TwK8njLdE/NDnrtv+7Y1qdU6k2
-         Rk8koAd2t06IdsauXjEG3Nxl9TH41kS7qPdhgKVAaMpIPUfGPZXIrxngfH+mBO9sspMF
-         QHfxR9MhWMv+xhdJVVby9e3DSz1g6fvNo3MStYsdNgTOuIVNuBcZC1sWz1YwqupGY93H
-         R6+cNcurC9yJBicknmdtPibMuy7uJGE5/S+ZMIkf3D8MSYXmENI8UGJ3He24DtEgHGoA
-         wVdA==
-X-Gm-Message-State: AC+VfDyLyl4uXjCRgYb8nmU1N4B25NInStqnOtbZeS8DKbHS+JabOggz
-        +FZCwU2D63A79fXL6SIFxA==
-X-Google-Smtp-Source: ACHHUZ6huIxB7TX+/DLvdKdc8mYNTXyBGF99Ajc4+Uni1wbszykli1jrwEBBrzCBaNSbKvMS1cO2lA==
-X-Received: by 2002:a05:6602:29b1:b0:76c:6674:243b with SMTP id u17-20020a05660229b100b0076c6674243bmr123367ios.15.1686945397889;
-        Fri, 16 Jun 2023 12:56:37 -0700 (PDT)
-Received: from robh_at_kernel.org ([2605:ef80:80c2:7a4a:82c2:d6b3:423e:4a47])
-        by smtp.gmail.com with ESMTPSA id q20-20020a02c8d4000000b0040fa0f43777sm6420098jao.161.2023.06.16.12.56.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jun 2023 12:56:37 -0700 (PDT)
-Received: (nullmailer pid 934772 invoked by uid 1000);
-        Fri, 16 Jun 2023 19:56:21 -0000
-Date:   Fri, 16 Jun 2023 13:56:21 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     =?iso-8859-1?Q?Fern=E1ndez?= Rojas <noltari@gmail.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Marek Vasut <marex@denx.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Suman Anna <s-anna@ti.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-clk@vger.kernel.org, Abel Vesa <abelvesa@kernel.org>,
-        devicetree@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        - <devicetree-spec@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>
-Subject: Re: [PATCH] dt-bindings: Remove last usage of "binding" or "schema"
- in titles
-Message-ID: <168694537949.934680.13323062117489358147.robh@kernel.org>
-References: <20230615213154.1753313-1-robh@kernel.org>
+        Fri, 16 Jun 2023 16:01:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1221735A3;
+        Fri, 16 Jun 2023 13:01:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B4F962E05;
+        Fri, 16 Jun 2023 20:01:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E208FC433C0;
+        Fri, 16 Jun 2023 20:01:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686945682;
+        bh=NNR06pawYLcrluh/DT0ZjxTIOvEpuKGIsr6P52TLsXk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=B2x9p0bw9e1c5FEiElfS0dqOB9kBN1XvLc3rdRIjWsCJR6DEA+8/fPzx0tD0XRds9
+         xnUob2gqF2SwBz+B8m0N3hPtdbY9Zjp4OWtxr5mJ453zMkqDfQfhs3Bk0NKVLLnJ8T
+         YRFinBI4ZyqxgEMzd4FvqZ96m1iAvyUW5PzZ9IkU7jzJf2O+Uh3mAZnkJkvCh4Irzi
+         y8m2OdBztq5JFis9yBA+hEUTNF3tMD5RAOz5rdpO89Y54dunPa4NAr9k6faBzowxQk
+         AVRlbo+pV0l2tH94RtPSD4Alk/lhusm0f9qKVWPhAsHRvmHc3DaWJj06DslGvi6t1A
+         z4M//Xaki6glw==
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-4f766777605so1569607e87.1;
+        Fri, 16 Jun 2023 13:01:22 -0700 (PDT)
+X-Gm-Message-State: AC+VfDyVb1J0jxb7ByxdQPFCoN6rG5PynZqV/6xLihGaBnsDfgruhCon
+        IUH8GAu3x/TSlzsgzzJMcx1NcvAGKA32lec/Nr8=
+X-Google-Smtp-Source: ACHHUZ5JqRMNnpRMFCyZiMjc+UWPs6A2cx1mTw/2r3SQw3woyTfRJjaUEkhnoXK7xbHKeHI/ilSSCGbka/vlr73Fo7g=
+X-Received: by 2002:a05:6512:60a:b0:4f8:5635:2ccf with SMTP id
+ b10-20020a056512060a00b004f856352ccfmr2048673lfe.8.1686945680955; Fri, 16 Jun
+ 2023 13:01:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230615213154.1753313-1-robh@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20230616085038.4121892-1-rppt@kernel.org> <20230616085038.4121892-7-rppt@kernel.org>
+In-Reply-To: <20230616085038.4121892-7-rppt@kernel.org>
+From:   Song Liu <song@kernel.org>
+Date:   Fri, 16 Jun 2023 13:01:08 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4J+rFvh9WJVWLZxFHtcYxahYk=NoKYdU9FMibZU8986w@mail.gmail.com>
+Message-ID: <CAPhsuW4J+rFvh9WJVWLZxFHtcYxahYk=NoKYdU9FMibZU8986w@mail.gmail.com>
+Subject: Re: [PATCH v2 06/12] mm/execmem: introduce execmem_data_alloc()
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Puranjay Mohan <puranjay12@gmail.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,24 +91,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jun 16, 2023 at 1:51=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wro=
+te:
+>
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+>
+> Data related to code allocations, such as module data section, need to
+> comply with architecture constraints for its placement and its
+> allocation right now was done using execmem_text_alloc().
+>
+> Create a dedicated API for allocating data related to code allocations
+> and allow architectures to define address ranges for data allocations.
+>
+> Since currently this is only relevant for powerpc variants that use the
+> VMALLOC address space for module data allocations, automatically reuse
+> address ranges defined for text unless address range for data is
+> explicitly defined by an architecture.
+>
+> With separation of code and data allocations, data sections of the
+> modules are now mapped as PAGE_KERNEL rather than PAGE_KERNEL_EXEC which
+> was a default on many architectures.
+>
+> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+[...]
+>  static void free_mod_mem(struct module *mod)
+> diff --git a/mm/execmem.c b/mm/execmem.c
+> index a67acd75ffef..f7bf496ad4c3 100644
+> --- a/mm/execmem.c
+> +++ b/mm/execmem.c
+> @@ -63,6 +63,20 @@ void *execmem_text_alloc(size_t size)
+>                              fallback_start, fallback_end, kasan);
+>  }
+>
+> +void *execmem_data_alloc(size_t size)
+> +{
+> +       unsigned long start =3D execmem_params.modules.data.start;
+> +       unsigned long end =3D execmem_params.modules.data.end;
+> +       pgprot_t pgprot =3D execmem_params.modules.data.pgprot;
+> +       unsigned int align =3D execmem_params.modules.data.alignment;
+> +       unsigned long fallback_start =3D execmem_params.modules.data.fall=
+back_start;
+> +       unsigned long fallback_end =3D execmem_params.modules.data.fallba=
+ck_end;
+> +       bool kasan =3D execmem_params.modules.flags & EXECMEM_KASAN_SHADO=
+W;
+> +
+> +       return execmem_alloc(size, start, end, align, pgprot,
+> +                            fallback_start, fallback_end, kasan);
+> +}
+> +
+>  void execmem_free(void *ptr)
+>  {
+>         /*
+> @@ -101,6 +115,28 @@ static bool execmem_validate_params(struct execmem_p=
+arams *p)
+>         return true;
+>  }
+>
+> +static void execmem_init_missing(struct execmem_params *p)
 
-On Thu, 15 Jun 2023 15:31:54 -0600, Rob Herring wrote:
-> The Devicetree bindings document does not have to say in the title that
-> it is a "Devicetree binding", but instead just describe the hardware.
-> 
-> Most of these have been fixed already, so fix the handful that snuck in.
-> With this, a meta-schema check can be enabled to catch these
-> automatically.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/clock/brcm,bcm63268-timer-clocks.yaml   | 2 +-
->  Documentation/devicetree/bindings/clock/imx8mp-audiomix.yaml    | 2 +-
->  .../devicetree/bindings/power/reset/restart-handler.yaml        | 2 +-
->  .../devicetree/bindings/remoteproc/ti,pru-consumer.yaml         | 2 +-
->  .../devicetree/bindings/reserved-memory/framebuffer.yaml        | 2 +-
->  5 files changed, 5 insertions(+), 5 deletions(-)
-> 
+Shall we call this execmem_default_init_data?
 
-Applied, thanks!
+> +{
+> +       struct execmem_modules_range *m =3D &p->modules;
+> +
+> +       if (!pgprot_val(execmem_params.modules.data.pgprot))
+> +               execmem_params.modules.data.pgprot =3D PAGE_KERNEL;
 
+Do we really need to check each of these? IOW, can we do:
+
+if (!pgprot_val(execmem_params.modules.data.pgprot)) {
+       execmem_params.modules.data.pgprot =3D PAGE_KERNEL;
+       execmem_params.modules.data.alignment =3D m->text.alignment;
+       execmem_params.modules.data.start =3D m->text.start;
+       execmem_params.modules.data.end =3D m->text.end;
+       execmem_params.modules.data.fallback_start =3D m->text.fallback_star=
+t;
+      execmem_params.modules.data.fallback_end =3D m->text.fallback_end;
+}
+
+Thanks,
+Song
+
+[...]
