@@ -2,121 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17C90733FCD
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 11:00:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 092A2733FCF
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 11:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232705AbjFQJAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 05:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41140 "EHLO
+        id S234511AbjFQJBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 05:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjFQI76 (ORCPT
+        with ESMTP id S234015AbjFQJBJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 04:59:58 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403F12103
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 01:59:57 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-570114e1feaso20115817b3.3
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 01:59:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686992396; x=1689584396;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DAxlbr70nVGLPeolqN3TzyVnfvZ6eeI7P/kXQdKGTBs=;
-        b=MxKH+RcVMjAIkHZiyEi8+5ceCL20HNh47UOTrkMz/aREhS7iLhXGH+koJ5DRNoE23U
-         UTYnDflrRNqzZ8bFZK6GGRblbtbCQtwP1cL+rIjN54mqBumgm4LWjAzHNnZaMJIpdLY3
-         UdAIIbLzcrGWq5DtnKsxyiAUJ65Az5S3hLXzye+6Li8ayjcz0L/yhNV5GODBcK0wNAAI
-         ZqimddRh4dT+fKd/GYU5PBAjSxqGVVJHZHyTsxWoAKAN6S+YMoiUpHg0MnLVkNgTRRgw
-         ZqFHEb3fMJwpOrlDUxmzpz3Eo26NaX4uV5TD/zcWBkkqDPIZRV6engawhcxQHYIIHCc4
-         CUeA==
+        Sat, 17 Jun 2023 05:01:09 -0400
+Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7252103
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 02:01:08 -0700 (PDT)
+Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-77e2b91f817so13139439f.0
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 02:01:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686992396; x=1689584396;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DAxlbr70nVGLPeolqN3TzyVnfvZ6eeI7P/kXQdKGTBs=;
-        b=EBS4Ug3jlk2At7opyyL6aIOcA3vycWz+FvtRNrJvUxre4n9a+1rUENvgBybqmjo2CP
-         b1Q5NUdKrh6CXVTM0DpNyBQ1clQX/btpz8kgbAYP9iaophOblekyI6n3+DkpiV6jfsm0
-         oIlYF9p5cndrkpQofemVInQcKc/s1MWPo0vumZk6JkM9YSygB/CxAxJTthpyxK/tSLSY
-         L5BIoAhpCC9hSXKDujVLb5F/iuf0ZQiQqUvDlxJw2aJ3bjLEjgiK2m9RGu2fEoiUJ3Qm
-         yfg5bKZso+bvgd1aYTaWaan03E7/qoZjO69SNa24rgy7bJNk9fPZs5+j4tDIjhgr6hSg
-         d93g==
-X-Gm-Message-State: AC+VfDzBQ0PZI6hdBxA/F3T59YTQ4QbrLKqQ5eqmX/CuRdm+i8N5iDOh
-        ZfM2LRC1fzCNfNmB2SeUWYl5P2QGnJqqtESkboU=
-X-Google-Smtp-Source: ACHHUZ5iThchRPHO1uX2naoiBRIc1k7oR/L5+4esIYomcMWDiLMvKWV8Fgh9XEY9sPw+C//l+o6yBnRtovHIl3QSavY=
-X-Received: by 2002:a25:bccf:0:b0:bac:b478:d215 with SMTP id
- l15-20020a25bccf000000b00bacb478d215mr1910617ybm.9.1686992396239; Sat, 17 Jun
- 2023 01:59:56 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686992467; x=1689584467;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kCZf97Eox4u67Klmj8lmXvnCId2RnzbotAfmTDKMiNg=;
+        b=MckDSShbDQLyYoJZylNTBxLuld03Nr1Sj1blcbXFfG9pLEPh/LZEPvtK9nulq4A+CF
+         a77KZi+km3nPzELAEm/gL2ThRw4a9pU25CM1uneAntMgAm7i/ElgcGwS0gdkTY2oNxz/
+         WlveIbnypfk1mYQnd2cAvTGeKbXLKX9f2/YkK7Euw9yhRnu7VPVa0ltnOzJy98AiGi7/
+         fE0IQzXpFw0sQWxNN62kxuorevSZcVGTyhCZ2xf26ScBUXSIYwFvdN6xJ9vea5OjAdkf
+         F2foLYUxQ2GhhAFjKNaMQI8mjN9EZ+8XOnV0ve+zNRSOB+kS9iynSGCggeWHp5niHMMk
+         YUqw==
+X-Gm-Message-State: AC+VfDxVmdQZtC8mika/pArGSn7aT7aRWWWYFlF4usbecKkUeXmYx1LE
+        lI4/l3iPdtRASsuQbXIB9U9d0UAYAXAK35/CUTPSL/iQztqt
+X-Google-Smtp-Source: ACHHUZ7cft+FCmnH2pEaVea26oLExDWClBt0nq4LlTvkudLqcfpayVBixd6cQrP8GJx3Xh/TEnyWRwL+ojZSl47nFVcoJ39KXwiF
 MIME-Version: 1.0
-References: <20230617044036.3985524-1-zhiguangni01@gmail.com>
- <20230616224407.863c74a3dc9d4f1427802f91@linux-foundation.org>
- <CACZJ9cXM9VkJ5=euHphwM5TtX3aZqZ_QynOq10FtrqCxZfZsQA@mail.gmail.com> <20230617070051.GU52412@kernel.org>
-In-Reply-To: <20230617070051.GU52412@kernel.org>
-From:   Liam Ni <zhiguangni01@gmail.com>
-Date:   Sat, 17 Jun 2023 16:59:46 +0800
-Message-ID: <CACZJ9cWFyr7MyGWWaGiNYHDb39ZYAmijH90gAH5N8-z4jc2KNw@mail.gmail.com>
-Subject: Re: [PATCH] mm/sparse:avoid null pointer access in memory_present()
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
-        hpa@zytor.com, linux-kernel@vger.kernel.org, linux-mm@kvack.org
+X-Received: by 2002:a05:6e02:790:b0:335:ba2a:c3d with SMTP id
+ q16-20020a056e02079000b00335ba2a0c3dmr1097467ils.5.1686992467471; Sat, 17 Jun
+ 2023 02:01:07 -0700 (PDT)
+Date:   Sat, 17 Jun 2023 02:01:07 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c3329c05fe4f8aa0@google.com>
+Subject: [syzbot] [f2fs?] possible deadlock in f2fs_file_mmap
+From:   syzbot <syzbot+c0e3db4f9cd6e05cadd3@syzkaller.appspotmail.com>
+To:     chao@kernel.org, jaegeuk@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 17 Jun 2023 at 15:01, Mike Rapoport <rppt@kernel.org> wrote:
->
-> On Sat, Jun 17, 2023 at 02:17:58PM +0800, Liam Ni wrote:
-> > On Sat, 17 Jun 2023 at 13:44, Andrew Morton <akpm@linux-foundation.org>=
- wrote:
-> > >
-> > > On Sat, 17 Jun 2023 14:40:36 +1000 Liam Ni <zhiguangni01@gmail.com> w=
-rote:
-> > >
-> > > > __nr_to_section() may return a null pointer,
-> > > > before accessing the member variable section_mem_map,
-> > > > we should first determine whether it is a null pointer.
-> > > >
-> > > > ...
-> > > >
-> > > > --- a/mm/sparse.c
-> > > > +++ b/mm/sparse.c
-> > > > @@ -258,7 +258,7 @@ static void __init memory_present(int nid, unsi=
-gned long start, unsigned long en
-> > > >               set_section_nid(section, nid);
-> > > >
-> > > >               ms =3D __nr_to_section(section);
-> > > > -             if (!ms->section_mem_map) {
-> > > > +             if (ms && !ms->section_mem_map) {
-> > > >                       ms->section_mem_map =3D sparse_encode_early_n=
-id(nid) |
-> > > >                                                       SECTION_IS_ON=
-LINE;
-> > > >                       __section_mark_present(ms, section);
-> > >
-> > > I'm suspecting that if __nr_to_section() returns NULL here, we should
-> > > just panic.  But a null-deref gives the same information, so why chan=
-ge
-> > > things?
-> >
-> > Do you mean if ms is a null pointer=EF=BC=8Cms->section_mem_map will ca=
-use
-> > system panic,so we needn't change?
->
-> Yes, if __nr_to_section ever returns NULL the system will crash anyway.
+Hello,
 
-I got it,do we need to print some information by panic()?
+syzbot found the following issue on:
 
->
-> --
-> Sincerely yours,
-> Mike.
+HEAD commit:    b16049b21162 Add linux-next specific files for 20230614
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=134b968d280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d103d5f9125e9fe9
+dashboard link: https://syzkaller.appspot.com/bug?extid=c0e3db4f9cd6e05cadd3
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1620a663280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1327629b280000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/a21dda01fc71/disk-b16049b2.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f31e3fc32b7a/vmlinux-b16049b2.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/3967bcf93010/bzImage-b16049b2.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/8deff423ac75/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c0e3db4f9cd6e05cadd3@syzkaller.appspotmail.com
+
+======================================================
+WARNING: possible circular locking dependency detected
+6.4.0-rc6-next-20230614-syzkaller #0 Not tainted
+------------------------------------------------------
+syz-executor407/5033 is trying to acquire lock:
+ffff888076c40a28 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:768 [inline]
+ffff888076c40a28 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: f2fs_file_mmap+0x154/0x290 fs/f2fs/file.c:527
+
+but task is already holding lock:
+ffff8880787d3768 (&mm->mmap_lock){++++}-{3:3}, at: mmap_write_lock_killable include/linux/mmap_lock.h:110 [inline]
+ffff8880787d3768 (&mm->mmap_lock){++++}-{3:3}, at: vm_mmap_pgoff+0x158/0x3b0 mm/util.c:541
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #1 (&mm->mmap_lock){++++}-{3:3}:
+       down_read+0x9c/0x480 kernel/locking/rwsem.c:1520
+       mmap_read_lock include/linux/mmap_lock.h:142 [inline]
+       do_user_addr_fault+0xb3d/0x1210 arch/x86/mm/fault.c:1391
+       handle_page_fault arch/x86/mm/fault.c:1534 [inline]
+       exc_page_fault+0x98/0x170 arch/x86/mm/fault.c:1590
+       asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:570
+       fault_in_readable+0x129/0x210 mm/gup.c:1928
+       fault_in_iov_iter_readable+0x252/0x2c0 lib/iov_iter.c:216
+       f2fs_preallocate_blocks fs/f2fs/file.c:4508 [inline]
+       f2fs_file_write_iter+0x516/0x2500 fs/f2fs/file.c:4744
+       call_write_iter include/linux/fs.h:1865 [inline]
+       new_sync_write fs/read_write.c:491 [inline]
+       vfs_write+0x960/0xd70 fs/read_write.c:584
+       ksys_write+0x122/0x250 fs/read_write.c:637
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3142 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3261 [inline]
+       validate_chain kernel/locking/lockdep.c:3876 [inline]
+       __lock_acquire+0x2e9d/0x5e20 kernel/locking/lockdep.c:5144
+       lock_acquire.part.0+0x11c/0x370 kernel/locking/lockdep.c:5761
+       down_write+0x92/0x200 kernel/locking/rwsem.c:1573
+       inode_lock include/linux/fs.h:768 [inline]
+       f2fs_file_mmap+0x154/0x290 fs/f2fs/file.c:527
+       call_mmap include/linux/fs.h:1870 [inline]
+       mmap_region+0x99c/0x2770 mm/mmap.c:2675
+       do_mmap+0x850/0xee0 mm/mmap.c:1367
+       vm_mmap_pgoff+0x1a2/0x3b0 mm/util.c:543
+       ksys_mmap_pgoff+0x42b/0x5b0 mm/mmap.c:1413
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&mm->mmap_lock);
+                               lock(&sb->s_type->i_mutex_key#15);
+                               lock(&mm->mmap_lock);
+  lock(&sb->s_type->i_mutex_key#15);
+
+ *** DEADLOCK ***
+
+1 lock held by syz-executor407/5033:
+ #0: ffff8880787d3768 (&mm->mmap_lock){++++}-{3:3}, at: mmap_write_lock_killable include/linux/mmap_lock.h:110 [inline]
+ #0: ffff8880787d3768 (&mm->mmap_lock){++++}-{3:3}, at: vm_mmap_pgoff+0x158/0x3b0 mm/util.c:541
+
+stack backtrace:
+CPU: 1 PID: 5033 Comm: syz-executor407 Not tainted 6.4.0-rc6-next-20230614-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ check_noncircular+0x2df/0x3b0 kernel/locking/lockdep.c:2195
+ check_prev_add kernel/locking/lockdep.c:3142 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3261 [inline]
+ validate_chain kernel/locking/lockdep.c:3876 [inline]
+ __lock_acquire+0x2e9d/0x5e20 kernel/locking/lockdep.c:5144
+ lock_acquire.part.0+0x11c/0x370 kernel/locking/lockdep.c:5761
+ down_write+0x92/0x200 kernel/locking/rwsem.c:1573
+ inode_lock include/linux/fs.h:768 [inline]
+ f2fs_file_mmap+0x154/0x290 fs/f2fs/file.c:527
+ call_mmap include/linux/fs.h:1870 [inline]
+ mmap_region+0x99c/0x2770 mm/mmap.c:2675
+ do_mmap+0x850/0xee0 mm/mmap.c:1367
+ vm_mmap_pgoff+0x1a2/0x3b0 mm/util.c:543
+ ksys_mmap_pgoff+0x42b/0x5b0 mm/mmap.c:1413
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f5f44cdf4d9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f5f3dc292f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000009
+RAX: ffffffffffffffda RBX: 00007f5f44d696f8 RCX: 00007f5f44cdf4d9
+RDX: 000000000000000b RSI: 0000000000b36000 RDI: 0000000020000000
+RBP: 00007f5f44d696f0 R08: 0000000000000004 R09: 0000000000000000
+R10: 0000000000028011 R11: 0000000000000246 R12: 00007f5f44d696fc
+R13: 656d6974797a616c R14: 746e657478656f6e R15: 0000000000022000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
