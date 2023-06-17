@@ -2,115 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B108733F3B
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 09:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AB66733F3C
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 09:35:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346181AbjFQHdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 03:33:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48750 "EHLO
+        id S1346177AbjFQHft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 03:35:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234647AbjFQHdI (ORCPT
+        with ESMTP id S229933AbjFQHfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 03:33:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7340297A;
-        Sat, 17 Jun 2023 00:33:06 -0700 (PDT)
+        Sat, 17 Jun 2023 03:35:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4482FB5
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 00:35:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48C5260A73;
-        Sat, 17 Jun 2023 07:33:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FC93C433C8;
-        Sat, 17 Jun 2023 07:33:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BF8BA60DE8
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 07:35:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30B8CC433C0;
+        Sat, 17 Jun 2023 07:35:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686987185;
-        bh=ptIUt8Giy+UX+V4UbH0FVrL7yqzDEK1ImVjFGbruads=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=UD5QZAgungDxwbEEdJFqJAfYhiB0+n5c2GA+6l9UBZ4eiJksYv8Kh+bHX21yOZuYr
-         nmlR2AqeiR+JYFXlyEkfPtxKdUankyhT+z3CXp8YCUnHmreMPFZhTmJryzdyEVMdkY
-         bv4mekIv+PSTdkydKWM1q95Nlkn6HNOn/Pga5scSTlvVqz0444m/l5UALC0jsto92Y
-         laourqKUK5FmeHZsbDFP4AOgC/+1aMsS4nKxnKeKOBu2adlOPNtrRHQVtw6nhj5Oxm
-         YlmHaNDEC1peE9xdVgUX8K3FxprHNW5KghxoCp75Z/xB72sYTUS4jhusSvgY4YT3DI
-         AqEkwiXyQdGnQ==
-Message-ID: <aed1592f-927f-13ab-b692-7a0745ac5733@kernel.org>
-Date:   Sat, 17 Jun 2023 09:32:58 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: =?UTF-8?Q?Re=3a_=5bPATCH_1/3=5d_dt-bindings=3a_can=3a_xilinx=5fcan?=
- =?UTF-8?B?OiBBZGQgRUNDIHByb3BlcnR5IOKAmHhsbngsaGFzLWVjY+KAmQ==?=
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     "Goud, Srinivas" <srinivas.goud@amd.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     "wg@grandegger.com" <wg@grandegger.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "gcnu.goud@gmail.com" <gcnu.goud@gmail.com>,
-        "git (AMD-Xilinx)" <git@amd.com>,
-        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <1686570177-2836108-1-git-send-email-srinivas.goud@amd.com>
- <1686570177-2836108-2-git-send-email-srinivas.goud@amd.com>
- <20230613-outskirts-dove-e3e39b096647-mkl@pengutronix.de>
- <PH8PR12MB667577C4800ED8E82C36D57DE15AA@PH8PR12MB6675.namprd12.prod.outlook.com>
- <d12e3d8b-20e8-48bb-84d0-3fe7d3502c83@kernel.org>
-In-Reply-To: <d12e3d8b-20e8-48bb-84d0-3fe7d3502c83@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        s=k20201202; t=1686987344;
+        bh=c9UO8nssl2fK59bC4qDdVj1LTFQ2SWZ6qfnG2mSUeDo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hrG2lXSfWvauenyqD88/Ei4/B6oTOR3BBVsNo+7DUfCJ/kQKZRMrBM9DKEdVFWLlz
+         2gjelx6dA5DUbG5eU4fGXmjMiTiwBk+96jfhwWN87li8gBEGeXTXCxfBRW0padEyGw
+         Is/IQqOYI6BmA3u3lAydDADDlUY/HrHR7NYIBjX4/5D/jUisQpmWVWBgJ+78gw9OyI
+         XALApiIuO9LIrRgbo0UrImw1N5Efb8/fB98kjF1eOhXRpp1gUGy8UscwYV3BlRhre3
+         5hMT+X3cKFv536cdGBn74cTjTQjI9uvbMHYnO0YkTCbFJ0SsPvY3qG5f3GfFFxU5J9
+         /uCZJ7fBTCOlA==
+Received: from [77.240.177.73] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1qAQTF-0063wk-Qd;
+        Sat, 17 Jun 2023 08:35:41 +0100
+Date:   Sat, 17 Jun 2023 08:35:45 +0100
+Message-ID: <87zg4ypmlq.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kunkun Jiang <jiangkunkun@huawei.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        "open list:IRQCHIP DRIVERS" <linux-kernel@vger.kernel.org>,
+        <wanghaibin.wang@huawei.com>, <chenxiang66@hisilicon.com>,
+        <tangnianyao@huawei.com>
+Subject: Re: [PATCH] irqchipi/gic-v4: Ensure accessing the correct RD when and writing INVLPIR
+In-Reply-To: <b073b1f7-0567-eb45-dec9-dcd2054e41c9@huawei.com>
+References: <20230412041510.497-1-jiangkunkun@huawei.com>
+        <86y1mxl9m4.wl-maz@kernel.org>
+        <f618c540-879c-ca5b-31af-e55472d8208c@huawei.com>
+        <86bkikmvjk.wl-maz@kernel.org>
+        <b073b1f7-0567-eb45-dec9-dcd2054e41c9@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 77.240.177.73
+X-SA-Exim-Rcpt-To: jiangkunkun@huawei.com, tglx@linutronix.de, yuzenghui@huawei.com, linux-kernel@vger.kernel.org, wanghaibin.wang@huawei.com, chenxiang66@hisilicon.com, tangnianyao@huawei.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/06/2023 13:11, Krzysztof Kozlowski wrote:
-> On 14/06/2023 12:22, Goud, Srinivas wrote:
->> Hi,
->>
->>> -----Original Message-----
->>> From: Marc Kleine-Budde <mkl@pengutronix.de>
->>> Sent: Tuesday, June 13, 2023 1:23 PM
->>> To: Goud, Srinivas <srinivas.goud@amd.com>
->>> Cc: wg@grandegger.com; davem@davemloft.net; edumazet@google.com;
->>> kuba@kernel.org; pabeni@redhat.com; gcnu.goud@gmail.com; git (AMD-
->>> Xilinx) <git@amd.com>; michal.simek@xilinx.com; linux-can@vger.kernel.org;
->>> linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org
->>> Subject: Re: [PATCH 1/3] dt-bindings: can: xilinx_can: Add ECC property
->>> ‘xlnx,has-ecc’
->>>
->>> On 12.06.2023 17:12:55, Srinivas Goud wrote:
->>>> ECC feature added to Tx and Rx FIFO’s for Xilinx CAN Controller.
->>>> Part of this feature configuration and counter registers added in IP
->>>> for 1bit/2bit ECC errors.
->>>> Please find more details in PG096 v5.1 document.
->>>>
->>>> xlnx,has-ecc is optional property and added to Xilinx CAN Controller
->>>> node if ECC block enabled in the HW.
->>>>
->>>> Signed-off-by: Srinivas Goud <srinivas.goud@amd.com>
->>>
->>> Is there a way to introspect the IP core to check if this feature is compiled in?
->> There is no way(IP registers) to indicate whether ECC feature is enabled or not.
+On Tue, 16 May 2023 13:01:59 +0100,
+Kunkun Jiang <jiangkunkun@huawei.com> wrote:
 > 
-> Isn't this then deductible from compatible? Your binding claims it is
-> only for AXI CAN, so xlnx,axi-can-1.00.a, even though you did not
-> restrict it in the binding.
+> Hi Marc,
+> 
+> On 2023/5/16 18:15, Marc Zyngier wrote:
+> > On Thu, 13 Apr 2023 04:57:17 +0100,
+> > Kunkun Jiang <jiangkunkun@huawei.com> wrote:
+> >>> Wouldn't it be nice if irq_to_cpuid() could work out whether it is
+> >>> dealing with a LPI or a VLPI like it does today, but also directly
+> >>> with a VPE? We could then use the same code as derect_lpi_inv(). I
+> >>> came up with this the hack below, which is totally untested as I don't
+> >>> have access to GICv4.1 HW.
+> >>> 
+> >>> Could you give it a spin?
+> >> Nice, I will test it as soon as possible.
+> > Did you ever managed to test this?
+> Sorry,I've only been coordinating the GICv4.1 environment in the last
+> few days. I have tested it with GICv4 many times, and it doesn't recur.
+> However, another call trace occurs with GICv4.1 when the device driver
+> is loaded in Guest. I haven't found out why. Maybe you can help analyze it.
 
-BTW, this is not an ACK, because this was not tested by automation. I
-don't understand why get_maintainers.pl are so tricky to use, but
-nevertheless I require resend to satisfy automation.
+I also went back to my patch, and it is a bit bogus (it doesn't even
+compile to start with). I've now posted new version[1] that should at
+least fix the bug you initially reported.
 
-Best regards,
-Krzysztof
+Can you please test it and reply to it?
 
+Thanks,
+
+	M.
+
+[1] https://lore.kernel.org/r/20230617073242.3199746-1-maz@kernel.org
+
+-- 
+Without deviation from the norm, progress is not possible.
