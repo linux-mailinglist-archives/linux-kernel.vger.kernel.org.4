@@ -2,68 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4275D733DDB
+	by mail.lfdr.de (Postfix) with ESMTP id 97B14733DDC
 	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 05:47:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232245AbjFQDpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 23:45:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
+        id S232588AbjFQDq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 23:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjFQDpI (ORCPT
+        with ESMTP id S229683AbjFQDq4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 23:45:08 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED5730F8;
-        Fri, 16 Jun 2023 20:45:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686973507; x=1718509507;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XwjZf4OZ6eYrcFkxkPDYjloZyHMyc8e9inqGFlKDqN8=;
-  b=jMVQe3B2PVUh4QwxC7xGJw4RW8xMazNpyMyqOI47XV5ceOg9ZqT8745b
-   QggThgQXei22q+zyupEqzzHJciZWIq+3W+1bVmhKF8ZB1B2OtR+sQpFGi
-   huddxpenz1Z59vVBYQgM+tBSk5Ly7WUlPDZCKg7+6HiQazKadnlqEPUSA
-   9Vsdwc8r89tBBlKanKMKNeloLzvgzCijN7BJre4PHnYSeYvfqkjOzyoST
-   EVO/pVmDk0obN2hkr33DmYEm+cyX8gJLpfgo3VIbBNgDz5bSAwGwg+sL8
-   sGUtpshWwH4+wFfkrT6bdy/OONCfutIZ0IE13maptyRSA+3mcB3vSM8Db
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="445738601"
-X-IronPort-AV: E=Sophos;i="6.00,249,1681196400"; 
-   d="scan'208";a="445738601"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 20:45:06 -0700
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="746596944"
-X-IronPort-AV: E=Sophos;i="6.00,249,1681196400"; 
-   d="scan'208";a="746596944"
-Received: from jye19-mobl.ccr.corp.intel.com (HELO localhost) ([10.255.28.32])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 20:45:02 -0700
-Date:   Sat, 17 Jun 2023 11:45:00 +0800
-From:   Yu Zhang <yu.c.zhang@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Robin Murphy <robin.murphy@arm.com>
-Subject: Re: [PATCH 1/3] KVM: VMX: Retry APIC-access page reload if
- invalidation is in-progress
-Message-ID: <20230617034500.djk5nhmpxony3ngp@linux.intel.com>
-References: <20230602011518.787006-1-seanjc@google.com>
- <20230602011518.787006-2-seanjc@google.com>
- <20230607073728.vggwcoylibj3cp6s@linux.intel.com>
- <ZICUbIF2+Cvbb9GM@google.com>
- <20230607172243.c2bkw43hcet4sfnb@linux.intel.com>
- <ZIDENf2vzwUjzcl2@google.com>
- <20230608070016.f3dz6dhvdkxsomdb@linux.intel.com>
- <ZIi+jWxYg/UhKpr1@google.com>
+        Fri, 16 Jun 2023 23:46:56 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C00C1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 20:46:53 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Qjhm96QBsz18MCB;
+        Sat, 17 Jun 2023 11:46:49 +0800 (CST)
+Received: from huawei.com (10.175.104.170) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Sat, 17 Jun
+ 2023 11:46:51 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <akpm@linux-foundation.org>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <linmiaohe@huawei.com>
+Subject: [PATCH] mm: page_alloc: make compound_page_dtors static
+Date:   Sat, 17 Jun 2023 11:46:22 +0800
+Message-ID: <20230617034622.1235913-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZIi+jWxYg/UhKpr1@google.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.104.170]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,24 +46,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> 
-> > and the backing page is being reclaimed in L0? I saw
-> > nested_get_vmcs12_pages() will check vmcs12 and set the APIC access address
-> > in VMCS02, but not sure if this routine will be triggered by the mmu
-> > notifier...
-> 
-> Pages from vmcs12 that are referenced by physical address in the VMCS are pinned
-> (where "pinned" means KVM holds a reference to the page) by kvm_vcpu_map().  I.e.
-> the page will not be migrated, and if userspace unmaps the page, userspace might
-> break its VM, but that's true for any guest memory that userspace unexpectedly
-> unmaps, and there won't be any no use-after-free issues.
-> 
-Thanks, Sean. 
+It's only used inside page_alloc.c now. So make it static and remove the
+declaration in mm.h.
 
-About the kvm_vcpu_map(), is it necessary for APIC access address? L0 only
-needs to get its pfn, and does not care about the hva or struct page. Could
-we just use gfn_to_pfn() to retrieve the pfn, and kvm_release_pfn_clean() to
-unpin it later? 
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+---
+ include/linux/mm.h | 1 -
+ mm/page_alloc.c    | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-B.R.
-Yu
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index fdd966b11f79..441ab55e94c5 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -1220,7 +1220,6 @@ enum compound_dtor_id {
+ #endif
+ 	NR_COMPOUND_DTORS,
+ };
+-extern compound_page_dtor * const compound_page_dtors[NR_COMPOUND_DTORS];
+ 
+ static inline void folio_set_compound_dtor(struct folio *folio,
+ 		enum compound_dtor_id compound_dtor)
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 9eb42182eb90..3ab51fb9191c 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -284,7 +284,7 @@ const char * const migratetype_names[MIGRATE_TYPES] = {
+ #endif
+ };
+ 
+-compound_page_dtor * const compound_page_dtors[NR_COMPOUND_DTORS] = {
++static compound_page_dtor * const compound_page_dtors[NR_COMPOUND_DTORS] = {
+ 	[NULL_COMPOUND_DTOR] = NULL,
+ 	[COMPOUND_PAGE_DTOR] = free_compound_page,
+ #ifdef CONFIG_HUGETLB_PAGE
+-- 
+2.27.0
+
