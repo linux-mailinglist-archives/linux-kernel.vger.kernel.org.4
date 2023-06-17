@@ -2,191 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA8F073435D
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 21:48:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2FE673435F
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 21:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233935AbjFQTsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 15:48:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33612 "EHLO
+        id S1346345AbjFQTtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 15:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjFQTsd (ORCPT
+        with ESMTP id S235451AbjFQTsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 15:48:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D169CE4;
-        Sat, 17 Jun 2023 12:48:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6655E610E7;
-        Sat, 17 Jun 2023 19:48:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAA55C433C8;
-        Sat, 17 Jun 2023 19:48:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687031311;
-        bh=WjHfdWYHWQp9ZF20XQ2bFJYdb5Ej6liaTwZ2tTeQqSg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=LjCKwgxTpgAFMq3bjlJAGKdhqWJNQivhg+6advoXBN+Bs7VEDTkqeVTsXvfkhL8Mb
-         RFhJN2gsMPuhjb1bbvumum6omXBAShXAY1saFKm7nuQpoLeAHNZ4S2jzb5eVAz88+e
-         8U17V48G/Ee8pitlmcG0WzvGbYgphYxttFzxtU9yV28Y0FrzwLmUw+oegyIrGf2boy
-         Yx5qZZkLaunnDigDPxDSqb/rnbeMg1w1aK3Zb0GzrumVZ9s3N664X4BglWpi8Xpkvz
-         MOQIKXNLyet/WUPmu+8DSQ9z2ea3L4oaPoI1Qh7N57vWFpikeMUzLHzLvZLhVxUb6m
-         GSuZl2fYQOSVg==
-Date:   Sat, 17 Jun 2023 20:48:24 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] iio: light: bu27008: add chip info
-Message-ID: <20230617204824.6f3d9b20@jic23-huawei>
-In-Reply-To: <e898bb74afdbc9aa030932e82c36b4ce6d13bab7.1686651445.git.mazziesaccount@gmail.com>
-References: <cover.1686650184.git.mazziesaccount@gmail.com>
-        <e898bb74afdbc9aa030932e82c36b4ce6d13bab7.1686651445.git.mazziesaccount@gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+        Sat, 17 Jun 2023 15:48:50 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBEAD1982
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 12:48:42 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f906d8fca3so4253035e9.1
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 12:48:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687031321; x=1689623321;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jlLud9fUjWTG1BAYyfaScj42f1iE+kplSpMj/YmXmBc=;
+        b=KhnI54STxI15hEJpXsh/ENw0PqfyO9C/kPIsaZXVMi/uN5t5h8CDd00otWlOi74H79
+         +j3gT+rjwymjKQp4D0lpy8BjV5SwT0r0+HUS8bFwp4NxAD4csfPjvzf4KlDzKdGFG0Mv
+         rkHHtzPBD18oUAEImBCfWOpVEozyCmhs6PuTj7DHo2V12g8/wMTMNdjnkzWQUhtu/3Qw
+         oclL8EqitZdAuYA4a1NrWvt00SmPAs7k7M4lvSrOYeXRkKsYz0oPU1agkKmBrulzgNRY
+         FpweJn3bo1lEr5iMFC89f/2jNNcxCoimEDqL1u8reMUTqsPRJpHocN1NPxVFLK8Q+y2/
+         kWnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687031321; x=1689623321;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jlLud9fUjWTG1BAYyfaScj42f1iE+kplSpMj/YmXmBc=;
+        b=NvA+PLphki6lU5BiWsm3veki3benBZtiJgy2DPLaMO/3yB1k4E67LQ/0+2hw6bjrNL
+         tWjyfNyBP9oIDlXzLxHwGJiVAZCSZzz681DiGInsGg/0c+PmhAdTPGWPoRACPi5hppjs
+         xxR8pOgKFB3av7gXzK8aqEk2+ml6eOFQYjmKHMnQLdBpu+ke4lKUPdw6aMgJab37lOwR
+         OuUOvgnI5w2iaxA9jiG2sIhGCeS3y4WYxCGSrlA+bFviuZMTzibqyv1SbQ0I1HLS5hGX
+         yI1nL5wmICK7s3RipaBRVP4KouhOnHIpNMsnrsoLvAW8ocPb/1YvEJSsmShHVOSr9T1r
+         Gy3Q==
+X-Gm-Message-State: AC+VfDwb7jvc73CPoj/03IbzY/iTmwBfgnb7r5jfzLUf1vwv+TQwiS5s
+        5a83ANQq7ZEvPqLu8r9S0yjjN8xCoiQ=
+X-Google-Smtp-Source: ACHHUZ4E6pjgtV/NPkGE1Sb8nK9sAmKY2Q2xyz3vXVK+XTnHnC4yHwPgKyIOlkNrnl3ncCII/AyJ0w==
+X-Received: by 2002:a1c:7c17:0:b0:3f9:aca:48c3 with SMTP id x23-20020a1c7c17000000b003f90aca48c3mr237960wmc.0.1687031320771;
+        Sat, 17 Jun 2023 12:48:40 -0700 (PDT)
+Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
+        by smtp.gmail.com with ESMTPSA id h12-20020adffd4c000000b0031130b9b173sm1675719wrs.34.2023.06.17.12.48.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Jun 2023 12:48:39 -0700 (PDT)
+Date:   Sat, 17 Jun 2023 20:48:38 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        James Houghton <jthoughton@google.com>,
+        Hugh Dickins <hughd@google.com>
+Subject: Re: [PATCH 5/7] mm/gup: Cleanup next_page handling
+Message-ID: <f4087efd-36c3-4e3a-96ce-44dbd1a0b5d7@lucifer.local>
+References: <20230613215346.1022773-1-peterx@redhat.com>
+ <20230613215346.1022773-6-peterx@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230613215346.1022773-6-peterx@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 13 Jun 2023 13:20:07 +0300
-Matti Vaittinen <mazziesaccount@gmail.com> wrote:
-
-> The ROHM BU27010 RGB + flickering sensor is in many regards similar to
-> the BU27008. Prepare for adding support for BU27010 by allowing
-> chip-specific properties to be brought from the of_device_id data.
-> 
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-A few things inline - including some commented out code you missed
-when tidying up before sending.
-
-Jonathan
-
+On Tue, Jun 13, 2023 at 05:53:44PM -0400, Peter Xu wrote:
+> The only path that doesn't use generic "**pages" handling is the gate vma.
+> Make it use the same path, meanwhile tune the next_page label upper to
+> cover "**pages" handling.  This prepares for THP handling for "**pages".
+>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
 > ---
->  drivers/iio/light/rohm-bu27008.c | 185 +++++++++++++++++++++++--------
->  1 file changed, 138 insertions(+), 47 deletions(-)
-> 
-> diff --git a/drivers/iio/light/rohm-bu27008.c b/drivers/iio/light/rohm-bu27008.c
-> index b50bf8973d9a..8c7f6f20a523 100644
-> --- a/drivers/iio/light/rohm-bu27008.c
-> +++ b/drivers/iio/light/rohm-bu27008.c
-> @@ -211,7 +211,33 @@ static const struct iio_chan_spec bu27008_channels[] = {
->  	IIO_CHAN_SOFT_TIMESTAMP(BU27008_NUM_CHANS),
->  };
->  
-> +struct bu27008_data;
+>  mm/gup.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+>
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 8d59ae4554e7..a2d1b3c4b104 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -1135,7 +1135,7 @@ static long __get_user_pages(struct mm_struct *mm,
+>  			if (!vma && in_gate_area(mm, start)) {
+>  				ret = get_gate_page(mm, start & PAGE_MASK,
+>  						gup_flags, &vma,
+> -						pages ? &pages[i] : NULL);
+> +						pages ? &page : NULL);
+
+Good spot... ugh that we handled this differently.
+
+>  				if (ret)
+>  					goto out;
+>  				ctx.page_mask = 0;
+
+We can drop this line now right? As the new next_page block will duplicate
+this.
+
+> @@ -1205,19 +1205,18 @@ static long __get_user_pages(struct mm_struct *mm,
+>  				ret = PTR_ERR(page);
+>  				goto out;
+>  			}
+> -
+> -			goto next_page;
+
+This is neat, we've already checked if pages != NULL so the if (pages)
+block at the new next_page label will not be run.
+
+>  		} else if (IS_ERR(page)) {
+>  			ret = PTR_ERR(page);
+>  			goto out;
+>  		}
+> +next_page:
+>  		if (pages) {
+>  			pages[i] = page;
+>  			flush_anon_page(vma, page, start);
+>  			flush_dcache_page(page);
+
+I guess there's no harm that we now flush here, though it seems to me to be
+superfluous, it's not a big deal I don't think.
+
+>  			ctx.page_mask = 0;
+>  		}
+> -next_page:
 > +
-> +struct bu27_chip_data {
-> +	const char *name;
-> +	int (*chip_init)(struct bu27008_data *data);
-> +	int (*get_gain_sel)(struct bu27008_data *data, int *sel);
-> +	int (*write_gain_sel)(struct bu27008_data *data, int sel);
-> +	const struct regmap_config *regmap_cfg;
-> +	const struct iio_gain_sel_pair *gains;
-> +	const struct iio_gain_sel_pair *gains_ir;
-> +	int num_gains;
-> +	int num_gains_ir;
-> +	int scale1x;
-> +
-> +	int drdy_en_reg;
-> +	int drdy_en_mask;
-> +	int meas_en_reg;
-> +	int meas_en_mask;
-> +	int valid_reg;
-> +	int chan_sel_reg;
-> +	int chan_sel_mask;
-> +	int int_time_mask;
-> +	u8 part_id;
-> +};
-> +
->  struct bu27008_data {
-> +	const struct bu27_chip_data *cd;
->  	struct regmap *regmap;
->  	struct iio_trigger *trig;
->  	struct device *dev;
-> @@ -282,6 +308,32 @@ static const struct regmap_config bu27008_regmap = {
->  	.disable_locking = true,
->  };
->  
-> +static int bu27008_chip_init(struct bu27008_data *data);
-> +static int bu27008_write_gain_sel(struct bu27008_data *data, int sel);
-> +static int bu27008_get_gain_sel(struct bu27008_data *data, int *sel);
-> +
-> +static const struct bu27_chip_data bu27008_chip = {
-> +	.name = "bu27008",
-> +	.chip_init = bu27008_chip_init,
-> +	.scale1x = BU27008_SCALE_1X,
+>  		page_increm = 1 + (~(start >> PAGE_SHIFT) & ctx.page_mask);
+>  		if (page_increm > nr_pages)
+>  			page_increm = nr_pages;
+> --
+> 2.40.1
+>
 
-I'd keep this in same order as the definition unless there is a
-strong reason for a different ordering (perhaps the structure
-is ordered for packing purposes or something like that and assigning
-can be done in an order that groups things better?)
-Cost of out of order is that it's hard to check if everything is assigned.
+Other than that, LGTM,
 
-> +	.get_gain_sel = bu27008_get_gain_sel,
-> +	.write_gain_sel = bu27008_write_gain_sel,
-> +	.part_id = BU27008_ID,
-> +	.regmap_cfg = &bu27008_regmap,
-> +	.drdy_en_reg = BU27008_REG_MODE_CONTROL3,
-> +	.drdy_en_mask = BU27008_MASK_INT_EN,
-> +	.valid_reg = BU27008_REG_MODE_CONTROL3,
-> +	.meas_en_reg = BU27008_REG_MODE_CONTROL3,
-> +	.meas_en_mask = BU27008_MASK_MEAS_EN,
-> +	.chan_sel_reg = BU27008_REG_MODE_CONTROL3,
-> +	.chan_sel_mask = BU27008_MASK_CHAN_SEL,
-> +	.int_time_mask = BU27008_MASK_MEAS_MODE,
-> +	.gains = &bu27008_gains[0],
-> +	.num_gains = ARRAY_SIZE(bu27008_gains),
-> +	.gains_ir = &bu27008_gains_ir[0],
-> +	.num_gains_ir = ARRAY_SIZE(bu27008_gains_ir),
-> +};
-
-Could you move this down to below all the callbacks so that no need for forward
-definitions of the functions? 
-
-> +
->  #define BU27008_MAX_VALID_RESULT_WAIT_US	50000
->  #define BU27008_VALID_RESULT_WAIT_QUANTA_US	1000
-
-> -	idev->channels = bu27008_channels;
-> -	idev->num_channels = ARRAY_SIZE(bu27008_channels);
-> -	idev->name = "bu27008";
-> +	idev->channels = /* data->cd->cspec; */ &bu27008_channels[0];
-?   Seems you didn't put the channels cd
-
-> +	idev->num_channels = /* data->cd->num_channels; */ ARRAY_SIZE(bu27008_channels);
-?
-
-
-> +	idev->name = data->cd->name;
->  	idev->info = &bu27008_info;
->  	idev->modes = INDIO_DIRECT_MODE;
->  	idev->available_scan_masks = bu27008_scan_masks;
->  
-> -	ret = bu27008_chip_init(data);
-> +	ret = data->cd->chip_init(data);
->  	if (ret)
->  		return ret;
->  
-> @@ -1021,7 +1112,7 @@ static int bu27008_probe(struct i2c_client *i2c)
->  }
->  
->  static const struct of_device_id bu27008_of_match[] = {
-> -	{ .compatible = "rohm,bu27008" },
-> +	{ .compatible = "rohm,bu27008", .data = &bu27008_chip },
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(of, bu27008_of_match);
-
+Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
