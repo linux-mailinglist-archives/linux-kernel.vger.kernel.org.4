@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FCB9734188
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 15:58:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0CCA734189
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 15:58:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346209AbjFQN6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 09:58:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47520 "EHLO
+        id S1346206AbjFQN6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 09:58:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237280AbjFQN54 (ORCPT
+        with ESMTP id S232182AbjFQN6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 09:57:56 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E46B30E3
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 06:57:27 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-97ea801b0d0so44276066b.1
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 06:57:27 -0700 (PDT)
+        Sat, 17 Jun 2023 09:58:03 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41C82700
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 06:57:33 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-516a0105121so402926a12.0
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 06:57:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687010246; x=1689602246;
+        d=gmail.com; s=20221208; t=1687010252; x=1689602252;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5r8DhT5L5h8r0JwLA0gY98CPzBjOeUot4BZYb8MwDFg=;
-        b=po6/GxT79Pm4LMgotSpY2CrnosQiuatHhG2r+ox8rDNPiFx02/4VBAPMsg7qRulaT8
-         L9pPMyf82WjyPwbVdVo749dObJ8wijFGR6luwWbw5wZPinUZLa84i/2FrCg4lna97tK4
-         0P6v9mk5cow8xGHEDAlukGsncTt2T7wMgrjXaQnEB4vt2vDfCKE53x7VFO6D0s1GhU9Y
-         nAL5Bscb1WmQhuNKAE0egkJ0ffmVwDRe9CVnSmrQiDBtuPKssDny2xc4ccPrfVB++iHw
-         RwnPWReZl87ir4wnbnqD2V+9GCq4uM5FOzyOoLww81a04g6gF/CMPzZN4+6vMNPY3/Sa
-         L6iw==
+        bh=VkmjazlAR0SOJnibuMAsrh0dHrzkB5jiHviyz5Pstgw=;
+        b=rJRtS9moHqpXhI4Hk5iQvZgVkY+D9eUn5XNHCL3JfXtr0RhT/6VCRsnLvR721Y84b4
+         /lSzIHOlg1aTXigGz3SGJyiRPMqNkv/ijtVR0FKtmhnHJ8ANGDpyfbBM8Vj37bC3LnAr
+         8JzWJSKtBitls4qiIkfd3Umi1982q2/3D06NpDGmcqG32gtmi30aflgquHpBsog59ekc
+         fn0jQvqKpqmIEZIf8ndtJfpV8YF91JwU1Pr7DjjB+a8vsWxvB8AebCL4/9w9LsdeyOzk
+         WtUTRbzLmfRqWj7P9a0gh4eD8mW8wt1HG3w/aXkccNf7hL7v6xXOscQ6x8JZOnbIh8aF
+         N+XA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687010246; x=1689602246;
+        d=1e100.net; s=20221208; t=1687010252; x=1689602252;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5r8DhT5L5h8r0JwLA0gY98CPzBjOeUot4BZYb8MwDFg=;
-        b=lzygR5W7Wbzn8mAx1OXLGeeINTjgYZs8OoOI9mivXdCdM4+7aUzUaPa2dEw5nCUcUY
-         fFm+aV7EIFNnLoT/IRF3BH+LG8QRltbEjCXc8Nu+xQj7mipNfb/zyOoNKa6g3ffQT+AQ
-         FheE/CfGLdbCV+kgcdOuXAUxZPCzLiERpGWwBMtaj40mtBvzJWZ1kIHFuB6aIuHBf/dF
-         bHr2fFAPkN+x3viJsUr+nYcDQHMfBJyGGtZt4NDTdSrkm4jjTuFx+bFNhT+xtoYKZyNF
-         1Ogyf+gXOH3DfJuTP6ToAEivloDHaQ1EMjCfwq+05koSX5FBRJaagVUH9TAjvA2FOgJV
-         3qOQ==
-X-Gm-Message-State: AC+VfDxvSCpnwldT296ls0NRE4cHBaYpyy2kA1AXtBJ2L8hnu5owr6PM
-        pu4OfmU0jV07gF3KqfYQTbUmlvgzOFw=
-X-Google-Smtp-Source: ACHHUZ7bVJVqEU8KH/THe0uY1XocKcopdUINfLGItCXNEVmxIfwG88jbBbM3dW3HtE8pTCJfq0ZfZw==
-X-Received: by 2002:a17:906:6493:b0:987:6960:36c5 with SMTP id e19-20020a170906649300b00987696036c5mr1352539ejm.6.1687010245981;
-        Sat, 17 Jun 2023 06:57:25 -0700 (PDT)
+        bh=VkmjazlAR0SOJnibuMAsrh0dHrzkB5jiHviyz5Pstgw=;
+        b=LJFRQxEnjxgf2epwcscXp2cKtAKfpIoduUT3QZlKEDvGGNASC7KxcZZ+0ciNrVtbbL
+         cqVX1zqCKfwfwKuJNsIrjZRo4cz2AK+nocUZ2zD5wyHb8H02zZo9FuFwr/whbgCdrvmo
+         ZHiu8iDYZVxU5ND6PhFrCodZPBfHU3vAI8j8xugPHhyUVfx2vJlEWi4wJbfmlSFIey9b
+         sye3ZAGzLqifhQ9wyGRLLykjA1XxfinpKLL3bQWZJ+RJ5gKSpAMOLhmnG6YC38eLo4O3
+         4gh7uATyOVCFWQ6fMPUu1LAbr548Qb4lGxEXaP/wgx1fe8RNfJHLH6M2AMoZ0efFnRz5
+         YaQg==
+X-Gm-Message-State: AC+VfDysJiDpcxtC8PFThmIcK1p/llhMtRyta4Fdx4Lcy8ojZz4L1HVL
+        MEXMqA86pyLGZ5qlXB2V35/nWyH3OpE=
+X-Google-Smtp-Source: ACHHUZ6FtskcSTRECAxBoKpnqyL+RR0w/eZwdEqmLvJ9r86v6fg3cTMycPC3KiEs1azh/X3XOWOarQ==
+X-Received: by 2002:a05:6402:2753:b0:509:c551:c00c with SMTP id z19-20020a056402275300b00509c551c00cmr4125835edd.2.1687010251968;
+        Sat, 17 Jun 2023 06:57:31 -0700 (PDT)
 Received: from matrix-ESPRIMO-P710 (p57ba2e0b.dip0.t-ipconnect.de. [87.186.46.11])
-        by smtp.gmail.com with ESMTPSA id q14-20020a1709066b0e00b00987435d6266sm982342ejr.190.2023.06.17.06.57.24
+        by smtp.gmail.com with ESMTPSA id eh9-20020a0564020f8900b0050a276e7ba8sm11024906edb.36.2023.06.17.06.57.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Jun 2023 06:57:25 -0700 (PDT)
-Date:   Sat, 17 Jun 2023 15:57:23 +0200
+        Sat, 17 Jun 2023 06:57:31 -0700 (PDT)
+Date:   Sat, 17 Jun 2023 15:57:29 +0200
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 7/9] staging: rtl8192e: Rename RTLLIB_NOLINK to
- MAC80211_NOLINK
-Message-ID: <74feefdf800304deaf918efbc04344865f7aa01d.1687007788.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 8/9] staging: rtl8192e: Rename RTLLIB_LINKED to
+ MAC80211_LINKED
+Message-ID: <532bd98301657b2a8329e95eccb993540ae9ba3f.1687007788.git.philipp.g.hortmann@gmail.com>
 References: <cover.1687007788.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -71,202 +71,610 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename RTLLIB_NOLINK to MAC80211_NOLINK to align with rtlwifi driver.
+Rename RTLLIB_LINKED to MAC80211_LINKED to align with rtlwifi driver.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- drivers/staging/rtl8192e/rtl8192e/rtl_core.c |  2 +-
- drivers/staging/rtl8192e/rtllib.h            |  2 +-
- drivers/staging/rtl8192e/rtllib_rx.c         |  2 +-
- drivers/staging/rtl8192e/rtllib_softmac.c    | 34 ++++++++++----------
- 4 files changed, 20 insertions(+), 20 deletions(-)
+ .../staging/rtl8192e/rtl8192e/r8192E_dev.c    | 10 +++----
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c  | 30 +++++++++----------
+ drivers/staging/rtl8192e/rtl8192e/rtl_dm.c    | 16 +++++-----
+ .../staging/rtl8192e/rtl8192e/rtl_ethtool.c   |  2 +-
+ drivers/staging/rtl8192e/rtl8192e/rtl_ps.c    |  4 +--
+ drivers/staging/rtl8192e/rtl8192e/rtl_wx.c    |  8 ++---
+ drivers/staging/rtl8192e/rtllib.h             |  2 +-
+ drivers/staging/rtl8192e/rtllib_rx.c          | 12 ++++----
+ drivers/staging/rtl8192e/rtllib_softmac.c     | 28 ++++++++---------
+ drivers/staging/rtl8192e/rtllib_softmac_wx.c  | 10 +++----
+ drivers/staging/rtl8192e/rtllib_wx.c          |  2 +-
+ 11 files changed, 62 insertions(+), 62 deletions(-)
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-index 7b7500c6b181..b4c618d37a71 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-@@ -1192,7 +1192,7 @@ static void _rtl92e_watchdog_wq_cb(void *data)
+diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
+index b6c086047841..7683853e7c46 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
++++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
+@@ -52,15 +52,15 @@ static void _rtl92e_update_msr(struct net_device *dev)
  
- 	if (!rtllib_act_scanning(priv->rtllib, false)) {
- 		if ((ieee->iw_mode == IW_MODE_INFRA) && (ieee->link_state ==
--		     RTLLIB_NOLINK) &&
-+		     MAC80211_NOLINK) &&
- 		     (ieee->rf_power_state == rf_on) && !ieee->is_set_key &&
- 		     (!ieee->proto_stoppping) && !ieee->wx_set_enc) {
- 			if ((ieee->pwr_save_ctrl.ReturnPoint ==
-diff --git a/drivers/staging/rtl8192e/rtllib.h b/drivers/staging/rtl8192e/rtllib.h
-index 933656e9fc8a..68f0e1426b35 100644
---- a/drivers/staging/rtl8192e/rtllib.h
-+++ b/drivers/staging/rtl8192e/rtllib.h
-@@ -1121,7 +1121,7 @@ struct rtllib_network {
- 
- enum rtl_link_state {
- 	/* the card is not linked at all */
--	RTLLIB_NOLINK = 0,
-+	MAC80211_NOLINK = 0,
- 
- 	/* RTLLIB_ASSOCIATING* are for BSS client mode
- 	 * the driver shall not perform RX filtering unless
-diff --git a/drivers/staging/rtl8192e/rtllib_rx.c b/drivers/staging/rtl8192e/rtllib_rx.c
-index 9beac92c613f..68f1393b1b63 100644
---- a/drivers/staging/rtl8192e/rtllib_rx.c
-+++ b/drivers/staging/rtl8192e/rtllib_rx.c
-@@ -2643,7 +2643,7 @@ static inline void rtllib_process_probe_response(
- 		    || ((ieee->current_network.ssid_len == network->ssid_len) &&
- 		    (strncmp(ieee->current_network.ssid, network->ssid,
- 		    network->ssid_len) == 0) &&
--		    (ieee->link_state == RTLLIB_NOLINK))))
-+		    (ieee->link_state == MAC80211_NOLINK))))
- 			renew = 1;
- 		update_network(ieee, target, network);
- 		if (renew && (ieee->softmac_features & IEEE_SOFTMAC_ASSOCIATE))
-diff --git a/drivers/staging/rtl8192e/rtllib_softmac.c b/drivers/staging/rtl8192e/rtllib_softmac.c
-index 242bb5c633e9..bbb0f61c851d 100644
---- a/drivers/staging/rtl8192e/rtllib_softmac.c
-+++ b/drivers/staging/rtl8192e/rtllib_softmac.c
-@@ -508,7 +508,7 @@ static void rtllib_softmac_scan_syncro(struct rtllib_device *ieee, u8 is_mesh)
- 		 *    performing a complete syncro scan before conclude
- 		 *    there are no interesting cell and to create a
- 		 *    new one. In this case the link state is
--		 *    RTLLIB_NOLINK until we found an interesting cell.
-+		 *    MAC80211_NOLINK until we found an interesting cell.
- 		 *    If so the ieee8021_new_net, called by the RX path
- 		 *    will set the state to RTLLIB_LINKED, so we stop
- 		 *    scanning
-@@ -1548,7 +1548,7 @@ inline void rtllib_softmac_new_net(struct rtllib_device *ieee,
- 	/* we are interested in new only if we are not associated
- 	 * and we are not associating / authenticating
- 	 */
--	if (ieee->link_state != RTLLIB_NOLINK)
-+	if (ieee->link_state != MAC80211_NOLINK)
+ 	switch (priv->rtllib->iw_mode) {
+ 	case IW_MODE_INFRA:
+-		if (priv->rtllib->link_state == RTLLIB_LINKED)
++		if (priv->rtllib->link_state == MAC80211_LINKED)
+ 			msr |= MSR_LINK_MANAGED;
+ 		break;
+ 	case IW_MODE_ADHOC:
+-		if (priv->rtllib->link_state == RTLLIB_LINKED)
++		if (priv->rtllib->link_state == MAC80211_LINKED)
+ 			msr |= MSR_LINK_ADHOC;
+ 		break;
+ 	case IW_MODE_MASTER:
+-		if (priv->rtllib->link_state == RTLLIB_LINKED)
++		if (priv->rtllib->link_state == MAC80211_LINKED)
+ 			msr |= MSR_LINK_MASTER;
+ 		break;
+ 	default:
+@@ -745,7 +745,7 @@ void rtl92e_link_change(struct net_device *dev)
+ 	if (!priv->up)
  		return;
  
- 	if ((ieee->iw_mode == IW_MODE_INFRA) && !(net->capability &
-@@ -1682,7 +1682,7 @@ static void rtllib_softmac_check_all_nets(struct rtllib_device *ieee)
- 		 * we had found what we are searching for
- 		 */
+-	if (ieee->link_state == RTLLIB_LINKED) {
++	if (ieee->link_state == MAC80211_LINKED) {
+ 		_rtl92e_net_update(dev);
+ 		rtl92e_update_ratr_table(dev);
+ 		if ((ieee->pairwise_key_type == KEY_TYPE_WEP40) ||
+@@ -760,7 +760,7 @@ void rtl92e_link_change(struct net_device *dev)
+ 		u32 reg;
  
--		if (ieee->link_state != RTLLIB_NOLINK)
-+		if (ieee->link_state != MAC80211_NOLINK)
- 			break;
+ 		reg = rtl92e_readl(dev, RCR);
+-		if (priv->rtllib->link_state == RTLLIB_LINKED) {
++		if (priv->rtllib->link_state == MAC80211_LINKED) {
+ 			if (ieee->intel_promiscuous_md_info.promiscuous_on)
+ 				;
+ 			else
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+index b4c618d37a71..9cb4ae9ba970 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+@@ -169,7 +169,7 @@ bool rtl92e_set_rf_state(struct net_device *dev,
+ 		    (priv->rtllib->iw_mode == IW_MODE_ADHOC)) {
+ 			if ((priv->rtllib->rf_off_reason > RF_CHANGE_BY_IPS) ||
+ 			    (change_source > RF_CHANGE_BY_IPS)) {
+-				if (ieee->link_state == RTLLIB_LINKED)
++				if (ieee->link_state == MAC80211_LINKED)
+ 					priv->blinked_ingpio = true;
+ 				else
+ 					priv->blinked_ingpio = false;
+@@ -327,7 +327,7 @@ static void _rtl92e_qos_activate(void *data)
+ 	int i;
  
- 		if (ieee->scan_age == 0 || time_after(target->last_scanned +
-@@ -2495,7 +2495,7 @@ static void rtllib_start_ibss_wq(void *data)
- 		ieee->ssid_set = 1;
+ 	mutex_lock(&priv->mutex);
+-	if (priv->rtllib->link_state != RTLLIB_LINKED)
++	if (priv->rtllib->link_state != MAC80211_LINKED)
+ 		goto success;
+ 
+ 	for (i = 0; i <  QOS_QUEUE_NUM; i++)
+@@ -344,7 +344,7 @@ static int _rtl92e_qos_handle_probe_response(struct r8192_priv *priv,
+ 	int ret = 0;
+ 	u32 size = sizeof(struct rtllib_qos_parameters);
+ 
+-	if (priv->rtllib->link_state != RTLLIB_LINKED)
++	if (priv->rtllib->link_state != MAC80211_LINKED)
+ 		return ret;
+ 
+ 	if (priv->rtllib->iw_mode != IW_MODE_INFRA)
+@@ -400,7 +400,7 @@ static int _rtl92e_qos_assoc_resp(struct r8192_priv *priv,
+ 	if (!priv || !network)
+ 		return 0;
+ 
+-	if (priv->rtllib->link_state != RTLLIB_LINKED)
++	if (priv->rtllib->link_state != MAC80211_LINKED)
+ 		return 0;
+ 
+ 	if (priv->rtllib->iw_mode != IW_MODE_INFRA)
+@@ -635,7 +635,7 @@ static int _rtl92e_sta_up(struct net_device *dev, bool is_silent_reset)
+ 	if (priv->polling_timer_on == 0)
+ 		rtl92e_check_rfctrl_gpio_timer(&priv->gpio_polling_timer);
+ 
+-	if (priv->rtllib->link_state != RTLLIB_LINKED)
++	if (priv->rtllib->link_state != MAC80211_LINKED)
+ 		rtllib_softmac_start_protocol(priv->rtllib, 0);
+ 	rtllib_reset_queue(priv->rtllib);
+ 	_rtl92e_watchdog_timer_cb(&priv->watch_dog_timer);
+@@ -660,7 +660,7 @@ static int _rtl92e_sta_down(struct net_device *dev, bool shutdownrf)
+ 
+ 	priv->rtllib->rtllib_ips_leave(dev);
+ 
+-	if (priv->rtllib->link_state == RTLLIB_LINKED)
++	if (priv->rtllib->link_state == MAC80211_LINKED)
+ 		rtl92e_leisure_ps_leave(dev);
+ 
+ 	priv->up = 0;
+@@ -1009,7 +1009,7 @@ static enum reset_type _rtl92e_if_check_reset(struct net_device *dev)
+ 
+ 	if (rfState == rf_on &&
+ 	    (priv->rtllib->iw_mode == IW_MODE_INFRA) &&
+-	    (priv->rtllib->link_state == RTLLIB_LINKED))
++	    (priv->rtllib->link_state == MAC80211_LINKED))
+ 		RxResetType = _rtl92e_rx_check_stuck(dev);
+ 
+ 	if (TxResetType == RESET_TYPE_NORMAL ||
+@@ -1051,7 +1051,7 @@ static void _rtl92e_if_silent_reset(struct net_device *dev)
+ 
+ 		mutex_lock(&priv->wx_mutex);
+ 
+-		if (priv->rtllib->link_state == RTLLIB_LINKED)
++		if (priv->rtllib->link_state == MAC80211_LINKED)
+ 			rtl92e_leisure_ps_leave(dev);
+ 
+ 		if (priv->up) {
+@@ -1073,9 +1073,9 @@ static void _rtl92e_if_silent_reset(struct net_device *dev)
+ 		rtl92e_dm_deinit(dev);
+ 		rtllib_stop_scan_syncro(ieee);
+ 
+-		if (ieee->link_state == RTLLIB_LINKED) {
++		if (ieee->link_state == MAC80211_LINKED) {
+ 			mutex_lock(&ieee->wx_mutex);
+-			netdev_info(dev, "ieee->link_state is RTLLIB_LINKED\n");
++			netdev_info(dev, "ieee->link_state is MAC80211_LINKED\n");
+ 			rtllib_stop_send_beacons(priv->rtllib);
+ 			del_timer_sync(&ieee->associate_timer);
+ 			cancel_delayed_work(&ieee->associate_retry_wq);
+@@ -1110,14 +1110,14 @@ static void _rtl92e_if_silent_reset(struct net_device *dev)
+ 
+ 		rtl92e_enable_hw_security_config(dev);
+ 
+-		if (ieee->link_state == RTLLIB_LINKED && ieee->iw_mode ==
++		if (ieee->link_state == MAC80211_LINKED && ieee->iw_mode ==
+ 		    IW_MODE_INFRA) {
+ 			ieee->set_chan(ieee->dev,
+ 				       ieee->current_network.channel);
+ 
+ 			schedule_work(&ieee->associate_complete_wq);
+ 
+-		} else if (ieee->link_state == RTLLIB_LINKED && ieee->iw_mode ==
++		} else if (ieee->link_state == MAC80211_LINKED && ieee->iw_mode ==
+ 			   IW_MODE_ADHOC) {
+ 			ieee->set_chan(ieee->dev,
+ 				       ieee->current_network.channel);
+@@ -1181,7 +1181,7 @@ static void _rtl92e_watchdog_wq_cb(void *data)
+ 	if (!priv->up || priv->hw_radio_off)
+ 		return;
+ 
+-	if (priv->rtllib->link_state >= RTLLIB_LINKED) {
++	if (priv->rtllib->link_state >= MAC80211_LINKED) {
+ 		if (priv->rtllib->CntAfterLink < 2)
+ 			priv->rtllib->CntAfterLink++;
+ 	} else {
+@@ -1202,7 +1202,7 @@ static void _rtl92e_watchdog_wq_cb(void *data)
+ 			}
+ 		}
+ 	}
+-	if ((ieee->link_state == RTLLIB_LINKED) && (ieee->iw_mode ==
++	if ((ieee->link_state == MAC80211_LINKED) && (ieee->iw_mode ==
+ 	     IW_MODE_INFRA) && (!ieee->net_promiscuous_md)) {
+ 		if (ieee->link_detect_info.NumRxOkInPeriod > 100 ||
+ 		ieee->link_detect_info.NumTxOkInPeriod > 100)
+@@ -1244,7 +1244,7 @@ static void _rtl92e_watchdog_wq_cb(void *data)
+ 	ieee->link_detect_info.bHigherBusyTraffic = bHigherBusyTraffic;
+ 	ieee->link_detect_info.bHigherBusyRxTraffic = bHigherBusyRxTraffic;
+ 
+-	if (ieee->link_state == RTLLIB_LINKED && ieee->iw_mode == IW_MODE_INFRA) {
++	if (ieee->link_state == MAC80211_LINKED && ieee->iw_mode == IW_MODE_INFRA) {
+ 		u32	TotalRxBcnNum = 0;
+ 		u32	TotalRxDataNum = 0;
+ 
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
+index 74715e254df3..adb6f12c89d8 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
+@@ -291,7 +291,7 @@ static void _rtl92e_dm_check_rate_adaptive(struct net_device *dev)
+ 	if (priv->rtllib->mode != WIRELESS_MODE_N_24G)
+ 		return;
+ 
+-	if (priv->rtllib->link_state == RTLLIB_LINKED) {
++	if (priv->rtllib->link_state == MAC80211_LINKED) {
+ 		bshort_gi_enabled = (ht_info->cur_tx_bw40mhz &&
+ 				     ht_info->bCurShortGI40MHz) ||
+ 				    (!ht_info->cur_tx_bw40mhz &&
+@@ -1075,7 +1075,7 @@ static void _rtl92e_dm_ctrl_initgain_byrssi_driver(struct net_device *dev)
+ 		dm_digtable.dig_state = DM_STA_DIG_OFF;
  	}
  
--	ieee->link_state = RTLLIB_NOLINK;
-+	ieee->link_state = MAC80211_NOLINK;
- 	ieee->mode = WIRELESS_MODE_G;
- 	/* check if we have this cell in our network list */
- 	rtllib_softmac_check_all_nets(ieee);
-@@ -2514,11 +2514,11 @@ static void rtllib_start_ibss_wq(void *data)
+-	if (priv->rtllib->link_state == RTLLIB_LINKED)
++	if (priv->rtllib->link_state == MAC80211_LINKED)
+ 		dm_digtable.cur_sta_connect_state = DIG_STA_CONNECT;
+ 	else
+ 		dm_digtable.cur_sta_connect_state = DIG_STA_DISCONNECT;
+@@ -1105,7 +1105,7 @@ static void _rtl92e_dm_ctrl_initgain_byrssi_false_alarm(struct net_device *dev)
+ 		dm_digtable.dig_algorithm_switch = 0;
+ 	}
+ 
+-	if (priv->rtllib->link_state != RTLLIB_LINKED)
++	if (priv->rtllib->link_state != MAC80211_LINKED)
+ 		return;
+ 
+ 	if ((priv->undecorated_smoothed_pwdb > dm_digtable.rssi_low_thresh) &&
+@@ -1406,7 +1406,7 @@ static void _rtl92e_dm_check_edca_turbo(struct net_device *dev)
+ 
+ 	if (priv->rtllib->iw_mode == IW_MODE_ADHOC)
+ 		goto dm_CheckEdcaTurbo_EXIT;
+-	if (priv->rtllib->link_state != RTLLIB_LINKED)
++	if (priv->rtllib->link_state != MAC80211_LINKED)
+ 		goto dm_CheckEdcaTurbo_EXIT;
+ 	if (priv->rtllib->ht_info->iot_action & HT_IOT_ACT_DISABLE_EDCA_TURBO)
+ 		goto dm_CheckEdcaTurbo_EXIT;
+@@ -1820,7 +1820,7 @@ static void _rtl92e_dm_fsync_timer_callback(struct timer_list *t)
+ 	bool		bSwitchFromCountDiff = false;
+ 	bool		bDoubleTimeInterval = false;
+ 
+-	if (priv->rtllib->link_state == RTLLIB_LINKED &&
++	if (priv->rtllib->link_state == MAC80211_LINKED &&
+ 	    priv->rtllib->bfsync_enable &&
+ 	    (priv->rtllib->ht_info->iot_action & HT_IOT_ACT_CDD_FSYNC)) {
+ 		u32 rate_bitmap;
+@@ -1990,7 +1990,7 @@ static void _rtl92e_dm_check_fsync(struct net_device *dev)
+ 	static u8 reg_c38_State = RegC38_Default;
+ 	static u32 reset_cnt;
+ 
+-	if (priv->rtllib->link_state == RTLLIB_LINKED &&
++	if (priv->rtllib->link_state == MAC80211_LINKED &&
+ 	    priv->rtllib->ht_info->IOTPeer == HT_IOT_PEER_BROADCOM) {
+ 		if (priv->rtllib->bfsync_enable == 0) {
+ 			switch (priv->rtllib->fsync_state) {
+@@ -2043,7 +2043,7 @@ static void _rtl92e_dm_check_fsync(struct net_device *dev)
+ 			break;
+ 		}
+ 
+-		if (priv->rtllib->link_state == RTLLIB_LINKED) {
++		if (priv->rtllib->link_state == MAC80211_LINKED) {
+ 			if (priv->undecorated_smoothed_pwdb <=
+ 			    RegC38_TH) {
+ 				if (reg_c38_State !=
+@@ -2112,7 +2112,7 @@ static void _rtl92e_dm_dynamic_tx_power(struct net_device *dev)
+ 		txlowpower_threshold = TX_POWER_NEAR_FIELD_THRESH_LOW;
+ 	}
+ 
+-	if (priv->rtllib->link_state == RTLLIB_LINKED) {
++	if (priv->rtllib->link_state == MAC80211_LINKED) {
+ 		if (priv->undecorated_smoothed_pwdb >= txhipower_threshold) {
+ 			priv->dynamic_tx_high_pwr = true;
+ 			priv->dynamic_tx_low_pwr = false;
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_ethtool.c b/drivers/staging/rtl8192e/rtl8192e/rtl_ethtool.c
+index 543b0e9dfa88..1625d1326599 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_ethtool.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_ethtool.c
+@@ -27,7 +27,7 @@ static u32 _rtl92e_ethtool_get_link(struct net_device *dev)
+ {
+ 	struct r8192_priv *priv = rtllib_priv(dev);
+ 
+-	return ((priv->rtllib->link_state == RTLLIB_LINKED) ||
++	return ((priv->rtllib->link_state == MAC80211_LINKED) ||
+ 		(priv->rtllib->link_state == RTLLIB_LINKED_SCANNING));
+ }
+ 
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_ps.c b/drivers/staging/rtl8192e/rtl8192e/rtl_ps.c
+index bb52a595f75c..5ecade840d75 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_ps.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_ps.c
+@@ -118,7 +118,7 @@ void rtl92e_ips_enter(struct net_device *dev)
+ 
+ 	rt_state = priv->rtllib->rf_power_state;
+ 	if (rt_state == rf_on && !psc->bSwRfProcessing &&
+-		(priv->rtllib->link_state != RTLLIB_LINKED) &&
++		(priv->rtllib->link_state != MAC80211_LINKED) &&
+ 		(priv->rtllib->iw_mode != IW_MODE_MASTER)) {
+ 		psc->eInactivePowerState = rf_off;
+ 		_rtl92e_ps_update_rf_state(dev);
+@@ -209,7 +209,7 @@ void rtl92e_leisure_ps_enter(struct net_device *dev)
+ 					&priv->rtllib->pwr_save_ctrl;
+ 
+ 	if (!((priv->rtllib->iw_mode == IW_MODE_INFRA) &&
+-	    (priv->rtllib->link_state == RTLLIB_LINKED))
++	    (priv->rtllib->link_state == MAC80211_LINKED))
+ 	    || (priv->rtllib->iw_mode == IW_MODE_ADHOC) ||
+ 	    (priv->rtllib->iw_mode == IW_MODE_MASTER))
+ 		return;
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_wx.c b/drivers/staging/rtl8192e/rtl8192e/rtl_wx.c
+index 2d99badfb224..4436442b56dd 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_wx.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_wx.c
+@@ -169,7 +169,7 @@ static int _rtl92e_wx_adapter_power_status(struct net_device *dev,
+ 		priv->ps_force = false;
+ 		psc->bLeisurePs = true;
+ 	} else {
+-		if (priv->rtllib->link_state == RTLLIB_LINKED)
++		if (priv->rtllib->link_state == MAC80211_LINKED)
+ 			rtl92e_leisure_ps_leave(dev);
+ 
+ 		priv->ps_force = true;
+@@ -378,7 +378,7 @@ static int _rtl92e_wx_set_scan(struct net_device *dev,
+ 		if ((ieee->link_state >= RTLLIB_ASSOCIATING) &&
+ 		    (ieee->link_state <= RTLLIB_ASSOCIATING_AUTHENTICATED))
+ 			return 0;
+-		if ((priv->rtllib->link_state == RTLLIB_LINKED) &&
++		if ((priv->rtllib->link_state == MAC80211_LINKED) &&
+ 		    (priv->rtllib->CntAfterLink < 2))
+ 			return 0;
+ 	}
+@@ -409,7 +409,7 @@ static int _rtl92e_wx_set_scan(struct net_device *dev,
+ 
+ 	priv->rtllib->FirstIe_InScan = true;
+ 
+-	if (priv->rtllib->link_state != RTLLIB_LINKED) {
++	if (priv->rtllib->link_state != MAC80211_LINKED) {
+ 		if (rt_state == rf_off) {
+ 			if (priv->rtllib->rf_off_reason >
+ 			    RF_CHANGE_BY_IPS) {
+@@ -1124,7 +1124,7 @@ static struct iw_statistics *_rtl92e_get_wireless_stats(struct net_device *dev)
+ 	int tmp_qual = 0;
+ 	int tmp_noise = 0;
+ 
+-	if (ieee->link_state < RTLLIB_LINKED) {
++	if (ieee->link_state < MAC80211_LINKED) {
+ 		wstats->qual.qual = 10;
+ 		wstats->qual.level = 0;
+ 		wstats->qual.noise = 0x100 - 100;	/* -100 dBm */
+diff --git a/drivers/staging/rtl8192e/rtllib.h b/drivers/staging/rtl8192e/rtllib.h
+index 68f0e1426b35..7758bfd90283 100644
+--- a/drivers/staging/rtl8192e/rtllib.h
++++ b/drivers/staging/rtl8192e/rtllib.h
+@@ -1146,7 +1146,7 @@ enum rtl_link_state {
+ 	/* the link is ok. the card associated to a BSS or linked
+ 	 * to a ibss cell or acting as an AP and creating the bss
+ 	 */
+-	RTLLIB_LINKED,
++	MAC80211_LINKED,
+ 
+ 	/* same as LINKED, but the driver shall apply RX filter
+ 	 * rules as we are in NO_LINK mode. As the card is still
+diff --git a/drivers/staging/rtl8192e/rtllib_rx.c b/drivers/staging/rtl8192e/rtllib_rx.c
+index 68f1393b1b63..78d13ff1f14e 100644
+--- a/drivers/staging/rtl8192e/rtllib_rx.c
++++ b/drivers/staging/rtl8192e/rtllib_rx.c
+@@ -1196,7 +1196,7 @@ static void rtllib_rx_check_leave_lps(struct rtllib_device *ieee, u8 unicast,
+ 				      u8 nr_subframes)
+ {
+ 	if (unicast) {
+-		if (ieee->link_state == RTLLIB_LINKED) {
++		if (ieee->link_state == MAC80211_LINKED) {
+ 			if (((ieee->link_detect_info.NumRxUnicastOkInPeriod +
+ 			    ieee->link_detect_info.NumTxOkInPeriod) > 8) ||
+ 			    (ieee->link_detect_info.NumRxUnicastOkInPeriod > 2)) {
+@@ -2117,7 +2117,7 @@ int rtllib_parse_info_param(struct rtllib_device *ieee,
+ 			network->tim.tim_period = info_element->data[1];
+ 
+ 			network->dtim_period = info_element->data[1];
+-			if (ieee->link_state != RTLLIB_LINKED)
++			if (ieee->link_state != MAC80211_LINKED)
+ 				break;
+ 			network->last_dtim_sta_time = jiffies;
+ 
+@@ -2585,7 +2585,7 @@ static inline void rtllib_process_probe_response(
+ 				ieee->current_network.buseprotection = false;
+ 		}
+ 		if (is_beacon(frame_ctl)) {
+-			if (ieee->link_state >= RTLLIB_LINKED)
++			if (ieee->link_state >= MAC80211_LINKED)
+ 				ieee->link_detect_info.NumRecvBcnInPeriod++;
+ 		}
+ 	}
+@@ -2654,7 +2654,7 @@ static inline void rtllib_process_probe_response(
+ 	if (is_beacon(frame_ctl) &&
+ 	    is_same_network(&ieee->current_network, network,
+ 	    (network->ssid_len ? 1 : 0)) &&
+-	    (ieee->link_state == RTLLIB_LINKED)) {
++	    (ieee->link_state == MAC80211_LINKED)) {
+ 		ieee->handle_beacon(ieee->dev, beacon, &ieee->current_network);
+ 	}
+ free_network:
+@@ -2683,7 +2683,7 @@ static void rtllib_rx_mgt(struct rtllib_device *ieee,
+ 
+ 		if (ieee->sta_sleep || (ieee->ps != RTLLIB_PS_DISABLED &&
+ 		    ieee->iw_mode == IW_MODE_INFRA &&
+-		    ieee->link_state == RTLLIB_LINKED))
++		    ieee->link_state == MAC80211_LINKED))
+ 			schedule_work(&ieee->ps_task);
+ 
+ 		break;
+@@ -2700,7 +2700,7 @@ static void rtllib_rx_mgt(struct rtllib_device *ieee,
+ 		if ((ieee->softmac_features & IEEE_SOFTMAC_PROBERS) &&
+ 		    ((ieee->iw_mode == IW_MODE_ADHOC ||
+ 		    ieee->iw_mode == IW_MODE_MASTER) &&
+-		    ieee->link_state == RTLLIB_LINKED))
++		    ieee->link_state == MAC80211_LINKED))
+ 			rtllib_rx_probe_rq(ieee, skb);
+ 		break;
+ 	}
+diff --git a/drivers/staging/rtl8192e/rtllib_softmac.c b/drivers/staging/rtl8192e/rtllib_softmac.c
+index bbb0f61c851d..d99b98a39cc7 100644
+--- a/drivers/staging/rtl8192e/rtllib_softmac.c
++++ b/drivers/staging/rtl8192e/rtllib_softmac.c
+@@ -510,7 +510,7 @@ static void rtllib_softmac_scan_syncro(struct rtllib_device *ieee, u8 is_mesh)
+ 		 *    new one. In this case the link state is
+ 		 *    MAC80211_NOLINK until we found an interesting cell.
+ 		 *    If so the ieee8021_new_net, called by the RX path
+-		 *    will set the state to RTLLIB_LINKED, so we stop
++		 *    will set the state to MAC80211_LINKED, so we stop
+ 		 *    scanning
+ 		 * 2- We are linked and the root uses run iwlist scan.
+ 		 *    So we switch to RTLLIB_LINKED_SCANNING to remember
+@@ -522,7 +522,7 @@ static void rtllib_softmac_scan_syncro(struct rtllib_device *ieee, u8 is_mesh)
+ 		 * if the state become LINKED because of the #1 situation
+ 		 */
+ 
+-		if (ieee->link_state == RTLLIB_LINKED)
++		if (ieee->link_state == MAC80211_LINKED)
+ 			goto out;
+ 		if (ieee->sync_scan_hurryup) {
+ 			netdev_info(ieee->dev,
+@@ -543,7 +543,7 @@ static void rtllib_softmac_scan_syncro(struct rtllib_device *ieee, u8 is_mesh)
+ 	ieee->actscanning = false;
+ 	ieee->sync_scan_hurryup = 0;
+ 
+-	if (ieee->link_state >= RTLLIB_LINKED) {
++	if (ieee->link_state >= MAC80211_LINKED) {
+ 		if (IS_DOT11D_ENABLE(ieee))
+ 			dot11d_scan_complete(ieee);
+ 	}
+@@ -1508,7 +1508,7 @@ static void rtllib_associate_complete(struct rtllib_device *ieee)
+ {
+ 	del_timer_sync(&ieee->associate_timer);
+ 
+-	ieee->link_state = RTLLIB_LINKED;
++	ieee->link_state = MAC80211_LINKED;
+ 	rtllib_sta_send_associnfo(ieee);
+ 
+ 	schedule_work(&ieee->associate_complete_wq);
+@@ -1664,7 +1664,7 @@ inline void rtllib_softmac_new_net(struct rtllib_device *ieee,
+ 						    "Using B rates\n");
+ 				}
+ 				memset(ieee->dot11ht_oper_rate_set, 0, 16);
+-				ieee->link_state = RTLLIB_LINKED;
++				ieee->link_state = MAC80211_LINKED;
+ 			}
+ 		}
+ 	}
+@@ -1985,7 +1985,7 @@ static inline void rtllib_sta_ps(struct work_struct *work)
+ 
+ 	if ((ieee->ps == RTLLIB_PS_DISABLED ||
+ 	     ieee->iw_mode != IW_MODE_INFRA ||
+-	     ieee->link_state != RTLLIB_LINKED)) {
++	     ieee->link_state != MAC80211_LINKED)) {
+ 		spin_lock_irqsave(&ieee->mgmt_tx_lock, flags2);
+ 		rtllib_sta_wakeup(ieee, 1);
+ 
+@@ -2149,7 +2149,7 @@ rtllib_rx_assoc_resp(struct rtllib_device *ieee, struct sk_buff *skb,
+ 
+ 			if (!network)
+ 				return 1;
+-			ieee->link_state = RTLLIB_LINKED;
++			ieee->link_state = MAC80211_LINKED;
+ 			ieee->assoc_id = aid;
+ 			ieee->softmac_stats.rx_ass_ok++;
+ 			/* station support qos */
+@@ -2283,7 +2283,7 @@ rtllib_rx_deauth(struct rtllib_device *ieee, struct sk_buff *skb)
+ 	 * both for disassociation and deauthentication
+ 	 */
+ 	if ((ieee->softmac_features & IEEE_SOFTMAC_ASSOCIATE) &&
+-	    ieee->link_state == RTLLIB_LINKED &&
++	    ieee->link_state == MAC80211_LINKED &&
+ 	    (ieee->iw_mode == IW_MODE_INFRA)) {
+ 		frame_ctl = le16_to_cpu(header->frame_ctl);
+ 		netdev_info(ieee->dev,
+@@ -2458,7 +2458,7 @@ static void rtllib_start_master_bss(struct rtllib_device *ieee)
+ 	ether_addr_copy(ieee->current_network.bssid, ieee->dev->dev_addr);
+ 
+ 	ieee->set_chan(ieee->dev, ieee->current_network.channel);
+-	ieee->link_state = RTLLIB_LINKED;
++	ieee->link_state = MAC80211_LINKED;
+ 	ieee->link_change(ieee->dev);
+ 	notify_wx_assoc_event(ieee);
+ 	netif_carrier_on(ieee->dev);
+@@ -2509,7 +2509,7 @@ static void rtllib_start_ibss_wq(void *data)
+ 	 * (in bss mode we had to make sure no-one tried to associate when
+ 	 * we had just checked the ieee->link_state and we was going to start the
+ 	 * scan) because in ibss mode the rtllib_new_net function, when
+-	 * finds a good net, just set the ieee->link_state to RTLLIB_LINKED,
++	 * finds a good net, just set the ieee->link_state to MAC80211_LINKED,
+ 	 * so, at worst, we waste a bit of time to initiate an unneeded syncro
  	 * scan, that will stop at the first round because it sees the state
  	 * associated.
- 	 */
--	if (ieee->link_state == RTLLIB_NOLINK)
-+	if (ieee->link_state == MAC80211_NOLINK)
- 		rtllib_start_scan_syncro(ieee, 0);
+@@ -2581,7 +2581,7 @@ static void rtllib_start_ibss_wq(void *data)
+ 	ieee->SetHwRegHandler(ieee->dev, HW_VAR_MEDIA_STATUS,
+ 			      (u8 *)(&ieee->link_state));
  
- 	/* the network definitively is not here.. create a new cell */
--	if (ieee->link_state == RTLLIB_NOLINK) {
-+	if (ieee->link_state == MAC80211_NOLINK) {
- 		netdev_info(ieee->dev, "creating new IBSS cell\n");
- 		ieee->current_network.channel = ieee->bss_start_channel;
- 		if (!ieee->wap_set)
-@@ -2623,7 +2623,7 @@ static void rtllib_start_bss(struct rtllib_device *ieee)
- 	 */
- 	spin_lock_irqsave(&ieee->lock, flags);
+-	ieee->link_state = RTLLIB_LINKED;
++	ieee->link_state = MAC80211_LINKED;
+ 	ieee->link_change(ieee->dev);
  
--	if (ieee->link_state == RTLLIB_NOLINK)
-+	if (ieee->link_state == MAC80211_NOLINK)
- 		rtllib_start_scan(ieee);
- 	spin_unlock_irqrestore(&ieee->lock, flags);
- }
-@@ -2643,7 +2643,7 @@ void rtllib_disassociate(struct rtllib_device *ieee)
- 
- 	if (IS_DOT11D_ENABLE(ieee))
- 		dot11d_reset(ieee);
--	ieee->link_state = RTLLIB_NOLINK;
-+	ieee->link_state = MAC80211_NOLINK;
- 	ieee->is_set_key = false;
- 	ieee->wap_set = 0;
- 
-@@ -2665,11 +2665,11 @@ static void rtllib_associate_retry_wq(void *data)
- 	if (ieee->link_state != RTLLIB_ASSOCIATING_RETRY)
- 		goto exit;
- 
--	/* until we do not set the state to RTLLIB_NOLINK
-+	/* until we do not set the state to MAC80211_NOLINK
- 	 * there are no possibility to have someone else trying
- 	 * to start an association procedure (we get here with
- 	 * ieee->link_state = RTLLIB_ASSOCIATING).
--	 * When we set the state to RTLLIB_NOLINK it is possible
-+	 * When we set the state to MAC80211_NOLINK it is possible
- 	 * that the RX path run an attempt to associate, but
- 	 * both rtllib_softmac_check_all_nets and the
- 	 * RX path works with ieee->lock held so there are no
-@@ -2679,13 +2679,13 @@ static void rtllib_associate_retry_wq(void *data)
- 	 * state and we are going to start the scan.
- 	 */
- 	ieee->beinretry = true;
--	ieee->link_state = RTLLIB_NOLINK;
-+	ieee->link_state = MAC80211_NOLINK;
- 
- 	rtllib_softmac_check_all_nets(ieee);
- 
- 	spin_lock_irqsave(&ieee->lock, flags);
- 
--	if (ieee->link_state == RTLLIB_NOLINK)
-+	if (ieee->link_state == MAC80211_NOLINK)
- 		rtllib_start_scan(ieee);
- 	spin_unlock_irqrestore(&ieee->lock, flags);
- 
-@@ -2763,7 +2763,7 @@ void rtllib_stop_protocol(struct rtllib_device *ieee, u8 shutdown)
- 	rtllib_stop_scan(ieee);
- 
+ 	HTSetConnectBwMode(ieee, HT_CHANNEL_WIDTH_20, HT_EXTCHNL_OFFSET_NO_EXT);
+@@ -2765,7 +2765,7 @@ void rtllib_stop_protocol(struct rtllib_device *ieee, u8 shutdown)
  	if (ieee->link_state <= RTLLIB_ASSOCIATING_AUTHENTICATED)
--		ieee->link_state = RTLLIB_NOLINK;
-+		ieee->link_state = MAC80211_NOLINK;
+ 		ieee->link_state = MAC80211_NOLINK;
  
- 	if (ieee->link_state == RTLLIB_LINKED) {
+-	if (ieee->link_state == RTLLIB_LINKED) {
++	if (ieee->link_state == MAC80211_LINKED) {
  		if (ieee->iw_mode == IW_MODE_INFRA)
-@@ -2845,7 +2845,7 @@ int rtllib_softmac_init(struct rtllib_device *ieee)
+ 			SendDisassociation(ieee, 1, WLAN_REASON_DEAUTH_LEAVING);
+ 		rtllib_disassociate(ieee);
+@@ -3100,7 +3100,7 @@ bool rtllib_MgntDisconnect(struct rtllib_device *rtllib, u8 asRsn)
+ 	if (rtllib->ps != RTLLIB_PS_DISABLED)
+ 		rtllib->sta_wake_up(rtllib->dev);
  
- 	memset(&ieee->current_network, 0, sizeof(struct rtllib_network));
+-	if (rtllib->link_state == RTLLIB_LINKED) {
++	if (rtllib->link_state == MAC80211_LINKED) {
+ 		if (rtllib->iw_mode == IW_MODE_ADHOC)
+ 			rtllib_MgntDisconnectIBSS(rtllib);
+ 		if (rtllib->iw_mode == IW_MODE_INFRA)
+@@ -3119,7 +3119,7 @@ void notify_wx_assoc_event(struct rtllib_device *ieee)
+ 		return;
  
--	ieee->link_state = RTLLIB_NOLINK;
-+	ieee->link_state = MAC80211_NOLINK;
- 	for (i = 0; i < 5; i++)
- 		ieee->seq_ctrl[i] = 0;
- 	ieee->dot11d_info = kzalloc(sizeof(struct rt_dot11d_info), GFP_ATOMIC);
-@@ -3036,7 +3036,7 @@ static void rtllib_MgntDisconnectIBSS(struct rtllib_device *rtllib)
- 	u8	i;
- 	bool	bFilterOutNonAssociatedBSSID = false;
+ 	wrqu.ap_addr.sa_family = ARPHRD_ETHER;
+-	if (ieee->link_state == RTLLIB_LINKED)
++	if (ieee->link_state == MAC80211_LINKED)
+ 		memcpy(wrqu.ap_addr.sa_data, ieee->current_network.bssid,
+ 		       ETH_ALEN);
+ 	else {
+diff --git a/drivers/staging/rtl8192e/rtllib_softmac_wx.c b/drivers/staging/rtl8192e/rtllib_softmac_wx.c
+index 8e101b63ec75..c1d1bf4d720a 100644
+--- a/drivers/staging/rtl8192e/rtllib_softmac_wx.c
++++ b/drivers/staging/rtl8192e/rtllib_softmac_wx.c
+@@ -53,7 +53,7 @@ int rtllib_wx_set_freq(struct rtllib_device *ieee, struct iw_request_info *a,
  
--	rtllib->link_state = RTLLIB_NOLINK;
-+	rtllib->link_state = MAC80211_NOLINK;
+ 		if (ieee->iw_mode == IW_MODE_ADHOC ||
+ 		    ieee->iw_mode == IW_MODE_MASTER)
+-			if (ieee->link_state == RTLLIB_LINKED) {
++			if (ieee->link_state == MAC80211_LINKED) {
+ 				rtllib_stop_send_beacons(ieee);
+ 				rtllib_start_send_beacons(ieee);
+ 			}
+@@ -95,7 +95,7 @@ int rtllib_wx_get_wap(struct rtllib_device *ieee,
+ 	/* We want avoid to give to the user inconsistent infos*/
+ 	spin_lock_irqsave(&ieee->lock, flags);
  
- 	for (i = 0; i < 6; i++)
- 		rtllib->current_network.bssid[i] = 0x55;
-@@ -3063,7 +3063,7 @@ static void rtllib_MlmeDisassociateRequest(struct rtllib_device *rtllib,
- 	RemovePeerTS(rtllib, asSta);
+-	if (ieee->link_state != RTLLIB_LINKED &&
++	if (ieee->link_state != MAC80211_LINKED &&
+ 		ieee->link_state != RTLLIB_LINKED_SCANNING &&
+ 		ieee->wap_set == 0)
  
- 	if (memcmp(rtllib->current_network.bssid, asSta, 6) == 0) {
--		rtllib->link_state = RTLLIB_NOLINK;
-+		rtllib->link_state = MAC80211_NOLINK;
+@@ -184,7 +184,7 @@ int rtllib_wx_get_essid(struct rtllib_device *ieee, struct iw_request_info *a,
+ 		goto out;
+ 	}
  
- 		for (i = 0; i < 6; i++)
- 			rtllib->current_network.bssid[i] = 0x22;
-@@ -3092,7 +3092,7 @@ rtllib_MgntDisconnectAP(
- 	rtllib_MlmeDisassociateRequest(rtllib, rtllib->current_network.bssid,
- 				       asRsn);
+-	if (ieee->link_state != RTLLIB_LINKED &&
++	if (ieee->link_state != MAC80211_LINKED &&
+ 		ieee->link_state != RTLLIB_LINKED_SCANNING &&
+ 		ieee->ssid_set == 0) {
+ 		ret = -1;
+@@ -355,7 +355,7 @@ void rtllib_wx_sync_scan_wq(void *data)
  
--	rtllib->link_state = RTLLIB_NOLINK;
-+	rtllib->link_state = MAC80211_NOLINK;
- }
+ 	ieee->ScanOperationBackupHandler(ieee->dev, SCAN_OPT_RESTORE);
  
- bool rtllib_MgntDisconnect(struct rtllib_device *rtllib, u8 asRsn)
+-	ieee->link_state = RTLLIB_LINKED;
++	ieee->link_state = MAC80211_LINKED;
+ 	ieee->link_change(ieee->dev);
+ 
+ 	/* Notify AP that I wake up again */
+@@ -385,7 +385,7 @@ int rtllib_wx_set_scan(struct rtllib_device *ieee, struct iw_request_info *a,
+ 		goto out;
+ 	}
+ 
+-	if (ieee->link_state == RTLLIB_LINKED) {
++	if (ieee->link_state == MAC80211_LINKED) {
+ 		schedule_work(&ieee->wx_sync_scan_wq);
+ 		/* intentionally forget to up sem */
+ 		return 0;
+diff --git a/drivers/staging/rtl8192e/rtllib_wx.c b/drivers/staging/rtl8192e/rtllib_wx.c
+index a82fd64dbdce..538cedb1dc02 100644
+--- a/drivers/staging/rtl8192e/rtllib_wx.c
++++ b/drivers/staging/rtl8192e/rtllib_wx.c
+@@ -619,7 +619,7 @@ int rtllib_wx_set_mlme(struct rtllib_device *ieee,
+ 	bool deauth = false;
+ 	struct iw_mlme *mlme = (struct iw_mlme *)extra;
+ 
+-	if (ieee->link_state != RTLLIB_LINKED)
++	if (ieee->link_state != MAC80211_LINKED)
+ 		return -ENOLINK;
+ 
+ 	mutex_lock(&ieee->wx_mutex);
 -- 
 2.40.1
 
