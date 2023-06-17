@@ -2,53 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F7B3733DEE
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 06:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39BAF733DF0
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 06:13:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230384AbjFQEKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 00:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38234 "EHLO
+        id S231635AbjFQENb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 00:13:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjFQEKk (ORCPT
+        with ESMTP id S229493AbjFQEN0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 00:10:40 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F067B3
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 21:10:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=aBPG/1s8UFTtWCYq3+C+Ner90XZt71tgP7YOAinQcyc=; b=a21tWsBFH4ruU+tZeR4vNB2qsc
-        tb/ZKwVhElnZNLbSy6/24ht28PpmIP4HvsKHRaA9cThGZB9+j7Ni6jHEeqRQ64wuRtYHCWsF0WJt2
-        KazNfCtw0ExX46AWS85Vwo3DS9l2ojI/2bFlOxBogXl4K2rIuqVHWki/lDoMhdenDi3FSQy2scu9z
-        gaR2BdJY9JA41hSD6lvRr6aKoPsvsKg0i5TcfFjWhkjBTNtTlPWb5X3wOY5XhemlBK0Hgjo7Q3EF1
-        d1rIVhj3nXGFNtf9HuHroCKIY1W9iOCI8+h9uP73CN6D8SOOuxu+gXGRuQCVj/iCAgu8eWX+XiDte
-        dIOD/LIg==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qANGi-002fPF-1b;
-        Sat, 17 Jun 2023 04:10:32 +0000
-Message-ID: <44b75227-adbe-831c-1955-8e4ae4a03c9f@infradead.org>
-Date:   Fri, 16 Jun 2023 21:10:29 -0700
+        Sat, 17 Jun 2023 00:13:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9481430F1;
+        Fri, 16 Jun 2023 21:13:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E694961701;
+        Sat, 17 Jun 2023 04:13:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9D6BC433C8;
+        Sat, 17 Jun 2023 04:13:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686975204;
+        bh=O9IhQbkEdVOj/uSoDsWPMJ4oir6I9roRy38/BIcjOhk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=prsSj/MitUcMcJEJJGh9ljH+bbdtrtfA0qq/Vjlz64iphGyMBl/DCSSL5cPlqQSoG
+         QFnIyOmE3Nq+O4LtrfXQ6VUkCKfb27Apf74fQF5VwhK5fujZgfD0WTOCZpfWzvNSx9
+         hi+TV46ghkkdluXRLPaqiUTwgnHGDVxfqzTFPLny8o6QuB6XgRjdzFNTfNY6yUfDrE
+         m2m1wQJ28r/MX9OEDeA096JgwvSYS3df7ZMmtK5XsPy2nHem5s8XfuDU8kTkK+tjLg
+         UIAX881i63f/5ULrhFImQlIKzSY3Gr0SXMJA238X687eDSBzWYVPkU4MQJfo+DWb4H
+         9ShASJVpIMuww==
+Message-ID: <1d249326-e3dd-9c9d-7b53-2fffeb39bfb4@kernel.org>
+Date:   Fri, 16 Jun 2023 21:13:22 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 1/4] ASoC: max98388: fix unused function warnings
+ Thunderbird/102.11.1
+Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
 Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>, Mark Brown <broonie@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Ryan Lee <ryans.lee@analog.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-References: <20230616090156.2347850-1-arnd@kernel.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230616090156.2347850-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Kent Overstreet <kent.overstreet@linux.dev>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-bcachefs@vger.kernel.org" <linux-bcachefs@vger.kernel.org>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-8-kent.overstreet@linux.dev>
+ <3508afc0-6f03-a971-e716-999a7373951f@wdc.com>
+ <202305111525.67001E5C4@keescook> <ZF6Ibvi8U9B+mV1d@moria.home.lan>
+ <202305161401.F1E3ACFAC@keescook> <ZGPzocRpSlg+4vgN@moria.home.lan>
+From:   Andy Lutomirski <luto@kernel.org>
+In-Reply-To: <ZGPzocRpSlg+4vgN@moria.home.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,67 +71,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/16/23 02:00, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On 5/16/23 14:20, Kent Overstreet wrote:
+> On Tue, May 16, 2023 at 02:02:11PM -0700, Kees Cook wrote:
+>> For something that small, why not use the text_poke API?
 > 
-> The PM functions are never referenced when CONFIG_PM_SLEEP is
-> disabled:
-> 
-> sound/soc/codecs/max98388.c:854:12: error: unused function 'max98388_suspend' [-Werror,-Wunused-function]
-> static int max98388_suspend(struct device *dev)
->            ^
-> sound/soc/codecs/max98388.c:864:12: error: unused function 'max98388_resume' [-Werror,-Wunused-function]
-> static int max98388_resume(struct device *dev)
-> 
-> Fix this by using the modern SYSTEM_SLEEP_PM_OPS() macro in place of
-> the deprecated SET_SYSTEM_SLEEP_PM_OPS() version, and use pm_sleep_ptr()
-> to hide the entire structure as well.
-> 
-> On a related note, the of_match_ptr() and ACPI_PTR() macros have the same
-> problem and would cause the device id table to be unused when the driver
-> is built-in and the respective subsystems are disabled. This does not
-> cause warnings unless -Wunused-const-variable is passed to the compiler,
-> but it's better to just not use the macros at all here.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> This looks like it's meant for patching existing kernel text, which
+> isn't what I want - I'm generating new functions on the fly, one per
+> btree node.
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+Dynamically generating code is a giant can of worms.
 
-Thanks.
+Kees touched on a basic security thing: a linear address mapped W+X is a big
+no-no.  And that's just scratching the surface -- ideally we would have a
+strong protocol for generating code: the code is generated in some
+extra-secure context, then it's made immutable and double-checked, then
+it becomes live.  (And we would offer this to userspace, some day.)
+Just having a different address for the W and X aliases is pretty weak.
 
-> ---
->  sound/soc/codecs/max98388.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+(When x86 modifies itself at boot or for static keys, it changes out the
+page tables temporarily.)
+
+And even beyond security, we have correctness.  x86 is a fairly 
+forgiving architecture.  If you go back in time about 20 years, modify
+some code *at the same linear address at which you intend to execute 
+it*, and jump to it, it works.  It may even work if you do it through
+an alias (the manual is vague).  But it's not 20 years ago, and you have
+multiple cores.  This does *not* work with multiple CPUs -- you need to 
+serialize on the CPU executing the modified code.  On all the but the 
+very newest CPUs, you need to kludge up the serialization, and that's
+sloooooooooooooow.  Very new CPUs have the SERIALIZE instruction, which
+is merely sloooooow.
+
+(The manual is terrible.  It's clear that a way to do this without 
+serializing must exist, because that's what happens when code is paged 
+in from a user program.)
+
+And remember that x86 is the forgiving architecture.  Other 
+architectures have their own rules that may involve all kinds of 
+terrifying cache management.  IIRC ARM (32-bit) is really quite nasty in 
+this regard.  I've seen some references suggesting that RISC-V has a 
+broken design of its cache management and this is a real mess.
+
+x86 low level stuff on Linux gets away with it because the 
+implementation is conservative and very slow, but it's very rarely invoked.
+
+eBPF gets away with it in ways that probably no one really likes, but 
+also no one expects eBPF to load programs particularly quickly.
+
+You are proposing doing this when a btree node is loaded.  You could 
+spend 20 *thousand* cycles, on *each CPU*, the first time you access 
+that node, not to mention the extra branch to decide whether you need to 
+spend those 20k cycles.  Or you could use IPIs.
+
+Or you could just not do this.  I think you should just remove all this 
+dynamic codegen stuff, at least for now.
+
 > 
-> diff --git a/sound/soc/codecs/max98388.c b/sound/soc/codecs/max98388.c
-> index 8062a71150074..3d03c4bac6c55 100644
-> --- a/sound/soc/codecs/max98388.c
-> +++ b/sound/soc/codecs/max98388.c
-> @@ -873,7 +873,7 @@ static int max98388_resume(struct device *dev)
->  }
->  
->  static const struct dev_pm_ops max98388_pm = {
-> -	SET_SYSTEM_SLEEP_PM_OPS(max98388_suspend, max98388_resume)
-> +	SYSTEM_SLEEP_PM_OPS(max98388_suspend, max98388_resume)
->  };
->  
->  static const struct regmap_config max98388_regmap = {
-> @@ -998,9 +998,9 @@ MODULE_DEVICE_TABLE(acpi, max98388_acpi_match);
->  static struct i2c_driver max98388_i2c_driver = {
->  	.driver = {
->  		.name = "max98388",
-> -		.of_match_table = of_match_ptr(max98388_of_match),
-> -		.acpi_match_table = ACPI_PTR(max98388_acpi_match),
-> -		.pm = &max98388_pm,
-> +		.of_match_table = max98388_of_match,
-> +		.acpi_match_table = max98388_acpi_match,
-> +		.pm = pm_sleep_ptr(&max98388_pm),
->  	},
->  	.probe = max98388_i2c_probe,
->  	.id_table = max98388_i2c_id,
+> I'm working up a new allocator - a (very simple) slab allocator where
+> you pass a buffer, and it gives you a copy of that buffer mapped
+> executable, but not writeable.
+> 
+> It looks like we'll be able to convert bpf, kprobes, and ftrace
+> trampolines to it; it'll consolidate a fair amount of code (particularly
+> in bpf), and they won't have to burn a full page per allocation anymore.
+> 
+> bpf has a neat trick where it maps the same page in two different
+> locations, one is the executable location and the other is the writeable
+> location - I'm stealing that.
+> 
+> external api will be:
+> 
+> void *jit_alloc(void *buf, size_t len, gfp_t gfp);
+> void jit_free(void *buf);
+> void jit_update(void *buf, void *new_code, size_t len); /* update an existing allocation */
 
--- 
-~Randy
+Based on the above, I regret to inform you that jit_update() will either 
+need to sync all cores via IPI or all cores will need to check whether a 
+sync is needed and do it themselves.
+
+That IPI could be, I dunno, 500k cycles?  1M cycles?  Depends on what 
+cores are asleep at the time.  (I have some old Sandy Bridge machines 
+where, if you tick all the boxes wrong, you might spend tens of 
+milliseconds doing this due to power savings gone wrong.)  Or are you 
+planning to implement a fancy mostly-lockless thing to track which cores 
+actually need the IPI so you can avoid waking up sleeping cores?
+
+Sorry to be a party pooper.
+
+--Andy
+
+P.S. I have given some thought to how to make a JIT API that was 
+actually (somewhat) performant.  It's nontrivial, and it would involve 
+having at least phone calls and possibly actual meetings with people who 
+understand the microarchitecture of various CPUs to get all the details 
+hammered out and documented properly.
+
+I don't think it would be efficient for teeny little functions like 
+bcachefs wants, but maybe?  That would be even more complex and messy.
