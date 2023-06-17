@@ -2,155 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FD4C733E8D
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 08:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE5DB733E94
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 08:11:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbjFQGAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 02:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54810 "EHLO
+        id S232190AbjFQGLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 02:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjFQGAy (ORCPT
+        with ESMTP id S229493AbjFQGLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 02:00:54 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6017B10DD;
-        Fri, 16 Jun 2023 23:00:51 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id 46e09a7af769-6b44b5adfd3so1088838a34.3;
-        Fri, 16 Jun 2023 23:00:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686981650; x=1689573650;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dsMcBAzokADfDQj+dcl9riTWGJRFeO6KPrhVYaZaLbE=;
-        b=cqV1VAc+CW2y1q0B8H7xLgWwrIaPt3xH5+65rvlVgf0kDgE1PntwzmcLropSCHsc3w
-         3NKol9XRS9po/LXhn9Wc4qphPQPZna6Jw/MXk4/P/au2Zn7DDtyPQm7+kz4NkUpcp98e
-         lxRZ+HHRp8N6CV3R8kd0KUjJMTDobcEdV7UJ5pnuZVj16tfgXXjhPJs5xHdsJm5woN/W
-         RYAGdwpY4op1V1EZuTo5RfgHUUdimgqaJhxlxBuTJz2nwboELmizMX88zLKBSHmgMHWh
-         r5lcUtEwe32NcowAZYELFM2jvcnCIb1yfEzokglgJ72UsnL6fULRX0gbD8IqKRPWvubz
-         E0jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686981650; x=1689573650;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dsMcBAzokADfDQj+dcl9riTWGJRFeO6KPrhVYaZaLbE=;
-        b=e2BPvwGTm1+1cngp5wL/4cU8dRu2J/01nvX/9j23g3gpfzQLguUzuP6JBK3py8EbVk
-         q1nLzN8li6S5czuu+4d+Ktw8a1BVr6yGTE0+pqy6Xx+jiwKZs9FaOCPRKkdjgjWeboz+
-         MAzZ8zhq/dZHwFuhQELLnIKYsZtIS/zQqolDGuuxqluEhjD9e7HoRoTg472+IJmtKXpC
-         JrI+J+FbjM0SSYrDCIKhHgX4di8xVpCONd0xtWC0NvDTNFpY7AWsVlLg83Fwt0d+K8hj
-         K7zkx+P0JdDziDoa5m5l0i4ysHVuUPU0baQ4ER+f+AsmE0lytcFtM1Vy7U4K17gPqNuE
-         cteg==
-X-Gm-Message-State: AC+VfDyvbfvPpz31j8QZ+9B5FDdM9YuOwG5N5WZ6+BEQJEp3CDnXPVI1
-        yWv5DWMkB2LiHr3R7bvcPP/IsGTOcM9/X/EV6CM=
-X-Google-Smtp-Source: ACHHUZ7M+3ahl8aA1MWs6d/uUu4V7qCSK+MWXW+1JTHNn93McFFieptDJhDlxwwDNFj+LBvLv4HgNni2E3XkOJKI6m8=
-X-Received: by 2002:a54:470a:0:b0:398:45e0:38c0 with SMTP id
- k10-20020a54470a000000b0039845e038c0mr4306200oik.15.1686981650571; Fri, 16
- Jun 2023 23:00:50 -0700 (PDT)
+        Sat, 17 Jun 2023 02:11:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66EFE26AA;
+        Fri, 16 Jun 2023 23:11:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0327E6068F;
+        Sat, 17 Jun 2023 06:11:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 232F1C433C8;
+        Sat, 17 Jun 2023 06:10:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686982263;
+        bh=1X6Vc8+Xzykk7Z2p+5RPkPnfKk/mxTwRqvgQiLyFLcs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kpVRRR3/peLouH5K6845IoDymP4RzHQ5X18L/qapqW+HSOSVD4Jxe+dS8ZHi81pu/
+         6UGSL3ryafkglY404kB9NewuLJthdXrDKmiG1bUa/SbIGImcdFFTImcXA24Lrq1XBP
+         b8jHFLQ6gc3Wlj/T62OORePu3DpO0oegza9UGNNTomGmTdYPVnUkXHwlXXNP8xNb6O
+         mSUdao6gRKvwJRP5+ktwASUtigGyhHJfmUrvUL8UkoscW+emJo4VTKfMECcoxbnJ1O
+         71I0q0m7dm69SI0vCCHrQzATzQcgIJXdFUCmromH14CzN/7cF+UERF73BpE9q6ULNL
+         UyjIthY/V8Lsw==
+Date:   Sat, 17 Jun 2023 09:10:15 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "deller@gmx.de" <deller@gmx.de>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "kent.overstreet@linux.dev" <kent.overstreet@linux.dev>,
+        "puranjay12@gmail.com" <puranjay12@gmail.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "dinguyen@kernel.org" <dinguyen@kernel.org>,
+        "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "song@kernel.org" <song@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Subject: Re: [PATCH v2 04/12] mm/execmem, arch: convert remaining overrides
+ of module_alloc to execmem
+Message-ID: <20230617061015.GO52412@kernel.org>
+References: <20230616085038.4121892-1-rppt@kernel.org>
+ <20230616085038.4121892-5-rppt@kernel.org>
+ <15f5dff8217b1a2e16697d40e48dee6dd1f9b2f3.camel@intel.com>
 MIME-Version: 1.0
-References: <CAMhs-H_GjHU+r33oeytXiyu+bgGTrGL8Ck=DbsMYnqC-XBNYYw@mail.gmail.com>
- <TYAP286MB0315C2088627FB035A5D43D6BC59A@TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM>
-In-Reply-To: <TYAP286MB0315C2088627FB035A5D43D6BC59A@TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Sat, 17 Jun 2023 08:00:39 +0200
-Message-ID: <CAMhs-H_sHWu_uFMbjzB2APU=aYv6d4gnXD9xw=ANigTXDjQzzg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/9] clk: ralink: add clock and reset driver for MTMIPS SoCs
-To:     Shiji Yang <yangshiji66@outlook.com>
-Cc:     arinc.unal@arinc9.com, devicetree@vger.kernel.org,
-        john@phrozen.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, matthias.bgg@gmail.com,
-        mturquette@baylibre.com, p.zabel@pengutronix.de,
-        robh+dt@kernel.org, sboyd@kernel.org, tsbogend@alpha.franken.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <15f5dff8217b1a2e16697d40e48dee6dd1f9b2f3.camel@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 7:51=E2=80=AFAM Shiji Yang <yangshiji66@outlook.com=
-> wrote:
->
-> Thank you for your quick reply!
->
-> >> >+      {
-> >> >+              .compatible =3D "ralink,mt7620a-sysc",
-> >> >+              .data =3D &mt7620_clk_data,
-> >> >+      },
-> >> >+      {
-> >> >+              .compatible =3D "ralink,mt7620-sysc",
-> >> >+              .data =3D &mt7620_clk_data,
-> >> >+      },
-> >> >+      {
-> >>
-> >> I am confused about the difference between `ralink,mt7620-sysc` and
-> >> `ralink,mt7620a-sysc`. Do you mean mt7620n?
-> >> https://www.mediatek.com/products/home-networking/mt7620n-a
-> >
-> >There is no real difference. As you can see both of them use the same
-> >'mt7620_clk_data' but since both compatible strings already exist
-> >somewhere I introduced both of them.
-> >arch/mips/boot/dts/ralink
->
-> If they are the same, perhaps `mt7620a` also need to be checked in mtmips=
-_clk_regs_init().
-> Or just remove compatible string of `mt7620a` and update dtsi files?
+On Fri, Jun 16, 2023 at 04:16:28PM +0000, Edgecombe, Rick P wrote:
+> On Fri, 2023-06-16 at 11:50 +0300, Mike Rapoport wrote:
+> > -void *module_alloc(unsigned long size)
+> > -{
+> > -       gfp_t gfp_mask = GFP_KERNEL;
+> > -       void *p;
+> > -
+> > -       if (PAGE_ALIGN(size) > MODULES_LEN)
+> > -               return NULL;
+> > +static struct execmem_params execmem_params = {
+> > +       .modules = {
+> > +               .flags = EXECMEM_KASAN_SHADOW,
+> > +               .text = {
+> > +                       .alignment = MODULE_ALIGN,
+> > +               },
+> > +       },
+> > +};
+> 
+> Did you consider making these execmem_params's ro_after_init? Not that
+> it is security sensitive, but it's a nice hint to the reader that it is
+> only modified at init. And I guess basically free sanitizing of buggy
+> writes to it.
 
-We are planning to properly port dts files from openWRT into the
-mainline kernel and also update the current out of date files which
-already exist on tree, so we will take care of this kind of details
-then.
+Makes sense.
+ 
+> >  
+> > -       p = __vmalloc_node_range(size, MODULE_ALIGN,
+> > -                                MODULES_VADDR +
+> > get_module_load_offset(),
+> > -                                MODULES_END, gfp_mask, PAGE_KERNEL,
+> > -                                VM_FLUSH_RESET_PERMS |
+> > VM_DEFER_KMEMLEAK,
+> > -                                NUMA_NO_NODE,
+> > __builtin_return_address(0));
+> > +struct execmem_params __init *execmem_arch_params(void)
+> > +{
+> > +       unsigned long start = MODULES_VADDR +
+> > get_module_load_offset();
+> 
+> I think we can drop the mutex's in get_module_load_offset() now, since
+> execmem_arch_params() should only be called once at init.
 
->
-> >+static void __init mtmips_clk_regs_init(struct device_node *node,
-> >+                                      struct mtmips_clk_priv *priv)
-> >+{
-> >+      u32 t;
-> >+
-> >+      if (!of_device_is_compatible(node, "ralink,mt7620-sysc"))
-> >+              return;
-> >+
-> >+      /*
-> >+       * When the CPU goes into sleep mode, the BUS
-> >+       * clock will be too low for USB to function properly.
-> >+       * Adjust the busses fractional divider to fix this
-> >+       */
-> >+      regmap_read(priv->sysc, SYSC_REG_CPU_SYS_CLKCFG, &t);
-> >+      t &=3D ~(CLKCFG_FDIV_MASK | CLKCFG_FFRAC_MASK);
-> >+      t |=3D CLKCFG_FDIV_USB_VAL | CLKCFG_FFRAC_USB_VAL;
-> >+      regmap_write(priv->sysc, SYSC_REG_CPU_SYS_CLKCFG, t);
-> >+}
-> >+
->
-> If we choose to update dts file. We can also remove the legacy
-> "ralink,rt2880-reset" compatible string by the way.
+Right. Even more, the entire get_module_load_offset() can be folded into
+execmem_arch_params() as 
 
-Ditto.
+	if (IS_ENABLED(CONFIG_RANDOMIZE_BASE) && kaslr_enabled())
+		module_load_offset =
+			get_random_u32_inclusive(1, 1024) * PAGE_SIZE;
 
->
-> >+static const struct of_device_id mtmips_clk_of_match[] =3D {
-> >+      { .compatible =3D "ralink,rt2880-reset" },
-> >+      { .compatible =3D "ralink,rt2880-sysc" },
-> >+      { .compatible =3D "ralink,rt3050-sysc" },
-> >+      { .compatible =3D "ralink,rt3050-sysc" },
-> >+      { .compatible =3D "ralink,rt3352-sysc" },
-> >+      { .compatible =3D "ralink,rt3883-sysc" },
-> >+      { .compatible =3D "ralink,rt5350-sysc" },
-> >+      { .compatible =3D "ralink,mt7620a-sysc" },
-> >+      { .compatible =3D "ralink,mt7620-sysc" },
-> >+      { .compatible =3D "ralink,mt7628-sysc" },
-> >+      { .compatible =3D "ralink,mt7688-sysc" },
-> >+      {}
-> >+};
->
-> Thanks,
->     Shiji Yang
+> >  
+> > -       if (p && (kasan_alloc_module_shadow(p, size, gfp_mask) < 0))
+> > {
+> > -               vfree(p);
+> > -               return NULL;
+> > -       }
+> > +       execmem_params.modules.text.start = start;
+> > +       execmem_params.modules.text.end = MODULES_END;
+> > +       execmem_params.modules.text.pgprot = PAGE_KERNEL;
+> >  
+> > -       return p;
+> > +       return &execmem_params;
+> >  }
+> >  
+> 
 
-Thanks,
-    Sergio Paracuellos
+-- 
+Sincerely yours,
+Mike.
