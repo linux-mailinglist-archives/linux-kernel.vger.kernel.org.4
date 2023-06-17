@@ -2,141 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0B26733F80
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 10:13:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEE31733F7D
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 10:13:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346302AbjFQINa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 04:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58036 "EHLO
+        id S1346258AbjFQINH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 04:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232705AbjFQIN2 (ORCPT
+        with ESMTP id S232705AbjFQINE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 04:13:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520971FFE
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 01:13:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DFD73611AD
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 08:13:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31758C433C8;
-        Sat, 17 Jun 2023 08:13:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686989606;
-        bh=eqvHCNCeMkLO+EgkoH/FKPeGp52JksulsjVREFCIStM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PziBb3RGhjIbGfqlYcJJJtFxRE498w/GDvXEFBfRRKD1Ws4mXivHZm0W7KFzfV+04
-         4zKOUC2dmzkHXRmOr/m3D74vXXn1DhEnqh6cqfSDOiq9c2XIxGWmSBG65iz9lmtQp+
-         a/Z5fScLRoVEc8SJ+hc254tXJ7WqxOm6OcFHYBFrxu0Sx3AjzU13tGVQFzjlStqDCX
-         b4G53ZibgVUFCLEs7JI3Y5JP9+rTrGjS+6h9xoh074b9aAAJ8oIopZiYm7vWQPqFJN
-         AqgU1Y4FIm+Z02CsR6UyfKvcuTNENkafvXN9IGk/1mixtq545XjuMZx2O3aMPhx/kt
-         NqGGLykwJLOZw==
-Date:   Sat, 17 Jun 2023 11:12:49 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Yajun Deng <yajun.deng@linux.dev>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2] mm: pass nid to reserve_bootmem_region()
-Message-ID: <20230617081249.GW52412@kernel.org>
-References: <20230616072247.GL52412@kernel.org>
- <20230616023011.2952211-1-yajun.deng@linux.dev>
- <5ba9ad9bedb2fd3fb96571a778fc35b5@linux.dev>
+        Sat, 17 Jun 2023 04:13:04 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF162733
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 01:13:02 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-987f7045f9aso12519566b.1
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 01:13:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686989581; x=1689581581;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=s9XhF1AbZgBc4w90xXvzVaGHxO7u4rSN46uhBHv0hS8=;
+        b=Hj2OV1ESAdQP+iZRBErFlbPxNOYXc7f/oc4frykipndr7yM5akNzNjVxG8kWrKI00V
+         tPLVSECmWbYViuiKxJCaXvwZTUt/i1i5iLlDAdF+Zz8TjS6ALo5G9uDk1R4picB6NEt0
+         +czzvzzYnHscyl0GiQuxM8DfU5yF9WgYR+zfuJWTYqmyKpOm/fDBAPqA492P63/ikRp0
+         5mT5cx47tYMC7vPHdmBMn5+ieA12wX71ICmaBNenhuBbEb31ZMpkvi3ZfVBacqcXkOhq
+         TDs7ZPTKbQWRe87ivJ8LFnlfp9N2V3y6Eim8rxH9UJec0C5swEBCF4D8jjI0+yHNtnPX
+         Hvmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686989581; x=1689581581;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s9XhF1AbZgBc4w90xXvzVaGHxO7u4rSN46uhBHv0hS8=;
+        b=H4tC4lgBK5mjNdBR0na+xF6Kt2RTo7BNZ4mVfhXAsN4QV+4O+HbPLqtSJOyxlnnO/X
+         +k83MYobBXTaY7bACifyoy7On808iYBoVzIpERrDf2Xidz+Twh2XA28erSnij7NKFWlA
+         zhGmDuF+OKham/1J9iJ3/nIccfiK/NmHaDWMbocHAD8PkC/R4Gw98nxuHHgFDH/RzyNz
+         5Lw5F+6neOeYlOV/UV9UsQsEdYfVfyQgXVbA/MSna+Bs3c0qIkStK9PxVuHfauiqxzji
+         wEcAUbD1WU4V0TQSZoxgN7Q7lOMghQlPkY4NBbGsOdb7asfEISfWiKTF7WyqEJKwKilB
+         Fl7g==
+X-Gm-Message-State: AC+VfDzodhh9klyuaG8nRk3CZwftcvn9OZeWddX1fVXycC2GW8qhouCM
+        Sz4n0KMrIwM6Cq7YoEuJeqfbLA==
+X-Google-Smtp-Source: ACHHUZ7920VxznNipQN2HN5RuxDHXyv+t2OsUpZfL85ldT7SzJwV3ez4MBscPpHMuJ/Pvqre182xgQ==
+X-Received: by 2002:a17:907:96a3:b0:96a:1ee9:4a5 with SMTP id hd35-20020a17090796a300b0096a1ee904a5mr5224523ejc.8.1686989581460;
+        Sat, 17 Jun 2023 01:13:01 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id kd14-20020a17090798ce00b00965a0f30fbfsm11749931ejc.186.2023.06.17.01.12.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 17 Jun 2023 01:13:01 -0700 (PDT)
+Message-ID: <3509622d-81f5-6687-ca27-5e4dc28f99dd@linaro.org>
+Date:   Sat, 17 Jun 2023 10:12:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5ba9ad9bedb2fd3fb96571a778fc35b5@linux.dev>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v3 3/8] dt-bindings: rtc: isl12022: add bindings for
+ battery alarm trip levels
+Content-Language: en-US
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
+ <20230615105826.411953-1-linux@rasmusvillemoes.dk>
+ <20230615105826.411953-4-linux@rasmusvillemoes.dk>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230615105826.411953-4-linux@rasmusvillemoes.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 07:51:21AM +0000, Yajun Deng wrote:
-> June 16, 2023 3:22 PM, "Mike Rapoport" <rppt@kernel.org> wrote:
-> > On Fri, Jun 16, 2023 at 10:30:11AM +0800, Yajun Deng wrote:
-> > 
-> >> diff --git a/mm/mm_init.c b/mm/mm_init.c
-> >> index d393631599a7..1499efbebc6f 100644
-> >> --- a/mm/mm_init.c
-> >> +++ b/mm/mm_init.c
-> >> @@ -738,16 +735,20 @@ static inline void init_reserved_page(unsigned long pfn)
-> >> * marks the pages PageReserved. The remaining valid pages are later
-> >> * sent to the buddy page allocator.
-> >> */
-> >> -void __meminit reserve_bootmem_region(phys_addr_t start, phys_addr_t end)
-> >> +void __meminit reserve_bootmem_region(phys_addr_t start,
-> >> + phys_addr_t end, int nid)
-> >> {
-> >> unsigned long start_pfn = PFN_DOWN(start);
-> >> unsigned long end_pfn = PFN_UP(end);
-> >> 
-> >> + if (nid == MAX_NUMNODES)
-> >> + nid = first_online_node;
-> > 
-> > How can this happen?
-> > 
+On 15/06/2023 12:58, Rasmus Villemoes wrote:
+> The isl12022 has a built-in support for monitoring the voltage of the
+> backup battery, and setting bits in the status register when that
+> voltage drops below two predetermined levels (usually 85% and 75% of
+> the nominal voltage). However, since it can operate at wide range of
+> battery voltages (2.5V - 5.5V), one must configure those trip levels
+> according to which battery is used on a given board.
 > 
-> Some reserved memory regions may not set nid. I found it when I debug.
-> We can see that by memblock_debug_show().
- 
-Hmm, indeed. But then it means that some struct pages for the reserved pages
-will get wrong nid and if they are freed we'd actually get pages with wrong
-nid. 
+> Add bindings for defining these two trip levels. While the register
+> and bit names suggest that they should correspond to 85% and 75% of
+> the nominal battery voltage, the data sheet also says
 
-Maybe it's this time to set nid on all reserved pages with something like
 
-diff --git a/mm/memblock.c b/mm/memblock.c
-index 3feafea06ab2..fcd0987e2496 100644
---- a/mm/memblock.c
-+++ b/mm/memblock.c
-@@ -2084,6 +2084,14 @@ static void __init memmap_init_reserved_pages(void)
- 	phys_addr_t start, end;
- 	u64 i;
- 
-+	for_each_mem_region(region) {
-+		int nid = memblock_get_region_node(region);
-+
-+		start = region->base;
-+		end = start + region->size;
-+		memblock_set_node(start, end, &memblock.reserved, nid);
-+	}
-+
- 	/* initialize struct pages for the reserved regions */
- 	for_each_reserved_mem_range(i, &start, &end)
- 		reserve_bootmem_region(start, end);
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> >> @@ -2579,7 +2580,13 @@ void __init set_dma_reserve(unsigned long new_dma_reserve)
-> >> void __init memblock_free_pages(struct page *page, unsigned long pfn,
-> >> unsigned int order)
-> >> {
-> >> - if (!early_page_initialised(pfn))
-> >> + int nid = 0;
-> >> +
-> >> +#ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
-> >> + nid = early_pfn_to_nid(pfn);
-> >> +#endif
+Best regards,
+Krzysztof
 
-Please replace #ifdef with 
-
-	if (IS_DEFINED(CONFIG_DEFERRED_STRUCT_PAGE_INIT))
- 
-> > Wen can pass nid to memblock_free_pages, no?
-> >
-> 
-> memblock_free_pages() was called by __free_pages_memory() and memblock_free_late().
-> For the latter, I'm not sure if we can pass nid.
-> 
-> I think we can pass nid to reserve_bootmem_region() in this patch, and pass nid to
-> memblock_free_pages() in another patch if we can confirm this.
-
-Fair enough.
-
--- 
-Sincerely yours,
-Mike.
