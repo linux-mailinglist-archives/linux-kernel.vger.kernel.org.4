@@ -2,139 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69CA7733E29
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 07:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D45F5733E30
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 07:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232808AbjFQFIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 01:08:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45910 "EHLO
+        id S231149AbjFQFO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 01:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232408AbjFQFIw (ORCPT
+        with ESMTP id S229852AbjFQFOX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 01:08:52 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 059CC19BB
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 22:08:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=7hf5/V1+7qv/OVN9FVB5EfsnRiw5saIpK4oYVVac1Aw=; b=sbKTvkdWKTASdSCVFWD6nn16dc
-        CHkSGhjkW+NujzLO1cALnOJGX6AJ7GK3XjCKihAUMDhJAStz9m6kmysroB5uoBlG0RwIzcwJXimuT
-        D7lpogjh9SsgtzLK6sT1ATw2xz1gdZoeDI5pewZZJqVDZV0ruqWEYkXdAIqqiwe0Vh3rCTF82kzj4
-        P/9bt6H8rayv2wKfCVuEsHmmnN+mPuevsVmnLJCej/op3kGH+yVeVGyEKyuSeWDGDjlrPLhH7F4rn
-        AKA3AkQM/paqDt7sw26TkTdFi9K8yVZlg/0CUA2s81NOXrcWYa4dIS4UsRKnV16guTrS0Yo4/m5SH
-        3i7Q/lxA==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qAOB2-002kjp-2b;
-        Sat, 17 Jun 2023 05:08:44 +0000
-Message-ID: <20042da0-3b00-5c33-6f22-23b48a1f236c@infradead.org>
-Date:   Fri, 16 Jun 2023 22:08:42 -0700
+        Sat, 17 Jun 2023 01:14:23 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904EF1AB
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 22:14:22 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-77d99de0e9bso139218939f.3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 22:14:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686978862; x=1689570862;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/ruLjNhk6fCywW5LUQo5nl6809b1AY9//IrZcqzckXw=;
+        b=jd8GIc/aQZq+8wtWRKVOSelAzki/OcAxydTP8YtBfJtDFITxv+JJiuDf70LGxKxS8G
+         EyLn+Sx7dXT9PHYp+SWlR3DG2MS0OOSqhqX8z4E1Kx/A9fb7VKa+gY9coX04HTg8bwM5
+         vgUDm+DgE4A0FtvODLKz2dJegFOtVIkPuGAMk7MDRxnvk9SY05eRp4xt1gvkJw3KV48s
+         2tYlklayqoVrwwzsKg/v1fweITM54lflNi0tNuHLwKRSnursYGSaAnGlbTCubxHghQ/p
+         eSGPpfvhPvrua+HRStl5zzQFNKSYfX6YwQnbsM5Tq+plltu9QKlyqGv0DmeZZiU8/Gtk
+         loWw==
+X-Gm-Message-State: AC+VfDz+ZwcTRRaGzj4Ikxi94oA0OW5kH9CVXfu0iKkY/iY9q6DZ3NUp
+        TreUUBY+f4XJhRx7yExNMYWqoW2WZzGoPNnaeqlxJqydQDHg
+X-Google-Smtp-Source: ACHHUZ4ME0j7OSg9GrPniZmeNmXInLXLlmxE353z7XujKzFE1xvL+lh/SzXZuoFdTerY/43T8JOXyw5KdK1I5r/QOsxVefey2ESQ
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 RESEND] ASoC: fsl MPC52xx drivers require PPC_BESTCOMM
-Content-Language: en-US
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Grant Likely <grant.likely@secretlab.ca>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>, alsa-devel@alsa-project.org,
-        linuxppc-dev@lists.ozlabs.org, Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>
-References: <20230521225702.1608-1-rdunlap@infradead.org>
- <71922379-ee3d-9d6d-33dd-edcf8ef7508e@infradead.org>
-In-Reply-To: <71922379-ee3d-9d6d-33dd-edcf8ef7508e@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:10fc:b0:426:26bf:5a60 with SMTP id
+ g28-20020a05663810fc00b0042626bf5a60mr972100jae.5.1686978861956; Fri, 16 Jun
+ 2023 22:14:21 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 22:14:21 -0700
+In-Reply-To: <0000000000002b6ab405fe43af4a@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cf863605fe4c5f40@google.com>
+Subject: Re: [syzbot] [kernel?] possible deadlock in exit_itimers
+From:   syzbot <syzbot+5fd924f4cd9dc1c7828c@syzkaller.appspotmail.com>
+To:     frederic@kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark, Liam,
+syzbot has bisected this issue to:
 
-On 5/30/23 16:38, Randy Dunlap wrote:
-> Hello maintainers,
-> 
-> I am still seeing these build errors on linux-next-20230530.
-> 
-> Is there a problem with the patch?
-> Thanks.
-> 
+commit 1b59b2577582f9cf3d0f17245675a76859175cc1
+Author: Thomas Gleixner <tglx@linutronix.de>
+Date:   Thu Jun 1 20:16:34 2023 +0000
 
-I am still seeing build errors on linux-next-20230615.
+    posix-timers: Prevent RT livelock in itimer_delete()
 
-Is there a problem with the patch?
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=106d46e3280000
+start commit:   f7efed9f38f8 Add linux-next specific files for 20230616
+git tree:       linux-next
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=126d46e3280000
+console output: https://syzkaller.appspot.com/x/log.txt?x=146d46e3280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=60b1a32485a77c16
+dashboard link: https://syzkaller.appspot.com/bug?extid=5fd924f4cd9dc1c7828c
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1401d8ef280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=176b45cf280000
 
-Can it be applied/merged?
+Reported-by: syzbot+5fd924f4cd9dc1c7828c@syzkaller.appspotmail.com
+Fixes: 1b59b2577582 ("posix-timers: Prevent RT livelock in itimer_delete()")
 
-Thanks.
-
-> On 5/21/23 15:57, Randy Dunlap wrote:
->> Both SND_MPC52xx_SOC_PCM030 and SND_MPC52xx_SOC_EFIKA select
->> SND_SOC_MPC5200_AC97. The latter symbol depends on PPC_BESTCOMM,
->> so the 2 former symbols should also depend on PPC_BESTCOMM since
->> "select" does not follow any dependency chains.
->>
->> This prevents a kconfig warning and build errors:
->>
->> WARNING: unmet direct dependencies detected for SND_SOC_MPC5200_AC97
->>   Depends on [n]: SOUND [=y] && !UML && SND [=m] && SND_SOC [=m] && SND_POWERPC_SOC [=m] && PPC_MPC52xx [=y] && PPC_BESTCOMM [=n]
->>   Selected by [m]:
->>   - SND_MPC52xx_SOC_PCM030 [=m] && SOUND [=y] && !UML && SND [=m] && SND_SOC [=m] && SND_POWERPC_SOC [=m] && PPC_MPC5200_SIMPLE [=y]
->>   - SND_MPC52xx_SOC_EFIKA [=m] && SOUND [=y] && !UML && SND [=m] && SND_SOC [=m] && SND_POWERPC_SOC [=m] && PPC_EFIKA [=y]
->>
->> ERROR: modpost: "mpc5200_audio_dma_destroy" [sound/soc/fsl/mpc5200_psc_ac97.ko] undefined!
->> ERROR: modpost: "mpc5200_audio_dma_create" [sound/soc/fsl/mpc5200_psc_ac97.ko] undefined!
->>
->> Fixes: 40d9ec14e7e1 ("ASoC: remove BROKEN from Efika and pcm030 fabric drivers")
->> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->> Cc: Grant Likely <grant.likely@secretlab.ca>
->> Cc: Mark Brown <broonie@kernel.org>
->> Cc: Liam Girdwood <lgirdwood@gmail.com>
->> Cc: Shengjiu Wang <shengjiu.wang@gmail.com>
->> Cc: Xiubo Li <Xiubo.Lee@gmail.com>
->> Cc: alsa-devel@alsa-project.org
->> Cc: linuxppc-dev@lists.ozlabs.org
->> Cc: Jaroslav Kysela <perex@perex.cz>
->> Cc: Takashi Iwai <tiwai@suse.com>
->> ---
->> v2: use correct email address for Mark Brown.
->>
->>  sound/soc/fsl/Kconfig |    4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff -- a/sound/soc/fsl/Kconfig b/sound/soc/fsl/Kconfig
->> --- a/sound/soc/fsl/Kconfig
->> +++ b/sound/soc/fsl/Kconfig
->> @@ -243,7 +243,7 @@ config SND_SOC_MPC5200_AC97
->>  
->>  config SND_MPC52xx_SOC_PCM030
->>  	tristate "SoC AC97 Audio support for Phytec pcm030 and WM9712"
->> -	depends on PPC_MPC5200_SIMPLE
->> +	depends on PPC_MPC5200_SIMPLE && PPC_BESTCOMM
->>  	select SND_SOC_MPC5200_AC97
->>  	select SND_SOC_WM9712
->>  	help
->> @@ -252,7 +252,7 @@ config SND_MPC52xx_SOC_PCM030
->>  
->>  config SND_MPC52xx_SOC_EFIKA
->>  	tristate "SoC AC97 Audio support for bbplan Efika and STAC9766"
->> -	depends on PPC_EFIKA
->> +	depends on PPC_EFIKA && PPC_BESTCOMM
->>  	select SND_SOC_MPC5200_AC97
->>  	select SND_SOC_STAC9766
->>  	help
-> 
-
--- 
-~Randy
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
