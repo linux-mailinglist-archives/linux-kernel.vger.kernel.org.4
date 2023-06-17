@@ -2,238 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DCB873405D
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 12:46:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF6773405E
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 12:47:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234308AbjFQKq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 06:46:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33886 "EHLO
+        id S231391AbjFQKr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 06:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234298AbjFQKqA (ORCPT
+        with ESMTP id S229683AbjFQKrX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 06:46:00 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768BE10F7;
-        Sat, 17 Jun 2023 03:45:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1686998745; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=EsrNNKykNruT/Z6vXMkVby4XVMgK5ed/ePXZff5aVLXLiGG4HZOHML3ID/oYm4peOP
-    jRkIvL/1GQNLPBMUzh6a+jLQH3CPg6eUbPcqX903ndxclYFeJknpkEy67njI95X52Evv
-    +i4oh406cg3WXHKjjMn6a6iyI7qLfi38pOGLviL+k4IgAq+RT3uO05LgSpZCyZseESw9
-    SMaovUQ2C3QbKcd2aUqgaqHwzNYfbdDIxXuhwR13GGPOqMO8Ped/s0hNCLNA7rVxH8RT
-    Oy7Eb0IUSqX5XBO/G1K7e+bWoo25UyU0i0G2xLwiOwYiKAGDMm0y/PET5fRN80BzVF40
-    D82g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686998745;
-    s=strato-dkim-0002; d=strato.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=Zo1aYoXQPVQhd4Ack1fHIk+3jiMLxZtS4fgIWvguVR8=;
-    b=Gmjckf+beQ75KMu3ygJ6AocwYs7wP0jKcd4zUKSqwlLLG+dJ888dCrDAAST4r138Ol
-    ZNeK+EGQY56go5Srex+LW8H8oed+t/nrtxyg8oHc/sO16Q7HUb2TijZG+InBuxTCESGn
-    JuWmgBnw0iuxFEVpysMk40EV0fpDxQak3xmJ9l5al2pthvHyzcHWevMpfjV/b6lyEiGa
-    xm5GDkao1h0qguRrKr6/6NGLgcoyQl6saxGIe0ycow1h5eQjeuVjz2pIosi5J8v0+jfO
-    k62ECHbm8rvIUarqP3/28DrX9MWTG0N4QeoLJzDlhFVhS4W9X01oivpalDy9lOZ5JHC0
-    LQYQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686998745;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=Zo1aYoXQPVQhd4Ack1fHIk+3jiMLxZtS4fgIWvguVR8=;
-    b=M0w0vMpCzyYilxF5WgambLdjEIJy5j8LDhZ4diUPSwLEmX3VxQYkG34ojD9B/bZxTl
-    fZnVTEsWVq0jezNfagr7DPxDiYOent+jGdIXaD7e5ZMwCkiNTfps/HnfcgGHLF7CfBNk
-    PebQkwux6nKH7BedtGbmbJC71ISMp+/4MrsH006iPlTizuRf/gHpDHuTJ5r5ENDPO376
-    /BtowAZb99jewaq71y0y2gZjl6EPzFJo5akO/QNskHMFX5os+IaDJZNWNoRJfpnqbq4c
-    2bZMFotS2gM27gZd1kXRYghObCAr8UirzYssK/W6LgLpf+W3VJ4VYiDO4b6QVQXMZ+kS
-    aerA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686998745;
-    s=strato-dkim-0003; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=Zo1aYoXQPVQhd4Ack1fHIk+3jiMLxZtS4fgIWvguVR8=;
-    b=a8JbrUwhjV4lZW1szwNF2WzwVYZHyJ3zBRhoZ/howI367UFstEjbbKrFrkYNKGTXkd
-    ZkrNvwc35jOQr8Zi1MCQ==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Apz9PSN6LgsXcGeqHQ="
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 49.6.0 DYNA|AUTH)
-    with ESMTPSA id jaf17fz5HAjjAg3
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Sat, 17 Jun 2023 12:45:45 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH 0/9] MIPS: CI20: Add WiFi / Bluetooth support
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <5EF6B0D2-2B84-4C98-B799-88062E035EC1@goldelico.com>
-Date:   Sat, 17 Jun 2023 12:45:44 +0200
-Cc:     list@opendingux.net, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Boddie <paul@boddie.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <43DCEEA5-C013-44BE-85C7-D61A980B0EA5@goldelico.com>
-References: <20230615084006.79194526F801@goldelico.com>
- <C1924536-FA97-4E75-9D22-99E5AF24EE5B@goldelico.com>
- <A8EBCBA4-D9BA-4C2F-9C91-38128D06EDBA@goldelico.com>
- <AA802E24-A97B-42B6-90A4-5ECB1E4D9294@goldelico.com>
- <5EF6B0D2-2B84-4C98-B799-88062E035EC1@goldelico.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 17 Jun 2023 06:47:23 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD81E5D
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 03:47:22 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-570808d8ddeso11500297b3.0
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 03:47:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686998842; x=1689590842;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+r2JfUv+ZO+RszpI5dllFAqEGRPOcKiZhlZFdKx9JKs=;
+        b=fnbIkgvH67XT9/L1sjb9LyxAsiBuHyLM7LsvhIqDUzPsJhPkcFLykPHLlGUDjBLQbi
+         CzlLKaIpPzcTGslpjepmV/2RsVJwF1FxB6hpjIAWKUiySTTfWVkcO2OA0/wNsJPD3p5K
+         7vGI/yQ5IuViqzdPu+lbxaKGfOIRFrttF7hkied38UAw4QgSiNm7Zep/02x2mvw29Ick
+         385LoY8Z3glwiA8kYeJPYXpyJv0ez1HAF5NefP3SSowPRmGYY3lnBCNM85vl+nsKmV+s
+         hi8/n+1gSFipMIaqwK5X1tZo4Qq9E7UWhMGs7FE/P1pNDJW2oMGTezb3Ggkf/USuP+gN
+         SfOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686998842; x=1689590842;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+r2JfUv+ZO+RszpI5dllFAqEGRPOcKiZhlZFdKx9JKs=;
+        b=jGAFWjJA83VMlFO+a/6jkOJoc0jpmoc7LrDXQB91lo8vBLipgSrLDFYdI3hRd+fDBa
+         AWPFZwiJJlfuO9OQlJAiZGJo8IxzzB8Ibcn46J+94b2Oe3w/+Z+OFhzB/iw6AsgYuJjO
+         gXa4VBpTNKfDRmjwU+VByG0G1HgTKzYi26oEzHa1RnQyU5J7bX3EUd0xWdUUFDwcbvsS
+         Yg2/34Ybm4aiJ/UIlrYN2ydQ9P7nXUrVGwVD9iK8yAYrGDxIyLlA03a9AgBMKq/ijQW/
+         H+mWxBj6eUVO1aui/FrWci+PYjiXm80CyrtrxNv+Sy4vHnYfrOy/tkmO8SxQPa3WAN6B
+         /l6g==
+X-Gm-Message-State: AC+VfDwxJbFyI6LQQJ1fNAjmew4U8xxv7COYufHI2ewTXPTaLv2c0PKK
+        za8DkGCOLqmi1W75fUaLBSWIgiZUpTKE76Tiw6tiO4KTQm4wug==
+X-Google-Smtp-Source: ACHHUZ5O7s7g8wgj2ugKf8ZyQ/eXclIexDlO/3h9hidaw/UelmVEUU17WcKreRpwZEznYsRhwdYon5s/qTYYGrbGOFM=
+X-Received: by 2002:a81:bf52:0:b0:570:17e5:e536 with SMTP id
+ s18-20020a81bf52000000b0057017e5e536mr5047541ywk.36.1686998842094; Sat, 17
+ Jun 2023 03:47:22 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230615142016.419570-1-zhiguangni01@gmail.com> <20230615170011.GK52412@kernel.org>
+In-Reply-To: <20230615170011.GK52412@kernel.org>
+From:   Liam Ni <zhiguangni01@gmail.com>
+Date:   Sat, 17 Jun 2023 18:47:11 +0800
+Message-ID: <CACZJ9cVxqeDooeAMi8HBFmeo_85E+NuMYbW9PCvp7Rm-wunOGg@mail.gmail.com>
+Subject: Re: [PATCH] x86,NUMA:Get the number of ram pages directly in numa_meminfo_cover_memory()
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        akpm@linux-foundation.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+Hi,
 
-> Am 16.06.2023 um 22:21 schrieb H. Nikolaus Schaller =
-<hns@goldelico.com>:
+On Fri, 16 Jun 2023 at 01:00, Mike Rapoport <rppt@kernel.org> wrote:
+>
+> Hi,
+>
+> On Fri, Jun 16, 2023 at 12:20:16AM +1000, Liam Ni wrote:
+> > In a previous implementation,The ram page is calculated
+> > by counting the number of holes,
+> > however,the number of ram pages is calculated during hole calculation.
+> > Therefore,we can directly calculate the amount of ram pages.
+> >
+> > Signed-off-by: Liam Ni <zhiguangni01@gmail.com>
+> > ---
+> >  arch/x86/mm/numa.c |  4 ++--
+> >  include/linux/mm.h |  4 ++++
+> >  mm/mm_init.c       | 33 +++++++++++++++++++++++++++++++++
+> >  3 files changed, 39 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
+> > index 2aadb2019b4f..8ea0e956e3d7 100644
+> > --- a/arch/x86/mm/numa.c
+> > +++ b/arch/x86/mm/numa.c
+> > @@ -461,12 +461,12 @@ static bool __init numa_meminfo_cover_memory(const struct numa_meminfo *mi)
+> >               u64 s = mi->blk[i].start >> PAGE_SHIFT;
+> >               u64 e = mi->blk[i].end >> PAGE_SHIFT;
+> >               numaram += e - s;
+> > -             numaram -= __absent_pages_in_range(mi->blk[i].nid, s, e);
+> > +             numaram += __available_pages_in_range(mi->blk[i].nid, s, e);
+>
+> This is wrong. You add number of pages in range core MM sees to the number
+> of pages covered by the numa_meminfo.
+>
+> More generally, rather than traverse all the numa_meminfo's and for each of
+> them traverse all the regions in memblock.memory it's enough to count
+> memory in memblock that doesn't have the node assigned and compare it to
+> memblock_phys_mem_size().
 
-> - But renaming the DT nodes (e.g. SUDCDC1 -> DCDC1) (with or without =
-regulator_name) makes
-> boot hang with strange errors which indicate that the processor power =
-supply is not stable.
-> Once a while it did even automatically reboot. In most cases there are =
-some EXT4 errors
-> afterwards.
+Logic like below?
+static bool __init numa_meminfo_cover_memory(const struct numa_meminfo *mi)
+{
+   u64 error_value;
+   error_value = pages_without_nid_in_range(0,max_pfn);
+    if ((error_value ) >= (1 << (20 - PAGE_SHIFT))) {
+        //print error information
+        return false;
+     }
+     return true;
+}
 
-I am coming closer, I think. I have now touched only the DCDC1 node =
-name.
+I can't figure out why compare it with memblock_phys_mem_size().
+The number of pages in memblock that doesn't have the node
+assigned,which also means that these pages are not in numa_info.
+So these pages can represent the number of lose pages.
 
-a) with "SUDCDC1" -> "DCDC1" (bad bood):
-
-regulator_of_get_init_node() returns the child node
-
-Then:
-[    0.666962] act8865 0-005a: Looking up vp1-supply from device tree
-[    0.673191] DCDC1: supplied by vcc_33v
-[    0.727070] DCDC1: Bringing 1200000uV into 1100000-1100000uV
-[    0.739398] DCDC1: 1100 mV, enabled
-
-b) without patch/series or reverted (good boot):
-
-regulator_of_get_init_node() returns NULL
-
-Then:
-[    1.016487] DCDC1: at 1200 mV, enabled
-[    1.020578] act8865 0-005a: Looking up vp1-supply from device tree
-[    1.026917] DCDC1: supplied by vcc_33v
-
-So at least for my board the patched series seems to reduce DCDC1 =
-voltage
-to 1.1V which may trigger the boot and stability problems on my board =
-while
-it is fine for yours. This could explain the hardware dependency.
-
-Now I have no data sheets or information which voltages are the right =
-ones
-and where the 1200mV come from (most likely some default programmed
-into the PMU chip).
-
-And the issue seems to be that without matching the node names the
-voltages in the device tree may have been ignored completely all the
-time... Now it sets up voltages, which should happen. But different
-ones for my board which breaks boot.
-
-Finally I did risk (I have no replacement CI20 board and they are no =
-longer
-on sale... RS part# was 125-3305 Mouser 456-VL-62851) to run a test with
-rename to "DCDC1" but changing the voltage to 1200mV. And this version =
-boots.
-
-Still without WiFi/Bluetooth but that may be related to missing rename
-of the other regulators.
-
-So I tried renaming all regulators as by your [PATCH 2/9], and now I
-see something from WiFi (haven't installed firmware yet) and the =
-Bluetooth chip:
-
-[    1.977876] mmc1: new high speed SDIO card at address 0001
-
-[   11.341994] Bluetooth: hci0: BCM: chip id 62
-[   11.348811] Bluetooth: hci0: BCM: features 0x0f
-[   11.376698] Bluetooth: hci0: BCM4330B1
-[   11.380662] Bluetooth: hci0: BCM4330B1 (002.001.003) build 0000
-[   11.392053] Bluetooth: hci0: BCM4330B1 'brcm/BCM4330B1.hcd' Patch
-
-[   12.145330] brcmfmac mmc1:0001:1: Direct firmware load for =
-brcm/brcmfmac4330-sdio.img,ci20.bin failed with error -2
-[   12.208001] brcmfmac mmc1:0001:1: Direct firmware load for =
-brcm/brcmfmac4330-sdio.clm_blob failed with error -2
-
-Unfortunatley systemd bailed out starting Bluetooth service but
-failed to provide a login:
-
-In summary it looks like a potential fix could be to replace the DCDC1
-min/max range by 1.0 - 1.2V instead of 1.1 - 1.1V but we need deeper
-understanding first. Usually this has something to do with dynamic =
-voltage
-scaling depending on processor clock and lower voltages are only allowed
-for lower frequencies but max. clock requires the highest possible =
-voltage.
-AFAIK we have no cpufreq integrated and therefore always run at max. =
-speed.
-
-BR,
-Nikolaus
-
-PS: here is what I read back from the regulator voltages (for DCDC1  =
-min/max =3D 1.2V):
-
-root@letux:~# cat /sys/kernel/debug/regulator/regulator_summary
- regulator                      use open bypass  opmode voltage current  =
-   min     max
-=
---------------------------------------------------------------------------=
--------------
- regulator-dummy                  1    0      0 unknown     0mV     0mA  =
-   0mV     0mV=20
- eth0_power                       1    1      0 unknown  3300mV     0mA  =
-3300mV  3300mV=20
-    16000000.dm9000-vcc           1                                 0mA  =
-   0mV     0mV
- otg_power                        0    0      0 unknown  5000mV     0mA  =
-5000mV  5000mV=20
- vcc_33v                          4    9      0 unknown  3300mV     0mA  =
-3300mV  3300mV=20
-    13450000.mmc-vqmmc            1                                 0mA  =
-   0mV     0mV
-    13450000.mmc-vmmc             1                                 0mA  =
-3300mV  3400mV
-    DCDC1                         1    0      0 standby  1200mV     0mA  =
-1200mV  1200mV=20
-    DCDC2                         0    0      0 standby  1500mV     0mA  =
-   0mV     0mV=20
-    DCDC3                         0    0      0 unknown  3300mV     0mA  =
-   0mV     0mV=20
-    LDO5                          0    0      0 unknown  2500mV     0mA  =
-   0mV     0mV=20
-    LDO6                          0    0      0  normal  1800mV     0mA  =
-1800mV  1800mV=20
-    LDO7                          0    0      0 unknown  3300mV     0mA  =
-   0mV     0mV=20
-    LDO8                          0    0      0 unknown  3300mV     0mA  =
-   0mV     0mV=20
- SUDCDC_REG4                      0    0      0  normal  5000mV     0mA  =
-   0mV     0mV=20
- LDO_REG9                         1    0      0 unknown  3300mV     0mA  =
-3300mV  3300mV=20
- LDO_REG10                        1    0      0 unknown  1200mV     0mA  =
-1200mV  1200mV=20
- bt_power                         0    0      0 unknown  3300mV     0mA  =
-3300mV  3300mV=20
-root@letux:~#=20
-
-This matches device tree except DCDC1, LDO7 and LDO8 (camera).
-
+Thanks
+Liam Ni
