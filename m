@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C94AF734195
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 16:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC702734196
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 16:13:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235327AbjFQOMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 10:12:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50922 "EHLO
+        id S235924AbjFQOM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 10:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232182AbjFQOM2 (ORCPT
+        with ESMTP id S233330AbjFQOM2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 17 Jun 2023 10:12:28 -0400
-X-Greylist: delayed 607 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 17 Jun 2023 07:12:25 PDT
 Received: from mail.manjaro.org (mail.manjaro.org [IPv6:2a01:4f8:c0c:51f3::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE13C19A9;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2BB01BD1;
         Sat, 17 Jun 2023 07:12:24 -0700 (PDT)
 From:   Furkan Kardame <f.kardame@manjaro.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
-        t=1687010018;
+        t=1687010022;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Bbqiov4Op0v1yv6B2iZ6b4aJ69uVgQBZKHbEsOQQ+Ms=;
-        b=XvONLIaguEdw3eRIvRs21O8r/dSNfd9QrB4ENd0VDyxkNR5Jdu35Hr3MBa26pR5/buXNVH
-        Tt4evY92oirREYSScQj+4hDihmyXlZKt3yyMClCI38d4WG4Twz9fO4FhXSJ0/vliVRoGzQ
-        5y196eoinHUVoBI/FWpM9RY+fW6bgbmD5VeKa7p82qFxmfyJUp0BufpUtMzqQpRc+yRN3P
-        V9L3jyMwxiBOZCC5OiFS3Q8iF7+t6SkzLp9MS5RUejMHF5NX8S5US81rSd/zDoG+fnJKjX
-        23FAZT9Wohsfqa4YTqjlfKTAV7o/NTrH9XXFK5UP5SVjdbszu4ytd1G/d7yv7Q==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AdJOrsfn+EjXmTCRjY9atZ1E+lqcObT34k7FSpSTYes=;
+        b=tDnT8cj4a4ZuQq/nu7Zc/NybdN81LHbDHh0F9tr+HFCIr0kzYR+y0FfNgApbP2qtaL1rGV
+        FoD/eRHU0i2vp289JhLsgSBZ7Bq3ihKLRpKdXiBx+wavtzHG2Iuq6AB3Ba4rBaYxVHExPe
+        yk/+JsgBdP/7DL+oBtKlpGZy88o1JXu/r/QtlWsFPTTu0FbQ9LslPCTdeEFUdn+eScsvVE
+        SOtqTIU0I90zxRoLNxTHT28gCk0W5hGhOrDGhIMxiz7ImF7Gbw4N4TtD2ySdIx6o7vAfCJ
+        16H+BtBjYQY6CkmgxQ7mhF2ydiJj/O8T8ujsuOIaHmdroA1z/HagplC2QpTCKg==
 To:     robh+dt@kernel.org
 Cc:     krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
         heiko@sntech.de, broonie@kernel.org, deller@gmx.de,
@@ -35,9 +35,11 @@ Cc:     krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
         Furkan Kardame <f.kardame@manjaro.org>
-Subject: [PATCHv2 0/2] Add support for Firefly Station P2 aka rk3568-roc-pc
-Date:   Sat, 17 Jun 2023 16:53:13 +0300
-Message-Id: <20230617135315.25441-1-f.kardame@manjaro.org>
+Subject: [PATCHv2 1/2] dt-bindings: arm: rockchip: Add Firefly Station P2
+Date:   Sat, 17 Jun 2023 16:53:14 +0300
+Message-Id: <20230617135315.25441-2-f.kardame@manjaro.org>
+In-Reply-To: <20230617135315.25441-1-f.kardame@manjaro.org>
+References: <20230617135315.25441-1-f.kardame@manjaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Authentication-Results: ORIGINATING;
@@ -52,33 +54,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Patch 1 adds the requisite dt-binding.
-Patch 2 adds Firefly Station P2 device tree
+Station P2 is a single board computer by firefly based
+on rk3568 soc
 
-Please review and let me know if I have missed anything.
+Signed-off-by: Furkan Kardame <f.kardame@manjaro.org>
+---
+ Documentation/devicetree/bindings/arm/rockchip.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Furkan Kardame
-
---- 
-v2: 
-- Add regulator suffix to nodes
-- Fix indentation
-- Remove sdio_pwrseq node as it's not needed until sdmmc2 is added
-- Remove underscore from pinctrl node name
-- Fix dt-binding compatible name
-
-v1: https://lore.kernel.org/all/20230616211020.55755-3-f.kardame@manjaro.org/
-
-Furkan Kardame (2):
-  dt-bindings: arm: rockchip: Add Firefly Station P2
-  arm64: dts: rockchip: add dts for Firefly Station P2 aka rk3568-roc-pc
-
- .../devicetree/bindings/arm/rockchip.yaml     |   5 +
- arch/arm64/boot/dts/rockchip/Makefile         |   1 +
- .../arm64/boot/dts/rockchip/rk3568-roc-pc.dts | 673 ++++++++++++++++++
- 3 files changed, 679 insertions(+)
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-roc-pc.dts
-
+diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
+index ec141c937..fa21640bc 100644
+--- a/Documentation/devicetree/bindings/arm/rockchip.yaml
++++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
+@@ -185,6 +185,11 @@ properties:
+           - const: firefly,rk3566-roc-pc
+           - const: rockchip,rk3566
+ 
++      - description: Firefly Station P2
++	items:
++	  - const: firefly,rk3568-roc-pc
++	  - const: rockchip,rk3568
++
+       - description: FriendlyElec NanoPi R2 series boards
+         items:
+           - enum:
 -- 
 2.40.1
 
