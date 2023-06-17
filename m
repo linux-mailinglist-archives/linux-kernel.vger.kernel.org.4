@@ -2,90 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CDFF73424A
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 18:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF62B73424F
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 18:48:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232856AbjFQQif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 12:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48418 "EHLO
+        id S230342AbjFQQsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 12:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbjFQQid (ORCPT
+        with ESMTP id S229487AbjFQQsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 12:38:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F73E5C;
-        Sat, 17 Jun 2023 09:38:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Sat, 17 Jun 2023 12:48:11 -0400
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7DA198C;
+        Sat, 17 Jun 2023 09:48:08 -0700 (PDT)
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [10.196.197.202])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 35857611A1;
-        Sat, 17 Jun 2023 16:38:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 962CAC433CC;
-        Sat, 17 Jun 2023 16:38:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687019911;
-        bh=wsV5PAOYMtSK534qTONYBGMJADMTf/thu6AVR5VKWFg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=q5TvC7wXcesBdrAtVwBAqlybicfQ3l31tWhe47gCHoheDPlgSrgt59SLSMZIhYDmm
-         jGSI/AbGdyvh5m2k3AnGCSYg1w5Ip7D6pqCyW2WpiRZOEAGiOwo2Hmd+1j6rAUprE/
-         b4HC/Njwt5Mk8bqvMnWE6kMHhKXtbhBU8/LPHAhQqUf6bNYjoID11JcNvnbHR/Wty1
-         Ci4aW7m3E0aYzqV5URi12B3tlQTJav9/V3UGVH6RUi6w1dQdJ06xsBzhXtuLm5kC4A
-         9lTOU3FN61E41TP3c36eHFu7PswdRbNKM83MrM077JEeujQ0StC2gBK9V8FMll8Kgo
-         IyVxt6UshhCrg==
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-4f841b7a697so2303490e87.3;
-        Sat, 17 Jun 2023 09:38:31 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzAKM11ayayk1YGXRKJGqccm1KymiYuK6icL39q047Ur3K0n+i4
-        CvKqQ4Dlr2qxqdJHLsshBAmx/groT4nmUV5dJW4=
-X-Google-Smtp-Source: ACHHUZ7/x1kYUhYXMtUENPjhDtD48HKOo5oy2K5VqpfigImzwjTDz7CrLzlDpzPNd4SA2zOD7D4teoP7FVQzMuuaU40=
-X-Received: by 2002:ac2:5bd1:0:b0:4eb:42b7:8c18 with SMTP id
- u17-20020ac25bd1000000b004eb42b78c18mr3005243lfn.53.1687019909491; Sat, 17
- Jun 2023 09:38:29 -0700 (PDT)
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4Qk25c6srzz9sNf;
+        Sat, 17 Jun 2023 18:48:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
+        s=MBO0001; t=1687020485;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oywZapLqwNyrHkbuwEVveNFbHDemaqJwUKPIXYQhvIg=;
+        b=LF3YZg2+edsmb61SmLOGvaNJisClVcQaaOe3GNcmYcrAoTU9J3ldeQNZhINufqXqAx4cRr
+        OEdMmzwMIeYSlvWOelY16SOs8u1IGozEzhemqj5UwrDhU6bQdLbabbvkuO7lOQWYDBErp9
+        jDjk6esNVRCFUWdnvw/Bf+ODrP6cVjz2jZXTvhNl9bl0/eKRzEl0/2mpSCzD66YJ2kUtdS
+        Z5db+8uyLmoIxLTIc+2409SBd08VvhnO/jlBG0LO7DY7b5TNjr9JTBHar8RFm2HKAe9fJ9
+        r7bpWcfg/GHx+Qu03kbK8D9sP8c8VNY+twdR0KZLQT5BqRes0T7bjHy3p1a7+g==
+References: <20230613083626.227476-3-frank@oltmanns.dev>
+ <202306132038.nUB6hmCv-lkp@intel.com> <87edmeqwva.fsf@oltmanns.dev>
+ <aa23f41c0e313e97122ac384d66e2325.sboyd@kernel.org>
+ <875y7ps3tq.fsf@oltmanns.dev>
+ <dab61757f0c33453ad19857350117c62.sboyd@kernel.org>
+From:   Frank Oltmanns <frank@oltmanns.dev>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        kernel test robot <lkp@intel.com>,
+        oe-kbuild-all@lists.linux.dev, "A.s. Dong" <aisheng.dong@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Subject: Re: [PATCH v2 2/2] clk: tests: Add tests for fractional divisor
+ approximation
+In-reply-to: <dab61757f0c33453ad19857350117c62.sboyd@kernel.org>
+Date:   Sat, 17 Jun 2023 18:47:54 +0200
+Message-ID: <87cz1u2fyd.fsf@oltmanns.dev>
 MIME-Version: 1.0
-References: <20230616085038.4121892-1-rppt@kernel.org> <20230616085038.4121892-8-rppt@kernel.org>
- <CAPhsuW6BG2oVrGDOpCKyOEvU9fBOboYYhducv96KUBe276Mvng@mail.gmail.com>
- <20230617065759.GT52412@kernel.org> <ZI3TGhJ2y5SBWmnA@moria.home.lan>
-In-Reply-To: <ZI3TGhJ2y5SBWmnA@moria.home.lan>
-From:   Song Liu <song@kernel.org>
-Date:   Sat, 17 Jun 2023 09:38:17 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4KDriCDfQ40MKKQ3AjyeRbEUJxjqoBLipe5AJMxY3U-w@mail.gmail.com>
-Message-ID: <CAPhsuW4KDriCDfQ40MKKQ3AjyeRbEUJxjqoBLipe5AJMxY3U-w@mail.gmail.com>
-Subject: Re: [PATCH v2 07/12] arm64, execmem: extend execmem_params for
- generated code definitions
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Puranjay Mohan <puranjay12@gmail.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,45 +67,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 8:37=E2=80=AFAM Kent Overstreet
-<kent.overstreet@linux.dev> wrote:
+Hi Stephen,
+
+On 2023-06-16 at 12:33:51 -0700, Stephen Boyd <sboyd@kernel.org> wrote:
+> Quoting Frank Oltmanns (2023-06-14 22:16:17)
+>> Hi Stephen,
+>>
+>> On 2023-06-14 at 13:02:24 -0700, Stephen Boyd <sboyd@kernel.org> wrote:
+>> > Quoting Frank Oltmanns (2023-06-14 01:19:37)
+>> >> Hi,
+>> >>
+>> >> On 2023-06-13 at 20:48:21 +0800, kernel test robot <lkp@intel.com> wrote:
+>> >> Can someone more knowlegdable than me please confirm if my understanding
+>> >> is correct?
+>> >
+>> > Export the symbol.
+>>
+>> Ok. I can do that. Please note that I had already submitted a V3 [1],
+>> that went the way of using clk_fractional_divider_ops.round_rate. I
+>> apologize for not waiting for your feedback prior to submission. It
+>> won't happen again.
+>>
+>> I liked the approach of calling clk_fd_round_rate directly via the ops,
+>> because it might allow me to test the other ops as well using the same
+>> blueprint. Of course, I will not add test cases, if you don't want it.
+>> (Calling clk_fd_round_rate also had the side effect of teaching me, that
+>> fd clocks expect the fraction to be less than or equal to 1.)
+>>
+>> I don't want to waste your time, but if you could maybe have a chance to
+>> look at the approach I took in V3 and tell me if you still want me to
+>> export the symbol instead, that would be really helpful. I'll follow
+>> your preference.
+>>
+>> If I don't hear back until the weekend, I will treat your three words
+>> above as your preference and prepare a V4 that goes back to calling
+>> clk_fractional_divider_general_approximation directly.
+>>
 >
-> On Sat, Jun 17, 2023 at 09:57:59AM +0300, Mike Rapoport wrote:
-> > > This is growing fast. :) We have 3 now: text, data, jit. And it will =
-be
-> > > 5 when we split data into rw data, ro data, ro after init data. I won=
-der
-> > > whether we should still do some type enum here. But we can revisit
-> > > this topic later.
-> >
-> > I don't think we'd need 5. Four at most :)
-> >
-> > I don't know yet what would be the best way to differentiate RW and RO
-> > data, but ro_after_init surely won't need a new type. It either will be
-> > allocated as RW and then the caller will have to set it RO after
-> > initialization is done, or it will be allocated as RO and the caller wi=
-ll
-> > have to do something like text_poke to update it.
+> Just call the API directly. That narrows the test to exactly what we
+> want to test. If you export the API it will make the rockchip folks
+> happy too[1]. We of course need to make sure that the registration API
+> works as well and actually uses the widths that are passed in, but it
+> doesn't need to fully exercise the approximation algorithm.
 >
-> Perhaps ro_after_init could use the same allocation interface and share
-> pages with ro pages - if we just added a refcount for "this page
-> currently needs to be rw, module is still loading?"
+> [1] https://lore.kernel.org/r/20230601095512.18029-1-zhangqing@rock-chips.com
 
-If we don't relax rules with read only, we will have to separate rw, ro,
-and ro_after_init. But we can still have page sharing:
+I've now submitted V5 [1] of this patchset. Unfortunately, V4 [2] had a
+compiler warning on clang that slipped through the cracks. I'm sorry for
+the noise.
 
-Two modules can put rw data on the same page.
-With text poke (ro data poke to be accurate), two modules can put
-ro data on the same page.
+In my opinion V5 is ready for review and hopefully addresses all your
+previous concerns.
 
-> text_poke() approach wouldn't be workable, you'd have to audit and fix
-> all module init code in the entire kernel.
+Thank you for your patience.
 
-Agreed. For this reason, each module has to have its own page(s) for
-ro_after_init data.
+Best regards,
+  Frank
 
-To eventually remove VM_FLUSH_RESET_PERMS, we want
-ro_after_init data to share the same allocation interface.
-
-Thanks,
-Song
+[1] https://lore.kernel.org/all/20230617131041.18313-1-frank@oltmanns.dev/
+[2] https://lore.kernel.org/all/20230617102919.27564-1-frank@oltmanns.dev/
