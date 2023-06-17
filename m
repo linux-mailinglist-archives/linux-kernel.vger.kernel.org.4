@@ -2,101 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B24734054
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 12:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C902E734059
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 12:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231894AbjFQKnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 06:43:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60902 "EHLO
+        id S233620AbjFQKpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 06:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjFQKnD (ORCPT
+        with ESMTP id S235082AbjFQKnU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 06:43:03 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80AC910DB;
-        Sat, 17 Jun 2023 03:43:02 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Qjt0K34yQz4f56MJ;
-        Sat, 17 Jun 2023 18:42:57 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.104.67])
-        by APP4 (Coremail) with SMTP id gCh0CgAHuKsujo1kJ6GfLw--.51912S4;
-        Sat, 17 Jun 2023 18:42:56 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     hch@lst.de, axboe@kernel.dk, brauner@kernel.org, hare@suse.de,
-        dsterba@suse.com, jinpu.wang@ionos.com
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
-        yangerkun@huawei.com
-Subject: [PATCH -next] block: fix wrong mode for blkdev_get_by_dev() from disk_scan_partitions()
-Date:   Sat, 17 Jun 2023 18:38:13 +0800
-Message-Id: <20230617103813.3708374-1-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.39.2
+        Sat, 17 Jun 2023 06:43:20 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2740D10DB
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 03:43:19 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51a4044b7a1so1803321a12.2
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 03:43:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686998597; x=1689590597;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SXehPHfp4hD58zuOBHpI3CN7ZUjU79jauVD9+CTL9CU=;
+        b=v/5eAneTfiOB6RtTochY284msjQvoPq6a4pZgXDJuLXT70Wi1NKtsfoCOmebDSRwGw
+         9xwMFYw4JDSFzzDLdiKFaEYKaP55sLzzpy3DX2rd8eYhzL0NEXLCB+EJ99YzNwlky3kW
+         ngmYmxg/RuPQdw0kWxG4SYpQ66dUDsKoc9LH4dgJPsPznX59YNwWz/Hdi9ldxMcOgYQy
+         ehjmkv1au49VmSREY6VLfRRBQEYdhQE90/u7DHHUUK2CPpma2YYRpiTRSmdasEj5AUGk
+         VIYTlu8VXoibu9ti6g97DJCOEKI5J2DV7MGgu80iGu83kc8h803oJFu1IZRUpBC3I5Q3
+         I3ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686998597; x=1689590597;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SXehPHfp4hD58zuOBHpI3CN7ZUjU79jauVD9+CTL9CU=;
+        b=LNobHpbyGMwQjIhizbudToHfjadyvIC/pEe9cb2t9aDtyeZWKpEMFjxG3K0LuKupG/
+         AqBMtmBjTpnWZdkyaOw4c6DqQsctrXbkhti2YgXj9D3rtpwhOyyPZzcrqS2WrfNWrx4Q
+         A2qpaSxeUmP/ovj1bPVBKFmkFqKDmyXrDfEQQlGSqDvvnCvXO4OoitBH8Bg4wtZOTPoM
+         uf0D3J+FIk4TUw+Y6wRGoSFCkkHTHh1t7PlcCIxr3WhhjC2zsOI2tlfTWOa0zuYAq0k/
+         p82Q8BhXZIk0ZLtwk/ZrImCwaCIxWWQQ7Y2L+m4MQMfIwS0EfmQDAuAyPrIcEodVTY6j
+         MRBQ==
+X-Gm-Message-State: AC+VfDzw2su9SIIYBHmV5yZyBsVYGmHI2JntuJCH06MnzSfB2qrF+IdT
+        btNnZfg6Ny2XFCMkbE8NXLUjuA==
+X-Google-Smtp-Source: ACHHUZ5mNmonmeX1pj58nQ8JJHbgPkGUtqFcLoO43kCROLgIVGLDO/BjBAkgHRjsjF0V8RgZ50iQ9w==
+X-Received: by 2002:a17:907:16a6:b0:978:66bd:d771 with SMTP id hc38-20020a17090716a600b0097866bdd771mr5423085ejc.55.1686998597567;
+        Sat, 17 Jun 2023 03:43:17 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id z20-20020a1709064e1400b009745eddf997sm11789464eju.198.2023.06.17.03.43.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 17 Jun 2023 03:43:16 -0700 (PDT)
+Message-ID: <168b28ba-cc37-84a1-2b1f-a045525b50a1@linaro.org>
+Date:   Sat, 17 Jun 2023 12:43:14 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAHuKsujo1kJ6GfLw--.51912S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7WF4rWFWfKF17Jr4rGr45Wrg_yoW8Gw1kpF
-        WUWF45tryqgryxuF4vy3ZrGay5Gan8GryxKrWIgw1Fv39xXrnYkF92krZ8Wr10vFWSg3y5
-        WFnrZFyFqF1F9wUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvj14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxa
-        n2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrV
-        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
-        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267
-        AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWU
-        JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUoO
-        J5UUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [RESEND PATCH 1/3] dt-bindings: remoteproc: qcom,pas: correct
+ memory-region constraints
+Content-Language: en-US
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        linux-remoteproc@vger.kernel.org,
+        Manivannan Sadhasivam <mani@kernel.org>
+References: <20230331092125.44885-1-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230331092125.44885-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+On 31/03/2023 11:21, Krzysztof Kozlowski wrote:
+> Qualcomm PAS devices expect exactly one memory region, not many.  Also,
+> the memory-region is now defined in device specific binding, not in
+> qcom,pas-common.yaml, thus also require it in the same place.
+> 
+> Fixes: cee616c68846 ("dt-bindings: remoteproc: qcom: adsp: move memory-region and firmware-name out of pas-common")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> 
+> ---
 
-After commit 2736e8eeb0cc ("block: use the holder as indication for
-exclusive opens"), blkdev_get_by_dev() will warn if holder is NULL and
-mode contains 'FMODE_EXCL'.
+I sent it in March. Then on 31st of March I resent it. Almost three
+months ago.
 
-holder from blkdev_get_by_dev() from disk_scan_partitions() is always NULL,
-hence it should not use 'FMODE_EXCL', which is broben by the commit. For
-consequence, WARN_ON_ONCE() will be triggered from blkdev_get_by_dev()
-if user scan partitions with device opened exclusively.
+Shall I resend it one more time? Any comments? Applying?
 
-Fix this problem by removing 'FMODE_EXCL' from disk_scan_partitions(),
-as it used to be.
-
-Reported-by: syzbot+00cd27751f78817f167b@syzkaller.appspotmail.com
-Link: https://syzkaller.appspot.com/bug?extid=00cd27751f78817f167b
-Fixes: 2736e8eeb0cc ("block: use the holder as indication for exclusive opens")
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
- block/genhd.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/block/genhd.c b/block/genhd.c
-index 2c2f9a716822..1fb964866fd0 100644
---- a/block/genhd.c
-+++ b/block/genhd.c
-@@ -365,7 +365,8 @@ int disk_scan_partitions(struct gendisk *disk, blk_mode_t mode)
- 	}
- 
- 	set_bit(GD_NEED_PART_SCAN, &disk->state);
--	bdev = blkdev_get_by_dev(disk_devt(disk), mode, NULL, NULL);
-+	bdev = blkdev_get_by_dev(disk_devt(disk), mode & ~FMODE_EXCL, NULL,
-+				 NULL);
- 	if (IS_ERR(bdev))
- 		ret =  PTR_ERR(bdev);
- 	else
--- 
-2.39.2
+Best regards,
+Krzysztof
 
