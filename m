@@ -2,336 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02A90733D97
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 04:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BED53733D9E
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 04:30:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbjFQCS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 22:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50788 "EHLO
+        id S231397AbjFQC3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 22:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjFQCS4 (ORCPT
+        with ESMTP id S229500AbjFQC3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 22:18:56 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F05F2D72
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 19:18:54 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-56ffd7d7fedso16654147b3.2
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 19:18:54 -0700 (PDT)
+        Fri, 16 Jun 2023 22:29:42 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7D135A3
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 19:29:40 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id 46e09a7af769-6b2b7ca1cb8so1205352a34.2
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 19:29:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686968333; x=1689560333;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pOFci3gQgrdX82h8XRvfgOYsHWhRE165e0Pr8Okwmz8=;
-        b=t9IXKtZY7wkYqVnEj8GXmVcJ60w5Txwc1G1EVQ0UhJR7vcKJ3XtMO10HxoXXqYSRj3
-         7k6bL0tiFPyW3pS5iDdkKGFuNS8isGisqJfFI5+gyWZkVs0Oa/re8vKXTVRCOeJpBYqv
-         /TLyzN2f4w5XNKwQdDRjU3WY2B1VDANHGuFbj6UbUeyL9N0yKETQf1ct9HAoO8dz0yc8
-         nC43kXVNqYiwUUpyM8b36fYBRoPI4Hz0LyOvlFL+uvQp/a4yBq0iafp82H7nIlYM0nrk
-         2bkRjdbdbPkeKnGAKxuP/WIr64lJg+UMnNANd74WpseMcfS4pToNoKRxBdRvArxEDs3B
-         P/tA==
+        d=broadcom.com; s=google; t=1686968980; x=1689560980;
+        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=5z8QBb6O8P087oUPd26duriIWGZAkrXX56WPhr7u3Q0=;
+        b=N6pitaaUQglkpefRWJ2WEnRjeOjOnxD+uLHkiPPaLayZQ6wQhpKDf/J9j+vtEwdx3z
+         J3KiqFBVyUyDtTu45x6eF6LZHyNuBumpnROLXLn2zu2Kx9XVrgp5jPjEIEwc/25b7epl
+         92W4+bI9Y7TJPC1coESKyL0BsGCjIkjKMeu0c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686968333; x=1689560333;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pOFci3gQgrdX82h8XRvfgOYsHWhRE165e0Pr8Okwmz8=;
-        b=bWLJPx2RqWOKhqbtBGVm1XvoDnmvSNUTNMa/XAPl2TEdwaKitC+CBsTFVx8dHjN5iO
-         s6DWOHPzsOkxTIMmA5J6Mh3IQlbia2I+7Yx84QoqFsC62gA6bAjgSZ5igrA8TtAPdp4f
-         sxgE2RbHeFLcO8f02Q2nYQGu3QacCOzJ1e8WG5vz9IAY6J9ZA5b1hSoPcTvdacUoZBfw
-         YOCn2NG3F8PWhSV7ctXYDyHnVj+u9444WhPnHAmPzuJhYjVnaQUVad1PVzb7PJA9+Hou
-         YhUzObrasN4wRvyiUxLoqcqYCANxtOy5vCO2AoI5a3e5mnFskeGsROmkBEmU/E2IuJCu
-         L46w==
-X-Gm-Message-State: AC+VfDyC0GRCo2thW0zITp/A02IZcTsd7pTSxXdT7yKDCoI8JLWaKfQm
-        QDwqoiSVX0MHq87Ca/2QkOEu0vp8P8ZhUMiSItSvDw==
-X-Google-Smtp-Source: ACHHUZ5g+A6dpsh3e+eCHMA0DmE96nkTXFEWJUnZ7bnNSAVOmmQVPBS7jGrcdJiOx0/jkvIrDsZJIcyfoW6IZ2trPKE=
-X-Received: by 2002:a0d:ca0d:0:b0:56d:770:c315 with SMTP id
- m13-20020a0dca0d000000b0056d0770c315mr3688060ywd.49.1686968333211; Fri, 16
- Jun 2023 19:18:53 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686968980; x=1689560980;
+        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5z8QBb6O8P087oUPd26duriIWGZAkrXX56WPhr7u3Q0=;
+        b=MSKdE+ALf+d5pGf2hHaZBaZe16jFatSgQPy0aGKLMnLbiuvblfCxKHtGsPiKizOfE0
+         k+cRA7JndnQk721+qjh4VMFhaOaZrSujW3ElMHUFp9Ik6SLI/Jkjpbs12LGQ0C6+HuGg
+         AcijwQQj84d1lidPdnh7obpv+Il6LFPCEKqGiubm0WEzezJOXRF6N4Fwf1X3xvl/i48B
+         JBL+rbXdj/l3FiXEUU7Syrxe+taUQLwqoD29sslgrlOZAozcPhz1x8OmFGr+xKCZIVQR
+         JHfRHGIzAOyfw/reabgULtd/to08+x3sY5S37sHT5/BU3g7KBdLUYAXshPsjGRwUgBlt
+         bo1A==
+X-Gm-Message-State: AC+VfDyPIPla9QUHlfNjcngaqSWLOOi7y3+JnbrMiQ5rUrYzVOxi5j7s
+        HX6L0OX8zp1wdNdcoQaKVeiL1g==
+X-Google-Smtp-Source: ACHHUZ7GO0gL0gLsVdZu44bh+Kjao+Ei7nF4sNHJ3/KpAhZjsAxTaxuUKU3wdqMrYECcztu5saauZw==
+X-Received: by 2002:a05:6830:1e37:b0:6b2:dd5b:8c1a with SMTP id t23-20020a0568301e3700b006b2dd5b8c1amr1100175otr.32.1686968979868;
+        Fri, 16 Jun 2023 19:29:39 -0700 (PDT)
+Received: from ubuntu-22.localdomain ([192.19.222.250])
+        by smtp.gmail.com with ESMTPSA id b2-20020aa78702000000b006668f004420sm3520239pfo.148.2023.06.16.19.29.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 19:29:37 -0700 (PDT)
+From:   William Zhang <william.zhang@broadcom.com>
+To:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        Linux MTD List <linux-mtd@lists.infradead.org>
+Cc:     f.fainelli@gmail.com, rafal@milecki.pl, kursad.oney@broadcom.com,
+        joel.peshkin@broadcom.com, computersforpeace@gmail.com,
+        anand.gore@broadcom.com, dregan@mail.com, kamal.dasu@broadcom.com,
+        tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com,
+        William Zhang <william.zhang@broadcom.com>,
+        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Kamal Dasu <kdasu.kdev@gmail.com>
+Subject: [PATCH v2 0/4] mtd: rawnand: brcmnand: driver and doc updates
+Date:   Fri, 16 Jun 2023 19:29:16 -0700
+Message-Id: <20230617022920.67173-1-william.zhang@broadcom.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230517235314.GB10757@monkey> <CACw3F52zNguJ-MvXOAJuMK+JfreLxorvHDPwO8w_gQdOzWj7eA@mail.gmail.com>
- <20230519224214.GB3581@monkey> <20230522044557.GA845371@hori.linux.bs1.fc.nec.co.jp>
- <CACw3F50rkrWkdMKo7yq35vDbGrcF4b0zohN3dORxL_h0KxZ7Bg@mail.gmail.com>
- <20230523024305.GA920098@hori.linux.bs1.fc.nec.co.jp> <CACw3F53C0f_Ph0etD+BgkAz4P8pX3YArjFgSPaLh_d6rUqMUCw@mail.gmail.com>
- <CACw3F52k=fhYpLpvDoVPcmKnOALLkPsGk08PdS_H0+miSYvhEQ@mail.gmail.com>
- <20230612041901.GA3083591@ik1-406-35019.vs.sakura.ne.jp> <CACw3F51o1ZFSYZa+XLnk4Wwjy2w_q=Kn+aOQs0=qpfG-ZYDFKg@mail.gmail.com>
- <20230616233447.GB7371@monkey>
-In-Reply-To: <20230616233447.GB7371@monkey>
-From:   Jiaqi Yan <jiaqiyan@google.com>
-Date:   Fri, 16 Jun 2023 19:18:41 -0700
-Message-ID: <CACw3F52iG5bqQbvZ9QkkRkVfy+NbSOu9hnkVOt5khukNNG73OQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] mm/hwpoison: find subpage in hugetlb HWPOISON list
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>,
-        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
-        "shy828301@gmail.com" <shy828301@gmail.com>,
-        "linmiaohe@huawei.com" <linmiaohe@huawei.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "duenwen@google.com" <duenwen@google.com>,
-        "axelrasmussen@google.com" <axelrasmussen@google.com>,
-        "jthoughton@google.com" <jthoughton@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000cf157005fe4a12d0"
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 4:35=E2=80=AFPM Mike Kravetz <mike.kravetz@oracle.c=
-om> wrote:
->
-> On 06/16/23 14:19, Jiaqi Yan wrote:
-> > On Sun, Jun 11, 2023 at 9:19=E2=80=AFPM Naoya Horiguchi
-> > <naoya.horiguchi@linux.dev> wrote:
-> > >
-> > > On Fri, Jun 09, 2023 at 10:48:47PM -0700, Jiaqi Yan wrote:
-> > > > On Thu, May 25, 2023 at 5:28=E2=80=AFPM Jiaqi Yan <jiaqiyan@google.=
-com> wrote:
-> > > > >
-> > > > > On Mon, May 22, 2023 at 7:43=E2=80=AFPM HORIGUCHI NAOYA(=E5=A0=80=
-=E5=8F=A3=E3=80=80=E7=9B=B4=E4=B9=9F)
-> > > > > <naoya.horiguchi@nec.com> wrote:
-> > > > > >
-> > > > > > On Mon, May 22, 2023 at 11:22:49AM -0700, Jiaqi Yan wrote:
-> > > > > > > On Sun, May 21, 2023 at 9:50=E2=80=AFPM HORIGUCHI NAOYA(=E5=
-=A0=80=E5=8F=A3=E3=80=80=E7=9B=B4=E4=B9=9F)
-> > > > > > > <naoya.horiguchi@nec.com> wrote:
-> > > > > > > >
-> > > > > > > > On Fri, May 19, 2023 at 03:42:14PM -0700, Mike Kravetz wrot=
-e:
-> > > > > > > > > On 05/19/23 13:54, Jiaqi Yan wrote:
-> > > > > > > > > > On Wed, May 17, 2023 at 4:53=E2=80=AFPM Mike Kravetz <m=
-ike.kravetz@oracle.com> wrote:
-> > > > > > > > > > >
-> > > > > > > > > > > On 05/17/23 16:09, Jiaqi Yan wrote:
-> > > > > > > > > > > > Adds the functionality to search a subpage's corres=
-ponding raw_hwp_page
-> > > > > > > > > > > > in hugetlb page's HWPOISON list. This functionality=
- can also tell if a
-> > > > > > > > > > > > subpage is a raw HWPOISON page.
-> > > > > > > > > > > >
-> > > > > > > > > > > > Exports this functionality to be immediately used i=
-n the read operation
-> > > > > > > > > > > > for hugetlbfs.
-> > > > > > > > > > > >
-> > > > > > > > > > > > Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
-> > > > > > > > > > > > ---
-> > > > > > > > > > > >  include/linux/mm.h  | 23 +++++++++++++++++++++++
-> > > > > > > > > > > >  mm/memory-failure.c | 26 ++++++++++++++++---------=
--
-> > > > > > > > > > > >  2 files changed, 39 insertions(+), 10 deletions(-)
-> > > > > > > > > > > >
-> > > > > > > > > > > > diff --git a/include/linux/mm.h b/include/linux/mm.=
-h
-> > > > > > > > > > > > index 27ce77080c79..f191a4119719 100644
-> > > > > > > > > > > > --- a/include/linux/mm.h
-> > > > > > > > > > > > +++ b/include/linux/mm.h
-> > > > > > > > > > >
-> > > > > > > > > > > Any reason why you decided to add the following to li=
-nux/mm.h instead of
-> > > > > > > > > > > linux/hugetlb.h?  Since it is hugetlb specific I woul=
-d have thought
-> > > > > > > > > > > hugetlb.h was more appropriate.
-> > > > > > > > > > >
-> > > > > > > > > > > > @@ -3683,6 +3683,29 @@ enum mf_action_page_type {
-> > > > > > > > > > > >   */
-> > > > > > > > > > > >  extern const struct attribute_group memory_failure=
-_attr_group;
-> > > > > > > > > > > >
-> > > > > > > > > > > > +#ifdef CONFIG_HUGETLB_PAGE
-> > > > > > > > > > > > +/*
-> > > > > > > > > > > > + * Struct raw_hwp_page represents information abou=
-t "raw error page",
-> > > > > > > > > > > > + * constructing singly linked list from ->_hugetlb=
-_hwpoison field of folio.
-> > > > > > > > > > > > + */
-> > > > > > > > > > > > +struct raw_hwp_page {
-> > > > > > > > > > > > +     struct llist_node node;
-> > > > > > > > > > > > +     struct page *page;
-> > > > > > > > > > > > +};
-> > > > > > > > > > > > +
-> > > > > > > > > > > > +static inline struct llist_head *raw_hwp_list_head=
-(struct folio *folio)
-> > > > > > > > > > > > +{
-> > > > > > > > > > > > +     return (struct llist_head *)&folio->_hugetlb_=
-hwpoison;
-> > > > > > > > > > > > +}
-> > > > > > > > > > > > +
-> > > > > > > > > > > > +/*
-> > > > > > > > > > > > + * Given @subpage, a raw page in a hugepage, find =
-its location in @folio's
-> > > > > > > > > > > > + * _hugetlb_hwpoison list. Return NULL if @subpage=
- is not in the list.
-> > > > > > > > > > > > + */
-> > > > > > > > > > > > +struct raw_hwp_page *find_raw_hwp_page(struct foli=
-o *folio,
-> > > > > > > > > > > > +                                    struct page *s=
-ubpage);
-> > > > > > > > > > > > +#endif
-> > > > > > > > > > > > +
-> > > > > > > > > > > >  #if defined(CONFIG_TRANSPARENT_HUGEPAGE) || define=
-d(CONFIG_HUGETLBFS)
-> > > > > > > > > > > >  extern void clear_huge_page(struct page *page,
-> > > > > > > > > > > >                           unsigned long addr_hint,
-> > > > > > > > > > > > diff --git a/mm/memory-failure.c b/mm/memory-failur=
-e.c
-> > > > > > > > > > > > index 5b663eca1f29..c49e6c2d1f07 100644
-> > > > > > > > > > > > --- a/mm/memory-failure.c
-> > > > > > > > > > > > +++ b/mm/memory-failure.c
-> > > > > > > > > > > > @@ -1818,18 +1818,24 @@ EXPORT_SYMBOL_GPL(mf_dax_ki=
-ll_procs);
-> > > > > > > > > > > >  #endif /* CONFIG_FS_DAX */
-> > > > > > > > > > > >
-> > > > > > > > > > > >  #ifdef CONFIG_HUGETLB_PAGE
-> > > > > > > > > > > > -/*
-> > > > > > > > > > > > - * Struct raw_hwp_page represents information abou=
-t "raw error page",
-> > > > > > > > > > > > - * constructing singly linked list from ->_hugetlb=
-_hwpoison field of folio.
-> > > > > > > > > > > > - */
-> > > > > > > > > > > > -struct raw_hwp_page {
-> > > > > > > > > > > > -     struct llist_node node;
-> > > > > > > > > > > > -     struct page *page;
-> > > > > > > > > > > > -};
-> > > > > > > > > > > >
-> > > > > > > > > > > > -static inline struct llist_head *raw_hwp_list_head=
-(struct folio *folio)
-> > > > > > > > > > > > +struct raw_hwp_page *find_raw_hwp_page(struct foli=
-o *folio,
-> > > > > > > > > > > > +                                    struct page *s=
-ubpage)
-> > > > > > > > > > > >  {
-> > > > > > > > > > > > -     return (struct llist_head *)&folio->_hugetlb_=
-hwpoison;
-> > > > > > > > > > > > +     struct llist_node *t, *tnode;
-> > > > > > > > > > > > +     struct llist_head *raw_hwp_head =3D raw_hwp_l=
-ist_head(folio);
-> > > > > > > > > > > > +     struct raw_hwp_page *hwp_page =3D NULL;
-> > > > > > > > > > > > +     struct raw_hwp_page *p;
-> > > > > > > > > > > > +
-> > > > > > > > > > > > +     llist_for_each_safe(tnode, t, raw_hwp_head->f=
-irst) {
-> > > > > > > > > > >
-> > > > > > > > > > > IIUC, in rare error cases a hugetlb page can be poiso=
-ned WITHOUT a
-> > > > > > > > > > > raw_hwp_list.  This is indicated by the hugetlb page =
-specific flag
-> > > > > > > > > > > RawHwpUnreliable or folio_test_hugetlb_raw_hwp_unreli=
-able().
-> > > > > > > > > > >
-> > > > > > > > > > > Looks like this routine does not consider that case. =
- Seems like it should
-> > > > > > > > > > > always return the passed subpage if folio_test_hugetl=
-b_raw_hwp_unreliable()
-> > > > > > > > > > > is true?
-> > > > > > > > > >
-> > > > > > > > > > Thanks for catching this. I wonder should this routine =
-consider
-> > > > > > > > > > RawHwpUnreliable or should the caller do.
-> > > > > > > > > >
-> > > > > > > > > > find_raw_hwp_page now returns raw_hwp_page* in the llis=
-t entry to
-> > > > > > > > > > caller (valid one at the moment), but once RawHwpUnreli=
-able is set,
-> > > > > > > > > > all the raw_hwp_page in the llist will be kfree(), and =
-the returned
-> > > > > > > > > > value becomes dangling pointer to caller (if the caller=
- holds that
-> > > > > > > > > > caller long enough). Maybe returning a bool would be sa=
-fer to the
-> > > > > > > > > > caller? If the routine returns bool, then checking RawH=
-wpUnreliable
-> > > > > > > > > > can definitely be within the routine.
-> > > > > > > > >
-> > > > > > > > > I think the check for RawHwpUnreliable should be within t=
-his routine.
-> > > > > > > > > Looking closer at the code, I do not see any way to synch=
-ronize this.
-> > > > > > > > > It looks like manipulation in the memory-failure code wou=
-ld be
-> > > > > > > > > synchronized via the mf_mutex.  However, I do not see how=
- traversal and
-> > > > > > > > > freeing of the raw_hwp_list  called from __update_and_fre=
-e_hugetlb_folio
-> > > > > > > > > is synchronized against memory-failure code modifying the=
- list.
-> > > > > > > > >
-> > > > > > > > > Naoya, can you provide some thoughts?
-> >
-> > Hi Mike,
-> >
-> > Now looking again this, I think concurrent adding and deleting are
-> > fine with each other and with themselves, because raw_hwp_list is
-> > lock-less llist.
->
-> Correct.
->
-> > As for synchronizing traversal with adding and deleting, I wonder is
-> > it a good idea to make __update_and_free_hugetlb_folio hold
-> > hugetlb_lock before it folio_clear_hugetlb_hwpoison(which traverse +
-> > delete raw_hwp_list)? In hugetlb, get_huge_page_for_hwpoison already
-> > takes hugetlb_lock; it seems to me __update_and_free_hugetlb_folio is
-> > missing the lock.
->
-> I do not think the lock is needed.  However, while looking more closely
-> at this I think I discovered another issue.
-> This is VERY subtle.
-> Perhaps Naoya can help verify if my reasoning below is correct.
->
-> In __update_and_free_hugetlb_folio we are not operating on a hugetlb page=
-.
-> Why is this?
-> Before calling update_and_free_hugetlb_folio we call remove_hugetlb_folio=
-.
-> The purpose of remove_hugetlb_folio is to remove the huge page from the
-> list AND compound page destructor indicating this is a hugetlb page is ch=
-anged.
-> This is all done while holding the hugetlb lock.  So, the test for
-> folio_test_hugetlb(folio) is false.
->
-> We have technically a compound non-hugetlb page with a non-null raw_hwp_l=
-ist.
->
-> Important note: at this time we have not reallocated vmemmap pages if
-> hugetlb page was vmemmap optimized.  That is done later in
-> __update_and_free_hugetlb_folio.
+--000000000000cf157005fe4a12d0
+Content-Transfer-Encoding: 8bit
+
+This patch series include the accumulative updates and fixes for the
+brcmnand driver. The bcmbca SoC related updates are removed from v2 and
+will be sent through separate patch series.
+
+Changes in v2:
+- Use driver static data for ECC level shift
+- Handle the remaining unaligned oob data after the oob data write loop
+- Remove bcmbca SoC related updates
+
+William Zhang (4):
+  mtd: rawnand: brcmnand: Fix ECC level field setting for v7.2
+    controller
+  mtd: rawnand: brcmnand: Fix potential false time out warning
+  mtd: rawnand: brcmnand: Fix crash during the panic_write
+  mtd: rawnand: brcmnand: Fix potential out-of-bounds access in oob
+    write
+
+ drivers/mtd/nand/raw/brcmnand/brcmnand.c | 107 +++++++++++++++--------
+ 1 file changed, 71 insertions(+), 36 deletions(-)
+
+-- 
+2.37.3
 
 
->
-> The 'good news' is that after this point get_huge_page_for_hwpoison will
-> not recognize this as a hugetlb page, so nothing will be added to the
-> list.  There is no need to worry about entries being added to the list
-> during traversal.
->
-> The 'bad news' is that if we get a memory error at this time we will
-> treat it as a memory error on a regular compound page.  So,
-> TestSetPageHWPoison(p) in memory_failure() may try to write a read only
-> struct page. :(
+--000000000000cf157005fe4a12d0
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-At least I think this is an issue.
-
-Would it help if dissolve_free_huge_page doesn't unlock hugetlb_lock
-until update_and_free_hugetlb_folio is done, or basically until
-dissolve_free_huge_page is done?
-
-TestSetPageHWPoison in memory_failure is called after
-try_memory_failure_hugetlb, and folio_test_hugetlb is tested within
-__get_huge_page_for_hwpoison, which is wrapped by the hugetlb_lock. So
-by the time dissolve_free_huge_page returns, subpages already go
-through hugetlb_vmemmap_restore and __destroy_compound_gigantic_folio
-and become non-compound raw pages (folios). Now
-folio_test_hugetlb(p)=3Dfalse will be correct for memory_failure, and it
-can recover p as a dissolved non-hugetlb page.
-
-
-> --
-> Mike Kravetz
+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
+YDZuuBJwnyCzevMoPtVYPharioL5H3BRnQi8YoTXH7/uRo33dewYFm474yFjwwnt82TFtveVZkVq
+6h4WIQ4wTcwFfET8zMkELnGzS5SHCl8sPD+lNxxJ1JDZYwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
+BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
+YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
+BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
+MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
+YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
+Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
+HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
+BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUq65GzwZxydFHjjYEU/9h
+xHhPWlwwDQYJKoZIhvcNAQELBQADggEBAA2hGG3JPAdGPH0ZdohGUCIVjKz+U+EFuIDbS6A/5jqX
+VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
+/ppSz3WoflVyFFQ5YXniZ+eU+2/cdnYZg4aVUnFjimOF5o3NfMLzOkhQNxbaDjFUfUYD8hKmU6v4
+0vUBj8KZ9Gi1LIagLKUREn8jku0lcLsRbnJ5Ey5ScajC/FESPyYWasOW8j8/1EoJksmhbYGKNS6C
+urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
+MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
+VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
+JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILTXJ6c5JM5lRRS/xwsTt6eF9Xa3
+Uy4gp8rgtZmIda+WMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
+MDYxNzAyMjk0MFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
+AwQCATANBgkqhkiG9w0BAQEFAASCAQChq/M3i9XrrmB60DCA/XPmffHhOkhliIXZCGBVsTdt0mpY
+Pl1E7s+1iufG/0Xn6hDzIfRNnroxaoc3Pxu8njiikURohboLuwBlS5BI7N+UMFGip3JLT3hCy9oM
+Zq7qa2bMiC1aqksuZGsw2PmN6lQNxnAvsfiT8nzILNEiSf9j6jAaRHstMvNy/J32f0yaHs9sIdw+
+Ci9PIQaLXkVlm/+Ko4ko8nZpzYyZI1MVJKHlpA4tksn3XreKQ+kEPZ9WkR+07cLoW/spAx3b/2yc
+oFDyklde5YVqZ7lzIL1Dcumo3dn6/zV27lKGVS8oDOuSQd010QDwTQqVtGDa+szah2JS
+--000000000000cf157005fe4a12d0--
