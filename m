@@ -2,104 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F74733E5F
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 07:26:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D95C733E64
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 07:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345886AbjFQFZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 01:25:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47986 "EHLO
+        id S230352AbjFQFbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 01:31:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233822AbjFQFYv (ORCPT
+        with ESMTP id S229686AbjFQFbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 01:24:51 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF6F1FD7;
-        Fri, 16 Jun 2023 22:24:50 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-3110ab7110aso1203294f8f.3;
-        Fri, 16 Jun 2023 22:24:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686979488; x=1689571488;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ENURxkCD4SFoaP6aebwo/q0vo0bcMItJOR8Kmmrb9B8=;
-        b=DWVWlsv+DY0BtlXJOK+TO2cyNO9d/eSdrU502cwPY9u4+SJEh1YcURZY5w+ORfUnM1
-         axcCR6YSztlPndCs+v3A6CB8ZN6lrEx8dQ2K9qVIj8x/pCFa5G1YMBqVpXJju8AJY7FH
-         KLXLwlW14Ex3ZDhLQ/Q9cxqaKqy0hCE8lZzlnTEuAxw0QrEQHkCZ4B4kRamZZOVdj5Ww
-         pBVoQMpBk+Vcbu92sxhxzDiya0lC8y81EjfEj9EiLkdjEgT8kp6mwLPk7TeIia9/XzQi
-         RCH9uyNvSLeqPbZrXoq2GKMuJ+i5PSKKKL+Al5EkWZ1vuvfoPJHW5k6Qu/8cvt5XIP8X
-         fIJA==
+        Sat, 17 Jun 2023 01:31:00 -0400
+Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92EE91FDD
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 22:30:54 -0700 (PDT)
+Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-77e2b91f817so3628939f.0
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 22:30:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686979488; x=1689571488;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ENURxkCD4SFoaP6aebwo/q0vo0bcMItJOR8Kmmrb9B8=;
-        b=L9QxUKMYmr9fAdZtKURcQwFpXm6yF1qZMpVRNYnnVcA8ac7gHekW6OShiIuyM+H35X
-         Za34MJgaVJd+HOGW/IrnCZqu5SCf71q2oh3xMu1rPpGRVjy/L8sQKU80a4jycJYFwEny
-         DFtIzsejwqT/Nv9t19d15SxpLx2JhXt25IiiPEHcZqKiUvk0t3iOR7mxovNxeMKjeJm/
-         JfntKN2R1mOvYTRFCy1nHi43ch5gOv2CN3YtivKIvfXgx0f16hoTsY1Q0uVftFwdyeab
-         G7OxiZm3ECsBtD/EuChtcB9o2bcg1ReSniH7GyFM8yoF1CBU0fmDvhIBAVSqg/UF7hHb
-         +5uQ==
-X-Gm-Message-State: AC+VfDwn7xSDDB+OaoojjCu5ksObNlBCIR9+QGqeSVNwDm8qpV2kmKeT
-        JP/f5KjOmPV3Dv8SaA5wssOKkC/0FhI=
-X-Google-Smtp-Source: ACHHUZ58OfhWAnmWtcWCxFG7XWjFe5oWwkaKzBAtkDPOeBDN7eDEEKAo/3ECvi6sd1BPZrPFohl3XA==
-X-Received: by 2002:adf:ec0e:0:b0:309:44ed:ccff with SMTP id x14-20020adfec0e000000b0030944edccffmr3252117wrn.1.1686979488443;
-        Fri, 16 Jun 2023 22:24:48 -0700 (PDT)
-Received: from localhost.localdomain (61.red-88-10-54.dynamicip.rima-tde.net. [88.10.54.61])
-        by smtp.gmail.com with ESMTPSA id a3-20020a056000050300b003068f5cca8csm25198228wrf.94.2023.06.16.22.24.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jun 2023 22:24:47 -0700 (PDT)
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-To:     linux-clk@vger.kernel.org
-Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
-        john@phrozen.org, linux-kernel@vger.kernel.org,
-        p.zabel@pengutronix.de, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, devicetree@vger.kernel.org,
-        arinc.unal@arinc9.com
-Subject: [PATCH v4 9/9] MAINTAINERS: add Mediatek MTMIPS Clock maintainer
-Date:   Sat, 17 Jun 2023 07:24:35 +0200
-Message-Id: <20230617052435.359177-10-sergio.paracuellos@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230617052435.359177-1-sergio.paracuellos@gmail.com>
-References: <20230617052435.359177-1-sergio.paracuellos@gmail.com>
+        d=1e100.net; s=20221208; t=1686979854; x=1689571854;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CKSRELDmcJqxfwVUFKf+7p+z3BH0HyEe5s50qS4EyFg=;
+        b=XzYrUzF9n+wRy4G4aZd7bF01uTSUHD3kycswiKVKLY8KvSyUt2FOlNMOcRD606i5vb
+         tufEJ5EIHO5Zjl3Yxht2brbkvOt08fbmT9fSbJvIuRwa+GgS1yE/lRgiC7/TKf2DRqwu
+         7gBWnNmh3nyOdYbf0aAuDYJ1JlNGKQ+aDDZj4Rh49ksGp5nsfo5K20FREwxWhW77sW1v
+         Ilye36iH5EMWXAiK4NI6jZoz7s2GTBzX7tVtJUiK7D2JH21zQaLhFeRgak2e2NRbZch9
+         sDV44eoUc/ZqU2mcXNeZWQ7kKoCER+CArroyfPlmiDL1qkrfl9p4xjwHQp3T894vqF3w
+         QDyg==
+X-Gm-Message-State: AC+VfDyEQUepntV2kGlitUK1cI3DfNsoxyq68BwM5RsQdosvT3vwcGMG
+        AvHnDonMAySOuFJIJtaOpmdOo/96W4MgThHfRbnBci6o3ceT
+X-Google-Smtp-Source: ACHHUZ4Nzq+tx2Y+JJKYx+8g11AgEgpHJN4CiJy9kJgbs4gHgb513dMIgEPDq2Za3oSFLnb5tc33baQicTxxDa/hf19lBxoGp/g1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:da48:0:b0:33b:f0ca:fd14 with SMTP id
+ p8-20020a92da48000000b0033bf0cafd14mr1027014ilq.0.1686979853936; Fri, 16 Jun
+ 2023 22:30:53 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 22:30:53 -0700
+In-Reply-To: <0000000000007d069905f284b9d9@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000efee7905fe4c9a46@google.com>
+Subject: Re: [syzbot] [hfs?] kernel BUG in hfsplus_bnode_put
+From:   syzbot <syzbot+005d2a9ecd9fbf525f6a@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, fmdefrancesco@gmail.com,
+        ira.weiny@intel.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, slava@dubeyko.com,
+        syzkaller-bugs@googlegroups.com, willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding myself as maintainer for Mediatek MTMIPS clock driver.
+syzbot has found a reproducer for the following issue on:
 
-Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+HEAD commit:    40f71e7cd3c6 Merge tag 'net-6.4-rc7' of git://git.kernel.o..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=10482ae3280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7ff8f87c7ab0e04e
+dashboard link: https://syzkaller.appspot.com/bug?extid=005d2a9ecd9fbf525f6a
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=142e7287280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13fd185b280000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/073eea957569/disk-40f71e7c.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c8a97aaa4cdc/vmlinux-40f71e7c.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/f536015eacbd/bzImage-40f71e7c.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/b5f1764cd64d/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+005d2a9ecd9fbf525f6a@syzkaller.appspotmail.com
+
+loop0: detected capacity change from 0 to 1024
+------------[ cut here ]------------
+kernel BUG at fs/hfsplus/bnode.c:618!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 5068 Comm: syz-executor476 Not tainted 6.4.0-rc6-syzkaller-00195-g40f71e7cd3c6 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+RIP: 0010:hfsplus_bnode_put+0x6b7/0x6d0 fs/hfsplus/bnode.c:618
+Code: ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c 6c fd ff ff 48 89 df e8 ca 5a 81 ff e9 5f fd ff ff e8 50 83 29 ff 0f 0b e8 49 83 29 ff <0f> 0b e8 42 83 29 ff 0f 0b e8 3b 83 29 ff 0f 0b 66 0f 1f 84 00 00
+RSP: 0018:ffffc90003c1f510 EFLAGS: 00010293
+RAX: ffffffff8261fc57 RBX: ffff888012ad7180 RCX: ffff888014385940
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffff8261f620 R09: ffffed100255ae31
+R10: 0000000000000000 R11: dffffc0000000001 R12: ffff888012ad7100
+R13: dffffc0000000000 R14: ffff8880283d4000 R15: dffffc0000000000
+FS:  00007f26ad319700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f26ad31a000 CR3: 000000001fab8000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ hfsplus_bmap_alloc+0x590/0x640 fs/hfsplus/btree.c:414
+ hfs_bnode_split+0xde/0x1110 fs/hfsplus/brec.c:245
+ hfsplus_brec_insert+0x3a6/0xdd0 fs/hfsplus/brec.c:100
+ hfsplus_create_cat+0xeee/0x1bb0 fs/hfsplus/catalog.c:308
+ hfsplus_mknod+0x16a/0x2a0 fs/hfsplus/dir.c:494
+ vfs_create+0x1e2/0x330 fs/namei.c:3194
+ do_mknodat+0x3c6/0x6e0 fs/namei.c:4043
+ __do_sys_mknodat fs/namei.c:4071 [inline]
+ __se_sys_mknodat fs/namei.c:4068 [inline]
+ __x64_sys_mknodat+0xa9/0xc0 fs/namei.c:4068
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f26ad36d769
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 71 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f26ad3192f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000103
+RAX: ffffffffffffffda RBX: 00007f26ad3f27a0 RCX: 00007f26ad36d769
+RDX: 0000000000000000 RSI: 0000000020000080 RDI: 00000000ffffff9c
+RBP: 00007f26ad3bf0c0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000103 R11: 0000000000000246 R12: 00007f26ad3bf1c0
+R13: 0073756c70736668 R14: e5652d70fedcf551 R15: 00007f26ad3f27a8
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:hfsplus_bnode_put+0x6b7/0x6d0 fs/hfsplus/bnode.c:618
+Code: ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c 6c fd ff ff 48 89 df e8 ca 5a 81 ff e9 5f fd ff ff e8 50 83 29 ff 0f 0b e8 49 83 29 ff <0f> 0b e8 42 83 29 ff 0f 0b e8 3b 83 29 ff 0f 0b 66 0f 1f 84 00 00
+RSP: 0018:ffffc90003c1f510 EFLAGS: 00010293
+RAX: ffffffff8261fc57 RBX: ffff888012ad7180 RCX: ffff888014385940
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffff8261f620 R09: ffffed100255ae31
+R10: 0000000000000000 R11: dffffc0000000001 R12: ffff888012ad7100
+R13: dffffc0000000000 R14: ffff8880283d4000 R15: dffffc0000000000
+FS:  00007f26ad319700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f26ad31a000 CR3: 000000001fab8000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+
 ---
- MAINTAINERS | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8d5bc223f305..581234dfa735 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13137,6 +13137,12 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/phy/mediatek,mt7621-pci-phy.yaml
- F:	drivers/phy/ralink/phy-mt7621-pci.c
- 
-+MEDIATEK MTMIPS CLOCK DRIVER
-+M:	Sergio Paracuellos <sergio.paracuellos@gmail.com>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
-+F:	drivers/clk/ralink/clk-mtmips.c
-+
- MEDIATEK NAND CONTROLLER DRIVER
- L:	linux-mtd@lists.infradead.org
- S:	Orphan
--- 
-2.25.1
-
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
