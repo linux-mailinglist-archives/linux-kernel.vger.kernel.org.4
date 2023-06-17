@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C531D734232
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 18:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE52E734234
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 18:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346132AbjFQQ1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 12:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
+        id S1346273AbjFQQ1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 12:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346231AbjFQQ1G (ORCPT
+        with ESMTP id S1345967AbjFQQ1L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 12:27:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4198A10D8;
-        Sat, 17 Jun 2023 09:27:05 -0700 (PDT)
+        Sat, 17 Jun 2023 12:27:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6222D173B;
+        Sat, 17 Jun 2023 09:27:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C815F60F78;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E9A5D60F71;
+        Sat, 17 Jun 2023 16:27:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1AE5C433CD;
         Sat, 17 Jun 2023 16:27:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB7D5C433C9;
-        Sat, 17 Jun 2023 16:27:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687019224;
-        bh=ayCUu7VWTParlzqlhysZ/3yMoFf8bKiG9G6ke1+jMJ4=;
+        s=k20201202; t=1687019228;
+        bh=9TcP0pheewMFNteE2MjQt4eyImwOKciOqR8+Aqc04aI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FGjV6yD0kJyidE+gMTGYZ+mL4zZN4FDEsOMBIjd+0+g/uh9zpjuCuMDgRObtvZ/zA
-         /zW39lihE/LJ9ntaZXe4+AHtf9lT3ipqWNhRneZggwHAEbAzb/NVNh+G6nQxqh/nK5
-         daH2GtaeWlMFqEk39/a02/koOZXP9fsHME+23sNtiaqsahrroPkHTg5mEQHFAEeP/9
-         UvknHTBiGituPIzz9KA6rMSbI2ZmQi/wQb97k46URxMwOFyQubT7hkpzrstFtwsv8y
-         bf8hA1Ff6ZdVMlEk/Jpd3amham+2N/S5f84etKZdVYsgc588eQ/rCIIqtcq4iWszje
-         oqphKQy1i3tQg==
+        b=BPnAUsh93U3aeHBUKqzv4wIHLB3IOdV2/E6/coVGuZyPoQ34uckzFBlxTg2W2TApd
+         ElOmw92e7gpvrpqZCj0LR+ePdZPnWiSteQwpULo5lNfTQOo09E1ViF2YbdCqlblh/w
+         rzqy68lX5qbuPf2pI6lR8Y7gEFVwSOAqtFHoZ3wGgQ6jaHe+WzG98kZ4LEQE6z0fKW
+         pnWBbX5XYpiKkX1QOk5psdB1DfcRGUF/Upf+63t+59b5/xuyi7BoIfzBeMFFpNvY2/
+         weom9JS1O9tQqeAkZv0pDRso9V9TXdymiQr0zAHnAzWjSoMzWxbbgCoVnYl+E2ywLP
+         EphWZrBIzsKew==
 From:   Jisheng Zhang <jszhang@kernel.org>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>,
@@ -45,69 +45,52 @@ To:     Thomas Gleixner <tglx@linutronix.de>,
         Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: [PATCH v3 3/8] dt-bindings: riscv: Add T-HEAD TH1520 board compatibles
-Date:   Sun, 18 Jun 2023 00:15:24 +0800
-Message-Id: <20230617161529.2092-4-jszhang@kernel.org>
+        linux-riscv@lists.infradead.org,
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v3 4/8] riscv: Add the T-HEAD SoC family Kconfig option
+Date:   Sun, 18 Jun 2023 00:15:25 +0800
+Message-Id: <20230617161529.2092-5-jszhang@kernel.org>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230617161529.2092-1-jszhang@kernel.org>
 References: <20230617161529.2092-1-jszhang@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Several SoMs and boards are available that feature the T-HEAD TH1520
-SoC. Document the compatible strings.
+The first SoC in the T-HEAD series is TH1520, containing quad T-HEAD
+C910 cores.
 
 Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- .../devicetree/bindings/riscv/thead.yaml      | 29 +++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/riscv/thead.yaml
+ arch/riscv/Kconfig.socs | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/riscv/thead.yaml b/Documentation/devicetree/bindings/riscv/thead.yaml
-new file mode 100644
-index 000000000000..e62f6821372e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/riscv/thead.yaml
-@@ -0,0 +1,29 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/riscv/thead.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
+index 1cf69f958f10..ce10a38dff37 100644
+--- a/arch/riscv/Kconfig.socs
++++ b/arch/riscv/Kconfig.socs
+@@ -41,6 +41,12 @@ config ARCH_SUNXI
+ 	  This enables support for Allwinner sun20i platform hardware,
+ 	  including boards based on the D1 and D1s SoCs.
+ 
++config ARCH_THEAD
++	bool "T-HEAD RISC-V SoCs"
++	select ERRATA_THEAD
++	help
++	  This enables support for the RISC-V based T-HEAD SoCs.
 +
-+title: T-HEAD SoC-based boards
-+
-+maintainers:
-+  - Jisheng Zhang <jszhang@kernel.org>
-+
-+description:
-+  T-HEAD SoC-based boards
-+
-+properties:
-+  $nodename:
-+    const: '/'
-+  compatible:
-+    oneOf:
-+      - description: Sipeed Lichee Pi 4A board for the Sipeed Lichee Module 4A
-+        items:
-+          - enum:
-+              - sipeed,lichee-pi-4a
-+          - const: sipeed,lichee-module-4a
-+          - const: thead,th1520
-+
-+additionalProperties: true
-+
-+...
+ config ARCH_VIRT
+ 	def_bool SOC_VIRT
+ 
 -- 
 2.40.0
 
