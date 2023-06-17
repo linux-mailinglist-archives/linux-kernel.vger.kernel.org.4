@@ -2,161 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D647342A6
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 19:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D19EB7342AB
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 19:39:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235436AbjFQRho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 13:37:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
+        id S1346388AbjFQRj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 13:39:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbjFQRhm (ORCPT
+        with ESMTP id S229745AbjFQRj2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 13:37:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36AF8CF;
-        Sat, 17 Jun 2023 10:37:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5F5D60C36;
-        Sat, 17 Jun 2023 17:37:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6103EC433C0;
-        Sat, 17 Jun 2023 17:37:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687023460;
-        bh=yjWqLCRuNvNrNClVvawWz5iSG0BNNGOBbd1yVAVgv2E=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Gk6cX/rJ1Ri3cwZfCCTHAHjNyKUq1gbgys78oMyIELRnFGfeyX9pcMC1ImDIksVoD
-         1K2QvyGUdwHS6OK9VUKdSsgnwJZTEiv3Wa/QFyEUf1CnA3J0curCqLE0EV13fbM+6S
-         DDiO4qh6Ju9GoQ/8wbSd3yECsiSzgnrBmhukBE6AjqlYOEJRYQiLTqkxWKL7XdKPEF
-         2KwZlk6NEZdbjc+o0vhvVIIVQTGX6lY4yfQJBh5XWQ/6B5jzyVtJ86vtBjo97nQXIj
-         8KsLWD0oHiZxX+3f26gIMXOfzmdYTpkjIUQLy7FzWwbD42m2Mznh9fIUMMw9DgSVJG
-         hSgpQYQsnHTRw==
-Date:   Sat, 17 Jun 2023 18:37:31 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v5 01/13] ASoC: dt-bindings: Add audio-iio-aux
-Message-ID: <20230617183731.31e9b3c4@jic23-huawei>
-In-Reply-To: <20230615152631.224529-2-herve.codina@bootlin.com>
-References: <20230615152631.224529-1-herve.codina@bootlin.com>
-        <20230615152631.224529-2-herve.codina@bootlin.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+        Sat, 17 Jun 2023 13:39:28 -0400
+Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888E0CF
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 10:39:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
+        t=1687023562; bh=QNi/M5o8tjco+bs7ZpJCM0M69P+WYpwoTdiw6C3GKjE=;
+        h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
+        b=UCIIzZ1fZOAmlu5KBcigaoZdJeiQl5iQTvp+Em63hxeUFHVFV0VMqbdaea4EWAXd2
+         zyNzLyQg4BvC6r1dp/bhnPzsSPmgYTl4xVte++3qTqVUnvPkrzgeQA3QaLX1yeaBJF
+         kDvybXs2TotdiXv1/jxmESYHIbhgHQkxRY9Yky/I=
+Date:   Sat, 17 Jun 2023 19:39:22 +0200
+From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     linux-rockchip@lists.infradead.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>
+Subject: Re: [PATCH] drm: bridge: dw-mipi-dsi: Fix enable/disable of DSI
+ controller
+Message-ID: <nm7nwmftzsjafovdprobzpuat6hrm6rghishgywww7qtul5skp@mihpqbpre3e5>
+Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>, 
+        Sam Ravnborg <sam@ravnborg.org>, linux-rockchip@lists.infradead.org, 
+        Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, Jonas Karlman <jonas@kwiboo.se>, 
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>, open list <linux-kernel@vger.kernel.org>, 
+        Jernej Skrabec <jernej.skrabec@gmail.com>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
+        Andrzej Hajda <andrzej.hajda@intel.com>
+X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
+ <https://xff.cz/key.txt>
+References: <20230617150643.1808409-1-megi@xff.cz>
+ <20230617173553.GA1843063@ravnborg.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230617173553.GA1843063@ravnborg.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Jun 2023 17:26:19 +0200
-Herve Codina <herve.codina@bootlin.com> wrote:
+Hello Sam,
 
-> Industrial I/O devices can be present in the audio path.
-> These devices needs to be viewed as audio components in order to be
-> fully integrated in the audio path.
+On Sat, Jun 17, 2023 at 07:35:53PM +0200, Sam Ravnborg wrote:
 > 
-> audio-iio-aux allows to consider these Industrial I/O devices as
-> auxliary audio devices.
+> Hi Ondřej,
 > 
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-
-LGTM
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
-> ---
->  .../bindings/sound/audio-iio-aux.yaml         | 64 +++++++++++++++++++
->  1 file changed, 64 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sound/audio-iio-aux.yaml
+> On Sat, Jun 17, 2023 at 05:06:33PM +0200, Ondřej Jirman wrote:
+> > From: Ondrej Jirman <megi@xff.cz>
+> > 
+> > Before this patch, booting to Linux VT and doing a simple:
+> > 
+> >   echo 2 > /sys/class/graphics/fb0/blank
+> >   echo 0 > /sys/class/graphics/fb0/blank
+> > 
+> > would result in failures to re-enable the panel. Mode set callback is
+> > called only once during boot in this scenario, while calls to
+> > enable/disable callbacks are balanced afterwards. The driver doesn't
+> > work unless userspace calls modeset before enabling the CRTC/connector.
+> > 
+> > This patch moves enabling of the DSI host from mode_set into pre_enable
+> > callback, and removes some old hacks where this bridge driver is
+> > directly calling into other bridge driver's callbacks.
+> > 
+> > pre_enable_prev_first flag is set on the panel's bridge so that panel
+> > drivers will get their prepare function called between DSI host's
+> > pre_enable and enable callbacks, so that they get a chance to
+> > perform panel setup while DSI host is already enabled in command
+> > mode. Otherwise panel's prepare would be called before DSI host
+> > is enabled, and any DSI communication used in prepare callback
+> > would fail.
+> > 
+> > With all these changes, the enable/disable sequence is now well
+> > balanced, and host's and panel's callbacks are called in proper order
+> > documented in the drm_panel API documentation without needing the old
+> > hacks. (Mainly that panel->prepare is called when DSI host is ready to
+> > allow the panel driver to send DSI commands and vice versa during
+> > disable.)
+> > 
+> > Tested on Pinephone Pro. Trace of the callbacks follows.
+> > 
+> > Before:
+> > 
+> > [    1.253882] dw-mipi-dsi-rockchip ff960000.dsi: mode_set
+> > [    1.290732] panel-himax-hx8394 ff960000.dsi.0: prepare
+> > [    1.475576] dw-mipi-dsi-rockchip ff960000.dsi: enable
+> > [    1.475593] panel-himax-hx8394 ff960000.dsi.0: enable
+> > 
+> > echo 2 > /sys/class/graphics/fb0/blank
+> > 
+> > [   13.722799] panel-himax-hx8394 ff960000.dsi.0: disable
+> > [   13.774502] dw-mipi-dsi-rockchip ff960000.dsi: post_disable
+> > [   13.774526] panel-himax-hx8394 ff960000.dsi.0: unprepare
+> > 
+> > echo 0 > /sys/class/graphics/fb0/blank
+> > 
+> > [   17.735796] panel-himax-hx8394 ff960000.dsi.0: prepare
+> > [   17.923522] dw-mipi-dsi-rockchip ff960000.dsi: enable
+> > [   17.923540] panel-himax-hx8394 ff960000.dsi.0: enable
+> > [   17.944330] dw-mipi-dsi-rockchip ff960000.dsi: failed to write command FIFO
+> > [   17.944335] panel-himax-hx8394 ff960000.dsi.0: sending command 0xb9 failed: -110
+> > [   17.944340] panel-himax-hx8394 ff960000.dsi.0: Panel init sequence failed: -110
+> > 
+> > echo 2 > /sys/class/graphics/fb0/blank
+> > 
+> > [  431.148583] panel-himax-hx8394 ff960000.dsi.0: disable
+> > [  431.169259] dw-mipi-dsi-rockchip ff960000.dsi: failed to write command FIFO
+> > [  431.169268] panel-himax-hx8394 ff960000.dsi.0: Failed to enter sleep mode: -110
+> > [  431.169282] dw-mipi-dsi-rockchip ff960000.dsi: post_disable
+> > [  431.169316] panel-himax-hx8394 ff960000.dsi.0: unprepare
+> > [  431.169357] pclk_mipi_dsi0 already disabled
+> > 
+> > echo 0 > /sys/class/graphics/fb0/blank
+> > 
+> > [  432.796851] panel-himax-hx8394 ff960000.dsi.0: prepare
+> > [  432.981537] dw-mipi-dsi-rockchip ff960000.dsi: enable
+> > [  432.981568] panel-himax-hx8394 ff960000.dsi.0: enable
+> > [  433.002290] dw-mipi-dsi-rockchip ff960000.dsi: failed to write command FIFO
+> > [  433.002299] panel-himax-hx8394 ff960000.dsi.0: sending command 0xb9 failed: -110
+> > [  433.002312] panel-himax-hx8394 ff960000.dsi.0: Panel init sequence failed: -110
+> > 
+> > -----------------------------------------------------------------------
+> > 
+> > After:
+> > 
+> > [    1.248372] dw-mipi-dsi-rockchip ff960000.dsi: mode_set
+> > [    1.248704] dw-mipi-dsi-rockchip ff960000.dsi: pre_enable
+> > [    1.285377] panel-himax-hx8394 ff960000.dsi.0: prepare
+> > [    1.468392] dw-mipi-dsi-rockchip ff960000.dsi: enable
+> > [    1.468421] panel-himax-hx8394 ff960000.dsi.0: enable
+> > 
+> > echo 2 > /sys/class/graphics/fb0/blank
+> > 
+> > [   16.210357] panel-himax-hx8394 ff960000.dsi.0: disable
+> > [   16.261315] dw-mipi-dsi-rockchip ff960000.dsi: post_disable
+> > [   16.261339] panel-himax-hx8394 ff960000.dsi.0: unprepare
+> > 
+> > echo 0 > /sys/class/graphics/fb0/blank
+> > 
+> > [   19.161453] dw-mipi-dsi-rockchip ff960000.dsi: pre_enable
+> > [   19.197869] panel-himax-hx8394 ff960000.dsi.0: prepare
+> > [   19.382141] dw-mipi-dsi-rockchip ff960000.dsi: enable
+> > [   19.382158] panel-himax-hx8394 ff960000.dsi.0: enable
+> > 
+> > Signed-off-by: Ondrej Jirman <megi@xff.cz>
 > 
-> diff --git a/Documentation/devicetree/bindings/sound/audio-iio-aux.yaml b/Documentation/devicetree/bindings/sound/audio-iio-aux.yaml
-> new file mode 100644
-> index 000000000000..d3cc1ea4a175
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/audio-iio-aux.yaml
-> @@ -0,0 +1,64 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/audio-iio-aux.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Audio IIO auxiliary
-> +
-> +maintainers:
-> +  - Herve Codina <herve.codina@bootlin.com>
-> +
-> +description:
-> +  Auxiliary device based on Industrial I/O device channels
-> +
-> +allOf:
-> +  - $ref: dai-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: audio-iio-aux
-> +
-> +  io-channels:
-> +    description:
-> +      Industrial I/O device channels used
-> +
-> +  io-channel-names:
-> +    description:
-> +      Industrial I/O channel names related to io-channels.
-> +      These names are used to provides sound controls, widgets and routes names.
-> +
-> +  snd-control-invert-range:
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    description: |
-> +      A list of 0/1 flags defining whether or not the related channel is
-> +      inverted
-> +    items:
-> +      enum: [0, 1]
-> +      default: 0
-> +      description: |
-> +        Invert the sound control value compared to the IIO channel raw value.
-> +          - 1: The related sound control value is inverted meaning that the
-> +               minimum sound control value correspond to the maximum IIO channel
-> +               raw value and the maximum sound control value correspond to the
-> +               minimum IIO channel raw value.
-> +          - 0: The related sound control value is not inverted meaning that the
-> +               minimum (resp maximum) sound control value correspond to the
-> +               minimum (resp maximum) IIO channel raw value.
-> +
-> +required:
-> +  - compatible
-> +  - io-channels
-> +  - io-channel-names
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    iio-aux {
-> +        compatible = "audio-iio-aux";
-> +        io-channels = <&iio 0>, <&iio 1>, <&iio 2>, <&iio 3>;
-> +        io-channel-names = "CH0", "CH1", "CH2", "CH3";
-> +        /* Invert CH1 and CH2 */
-> +        snd-control-invert-range = <0 1 1 0>;
-> +    };
+> Nice cleanup and fix.
+> Have you consider if this need a Fixes: ?
 
+It might be useful, I'll hunt for some some useful base for a Fixes tag.
+
+> 
+> > ---
+> >  drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c | 28 +++++++++++--------
+> >  1 file changed, 16 insertions(+), 12 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
+> > index b2efecf7d160..352c6829259a 100644
+> > --- a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
+> > +++ b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
+> > @@ -265,6 +265,7 @@ struct dw_mipi_dsi {
+> >  	struct dw_mipi_dsi *master; /* dual-dsi master ptr */
+> >  	struct dw_mipi_dsi *slave; /* dual-dsi slave ptr */
+> >  
+> > +	struct drm_display_mode mode;
+> >  	const struct dw_mipi_dsi_plat_data *plat_data;
+> >  };
+> >  
+> > @@ -332,6 +333,7 @@ static int dw_mipi_dsi_host_attach(struct mipi_dsi_host *host,
+> >  	if (IS_ERR(bridge))
+> >  		return PTR_ERR(bridge);
+> >  
+> > +	bridge->pre_enable_prev_first = true;
+> >  	dsi->panel_bridge = bridge;
+> >  
+> >  	drm_bridge_add(&dsi->bridge);
+> > @@ -859,15 +861,6 @@ static void dw_mipi_dsi_bridge_post_atomic_disable(struct drm_bridge *bridge,
+> >  	 */
+> >  	dw_mipi_dsi_set_mode(dsi, 0);
+> >  
+> > -	/*
+> > -	 * TODO Only way found to call panel-bridge post_disable &
+> > -	 * panel unprepare before the dsi "final" disable...
+> > -	 * This needs to be fixed in the drm_bridge framework and the API
+> > -	 * needs to be updated to manage our own call chains...
+> > -	 */
+> > -	if (dsi->panel_bridge->funcs->post_disable)
+> > -		dsi->panel_bridge->funcs->post_disable(dsi->panel_bridge);
+> > -
+> >  	if (phy_ops->power_off)
+> >  		phy_ops->power_off(dsi->plat_data->priv_data);
+> >  
+> > @@ -942,15 +935,25 @@ static void dw_mipi_dsi_mode_set(struct dw_mipi_dsi *dsi,
+> >  		phy_ops->power_on(dsi->plat_data->priv_data);
+> >  }
+> >  
+> > +static void dw_mipi_dsi_bridge_atomic_pre_enable(struct drm_bridge *bridge,
+> > +						 struct drm_bridge_state *old_bridge_state)
+> > +{
+> > +	struct dw_mipi_dsi *dsi = bridge_to_dsi(bridge);
+> > +
+> > +	/* Power up the dsi ctl into a command mode */
+> > +	dw_mipi_dsi_mode_set(dsi, &dsi->mode);
+> > +	if (dsi->slave)
+> > +		dw_mipi_dsi_mode_set(dsi->slave, &dsi->mode);
+> > +}
+> > +
+> >  static void dw_mipi_dsi_bridge_mode_set(struct drm_bridge *bridge,
+> >  					const struct drm_display_mode *mode,
+> >  					const struct drm_display_mode *adjusted_mode)
+> >  {
+> >  	struct dw_mipi_dsi *dsi = bridge_to_dsi(bridge);
+> >  
+> > -	dw_mipi_dsi_mode_set(dsi, adjusted_mode);
+> > -	if (dsi->slave)
+> > -		dw_mipi_dsi_mode_set(dsi->slave, adjusted_mode);
+> > +	/* Store the display mode for later use in pre_enable callback */
+> > +	memcpy(&dsi->mode, adjusted_mode, sizeof(dsi->mode));
+> >  }
+> Use drm_mode_copy here.
+
+Ok.
+
+> With this fixed:
+> 
+> Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
+
+thank you,
+	Ondrej
