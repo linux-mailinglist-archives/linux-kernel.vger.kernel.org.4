@@ -2,107 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3890D733F04
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 09:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C11733F06
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 09:12:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234470AbjFQHMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 03:12:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40726 "EHLO
+        id S234686AbjFQHMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 03:12:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231929AbjFQHMI (ORCPT
+        with ESMTP id S234063AbjFQHMc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 03:12:08 -0400
-Received: from smtp.smtpout.orange.fr (smtp-29.smtpout.orange.fr [80.12.242.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BBAC211D
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 00:12:06 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id AQ6OqsOdNhQKVAQ6OqaPHj; Sat, 17 Jun 2023 09:12:05 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1686985925;
-        bh=uwjvZj5RduTr+IL/itfPrhtkCpiCiq3BjJuJN5U78E8=;
-        h=From:To:Cc:Subject:Date;
-        b=Q/XB/le1cPA7lV0lwHKtheheqImQ1ZC+UbmBb0RrLc5UUPy0ApWfj8i+ezLJggG61
-         MrPi/9TLFjqBilDykja7HpJCw9l0Ys1/tpSW0E1ShgsgKWHVl26PLf+HLxY0/WzZGN
-         0I/RbY3K0/VvylXKDIb0Js6FWQfR7GC8sPCC6C4t66qaQy55ZxoW4Zv0jtJcGa9qcX
-         hwkfloujL0ivqu1ygVejbFVMGc7IZW4VskCT5IgA3ofTSCTcQkq4e1Mjz9cePLCu71
-         RZquMs4za+u16/DKyE3eBKvCH3aX4WZnFyaEkSKoRziCaA1y2Nn/MLLytcLDPjuEVZ
-         gfPZLMLPt13HA==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 17 Jun 2023 09:12:05 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Michael Hennerich <michael.hennerich@analog.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-input@vger.kernel.org
-Subject: [PATCH] Input: adp5588-keys - Use devm_regulator_get_enable()
-Date:   Sat, 17 Jun 2023 09:12:03 +0200
-Message-Id: <af343b5b0d740cc9f8863264c30e3da4215721d7.1686985911.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sat, 17 Jun 2023 03:12:32 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DCDD213B
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 00:12:31 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f900cd3f69so3643405e9.0
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 00:12:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686985949; x=1689577949;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SHuRK5yrOAZzHQ9WBWjIol/EVx+4lKJS52e0FUFGTIA=;
+        b=WYmeWxy/fblK4tTo5Kko5JcGQqtD97d7Pwz9T27oxY49f7Rk1/Y7+TL9JcYKVzg8gd
+         9k5WLt/jfmVe2bNcJHyP4hHslgvbbSRlu79hMtGJjclh7W3CApPwMfBJP2iDfXOq3I7t
+         t/FhNh7/qBru1saWiMkNUIPegPLhNVpiA7JzZaIQCk4IgaJfvr/XkRiUxZe1VijyFUPM
+         rx7/6kSQUPlCGx8/h+FWBDYfaJkb2GllJ/o8Jc4Vi3oP5xNlRd6cDVoc52ovKQPLEEzu
+         zto88ihFiT5aOkIEnIWKSUZIlslTxV6WQOlJWNCSpd/YuF+ojwqwfMMqy6dq56+2dWOb
+         4ftg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686985949; x=1689577949;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SHuRK5yrOAZzHQ9WBWjIol/EVx+4lKJS52e0FUFGTIA=;
+        b=U9uCk+41rgnW58tX1iQABU64bisv+oOTOLlABw7T88lO2WwGpqSw/M4DXOXbKm3Ux0
+         Q0szWNmlOU8bYzKwHVcMoevXUNypyx8e2Q1CS8WOG4MrZWqBhQohT1nqEhVmmun2lOLM
+         baYoBH2qbtowoXig76ZRbQaUUmKlQWpqt8bqqZyjwAZ82YVokX0dF4II+VTjlW9mAskl
+         xzf8SfRBf6KdFtIKRhxtcdx7jh78TGUMj6VZXAk3fAALntEvRi88B/lTpe1bzGum7vKm
+         GtJQbdciXIZgYY+Gk7WpZpLMBAsGDNwZlATlz7/pYnouFEHIXtCIW/63FIl9UPO/5F/z
+         IfSQ==
+X-Gm-Message-State: AC+VfDy3LrntrrktzAcMzM7YeABX1UPs4ZxRtp2oGN66K0fyz4AMfjJz
+        N6W0MX0GWPyumUMX2UciAwGcHcQi0MFMptO3KxM=
+X-Google-Smtp-Source: ACHHUZ4Ud7lQ8ejx3wbY/Gp18DoNVMVg+GQ8oKKNeAmLL51OE2FZE59bFzPi6e1YEfX6Eas25160GQ==
+X-Received: by 2002:a7b:c8c2:0:b0:3f9:5d0:b71d with SMTP id f2-20020a7bc8c2000000b003f905d0b71dmr203135wml.30.1686985949539;
+        Sat, 17 Jun 2023 00:12:29 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:4aa0:8c56:eebe:c05c? ([2a05:6e02:1041:c10:4aa0:8c56:eebe:c05c])
+        by smtp.googlemail.com with ESMTPSA id k24-20020a7bc318000000b003f733c1129fsm4114574wmj.33.2023.06.17.00.12.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 17 Jun 2023 00:12:29 -0700 (PDT)
+Message-ID: <422def66-911e-9e2b-34a4-f595776f43dd@linaro.org>
+Date:   Sat, 17 Jun 2023 09:12:28 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] thermal/drivers/loongson2: Fix thermal zone private data
+ access
+To:     zhuyinbo <zhuyinbo@loongson.cn>
+Cc:     rafael@kernel.org, loongson-kernel@lists.loongnix.cn,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        zhanghongchen <zhanghongchen@loongson.cn>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+References: <8ca44091-35fd-cc24-9896-0317772c5620@loongson.cn>
+ <20230616143407.689515-1-daniel.lezcano@linaro.org>
+ <9c12ece8-3a85-105b-d8d3-208fe816734a@linaro.org>
+ <323267b7-3dbc-8982-7f16-08672b19039b@loongson.cn>
+Content-Language: en-US
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <323267b7-3dbc-8982-7f16-08672b19039b@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use devm_regulator_get_enable() instead of hand writing it. It saves some
-line of code.
+On 17/06/2023 03:52, zhuyinbo wrote:
+> 
+> 
+> 在 2023/6/16 下午10:35, Daniel Lezcano 写道:
+>> On 16/06/2023 16:34, Daniel Lezcano wrote:
+>>> The thermal zone device won't be accessible directly anymore.
+>>>
+>>> Use the private data accessor.
+>>
+>> To be folded with your next version
+>>
+> 
+> 
+> okay, If I understand correctly, I will make this patch as a independent
+> [3/3] patch of the v15 series patch.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/input/keyboard/adp5588-keys.c | 17 +----------------
- 1 file changed, 1 insertion(+), 16 deletions(-)
+It is better to merge it with your patch 2 in order to prevent a git 
+bisecting error (no need to add a my signoff or whatever)
 
-diff --git a/drivers/input/keyboard/adp5588-keys.c b/drivers/input/keyboard/adp5588-keys.c
-index 896a5a989ddc..61e8e43e9c2b 100644
---- a/drivers/input/keyboard/adp5588-keys.c
-+++ b/drivers/input/keyboard/adp5588-keys.c
-@@ -713,17 +713,11 @@ static int adp5588_fw_parse(struct adp5588_kpad *kpad)
- 	return 0;
- }
- 
--static void adp5588_disable_regulator(void *reg)
--{
--	regulator_disable(reg);
--}
--
- static int adp5588_probe(struct i2c_client *client)
- {
- 	struct adp5588_kpad *kpad;
- 	struct input_dev *input;
- 	struct gpio_desc *gpio;
--	struct regulator *vcc;
- 	unsigned int revid;
- 	int ret;
- 	int error;
-@@ -749,16 +743,7 @@ static int adp5588_probe(struct i2c_client *client)
- 	if (error)
- 		return error;
- 
--	vcc = devm_regulator_get(&client->dev, "vcc");
--	if (IS_ERR(vcc))
--		return PTR_ERR(vcc);
--
--	error = regulator_enable(vcc);
--	if (error)
--		return error;
--
--	error = devm_add_action_or_reset(&client->dev,
--					 adp5588_disable_regulator, vcc);
-+	error = devm_regulator_get_enable(&client->dev, "vcc");
- 	if (error)
- 		return error;
- 
 -- 
-2.34.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
