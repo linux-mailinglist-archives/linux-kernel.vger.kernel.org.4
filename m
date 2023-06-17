@@ -2,113 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC2FA733D74
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 03:45:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BC8E733D7F
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 03:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbjFQBo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 21:44:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43810 "EHLO
+        id S232006AbjFQBvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 21:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjFQBo6 (ORCPT
+        with ESMTP id S231781AbjFQBvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 21:44:58 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962363AB4;
-        Fri, 16 Jun 2023 18:44:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686966297; x=1718502297;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=5os4uL0tj6EqAUIyn9+nlsK5sK4S/kAFE+rIybEFyjE=;
-  b=K0fgDNNmwSmyvCY9UR6AGuTbqZq2EHRNr4rJtf08qmONunYFFC9XZ9Gd
-   AgjHZIgQD5nZAm//0b+k/+Y16yKMUQBOrRZECFt8SoonT60AtVp1YJBfy
-   4WBiW4ktWsqB5VxkqANsYttgr6D9jwVA+3gK1vnHWqKhsy7P5VRKpfLA1
-   vydXPIYiEokjMREFlucadIn8M8NKNTD3DVlGpSkqjvKcWkY9GEul/tw2H
-   g3Pqhkz0CwLhg3RQEjxNOPZ0e9yNsViUmCCSdj1gwgUGPpAGXxlct5nbC
-   pYVDJe6FzGverrqz0VtaGzISEmWsTE9i7diW+6eSrwGoZg8u4laLJ6S/v
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="349059129"
-X-IronPort-AV: E=Sophos;i="6.00,249,1681196400"; 
-   d="scan'208";a="349059129"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 18:44:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="857590830"
-X-IronPort-AV: E=Sophos;i="6.00,249,1681196400"; 
-   d="scan'208";a="857590830"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Jun 2023 18:44:56 -0700
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     hdegoede@redhat.com, markgross@kernel.org,
-        ilpo.jarvinen@linux.intel.com
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] platform/x86/intel: tpmi: Remove hardcoded unit and offset
-Date:   Fri, 16 Jun 2023 18:44:47 -0700
-Message-Id: <20230617014447.2543592-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
+        Fri, 16 Jun 2023 21:51:00 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4E13AB6
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 18:50:59 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Qjf9p0n7szTlBj;
+        Sat, 17 Jun 2023 09:50:22 +0800 (CST)
+Received: from [10.174.151.185] (10.174.151.185) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Sat, 17 Jun 2023 09:50:56 +0800
+Subject: Re: [PATCH] sched: remove unneeded header files
+To:     <mingo@redhat.com>, <peterz@infradead.org>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>
+CC:     <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
+        <vschneid@redhat.com>, <linux-kernel@vger.kernel.org>
+References: <20230527205731.2283720-1-linmiaohe@huawei.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <2fd3e785-f8bb-b3fc-6340-ed029e32057b@huawei.com>
+Date:   Sat, 17 Jun 2023 09:50:56 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230527205731.2283720-1-linmiaohe@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use sizeof(u32) for TPMI entry size units. Also add a define
-for capability offset unit size.
+On 2023/5/28 4:57, Miaohe Lin wrote:
+> Remove some unneeded header files. No functional change intended.
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- drivers/platform/x86/intel/tpmi.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+friendly ping... :)
 
-diff --git a/drivers/platform/x86/intel/tpmi.c b/drivers/platform/x86/intel/tpmi.c
-index a5227951decc..9c606ee2030c 100644
---- a/drivers/platform/x86/intel/tpmi.c
-+++ b/drivers/platform/x86/intel/tpmi.c
-@@ -222,7 +222,7 @@ static int tpmi_create_device(struct intel_tpmi_info *tpmi_info,
- 	snprintf(feature_id_name, sizeof(feature_id_name), "tpmi-%s", name);
- 
- 	for (i = 0, tmp = res; i < pfs->pfs_header.num_entries; i++, tmp++) {
--		u64 entry_size_bytes = pfs->pfs_header.entry_size * 4;
-+		u64 entry_size_bytes = pfs->pfs_header.entry_size * sizeof(u32);
- 
- 		tmp->start = pfs->vsec_offset + entry_size_bytes * i;
- 		tmp->end = tmp->start + entry_size_bytes - 1;
-@@ -277,7 +277,7 @@ static int tpmi_process_info(struct intel_tpmi_info *tpmi_info,
- 	void __iomem *info_mem;
- 
- 	info_mem = ioremap(pfs->vsec_offset + TPMI_INFO_BUS_INFO_OFFSET,
--			   pfs->pfs_header.entry_size * 4 - TPMI_INFO_BUS_INFO_OFFSET);
-+			   pfs->pfs_header.entry_size * sizeof(u32) - TPMI_INFO_BUS_INFO_OFFSET);
- 	if (!info_mem)
- 		return -ENOMEM;
- 
-@@ -308,6 +308,8 @@ static int tpmi_fetch_pfs_header(struct intel_tpmi_pm_feature *pfs, u64 start, i
- 	return 0;
- }
- 
-+#define TPMI_CAP_OFFSET_UNIT	1024
-+
- static int intel_vsec_tpmi_init(struct auxiliary_device *auxdev)
- {
- 	struct intel_vsec_device *vsec_dev = auxdev_to_ivdev(auxdev);
-@@ -354,7 +356,7 @@ static int intel_vsec_tpmi_init(struct auxiliary_device *auxdev)
- 		if (!pfs_start)
- 			pfs_start = res_start;
- 
--		pfs->pfs_header.cap_offset *= 1024;
-+		pfs->pfs_header.cap_offset *= TPMI_CAP_OFFSET_UNIT;
- 
- 		pfs->vsec_offset = pfs_start + pfs->pfs_header.cap_offset;
- 
--- 
-2.38.1
+> 
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>  kernel/sched/sched.h | 7 -------
+>  1 file changed, 7 deletions(-)
+> 
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index 6408385c7e3f..d3db1a67ad6a 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -26,7 +26,6 @@
+>  #include <linux/bug.h>
+>  #include <linux/capability.h>
+>  #include <linux/cgroup_api.h>
+> -#include <linux/cgroup.h>
+>  #include <linux/context_tracking.h>
+>  #include <linux/cpufreq.h>
+>  #include <linux/cpumask_api.h>
+> @@ -34,8 +33,6 @@
+>  #include <linux/file.h>
+>  #include <linux/fs_api.h>
+>  #include <linux/hrtimer_api.h>
+> -#include <linux/interrupt.h>
+> -#include <linux/irq_work.h>
+>  #include <linux/jiffies.h>
+>  #include <linux/kref_api.h>
+>  #include <linux/kthread.h>
+> @@ -44,19 +41,15 @@
+>  #include <linux/lockdep.h>
+>  #include <linux/minmax.h>
+>  #include <linux/mm.h>
+> -#include <linux/module.h>
+>  #include <linux/mutex_api.h>
+>  #include <linux/plist.h>
+>  #include <linux/poll.h>
+>  #include <linux/proc_fs.h>
+>  #include <linux/profile.h>
+> -#include <linux/psi.h>
+>  #include <linux/rcupdate.h>
+>  #include <linux/seq_file.h>
+> -#include <linux/seqlock.h>
+>  #include <linux/softirq.h>
+>  #include <linux/spinlock_api.h>
+> -#include <linux/static_key.h>
+>  #include <linux/stop_machine.h>
+>  #include <linux/syscalls_api.h>
+>  #include <linux/syscalls.h>
+> 
 
