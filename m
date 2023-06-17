@@ -2,290 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1375C734463
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 00:49:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9832E73446C
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 01:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233161AbjFQWtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 18:49:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60516 "EHLO
+        id S233416AbjFQXAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 19:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231132AbjFQWtH (ORCPT
+        with ESMTP id S229911AbjFQXAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 18:49:07 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2F510CF;
-        Sat, 17 Jun 2023 15:49:05 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f611ac39c5so2681244e87.2;
-        Sat, 17 Jun 2023 15:49:05 -0700 (PDT)
+        Sat, 17 Jun 2023 19:00:13 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8B810FE
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 16:00:11 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35HJekDb015822;
+        Sat, 17 Jun 2023 22:59:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type :
+ content-transfer-encoding : in-reply-to : mime-version; s=corp-2023-03-30;
+ bh=jAjY5zCDlpeJstRNYa3yE2j2jdsFL/XtTtN8VEbGJ0U=;
+ b=CyeE4ctQUx+Yc538CRVDLMyjAvWIc2GE1E4lbhF0dbrJodAypmW8V+oKgyEZelbrnMv9
+ ZsNU7l7ZDHPI6+aE36HEf4tNEhy8LTCL/fEx4J6mtlVPzIqpnSQ1Vy7TOyqa+Gt8rkgK
+ qutBgq48rGZHTSE/mF+U/UBcEvilqXIKG2u6GnyiiHKbsjNc8rJqW5yQi3pWKtCr4bOd
+ UNH3y6de6rvwW1hcYw41X1pxlp699xSrKXdIV5RxlTXgjc/Tsin9pqI57gr/WH3zms88
+ JqFyx6fs9ZXpcLNxVUuYcpeHwvStqdNzfsOzISOdj/lLvRXpxGFOGt81BCtrdWRmeW4o Hg== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r94etgqw0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 17 Jun 2023 22:59:34 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35HI0F30012378;
+        Sat, 17 Jun 2023 22:59:33 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2174.outbound.protection.outlook.com [104.47.59.174])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3r9391n3as-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 17 Jun 2023 22:59:33 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EEsTFsl5yRe923nECNuNzDBhMxWsvhuAgQb7kwUgc/zqi+8l7hkwJc7ZGct5TbAFpRGLlrfFb+yjLkkkbNk2mCbw/Z4tIykD2L67EXWYJ34ImkJNAiu8Q7O0BzkJpmDLTQFQZ51LiVCyhqOsvR15YM7LpB+0H1Y3INb9zGCBXVESs+K1sbLCLhTKy9CkA87TTkLHa23UfE+gDneZrRbuQe7cYG1gFZLL6YMVYT20ZZ17p/ZgS6pklMvEA9Q9fX3w1i/BqPMICG7hETmZFOmpLqXON0XO8SOFE3LCzSqzeknFa3/O5x0CCDB9CJm+pB4iFXGKyuvGwta97rrQjdspmg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jAjY5zCDlpeJstRNYa3yE2j2jdsFL/XtTtN8VEbGJ0U=;
+ b=XhA/HPZ0NsQjwRdh0ijZkVZsFJlYrsoAZvzT1SGEuf8V6s5QWbvMx9Tk95XAiYEg+FGzs2BJCMcU2naU0Tyrjzl8j7hLlXnQx0qG+1r7bRzZEchilCLTOUG9pqC2s+8ELBb0TeVw6ITuPhiT7n/TfMpCYIZib9Pj6b4NJVMMv3LN59X5lO48Kth0WLrdQJyKihcgY9knwoXVme51I5bTVejO7Sf8H/9Mq3yld48S2TL1qG+krOTYWWOXrS5U2yp6N69UGuwQ4wInB6KeXFE86bySRdzsbR19IPI/FeHdpnhVzG5z4E9ded/Ci0fIeoqybT+jrgiW7Z3zhteUkS1kmw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687042143; x=1689634143;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xv7EgGhL36l2E3gdf0tc0pHjyAPM7mI/kMuNzs8yeVk=;
-        b=T0Bx7HAtoNsb2RhxIprcNzY1AvNE/10TP8/AueXP0lBoMkn0MwG3tziLqbd0/4hssg
-         QZ27eLLDbQcIEYWNJjQnadOUMFHV+BPja3BOxMiI0tnGADs6WSG2enKHdrP1Uv1NcPcv
-         4dd5SPP0NG0R3S+YVFfllCQDwzn+eU4gwa00h/IO6JPEfh7StPGYZILbHvlPZh7IlSvk
-         fJVnlmkVxefUszY1C7aeYGac8HTDeUELrcI2ioAfee9sIa1fp6Vkt8B1+1fo4RFhmKs6
-         vAmK7Bhgp24LKjlO0bJt0oQItInBB6Vz7LDcNAv3V7z0XnAU5eCpRbSvuSXkahg5Y60f
-         4rNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687042143; x=1689634143;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xv7EgGhL36l2E3gdf0tc0pHjyAPM7mI/kMuNzs8yeVk=;
-        b=ITKeBo2B0buDICnZyDAAbrKjkv/fMH1hlcxkNoE0c2dbrSijWOa1xfAObpJBidiGcc
-         M8Kvs9O+Qi4duCgHVD4oeTaWrBfnuQ7WZSkD0D6E6Cs899fZ1ameUst+ZMV0a9TQ3845
-         SL9KqpbTtsIC/hmOLh/hptNYv2zYYWFs/jeI32Xola7FFJ8SGRHcqMfFUW78OYWKDFJS
-         fx960mGUZ26gBHQc8vzNiD6mTXJDcJ9BmF4DFjPVqEvnUpfODIvuGDse0aexlQXB0Bw9
-         2LAWxQ5F5V6a6fMKnWoKJ1n6EmHRHry4FLPykQ87M1l4bdx0mJW5WmYmbHjLM+lqeoTs
-         LHWw==
-X-Gm-Message-State: AC+VfDwta/KULj734fjulAYx0teWlLtR+koXRwsTPxK6TKVCZeINtaQs
-        v2jOXO/+JDYZVvb/sTfqbCo=
-X-Google-Smtp-Source: ACHHUZ6CJUCD5yVPS+FecHR2u+OUus/P3dyrT5K3iQqnI0oC46YgND/NIJt3MWsebEnKIKKKZCU1KQ==
-X-Received: by 2002:a19:ca52:0:b0:4f7:68eb:7c27 with SMTP id h18-20020a19ca52000000b004f768eb7c27mr2865189lfj.29.1687042143106;
-        Sat, 17 Jun 2023 15:49:03 -0700 (PDT)
-Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
-        by smtp.gmail.com with ESMTPSA id l15-20020a7bc44f000000b003f90846d8a7sm2090784wmi.6.2023.06.17.15.49.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Jun 2023 15:49:02 -0700 (PDT)
-Date:   Sat, 17 Jun 2023 23:49:01 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        Kirill A Shutemov <kirill@shutemov.name>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Lokesh Gidra <lokeshgidra@google.com>,
-        Vineeth Pillai <vineeth@bitbyteword.org>
-Subject: Re: [PATCH v4 1/7] mm/mremap: Optimize the start addresses in
- move_page_tables()
-Message-ID: <f2f751ca-217e-4177-bb7f-1c9cd71e103e@lucifer.local>
-References: <20230531220807.2048037-1-joel@joelfernandes.org>
- <20230531220807.2048037-2-joel@joelfernandes.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jAjY5zCDlpeJstRNYa3yE2j2jdsFL/XtTtN8VEbGJ0U=;
+ b=TeUYwAdqnJ90qrXZlT8ESvt1SgVpgziG+6x5yoH/EEHBPaSrR/T9NVrrLqb2UfzpxcuyidU3YfxJ3THefYLfbFVqcagzv0Cp8lq20EI9sGEbhWuVBX8Xvdc0Y2U/YVfveMRk1Tddd7a/UhyRJU0rfrneo7oN9ZGUxIkBfDcmg8Q=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by SA1PR10MB6518.namprd10.prod.outlook.com (2603:10b6:806:2b4::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.27; Sat, 17 Jun
+ 2023 22:59:30 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::4a17:13b0:2876:97f2]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::4a17:13b0:2876:97f2%7]) with mapi id 15.20.6500.031; Sat, 17 Jun 2023
+ 22:59:30 +0000
+Date:   Sat, 17 Jun 2023 15:59:27 -0700
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     Jiaqi Yan <jiaqiyan@google.com>
+Cc:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        HORIGUCHI =?utf-8?B?TkFPWUEo5aCA5Y+jIOebtOS5nyk=?= 
+        <naoya.horiguchi@nec.com>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "shy828301@gmail.com" <shy828301@gmail.com>,
+        "linmiaohe@huawei.com" <linmiaohe@huawei.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "duenwen@google.com" <duenwen@google.com>,
+        "axelrasmussen@google.com" <axelrasmussen@google.com>,
+        "jthoughton@google.com" <jthoughton@google.com>
+Subject: Re: [PATCH v1 1/3] mm/hwpoison: find subpage in hugetlb HWPOISON list
+Message-ID: <20230617225927.GA3540@monkey>
+References: <20230519224214.GB3581@monkey>
+ <20230522044557.GA845371@hori.linux.bs1.fc.nec.co.jp>
+ <CACw3F50rkrWkdMKo7yq35vDbGrcF4b0zohN3dORxL_h0KxZ7Bg@mail.gmail.com>
+ <20230523024305.GA920098@hori.linux.bs1.fc.nec.co.jp>
+ <CACw3F53C0f_Ph0etD+BgkAz4P8pX3YArjFgSPaLh_d6rUqMUCw@mail.gmail.com>
+ <CACw3F52k=fhYpLpvDoVPcmKnOALLkPsGk08PdS_H0+miSYvhEQ@mail.gmail.com>
+ <20230612041901.GA3083591@ik1-406-35019.vs.sakura.ne.jp>
+ <CACw3F51o1ZFSYZa+XLnk4Wwjy2w_q=Kn+aOQs0=qpfG-ZYDFKg@mail.gmail.com>
+ <20230616233447.GB7371@monkey>
+ <CACw3F52iG5bqQbvZ9QkkRkVfy+NbSOu9hnkVOt5khukNNG73OQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230531220807.2048037-2-joel@joelfernandes.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACw3F52iG5bqQbvZ9QkkRkVfy+NbSOu9hnkVOt5khukNNG73OQ@mail.gmail.com>
+X-ClientProxiedBy: MW3PR05CA0011.namprd05.prod.outlook.com
+ (2603:10b6:303:2b::16) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|SA1PR10MB6518:EE_
+X-MS-Office365-Filtering-Correlation-Id: f27f15a5-051f-420a-f9e9-08db6f8681fd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dcPt9iNpD6aI2mE+2IOXKaJOzUpARwQAt9RNdsM8g//eCl4tKzxp+gQkl7WyPIBL31CcOcQRHR/4vO6GAACk1+6Lse03n3KfMoJjWbHLaV5wG4GpYLwLDR74ofylbsUmbUvZQY6J5KBvTxzHbC6bGAF4dS4310jhG2K391E8HVliSqd4w1Iw+8cHLCaPWPpdnpef5Wtnj9lC3L7zq3vv966PVZmSL9rXUsLkEnjbxZTlkcmXYlrlEuAToR3hUKGo9Bpdd2/wBCPnfNLXxQWQr+M6ohwas16xg7Db2RBdjx02jj4HISDq5Nloh1LBiau/rURqHwMOwR9b+XXGEPisfvJp60hDhvDV8Wif0m/795HcR9E3ZbP+SR4vTV5JWg5OKVeHSIAlcYoSv9nxzk6vmWSLf4suXD+8JsQlgOVowFehB84gLGWOcHquIW57UeIWiKxiYZas2Ul3WAOaCzDdcQ7zryJ9E6qSzqRaEAgw6+dX14O/ruGMbcz9NsIL13GB4HqPSnIgANTg+Fac87FbbaUqFVzWwpI0hMytf6bKw110r6gmRz9+AZ5wZttlsm+/
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(136003)(376002)(366004)(39860400002)(396003)(346002)(451199021)(83380400001)(26005)(5660300002)(6506007)(53546011)(1076003)(2906002)(186003)(44832011)(7416002)(9686003)(478600001)(6512007)(38100700002)(66556008)(33656002)(316002)(66946007)(66476007)(8936002)(33716001)(6486002)(6666004)(86362001)(6916009)(41300700001)(8676002)(4326008)(54906003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NU5aM2IrNmZMenhmemJrZVgwcVNIMVNiYTFkSjVzNlNOYkl6OXg5a05OMW96?=
+ =?utf-8?B?TkdsTEZ2bm9MYmlOczIwRUJPTjRwNEEvS3N1bGtqd2xnUFBhc1J1WUdzOE5U?=
+ =?utf-8?B?MkNtUERWdnlDYlFMd0NhZyswYk1HSDBlNm9TaXRsMzNxUHltSmJKTjhweDBz?=
+ =?utf-8?B?S2hYRkVpb1RoSnBtNS9Oa0NKVmhqZ2wwVnNoYmVDN2RtMXJuQTlYWGF3cjZM?=
+ =?utf-8?B?LzRwK3BRTTFsVlltRm9ma0lib0dQVktPdUI4Q3ArazNud3BIR0paTFJ6WVhz?=
+ =?utf-8?B?RUZtMCt1Q3NTbXI2NjE5d0dueCtiaFVhQ2x6MXVDZ01reU1TU0ZLZ2ZGZTh2?=
+ =?utf-8?B?NUJiY3dxNEpOOElQUzk4QWlic0dsTnZVKzEwWHFWaFo2ay9mNDNuMEhPYVpl?=
+ =?utf-8?B?ZVc1RVZVTkNVTHFRUERhQUxjYWtrYlExbnVuVmVublR6cVAwWnpxN1hWNzBN?=
+ =?utf-8?B?aVlpOGFSM2V1VWhuNDlxZm8yejNFYVR1Q3ZtNHdzd1FFWVpxS0d1Sy9zeGVB?=
+ =?utf-8?B?bk5PNjg2cE9DZVFjcjVWMGQrNFlIMU1nR1hSN0V1QWkwTGFLQytNWnpkSFY4?=
+ =?utf-8?B?VW52bmNNRTVqNEE2ZUpkdXZkY3NkOUFLZTAwcFRuekxEUUhrY21PS3BkeWRj?=
+ =?utf-8?B?dTI0dWp3cmFVWlBHSnRSc05YdFRKUGVoakFyeHBPb2lJWnNEK3R6Wmx0aXdz?=
+ =?utf-8?B?SDk3cEUyRXRMTzlZenlFQ1lCTU41TEFjWllyQ3d0N0dOYm9IbVRFRENnakh4?=
+ =?utf-8?B?cFBUSllXMGdCTERhUzhsR0l5aTFib3pRTnV5UmVTeXpQZmpmYzhsV09UTWJV?=
+ =?utf-8?B?dktQWGhvcXZCa3M5VVhlTkZlNHdUZHBzVncrQnBHSWRyVkZuNkVsdk9jUUEy?=
+ =?utf-8?B?amRtajU1anlIZi93ZkhGbXBtbm5UMkwrakh4QVVjV1F0RG5uSHVWcWNtdHpO?=
+ =?utf-8?B?T2V1bmJlVHFoWXY4b2tJV2MwdUVXUGRuL1c0RENKQTFLL2VNM0F4bXFCd29j?=
+ =?utf-8?B?NGp3RzV2MG1UenhMRW15VmUyK05rSzQ3MG9WZzQ4RVJJTVgrbDkxa0o4QmUz?=
+ =?utf-8?B?bXFUdWJDVHZSVzRUc0lGR2RwaERmWVNYZzZ6NGlnVWZhdlphTjN2a2U4cE1H?=
+ =?utf-8?B?RXY1dWY0MHJhSVltVjl4RUhScHBWU3ZFcWRkMkx4SkdBVG1lTEI1QUZXL2k2?=
+ =?utf-8?B?MC94RlA1cE1lV0EyVjArUDFMVnpqdUFKQmMxQnZDMktPcjJRL05SUFBvUTc3?=
+ =?utf-8?B?TTNMOUhHOGlCc2ZqWkRZcVEwUnMxd1VneDQyQVpnRk5GSjVpcDlLMlpUejFJ?=
+ =?utf-8?B?Q3FQdVNMWW1GRFpiRWRZS0xaSzVCbGhVdlo0bnE0SWc1bXpRbmhyd2ZxSGFN?=
+ =?utf-8?B?Mmd2SWZyZjdrekRHeEFtbTlxNHVvT3hVa0JsN1NEV3A3M1VBd05YV1dTeFRZ?=
+ =?utf-8?B?NGFKbGI4K0ZVVEZZWW1PdkdwTDd4VndySldodFpCRytHZTBhOWtpYWdEeVJi?=
+ =?utf-8?B?clc0N2RYMDdOUnNjUzR1NE54bHk2NEZEMm4xQVJBblZycytCVkNHc3hNdGE0?=
+ =?utf-8?B?TEdnMCtqbzRBUUErUW1VRlJXb0hqNnBCaHZQck5lanVkMVgrWDZsOEFvc1Jj?=
+ =?utf-8?B?SUQ2aXNUNmZJZE5jeVNMQVZZWmgxMEw2bDlVL0VvZ0J0MkRZL05YWUszSmRq?=
+ =?utf-8?B?V3QwYStIZlhLSnIzUFVDVW50TmRmYjRmcEFnYUc3Z01RdWZDQ3dLWUw3UUN0?=
+ =?utf-8?B?aXJJbFZDclhaalNKc1Z3NkxublljTFFpdnREZmQ3YTR1WnZFOERaaTNDdWp0?=
+ =?utf-8?B?UEgvVTVUaHdiSjdPTDVtWndMd2NXbENKTFNXM0FDZjVUZVRKcXRZKzFlNGtF?=
+ =?utf-8?B?Y1gyLzZsMFkxN2ppdzE5aFNBTFp5aXhiUWNrcGZNS3ZQQlN2KzVDcXBzcVZ2?=
+ =?utf-8?B?Y1M3SS9HREx2YU1SYVF4elVweG1idDFTVkNxMWxnc0ZYOUJ4NEV5eElUa2F4?=
+ =?utf-8?B?RDl1aGQ3RjZFcjl0V0VtQ1dQNmQ5TzhqbktGWEg1NkZhTWpuQ1hLUkZWR21i?=
+ =?utf-8?B?ZWFCMTJGUElxajJyaUd2T3RlTE1FQXlkZ0xZSUkrQjZqMEorS0RqTGszTDhO?=
+ =?utf-8?Q?c8kTeRaYOtkdkrDH9kazZaKT2?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?ckdma1ZXb25SUUFQcFdKYzRKd2tiYUFOL2ZqWFZKemFiRFl0K1g0OFZVdG1J?=
+ =?utf-8?B?TjVnSzdaaUFkOE9JV29sRFlkUmVRQUhNKzJZbmxjcExxSEsvR1gwMXZDWGdV?=
+ =?utf-8?B?MEZFWGZiUlNUdVRrUGR6VzUxQnlMV2o0bjlnQWpENFZ5L1VBbFpYd3IwdE1C?=
+ =?utf-8?B?bndEcmZ3OEE3bEc4ZmduNmZsNkhpNWRGVTBkN3FvbXZDYUxmQTJGajk5dHh4?=
+ =?utf-8?B?TU1Tc2U4OVM5ZU5LR2t3OGwrVzNBZWxYbzF0WDlaVTJxbWE5YlNHQkkvcDAz?=
+ =?utf-8?B?dWw0RXlyYUgyYnExbVFTbUExdDVvZkpxYlUvc2E4VCtpMU8vQmN4Q3djRUVN?=
+ =?utf-8?B?WCtkRnBNWWRoSUpzOHI2UWFXQTJaWGlpbWlmTXNUKzIrdXZhYzdGUmgvVE03?=
+ =?utf-8?B?TkYrQnBWaldTMHZQZHhWVFE4cW80a1AzdTc0dmpIdlZiRC9zWTRZcGh1djkw?=
+ =?utf-8?B?Q2gzcldZQ1ZUbCthRGlXMGZRMXVybFU4RGxyVERkTHBwOGpnV2F1a2l5cEN2?=
+ =?utf-8?B?b0hZWDVHbzZ5dHl2VnJNQlQ3UnI4TW14ekk4UDE0ZmZRcFJpdnlVZU9mR2FV?=
+ =?utf-8?B?UW4zUlBFaDVtVVdXbDBGWnRGTlk3ZTEyS29haUp3UVVsR0pwemhISTRJQmVx?=
+ =?utf-8?B?WlVEeXlHdUMvMkZ2NWhwb1JBQUxCcW9BcXFDdFA0aVMxaVFpaXpBUDM5Vktx?=
+ =?utf-8?B?U0pMVzZNc3ZzN2VScEtYc3o3bzJSd09kM3JRVGI4dUJBMzV6RTV0ZnFXcWF4?=
+ =?utf-8?B?alh4Z2NKZCt3N0FUYlAzRVNXSmRJWHNyNklDU0NNUENaa2ZHeGNkbnFLQjFN?=
+ =?utf-8?B?cldiY2ZuS01wWkFCd3ZDRGtLa1VvMkxsdzhWTm81SjFtY1RnTWVQTEJSbnFM?=
+ =?utf-8?B?elE3MEZHVXUrSk5ic1EyZXBURTNUc0k2Y2pHN3dDMzRId2M5ZzlGWkpGSkRi?=
+ =?utf-8?B?TzdZK2N6MmltS2ZreGQrQ3dlQStyc0NsNXlCUzFJY043aVFHZVYrQTRxd0hz?=
+ =?utf-8?B?b01kVTdqenAwMjB5Ukt1RVZpWkZMbURySi9acTdqVEZ4UnpqUSt0TW8ybmVp?=
+ =?utf-8?B?T0NrdjVOQm9ibDZPTEx0SWtIUCtIT1NLQU5ORnoySi9JQXhyZEIvSHYyY0RE?=
+ =?utf-8?B?VG52ZGpReEthalMrRVJLdXJ3R2tUcGU5WDJpb2tOZWpqL2FSaWlPS1pxN1ZO?=
+ =?utf-8?B?VEdlK3hnYVltVnZ6bUY0cEFLcGhBb2IvTHhpYnMxY0lubVVSQzF0c3JXc3lq?=
+ =?utf-8?B?VzVIdjhNaTIrWkg5MndEOEN3d0lFTlBkSU1IR0p2ckZKZkdETzJRYkM5K3BI?=
+ =?utf-8?B?RTNKRlJoKzdRSUg3SEhYblprSGFwZGVsY3lDWlc1d0FSam1vU0ZHUGdCcHJp?=
+ =?utf-8?B?c3Bpa2tkMXBMTmc9PQ==?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f27f15a5-051f-420a-f9e9-08db6f8681fd
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2023 22:59:30.3029
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kgEHfQTOZh7h6M4k3CgsGXejhiRZ0UnNajhXJoLXeBir/Yi8szQ1mVpI7jtZasJLVWMPAf6JAogsM9ZJdwyjwA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB6518
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-17_17,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 mlxlogscore=840
+ adultscore=0 malwarescore=0 suspectscore=0 mlxscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306170215
+X-Proofpoint-GUID: NXkgd6zz0sAa4IxmsoWOkWiW09W28KWI
+X-Proofpoint-ORIG-GUID: NXkgd6zz0sAa4IxmsoWOkWiW09W28KWI
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 10:08:01PM +0000, Joel Fernandes (Google) wrote:
-> Recently, we see reports [1] of a warning that triggers due to
-> move_page_tables() doing a downward and overlapping move on a
-> mutually-aligned offset within a PMD. By mutual alignment, I
-> mean the source and destination addresses of the mremap are at
-> the same offset within a PMD.
->
-> This mutual alignment along with the fact that the move is downward is
-> sufficient to cause a warning related to having an allocated PMD that
-> does not have PTEs in it.
->
-> This warning will only trigger when there is mutual alignment in the
-> move operation. A solution, as suggested by Linus Torvalds [2], is to
-> initiate the copy process at the PMD level whenever such alignment is
-> present. Implementing this approach will not only prevent the warning
-> from being triggered, but it will also optimize the operation as this
-> method should enhance the speed of the copy process whenever there's a
-> possibility to start copying at the PMD level.
->
-> Some more points:
-> a. The optimization can be done only when both the source and
-> destination of the mremap do not have anything mapped below it up to a
-> PMD boundary. I add support to detect that.
->
-> b. #a is not a problem for the call to move_page_tables() from exec.c as
-> nothing is expected to be mapped below the source. However, for
-> non-overlapping mutually aligned moves as triggered by mremap(2), I
-> added support for checking such cases.
->
-> c. I currently only optimize for PMD moves, in the future I/we can build
-> on this work and do PUD moves as well if there is a need for this. But I
-> want to take it one step at a time.
->
-> d. We need to be careful about mremap of ranges within the VMA itself.
-> For this purpose, I added checks to determine if the address to align
-> is not the beginning of the VMA which that address corresponds to.
->
-> [1] https://lore.kernel.org/all/ZB2GTBD%2FLWTrkOiO@dhcp22.suse.cz/
-> [2] https://lore.kernel.org/all/CAHk-=whd7msp8reJPfeGNyt0LiySMT0egExx3TVZSX3Ok6X=9g@mail.gmail.com/
->
-> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> ---
->  mm/mremap.c | 61 +++++++++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 61 insertions(+)
->
-> diff --git a/mm/mremap.c b/mm/mremap.c
-> index 411a85682b58..bf355e4d6bd4 100644
-> --- a/mm/mremap.c
-> +++ b/mm/mremap.c
-> @@ -478,6 +478,51 @@ static bool move_pgt_entry(enum pgt_entry entry, struct vm_area_struct *vma,
->  	return moved;
->  }
->
-> +/*
-> + * A helper to check if a previous mapping exists. Required for
-> + * move_page_tables() and realign_addr() to determine if a previous mapping
-> + * exists before we can do realignment optimizations.
-> + */
-> +static bool can_align_down(struct vm_area_struct *vma, unsigned long addr_to_align,
-> +			       unsigned long mask)
-> +{
-> +	unsigned long addr_masked = addr_to_align & mask;
-> +	struct vm_area_struct *prev = NULL, *cur = NULL;
-> +
-> +	/*
-> +	 * If @addr_to_align of either source or destination is not the beginning
-> +	 * of the corresponding VMA, we can't align down or we will destroy part
-> +	 * of the current mapping.
-> +	 */
-> +	if (vma->vm_start != addr_to_align)
-> +		return false;
+On 06/16/23 19:18, Jiaqi Yan wrote:
+> On Fri, Jun 16, 2023 at 4:35 PM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+> > On 06/16/23 14:19, Jiaqi Yan wrote:
+> > >
+> > > Now looking again this, I think concurrent adding and deleting are
+> > > fine with each other and with themselves, because raw_hwp_list is
+> > > lock-less llist.
+> >
+> > Correct.
+> >
+> > > As for synchronizing traversal with adding and deleting, I wonder is
+> > > it a good idea to make __update_and_free_hugetlb_folio hold
+> > > hugetlb_lock before it folio_clear_hugetlb_hwpoison(which traverse +
+> > > delete raw_hwp_list)? In hugetlb, get_huge_page_for_hwpoison already
+> > > takes hugetlb_lock; it seems to me __update_and_free_hugetlb_folio is
+> > > missing the lock.
+> >
+> > I do not think the lock is needed.  However, while looking more closely
+> > at this I think I discovered another issue.
+> > This is VERY subtle.
+> > Perhaps Naoya can help verify if my reasoning below is correct.
+> >
+> > In __update_and_free_hugetlb_folio we are not operating on a hugetlb page.
+> > Why is this?
+> > Before calling update_and_free_hugetlb_folio we call remove_hugetlb_folio.
+> > The purpose of remove_hugetlb_folio is to remove the huge page from the
+> > list AND compound page destructor indicating this is a hugetlb page is changed.
+> > This is all done while holding the hugetlb lock.  So, the test for
+> > folio_test_hugetlb(folio) is false.
+> >
+> > We have technically a compound non-hugetlb page with a non-null raw_hwp_list.
+> >
+> > Important note: at this time we have not reallocated vmemmap pages if
+> > hugetlb page was vmemmap optimized.  That is done later in
+> > __update_and_free_hugetlb_folio.
+> 
+> 
+> >
+> > The 'good news' is that after this point get_huge_page_for_hwpoison will
+> > not recognize this as a hugetlb page, so nothing will be added to the
+> > list.  There is no need to worry about entries being added to the list
+> > during traversal.
+> >
+> > The 'bad news' is that if we get a memory error at this time we will
+> > treat it as a memory error on a regular compound page.  So,
+> > TestSetPageHWPoison(p) in memory_failure() may try to write a read only
+> > struct page. :(
+> 
+> At least I think this is an issue.
+> 
+> Would it help if dissolve_free_huge_page doesn't unlock hugetlb_lock
+> until update_and_free_hugetlb_folio is done, or basically until
+> dissolve_free_huge_page is done?
 
-See below, I think we can eliminate this check.
+Unfortunately, update_and_free_hugetlb_folio is designed to be called
+without locks held.  This is because we can not hold any locks while
+allocating vmemmap pages.
 
-> +
-> +	/*
-> +	 * Find the VMA before @vma to see if it subsumes the masked address.
-> +	 * The mmap write lock is held here so the lookup is safe.
-> +	 */
-> +	cur = find_vma_prev(vma->vm_mm, vma->vm_start, &prev);
-> +	if (WARN_ON_ONCE(cur != vma))
-> +		return false;
-> +
-> +	return !prev || prev->vm_end <= addr_masked;
+I'll try to think of some way to restructure the code.  IIUC, this is a
+potential general issue, not just isolated to memory error handling.
+-- 
+Mike Kravetz
 
-This is a bit clunky, and I don't think we need the WARN_ON_ONCE() check if
-we're under the mmap_lock.
-
-How about something like:-
-
-return find_vma_intersection(vma->mm, addr_masked, vma->vm_start) == NULL;
-
-Which explicitly asserts that the range in [addr_masked, vma->vm_start) is
-empty.
-
-But actually, we should be able to go further and replace the previous
-check with:-
-
-return find_vma_intersection(vma->mm, addr_masked, addr_to_align) == NULL;
-
-Which will fail if addr_to_align is offset within the VMA.
-
-> +}
-> +
-> +/* Opportunistically realign to specified boundary for faster copy. */
-> +static void realign_addr(unsigned long *old_addr, struct vm_area_struct *old_vma,
-
-Something of a nit, but this isn't _always_ realigning the address, so perhaps
-something like maybe_realign_addr() or try_realign_addr() is better?
-
-This is probably debatable, as the comment already explains it is opportunistic
-:)
-
-> +			 unsigned long *new_addr, struct vm_area_struct *new_vma,
-> +			 unsigned long mask)
-> +{
-> +	bool mutually_aligned = (*old_addr & ~mask) == (*new_addr & ~mask);
-> +
-> +	if ((*old_addr & ~mask) && mutually_aligned
-
-I may be misunderstanding something here, but doesn't the first condition
-here disallow for offset into PMD == 0? Why?
-
-> +	    && can_align_down(old_vma, *old_addr, mask)
-> +	    && can_align_down(new_vma, *new_addr, mask)) {
-> +		*old_addr = *old_addr & mask;
-> +		*new_addr = *new_addr & mask;
-> +	}
-> +}
-> +
->  unsigned long move_page_tables(struct vm_area_struct *vma,
->  		unsigned long old_addr, struct vm_area_struct *new_vma,
->  		unsigned long new_addr, unsigned long len,
-> @@ -493,6 +538,15 @@ unsigned long move_page_tables(struct vm_area_struct *vma,
->
->  	old_end = old_addr + len;
->
-> +	/*
-> +	 * If possible, realign addresses to PMD boundary for faster copy.
-> +	 * Don't align for intra-VMA moves as we may destroy existing mappings.
-> +	 */
-> +	if ((vma != new_vma)
-
-Nit but these parens aren't needed. Also if we're deferring the decision as
-to whether we realign to this function, why are we doing this check here
-and not here?
-
-It feels like it'd be neater to keep all the conditions (including the
-length one) together in one place.
-
-
-> +		&& (len >= PMD_SIZE - (old_addr & ~PMD_MASK))) {
-
-You don't mention this condition in the above comment (if we have this
-altogether as part of the realign function could comment separately there)
-- so we only go ahead and do this optimisation if the length of the remap
-is such that the entire of old_addr -> end of its PMD (and thus the same
-for new_addr) is copied?
-
-I may be missing something/being naive here, but can't we just do a similar
-check to the one done for space _below_ the VMA to see if [end, (end of
-PMD)) is equally empty?
-
-> +		realign_addr(&old_addr, vma, &new_addr, new_vma, PMD_MASK);
-> +	}
-> +
->  	if (is_vm_hugetlb_page(vma))
->  		return move_hugetlb_page_tables(vma, new_vma, old_addr,
->  						new_addr, len);
-> @@ -565,6 +619,13 @@ unsigned long move_page_tables(struct vm_area_struct *vma,
->
->  	mmu_notifier_invalidate_range_end(&range);
->
-> +	/*
-> +	 * Prevent negative return values when {old,new}_addr was realigned
-> +	 * but we broke out of the above loop for the first PMD itself.
-> +	 */
-> +	if (len + old_addr < old_end)
-> +		return 0;
-> +
-
-I find this a little iffy, I mean I see that if you align [old,new]_addr to
-PMD, then from then on in you're relying on the fact that the loop is just
-going from old_addr (now aligned) -> old_end and thus has the correct
-length.
-
-Can't we just fix this issue by correcting len? If you take my review above
-which checks len in [maybe_]realign_addr(), you could take that as a
-pointer and equally update that.
-
-Then you can drop this check.
-
-Also I am concerned in the hugetlb case -> len is passed to
-move_hugetlb_page_tables() which is now strictly incorrect, I wonder if
-this could cause an issue?
-
-Correcting len seems the neat way of addressing this.
-
->  	return len + old_addr - old_end;	/* how much done */
->  }
->
-> --
-> 2.41.0.rc2.161.g9c6817b8e7-goog
->
+> 
+> TestSetPageHWPoison in memory_failure is called after
+> try_memory_failure_hugetlb, and folio_test_hugetlb is tested within
+> __get_huge_page_for_hwpoison, which is wrapped by the hugetlb_lock. So
+> by the time dissolve_free_huge_page returns, subpages already go
+> through hugetlb_vmemmap_restore and __destroy_compound_gigantic_folio
+> and become non-compound raw pages (folios). Now
+> folio_test_hugetlb(p)=false will be correct for memory_failure, and it
+> can recover p as a dissolved non-hugetlb page.
