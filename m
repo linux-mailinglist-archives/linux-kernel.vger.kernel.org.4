@@ -2,115 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ABBA734223
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 18:14:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7FC73422C
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 18:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237205AbjFQQOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 12:14:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
+        id S231620AbjFQQ04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 12:26:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236972AbjFQQOV (ORCPT
+        with ESMTP id S229772AbjFQQ0z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 12:14:21 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E641FD3;
-        Sat, 17 Jun 2023 09:14:20 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-1a997531cceso1725053fac.3;
-        Sat, 17 Jun 2023 09:14:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687018460; x=1689610460;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=p6+LjqTkrNRU01Zz+GeTO55AR/K34Z0WlrGrCZ9xml8=;
-        b=TRjGdNk/VlTqNbHWAyTRreJdyFVzJ54szhX8WtU8SxeuNc08CIvXLpsWUNhrctTphM
-         VAwmJFt8MfmkDQt2rMvgfrJbAG2PzgupFslMUBP1Fvco3JdaMis6Hwp5GaM68YSctGd8
-         N7jvPUV2WZNBpcDaFPxxDwdMNPyAME4a9J0TJhRK7qOm6w6nmg0jW0rKhwloKqIOwoIW
-         4ULrKnXeHRDr5j9Fe7Z+1BQo++4x0BIU/jsdoE0JDLuvIBjgMUiQYhwtpT/8m5AZdZGg
-         s4QFo2kOt2w7y9EduE9pBzjEfxc6D4y6n96ENoqMZRYuhGRUtsHHWZPdBXwVNfVa91N9
-         7N3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687018460; x=1689610460;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p6+LjqTkrNRU01Zz+GeTO55AR/K34Z0WlrGrCZ9xml8=;
-        b=J/FBTzmsntcK0Q9N6B4UqMBAR9PuqRBXDmWq6y2jW3t8R146Oj61ExMOqGmIw2Nk4A
-         G4203RX+RBKm8MJhJKJO5BLNGm+kZc5Xg+R3mElCHlY3/FML54gCW7j7zkTUN8hhlbn0
-         91LUa/l6Aa1RCXwYcpkku3llTacJ0Xcr/tGQVsEsmoiY5GK2iSvpGpV4wZgDUTX4ro9y
-         RiDWfEhTLr5HMNwHbvysjBP+L75G7pc01nHk641g/+GxbAnUNd21M/pfUhgVvm7TY2KR
-         v4L6jQR4C1a7cLZslaGyaAzzr8ueQohjIylJowXdO7zj9hv9JLf0hgd8TSqIXTZ1E0vx
-         jSTQ==
-X-Gm-Message-State: AC+VfDxpOk6oUgQWOFtfkOCZZUvM0Tpj0D/K4hZD4nHmUXlCP0G1k4D2
-        ku2QzZfUCepIq60t5+MdcAuT8NgEIdk=
-X-Google-Smtp-Source: ACHHUZ5+zNrtLpDjNBrYho9u3MbkEA56OKlnQSOvjZgNZYI1efvnf+Rnx6wJ0Rl/BJ7uw3gw9FUDPw==
-X-Received: by 2002:a05:6870:d2aa:b0:19f:a1da:49db with SMTP id d42-20020a056870d2aa00b0019fa1da49dbmr2222314oae.15.1687018459868;
-        Sat, 17 Jun 2023 09:14:19 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g15-20020aa7874f000000b006542462d040sm15111165pfo.206.2023.06.17.09.14.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Jun 2023 09:14:19 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 17 Jun 2023 09:14:18 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     JuenKit Yip <JuenKit_Yip@hotmail.com>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 6/6] hwmon: (sht3x) complement sysfs interface for
- sts3x
-Message-ID: <56a3a6fd-604c-4e67-81d6-52a12c6c866e@roeck-us.net>
-References: <20230616160017.21228-1-JuenKit_Yip@hotmail.com>
- <DB4PR10MB6261B912ADFA6BB78240596F9258A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+        Sat, 17 Jun 2023 12:26:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5601139;
+        Sat, 17 Jun 2023 09:26:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AD7D60BA8;
+        Sat, 17 Jun 2023 16:26:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 703E8C433C0;
+        Sat, 17 Jun 2023 16:26:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687019212;
+        bh=7whImffFsXNXDTUSndk8VRw8HLujcf+MIoj28Sa/Sis=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Spid7fkQoa7mD6jP8afMn0ZMHtWS0hnOJOwdOlG/zGMBTA/Q92s1OiZkGG2yfDaAX
+         OZ7SAnEjhXGimqC39e7wWtBhJKdUGEwU7KDHKWRdj7bDjc8w1LOMu9tT5kFcqldx9e
+         e2JqjwxrmYCciHwjWHHf6wDUNpdyioM/pq4e5qXDUTyGA/uySHErsV2PdTV6RhrtCu
+         4Wi/oJ+5MdBLs77TR5bE0r6dTR9A1EdwIZb6CYgEiHF3rFIipBE9qufSkma9MXAb5V
+         uUAvz0E3IsHsJCDOrangX5pl21erj3lv1MTc0V6W2AtbmHawJBhP8y79Xfd2pufeQs
+         wHG4SxOvB5oog==
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH v3 0/8] Add Sipeed Lichee Pi 4A RISC-V board support
+Date:   Sun, 18 Jun 2023 00:15:21 +0800
+Message-Id: <20230617161529.2092-1-jszhang@kernel.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DB4PR10MB6261B912ADFA6BB78240596F9258A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 12:00:17AM +0800, JuenKit Yip wrote:
-> Compared to sht3x, sts3x has the similiar functions and operations
+Sipeed's Lichee Pi 4A development board uses Lichee Module 4A core
+module which is powered by T-HEAD's TH1520 SoC. Add minimal device
+tree files for the core module and the development board.
 
-s/similiar/similar/
+Support basic uart/gpio/dmac drivers, so supports booting to a basic
+shell.
 
-> but it has no humidity sensor.
-> 
-> Signed-off-by: JuenKit Yip <JuenKit_Yip@hotmail.com>
+NOTE: the thead cpu reset dt-binding and DT node are removed in v3. This
+makes secondary CPUs unable to be online. However, minimal th1520
+support is better than nothing. And the community has been working on
+and will work on the cpu reset dt-binding, for example, Conor, Guo and
+Jessica are discussing about it, I have seen valuable comments and
+inputs from them. I believe we can add back cpu reset in next
+development window.
 
-Applied to hwmon-next after fixing the above. Please run checkpatch
-on your patches; it would have told you.
+Thanks
 
-Thanks,
-Guenter
+Since v2:
+  - remove thead cpu-rst dt-binding doc and its DT node from th1520.dtsi
+  - collect Reviewed-by and Acked-by tags
+  - update uart reg size as suggested by Yixun
+  - Add Guo Ren and Fu Wei as THEAD SoCs Maintainers
 
-> ---
->  drivers/hwmon/sht3x.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
-> index adfc11c12..ae384ced7 100644
-> --- a/drivers/hwmon/sht3x.c
-> +++ b/drivers/hwmon/sht3x.c
-> @@ -707,6 +707,14 @@ static struct attribute *sht3x_attrs[] = {
->  
->  static struct attribute *sts3x_attrs[] = {
->  	&sensor_dev_attr_temp1_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp1_max.dev_attr.attr,
-> +	&sensor_dev_attr_temp1_max_hyst.dev_attr.attr,
-> +	&sensor_dev_attr_temp1_min.dev_attr.attr,
-> +	&sensor_dev_attr_temp1_min_hyst.dev_attr.attr,
-> +	&sensor_dev_attr_temp1_alarm.dev_attr.attr,
-> +	&sensor_dev_attr_heater_enable.dev_attr.attr,
-> +	&sensor_dev_attr_update_interval.dev_attr.attr,
-> +	&sensor_dev_attr_repeatability.dev_attr.attr,
->  	NULL
->  };
->  
+Since v1:
+  - add missing plic, clint, th1520 itself dt-bindings
+  - use c900-plic
+  - s/light/th1520
+  - add dt-binding for T-HEAD CPU reset
+  - enable ARCH_THEAD in defconfig
+  - fix all dtbs_check error/warning except the CPU RESET, see above.
+
+Jisheng Zhang (8):
+  dt-bindings: interrupt-controller: Add T-HEAD's TH1520 PLIC
+  dt-bindings: timer: Add T-HEAD TH1520 clint
+  dt-bindings: riscv: Add T-HEAD TH1520 board compatibles
+  riscv: Add the T-HEAD SoC family Kconfig option
+  riscv: dts: add initial T-HEAD TH1520 SoC device tree
+  riscv: dts: thead: add sipeed Lichee Pi 4A board device tree
+  MAINTAINERS: add entry for T-HEAD RISC-V SoC
+  riscv: defconfig: enable T-HEAD SoC
+
+ .../sifive,plic-1.0.0.yaml                    |   1 +
+ .../devicetree/bindings/riscv/thead.yaml      |  29 ++
+ .../bindings/timer/sifive,clint.yaml          |   1 +
+ MAINTAINERS                                   |   8 +
+ arch/riscv/Kconfig.socs                       |   6 +
+ arch/riscv/boot/dts/Makefile                  |   1 +
+ arch/riscv/boot/dts/thead/Makefile            |   2 +
+ .../dts/thead/th1520-lichee-module-4a.dtsi    |  38 ++
+ .../boot/dts/thead/th1520-lichee-pi-4a.dts    |  32 ++
+ arch/riscv/boot/dts/thead/th1520.dtsi         | 422 ++++++++++++++++++
+ arch/riscv/configs/defconfig                  |   1 +
+ 11 files changed, 541 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/riscv/thead.yaml
+ create mode 100644 arch/riscv/boot/dts/thead/Makefile
+ create mode 100644 arch/riscv/boot/dts/thead/th1520-lichee-module-4a.dtsi
+ create mode 100644 arch/riscv/boot/dts/thead/th1520-lichee-pi-4a.dts
+ create mode 100644 arch/riscv/boot/dts/thead/th1520.dtsi
+
+-- 
+2.40.0
+
