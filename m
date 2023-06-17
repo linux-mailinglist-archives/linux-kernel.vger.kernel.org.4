@@ -2,159 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6A67342F8
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 20:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 553C77342FC
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 20:16:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346380AbjFQSPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 14:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43634 "EHLO
+        id S1346418AbjFQSQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 14:16:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231822AbjFQSPe (ORCPT
+        with ESMTP id S1346423AbjFQSQA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 14:15:34 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DADD1737
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 11:15:33 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f611ac39c5so2499051e87.2
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 11:15:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google; t=1687025731; x=1689617731;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7Dsw7nAhARw8huKJiFcVT3g3RXe09FTUVjhq7l/Iznk=;
-        b=VWZAosjutRNS4RszthwOli914gKOptEXZa4eZ5SwV/+PgVaATfd/NAwSbwkp2X/B+B
-         UsWhfOCT6R3PMY+waiHqFwJOIhbTHpzgA8g5DLs8l8nepobX5nR6l/GBRdrXWwLQyf05
-         IzAD3kEWnvQgMNDBM95vGaMOMKgdhRyD5FOqr6sA5WpKr19y0QX9BVSLIY03cDC9oNxH
-         8/pRAB1vBtT97ruYFF9PW6Se2JDc1YYWs0dtdypBzTtktYPIbobwAXLH1EYjie2hnvy1
-         BosMqAPawNTICw1gO9VUaoE2s/6blYmmoYwx0KoIpv2kUV+VcxxkF7uXkbjsE1m7H0p+
-         n22A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687025731; x=1689617731;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7Dsw7nAhARw8huKJiFcVT3g3RXe09FTUVjhq7l/Iznk=;
-        b=ZPcKzKPWP4NcL6H9CtjHVyb2KGxSi09NoXXRWwwuCbVLwml9pni7mCKcJyGvp3J4Uk
-         fPD3GvHqW6JbvM8wEJRDYlvW6Deb3jGy89x4hsB3TT/4gjmpfy0bXoxYK3UcI8p1K1yh
-         fSRXjMVvhAnefsrDQx+M3iAkxqdGoHGh1hs2zGdpPDYxtGr/lidGYDFOZaazV2apmU6H
-         iabiDMiuHFnFtg0gaib7K0rq8bFDWhKjqSdSj7px5dDB8uX1V4rgrggl7xzNY9tGKG09
-         9NPIw3Xbn0rFYmGGkwlGU4yaxdcfha26XYFvBJk6HRaQ1QSjhbaP+1MinzYCsZFCfQIT
-         K8sQ==
-X-Gm-Message-State: AC+VfDxV8WspEM+cuL5ZYyHKOxLF2i12Nz/DOrBM7e1b9x+MknkWNWC1
-        mojCU7zwisI9o7elZRC7vh83JQ==
-X-Google-Smtp-Source: ACHHUZ6aSxu1poHVXap/a1Nbx1PeH9YaODmzO7ZFGZ7Lsf9tYpTQaaJmZYzW70eLvrIH2lA9NQHnUw==
-X-Received: by 2002:a19:5e02:0:b0:4f7:69b9:fa07 with SMTP id s2-20020a195e02000000b004f769b9fa07mr3347470lfb.45.1687025731242;
-        Sat, 17 Jun 2023 11:15:31 -0700 (PDT)
-Received: from ?IPV6:2a02:a31b:2041:8680:1268:c8b0:5fcc:bf13? ([2a02:a31b:2041:8680:1268:c8b0:5fcc:bf13])
-        by smtp.gmail.com with ESMTPSA id v5-20020ac25605000000b004f3b3f5751bsm275240lfd.275.2023.06.17.11.15.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Jun 2023 11:15:30 -0700 (PDT)
-Message-ID: <0fce3bf9-7100-6e4e-297e-32dffc875bcf@semihalf.com>
-Date:   Sat, 17 Jun 2023 20:15:27 +0200
+        Sat, 17 Jun 2023 14:16:00 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27CE6173A;
+        Sat, 17 Jun 2023 11:15:53 -0700 (PDT)
+Received: from [192.168.1.131] ([89.1.214.195]) by mrelayeu.kundenserver.de
+ (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1N3Kc6-1q26EK0AFO-010Pfd; Sat, 17 Jun 2023 20:15:30 +0200
+Message-ID: <5d2eb5af-b674-751b-1583-e048fbf8c3a5@mweigand.net>
+Date:   Sat, 17 Jun 2023 20:15:29 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v2] docs: security: Confidential computing intro and
- threat model for x86 virtualization
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/3] dt-bindings: backlight: lm3630a: add entries to
+ control boost frequency
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
+        Maximilian Weigand <mweigand2017@gmail.com>,
+        Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+References: <20230602-lm3630a_boost_frequency-v1-0-076472036d1a@mweigand.net>
+ <20230602-lm3630a_boost_frequency-v1-2-076472036d1a@mweigand.net>
+ <17576d81-a342-0b77-367a-eb9f2b97b734@linaro.org> <7491264.lOV4Wx5bFT@diego>
+ <c29b2b0c-2b0c-f79c-9de5-58a67edd5c87@linaro.org>
 Content-Language: en-US
-To:     Allen Webb <allenwebb@google.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Elena Reshetova <elena.reshetova@intel.com>,
-        Carlos Bilbao <carlos.bilbao@amd.com>,
-        Jason CJ Chen <jason.cj.chen@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "kraxel@redhat.com" <kraxel@redhat.com>,
-        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Dhaval.Giani@amd.com" <Dhaval.Giani@amd.com>,
-        "michael.day@amd.com" <michael.day@amd.com>,
-        "pavankumar.paluri@amd.com" <pavankumar.paluri@amd.com>,
-        "David.Kaplan@amd.com" <David.Kaplan@amd.com>,
-        "Reshma.Lal@amd.com" <Reshma.Lal@amd.com>,
-        "Jeremy.Powell@amd.com" <Jeremy.Powell@amd.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "dgilbert@redhat.com" <dgilbert@redhat.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "dinechin@redhat.com" <dinechin@redhat.com>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        "berrange@redhat.com" <berrange@redhat.com>,
-        "mst@redhat.com" <mst@redhat.com>, "tytso@mit.edu" <tytso@mit.edu>,
-        "jikos@kernel.org" <jikos@kernel.org>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "richard.weinberger@gmail.com" <richard.weinberger@gmail.com>,
-        "lukas@wunner.de" <lukas@wunner.de>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "cdupontd@redhat.com" <cdupontd@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "sameo@rivosinc.com" <sameo@rivosinc.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "security@kernel.org" <security@kernel.org>,
-        Larry Dewey <larry.dewey@amd.com>, android-kvm@google.com,
-        Dmitry Torokhov <dtor@google.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Patryk Duda <pdk@semihalf.com>
-References: <20230612164727.3935657-1-carlos.bilbao@amd.com>
- <ZIihRqZljMaMRGcK@google.com>
- <DM8PR11MB5750D16B08B769173DCD740AE75AA@DM8PR11MB5750.namprd11.prod.outlook.com>
- <ZInLlkXsgnej9ZpT@google.com>
- <001aa2ed-2f78-4361-451d-e31a4d4abaa0@semihalf.com>
- <ZIxqAXhy1tCVpzz7@google.com>
- <CAJzde06TP5D1UAko6tJmdPt-0Ja4cnByWEDF0c6KJ4k__WjODg@mail.gmail.com>
- <ZIx0w/1x7HbmOKYr@google.com>
- <CAJzde04DSeVcMCVTN_3SFUVoKszL1YUbX9eHq6Y0QKtX16xCDA@mail.gmail.com>
-From:   Dmytro Maluka <dmy@semihalf.com>
-In-Reply-To: <CAJzde04DSeVcMCVTN_3SFUVoKszL1YUbX9eHq6Y0QKtX16xCDA@mail.gmail.com>
+From:   Maximilian Weigand <mweigand@mweigand.net>
+In-Reply-To: <c29b2b0c-2b0c-f79c-9de5-58a67edd5c87@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:bV9uqzgIsGllvko+cxd+BlB62CSSsLP5A90XEJ+9cqd1n+07lc+
+ AfZkzBcAE+RV8jmhmYvi7ZBTU3W3R7AlJCe1I4Kn5uQTVqpj3r/ox+IW7poeTyFs4hLMuhj
+ 9XrXA3fiYg+eFkeddVpPQItFoaFs3iaHTpK5cl9PbjUYoKZHT0H24ESmlq9xEHyoBHU5ca1
+ Bd+ymstKQAx8B71uT2pAg==
+UI-OutboundReport: notjunk:1;M01:P0:25qzwWuEuJA=;SVGc/5dvXzWRF5cOZD0NSglS10i
+ Mjr6t2rtiy83DfLVRfBX5GUKRRdMRlaWmJe34yyXjKalRWoW3tDENB5uTDSaR5+W/zLzd0fka
+ ehqA+xuQKkQEMmc4FcIchWDQVmgMYHgWIIiGDgtK1F1Mk0DfQql5l45JrjJ8Yc/bPruOAo1YA
+ +PYRAREqSd1M7zkCYwpafdYaIZ7J568TLPz36dHk9JqtIXNbpTU9DdP4ZKcMkQhgT1pIZASvo
+ zijqDqWHGNe9P9dbPhGb47lYTkTHFXedFOi95dvk57xsnQTZi1UDi73XsRl+6DeuWU9h6H+OU
+ JwCxFrq1VtokvzaVCA2JfjLlGoSFpWGpKjciNKgW7ZHWLYdQvkvCTdLbxBi3XbGSI8HZ2zt7G
+ z+u9SUcbsDkLumGfXwh+58rmwffBXj+E2Jq63hKTfbJcytqcjpp81+Go+MMnetLecVZSpQWoR
+ 7tkThgHMmQ1RAFvcoUfpkG6ErXY05ayeVwRWEwDCxg3YIAgkTCeBparFVNhohf794HdP7/KVf
+ Dus9PoqxmwhJ4+touPvIMO39BTZcBDOqm0CFYjqAW+FpU0sNzZHopm761MdGtfHKN6FogSNt+
+ jsRkUI5HtJ8/ssNdKyKTth5LvSfFleua07eXEXaSYfhNxqk9CjEau2nRg+x1yx6q4Se+tKkSS
+ ACUK1ubkwqRY5h3RfmlJB+Y+P4MUqW1WdUURnJp7pw==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/16/23 17:16, Allen Webb wrote:
-> That extra context helps, so the hardening is on the side of the guest
-> kernel since the host kernel isn't trusted?
+Hi,
+
+On 17.06.23 19:42, Krzysztof Kozlowski wrote:
+> On 17/06/2023 18:34, Heiko Stübner wrote:
+>> Am Samstag, 17. Juni 2023, 12:12:17 CEST schrieb Krzysztof Kozlowski:
+>>> On 14/06/2023 21:08, Maximilian Weigand wrote:
+>>>> From: Maximilian Weigand <mweigand@mweigand.net>
+>>>>
+>>>> Add 'ti,boost_use_1mhz' to switch between 500 kHz and 1 MHz boost
+>>>> converter switching frequency, and add 'ti,boost_frequency_shift' to
+>>>> activate a frequency shift to 560 kHz or 1.12 MHz, respectively.
+>>>>
+>>>> Signed-off-by: Maximilian Weigand <mweigand@mweigand.net>
+>>>> ---
+>>>>  .../bindings/leds/backlight/lm3630a-backlight.yaml           | 12 ++++++++++++
+>>>>  1 file changed, 12 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/leds/backlight/lm3630a-backlight.yaml b/Documentation/devicetree/bindings/leds/backlight/lm3630a-backlight.yaml
+>>>> index 3c9b4054ed9a..ef7ea0ad2d25 100644
+>>>> --- a/Documentation/devicetree/bindings/leds/backlight/lm3630a-backlight.yaml
+>>>> +++ b/Documentation/devicetree/bindings/leds/backlight/lm3630a-backlight.yaml
+>>>> @@ -33,6 +33,18 @@ properties:
+>>>>      description: GPIO to use to enable/disable the backlight (HWEN pin).
+>>>>      maxItems: 1
+>>>>  
+>>>> +  ti,boost_use_1mhz:
+>>>
+>>> No underscores in property names.
+>>>
+>>>> +    description: |
+>>>
+>>> Do not need '|' unless you need to preserve formatting.
+>>>
+>>>> +      If present, change the boost converter switching frequency from the
+>>>> +      default 500 kHz to 1 MHz. Refer to data sheet for hardware requirements.
+>>>> +    type: boolean
+>>>> +
+>>>> +  ti,boost_frequency_shift:
+>>>> +    description: |
+>>>> +      If present, change boost converter switching frequency from 500 kHz to
+>>>> +      560 kHz or from 1 Mhz to 1.12 Mhz, respectively.
+>>>
+>>> So just make it a property choosing the frequency, not bools, with
+>>> proper unit suffix.
+>>
+>> i.e.
+>> ti,boost-frequency-hz = <x>;
+>> with x being 500000, 560000, 1000000, 1120000
+>>
+>> with the driver failing when the frequency is not achievable
+>> with the two knobs of 1mhz and shift.
 > 
-> My biggest concerns would be around situations where devices have
-> memory access for things like DMA. In such cases the guest would need
-> to be protected from the devices so bounce buffers or some limited
-> shared memory might need to be set up to facilitate these devices
-> without breaking the goals of pKVM.
+> Yeah, with a default value (500000, I guess).
 
-I'm assuming you are talking about cases when we want a host-owned
-device, e.g. a TPM from your example, to be able to DMA to the guest
-memory (please correct me if you mean something different). I think with
-pKVM it should be already possible to do securely and without extra
-hardening in the guest (modulo establishing trust between the guest and
-the TPM, which you mentioned, but that is needed anyway?). The
-hypervisor in any case ensures protection of the guest memory from the
-host devices DMA via IOMMU. Also the hypervisor allows the guest to
-explicitly share its memory pages with the host via a hypercall. Those
-shared pages, and only those, become accessible by the host devices DMA
-as well.
+Thanks for the feedback, this is quite obviously the better solution! I
+will rework the submission accordingly.
 
-P.S. I know that on chromebooks the TPM can't possibly do DMA. :)
+Best regards
 
-> The minimum starting point for something like this would be a shared
-> memory region visible to both the guest and the host. Given that it
-> should be possible to build communication primitives on top, but yes
-> ideally something like vsock or virtio would just work without
-> introducing risk of exploitation and typically the hypervisor is
-> trusted. Maybe this could be modeled as sibling to sibling
-> virtio/vsock?
+Maximilian
+
