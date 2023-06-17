@@ -2,141 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 982FE734191
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 16:10:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAB80734199
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 16:15:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235176AbjFQOJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 10:09:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50392 "EHLO
+        id S1346207AbjFQOP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 10:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232182AbjFQOJx (ORCPT
+        with ESMTP id S231648AbjFQOPZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 10:09:53 -0400
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2062.outbound.protection.outlook.com [40.107.247.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559FB173D;
-        Sat, 17 Jun 2023 07:09:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Cnc4DbQ7uHFDyAE+2p8ogzPR02+X3j4EMuYEUqqrUVlH5hJ9I1Z6/UaXWN1WVYoZ4PO1hbXJbm0+ISx1TPPP0Fil5g/qRGzyqA3W8cZIidqYquo6IQxz0nVoibesutq/0eXqyCSeJCb/WXNhpTvX3QcOr/YuBjSHX58bQZ7c4SoFgBWxBC8flfJxacOWnOT8LS/skmpt6N95LKdCdl2ndEmSnCC173tpLDJropEtTWNXc15WOsYvqXzvxSKCG3V9B2tFgOlD2HlQu5cdNumFfdT7fBuM0XZ1dYqPGuHzlI3mjnTFE5tUMEQPufteVZv23goR14J8nqzKO13BmPCK1g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kv6BnQv6Zl0kIfdatTGo5+gKijq2w9oKvwN2227i8fk=;
- b=Brz9wRShU8fyNkh+PJGDpk0FwHY/+2vEeI+5p34jjffsq43xDxFolXo6lExtn+6gVG6XAWYUe6vmfHMN/+Xm6eT2PaPditWbqayVENVLQ6n5bsspQRwT17YIFAO3nn9B1vny1gSmnnIYy8thwaPJR7h/aLryQ8CLnxcrM66HmkoQjab8jf55MeRULcJ1kz5SnG3iiEMzFZX8M1kJ470EtynMkg+aoSS5sw3v6ydhx/pDAQwrHEUxDcOnOobOtR5DISEAyN3PhO7NRIVEXboDld2xJs8p1bJkonDH+4cgK/m4cY2XWbIFcKvXU8l4wCbyjL8+GEQt9r3G8VpcSjXsIg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=solid-run.com; dmarc=pass action=none
- header.from=solid-run.com; dkim=pass header.d=solid-run.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=solidrn.onmicrosoft.com; s=selector1-solidrn-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kv6BnQv6Zl0kIfdatTGo5+gKijq2w9oKvwN2227i8fk=;
- b=E5pddAgH9akDpCZbYrmu0p9vZ0Jw3kTlQtMX2x3PAWIcBBX0yZ1sJCRF8G+thIIhpE4fnnB9BHoKegs9+33GuUn7CmTfirzA2wsObfgl89qZpLzWtWZSJvPJznv5Lz+EYD3FBNwIq4kUyp4mnAYmHF0C7C0zA30dmsrKjxL6EL8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=solid-run.com;
-Received: from AS8PR04MB8963.eurprd04.prod.outlook.com (2603:10a6:20b:42e::18)
- by AM8PR04MB7250.eurprd04.prod.outlook.com (2603:10a6:20b:1dc::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.32; Sat, 17 Jun
- 2023 14:09:47 +0000
-Received: from AS8PR04MB8963.eurprd04.prod.outlook.com
- ([fe80::5a4:421d:f180:9105]) by AS8PR04MB8963.eurprd04.prod.outlook.com
- ([fe80::5a4:421d:f180:9105%6]) with mapi id 15.20.6500.031; Sat, 17 Jun 2023
- 14:09:47 +0000
-Message-ID: <b91576d1-a026-3c7e-955b-b36182cbc2c7@solid-run.com>
-Date:   Sat, 17 Jun 2023 17:09:42 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 2/3] dt-bindings: arm: Add SolidRun LX2162A SoM & Clearfog
- Board
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Li Yang <leoyang.li@nxp.com>, Marek Vasut <marex@denx.de>,
-        Fabio Estevam <festevam@denx.de>,
-        Stefan Wahren <stefan.wahren@chargebyte.com>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Andreas Kemnade <andreas@kemnade.info>
-References: <20230616110610.32173-1-josua@solid-run.com>
- <20230616110610.32173-3-josua@solid-run.com>
- <a9098664-ac16-eddb-3e2d-78eb08ac973f@linaro.org>
- <5139b72e-cccb-43b3-ba37-35f0011e4a2b@solid-run.com>
- <f6283bf7-2c38-8257-e430-d17dd4dd233b@linaro.org>
-From:   Josua Mayer <josua@solid-run.com>
-In-Reply-To: <f6283bf7-2c38-8257-e430-d17dd4dd233b@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0120.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a3::18) To AS8PR04MB8963.eurprd04.prod.outlook.com
- (2603:10a6:20b:42e::18)
+        Sat, 17 Jun 2023 10:15:25 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EFA1BD1;
+        Sat, 17 Jun 2023 07:15:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1687011310; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=UiLias+d1CKFQudf7HvmdiB29NDf1GbdStqyFgAEf9oSLAD6lAyDREP0Kpb1+3bp6R
+    trlYmzzi36/KUZud0raGEuvD9sOjcB8YoUFoOMQNUz6AX4N+9baxPMAHIgSXpn0Pib8q
+    H+HCmNK8UPB5boLYYSFbNs7GvtzMqk3YXXjcedankQGMtnFv6/REGgfZtNQ7Rcr1FaAd
+    hOM8rTJAvk4QsUZNWax4ce6//4Usg/sb9akXihNgrNQtXDpH/yEGBXchaOT3Prt8E0Tv
+    2iLdBCh9ehNzmrcNnIgqPOlECKrUv8uOEQfuHCLkwM3V/OXEo4dejQ+FIMfcb7F80wGy
+    iDqA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1687011310;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=y0b7he3HXOLqe7VbS+H+PIvkibqHGVaV+hOty/itXJY=;
+    b=i7oyBJptOC72RfTg787sy7RLdtClSB6CdRArbk7C1JTDlnC39FPFbOpPILa2qZ42h3
+    49lOGT1PD7H8iXW7K34FAqnreLNJkXhDL9pdkDrylIV1/x6/TJJaDFOUQcrE82tONKZY
+    Ybd+mfTeKD93ooLL1p95FNUJk/vAQtJbm8NRXI2//KL0OvJGuSB24GLH0SfTrpzDgqkb
+    dqhDuH+sJvB/JoGMX6QiuBEDcDhdugu6uU40lE6quzY39z9jqTy3vQqcO5OUXUo9Wfk7
+    ReSxrPOLp8J9yxSGm3NJVuKq3Ra1tqNZ/Qair/9lgGv3pPqHfx5fZCYL7GnQ9+VsSCeJ
+    hbcw==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1687011310;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=y0b7he3HXOLqe7VbS+H+PIvkibqHGVaV+hOty/itXJY=;
+    b=Mw3xpHOgdAXOTj3RbzSJdMwNiE5Emj10hxklRy++KFFnWaooYHeArdxBn4il3PioRP
+    rPn7snv7U1pYiCLhnYhNIIZG97rgI7tGmFJuvaiBw/7xvQUewA6sUM2vYdKQ0/Fx3V2V
+    J/uXEZY0qt++ZGpMDM4hmctGmyysLuWSAeraUhJDJ67R7l7oDkCApwpZd0/vS7OrM2Rn
+    anFDo/YbG2SPTZhgJ5JsXAlhNqj4GGcbpu1EdUAmLnJxvOxGstNpC7GreJhsGNrFx+EA
+    WthgnnB676j/yUiToRg6S1etVr1zzxKtzWcCnqI5k57LjYKOnZEIeBvu8aGegrzzkLzJ
+    e6pw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1687011310;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=y0b7he3HXOLqe7VbS+H+PIvkibqHGVaV+hOty/itXJY=;
+    b=DksqII6+OZ1i49BQBKI11R4ZINk9g3AHXe1YsF7OgSDZccsyASYrWFFnUDfoXf4d9R
+    LJN/H6EVDwTXI8p3eKCA==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4peA+pvh"
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.6.0 DYNA|AUTH)
+    with ESMTPSA id D0d0a8z5HEF98GB
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sat, 17 Jun 2023 16:15:09 +0200 (CEST)
+Date:   Sat, 17 Jun 2023 16:15:03 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Jakob Hauser <jahau@rocketmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        Henrik Grimler <henrik@grimler.se>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH RESEND] arm64: dts: qcom: msm8916-samsung-serranove: Add
+ RT5033 PMIC with charger
+Message-ID: <ZI2_565RFDtR3Sa-@gerhold.net>
+References: <20230617002934.39408-1-jahau.ref@rocketmail.com>
+ <20230617002934.39408-1-jahau@rocketmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8PR04MB8963:EE_|AM8PR04MB7250:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3b1260d2-6e10-4de6-50ea-08db6f3c8208
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WfVx7frLuBGUU9REhH6SNEmqyX8fb7Esl8dSkbJT92mrHV5AWihkotaE1jqZRRJyyZ0aZElCzNALH+Add6xqFcGgvioi9aatA25EvebqLomaE/AZ7/dV3GLmUT4qjFh8JXaPNgEeAp4XaEjw1VOvF0yR0Ca1c0ZZiKwYJszL6006TS1p6Nuky09vCvvSApJbDJXAsMbVsjUxKb21DENQjzs8HhsZVUQh7OsD4012Xb7sX+/7AdYIPcLtPTAcN+mq1UeLsZEzaHKMlh5bvN1kTx/PKdiYp64N+sSCrk0WsRcSZDUswJpcAIn0B9QJxvtlxHYv60CIvpDgpz7b2J2sIO4EjtMot/FMdlyQJyAkfS+7eDOYiaLStnvQluteobYAK0VNOuofhfjmagvIDP7bWNCsulRQhVpz2t9PEGnCkAKYRzvPM7yw3Vbf7BhDttiDEyf8zJPHf+gEoGJbHt18+Mrg/+zP5BgCSjhFY7/0b8bZRKxQvEPmObfyMQ4tkHvM7GNB6Ou5qrbMdlY/vquLemfvghZomDDJbMOpkXNNLJZ9m12gciQctnHt5CvUXIQgBw8hmjP7OeGMEf6+pl3S3ffWCdBNG/ETkIq0GKrjWXAGVpMYR9+w4lpY76V+OdJW/9I95NxvgXo7S1YtwCqVzXrx6xKufkJ9rxdOBHK3TSZ00ZHq7zD+zlTgAJNp4AQD
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8963.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(376002)(39840400004)(136003)(346002)(366004)(451199021)(316002)(4326008)(5660300002)(66556008)(66476007)(8936002)(7416002)(8676002)(66946007)(54906003)(478600001)(41300700001)(31686004)(966005)(6486002)(6666004)(2906002)(4744005)(26005)(186003)(6506007)(6512007)(2616005)(36756003)(38100700002)(86362001)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RGFvQjNjMUs1Qm1xcnJuaElHT3RrMmVFSTFkYVpEMDdLcXVleUk0bVlxbXhW?=
- =?utf-8?B?MldEdmVnZis5a21lZ0V4OUMwR1JSYlVyeXdjWlltcnFRUUlvZ3RTQmIxYXlM?=
- =?utf-8?B?Szh0K01LZzF3VHFjbEZBcHR2cGJUclpuVXhSYytrNGcvNkNIZzhtZVZsTDVV?=
- =?utf-8?B?clFyWU0rY2Y4elZPbzM0dnNGb2lWYUtlOVBKWHRhQXRCNEIxTlZXckduNWlJ?=
- =?utf-8?B?QjN4VHJRZnFQVWFySXkzYXg1ZGJQcVd1aEFHSlpKdHlBMGhJSHBmZHBJUGhq?=
- =?utf-8?B?RHhDMStpbEpReVlkS1FOYnNUd0VjZmZqdUZUM0x3bzVzSDZta1piMVF0WDd3?=
- =?utf-8?B?NjBvVlpmb2luYmhKQ0JHcHNUYkJXM3A1YWh5cWNoUG9EeDZuZmVodmIyMEkw?=
- =?utf-8?B?SEhaOEN3UUV3YW8rV1c3MXRHWXRqL0FUZkY1d094MGNxZ24xcEVtblE0VTgw?=
- =?utf-8?B?dEY4NUR2VEQwbUxoOUNFMHF0N3g2QklOY3R6SzYxRmNtVmFmTzJobzU1TDF5?=
- =?utf-8?B?YW82d1VaY3JrYll0bGlFYzcyUyt6ei9MUVFha3ovZnk0aythL1p0SUVucHc0?=
- =?utf-8?B?SE9VRFV4dXY3L3JZUWhnM2hyVkZzQ2RxdVpZNnlucGlPVnJiWkJML05LRng4?=
- =?utf-8?B?T1BlUzJ2bnJLTGxtU2Y0SlNKQlA4M2pabm5OeWVUSm9oQkc4QUZQa2ptOG5t?=
- =?utf-8?B?ZE1JTjBNUURRK09UcXFrRHNWVC90QXpMYXptbmhpQXlnUGtEcm9UQytCRXIw?=
- =?utf-8?B?Ri9DMUZtcGRoNXU3ekhlYU9veGYxcHVScjhpY2xEWlFudUQvUlp5Z3k5dTln?=
- =?utf-8?B?SFA0bmMzUzBNeEhVOGtwbEhpTW9td0ZIUGhFQ1RpNFdMMUl0Z3pkQm1aTVNV?=
- =?utf-8?B?TzdwcGIyTkxHeVF5K29aemRyOGdsa3R0TWMxek11SnhsQmU1RWx4OVVqNEdk?=
- =?utf-8?B?VS8wa1FWcGZkVVprK2orUFNtdEZnZmVTbjR2ZDcvclpkNVpCbUtVekJmejVv?=
- =?utf-8?B?VHRxdE44NlFDRmVCd0FHYjd4OXpIZEcvUnkwYjVpN0FLQm5JYm05S1hFdHhi?=
- =?utf-8?B?ajdUb3FXRkE4NjVTdmpPVTNqNnJTWUZkc2dZeVZ2cDErV1JwKzkwQzhpaVg0?=
- =?utf-8?B?czNVL2dEdzBhV1FuN01PQnduc3Q0Q25MZU53bS94WmFWT2cwQmc3RmYzNW5U?=
- =?utf-8?B?Smo3bzVhQlZJc0lMaUhOTDlYemRlU0F0RVBQaExPeVF2OXBXU0hIUkFzRnh3?=
- =?utf-8?B?WEg1eXRpV2JiU2s0VmNHTU5STlBRZWtsL0wxcHJTQnN0RmJXakN4ajRWSkZS?=
- =?utf-8?B?V0hLUlR4aUZHWjlNRXNpbjQ1TWdPTExHUVNrMlZ2Um5kZ0lqMmVwZHExTE9D?=
- =?utf-8?B?cWFZSy91SU9KNVA4T2hRRlRDTncyYS84VDhUN1JMQjkzZHVvNXhIdHNqY3VT?=
- =?utf-8?B?SDJWNkxwazM3MEJOM2VSVzd6bVVuNTdZZnpmR1d4WFFiTnNHdkl0YXd1alI0?=
- =?utf-8?B?bFVrWk10b1lxZ1M5Mm5aVnRKNlhZdkp0S0lEVExvN2IrbkxjS0VHODk0cGdI?=
- =?utf-8?B?S203NUF5MzJCR2JrWEM1b1o3QStKME5vMWxCRXlzRVZ6Y0RudHhWcnlzMG5h?=
- =?utf-8?B?SysvVHJ6SWRmdmpIWEh0ZUNXTlBUWUwyeDRsOWUxYnVoQ2ZjMlA2ZGIwWHdP?=
- =?utf-8?B?b2dFUkVHakg3eTh2SThZQ3dZZHRKVHg3WFZRd0w0MEdVQjhEakJLbHBpaDVn?=
- =?utf-8?B?dGtzRHoyZk5rZWJxMGtMQUV0SERjRGlhNERxbUdtUlkvMnFOYm1lR3Y3SXhy?=
- =?utf-8?B?ZmZNYzZpUlhwYU9rOVZkdGx5VkFhVDR5Q29pU3k2WHo0MkdpSWhvRkgzSW1L?=
- =?utf-8?B?bTBnWEd5N1U0OXRDTEZlb2FtaXpQU0dUSWx1NmZqekRsTXRMRFlrYXcraVov?=
- =?utf-8?B?M1AzNE5RaXkrN1R4Y1pSelFCaXpFdDUxemg1Z1BPbTdtWjdqbHN3aDVZTGdJ?=
- =?utf-8?B?S1dGRlM2WThpMmVyMzVabFVzMDFKaXg5elhoNi85Z3F0Q1FLZXFveFo2bVVB?=
- =?utf-8?B?cXFWNGFMNzFwYlg3K21McjZjVHpNQ1dxNThxYzJuOEFjdVJ2YjBqVlk5aUFD?=
- =?utf-8?Q?+tKuV637dzmb4QInIJTmzc3tQ?=
-X-OriginatorOrg: solid-run.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b1260d2-6e10-4de6-50ea-08db6f3c8208
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8963.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2023 14:09:47.4485
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: a4a8aaf3-fd27-4e27-add2-604707ce5b82
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UySjmfJAjeFy8+QFF1oZeNyAi5eTAIxXYElm/tqzrJn4Ag7V/ISbuoo+dUaBLhQfcRch0MjOJz6hlCE2zy3ivw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7250
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230617002934.39408-1-jahau@rocketmail.com>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -144,28 +94,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On Sat, Jun 17, 2023 at 02:29:34AM +0200, Jakob Hauser wrote:
+> For the regulators, apply the same settings as in the downstream
+> devicetree [1], including the "regulator-always-on" for the SAFE_LDO.
+> For the voltage of SAFE_LDO, however, there is only one voltage of 4.9 V
+> available in the mainline driver [2][3].
+> 
+> The values of the battery data evolve from following sources:
+> - precharge current: 450 mA corresponds to the default value of the chip. It
+>   doesn't get changed by the downstream Android driver. Therefore let's stick
+>   to this value.
+> - constant charge current: The 1000 mA are taken from the downstream devicetree
+>   of the serranove battery. It's not easy to spot. The value is in the line
+>   "input_current_limit" [4]. The rows are according to the power supply type,
+>   the 4th value stands for "main supply" [5]. That's the value used by the
+>   Android driver when a charging cable is plugged into the device.
+> - charge termination current: In the downstream devicetree of the battery
+>   that's the line "full_check_current_1st", which contains the 150 mA [6].
+> - precharge voltage: This one doesn't get set in the downstream Android driver.
+>   The chip's default is 2.8 V. That seemed too low to have a notable effect of
+>   handling the battery gentle. The chosen value of 3.5 V is a bit arbitrary
+>   and possibly rather high. As the device is already several years old and
+>   therefore most batteries too, a value on the safe side seems reasonable.
+> - constant charge voltage: The value of 4.35 V is set in the line
+>   "chg_float_voltage" of the downstream battery devicetree [7].
+> 
+> The "connector" sub-node in the extcon node, the "battery" node in the
+> general section and the line "power-supplies" in the fuel-gauge node result
+> from the way of implementation documented in the dt-bindings of
+> rt5033-charger [8] and mfd rt5033 [9].
+> 
+> [1] https://github.com/msm8916-mainline/linux-downstream/blob/GT-I9195I/arch/arm/boot/dts/samsung/msm8916/msm8916-sec-serranovelte-eur-r03.dtsi#L135-L181
+> [2] https://github.com/torvalds/linux/blob/v6.3/include/linux/mfd/rt5033-private.h#L211-L212
+> [3] https://github.com/torvalds/linux/blob/v6.3/drivers/regulator/rt5033-regulator.c#L83
+> [4] https://github.com/msm8916-mainline/linux-downstream/blob/GT-I9195I/arch/arm/boot/dts/samsung/msm8916/msm8916-sec-serranovelte-battery-r01.dtsi#L100
+> [5] https://github.com/msm8916-mainline/linux-downstream/blob/GT-I9195I/include/linux/power_supply.h#L173-L177
+> [6] https://github.com/msm8916-mainline/linux-downstream/blob/GT-I9195I/arch/arm/boot/dts/samsung/msm8916/msm8916-sec-serranovelte-battery-r01.dtsi#L102
+> [7] https://github.com/msm8916-mainline/linux-downstream/blob/GT-I9195I/arch/arm/boot/dts/samsung/msm8916/msm8916-sec-serranovelte-battery-r01.dtsi#L95
+> [8] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml?h=next-20230616
+> [9] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml?h=next-20230616
+> 
+> Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
+> ---
+> The patch is based on linux-next "next-20230616".
+> 
+> The driver rt5033-charger was just recently added to linux-next.
+> 
+> RESEND because I used an outdated e-mail address of Bjorn before.
+> 
+>  .../dts/qcom/msm8916-samsung-serranove.dts    | 67 ++++++++++++++++++-
+>  1 file changed, 66 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts b/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts
+> index 15dc246e84e2..2114d26548db 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts
+> +++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts
+> [...]
+> @@ -261,6 +278,46 @@ touchscreen@20 {
+>  	};
+>  };
+>  
+> +&blsp_i2c6 {
+> +	status = "okay";
+> +
+> +	pmic@34 {
+> +		compatible = "richtek,rt5033";
+> +		reg = <0x34>;
+> +
+> +		interrupt-parent = <&tlmm>;
+> +		interrupts = <62 IRQ_TYPE_EDGE_FALLING>;
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pmic_int_default>;
+> +
+> +		regulators {
+> +			safe_ldo_reg: SAFE_LDO {
+> +				regulator-name = "SAFE_LDO";
+> +				regulator-min-microvolt = <4900000>;
+> +				regulator-max-microvolt = <4900000>;
+> +				regulator-always-on;
+> +			};
+> +			ldo_reg: LDO {
+> +				regulator-name = "LDO";
+> +				regulator-min-microvolt = <2800000>;
+> +				regulator-max-microvolt = <2800000>;
+> +			};
+> +			buck_reg: BUCK {
+> +				regulator-name = "BUCK";
+> +				regulator-min-microvolt = <1200000>;
+> +				regulator-max-microvolt = <1200000>;
+> +			};
 
-Am 16.06.23 um 19:59 schrieb Krzysztof Kozlowski:
-> Test the binding and test DTS against it:
-> Please run `make dtbs_check` (see
-> Documentation/devicetree/bindings/writing-schema.rst for instructions).
-> https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
-This was helpful! I ran it a few times and studied the results.
-Many complaints related to lx2160a.dtsi, some common among different 
-layerscape based dts.
-Finally some mistakes of my own.
+The "regulator-name"s here don't really seem useful, since they're just
+the same as the ones already declared in the driver. Can you drop them?
+Alternatively you could assign more useful board-specific names, such as
+the CAM_SENSOR_A2.8V that was used downstream.
 
-v2 addresses all that were under my control, and a common one that I 
-understood well enough.
+Also, I think it would be slightly clearer to prefix the regulator
+labels (safe_ldo_reg, ldo_reg etc) with rt5033_. Perhaps
+"rt5033_ldo_reg" or "rt5033_reg_ldo"?
 
-> It might point you to answer.
->
-> Why do you make solidrun,honeycomb compatible with cex7 and som?
-
-Exactly - unintentional.
-
-
-> Best regards,
-> Krzysztof
-- Josua Mayer
+Thanks,
+Stephan
