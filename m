@@ -2,114 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB1017340FF
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 14:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C58437340F8
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 14:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235070AbjFQMcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 08:32:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56778 "EHLO
+        id S233405AbjFQM0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 08:26:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230312AbjFQMcp (ORCPT
+        with ESMTP id S231128AbjFQM0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 08:32:45 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2E5B3
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 05:32:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=UBddHYr3K5LOhUQ5VMGfrM3npDCghRmrpbkd2omOJrY=; b=Kcc4H6k+cd4XLqThXuMfkEjn5M
-        6+BW9TrrKOQrp3piZYzRgK7pKbbP/WhMN6TiKGJmK1BqjReii2Q06PKR3UUOrNlWIuEb1WrnRRtMT
-        XOlzXx84V9fnqO9mUxrNqMHfSW6ZzypvKI6+Rl+2pywxNwcF9GUsddTa4mdRTBS4ydKCGtbrrN+Ew
-        Ee4qsO6ThufJ4Tbl0aMzJXmfR3GhICx81791IJvq/HIe9gaXT3UgYEdWk1GUjRAS1mYrs+vp77tUL
-        38Soi7NmlEWSlN7a+4y0j3K0c2nNSizPmHcHDoxNmnVSMRK1pcIiu3dBgciugIN2PUqE0qMLL+Wga
-        SKp3nQsw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qAV6I-009wUH-1E; Sat, 17 Jun 2023 12:32:18 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 554EB3002F0;
-        Sat, 17 Jun 2023 14:32:17 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1385821300B3C; Sat, 17 Jun 2023 14:21:16 +0200 (CEST)
-Date:   Sat, 17 Jun 2023 14:21:15 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Robin Jarry <rjarry@redhat.com>
-Cc:     Waiman Long <longman@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org> 
-        , Josh Poimboeuf <jpoimboe@kernel.org>, Pawan Gupta
-        <pawan.kumar.gupta@linux.intel.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann
-        <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, Ben
-        Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, Daniel
-        Bristot de Oliveira <bristot@redhat.com>, Valentin Schneider" 
-        <vschneid@redhat.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Joe Mario <jmario@redhat.com>
-Subject: Re: [PATCH 0/5] x86/speculation: Disable IBRS when idle
-Message-ID: <20230617122115.GA1830050@hirez.programming.kicks-ass.net>
-References: <20230616200003.745742-1-longman@redhat.com>
- <CTECMFWMMST3.9FTWRDG7FFKQ@ringo>
+        Sat, 17 Jun 2023 08:26:37 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE9A2B5;
+        Sat, 17 Jun 2023 05:26:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687004796; x=1718540796;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cXD0g1H9E9UuwGms7XxMSDgjreFk+KWaexzmji8c5Sk=;
+  b=RDl+b/UbfWizwjLycGZYzmFV+UsAD/FxCzaEp/04NR+X9FA1nlXwqMVd
+   JOt/njqMe8Z9Nr+kiN/CjP7R5KmfbWn56t/XVnUlBjT5gIrrJIiPvEjOl
+   YqFr7YNJRHCJPolWyupr4QXcjUt0sM/Ex58Atc4aQtTzlujvoctlftYcY
+   bJKXME2kp5ow+VAJF+Ikz44OPrHIb44jIt1+AjBv5NOE8f6dADWL2p7BV
+   qb5iDuaRqpgn0aVPdV3lHlpUdUK43KylINRm0lsZ0SlKAFCNsrMx4Z/G9
+   Pmh7vVHzwiAlCj3Qej2stD1E5h0n6cNbuNlvnRylDYSqcUHorXPhMx8zQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="445765392"
+X-IronPort-AV: E=Sophos;i="6.00,250,1681196400"; 
+   d="scan'208";a="445765392"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2023 05:26:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="716339005"
+X-IronPort-AV: E=Sophos;i="6.00,250,1681196400"; 
+   d="scan'208";a="716339005"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 17 Jun 2023 05:26:33 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qAV0i-0002kG-1u;
+        Sat, 17 Jun 2023 12:26:32 +0000
+Date:   Sat, 17 Jun 2023 20:25:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yu Kuai <yukuai1@huaweicloud.com>, hch@lst.de, axboe@kernel.dk,
+        brauner@kernel.org, hare@suse.de, dsterba@suse.com,
+        jinpu.wang@ionos.com
+Cc:     oe-kbuild-all@lists.linux.dev, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yukuai1@huaweicloud.com, yi.zhang@huawei.com, yangerkun@huawei.com
+Subject: Re: [PATCH -next] block: fix wrong mode for blkdev_get_by_dev() from
+ disk_scan_partitions()
+Message-ID: <202306172040.1dllc8rx-lkp@intel.com>
+References: <20230617103813.3708374-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CTECMFWMMST3.9FTWRDG7FFKQ@ringo>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230617103813.3708374-1-yukuai1@huaweicloud.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 10:14:52PM +0200, Robin Jarry wrote:
-> Waiman Long, Jun 16, 2023 at 21:59:
-> > For Intel processors that need to turn on IBRS to protect against
-> > Spectre v2 and Retbleed, the IBRS bit in the SPEC_CTRL MSR affects
-> > the performance of the whole core even if only one thread is turning
-> > it on when running in the kernel. For user space heavy applications,
-> > the performance impact of occasionally turning IBRS on during syscalls
-> > shouldn't be significant. Unfortunately, that is not the case when the
-> > sibling thread is idling in the kernel. In that case, the performance
-> > impact can be significant.
-> >
-> > When DPDK is running on an isolated CPU thread processing network packets
-> > in user space while its sibling thread is idle. The performance of the
-> > busy DPDK thread with IBRS on and off in the sibling idle thread are:
-> >
-> >                                 IBRS on               IBRS off
-> >                                 -------               --------
-> >   packets/second:                  7.8M                  10.4M
-> >   avg tsc cycles/packet:         282.26                 209.86
-> >
-> > This is a 25% performance degradation. The test system is a Intel Xeon
-> > 4114 CPU @ 2.20GHz.
-> >
-> > This patch series turns off IBRS when in various idle mode to eliminate
-> > the performance impact of the idling thread on its busy sibling thread.
-> 
-> Hi Longman,
-> 
-> thanks a lot for the quick turnaround on this issue.
-> 
-> Tested-by: Robin Jarry <rjarry@redhat.com>
+Hi Yu,
 
-I can't see the patches -- they didn't arrive in my mailbox nor can I
-find them in the archive, in fact this here mail is the only evidence
-they exist at all.
+kernel test robot noticed the following build errors:
 
-However, did you all see intel_idle_ibrs() and how that is selected for
-C6 and up?
+[auto build test ERROR on next-20230616]
 
-What exactly isn't working there?
+url:    https://github.com/intel-lab-lkp/linux/commits/Yu-Kuai/block-fix-wrong-mode-for-blkdev_get_by_dev-from-disk_scan_partitions/20230617-184451
+base:   next-20230616
+patch link:    https://lore.kernel.org/r/20230617103813.3708374-1-yukuai1%40huaweicloud.com
+patch subject: [PATCH -next] block: fix wrong mode for blkdev_get_by_dev() from disk_scan_partitions()
+config: alpha-randconfig-r036-20230617 (https://download.01.org/0day-ci/archive/20230617/202306172040.1dllc8rx-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230617/202306172040.1dllc8rx-lkp@intel.com/reproduce)
 
-Also, instead of investing more in this IBRS trainwreck, did you all try
-call-depth-stuffing ?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306172040.1dllc8rx-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   block/genhd.c: In function 'disk_scan_partitions':
+>> block/genhd.c:369:59: error: 'FMODE_EXCL' undeclared (first use in this function); did you mean 'FMODE_EXEC'?
+     369 |         bdev = blkdev_get_by_dev(disk_devt(disk), mode & ~FMODE_EXCL, NULL,
+         |                                                           ^~~~~~~~~~
+         |                                                           FMODE_EXEC
+   block/genhd.c:369:59: note: each undeclared identifier is reported only once for each function it appears in
+
+
+vim +369 block/genhd.c
+
+   342	
+   343	int disk_scan_partitions(struct gendisk *disk, blk_mode_t mode)
+   344	{
+   345		struct block_device *bdev;
+   346		int ret = 0;
+   347	
+   348		if (disk->flags & (GENHD_FL_NO_PART | GENHD_FL_HIDDEN))
+   349			return -EINVAL;
+   350		if (test_bit(GD_SUPPRESS_PART_SCAN, &disk->state))
+   351			return -EINVAL;
+   352		if (disk->open_partitions)
+   353			return -EBUSY;
+   354	
+   355		/*
+   356		 * If the device is opened exclusively by current thread already, it's
+   357		 * safe to scan partitons, otherwise, use bd_prepare_to_claim() to
+   358		 * synchronize with other exclusive openers and other partition
+   359		 * scanners.
+   360		 */
+   361		if (!(mode & BLK_OPEN_EXCL)) {
+   362			ret = bd_prepare_to_claim(disk->part0, disk_scan_partitions,
+   363						  NULL);
+   364			if (ret)
+   365				return ret;
+   366		}
+   367	
+   368		set_bit(GD_NEED_PART_SCAN, &disk->state);
+ > 369		bdev = blkdev_get_by_dev(disk_devt(disk), mode & ~FMODE_EXCL, NULL,
+   370					 NULL);
+   371		if (IS_ERR(bdev))
+   372			ret =  PTR_ERR(bdev);
+   373		else
+   374			blkdev_put(bdev, NULL);
+   375	
+   376		/*
+   377		 * If blkdev_get_by_dev() failed early, GD_NEED_PART_SCAN is still set,
+   378		 * and this will cause that re-assemble partitioned raid device will
+   379		 * creat partition for underlying disk.
+   380		 */
+   381		clear_bit(GD_NEED_PART_SCAN, &disk->state);
+   382		if (!(mode & BLK_OPEN_EXCL))
+   383			bd_abort_claiming(disk->part0, disk_scan_partitions);
+   384		return ret;
+   385	}
+   386	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
