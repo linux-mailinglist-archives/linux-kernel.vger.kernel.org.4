@@ -2,101 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F712734221
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 18:14:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ABBA734223
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 18:14:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236463AbjFQQOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 12:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42560 "EHLO
+        id S237205AbjFQQOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 12:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjFQQOM (ORCPT
+        with ESMTP id S236972AbjFQQOV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 12:14:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F052410E0
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 09:13:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687018405;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vohTZOhneh/Z735yZQIJNbji5u3c6RxaFCGzdDERCaE=;
-        b=SjBj3qTBQ+0ibQxC5KKP6b+HCzA+MDEdKUL43lrEKqjkWCb7XoWFdWWCipTmzipml2RU0R
-        Z2AgMftDmZP3/nyme5gf1+575DZjew3CgpxpDV7ZSK9Sm+/CrFS4ju/wIO4kSnb68J2OA/
-        uz9IjnJg/Fizu5UBloinjsdex9Ok3cc=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-8-21hKs1fEO1ODjEqbn8eGbA-1; Sat, 17 Jun 2023 12:13:23 -0400
-X-MC-Unique: 21hKs1fEO1ODjEqbn8eGbA-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f7e7cfcae4so8610075e9.1
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 09:13:23 -0700 (PDT)
+        Sat, 17 Jun 2023 12:14:21 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E641FD3;
+        Sat, 17 Jun 2023 09:14:20 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-1a997531cceso1725053fac.3;
+        Sat, 17 Jun 2023 09:14:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687018460; x=1689610460;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=p6+LjqTkrNRU01Zz+GeTO55AR/K34Z0WlrGrCZ9xml8=;
+        b=TRjGdNk/VlTqNbHWAyTRreJdyFVzJ54szhX8WtU8SxeuNc08CIvXLpsWUNhrctTphM
+         VAwmJFt8MfmkDQt2rMvgfrJbAG2PzgupFslMUBP1Fvco3JdaMis6Hwp5GaM68YSctGd8
+         N7jvPUV2WZNBpcDaFPxxDwdMNPyAME4a9J0TJhRK7qOm6w6nmg0jW0rKhwloKqIOwoIW
+         4ULrKnXeHRDr5j9Fe7Z+1BQo++4x0BIU/jsdoE0JDLuvIBjgMUiQYhwtpT/8m5AZdZGg
+         s4QFo2kOt2w7y9EduE9pBzjEfxc6D4y6n96ENoqMZRYuhGRUtsHHWZPdBXwVNfVa91N9
+         7N3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687018402; x=1689610402;
-        h=in-reply-to:references:to:from:cc:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=vohTZOhneh/Z735yZQIJNbji5u3c6RxaFCGzdDERCaE=;
-        b=DRLlEu3J9NFQHhckxe2X+JhqzF4ok7wmycg/rKZYMM5DLHdNLeiQCx97Nea18y2AFD
-         aYqrP3u3aebHP7lJMFC55PSMYUUAFgwZov0DU3SAtJScGTVDBKT+I0CxY+pbVsyofTKS
-         uieIBA7dGfeYrS7ac/ccaYdk8xodFRMRG0F53GXbF4Uv9UcphYHQQwGcxDjjXeWzHymQ
-         anYU/UhVEwxt6YU8vJ40C44Oe6S0uFvu4xT2e41uf4GQ0zIuvQQXF8RvUJFLdT+nfWN5
-         IgNfk1Meob6qMNQCqZL/WhJkNGjIveoThngcKohIHdSBoMfoAbqDgZfw6hC7qLd12NBK
-         7/ww==
-X-Gm-Message-State: AC+VfDwPiixjmsulgSLalWq4CrvPWRIkOvpZfgbYDsNiy2bNd7Mt/Q+i
-        sSgwwLqDZpvuH5cmE1LFgPBodnUW+gJR5icfFnnWy2JDhmkQbhwYOGkgxW6C8uxh2e/avz2TC0M
-        3ZGMosiW0JyYF12F9sMB4LClI
-X-Received: by 2002:a05:600c:378b:b0:3f8:d0e7:daed with SMTP id o11-20020a05600c378b00b003f8d0e7daedmr5307704wmr.19.1687018402363;
-        Sat, 17 Jun 2023 09:13:22 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6LqY5Wf9FaG5P+SyLWThEV/+w581nqDDToSDW3GAOUuMFuPoptxdQkl8HmWw41eCdTW82zPQ==
-X-Received: by 2002:a05:600c:378b:b0:3f8:d0e7:daed with SMTP id o11-20020a05600c378b00b003f8d0e7daedmr5307684wmr.19.1687018401997;
-        Sat, 17 Jun 2023 09:13:21 -0700 (PDT)
-Received: from localhost (2a01cb000f8b970084d0c0d672c3677c.ipv6.abo.wanadoo.fr. [2a01:cb00:f8b:9700:84d0:c0d6:72c3:677c])
-        by smtp.gmail.com with ESMTPSA id p19-20020a05600c469300b003f7f475c3bcsm12936700wmo.1.2023.06.17.09.13.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Jun 2023 09:13:21 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Sat, 17 Jun 2023 18:13:20 +0200
-Message-Id: <CTF24276X8IG.39QXKZJJRLM12@ringo>
-Subject: Re: [PATCH 0/5] x86/speculation: Disable IBRS when idle
-Cc:     "Waiman Long" <longman@redhat.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org> 
-        , Josh Poimboeuf <jpoimboe@kernel.org>, Pawan Gupta
-        <pawan.kumar.gupta@linux.intel.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann
-        <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, Ben
-        Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, Daniel
-        Bristot de Oliveira <bristot@redhat.com>, Valentin Schneider" 
-        <vschneid@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <x86@kernel.org>, "Joe Mario" <jmario@redhat.com>
-From:   "Robin Jarry" <rjarry@redhat.com>
-To:     "Peter Zijlstra" <peterz@infradead.org>
-X-Mailer: aerc/0.15.2-49-gd17c48e2f3c0-dirty
-References: <20230616200003.745742-1-longman@redhat.com>
- <CTECMFWMMST3.9FTWRDG7FFKQ@ringo>
- <20230617122115.GA1830050@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230617122115.GA1830050@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1687018460; x=1689610460;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=p6+LjqTkrNRU01Zz+GeTO55AR/K34Z0WlrGrCZ9xml8=;
+        b=J/FBTzmsntcK0Q9N6B4UqMBAR9PuqRBXDmWq6y2jW3t8R146Oj61ExMOqGmIw2Nk4A
+         G4203RX+RBKm8MJhJKJO5BLNGm+kZc5Xg+R3mElCHlY3/FML54gCW7j7zkTUN8hhlbn0
+         91LUa/l6Aa1RCXwYcpkku3llTacJ0Xcr/tGQVsEsmoiY5GK2iSvpGpV4wZgDUTX4ro9y
+         RiDWfEhTLr5HMNwHbvysjBP+L75G7pc01nHk641g/+GxbAnUNd21M/pfUhgVvm7TY2KR
+         v4L6jQR4C1a7cLZslaGyaAzzr8ueQohjIylJowXdO7zj9hv9JLf0hgd8TSqIXTZ1E0vx
+         jSTQ==
+X-Gm-Message-State: AC+VfDxpOk6oUgQWOFtfkOCZZUvM0Tpj0D/K4hZD4nHmUXlCP0G1k4D2
+        ku2QzZfUCepIq60t5+MdcAuT8NgEIdk=
+X-Google-Smtp-Source: ACHHUZ5+zNrtLpDjNBrYho9u3MbkEA56OKlnQSOvjZgNZYI1efvnf+Rnx6wJ0Rl/BJ7uw3gw9FUDPw==
+X-Received: by 2002:a05:6870:d2aa:b0:19f:a1da:49db with SMTP id d42-20020a056870d2aa00b0019fa1da49dbmr2222314oae.15.1687018459868;
+        Sat, 17 Jun 2023 09:14:19 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g15-20020aa7874f000000b006542462d040sm15111165pfo.206.2023.06.17.09.14.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Jun 2023 09:14:19 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 17 Jun 2023 09:14:18 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     JuenKit Yip <JuenKit_Yip@hotmail.com>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 6/6] hwmon: (sht3x) complement sysfs interface for
+ sts3x
+Message-ID: <56a3a6fd-604c-4e67-81d6-52a12c6c866e@roeck-us.net>
+References: <20230616160017.21228-1-JuenKit_Yip@hotmail.com>
+ <DB4PR10MB6261B912ADFA6BB78240596F9258A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DB4PR10MB6261B912ADFA6BB78240596F9258A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter Zijlstra, Jun 17, 2023 at 14:21:
-> I can't see the patches -- they didn't arrive in my mailbox nor can I
-> find them in the archive, in fact this here mail is the only evidence
-> they exist at all.
+On Sat, Jun 17, 2023 at 12:00:17AM +0800, JuenKit Yip wrote:
+> Compared to sht3x, sts3x has the similiar functions and operations
 
-I was also looking at them on the public archives but only found my own
-reply. Maybe something got wrong with Red Hat internal SMTP.
+s/similiar/similar/
 
+> but it has no humidity sensor.
+> 
+> Signed-off-by: JuenKit Yip <JuenKit_Yip@hotmail.com>
+
+Applied to hwmon-next after fixing the above. Please run checkpatch
+on your patches; it would have told you.
+
+Thanks,
+Guenter
+
+> ---
+>  drivers/hwmon/sht3x.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/hwmon/sht3x.c b/drivers/hwmon/sht3x.c
+> index adfc11c12..ae384ced7 100644
+> --- a/drivers/hwmon/sht3x.c
+> +++ b/drivers/hwmon/sht3x.c
+> @@ -707,6 +707,14 @@ static struct attribute *sht3x_attrs[] = {
+>  
+>  static struct attribute *sts3x_attrs[] = {
+>  	&sensor_dev_attr_temp1_input.dev_attr.attr,
+> +	&sensor_dev_attr_temp1_max.dev_attr.attr,
+> +	&sensor_dev_attr_temp1_max_hyst.dev_attr.attr,
+> +	&sensor_dev_attr_temp1_min.dev_attr.attr,
+> +	&sensor_dev_attr_temp1_min_hyst.dev_attr.attr,
+> +	&sensor_dev_attr_temp1_alarm.dev_attr.attr,
+> +	&sensor_dev_attr_heater_enable.dev_attr.attr,
+> +	&sensor_dev_attr_update_interval.dev_attr.attr,
+> +	&sensor_dev_attr_repeatability.dev_attr.attr,
+>  	NULL
+>  };
+>  
