@@ -2,52 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 126AF733F59
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 10:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B754733F62
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 10:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346229AbjFQIBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 04:01:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53976 "EHLO
+        id S231929AbjFQIEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 04:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231929AbjFQIBd (ORCPT
+        with ESMTP id S229667AbjFQIEN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 04:01:33 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C2D2720;
-        Sat, 17 Jun 2023 01:01:32 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QjpM53p5YztQTP;
-        Sat, 17 Jun 2023 15:58:57 +0800 (CST)
-Received: from [10.174.178.66] (10.174.178.66) by
- dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Sat, 17 Jun 2023 16:01:29 +0800
-Message-ID: <961f4d1a-6756-0a09-f578-5bf5791a1a64@huawei.com>
-Date:   Sat, 17 Jun 2023 16:01:29 +0800
+        Sat, 17 Jun 2023 04:04:13 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA52B1A4
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 01:04:11 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9829a5ae978so232868766b.2
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 01:04:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686989050; x=1689581050;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JskatFucMmAeLdfnFCEkpDxKlTgR0k+Wi7MQ3LzyqlE=;
+        b=olYtqBvXhj2eKwZADpIRHO8dazWhRSBP/tCJtpoDYyDDVmhEDF0TB+NvCPLMGD4WHV
+         7nvMuE66b4sIY5fkHjfyVyDw/sUoN7iUcwOPjQLHXUeiB5abyGuMZE69eZ7NKiFZCiT1
+         XPHSFGYUkCNherRbPgj83LB77/wHo0Gc8G151opIYyhPNBp8VpNM0ISAf/4NYk7rX6/o
+         Q80TEGfTdXJU1J4Ez9wqFGMIBNI7uVT9N6SG8jCGL7zjG2HsHjR5BcI8havwN1vUSLJg
+         abiAh1Cgosi89RPA+CAQAIlynRtS2tFYFMvq0ReWWtBbidr13hRBc7gLQyB26Vu73/fq
+         x2sQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686989050; x=1689581050;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JskatFucMmAeLdfnFCEkpDxKlTgR0k+Wi7MQ3LzyqlE=;
+        b=TeV1Wp/0ZblH0aKqR7oXUMrwhJPLFrwTvhjZklgGptT4/fuz+mo955wukuUourqCvy
+         yJAlgwNvhSLSczR26ewCXBFizS12qAW/+8/heEfkywtasaZbnqawEHwe+/g2bwQcJ9zi
+         R/lDfqT1kGJSLWTRk5WmBVG99chEjc3/q79iG4PksVZ1dWXvITMoHSBpHZ5RFBhN19SQ
+         7sUFqSzZ7CCuId1szCBj3pg0zHRbhwS1n4joMMkIyrUy5VnOflT90kLRdoaBrZpbVtmF
+         3qmRbus5+QP4pENd7k2Gs/kd7f7b9p+XW7+C/LTn01HIfyoIn8byrEmm9LNOlWXWKAqe
+         awmg==
+X-Gm-Message-State: AC+VfDzo+qAGFA0E3841gY9XzWBNuN6Dgjp/TAa/DPEq3n8tH+QXH7QT
+        u7yWXhSJ2N6NecAHhk8w/4RiPQ==
+X-Google-Smtp-Source: ACHHUZ7kZqKBEMLNLGBMJ8yGHStlrG8Dg/LXVr7TO3CkwsYIX8auZF1/tEu6GqnbYv+WO0MdC2nQ6A==
+X-Received: by 2002:a17:907:3188:b0:966:5a6c:752d with SMTP id xe8-20020a170907318800b009665a6c752dmr4045542ejb.20.1686989050183;
+        Sat, 17 Jun 2023 01:04:10 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id z8-20020a17090655c800b009828bc469a4sm3813170ejp.103.2023.06.17.01.04.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 17 Jun 2023 01:04:09 -0700 (PDT)
+Message-ID: <fd07ea29-0b9d-4955-0f1b-2879c8b3442f@linaro.org>
+Date:   Sat, 17 Jun 2023 10:04:07 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH] selftests: tc-testing: add one test for flushing
- explicitly created chain
-To:     renmingshuai <renmingshuai@huawei.com>, <pctammela@mojatatu.com>,
-        <vladbu@nvidia.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <jhs@mojatatu.com>,
-        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>
-CC:     <liaichun@huawei.com>, <caowangbao@huawei.com>, <yanan@huawei.com>,
-        <liubo335@huawei.com>
-References: <20230617032033.892064-1-renmingshuai@huawei.com>
-From:   shaozhengchao <shaozhengchao@huawei.com>
-In-Reply-To: <20230617032033.892064-1-renmingshuai@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 1/6] dt-bindings: mmc: mmci: Add st,stm32mp25-sdmmc2
+ compatible
+Content-Language: en-US
+To:     Yann Gautier <yann.gautier@foss.st.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Conor Dooley <conor+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        linux-kernel@vger.kernel.org, Marek Vasut <marex@denx.de>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Xiang wangx <wangxiang@cdjrlc.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+References: <20230615092001.1213132-1-yann.gautier@foss.st.com>
+ <20230615092001.1213132-2-yann.gautier@foss.st.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230615092001.1213132-2-yann.gautier@foss.st.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.66]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500026.china.huawei.com (7.185.36.106)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,52 +91,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Hi renmingshuai:
-On 2023/6/17 11:20, renmingshuai wrote:
-> Add the test for additional reference to chains that are explicitly created
->   by RTM_NEWCHAIN message
+On 15/06/2023 11:19, Yann Gautier wrote:
+> For STM32MP25, we'll need to distinguish how is managed the delay block.
+> This is done through a new comptible dedicated for this SoC, as the
+> delay block registers are located in SYSCFG peripheral.
 > 
-> commit c9a82bec02c3 ("net/sched: cls_api: Fix lockup on flushing explicitly
->   created chain")
-> Signed-off-by: Mingshuai Ren <renmingshuai@huawei.com>
+> Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
 > ---
->   .../tc-testing/tc-tests/infra/filter.json     | 25 +++++++++++++++++++
->   1 file changed, 25 insertions(+)
->   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/infra/filter.json
+>  Documentation/devicetree/bindings/mmc/arm,pl18x.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> diff --git a/tools/testing/selftests/tc-testing/tc-tests/infra/filter.json b/tools/testing/selftests/tc-testing/tc-tests/infra/filter.json
-> new file mode 100644
-> index 000000000000..c4c778e83da2
-> --- /dev/null
-> +++ b/tools/testing/selftests/tc-testing/tc-tests/infra/filter.json
-> @@ -0,0 +1,25 @@
-> +[
-> +    {
-> +        "id": "c2b4",
-> +        "name": "soft lockup alarm will be not generated after delete the prio 0 filter of the chain",
-	 "Delete the prio 0 filter of chain" looks better. And adding
-  test result in comment also will be better.
+> diff --git a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml b/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
+> index 1c96da04f0e53..e47b3418b6c77 100644
+> --- a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
+> @@ -59,6 +59,12 @@ properties:
+>            - const: st,stm32-sdmmc2
+>            - const: arm,pl18x
+>            - const: arm,primecell
+> +      - description: Entry for STMicroelectronics variant of PL18x for
+> +          STM32MP25. This dedicated compatible is used by bootloaders.
+> +        items:
+> +          - const: st,stm32mp25-sdmmc2
 
-Zhengchao Shao
-> +        "category": [
-> +            "filter",
-> +            "chain"
-> +        ],
-> +        "setup": [
-> +            "$IP link add dev $DUMMY type dummy || /bin/true",
-> +            "$TC qdisc add dev $DUMMY root handle 1: htb default 1",
-> +            "$TC chain add dev $DUMMY",
-> +            "$TC filter del dev $DUMMY chain 0 parent 1: prio 0"
-> +        ],
-> +        "cmdUnderTest": "$TC filter add dev $DUMMY chain 0 parent 1:",
-> +        "expExitCode": "2",
-> +        "verifyCmd": "$TC chain ls dev $DUMMY",
-> +        "matchPattern": "chain parent 1: chain 0",
-> +        "matchCount": "1",
-> +        "teardown": [
-> +            "$TC qdisc del dev $DUMMY root handle 1: htb default 1",
-> +            "$IP link del dev $DUMMY type dummy"
-> +        ]
-> +    }
-> +]
+Except what's said, this looks like can be part of previous entry via enum.
+
+Best regards,
+Krzysztof
+
