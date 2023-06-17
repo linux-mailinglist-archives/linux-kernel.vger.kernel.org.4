@@ -2,127 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EF6773405E
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 12:47:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF4673405F
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 12:48:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231391AbjFQKr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 06:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34358 "EHLO
+        id S234387AbjFQKse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 06:48:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjFQKrX (ORCPT
+        with ESMTP id S229683AbjFQKsd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 06:47:23 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD81E5D
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 03:47:22 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-570808d8ddeso11500297b3.0
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 03:47:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686998842; x=1689590842;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+r2JfUv+ZO+RszpI5dllFAqEGRPOcKiZhlZFdKx9JKs=;
-        b=fnbIkgvH67XT9/L1sjb9LyxAsiBuHyLM7LsvhIqDUzPsJhPkcFLykPHLlGUDjBLQbi
-         CzlLKaIpPzcTGslpjepmV/2RsVJwF1FxB6hpjIAWKUiySTTfWVkcO2OA0/wNsJPD3p5K
-         7vGI/yQ5IuViqzdPu+lbxaKGfOIRFrttF7hkied38UAw4QgSiNm7Zep/02x2mvw29Ick
-         385LoY8Z3glwiA8kYeJPYXpyJv0ez1HAF5NefP3SSowPRmGYY3lnBCNM85vl+nsKmV+s
-         hi8/n+1gSFipMIaqwK5X1tZo4Qq9E7UWhMGs7FE/P1pNDJW2oMGTezb3Ggkf/USuP+gN
-         SfOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686998842; x=1689590842;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+r2JfUv+ZO+RszpI5dllFAqEGRPOcKiZhlZFdKx9JKs=;
-        b=jGAFWjJA83VMlFO+a/6jkOJoc0jpmoc7LrDXQB91lo8vBLipgSrLDFYdI3hRd+fDBa
-         AWPFZwiJJlfuO9OQlJAiZGJo8IxzzB8Ibcn46J+94b2Oe3w/+Z+OFhzB/iw6AsgYuJjO
-         gXa4VBpTNKfDRmjwU+VByG0G1HgTKzYi26oEzHa1RnQyU5J7bX3EUd0xWdUUFDwcbvsS
-         Yg2/34Ybm4aiJ/UIlrYN2ydQ9P7nXUrVGwVD9iK8yAYrGDxIyLlA03a9AgBMKq/ijQW/
-         H+mWxBj6eUVO1aui/FrWci+PYjiXm80CyrtrxNv+Sy4vHnYfrOy/tkmO8SxQPa3WAN6B
-         /l6g==
-X-Gm-Message-State: AC+VfDwxJbFyI6LQQJ1fNAjmew4U8xxv7COYufHI2ewTXPTaLv2c0PKK
-        za8DkGCOLqmi1W75fUaLBSWIgiZUpTKE76Tiw6tiO4KTQm4wug==
-X-Google-Smtp-Source: ACHHUZ5O7s7g8wgj2ugKf8ZyQ/eXclIexDlO/3h9hidaw/UelmVEUU17WcKreRpwZEznYsRhwdYon5s/qTYYGrbGOFM=
-X-Received: by 2002:a81:bf52:0:b0:570:17e5:e536 with SMTP id
- s18-20020a81bf52000000b0057017e5e536mr5047541ywk.36.1686998842094; Sat, 17
- Jun 2023 03:47:22 -0700 (PDT)
+        Sat, 17 Jun 2023 06:48:33 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA5710E9
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 03:48:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686998912; x=1718534912;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0B16iPGijcdEmqnoTJ7HHdiLq3JYhlxBHUx2ubb9VJg=;
+  b=DwFHjQTieD6nUVTaYjyAGTtQWRowGEUmuULkfI7hhuzaf97NdmRALrye
+   J1txEqzuuO9y2g3GCoalZH2Y5OL2q91dQ6eqIuhH4KH1elXIfQA6usJ2b
+   QS3sJokdk76jbrRTJJseVFFXzPIfILXAv+kuCD6YzXiEVJVZWY5EWpJGs
+   od/zkdk0zlTkUmvT2ZM2f+KxgGvIohRZQj6llo2+8DDhhybS1JVjjwIfM
+   iTuZVKEYd8LhDdF1agce3jC2IDYVPwkGmvVb7Kip1ltthlA+If3KvflGD
+   bEF/EvN/Bap89POrmkzcF9AtY49+7UpYGR0nioMJF0RNc7VN3yELHhncU
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="344119424"
+X-IronPort-AV: E=Sophos;i="6.00,250,1681196400"; 
+   d="scan'208";a="344119424"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2023 03:48:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="803106210"
+X-IronPort-AV: E=Sophos;i="6.00,250,1681196400"; 
+   d="scan'208";a="803106210"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 17 Jun 2023 03:48:30 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qATTp-0002gG-2B;
+        Sat, 17 Jun 2023 10:48:29 +0000
+Date:   Sat, 17 Jun 2023 18:48:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: drivers/spi/spi-mpc52xx-psc.c:195:5: warning: no previous prototype
+ for 'mpc52xx_psc_spi_transfer_one_message'
+Message-ID: <202306171837.X7dsEWDB-lkp@intel.com>
 MIME-Version: 1.0
-References: <20230615142016.419570-1-zhiguangni01@gmail.com> <20230615170011.GK52412@kernel.org>
-In-Reply-To: <20230615170011.GK52412@kernel.org>
-From:   Liam Ni <zhiguangni01@gmail.com>
-Date:   Sat, 17 Jun 2023 18:47:11 +0800
-Message-ID: <CACZJ9cVxqeDooeAMi8HBFmeo_85E+NuMYbW9PCvp7Rm-wunOGg@mail.gmail.com>
-Subject: Re: [PATCH] x86,NUMA:Get the number of ram pages directly in numa_meminfo_cover_memory()
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        akpm@linux-foundation.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Mark,
 
-On Fri, 16 Jun 2023 at 01:00, Mike Rapoport <rppt@kernel.org> wrote:
->
-> Hi,
->
-> On Fri, Jun 16, 2023 at 12:20:16AM +1000, Liam Ni wrote:
-> > In a previous implementation,The ram page is calculated
-> > by counting the number of holes,
-> > however,the number of ram pages is calculated during hole calculation.
-> > Therefore,we can directly calculate the amount of ram pages.
-> >
-> > Signed-off-by: Liam Ni <zhiguangni01@gmail.com>
-> > ---
-> >  arch/x86/mm/numa.c |  4 ++--
-> >  include/linux/mm.h |  4 ++++
-> >  mm/mm_init.c       | 33 +++++++++++++++++++++++++++++++++
-> >  3 files changed, 39 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
-> > index 2aadb2019b4f..8ea0e956e3d7 100644
-> > --- a/arch/x86/mm/numa.c
-> > +++ b/arch/x86/mm/numa.c
-> > @@ -461,12 +461,12 @@ static bool __init numa_meminfo_cover_memory(const struct numa_meminfo *mi)
-> >               u64 s = mi->blk[i].start >> PAGE_SHIFT;
-> >               u64 e = mi->blk[i].end >> PAGE_SHIFT;
-> >               numaram += e - s;
-> > -             numaram -= __absent_pages_in_range(mi->blk[i].nid, s, e);
-> > +             numaram += __available_pages_in_range(mi->blk[i].nid, s, e);
->
-> This is wrong. You add number of pages in range core MM sees to the number
-> of pages covered by the numa_meminfo.
->
-> More generally, rather than traverse all the numa_meminfo's and for each of
-> them traverse all the regions in memblock.memory it's enough to count
-> memory in memblock that doesn't have the node assigned and compare it to
-> memblock_phys_mem_size().
+FYI, the error/warning still remains.
 
-Logic like below?
-static bool __init numa_meminfo_cover_memory(const struct numa_meminfo *mi)
-{
-   u64 error_value;
-   error_value = pages_without_nid_in_range(0,max_pfn);
-    if ((error_value ) >= (1 << (20 - PAGE_SHIFT))) {
-        //print error information
-        return false;
-     }
-     return true;
-}
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1639fae5132bc8a904af28d97cea0bedb3af802e
+commit: 145cfc3840e5931a789a8e2e76af841ab4cad44b spi: mpc52xx-psc: Switch to using core message queue
+date:   12 months ago
+config: powerpc-randconfig-r032-20230617 (https://download.01.org/0day-ci/archive/20230617/202306171837.X7dsEWDB-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230617/202306171837.X7dsEWDB-lkp@intel.com/reproduce)
 
-I can't figure out why compare it with memblock_phys_mem_size().
-The number of pages in memblock that doesn't have the node
-assigned,which also means that these pages are not in numa_info.
-So these pages can represent the number of lose pages.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306171837.X7dsEWDB-lkp@intel.com/
 
-Thanks
-Liam Ni
+All warnings (new ones prefixed by >>):
+
+>> drivers/spi/spi-mpc52xx-psc.c:195:5: warning: no previous prototype for 'mpc52xx_psc_spi_transfer_one_message' [-Wmissing-prototypes]
+     195 | int mpc52xx_psc_spi_transfer_one_message(struct spi_controller *ctlr,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/mpc52xx_psc_spi_transfer_one_message +195 drivers/spi/spi-mpc52xx-psc.c
+
+   194	
+ > 195	int mpc52xx_psc_spi_transfer_one_message(struct spi_controller *ctlr,
+   196						 struct spi_message *m)
+   197	{
+   198		struct spi_device *spi;
+   199		struct spi_transfer *t = NULL;
+   200		unsigned cs_change;
+   201		int status;
+   202	
+   203		spi = m->spi;
+   204		cs_change = 1;
+   205		status = 0;
+   206		list_for_each_entry (t, &m->transfers, transfer_list) {
+   207			if (t->bits_per_word || t->speed_hz) {
+   208				status = mpc52xx_psc_spi_transfer_setup(spi, t);
+   209				if (status < 0)
+   210					break;
+   211			}
+   212	
+   213			if (cs_change)
+   214				mpc52xx_psc_spi_activate_cs(spi);
+   215			cs_change = t->cs_change;
+   216	
+   217			status = mpc52xx_psc_spi_transfer_rxtx(spi, t);
+   218			if (status)
+   219				break;
+   220			m->actual_length += t->len;
+   221	
+   222			spi_transfer_delay_exec(t);
+   223	
+   224			if (cs_change)
+   225				mpc52xx_psc_spi_deactivate_cs(spi);
+   226		}
+   227	
+   228		m->status = status;
+   229		if (status || !cs_change)
+   230			mpc52xx_psc_spi_deactivate_cs(spi);
+   231	
+   232		mpc52xx_psc_spi_transfer_setup(spi, NULL);
+   233	
+   234		spi_finalize_current_message(ctlr);
+   235	
+   236		return 0;
+   237	}
+   238	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
