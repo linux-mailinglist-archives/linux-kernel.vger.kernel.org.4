@@ -2,65 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 447A1733D4A
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 02:45:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A4A4733D5F
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 02:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230453AbjFQApI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 20:45:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36606 "EHLO
+        id S231793AbjFQA6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 20:58:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjFQApF (ORCPT
+        with ESMTP id S229483AbjFQA6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 20:45:05 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A423A92
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 17:45:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=cszALHYSeI7dIli/xZoXLXNFlOmkeWHMkASD1ujijPw=; b=nmJ5S18KN8QJqxlk12F8Nkt1es
-        TVWXxAbwC0HOZvexLboqUuF+NfzHwyQ2pakRl2XVBW9ifpd67VmDF14KOO4AJGeuZJahfH53QVp7l
-        s3QZa+56kqmwgDXZOyCEY42DWB3l/D+s7PuJFl4A+SqgYM40t4PDuPazmIuahi3f1ZLBQvhKuKxEC
-        4uAhQGn+UJ9RPPlq56a/wJjfMH2koVfDWaZ2hUI9rzX3zlBhReXSZQKwkcmyWF2p9eU7a2d1aX3ls
-        QUr2H+TG9vcE6uEAiRzVWOTHi6QHWZd2hkL/bbPpIH5x/drQaZiFEkaGDOLIof8lRHsQK+O/6VTty
-        w5+Ta3sw==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qAK3o-002GI7-0B;
-        Sat, 17 Jun 2023 00:45:00 +0000
-Message-ID: <3cd3fc67-fb39-f483-3a6f-94ddfbbcf652@infradead.org>
-Date:   Fri, 16 Jun 2023 17:44:58 -0700
+        Fri, 16 Jun 2023 20:58:10 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD1C3AA8;
+        Fri, 16 Jun 2023 17:58:09 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b3f9a96606so2012305ad.0;
+        Fri, 16 Jun 2023 17:58:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686963489; x=1689555489;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=u8rPlv3Ywh/NUyCYpCykVWdpi8JntsuNA88J8AvL8Ck=;
+        b=g+tl+YZvyAJouiUMIa5HQBdhD5zB7uhMwjonJBFdiSAAaotfzGLq46vTcwO+NqpfpP
+         hqL+3YSQcN/6pELHfNCAhLcTnmvAgkTvYAnkk2mqs/7zCfgnHHfhlhYLNs4k4PhQ+i1n
+         xrfF+czMXg2pZSugIH8TrO0KhU67s+zTFl0k81Dp6HJ4uieS3HEuZ8vHgt1OkxxSy9Re
+         wdDcKpwUYpD9dxZkTsYwbwJtRaf+DgOX+gxEMAYll9Bm78kIQMcyxIhTA1+5eWnBzLTb
+         w8i3luLGZQT8ZHCGfV4qkcYVgjW59rfcjeS7k7jj9RJqJkE/327OZaSjbDMFGyU878Td
+         XxkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686963489; x=1689555489;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u8rPlv3Ywh/NUyCYpCykVWdpi8JntsuNA88J8AvL8Ck=;
+        b=d+ZSvNfkQYkjmjIb7/Y5KmlyF2CuysbCFbyXmagAYalO/IwUfwIiEnuCH2xDGq5TVU
+         5+ckWm3xdJBv0PdZGix1HJtzJJdGNnWyIJGNYqF6TJXbQlVkS2zpUg0RoHwKUUh3sliM
+         bkrTu0o3gbVsjsDEaMmqYdfJ8huE+fgOald7NtVxorJmT2hJVGK2drSyRKW41w8BzxZ5
+         mFzV9K4f0/DBxLAeQ0XEiRG9LlbaIXo6njjNCtcnZlCfPi71weUNkgbF+TKxJuyjb9jl
+         3CR4vASSL1sxMrDxU1G1+w/O7MlRO0y9bwfUduip0vp2Ybo+g+MNSb6o3UzilgX4jwkh
+         wJOA==
+X-Gm-Message-State: AC+VfDytvqggiNyjULtANgfgjsq14PjCgzVQCc/dPUh9GrH8hSt4OisJ
+        ULDwgk8IcgGGFih1h3bwtVA=
+X-Google-Smtp-Source: ACHHUZ7az4sIy8eKKlwLxocvFC/eqUqPa0gN/k1TpxoNbQsT+t2yVkT6gjt/mPsl9/THLbKs2aN0uw==
+X-Received: by 2002:a17:902:f691:b0:1af:adc2:ab5b with SMTP id l17-20020a170902f69100b001afadc2ab5bmr4152524plg.0.1686963489235;
+        Fri, 16 Jun 2023 17:58:09 -0700 (PDT)
+Received: from hoboy.vegasvil.org ([2601:640:8200:e:e2d5:5eff:fea5:802f])
+        by smtp.gmail.com with ESMTPSA id k1-20020a170902694100b001b025aba9edsm16342899plt.220.2023.06.16.17.58.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 17:58:08 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 17:58:06 -0700
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     Alex Maftei <alex.maftei@amd.com>
+Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net 0/2] selftests/ptp: Add support for new timestamp
+ IOCTLs
+Message-ID: <ZI0FHsWm37BZ0W4N@hoboy.vegasvil.org>
+References: <cover.1686955631.git.alex.maftei@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] drm/i915: make i915_drm_client_fdinfo() reference
- conditional again
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Andi Shyti <andi.shyti@linux.intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Imre Deak <imre.deak@intel.com>,
-        Alan Previn <alan.previn.teres.alexis@intel.com>,
-        Anshuman Gupta <anshuman.gupta@intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230616093158.3568480-1-arnd@kernel.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230616093158.3568480-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1686955631.git.alex.maftei@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,58 +72,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/16/23 02:31, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Fri, Jun 16, 2023 at 11:48:43PM +0100, Alex Maftei wrote:
+> PTP_SYS_OFFSET_EXTENDED was added in November 2018 in
+> 361800876f80 (" ptp: add PTP_SYS_OFFSET_EXTENDED ioctl")
+> and PTP_SYS_OFFSET_PRECISE was added in February 2016 in
+> 719f1aa4a671 ("ptp: Add PTP_SYS_OFFSET_PRECISE for driver crosstimestamping")
 > 
-> The function is only defined if CONFIG_PROC_FS is enabled:
-> 
-> ld.lld: error: undefined symbol: i915_drm_client_fdinfo
->>>> referenced by i915_driver.c
->>>>               drivers/gpu/drm/i915/i915_driver.o:(i915_drm_driver) in archive vmlinux.a
-> 
-> Use the PTR_IF() helper to make the reference NULL otherwise.
-> 
-> Fixes: e894b724c316d ("drm/i915: Use the fdinfo helper")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> The PTP selftest code is lacking support for these two IOCTLS.
+> This short series of patches adds support for them.
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+This is new functionality, so the target branch should be net-next.
 
-Thanks.
+Thanks,
+Richard
 
-> ---
->  drivers/gpu/drm/i915/i915_driver.c     | 2 +-
->  drivers/gpu/drm/i915/i915_drm_client.h | 2 --
->  2 files changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/i915_driver.c b/drivers/gpu/drm/i915/i915_driver.c
-> index 75cbc43b326dd..0ad0c5885ec27 100644
-> --- a/drivers/gpu/drm/i915/i915_driver.c
-> +++ b/drivers/gpu/drm/i915/i915_driver.c
-> @@ -1816,7 +1816,7 @@ static const struct drm_driver i915_drm_driver = {
->  	.open = i915_driver_open,
->  	.lastclose = i915_driver_lastclose,
->  	.postclose = i915_driver_postclose,
-> -	.show_fdinfo = i915_drm_client_fdinfo,
-> +	.show_fdinfo = PTR_IF(IS_ENABLED(CONFIG_PROC_FS), i915_drm_client_fdinfo),
->  
->  	.prime_handle_to_fd = drm_gem_prime_handle_to_fd,
->  	.prime_fd_to_handle = drm_gem_prime_fd_to_handle,
-> diff --git a/drivers/gpu/drm/i915/i915_drm_client.h b/drivers/gpu/drm/i915/i915_drm_client.h
-> index 4c18b99e10a4e..67816c912bca1 100644
-> --- a/drivers/gpu/drm/i915/i915_drm_client.h
-> +++ b/drivers/gpu/drm/i915/i915_drm_client.h
-> @@ -47,8 +47,6 @@ static inline void i915_drm_client_put(struct i915_drm_client *client)
->  
->  struct i915_drm_client *i915_drm_client_alloc(void);
->  
-> -#ifdef CONFIG_PROC_FS
->  void i915_drm_client_fdinfo(struct drm_printer *p, struct drm_file *file);
-> -#endif
->  
->  #endif /* !__I915_DRM_CLIENT_H__ */
 
--- 
-~Randy
