@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE66D73426E
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 19:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AFE7734278
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 19:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236951AbjFQRQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 13:16:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
+        id S232867AbjFQRQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 13:16:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234629AbjFQRPx (ORCPT
+        with ESMTP id S234911AbjFQRPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 17 Jun 2023 13:15:53 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76AB51FD4
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 10:15:49 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-978863fb00fso294011666b.3
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 10:15:49 -0700 (PDT)
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7FC11FD5
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 10:15:50 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9827109c6e9so268286366b.3
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 10:15:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687022148; x=1689614148;
+        d=linaro.org; s=google; t=1687022149; x=1689614149;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dCJbJ016qYNTOXUy/U/7OZXPXguoAT6ZFzPeAim4998=;
-        b=k0TKxnMm8XJVSseSGIMdtGLS4JdpAgaZt7gFChBkuYM0YEbKWy1dxWzc2hrBU79Ctx
-         Rvccn/AuoREwGz1uxNEvRWiZAyRBmpUZvKWk2chIMgKzsbPkWX9Yqh4dycQ2HBoja7T0
-         mEwxECJ2UUeWe8RQ5cDO2ubckysO11VqUvPcFYOtXSkb+OjbNkOwUJYiqowwIniUmK69
-         BlyDZj9elpKcAgX/NC5cM292X80yMVrIqtnjFoJyvBD3zEQoaFeZr9ovF8Y24BMUN7aF
-         usdw7krXxAB7dumhY9+Bwy/jVcqpf95x99eM2rDuPma36iKE/RrGenN6swI6yyaqQ2jE
-         Flpg==
+        bh=Ps3QWhVVgM6yGh2UTWWsOwF/OhEiPRE19a/BAGqkfqA=;
+        b=oVqwU31gtiEEDfj1eoeE+VmSOhCMLMwXXabNAHauNMZRtyHi1OSr8aIk8+OyWUrhDU
+         3UeECwwK5pG6JxC3/ZcUfDPyYAFZgZ+O7tDYJO12ffSnz4PuPN3zgBpV+Q0fPB7gZBy6
+         Q05camFlcR4He86LcAMbFKMWuNCpwgazMmvHKZ5ahanIBdZngLMAJorPzjrY/tOujAQx
+         C7VHmZ9/qyiKuuLjPJdS4XnHO8yzPOL1E+sC/TXXjuHRZQRMwPTfcz42/GwP+Rf/xyyE
+         k0CkL2ji9d9vT/i1XkkOjTTKREZ9PMBdBHdBYO8xwmD7T5Kd4rNu2IIBPMcNcEcGEXE5
+         MRrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687022148; x=1689614148;
+        d=1e100.net; s=20221208; t=1687022149; x=1689614149;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dCJbJ016qYNTOXUy/U/7OZXPXguoAT6ZFzPeAim4998=;
-        b=OjpBeAyAcNOEyGkuAot/4O5uTXDoGeW4fmQs6pzrWYhjc7liPDzzDdQTXxxcCgHOpg
-         6onhKQdE/wlYbuJHlQoOAUYmKCZQdkdPWE8OILtHhAyV23mO3tLGGd68Lr3iVPeg91xf
-         ORO/GItDrxMXS0ISo54cHWsU4wsDlHZs6BGSboKoQGQh25BBKE7C81+67qT5jZ7TttQr
-         1l8tM7Q+SjhkY6xJarqkIyPNzfek9oyVtfVd3VWv5/1qTdfUl3lalWqvVv1sNLSdzvsQ
-         8dEiKx3P8ffI99UkC3mlJEEgIlvvgr4L8x/X0quYyjLuM9nSppiJDqt/up3qmo5r3fgX
-         MCSA==
-X-Gm-Message-State: AC+VfDwDO89OlrtxI0ge2/jKJnnSHmIo7CxhvTyO3+WZiGX+jy54pk1u
-        XZEiHNiT3U0r1LgpZ4eNBGsQEg==
-X-Google-Smtp-Source: ACHHUZ7gwFYXSv8CDJFaOOlsdhsNiF9HHreFqVvs1/2ausGfe40jsqXlYKjLbSbIPoy0HRFaS7Tjgg==
-X-Received: by 2002:a17:907:2cc5:b0:988:2a2f:91b9 with SMTP id hg5-20020a1709072cc500b009882a2f91b9mr904589ejc.63.1687022147583;
-        Sat, 17 Jun 2023 10:15:47 -0700 (PDT)
+        bh=Ps3QWhVVgM6yGh2UTWWsOwF/OhEiPRE19a/BAGqkfqA=;
+        b=MuLOUlyUUvBBakzE7Rld7OUZhmzalRIwvX5MOhlYZgQZ9/myxKZHzcRZHUHZ6ZBf4S
+         HawFwkerzUTw1iQk5pN4uYNoJMiz3q7O5cHJPLeyFwGql/d1p/iGHKUuKTdfY9fe2yUE
+         RyS0ZjasPIrwKKhXHO4MOmdecKZ68i5oq0DK9n+TSGRdhZMU4dHJjGV4PYEW3uodbQIF
+         JrVnr4ue+n/hQeqqvMj2ktP7FpzODIhGxxdYJ6uUQfngPo8r+yqkHLDyZY9qF5Tlz/y5
+         E64FkDWw0izR+7yOheyil1TP/YGp+WsA5CTeW9Du/qnGhjZ3nJQk5cY0ooJ8ggqdvHoo
+         haQQ==
+X-Gm-Message-State: AC+VfDwlxiHwdzU3Bx8NvJD6Ve17EpO1AjGiX8B/4dk67oXLSoZlU0Kw
+        CYaGm5H9PbXPcm7dfzbmgjpGAg==
+X-Google-Smtp-Source: ACHHUZ5LRta2MSNgyD5Erud7nJ08cxzq9SD3oia0W3ulgA2TZ+4a1Qm7H3m11Sc648D6tS1N5llJ4Q==
+X-Received: by 2002:a17:907:9453:b0:987:47b3:6e34 with SMTP id dl19-20020a170907945300b0098747b36e34mr2143469ejc.67.1687022149172;
+        Sat, 17 Jun 2023 10:15:49 -0700 (PDT)
 Received: from krzk-bin.. ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id os5-20020a170906af6500b009829dc0f2a0sm3841897ejb.111.2023.06.17.10.15.46
+        by smtp.gmail.com with ESMTPSA id os5-20020a170906af6500b009829dc0f2a0sm3841897ejb.111.2023.06.17.10.15.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Jun 2023 10:15:47 -0700 (PDT)
+        Sat, 17 Jun 2023 10:15:48 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -63,9 +63,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 03/15] arm64: dts: qcom: apq8016-sbc: drop label from I2C and SPI
-Date:   Sat, 17 Jun 2023 19:15:29 +0200
-Message-Id: <20230617171541.286957-3-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 04/15] arm64: dts: qcom: apq8096-db820c: drop label from I2C
+Date:   Sat, 17 Jun 2023 19:15:30 +0200
+Message-Id: <20230617171541.286957-4-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230617171541.286957-1-krzysztof.kozlowski@linaro.org>
 References: <20230617171541.286957-1-krzysztof.kozlowski@linaro.org>
@@ -81,63 +81,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I2C and SPI controller bindings do not allow label property:
+I2C controller bindings do not allow label property:
 
-  apq8016-sbc.dtb: spi@78b7000: Unevaluated properties are not allowed ('label' was unexpected)
-  apq8016-sbc.dtb: i2c@78b6000: Unevaluated properties are not allowed ('label' was unexpected)
+  apq8096-db820c.dtb: i2c@7577000: Unevaluated properties are not allowed ('label' was unexpected)
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/apq8016-sbc.dts | 15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
+ arch/arm64/boot/dts/qcom/apq8096-db820c.dts | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/apq8016-sbc.dts b/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
-index f3d65a606194..e0993e32ee38 100644
---- a/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
-+++ b/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
-@@ -172,15 +172,13 @@ led@6 {
+diff --git a/arch/arm64/boot/dts/qcom/apq8096-db820c.dts b/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
+index 537547b97459..002cf5806d83 100644
+--- a/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
++++ b/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
+@@ -138,8 +138,7 @@ wlan_en: wlan-en-1-8v {
  };
  
- &blsp_i2c2 {
+ &blsp1_i2c3 {
 -	/* On Low speed expansion */
+-	label = "LS-I2C0";
 +	/* On Low speed expansion: LS-I2C0 */
  	status = "okay";
--	label = "LS-I2C0";
  };
  
- &blsp_i2c4 {
+@@ -168,14 +167,12 @@ &adsp_pil {
+ };
+ 
+ &blsp2_i2c1 {
 -	/* On High speed expansion */
+-	label = "HS-I2C2";
 +	/* On High speed expansion: HS-I2C2 */
  	status = "okay";
--	label = "HS-I2C2";
- 
- 	adv_bridge: bridge@39 {
- 		status = "okay";
-@@ -228,21 +226,18 @@ adv7533_out: endpoint {
  };
  
- &blsp_i2c6 {
+ &blsp2_i2c1 {
 -	/* On Low speed expansion */
+-	label = "LS-I2C1";
 +	/* On Low speed expansion: LS-I2C1 */
  	status = "okay";
--	label = "LS-I2C1";
  };
  
- &blsp_spi3 {
--	/* On High speed expansion */
-+	/* On High speed expansion: HS-SPI1 */
- 	status = "okay";
--	label = "HS-SPI1";
- };
- 
- &blsp_spi5 {
--	/* On Low speed expansion */
-+	/* On Low speed expansion: LS-SPI0 */
- 	status = "okay";
--	label = "LS-SPI0";
- };
- 
- &blsp_uart1 {
 -- 
 2.34.1
 
