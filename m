@@ -2,114 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB06734390
+	by mail.lfdr.de (Postfix) with ESMTP id 8062773438F
 	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 22:36:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346489AbjFQUgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 16:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41798 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346474AbjFQUgu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1346476AbjFQUgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Sat, 17 Jun 2023 16:36:50 -0400
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C7DE6E;
-        Sat, 17 Jun 2023 13:36:49 -0700 (PDT)
-Received: from localhost.localdomain (178.176.79.248) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Sat, 17 Jun
- 2023 23:36:44 +0300
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-To:     Ulf Hansson <ulf.hansson@linaro.org>, <linux-mmc@vger.kernel.org>
-CC:     Chaotian Jing <chaotian.jing@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 03/12] mmc: mtk-sd: fix deferred probing
-Date:   Sat, 17 Jun 2023 23:36:13 +0300
-Message-ID: <20230617203622.6812-4-s.shtylyov@omp.ru>
-X-Mailer: git-send-email 2.26.3
-In-Reply-To: <20230617203622.6812-1-s.shtylyov@omp.ru>
-References: <20230617203622.6812-1-s.shtylyov@omp.ru>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41772 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346455AbjFQUgr (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 17 Jun 2023 16:36:47 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9FC4E6E
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 13:36:46 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-510d6b939bfso2849003a12.0
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 13:36:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687034205; x=1689626205;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2aJz+RT/xyq0N/i2nhfM+NmOZutl67Cvwf+2Z6rBvnE=;
+        b=KgsFph9+3TeTFwsHIYPeBYpJGSM/BFb++KvNOt2lJShBCESxyFR2hxFgEjCTMnSMUo
+         if2aBcWChwui//SHSR/ZwfojH6ZW7hE9SIBnTWXfZzW6ERo0bAovKD5h6aILaY+1vFQl
+         GHncrOxQze3YycrmK5cGDccCYic6U3TE+wp3LaYYERZAHa6LzOhEtedUcUauEOFC3C2g
+         E1kG9DA+Q4jGt5iYKJi6JTg8dhSLesRpLPNKP78FzjZkA9fC+m5XRM6hyr8+HOKHGRp2
+         DcYPP+9kjd9mrlc2UoFq+hOUYaQxXVoiYm19bLatwuKiGXN5j8GBWSVjcQlIboNpQVnt
+         W4vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687034205; x=1689626205;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2aJz+RT/xyq0N/i2nhfM+NmOZutl67Cvwf+2Z6rBvnE=;
+        b=SRWiilUTo38IRfFdEr/Wr8+XRhCZiW7ZKAzvxLbX1mcqNRdd7RGxW0lenGtbi4rX1K
+         CbYzDC6pQi4Ul9AqO6p56BJIMOt7VCJprE3Nd+DG0auD6WKUqe1s4dTw304LmQb++A1F
+         cZloGmNkhlI5LpIGf7LqaZGjkXocQWW6/1UI3dIQYDulr5MlN866Gi1ZrYWbfY7OnUa4
+         NC3dUgq5cwn1c2wfDQCqDlU7czKe0mOuUhKYXDeMa9cEGCf6hs6RdQgyzXiuhQ1NgzmX
+         VimDcQpdCMY916tnQDV36i1rDEQ+qMvblHNByoVP614QR+2p/WtATjRgwLYuXx5ZcoUy
+         hVUw==
+X-Gm-Message-State: AC+VfDwXYtatln2g5PxPr8VNR8zsAyxVTWYLhogFn77KiW9J5++Jo+iq
+        qf1Ygws5SaeSg5II3n/mZMK9AA==
+X-Google-Smtp-Source: ACHHUZ7YPFcNDwh5hs6abIefKOUQ+hQDS6/+wrmEAKKAg1RNr7W9xWwIqfkUZ7FXupdhoF1WejLc/A==
+X-Received: by 2002:a17:907:3f87:b0:97d:9b73:690b with SMTP id hr7-20020a1709073f8700b0097d9b73690bmr6103013ejc.59.1687034205126;
+        Sat, 17 Jun 2023 13:36:45 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id y9-20020a17090668c900b0098242730348sm6313405ejr.72.2023.06.17.13.36.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 17 Jun 2023 13:36:44 -0700 (PDT)
+Message-ID: <9e9c9f70-7b02-900f-36b9-27c734c12721@linaro.org>
+Date:   Sat, 17 Jun 2023 22:36:42 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [178.176.79.248]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 06/17/2023 20:23:23
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 178086 [Jun 16 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 517 517 b0056c19d8e10afbb16cb7aad7258dedb0179a79
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_no_received}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.79.248 in (user)
- dbl.spamhaus.org}
-X-KSE-AntiSpam-Info: omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2
-X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.79.248
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 06/17/2023 20:29:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 6/17/2023 5:34:00 PM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 4/4] arm64: dts: freescale: Add support for LX2162 SoM
+ & Clearfog Board
+Content-Language: en-US
+To:     Josua Mayer <josua@solid-run.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Li Yang <leoyang.li@nxp.com>
+References: <20230617134009.23042-1-josua@solid-run.com>
+ <20230617134009.23042-5-josua@solid-run.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230617134009.23042-5-josua@solid-run.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver overrides the error codes returned by platform_get_irq() to
--EINVAL, so if it returns -EPROBE_DEFER, the driver will fail the probe
-permanently instead of the deferred probing. Switch to propagating the
-error codes upstream.
+On 17/06/2023 15:40, Josua Mayer wrote:
+> Add support for the SolidRun LX2162A System on Module (SoM), and the
+> Clearfog evaluation board.
+> 
+> The SoM has few software-controllable features:
+> - AR8035 Ethernet PHY
+> - eMMC
+> - SPI Flash
+> - fan controller
+> - various eeproms
+> 
+> The Clearfog evaluation board provides:
+> - microSD connector
+> - USB-A
+> - 2x 10Gbps SFP+
+> - 2x 25Gbps SFP+ with a retimer
+> - 8x 2.5Gbps RJ45
+> - 2x mPCI (assembly option / disables 2xRJ45)
+> 
+> The 8x RJ45 ports are connected with an 8-port PHY: Marvell 88E2580
+> supporting up to 5Gbps, while SoC and magnetics are limited to 2.5Gbps.
+> 
+> However 2500 speed is untested due to documentation and drivier
+> limitations. To avoid confusion the phy nodes have been explicitly
+> limited to 1000 for now.
+> 
+> The PCI nodes are disabled, but explicitly added to mark that this board
+> can have pci.
+> It is expected that the bootloader will patch the status property
+> "okay" and disable 2x RJ45 ports, according to active serdes configuration.
+> 
+> Signed-off-by: Josua Mayer <josua@solid-run.com>
+> ---
+> V1 -> V2: reordered "compatible" and "reg" properties
+> V1 -> V2: replaced chip-specific DT node names with generic ones
+> 
+>  arch/arm64/boot/dts/freescale/Makefile        |   1 +
+>  .../dts/freescale/fsl-lx2162a-clearfog.dts    | 371 ++++++++++++++++++
+>  .../dts/freescale/fsl-lx2162a-sr-som.dtsi     |  75 ++++
+>  3 files changed, 447 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/freescale/fsl-lx2162a-clearfog.dts
+>  create mode 100644 arch/arm64/boot/dts/freescale/fsl-lx2162a-sr-som.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+> index ef7d17aef58f..b4fb5044d1c7 100644
+> --- a/arch/arm64/boot/dts/freescale/Makefile
+> +++ b/arch/arm64/boot/dts/freescale/Makefile
+> @@ -34,6 +34,7 @@ dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-lx2160a-honeycomb.dtb
+>  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-lx2160a-qds.dtb
+>  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-lx2160a-rdb.dtb
+>  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-lx2162a-qds.dtb
+> +dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-lx2162a-clearfog.dtb
+>  
 
-Fixes: 208489032bdd ("mmc: mediatek: Add Mediatek MMC driver")
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
----
-Changes in version 2:
-- refreshed the patch.
+...
 
- drivers/mmc/host/mtk-sd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +&fspi {
+> +	status = "okay";
+> +
+> +	flash@0 {
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		compatible = "jedec,spi-nor";
+> +		reg = <0>;
 
-diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
-index edade0e54a0c..9785ec91654f 100644
---- a/drivers/mmc/host/mtk-sd.c
-+++ b/drivers/mmc/host/mtk-sd.c
-@@ -2680,7 +2680,7 @@ static int msdc_drv_probe(struct platform_device *pdev)
- 
- 	host->irq = platform_get_irq(pdev, 0);
- 	if (host->irq < 0) {
--		ret = -EINVAL;
-+		ret = host->irq;
- 		goto host_free;
- 	}
- 
--- 
-2.26.3
+Still wrong order of properties. compatible is always first, then reg.
+
+Best regards,
+Krzysztof
 
