@@ -2,109 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 316C0733E05
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 06:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4729C733E07
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 06:41:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232058AbjFQEgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 00:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41472 "EHLO
+        id S231992AbjFQEk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 00:40:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjFQEg1 (ORCPT
+        with ESMTP id S229493AbjFQEky (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 00:36:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BAD35AD;
-        Fri, 16 Jun 2023 21:36:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 46D7960BD4;
-        Sat, 17 Jun 2023 04:36:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A9B0C433C0;
-        Sat, 17 Jun 2023 04:36:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686976585;
-        bh=OKFlrVcr8JO5imMZjskPBYyT2e9wwxpgnHDmugLd/OM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=pG2KDixZAmhTp7k5AHPjC84RnT5jz7KcbQkNullO09O8vZHTe0iMvdgVGvz2Ejy71
-         EqA4Jqz61D9zaKANiTCxXOH0wHzhoEaa8+at3UT0hpo+OG1wszP7BvHG1cF1mQ2Kbd
-         Aup4m/FUOEqxP0brQ1PCkFMZlCuuBrr5bS15Ejde/xsHB9P6rz2mPf0T4um2qko7HI
-         biGZ93xHk76fwS0YdOR6PL3WY2FG3YoOzumC1B1CvmwMFyq24NDMbzbK1EpE4psnQf
-         w5/0834D4gqu0RWI5wDqmJQRrrBqTwp0HyaIze2KSxcN6K41+fFy7n2jdFU0OuxKBz
-         PmJchfFlI+yuw==
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] clk fixes for v6.4-rc6
-Date:   Fri, 16 Jun 2023 21:36:23 -0700
-Message-ID: <20230617043624.831750-1-sboyd@kernel.org>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 17 Jun 2023 00:40:54 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABEF81732
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 21:40:53 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id 5614622812f47-39eab4bbe8aso818629b6e.1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 21:40:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686976853; x=1689568853;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JdTXgdzdalPUjI3Ht3T1J7by7Wvs6eS5DA4nj1ZXZls=;
+        b=TmUuyayMRWJtcc7lll42NWrHN9ZTGtFNwyTVMVacmssHpZENrIWp01v69I1vBIDcKc
+         GgXNjou394k0gyc/QbrYQz+WhwbuNXlf4xsBLvjSzOEF816LLgMWTKD4mjrAs4o3BG8N
+         5aYRL0BvfVGKNTp34xnxaLO96YbmNwqWV68RmbQpJDv0TC0kqslkmMAajG7b4lJ+ZA4A
+         QtQKpz+F1HaOB1Kl2uqGcBC2yYXPS4asqtxtiUGbh0kL9TBOU2A9dC6JSpbRZ29zNY5j
+         97hBT2S74RlieT9iQmLqKPgFtjlcBY/yFoD+DMP2Z5Dwl1rCR/R2LhYINAbjl7/YgWsg
+         BH1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686976853; x=1689568853;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JdTXgdzdalPUjI3Ht3T1J7by7Wvs6eS5DA4nj1ZXZls=;
+        b=dE0vK9sKEeKtJYA2tnwiNXAN7IJa3Z0kQoq3mnZipOHkBG/UmioqhJ+dRzkTrc1c86
+         h9H0GIoe5IUUPlvdZXY6V3GeZ5xNGRUHuGO4k+1oGSCe21NbJt5PoLpMia4I2buIrrw0
+         NyDkVvSmkTQG+eGkwNTkEo0S54V+AaBJO3lp25qIS1/wbQ+1WwhAVzVa+OCg9SRdzVrP
+         ayWcPP7ddoL15roDjF39mwB9bvv9hpMMdHZtzs9a2csKJV3kP+Y3P2VsTEGGGyBa+4ky
+         SUgkI2YZkDaH9jig/vf4CKOfa+GAcmYJzDIOvhOXsYMwOdT6vhNPpLx5OhW1SsR1FjyI
+         NB8g==
+X-Gm-Message-State: AC+VfDyVVtx4Ej++xPj5R41rw+mpiedCVvI1m0N+kdLX0CaTojJD7zIt
+        /zbG0L6lVd64FoMe7s90KAg=
+X-Google-Smtp-Source: ACHHUZ4gYURqhUUkMPEdrxMDKQayn+10xNi14I/kungRha1hXNiO8wzNWYoiyPAkYT35KE/zYTCRfw==
+X-Received: by 2002:a05:6808:f92:b0:39a:a77a:eb48 with SMTP id o18-20020a0568080f9200b0039aa77aeb48mr5206055oiw.0.1686976852938;
+        Fri, 16 Jun 2023 21:40:52 -0700 (PDT)
+Received: from localhost.localdomain ([112.213.33.6])
+        by smtp.gmail.com with ESMTPSA id kg14-20020a170903060e00b001b06361a38dsm3413397plb.116.2023.06.16.21.40.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 21:40:52 -0700 (PDT)
+From:   Liam Ni <zhiguangni01@gmail.com>
+To:     dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+        hpa@zytor.com, akpm@linux-foundation.org, rppt@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        zhiguangni01@gmail.com
+Subject: [PATCH] mm/sparse:avoid null pointer access in memory_present()
+Date:   Sat, 17 Jun 2023 14:40:36 +1000
+Message-Id: <20230617044036.3985524-1-zhiguangni01@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+__nr_to_section() may return a null pointer,
+before accessing the member variable section_mem_map,
+we should first determine whether it is a null pointer.
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+Signed-off-by: Liam Ni <zhiguangni01@gmail.com>
+---
+ mm/sparse.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-fixes-for-linus
-
-for you to fetch changes up to 23200a4c8ac284f8b4263d7cecaefecaa3ad6732:
-
-  clk: pxa: fix NULL pointer dereference in pxa3xx_clk_update_accr (2023-06-14 17:22:17 -0700)
-
-----------------------------------------------------------------
-A handful of clk driver fixes
-
- - Fix an OOB issue in the Mediatek mt8365 driver where arrays of clks
-   are mismatched in size
-
- - Use the proper clk_ops for a few clks in the Mediatek mt8365 driver
-
- - Stop using abs() in clk_composite_determine_rate() because 64-bit
-   math goes wrong on large unsigned long numbers that are subtracted
-   and passed into abs()
-
- - Zero initialize a struct clk_init_data in clk-loongson2 to avoid
-   stack junk confusing clk_hw_register()
-
- - Actually use a pointer to __iomem for writel() in
-   pxa3xx_clk_update_accr() so we don't oops
-
-----------------------------------------------------------------
-Alexandre Mergnat (1):
-      clk: mediatek: mt8365: Fix index issue
-
-Arnd Bergmann (1):
-      clk: pxa: fix NULL pointer dereference in pxa3xx_clk_update_accr
-
-Binbin Zhou (1):
-      clk: clk-loongson2: Zero init clk_init_data
-
-Markus Schneider-Pargmann (1):
-      clk: mediatek: mt8365: Fix inverted topclk operations
-
-Sebastian Reichel (1):
-      clk: composite: Fix handling of high clock rates
-
- drivers/clk/clk-composite.c       |  5 ++++-
- drivers/clk/clk-loongson2.c       |  2 +-
- drivers/clk/mediatek/clk-mt8365.c | 18 +++++++++++++++---
- drivers/clk/pxa/clk-pxa3xx.c      |  2 +-
- 4 files changed, 21 insertions(+), 6 deletions(-)
-
+diff --git a/mm/sparse.c b/mm/sparse.c
+index 4e6e3a9d49dc..37fa3818bc25 100644
+--- a/mm/sparse.c
++++ b/mm/sparse.c
+@@ -258,7 +258,7 @@ static void __init memory_present(int nid, unsigned long start, unsigned long en
+ 		set_section_nid(section, nid);
+ 
+ 		ms = __nr_to_section(section);
+-		if (!ms->section_mem_map) {
++		if (ms && !ms->section_mem_map) {
+ 			ms->section_mem_map = sparse_encode_early_nid(nid) |
+ 							SECTION_IS_ONLINE;
+ 			__section_mark_present(ms, section);
 -- 
-https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
-https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
+2.25.1
+
