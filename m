@@ -2,154 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5816C734084
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 13:23:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50D2D734092
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 13:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234184AbjFQLXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 07:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
+        id S234769AbjFQLjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 07:39:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjFQLXB (ORCPT
+        with ESMTP id S234346AbjFQLj3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 07:23:01 -0400
-Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB4899
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 04:22:59 -0700 (PDT)
-Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-340bdf36dcdso15748595ab.0
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 04:22:59 -0700 (PDT)
+        Sat, 17 Jun 2023 07:39:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF161BD1
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 04:38:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687001923;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=e4oaFvu+oLj9clZTX2+t/9r2R/dvlWv5GxKJkZqu9ZE=;
+        b=fzcx5UiN6Gt9YSWLG7K8CU//PFGhBgEvvwL9E6OGpKq/A1szHHlPr7fJVdhAr7iBJPiJqf
+        e2MbhMnxcBPANV9qXjVdnHvi23h3xWRXrqFJQe3KkatLXpgzBKd/7ajmdFSMeCSctxnL65
+        AWBxtZmThUf/8xzfIqBJlBVt7i381BA=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-378-6-oB5WbZM-CT0hZX8tIHlA-1; Sat, 17 Jun 2023 07:38:41 -0400
+X-MC-Unique: 6-oB5WbZM-CT0hZX8tIHlA-1
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-6300c2a972cso5138306d6.1
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 04:38:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687000979; x=1689592979;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=976nUGLA1eLtjJZopusDJfTHe5lySN1BOdO4t8e0GJk=;
-        b=Z9E8n1w0NcU/gJDR0sWfwhpYbnC0qSfq1fngHw7NOSoi50VkUgdVPUKXr7DqB6hxel
-         yPd3QRrLaNDRyV+8QQT7+m27TUgaGgAzusE/+Mr38qauEinD4qnj+RVsTVpWTPcVnK0g
-         OEYdB/0Ahi+THMfKcSki2wAkasoILMO6n8aR4x91Oh3dOugyM2WGDORnZ6mRX6URr3Ly
-         If11u5N+faqDbHRAUfclBOoR/X4jIMrTz5FTgO6yNfe2SFKwzjonjlZcL4caXdlcVXDN
-         5q2/fJw//oxB0ADsyVlpmGcqXN8SKuzRhUIo4NFZxGNlkNs2YdLwuYA+WKwvfL5/LOnN
-         IPRA==
-X-Gm-Message-State: AC+VfDy6M9G/gF+fY0zf4R8HUNtqo2X9qSJ5tbN62j1FxcuXElEXpoWo
-        fVPgnmz/nbYJgFFJEGww7F6y9ptwIe8QRguI1ZBPYTkuIsRz
-X-Google-Smtp-Source: ACHHUZ6CLGw8oS/wZoEcJyQld9KGJx/uFDIU4+qOLKL7d4cyna0ONvOkvR4DYF/bnu31XqwEYGY5azAOr3HIlcxp+U956QpN2ujo
+        d=1e100.net; s=20221208; t=1687001921; x=1689593921;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e4oaFvu+oLj9clZTX2+t/9r2R/dvlWv5GxKJkZqu9ZE=;
+        b=H7yj2+H/Ue+POVsrE6JJ/UTQEvS/bMgJ4uCHwLyA6pDy2R8FUyLph1OqFWY/oEZIGQ
+         cJBvHRHAwz8nmr3RSwH6gvEoJNik1MSLVuIAR4LUvWq7z1O6/SWB7hcwVKV/V0bvmd5P
+         L9azBn1XWtoMuAn2pOXBuzlDzH7UGHWSjVyMBSrgd7AaCKtNCn0eFgNdUgAIfz+HHEv7
+         C/fyTiXLuwNdQPud9x4KyqA6UMT3xjKmBlZhIqGTozvbQ6hFFm6XAhCO+Jpz8KUtpjYW
+         0dCig0NEG9VVF2xIna4BJJ0BpWT6TNXgAYzsHEQWxwqnAFn0oJ/JKOILNmLtWPh3m+2V
+         ACFQ==
+X-Gm-Message-State: AC+VfDweq+4VY/XyauLY3ZcaNbxSrHGFFvRZu+wosUO0THNX4V7VJNIc
+        BkIRtiQ21ELm5ROKF6dwLYMXw/sZqzI8hVcWygB2QAxIkfUCADZpAqbQ7bR67t15mxUsQ3lMM6L
+        DAEhZq9qVk2m17uiHXnvBaT4d
+X-Received: by 2002:a05:6214:2484:b0:62f:ff5c:6b3e with SMTP id gi4-20020a056214248400b0062fff5c6b3emr5080941qvb.34.1687001921412;
+        Sat, 17 Jun 2023 04:38:41 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7kAPxY0P/+pHsf5eYAttHB/VT0n+7jpgTnH2PyzRpW3fTXbo/JyZj81xki2cMCorIp/25kfQ==
+X-Received: by 2002:a05:6214:2484:b0:62f:ff5c:6b3e with SMTP id gi4-20020a056214248400b0062fff5c6b3emr5080918qvb.34.1687001921169;
+        Sat, 17 Jun 2023 04:38:41 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id s15-20020a0cdc0f000000b006300e1db3ecsm363670qvk.141.2023.06.17.04.38.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Jun 2023 04:38:40 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] thermal/drivers/tsens: remove unused variable ops_v0_1
+Date:   Sat, 17 Jun 2023 07:38:37 -0400
+Message-Id: <20230617113837.3224912-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-X-Received: by 2002:a92:d650:0:b0:340:7430:2317 with SMTP id
- x16-20020a92d650000000b0034074302317mr1223035ilp.3.1687000979374; Sat, 17 Jun
- 2023 04:22:59 -0700 (PDT)
-Date:   Sat, 17 Jun 2023 04:22:59 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001c8edb05fe518644@google.com>
-Subject: [syzbot] [xfs?] UBSAN: array-index-out-of-bounds in xfs_attr3_leaf_add_work
-From:   syzbot <syzbot+510dcbdc6befa1e6b2f6@syzkaller.appspotmail.com>
-To:     djwong@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+gcc with W=1 reports
+drivers/thermal/qcom/tsens-v0_1.c:328:31: error:
+  ‘ops_v0_1’ defined but not used [-Werror=unused-const-variable=]
+  328 | static const struct tsens_ops ops_v0_1 = {
+      |                               ^~~~~~~~
 
-syzbot found the following issue on:
+This variable is not used, so remove it.
 
-HEAD commit:    1f6ce8392d6f Add linux-next specific files for 20230613
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=14e629dd280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d103d5f9125e9fe9
-dashboard link: https://syzkaller.appspot.com/bug?extid=510dcbdc6befa1e6b2f6
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=139d8d2d280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11b371f1280000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/2d9bf45aeae9/disk-1f6ce839.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/e0b03ef83e17/vmlinux-1f6ce839.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/b6c21a24174d/bzImage-1f6ce839.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/65eca6891c21/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+510dcbdc6befa1e6b2f6@syzkaller.appspotmail.com
-
-XFS (loop0): Mounting V4 Filesystem 5e6273b8-2167-42bb-911b-418aa14a1261
-XFS (loop0): Ending clean mount
-xfs filesystem being mounted at /root/file0 supports timestamps until 2038-01-19 (0x7fffffff)
-================================================================================
-UBSAN: array-index-out-of-bounds in fs/xfs/libxfs/xfs_attr_leaf.c:1560:3
-index 14 is out of range for type '__u8 [1]'
-CPU: 1 PID: 5021 Comm: syz-executor198 Not tainted 6.4.0-rc6-next-20230613-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
- ubsan_epilogue lib/ubsan.c:217 [inline]
- __ubsan_handle_out_of_bounds+0xd5/0x140 lib/ubsan.c:348
- xfs_attr3_leaf_add_work+0x1528/0x1730 fs/xfs/libxfs/xfs_attr_leaf.c:1560
- xfs_attr3_leaf_add+0x750/0x880 fs/xfs/libxfs/xfs_attr_leaf.c:1438
- xfs_attr_leaf_try_add+0x1b7/0x660 fs/xfs/libxfs/xfs_attr.c:1242
- xfs_attr_leaf_addname fs/xfs/libxfs/xfs_attr.c:444 [inline]
- xfs_attr_set_iter+0x16c4/0x2f90 fs/xfs/libxfs/xfs_attr.c:721
- xfs_xattri_finish_update+0x3c/0x140 fs/xfs/xfs_attr_item.c:332
- xfs_attr_finish_item+0x6d/0x280 fs/xfs/xfs_attr_item.c:463
- xfs_defer_finish_one fs/xfs/libxfs/xfs_defer.c:481 [inline]
- xfs_defer_finish_noroll+0x93b/0x1f20 fs/xfs/libxfs/xfs_defer.c:565
- __xfs_trans_commit+0x566/0xe20 fs/xfs/xfs_trans.c:972
- xfs_attr_set+0x12e5/0x2220 fs/xfs/libxfs/xfs_attr.c:1083
- xfs_attr_change fs/xfs/xfs_xattr.c:106 [inline]
- xfs_xattr_set+0xf2/0x1c0 fs/xfs/xfs_xattr.c:151
- __vfs_setxattr+0x173/0x1e0 fs/xattr.c:201
- __vfs_setxattr_noperm+0x129/0x5f0 fs/xattr.c:235
- __vfs_setxattr_locked+0x1d3/0x260 fs/xattr.c:296
- vfs_setxattr+0x143/0x340 fs/xattr.c:322
- do_setxattr+0x147/0x190 fs/xattr.c:630
- setxattr+0x146/0x160 fs/xattr.c:653
- path_setxattr+0x197/0x1c0 fs/xattr.c:672
- __do_sys_setxattr fs/xattr.c:688 [inline]
- __se_sys_setxattr fs/xattr.c:684 [inline]
- __x64_sys_setxattr+0xc4/0x160 fs/xattr.c:684
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f9effd537f9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 51 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc33918058 EFLAGS: 00000246 ORIG_RAX: 00000000000000bc
-RAX: ffffffffffffffda RBX: 0030656c69662f2e RCX: 00007f9effd537f9
-RDX: 0000000020000680 RSI: 0000000020000200 RDI: 0000000020000000
-RBP: 00007f9effd13090 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000058 R11: 0000000000000246 R12: 00007f9effd13120
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-================================================================================
-
-
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/thermal/qcom/tsens-v0_1.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/tsens-v0_1.c
+index a941b4241b0a..0caf4628582c 100644
+--- a/drivers/thermal/qcom/tsens-v0_1.c
++++ b/drivers/thermal/qcom/tsens-v0_1.c
+@@ -325,12 +325,6 @@ static const struct reg_field tsens_v0_1_regfields[MAX_REGFIELDS] = {
+ 	[TRDY] = REG_FIELD(TM_TRDY_OFF, 0, 0),
+ };
+ 
+-static const struct tsens_ops ops_v0_1 = {
+-	.init		= init_common,
+-	.calibrate	= tsens_calibrate_common,
+-	.get_temp	= get_temp_common,
+-};
+-
+ static const struct tsens_ops ops_8226 = {
+ 	.init		= init_8226,
+ 	.calibrate	= tsens_calibrate_common,
+-- 
+2.27.0
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
