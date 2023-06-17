@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 669E1733FA1
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 10:28:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB4E733FA2
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 10:28:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345955AbjFQI2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 04:28:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33210 "EHLO
+        id S1345958AbjFQI2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 04:28:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232314AbjFQI2F (ORCPT
+        with ESMTP id S1345517AbjFQI2F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 17 Jun 2023 04:28:05 -0400
-Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70BA10CF
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 01:28:03 -0700 (PDT)
-Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-77b25d256aaso155372039f.0
+Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032F8210D
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 01:28:04 -0700 (PDT)
+Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-340b21b5927so13088205ab.3
         for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 01:28:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1686990483; x=1689582483;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=EvzkMc9H5Qu3CfLh6Ayp0HxbA/K5f7RFDZ+Yf/cv0ic=;
-        b=Koeq4+G41m4ftdcI/vPoS/6GNoYsdJpy8FkYLm5gAHIuhe8hbdbiDIxClPmb9s9AI+
-         h1Oz/ML1iS5v3lZF1SDDR91/6D6kw+D474WWWizJ5Jmc/VfN29a5w/PWxRimBe1gljFN
-         3+hGDtUGHoIfpK20bRiRY2qLskeJ8/YJk1xeYUpH+znUn0tadu051Q8IN9ZAoeXX4SYG
-         wKwwzOcaGW3moYtrcqhv7FjjqjkbBH/T8ZHQ3cFPMasaX89VAaJ7s0UrQA/ds/WaqfTB
-         vof3HZ+hQxAtCMW0vNUWN8CEEaRV+VtZtlmv6GYCuDGESxRr4I3SxU4+jTYgUE/BLWZA
-         n0Zg==
-X-Gm-Message-State: AC+VfDxarzx32rbWuebDAFsyzy3QcIpTsu64coRYao/w9OYlnhauq01Z
-        LiGLt5QafiJQhi2TRhuiK70Kf/G/dBCTRzh8S0corulG//NU
-X-Google-Smtp-Source: ACHHUZ5VaKdxrt3XJL1Kd65bRkQ2/NqG1BaMZjE2EcapUA6Ieh2QN2UA7P+X2TjTaXSFIL6Mdt7XLUorkRhe6kEevEIAHB1f4hC4
+        bh=5v7zJpbVn4pQlwVyeTR+IJ1KhBxmoUGydBGoDXqtT5s=;
+        b=hi9KEhIX/+9m2mrfykDDOLkVW05P+ptSgX5oXIqAE6EW+mk4bs5ibfg6XApZH+uv5B
+         gDCD4Zv+Hd1iuo8JWYrRIeoq5Rvwe2az6wuGxFs4i1nyYvhsUZtHpPmfpNNuw79mHIru
+         WPapTxBCyyEgG6Ma71VlxCefFM4JMme7kX/XofNwEWa33QwScXB93uUPfBlhPEoLrr5P
+         zMnh38d4B8fgZbVvXP7E+ycM34bO6WCjPD5w1mImu+L8rfrmDz/D/ty+NBTQWSdH7swZ
+         3M+38ZTq3lSN/TbYBAYZklZl9NI+aNifS5e3bdiMDe1XIW8D/6enxddoVu9xIRr1fF1M
+         Xm8w==
+X-Gm-Message-State: AC+VfDw/9WqAesBgK0MRbip83SD3Un4/wvTIkkqrD2F/LbLXxD6lupk+
+        LWeZnxhMvgtathnO0QOaKvVRfHYtAhGTRcSU63Wbk3BaQSRj
+X-Google-Smtp-Source: ACHHUZ6Acvbd1grZxHyWovYYNSTF9JTF7UqexvA3cF4TMD1kndKcZa0E387aHMcLolyKEKkfGEtz7tkfxtTTvg7hnGEbFjeumhKv
 MIME-Version: 1.0
-X-Received: by 2002:a5e:860f:0:b0:774:8e68:1ce6 with SMTP id
- z15-20020a5e860f000000b007748e681ce6mr1098962ioj.3.1686990483134; Sat, 17 Jun
+X-Received: by 2002:a92:cac8:0:b0:33b:f9b5:d6c2 with SMTP id
+ m8-20020a92cac8000000b0033bf9b5d6c2mr1100973ilq.5.1686990483333; Sat, 17 Jun
  2023 01:28:03 -0700 (PDT)
 Date:   Sat, 17 Jun 2023 01:28:03 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007ca70405fe4f149a@google.com>
-Subject: [syzbot] [block?] WARNING in blkdev_put (3)
-From:   syzbot <syzbot+04625c80899f4555de39@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Message-ID: <0000000000007faf0005fe4f14b9@google.com>
+Subject: [syzbot] [ext4?] WARNING in ext4_file_write_iter
+From:   syzbot <syzbot+5050ad0fb47527b1808a@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -60,75 +61,61 @@ syzbot found the following issue on:
 
 HEAD commit:    f7efed9f38f8 Add linux-next specific files for 20230616
 git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=12240d17280000
+console output: https://syzkaller.appspot.com/x/log.txt?x=144c7b07280000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=60b1a32485a77c16
-dashboard link: https://syzkaller.appspot.com/bug?extid=04625c80899f4555de39
+dashboard link: https://syzkaller.appspot.com/bug?extid=5050ad0fb47527b1808a
 compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11bc386b280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17bbc85b280000
+
+Unfortunately, I don't have any reproducer for this issue yet.
 
 Downloadable assets:
 disk image: https://storage.googleapis.com/syzbot-assets/95bcbee03439/disk-f7efed9f.raw.xz
 vmlinux: https://storage.googleapis.com/syzbot-assets/6fd295caa4de/vmlinux-f7efed9f.xz
 kernel image: https://storage.googleapis.com/syzbot-assets/69c038a34b5f/bzImage-f7efed9f.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/b37a2f98c970/mount_0.gz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+04625c80899f4555de39@syzkaller.appspotmail.com
+Reported-by: syzbot+5050ad0fb47527b1808a@syzkaller.appspotmail.com
 
-REISERFS (device loop0): journal params: device loop0, size 512, journal first block 18, max trans len 256, max batch 225, max commit age 30, max trans age 30
-REISERFS (device loop0): checking transaction log (loop0)
-REISERFS (device loop0): Using r5 hash to sort names
 ------------[ cut here ]------------
-WARNING: CPU: 1 PID: 5034 at block/bdev.c:617 bd_end_claim block/bdev.c:617 [inline]
-WARNING: CPU: 1 PID: 5034 at block/bdev.c:617 blkdev_put+0x562/0x8a0 block/bdev.c:901
+WARNING: CPU: 1 PID: 17447 at fs/ext4/file.c:611 ext4_dio_write_iter fs/ext4/file.c:611 [inline]
+WARNING: CPU: 1 PID: 17447 at fs/ext4/file.c:611 ext4_file_write_iter+0x1470/0x1880 fs/ext4/file.c:720
 Modules linked in:
-CPU: 1 PID: 5034 Comm: syz-executor379 Not tainted 6.4.0-rc6-next-20230616-syzkaller #0
+CPU: 1 PID: 17447 Comm: syz-executor.2 Not tainted 6.4.0-rc6-next-20230616-syzkaller #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-RIP: 0010:bd_end_claim block/bdev.c:617 [inline]
-RIP: 0010:blkdev_put+0x562/0x8a0 block/bdev.c:901
-Code: c0 74 08 3c 03 0f 8e 23 03 00 00 41 83 ac 24 f0 04 00 00 01 e9 2b fe ff ff e8 1a 39 90 fd 0f 0b e9 4b fc ff ff e8 0e 39 90 fd <0f> 0b e9 e0 fb ff ff e8 02 39 90 fd 4c 8d ab a8 00 00 00 31 f6 4c
-RSP: 0018:ffffc90003b5fa28 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff888148c8c500 RCX: 0000000000000000
-RDX: ffff888025959dc0 RSI: ffffffff83f42912 RDI: 0000000000000001
-RBP: ffff88801f459000 R08: 0000000000000000 R09: fffffbfff1d53172
-R10: ffffffff8ea98b97 R11: 0000000000000003 R12: ffff888148c8c538
-R13: ffffc90003b81000 R14: ffff88801f459460 R15: ffff888148c8c500
-FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+RIP: 0010:ext4_dio_write_iter fs/ext4/file.c:611 [inline]
+RIP: 0010:ext4_file_write_iter+0x1470/0x1880 fs/ext4/file.c:720
+Code: 84 03 00 00 48 8b 04 24 31 ff 8b 40 20 89 c3 89 44 24 10 83 e3 08 89 de e8 bd 5e 5b ff 85 db 0f 85 d5 fc ff ff e8 90 62 5b ff <0f> 0b e9 c9 fc ff ff e8 84 62 5b ff 48 8b 4c 24 40 4c 89 fa 4c 89
+RSP: 0018:ffffc9000bc5f9e8 EFLAGS: 00010216
+RAX: 000000000003523a RBX: 0000000000000000 RCX: ffffc9000b3d9000
+RDX: 0000000000040000 RSI: ffffffff8228ff90 RDI: 0000000000000005
+RBP: 0000000000000001 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: ffffffff8a832160
+R13: 0000000000000000 R14: 0000000000000000 R15: fffffffffffffff5
+FS:  00007f129f62e700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f42f1a5f140 CR3: 000000000c775000 CR4: 00000000003506e0
+CR2: 0000000020105000 CR3: 0000000044e0d000 CR4: 00000000003506e0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- release_journal_dev fs/reiserfs/journal.c:2592 [inline]
- free_journal_ram+0x421/0x5c0 fs/reiserfs/journal.c:1896
- do_journal_release fs/reiserfs/journal.c:1960 [inline]
- journal_release+0x276/0x630 fs/reiserfs/journal.c:1971
- reiserfs_put_super+0xe4/0x5c0 fs/reiserfs/super.c:616
- generic_shutdown_super+0x158/0x480 fs/super.c:499
- kill_block_super+0x64/0xb0 fs/super.c:1422
- deactivate_locked_super+0x98/0x160 fs/super.c:330
- deactivate_super+0xb1/0xd0 fs/super.c:361
- cleanup_mnt+0x2ae/0x3d0 fs/namespace.c:1247
- task_work_run+0x16f/0x270 kernel/task_work.c:179
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0xadc/0x2a30 kernel/exit.c:874
- do_group_exit+0xd4/0x2a0 kernel/exit.c:1024
- __do_sys_exit_group kernel/exit.c:1035 [inline]
- __se_sys_exit_group kernel/exit.c:1033 [inline]
- __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1033
+ call_write_iter include/linux/fs.h:1871 [inline]
+ aio_write+0x350/0x7d0 fs/aio.c:1596
+ __io_submit_one fs/aio.c:1968 [inline]
+ io_submit_one+0xf4c/0x1c50 fs/aio.c:2015
+ __do_sys_io_submit fs/aio.c:2074 [inline]
+ __se_sys_io_submit fs/aio.c:2044 [inline]
+ __x64_sys_io_submit+0x190/0x320 fs/aio.c:2044
  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f42f19ea9c9
-Code: Unable to access opcode bytes at 0x7f42f19ea99f.
-RSP: 002b:00007fffc2761718 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 00007f42f1a61330 RCX: 00007f42f19ea9c9
-RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000001
-RBP: 0000000000000001 R08: ffffffffffffffc0 R09: 0000000000001111
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f42f1a61330
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
+RIP: 0033:0x7f129e88c389
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f129f62e168 EFLAGS: 00000246 ORIG_RAX: 00000000000000d1
+RAX: ffffffffffffffda RBX: 00007f129e9abf80 RCX: 00007f129e88c389
+RDX: 0000000020000780 RSI: 0000000000000001 RDI: 00007f129f5e4000
+RBP: 00007f129e8d7493 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fffd72c552f R14: 00007f129f62e300 R15: 0000000000022000
  </TASK>
 
 
@@ -142,10 +129,6 @@ https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
 If the bug is already fixed, let syzbot know by replying with:
 #syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
 
 If you want to change bug's subsystems, reply with:
 #syz set subsystems: new-subsystem
