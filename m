@@ -2,107 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3E5F7343C4
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 22:41:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E94317343CA
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 22:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346564AbjFQUlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 16:41:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44674 "EHLO
+        id S233572AbjFQUmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 16:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346540AbjFQUla (ORCPT
+        with ESMTP id S233644AbjFQUmd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 16:41:30 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89EB1FF7
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 13:41:28 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-51a3e6a952aso2436020a12.3
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 13:41:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687034487; x=1689626487;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0YMohJWhk2sPmAd88p9LdyGWgkzdVwbfUdAqnb6H2VE=;
-        b=cE1eusYADr7vRUpNFcqt0nQuoXX4oWfGd8Mbi+v7wYMZydVDiAVSOllaxD/EnkcYly
-         rM6fZTSUFMkGTdd2Gjs5j2xCEGAaMQZKEKHbmE956KQe0LzqASww9muAuGOQboHHdzwX
-         upa2ix7x5+JrK6ZTvF7gGp407OXD3WHtZrBJt8mpZ8faBjtNXNeDokrv08Btj+nfmiIe
-         5glojJXxSIQueE0sQcj0XRrton/LeOSKB0+Ro7fqkbkakn8DxAsw9O50ezuZZ4MkOl/8
-         EDZ92eT7YNyIiuliujhRInhYEgJ7GWM4+3n+5z6LhBqiyUtOVETtwY/25r3KVf8NaBmS
-         btvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687034487; x=1689626487;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0YMohJWhk2sPmAd88p9LdyGWgkzdVwbfUdAqnb6H2VE=;
-        b=h3E7AXRH59vMyS2hrA2Zw8SvjkpJC9yRA5zUPuLNFYHDcxxrTMZYY12OtpRMmy1TIk
-         xCXwjN3AYFWcs9m0NSi0/FBvcQ6pOhweQmzIN2la7zaew0fUssMsva9MD2+9pnxrrnL8
-         9rKgMNEOwES/6sONNZCWtMQfaVGPFF+OBP6iTTyIdEfCRqZDdG9Tw/UFJqdMsvGpqpAP
-         Oar8A9mz7eFw8+/r70pQ/oU5Fwm+DUlPvGqiX3nNdFsyW+xD0Re09ngM25A/v2pKiZX8
-         PpH8Hwr7XsJQtOaX1TjH1vx4L+BBFariB3FCf/qX3eO5BUVVIP2c9VUn+pNuEYpZB7fX
-         osxA==
-X-Gm-Message-State: AC+VfDwCiKEWRPCA+yitk2GEVCRWK/LfQ/mBM5JzexA9VhLNfmU9LQw0
-        yMDQshwC6An2gRsMTlIcubjKPjBoGjmIdSnYYXQ=
-X-Google-Smtp-Source: ACHHUZ5Gpx59p807a0VPtzDT1W0oByYpr/1RXTu1WKeTtPOX0qmZAin6Xk889vlq45xUJ8s6GFtVVQ==
-X-Received: by 2002:a17:907:86ac:b0:96f:88a3:3a0e with SMTP id qa44-20020a17090786ac00b0096f88a33a0emr6422515ejc.0.1687034487174;
-        Sat, 17 Jun 2023 13:41:27 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id qn18-20020a170907211200b00982c33ea394sm3349203ejb.97.2023.06.17.13.41.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Jun 2023 13:41:26 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
+        Sat, 17 Jun 2023 16:42:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603EA1717;
+        Sat, 17 Jun 2023 13:42:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0CDE6130D;
+        Sat, 17 Jun 2023 20:42:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70350C433C8;
+        Sat, 17 Jun 2023 20:42:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687034532;
+        bh=WX/ny3bQSc/mSYEm1J1YzU7+UYxZ9RPhpjwAi58MXH4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MXVs55UrLapO907ehdg+amsoikUNM51FImBIRMT57u8WClBi6VnI4k3LFIt0docBw
+         xpmioIJbuGM5NBuzEsBmwTMD6Hmhi+dA8huMnn8vOgvhvMmO3PyM9WLAswHnCa5wQt
+         8ZqWWTckq1H5tkpqi8AiIRie83a7I/B6fYHEsf+9qWb1wfRr2iCixGziOaNJqto8H7
+         uf20rsugiFsAqBSBtsVur79sSxQwKpm6PcCGTNzL2W1hNIPIgVrR5L1E+XjpyWydks
+         qxfuOWcF3IxLQQBoyJz6IN2oFBoXkC5eo0TGOPHD08xszk4eMBGDed3K7YXUouK9jR
+         YnVTx8dSUtovQ==
+Date:   Sat, 17 Jun 2023 21:42:06 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 3/3] arm64: dts: qcom: sc8180x: Fix OSM L3 compatible
-Date:   Sat, 17 Jun 2023 22:41:18 +0200
-Message-Id: <20230617204118.61959-3-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230617204118.61959-1-krzysztof.kozlowski@linaro.org>
-References: <20230617204118.61959-1-krzysztof.kozlowski@linaro.org>
+        krishna Lanka <quic_vamslank@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: pinctrl: qcom,sdx65-tlmm: add pcie_clkreq
+ function
+Message-ID: <20230617-untimed-huskiness-fd212e6dca96@spud>
+References: <20230617111809.129232-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="itG2DWeY27fGdIw0"
+Content-Disposition: inline
+In-Reply-To: <20230617111809.129232-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit c70edc067739 ("dt-bindings: interconnect: Add sm8350,
-sc8280xp and generic OSM L3 compatibles") OSM L3 compatible should have
-generic fallback:
 
-  sc8180x-primus.dtb: interconnect@18321000: compatible: 'oneOf' conditional failed, one must be fixed:
+--itG2DWeY27fGdIw0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sc8180x.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sat, Jun 17, 2023 at 01:18:09PM +0200, Krzysztof Kozlowski wrote:
+> DTS and driver already support pcie_clkreq function for a pin.  Add it
+> to fix dtbs_check warning:
+>=20
+>   qcom-sdx65-mtp.dtb: pinctrl@f100000: pcie-ep-clkreq-default-state: 'one=
+Of' conditional failed, one must be fixed:
+>     'bias-disable', 'drive-strength', 'function', 'pins' do not match any=
+ of the regexes: '-pins$', 'pinctrl-[0-9]+'
+>     'pcie_clkreq' is not one of ['blsp_uart1', 'blsp_spi1', ... 'gpio']
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8180x.dtsi b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-index b02e14c96874..204deefbfa8b 100644
---- a/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-@@ -3564,7 +3564,7 @@ rpmhpd_opp_turbo_l1: opp10 {
- 		};
- 
- 		osm_l3: interconnect@18321000 {
--			compatible = "qcom,sc8180x-osm-l3";
-+			compatible = "qcom,sc8180x-osm-l3", "qcom,osm-l3";
- 			reg = <0 0x18321000 0 0x1400>;
- 
- 			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
--- 
-2.34.1
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
+Cheers,
+Conor.
+
+> ---
+>  Documentation/devicetree/bindings/pinctrl/qcom,sdx65-tlmm.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-tlmm.ya=
+ml b/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-tlmm.yaml
+> index 2ef793ae4038..27319782d94b 100644
+> --- a/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-tlmm.yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-tlmm.yaml
+> @@ -85,7 +85,7 @@ $defs:
+>                  qdss_tracectl_a, dac_calib13, qdss_traceclk_a, dac_calib=
+14,
+>                  dac_calib15, hdmi_rcv, dac_calib16, hdmi_cec, pwr_modem,
+>                  dac_calib17, hdmi_ddc, pwr_nav, dac_calib18, pwr_crypto,
+> -                dac_calib19, hdmi_hot, dac_calib20, dac_calib21, pci_e0,
+> +                dac_calib19, hdmi_hot, dac_calib20, dac_calib21, pci_e0,=
+ pcie_clkreq,
+>                  dac_calib22, dac_calib23, dac_calib24, tsif1_sync, dac_c=
+alib25,
+>                  sd_write, tsif1_error, blsp_spi2, blsp_uart2, blsp_uim2,
+>                  qdss_cti, blsp_i2c2, blsp_spi3, blsp_uart3, blsp_uim3, b=
+lsp_i2c3,
+> --=20
+> 2.34.1
+>=20
+
+--itG2DWeY27fGdIw0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZI4angAKCRB4tDGHoIJi
+0g1gAQDv2kVJcPxiEhVhKgwUNwWJ7WdK+ExNYXrzNZTq/SemVgEAhdmDEE8h1h26
+TEL4XR+3KBwp/wYgJO0Ah1FoMCqT4g0=
+=UpIb
+-----END PGP SIGNATURE-----
+
+--itG2DWeY27fGdIw0--
