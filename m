@@ -2,202 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 876637340F5
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 14:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB1017340FF
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 14:32:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235081AbjFQMUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 08:20:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53054 "EHLO
+        id S235070AbjFQMcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 08:32:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346166AbjFQMUt (ORCPT
+        with ESMTP id S230312AbjFQMcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 08:20:49 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F74295B
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 05:20:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687004434; x=1718540434;
-  h=date:from:to:cc:subject:message-id;
-  bh=vgntT5tMiFw/tiCuYPxKCQ0+K7PfX5f+44KIFN/AEEw=;
-  b=k32dPxkxPA1P2X+lnBGWV6Dh8/Pwpy96LYB5vAPPIYqFaXcEbZH6U3vn
-   qo9d/+f/SC9iW8WhFpn6lgmRLQzXnvaFK99LnGrY9B9bCwYPx7UNDM+MK
-   WZibQ7U/DHnRdpdyZ38Iu6YsXRGHqsBcuJH4Nk0w5Wy2KPNeCucsn6aei
-   6s/Gk+nbhqT5y2xOafAYZJzLvXdBj2SGS33fqSt9Gl5zkf0TeVt2Ad6gp
-   2dppGgIlcttwlUHWCNb9Q5vUx5SylCg8C3s6vaootAfh0PuFOEzVbx8lZ
-   sbzKckViqB1imYqrtu1gNW354v1kYD3ps6tm/rGUFaGLjKZjZvmwuqOwS
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="425327976"
-X-IronPort-AV: E=Sophos;i="6.00,250,1681196400"; 
-   d="scan'208";a="425327976"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2023 05:20:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="778466624"
-X-IronPort-AV: E=Sophos;i="6.00,250,1681196400"; 
-   d="scan'208";a="778466624"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 17 Jun 2023 05:20:33 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qAUuu-0002js-1O;
-        Sat, 17 Jun 2023 12:20:32 +0000
-Date:   Sat, 17 Jun 2023 20:20:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2023.06.14a] BUILD SUCCESS
- c06f5d5cfd22726422dcc257068670ae0b220a6a
-Message-ID: <202306172017.mYzljAbr-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 17 Jun 2023 08:32:45 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2E5B3
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 05:32:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=UBddHYr3K5LOhUQ5VMGfrM3npDCghRmrpbkd2omOJrY=; b=Kcc4H6k+cd4XLqThXuMfkEjn5M
+        6+BW9TrrKOQrp3piZYzRgK7pKbbP/WhMN6TiKGJmK1BqjReii2Q06PKR3UUOrNlWIuEb1WrnRRtMT
+        XOlzXx84V9fnqO9mUxrNqMHfSW6ZzypvKI6+Rl+2pywxNwcF9GUsddTa4mdRTBS4ydKCGtbrrN+Ew
+        Ee4qsO6ThufJ4Tbl0aMzJXmfR3GhICx81791IJvq/HIe9gaXT3UgYEdWk1GUjRAS1mYrs+vp77tUL
+        38Soi7NmlEWSlN7a+4y0j3K0c2nNSizPmHcHDoxNmnVSMRK1pcIiu3dBgciugIN2PUqE0qMLL+Wga
+        SKp3nQsw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qAV6I-009wUH-1E; Sat, 17 Jun 2023 12:32:18 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 554EB3002F0;
+        Sat, 17 Jun 2023 14:32:17 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1385821300B3C; Sat, 17 Jun 2023 14:21:16 +0200 (CEST)
+Date:   Sat, 17 Jun 2023 14:21:15 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Robin Jarry <rjarry@redhat.com>
+Cc:     Waiman Long <longman@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org> 
+        , Josh Poimboeuf <jpoimboe@kernel.org>, Pawan Gupta
+        <pawan.kumar.gupta@linux.intel.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann
+        <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, Ben
+        Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, Daniel
+        Bristot de Oliveira <bristot@redhat.com>, Valentin Schneider" 
+        <vschneid@redhat.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, Joe Mario <jmario@redhat.com>
+Subject: Re: [PATCH 0/5] x86/speculation: Disable IBRS when idle
+Message-ID: <20230617122115.GA1830050@hirez.programming.kicks-ass.net>
+References: <20230616200003.745742-1-longman@redhat.com>
+ <CTECMFWMMST3.9FTWRDG7FFKQ@ringo>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CTECMFWMMST3.9FTWRDG7FFKQ@ringo>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.06.14a
-branch HEAD: c06f5d5cfd22726422dcc257068670ae0b220a6a  Docs/RCU/rculist_nulls: Fix text discussing atomic_set_release()
+On Fri, Jun 16, 2023 at 10:14:52PM +0200, Robin Jarry wrote:
+> Waiman Long, Jun 16, 2023 at 21:59:
+> > For Intel processors that need to turn on IBRS to protect against
+> > Spectre v2 and Retbleed, the IBRS bit in the SPEC_CTRL MSR affects
+> > the performance of the whole core even if only one thread is turning
+> > it on when running in the kernel. For user space heavy applications,
+> > the performance impact of occasionally turning IBRS on during syscalls
+> > shouldn't be significant. Unfortunately, that is not the case when the
+> > sibling thread is idling in the kernel. In that case, the performance
+> > impact can be significant.
+> >
+> > When DPDK is running on an isolated CPU thread processing network packets
+> > in user space while its sibling thread is idle. The performance of the
+> > busy DPDK thread with IBRS on and off in the sibling idle thread are:
+> >
+> >                                 IBRS on               IBRS off
+> >                                 -------               --------
+> >   packets/second:                  7.8M                  10.4M
+> >   avg tsc cycles/packet:         282.26                 209.86
+> >
+> > This is a 25% performance degradation. The test system is a Intel Xeon
+> > 4114 CPU @ 2.20GHz.
+> >
+> > This patch series turns off IBRS when in various idle mode to eliminate
+> > the performance impact of the idling thread on its busy sibling thread.
+> 
+> Hi Longman,
+> 
+> thanks a lot for the quick turnaround on this issue.
+> 
+> Tested-by: Robin Jarry <rjarry@redhat.com>
 
-elapsed time: 720m
+I can't see the patches -- they didn't arrive in my mailbox nor can I
+find them in the archive, in fact this here mail is the only evidence
+they exist at all.
 
-configs tested: 125
-configs skipped: 4
+However, did you all see intel_idle_ibrs() and how that is selected for
+C6 and up?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+What exactly isn't working there?
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r016-20230616   gcc  
-arc                  randconfig-r025-20230616   gcc  
-arc                  randconfig-r043-20230616   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                     am200epdkit_defconfig   clang
-arm                     davinci_all_defconfig   clang
-arm                                 defconfig   gcc  
-arm                   milbeaut_m10v_defconfig   clang
-arm                          pxa910_defconfig   gcc  
-arm                  randconfig-r011-20230616   clang
-arm                  randconfig-r046-20230616   clang
-arm                       versatile_defconfig   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r005-20230616   gcc  
-csky                 randconfig-r012-20230616   gcc  
-csky                 randconfig-r035-20230616   gcc  
-hexagon              randconfig-r041-20230616   clang
-hexagon              randconfig-r045-20230616   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r004-20230616   clang
-i386         buildonly-randconfig-r005-20230616   clang
-i386         buildonly-randconfig-r006-20230616   clang
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230616   clang
-i386                 randconfig-i002-20230616   clang
-i386                 randconfig-i003-20230616   clang
-i386                 randconfig-i004-20230616   clang
-i386                 randconfig-i005-20230616   clang
-i386                 randconfig-i006-20230616   clang
-i386                 randconfig-i011-20230616   gcc  
-i386                 randconfig-i012-20230616   gcc  
-i386                 randconfig-i013-20230616   gcc  
-i386                 randconfig-i014-20230616   gcc  
-i386                 randconfig-i015-20230616   gcc  
-i386                 randconfig-i016-20230616   gcc  
-i386                 randconfig-r023-20230616   gcc  
-i386                 randconfig-r033-20230616   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r013-20230616   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                       m5275evb_defconfig   gcc  
-m68k                 randconfig-r004-20230616   gcc  
-m68k                 randconfig-r022-20230616   gcc  
-microblaze           randconfig-r032-20230616   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r034-20230616   gcc  
-nios2                               defconfig   gcc  
-openrisc                            defconfig   gcc  
-openrisc             randconfig-r001-20230616   gcc  
-openrisc             randconfig-r021-20230616   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                      acadia_defconfig   clang
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                    amigaone_defconfig   gcc  
-powerpc                      cm5200_defconfig   gcc  
-powerpc                        fsp2_defconfig   clang
-powerpc                       maple_defconfig   gcc  
-powerpc                  mpc866_ads_defconfig   clang
-powerpc              randconfig-r036-20230616   clang
-powerpc                 xes_mpc85xx_defconfig   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230616   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r006-20230616   clang
-s390                 randconfig-r026-20230616   gcc  
-s390                 randconfig-r044-20230616   gcc  
-sh                               alldefconfig   gcc  
-sh                               allmodconfig   gcc  
-sh                   randconfig-r002-20230616   gcc  
-sh                   randconfig-r015-20230616   gcc  
-sh                           se7705_defconfig   gcc  
-sh                           se7722_defconfig   gcc  
-sh                     sh7710voipgw_defconfig   gcc  
-sh                            shmin_defconfig   gcc  
-sh                              ul2_defconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r024-20230616   gcc  
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                   randconfig-r031-20230616   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r001-20230616   clang
-x86_64       buildonly-randconfig-r002-20230616   clang
-x86_64       buildonly-randconfig-r003-20230616   clang
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230616   clang
-x86_64               randconfig-a002-20230616   clang
-x86_64               randconfig-a003-20230616   clang
-x86_64               randconfig-a004-20230616   clang
-x86_64               randconfig-a005-20230616   clang
-x86_64               randconfig-a006-20230616   clang
-x86_64               randconfig-a011-20230616   gcc  
-x86_64               randconfig-a012-20230616   gcc  
-x86_64               randconfig-a013-20230616   gcc  
-x86_64               randconfig-a014-20230616   gcc  
-x86_64               randconfig-a015-20230616   gcc  
-x86_64               randconfig-a016-20230616   gcc  
-x86_64               randconfig-r003-20230616   clang
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Also, instead of investing more in this IBRS trainwreck, did you all try
+call-depth-stuffing ?
