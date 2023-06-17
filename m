@@ -2,46 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BD2F733DC7
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 05:22:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE4AF733DCA
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 05:25:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233563AbjFQDVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 23:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59492 "EHLO
+        id S233792AbjFQDZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 23:25:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbjFQDVM (ORCPT
+        with ESMTP id S229993AbjFQDZp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 23:21:12 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202E226B3;
-        Fri, 16 Jun 2023 20:21:10 -0700 (PDT)
-Received: from dggpemm500011.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Qjh7b0drKztQX8;
-        Sat, 17 Jun 2023 11:18:35 +0800 (CST)
-Received: from localhost.huawei.com (10.137.16.203) by
- dggpemm500011.china.huawei.com (7.185.36.110) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Sat, 17 Jun 2023 11:21:06 +0800
-From:   renmingshuai <renmingshuai@huawei.com>
-To:     <pctammela@mojatatu.com>, <vladbu@nvidia.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>
-CC:     <liaichun@huawei.com>, <caowangbao@huawei.com>, <yanan@huawei.com>,
-        <liubo335@huawei.com>
-Subject: [PATCH] selftests: tc-testing: add one test for flushing explicitly created chain
-Date:   Sat, 17 Jun 2023 11:20:33 +0800
-Message-ID: <20230617032033.892064-1-renmingshuai@huawei.com>
-X-Mailer: git-send-email 2.27.0
+        Fri, 16 Jun 2023 23:25:45 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC9082D5D;
+        Fri, 16 Jun 2023 20:25:42 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8Cx8Oi1J41kVTIGAA--.11243S3;
+        Sat, 17 Jun 2023 11:25:41 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxG8q0J41kmtwdAA--.10184S3;
+        Sat, 17 Jun 2023 11:25:40 +0800 (CST)
+Subject: Re: [PATCH v14 1/2] thermal: loongson-2: add thermal management
+ support
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn,
+        zhanghongchen <zhanghongchen@loongson.cn>, zhuyinbo@loongson.cn
+References: <20230426062018.19755-1-zhuyinbo@loongson.cn>
+ <af4d1e00-76d6-b71a-2ed1-562e6405306b@linaro.org>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <bc081559-e6f5-7ac8-7ae1-3cfbbee51697@loongson.cn>
+Date:   Sat, 17 Jun 2023 11:25:40 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.137.16.203]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500011.china.huawei.com (7.185.36.110)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+In-Reply-To: <af4d1e00-76d6-b71a-2ed1-562e6405306b@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxG8q0J41kmtwdAA--.10184S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+        nUUI43ZEXa7xR_UUUUUUUUU==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -50,48 +61,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the test for additional reference to chains that are explicitly created
- by RTM_NEWCHAIN message
 
-commit c9a82bec02c3 ("net/sched: cls_api: Fix lockup on flushing explicitly
- created chain")
-Signed-off-by: Mingshuai Ren <renmingshuai@huawei.com>
----
- .../tc-testing/tc-tests/infra/filter.json     | 25 +++++++++++++++++++
- 1 file changed, 25 insertions(+)
- create mode 100644 tools/testing/selftests/tc-testing/tc-tests/infra/filter.json
+Hi Daniel,
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/infra/filter.json b/tools/testing/selftests/tc-testing/tc-tests/infra/filter.json
-new file mode 100644
-index 000000000000..c4c778e83da2
---- /dev/null
-+++ b/tools/testing/selftests/tc-testing/tc-tests/infra/filter.json
-@@ -0,0 +1,25 @@
-+[
-+    {
-+        "id": "c2b4",
-+        "name": "soft lockup alarm will be not generated after delete the prio 0 filter of the chain",
-+        "category": [
-+            "filter",
-+            "chain"
-+        ],
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY root handle 1: htb default 1",
-+            "$TC chain add dev $DUMMY",
-+            "$TC filter del dev $DUMMY chain 0 parent 1: prio 0"
-+        ],
-+        "cmdUnderTest": "$TC filter add dev $DUMMY chain 0 parent 1:",
-+        "expExitCode": "2",
-+        "verifyCmd": "$TC chain ls dev $DUMMY",
-+        "matchPattern": "chain parent 1: chain 0",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY root handle 1: htb default 1",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-+    }
-+]
--- 
-2.27.0
+在 2023/6/12 下午10:22, Daniel Lezcano 写道:
+
+...
+
+>>
+>> +#define LOONGSON2_SOC_MAX_SENSOR_NUM            4
+>> +
+>> +#define LOONGSON2_TSENSOR_CTRL_HI            0x0
+>> +#define LOONGSON2_TSENSOR_CTRL_LO            0x8
+>> +#define LOONGSON2_TSENSOR_STATUS            0x10
+>> +#define LOONGSON2_TSENSOR_OUT                0x14
+> 
+> Please use BIT() macros
+
+
+I learn about that BIT() is generally used to describe the functional
+bit or control bit or status bits of a register, but these register was
+some different register offset and not some control bit or status bit
+So using BIT() here seems a bit inappropriate, Do you think so?
+
+
+Thanks,
+Yinbo
 
