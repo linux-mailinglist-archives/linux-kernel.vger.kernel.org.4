@@ -2,81 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2680E733F0C
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 09:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E867733F11
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 09:15:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233189AbjFQHPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 03:15:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41614 "EHLO
+        id S232772AbjFQHP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 03:15:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232806AbjFQHPI (ORCPT
+        with ESMTP id S231912AbjFQHPy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 03:15:08 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6AE1213B
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 00:15:05 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f907f31247so529885e9.2
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 00:15:05 -0700 (PDT)
+        Sat, 17 Jun 2023 03:15:54 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4FF26BA
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 00:15:53 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-986bfdfe8d4so182746266b.1
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 00:15:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686986104; x=1689578104;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=linaro.org; s=google; t=1686986151; x=1689578151;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=qkJta/itqN/plYtDpPSK5B2b/lfTXQ8wtnzVNHq6pLE=;
-        b=ycmJGcahVDhbo4zOAmSq3lKerxRW6RC3JCMzXhwfVt5UvBk/TgeuQrTapqugeYLPvN
-         qy0ktDd9U08LGZRRgjXYmhb0ILQAwM0B6A95fewx/Wu4+UyZt0LHuMCQl5WU75ujZT5C
-         rm2ojIKbqyY7CbIHO6hKRDcknLcpqncqujV7u4oKlx7iDKUY1fPolscXd3QiTudbPkmG
-         sFWJj2vaHfaMykLDDUY3YkUVbtu59vkMCos6sGf69zVRjNvwso5WYKUDQOwNEfK25HCE
-         1gTotbnZv9vvgda7fR62QgrhXFFPo66oqyiIjXt3t3PJ3UrmUe2vvInawh6CHBXDEZY+
-         QWPQ==
+        bh=DncxBWQlcUNpstw3Uyqlpb1LlZypTxxD12g/hHvOzGg=;
+        b=usmhpaEw3Au+u5l4p88p0tzi7rBdur4h7/4BSAv/vKf4stAq6YID+vZD+0HazLjd+D
+         2QoqkUYvXt6OObrisr8IhlK0rcdvVWOCgobynsAlFif8RnLRopiLQtXtb/jaaZuleGd5
+         Q4fV6ynClFUUMKWCveoUGJhj3tf8zl1B6RRnzMuoiZtAMPbbJC6bVSlxIhUNoIdxKZEC
+         ji76lxFBmMia7R71uyiv1+bvB1jgjQWC76rbMPHBO+ReMzg8Oi5ngt8qDYYVZpJGCF1t
+         dlQhyq3dg+OubbPXBa67J/sIYT09TzdZ2BwAkAa07g6IAFWU3xzcUUJw+IlNfVa5ZyvY
+         aNVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686986104; x=1689578104;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=1e100.net; s=20221208; t=1686986151; x=1689578151;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qkJta/itqN/plYtDpPSK5B2b/lfTXQ8wtnzVNHq6pLE=;
-        b=MKB+b2xjs0rBbCB+PTt5AOJDVBu3k4Mzu3oUrvGsjU1x2zT61iuNOIxc7Ro4AOIYcu
-         e9K3laOc8+AbEU3IZVtNtWGfF+j18l2ZaqbcDzQc4W5IU3v2m/OJ9fMu5zXl8etvd/s/
-         IymzgQhWl6HiaD/Ya9Oba89XNWkoKrH9RDpIyhBeMZDQQt00TAAuMM3utYrw933GVZPB
-         ulbOmDiLlqeMVZmzwp05kRiNu3z7/Y+ukNoeDLtahxJOVTnr/uHGMGcrUbMLMSypXQkM
-         eCXNZciOlJcRnEl9OCui5eMXACPSRZzbcil0Y1FBrARM/2iBTyVcL4j6s+hX7LZv0hd5
-         NbfQ==
-X-Gm-Message-State: AC+VfDzOyCTNe1lkiGPMGrhb+8+gdKOxj4EPLPn0io+Lbj9WolUgFGLG
-        fRfQA9LgFGAh+xVyEXl+aOVqEA==
-X-Google-Smtp-Source: ACHHUZ5OiiQzsETNaWBoHR3RwTTo+lhlSaUAJZCEBguY17vTlskHr3Q8Om8diCiSMwvip/2wP+bn/A==
-X-Received: by 2002:a05:600c:2043:b0:3f7:3280:810b with SMTP id p3-20020a05600c204300b003f73280810bmr2941325wmg.19.1686986104226;
-        Sat, 17 Jun 2023 00:15:04 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:4aa0:8c56:eebe:c05c? ([2a05:6e02:1041:c10:4aa0:8c56:eebe:c05c])
-        by smtp.googlemail.com with ESMTPSA id p19-20020a05600c469300b003f7f475c3bcsm11212368wmo.1.2023.06.17.00.15.03
+        bh=DncxBWQlcUNpstw3Uyqlpb1LlZypTxxD12g/hHvOzGg=;
+        b=KEZV6wZWoevVVFnMk2FCNPBTRVPWDDyRstVDDYHC1n1FnkyXdICkSt9+Y6h9fYd00t
+         TXcPEhGoJ2+K41PreTb978IYbVtMW6xGNZimuzWiH4PJzIregvJtZDjOkOBb1r1NdBox
+         EmGxNL2CIuxy2EkRcuI09iSbOnjaJ07SrazBRL0G77VQqDVVQ+TdNp1yVgrZ1+Mz/qpC
+         GP8CypRO/3SZq+0ArE7zeqYJC5y0yLK0dGYz4MzcvQ/LRRDkESzBBbJV6zrgeYZrUohH
+         tsdMo2usKDBCiT7rHiypjODKQU86NZgRVxOnyRzN9tz+wFrlrUqveRlTmevghFtII+lz
+         yvxA==
+X-Gm-Message-State: AC+VfDwKv5NfiaQbyR3HrvN2dFuih7ohYG4APPIuA5WvYxDNDEhR/92U
+        PJzsvXuAnFe35UOI82svhFxuiw==
+X-Google-Smtp-Source: ACHHUZ7/jJE3fjrBXvzZKqNsxyzq7Um/rwbMXpWiWfxwRf6F9pBJ/5MEXt8jFSfbW6NgzWNeepqWAA==
+X-Received: by 2002:a17:907:72ce:b0:96f:a412:8b03 with SMTP id du14-20020a17090772ce00b0096fa4128b03mr4071741ejc.5.1686986151441;
+        Sat, 17 Jun 2023 00:15:51 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id x10-20020a1709060eea00b009745edfb7cbsm11620540eji.45.2023.06.17.00.15.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Jun 2023 00:15:03 -0700 (PDT)
-Message-ID: <dd3cc9db-bb60-8dfd-19b7-afeeedb65177@linaro.org>
-Date:   Sat, 17 Jun 2023 09:15:03 +0200
+        Sat, 17 Jun 2023 00:15:51 -0700 (PDT)
+Message-ID: <cefbb542-e9c3-8e4f-a3fa-542414ab8dc0@linaro.org>
+Date:   Sat, 17 Jun 2023 09:15:48 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v14 1/2] thermal: loongson-2: add thermal management
- support
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 2/3] pinctrl: qcom: sm8350-lpass-lpi: add SM8350 LPASS
+ TLMM
 Content-Language: en-US
-To:     zhuyinbo <zhuyinbo@loongson.cn>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn,
-        zhanghongchen <zhanghongchen@loongson.cn>
-References: <20230426062018.19755-1-zhuyinbo@loongson.cn>
- <af4d1e00-76d6-b71a-2ed1-562e6405306b@linaro.org>
- <bc081559-e6f5-7ac8-7ae1-3cfbbee51697@loongson.cn>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <bc081559-e6f5-7ac8-7ae1-3cfbbee51697@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Conor Dooley <conor+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230616185742.2250452-1-krzysztof.kozlowski@linaro.org>
+ <20230616185742.2250452-2-krzysztof.kozlowski@linaro.org>
+ <835bc0c9-0218-80e3-f64f-bd4116ad02e8@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <835bc0c9-0218-80e3-f64f-bd4116ad02e8@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -87,37 +88,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/06/2023 05:25, zhuyinbo wrote:
+On 17/06/2023 01:36, Konrad Dybcio wrote:
+> On 16.06.2023 20:57, Krzysztof Kozlowski wrote:
+>> Add driver for pin controller in Low Power Audio SubSystem (LPASS).  The
+>> driver is similar to SM8450 LPASS pin controller, with difference in one
+>> new pin (gpio14).
+> 8250*
 > 
-> Hi Daniel,
+> 8450 has a whole lot more!
 > 
-> 在 2023/6/12 下午10:22, Daniel Lezcano 写道:
-> 
-> ...
-> 
->>>
->>> +#define LOONGSON2_SOC_MAX_SENSOR_NUM            4
->>> +
->>> +#define LOONGSON2_TSENSOR_CTRL_HI            0x0
->>> +#define LOONGSON2_TSENSOR_CTRL_LO            0x8
->>> +#define LOONGSON2_TSENSOR_STATUS            0x10
->>> +#define LOONGSON2_TSENSOR_OUT                0x14
->>
->> Please use BIT() macros
-> 
-> 
-> I learn about that BIT() is generally used to describe the functional
-> bit or control bit or status bits of a register, but these register was
-> some different register offset and not some control bit or status bit
-> So using BIT() here seems a bit inappropriate, Do you think so?
+> The 8250 in fact does look almost identical.. Perhaps in this case it
+> would be sane to combine the two?
 
-Yes, you are right
+It meant to be 8250 as I copied that one. I'll fix it.
 
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Best regards,
+Krzysztof
 
