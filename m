@@ -2,234 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 699B17342E5
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 20:11:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FDBC7342EA
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 20:12:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232563AbjFQSK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 14:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40664 "EHLO
+        id S236972AbjFQSMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 14:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjFQSKz (ORCPT
+        with ESMTP id S229663AbjFQSMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 14:10:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB88C1736;
-        Sat, 17 Jun 2023 11:10:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5951760B6A;
-        Sat, 17 Jun 2023 18:10:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 087AFC433C0;
-        Sat, 17 Jun 2023 18:10:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687025453;
-        bh=+MUxODR25JxS83z5KzVEnmk64ZPPdYw5BmwBRnEkZug=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KQ+qvDhZbrqMpK69x38tBJXqGniOYa1aHTkKJ74lnZTxGd8gInXVya1OhDINdqigr
-         9VlN4r4kNz1OmbWJ81sCXXanBRteKjaxyqF0QNENKpwdvxpIKdA0EfgbrzoZyVdzxf
-         mp+KS5bKbsyQtYpei2gvo38eOMdBDQeRs71L8RkOdcSnBHWLl9q3mUv6K1IV3WLc/O
-         zGychfnbi+rhLh+6kvjrRk+Zjhu+eSqo6TqJZgHbSE4KPxDJ93+QMijebn6HlOD7Nb
-         xSq6e/WGMI8yRThC4/IhpqRxahs8kBUKqM8KdOZgfX1z35UiMl0L8ynky+uhTr6RsZ
-         jN2Lzb3IZwKvA==
-Date:   Sat, 17 Jun 2023 19:10:47 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Nuno =?UTF-8?B?U8Oh?= <noname.nuno@gmail.com>
-Cc:     Alisa Roman <alisa.roman@analog.com>, stable@vger.kernel.org,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iio: adc: ad7192: Fix ac excitation feature
-Message-ID: <20230617191047.51e4852f@jic23-huawei>
-In-Reply-To: <b8693c52df5cf520d6994b872bac0768901a0a6d.camel@gmail.com>
-References: <20230614155242.160296-1-alisa.roman@analog.com>
-        <b8693c52df5cf520d6994b872bac0768901a0a6d.camel@gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+        Sat, 17 Jun 2023 14:12:17 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9420F1737;
+        Sat, 17 Jun 2023 11:12:16 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id 46e09a7af769-6b1fa5a04e9so1368515a34.1;
+        Sat, 17 Jun 2023 11:12:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687025536; x=1689617536;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5wx2MjUHPA+Xun7dM0j+8fNF+bZq54eMfmrRm0GhpLQ=;
+        b=EQf9MpGKQUI9no+uZ9gdsmvfJjF9iTToYyP0km1wjv7eCr924UfJJtAOV0qNYZTt2d
+         oxMR60tOx+DKIJCTsFA3lwTSJT5AGxiQvJqkBBfNHjEdOevVHJFKpPCI2LZxRC458/UO
+         2m4iU1m1imidwlwrP/YnJUDe+txi1HSTUgyh9nRCHMAUlfwoZmKCbmdNmjDvwz9mA76j
+         soYJ4lNfT5gxbQSA2vgwE2oERWW5G75fVzguD5VvcMISA7Nnn+PWBWmDeh05YqCGe0AK
+         Ei/mJzpPKvBykofpX50L5ztmG3ToqyCYVepp/kkce0zCwHc+i6z3h7UsA6h2edv2qFSA
+         9zhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687025536; x=1689617536;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5wx2MjUHPA+Xun7dM0j+8fNF+bZq54eMfmrRm0GhpLQ=;
+        b=gHZcA8LNAZd5lKS3Hi70/aCJRFPDHyf2iuqXPS9Xb/8mQLWdJhjUVza2Hm4W/OtGxa
+         si3xh/4VjIZT00C/GUt33gNTt86GXNQ6G1oY1xfzJ04lGhPtYlSeJc5nxOn1r8Qn4gU7
+         /XOrGQ4FeZj/W6TBPRXG8iYPvyFolYTx5969N+Jy3KL9CUgrDJZgUN1sNWWxK8mSW/+x
+         yGu1/ieH4wx2BRZVPRi4/ZY821P0bp2YHvXuW/Z8LJ+gW8T7lIVhxZmEbKlS4Jo/Vxp2
+         ozLweiq+wMQMWubgUrjmkHYNdX/3mWdHPBye/Z1BtVrmxNe1HgE1VSFa5j5qEfaBG0vk
+         Ogow==
+X-Gm-Message-State: AC+VfDxE/UGwYG//sUGprmeS/e3KM34n/IO455G76ZfBng113VK4Qyxf
+        tV/zYcy3ZvPcUIrvPEC8/whX0lXsjEg=
+X-Google-Smtp-Source: ACHHUZ7DJBhtYdHPm7i7DgnBXij+fPxACYecTPivrMoxK6bpNjg+dHwafpRFmyfdf3h6BhL/450+rg==
+X-Received: by 2002:a05:6830:1da4:b0:6af:a332:4c23 with SMTP id z4-20020a0568301da400b006afa3324c23mr1532341oti.14.1687025535864;
+        Sat, 17 Jun 2023 11:12:15 -0700 (PDT)
+Received: from smeagol.fibertel.com.ar ([201.235.4.68])
+        by smtp.gmail.com with ESMTPSA id j24-20020a9d7698000000b006adda5cddb7sm6604927otl.62.2023.06.17.11.12.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Jun 2023 11:12:15 -0700 (PDT)
+From:   =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
+        <samsagax@gmail.com>
+To:     linux@roeck-us.net
+Cc:     =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
+        <samsagax@gmail.com>, derekjohn.clark@gmail.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] hwmon: (oxp-sensors) Minor cleanup of driver code
+Date:   Sat, 17 Jun 2023 15:11:41 -0300
+Message-ID: <20230617181159.32844-1-samsagax@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Jun 2023 13:46:44 +0200
-Nuno S=C3=A1 <noname.nuno@gmail.com> wrote:
+Make some cleanup of the driver removing unnecesary header and some
+duplicated return on error logic.
 
-> On Wed, 2023-06-14 at 18:52 +0300, Alisa Roman wrote:
-> > AC excitation enable feature exposed to user on AD7192, allowing a bit
-> > which should be 0 to be set. This feature is specific only to AD7195. AC
-> > excitation attribute moved accordingly.
-> >=20
-> > In the AD7195 documentation, the AC excitation enable bit is on position
-> > 22 in the Configuration register. ACX macro changed to match correct
-> > register and bit.
-> >=20
-> > Note that the fix tag is for the commit that moved the driver out of
-> > staging.
-> >=20
-> > Fixes: b581f748cce0 ("staging: iio: adc: ad7192: move out of staging")
-> > Signed-off-by: Alisa Roman <alisa.roman@analog.com>
-> > Cc: stable@vger.kernel.org
-> > --- =20
->=20
-> Hi Alisa,
->=20
-> I see you improved the commit message to explain what's going on but you =
-should
-> have versioned your patches accordingly. Anyways, don't forget to do it n=
-ext
-> time :). You could also mention the name change AD7192_MODE_ACX ->
-> AD7192_CONFIG_ACX even though it's a bit obvious. Anyways:
->=20
-> Reviewed-by: Nuno Sa <nuno.sa@analog.com>
+Joaquín Ignacio Aramendía (2):
+  hwmon: (oxp-sensors) Remove unused header
+  hwmon: (oxp-sensors) Simplify logic of error return
 
-Hi Alisa,
+ drivers/hwmon/oxp-sensors.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-I've queued this up locally but as we are close to the merge window, my
-fixes branch is in the odd state of being ahead of what it's usually based =
-on.
-As such I won't push it out until post merge window and won't push it out
-in the meantime as it would make a mess of linux-next.
-
-For now it's pushed out as fixes-testing so we can get some autobuilder cov=
-erage
-on it.
-
-Jonathan
-
-
->=20
-> > =C2=A0drivers/iio/adc/ad7192.c | 16 ++++++++--------
-> > =C2=A01 file changed, 8 insertions(+), 8 deletions(-)
-> >=20
-> > diff --git a/drivers/iio/adc/ad7192.c b/drivers/iio/adc/ad7192.c
-> > index 8685e0b58a83..7bc3ebfe8081 100644
-> > --- a/drivers/iio/adc/ad7192.c
-> > +++ b/drivers/iio/adc/ad7192.c
-> > @@ -62,7 +62,6 @@
-> > =C2=A0#define AD7192_MODE_STA_MASK=C2=A0=C2=A0=C2=A0BIT(20) /* Status R=
-egister transmission Mask
-> > */
-> > =C2=A0#define AD7192_MODE_CLKSRC(x)=C2=A0=C2=A0(((x) & 0x3) << 18) /* C=
-lock Source Select */
-> > =C2=A0#define AD7192_MODE_SINC3=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0BIT(=
-15) /* SINC3 Filter Select */
-> > -#define AD7192_MODE_ACX=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0BIT(14) /* AC excitation=
- enable(AD7195
-> > only)*/
-> > =C2=A0#define AD7192_MODE_ENPAR=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0BIT(=
-13) /* Parity Enable */
-> > =C2=A0#define AD7192_MODE_CLKDIV=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0BIT(12) /=
-* Clock divide by 2 (AD7190/2 only)*/
-> > =C2=A0#define AD7192_MODE_SCYCLE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0BIT(11) /=
-* Single cycle conversion */
-> > @@ -91,6 +90,7 @@
-> > =C2=A0/* Configuration Register Bit Designations (AD7192_REG_CONF) */
-> > =C2=A0
-> > =C2=A0#define AD7192_CONF_CHOP=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0BIT(23) /* CHOP enable */
-> > +#define AD7192_CONF_ACX=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0BIT(22) /* AC excitation=
- enable(AD7195
-> > only) */
-> > =C2=A0#define AD7192_CONF_REFSEL=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0BIT(20) /=
-* REFIN1/REFIN2 Reference Select */
-> > =C2=A0#define AD7192_CONF_CHAN(x)=C2=A0=C2=A0=C2=A0=C2=A0((x) << 8) /* =
-Channel select */
-> > =C2=A0#define AD7192_CONF_CHAN_MASK=C2=A0=C2=A0(0x7FF << 8) /* Channel =
-select mask */
-> > @@ -472,7 +472,7 @@ static ssize_t ad7192_show_ac_excitation(struct dev=
-ice
-> > *dev,
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct iio_dev *indio_d=
-ev =3D dev_to_iio_dev(dev);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct ad7192_state *st=
- =3D iio_priv(indio_dev);
-> > =C2=A0
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return sysfs_emit(buf, "%d\n=
-", !!(st->mode & AD7192_MODE_ACX));
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return sysfs_emit(buf, "%d\n=
-", !!(st->conf & AD7192_CONF_ACX));
-> > =C2=A0}
-> > =C2=A0
-> > =C2=A0static ssize_t ad7192_show_bridge_switch(struct device *dev,
-> > @@ -513,13 +513,13 @@ static ssize_t ad7192_set(struct device *dev,
-> > =C2=A0
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0ad_sd_write_reg(&st->sd, AD7192_REG_GPOCON, 1, s=
-t->gpocon);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0break;
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case AD7192_REG_MODE:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case AD7192_REG_CONF:
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0if (val)
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0st->mo=
-de |=3D AD7192_MODE_ACX;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0st->co=
-nf |=3D AD7192_CONF_ACX;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0else
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0st->mo=
-de &=3D ~AD7192_MODE_ACX;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0st->co=
-nf &=3D ~AD7192_CONF_ACX;
-> > =C2=A0
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0ad_sd_write_reg(&st->sd, AD7192_REG_MODE, 3, st->mode);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0ad_sd_write_reg(&st->sd, AD7192_REG_CONF, 3, st->conf);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0break;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0default:
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0ret =3D -EINVAL;
-> > @@ -579,12 +579,11 @@ static IIO_DEVICE_ATTR(bridge_switch_en, 0644,
-> > =C2=A0
-> > =C2=A0static IIO_DEVICE_ATTR(ac_excitation_en, 0644,
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ad7192_show=
-_ac_excitation, ad7192_set,
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 AD7192_REG_MODE);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 AD7192_REG_CONF);
-> > =C2=A0
-> > =C2=A0static struct attribute *ad7192_attributes[] =3D {
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0&iio_dev_attr_filter_lo=
-w_pass_3db_frequency_available.dev_attr.attr,
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0&iio_dev_attr_bridge_sw=
-itch_en.dev_attr.attr,
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0&iio_dev_attr_ac_excitation_=
-en.dev_attr.attr,
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0NULL
-> > =C2=A0};
-> > =C2=A0
-> > @@ -595,6 +594,7 @@ static const struct attribute_group ad7192_attribut=
-e_group
-> > =3D {
-> > =C2=A0static struct attribute *ad7195_attributes[] =3D {
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0&iio_dev_attr_filter_lo=
-w_pass_3db_frequency_available.dev_attr.attr,
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0&iio_dev_attr_bridge_sw=
-itch_en.dev_attr.attr,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0&iio_dev_attr_ac_excitation_=
-en.dev_attr.attr,
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0NULL
-> > =C2=A0};
-> > =C2=A0 =20
->=20
+-- 
+2.41.0
 
