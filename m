@@ -2,157 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82D87733EA4
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 08:24:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF671733EA8
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 08:27:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232039AbjFQGYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 02:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57422 "EHLO
+        id S232807AbjFQG1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 02:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjFQGY2 (ORCPT
+        with ESMTP id S229562AbjFQG1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 02:24:28 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A792683
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 23:24:27 -0700 (PDT)
-Date:   Sat, 17 Jun 2023 06:24:24 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686983065;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NylHAmCmQ76Rw791ZTTP1U3oqUEJrmR6kqmyV/Ln66Y=;
-        b=WTNWfJrZt3z/qhSQHEU0riAIl9l6Aoef/THPnnRUEBlmqCtOoQd19tDw6ab9yIX/f4HuL5
-        r0Jjy9BXN8zJrD3NK61SniT4h1GtDhehGyEvSWldkbvfYMdizz4CNJ4iN43Vgsp1Rd/qo9
-        l1kiCnIO0XptiDsOCXlZqkvs+6MrQGrRdkg20c6gHuwM4hS9AboE9iVwJAIh/PeGjDU6ta
-        hqM63fK63i74i+seI+QAPnvCtjO4phjv+TN91vvvJv16C/2k660YJJTR98wdCle78CcH0Q
-        HMgnHZiM0gIZSIvC8xQhiAhIFRiK/z2n5+Nr/vqFsOR7Be+18CmxcWtHlTksbg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686983065;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NylHAmCmQ76Rw791ZTTP1U3oqUEJrmR6kqmyV/Ln66Y=;
-        b=uZ58zR3hvFYosyMqg8FtpWq/SBH4gKwx50N/S8IkyljQNLQ16LY0etVFqJo+K95kOA5dKv
-        uDm5gkQ2H76dYgDA==
-From:   "irqchip-bot for Binbin Zhou" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] dt-bindings: interrupt-controller: Add
- Loongson EIOINTC
-Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        tglx@linutronix.de
-In-Reply-To: =?utf-8?q?=3C4369959615eda101e612c450b8974d76ce7e8821=2E16832?=
- =?utf-8?q?79769=2Egit=2Ezhoubinbin=40loongson=2Ecn=3E?=
-References: =?utf-8?q?=3C4369959615eda101e612c450b8974d76ce7e8821=2E168327?=
- =?utf-8?q?9769=2Egit=2Ezhoubinbin=40loongson=2Ecn=3E?=
+        Sat, 17 Jun 2023 02:27:01 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C4CE66;
+        Fri, 16 Jun 2023 23:27:00 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-51a3e7a9127so2399545a12.1;
+        Fri, 16 Jun 2023 23:27:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686983219; x=1689575219;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vETI5TQvq1SPOYV8EBJJoDmGtq15U8VQP1o1n/huufs=;
+        b=X1dgpGhhxlqnzRaky3bchjnOrqH0OtZ1IpBnDOL+gOL6y/eFrN8swpP1AbhExG1sdk
+         n2MTdNfcPGWX+tMQ9RVjkHcA1Ol1FA0GgFs2gJSQhKvO6LRp4eiiL5InXpBfWUNrBrEk
+         7+o7pDdw4S/dgwrvMdLKF4z/EiWXBjOItpNXcFIXEHiBrVYYKMvOV3Hlj46LGdc9kVN/
+         liq9x7SAxu/0BCV+V4QdXvHNE5p557h2UKjwEq4tdE7S79y/d7qdeiBzAEe6RgY2hCww
+         IhncM7oxAHYUAKovYqfd8BtasV+7nkLs6dYdg5XG9XKa+YV9o0UpUApsnXYXIdLRzRG3
+         zE0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686983219; x=1689575219;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vETI5TQvq1SPOYV8EBJJoDmGtq15U8VQP1o1n/huufs=;
+        b=Le/vMVth1rNqqPEgMulDJNNvvUtIegOBYsFLkx4XIPn9r314wfPEj4l12wzgXwFfx4
+         aY8kvf6Qy8fdZ9g/bvmRfp+BJKgDKvU6enprjepTl7rYpHQaXLHRkaaxeHiX0911LT7y
+         kLphpu9iBYE6ZwZ7BRvaAD4VP7l4XSJyLm3KeetRrpY0hFjUW0pJ65/ustTe5/MJq6tt
+         ulygWMxTUEXq9f8UPoRklKd+BQGLaByFChtk1OLM5D4iZBjEGNhY8NTkzutEx3evoKgF
+         UFrH83vtpSEKnEAQO+jVwZWiAVIPJqxy6y/fMEDnJVMzE3/U5Q6sfDfH9S69qMbT1oqF
+         A29A==
+X-Gm-Message-State: AC+VfDzFYWyyOWnorXbI+g5gx/WMh4YK3JiHdGcG6egZG/VWzOdBFAkQ
+        EQ3D7RTuUdTVXtlGQGgipSU=
+X-Google-Smtp-Source: ACHHUZ6hdV8TrJbD/tkY32AmFYy/lDFrFyiM6FgO5/qja6NVTAccT/wZ+SRYemLvC8KhX1SnjBTORQ==
+X-Received: by 2002:a05:6402:322:b0:51a:3fdc:5bb0 with SMTP id q2-20020a056402032200b0051a3fdc5bb0mr3008125edw.15.1686983218664;
+        Fri, 16 Jun 2023 23:26:58 -0700 (PDT)
+Received: from arinc9-PC.. ([149.91.1.15])
+        by smtp.gmail.com with ESMTPSA id n6-20020a056402514600b0051a313a66e8sm1799638edd.45.2023.06.16.23.26.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 23:26:57 -0700 (PDT)
+From:   arinc9.unal@gmail.com
+X-Google-Original-From: arinc.unal@arinc9.com
+To:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     Landen Chao <landen.chao@mediatek.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH net v6 0/6] net: dsa: mt7530: fix multiple CPU ports, BPDU and LLDP handling
+Date:   Sat, 17 Jun 2023 09:26:43 +0300
+Message-Id: <20230617062649.28444-1-arinc.unal@arinc9.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Message-ID: <168698306469.404.6921468886954595002.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-next branch of irqchip:
+Hi.
 
-Commit-ID:     2c23c07a359649b7a053c1af320044329768b1fd
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/2c23c07a359649b7a053c1af320044329768b1fd
-Author:        Binbin Zhou <zhoubinbin@loongson.cn>
-AuthorDate:    Fri, 05 May 2023 17:46:48 +08:00
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Sat, 17 Jun 2023 07:16:09 +01:00
+This patch series fixes all non-theoretical issues regarding multiple CPU
+ports and the handling of LLDP frames and BPDUs.
 
-dt-bindings: interrupt-controller: Add Loongson EIOINTC
+I am adding me as a maintainer, I've got some code improvements on the way.
+I will keep an eye on this driver and the patches submitted for it in the
+future.
 
-Add Loongson Extended I/O Interrupt controller binding with DT schema
-format using json-schema.
+Arınç
 
-Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/4369959615eda101e612c450b8974d76ce7e8821.1683279769.git.zhoubinbin@loongson.cn
----
- Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml | 59 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
+v6:
+- Change a small portion of the comment in the diff on "net: dsa: mt7530:
+  set all CPU ports in MT7531_CPU_PMAP" with Russell's suggestion.
+- Change the patch log of "net: dsa: mt7530: fix trapping frames on
+  non-MT7621 SoC MT7530 switch" with Vladimir's suggestion.
+- Group the code for trapping frames into a common function and call that.
+- Add Vladimir and Russell's reviewed-by tags to where they're given.
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
-new file mode 100644
-index 0000000..393c128
---- /dev/null
-+++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
-@@ -0,0 +1,59 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/interrupt-controller/loongson,eiointc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Loongson Extended I/O Interrupt Controller
-+
-+maintainers:
-+  - Binbin Zhou <zhoubinbin@loongson.cn>
-+
-+description: |
-+  This interrupt controller is found on the Loongson-3 family chips and
-+  Loongson-2K series chips and is used to distribute interrupts directly to
-+  individual cores without forwarding them through the HT's interrupt line.
-+
-+allOf:
-+  - $ref: /schemas/interrupt-controller.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - loongson,ls2k0500-eiointc
-+      - loongson,ls2k2000-eiointc
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  interrupt-controller: true
-+
-+  '#interrupt-cells':
-+    const: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - interrupt-controller
-+  - '#interrupt-cells'
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    eiointc: interrupt-controller@1fe11600 {
-+      compatible = "loongson,ls2k0500-eiointc";
-+      reg = <0x1fe10000 0x10000>;
-+
-+      interrupt-controller;
-+      #interrupt-cells = <1>;
-+
-+      interrupt-parent = <&cpuintc>;
-+      interrupts = <3>;
-+    };
-+
-+...
+v5:
+- Change the comment in the diff on the first patch with Russell's words.
+- Change the patch log of the first patch to state that the patch is just
+  preparatory work for change "net: dsa: introduce
+  preferred_default_local_cpu_port and use on MT7530" and not a fix to an
+  existing problem on the code base.
+- Remove the "net: dsa: mt7530: fix trapping frames with multiple CPU ports
+  on MT7530" patch. It fixes a theoretical issue, therefore it is net-next
+  material.
+- Remove unnecessary information from the patch logs. Remove the enum
+  renaming change.
+- Strengthen the point of the "net: dsa: introduce
+  preferred_default_local_cpu_port and use on MT7530" patch.
+
+v4: Make the patch logs and my comments in the code easier to understand.
+v3: Fix the from header on the patches. Write a cover letter.
+v2: Add patches to fix the handling of LLDP frames and BPDUs.
+
+Arınç ÜNAL (6):
+  net: dsa: mt7530: set all CPU ports in MT7531_CPU_PMAP
+  net: dsa: mt7530: fix trapping frames on non-MT7621 SoC MT7530 switch
+  net: dsa: mt7530: fix handling of BPDUs on MT7530 switch
+  net: dsa: mt7530: fix handling of LLDP frames
+  net: dsa: introduce preferred_default_local_cpu_port and use on MT7530
+  MAINTAINERS: add me as maintainer of MEDIATEK SWITCH DRIVER
+
+ MAINTAINERS              |  5 +++--
+ drivers/net/dsa/mt7530.c | 48 ++++++++++++++++++++++++++++++++++---------
+ drivers/net/dsa/mt7530.h |  6 ++++++
+ include/net/dsa.h        |  8 ++++++++
+ net/dsa/dsa.c            | 24 +++++++++++++++++++++-
+ 5 files changed, 78 insertions(+), 13 deletions(-)
+
+
