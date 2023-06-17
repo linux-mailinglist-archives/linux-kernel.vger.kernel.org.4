@@ -2,99 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD5327340F9
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 14:26:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E3A7340FA
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 14:27:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346024AbjFQM0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 08:26:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54740 "EHLO
+        id S1345984AbjFQM1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 08:27:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbjFQM0n (ORCPT
+        with ESMTP id S230312AbjFQM1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 08:26:43 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA34C10C0
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 05:26:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=/bjzQjV9WG/udgkWnOpVEkTtuTWRkA88JggE03WCnFQ=; b=CnoRBG5H/bPzMc8NP2bVF06BwS
-        gE3Nwl6kTYovyqKGc41JMLfdtkpQ5AckMsOl9LqKG7K9tJc78TOzuMBSxt+FSJ5LW9NIDjs8oyfT0
-        DeNPcUT/YscNA5meVNVfoqmwqpCt/38EjbJf0WF3SRwVf6QSOqsWVv/bWmPY5G73MoGXrb6qof6pj
-        3NWVRmNoNCSuuU6E2NPF5VdRi00M3IfMGMrHWb+D3Ome1Jnyl771252O9eIdeOgh+P66/gIxM1Z1+
-        YBoAfWkLaTiS8Accm9yvB7voBijILhLMCXn0jTvpW7OyUMBcnkV07H9pBjWOop6o20wcPpVHrid32
-        LFeey1hg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qAV0a-00Dc35-1M;
-        Sat, 17 Jun 2023 12:26:24 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F3B27300095;
-        Sat, 17 Jun 2023 14:26:22 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C715924B5C281; Sat, 17 Jun 2023 14:26:22 +0200 (CEST)
-Date:   Sat, 17 Jun 2023 14:26:22 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sched/deadline: Use helper function task_current()
-Message-ID: <20230617122622.GC1830050@hirez.programming.kicks-ass.net>
-References: <20230617074305.1916633-1-linmiaohe@huawei.com>
+        Sat, 17 Jun 2023 08:27:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB76E100
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 05:26:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687004805;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=szv0cF+bl4sIifpCG+zmQZUts/OGqmFER4Ll8Eqs/O8=;
+        b=TkTGJ6t8bc0ozyONrd/T6EmLHXf9e0DUDa4IMqBygAeydPQIe+gpzaLf5n44pBHo6HU4YC
+        VeQoXM30fJlYATPELhBTUngDr+j73mXyjWCxKdNFoxlzidjY2Ql0PKTKdxKF4I4b2G2pQO
+        0gpUs4JN+ueDTRgxBEwCRRrqpEHnwyA=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-286-0Gap7E0ZP9m3vzOacEDqgw-1; Sat, 17 Jun 2023 08:26:43 -0400
+X-MC-Unique: 0Gap7E0ZP9m3vzOacEDqgw-1
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-62fe9513320so21414476d6.3
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 05:26:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687004803; x=1689596803;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=szv0cF+bl4sIifpCG+zmQZUts/OGqmFER4Ll8Eqs/O8=;
+        b=gwbqw+QzFcekwH0x/zg0qdTf1bM79W+t5CWgdcSYiRBi6fD26IlixCsDaVdTBfqFP+
+         +6UYrrM4C/3+Ia4wMo7GwVrBXwhr4lbQEUpfU6xAUDQ/g7Uy2Ldq++dRo7Z92jzdcarz
+         +NE+Lz5wTwqQ3P1xKU3cV8ukYrF/zMt9qxeVwzodzq0WreFER7EKd+jX9joC7lY8ZlKE
+         u8x6yMT+eC+wV+cAgvjWop64MVM4GFCzYNkfdm1aRoY4zZ7jW6pFMaxIPW9TrataFlCy
+         tU+rY4d4Kqg6fr9fKYYP7dU9PLSW5f0ARbNk21WccJHuxN+PGbRgFx+6Y+R6jGQBsWQK
+         /ALQ==
+X-Gm-Message-State: AC+VfDw46ZVyjEwgRoBt8kTRyshAlIWbXvqpgREB7AuDkBbc6mdrGv3B
+        DUQAMIaWc2oOEXiTEAitpb1QyehE/9B+miJ5Fjl9obzptJnWgmj5T87db0sUOaFnvxzyFjvWOt8
+        5ML3KXSy9V/3AwbGCtyFAlzlX
+X-Received: by 2002:a05:6214:2aa9:b0:621:41f6:1f7b with SMTP id js9-20020a0562142aa900b0062141f61f7bmr4669467qvb.7.1687004803051;
+        Sat, 17 Jun 2023 05:26:43 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6lHXpX8/GVgXs6SRlViW67tYe8C1zdG42GI7bVdDa/NP1rorw/xsL8eLyxOx5KpbTQEieK0g==
+X-Received: by 2002:a05:6214:2aa9:b0:621:41f6:1f7b with SMTP id js9-20020a0562142aa900b0062141f61f7bmr4669446qvb.7.1687004802772;
+        Sat, 17 Jun 2023 05:26:42 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id l8-20020a0ce088000000b0062df235c6d9sm5050098qvk.18.2023.06.17.05.26.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Jun 2023 05:26:42 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, ryans.lee@analog.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] ASoC: max98388: set variable soc_codec_dev_max98388 storage-class-specifier to static
+Date:   Sat, 17 Jun 2023 08:26:35 -0400
+Message-Id: <20230617122635.3225639-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230617074305.1916633-1-linmiaohe@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 03:43:05PM +0800, Miaohe Lin wrote:
-> Use helper function task_current() to check whether task is currently
-> running on the runqueue. No functional change intended.
+smatch reports
+sound/soc/codecs/max98388.c:890:39: warning: symbol
+  'soc_codec_dev_max98388' was not declared. Should it be static?
 
-Why though? this makes no sense. Please leave perfectly fine code alone.
+This variable is only used in its defining file, so it should be static.
 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> ---
->  kernel/sched/deadline.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-> index f827067ad03b..23284229e16b 100644
-> --- a/kernel/sched/deadline.c
-> +++ b/kernel/sched/deadline.c
-> @@ -2424,7 +2424,7 @@ static void pull_dl_task(struct rq *this_rq)
->  		 */
->  		if (p && dl_time_before(p->dl.deadline, dmin) &&
->  		    dl_task_is_earliest_deadline(p, this_rq)) {
-> -			WARN_ON(p == src_rq->curr);
-> +			WARN_ON(task_current(src_rq, p));
->  			WARN_ON(!task_on_rq_queued(p));
->  
->  			/*
-> @@ -2636,7 +2636,7 @@ static void switched_to_dl(struct rq *rq, struct task_struct *p)
->  		return;
->  	}
->  
-> -	if (rq->curr != p) {
-> +	if (!task_current(rq, p)) {
->  #ifdef CONFIG_SMP
->  		if (p->nr_cpus_allowed > 1 && rq->dl.overloaded)
->  			deadline_queue_push_tasks(rq);
-> -- 
-> 2.27.0
-> 
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ sound/soc/codecs/max98388.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sound/soc/codecs/max98388.c b/sound/soc/codecs/max98388.c
+index 8062a7115007..b7d1d5c7b72f 100644
+--- a/sound/soc/codecs/max98388.c
++++ b/sound/soc/codecs/max98388.c
+@@ -887,7 +887,7 @@ static const struct regmap_config max98388_regmap = {
+ 	.cache_type = REGCACHE_RBTREE,
+ };
+ 
+-const struct snd_soc_component_driver soc_codec_dev_max98388 = {
++static const struct snd_soc_component_driver soc_codec_dev_max98388 = {
+ 	.probe			= max98388_probe,
+ 	.controls		= max98388_snd_controls,
+ 	.num_controls		= ARRAY_SIZE(max98388_snd_controls),
+-- 
+2.27.0
+
