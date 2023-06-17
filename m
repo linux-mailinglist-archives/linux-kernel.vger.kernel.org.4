@@ -2,50 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 562A3733DF5
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 06:21:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D31E733E06
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 06:36:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231162AbjFQEVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 00:21:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39778 "EHLO
+        id S231781AbjFQEgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 00:36:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjFQEVa (ORCPT
+        with ESMTP id S229493AbjFQEgR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 00:21:30 -0400
+        Sat, 17 Jun 2023 00:36:17 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1688CE4F
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 21:21:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BDD1FF7;
+        Fri, 16 Jun 2023 21:36:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
         Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=iVbL06ecvTbKJLIW9R0V3emDT+EiFhX0womXFV5J6Qk=; b=XlCFgO/IgjShb1qecHAHHOAup8
-        qDju1SLo3IbvU8gcFhB7gTeTZtAdD4SoNW9BCRjGPBHXlQPqlQpKGlXoxpqwSoW9bxgZbkiGyhgEj
-        KVK6jYraANXMzCAzR1oEf1fxbhRpxeQMZIFcj0HzAmNR+DwsRxNR0etR0LXeLkkfZBjZ2GShDPPmk
-        yPEC0uXng1E1IpSqYas6+7/Izyo8k9tWXRzvkyRI+fBRJvLV9MimUj1MNPEGdtUXM76WM3PORiPb8
-        +qxIcnLa6X7FUsFbdPLT/QNIz/YhEvd6P3Pe+HGNm74XlJRq/JcJQ6+LAP1q05llni8YsdSNNRTfT
-        Pp6rIOGA==;
+        bh=wUkV62sn8j1lEhJKWcMl0xb3qjf2WlXQi9oTNeYqRrc=; b=4umd6UzaGBKkL6/CSU2iTGaRwF
+        IUFovXwULMrVCDKZqwJE0gUy8wGxdFK+iyY9SyPUZL1UzU4QbbB9Jv7NfzXtvqHJN4R195HdPnqah
+        o4xsWfOR5dD5VaqnGsGAT5yr8R+VHaFtQeQLAi1o1sfYJZQqf93ZGLbBhR8M39BWX15rSlAdwrBfM
+        NljzugUhuTGSRDID5MizyBSuSq9jVkwmrD4Sxzs5nUaRe4ugWEpTCnKkvAWzt3bBZEtzXvdUBva4R
+        JTxl4e9YK0E/yjwvUAm/Q6T1Gr1Ob03SByoSJjMN3QAxCLxsBd3e1s927QurYHw2XiXDNUsKzt2Rn
+        MIsg2RWg==;
 Received: from [2601:1c2:980:9ec0::2764]
         by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qANR7-002gKb-17;
-        Sat, 17 Jun 2023 04:21:17 +0000
-Message-ID: <87367afc-102e-d6cc-e51e-74170a08b2cc@infradead.org>
-Date:   Fri, 16 Jun 2023 21:21:16 -0700
+        id 1qANfC-002hUJ-0e;
+        Sat, 17 Jun 2023 04:35:50 +0000
+Message-ID: <e837c61f-f015-7ccd-003c-7f59acfe54be@infradead.org>
+Date:   Fri, 16 Jun 2023 21:35:48 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
-Subject: Re: [PATCH 3/4] ASoC: loongson: add PCI dependency
+Subject: Re: [PATCH] net: phy: mediatek: fix compile-test dependencies
 Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>, Mark Brown <broonie@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Yingkun Meng <mengyingkun@loongson.cn>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-References: <20230616090156.2347850-1-arnd@kernel.org>
- <20230616090156.2347850-3-arnd@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?Q?Ram=c3=b3n_Nordin_Rodriguez?= 
+        <ramon.nordin.rodriguez@ferroamp.se>,
+        Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>,
+        Frank Sae <Frank.Sae@motor-comm.com>,
+        Michael Walle <michael@walle.cc>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Piergiorgio Beruto <piergiorgio.beruto@gmail.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230616093009.3511692-1-arnd@kernel.org>
 From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230616090156.2347850-3-arnd@kernel.org>
+In-Reply-To: <20230616093009.3511692-1-arnd@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -60,21 +76,27 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 6/16/23 02:00, Arnd Bergmann wrote:
+On 6/16/23 02:29, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
 > 
-> The new driver fails to build when PCI is disabled:
+> The new phy driver attempts to select a driver from another subsystem,
+> but that fails when the NVMEM subsystem is disabled:
 > 
-> WARNING: unmet direct dependencies detected for SND_SOC_LOONGSON_I2S_PCI
->   Depends on [n]: SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && (LOONGARCH || COMPILE_TEST [=y]) && PCI [=n]
+> WARNING: unmet direct dependencies detected for NVMEM_MTK_EFUSE
+>   Depends on [n]: NVMEM [=n] && (ARCH_MEDIATEK [=n] || COMPILE_TEST [=y]) && HAS_IOMEM [=y]
 >   Selected by [y]:
->   - SND_SOC_LOONGSON_CARD [=y] && SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && (LOONGARCH || COMPILE_TEST [=y])
-> sound/soc/loongson/loongson_i2s_pci.c:167:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-> module_pci_driver(loongson_i2s_driver);
+>   - MEDIATEK_GE_SOC_PHY [=y] && NETDEVICES [=y] && PHYLIB [=y] && (ARM64 && ARCH_MEDIATEK [=n] || COMPILE_TEST [=y])
 > 
-> Add the appropriate Kconfig dependency.
+> I could not see an actual compile time dependency, so presumably this
+> is only needed for for working correctly but not technically a dependency
+> on that particular nvmem driver implementation, so it would likely
+> be safe to remove the select for compile testing.
 > 
-> Fixes: d24028606e764 ("ASoC: loongson: Add Loongson ASoC Sound Card Support")
+> To keep the spirit of the original 'select', just replace this with a
+> 'depends on' that ensures that the driver will work but does not get in
+> the way of build testing.
+> 
+> Fixes: 98c485eaf509b ("net: phy: add driver for MediaTek SoC built-in GE PHYs")
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
 Acked-by: Randy Dunlap <rdunlap@infradead.org>
@@ -83,21 +105,22 @@ Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
 Thanks.
 
 > ---
->  sound/soc/loongson/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/net/phy/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/sound/soc/loongson/Kconfig b/sound/soc/loongson/Kconfig
-> index c175f9de19a85..b8d7e2bade246 100644
-> --- a/sound/soc/loongson/Kconfig
-> +++ b/sound/soc/loongson/Kconfig
-> @@ -16,6 +16,7 @@ config SND_SOC_LOONGSON_I2S_PCI
->  config SND_SOC_LOONGSON_CARD
->  	tristate "Loongson Sound Card Driver"
->  	select SND_SOC_LOONGSON_I2S_PCI
-> +	depends on PCI
+> diff --git a/drivers/net/phy/Kconfig b/drivers/net/phy/Kconfig
+> index a40269c175974..78e6981650d94 100644
+> --- a/drivers/net/phy/Kconfig
+> +++ b/drivers/net/phy/Kconfig
+> @@ -239,7 +239,7 @@ config MEDIATEK_GE_PHY
+>  config MEDIATEK_GE_SOC_PHY
+>  	tristate "MediaTek SoC Ethernet PHYs"
+>  	depends on (ARM64 && ARCH_MEDIATEK) || COMPILE_TEST
+> -	select NVMEM_MTK_EFUSE
+> +	depends on NVMEM_MTK_EFUSE
 >  	help
->  	  Say Y or M if you want to add support for SoC audio using
->  	  loongson I2S controller.
+>  	  Supports MediaTek SoC built-in Gigabit Ethernet PHYs.
+>  
 
 -- 
 ~Randy
