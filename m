@@ -2,154 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56894734220
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 18:08:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F712734221
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 18:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236162AbjFQQIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 12:08:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41940 "EHLO
+        id S236463AbjFQQOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 12:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjFQQIM (ORCPT
+        with ESMTP id S229675AbjFQQOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 12:08:12 -0400
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76CB2E49
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 09:08:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1687018088;
-        bh=hgJzCXMmkqHB9zu6/hj+qfZRgZydP6kjIOD4e+oiFOA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=mFQYEPED4gaJvcYd/O4g7kh85pD3HfCmBmGvIdkS/CeO1+GqM6lShnYTTr3gpOD2+
-         +iKvK1voevlX17Etylc0ncbsfG76IkRi6lPWDut+biCo0o6va+ldebHsmIFyR0xzty
-         TO3f2nkKYAPn6oWlXhHYHC8Ht1IvR5SVTchaWB3V5GAHKaWalLKNsGygXSJQLt7hZf
-         DaEMIT6rD4t+zxqIlThQLOyMXAdimtHB6OlVSTW5ezrhv8uSjbw7vcy1cJWeH1ef9q
-         Gepq+uI6pknU4ySsG6OkjP6aKYS/SCcTBCF03JCrLxITrO0xwqw4+24U6fsSlP706T
-         jAluni3D9LDyA==
-Received: from [192.168.18.28] (unknown [107.159.220.152])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4Qk1CX03Ksz18k0;
-        Sat, 17 Jun 2023 12:08:07 -0400 (EDT)
-Message-ID: <6bbbb1f9-fc2b-c95d-5ef1-c178cfaae1ba@efficios.com>
-Date:   Sat, 17 Jun 2023 12:08:26 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] mm: Move mm_count into its own cache line
-Content-Language: en-US
-To:     John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org,
-        kernel test robot <yujie.liu@intel.com>,
-        Aaron Lu <aaron.lu@intel.com>,
-        Olivier Dion <odion@efficios.com>, michael.christie@oracle.com,
-        Feng Tang <feng.tang@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>, Peter Xu <peterx@redhat.com>,
-        linux-mm@kvack.org
-References: <20230515143536.114960-1-mathieu.desnoyers@efficios.com>
- <20230616131639.992998157fe696eb0e0589aa@linux-foundation.org>
- <efb2e71a-9b18-4ccd-bdbc-3014fae032fc@efficios.com>
- <1634ca8f-2b22-712e-15f9-9980ba8a4e64@nvidia.com>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <1634ca8f-2b22-712e-15f9-9980ba8a4e64@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 17 Jun 2023 12:14:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F052410E0
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 09:13:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687018405;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vohTZOhneh/Z735yZQIJNbji5u3c6RxaFCGzdDERCaE=;
+        b=SjBj3qTBQ+0ibQxC5KKP6b+HCzA+MDEdKUL43lrEKqjkWCb7XoWFdWWCipTmzipml2RU0R
+        Z2AgMftDmZP3/nyme5gf1+575DZjew3CgpxpDV7ZSK9Sm+/CrFS4ju/wIO4kSnb68J2OA/
+        uz9IjnJg/Fizu5UBloinjsdex9Ok3cc=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-8-21hKs1fEO1ODjEqbn8eGbA-1; Sat, 17 Jun 2023 12:13:23 -0400
+X-MC-Unique: 21hKs1fEO1ODjEqbn8eGbA-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f7e7cfcae4so8610075e9.1
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 09:13:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687018402; x=1689610402;
+        h=in-reply-to:references:to:from:cc:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=vohTZOhneh/Z735yZQIJNbji5u3c6RxaFCGzdDERCaE=;
+        b=DRLlEu3J9NFQHhckxe2X+JhqzF4ok7wmycg/rKZYMM5DLHdNLeiQCx97Nea18y2AFD
+         aYqrP3u3aebHP7lJMFC55PSMYUUAFgwZov0DU3SAtJScGTVDBKT+I0CxY+pbVsyofTKS
+         uieIBA7dGfeYrS7ac/ccaYdk8xodFRMRG0F53GXbF4Uv9UcphYHQQwGcxDjjXeWzHymQ
+         anYU/UhVEwxt6YU8vJ40C44Oe6S0uFvu4xT2e41uf4GQ0zIuvQQXF8RvUJFLdT+nfWN5
+         IgNfk1Meob6qMNQCqZL/WhJkNGjIveoThngcKohIHdSBoMfoAbqDgZfw6hC7qLd12NBK
+         7/ww==
+X-Gm-Message-State: AC+VfDwPiixjmsulgSLalWq4CrvPWRIkOvpZfgbYDsNiy2bNd7Mt/Q+i
+        sSgwwLqDZpvuH5cmE1LFgPBodnUW+gJR5icfFnnWy2JDhmkQbhwYOGkgxW6C8uxh2e/avz2TC0M
+        3ZGMosiW0JyYF12F9sMB4LClI
+X-Received: by 2002:a05:600c:378b:b0:3f8:d0e7:daed with SMTP id o11-20020a05600c378b00b003f8d0e7daedmr5307704wmr.19.1687018402363;
+        Sat, 17 Jun 2023 09:13:22 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6LqY5Wf9FaG5P+SyLWThEV/+w581nqDDToSDW3GAOUuMFuPoptxdQkl8HmWw41eCdTW82zPQ==
+X-Received: by 2002:a05:600c:378b:b0:3f8:d0e7:daed with SMTP id o11-20020a05600c378b00b003f8d0e7daedmr5307684wmr.19.1687018401997;
+        Sat, 17 Jun 2023 09:13:21 -0700 (PDT)
+Received: from localhost (2a01cb000f8b970084d0c0d672c3677c.ipv6.abo.wanadoo.fr. [2a01:cb00:f8b:9700:84d0:c0d6:72c3:677c])
+        by smtp.gmail.com with ESMTPSA id p19-20020a05600c469300b003f7f475c3bcsm12936700wmo.1.2023.06.17.09.13.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 17 Jun 2023 09:13:21 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Sat, 17 Jun 2023 18:13:20 +0200
+Message-Id: <CTF24276X8IG.39QXKZJJRLM12@ringo>
+Subject: Re: [PATCH 0/5] x86/speculation: Disable IBRS when idle
+Cc:     "Waiman Long" <longman@redhat.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org> 
+        , Josh Poimboeuf <jpoimboe@kernel.org>, Pawan Gupta
+        <pawan.kumar.gupta@linux.intel.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann
+        <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, Ben
+        Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, Daniel
+        Bristot de Oliveira <bristot@redhat.com>, Valentin Schneider" 
+        <vschneid@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <x86@kernel.org>, "Joe Mario" <jmario@redhat.com>
+From:   "Robin Jarry" <rjarry@redhat.com>
+To:     "Peter Zijlstra" <peterz@infradead.org>
+X-Mailer: aerc/0.15.2-49-gd17c48e2f3c0-dirty
+References: <20230616200003.745742-1-longman@redhat.com>
+ <CTECMFWMMST3.9FTWRDG7FFKQ@ringo>
+ <20230617122115.GA1830050@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230617122115.GA1830050@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/16/23 18:35, John Hubbard wrote:
-> On 6/16/23 13:38, Mathieu Desnoyers wrote:
-> ...
->>>> This comment is rather odd for a few reasons:
->>>>
->>>> - It requires addition/removal of mm_struct fields to carefully 
->>>> consider
->>>>    field alignment of _other_ fields,
->>>> - It expresses the wish to keep an "optimal" alignment for a specific
->>>>    kernel config.
->>>>
->>>> I suspect that the author of this comment may want to revisit this 
->>>> topic
->>>> and perhaps introduce a split-struct approach for struct rw_semaphore,
->>>> if the need is to place various fields of this structure in different
->>>> cache lines.
->>>>
-> 
-> Agreed. The whole thing is far too fragile, but when reviewing this I
-> wasn't sure what else to suggest. Now looking at it again with your
-> alignment suggestion, there is an interesting conflicting set of
-> desires:
-> 
-> a) Here: Feng Tang discovered that .count and .owner are best put in
-> separate cache lines for the contended case for mmap_lock, and
-> 
-> b) rwsem.h, which specifies precisely the opposite for the uncontended
-> case:
-> 
->   * For an uncontended rwsem, count and owner are the only fields a task
->   * needs to touch when acquiring the rwsem. So they are put next to each
->   * other to increase the chance that they will share the same cacheline.
-> 
-> I suspect that overall, it's "better" to align rw_semaphore's .count and
-> .owner field so that the lock is optimized for the contended case,
-> because it's reasonable to claim that the benefit of having those two
-> fields in the same cacheline for the uncontended case is far less than
-> the cost to the contended case, of keeping them close to each other.
-> 
-> However, it's still not unlikely that someone will measure a performance
-> regression if such a change is made.
-> 
-> Thoughts?
-> 
+Peter Zijlstra, Jun 17, 2023 at 14:21:
+> I can't see the patches -- they didn't arrive in my mailbox nor can I
+> find them in the archive, in fact this here mail is the only evidence
+> they exist at all.
 
-I suspect that the purpose of b) is only to maximize the functional density
-of the data cache: only using a single cache line for the rwsem uncontended
-case has the smallest footprint on the data cache.
-
-However, if we look at the rwsem in the context of its use within another
-data structure containing it, I think we can do better by analyzing the access
-pattern of _other_ fields of that structure.
-
-I have faced a similar situation within liburcu's wfcqueue's API [1], where
-it's better for head and tail to sit on different cache lines to eliminate
-false-sharing between enqueue and dequeue. I solved this by splitting the
-head and tail parameters in the API. So the user can decide to place them
-other on the same cache line, or on different cache lines, depending on the
-use-case. The user also has the freedom to place both head and tail on the
-same cache line as _other_ fields based on usage pattern.
-
-By providing enough flexibility to place the rwsem fields so that the count
-is on its own cache-line, and owner is on the same cache line as other fields
-touched when the rwsem is held, I suspect we can both improve functional
-density _and_ eliminate false-sharing in the contended case.
-
-Thanks,
-
-Mathieu
-
-[1] https://github.com/urcu/userspace-rcu/blob/master/include/urcu/wfcqueue.h#L279
-
-
-> ...
->>> If the plan is to put mm_count in "its own" cacheline then padding will
->>> be needed?
->>
->> It's taken care of by the anonymous structure trick. Here is an quick 
->> example showing the difference between alignment attribute applied to 
->> an integer type vs to an anonymous structure:
-> 
-> Thanks for explaining very clearly how that works, that's really
-> helpful!
-> thanks,
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+I was also looking at them on the public archives but only found my own
+reply. Maybe something got wrong with Red Hat internal SMTP.
 
