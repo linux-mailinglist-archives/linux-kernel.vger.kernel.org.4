@@ -2,73 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44981733FFD
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 11:50:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94BD9733FFF
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 11:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235336AbjFQJui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 05:50:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48832 "EHLO
+        id S235526AbjFQJ5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 05:57:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231894AbjFQJuf (ORCPT
+        with ESMTP id S231894AbjFQJ5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 05:50:35 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B81F10CF
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 02:50:35 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-33fc2f90703so23006735ab.1
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 02:50:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686995434; x=1689587434;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z30B3iBy+vFYZtoAoWzQ/5830xtC1q1OQ1v2xTzj4Tc=;
-        b=UTo0DtSqvRtiRPaOazIyZPNYWiPrYEwaXnAFv+ZG4+1VJEfdnMH9WEyEO72axO4EX4
-         j7dmCg3pxcRfny6ypiBlX24nnt6ucXIfKH5S0WUCewGrK5pZCMKEBd18z6sse7RHCPta
-         TOSSdo85sHpH6v/xtE4qLs0k0nfg/Qv5fMfNe7SUmU81YexfK9yqv/tz3Bi8QQNAYfJk
-         nIAPSbleZFdRWDkz8ZwAh+mTA0EEB/LVJsQg4+De+kU8ctLdjOd8+41JKinzK5bRGJxE
-         jHL2FpSSXW1vUeLAKMB2sXHt4FYMpXAjgrFTe2rDw3Pv56JTn3llENHY1If3qKFkyqgj
-         KH8Q==
-X-Gm-Message-State: AC+VfDz89Aa6AloXspNn1rV6GxUN+uWC3Z9kaq07IqhEd0k7mYLfdB9y
-        zAJZw82cIN5XxufaI5mMOD3UJ2AfpF4X9P8I9+tVGpa5t6pn
-X-Google-Smtp-Source: ACHHUZ56Z3AUM41aIl/Iz5X0Dvmx7mLD6cg0SNE338xMRW2rHAp9qJaMO/LBELZm+1Bj3nukuFlj3+B/e0B5GP0wjQECdFFXsHl7
+        Sat, 17 Jun 2023 05:57:20 -0400
+Received: from smtp.smtpout.orange.fr (smtp-26.smtpout.orange.fr [80.12.242.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530CB172C
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 02:57:18 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id ASgAqUsC7EYhqASgBqk5h0; Sat, 17 Jun 2023 11:57:15 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1686995835;
+        bh=haiC7wDeOkzD6Zrppzqp1H4WJr8jevDuZHEsdYQ8KDc=;
+        h=From:To:Cc:Subject:Date;
+        b=ali9cnV7fC8/R6pOrB1uVH0nh2XxHo70SOAnhlm3Zi+WfN/0mgK/mxUKsSbz8H65x
+         oVetSEqsuZy9z1U6t4X0Rv4Xx/K1GnahMxK9pwQG90CfShmI9U8W3YXQzfdIMLU89B
+         D0b1VTqRiYzTGjhdfGoz6i3NBoOmi41gNYFtlBNP6+onKSguXa3sFgmYo6c3W/Sd1x
+         Vb/vh9QgiNU0ErO5qN6l1c0f98OdxRpRIO+TtJJSozVToRPG/JUzK32gfEmvpg4fIf
+         sjvmvqn+hCZCviVbY+J6BHyi3G+jyFiwWv6JIDm2sZvfQK0VlmQUkvsQ0vte4cFyp6
+         i065cPRc9jVLg==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 17 Jun 2023 11:57:15 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Johan Hovold <johan@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH] gnss: Use devm_regulator_get_enable_optional()
+Date:   Sat, 17 Jun 2023 11:57:09 +0200
+Message-Id: <62effa7aa1a2023a77709e6416c57d9cb79a5ccc.1686995765.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Received: by 2002:a92:c264:0:b0:331:31d7:9816 with SMTP id
- h4-20020a92c264000000b0033131d79816mr1444924ild.1.1686995434087; Sat, 17 Jun
- 2023 02:50:34 -0700 (PDT)
-Date:   Sat, 17 Jun 2023 02:50:34 -0700
-In-Reply-To: <20230617074659.4760-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000962f4d05fe503bfc@google.com>
-Subject: Re: [syzbot] [kernel?] possible deadlock in exit_itimers
-From:   syzbot <syzbot+5fd924f4cd9dc1c7828c@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Use devm_regulator_get_enable_optional() instead of hand writing it. It
+saves some line of code.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+Note that regulator_disable() is now called after gnss_serial_free() in
+the error handling path of the probe and in the remove function, but it
+looks harmless to me.
+---
+ drivers/gnss/mtk.c | 26 ++++----------------------
+ 1 file changed, 4 insertions(+), 22 deletions(-)
 
-Reported-and-tested-by: syzbot+5fd924f4cd9dc1c7828c@syzkaller.appspotmail.com
+diff --git a/drivers/gnss/mtk.c b/drivers/gnss/mtk.c
+index c62b1211f4fe..d3d31295d4e0 100644
+--- a/drivers/gnss/mtk.c
++++ b/drivers/gnss/mtk.c
+@@ -17,7 +17,6 @@
+ #include "serial.h"
+ 
+ struct mtk_data {
+-	struct regulator *vbackup;
+ 	struct regulator *vcc;
+ };
+ 
+@@ -87,30 +86,16 @@ static int mtk_probe(struct serdev_device *serdev)
+ 		goto err_free_gserial;
+ 	}
+ 
+-	data->vbackup = devm_regulator_get_optional(&serdev->dev, "vbackup");
+-	if (IS_ERR(data->vbackup)) {
+-		ret = PTR_ERR(data->vbackup);
+-		if (ret == -ENODEV)
+-			data->vbackup = NULL;
+-		else
+-			goto err_free_gserial;
+-	}
+-
+-	if (data->vbackup) {
+-		ret = regulator_enable(data->vbackup);
+-		if (ret)
+-			goto err_free_gserial;
+-	}
++	ret = devm_regulator_get_enable_optional(&serdev->dev, "vbackup");
++	if (ret)
++		goto err_free_gserial;
+ 
+ 	ret = gnss_serial_register(gserial);
+ 	if (ret)
+-		goto err_disable_vbackup;
++		goto err_free_gserial;
+ 
+ 	return 0;
+ 
+-err_disable_vbackup:
+-	if (data->vbackup)
+-		regulator_disable(data->vbackup);
+ err_free_gserial:
+ 	gnss_serial_free(gserial);
+ 
+@@ -120,11 +105,8 @@ static int mtk_probe(struct serdev_device *serdev)
+ static void mtk_remove(struct serdev_device *serdev)
+ {
+ 	struct gnss_serial *gserial = serdev_device_get_drvdata(serdev);
+-	struct mtk_data *data = gnss_serial_get_drvdata(gserial);
+ 
+ 	gnss_serial_deregister(gserial);
+-	if (data->vbackup)
+-		regulator_disable(data->vbackup);
+ 	gnss_serial_free(gserial);
+ }
+ 
+-- 
+2.34.1
 
-Tested on:
-
-commit:         f7efed9f Add linux-next specific files for 20230616
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=11bddabb280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=60b1a32485a77c16
-dashboard link: https://syzkaller.appspot.com/bug?extid=5fd924f4cd9dc1c7828c
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=12be8d37280000
-
-Note: testing is done by a robot and is best-effort only.
