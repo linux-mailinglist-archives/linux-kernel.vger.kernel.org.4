@@ -2,97 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A12733F73
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 10:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B26733F80
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 10:13:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346276AbjFQIJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 04:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57036 "EHLO
+        id S1346302AbjFQINa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 04:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346299AbjFQIJy (ORCPT
+        with ESMTP id S232705AbjFQIN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 04:09:54 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210CF1BDF
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 01:09:53 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-5704ddda6dfso19139517b3.1
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 01:09:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686989392; x=1689581392;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iO7yYZHdApPLayvlEq96oV4J2Y5un4PdapCLJrNW4Uo=;
-        b=NoD8C8BVIiciXMn2EjslqtsdVtrK3ecA1gC8tOPLR/c0iJOSaaAilbSxUznSxPVnry
-         Hf1nLe4Wno8ZjBYPTtiptNdAjBt48QyjXi18yYVqNvNSSgF1fqLCuKWfj9sHlFKv0VsL
-         +7VvP6uqMk5IVXslMyiQXzmVXR6b2aSIKoM0U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686989392; x=1689581392;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iO7yYZHdApPLayvlEq96oV4J2Y5un4PdapCLJrNW4Uo=;
-        b=kHWjSiO6A1VhkDV+ULIP9pkDa3+NIvPJNxhYRN/PshZxSe6J4tZStv9Cx8TivChdNK
-         MJkpOF/lkILm82w/CMPNSkHRYhf6TktzEvbR1hNJyX4Hx5tscn7hQ9/ck3A3eQZnDatN
-         kkE7Anez2EX5He3ZmwXQBaGT8N3KOWl1+5k1nF5rewTPcTYKS8eGPI6mb/2E8F2lEuYC
-         0/M4IWiLclHySKkIarSP7WlgGYnm+FROWD+rD95U21A7X/dtM+bhQ3XU125K6wYTcZ0J
-         BeBN9xtyI2hy2zrGsXUwG+MZKuQBV3KpfpcME4WEhoBadpL30kdpiBHsPEVNZo6Yn60K
-         Owog==
-X-Gm-Message-State: AC+VfDzH5HT+weXFtcUTEi0ZWCGssdrVGDWdmDaNEpnpAgQFDiGLDWCS
-        JumUEPrC0sgxNyQngj0wT0px9w==
-X-Google-Smtp-Source: ACHHUZ45EzJEURRjW9tyst7zDQWL4xDWtCn2NjObo0iROo22obHy5cJ5ETkNX32sCKD4Uqofs7aAqw==
-X-Received: by 2002:a0d:d8c2:0:b0:565:8c16:a0e1 with SMTP id a185-20020a0dd8c2000000b005658c16a0e1mr5223821ywe.13.1686989392392;
-        Sat, 17 Jun 2023 01:09:52 -0700 (PDT)
-Received: from fshao-p620.tpe.corp.google.com ([2401:fa00:1:10:f83b:769f:1443:112])
-        by smtp.gmail.com with ESMTPSA id c4-20020a170902c2c400b001aaf536b1e3sm8476488pla.123.2023.06.17.01.09.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Jun 2023 01:09:51 -0700 (PDT)
-From:   Fei Shao <fshao@chromium.org>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Fei Shao <fshao@chromium.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: Fix memory leak in devm_clk_notifier_register()
-Date:   Sat, 17 Jun 2023 16:09:01 +0800
-Message-ID: <20230617160901.1.I2b151cdf7a72d9e3ecc7ab2ff38409ebe6d65d6b@changeid>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+        Sat, 17 Jun 2023 04:13:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520971FFE
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 01:13:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DFD73611AD
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 08:13:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31758C433C8;
+        Sat, 17 Jun 2023 08:13:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686989606;
+        bh=eqvHCNCeMkLO+EgkoH/FKPeGp52JksulsjVREFCIStM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PziBb3RGhjIbGfqlYcJJJtFxRE498w/GDvXEFBfRRKD1Ws4mXivHZm0W7KFzfV+04
+         4zKOUC2dmzkHXRmOr/m3D74vXXn1DhEnqh6cqfSDOiq9c2XIxGWmSBG65iz9lmtQp+
+         a/Z5fScLRoVEc8SJ+hc254tXJ7WqxOm6OcFHYBFrxu0Sx3AjzU13tGVQFzjlStqDCX
+         b4G53ZibgVUFCLEs7JI3Y5JP9+rTrGjS+6h9xoh074b9aAAJ8oIopZiYm7vWQPqFJN
+         AqgU1Y4FIm+Z02CsR6UyfKvcuTNENkafvXN9IGk/1mixtq545XjuMZx2O3aMPhx/kt
+         NqGGLykwJLOZw==
+Date:   Sat, 17 Jun 2023 11:12:49 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Yajun Deng <yajun.deng@linux.dev>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2] mm: pass nid to reserve_bootmem_region()
+Message-ID: <20230617081249.GW52412@kernel.org>
+References: <20230616072247.GL52412@kernel.org>
+ <20230616023011.2952211-1-yajun.deng@linux.dev>
+ <5ba9ad9bedb2fd3fb96571a778fc35b5@linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5ba9ad9bedb2fd3fb96571a778fc35b5@linux.dev>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-devm_clk_notifier_register() allocates a devres resource for clk
-notifier but didn't register that to the device, so the notifier didn't
-get unregistered on device detach and the allocated resource was leaked.
+On Fri, Jun 16, 2023 at 07:51:21AM +0000, Yajun Deng wrote:
+> June 16, 2023 3:22 PM, "Mike Rapoport" <rppt@kernel.org> wrote:
+> > On Fri, Jun 16, 2023 at 10:30:11AM +0800, Yajun Deng wrote:
+> > 
+> >> diff --git a/mm/mm_init.c b/mm/mm_init.c
+> >> index d393631599a7..1499efbebc6f 100644
+> >> --- a/mm/mm_init.c
+> >> +++ b/mm/mm_init.c
+> >> @@ -738,16 +735,20 @@ static inline void init_reserved_page(unsigned long pfn)
+> >> * marks the pages PageReserved. The remaining valid pages are later
+> >> * sent to the buddy page allocator.
+> >> */
+> >> -void __meminit reserve_bootmem_region(phys_addr_t start, phys_addr_t end)
+> >> +void __meminit reserve_bootmem_region(phys_addr_t start,
+> >> + phys_addr_t end, int nid)
+> >> {
+> >> unsigned long start_pfn = PFN_DOWN(start);
+> >> unsigned long end_pfn = PFN_UP(end);
+> >> 
+> >> + if (nid == MAX_NUMNODES)
+> >> + nid = first_online_node;
+> > 
+> > How can this happen?
+> > 
+> 
+> Some reserved memory regions may not set nid. I found it when I debug.
+> We can see that by memblock_debug_show().
+ 
+Hmm, indeed. But then it means that some struct pages for the reserved pages
+will get wrong nid and if they are freed we'd actually get pages with wrong
+nid. 
 
-This fixes the issue.
+Maybe it's this time to set nid on all reserved pages with something like
 
-Fixes: 6d30d50d037d ("clk: add devm variant of clk_notifier_register")
-Signed-off-by: Fei Shao <fshao@chromium.org>
----
+diff --git a/mm/memblock.c b/mm/memblock.c
+index 3feafea06ab2..fcd0987e2496 100644
+--- a/mm/memblock.c
++++ b/mm/memblock.c
+@@ -2084,6 +2084,14 @@ static void __init memmap_init_reserved_pages(void)
+ 	phys_addr_t start, end;
+ 	u64 i;
+ 
++	for_each_mem_region(region) {
++		int nid = memblock_get_region_node(region);
++
++		start = region->base;
++		end = start + region->size;
++		memblock_set_node(start, end, &memblock.reserved, nid);
++	}
++
+ 	/* initialize struct pages for the reserved regions */
+ 	for_each_reserved_mem_range(i, &start, &end)
+ 		reserve_bootmem_region(start, end);
 
- drivers/clk/clk.c | 1 +
- 1 file changed, 1 insertion(+)
+> >> @@ -2579,7 +2580,13 @@ void __init set_dma_reserve(unsigned long new_dma_reserve)
+> >> void __init memblock_free_pages(struct page *page, unsigned long pfn,
+> >> unsigned int order)
+> >> {
+> >> - if (!early_page_initialised(pfn))
+> >> + int nid = 0;
+> >> +
+> >> +#ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
+> >> + nid = early_pfn_to_nid(pfn);
+> >> +#endif
 
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index 7ac9f7a8cb84..c249f9791ae8 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -4741,6 +4741,7 @@ int devm_clk_notifier_register(struct device *dev, struct clk *clk,
- 	if (!ret) {
- 		devres->clk = clk;
- 		devres->nb = nb;
-+		devres_add(dev, devres);
- 	} else {
- 		devres_free(devres);
- 	}
+Please replace #ifdef with 
+
+	if (IS_DEFINED(CONFIG_DEFERRED_STRUCT_PAGE_INIT))
+ 
+> > Wen can pass nid to memblock_free_pages, no?
+> >
+> 
+> memblock_free_pages() was called by __free_pages_memory() and memblock_free_late().
+> For the latter, I'm not sure if we can pass nid.
+> 
+> I think we can pass nid to reserve_bootmem_region() in this patch, and pass nid to
+> memblock_free_pages() in another patch if we can confirm this.
+
+Fair enough.
+
 -- 
-2.41.0.162.gfafddb0af9-goog
-
+Sincerely yours,
+Mike.
