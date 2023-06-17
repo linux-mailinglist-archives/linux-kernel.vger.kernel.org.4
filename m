@@ -2,182 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB542734074
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 13:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0386E73407B
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 13:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235351AbjFQLMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 07:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39288 "EHLO
+        id S231920AbjFQLSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 07:18:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjFQLMt (ORCPT
+        with ESMTP id S234055AbjFQLSU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 07:12:49 -0400
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE351FF3
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 04:12:48 -0700 (PDT)
-Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3418055950bso14545845ab.1
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 04:12:48 -0700 (PDT)
+        Sat, 17 Jun 2023 07:18:20 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1051BF3
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 04:18:14 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-983f499fc81so229427266b.3
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 04:18:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687000693; x=1689592693;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OWAbg6BOF2nzE2I56RfPp2+x9gJUvp4uCgmjbp/7H+A=;
+        b=ARHmcEYC3adamnFDzjiuas+r/2hjAFU+HZRxNGinwYAqs5goOO/wZ2gRxJYiHD5TAb
+         HY9vO9cMRCGJjPW1+87zDuCvdwm+nsy0qNW3VaJz2x15ddiRTZRCpmXtYQJ5VPCGbJmB
+         3e3c0W9/eM+if1olKzXMSwyEE7OHpjtj19r90TgORX5ohkfzspkTx/dO5GLwYsGR60B7
+         s16rW+e9KDenBwiJ2ize1K31oBrQw5eGhmqZHaQbEbKc7FgaABcDweWLTNUz3drqih35
+         E2kwTtUCgJy/SSAWD5+bPWUrufEqpjTG+hNJf9J/w6SAHO23YWpgdxaA3R2Sjv2vzOaC
+         n7Cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687000368; x=1689592368;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tqysVBz+NFmrTu+Ca/Xnkrb+OEIx8dLa2JZyf+GKTrw=;
-        b=DaopRaMiD4WdLJ0i0dXjrjK9UHKcfv7ahir0/t2QbnXgy+bbCwX2AQdbHsFyj/bYAe
-         zKL4cWZflxz9kCo1p0Mu4dw+pQjILtEhvV0CoIQ7IWDfdJRucmNb/WzMzydjR1qlwrcH
-         93T7UmIMvexv5V52osejC/UMjAfZcQ31UcaU+K5nyGJtrqAJxr+wSo0yY+YWBWADccir
-         VCXohaxpeGMGtma/IfdUPqHigD1Yo86JupEQaSJn1pefEy7gyGgpBhkAFPLb1wYaR8L2
-         25ZpdTG2EssMojMShofsyAqhvgBUxPOSDt4AqIXNU8kOpmygyAk2Bh5VklbriWOW+MJY
-         8cpQ==
-X-Gm-Message-State: AC+VfDwEl0wdAIwKZgrTT2IbmUDx7gF0NjvTGrIrjLQG8WoKxRYvt+nE
-        vy7vN/5Xb4Vk5UZ8dfSaqMUnpRkaHxCWoCeMsuNAQrfOlYXa
-X-Google-Smtp-Source: ACHHUZ4msT+TTZyn0q/FX5PQ0CqLUvKtu2X97cf3SNxRrcp6ri3a1sPOQOT2KklftY2+grulVgp2JCc8fdvjhW7CFLx9FFQpBLCb
+        d=1e100.net; s=20221208; t=1687000693; x=1689592693;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OWAbg6BOF2nzE2I56RfPp2+x9gJUvp4uCgmjbp/7H+A=;
+        b=HL4pb4AA1TU8Lr2e6uOtm1BFlZEYZEX/9QvI24iaL0VQNjta3juKxVOVLgBlFinYwe
+         ndA1+hcp0NGn7gdUfiEnc743X96SlnyQSAGZJt8t9tZ254Am5Lps8rGRAvM6htzB8ID+
+         Sup3YZwEHX3SahW98En8/A5vyTjO8dBrneAQ7bGbEA2yf0e05lekgLM0oND9X3Mx4WHo
+         whyRT0EuyicXY+87j5SlOG3z18qV2E6VMb3tW9o7p1yzwhbcIx/MyPMgq2tJvtWRm5lV
+         He1W8xvMb+tEf8H+lJpH954YzQFIgurH0tXOdGfvwtxEGSDoUYk99eZPAZKNKoy0Hl0I
+         Fvog==
+X-Gm-Message-State: AC+VfDxmS64UcoEkyLgbC7lF1eztvJ4xJ5P4Atd5dMYtMxjsoiX3o6hK
+        zqHn69dABeuCT3k1+LzwShcq4A==
+X-Google-Smtp-Source: ACHHUZ4qmMOhdxySg3FMwhU5HEqjuFWtlrAY047yKgdyCSe7/cq+Y9GrLJnX74LxW7X/nfZWhrczdQ==
+X-Received: by 2002:a17:906:4793:b0:978:8937:19ba with SMTP id cw19-20020a170906479300b00978893719bamr4293294ejc.44.1687000693382;
+        Sat, 17 Jun 2023 04:18:13 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id e17-20020a1709067e1100b00982cac5fbbbsm2653275ejr.62.2023.06.17.04.18.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Jun 2023 04:18:12 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        krishna Lanka <quic_vamslank@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: pinctrl: qcom,sdx65-tlmm: add pcie_clkreq function
+Date:   Sat, 17 Jun 2023 13:18:09 +0200
+Message-Id: <20230617111809.129232-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1aac:b0:341:e20d:24b with SMTP id
- l12-20020a056e021aac00b00341e20d024bmr1531796ilv.0.1687000367830; Sat, 17 Jun
- 2023 04:12:47 -0700 (PDT)
-Date:   Sat, 17 Jun 2023 04:12:47 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a91cfe05fe5161f2@google.com>
-Subject: [syzbot] [bluetooth?] BUG: sleeping function called from invalid
- context in __hci_cmd_sync_sk
-From:   syzbot <syzbot+c715e1bd8dfbcb1ab176@syzkaller.appspotmail.com>
-To:     johan.hedberg@gmail.com, linux-bluetooth@vger.kernel.org,
-        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
-        marcel@holtmann.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+DTS and driver already support pcie_clkreq function for a pin.  Add it
+to fix dtbs_check warning:
 
-syzbot found the following issue on:
+  qcom-sdx65-mtp.dtb: pinctrl@f100000: pcie-ep-clkreq-default-state: 'oneOf' conditional failed, one must be fixed:
+    'bias-disable', 'drive-strength', 'function', 'pins' do not match any of the regexes: '-pins$', 'pinctrl-[0-9]+'
+    'pcie_clkreq' is not one of ['blsp_uart1', 'blsp_spi1', ... 'gpio']
 
-HEAD commit:    1f6ce8392d6f Add linux-next specific files for 20230613
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=14adff43280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d103d5f9125e9fe9
-dashboard link: https://syzkaller.appspot.com/bug?extid=c715e1bd8dfbcb1ab176
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11287563280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14395963280000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/2d9bf45aeae9/disk-1f6ce839.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/e0b03ef83e17/vmlinux-1f6ce839.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/b6c21a24174d/bzImage-1f6ce839.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c715e1bd8dfbcb1ab176@syzkaller.appspotmail.com
-
-BUG: sleeping function called from invalid context at net/bluetooth/hci_sync.c:166
-in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 4430, name: kworker/u5:1
-preempt_count: 0, expected: 0
-RCU nest depth: 1, expected: 0
-4 locks held by kworker/u5:1/4430:
- #0: ffff888020183138 ((wq_completion)hci0#2){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:20 [inline]
- #0: ffff888020183138 ((wq_completion)hci0#2){+.+.}-{0:0}, at: raw_atomic64_set include/linux/atomic/atomic-arch-fallback.h:2608 [inline]
- #0: ffff888020183138 ((wq_completion)hci0#2){+.+.}-{0:0}, at: raw_atomic_long_set include/linux/atomic/atomic-long.h:79 [inline]
- #0: ffff888020183138 ((wq_completion)hci0#2){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:3196 [inline]
- #0: ffff888020183138 ((wq_completion)hci0#2){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:675 [inline]
- #0: ffff888020183138 ((wq_completion)hci0#2){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:702 [inline]
- #0: ffff888020183138 ((wq_completion)hci0#2){+.+.}-{0:0}, at: process_one_work+0x8fd/0x16f0 kernel/workqueue.c:2564
- #1: ffffc900057a7db0 ((work_completion)(&hdev->rx_work)){+.+.}-{0:0}, at: process_one_work+0x930/0x16f0 kernel/workqueue.c:2568
- #2: ffff88802b78c078 (&hdev->lock){+.+.}-{3:3}, at: hci_le_create_big_complete_evt+0xe9/0xab0 net/bluetooth/hci_event.c:6947
- #3: ffffffff8c9a2840 (rcu_read_lock){....}-{1:2}, at: hci_le_ev_skb_pull net/bluetooth/hci_event.c:79 [inline]
- #3: ffffffff8c9a2840 (rcu_read_lock){....}-{1:2}, at: hci_le_create_big_complete_evt+0xcc/0xab0 net/bluetooth/hci_event.c:6943
-CPU: 0 PID: 4430 Comm: kworker/u5:1 Not tainted 6.4.0-rc6-next-20230613-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-Workqueue: hci0 hci_rx_work
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
- __might_resched+0x358/0x580 kernel/sched/core.c:10188
- __hci_cmd_sync_sk+0x359/0xe30 net/bluetooth/hci_sync.c:166
- __hci_cmd_sync_status_sk+0x45/0x160 net/bluetooth/hci_sync.c:247
- __hci_cmd_sync_status net/bluetooth/hci_sync.c:273 [inline]
- hci_le_terminate_big_sync+0xa4/0xd0 net/bluetooth/hci_sync.c:1671
- hci_le_create_big_complete_evt+0x741/0xab0 net/bluetooth/hci_event.c:6982
- hci_le_meta_evt+0x2bc/0x510 net/bluetooth/hci_event.c:7182
- hci_event_func net/bluetooth/hci_event.c:7512 [inline]
- hci_event_packet+0x641/0xfd0 net/bluetooth/hci_event.c:7567
- hci_rx_work+0xaeb/0x1340 net/bluetooth/hci_core.c:4064
- process_one_work+0xa34/0x16f0 kernel/workqueue.c:2594
- worker_thread+0x67d/0x10c0 kernel/workqueue.c:2745
- kthread+0x344/0x440 kernel/kthread.c:379
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-------------[ cut here ]------------
-Voluntary context switch within RCU read-side critical section!
-WARNING: CPU: 0 PID: 4430 at kernel/rcu/tree_plugin.h:320 rcu_note_context_switch+0xbb9/0x1800 kernel/rcu/tree_plugin.h:320
-Modules linked in:
-CPU: 0 PID: 4430 Comm: kworker/u5:1 Tainted: G        W          6.4.0-rc6-next-20230613-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-Workqueue: hci0 hci_rx_work
-RIP: 0010:rcu_note_context_switch+0xbb9/0x1800 kernel/rcu/tree_plugin.h:320
-Code: 1d 44 68 00 4c 8b 4c 24 30 8b 4c 24 28 48 8b 54 24 20 e9 8f 03 00 00 48 c7 c7 c0 32 6e 8a c6 05 10 41 24 0d 01 e8 87 83 dc ff <0f> 0b e9 4c f5 ff ff 81 e5 ff ff ff 7f 0f 84 d7 f6 ff ff 65 48 8b
-RSP: 0018:ffffc900057a74c0 EFLAGS: 00010086
-RAX: 0000000000000000 RBX: ffff8880b983d340 RCX: 0000000000000000
-RDX: ffff88802c40bb80 RSI: ffffffff814bf5f7 RDI: 0000000000000001
-RBP: ffff88802c40bb80 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
-R13: ffff88802c40bb80 R14: ffffffff8ea9aff0 R15: ffff8880b983c440
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f802b262fc8 CR3: 000000002812e000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __schedule+0x276/0x5790 kernel/sched/core.c:6609
- schedule+0xde/0x1a0 kernel/sched/core.c:6785
- schedule_timeout+0x14e/0x2b0 kernel/time/timer.c:2167
- __hci_cmd_sync_sk+0xc1d/0xe30 net/bluetooth/hci_sync.c:166
- __hci_cmd_sync_status_sk+0x45/0x160 net/bluetooth/hci_sync.c:247
- __hci_cmd_sync_status net/bluetooth/hci_sync.c:273 [inline]
- hci_le_terminate_big_sync+0xa4/0xd0 net/bluetooth/hci_sync.c:1671
- hci_le_create_big_complete_evt+0x741/0xab0 net/bluetooth/hci_event.c:6982
- hci_le_meta_evt+0x2bc/0x510 net/bluetooth/hci_event.c:7182
- hci_event_func net/bluetooth/hci_event.c:7512 [inline]
- hci_event_packet+0x641/0xfd0 net/bluetooth/hci_event.c:7567
- hci_rx_work+0xaeb/0x1340 net/bluetooth/hci_core.c:4064
- process_one_work+0xa34/0x16f0 kernel/workqueue.c:2594
- worker_thread+0x67d/0x10c0 kernel/workqueue.c:2745
- kthread+0x344/0x440 kernel/kthread.c:379
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-
-
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ Documentation/devicetree/bindings/pinctrl/qcom,sdx65-tlmm.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-tlmm.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-tlmm.yaml
+index 2ef793ae4038..27319782d94b 100644
+--- a/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-tlmm.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-tlmm.yaml
+@@ -85,7 +85,7 @@ $defs:
+                 qdss_tracectl_a, dac_calib13, qdss_traceclk_a, dac_calib14,
+                 dac_calib15, hdmi_rcv, dac_calib16, hdmi_cec, pwr_modem,
+                 dac_calib17, hdmi_ddc, pwr_nav, dac_calib18, pwr_crypto,
+-                dac_calib19, hdmi_hot, dac_calib20, dac_calib21, pci_e0,
++                dac_calib19, hdmi_hot, dac_calib20, dac_calib21, pci_e0, pcie_clkreq,
+                 dac_calib22, dac_calib23, dac_calib24, tsif1_sync, dac_calib25,
+                 sd_write, tsif1_error, blsp_spi2, blsp_uart2, blsp_uim2,
+                 qdss_cti, blsp_i2c2, blsp_spi3, blsp_uart3, blsp_uim3, blsp_i2c3,
+-- 
+2.34.1
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
