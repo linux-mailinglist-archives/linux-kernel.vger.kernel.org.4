@@ -2,247 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A083734458
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 00:23:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B160B734460
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 00:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232730AbjFQWXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 18:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56768 "EHLO
+        id S232929AbjFQW3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 18:29:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232065AbjFQWXQ (ORCPT
+        with ESMTP id S231132AbjFQW3I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 18:23:16 -0400
-Received: from s.wrqvtzvf.outbound-mail.sendgrid.net (s.wrqvtzvf.outbound-mail.sendgrid.net [149.72.126.143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0452B10E0
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 15:23:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kwiboo.se;
-        h=from:subject:in-reply-to:references:mime-version:to:cc:
-        content-transfer-encoding:content-type:cc:content-type:from:subject:to;
-        s=s1; bh=In9jXU/Xmc90ShXMfHKgvGxvsps9jJbDF/D42oeosxM=;
-        b=f5OSXAF0iGtb4udg0YVYucbfwZeIk6ReJVzTnE562VDQ2IQXiN9oPimZEWkzNRcg3YlU
-        Kf89B0WsEGLy0RUAON+z96YFuNcGPDvrjePeGGqtPJhAMw01K7Rl5hkbU9xpOHi1JjrCuD
-        7M7ozbb8t/n2AsdjdlrIqR4aiZbxmo90xZfdC/5xg6A1Gix/mcHH2NYlTHWoP8LtNAdu2+
-        +TFTuX8MlWvODEz2OIsKyTc5J8GVVDGjkGcPAlmFmVc9Yfvaan38YDVMl32fn1GGyw3BpL
-        RxyqaiTmZcUP8pB74lWkRjhToBxyAmU3xhE0bKEayoy767hXv3F41wC7zfmBPIRQ==
-Received: by filterdrecv-canary-78ff49ff78-6jdhb with SMTP id filterdrecv-canary-78ff49ff78-6jdhb-1-648E3251-31
-        2023-06-17 22:23:13.974305074 +0000 UTC m=+3278615.968239283
-Received: from bionic.localdomain (unknown)
-        by geopod-ismtpd-1 (SG)
-        with ESMTP
-        id V8aP4NOAQ_-U3xk-8FFjJg
-        Sat, 17 Jun 2023 22:23:13.695 +0000 (UTC)
-From:   Jonas Karlman <jonas@kwiboo.se>
-Subject: [PATCH v3 2/2] drm/rockchip: vop: Add NV15, NV20 and NV30 support
-Date:   Sat, 17 Jun 2023 22:23:14 +0000 (UTC)
-Message-Id: <20230617222307.3145714-3-jonas@kwiboo.se>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230617222307.3145714-1-jonas@kwiboo.se>
-References: <20230617222307.3145714-1-jonas@kwiboo.se>
+        Sat, 17 Jun 2023 18:29:08 -0400
+Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18CC1AA;
+        Sat, 17 Jun 2023 15:29:06 -0700 (PDT)
+Received: from local
+        by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1qAePH-0005ow-24;
+        Sat, 17 Jun 2023 22:28:31 +0000
+Date:   Sun, 18 Jun 2023 00:26:32 +0200
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?iso-8859-1?Q?Ram=F3n?= Nordin Rodriguez 
+        <ramon.nordin.rodriguez@ferroamp.se>,
+        Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>,
+        Frank Sae <Frank.Sae@motor-comm.com>,
+        Michael Walle <michael@walle.cc>,
+        Piergiorgio Beruto <piergiorgio.beruto@gmail.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] net: phy: mediatek: fix compile-test dependencies
+Message-ID: <ZI4zGF4MUSclEJK_@pidgin.makrotopia.org>
+References: <20230616093009.3511692-1-arnd@kernel.org>
+ <ZIxL16HWci5dd7Ah@corigine.com>
 MIME-Version: 1.0
-X-SG-EID: =?us-ascii?Q?TdbjyGynYnRZWhH+7lKUQJL+ZxmxpowvO2O9SQF5CwCVrYgcwUXgU5DKUU3QxA?=
- =?us-ascii?Q?fZekEeQsTe+RrMu3cja6a0h6i1hv+OZJVIZNLFe?=
- =?us-ascii?Q?BUB6rZ5yOxRN6V3ryls9aLxT7Au4q7aBvoO6NbC?=
- =?us-ascii?Q?14xqEU0E9j+eD0WG1hBLHyO=2FHHqrQE5ekiIn5oF?=
- =?us-ascii?Q?j0dcRQSbJ0hiYk0NIK70+hOLoL53gAKvWUJvV99?=
- =?us-ascii?Q?EKEwEhUkcJe=2FS669FDfJMJM6qBIYw5PsONIvvv4?=
- =?us-ascii?Q?6ZXzqsUNTOBR7aMSWy1tA=3D=3D?=
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sandy Huang <hjc@rock-chips.com>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jonas Karlman <jonas@kwiboo.se>
-X-Entity-ID: P7KYpSJvGCELWjBME/J5tg==
-Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset=us-ascii
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <ZIxL16HWci5dd7Ah@corigine.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for displaying 10-bit 4:2:0 and 4:2:2 formats produced by the
-Rockchip Video Decoder on RK322X, RK3288, RK3328, RK3368 and RK3399.
-Also add support for 10-bit 4:4:4 format while at it.
+On Fri, Jun 16, 2023 at 01:47:35PM +0200, Simon Horman wrote:
+> On Fri, Jun 16, 2023 at 11:29:54AM +0200, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> > 
+> > The new phy driver attempts to select a driver from another subsystem,
+> > but that fails when the NVMEM subsystem is disabled:
+> > 
+> > WARNING: unmet direct dependencies detected for NVMEM_MTK_EFUSE
+> >   Depends on [n]: NVMEM [=n] && (ARCH_MEDIATEK [=n] || COMPILE_TEST [=y]) && HAS_IOMEM [=y]
+> >   Selected by [y]:
+> >   - MEDIATEK_GE_SOC_PHY [=y] && NETDEVICES [=y] && PHYLIB [=y] && (ARM64 && ARCH_MEDIATEK [=n] || COMPILE_TEST [=y])
+> > 
+> > I could not see an actual compile time dependency, so presumably this
+> > is only needed for for working correctly but not technically a dependency
+> 
+> nit: for for -> for
+>      or
+>      for for working correctly -> for correct operation
+> 
+> > on that particular nvmem driver implementation, so it would likely
+> > be safe to remove the select for compile testing.
+> > 
+> > To keep the spirit of the original 'select', just replace this with a
+> > 'depends on' that ensures that the driver will work but does not get in
+> > the way of build testing.
+> > 
+> > Fixes: 98c485eaf509b ("net: phy: add driver for MediaTek SoC built-in GE PHYs")
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> 
+> I don't know the answer to the question of if this dependency is needed or
+> not. But I do agree that it does what it says on the box.
 
-V2: Added NV30 support
+It's not needed to build or load the driver, but the PHY won't function
+at all without reading values from the SoCs efuse, and for that the
+nvmem driver is required.
 
-Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
-Reviewed-by: Sandy Huang <hjc@rock-chips.com>
----
- drivers/gpu/drm/rockchip/rockchip_drm_vop.c | 29 +++++++++++++++++--
- drivers/gpu/drm/rockchip/rockchip_drm_vop.h |  1 +
- drivers/gpu/drm/rockchip/rockchip_vop_reg.c | 32 +++++++++++++++++----
- 3 files changed, 54 insertions(+), 8 deletions(-)
+Using a simple dependency instead of select will fix it.
 
-diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
-index 60b23636a3fe..3984265a6d8f 100644
---- a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
-+++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
-@@ -273,6 +273,18 @@ static bool has_uv_swapped(uint32_t format)
- 	}
- }
- 
-+static bool is_fmt_10(uint32_t format)
-+{
-+	switch (format) {
-+	case DRM_FORMAT_NV15:
-+	case DRM_FORMAT_NV20:
-+	case DRM_FORMAT_NV30:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
- static enum vop_data_format vop_convert_format(uint32_t format)
- {
- 	switch (format) {
-@@ -288,12 +300,15 @@ static enum vop_data_format vop_convert_format(uint32_t format)
- 	case DRM_FORMAT_BGR565:
- 		return VOP_FMT_RGB565;
- 	case DRM_FORMAT_NV12:
-+	case DRM_FORMAT_NV15:
- 	case DRM_FORMAT_NV21:
- 		return VOP_FMT_YUV420SP;
- 	case DRM_FORMAT_NV16:
-+	case DRM_FORMAT_NV20:
- 	case DRM_FORMAT_NV61:
- 		return VOP_FMT_YUV422SP;
- 	case DRM_FORMAT_NV24:
-+	case DRM_FORMAT_NV30:
- 	case DRM_FORMAT_NV42:
- 		return VOP_FMT_YUV444SP;
- 	default:
-@@ -944,7 +959,12 @@ static void vop_plane_atomic_update(struct drm_plane *plane,
- 	dsp_sty = dest->y1 + crtc->mode.vtotal - crtc->mode.vsync_start;
- 	dsp_st = dsp_sty << 16 | (dsp_stx & 0xffff);
- 
--	offset = (src->x1 >> 16) * fb->format->cpp[0];
-+	if (fb->format->block_w[0])
-+		offset = (src->x1 >> 16) * fb->format->char_per_block[0] /
-+			 fb->format->block_w[0];
-+	else
-+		offset = (src->x1 >> 16) * fb->format->cpp[0];
-+
- 	offset += (src->y1 >> 16) * fb->pitches[0];
- 	dma_addr = rk_obj->dma_addr + offset + fb->offsets[0];
- 
-@@ -970,6 +990,7 @@ static void vop_plane_atomic_update(struct drm_plane *plane,
- 	}
- 
- 	VOP_WIN_SET(vop, win, format, format);
-+	VOP_WIN_SET(vop, win, fmt_10, is_fmt_10(fb->format->format));
- 	VOP_WIN_SET(vop, win, yrgb_vir, DIV_ROUND_UP(fb->pitches[0], 4));
- 	VOP_WIN_SET(vop, win, yrgb_mst, dma_addr);
- 	VOP_WIN_YUV2YUV_SET(vop, win_yuv2yuv, y2r_en, is_yuv);
-@@ -986,7 +1007,11 @@ static void vop_plane_atomic_update(struct drm_plane *plane,
- 		uv_obj = fb->obj[1];
- 		rk_uv_obj = to_rockchip_obj(uv_obj);
- 
--		offset = (src->x1 >> 16) * bpp / hsub;
-+		if (fb->format->block_w[1])
-+			offset = (src->x1 >> 16) * bpp /
-+				 fb->format->block_w[1] / hsub;
-+		else
-+			offset = (src->x1 >> 16) * bpp / hsub;
- 		offset += (src->y1 >> 16) * fb->pitches[1] / vsub;
- 
- 		dma_addr = rk_uv_obj->dma_addr + offset + fb->offsets[1];
-diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop.h b/drivers/gpu/drm/rockchip/rockchip_drm_vop.h
-index 5f56e0597df8..4b2daefeb8c1 100644
---- a/drivers/gpu/drm/rockchip/rockchip_drm_vop.h
-+++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop.h
-@@ -186,6 +186,7 @@ struct vop_win_phy {
- 	struct vop_reg enable;
- 	struct vop_reg gate;
- 	struct vop_reg format;
-+	struct vop_reg fmt_10;
- 	struct vop_reg rb_swap;
- 	struct vop_reg uv_swap;
- 	struct vop_reg act_info;
-diff --git a/drivers/gpu/drm/rockchip/rockchip_vop_reg.c b/drivers/gpu/drm/rockchip/rockchip_vop_reg.c
-index 20ac7811c5eb..7f72dcac6f0e 100644
---- a/drivers/gpu/drm/rockchip/rockchip_vop_reg.c
-+++ b/drivers/gpu/drm/rockchip/rockchip_vop_reg.c
-@@ -53,6 +53,23 @@ static const uint32_t formats_win_full[] = {
- 	DRM_FORMAT_NV42,
- };
- 
-+static const uint32_t formats_win_full_10[] = {
-+	DRM_FORMAT_XRGB8888,
-+	DRM_FORMAT_ARGB8888,
-+	DRM_FORMAT_XBGR8888,
-+	DRM_FORMAT_ABGR8888,
-+	DRM_FORMAT_RGB888,
-+	DRM_FORMAT_BGR888,
-+	DRM_FORMAT_RGB565,
-+	DRM_FORMAT_BGR565,
-+	DRM_FORMAT_NV12,
-+	DRM_FORMAT_NV16,
-+	DRM_FORMAT_NV24,
-+	DRM_FORMAT_NV15,
-+	DRM_FORMAT_NV20,
-+	DRM_FORMAT_NV30,
-+};
-+
- static const uint64_t format_modifiers_win_full[] = {
- 	DRM_FORMAT_MOD_LINEAR,
- 	DRM_FORMAT_MOD_INVALID,
-@@ -627,11 +644,12 @@ static const struct vop_scl_regs rk3288_win_full_scl = {
- 
- static const struct vop_win_phy rk3288_win01_data = {
- 	.scl = &rk3288_win_full_scl,
--	.data_formats = formats_win_full,
--	.nformats = ARRAY_SIZE(formats_win_full),
-+	.data_formats = formats_win_full_10,
-+	.nformats = ARRAY_SIZE(formats_win_full_10),
- 	.format_modifiers = format_modifiers_win_full,
- 	.enable = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 0),
- 	.format = VOP_REG(RK3288_WIN0_CTRL0, 0x7, 1),
-+	.fmt_10 = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 4),
- 	.rb_swap = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 12),
- 	.uv_swap = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 15),
- 	.act_info = VOP_REG(RK3288_WIN0_ACT_INFO, 0x1fff1fff, 0),
-@@ -768,11 +786,12 @@ static const struct vop_intr rk3368_vop_intr = {
- 
- static const struct vop_win_phy rk3368_win01_data = {
- 	.scl = &rk3288_win_full_scl,
--	.data_formats = formats_win_full,
--	.nformats = ARRAY_SIZE(formats_win_full),
-+	.data_formats = formats_win_full_10,
-+	.nformats = ARRAY_SIZE(formats_win_full_10),
- 	.format_modifiers = format_modifiers_win_full,
- 	.enable = VOP_REG(RK3368_WIN0_CTRL0, 0x1, 0),
- 	.format = VOP_REG(RK3368_WIN0_CTRL0, 0x7, 1),
-+	.fmt_10 = VOP_REG(RK3368_WIN0_CTRL0, 0x1, 4),
- 	.rb_swap = VOP_REG(RK3368_WIN0_CTRL0, 0x1, 12),
- 	.uv_swap = VOP_REG(RK3368_WIN0_CTRL0, 0x1, 15),
- 	.x_mir_en = VOP_REG(RK3368_WIN0_CTRL0, 0x1, 21),
-@@ -938,11 +957,12 @@ static const struct vop_win_yuv2yuv_data rk3399_vop_big_win_yuv2yuv_data[] = {
- 
- static const struct vop_win_phy rk3399_win01_data = {
- 	.scl = &rk3288_win_full_scl,
--	.data_formats = formats_win_full,
--	.nformats = ARRAY_SIZE(formats_win_full),
-+	.data_formats = formats_win_full_10,
-+	.nformats = ARRAY_SIZE(formats_win_full_10),
- 	.format_modifiers = format_modifiers_win_full_afbc,
- 	.enable = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 0),
- 	.format = VOP_REG(RK3288_WIN0_CTRL0, 0x7, 1),
-+	.fmt_10 = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 4),
- 	.rb_swap = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 12),
- 	.uv_swap = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 15),
- 	.x_mir_en = VOP_REG(RK3288_WIN0_CTRL0, 0x1, 21),
--- 
-2.40.1
+Reviewed-by: Daniel Golle <daniel@makrotopia.org>
 
+> 
+> Reviewed-by: Simon Horman <simon.horman@corigine.com>
+> 
+> 
