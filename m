@@ -2,63 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0B4733EFA
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 09:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC28733EFB
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 09:03:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233266AbjFQHCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 03:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
+        id S234516AbjFQHC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 03:02:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjFQHCt (ORCPT
+        with ESMTP id S231929AbjFQHCw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 03:02:49 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83809199F
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 00:02:48 -0700 (PDT)
-Date:   Sat, 17 Jun 2023 07:02:46 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686985367;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=X6HC5wxQcIEqAgSQJdb+UHn0VmVyLap03X1VIiek8n0=;
-        b=T+js6W1HnY8TYaiyhLEu0eJnKbvr33ciR71ohSJfhLKCuJQHe0zLB25CNlnZEI3imZCkWE
-        Rv/LWwY4FAgmh8+X+o250R+/6nBoQYDzuBJS3iWM8I2NY5zm6YnTlmovbg/wk33zUygnWo
-        DvltwBtvD4QVd4DzyPGXSwvaLbNXGRoCaDyu3t5VcbbI+vUkF9IvLLIaWpaE0017Qr0lDL
-        9cgYYyH4uYa5n+SIRRJ/uXO2wnmOzcjPLtVubAXwF+qbEYb6Fzb+iqSh64FgBb8MV6w96d
-        R6kgSByhvnvhArcukl/TmdBphJhSss/RoidRZ3M9jtcrhj3lpQFkhYMBYm4NuA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686985367;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=X6HC5wxQcIEqAgSQJdb+UHn0VmVyLap03X1VIiek8n0=;
-        b=/+EtQbT6+8pK0YopFX5C8mU7LzxT2AcaRCgeqMX5VpxiNjwZQoLx3YqBteENpcHAU2opx8
-        /XD+Rm5UhaTIkWAQ==
-From:   "irqchip-bot for John Paul Adrian Glaubitz" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip/jcore-aic: Fix missing allocation
- of IRQ descriptors
-Cc:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Rob Landley <rob@landley.net>, Marc Zyngier <maz@kernel.org>,
-        tglx@linutronix.de
-In-Reply-To: <20230510163343.43090-1-glaubitz@physik.fu-berlin.de>
-References: <20230510163343.43090-1-glaubitz@physik.fu-berlin.de>
-MIME-Version: 1.0
-Message-ID: <168698536627.404.550156100246054585.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        Sat, 17 Jun 2023 03:02:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4747419A0
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 00:02:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D203460C78
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 07:02:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 395B6C433C9;
+        Sat, 17 Jun 2023 07:02:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686985370;
+        bh=mDjap47vtptdvQXYjii6QqSRgGmQnRM6EgD4Gp3rKyg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hEcO12pIj2UgGbu941bcI/B0dMQehv4dSlHAtI72llgnimuvPteZMPtyBw3BFQF8p
+         mgadzCVHKe3a2UAYlRLjxidSCyJd0qsMhRKz0O9phZUTCWIBlp+Xl0dj+amjjkUQvg
+         2oO5pW9PsEXWihhoLrzMIbCayvtERXSeXFtJRc6xyHgTaMEgrK4+cSw/nSybgyk+2S
+         D6fx9KrELyMT2AhYupanTQZuoblhwVOpACiCCtBBKIz769e1lI7swSfnQaCSQmf3ik
+         UkoXRZlhMNTAeez8aolyEtlVoQLJSH0HCdQaF+QANh+y0069skZMDfPeM8nxXxzI5f
+         5pTMVfnTnx+4g==
+Received: from [77.240.177.73] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1qAPxP-0063hb-Tf;
+        Sat, 17 Jun 2023 08:02:48 +0100
+Date:   Sat, 17 Jun 2023 08:02:51 +0100
+Message-ID: <871qiar2p0.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kunkun Jiang <jiangkunkun@huawei.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        "open list:IRQCHIP DRIVERS" <linux-kernel@vger.kernel.org>,
+        <wanghaibin.wang@huawei.com>, <chenxiang66@hisilicon.com>,
+        <tangnianyao@huawei.com>
+Subject: Re: [PATCH] irqchipi/gic-v4: Ensure accessing the correct RD when and writing INVLPIR
+In-Reply-To: <b073b1f7-0567-eb45-dec9-dcd2054e41c9@huawei.com>
+References: <20230412041510.497-1-jiangkunkun@huawei.com>
+        <86y1mxl9m4.wl-maz@kernel.org>
+        <f618c540-879c-ca5b-31af-e55472d8208c@huawei.com>
+        <86bkikmvjk.wl-maz@kernel.org>
+        <b073b1f7-0567-eb45-dec9-dcd2054e41c9@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 77.240.177.73
+X-SA-Exim-Rcpt-To: jiangkunkun@huawei.com, tglx@linutronix.de, yuzenghui@huawei.com, linux-kernel@vger.kernel.org, wanghaibin.wang@huawei.com, chenxiang66@hisilicon.com, tangnianyao@huawei.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,54 +74,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-next branch of irqchip:
+On Tue, 16 May 2023 13:01:59 +0100,
+Kunkun Jiang <jiangkunkun@huawei.com> wrote:
+> 
+> Hi Marc,
+> 
+> On 2023/5/16 18:15, Marc Zyngier wrote:
+> > On Thu, 13 Apr 2023 04:57:17 +0100,
+> > Kunkun Jiang <jiangkunkun@huawei.com> wrote:
+> >>> Wouldn't it be nice if irq_to_cpuid() could work out whether it is
+> >>> dealing with a LPI or a VLPI like it does today, but also directly
+> >>> with a VPE? We could then use the same code as derect_lpi_inv(). I
+> >>> came up with this the hack below, which is totally untested as I don't
+> >>> have access to GICv4.1 HW.
+> >>> 
+> >>> Could you give it a spin?
+> >> Nice, I will test it as soon as possible.
+> > Did you ever managed to test this?
+> Sorry,I've only been coordinating the GICv4.1 environment in the last
+> few days. I have tested it with GICv4 many times, and it doesn't recur.
+> However, another call trace occurs with GICv4.1 when the device driver
+> is loaded in Guest. I haven't found out why. Maybe you can help analyze it.
 
-Commit-ID:     4848229494a323eeaab62eee5574ef9f7de80374
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/4848229494a323eeaab62eee5574ef9f7de80374
-Author:        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-AuthorDate:    Wed, 10 May 2023 18:33:42 +02:00
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Sat, 17 Jun 2023 07:54:48 +01:00
+Which driver is loaded in the guest?
 
-irqchip/jcore-aic: Fix missing allocation of IRQ descriptors
+As I said, I don't have the HW at all, so I cannot test things, and
+this stack-trace is not enough to analyse anything (you're not even
+saying what you are doing).
 
-The initialization function for the J-Core AIC aic_irq_of_init() is
-currently missing the call to irq_alloc_descs() which allocates and
-initializes all the IRQ descriptors. Add missing function call and
-return the error code from irq_alloc_descs() in case the allocation
-fails.
+	M.
 
-Fixes: 981b58f66cfc ("irqchip/jcore-aic: Add J-Core AIC driver")
-Signed-off-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Tested-by: Rob Landley <rob@landley.net>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20230510163343.43090-1-glaubitz@physik.fu-berlin.de
----
- drivers/irqchip/irq-jcore-aic.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/drivers/irqchip/irq-jcore-aic.c b/drivers/irqchip/irq-jcore-aic.c
-index 5f47d8e..b9dcc8e 100644
---- a/drivers/irqchip/irq-jcore-aic.c
-+++ b/drivers/irqchip/irq-jcore-aic.c
-@@ -68,6 +68,7 @@ static int __init aic_irq_of_init(struct device_node *node,
- 	unsigned min_irq = JCORE_AIC2_MIN_HWIRQ;
- 	unsigned dom_sz = JCORE_AIC_MAX_HWIRQ+1;
- 	struct irq_domain *domain;
-+	int ret;
- 
- 	pr_info("Initializing J-Core AIC\n");
- 
-@@ -100,6 +101,12 @@ static int __init aic_irq_of_init(struct device_node *node,
- 	jcore_aic.irq_unmask = noop;
- 	jcore_aic.name = "AIC";
- 
-+	ret = irq_alloc_descs(-1, min_irq, dom_sz - min_irq,
-+			      of_node_to_nid(node));
-+
-+	if (ret < 0)
-+		return ret;
-+
- 	domain = irq_domain_add_legacy(node, dom_sz - min_irq, min_irq, min_irq,
- 				       &jcore_aic_irqdomain_ops,
- 				       &jcore_aic);
+-- 
+Without deviation from the norm, progress is not possible.
