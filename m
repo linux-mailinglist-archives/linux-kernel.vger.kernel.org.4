@@ -2,78 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D45F5733E30
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 07:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB1E4733E33
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 07:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231149AbjFQFO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 01:14:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46518 "EHLO
+        id S232948AbjFQFRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 01:17:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjFQFOX (ORCPT
+        with ESMTP id S229852AbjFQFRU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 01:14:23 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904EF1AB
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 22:14:22 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-77d99de0e9bso139218939f.3
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 22:14:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686978862; x=1689570862;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/ruLjNhk6fCywW5LUQo5nl6809b1AY9//IrZcqzckXw=;
-        b=jd8GIc/aQZq+8wtWRKVOSelAzki/OcAxydTP8YtBfJtDFITxv+JJiuDf70LGxKxS8G
-         EyLn+Sx7dXT9PHYp+SWlR3DG2MS0OOSqhqX8z4E1Kx/A9fb7VKa+gY9coX04HTg8bwM5
-         vgUDm+DgE4A0FtvODLKz2dJegFOtVIkPuGAMk7MDRxnvk9SY05eRp4xt1gvkJw3KV48s
-         2tYlklayqoVrwwzsKg/v1fweITM54lflNi0tNuHLwKRSnursYGSaAnGlbTCubxHghQ/p
-         eSGPpfvhPvrua+HRStl5zzQFNKSYfX6YwQnbsM5Tq+plltu9QKlyqGv0DmeZZiU8/Gtk
-         loWw==
-X-Gm-Message-State: AC+VfDz+ZwcTRRaGzj4Ikxi94oA0OW5kH9CVXfu0iKkY/iY9q6DZ3NUp
-        TreUUBY+f4XJhRx7yExNMYWqoW2WZzGoPNnaeqlxJqydQDHg
-X-Google-Smtp-Source: ACHHUZ4ME0j7OSg9GrPniZmeNmXInLXLlmxE353z7XujKzFE1xvL+lh/SzXZuoFdTerY/43T8JOXyw5KdK1I5r/QOsxVefey2ESQ
+        Sat, 17 Jun 2023 01:17:20 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A8310D1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 22:17:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686979039; x=1718515039;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=V5xkK2rElWwrYcGj6hIZaRQE8ORUl+xbKEeQFpcOimk=;
+  b=ESzppGJWj58GNloyimQ5M7W0v3TTgFY0+2nXyaVjFXsDnf+0YYNwxrvd
+   4TQ20/Stjm1hlt8EZwAbJWShjbpWXS7toE2Ce7DVnKz9tpJCAZVQY5uIF
+   Z+J1Fey/VrrkGeZKHPrHIwUitnCC7yUQxHYFGBx4ZurMYDv01OD0IH9E2
+   DKi05dei9nhuZgJTBWu2GF8vgJUOKiv/hFvwlXATHDS3oqzGgQzBQ2Cou
+   FQmpEHDjyE1SU52198RHY30Tf9W1cZJCllrwXbGdMmADyYyY/5fbTVAw3
+   G7bFc0shyE+XjsrgiiWvfsq8xGmIlz1f7oTl3PA2rqOHyj6RGGIVlr5h3
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="425303234"
+X-IronPort-AV: E=Sophos;i="6.00,249,1681196400"; 
+   d="scan'208";a="425303234"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 22:17:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="707315736"
+X-IronPort-AV: E=Sophos;i="6.00,249,1681196400"; 
+   d="scan'208";a="707315736"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 16 Jun 2023 22:17:17 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qAOJI-0002Jw-0h;
+        Sat, 17 Jun 2023 05:17:16 +0000
+Date:   Sat, 17 Jun 2023 13:16:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Ingo Molnar <mingo@kernel.org>
+Subject: mm/kasan/shadow.c:49: multiple definition of `memset';
+ arch/x86/lib/memset_64.o:arch/x86/um/../lib/memset_64.S:29: first defined
+ here
+Message-ID: <202306171302.fa4CDGXG-lkp@intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:10fc:b0:426:26bf:5a60 with SMTP id
- g28-20020a05663810fc00b0042626bf5a60mr972100jae.5.1686978861956; Fri, 16 Jun
- 2023 22:14:21 -0700 (PDT)
-Date:   Fri, 16 Jun 2023 22:14:21 -0700
-In-Reply-To: <0000000000002b6ab405fe43af4a@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cf863605fe4c5f40@google.com>
-Subject: Re: [syzbot] [kernel?] possible deadlock in exit_itimers
-From:   syzbot <syzbot+5fd924f4cd9dc1c7828c@syzkaller.appspotmail.com>
-To:     frederic@kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1639fae5132bc8a904af28d97cea0bedb3af802e
+commit: 69d4c0d3218692ffa56b0e1b9c76c50c699d7044 entry, kasan, x86: Disallow overriding mem*() functions
+date:   5 months ago
+config: um-randconfig-r012-20230617 (https://download.01.org/0day-ci/archive/20230617/202306171302.fa4CDGXG-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=69d4c0d3218692ffa56b0e1b9c76c50c699d7044
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 69d4c0d3218692ffa56b0e1b9c76c50c699d7044
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=um olddefconfig
+        make W=1 O=build_dir ARCH=um SHELL=/bin/bash
 
-commit 1b59b2577582f9cf3d0f17245675a76859175cc1
-Author: Thomas Gleixner <tglx@linutronix.de>
-Date:   Thu Jun 1 20:16:34 2023 +0000
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306171302.fa4CDGXG-lkp@intel.com/
 
-    posix-timers: Prevent RT livelock in itimer_delete()
+All errors (new ones prefixed by >>):
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=106d46e3280000
-start commit:   f7efed9f38f8 Add linux-next specific files for 20230616
-git tree:       linux-next
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=126d46e3280000
-console output: https://syzkaller.appspot.com/x/log.txt?x=146d46e3280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=60b1a32485a77c16
-dashboard link: https://syzkaller.appspot.com/bug?extid=5fd924f4cd9dc1c7828c
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1401d8ef280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=176b45cf280000
+   ld: mm/kasan/shadow.o: in function `memset':
+>> mm/kasan/shadow.c:49: multiple definition of `memset'; arch/x86/lib/memset_64.o:arch/x86/um/../lib/memset_64.S:29: first defined here
+   ld: mm/kasan/shadow.o: in function `memmove':
+>> mm/kasan/shadow.c:59: multiple definition of `memmove'; arch/x86/lib/memmove_64.o:arch/x86/um/../lib/memmove_64.S:31: first defined here
+   ld: mm/kasan/shadow.o: in function `memcpy':
+>> mm/kasan/shadow.c:70: multiple definition of `memcpy'; arch/x86/lib/memcpy_64.o:arch/x86/um/../lib/memcpy_64.S:32: first defined here
 
-Reported-by: syzbot+5fd924f4cd9dc1c7828c@syzkaller.appspotmail.com
-Fixes: 1b59b2577582 ("posix-timers: Prevent RT livelock in itimer_delete()")
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+vim +49 mm/kasan/shadow.c
+
+bb359dbcb70085 Andrey Konovalov 2020-12-22  40  
+69d4c0d3218692 Peter Zijlstra   2023-01-12  41  #ifndef CONFIG_GENERIC_ENTRY
+69d4c0d3218692 Peter Zijlstra   2023-01-12  42  /*
+69d4c0d3218692 Peter Zijlstra   2023-01-12  43   * CONFIG_GENERIC_ENTRY relies on compiler emitted mem*() calls to not be
+69d4c0d3218692 Peter Zijlstra   2023-01-12  44   * instrumented. KASAN enabled toolchains should emit __asan_mem*() functions
+69d4c0d3218692 Peter Zijlstra   2023-01-12  45   * for the sites they want to instrument.
+69d4c0d3218692 Peter Zijlstra   2023-01-12  46   */
+bb359dbcb70085 Andrey Konovalov 2020-12-22  47  #undef memset
+bb359dbcb70085 Andrey Konovalov 2020-12-22  48  void *memset(void *addr, int c, size_t len)
+bb359dbcb70085 Andrey Konovalov 2020-12-22 @49  {
+f00748bfa0246c Andrey Konovalov 2021-02-24  50  	if (!kasan_check_range((unsigned long)addr, len, true, _RET_IP_))
+bb359dbcb70085 Andrey Konovalov 2020-12-22  51  		return NULL;
+bb359dbcb70085 Andrey Konovalov 2020-12-22  52  
+bb359dbcb70085 Andrey Konovalov 2020-12-22  53  	return __memset(addr, c, len);
+bb359dbcb70085 Andrey Konovalov 2020-12-22  54  }
+bb359dbcb70085 Andrey Konovalov 2020-12-22  55  
+bb359dbcb70085 Andrey Konovalov 2020-12-22  56  #ifdef __HAVE_ARCH_MEMMOVE
+bb359dbcb70085 Andrey Konovalov 2020-12-22  57  #undef memmove
+bb359dbcb70085 Andrey Konovalov 2020-12-22  58  void *memmove(void *dest, const void *src, size_t len)
+bb359dbcb70085 Andrey Konovalov 2020-12-22 @59  {
+f00748bfa0246c Andrey Konovalov 2021-02-24  60  	if (!kasan_check_range((unsigned long)src, len, false, _RET_IP_) ||
+f00748bfa0246c Andrey Konovalov 2021-02-24  61  	    !kasan_check_range((unsigned long)dest, len, true, _RET_IP_))
+bb359dbcb70085 Andrey Konovalov 2020-12-22  62  		return NULL;
+bb359dbcb70085 Andrey Konovalov 2020-12-22  63  
+bb359dbcb70085 Andrey Konovalov 2020-12-22  64  	return __memmove(dest, src, len);
+bb359dbcb70085 Andrey Konovalov 2020-12-22  65  }
+bb359dbcb70085 Andrey Konovalov 2020-12-22  66  #endif
+bb359dbcb70085 Andrey Konovalov 2020-12-22  67  
+bb359dbcb70085 Andrey Konovalov 2020-12-22  68  #undef memcpy
+bb359dbcb70085 Andrey Konovalov 2020-12-22  69  void *memcpy(void *dest, const void *src, size_t len)
+bb359dbcb70085 Andrey Konovalov 2020-12-22 @70  {
+f00748bfa0246c Andrey Konovalov 2021-02-24  71  	if (!kasan_check_range((unsigned long)src, len, false, _RET_IP_) ||
+f00748bfa0246c Andrey Konovalov 2021-02-24  72  	    !kasan_check_range((unsigned long)dest, len, true, _RET_IP_))
+bb359dbcb70085 Andrey Konovalov 2020-12-22  73  		return NULL;
+bb359dbcb70085 Andrey Konovalov 2020-12-22  74  
+bb359dbcb70085 Andrey Konovalov 2020-12-22  75  	return __memcpy(dest, src, len);
+bb359dbcb70085 Andrey Konovalov 2020-12-22  76  }
+69d4c0d3218692 Peter Zijlstra   2023-01-12  77  #endif
+69d4c0d3218692 Peter Zijlstra   2023-01-12  78  
+
+:::::: The code at line 49 was first introduced by commit
+:::::: bb359dbcb70085a63e8bdbf14837a900750f0cf7 kasan: split out shadow.c from common.c
+
+:::::: TO: Andrey Konovalov <andreyknvl@google.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
