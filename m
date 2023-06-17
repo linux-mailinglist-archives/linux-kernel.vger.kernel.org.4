@@ -2,208 +2,369 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9166734131
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 15:25:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D6CA734136
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 15:26:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232795AbjFQNZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 09:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37584 "EHLO
+        id S234244AbjFQN0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 09:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjFQNZD (ORCPT
+        with ESMTP id S229683AbjFQN0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 09:25:03 -0400
-Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D54C1
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 06:25:02 -0700 (PDT)
-Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-341ce6fb1f5so17207565ab.2
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 06:25:02 -0700 (PDT)
+        Sat, 17 Jun 2023 09:26:13 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3580EC1;
+        Sat, 17 Jun 2023 06:26:12 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id 5614622812f47-39cf00a2ad2so1271168b6e.1;
+        Sat, 17 Jun 2023 06:26:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687008371; x=1689600371;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2cEQwBbCq0ejXdRe1WDvtB5tnXU9oaL0Kp5wEO5rTdA=;
+        b=hEc3/TxRCXGVuX6IQ81ZOBrRkbjBsvqoHfLLganGrgJtVM10qO4hvOTCyxJvy+pYm/
+         DpIop/bbYjZYuWE+0jFW/lOTEIVb++Vj/v49yBFUtJjk55Ck61cw1g3uphy4GTnGb7ko
+         elrPv68GUwnB/kGEx8R3RSPWx3fuTZheLgF+vcN2xDBfLNTQtwAptDhM2d67R2jgpPf7
+         Zow9uqo5k3ulPhsjgOGEZvhKBkYElzM9y9YUuHaBu+UyiijFZkcVd2rBpDo+ilGc41ku
+         G4+oTP3fWfBjIUy0RJL2eSUjsBq9eN6dw6cM3iJjGyzitqGR5CeUvz3KzZMTZNbD4sn3
+         vSdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687008301; x=1689600301;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eKT35itmh35X+BVg1xyD9Iz6NOKE1S0Sbt2WIuNW/AI=;
-        b=Die7Nzufq4EaX3214FyWTkMZgmOzIDjWevst3rQNy7XmvOFSpiiZ1uxk566xfr/ppR
-         3zHGoPinDwpGs6hgUoPxBQcRhY+P7xwQWr9mM7Fbw48FtNeBwXMNWXOd/2tYf/AlAh8I
-         fHBrE3kGXsiXUsQfcLsi3m/o1y9w9fgv5DNb07e7u495zuB0Z5ZisfybpK3UIDvxyWVq
-         fPZtlpWov/fi228M/xRjWQGf7is6jRpmOr4jCr/NR+qWgwRrKz/376MxuHjlqq7i90CW
-         ipVc+iHXoVXDqFchoHtI1IEX9aIWL1ZPR3MPwTucWqDrim7zyzI5vHeM0AlzfIlPc5ZE
-         nYMA==
-X-Gm-Message-State: AC+VfDzNUELHU+R1vxDgKTCryX2rOEHb88VQ6kegj3nIX41SGhr2IPXG
-        UTYtOSzFUXint8417ACV7eWnnEnKFxKvXh0/e6gVk3weEfpa
-X-Google-Smtp-Source: ACHHUZ5hY1CtLi6DQK0PcL4kz8OLy4HRx6wdNtGgJ/4ih3twZhZKNVIp04Be/L73r+3AALt4uW5KmpMD6uibsNK8NKogpD0fEOYI
+        d=1e100.net; s=20221208; t=1687008371; x=1689600371;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2cEQwBbCq0ejXdRe1WDvtB5tnXU9oaL0Kp5wEO5rTdA=;
+        b=lyE4CbZBHLt5M0hSdmP5xczBucrAQiNGODijc6xfWGpnsbWXHnyxUYbsfWmQh/sNiX
+         CXH40vId6PpVdSgInKpbHgmLYiwMUycGWWy+hwKLnaWSVfWuQmUdz8V+dILTqRXjgjyd
+         uWfoEqeB8QY2nJLUBTmZ1dDVy/j2y0z5eEh9WwMMWc3atPfnYS9cX6zzsz/DfoPwXjd2
+         jzJqicnx2PI7TqrszlTwOnOVuPgATaRBHfJwvriReoe2ffPLoKKEDCaKscunF+jfYukS
+         iljPxVh48VNo0WLJCHRQjOB7DQFgAEZ5bv7h8xLXSD8YUpwrpSIO0t7YLWMSZAD5rQ/s
+         TEJg==
+X-Gm-Message-State: AC+VfDw7LaaqMXWISxyynGZosY/wawktjwzhjF48RW3pH79LpP2xb41M
+        R6gGGc43wtiibiV9QW8jVG+xF4jaXRNDVNW3a28=
+X-Google-Smtp-Source: ACHHUZ4lgYDxDtxU1I2yjiFxD97PjXSn26RFYDysI6xIe7xTPJW0m7HKiq2hONSK99kmo+sni5TXkivdzj4XAqxcx4Q=
+X-Received: by 2002:a05:6808:3009:b0:39d:f03e:71ca with SMTP id
+ ay9-20020a056808300900b0039df03e71camr4622035oib.53.1687008371344; Sat, 17
+ Jun 2023 06:26:11 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a92:d483:0:b0:341:da64:d82d with SMTP id
- p3-20020a92d483000000b00341da64d82dmr1289041ilg.6.1687008301588; Sat, 17 Jun
- 2023 06:25:01 -0700 (PDT)
-Date:   Sat, 17 Jun 2023 06:25:01 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008ca7ee05fe533ac3@google.com>
-Subject: [syzbot] [block?] KMSAN: kernel-infoleak in copy_page_to_iter (4)
-From:   syzbot <syzbot+17a061f6132066e9fb95@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, glider@google.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <20230617052435.359177-3-sergio.paracuellos@gmail.com> <TYAP286MB0315AB8274CDD341D49809A2BC59A@TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM>
+In-Reply-To: <TYAP286MB0315AB8274CDD341D49809A2BC59A@TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Sat, 17 Jun 2023 15:26:00 +0200
+Message-ID: <CAMhs-H8rt3-ffvjkNSORiNXQUVCUHCc7FNwYN7TOyQ0DxCe2fA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/9] clk: ralink: add clock and reset driver for MTMIPS SoCs
+To:     Shiji Yang <yangshiji66@outlook.com>
+Cc:     arinc.unal@arinc9.com, devicetree@vger.kernel.org,
+        john@phrozen.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, matthias.bgg@gmail.com,
+        mturquette@baylibre.com, p.zabel@pengutronix.de,
+        robh+dt@kernel.org, sboyd@kernel.org, tsbogend@alpha.franken.de
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Shiji Yang,
 
-syzbot found the following issue on:
+On Sat, Jun 17, 2023 at 2:55=E2=80=AFPM Shiji Yang <yangshiji66@outlook.com=
+> wrote:
+>
+> Hi Sergio Paracuellos!
+>
+> I found there are still some areas that need improvement.
 
-HEAD commit:    7cccf3be6dcb string: use __builtin_memcpy() in strlcpy/str..
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=1228ed9b280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5e9e8900159378
-dashboard link: https://syzkaller.appspot.com/bug?extid=17a061f6132066e9fb95
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: i386
+Awesome! I did not expect to get testing before this is added to the
+tree .As I have mentioned I have only tested this with Ralink 5350 ALL
+One board. So thanks for testing this so far!! It is really helpful.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+>
+> >+
+> >+static unsigned long rt3883_bus_recalc_rate(struct clk_hw *hw,
+> >+                                          unsigned long parent_rate)
+> >+{
+> >+      struct mtmips_clk *clk =3D to_mtmips_clk(hw);
+> >+      struct regmap *sysc =3D clk->priv->sysc;
+> >+      u32 ddr2;
+> >+      u32 t;
+> >+
+> >+      regmap_read(sysc, SYSC_REG_SYSTEM_CONFIG, &t);
+> >+      ddr2 =3D t & RT3883_SYSCFG0_DRAM_TYPE_DDR2;
+> >+
+> >+      switch (parent_rate) {
+> >+      case 250000000:
+> >+              return (ddr2) ? 125000000 : 83000000;
+> >+      case 384000000:
+> >+              return (ddr2) ? 128000000 : 96000000;
+> >+      case 480000000:
+> >+              return (ddr2) ? 160000000 : 120000000;
+> >+      case 500000000:
+> >+              return (ddr2) ? 166000000 : 125000000;
+> >+      default:
+> >+              WARN_ON_ONCE(parent_rate =3D=3D 0);
+>
+> drivers/clk/ralink/clk-mtmips.c: In function 'rt3883_bus_recalc_rate':
+> drivers/clk/ralink/clk-mtmips.c:502:1: error: control reaches end of non-=
+void function [-Werror=3Dreturn-type]
+>   502 | }
+>       | ^
+>
+> Build error here, need to return a value, `parent_rate / 4` should be oka=
+y.
+> It seems that the program will never run into this default case.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/5e08b958e39c/disk-7cccf3be.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/9003cbdf6555/vmlinux-7cccf3be.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/192dba10f451/bzImage-7cccf3be.xz
+Ouch, it was a BUG() call here before changing it to WARN_ON_ONCE so
+yes a return is needed! Thanks!
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+17a061f6132066e9fb95@syzkaller.appspotmail.com
+>
+> >+      }
+> >+}
+> >+
+>
+>
+> >+
+> >+static const struct of_device_id mtmips_clk_of_match[] =3D {
+> >+      { .compatible =3D "ralink,rt2880-reset" },
+> >+      { .compatible =3D "ralink,rt2880-sysc" },
+> >+      { .compatible =3D "ralink,rt3050-sysc" },
+> >+      { .compatible =3D "ralink,rt3050-sysc" },
+>
+> There are two `ralink,rt3050-sysc`. I think the second one should be
+> `ralink,rt3052-sysc`.
 
-=====================================================
-BUG: KMSAN: kernel-infoleak in instrument_copy_to_user include/linux/instrumented.h:114 [inline]
-BUG: KMSAN: kernel-infoleak in copyout lib/iov_iter.c:169 [inline]
-BUG: KMSAN: kernel-infoleak in _copy_to_iter+0x420/0x1d00 lib/iov_iter.c:536
- instrument_copy_to_user include/linux/instrumented.h:114 [inline]
- copyout lib/iov_iter.c:169 [inline]
- _copy_to_iter+0x420/0x1d00 lib/iov_iter.c:536
- copy_page_to_iter+0x46e/0x920 lib/iov_iter.c:742
- copy_folio_to_iter include/linux/uio.h:197 [inline]
- filemap_read+0xc37/0x14f0 mm/filemap.c:2742
- blkdev_read_iter+0xa1b/0xbc0 block/fops.c:606
- call_read_iter include/linux/fs.h:1862 [inline]
- new_sync_read fs/read_write.c:389 [inline]
- vfs_read+0x933/0xe40 fs/read_write.c:470
- ksys_read+0x20f/0x4c0 fs/read_write.c:613
- __do_sys_read fs/read_write.c:623 [inline]
- __se_sys_read fs/read_write.c:621 [inline]
- __x64_sys_read+0x93/0xd0 fs/read_write.c:621
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+True :)
 
-Uninit was stored to memory at:
- _copy_to_iter+0xc9e/0x1d00 lib/iov_iter.c:536
- copy_page_to_iter+0x46e/0x920 lib/iov_iter.c:742
- shmem_file_read_iter+0xac2/0x1310 mm/shmem.c:2696
- do_iter_read+0xd0a/0x1340 fs/read_write.c:795
- vfs_iter_read+0x88/0xe0 fs/read_write.c:837
- lo_read_simple drivers/block/loop.c:290 [inline]
- do_req_filebacked drivers/block/loop.c:500 [inline]
- loop_handle_cmd drivers/block/loop.c:1888 [inline]
- loop_process_work+0x12c9/0x3990 drivers/block/loop.c:1923
- loop_rootcg_workfn+0x2b/0x30 drivers/block/loop.c:1954
- process_one_work+0xb0d/0x1410 kernel/workqueue.c:2405
- worker_thread+0x107e/0x1d60 kernel/workqueue.c:2552
- kthread+0x3e8/0x540 kernel/kthread.c:379
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+>
+> >+      { .compatible =3D "ralink,rt3352-sysc" },
+> >+      { .compatible =3D "ralink,rt3883-sysc" },
+> >+      { .compatible =3D "ralink,rt5350-sysc" },
+> >+      { .compatible =3D "ralink,mt7620a-sysc" },
+> >+      { .compatible =3D "ralink,mt7620-sysc" },
+> >+      { .compatible =3D "ralink,mt7628-sysc" },
+> >+      { .compatible =3D "ralink,mt7688-sysc" },
+> >+      {}
+> >+};
+> >+
+>
+>
+> > void __init plat_time_init(void)
+> > {
+> >+      struct of_phandle_args clkspec;
+> >       struct clk *clk;
+> >+      int cpu_clk_idx;
+> >
+> >       ralink_of_remap();
+> >
+> >-      ralink_clk_init();
+> >-      clk =3D clk_get_sys("cpu", NULL);
+> >+      cpu_clk_idx =3D clk_cpu_index();
+> >+      if (cpu_clk_idx =3D=3D -1)
+> >+              panic("unable to get CPU clock index");
+> >+
+> >+      of_clk_init(NULL);
+> >+      clkspec.np =3D of_find_node_by_name(NULL, "sysc");
+>
+> The node name should be "syscon" as the example node name in the
+> dt-bindings document is "syscon".
 
-Uninit was stored to memory at:
- memcpy_from_iter lib/iov_iter.c:639 [inline]
- copy_page_from_iter_atomic+0x1271/0x26d0 lib/iov_iter.c:872
- generic_perform_write+0x4a2/0xbb0 mm/filemap.c:3931
- __generic_file_write_iter+0x393/0x920 mm/filemap.c:4051
- generic_file_write_iter+0x103/0x5b0 mm/filemap.c:4083
- do_iter_write+0x605/0x1310 fs/read_write.c:860
- vfs_iter_write+0x88/0xe0 fs/read_write.c:901
- lo_write_bvec drivers/block/loop.c:249 [inline]
- lo_write_simple drivers/block/loop.c:271 [inline]
- do_req_filebacked drivers/block/loop.c:495 [inline]
- loop_handle_cmd drivers/block/loop.c:1888 [inline]
- loop_process_work+0x206d/0x3990 drivers/block/loop.c:1923
- loop_workfn+0x48/0x60 drivers/block/loop.c:1947
- process_one_work+0xb0d/0x1410 kernel/workqueue.c:2405
- worker_thread+0x107e/0x1d60 kernel/workqueue.c:2552
- kthread+0x3e8/0x540 kernel/kthread.c:379
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+sysc is label to get this node since it is the one shared by all
+different dtsi files.
 
-Uninit was stored to memory at:
- copy_to_dinode+0x88d/0xb40 fs/jfs/jfs_imap.c:3148
- diWrite+0x1bf0/0x1f00 fs/jfs/jfs_imap.c:786
- txCommit+0xe52/0x8f40 fs/jfs/jfs_txnmgr.c:1250
- __jfs_xattr_set+0x1b3/0x1f0 fs/jfs/xattr.c:919
- jfs_xattr_set+0x79/0x90 fs/jfs/xattr.c:941
- __vfs_setxattr+0x7aa/0x8b0 fs/xattr.c:201
- __vfs_setxattr_noperm+0x24f/0xa30 fs/xattr.c:235
- __vfs_setxattr_locked+0x441/0x480 fs/xattr.c:296
- vfs_setxattr+0x294/0x650 fs/xattr.c:322
- do_setxattr fs/xattr.c:630 [inline]
- setxattr+0x45f/0x540 fs/xattr.c:653
- __do_sys_fsetxattr fs/xattr.c:709 [inline]
- __se_sys_fsetxattr+0x2bb/0x420 fs/xattr.c:698
- __ia32_sys_fsetxattr+0xe3/0x150 fs/xattr.c:698
- do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
- __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
- do_fast_syscall_32+0x37/0x80 arch/x86/entry/common.c:203
- do_SYSENTER_32+0x1f/0x30 arch/x86/entry/common.c:246
- entry_SYSENTER_compat_after_hwframe+0x70/0x82
+>
+> >+      clkspec.args_count =3D 1;
+> >+      clkspec.args[0] =3D cpu_clk_idx;
+> >+      clk =3D of_clk_get_from_provider(&clkspec);
+> >       if (IS_ERR(clk))
+> >               panic("unable to get CPU clock, err=3D%ld", PTR_ERR(clk))=
+;
+> >       pr_info("CPU Clock: %ldMHz\n", clk_get_rate(clk) / 1000000);
+>
+>
+> It seems that the clock calculation logic of the mt7620 has changed.
+> The kernel got an incorrect clock frequency 3480MHz. The correct CPU
+> clock should be 580MHz =3D 3480MHz / 6.
 
-Uninit was stored to memory at:
- ea_put fs/jfs/xattr.c:637 [inline]
- __jfs_setxattr+0x1877/0x1b90 fs/jfs/xattr.c:783
- __jfs_xattr_set+0xe6/0x1f0 fs/jfs/xattr.c:917
- jfs_xattr_set+0x79/0x90 fs/jfs/xattr.c:941
- __vfs_setxattr+0x7aa/0x8b0 fs/xattr.c:201
- __vfs_setxattr_noperm+0x24f/0xa30 fs/xattr.c:235
- __vfs_setxattr_locked+0x441/0x480 fs/xattr.c:296
- vfs_setxattr+0x294/0x650 fs/xattr.c:322
- do_setxattr fs/xattr.c:630 [inline]
- setxattr+0x45f/0x540 fs/xattr.c:653
- __do_sys_fsetxattr fs/xattr.c:709 [inline]
- __se_sys_fsetxattr+0x2bb/0x420 fs/xattr.c:698
- __ia32_sys_fsetxattr+0xe3/0x150 fs/xattr.c:698
- do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
- __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
- do_fast_syscall_32+0x37/0x80 arch/x86/entry/common.c:203
- do_SYSENTER_32+0x1f/0x30 arch/x86/entry/common.c:246
- entry_SYSENTER_compat_after_hwframe+0x70/0x82
+The only thing that changed a bit is the stuff with the CONFIG_USB
+that I was told to change by Stephen. Can you check if that is the
+problem with your bad cpu clock? Just comment the call
+'mtmips_clk_regs_init' of the probe function.
 
-Local variable ea_buf created at:
- __jfs_setxattr+0x5d/0x1b90 fs/jfs/xattr.c:660
- __jfs_xattr_set+0xe6/0x1f0 fs/jfs/xattr.c:917
+>
+> I will test and report mt7628 later.
 
-Bytes 3689-3691 of 4096 are uninitialized
-Memory access of size 4096 starts at ffff88815f2ee000
-Data copied to user address 000055a672e8dc78
+Thanks!
 
-CPU: 1 PID: 7649 Comm: udevd Not tainted 6.4.0-rc6-syzkaller-g7cccf3be6dcb #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-=====================================================
+>
+> mt7620 dmesg:
+> [    0.000000] Linux version 5.15.117 (db@Aspire-V-Nitro) (mipsel-openwrt=
+-linux-musl-gcc (OpenWrt GCC 12.3.0 r23471+7-816fcf88f6) 12.3.0, GNU ld (GN=
+U Binutils) 2.40.0) #0 Sat Jun 17 08:41:01 2023
+> [    0.000000] Board has DDR2
+> [    0.000000] Analog PMU set to hw control
+> [    0.000000] Digital PMU set to hw control
+> [    0.000000] SoC Type: MediaTek MT7620A ver:2 eco:6
+> [    0.000000] printk: bootconsole [early0] enabled
+> [    0.000000] CPU0 revision is: 00019650 (MIPS 24KEc)
+> [    0.000000] MIPS: machine is Haier HW-L1W
+> [    0.000000] Initrd not found or empty - disabling initrd
+> [    0.000000] Primary instruction cache 64kB, VIPT, 4-way, linesize 32 b=
+ytes.
+> [    0.000000] Primary data cache 32kB, 4-way, PIPT, no aliases, linesize=
+ 32 bytes
+> [    0.000000] Zone ranges:
+> [    0.000000]   Normal   [mem 0x0000000000000000-0x0000000007ffffff]
+> [    0.000000] Movable zone start for each node
+> [    0.000000] Early memory node ranges
+> [    0.000000]   node   0: [mem 0x0000000000000000-0x0000000007ffffff]
+> [    0.000000] Initmem setup node 0 [mem 0x0000000000000000-0x0000000007f=
+fffff]
+> [    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 324=
+80
+> [    0.000000] Kernel command line: console=3DttyS0,115200 rootfstype=3Ds=
+quashfs,jffs2
+> [    0.000000] Dentry cache hash table entries: 16384 (order: 4, 65536 by=
+tes, linear)
+> [    0.000000] Inode-cache hash table entries: 8192 (order: 3, 32768 byte=
+s, linear)
+> [    0.000000] Writing ErrCtl register=3D00064000
+> [    0.000000] Readback ErrCtl register=3D00064000
+> [    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+> [    0.000000] Memory: 120992K/131072K available (5518K kernel code, 600K=
+ rwdata, 1192K rodata, 1192K init, 215K bss, 10080K reserved, 0K cma-reserv=
+ed)
+> [    0.000000] SLUB: HWalign=3D32, Order=3D0-3, MinObjects=3D0, CPUs=3D1,=
+ Nodes=3D1
+> [    0.000000] NR_IRQS: 256
+> [    0.000000] CPU Clock: 3480MHz
+> [    0.000000] clocksource: systick: mask: 0xffff max_cycles: 0xffff, max=
+_idle_ns: 583261500 ns
+> [    0.000000] systick: enable autosleep mode
+> [    0.000000] systick: running - mult: 214748, shift: 32
+> [    0.000000] clocksource: MIPS: mask: 0xffffffff max_cycles: 0xffffffff=
+, max_idle_ns: 1098425544 ns
+> [    0.000000] sched_clock: 32 bits at 1740MHz, resolution 0ns, wraps eve=
+ry 1234186239ns
+> [    0.001354] Calibrating delay loop... 385.84 BogoMIPS (lpj=3D1929216)
+> [    0.012389] pid_max: default: 32768 minimum: 301
+> [    0.013357] Mount-cache hash table entries: 1024 (order: 0, 4096 bytes=
+, linear)
+> [    0.014589] Mountpoint-cache hash table entries: 1024 (order: 0, 4096 =
+bytes, linear)
+> [    0.017429] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xfffff=
+fff, max_idle_ns: 19112604462750000 ns
+> [    0.019103] futex hash table entries: 256 (order: -1, 3072 bytes, line=
+ar)
+> [    0.020288] pinctrl core: initialized pinctrl subsystem
+> [    0.021415] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+> [    0.105370] rt2880_gpio 10000600.gpio: registering 24 gpios
+> [    0.106328] rt2880_gpio 10000600.gpio: registering 24 irq handlers
+> [    0.107446] rt2880_gpio 10000688.gpio: registering 1 gpios
+> [    0.108381] rt2880_gpio 10000688.gpio: registering 1 irq handlers
+> [    0.109673] PCI host bridge to bus 0000:00
+> [    0.110372] pci_bus 0000:00: root bus resource [mem 0x20000000-0x2ffff=
+fff]
+> [    0.111528] pci_bus 0000:00: root bus resource [io  0x10160000-0x1016f=
+fff]
+> [    0.112695] pci_bus 0000:00: No busn resource found for root bus, will=
+ use [bus 00-ff]
+> [    0.114046] pci 0000:00:00.0: [1814:0801] type 01 class 0x060400
+> [    0.115059] pci 0000:00:00.0: reg 0x10: [mem 0x00000000-0x7fffffff]
+> [    0.116118] pci 0000:00:00.0: reg 0x14: [mem 0x00000000-0x0000ffff]
+> [    0.117195] pci 0000:00:00.0: supports D1
+> [    0.117862] pci 0000:00:00.0: PME# supported from D0 D1 D3hot
+> [    0.119156] pci 0000:00:00.0: bridge configuration invalid ([bus 00-00=
+]), reconfiguring
+> [    0.120556] pci 0000:01:00.0: [14c3:7650] type 00 class 0x028000
+> [    0.121570] pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x000fffff]
+> [    0.122658] pci 0000:01:00.0: PME# supported from D0 D3hot D3cold
+> [    0.123749] pci 0000:01:00.1: [14c3:8650] type 00 class 0x0d1100
+> [    0.124769] pci 0000:01:00.1: reg 0x10: [mem 0x00000000-0x000fffff]
+> [    0.125844] pci 0000:01:00.1: supports D1
+> [    0.126513] pci 0000:01:00.1: PME# supported from D0 D1 D3hot D3cold
+> [    0.127897] pci_bus 0000:01: busn_res: [bus 01-ff] end is updated to 0=
+1
+> [    0.129018] pci_bus 0000:00: busn_res: [bus 00-ff] end is updated to 0=
+1
+> [    0.130138] pci 0000:00:00.0: BAR 0: no space for [mem size 0x80000000=
+]
+> [    0.131255] pci 0000:00:00.0: BAR 0: failed to assign [mem size 0x8000=
+0000]
+> [    0.132434] pci 0000:00:00.0: BAR 8: assigned [mem 0x20000000-0x201fff=
+ff]
+> [    0.133587] pci 0000:00:00.0: BAR 1: assigned [mem 0x20200000-0x2020ff=
+ff]
+> [    0.134738] pci 0000:01:00.0: BAR 0: assigned [mem 0x20000000-0x200fff=
+ff]
+> [    0.135890] pci 0000:01:00.1: BAR 0: assigned [mem 0x20100000-0x201fff=
+ff]
+> [    0.137040] pci 0000:00:00.0: PCI bridge to [bus 01]
+> [    0.137882] pci 0000:00:00.0:   bridge window [mem 0x20000000-0x201fff=
+ff]
+> [    0.139123] clocksource: Switched to clocksource MIPS
+> [    0.140241] NET: Registered PF_INET protocol family
+> [    0.141106] IP idents hash table entries: 2048 (order: 2, 16384 bytes,=
+ linear)
+> [    0.142473] tcp_listen_portaddr_hash hash table entries: 512 (order: 0=
+, 4096 bytes, linear)
+> [    0.143893] Table-perturb hash table entries: 65536 (order: 6, 262144 =
+bytes, linear)
+> [    0.145199] TCP established hash table entries: 1024 (order: 0, 4096 b=
+ytes, linear)
+> [    0.146499] TCP bind hash table entries: 1024 (order: 0, 4096 bytes, l=
+inear)
+> [    0.147695] TCP: Hash tables configured (established 1024 bind 1024)
+> [    0.148803] UDP hash table entries: 256 (order: 0, 4096 bytes, linear)
+> [    0.149920] UDP-Lite hash table entries: 256 (order: 0, 4096 bytes, li=
+near)
+> [    0.151177] NET: Registered PF_UNIX/PF_LOCAL protocol family
+> [    0.152149] PCI: CLS 0 bytes, default 32
+> [    0.152847] rt-timer 10000100.timer: failed get clock rate
+> [    0.153771] rt-timer: probe of 10000100.timer failed with error -2
+> [    0.155602] workingset: timestamp_bits=3D14 max_order=3D15 bucket_orde=
+r=3D1
+> [    0.157808] squashfs: version 4.0 (2009/01/31) Phillip Lougher
+> [    0.158792] jffs2: version 2.2 (NAND) (SUMMARY) (LZMA) (RTIME) (CMODE_=
+PRIORITY) (c) 2001-2006 Red Hat, Inc.
+> [    0.161032] Serial: 8250/16550 driver, 2 ports, IRQ sharing disabled
+> [    0.162284] of_serial 10000c00.uartlite: failed to get clock: -2
+> [    0.163300] of_serial: probe of 10000c00.uartlite failed with error -2
+> [    0.164624] spi-rt2880 10000b00.spi: unable to get SYS clock
+> [    0.165580] spi-rt2880: probe of 10000b00.spi failed with error -2
+> [    0.171098] gsw: setting port4 to ephy mode
+> [    0.171828] mtk_soc_eth 10100000.ethernet: generated random MAC addres=
+s f6:6c:93:9a:c8:ca
+> [    0.173208] mtk_soc_eth 10100000.ethernet: mdio-bus disabled
+> [    0.174205] mtk_soc_eth 10100000.ethernet: loaded mt7620 driver
+> [    0.175329] mtk_soc_eth 10100000.ethernet eth0: mediatek frame engine =
+at 0xb0100000, irq 5
+> [    0.176805] rt2880_wdt: probe of 10000120.watchdog failed with error -=
+2
+> [    0.178187] NET: Registered PF_INET6 protocol family
+> [    0.179980] Segment Routing with IPv6
+> [    0.180607] In-situ OAM (IOAM) with IPv6
+> [    0.181290] NET: Registered PF_PACKET protocol family
+> [    0.182148] 8021q: 802.1Q VLAN Support v1.8
+> [    0.183347] Warning: unable to open an initial console.
+> [    0.184558] /dev/root: Can't open blockdev
+> [    0.185253] VFS: Cannot open root device "(null)" or unknown-block(0,0=
+): error -6
+> [    0.186516] Please append a correct "root=3D" boot option; here are th=
+e available partitions:
+> [    0.187934] Kernel panic - not syncing: VFS: Unable to mount root fs o=
+n unknown-block(0,0)
+> [    0.189335] Rebooting in 1 seconds..
+>
+>
+> Thanks,
+>     Shiji Yang
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Best regards,
+    Sergio Paracuellos
