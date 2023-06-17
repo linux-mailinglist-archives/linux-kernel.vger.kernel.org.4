@@ -2,59 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF4673405F
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 12:48:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC3F5734061
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 12:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234387AbjFQKse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 06:48:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34840 "EHLO
+        id S234856AbjFQKwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 06:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjFQKsd (ORCPT
+        with ESMTP id S229683AbjFQKwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 06:48:33 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA5710E9
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 03:48:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686998912; x=1718534912;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0B16iPGijcdEmqnoTJ7HHdiLq3JYhlxBHUx2ubb9VJg=;
-  b=DwFHjQTieD6nUVTaYjyAGTtQWRowGEUmuULkfI7hhuzaf97NdmRALrye
-   J1txEqzuuO9y2g3GCoalZH2Y5OL2q91dQ6eqIuhH4KH1elXIfQA6usJ2b
-   QS3sJokdk76jbrRTJJseVFFXzPIfILXAv+kuCD6YzXiEVJVZWY5EWpJGs
-   od/zkdk0zlTkUmvT2ZM2f+KxgGvIohRZQj6llo2+8DDhhybS1JVjjwIfM
-   iTuZVKEYd8LhDdF1agce3jC2IDYVPwkGmvVb7Kip1ltthlA+If3KvflGD
-   bEF/EvN/Bap89POrmkzcF9AtY49+7UpYGR0nioMJF0RNc7VN3yELHhncU
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="344119424"
-X-IronPort-AV: E=Sophos;i="6.00,250,1681196400"; 
-   d="scan'208";a="344119424"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2023 03:48:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="803106210"
-X-IronPort-AV: E=Sophos;i="6.00,250,1681196400"; 
-   d="scan'208";a="803106210"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 17 Jun 2023 03:48:30 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qATTp-0002gG-2B;
-        Sat, 17 Jun 2023 10:48:29 +0000
-Date:   Sat, 17 Jun 2023 18:48:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: drivers/spi/spi-mpc52xx-psc.c:195:5: warning: no previous prototype
- for 'mpc52xx_psc_spi_transfer_one_message'
-Message-ID: <202306171837.X7dsEWDB-lkp@intel.com>
+        Sat, 17 Jun 2023 06:52:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F02CCD
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 03:52:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1EC260AE4
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 10:52:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D959DC433C0;
+        Sat, 17 Jun 2023 10:52:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686999136;
+        bh=WiB5tt+dGicCP1dSR4iRdltEOzqRT8XN4J7t5k3g/Zo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T7B4It7yaepq/T7zRX2xmX4h1hL1m/4+tS9nUaeaAxGMk+hqyYvsRMT7i9q4J6MuK
+         ZayyYI+B7VqTIGQXVqqryhxtSaqOCDDnVJbYMFLXGJt7DWjS3Y4rk3FftC8f2S2W/Z
+         R2oN0QwNFBYyoqIcovohJbG4OykTcgk820egxAPElplcBT58jcRBercnS5tvi6cDp4
+         hUIlyDW66VVCGydIB2U78f9u88mRK7K+UiAVbbxe8zPHF8aoFy8zvgSRlYFE5roxjQ
+         Hafko6JXt6PuJTeK5reH7UdAE78Du348x/nD6q3SqdJiQRnaiBeb5m+6xmjhLGoK6y
+         C/4swd4WLnMqQ==
+Date:   Sat, 17 Jun 2023 13:51:37 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     akpm@linux-foundation.org, tglx@linutronix.de, mingo@redhat.com,
+        peterz@infradead.org, dvhart@infradead.org, dave@stgolabs.net,
+        andrealmeid@igalia.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/mm_init.c: remove obsolete macro HASH_SMALL
+Message-ID: <20230617105137.GX52412@kernel.org>
+References: <20230617070955.1751393-1-linmiaohe@huawei.com>
+ <20230617075644.GV52412@kernel.org>
+ <6d149902-a944-7961-89c1-f07047953c7f@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <6d149902-a944-7961-89c1-f07047953c7f@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,78 +59,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+On Sat, Jun 17, 2023 at 04:39:44PM +0800, Miaohe Lin wrote:
+> On 2023/6/17 15:56, Mike Rapoport wrote:
+> > On Sat, Jun 17, 2023 at 03:09:55PM +0800, Miaohe Lin wrote:
+> >> HASH_SMALL only works when parameter numentries is 0. But the sole caller
+> >> futex_init() never calls alloc_large_system_hash() with numentries set to
+> >> 0. 
+> > 
+> 
+> Thanks for your quick review.
+> 
+> > Doesn't it? 
+> > What happens when CONFIG_BASE_SMALL is set?
+> 
+> When CONFIG_BASE_SMALL is set, futex_hashsize is set to 16 and alloc_large_system_hash() is called with
+> numentries == 16 && flags == HASH_SMALL. But in the alloc_large_system_hash(), we have the below logic:
+> 
+> alloc_large_system_hash()
+> {
+>   if (!numentries) { /* numentries == 16 here, so this code block is skipped. */
+>     ...
+>     if (unlikely(flags & HASH_SMALL)) { /* So as here. */
+>       ...
+>   }
+>   ...
+> }
+> 
+> So HASH_SMALL is just unused. Or am I miss something?
 
-FYI, the error/warning still remains.
+You are right, I've missed that. 
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1639fae5132bc8a904af28d97cea0bedb3af802e
-commit: 145cfc3840e5931a789a8e2e76af841ab4cad44b spi: mpc52xx-psc: Switch to using core message queue
-date:   12 months ago
-config: powerpc-randconfig-r032-20230617 (https://download.01.org/0day-ci/archive/20230617/202306171837.X7dsEWDB-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230617/202306171837.X7dsEWDB-lkp@intel.com/reproduce)
+> Thanks.
+> 
+> > 
+> >> So HASH_SMALL is obsolete and remove it.
+> > 
+> >> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> >> ---
+> >>  include/linux/memblock.h |  2 --
+> >>  kernel/futex/core.c      |  3 +--
+> >>  mm/mm_init.c             | 10 +---------
+> >>  3 files changed, 2 insertions(+), 13 deletions(-)
+> >>
+> >> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
+> >> index f71ff9f0ec81..346d80809517 100644
+> >> --- a/include/linux/memblock.h
+> >> +++ b/include/linux/memblock.h
+> >> @@ -581,8 +581,6 @@ extern void *alloc_large_system_hash(const char *tablename,
+> >>  				     unsigned long high_limit);
+> >>  
+> >>  #define HASH_EARLY	0x00000001	/* Allocating during early boot? */
+> >> -#define HASH_SMALL	0x00000002	/* sub-page allocation allowed, min
+> >> -					 * shift passed via *_hash_shift */
+> >>  #define HASH_ZERO	0x00000004	/* Zero allocated hash table */
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306171837.X7dsEWDB-lkp@intel.com/
+Can you update HASH_ZERO to 0x2?
 
-All warnings (new ones prefixed by >>):
-
->> drivers/spi/spi-mpc52xx-psc.c:195:5: warning: no previous prototype for 'mpc52xx_psc_spi_transfer_one_message' [-Wmissing-prototypes]
-     195 | int mpc52xx_psc_spi_transfer_one_message(struct spi_controller *ctlr,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/mpc52xx_psc_spi_transfer_one_message +195 drivers/spi/spi-mpc52xx-psc.c
-
-   194	
- > 195	int mpc52xx_psc_spi_transfer_one_message(struct spi_controller *ctlr,
-   196						 struct spi_message *m)
-   197	{
-   198		struct spi_device *spi;
-   199		struct spi_transfer *t = NULL;
-   200		unsigned cs_change;
-   201		int status;
-   202	
-   203		spi = m->spi;
-   204		cs_change = 1;
-   205		status = 0;
-   206		list_for_each_entry (t, &m->transfers, transfer_list) {
-   207			if (t->bits_per_word || t->speed_hz) {
-   208				status = mpc52xx_psc_spi_transfer_setup(spi, t);
-   209				if (status < 0)
-   210					break;
-   211			}
-   212	
-   213			if (cs_change)
-   214				mpc52xx_psc_spi_activate_cs(spi);
-   215			cs_change = t->cs_change;
-   216	
-   217			status = mpc52xx_psc_spi_transfer_rxtx(spi, t);
-   218			if (status)
-   219				break;
-   220			m->actual_length += t->len;
-   221	
-   222			spi_transfer_delay_exec(t);
-   223	
-   224			if (cs_change)
-   225				mpc52xx_psc_spi_deactivate_cs(spi);
-   226		}
-   227	
-   228		m->status = status;
-   229		if (status || !cs_change)
-   230			mpc52xx_psc_spi_deactivate_cs(spi);
-   231	
-   232		mpc52xx_psc_spi_transfer_setup(spi, NULL);
-   233	
-   234		spi_finalize_current_message(ctlr);
-   235	
-   236		return 0;
-   237	}
-   238	
+> >>  
+> >>  /* Only NUMA needs hash distribution. 64bit NUMA architectures have
+> >> diff --git a/kernel/futex/core.c b/kernel/futex/core.c
+> >> index 514e4582b863..f10587d1d481 100644
+> >> --- a/kernel/futex/core.c
+> >> +++ b/kernel/futex/core.c
+> >> @@ -1132,8 +1132,7 @@ static int __init futex_init(void)
+> >>  #endif
+> >>  
+> >>  	futex_queues = alloc_large_system_hash("futex", sizeof(*futex_queues),
+> >> -					       futex_hashsize, 0,
+> >> -					       futex_hashsize < 256 ? HASH_SMALL : 0,
+> >> +					       futex_hashsize, 0, 0,
+> >>  					       &futex_shift, NULL,
+> >>  					       futex_hashsize, futex_hashsize);
+> >>  	futex_hashsize = 1UL << futex_shift;
+> >> diff --git a/mm/mm_init.c b/mm/mm_init.c
+> >> index d393631599a7..fab3c4649d5b 100644
+> >> --- a/mm/mm_init.c
+> >> +++ b/mm/mm_init.c
+> >> @@ -2492,15 +2492,7 @@ void *__init alloc_large_system_hash(const char *tablename,
+> >>  		else
+> >>  			numentries <<= (PAGE_SHIFT - scale);
+> >>  
+> >> -		/* Make sure we've got at least a 0-order allocation.. */
+> >> -		if (unlikely(flags & HASH_SMALL)) {
+> >> -			/* Makes no sense without HASH_EARLY */
+> >> -			WARN_ON(!(flags & HASH_EARLY));
+> >> -			if (!(numentries >> *_hash_shift)) {
+> >> -				numentries = 1UL << *_hash_shift;
+> >> -				BUG_ON(!numentries);
+> >> -			}
+> >> -		} else if (unlikely((numentries * bucketsize) < PAGE_SIZE))
+> >> +		if (unlikely((numentries * bucketsize) < PAGE_SIZE))
+> >>  			numentries = PAGE_SIZE / bucketsize;
+> >>  	}
+> >>  	numentries = roundup_pow_of_two(numentries);
+> >> -- 
+> >> 2.27.0
+> >>
+> > 
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Sincerely yours,
+Mike.
