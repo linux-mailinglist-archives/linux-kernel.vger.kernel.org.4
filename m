@@ -2,80 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C0F7733D2B
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 02:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4DE4733D30
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 02:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbjFQAaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 20:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60002 "EHLO
+        id S229696AbjFQAeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 20:34:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbjFQA37 (ORCPT
+        with ESMTP id S231784AbjFQAeB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 20:29:59 -0400
-Received: from sonic309-26.consmr.mail.ir2.yahoo.com (sonic309-26.consmr.mail.ir2.yahoo.com [77.238.179.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A085C3A8B
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 17:29:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1686961796; bh=3ubr12IgCaxiPc2P8P9TgUxEmc8Jyb9OzmeOqzumtgk=; h=From:To:Cc:Subject:Date:References:From:Subject:Reply-To; b=M4Updjdi/OxKbtaffuNH0NEQsq2dfOH3jBxf+nDZMVzh3GGJus6BAo3PD4VGUzZIUsk8dzhmumQpsthkSMFgIUySZQ5Oy10wQLb8Yc64GNPKWqLyb3FyHZBohgi9PPHHw0Qslg/1cyt6yMr4LJTlPBAtxFKra17viSo27OMYMLRXrv+O+uK6l5y8TqjKKQlag63Gto1MaOGiCutsj4B/SRs5l/QuLRFqSVxZXLjR2GBrE7ThuV8aHw/fXAP6oKhAe852cPzciit/kHMNnGoH6XnktlCLzfgqugCyYXTy0HvfdWbuXV0rks3EF1r3HNoIudujY0wGtfWkgYTUoR79xQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1686961796; bh=MH5EA0KMdDcFFmZklUynEhNEW+WykT6rpUiuQIMgOS9=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=HyAHiozHGMTZDiDgduuyEbzkitm2Ac+++dCwWPUySoSvCjgqeCWqJ7ZHZNw5/mzhuxpqfEr0/W/nD91+2bxlHyfJ9aUScOBVCn6yzU4ncMkSsIXmWOv1Bd3NNG5ccS5SphMf3eXmbix7E77MFIj6df2L8b+QipOJcF0WbmUd6/oRwAyebU6UoT9H2hYu8hfag32aIgabZuy1q4sIC7XUThBk/8iPx9iqtaPjFt/omRjDSRYukJybQ5Y10Q4lqcC459egjUMJ+T/01WBsEZWvoRK/JCp3bv0/puqr7G+be+JnDR0zScccGSMEaYhcY33iv/YRfnhKaje5uZ2EwCIsMg==
-X-YMail-OSG: mN13q3sVM1keDcvr7VW0xFSaD4WqKY.6_NqMnAy7IeEb54cIHb0m.w826wvgL6R
- S7PW.GFHt16fIeBCoKFLlY6WkLKNqSVSls1AtZL.1ZnghE7B3Jf0pqUHOIFEM0RFYToddOdduNzs
- Y9e1A0jenAGXyYPLFiMx0JKphCjhUGWqaQf__4i6WWJeWolVafO8ugECPjWPqn7WWs6FgZrUHBP3
- T0xemv8oyCHc4IHeYQD6p0W75JpnLjxVxUUSAYIXXbM4v_sFIxoD2WIRgNcndmSjj_tpTHEt1yFe
- 3qTILi9zWmNzHlKv7bFCsc32oXsKAdemCl9HZdCLyL4cO9r0culLLLH58JU5YdGcmgvWDU0n.ksS
- VQT9VHI_QLoqc_dQ9_j0ZYCMo8r5iTzRa92JMfewl420rlMkdTMvaG3HPUmNtXem0sa7U7KlDocO
- 789gAmrLeSav_RIlOMoOOyi4ncf2JUoefj3XKfuNU_WvlxuTpjJusVlTjLy__5K5Dlj_4VY62NDO
- otQgW4KZwig8BnOFt07mCEumsJd52EF4Lw_OBpHeXULKvNqVkjMSHCwLqv9YUTsdLqD09BJ6oyq2
- oI.GZ1Vn.LYoJ0Cc8RIemsvmTJr_X1lFzAHzhdXzTazfBi6NGYcCogOTu9Yyt4SfGeVeqwq0lvXS
- kZnpQGeBoJSVv4ROtfwwMneeKFFNQ2avayUcreJjl7jyXZuq4O1qKeoK7CLUpvGGgK9Myo3Q1AUQ
- f0w.Ye.ZZ1CRH2i9zVEShFgwZaGpUFmEyfeIXNTg5NWu8_fqN0GEFO85aAuZVyseRC2aOX7ljF0y
- rA6Dte_363jC5kVMbOfM5YjAGBwmDg3YRcr9RFvd_6QQQpv.jvCdj_Ac1TIHcB31ixbeniojQc5p
- 6K.3yg_.JCSpQ5sN8SYCDPgSjkD1hUWnNm7Wa0FE3anb2DvYNMB84_AGT2aKLpYim2tjjsM28HO7
- JoyAWz1RsU6uCHjfUEwrFuh_fx3F8eZR3avAqhPTaSEK3oaz.Y4pB_ERI5vOcQDBnW7w7nn3N7Ft
- 3ZjGi.I6sBNBQqnNUQ58fYrZqfW8rq5KVNL9jMOt7kVuFRcvcMFhVkMBBUST38WWeMVw2IcfeTit
- MEoz3THhM18sLKjjmt4rZ6XfengcOP0rgRpIi5umgOCsZ.LGaYHNAh_Bf5CV21yT6_F4qQUbDrca
- EpdqNJbO0umP07rDQEQ9vwMtNDcoyZy0rn0jkineORZSASP0DRscThl3YcG_XD3ggJZKKcqti3fn
- 9_rE5EOjUCmHhdNQQsRF1lIMTtm0j6B0LDu6ZPzRH4ENCNlq_a7zq0XCU8cFoGUoOWs7bTpeak4g
- N7Whj.bO5bzaVGSfRZeR.INgOr5gMbrzYjoeRdGlPHUbrKuB_dswbQiSee5Pk5Zb3fBaY3WtkK8e
- p4oGIPJjzuCAjPv55hAdxb4LM0ljSzZB0CPf9yJYEm5fRRnmiWwt7kz_j7LJVnrK.L5h_.C2lwBi
- HW.i.q4dEBwdLU.4oyBhiWSFM7gK.etrQSJ3OisJSFQI3jo090uUKNrgqRPUvWhrxHQ5c8SXU10w
- osiEStVZZ6LKa99ptOVV3zmGkJx.WD1q2E7v3UYdXcf7z3tBxqJHr7vOoqgxXO1sTcWywwofBbV_
- .UMwN0Ebn9NdwwwFYBGx7bj943zhF60lQqXfuBXgaPUqNpWdFJEFUnp8Pxov7Yb9BrNUMPR666rc
- l8V2cpj2qJ_WxKN99Q4624oRStpoiomYIDCnxLdr6Zwb.fIuqDQPI3ZBrlGpYHVOWXZGdA3Aqj.b
- Y00ZpYqdCKYV.VpHuMin7ALSwdGJvFZowiZ0F6O_tC3nZSR.TtrSvztPjHVGjJWrTy0Kxobw1ENy
- uGYoYnO30Wifu5gJailc2gnxphEU.KWwooJApGRIsHd3MOMXmF3ayJN5H1_qJ0orTOoBemH_QQxw
- ydMAzwLghF3Jnfp5VUWkCHXBzTM.CtAc_6WLINbF6ooZpPlLiw_S_kjME3bqZKLvCczWk7pRIacw
- R.tbp2Jc0rPmE2doXZzPqkmLOs8XH2Etllup7xDxkLZ2YZU8NjtN7FX9SbY0ckmpk2nMtJTNXByT
- vqUZ4g5tWiiFhgR5tgDjOcGxDMO9zFRZHWSB9rPwOhkvPoOHdkZ8FCov0VVLFQL1GSiZkQDjCTi5
- _M8fd_zA1LttfTOi6ewcSahLBX3t7hbbHYuOav_tMi6hj.qrNoq2WhplOrsWBzgExJMgf8Fisej4
- p5ZGUCBwbE3GthfHETSSN7hGfE1KqH3vsejcU8ocTyLAw2tIKtrQuooSC1WAul65N_KAhXiV51ZI
- n5GvVQ1Mc5gXWXMUIfQVZNiGRkgDJ0Qi1Yh2OAQ_r.L1Abg--
-X-Sonic-MF: <jahau@rocketmail.com>
-X-Sonic-ID: affb121a-d648-453f-a0ed-9ac74f21d891
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.ir2.yahoo.com with HTTP; Sat, 17 Jun 2023 00:29:56 +0000
-Received: by hermes--production-ir2-7867f454fc-8nkq6 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID e11accc94c1b3a6c23a5a72d5ce29def;
-          Sat, 17 Jun 2023 00:29:54 +0000 (UTC)
-From:   Jakob Hauser <jahau@rocketmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Henrik Grimler <henrik@grimler.se>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Jakob Hauser <jahau@rocketmail.com>
-Subject: [PATCH RESEND] arm64: dts: qcom: msm8916-samsung-serranove: Add RT5033 PMIC with charger
-Date:   Sat, 17 Jun 2023 02:29:34 +0200
-Message-Id: <20230617002934.39408-1-jahau@rocketmail.com>
-X-Mailer: git-send-email 2.39.2
+        Fri, 16 Jun 2023 20:34:01 -0400
+Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8803C3A9B
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 17:33:57 -0700 (PDT)
+Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-33d93feefb5so11135925ab.1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 17:33:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686962037; x=1689554037;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GhDsowiwn7/lUjD4iBtZXoBf6gT4cGop3v5+h/m2ZEo=;
+        b=VbLg3+c5z3JBVaFxLUsfoskYU7V8vhdum0g8l0QOq1fxa2GCmcfTyTsuNqp2rLfgNq
+         FKYJDnJi59EkbnX8H/Tfrnkk3QUfiX+AZu8WAUR147i4dvgUWWdeSEAQDFv9LahVfLan
+         NgoZml+f6sjo+dg0LUc8fKtcaeOihEXyJ8lTAgnFecmfY/zbuwt9IcBh9kKw4mo1gDEL
+         e6LIPk7ku638+q0HiUGKoVLz78X2TUjmheSlpQoGxCpjRKqbQjni5r7hmkNzYLPPh7iI
+         EVMjFD4vPv3rkHBoIqbprO1QWCETiLQT0assRKkl2bQK9AehjFr0BVu9Gbd+6LLxZsOA
+         lhtg==
+X-Gm-Message-State: AC+VfDxYkfKePS145uKQUqOGk2iD43oEyQoKoAfpQNd1/OP9U3VgbUrr
+        sA7Lp7z2k6GUvv3kJeL0UiQ4S0r/4tQSu03aKoOB9Vo2zD35
+X-Google-Smtp-Source: ACHHUZ7Ky3sk53fVmNPGie1rxP0j6zXudWuXztYdPWawbmN1o9u+3Lfld1sCYj7qzfr4kJXF1CpdtHKc9n7mc/37iLLdbo8tVrfL
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-References: <20230617002934.39408-1-jahau.ref@rocketmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+X-Received: by 2002:a92:d204:0:b0:338:bdd7:d439 with SMTP id
+ y4-20020a92d204000000b00338bdd7d439mr671608ily.6.1686962036905; Fri, 16 Jun
+ 2023 17:33:56 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 17:33:56 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f59fa505fe48748f@google.com>
+Subject: [syzbot] [ext4?] INFO: task hung in __writeback_inodes_sb_nr (6)
+From:   syzbot <syzbot+38d04642cea49f3a3d2e@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,169 +55,755 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the regulators, apply the same settings as in the downstream
-devicetree [1], including the "regulator-always-on" for the SAFE_LDO.
-For the voltage of SAFE_LDO, however, there is only one voltage of 4.9 V
-available in the mainline driver [2][3].
+Hello,
 
-The values of the battery data evolve from following sources:
-- precharge current: 450 mA corresponds to the default value of the chip. It
-  doesn't get changed by the downstream Android driver. Therefore let's stick
-  to this value.
-- constant charge current: The 1000 mA are taken from the downstream devicetree
-  of the serranove battery. It's not easy to spot. The value is in the line
-  "input_current_limit" [4]. The rows are according to the power supply type,
-  the 4th value stands for "main supply" [5]. That's the value used by the
-  Android driver when a charging cable is plugged into the device.
-- charge termination current: In the downstream devicetree of the battery
-  that's the line "full_check_current_1st", which contains the 150 mA [6].
-- precharge voltage: This one doesn't get set in the downstream Android driver.
-  The chip's default is 2.8 V. That seemed too low to have a notable effect of
-  handling the battery gentle. The chosen value of 3.5 V is a bit arbitrary
-  and possibly rather high. As the device is already several years old and
-  therefore most batteries too, a value on the safe side seems reasonable.
-- constant charge voltage: The value of 4.35 V is set in the line
-  "chg_float_voltage" of the downstream battery devicetree [7].
+syzbot found the following issue on:
 
-The "connector" sub-node in the extcon node, the "battery" node in the
-general section and the line "power-supplies" in the fuel-gauge node result
-from the way of implementation documented in the dt-bindings of
-rt5033-charger [8] and mfd rt5033 [9].
+HEAD commit:    62d8779610bb Merge tag 'ext4_for_linus_stable' of git://gi..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1623de37280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ac246111fb601aec
+dashboard link: https://syzkaller.appspot.com/bug?extid=38d04642cea49f3a3d2e
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-[1] https://github.com/msm8916-mainline/linux-downstream/blob/GT-I9195I/arch/arm/boot/dts/samsung/msm8916/msm8916-sec-serranovelte-eur-r03.dtsi#L135-L181
-[2] https://github.com/torvalds/linux/blob/v6.3/include/linux/mfd/rt5033-private.h#L211-L212
-[3] https://github.com/torvalds/linux/blob/v6.3/drivers/regulator/rt5033-regulator.c#L83
-[4] https://github.com/msm8916-mainline/linux-downstream/blob/GT-I9195I/arch/arm/boot/dts/samsung/msm8916/msm8916-sec-serranovelte-battery-r01.dtsi#L100
-[5] https://github.com/msm8916-mainline/linux-downstream/blob/GT-I9195I/include/linux/power_supply.h#L173-L177
-[6] https://github.com/msm8916-mainline/linux-downstream/blob/GT-I9195I/arch/arm/boot/dts/samsung/msm8916/msm8916-sec-serranovelte-battery-r01.dtsi#L102
-[7] https://github.com/msm8916-mainline/linux-downstream/blob/GT-I9195I/arch/arm/boot/dts/samsung/msm8916/msm8916-sec-serranovelte-battery-r01.dtsi#L95
-[8] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml?h=next-20230616
-[9] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml?h=next-20230616
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/f2ffbf05c9a8/disk-62d87796.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/4809ae14c9e7/vmlinux-62d87796.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/9cd8b18ed845/bzImage-62d87796.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+38d04642cea49f3a3d2e@syzkaller.appspotmail.com
+
+INFO: task syz-executor.2:687 blocked for more than 143 seconds.
+      Not tainted 6.4.0-rc6-syzkaller-00049-g62d8779610bb #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor.2  state:D stack:23232 pid:687   ppid:24312  flags:0x00004002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5343 [inline]
+ __schedule+0xc9a/0x5880 kernel/sched/core.c:6669
+ schedule+0xde/0x1a0 kernel/sched/core.c:6745
+ wb_wait_for_completion+0x182/0x240 fs/fs-writeback.c:192
+ __writeback_inodes_sb_nr+0x1d7/0x280 fs/fs-writeback.c:2644
+ try_to_writeback_inodes_sb+0x98/0xc0 fs/fs-writeback.c:2692
+ ext4_nonda_switch+0x1aa/0x1f0 fs/ext4/inode.c:2864
+ ext4_da_write_begin+0x172/0x8c0 fs/ext4/inode.c:2891
+ generic_perform_write+0x256/0x570 mm/filemap.c:3929
+ ext4_buffered_write_iter+0x15b/0x460 fs/ext4/file.c:289
+ ext4_file_write_iter+0xbe0/0x1740 fs/ext4/file.c:710
+ __kernel_write_iter+0x262/0x7a0 fs/read_write.c:517
+ dump_emit_page fs/coredump.c:888 [inline]
+ dump_user_range+0x23c/0x710 fs/coredump.c:915
+ elf_core_dump+0x277e/0x36e0 fs/binfmt_elf.c:2142
+ do_coredump+0x2f2b/0x4020 fs/coredump.c:764
+ get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+ exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
+ irqentry_exit_to_user_mode+0x9/0x40 kernel/entry/common.c:310
+ asm_exc_general_protection+0x26/0x30 arch/x86/include/asm/idtentry.h:564
+RIP: 0033:0x7fd6b008c391
+RSP: 002b:0000000020000160 EFLAGS: 00010217
+RAX: 0000000000000000 RBX: 00007fd6b01abf80 RCX: 00007fd6b008c389
+RDX: 0000000020000180 RSI: 0000000020000160 RDI: 0000000002000000
+RBP: 00007fd6b00d7493 R08: 0000000020000200 R09: 0000000020000200
+R10: 00000000200001c0 R11: 0000000000000206 R12: 0000000000000000
+R13: 00007ffddfff939f R14: 00007fd6b0dfd300 R15: 0000000000022000
+ </TASK>
+INFO: task syz-executor.4:740 blocked for more than 143 seconds.
+      Not tainted 6.4.0-rc6-syzkaller-00049-g62d8779610bb #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor.4  state:D stack:23248 pid:740   ppid:542    flags:0x00004006
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5343 [inline]
+ __schedule+0xc9a/0x5880 kernel/sched/core.c:6669
+ schedule+0xde/0x1a0 kernel/sched/core.c:6745
+ wb_wait_for_completion+0x182/0x240 fs/fs-writeback.c:192
+ __writeback_inodes_sb_nr+0x1d7/0x280 fs/fs-writeback.c:2644
+ try_to_writeback_inodes_sb+0x98/0xc0 fs/fs-writeback.c:2692
+ ext4_nonda_switch+0x1aa/0x1f0 fs/ext4/inode.c:2864
+ ext4_da_write_begin+0x172/0x8c0 fs/ext4/inode.c:2891
+ generic_perform_write+0x256/0x570 mm/filemap.c:3929
+ ext4_buffered_write_iter+0x15b/0x460 fs/ext4/file.c:289
+ ext4_file_write_iter+0xbe0/0x1740 fs/ext4/file.c:710
+ __kernel_write_iter+0x262/0x7a0 fs/read_write.c:517
+ dump_emit_page fs/coredump.c:888 [inline]
+ dump_user_range+0x23c/0x710 fs/coredump.c:915
+ elf_core_dump+0x277e/0x36e0 fs/binfmt_elf.c:2142
+ do_coredump+0x2f2b/0x4020 fs/coredump.c:764
+ get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+ exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
+ irqentry_exit_to_user_mode+0x9/0x40 kernel/entry/common.c:310
+ asm_exc_general_protection+0x26/0x30 arch/x86/include/asm/idtentry.h:564
+RIP: 0033:0x7fbf7328c391
+RSP: 002b:0000000020000160 EFLAGS: 00010217
+RAX: 0000000000000000 RBX: 00007fbf733ac050 RCX: 00007fbf7328c389
+RDX: 0000000020000180 RSI: 0000000020000160 RDI: 0000000002000000
+RBP: 00007fbf732d7493 R08: 0000000020000200 R09: 0000000020000200
+R10: 00000000200001c0 R11: 0000000000000206 R12: 0000000000000000
+R13: 00007ffc83f3088f R14: 00007fbf74061300 R15: 0000000000022000
+ </TASK>
+INFO: task syz-executor.4:885 blocked for more than 145 seconds.
+      Not tainted 6.4.0-rc6-syzkaller-00049-g62d8779610bb #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor.4  state:D stack:23824 pid:885   ppid:542    flags:0x00004006
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5343 [inline]
+ __schedule+0xc9a/0x5880 kernel/sched/core.c:6669
+ schedule+0xde/0x1a0 kernel/sched/core.c:6745
+ wb_wait_for_completion+0x182/0x240 fs/fs-writeback.c:192
+ __writeback_inodes_sb_nr+0x1d7/0x280 fs/fs-writeback.c:2644
+ try_to_writeback_inodes_sb+0x98/0xc0 fs/fs-writeback.c:2692
+ ext4_nonda_switch+0x1aa/0x1f0 fs/ext4/inode.c:2864
+ ext4_da_write_begin+0x172/0x8c0 fs/ext4/inode.c:2891
+ generic_perform_write+0x256/0x570 mm/filemap.c:3929
+ ext4_buffered_write_iter+0x15b/0x460 fs/ext4/file.c:289
+ ext4_file_write_iter+0xbe0/0x1740 fs/ext4/file.c:710
+ __kernel_write_iter+0x262/0x7a0 fs/read_write.c:517
+ dump_emit_page fs/coredump.c:888 [inline]
+ dump_user_range+0x23c/0x710 fs/coredump.c:915
+ elf_core_dump+0x277e/0x36e0 fs/binfmt_elf.c:2142
+ do_coredump+0x2f2b/0x4020 fs/coredump.c:764
+ get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+ exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
+ irqentry_exit_to_user_mode+0x9/0x40 kernel/entry/common.c:310
+ asm_exc_general_protection+0x26/0x30 arch/x86/include/asm/idtentry.h:564
+RIP: 0033:0x7fbf7328c391
+RSP: 002b:0000000020000160 EFLAGS: 00010217
+RAX: 0000000000000000 RBX: 00007fbf733abf80 RCX: 00007fbf7328c389
+RDX: 0000000020000180 RSI: 0000000020000160 RDI: 0000000002000000
+RBP: 00007fbf732d7493 R08: 0000000020000200 R09: 0000000020000200
+R10: 00000000200001c0 R11: 0000000000000206 R12: 0000000000000000
+R13: 00007ffc83f3088f R14: 00007fbf74082300 R15: 0000000000022000
+ </TASK>
+INFO: task syz-executor.4:908 blocked for more than 146 seconds.
+      Not tainted 6.4.0-rc6-syzkaller-00049-g62d8779610bb #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor.4  state:D stack:23944 pid:908   ppid:542    flags:0x00004006
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5343 [inline]
+ __schedule+0xc9a/0x5880 kernel/sched/core.c:6669
+ schedule+0xde/0x1a0 kernel/sched/core.c:6745
+ wb_wait_for_completion+0x182/0x240 fs/fs-writeback.c:192
+ __writeback_inodes_sb_nr+0x1d7/0x280 fs/fs-writeback.c:2644
+ try_to_writeback_inodes_sb+0x98/0xc0 fs/fs-writeback.c:2692
+ ext4_nonda_switch+0x1aa/0x1f0 fs/ext4/inode.c:2864
+ ext4_da_write_begin+0x172/0x8c0 fs/ext4/inode.c:2891
+ generic_perform_write+0x256/0x570 mm/filemap.c:3929
+ ext4_buffered_write_iter+0x15b/0x460 fs/ext4/file.c:289
+ ext4_file_write_iter+0xbe0/0x1740 fs/ext4/file.c:710
+ __kernel_write_iter+0x262/0x7a0 fs/read_write.c:517
+ dump_emit_page fs/coredump.c:888 [inline]
+ dump_user_range+0x23c/0x710 fs/coredump.c:915
+ elf_core_dump+0x277e/0x36e0 fs/binfmt_elf.c:2142
+ do_coredump+0x2f2b/0x4020 fs/coredump.c:764
+ get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+ exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
+ irqentry_exit_to_user_mode+0x9/0x40 kernel/entry/common.c:310
+ asm_exc_general_protection+0x26/0x30 arch/x86/include/asm/idtentry.h:564
+RIP: 0033:0x7fbf7328c391
+RSP: 002b:0000000020000280 EFLAGS: 00010217
+RAX: 0000000000000000 RBX: 00007fbf733abf80 RCX: 00007fbf7328c389
+RDX: 00000000200002c0 RSI: 0000000020000280 RDI: 0000000000000200
+RBP: 00007fbf732d7493 R08: 0000000020000340 R09: 0000000020000340
+R10: 0000000020000300 R11: 0000000000000206 R12: 0000000000000000
+R13: 00007ffc83f3088f R14: 00007fbf74082300 R15: 0000000000022000
+ </TASK>
+INFO: task syz-executor.4:936 blocked for more than 147 seconds.
+      Not tainted 6.4.0-rc6-syzkaller-00049-g62d8779610bb #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor.4  state:D stack:23944 pid:936   ppid:542    flags:0x00004006
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5343 [inline]
+ __schedule+0xc9a/0x5880 kernel/sched/core.c:6669
+ schedule+0xde/0x1a0 kernel/sched/core.c:6745
+ wb_wait_for_completion+0x182/0x240 fs/fs-writeback.c:192
+ __writeback_inodes_sb_nr+0x1d7/0x280 fs/fs-writeback.c:2644
+ try_to_writeback_inodes_sb+0x98/0xc0 fs/fs-writeback.c:2692
+ ext4_nonda_switch+0x1aa/0x1f0 fs/ext4/inode.c:2864
+ ext4_da_write_begin+0x172/0x8c0 fs/ext4/inode.c:2891
+ generic_perform_write+0x256/0x570 mm/filemap.c:3929
+ ext4_buffered_write_iter+0x15b/0x460 fs/ext4/file.c:289
+ ext4_file_write_iter+0xbe0/0x1740 fs/ext4/file.c:710
+ __kernel_write_iter+0x262/0x7a0 fs/read_write.c:517
+ dump_emit_page fs/coredump.c:888 [inline]
+ dump_user_range+0x23c/0x710 fs/coredump.c:915
+ elf_core_dump+0x277e/0x36e0 fs/binfmt_elf.c:2142
+ do_coredump+0x2f2b/0x4020 fs/coredump.c:764
+ get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+ exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
+ irqentry_exit_to_user_mode+0x9/0x40 kernel/entry/common.c:310
+ asm_exc_general_protection+0x26/0x30 arch/x86/include/asm/idtentry.h:564
+RIP: 0033:0x7fbf7328c391
+RSP: 002b:0000000020000160 EFLAGS: 00010217
+RAX: 0000000000000000 RBX: 00007fbf733abf80 RCX: 00007fbf7328c389
+RDX: 0000000020000180 RSI: 0000000020000160 RDI: 0000000002000000
+RBP: 00007fbf732d7493 R08: 0000000020000200 R09: 0000000020000200
+R10: 00000000200001c0 R11: 0000000000000206 R12: 0000000000000000
+R13: 00007ffc83f3088f R14: 00007fbf74082300 R15: 0000000000022000
+ </TASK>
+INFO: task syz-executor.2:971 blocked for more than 147 seconds.
+      Not tainted 6.4.0-rc6-syzkaller-00049-g62d8779610bb #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor.2  state:D stack:22928 pid:971   ppid:24312  flags:0x00004002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5343 [inline]
+ __schedule+0xc9a/0x5880 kernel/sched/core.c:6669
+ schedule+0xde/0x1a0 kernel/sched/core.c:6745
+ wb_wait_for_completion+0x182/0x240 fs/fs-writeback.c:192
+ __writeback_inodes_sb_nr+0x1d7/0x280 fs/fs-writeback.c:2644
+ try_to_writeback_inodes_sb+0x98/0xc0 fs/fs-writeback.c:2692
+ ext4_nonda_switch+0x1aa/0x1f0 fs/ext4/inode.c:2864
+ ext4_da_write_begin+0x172/0x8c0 fs/ext4/inode.c:2891
+ generic_perform_write+0x256/0x570 mm/filemap.c:3929
+ ext4_buffered_write_iter+0x15b/0x460 fs/ext4/file.c:289
+ ext4_file_write_iter+0xbe0/0x1740 fs/ext4/file.c:710
+ __kernel_write_iter+0x262/0x7a0 fs/read_write.c:517
+ dump_emit_page fs/coredump.c:888 [inline]
+ dump_user_range+0x23c/0x710 fs/coredump.c:915
+ elf_core_dump+0x277e/0x36e0 fs/binfmt_elf.c:2142
+ do_coredump+0x2f2b/0x4020 fs/coredump.c:764
+ get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+ exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
+ irqentry_exit_to_user_mode+0x9/0x40 kernel/entry/common.c:310
+ asm_exc_general_protection+0x26/0x30 arch/x86/include/asm/idtentry.h:564
+RIP: 0033:0x7fd6b008c391
+RSP: 002b:0000000020000280 EFLAGS: 00010217
+RAX: 0000000000000000 RBX: 00007fd6b01abf80 RCX: 00007fd6b008c389
+RDX: 00000000200002c0 RSI: 0000000020000280 RDI: 0000000000000200
+RBP: 00007fd6b00d7493 R08: 0000000020000340 R09: 0000000020000340
+R10: 0000000020000300 R11: 0000000000000206 R12: 0000000000000000
+R13: 00007ffddfff939f R14: 00007fd6b0dfd300 R15: 0000000000022000
+ </TASK>
+INFO: task syz-executor.2:983 blocked for more than 148 seconds.
+      Not tainted 6.4.0-rc6-syzkaller-00049-g62d8779610bb #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor.2  state:D stack:23776 pid:983   ppid:24312  flags:0x00004002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5343 [inline]
+ __schedule+0xc9a/0x5880 kernel/sched/core.c:6669
+ schedule+0xde/0x1a0 kernel/sched/core.c:6745
+ wb_wait_for_completion+0x182/0x240 fs/fs-writeback.c:192
+ __writeback_inodes_sb_nr+0x1d7/0x280 fs/fs-writeback.c:2644
+ try_to_writeback_inodes_sb+0x98/0xc0 fs/fs-writeback.c:2692
+ ext4_nonda_switch+0x1aa/0x1f0 fs/ext4/inode.c:2864
+ ext4_da_write_begin+0x172/0x8c0 fs/ext4/inode.c:2891
+ generic_perform_write+0x256/0x570 mm/filemap.c:3929
+ ext4_buffered_write_iter+0x15b/0x460 fs/ext4/file.c:289
+ ext4_file_write_iter+0xbe0/0x1740 fs/ext4/file.c:710
+ __kernel_write_iter+0x262/0x7a0 fs/read_write.c:517
+ dump_emit_page fs/coredump.c:888 [inline]
+ dump_user_range+0x23c/0x710 fs/coredump.c:915
+ elf_core_dump+0x277e/0x36e0 fs/binfmt_elf.c:2142
+ do_coredump+0x2f2b/0x4020 fs/coredump.c:764
+ get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+ exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
+ irqentry_exit_to_user_mode+0x9/0x40 kernel/entry/common.c:310
+ asm_exc_general_protection+0x26/0x30 arch/x86/include/asm/idtentry.h:564
+RIP: 0033:0x7fd6b008c391
+RSP: 002b:0000000020000160 EFLAGS: 00010217
+RAX: 0000000000000000 RBX: 00007fd6b01abf80 RCX: 00007fd6b008c389
+RDX: 0000000020000180 RSI: 0000000020000160 RDI: 0000000002000000
+RBP: 00007fd6b00d7493 R08: 0000000020000200 R09: 0000000020000200
+R10: 00000000200001c0 R11: 0000000000000206 R12: 0000000000000000
+R13: 00007ffddfff939f R14: 00007fd6b0dfd300 R15: 0000000000022000
+ </TASK>
+INFO: task syz-executor.2:997 blocked for more than 148 seconds.
+      Not tainted 6.4.0-rc6-syzkaller-00049-g62d8779610bb #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor.2  state:D stack:23744 pid:997   ppid:24312  flags:0x00004002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5343 [inline]
+ __schedule+0xc9a/0x5880 kernel/sched/core.c:6669
+ schedule+0xde/0x1a0 kernel/sched/core.c:6745
+ wb_wait_for_completion+0x182/0x240 fs/fs-writeback.c:192
+ __writeback_inodes_sb_nr+0x1d7/0x280 fs/fs-writeback.c:2644
+ try_to_writeback_inodes_sb+0x98/0xc0 fs/fs-writeback.c:2692
+ ext4_nonda_switch+0x1aa/0x1f0 fs/ext4/inode.c:2864
+ ext4_da_write_begin+0x172/0x8c0 fs/ext4/inode.c:2891
+ generic_perform_write+0x256/0x570 mm/filemap.c:3929
+ ext4_buffered_write_iter+0x15b/0x460 fs/ext4/file.c:289
+ ext4_file_write_iter+0xbe0/0x1740 fs/ext4/file.c:710
+ __kernel_write_iter+0x262/0x7a0 fs/read_write.c:517
+ dump_emit_page fs/coredump.c:888 [inline]
+ dump_user_range+0x23c/0x710 fs/coredump.c:915
+ elf_core_dump+0x277e/0x36e0 fs/binfmt_elf.c:2142
+ do_coredump+0x2f2b/0x4020 fs/coredump.c:764
+ get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+ exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
+ irqentry_exit_to_user_mode+0x9/0x40 kernel/entry/common.c:310
+ asm_exc_general_protection+0x26/0x30 arch/x86/include/asm/idtentry.h:564
+RIP: 0033:0x7fd6b008c391
+RSP: 002b:0000000020000280 EFLAGS: 00010217
+RAX: 0000000000000000 RBX: 00007fd6b01abf80 RCX: 00007fd6b008c389
+RDX: 00000000200002c0 RSI: 0000000020000280 RDI: 0000000000000200
+RBP: 00007fd6b00d7493 R08: 0000000020000340 R09: 0000000020000340
+R10: 0000000020000300 R11: 0000000000000206 R12: 0000000000000000
+R13: 00007ffddfff939f R14: 00007fd6b0dfd300 R15: 0000000000022000
+ </TASK>
+
+Showing all locks held in the system:
+1 lock held by rcu_tasks_kthre/13:
+ #0: ffffffff8c7984b0 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x31/0xd80 kernel/rcu/tasks.h:518
+1 lock held by rcu_tasks_trace/14:
+ #0: ffffffff8c7981b0 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x31/0xd80 kernel/rcu/tasks.h:518
+1 lock held by khungtaskd/28:
+ #0: ffffffff8c7990c0 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x55/0x340 kernel/locking/lockdep.c:6559
+3 locks held by kworker/u4:3/46:
+ #0: ffff888145672138 ((wq_completion)writeback){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff888145672138 ((wq_completion)writeback){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff888145672138 ((wq_completion)writeback){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1324 [inline]
+ #0: ffff888145672138 ((wq_completion)writeback){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:643 [inline]
+ #0: ffff888145672138 ((wq_completion)writeback){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:670 [inline]
+ #0: ffff888145672138 ((wq_completion)writeback){+.+.}-{0:0}, at: process_one_work+0x883/0x15e0 kernel/workqueue.c:2376
+ #1: ffffc90000b77db0 ((work_completion)(&(&wb->dwork)->work)){+.+.}-{0:0}, at: process_one_work+0x8b7/0x15e0 kernel/workqueue.c:2380
+ #2: ffff88802c31eb98 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+2 locks held by getty/4753:
+ #0: ffff88802aec0098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x26/0x80 drivers/tty/tty_ldisc.c:243
+ #1: ffffc900015802f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0xef4/0x13e0 drivers/tty/n_tty.c:2176
+3 locks held by syz-executor.2/24312:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: do_unlinkat+0x190/0x680 fs/namei.c:4374
+ #1: ffff88803fe02c00 (&type->i_mutex_dir_key#3/1){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:810 [inline]
+ #1: ffff88803fe02c00 (&type->i_mutex_dir_key#3/1){+.+.}-{3:3}, at: do_unlinkat+0x280/0x680 fs/namei.c:4378
+ #2: ffff888083300400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #2: ffff888083300400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: vfs_unlink+0xd9/0x930 fs/namei.c:4316
+3 locks held by syz-executor.2/687:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff888082afd400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff888082afd400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+ #2: ffff88802c31c0e0 (&type->s_umount_key#32){++++}-{3:3}, at: try_to_writeback_inodes_sb+0x21/0xc0 fs/fs-writeback.c:2689
+3 locks held by syz-executor.4/740:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff88808724c000 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff88808724c000 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+ #2: ffff88802c31c0e0 (&type->s_umount_key#32){++++}-{3:3}, at: try_to_writeback_inodes_sb+0x21/0xc0 fs/fs-writeback.c:2689
+3 locks held by syz-executor.4/885:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff888046cf0400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff888046cf0400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+ #2: ffff88802c31c0e0 (&type->s_umount_key#32){++++}-{3:3}, at: try_to_writeback_inodes_sb+0x21/0xc0 fs/fs-writeback.c:2689
+3 locks held by syz-executor.4/908:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff88805471a200 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff88805471a200 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+ #2: ffff88802c31c0e0 (&type->s_umount_key#32){++++}-{3:3}, at: try_to_writeback_inodes_sb+0x21/0xc0 fs/fs-writeback.c:2689
+3 locks held by syz-executor.4/936:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff888050412c00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff888050412c00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+ #2: ffff88802c31c0e0 (&type->s_umount_key#32){++++}-{3:3}, at: try_to_writeback_inodes_sb+0x21/0xc0 fs/fs-writeback.c:2689
+3 locks held by syz-executor.2/971:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff8880874e5e00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff8880874e5e00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+ #2: ffff88802c31c0e0 (&type->s_umount_key#32){++++}-{3:3}, at: try_to_writeback_inodes_sb+0x21/0xc0 fs/fs-writeback.c:2689
+3 locks held by syz-executor.2/983:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff88808724b600 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff88808724b600 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+ #2: ffff88802c31c0e0 (&type->s_umount_key#32){++++}-{3:3}, at: try_to_writeback_inodes_sb+0x21/0xc0 fs/fs-writeback.c:2689
+3 locks held by syz-executor.2/997:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff888082afca00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff888082afca00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+ #2: ffff88802c31c0e0 (&type->s_umount_key#32){++++}-{3:3}, at: try_to_writeback_inodes_sb+0x21/0xc0 fs/fs-writeback.c:2689
+1 lock held by syz-executor.0/5907:
+ #0: ffff8880546eac00 (&type->i_mutex_dir_key#3){++++}-{3:3}, at: iterate_dir+0xd1/0x6f0 fs/readdir.c:55
+1 lock held by syz-executor.1/7188:
+ #0: ffff888082aeb600 (&type->i_mutex_dir_key#3){++++}-{3:3}, at: iterate_dir+0xd1/0x6f0 fs/readdir.c:55
+1 lock held by syz-executor.0/7562:
+ #0: ffff88802c31eb98 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+1 lock held by syz-executor.0/7739:
+ #0: ffff88802c31eb98 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+1 lock held by syz-executor.0/7802:
+ #0: ffff88802c31eb98 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+1 lock held by syz-executor.1/7812:
+ #0: ffff88802c31eb98 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+1 lock held by syz-executor.0/7827:
+ #0: ffff88802c31eb98 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+1 lock held by syz-executor.0/7838:
+ #0: ffff88802c31eb98 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+1 lock held by syz-executor.1/7856:
+ #0: ffff88802c31eb98 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+1 lock held by syz-executor.2/7858:
+ #0: ffff88802c31eb98 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+1 lock held by syz-executor.5/8636:
+ #0: ffff888082aec000 (&type->i_mutex_dir_key#3){++++}-{3:3}, at: iterate_dir+0xd1/0x6f0 fs/readdir.c:55
+1 lock held by syz-executor.5/8731:
+ #0: ffff88802c31eb98 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+1 lock held by syz-executor.5/8734:
+ #0: ffff88802c31eb98 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+2 locks held by syz-executor.5/8877:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff8880870e4000 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff8880870e4000 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.0/8885:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff888082f0f200 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff888082f0f200 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.1/8886:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff888082f0de00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff888082f0de00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.2/8888:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff888082f0a200 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff888082f0a200 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.1/8889:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff888082f0e800 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff888082f0e800 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.5/8890:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff8880870e6800 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff8880870e6800 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.0/8891:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff8880870e5400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff8880870e5400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.1/8907:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff888082aed400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff888082aed400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.1/8911:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff88803cddb600 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff88803cddb600 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.2/8912:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff888082ae8e00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff888082ae8e00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.5/8918:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff8880826e9800 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff8880826e9800 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.0/8919:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff88803cddca00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff88803cddca00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.0/8923:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff8880826eca00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff8880826eca00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.5/8924:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff8880826ec000 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff8880826ec000 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+3 locks held by syz-executor.2/8938:
+ #0: ffff88802c31eb98 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+ #1: ffff88814be58990 (jbd2_handle){++++}-{0:0}, at: start_this_handle+0xfb4/0x14e0 fs/jbd2/transaction.c:461
+ #2: ffff888078e9f088 (&ei->i_data_sem){++++}-{3:3}, at: ext4_map_blocks+0x707/0x18d0 fs/ext4/inode.c:616
+2 locks held by syz-executor.1/8942:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff888078e9de00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff888078e9de00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+1 lock held by syz-executor.4/8955:
+ #0: ffff8880546eb600 (&type->i_mutex_dir_key#3){++++}-{3:3}, at: iterate_dir+0xd1/0x6f0 fs/readdir.c:55
+1 lock held by syz-executor.0/9094:
+ #0: ffff88802c31eb98 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+1 lock held by syz-executor.0/9096:
+ #0: ffff88802c31eb98 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+1 lock held by syz-executor.3/9157:
+ #0: ffff88803444e800 (&type->i_mutex_dir_key#3){++++}-{3:3}, at: iterate_dir+0xd1/0x6f0 fs/readdir.c:55
+2 locks held by syz-executor.3/9599:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff88802fd5d400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff88802fd5d400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.3/9600:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff88802fd5ca00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff88802fd5ca00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.2/9619:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff88803e361800 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff88803e361800 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.5/9625:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff888046cf3600 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff888046cf3600 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+1 lock held by syz-executor.1/9626:
+ #0: ffff88802c31eb98 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+2 locks held by syz-executor.3/9627:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff88803ce98e00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff88803ce98e00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.4/9629:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff888046cf7200 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff888046cf7200 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.3/9635:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff88805471c000 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff88805471c000 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.5/9637:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff888046cf2c00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff888046cf2c00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.0/9640:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff88805471d400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff88805471d400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+1 lock held by syz-executor.2/9785:
+ #0: ffff88802c31eb98 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+1 lock held by syz-executor.0/9790:
+ #0: ffff88802c31eb98 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+1 lock held by syz-executor.1/9795:
+ #0: ffff88802c31eb98 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+1 lock held by syz-executor.1/9796:
+ #0: ffff88802c31eb98 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+1 lock held by syz-executor.0/9797:
+ #0: ffff88802c31eb98 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+1 lock held by syz-executor.0/9806:
+ #0: ffff88802c31eb98 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+1 lock held by syz-executor.0/9807:
+ #0: ffff88802c31eb98 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+1 lock held by syz-executor.1/9815:
+ #0: ffff88802c31eb98 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+1 lock held by syz-executor.1/9819:
+ #0: ffff88802c31eb98 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+1 lock held by syz-executor.2/9829:
+ #0: ffff88802c31eb98 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+1 lock held by syz-executor.1/9847:
+ #0: ffff88802c31eb98 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+1 lock held by syz-executor.2/9852:
+ #0: ffff88802c31eb98 (&sbi->s_writepages_rwsem){.+.+}-{0:0}, at: do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+2 locks held by syz-executor.4/9858:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff888087255400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff888087255400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.4/9861:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff88803e364a00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff88803e364a00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.3/9863:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff88803e367200 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff88803e367200 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.3/9866:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff88802fd5ac00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff88802fd5ac00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.5/9869:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff88802fd5a200 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff88802fd5a200 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.4/9873:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff888082afc000 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff888082afc000 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.5/9875:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff88803450ac00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff88803450ac00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.4/9879:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff888082af8e00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff888082af8e00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.0/9883:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff888082b4b600 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff888082b4b600 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.1/9884:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff888082b4ac00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff888082b4ac00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.3/9888:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff888082b48400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff888082b48400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.1/9889:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff888082b4d400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff888082b4d400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.0/9891:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff888082afac00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff888082afac00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.3/9894:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff888082b4a200 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff888082b4a200 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.3/9899:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff8880546eca00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff8880546eca00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.4/9905:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff8880546e8400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff8880546e8400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.0/9906:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff88803fe01800 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff88803fe01800 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.1/9911:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff88803fe00400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff88803fe00400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.2/9912:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff8880546e9800 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff8880546e9800 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.4/9930:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff888033322c00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff888033322c00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.2/9931:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff888083300400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff888083300400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.3/9937:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff888033326800 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff888033326800 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.0/9938:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff888033325400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff888033325400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.1/9939:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff8880874e6800 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff8880874e6800 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+2 locks held by syz-executor.5/9940:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: get_signal+0x1c02/0x25b0 kernel/signal.c:2862
+ #1: ffff8880874e0400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #1: ffff8880874e0400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_buffered_write_iter+0xb0/0x460 fs/ext4/file.c:283
+3 locks held by syz-executor.4/9942:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: do_unlinkat+0x190/0x680 fs/namei.c:4374
+ #1: ffff8880546eb600 (&type->i_mutex_dir_key#3/1){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:810 [inline]
+ #1: ffff8880546eb600 (&type->i_mutex_dir_key#3/1){+.+.}-{3:3}, at: do_unlinkat+0x280/0x680 fs/namei.c:4378
+ #2: ffff888033322c00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #2: ffff888033322c00 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: vfs_unlink+0xd9/0x930 fs/namei.c:4316
+3 locks held by syz-executor.1/9943:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: do_unlinkat+0x190/0x680 fs/namei.c:4374
+ #1: ffff888082aeb600 (&type->i_mutex_dir_key#3/1){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:810 [inline]
+ #1: ffff888082aeb600 (&type->i_mutex_dir_key#3/1){+.+.}-{3:3}, at: do_unlinkat+0x280/0x680 fs/namei.c:4378
+ #2: ffff8880874e6800 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #2: ffff8880874e6800 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: vfs_unlink+0xd9/0x930 fs/namei.c:4316
+3 locks held by syz-executor.3/9945:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: do_unlinkat+0x190/0x680 fs/namei.c:4374
+ #1: ffff88803444e800 (&type->i_mutex_dir_key#3/1){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:810 [inline]
+ #1: ffff88803444e800 (&type->i_mutex_dir_key#3/1){+.+.}-{3:3}, at: do_unlinkat+0x280/0x680 fs/namei.c:4378
+ #2: ffff888033326800 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #2: ffff888033326800 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: vfs_unlink+0xd9/0x930 fs/namei.c:4316
+3 locks held by syz-executor.0/9948:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: do_unlinkat+0x190/0x680 fs/namei.c:4374
+ #1: ffff8880546eac00 (&type->i_mutex_dir_key#3/1){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:810 [inline]
+ #1: ffff8880546eac00 (&type->i_mutex_dir_key#3/1){+.+.}-{3:3}, at: do_unlinkat+0x280/0x680 fs/namei.c:4378
+ #2: ffff888033325400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #2: ffff888033325400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: vfs_unlink+0xd9/0x930 fs/namei.c:4316
+3 locks held by syz-executor.5/9949:
+ #0: ffff88802c31c460 (sb_writers#4){.+.+}-{0:0}, at: do_unlinkat+0x190/0x680 fs/namei.c:4374
+ #1: ffff888082aec000 (&type->i_mutex_dir_key#3/1){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:810 [inline]
+ #1: ffff888082aec000 (&type->i_mutex_dir_key#3/1){+.+.}-{3:3}, at: do_unlinkat+0x280/0x680 fs/namei.c:4378
+ #2: ffff8880874e0400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ #2: ffff8880874e0400 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: vfs_unlink+0xd9/0x930 fs/namei.c:4316
+
+=============================================
+
+NMI backtrace for cpu 1
+CPU: 1 PID: 28 Comm: khungtaskd Not tainted 6.4.0-rc6-syzkaller-00049-g62d8779610bb #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ nmi_cpu_backtrace+0x29c/0x350 lib/nmi_backtrace.c:113
+ nmi_trigger_cpumask_backtrace+0x2a4/0x300 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:148 [inline]
+ check_hung_uninterruptible_tasks kernel/hung_task.c:222 [inline]
+ watchdog+0xe16/0x1090 kernel/hung_task.c:379
+ kthread+0x344/0x440 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+Sending NMI from CPU 1 to CPUs 0:
+NMI backtrace for cpu 0
+CPU: 0 PID: 68 Comm: kworker/u4:4 Not tainted 6.4.0-rc6-syzkaller-00049-g62d8779610bb #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+Workqueue: phy90 ieee80211_iface_work
+RIP: 0010:lookup_chain_cache kernel/locking/lockdep.c:3740 [inline]
+RIP: 0010:lookup_chain_cache_add kernel/locking/lockdep.c:3760 [inline]
+RIP: 0010:validate_chain kernel/locking/lockdep.c:3815 [inline]
+RIP: 0010:__lock_acquire+0x19cb/0x5f30 kernel/locking/lockdep.c:5088
+Code: 08 49 c1 ec 2f 84 c0 4e 8d 2c e5 60 2c 41 91 0f 84 c2 03 00 00 48 b8 00 00 00 00 00 fc ff df 4c 89 ea 48 c1 ea 03 80 3c 02 00 <0f> 85 53 3d 00 00 4a 8b 1c e5 60 2c 41 91 48 85 db 74 63 48 83 eb
+RSP: 0018:ffffc900020af840 EFLAGS: 00000046
+RAX: dffffc0000000000 RBX: 0000000000000001 RCX: ffffffff81659797
+RDX: 1ffffffff228d43e RSI: 0000000000000008 RDI: ffffffff9152ad00
+RBP: ffff888019af8000 R08: 0000000000000000 R09: ffffffff9152ad07
+R10: fffffbfff22a55a0 R11: 0000000000094001 R12: 000000000000aeb2
+R13: ffffffff9146a1f0 R14: 0000000000000000 R15: ffff888019af8b18
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000555556a55848 CR3: 000000002994d000 CR4: 0000000000350ef0
+Call Trace:
+ <NMI>
+ </NMI>
+ <TASK>
+ lock_acquire kernel/locking/lockdep.c:5705 [inline]
+ lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5670
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+ _raw_spin_lock_irqsave+0x3d/0x60 kernel/locking/spinlock.c:162
+ __debug_check_no_obj_freed lib/debugobjects.c:1011 [inline]
+ debug_check_no_obj_freed+0xcb/0x420 lib/debugobjects.c:1054
+ slab_free_hook mm/slub.c:1756 [inline]
+ slab_free_freelist_hook+0xeb/0x1c0 mm/slub.c:1807
+ slab_free mm/slub.c:3786 [inline]
+ kmem_cache_free+0xe9/0x480 mm/slub.c:3808
+ skb_kfree_head net/core/skbuff.c:903 [inline]
+ skb_kfree_head net/core/skbuff.c:899 [inline]
+ skb_free_head+0x17f/0x1b0 net/core/skbuff.c:918
+ skb_release_data+0x598/0x820 net/core/skbuff.c:948
+ skb_release_all net/core/skbuff.c:1014 [inline]
+ __kfree_skb net/core/skbuff.c:1028 [inline]
+ kfree_skb_reason+0x179/0x3c0 net/core/skbuff.c:1064
+ kfree_skb include/linux/skbuff.h:1236 [inline]
+ ieee80211_iface_work+0x357/0xd70 net/mac80211/iface.c:1650
+ process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
+ worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
+ kthread+0x344/0x440 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+
+
 ---
-The patch is based on linux-next "next-20230616".
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-The driver rt5033-charger was just recently added to linux-next.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-RESEND because I used an outdated e-mail address of Bjorn before.
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
- .../dts/qcom/msm8916-samsung-serranove.dts    | 67 ++++++++++++++++++-
- 1 file changed, 66 insertions(+), 1 deletion(-)
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts b/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts
-index 15dc246e84e2..2114d26548db 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts
-@@ -142,6 +142,12 @@ muic: extcon@14 {
- 
- 			pinctrl-names = "default";
- 			pinctrl-0 = <&muic_irq_default>;
-+
-+			usb_con: connector {
-+				compatible = "usb-b-connector";
-+				label = "micro-USB";
-+				type = "micro";
-+			};
- 		};
- 	};
- 
-@@ -199,6 +205,15 @@ nfc@2b {
- 			pinctrl-0 = <&nfc_default>;
- 		};
- 	};
-+
-+	battery: battery {
-+		compatible = "simple-battery";
-+		precharge-current-microamp = <450000>;
-+		constant-charge-current-max-microamp = <1000000>;
-+		charge-term-current-microamp = <150000>;
-+		precharge-upper-limit-microvolt = <3500000>;
-+		constant-charge-voltage-max-microvolt = <4350000>;
-+	};
- };
- 
- &blsp_i2c2 {
-@@ -228,7 +243,7 @@ magnetometer@2e {
- &blsp_i2c4 {
- 	status = "okay";
- 
--	battery@35 {
-+	fuel-gauge@35 {
- 		compatible = "richtek,rt5033-battery";
- 		reg = <0x35>;
- 
-@@ -237,6 +252,8 @@ battery@35 {
- 
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&fg_alert_default>;
-+
-+		power-supplies = <&rt5033_charger>;
- 	};
- };
- 
-@@ -261,6 +278,46 @@ touchscreen@20 {
- 	};
- };
- 
-+&blsp_i2c6 {
-+	status = "okay";
-+
-+	pmic@34 {
-+		compatible = "richtek,rt5033";
-+		reg = <0x34>;
-+
-+		interrupt-parent = <&tlmm>;
-+		interrupts = <62 IRQ_TYPE_EDGE_FALLING>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pmic_int_default>;
-+
-+		regulators {
-+			safe_ldo_reg: SAFE_LDO {
-+				regulator-name = "SAFE_LDO";
-+				regulator-min-microvolt = <4900000>;
-+				regulator-max-microvolt = <4900000>;
-+				regulator-always-on;
-+			};
-+			ldo_reg: LDO {
-+				regulator-name = "LDO";
-+				regulator-min-microvolt = <2800000>;
-+				regulator-max-microvolt = <2800000>;
-+			};
-+			buck_reg: BUCK {
-+				regulator-name = "BUCK";
-+				regulator-min-microvolt = <1200000>;
-+				regulator-max-microvolt = <1200000>;
-+			};
-+		};
-+
-+		rt5033_charger: charger {
-+			compatible = "richtek,rt5033-charger";
-+			monitored-battery = <&battery>;
-+			richtek,usb-connector = <&usb_con>;
-+		};
-+	};
-+};
-+
- &blsp_uart2 {
- 	status = "okay";
- };
-@@ -387,6 +444,14 @@ nfc_i2c_default: nfc-i2c-default-state {
- 		bias-disable;
- 	};
- 
-+	pmic_int_default: pmic-int-default-state {
-+		pins = "gpio62";
-+		function = "gpio";
-+
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
- 	tkey_default: tkey-default-state {
- 		pins = "gpio98";
- 		function = "gpio";
--- 
-2.39.2
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
 
+If you want to undo deduplication, reply with:
+#syz undup
