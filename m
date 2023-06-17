@@ -2,113 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF2A7341EC
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 17:34:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 015DD7341EE
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 17:34:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234954AbjFQPd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 11:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
+        id S236101AbjFQPex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 11:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbjFQPd4 (ORCPT
+        with ESMTP id S235450AbjFQPeu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 11:33:56 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C20173A;
-        Sat, 17 Jun 2023 08:33:55 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id 46e09a7af769-6b162127472so1673684a34.0;
-        Sat, 17 Jun 2023 08:33:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687016035; x=1689608035;
-        h=in-reply-to:references:message-id:to:from:subject:cc:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eIrXu2yfb9Pam+bpdsMdAx2WWEzIapMDlsAs1QsbBws=;
-        b=RBZwfxwyvUmlx7gfaQja0EIyLztHe3BBUZtCltHvzg1JOEml2iTtCdo/pr3V/Dnua9
-         qGM2FmKPCVsX2/2Fjbs60I8YYyMvq7C5o4kKo+/q3YpC3GveuIiQeGTD/FMg6w+RKqFV
-         0ebDTbFibZEMMgur9SAVFAvLlQ26gZaWVfFMPHY9BW8SA+G8spyrFul4hiZpMBAzVI65
-         o1FXpATjrIN6T0ClfgpDB5AO4pZ8kZSoKTTvazBlFmmtG5JLQs02am/UbfWrr/jFgAt5
-         kTGr2pRP76Z2JCS31DazLoSsJK+EpcNhxhSSSY4v5EssrtM6dvZx6LYGOIgGCYLwF1qE
-         RAaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687016035; x=1689608035;
-        h=in-reply-to:references:message-id:to:from:subject:cc:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=eIrXu2yfb9Pam+bpdsMdAx2WWEzIapMDlsAs1QsbBws=;
-        b=NwFNtfcs0DjFU+KEYnVvaoL//pptuIVnnR3+rj8P626huU83wE5aoPlcI1a+kNfQ2P
-         dasrgSrl9Em4xzsNH/Fe4rDK/WoZD2hvhmQ9R/QqI8qs4wdIiwKPZcY6DRjeffnPwIRI
-         of3N/dKj5WvQHHSsseX9RdyDOJ+/38HY0gl+mbetccze2c9Mx8NGiOcCVAGHO8LXYcgA
-         DAuab3BvdcNpOmqyOW26yzS13LojQT0GKQ3gyddBXGVGBxcifziNQz3uGergvMZsSgp3
-         RCEi5iJ1pVBgxdGsjvb04U3U6yrDzcXzV+iTQRZ94bwvEALHqS9LggGkR6rfRDeab7n5
-         /tSg==
-X-Gm-Message-State: AC+VfDyZvHeFgL51EjkcyMaZ45QPZxzZOZMFRXaIsPDKspMJ1/EI7kxw
-        cY6ND+2WOgjCAgNR1ruEN4I=
-X-Google-Smtp-Source: ACHHUZ4cTukZlbOT2Rzej4qrlx/YeNZFj5PqAaaj504WWtITW+WCdZ/wmMf5sdoXCfsGaSEUg7HjFw==
-X-Received: by 2002:a05:6830:43:b0:6ac:86bf:f621 with SMTP id d3-20020a056830004300b006ac86bff621mr2754731otp.7.1687016034741;
-        Sat, 17 Jun 2023 08:33:54 -0700 (PDT)
-Received: from localhost ([2600:1700:f3b0:64c0::35])
-        by smtp.gmail.com with ESMTPSA id k1-20020a056830168100b006addf2a4110sm8614459otr.55.2023.06.17.08.33.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Jun 2023 08:33:54 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Sat, 17 Jun 2023 10:33:51 -0500
-Cc:     "Nathan Chancellor" <nathan@kernel.org>,
-        "Nick Desaulniers" <ndesaulniers@google.com>,
-        "Nicolas Schier" <nicolas@fjasle.eu>,
-        "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
-        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        "Benno Lossin" <benno.lossin@proton.me>,
-        "Alice Ryhl" <aliceryhl@google.com>,
-        "Andreas Hindborg" <nmi@metaspace.dk>,
-        <linux-kbuild@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <patches@lists.linux.dev>,
-        "Jordan Isaacs" <mail@jdisaacs.com>,
-        "Tiago Lam" <tiagolam@gmail.com>
-Subject: Re: [PATCH v2 07/11] kbuild: rust_is_available: fix confusion when
- a version appears in the path
-From:   "Ethan D. Twardy" <ethan.twardy@gmail.com>
-To:     "Miguel Ojeda" <ojeda@kernel.org>,
-        "Masahiro Yamada" <masahiroy@kernel.org>,
-        "Wedson Almeida Filho" <wedsonaf@gmail.com>,
-        "Alex Gaynor" <alex.gaynor@gmail.com>
-Message-Id: <CTF19P8FLNUZ.3OA1ANA7IUG87@hackbook>
-X-Mailer: aerc 9999
-References: <20230616001631.463536-1-ojeda@kernel.org>
- <20230616001631.463536-8-ojeda@kernel.org>
-In-Reply-To: <20230616001631.463536-8-ojeda@kernel.org>
+        Sat, 17 Jun 2023 11:34:50 -0400
+Received: from out-42.mta0.migadu.com (out-42.mta0.migadu.com [IPv6:2001:41d0:1004:224b::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999312103
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 08:34:46 -0700 (PDT)
+Date:   Sat, 17 Jun 2023 11:34:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1687016083;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=y/n1M3rkIqj2fYlcf86oQKmm6toDjWN0ksVwZeIikJo=;
+        b=dOatmczg4Jywa17R64WDUuNlLFHSl0gHLdFxUjiRip5Y9HERUHlvyqQktBUOYz3C04QOpZ
+        yi8bWqsNiwlZWZ1G/Lf4997PNQLyIwqM+VFcfnJ0l2MuAillQ1X2IWn1/r9IYihlBZtgR0
+        NixVJmtd1KAhXd70CJAq2tCS+y+D2d4=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-bcachefs@vger.kernel.org" <linux-bcachefs@vger.kernel.org>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
+Message-ID: <ZI3Sh6p8b4FcP0Y2@moria.home.lan>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-8-kent.overstreet@linux.dev>
+ <3508afc0-6f03-a971-e716-999a7373951f@wdc.com>
+ <202305111525.67001E5C4@keescook>
+ <ZF6Ibvi8U9B+mV1d@moria.home.lan>
+ <202305161401.F1E3ACFAC@keescook>
+ <ZGPzocRpSlg+4vgN@moria.home.lan>
+ <1d249326-e3dd-9c9d-7b53-2fffeb39bfb4@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1d249326-e3dd-9c9d-7b53-2fffeb39bfb4@kernel.org>
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu Jun 15, 2023 at 7:16 PM CDT, Miguel Ojeda wrote:
-> ---
->  scripts/rust_is_available.sh | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/scripts/rust_is_available.sh b/scripts/rust_is_available.sh
-> index 7e0368babe64..810691af66eb 100755
-> --- a/scripts/rust_is_available.sh
-> +++ b/scripts/rust_is_available.sh
-> @@ -157,9 +157,7 @@ fi
->  # of the `libclang` found by the Rust bindings generator is suitable.
->  bindgen_libclang_version=3D$( \
->  	echo "$bindgen_libclang_output" \
-> -		| grep -F 'clang version ' \
-> -		| grep -oE '[0-9]+\.[0-9]+\.[0-9]+' \
-> -		| head -n 1 \
-> +		| sed -nE 's:.*clang version ([0-9]+\.[0-9]+\.[0-9]+).*:\1:p'
->  )
->  bindgen_libclang_min_version=3D$($min_tool_version llvm)
->  bindgen_libclang_cversion=3D$(get_canonical_version $bindgen_libclang_ve=
-rsion)
+On Fri, Jun 16, 2023 at 09:13:22PM -0700, Andy Lutomirski wrote:
+> On 5/16/23 14:20, Kent Overstreet wrote:
+> > On Tue, May 16, 2023 at 02:02:11PM -0700, Kees Cook wrote:
+> > > For something that small, why not use the text_poke API?
+> > 
+> > This looks like it's meant for patching existing kernel text, which
+> > isn't what I want - I'm generating new functions on the fly, one per
+> > btree node.
+> 
+> Dynamically generating code is a giant can of worms.
+> 
+> Kees touched on a basic security thing: a linear address mapped W+X is a big
+> no-no.  And that's just scratching the surface -- ideally we would have a
+> strong protocol for generating code: the code is generated in some
+> extra-secure context, then it's made immutable and double-checked, then
+> it becomes live.
 
-Reviewed-By: Ethan Twardy <ethan.twardy@gmail.com>
-Tested-By: Ethan Twardy <ethan.twardy@gmail.com>
+"Double checking" arbitrary code is is fantasy. You can't "prove the
+security" of arbitrary code post compilation.
+
+Rice's theorem states that any nontrivial property of a program is
+either a direct consequence of the syntax, or is undecidable. It's why
+programs in statically typed languages are easier to reason about, and
+it's also why the borrow checker in Rust is a syntactic construct.
+
+You just have to be able to trust the code that generates the code. Just
+like you have to be able to trust any other code that lives in kernel
+space.
+
+This is far safer and easier to reason about than what BPF is doing
+because we're not compiling arbitrary code, the actual codegen part is
+200 loc and the input is just a single table.
+
+> 
+> (When x86 modifies itself at boot or for static keys, it changes out the
+> page tables temporarily.)
+> 
+> And even beyond security, we have correctness.  x86 is a fairly forgiving
+> architecture.  If you go back in time about 20 years, modify
+> some code *at the same linear address at which you intend to execute it*,
+> and jump to it, it works.  It may even work if you do it through
+> an alias (the manual is vague).  But it's not 20 years ago, and you have
+> multiple cores.  This does *not* work with multiple CPUs -- you need to
+> serialize on the CPU executing the modified code.  On all the but the very
+> newest CPUs, you need to kludge up the serialization, and that's
+> sloooooooooooooow.  Very new CPUs have the SERIALIZE instruction, which
+> is merely sloooooow.
+
+If what you were saying was true, it would be an issue any time we
+mapped in new executable code for userspace - minor page faults would be
+stupidly slow.
+
+This code has been running on thousands of machines for years, and the
+only issues that have come up have been due to the recent introduction
+of indirect branch tracking. x86 doesn't have such broken caches, and
+architectures that do have utterly broken caches (because that's what
+you're describing: you're describing caches that _are not coherent
+across cores_) are not high on my list of things I care about.
+
+Also, SERIALIZE is a spectre thing. Not relevant here.
+
+> Based on the above, I regret to inform you that jit_update() will either
+> need to sync all cores via IPI or all cores will need to check whether a
+> sync is needed and do it themselves.
+
+text_poke() doesn't even send IPIs.
+
+I think you've been misled about some things :)
