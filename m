@@ -2,83 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A734C734178
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 15:46:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 726D0734179
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 15:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234727AbjFQNq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 09:46:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44068 "EHLO
+        id S234358AbjFQNsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 09:48:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234374AbjFQNqX (ORCPT
+        with ESMTP id S229643AbjFQNse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 09:46:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C12AA1BF9
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 06:46:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DFDC60FDB
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 13:46:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F7ADC433C8;
-        Sat, 17 Jun 2023 13:46:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687009579;
-        bh=JY48Q9h8/zPsasO5RFQPKvoVzkgofY9CUa1T4CXsfmw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Kfj/Hu0DzPAof1+l7kgXMtgxOB7LduhDHyh+C+lKxEnvHQLkINUtdP5nPFmxdIUTL
-         cvLgkVFdUUM7NkGbH/PZwO6m8AHbNBEQZgLil4hNScbD4fn5R0eqdBfSp9R+gBAgxJ
-         72lM9aUHJoDPZp1aXFPpEGSCwFzjXPPcx/+HWjkk=
-Date:   Sat, 17 Jun 2023 15:46:17 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [GIT PULL] Staging driver fix for 6.4-rc7
-Message-ID: <ZI25KRBpKGcP0wSf@kroah.com>
+        Sat, 17 Jun 2023 09:48:34 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D7699
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 06:48:32 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-3420c84e530so11847825ab.1
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 06:48:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687009712; x=1689601712;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2ad5CvYu120Tnp8p6CoLp65bBEG4gIpvPDCK1drkPXU=;
+        b=ko/qrOe2qIvrqpKTdWYsFGrIbpHIUMafg3sh+JvAGwtyOMBz0RDuspH1CFghheHuf0
+         IRn37VH1wV4slMzjx4kESNafB4/jRwyIE6fSlO1rcWIsSYqkXLCyiDb1kmB1jyHaCzgd
+         5IajW1YXTFUpzeXS6IY7RHwwYcyqtyEkPtFJK43pPNTGbj+xr8CFhTZ0WwdiU4x1+F7B
+         VYwRt59VCgKDAmBT2vXgo2Sn8iM805BZlMD8bhprXWl/UYK27E0hfdwgdCc1Qm5nxhY0
+         0DonzpuWNbJfiEvcSYjE2JZtzdfiA4+Qr0L8vJ8Hc0d8SAbQjnxhzyerMxKs+ow2ya1d
+         DpJA==
+X-Gm-Message-State: AC+VfDyacT+WcR0w6bAnaq8S3UCAm32s2waif3LmG9nveVpKm/fPrhvs
+        GSTwznnNwRVPL6n/tf7/81h50A36YjLUQ9DPTtu0XWpR3uRU
+X-Google-Smtp-Source: ACHHUZ5foKX5PPdxdDJ+kmslsPGGGXODYHvWZhwRSOoC+lojtF21Llk+nkSG32HQpWqs9ce/idTN5i15IvPjSSOLl7pDBtxRaGRG
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:603:0:b0:340:c135:a371 with SMTP id
+ x3-20020a920603000000b00340c135a371mr1245231ilg.1.1687009711999; Sat, 17 Jun
+ 2023 06:48:31 -0700 (PDT)
+Date:   Sat, 17 Jun 2023 06:48:31 -0700
+In-Reply-To: <20230617130908.1093-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009dd46005fe538e4e@google.com>
+Subject: Re: [syzbot] [bluetooth?] BUG: sleeping function called from invalid
+ context in __hci_cmd_sync_sk
+From:   syzbot <syzbot+c715e1bd8dfbcb1ab176@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+Hello,
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-are available in the Git repository at:
+Reported-and-tested-by: syzbot+c715e1bd8dfbcb1ab176@syzkaller.appspotmail.com
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git tags/staging-6.4-rc7
+Tested on:
 
-for you to fetch changes up to b3dad076a058916c443c93074dc3ee80baaff4ea:
+commit:         1f6ce839 Add linux-next specific files for 20230613
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=13bc9373280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d103d5f9125e9fe9
+dashboard link: https://syzkaller.appspot.com/bug?extid=c715e1bd8dfbcb1ab176
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=14e6e45b280000
 
-  staging: octeon: delete my name from TODO contact (2023-05-08 16:09:33 +0200)
-
-----------------------------------------------------------------
-Staging driver fix for 6.4-rc7
-
-Here is a single staging driver "fix" for 6.4-rc7.  I've been sitting on
-it in my tree for many weeks as it is just a simple documentation
-update, with the hope that maybe some other staging driver fixes would
-need to be merged for 6.4-final, but that does not seem to be the case.
-
-So please, pull in this one documentation update so that Aaro doesn't
-get emails going forward that he can't do anything about.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Aaro Koskinen (1):
-      staging: octeon: delete my name from TODO contact
-
- drivers/staging/octeon/TODO | 1 -
- 1 file changed, 1 deletion(-)
+Note: testing is done by a robot and is best-effort only.
