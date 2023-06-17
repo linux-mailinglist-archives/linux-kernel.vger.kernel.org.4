@@ -2,114 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3968734070
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 13:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74D58734072
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 13:10:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235264AbjFQLJ1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 17 Jun 2023 07:09:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38110 "EHLO
+        id S231423AbjFQLKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 07:10:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233026AbjFQLJZ (ORCPT
+        with ESMTP id S229852AbjFQLKc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 07:09:25 -0400
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B9B172A;
-        Sat, 17 Jun 2023 04:09:25 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-be49e41a3d6so1303230276.1;
-        Sat, 17 Jun 2023 04:09:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687000164; x=1689592164;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ma2ohXdKWjjObauQDSrmhCjbdpKidVQlMZ34Z0kZwiE=;
-        b=k5I7pH9qIn0Cll61CKGkRyHSSBkUh5QTqYkz3j4ZqFtI7FEO6JRtSqjFo4fA+yVo4X
-         XFhxJ38O93rCRPrx81mVnQ6kg6HyjlOoSbrRS+Rh+GG/fiXb+N3JY6f1+wfuKdVw1MwV
-         /+zcKP36mpYvBgcZEDNKyRRbRiKlqrCIIA3G7XzXJRM/m/VzCD+AXipbBpMOUii2bfgB
-         ZOijHOKbQyWRyZKNy+E9OXfXHQAq4xN/qdu8DE9U/heH0Qw84cNaK9XbwfcSRWS9CFyE
-         EfenebNTXRgPiMuKuvNGfE2LvuQadel+1wJpTdqNVbMs/GHE4F8IRt7ptMqluYhaF5Ks
-         Ww0g==
-X-Gm-Message-State: AC+VfDxZRWckjPKXXV5SqwOt3y7iXl2qcN79z53MPPWmTLfqg5g41Zsz
-        axrI+RkZQipNAtZUo4Fy9xhXFvQxmG18zA==
-X-Google-Smtp-Source: ACHHUZ5Y/pYgk5ucg8HwGRJxY+NblBL9zjJdCXIufrkqCP3bvSEqTEgLzYTRE4oVwoxhTTOW30PCow==
-X-Received: by 2002:a25:fc10:0:b0:bb1:5628:59ee with SMTP id v16-20020a25fc10000000b00bb1562859eemr1400672ybd.28.1687000164051;
-        Sat, 17 Jun 2023 04:09:24 -0700 (PDT)
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
-        by smtp.gmail.com with ESMTPSA id b13-20020a5b0b4d000000b00bcb4ac1fbc6sm2868049ybr.30.2023.06.17.04.09.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Jun 2023 04:09:23 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-bcad7f7dabcso1479716276.0;
-        Sat, 17 Jun 2023 04:09:23 -0700 (PDT)
-X-Received: by 2002:a25:2404:0:b0:bc7:f83f:92f4 with SMTP id
- k4-20020a252404000000b00bc7f83f92f4mr1344930ybk.39.1687000163316; Sat, 17 Jun
- 2023 04:09:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230527164452.64797-1-contact@artur-rojek.eu>
- <20230527164452.64797-4-contact@artur-rojek.eu> <CAMuHMdV3gn8g-gKam71K=WfT3CVNwvz5eKPSh2Fqi3wVg7ZwNw@mail.gmail.com>
- <f7b9ceb9739f8ae5cbee4f6073ce3af3921a2540.camel@physik.fu-berlin.de>
- <CAMuHMdVFBo+KMNQ6gzh3rZrZ+_Wfg=UJ4XOW4Uqibnjm6T7CdA@mail.gmail.com>
- <8205bc2cb9f983914ff6920deed3f54893713ba0.camel@physik.fu-berlin.de> <d5667e9675bf8be35b1a5414d443b8f371b1bd9e.camel@physik.fu-berlin.de>
-In-Reply-To: <d5667e9675bf8be35b1a5414d443b8f371b1bd9e.camel@physik.fu-berlin.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sat, 17 Jun 2023 13:09:09 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV=kc1sZfsBad99ofbUBUyuZ_fAekdkFJYp9Rhskf9xWg@mail.gmail.com>
-Message-ID: <CAMuHMdV=kc1sZfsBad99ofbUBUyuZ_fAekdkFJYp9Rhskf9xWg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] sh: dma: Correct the number of DMA channels in SH7709
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Artur Rojek <contact@artur-rojek.eu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Rafael Ignacio Zurita <rafaelignacio.zurita@gmail.com>,
-        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Sat, 17 Jun 2023 07:10:32 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E161722
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 04:10:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687000231; x=1718536231;
+  h=date:from:to:cc:subject:message-id;
+  bh=CXRqCFF5rkpqCd3L7+zXpYnlu0o3ej5C40fN3Kqo9Xg=;
+  b=Uf8l+U+wR2KkU5aOn5GEO1Hopm6CaoHKQ4W282ITXXY0ssZprOve1Byc
+   tC/UN2rsV5axIJgOJl9mXN/B8IEz9UyPu5zT8WgrIMcDyRd2ivmccV9ja
+   h6QZ8HmUi8EfOwoeRhApStw5Q+xNNcO6xoUdT77I/jgT/+tgrlJ+sKupc
+   R04Mq9hJCOBnwSvJhKTnO0vkplKhVJwF7Aefd/shNV4PUbam9Dj51MjsQ
+   nhzg0x3DDmn5dT6BtvWPZZwK5y8Jv5f4PdUwErO0OT6xzVctVLtpME95I
+   5a+rE1Y4VomzqurCwWak0F4BS5eksxiTHGp7q14MdphP6elJBRKO5eam4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="388249667"
+X-IronPort-AV: E=Sophos;i="6.00,250,1681196400"; 
+   d="scan'208";a="388249667"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2023 04:10:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="1043379732"
+X-IronPort-AV: E=Sophos;i="6.00,250,1681196400"; 
+   d="scan'208";a="1043379732"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 17 Jun 2023 04:10:30 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qATp8-0002h6-0M;
+        Sat, 17 Jun 2023 11:10:30 +0000
+Date:   Sat, 17 Jun 2023 19:09:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/boot] BUILD SUCCESS
+ 0a9567ac5e6a40cdd9c8cd15b19a62a15250f450
+Message-ID: <202306171950.bAQ4dfhj-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adrian,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/boot
+branch HEAD: 0a9567ac5e6a40cdd9c8cd15b19a62a15250f450  x86/mem_encrypt: Unbreak the AMD_MEM_ENCRYPT=n build
 
-On Sat, Jun 17, 2023 at 9:32 AM John Paul Adrian Glaubitz
-<glaubitz@physik.fu-berlin.de> wrote:
-> On Thu, 2023-06-08 at 12:03 +0200, John Paul Adrian Glaubitz wrote:
-> > > > > That is actually safer, as the user can override NR_ONCHIP_DMA_CHANNELS
-> > > > > when configuring his kernel, thus breaking DMA  due to an incorrect
-> > > > > value of SH_DMAC_NR_MD_CH.
-> > > > >
-> > > > > Unfortunately we cannot protect against that when using a single DMAC,
-> > > > > as SH_DMAC_NR_MD_CH can be either 4, 6, or 8.
-> > > > >
-> > > > > Perhaps this configuration should be moved from Kconfig to <cpu/dma.h>,
-> > > > > to protect against a user overriding this value?
-> > > >
-> > > > Isn't SH_DMAC_NR_MD_CH already hardwired to the SoC being used?
-> > >
-> > > It depends on CONFIG_NR_ONCHIP_DMA_CHANNELS, while it
-> > > should be fixed based on the SoC.
-> >
-> > I agree. However, I would be fine with merging this patch set first and fixing
-> > this particular issue in a follow-up series.
->
-> So, my suggestion is to take this series as-is for 6.5, then get the other issues
-> you mentioned fixed for 6.6. I think it's already a gain when these issues are
-> fixed and the kernel boots on the HP Journada 680 again.
+elapsed time: 877m
 
-Sure, I don't want to block the acceptance of this series at all.
-Thanks!
+configs tested: 119
+configs skipped: 5
 
-Gr{oetje,eeting}s,
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-                        Geert
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r006-20230616   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r016-20230616   gcc  
+arc                  randconfig-r032-20230616   gcc  
+arc                  randconfig-r043-20230617   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                       aspeed_g4_defconfig   clang
+arm                       aspeed_g5_defconfig   gcc  
+arm                                 defconfig   gcc  
+arm                          gemini_defconfig   gcc  
+arm                        mvebu_v5_defconfig   clang
+arm                  randconfig-r011-20230616   clang
+arm                  randconfig-r046-20230617   gcc  
+arm                           stm32_defconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r012-20230616   gcc  
+csky                 randconfig-r024-20230617   gcc  
+hexagon              randconfig-r041-20230617   clang
+hexagon              randconfig-r045-20230617   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r004-20230616   clang
+i386         buildonly-randconfig-r005-20230616   clang
+i386         buildonly-randconfig-r006-20230616   clang
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230617   gcc  
+i386                 randconfig-i002-20230617   gcc  
+i386                 randconfig-i003-20230617   gcc  
+i386                 randconfig-i004-20230617   gcc  
+i386                 randconfig-i005-20230617   gcc  
+i386                 randconfig-i006-20230617   gcc  
+i386                 randconfig-i011-20230616   gcc  
+i386                 randconfig-i012-20230616   gcc  
+i386                 randconfig-i013-20230616   gcc  
+i386                 randconfig-i014-20230616   gcc  
+i386                 randconfig-i015-20230616   gcc  
+i386                 randconfig-i016-20230616   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r013-20230616   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                        stmark2_defconfig   gcc  
+microblaze           randconfig-r001-20230616   gcc  
+microblaze           randconfig-r004-20230616   gcc  
+microblaze           randconfig-r022-20230617   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                      maltasmvp_defconfig   gcc  
+mips                 randconfig-r021-20230617   gcc  
+mips                 randconfig-r023-20230617   gcc  
+mips                 randconfig-r036-20230616   gcc  
+nios2                               defconfig   gcc  
+openrisc                            defconfig   gcc  
+openrisc             randconfig-r026-20230617   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r034-20230616   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                      arches_defconfig   gcc  
+powerpc                      ep88xc_defconfig   gcc  
+powerpc                     powernv_defconfig   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r042-20230617   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r025-20230617   clang
+s390                 randconfig-r044-20230617   clang
+sh                               allmodconfig   gcc  
+sh                            migor_defconfig   gcc  
+sh                          r7785rp_defconfig   gcc  
+sh                   randconfig-r015-20230616   gcc  
+sh                           se7722_defconfig   gcc  
+sh                             sh03_defconfig   gcc  
+sh                          urquell_defconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r002-20230616   gcc  
+sparc                randconfig-r005-20230616   gcc  
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                   randconfig-r031-20230616   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230616   clang
+x86_64       buildonly-randconfig-r002-20230616   clang
+x86_64       buildonly-randconfig-r003-20230616   clang
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230617   gcc  
+x86_64               randconfig-a002-20230617   gcc  
+x86_64               randconfig-a003-20230617   gcc  
+x86_64               randconfig-a004-20230617   gcc  
+x86_64               randconfig-a005-20230617   gcc  
+x86_64               randconfig-a006-20230617   gcc  
+x86_64               randconfig-a011-20230616   gcc  
+x86_64               randconfig-a012-20230616   gcc  
+x86_64               randconfig-a013-20230616   gcc  
+x86_64               randconfig-a014-20230616   gcc  
+x86_64               randconfig-a015-20230616   gcc  
+x86_64               randconfig-a016-20230616   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r035-20230616   gcc  
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
