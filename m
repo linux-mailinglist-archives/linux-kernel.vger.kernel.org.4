@@ -2,116 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB2137341EA
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 17:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EF2A7341EC
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 17:34:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234812AbjFQPb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 11:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34170 "EHLO
+        id S234954AbjFQPd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 11:33:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231618AbjFQPby (ORCPT
+        with ESMTP id S229782AbjFQPd4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 11:31:54 -0400
-Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A4A173A;
-        Sat, 17 Jun 2023 08:31:53 -0700 (PDT)
-Received: by mail-oo1-xc31.google.com with SMTP id 006d021491bc7-55af55a0fdaso1377113eaf.2;
-        Sat, 17 Jun 2023 08:31:53 -0700 (PDT)
+        Sat, 17 Jun 2023 11:33:56 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C20173A;
+        Sat, 17 Jun 2023 08:33:55 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id 46e09a7af769-6b162127472so1673684a34.0;
+        Sat, 17 Jun 2023 08:33:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687015913; x=1689607913;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1687016035; x=1689608035;
+        h=in-reply-to:references:message-id:to:from:subject:cc:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GFRcy9xaOtTkKOFXeluqYOSA9lXpSOxpkjdjDAIDgE4=;
-        b=AT538ixHycIm85RDPffWsO9rvNnXRUxHrFBotGzvrmdnjjH4/kINcPQjgq0EaC+cUE
-         Kx8dxo3LMHYCsnJJptACcSqYm8J/2e/FOiBz98jsfY7qST1bXLFv/WQURbsH20t9a0Le
-         uCJFHY6vAqQIg544kpbaHDJNFi7C9e7DEAVUkRAXp7Okjk/K8nyiQ54J6DABp+sRlBZ9
-         Jh0b+nOzTFX2QAmAYFuowAtiDWPP+XFlgAUGtpnSQucwKWSfFXh/T04Ll5fOfSBXkxQ+
-         71gHj+SvQkV82eyFi5JsZiGwsUmNd1zK0e1Fgiu5bZAkn6/koL81kAmAlWgqJEDC75KI
-         W4og==
+        bh=eIrXu2yfb9Pam+bpdsMdAx2WWEzIapMDlsAs1QsbBws=;
+        b=RBZwfxwyvUmlx7gfaQja0EIyLztHe3BBUZtCltHvzg1JOEml2iTtCdo/pr3V/Dnua9
+         qGM2FmKPCVsX2/2Fjbs60I8YYyMvq7C5o4kKo+/q3YpC3GveuIiQeGTD/FMg6w+RKqFV
+         0ebDTbFibZEMMgur9SAVFAvLlQ26gZaWVfFMPHY9BW8SA+G8spyrFul4hiZpMBAzVI65
+         o1FXpATjrIN6T0ClfgpDB5AO4pZ8kZSoKTTvazBlFmmtG5JLQs02am/UbfWrr/jFgAt5
+         kTGr2pRP76Z2JCS31DazLoSsJK+EpcNhxhSSSY4v5EssrtM6dvZx6LYGOIgGCYLwF1qE
+         RAaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687015913; x=1689607913;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GFRcy9xaOtTkKOFXeluqYOSA9lXpSOxpkjdjDAIDgE4=;
-        b=hCxfvobIxvOR092r0UUhv2TBMplWCISorA8eu6DCEBRXA8BYeWZ6CEyJyqwg4QvyeL
-         TyfPxdXswn5iiyJ9MoANq+TyIQ1a1N1v1O+TnWRQPiZXaCMwVJn58hSZ8Ls5UngBK0w7
-         h3V0OUsSsSCblLoctHfCeWgYnrjd3m1pasn1esgR3A0ro4X9HnPkBdzZ0GoPk4m29D9z
-         NLKally9tMQd6J40UNnS5WX1LYdZ4mZGENnz03IDlvZA+DEbUoc2vLo4+m1KVE8idnCP
-         71aKCOJ+dHACXF7GtL0gFTEclOrjmp+UqsMlLoFt9ZcDqwshSRprsjRl2mOn8keCl8in
-         n+ew==
-X-Gm-Message-State: AC+VfDzBtKLRIQ8oN7aNRL2lhDbKRcz/mCw0hU5rFZYUV0Az+iLkP0l3
-        Qj3qF+AOAaR6K4kzoe8h96Dqdvd3mVs75pyxKr0=
-X-Google-Smtp-Source: ACHHUZ4IUR51rgg1xp03+pO4cesgi9skb05Qde4K9z5nZ+EveB4NjJamwCKIv9Mom8aYSM1s2T/cx+YTL9VUZHMOfGM=
-X-Received: by 2002:a05:6808:1a1c:b0:39c:6a30:cc7f with SMTP id
- bk28-20020a0568081a1c00b0039c6a30cc7fmr7329093oib.21.1687015912939; Sat, 17
- Jun 2023 08:31:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230617052435.359177-3-sergio.paracuellos@gmail.com>
- <TYAP286MB0315AB8274CDD341D49809A2BC59A@TYAP286MB0315.JPNP286.PROD.OUTLOOK.COM>
- <CAMhs-H8rt3-ffvjkNSORiNXQUVCUHCc7FNwYN7TOyQ0DxCe2fA@mail.gmail.com> <a61180e8-5732-2208-3a0c-e2b0137f9290@linaro.org>
-In-Reply-To: <a61180e8-5732-2208-3a0c-e2b0137f9290@linaro.org>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Sat, 17 Jun 2023 17:31:41 +0200
-Message-ID: <CAMhs-H_UZowVdVvQ_G_Jm+yLeCELDxjG=FQDQ-OOLt8FHJUZYg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/9] clk: ralink: add clock and reset driver for MTMIPS SoCs
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Shiji Yang <yangshiji66@outlook.com>, arinc.unal@arinc9.com,
-        devicetree@vger.kernel.org, john@phrozen.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        matthias.bgg@gmail.com, mturquette@baylibre.com,
-        p.zabel@pengutronix.de, robh+dt@kernel.org, sboyd@kernel.org,
-        tsbogend@alpha.franken.de
-Content-Type: text/plain; charset="UTF-8"
+        d=1e100.net; s=20221208; t=1687016035; x=1689608035;
+        h=in-reply-to:references:message-id:to:from:subject:cc:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=eIrXu2yfb9Pam+bpdsMdAx2WWEzIapMDlsAs1QsbBws=;
+        b=NwFNtfcs0DjFU+KEYnVvaoL//pptuIVnnR3+rj8P626huU83wE5aoPlcI1a+kNfQ2P
+         dasrgSrl9Em4xzsNH/Fe4rDK/WoZD2hvhmQ9R/QqI8qs4wdIiwKPZcY6DRjeffnPwIRI
+         of3N/dKj5WvQHHSsseX9RdyDOJ+/38HY0gl+mbetccze2c9Mx8NGiOcCVAGHO8LXYcgA
+         DAuab3BvdcNpOmqyOW26yzS13LojQT0GKQ3gyddBXGVGBxcifziNQz3uGergvMZsSgp3
+         RCEi5iJ1pVBgxdGsjvb04U3U6yrDzcXzV+iTQRZ94bwvEALHqS9LggGkR6rfRDeab7n5
+         /tSg==
+X-Gm-Message-State: AC+VfDyZvHeFgL51EjkcyMaZ45QPZxzZOZMFRXaIsPDKspMJ1/EI7kxw
+        cY6ND+2WOgjCAgNR1ruEN4I=
+X-Google-Smtp-Source: ACHHUZ4cTukZlbOT2Rzej4qrlx/YeNZFj5PqAaaj504WWtITW+WCdZ/wmMf5sdoXCfsGaSEUg7HjFw==
+X-Received: by 2002:a05:6830:43:b0:6ac:86bf:f621 with SMTP id d3-20020a056830004300b006ac86bff621mr2754731otp.7.1687016034741;
+        Sat, 17 Jun 2023 08:33:54 -0700 (PDT)
+Received: from localhost ([2600:1700:f3b0:64c0::35])
+        by smtp.gmail.com with ESMTPSA id k1-20020a056830168100b006addf2a4110sm8614459otr.55.2023.06.17.08.33.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 17 Jun 2023 08:33:54 -0700 (PDT)
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Sat, 17 Jun 2023 10:33:51 -0500
+Cc:     "Nathan Chancellor" <nathan@kernel.org>,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        "Nicolas Schier" <nicolas@fjasle.eu>,
+        "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
+        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        "Benno Lossin" <benno.lossin@proton.me>,
+        "Alice Ryhl" <aliceryhl@google.com>,
+        "Andreas Hindborg" <nmi@metaspace.dk>,
+        <linux-kbuild@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <patches@lists.linux.dev>,
+        "Jordan Isaacs" <mail@jdisaacs.com>,
+        "Tiago Lam" <tiagolam@gmail.com>
+Subject: Re: [PATCH v2 07/11] kbuild: rust_is_available: fix confusion when
+ a version appears in the path
+From:   "Ethan D. Twardy" <ethan.twardy@gmail.com>
+To:     "Miguel Ojeda" <ojeda@kernel.org>,
+        "Masahiro Yamada" <masahiroy@kernel.org>,
+        "Wedson Almeida Filho" <wedsonaf@gmail.com>,
+        "Alex Gaynor" <alex.gaynor@gmail.com>
+Message-Id: <CTF19P8FLNUZ.3OA1ANA7IUG87@hackbook>
+X-Mailer: aerc 9999
+References: <20230616001631.463536-1-ojeda@kernel.org>
+ <20230616001631.463536-8-ojeda@kernel.org>
+In-Reply-To: <20230616001631.463536-8-ojeda@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 4:44=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+On Thu Jun 15, 2023 at 7:16 PM CDT, Miguel Ojeda wrote:
+> ---
+>  scripts/rust_is_available.sh | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 >
-> On 17/06/2023 15:26, Sergio Paracuellos wrote:
-> >>> void __init plat_time_init(void)
-> >>> {
-> >>> +      struct of_phandle_args clkspec;
-> >>>       struct clk *clk;
-> >>> +      int cpu_clk_idx;
-> >>>
-> >>>       ralink_of_remap();
-> >>>
-> >>> -      ralink_clk_init();
-> >>> -      clk =3D clk_get_sys("cpu", NULL);
-> >>> +      cpu_clk_idx =3D clk_cpu_index();
-> >>> +      if (cpu_clk_idx =3D=3D -1)
-> >>> +              panic("unable to get CPU clock index");
-> >>> +
-> >>> +      of_clk_init(NULL);
-> >>> +      clkspec.np =3D of_find_node_by_name(NULL, "sysc");
-> >>
-> >> The node name should be "syscon" as the example node name in the
-> >> dt-bindings document is "syscon".
-> >
-> > sysc is label to get this node since it is the one shared by all
-> > different dtsi files.
->
-> If it is label, why do you use it to get by name? name !=3D label.
+> diff --git a/scripts/rust_is_available.sh b/scripts/rust_is_available.sh
+> index 7e0368babe64..810691af66eb 100755
+> --- a/scripts/rust_is_available.sh
+> +++ b/scripts/rust_is_available.sh
+> @@ -157,9 +157,7 @@ fi
+>  # of the `libclang` found by the Rust bindings generator is suitable.
+>  bindgen_libclang_version=3D$( \
+>  	echo "$bindgen_libclang_output" \
+> -		| grep -F 'clang version ' \
+> -		| grep -oE '[0-9]+\.[0-9]+\.[0-9]+' \
+> -		| head -n 1 \
+> +		| sed -nE 's:.*clang version ([0-9]+\.[0-9]+\.[0-9]+).*:\1:p'
+>  )
+>  bindgen_libclang_min_version=3D$($min_tool_version llvm)
+>  bindgen_libclang_cversion=3D$(get_canonical_version $bindgen_libclang_ve=
+rsion)
 
-Sorry I meant both of them, node name in dtsi file and also label for
-referring to it from other nodes.
-
->
-> Best regards,
-> Krzysztof
->
-
-Best regards,
-    Sergio Paracuellos
+Reviewed-By: Ethan Twardy <ethan.twardy@gmail.com>
+Tested-By: Ethan Twardy <ethan.twardy@gmail.com>
