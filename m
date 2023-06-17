@@ -2,147 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB1E4733E33
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 07:17:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46169733E36
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 07:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232948AbjFQFRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 01:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
+        id S233296AbjFQFYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 01:24:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjFQFRU (ORCPT
+        with ESMTP id S233039AbjFQFYk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 01:17:20 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A8310D1
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 22:17:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686979039; x=1718515039;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=V5xkK2rElWwrYcGj6hIZaRQE8ORUl+xbKEeQFpcOimk=;
-  b=ESzppGJWj58GNloyimQ5M7W0v3TTgFY0+2nXyaVjFXsDnf+0YYNwxrvd
-   4TQ20/Stjm1hlt8EZwAbJWShjbpWXS7toE2Ce7DVnKz9tpJCAZVQY5uIF
-   Z+J1Fey/VrrkGeZKHPrHIwUitnCC7yUQxHYFGBx4ZurMYDv01OD0IH9E2
-   DKi05dei9nhuZgJTBWu2GF8vgJUOKiv/hFvwlXATHDS3oqzGgQzBQ2Cou
-   FQmpEHDjyE1SU52198RHY30Tf9W1cZJCllrwXbGdMmADyYyY/5fbTVAw3
-   G7bFc0shyE+XjsrgiiWvfsq8xGmIlz1f7oTl3PA2rqOHyj6RGGIVlr5h3
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="425303234"
-X-IronPort-AV: E=Sophos;i="6.00,249,1681196400"; 
-   d="scan'208";a="425303234"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 22:17:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="707315736"
-X-IronPort-AV: E=Sophos;i="6.00,249,1681196400"; 
-   d="scan'208";a="707315736"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 16 Jun 2023 22:17:17 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qAOJI-0002Jw-0h;
-        Sat, 17 Jun 2023 05:17:16 +0000
-Date:   Sat, 17 Jun 2023 13:16:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Ingo Molnar <mingo@kernel.org>
-Subject: mm/kasan/shadow.c:49: multiple definition of `memset';
- arch/x86/lib/memset_64.o:arch/x86/um/../lib/memset_64.S:29: first defined
- here
-Message-ID: <202306171302.fa4CDGXG-lkp@intel.com>
+        Sat, 17 Jun 2023 01:24:40 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802DB1FDD;
+        Fri, 16 Jun 2023 22:24:38 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-519274f7b05so2023745a12.3;
+        Fri, 16 Jun 2023 22:24:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686979476; x=1689571476;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qZaKN6gGmQ/oA4Z4nV3ooBnlset17m+/j+OKKJXvACI=;
+        b=fBLve9yc16crS8VW0xoaUuUwbIIRMygsPb43FxmPrRxkav3yk9Xmgv+jqkBkIUdFya
+         9bMPjK9FVcWlQt/2fwK3WQ78fUTke7QZ3+KYICDLTVA9TcxbCeC4MuNj+7smcjEn3j4p
+         0kuZ0+CNzHxXVUsUfmFK6Myv2AI7zZGhVRHmIWFtjzljA/dP16c0HetPiOeP7uHOz5YJ
+         AcRb+w+yh/uk+H2/uwLIXrRO/tSorlffgeVXKIv2UAUwsCS+ONEtcQrh/H0mYisAk+jz
+         yIpaEV65fBorcT2yVDVs2D+k2+primGcwhXAr2vT7IsRB8L+rZVKX9lvvzbnqruD5a2g
+         //jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686979476; x=1689571476;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qZaKN6gGmQ/oA4Z4nV3ooBnlset17m+/j+OKKJXvACI=;
+        b=VcxtB3I6dq4mQ54MxxzAUlgRO5jwcInIWBnjM0Gr2+qTM3/LGjTkeam/8TRwIrziqt
+         YPcEHDrx3VMkm/xBZzGk0H0xIuEjh72D6FfRsX6ZqiY5SrEPnR/ybke8m9BBnoE4kKkw
+         CX4+EpV+5TBI8DI9SbJfV6vMOd9V1E0DZ+0OQg/sjEE872M4eAzAD7CB8e8338xeYNV1
+         xFNPe0Z6ggIsfQ/XoN3+WvjXmsiMVJPV7jS32kc6YipIm2cWE226nGn7gCgH77w9pnwq
+         aJ2amPscQ2y6BY/el0I9jxLU5PD28hxEMEo8KTv/999phGcOdfkX3AwRF7k7LNDX5Jfk
+         ZeoQ==
+X-Gm-Message-State: AC+VfDx8rf2n/Uq6AS1xyQkqLhV38auvf7bgopemJkaqJVhHJn7GiMPM
+        K4zxi2niB0pcsgZO29nGtFpGmzdV78Q=
+X-Google-Smtp-Source: ACHHUZ6jKyuPUdrTXi1Qpz+ZEhzWkC/+3AorpK1bxsTvBPcyokHcmnGTxSWyo7rR4QfSLAD+AWlsgg==
+X-Received: by 2002:a17:907:97d4:b0:94b:4a4:2836 with SMTP id js20-20020a17090797d400b0094b04a42836mr3929885ejc.69.1686979476340;
+        Fri, 16 Jun 2023 22:24:36 -0700 (PDT)
+Received: from localhost.localdomain (61.red-88-10-54.dynamicip.rima-tde.net. [88.10.54.61])
+        by smtp.gmail.com with ESMTPSA id a3-20020a056000050300b003068f5cca8csm25198228wrf.94.2023.06.16.22.24.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 22:24:35 -0700 (PDT)
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+To:     linux-clk@vger.kernel.org
+Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
+        john@phrozen.org, linux-kernel@vger.kernel.org,
+        p.zabel@pengutronix.de, mturquette@baylibre.com, sboyd@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, devicetree@vger.kernel.org,
+        arinc.unal@arinc9.com
+Subject: [PATCH v4 0/9] [PATCH v3 0/9] mips: ralink: add complete clock and reset driver for mtmips SoCs
+Date:   Sat, 17 Jun 2023 07:24:26 +0200
+Message-Id: <20230617052435.359177-1-sergio.paracuellos@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1639fae5132bc8a904af28d97cea0bedb3af802e
-commit: 69d4c0d3218692ffa56b0e1b9c76c50c699d7044 entry, kasan, x86: Disallow overriding mem*() functions
-date:   5 months ago
-config: um-randconfig-r012-20230617 (https://download.01.org/0day-ci/archive/20230617/202306171302.fa4CDGXG-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=69d4c0d3218692ffa56b0e1b9c76c50c699d7044
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 69d4c0d3218692ffa56b0e1b9c76c50c699d7044
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=um olddefconfig
-        make W=1 O=build_dir ARCH=um SHELL=/bin/bash
+Hi all!
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306171302.fa4CDGXG-lkp@intel.com/
+This patchset is a big effort to properly implement a clock and reset
+driver for old ralink SoCs. This allow to properly define clocks in 
+device tree and avoid to use fixed-clocks directly from 'arch/mips/ralink'
+architecture directory code.
 
-All errors (new ones prefixed by >>):
+Device tree 'sysc' node will be both clock and reset provider using 
+'clock-cells' and 'reset-cells' properties.
 
-   ld: mm/kasan/shadow.o: in function `memset':
->> mm/kasan/shadow.c:49: multiple definition of `memset'; arch/x86/lib/memset_64.o:arch/x86/um/../lib/memset_64.S:29: first defined here
-   ld: mm/kasan/shadow.o: in function `memmove':
->> mm/kasan/shadow.c:59: multiple definition of `memmove'; arch/x86/lib/memmove_64.o:arch/x86/um/../lib/memmove_64.S:31: first defined here
-   ld: mm/kasan/shadow.o: in function `memcpy':
->> mm/kasan/shadow.c:70: multiple definition of `memcpy'; arch/x86/lib/memcpy_64.o:arch/x86/um/../lib/memcpy_64.S:32: first defined here
+The ralink SoCs we are taking about are RT2880, RT3050, RT3052, RT3350,
+RT3352, RT3883, RT5350, MT7620, MT7628 and MT7688. Mostly the code in
+this new driver has been extracted from 'arch/mips/ralink' and cleanly
+put using kernel clock and reset driver APIs. The clock plans for this
+SoCs only talks about relation between CPU frequency and BUS frequency.
+This relation is different depending on the particular SoC. CPU clock is
+derived from XTAL frequencies.
 
+ Depending on the SoC we have the following frequencies:
+ * RT2880 SoC:
+     - XTAL: 40 MHz.
+     - CPU: 250, 266, 280 or 300 MHz.
+     - BUS: CPU / 2 MHz.
+  * RT3050, RT3052, RT3350:
+     - XTAL: 40 MHz.
+     - CPU: 320 or 384 MHz.
+     - BUS: CPU / 3 MHz.
+  * RT3352:
+     - XTAL: 40 MHz.
+     - CPU: 384 or 400 MHz.
+     - BUS: CPU / 3 MHz.
+     - PERIPH: 40 MHz.
+  * RT3383:
+     - XTAL: 40 MHz.
+     - CPU: 250, 384, 480 or 500 MHz.
+     - BUS: Depends on RAM Type and CPU:
+       + RAM DDR2: 125. ELSE 83 MHz.
+       + RAM DDR2: 128. ELSE 96 MHz.
+       + RAM DDR2: 160. ELSE 120 MHz.
+       + RAM DDR2: 166. ELSE 125 MHz.
+  * RT5350:
+      - XTAL: 40 MHz.
+      - CPU: 300, 320 or 360 MHz.
+      - BUS: CPU / 3, CPU / 4, CPU / 3 MHz.
+      - PERIPH: 40 MHz.
+  * MT7628 and MT7688:
+     - XTAL: 20 MHz or 40 MHz.
+     - CPU: 575 or 580 MHz.
+     - BUS: CPU / 3.
+     - PCMI2S: 480 MHz.
+     - PERIPH: 40 MHz.
+  * MT7620:
+     - XTAL: 20 MHz or 40 MHz.
+     - PLL: XTAL, 480, 600 MHz.
+     - CPU: depends on PLL and some mult and dividers.
+     - BUS: depends on PLL and some mult and dividers.
+     - PERIPH: 40 or XTAL MHz.
 
-vim +49 mm/kasan/shadow.c
+MT7620 is a bit more complex deriving CPU clock from a PLL and an bunch of
+register reads and predividers. To derive CPU and BUS frequencies in the
+MT7620 SoC 'mt7620_calc_rate()' helper is used.
+In the case XTAL can have different frequencies and we need a different
+clock frequency for peripherals 'periph' clock in introduced.
+The rest of the peripherals present in the SoC just follow their parent
+frequencies.
 
-bb359dbcb70085 Andrey Konovalov 2020-12-22  40  
-69d4c0d3218692 Peter Zijlstra   2023-01-12  41  #ifndef CONFIG_GENERIC_ENTRY
-69d4c0d3218692 Peter Zijlstra   2023-01-12  42  /*
-69d4c0d3218692 Peter Zijlstra   2023-01-12  43   * CONFIG_GENERIC_ENTRY relies on compiler emitted mem*() calls to not be
-69d4c0d3218692 Peter Zijlstra   2023-01-12  44   * instrumented. KASAN enabled toolchains should emit __asan_mem*() functions
-69d4c0d3218692 Peter Zijlstra   2023-01-12  45   * for the sites they want to instrument.
-69d4c0d3218692 Peter Zijlstra   2023-01-12  46   */
-bb359dbcb70085 Andrey Konovalov 2020-12-22  47  #undef memset
-bb359dbcb70085 Andrey Konovalov 2020-12-22  48  void *memset(void *addr, int c, size_t len)
-bb359dbcb70085 Andrey Konovalov 2020-12-22 @49  {
-f00748bfa0246c Andrey Konovalov 2021-02-24  50  	if (!kasan_check_range((unsigned long)addr, len, true, _RET_IP_))
-bb359dbcb70085 Andrey Konovalov 2020-12-22  51  		return NULL;
-bb359dbcb70085 Andrey Konovalov 2020-12-22  52  
-bb359dbcb70085 Andrey Konovalov 2020-12-22  53  	return __memset(addr, c, len);
-bb359dbcb70085 Andrey Konovalov 2020-12-22  54  }
-bb359dbcb70085 Andrey Konovalov 2020-12-22  55  
-bb359dbcb70085 Andrey Konovalov 2020-12-22  56  #ifdef __HAVE_ARCH_MEMMOVE
-bb359dbcb70085 Andrey Konovalov 2020-12-22  57  #undef memmove
-bb359dbcb70085 Andrey Konovalov 2020-12-22  58  void *memmove(void *dest, const void *src, size_t len)
-bb359dbcb70085 Andrey Konovalov 2020-12-22 @59  {
-f00748bfa0246c Andrey Konovalov 2021-02-24  60  	if (!kasan_check_range((unsigned long)src, len, false, _RET_IP_) ||
-f00748bfa0246c Andrey Konovalov 2021-02-24  61  	    !kasan_check_range((unsigned long)dest, len, true, _RET_IP_))
-bb359dbcb70085 Andrey Konovalov 2020-12-22  62  		return NULL;
-bb359dbcb70085 Andrey Konovalov 2020-12-22  63  
-bb359dbcb70085 Andrey Konovalov 2020-12-22  64  	return __memmove(dest, src, len);
-bb359dbcb70085 Andrey Konovalov 2020-12-22  65  }
-bb359dbcb70085 Andrey Konovalov 2020-12-22  66  #endif
-bb359dbcb70085 Andrey Konovalov 2020-12-22  67  
-bb359dbcb70085 Andrey Konovalov 2020-12-22  68  #undef memcpy
-bb359dbcb70085 Andrey Konovalov 2020-12-22  69  void *memcpy(void *dest, const void *src, size_t len)
-bb359dbcb70085 Andrey Konovalov 2020-12-22 @70  {
-f00748bfa0246c Andrey Konovalov 2021-02-24  71  	if (!kasan_check_range((unsigned long)src, len, false, _RET_IP_) ||
-f00748bfa0246c Andrey Konovalov 2021-02-24  72  	    !kasan_check_range((unsigned long)dest, len, true, _RET_IP_))
-bb359dbcb70085 Andrey Konovalov 2020-12-22  73  		return NULL;
-bb359dbcb70085 Andrey Konovalov 2020-12-22  74  
-bb359dbcb70085 Andrey Konovalov 2020-12-22  75  	return __memcpy(dest, src, len);
-bb359dbcb70085 Andrey Konovalov 2020-12-22  76  }
-69d4c0d3218692 Peter Zijlstra   2023-01-12  77  #endif
-69d4c0d3218692 Peter Zijlstra   2023-01-12  78  
+I am using 'mtmips' inside for ralink clock driver. This is aligned with
+pinctrl series recently merged through pinctrl git tree [0].
 
-:::::: The code at line 49 was first introduced by commit
-:::::: bb359dbcb70085a63e8bdbf14837a900750f0cf7 kasan: split out shadow.c from common.c
+I am maintaining ralink as prefix for compatible strings after discussions
+between Rob and Arinc in v2 of this series [1].
 
-:::::: TO: Andrey Konovalov <andreyknvl@google.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+Changes have been compile tested for:
+- RT2880
+- RT3883
+- MT7620
+
+Changes have been properly tested in RT5350 SoC based board (ALL5003 board)
+resulting in a working platform.
+
+Dts files for these SoCs in-tree except MT7621 are incomplete. We are
+planning to align with openWRT files at some point and add extra needed
+changes. Hence I am not touching them at all in these series. If this is
+a problem, please let me know and I will update them.
+
+Talking about merging this series I'd like all of the patches going through
+the MIPS tree if possible.
+
+Thanks in advance for your time.
+
+Best regards,
+    Sergio Paracuellos
+
+Changes in v4:
+- Collect Reviewed-by and Acked-by tags.
+- Pass proper data for 'ralink,rt3352-sysc' and 'ralink,rt3883-sysc' compatible string.
+
+Changes in v3:
+- Address Stephen comments in v2:
+    + Drop unsused include '<linux/clk.h>'.
+    + Add fixed and factor clocks when it makes sense.
+    + Make 'mtmips_periph_clk_ops' named variable.
+    + WARN_ON -> WARN_ON_ONCE.
+    + Avoid CONFIG_USB dependent code. Introduce new 'mtmips_clk_regs_init'.
+    + Don't validate the bindings in the driver.
+    + Make const 'struct clk_init_data' used inside macros.
+    + do_div -> div_u64.
+    + Make use of dev_err_probe.
+
+Changes in v2:
+- Address bindings documentation changes pointed out by Krzysztof:
+    + Rename the file into 'mediatek,mtmips-sysc.yaml'.
+    + Redo commit subject and log message.
+    + Order compatibles alphabetically.
+    + Redo bindings description taking into account this is a system
+      controller node which provides both clocks and resets to the world.
+    + Drop label from example.
+    + Use 'syscon' as node name in example.
+    + Drop no sense 'ralink,rt2880-reset' compatible string 
+- Squash patches 6 and 7 together as pointed out by Stephen Boyd.
+
+Previoous series:
+v3: https://lore.kernel.org/linux-mips/20230616064735.GA6380@alpha.franken.de/T/#mafbc1704938b94a367c4b6240d9880a67be1f92f
+v2: https://lore.kernel.org/linux-clk/CAMhs-H-BfZb3mD8E=LeJ4vT22uibQ1DnaZsfTrtRxSiv=8L5RA@mail.gmail.com/T/#t
+v1: https://lore.kernel.org/linux-clk/20230320161823.1424278-1-sergio.paracuellos@gmail.com/T/#t
+
+[0]: https://lore.kernel.org/linux-gpio/e9e6ad87-2db5-9767-ff39-64a302b06185@arinc9.com/T/#t
+[1]: https://lore.kernel.org/linux-clk/CAMhs-H-BfZb3mD8E=LeJ4vT22uibQ1DnaZsfTrtRxSiv=8L5RA@mail.gmail.com/T/#mfe725b6e3382c6fb09736472a846cbbc84f264dc
+
+Sergio Paracuellos (9):
+  dt-bindings: clock: add mtmips SoCs system controller
+  clk: ralink: add clock and reset driver for MTMIPS SoCs
+  mips: ralink: rt288x: remove clock related code
+  mips: ralink: rt305x: remove clock related code
+  mips: ralink: rt3883: remove clock related code
+  mips: ralink: mt7620: remove clock related code
+  mips: ralink: remove reset related code
+  mips: ralink: get cpu rate from new driver code
+  MAINTAINERS: add Mediatek MTMIPS Clock maintainer
+
+ .../bindings/clock/mediatek,mtmips-sysc.yaml  |   65 +
+ MAINTAINERS                                   |    6 +
+ arch/mips/include/asm/mach-ralink/mt7620.h    |   35 -
+ arch/mips/include/asm/mach-ralink/rt288x.h    |   10 -
+ arch/mips/include/asm/mach-ralink/rt305x.h    |   21 -
+ arch/mips/include/asm/mach-ralink/rt3883.h    |    8 -
+ arch/mips/ralink/clk.c                        |   26 +-
+ arch/mips/ralink/common.h                     |    5 -
+ arch/mips/ralink/mt7620.c                     |  226 ----
+ arch/mips/ralink/of.c                         |    4 -
+ arch/mips/ralink/reset.c                      |   61 -
+ arch/mips/ralink/rt288x.c                     |   31 -
+ arch/mips/ralink/rt305x.c                     |   78 --
+ arch/mips/ralink/rt3883.c                     |   44 -
+ drivers/clk/ralink/Kconfig                    |    7 +
+ drivers/clk/ralink/Makefile                   |    1 +
+ drivers/clk/ralink/clk-mtmips.c               | 1134 +++++++++++++++++
+ 17 files changed, 1232 insertions(+), 530 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
+ create mode 100644 drivers/clk/ralink/clk-mtmips.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.25.1
+
