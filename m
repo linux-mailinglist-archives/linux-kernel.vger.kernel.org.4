@@ -2,185 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25DD2733FCB
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 10:57:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17C90733FCD
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 11:00:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233939AbjFQI5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 04:57:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40684 "EHLO
+        id S232705AbjFQJAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 05:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231920AbjFQI5t (ORCPT
+        with ESMTP id S229506AbjFQI76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 04:57:49 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05BC92103
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 01:57:48 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-985b04c47c3so219481366b.1
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 01:57:47 -0700 (PDT)
+        Sat, 17 Jun 2023 04:59:58 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403F12103
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 01:59:57 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-570114e1feaso20115817b3.3
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 01:59:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686992266; x=1689584266;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pgysnMUWPxrDeN0B1Faf6Ufq3sMPZzJpEejdj3yiLTo=;
-        b=Ep4rhGij69HlZdJB6dvhGBslIi5J1X0YN5FQ+uVyl9cBUJW4BfzzKi92yLruwMKJNR
-         x2v9cMCpTHOjdh3EcfEZ3ifxfGvgbxbZUCxDLXg4p/19hlPTRfpC5tBklY13lNSTpCPb
-         TR8Iw4gbKvN2ZSdKBNjvB+zyxe/7LRkOvAlGH50xTHBrn39SakHg6Q57hNlzZsg8R0oG
-         ZcpVtJJg1TTlp33Vx3YoVregwSDu/gJ/5ne2m0Go8KJJZx7lJdGiYMKzXC1K8IqQpWqu
-         g/R6Db3wS5nims712daAO7jHshKPIQ07PCu436EEUmojpzn1i6xX30JJvbK2zMYMhQ11
-         l4wg==
+        d=gmail.com; s=20221208; t=1686992396; x=1689584396;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DAxlbr70nVGLPeolqN3TzyVnfvZ6eeI7P/kXQdKGTBs=;
+        b=MxKH+RcVMjAIkHZiyEi8+5ceCL20HNh47UOTrkMz/aREhS7iLhXGH+koJ5DRNoE23U
+         UTYnDflrRNqzZ8bFZK6GGRblbtbCQtwP1cL+rIjN54mqBumgm4LWjAzHNnZaMJIpdLY3
+         UdAIIbLzcrGWq5DtnKsxyiAUJ65Az5S3hLXzye+6Li8ayjcz0L/yhNV5GODBcK0wNAAI
+         ZqimddRh4dT+fKd/GYU5PBAjSxqGVVJHZHyTsxWoAKAN6S+YMoiUpHg0MnLVkNgTRRgw
+         ZqFHEb3fMJwpOrlDUxmzpz3Eo26NaX4uV5TD/zcWBkkqDPIZRV6engawhcxQHYIIHCc4
+         CUeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686992266; x=1689584266;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pgysnMUWPxrDeN0B1Faf6Ufq3sMPZzJpEejdj3yiLTo=;
-        b=Aq8hx1T0rerxOlUl4+rwUAq15QVsweEXGelS8rRG78Fy1vwPqjSJoH5UvdBHGhuUFC
-         EgBW6iMUXVd9aIhfFMUoSyilofHQAHtCtSpcvW8o6L0DSE/dQiyuCbULBOo06/vW7jkj
-         ZZgcrQ3+NLQElMfsQFSl87Yc7DVn8uoiXC72F6Lhxl2PGdXEsCSUYj4Ab0f/tEqV4hXp
-         l6dikvl2IyHRQcFPSeuZHpy+TYsM/3QpjEv3dRE5GJSkqiUvxtEAMiWRuz9723fweu+8
-         4uSM5+xstVA/ZKO5q++iBBB8ZJSu4u6EgYlL3dMWLX31SjpSELhHZOR47Qqd8fmkHgUJ
-         uhlw==
-X-Gm-Message-State: AC+VfDwh7apw6LE79RctPFXrGmnhCB2KMKZYRW7VgJqXr0N0ltvIu5aH
-        j0uXeeWsWumkBQz+bIQ4YbO7PA==
-X-Google-Smtp-Source: ACHHUZ61jEiVOPgq3xLBlRirBwI281rOwqromd11/oVJ0r1/1HEzj6D02KClx0KTTDExEFXIXQMDAA==
-X-Received: by 2002:a17:907:7290:b0:96b:48d2:1997 with SMTP id dt16-20020a170907729000b0096b48d21997mr4283094ejc.65.1686992266535;
-        Sat, 17 Jun 2023 01:57:46 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id g26-20020a1709064e5a00b00987ac9cfb8esm368474ejw.67.2023.06.17.01.57.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Jun 2023 01:57:45 -0700 (PDT)
-Message-ID: <ad189220-424b-89bb-a187-60b0294ae1a7@linaro.org>
-Date:   Sat, 17 Jun 2023 10:57:44 +0200
+        d=1e100.net; s=20221208; t=1686992396; x=1689584396;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DAxlbr70nVGLPeolqN3TzyVnfvZ6eeI7P/kXQdKGTBs=;
+        b=EBS4Ug3jlk2At7opyyL6aIOcA3vycWz+FvtRNrJvUxre4n9a+1rUENvgBybqmjo2CP
+         b1Q5NUdKrh6CXVTM0DpNyBQ1clQX/btpz8kgbAYP9iaophOblekyI6n3+DkpiV6jfsm0
+         oIlYF9p5cndrkpQofemVInQcKc/s1MWPo0vumZk6JkM9YSygB/CxAxJTthpyxK/tSLSY
+         L5BIoAhpCC9hSXKDujVLb5F/iuf0ZQiQqUvDlxJw2aJ3bjLEjgiK2m9RGu2fEoiUJ3Qm
+         yfg5bKZso+bvgd1aYTaWaan03E7/qoZjO69SNa24rgy7bJNk9fPZs5+j4tDIjhgr6hSg
+         d93g==
+X-Gm-Message-State: AC+VfDzBQ0PZI6hdBxA/F3T59YTQ4QbrLKqQ5eqmX/CuRdm+i8N5iDOh
+        ZfM2LRC1fzCNfNmB2SeUWYl5P2QGnJqqtESkboU=
+X-Google-Smtp-Source: ACHHUZ5iThchRPHO1uX2naoiBRIc1k7oR/L5+4esIYomcMWDiLMvKWV8Fgh9XEY9sPw+C//l+o6yBnRtovHIl3QSavY=
+X-Received: by 2002:a25:bccf:0:b0:bac:b478:d215 with SMTP id
+ l15-20020a25bccf000000b00bacb478d215mr1910617ybm.9.1686992396239; Sat, 17 Jun
+ 2023 01:59:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v7 12/12] dt-bindings: fsl-dma: fsl-edma: add edma3
- compatible string
-Content-Language: en-US
-To:     Frank Li <Frank.Li@nxp.com>, vkoul@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        peng.fan@nxp.com, joy.zou@nxp.com, shenwei.wang@nxp.com,
-        imx@lists.linux.dev
-References: <20230616153438.2299922-1-Frank.Li@nxp.com>
- <20230616153438.2299922-13-Frank.Li@nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230616153438.2299922-13-Frank.Li@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230617044036.3985524-1-zhiguangni01@gmail.com>
+ <20230616224407.863c74a3dc9d4f1427802f91@linux-foundation.org>
+ <CACZJ9cXM9VkJ5=euHphwM5TtX3aZqZ_QynOq10FtrqCxZfZsQA@mail.gmail.com> <20230617070051.GU52412@kernel.org>
+In-Reply-To: <20230617070051.GU52412@kernel.org>
+From:   Liam Ni <zhiguangni01@gmail.com>
+Date:   Sat, 17 Jun 2023 16:59:46 +0800
+Message-ID: <CACZJ9cWFyr7MyGWWaGiNYHDb39ZYAmijH90gAH5N8-z4jc2KNw@mail.gmail.com>
+Subject: Re: [PATCH] mm/sparse:avoid null pointer access in memory_present()
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+        hpa@zytor.com, linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/06/2023 17:34, Frank Li wrote:
-> Extend Freescale eDMA driver bindings to support eDMA3 IP blocks in
-> i.MX8QM and i.MX8QXP SoCs. In i.MX93, both eDMA3 and eDMA4 are now.
-> 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
->  .../devicetree/bindings/dma/fsl,edma.yaml     | 103 ++++++++++++++++--
->  1 file changed, 96 insertions(+), 7 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/dma/fsl,edma.yaml b/Documentation/devicetree/bindings/dma/fsl,edma.yaml
-> index 5fd8fc604261..2363c10e0d1c 100644
-> --- a/Documentation/devicetree/bindings/dma/fsl,edma.yaml
-> +++ b/Documentation/devicetree/bindings/dma/fsl,edma.yaml
-> @@ -21,32 +21,41 @@ properties:
->        - enum:
->            - fsl,vf610-edma
->            - fsl,imx7ulp-edma
-> +          - fsl,imx8qm-adma
-> +          - fsl,imx8qm-edma
-> +          - fsl,imx93-edma3
-> +          - fsl,imx93-edma4
->        - items:
->            - const: fsl,ls1028a-edma
->            - const: fsl,vf610-edma
->  
->    reg:
-> -    minItems: 2
-> +    minItems: 1
->      maxItems: 3
->  
->    interrupts:
-> -    minItems: 2
-> -    maxItems: 17
-> +    minItems: 1
-> +    maxItems: 64
->  
->    interrupt-names:
-> -    minItems: 2
-> -    maxItems: 17
-> +    minItems: 1
-> +    maxItems: 64
->  
->    "#dma-cells":
-> -    const: 2
-> +    enum:
-> +      - 2
-> +      - 3
->  
->    dma-channels:
-> -    const: 32
-> +    minItems: 1
-> +    maxItems: 64
->  
->    clocks:
-> +    minItems: 1
->      maxItems: 2
->  
->    clock-names:
-> +    minItems: 1
->      maxItems: 2
->  
->    big-endian:
-> @@ -65,6 +74,26 @@ required:
->  
->  allOf:
->    - $ref: dma-controller.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - fsl,imx8qm-adma
-> +              - fsl,imx8qm-edma
-> +              - fsl,imx93-edma3
-> +              - fsl,imx93-edma4
-> +    then:
-> +      properties:
-> +        "#dma-cells":
-> +          const: 3
-> +        # It is not necessary to write the interrupt name for each channel.
-> +        # instead, you can simply maintain the sequential IRQ numbers as
-> +        # defined for the DMA channels.
-> +        interrupt-names: false
-> +        clock-names:
+On Sat, 17 Jun 2023 at 15:01, Mike Rapoport <rppt@kernel.org> wrote:
+>
+> On Sat, Jun 17, 2023 at 02:17:58PM +0800, Liam Ni wrote:
+> > On Sat, 17 Jun 2023 at 13:44, Andrew Morton <akpm@linux-foundation.org>=
+ wrote:
+> > >
+> > > On Sat, 17 Jun 2023 14:40:36 +1000 Liam Ni <zhiguangni01@gmail.com> w=
+rote:
+> > >
+> > > > __nr_to_section() may return a null pointer,
+> > > > before accessing the member variable section_mem_map,
+> > > > we should first determine whether it is a null pointer.
+> > > >
+> > > > ...
+> > > >
+> > > > --- a/mm/sparse.c
+> > > > +++ b/mm/sparse.c
+> > > > @@ -258,7 +258,7 @@ static void __init memory_present(int nid, unsi=
+gned long start, unsigned long en
+> > > >               set_section_nid(section, nid);
+> > > >
+> > > >               ms =3D __nr_to_section(section);
+> > > > -             if (!ms->section_mem_map) {
+> > > > +             if (ms && !ms->section_mem_map) {
+> > > >                       ms->section_mem_map =3D sparse_encode_early_n=
+id(nid) |
+> > > >                                                       SECTION_IS_ON=
+LINE;
+> > > >                       __section_mark_present(ms, section);
+> > >
+> > > I'm suspecting that if __nr_to_section() returns NULL here, we should
+> > > just panic.  But a null-deref gives the same information, so why chan=
+ge
+> > > things?
+> >
+> > Do you mean if ms is a null pointer=EF=BC=8Cms->section_mem_map will ca=
+use
+> > system panic,so we needn't change?
+>
+> Yes, if __nr_to_section ever returns NULL the system will crash anyway.
 
-items:
-  - const: dma
+I got it,do we need to print some information by panic()?
 
-missing clocks...
-
-oh wait, I already said this. Let's use reviewers time for doing the
-same review, why not. They work for free.
-
-This is a friendly reminder during the review process.
-
-It seems my previous comments were not fully addressed. Maybe my
-feedback got lost between the quotes, maybe you just forgot to apply it.
-Please go back to the previous discussion and either implement all
-requested changes or keep discussing them.
-
-Thank you.
-
-Best regards,
-Krzysztof
-
+>
+> --
+> Sincerely yours,
+> Mike.
