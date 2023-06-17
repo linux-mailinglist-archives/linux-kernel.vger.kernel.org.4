@@ -2,226 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA8773429F
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 19:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC6AD7342A8
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 19:38:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346367AbjFQR15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 13:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60126 "EHLO
+        id S231374AbjFQRhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 13:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346366AbjFQR1y (ORCPT
+        with ESMTP id S229745AbjFQRhB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 13:27:54 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014DEE52;
-        Sat, 17 Jun 2023 10:27:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
- s=s31663417; t=1687022863; x=1687627663; i=julian.ribbeck@gmx.de;
- bh=4rrE9fbrtibQKxhrqH1MY7aY9tEVOUx8M44gNqot0uE=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
- b=McwMx4UkIqlLpFGrHfK7pqcIosuDDGZ+Lh3tfwchMNZ9pYDNHiWhrZm91WrXFCid0ju0p97
- F7d0ZJa/bfRyDi6lxWAyUDW6gSEQdVL5IoNpH5F/8ZcNWIEvXrzBWyg8HL0X/Ygd1erKTVqxU
- W2ULxza8RgoafQiQXtjiGv9GbvlLmW+yY83AhfznRI1qqlWHl1m5Hai4VGjjasyIfUtLYN7nH
- gFDebgEj0SaSoT5chwqOCOWgsHyLIpjQ7DVAoOZ2LpfcrBHbgpyO6lD2rm2k+gqx6a/WsyR0s
- xZCAvJkt6wD8HeuGoxIlr6LjY/g0TjE8qiqWIi66leHNz3UgeSFQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from x1-yoga-arch.speedport.ip ([93.242.194.247]) by mail.gmx.net
- (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MysVs-1pxjvZ1n8c-00vyRR; Sat, 17 Jun 2023 19:27:43 +0200
-From:   Julian Ribbeck <julian.ribbeck@gmx.de>
-To:     devicetree@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Julian Ribbeck <julian.ribbeck@gmx.de>
-Subject: [PATCH] ARM: dts: sun7i: Add Iteaduino Plus A20
-Date:   Sat, 17 Jun 2023 19:27:35 +0200
-Message-ID: <20230617172735.1098591-1-julian.ribbeck@gmx.de>
-X-Mailer: git-send-email 2.41.0
+        Sat, 17 Jun 2023 13:37:01 -0400
+Received: from mailrelay5-1.pub.mailoutpod2-cph3.one.com (mailrelay5-1.pub.mailoutpod2-cph3.one.com [46.30.211.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F02F139
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 10:36:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=rsa1;
+        h=in-reply-to:content-transfer-encoding:content-type:mime-version:references:
+         message-id:subject:cc:to:from:date:from;
+        bh=HTsY6p85oS2lNQWL6cptD2+QQvem/CfxulA1ZbEcSKo=;
+        b=ZYFdOAt2MR2EVe5qAO5yJuhk6ISLZJIGdvabsFg2AUbdM8dn3OfJnJ/7s3I5e/mcK3jh0oDz964uD
+         2lzzVRB5iLbki2u+pHvKZhMx9paJxZowsDpDWmj53vDAWyn5HvyVmlXz4wb+LkX4W5fMeLJ/zPbrpr
+         6bndUTYGkca7iIe0b+a4WGmT65AuJxQOeXaBy+ZT5oWpfoL1VDbDLvH1+v1Bu4kNH8jRinQ4YZZ4f/
+         QF4wFUO00GeTSyocfHzMSa6+Jdq4FlBuc9TXQq3zK7YOqvwOfQTJLAqfUZa6PvVbKwONajbGnFpUKb
+         0YjR6WWWw5pABGUuTnU4PzEjHPZFS7g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed1;
+        h=in-reply-to:content-transfer-encoding:content-type:mime-version:references:
+         message-id:subject:cc:to:from:date:from;
+        bh=HTsY6p85oS2lNQWL6cptD2+QQvem/CfxulA1ZbEcSKo=;
+        b=Q875wQXzhN4Y67Mih7wkf7RZg5W0WoyjEphiY9m9+Nlhv15sTwxQXGGDGnUU3X7SEYR3wX3+oWNYq
+         xSlUsgIAg==
+X-HalOne-ID: 67c6c44f-0d35-11ee-b74b-55333ba73462
+Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay5 (Halon) with ESMTPSA
+        id 67c6c44f-0d35-11ee-b74b-55333ba73462;
+        Sat, 17 Jun 2023 17:35:55 +0000 (UTC)
+Date:   Sat, 17 Jun 2023 19:35:53 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
+Cc:     linux-rockchip@lists.infradead.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>
+Subject: Re: [PATCH] drm: bridge: dw-mipi-dsi: Fix enable/disable of DSI
+ controller
+Message-ID: <20230617173553.GA1843063@ravnborg.org>
+References: <20230617150643.1808409-1-megi@xff.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:nCL+sr8yW5ABMCO80uxx558sAlW0aZ8z/IBe/BbgnErlAM7g6T0
- BmR27XqDoCI72fiRogdw7vsD1NLe2Qv7ITxISfJxE0yEnaf/pwZ2UTk3peMGDcWo+g3eQIH
- lHEPa1rfhrhtze7u+8yCSKLq9GR7zNh6+eeafHLDUY7Ea9ttFlNB4Ts2jmISstvMxWvDW9p
- 2edyGUOJeIuP1W1kyPVSw==
-UI-OutboundReport: notjunk:1;M01:P0:ZNgCLGI9FBQ=;bKBLSChUJONOroUJNG9dxqPql6w
- fTNDdBDN4vHWZcOuRhVBDc+bWKPlL4xf0s760PKk/P5T2gG1IyuAKwlCtsAMlUJ9S36U0QUgS
- hTNxMzHNuVbeqPXeov5oCWAdslnVhWa0oQGuQIoB783rNOGRTzkMI0biuXbsD3tYs9oeLDbaJ
- ILutUG9sIKIAk/iCCNUdrchfWDdbvy0QB8TBjmCPNgiXNwMhQa5hTuiDXKRWRn6OOJVHLc9uU
- Z/ejAcryDv9ahNPVIQE9ZS9UF/IwcEa1VVZGCfsjJ7KLX6gyn6YxKiIeBsMu2tlIpEW3iM38X
- wERdao0xw9qnKgt49Apd40wCedd1ldhzPKJJBI+7GJCrZMucAfLpOthVoJj/NCaS2P3NrDRGF
- extsnD0R5Q9Z4BKAEbrBGIzQIt67LhwxmaFhcY8UXKUCBMr/dPfnAt7eXPXP9kIjrmY6NaMWb
- tCD6XWBjVdFN1/wH//BFUMbsZoHme/69yQpgZipPoJ2C2nIBZYXYqxKk5r2QDPHW9s/s8kZNX
- 0t2OxB8A0zhDCEgq9mowODTv7ViSwngdOC3RmAFnJpFu++Hc5m093X7QVLRKuS57SKJdfXfW0
- 4RlaI8TLHMFQQZgk/6zQRmQbWeiVQ3agp9mQHswoMElL/cJ+Q9ii/IleEfccAo4NUn9vSKEMY
- RvD0V2J1XwPoYPh3Le8G2uCHjP103H51jIh42hHjaQbTdRd6GRivW15IA3hVBKAZs04Dqc2En
- 2a+FIpeh3zlU8bPz2ZEUdpYaOL/Fe9ocXnx0xuNVKaS02j0tRNd4NweGBssDwhlqFhhwjlQ6v
- Tu+3OoJtkyCsS0ieFEvvnJtOG8ezwxXC2ZR4meCXBlUTZ2kcbaXSKpL93knav1DP8A1clR4aX
- XdT8KpN7E4WMVbVSZfmLCVJbFPM+7AGM0jNz5wDLoj4wf8nDvgr63ZzOb6clN8GVS1lOx4V1+
- GLQDWGYkLLpHl8RlOMkAdu5YPLw=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230617150643.1808409-1-megi@xff.cz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Iteaduino Plus A20 is very similar to Iteaduino Plus A10. In fact it
-shares the same breakout board and the Itead Core A20 on top of it, is
-only adapted to support the dual-core A20.
+Hi Ondřej,
 
-This commits enables the following hardware:
+On Sat, Jun 17, 2023 at 05:06:33PM +0200, Ondřej Jirman wrote:
+> From: Ondrej Jirman <megi@xff.cz>
+> 
+> Before this patch, booting to Linux VT and doing a simple:
+> 
+>   echo 2 > /sys/class/graphics/fb0/blank
+>   echo 0 > /sys/class/graphics/fb0/blank
+> 
+> would result in failures to re-enable the panel. Mode set callback is
+> called only once during boot in this scenario, while calls to
+> enable/disable callbacks are balanced afterwards. The driver doesn't
+> work unless userspace calls modeset before enabling the CRTC/connector.
+> 
+> This patch moves enabling of the DSI host from mode_set into pre_enable
+> callback, and removes some old hacks where this bridge driver is
+> directly calling into other bridge driver's callbacks.
+> 
+> pre_enable_prev_first flag is set on the panel's bridge so that panel
+> drivers will get their prepare function called between DSI host's
+> pre_enable and enable callbacks, so that they get a chance to
+> perform panel setup while DSI host is already enabled in command
+> mode. Otherwise panel's prepare would be called before DSI host
+> is enabled, and any DSI communication used in prepare callback
+> would fail.
+> 
+> With all these changes, the enable/disable sequence is now well
+> balanced, and host's and panel's callbacks are called in proper order
+> documented in the drm_panel API documentation without needing the old
+> hacks. (Mainly that panel->prepare is called when DSI host is ready to
+> allow the panel driver to send DSI commands and vice versa during
+> disable.)
+> 
+> Tested on Pinephone Pro. Trace of the callbacks follows.
+> 
+> Before:
+> 
+> [    1.253882] dw-mipi-dsi-rockchip ff960000.dsi: mode_set
+> [    1.290732] panel-himax-hx8394 ff960000.dsi.0: prepare
+> [    1.475576] dw-mipi-dsi-rockchip ff960000.dsi: enable
+> [    1.475593] panel-himax-hx8394 ff960000.dsi.0: enable
+> 
+> echo 2 > /sys/class/graphics/fb0/blank
+> 
+> [   13.722799] panel-himax-hx8394 ff960000.dsi.0: disable
+> [   13.774502] dw-mipi-dsi-rockchip ff960000.dsi: post_disable
+> [   13.774526] panel-himax-hx8394 ff960000.dsi.0: unprepare
+> 
+> echo 0 > /sys/class/graphics/fb0/blank
+> 
+> [   17.735796] panel-himax-hx8394 ff960000.dsi.0: prepare
+> [   17.923522] dw-mipi-dsi-rockchip ff960000.dsi: enable
+> [   17.923540] panel-himax-hx8394 ff960000.dsi.0: enable
+> [   17.944330] dw-mipi-dsi-rockchip ff960000.dsi: failed to write command FIFO
+> [   17.944335] panel-himax-hx8394 ff960000.dsi.0: sending command 0xb9 failed: -110
+> [   17.944340] panel-himax-hx8394 ff960000.dsi.0: Panel init sequence failed: -110
+> 
+> echo 2 > /sys/class/graphics/fb0/blank
+> 
+> [  431.148583] panel-himax-hx8394 ff960000.dsi.0: disable
+> [  431.169259] dw-mipi-dsi-rockchip ff960000.dsi: failed to write command FIFO
+> [  431.169268] panel-himax-hx8394 ff960000.dsi.0: Failed to enter sleep mode: -110
+> [  431.169282] dw-mipi-dsi-rockchip ff960000.dsi: post_disable
+> [  431.169316] panel-himax-hx8394 ff960000.dsi.0: unprepare
+> [  431.169357] pclk_mipi_dsi0 already disabled
+> 
+> echo 0 > /sys/class/graphics/fb0/blank
+> 
+> [  432.796851] panel-himax-hx8394 ff960000.dsi.0: prepare
+> [  432.981537] dw-mipi-dsi-rockchip ff960000.dsi: enable
+> [  432.981568] panel-himax-hx8394 ff960000.dsi.0: enable
+> [  433.002290] dw-mipi-dsi-rockchip ff960000.dsi: failed to write command FIFO
+> [  433.002299] panel-himax-hx8394 ff960000.dsi.0: sending command 0xb9 failed: -110
+> [  433.002312] panel-himax-hx8394 ff960000.dsi.0: Panel init sequence failed: -110
+> 
+> -----------------------------------------------------------------------
+> 
+> After:
+> 
+> [    1.248372] dw-mipi-dsi-rockchip ff960000.dsi: mode_set
+> [    1.248704] dw-mipi-dsi-rockchip ff960000.dsi: pre_enable
+> [    1.285377] panel-himax-hx8394 ff960000.dsi.0: prepare
+> [    1.468392] dw-mipi-dsi-rockchip ff960000.dsi: enable
+> [    1.468421] panel-himax-hx8394 ff960000.dsi.0: enable
+> 
+> echo 2 > /sys/class/graphics/fb0/blank
+> 
+> [   16.210357] panel-himax-hx8394 ff960000.dsi.0: disable
+> [   16.261315] dw-mipi-dsi-rockchip ff960000.dsi: post_disable
+> [   16.261339] panel-himax-hx8394 ff960000.dsi.0: unprepare
+> 
+> echo 0 > /sys/class/graphics/fb0/blank
+> 
+> [   19.161453] dw-mipi-dsi-rockchip ff960000.dsi: pre_enable
+> [   19.197869] panel-himax-hx8394 ff960000.dsi.0: prepare
+> [   19.382141] dw-mipi-dsi-rockchip ff960000.dsi: enable
+> [   19.382158] panel-himax-hx8394 ff960000.dsi.0: enable
+> 
+> Signed-off-by: Ondrej Jirman <megi@xff.cz>
 
-* HDMI Video output
-* USB
-* SATA (untested due to lack of hardware I could attach)
-* Ethernet
-* MMC storage
-* UART
-* USB OTG (untested, because I don't own an USB OTG cable/device)
+Nice cleanup and fix.
+Have you consider if this need a Fixes: ?
 
-Signed-off-by: Julian Ribbeck <julian.ribbeck@gmx.de>
-=2D--
- arch/arm/boot/dts/Makefile                    |   1 +
- .../dts/sun7i-a20-itead-iteaduino-plus.dts    | 109 ++++++++++++++++++
- 2 files changed, 110 insertions(+)
- create mode 100644 arch/arm/boot/dts/sun7i-a20-itead-iteaduino-plus.dts
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 59829fc90315..1d5ab086f8de 100644
-=2D-- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1334,6 +1334,7 @@ dtb-$(CONFIG_MACH_SUN7I) +=3D \
- 	sun7i-a20-haoyu-marsboard.dtb \
- 	sun7i-a20-hummingbird.dtb \
- 	sun7i-a20-itead-ibox.dtb \
-+	sun7i-a20-itead-iteaduino-plus.dts \
- 	sun7i-a20-i12-tvbox.dtb \
- 	sun7i-a20-icnova-swac.dtb \
- 	sun7i-a20-lamobo-r1.dtb \
-diff --git a/arch/arm/boot/dts/sun7i-a20-itead-iteaduino-plus.dts b/arch/a=
-rm/boot/dts/sun7i-a20-itead-iteaduino-plus.dts
-new file mode 100644
-index 000000000000..8d94db5520af
-=2D-- /dev/null
-+++ b/arch/arm/boot/dts/sun7i-a20-itead-iteaduino-plus.dts
-@@ -0,0 +1,109 @@
-+// SPDX-License-Identifier: (GPL-2.0+ or MIT)
-+
-+/dts-v1/;
-+#include "sun7i-a20.dtsi"
-+#include "sunxi-itead-core-common.dtsi"
-+#include "axp209.dtsi"
-+
-+/ {
-+	model =3D "Itead Iteaduino Plus A20";
-+	compatible =3D "itead,iteaduino-plus-a20", "allwinner,sun7i-a20";
-+
-+	hdmi-connector {
-+		compatible =3D "hdmi-connector";
-+		type =3D "a";
-+
-+		port {
-+			hdmi_con_in: endpoint {
-+				remote-endpoint =3D <&hdmi_out_con>;
-+			};
-+		};
-+	};
-+};
-+
-+&ac_power_supply {
-+	status =3D "okay";
-+};
-+
-+&ahci {
-+	target-supply =3D <&reg_ahci_5v>;
-+	status =3D "okay";
-+};
-+
-+&axp209 {
-+	interrupts =3D <0>;
-+};
-+
-+&battery_power_supply {
-+	status =3D "okay";
-+};
-+
-+
-+&de {
-+	status =3D "okay";
-+};
-+
-+&emac {
-+	pinctrl-names =3D "default";
-+	pinctrl-0 =3D <&emac_pa_pins>;
-+	phy-handle =3D <&phy1>;
-+	status =3D "okay";
-+};
-+
-+&emac_sram {
-+	status =3D "okay";
-+};
-+
-+&hdmi {
-+	status =3D "okay";
-+};
-+
-+&hdmi_out {
-+	hdmi_out_con: endpoint {
-+		remote-endpoint =3D <&hdmi_con_in>;
-+	};
-+};
-+
-+&mdio {
-+	status =3D "okay";
-+
-+	phy1: ethernet-phy@1 {
-+		reg =3D <1>;
-+	};
-+};
-+
-+&mmc0 {
-+	vmmc-supply =3D <&reg_vcc3v3>;
-+	bus-width =3D <4>;
-+	cd-gpios =3D <&pio 7 1 GPIO_ACTIVE_LOW>; /* PH1 */
-+	status =3D "okay";
-+};
-+
-+
-+&otg_sram {
-+	status =3D "okay";
-+};
-+
-+&reg_ahci_5v {
-+	status =3D "okay";
-+};
-+
-+
-+&reg_usb0_vbus {
-+	status =3D "okay";
-+};
-+
-+&usb_otg {
-+	status =3D "otg";
-+};
-+
-+&usb_power_supply {
-+	status =3D "okay";
-+};
-+
-+&usbphy {
-+	usb0_id_det-gpios =3D <&pio 7 4 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>; /* P=
-H4 */
-+	usb0_vbus_det-gpios =3D <&pio 7 5 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>; /*=
- PH5 */
-+	usb0_vbus_power-supply =3D <&usb_power_supply>;
-+	usb0_vbus-supply =3D <&reg_usb0_vbus>;
-+};
-=2D-
-2.41.0
+> ---
+>  drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c | 28 +++++++++++--------
+>  1 file changed, 16 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
+> index b2efecf7d160..352c6829259a 100644
+> --- a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
+> +++ b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
+> @@ -265,6 +265,7 @@ struct dw_mipi_dsi {
+>  	struct dw_mipi_dsi *master; /* dual-dsi master ptr */
+>  	struct dw_mipi_dsi *slave; /* dual-dsi slave ptr */
+>  
+> +	struct drm_display_mode mode;
+>  	const struct dw_mipi_dsi_plat_data *plat_data;
+>  };
+>  
+> @@ -332,6 +333,7 @@ static int dw_mipi_dsi_host_attach(struct mipi_dsi_host *host,
+>  	if (IS_ERR(bridge))
+>  		return PTR_ERR(bridge);
+>  
+> +	bridge->pre_enable_prev_first = true;
+>  	dsi->panel_bridge = bridge;
+>  
+>  	drm_bridge_add(&dsi->bridge);
+> @@ -859,15 +861,6 @@ static void dw_mipi_dsi_bridge_post_atomic_disable(struct drm_bridge *bridge,
+>  	 */
+>  	dw_mipi_dsi_set_mode(dsi, 0);
+>  
+> -	/*
+> -	 * TODO Only way found to call panel-bridge post_disable &
+> -	 * panel unprepare before the dsi "final" disable...
+> -	 * This needs to be fixed in the drm_bridge framework and the API
+> -	 * needs to be updated to manage our own call chains...
+> -	 */
+> -	if (dsi->panel_bridge->funcs->post_disable)
+> -		dsi->panel_bridge->funcs->post_disable(dsi->panel_bridge);
+> -
+>  	if (phy_ops->power_off)
+>  		phy_ops->power_off(dsi->plat_data->priv_data);
+>  
+> @@ -942,15 +935,25 @@ static void dw_mipi_dsi_mode_set(struct dw_mipi_dsi *dsi,
+>  		phy_ops->power_on(dsi->plat_data->priv_data);
+>  }
+>  
+> +static void dw_mipi_dsi_bridge_atomic_pre_enable(struct drm_bridge *bridge,
+> +						 struct drm_bridge_state *old_bridge_state)
+> +{
+> +	struct dw_mipi_dsi *dsi = bridge_to_dsi(bridge);
+> +
+> +	/* Power up the dsi ctl into a command mode */
+> +	dw_mipi_dsi_mode_set(dsi, &dsi->mode);
+> +	if (dsi->slave)
+> +		dw_mipi_dsi_mode_set(dsi->slave, &dsi->mode);
+> +}
+> +
+>  static void dw_mipi_dsi_bridge_mode_set(struct drm_bridge *bridge,
+>  					const struct drm_display_mode *mode,
+>  					const struct drm_display_mode *adjusted_mode)
+>  {
+>  	struct dw_mipi_dsi *dsi = bridge_to_dsi(bridge);
+>  
+> -	dw_mipi_dsi_mode_set(dsi, adjusted_mode);
+> -	if (dsi->slave)
+> -		dw_mipi_dsi_mode_set(dsi->slave, adjusted_mode);
+> +	/* Store the display mode for later use in pre_enable callback */
+> +	memcpy(&dsi->mode, adjusted_mode, sizeof(dsi->mode));
+>  }
+Use drm_mode_copy here.
+With this fixed:
 
+Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
