@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 349117343D6
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 22:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3246B7343D8
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 22:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235690AbjFQU5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 16:57:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49548 "EHLO
+        id S1345073AbjFQU5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 16:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjFQU5D (ORCPT
+        with ESMTP id S229732AbjFQU5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 16:57:03 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82448F;
-        Sat, 17 Jun 2023 13:57:01 -0700 (PDT)
+        Sat, 17 Jun 2023 16:57:09 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1882D137;
+        Sat, 17 Jun 2023 13:57:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
- s=s31663417; t=1687035415; x=1687640215; i=julian.ribbeck@gmx.de;
- bh=t7HmD3gluiyFcTE258+e9VTlqgNSUHj+xdesG9chbig=;
+ s=s31663417; t=1687035421; x=1687640221; i=julian.ribbeck@gmx.de;
+ bh=PLZak75GCgsTN4zIfmB6/nHpBvVltfN3cEEBjSeZxvA=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
- b=fWaMiEhIRbpeXp98cs2McdR9U87oS7yZemChegpiFa6jQ0QKmPCXoyxDPUHAS6IYXuy0S8f
- jz660WR2ThFFJvXnhAyTlQexv8JNSxKkRcmDWErRsZaoreYpkMb1bdkpx96v2dsQ4E20SN93A
- ET6jnpnPmUJJL858kCngqM6mDqlKctNHAft9dHUZIB+qxJGEg7RxucVK3BHRCWutN9qZqesAQ
- 3/x1N4ZtUlPSVu1rOytELMUDTNXwV686AvZaY3XlMMYTzlqctXSJk5lPSriW91Rlz1ZlVlo/a
- c/2A3m/gSFqdJsCRqAv1h6FtaWDu9VAAnYE4IE7sNxjvQSJW7inQ==
+ b=tm5xsoUmWjreDv5jr8Om8OHsxl4Ukkfbkt+6BSdtWVBGgmm+Vrm8ZoMtVOBiefBX+pQ9his
+ Ijr6AF0CsXRBIyJlndOvSAj0laZDyHqSYX8tbyEF8dgle0F74c+K9E7UImC9Xdfsv/Lzvg8Cf
+ MaX/snbv2hyY1M45KN/b0HFIiDhqggBGGqHshMbQ/iqkttGPfbi6ZkcMUVch8RDLGURGzQLeP
+ ILRpFdi51z3WsrgM/mUuFtu8FfX9L/DDYcnCX64o16eroz7gRVDOaSeUo8edb2diKchJ6LI3x
+ GqyXoQvz/ZklIFZiVOtDDwxsanK+gxDXB6voZnJGBzE4jThwg6GA==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from x1-yoga-arch.speedport.ip ([93.242.194.247]) by mail.gmx.net
  (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1Mkpf3-1pgoTh362p-00mIO1; Sat, 17 Jun 2023 22:56:54 +0200
+ 1MMGN2-1qQdh51d2s-00JKRk; Sat, 17 Jun 2023 22:57:01 +0200
 From:   Julian Ribbeck <julian.ribbeck@gmx.de>
 To:     krzysztof.kozlowski@linaro.org
 Cc:     conor+dt@kernel.org, devicetree@vger.kernel.org,
         julian.ribbeck@gmx.de, linux-kernel@vger.kernel.org,
         robh+dt@kernel.org
-Subject: [PATCH v2 1/2] ARM: dts: sun7i: Add Iteaduino Plus A20
-Date:   Sat, 17 Jun 2023 22:55:17 +0200
-Message-ID: <20230617205624.1178427-1-julian.ribbeck@gmx.de>
+Subject: [PATCH v2 2/2] dt-bindings: arm: sunxi: Add itead,iteaduino-plus-a20
+Date:   Sat, 17 Jun 2023 22:55:18 +0200
+Message-ID: <20230617205624.1178427-2-julian.ribbeck@gmx.de>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <e0e71b0c-086d-ce54-f4d3-6f594d8e5da6@linaro.org>
+In-Reply-To: <20230617205624.1178427-1-julian.ribbeck@gmx.de>
 References: <e0e71b0c-086d-ce54-f4d3-6f594d8e5da6@linaro.org>
+ <20230617205624.1178427-1-julian.ribbeck@gmx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:iiVJPRJM3uFZmd/6C5jhGebn50DPJHjq2/fQpBvgyFbWBSEewwH
- fbuop9dDuu19LDK2/rsvIOHB0dE2NWm0M+Z8dBhIY23u4gJw6rUIeeiZanpSIVyJOokoWqV
- hy1gv657LBZEAlMTQt2lqofEJyBLuDxHul2BWJoiUC3rHUe9RMzDJrlKXMn56M+kw+uwAG6
- R7TyWpf0q0eEt6jXh37Zw==
-UI-OutboundReport: notjunk:1;M01:P0:PhtFvfbfNgE=;+NDwu7NGthCIWNGXe/IMhDqUfUs
- MBbBBF+CbKf/0XD7tribnJJx2OGOwkVyly1hMd/dc9dsUeR58BWITAHHxPgBWi4SrEUFBaQiV
- k5MbtSQ4/C/Bp9ZTgXHb0EHW6GPqoWeB8laVuKr5cWLWFOEimGqlL9OT5oQ+PsP48Y80IfT29
- Gn6KyEv24LBQtXP898WCIsUN/mrEF/cB3ETTc0gU823wNg75McmsCoDBsKf72DK4Kezs2dRuM
- s5i8eVL8ArJXQlHyeJFXJpZlrrVoM3K64tBzyak/RU0f8fuWLVsBxRtPIBPp4o7B7NM6u9R+C
- vLptJhNIb91zjfNxKqblfynFdwjl50+s/rarC65hgGG2DDqv6dHCtAn+21yCmOYoVTM05nPik
- KhfFTmGn1NXlzu2ru1jn64pcCNUxYrPvPGmh4y4r5J6bciR92l4nRIMSNmuaDHCHqLR1tiUon
- VziXBRdoBQM9CXDlPrY4k47DIG+Do/aK01gmRZhlLLM1za8bknSLLPLiHaGgNPII/3SGR+JTf
- oiymWu1kWfc9IL/HC+EqF7bftTZUkXInDFnlMJk5EvBrsXqfp7EEICbR33CT3bdMI3j98Noe6
- kithDBs7PSj3ikESu46MVdOUa2xwEeHRCJbQr5Xxx1Qu5pvl6ge+LQXgLtbpj9ZOowZ0FfusJ
- GZAouYuLgYG7cVyoKltPFjmxlT8qp4u4UVtw/tvlxvdf3SCHIZjQQlc/Ru9PsEmYHOhbR6b6l
- eH6nruGDk7S9h45TMRy62Y9lZSqiROJryuyAA0qCGX6yjURCJ945OHuKUiSZlY2+LBQnu4VSK
- SJwG9UgT9S+KtvX3IEFyzKIEVx7/J6eGnNuTdBfOo+FY2VJicBwAsXpAqhhPyyVbpnwj8TDRr
- AxE1HRpJKriqunRT018/anF05uM9C3HUYNE5i4ioJ/qYeKdde323qaUdy273lYPegEVoyMs0R
- xg37ItlA/VsTkgboeld7ACIE6IQ=
+X-Provags-ID: V03:K1:emxx+JikUx3unGNulN2YFus2Bg8k0g3nSa0Fepw3MTAsw/6xJum
+ r5G2nSwqlJyB5fuuYJBmQfJt+dnJ+MwZpJhLBNEk3+Mdb42cTPlruD910dUwsedaHzjeCho
+ H9+qfOnXsPJKGk7gtaScrvP8l6tXM5/Vt5s9YUD2/E3YBCPfwQpGH9/t/3n9Fvxl1qrZbH/
+ DFtMxx9cU8903+TuueFdQ==
+UI-OutboundReport: notjunk:1;M01:P0:axGvYAz1uow=;+/rRoE9HnHmb3dgaP3wHkFRE33b
+ xQHF63oLN2QNA/JRd3qKEkjoVmncRwBOWWxBnjAj7v7wxrUFFDl480TKCI9i93nll1+P/PTd5
+ 163B4NoyNyt8iAwVqcqGP3QzoXapCiKvE6JnBxHgswpPh0RCld1iGpA1WnRtQISn1sTXLL9xe
+ TeWNwAKHuydDrQzUMTNAB1wyxQBHRSfk6CaSpBwccwSrz2kActlpEjyBHbrFGsrzBM8+9uy3H
+ yZtiBJBNb9tpe12mXno1ez37vVXHqczvjZQX03nJGml14Y8FMCVZGqfoTdtcoqRCcRZsxgvAY
+ RCyagLwMmFKatcKi3isnK0YGlj9KBzqCsliMp1tSGwIiRWyK3+dp6pJAJKZkeIGaRyi6qRnCu
+ N1U4CKPL3ZU0RS/8JMtRK2xfFA07Z847QOYtHS2tpda3YXxx5TbOk1K9h/2DuoJFgp5yJxkVS
+ 1RefbleZ2UEFaAJROV8qpaZ6+4LCs8QjomwK/5yeNvci57R3w3sU7T4229VuVag11qVcEVq+j
+ +1o1sKLixoFF7O8ECbS8zGdDTNpTtNl3f333rIQynxnsFW6cRXmpsq043YfFHKZ7ElG5rori2
+ rTPMfDPTqdQmSGJdvB3y4BHhvQu2owT9p12k7oDBXWJ+kX/Qn79pnWN/b4owZkI+fcgcl38QR
+ 9jhL4JMhML9yIktXdpDA9OQI7uQ8wB66J9sRec4RgaYFI87HJOcFU7gNKO4M5mp4jD5tV+g6Y
+ KnHOgfGzXK6ffilftSiYUtBy+luNR4DSIomhuzTnkvzatePU4euKBqa7Ly4H3ZToxFHMUwTiw
+ z3uU6QDBH6/2YJBXjlrOC33TqMuWNI1HjHATH85lSNVvKkA8NFf5pywZR9Nq5jgTbqrAt8yzl
+ 4dgt7VAq7QOzUw0mCaeWijvAiL5187HdWaw9Ectbg3W5CjS3JGadf6BEOYil8V9ZIrZyiYmUO
+ Lt8U1ay3XuyNJ/4323h0FeSHruQ=
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,162 +72,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Iteaduino Plus A20 is very similar to Iteaduino Plus A10. In fact it
-shares the same breakout board and the Itead Core A20 on top of it, is
-only adapted to support the dual-core A20.
-
-This commits enables the following hardware:
-
-* HDMI Video output
-* USB
-* SATA (untested due to lack of hardware I could attach)
-* Ethernet
-* MMC storage
-* UART
-* USB OTG (untested, because I don't own an USB OTG cable/device)
+Add itead,iteaduino-plus-a20 bindings
 
 Signed-off-by: Julian Ribbeck <julian.ribbeck@gmx.de>
 =2D--
- arch/arm/boot/dts/Makefile                    |   1 +
- .../dts/sun7i-a20-itead-iteaduino-plus.dts    | 114 ++++++++++++++++++
- 2 files changed, 115 insertions(+)
- create mode 100644 arch/arm/boot/dts/sun7i-a20-itead-iteaduino-plus.dts
+ Documentation/devicetree/bindings/arm/sunxi.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 59829fc90315..3b6e284e4472 100644
-=2D-- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1334,6 +1334,7 @@ dtb-$(CONFIG_MACH_SUN7I) +=3D \
- 	sun7i-a20-haoyu-marsboard.dtb \
- 	sun7i-a20-hummingbird.dtb \
- 	sun7i-a20-itead-ibox.dtb \
-+	sun7i-a20-itead-iteaduino-plus.dtb \
- 	sun7i-a20-i12-tvbox.dtb \
- 	sun7i-a20-icnova-swac.dtb \
- 	sun7i-a20-lamobo-r1.dtb \
-diff --git a/arch/arm/boot/dts/sun7i-a20-itead-iteaduino-plus.dts b/arch/a=
-rm/boot/dts/sun7i-a20-itead-iteaduino-plus.dts
-new file mode 100644
-index 000000000000..204c5f2c81c7
-=2D-- /dev/null
-+++ b/arch/arm/boot/dts/sun7i-a20-itead-iteaduino-plus.dts
-@@ -0,0 +1,114 @@
-+// SPDX-License-Identifier: (GPL-2.0+ or MIT)
+diff --git a/Documentation/devicetree/bindings/arm/sunxi.yaml b/Documentat=
+ion/devicetree/bindings/arm/sunxi.yaml
+index 013821f4a7b8..aaa9a96736b7 100644
+=2D-- a/Documentation/devicetree/bindings/arm/sunxi.yaml
++++ b/Documentation/devicetree/bindings/arm/sunxi.yaml
+@@ -356,6 +356,11 @@ properties:
+           - const: itead,iteaduino-plus-a10
+           - const: allwinner,sun4i-a10
+
++      - description: Itead Iteaduino Plus A20
++        items:
++          - const: itead,iteaduino-plus-a20
++          - const: allwinner,sun7i-a20
 +
-+/dts-v1/;
-+#include "sun7i-a20.dtsi"
-+#include "sunxi-itead-core-common.dtsi"
-+#include "axp209.dtsi"
-+
-+/ {
-+	model =3D "Itead Iteaduino Plus A20";
-+	compatible =3D "itead,iteaduino-plus-a20", "allwinner,sun7i-a20";
-+
-+	hdmi-connector {
-+		compatible =3D "hdmi-connector";
-+		type =3D "a";
-+
-+		port {
-+			hdmi_con_in: endpoint {
-+				remote-endpoint =3D <&hdmi_out_con>;
-+			};
-+		};
-+	};
-+};
-+
-+&ac_power_supply {
-+	status =3D "okay";
-+};
-+
-+&ahci {
-+	target-supply =3D <&reg_ahci_5v>;
-+	status =3D "okay";
-+};
-+
-+&axp209 {
-+	interrupt-parent =3D <&nmi_intc>;
-+	interrupts =3D <0 IRQ_TYPE_LEVEL_LOW>;
-+};
-+
-+&battery_power_supply {
-+	status =3D "okay";
-+};
-+
-+&codec {
-+	stauts =3D "okay";
-+};
-+
-+&de {
-+	status =3D "okay";
-+};
-+
-+&emac {
-+	pinctrl-names =3D "default";
-+	pinctrl-0 =3D <&emac_pa_pins>;
-+	phy-handle =3D <&phy1>;
-+	status =3D "okay";
-+};
-+
-+&emac_sram {
-+	status =3D "okay";
-+};
-+
-+&hdmi {
-+	status =3D "okay";
-+};
-+
-+&hdmi_out {
-+	hdmi_out_con: endpoint {
-+		remote-endpoint =3D <&hdmi_con_in>;
-+	};
-+};
-+
-+&mdio {
-+	status =3D "okay";
-+
-+	phy1: ethernet-phy@1 {
-+		reg =3D <1>;
-+	};
-+};
-+
-+&mmc0 {
-+	vmmc-supply =3D <&reg_vcc3v3>;
-+	bus-width =3D <4>;
-+	cd-gpios =3D <&pio 7 1 GPIO_ACTIVE_LOW>; /* PH1 */
-+	status =3D "okay";
-+};
-+
-+
-+&otg_sram {
-+	status =3D "okay";
-+};
-+
-+&reg_ahci_5v {
-+	status =3D "okay";
-+};
-+
-+
-+&reg_usb0_vbus {
-+	status =3D "okay";
-+};
-+
-+&usb_otg {
-+	status =3D "okay";
-+	dr_mode =3D "otg";
-+};
-+
-+&usb_power_supply {
-+	status =3D "okay";
-+};
-+
-+&usbphy {
-+	usb0_id_det-gpios =3D <&pio 7 4 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>; /* P=
-H4 */
-+	usb0_vbus_det-gpios =3D <&pio 7 5 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>; /*=
- PH5 */
-+	usb0_vbus_power-supply =3D <&usb_power_supply>;
-+	usb0_vbus-supply =3D <&reg_usb0_vbus>;
-+};
+       - description: Jesurun Q5
+         items:
+           - const: jesurun,q5
 =2D-
 2.41.0
 
