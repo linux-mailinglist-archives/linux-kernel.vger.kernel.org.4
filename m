@@ -2,298 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28F15733F98
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 10:23:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 669E1733FA1
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 10:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346315AbjFQIXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 04:23:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60380 "EHLO
+        id S1345955AbjFQI2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 04:28:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjFQIW6 (ORCPT
+        with ESMTP id S232314AbjFQI2F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 04:22:58 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B8A1FFE
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 01:22:55 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-982a99fda0dso214398566b.1
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 01:22:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686990174; x=1689582174;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wC+vEEL2KSY0Tw/5J6CHeL6CxIP7ysab2iFSmvj+s+s=;
-        b=b3fk5m39rjiIWp4Ty7fDkLDZRuDMIe+upsBIc/IU/zzxmRtFtkqAua3LWydwLRCjki
-         jAU7wx2OX3QrQ7YNKru65K7On+s0ZDzBKw7MsCSxUzt0rDb/0lfHRA9IBu6d6dR62RLc
-         0zrtXYlWlzMHmE8ZqnuowucNX63QkKi7P+lQLtGX5Dl+p/OPwzN3E21KJ9j1VvwcYw9T
-         xvRaXktp7S4CQCUX9z3vaaboIR1QJfnr9nmXc3UJuXQJd/JzdTdwGhkZ3t4zBXZjNMe9
-         Ia+w4agT1My3V72zQ0/QGK/1rcyigEAcepuW+iFBd5LWtZaf7hReo9Xh3FglamA0f+0y
-         Q2fQ==
+        Sat, 17 Jun 2023 04:28:05 -0400
+Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70BA10CF
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 01:28:03 -0700 (PDT)
+Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-77b25d256aaso155372039f.0
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 01:28:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686990174; x=1689582174;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wC+vEEL2KSY0Tw/5J6CHeL6CxIP7ysab2iFSmvj+s+s=;
-        b=FQpFFFGbM7ySn3pl/CTv6H0Fa8c0mBGtkuVQY5Pq1HTzxB4FnOOF2HDgXwDcYzZ9dG
-         vWmQkW0egBDqLN17uG4dBdS28/4jx581AuKdOVRdwDX49R/s0324zYwogSlaA/9GYsY2
-         QCK/11sHZb9bxfCj9WrdvCetAlkwMR4GkzkZkaC0D4FLa+LQXwFMgOuqLXwYIzZo+RD6
-         X+xhl2wZPxW51bj4UTYta0f6DvR+r0r0t4zWy2p1xzKg54kkuMZeGAdX0SguIv9xJhDI
-         apk2ZdKOI/xe9DqkX8+Brv7QvWmeanKVE6Af14NwlxF1Ia1msUtRIO1DFDzX3I6Mgtjl
-         kiNA==
-X-Gm-Message-State: AC+VfDzUANY/UrTwYLhI6llQZuPRJnvxFlABhQeL8VqrnH6W7r0Y3BbB
-        eooIyXLeGnVTcEcWRq9nDWBAIA==
-X-Google-Smtp-Source: ACHHUZ7LweH1B3zdgTpICOXYMpy7z6YXVQsrg7xvsGUXQUtCqWRVZpgvO6M+J+IVcxc/ROlQHQy8Lw==
-X-Received: by 2002:a17:907:9305:b0:96f:8666:5fc4 with SMTP id bu5-20020a170907930500b0096f86665fc4mr3992221ejc.50.1686990173877;
-        Sat, 17 Jun 2023 01:22:53 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id z19-20020a170906815300b009871b3f961asm816874ejw.58.2023.06.17.01.22.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Jun 2023 01:22:53 -0700 (PDT)
-Message-ID: <63698c0e-1e30-cb88-d71d-6bdf7f5ad4d7@linaro.org>
-Date:   Sat, 17 Jun 2023 10:22:51 +0200
+        d=1e100.net; s=20221208; t=1686990483; x=1689582483;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EvzkMc9H5Qu3CfLh6Ayp0HxbA/K5f7RFDZ+Yf/cv0ic=;
+        b=Koeq4+G41m4ftdcI/vPoS/6GNoYsdJpy8FkYLm5gAHIuhe8hbdbiDIxClPmb9s9AI+
+         h1Oz/ML1iS5v3lZF1SDDR91/6D6kw+D474WWWizJ5Jmc/VfN29a5w/PWxRimBe1gljFN
+         3+hGDtUGHoIfpK20bRiRY2qLskeJ8/YJk1xeYUpH+znUn0tadu051Q8IN9ZAoeXX4SYG
+         wKwwzOcaGW3moYtrcqhv7FjjqjkbBH/T8ZHQ3cFPMasaX89VAaJ7s0UrQA/ds/WaqfTB
+         vof3HZ+hQxAtCMW0vNUWN8CEEaRV+VtZtlmv6GYCuDGESxRr4I3SxU4+jTYgUE/BLWZA
+         n0Zg==
+X-Gm-Message-State: AC+VfDxarzx32rbWuebDAFsyzy3QcIpTsu64coRYao/w9OYlnhauq01Z
+        LiGLt5QafiJQhi2TRhuiK70Kf/G/dBCTRzh8S0corulG//NU
+X-Google-Smtp-Source: ACHHUZ5VaKdxrt3XJL1Kd65bRkQ2/NqG1BaMZjE2EcapUA6Ieh2QN2UA7P+X2TjTaXSFIL6Mdt7XLUorkRhe6kEevEIAHB1f4hC4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v4 4/5] dt-bindings: phy: realtek: Add the doc about the
- Realtek SoC USB 2.0 PHY
-Content-Language: en-US
-To:     Stanley Chang <stanley_chang@realtek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Ray Chi <raychi@google.com>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20230614092850.21460-1-stanley_chang@realtek.com>
- <20230614092850.21460-4-stanley_chang@realtek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230614092850.21460-4-stanley_chang@realtek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Received: by 2002:a5e:860f:0:b0:774:8e68:1ce6 with SMTP id
+ z15-20020a5e860f000000b007748e681ce6mr1098962ioj.3.1686990483134; Sat, 17 Jun
+ 2023 01:28:03 -0700 (PDT)
+Date:   Sat, 17 Jun 2023 01:28:03 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007ca70405fe4f149a@google.com>
+Subject: [syzbot] [block?] WARNING in blkdev_put (3)
+From:   syzbot <syzbot+04625c80899f4555de39@syzkaller.appspotmail.com>
+To:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/06/2023 11:28, Stanley Chang wrote:
-> Add the documentation explain the property about Realtek USB PHY driver.
-> 
-> Realtek DHC (digital home center) RTD SoCs support DWC3 XHCI USB
-> controller. Added the driver to drive the USB 2.0 PHY transceivers.
-> 
-> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
-> ---
-> v3 to v4 change:
->     1. Remove the parameter and non hardware properties from dts.
->     2. Using the compatible data included the config and parameter
->        in driver.
-> v2 to v3 change:
->     1. Broken down into two patches, one for each of USB 2 & 3.
->     2. Add more description about Realtek RTD SoCs architecture.
->     3. Removed parameter v1 support for simplification.
->     4. Revised the compatible name for fallback compatible.
->     5. Remove some properties that can be set in the driver.
-> v1 to v2 change:
->     Add phy-cells for generic phy driver
-> ---
->  .../bindings/phy/realtek,usb2phy.yaml         | 145 ++++++++++++++++++
->  1 file changed, 145 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/realtek,usb2phy.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/realtek,usb2phy.yaml b/Documentation/devicetree/bindings/phy/realtek,usb2phy.yaml
-> new file mode 100644
-> index 000000000000..cfd77143475c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/realtek,usb2phy.yaml
-> @@ -0,0 +1,145 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +# Copyright 2023 Realtek Semiconductor Corporation
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/phy/realtek,usb2phy.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Realtek DHC SoCs USB 2.0 PHY
-> +
-> +maintainers:
-> +  - Stanley Chang <stanley_chang@realtek.com>
-> +
-> +description:
-> +  Realtek USB 2.0 PHY support the digital home center (DHC) RTD series SoCs.
-> +  The USB 2.0 PHY driver is designed to support the XHCI controller. The SoCs
-> +  support multiple XHCI controllers. One PHY device node maps to one XHCI
-> +  controller.
-> +
-> +  RTD1295/RTD1619 SoCs USB
-> +  The USB architecture includes three XHCI controllers.
-> +  Each XHCI maps to one USB 2.0 PHY and map one USB 3.0 PHY on some
-> +  controllers.
-> +  XHCI controller#0 -- usb2phy -- phy#0
-> +                    |- usb3phy -- phy#0
-> +  XHCI controller#1 -- usb2phy -- phy#0
-> +  XHCI controller#2 -- usb2phy -- phy#0
-> +                    |- usb3phy -- phy#0
-> +
-> +  RTD1395 SoCs USB
-> +  The USB architecture includes two XHCI controllers.
-> +  The controller#0 has one USB 2.0 PHY. The controller#1 includes two USB 2.0
-> +  PHY.
-> +  XHCI controller#0 -- usb2phy -- phy#0
-> +  XHCI controller#1 -- usb2phy -- phy#0
-> +                               |- phy#1
-> +
-> +  RTD1319/RTD1619b SoCs USB
-> +  The USB architecture includes three XHCI controllers.
-> +  Each XHCI maps to one USB 2.0 PHY and map one USB 3.0 PHY on controllers#2.
-> +  XHCI controller#0 -- usb2phy -- phy#0
-> +  XHCI controller#1 -- usb2phy -- phy#0
-> +  XHCI controller#2 -- usb2phy -- phy#0
-> +                    |- usb3phy -- phy#0
-> +
-> +  RTD1319d SoCs USB
-> +  The USB architecture includes three XHCI controllers.
-> +  Each xhci maps to one USB 2.0 PHY and map one USB 3.0 PHY on controllers#0.
-> +  XHCI controller#0 -- usb2phy -- phy#0
-> +                    |- usb3phy -- phy#0
-> +  XHCI controller#1 -- usb2phy -- phy#0
-> +  XHCI controller#2 -- usb2phy -- phy#0
-> +
-> +  RTD1312c/RTD1315e SoCs USB
-> +  The USB architecture includes three XHCI controllers.
-> +  Each XHCI maps to one USB 2.0 PHY.
-> +  XHCI controller#0 -- usb2phy -- phy#0
-> +  XHCI controller#1 -- usb2phy -- phy#0
-> +  XHCI controller#2 -- usb2phy -- phy#0
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - realtek,rtd1295-usb2phy
-> +          - realtek,rtd1312c-usb2phy
-> +          - realtek,rtd1315e-usb2phy
-> +          - realtek,rtd1319-usb2phy
-> +          - realtek,rtd1319d-usb2phy
-> +          - realtek,rtd1395-usb2phy
-> +          - realtek,rtd1395-usb2phy-2port
-> +          - realtek,rtd1619-usb2phy
-> +          - realtek,rtd1619b-usb2phy
-> +      - const: realtek,usb2phy
+Hello,
 
-That's not what your driver is saying... This patchset has random set of
-changes.
+syzbot found the following issue on:
 
-I suggest to drop "realtek,usb2phy".
+HEAD commit:    f7efed9f38f8 Add linux-next specific files for 20230616
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=12240d17280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=60b1a32485a77c16
+dashboard link: https://syzkaller.appspot.com/bug?extid=04625c80899f4555de39
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11bc386b280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17bbc85b280000
 
-> +
-> +  reg:
-> +    items:
-> +      - description: PHY data registers
-> +      - description: PHY control registers
-> +
-> +  "#phy-cells":
-> +    const: 0
-> +
-> +  nvmem-cells:
-> +    maxItems: 2
-> +    description:
-> +      Phandles to nvmem cell that contains the trimming data.
-> +      If unspecified, default value is used.
-> +
-> +  nvmem-cell-names:
-> +    items:
-> +      - const: usb-dc-cal
-> +      - const: usb-dc-dis
-> +    description:
-> +      The following names, which correspond to each nvmem-cells.
-> +      usb-dc-cal is the driving level for each phy specified via efuse.
-> +      usb-dc-dis is the disconnection level for each phy specified via efuse.
-> +
-> +  realtek,inverse-hstx-sync-clock:
-> +    description:
-> +      For one of the phys of RTD1619b SoC, the synchronous clock of the
-> +      high-speed tx must be inverted. So this property is used to set the
-> +      inverted clock.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/95bcbee03439/disk-f7efed9f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/6fd295caa4de/vmlinux-f7efed9f.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/69c038a34b5f/bzImage-f7efed9f.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/b37a2f98c970/mount_0.gz
 
-Drop last sentence, it is redundant.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+04625c80899f4555de39@syzkaller.appspotmail.com
 
-> +    type: boolean
-> +
-> +  realtek,driving-level:
-> +    description:
-> +      Each board or port may have a different driving capability. This
-> +      will adjust the driving level value if the value is not the default.
+REISERFS (device loop0): journal params: device loop0, size 512, journal first block 18, max trans len 256, max batch 225, max commit age 30, max trans age 30
+REISERFS (device loop0): checking transaction log (loop0)
+REISERFS (device loop0): Using r5 hash to sort names
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 5034 at block/bdev.c:617 bd_end_claim block/bdev.c:617 [inline]
+WARNING: CPU: 1 PID: 5034 at block/bdev.c:617 blkdev_put+0x562/0x8a0 block/bdev.c:901
+Modules linked in:
+CPU: 1 PID: 5034 Comm: syz-executor379 Not tainted 6.4.0-rc6-next-20230616-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+RIP: 0010:bd_end_claim block/bdev.c:617 [inline]
+RIP: 0010:blkdev_put+0x562/0x8a0 block/bdev.c:901
+Code: c0 74 08 3c 03 0f 8e 23 03 00 00 41 83 ac 24 f0 04 00 00 01 e9 2b fe ff ff e8 1a 39 90 fd 0f 0b e9 4b fc ff ff e8 0e 39 90 fd <0f> 0b e9 e0 fb ff ff e8 02 39 90 fd 4c 8d ab a8 00 00 00 31 f6 4c
+RSP: 0018:ffffc90003b5fa28 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff888148c8c500 RCX: 0000000000000000
+RDX: ffff888025959dc0 RSI: ffffffff83f42912 RDI: 0000000000000001
+RBP: ffff88801f459000 R08: 0000000000000000 R09: fffffbfff1d53172
+R10: ffffffff8ea98b97 R11: 0000000000000003 R12: ffff888148c8c538
+R13: ffffc90003b81000 R14: ffff88801f459460 R15: ffff888148c8c500
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f42f1a5f140 CR3: 000000000c775000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ release_journal_dev fs/reiserfs/journal.c:2592 [inline]
+ free_journal_ram+0x421/0x5c0 fs/reiserfs/journal.c:1896
+ do_journal_release fs/reiserfs/journal.c:1960 [inline]
+ journal_release+0x276/0x630 fs/reiserfs/journal.c:1971
+ reiserfs_put_super+0xe4/0x5c0 fs/reiserfs/super.c:616
+ generic_shutdown_super+0x158/0x480 fs/super.c:499
+ kill_block_super+0x64/0xb0 fs/super.c:1422
+ deactivate_locked_super+0x98/0x160 fs/super.c:330
+ deactivate_super+0xb1/0xd0 fs/super.c:361
+ cleanup_mnt+0x2ae/0x3d0 fs/namespace.c:1247
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0xadc/0x2a30 kernel/exit.c:874
+ do_group_exit+0xd4/0x2a0 kernel/exit.c:1024
+ __do_sys_exit_group kernel/exit.c:1035 [inline]
+ __se_sys_exit_group kernel/exit.c:1033 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1033
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f42f19ea9c9
+Code: Unable to access opcode bytes at 0x7f42f19ea99f.
+RSP: 002b:00007fffc2761718 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f42f1a61330 RCX: 00007f42f19ea9c9
+RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000001
+RBP: 0000000000000001 R08: ffffffffffffffc0 R09: 0000000000001111
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f42f1a61330
+R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
+ </TASK>
 
-I don't understand it. What is "driving capability" and if each port can
-have it different, why do you need property for this?
 
-You mention some default - why it is not expressed as "default: xx"?
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-What do the values mean?
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    minimum: 0
-> +    maximum: 31
-> +
-> +  realtek,driving-compensate:
-> +    description:
-> +      For RTD1315e SoC, the driving level can be adjusted by reading the
-> +      efuse table. Therefore, this property provides drive compensation for
-> +      different boards with different drive capabilities.
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-if driving level can be read from nvmem, why do you have
-realtek,driving-level in the first place? Don't you miss here some allOf
-making this constrained per variant?
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
-"Therefore" means "for that reason" or "as a consequence". How is this
-property a consequence of reading driving level from efuse? Is it then
-mutually exclusive with "realtek,driving-level"? But your schema does
-not express it.
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
-> +    $ref: /schemas/types.yaml#/definitions/int32
-> +    minimum: -8
-> +    maximum: 8
-> +
-> +  realtek,disconnection-compensate:
-> +    description:
-> +      This adjusts the disconnection level compensation for the different
-> +      boards with different disconnection level.
-> +    $ref: /schemas/types.yaml#/definitions/int32
-> +    minimum: -8
-> +    maximum: 8
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - "#phy-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    usb_port0_usb2phy: usb-phy@13214 {
-> +        compatible = "realtek,rtd1319d-usb2phy", "realtek,usb2phy";
-> +        reg = <0x13214 0x4>, <0x28280 0x4>;
-> +        #phy-cells = <0>;
-> +
-> +        realtek,driving-level = <0xe>;
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
 
-Why this example is so empty? You have at least 6 more properties which
-should be shown here.
-
-Best regards,
-Krzysztof
-
+If you want to undo deduplication, reply with:
+#syz undup
