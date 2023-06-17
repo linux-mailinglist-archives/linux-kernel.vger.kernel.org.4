@@ -2,245 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1CDF733D38
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 02:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C33F733D45
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 02:44:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbjFQAiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 16 Jun 2023 20:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34488 "EHLO
+        id S230045AbjFQAoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 16 Jun 2023 20:44:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjFQAh6 (ORCPT
+        with ESMTP id S229493AbjFQAoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 16 Jun 2023 20:37:58 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25073A9F
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 17:37:55 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b203891b2cso18506461fa.3
-        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 17:37:55 -0700 (PDT)
+        Fri, 16 Jun 2023 20:44:04 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E0F3A92
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 17:44:02 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b44c08b36dso18887871fa.1
+        for <linux-kernel@vger.kernel.org>; Fri, 16 Jun 2023 17:44:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686962274; x=1689554274;
+        d=linaro.org; s=google; t=1686962641; x=1689554641;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=zLJ/HyLk8aHdK48XNj4A6heaUhmNKktRDgE5dNyjydg=;
-        b=F/zDTD04CIDiDtqFILY+mlOJJrQDgwNsNf0ZJTwwM7BhWLA4SWXQJg/NUnSvrEIixH
-         E/OwMz6Vx4bzt31u/Ep7J2sZcrE3REGZg4QTpPxsy8FkV8keDkznN4l2H0605wcWHJg1
-         K27DuUnKZy6ENPvlWWUuTlY+Q8RmiPB7s3zl3SAS/xQM40+EeNGKhlHoRf5xGvxjAiru
-         IZZ7aSO1A6XLxbrUVFCzfUI1CPGhU95RmYY03cnemM12cBWvOpHyKvdguM62CGyRg926
-         GDlbIJQ/NrAfL/T+T5Ou33KrguWIUuGvM9W2K/abeDsvkpXn83I0gNUSxXaz2iaIArXr
-         UY3w==
+        bh=9mU9/r2NP5pdyOYwI4LQnZTUP7KdrI2cN021yOGtwio=;
+        b=o3hkf4LmU9suujKu2ERmn6Gh1FpoCEhilDqUtyCUr9uFhBcl7CEtu9FlHhBfl6c9xZ
+         Fl9kN2K80JY7VpuHcpAnOmrmMD2BZuaCVMUfrNLYQb3zsVbtFDfLV/X4GDksMlFpcjub
+         OEhM91WO/H4xixVW4NXx1DPRWE6fEbNE/WjR1Y9Hw5GbWoGEg+c5Bfpk715gjvBTTqic
+         7A+qYqjDAK+/5OR/qSY6H+uVqqWZgLOKVeZ9TEG5mY08vLLeaGjr2zJPQnvt8BFA3zJf
+         e8/VUrcJKxuuRc15A5difpTpVfe+83IwPSsY+4BPe6thRD6HlQd7V4Bi92/ilt2vbymt
+         ZsaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686962274; x=1689554274;
+        d=1e100.net; s=20221208; t=1686962641; x=1689554641;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zLJ/HyLk8aHdK48XNj4A6heaUhmNKktRDgE5dNyjydg=;
-        b=PD3xLytTFN3iauXsNymm8clSq0K/9EbQAAune15/i2CcJRrJJFlAITYjQjjDnLowSS
-         Q8v7fe8Y8ZnTklyO6KY/XctbV2jIAJJdretVmJUIHahHNSuDgdT6FyoCSvhXnF5XAvWr
-         RzkfdiBkBO6MMBSp8GgWeuBb6t19l8HchlEHwS/Z+VAb0qPql/MVASSaTTsFiwZCOoLB
-         5qFG9eKyCprrIKqKDN6rgHw4hLwQPV6BZeLovWC4qQSnLSPbueK2IOTl3mANke0149k2
-         dXojJZjdOkyIY3cHBYvBYrfWI+qLqL3u8fMnRjAcmi+z25LFZxj/SJP0LuQGEIea5NXs
-         Us8g==
-X-Gm-Message-State: AC+VfDwn/3RNJmtH72QOtMqpgSbN+owFV6Jqv0i/Nwry5/3Tc2XFHwO8
-        9nM5odCl0l6BqmGt5HgvZ6Af1Q==
-X-Google-Smtp-Source: ACHHUZ70tOwcodBKjysvwsCBQVd0Y91pAmSk1S5eoU5HgEC2qlxBhGcITnzOYwkKBnRAYA55tcDz+A==
-X-Received: by 2002:a2e:9082:0:b0:2b1:e807:f0f with SMTP id l2-20020a2e9082000000b002b1e8070f0fmr2660137ljg.28.1686962274146;
-        Fri, 16 Jun 2023 17:37:54 -0700 (PDT)
+        bh=9mU9/r2NP5pdyOYwI4LQnZTUP7KdrI2cN021yOGtwio=;
+        b=EmLACfs6Nnl2MFl03/OZ92TPAmDvqh6wJhAaMtjcQuH0qdUtvTLrfONKTp4hxEB307
+         zzOJUPZ7AjgnSNJunvKS3pGfJf1o8d4v6uCCLrHSTZXGTrMGGFBW5QL6/E23OrHvNaMI
+         FGJcZyZFyGxLhJM3eOpImZjLIxKAcYBWmLgBqKcxYZ+YF+WCaqX+wBy7hIQlGvDi5VUy
+         rAkWKcgAMb9/5YpKb44K9mdviYds5CXqow/xtsuhgMYE+dtti0/OxWGZBJ3nDPxhyWXI
+         MMq2OJSlYCjp+b51rv/tKgq2MYkXqL+sbJ5Q1r0ayhSYA3Bdgp0XGAgaEf2Gn5s8TZNA
+         ANPQ==
+X-Gm-Message-State: AC+VfDxLHN+XbnyEkC0KAoSfSW5eMuCXCW+dkZVTRlh3O86UjzuMPwDk
+        M3QYOQw52dtrPdx9ezfPHsubAg==
+X-Google-Smtp-Source: ACHHUZ4/NJzvy9Ymi1RNhlhOYdBvrKxBA5Ui0VN9jETqQpt1BUY1v2MlEH0NcxHdO2ACnkRNIFfmnw==
+X-Received: by 2002:a05:6512:3125:b0:4f8:5864:3cb5 with SMTP id p5-20020a056512312500b004f858643cb5mr2067503lfd.13.1686962640709;
+        Fri, 16 Jun 2023 17:44:00 -0700 (PDT)
 Received: from [192.168.1.212] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id y5-20020a2e95c5000000b002b3204fdd78sm3021076ljh.140.2023.06.16.17.37.53
+        by smtp.gmail.com with ESMTPSA id q16-20020ac25290000000b004f85cf6416asm147300lfm.118.2023.06.16.17.43.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jun 2023 17:37:53 -0700 (PDT)
-Message-ID: <2b01b53a-9d8a-3b7d-d1bd-7d25eb77a9c0@linaro.org>
-Date:   Sat, 17 Jun 2023 03:37:52 +0300
+        Fri, 16 Jun 2023 17:44:00 -0700 (PDT)
+Message-ID: <6c91dfd9-50b1-7196-9191-c7dbf1ec4ed2@linaro.org>
+Date:   Sat, 17 Jun 2023 03:43:59 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [Freedreno] [PATCH 1/3] drm/msm/dpu: Add DPU_INTF_DATABUS_WIDEN
- feature flag for DPU >= 5.0
+Subject: Re: [PATCH] drm/msm/adreno: Update MODULE_FIRMWARE macros
 Content-Language: en-GB
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Sean Paul <sean@poorly.run>
-References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
- <20230525-add-widebus-support-v1-1-c7069f2efca1@quicinc.com>
- <wpjxrnhbcanbc5iatxnff25yrrdfrtmgb24sgwyo457dz2oyjz@e2docpcb6337>
- <f4fb042c-1458-6077-3c49-8cc02638b27c@linaro.org>
- <ycgei43x4kfmjk7g7gbeglehtiiinfbqmrjbdzcy56frxbtd2z@yk2f5kgrkbrt>
- <e23de804-060d-3278-5045-1ed03f0de80d@quicinc.com>
- <c5cfc132-effb-8269-ac5d-ed8c988d1a16@quicinc.com>
- <08b6aaf4-6edd-4f41-5d98-11ffc27e766e@quicinc.com>
- <6d11e420-1b95-0029-ec7a-17fbc8acb5ca@linaro.org>
- <827875ad-a446-10e7-6608-f9b0fa830a00@quicinc.com>
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>
+Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com, sean@poorly.run,
+        airlied@gmail.com, daniel@ffwll.ch, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, johan+linaro@kernel.org,
+        konrad.dybcio@linaro.org, ribalda@chromium.org,
+        joel@joelfernandes.org
+References: <20230616122815.1037425-1-juerg.haefliger@canonical.com>
+ <yl7qxypdzlzwmmp3b43vz5xo6jxey4zcpdxurcvfzujxrawz36@lneajulwoy4k>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <827875ad-a446-10e7-6608-f9b0fa830a00@quicinc.com>
+In-Reply-To: <yl7qxypdzlzwmmp3b43vz5xo6jxey4zcpdxurcvfzujxrawz36@lneajulwoy4k>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/06/2023 00:10, Abhinav Kumar wrote:
-> 
-> 
-> On 6/14/2023 1:43 PM, Dmitry Baryshkov wrote:
->> On 14/06/2023 23:39, Abhinav Kumar wrote:
->>>
->>>
->>> On 6/14/2023 12:54 PM, Abhinav Kumar wrote:
->>>>
->>>>
->>>> On 6/14/2023 12:35 PM, Abhinav Kumar wrote:
->>>>>
->>>>>
->>>>> On 6/14/2023 5:23 AM, Marijn Suijten wrote:
->>>>>> On 2023-06-14 15:01:59, Dmitry Baryshkov wrote:
->>>>>>> On 14/06/2023 14:42, Marijn Suijten wrote:
->>>>>>>> On 2023-06-13 18:57:11, Jessica Zhang wrote:
->>>>>>>>> DPU 5.x+ supports a databus widen mode that allows more data to 
->>>>>>>>> be sent
->>>>>>>>> per pclk. Enable this feature flag on all relevant chipsets.
->>>>>>>>>
->>>>>>>>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
->>>>>>>>> ---
->>>>>>>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 3 ++-
->>>>>>>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h | 2 ++
->>>>>>>>>    2 files changed, 4 insertions(+), 1 deletion(-)
->>>>>>>>>
->>>>>>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c 
->>>>>>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>>>>>>> index 36ba3f58dcdf..0be7bf0bfc41 100644
->>>>>>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>>>>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>>>>>>> @@ -103,7 +103,8 @@
->>>>>>>>>        (BIT(DPU_INTF_INPUT_CTRL) | \
->>>>>>>>>         BIT(DPU_INTF_TE) | \
->>>>>>>>>         BIT(DPU_INTF_STATUS_SUPPORTED) | \
->>>>>>>>> -     BIT(DPU_DATA_HCTL_EN))
->>>>>>>>> +     BIT(DPU_DATA_HCTL_EN) | \
->>>>>>>>> +     BIT(DPU_INTF_DATABUS_WIDEN))
->>>>>>>>
->>>>>>>> This doesn't work.  DPU 5.0.0 is SM8150, which has DSI 6G 2.3. 
->>>>>>>> In the
->>>>>>>> last patch for DSI you state and enable widebus for DSI 6G 2.5+ 
->>>>>>>> only,
->>>>>>>> meaning DPU and DSI are now desynced, and the output is completely
->>>>>>>> corrupted.
->>>>>>
->>>
->>> I looked at the internal docs and also this change. This change is 
->>> incorrect because this will try to enable widebus for DPU >= 5.0 and 
->>> DSI  >= 2.5
->>>
->>> That was not the intended right condition as thats not what the docs 
->>> say.
->>>
->>> We should enable for DPU >= 7.0 and DSI >= 2.5
->>>
->>> Is there any combination where this compatibility is broken? That 
->>> would be the strange thing for me ( not DPU 5.0 and DSI 2.5 as that 
->>> was incorrect)
->>>
->>> Part of this confusion is because of catalog macro re-use again.
->>>
->>> This series is a good candidate and infact I think we should only do 
->>> core_revision based check on DPU and DSI to avoid bringing the 
->>> catalog mess into this.
+On 16/06/2023 18:55, Akhil P Oommen wrote:
+> On Fri, Jun 16, 2023 at 02:28:15PM +0200, Juerg Haefliger wrote:
 >>
->> I have just a single request here: can we please have the same 
->> approach for both DSI and DP? I don't mind changing DP code if it 
->> makes it better. If you don't have better reasons, I like the idea of 
->> DSI/DP dictating whether wide bus should be used on the particular 
->> interface. It allows us to handle possible errata or corner cases 
->> there. Another option would be to make DPU tell DSI / DP whether the 
->> wide bus is enabled or not, but I'd say, this is slightly worse solution.
+>> Add missing MODULE_FIRMWARE macros and remove some for firmwares that
+>> the driver no longer references.
 >>
+>> Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
+>> ---
+>>   drivers/gpu/drm/msm/adreno/adreno_device.c | 23 ++++++++++++++++++----
+>>   1 file changed, 19 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
+>> index 8cff86e9d35c..9f70d7c1a72a 100644
+>> --- a/drivers/gpu/drm/msm/adreno/adreno_device.c
+>> +++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
+>> @@ -364,17 +364,32 @@ MODULE_FIRMWARE("qcom/a330_pm4.fw");
+>>   MODULE_FIRMWARE("qcom/a330_pfp.fw");
+>>   MODULE_FIRMWARE("qcom/a420_pm4.fw");
+>>   MODULE_FIRMWARE("qcom/a420_pfp.fw");
+>> +MODULE_FIRMWARE("qcom/a506_zap.mdt");
+>> +MODULE_FIRMWARE("qcom/a508_zap.mdt");
+>> +MODULE_FIRMWARE("qcom/a512_zap.mdt");
+>>   MODULE_FIRMWARE("qcom/a530_pm4.fw");
+>>   MODULE_FIRMWARE("qcom/a530_pfp.fw");
+>>   MODULE_FIRMWARE("qcom/a530v3_gpmu.fw2");
+>>   MODULE_FIRMWARE("qcom/a530_zap.mdt");
+>> -MODULE_FIRMWARE("qcom/a530_zap.b00");
+>> -MODULE_FIRMWARE("qcom/a530_zap.b01");
+>> -MODULE_FIRMWARE("qcom/a530_zap.b02");
+> Why are these not required when "qcom/a530_zap.mdt" is present?
 > 
-> Today, DP's widebus does not check if DPU supports that or not.
+> mdt & b0* binaries are different partitions of the same secure
+> firmware. Even though we specify only the .mdt file here, the PIL driver
+> will load the *.b0* file automatically. OTOH, "*.mbn" is a standalone
+> unified binary format.
 > 
-> DPU encoder queries the DP whether widebus is available and enables it.
-> 
-> We can also do the same thing for DSI.
-> 
-> So for intf_type of DSI, DPU encoder will query DSI if it supports widebus.
+> If the requirement is to ensure that all necessary firmwares are part of
+> your distribution, you should include the *.b0* files too here.
 
-Not if it supports wide bus. But the check is whether enabling wide bus 
-is requested by the output driver (DSI/DP).
+I'd say, we should drop all zap files from this list. Linux-firmware 
+does not provide files with such names. The zap file name depends on the 
+SoC and the platform name.
+
+Juerg, could you please split the patch into two parts:
+- pfp/pm4/sqe firmware names (which can be merged pretty quickly, as 
+there is no controversy) and zap files changes (after we finish 
+discussion in this thread).
 
 > 
-> Then DSI will do its version checks and for DSC it will say yes.
+> -Akhil
 > 
-> This way, we will never check for the DPU's core revision for DSI and 
-> purely rely of DP/DSI's hw revisions.
-> 
-> Thats fine with me because that way we again just rely on the hw 
-> revision to enable the feature.
-> 
-> But as a result I am still going to drop this patch which adds widebus 
-> to the catalog as a dpu cap which I always wanted to do anyway as we 
-> will just rely on the DSI and DP hw revisions.
-
-Yep.
-
-> 
->>>
->>>>>> Tested this on SM8350 which actually has DSI 2.5, and it is also
->>>>>> corrupted with this series so something else on this series might be
->>>>>> broken.
->>>>>>
->>>>
->>>> Missed this response. That seems strange.
->>>>
->>>> This series was tested on SM8350 HDK with a command mode panel.
->>>>
->>>> We will fix the DPU-DSI handshake and post a v2 but your issue needs 
->>>> investigation in parallel.
->>>>
->>>> So another bug to track that would be great.
->>>>
->>>>>>>> Is the bound in dsi_host wrong, or do DPU and DSI need to 
->>>>>>>> communicate
->>>>>>>> when widebus will be enabled, based on DPU && DSI supporting it?
->>>>>>>
->>>>>>> I'd prefer to follow the second approach, as we did for DP. DPU 
->>>>>>> asks the
->>>>>>> actual video output driver if widebus is to be enabled.
->>>>>>
->>>>>
->>>>> I was afraid of this. This series was made on an assumption that 
->>>>> the DPU version of widebus and DSI version of widebus would be 
->>>>> compatible but looks like already SM8150 is an outlier.
->>>>>
->>>>> Yes, I think we have to go with second approach.
->>>>>
->>>>> DPU queries DSI if it supports widebus and enables it.
->>>>>
->>>>> Thanks for your responses. We will post a v2.
->>>>>
->>>>>> Doesn't it seem very strange that DPU 5.x+ comes with a widebus 
->>>>>> feature,
->>>>>> but the DSI does not until two revisions later?  Or is this 
->>>>>> available on
->>>>>> every interface, but only for a different (probably DP) encoder 
->>>>>> block?
->>>>>>
->>>>>
->>>>> Yes its strange.
->>>>>
->>>
->>> I have clarified this above. Its not strange but appeared strange 
->>> because we were checking wrong conditions.
->>>
->>>
->>>>>> - Marijn
+>> +MODULE_FIRMWARE("qcom/a540_gpmu.fw2");
+>> +MODULE_FIRMWARE("qcom/a540_zap.mdt");
+>> +MODULE_FIRMWARE("qcom/a615_zap.mdt");
+>>   MODULE_FIRMWARE("qcom/a619_gmu.bin");
+>>   MODULE_FIRMWARE("qcom/a630_sqe.fw");
+>>   MODULE_FIRMWARE("qcom/a630_gmu.bin");
+>> -MODULE_FIRMWARE("qcom/a630_zap.mbn");
+>> +MODULE_FIRMWARE("qcom/a630_zap.mdt");
+>> +MODULE_FIRMWARE("qcom/a640_gmu.bin");
+>> +MODULE_FIRMWARE("qcom/a640_zap.mdt");
+>> +MODULE_FIRMWARE("qcom/a650_gmu.bin");
+>> +MODULE_FIRMWARE("qcom/a650_sqe.fw");
+>> +MODULE_FIRMWARE("qcom/a650_zap.mdt");
+>> +MODULE_FIRMWARE("qcom/a660_gmu.bin");
+>> +MODULE_FIRMWARE("qcom/a660_sqe.fw");
+>> +MODULE_FIRMWARE("qcom/a660_zap.mdt");
+>> +MODULE_FIRMWARE("qcom/leia_pfp_470.fw");
+>> +MODULE_FIRMWARE("qcom/leia_pm4_470.fw");
+>> +MODULE_FIRMWARE("qcom/yamato_pfp.fw");
+>> +MODULE_FIRMWARE("qcom/yamato_pm4.fw");
+>>   
+>>   static inline bool _rev_match(uint8_t entry, uint8_t id)
+>>   {
+>> -- 
+>> 2.37.2
 >>
 
 -- 
