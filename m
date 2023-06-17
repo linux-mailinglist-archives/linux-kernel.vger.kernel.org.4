@@ -2,197 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74D58734072
-	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 13:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB542734074
+	for <lists+linux-kernel@lfdr.de>; Sat, 17 Jun 2023 13:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231423AbjFQLKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 07:10:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
+        id S235351AbjFQLMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 07:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjFQLKc (ORCPT
+        with ESMTP id S229852AbjFQLMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 07:10:32 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E161722
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 04:10:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687000231; x=1718536231;
-  h=date:from:to:cc:subject:message-id;
-  bh=CXRqCFF5rkpqCd3L7+zXpYnlu0o3ej5C40fN3Kqo9Xg=;
-  b=Uf8l+U+wR2KkU5aOn5GEO1Hopm6CaoHKQ4W282ITXXY0ssZprOve1Byc
-   tC/UN2rsV5axIJgOJl9mXN/B8IEz9UyPu5zT8WgrIMcDyRd2ivmccV9ja
-   h6QZ8HmUi8EfOwoeRhApStw5Q+xNNcO6xoUdT77I/jgT/+tgrlJ+sKupc
-   R04Mq9hJCOBnwSvJhKTnO0vkplKhVJwF7Aefd/shNV4PUbam9Dj51MjsQ
-   nhzg0x3DDmn5dT6BtvWPZZwK5y8Jv5f4PdUwErO0OT6xzVctVLtpME95I
-   5a+rE1Y4VomzqurCwWak0F4BS5eksxiTHGp7q14MdphP6elJBRKO5eam4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="388249667"
-X-IronPort-AV: E=Sophos;i="6.00,250,1681196400"; 
-   d="scan'208";a="388249667"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2023 04:10:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="1043379732"
-X-IronPort-AV: E=Sophos;i="6.00,250,1681196400"; 
-   d="scan'208";a="1043379732"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 17 Jun 2023 04:10:30 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qATp8-0002h6-0M;
-        Sat, 17 Jun 2023 11:10:30 +0000
-Date:   Sat, 17 Jun 2023 19:09:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/boot] BUILD SUCCESS
- 0a9567ac5e6a40cdd9c8cd15b19a62a15250f450
-Message-ID: <202306171950.bAQ4dfhj-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sat, 17 Jun 2023 07:12:49 -0400
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE351FF3
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 04:12:48 -0700 (PDT)
+Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3418055950bso14545845ab.1
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 04:12:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687000368; x=1689592368;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tqysVBz+NFmrTu+Ca/Xnkrb+OEIx8dLa2JZyf+GKTrw=;
+        b=DaopRaMiD4WdLJ0i0dXjrjK9UHKcfv7ahir0/t2QbnXgy+bbCwX2AQdbHsFyj/bYAe
+         zKL4cWZflxz9kCo1p0Mu4dw+pQjILtEhvV0CoIQ7IWDfdJRucmNb/WzMzydjR1qlwrcH
+         93T7UmIMvexv5V52osejC/UMjAfZcQ31UcaU+K5nyGJtrqAJxr+wSo0yY+YWBWADccir
+         VCXohaxpeGMGtma/IfdUPqHigD1Yo86JupEQaSJn1pefEy7gyGgpBhkAFPLb1wYaR8L2
+         25ZpdTG2EssMojMShofsyAqhvgBUxPOSDt4AqIXNU8kOpmygyAk2Bh5VklbriWOW+MJY
+         8cpQ==
+X-Gm-Message-State: AC+VfDwEl0wdAIwKZgrTT2IbmUDx7gF0NjvTGrIrjLQG8WoKxRYvt+nE
+        vy7vN/5Xb4Vk5UZ8dfSaqMUnpRkaHxCWoCeMsuNAQrfOlYXa
+X-Google-Smtp-Source: ACHHUZ4msT+TTZyn0q/FX5PQ0CqLUvKtu2X97cf3SNxRrcp6ri3a1sPOQOT2KklftY2+grulVgp2JCc8fdvjhW7CFLx9FFQpBLCb
+MIME-Version: 1.0
+X-Received: by 2002:a05:6e02:1aac:b0:341:e20d:24b with SMTP id
+ l12-20020a056e021aac00b00341e20d024bmr1531796ilv.0.1687000367830; Sat, 17 Jun
+ 2023 04:12:47 -0700 (PDT)
+Date:   Sat, 17 Jun 2023 04:12:47 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a91cfe05fe5161f2@google.com>
+Subject: [syzbot] [bluetooth?] BUG: sleeping function called from invalid
+ context in __hci_cmd_sync_sk
+From:   syzbot <syzbot+c715e1bd8dfbcb1ab176@syzkaller.appspotmail.com>
+To:     johan.hedberg@gmail.com, linux-bluetooth@vger.kernel.org,
+        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
+        marcel@holtmann.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/boot
-branch HEAD: 0a9567ac5e6a40cdd9c8cd15b19a62a15250f450  x86/mem_encrypt: Unbreak the AMD_MEM_ENCRYPT=n build
+Hello,
 
-elapsed time: 877m
+syzbot found the following issue on:
 
-configs tested: 119
-configs skipped: 5
+HEAD commit:    1f6ce8392d6f Add linux-next specific files for 20230613
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=14adff43280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d103d5f9125e9fe9
+dashboard link: https://syzkaller.appspot.com/bug?extid=c715e1bd8dfbcb1ab176
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11287563280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14395963280000
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/2d9bf45aeae9/disk-1f6ce839.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e0b03ef83e17/vmlinux-1f6ce839.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/b6c21a24174d/bzImage-1f6ce839.xz
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r006-20230616   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r016-20230616   gcc  
-arc                  randconfig-r032-20230616   gcc  
-arc                  randconfig-r043-20230617   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                       aspeed_g4_defconfig   clang
-arm                       aspeed_g5_defconfig   gcc  
-arm                                 defconfig   gcc  
-arm                          gemini_defconfig   gcc  
-arm                        mvebu_v5_defconfig   clang
-arm                  randconfig-r011-20230616   clang
-arm                  randconfig-r046-20230617   gcc  
-arm                           stm32_defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r012-20230616   gcc  
-csky                 randconfig-r024-20230617   gcc  
-hexagon              randconfig-r041-20230617   clang
-hexagon              randconfig-r045-20230617   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r004-20230616   clang
-i386         buildonly-randconfig-r005-20230616   clang
-i386         buildonly-randconfig-r006-20230616   clang
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230617   gcc  
-i386                 randconfig-i002-20230617   gcc  
-i386                 randconfig-i003-20230617   gcc  
-i386                 randconfig-i004-20230617   gcc  
-i386                 randconfig-i005-20230617   gcc  
-i386                 randconfig-i006-20230617   gcc  
-i386                 randconfig-i011-20230616   gcc  
-i386                 randconfig-i012-20230616   gcc  
-i386                 randconfig-i013-20230616   gcc  
-i386                 randconfig-i014-20230616   gcc  
-i386                 randconfig-i015-20230616   gcc  
-i386                 randconfig-i016-20230616   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r013-20230616   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                        stmark2_defconfig   gcc  
-microblaze           randconfig-r001-20230616   gcc  
-microblaze           randconfig-r004-20230616   gcc  
-microblaze           randconfig-r022-20230617   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                      maltasmvp_defconfig   gcc  
-mips                 randconfig-r021-20230617   gcc  
-mips                 randconfig-r023-20230617   gcc  
-mips                 randconfig-r036-20230616   gcc  
-nios2                               defconfig   gcc  
-openrisc                            defconfig   gcc  
-openrisc             randconfig-r026-20230617   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r034-20230616   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                      arches_defconfig   gcc  
-powerpc                      ep88xc_defconfig   gcc  
-powerpc                     powernv_defconfig   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230617   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r025-20230617   clang
-s390                 randconfig-r044-20230617   clang
-sh                               allmodconfig   gcc  
-sh                            migor_defconfig   gcc  
-sh                          r7785rp_defconfig   gcc  
-sh                   randconfig-r015-20230616   gcc  
-sh                           se7722_defconfig   gcc  
-sh                             sh03_defconfig   gcc  
-sh                          urquell_defconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r002-20230616   gcc  
-sparc                randconfig-r005-20230616   gcc  
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                   randconfig-r031-20230616   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r001-20230616   clang
-x86_64       buildonly-randconfig-r002-20230616   clang
-x86_64       buildonly-randconfig-r003-20230616   clang
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230617   gcc  
-x86_64               randconfig-a002-20230617   gcc  
-x86_64               randconfig-a003-20230617   gcc  
-x86_64               randconfig-a004-20230617   gcc  
-x86_64               randconfig-a005-20230617   gcc  
-x86_64               randconfig-a006-20230617   gcc  
-x86_64               randconfig-a011-20230616   gcc  
-x86_64               randconfig-a012-20230616   gcc  
-x86_64               randconfig-a013-20230616   gcc  
-x86_64               randconfig-a014-20230616   gcc  
-x86_64               randconfig-a015-20230616   gcc  
-x86_64               randconfig-a016-20230616   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r035-20230616   gcc  
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c715e1bd8dfbcb1ab176@syzkaller.appspotmail.com
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+BUG: sleeping function called from invalid context at net/bluetooth/hci_sync.c:166
+in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 4430, name: kworker/u5:1
+preempt_count: 0, expected: 0
+RCU nest depth: 1, expected: 0
+4 locks held by kworker/u5:1/4430:
+ #0: ffff888020183138 ((wq_completion)hci0#2){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:20 [inline]
+ #0: ffff888020183138 ((wq_completion)hci0#2){+.+.}-{0:0}, at: raw_atomic64_set include/linux/atomic/atomic-arch-fallback.h:2608 [inline]
+ #0: ffff888020183138 ((wq_completion)hci0#2){+.+.}-{0:0}, at: raw_atomic_long_set include/linux/atomic/atomic-long.h:79 [inline]
+ #0: ffff888020183138 ((wq_completion)hci0#2){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:3196 [inline]
+ #0: ffff888020183138 ((wq_completion)hci0#2){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:675 [inline]
+ #0: ffff888020183138 ((wq_completion)hci0#2){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:702 [inline]
+ #0: ffff888020183138 ((wq_completion)hci0#2){+.+.}-{0:0}, at: process_one_work+0x8fd/0x16f0 kernel/workqueue.c:2564
+ #1: ffffc900057a7db0 ((work_completion)(&hdev->rx_work)){+.+.}-{0:0}, at: process_one_work+0x930/0x16f0 kernel/workqueue.c:2568
+ #2: ffff88802b78c078 (&hdev->lock){+.+.}-{3:3}, at: hci_le_create_big_complete_evt+0xe9/0xab0 net/bluetooth/hci_event.c:6947
+ #3: ffffffff8c9a2840 (rcu_read_lock){....}-{1:2}, at: hci_le_ev_skb_pull net/bluetooth/hci_event.c:79 [inline]
+ #3: ffffffff8c9a2840 (rcu_read_lock){....}-{1:2}, at: hci_le_create_big_complete_evt+0xcc/0xab0 net/bluetooth/hci_event.c:6943
+CPU: 0 PID: 4430 Comm: kworker/u5:1 Not tainted 6.4.0-rc6-next-20230613-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
+Workqueue: hci0 hci_rx_work
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
+ __might_resched+0x358/0x580 kernel/sched/core.c:10188
+ __hci_cmd_sync_sk+0x359/0xe30 net/bluetooth/hci_sync.c:166
+ __hci_cmd_sync_status_sk+0x45/0x160 net/bluetooth/hci_sync.c:247
+ __hci_cmd_sync_status net/bluetooth/hci_sync.c:273 [inline]
+ hci_le_terminate_big_sync+0xa4/0xd0 net/bluetooth/hci_sync.c:1671
+ hci_le_create_big_complete_evt+0x741/0xab0 net/bluetooth/hci_event.c:6982
+ hci_le_meta_evt+0x2bc/0x510 net/bluetooth/hci_event.c:7182
+ hci_event_func net/bluetooth/hci_event.c:7512 [inline]
+ hci_event_packet+0x641/0xfd0 net/bluetooth/hci_event.c:7567
+ hci_rx_work+0xaeb/0x1340 net/bluetooth/hci_core.c:4064
+ process_one_work+0xa34/0x16f0 kernel/workqueue.c:2594
+ worker_thread+0x67d/0x10c0 kernel/workqueue.c:2745
+ kthread+0x344/0x440 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+------------[ cut here ]------------
+Voluntary context switch within RCU read-side critical section!
+WARNING: CPU: 0 PID: 4430 at kernel/rcu/tree_plugin.h:320 rcu_note_context_switch+0xbb9/0x1800 kernel/rcu/tree_plugin.h:320
+Modules linked in:
+CPU: 0 PID: 4430 Comm: kworker/u5:1 Tainted: G        W          6.4.0-rc6-next-20230613-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
+Workqueue: hci0 hci_rx_work
+RIP: 0010:rcu_note_context_switch+0xbb9/0x1800 kernel/rcu/tree_plugin.h:320
+Code: 1d 44 68 00 4c 8b 4c 24 30 8b 4c 24 28 48 8b 54 24 20 e9 8f 03 00 00 48 c7 c7 c0 32 6e 8a c6 05 10 41 24 0d 01 e8 87 83 dc ff <0f> 0b e9 4c f5 ff ff 81 e5 ff ff ff 7f 0f 84 d7 f6 ff ff 65 48 8b
+RSP: 0018:ffffc900057a74c0 EFLAGS: 00010086
+RAX: 0000000000000000 RBX: ffff8880b983d340 RCX: 0000000000000000
+RDX: ffff88802c40bb80 RSI: ffffffff814bf5f7 RDI: 0000000000000001
+RBP: ffff88802c40bb80 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
+R13: ffff88802c40bb80 R14: ffffffff8ea9aff0 R15: ffff8880b983c440
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f802b262fc8 CR3: 000000002812e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __schedule+0x276/0x5790 kernel/sched/core.c:6609
+ schedule+0xde/0x1a0 kernel/sched/core.c:6785
+ schedule_timeout+0x14e/0x2b0 kernel/time/timer.c:2167
+ __hci_cmd_sync_sk+0xc1d/0xe30 net/bluetooth/hci_sync.c:166
+ __hci_cmd_sync_status_sk+0x45/0x160 net/bluetooth/hci_sync.c:247
+ __hci_cmd_sync_status net/bluetooth/hci_sync.c:273 [inline]
+ hci_le_terminate_big_sync+0xa4/0xd0 net/bluetooth/hci_sync.c:1671
+ hci_le_create_big_complete_evt+0x741/0xab0 net/bluetooth/hci_event.c:6982
+ hci_le_meta_evt+0x2bc/0x510 net/bluetooth/hci_event.c:7182
+ hci_event_func net/bluetooth/hci_event.c:7512 [inline]
+ hci_event_packet+0x641/0xfd0 net/bluetooth/hci_event.c:7567
+ hci_rx_work+0xaeb/0x1340 net/bluetooth/hci_core.c:4064
+ process_one_work+0xa34/0x16f0 kernel/workqueue.c:2594
+ worker_thread+0x67d/0x10c0 kernel/workqueue.c:2745
+ kthread+0x344/0x440 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
