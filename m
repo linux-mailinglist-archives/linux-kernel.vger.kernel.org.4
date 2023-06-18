@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3A56734744
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 19:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2808E734748
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 19:39:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbjFRRh4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 18 Jun 2023 13:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48460 "EHLO
+        id S229557AbjFRRjf convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 18 Jun 2023 13:39:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjFRRhz (ORCPT
+        with ESMTP id S229472AbjFRRjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 13:37:55 -0400
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545F61BF;
-        Sun, 18 Jun 2023 10:37:54 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-bd77424c886so3059419276.0;
-        Sun, 18 Jun 2023 10:37:54 -0700 (PDT)
+        Sun, 18 Jun 2023 13:39:31 -0400
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B961B5;
+        Sun, 18 Jun 2023 10:39:30 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-57045429f76so30952537b3.0;
+        Sun, 18 Jun 2023 10:39:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687109873; x=1689701873;
+        d=1e100.net; s=20221208; t=1687109969; x=1689701969;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :reply-to:in-reply-to:references:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=AjyowO3olSkVxM1P/M6uTj58+6YqzrML2c9g+1elEw8=;
-        b=gzLUHlk2PIqmTF8HPM5y3rAwCM2IrId/Dar99HLwNoNSGg1sduntnn2KWffoU/6HSv
-         ytV2Uz7CGONa5lZ5pFB4lKp0AQxt1sHF7QrdbhF78X36FPaq+OktxOAJwI4ADLVLGQ2o
-         t95TVir6XWt5V1PQ6hA7WJ4re7Lk+5TAWxM/mqkHVvaCYq1Ogah3C9VZxzYVAgrx987Z
-         yyykM20c7X9/Qjcj71cbkuMWJLvbs+HOjTvz/Lg/kXqeTXCA+5CxmV8QXC8T/KYhgKCt
-         4gL1nTAa0TKfLHEymtv5KraqkZ3pIoIkePCl+4v5QBwGwLBZ73PsyN1l95TY3M/Hcl/B
-         mDxw==
-X-Gm-Message-State: AC+VfDxNVH2072uNnpmLZWKZw0iglfkfK9kh6LX5QW1MBBFeiQStp7qY
-        HniPyqdJFSRfv/momwugLNJ5NrgUcsgwZuuyKJc=
-X-Google-Smtp-Source: ACHHUZ4TPXAFltd7BI78ccjVwowAz7OL2JP3i3y2P7xTKi6A51SY3VJD3P/Ovyas9IyxHsU2Y9HBgA==
-X-Received: by 2002:a25:d657:0:b0:bdd:85d:a5d6 with SMTP id n84-20020a25d657000000b00bdd085da5d6mr4135351ybg.31.1687109872969;
-        Sun, 18 Jun 2023 10:37:52 -0700 (PDT)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id c14-20020a25c00e000000b00be45a29d440sm859068ybf.12.2023.06.18.10.37.51
+        bh=6cwyhtXgWV8QHFMzUCKjIBrAmoEHpsYP4sSAmGvJDK0=;
+        b=V45Ae/yv0Nt7g5pVPRhvlNpx0zyFY7pccXwXud3wFO2rirDGI/KjVlc4gyKgOLJfTZ
+         S2gV1xm8zwrVLWV57unc1VL3J6mqUrWCcMWqn3TLA4qSiVFGH2pD0v2FyKn8FtMn44ze
+         v0gY3Ds95QpN1SA5C8ER7CpT2qXGNownJtza9VzUZACorpWwuxGU20CavSZU/qQHtbdW
+         j4APxnjEMQDetY+wp2WTW6f0rrOHFbYiOq5mdxJtZBvUKiCdm2W4xXnTSFFhQibGh3Py
+         G7grwOS9QTd8aoNy4gnjZlV7NJH5ZBHYaA7lDI8Oy7R9zK0TpaYNA97nOlAdso4WwHU+
+         DBIA==
+X-Gm-Message-State: AC+VfDzOdzhFdOUPxih3hW/muazz+sYom3RbgT5Oz6hkIo9CoCVL+EFC
+        iu46gQFD5rB2HKslIqUIGlDzq82dmNiTYAr0
+X-Google-Smtp-Source: ACHHUZ7lXTeeNNzOVe8bZkVoAAltNYIKAbNhNweTa63SnpSCmWbKGk/YUu6CigHswESAdBRzCiOhKQ==
+X-Received: by 2002:a81:7206:0:b0:570:209a:a4fe with SMTP id n6-20020a817206000000b00570209aa4femr7695264ywc.32.1687109969156;
+        Sun, 18 Jun 2023 10:39:29 -0700 (PDT)
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
+        by smtp.gmail.com with ESMTPSA id v20-20020a814814000000b00570336e2729sm2101366ywa.24.2023.06.18.10.39.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Jun 2023 10:37:52 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-bd77424c886so3059394276.0;
-        Sun, 18 Jun 2023 10:37:51 -0700 (PDT)
-X-Received: by 2002:a25:ad1e:0:b0:bcb:3280:57fc with SMTP id
- y30-20020a25ad1e000000b00bcb328057fcmr5010633ybi.53.1687109871675; Sun, 18
- Jun 2023 10:37:51 -0700 (PDT)
+        Sun, 18 Jun 2023 10:39:28 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-57045429f76so30952317b3.0;
+        Sun, 18 Jun 2023 10:39:28 -0700 (PDT)
+X-Received: by 2002:a25:d791:0:b0:bc4:78ac:9216 with SMTP id
+ o139-20020a25d791000000b00bc478ac9216mr4665462ybg.61.1687109968456; Sun, 18
+ Jun 2023 10:39:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230615182938.18487-1-tanure@linux.com> <20230615182938.18487-5-tanure@linux.com>
- <20230615-mushroom-numeric-3a4c03f2204b@spud>
-In-Reply-To: <20230615-mushroom-numeric-3a4c03f2204b@spud>
+References: <20230615182938.18487-1-tanure@linux.com> <20230615182938.18487-3-tanure@linux.com>
+ <20230615-capable-implicit-90a8f0265616@spud>
+In-Reply-To: <20230615-capable-implicit-90a8f0265616@spud>
 Reply-To: tanure@linux.com
 From:   Lucas Tanure <tanure@linux.com>
-Date:   Sun, 18 Jun 2023 18:37:40 +0100
-X-Gmail-Original-Message-ID: <CAJX_Q+2ND=GJEEXdLLpEWoecN5gtZm-1i92pAgi+eQocSRUVqw@mail.gmail.com>
-Message-ID: <CAJX_Q+2ND=GJEEXdLLpEWoecN5gtZm-1i92pAgi+eQocSRUVqw@mail.gmail.com>
-Subject: Re: [PATCH 4/6] dt-bindings: serial: amlogic, meson-uart: support T7
+Date:   Sun, 18 Jun 2023 18:39:17 +0100
+X-Gmail-Original-Message-ID: <CAJX_Q+2Gm6mr_2cbhCh7a_bOw09W2PBxyOAvasGCrPTdcruczQ@mail.gmail.com>
+Message-ID: <CAJX_Q+2Gm6mr_2cbhCh7a_bOw09W2PBxyOAvasGCrPTdcruczQ@mail.gmail.com>
+Subject: Re: [PATCH 2/6] dt-bindings: clock: Bindings for Meson T7 clock controller
 To:     Conor Dooley <conor@kernel.org>
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -79,55 +79,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 10:25 PM Conor Dooley <conor@kernel.org> wrote:
+On Thu, Jun 15, 2023 at 10:41 PM Conor Dooley <conor@kernel.org> wrote:
 >
-> On Thu, Jun 15, 2023 at 07:29:36PM +0100, Lucas Tanure wrote:
-> > Add serial bindings support menson T7 SoC family.
-> >
+> Hey Lucas,
+>
+> On Thu, Jun 15, 2023 at 07:29:34PM +0100, Lucas Tanure wrote:
+> > Add documentation for T7 the clock controller.
+>
+> Other than the bot's complaint, few comments for ya.
+>
 > > Signed-off-by: Lucas Tanure <tanure@linux.com>
 > > ---
-> >  Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml | 1 +
-> >  1 file changed, 1 insertion(+)
+> >  .../bindings/clock/amlogic,mesont7.yaml       |  69 +++
+> >  include/dt-bindings/clock/mesont7-clkc.h      | 487 ++++++++++++++++++
+> >  2 files changed, 556 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/clock/amlogic,mesont7.yaml
+> >  create mode 100644 include/dt-bindings/clock/mesont7-clkc.h
 > >
-> > diff --git a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
-> > index 01ec45b3b406..01b01f8840ea 100644
-> > --- a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
-> > +++ b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
-> > @@ -46,6 +46,7 @@ properties:
-> >            - amlogic,meson8b-uart
-> >            - amlogic,meson-gx-uart
-> >            - amlogic,meson-s4-uart
-> > +          - amlogic,meson-t7-uart
+> > diff --git a/Documentation/devicetree/bindings/clock/amlogic,mesont7.yaml b/Documentation/devicetree/bindings/clock/amlogic,mesont7.yaml
+> > new file mode 100644
+> > index 000000000000..18e7cca0c0e1
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/clock/amlogic,mesont7.yaml
 >
-> | diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
-> | index 2501db5a7aaf..0208f9a6ba7e 100644
-> | --- a/drivers/tty/serial/meson_uart.c
-> | +++ b/drivers/tty/serial/meson_uart.c
-> | @@ -796,6 +796,10 @@ static const struct of_device_id meson_uart_dt_match[] = {
-> |                 .compatible = "amlogic,meson-s4-uart",
-> |                 .data = (void *)&meson_g12a_uart_data,
-> |         },
-> | +       {
-> | +               .compatible = "amlogic,meson-t7-uart",
-> | +               .data = (void *)&meson_g12a_uart_data,
-> | +       },
-> |         { /* sentinel */ },
-> |  };
-> |  MODULE_DEVICE_TABLE(of, meson_uart_dt_match);
+> The filename should match the compatible - please test the bindings,
+> dt_binding_check will complain.
 >
-> You're adding another element to this enum, but the driver change
-> implies compatibility with the s4 uart. Should you not set this up with
-> fallback compatibles?
-
-I will drop this patch and use the s4 and g12a compatible strings.
-
+> > @@ -0,0 +1,69 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/clock/amlogic,mesont7-clk.yaml#
+>
+> and this should match the filename
+>
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Amlogic Meson T7 Clock Controller
+> > +
+> > +maintainers:
+> > +  - Lucas Tanure <tanure@linux.com>
+> > +
+> > +description: |
+> > +  The Amlogic Meson T7 clock controller generates and supplies clock to
+> > +  various peripherals within the SoC.
+> > +
+> > +  This binding uses common clock bindings
+> > +  [1] Documentation/devicetree/bindings/clock/clock-bindings.txt
+>
+> This doesn't add anything as you're adding a yaml binding. I'd drop it
+> (and the | from description: since you would no longer have formatting
+> to preserve).
+>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: amlogic,t7-clkc
+> > +
+> > +  reg:
+> > +    items:
+> > +      - description: basic registers
+>
+> What does "basic registers" mean? I think you should be more specific in
+> your description.
+>
+> > +      - description: pll registers
+> > +      - description: cpu_clk registers
+> > +
+> > +  reg-names:
+> > +    items:
+> > +      - const: basic
+> > +      - const: pll
+> > +      - const: cpu_clk
+> > +
+> > +  clocks:
+> > +    maxItems: 1
+> > +
+> > +  clock-names:
+> > +    const: xtal
+> > +
+> > +  '#clock-cells':
+> > +    const: 1
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - reg-names
+> > +  - clocks
+> > +  - clock-names
+> > +  - '#clock-cells'
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  # Clock controller node:
+> > +  - |
+> > +    clkc: clock-controller {
+>
+> The comment above and the node name here can be dropped.
+> You do however need to change "clock-controller" to
+> "clock-controller@<addr>".
+>
+> > +        compatible = "amlogic,t7-clkc";
+> > +        #clock-cells = <1>;
+> > +        reg = <0x0 0x0000 0x00 0x49c>,
+> > +              <0x0 0x8000 0x00 0x320>,
+> > +              <0x0 0xe040 0x00 0x0bc>;
+>
+> Drop the 0x0 stuff from here.
+>
+> > +        reg-names = "basic", "pll", "cpu_clk";
+> > +        clocks = <&xtal>;
+> > +        clock-names = "xtal";
+> > +        status = "okay";
+>
+> status can be dropped, okay is the default.
 >
 > Cheers,
 > Conor.
 >
-> >        - description: Everything-Else power domain UART controller on G12A SoCs
-> >          items:
-> >            - const: amlogic,meson-g12a-uart
-> > --
-> > 2.41.0
-> >
+I will drop this patch for now, wait for the S4 clock driver to be
+upstreamed, and use that as a base.
