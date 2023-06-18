@@ -2,71 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ACB27344D9
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 05:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFCB67344A2
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 04:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbjFRDrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 17 Jun 2023 23:47:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
+        id S229462AbjFRCL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 17 Jun 2023 22:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjFRDri (ORCPT
+        with ESMTP id S229379AbjFRCL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 17 Jun 2023 23:47:38 -0400
-X-Greylist: delayed 6156 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 17 Jun 2023 20:47:33 PDT
-Received: from gateway7.aos.rw (gateway7.aos.rw [197.243.24.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF7F1987;
-        Sat, 17 Jun 2023 20:47:33 -0700 (PDT)
-Received: from mail.iprcngoma.rp.ac.rw (sm.zm.108.mb.rw [197.243.21.73])
-        by gateway.aos.rw  with ESMTP id 35I248lY001403-35I248la001403
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Sun, 18 Jun 2023 04:04:08 +0200
-Received: from mail.iprcngoma.rp.ac.rw (localhost [127.0.0.1])
-        by mail.iprcngoma.rp.ac.rw (Postfix) with ESMTPS id 83C731EEFA7;
-        Sun, 18 Jun 2023 04:04:07 +0200 (CAT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.iprcngoma.rp.ac.rw (Postfix) with ESMTP id 892211EEFAE;
-        Sun, 18 Jun 2023 04:04:06 +0200 (CAT)
-Received: from mail.iprcngoma.rp.ac.rw ([127.0.0.1])
-        by localhost (mail.iprcngoma.rp.ac.rw [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 2pfmfq6krXAI; Sun, 18 Jun 2023 04:04:05 +0200 (CAT)
-Received: from mail.iprcngoma.rp.ac.rw (ldap [197.243.21.73])
-        by mail.iprcngoma.rp.ac.rw (Postfix) with ESMTP id 61FDA1EEF9F;
-        Sun, 18 Jun 2023 04:04:00 +0200 (CAT)
-Date:   Sun, 18 Jun 2023 04:04:00 +0200 (CAT)
-From:   Jennifer Brown <info@iprcngoma.rp.ac.rw>
-Reply-To: "bannabelec@gmail.com" <bannabelec@gmail.com>
-Message-ID: <1306079720.35488.1687053840356.JavaMail.zimbra@iprcngoma.rp.ac.rw>
-Subject: Important Matter
+        Sat, 17 Jun 2023 22:11:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A63ABA3;
+        Sat, 17 Jun 2023 19:11:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59CE660B30;
+        Sun, 18 Jun 2023 02:11:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB3BEC433C8;
+        Sun, 18 Jun 2023 02:11:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687054284;
+        bh=hrbm6au2VGNBIFNhWA1SNgCyBekbxhSckbGJy7ygoK0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Ya9PdseP5WKgielreKKNKz2v6XO+JHq7gXQiUk3htMSv9iwKT4lgTCGTVZJ2MFbMk
+         dEZEgpKnQM4x0TBmGdJe+jx+EGsGwgB3l4mfVbrNn/YrQbPQYaAuLUZA+2MhJBIH/8
+         vrbQqI/fZTFqtX3/G3AVaODItl823e/eRfW3mkvspzpDfKmNZKjk9iMx8pI68fa7pU
+         Ap+PQ4GUvuIpfjLavr0SNfT/VcAWeUXm4M8HVzbYeOei0qDN8dylbTfwOhyEZh5weu
+         MCwXhYhOvoDeOFqhyUWhIWmU8HpPJ5FB1ZkIJ4lU0ypENEB9Abfezr0jUQAhx2Fvh/
+         NxhqZ4hXxjRRQ==
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-9768fd99c0cso665059866b.0;
+        Sat, 17 Jun 2023 19:11:24 -0700 (PDT)
+X-Gm-Message-State: AC+VfDyPKf/SvjVaVGIADPZ3AU/5cIC9MbU0wcHvD+Y5ro2d9aW0f9ro
+        BfbND2vuy6QBzeH8iTDkbMS01xGNgEC82MFgG5Q=
+X-Google-Smtp-Source: ACHHUZ5PRIJVD6PSGfwwUDJfcbff85dKyWLrYQFmq7HH0Jj0ecCvtJ3i2o1T4TZVJIDzKWrSRrubRTMKJKab6W2v1n0=
+X-Received: by 2002:a17:907:9624:b0:987:9852:603a with SMTP id
+ gb36-20020a170907962400b009879852603amr2734046ejc.26.1687054282890; Sat, 17
+ Jun 2023 19:11:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [104.250.176.7]
-X-Mailer: Zimbra 8.8.15_GA_4522 (zclient/8.8.15_GA_4522)
-Thread-Index: 3MfehatGKeqISynoP3DlMkgiZ4eSvA==
-Thread-Topic: Important Matter
-X-FEAS-Client-IP: 197.243.21.73
-X-FE-Last-Public-Client-IP: 197.243.21.73
-X-FE-Policy-ID: 175:4:2:SYSTEM
-X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,MISSING_HEADERS,REPLYTO_WITHOUT_TO_CC,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20230617185335.2025859-1-yuzhao@google.com>
+In-Reply-To: <20230617185335.2025859-1-yuzhao@google.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Sun, 18 Jun 2023 10:11:10 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5Z4eCumeykwcD8B-5K+ur5SWjufSv6oZw4Y9uSsE+wXg@mail.gmail.com>
+Message-ID: <CAAhV-H5Z4eCumeykwcD8B-5K+ur5SWjufSv6oZw4Y9uSsE+wXg@mail.gmail.com>
+Subject: Re: [PATCH] kvm/mips: update MAINTAINERS
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 SPF_NONE SPF: sender does not publish an SPF Record
-        *  1.0 MISSING_HEADERS Missing To: header
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Acked-by: Huacai Chen <chenhuacai@kernel.org>
 
-
-There is an important matter I need to discuss with you please reply.Thanks
+On Sun, Jun 18, 2023 at 2:53=E2=80=AFAM Yu Zhao <yuzhao@google.com> wrote:
+>
+> Aleksandar Markovic was last seen in Oct 2020 [1] and cannot be
+> reached for multiple days because of "Recipient inbox full".
+>
+> [1] https://lore.kernel.org/all/1602103041-32017-4-git-send-email-aleksan=
+dar.qemu.devel@gmail.com/
+>
+> Signed-off-by: Yu Zhao <yuzhao@google.com>
+> ---
+>  MAINTAINERS | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 6992b7cc7095..9de60ba04b6d 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -11379,7 +11379,6 @@ F:      tools/testing/selftests/kvm/aarch64/
+>
+>  KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)
+>  M:     Huacai Chen <chenhuacai@kernel.org>
+> -M:     Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+>  L:     linux-mips@vger.kernel.org
+>  L:     kvm@vger.kernel.org
+>  S:     Maintained
+> --
+> 2.41.0.162.gfafddb0af9-goog
+>
