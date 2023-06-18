@@ -2,80 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C989D73454B
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 10:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6283B734553
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 10:01:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbjFRIAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 04:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58214 "EHLO
+        id S229575AbjFRIBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 04:01:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjFRIAC (ORCPT
+        with ESMTP id S229470AbjFRIBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 04:00:02 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF498E67
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 01:00:00 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-311367a3e12so615299f8f.2
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 01:00:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687075199; x=1689667199;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dpH7soYjZvM77RERx/MOosU4hmkZgNMVHlOhKQrkCCE=;
-        b=BzXRjipSOBn/qZjPJHyPfEk4seHo6gkrRv0NIlncTSvDqxtzEHVhVoQz3UVkEdszir
-         NIkuGzIJ010PjCDsenmIe0Gtd9P7foW8obo2eWqcn8t9b/7Q7DD7XQ74h52uA8+0AzUm
-         /egHR6SQVZ2v7yDB97FyiyFD6/VMOVSuw1Vm/mGDKfaSbE+7kqjDYOn6IreCX0uHgCLr
-         QSVceqyr/2cnkrAiM7oNk4wDqv/WCwLADu5e3eM9U9ynOB3znvob/pFODvV/W65hsa9H
-         6+F3fXGCeGSAGRFzd4lGcgRGdvPhmeGlxYf8kalRWBjWMMcx/m50Hi7VoeWR4iDT8WYA
-         mbPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687075199; x=1689667199;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dpH7soYjZvM77RERx/MOosU4hmkZgNMVHlOhKQrkCCE=;
-        b=SHGAf5Xn9Ww6V5UqywaDYOIOG0o/iVCSnQ4afosRCzjhsKL+XilH42fRBQ16Fpp10Q
-         XK1qTcYMgqpmYyG5zfdilbT8LpkIqZw5YgtPbQgzWVtLrg6/LPRv5XTBJ2DzkJefhai8
-         aDM+029ml5h8V8wDdYMeROTtRQfkw/ZrBA6gtYHUAu1mqBLemvUVJ64v/P/6ndEjFrN2
-         BlK7Hv3UukFz2W5p3NIziGNTOfqd9ZZe/A8zF7whBbmT+A4pX1l7COHHlGh+pVFjZIOR
-         SAq2YWB3yz+bRh/QOy9wD1uQo/wZvNsHLo6H8uSqpntw2awUwEmerjwIFCO6yQ6Y61cA
-         ARCA==
-X-Gm-Message-State: AC+VfDxpDaZoX8K9oSvim4qE8o75YU7A94ZPt0tY/tQWjSxLPlaBua8S
-        SE5FaVUqydDTcckV4hFjZQaXhQ==
-X-Google-Smtp-Source: ACHHUZ5Y9STNFgg5ks1RsYRVVxGur5Zs9+djrPWC8XF4xIEQvgI6/3qm5R1z5bA6XnrtYKUuG0NlfA==
-X-Received: by 2002:a05:6000:1008:b0:30f:c1f5:e91e with SMTP id a8-20020a056000100800b0030fc1f5e91emr5853992wrx.27.1687075199414;
-        Sun, 18 Jun 2023 00:59:59 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id x22-20020aa7cd96000000b0050bca43ff55sm11862998edv.68.2023.06.18.00.59.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Jun 2023 00:59:59 -0700 (PDT)
-Message-ID: <95c66851-e570-353a-a174-7a885f7fea01@linaro.org>
-Date:   Sun, 18 Jun 2023 09:59:56 +0200
+        Sun, 18 Jun 2023 04:01:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA0D10D7;
+        Sun, 18 Jun 2023 01:01:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B17EC60F61;
+        Sun, 18 Jun 2023 08:01:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DA1EC433C0;
+        Sun, 18 Jun 2023 08:01:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687075275;
+        bh=JOdF7gdXvqBjASqKs6SWBkQKDgB3N69nrNaZPukvaeM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sRSVsUz+8qwPDTD+DbQ8ZGj3oxWbs6Q2yclpQ5oA01FgfO3x99AMq57vy9vTmKGCz
+         zxsNFAk2tsVXc2/ZMKN5WrqHKwwq7cFYa5f3HPOYIxlAVh8JcIK7E8a/4ukOQRZ4nx
+         MkY7brx+YmsqJJOWjKI+esA6758vzynczNeZM28mb8D2036W2Ac3dVaBq4RYIRm2lO
+         UwBKETxVcKwPW5jcSjXTb+3J9p7JSrJABXAw2lEoobsEXKewtbcSu8Iyl/ROefguVb
+         JB6NowqZPjsvgPvrW3+OErG+qxYX7mjk/nhQmoo1FPg/indEYGUiochf7rWuDn85yN
+         s8jpvUG70jw+A==
+Date:   Sun, 18 Jun 2023 11:00:27 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Puranjay Mohan <puranjay12@gmail.com>,
+        Rick P Edgecombe <rick.p.edgecombe@intel.com>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Song Liu <song@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org,
+        the arch/x86 maintainers <x86@kernel.org>
+Subject: Re: [PATCH v2 02/12] mm: introduce execmem_text_alloc() and
+ jit_text_alloc()
+Message-ID: <20230618080027.GA52412@kernel.org>
+References: <20230616085038.4121892-1-rppt@kernel.org>
+ <20230616085038.4121892-3-rppt@kernel.org>
+ <f9a7eebe-d36e-4587-b99d-35d4edefdd14@app.fastmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 1/3] arm64: dts: qcom: sm8150: Fix OSM L3 interconnect
- cells
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Markus Elfring <Markus.Elfring@web.de>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, cocci@inria.fr
-References: <20230617204118.61959-1-krzysztof.kozlowski@linaro.org>
- <78cc123f-3899-5102-09bf-b00d95311475@web.de>
- <b00a058b-035a-a792-cd3b-e1501e824b47@linaro.org>
-In-Reply-To: <b00a058b-035a-a792-cd3b-e1501e824b47@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f9a7eebe-d36e-4587-b99d-35d4edefdd14@app.fastmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,17 +87,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/06/2023 09:58, Krzysztof Kozlowski wrote:
-> On 18/06/2023 07:47, Markus Elfring wrote:
->>> Qualcomm Operating State Manager (OSM) L3 Interconnect does not take
->>> path (third) argument. …
->>
->> Can such a small patch series become a bit nicer also with a corresponding cover letter?
->>
-> No need.
+On Sat, Jun 17, 2023 at 01:38:29PM -0700, Andy Lutomirski wrote:
+> On Fri, Jun 16, 2023, at 1:50 AM, Mike Rapoport wrote:
+> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> >
+> > module_alloc() is used everywhere as a mean to allocate memory for code.
+> >
+> > Beside being semantically wrong, this unnecessarily ties all subsystems
+> > that need to allocate code, such as ftrace, kprobes and BPF to modules
+> > and puts the burden of code allocation to the modules code.
+> >
+> > Several architectures override module_alloc() because of various
+> > constraints where the executable memory can be located and this causes
+> > additional obstacles for improvements of code allocation.
+> >
+> > Start splitting code allocation from modules by introducing
+> > execmem_text_alloc(), execmem_free(), jit_text_alloc(), jit_free() APIs.
+> >
+> > Initially, execmem_text_alloc() and jit_text_alloc() are wrappers for
+> > module_alloc() and execmem_free() and jit_free() are replacements of
+> > module_memfree() to allow updating all call sites to use the new APIs.
+> >
+> > The intention semantics for new allocation APIs:
+> >
+> > * execmem_text_alloc() should be used to allocate memory that must reside
+> >   close to the kernel image, like loadable kernel modules and generated
+> >   code that is restricted by relative addressing.
+> >
+> > * jit_text_alloc() should be used to allocate memory for generated code
+> >   when there are no restrictions for the code placement. For
+> >   architectures that require that any code is within certain distance
+> >   from the kernel image, jit_text_alloc() will be essentially aliased to
+> >   execmem_text_alloc().
+> >
+> 
+> Is there anything in this series to help users do the appropriate
+> synchronization when the actually populate the allocated memory with
+> code?  See here, for example:
 
-Ah, I forgot you are banned.
+This series only factors out the executable allocations from modules and
+puts them in a central place.
+Anything else would go on top after this lands.
+ 
+> https://lore.kernel.org/linux-fsdevel/cb6533c6-cea0-4f04-95cf-b8240c6ab405@app.fastmail.com/T/#u
 
-Best regards,
-Krzysztof
-
+-- 
+Sincerely yours,
+Mike.
