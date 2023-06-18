@@ -2,53 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54076734603
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 13:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3162734612
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 14:10:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbjFRLvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 07:51:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57086 "EHLO
+        id S229827AbjFRMKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 08:10:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjFRLvI (ORCPT
+        with ESMTP id S229809AbjFRMKj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 07:51:08 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 871E7FA;
-        Sun, 18 Jun 2023 04:51:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1687089064;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zaLQZRJzkXP7u1JRsYLXSI2d3hce21yOLxns9cE2+0c=;
-        b=1xWntLyTa58wwy/f+xowka2n0ALb4yVY7aOsoKXBsizbw9PJMxvoxDMjN1VMUIRKaSwjxc
-        Fa5LvfOjjB2dgf8KbBnGYMZ77f7oeeJvXuzCvyKINzxgLhWmlvipkVYAHK8sdynCgn52Px
-        P6VHBhplQ2EpOPtJGpzZEfQzyYGEtKc=
-Message-ID: <ebf776a8fb8dee045e7661daaca4564fe39917a6.camel@crapouillou.net>
-Subject: Re: [PATCH 0/9] MIPS: CI20: Add WiFi / Bluetooth support
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     list@opendingux.net, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Paul Burton <paulburton@kernel.org>
-Date:   Sun, 18 Jun 2023 13:51:01 +0200
-In-Reply-To: <43DCEEA5-C013-44BE-85C7-D61A980B0EA5@goldelico.com>
-References: <20230615084006.79194526F801@goldelico.com>
-         <C1924536-FA97-4E75-9D22-99E5AF24EE5B@goldelico.com>
-         <A8EBCBA4-D9BA-4C2F-9C91-38128D06EDBA@goldelico.com>
-         <AA802E24-A97B-42B6-90A4-5ECB1E4D9294@goldelico.com>
-         <5EF6B0D2-2B84-4C98-B799-88062E035EC1@goldelico.com>
-         <43DCEEA5-C013-44BE-85C7-D61A980B0EA5@goldelico.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+        Sun, 18 Jun 2023 08:10:39 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34531B3;
+        Sun, 18 Jun 2023 05:10:34 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35IC1xHl029496;
+        Sun, 18 Jun 2023 12:10:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=zNHDB4mne5Mh07dWM3OfrbNBeOyhODIhoAblqGKDb0E=;
+ b=QdJPq/owm3viMRfJdyIn3P6KPn9nX71LX32XJmMEvoPo6e849SCR2hTPAwuxZeXrp8dZ
+ yZZtiLOM1RrHGrPMOnLg0mkaKr0MCRd1+igCznmbopJA0SFmknWb9Myh9MNhkbuNsQpS
+ SXnoLp3O88cE99pbCG+relchrXmsQ9gb3RM1K0p9AIESlH/WjKQYWryXN+DOnl6Zv8q3
+ RjlK3Ay9/XOFTsCWEDjkQnewMDUgH9ZfQ4dEyw1CtLCqHnkFMjQEU14z4vEUsS+ubvIf
+ cljzagffzd65UnQKUAIGbTompqUF3Xp+sE8j2t7pDm8Jtpm4EvNNfSDlkwT23H4g4f9G lw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r94e4sm8p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 18 Jun 2023 12:10:31 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35ICA4q1011716
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 18 Jun 2023 12:10:04 GMT
+Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Sun, 18 Jun 2023 05:10:01 -0700
+From:   Krishna Kurapati <quic_kriskura@quicinc.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
+        <quic_jackp@quicinc.com>, <quic_ugoswami@quicinc.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>
+Subject: [PATCH v3] usb: dwc3: gadget: Propagate core init errors to UDC during pullup
+Date:   Sun, 18 Jun 2023 17:39:49 +0530
+Message-ID: <20230618120949.14868-1-quic_kriskura@quicinc.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: q-hHFiyDjrZ2C_VnAoTHxgKKMCfFMxXr
+X-Proofpoint-GUID: q-hHFiyDjrZ2C_VnAoTHxgKKMCfFMxXr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-18_08,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
+ impostorscore=0 malwarescore=0 bulkscore=0 adultscore=0 mlxscore=0
+ phishscore=0 lowpriorityscore=0 mlxlogscore=999 priorityscore=1501
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306180116
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,132 +77,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgTmlrb2xhdXMsCgpMZSBzYW1lZGkgMTcganVpbiAyMDIzIMOgIDEyOjQ1ICswMjAwLCBILiBO
-aWtvbGF1cyBTY2hhbGxlciBhIMOpY3JpdMKgOgo+IEhpIFBhdWwsCj4gCj4gPiBBbSAxNi4wNi4y
-MDIzIHVtIDIyOjIxIHNjaHJpZWIgSC4gTmlrb2xhdXMgU2NoYWxsZXIKPiA+IDxobnNAZ29sZGVs
-aWNvLmNvbT46Cj4gCj4gPiAtIEJ1dCByZW5hbWluZyB0aGUgRFQgbm9kZXMgKGUuZy4gU1VEQ0RD
-MSAtPiBEQ0RDMSkgKHdpdGggb3IKPiA+IHdpdGhvdXQgcmVndWxhdG9yX25hbWUpIG1ha2VzCj4g
-PiBib290IGhhbmcgd2l0aCBzdHJhbmdlIGVycm9ycyB3aGljaCBpbmRpY2F0ZSB0aGF0IHRoZSBw
-cm9jZXNzb3IKPiA+IHBvd2VyIHN1cHBseSBpcyBub3Qgc3RhYmxlLgo+ID4gT25jZSBhIHdoaWxl
-IGl0IGRpZCBldmVuIGF1dG9tYXRpY2FsbHkgcmVib290LiBJbiBtb3N0IGNhc2VzIHRoZXJlCj4g
-PiBhcmUgc29tZSBFWFQ0IGVycm9ycwo+ID4gYWZ0ZXJ3YXJkcy4KPiAKPiBJIGFtIGNvbWluZyBj
-bG9zZXIsIEkgdGhpbmsuIEkgaGF2ZSBub3cgdG91Y2hlZCBvbmx5IHRoZSBEQ0RDMSBub2RlCj4g
-bmFtZS4KPiAKPiBhKSB3aXRoICJTVURDREMxIiAtPiAiRENEQzEiIChiYWQgYm9vZCk6Cj4gCj4g
-cmVndWxhdG9yX29mX2dldF9pbml0X25vZGUoKSByZXR1cm5zIHRoZSBjaGlsZCBub2RlCj4gCj4g
-VGhlbjoKPiBbwqDCoMKgIDAuNjY2OTYyXSBhY3Q4ODY1IDAtMDA1YTogTG9va2luZyB1cCB2cDEt
-c3VwcGx5IGZyb20gZGV2aWNlIHRyZWUKPiBbwqDCoMKgIDAuNjczMTkxXSBEQ0RDMTogc3VwcGxp
-ZWQgYnkgdmNjXzMzdgo+IFvCoMKgwqAgMC43MjcwNzBdIERDREMxOiBCcmluZ2luZyAxMjAwMDAw
-dVYgaW50byAxMTAwMDAwLTExMDAwMDB1Vgo+IFvCoMKgwqAgMC43MzkzOThdIERDREMxOiAxMTAw
-IG1WLCBlbmFibGVkCj4gCj4gYikgd2l0aG91dCBwYXRjaC9zZXJpZXMgb3IgcmV2ZXJ0ZWQgKGdv
-b2QgYm9vdCk6Cj4gCj4gcmVndWxhdG9yX29mX2dldF9pbml0X25vZGUoKSByZXR1cm5zIE5VTEwK
-PiAKPiBUaGVuOgo+IFvCoMKgwqAgMS4wMTY0ODddIERDREMxOiBhdCAxMjAwIG1WLCBlbmFibGVk
-Cj4gW8KgwqDCoCAxLjAyMDU3OF0gYWN0ODg2NSAwLTAwNWE6IExvb2tpbmcgdXAgdnAxLXN1cHBs
-eSBmcm9tIGRldmljZSB0cmVlCj4gW8KgwqDCoCAxLjAyNjkxN10gRENEQzE6IHN1cHBsaWVkIGJ5
-IHZjY18zM3YKPiAKPiBTbyBhdCBsZWFzdCBmb3IgbXkgYm9hcmQgdGhlIHBhdGNoZWQgc2VyaWVz
-IHNlZW1zIHRvIHJlZHVjZSBEQ0RDMQo+IHZvbHRhZ2UKPiB0byAxLjFWIHdoaWNoIG1heSB0cmln
-Z2VyIHRoZSBib290IGFuZCBzdGFiaWxpdHkgcHJvYmxlbXMgb24gbXkgYm9hcmQKPiB3aGlsZQo+
-IGl0IGlzIGZpbmUgZm9yIHlvdXJzLiBUaGlzIGNvdWxkIGV4cGxhaW4gdGhlIGhhcmR3YXJlIGRl
-cGVuZGVuY3kuCj4gCj4gTm93IEkgaGF2ZSBubyBkYXRhIHNoZWV0cyBvciBpbmZvcm1hdGlvbiB3
-aGljaCB2b2x0YWdlcyBhcmUgdGhlIHJpZ2h0Cj4gb25lcwo+IGFuZCB3aGVyZSB0aGUgMTIwMG1W
-IGNvbWUgZnJvbSAobW9zdCBsaWtlbHkgc29tZSBkZWZhdWx0IHByb2dyYW1tZWQKPiBpbnRvIHRo
-ZSBQTVUgY2hpcCkuCj4gCj4gQW5kIHRoZSBpc3N1ZSBzZWVtcyB0byBiZSB0aGF0IHdpdGhvdXQg
-bWF0Y2hpbmcgdGhlIG5vZGUgbmFtZXMgdGhlCj4gdm9sdGFnZXMgaW4gdGhlIGRldmljZSB0cmVl
-IG1heSBoYXZlIGJlZW4gaWdub3JlZCBjb21wbGV0ZWx5IGFsbCB0aGUKPiB0aW1lLi4uIE5vdyBp
-dCBzZXRzIHVwIHZvbHRhZ2VzLCB3aGljaCBzaG91bGQgaGFwcGVuLiBCdXQgZGlmZmVyZW50Cj4g
-b25lcyBmb3IgbXkgYm9hcmQgd2hpY2ggYnJlYWtzIGJvb3QuCgpTbyB0aGUgbm9kZSBuYW1lcyBm
-aXggY2F1c2VkIHRoZSBkcml2ZXIgdG8gYWN0dWFsbHkgdXNlIHRoZSBpbmZvIGZyb20KRFQsIHdo
-aWNoIGRvZXNuJ3QgYWxsb3cgdGhlIGJvYXJkIHRvIGJvb3QuIE5pY2UuCgo+IEZpbmFsbHkgSSBk
-aWQgcmlzayAoSSBoYXZlIG5vIHJlcGxhY2VtZW50IENJMjAgYm9hcmQgYW5kIHRoZXkgYXJlIG5v
-Cj4gbG9uZ2VyCj4gb24gc2FsZS4uLiBSUyBwYXJ0IyB3YXMgMTI1LTMzMDUgTW91c2VyIDQ1Ni1W
-TC02Mjg1MSkgdG8gcnVuIGEgdGVzdAo+IHdpdGgKPiByZW5hbWUgdG8gIkRDREMxIiBidXQgY2hh
-bmdpbmcgdGhlIHZvbHRhZ2UgdG8gMTIwMG1WLiBBbmQgdGhpcwo+IHZlcnNpb24gYm9vdHMuCgpM
-b29raW5nIGF0IHRoZSBKWjQ3ODBfRFMuUERGIGZpbGUsIHRoZSBTb0MgYWN0dWFsbHkgd2FudHMg
-MS4xViBzbyB0aGUKRFQgaXMgbm90IHdyb25nIC0gaW4gdGhlb3J5LiBCdXQgaW4gcHJhY3RpY2Ug
-aXQgZG9lcyBub3Qgd29yaywgYXMgeW91CmV4cGVyaWVuY2VkIHlvdXJzZWxmLiBIb3dldmVyLCBp
-ZiB0aGUgQUNUODYwMCBkZWZhdWx0cyB0byAxLjJWLCBvciBpZgp0aGUgYm9vdGxvYWRlciBjb25m
-aWd1cmVzIGl0IHRvIDEuMlYsIEkgd291bGQgdGhpbmsgdGhhdCB0aGlzIGlzCmFjdHVhbGx5IGEg
-dm9sdGFnZSB0aGF0IHRoZSBTb0MgY2FuIGhhbmRsZSAtIG90aGVyd2lzZSB0aGUgU29DIHdvdWxk
-IGJlCm92ZXJ2b2x0ZWQgdW50aWwgdGhlIGtlcm5lbCBzdGFydHMsIGFuZCB0aGUgYm9hcmQgZGVz
-aWduIHdvdWxkIGJlCmZsYXdlZC4KCkkgbWVhc3VyZWQgdGhhdCB0aGUgb2xkIDMueCBrZXJuZWwg
-a2VlcHMgdGhlIFNvQyB2b2x0YWdlIGF0IDEuMlYsIHNvIGl0CnNvdW5kcyBsaWtlIGEgYmV0dGVy
-IGRlZmF1bHQuIFRoZXJlZm9yZSB0aGUgZml4IGhlcmUgd291bGQgYmUgdG8gcmFpc2UKdGhlIERD
-REMxIHJlZ3VsYXRvciB0byAxLjJWLgoKSSdsbCBzZW5kIGEgcGF0Y2ggbGF0ZXIgdG9kYXkuCgpD
-aGVlcnMsCi1QYXVsCgo+IFN0aWxsIHdpdGhvdXQgV2lGaS9CbHVldG9vdGggYnV0IHRoYXQgbWF5
-IGJlIHJlbGF0ZWQgdG8gbWlzc2luZwo+IHJlbmFtZQo+IG9mIHRoZSBvdGhlciByZWd1bGF0b3Jz
-Lgo+IAo+IFNvIEkgdHJpZWQgcmVuYW1pbmcgYWxsIHJlZ3VsYXRvcnMgYXMgYnkgeW91ciBbUEFU
-Q0ggMi85XSwgYW5kIG5vdyBJCj4gc2VlIHNvbWV0aGluZyBmcm9tIFdpRmkgKGhhdmVuJ3QgaW5z
-dGFsbGVkIGZpcm13YXJlIHlldCkgYW5kIHRoZQo+IEJsdWV0b290aCBjaGlwOgo+IAo+IFvCoMKg
-wqAgMS45Nzc4NzZdIG1tYzE6IG5ldyBoaWdoIHNwZWVkIFNESU8gY2FyZCBhdCBhZGRyZXNzIDAw
-MDEKPiAKPiBbwqDCoCAxMS4zNDE5OTRdIEJsdWV0b290aDogaGNpMDogQkNNOiBjaGlwIGlkIDYy
-Cj4gW8KgwqAgMTEuMzQ4ODExXSBCbHVldG9vdGg6IGhjaTA6IEJDTTogZmVhdHVyZXMgMHgwZgo+
-IFvCoMKgIDExLjM3NjY5OF0gQmx1ZXRvb3RoOiBoY2kwOiBCQ000MzMwQjEKPiBbwqDCoCAxMS4z
-ODA2NjJdIEJsdWV0b290aDogaGNpMDogQkNNNDMzMEIxICgwMDIuMDAxLjAwMykgYnVpbGQgMDAw
-MAo+IFvCoMKgIDExLjM5MjA1M10gQmx1ZXRvb3RoOiBoY2kwOiBCQ000MzMwQjEgJ2JyY20vQkNN
-NDMzMEIxLmhjZCcgUGF0Y2gKPiAKPiBbwqDCoCAxMi4xNDUzMzBdIGJyY21mbWFjIG1tYzE6MDAw
-MToxOiBEaXJlY3QgZmlybXdhcmUgbG9hZCBmb3IKPiBicmNtL2JyY21mbWFjNDMzMC1zZGlvLmlt
-ZyxjaTIwLmJpbiBmYWlsZWQgd2l0aCBlcnJvciAtMgo+IFvCoMKgIDEyLjIwODAwMV0gYnJjbWZt
-YWMgbW1jMTowMDAxOjE6IERpcmVjdCBmaXJtd2FyZSBsb2FkIGZvcgo+IGJyY20vYnJjbWZtYWM0
-MzMwLXNkaW8uY2xtX2Jsb2IgZmFpbGVkIHdpdGggZXJyb3IgLTIKPiAKPiBVbmZvcnR1bmF0bGV5
-IHN5c3RlbWQgYmFpbGVkIG91dCBzdGFydGluZyBCbHVldG9vdGggc2VydmljZSBidXQKPiBmYWls
-ZWQgdG8gcHJvdmlkZSBhIGxvZ2luOgo+IAo+IEluIHN1bW1hcnkgaXQgbG9va3MgbGlrZSBhIHBv
-dGVudGlhbCBmaXggY291bGQgYmUgdG8gcmVwbGFjZSB0aGUKPiBEQ0RDMQo+IG1pbi9tYXggcmFu
-Z2UgYnkgMS4wIC0gMS4yViBpbnN0ZWFkIG9mIDEuMSAtIDEuMVYgYnV0IHdlIG5lZWQgZGVlcGVy
-Cj4gdW5kZXJzdGFuZGluZyBmaXJzdC4gVXN1YWxseSB0aGlzIGhhcyBzb21ldGhpbmcgdG8gZG8g
-d2l0aCBkeW5hbWljCj4gdm9sdGFnZQo+IHNjYWxpbmcgZGVwZW5kaW5nIG9uIHByb2Nlc3NvciBj
-bG9jayBhbmQgbG93ZXIgdm9sdGFnZXMgYXJlIG9ubHkKPiBhbGxvd2VkCj4gZm9yIGxvd2VyIGZy
-ZXF1ZW5jaWVzIGJ1dCBtYXguIGNsb2NrIHJlcXVpcmVzIHRoZSBoaWdoZXN0IHBvc3NpYmxlCj4g
-dm9sdGFnZS4KPiBBRkFJSyB3ZSBoYXZlIG5vIGNwdWZyZXEgaW50ZWdyYXRlZCBhbmQgdGhlcmVm
-b3JlIGFsd2F5cyBydW4gYXQgbWF4Lgo+IHNwZWVkLgo+IAo+IEJSLAo+IE5pa29sYXVzCj4gCj4g
-UFM6IGhlcmUgaXMgd2hhdCBJIHJlYWQgYmFjayBmcm9tIHRoZSByZWd1bGF0b3Igdm9sdGFnZXMg
-KGZvciBEQ0RDMcKgCj4gbWluL21heCA9IDEuMlYpOgo+IAo+IHJvb3RAbGV0dXg6fiMgY2F0IC9z
-eXMva2VybmVsL2RlYnVnL3JlZ3VsYXRvci9yZWd1bGF0b3Jfc3VtbWFyeQo+IMKgcmVndWxhdG9y
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHVzZSBvcGVuIGJ5cGFz
-c8KgIG9wbW9kZSB2b2x0YWdlCj4gY3VycmVudMKgwqDCoMKgIG1pbsKgwqDCoMKgIG1heAo+IC0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLQo+IC0tLS0tLS0tLS0tLS0tLS0tLQo+IMKgcmVndWxhdG9yLWR1bW15wqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAxwqDCoMKgIDDCoMKgwqDCoMKgIDAgdW5rbm93
-bsKgwqDCoMKgIDBtVsKgwqDCoMKgCj4gMG1BwqDCoMKgwqAgMG1WwqDCoMKgwqAgMG1WIAo+IMKg
-ZXRoMF9wb3dlcsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDHC
-oMKgwqAgMcKgwqDCoMKgwqAgMCB1bmtub3duwqAgMzMwMG1WwqDCoMKgwqAKPiAwbUHCoCAzMzAw
-bVbCoCAzMzAwbVYgCj4gwqDCoMKgIDE2MDAwMDAwLmRtOTAwMC12Y2PCoMKgwqDCoMKgwqDCoMKg
-wqDCoCAxwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoAo+IDBtQcKgwqDCoMKgIDBtVsKgwqDCoMKgIDBtVgo+IMKgb3RnX3Bvd2Vy
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAwwqDCoMKgIDDC
-oMKgwqDCoMKgIDAgdW5rbm93bsKgIDUwMDBtVsKgwqDCoMKgCj4gMG1BwqAgNTAwMG1WwqAgNTAw
-MG1WIAo+IMKgdmNjXzMzdsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgIDTCoMKgwqAgOcKgwqDCoMKgwqAgMCB1bmtub3duwqAgMzMwMG1WwqDCoMKgwqAK
-PiAwbUHCoCAzMzAwbVbCoCAzMzAwbVYgCj4gwqDCoMKgIDEzNDUwMDAwLm1tYy12cW1tY8KgwqDC
-oMKgwqDCoMKgwqDCoMKgwqAgMcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAKPiAwbUHCoMKgwqDCoCAwbVbCoMKgwqDCoCAwbVYK
-PiDCoMKgwqAgMTM0NTAwMDAubW1jLXZtbWPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgMcKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAKPiAwbUHCoCAzMzAwbVbCoCAzNDAwbVYKPiDCoMKgwqAgRENEQzHCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgMcKgwqDCoCAwwqDCoMKgwqDCoCAwIHN0
-YW5kYnnCoCAxMjAwbVbCoMKgwqDCoAo+IDBtQcKgIDEyMDBtVsKgIDEyMDBtViAKPiDCoMKgwqAg
-RENEQzLCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgMMKg
-wqDCoCAwwqDCoMKgwqDCoCAwIHN0YW5kYnnCoCAxNTAwbVbCoMKgwqDCoAo+IDBtQcKgwqDCoMKg
-IDBtVsKgwqDCoMKgIDBtViAKPiDCoMKgwqAgRENEQzPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgMMKgwqDCoCAwwqDCoMKgwqDCoCAwIHVua25vd27CoCAz
-MzAwbVbCoMKgwqDCoAo+IDBtQcKgwqDCoMKgIDBtVsKgwqDCoMKgIDBtViAKPiDCoMKgwqAgTERP
-NcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDDCoMKg
-wqAgMMKgwqDCoMKgwqAgMCB1bmtub3duwqAgMjUwMG1WwqDCoMKgwqAKPiAwbUHCoMKgwqDCoCAw
-bVbCoMKgwqDCoCAwbVYgCj4gwqDCoMKgIExETzbCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAwwqDCoMKgIDDCoMKgwqDCoMKgIDDCoCBub3JtYWzCoCAx
-ODAwbVbCoMKgwqDCoAo+IDBtQcKgIDE4MDBtVsKgIDE4MDBtViAKPiDCoMKgwqAgTERPN8KgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDDCoMKgwqAgMMKg
-wqDCoMKgwqAgMCB1bmtub3duwqAgMzMwMG1WwqDCoMKgwqAKPiAwbUHCoMKgwqDCoCAwbVbCoMKg
-wqDCoCAwbVYgCj4gwqDCoMKgIExETzjCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoCAwwqDCoMKgIDDCoMKgwqDCoMKgIDAgdW5rbm93bsKgIDMzMDBtVsKg
-wqDCoMKgCj4gMG1BwqDCoMKgwqAgMG1WwqDCoMKgwqAgMG1WIAo+IMKgU1VEQ0RDX1JFRzTCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgMMKgwqDCoCAwwqDCoMKgwqDC
-oCAwwqAgbm9ybWFswqAgNTAwMG1WwqDCoMKgwqAKPiAwbUHCoMKgwqDCoCAwbVbCoMKgwqDCoCAw
-bVYgCj4gwqBMRE9fUkVHOcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoCAxwqDCoMKgIDDCoMKgwqDCoMKgIDAgdW5rbm93bsKgIDMzMDBtVsKgwqDCoMKgCj4g
-MG1BwqAgMzMwMG1WwqAgMzMwMG1WIAo+IMKgTERPX1JFRzEwwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAxwqDCoMKgIDDCoMKgwqDCoMKgIDAgdW5rbm93bsKg
-IDEyMDBtVsKgwqDCoMKgCj4gMG1BwqAgMTIwMG1WwqAgMTIwMG1WIAo+IMKgYnRfcG93ZXLCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgMMKgwqDCoCAwwqDC
-oMKgwqDCoCAwIHVua25vd27CoCAzMzAwbVbCoMKgwqDCoAo+IDBtQcKgIDMzMDBtVsKgIDMzMDBt
-ViAKPiByb290QGxldHV4On4jIAo+IAo+IFRoaXMgbWF0Y2hlcyBkZXZpY2UgdHJlZSBleGNlcHQg
-RENEQzEsIExETzcgYW5kIExETzggKGNhbWVyYSkuCj4gCgo=
+In scenarios where pullup relies on resume (get sync) to initialize
+the controller and set the run stop bit, then core_init is followed by
+gadget_resume which will eventually set run stop bit.
+
+But in cases where the core_init fails, the return value is not sent
+back to udc appropriately. So according to UDC the controller has
+started but in reality we never set the run stop bit.
+
+On systems like Android, there are uevents sent to HAL depending on
+whether the configfs_bind / configfs_disconnect were invoked. In the
+above mentioned scnenario, if the core init fails, the run stop won't
+be set and the cable plug-out won't result in generation of any
+disconnect event and userspace would never get any uevent regarding
+cable plug out and we never call pullup(0) again. Furthermore none of
+the next Plug-In/Plug-Out's would be known to configfs.
+
+Return back the appropriate result to UDC to let the userspace/
+configfs know that the pullup failed so they can take appropriate
+action.
+
+Fixes: 77adb8bdf422 ("usb: dwc3: gadget: Allow runtime suspend if UDC unbinded")
+Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+---
+Changes in v3: Added changelog mising in v2
+Changes in v2: Added Fixes tag
+
+ drivers/usb/dwc3/gadget.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 578804dc29ca..27cb671e18e3 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2747,7 +2747,9 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+ 	ret = pm_runtime_get_sync(dwc->dev);
+ 	if (!ret || ret < 0) {
+ 		pm_runtime_put(dwc->dev);
+-		return 0;
++		if (ret < 0)
++			pm_runtime_set_suspended(dwc->dev);
++		return ret;
+ 	}
+ 
+ 	if (dwc->pullups_connected == is_on) {
+-- 
+2.40.0
 
