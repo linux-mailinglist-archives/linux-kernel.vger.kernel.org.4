@@ -2,116 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A1F7734626
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 14:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34A7D734632
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 14:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbjFRMl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 08:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33864 "EHLO
+        id S229549AbjFRMxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 08:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjFRMl6 (ORCPT
+        with ESMTP id S229453AbjFRMxB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 08:41:58 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B077B12B
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 05:41:56 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-51a20c744ebso2924784a12.1
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 05:41:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687092115; x=1689684115;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LcmCILrgJX1B1Vteq2MM9FqRXYqqpViPdWNgRXDlb3o=;
-        b=dLxTN7sLvrQKZSpwIGW+AeLTtG/dhcI5bwtBx1FK7kHl1JuyqlMTryBFUs8YIupTvl
-         AD22hN0u+IOPT2sf5wlG2QYlQc28vagkoCC14EBWQfH7ZHi/K44hgYjMzqu62nJAyhgE
-         Pn9VWnGkzbcUIN8IHmLIr1XqQzjLjq2NlKFXRS1a3uDzUTkeBTqsNpVZXUmbP/t34P/X
-         B9R3WMrkCL7TwAyQGxPbO9WojQmOfpmoAfcd/NRw6xSq4Y57xB32eZmfRZTXf0gcP3VD
-         Xp7u80SadEF36cf9A/WOGsi7YIXtsOe3+AH1kf1V/oupO+SWozZywwYjlAaaECC2iejh
-         Mwpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687092115; x=1689684115;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LcmCILrgJX1B1Vteq2MM9FqRXYqqpViPdWNgRXDlb3o=;
-        b=kCCYZR//7/JU6F2f5rWZfJv7AUH3YkjrRn11+GDV+U8CO9hdS+ahczFam41Y+JUDQJ
-         uRIQf3QBWPq+FUThdXPyRCdnVqsb+Lz1m09YdvQbr3oPez3QDncwC58+06JGJHg8KLRR
-         wg7A5vVRkC+DEPi2EekC6+iFtdeWugfJLVWJ5g43kSVnomqivS2t1yS+2DcA43k2vfeX
-         IDPhbmIEnWgz9TMK2r+fEvVhzJWpv8HQC8k9u0mq/ZeRewyB2nRkw3hWUGkKMg56xVuw
-         TNvXuhLsPE2lGEDcKiE1RRdRqcmJFe6oMKpK2APiskGVH2nnIzOczl9gi+pQ0OR4QEyD
-         bX+w==
-X-Gm-Message-State: AC+VfDyxPPNZKp+C05O5MktV0cOROmfbJhKJa43B0hAUtLDYTiZE3DvU
-        6Rh7QJfYo90Pkh9DrfkyaHq9tQ==
-X-Google-Smtp-Source: ACHHUZ50WlmlYxWLSbjtOGtaGPZ2SyiLg5sdXpLwhX0ienP7WjjARcHT61+XPqJAdqMSWmHIqxuyTA==
-X-Received: by 2002:a05:6402:88e:b0:514:7f39:aa80 with SMTP id e14-20020a056402088e00b005147f39aa80mr4377322edy.18.1687092115222;
-        Sun, 18 Jun 2023 05:41:55 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id t18-20020a05640203d200b0051a4fcf7187sm720934edw.62.2023.06.18.05.41.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Jun 2023 05:41:54 -0700 (PDT)
-Message-ID: <7cbc6572-6772-64a6-6c91-567d58286426@linaro.org>
-Date:   Sun, 18 Jun 2023 14:41:52 +0200
+        Sun, 18 Jun 2023 08:53:01 -0400
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8460E5F;
+        Sun, 18 Jun 2023 05:52:55 -0700 (PDT)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4QkXqm1VkQz9sjp;
+        Sun, 18 Jun 2023 14:52:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mariushoch.de;
+        s=MBO0001; t=1687092772;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XlGPTTbstQnFGAqOrIapNTlekWsFm28DnNL8CbHdVd0=;
+        b=RpKAls7Aibuqbfa+9xhSthLFexlf9163K7BVeT8LEwFzV0zSMPz1Bv79VhVzr8vz+axuPY
+        AE0JUKub+hbDE4vY9UcXhZphTrbBZgsAPJpLAubX/CwOk9LPiRYPp6IsqX4nOraUmoN8dN
+        q3NbE3AujHBGtCFAjTeMPiBBcJN4LjKbAvxJAyODZfb+BQo5fzhxVtoWxiFzY/oLTP9lEu
+        +p1w6PD5HOSL9ZC/e2DhWgUJ70Mi6Q8bZX3NLDiwJRZ1ZC9TaWGFV6tS9GZXNvcts+QCQd
+        c6CWxb/iLChVN7NWsbqx0q/rpQMuCRYV/vD2MuBmfDvcWPV2t0LSb2v9kRVFcA==
+Message-ID: <9d07309f-9596-2be0-97ab-2bb9ee237c11@mariushoch.de>
+Date:   Sun, 18 Jun 2023 14:52:50 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 1/2] dt-bindings: leds: Add Kinetic KTD2026/2027 LED
-To:     =?UTF-8?Q?Andr=c3=a9_Apitzsch?= <git@apitzsch.eu>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <20230618-ktd202x-v1-0-fc182fefadd7@apitzsch.eu>
- <20230618-ktd202x-v1-1-fc182fefadd7@apitzsch.eu>
+From:   Marius Hoch <mail@mariushoch.de>
+Subject: Re: [PATCH 0/2] i2c: i801: Force no IRQ for Dell Latitude E7450
+To:     Rudolf Marek <r.marek@assembler.cz>,
+        Jean Delvare <jdelvare@suse.de>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230514103634.235917-1-mail@mariushoch.de>
+ <20230523200350.62ab4788@endymion.delvare>
+ <59a6a917-2a93-d52d-37f3-091295dd0db4@mariushoch.de>
+ <20230604160132.102dd6a7@endymion.delvare>
+ <ae93843f-7ab0-9d10-cf93-261f986962a5@assembler.cz>
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230618-ktd202x-v1-1-fc182fefadd7@apitzsch.eu>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <ae93843f-7ab0-9d10-cf93-261f986962a5@assembler.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/06/2023 13:45, André Apitzsch wrote:
-> Document Kinetic KTD2026/2027 LED driver devicetree bindings.
-> 
-> Signed-off-by: André Apitzsch <git@apitzsch.eu>
-> ---
->  .../devicetree/bindings/leds/leds-ktd202x.yaml     | 164 +++++++++++++++++++++
->  1 file changed, 164 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/leds/leds-ktd202x.yaml b/Documentation/devicetree/bindings/leds/leds-ktd202x.yaml
-> new file mode 100644
-> index 000000000000..9868d6f6f147
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/leds/leds-ktd202x.yaml
+Hi Rudolf,
 
-Filename matching compatible, so missing vendor prefix. Can be
-kinetic,ktd202x.yaml
+thanks for the reply.
 
-> @@ -0,0 +1,164 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/leds/leds-ktd202x.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Kinetic KTD2026/7 RGB/White LED Driver
+On 04/06/2023 22:41, Rudolf Marek wrote:
+> Hi Jean,
+>
+> Dne 04. 06. 23 v 16:01 Jean Delvare napsal(a):
+>> I admit I don't know. I'm not familiar with how GSI numbers relate to
+>> IRQ numbers. I think I understand that GSI numbers are an ACPI thing,
+>> and the ACPI layer is responsible for mapping these to actual IRQ
+>> numbers? Is there a GSI-to-IRQ table available somewhere as part of the
+>> ACPI tables? If so, it would be interesting to disassemble the ACPI
+>> tables on your system and check what this looks like for you.
+>
+> You need to check _PRT method of PCI0 device in APIC mode.
+> This will tell you to what GSI (APIC/pin) it goes.
+> To check you need to have a look to the DSDT table and decompile
+> it. You can obtain it by running acpidump > tables.txt and the 
+> acpixtract -a tables.txt
+> and finally running iasl -d dsdt.asl.
+>
+> Then, because the SMBUS lives on bus0, you just need to check _PRT method
+> under PCI0 device for the entry of 001fffff (INT C).
+> If this entry exists it will tell you where is it connected.
+The PCI0 device's _PRT, when PICM is true, returns AR00. That contains:
+             Package (0x04)
+             {
+                 0x001FFFFF,
+                 0x02,
+                 Zero,
+                 0x12
+             },
 
-Driver stands for Linux driver or for driving a LED? If the first, then
-drop.
+So according to this IRQ (=GSI?) 18 should be used (which, as mentioned 
+earlier is also used for the freefall device). (In acpi_pci_irq_enable) 
+acpi_register_gsi fails for this (with gsi=18) and afterwards dev->irq 
+is at 255 (which might just be an initial value? dev->irq is only set in 
+acpi_pci_irq_enable afterwards).
 
+> I assume this has no entry and then as a last chance Linux tries the 
+> PCI IRQ entry
+> in the configuration space gets queried. And this has 0xff which is
+> telling no IRQ connected.
+>
+> The southbridge has a IRQ routing configuration register which can be 
+> used to verify
+> if this is routed anywhere or really left "unconnected". This is 
+> usually in the the RCBA base + something
+> register. Have a look to "D31IP" register:
+>
+> SMBus Pin (SMIP) — R/W. Indicates which pin the SMBus controller 
+> drives as its
+> interrupt. bits 15:12
+>
+> If there is 0, it is not routed anywhere. Also you need to check 
+> "D31IR" where the PIN C is going:
+>
+> Interrupt C Pin Route (ICR) — R/W. Indicates which physical pin on the 
+> PCH is
+> connected to the INTC# pin reported for device 31 functions.
+>
+> The PIRQA corresponds to the PIN 16 of IOAPIC etc.
+>
+> If you need more info on that feel free to contact me. I can try to help.
+I skipped these steps (after identifying the _PRT entry) as it seems to 
+me that we have a ACPI entry here (it's just not functional), thus this 
+information would presumably be of no help.
 
-The rest looks good, so you just need to use proper filename.
-
-Best regards,
-Krzysztof
+Further help in debugging this would be much appreciated. In order to 
+further see why acpi_register_gsi failed, I also got the irqdomain debug 
+output and this also didn't help me (except that it doesn't register a 
+domain for our SMBus, like "irq: Added domain IR-PCI-MSI-0000:00:XX").
+>
+>
+> Thanks,
+> Rudolf
+>
 
