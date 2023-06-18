@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C76CF734861
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 22:51:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 013FC734863
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 22:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbjFRUvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 16:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48774 "EHLO
+        id S229846AbjFRUvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 16:51:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjFRUuK (ORCPT
+        with ESMTP id S229610AbjFRUuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 16:50:10 -0400
+        Sun, 18 Jun 2023 16:50:11 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB33AE49;
-        Sun, 18 Jun 2023 13:50:08 -0700 (PDT)
-Date:   Sun, 18 Jun 2023 20:50:06 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB6EE54;
+        Sun, 18 Jun 2023 13:50:09 -0700 (PDT)
+Date:   Sun, 18 Jun 2023 20:50:07 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1687121407;
+        s=2020; t=1687121408;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=LVSIjk+yc6ILF9K42y1xy8dftnlzkecrXrQkd8YW1eY=;
-        b=H8kmFWiJMpxJwJ0SAfNQcvCxBgIHjNvbObLfOxpKonZMXi9R0hKxSYWxHp2f6bRW4KcATv
-        DqAhjKlFrGflnSZ2a1oXO8TpXKer78jkn1R/hQxwjKn3tfDGFFhoUWczHOX57SA32L+kEv
-        vUsnydk69/y9Qmnj5uk+u/Qm8XClKXpweMfhhqrCSFk0e88Zb6pivUVey3jNa3suk5M9lP
-        miuXtaXxc7wuODuQRxIj7Pv3FVs9A1kk4JmA9YhvU3IkNd961HpCT545fb0hscyk/2Ex+a
-        mT+L7rRQMPbGzBgi/n5G/PWVYIy7yUjvt8z1WZ+dRQnRCTXnNzOZKP/ovvEXWA==
+        bh=MrEQ3I65cqng6jyKbh0tu2RLyql6fYc51c1USigvkrU=;
+        b=W+inexBV4Pp2XLD4WPfjL7bLFSrAmJHKux4gQimypHtXVUf54QX+7dXy+L8c67WXTBIrQY
+        Eiz1R+6hc8QdRr2/GqFnrKJmPQzJKlZJLQKcaw0WfK+w0tihTOt4qfLADSuFEej8LWf2XB
+        SXKNLOq3n7Bad+9jhpVhlEgr8R7EsnH8XKa6HRLqstmOraGykR6rurK1Oe627rMzqcjPjG
+        iMoGPatlUCBgEKqeLKLqeWz174ckD/8F9zH1PORBrUVAwi4K8HxxZuGByUYSvp9spa3q/z
+        vPB1EK8EVp9xruNqKS0RjDqXhcqtW4g3VuFjW0xv8d3oTT8UIJIn+13Q2KJQ/A==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1687121407;
+        s=2020e; t=1687121408;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=LVSIjk+yc6ILF9K42y1xy8dftnlzkecrXrQkd8YW1eY=;
-        b=OvWLZeqo4kI6CgJpkcWB+vmfmc8XEoaeL67KHZ/luGO3SurGzqbLIVNqitVdIMcId7OuqT
-        xJg1ogdI1RTXL6Aw==
+        bh=MrEQ3I65cqng6jyKbh0tu2RLyql6fYc51c1USigvkrU=;
+        b=rpe3sI96Otmw2MHpyCFZ059UrXFmrgLYuc2McEmOv3o53JmuDoJJfGSdwkEE1sIGiMurOG
+        XOV3F2geZiH8fnBw==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] posix-timers: Add comments about timer lookup
+Subject: [tip: timers/core] posix-timers: Cleanup comments about timer ID tracking
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Frederic Weisbecker <frederic@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230425183313.091081515@linutronix.de>
-References: <20230425183313.091081515@linutronix.de>
+In-Reply-To: <20230425183313.038444551@linutronix.de>
+References: <20230425183313.038444551@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <168712140656.404.4260184240973018058.tip-bot2@tip-bot2>
+Message-ID: <168712140755.404.17638032400776880983.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,97 +67,71 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     ae88967d71f1b4ffb6e48043993d37a106da8109
-Gitweb:        https://git.kernel.org/tip/ae88967d71f1b4ffb6e48043993d37a106da8109
+Commit-ID:     8d44b958a1a088195524c884f0437660e0522380
+Gitweb:        https://git.kernel.org/tip/8d44b958a1a088195524c884f0437660e0522380
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Tue, 25 Apr 2023 20:49:03 +02:00
+AuthorDate:    Tue, 25 Apr 2023 20:49:01 +02:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Sun, 18 Jun 2023 22:41:49 +02:00
+CommitterDate: Sun, 18 Jun 2023 22:41:48 +02:00
 
-posix-timers: Add comments about timer lookup
+posix-timers: Cleanup comments about timer ID tracking
 
-Document how the timer ID validation in the hash table works.
+Describe the hash table properly and remove the IDR leftover comments.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
-Link: https://lore.kernel.org/r/20230425183313.091081515@linutronix.de
+Link: https://lore.kernel.org/r/20230425183313.038444551@linutronix.de
 
 ---
- kernel/time/posix-timers.c | 39 ++++++++++++++++++++++++++++++-------
- 1 file changed, 32 insertions(+), 7 deletions(-)
+ kernel/time/posix-timers.c | 28 ++++++++--------------------
+ 1 file changed, 8 insertions(+), 20 deletions(-)
 
 diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
-index 79909a2..d7890ac 100644
+index 0c61f29..79909a2 100644
 --- a/kernel/time/posix-timers.c
 +++ b/kernel/time/posix-timers.c
-@@ -506,6 +506,12 @@ static int do_timer_create(clockid_t which_clock, struct sigevent *event,
- 		return -EAGAIN;
- 
- 	spin_lock_init(&new_timer->it_lock);
-+
-+	/*
-+	 * Add the timer to the hash table. The timer is not yet valid
-+	 * because new_timer::it_signal is still NULL. The timer id is also
-+	 * not yet visible to user space.
-+	 */
- 	new_timer_id = posix_timer_add(new_timer);
- 	if (new_timer_id < 0) {
- 		error = new_timer_id;
-@@ -551,6 +557,7 @@ static int do_timer_create(clockid_t which_clock, struct sigevent *event,
- 		goto out;
- 
- 	spin_lock_irq(&current->sighand->siglock);
-+	/* This makes the timer valid in the hash table */
- 	new_timer->it_signal = current->signal;
- 	list_add(&new_timer->list, &current->signal->posix_timers);
- 	spin_unlock_irq(&current->sighand->siglock);
-@@ -597,13 +604,6 @@ COMPAT_SYSCALL_DEFINE3(timer_create, clockid_t, which_clock,
- }
- #endif
+@@ -35,20 +35,17 @@
+ #include "timekeeping.h"
+ #include "posix-timers.h"
  
 -/*
-- * Locking issues: We need to protect the result of the id look up until
-- * we get the timer locked down so it is not deleted under us.  The
-- * removal is done under the idr spinlock so we use that here to bridge
-- * the find to the timer lock.  To avoid a dead lock, the timer id MUST
-- * be release with out holding the timer lock.
+- * Management arrays for POSIX timers. Timers are now kept in static hash table
+- * with 512 entries.
+- * Timer ids are allocated by local routine, which selects proper hash head by
+- * key, constructed from current->signal address and per signal struct counter.
+- * This keeps timer ids unique per process, but now they can intersect between
+- * processes.
 - */
- static struct k_itimer *__lock_timer(timer_t timer_id, unsigned long *flags)
- {
- 	struct k_itimer *timr;
-@@ -615,10 +615,35 @@ static struct k_itimer *__lock_timer(timer_t timer_id, unsigned long *flags)
- 	if ((unsigned long long)timer_id > INT_MAX)
- 		return NULL;
++static struct kmem_cache *posix_timers_cache;
  
-+	/*
-+	 * The hash lookup and the timers are RCU protected.
-+	 *
-+	 * Timers are added to the hash in invalid state where
-+	 * timr::it_signal == NULL. timer::it_signal is only set after the
-+	 * rest of the initialization succeeded.
-+	 *
-+	 * Timer destruction happens in steps:
-+	 *  1) Set timr::it_signal to NULL with timr::it_lock held
-+	 *  2) Release timr::it_lock
-+	 *  3) Remove from the hash under hash_lock
-+	 *  4) Call RCU for removal after the grace period
-+	 *
-+	 * Holding rcu_read_lock() accross the lookup ensures that
-+	 * the timer cannot be freed.
-+	 *
-+	 * The lookup validates locklessly that timr::it_signal ==
-+	 * current::it_signal and timr::it_id == @timer_id. timr::it_id
-+	 * can't change, but timr::it_signal becomes NULL during
-+	 * destruction.
-+	 */
- 	rcu_read_lock();
- 	timr = posix_timer_by_id(timer_id);
- 	if (timr) {
- 		spin_lock_irqsave(&timr->it_lock, *flags);
-+		/*
-+		 * Validate under timr::it_lock that timr::it_signal is
-+		 * still valid. Pairs with #1 above.
-+		 */
- 		if (timr->it_signal == current->signal) {
- 			rcu_read_unlock();
- 			return timr;
+ /*
+- * Lets keep our timers in a slab cache :-)
++ * Timers are managed in a hash table for lockless lookup. The hash key is
++ * constructed from current::signal and the timer ID and the timer is
++ * matched against current::signal and the timer ID when walking the hash
++ * bucket list.
++ *
++ * This allows checkpoint/restore to reconstruct the exact timer IDs for
++ * a process.
+  */
+-static struct kmem_cache *posix_timers_cache;
+-
+ static DEFINE_HASHTABLE(posix_timers_hashtable, 9);
+ static DEFINE_SPINLOCK(hash_lock);
+ 
+@@ -66,15 +63,6 @@ static const struct k_clock clock_realtime, clock_monotonic;
+ #endif
+ 
+ /*
+- * The timer ID is turned into a timer address by idr_find().
+- * Verifying a valid ID consists of:
+- *
+- * a) checking that idr_find() returns other than -1.
+- * b) checking that the timer id matches the one in the timer itself.
+- * c) that the timer owner is in the callers thread group.
+- */
+-
+-/*
+  * CLOCKs: The POSIX standard calls for a couple of clocks and allows us
+  *	    to implement others.  This structure defines the various
+  *	    clocks.
