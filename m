@@ -2,712 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6128F734600
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 13:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54076734603
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 13:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbjFRLrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 07:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56460 "EHLO
+        id S229614AbjFRLvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 07:51:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjFRLro (ORCPT
+        with ESMTP id S229447AbjFRLvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 07:47:44 -0400
-Received: from smtprelay05.ispgateway.de (smtprelay05.ispgateway.de [80.67.18.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED50FA;
-        Sun, 18 Jun 2023 04:47:38 -0700 (PDT)
-Received: from [92.206.161.29] (helo=note-book.lan)
-        by smtprelay05.ispgateway.de with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <git@apitzsch.eu>)
-        id 1qAqs8-00070T-5U; Sun, 18 Jun 2023 13:47:08 +0200
-From:   =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
-Date:   Sun, 18 Jun 2023 13:45:54 +0200
-Subject: [PATCH 2/2] leds: add ktd202x driver
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230618-ktd202x-v1-2-fc182fefadd7@apitzsch.eu>
-References: <20230618-ktd202x-v1-0-fc182fefadd7@apitzsch.eu>
-In-Reply-To: <20230618-ktd202x-v1-0-fc182fefadd7@apitzsch.eu>
-To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Sun, 18 Jun 2023 07:51:08 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 871E7FA;
+        Sun, 18 Jun 2023 04:51:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1687089064;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zaLQZRJzkXP7u1JRsYLXSI2d3hce21yOLxns9cE2+0c=;
+        b=1xWntLyTa58wwy/f+xowka2n0ALb4yVY7aOsoKXBsizbw9PJMxvoxDMjN1VMUIRKaSwjxc
+        Fa5LvfOjjB2dgf8KbBnGYMZ77f7oeeJvXuzCvyKINzxgLhWmlvipkVYAHK8sdynCgn52Px
+        P6VHBhplQ2EpOPtJGpzZEfQzyYGEtKc=
+Message-ID: <ebf776a8fb8dee045e7661daaca4564fe39917a6.camel@crapouillou.net>
+Subject: Re: [PATCH 0/9] MIPS: CI20: Add WiFi / Bluetooth support
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     list@opendingux.net, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
-X-Mailer: b4 0.12.2
-X-Df-Sender: YW5kcmVAYXBpdHpzY2guZXU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Boddie <paul@boddie.org.uk>,
+        Paul Burton <paulburton@kernel.org>
+Date:   Sun, 18 Jun 2023 13:51:01 +0200
+In-Reply-To: <43DCEEA5-C013-44BE-85C7-D61A980B0EA5@goldelico.com>
+References: <20230615084006.79194526F801@goldelico.com>
+         <C1924536-FA97-4E75-9D22-99E5AF24EE5B@goldelico.com>
+         <A8EBCBA4-D9BA-4C2F-9C91-38128D06EDBA@goldelico.com>
+         <AA802E24-A97B-42B6-90A4-5ECB1E4D9294@goldelico.com>
+         <5EF6B0D2-2B84-4C98-B799-88062E035EC1@goldelico.com>
+         <43DCEEA5-C013-44BE-85C7-D61A980B0EA5@goldelico.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit adds support for Kinetic KTD2026/7 RGB/White LED driver.
-
-Signed-off-by: André Apitzsch <git@apitzsch.eu>
----
- drivers/leds/rgb/Kconfig        |  12 +
- drivers/leds/rgb/Makefile       |   1 +
- drivers/leds/rgb/leds-ktd202x.c | 610 ++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 623 insertions(+)
-
-diff --git a/drivers/leds/rgb/Kconfig b/drivers/leds/rgb/Kconfig
-index 360c8679c6e2..fa422e7a3f74 100644
---- a/drivers/leds/rgb/Kconfig
-+++ b/drivers/leds/rgb/Kconfig
-@@ -2,6 +2,18 @@
- 
- if LEDS_CLASS_MULTICOLOR
- 
-+config LEDS_KTD202X
-+	tristate "LED support for KTD202x Chips"
-+	depends on I2C
-+	depends on OF
-+	select REGMAP_I2C
-+	help
-+	  This option enables support for LEDs connected to the KTD202x
-+	  chip.
-+
-+	  To compile this driver as a module, choose M here: the module
-+	  will be called leds-ktd202x.
-+
- config LEDS_PWM_MULTICOLOR
- 	tristate "PWM driven multi-color LED Support"
- 	depends on PWM
-diff --git a/drivers/leds/rgb/Makefile b/drivers/leds/rgb/Makefile
-index 8c01daf63f61..5b4f22e077c0 100644
---- a/drivers/leds/rgb/Makefile
-+++ b/drivers/leds/rgb/Makefile
-@@ -1,5 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- 
-+obj-$(CONFIG_LEDS_KTD202X)		+= leds-ktd202x.o
- obj-$(CONFIG_LEDS_PWM_MULTICOLOR)	+= leds-pwm-multicolor.o
- obj-$(CONFIG_LEDS_QCOM_LPG)		+= leds-qcom-lpg.o
- obj-$(CONFIG_LEDS_MT6370_RGB)		+= leds-mt6370-rgb.o
-diff --git a/drivers/leds/rgb/leds-ktd202x.c b/drivers/leds/rgb/leds-ktd202x.c
-new file mode 100644
-index 000000000000..4f0cc558c797
---- /dev/null
-+++ b/drivers/leds/rgb/leds-ktd202x.c
-@@ -0,0 +1,610 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+// Driver for Kinetic KTD2026/7 RGB/White LED driver
-+
-+#include <linux/i2c.h>
-+#include <linux/led-class-multicolor.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/regmap.h>
-+#include <linux/regulator/consumer.h>
-+
-+#define KTD202X_MAX_LEDS 4
-+
-+#define KTD202X_REG_RESET_CONTROL	0x00
-+#define KTD202X_REG_FLASH_PERIOD	0x01
-+#define KTD202X_REG_PWM1_TIMER		0x02
-+#define KTD202X_REG_PWM2_TIMER		0x03
-+#define KTD202X_REG_CHANNEL_CTRL	0x04
-+#define KTD202X_REG_TRISE_FALL		0x05
-+#define KTD202X_REG_LED_IOUT(x)		(0x06 + (x))
-+
-+#define KTD202X_RSTR_RESET 0x07
-+
-+#define KTD202X_ENABLE_CTRL_WAKE 0x00 /* SCL & SDA High */
-+#define KTD202X_ENABLE_CTRL_SLEEP 0x08 /* SCL=High & SDA Toggling */
-+
-+#define KTD202X_CHANNEL_CTRL_MASK(x) (BIT(2 * (x)) | BIT(2 * (x) + 1))
-+#define KTD202X_CHANNEL_CTRL_OFF 0
-+#define KTD202X_CHANNEL_CTRL_ON(x) BIT(2 * (x))
-+#define KTD202X_CHANNEL_CTRL_PWM1(x) BIT(2 * (x) + 1)
-+#define KTD202X_CHANNEL_CTRL_PWM2(x) (BIT(2 * (x)) | BIT(2 * (x) + 1))
-+
-+#define KTD202X_TIME_MIN 256 /* ms */
-+#define KTD202X_TIME_STEP 128 /* ms */
-+#define KTD202X_ON_MAX 256
-+
-+static const struct reg_default ktd202x_reg_defaults[] = {
-+	{ KTD202X_REG_RESET_CONTROL, 0x00 },
-+	{ KTD202X_REG_FLASH_PERIOD, 0x00 },
-+	{ KTD202X_REG_PWM1_TIMER, 0x01 },
-+	{ KTD202X_REG_PWM2_TIMER, 0x01 },
-+	{ KTD202X_REG_CHANNEL_CTRL, 0x00 },
-+	{ KTD202X_REG_TRISE_FALL, 0x00 },
-+	{ KTD202X_REG_LED_IOUT(0), 0x4f },
-+	{ KTD202X_REG_LED_IOUT(1), 0x4f },
-+	{ KTD202X_REG_LED_IOUT(2), 0x4f },
-+	{ KTD202X_REG_LED_IOUT(3), 0x4f },
-+};
-+
-+struct ktd202x;
-+
-+struct ktd202x_led {
-+	struct ktd202x *chip;
-+	union {
-+		struct led_classdev cdev;
-+		struct led_classdev_mc mcdev;
-+	};
-+	u32 index;
-+};
-+
-+struct ktd202x {
-+	struct mutex mutex; /* held when writing to registers */
-+	struct regulator *vin_regulator;
-+	struct device *dev;
-+	struct regmap *regmap;
-+	bool enabled;
-+	int num_leds;
-+	struct ktd202x_led leds[KTD202X_MAX_LEDS];
-+};
-+
-+struct ktd202x_info {
-+	unsigned int num_leds;
-+};
-+
-+static const struct ktd202x_info ktd2026 = {
-+	.num_leds = 3,
-+};
-+
-+static const struct ktd202x_info ktd2027 = {
-+	.num_leds = 4,
-+};
-+
-+static int ktd202x_chip_init(struct ktd202x *chip)
-+{
-+	int ret;
-+
-+	ret = regmap_write(chip->regmap, KTD202X_REG_RESET_CONTROL,
-+			   KTD202X_ENABLE_CTRL_WAKE);
-+
-+	if (ret) {
-+		dev_err(chip->dev, "Failed to enable the chip: %d\n", ret);
-+		return ret;
-+	}
-+
-+	return ret;
-+}
-+
-+static void ktd202x_chip_disable(struct ktd202x *chip)
-+{
-+	int ret;
-+
-+	if (!chip->enabled)
-+		return;
-+
-+	regmap_write(chip->regmap, KTD202X_REG_RESET_CONTROL,
-+		     KTD202X_ENABLE_CTRL_SLEEP);
-+
-+	ret = regulator_disable(chip->vin_regulator);
-+	if (ret) {
-+		dev_err(chip->dev, "Failed to disable regulator: %d\n", ret);
-+		return;
-+	}
-+
-+	chip->enabled = false;
-+}
-+
-+static int ktd202x_chip_enable(struct ktd202x *chip)
-+{
-+	int ret;
-+
-+	if (chip->enabled)
-+		return 0;
-+
-+	ret = regulator_enable(chip->vin_regulator);
-+	if (ret) {
-+		dev_err(chip->dev, "Failed to enable regulator: %d\n", ret);
-+		return ret;
-+	}
-+	chip->enabled = true;
-+
-+	ret = ktd202x_chip_init(chip);
-+	if (ret)
-+		ktd202x_chip_disable(chip);
-+
-+	return ret;
-+}
-+
-+static bool ktd202x_chip_in_use(struct ktd202x *chip)
-+{
-+	int i;
-+
-+	if (chip->num_leds == 1) {
-+		if (chip->leds[0].mcdev.led_cdev.brightness)
-+			return true;
-+	} else {
-+		for (i = 0; i < chip->num_leds; i++)
-+			if (chip->leds[i].cdev.brightness)
-+				return true;
-+	}
-+	return false;
-+}
-+
-+static void ktd202x_brightness_set(struct ktd202x_led *led, struct led_classdev *cdev,
-+				   struct mc_subled *subleds, unsigned int num_colors)
-+{
-+	enum led_brightness brightness;
-+	int idx;
-+	int ret;
-+	int i;
-+
-+	if (ktd202x_chip_in_use(led->chip)) {
-+		ret = ktd202x_chip_enable(led->chip);
-+		if (ret)
-+			return;
-+	}
-+
-+	for (i = 0; i < num_colors; i++) {
-+		idx = subleds[i].channel;
-+		brightness = subleds[i].brightness;
-+
-+		ret = regmap_write(led->chip->regmap, KTD202X_REG_LED_IOUT(idx),
-+				   brightness ? brightness-1 : 0);
-+		if (ret)
-+			return;
-+
-+		if (brightness) {
-+			ret = regmap_update_bits(led->chip->regmap,
-+						 KTD202X_REG_CHANNEL_CTRL,
-+						 KTD202X_CHANNEL_CTRL_MASK(idx),
-+						 KTD202X_CHANNEL_CTRL_ON(idx));
-+		} else {
-+			ret = regmap_update_bits(led->chip->regmap,
-+						 KTD202X_REG_CHANNEL_CTRL,
-+						 KTD202X_CHANNEL_CTRL_MASK(idx),
-+						 KTD202X_CHANNEL_CTRL_OFF);
-+		}
-+		if (ret)
-+			return;
-+	}
-+
-+	if (!ktd202x_chip_in_use(led->chip))
-+		ktd202x_chip_disable(led->chip);
-+}
-+
-+static int ktd202x_brightness_single_set(struct led_classdev *cdev,
-+					 enum led_brightness value)
-+{
-+	struct ktd202x_led *led = container_of(cdev, struct ktd202x_led, cdev);
-+	struct mc_subled info;
-+	int num_channels = 1;
-+
-+	mutex_lock(&led->chip->mutex);
-+
-+	info.brightness = value;
-+	info.channel = led->index;
-+	ktd202x_brightness_set(led, cdev, &info, num_channels);
-+
-+	mutex_unlock(&led->chip->mutex);
-+
-+	return 0;
-+}
-+
-+static int ktd202x_brightness_mc_set(struct led_classdev *cdev,
-+				     enum led_brightness value)
-+{
-+	struct led_classdev_mc *mc = lcdev_to_mccdev(cdev);
-+	struct ktd202x_led *led = container_of(mc, struct ktd202x_led, mcdev);
-+
-+	mutex_lock(&led->chip->mutex);
-+
-+	led_mc_calc_color_components(mc, value);
-+	ktd202x_brightness_set(led, cdev, mc->subled_info, mc->num_colors);
-+
-+	mutex_unlock(&led->chip->mutex);
-+
-+	return 0;
-+}
-+
-+static int ktd202x_blink_set(struct ktd202x_led *led, struct led_classdev *cdev,
-+			     unsigned long *delay_on, unsigned long *delay_off,
-+			     u8 ctrl_mask, u8 ctrl_on, u8 ctrl_pwm1)
-+{
-+	unsigned long delay_total; /* ms */
-+	int ret, num_steps, on;
-+
-+	/* Never off - brightness is already set, disable blinking */
-+	if (!*delay_off) {
-+		ret = regmap_update_bits(led->chip->regmap,
-+					 KTD202X_REG_CHANNEL_CTRL,
-+					 ctrl_mask,
-+					 ctrl_on);
-+		return ret;
-+	}
-+
-+	/* Convert into values the HW will understand. */
-+	num_steps = (*delay_on + *delay_off - KTD202X_TIME_MIN) /
-+		    KTD202X_TIME_STEP + 1;
-+	num_steps = min(126, num_steps);
-+	on = (*delay_on * KTD202X_ON_MAX) / (*delay_on + *delay_off);
-+
-+	delay_total = num_steps * KTD202X_TIME_STEP + KTD202X_TIME_MIN;
-+	*delay_on = (delay_total * on) / KTD202X_ON_MAX;
-+	*delay_off = delay_total - *delay_on;
-+
-+	/* Set timings */
-+	ret = regmap_write(led->chip->regmap, KTD202X_REG_FLASH_PERIOD,
-+			   num_steps);
-+	if (ret)
-+		return ret;
-+	ret = regmap_write(led->chip->regmap, KTD202X_REG_PWM1_TIMER, on);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_update_bits(led->chip->regmap, KTD202X_REG_CHANNEL_CTRL,
-+				 ctrl_mask,
-+				 ctrl_pwm1);
-+	return ret;
-+}
-+
-+static int ktd202x_blink_single_set(struct led_classdev *cdev,
-+				    unsigned long *delay_on,
-+				    unsigned long *delay_off)
-+{
-+	struct ktd202x_led *led = container_of(cdev, struct ktd202x_led, cdev);
-+	struct led_classdev *lcdev;
-+	int index, ret;
-+	u8 ctrl_mask;
-+	u8 ctrl_on;
-+	u8 ctrl_pwm1;
-+
-+	lcdev = &led->cdev;
-+
-+	/* If no blink specified, default to 1 Hz. */
-+	if (!*delay_off && !*delay_on) {
-+		*delay_off = 500;
-+		*delay_on = 500;
-+	}
-+
-+	if (!lcdev->brightness) {
-+		lcdev->brightness = LED_FULL;
-+		ret = ktd202x_brightness_single_set(lcdev, lcdev->brightness);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	/* Never on - just set to off */
-+	if (!*delay_on) {
-+		lcdev->brightness = LED_OFF;
-+		return ktd202x_brightness_single_set(lcdev, LED_OFF);
-+	}
-+
-+	index = led->index;
-+	ctrl_mask = KTD202X_CHANNEL_CTRL_MASK(index);
-+	ctrl_on = KTD202X_CHANNEL_CTRL_ON(index);
-+	ctrl_pwm1 = KTD202X_CHANNEL_CTRL_PWM1(index);
-+
-+	mutex_lock(&led->chip->mutex);
-+
-+	ret = ktd202x_blink_set(led, lcdev, delay_on, delay_off, ctrl_mask,
-+				ctrl_on, ctrl_pwm1);
-+
-+	mutex_unlock(&led->chip->mutex);
-+
-+	return ret;
-+}
-+
-+static int ktd202x_blink_mc_set(struct led_classdev *cdev,
-+				unsigned long *delay_on,
-+				unsigned long *delay_off)
-+{
-+	struct led_classdev_mc *mc = lcdev_to_mccdev(cdev);
-+	struct ktd202x_led *led = container_of(mc, struct ktd202x_led, mcdev);
-+	struct led_classdev *lcdev;
-+	u8 ctrl_mask = 0;
-+	u8 ctrl_on = 0;
-+	u8 ctrl_pwm1 = 0;
-+	int ret, i;
-+
-+	lcdev = &led->mcdev.led_cdev;
-+
-+	/* If no blink specified, default to 1 Hz. */
-+	if (!*delay_off && !*delay_on) {
-+		*delay_off = 500;
-+		*delay_on = 500;
-+	}
-+
-+	if (!lcdev->brightness) {
-+		lcdev->brightness = LED_FULL;
-+		ret = ktd202x_brightness_mc_set(lcdev, lcdev->brightness);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	/* Never on - just set to off */
-+	if (!*delay_on) {
-+		lcdev->brightness = LED_OFF;
-+		return ktd202x_brightness_mc_set(lcdev, LED_OFF);
-+	}
-+
-+	for (i = 0; i < mc->num_colors; i++) {
-+		int index = mc->subled_info[i].channel;
-+
-+		ctrl_mask |= KTD202X_CHANNEL_CTRL_MASK(index);
-+		ctrl_on |= KTD202X_CHANNEL_CTRL_ON(index);
-+		ctrl_pwm1 |= KTD202X_CHANNEL_CTRL_PWM1(index);
-+	}
-+
-+	mutex_lock(&led->chip->mutex);
-+
-+	ret = ktd202x_blink_set(led, lcdev, delay_on, delay_off, ctrl_mask,
-+				ctrl_on, ctrl_pwm1);
-+
-+	mutex_unlock(&led->chip->mutex);
-+
-+	return ret;
-+}
-+
-+static int ktd202x_add_led(struct ktd202x *chip, struct device_node *np,
-+			   unsigned int index)
-+{
-+	struct led_init_data init_data = {};
-+	struct led_classdev *cdev;
-+	struct device_node *child;
-+	struct mc_subled *info;
-+	struct ktd202x_led *led = &chip->leds[index];
-+	int num_channels;
-+	u32 color = 0;
-+	u32 reg;
-+	int ret;
-+	int i;
-+
-+	ret = of_property_read_u32(np, "color", &color);
-+	if (ret < 0 && ret != -EINVAL) {
-+		dev_err(chip->dev, "failed to parse \"color\" of %pOF\n", np);
-+		return ret;
-+	}
-+
-+	if (color == LED_COLOR_ID_RGB) {
-+		num_channels = of_get_available_child_count(np);
-+		if (!num_channels || num_channels > chip->num_leds)
-+			return -EINVAL;
-+	} else {
-+		num_channels = 1;
-+	}
-+
-+	led->chip = chip;
-+
-+	if (color == LED_COLOR_ID_RGB) {
-+		info = devm_kcalloc(chip->dev, num_channels, sizeof(*info),
-+				    GFP_KERNEL);
-+		if (!info)
-+			return -ENOMEM;
-+
-+		i = 0;
-+		for_each_available_child_of_node(np, child) {
-+			u32 color = 0;
-+
-+			ret = of_property_read_u32(child, "reg", &reg);
-+			if (ret != 0 || reg >= chip->num_leds) {
-+				dev_err(chip->dev, "invalid \"reg\" of %pOFn\n",
-+					np);
-+				return -EINVAL;
-+			}
-+
-+			ret = of_property_read_u32(child, "color", &color);
-+			if (ret < 0 && ret != -EINVAL) {
-+				dev_err(chip->dev,
-+					"failed to parse \"color\" of %pOF\n",
-+					np);
-+				return ret;
-+			}
-+
-+			info[i].color_index = color;
-+			info[i].channel = reg;
-+			info[i].intensity = 0;
-+			i++;
-+		}
-+
-+		led->mcdev.subled_info = info;
-+		led->mcdev.num_colors = num_channels;
-+
-+		cdev = &led->mcdev.led_cdev;
-+		cdev->brightness_set_blocking = ktd202x_brightness_mc_set;
-+		cdev->blink_set = ktd202x_blink_mc_set;
-+	} else {
-+		ret = of_property_read_u32(np, "reg", &reg);
-+		if (ret != 0 || reg >= chip->num_leds) {
-+			dev_err(chip->dev, "invalid \"reg\" of %pOFn\n", np);
-+			return -EINVAL;
-+		}
-+		led->index = reg;
-+
-+		cdev = &led->cdev;
-+		cdev->brightness_set_blocking = ktd202x_brightness_single_set;
-+		cdev->blink_set = ktd202x_blink_single_set;
-+	}
-+
-+	cdev->max_brightness = 192;
-+
-+	init_data.fwnode = of_fwnode_handle(np);
-+
-+	if (color == LED_COLOR_ID_RGB)
-+		ret = devm_led_classdev_multicolor_register_ext(chip->dev,
-+								&led->mcdev,
-+								&init_data);
-+	else
-+		ret = devm_led_classdev_register_ext(chip->dev, &led->cdev,
-+						     &init_data);
-+	if (ret) {
-+		dev_err(chip->dev, "unable to register %s\n", cdev->name);
-+		of_node_put(np);
-+	}
-+
-+	return ret;
-+}
-+
-+static int ktd202x_probe_dt(struct ktd202x *chip)
-+{
-+	struct device_node *np = dev_of_node(chip->dev), *child;
-+	const struct ktd202x_info *ktd202x;
-+	unsigned int i;
-+	int count, ret;
-+
-+	ktd202x = of_device_get_match_data(chip->dev);
-+	if (!ktd202x)
-+		return -ENODEV;
-+
-+	chip->num_leds = ktd202x->num_leds;
-+
-+	count = of_get_available_child_count(np);
-+	if (!count || count > ktd202x->num_leds)
-+		return -EINVAL;
-+
-+	regmap_write(chip->regmap, KTD202X_REG_RESET_CONTROL,
-+		     KTD202X_RSTR_RESET);
-+	/* allow the device to execute the complete reset */
-+	usleep_range(200, 300);
-+
-+	i = 0;
-+	for_each_available_child_of_node(np, child) {
-+		ret = ktd202x_add_led(chip, child, i);
-+		if (ret)
-+			return ret;
-+		i++;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct regmap_config ktd202x_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.max_register = 0x09,
-+	.cache_type = REGCACHE_FLAT,
-+	.reg_defaults = ktd202x_reg_defaults,
-+	.num_reg_defaults = ARRAY_SIZE(ktd202x_reg_defaults),
-+};
-+
-+static int ktd202x_probe(struct i2c_client *client)
-+{
-+	struct ktd202x *chip;
-+	int ret;
-+
-+	chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
-+	if (!chip)
-+		return -ENOMEM;
-+
-+	mutex_init(&chip->mutex);
-+	mutex_lock(&chip->mutex);
-+
-+	chip->dev = &client->dev;
-+	i2c_set_clientdata(client, chip);
-+
-+	chip->regmap = devm_regmap_init_i2c(client, &ktd202x_regmap_config);
-+	if (IS_ERR(chip->regmap)) {
-+		ret = dev_err_probe(&client->dev, PTR_ERR(chip->regmap),
-+				    "Failed to allocate register map.\n");
-+		goto error;
-+	}
-+
-+	chip->vin_regulator = devm_regulator_get(&client->dev, "vin");
-+	ret = PTR_ERR_OR_ZERO(chip->vin_regulator);
-+	if (ret) {
-+		dev_err_probe(&client->dev, ret,
-+			      "Failed to request regulator.\n");
-+		goto error;
-+	}
-+
-+	ret = regulator_enable(chip->vin_regulator);
-+	if (ret) {
-+		dev_err_probe(&client->dev, ret,
-+			      "Failed to enable regulator.\n");
-+		goto error;
-+	}
-+
-+	ret = ktd202x_probe_dt(chip);
-+	if (ret < 0)
-+		goto error_reg;
-+
-+	ret = regulator_disable(chip->vin_regulator);
-+	if (ret) {
-+		dev_err_probe(&client->dev, ret,
-+			      "Failed to disable regulator.\n");
-+		goto error;
-+	}
-+
-+	mutex_unlock(&chip->mutex);
-+
-+	return 0;
-+
-+error_reg:
-+	regulator_disable(chip->vin_regulator);
-+
-+error:
-+	mutex_destroy(&chip->mutex);
-+	return ret;
-+}
-+
-+static void ktd202x_remove(struct i2c_client *client)
-+{
-+	struct ktd202x *chip = i2c_get_clientdata(client);
-+
-+	ktd202x_chip_disable(chip);
-+
-+	mutex_destroy(&chip->mutex);
-+}
-+
-+static void ktd202x_shutdown(struct i2c_client *client)
-+{
-+	struct ktd202x *chip = i2c_get_clientdata(client);
-+
-+	/* Reset registers to make sure all off before shutdown */
-+	regmap_write(chip->regmap, KTD202X_REG_RESET_CONTROL,
-+		     KTD202X_RSTR_RESET);
-+}
-+
-+static const struct of_device_id ktd202x_match_table[] = {
-+	{ .compatible = "kinetic,ktd2026", .data = &ktd2026 },
-+	{ .compatible = "kinetic,ktd2027", .data = &ktd2027 },
-+	{ /* sentinel */ },
-+};
-+
-+MODULE_DEVICE_TABLE(of, ktd202x_match_table);
-+
-+static struct i2c_driver ktd202x_driver = {
-+	.driver = {
-+		.name = "leds-ktd202x",
-+		.of_match_table = of_match_ptr(ktd202x_match_table),
-+	},
-+	.probe_new = ktd202x_probe,
-+	.remove = ktd202x_remove,
-+	.shutdown = ktd202x_shutdown,
-+};
-+
-+module_i2c_driver(ktd202x_driver);
-+
-+MODULE_AUTHOR("André Apitzsch <git@apitzsch.eu>");
-+MODULE_DESCRIPTION("Kinetic KTD2026/7 LED driver");
-+MODULE_LICENSE("GPL");
-
--- 
-2.41.0
+SGkgTmlrb2xhdXMsCgpMZSBzYW1lZGkgMTcganVpbiAyMDIzIMOgIDEyOjQ1ICswMjAwLCBILiBO
+aWtvbGF1cyBTY2hhbGxlciBhIMOpY3JpdMKgOgo+IEhpIFBhdWwsCj4gCj4gPiBBbSAxNi4wNi4y
+MDIzIHVtIDIyOjIxIHNjaHJpZWIgSC4gTmlrb2xhdXMgU2NoYWxsZXIKPiA+IDxobnNAZ29sZGVs
+aWNvLmNvbT46Cj4gCj4gPiAtIEJ1dCByZW5hbWluZyB0aGUgRFQgbm9kZXMgKGUuZy4gU1VEQ0RD
+MSAtPiBEQ0RDMSkgKHdpdGggb3IKPiA+IHdpdGhvdXQgcmVndWxhdG9yX25hbWUpIG1ha2VzCj4g
+PiBib290IGhhbmcgd2l0aCBzdHJhbmdlIGVycm9ycyB3aGljaCBpbmRpY2F0ZSB0aGF0IHRoZSBw
+cm9jZXNzb3IKPiA+IHBvd2VyIHN1cHBseSBpcyBub3Qgc3RhYmxlLgo+ID4gT25jZSBhIHdoaWxl
+IGl0IGRpZCBldmVuIGF1dG9tYXRpY2FsbHkgcmVib290LiBJbiBtb3N0IGNhc2VzIHRoZXJlCj4g
+PiBhcmUgc29tZSBFWFQ0IGVycm9ycwo+ID4gYWZ0ZXJ3YXJkcy4KPiAKPiBJIGFtIGNvbWluZyBj
+bG9zZXIsIEkgdGhpbmsuIEkgaGF2ZSBub3cgdG91Y2hlZCBvbmx5IHRoZSBEQ0RDMSBub2RlCj4g
+bmFtZS4KPiAKPiBhKSB3aXRoICJTVURDREMxIiAtPiAiRENEQzEiIChiYWQgYm9vZCk6Cj4gCj4g
+cmVndWxhdG9yX29mX2dldF9pbml0X25vZGUoKSByZXR1cm5zIHRoZSBjaGlsZCBub2RlCj4gCj4g
+VGhlbjoKPiBbwqDCoMKgIDAuNjY2OTYyXSBhY3Q4ODY1IDAtMDA1YTogTG9va2luZyB1cCB2cDEt
+c3VwcGx5IGZyb20gZGV2aWNlIHRyZWUKPiBbwqDCoMKgIDAuNjczMTkxXSBEQ0RDMTogc3VwcGxp
+ZWQgYnkgdmNjXzMzdgo+IFvCoMKgwqAgMC43MjcwNzBdIERDREMxOiBCcmluZ2luZyAxMjAwMDAw
+dVYgaW50byAxMTAwMDAwLTExMDAwMDB1Vgo+IFvCoMKgwqAgMC43MzkzOThdIERDREMxOiAxMTAw
+IG1WLCBlbmFibGVkCj4gCj4gYikgd2l0aG91dCBwYXRjaC9zZXJpZXMgb3IgcmV2ZXJ0ZWQgKGdv
+b2QgYm9vdCk6Cj4gCj4gcmVndWxhdG9yX29mX2dldF9pbml0X25vZGUoKSByZXR1cm5zIE5VTEwK
+PiAKPiBUaGVuOgo+IFvCoMKgwqAgMS4wMTY0ODddIERDREMxOiBhdCAxMjAwIG1WLCBlbmFibGVk
+Cj4gW8KgwqDCoCAxLjAyMDU3OF0gYWN0ODg2NSAwLTAwNWE6IExvb2tpbmcgdXAgdnAxLXN1cHBs
+eSBmcm9tIGRldmljZSB0cmVlCj4gW8KgwqDCoCAxLjAyNjkxN10gRENEQzE6IHN1cHBsaWVkIGJ5
+IHZjY18zM3YKPiAKPiBTbyBhdCBsZWFzdCBmb3IgbXkgYm9hcmQgdGhlIHBhdGNoZWQgc2VyaWVz
+IHNlZW1zIHRvIHJlZHVjZSBEQ0RDMQo+IHZvbHRhZ2UKPiB0byAxLjFWIHdoaWNoIG1heSB0cmln
+Z2VyIHRoZSBib290IGFuZCBzdGFiaWxpdHkgcHJvYmxlbXMgb24gbXkgYm9hcmQKPiB3aGlsZQo+
+IGl0IGlzIGZpbmUgZm9yIHlvdXJzLiBUaGlzIGNvdWxkIGV4cGxhaW4gdGhlIGhhcmR3YXJlIGRl
+cGVuZGVuY3kuCj4gCj4gTm93IEkgaGF2ZSBubyBkYXRhIHNoZWV0cyBvciBpbmZvcm1hdGlvbiB3
+aGljaCB2b2x0YWdlcyBhcmUgdGhlIHJpZ2h0Cj4gb25lcwo+IGFuZCB3aGVyZSB0aGUgMTIwMG1W
+IGNvbWUgZnJvbSAobW9zdCBsaWtlbHkgc29tZSBkZWZhdWx0IHByb2dyYW1tZWQKPiBpbnRvIHRo
+ZSBQTVUgY2hpcCkuCj4gCj4gQW5kIHRoZSBpc3N1ZSBzZWVtcyB0byBiZSB0aGF0IHdpdGhvdXQg
+bWF0Y2hpbmcgdGhlIG5vZGUgbmFtZXMgdGhlCj4gdm9sdGFnZXMgaW4gdGhlIGRldmljZSB0cmVl
+IG1heSBoYXZlIGJlZW4gaWdub3JlZCBjb21wbGV0ZWx5IGFsbCB0aGUKPiB0aW1lLi4uIE5vdyBp
+dCBzZXRzIHVwIHZvbHRhZ2VzLCB3aGljaCBzaG91bGQgaGFwcGVuLiBCdXQgZGlmZmVyZW50Cj4g
+b25lcyBmb3IgbXkgYm9hcmQgd2hpY2ggYnJlYWtzIGJvb3QuCgpTbyB0aGUgbm9kZSBuYW1lcyBm
+aXggY2F1c2VkIHRoZSBkcml2ZXIgdG8gYWN0dWFsbHkgdXNlIHRoZSBpbmZvIGZyb20KRFQsIHdo
+aWNoIGRvZXNuJ3QgYWxsb3cgdGhlIGJvYXJkIHRvIGJvb3QuIE5pY2UuCgo+IEZpbmFsbHkgSSBk
+aWQgcmlzayAoSSBoYXZlIG5vIHJlcGxhY2VtZW50IENJMjAgYm9hcmQgYW5kIHRoZXkgYXJlIG5v
+Cj4gbG9uZ2VyCj4gb24gc2FsZS4uLiBSUyBwYXJ0IyB3YXMgMTI1LTMzMDUgTW91c2VyIDQ1Ni1W
+TC02Mjg1MSkgdG8gcnVuIGEgdGVzdAo+IHdpdGgKPiByZW5hbWUgdG8gIkRDREMxIiBidXQgY2hh
+bmdpbmcgdGhlIHZvbHRhZ2UgdG8gMTIwMG1WLiBBbmQgdGhpcwo+IHZlcnNpb24gYm9vdHMuCgpM
+b29raW5nIGF0IHRoZSBKWjQ3ODBfRFMuUERGIGZpbGUsIHRoZSBTb0MgYWN0dWFsbHkgd2FudHMg
+MS4xViBzbyB0aGUKRFQgaXMgbm90IHdyb25nIC0gaW4gdGhlb3J5LiBCdXQgaW4gcHJhY3RpY2Ug
+aXQgZG9lcyBub3Qgd29yaywgYXMgeW91CmV4cGVyaWVuY2VkIHlvdXJzZWxmLiBIb3dldmVyLCBp
+ZiB0aGUgQUNUODYwMCBkZWZhdWx0cyB0byAxLjJWLCBvciBpZgp0aGUgYm9vdGxvYWRlciBjb25m
+aWd1cmVzIGl0IHRvIDEuMlYsIEkgd291bGQgdGhpbmsgdGhhdCB0aGlzIGlzCmFjdHVhbGx5IGEg
+dm9sdGFnZSB0aGF0IHRoZSBTb0MgY2FuIGhhbmRsZSAtIG90aGVyd2lzZSB0aGUgU29DIHdvdWxk
+IGJlCm92ZXJ2b2x0ZWQgdW50aWwgdGhlIGtlcm5lbCBzdGFydHMsIGFuZCB0aGUgYm9hcmQgZGVz
+aWduIHdvdWxkIGJlCmZsYXdlZC4KCkkgbWVhc3VyZWQgdGhhdCB0aGUgb2xkIDMueCBrZXJuZWwg
+a2VlcHMgdGhlIFNvQyB2b2x0YWdlIGF0IDEuMlYsIHNvIGl0CnNvdW5kcyBsaWtlIGEgYmV0dGVy
+IGRlZmF1bHQuIFRoZXJlZm9yZSB0aGUgZml4IGhlcmUgd291bGQgYmUgdG8gcmFpc2UKdGhlIERD
+REMxIHJlZ3VsYXRvciB0byAxLjJWLgoKSSdsbCBzZW5kIGEgcGF0Y2ggbGF0ZXIgdG9kYXkuCgpD
+aGVlcnMsCi1QYXVsCgo+IFN0aWxsIHdpdGhvdXQgV2lGaS9CbHVldG9vdGggYnV0IHRoYXQgbWF5
+IGJlIHJlbGF0ZWQgdG8gbWlzc2luZwo+IHJlbmFtZQo+IG9mIHRoZSBvdGhlciByZWd1bGF0b3Jz
+Lgo+IAo+IFNvIEkgdHJpZWQgcmVuYW1pbmcgYWxsIHJlZ3VsYXRvcnMgYXMgYnkgeW91ciBbUEFU
+Q0ggMi85XSwgYW5kIG5vdyBJCj4gc2VlIHNvbWV0aGluZyBmcm9tIFdpRmkgKGhhdmVuJ3QgaW5z
+dGFsbGVkIGZpcm13YXJlIHlldCkgYW5kIHRoZQo+IEJsdWV0b290aCBjaGlwOgo+IAo+IFvCoMKg
+wqAgMS45Nzc4NzZdIG1tYzE6IG5ldyBoaWdoIHNwZWVkIFNESU8gY2FyZCBhdCBhZGRyZXNzIDAw
+MDEKPiAKPiBbwqDCoCAxMS4zNDE5OTRdIEJsdWV0b290aDogaGNpMDogQkNNOiBjaGlwIGlkIDYy
+Cj4gW8KgwqAgMTEuMzQ4ODExXSBCbHVldG9vdGg6IGhjaTA6IEJDTTogZmVhdHVyZXMgMHgwZgo+
+IFvCoMKgIDExLjM3NjY5OF0gQmx1ZXRvb3RoOiBoY2kwOiBCQ000MzMwQjEKPiBbwqDCoCAxMS4z
+ODA2NjJdIEJsdWV0b290aDogaGNpMDogQkNNNDMzMEIxICgwMDIuMDAxLjAwMykgYnVpbGQgMDAw
+MAo+IFvCoMKgIDExLjM5MjA1M10gQmx1ZXRvb3RoOiBoY2kwOiBCQ000MzMwQjEgJ2JyY20vQkNN
+NDMzMEIxLmhjZCcgUGF0Y2gKPiAKPiBbwqDCoCAxMi4xNDUzMzBdIGJyY21mbWFjIG1tYzE6MDAw
+MToxOiBEaXJlY3QgZmlybXdhcmUgbG9hZCBmb3IKPiBicmNtL2JyY21mbWFjNDMzMC1zZGlvLmlt
+ZyxjaTIwLmJpbiBmYWlsZWQgd2l0aCBlcnJvciAtMgo+IFvCoMKgIDEyLjIwODAwMV0gYnJjbWZt
+YWMgbW1jMTowMDAxOjE6IERpcmVjdCBmaXJtd2FyZSBsb2FkIGZvcgo+IGJyY20vYnJjbWZtYWM0
+MzMwLXNkaW8uY2xtX2Jsb2IgZmFpbGVkIHdpdGggZXJyb3IgLTIKPiAKPiBVbmZvcnR1bmF0bGV5
+IHN5c3RlbWQgYmFpbGVkIG91dCBzdGFydGluZyBCbHVldG9vdGggc2VydmljZSBidXQKPiBmYWls
+ZWQgdG8gcHJvdmlkZSBhIGxvZ2luOgo+IAo+IEluIHN1bW1hcnkgaXQgbG9va3MgbGlrZSBhIHBv
+dGVudGlhbCBmaXggY291bGQgYmUgdG8gcmVwbGFjZSB0aGUKPiBEQ0RDMQo+IG1pbi9tYXggcmFu
+Z2UgYnkgMS4wIC0gMS4yViBpbnN0ZWFkIG9mIDEuMSAtIDEuMVYgYnV0IHdlIG5lZWQgZGVlcGVy
+Cj4gdW5kZXJzdGFuZGluZyBmaXJzdC4gVXN1YWxseSB0aGlzIGhhcyBzb21ldGhpbmcgdG8gZG8g
+d2l0aCBkeW5hbWljCj4gdm9sdGFnZQo+IHNjYWxpbmcgZGVwZW5kaW5nIG9uIHByb2Nlc3NvciBj
+bG9jayBhbmQgbG93ZXIgdm9sdGFnZXMgYXJlIG9ubHkKPiBhbGxvd2VkCj4gZm9yIGxvd2VyIGZy
+ZXF1ZW5jaWVzIGJ1dCBtYXguIGNsb2NrIHJlcXVpcmVzIHRoZSBoaWdoZXN0IHBvc3NpYmxlCj4g
+dm9sdGFnZS4KPiBBRkFJSyB3ZSBoYXZlIG5vIGNwdWZyZXEgaW50ZWdyYXRlZCBhbmQgdGhlcmVm
+b3JlIGFsd2F5cyBydW4gYXQgbWF4Lgo+IHNwZWVkLgo+IAo+IEJSLAo+IE5pa29sYXVzCj4gCj4g
+UFM6IGhlcmUgaXMgd2hhdCBJIHJlYWQgYmFjayBmcm9tIHRoZSByZWd1bGF0b3Igdm9sdGFnZXMg
+KGZvciBEQ0RDMcKgCj4gbWluL21heCA9IDEuMlYpOgo+IAo+IHJvb3RAbGV0dXg6fiMgY2F0IC9z
+eXMva2VybmVsL2RlYnVnL3JlZ3VsYXRvci9yZWd1bGF0b3Jfc3VtbWFyeQo+IMKgcmVndWxhdG9y
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHVzZSBvcGVuIGJ5cGFz
+c8KgIG9wbW9kZSB2b2x0YWdlCj4gY3VycmVudMKgwqDCoMKgIG1pbsKgwqDCoMKgIG1heAo+IC0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLQo+IC0tLS0tLS0tLS0tLS0tLS0tLQo+IMKgcmVndWxhdG9yLWR1bW15wqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAxwqDCoMKgIDDCoMKgwqDCoMKgIDAgdW5rbm93
+bsKgwqDCoMKgIDBtVsKgwqDCoMKgCj4gMG1BwqDCoMKgwqAgMG1WwqDCoMKgwqAgMG1WIAo+IMKg
+ZXRoMF9wb3dlcsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDHC
+oMKgwqAgMcKgwqDCoMKgwqAgMCB1bmtub3duwqAgMzMwMG1WwqDCoMKgwqAKPiAwbUHCoCAzMzAw
+bVbCoCAzMzAwbVYgCj4gwqDCoMKgIDE2MDAwMDAwLmRtOTAwMC12Y2PCoMKgwqDCoMKgwqDCoMKg
+wqDCoCAxwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoAo+IDBtQcKgwqDCoMKgIDBtVsKgwqDCoMKgIDBtVgo+IMKgb3RnX3Bvd2Vy
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAwwqDCoMKgIDDC
+oMKgwqDCoMKgIDAgdW5rbm93bsKgIDUwMDBtVsKgwqDCoMKgCj4gMG1BwqAgNTAwMG1WwqAgNTAw
+MG1WIAo+IMKgdmNjXzMzdsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgIDTCoMKgwqAgOcKgwqDCoMKgwqAgMCB1bmtub3duwqAgMzMwMG1WwqDCoMKgwqAK
+PiAwbUHCoCAzMzAwbVbCoCAzMzAwbVYgCj4gwqDCoMKgIDEzNDUwMDAwLm1tYy12cW1tY8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAgMcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAKPiAwbUHCoMKgwqDCoCAwbVbCoMKgwqDCoCAwbVYK
+PiDCoMKgwqAgMTM0NTAwMDAubW1jLXZtbWPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgMcKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAKPiAwbUHCoCAzMzAwbVbCoCAzNDAwbVYKPiDCoMKgwqAgRENEQzHCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgMcKgwqDCoCAwwqDCoMKgwqDCoCAwIHN0
+YW5kYnnCoCAxMjAwbVbCoMKgwqDCoAo+IDBtQcKgIDEyMDBtVsKgIDEyMDBtViAKPiDCoMKgwqAg
+RENEQzLCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgMMKg
+wqDCoCAwwqDCoMKgwqDCoCAwIHN0YW5kYnnCoCAxNTAwbVbCoMKgwqDCoAo+IDBtQcKgwqDCoMKg
+IDBtVsKgwqDCoMKgIDBtViAKPiDCoMKgwqAgRENEQzPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgMMKgwqDCoCAwwqDCoMKgwqDCoCAwIHVua25vd27CoCAz
+MzAwbVbCoMKgwqDCoAo+IDBtQcKgwqDCoMKgIDBtVsKgwqDCoMKgIDBtViAKPiDCoMKgwqAgTERP
+NcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDDCoMKg
+wqAgMMKgwqDCoMKgwqAgMCB1bmtub3duwqAgMjUwMG1WwqDCoMKgwqAKPiAwbUHCoMKgwqDCoCAw
+bVbCoMKgwqDCoCAwbVYgCj4gwqDCoMKgIExETzbCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAwwqDCoMKgIDDCoMKgwqDCoMKgIDDCoCBub3JtYWzCoCAx
+ODAwbVbCoMKgwqDCoAo+IDBtQcKgIDE4MDBtVsKgIDE4MDBtViAKPiDCoMKgwqAgTERPN8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDDCoMKgwqAgMMKg
+wqDCoMKgwqAgMCB1bmtub3duwqAgMzMwMG1WwqDCoMKgwqAKPiAwbUHCoMKgwqDCoCAwbVbCoMKg
+wqDCoCAwbVYgCj4gwqDCoMKgIExETzjCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoCAwwqDCoMKgIDDCoMKgwqDCoMKgIDAgdW5rbm93bsKgIDMzMDBtVsKg
+wqDCoMKgCj4gMG1BwqDCoMKgwqAgMG1WwqDCoMKgwqAgMG1WIAo+IMKgU1VEQ0RDX1JFRzTCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgMMKgwqDCoCAwwqDCoMKgwqDC
+oCAwwqAgbm9ybWFswqAgNTAwMG1WwqDCoMKgwqAKPiAwbUHCoMKgwqDCoCAwbVbCoMKgwqDCoCAw
+bVYgCj4gwqBMRE9fUkVHOcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCAxwqDCoMKgIDDCoMKgwqDCoMKgIDAgdW5rbm93bsKgIDMzMDBtVsKgwqDCoMKgCj4g
+MG1BwqAgMzMwMG1WwqAgMzMwMG1WIAo+IMKgTERPX1JFRzEwwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAxwqDCoMKgIDDCoMKgwqDCoMKgIDAgdW5rbm93bsKg
+IDEyMDBtVsKgwqDCoMKgCj4gMG1BwqAgMTIwMG1WwqAgMTIwMG1WIAo+IMKgYnRfcG93ZXLCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgMMKgwqDCoCAwwqDC
+oMKgwqDCoCAwIHVua25vd27CoCAzMzAwbVbCoMKgwqDCoAo+IDBtQcKgIDMzMDBtVsKgIDMzMDBt
+ViAKPiByb290QGxldHV4On4jIAo+IAo+IFRoaXMgbWF0Y2hlcyBkZXZpY2UgdHJlZSBleGNlcHQg
+RENEQzEsIExETzcgYW5kIExETzggKGNhbWVyYSkuCj4gCgo=
 
