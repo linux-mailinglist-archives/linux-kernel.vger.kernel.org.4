@@ -2,51 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF0973457C
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 10:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8AD6734583
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 10:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbjFRIZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 04:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
+        id S229658AbjFRIhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 04:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjFRIZ1 (ORCPT
+        with ESMTP id S229551AbjFRIhE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 04:25:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8AB10D8
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 01:25:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7867C60C00
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 08:25:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1918C433C0;
-        Sun, 18 Jun 2023 08:25:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687076724;
-        bh=M80Ff1YaeCaOLCW/e4K/1ANMMVMvU/StnWvOxNQFr9k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CNqMmNkwiNDq/IsDK5Mwos4nbbrk/A/06OBVOt+J8GJq0LaDU4pBofGinhydpmGuz
-         96I9rFt6nS3o+QCrPkFThFLvn5v47MZLdTVGNFfdhfWZ5O1p6IqC/1djzOszKM9XK2
-         RvnDraCZ8KxJwznZdNSoG2iGl0w8055EVCBFooTN2OPTCcoxMAx20sS7ato7Pi2A1Z
-         zwGNAhJHkwt8vPzsqm/XLMxAuof0mzDhRLVi4ILiWd1BtHTTiboeDZuxV1F67TB6Va
-         BfbA6mxX0AlDXQdEG7HAv+KgzZAjv4Zs0ZxiijtFcrHH2DSBKFsaPio567kqxe5Uru
-         Quf3gwRZzk/Ig==
-Date:   Sun, 18 Jun 2023 11:24:46 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Yajun Deng <yajun.deng@linux.dev>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v3] mm: pass nid to reserve_bootmem_region()
-Message-ID: <20230618082446.GB52412@kernel.org>
-References: <20230618053000.2930604-1-yajun.deng@linux.dev>
+        Sun, 18 Jun 2023 04:37:04 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D67C10D
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 01:37:02 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9741caaf9d4so308857966b.0
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 01:37:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687077421; x=1689669421;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CqBu5wPBLSKpT6xKjTZPHEicExKCCi3BZO99th5vmu0=;
+        b=IfI28QAoO6Y19vMkOqSdshh/D7g51BT9PMVm9xXlg7mMo17+2bESmsKYK1I+u5OLB0
+         D0R4gNuEpTL6u1yDfAH7fKIOsBVZbhyf8oJtrmqSg4rkoyPwCRabJKDVMrgyCV5AK3xg
+         9wcXRyiPBHwjy4Tp616coNpDGxCe1xLvStRT46g6qtL6hGueMu0yjj1bUSVsperBa09t
+         NmJDXQvc3CPB5EVTx1/xraCuBi0P2wsxjD8XDJi9U40Pugpb00JwT5SkPy+p48VEYL6g
+         j2skJpK4AtNQiaYIGdul19ponWJc7BSXnvCWM8d0a42hOHuRk5U0WYd9duM+srSRSHyv
+         FnFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687077421; x=1689669421;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CqBu5wPBLSKpT6xKjTZPHEicExKCCi3BZO99th5vmu0=;
+        b=SavJ7kvx+F1XutNSJPPVVO798Z+YucNKFCdCJX7NKPtZ0jt1XyzEwRp/j+fF6LTafq
+         IaDtfOx8tM1KsAvJd/goQrZBRyfLDTIXE2EySgBSfE4Jeh6bc16IsVMcEaZF9Y/jL5hb
+         4CPhd3oGufe+DbiFGIqUNTmFNVL6iQWZoxg2Vz2XoxYRSl5DXszMKr2gHyfrQt9xZj7V
+         pZGUayLxezd3etw0rIhOMidrdEpusLfiHLXZc+m/uk9UJU+sj2KG4UnDI+HlSpQwBHjB
+         vN2w9IJgVZc8BOOSMyH0GkTZTDNivfLfSrw+GvihNs/YDrfF1gjYsX7qGSTuhmQIGiNJ
+         LTGQ==
+X-Gm-Message-State: AC+VfDyEcPlqeKJadPreodw0Vxt6bGR8iZxL1+AG1M+1juzzYUZMZfik
+        zgykEEKbEEfge/Z4Rl/BMYlTcuX3QT7bJBtoHBc=
+X-Google-Smtp-Source: ACHHUZ6D8tZRpKg4w9Sff05q/wAII4JkK1iFtnAjdeEIIbbZN0hkWuSpiteTsfq+osyb55Q4+XZMJw==
+X-Received: by 2002:a17:907:1b09:b0:974:771e:6bf0 with SMTP id mp9-20020a1709071b0900b00974771e6bf0mr5372268ejc.56.1687077420866;
+        Sun, 18 Jun 2023 01:37:00 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id cd10-20020a170906b34a00b0098696189722sm2578047ejb.192.2023.06.18.01.36.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 18 Jun 2023 01:37:00 -0700 (PDT)
+Message-ID: <bfa97efc-cd3d-dee7-157f-02f2cd01ff46@linaro.org>
+Date:   Sun, 18 Jun 2023 10:36:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230618053000.2930604-1-yajun.deng@linux.dev>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v8 02/11] dt-bindings: dma: Increase iommu maxItems for
+ BAM DMA
+Content-Language: en-US
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, andersson@kernel.org,
+        bhupesh.linux@gmail.com, robh+dt@kernel.org,
+        konrad.dybcio@linaro.org, vladimir.zapolskiy@linaro.org,
+        rfoss@kernel.org, neil.armstrong@linaro.org, djakov@kernel.org,
+        stephan@gerhold.net, Anders Roxell <anders.roxell@linaro.org>,
+        Linux Kernel Functional Testing <lkft@linaro.org>
+References: <20230526192210.3146896-1-bhupesh.sharma@linaro.org>
+ <20230526192210.3146896-3-bhupesh.sharma@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230526192210.3146896-3-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,200 +83,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 18, 2023 at 01:30:00PM +0800, Yajun Deng wrote:
-> early_pfn_to_nid() is called frequently in init_reserved_page(), it
-> returns the node id of the PFN. These PFN are probably from the same
-> memory region, they have the same node id. It's not necessary to call
-> early_pfn_to_nid() for each PFN.
+On 26/05/2023 21:22, Bhupesh Sharma wrote:
+> Since SM8450 BAM DMA engine supports five iommu entries,
+> increase the maxItems in the iommu property section, without
+> which 'dtbs_check' reports the following error:
 > 
-> Pass nid to reserve_bootmem_region() and drop the call to
-> early_pfn_to_nid() in init_reserved_page(). Also, set nid on all
-> reserved pages before doing this, as some reserved memory regions may
-> not be set nid.
+>   arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx224.dtb:
+>     dma-controller@1dc4000: iommus: is too long
 > 
-> The most beneficial function is memmap_init_reserved_pages() if
-> CONFIG_DEFERRED_STRUCT_PAGE_INIT is enabled.
-> 
-> The following data was tested on an x86 machine with 190GB of RAM.
-> 
-> before:
-> memmap_init_reserved_pages()  67ms
-> 
-> after:
-> memmap_init_reserved_pages()  20ms
-> 
-> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202306160145.juJMr3Bi-lkp@intel.com
-
-For the future postings please add a patch changelog explaining difference
-against previous submission
-(https://docs.kernel.org/process/submitting-patches.html#respond-to-review-comments)
-
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Tested-by: Anders Roxell <anders.roxell@linaro.org>
+> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 > ---
->  include/linux/mm.h |  3 ++-
->  mm/memblock.c      | 31 +++++++++++++++++++++----------
->  mm/mm_init.c       | 27 +++++++++++++++------------
->  3 files changed, 38 insertions(+), 23 deletions(-)
+>  Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index fdd966b11f79..a7a0e692d44d 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -2960,7 +2960,8 @@ extern unsigned long free_reserved_area(void *start, void *end,
+> diff --git a/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml b/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
+> index c663b6102f50..5636d38f712a 100644
+> --- a/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
+> +++ b/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
+> @@ -44,7 +44,7 @@ properties:
 >  
->  extern void adjust_managed_page_count(struct page *page, long count);
->  
-> -extern void reserve_bootmem_region(phys_addr_t start, phys_addr_t end);
-> +extern void reserve_bootmem_region(phys_addr_t start,
-> +				   phys_addr_t end, int nid);
->  
->  /* Free the reserved page into the buddy system, so it gets managed. */
->  static inline void free_reserved_page(struct page *page)
-> diff --git a/mm/memblock.c b/mm/memblock.c
-> index ff0da1858778..f9e61e565a53 100644
-> --- a/mm/memblock.c
-> +++ b/mm/memblock.c
-> @@ -2091,19 +2091,30 @@ static void __init memmap_init_reserved_pages(void)
->  {
->  	struct memblock_region *region;
->  	phys_addr_t start, end;
-> -	u64 i;
-> +	int nid;
-> +
-> +	/*
-> +	 * set nid on all reserved pages and also treat struct
-> +	 * pages for the NOMAP regions as PageReserved
-> +	 */
-> +	for_each_mem_region(region) {
-> +		nid = memblock_get_region_node(region);
-> +		start = region->base;
-> +		end = start + region->size;
-> +
-> +		if (memblock_is_nomap(region))
-> +			reserve_bootmem_region(start, end, nid);
-> +
-> +		memblock_set_node(start, end, &memblock.reserved, nid);
-> +	}
->  
->  	/* initialize struct pages for the reserved regions */
-> -	for_each_reserved_mem_range(i, &start, &end)
-> -		reserve_bootmem_region(start, end);
-> +	for_each_reserved_mem_region(region) {
-> +		nid = memblock_get_region_node(region);
-> +		start = region->base;
-> +		end = start + region->size;
->  
-> -	/* and also treat struct pages for the NOMAP regions as PageReserved */
-> -	for_each_mem_region(region) {
-> -		if (memblock_is_nomap(region)) {
-> -			start = region->base;
-> -			end = start + region->size;
-> -			reserve_bootmem_region(start, end);
-> -		}
-> +		reserve_bootmem_region(start, end, nid);
->  	}
->  }
->  
-> diff --git a/mm/mm_init.c b/mm/mm_init.c
-> index d393631599a7..06cd5f93f9e7 100644
-> --- a/mm/mm_init.c
-> +++ b/mm/mm_init.c
-> @@ -646,10 +646,8 @@ static inline void pgdat_set_deferred_range(pg_data_t *pgdat)
->  }
->  
->  /* Returns true if the struct page for the pfn is initialised */
-> -static inline bool __meminit early_page_initialised(unsigned long pfn)
-> +static inline bool __meminit early_page_initialised(unsigned long pfn, int nid)
->  {
-> -	int nid = early_pfn_to_nid(pfn);
-> -
->  	if (node_online(nid) && pfn >= NODE_DATA(nid)->first_deferred_pfn)
->  		return false;
->  
-> @@ -695,15 +693,14 @@ defer_init(int nid, unsigned long pfn, unsigned long end_pfn)
->  	return false;
->  }
->  
-> -static void __meminit init_reserved_page(unsigned long pfn)
-> +static void __meminit init_reserved_page(unsigned long pfn, int nid)
->  {
->  	pg_data_t *pgdat;
-> -	int nid, zid;
-> +	int zid;
->  
-> -	if (early_page_initialised(pfn))
-> +	if (early_page_initialised(pfn, nid))
->  		return;
->  
-> -	nid = early_pfn_to_nid(pfn);
->  	pgdat = NODE_DATA(nid);
->  
->  	for (zid = 0; zid < MAX_NR_ZONES; zid++) {
-> @@ -717,7 +714,7 @@ static void __meminit init_reserved_page(unsigned long pfn)
->  #else
->  static inline void pgdat_set_deferred_range(pg_data_t *pgdat) {}
->  
-> -static inline bool early_page_initialised(unsigned long pfn)
-> +static inline bool early_page_initialised(unsigned long pfn, int nid)
->  {
->  	return true;
->  }
-> @@ -727,7 +724,7 @@ static inline bool defer_init(int nid, unsigned long pfn, unsigned long end_pfn)
->  	return false;
->  }
->  
-> -static inline void init_reserved_page(unsigned long pfn)
-> +static inline void init_reserved_page(unsigned long pfn, int nid)
->  {
->  }
->  #endif /* CONFIG_DEFERRED_STRUCT_PAGE_INIT */
-> @@ -738,7 +735,8 @@ static inline void init_reserved_page(unsigned long pfn)
->   * marks the pages PageReserved. The remaining valid pages are later
->   * sent to the buddy page allocator.
->   */
-> -void __meminit reserve_bootmem_region(phys_addr_t start, phys_addr_t end)
-> +void __meminit reserve_bootmem_region(phys_addr_t start,
-> +				      phys_addr_t end, int nid)
->  {
->  	unsigned long start_pfn = PFN_DOWN(start);
->  	unsigned long end_pfn = PFN_UP(end);
-> @@ -747,7 +745,7 @@ void __meminit reserve_bootmem_region(phys_addr_t start, phys_addr_t end)
->  		if (pfn_valid(start_pfn)) {
->  			struct page *page = pfn_to_page(start_pfn);
->  
-> -			init_reserved_page(start_pfn);
-> +			init_reserved_page(start_pfn, nid);
->  
->  			/* Avoid false-positive PageTail() */
->  			INIT_LIST_HEAD(&page->lru);
-> @@ -2579,7 +2577,12 @@ void __init set_dma_reserve(unsigned long new_dma_reserve)
->  void __init memblock_free_pages(struct page *page, unsigned long pfn,
->  							unsigned int order)
->  {
-> -	if (!early_page_initialised(pfn))
-> +	int nid = 0;
-> +
-> +	if (IS_ENABLED(CONFIG_DEFERRED_STRUCT_PAGE_INIT))
-> +		nid = early_pfn_to_nid(pfn);
-> +
-> +	if (!early_page_initialised(pfn, nid))
->  		return;
+>    iommus:
+>      minItems: 1
+> -    maxItems: 4
+> +    maxItems: 5
 
-Please make the test for early_page_initialised() inside if
-(IS_ENABLED(CONFIG_DEFERRED_STRUCT_PAGE_INIT)), this makes it clearer that
-it's only required with deferred init.
+This needs at least 6 (sm8250).
 
-Other than that,
+Best regards,
+Krzysztof
 
-Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
-
->  	if (!kmsan_memblock_free_pages(page, order)) {
->  		/* KMSAN will take care of these pages. */
-> -- 
-> 2.25.1
-> 
-
--- 
-Sincerely yours,
-Mike.
