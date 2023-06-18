@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62E91734754
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 19:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C5D734759
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 19:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbjFRRmG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 18 Jun 2023 13:42:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49950 "EHLO
+        id S229592AbjFRRnD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 18 Jun 2023 13:43:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjFRRmD (ORCPT
+        with ESMTP id S229456AbjFRRnB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 13:42:03 -0400
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB6E1B5;
-        Sun, 18 Jun 2023 10:42:01 -0700 (PDT)
-Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-76255e34663so58099385a.0;
-        Sun, 18 Jun 2023 10:42:01 -0700 (PDT)
+        Sun, 18 Jun 2023 13:43:01 -0400
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C05F1BF;
+        Sun, 18 Jun 2023 10:43:00 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-570114e1feaso34071417b3.3;
+        Sun, 18 Jun 2023 10:43:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687110120; x=1689702120;
+        d=1e100.net; s=20221208; t=1687110179; x=1689702179;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :reply-to:in-reply-to:references:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=/rs7djGRDMu1aZXDhugX14SPLxQVWX7l11QLi7OKMns=;
-        b=Zr9XUwh5ZLaYPOQIxMbhqIC9uIK8DYoXV+B9u/fCGz4pYK5mQQNcWx9cmxYPjVOfOa
-         f6epM9kuqxXKXFPxd5MVJwTXPTJ6QFcoeOiLqHcxOsmF83P3aLMQgZawM2F6lvOxaTbx
-         GYRB/gAhtbzluJjUIsJw0BUOejGpgaz8hDJxPjfI+MdOw0pDfVeUvgoFFW5NXyA0Xl8l
-         BICV/Wd5bY1H4NkA32SL6n2A46V6q4XIUyXSJ1OLNn90YKXt/+2A0ldzul/6XLs+afSM
-         i/ZGFUXIjts6xe6cfeiGShXhDjnBOYEBtfDMI5u6pmM3iI4mfEgWv4Amucrpq6EqyyuN
-         vkSQ==
-X-Gm-Message-State: AC+VfDw1uIwO88eG/DvgnWFYpgWuEOUWlhLeR09DDykkM1ecyCq9Jwfp
-        XMV+NO15bHdqtDkCFyzNpQ1yeWnyfZIZm/iTDM8=
-X-Google-Smtp-Source: ACHHUZ6iaFLF22nJx00USsTKYgpvIK9MDJSjfPRKxE507vsKGxcMB1KMAW4OmXJ/1oj3NsL4TW/2GA==
-X-Received: by 2002:a05:620a:a1b:b0:762:5aff:2386 with SMTP id i27-20020a05620a0a1b00b007625aff2386mr1734414qka.3.1687110119983;
-        Sun, 18 Jun 2023 10:41:59 -0700 (PDT)
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com. [209.85.222.174])
-        by smtp.gmail.com with ESMTPSA id h2-20020a37c442000000b007623a6ec960sm2502093qkm.124.2023.06.18.10.41.59
+        bh=xLpx9nbtGApdAP3oWuubaSztjg6fg3+1+MFFJiCzVks=;
+        b=UuSOFhDN3AXPVa9A169V+3aNaU1UZoOiKTeUplT83KwkewbICliUELFj1HrE8Va5cd
+         3QQR1hqXg8OeOHxZ2xpl6L7agJ2bH0JFmUrIxsJNj2H4fw5jDDymbderuen0tSqE2ep2
+         Iz4bXKhnZQSnBBvKq6chPqO6uobkMYyaSk6AfPyuJaCjPsBjHOxO5wKsdmT9u5dBrGva
+         gF1Z3Tlsa1w8VpTypZuRG9i+f6hz1V6RZrJLwPLAqcbgknZnL4om++Bct4jvoo5hQinF
+         UCkrq4wphI6nlz7Goe9CWKOErLMzDDPPZXCoe4O5NzwDrcFb//9U/1y3PDDBHvLagyqS
+         wJ+w==
+X-Gm-Message-State: AC+VfDxWrE+Wq/4nQu/EHS8SYoB/NZNQaqEgSdSAAVAMk72N4ZHGdUVM
+        hbzwn5bZ37kKlAhbA/1dAqQNzsRH+dmznM+J
+X-Google-Smtp-Source: ACHHUZ50wFH3Gg4eWi5NnP7Se5q70MRkKrqZ6QFbz5WhYG7VuCS6xaItJDKw7heJ9UxYmHasfarwNA==
+X-Received: by 2002:a0d:d4cb:0:b0:570:77b3:1c78 with SMTP id w194-20020a0dd4cb000000b0057077b31c78mr7263165ywd.25.1687110179316;
+        Sun, 18 Jun 2023 10:42:59 -0700 (PDT)
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
+        by smtp.gmail.com with ESMTPSA id j62-20020a819241000000b0056d2d227c37sm1774587ywg.83.2023.06.18.10.42.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Jun 2023 10:41:59 -0700 (PDT)
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-7623e09e7aaso134185085a.2;
-        Sun, 18 Jun 2023 10:41:59 -0700 (PDT)
-X-Received: by 2002:a05:6214:f29:b0:623:883a:3137 with SMTP id
- iw9-20020a0562140f2900b00623883a3137mr9867954qvb.51.1687110118841; Sun, 18
- Jun 2023 10:41:58 -0700 (PDT)
+        Sun, 18 Jun 2023 10:42:58 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-57012b2973eso34088467b3.2;
+        Sun, 18 Jun 2023 10:42:58 -0700 (PDT)
+X-Received: by 2002:a81:a0d3:0:b0:56c:ff9d:8cd9 with SMTP id
+ x202-20020a81a0d3000000b0056cff9d8cd9mr8570801ywg.7.1687110178437; Sun, 18
+ Jun 2023 10:42:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230615182938.18487-1-tanure@linux.com> <20230615182938.18487-7-tanure@linux.com>
- <ZIumTthAmBLBxpXn@ofant>
-In-Reply-To: <ZIumTthAmBLBxpXn@ofant>
+References: <20230615182938.18487-4-tanure@linux.com> <202306161946.Kk7xeos8-lkp@intel.com>
+In-Reply-To: <202306161946.Kk7xeos8-lkp@intel.com>
 Reply-To: tanure@linux.com
 From:   Lucas Tanure <tanure@linux.com>
-Date:   Sun, 18 Jun 2023 18:41:47 +0100
-X-Gmail-Original-Message-ID: <CAJX_Q+14r0knLHLg0=G_kA=JhVvhZD1VRK=xuKkvTzwg820coA@mail.gmail.com>
-Message-ID: <CAJX_Q+14r0knLHLg0=G_kA=JhVvhZD1VRK=xuKkvTzwg820coA@mail.gmail.com>
-Subject: Re: [PATCH 6/6] arm64: dts: meson-t7-a311d2-khadas-vim4: add initial device-tree
-To:     Yixun Lan <dlan@gentoo.org>
+Date:   Sun, 18 Jun 2023 18:42:47 +0100
+X-Gmail-Original-Message-ID: <CAJX_Q+2Jr4CHHbzy+d5wNgrEsU__EFQr_y0PZvLdb-uEp+H6eA@mail.gmail.com>
+Message-ID: <CAJX_Q+2Jr4CHHbzy+d5wNgrEsU__EFQr_y0PZvLdb-uEp+H6eA@mail.gmail.com>
+Subject: Re: [PATCH 3/6] clk: meson: t7: add peripheral clock controller
+To:     kernel test robot <lkp@intel.com>
 Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Neil Armstrong <neil.armstrong@linaro.org>,
         Jerome Brunet <jbrunet@baylibre.com>,
@@ -63,419 +62,132 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>,
         Kevin Hilman <khilman@baylibre.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick <nick@khadas.com>, Artem <art@khadas.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org
+        oe-kbuild-all@lists.linux.dev, Nick <nick@khadas.com>,
+        Artem <art@khadas.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-serial@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 1:01 AM Yixun Lan <dlan@gentoo.org> wrote:
+On Fri, Jun 16, 2023 at 12:23 PM kernel test robot <lkp@intel.com> wrote:
 >
-> Hi Lucas:
+> Hi Lucas,
 >
-> On 19:29 Thu 15 Jun     , Lucas Tanure wrote:
-> > The Khadas VIM4 uses the Amlogic A311D2 SoC, based on the Amlogic T7 SoC
-> > family, on a board with the same form factor as the VIM3 models.
-> I'd like to see little bit more verbose messages here, like
-> which functionality/driver added here - cpu, gic, timer, uart?
-Ok, I add this information in the next version.
-Its adding CPU, GIC, and UART.
-
+> kernel test robot noticed the following build warnings:
 >
-> so, it's capable of booting into a serial console?
-yes
-
+> [auto build test WARNING on robh/for-next]
+> [also build test WARNING on clk/clk-next tty/tty-testing tty/tty-next tty/tty-linus krzk/for-next krzk-dt/for-next krzk-mem-ctrl/for-next linus/master v6.4-rc6 next-20230616]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
 >
-> >
-> > - 8GB LPDDR4X 2016MHz
-> > - 32GB eMMC 5.1 storage
-> > - 32MB SPI flash
-> > - 10/100/1000 Base-T Ethernet
-> > - AP6275S Wireless (802.11 a/b/g/n/ac/ax, BT5.1)
-> > - HDMI 2.1 video
-> > - HDMI Input
-> > - 1x USB 2.0 + 1x USB 3.0 ports
-> > - 1x USB-C (power) with USB 2.0 OTG
-> > - 3x LED's (1x red, 1x blue, 1x white)
-> > - 3x buttons (power, function, reset)
-> > - M2 socket with PCIe, USB, ADC & I2C
-> > - 40pin GPIO Header
-> > - 1x micro SD card slot
-> >
-> > Signed-off-by: Lucas Tanure <tanure@linux.com>
-> > ---
-> >  arch/arm64/boot/dts/amlogic/Makefile          |   1 +
-> >  .../amlogic/meson-t7-a311d2-khadas-vim4.dts   | 112 ++++++++++
-> >  arch/arm64/boot/dts/amlogic/meson-t7.dtsi     | 202 ++++++++++++++++++
-> >  3 files changed, 315 insertions(+)
-> >  create mode 100644 arch/arm64/boot/dts/amlogic/meson-t7-a311d2-khadas-vim4.dts
-> >  create mode 100644 arch/arm64/boot/dts/amlogic/meson-t7.dtsi
-> >
-> > diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/Makefile
-> > index cd1c5b04890a..1c5846bd1ca0 100644
-> > --- a/arch/arm64/boot/dts/amlogic/Makefile
-> > +++ b/arch/arm64/boot/dts/amlogic/Makefile
-> > @@ -74,3 +74,4 @@ dtb-$(CONFIG_ARCH_MESON) += meson-sm1-odroid-hc4.dtb
-> >  dtb-$(CONFIG_ARCH_MESON) += meson-sm1-sei610.dtb
-> >  dtb-$(CONFIG_ARCH_MESON) += meson-sm1-x96-air-gbit.dtb
-> >  dtb-$(CONFIG_ARCH_MESON) += meson-sm1-x96-air.dtb
-> > +dtb-$(CONFIG_ARCH_MESON) += meson-t7-a311d2-khadas-vim4.dtb
-> > diff --git a/arch/arm64/boot/dts/amlogic/meson-t7-a311d2-khadas-vim4.dts b/arch/arm64/boot/dts/amlogic/meson-t7-a311d2-khadas-vim4.dts
-> > new file mode 100644
-> > index 000000000000..46e175536edf
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/amlogic/meson-t7-a311d2-khadas-vim4.dts
-> > @@ -0,0 +1,112 @@
-> > +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> > +/*
-> > + * Copyright (c) 2022 Wesion, Inc. All rights reserved.
-> > + */
-> > +
-> > +/dts-v1/;
-> > +
-> > +#include "meson-t7.dtsi"
-> > +
-> > +/ {
-> > +     model = "Khadas VIM4";
-> > +
-> > +     aliases {
-> > +             serial0 = &uart_A;
-> > +     };
-> > +
-> > +     reserved-memory {
-> > +             #address-cells = <2>;
-> > +             #size-cells = <2>;
-> > +             ranges;
-> > +
-> > +             /* 3 MiB reserved for ARM Trusted Firmware (BL31) */
-> > +             secmon_reserved: secmon@5000000 {
-> > +                     reg = <0x0 0x05000000 0x0 0x300000>;
-> > +                     no-map;
-> > +             };
-> > +
-> > +             /* 32 MiB reserved for ARM Trusted Firmware (BL32) */
-> > +             secmon_reserved_bl32: secmon@5300000 {
-> > +                     reg = <0x0 0x05300000 0x0 0x2000000>;
-> > +                     no-map;
-> > +             };
-> > +     };
-> > +
-> > +     xtal: xtal-clk {
-> > +             compatible = "fixed-clock";
-> > +             clock-frequency = <24000000>;
-> > +             clock-output-names = "xtal";
-> > +             #clock-cells = <0>;
-> > +     };
-> > +
-> > +     vddcpu_a: regulator-vddcpu-a {
-> > +             /*
-> > +              * MP8756GD Regulator.
-> > +              */
-> > +             compatible = "pwm-regulator";
-> > +
-> > +             regulator-name = "VDDCPU_A";
-> > +             regulator-min-microvolt = <689000>;
-> > +             regulator-max-microvolt = <1049000>;
-> > +
-> > +             regulator-boot-on;
-> > +             regulator-always-on;
-> > +     };
-> > +
-> > +     vddcpu_b: regulator-vddcpu-a {
-> > +             /*
-> > +              * MP8756GD Regulator.
-> > +              */
-> > +             compatible = "pwm-regulator";
-> > +
-> > +             regulator-name = "VDDCPU_B";
-> > +             regulator-min-microvolt = <689000>;
-> > +             regulator-max-microvolt = <1049000>;
-> > +
-> > +             regulator-boot-on;
-> > +             regulator-always-on;
-> > +     };
-> > +};
-> > +
-> > +&clkc{
-> > +     clocks = <&xtal>;
-> > +     clock-names = "xtal";
-> > +     status = "okay";
-> > +};
-> > +
-> > +&uart_A {
-> > +     status = "okay";
-> > +};
-> > +
-> > +&cpu0 {
-> > +     cpu-supply = <&vddcpu_a>;
-> > +};
-> > +
-> > +&cpu1 {
-> > +     cpu-supply = <&vddcpu_a>;
-> > +};
-> > +
-> > +&cpu2 {
-> > +     cpu-supply = <&vddcpu_a>;
-> > +};
-> > +
-> > +&cpu3 {
-> > +     cpu-supply = <&vddcpu_a>;
-> > +};
-> > +
-> > +&cpu100 {
-> > +     cpu-supply = <&vddcpu_b>;
-> > +};
-> > +
-> > +&cpu101 {
-> > +     cpu-supply = <&vddcpu_b>;
-> > +};
-> > +
-> > +&cpu102 {
-> > +     cpu-supply = <&vddcpu_b>;
-> > +};
-> > +
-> > +&cpu103 {
-> > +     cpu-supply = <&vddcpu_b>;
-> > +};
-> > +
-> > diff --git a/arch/arm64/boot/dts/amlogic/meson-t7.dtsi b/arch/arm64/boot/dts/amlogic/meson-t7.dtsi
-> > new file mode 100644
-> > index 000000000000..453b3d9cb9d8
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/amlogic/meson-t7.dtsi
-> > @@ -0,0 +1,202 @@
-> > +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> > +/*
-> > + * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
-> > + */
-> > +
-> > +#include <dt-bindings/clock/mesont7-clkc.h>
-> > +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +
-> > +/ {
-> > +     compatible = "amlogic,t7";
-> > +     interrupt-parent = <&gic>;
-> > +     #address-cells = <2>;
-> > +     #size-cells = <2>;
-> > +
-> > +     cpus {
-> > +             #address-cells = <0x2>;
-> > +             #size-cells = <0x0>;
-> > +
-> > +             cpu-map {
-> > +                     cluster0 {
-> > +                             core0 {
-> > +                                     cpu = <&cpu100>;
-> > +                             };
-> > +                             core1 {
-> > +                                     cpu = <&cpu101>;
-> > +                             };
-> > +                             core2 {
-> > +                                     cpu = <&cpu102>;
-> > +                             };
-> > +                             core3 {
-> > +                                     cpu = <&cpu103>;
-> > +                             };
-> > +                     };
-> > +
-> > +                     cluster1 {
-> > +                             core0 {
-> > +                                     cpu = <&cpu0>;
-> > +                             };
-> > +                             core1 {
-> > +                                     cpu = <&cpu1>;
-> > +                             };
-> > +                             core2 {
-> > +                                     cpu = <&cpu2>;
-> > +                             };
-> > +                             core3 {
-> > +                                     cpu = <&cpu3>;
-> > +                             };
-> > +                     };
-> > +             };
-> > +
-> > +             cpu100: cpu@100 {
-> > +                     device_type = "cpu";
-> > +                     compatible = "arm,cortex-a53";
-> > +                     reg = <0x0 0x100>;
-> > +                     enable-method = "psci";
-> > +                     capacity-dmips-mhz = <632>;
-> > +                     dynamic-power-coefficient = <110>;
-> > +                     #cooling-cells = <2>;
-> > +             };
-> > +
-> > +             cpu101: cpu@101{
-> > +                     device_type = "cpu";
-> > +                     compatible = "arm,cortex-a53";
-> > +                     reg = <0x0 0x101>;
-> > +                     enable-method = "psci";
-> > +                     capacity-dmips-mhz = <632>;
-> > +                     dynamic-power-coefficient = <110>;
-> > +                     #cooling-cells = <2>;
-> > +             };
-> > +
-> > +             cpu102: cpu@102 {
-> > +                     device_type = "cpu";
-> > +                     compatible = "arm,cortex-a53";
-> > +                     reg = <0x0 0x102>;
-> > +                     enable-method = "psci";
-> > +                     capacity-dmips-mhz = <632>;
-> > +                     dynamic-power-coefficient = <110>;
-> > +                     #cooling-cells = <2>;
-> > +             };
-> > +
-> > +             cpu103: cpu@103 {
-> > +                     device_type = "cpu";
-> > +                     compatible = "arm,cortex-a53";
-> > +                     reg = <0x0 0x103>;
-> > +                     enable-method = "psci";
-> > +                     capacity-dmips-mhz = <632>;
-> > +                     dynamic-power-coefficient = <110>;
-> > +                     #cooling-cells = <2>;
-> > +             };
-> > +
-> > +             cpu0: cpu@0 {
-> > +                     device_type = "cpu";
-> > +                     compatible = "arm,cortex-a73";
-> > +                     reg = <0x0 0x0>;
-> > +                     enable-method = "psci";
-> > +                     capacity-dmips-mhz = <1024>;
-> > +                     dynamic-power-coefficient = <550>;
-> > +                     #cooling-cells = <2>;
-> > +             };
-> > +
-> > +             cpu1: cpu@1 {
-> > +                     device_type = "cpu";
-> > +                     compatible = "arm,cortex-a73";
-> > +                     reg = <0x0 0x1>;
-> > +                     enable-method = "psci";
-> > +                     capacity-dmips-mhz = <1024>;
-> > +                     dynamic-power-coefficient = <550>;
-> > +                     #cooling-cells = <2>;
-> > +             };
-> > +
-> > +             cpu2: cpu@2 {
-> > +                     device_type = "cpu";
-> > +                     compatible = "arm,cortex-a73";
-> > +                     reg = <0x0 0x2>;
-> > +                     enable-method = "psci";
-> > +                     capacity-dmips-mhz = <1024>;
-> > +                     dynamic-power-coefficient = <550>;
-> > +                     #cooling-cells = <2>;
-> > +             };
-> > +
-> > +             cpu3: cpu@3 {
-> > +                     device_type = "cpu";
-> > +                     compatible = "arm,cortex-a73";
-> > +                     reg = <0x0 0x3>;
-> > +                     enable-method = "psci";
-> > +                     capacity-dmips-mhz = <1024>;
-> > +                     dynamic-power-coefficient = <550>;
-> > +                     #cooling-cells = <2>;
-> > +             };
-> > +     };
-> > +
-> > +     timer {
-> > +             compatible = "arm,armv8-timer";
-> > +             interrupts = <GIC_PPI 13 0xff08>,
-> > +                          <GIC_PPI 14 0xff08>,
-> > +                          <GIC_PPI 11 0xff08>,
-> > +                          <GIC_PPI 10 0xff08>;
-> > +     };
-> > +
-> > +     gic: interrupt-controller@fff01000 {
-> > +             compatible = "arm,cortex-a15-gic", "arm,cortex-a9-gic";
-> > +             #interrupt-cells = <3>;
-> > +             #address-cells = <0>;
-> > +             interrupt-controller;
-> > +             reg = <0x0 0xfff01000 0 0x1000>,
-> > +                   <0x0 0xfff02000 0 0x0100>;
-> > +             interrupts = <GIC_PPI 9 0xf04>;
-> > +     };
-> > +
-> > +     psci {
-> > +             compatible = "arm,psci-0.2";
-> can you double check if it is actual version 0.2?
-> most recent Amlogic SoC should support psci-1.0
+> url:    https://github.com/intel-lab-lkp/linux/commits/Lucas-Tanure/dt-bindings-arm-amlogic-add-Amlogic-T7-based-Khadas-VIM4-bindings/20230616-023038
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+> patch link:    https://lore.kernel.org/r/20230615182938.18487-4-tanure%40linux.com
+> patch subject: [PATCH 3/6] clk: meson: t7: add peripheral clock controller
+> config: arm64-buildonly-randconfig-r004-20230615 (https://download.01.org/0day-ci/archive/20230616/202306161946.Kk7xeos8-lkp@intel.com/config)
+> compiler: aarch64-linux-gcc (GCC) 12.3.0
+> reproduce: (https://download.01.org/0day-ci/archive/20230616/202306161946.Kk7xeos8-lkp@intel.com/reproduce)
 >
-> > +             method = "smc";
-> > +     };
-> > +
-> > +     sm: secure-monitor {
-> > +             compatible = "amlogic,meson-gxbb-sm";
-> > +     };
-> > +
-> > +     soc {
-> > +             compatible = "simple-bus";
-> > +             #address-cells = <2>;
-> > +             #size-cells = <2>;
-> > +             ranges;
-> > +
-> > +             apb4: apb4@fe000000 {
-> > +                     compatible = "simple-bus";
-> > +                     reg = <0x0 0xfe000000 0x0 0x480000>;
-> > +                     #address-cells = <2>;
-> > +                     #size-cells = <2>;
-> > +                     ranges = <0x0 0x0 0x0 0xfe000000 0x0 0x480000>;
-> > +
-> > +                     clkc: clock-controller {
-> > +                             compatible = "amlogic,t7-clkc";
-> > +                             #clock-cells = <1>;
-> > +                             reg = <0x0 0x0 0x0 0x49c>,
-> > +                                   <0x0 0x8000 0x0 0x320>,
-> > +                                   <0x0 0xe040 0x0 0xbc>;
-> > +                             reg-names = "basic",
-> > +                                         "pll",
-> > +                                         "cpu_clk";
-> > +                     };
-> > +
-> > +                     ao-secure@140 {
-> > +                             compatible = "amlogic,meson-gx-ao-secure", "syscon";
-> > +                             reg=<0x0 0x10220 0x0 0x140>;
-> > +                             amlogic,has-chip-id;
-> > +                     };
-> > +             };
-> > +
-> > +             uart_A: serial@fe078000 {
-> > +                     compatible = "amlogic,meson-t7-uart";
-> > +                     reg = <0x0 0xfe078000 0x0 0x18>;
-> > +                     interrupts = <0 168 1>;
-> > +                     status = "disabled";
-> > +                     clocks = <&xtal>, <&clkc CLKID_UART_A>, <&xtal>;
-> > +                     clock-names = "xtal", "pclk", "baud";
-> > +                     fifo-size = < 64 >;
-> > +                     pinctrl-names = "default";
-> > +             };
-> I believe there are more uart ports, it's worth the effort to add them all in one run,
-> which sounds more consistent to me, anyway you could also choose to add them
-> in later patch series, no problem..
-
-Yeah, I prefer to add those uarts later, when I can propper test them.
-
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202306161946.Kk7xeos8-lkp@intel.com/
 >
-> > +     };
-> > +};
-> > +
-> > --
-> > 2.41.0
-> >
-> >
-> > _______________________________________________
-> > linux-amlogic mailing list
-> > linux-amlogic@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-amlogic
+> All warnings (new ones prefixed by >>):
+>
+>    drivers/clk/meson/t7.c:7084:51: warning: initialized field overwritten [-Woverride-init]
+>     7084 |                 [CLKID_VID_PLL]                 = &t7_vid_pll.hw,
+>          |                                                   ^
+>    drivers/clk/meson/t7.c:7084:51: note: (near initialization for 't7_hw_onecell_data.hws[93]')
+>    drivers/clk/meson/t7.c: In function 'meson_t7_probe':
+> >> drivers/clk/meson/t7.c:7946:36: warning: variable 'mclk_data' set but not used [-Wunused-but-set-variable]
+>     7946 |         struct meson_clk_pll_data *mclk_data;
+>          |                                    ^~~~~~~~~
+>    drivers/clk/meson/t7.c: At top level:
+>    drivers/clk/meson/t7.c:689:37: warning: 't7_a73_dyn_clk_sel' defined but not used [-Wunused-const-variable=]
+>      689 | static const struct clk_parent_data t7_a73_dyn_clk_sel[] = {
+>          |                                     ^~~~~~~~~~~~~~~~~~
+>    drivers/clk/meson/t7.c:93:29: warning: 'meson_pll_clk_no_ops' defined but not used [-Wunused-const-variable=]
+>       93 | static const struct clk_ops meson_pll_clk_no_ops = {};
+>          |                             ^~~~~~~~~~~~~~~~~~~~
+>
+>
+> vim +/mclk_data +7946 drivers/clk/meson/t7.c
+>
+>   7939
+>   7940  static int __ref meson_t7_probe(struct platform_device *pdev)
+>   7941  {
+>   7942          struct device *dev = &pdev->dev;
+>   7943          struct regmap *basic_map;
+>   7944          struct regmap *pll_map;
+>   7945          struct regmap *cpu_clk_map;
+> > 7946          struct meson_clk_pll_data *mclk_data;
+>   7947          int ret, i;
+>   7948
+>   7949          /* Get regmap for different clock area */
+>   7950          basic_map = t7_regmap_resource(dev, "basic");
+>   7951          if (IS_ERR(basic_map)) {
+>   7952                  dev_err(dev, "basic clk registers not found\n");
+>   7953                  return PTR_ERR(basic_map);
+>   7954          }
+>   7955
+>   7956          pll_map = t7_regmap_resource(dev, "pll");
+>   7957          if (IS_ERR(pll_map)) {
+>   7958                  dev_err(dev, "pll clk registers not found\n");
+>   7959                  return PTR_ERR(pll_map);
+>   7960          }
+>   7961
+>   7962          cpu_clk_map = t7_regmap_resource(dev, "cpu_clk");
+>   7963          if (IS_ERR(cpu_clk_map)) {
+>   7964                  dev_err(dev, "cpu clk registers not found\n");
+>   7965                  return PTR_ERR(cpu_clk_map);
+>   7966          }
+>   7967
+>   7968          /* Populate regmap for the regmap backed clocks */
+>   7969          for (i = 0; i < ARRAY_SIZE(t7_clk_regmaps); i++)
+>   7970                  t7_clk_regmaps[i]->map = basic_map;
+>   7971
+>   7972          for (i = 0; i < ARRAY_SIZE(t7_cpu_clk_regmaps); i++)
+>   7973                  t7_cpu_clk_regmaps[i]->map = cpu_clk_map;
+>   7974
+>   7975          for (i = 0; i < ARRAY_SIZE(t7_pll_clk_regmaps); i++)
+>   7976                  t7_pll_clk_regmaps[i]->map = pll_map;
+>   7977          regmap_write(pll_map, ANACTRL_MPLL_CTRL0, 0x00000543);
+>   7978
+>   7979          mclk_data = t7_mclk_pll_dco.data;
+>   7980
+>   7981          for (i = 0; i < t7_hw_onecell_data.num; i++) {
+>   7982                  /* array might be sparse */
+>   7983                  if (!t7_hw_onecell_data.hws[i])
+>   7984                          continue;
+>   7985
+>   7986                  ret = devm_clk_hw_register(dev, t7_hw_onecell_data.hws[i]);
+>   7987                  if (ret) {
+>   7988                          dev_err(dev, "Clock registration failed\n");
+>   7989                          return ret;
+>   7990                  }
+>   7991          }
+>   7992          meson_t7_dvfs_setup(pdev);
+>   7993
+>   7994
+>   7995          return devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get, &t7_hw_onecell_data);
+>   7996  }
+>   7997
 >
 > --
-> Yixun Lan (dlan)
-> Gentoo Linux Developer
-> GPG Key ID AABEFD55
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
+
+I will drop this patch and use the S4 clock driver after it lands.
+Thanks
