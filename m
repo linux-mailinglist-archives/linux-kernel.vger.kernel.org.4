@@ -2,137 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D91317344F3
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 07:07:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4227344F5
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 07:16:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbjFRFHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 01:07:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
+        id S229531AbjFRFQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 01:16:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjFRFHH (ORCPT
+        with ESMTP id S229494AbjFRFQO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 01:07:07 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E495E137;
-        Sat, 17 Jun 2023 22:07:05 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-3111547c8f9so2353323f8f.1;
-        Sat, 17 Jun 2023 22:07:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687064824; x=1689656824;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J+qqsqpcmp1BNuckvDBNutT1wsju4zMnJ/FPnqSF/3I=;
-        b=lalI1AI7uebE7hPNOhbKNNQC24Lh5BL1X/SgQMnMTwRk+fvPSCcVn0KajZnibVQX+a
-         QzoW9DNa2quSr6CQiYd9M9vcaTiKmcMUToe7KmIBRdux7BBFdr8tQ5dWM/40KJCxQrqn
-         P8dKrQkQzZKCrEqAuoKBglwhZ7BBGvRsmZ0x+lXytN98bc/QKCG/tzckuHudZqbmi1fI
-         Lgqm/Hbsiigmhmk/tgNTT3n4htYQQUWJFLhaiG2qm2SmjlBzsGAfhBsUVgxjpvQG4xP+
-         kJMyJQzzbCDEVVYQEUxumz1+t/Fu74q61/ePHBwaSh9krXhswGKFSfXaOGOBssBY1puc
-         G/ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687064824; x=1689656824;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=J+qqsqpcmp1BNuckvDBNutT1wsju4zMnJ/FPnqSF/3I=;
-        b=kuFbwDzbTjmW9EXsr3/t3LgTnmGrGh1kOj7GbGDji5mh1gcW2g5Q64Lw2upXm6BcoL
-         1g5v14suILLqV7eS/Ew9jYJNIBIuW0cDwLHpf4Gg3AOzkbYqqSEd101SZiGtr+YHCdiY
-         WPwq07+rbBPj8rzSbazGZCTGigHZAVzWyHgcwN3OAAGfLNCX/dlczRS5fPfzwcK28Fbv
-         CcoAAr3Lq2Pzh2Dul3E/SdCzoGLJRRX0pdz32JpTMd86omh1F1n3Wvo+EPEcRc8KGgks
-         x9YZgLZWQyUW5Guqm6LWeC8HRXm9623c4nwi6ebw3Kud5Ybrkej13O69l2x7wVrLdq0m
-         7WqA==
-X-Gm-Message-State: AC+VfDwHoX4T/UKqQ3+o3FKxa/HAVm7QDJIj1uJtXSKXQe5Yq6A37YY3
-        /LzFz7Ccsl7Ogg117fWckZpw8mZvjxg=
-X-Google-Smtp-Source: ACHHUZ4XBWvxBlkNE5O4VAGreNupZntG7t9PNSr3dj/W2txjWoJ2+sUq4ds23q6UJFj0qQpWMLYGEw==
-X-Received: by 2002:adf:db47:0:b0:30f:c6c3:e6d9 with SMTP id f7-20020adfdb47000000b0030fc6c3e6d9mr5011298wrj.46.1687064824120;
-        Sat, 17 Jun 2023 22:07:04 -0700 (PDT)
-Received: from suse.localnet (host-79-26-32-1.retail.telecomitalia.it. [79.26.32.1])
-        by smtp.gmail.com with ESMTPSA id e8-20020adff348000000b00304adbeeabbsm27943038wrp.99.2023.06.17.22.07.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Jun 2023 22:07:03 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sumitra Sharma <sumitraartsy@gmail.com>
-Cc:     Ira Weiny <ira.weiny@intel.com>, Deepak R Varma <drv@mailo.com>
-Subject: Re: [PATCH v2] lib/test_bpf: Call page_address() on page acquired with
- GFP_KERNEL flag
-Date:   Sun, 18 Jun 2023 07:07:00 +0200
-Message-ID: <3564297.R56niFO833@suse>
-In-Reply-To: <20230613071756.GA359746@sumitra.com>
-References: <20230613071756.GA359746@sumitra.com>
+        Sun, 18 Jun 2023 01:16:14 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A5FE49;
+        Sat, 17 Jun 2023 22:16:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
+ s=s31663417; t=1687065362; x=1687670162; i=deller@gmx.de;
+ bh=EUaQIqD/ZsW66UMROAlu4iCbxsjI+oeUTCmLgbKJ/4g=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+ b=SHPJMH7tnBwIf4Bt7I1opP5D3dQJQjD07wM03mpq+0tXA8pMRcX2dIUY050piuW+Kjx5mQK
+ pViVWlMSHu1BGsLjaeGIlkiAuk6Yjh/T1faaxfz0fC8H+WRBISuIsT5BSgJBbIGyVEB0hNF/j
+ Gr2MEhl0GAZrGE+2Cur7cqM+EyRVavov4Fd5KGbMas2VOFL9elBgPvTopxM/1FyRdxFTZScTu
+ s6a1TMoGKjDLeB3ANdpzu5+B/rCposqOzHh0j21rCkfO3iopjzc+YUkZNkE/0q+OHxqGv2Ol9
+ dRkAPtavYui6Nkf/m/DOtov4DHUhTYPFl7K95CElSQkfibVIunNQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from p100 ([94.134.148.114]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MrhQ6-1pnXVO0u7Y-00nhW5; Sun, 18
+ Jun 2023 07:16:02 +0200
+Date:   Sun, 18 Jun 2023 07:16:00 +0200
+From:   Helge Deller <deller@gmx.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        John David Anglin <dave.anglin@bell.net>
+Cc:     Ben Hutchings <benh@debian.org>
+Subject: [GIT PULL] parisc architecture fix for v6.4-rc7
+Message-ID: <ZI6TEDXhJKW3l3XF@p100>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Provags-ID: V03:K1:TdNWjSBn5PpPAdht8GFwkkEPO6SEFbE+bQm0ulkmMLPtB5nIlbT
+ kZaSqsxQSk7H13sjxncc3qUfcI+M6Tv8wGKunZ0+nOf/ysUfsbjg+NHsDBFlDGOtPn/ZS63
+ 6iBMcd7FHq0F+bVK28VD8ykhpOwhAdkw6D85jjQ1bvbinxzrbXuYNQFiBkFeNXZNoBt6UJm
+ +hReJiUtwuPtf+oko7J4w==
+UI-OutboundReport: notjunk:1;M01:P0:VsjydBoPoyY=;G1ArkVU6Ab4XJ9SGWJk5ATXU0yV
+ bUQrehVA8jd5u+P5k94XS5HbGpryBP1M8jbbtIpawk9Xxz84s7oW5asNlWAfxf80SNyM1unGl
+ /v5S6MwDxGtLFyPCzNhE7+GFxwX0XHdrOH4U50wPHDWM1mVRDhXSxt74wNGc2ZoaGrFNTiziA
+ fVZLbl76b1kvTot1ljD4CMVlHMOhuNTB1QSzAT+w6YI8XP0CiZgS75bDLFrhKcpM2xTCT0TSy
+ ndrunTSXnhQ5MUXKHYRozx1TzOUF/0Xj1NFGxBXV497gqn5WSygzS0cZfJNMIY4pgqNHdo9D/
+ Hr1LmqsN/HqWLNJ4qH5vjwjzSwaE3afcQRaCVuAPwK0wwyKQpwwb61jHQL8IsIvVB38gQiBHN
+ 1EDUWkGP1uKZvl5VfH77kFl+dgefZTAibdc5v1cU1I3+G/3fBSbtPj7on8zg8VRs5V9+rXeYy
+ 2N/kKn9Fgpsd/ZcB/S+4EzBS7E1Du6VSixqzIguMUEOyOb/PTO08q1+txTh0YShOB8wuZQURK
+ mgRYpJGoJVa+4Za85OkzDE4+uuJUtr3YpR+Fqn2/zF2s5XEr2DEOONGiELt2+9KsxroKz7nQI
+ C2Quz5EqokZ7b7+9MvbUxktjiNSjTXMQXmaM0vdFVwAindPz2C5nKm6rBZXQWUy+wTIHTM0Ty
+ Kt5WQgnuV1yYjWnKACYfmE9R9ToXoaccuzU0RfXXHcGqkkb0C/14Uea6Z9Cj0g/ZfxoLBl1i/
+ G2fln+mm7a+sddYgxh60/Elxxa1d9eOwiRSqXlA7NSuje+6SyqJP272K05HeTst/Vi7ZTCUv1
+ t2o8mkXErlg+eUey/MIgu8aF2nhkuErPyOZbH1qIQaTP4yvCz4Na/lTYfV1frFOc4gqmhMqCu
+ 1eQ/zDfW/ND41u4poboQqEmQU1aW77EUDN3UCVXLEIHvmxNl28v7A/9QaGYTH4EIBDWCm131g
+ BMUB5oYCUoCtE5gRWj1ugdLGcYo=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On marted=EC 13 giugno 2023 09:17:56 CEST Sumitra Sharma wrote:
-> generate_test_data() acquires a page with alloc_page(GFP_KERNEL). Pages
-> allocated with GFP_KERNEL cannot come from Highmem. This is why
-> there is no need to call kmap() on them.
->=20
-> Therefore, use a plain page_address() on that page.
->=20
-> Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
-> ---
->=20
-> Changes in v2:
-> 	- Remove the kmap() call and call page_address() instead.
+Dear Linus,
 
-NIT: Give credit to whom asked you for this removal and explain why the=20
-mapping is not required.
+please pull one small patch for parisc. It fixes a build error
+with the latest binutils.
 
-> 	- Change the commit subject and message.
->=20
->  lib/test_bpf.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->=20
-> diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-> index ade9ac672adb..70fcd0bcf14b 100644
-> --- a/lib/test_bpf.c
-> +++ b/lib/test_bpf.c
-> @@ -14388,11 +14388,10 @@ static void *generate_test_data(struct bpf_test
-> *test, int sub) if (!page)
->  			goto err_kfree_skb;
->=20
-> -		ptr =3D kmap(page);
-> +		ptr =3D page_address(page);
->  		if (!ptr)
->  			goto err_free_page;
+Thanks,
+Helge
 
-What is the reason of this test? Could "ptr" ever be NULL? What is the code=
-=20
-checking just few lines above this latter test?
-
-Please, take a deeper look at this function as a whole.
-
-=46abio
-
->  		memcpy(ptr, test->frag_data, MAX_DATA);
-> -		kunmap(page);
->  		skb_add_rx_frag(skb, 0, page, 0, MAX_DATA, MAX_DATA);
->  	}
->=20
-> --
-> 2.25.1
+---
 
 
+The following changes since commit 858fd168a95c5b9669aac8db6c14a9aeab446375:
 
+  Linux 6.4-rc6 (2023-06-11 14:35:30 -0700)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git tags/parisc-for-6.4-4
+
+for you to fetch changes up to b5b2a02bcaac7c287694aa0db4837a07bf178626:
+
+  parisc: Delete redundant register definitions in <asm/assembly.h> (2023-06-17 06:48:11 +0200)
+
+----------------------------------------------------------------
+parisc architecture fixes for kernel v6.4-rc7:
+
+- Drop redundant register definitions to fix build with latest binutils
+
+----------------------------------------------------------------
+Ben Hutchings (1):
+      parisc: Delete redundant register definitions in <asm/assembly.h>
+
+ arch/parisc/include/asm/assembly.h | 4 ----
+ 1 file changed, 4 deletions(-)
