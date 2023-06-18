@@ -2,144 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 268B77347F2
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 21:18:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4593D7347F6
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 21:19:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbjFRTSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 15:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38596 "EHLO
+        id S229532AbjFRTTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 15:19:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjFRTSM (ORCPT
+        with ESMTP id S229482AbjFRTTx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 15:18:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68078FC;
-        Sun, 18 Jun 2023 12:18:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED67E60C91;
-        Sun, 18 Jun 2023 19:18:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF233C433C8;
-        Sun, 18 Jun 2023 19:18:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687115890;
-        bh=/vS2RnSOJk0DnospOK4BfOYwwbxR6nlM/Q7dvGK/FTQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jZFv52WuCzEwuk4QP8lx6cwSDc7mFFmDfvm5z5jr32GHXC0EnkI1AiW5A67RhchT2
-         bEKKFKdX+wys/vD/MVI9c5CPUHKQSwjFexot7zNQ3aC34wSVbXsUpqU+fNBL1VcQmf
-         +omPHhTF1BQNJfR746/ZpPUX3AtzVRo9hRfnQ0kvJa+NOJyyH8cXS8KNuyG8I6CMQw
-         lOcBuxVGanIn5qh91fR6Issb7i5mRLmOLjQMJW9Lb4BI2OR5aI/nRbwg33zRPDa1g6
-         DepmsnuXaXlAtjh9jTDR9y3ZyzuY9R6eznGecH9j5zFFAC6nUv3x5M+zGNGibaX2xH
-         lgQVFyALfxoYw==
-Date:   Sun, 18 Jun 2023 20:18:04 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Lucas Tanure <tanure@linux.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick <nick@khadas.com>, Artem <art@khadas.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH 4/6] dt-bindings: serial: amlogic, meson-uart: support T7
-Message-ID: <20230618-ammonium-scratch-2990eb8c3ac7@spud>
-References: <20230615182938.18487-1-tanure@linux.com>
- <20230615182938.18487-5-tanure@linux.com>
- <20230615-mushroom-numeric-3a4c03f2204b@spud>
- <CAJX_Q+2ND=GJEEXdLLpEWoecN5gtZm-1i92pAgi+eQocSRUVqw@mail.gmail.com>
+        Sun, 18 Jun 2023 15:19:53 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1193FC
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 12:19:51 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-3fddc620055so202321cf.1
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 12:19:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687115991; x=1689707991;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JbR6FYiZlzxET1aZbxa1LnPa25BlJwTh4qhaLJ4bvzg=;
+        b=eeTeUO735vurVqYffUSvtO4InMdD7ecrFouGxTvZhYEKJAFj+iNmhaN9tu2ONEh2zq
+         89mW0ayvjTPwrfBsoKUi9fd5fr9ze0ICHF7BxV4woHO5JqvPZRPKLY2xrrn26G+NJH0x
+         DUxE98voVWezGuxg9OUVAFu8rupSLoeVL/QnMQxAmb/k40sScPQjWMg9w2/P2DgTkMb8
+         SHdvwblgqJJHWx+7iPLuQxgNy100g4QEuXp4/vYMvNUabSEKRH66I5WIJ93nZtC1CnKk
+         7RYEIUbSVvCf3kGwuVSB8mzNNo/aPYY38t591pX2WAN2fS9n4tJiTPSz8cqRXqfOVBu7
+         hOsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687115991; x=1689707991;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JbR6FYiZlzxET1aZbxa1LnPa25BlJwTh4qhaLJ4bvzg=;
+        b=Zs+i79tc6rHwtltXaI2Vrlg5IlTQx9/EzuVO9hGGzLG40ghUxc/V2ZhEnUkRiccKLQ
+         9HeKhXyYpVlor74czX900/v3V0mu2g0iai98/iOi0BTcUtihay3+cf3qDUVOKvpTxj0o
+         ajLxR/AvyMxTKLrmAJsCSBocFKz/6M22BIgLG+kX3kTRiRVz1eHDG30ztjBgdDqqCrwM
+         XRGPEoagceOprQqtKbzQXixnAXKqO93LrM9DuTlDZ0TrsbBxz0Bi//AswmbQFCkDiCIS
+         est+XXI/s8mE4ONFJ7GdiK0LVJBJ0StL4VN+UQ3+ddKf6oooEg1AfQI41evLp7+2Y10P
+         sVtA==
+X-Gm-Message-State: AC+VfDwjxNVTPJmWyite8H0gZPPbZy0gNaF6lW0eFV4fbthUJ3dhKmzv
+        n/539UiFXHmdwyAAs1t5jmTHrcURg/zJBK1yEinf3g==
+X-Google-Smtp-Source: ACHHUZ4amVIobuPycpFLC2fHeYKXTl1nn9tY9t3tZcZ8KQLrci6OwIYFpzYKhnwEJ6EGI3MQyCTT/zihLmvQ2yroRTk=
+X-Received: by 2002:a05:622a:589:b0:3ed:210b:e698 with SMTP id
+ c9-20020a05622a058900b003ed210be698mr754708qtb.7.1687115990926; Sun, 18 Jun
+ 2023 12:19:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="gLIFy3noUErwq6fk"
-Content-Disposition: inline
-In-Reply-To: <CAJX_Q+2ND=GJEEXdLLpEWoecN5gtZm-1i92pAgi+eQocSRUVqw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230526234435.662652-1-yuzhao@google.com> <20230609005943.43041-1-yuzhao@google.com>
+In-Reply-To: <20230609005943.43041-1-yuzhao@google.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Sun, 18 Jun 2023 13:19:14 -0600
+Message-ID: <CAOUHufZm9gDxRoVCc+hrZeyr=n9s-sa0i1DDGkWq2N_N9Sznmw@mail.gmail.com>
+Subject: Re: kvm/x86: multichase benchmark
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Alistair Popple <apopple@nvidia.com>,
+        Anup Patel <anup@brainfault.org>,
+        Ben Gardon <bgardon@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Gavin Shan <gshan@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michael Larabel <michael@michaellarabel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
+        linux-trace-kernel@vger.kernel.org, x86@kernel.org,
+        linux-mm@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 8, 2023 at 6:59=E2=80=AFPM Yu Zhao <yuzhao@google.com> wrote:
+>
+> TLDR
+> =3D=3D=3D=3D
+> Multichase in 64 microVMs achieved 6% more total samples (in ~4 hours) af=
+ter this patchset [1].
+>
+> Hardware
+> =3D=3D=3D=3D=3D=3D=3D=3D
+> HOST $ lscpu
+> Architecture:            x86_64
+>   CPU op-mode(s):        32-bit, 64-bit
+>   Address sizes:         43 bits physical, 48 bits virtual
+>   Byte Order:            Little Endian
+> CPU(s):                  128
+>   On-line CPU(s) list:   0-127
+> Vendor ID:               AuthenticAMD
+>   Model name:            AMD Ryzen Threadripper PRO 3995WX 64-Cores
+>     CPU family:          23
+>     Model:               49
+>     Thread(s) per core:  2
+>     Core(s) per socket:  64
+>     Socket(s):           1
+>     Stepping:            0
+>     Frequency boost:     disabled
+>     CPU max MHz:         4308.3979
+>     CPU min MHz:         2200.0000
+>     BogoMIPS:            5390.20
+>     Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr=
+ pge mca cmov pat pse36 clflush mmx fxsr sse sse2
+>                          ...
+> Virtualization features:
+>   Virtualization:        AMD-V
+> Caches (sum of all):
+>   L1d:                   2 MiB (64 instances)
+>   L1i:                   2 MiB (64 instances)
+>   L2:                    32 MiB (64 instances)
+>   L3:                    256 MiB (16 instances)
+> NUMA:
+>   NUMA node(s):          1
+>   NUMA node0 CPU(s):     0-127
+> Vulnerabilities:
+>   Itlb multihit:         Not affected
+>   L1tf:                  Not affected
+>   Mds:                   Not affected
+>   Meltdown:              Not affected
+>   Mmio stale data:       Not affected
+>   Retbleed:              Mitigation; untrained return thunk; SMT enabled =
+with STIBP protection
+>   Spec store bypass:     Mitigation; Speculative Store Bypass disabled vi=
+a prctl
+>   Spectre v1:            Mitigation; usercopy/swapgs barriers and __user =
+pointer sanitization
+>   Spectre v2:            Mitigation; Retpolines, IBPB conditional, STIBP =
+always-on, RSB filling, PBRSB-eIBRS Not affected
+>   Srbds:                 Not affected
+>   Tsx async abort:       Not affected
+>
+> HOST $ numactl -H
+> available: 1 nodes (0)
+> node 0 cpus: 0-127
+> node 0 size: 257542 MB
+> node 0 free: 224855 MB
+> node distances:
+> node   0
+>   0:  10
+>
+> HOST $ cat /sys/class/nvme/nvme0/model
+> INTEL SSDPF21Q800GB
+>
+> HOST $ cat /sys/class/nvme/nvme0/numa_node
+> 0
+>
+> Software
+> =3D=3D=3D=3D=3D=3D=3D=3D
+> HOST $ cat /etc/lsb-release
+> DISTRIB_ID=3DUbuntu
+> DISTRIB_RELEASE=3D22.04
+> DISTRIB_CODENAME=3Djammy
+> DISTRIB_DESCRIPTION=3D"Ubuntu 22.04.1 LTS"
+>
+> HOST $ uname -a
+> Linux x86 6.4.0-rc5+ #1 SMP PREEMPT_DYNAMIC Wed Jun  7 22:17:47 UTC 2023 =
+x86_64 x86_64 x86_64 GNU/Linux
+>
+> HOST $ cat /proc/swaps
+> Filename          Type         Size         Used    Priority
+> /dev/nvme0n1p2    partition    466838356    0       -2
+>
+> HOST $ cat /sys/kernel/mm/lru_gen/enabled
+> 0x000f
+>
+> HOST $ cat /sys/kernel/mm/transparent_hugepage/enabled
+> always madvise [never]
+>
+> HOST $ cat /sys/kernel/mm/transparent_hugepage/defrag
+> always defer defer+madvise madvise [never]
+>
+> Procedure
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D
+> HOST $ git clone https://github.com/google/multichase
+>
+> HOST $ <Build multichase>
+> HOST $ <Unpack /boot/initrd.img into ./initrd/>
+>
+> HOST $ cp multichase/multichase ./initrd/bin/
+> HOST $ sed -i \
+>     "/^maybe_break top$/i multichase -t 2 -m 4g -n 28800; poweroff" \
 
---gLIFy3noUErwq6fk
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I was reminded that I missed one parameter above, i.e.,
 
-On Sun, Jun 18, 2023 at 06:37:40PM +0100, Lucas Tanure wrote:
-> On Thu, Jun 15, 2023 at 10:25=E2=80=AFPM Conor Dooley <conor@kernel.org> =
-wrote:
-> >
-> > On Thu, Jun 15, 2023 at 07:29:36PM +0100, Lucas Tanure wrote:
-> > > Add serial bindings support menson T7 SoC family.
-> > >
-> > > Signed-off-by: Lucas Tanure <tanure@linux.com>
-> > > ---
-> > >  Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml | 1=
- +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/serial/amlogic,meson-u=
-art.yaml b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
-> > > index 01ec45b3b406..01b01f8840ea 100644
-> > > --- a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
-> > > +++ b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
-> > > @@ -46,6 +46,7 @@ properties:
-> > >            - amlogic,meson8b-uart
-> > >            - amlogic,meson-gx-uart
-> > >            - amlogic,meson-s4-uart
-> > > +          - amlogic,meson-t7-uart
-> >
-> > | diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/mes=
-on_uart.c
-> > | index 2501db5a7aaf..0208f9a6ba7e 100644
-> > | --- a/drivers/tty/serial/meson_uart.c
-> > | +++ b/drivers/tty/serial/meson_uart.c
-> > | @@ -796,6 +796,10 @@ static const struct of_device_id meson_uart_dt_m=
-atch[] =3D {
-> > |                 .compatible =3D "amlogic,meson-s4-uart",
-> > |                 .data =3D (void *)&meson_g12a_uart_data,
-> > |         },
-> > | +       {
-> > | +               .compatible =3D "amlogic,meson-t7-uart",
-> > | +               .data =3D (void *)&meson_g12a_uart_data,
-> > | +       },
-> > |         { /* sentinel */ },
-> > |  };
-> > |  MODULE_DEVICE_TABLE(of, meson_uart_dt_match);
-> >
-> > You're adding another element to this enum, but the driver change
-> > implies compatibility with the s4 uart. Should you not set this up with
-> > fallback compatibles?
->=20
-> I will drop this patch and use the s4 and g12a compatible strings.
+"/^maybe_break top$/i multichase -N -t 2 -m 4g -n 28800; poweroff" \
+                                 ^^
 
-You still need to add a compatible for the t7, just let it fall back to
-one of the others. Eg:
-compatible =3D "amlogic,meson-t7-uart", "amlogic,meson-s4-uart";
+>     ./initrd/init
+>
+> HOST $ <Pack ./initrd/ into ./initrd.img>
+>
+> HOST $ cat run_microvms.sh
+> memcgs=3D64
+>
+> run() {
+>     path=3D/sys/fs/cgroup/memcg$1
+>
+>     mkdir $path
+>     echo $BASHPID >$path/cgroup.procs
 
-Cheers,
-Conor.
+And one line here:
 
---gLIFy3noUErwq6fk
-Content-Type: application/pgp-signature; name="signature.asc"
+echo 4000m >$path/memory.min # or the largest size that doesn't cause OOM k=
+ills
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZI9YbAAKCRB4tDGHoIJi
-0pSJAP4pCeRXWnB2Azet+8vaCW46xvhOyL8mjbZXG+XvzEZAEwD/TE2Nc5oOrKfm
-tgEfqnMjGs3egm4P1F5l0K+qluDHmgM=
-=1dUJ
------END PGP SIGNATURE-----
-
---gLIFy3noUErwq6fk--
+>     qemu-system-x86_64 -M microvm,accel=3Dkvm -cpu host -smp 2 -m 6g \
+>         -nographic -kernel /boot/vmlinuz -initrd ./initrd.img \
+>         -append "console=3DttyS0 loglevel=3D0"
+> }
+>
+> for ((memcg =3D 0; memcg < $memcgs; memcg++)); do
+>     run $memcg &
+> done
+>
+> wait
+>
+> Results
+> =3D=3D=3D=3D=3D=3D=3D
+>                  Before [1]    After    Change
+> ----------------------------------------------
+> Total samples    6824          7237     +6%
+>
+> Notes
+> =3D=3D=3D=3D=3D
+> [1] "mm: rmap: Don't flush TLB after checking PTE young for page
+>     reference" was included so that the comparison is apples to
+>     Apples.
+>     https://lore.kernel.org/r/20220706112041.3831-1-21cnbao@gmail.com/
