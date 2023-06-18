@@ -2,202 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE4A3734516
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 08:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C124734510
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 08:29:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjFRGaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 02:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47046 "EHLO
+        id S229605AbjFRG3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 02:29:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjFRGaM (ORCPT
+        with ESMTP id S229456AbjFRG3v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 02:30:12 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EDB171B;
-        Sat, 17 Jun 2023 23:30:06 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id D9DD95FD27;
-        Sun, 18 Jun 2023 09:30:02 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1687069802;
-        bh=zgsAeO7ZZncpPTynVaz+VDbdNBDA85YSMh2T8X4pUbw=;
-        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=G0gbPFZRqGQHbjLXDcfSz97/AlUdJ/hYlNUzaQc7QF10oG0HeEYx/zuqoqlV1jjET
-         648yw2Y70OznSk4NQPFE+NmBfcGeMd4p+gM0ym85lxvKeFID49HNSOvbTnlN6wQD4u
-         otMX2uT/MQ4vl89kxgWLsXajiDqz4Jiey+gvyi14OU6CtKsEcHdFB4Y4R/3U4zqmCf
-         xPJiQHiiylOGiBbV8t4OdMdFXXLPW0WTi5ZnTU7Y/xu/HWiszk++pHCjwvUJOvZ8rl
-         RpGBhXKP19QYIi1D73SwjoeQdSZDhnKtcLhtMriNxsRMCgHNayA7JDw23UGDGJQeKh
-         MAnBFBOE2FGCg==
-Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Sun, 18 Jun 2023 09:30:02 +0300 (MSK)
-From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>
-CC:     <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>,
-        <avkrasnov@sberdevices.ru>,
-        Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Subject: [RFC PATCH v1 4/4] vsock/test: MSG_PEEK test for SOCK_SEQPACKET
-Date:   Sun, 18 Jun 2023 09:24:51 +0300
-Message-ID: <20230618062451.79980-5-AVKrasnov@sberdevices.ru>
-X-Mailer: git-send-email 2.35.0
-In-Reply-To: <20230618062451.79980-1-AVKrasnov@sberdevices.ru>
-References: <20230618062451.79980-1-AVKrasnov@sberdevices.ru>
+        Sun, 18 Jun 2023 02:29:51 -0400
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13797E51;
+        Sat, 17 Jun 2023 23:29:50 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3110ab7110aso2066554f8f.3;
+        Sat, 17 Jun 2023 23:29:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687069788; x=1689661788;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3kVdcijOpIuUfsXa/7yUYV8tahrXAsxjueUTSgD3qp8=;
+        b=fIf3RAr/PXadXa++2uSc7dLjzJXN7bNqAOaY6aiCQ8PiGmZDoSXRyFjXIoLsEfxwJr
+         d5z+SP3rROU5jhqp/ZWZN5YNiiIzzlrYG3r6gJ+EA+Z2TKyx+6vqDF6K29bLfSX7kZEC
+         +/tpg4cPvmbAWNmfxrdgIQoAnRlnK1LQqGTyqT29bOby2JMQgSbmSp0bFoKz6DzRiVEl
+         FXvHs9OZcgjfbd3NrEVvALxgqXCXt0qAa7RFHPu2PZNVQNHyLzpmkZ0BPNOcOT+Slkr6
+         THcautXwnp39N8yvRHFYpfUvSdLvRy6uKY+0SIAItTNJ+7IQ8iO/hsfEtK/40PFrP8IK
+         K/Kg==
+X-Gm-Message-State: AC+VfDyld1vcir11cztyHBAGmmpz8oYgifJNThSPga6Og/uJmkX9kpPz
+        OoprpPnekavOUmZcqA70dZIwbGsmkH+IzQ==
+X-Google-Smtp-Source: ACHHUZ6ZbnURw/CVYWDl9YzpGIputEl07AhKursQyXeSC4U6a7TWrl7sOOOImEUOnLqLJzNaj7JAzg==
+X-Received: by 2002:adf:fd4e:0:b0:30f:c153:2f08 with SMTP id h14-20020adffd4e000000b0030fc1532f08mr5247859wrs.33.1687069788313;
+        Sat, 17 Jun 2023 23:29:48 -0700 (PDT)
+Received: from costa-tp.bos2.lab ([2a00:a040:1a3:c11b:3ae6:1732:e587:a81f])
+        by smtp.gmail.com with ESMTPSA id h4-20020adffa84000000b0030647d1f34bsm27932929wrr.1.2023.06.17.23.29.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Jun 2023 23:29:47 -0700 (PDT)
+From:   Costa Shulyupin <costa.shul@redhat.com>
+To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Cc:     Costa Shulyupin <costa.shul@redhat.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v4] docs: consolidate storage interfaces
+Date:   Sun, 18 Jun 2023 09:29:37 +0300
+Message-Id: <20230618062937.481280-1-costa.shul@redhat.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <87h6rhoyag.fsf@meer.lwn.net>
+References: <87h6rhoyag.fsf@meer.lwn.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/18 01:53:00 #21507494
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds MSG_PEEK test for SOCK_SEQPACKET. It works in the same way as
-SOCK_STREAM test, except it also tests MSG_TRUNC flag.
+to make the page more organized as requested
 
-Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Signed-off-by: Costa Shulyupin <costa.shul@redhat.com>
+
 ---
- tools/testing/vsock/vsock_test.c | 58 +++++++++++++++++++++++++++++---
- 1 file changed, 54 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/vsock/vsock_test.c b/tools/testing/vsock/vsock_test.c
-index 104ac102e411..2bacd0ea1195 100644
---- a/tools/testing/vsock/vsock_test.c
-+++ b/tools/testing/vsock/vsock_test.c
-@@ -257,13 +257,18 @@ static void test_stream_multiconn_server(const struct test_opts *opts)
+Changes:
+ v4. rollback to single Storage category, add 'TCM Virtual Device'
+ v3. add Integrity, Virtualization and Miscellaneous per Bagas Sanjaya
+ v2. add Core subsystems, Networking, Peripherals and Embedded
+ v1. add Storage category
+---
+ Documentation/subsystem-apis.rst | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
+
+diff --git a/Documentation/subsystem-apis.rst b/Documentation/subsystem-apis.rst
+index 55c90d5383ef..b67a1b65855b 100644
+--- a/Documentation/subsystem-apis.rst
++++ b/Documentation/subsystem-apis.rst
+@@ -22,6 +22,18 @@ Human interfaces
+    gpu/index
+    fb/index
  
- #define MSG_PEEK_BUF_LEN 64
- 
--static void test_stream_msg_peek_client(const struct test_opts *opts)
-+static void __test_msg_peek_client(const struct test_opts *opts,
-+				   bool seqpacket)
- {
- 	unsigned char buf[MSG_PEEK_BUF_LEN];
- 	int fd;
- 	int i;
- 
--	fd = vsock_stream_connect(opts->peer_cid, 1234);
-+	if (seqpacket)
-+		fd = vsock_seqpacket_connect(opts->peer_cid, 1234);
-+	else
-+		fd = vsock_stream_connect(opts->peer_cid, 1234);
++Storage interfaces
++------------------
 +
- 	if (fd < 0) {
- 		perror("connect");
- 		exit(EXIT_FAILURE);
-@@ -278,7 +283,8 @@ static void test_stream_msg_peek_client(const struct test_opts *opts)
- 	close(fd);
- }
- 
--static void test_stream_msg_peek_server(const struct test_opts *opts)
-+static void __test_msg_peek_server(const struct test_opts *opts,
-+				   bool seqpacket)
- {
- 	unsigned char buf_half[MSG_PEEK_BUF_LEN / 2];
- 	unsigned char buf_normal[MSG_PEEK_BUF_LEN];
-@@ -286,7 +292,11 @@ static void test_stream_msg_peek_server(const struct test_opts *opts)
- 	ssize_t res;
- 	int fd;
- 
--	fd = vsock_stream_accept(VMADDR_CID_ANY, 1234, NULL);
-+	if (seqpacket)
-+		fd = vsock_seqpacket_accept(VMADDR_CID_ANY, 1234, NULL);
-+	else
-+		fd = vsock_stream_accept(VMADDR_CID_ANY, 1234, NULL);
++.. toctree::
++   :maxdepth: 1
 +
- 	if (fd < 0) {
- 		perror("accept");
- 		exit(EXIT_FAILURE);
-@@ -328,6 +338,21 @@ static void test_stream_msg_peek_server(const struct test_opts *opts)
- 		exit(EXIT_FAILURE);
- 	}
- 
-+	if (seqpacket) {
-+		/* This type of socket supports MSG_TRUNC flag,
-+		 * so check it with MSG_PEEK. We must get length
-+		 * of the message.
-+		 */
-+		res = recv(fd, buf_half, sizeof(buf_half), MSG_PEEK |
-+			   MSG_TRUNC);
-+		if (res != sizeof(buf_peek)) {
-+			fprintf(stderr,
-+				"recv(2) + MSG_PEEK | MSG_TRUNC, exp %zu, got %zi\n",
-+				sizeof(buf_half), res);
-+			exit(EXIT_FAILURE);
-+		}
-+	}
++   filesystems/index
++   block/index
++   cdrom/index
++   scsi/index
++   target/index
 +
- 	res = recv(fd, buf_normal, sizeof(buf_normal), 0);
- 	if (res != sizeof(buf_normal)) {
- 		fprintf(stderr, "recv(2), expected %zu, got %zi\n",
-@@ -344,6 +369,16 @@ static void test_stream_msg_peek_server(const struct test_opts *opts)
- 	close(fd);
- }
+ **Fixme**: much more organizational work is needed here.
  
-+static void test_stream_msg_peek_client(const struct test_opts *opts)
-+{
-+	return __test_msg_peek_client(opts, false);
-+}
-+
-+static void test_stream_msg_peek_server(const struct test_opts *opts)
-+{
-+	return __test_msg_peek_server(opts, false);
-+}
-+
- #define SOCK_BUF_SIZE (2 * 1024 * 1024)
- #define MAX_MSG_SIZE (32 * 1024)
- 
-@@ -1113,6 +1148,16 @@ static void test_stream_virtio_skb_merge_server(const struct test_opts *opts)
- 	close(fd);
- }
- 
-+static void test_seqpacket_msg_peek_client(const struct test_opts *opts)
-+{
-+	return __test_msg_peek_client(opts, true);
-+}
-+
-+static void test_seqpacket_msg_peek_server(const struct test_opts *opts)
-+{
-+	return __test_msg_peek_server(opts, true);
-+}
-+
- static struct test_case test_cases[] = {
- 	{
- 		.name = "SOCK_STREAM connection reset",
-@@ -1188,6 +1233,11 @@ static struct test_case test_cases[] = {
- 		.run_client = test_stream_virtio_skb_merge_client,
- 		.run_server = test_stream_virtio_skb_merge_server,
- 	},
-+	{
-+		.name = "SOCK_SEQPACKET MSG_PEEK",
-+		.run_client = test_seqpacket_msg_peek_client,
-+		.run_server = test_seqpacket_msg_peek_server,
-+	},
- 	{},
- };
- 
+ .. toctree::
+@@ -31,8 +43,6 @@ Human interfaces
+    core-api/index
+    locking/index
+    accounting/index
+-   block/index
+-   cdrom/index
+    cpu-freq/index
+    fpga/index
+    i2c/index
+@@ -44,7 +54,6 @@ Human interfaces
+    networking/index
+    pcmcia/index
+    power/index
+-   target/index
+    timers/index
+    spi/index
+    w1/index
+@@ -54,12 +63,10 @@ Human interfaces
+    accel/index
+    security/index
+    crypto/index
+-   filesystems/index
+    mm/index
+    bpf/index
+    usb/index
+    PCI/index
+-   scsi/index
+    misc-devices/index
+    scheduler/index
+    mhi/index
 -- 
-2.25.1
+2.40.1
 
