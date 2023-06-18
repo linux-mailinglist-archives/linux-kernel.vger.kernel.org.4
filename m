@@ -2,51 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F43734930
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 00:48:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1427734933
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 00:53:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbjFRWsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 18:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47924 "EHLO
+        id S229515AbjFRWxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 18:53:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjFRWsR (ORCPT
+        with ESMTP id S229472AbjFRWxH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 18:48:17 -0400
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56071BD
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 15:48:15 -0700 (PDT)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id 3149F240028
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 00:48:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1687128493; bh=wB4xfJwsOqxiO5M4BIDiST16DjuP1Z+4Ob8EgcCvync=;
-        h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:
-         Content-Transfer-Encoding:From;
-        b=rqC1/Zt4XQa83aEqZ3J+HJP2rND3fkxHVLi7PeWpsrSY05u2Q1sG/zyWkkjfceqak
-         7z0J0s4fEPxFNTWAVgvcExj9QyuuCSeP7UgTP6SilO4iifAmbBBS8IHsGUpgAi2HqM
-         6en2E5C/SBp0tK3m4YekILJzY9FiHOk/hoCKPrIOGmGyMoReVx+mMXmQ9YMbcNeyUM
-         WvEI1+ScWK/PZ0M9kEPGLPyahoUtgoaVE0EJTopLr5T4Vh+1aoSaPmhBYpXLv+IgVF
-         tAvNdbEVKQpFLvPfSrZJVZ3THSuSHzMLDN/Ggp1Od1s+TxRmTEI7DW96p/yRVXulPA
-         PFsUGWpUVRGtg==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4Qkp2d4Pg1z9rxK;
-        Mon, 19 Jun 2023 00:48:09 +0200 (CEST)
-From:   Anne Macedo <retpolanne@posteo.net>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        retpolanne@posteo.net
-Subject: [PATCH] usb: host: xhci: parameterize Renesas delay/retry
-Date:   Sun, 18 Jun 2023 22:46:57 +0000
-Message-ID: <20230618224656.2476-2-retpolanne@posteo.net>
+        Sun, 18 Jun 2023 18:53:07 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0631BB;
+        Sun, 18 Jun 2023 15:53:06 -0700 (PDT)
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35IMKKUd007655;
+        Sun, 18 Jun 2023 15:52:18 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=s2048-2021-q4;
+ bh=U52w7Duulz2+oZvCeWQJjJh7Dt3dM0299maQbomdyNQ=;
+ b=UjdrVeTseRoak/qdRoc5/RNSighp5RPMLW7NWzoJEUD6vAJ2O/pFeQqE6capau4uqhAu
+ LJYfs1OADxj3iAs7B8XSdcqVhJW0ytLIErV4hRdPwCd1XQf5w5AelcHjhJFWu/YmB0vJ
+ UhfvLhhAw0+clOrZanGqxTWPvbzwZF5tfNIrLYLT5n25WX5ujc8kA/Dc0FzNQHuPoeRd
+ xnVKkjgmpsRS5Zk+Xj7+R6nPjEq4UACfZNegI0C/sT0CjzlpEBYjDkGTwMnEhdFa1NIk
+ Zz7nJHL7clWFVof4lqGHrPBhRoDrCKknUHDtzTnhYEgqq4ljaxWM8CVoz/20GLwvxMCY vg== 
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2106.outbound.protection.outlook.com [104.47.70.106])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3r9ac302ut-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 18 Jun 2023 15:52:18 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AiBY/4ACtDqPpFIocI3mE17deZNaE55F/HPntFvJfL0bsLSjZzEGkJp0R0TkdLqegiv+52ORQtD6YJCIy8sdg2NcLLXH72a26WWYXKID1JOsBMYjmQ/Ys0YqV2e0Cfh65ugnQ0EQKBIGiLtfsemxk3wBD7zNvnGkNHyKuHsLfhOUjGzIbO/GccqqUP3kVYopQSy/9JxhtD9olfNOrmjw0FMtD25/su6rNSEQEQSlaf1TQMVgnF+p6Ep2stNzNEATpyBW4Jy6eCv/Ds80uGuO1fFUesym93jAPxR4coD9R/5kvPQKaXeGlH7+ZUzraALMHdu0yqPpVzGsKWW941rzig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=U52w7Duulz2+oZvCeWQJjJh7Dt3dM0299maQbomdyNQ=;
+ b=aMBSvGKJqZ/rMr82OYulpOHXQyE6I2p/32E9b7LOFm/4M9VZQ0q9dHUqylrhKNmK7Tte0KDbxRELOiACWF5xQSGP+iSL4n1ZOj7YarSg7iaICaIOYdUNHnWVA6aRKYZJkNs7UrzT1r5hJZ3+ZnnyK5CQ/sF6JaCjFSPZPjvkMdUbrNL1VkRsSQnmRfsfdQi2ShilSmvj1RuXxhD45J/SIP7KW5hZpPB29Sf0pDZZl6U5LvNrkKC7SlkVgX0uj2w26P6scXLBKCVuY1KSnqqWSIp9YRlavIAsBtpoSGVjyOO8tyvby+hJkRQYeaznUAiZ8SY5sN4UigEHKzZ21PmykA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by CO1PR15MB4908.namprd15.prod.outlook.com (2603:10b6:303:e3::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.36; Sun, 18 Jun
+ 2023 22:52:15 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::428f:acec:2c1f:c812]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::428f:acec:2c1f:c812%6]) with mapi id 15.20.6500.031; Sun, 18 Jun 2023
+ 22:52:15 +0000
+Message-ID: <12ff965a-12d7-e7f4-a577-5e645d4ff6c0@meta.com>
+Date:   Sun, 18 Jun 2023 15:52:11 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH bpf-next v5 1/3] bpf, x86: clean garbage values when store
+ args from regs into stack
+To:     menglong8.dong@gmail.com, alexei.starovoitov@gmail.com
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, benbjiang@tencent.com,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Menglong Dong <imagedong@tencent.com>
+References: <20230613025226.3167956-1-imagedong@tencent.com>
+ <20230613025226.3167956-2-imagedong@tencent.com>
+Content-Language: en-US
+From:   Yonghong Song <yhs@meta.com>
+In-Reply-To: <20230613025226.3167956-2-imagedong@tencent.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BYAPR08CA0011.namprd08.prod.outlook.com
+ (2603:10b6:a03:100::24) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|CO1PR15MB4908:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1e218ca1-986d-46ad-df2b-08db704ea930
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QMECN4w7RX5F6G5kbt9aFYaFZqyXjaFpYQCo3p4hk5Kff/50rj5WVquGm0HWGkuCQx8CQJ0qKlHA2OaqujlKydaLNhOy/PcyLssaMs5LpZvp3NxBPXpmVdD3GSg74fZu5Bt75otl2v9WQDOb3svJOtzoQ+oxhur4jYwTfbV0URuTFTS4bDdk+9PEPO9Diwb5mmi7s5Vc0N1vPX5mqh5HrIG9TesyLdKISr8ohji4lATvl4hWAEefF7+iLjG+LbYAu/uyEGM+P787EJjUrZdBO9yFQ9E8pDDTDIkPnKRO3LTlyDTdY+NNLfFglmXksTJ8Snd3BpY/mOZf+8nj4i1eyRF2RHlCmTYfPw5sY9p4TzxbQvi+9S7HQGHQrEnBPa6vNsQexcugYan1AbJ6PbW73vGECjFDy7mpM3TxEBxihQfYJXXvNZNJ11qdCpiYLSwYiaaDmpKEg7s6dii3P3jt+70ywpqXwvOA68gaBznTYFtyc1lB1BF8Zwc8bK5zlalWxqR8uiPEGT8EkOwGCscItqBl3zL+CdubHzFcG2NNlhPkhxrDvcy17Xjn7CsFSdchzJ6hoXC7owOAZzG1oZWCEdYLDOj8qogklgGXZ2QZ7LCnXdZ9XCEue5LuqBs5XEGB9h25q71gQHFmFFxMusA4NQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(346002)(136003)(39860400002)(396003)(451199021)(478600001)(4326008)(6512007)(186003)(36756003)(6506007)(53546011)(6486002)(6666004)(2906002)(8676002)(8936002)(41300700001)(66946007)(66556008)(66476007)(316002)(5660300002)(7416002)(31696002)(86362001)(83380400001)(38100700002)(31686004)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?b1Y5eEhKY2xzMUhZRWV1QUZaaWpBUFNsSTZNTXhFK2Z4eGgyengyZmg1Qklt?=
+ =?utf-8?B?dWJRT0dnVVU1Y09pdXBGY0JDOFhqWnN3RU1MdXl0T0hvNzdBSUhDZDFocGEz?=
+ =?utf-8?B?ZG1KSXJ5Rkp6aVVVTVFxRjVRTC9wNGRhRHU0NUxRZWRUdGFHNkdqSUJHRjdL?=
+ =?utf-8?B?MXorMDZ2amZodmEzREZFOTFwOWlmSlo5K2xXd0hZcEwvZDJ4Z3hFd0E3VEZS?=
+ =?utf-8?B?RHNkZWM2VTNDQ2lOb3JFWWxmRlY0RGlaaVRoMFlJU2U4bUkrM1hUc09RQWkw?=
+ =?utf-8?B?amFCcGJVQ01BRm9hVEZkY2hHZ2x2WGJVU3Fsb0gzVjRwWFBybWZjOU5JWWtS?=
+ =?utf-8?B?MmFlTVhpTzhtMFppSmlGRlRzbU1zU202TjZMemEzTVRBNjlBYm9lUWJ4NUFi?=
+ =?utf-8?B?TFA2WjRyL2VOS2l2Q2tiUnMzbUg5d1duUHRWYmFqS25QL05raW10bUtWaDBJ?=
+ =?utf-8?B?ajJSbm1QZzdXTG1aUE5Wc1hwWG9ybUNDb1ZWblh0YnBVSDdwRklHb0RoWmRL?=
+ =?utf-8?B?dTllQXg5K295NmZOMHplZVN1c3ZBZkVLdi9NSjhEVGUvaTEvbkw4eVZzalQz?=
+ =?utf-8?B?ZFEvVXltT2JKQzIzK0I4QVc3VmlLSlFmOC84UFFkNmh4K0dYMnZaajd1V0x5?=
+ =?utf-8?B?KzBrMjJRT2JPbmFZMlBOY1paa3BwaGYyUU4xRjNyY0E4Z09qWE85c1FDc25H?=
+ =?utf-8?B?SG5MNWdUSTVSaXhSWDFGaS83QmdEc0NDcDErT3ZYWTZ5TkVHL2pPVHN0R3Nq?=
+ =?utf-8?B?MTFubHIyeERFeEVYdVVLOFlaMTczSThZOUQ3WitLUVBjWVVHWU5kRWhTZmx6?=
+ =?utf-8?B?ME1uRmN0NFcyZ01wRjBMZXAyTGNwUHFReS91Z3ZEK0YyRFFjeVlSS3JRajRF?=
+ =?utf-8?B?K09wVjVzL3dsc205OURMR2NKcEZBQ2k1VTQyUTl1TDVXblErQy9zYkVQZGFa?=
+ =?utf-8?B?MmlkZW5zWEFIZzh4M1ZEYjUrT01uckI3SitDQnptTWR4OE91Nk9mMnV6RnZX?=
+ =?utf-8?B?MTVjZ3lxbHJuOGJkSUZmRWtZZVBTaWVNNkRtUHdTb3dPNGlsVEVZaStDMTQ1?=
+ =?utf-8?B?TjhMTmNHN1lKWEMvNmVYOXJMOUpiY1NsdUExZ0F5ekJhRkdkdmdjUTg5dmFw?=
+ =?utf-8?B?eGswTTg3WFEzL1hSeVA1b1gzZzhLZGlNTGNEUHd4ZG9BYVFMRUVsbUJyK1VO?=
+ =?utf-8?B?Uk9VVDduT1RtakRNRDJlZmdxWEJWT1FsVzBiN1V3Q29aeUYwcnh0aE9sRDQy?=
+ =?utf-8?B?ckFrQmdESTZNMFdmK25rVmRtall6RUloYUZlRFRlaXdLWGhaMkVEU2VRY1RL?=
+ =?utf-8?B?SVJWNXhnZ3lOb3RyQ2xncFRUMGV1Q2xuV1lSRFpLaThqcU8yTHFRcCt6NStW?=
+ =?utf-8?B?NisrN1dlZFNsSlF4cHJtKzVFTEQ0Rm9zejZlNFNjNWJNcVoxcFhQS0dmZnd4?=
+ =?utf-8?B?OHh6SGxBNUZJdDVVUTRZTERoWmx4aEVFbjBMQ2EzaGhuUXFTWkhKVGw4K1lG?=
+ =?utf-8?B?US8wakMweGY5Y0tvTXBrWlRZRXdkdXhYUFRKOWhMTWdjZHN2eGZzWnFCSjVY?=
+ =?utf-8?B?eEZ1NkxzMnQ4V0FCcHdWc0F1bWt4Q056QXdaVGFtUzVvaHdnTzlwOHRiajQw?=
+ =?utf-8?B?U1lqWFJmVHhUNEVtSWZnUmkvMGJtVWR6aTI0dkVRUzlJbTZWdGFoYkMrZ2h1?=
+ =?utf-8?B?TWNjVnVYcDBmR3lSdDJmVSsyVGo4MVlmS0NqbmRFU3o1QmZpaHREN3RzRE1v?=
+ =?utf-8?B?Nmx4c0tMRE5iQWUvRW9lQkZQcmUyemZJT0pMNTRXa0lUUlAvQVRnNFF3cDdU?=
+ =?utf-8?B?a1lEZ3dFNFBFWjNUTjhsbEZYTUNzTTNqWDF3cmUrZEJQSVBpNlhzeityWHlJ?=
+ =?utf-8?B?M1dkcTFLTHZ6bGNoUy9vVlRoMDVrNWNYdkg4N0JrR0VsWGc3R3RXM2p3dkRO?=
+ =?utf-8?B?dHVlRU1xSklSU2ZtMnA3SW9ENXYyMkphZkMyY05nMlBrSGJKQk8vQjJyWE9S?=
+ =?utf-8?B?YTV5c2dOemZjZzh6NnNTc2lEUlUwT25XODNOOVh6ZnBoQ1lJTTkvZ0ltV1VC?=
+ =?utf-8?B?bUp1ZlV5bDJaMkl6Rnluc0tlNEp3cmVUbG1tUzE1TDdQYnFCM1B0ekk3bEg2?=
+ =?utf-8?B?WVJEcDNMY21IemtQazl2T1hmc1JML1RYTFQrVUFidG9Bc21qcmUzWGlHVWRm?=
+ =?utf-8?B?cnc9PQ==?=
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e218ca1-986d-46ad-df2b-08db704ea930
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jun 2023 22:52:15.2965
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nwx5APEBJ68WHhfytcYfQ7H6ZNwflanSWv+9Qblhpmi20TKwR8FPs9Q+JWVKw/dx
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR15MB4908
+X-Proofpoint-ORIG-GUID: HzWc7AWWvB53PgVADZJ8UkOTzDkU09V_
+X-Proofpoint-GUID: HzWc7AWWvB53PgVADZJ8UkOTzDkU09V_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-18_16,2023-06-16_01,2023-05-22_02
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,215 +147,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cards based on Renesas uPD720202 have their firmware downloaded during
-boot by xhci-pci. At this step, the status of the firmware is read and
-it takes a while for this read to happen (up to a few seconds). The
-macros RENESAS_RETRY and RENESAS_DELAY are used to retry reading this
-status byte from PCI a few times. If it can't read the status byte in
-RENESAS_RETRY tries, it times out.
 
-However, since this may vary from card to card, these retry and delay
-values need to be tweaked. In order to avoid having to patch the code to
-change these values, CONFIG_USB_XHCI_PCI_RENESAS_RETRY and
-CONFIG_USB_XHCI_PCI_RENESAS_DELAY are introduced.
 
-If applied, this patch helps to fix errors such as:
+On 6/12/23 7:52 PM, menglong8.dong@gmail.com wrote:
+> From: Menglong Dong <imagedong@tencent.com>
+> 
+> There are garbage values in upper bytes when we store the arguments
+> into stack in save_regs() if the size of the argument less then 8.
+> 
+> As we already reserve 8 byte for the arguments in regs and stack,
+> it is ok to store/restore the regs in BPF_DW size. Then, the garbage
+> values in upper bytes will be cleaned.
 
-ROM Download Step 34 failed at position 136 bytes
-Firmware Download Step 2 failed at position 8 bytes with (-110)
+Please make it clear that there are no bugs in the existing code
+since for each argument, a type case will happen like
+     (parameter_type)ctx[stack_slot]
+where ctx[] is an u64 type array. The compiler will generate
+correct code to do type casting so garbage value will not impact
+the final result. But indeed, uniformly
+do save/restore with BPF_DW size can simplify code.
 
-while loading xhci-pci when using these cards.
+> 
+> Signed-off-by: Menglong Dong <imagedong@tencent.com>
 
-This error in particular has been noticed by this e-mail [1].
+Acked-by: Yonghong Song <yhs@fb.com>
 
-[1] https://lore.kernel.org/lkml/20190626070658.GP2962@vkoul-mobl/
-
-Signed-off-by: Anne Macedo <retpolanne@posteo.net>
----
- drivers/usb/host/Kconfig            | 10 +++++++
- drivers/usb/host/xhci-pci-renesas.c | 45 ++++++++++++++---------------
- 2 files changed, 31 insertions(+), 24 deletions(-)
-
-diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-index c170672f847e..8a255e3b0f03 100644
---- a/drivers/usb/host/Kconfig
-+++ b/drivers/usb/host/Kconfig
-@@ -51,6 +51,16 @@ config USB_XHCI_PCI_RENESAS
- 	  installed on your system for this device to work.
- 	  If unsure, say 'N'.
- 
-+config USB_XHCI_PCI_RENESAS_DELAY
-+	int "Renesas firmware download delay for setting DATAX"
-+	depends on USB_XHCI_PCI_RENESAS
-+	default 10
-+
-+config USB_XHCI_PCI_RENESAS_RETRY
-+	int "Renesas firmware download number of retries for setting DATAX"
-+	depends on USB_XHCI_PCI_RENESAS
-+	default 1000
-+
- config USB_XHCI_PLATFORM
- 	tristate "Generic xHCI driver for a platform device"
- 	help
-diff --git a/drivers/usb/host/xhci-pci-renesas.c b/drivers/usb/host/xhci-pci-renesas.c
-index 93f8b355bc70..009f5878fe6f 100644
---- a/drivers/usb/host/xhci-pci-renesas.c
-+++ b/drivers/usb/host/xhci-pci-renesas.c
-@@ -47,9 +47,6 @@
- #define RENESAS_ROM_ERASE_MAGIC				0x5A65726F
- #define RENESAS_ROM_WRITE_MAGIC				0x53524F4D
- 
--#define RENESAS_RETRY	10000
--#define RENESAS_DELAY	10
--
- static int renesas_fw_download_image(struct pci_dev *dev,
- 				     const u32 *fw, size_t step, bool rom)
- {
-@@ -73,7 +70,7 @@ static int renesas_fw_download_image(struct pci_dev *dev,
- 	data0_or_data1 = (step & 1) == 1;
- 
- 	/* step+1. Read "Set DATAX" and confirm it is cleared. */
--	for (i = 0; i < RENESAS_RETRY; i++) {
-+	for (i = 0; i < CONFIG_USB_XHCI_PCI_RENESAS_RETRY; i++) {
- 		err = pci_read_config_byte(dev, status_reg, &fw_status);
- 		if (err) {
- 			dev_err(&dev->dev, "Read Status failed: %d\n",
-@@ -83,9 +80,9 @@ static int renesas_fw_download_image(struct pci_dev *dev,
- 		if (!(fw_status & BIT(data0_or_data1)))
- 			break;
- 
--		udelay(RENESAS_DELAY);
-+		udelay(CONFIG_USB_XHCI_PCI_RENESAS_DELAY);
- 	}
--	if (i == RENESAS_RETRY) {
-+	if (i == CONFIG_USB_XHCI_PCI_RENESAS_RETRY) {
- 		dev_err(&dev->dev, "Timeout for Set DATAX step: %zd\n", step);
- 		return -ETIMEDOUT;
- 	}
-@@ -321,7 +318,7 @@ static int renesas_fw_download(struct pci_dev *pdev,
- 	 * "DATA0" or "DATA1". Naturally, we wait until "SET DATA0/1"
- 	 * is cleared by the hardware beforehand.
- 	 */
--	for (i = 0; i < RENESAS_RETRY; i++) {
-+	for (i = 0; i < CONFIG_USB_XHCI_PCI_RENESAS_RETRY; i++) {
- 		err = pci_read_config_byte(pdev, RENESAS_FW_STATUS_MSB,
- 					   &fw_status);
- 		if (err)
-@@ -329,9 +326,9 @@ static int renesas_fw_download(struct pci_dev *pdev,
- 		if (!(fw_status & (BIT(0) | BIT(1))))
- 			break;
- 
--		udelay(RENESAS_DELAY);
-+		udelay(CONFIG_USB_XHCI_PCI_RENESAS_DELAY);
- 	}
--	if (i == RENESAS_RETRY)
-+	if (i == CONFIG_USB_XHCI_PCI_RENESAS_RETRY)
- 		dev_warn(&pdev->dev, "Final Firmware Download step timed out.");
- 
- 	/*
-@@ -343,16 +340,16 @@ static int renesas_fw_download(struct pci_dev *pdev,
- 		return pcibios_err_to_errno(err);
- 
- 	/* 12. Read "Result Code" and confirm it is good. */
--	for (i = 0; i < RENESAS_RETRY; i++) {
-+	for (i = 0; i < CONFIG_USB_XHCI_PCI_RENESAS_RETRY; i++) {
- 		err = pci_read_config_byte(pdev, RENESAS_FW_STATUS, &fw_status);
- 		if (err)
- 			return pcibios_err_to_errno(err);
- 		if (fw_status & RENESAS_FW_STATUS_SUCCESS)
- 			break;
- 
--		udelay(RENESAS_DELAY);
-+		udelay(CONFIG_USB_XHCI_PCI_RENESAS_DELAY);
- 	}
--	if (i == RENESAS_RETRY) {
-+	if (i == CONFIG_USB_XHCI_PCI_RENESAS_RETRY) {
- 		/* Timed out / Error - let's see if we can fix this */
- 		err = renesas_fw_check_running(pdev);
- 		switch (err) {
-@@ -405,17 +402,17 @@ static void renesas_rom_erase(struct pci_dev *pdev)
- 	/* sleep a bit while ROM is erased */
- 	msleep(20);
- 
--	for (i = 0; i < RENESAS_RETRY; i++) {
-+	for (i = 0; i < CONFIG_USB_XHCI_PCI_RENESAS_RETRY; i++) {
- 		retval = pci_read_config_byte(pdev, RENESAS_ROM_STATUS,
- 					      &status);
- 		status &= RENESAS_ROM_STATUS_ERASE;
- 		if (!status)
- 			break;
- 
--		mdelay(RENESAS_DELAY);
-+		mdelay(CONFIG_USB_XHCI_PCI_RENESAS_DELAY);
- 	}
- 
--	if (i == RENESAS_RETRY)
-+	if (i == CONFIG_USB_XHCI_PCI_RENESAS_RETRY)
- 		dev_dbg(&pdev->dev, "Chip erase timedout: %x\n", status);
- 
- 	dev_dbg(&pdev->dev, "ROM Erase... Done success\n");
-@@ -464,7 +461,7 @@ static bool renesas_setup_rom(struct pci_dev *pdev, const struct firmware *fw)
- 	/*
- 	 * wait till DATA0/1 is cleared
- 	 */
--	for (i = 0; i < RENESAS_RETRY; i++) {
-+	for (i = 0; i < CONFIG_USB_XHCI_PCI_RENESAS_RETRY; i++) {
- 		err = pci_read_config_byte(pdev, RENESAS_ROM_STATUS_MSB,
- 					   &status);
- 		if (err)
-@@ -472,9 +469,9 @@ static bool renesas_setup_rom(struct pci_dev *pdev, const struct firmware *fw)
- 		if (!(status & (BIT(0) | BIT(1))))
- 			break;
- 
--		udelay(RENESAS_DELAY);
-+		udelay(CONFIG_USB_XHCI_PCI_RENESAS_DELAY);
- 	}
--	if (i == RENESAS_RETRY) {
-+	if (i == CONFIG_USB_XHCI_PCI_RENESAS_RETRY) {
- 		dev_err(&pdev->dev, "Final Firmware ROM Download step timed out\n");
- 		goto remove_bypass;
- 	}
-@@ -487,7 +484,7 @@ static bool renesas_setup_rom(struct pci_dev *pdev, const struct firmware *fw)
- 	udelay(10);
- 
- 	/* 18. check result */
--	for (i = 0; i < RENESAS_RETRY; i++) {
-+	for (i = 0; i < CONFIG_USB_XHCI_PCI_RENESAS_RETRY; i++) {
- 		err = pci_read_config_byte(pdev, RENESAS_ROM_STATUS, &status);
- 		if (err) {
- 			dev_err(&pdev->dev, "Read ROM status failed:%d\n",
-@@ -499,9 +496,9 @@ static bool renesas_setup_rom(struct pci_dev *pdev, const struct firmware *fw)
- 			dev_dbg(&pdev->dev, "Download ROM success\n");
- 			break;
- 		}
--		udelay(RENESAS_DELAY);
-+		udelay(CONFIG_USB_XHCI_PCI_RENESAS_DELAY);
- 	}
--	if (i == RENESAS_RETRY) { /* Timed out */
-+	if (i == CONFIG_USB_XHCI_PCI_RENESAS_RETRY) { /* Timed out */
- 		dev_err(&pdev->dev,
- 			"Download to external ROM TO: %x\n", status);
- 		return false;
-@@ -521,16 +518,16 @@ static bool renesas_setup_rom(struct pci_dev *pdev, const struct firmware *fw)
- 	/*
- 	 * wait till Reload is cleared
- 	 */
--	for (i = 0; i < RENESAS_RETRY; i++) {
-+	for (i = 0; i < CONFIG_USB_XHCI_PCI_RENESAS_RETRY; i++) {
- 		err = pci_read_config_byte(pdev, RENESAS_ROM_STATUS, &status);
- 		if (err)
- 			return false;
- 		if (!(status & RENESAS_ROM_STATUS_RELOAD))
- 			break;
- 
--		udelay(RENESAS_DELAY);
-+		udelay(CONFIG_USB_XHCI_PCI_RENESAS_DELAY);
- 	}
--	if (i == RENESAS_RETRY) {
-+	if (i == CONFIG_USB_XHCI_PCI_RENESAS_RETRY) {
- 		dev_err(&pdev->dev, "ROM Exec timed out: %x\n", status);
- 		return false;
- 	}
--- 
-2.41.0
-
+> ---
+>   arch/x86/net/bpf_jit_comp.c | 35 ++++++-----------------------------
+>   1 file changed, 6 insertions(+), 29 deletions(-)
+> 
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index 1056bbf55b17..a407fbbffecd 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
+> @@ -1860,57 +1860,34 @@ st:			if (is_imm8(insn->off))
+>   static void save_regs(const struct btf_func_model *m, u8 **prog, int nr_regs,
+>   		      int stack_size)
+>   {
+> -	int i, j, arg_size;
+> -	bool next_same_struct = false;
+> +	int i;
+>   
+>   	/* Store function arguments to stack.
+>   	 * For a function that accepts two pointers the sequence will be:
+>   	 * mov QWORD PTR [rbp-0x10],rdi
+>   	 * mov QWORD PTR [rbp-0x8],rsi
+>   	 */
+> -	for (i = 0, j = 0; i < min(nr_regs, 6); i++) {
+> -		/* The arg_size is at most 16 bytes, enforced by the verifier. */
+> -		arg_size = m->arg_size[j];
+> -		if (arg_size > 8) {
+> -			arg_size = 8;
+> -			next_same_struct = !next_same_struct;
+> -		}
+> -
+> -		emit_stx(prog, bytes_to_bpf_size(arg_size),
+> -			 BPF_REG_FP,
+> +	for (i = 0; i < min(nr_regs, 6); i++)
+> +		emit_stx(prog, BPF_DW, BPF_REG_FP,
+>   			 i == 5 ? X86_REG_R9 : BPF_REG_1 + i,
+>   			 -(stack_size - i * 8));
+> -
+> -		j = next_same_struct ? j : j + 1;
+> -	}
+>   }
+>   
+[...]
