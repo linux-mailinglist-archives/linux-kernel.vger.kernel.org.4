@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5839A73485E
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 22:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A8EC734866
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 22:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbjFRUuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 16:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48716 "EHLO
+        id S229758AbjFRUvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 16:51:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjFRUuI (ORCPT
+        with ESMTP id S229639AbjFRUuI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 18 Jun 2023 16:50:08 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4BEE5A;
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA378E4F;
         Sun, 18 Jun 2023 13:50:06 -0700 (PDT)
-Date:   Sun, 18 Jun 2023 20:50:04 -0000
+Date:   Sun, 18 Jun 2023 20:50:05 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1687121404;
+        s=2020; t=1687121405;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5+A7Bi/X2n8XHhjnVYrS8ebBzftUu/YIL7YEonpKXCY=;
-        b=L1Uw9LA8kg+l3i0VbY1Psw+zipWiLXEZcUPuE0qvrCysLyPdjlk9ZFNNnXscICsZ1HcDKY
-        ojfjKsdNFUjlZYRYvjSxBdWs+LRvBBXdp/kPX5baL7BJDFIdrkH7iYhyE4p7011YAfzqFA
-        T3oPyioT2qATp2DgLB+ZFndO5xcx7/Scsvy9yMs0GGe3hhboywQSoVcLTJA4Aq7RnmO/Fl
-        hKEVH0RWEsqPVzVelV4J54Ine20xtiGS+78W/1KkoS797Mgomdz3wVeFlB0cbOfOSoWz30
-        SEohsn2NLm3LScj2DwPPJBQoSW0pvOCPxbTHwXXZlh+wLIkeDN8hAtAhQDsT1w==
+        bh=xCFs+WVBnorywR4TvQ0Vs07yRWRFxviJoCcGWxR8i4o=;
+        b=dr6VuJCJMG8S3etF6Cv8OnPGfwx8CRDwLePE8XB1n1T1xUoovV7b6DFpZMu6IMEAM0R7pf
+        LjvOol0vl/4IGApnJT4Bf0k3MqLZe9w61/0EPaIPHu639d6WlnH8GxZ/lx7BwjF9BKhfv3
+        AMnUeU2Ir+n2rRlABgaaxLbzxUJ20kDehwa5w3ZQheswuTyz9iphg+8TkegcW7VkUIksrr
+        TA0bzmzt4Fbpcg/lssogGWGHHlYhAfHpNORrkrC1OGRReM0Mbg8zrLP/K+B+jCXBU6uTdM
+        9GkadbeRFzLejmH6O3fPoEQbGx9x8sDxqEp+YAMO/mBns6Rphxq6yoiPBK9Gew==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1687121404;
+        s=2020e; t=1687121405;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5+A7Bi/X2n8XHhjnVYrS8ebBzftUu/YIL7YEonpKXCY=;
-        b=mrPnrVPAqHepILe+NjTTk1iQKQzlRR0FKbytVtA2nSUQF2kSbTsOhrnf46tbgMDwtYEswe
-        Vyjy/W8GenOyw+Cw==
+        bh=xCFs+WVBnorywR4TvQ0Vs07yRWRFxviJoCcGWxR8i4o=;
+        b=w8E7cdYNq8CU0uElrDq2+JEKOLewAiolrOzHagCcYNxRrR5Wg9gRf7vzO1HHY/fhxSx+ph
+        aF7xG0e26PGHBTDA==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] posix-timers: Remove pointless irqsafe from hash_lock
+Subject: [tip: timers/core] posix-timers: Set k_itimer:: It_signal to NULL on exit()
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Frederic Weisbecker <frederic@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230425183313.249063953@linutronix.de>
-References: <20230425183313.249063953@linutronix.de>
+In-Reply-To: <20230425183313.196462644@linutronix.de>
+References: <20230425183313.196462644@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <168712140425.404.12496348784303071442.tip-bot2@tip-bot2>
+Message-ID: <168712140508.404.13177458639953476257.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,40 +67,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     11fbe6cd41210c7b5173257158a22e11e225622d
-Gitweb:        https://git.kernel.org/tip/11fbe6cd41210c7b5173257158a22e11e225622d
+Commit-ID:     72786ff23d5acb7bf3e2535831b2f1dc55c7f44e
+Gitweb:        https://git.kernel.org/tip/72786ff23d5acb7bf3e2535831b2f1dc55c7f44e
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Tue, 25 Apr 2023 20:49:08 +02:00
+AuthorDate:    Tue, 25 Apr 2023 20:49:06 +02:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Sun, 18 Jun 2023 22:41:49 +02:00
 
-posix-timers: Remove pointless irqsafe from hash_lock
+posix-timers: Set k_itimer:: It_signal to NULL on exit()
 
-All usage of hash_lock is in thread context. No point in using
-spin_lock_irqsave()/irqrestore() for a single usage site.
+Technically it's not required to set k_itimer::it_signal to NULL on exit()
+because there is no other thread anymore which could lookup the timer
+concurrently.
+
+Set it to NULL for consistency sake and add a comment to that effect.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
-Link: https://lore.kernel.org/r/20230425183313.249063953@linutronix.de
+Link: https://lore.kernel.org/r/20230425183313.196462644@linutronix.de
 
 ---
- kernel/time/posix-timers.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ kernel/time/posix-timers.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
-index c1b77c5..ed7d260 100644
+index de3fca8..c1b77c5 100644
 --- a/kernel/time/posix-timers.c
 +++ b/kernel/time/posix-timers.c
-@@ -471,10 +471,9 @@ static void k_itimer_rcu_free(struct rcu_head *head)
- static void release_posix_timer(struct k_itimer *tmr, int it_id_set)
- {
- 	if (it_id_set) {
--		unsigned long flags;
--		spin_lock_irqsave(&hash_lock, flags);
-+		spin_lock(&hash_lock, flags);
- 		hlist_del_rcu(&tmr->t_hash);
--		spin_unlock_irqrestore(&hash_lock, flags);
-+		spin_unlock(&hash_lock, flags);
+@@ -1101,6 +1101,14 @@ retry_delete:
  	}
- 	put_pid(tmr->it_pid);
- 	sigqueue_free(tmr->sigq);
+ 	list_del(&timer->list);
+ 
++	/*
++	 * Setting timer::it_signal to NULL is technically not required
++	 * here as nothing can access the timer anymore legitimately via
++	 * the hash table. Set it to NULL nevertheless so that all deletion
++	 * paths are consistent.
++	 */
++	WRITE_ONCE(timer->it_signal, NULL);
++
+ 	spin_unlock_irqrestore(&timer->it_lock, flags);
+ 	release_posix_timer(timer, IT_ID_SET);
+ }
