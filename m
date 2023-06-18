@@ -2,118 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61FE87344F9
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 07:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B11C7344FA
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 07:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbjFRF33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 01:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39742 "EHLO
+        id S229546AbjFRFaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 01:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjFRF31 (ORCPT
+        with ESMTP id S229574AbjFRFaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 01:29:27 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BCF18D
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 22:29:26 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9827109c6e9so317709666b.3
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 22:29:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687066165; x=1689658165;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/UTGt7iKNdIzFHJhjEBhwjHxC/KeXkq7iK+gyIRePnA=;
-        b=QshDGO/8+dQtptQe3oTeB5REZopFkvHAuQfSsiKGAlct6fS75RHbXsjUJ4vH6MYP/w
-         wVr+IB5/2Ay8Cra/ELGMyO4M62SI/Is8NUrAB1ZTkq43EXauP+PgbXc81Qdo9gL9M8Uh
-         GBIemPdCaTDPg27+tVHwZe2rFUt8KUag/JsGzvgSRBpCecWwSGQqzXUct2vFwKL06yxW
-         8PBGS0nqPySf44GUn3lj/TXdCMpslJTlsWleshCYov/2Cw49sxmuIP7eFLta9TU43DF3
-         I+Sl/ZI0v3FzZeYVv7tWa8oNZTbuMottFRyrS9N9b3bcWoNuAsbhgdiyx/ATcz09vdcW
-         cO4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687066165; x=1689658165;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/UTGt7iKNdIzFHJhjEBhwjHxC/KeXkq7iK+gyIRePnA=;
-        b=jK3wu8JV37q2xV2OdK/u1oIEM9rYvLaz5r8PfUOzOeZMDZns0mKbKkCwKC7tEcVYqQ
-         eVB3xxk1Dr+qId+95VF3fNUSEoz4pShSkgOGcDgfB0zIN07k3mxeiofsT562TrNOuQzr
-         eN9hJKhFcgJkDxV/ab+2RueD85dRjE8ODha/e8nTE8fEt91z/n4mBEaYkqKtIOLhZC6a
-         fm4/FMYpkRIzkonAhaJmWBcQAst2rVOvGeD9KjT2vHyVrswWz5ZjRJmobMwPqC00/wLd
-         I8NrHyktaegye7nJQo+mY8BCaeccHdsEUHXIyHxHqi67TunHDLNLfO/BFgeJe9tRcnF4
-         ++mw==
-X-Gm-Message-State: AC+VfDxbZeeD4zLyCg3bF8OJ/ge5hzCq2iDlfem/gXkdruoWz+bxXVBE
-        jbkQG0teMfr6G2UV3QD+i4+7+Prj3lL4+C6jCe/fww==
-X-Google-Smtp-Source: ACHHUZ5Owm1j445iAj1AbhlY7ujp9HjjFWMq1Heyx1o80K7E8d2gzF17j4sBfmODCeJ2WmON79zFq5nRPXSLKi1E5IY=
-X-Received: by 2002:a17:906:4793:b0:96f:5747:a0de with SMTP id
- cw19-20020a170906479300b0096f5747a0demr5942787ejc.6.1687066164695; Sat, 17
- Jun 2023 22:29:24 -0700 (PDT)
+        Sun, 18 Jun 2023 01:30:20 -0400
+Received: from out-62.mta0.migadu.com (out-62.mta0.migadu.com [91.218.175.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CAC123
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 22:30:17 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1687066215;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=aBYmdBEH1qB16YD6TQS5RIcWSGINKfp80AeFzQ6XOsg=;
+        b=LeJfEXumxxsSmSrwA0/6hbN57mvPaEOYLtVkUp8a/TJOPWUAPG8qb6FLyim8+6JeHI+yCG
+        aKNFs7on1MViZ4jWWaAkOl1l9kvJ7LsMDQMeYm8dLPGtsN4CfrmVqXsZ2m3CEyJ1cEsDmV
+        Niape9HU++wF2Rz6h2u8UEW0rlZnJLA=
+From:   Yajun Deng <yajun.deng@linux.dev>
+To:     akpm@linux-foundation.org, rppt@kernel.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Yajun Deng <yajun.deng@linux.dev>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v3] mm: pass nid to reserve_bootmem_region()
+Date:   Sun, 18 Jun 2023 13:30:00 +0800
+Message-Id: <20230618053000.2930604-1-yajun.deng@linux.dev>
 MIME-Version: 1.0
-References: <20230612093815.133504-1-cerasuolodomenico@gmail.com>
- <20230612093815.133504-2-cerasuolodomenico@gmail.com> <20230618043857.GA2417524@google.com>
- <CAJD7tkbRn2txAt94keKTRbAA7--XF3rXSa8vsh9eGZa2CUWP8w@mail.gmail.com> <20230618052526.GB2417524@google.com>
-In-Reply-To: <20230618052526.GB2417524@google.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Sat, 17 Jun 2023 22:28:48 -0700
-Message-ID: <CAJD7tkbcf+MEMJdGeruB7XL=J8tJNgkB7_1UQ2S4VEKjob-NQw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/7] mm: zswap: add pool shrinking mechanism
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
-        vitaly.wool@konsulko.com, minchan@kernel.org, linux-mm@kvack.org,
-        ddstreet@ieee.org, sjenning@redhat.com, nphamcs@gmail.com,
-        hannes@cmpxchg.org, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 10:25=E2=80=AFPM Sergey Senozhatsky
-<senozhatsky@chromium.org> wrote:
->
-> On (23/06/17 21:48), Yosry Ahmed wrote:
-> > > On (23/06/12 11:38), Domenico Cerasuolo wrote:
-> > > > +static int zswap_reclaim_entry(struct zswap_pool *pool)
-> > > > +{
-> > > > +     struct zswap_header *zhdr;
-> > > > +     struct zswap_entry *entry;
-> > > > +     struct zswap_tree *tree;
-> > > > +     pgoff_t swpoffset;
-> > > > +     int ret;
-> > > > +
-> > > > +     /* Get an entry off the LRU */
-> > > > +     spin_lock(&pool->lru_lock);
-> > > > +     if (list_empty(&pool->lru)) {
-> > > > +             spin_unlock(&pool->lru_lock);
-> > > > +             return -EINVAL;
-> > > > +     }
-> > > > +     entry =3D list_last_entry(&pool->lru, struct zswap_entry, lru=
-);
-> > > > +     list_del_init(&entry->lru);
-> > >
-> > > A quick question: should we zswap_entry_get() here?
-> >
-> > We need to hold the tree lock for that, and the lock ordering is tree
-> > lock -> lru lock. If we try to grab the tree lock here we may
-> > deadlock.
->
-> We can deadlock doing this?
->
->         lock tree_lock
->         lock lru_lock
->         list_del_init
->         unlock lru_lock
->         entry_get
->         unlock tree_lock
->         writeback
+early_pfn_to_nid() is called frequently in init_reserved_page(), it
+returns the node id of the PFN. These PFN are probably from the same
+memory region, they have the same node id. It's not necessary to call
+early_pfn_to_nid() for each PFN.
 
-We don't know which tree the zswap entry belongs to until we get from
-the LRU -- so we can't hold the tree lock before getting the entry
-from the lru (and to get the entry from the LRU we need the lru_lock).
+Pass nid to reserve_bootmem_region() and drop the call to
+early_pfn_to_nid() in init_reserved_page(). Also, set nid on all
+reserved pages before doing this, as some reserved memory regions may
+not be set nid.
+
+The most beneficial function is memmap_init_reserved_pages() if
+CONFIG_DEFERRED_STRUCT_PAGE_INIT is enabled.
+
+The following data was tested on an x86 machine with 190GB of RAM.
+
+before:
+memmap_init_reserved_pages()  67ms
+
+after:
+memmap_init_reserved_pages()  20ms
+
+Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202306160145.juJMr3Bi-lkp@intel.com
+---
+ include/linux/mm.h |  3 ++-
+ mm/memblock.c      | 31 +++++++++++++++++++++----------
+ mm/mm_init.c       | 27 +++++++++++++++------------
+ 3 files changed, 38 insertions(+), 23 deletions(-)
+
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index fdd966b11f79..a7a0e692d44d 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -2960,7 +2960,8 @@ extern unsigned long free_reserved_area(void *start, void *end,
+ 
+ extern void adjust_managed_page_count(struct page *page, long count);
+ 
+-extern void reserve_bootmem_region(phys_addr_t start, phys_addr_t end);
++extern void reserve_bootmem_region(phys_addr_t start,
++				   phys_addr_t end, int nid);
+ 
+ /* Free the reserved page into the buddy system, so it gets managed. */
+ static inline void free_reserved_page(struct page *page)
+diff --git a/mm/memblock.c b/mm/memblock.c
+index ff0da1858778..f9e61e565a53 100644
+--- a/mm/memblock.c
++++ b/mm/memblock.c
+@@ -2091,19 +2091,30 @@ static void __init memmap_init_reserved_pages(void)
+ {
+ 	struct memblock_region *region;
+ 	phys_addr_t start, end;
+-	u64 i;
++	int nid;
++
++	/*
++	 * set nid on all reserved pages and also treat struct
++	 * pages for the NOMAP regions as PageReserved
++	 */
++	for_each_mem_region(region) {
++		nid = memblock_get_region_node(region);
++		start = region->base;
++		end = start + region->size;
++
++		if (memblock_is_nomap(region))
++			reserve_bootmem_region(start, end, nid);
++
++		memblock_set_node(start, end, &memblock.reserved, nid);
++	}
+ 
+ 	/* initialize struct pages for the reserved regions */
+-	for_each_reserved_mem_range(i, &start, &end)
+-		reserve_bootmem_region(start, end);
++	for_each_reserved_mem_region(region) {
++		nid = memblock_get_region_node(region);
++		start = region->base;
++		end = start + region->size;
+ 
+-	/* and also treat struct pages for the NOMAP regions as PageReserved */
+-	for_each_mem_region(region) {
+-		if (memblock_is_nomap(region)) {
+-			start = region->base;
+-			end = start + region->size;
+-			reserve_bootmem_region(start, end);
+-		}
++		reserve_bootmem_region(start, end, nid);
+ 	}
+ }
+ 
+diff --git a/mm/mm_init.c b/mm/mm_init.c
+index d393631599a7..06cd5f93f9e7 100644
+--- a/mm/mm_init.c
++++ b/mm/mm_init.c
+@@ -646,10 +646,8 @@ static inline void pgdat_set_deferred_range(pg_data_t *pgdat)
+ }
+ 
+ /* Returns true if the struct page for the pfn is initialised */
+-static inline bool __meminit early_page_initialised(unsigned long pfn)
++static inline bool __meminit early_page_initialised(unsigned long pfn, int nid)
+ {
+-	int nid = early_pfn_to_nid(pfn);
+-
+ 	if (node_online(nid) && pfn >= NODE_DATA(nid)->first_deferred_pfn)
+ 		return false;
+ 
+@@ -695,15 +693,14 @@ defer_init(int nid, unsigned long pfn, unsigned long end_pfn)
+ 	return false;
+ }
+ 
+-static void __meminit init_reserved_page(unsigned long pfn)
++static void __meminit init_reserved_page(unsigned long pfn, int nid)
+ {
+ 	pg_data_t *pgdat;
+-	int nid, zid;
++	int zid;
+ 
+-	if (early_page_initialised(pfn))
++	if (early_page_initialised(pfn, nid))
+ 		return;
+ 
+-	nid = early_pfn_to_nid(pfn);
+ 	pgdat = NODE_DATA(nid);
+ 
+ 	for (zid = 0; zid < MAX_NR_ZONES; zid++) {
+@@ -717,7 +714,7 @@ static void __meminit init_reserved_page(unsigned long pfn)
+ #else
+ static inline void pgdat_set_deferred_range(pg_data_t *pgdat) {}
+ 
+-static inline bool early_page_initialised(unsigned long pfn)
++static inline bool early_page_initialised(unsigned long pfn, int nid)
+ {
+ 	return true;
+ }
+@@ -727,7 +724,7 @@ static inline bool defer_init(int nid, unsigned long pfn, unsigned long end_pfn)
+ 	return false;
+ }
+ 
+-static inline void init_reserved_page(unsigned long pfn)
++static inline void init_reserved_page(unsigned long pfn, int nid)
+ {
+ }
+ #endif /* CONFIG_DEFERRED_STRUCT_PAGE_INIT */
+@@ -738,7 +735,8 @@ static inline void init_reserved_page(unsigned long pfn)
+  * marks the pages PageReserved. The remaining valid pages are later
+  * sent to the buddy page allocator.
+  */
+-void __meminit reserve_bootmem_region(phys_addr_t start, phys_addr_t end)
++void __meminit reserve_bootmem_region(phys_addr_t start,
++				      phys_addr_t end, int nid)
+ {
+ 	unsigned long start_pfn = PFN_DOWN(start);
+ 	unsigned long end_pfn = PFN_UP(end);
+@@ -747,7 +745,7 @@ void __meminit reserve_bootmem_region(phys_addr_t start, phys_addr_t end)
+ 		if (pfn_valid(start_pfn)) {
+ 			struct page *page = pfn_to_page(start_pfn);
+ 
+-			init_reserved_page(start_pfn);
++			init_reserved_page(start_pfn, nid);
+ 
+ 			/* Avoid false-positive PageTail() */
+ 			INIT_LIST_HEAD(&page->lru);
+@@ -2579,7 +2577,12 @@ void __init set_dma_reserve(unsigned long new_dma_reserve)
+ void __init memblock_free_pages(struct page *page, unsigned long pfn,
+ 							unsigned int order)
+ {
+-	if (!early_page_initialised(pfn))
++	int nid = 0;
++
++	if (IS_ENABLED(CONFIG_DEFERRED_STRUCT_PAGE_INIT))
++		nid = early_pfn_to_nid(pfn);
++
++	if (!early_page_initialised(pfn, nid))
+ 		return;
+ 	if (!kmsan_memblock_free_pages(page, order)) {
+ 		/* KMSAN will take care of these pages. */
+-- 
+2.25.1
+
