@@ -2,75 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC8DA73454D
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 10:01:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44261734507
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 08:05:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbjFRIA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 04:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58624 "EHLO
+        id S229579AbjFRGFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 02:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjFRIAy (ORCPT
+        with ESMTP id S229456AbjFRGF2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 04:00:54 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3172E5D
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 01:00:53 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9827109c6e9so327530166b.3
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 01:00:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687075252; x=1689667252;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SAkLYeiehOSzeEqsiJZk/Gwuzn6AJ/4HofVW5Winb6o=;
-        b=FjhzBM5tHl7Pd7axdYfAGwvn/N+cpIbOAhb7Ne66yMgZqWQexYFA9toZG2pByatVeU
-         bY7AuzhquUoVXmqHjrsxMB4O8CRdhGs9rR1nUW0xkI4hAkbNHhJ7NIa6Zsi8VpbVYe0l
-         988Gy0dByv66Wu0/icynH53+6Harz6AuSrO4QrC4YgFP2RJ4blXBe4aKcm0Sug/X+ESq
-         wWgGq9ZRN3DE1Tmc6B3sCAIDfRwutOGpPyOM7M7sBKVkVgmGlLnaCTPijAZLzRhw9LMu
-         Awm8OlQeHHaal25mkOC7XIDFBf0xSqxws9rmkhlCvU/W+4WMEAs6lHrVKltXM6I78uX8
-         lBbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687075252; x=1689667252;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SAkLYeiehOSzeEqsiJZk/Gwuzn6AJ/4HofVW5Winb6o=;
-        b=ZRsbalBqECMIOpBHLs8EczRpMKFm2oIJlTcPjNSuJW7uJFQjTQLia0Qp3KBfJ85pJh
-         vGQRHfAuBEsJT1KKCR7Ga3hO7D+50+8Vt6XXOtrxAsrGItEAzi3wiI0ch5C9NQiSV644
-         8BCsDTpyh4MAlVlKyAA/C7iH/IlQaE99CX6/ZGeBkcQC01+65uNTj7Xk/F6hy5aEZK8N
-         7bHjwMEUhV9TKBrretKYQuYAjICJqR5Ng6yc0JtpEiJfDlZS8r4X4St7rO/9ISOF0wVu
-         Mb16HW959e+zYcOymvS4pEqKBlkEOE+i3oU3gUZKewNwKSUgXpqeuqqaDzZICVkvk03H
-         /tdg==
-X-Gm-Message-State: AC+VfDyx/CfCzBbA+GEr5T6oYO0V6yx465TML93GFQSIhto+4AQIeKYx
-        JleEj8wGvIWF7ajFSUbd3VaSiQ==
-X-Google-Smtp-Source: ACHHUZ7rF+SxgQirtPSPq0Sf1HxrrXAeg3CI8mD6OdRDSzPZYQnYupUONngG0nLS4h2ilTR8ny49uw==
-X-Received: by 2002:a17:906:aac8:b0:978:6b18:e935 with SMTP id kt8-20020a170906aac800b009786b18e935mr5192232ejb.23.1687075252171;
-        Sun, 18 Jun 2023 01:00:52 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id qh1-20020a170906eca100b009889c4bd8absm3199ejb.216.2023.06.18.01.00.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Jun 2023 01:00:51 -0700 (PDT)
-Message-ID: <bba4acf9-23a4-d732-900b-944c4ddef08c@linaro.org>
-Date:   Sun, 18 Jun 2023 10:00:50 +0200
+        Sun, 18 Jun 2023 02:05:28 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5175F10E3;
+        Sat, 17 Jun 2023 23:05:27 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QkMnb1BKvz4f4PNl;
+        Sun, 18 Jun 2023 14:05:23 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.104.67])
+        by APP4 (Coremail) with SMTP id gCh0CgCH77Kgno5k_0DdLw--.62007S4;
+        Sun, 18 Jun 2023 14:05:21 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     hch@lst.de, axboe@kernel.dk, brauner@kernel.org, dsterba@suse.com,
+        hare@suse.de, jinpu.wang@ionos.com
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
+        yangerkun@huawei.com
+Subject: [PATCH -next v2] block: fix wrong mode for blkdev_get_by_dev() from disk_scan_partitions()
+Date:   Sun, 18 Jun 2023 22:04:02 +0800
+Message-Id: <20230618140402.7556-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 2/2] dt-bindings: arm: sunxi: Add
- itead,iteaduino-plus-a20
-Content-Language: en-US
-To:     Julian Ribbeck <julian.ribbeck@gmx.de>
-Cc:     conor+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org
-References: <e0e71b0c-086d-ce54-f4d3-6f594d8e5da6@linaro.org>
- <20230617205624.1178427-1-julian.ribbeck@gmx.de>
- <20230617205624.1178427-2-julian.ribbeck@gmx.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230617205624.1178427-2-julian.ribbeck@gmx.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgCH77Kgno5k_0DdLw--.62007S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7WF4rWFWfKF17Jr4rGr45Wrg_yoW8Xr4UpF
+        W5WF45tryqgryxZF4vv3ZrGay5Ga98GryxKrWIgw1Fv39xXrsYkF92krs8Wr10vFZagrW5
+        WFnrZFyFqFyF9wUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9q14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8XwA2ocxC64kIII
+        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xv
+        wVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4
+        x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG
+        64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r
+        1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAq
+        YI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4I
+        kC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWU
+        WwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr
+        0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWr
+        Jr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r
+        4UJbIYCTnIWIevJa73UjIFyTuYvjTRNgAwUUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,14 +61,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/06/2023 22:55, Julian Ribbeck wrote:
-> Add itead,iteaduino-plus-a20 bindings
-> 
-> Signed-off-by: Julian Ribbeck <julian.ribbeck@gmx.de>
-> ---
+From: Yu Kuai <yukuai3@huawei.com>
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+After commit 2736e8eeb0cc ("block: use the holder as indication for
+exclusive opens"), blkdev_get_by_dev() will warn if holder is NULL and
+mode contains 'FMODE_EXCL'.
 
-Best regards,
-Krzysztof
+holder from blkdev_get_by_dev() from disk_scan_partitions() is always NULL,
+hence it should not use 'FMODE_EXCL', which is broben by the commit. For
+consequence, WARN_ON_ONCE() will be triggered from blkdev_get_by_dev()
+if user scan partitions with device opened exclusively.
+
+Fix this problem by removing 'FMODE_EXCL' from disk_scan_partitions(),
+as it used to be.
+
+Reported-by: syzbot+00cd27751f78817f167b@syzkaller.appspotmail.com
+Link: https://syzkaller.appspot.com/bug?extid=00cd27751f78817f167b
+Fixes: 2736e8eeb0cc ("block: use the holder as indication for exclusive opens")
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+---
+
+Changes in v2:
+ - fix a typo
+
+ block/genhd.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/block/genhd.c b/block/genhd.c
+index 2c2f9a716822..d1e845ae1b32 100644
+--- a/block/genhd.c
++++ b/block/genhd.c
+@@ -365,7 +365,8 @@ int disk_scan_partitions(struct gendisk *disk, blk_mode_t mode)
+ 	}
+ 
+ 	set_bit(GD_NEED_PART_SCAN, &disk->state);
+-	bdev = blkdev_get_by_dev(disk_devt(disk), mode, NULL, NULL);
++	bdev = blkdev_get_by_dev(disk_devt(disk), mode & ~FMODE_EXEC, NULL,
++				 NULL);
+ 	if (IS_ERR(bdev))
+ 		ret =  PTR_ERR(bdev);
+ 	else
+-- 
+2.39.2
 
