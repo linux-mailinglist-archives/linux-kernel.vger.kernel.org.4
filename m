@@ -2,87 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8784A7345B5
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 11:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6BF87345B7
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 11:34:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229730AbjFRJdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 05:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43358 "EHLO
+        id S229745AbjFRJeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 05:34:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjFRJdi (ORCPT
+        with ESMTP id S229737AbjFRJeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 05:33:38 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3B310D3;
-        Sun, 18 Jun 2023 02:33:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=KTo4dg5Pw2cEjEIq8Y10umtMxG9ZrOcdRjy2b8H93Kw=; b=OmHgEWdBs/F6pO/K6891l6y4SH
-        ZlQ298AuC+q4UP6CkIko5rDTMXTbQB1so/I90rY2F8+tNGmqwupZRKOFnwNIyi/Bl+Vjke5hv0NpW
-        U8UATYg7aaTnYaFd1qUOC6J7CYjIj2j8VIG7WkXS5I6ZHkCNVnyWfBgQ5q6mTmfC0pQhGMjXgbGGm
-        qPQwePIyexOUrabiXLBojG5V7oSPCkkBF1exhSE3JhlK1maA4gB3nA9iYzmNfZR0tiJY58d7glVFq
-        aS6krm1SPqEhG75RhQ1yI0yJsMBbxTB2G3GPs0Crv9O3PDmgZVJMO3wM5VKrDZPNaWBkn1/37HZyJ
-        dUajjQnA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qAomt-005Xgr-1D;
-        Sun, 18 Jun 2023 09:33:35 +0000
-Date:   Sun, 18 Jun 2023 02:33:35 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Joel Granados <j.granados@samsung.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/8] Remove child from struct ctl_table
-Message-ID: <ZI7Pbw5WcJDDISYI@bombadil.infradead.org>
-References: <CGME20230616085926eucas1p10709e25a4c0246ed2b22da602f919b4e@eucas1p1.samsung.com>
- <20230616085922.3066990-1-j.granados@samsung.com>
+        Sun, 18 Jun 2023 05:34:05 -0400
+Received: from smtp.smtpout.orange.fr (smtp-21.smtpout.orange.fr [80.12.242.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F71710E9
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 02:34:04 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id AonGq59X5yzHXAonGqVxjA; Sun, 18 Jun 2023 11:34:02 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1687080842;
+        bh=aVg/k7ynCstaMz721k7lr6Az8vrDxOwyA02xIprHpec=;
+        h=From:To:Cc:Subject:Date;
+        b=keWNbqPt6AoeSWh7bs0Pxc+aVdWPLZihbxi3uZ+XUbPzMsUNtqINXjqOgyJ8qdvuM
+         pcK9hR088E5/XTA3d6vgBqU5slH+OcbJb8az1qqaXr3Lt5xpMn0ef9OdIypuGicH+F
+         rlFL5ugkrNZFqMAesArycjeaquu1kN4m6GgaRagFZNsnaUnbvXPSFvlB6NU3p4/BL/
+         00/Zu77MKIj3V4YBLlg3RZi/JFf9Gq8SVWHxP7cP0ruyC38+Nn8s+EfyAUTFSLBfJF
+         Aj/ic/1BOodkREUsim9RHfshFBPD6RBfZElx8JX1hU9eCDVCJEIwFYPORCIZmnEI1X
+         wyty99C5Ebpqw==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 18 Jun 2023 11:34:02 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Jeremy Kerr <jk@codeconstruct.com.au>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        netdev@vger.kernel.org
+Subject: [PATCH net-next] mctp: Reorder fields in 'struct mctp_route'
+Date:   Sun, 18 Jun 2023 11:33:55 +0200
+Message-Id: <393ad1a5aef0aa28d839eeb3d7477da0e0eeb0b0.1687080803.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230616085922.3066990-1-j.granados@samsung.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 10:59:14AM +0200, Joel Granados wrote:
-> This is part of the effort to remove the empty element of the ctl_table
-> structures (used to calculate size) and replace it with an ARRAY_SIZE call. By
-> replacing the child element in struct ctl_table with a flags element we make
-> sure that there are no forward recursions on child nodes and therefore set
-> ourselves up for just using an ARRAY_SIZE. We also added some self tests to
-> make sure that we do not break anything.
-> 
-> Patchset is separated in 4: parport fixes, selftests fixes, selftests additions and
-> replacement of child element. Tested everything with sysctl self tests and everything
-> seems "ok".
-> 
-> 1. parport fixes: This is related to my previous series and it plugs a sysct
->    table leak in the parport driver. @mcgrof: I'm just leaving this here so we
->    don't have to retest the parport stuff
-> 
-> 2. Selftests fixes: Remove the prefixed zeros when passing a awk field to the
->    awk print command because it was causing $0009 to be interpreted as $0.
->    Replaced continue with return in sysctl.sh(test_case) so the test actually
->    gets skipped. The skip decision is now in sysctl.sh(skip_test).
-> 
-> 3. Selftest additions: New test to confirm that unregister actually removes
->    targets. New test to confirm that permanently empty targets are indeed
->    created and that no other targets can be created "on top".
-> 
-> 4. Replaced the child pointer in struct ctl_table with an enum which is used to
->    differentiate between permanently empty targets and non-empty ones.
-> 
-> V2: Replaced the u8 flag with an enumeration.
+Group some variables based on their sizes to reduce hole and avoid padding.
+On x86_64, this shrinks the size of 'struct mctp_route'
+from 72 to 64 bytes.
 
-Thanks, I dropped the old patches and applied this new set. Pushed out
-to sysctl-next.
+It saves a few bytes of memory and is more cache-line friendly.
 
-  Luis
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+Using pahole
+
+Before:
+======
+struct mctp_route {
+	mctp_eid_t                 min;                  /*     0     1 */
+	mctp_eid_t                 max;                  /*     1     1 */
+
+	/* XXX 6 bytes hole, try to pack */
+
+	struct mctp_dev *          dev;                  /*     8     8 */
+	unsigned int               mtu;                  /*    16     4 */
+	unsigned char              type;                 /*    20     1 */
+
+	/* XXX 3 bytes hole, try to pack */
+
+	int                        (*output)(struct mctp_route *, struct sk_buff *); /*    24     8 */
+	struct list_head           list;                 /*    32    16 */
+	refcount_t                 refs;                 /*    48     4 */
+
+	/* XXX 4 bytes hole, try to pack */
+
+	struct callback_head       rcu __attribute__((__aligned__(8))); /*    56    16 */
+
+	/* size: 72, cachelines: 2, members: 9 */
+	/* sum members: 59, holes: 3, sum holes: 13 */
+	/* forced alignments: 1, forced holes: 1, sum forced holes: 4 */
+	/* last cacheline: 8 bytes */
+} __attribute__((__aligned__(8)));
+
+
+After:
+=====
+struct mctp_route {
+	mctp_eid_t                 min;                  /*     0     1 */
+	mctp_eid_t                 max;                  /*     1     1 */
+	unsigned char              type;                 /*     2     1 */
+
+	/* XXX 1 byte hole, try to pack */
+
+	unsigned int               mtu;                  /*     4     4 */
+	struct mctp_dev *          dev;                  /*     8     8 */
+	int                        (*output)(struct mctp_route *, struct sk_buff *); /*    16     8 */
+	struct list_head           list;                 /*    24    16 */
+	refcount_t                 refs;                 /*    40     4 */
+
+	/* XXX 4 bytes hole, try to pack */
+
+	struct callback_head       rcu __attribute__((__aligned__(8))); /*    48    16 */
+
+	/* size: 64, cachelines: 1, members: 9 */
+	/* sum members: 59, holes: 2, sum holes: 5 */
+	/* forced alignments: 1, forced holes: 1, sum forced holes: 4 */
+} __attribute__((__aligned__(8)));
+---
+ include/net/mctp.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/net/mctp.h b/include/net/mctp.h
+index 82800d521c3d..da86e106c91d 100644
+--- a/include/net/mctp.h
++++ b/include/net/mctp.h
+@@ -234,9 +234,9 @@ struct mctp_flow {
+ struct mctp_route {
+ 	mctp_eid_t		min, max;
+ 
+-	struct mctp_dev		*dev;
+-	unsigned int		mtu;
+ 	unsigned char		type;
++	unsigned int		mtu;
++	struct mctp_dev		*dev;
+ 	int			(*output)(struct mctp_route *route,
+ 					  struct sk_buff *skb);
+ 
+-- 
+2.34.1
+
