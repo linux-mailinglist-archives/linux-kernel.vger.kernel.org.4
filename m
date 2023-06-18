@@ -2,136 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A32734948
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 01:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A19C473494C
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 01:24:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbjFRXUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 19:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51992 "EHLO
+        id S229560AbjFRXYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 19:24:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjFRXUB (ORCPT
+        with ESMTP id S229456AbjFRXYI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 19:20:01 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65765E44;
-        Sun, 18 Jun 2023 16:19:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=GJTEjYL5z/lt+SoxF2bl4kul2vmCYYSoav4S28/6QTg=; b=FpTwS7uP4TSeOstJ8kPt54EQpZ
-        OcV51tBxE1E18smX38m1oXfqs449ZRxkgtwbvI0dh8Ue0j37LUwz70TqC7RuZYAbRRWEHw2Ilqnrf
-        VMGOerWvfKIABRSHuSkz6/m/7Kx5YEO9stQ0DO25d6VrV2jcojPrQJc8o5Z6LQ7+gwMT3SMLzxSCG
-        OMt70oNhDR2n0Nn/f2ZVaK4qjfVsAt+pvt/JHpMM1MLJ0GGxN0i44cGEP9h+Z3PJrSD9qWX9KwO+c
-        rYFPj6Ux9L6K6s7+50eVwP4CS8VAZe5AFl4YZkwPtZF73EFeGAbdqHxGemqH4dm7/fKStA2zFwhC7
-        ckSLqjXw==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qB1gT-006vXu-1r;
-        Sun, 18 Jun 2023 23:19:49 +0000
-Message-ID: <159350f1-bcb2-e81d-ce28-a07a698c468f@infradead.org>
-Date:   Sun, 18 Jun 2023 16:19:47 -0700
+        Sun, 18 Jun 2023 19:24:08 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05234E44;
+        Sun, 18 Jun 2023 16:24:04 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qkpqx670Zz4wjD;
+        Mon, 19 Jun 2023 09:23:57 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1687130638;
+        bh=tQxCQkiyao5+LPgHpUlD4eq7txYSIRHBDxuOjzVkzQk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TG5jNgm/Ffajk77yNl7fLWVm/S0d+EjqnBL1kLETDf7tgnqbdmjH9d2MPNkS759Yq
+         zTwmkMQqJdiLrS8SqMJq04A8e7Q3r6Ocw46cYTzlud3kG7cz6LvvfitGRHcU8Jn7bK
+         oMSbUBWRUpTsDxw576QIAgtPJF+57wha2U5UwrHHlq30DEWev/ODwbE7Be1OaeItfB
+         oRrtrzYQ7LaLmijvvMr1KcQWVpIzCLsBCiJECQRV2PvLKR9AxC+56NIITotGVC8ETl
+         EX5TQ4n3WAYKXr5coEKZQ/0nkJ81cX70mY5YfxqEhN4AuoR1rLWlXOvkZMNHSnPtJB
+         ycLV7dzhQPgbg==
+Date:   Mon, 19 Jun 2023 09:23:55 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the mm tree with Linus' tree
+Message-ID: <20230619092355.133c5cdb@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] SPARC: Fix parport_pc support for 32-bit platforms
-Content-Language: en-US
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>, sparclinux@vger.kernel.org,
-        linux-parport@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <alpine.DEB.2.21.2306182347101.14084@angie.orcam.me.uk>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <alpine.DEB.2.21.2306182347101.14084@angie.orcam.me.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/yTh=MXtZNF6gXeSWW98ArYD";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+--Sig_/yTh=MXtZNF6gXeSWW98ArYD
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 6/18/23 16:00, Maciej W. Rozycki wrote:
-> For 32-bit SPARC platforms PC-style parallel ports are only available as 
-> PCI options.  Adjust <asm/parport.h> accordingly, fixing build errors:
-> 
-> sparc-linux-gnu-ld: drivers/parport/parport_pc.o: in function `ecpp_remove':
-> parport_pc.c:(.text+0x8f0): undefined reference to `ebus_dma_irq_enable'
-> sparc-linux-gnu-ld: parport_pc.c:(.text+0x8f8): undefined reference to `ebus_dma_unregister'
-> sparc-linux-gnu-ld: drivers/parport/parport_pc.o: in function `parport_pc_fifo_write_block_dma':
-> parport_pc.c:(.text+0x1430): undefined reference to `ebus_dma_enable'
-> sparc-linux-gnu-ld: parport_pc.c:(.text+0x1444): undefined reference to `ebus_dma_prepare'
-> sparc-linux-gnu-ld: parport_pc.c:(.text+0x14e4): undefined reference to `ebus_dma_enable'
-> sparc-linux-gnu-ld: parport_pc.c:(.text+0x14f4): undefined reference to `ebus_dma_request'
-> sparc-linux-gnu-ld: parport_pc.c:(.text+0x1584): undefined reference to `ebus_dma_enable'
-> sparc-linux-gnu-ld: parport_pc.c:(.text+0x1594): undefined reference to `ebus_dma_residue'
-> sparc-linux-gnu-ld: parport_pc.c:(.text+0x1608): undefined reference to `ebus_dma_enable'
-> sparc-linux-gnu-ld: parport_pc.c:(.text+0x1618): undefined reference to `ebus_dma_residue'
-> sparc-linux-gnu-ld: drivers/parport/parport_pc.o: in function `ecpp_probe':
-> parport_pc.c:(.text+0x33a0): undefined reference to `ebus_dma_register'
-> sparc-linux-gnu-ld: parport_pc.c:(.text+0x33b8): undefined reference to `ebus_dma_irq_enable'
-> sparc-linux-gnu-ld: parport_pc.c:(.text+0x34b0): undefined reference to `ebus_dma_irq_enable'
-> sparc-linux-gnu-ld: parport_pc.c:(.text+0x34bc): undefined reference to `ebus_dma_unregister'
-> 
-> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-> Fixes: 66bcd06099bb ("parport_pc: Also enable driver for PCI systems")
-> Cc: stable@vger.kernel.org # v5.18+
+Hi all,
 
-Yes, this fixes the build errors. Thanks for the patch.
+Today's linux-next merge of the mm tree got a conflict in:
 
-There is one new warning that should be fixed as well:
+  mm/mmap.c
 
-<stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-In file included from ../include/linux/spinlock.h:88,
-                 from ../include/linux/kref.h:16,
-                 from ../include/linux/mm_types.h:8,
-                 from ../include/linux/buildid.h:5,
-                 from ../include/linux/module.h:14,
-                 from ../drivers/parport/parport_pc.c:46:
-../arch/sparc/include/asm/parport.h:27:24: warning: 'dma_spin_lock' defined but not used [-Wunused-variable]
-   27 | static DEFINE_SPINLOCK(dma_spin_lock);
-      |                        ^~~~~~~~~~~~~
-../include/linux/spinlock_types.h:43:44: note: in definition of macro 'DEFINE_SPINLOCK'
-   43 | #define DEFINE_SPINLOCK(x)      spinlock_t x = __SPIN_LOCK_UNLOCKED(x)
-      |                                            ^
+between commit:
 
+  606c812eb1d5 ("mm/mmap: Fix error path in do_vmi_align_munmap()")
 
-> ---
->  arch/sparc/include/asm/parport.h |    5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> linux-sparc32-parport-pc.diff
-> Index: linux-macro/arch/sparc/include/asm/parport.h
-> ===================================================================
-> --- linux-macro.orig/arch/sparc/include/asm/parport.h
-> +++ linux-macro/arch/sparc/include/asm/parport.h
-> @@ -19,7 +19,9 @@
->   * While sparc64 doesn't have an ISA DMA API, we provide something that looks
->   * close enough to make parport_pc happy
->   */
-> +#ifdef CONFIG_SPARC64
->  #define HAS_DMA
-> +#endif
->  
->  #ifdef CONFIG_PARPORT_PC_FIFO
->  static DEFINE_SPINLOCK(dma_spin_lock);
-> @@ -249,7 +251,8 @@ static struct platform_driver ecpp_drive
->  
->  static int parport_pc_find_nonpci_ports(int autoirq, int autodma)
->  {
-> -	return platform_driver_register(&ecpp_driver);
-> +	return (IS_ENABLED(CONFIG_SPARC64) &&
-> +		platform_driver_register(&ecpp_driver));
->  }
->  
->  #endif /* !(_ASM_SPARC64_PARPORT_H */
+from the origin tree and commits:
 
--- 
-~Randy
+  66106c364147 ("mm: change do_vmi_align_munmap() side tree index")
+  47b1d8de18f5 ("mm/mmap: change vma iteration order in do_vmi_align_munmap=
+()")
+
+from the mm tree.
+
+I fixed it up (I think - see below) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc mm/mmap.c
+index 98cda6f72605,474a0d856622..000000000000
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@@ -2398,15 -2409,27 +2396,29 @@@ do_vmi_align_munmap(struct vma_iterato
+  			if (error)
+  				goto end_split_failed;
+  		}
+ -		mas_set(&mas_detach, count);
+ -		error =3D munmap_sidetree(next, &mas_detach);
+ -		if (error)
+ -			goto munmap_sidetree_failed;
+ +		vma_start_write(next);
+- 		mas_set_range(&mas_detach, next->vm_start, next->vm_end - 1);
+ +		if (mas_store_gfp(&mas_detach, next, GFP_KERNEL))
+ +			goto munmap_gather_failed;
+ +		vma_mark_detached(next, true);
+ +		if (next->vm_flags & VM_LOCKED)
+ +			locked_vm +=3D vma_pages(next);
+ =20
+  		count++;
++ 		if (unlikely(uf)) {
++ 			/*
++ 			 * If userfaultfd_unmap_prep returns an error the vmas
++ 			 * will remain split, but userland will get a
++ 			 * highly unexpected error anyway. This is no
++ 			 * different than the case where the first of the two
++ 			 * __split_vma fails, but we don't undo the first
++ 			 * split, despite we could. This is unlikely enough
++ 			 * failure that it's not worth optimizing it for.
++ 			 */
++ 			error =3D userfaultfd_unmap_prep(next, start, end, uf);
++=20
++ 			if (error)
++ 				goto userfaultfd_error;
++ 		}
+  #ifdef CONFIG_DEBUG_VM_MAPLE_TREE
+  		BUG_ON(next->vm_start < start);
+  		BUG_ON(next->vm_start > end);
+@@@ -2454,14 -2455,18 +2444,20 @@@
+  		BUG_ON(count !=3D test_count);
+  	}
+  #endif
+- 	/* Point of no return */
+ +	error =3D -ENOMEM;
+- 	vma_iter_set(vmi, start);
++ 	while (vma_iter_addr(vmi) > start)
++ 		vma_iter_prev_range(vmi);
++=20
+  	if (vma_iter_clear_gfp(vmi, start, end, GFP_KERNEL))
+ -		return -ENOMEM;
+ +		goto clear_tree_failed;
+ =20
+ +	mm->locked_vm -=3D locked_vm;
+  	mm->map_count -=3D count;
++ 	prev =3D vma_iter_prev_range(vmi);
++ 	next =3D vma_next(vmi);
++ 	if (next)
++ 		vma_iter_prev_range(vmi);
++=20
+  	/*
+  	 * Do not downgrade mmap_lock if we are next to VM_GROWSDOWN or
+  	 * VM_GROWSUP VMA. Such VMAs can change their size under
+
+--Sig_/yTh=MXtZNF6gXeSWW98ArYD
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSPkgsACgkQAVBC80lX
+0GwKMgf8DWWJQY5lhGXLK0fj2/FYYNKFLXi6GeGbvJtxTN4rONqn1D5KhsQpOSqL
+cBLQTQm6ZlWiD0BisFHULst5yyPUpW4jpHXPNDfI0JGV9OtOxbAYnOciyrHAVD89
+mIIB5Ah9vpSTziN9jLKXEEa37eGrVKz1p7ZjIdVdOUyfVhTI1IAubgk7FCHTctup
+bqph/yZShXWgtmRFw1X8RNHvYWC8eagHvRbM/Z6YTvj5yzH9hPotU8Y1j9+hPoWO
+V9q04UkAAeiXpMalIz3t13WijbYfgBt8o2om4YMz+OTZ8EbjrZw1PRK5vvBMWKJC
+99LcDivfNyY2yVlwkMLpcekg5itM+A==
+=PQB2
+-----END PGP SIGNATURE-----
+
+--Sig_/yTh=MXtZNF6gXeSWW98ArYD--
