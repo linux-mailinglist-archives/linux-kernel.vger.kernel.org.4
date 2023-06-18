@@ -2,71 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 431CD734814
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 22:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99F03734818
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 22:11:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229494AbjFRUKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 16:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43718 "EHLO
+        id S229529AbjFRULw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 16:11:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjFRUKw (ORCPT
+        with ESMTP id S229482AbjFRULu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 16:10:52 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42899E45;
-        Sun, 18 Jun 2023 13:10:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=ryallP7cWmf03xUcI8HOxzHAoVEyLcnwb4V9yA2C1D4=; b=roy22sPJ+9CM5E2toPz3/JAKp4
-        r0ymVxlHF6GAptlaGmGv33CoADQbtHgui0Y1ru8z7qABfH9tjXpp4ltbBwhJpf7ZUP/VZZ1cBw6/c
-        7E/vCvVYLEUXFU8meCInio4r45hiJLNHUbvwoYyJONiGM/2nJ5L/ScpQxLEuGiPB1yBM=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1qAyjI-00GrWU-Pv; Sun, 18 Jun 2023 22:10:32 +0200
-Date:   Sun, 18 Jun 2023 22:10:32 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next PATCH v4 2/3] leds: trigger: netdev: add additional
- specific link duplex mode
-Message-ID: <0ff1f4b2-40ab-46af-a668-850a58b668b0@lunn.ch>
-References: <20230617115355.22868-1-ansuelsmth@gmail.com>
- <20230617115355.22868-3-ansuelsmth@gmail.com>
+        Sun, 18 Jun 2023 16:11:50 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E59E49
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 13:11:48 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-3fde9bfb3c8so115291cf.0
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 13:11:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687119108; x=1689711108;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mpfISiVhGBFvYu3AQzytJ9eyp0qWbNPzT0F/TqGcEF0=;
+        b=BI4IVSXI0OmI7HSHsHlrapOhxlYQr88irtqXtejFQDdwi0ENBjBoT+XLb8GlVX5ye2
+         2RKZIVa3SgmrzIbhLz9gPTVxEaHp2aLuGzJABn2V8qcyj1r5n7W74CILO0agM4yRBdqp
+         1RaptWkZvNHDOFx+VjmcCLiDP8C+KTiX8SbGmrEKzvHmrSeItS1P0Xmdw5h0oqtFiDy4
+         AOhW0Kb490uZt+xyTNM54SZyWZrBQ/OOSALJEaw5URHLWQ5/4/9LTWbU9KUB5nzr8SkC
+         EiNHGrA/DNhBI3N/ps22/XwwMptyPwh1WFUc37QSRtqZWWbsx8o8/qqFNZmnqhSquaII
+         BNYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687119108; x=1689711108;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mpfISiVhGBFvYu3AQzytJ9eyp0qWbNPzT0F/TqGcEF0=;
+        b=Ps6dJsZT4Xue6lhR5wsYT/MJzvmIpdFeZ2sJZqcT+YxfDigKUXCcFN6b2QrSztxEcv
+         W2wV6nx6Fcig6U08IC8z1y6BQ6LhF5vqViM0QmVnREATw3cdKx5ScwM6qOPJT5FRHnXo
+         55C3LKhhVjaT7YsLzv2kR0cOYfHqsbb3YbvfjL9XiKtdH3/xpUedPA6k43dbpm8kQyLL
+         B2YFinO7illS3l6hmi+0f5vtovR0DcFjKUM86wXIqD9yeFCKUpU1NsJEJrvdgKqcIMJz
+         nGae/qx1Lo/9ANhTRu0pZawgOteDBBwGsXaR3UbWGKPXPDP+OUagqvAhoAG/25/OwUG7
+         MnLg==
+X-Gm-Message-State: AC+VfDxGVCBTpuziW850g7n2m+mm6k+HjuWQ5gox6UX2TGJjWuIjRWYz
+        OQrI5OHJDhNuWgjD3AHiF6HBo0kS4L8Ng+EvHXPLFw==
+X-Google-Smtp-Source: ACHHUZ7+FzP5AfTCxoLANN0O1kovXzprxLRO2NDRfP+79+jkGgGwKBzMX+UybO5p4uMqphT40cGSU06Ta5mNNZ2MZbY=
+X-Received: by 2002:a05:622a:85:b0:3f8:5b2:aeed with SMTP id
+ o5-20020a05622a008500b003f805b2aeedmr773688qtw.21.1687119107794; Sun, 18 Jun
+ 2023 13:11:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230617115355.22868-3-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230526234435.662652-1-yuzhao@google.com> <20230609005935.42390-1-yuzhao@google.com>
+ <873530okh0.wl-maz@kernel.org>
+In-Reply-To: <873530okh0.wl-maz@kernel.org>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Sun, 18 Jun 2023 14:11:11 -0600
+Message-ID: <CAOUHufaWbWZ-q-PUJnjXD_jDk1s34mcg4vHU8CtAtmeAT-deRA@mail.gmail.com>
+Subject: Re: kvm/arm64: Spark benchmark
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Anup Patel <anup@brainfault.org>,
+        Ben Gardon <bgardon@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Gavin Shan <gshan@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michael Larabel <michael@michaellarabel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
+        linux-trace-kernel@vger.kernel.org, x86@kernel.org,
+        linux-mm@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 01:53:54PM +0200, Christian Marangi wrote:
-> Add additional modes for specific link duplex. Use ethtool APIs to get the
-> current link duplex and enable the LED accordingly. Under netdev event
-> handler the rtnl lock is already held and is not needed to be set to
-> access ethtool APIs.
-> 
-> This is especially useful for PHY and Switch that supports LEDs hw
-> control for specific link duplex.
-> 
-> Add additional modes:
-> - half_duplex: Turn on LED when link is half duplex
-> - full_duplex: Turn on LED when link is full duplex
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+On Fri, Jun 9, 2023 at 7:04=E2=80=AFAM Marc Zyngier <maz@kernel.org> wrote:
+>
+> On Fri, 09 Jun 2023 01:59:35 +0100,
+> Yu Zhao <yuzhao@google.com> wrote:
+> >
+> > TLDR
+> > =3D=3D=3D=3D
+> > Apache Spark spent 12% less time sorting four billion random integers t=
+wenty times (in ~4 hours) after this patchset [1].
+>
+> Why are the 3 architectures you have considered being evaluated with 3
+> different benchmarks?
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+I was hoping people having special interests in different archs might
+try to reproduce the benchmarks that I didn't report (but did cover)
+and see what happens.
 
-    Andrew
+> I am not suspecting you to have cherry-picked
+> the best results
+
+I'm generally very conservative when reporting *synthetic* results.
+For example, the same memcached benchmark used on powerpc yielded >50%
+improvement on aarch64, because the default Ubuntu Kconfig uses 64KB
+base page size for powerpc but 4KB for aarch64. (Before the series,
+the reclaim (swap) path takes kvm->mmu_lock for *write* on O(nr of all
+pages to consider); after the series, it becomes O(actual nr of pages
+to swap), which is <10% given how the benchmark was set up.)
+
+          Ops/sec  Avg. Latency  p50 Latency  p99 Latency  p99.9 Latency
+------------------------------------------------------------------------
+Before  639511.40       0.09940      0.04700      0.27100       22.52700
+After   974184.60       0.06471      0.04700      0.15900        3.75900
+
+> but I'd really like to see a variety of benchmarks
+> that exercise this stuff differently.
+
+I'd be happy to try other synthetic workloads that people think that
+are relatively representative. Also, I've backported the series and
+started an A/B experiment involving ~1 million devices (real-world
+workloads). We should have the preliminary results by the time I post
+the next version.
