@@ -2,179 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC488734712
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 18:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B10E73471F
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 18:54:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbjFRQt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 12:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42154 "EHLO
+        id S229612AbjFRQyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 12:54:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjFRQtZ (ORCPT
+        with ESMTP id S229470AbjFRQym (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 12:49:25 -0400
-Received: from sonic309-25.consmr.mail.ir2.yahoo.com (sonic309-25.consmr.mail.ir2.yahoo.com [77.238.179.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92909E4D
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 09:49:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1687106962; bh=1byxmKsuwVtHNKVjs0CfYPPIiLgXwsmmbrJRN3DT5sY=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=uha/SwH7I7rs/r5ZpEHymasRxI2NNC+1btE5cJbHnBVi/+2EP7LDhN4wP0wDJUYFZOHGiyqYc6KUZdGxbK/K5mHGpV0F5Op8ZtJI8ZAGhObL62malGYW6geWo/PDkaNG+bbZx5AixdS/ovGfmzqmzPLyac5wc/8HU47ZdWI6bRFyGu2FAmtdOxy+Zs18pBuCIB3ns2p/sxLaJI9ag/V6BGpq651v+Mdo5Mt8drysFdU2I6OIGYU0/6jEiLIUIkufSuDABDMOHHFDT5favNAZie9mABoyfHlT/MRyDTqRa4+qr2JkIAxUZsyjmSV3WR7UptRCAYk0k1y5Sie2SoaKkA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1687106962; bh=aJFsOPX7ARn/sObHD13lQRHiRpseUebdhxOsSCSQNu9=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=pnZ2jomD+qitYFiL0hkl3X6RthizvbE/SLUTXcJrhYl98NczZJKkXP2bQI9AHkdXsajDhiSPhjsTpHboF6vn+fdmACCYu9w2UGz/LDqZ6nb9z5FCLXaI13nX5BDu7uEIB6oRBBakArIL09jTJT16NJJNz4/T2nCeQkR2MhZqmM0DhM1B62TOzJd1CmhhRYskRyVTkPccRGNQPRNzJ1Rz58GN33Z8ZQOLJ79mEKObXjTyRCepkukeVHCK2OG/v3m7JuX1Uugj2ozeDjpTB5fzhhtQI/9RqdLe6mtSaW/y0vyIBmpsWssIa6/BD1irrJACUsSHr20N1X2YKExjn6fxcg==
-X-YMail-OSG: y1.8yFUVM1nNIPH0bembKj4.xSeiOLT4LwMSpl8Fo4EH0ZaQSwdfamb.Rx4slUh
- 7baTXb1K7zM.3kQpzH8Ut2G1xug_uq4zseHmxx_kanDYG3syXd1cOAe1zyH779ysxCKV9YEnSW1l
- FCGTHDUJPGzqh3qneYpBMye0SWkONmrU6C3NM3p.7PWscqnII.v7kzwtzsoSbVl6rKH3opYc4.Ol
- Ohz_Xgaltk8D4Lo6ca8Ms4QLPF9scTKV.X03OZUFxAIsFopmBjXG6d1De88FtZ68aLOuhYsRcMMP
- W6o01rAep6TzOWOYngW.u6xI_VES6dvwhkkFkWq8zduOGQkbcOoqB58Pyih9bmPYkA1igg1dneck
- Eabn95qIKME_eoi1yTKOREO5HigP7Mt84bwGUNlJmoi1AYjWWqxIU9DC321_K8o4P.6IzBj1mJux
- HG2aWh7eWwnl0gQY2yFmgZ36Bljt1CCsu_gMeES_cSmbukeRWhD.eApRt14XcXvxiX782ubfprf_
- o9MTiiHmF6gMf5Ji23L7DuSuSOjDQW87703aR1sTlbkComoBFSkeGy3jNP7tx9Pazqg72MUv9T_A
- 0O61VhZpoGjllLpcXmAyETtli1E415ZnH.bY_.RrS2B2v3GRU5vkMoSvk60pZ.abI6X1VGyL3oHg
- TlOOnSG.fl1jdJWS7MsOfDHdDqOmtFvuxKV35CRMVC5pLscK6eiWVEw3fqxqlhlbLja8yAC_B1cx
- _7i85Auca2KrGtsByuXX.0VUKb2a4EtJHvb5Fl49jfleS6skZLLRrpO77yNK35xSBjdfAebBmkcs
- Z3oAvk6suwoUeTMxfKUCctfZlhcmsaV3KQCwuosh73jegIX4P6GqP0AKbreH.eYFrE154.FNQwxE
- hBIgLNxlJSZmxfrCVoz1JZIPxrQJrkLb39vtXnCZNWQoPwV3WaEEcnsdFS_wJ_IGwoAONTT8fYnR
- abm5fbjD.HHpj0mDbSmbFEtHu5VPSC51I8C_uwU7d.bYhTtcEOkW7w3luHruedxZUafW7LC.XvRD
- CzDl34SGHnHONDEPffx7eUsK1hMZb1B.bWJC_OXwBj_r66M5ScCWHZ8ebwUfHR5AY26H_nx2.Mys
- dirxSG69kKE8aBl0mybEDi.9g1yF9V2y9cXK1HrNWg5VYTZwAbW_XcYmpwZJem4sQgxti3jYFyxv
- XS4JUypxm88YYDKOXGtBlvePamRdNN4hNpBJJzd3TJaml2gChrBHE0LFBDBY4yfj9nzKTBNzGxks
- tRA8nkI.BL5InLQY_gceaK0BHF.QqxhWFNVod8EpDBYO5L5cbUqcoeY__sbHxu.meiZKhHUNVeE9
- v1Btbe3aHDeY2Wu_aLTleBkcoJgyywzLazzK4QoptBHXrZbWGRFvckfa_F8Z4HlOYCJyCnKN7391
- AgHfUWrH3cP6KyH51olSlCAchgSjqCl8a58pZ0cudm0EI4qTTdnRfFWL6FlIU1LqRcecGKr3ZitK
- 0FrSEVnDqHAUz01DWkb0y8Xj6znxBorKK4K.LN7lZAk53NxixcfLm1yzwJw2oYi4HQfj.asZl16Y
- FKFYkbv7ROyoeRRIDdzye7qX89TkptfquKr9aZDl6YHjxKNmhQqDixsD4iK30BO.4m574LOB.xmN
- QkOq6RQGdy2mVEXQ1DXabbJuf7m4EYzs.IJ9hpdR6uOCmhquk.CPfXlKRmyIMCa2MT8fGs6.Cu1M
- nIbdc2KXQLcuon2JxEacK7yi5Oi2vMP6fyNKimQIXeOu0U6IZkaB8wvDPZFlOZDg8VYS8QoFJlLP
- uZSr9nszMXwNPb.rMU1DeJdCg0aJKeIo..GDT6rFsNbpy9p9h.GsEMENJ5oCHEe9JGL69xCPuTar
- Ba0zlgJdJI7i5IxK1XIDz_ZGr.fQLHwhYg8HSaUuxN89hG1RVZPFuozz2BTOws9KmNhKsxngAc1F
- HnF0UuNQ.sJwO_VOj4wEfSbL6mdCBXYXA1y38RryQhBdvQoKPS27J1rvW02EhffbqNK9ufmwEd.X
- VvZ63ckWZLIVlShmNdOe6R2IcQrpsDJ4f2PrweVTLRcNHbWvtpzZrupUL2qlF0D1WR6zOUOJ8ALu
- XUFhSZqpETKd_Fjt3YO5Z7TL6y1CjbofIEDyv.VkTyzckCVbipbv_f8NV6.o4ivr829cFn4G1jwC
- bp3ZhyXiSlUV3Djteo2.RxciRbsFTTi4itNpdiBCPfFJ7Wi4JzSQQLctQ8Wir7_ooQwmqbYDJ6MW
- 3KvS2_l8AhA5PjNJCM6JsP2PQrKddsvL1idKtjCKyyIFEu2KCBjTFknxeqrBOrxFnk2J7RMwubGz
- 0KxZ7L7G_HTpsmQcak1kuLNTdp65MF03k
-X-Sonic-MF: <jahau@rocketmail.com>
-X-Sonic-ID: 0a8d3c80-63d9-43ac-ad23-34ea945a5cd7
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.ir2.yahoo.com with HTTP; Sun, 18 Jun 2023 16:49:22 +0000
-Received: by hermes--production-ir2-7867f454fc-z6m77 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 4eb4576de48997a989d0f23ab4fb0b6c;
-          Sun, 18 Jun 2023 16:49:18 +0000 (UTC)
-Message-ID: <ab3e475f-27ae-e718-60bd-cb22f5070942@rocketmail.com>
-Date:   Sun, 18 Jun 2023 18:49:16 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH RESEND] arm64: dts: qcom: msm8916-samsung-serranove: Add
- RT5033 PMIC with charger
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Henrik Grimler <henrik@grimler.se>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <20230617002934.39408-1-jahau.ref@rocketmail.com>
- <20230617002934.39408-1-jahau@rocketmail.com> <ZI2_565RFDtR3Sa-@gerhold.net>
-Content-Language: en-US
-From:   Jakob Hauser <jahau@rocketmail.com>
-In-Reply-To: <ZI2_565RFDtR3Sa-@gerhold.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Sun, 18 Jun 2023 12:54:42 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD2610B;
+        Sun, 18 Jun 2023 09:54:41 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id af79cd13be357-76344f8140dso23198385a.3;
+        Sun, 18 Jun 2023 09:54:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687107281; x=1689699281;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4sK61SVjYCcgummf/cy7pNsLb9SbPBeqU0f1FYDFMyI=;
+        b=rY8QSvEl6p4fIeB+cNXrfBx3Qi8Q0oRZm5VoS2BoCgfjuYRQQUwrdFGEDdU23IrXo0
+         chGoGHKPwP0LXmrfTl3qHlcCmo1sRYapzINEnQSow+fzi+pFn5PGiApYOrJ50HKaB68T
+         utE+yg2GnzRQ30Bj8a8L69p3c374+UtcDkNfJR34GIn05f0b7+0AmEbyApvKm1DNJWT/
+         bJcRj7sz29ir/3TzVW+gzb/qTkz7VnAPSgi9enEEZ3+K74hSxYqhdeSEvqiAsjKKoCqT
+         OzoP6N5BMK7b0x2JfdgrfrTiD4DoK57jW0lPFco02d1KYyD6s/pMa/qc2P6IX40592qx
+         JtnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687107281; x=1689699281;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4sK61SVjYCcgummf/cy7pNsLb9SbPBeqU0f1FYDFMyI=;
+        b=PvJr6nOajjEg6nBWopPUvyV3lClFlhSHKoj82QChhFMt5m0zUes7J2L5PDvWmtiU3f
+         Tkv7uvyfCLXXiQ9UPnBzG/c6gN5imTqXeq9eqnmsEbpxASViHl5pamiWZ0b7bpDy2N6Y
+         fcJUj1N5qzG+TiD8kZVzEMYgLTHHhkDjpw7BR1RZFfxEgoS8HpnUf10BLt0IUKVKR3G7
+         0kR/tp/e+qFdY9jwf4y2q2Pv5xkb6q7bwXujC6jzKuS7YBTEiz7t7roz6cNe1O24RMDL
+         +MaqHuMQhHqZqG7iQqUsM5DAz5ENn/nqB8rnM4cj0NgZp94pX3zzfjSfOmAJSRD0fvoE
+         wT8A==
+X-Gm-Message-State: AC+VfDwwVj5h13DIgF4ld/PJoPOX85Y7FxEt4vVz5VMfxDa5ThP1KLpo
+        AfAazsDXyLUe6K6DxIRLknI=
+X-Google-Smtp-Source: ACHHUZ7rD2n8b5vnYB/xOzS5BAQNWYuxXJrQo4BmBND6gWZP6jCAnPQahStFSM7LauZ1ZKr4AefxaQ==
+X-Received: by 2002:ad4:5be2:0:b0:626:33bb:3fd3 with SMTP id k2-20020ad45be2000000b0062633bb3fd3mr8290593qvc.19.1687107280821;
+        Sun, 18 Jun 2023 09:54:40 -0700 (PDT)
+Received: from localhost (172.174.245.35.bc.googleusercontent.com. [35.245.174.172])
+        by smtp.gmail.com with ESMTPSA id t3-20020ac85303000000b003f7a54fa72fsm1857340qtn.0.2023.06.18.09.54.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Jun 2023 09:54:40 -0700 (PDT)
+Date:   Sun, 18 Jun 2023 12:54:40 -0400
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To:     David Howells <dhowells@redhat.com>, netdev@vger.kernel.org
+Cc:     David Howells <dhowells@redhat.com>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        dccp@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-hams@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-x25@vger.kernel.org,
+        mptcp@lists.linux.dev, rds-devel@oss.oracle.com,
+        tipc-discussion@lists.sourceforge.net,
+        virtualization@lists.linux-foundation.org
+Message-ID: <648f36d02fe6e_33cfbc2944f@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20230617121146.716077-18-dhowells@redhat.com>
+References: <20230617121146.716077-1-dhowells@redhat.com>
+ <20230617121146.716077-18-dhowells@redhat.com>
+Subject: RE: [PATCH net-next v2 17/17] net: Kill MSG_SENDPAGE_NOTLAST
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.21557 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephan,
-
-On 17.06.23 16:15, Stephan Gerhold wrote:
-> On Sat, Jun 17, 2023 at 02:29:34AM +0200, Jakob Hauser wrote:
-
-...
-
->> +		regulators {
->> +			safe_ldo_reg: SAFE_LDO {
->> +				regulator-name = "SAFE_LDO";
->> +				regulator-min-microvolt = <4900000>;
->> +				regulator-max-microvolt = <4900000>;
->> +				regulator-always-on;
->> +			};
->> +			ldo_reg: LDO {
->> +				regulator-name = "LDO";
->> +				regulator-min-microvolt = <2800000>;
->> +				regulator-max-microvolt = <2800000>;
->> +			};
->> +			buck_reg: BUCK {
->> +				regulator-name = "BUCK";
->> +				regulator-min-microvolt = <1200000>;
->> +				regulator-max-microvolt = <1200000>;
->> +			};
+David Howells wrote:
+> Now that ->sendpage() has been removed, MSG_SENDPAGE_NOTLAST can be cleaned
+> up.  Things were converted to use MSG_MORE instead, but the protocol
+> sendpage stubs still convert MSG_SENDPAGE_NOTLAST to MSG_MORE, which is now
+> unnecessary.
 > 
-> The "regulator-name"s here don't really seem useful, since they're just
-> the same as the ones already declared in the driver. Can you drop them?
-> Alternatively you could assign more useful board-specific names, such as
-> the CAM_SENSOR_A2.8V that was used downstream.
-> 
-> Also, I think it would be slightly clearer to prefix the regulator
-> labels (safe_ldo_reg, ldo_reg etc) with rt5033_. Perhaps
-> "rt5033_ldo_reg" or "rt5033_reg_ldo"?
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: "David S. Miller" <davem@davemloft.net>
+> cc: Eric Dumazet <edumazet@google.com>
+> cc: Jakub Kicinski <kuba@kernel.org>
+> cc: Paolo Abeni <pabeni@redhat.com>
+> cc: Jens Axboe <axboe@kernel.dk>
+> cc: Matthew Wilcox <willy@infradead.org>
+> cc: bpf@vger.kernel.org
+> cc: dccp@vger.kernel.org
+> cc: linux-afs@lists.infradead.org
+> cc: linux-arm-msm@vger.kernel.org
+> cc: linux-can@vger.kernel.org
+> cc: linux-crypto@vger.kernel.org
+> cc: linux-doc@vger.kernel.org
+> cc: linux-hams@vger.kernel.org
+> cc: linux-perf-users@vger.kernel.org
+> cc: linux-rdma@vger.kernel.org
+> cc: linux-sctp@vger.kernel.org
+> cc: linux-wpan@vger.kernel.org
+> cc: linux-x25@vger.kernel.org
+> cc: mptcp@lists.linux.dev
+> cc: netdev@vger.kernel.org
+> cc: rds-devel@oss.oracle.com
+> cc: tipc-discussion@lists.sourceforge.net
+> cc: virtualization@lists.linux-foundation.org
+> ---
+>  include/linux/socket.h                         | 4 +---
+>  net/ipv4/tcp_bpf.c                             | 4 +++-
+>  net/tls/tls_device.c                           | 3 +--
+>  net/tls/tls_main.c                             | 2 +-
+>  net/tls/tls_sw.c                               | 2 +-
+>  tools/perf/trace/beauty/include/linux/socket.h | 1 -
+>  tools/perf/trace/beauty/msg_flags.c            | 3 ---
+>  7 files changed, 7 insertions(+), 12 deletions(-)
+>
+ 
+> @@ -90,7 +90,9 @@ static int tcp_bpf_push(struct sock *sk, struct sk_msg *msg, u32 apply_bytes,
+>  {
+>  	bool apply = apply_bytes;
+>  	struct scatterlist *sge;
+> -	struct msghdr msghdr = { .msg_flags = flags | MSG_SPLICE_PAGES, };
+> +	struct msghdr msghdr = {
+> +		.msg_flags = flags | MSG_SPLICE_PAGES | MSG_MORE,
+> +	};
+>  	struct page *page;
+>  	int size, ret = 0;
+>  	u32 off;
 
-...
-About the "regulator-name"s I wasn't really aware. I don't have a strong 
-opinion on this.
+Is it intentional to add MSG_MORE here in this patch?
 
-With the downstream names, it would look like this:
+I do see that patch 3 removes this branch:
 
-regulators {
-	rt5033_reg_safe_ldo: SAFE_LDO {
-		regulator-name = "RT5033SafeLDO";
-		regulator-min-microvolt = <4900000>;
-		regulator-max-microvolt = <4900000>;
-		regulator-always-on;
-	};
-	rt5033_reg_ldo: LDO {
-		regulator-name = "CAM_SENSOR_A2.8V";
-		regulator-min-microvolt = <2800000>;
-		regulator-max-microvolt = <2800000>;
-	};
-	rt5033_reg_buck: BUCK {
-		regulator-name = "CAM_SENSOR_CORE_1.25V";
-		regulator-min-microvolt = <1200000>;
-		regulator-max-microvolt = <1200000>;
-	};
-
-Dropping them would look like this:
-
-regulators {
-	rt5033_reg_safe_ldo: SAFE_LDO {
-		regulator-min-microvolt = <4900000>;
-		regulator-max-microvolt = <4900000>;
-		regulator-always-on;
-	};
-	rt5033_reg_ldo: LDO {
-		regulator-min-microvolt = <2800000>;
-		regulator-max-microvolt = <2800000>;
-	};
-	rt5033_reg_buck: BUCK {
-		regulator-min-microvolt = <1200000>;
-		regulator-max-microvolt = <1200000>;
-	};
-
-I would rather drop them. The first name "RT5033SafeLDO" doesn't add 
-much information. The other two I'm not fully sure if they provide the 
-cam sensor only or if there might be other users as well. Also it add an 
-additional set of names. When dropping them, the generic names SAFE_LDO, 
-LDO and BUCK are taken from the rt5033-regulator driver.
-
-Unfortunately, I added the example in the dt-bindings with the generic 
-names. So this question might come up again when someone else adds 
-rt5033-regulators to another device.
-
-For the phandle labels I'd go for rt5033_reg_..., I already changed them 
-in the examples above.
-
-Kind regards,
-Jakob
+@@ -111,9 +111,6 @@  static int tcp_bpf_push(struct sock *sk, struct sk_msg *msg, u32 apply_bytes,
+ 		if (has_tx_ulp)
+ 			msghdr.msg_flags |= MSG_SENDPAGE_NOPOLICY;
+ 
+-		if (flags & MSG_SENDPAGE_NOTLAST)
+-			msghdr.msg_flags |= MSG_MORE;
+-
