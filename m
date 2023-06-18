@@ -2,261 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4593D7347F6
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 21:19:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C77F73480D
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 21:45:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbjFRTTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 15:19:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39062 "EHLO
+        id S229516AbjFRTpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 15:45:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjFRTTx (ORCPT
+        with ESMTP id S229456AbjFRTpC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 15:19:53 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1193FC
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 12:19:51 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-3fddc620055so202321cf.1
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 12:19:51 -0700 (PDT)
+        Sun, 18 Jun 2023 15:45:02 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74DEB128
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 12:44:59 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-51669dd574aso648265a12.0
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 12:44:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687115991; x=1689707991;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JbR6FYiZlzxET1aZbxa1LnPa25BlJwTh4qhaLJ4bvzg=;
-        b=eeTeUO735vurVqYffUSvtO4InMdD7ecrFouGxTvZhYEKJAFj+iNmhaN9tu2ONEh2zq
-         89mW0ayvjTPwrfBsoKUi9fd5fr9ze0ICHF7BxV4woHO5JqvPZRPKLY2xrrn26G+NJH0x
-         DUxE98voVWezGuxg9OUVAFu8rupSLoeVL/QnMQxAmb/k40sScPQjWMg9w2/P2DgTkMb8
-         SHdvwblgqJJHWx+7iPLuQxgNy100g4QEuXp4/vYMvNUabSEKRH66I5WIJ93nZtC1CnKk
-         7RYEIUbSVvCf3kGwuVSB8mzNNo/aPYY38t591pX2WAN2fS9n4tJiTPSz8cqRXqfOVBu7
-         hOsg==
+        d=gmail.com; s=20221208; t=1687117498; x=1689709498;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=idXdS9jRPviKMoRt0bBHppB9dZDM/k9Odq0fiPi3ljQ=;
+        b=IlKWWrskmi0qXvsLQAGP2OJCKq8McIK77wKkLTL8KfeFi6SZrWrLJc/Dop3G+CLBIK
+         NoHhIWrxBNwviCbn4CAnmikM0G7jeHV/dLI1iViUICWf+Whw12ybhF4bv4LP0y/+Y4t8
+         ToQfN/uV/vjcMv7InR+DFZmEcyaV1eJQ5hAUgefr6tS/im+wMHvjs2Wbu/eVw/t3LcuM
+         z8J6qv1mjtqbWdBMhsMg2EmRDj4mOOu64UPscpCt/korxciCNKUt2bqLJEN/qK5Nugeb
+         PoixWLviM8UspOF8OxFAPfQr5FCYpNIBngAK3+QO5/aR589BgRls9NYZe7rbtCKnrTCR
+         TvKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687115991; x=1689707991;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JbR6FYiZlzxET1aZbxa1LnPa25BlJwTh4qhaLJ4bvzg=;
-        b=Zs+i79tc6rHwtltXaI2Vrlg5IlTQx9/EzuVO9hGGzLG40ghUxc/V2ZhEnUkRiccKLQ
-         9HeKhXyYpVlor74czX900/v3V0mu2g0iai98/iOi0BTcUtihay3+cf3qDUVOKvpTxj0o
-         ajLxR/AvyMxTKLrmAJsCSBocFKz/6M22BIgLG+kX3kTRiRVz1eHDG30ztjBgdDqqCrwM
-         XRGPEoagceOprQqtKbzQXixnAXKqO93LrM9DuTlDZ0TrsbBxz0Bi//AswmbQFCkDiCIS
-         est+XXI/s8mE4ONFJ7GdiK0LVJBJ0StL4VN+UQ3+ddKf6oooEg1AfQI41evLp7+2Y10P
-         sVtA==
-X-Gm-Message-State: AC+VfDwjxNVTPJmWyite8H0gZPPbZy0gNaF6lW0eFV4fbthUJ3dhKmzv
-        n/539UiFXHmdwyAAs1t5jmTHrcURg/zJBK1yEinf3g==
-X-Google-Smtp-Source: ACHHUZ4amVIobuPycpFLC2fHeYKXTl1nn9tY9t3tZcZ8KQLrci6OwIYFpzYKhnwEJ6EGI3MQyCTT/zihLmvQ2yroRTk=
-X-Received: by 2002:a05:622a:589:b0:3ed:210b:e698 with SMTP id
- c9-20020a05622a058900b003ed210be698mr754708qtb.7.1687115990926; Sun, 18 Jun
- 2023 12:19:50 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687117498; x=1689709498;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=idXdS9jRPviKMoRt0bBHppB9dZDM/k9Odq0fiPi3ljQ=;
+        b=JkV4ODgw8diu56qVrLue+GWvEmw8r+Alc+jL+HZP5W0pSYqdEmaldIkWDagDy60LJe
+         Hg4eFjIitxJTqwBsEJFwBzJ7dkTnQZ10cok+AlGWsdAjiBVJ3suvWUka4Cd5w6r5FIb4
+         19N3fMdRAiLg69OUjIOmnTkmb2+4XAq7qmAWfLihEGf3x6vtrdqxClbhnBB/tXqGUt1N
+         2Hl9BBDUV6eNFlp7c5LTDADThFCBtS1bnExJlnVs2D6MP9ecWglwUDHMgZZEXT+9Pydg
+         r5ZnhR/NTio6Ve+Ng97P2jDuXB11t1XFK1gAOLf37QAPVcmQoOPNmiK7Pc+gVk+OTlzz
+         vx9A==
+X-Gm-Message-State: AC+VfDxBkOx8VIaDlbZPB+Ed9r8BMCxXLiHrubdW0LZBCciwP2A/yfgx
+        ISJTA0CfEw5uG23oZtBdSa8=
+X-Google-Smtp-Source: ACHHUZ6C9zgdZYCqZ85VizVH6aieT5dj7JUJQJdATrVopZdXeyGOlAOhfCEuzDniurqxZDjJabTyNQ==
+X-Received: by 2002:a05:6402:42c9:b0:51a:4dd9:4308 with SMTP id i9-20020a05640242c900b0051a4dd94308mr2100323edc.2.1687117497730;
+        Sun, 18 Jun 2023 12:44:57 -0700 (PDT)
+Received: from matrix-ESPRIMO-P710 (p57ba2e0b.dip0.t-ipconnect.de. [87.186.46.11])
+        by smtp.gmail.com with ESMTPSA id i17-20020a05640200d100b005183673f2fcsm9014806edu.69.2023.06.18.12.44.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Jun 2023 12:44:56 -0700 (PDT)
+Date:   Sun, 18 Jun 2023 21:44:54 +0200
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: rtl8192e: Add missing entry CFG80211 in Kconfig
+Message-ID: <20230618194454.GA10653@matrix-ESPRIMO-P710>
 MIME-Version: 1.0
-References: <20230526234435.662652-1-yuzhao@google.com> <20230609005943.43041-1-yuzhao@google.com>
-In-Reply-To: <20230609005943.43041-1-yuzhao@google.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Sun, 18 Jun 2023 13:19:14 -0600
-Message-ID: <CAOUHufZm9gDxRoVCc+hrZeyr=n9s-sa0i1DDGkWq2N_N9Sznmw@mail.gmail.com>
-Subject: Re: kvm/x86: multichase benchmark
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Alistair Popple <apopple@nvidia.com>,
-        Anup Patel <anup@brainfault.org>,
-        Ben Gardon <bgardon@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Gavin Shan <gshan@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michael Larabel <michael@michaellarabel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
-        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
-        linux-trace-kernel@vger.kernel.org, x86@kernel.org,
-        linux-mm@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 8, 2023 at 6:59=E2=80=AFPM Yu Zhao <yuzhao@google.com> wrote:
->
-> TLDR
-> =3D=3D=3D=3D
-> Multichase in 64 microVMs achieved 6% more total samples (in ~4 hours) af=
-ter this patchset [1].
->
-> Hardware
-> =3D=3D=3D=3D=3D=3D=3D=3D
-> HOST $ lscpu
-> Architecture:            x86_64
->   CPU op-mode(s):        32-bit, 64-bit
->   Address sizes:         43 bits physical, 48 bits virtual
->   Byte Order:            Little Endian
-> CPU(s):                  128
->   On-line CPU(s) list:   0-127
-> Vendor ID:               AuthenticAMD
->   Model name:            AMD Ryzen Threadripper PRO 3995WX 64-Cores
->     CPU family:          23
->     Model:               49
->     Thread(s) per core:  2
->     Core(s) per socket:  64
->     Socket(s):           1
->     Stepping:            0
->     Frequency boost:     disabled
->     CPU max MHz:         4308.3979
->     CPU min MHz:         2200.0000
->     BogoMIPS:            5390.20
->     Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr=
- pge mca cmov pat pse36 clflush mmx fxsr sse sse2
->                          ...
-> Virtualization features:
->   Virtualization:        AMD-V
-> Caches (sum of all):
->   L1d:                   2 MiB (64 instances)
->   L1i:                   2 MiB (64 instances)
->   L2:                    32 MiB (64 instances)
->   L3:                    256 MiB (16 instances)
-> NUMA:
->   NUMA node(s):          1
->   NUMA node0 CPU(s):     0-127
-> Vulnerabilities:
->   Itlb multihit:         Not affected
->   L1tf:                  Not affected
->   Mds:                   Not affected
->   Meltdown:              Not affected
->   Mmio stale data:       Not affected
->   Retbleed:              Mitigation; untrained return thunk; SMT enabled =
-with STIBP protection
->   Spec store bypass:     Mitigation; Speculative Store Bypass disabled vi=
-a prctl
->   Spectre v1:            Mitigation; usercopy/swapgs barriers and __user =
-pointer sanitization
->   Spectre v2:            Mitigation; Retpolines, IBPB conditional, STIBP =
-always-on, RSB filling, PBRSB-eIBRS Not affected
->   Srbds:                 Not affected
->   Tsx async abort:       Not affected
->
-> HOST $ numactl -H
-> available: 1 nodes (0)
-> node 0 cpus: 0-127
-> node 0 size: 257542 MB
-> node 0 free: 224855 MB
-> node distances:
-> node   0
->   0:  10
->
-> HOST $ cat /sys/class/nvme/nvme0/model
-> INTEL SSDPF21Q800GB
->
-> HOST $ cat /sys/class/nvme/nvme0/numa_node
-> 0
->
-> Software
-> =3D=3D=3D=3D=3D=3D=3D=3D
-> HOST $ cat /etc/lsb-release
-> DISTRIB_ID=3DUbuntu
-> DISTRIB_RELEASE=3D22.04
-> DISTRIB_CODENAME=3Djammy
-> DISTRIB_DESCRIPTION=3D"Ubuntu 22.04.1 LTS"
->
-> HOST $ uname -a
-> Linux x86 6.4.0-rc5+ #1 SMP PREEMPT_DYNAMIC Wed Jun  7 22:17:47 UTC 2023 =
-x86_64 x86_64 x86_64 GNU/Linux
->
-> HOST $ cat /proc/swaps
-> Filename          Type         Size         Used    Priority
-> /dev/nvme0n1p2    partition    466838356    0       -2
->
-> HOST $ cat /sys/kernel/mm/lru_gen/enabled
-> 0x000f
->
-> HOST $ cat /sys/kernel/mm/transparent_hugepage/enabled
-> always madvise [never]
->
-> HOST $ cat /sys/kernel/mm/transparent_hugepage/defrag
-> always defer defer+madvise madvise [never]
->
-> Procedure
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D
-> HOST $ git clone https://github.com/google/multichase
->
-> HOST $ <Build multichase>
-> HOST $ <Unpack /boot/initrd.img into ./initrd/>
->
-> HOST $ cp multichase/multichase ./initrd/bin/
-> HOST $ sed -i \
->     "/^maybe_break top$/i multichase -t 2 -m 4g -n 28800; poweroff" \
+Add missing entry CFG80211 in Kconfig to ensure that CFG80211 is
+available when selecting hardware rtl8192e.
 
-I was reminded that I missed one parameter above, i.e.,
+Fixes: d88b46ce5ab8 ("staging: rtl8192e: Add cfg80211.h and remove defined variables")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202306180620.Ew55XtKJ-lkp@intel.com/
+Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+---
+Tested with rtl8192e (WLL6130-D99)
+Transferred this patch over wlan connection of rtl8192e
+---
+ drivers/staging/rtl8192e/rtl8192e/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-"/^maybe_break top$/i multichase -N -t 2 -m 4g -n 28800; poweroff" \
-                                 ^^
+diff --git a/drivers/staging/rtl8192e/rtl8192e/Kconfig b/drivers/staging/rtl8192e/rtl8192e/Kconfig
+index eae8167f79dd..f8f774a16295 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/Kconfig
++++ b/drivers/staging/rtl8192e/rtl8192e/Kconfig
+@@ -3,6 +3,7 @@ config RTL8192E
+ 	tristate "RealTek RTL8192E Wireless LAN NIC driver"
+ 	depends on PCI && WLAN && RTLLIB
+ 	depends on m
++	select CFG80211
+ 	select WIRELESS_EXT
+ 	select WEXT_PRIV
+ 	select CRYPTO
+-- 
+2.40.1
 
->     ./initrd/init
->
-> HOST $ <Pack ./initrd/ into ./initrd.img>
->
-> HOST $ cat run_microvms.sh
-> memcgs=3D64
->
-> run() {
->     path=3D/sys/fs/cgroup/memcg$1
->
->     mkdir $path
->     echo $BASHPID >$path/cgroup.procs
-
-And one line here:
-
-echo 4000m >$path/memory.min # or the largest size that doesn't cause OOM k=
-ills
-
->     qemu-system-x86_64 -M microvm,accel=3Dkvm -cpu host -smp 2 -m 6g \
->         -nographic -kernel /boot/vmlinuz -initrd ./initrd.img \
->         -append "console=3DttyS0 loglevel=3D0"
-> }
->
-> for ((memcg =3D 0; memcg < $memcgs; memcg++)); do
->     run $memcg &
-> done
->
-> wait
->
-> Results
-> =3D=3D=3D=3D=3D=3D=3D
->                  Before [1]    After    Change
-> ----------------------------------------------
-> Total samples    6824          7237     +6%
->
-> Notes
-> =3D=3D=3D=3D=3D
-> [1] "mm: rmap: Don't flush TLB after checking PTE young for page
->     reference" was included so that the comparison is apples to
->     Apples.
->     https://lore.kernel.org/r/20220706112041.3831-1-21cnbao@gmail.com/
