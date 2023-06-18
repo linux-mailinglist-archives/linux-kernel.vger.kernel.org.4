@@ -2,136 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A0173463C
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 15:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D0B73464A
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 15:23:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjFRNIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 09:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38266 "EHLO
+        id S229676AbjFRNXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 09:23:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjFRNIJ (ORCPT
+        with ESMTP id S229659AbjFRNXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 09:08:09 -0400
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB8AB0;
-        Sun, 18 Jun 2023 06:08:08 -0700 (PDT)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4QkY9J6FFsz9sq0;
-        Sun, 18 Jun 2023 15:08:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mariushoch.de;
-        s=MBO0001; t=1687093684;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UEYGb76FFpCH3VvdAihjEP00oTFhKJZ92WOIg9ErGZo=;
-        b=G4QWYfxQAmEx2waUZWevykuIDbHdpQ4PgvrthOgCKa3NLusQHSOqK2f7QWv9DRf30Tyc/V
-        dtPrSbn/3yjpJuY+xMs90x42VRJcGjzec52IbkT/0reUFKVTaxxfcHo5/lj4bX8sC1IkF3
-        sNLcwdBGxUcOhAf0iI80GpvfxnmKepKl4YCOkXSl5ZJUWTbiOf8oBZ2U8oi+AAVtPO0U+v
-        JTzaukBnZgBxuH2ePEESl5oMTMmxTQZcEYctvtQSAtmEJ0Wl5gjtlngmDN1j+I93BNqmGr
-        se6m2xQStWXJAFjYLBaABYHjo+15b4wX4IqAXbBhBoYykSW5FOJisF9t1VS/9Q==
-Message-ID: <2648642f-3078-aebf-7920-7eceed044dc8@mariushoch.de>
-Date:   Sun, 18 Jun 2023 15:08:03 +0200
+        Sun, 18 Jun 2023 09:23:11 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F2BD12F;
+        Sun, 18 Jun 2023 06:23:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687094588; x=1718630588;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FVlwepFy/UglT5MUNxy17NwDKspoxGIR9qfU/vyDNtI=;
+  b=GI7as7+xH50gOW8GpW0dmvfKQGVqPxveId98UYLOSX4iBmV86b3IPY7K
+   jF3lXRDcDuqpMfT0foXa9Ri5LIql4tulS0Zw+4DyYOMKsRfCJWjnHaAhE
+   Sk0slrRu69AxAK46/felmUvjhFeDA/X/asCjRk9ClUKVTfA63g/J5U936
+   Bvvt8Ux84ZEsWQbK8iEJWdTIgHJThWukbGFJj0B8M6V00C1KvpISWAACk
+   SJJY2t/YWgBZGemP9V5cvBirb+iej/JvUlh5XKCLr6A5iEPE/wr1J0s3a
+   ZAUy7+1Go2eJzfXzivfD1KPZCoXa1bGYNcmZPHBuTacT8HZi+8JR2aueq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="356967032"
+X-IronPort-AV: E=Sophos;i="6.00,252,1681196400"; 
+   d="scan'208";a="356967032"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2023 06:23:08 -0700
+X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="747146720"
+X-IronPort-AV: E=Sophos;i="6.00,252,1681196400"; 
+   d="scan'208";a="747146720"
+Received: from unknown (HELO localhost.localdomain) ([10.226.216.116])
+  by orsmga001.jf.intel.com with ESMTP; 18 Jun 2023 06:23:03 -0700
+From:   niravkumar.l.rabara@intel.com
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Niravkumar L Rabara <niravkumar.l.rabara@intel.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Wen Ping <wen.ping.teh@intel.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, netdev@vger.kernel.org,
+        Adrian Ng Ho Yin <adrian.ho.yin.ng@intel.com>
+Subject: [PATCH 0/4] Add support for Agilex5 SoCFPGA platform
+Date:   Sun, 18 Jun 2023 21:22:31 +0800
+Message-Id: <20230618132235.728641-1-niravkumar.l.rabara@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: Re: [PATCH 1/2] i2c: i801: Force no IRQ for Dell Latitude E7450
-Content-Language: en-US
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230514103634.235917-1-mail@mariushoch.de>
- <20230514103634.235917-2-mail@mariushoch.de>
- <20230604163855.5b7ea1e0@endymion.delvare>
-From:   Marius Hoch <mail@mariushoch.de>
-In-Reply-To: <20230604163855.5b7ea1e0@endymion.delvare>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 4QkY9J6FFsz9sq0
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jean,
+From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
 
-On 04/06/2023 16:38, Jean Delvare wrote:
-> On Sun, 14 May 2023 12:36:33 +0200, Marius Hoch wrote:
->> The Dell Latitude E7450 uses IRQ 18 for the accelerometer,
->> but also claims that the SMBus uses IRQ 18. This will
->> result in:
->>
->> i801_smbus 0000:00:1f.3: PCI INT C: failed to register GSI
->> i801_smbus 0000:00:1f.3: Failed to enable SMBus PCI device (-16)
->> i801_smbus: probe of 0000:00:1f.3 failed with error -16
->>
->> Force the SMBus IRQ to IRQ_NOTCONNECTED in this case, so that
->> we fall back to polling, which also seems to be what the (very
->> dated) Windows 7 drivers on the Dell Latitude E7450 do.
->>
->> This was tested on Dell Latitude E7450.
->>
->> Signed-off-by: Marius Hoch <mail@mariushoch.de>
->> ---
->>   drivers/i2c/busses/i2c-i801.c | 20 ++++++++++++++++++++
->>   1 file changed, 20 insertions(+)
->>
->> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
->> index ac5326747c51..5fd2ac585160 100644
->> --- a/drivers/i2c/busses/i2c-i801.c
->> +++ b/drivers/i2c/busses/i2c-i801.c
->> @@ -1624,6 +1624,20 @@ static void i801_setup_hstcfg(struct i801_priv *priv)
->>   	pci_write_config_byte(priv->pci_dev, SMBHSTCFG, hstcfg);
->>   }
->>   
->> +/**
-> As reported by the kernel test robot, please don't start a comment with
-> /** unless it's a kernel-doc-style comment.
->
->> + * These DELL devices claim an IRQ for the SMBus (usually 18), but we can't use
->> + * it, as its actually for the I2C accelerometer.
->> + */
->> +static const struct dmi_system_id dmi_force_no_irq[] = {
->> +	{
->> +		.matches = {
->> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
->> +			DMI_MATCH(DMI_PRODUCT_NAME, "Latitude E7450"),
->> +		},
->> +	},
->> +	{} /* Terminating entry */
->> +};
->> +
->>   static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
->>   {
->>   	int err, i;
->> @@ -1657,6 +1671,12 @@ static int i801_probe(struct pci_dev *dev, const struct pci_device_id *id)
->>   	if (!(priv->features & FEATURE_BLOCK_BUFFER))
->>   		priv->features &= ~FEATURE_BLOCK_PROC;
->>   
->> +	if (dmi_check_system(dmi_force_no_irq)) {
-> If the problem is caused by dev->irq being 255, and now that we know
-> that this value is special on x86, wouldn't it make more sense to
-> restrict this quirk to CONFIG_X86 and simply check for dev->irq ==
-> 0xff? This would save us the extra effort of maintaining a list of
-> machines which need the quirk.
->
->> +		/* Force no IRQ for these devices, otherwise pcim_enable_device will fail */
->> +		dev->irq = IRQ_NOTCONNECTED;
->> +		dev->irq_managed = 1;
-> This field is undocumented so I have no idea what it does. Is it not
-> sufficient to set irq to IRQ_NOTCONNECTED?
-If irq_managed is not set our irq value will be entirely ignored it 
-seems (thus leading to the same code path/ failure initially outlined).
->
->> +	}
->> +
->>   	err = pcim_enable_device(dev);
->>   	if (err) {
->>   		dev_err(&dev->dev, "Failed to enable SMBus PCI device (%d)\n",
->
+This patch set introduce the changes required for Agilx5 platform.
+
+patch [1/4] - Introduced compatible string for Agilex5 board
+patch [2/4] - Add reset and clock header and yaml file.
+patch [3/4] - Add clock driver for Agilex5 platform. This patch depends
+on patch 2.
+patch [4/4] - Add device tree files, socfpga_agilex5_socdk_swvp.dts is
+used for Virtual Platform (SIMICS) and socfpga_agilex5_socdk_nand.dts
+is used for NAND Flash based board. This patch depends on patch 3.
+
+Niravkumar L Rabara (4):
+  dt-bindings: intel: Add Intel Agilex5 compatible
+  dt-bindings: clock: Add Intel Agilex5 clocks and resets
+  clk: socfpga: agilex5: Add clock driver for Agilex5 platform
+  arm64: dts: agilex5: Add initial support for Intel's Agilex5 SoCFPGA
+
+ .../bindings/arm/intel,socfpga.yaml           |   1 +
+ .../bindings/clock/intel,agilex5.yaml         |  42 +
+ arch/arm64/boot/dts/intel/Makefile            |   3 +
+ .../arm64/boot/dts/intel/socfpga_agilex5.dtsi | 641 +++++++++++++
+ .../boot/dts/intel/socfpga_agilex5_socdk.dts  | 184 ++++
+ .../dts/intel/socfpga_agilex5_socdk_nand.dts  | 131 +++
+ .../dts/intel/socfpga_agilex5_socdk_swvp.dts  | 248 ++++++
+ drivers/clk/socfpga/Kconfig                   |   4 +-
+ drivers/clk/socfpga/Makefile                  |   2 +-
+ drivers/clk/socfpga/clk-agilex5.c             | 843 ++++++++++++++++++
+ drivers/clk/socfpga/clk-pll-s10.c             |  48 +
+ drivers/clk/socfpga/stratix10-clk.h           |   2 +
+ include/dt-bindings/clock/agilex5-clock.h     | 100 +++
+ .../dt-bindings/reset/altr,rst-mgr-agilex5.h  |  79 ++
+ 14 files changed, 2325 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/intel,agilex5.yaml
+ create mode 100644 arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi
+ create mode 100644 arch/arm64/boot/dts/intel/socfpga_agilex5_socdk.dts
+ create mode 100644 arch/arm64/boot/dts/intel/socfpga_agilex5_socdk_nand.dts
+ create mode 100644 arch/arm64/boot/dts/intel/socfpga_agilex5_socdk_swvp.dts
+ create mode 100644 drivers/clk/socfpga/clk-agilex5.c
+ create mode 100644 include/dt-bindings/clock/agilex5-clock.h
+ create mode 100644 include/dt-bindings/reset/altr,rst-mgr-agilex5.h
+
+-- 
+2.25.1
 
