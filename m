@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DC4D7347ED
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 21:17:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 268B77347F2
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 21:18:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbjFRTQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 15:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38196 "EHLO
+        id S229560AbjFRTSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 15:18:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjFRTQy (ORCPT
+        with ESMTP id S229493AbjFRTSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 15:16:54 -0400
+        Sun, 18 Jun 2023 15:18:12 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065B6F5;
-        Sun, 18 Jun 2023 12:16:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68078FC;
+        Sun, 18 Jun 2023 12:18:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 976A560DCF;
-        Sun, 18 Jun 2023 19:16:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91F95C433C0;
-        Sun, 18 Jun 2023 19:16:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED67E60C91;
+        Sun, 18 Jun 2023 19:18:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF233C433C8;
+        Sun, 18 Jun 2023 19:18:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687115812;
-        bh=mP8T1ASBLz9yF5+LfqYXClRBj0tfB2v2jcwuuySoPKY=;
+        s=k20201202; t=1687115890;
+        bh=/vS2RnSOJk0DnospOK4BfOYwwbxR6nlM/Q7dvGK/FTQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VbJ8j8piIg2GaSBa8rWY6dUZBgm7/wL4k8ZeVH4fnTMbgUT15yDmQXjVbegnKCcSO
-         qVK+SeNyt8BB17OqxQbnLV+yqyEttEaVpRgOyBgCpvAmAaGR/oarQh2IjFG13B8oz2
-         I9czn0mTPnDZ030K3X7sKbIzN8qdV+25YeKq3J9rX6rZuQMp37llg7siFiPaTTC/Pd
-         4zMH9Jdop2CQu01M6tlEsU2PBrn+1JEA6zMTycVKiC0uumk1Xy4f663aBKj4KD/MYV
-         BfllbD+UMwNO2mRO3p0bPeunlPdfUi/NUGrj+b3bQRktNH2W8HnKk8Z1C9WCBAT1eQ
-         Ar4SRL7yANn5Q==
-Date:   Sun, 18 Jun 2023 20:16:46 +0100
+        b=jZFv52WuCzEwuk4QP8lx6cwSDc7mFFmDfvm5z5jr32GHXC0EnkI1AiW5A67RhchT2
+         bEKKFKdX+wys/vD/MVI9c5CPUHKQSwjFexot7zNQ3aC34wSVbXsUpqU+fNBL1VcQmf
+         +omPHhTF1BQNJfR746/ZpPUX3AtzVRo9hRfnQ0kvJa+NOJyyH8cXS8KNuyG8I6CMQw
+         lOcBuxVGanIn5qh91fR6Issb7i5mRLmOLjQMJW9Lb4BI2OR5aI/nRbwg33zRPDa1g6
+         DepmsnuXaXlAtjh9jTDR9y3ZyzuY9R6eznGecH9j5zFFAC6nUv3x5M+zGNGibaX2xH
+         lgQVFyALfxoYw==
+Date:   Sun, 18 Jun 2023 20:18:04 +0100
 From:   Conor Dooley <conor@kernel.org>
 To:     Lucas Tanure <tanure@linux.com>
 Cc:     Rob Herring <robh+dt@kernel.org>,
@@ -49,18 +49,17 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH 2/6] dt-bindings: clock: Bindings for Meson T7 clock
- controller
-Message-ID: <20230618-silver-spherical-e7363a9fc3b0@spud>
+Subject: Re: [PATCH 4/6] dt-bindings: serial: amlogic, meson-uart: support T7
+Message-ID: <20230618-ammonium-scratch-2990eb8c3ac7@spud>
 References: <20230615182938.18487-1-tanure@linux.com>
- <20230615182938.18487-3-tanure@linux.com>
- <20230615-capable-implicit-90a8f0265616@spud>
- <CAJX_Q+2Gm6mr_2cbhCh7a_bOw09W2PBxyOAvasGCrPTdcruczQ@mail.gmail.com>
+ <20230615182938.18487-5-tanure@linux.com>
+ <20230615-mushroom-numeric-3a4c03f2204b@spud>
+ <CAJX_Q+2ND=GJEEXdLLpEWoecN5gtZm-1i92pAgi+eQocSRUVqw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="BJPwe1aiOa3RKn6U"
+        protocol="application/pgp-signature"; boundary="gLIFy3noUErwq6fk"
 Content-Disposition: inline
-In-Reply-To: <CAJX_Q+2Gm6mr_2cbhCh7a_bOw09W2PBxyOAvasGCrPTdcruczQ@mail.gmail.com>
+In-Reply-To: <CAJX_Q+2ND=GJEEXdLLpEWoecN5gtZm-1i92pAgi+eQocSRUVqw@mail.gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -72,151 +71,75 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---BJPwe1aiOa3RKn6U
+--gLIFy3noUErwq6fk
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Jun 18, 2023 at 06:39:17PM +0100, Lucas Tanure wrote:
-> On Thu, Jun 15, 2023 at 10:41=E2=80=AFPM Conor Dooley <conor@kernel.org> =
+On Sun, Jun 18, 2023 at 06:37:40PM +0100, Lucas Tanure wrote:
+> On Thu, Jun 15, 2023 at 10:25=E2=80=AFPM Conor Dooley <conor@kernel.org> =
 wrote:
 > >
-> > Hey Lucas,
-> >
-> > On Thu, Jun 15, 2023 at 07:29:34PM +0100, Lucas Tanure wrote:
-> > > Add documentation for T7 the clock controller.
-> >
-> > Other than the bot's complaint, few comments for ya.
-> >
+> > On Thu, Jun 15, 2023 at 07:29:36PM +0100, Lucas Tanure wrote:
+> > > Add serial bindings support menson T7 SoC family.
+> > >
 > > > Signed-off-by: Lucas Tanure <tanure@linux.com>
 > > > ---
-> > >  .../bindings/clock/amlogic,mesont7.yaml       |  69 +++
-> > >  include/dt-bindings/clock/mesont7-clkc.h      | 487 ++++++++++++++++=
-++
-> > >  2 files changed, 556 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/clock/amlogic,m=
-esont7.yaml
-> > >  create mode 100644 include/dt-bindings/clock/mesont7-clkc.h
+> > >  Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml | 1=
+ +
+> > >  1 file changed, 1 insertion(+)
 > > >
-> > > diff --git a/Documentation/devicetree/bindings/clock/amlogic,mesont7.=
-yaml b/Documentation/devicetree/bindings/clock/amlogic,mesont7.yaml
-> > > new file mode 100644
-> > > index 000000000000..18e7cca0c0e1
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/clock/amlogic,mesont7.yaml
+> > > diff --git a/Documentation/devicetree/bindings/serial/amlogic,meson-u=
+art.yaml b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+> > > index 01ec45b3b406..01b01f8840ea 100644
+> > > --- a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+> > > +++ b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+> > > @@ -46,6 +46,7 @@ properties:
+> > >            - amlogic,meson8b-uart
+> > >            - amlogic,meson-gx-uart
+> > >            - amlogic,meson-s4-uart
+> > > +          - amlogic,meson-t7-uart
 > >
-> > The filename should match the compatible - please test the bindings,
-> > dt_binding_check will complain.
+> > | diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/mes=
+on_uart.c
+> > | index 2501db5a7aaf..0208f9a6ba7e 100644
+> > | --- a/drivers/tty/serial/meson_uart.c
+> > | +++ b/drivers/tty/serial/meson_uart.c
+> > | @@ -796,6 +796,10 @@ static const struct of_device_id meson_uart_dt_m=
+atch[] =3D {
+> > |                 .compatible =3D "amlogic,meson-s4-uart",
+> > |                 .data =3D (void *)&meson_g12a_uart_data,
+> > |         },
+> > | +       {
+> > | +               .compatible =3D "amlogic,meson-t7-uart",
+> > | +               .data =3D (void *)&meson_g12a_uart_data,
+> > | +       },
+> > |         { /* sentinel */ },
+> > |  };
+> > |  MODULE_DEVICE_TABLE(of, meson_uart_dt_match);
 > >
-> > > @@ -0,0 +1,69 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/clock/amlogic,mesont7-clk.yaml#
-> >
-> > and this should match the filename
-> >
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Amlogic Meson T7 Clock Controller
-> > > +
-> > > +maintainers:
-> > > +  - Lucas Tanure <tanure@linux.com>
-> > > +
-> > > +description: |
-> > > +  The Amlogic Meson T7 clock controller generates and supplies clock=
- to
-> > > +  various peripherals within the SoC.
-> > > +
-> > > +  This binding uses common clock bindings
-> > > +  [1] Documentation/devicetree/bindings/clock/clock-bindings.txt
-> >
-> > This doesn't add anything as you're adding a yaml binding. I'd drop it
-> > (and the | from description: since you would no longer have formatting
-> > to preserve).
-> >
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    const: amlogic,t7-clkc
-> > > +
-> > > +  reg:
-> > > +    items:
-> > > +      - description: basic registers
-> >
-> > What does "basic registers" mean? I think you should be more specific in
-> > your description.
-> >
-> > > +      - description: pll registers
-> > > +      - description: cpu_clk registers
-> > > +
-> > > +  reg-names:
-> > > +    items:
-> > > +      - const: basic
-> > > +      - const: pll
-> > > +      - const: cpu_clk
-> > > +
-> > > +  clocks:
-> > > +    maxItems: 1
-> > > +
-> > > +  clock-names:
-> > > +    const: xtal
-> > > +
-> > > +  '#clock-cells':
-> > > +    const: 1
-> > > +
-> > > +required:
-> > > +  - compatible
-> > > +  - reg
-> > > +  - reg-names
-> > > +  - clocks
-> > > +  - clock-names
-> > > +  - '#clock-cells'
-> > > +
-> > > +additionalProperties: false
-> > > +
-> > > +examples:
-> > > +  # Clock controller node:
-> > > +  - |
-> > > +    clkc: clock-controller {
-> >
-> > The comment above and the node name here can be dropped.
-> > You do however need to change "clock-controller" to
-> > "clock-controller@<addr>".
-> >
-> > > +        compatible =3D "amlogic,t7-clkc";
-> > > +        #clock-cells =3D <1>;
-> > > +        reg =3D <0x0 0x0000 0x00 0x49c>,
-> > > +              <0x0 0x8000 0x00 0x320>,
-> > > +              <0x0 0xe040 0x00 0x0bc>;
-> >
-> > Drop the 0x0 stuff from here.
-> >
-> > > +        reg-names =3D "basic", "pll", "cpu_clk";
-> > > +        clocks =3D <&xtal>;
-> > > +        clock-names =3D "xtal";
-> > > +        status =3D "okay";
-> >
-> > status can be dropped, okay is the default.
-> >
-> > Cheers,
-> > Conor.
-> >
-> I will drop this patch for now, wait for the S4 clock driver to be
-> upstreamed, and use that as a base.
+> > You're adding another element to this enum, but the driver change
+> > implies compatibility with the s4 uart. Should you not set this up with
+> > fallback compatibles?
+>=20
+> I will drop this patch and use the s4 and g12a compatible strings.
 
-Why? Is the t7-clkc IP the same or very similar to the S4?
+You still need to add a compatible for the t7, just let it fall back to
+one of the others. Eg:
+compatible =3D "amlogic,meson-t7-uart", "amlogic,meson-s4-uart";
 
+Cheers,
+Conor.
 
---BJPwe1aiOa3RKn6U
+--gLIFy3noUErwq6fk
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZI9YHgAKCRB4tDGHoIJi
-0pTeAQCTxIXdRlt+4mb9a05/Kfer0GAM2qFkhTwzSLdmPX4jYwEAxZtr/ZglN5FX
-V0pBA6p+7HCWHtSFGaf63zHs1OoVqQw=
-=Lgfe
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZI9YbAAKCRB4tDGHoIJi
+0pSJAP4pCeRXWnB2Azet+8vaCW46xvhOyL8mjbZXG+XvzEZAEwD/TE2Nc5oOrKfm
+tgEfqnMjGs3egm4P1F5l0K+qluDHmgM=
+=1dUJ
 -----END PGP SIGNATURE-----
 
---BJPwe1aiOa3RKn6U--
+--gLIFy3noUErwq6fk--
