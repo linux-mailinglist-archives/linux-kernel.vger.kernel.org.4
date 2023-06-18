@@ -2,103 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F5067345E8
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 13:42:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F79B7345EC
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 13:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbjFRLmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 07:42:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53336 "EHLO
+        id S229777AbjFRLox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 07:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjFRLmD (ORCPT
+        with ESMTP id S229762AbjFRLov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 07:42:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2B2E5E;
-        Sun, 18 Jun 2023 04:42:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0197A60F6B;
-        Sun, 18 Jun 2023 11:42:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5992EC433C0;
-        Sun, 18 Jun 2023 11:41:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687088520;
-        bh=BFmIrutDYG4LB/6zb/Nq9wLMZ8zxH9TishG/byWakZw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=nyXluhSZyi5w0ELiAjionCSz2q0Fhr8mg7NxOyVCVHZZJXdVx5o4MujlqZ0mYCPhp
-         uM2gXLUbGjewDDyVrJ2tAQUKyLMJ3DRhfsGLZee7v0CtSdnnPGKvBxQuOmmCtfu00S
-         mfCQqO6ImWwDP8tGQ2g95k4cfnUYmRTOtf0OZFskNQlkqV5x9L64K67DNWHoHWbQrI
-         CzSZWfJbVa1fEJX9tT3ltI450mR1nsaHWwaXAiDeoU77n9y7ut4cqokJw9xWxPrpNd
-         +gMW+f6euw7tgL6tHFjklmCL0diW9XhwYxz/0+C97kB8SIojtktp7Z9Pw4ibvmcnvU
-         hcR5HfR+C6evQ==
-Message-ID: <d0d12af5-4dd6-b153-f1fc-123721bfd929@kernel.org>
-Date:   Sun, 18 Jun 2023 20:41:56 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v4 5/5] arm64: dts: rockchip: rk3588: add SATA support
-Content-Language: en-US
-To:     =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        Sun, 18 Jun 2023 07:44:51 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54F410D0
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 04:44:48 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-987accb4349so208007566b.0
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 04:44:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687088687; x=1689680687;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=E2l62kT3eiLEXqJg8CxMuWY141wzPG/hn4e3QVCnoRo=;
+        b=whUyseXZjMZhBSfuawXlWU0LfE0rSHAdHQOKBNAIR+CrxT7m1V70RciIGp+YM6yHAO
+         6HBjvZg59OnFQ4FTYrhHWz5++OfJmZjh/N1fMrMG1FYn+jIlnvSs16EKkW38KUlxWgio
+         twb0wyP77TH8tW4/r30MLeOnFhuNQ9SbU2FJOTXg8m34sdv0HKH3NlW9bzL0L8rea+5X
+         7+SfIZjHdAkxwP9JjrWJeeUFZvoQhXWdST7kMH8kfsm8/k77iwPEhnpRzgTCMT+zKXOY
+         cPycoOoQ4QcAEbwMvox/Y1BPmrDkEgwXjUsIdQ+5Rs1r5HRxRTVYJ+6mzBdG0kstlCtA
+         ytVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687088687; x=1689680687;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=E2l62kT3eiLEXqJg8CxMuWY141wzPG/hn4e3QVCnoRo=;
+        b=YSR/24+49yyNKLAQfTgO+99yjR+Uyma+Hv/ntUO5gRdvdiSc2Q8vlTwZKBvrzMihcA
+         bw3vTZe6SbAOseKoG9yaU8OuKauiawhKKgOr9qTxS1bUwXQq3n0Tt0M9VaZIS7wJdim7
+         9V3qH0lTKpoENmCBx5wgdOtgpp5DGYV1tIM+/c5iruQrTxF/ppBqi5w3BAjxrN7lKyYF
+         NMqVlCafJy/fPkl2MZwo7xtLgH2zqtd4iWV+9HbLeztnxjTi9M+wtZk/e8s0oKwx0edo
+         uTnzMNhbdGtGtgDhV/OD0zgT8dDrw06LBxWA2LoowFV274PEeA2V6Hxsh2x54Qo3aULX
+         XGug==
+X-Gm-Message-State: AC+VfDy9eivODf7O5p6UyQI5m6TxSVJvWdYkKCQjtJphhxcsEzdRmzRn
+        +In57Nrb6X0/o/zHtVDM/gp/zg==
+X-Google-Smtp-Source: ACHHUZ7OkwHwZ354uyf5KpKgxVBy17PLodEGLL3XG9b4tYp1rBqRcUayxXIOn5EkFUKTc1VIZ7I1Gw==
+X-Received: by 2002:a17:907:7e91:b0:973:cb21:8479 with SMTP id qb17-20020a1709077e9100b00973cb218479mr7048460ejc.70.1687088687234;
+        Sun, 18 Jun 2023 04:44:47 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id p4-20020a1709060dc400b0096f937b0d3esm13183854eji.3.2023.06.18.04.44.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Jun 2023 04:44:46 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-ide@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-References: <20230612171337.74576-1-sebastian.reichel@collabora.com>
- <20230612171337.74576-6-sebastian.reichel@collabora.com>
- <fa42c1ad-c411-2121-92f7-fc1e1f0f8172@kernel.org> <4844617.31r3eYUQgx@diego>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <4844617.31r3eYUQgx@diego>
-Content-Type: text/plain; charset=UTF-8
+        Conor Dooley <conor+dt@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/7] arm64: dts: qcom: sm8350-hdk: correct FSA4480 port
+Date:   Sun, 18 Jun 2023 13:44:36 +0200
+Message-Id: <20230618114442.140185-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/18/23 17:13, Heiko Stübner wrote:
-> Hi Damien,
-> 
-> Am Sonntag, 18. Juni 2023, 05:10:58 CEST schrieb Damien Le Moal:
->> On 6/13/23 02:13, Sebastian Reichel wrote:
->>> Add all three SATA IP blocks to the RK3588 DT.
->>>
->>> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
->>
->> This patch does not apply to libata for-6.5 branch. What is it based on ?
-> 
-> I guess probably either mainline or my dts-branch [0] .
-> 
-> Most of the time we have series doing driver changes + devicetree changes
-> where subsystem maintainers pick the driver + binding patches 
-> (1-3 in this case) and after that I pick the devicetree changes (4-5 here).
+FSA4480 has only one port according to bindings:
 
-OK. I will queue 1-3 only then. Please pickup 4 & 5.
-Thanks !
+  sm8350-hdk.dtb: typec-mux@42: 'port' is a required property
 
-> 
-> 
-> Heiko
-> 
-> 
-> [0] https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git/log/?h=v6.5-armsoc/dts64
-> 
-> 
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/sm8350-hdk.dts | 13 +++----------
+ 1 file changed, 3 insertions(+), 10 deletions(-)
 
+diff --git a/arch/arm64/boot/dts/qcom/sm8350-hdk.dts b/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
+index b182f4cf06cc..95a2a42ccb9e 100644
+--- a/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
++++ b/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
+@@ -349,16 +349,9 @@ typec-mux@42 {
+ 		mode-switch;
+ 		orientation-switch;
+ 
+-		ports {
+-			#address-cells = <1>;
+-			#size-cells = <0>;
+-
+-			port@0 {
+-				reg = <0>;
+-
+-				fsa4480_sbu_mux: endpoint {
+-					remote-endpoint = <&pmic_glink_sbu>;
+-				};
++		port {
++			fsa4480_sbu_mux: endpoint {
++				remote-endpoint = <&pmic_glink_sbu>;
+ 			};
+ 		};
+ 	};
 -- 
-Damien Le Moal
-Western Digital Research
+2.34.1
 
