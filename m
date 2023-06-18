@@ -2,47 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63F1C7345DD
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 12:40:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 314B47345DF
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 13:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbjFRKkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 06:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49042 "EHLO
+        id S229730AbjFRLAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 07:00:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjFRKk3 (ORCPT
+        with ESMTP id S229489AbjFRK77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 06:40:29 -0400
+        Sun, 18 Jun 2023 06:59:59 -0400
 Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684ADE60;
-        Sun, 18 Jun 2023 03:40:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7ADEE
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 03:59:58 -0700 (PDT)
 Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
         by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qAppU-0005HL-1I; Sun, 18 Jun 2023 12:40:20 +0200
-Message-ID: <d698b838-57e0-d019-a783-c229c04eeca4@leemhuis.info>
-Date:   Sun, 18 Jun 2023 12:40:19 +0200
+        id 1qAq8P-0001Ly-D2; Sun, 18 Jun 2023 12:59:53 +0200
+Message-ID: <d8e0e211-6e2c-6aba-9ffd-84833872f559@leemhuis.info>
+Date:   Sun, 18 Jun 2023 12:59:52 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Re: [linus:master] [mm] f95bdb700b: stress-ng.ramfs.ops_per_sec
+ -88.8% regression
 Content-Language: en-US, de-DE
-To:     Jeff Layton <jlayton@kernel.org>, Chuck Lever <cel@kernel.org>
-Cc:     Chuck Lever <chuck.lever@oracle.com>, Neil Brown <neilb@suse.de>,
-        Olga Kornievskaia <kolga@netapp.com>,
-        Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
-        stable@vger.kernel.org, Eirik Fuller <efuller@redhat.com>,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230616191744.202292-1-jlayton@kernel.org>
- <ZIzFp3ViiU2SCi6J@manet.1015granger.net>
- <4b5063eb5a1139adc9dd4bdadde30674faee0700.camel@kernel.org>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: Re: [PATCH] nfsd: move init of percpu reply_cache_stats counters back
- to nfsd_init_net
-In-Reply-To: <4b5063eb5a1139adc9dd4bdadde30674faee0700.camel@kernel.org>
+To:     kernel test robot <yujie.liu@intel.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>
+Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Kirill Tkhai <tkhai@ya.ru>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        David Hildenbrand <david@redhat.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yang Shi <shy828301@gmail.com>, linux-mm@kvack.org,
+        ying.huang@intel.com, feng.tang@intel.com, fengwei.yin@intel.com,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+References: <202305230837.db2c233f-yujie.liu@intel.com>
+From:   "Linux regression tracking #adding (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+In-Reply-To: <202305230837.db2c233f-yujie.liu@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1687084825;3626a0dc;
-X-HE-SMSGID: 1qAppU-0005HL-1I
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1687085998;c33207e6;
+X-HE-SMSGID: 1qAq8P-0001Ly-D2
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,39 +62,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.06.23 22:54, Jeff Layton wrote:
-> On Fri, 2023-06-16 at 16:27 -0400, Chuck Lever wrote:
->> Thanks Eirik and Jeff.
->>
->> At this point in the release cycle, I plan to apply this for the
->> next merge window (6.5).
+[TLDR: I'm adding this report to the list of tracked Linux kernel
+regressions; the text you find below is based on a few templates
+paragraphs you might have encountered already in similar form.
+See link in footer if these mails annoy you.]
+
+On 23.05.23 03:35, kernel test robot wrote:
+> Hello,
 > 
-> I think we should take this in sooner. This is a regression and a
-> user-triggerable oops in the right situation. If:
+> kernel test robot noticed a -88.8% regression of stress-ng.ramfs.ops_per_sec on:
 > 
-> - non-x86_64 arch
-> - /proc/fs/nfsd is mounted in the namespace
-> - nfsd is not started in the namespace
-> - unprivileged user calls "cat /proc/fs/nfsd/reply_cache_stats"
+> commit: f95bdb700bc6bb74e1199b1f5f90c613e152cfa7 ("mm: vmscan: make global slab shrink lockless")
+> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
 
-FWIW, might be worth to simply tell Linus about it and let him decide,
-that's totally fine and even documented in the old and the new docs for
-handling regressions[1].
+To be sure Linus is aware of the pending revert before releasing -rc7,
+let me add this to the list of tracked regressions:
 
-[1]
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/Documentation/process/handling-regressions.rst?id=eed892da9cd08be76a8f467c600ef58716dbb4d2
+#regzbot ^introduced f95bdb700bc6bb74e1199b1f5f90c613e152cfa7.
+#regzbot title mm: problems with the SRCU changeover (two reverts pending)
+#regzbot monitor:
+https://lore.kernel.org/all/ZH6K0McWBeCjaf16@dread.disaster.area/
+#regzbot fix: Revert "mm: vmscan: make global slab shrink lockless"
+#regzbot ignore-activity
 
->>> Cc: stable@vger.kernel.org # v6.3+
->>> Fixes: f5f9d4a314da ("nfsd: move reply cache initialization into nfsd startup")
->>
->> Why both Fixes: and Cc: stable?
-> 
-> *shrug* : they mean different things. I can drop the Cc stable.
+Side note: "Revert "mm: vmscan: add shrinker_srcu_generation"" (also in
+mm-hotfixes-unstable/next) is related. See
+https://lore.kernel.org/all/51cbf269-daff-d7b8-653f-7ba388475ab8@linux.dev/
 
-Please leave it, only a stable tag ensures backporting; a fixes tag
-alone is not enough. See [1] above or these recent messages from Greg:
-
-https://lore.kernel.org/all/2023061137-algorithm-almanac-1337@gregkh/
-https://lore.kernel.org/all/2023060703-colony-shakily-3514@gregkh/
-
-Ciao, Thorsten
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
