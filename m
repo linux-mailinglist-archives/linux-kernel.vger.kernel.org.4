@@ -2,84 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E67B7347D8
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 20:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F3F37347E2
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 21:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbjFRS4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 14:56:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
+        id S229635AbjFRTLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 15:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjFRS4N (ORCPT
+        with ESMTP id S229543AbjFRTLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 14:56:13 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20771A8
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 11:56:10 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-988b204ce5fso23049766b.3
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 11:56:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687114569; x=1689706569;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VsBoHcDpVwstkvz8cUllJMFB0Dg9TMKcjmLxE2/Vlro=;
-        b=rTbTJJPOiKE2Q7S3l+fZhg1ov4Tk0SEswxYOMtw7b5JeFb33kHqs7pNnq7rUdWbApl
-         fDknx34ErxqIJGK+s+uylJMbdqyVDMcIZbFDfsedd4HmhvrAffcIFTE91q8D5EqnRiVL
-         azwlpc4gHlwESxdeaCTjKx4HoxVgI/w8C0xOdzpNJt6/AoFPSBUG2aCR2BttVWCtdEva
-         PaAHqaZwW1RAqUieMkLtt5emrL/mi/KmS0Z/kFyDItoAlQSFDrc4STLKikAdZAS0zZsC
-         14Zn76DLK11CtydhF6/B8zga8aC/SwOLwMLmIPG+W3FDz84lY820de0KBlqsU4red+Mp
-         jxTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687114569; x=1689706569;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VsBoHcDpVwstkvz8cUllJMFB0Dg9TMKcjmLxE2/Vlro=;
-        b=dYX52GaQ8CPePES0D/abPEVEfDmSQfcLLbT10FnFWYmZ3W4oUQGE6SWoEkPJLHLHKi
-         bfVblHqY2QYhZr0fbnhPARa/jzrdTckvLGj9cBZgr/9mBVpZQNOYHS/1UKAh6cmaphli
-         Ax1vKwLOwH34dvImJYOgE4m5aO/bhrOe+hfRFZR5dZeAVzy7vbH/eYcFcf1/pJEliWhY
-         Sxz/fKWhlWbPgL0O6qtAtAR0PpkOhgrEZTAOBQhXcU8CmpBbQjeBhrhIza9UO7jMy/iE
-         cjbSiN59sae3EhtnH1qOlrE0SH6mcme1jVjlPdXzhS54g9YW3e5mPTiuqwz+7h1uuWsT
-         GWqQ==
-X-Gm-Message-State: AC+VfDy8JqsUYwz90dOs94n6Q22VwOZjNyi5ubMAERC9nZVk7A6ZG1J0
-        hXDD/xxWz6jJI5eO2V4YocZwLg==
-X-Google-Smtp-Source: ACHHUZ4wF5oCcJlqMRZO2uuJRzpT6Mkw8Fb/w/rv6ViIPR0zvb2PA5WPb1E1tBEtQi+uuSWSnZRQzw==
-X-Received: by 2002:a17:907:707:b0:966:634d:9d84 with SMTP id xb7-20020a170907070700b00966634d9d84mr7370957ejb.20.1687114569154;
-        Sun, 18 Jun 2023 11:56:09 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id os5-20020a170906af6500b009829dc0f2a0sm5182095ejb.111.2023.06.18.11.56.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Jun 2023 11:56:08 -0700 (PDT)
-Message-ID: <9dd622a1-b8c5-316e-6100-876b02e22fc9@linaro.org>
-Date:   Sun, 18 Jun 2023 20:56:06 +0200
+        Sun, 18 Jun 2023 15:11:38 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898821B6;
+        Sun, 18 Jun 2023 12:11:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1687115492; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=lQynQm4TBgm2oPzFgVhKTiDlfm5RqIGuhIDN8h1xeR0njFroEQGHuHLeiVWBAJpupP
+    eS33rLTDtS893Gj9pW4C+YHTF4vrb5Q/zK+KxCvEX6h8Zmx2Ol0w0/r4hRUYurN/WhrY
+    NKZ8Nn0nd2W3dob3OkPr1262Odw6MyQ6GofT5kCLviHyhpXgU+mdQrbLC/EAqAbJG/fQ
+    KGbW2XTf5JCkIPCF6ckwuaBWqpFuU2RcW8OlHI01+LGWrQQP/bCdS0dBnfyHclXqan0h
+    SWuQ60GzrX2TTFpyDycNRDGrCmrF5hdLqkynZUTSDdrodxhojwAczDcOVnxi91i2ym6D
+    dcmg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1687115492;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=FJMWBLVxHgWe48faKZRs40upiT2yzn0xKgnw2MVIZWM=;
+    b=hE67MlzWy6GMUIMCASjLk4ocMHGbl/nFQIi9hmUfe3P+Apv9l4VTDcRAnufN7lJwIl
+    aMJA072Slf3hR63aSEF2xfJjvjCzj5pWv6FizIHVQ6ucwagV8lFQ5Y0ZaNaH3B/lQhPX
+    vUVeujLRG1eZOH/CB5KrdsdFngzOqBkBTSJU5QciXz7IUQbHS4HOjSVQxQ+DVbaN5BUx
+    K5jAE94bjkwytAIElot4XSOmJn85pNaqf5KTvkSYdkKJsQJ+7QeJ/1rEt+L0bwzAwcKF
+    iW24CutL6/mP/JRHyIyV+oz+1oDYiKlL/LO3gfYXDTjDUxh1zQ/YXNLG+hwXwerXmq24
+    qBjg==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1687115492;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=FJMWBLVxHgWe48faKZRs40upiT2yzn0xKgnw2MVIZWM=;
+    b=YbhDKRYKpFWVDUU2/MBK6STXwSjorBYv7xYEmS6a6yOGzkaTX/9zeJtMkcYndQ18c7
+    iUv7YxoBOSLiTNYokZjyd4sf+JSuez0ggkAZckwQL+L/2Lkf1qQxq4xFkPeh178OCf7F
+    yTyhDGCv5aUMI554B5knidfXNnxr6+yMbVG4PA6bjPlrodXSFGQSY5V/Zqp+R2TEvkQh
+    thT7JJhq/8fQw0dS45qBRe+UEDbV2Z2apYLYW78qcOrc7wAdYNQCl5WEw9YboWDFITsU
+    oZEpSrNI1axVP+PXWuYiRo7AHNR4aiDAhM3p5rLgGu/XU9Ajj1RBkAPXuVxY24chzbC/
+    dNAg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1687115492;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=FJMWBLVxHgWe48faKZRs40upiT2yzn0xKgnw2MVIZWM=;
+    b=oF54QNymzT0Ibs4uevVULRe9zB9GwGr3yz6CddEyWCruKLzznt8IRe5aKPHvcgcJ1y
+    gYTMNeJHYjqgNPXf7fDw==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4peA+pvh"
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.6.0 DYNA|AUTH)
+    with ESMTPSA id D0d0a8z5IJBW9YU
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sun, 18 Jun 2023 21:11:32 +0200 (CEST)
+Date:   Sun, 18 Jun 2023 21:11:29 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Jakob Hauser <jahau@rocketmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        Henrik Grimler <henrik@grimler.se>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH RESEND] arm64: dts: qcom: msm8916-samsung-serranove: Add
+ RT5033 PMIC with charger
+Message-ID: <ZI9WjmWhkUh_bdz6@gerhold.net>
+References: <20230617002934.39408-1-jahau.ref@rocketmail.com>
+ <20230617002934.39408-1-jahau@rocketmail.com>
+ <ZI2_565RFDtR3Sa-@gerhold.net>
+ <ab3e475f-27ae-e718-60bd-cb22f5070942@rocketmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 4/4] arm64: dts: agilex5: Add initial support for Intel's
- Agilex5 SoCFPGA
-Content-Language: en-US
-To:     niravkumar.l.rabara@intel.com, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Wen Ping <wen.ping.teh@intel.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, netdev@vger.kernel.org,
-        Adrian Ng Ho Yin <adrian.ho.yin.ng@intel.com>
-References: <20230618132235.728641-1-niravkumar.l.rabara@intel.com>
- <20230618132235.728641-5-niravkumar.l.rabara@intel.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230618132235.728641-5-niravkumar.l.rabara@intel.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ab3e475f-27ae-e718-60bd-cb22f5070942@rocketmail.com>
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,551 +96,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/06/2023 15:22, niravkumar.l.rabara@intel.com wrote:
-> From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+On Sun, Jun 18, 2023 at 06:49:16PM +0200, Jakob Hauser wrote:
+> On 17.06.23 16:15, Stephan Gerhold wrote:
+> > On Sat, Jun 17, 2023 at 02:29:34AM +0200, Jakob Hauser wrote:
 > 
-> Add the initial device tree files for Intel's Agilex5 SoCFPGA platform.
+> ...
 > 
-> Signed-off-by: Adrian Ng Ho Yin <adrian.ho.yin.ng@intel.com>
-> Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
-> ---
->  arch/arm64/boot/dts/intel/Makefile            |   3 +
->  .../arm64/boot/dts/intel/socfpga_agilex5.dtsi | 641 ++++++++++++++++++
->  .../boot/dts/intel/socfpga_agilex5_socdk.dts  | 184 +++++
->  .../dts/intel/socfpga_agilex5_socdk_nand.dts  | 131 ++++
->  .../dts/intel/socfpga_agilex5_socdk_swvp.dts  | 248 +++++++
->  5 files changed, 1207 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi
->  create mode 100644 arch/arm64/boot/dts/intel/socfpga_agilex5_socdk.dts
->  create mode 100644 arch/arm64/boot/dts/intel/socfpga_agilex5_socdk_nand.dts
->  create mode 100644 arch/arm64/boot/dts/intel/socfpga_agilex5_socdk_swvp.dts
+> > > +		regulators {
+> > > +			safe_ldo_reg: SAFE_LDO {
+> > > +				regulator-name = "SAFE_LDO";
+> > > +				regulator-min-microvolt = <4900000>;
+> > > +				regulator-max-microvolt = <4900000>;
+> > > +				regulator-always-on;
+> > > +			};
+> > > +			ldo_reg: LDO {
+> > > +				regulator-name = "LDO";
+> > > +				regulator-min-microvolt = <2800000>;
+> > > +				regulator-max-microvolt = <2800000>;
+> > > +			};
+> > > +			buck_reg: BUCK {
+> > > +				regulator-name = "BUCK";
+> > > +				regulator-min-microvolt = <1200000>;
+> > > +				regulator-max-microvolt = <1200000>;
+> > > +			};
+> > 
+> > The "regulator-name"s here don't really seem useful, since they're just
+> > the same as the ones already declared in the driver. Can you drop them?
+> > Alternatively you could assign more useful board-specific names, such as
+> > the CAM_SENSOR_A2.8V that was used downstream.
+> > 
+> > Also, I think it would be slightly clearer to prefix the regulator
+> > labels (safe_ldo_reg, ldo_reg etc) with rt5033_. Perhaps
+> > "rt5033_ldo_reg" or "rt5033_reg_ldo"?
 > 
-> diff --git a/arch/arm64/boot/dts/intel/Makefile b/arch/arm64/boot/dts/intel/Makefile
-> index c2a723838344..bb74a7e30e58 100644
-> --- a/arch/arm64/boot/dts/intel/Makefile
-> +++ b/arch/arm64/boot/dts/intel/Makefile
-> @@ -2,5 +2,8 @@
->  dtb-$(CONFIG_ARCH_INTEL_SOCFPGA) += socfpga_agilex_n6000.dtb \
->  				socfpga_agilex_socdk.dtb \
->  				socfpga_agilex_socdk_nand.dtb \
-> +				socfpga_agilex5_socdk.dtb \
-> +				socfpga_agilex5_socdk_nand.dtb \
-> +				socfpga_agilex5_socdk_swvp.dtb \
->  				socfpga_n5x_socdk.dtb
->  dtb-$(CONFIG_ARCH_KEEMBAY) += keembay-evm.dtb
-> diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi b/arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi
-> new file mode 100644
-> index 000000000000..9454d88d6457
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi
-> @@ -0,0 +1,641 @@
-> +// SPDX-License-Identifier:     GPL-2.0
+> ...
+> About the "regulator-name"s I wasn't really aware. I don't have a strong
+> opinion on this.
+> 
+> With the downstream names, it would look like this:
+> 
+> regulators {
+> 	rt5033_reg_safe_ldo: SAFE_LDO {
+> 		regulator-name = "RT5033SafeLDO";
+> 		regulator-min-microvolt = <4900000>;
+> 		regulator-max-microvolt = <4900000>;
+> 		regulator-always-on;
+> 	};
+> 	rt5033_reg_ldo: LDO {
+> 		regulator-name = "CAM_SENSOR_A2.8V";
+> 		regulator-min-microvolt = <2800000>;
+> 		regulator-max-microvolt = <2800000>;
+> 	};
+> 	rt5033_reg_buck: BUCK {
+> 		regulator-name = "CAM_SENSOR_CORE_1.25V";
+> 		regulator-min-microvolt = <1200000>;
+> 		regulator-max-microvolt = <1200000>;
+> 	};
+> 
+> Dropping them would look like this:
+> 
+> regulators {
+> 	rt5033_reg_safe_ldo: SAFE_LDO {
+> 		regulator-min-microvolt = <4900000>;
+> 		regulator-max-microvolt = <4900000>;
+> 		regulator-always-on;
+> 	};
+> 	rt5033_reg_ldo: LDO {
+> 		regulator-min-microvolt = <2800000>;
+> 		regulator-max-microvolt = <2800000>;
+> 	};
+> 	rt5033_reg_buck: BUCK {
+> 		regulator-min-microvolt = <1200000>;
+> 		regulator-max-microvolt = <1200000>;
+> 	};
+> 
+> I would rather drop them. The first name "RT5033SafeLDO" doesn't add much
+> information. The other two I'm not fully sure if they provide the cam sensor
+> only or if there might be other users as well. Also it add an additional set
+> of names. When dropping them, the generic names SAFE_LDO, LDO and BUCK are
+> taken from the rt5033-regulator driver.
+> 
+> Unfortunately, I added the example in the dt-bindings with the generic
+> names. So this question might come up again when someone else adds
+> rt5033-regulators to another device.
+> 
+> For the phandle labels I'd go for rt5033_reg_..., I already changed them in
+> the examples above.
+> 
 
-Drop indent before license.
+Sounds good to me, thanks!
 
-> +/*
-> + * Copyright (C) 2023, Intel Corporation
-> + */
-> +
-> +/dts-v1/;
-> +#include <dt-bindings/reset/altr,rst-mgr-agilex5.h>
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/interrupt-controller/irq.h>
-> +#include <dt-bindings/clock/agilex5-clock.h>
-> +
-> +/ {
-> +	compatible = "intel,socfpga-agilex";
-> +	#address-cells = <2>;
-> +	#size-cells = <2>;
-> +
-> +	reserved-memory {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +
-> +		service_reserved: svcbuffer@0 {
-> +			compatible = "shared-dma-pool";
-> +			reg = <0x0 0x80000000 0x0 0x2000000>;
-> +			alignment = <0x1000>;
-> +			no-map;
-> +		};
-> +	};
-> +
-> +	cpus {
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		cpu0: cpu@0 {
-> +			compatible = "arm,cortex-a55";
-> +			device_type = "cpu";
-> +			enable-method = "psci";
-> +			reg = <0x0>;
-> +		};
-> +
-> +		cpu1: cpu@1 {
-> +			compatible = "arm,cortex-a55";
-> +			device_type = "cpu";
-> +			enable-method = "psci";
-> +			reg = <0x100>;
-> +		};
-> +
-> +		cpu2: cpu@2 {
-> +			compatible = "arm,cortex-a76";
-> +			device_type = "cpu";
-> +			enable-method = "psci";
-> +			reg = <0x200>;
-> +		};
-> +
-> +		cpu3: cpu@3 {
-> +			compatible = "arm,cortex-a76";
-> +			device_type = "cpu";
-> +			enable-method = "psci";
-> +			reg = <0x300>;
-> +		};
-> +	};
-> +
-> +	psci {
-> +		compatible = "arm,psci-0.2";
-> +		method = "smc";
-> +	};
-> +
-> +	intc: interrupt-controller@1d000000 {
-> +		compatible = "arm,gic-v3", "arm,cortex-a15-gic";
-
-reg is always after compatible. Then ranges, if applicable.
-
-> +		#interrupt-cells = <3>;
-> +		#address-cells = <2>;
-> +		#size-cells =<2>;
-> +		interrupt-controller;
-> +		#redistributor-regions = <1>;
-> +		label = "GIC";
-
-It does not look like you tested the DTS against bindings. Please run
-`make dtbs_check` (see
-Documentation/devicetree/bindings/writing-schema.rst or
-https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
-for instructions).
-
-> +		status = "okay";
-
-Drop, you don't need status.
-
-> +		ranges;
-> +		redistributor-stride = <0x0 0x20000>;
-> +		reg = <0x0 0x1d000000 0 0x10000>,
-> +			<0x0 0x1d060000 0 0x100000>;
-> +
-> +		its: msi-controller@1d040000 {
-> +			compatible = "arm,gic-v3-its";
-> +			reg = <0x0 0x1d040000 0x0 0x20000>;
-> +			label = "ITS";
-> +			msi-controller;
-> +			status = "okay";
-
-Drop
-
-Anyway, entire node should be in soc. You clearly did not test it with
-dtbs W=1. Neither with dtbs_check.
-
-
-> +		};
-> +	};
-> +
-> +	/* Clock tree 5 main sources*/
-> +	clocks {
-> +		cb_intosc_hs_div2_clk: cb-intosc-hs-div2-clk {
-> +			#clock-cells = <0>;
-> +			compatible = "fixed-clock";
-> +		};
-> +
-> +		cb_intosc_ls_clk: cb-intosc-ls-clk {
-> +			#clock-cells = <0>;
-> +			compatible = "fixed-clock";
-> +		};
-> +
-> +		f2s_free_clk: f2s-free-clk {
-> +			#clock-cells = <0>;
-> +			compatible = "fixed-clock";
-> +		};
-> +
-> +		osc1: osc1 {
-> +			#clock-cells = <0>;
-> +			compatible = "fixed-clock";
-> +		};
-> +
-> +		qspi_clk: qspi-clk {
-> +			#clock-cells = <0>;
-> +			compatible = "fixed-clock";
-> +			clock-frequency = <200000000>;
-> +		};
-> +	};
-> +
-> +	timer {
-> +		compatible = "arm,armv8-timer";
-> +		interrupt-parent = <&intc>;
-> +		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
-> +			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
-> +			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
-> +			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
-> +	};
-> +
-> +	usbphy0: usbphy {
-> +		#phy-cells = <0>;
-> +		compatible = "usb-nop-xceiv";
-> +	};
-> +
-> +	soc {
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		compatible = "simple-bus";
-> +		device_type = "soc";
-> +		interrupt-parent = <&intc>;
-> +		ranges = <0 0 0 0xffffffff>;
-> +
-> +		clkmgr: clock-controller@10d10000 {
-> +			compatible = "intel,agilex5-clkmgr";
-> +			reg = <0x10d10000 0x1000>;
-> +			#clock-cells = <1>;
-> +		};
-> +
-> +		stmmac_axi_setup: stmmac-axi-config {
-> +			snps,wr_osr_lmt = <31>;
-> +			snps,rd_osr_lmt = <31>;
-> +			snps,blen = <0 0 0 32 16 8 4>;
-> +		};
-> +
-> +		mtl_rx_setup: rx-queues-config {
-
-These two nodes do not belong to SoC. Soc is for MMIO-based nodes.
-
-
-> +			snps,rx-queues-to-use = <8>;
-> +			snps,rx-sched-sp;
-> +			queue0 {
-> +				snps,dcb-algorithm;
-> +				snps,map-to-dma-channel = <0x0>;
-> +			};
-> +			queue1 {
-> +				snps,dcb-algorithm;
-> +				snps,map-to-dma-channel = <0x1>;
-> +			};
-> +			queue2 {
-> +				snps,dcb-algorithm;
-> +				snps,map-to-dma-channel = <0x2>;
-> +			};
-> +			queue3 {
-> +				snps,dcb-algorithm;
-> +				snps,map-to-dma-channel = <0x3>;
-> +			};
-> +			queue4 {
-> +				snps,dcb-algorithm;
-> +				snps,map-to-dma-channel = <0x4>;
-> +			};
-> +			queue5 {
-> +				snps,dcb-algorithm;
-> +				snps,map-to-dma-channel = <0x5>;
-> +			};
-> +			queue6 {
-> +				snps,dcb-algorithm;
-> +				snps,map-to-dma-channel = <0x6>;
-> +			};
-> +			queue7 {
-> +				snps,dcb-algorithm;
-> +				snps,map-to-dma-channel = <0x7>;
-> +			};
-> +		};
-> +
-> +		mtl_tx_setup: tx-queues-config {
-
-This as well
-
-> +			snps,tx-queues-to-use = <8>;
-> +			snps,tx-sched-wrr;
-> +			queue0 {
-> +				snps,weight = <0x09>;
-> +				snps,dcb-algorithm;
-> +			};
-> +			queue1 {
-> +				snps,weight = <0x0A>;
-> +				snps,dcb-algorithm;
-> +			};
-> +			queue2 {
-> +				snps,weight = <0x0B>;
-> +				snps,dcb-algorithm;
-> +			};
-> +			queue3 {
-> +				snps,weight = <0x0C>;
-> +				snps,dcb-algorithm;
-> +			};
-> +			queue4 {
-> +				snps,weight = <0x0D>;
-> +				snps,dcb-algorithm;
-> +			};
-> +			queue5 {
-> +				snps,weight = <0x0E>;
-> +				snps,dcb-algorithm;
-> +			};
-> +			queue6 {
-> +				snps,weight = <0x0F>;
-> +				snps,dcb-algorithm;
-> +			};
-> +			queue7 {
-> +				snps,weight = <0x10>;
-> +				snps,dcb-algorithm;
-> +			};
-> +		};
-> +
-> +		gmac0: ethernet@10810000 {
-> +			compatible = "altr,socfpga-stmmac-a10-s10",
-> +						"snps,dwxgmac-2.10",
-> +						"snps,dwxgmac";
-
-You have broken alignment.
-
-> +			reg = <0x10810000 0x3500>;
-> +			interrupts = <GIC_SPI 190 IRQ_TYPE_LEVEL_HIGH>,
-> +						<GIC_SPI 191 IRQ_TYPE_LEVEL_HIGH>,
-> +						<GIC_SPI 192 IRQ_TYPE_LEVEL_HIGH>,
-
-In multiple places. Really.
-
-> +						<GIC_SPI 193 IRQ_TYPE_LEVEL_HIGH>,
-> +						<GIC_SPI 194 IRQ_TYPE_LEVEL_HIGH>,
-> +						<GIC_SPI 195 IRQ_TYPE_LEVEL_HIGH>,
-> +						<GIC_SPI 196 IRQ_TYPE_LEVEL_HIGH>,
-> +						<GIC_SPI 197 IRQ_TYPE_LEVEL_HIGH>,
-> +						<GIC_SPI 198 IRQ_TYPE_LEVEL_HIGH>,
-> +						<GIC_SPI 199 IRQ_TYPE_LEVEL_HIGH>,
-> +						<GIC_SPI 200 IRQ_TYPE_LEVEL_HIGH>,
-> +						<GIC_SPI 201 IRQ_TYPE_LEVEL_HIGH>,
-> +						<GIC_SPI 202 IRQ_TYPE_LEVEL_HIGH>,
-> +						<GIC_SPI 203 IRQ_TYPE_LEVEL_HIGH>,
-> +						<GIC_SPI 204 IRQ_TYPE_LEVEL_HIGH>,
-> +						<GIC_SPI 205 IRQ_TYPE_LEVEL_HIGH>,
-> +						<GIC_SPI 206 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-names = "macirq",
-> +							"macirq_tx0",
-
-This is ugly.
-
-> +							"macirq_tx1",
-> +							"macirq_tx2",
-> +							"macirq_tx3",
-> +							"macirq_tx4",
-> +							"macirq_tx5",
-> +							"macirq_tx6",
-> +							"macirq_tx7",
-> +							"macirq_rx0",
-> +							"macirq_rx1",
-> +							"macirq_rx2",
-> +							"macirq_rx3",
-> +							"macirq_rx4",
-> +							"macirq_rx5",
-> +							"macirq_rx6",
-> +							"macirq_rx7";
-> +			mac-address = [00 00 00 00 00 00];
-
-Drop, it's SoC file.
-
-> +			resets = <&rst EMAC0_RESET>, <&rst EMAC0_OCP_RESET>;
-> +			reset-names = "stmmaceth", "stmmaceth-ocp";
-> +			tx-fifo-depth = <32768>;
-> +			rx-fifo-depth = <16384>;
-> +			snps,multicast-filter-bins = <64>;
-> +			snps,perfect-filter-entries = <64>;
-> +			snps,axi-config = <&stmmac_axi_setup>;
-> +			snps,mtl-rx-config = <&mtl_rx_setup>;
-> +			snps,mtl-tx-config = <&mtl_tx_setup>;
-> +			snps,pbl = <32>;
-> +			snps,pblx8;
-> +			snps,multi-irq-en;
-> +			snps,tso;
-> +			altr,sysmgr-syscon = <&sysmgr 0x44 0>;
-> +			altr,smtg-hub;
-> +			snps,rx-vlan-offload;
-> +			clocks = <&clkmgr AGILEX5_EMAC0_CLK>, <&clkmgr AGILEX5_EMAC_PTP_CLK>;
-> +			clock-names = "stmmaceth", "ptp_ref";
-> +			status = "disabled";
-> +		};
-> +
-> +		i2c0: i2c@10c02800 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-
-compatible first, reg second.
-
-> +			compatible = "snps,designware-i2c";
-> +			reg = <0x10c02800 0x100>;
-> +			interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
-> +			resets = <&rst I2C0_RESET>;
-> +			clocks = <&clkmgr AGILEX5_L4_SP_CLK>;
-> +			status = "disabled";
-> +		};
-> +
-> +		i2c1: i2c@10c02900 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			compatible = "snps,designware-i2c";
-> +			reg = <0x10c02900 0x100>;
-> +			interrupts = <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>;
-> +			resets = <&rst I2C1_RESET>;
-> +			clocks = <&clkmgr AGILEX5_L4_SP_CLK>;
-> +			status = "disabled";
-> +		};
-> +
-> +		i2c2: i2c@10c02a00 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			compatible = "snps,designware-i2c";
-> +			reg = <0x10c02a00 0x100>;
-> +			interrupts = <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>;
-> +			resets = <&rst I2C2_RESET>;
-> +			clocks = <&clkmgr AGILEX5_L4_SP_CLK>;
-> +			status = "disabled";
-> +		};
-> +
-> +		i2c3: i2c@10c02b00 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			compatible = "snps,designware-i2c";
-> +			reg = <0x10c02b00 0x100>;
-> +			interrupts = <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>;
-> +			resets = <&rst I2C3_RESET>;
-> +			clocks = <&clkmgr AGILEX5_L4_SP_CLK>;
-> +			status = "disabled";
-> +		};
-> +
-> +		i2c4: i2c@10c02c00 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			compatible = "snps,designware-i2c";
-> +			reg = <0x10c02c00 0x100>;
-> +			interrupts = <GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>;
-> +			resets = <&rst I2C4_RESET>;
-> +			clocks = <&clkmgr AGILEX5_L4_SP_CLK>;
-> +			status = "disabled";
-> +		};
-> +
-> +		i3c0: i3c@10da0000 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			compatible = "snps,dw-i3c-master-1.00a";
-> +			reg = <0x10da0000 0x1000>;
-> +			interrupts = <GIC_SPI 164 IRQ_TYPE_LEVEL_HIGH>;
-> +			resets = <&rst I3C0_RESET>;
-> +			clocks = <&clkmgr AGILEX5_L4_MP_CLK>;
-> +			status = "disabled";
-> +		};
-> +
-> +		i3c1: i3c@10da1000 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			compatible = "snps,dw-i3c-master-1.00a";
-> +			reg = <0x10da1000 0x1000>;
-> +			interrupts = <GIC_SPI 165 IRQ_TYPE_LEVEL_HIGH>;
-> +			resets = <&rst I3C1_RESET>;
-> +			clocks = <&clkmgr AGILEX5_L4_MP_CLK>;
-> +			status = "disabled";
-> +		};
-> +
-> +		gpio1: gpio@10C03300 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			compatible = "snps,dw-apb-gpio";
-> +			reg = <0x10C03300 0x100>;
-> +			resets = <&rst GPIO1_RESET>;
-> +			status = "disabled";
-> +
-> +			portb: gpio-controller@0 {
-> +				compatible = "snps,dw-apb-gpio-port";
-> +				gpio-controller;
-> +				#gpio-cells = <2>;
-> +				snps,nr-gpios = <24>;
-> +				reg = <0>;
-> +				interrupt-controller;
-> +				#interrupt-cells = <2>;
-> +				interrupts = <GIC_SPI 111 IRQ_TYPE_LEVEL_HIGH>;
-> +			};
-> +		};
-> +
-> +		mmc: mmc0@10808000 {
-
-It does not look like you tested the DTS against bindings. Please run
-`make dtbs_check` (see
-Documentation/devicetree/bindings/writing-schema.rst or
-https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
-for instructions).
-
-Sorry, but your DTS lacks any basic (internal!) review and basic tests
-with automated tools.
-
-..
-
-> +		spi0: spi@10da4000 {
-> +			compatible = "snps,dw-apb-ssi";
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			reg = <0x10da4000 0x1000>;
-> +			interrupts = <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>;
-> +			resets = <&rst SPIM0_RESET>;
-> +			reset-names = "spi";
-> +			reg-io-width = <4>;
-> +			num-cs = <4>;
-> +			clocks = <&clkmgr AGILEX5_L4_MAIN_CLK>;
-> +			dmas = <&dmac0 2>, <&dmac0 3>;
-> +			dma-names ="tx", "rx";
-> +
-> +			status = "disabled";
-> +
-> +			flash: m25p128@0 {
-
-It's getting worse...
-
-> +				status = "okay";
-
-and worse
-
-> +				compatible = "st,m25p80";
-> +				spi-max-frequency = <25000000>;
-> +				m25p,fast-read;
-> +				reg = <0>;
-> +
-> +				#address-cells = <1>;
-> +				#size-cells = <1>;
-> +
-> +				partition@0 {
-> +				label = "spi_flash_part0";
-> +				reg = <0x0 0x100000>;
-
-and less conforming to style
-
-> +				};
-> +			};
-> +
-
-... and less.
-...
-
-> +
-> +	chosen {
-> +		stdout-path = "serial0:115200n8";
-> +		bootargs = "console=uart8250,mmio32,0x10c02000,115200n8 \
-> +			root=/dev/ram0 rw initrd=0x10000000 init=/sbin/init \
-> +			ramdisk_size=10000000 earlycon=uart8250,mmio32,0x10c02000,115200n8 \
-> +			panic=-1 nosmp rootfstype=ext3";
-
-NAK. Drop entire bootags.
-
-> +	};
-> +
-> +	leds {
-> +		compatible = "gpio-leds";
-> +		hps0 {
-
-No, srsly? So all our cleanups for few years mean nothing?
-
-Best regards,
-Krzysztof
-
+Stephan
