@@ -2,84 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 155637345D5
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 12:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63F1C7345DD
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 12:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbjFRKaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 06:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48122 "EHLO
+        id S229705AbjFRKkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 06:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjFRKaV (ORCPT
+        with ESMTP id S229489AbjFRKk3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 06:30:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782A5E5E
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 03:30:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 159B360C6E
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 10:30:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 710AEC433C9;
-        Sun, 18 Jun 2023 10:30:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687084219;
-        bh=5fsuaDnwo2qvmwk8ou2lxLE0fvol54AynpeZPNcwaPM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=lDsrpVBDDA6CnkU/0DJrMu+5EtLL74KbXD5m+eqaoLiLac4kIN1LOt7EM5BsrCn72
-         g0B24gBDO8sZ6umP7D6UrFTJcQsxkuDb+xDtqyQ32eTYqRprTL9DqbcwcVd4y8Rcsp
-         588Jw41xyTMboYzVQpI16bpXH/S9i98PoSkRe9VF86zFA93J2RYc4J6BmB0BB9DQ7t
-         ymKtK9iWAgbnOXqunV+YhH7LDDASZ/Jtza5IwqoiURpxgf44Fb/CzzEontlOrKo3iJ
-         WNKMyvZ5LXsZOPI2isB5OY3AwChO5IhJPLFHsdFMD34d6sB6l+oJHSR3/wIS4JDGUu
-         Nh43sS4bQSu6Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 56C08E21EE5;
-        Sun, 18 Jun 2023 10:30:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sun, 18 Jun 2023 06:40:29 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684ADE60;
+        Sun, 18 Jun 2023 03:40:25 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1qAppU-0005HL-1I; Sun, 18 Jun 2023 12:40:20 +0200
+Message-ID: <d698b838-57e0-d019-a783-c229c04eeca4@leemhuis.info>
+Date:   Sun, 18 Jun 2023 12:40:19 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] nfc: fdp: Add MODULE_FIRMWARE macros
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168708421935.2238.16204190681278158265.git-patchwork-notify@kernel.org>
-Date:   Sun, 18 Jun 2023 10:30:19 +0000
-References: <20230616122218.1036256-1-juerg.haefliger@canonical.com>
-In-Reply-To: <20230616122218.1036256-1-juerg.haefliger@canonical.com>
-To:     Juerg Haefliger <juerg.haefliger@canonical.com>
-Cc:     krzysztof.kozlowski@linaro.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net,
-        shangxiaojing@huawei.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US, de-DE
+To:     Jeff Layton <jlayton@kernel.org>, Chuck Lever <cel@kernel.org>
+Cc:     Chuck Lever <chuck.lever@oracle.com>, Neil Brown <neilb@suse.de>,
+        Olga Kornievskaia <kolga@netapp.com>,
+        Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
+        stable@vger.kernel.org, Eirik Fuller <efuller@redhat.com>,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230616191744.202292-1-jlayton@kernel.org>
+ <ZIzFp3ViiU2SCi6J@manet.1015granger.net>
+ <4b5063eb5a1139adc9dd4bdadde30674faee0700.camel@kernel.org>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: Re: [PATCH] nfsd: move init of percpu reply_cache_stats counters back
+ to nfsd_init_net
+In-Reply-To: <4b5063eb5a1139adc9dd4bdadde30674faee0700.camel@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1687084825;3626a0dc;
+X-HE-SMSGID: 1qAppU-0005HL-1I
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
-
-On Fri, 16 Jun 2023 14:22:18 +0200 you wrote:
-> The module loads firmware so add MODULE_FIRMWARE macros to provide that
-> information via modinfo.
+On 16.06.23 22:54, Jeff Layton wrote:
+> On Fri, 2023-06-16 at 16:27 -0400, Chuck Lever wrote:
+>> Thanks Eirik and Jeff.
+>>
+>> At this point in the release cycle, I plan to apply this for the
+>> next merge window (6.5).
 > 
-> Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
-> ---
->  drivers/nfc/fdp/fdp.c | 3 +++
->  1 file changed, 3 insertions(+)
+> I think we should take this in sooner. This is a regression and a
+> user-triggerable oops in the right situation. If:
+> 
+> - non-x86_64 arch
+> - /proc/fs/nfsd is mounted in the namespace
+> - nfsd is not started in the namespace
+> - unprivileged user calls "cat /proc/fs/nfsd/reply_cache_stats"
 
-Here is the summary with links:
-  - nfc: fdp: Add MODULE_FIRMWARE macros
-    https://git.kernel.org/netdev/net/c/eb09fc2d1416
+FWIW, might be worth to simply tell Linus about it and let him decide,
+that's totally fine and even documented in the old and the new docs for
+handling regressions[1].
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+[1]
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/Documentation/process/handling-regressions.rst?id=eed892da9cd08be76a8f467c600ef58716dbb4d2
 
+>>> Cc: stable@vger.kernel.org # v6.3+
+>>> Fixes: f5f9d4a314da ("nfsd: move reply cache initialization into nfsd startup")
+>>
+>> Why both Fixes: and Cc: stable?
+> 
+> *shrug* : they mean different things. I can drop the Cc stable.
 
+Please leave it, only a stable tag ensures backporting; a fixes tag
+alone is not enough. See [1] above or these recent messages from Greg:
+
+https://lore.kernel.org/all/2023061137-algorithm-almanac-1337@gregkh/
+https://lore.kernel.org/all/2023060703-colony-shakily-3514@gregkh/
+
+Ciao, Thorsten
