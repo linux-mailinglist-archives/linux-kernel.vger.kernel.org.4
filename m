@@ -2,126 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3162734612
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 14:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BDB2734610
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 14:10:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbjFRMKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 08:10:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59282 "EHLO
+        id S229803AbjFRMJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 08:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbjFRMKj (ORCPT
+        with ESMTP id S229714AbjFRMJz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 08:10:39 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34531B3;
-        Sun, 18 Jun 2023 05:10:34 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35IC1xHl029496;
-        Sun, 18 Jun 2023 12:10:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=zNHDB4mne5Mh07dWM3OfrbNBeOyhODIhoAblqGKDb0E=;
- b=QdJPq/owm3viMRfJdyIn3P6KPn9nX71LX32XJmMEvoPo6e849SCR2hTPAwuxZeXrp8dZ
- yZZtiLOM1RrHGrPMOnLg0mkaKr0MCRd1+igCznmbopJA0SFmknWb9Myh9MNhkbuNsQpS
- SXnoLp3O88cE99pbCG+relchrXmsQ9gb3RM1K0p9AIESlH/WjKQYWryXN+DOnl6Zv8q3
- RjlK3Ay9/XOFTsCWEDjkQnewMDUgH9ZfQ4dEyw1CtLCqHnkFMjQEU14z4vEUsS+ubvIf
- cljzagffzd65UnQKUAIGbTompqUF3Xp+sE8j2t7pDm8Jtpm4EvNNfSDlkwT23H4g4f9G lw== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r94e4sm8p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 18 Jun 2023 12:10:31 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35ICA4q1011716
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 18 Jun 2023 12:10:04 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Sun, 18 Jun 2023 05:10:01 -0700
-From:   Krishna Kurapati <quic_kriskura@quicinc.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>, <quic_ugoswami@quicinc.com>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [PATCH v3] usb: dwc3: gadget: Propagate core init errors to UDC during pullup
-Date:   Sun, 18 Jun 2023 17:39:49 +0530
-Message-ID: <20230618120949.14868-1-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.40.0
+        Sun, 18 Jun 2023 08:09:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9D1F7;
+        Sun, 18 Jun 2023 05:09:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CDFAF60B8B;
+        Sun, 18 Jun 2023 12:09:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21EAFC433C0;
+        Sun, 18 Jun 2023 12:09:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687090193;
+        bh=U96oc84V7ydjoimAikfo3376ACAFBS29BVe29oAp1WE=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=BPJompywBU3hnZJ3Wg/Iq7fJBKIiv8h3EeqFinSLOtowecKBEU3JWDNzTRbFU4+Hq
+         5QuD3mVCKj1Khh7ZomEqH9FepwZfgDmBYmoumRQ2Oj9QA7K2EYrUFF7C9aG8mtE5lP
+         UOHON/qPKGGrYDwuAM9HyDvn1Pr0bf65MM2HsL2b5NmsmAxxwIO9Al+HAWLxs/ea0+
+         lox9LwCx971tZLKF1kSTk5EgyCfidubK/fgmzLnf5IZlBdjmFQqLwf4Q4m+BfxWDIq
+         5EnG4y3nIF1J+qWhs1N5+GqZWkPhpW+mGf5ax6WnXObSvUj0etXKgu+K3RYKHKXpO7
+         f5bSHt7Gfb4ZQ==
+Message-ID: <7d9515dbe6af110f2c32dce2b994120e4637b295.camel@kernel.org>
+Subject: Re: [PATCH] nfsd: move init of percpu reply_cache_stats counters
+ back to nfsd_init_net
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        Chuck Lever <cel@kernel.org>
+Cc:     Chuck Lever <chuck.lever@oracle.com>, Neil Brown <neilb@suse.de>,
+        Olga Kornievskaia <kolga@netapp.com>,
+        Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
+        stable@vger.kernel.org, Eirik Fuller <efuller@redhat.com>,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Sun, 18 Jun 2023 08:09:50 -0400
+In-Reply-To: <d698b838-57e0-d019-a783-c229c04eeca4@leemhuis.info>
+References: <20230616191744.202292-1-jlayton@kernel.org>
+         <ZIzFp3ViiU2SCi6J@manet.1015granger.net>
+         <4b5063eb5a1139adc9dd4bdadde30674faee0700.camel@kernel.org>
+         <d698b838-57e0-d019-a783-c229c04eeca4@leemhuis.info>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: q-hHFiyDjrZ2C_VnAoTHxgKKMCfFMxXr
-X-Proofpoint-GUID: q-hHFiyDjrZ2C_VnAoTHxgKKMCfFMxXr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-18_08,2023-06-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
- impostorscore=0 malwarescore=0 bulkscore=0 adultscore=0 mlxscore=0
- phishscore=0 lowpriorityscore=0 mlxlogscore=999 priorityscore=1501
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306180116
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In scenarios where pullup relies on resume (get sync) to initialize
-the controller and set the run stop bit, then core_init is followed by
-gadget_resume which will eventually set run stop bit.
+On Sun, 2023-06-18 at 12:40 +0200, Thorsten Leemhuis wrote:
+> On 16.06.23 22:54, Jeff Layton wrote:
+> > On Fri, 2023-06-16 at 16:27 -0400, Chuck Lever wrote:
+> > > Thanks Eirik and Jeff.
+> > >=20
+> > > At this point in the release cycle, I plan to apply this for the
+> > > next merge window (6.5).
+> >=20
+> > I think we should take this in sooner. This is a regression and a
+> > user-triggerable oops in the right situation. If:
+> >=20
+> > - non-x86_64 arch
+> > - /proc/fs/nfsd is mounted in the namespace
+> > - nfsd is not started in the namespace
+> > - unprivileged user calls "cat /proc/fs/nfsd/reply_cache_stats"
+>=20
+> FWIW, might be worth to simply tell Linus about it and let him decide,
+> that's totally fine and even documented in the old and the new docs for
+> handling regressions[1].
+>=20
+> [1]
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commi=
+t/Documentation/process/handling-regressions.rst?id=3Deed892da9cd08be76a8f4=
+67c600ef58716dbb4d2
+>=20
 
-But in cases where the core_init fails, the return value is not sent
-back to udc appropriately. So according to UDC the controller has
-started but in reality we never set the run stop bit.
+I'd rather Chuck make the final call here. The original patch
+description didn't point out how easy it is to trigger a panic with
+this, so I was hoping to convince him.
 
-On systems like Android, there are uevents sent to HAL depending on
-whether the configfs_bind / configfs_disconnect were invoked. In the
-above mentioned scnenario, if the core init fails, the run stop won't
-be set and the cable plug-out won't result in generation of any
-disconnect event and userspace would never get any uevent regarding
-cable plug out and we never call pullup(0) again. Furthermore none of
-the next Plug-In/Plug-Out's would be known to configfs.
+To further that argument too:
 
-Return back the appropriate result to UDC to let the userspace/
-configfs know that the pullup failed so they can take appropriate
-action.
+I have to wonder if this bug might cause (temporary?) memory corruption
+on x86_64. The code hits a spinlock in that struct, so there may be a
+window of time where it doesn't contain what's expected.
 
-Fixes: 77adb8bdf422 ("usb: dwc3: gadget: Allow runtime suspend if UDC unbinded")
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
----
-Changes in v3: Added changelog mising in v2
-Changes in v2: Added Fixes tag
+> > > > Cc: stable@vger.kernel.org # v6.3+
+> > > > Fixes: f5f9d4a314da ("nfsd: move reply cache initialization into nf=
+sd startup")
+> > >=20
+> > > Why both Fixes: and Cc: stable?
+> >=20
+> > *shrug* : they mean different things. I can drop the Cc stable.
+>=20
+> Please leave it, only a stable tag ensures backporting; a fixes tag
+> alone is not enough. See [1] above or these recent messages from Greg:
+>=20
+> https://lore.kernel.org/all/2023061137-algorithm-almanac-1337@gregkh/
+> https://lore.kernel.org/all/2023060703-colony-shakily-3514@gregkh/
+>=20
 
- drivers/usb/dwc3/gadget.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 578804dc29ca..27cb671e18e3 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2747,7 +2747,9 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
- 	ret = pm_runtime_get_sync(dwc->dev);
- 	if (!ret || ret < 0) {
- 		pm_runtime_put(dwc->dev);
--		return 0;
-+		if (ret < 0)
-+			pm_runtime_set_suspended(dwc->dev);
-+		return ret;
- 	}
- 
- 	if (dwc->pullups_connected == is_on) {
--- 
-2.40.0
-
+Chuck and I also recently requested that the stable series not pick
+patches automatically for fs/nfsd. This does need to be backported
+though, so I cc'ed stable to make that clear.
+--=20
+Jeff Layton <jlayton@kernel.org>
