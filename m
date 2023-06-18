@@ -2,71 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E21E7344ED
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 07:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C521E7344EC
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 07:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbjFREtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 00:49:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
+        id S229503AbjFREuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 00:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjFREtQ (ORCPT
+        with ESMTP id S229494AbjFREuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 00:49:16 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BCC1731
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 21:49:14 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-982a0232bdcso362172566b.1
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 21:49:14 -0700 (PDT)
+        Sun, 18 Jun 2023 00:50:09 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F031731
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 21:50:08 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f90a7325f6so6011245e9.3
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 21:50:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687063753; x=1689655753;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1687063807; x=1689655807;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+5rzEa5zaabq7BO9YTYpmhHbtEFXaArlfXhtHDBAqIU=;
-        b=m7WEfevY9YhSF6Z7flyGT/mOPrBk6ufb19mK5/73bFvzkKOU34uP8SpoQXneLp3Wjf
-         IbWmgGrf6EbHGKeDwRW1D3piqmvTGbKEkCe87tSoQzBrO7/NrE9CInrAA0vtJcxP2g3u
-         3OEDejeTGbOPaPhsFBHWDpmzLBierdgfxEShcn9HU4lgoZnltZEdDrvll3c7LXsSIfQx
-         ADtJxoCbSknGToMrALrp/6l9FtE7lstGABYZMoyaSPUS39bGG5n85gvpoP6yf7zbMKNu
-         +jEV9PXtS4fyvCuky28ZACeMBXY/KgjqyENd8gJfCugOl/poDI942cFU9nnK0e6HDLeB
-         bvhw==
+        bh=spKGmuwsJREHINCurqe1MccBaw6rOuxpPoT72kVRxDw=;
+        b=UbHjy9LDXYHFS/jJ5qmSj8vIl05uQA7NVEtyz151r4X0U+aHXVFgM73QmcMp24wGX7
+         INMzDhI9ifucG3TQ368SZkA37PPwpePGfac7+hTIIHZT3OXXogdrndg4OOKeYtpqH8KO
+         6ZDeBqbtMGSZzgXyrSsPSXQTFjLhq5Jl8mU1rHL7UbE7a/smnxbSCiKQSccDNBYkp6qh
+         ZyS/upXHKOD1YY1HXQgYEEDWHF94b/6P86X7UA+S0P2ToqmjrKtz64ZW2H3reLy1Oxy6
+         /bQnAmSFfFIeBaSi+NqLH4KlevpJVol/ROVrTYXwBNKAWLuXAeU8Pnpg4SCg9ceblqJQ
+         /Ung==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687063753; x=1689655753;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1687063807; x=1689655807;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+5rzEa5zaabq7BO9YTYpmhHbtEFXaArlfXhtHDBAqIU=;
-        b=hJiyvRcUy1k+2j8X5sI934FNM4+QnlrmTIcvXloNxxsuBK0EgXqgf/Ym5WGqAtysNS
-         Nx8DR5abmYIAb8SDyTd+wQF+fvdvlFKCcG0ApQYXxy6ya5h8+toDehUe4rrH4N8qcaZK
-         PVnnx8uB89NcdHRt4iuF9TSqvFbLZ/NJWRtARN2yLqPBuNXgVP3v+SQEj+MC9Z6kjCrA
-         MyBEDAwJ/EXrxWemvmCVBZMFLYHTSJXBtbws2NbcaEPLHGPB/Up2JiJBPt0U2rMgw2By
-         dMoVaaG+U5hEgk7qdXqugNw9aDN2CoCk4b+Ii4SoJpBqSwQ+Hhm49zsJCW1uA8j8K5n/
-         NF0g==
-X-Gm-Message-State: AC+VfDzF8UOkV4HAc3lT8o/ry1Nk/H2U9glw1WsA23zCbR5SDzwtwAh5
-        agTFrayNbl5vKNsqbmcul7emHL8kr2T/+GxlzQ34kg==
-X-Google-Smtp-Source: ACHHUZ4iNbApKH/9BJYO2Sn0xpoJtnRFi9+ygdAyyZviwBoqXWxee5Ivn9uwZypCW958ZA7RBaCmsgjS39R/51zfT6o=
-X-Received: by 2002:a17:906:58c5:b0:988:891b:28c6 with SMTP id
- e5-20020a17090658c500b00988891b28c6mr267336ejs.15.1687063752679; Sat, 17 Jun
- 2023 21:49:12 -0700 (PDT)
+        bh=spKGmuwsJREHINCurqe1MccBaw6rOuxpPoT72kVRxDw=;
+        b=agQ4vb/vZxx+aXZBK1EVjheBqDgF/hBhcolYBtDI2Jjyvag3oDtJ6JKNffXN3Mg5/4
+         Kl0t+9iYYYzgAjAsdtM13ffg3AhTzOX+phJRTKOXTDIAjBJuingwcLPZ8I8F83xiANxi
+         mhsuiOAFnLQ59YjdjKHpJxouHMa7k2icaCvfTa7CiaaTXTKvswPqxQKjGkOXvX9kWLrK
+         VwvDzh5fprrye7+146Wtsx+FqS/wpwL0Ybijlp4rHxcfMYIorUFooFLwhErTWuMbDByW
+         iT4Xk5+l6a/mTYkyLEtwmKrJK6Ttk5nLZ7TRZ4w5RZG84KkORdYtFfycjuPcTtsDG2Mx
+         eA4A==
+X-Gm-Message-State: AC+VfDz6JvBvm+NtlhNqemnWcVuELJnmcfAKKuYlh1q7uBuGPfqYlRK7
+        lbDDxjbTdz7C+tjWDpvg6PU=
+X-Google-Smtp-Source: ACHHUZ7qyEphBiIGyelTf1sNWRZitwwx5xQYO+IexrttRoj3sTX01OrNxqy1GwIZijlIVpSaps1OAw==
+X-Received: by 2002:a7b:c409:0:b0:3f7:16ed:4ca3 with SMTP id k9-20020a7bc409000000b003f716ed4ca3mr6578872wmi.1.1687063806617;
+        Sat, 17 Jun 2023 21:50:06 -0700 (PDT)
+Received: from suse.localnet (host-79-26-32-1.retail.telecomitalia.it. [79.26.32.1])
+        by smtp.gmail.com with ESMTPSA id y8-20020a7bcd88000000b003f904272d51sm3417712wmj.37.2023.06.17.21.50.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Jun 2023 21:50:06 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     =?ISO-8859-1?Q?J=E9r=F4me?= Glisse <jglisse@redhat.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Sumitra Sharma <sumitraartsy@gmail.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>, Deepak R Varma <drv@mailo.com>
+Subject: Re: [PATCH v2] lib: Replace kmap() with kmap_local_page()
+Date:   Sun, 18 Jun 2023 06:50:04 +0200
+Message-ID: <8275009.NyiUUSuA9g@suse>
+In-Reply-To: <20230610175712.GA348514@sumitra.com>
+References: <20230610175712.GA348514@sumitra.com>
 MIME-Version: 1.0
-References: <20230612093815.133504-1-cerasuolodomenico@gmail.com>
- <20230612093815.133504-2-cerasuolodomenico@gmail.com> <20230618043857.GA2417524@google.com>
-In-Reply-To: <20230618043857.GA2417524@google.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Sat, 17 Jun 2023 21:48:36 -0700
-Message-ID: <CAJD7tkbRn2txAt94keKTRbAA7--XF3rXSa8vsh9eGZa2CUWP8w@mail.gmail.com>
-Subject: Re: [PATCH v3 1/7] mm: zswap: add pool shrinking mechanism
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
-        vitaly.wool@konsulko.com, minchan@kernel.org, linux-mm@kvack.org,
-        ddstreet@ieee.org, sjenning@redhat.com, nphamcs@gmail.com,
-        hannes@cmpxchg.org, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,31 +73,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 9:39=E2=80=AFPM Sergey Senozhatsky
-<senozhatsky@chromium.org> wrote:
->
-> On (23/06/12 11:38), Domenico Cerasuolo wrote:
-> > +static int zswap_reclaim_entry(struct zswap_pool *pool)
-> > +{
-> > +     struct zswap_header *zhdr;
-> > +     struct zswap_entry *entry;
-> > +     struct zswap_tree *tree;
-> > +     pgoff_t swpoffset;
-> > +     int ret;
-> > +
-> > +     /* Get an entry off the LRU */
-> > +     spin_lock(&pool->lru_lock);
-> > +     if (list_empty(&pool->lru)) {
-> > +             spin_unlock(&pool->lru_lock);
-> > +             return -EINVAL;
-> > +     }
-> > +     entry =3D list_last_entry(&pool->lru, struct zswap_entry, lru);
-> > +     list_del_init(&entry->lru);
->
-> A quick question: should we zswap_entry_get() here?
+On sabato 10 giugno 2023 19:57:12 CEST Sumitra Sharma wrote:
+> kmap() has been deprecated in favor of the kmap_local_page()
+> due to high cost, restricted mapping space, the overhead of
+> a global lock for synchronization, and making the process
+> sleep in the absence of free slots.
+>=20
+> kmap_local_page() is faster than kmap() and offers thread-local
+> and CPU-local mappings, take pagefaults in a local kmap region
+> and preserves preemption by saving the mappings of outgoing
+> tasks and restoring those of the incoming one during a context
+> switch.
+>=20
+> The mappings are kept thread local in the functions
+> =E2=80=9Cdmirror_do_read=E2=80=9D and =E2=80=9Cdmirror_do_write=E2=80=9D =
+in test_hmm.c
+>=20
+> Therefore, replace kmap() with kmap_local_page() and use
+> mempcy_from/to_page() to avoid open coding kmap_local_page()
+> + memcpy() + kunmap_local().
+>=20
+> Remove the unused variable =E2=80=9Ctmp=E2=80=9D.
+>=20
+>=20
+> Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 
-We need to hold the tree lock for that, and the lock ordering is tree
-lock -> lru lock. If we try to grab the tree lock here we may
-deadlock. In the next code block we release the lru_lock, hold the
-tree lock, make sure the entry is still valid in the tree, then do
-zswap_entry_get().
+LGTM, so...
+
+Reviewed-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+
+Thanks,
+
+=46abio
+
+P.S.: The answer to an old question from you is that "LGTM" stands for "[It=
+]=20
+Looks Good To Me".=20
+
+It's just a way to introduce the "Reviewed-by" tag itself. However, "LGTM" =
+is=20
+not required, whereas the tag is required for a valid review and only the t=
+ag=20
+line will be added by maintainers in the log when your patch gets applied. =
+=20
+
+While here... Please don't put unnecessary blank lines between the tags.The=
+y=20
+are not required and instead may worsen readability (obviously, I'm not=20
+requiring a new version for this). =20
+
+>=20
+> Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+> ---
+>=20
+> Changes in v2:
+> 	- Change commit subject and description.
+> 	- Remove unnecessary type casting (char *).
+>=20
+>=20
+>  lib/test_hmm.c | 10 ++--------
+>  1 file changed, 2 insertions(+), 8 deletions(-)
+>=20
+> diff --git a/lib/test_hmm.c b/lib/test_hmm.c
+> index 67e6f83fe0f8..717dcb830127 100644
+> --- a/lib/test_hmm.c
+> +++ b/lib/test_hmm.c
+> @@ -368,16 +368,13 @@ static int dmirror_do_read(struct dmirror *dmirror,
+> unsigned long start, for (pfn =3D start >> PAGE_SHIFT; pfn < (end >>
+> PAGE_SHIFT); pfn++) { void *entry;
+>  		struct page *page;
+> -		void *tmp;
+>=20
+>  		entry =3D xa_load(&dmirror->pt, pfn);
+>  		page =3D xa_untag_pointer(entry);
+>  		if (!page)
+>  			return -ENOENT;
+>=20
+> -		tmp =3D kmap(page);
+> -		memcpy(ptr, tmp, PAGE_SIZE);
+> -		kunmap(page);
+> +		memcpy_from_page(ptr, page, 0, PAGE_SIZE);
+>=20
+>  		ptr +=3D PAGE_SIZE;
+>  		bounce->cpages++;
+> @@ -437,16 +434,13 @@ static int dmirror_do_write(struct dmirror *dmirror,
+> unsigned long start, for (pfn =3D start >> PAGE_SHIFT; pfn < (end >>
+> PAGE_SHIFT); pfn++) { void *entry;
+>  		struct page *page;
+> -		void *tmp;
+>=20
+>  		entry =3D xa_load(&dmirror->pt, pfn);
+>  		page =3D xa_untag_pointer(entry);
+>  		if (!page || xa_pointer_tag(entry) !=3D DPT_XA_TAG_WRITE)
+>  			return -ENOENT;
+>=20
+> -		tmp =3D kmap(page);
+> -		memcpy(tmp, ptr, PAGE_SIZE);
+> -		kunmap(page);
+> +		memcpy_to_page(page, 0, ptr, PAGE_SIZE);
+>=20
+>  		ptr +=3D PAGE_SIZE;
+>  		bounce->cpages++;
+> --
+> 2.25.1
+
+
+
+
