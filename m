@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B17D273485D
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 22:50:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD43C73485B
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 22:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbjFRUuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 16:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48700 "EHLO
+        id S229785AbjFRUun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 16:50:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbjFRUuE (ORCPT
+        with ESMTP id S229609AbjFRUuG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 16:50:04 -0400
+        Sun, 18 Jun 2023 16:50:06 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1490F123;
-        Sun, 18 Jun 2023 13:50:03 -0700 (PDT)
-Date:   Sun, 18 Jun 2023 20:50:01 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A58E50;
+        Sun, 18 Jun 2023 13:50:04 -0700 (PDT)
+Date:   Sun, 18 Jun 2023 20:50:02 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1687121401;
+        s=2020; t=1687121403;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=RLza2EuRT8Pc9gGBN+8vDyqrzm6IJK5zD9DGw50QT6U=;
-        b=nPuc6awDZWgANksgHs7s7QSQtDmMAlRwwFZLiGDe7a5tIHh3zj9F0usTFO4yv7AwqNfFh3
-        z3kXhEOmgtq08gjrAAnNUZaomNgSN7Ln/8aipVMBKqr7nH0QW4SmSVvmoj+WHs3F0Op2fd
-        erMHa/GVGldK0yAJh7h1DS9vW4uhFxVC3nQuFqQRwJIqCeJt/3UIwLd0015PspeHPRHgSt
-        szWkxeG+zF2C+Pbw5qXto8Q+Y5qgk7W2scKwI4TWaHgLjyiMpduvqYwiOMNa20xCmbNDLv
-        //FK9MZ8ThTDEiAV4ntwhPtc7w6L+7IfZhI/3n+MX9S+YYDHqXGA2yc+7O1wrA==
+        bh=YpXG9REuMylSASdnlFZVvxdCBcm2UP5k7d+AffXNLKE=;
+        b=MfsUgq5Z9Og+qG8qijuKFNR/4OMzFFR6otO8kUFcUvqDa1GQFt62adL7Fibw0BWIvVXBKa
+        1Aytq3VKa1MGZBRON6hIfMGsIlTdvUoWCHIS75bsmjHa2HqLU4xqrTU5adXKp6MKQ8gbvT
+        B6lpJznhPQ6AYlA1qjjt2Q7EJS4B8eFmngshRHOUw6Y4g3XhtvNLJLg1C0zrARJYn7Fb44
+        MRa0XJr2oe4zOms5cE5PvopUVKTRptkjVu5ia8pSJwWm23qXw2X+Pett4geLsPaMUsqDYP
+        VSFtZ+mSVT76X06gI5jq5KuA8x8AmN4CXgH67XhOGaA6uLZnUuMX5/TN5GUT4Q==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1687121401;
+        s=2020e; t=1687121403;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=RLza2EuRT8Pc9gGBN+8vDyqrzm6IJK5zD9DGw50QT6U=;
-        b=4e9YSEuAE14f9GlL/UUHr9vHLdDBNbsqVX+1GH752svLc0oOtyv9+z9o+dmXqIqS9Y0Tsq
-        EObs7cFjykAV5ECQ==
+        bh=YpXG9REuMylSASdnlFZVvxdCBcm2UP5k7d+AffXNLKE=;
+        b=jpozfEYg6XfmtrMjdPPd6AWAMbbiEigo2jU8+K0qRKSMsQt6duS36s9NGX6ekNHraSWNGX
+        qLRBc18YDbkH82Cg==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] posix-timers: Document sys_clock_getoverrun()
+Subject: [tip: timers/core] posix-timers: Document sys_clock_getres() correctly
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Frederic Weisbecker <frederic@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230425183313.462051641@linutronix.de>
-References: <20230425183313.462051641@linutronix.de>
+In-Reply-To: <20230425183313.356427330@linutronix.de>
+References: <20230425183313.356427330@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <168712140125.404.806739037272052051.tip-bot2@tip-bot2>
+Message-ID: <168712140276.404.16251417611941366765.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,58 +67,123 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     65cade468dee537885b51897ba41ba05a4dcf6ca
-Gitweb:        https://git.kernel.org/tip/65cade468dee537885b51897ba41ba05a4dcf6ca
+Commit-ID:     01679b5db7172b898be325ff272e10aebd412911
+Gitweb:        https://git.kernel.org/tip/01679b5db7172b898be325ff272e10aebd412911
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Tue, 25 Apr 2023 20:49:14 +02:00
+AuthorDate:    Tue, 25 Apr 2023 20:49:11 +02:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Sun, 18 Jun 2023 22:41:50 +02:00
 
-posix-timers: Document sys_clock_getoverrun()
+posix-timers: Document sys_clock_getres() correctly
 
-Document the syscall in detail and with coherent sentences.
+The decades old comment about Posix clock resolution is confusing at best.
+
+Remove it and add a proper explanation to sys_clock_getres().
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
-Link: https://lore.kernel.org/r/20230425183313.462051641@linutronix.de
+Link: https://lore.kernel.org/r/20230425183313.356427330@linutronix.de
 
 ---
- kernel/time/posix-timers.c | 25 +++++++++++++++++--------
- 1 file changed, 17 insertions(+), 8 deletions(-)
+ kernel/time/posix-timers.c | 81 +++++++++++++++++++++++++++++++++----
+ 1 file changed, 73 insertions(+), 8 deletions(-)
 
 diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
-index e1af74c..191ecf5 100644
+index 6ac6933..1acdd04 100644
 --- a/kernel/time/posix-timers.c
 +++ b/kernel/time/posix-timers.c
-@@ -783,14 +783,23 @@ SYSCALL_DEFINE2(timer_gettime32, timer_t, timer_id,
+@@ -67,14 +67,6 @@ static const struct k_clock clock_realtime, clock_monotonic;
+  *	    to implement others.  This structure defines the various
+  *	    clocks.
+  *
+- * RESOLUTION: Clock resolution is used to round up timer and interval
+- *	    times, NOT to report clock times, which are reported with as
+- *	    much resolution as the system can muster.  In some cases this
+- *	    resolution may depend on the underlying clock hardware and
+- *	    may not be quantifiable until run time, and only then is the
+- *	    necessary code is written.	The standard says we should say
+- *	    something about this issue in the documentation...
+- *
+  * FUNCTIONS: The CLOCKs structure defines possible functions to
+  *	    handle various clock functions.
+  *
+@@ -1198,6 +1190,79 @@ SYSCALL_DEFINE2(clock_adjtime, const clockid_t, which_clock,
+ 	return err;
+ }
  
- #endif
- 
--/*
-- * Get the number of overruns of a POSIX.1b interval timer.  This is to
-- * be the overrun of the timer last delivered.  At the same time we are
-- * accumulating overruns on the next timer.  The overrun is frozen when
-- * the signal is delivered, either at the notify time (if the info block
-- * is not queued) or at the actual delivery time (as we are informed by
-- * the call back to posixtimer_rearm().  So all we need to do is
-- * to pick up the frozen overrun.
 +/**
-+ * sys_timer_getoverrun - Get the number of overruns of a POSIX.1b interval timer
-+ * @timer_id:	The timer ID which identifies the timer
++ * sys_clock_getres - Get the resolution of a clock
++ * @which_clock:	The clock to get the resolution for
++ * @tp:			Pointer to a a user space timespec64 for storage
 + *
-+ * The "overrun count" of a timer is one plus the number of expiration
-+ * intervals which have elapsed between the first expiry, which queues the
-+ * signal and the actual signal delivery. On signal delivery the "overrun
-+ * count" is calculated and cached, so it can be returned directly here.
++ * POSIX defines:
 + *
-+ * As this is relative to the last queued signal the returned overrun count
-+ * is meaningless outside of the signal delivery path and even there it
-+ * does not accurately reflect the current state when user space evaluates
-+ * it.
++ * "The clock_getres() function shall return the resolution of any
++ * clock. Clock resolutions are implementation-defined and cannot be set by
++ * a process. If the argument res is not NULL, the resolution of the
++ * specified clock shall be stored in the location pointed to by res. If
++ * res is NULL, the clock resolution is not returned. If the time argument
++ * of clock_settime() is not a multiple of res, then the value is truncated
++ * to a multiple of res."
++ *
++ * Due to the various hardware constraints the real resolution can vary
++ * wildly and even change during runtime when the underlying devices are
++ * replaced. The kernel also can use hardware devices with different
++ * resolutions for reading the time and for arming timers.
++ *
++ * The kernel therefore deviates from the POSIX spec in various aspects:
++ *
++ * 1) The resolution returned to user space
++ *
++ *    For CLOCK_REALTIME, CLOCK_MONOTONIC, CLOCK_BOOTTIME, CLOCK_TAI,
++ *    CLOCK_REALTIME_ALARM, CLOCK_BOOTTIME_ALAREM and CLOCK_MONOTONIC_RAW
++ *    the kernel differentiates only two cases:
++ *
++ *    I)  Low resolution mode:
++ *
++ *	  When high resolution timers are disabled at compile or runtime
++ *	  the resolution returned is nanoseconds per tick, which represents
++ *	  the precision at which timers expire.
++ *
++ *    II) High resolution mode:
++ *
++ *	  When high resolution timers are enabled the resolution returned
++ *	  is always one nanosecond independent of the actual resolution of
++ *	  the underlying hardware devices.
++ *
++ *	  For CLOCK_*_ALARM the actual resolution depends on system
++ *	  state. When system is running the resolution is the same as the
++ *	  resolution of the other clocks. During suspend the actual
++ *	  resolution is the resolution of the underlying RTC device which
++ *	  might be way less precise than the clockevent device used during
++ *	  running state.
++ *
++ *   For CLOCK_REALTIME_COARSE and CLOCK_MONOTONIC_COARSE the resolution
++ *   returned is always nanoseconds per tick.
++ *
++ *   For CLOCK_PROCESS_CPUTIME and CLOCK_THREAD_CPUTIME the resolution
++ *   returned is always one nanosecond under the assumption that the
++ *   underlying scheduler clock has a better resolution than nanoseconds
++ *   per tick.
++ *
++ *   For dynamic POSIX clocks (PTP devices) the resolution returned is
++ *   always one nanosecond.
++ *
++ * 2) Affect on sys_clock_settime()
++ *
++ *    The kernel does not truncate the time which is handed in to
++ *    sys_clock_settime(). The kernel internal timekeeping is always using
++ *    nanoseconds precision independent of the clocksource device which is
++ *    used to read the time from. The resolution of that device only
++ *    affects the presicion of the time returned by sys_clock_gettime().
 + *
 + * Returns:
-+ *	-EINVAL		@timer_id is invalid
-+ *	1..INT_MAX	The number of overruns related to the last delivered signal
-  */
- SYSCALL_DEFINE1(timer_getoverrun, timer_t, timer_id)
++ *	0		Success. @tp contains the resolution
++ *	-EINVAL		@which_clock is not a valid clock ID
++ *	-EFAULT		Copying the resolution to @tp faulted
++ *	-ENODEV		Dynamic POSIX clock is not backed by a device
++ *	-EOPNOTSUPP	Dynamic POSIX clock does not support getres()
++ */
+ SYSCALL_DEFINE2(clock_getres, const clockid_t, which_clock,
+ 		struct __kernel_timespec __user *, tp)
  {
