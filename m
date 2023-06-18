@@ -2,102 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D99734524
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 08:48:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73E83734528
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 08:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229528AbjFRGsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 02:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
+        id S229536AbjFRGuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 02:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjFRGsT (ORCPT
+        with ESMTP id S229481AbjFRGuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 02:48:19 -0400
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76AFE5E;
-        Sat, 17 Jun 2023 23:48:18 -0700 (PDT)
-Received: by mail-oo1-xc36.google.com with SMTP id 006d021491bc7-558cf19575dso1758107eaf.3;
-        Sat, 17 Jun 2023 23:48:18 -0700 (PDT)
+        Sun, 18 Jun 2023 02:50:02 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343A1E5E
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 23:50:01 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f9189228bcso824225e9.3
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 23:50:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687070898; x=1689662898;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LTo1KCmoI+3M46rfBk4X9GJE9+liBm16LyxJ6tR7Fxc=;
-        b=oY3btrBjo/LfqdGWh6E6EVUrJi/7vM+uTKPjlDUnBvX2yE07x4jZct56Gnl8WB81WN
-         QAzV0LxE5EC4KhkpeeCMC3juCYCBg4hUsuZrKS0R4yRB1l3Qb7Al5NntC1476q5LAF5V
-         GBm+aG4BRUwH8cuaareS5WOGMRyU47aHPjbDZnWPQkoh9Ju0+VxZEojK8B6FH5Vuqevk
-         bk6Pxl7fWmqFJphL7WoqHdVRsHQp4ooeAkKUYrA+7WLtxgObkQAzBkJLRNdFDhaq+JOA
-         aEs8yLFH8FgSaiodu9tPI0E7nPX9zboJTts9lnQY9W+bRqW12qNweuDq5vsPfGYuasDS
-         p9mg==
+        d=linaro.org; s=google; t=1687070999; x=1689662999;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kTbsJHJAIh6L3OpmlKEMiLQ8FVA+BH6GdkanOhtFItg=;
+        b=am0n7jcHfoIjQo2hsnQsbevfZPseixSmpo2SSFGzb5Hpphzcc0coNeq1wFtWFmCgPf
+         Gs7slH4VN0Xs09KXbj2Wznu4ZP/OzkmWqn4jEM25d26yjSovzt/fHh8Towa7WRWvoixs
+         WDKCkF2wsVgv13NcweE+ZHmnY3Id4s46yAdJM5yqccCVw9sjmeNfwBDvteOYlkP+dtxi
+         JWSn+LUoN2FbR/Ffu6h6spvadXl7WFwIIHLCdbVDLHs5+iiaieUab6SSmjiFvcY/Dbgl
+         ZQa018CeTpHP1ieINDU2k55V6OnfDwcBXuW42bbJSLDnR9X58XeHCN7wHrdEbM0j3vhe
+         AyKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687070898; x=1689662898;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1687070999; x=1689662999;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=LTo1KCmoI+3M46rfBk4X9GJE9+liBm16LyxJ6tR7Fxc=;
-        b=iMkkM4xD7W5J9RWlvCigTbRSwQb7cvc3zXPpS8LRP6JTtzjUeXiOtY+OeTbINrG07Y
-         4jKtHVbz2oRaKxI1EiLi5tR+e27T1fb+5viFxpQ9QkpaK5UE72oL+PZvv/04nrO3wVlU
-         ytwXgTiPVnKpFYOEh4+5wp2I3pYivNQ7I1klXVxPb5qBbqEdoMF1NDzHguLUeUdjBvw3
-         d9rePR4hyzcoRr/MGiQdqXfxxBJc9OwaICcngl8Lbk52cn64StRoLs0KvMZOiF+4hEui
-         NXLj9lhLkNYT70PhPt9QQG4EjjgpzJQLSrahptN0GzDqBwAdhZWkRqG0+plnebY6Cr62
-         N0ug==
-X-Gm-Message-State: AC+VfDzSjhVGLzNJ4g74ZAjygdsPegGKGZ+tYrff0yuv9T5MserEJuv6
-        FhMehRdbFsEs0shInjIGrSM=
-X-Google-Smtp-Source: ACHHUZ7VGsWXSPSZpioEsUzxOniWvUcGzZsx86ZogwaxQv95Qm4aWDEuaEYwcOcvyYSfsNbxe+o7iw==
-X-Received: by 2002:a05:6808:300f:b0:39a:bd0e:43d with SMTP id ay15-20020a056808300f00b0039abd0e043dmr10012266oib.36.1687070897840;
-        Sat, 17 Jun 2023 23:48:17 -0700 (PDT)
-Received: from ubuntu777.domain.name (36-228-68-11.dynamic-ip.hinet.net. [36.228.68.11])
-        by smtp.gmail.com with ESMTPSA id n6-20020a1709026a8600b001a0448731c2sm18217909plk.47.2023.06.17.23.48.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Jun 2023 23:48:17 -0700 (PDT)
-From:   Min-Hua Chen <minhuadotchen@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     Min-Hua Chen <minhuadotchen@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] remoteproc: qcom_q6v5_pas: make adsp_segment_dump static
-Date:   Sun, 18 Jun 2023 14:48:12 +0800
-Message-Id: <20230618064812.230265-1-minhuadotchen@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        bh=kTbsJHJAIh6L3OpmlKEMiLQ8FVA+BH6GdkanOhtFItg=;
+        b=Xd3MPUhXZ4Zdxk2pmPT+ffOgQ3pj+NvXCIOheNWGUhWsvAY02tjraoe9wguaZ7iyUO
+         Lp8SrI/GjtTmOx2E0qZ+GHDriUfu+BrwMgmE9amBEatUWXuwYG532HKtXuydfarddqoB
+         BX9ir/c+6s2DGA2x6E12lC5jy/es3fdcrjOHIrLjzXizGoZePMF5DEniIP3wqBN2lNa7
+         K/lImYLxf9ZJ4c1DE3h109HpVqFixAoWfIHG4TcVNEWr/j+rwz0xLAhMzYBovr41WaI3
+         OZ8OclMx62OM3CKOO3puswe530mGbp6sWT8CJloxNPFBRn0ltaaeBHAqY9MgSTf2EJPq
+         ossw==
+X-Gm-Message-State: AC+VfDzuJf3S7Z9XV1u3Q2res7EtA5mi2QhIrgShU2roomozezusnSwy
+        U4XFDW8F09sOFPrWH+rG5SZ0/54Uv3Ed5Go7rk3hOQ==
+X-Google-Smtp-Source: ACHHUZ7S6ECk8uaphJNxTelZTmW4DZh6bWCMyhptboMmhW4e7hixs2RagJ/j3zTRKjShC7214bpopIgYhKQR4gMWn0c=
+X-Received: by 2002:a5d:6ad1:0:b0:311:18ce:152b with SMTP id
+ u17-20020a5d6ad1000000b0031118ce152bmr3848340wrw.61.1687070999524; Sat, 17
+ Jun 2023 23:49:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230526192210.3146896-1-bhupesh.sharma@linaro.org>
+ <20230526192210.3146896-11-bhupesh.sharma@linaro.org> <d239ad07-fbdd-16fa-3555-5bcf33c67059@linaro.org>
+ <11c3eb6c-823d-9688-ec53-e05c7bb557c5@linaro.org> <83807d70-c35c-6b66-e7f9-521bdfc6d1b4@linaro.org>
+In-Reply-To: <83807d70-c35c-6b66-e7f9-521bdfc6d1b4@linaro.org>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Sun, 18 Jun 2023 12:19:48 +0530
+Message-ID: <CAH=2NtyNqbhY6B0orqyGvhOWs7M5z9tBQ05E7e7Fb1toamN95Q@mail.gmail.com>
+Subject: Re: [PATCH v8 10/11] arm64: dts: qcom: sm8350: Add Crypto Engine support
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        agross@kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, andersson@kernel.org,
+        bhupesh.linux@gmail.com, robh+dt@kernel.org,
+        vladimir.zapolskiy@linaro.org, rfoss@kernel.org,
+        neil.armstrong@linaro.org, djakov@kernel.org, stephan@gerhold.net,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Linux Kernel Functional Testing <lkft@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes the following sparse warning:
+On Sat, 17 Jun 2023 at 12:58, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 17/06/2023 01:33, Konrad Dybcio wrote:
+> > On 16.06.2023 19:36, Krzysztof Kozlowski wrote:
+> >> On 26/05/2023 21:22, Bhupesh Sharma wrote:
+> >>> Add crypto engine (CE) and CE BAM related nodes and definitions to
+> >>> 'sm8350.dtsi'.
+> >>>
+> >>> Tested-by: Anders Roxell <anders.roxell@linaro.org>
+> >>> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> >>> Co-developed-by and Signed-off-by: Robert Foss <rfoss@kernel.org>
+> >>> [Bhupesh: Switch to '#interconnect-cells = <2>', available since commit 4f287e31ff5f]
+> >>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> >>> ---
+> >>
+> >> #regzbot introduced: f1040a7fe8f069d2259ab3dab9190210005ceb33
+> >> #regzbot title: HDK8350 silently crashes early on boot
+> >>
+> >> Hi, this landed in the next but unfortunately it causes silent crash
+> >> (and reboot) of HDK8350. Reverting this commit helps.
+> > Downstream also references the following SIDs:
+> >
+> > iommus = <&apps_smmu 0x592 0>,
+> >        <&apps_smmu 0x598 0>,
+> >        <&apps_smmu 0x599 0>,
+> >        <&apps_smmu 0x59F 0>;
+>
+> I already tried iommus from downstream from:
+> 1. qcrypto node (0x584, 0x594)
+> 2. qcedev (0x586, 0x596)
+> 3. qcom_cedev_ns_cb (0x592, 0x598, 0x599, 0x59F), although with 0x0011
+> last argument.
+>
+> Same results, but indeed iommu would be nice reason here.
+>
+> I also double checked the version of block (BAM DMA is v1.7.4) and other
+> properties. When I disabled crypto but left BAM DMA, the result was the
+> same, thus it is maybe the BAM who causes abort.
 
-drivers/remoteproc/qcom_q6v5_pas.c:108:6: sparse: warning: symbol
-'adsp_segment_dump' was not declared. Should it be static?
+I remember testing it on the sm8350-mtp and found no issues. Infact
+Robert (the original author of the patch) had also done some testing
+in the past.
 
-No functional change intended.
+I am sure - mtp v/s hdk board variation would not cause this, so let
+me have a stab at it tomorrow.
 
-Signed-off-by: Min-Hua Chen <minhuadotchen@gmail.com>
----
- drivers/remoteproc/qcom_q6v5_pas.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
-index e34d82b18a67..f77d11c91a75 100644
---- a/drivers/remoteproc/qcom_q6v5_pas.c
-+++ b/drivers/remoteproc/qcom_q6v5_pas.c
-@@ -105,7 +105,7 @@ struct qcom_adsp {
- 	struct qcom_scm_pas_metadata dtb_pas_metadata;
- };
- 
--void adsp_segment_dump(struct rproc *rproc, struct rproc_dump_segment *segment,
-+static void adsp_segment_dump(struct rproc *rproc, struct rproc_dump_segment *segment,
- 		       void *dest, size_t offset, size_t size)
- {
- 	struct qcom_adsp *adsp = rproc->priv;
--- 
-2.34.1
-
+Thanks,
+Bhupesh
