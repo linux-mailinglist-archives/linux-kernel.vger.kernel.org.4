@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FF9373485F
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 22:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5839A73485E
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 22:50:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbjFRUu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 16:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
+        id S229740AbjFRUuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 16:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjFRUuG (ORCPT
+        with ESMTP id S229631AbjFRUuI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 16:50:06 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6D1E56;
-        Sun, 18 Jun 2023 13:50:05 -0700 (PDT)
-Date:   Sun, 18 Jun 2023 20:50:03 -0000
+        Sun, 18 Jun 2023 16:50:08 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4BEE5A;
+        Sun, 18 Jun 2023 13:50:06 -0700 (PDT)
+Date:   Sun, 18 Jun 2023 20:50:04 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1687121404;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tE0PPSvgiBV5Ta1Wh/yehUxuOW1BM6BMnXtjBzy/htw=;
-        b=YXig6ezMJyRfFkCpfFbX6sh4o8D7NyqqJqmbpSNVHpYy45kWDo454iLrYpIWbARmxs4h2W
-        YUHMnbrCAvM1PEl9otel1Hems4kXriO+NjJUvHGKkXalI4CZ0jn597RZDmHC5L0TaHpz1F
-        dTAxqAvXa9vN+OzgNsZp/V1FYP4tbn84YLgiphwnGJByvu156l5mP8VkFosJM4EbAhXEYT
-        Oh10pSUT12qqsiREGfi0/v3pRafRpEHHD7fYPT/QSm0OmW4GjNnVG+3+R8DJgPUfHUVK89
-        Wnd7OuGj36Tz/zcluRyuNp6ap8pcsygXiAp0MjvXld0jE82F1Y/45pHTij3DTg==
+        bh=5+A7Bi/X2n8XHhjnVYrS8ebBzftUu/YIL7YEonpKXCY=;
+        b=L1Uw9LA8kg+l3i0VbY1Psw+zipWiLXEZcUPuE0qvrCysLyPdjlk9ZFNNnXscICsZ1HcDKY
+        ojfjKsdNFUjlZYRYvjSxBdWs+LRvBBXdp/kPX5baL7BJDFIdrkH7iYhyE4p7011YAfzqFA
+        T3oPyioT2qATp2DgLB+ZFndO5xcx7/Scsvy9yMs0GGe3hhboywQSoVcLTJA4Aq7RnmO/Fl
+        hKEVH0RWEsqPVzVelV4J54Ine20xtiGS+78W/1KkoS797Mgomdz3wVeFlB0cbOfOSoWz30
+        SEohsn2NLm3LScj2DwPPJBQoSW0pvOCPxbTHwXXZlh+wLIkeDN8hAtAhQDsT1w==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1687121404;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,21 +36,21 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tE0PPSvgiBV5Ta1Wh/yehUxuOW1BM6BMnXtjBzy/htw=;
-        b=fmRgRd0fiNph0n3x+a2Zg2UAvRhX4KHr6kwajorvsh1CbTBCIeB+stKJT7vIlJzlrA9DbV
-        Ab0b+jvRepTiUDCw==
+        bh=5+A7Bi/X2n8XHhjnVYrS8ebBzftUu/YIL7YEonpKXCY=;
+        b=mrPnrVPAqHepILe+NjTTk1iQKQzlRR0FKbytVtA2nSUQF2kSbTsOhrnf46tbgMDwtYEswe
+        Vyjy/W8GenOyw+Cw==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] posix-timers: Split release_posix_timers()
+Subject: [tip: timers/core] posix-timers: Remove pointless irqsafe from hash_lock
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Frederic Weisbecker <frederic@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230425183313.301432503@linutronix.de>
-References: <20230425183313.301432503@linutronix.de>
+In-Reply-To: <20230425183313.249063953@linutronix.de>
+References: <20230425183313.249063953@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <168712140351.404.14009303465424230043.tip-bot2@tip-bot2>
+Message-ID: <168712140425.404.12496348784303071442.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,113 +67,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     8cc96ca2c75f6da59de41321797c87562703c9e1
-Gitweb:        https://git.kernel.org/tip/8cc96ca2c75f6da59de41321797c87562703c9e1
+Commit-ID:     11fbe6cd41210c7b5173257158a22e11e225622d
+Gitweb:        https://git.kernel.org/tip/11fbe6cd41210c7b5173257158a22e11e225622d
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Tue, 25 Apr 2023 20:49:09 +02:00
+AuthorDate:    Tue, 25 Apr 2023 20:49:08 +02:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Sun, 18 Jun 2023 22:41:50 +02:00
+CommitterDate: Sun, 18 Jun 2023 22:41:49 +02:00
 
-posix-timers: Split release_posix_timers()
+posix-timers: Remove pointless irqsafe from hash_lock
 
-release_posix_timers() is called for cleaning up both hashed and unhashed
-timers. The cases are differentiated by an argument and the usage is
-hideous.
-
-Seperate the actual free path out and use it for unhashed timers. Provide a
-function for hashed timers.
-
-No functional change.
+All usage of hash_lock is in thread context. No point in using
+spin_lock_irqsave()/irqrestore() for a single usage site.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
-Link: https://lore.kernel.org/r/20230425183313.301432503@linutronix.de
+Link: https://lore.kernel.org/r/20230425183313.249063953@linutronix.de
 
 ---
- kernel/time/posix-timers.c | 31 +++++++++++++++----------------
- 1 file changed, 15 insertions(+), 16 deletions(-)
+ kernel/time/posix-timers.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
-index ed7d260..6ac6933 100644
+index c1b77c5..ed7d260 100644
 --- a/kernel/time/posix-timers.c
 +++ b/kernel/time/posix-timers.c
-@@ -466,20 +466,21 @@ static void k_itimer_rcu_free(struct rcu_head *head)
- 	kmem_cache_free(posix_timers_cache, tmr);
- }
- 
--#define IT_ID_SET	1
--#define IT_ID_NOT_SET	0
--static void release_posix_timer(struct k_itimer *tmr, int it_id_set)
--{
--	if (it_id_set) {
--		spin_lock(&hash_lock, flags);
--		hlist_del_rcu(&tmr->t_hash);
--		spin_unlock(&hash_lock, flags);
--	}
-+static void posix_timer_free(struct k_itimer *tmr)
-+{
+@@ -471,10 +471,9 @@ static void k_itimer_rcu_free(struct rcu_head *head)
+ static void release_posix_timer(struct k_itimer *tmr, int it_id_set)
+ {
+ 	if (it_id_set) {
+-		unsigned long flags;
+-		spin_lock_irqsave(&hash_lock, flags);
++		spin_lock(&hash_lock, flags);
+ 		hlist_del_rcu(&tmr->t_hash);
+-		spin_unlock_irqrestore(&hash_lock, flags);
++		spin_unlock(&hash_lock, flags);
+ 	}
  	put_pid(tmr->it_pid);
  	sigqueue_free(tmr->sigq);
- 	call_rcu(&tmr->rcu, k_itimer_rcu_free);
- }
- 
-+static void posix_timer_unhash_and_free(struct k_itimer *tmr)
-+{
-+	spin_lock(&hash_lock);
-+	hlist_del_rcu(&tmr->t_hash);
-+	spin_unlock(&hash_lock);
-+	posix_timer_free(tmr);
-+}
-+
- static int common_timer_create(struct k_itimer *new_timer)
- {
- 	hrtimer_init(&new_timer->it.real.timer, new_timer->it_clock, 0);
-@@ -493,7 +494,6 @@ static int do_timer_create(clockid_t which_clock, struct sigevent *event,
- 	const struct k_clock *kc = clockid_to_kclock(which_clock);
- 	struct k_itimer *new_timer;
- 	int error, new_timer_id;
--	int it_id_set = IT_ID_NOT_SET;
- 
- 	if (!kc)
- 		return -EINVAL;
-@@ -513,11 +513,10 @@ static int do_timer_create(clockid_t which_clock, struct sigevent *event,
- 	 */
- 	new_timer_id = posix_timer_add(new_timer);
- 	if (new_timer_id < 0) {
--		error = new_timer_id;
--		goto out;
-+		posix_timer_free(new_timer);
-+		return new_timer_id;
- 	}
- 
--	it_id_set = IT_ID_SET;
- 	new_timer->it_id = (timer_t) new_timer_id;
- 	new_timer->it_clock = which_clock;
- 	new_timer->kclock = kc;
-@@ -569,7 +568,7 @@ static int do_timer_create(clockid_t which_clock, struct sigevent *event,
- 	 * new_timer after the unlock call.
- 	 */
- out:
--	release_posix_timer(new_timer, it_id_set);
-+	posix_timer_unhash_and_free(new_timer);
- 	return error;
- }
- 
-@@ -1057,7 +1056,7 @@ retry_delete:
- 	WRITE_ONCE(timer->it_signal, NULL);
- 
- 	unlock_timer(timer, flags);
--	release_posix_timer(timer, IT_ID_SET);
-+	posix_timer_unhash_and_free(timer);
- 	return 0;
- }
- 
-@@ -1109,7 +1108,7 @@ retry_delete:
- 	WRITE_ONCE(timer->it_signal, NULL);
- 
- 	spin_unlock_irqrestore(&timer->it_lock, flags);
--	release_posix_timer(timer, IT_ID_SET);
-+	posix_timer_unhash_and_free(timer);
- }
- 
- /*
