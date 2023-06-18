@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE784734592
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 10:51:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07CD0734598
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 10:51:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbjFRIvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 04:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
+        id S229724AbjFRIvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 04:51:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjFRIvH (ORCPT
+        with ESMTP id S229494AbjFRIvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 04:51:07 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7BC10E5;
-        Sun, 18 Jun 2023 01:51:06 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-31121494630so2487436f8f.3;
-        Sun, 18 Jun 2023 01:51:06 -0700 (PDT)
+        Sun, 18 Jun 2023 04:51:08 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A284A10E3;
+        Sun, 18 Jun 2023 01:51:07 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-30e412a852dso1722922f8f.0;
+        Sun, 18 Jun 2023 01:51:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687078265; x=1689670265;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hmc9IwyZl6aMz+KHuXZhLsJGDOxYITeiAy/9M75qrxE=;
-        b=VArv5XEhbOMuRXTW55GI+jRO4qe5OYFVNPVGTpFHwWDLn8S0VUKNbJeCMXjvg7w+sc
-         P/Ec7YXrTzM53w9WOG9vAxSxIcFgOIh4NlzTjM0FZNFaRtXuiDGxnhpFAxKnDCvfgEes
-         k6tTxRvnhXCBTSBdJX7KZB658yHm99szm/nabNM9QrUvl6V5pb6JbjhGfqbgadF4KTEQ
-         W6ye1FLWjzYGKVRL/c+oaNHaJBcyOrFjpcMwcajZ7dYc3WD3ssLQpFwqrmvU8nGzk47X
-         x4hZN+FGUxIAjhbjngndMs3HmG/MaXQuhR9y5OWrt/fzBZrEcuW8/IiwwAD6g2jkpEnO
-         9CaQ==
+        d=gmail.com; s=20221208; t=1687078266; x=1689670266;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QTMdpVu9zcROFMVsz6T+C+h5mIKmLtZWdHwxQBCPR5I=;
+        b=Fh8hIlVoS/wbv8OUsIwPmLZWva6mur0bFHpAaMXzlEg1EecvqfhJu85SH0R81LOwah
+         RpuQXxAEb17Y929Muoxw2ubuKpIrRsf9/xy9zX10xPx8ArlyxJMnQAxKKrL5tQpQbT+d
+         RntyAiIDMzb+sy2anfFq19RHzYPz3tmH6qvtgiuw33PrU8EpIYFqcbghjpdm49YuOT7n
+         ait5W1W+In7qWdR9A0cNijeR2jHJmXiWbjtS/rcJJDFqMlv/ARdirrdH61IHIzBUk8Ll
+         VIYelOfN8W6PFAhJBnwb/OoWyRzsXk8C6wE2NE7vMiO7XX+0v6+nJgUf9XxjLQBVqt4m
+         6lmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687078265; x=1689670265;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hmc9IwyZl6aMz+KHuXZhLsJGDOxYITeiAy/9M75qrxE=;
-        b=DzYUR9qW1Wjqzpm/90A+8Y4ybKJ6z4p013fTwObKmETpVTN8dcDMwUEMEAJoXkCwLl
-         q3NeBPvnQzR8Yj8dEGrEF5fq3jEs1KBVgzk8eg4Iadwj6pLLYAQraVjssn134VrcZPb0
-         zrgJUei51KhKlRwDinr3i0EuG4gAX45LzSZlvsY1XmaxNVoBap04oRO9Uus85cdQc5qw
-         Na3hFyeva1Vf4aBusXCYzcK/OT/NlKMKKPoqeMYum8BTxKoBdAKZ6/sLnew7VXchnKVP
-         +rnqhrYiAPVVi2eb6o1lqXrkpX+vjZJpO/FaLzy9DijVwz+Xn1D+3YAMhg9Carry5fyi
-         bBzg==
-X-Gm-Message-State: AC+VfDxXga9luVwzcg84q4CRodGcw9uGuaO4ZN/dfz4e0vp9MWx7KuZS
-        XCho24/oGD42iqK6pz4x0hw=
-X-Google-Smtp-Source: ACHHUZ7ZV2jv1bt3JkvDFrYiAOcgGWw3QfOIOC2rnUu8s56kb/wlRP2xNkdJNi1qE4j6UrSMHWReLg==
-X-Received: by 2002:a5d:534f:0:b0:30f:d86b:ccab with SMTP id t15-20020a5d534f000000b0030fd86bccabmr6034312wrv.1.1687078264482;
-        Sun, 18 Jun 2023 01:51:04 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687078266; x=1689670266;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QTMdpVu9zcROFMVsz6T+C+h5mIKmLtZWdHwxQBCPR5I=;
+        b=HaV9wyb83FsreDyfW2VHRAwpOcpsHcWeMgiZpBHZOtWbXKb2Nq2QEjHAMrf9ErwHY1
+         LaXQwixxnFEWszxVUz82CLoXf7kTy46FdpwVoaAnxia6+9+udX70mk+iutYYHZ3VEcVO
+         7n1yicmWC1+IiBSnBgjTizHhSlRej98eansWmr9iPxxOz2scGBTYDhSot733D6o36Wtr
+         DObg14KvZdvcRSrdIV/5cT3H38pLQiB3mPJBy79pZiMVL5B+GsreDrlY0ewEml+rTJPD
+         FYt6RM1YNrWQRmrD3Rt83mkIltzYPDLQ6Tj2fItNJcgXdtT/1QMipA6/Oz8gAbV8qWgn
+         H0Tg==
+X-Gm-Message-State: AC+VfDy4SuWMz/2s5vdwdxctqQHa491R2zZJ+AKlTH3oBTL12ihnngup
+        ZAT2WxQBXiU6aRIMRAvM/L0=
+X-Google-Smtp-Source: ACHHUZ5iAvnY9+VrzTEbxe/zrg7W9+3kiDTUUX8UossRPNVMZs6v+1EbD8nADrl6LsmsWR+fqeDpOA==
+X-Received: by 2002:adf:d092:0:b0:30f:c7e4:d207 with SMTP id y18-20020adfd092000000b0030fc7e4d207mr3606483wrh.61.1687078265669;
+        Sun, 18 Jun 2023 01:51:05 -0700 (PDT)
 Received: from xeon.. ([188.163.112.79])
-        by smtp.gmail.com with ESMTPSA id i17-20020adfded1000000b00301a351a8d6sm6953550wrn.84.2023.06.18.01.51.03
+        by smtp.gmail.com with ESMTPSA id i17-20020adfded1000000b00301a351a8d6sm6953550wrn.84.2023.06.18.01.51.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Jun 2023 01:51:04 -0700 (PDT)
+        Sun, 18 Jun 2023 01:51:05 -0700 (PDT)
 From:   Svyatoslav Ryhel <clamor95@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -63,10 +64,12 @@ To:     Rob Herring <robh+dt@kernel.org>,
         Dmitry Osipenko <digetx@gmail.com>
 Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH v2 0/2] Support bridge/connector by Tegra HDMI
-Date:   Sun, 18 Jun 2023 11:50:44 +0300
-Message-Id: <20230618085046.10081-1-clamor95@gmail.com>
+Subject: [PATCH v2 1/2] drm/tegra: output: hdmi: Support bridge/connector
+Date:   Sun, 18 Jun 2023 11:50:45 +0300
+Message-Id: <20230618085046.10081-2-clamor95@gmail.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230618085046.10081-1-clamor95@gmail.com>
+References: <20230618085046.10081-1-clamor95@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,33 +82,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds support for the bridge/connector attached to the
-HDMI output, allowing to model the hardware properly. It keeps
-backwards compatibility with existing bindings and is required
-by devices which have a simple or MHL bridge connected to HDMI
-output like ASUS P1801-T or LG P880/P895 or HTC One X.
+From: Maxim Schwalm <maxim.schwalm@gmail.com>
 
-Tested on ASUS Transformers which have no dedicated bridge but
-have type d HDMI connector directly available. Tests went smoothly.
+Some Tegra device-trees may specify a video output graph, which involves
+MHL bridge/simple bridge and/or connector framework. This patch adds
+support for the bridge/connector attached to the HDMI output, allowing
+us to model the hardware properly.
 
+Inspired by: 29efdc2 ("drm/tegra: output: rgb: Support LVDS encoder bridge")
+
+Tested-by: Andreas Westman Dorcsak <hedmoo@yahoo.com> # ASUS TF T30
+Tested-by: Maxim Schwalm <maxim.schwalm@gmail.com> # ASUS P1801-T T30
+Tested-by: Robert Eckelmann <longnoserob@gmail.com> # ASUS TF101 T20
+Tested-by: Svyatoslav Ryhel <clamor95@gmail.com> # ASUS TF201 T30
+Signed-off-by: Maxim Schwalm <maxim.schwalm@gmail.com>
+Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
 ---
+ drivers/gpu/drm/tegra/hdmi.c | 44 +++++++++++++++++++++++++++---------
+ 1 file changed, 33 insertions(+), 11 deletions(-)
 
-Chandes from v1:
-- no changes, re-sending
-
----
-
-Maxim Schwalm (1):
-  drm/tegra: output: hdmi: Support bridge/connector
-
-Svyatoslav Ryhel (1):
-  ARM: tegra: transformers: add connector node
-
- arch/arm/boot/dts/tegra20-asus-tf101.dts      | 22 ++++++++--
- .../dts/tegra30-asus-transformer-common.dtsi  | 21 ++++++++-
- drivers/gpu/drm/tegra/hdmi.c                  | 44 ++++++++++++++-----
- 3 files changed, 71 insertions(+), 16 deletions(-)
-
+diff --git a/drivers/gpu/drm/tegra/hdmi.c b/drivers/gpu/drm/tegra/hdmi.c
+index 6eac54ae1205..a5b12b169e57 100644
+--- a/drivers/gpu/drm/tegra/hdmi.c
++++ b/drivers/gpu/drm/tegra/hdmi.c
+@@ -19,6 +19,7 @@
+ #include <soc/tegra/common.h>
+ #include <sound/hdmi-codec.h>
+ 
++#include <drm/drm_bridge_connector.h>
+ #include <drm/drm_atomic_helper.h>
+ #include <drm/drm_crtc.h>
+ #include <drm/drm_debugfs.h>
+@@ -1544,26 +1545,47 @@ static int tegra_hdmi_init(struct host1x_client *client)
+ {
+ 	struct tegra_hdmi *hdmi = host1x_client_to_hdmi(client);
+ 	struct drm_device *drm = dev_get_drvdata(client->host);
++	struct drm_connector *connector;
+ 	int err;
+ 
+ 	hdmi->output.dev = client->dev;
+ 
+-	drm_connector_init_with_ddc(drm, &hdmi->output.connector,
+-				    &tegra_hdmi_connector_funcs,
+-				    DRM_MODE_CONNECTOR_HDMIA,
+-				    hdmi->output.ddc);
+-	drm_connector_helper_add(&hdmi->output.connector,
+-				 &tegra_hdmi_connector_helper_funcs);
+-	hdmi->output.connector.dpms = DRM_MODE_DPMS_OFF;
+-
+ 	drm_simple_encoder_init(drm, &hdmi->output.encoder,
+ 				DRM_MODE_ENCODER_TMDS);
+ 	drm_encoder_helper_add(&hdmi->output.encoder,
+ 			       &tegra_hdmi_encoder_helper_funcs);
+ 
+-	drm_connector_attach_encoder(&hdmi->output.connector,
+-					  &hdmi->output.encoder);
+-	drm_connector_register(&hdmi->output.connector);
++	if (hdmi->output.bridge) {
++		err = drm_bridge_attach(&hdmi->output.encoder, hdmi->output.bridge,
++					NULL, DRM_BRIDGE_ATTACH_NO_CONNECTOR);
++		if (err) {
++			dev_err(client->dev, "failed to attach bridge: %d\n",
++				err);
++			return err;
++		}
++
++		connector = drm_bridge_connector_init(drm, &hdmi->output.encoder);
++		if (IS_ERR(connector)) {
++			dev_err(client->dev,
++				"failed to initialize bridge connector: %pe\n",
++				connector);
++			return PTR_ERR(connector);
++		}
++
++		drm_connector_attach_encoder(connector, &hdmi->output.encoder);
++	} else {
++		drm_connector_init_with_ddc(drm, &hdmi->output.connector,
++					    &tegra_hdmi_connector_funcs,
++					    DRM_MODE_CONNECTOR_HDMIA,
++					    hdmi->output.ddc);
++		drm_connector_helper_add(&hdmi->output.connector,
++					 &tegra_hdmi_connector_helper_funcs);
++		hdmi->output.connector.dpms = DRM_MODE_DPMS_OFF;
++
++		drm_connector_attach_encoder(&hdmi->output.connector,
++					     &hdmi->output.encoder);
++		drm_connector_register(&hdmi->output.connector);
++	}
+ 
+ 	err = tegra_output_init(drm, &hdmi->output);
+ 	if (err < 0) {
 -- 
 2.39.2
 
