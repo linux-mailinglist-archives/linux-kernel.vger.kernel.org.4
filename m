@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F29D73483B
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 22:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D78CD734838
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 22:50:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbjFRUuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 16:50:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48626 "EHLO
+        id S229571AbjFRUt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 16:49:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjFRUt4 (ORCPT
+        with ESMTP id S229456AbjFRUt4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 18 Jun 2023 16:49:56 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33641123;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F19E49;
         Sun, 18 Jun 2023 13:49:55 -0700 (PDT)
-Date:   Sun, 18 Jun 2023 20:49:52 -0000
+Date:   Sun, 18 Jun 2023 20:49:53 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1687121393;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2/sGYpIAZ39Bt5pDmlNlm77giPqZA2n3ZHBnu40tfgc=;
-        b=D4U6s63Ep17GDf/1OPl4BM/fgFyvBOd97Q0iyTR4WshGDQQDLsB7/Y3hQyG/QYl7aDbe6d
-        Z6kDLq3dBZJvMfTjjcY83iZuQhDE1WQMzdylc7e2PIPqkVek+mqC8YPJZ9yASjpV/pctsR
-        bvhdHpWrMo4hbFBRwbMrG/WFLZomPSp1PFk3HyB4beACYPwtXorxoGoeOXH8VVfVFNv+fR
-        Joy3rHFGOc7GLx4tSrNzW12i05E8eCedBE7StWz7pszARLpWd+Rim8lTk2XavxoNSCF7iZ
-        2cNJXavaeraGpbAoh5kCAKxLRjmLyLvKsoTB+F6febQJ8VPBAAsyf+OmadK6/w==
+        bh=u/f+hWamHpjajhGjJmO7YTLvaGN9UYfbUAWU7sxj7+s=;
+        b=rqF+RsLThFze7QvxH62il9CDBY5bIplY7mPWvtwTxa4NNRz8ECxPn17ZWL+9IKt4Ji5ag1
+        LIp+3/+mn7XjyH8oj6WJ8vOp2lu/wX9e6PC2+G7E7F116i4WP//rcAv/C2bw+BDmFVF6w4
+        +VUFNbKIRyx97jaMwd6gFsr2tf9S7x3nDj2uyPx9Hlib0096LdoFY8FUoAbIIjWjOKacPg
+        FmYhB3V6aeHIvbsUAK45Own07yzosuAorggQKhBaz6RgWQcGZd+x20bZlFNA3x1l7muwUZ
+        1ldyorLkCZ3Rp0az+TCbEP59oedAKx6XUBOfuZjFB1xad3rhM1MAvKa2qzYfpA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1687121393;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,22 +36,21 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2/sGYpIAZ39Bt5pDmlNlm77giPqZA2n3ZHBnu40tfgc=;
-        b=vDIgSX5nscJQE9VDq4ojWRqxefr4/lGRZEvn1UvsKP3YXtOTGwDI9AlS9RTJZVJ9+u2ZuA
-        3PwMpCqu7ysccrAQ==
-From:   "tip-bot2 for Arnd Bergmann" <tip-bot2@linutronix.de>
+        bh=u/f+hWamHpjajhGjJmO7YTLvaGN9UYfbUAWU7sxj7+s=;
+        b=0MwQ43S4fk8tuYgho0bU9fkhvj0Z3Tuuu/tnohAKgP/Ohsxx1cLX4qBLxNvFdvkVifGooN
+        6xGhvzlqtxZXtACQ==
+From:   "tip-bot2 for Wen Yang" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] posix-timers: Add sys_ni_posix_timers() prototype
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Kees Cook <keescook@chromium.org>, x86@kernel.org,
+Subject: [tip: timers/core] tick/rcu: Fix bogus ratelimit condition
+Cc:     Wen Yang <wenyang.linux@foxmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230607142925.3126422-1-arnd@kernel.org>
-References: <20230607142925.3126422-1-arnd@kernel.org>
+In-Reply-To: <tencent_5AAA3EEAB42095C9B7740BE62FBF9A67E007@qq.com>
+References: <tencent_5AAA3EEAB42095C9B7740BE62FBF9A67E007@qq.com>
 MIME-Version: 1.0
-Message-ID: <168712139252.404.12976753569767597191.tip-bot2@tip-bot2>
+Message-ID: <168712139326.404.5365806373072450136.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,53 +67,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     892f439ea17cbf56a36e57c584d583649a64b404
-Gitweb:        https://git.kernel.org/tip/892f439ea17cbf56a36e57c584d583649a64b404
-Author:        Arnd Bergmann <arnd@arndb.de>
-AuthorDate:    Wed, 07 Jun 2023 16:28:45 +02:00
+Commit-ID:     a7e282c77785c7eabf98836431b1f029481085ad
+Gitweb:        https://git.kernel.org/tip/a7e282c77785c7eabf98836431b1f029481085ad
+Author:        Wen Yang <wenyang.linux@foxmail.com>
+AuthorDate:    Fri, 05 May 2023 00:12:53 +08:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Sun, 18 Jun 2023 22:41:53 +02:00
 
-posix-timers: Add sys_ni_posix_timers() prototype
+tick/rcu: Fix bogus ratelimit condition
 
-The sys_ni_posix_timers() definition causes a warning when the declaration
-is missing, so this needs to be added along with the normal syscalls,
-outside of the #ifdef.
+The ratelimit logic in report_idle_softirq() is broken because the
+exit condition is always true:
 
-kernel/time/posix-stubs.c:26:17: error: no previous prototype for 'sys_ni_posix_timers' [-Werror=missing-prototypes]
+	static int ratelimit;
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+	if (ratelimit < 10)
+		return false;  ---> always returns here
+
+	ratelimit++;           ---> no chance to run
+
+Make it check for >= 10 instead.
+
+Fixes: 0345691b24c0 ("tick/rcu: Stop allowing RCU_SOFTIRQ in idle")
+Signed-off-by: Wen Yang <wenyang.linux@foxmail.com>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20230607142925.3126422-1-arnd@kernel.org
+Link: https://lore.kernel.org/r/tencent_5AAA3EEAB42095C9B7740BE62FBF9A67E007@qq.com
 
 ---
- arch/alpha/kernel/osf_sys.c | 2 --
- include/linux/syscalls.h    | 1 +
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ kernel/time/tick-sched.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/alpha/kernel/osf_sys.c b/arch/alpha/kernel/osf_sys.c
-index 2a9a877..d98701e 100644
---- a/arch/alpha/kernel/osf_sys.c
-+++ b/arch/alpha/kernel/osf_sys.c
-@@ -1014,8 +1014,6 @@ SYSCALL_DEFINE2(osf_settimeofday, struct timeval32 __user *, tv,
- 	return do_sys_settimeofday64(tv ? &kts : NULL, tz ? &ktz : NULL);
- }
+diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+index 5225467..8905505 100644
+--- a/kernel/time/tick-sched.c
++++ b/kernel/time/tick-sched.c
+@@ -1030,7 +1030,7 @@ static bool report_idle_softirq(void)
+ 			return false;
+ 	}
  
--asmlinkage long sys_ni_posix_timers(void);
--
- SYSCALL_DEFINE2(osf_utimes, const char __user *, filename,
- 		struct timeval32 __user *, tvs)
- {
-diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-index 33a0ee3..24871f8 100644
---- a/include/linux/syscalls.h
-+++ b/include/linux/syscalls.h
-@@ -1280,6 +1280,7 @@ asmlinkage long sys_ni_syscall(void);
+-	if (ratelimit < 10)
++	if (ratelimit >= 10)
+ 		return false;
  
- #endif /* CONFIG_ARCH_HAS_SYSCALL_WRAPPER */
- 
-+asmlinkage long sys_ni_posix_timers(void);
- 
- /*
-  * Kernel code should not call syscalls (i.e., sys_xyzyyz()) directly.
+ 	/* On RT, softirqs handling may be waiting on some lock */
