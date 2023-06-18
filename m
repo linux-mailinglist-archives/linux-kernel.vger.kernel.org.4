@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E06E0734856
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 22:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83AAE734859
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 22:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbjFRUu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 16:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48682 "EHLO
+        id S229781AbjFRUuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 16:50:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjFRUuC (ORCPT
+        with ESMTP id S229587AbjFRUuD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 16:50:02 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09AC5E4D;
-        Sun, 18 Jun 2023 13:50:01 -0700 (PDT)
-Date:   Sun, 18 Jun 2023 20:49:59 -0000
+        Sun, 18 Jun 2023 16:50:03 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63699E4D;
+        Sun, 18 Jun 2023 13:50:02 -0700 (PDT)
+Date:   Sun, 18 Jun 2023 20:50:00 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1687121399;
+        s=2020; t=1687121401;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=S2grR4taeojETLKA4WB7/rLhdtfB3E8NAr9445/B/eU=;
-        b=Ha5vnXTvzB2l57TwS5mO8LbrMe3VdI6vCKyERKehtNNz2byTLtp2Oe1VZihzbjHpkeA11x
-        s3AUayRsHTJ+pfLXeme08pz+zo0ZBoqY410bZ2TsiOh8UsO7skMpi1Q6OF5KnM4q+oudXD
-        bSYyAxWVOtvHBb5++Ppf0MTU42K8a3dMyqC1+US9KrSbcCT4htdHJcULtGLvFzRMCYXJqF
-        Vey6emGhcZugTYOAvoNNAlP67iBYc9ikE+7kJ/YTUHICSsUsi0NUm890LokzCVBDL6kVvh
-        hgL/NgWbXLJpdVUlUNjw5WCq9mlzGQF4kw2Qn4VkfeMFVXhKJv5V2T5Zs0d5NQ==
+        bh=FzRLgurewIvME1cnbVroMx6K+hOOPXTWA8wqVTWt6Dc=;
+        b=luLJoCARG/X4N7bDiyo26cH2fnTZF4fYvVNhJsfiBJSsMm8eUqcQcDFy8XGDhYKLMNGddX
+        fHplmh4FLqG0TCdp/5tClyjjh23KhvRi6PbGJHINcWWteZ8bOX2fmIzs9Yx+zaNrbIq0AC
+        OfpuMzFe2VI5OEt1CXOg1LzXLxl31JAwDdqxKtQJv9hsfcoDaZDpTYAF+ZmN0fcBl7R17R
+        4JRYDWZOwUyw4XcvCWz4w2Wh0nCq7s4jcx1pqbVEVsVJhSaaCKDx2QNqVuQI8S3ovBWNGT
+        0v91BDpVEo5HWJ9fi5QM7fx0pD7vP2ThZT8f1TqRpiMucWPahSbhzGnMQjaKnQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1687121399;
+        s=2020e; t=1687121401;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=S2grR4taeojETLKA4WB7/rLhdtfB3E8NAr9445/B/eU=;
-        b=zVXqQibN52woeXBIInlKZx9vYjmtOCkFA+9fgeqC6cMFySahMhoxNp5tfeK9E+qDchKNDs
-        m0+ciI0jFyuoDMAA==
+        bh=FzRLgurewIvME1cnbVroMx6K+hOOPXTWA8wqVTWt6Dc=;
+        b=lD10eJ0elR+QHCs9Wmu5D2ToV18cE+r70yUSPRESNDYac2593+3maHSjoceg1rlHN8oZ+H
+        f4+xeuaIwMUUr+CA==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] posix-timers: Add proper comments in do_timer_create()
+Subject: [tip: timers/core] posix-timers: Document sys_clock_settime()
+ permissions in place
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Frederic Weisbecker <frederic@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230425183313.619897296@linutronix.de>
-References: <20230425183313.619897296@linutronix.de>
+In-Reply-To: <20230425183313.514700292@linutronix.de>
+References: <20230425183313.514700292@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <168712139917.404.9575558212543207671.tip-bot2@tip-bot2>
+Message-ID: <168712140048.404.10922527392953092181.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,69 +68,54 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     52f090b164b59c06a4da87c0599424809a6bba16
-Gitweb:        https://git.kernel.org/tip/52f090b164b59c06a4da87c0599424809a6bba16
+Commit-ID:     3561fcb402b7ab7fdb4c1746dae4995889506605
+Gitweb:        https://git.kernel.org/tip/3561fcb402b7ab7fdb4c1746dae4995889506605
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Tue, 25 Apr 2023 20:49:19 +02:00
+AuthorDate:    Tue, 25 Apr 2023 20:49:16 +02:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Sun, 18 Jun 2023 22:41:51 +02:00
 
-posix-timers: Add proper comments in do_timer_create()
+posix-timers: Document sys_clock_settime() permissions in place
 
-The comment about timer lifetime at the end of the function is misplaced
-and uncomprehensible.
+The documentation of sys_clock_settime() permissions is at a random place
+and mostly word salad.
 
-Make it understandable and put it at the right place. Add a new comment
-about the visibility of the new timer ID to user space.
+Remove it and add a concise comment into sys_clock_settime().
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
-Link: https://lore.kernel.org/r/20230425183313.619897296@linutronix.de
+Link: https://lore.kernel.org/r/20230425183313.514700292@linutronix.de
 
 ---
- kernel/time/posix-timers.c | 20 +++++++++++---------
- 1 file changed, 11 insertions(+), 9 deletions(-)
+ kernel/time/posix-timers.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
 diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
-index 54adb4c..20d3b99 100644
+index 191ecf5..03ef6af 100644
 --- a/kernel/time/posix-timers.c
 +++ b/kernel/time/posix-timers.c
-@@ -529,12 +529,17 @@ static int do_timer_create(clockid_t which_clock, struct sigevent *event,
- 	new_timer->sigq->info.si_tid   = new_timer->it_id;
- 	new_timer->sigq->info.si_code  = SI_TIMER;
+@@ -74,13 +74,6 @@ static const struct k_clock clock_realtime, clock_monotonic;
+  *	    following: 1.) The k_itimer struct (sched.h) is used for
+  *	    the timer.  2.) The list, it_lock, it_clock, it_id and
+  *	    it_pid fields are not modified by timer code.
+- *
+- * Permissions: It is assumed that the clock_settime() function defined
+- *	    for each clock will take care of permission checks.	 Some
+- *	    clocks may be set able by any user (i.e. local process
+- *	    clocks) others not.	 Currently the only set able clock we
+- *	    have is CLOCK_REALTIME and its high res counter part, both of
+- *	    which we beg off on and pass to do_sys_settimeofday().
+  */
+ static struct k_itimer *__lock_timer(timer_t timer_id, unsigned long *flags);
  
--	if (copy_to_user(created_timer_id,
--			 &new_timer_id, sizeof (new_timer_id))) {
-+	if (copy_to_user(created_timer_id, &new_timer_id, sizeof (new_timer_id))) {
- 		error = -EFAULT;
- 		goto out;
- 	}
--
+@@ -1159,6 +1152,10 @@ SYSCALL_DEFINE2(clock_settime, const clockid_t, which_clock,
+ 	if (get_timespec64(&new_tp, tp))
+ 		return -EFAULT;
+ 
 +	/*
-+	 * After succesful copy out, the timer ID is visible to user space
-+	 * now but not yet valid because new_timer::signal is still NULL.
-+	 *
-+	 * Complete the initialization with the clock specific create
-+	 * callback.
++	 * Permission checks have to be done inside the clock specific
++	 * setter callback.
 +	 */
- 	error = kc->timer_create(new_timer);
- 	if (error)
- 		goto out;
-@@ -544,14 +549,11 @@ static int do_timer_create(clockid_t which_clock, struct sigevent *event,
- 	WRITE_ONCE(new_timer->it_signal, current->signal);
- 	list_add(&new_timer->list, &current->signal->posix_timers);
- 	spin_unlock_irq(&current->sighand->siglock);
--
--	return 0;
- 	/*
--	 * In the case of the timer belonging to another task, after
--	 * the task is unlocked, the timer is owned by the other task
--	 * and may cease to exist at any time.  Don't use or modify
--	 * new_timer after the unlock call.
-+	 * After unlocking sighand::siglock @new_timer is subject to
-+	 * concurrent removal and cannot be touched anymore
- 	 */
-+	return 0;
- out:
- 	posix_timer_unhash_and_free(new_timer);
- 	return error;
+ 	return kc->clock_set(which_clock, &new_tp);
+ }
+ 
