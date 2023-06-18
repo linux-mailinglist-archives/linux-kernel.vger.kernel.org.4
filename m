@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36358734862
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 22:51:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC002734865
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 22:51:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbjFRUvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 16:51:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48750 "EHLO
+        id S229867AbjFRUvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 16:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbjFRUuL (ORCPT
+        with ESMTP id S229679AbjFRUuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 16:50:11 -0400
+        Sun, 18 Jun 2023 16:50:14 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E45DE5D;
-        Sun, 18 Jun 2023 13:50:09 -0700 (PDT)
-Date:   Sun, 18 Jun 2023 20:50:07 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC603123;
+        Sun, 18 Jun 2023 13:50:10 -0700 (PDT)
+Date:   Sun, 18 Jun 2023 20:50:08 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1687121408;
+        s=2020; t=1687121409;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=0rZmwii/QkARH24aAlxE20/L4+QJ9DGFPRuwo6gx48U=;
-        b=3GMDTePwyFmRAUOlTuiX/coZ1rY5XbdVyoFmMNFlHOlxTeXrih4QYUd5oUz+kTSx6vgmFJ
-        VTt2gNZcLMT7mwnIknSZn2PUDF9vwb5ixO+ooL5Jo+ej9rVrGnSEsvPTt/sHgm6rvqLL+6
-        42h1AKg4BSV6g+lpa+P3HFTPrUxRObvFkiZuKU3rYnyU71P254IjArUFZwRsLXK6I0/sFj
-        ghm7unyCrRNlpyT2Uppht1xXWrzyDb7S2wWphUnrjnihR0bk4v7+y61vBi+g4vO9n+/MkJ
-        dGJfa31VOA27o9PUhWDcIzJsNQxyimo6Vhl/IXawsUKhS4DElH4YC/I/FDU3iw==
+        bh=9cX0/f87JAv45RYrZSJ9jgOnCKM2CFM0JW61+kgnazo=;
+        b=SvaFHhSNp9DFQKlUH5/ag17by7siXDDCjrMqMzVFC1t4ge5T/AkfKI0QoXT8PNTSjow4WM
+        fJRo0dUuXU2qx80g9SlCLkJUirEbCydC3wvB6OKMUtcP/oLpgz0XJkin5ZkbP1C0UAioHX
+        Yp2liWTgbHasQKp1FUvQjp7qqB2nQqgOUw2QjtUgUCfSQZf6AnoushUT+MEGLmPe0ehJ7Q
+        APrZ1ElFoM24mbN48icBtuw2Non2jXRsneWQwA4FSlCXh9PrxqZpOErkohMKuVHPY1Spme
+        CKwgdDEs9DFa4wmxsxbNE44v7Dyp6WlZ/wejHH8y4M10aBDiDaEJyoIgdXoDdg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1687121408;
+        s=2020e; t=1687121409;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=0rZmwii/QkARH24aAlxE20/L4+QJ9DGFPRuwo6gx48U=;
-        b=P9KTMmp5BsaP4TqEMxyCMq6Xy1d5hlP2Q0Nntg2wtq4WNVOSecnq4xswED73j/3g0+Aa2r
-        U9Y8iJb5KtYUVaAQ==
+        bh=9cX0/f87JAv45RYrZSJ9jgOnCKM2CFM0JW61+kgnazo=;
+        b=3dDoYo3/zIGQB187CYKA7+wBRL5ywZf0oOhQ1kp6LvChdoT/HbPYsIrQYOCqj8mRvy6EjW
+        dxLAs8O1NAK+70Cg==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] posix-timers: Clarify timer_wait_running() comment
+Subject: [tip: timers/core] posix-timers: Prevent RT livelock in itimer_delete()
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Frederic Weisbecker <frederic@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230425183312.985681995@linutronix.de>
-References: <20230425183312.985681995@linutronix.de>
+In-Reply-To: <87v8g7c50d.ffs@tglx>
+References: <87v8g7c50d.ffs@tglx>
 MIME-Version: 1.0
-Message-ID: <168712140796.404.15897229283135813033.tip-bot2@tip-bot2>
+Message-ID: <168712140881.404.6124752955191607832.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,50 +67,109 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     7d9909026645064cd31b20cee5939a0f72282261
-Gitweb:        https://git.kernel.org/tip/7d9909026645064cd31b20cee5939a0f72282261
+Commit-ID:     9d9e522010eb5685d8b53e8a24320653d9d4cbbf
+Gitweb:        https://git.kernel.org/tip/9d9e522010eb5685d8b53e8a24320653d9d4cbbf
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Tue, 25 Apr 2023 20:49:00 +02:00
+AuthorDate:    Thu, 01 Jun 2023 22:16:34 +02:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Sun, 18 Jun 2023 22:41:48 +02:00
+CommitterDate: Sun, 18 Jun 2023 22:40:42 +02:00
 
-posix-timers: Clarify timer_wait_running() comment
+posix-timers: Prevent RT livelock in itimer_delete()
 
-Explain it better and add the CONFIG_POSIX_CPU_TIMERS_TASK_WORK=y aspect
-for completeness.
+itimer_delete() has a retry loop when the timer is concurrently expired. On
+non-RT kernels this just spin-waits until the timer callback has completed,
+except for posix CPU timers which have HAVE_POSIX_CPU_TIMERS_TASK_WORK
+enabled.
 
+In that case and on RT kernels the existing task could live lock when
+preempting the task which does the timer delivery.
+
+Replace spin_unlock() with an invocation of timer_wait_running() to handle
+it the same way as the other retry loops in the posix timer code.
+
+Fixes: ec8f954a40da ("posix-timers: Use a callback for cancel synchronization on PREEMPT_RT")
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
-Link: https://lore.kernel.org/r/20230425183312.985681995@linutronix.de
-
+Link: https://lore.kernel.org/r/87v8g7c50d.ffs@tglx
 ---
- kernel/time/posix-timers.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+ kernel/time/posix-timers.c | 43 ++++++++++++++++++++++++++++++-------
+ 1 file changed, 35 insertions(+), 8 deletions(-)
 
 diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
-index 2d6cf93..0c61f29 100644
+index 808a247..ed3c4a9 100644
 --- a/kernel/time/posix-timers.c
 +++ b/kernel/time/posix-timers.c
-@@ -836,10 +836,18 @@ static void common_timer_wait_running(struct k_itimer *timer)
+@@ -1037,27 +1037,52 @@ retry_delete:
  }
  
  /*
-- * On PREEMPT_RT this prevent priority inversion against softirq kthread in
-- * case it gets preempted while executing a timer callback. See comments in
-- * hrtimer_cancel_wait_running. For PREEMPT_RT=n this just results in a
-- * cpu_relax().
-+ * On PREEMPT_RT this prevents priority inversion and a potential livelock
-+ * against the ksoftirqd thread in case that ksoftirqd gets preempted while
-+ * executing a hrtimer callback.
-+ *
-+ * See the comments in hrtimer_cancel_wait_running(). For PREEMPT_RT=n this
-+ * just results in a cpu_relax().
-+ *
-+ * For POSIX CPU timers with CONFIG_POSIX_CPU_TIMERS_TASK_WORK=n this is
-+ * just a cpu_relax(). With CONFIG_POSIX_CPU_TIMERS_TASK_WORK=y this
-+ * prevents spinning on an eventually scheduled out task and a livelock
-+ * when the task which tries to delete or disarm the timer has preempted
-+ * the task which runs the expiry in task work context.
+- * return timer owned by the process, used by exit_itimers
++ * Delete a timer if it is armed, remove it from the hash and schedule it
++ * for RCU freeing.
   */
- static struct k_itimer *timer_wait_running(struct k_itimer *timer,
- 					   unsigned long *flags)
+ static void itimer_delete(struct k_itimer *timer)
+ {
+-retry_delete:
+-	spin_lock_irq(&timer->it_lock);
++	unsigned long flags;
++
++	/*
++	 * irqsave is required to make timer_wait_running() work.
++	 */
++	spin_lock_irqsave(&timer->it_lock, flags);
+ 
++retry_delete:
++	/*
++	 * Even if the timer is not longer accessible from other tasks
++	 * it still might be armed and queued in the underlying timer
++	 * mechanism. Worse, that timer mechanism might run the expiry
++	 * function concurrently.
++	 */
+ 	if (timer_delete_hook(timer) == TIMER_RETRY) {
+-		spin_unlock_irq(&timer->it_lock);
++		/*
++		 * Timer is expired concurrently, prevent livelocks
++		 * and pointless spinning on RT.
++		 *
++		 * timer_wait_running() drops timer::it_lock, which opens
++		 * the possibility for another task to delete the timer.
++		 *
++		 * That's not possible here because this is invoked from
++		 * do_exit() only for the last thread of the thread group.
++		 * So no other task can access and delete that timer.
++		 */
++		if (WARN_ON_ONCE(timer_wait_running(timer, &flags) != timer))
++			return;
++
+ 		goto retry_delete;
+ 	}
+ 	list_del(&timer->list);
+ 
+-	spin_unlock_irq(&timer->it_lock);
++	spin_unlock_irqrestore(&timer->it_lock, flags);
+ 	release_posix_timer(timer, IT_ID_SET);
+ }
+ 
+ /*
+- * This is called by do_exit or de_thread, only when nobody else can
+- * modify the signal->posix_timers list. Yet we need sighand->siglock
+- * to prevent the race with /proc/pid/timers.
++ * Invoked from do_exit() when the last thread of a thread group exits.
++ * At that point no other task can access the timers of the dying
++ * task anymore.
+  */
+ void exit_itimers(struct task_struct *tsk)
+ {
+@@ -1067,10 +1092,12 @@ void exit_itimers(struct task_struct *tsk)
+ 	if (list_empty(&tsk->signal->posix_timers))
+ 		return;
+ 
++	/* Protect against concurrent read via /proc/$PID/timers */
+ 	spin_lock_irq(&tsk->sighand->siglock);
+ 	list_replace_init(&tsk->signal->posix_timers, &timers);
+ 	spin_unlock_irq(&tsk->sighand->siglock);
+ 
++	/* The timers are not longer accessible via tsk::signal */
+ 	while (!list_empty(&timers)) {
+ 		tmr = list_first_entry(&timers, struct k_itimer, list);
+ 		itimer_delete(tmr);
