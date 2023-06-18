@@ -2,210 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34E8D734686
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 16:14:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31ADA73468B
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 16:20:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbjFROOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 10:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
+        id S229759AbjFROU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 10:20:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjFROOg (ORCPT
+        with ESMTP id S229614AbjFROU1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 10:14:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6FAE5D;
-        Sun, 18 Jun 2023 07:14:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 04F0E61272;
-        Sun, 18 Jun 2023 14:14:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CC87C433C0;
-        Sun, 18 Jun 2023 14:14:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687097674;
-        bh=p8gKT/yMYSRrguGgxKLyFlg91r2qcybVafBHuY1rckE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ML9VIt8G8WDKV9idRBSL+KHsshpncRDH6QAi728pxiTjlhfWK027td+1J7xeXUbV9
-         xmwBY+o1YbiSUKyuJc/JPMw1y6neAKWEjjRcwJLzOmObNDYeeB0xXhexZVwqFnA510
-         I/o234mv405IR5asPUSb2vYAgs5nVm1MnBwluB0XwBBD8QyYWrxxAQD1I7gvnJVWkx
-         jrqkWk7ok2+eWNoP2z6u5T2kFxvAXZpNfXHVVVp6gvQAqu1neyZkPKzjNEvB9fn15g
-         wKjeQh9GlFKGvtuSTFFwQ+JjKWt/+z/81+ISOW4TvJvda+FhZRAtgcJoVzejfPRrke
-         IyGfjWSbjKzVA==
-Date:   Sun, 18 Jun 2023 22:14:25 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Xiaolei Wang <xiaolei.wang@windriver.com>
-Cc:     pawell@cadence.com, rogerq@kernel.org, a-govindraju@ti.com,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] usb: cdns3: Put the cdns set active part outside the
- spin lock
-Message-ID: <20230618141425.GA1588566@nchen-desktop>
-References: <20230616021952.1025854-1-xiaolei.wang@windriver.com>
+        Sun, 18 Jun 2023 10:20:27 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 508D9E71;
+        Sun, 18 Jun 2023 07:20:26 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-bc4f89f0f2fso2770040276.3;
+        Sun, 18 Jun 2023 07:20:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687098025; x=1689690025;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UKngzCbi/z0YczLfmgJ8G+89JRu+Tx99q0y6rf+xc3g=;
+        b=VaAic+1rlhUTFVg7WGWjD/PM++B/69nK3R1DcgWj7rqNxpw4yV9fuUWKfpqgtW/K7I
+         Jku2fodUUoezlMprvokwNK49VRwuEDr/JdcXT2eyuPymQU/KU44RR6E4F/VCjvAoxDk1
+         KrGyx51eGhHP3KY8eiarxseURUuPzQcRrZnqyy8Wh1wskYRfipZKy11JzbyD16UzaKvC
+         nsVkqLniY3F1bfuJP/l8ILPUL5tUoOJ/pHmFBOxEGlZGVPMIk7aUfKcOWy+M2DZ9RWfc
+         Y3uvvy4nQTH4yi9lyWQ0OCifbD4zzFYRwWNQVmJHCU+m8tyCaeCz/eCA8ppT0z0pCwT+
+         +7NA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687098025; x=1689690025;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UKngzCbi/z0YczLfmgJ8G+89JRu+Tx99q0y6rf+xc3g=;
+        b=D0kaFF39C+VFt5VI7fqDkIluUMvHoPbYRHYeKLXblpj/np29WrQ/fpac4AnnH5t8Qf
+         B6LzI/gDJluKcGrJlnT80r6peVaYdXeypMsV7mLI0eILLfDbG+a7U/9JsLnU3TyRSdaP
+         ZcPIXRJxwUb51OK0jv/UzzuGgryZjQ4s7JjUwO5wH6Sge9b2ZnZiXRAkaJW5brQelWod
+         dF5elm39xFCKqY3CyBKUd1YDANMXgEZ8BP1WP9ia5Z34NSDqhygG5SeXyLf/uVF6kTuk
+         tu91+29utLSVvrZW5+T3CYlQnwnD/Z6fowYFwSqejHoN6K/FCOyILfOmQq1gnHo+rsOp
+         x8CA==
+X-Gm-Message-State: AC+VfDy/4iYq571isZ7AYP8qHYNwKk0iYqna6UTb1pd0cLeVjcTLEe+8
+        zPxwBNliZRAd/WzE24CzwqbURpXiVTWWO4wecxw=
+X-Google-Smtp-Source: ACHHUZ6OWkndylY7XcNfai46ffCnTYYuh35ry6WdKDFVRKwvPPPvXYLW796YQAzIMxPv4BZVitbcDftNF6Bg3+Aa+r4=
+X-Received: by 2002:a0d:eb93:0:b0:56d:805:1507 with SMTP id
+ u141-20020a0deb93000000b0056d08051507mr7753300ywe.16.1687098025485; Sun, 18
+ Jun 2023 07:20:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230616021952.1025854-1-xiaolei.wang@windriver.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230529052821.58175-1-maninder1.s@samsung.com>
+ <CGME20230529052832epcas5p4fa1b8cf25d9810d32bd2ccf012086fb3@epcms5p1>
+ <CANiq72ncDr68qeahrHuQ63dj1Va3=Us6ZSjGRkr6Zp8j+=yH_Q@mail.gmail.com>
+ <20230529105707epcms5p1418eac680ebe1736196706b0db80dd39@epcms5p1>
+ <CANiq72n_eso7_pgna8ukmEnuCQPsKYPr0NU-Ss9Nwv0VzX=etg@mail.gmail.com> <202305301611.34F0A680A2@keescook>
+In-Reply-To: <202305301611.34F0A680A2@keescook>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Sun, 18 Jun 2023 16:20:14 +0200
+Message-ID: <CANiq72=K1sXz=TjBSjx+7JuTueH6vjbz9--Q2dGDYj3naKvroQ@mail.gmail.com>
+Subject: Re: [PATCH 1/1] arch:hexagon/powerpc: use KSYM_NAME_LEN in array size
+To:     Kees Cook <keescook@chromium.org>
+Cc:     maninder1.s@samsung.com, Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "bcain@quicinc.com" <bcain@quicinc.com>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "npiggin@gmail.com" <npiggin@gmail.com>,
+        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+        "nathanl@linux.ibm.com" <nathanl@linux.ibm.com>,
+        "ustavoars@kernel.org" <ustavoars@kernel.org>,
+        "alex.gaynor@gmail.com" <alex.gaynor@gmail.com>,
+        "gary@garyguo.net" <gary@garyguo.net>,
+        "ojeda@kernel.org" <ojeda@kernel.org>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Onkarnath <onkarnath.1@samsung.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-06-16 10:19:51, Xiaolei Wang wrote:
-> The device may be scheduled during the resume process,
-> so this cannot appear in atomic operations. Since
-> pm_runtime_set_active will resume suppliers, put set
-> active outside the spin lock, which is only used to
-> protect the struct cdns data structure, otherwise the
-> kernel will report the following warning:
-> 
->   BUG: sleeping function called from invalid context at drivers/base/power/runtime.c:1163
->   in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 651, name: sh
->   preempt_count: 1, expected: 0
->   RCU nest depth: 0, expected: 0
->   CPU: 0 PID: 651 Comm: sh Tainted: G        WC         6.1.20 #1
->   Hardware name: Freescale i.MX8QM MEK (DT)
->   Call trace:
->     dump_backtrace.part.0+0xe0/0xf0
->     show_stack+0x18/0x30
->     dump_stack_lvl+0x64/0x80
->     dump_stack+0x1c/0x38
->     __might_resched+0x1fc/0x240
->     __might_sleep+0x68/0xc0
->     __pm_runtime_resume+0x9c/0xe0
->     rpm_get_suppliers+0x68/0x1b0
->     __pm_runtime_set_status+0x298/0x560
->     cdns_resume+0xb0/0x1c0
->     cdns3_controller_resume.isra.0+0x1e0/0x250
->     cdns3_plat_resume+0x28/0x40
-> 
-> Signed-off-by: Xiaolei Wang <xiaolei.wang@windriver.com>
+On Wed, May 31, 2023 at 1:14=E2=80=AFAM Kees Cook <keescook@chromium.org> w=
+rote:
+>
+> On Mon, May 29, 2023 at 04:50:45PM +0200, Miguel Ojeda wrote:
+> > Kees: what is the current stance on `[static N]` parameters? Something =
+like:
+> >
+> >     const char *kallsyms_lookup(unsigned long addr,
+> >                                 unsigned long *symbolsize,
+> >                                 unsigned long *offset,
+> >     -                           char **modname, char *namebuf);
+> >     +                           char **modname, char namebuf[static KSY=
+M_NAME_LEN]);
+> >
+> > makes the compiler complain about cases like these (even if trivial):
+> >
+> >     arch/powerpc/xmon/xmon.c:1711:10: error: array argument is too smal=
+l;
+> >         contains 128 elements, callee requires at least 512
+> > [-Werror,-Warray-bounds]
+> >             name =3D kallsyms_lookup(pc, &size, &offset, NULL, tmpstr);
+> >                  ^                                           ~~~~~~
+> >     ./include/linux/kallsyms.h:86:29: note: callee declares array
+> > parameter as static here
+> >             char **modname, char namebuf[static KSYM_NAME_LEN]);
+> >                                  ^      ~~~~~~~~~~~~~~~~~~~~~~
+>
+> Wouldn't that be a good thing? (I.e. complain about the size mismatch?)
 
-Acked-by: Peter Chen <peter.chen@kernel.org>
+Yeah, I would say so (i.e. I meant it as a good thing).
 
-Peter
-> ---
->  v3:
->   * Fix build error:
->     cdns3-plat.c:258:18: error: too few arguments to function call, expected 2, have 1
->      258 |         cdns_resume(cdns);
->   * use 'cdns_resume(struct cdns *cdns) { return 0; }' instead of 
->     'cdns_resume(struct cdns *cdns, u8 set_active) { return 0; }'
->     and add 'static inline int cdns_set_active(struct cdns *cdns, u8 set_active)
->  		{ return 0; }'
->  v2:
->   * Fix build error: unused variable 'dev'
->   * delete unused 'struct device *dev = cdns->dev;' in cdns_resume()
-> 
->  drivers/usb/cdns3/cdns3-plat.c |  3 ++-
->  drivers/usb/cdns3/cdnsp-pci.c  |  3 ++-
->  drivers/usb/cdns3/core.c       | 15 +++++++++++----
->  drivers/usb/cdns3/core.h       |  7 +++++--
->  4 files changed, 20 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/usb/cdns3/cdns3-plat.c b/drivers/usb/cdns3/cdns3-plat.c
-> index 884e2301237f..1168dbeed2ce 100644
-> --- a/drivers/usb/cdns3/cdns3-plat.c
-> +++ b/drivers/usb/cdns3/cdns3-plat.c
-> @@ -255,9 +255,10 @@ static int cdns3_controller_resume(struct device *dev, pm_message_t msg)
->  	cdns3_set_platform_suspend(cdns->dev, false, false);
->  
->  	spin_lock_irqsave(&cdns->lock, flags);
-> -	cdns_resume(cdns, !PMSG_IS_AUTO(msg));
-> +	cdns_resume(cdns);
->  	cdns->in_lpm = false;
->  	spin_unlock_irqrestore(&cdns->lock, flags);
-> +	cdns_set_active(cdns, !PMSG_IS_AUTO(msg));
->  	if (cdns->wakeup_pending) {
->  		cdns->wakeup_pending = false;
->  		enable_irq(cdns->wakeup_irq);
-> diff --git a/drivers/usb/cdns3/cdnsp-pci.c b/drivers/usb/cdns3/cdnsp-pci.c
-> index 7b151f5af3cc..0725668ffea4 100644
-> --- a/drivers/usb/cdns3/cdnsp-pci.c
-> +++ b/drivers/usb/cdns3/cdnsp-pci.c
-> @@ -208,8 +208,9 @@ static int __maybe_unused cdnsp_pci_resume(struct device *dev)
->  	int ret;
->  
->  	spin_lock_irqsave(&cdns->lock, flags);
-> -	ret = cdns_resume(cdns, 1);
-> +	ret = cdns_resume(cdns);
->  	spin_unlock_irqrestore(&cdns->lock, flags);
-> +	cdns_set_active(cdns, 1);
->  
->  	return ret;
->  }
-> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
-> index dbcdf3b24b47..7b20d2d5c262 100644
-> --- a/drivers/usb/cdns3/core.c
-> +++ b/drivers/usb/cdns3/core.c
-> @@ -522,9 +522,8 @@ int cdns_suspend(struct cdns *cdns)
->  }
->  EXPORT_SYMBOL_GPL(cdns_suspend);
->  
-> -int cdns_resume(struct cdns *cdns, u8 set_active)
-> +int cdns_resume(struct cdns *cdns)
->  {
-> -	struct device *dev = cdns->dev;
->  	enum usb_role real_role;
->  	bool role_changed = false;
->  	int ret = 0;
-> @@ -556,15 +555,23 @@ int cdns_resume(struct cdns *cdns, u8 set_active)
->  	if (cdns->roles[cdns->role]->resume)
->  		cdns->roles[cdns->role]->resume(cdns, cdns_power_is_lost(cdns));
->  
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(cdns_resume);
-> +
-> +void cdns_set_active(struct cdns *cdns, u8 set_active)
-> +{
-> +	struct device *dev = cdns->dev;
-> +
->  	if (set_active) {
->  		pm_runtime_disable(dev);
->  		pm_runtime_set_active(dev);
->  		pm_runtime_enable(dev);
->  	}
->  
-> -	return 0;
-> +	return;
->  }
-> -EXPORT_SYMBOL_GPL(cdns_resume);
-> +EXPORT_SYMBOL_GPL(cdns_set_active);
->  #endif /* CONFIG_PM_SLEEP */
->  
->  MODULE_AUTHOR("Peter Chen <peter.chen@nxp.com>");
-> diff --git a/drivers/usb/cdns3/core.h b/drivers/usb/cdns3/core.h
-> index 2d332a788871..4a4dbc2c1561 100644
-> --- a/drivers/usb/cdns3/core.h
-> +++ b/drivers/usb/cdns3/core.h
-> @@ -125,10 +125,13 @@ int cdns_init(struct cdns *cdns);
->  int cdns_remove(struct cdns *cdns);
->  
->  #ifdef CONFIG_PM_SLEEP
-> -int cdns_resume(struct cdns *cdns, u8 set_active);
-> +int cdns_resume(struct cdns *cdns);
->  int cdns_suspend(struct cdns *cdns);
-> +void cdns_set_active(struct cdns *cdns, u8 set_active);
->  #else /* CONFIG_PM_SLEEP */
-> -static inline int cdns_resume(struct cdns *cdns, u8 set_active)
-> +static inline int cdns_resume(struct cdns *cdns)
-> +{ return 0; }
-> +static inline int cdns_set_active(struct cdns *cdns, u8 set_active)
->  { return 0; }
->  static inline int cdns_suspend(struct cdns *cdns)
->  { return 0; }
-> -- 
-> 2.25.1
-> 
+> > But I only see 2 files in the kernel using `[static N]` (from 2020 and
+> > 2021). Should something else be used instead (e.g. `__counted_by`),
+> > even if constexpr-sized?.
+>
+> Yeah, it seems pretty uncommon. I'd say traditionally arrays aren't
+> based too often, rather structs containing them.
+>
+> But ultimately, yeah, everything could gain __counted_by and friends in
+> the future.
 
--- 
+That would be nice!
 
-Thanks,
-Peter Chen
+Cheers,
+Miguel
