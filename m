@@ -2,126 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73E83734528
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 08:50:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDEC573452D
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 08:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbjFRGuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 02:50:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50624 "EHLO
+        id S229494AbjFRG52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 02:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjFRGuC (ORCPT
+        with ESMTP id S229468AbjFRG5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 02:50:02 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343A1E5E
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 23:50:01 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f9189228bcso824225e9.3
-        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 23:50:01 -0700 (PDT)
+        Sun, 18 Jun 2023 02:57:25 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D3DE77
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 23:57:24 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-565a33c35b1so32155147b3.0
+        for <linux-kernel@vger.kernel.org>; Sat, 17 Jun 2023 23:57:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687070999; x=1689662999;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kTbsJHJAIh6L3OpmlKEMiLQ8FVA+BH6GdkanOhtFItg=;
-        b=am0n7jcHfoIjQo2hsnQsbevfZPseixSmpo2SSFGzb5Hpphzcc0coNeq1wFtWFmCgPf
-         Gs7slH4VN0Xs09KXbj2Wznu4ZP/OzkmWqn4jEM25d26yjSovzt/fHh8Towa7WRWvoixs
-         WDKCkF2wsVgv13NcweE+ZHmnY3Id4s46yAdJM5yqccCVw9sjmeNfwBDvteOYlkP+dtxi
-         JWSn+LUoN2FbR/Ffu6h6spvadXl7WFwIIHLCdbVDLHs5+iiaieUab6SSmjiFvcY/Dbgl
-         ZQa018CeTpHP1ieINDU2k55V6OnfDwcBXuW42bbJSLDnR9X58XeHCN7wHrdEbM0j3vhe
-         AyKg==
+        d=google.com; s=20221208; t=1687071444; x=1689663444;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=myYEJQ4cXoxihGQz14f2NgKY1m5nccoqkiKaHRCGLnA=;
+        b=f8hZG5EV1v8ur0Uofbbm4KrkwSDeIuesyp1vSzziXgT41RJNgW7DnUeNXNS4qH2atl
+         I1UDna+07xwVf6Drz61wbRkC4OLnbYypo8GOdxdYQ2Lltrp+/ubLWkOdxAlLpaPnx0XK
+         OnBtKJXwjNtbvMz7a4xeAzeCbfZGpawFhJjfWKNbr+iKy2S8LrQJCqhHLw8pIbZrn3lI
+         HCQaHctYUwL2cnhuule9c5VbVqClwrtziyAi1OYAcqH7md99Qjvpipq4fPTdcehGbfF/
+         TiZ6ruO+/dS5pL9VmyaTRN3fonOjPmJHMzh6mwNAU/xR9LLzxDNdxBlnlinQJGc9RZhP
+         ALzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687070999; x=1689662999;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kTbsJHJAIh6L3OpmlKEMiLQ8FVA+BH6GdkanOhtFItg=;
-        b=Xd3MPUhXZ4Zdxk2pmPT+ffOgQ3pj+NvXCIOheNWGUhWsvAY02tjraoe9wguaZ7iyUO
-         Lp8SrI/GjtTmOx2E0qZ+GHDriUfu+BrwMgmE9amBEatUWXuwYG532HKtXuydfarddqoB
-         BX9ir/c+6s2DGA2x6E12lC5jy/es3fdcrjOHIrLjzXizGoZePMF5DEniIP3wqBN2lNa7
-         K/lImYLxf9ZJ4c1DE3h109HpVqFixAoWfIHG4TcVNEWr/j+rwz0xLAhMzYBovr41WaI3
-         OZ8OclMx62OM3CKOO3puswe530mGbp6sWT8CJloxNPFBRn0ltaaeBHAqY9MgSTf2EJPq
-         ossw==
-X-Gm-Message-State: AC+VfDzuJf3S7Z9XV1u3Q2res7EtA5mi2QhIrgShU2roomozezusnSwy
-        U4XFDW8F09sOFPrWH+rG5SZ0/54Uv3Ed5Go7rk3hOQ==
-X-Google-Smtp-Source: ACHHUZ7S6ECk8uaphJNxTelZTmW4DZh6bWCMyhptboMmhW4e7hixs2RagJ/j3zTRKjShC7214bpopIgYhKQR4gMWn0c=
-X-Received: by 2002:a5d:6ad1:0:b0:311:18ce:152b with SMTP id
- u17-20020a5d6ad1000000b0031118ce152bmr3848340wrw.61.1687070999524; Sat, 17
- Jun 2023 23:49:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230526192210.3146896-1-bhupesh.sharma@linaro.org>
- <20230526192210.3146896-11-bhupesh.sharma@linaro.org> <d239ad07-fbdd-16fa-3555-5bcf33c67059@linaro.org>
- <11c3eb6c-823d-9688-ec53-e05c7bb557c5@linaro.org> <83807d70-c35c-6b66-e7f9-521bdfc6d1b4@linaro.org>
-In-Reply-To: <83807d70-c35c-6b66-e7f9-521bdfc6d1b4@linaro.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Sun, 18 Jun 2023 12:19:48 +0530
-Message-ID: <CAH=2NtyNqbhY6B0orqyGvhOWs7M5z9tBQ05E7e7Fb1toamN95Q@mail.gmail.com>
-Subject: Re: [PATCH v8 10/11] arm64: dts: qcom: sm8350: Add Crypto Engine support
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, andersson@kernel.org,
-        bhupesh.linux@gmail.com, robh+dt@kernel.org,
-        vladimir.zapolskiy@linaro.org, rfoss@kernel.org,
-        neil.armstrong@linaro.org, djakov@kernel.org, stephan@gerhold.net,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Linux Kernel Functional Testing <lkft@linaro.org>
+        d=1e100.net; s=20221208; t=1687071444; x=1689663444;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=myYEJQ4cXoxihGQz14f2NgKY1m5nccoqkiKaHRCGLnA=;
+        b=e9sZgcxIEfHXMUCBjT9aWIuNvjnxgWQbhNH33cacEMZMK21nIcCq0YMrgYT8QJ8tQ5
+         3pW1U2O/cOQMh2DB07ZT9mAhJ/BbPW26B+bKfJcZ5faCmjUboy++5o8S11sy94zwRE9p
+         OqsIqA9Iq4+fUxFFJNjhvZRMFXeWq/hsy5SV/hjegiWdUPxYUaIZQ7ZLwqW+uLLl3XQ2
+         rB/JfNQaTA0BXxHI6OBH2CSkfQJN3OAt6K2c6S3InxcM1PoKFQOogy8IFA9xA8RJRpaU
+         Rd7EsGQqBTK7YCVOxuhv22ebveiw8YElXT3C75D12sFIjmHc9etAIWaDNQ+n94PSAgJ4
+         wmuQ==
+X-Gm-Message-State: AC+VfDxWZOOxvXEpkeqi4Ya293ujbgGMNKxcxP+29SOgM7MjbkEaanbz
+        7KR1dHPT9eWU+Kb9JLDxmNhwwAy63XOEgTS9
+X-Google-Smtp-Source: ACHHUZ58bBzWyWP210cPGPFNgbxSxsLYVqUXiVVtq+n6XV4dr+17yNK31Laxw3pjV5T0hOoBcXTORg7IVJ2Q5Cv6
+X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
+ (user=yosryahmed job=sendgmr) by 2002:a81:ae0d:0:b0:573:285a:c2a3 with SMTP
+ id m13-20020a81ae0d000000b00573285ac2a3mr699145ywh.1.1687071443846; Sat, 17
+ Jun 2023 23:57:23 -0700 (PDT)
+Date:   Sun, 18 Jun 2023 06:57:19 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Message-ID: <20230618065719.1363271-1-yosryahmed@google.com>
+Subject: [RFC PATCH 0/5] mm/mlock: new mlock_count tracking scheme
+From:   Yosry Ahmed <yosryahmed@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Yu Zhao <yuzhao@google.com>,
+        "Jan Alexander Steffens (heftig)" <heftig@archlinux.org>,
+        Steven Barrett <steven@liquorix.net>,
+        Brian Geffon <bgeffon@google.com>,
+        "T.J. Alumbaugh" <talumbau@google.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        David Howells <dhowells@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
+        Greg Thelen <gthelen@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Yosry Ahmed <yosryahmed@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 17 Jun 2023 at 12:58, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 17/06/2023 01:33, Konrad Dybcio wrote:
-> > On 16.06.2023 19:36, Krzysztof Kozlowski wrote:
-> >> On 26/05/2023 21:22, Bhupesh Sharma wrote:
-> >>> Add crypto engine (CE) and CE BAM related nodes and definitions to
-> >>> 'sm8350.dtsi'.
-> >>>
-> >>> Tested-by: Anders Roxell <anders.roxell@linaro.org>
-> >>> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >>> Co-developed-by and Signed-off-by: Robert Foss <rfoss@kernel.org>
-> >>> [Bhupesh: Switch to '#interconnect-cells = <2>', available since commit 4f287e31ff5f]
-> >>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> >>> ---
-> >>
-> >> #regzbot introduced: f1040a7fe8f069d2259ab3dab9190210005ceb33
-> >> #regzbot title: HDK8350 silently crashes early on boot
-> >>
-> >> Hi, this landed in the next but unfortunately it causes silent crash
-> >> (and reboot) of HDK8350. Reverting this commit helps.
-> > Downstream also references the following SIDs:
-> >
-> > iommus = <&apps_smmu 0x592 0>,
-> >        <&apps_smmu 0x598 0>,
-> >        <&apps_smmu 0x599 0>,
-> >        <&apps_smmu 0x59F 0>;
->
-> I already tried iommus from downstream from:
-> 1. qcrypto node (0x584, 0x594)
-> 2. qcedev (0x586, 0x596)
-> 3. qcom_cedev_ns_cb (0x592, 0x598, 0x599, 0x59F), although with 0x0011
-> last argument.
->
-> Same results, but indeed iommu would be nice reason here.
->
-> I also double checked the version of block (BAM DMA is v1.7.4) and other
-> properties. When I disabled crypto but left BAM DMA, the result was the
-> same, thus it is maybe the BAM who causes abort.
+This series attempts to rework the mlock_count tracking scheme to avoid
+overlaying page->lru. The main goal is to revive the unevictable LRU,
+which would be useful for upcoming work for offline memcgs recharging
+[1]. For that work, we need to be able to find all the pages charged to
+a memcg, and iterating the LRUS is the most efficient way to do it.
+With the current mlock_count scheme, the unevictable LRU is imaginary,
+as page->mlock_count overlays page->lru.
 
-I remember testing it on the sm8350-mtp and found no issues. Infact
-Robert (the original author of the patch) had also done some testing
-in the past.
+The proposed scheme overloads page->_mapcount to track mlock_count for
+order-0 pages, slightly similar to how page->_refcount is overloaded
+for pincount. More details in patch 1.
 
-I am sure - mtp v/s hdk board variation would not cause this, so let
-me have a stab at it tomorrow.
+Another advantage of this series is that we do not have to reset the
+mlock_count everytime we isolate an mlocked page from the LRU. This
+means we can more reliably track the mlock_count -- we are less likely
+to prematurely munlock() a page. We also do not need to re-initialize
+the mlock_count every time we add an mlocked page to the LRUs, or every
+time we found that it was reset during mlock/munlock. The lack of
+re-initialization slightly simplifies the mlock_count logic. The
+complexity is also more contained within mm/mlock.c.
 
-Thanks,
-Bhupesh
+This series is based on v6.4-rc6, and has been tested with the mlock
+selftests (though I had to rebase to v6.2 to get those selftests
+working).
+
+The series is broken up as follows:
+- Patch 1 is the actual rework of the mlock_count scheme.
+- Patch 2 handles the case where a page might be mistaknely stranded as
+  mlocked indefinetly if it was mapped a very large number of times.
+- Patch 3 adds a WARN_ON() in case a very large number of mappings can
+  be mistakenly interpreted as an mlock_count.
+- Patch 4 revives the unevictable LRU.
+- Patch 5 reverts a patch that was part of the original mlock_count
+  series [2] that is no longer needed now.
+
+[1]https://lore.kernel.org/linux-mm/CAJD7tkb56gR0X5v3VHfmk3az3bOz=wF2jhEi+7Eek0J8XXBeWQ@mail.gmail.com/
+[2]https://lore.kernel.org/linux-mm/55a49083-37f9-3766-1de9-9feea7428ac@google.com/
+
+Yosry Ahmed (5):
+  mm/mlock: rework mlock_count to use _mapcount for order-0 folios
+  mm/mlock: fixup mlock_count during unmap
+  mm/mlock: WARN_ON() if mapcount overflows into mlock_count
+  mm/vmscan: revive the unevictable LRU
+  Revert "mm/migrate: __unmap_and_move() push good newpage to LRU"
+
+ include/linux/mm.h        |  31 ++++++--
+ include/linux/mm_inline.h |  11 +--
+ include/linux/mm_types.h  |  24 +-----
+ mm/huge_memory.c          |   5 +-
+ mm/migrate.c              |  24 +++---
+ mm/mlock.c                | 150 +++++++++++++++++++++++++++++++++-----
+ mm/mmzone.c               |   8 --
+ mm/rmap.c                 |   3 +
+ mm/swap.c                 |   8 --
+ 9 files changed, 174 insertions(+), 90 deletions(-)
+
+-- 
+2.41.0.162.gfafddb0af9-goog
+
