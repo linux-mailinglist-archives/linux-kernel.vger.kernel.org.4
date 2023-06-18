@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9FAD7345FC
+	by mail.lfdr.de (Postfix) with ESMTP id 383B37345FA
 	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 13:45:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbjFRLpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 07:45:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54004 "EHLO
+        id S229818AbjFRLpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 07:45:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbjFRLpB (ORCPT
+        with ESMTP id S229811AbjFRLpC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 07:45:01 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A552210DB
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 04:44:56 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-98862e7e3e6so94382166b.0
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 04:44:56 -0700 (PDT)
+        Sun, 18 Jun 2023 07:45:02 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB6E10E7
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 04:44:58 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-982a0232bdcso401550466b.1
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 04:44:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687088695; x=1689680695;
+        d=linaro.org; s=google; t=1687088697; x=1689680697;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1dPojD9npiwMmQiJv3PZb1An4/WWE0TQK40AIn/qp+M=;
-        b=l5lafToVQYIRevrMTRL+nQkXc110zXRrLErkmbHXlKy5VvngHg6+dUmy7xgJ7WdDrH
-         rMndE7K6XF7eeEJkMOFhTK/NhNmmDWtkHORQdhK6jXmE329mvDm/3rBMAh0yTnglzYJF
-         KoTR6U23wZ5R8ovNBbOtIJn7oJUMXjf/10VCf+bIiXQybgLsTQIgmiijACJl3x793nh+
-         r9YQNNyP7AcGw7FbOQ4kKdhvU/LCGJG92I2YpSEnqx/eBqnN3W6xGvUrsroWbbUD1yk+
-         n/hvBRt3FfeMOpNYqHEB8ZSCN27SPooR+Py4srNEYzrvUP47kNSYDBxEdqyT2WaEU2xn
-         FT8Q==
+        bh=tI7hZPh6Ef7hI7RZcUH78AnG3ZVvJbISEmDlW8t8yX0=;
+        b=IKzOcvVISUvvxf4yVIrMpll/ZUR4dXtAdOE+8K1TJ/9LcLibW54Ek7KIAHh8ltOemj
+         77DF2R+b3R+GwcBKoVbRKQXS79rqCUrNg1nN5SdTeeThZS+FGWbc00GIH8+saX682i/k
+         An9cOtR4HtD69IGPcNLyoXZq4OQgTTS3hD2dEIPuXhwePpLtTkaxHXVPLsUwUr/BR0K1
+         Roabn2jqrMbbL5EUrGcEsgyZd5aqDi0k4WVoZyCVFpfyQJ+t+xzVE3F9E35KFuSMZZaW
+         pKPdgVMyuG3al38Ho+kNO6gyb0iMfChw7tQHpqLViUeis2pyvOkUPpf+2Go8jDxLzHiD
+         c0Ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687088695; x=1689680695;
+        d=1e100.net; s=20221208; t=1687088697; x=1689680697;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1dPojD9npiwMmQiJv3PZb1An4/WWE0TQK40AIn/qp+M=;
-        b=MntOC4vfx9RfcvnHc0mKV098sVCGZpjTYXyRIIwURl7g+2bG9wXGb1NOLc0jwqOseR
-         1KngAICPeALRD1e6oILYKZwKr4owdB4HcM0Y2Rb3T4i6EqBV2CzxVYgT4KblrZoAX+D6
-         +tMOgqnpGwE6rPdElROwdf6aBHIA4iagZ7jZFTFNdNZb9dzYHKJZBbm+LgwZo+zvX2mj
-         0XGiXfL66Fx1hA7zFm+J9D/9k0CU1c7uaHdNg+1E6t3ZVeOpPsV/rPofP9u4wk5XA/TA
-         3h4szp8MA5NG9WGy3e5DKoM3ul+s38lTuqlIRw/bKa4hgW3H4jY0bAAeUckhklchCpn0
-         dH8A==
-X-Gm-Message-State: AC+VfDz+l80Ve6tXgrZvbnSjiZfL5er27q+G3wrkI8uM6B5cmDQuMQqM
-        5BvlqLdWiussdLCP86JypgoLkg==
-X-Google-Smtp-Source: ACHHUZ6QitBWwkX6i02gqbVLAFVkgxp4wvxomq7VFX9OX9IPsrfNRB+6OtExkYlb5V8Cc/kUZ/DS6g==
-X-Received: by 2002:a17:907:7f2a:b0:97e:ab29:952c with SMTP id qf42-20020a1709077f2a00b0097eab29952cmr7313016ejc.2.1687088695257;
-        Sun, 18 Jun 2023 04:44:55 -0700 (PDT)
+        bh=tI7hZPh6Ef7hI7RZcUH78AnG3ZVvJbISEmDlW8t8yX0=;
+        b=Ty+PzZV07Y0bU1GmDZTWlxT0SUbesIce/nLk0w2yif1v7HddLSkRiSMQPv3qNW4/W/
+         JuJmbwEFX7vTlZ42I5xzl4TmYGpWDpsOtkmLc2p12cfvzx54GanFyz5d6Ni9gAZmGdqQ
+         H8Ofk1uP6MyCs+PcQ3bq9aH3GTuqZrPAUnnN0/uai++jb1zAlYeB7sDNgDUeazZhW2jI
+         JvNX9O3X32JJon1bB2Vcvjmf3k+uo/nZiHHBY7cUDGTBOmiZp3RGIuUpmJLNVYBWi8fJ
+         W+1Nq64bV+g+ZoWRUyXjn0N2YIwd0uaRAWizNCK+p+AEhdjbgYHaAxHbDwYnWhCoh6Mr
+         U5Lw==
+X-Gm-Message-State: AC+VfDzcV4GenfC2+OdC21s56K3xqFwiLoB32pD1SeoEtzJrjBIkkI7J
+        NgkI+oJ/mQATKuXIArgiHL3dmA==
+X-Google-Smtp-Source: ACHHUZ76G2KJnKYcfx5b3ujMuXh181TywXBmv3mdldkUI6reL+LmKWCkNnQvmCMZesi0PdcLC2tTig==
+X-Received: by 2002:a17:907:60d6:b0:973:ca90:1f18 with SMTP id hv22-20020a17090760d600b00973ca901f18mr7596760ejc.76.1687088696966;
+        Sun, 18 Jun 2023 04:44:56 -0700 (PDT)
 Received: from krzk-bin.. ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id p4-20020a1709060dc400b0096f937b0d3esm13183854eji.3.2023.06.18.04.44.53
+        by smtp.gmail.com with ESMTPSA id p4-20020a1709060dc400b0096f937b0d3esm13183854eji.3.2023.06.18.04.44.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Jun 2023 04:44:54 -0700 (PDT)
+        Sun, 18 Jun 2023 04:44:56 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -63,9 +63,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 5/7] arm64: dts: qcom: sm6350: correct ramoops pmsg-size
-Date:   Sun, 18 Jun 2023 13:44:40 +0200
-Message-Id: <20230618114442.140185-5-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 6/7] arm64: dts: qcom: sm8150-kumano: correct ramoops pmsg-size
+Date:   Sun, 18 Jun 2023 13:44:41 +0200
+Message-Id: <20230618114442.140185-6-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230618114442.140185-1-krzysztof.kozlowski@linaro.org>
 References: <20230618114442.140185-1-krzysztof.kozlowski@linaro.org>
@@ -84,19 +84,19 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 There is no 'msg-size' property in ramoops, so assume intention was for
 'pmsg-size':
 
-  sm6350-sony-xperia-lena-pdx213.dtb: ramoops@ffc00000: Unevaluated properties are not allowed ('msg-size' was unexpected)
+  sm8150-sony-xperia-kumano-griffin.dtb: ramoops@ffc00000: Unevaluated properties are not allowed ('msg-size' was unexpected)
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sm6350.dtsi | 2 +-
+ arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qcom/sm6350.dtsi
-index 30e77010aed5..698171bda9fa 100644
---- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
-@@ -673,7 +673,7 @@ ramoops: ramoops@ffc00000 {
- 			reg = <0 0xffc00000 0 0x100000>;
+diff --git a/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi b/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi
+index baafea53770b..ae0ca48b89a5 100644
+--- a/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano.dtsi
+@@ -222,7 +222,7 @@ ramoops@ffc00000 {
+ 			reg = <0x0 0xffc00000 0x0 0x100000>;
  			record-size = <0x1000>;
  			console-size = <0x40000>;
 -			msg-size = <0x20000 0x20000>;
