@@ -2,163 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99E0473459E
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 10:54:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F32BF7345A2
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 10:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbjFRIx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 04:53:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40128 "EHLO
+        id S229529AbjFRI4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 04:56:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjFRIx5 (ORCPT
+        with ESMTP id S229453AbjFRI4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 04:53:57 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD16C10E5
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 01:53:55 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-5169f614977so3384685a12.3
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 01:53:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687078434; x=1689670434;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YOqV3rtDI0CEwXVVct5W5QTJ26AQRGV9DPKnHoyoIyQ=;
-        b=Zj+V58GInMfbtKYprzCSYWjBjv7MENDx3liQ1mLiiPKRVC0M87JHlg52gJlVfOKyIh
-         ZWa6SH3qB8nijzClxj1aD9iwcNqO8ar4GRB1gRd04tCMxTOASO4lZwGD+T3mbmb0BJG1
-         ZPHNtIX5xLZMNmYqAy1pFIsantKEsbI6WA1BV74JL6dWs6fFia2n5GpFiqifAS11ABFD
-         3JI+0FuSgBNyqDmUVbmZfjWKa7LGBkior3iAT1J795YWg1i8otdJtkpKE7xOVnnXROOD
-         yhcLJJi47PnyNTjLDAtBWTtW24DKuNUcod8sJq8Q9G2LJjN9IWFE/dKAUI4CWJv1HsaY
-         FY6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687078434; x=1689670434;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YOqV3rtDI0CEwXVVct5W5QTJ26AQRGV9DPKnHoyoIyQ=;
-        b=i9ou+r/9duEDl2mPouEr534Zy9ytQ4t5R/5yExqcKr/1LWdrRZcjb4lsUHLZjP9Qsg
-         tpHyNIkXB4g5gzstL/HnQN99XsptT7uHtODUl1d7y0u30ltf65gyXe2064qOfQKNHdax
-         oUn1X3hbYVAR998s7mf1yNJe4/b2ztJlWfxzFq0Wy/MQ3GIp8mwcEQ/5NHHF8kcNoqky
-         y4KLABR1c5An51RhE4Z9C+vmINMsD9bNlDe4sIsQLPT4bmi1PmGWHtPzWlcM7cmt4228
-         XX34JGVIWZbiI55i/BGDNTlzXRLpv5ayAaSA+BEqKESQFY5SDR45/z9+lSqANoEo8lgT
-         D4dw==
-X-Gm-Message-State: AC+VfDwIKxDtTd1voXmRozzWMBKwEV2jQvV94ODflqUKdr+FPCFN3dal
-        6L65IEEOZQgo07mAC1zgUbSodw==
-X-Google-Smtp-Source: ACHHUZ5XJfX3/rCW8fWgqzmOnFENO/jS3uPJQ7JC93XERneKvBVIK4hcgep9HTEjZOoGKJW1VKUthQ==
-X-Received: by 2002:a17:907:a0c:b0:978:8e8c:1bcb with SMTP id bb12-20020a1709070a0c00b009788e8c1bcbmr6364791ejc.43.1687078434141;
-        Sun, 18 Jun 2023 01:53:54 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id w19-20020a1709064a1300b00988955f7b5esm152722eju.157.2023.06.18.01.53.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Jun 2023 01:53:53 -0700 (PDT)
-Message-ID: <4aadaf24-11f6-5cc1-4fbd-addbef4f891b@linaro.org>
-Date:   Sun, 18 Jun 2023 10:53:50 +0200
+        Sun, 18 Jun 2023 04:56:10 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D231BDD;
+        Sun, 18 Jun 2023 01:56:05 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 2E8811C0DE7; Sun, 18 Jun 2023 10:56:03 +0200 (CEST)
+Date:   Sun, 18 Jun 2023 10:56:02 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Manuel Lauss <manuel.lauss@gmail.com>
+Cc:     Pavel Machek <pavel@denx.de>, Sasha Levin <sashal@kernel.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 4.14 08/10] MIPS: Alchemy: fix dbdma2
+Message-ID: <ZI7GorATfHRiqOn9@duo.ucw.cz>
+References: <20230531134606.3385210-1-sashal@kernel.org>
+ <20230531134606.3385210-8-sashal@kernel.org>
+ <ZIy4GjSrV654NsBw@duo.ucw.cz>
+ <CAOLZvyHQL7T33O9fSdBZMtjrLKO2uN6Gr6g_p0oKVUtnMuXheQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v7 1/3] dt-bindings: ufs: qcom: Add ICE phandle
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-References: <20230408214041.533749-1-abel.vesa@linaro.org>
- <20230408214041.533749-2-abel.vesa@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230408214041.533749-2-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="65KtI6CNQfLwOUBP"
+Content-Disposition: inline
+In-Reply-To: <CAOLZvyHQL7T33O9fSdBZMtjrLKO2uN6Gr6g_p0oKVUtnMuXheQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/04/2023 23:40, Abel Vesa wrote:
-> Starting with SM8550, the ICE will have its own devicetree node
-> so add the qcom,ice property to reference it.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
-> 
-> The v6 is here:
-> https://lore.kernel.org/all/20230407105029.2274111-3-abel.vesa@linaro.org/
-> 
-> Changes since v6:
->  * Dropped the minItems for both the qcom,ice and the reg in the
->    qcom,ice compatile subschema, like Krzysztof suggested
-> 
-> Changes since v5:
->  * dropped the sm8550 specific subschema and replaced it with one that
->    mutually excludes the qcom,ice vs both the ICE specific reg range
->    and the ICE clock
-> 
-> Changes since v4:
->  * Added check for sm8550 compatible w.r.t. qcom,ice in order to enforce
->    it while making sure none of the other platforms are allowed to use it
-> 
-> Changes since v3:
->  * dropped the "and drop core clock" part from subject line
-> 
-> Changes since v2:
->  * dropped all changes except the qcom,ice property
-> 
-> 
->  .../devicetree/bindings/ufs/qcom,ufs.yaml     | 24 +++++++++++++++++++
->  1 file changed, 24 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> index c5a06c048389..10d426ba1959 100644
-> --- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> +++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> @@ -70,6 +70,10 @@ properties:
->    power-domains:
->      maxItems: 1
->  
-> +  qcom,ice:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: phandle to the Inline Crypto Engine node
-> +
->    reg:
->      minItems: 1
->      maxItems: 2
-> @@ -187,6 +191,26 @@ allOf:
->  
->      # TODO: define clock bindings for qcom,msm8994-ufshc
->  
-> +  - if:
-> +      properties:
-> +        qcom,ice:
 
-Un-reviewed. This is broken and was never tested. After applying this
-patch, I can see many new warnings in all DTBs (so it is easy to spot
-that it was not actually tested).
+--65KtI6CNQfLwOUBP
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Your probably meant here:
-  if:
-    required:
+On Sun 2023-06-18 07:43:10, Manuel Lauss wrote:
+> On Fri, Jun 16, 2023 at 9:33=E2=80=AFPM Pavel Machek <pavel@denx.de> wrot=
+e:
+>=20
+> > Hi!
+> >
+> > > From: Manuel Lauss <manuel.lauss@gmail.com>
+> > >
+> > > [ Upstream commit 2d645604f69f3a772d58ead702f9a8e84ab2b342 ]
+> > >
+> > > Various fixes for the Au1200/Au1550/Au1300 DBDMA2 code:
+> > >
+> > > - skip cache invalidation if chip has working coherency circuitry.
+> > > - invalidate KSEG0-portion of the (physical) data address.
+> > > - force the dma channel doorbell write out to bus immediately with
+> > >   a sync.
+> > >
+> > > Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > > Signed-off-by: Sasha Levin <sashal@kernel.org>
+> >
+> > I believe author's signoff is missing here.
+> >
+>=20
+> As the author, I say this patch should not be applied to 4.xx at all.  Sa=
+me
+> for my other 2 MIPS patches.
 
+Thanks for info, where is the threshold, do we need them for 5.10?
+
+Sasha, please drop.
 
 Best regards,
-Krzysztof
+									Pavel
 
+--=20
+DENX Software Engineering GmbH,        Managing Director: Erika Unter
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--65KtI6CNQfLwOUBP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZI7GogAKCRAw5/Bqldv6
+8qKtAKChGL5IEmgti7Kfa1jRnUDX3FM+bQCdFVU4lf2+lc6bH4yb1R5jUFXytes=
+=yOuy
+-----END PGP SIGNATURE-----
+
+--65KtI6CNQfLwOUBP--
