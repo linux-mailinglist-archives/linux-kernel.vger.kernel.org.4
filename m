@@ -2,66 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E16E17348BB
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 23:53:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F3F4734906
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 00:01:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbjFRVwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 17:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39822 "EHLO
+        id S229544AbjFRWB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 18:01:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjFRVwp (ORCPT
+        with ESMTP id S229487AbjFRWB2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 17:52:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89BC7113
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 14:52:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687125119;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type;
-        bh=wZLdjHcab2BcEUayDGFasfyZtj2UYXOAR0yUXAOl+LM=;
-        b=EwRF4DsW7rKDoSMT1DjDdC3WnF91zmdB0JMvADBy8lbJoDhJ9N0xFFgzlaIDi95EMhgJH9
-        OxiX2xXdqbKwY7Ovq3+/O9nAo6Nx65ZnxQeaViYZk7yke42buAgHXtZnmKserSae18DXYQ
-        wG8QYO+fo7Da9/ScZNx6ttJ4PETLf2Y=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-300-2SUG0_mZO4qACebW0T-EiA-1; Sun, 18 Jun 2023 17:51:55 -0400
-X-MC-Unique: 2SUG0_mZO4qACebW0T-EiA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 83B7338035A6;
-        Sun, 18 Jun 2023 21:51:54 +0000 (UTC)
-Received: from localhost (unknown [10.22.8.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A75D9C1603B;
-        Sun, 18 Jun 2023 21:51:53 +0000 (UTC)
-Date:   Sun, 18 Jun 2023 18:51:52 -0300
-From:   "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        stable-rt <stable-rt@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Pavel Machek <pavel@denx.de>,
-        Jeff Brady <jeffreyjbrady@gmail.com>,
-        Luis Goncalves <lgoncalv@redhat.com>
-Subject: [ANNOUNCE] 5.10.180-rt89
-Message-ID: <ZI98eLwx3ykPh2d9@uudg.org>
+        Sun, 18 Jun 2023 18:01:28 -0400
+Received: from s.wrqvwxzv.outbound-mail.sendgrid.net (s.wrqvwxzv.outbound-mail.sendgrid.net [149.72.154.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96786C5
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 15:01:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kwiboo.se;
+        h=from:subject:mime-version:to:cc:content-transfer-encoding:
+        content-type:cc:content-type:from:subject:to;
+        s=s1; bh=kE3ug1FphWK8w4bAu88BIK2LQbxYxA5TL1gVPHRLq0s=;
+        b=I18/eC+ZDPL1HZg9AUC1xf4aOdnDKuDMJNZrPnUxF/B8A44OdIN6YX9Y/GzODreQRsBJ
+        q5fe/G5y0H+GJ9SIBrsnX87Gg79I/absjKEwql8LswxWeSJjREH0MtNEOMD3Z1DDOpMhKg
+        D7xc4Au6vFseMsLWGbQhARkSavbLUlqRgqq+Hs0b2l0NLaXl9HtnkX9IYcnDNgvzX/2Max
+        zhTbxBxVMx8vNt/Cl/SVszvlOsSocZVNqN4G/5wTxhEqULNbKkplpXQ02snOXMlK+R1/Az
+        DVUs6Yf2kD5JX2LmIop7PApmABEePgUZcyB6VaWRLmGrIH0ZPweV5Z66/jQ9V1Ww==
+Received: by filterdrecv-65f68489c8-zmlx4 with SMTP id filterdrecv-65f68489c8-zmlx4-1-648F7EB4-7C
+        2023-06-18 22:01:25.078475909 +0000 UTC m=+3363925.214276436
+Received: from bionic.localdomain (unknown)
+        by geopod-ismtpd-5 (SG)
+        with ESMTP
+        id o9F54kvgToCDS4l4o5-IEA
+        Sun, 18 Jun 2023 22:01:24.617 +0000 (UTC)
+From:   Jonas Karlman <jonas@kwiboo.se>
+Subject: [PATCH v4 0/2] drm/rockchip: vop: Add NV15, NV20 and NV30 support
+Date:   Sun, 18 Jun 2023 22:01:25 +0000 (UTC)
+Message-Id: <20230618220122.3911297-1-jonas@kwiboo.se>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
+X-SG-EID: =?us-ascii?Q?TdbjyGynYnRZWhH+7lKUQJL+ZxmxpowvO2O9SQF5CwCVrYgcwUXgU5DKUU3QxA?=
+ =?us-ascii?Q?fZekEeQsTe+RrMu3cja6a0h2uRKfwUrnAuhEShj?=
+ =?us-ascii?Q?yRo=2FdCt6XHj=2FoPJvO4UOauxEyTrAKiA2DU4+Gq+?=
+ =?us-ascii?Q?lO9RCUbwfLMSCEL+PvsSkAWdCnDGx4lrxs0JTM6?=
+ =?us-ascii?Q?JkRcC9bUwBS4FWuT=2F6RhbZ6rTH3uuLRFRwKJe5u?=
+ =?us-ascii?Q?KGH1CVnPRaKR36iFzVgD6+RzZIvoU3a8jZos5l?=
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sandy Huang <hjc@rock-chips.com>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jonas Karlman <jonas@kwiboo.se>
+X-Entity-ID: P7KYpSJvGCELWjBME/J5tg==
+Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,122 +67,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello RT-list!
+This series add support for displaying 10-bit 4:2:0 and 4:2:2 formats produced
+by the Rockchip Video Decoder on RK322X, RK3288, RK3328, RK3368 and RK3399.
+Also include 10-bit 4:4:4 support since VOP can support that also.
 
-I'm pleased to announce the 5.10.180-rt89 stable release.
+First patch adds new fourcc 10-bit YUV formats with 4:2:2/4:4:4 sub-sampling.
+Second patch adds support for displaying the new fourcc formats.
 
-This release is a RT-only update. All the changes here are specific to RT.
+These patches has been in use by LibreELEC and other distros for the
+past 3+ years, hoping they can be merged this time around :-)
 
-You can get this release via the git tree at:
+Changes in v4:
+- Rework RK3328/RK3399 win0/1 data to not affect RK3368
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
+Changes in v3:
+- No changes, rebased on next-20230616
+- R-B tags was collected
 
-  branch: v5.10-rt
-  Head SHA1: cb0ca150b57efd9e879e56c8f9834d98182aa394
+Changes in v2:
+- Add NV30 format
+- R-B tags was not collected due to NV30 changes
 
-Or to build 5.10.180-rt89 directly, the following patches should be applied:
+This series is also available at [1].
 
-  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.10.tar.xz
+[1] https://github.com/Kwiboo/linux-rockchip/commits/next-20230616-vop-nv15
 
-  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.10.180.xz
+Jonas Karlman (2):
+  drm/fourcc: Add NV20 and NV30 YUV formats
+  drm/rockchip: vop: Add NV15, NV20 and NV30 support
 
-  https://www.kernel.org/pub/linux/kernel/projects/rt/5.10/older/patch-5.10.180-rt89.patch.xz
+ drivers/gpu/drm/drm_fourcc.c                |  8 +++
+ drivers/gpu/drm/rockchip/rockchip_drm_vop.c | 29 +++++++++-
+ drivers/gpu/drm/rockchip/rockchip_drm_vop.h |  1 +
+ drivers/gpu/drm/rockchip/rockchip_vop_reg.c | 63 +++++++++++++++++----
+ include/uapi/drm/drm_fourcc.h               |  2 +
+ 5 files changed, 91 insertions(+), 12 deletions(-)
 
-Signing key fingerprint:
-
-  9354 0649 9972 8D31 D464  D140 F394 A423 F8E6 7C26
-
-All keys used for the above files and repositories can be found on the
-following git repository:
-
-  git://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
-
-Testing performed under the tag v5.10.180-rt89-rc1 at:
-
-  https://linux.kernelci.org/test/job/rt-stable/branch/v5.10-rt-next/kernel/v5.10.180-rt89-rc1/
-
-Enjoy!
-Luis
-
-Changes from v5.10.180-rt88:
----
-
-Luis Claudio R. Goncalves (3):
-      Revert "printk: declare printk_deferred_{enter,safe}() in include/linux/printk.h"
-      Revert "mm/page_alloc: fix potential deadlock on zonelist_update_seqseqlock"
-      Linux 5.10.180-rt89
----
-include/linux/printk.h | 19 -------------------
- localversion-rt        |  2 +-
- mm/page_alloc.c        | 14 --------------
- 3 files changed, 1 insertion(+), 34 deletions(-)
----
-diff --git a/include/linux/printk.h b/include/linux/printk.h
-index 92e0656841128..7e4352467d831 100644
---- a/include/linux/printk.h
-+++ b/include/linux/printk.h
-@@ -609,23 +609,4 @@ static inline void print_hex_dump_debug(const char *prefix_str, int prefix_type,
- #define print_hex_dump_bytes(prefix_str, prefix_type, buf, len)	\
- 	print_hex_dump_debug(prefix_str, prefix_type, 16, 1, buf, len, true)
- 
--#if defined(CONFIG_PRINTK) && !defined(CONFIG_PREEMPT_RT)
--extern void __printk_safe_enter(void);
--extern void __printk_safe_exit(void);
--/*
-- * The printk_deferred_enter/exit macros are available only as a hack for
-- * some code paths that need to defer all printk console printing. Interrupts
-- * must be disabled for the deferred duration.
-- */
--#define printk_deferred_enter __printk_safe_enter
--#define printk_deferred_exit __printk_safe_exit
--#else /* defined(CONFIG_PRINTK) && !defined(CONFIG_PREEMPT_RT) */
--static inline void printk_deferred_enter(void)
--{
--}
--static inline void printk_deferred_exit(void)
--{
--}
--#endif
--
- #endif
-diff --git a/localversion-rt b/localversion-rt
-index 666227d921a3d..d2a40223e4b77 100644
---- a/localversion-rt
-+++ b/localversion-rt
-@@ -1 +1 @@
---rt88
-+-rt89
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 7e65e3ef16e3a..3760a06932a6e 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -6043,20 +6043,7 @@ static void __build_all_zonelists(void *data)
- 	int nid;
- 	int __maybe_unused cpu;
- 	pg_data_t *self = data;
--	unsigned long flags;
- 
--	/*
--	 * Explicitly disable this CPU's interrupts before taking seqlock
--	 * to prevent any IRQ handler from calling into the page allocator
--	 * (e.g. GFP_ATOMIC) that could hit zonelist_iter_begin and livelock.
--	 */
--	local_irq_save(flags);
--	/*
--	 * Explicitly disable this CPU's synchronous printk() before taking
--	 * seqlock to prevent any printk() from trying to hold port->lock, for
--	 * tty_insert_flip_string_and_push_buffer() on other CPU might be
--	 * calling kmalloc(GFP_ATOMIC | __GFP_NOWARN) with port->lock held.
--	 */
- 	write_seqlock(&zonelist_update_seq);
- 
- #ifdef CONFIG_NUMA
-@@ -6091,7 +6078,6 @@ static void __build_all_zonelists(void *data)
- 	}
- 
- 	write_sequnlock(&zonelist_update_seq);
--	local_irq_restore(flags);
- }
- 
- static noinline void __init
+-- 
+2.40.1
 
