@@ -2,309 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C860F734797
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 20:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3449734798
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 20:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbjFRSMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 14:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56054 "EHLO
+        id S229523AbjFRSO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 14:14:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjFRSMQ (ORCPT
+        with ESMTP id S229521AbjFRSOz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 14:12:16 -0400
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2050.outbound.protection.outlook.com [40.107.105.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04FDE64;
-        Sun, 18 Jun 2023 11:11:33 -0700 (PDT)
+        Sun, 18 Jun 2023 14:14:55 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B5BE51
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 11:14:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687112094; x=1718648094;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=xqV/iUbRiFrycllg8J07B/DjmjrRyp2L9bWjdCAWp7Y=;
+  b=BatzsyiggsYNkYbckJwdGql8UuSeanUD4jFG2KFNnVHN1DAX+PusdJWV
+   2mbVcurXfvSZZRTzrNWPwz9WhJY1jJfiQ8ITkmAqnVAfZ8QnjRgQy/PkN
+   6sFOi7m57LfO2biIVIzmGxzUEmDLpi+lLcrELqwRlMCtu+8p7g4nulu4Z
+   989wPKuRubwhrQFXTPkUJ9vyL+vjY9jovjSX3NHxWKA5/yAPgfBJ8tPcW
+   PdemHzSePTCYaOf33atkrozK+dw87V36sV1THyKKhZW/jgqnq0szB9qeN
+   TSrn/Sl+YnPGUm9VitmZjcUSYJ7LCUvWvXzA5PP7TfIcBssnS2IzOrNT6
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="339834201"
+X-IronPort-AV: E=Sophos;i="6.00,253,1681196400"; 
+   d="scan'208";a="339834201"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2023 11:11:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="837640827"
+X-IronPort-AV: E=Sophos;i="6.00,253,1681196400"; 
+   d="scan'208";a="837640827"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga004.jf.intel.com with ESMTP; 18 Jun 2023 11:11:19 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Sun, 18 Jun 2023 11:11:18 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Sun, 18 Jun 2023 11:11:18 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Sun, 18 Jun 2023 11:11:18 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.103)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Sun, 18 Jun 2023 11:11:17 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JdH0fGA6IXGemucvNo3U/LDd4S7wKQbgDkV4Aoid3HrpL0kIEkub10LYOTXw26BUKOGGOOYKLefz9NrY1rtnCNESx6jDVc046Z2x8mujt1vtIbLZOw3bhsrmgotjrPhuHdB/bjh8XFC86SNn2aFXulUXhSohnFwj2MIVHyNop83JSY1urPUKxfS7kpmj5+kPdtCGDUvgMvzRiUcGRqBjjZVfDZ/XeNisnkVnlc3m53Hy5i3yWQbRfGLLLy8zi9NJp8MeefyFh2hwtzvgh84C4sqjEIQubkXUKKpZ4lHF3TNhAzVdWDwwhXBaQOKJKLgCC0UshGyUkkMXNEBxlI1PEA==
+ b=BF2+vfhImdz03VfuAUr08JFB5eRadP5inldapbRp8jjvy4eUdSC1lQODB9YzXL5D73PBAMpVEpvd/Shspc532CEta8puwR0aENGfIR114VJahCu+Y1WPH5ZMyeggiSUGUcxiXBGcgikNJ9KYGguRlGxPEvEfQcMgyscqH+2aNsLRCB0rx6fO3oCiYQqIXPcn3U4cCUKaNIyBKW7Fn3I/Zd8fRh3IxiRxim2rhLz3add/AvuXKTW7ocld8R38frw5l8aV12Z/S1m5Qa9W0aQH/0pPUaG2v8bl2C4gQLeB91bDAHbOpYX1LKk3UX0hm/zMZ0+zbxfQkmF9ebz2aZpRhA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=X1aMJzWiiDVx+EzvQ6gIRjNjd3cakxN2zCgL6Y+LfCo=;
- b=TUaeeV3UlA5tqCmDC2D7QK2zYhK7VSK6YIAOUMta/LQDzKB4wPbaPgPi2OAKhJOPIxJ5BuKsaQyvAVwAtgH48bsUoFQv3Crc0dUWB65SFKhdbJ0Yb0BDOWaTEnXtmoWfrcme5Gj+Vl3r6jjT9mlz8+QQA0MWK7aSXCM5qZJDwpGHiR2Tp/LCvlewXh71DI9UTL+h5yCJYaeFbUIOsLYQYWcVT9wwys/+TcW//7ZvK64OOizzYP9F9rgYU8RzMp0HyPThtunIiSvX0a3A+ou/9zBUAZMNMH1HHDjeNMn1Ajfrk+ibTErX3EiBtD7Uz4ZyWVtFugmcn3Mt5FVxA0ShxQ==
+ bh=xVVSXzlLtQdGMUAdH4wZXZ/pdgYiGaS1oeTRmCjz4Ww=;
+ b=NwHXREZW84C2RAZqInh3lt6aTnRPwE3g7eEUA/jIJR3Lg2tMbOwYRTMsqXC2GUB9n32quN/YG/kv0ydWFX9sLBjTJFxP3g1MCFiGvMiTdAZO+P9wd928GRRgNPCIKDo0hrjjDptMyMnE098DNzaOEcXSByD7ArQLzO72gbKLGsIHGOC2DMLLskXL81DGuveLyHkXn5nh1Nfq8dpxFMulMthX2XHkgsOAIi6E/8Wss8cApAUOtjKELk/y/E5t2MlCho3OB8OVxP7vSNilgnV53NLBlOdW06WOqQy6EczZws4xODWbqSUQaukk80T7NLT5VZK6dFJXlVklnqaTjWcFvA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=X1aMJzWiiDVx+EzvQ6gIRjNjd3cakxN2zCgL6Y+LfCo=;
- b=S2HlA6JgAcZTunpHmnUUBCKlDVfnecfwfPWX9EX/essaLUHO+QqVTCkmc9OcOGcKlT+WNT3oJrjbi8BFIR1z1wEsrJLhg4yOPG/RoJsudGry5ZCxzKkLw6Onar4rZOo/WPGVaw1XL2Nw/t4tfHWTlSxyo4af8Y/0A4XLdsmsZ+4=
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
- by DB8PR04MB7019.eurprd04.prod.outlook.com (2603:10a6:10:12b::20) with
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
+ by CYYPR11MB8358.namprd11.prod.outlook.com (2603:10b6:930:c9::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.29; Sun, 18 Jun
- 2023 18:10:23 +0000
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::4a2a:262e:415f:e41c]) by AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::4a2a:262e:415f:e41c%7]) with mapi id 15.20.6500.031; Sun, 18 Jun 2023
- 18:10:23 +0000
-From:   Frank Li <Frank.Li@nxp.com>
-To:     frank.li@nxp.com
-Cc:     devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
-        imx@lists.linux.dev, joy.zou@nxp.com,
-        krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org,
-        linux-kernel@vger.kernel.org, peng.fan@nxp.com, robh+dt@kernel.org,
-        shenwei.wang@nxp.com, vkoul@kernel.org
-Subject: [PATCH v8 12/12] dt-bindings: fsl-dma: fsl-edma: add edma3 compatible string
-Date:   Sun, 18 Jun 2023 14:09:25 -0400
-Message-Id: <20230618180925.2350169-13-Frank.Li@nxp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230618180925.2350169-1-Frank.Li@nxp.com>
-References: <20230618180925.2350169-1-Frank.Li@nxp.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.37; Sun, 18 Jun
+ 2023 18:11:16 +0000
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::7237:cab8:f7f:52a5]) by SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::7237:cab8:f7f:52a5%7]) with mapi id 15.20.6500.031; Sun, 18 Jun 2023
+ 18:11:15 +0000
+Date:   Sun, 18 Jun 2023 11:11:08 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Sumitra Sharma <sumitraartsy@gmail.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        <intel-gfx@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        Thomas =?iso-8859-1?Q?Hellstr=F6m_=28Intel=29?= 
+        <thomas_os@shipmail.org>
+CC:     Ira Weiny <ira.weiny@intel.com>, Fabio <fmdefrancesco@gmail.com>,
+        "Deepak R Varma" <drv@mailo.com>,
+        Sumitra Sharma <sumitraartsy@gmail.com>
+Subject: Re: [PATCH v2] drm/i915: Replace kmap() with kmap_local_page()
+Message-ID: <648f48bc3d3c2_1de3f9294a3@iweiny-mobl.notmuch>
+References: <20230617180420.GA410966@sumitra.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR03CA0048.namprd03.prod.outlook.com
- (2603:10b6:a03:33e::23) To AM6PR04MB4838.eurprd04.prod.outlook.com
- (2603:10a6:20b:4::16)
+In-Reply-To: <20230617180420.GA410966@sumitra.com>
+X-ClientProxiedBy: SJ0PR05CA0207.namprd05.prod.outlook.com
+ (2603:10b6:a03:330::32) To SA1PR11MB6733.namprd11.prod.outlook.com
+ (2603:10b6:806:25c::17)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM6PR04MB4838:EE_|DB8PR04MB7019:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4c5a7828-747d-46d5-5e23-08db702748d6
+X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|CYYPR11MB8358:EE_
+X-MS-Office365-Filtering-Correlation-Id: 26b1cb24-f28e-4bbd-6f51-08db702767ab
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vqaiUnzQwuw1fZXIoPtJ8HhCXR3XigAG0H6r1ibMREaNdqBDW/wvFrJx+q0qwKeczdUKfTUWS4r/iEQ62NXey7eJ7WEi0XLodafaZHKvpIcaNDplXKdXAPA6lTSyusHpiyEnnLuipOxLGOjgE8mNo2FzVXjEcLTfverFgo9WvJbdNHTkHwP0Ac8mMx5a9gAA5R2sDltFAbbOIKEaIHN72LaBEJnSZTW0kKADMFeVT2xfZPblvm9SdGwZtGvqtqXWGQ74qNJ1gdQeJjrezAvCn3LQiI+aIv4wI+2PntUz/l/vZbISAHPsumUFBhnH3BupBq4I2/xVGJMNEo4Llq+5ji7SRw444ui+7nM5q3X1fqfs48Afsz5hrx4k36p0n8IFaVLwYUmYx8nzcJ0x8tkZuU1n2NDkh8Pvy+W4ffnjfBgouUZu6nW5PSx6y6WpVUcM1Y5PtekipLTciitgrKLAUm9pSM5zQRUFmZyCd3itCa9dW1MjD/hYXqZdirEMhI1AvqTV8XuVvn0YHLJ/nMboh6whKaWVXXlc+ZnAs/5Zpmj51ErFGFd91xhbtRI2+mf/azMFEpcZQf8GTQNBf8mMxMc33nIxdkiDm+CImEyHog964jeCK+D8Eq674YC6v+kS
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(39860400002)(396003)(136003)(366004)(451199021)(66946007)(316002)(4326008)(478600001)(66476007)(37006003)(66556008)(86362001)(36756003)(186003)(6506007)(1076003)(83380400001)(26005)(6512007)(6486002)(34206002)(8676002)(8936002)(5660300002)(2906002)(52116002)(38100700002)(38350700002)(2616005)(41300700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: qjRWiYd+1HnEfQd3lZWdQhZG9UxceONL8+adwN5aeZ3Nh3B2swAFAjWc9Yw4HVI51Dij5F3iSnv+qzznTvqm+ccJTw5JclM1S+U4ahJJe8lZXxWEb16+6dAbySUK3hpxPE31wpfAHW2LRCqVTx2WXJJeNBquhbmhRM4vBZBWRZGIh9U4e3GSVkoIYOK+hwMZ9/fMk7rx5th+jVo6sXF7fYqmVnsa7poAL/q6XH0v+Ig9xaSh+iQ6RNkjQZq5WFPpDzI6PtGdGP4ze/2QzGpoq/8zSdQR55wA+o4l5YbthSf5j779B0aizTzruUgnP+mmmPFCbJ9K+d6WcFYrn75xpod6ua3ggQtkT3lp0PDkw2H4lwrS0Wh74tbxMUFg5sAEXuPV3bHTfstGngRaee8qEa39SLmoAJinC5yvZTgQwFwHiLoD4jNDMF6MrTd+wB8m7uoxTHeA+DWWltWCVIAxKEEK1OcUZ8jYuufMNRvllQAfPS0qkdTXJP9/AQFWZGYqxu2rSyM0riWMFxULQu4sResim2t73h5SFIKXKsyNn9UeAY53Xb1YGN/UapnL1b7TH42moTQv8hvFrwrEnB5o0A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(396003)(376002)(39860400002)(366004)(136003)(451199021)(66556008)(9686003)(8936002)(6486002)(8676002)(26005)(41300700001)(6512007)(82960400001)(478600001)(921005)(66946007)(38100700002)(86362001)(66476007)(4326008)(316002)(110136005)(54906003)(6666004)(44832011)(5660300002)(186003)(7416002)(966005)(83380400001)(6506007)(66899021)(2906002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+HL+LNkXOzq9L7PyOpgMWECbY1zJWDMSrKC5vcMS7f7TLpD1Nv6a9N4FDNg7?=
- =?us-ascii?Q?Z1/5u3jq9Jgzim0e0U2SvHKNMoB0puV06z20zanh6SEsin7MIk1chB/xSkNH?=
- =?us-ascii?Q?a2qhwHeZ9JlsXjoCbRY7v17916FpFSe4fj3h+5czFjlrdcy9xeXdqjXFej8w?=
- =?us-ascii?Q?hARXcnkzQvA4OyzlyOlSKs4ODi/cijsOHI5HUIObKCBuX6+aOsFNtXjfyl7t?=
- =?us-ascii?Q?hKND9ZNuTLmIRKetx8PFU4uObxRNp32LRyY7QXXJIB49IK+//tKqlxKktOTe?=
- =?us-ascii?Q?3wwuXIjPX+XPz37J+fF+I9N/JxDJojsnnYsfSwFVTUuOsNP5N9DeJQRKPS97?=
- =?us-ascii?Q?0ILmU2CG/T+/2XvuaCs2SDffP02+Ohj4EzT0JK9JiYHc1H52fhxvo/fZiC4A?=
- =?us-ascii?Q?mfEmUmyeH2IvuIlH1xmkC17Tm9lfjXQl4Uib/g7LfEaWcm7Nl3IecGmcDyZ8?=
- =?us-ascii?Q?Cx8NPZkEI/O17XOQqkC3w9Rg7vOInmY2c+cK37RtCtX4XrmMsBXeiWBez9tc?=
- =?us-ascii?Q?pfIwHB5eYI37PbjKTAu4FWf7wtZj/WOzlQ2hToRDxFxyD2Fh5GYsWfBn6bEI?=
- =?us-ascii?Q?vz+ZAS61Yfffpf4wLTlFXcIve7ctKigudPktbAYDTmQ8MKYLV9dRiejohhyb?=
- =?us-ascii?Q?lqsPWLSEpz/mMRJRtISsCmCgmjyvT3bIVe3g9/O/qB0gykpqqXvOItDBD3IY?=
- =?us-ascii?Q?tJQAItijwB+fKCZVr4SnkG5tQxVWYdzWR6hxPFR8zB9HHpoPRVl0GM8/5SYx?=
- =?us-ascii?Q?SWYkHArRCQCsRVn8TE2wmHvrffBFPslp7o3ZPWNpl/YaXSjV2MKx9FM5qVXN?=
- =?us-ascii?Q?GPYdzLEgYZbP8yc19FseUsUhYb7lHcNdegqaz5biLPrdFGJesHo9WeVVeDpl?=
- =?us-ascii?Q?4ySQownIUuWqsZvb0WO64d3DUuHmQxYnSTvfoV6QdrNvMIbgDP8Fu2/OiOLB?=
- =?us-ascii?Q?Lbo2TIUCbWeuIrM8Zoj595Tc1MlXDP/c1TMyGhFiXx2+9BeQgy7AO5i4xIpr?=
- =?us-ascii?Q?xys1BkSOzj194rFY6SHd0RObgTT14mLf50GagWA6JjWMbquYX02pCm10HFs4?=
- =?us-ascii?Q?yn4u66+wImJzdtpEJ3vTEdoBFB1suNTLfIcDfd77Nm4j/hz42pgV1Nc4/mzr?=
- =?us-ascii?Q?vGsvmheN2vduvgJCF/3UDjPizEFNikrJbelpYWHWYVI+ByWBekw6EyZE3xRn?=
- =?us-ascii?Q?t/A/VAKTPVIwTQmXlsr0pM0RPNrkq7h16oNHd3aTJvtIxWVwdjaZCwtzqU+L?=
- =?us-ascii?Q?jq3wD9IyvEgUR7eAivsKsxZ6Fn91CfBb9Xkbu9Wr3lgXo84OaH8tUOC4ZaX0?=
- =?us-ascii?Q?3bshjUbQchuZZmu+l27Xpis6pMCDkJ5L6oZFrbXss9A1HUhe6DscNQe2sx7q?=
- =?us-ascii?Q?1KEj8Ex/iX6z7TANzSPsm2DfHALd+Xqopz6KT69nv/jtNP8U8opT067rklFN?=
- =?us-ascii?Q?oj0M4uxor2FU0UnyFcRL4lgEK01J/+HP8vn551JfEnpc7iB57i5L5SDAiRoS?=
- =?us-ascii?Q?/tHZzfYLvVZu3P2/RQIBJnKUbaSK5h3/QyWXECPRsSjWmd6osU7TI71RECMR?=
- =?us-ascii?Q?w0R89kyniSM4+I8S16+4pT570qF2VJsgMVILHtvN?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4c5a7828-747d-46d5-5e23-08db702748d6
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bTQ4WkMxUnlEOUFpb29jeHlrVDh0WExFZkRSLzA5aytOVHAvdHQzWXZuTUR0?=
+ =?utf-8?B?MFNVNXpKQ1dhcGxsT05WcWY2eURES2hqL2EvZTJqbjUwMjY3bjBpWGJoQ2l6?=
+ =?utf-8?B?SU04OE9YSWhjUkNmU0pVNGtjWjZxNXFudzJzRFpidENUZjAvamk1SC8rQmNp?=
+ =?utf-8?B?OGxuYzMvVVFuZUl1QmpUR0dIWlh3MkZONEdwWEVQOXE0WEV3VS9SSERjUnA4?=
+ =?utf-8?B?L3REL095RGU2OVJtNHEvSGtVSE5QWTdSSjJiQy9yU3pvaXlvNlBtcERGWld2?=
+ =?utf-8?B?UkpOM2RkQkFlN2p2WjZjRFZwWEE0aTRYeXNIOHBSU0JqK2lQVXFrOXF6Y2NN?=
+ =?utf-8?B?anVudTFhdm1hWU9UbHJpL0VaYjUzNVNpQ1VWUkJ0TGd6TW94d3ltWk93eVFn?=
+ =?utf-8?B?dVRFUWpNblNqNVl5M2NhTUJCZkRsS0RMcm5CRmliTWVYTC9TeWdvSSswREhK?=
+ =?utf-8?B?ZmJCbFg1SnBrN0x3clBRcUNxWVVKcXV1elRGa3RURzdpdFgzM0FKZ2FMQzJW?=
+ =?utf-8?B?RDd0UDh4ajNsYjh4WHhVeGNyMmRET3UxTDZyemNjbWdVSHFIRTdVd2Joa256?=
+ =?utf-8?B?M0hsMVFMYnZFYlg1WFF1NHJhenZmbkdlR0M5djZNcVlBOTg4TEJIWDFqNVNE?=
+ =?utf-8?B?UlhPS0Z1Tkhrd3diQUNuNUt6L3FGQUd1OGg1QlQ3ZmsvM1FrbEpWZEF5Skhw?=
+ =?utf-8?B?bHNmSldhbkw0LzUwd1F3NkpQWUt4U3c0U2c3S0tOWVJ6OGxhblpVL3BoRkZj?=
+ =?utf-8?B?aEtMaHdQMUZCZm5BZUJHNSt3SFlVM20veGRrN3M4dDRDZ3c2SlVPdFZQQkdQ?=
+ =?utf-8?B?UFFZZGdCeFI5MXlFSW05d24rbG1ZSkdjd1FFTm83ZVAvNTJtYjBwaXBMVUxH?=
+ =?utf-8?B?MisraHJId0psS01sUStTUTMxNmRLYmZ0WjJ0OVpXaWFLSFpDellhUVRwaHh4?=
+ =?utf-8?B?ZksvYXk1R0VnM1o0c0o2RXFscDRhTUpXSEl0WUhNQm9peUI1KzJncDZyV2tL?=
+ =?utf-8?B?OUNFOUpBZjdQbDQ4SldXWWVnNDNrSEY0NDRQRHlVc1BZRzFxSzhjOVlSNTdy?=
+ =?utf-8?B?VzNvbU9sTkwxL1lzVUlhZTJxWjVEMDhwWUp0TlczYUxQRkNUdjVxSE9ZaWho?=
+ =?utf-8?B?aGFSOWRrVkduMmxrcEh1K1E0Zlh0Mk9SQ2d5aWJvbXYydkc2SWt0bTViL2hR?=
+ =?utf-8?B?Vy9XTEJHMXFrQ2l3U3JoQ2drZHZQQy9hT1BVU0ZDY083SzlOLzd2dTRqeWxO?=
+ =?utf-8?B?TUdzV2JyaVFGWjhOMXZBVng4VEVXYkt6SWYwRVhrOWtKdStsb2h1dmFteWl4?=
+ =?utf-8?B?OHRQbFhYTGZ0QmJON3Vocy8yWm90WmxyNjFKS2l3VWJMV05EajREeHJXdmlj?=
+ =?utf-8?B?dWFFOHpzSUJWZHpzWndLc0NLMmo3WUtzTmJweGZmNS9odlVaekNCMDFnTmx2?=
+ =?utf-8?B?S2hxWEpOUmFoRUlqQURWTGVidlBYMXNSNWRpYlJlKzBPdWorL1RDL0dPQkhx?=
+ =?utf-8?B?bTJnU1hiUVh3Qi9xbE1tekYwc2Vmc1RiTE9HdGNLVFBmOEg5ZGtTWW04bkcv?=
+ =?utf-8?B?b0lDdnJJeUErR2srbUJqWWNWeFd4TzFRVkU2WWRoYXdRNVRiVXpWdmhqSVpM?=
+ =?utf-8?B?aGZ2QzRzTSsvSDdIVEVrbURzYWlxQ2ZoQ2JHeFNkenVuWUUwUFlCN205Z0d3?=
+ =?utf-8?B?Y2FhbjVnYlR3V0JmNE9FbDMrNFNXQTVJc3REcTZHR1ZaYnJacTZBNFBVSzZW?=
+ =?utf-8?B?amJuZDlnN0JQNXpQQ014TWluZmZNWTBDOHpCU2N1eElTTWtad2thTjBWWWpw?=
+ =?utf-8?B?eE9iSjFuLzJJd0JwR0ZqNHQ1SHlrNUVGVlIxQTVaMkpBamhxZzFQQkZCQlBY?=
+ =?utf-8?B?MUYrSGRZZUV6eXN6cUEyL2JHREZGQldJOXdtU0tnQnZOS0V1YUV3Sm0wOEV0?=
+ =?utf-8?B?STRMalFKZmNqMEFCTlV0Nm81QWZ2aW5Ga0kvWXN0RVMxRmtONHF1eEpWKy9q?=
+ =?utf-8?B?ay9TMTRLVlU0MWkybVJDMXJZUlJyU0dacE9LK2RoR3NNT1lMQkR1OWlCcy9G?=
+ =?utf-8?B?MlRDR1ozckNKVGZMSk9Sd3ZXenhPaWhteHVVSmEwMW1KajNzNU5MS0xtTmhq?=
+ =?utf-8?Q?NZ+AuDGB8q9qjdUErnG6rr0xZ?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 26b1cb24-f28e-4bbd-6f51-08db702767ab
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jun 2023 18:10:23.2475
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jun 2023 18:11:15.2309
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tcYl2+FxC05hmxEPPG5yCUdVhyy0L0BJjTSNjuoi2ATViLZKKvLWkHcALGFgM9Qt6p2QAf9x7PPmFCzeg5RtiA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7019
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: Xtj5Dzb99TbtFiVzRlZrcKZICE0fc2xRKQldOhcZq4LkUcevWBgnFCEAPD/2Sx/4Jg0XABBHR+9SldOIfn7b1g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR11MB8358
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extend Freescale eDMA driver bindings to support eDMA3 IP blocks in
-i.MX8QM and i.MX8QXP SoCs. In i.MX93, both eDMA3 and eDMA4 are now.
+Sumitra Sharma wrote:
+> kmap() has been deprecated in favor of the kmap_local_page()
+> due to high cost, restricted mapping space, the overhead of a
+> global lock for synchronization, and making the process sleep
+> in the absence of free slots.
+> 
+> kmap_local_page() is faster than kmap() and offers thread-local
+> and CPU-local mappings, take pagefaults in a local kmap region
+> and preserves preemption by saving the mappings of outgoing tasks
+> and restoring those of the incoming one during a context switch.
+> 
+> The mapping is kept thread local in the function
+> “i915_vma_coredump_create” in i915_gpu_error.c
+> 
+> Therefore, replace kmap() with kmap_local_page().
+> 
+> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> 
 
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
----
- .../devicetree/bindings/dma/fsl,edma.yaml     | 106 ++++++++++++++++--
- 1 file changed, 99 insertions(+), 7 deletions(-)
+NIT: No need for the line break between Suggested-by and your signed off line.
 
-diff --git a/Documentation/devicetree/bindings/dma/fsl,edma.yaml b/Documentation/devicetree/bindings/dma/fsl,edma.yaml
-index 5fd8fc604261..437db0c62339 100644
---- a/Documentation/devicetree/bindings/dma/fsl,edma.yaml
-+++ b/Documentation/devicetree/bindings/dma/fsl,edma.yaml
-@@ -21,32 +21,41 @@ properties:
-       - enum:
-           - fsl,vf610-edma
-           - fsl,imx7ulp-edma
-+          - fsl,imx8qm-adma
-+          - fsl,imx8qm-edma
-+          - fsl,imx93-edma3
-+          - fsl,imx93-edma4
-       - items:
-           - const: fsl,ls1028a-edma
-           - const: fsl,vf610-edma
- 
-   reg:
--    minItems: 2
-+    minItems: 1
-     maxItems: 3
- 
-   interrupts:
--    minItems: 2
--    maxItems: 17
-+    minItems: 1
-+    maxItems: 64
- 
-   interrupt-names:
--    minItems: 2
--    maxItems: 17
-+    minItems: 1
-+    maxItems: 64
- 
-   "#dma-cells":
--    const: 2
-+    enum:
-+      - 2
-+      - 3
- 
-   dma-channels:
--    const: 32
-+    minItems: 1
-+    maxItems: 64
- 
-   clocks:
-+    minItems: 1
-     maxItems: 2
- 
-   clock-names:
-+    minItems: 1
-     maxItems: 2
- 
-   big-endian:
-@@ -65,6 +74,29 @@ required:
- 
- allOf:
-   - $ref: dma-controller.yaml#
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - fsl,imx8qm-adma
-+              - fsl,imx8qm-edma
-+              - fsl,imx93-edma3
-+              - fsl,imx93-edma4
-+    then:
-+      properties:
-+        "#dma-cells":
-+          const: 3
-+        # It is not necessary to write the interrupt name for each channel.
-+        # instead, you can simply maintain the sequential IRQ numbers as
-+        # defined for the DMA channels.
-+        interrupt-names: false
-+        clock-names:
-+          items:
-+            - const: dma
-+        clocks:
-+          maxItems: 1
-+
-   - if:
-       properties:
-         compatible:
-@@ -72,18 +104,26 @@ allOf:
-             const: fsl,vf610-edma
-     then:
-       properties:
-+        clocks:
-+          minItems: 2
-         clock-names:
-           items:
-             - const: dmamux0
-             - const: dmamux1
-         interrupts:
-+          minItems: 2
-           maxItems: 2
-         interrupt-names:
-           items:
-             - const: edma-tx
-             - const: edma-err
-         reg:
-+          minItems: 2
-           maxItems: 3
-+        "#dma-cells":
-+          const: 2
-+        dma-channels:
-+          const: 32
- 
-   - if:
-       properties:
-@@ -92,14 +132,22 @@ allOf:
-             const: fsl,imx7ulp-edma
-     then:
-       properties:
-+        clock:
-+          minItems: 2
-         clock-names:
-           items:
-             - const: dma
-             - const: dmamux0
-         interrupts:
-+          minItems: 2
-           maxItems: 17
-         reg:
-+          minItems: 2
-           maxItems: 2
-+        "#dma-cells":
-+          const: 2
-+        dma-channels:
-+          const: 32
- 
- unevaluatedProperties: false
- 
-@@ -153,3 +201,47 @@ examples:
-        clock-names = "dma", "dmamux0";
-        clocks = <&pcc2 IMX7ULP_CLK_DMA1>, <&pcc2 IMX7ULP_CLK_DMA_MUX1>;
-     };
-+
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/imx93-clock.h>
-+
-+    dma-controller@44000000 {
-+      compatible = "fsl,imx93-edma3";
-+      reg = <0x44000000 0x200000>;
-+      #dma-cells = <3>;
-+      dma-channels = <31>;
-+      interrupts = <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 111 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 113 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 116 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 118 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 119 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 120 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 121 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 122 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 124 IRQ_TYPE_LEVEL_HIGH>,
-+                   <GIC_SPI 125 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&clk IMX93_CLK_EDMA1_GATE>;
-+        clock-names = "dma";
-+    };
--- 
-2.34.1
+> Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+> ---
+> 
+> Changes in v2:
+> 	- Replace kmap() with kmap_local_page().
+
+Generally it is customary to attribute a change like this to those who
+suggested it in a V1 review.
+
+For example:
+
+ 	- Tvrtko/Thomas: Use kmap_local_page() instead of page_address()
+
+Also I don't see Thomas on the new email list.  Since he took the time to
+review V1 he might want to check this version out.  I've added him to the
+'To:' list.
+
+Also a link to V1 is nice.  B4 formats it like this:
+
+- Link to v1: https://lore.kernel.org/all/20230614123556.GA381200@sumitra.com/
+
+All that said the code looks good to me.  So with the above changes.
+
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+
+> 	- Change commit subject and message.
+> 
+>  drivers/gpu/drm/i915/i915_gpu_error.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/i915_gpu_error.c b/drivers/gpu/drm/i915/i915_gpu_error.c
+> index f020c0086fbc..bc41500eedf5 100644
+> --- a/drivers/gpu/drm/i915/i915_gpu_error.c
+> +++ b/drivers/gpu/drm/i915/i915_gpu_error.c
+> @@ -1164,9 +1164,9 @@ i915_vma_coredump_create(const struct intel_gt *gt,
+>  
+>  			drm_clflush_pages(&page, 1);
+>  
+> -			s = kmap(page);
+> +			s = kmap_local_page(page);
+>  			ret = compress_page(compress, s, dst, false);
+> -			kunmap(page);
+> +			kunmap_local(s);
+>  
+>  			drm_clflush_pages(&page, 1);
+>  
+> -- 
+> 2.25.1
+> 
+
 
