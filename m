@@ -2,101 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B7B734678
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 15:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C652B73467D
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 16:02:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbjFRN6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 09:58:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46672 "EHLO
+        id S229854AbjFROCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 10:02:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbjFRN6G (ORCPT
+        with ESMTP id S229601AbjFROCo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 09:58:06 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671211BF;
-        Sun, 18 Jun 2023 06:58:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1687096683;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YFvP7ex7sh59x2Zu10sumdOcBtAoUqyi0bcCYgQlGWg=;
-        b=oeomZ+Lh4LsIYrRa1ueU6sp5sjcBeRBkiVFe96qQ2aTd4+WbMBrxDdDMo8cSC5L1zO3WJr
-        R8mbbMaWOOFJpjmdqGrYLhPV4wZzvpBR8jpineG40OwyjgB7QSINuDpOXIEKiY0GOh2ozK
-        98VCgkq/wLOkOaR8tFHJ+6mmUggrQq4=
-Message-ID: <5511fba10119cdc08a18ea2cca98fed343f9cd33.camel@crapouillou.net>
-Subject: Re: [PATCH 0/9] MIPS: CI20: Add WiFi / Bluetooth support
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     list@opendingux.net, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Paul Burton <paulburton@kernel.org>,
-        Christophe Branchereau <cbranchereau@gmail.com>
-Date:   Sun, 18 Jun 2023 15:58:01 +0200
-In-Reply-To: <ebf776a8fb8dee045e7661daaca4564fe39917a6.camel@crapouillou.net>
-References: <20230615084006.79194526F801@goldelico.com>
-         <C1924536-FA97-4E75-9D22-99E5AF24EE5B@goldelico.com>
-         <A8EBCBA4-D9BA-4C2F-9C91-38128D06EDBA@goldelico.com>
-         <AA802E24-A97B-42B6-90A4-5ECB1E4D9294@goldelico.com>
-         <5EF6B0D2-2B84-4C98-B799-88062E035EC1@goldelico.com>
-         <43DCEEA5-C013-44BE-85C7-D61A980B0EA5@goldelico.com>
-         <ebf776a8fb8dee045e7661daaca4564fe39917a6.camel@crapouillou.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Sun, 18 Jun 2023 10:02:44 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 525AFE45;
+        Sun, 18 Jun 2023 07:02:43 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1qAszG-0002BZ-Hl; Sun, 18 Jun 2023 16:02:38 +0200
+Message-ID: <dc4f14e5-d57e-241f-9932-1aca75048d13@leemhuis.info>
+Date:   Sun, 18 Jun 2023 16:02:37 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] nfsd: move init of percpu reply_cache_stats counters back
+ to nfsd_init_net
+Content-Language: en-US, de-DE
+To:     Jeff Layton <jlayton@kernel.org>, Chuck Lever <cel@kernel.org>
+Cc:     Chuck Lever <chuck.lever@oracle.com>, Neil Brown <neilb@suse.de>,
+        Olga Kornievskaia <kolga@netapp.com>,
+        Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
+        stable@vger.kernel.org, Eirik Fuller <efuller@redhat.com>,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230616191744.202292-1-jlayton@kernel.org>
+ <ZIzFp3ViiU2SCi6J@manet.1015granger.net>
+ <4b5063eb5a1139adc9dd4bdadde30674faee0700.camel@kernel.org>
+ <d698b838-57e0-d019-a783-c229c04eeca4@leemhuis.info>
+ <7d9515dbe6af110f2c32dce2b994120e4637b295.camel@kernel.org>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <7d9515dbe6af110f2c32dce2b994120e4637b295.camel@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1687096963;0d68c4e7;
+X-HE-SMSGID: 1qAszG-0002BZ-Hl
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+On 18.06.23 14:09, Jeff Layton wrote:
+> On Sun, 2023-06-18 at 12:40 +0200, Thorsten Leemhuis wrote:
+>> On 16.06.23 22:54, Jeff Layton wrote:
+>>> On Fri, 2023-06-16 at 16:27 -0400, Chuck Lever wrote:
+>>
+>> FWIW, might be worth to simply tell Linus about it and let him decide,
+>> that's totally fine and even documented in the old and the new docs for
+>> handling regressions[1].
+>>
+>> [1]
+>> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/Documentation/process/handling-regressions.rst?id=eed892da9cd08be76a8f467c600ef58716dbb4d2
+>
+> I'd rather Chuck make the final call here.
 
-[...]
+Totally fine for me, I just wanted to remind folks that this option
+exist, as I got the impression people forget it or fear it might annoy
+Linux. :D
 
-> Looking at the JZ4780_DS.PDF file, the SoC actually wants 1.1V so the
-> DT is not wrong - in theory. But in practice it does not work, as you
-> experienced yourself. However, if the ACT8600 defaults to 1.2V, or if
-> the bootloader configures it to 1.2V, I would think that this is
-> actually a voltage that the SoC can handle - otherwise the SoC would
-> be
-> overvolted until the kernel starts, and the board design would be
-> flawed.
->=20
-> I measured that the old 3.x kernel keeps the SoC voltage at 1.2V, so
-> it
-> sounds like a better default. Therefore the fix here would be to
-> raise
-> the DCDC1 regulator to 1.2V.
->=20
-> I'll send a patch later today.
+>>>>> Cc: stable@vger.kernel.org # v6.3+
+>>>>> Fixes: f5f9d4a314da ("nfsd: move reply cache initialization into nfsd startup")
+>>>> Why both Fixes: and Cc: stable?
+>>> *shrug* : they mean different things. I can drop the Cc stable.
+>>
+>> Please leave it, only a stable tag ensures backporting; a fixes tag
+>> alone is not enough. See [1] above or these recent messages from Greg:
+>>
+>> https://lore.kernel.org/all/2023061137-algorithm-almanac-1337@gregkh/
+>> https://lore.kernel.org/all/2023060703-colony-shakily-3514@gregkh/
+> 
+> Chuck and I also recently requested that the stable series not pick
+> patches automatically for fs/nfsd. This does need to be backported
+> though, so I cc'ed stable to make that clear.
 
-After a talk with Christophe (Cc'd), I changed my mind.
-
-A +100 mV overvolt is a *huge* step up, and although the SoC doesn't
-burst into flames, it could very well reduce its life span.
-
-I used to have huge stability issues (kernel not booting to userspace
-half the times, or just plain reboots after a few minutes of uptime)
-and I now realize it's because I was running the core at 1.1V, because
-these issues disappeared the moment I switched to 1.2V.
-
-However, I am now running at 1.125 volts, which is just 25mV above the
-nominal voltage - and it's been extremely stable so far.
-
-Nikolaus: could you test at 1.125 volts? If it's stable for you as
-well, I'd suggest to use this as the new default.
-
-Paul (Burton): As you wrote most of the drivers (and uboot?) for the
-board, do you know why VDDCORE was set to 1.2V?
-
-Cheers,
--Paul
+Great, many thx! Ciao, thorsten
