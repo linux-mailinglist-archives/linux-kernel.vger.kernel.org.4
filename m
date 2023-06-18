@@ -2,144 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F7EB7346DD
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 17:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D60B7346DF
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 17:54:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbjFRPv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 11:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32856 "EHLO
+        id S229799AbjFRPyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 11:54:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjFRPv1 (ORCPT
+        with ESMTP id S229536AbjFRPyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 11:51:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F01E4F;
-        Sun, 18 Jun 2023 08:51:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B19F460BC5;
-        Sun, 18 Jun 2023 15:51:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14FD1C433CA;
-        Sun, 18 Jun 2023 15:51:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687103486;
-        bh=V3ot2K88MpwMz51CvN4r3BLcrOzGzi0eMF77QypVbpU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=MEIBUVXDFCisCsR4stQQrmNAk+Y7E+e470RA1B3CGZVf8ZTpQwyivA+pZML+i7Fux
-         ItlxQNrbqTYdIVuVlqeuxzkd2txTUE2j97ZcytTVUqyC0NnWCSAfC1CMcjQUWqwkQt
-         b11LXV0LTfJDszA/SzUhoKRt2WwKB0pEiXc3KKnOCgMoP24HFZ8n4QnzHSCvnDEVL6
-         70vLvgzdygQ2LmIiqNiMOIrS4y5BBFJ44bVzzaGLf1NviIwe4w1DbDcnDAeI/d5hhk
-         NfSBoAmEtbXsAqNqil84CSCiu4oXHZUO1FPImn1VHp96FtF6QDinwvI5WDuBeKrpuZ
-         lxwxObwxgeh+Q==
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-55a35e2a430so1687568eaf.0;
-        Sun, 18 Jun 2023 08:51:26 -0700 (PDT)
-X-Gm-Message-State: AC+VfDyjjeoJdFicOPGM3NHbwEXnH7ZxmUF/+WE6JmzowABgsKpBUwQ4
-        MehOh4WXuqDaijco/GNuwUDV7MIa7l09qf6LqfA=
-X-Google-Smtp-Source: ACHHUZ5v3+Ga+/i8fDBpc3UI9VuOS8COU3PnHfh+EgF+Q4PXY+kM+rYPDrAUuC1ymGj6rsvWY8/beV83ydliFUvmlbY=
-X-Received: by 2002:a4a:eb86:0:b0:55e:14a2:e99f with SMTP id
- d6-20020a4aeb86000000b0055e14a2e99fmr4104465ooj.9.1687103485326; Sun, 18 Jun
- 2023 08:51:25 -0700 (PDT)
+        Sun, 18 Jun 2023 11:54:17 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA501B1;
+        Sun, 18 Jun 2023 08:54:16 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id e9e14a558f8ab-340b48c180bso13347585ab.0;
+        Sun, 18 Jun 2023 08:54:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687103656; x=1689695656;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DRkUw/2fPCwmjqO//WQSxM/yAklAIHP55L9AcTiCTNU=;
+        b=mXo4S/wRq1jnjJq05XD0CcKIhk0vcvr6OKY+uVI8TaEiSTOEB6yvZQ2+wTHJqDqKy4
+         DXq4MPyzAcX5sOtiwIe/cfdFhu9PK7Wkmh/D+5MgsSbx2QdlCfMY2yB/fnfERCsj4EHR
+         1ZBEHNNlRCFeeQ/pdgBgFNV6q302PV1UjINUio5mMADVWFFFsHoothfKOuyUd1WPEfbb
+         FTxyD7oOBoEg2QViyod6NB4YCFZzLd3a1UkE6D8vqWVkPJ+cycHybGQTnRVlrhesqlwL
+         Z1qcdK31uxniBVYJ9GyOu+t28K9gFQv1fMUOCmGCEv+OPGOn4O0CxnZ/zwa6F2UxS/wB
+         7CHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687103656; x=1689695656;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DRkUw/2fPCwmjqO//WQSxM/yAklAIHP55L9AcTiCTNU=;
+        b=Y3//NwOBxl7yiPrxmhkFbl18sZ2zzt9TkFEY5Faw8OvqhaTuAHjp5RmtSOW2Ldm3b8
+         7BA0EvgzbuRPN3HsLjOlnUWPa/ajHS+ScyJt3woaCQER/PzARxd+6UEm3E5xpSylq46q
+         d7utWVN9F8F6YyZMCsGtTjD7cQ6vjddmdC/azWmFU6WmByFIeBw42yI+YLtGdl+XnLNr
+         ZpmKUhtliFC/Q5fslVlnBvEtjr2t4KaijhiNSwS/cSU6ZpOI8XDqmCaxPyFrS/3ypFVO
+         xgwWrq3BIIF6DWNs+MVStGnY05T5yB/KFIypkJtcu0xB1QHO4y+EKZ0R3iRRyyOlHRzT
+         A8Pw==
+X-Gm-Message-State: AC+VfDxoiy8CH9wofT7efn75ydC7j0rb47dRFelLkAyOPM5f8KfMrxVN
+        rFpPr7BhTh2v4pL2qw8TLQU=
+X-Google-Smtp-Source: ACHHUZ4BKHaf7XvK45/sdK9qEnBiGarMgqtI+mQuResfyEJzLMP4hxjtnt76Gaj7fOrHeuwlKNBJ/Q==
+X-Received: by 2002:a92:d486:0:b0:340:d836:1f64 with SMTP id p6-20020a92d486000000b00340d8361f64mr6666293ilg.29.1687103656201;
+        Sun, 18 Jun 2023 08:54:16 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y8-20020a1709027c8800b001b51f6ad766sm5798371pll.284.2023.06.18.08.54.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Jun 2023 08:54:15 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 18 Jun 2023 08:54:14 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     =?iso-8859-1?Q?Joaqu=EDn_Ignacio_Aramend=EDa?= <samsagax@gmail.com>
+Cc:     derekjohn.clark@gmail.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] hwmon: (oxp-sensors) Remove unused header
+Message-ID: <923f828a-c8e3-4515-8723-4d4f7474a3c1@roeck-us.net>
+References: <20230617181159.32844-1-samsagax@gmail.com>
+ <20230617181159.32844-2-samsagax@gmail.com>
 MIME-Version: 1.0
-References: <20230617153025.1653851-1-masahiroy@kernel.org> <20230617200700.GA31221@lxhi-065>
-In-Reply-To: <20230617200700.GA31221@lxhi-065>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 19 Jun 2023 00:50:48 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATbrP4Re+-9rY9d0=Dsk-O4DasZZtV0wM7SWg3Y5eLKmQ@mail.gmail.com>
-Message-ID: <CAK7LNATbrP4Re+-9rY9d0=Dsk-O4DasZZtV0wM7SWg3Y5eLKmQ@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: make clean rule robust against too long argument error
-To:     Eugeniu Rosca <erosca@de.adit-jv.com>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230617181159.32844-2-samsagax@gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 18, 2023 at 5:07=E2=80=AFAM Eugeniu Rosca <erosca@de.adit-jv.co=
-m> wrote:
->
-> Hello Yamada-san,
->
-> Many thanks for your feedback and for your patch.
-> It indeed addresses the issue I have reported in [1].
->
-> On Sun, Jun 18, 2023 at 12:30:25AM +0900, Masahiro Yamada wrote:
-> > Commit cd968b97c492 ("kbuild: make built-in.a rule robust against too
-> > long argument error") made a build rule robust against "Argument list
-> > too long" error.
-> >
-> > Eugeniu Rosca reported the same error occurred when cleaning an externa=
-l
-> > module.
-> >
-> > The $(obj)/ prefix can be a very long path for external modules.
->
-> Confirmed. I am seeing an instance of $(obj) being 150 characters long,
-> due to an out-of-tree module deeply buried in a specific Yocto build.
->
-> In the current vanilla version of 'make clean' (w/o this patch), the
-> $(obj) prefix is applied to each and every file being removed,
-> dramatically increasing the strlen of arguments passed to 'rm -rf'.
->
-> >
-> > Apply a similar solution to 'make clean'.
-> >
-> > Reported-by: Eugeniu Rosca <erosca@de.adit-jv.com>
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > ---
-> >
-> >  scripts/Makefile.clean | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/scripts/Makefile.clean b/scripts/Makefile.clean
-> > index 3649900696dd..235408a44f90 100644
-> > --- a/scripts/Makefile.clean
-> > +++ b/scripts/Makefile.clean
-> > @@ -37,8 +37,9 @@ __clean-files   :=3D $(wildcard $(addprefix $(obj)/, =
-$(__clean-files)))
-> >
-> >  # =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D
-> >
-> > +# Use xargs to make this robust against "Argument list too long" error
->
-> Please, correct me if I am wrong, but it looks like the magic/brilliance
-> is in the 'patsubst' function, since below version also fails for me:
->
-> NOK: cmd_clean =3D printf '%s ' $(__clean-files) | xargs rm -rf
+On Sat, Jun 17, 2023 at 03:11:42PM -0300, Joaquín Ignacio Aramendía wrote:
+> We are not using <dev_printk.h>, remove that.
+> 
+> Signed-off-by: Joaquín Ignacio Aramendía <samsagax@gmail.com>
 
-Right.
-Now, 'printf' (instead of 'rm') failed with the too long argument list.
+Applied.
 
-GNU Make does not have the length limit, but shell does.
-So, the full-path list must be passed via stdout
-instead of the command line.
+Thanks,
+Guenter
 
-
-The comment might be confusing.
-
-I will repeat the same comment written in scripts/Makefile.build:
-
-  # To make this rule robust against "Argument list too long" error,
-  # remove $(obj)/ prefix, and restore it by a shell command.
-
-
-
-
---=20
-Best Regards
-Masahiro Yamada
+> ---
+>  drivers/hwmon/oxp-sensors.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
+> index be36d38f13d9..584e48d8106e 100644
+> --- a/drivers/hwmon/oxp-sensors.c
+> +++ b/drivers/hwmon/oxp-sensors.c
+> @@ -16,7 +16,6 @@
+>   */
+>  
+>  #include <linux/acpi.h>
+> -#include <linux/dev_printk.h>
+>  #include <linux/dmi.h>
+>  #include <linux/hwmon.h>
+>  #include <linux/init.h>
