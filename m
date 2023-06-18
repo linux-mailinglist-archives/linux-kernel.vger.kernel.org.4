@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44261734507
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 08:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2567173450D
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 08:27:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbjFRGFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 02:05:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44846 "EHLO
+        id S229597AbjFRG0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 02:26:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjFRGF2 (ORCPT
+        with ESMTP id S229456AbjFRG0r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 02:05:28 -0400
+        Sun, 18 Jun 2023 02:26:47 -0400
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5175F10E3;
-        Sat, 17 Jun 2023 23:05:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC51AE4F;
+        Sat, 17 Jun 2023 23:26:45 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QkMnb1BKvz4f4PNl;
-        Sun, 18 Jun 2023 14:05:23 +0800 (CST)
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QkNGB0RqQz4f3jJ1;
+        Sun, 18 Jun 2023 14:26:42 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.104.67])
-        by APP4 (Coremail) with SMTP id gCh0CgCH77Kgno5k_0DdLw--.62007S4;
-        Sun, 18 Jun 2023 14:05:21 +0800 (CST)
+        by APP4 (Coremail) with SMTP id gCh0CgA30JOdo45kQGLeLw--.26295S4;
+        Sun, 18 Jun 2023 14:26:39 +0800 (CST)
 From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     hch@lst.de, axboe@kernel.dk, brauner@kernel.org, dsterba@suse.com,
-        hare@suse.de, jinpu.wang@ionos.com
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     aligrudi@gmail.com, song@kernel.org
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
         yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
         yangerkun@huawei.com
-Subject: [PATCH -next v2] block: fix wrong mode for blkdev_get_by_dev() from disk_scan_partitions()
-Date:   Sun, 18 Jun 2023 22:04:02 +0800
-Message-Id: <20230618140402.7556-1-yukuai1@huaweicloud.com>
+Subject: [PATCH] raid10: avoid spin_lock from fastpath from raid10_unplug()
+Date:   Sun, 18 Jun 2023 22:25:20 +0800
+Message-Id: <20230618142520.14662-1-yukuai1@huaweicloud.com>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgCH77Kgno5k_0DdLw--.62007S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7WF4rWFWfKF17Jr4rGr45Wrg_yoW8Xr4UpF
-        W5WF45tryqgryxZF4vv3ZrGay5Ga98GryxKrWIgw1Fv39xXrsYkF92krs8Wr10vFZagrW5
-        WFnrZFyFqFyF9wUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9q14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+X-CM-TRANSID: gCh0CgA30JOdo45kQGLeLw--.26295S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7ArWxZryrZFy5tFyfWFyrtFb_yoW8Cr4fp3
+        yYgFWYgrWUZryjvw4DGa1UZ3WYga1vgrW2kr95Cwn8XF1YgFWaqF45trWDWrWUZrs3CFy5
+        AayakrZ8Gr4jyaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvY14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
         rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8XwA2ocxC64kIII
-        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xv
-        wVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4
-        x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG
-        64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r
-        1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAq
-        YI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4I
-        kC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWU
-        WwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr
-        0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWr
-        Jr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r
-        4UJbIYCTnIWIevJa73UjIFyTuYvjTRNgAwUUUUU
+        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xv
+        wVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7
+        xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
+        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
+        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8v
+        x2IErcIFxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v2
+        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0p
+        RQo7tUUUUU=
 X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
@@ -63,44 +62,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yu Kuai <yukuai3@huawei.com>
 
-After commit 2736e8eeb0cc ("block: use the holder as indication for
-exclusive opens"), blkdev_get_by_dev() will warn if holder is NULL and
-mode contains 'FMODE_EXCL'.
+Commit 0c0be98bbe67 ("md/raid10: prevent unnecessary calls to wake_up()
+in fast path") missed one place, for example, while testing with:
 
-holder from blkdev_get_by_dev() from disk_scan_partitions() is always NULL,
-hence it should not use 'FMODE_EXCL', which is broben by the commit. For
-consequence, WARN_ON_ONCE() will be triggered from blkdev_get_by_dev()
-if user scan partitions with device opened exclusively.
+fio -direct=1 -rw=write/randwrite -iodepth=1 ...
 
-Fix this problem by removing 'FMODE_EXCL' from disk_scan_partitions(),
-as it used to be.
+Then plug and unplug will be called for each io, then wake_up() from
+raid10_unplug() will cause lock contention as well.
 
-Reported-by: syzbot+00cd27751f78817f167b@syzkaller.appspotmail.com
-Link: https://syzkaller.appspot.com/bug?extid=00cd27751f78817f167b
-Fixes: 2736e8eeb0cc ("block: use the holder as indication for exclusive opens")
+Avoid this contention by using wake_up_barrier() instead of wake_up(),
+where spin_lock is not held while waitqueue is empty.
+
+By the way, in this scenario, each blk_plug_cb() will be allocated and
+freed for each io, this seems need to be optimized as well.
+
+Reported-and-tested-by: Ali Gholami Rudi <aligrudi@gmail.com>
+Link: https://lore.kernel.org/all/20231606122233@laper.mirepesht/
 Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
+ drivers/md/raid10.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Changes in v2:
- - fix a typo
-
- block/genhd.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/block/genhd.c b/block/genhd.c
-index 2c2f9a716822..d1e845ae1b32 100644
---- a/block/genhd.c
-+++ b/block/genhd.c
-@@ -365,7 +365,8 @@ int disk_scan_partitions(struct gendisk *disk, blk_mode_t mode)
- 	}
+diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
+index d0de8c9fb3cf..fbaaa5e05edc 100644
+--- a/drivers/md/raid10.c
++++ b/drivers/md/raid10.c
+@@ -1118,7 +1118,7 @@ static void raid10_unplug(struct blk_plug_cb *cb, bool from_schedule)
+ 		spin_lock_irq(&conf->device_lock);
+ 		bio_list_merge(&conf->pending_bio_list, &plug->pending);
+ 		spin_unlock_irq(&conf->device_lock);
+-		wake_up(&conf->wait_barrier);
++		wake_up_barrier(conf);
+ 		md_wakeup_thread(mddev->thread);
+ 		kfree(plug);
+ 		return;
+@@ -1127,7 +1127,7 @@ static void raid10_unplug(struct blk_plug_cb *cb, bool from_schedule)
+ 	/* we aren't scheduling, so we can do the write-out directly. */
+ 	bio = bio_list_get(&plug->pending);
+ 	raid1_prepare_flush_writes(mddev->bitmap);
+-	wake_up(&conf->wait_barrier);
++	wake_up_barrier(conf);
  
- 	set_bit(GD_NEED_PART_SCAN, &disk->state);
--	bdev = blkdev_get_by_dev(disk_devt(disk), mode, NULL, NULL);
-+	bdev = blkdev_get_by_dev(disk_devt(disk), mode & ~FMODE_EXEC, NULL,
-+				 NULL);
- 	if (IS_ERR(bdev))
- 		ret =  PTR_ERR(bdev);
- 	else
+ 	while (bio) { /* submit pending writes */
+ 		struct bio *next = bio->bi_next;
 -- 
 2.39.2
 
