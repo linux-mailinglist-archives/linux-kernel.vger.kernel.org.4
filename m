@@ -2,175 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CB2573486A
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 22:54:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EDA1734875
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 22:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbjFRUyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 16:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53268 "EHLO
+        id S229710AbjFRU6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 16:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjFRUyL (ORCPT
+        with ESMTP id S229650AbjFRU6L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 16:54:11 -0400
-Received: from smtp.smtpout.orange.fr (smtp-20.smtpout.orange.fr [80.12.242.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F89E68
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 13:53:47 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id AzNvqYsw5LSaaAzNvqfd41; Sun, 18 Jun 2023 22:52:32 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1687121552;
-        bh=hfE30K9IK7rXEnDLZJeVX8ddHPQiVgEhsGvxibEOfaw=;
-        h=From:To:Cc:Subject:Date;
-        b=bwidpUFgI5FGBLro01LZRgpEap6F3W1IkW3seMmj5UxJFMSQriDW4ce4ecJekQVmE
-         /F4Daw9LSApRqZlPO5WvJxYlH9/0OCOp+KmMSkuopDvXrII04NEDSYaexqdEjmxcya
-         JNNe1Qb0dVIu21NrGyL6g5PQNlw+tnFIKL8Z3AjXAmCLK3Ellvdh0PT6B6uzB65ogz
-         ciyULM4rnNFOD0fE4xlYctcSZxbtRFHSi9UO1AYIHGyxJvcLcxPxVVvhYdbQoa7hqb
-         VALI6p0MFdPLrzmVcZvp176RdPifi5QqpHmevB5PM0UUPbeDdcqd+r4IFlbnWecMWm
-         QiJfraQOT5gvA==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 18 Jun 2023 22:52:32 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     deller@gmx.de
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] video/hdmi: Reorder fields in 'struct hdmi_avi_infoframe'
-Date:   Sun, 18 Jun 2023 22:52:28 +0200
-Message-Id: <f5745aeab896f8d4622ff4c3cd0475d9be6bafd8.1687121400.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sun, 18 Jun 2023 16:58:11 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09324E4E
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 13:58:09 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id d75a77b69052e-3f9d619103dso205581cf.1
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 13:58:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687121888; x=1689713888;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FZtyfCTAVMiPGQWHjgwoE9XDDUe5Zitl3naYIJu5u8M=;
+        b=ZVT9TlvXekbzjsIk4FVN6w5b3V3bL2g07xM58CsOQEKlBliMaOMo4yZji4Q+4M2pTX
+         PwOyYLy6AVqkAYYG8oZQzsoJ5wXO3fYU4dvuBveWcoPn/DBqA76dOm2wErETk5RMX4DF
+         Pdjj7y7tVBfSg3bUPlVpNbbP9RKpJTFpWfMqG6NS8ogCoI9SFLLQjHjuiJCl9wmx/QMI
+         sfudbAhw5Fv3ydEbSaSvd7K7sWgk9eaIp4KEVRbqeVVI+v27ojzRWzN3DHLLYoRPb3Uw
+         6IMcAn+rqIjZUCyYlDlj0BpHHcpwknOPBIBYMxSFkst2yjNHbhKR20MPChNpYuTjpIYD
+         wwUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687121888; x=1689713888;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FZtyfCTAVMiPGQWHjgwoE9XDDUe5Zitl3naYIJu5u8M=;
+        b=DsDLCOdAUcqkOnVFZKY+voUPiB9b6MPocp+PjWN+IZE5OffHcHIhsPDra+yV2qIgsj
+         pCD5pDhw8VPfyfHi3hP7WohlB+E9LkBa0s3d2DZcOU04bnnZFUQU99jYKhKMgPEwOARD
+         NtQbQOd2wHXdcMUMZBds5HEXyWzVhAdHHFA3xt2xUyX+M1JqU+vG14cX5APEY2PbHAiq
+         zV5Xp8oc1aiz1u3lbkK9L6zPyMTGgkJ8oUflAyu0VabLahoNu+vIC6ToKhkQFpmmjG0t
+         mcFQ8p8ErW7m+8k9vgsU+aeuF2i+Whz8f6jyRngJQuDRrheVfeYDgR1XpTmGcy2eOvFp
+         BjSA==
+X-Gm-Message-State: AC+VfDz7anqEwNh2Wl8IVmAWnk5g0IGndYJCy4ELlvMp5vGAFLMaaSFH
+        kkNkT0BKvqqjNqjiGIToHh9j5uQv00n3TLgis2TgSA==
+X-Google-Smtp-Source: ACHHUZ6ZDWbPtAWRuLjADFFa6FEUQ3GypTx245KPaUVC0BHZGX9Wd0LOXtVKSGnZtQDaYiPHdDlVEaUz0sYg2vTadSQ=
+X-Received: by 2002:a05:622a:20a:b0:3f9:a78f:c527 with SMTP id
+ b10-20020a05622a020a00b003f9a78fc527mr291449qtx.21.1687121888063; Sun, 18 Jun
+ 2023 13:58:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com>
+ <178970b0-1539-8aac-76fd-972c6c46ec17@google.com> <20230614231758.GA1503611@dev-arch.thelio-3990X>
+ <f5526f17-9d78-f7ea-427a-7e76bfeb6b8@google.com> <344a4da-3890-45fd-607e-b5f85ca6ad48@google.com>
+ <20230615155059.GB3665766@dev-arch.thelio-3990X> <76b41825-30fa-b9e8-d043-2affcba24317@google.com>
+ <addfcb3-b5f4-976e-e050-a2508e589cfe@google.com> <ZI0uh8P/akwkGo0D@google.com>
+In-Reply-To: <ZI0uh8P/akwkGo0D@google.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Sun, 18 Jun 2023 14:57:31 -0600
+Message-ID: <CAOUHufbAjZd4Mxkio9OGct-TZ=L0QRG+_6Xa7atQVFN_4ez86w@mail.gmail.com>
+Subject: Re: [PATCH v2 07/23 replacement] mips: add pte_unmap() to balance pte_offset_map()
+To:     Hugh Dickins <hughd@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>, Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Group some variables based on their sizes to reduce hole and avoid padding.
-On x86_64, this shrinks the size of 'struct hdmi_avi_infoframe'
-from 68 to 60 bytes.
+On Fri, Jun 16, 2023 at 9:54=E2=80=AFPM Yu Zhao <yuzhao@google.com> wrote:
+>
+> On Thu, Jun 15, 2023 at 04:02:43PM -0700, Hugh Dickins wrote:
+> > To keep balance in future, __update_tlb() remember to pte_unmap() after
+> > pte_offset_map().  This is an odd case, since the caller has already do=
+ne
+> > pte_offset_map_lock(), then mips forgets the address and recalculates i=
+t;
+> > but my two naive attempts to clean that up did more harm than good.
+> >
+> > Tested-by: Nathan Chancellor <nathan@kernel.org>
+> > Signed-off-by: Hugh Dickins <hughd@google.com>
+>
+> FWIW: Tested-by: Yu Zhao <yuzhao@google.com>
+>
+> There is another problem, likely caused by khugepaged, happened multiple =
+times. But I don't think it's related to your series, just FYI.
+>
+>   Got mcheck at ffffffff81134ef0
+>   CPU: 3 PID: 36 Comm: khugepaged Not tainted 6.4.0-rc6-00049-g62d8779610=
+bb-dirty #1
 
-It saves a few bytes of memory and is more cache-line friendly.
+...
 
-This also reduces the union hdmi_infoframe the same way.
+>   Kernel panic - not syncing: Caught Machine Check exception - caused by =
+multiple matching entries in the TLB.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-Using pahole
+In case anyone plans to try to fix this - the problem goes back to at
+least 5.15 stable. My (educated) guess is that nobody complained about
+it because all the testing is done in QEMU, which does NOT detect
+conflicting TLBs. This means the verification of the fix would need to
+be on a real piece of h/w or an updated QEMU.
 
-Before:
-======
-struct hdmi_avi_infoframe {
-	enum hdmi_infoframe_type   type;                 /*     0     4 */
-	unsigned char              version;              /*     4     1 */
-	unsigned char              length;               /*     5     1 */
+In target/mips/tcg/sysemu/tlb_helper.c:
 
-	/* XXX 2 bytes hole, try to pack */
+static void r4k_fill_tlb(CPUMIPSState *env, int idx)
+{
+    r4k_tlb_t *tlb;
+    uint64_t mask =3D env->CP0_PageMask >> (TARGET_PAGE_BITS + 1);
 
-	enum hdmi_colorspace       colorspace;           /*     8     4 */
-	enum hdmi_scan_mode        scan_mode;            /*    12     4 */
-	enum hdmi_colorimetry      colorimetry;          /*    16     4 */
-	enum hdmi_picture_aspect   picture_aspect;       /*    20     4 */
-	enum hdmi_active_aspect    active_aspect;        /*    24     4 */
-	bool                       itc;                  /*    28     1 */
-
-	/* XXX 3 bytes hole, try to pack */
-
-	enum hdmi_extended_colorimetry extended_colorimetry; /*    32     4 */
-	enum hdmi_quantization_range quantization_range; /*    36     4 */
-	enum hdmi_nups             nups;                 /*    40     4 */
-	unsigned char              video_code;           /*    44     1 */
-
-	/* XXX 3 bytes hole, try to pack */
-
-	enum hdmi_ycc_quantization_range ycc_quantization_range; /*    48     4 */
-	enum hdmi_content_type     content_type;         /*    52     4 */
-	unsigned char              pixel_repeat;         /*    56     1 */
-
-	/* XXX 1 byte hole, try to pack */
-
-	short unsigned int         top_bar;              /*    58     2 */
-	short unsigned int         bottom_bar;           /*    60     2 */
-	short unsigned int         left_bar;             /*    62     2 */
-	/* --- cacheline 1 boundary (64 bytes) --- */
-	short unsigned int         right_bar;            /*    64     2 */
-
-	/* size: 68, cachelines: 2, members: 20 */
-	/* sum members: 57, holes: 4, sum holes: 9 */
-	/* padding: 2 */
-	/* last cacheline: 4 bytes */
-};
-
-
-After:
-=====
-struct hdmi_avi_infoframe {
-	enum hdmi_infoframe_type   type;                 /*     0     4 */
-	unsigned char              version;              /*     4     1 */
-	unsigned char              length;               /*     5     1 */
-	bool                       itc;                  /*     6     1 */
-	unsigned char              pixel_repeat;         /*     7     1 */
-	enum hdmi_colorspace       colorspace;           /*     8     4 */
-	enum hdmi_scan_mode        scan_mode;            /*    12     4 */
-	enum hdmi_colorimetry      colorimetry;          /*    16     4 */
-	enum hdmi_picture_aspect   picture_aspect;       /*    20     4 */
-	enum hdmi_active_aspect    active_aspect;        /*    24     4 */
-	enum hdmi_extended_colorimetry extended_colorimetry; /*    28     4 */
-	enum hdmi_quantization_range quantization_range; /*    32     4 */
-	enum hdmi_nups             nups;                 /*    36     4 */
-	unsigned char              video_code;           /*    40     1 */
-
-	/* XXX 3 bytes hole, try to pack */
-
-	enum hdmi_ycc_quantization_range ycc_quantization_range; /*    44     4 */
-	enum hdmi_content_type     content_type;         /*    48     4 */
-	short unsigned int         top_bar;              /*    52     2 */
-	short unsigned int         bottom_bar;           /*    54     2 */
-	short unsigned int         left_bar;             /*    56     2 */
-	short unsigned int         right_bar;            /*    58     2 */
-
-	/* size: 60, cachelines: 1, members: 20 */
-	/* sum members: 57, holes: 1, sum holes: 3 */
-	/* last cacheline: 60 bytes */
-};
----
- include/linux/hdmi.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/include/linux/hdmi.h b/include/linux/hdmi.h
-index 2f4dcc8d060e..3bb87bf6bc65 100644
---- a/include/linux/hdmi.h
-+++ b/include/linux/hdmi.h
-@@ -170,19 +170,19 @@ struct hdmi_avi_infoframe {
- 	enum hdmi_infoframe_type type;
- 	unsigned char version;
- 	unsigned char length;
-+	bool itc;
-+	unsigned char pixel_repeat;
- 	enum hdmi_colorspace colorspace;
- 	enum hdmi_scan_mode scan_mode;
- 	enum hdmi_colorimetry colorimetry;
- 	enum hdmi_picture_aspect picture_aspect;
- 	enum hdmi_active_aspect active_aspect;
--	bool itc;
- 	enum hdmi_extended_colorimetry extended_colorimetry;
- 	enum hdmi_quantization_range quantization_range;
- 	enum hdmi_nups nups;
- 	unsigned char video_code;
- 	enum hdmi_ycc_quantization_range ycc_quantization_range;
- 	enum hdmi_content_type content_type;
--	unsigned char pixel_repeat;
- 	unsigned short top_bar;
- 	unsigned short bottom_bar;
- 	unsigned short left_bar;
--- 
-2.34.1
-
+    /* XXX: detect conflicting TLBs and raise a MCHECK exception when neede=
+d */
+...
