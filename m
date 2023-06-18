@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D60B7346DF
-	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 17:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B44277346E1
+	for <lists+linux-kernel@lfdr.de>; Sun, 18 Jun 2023 17:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbjFRPyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 11:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33288 "EHLO
+        id S229811AbjFRPzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 11:55:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjFRPyR (ORCPT
+        with ESMTP id S229536AbjFRPy7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 11:54:17 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA501B1;
-        Sun, 18 Jun 2023 08:54:16 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id e9e14a558f8ab-340b48c180bso13347585ab.0;
-        Sun, 18 Jun 2023 08:54:16 -0700 (PDT)
+        Sun, 18 Jun 2023 11:54:59 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5964EB1;
+        Sun, 18 Jun 2023 08:54:58 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id 46e09a7af769-6b291d55f52so1912103a34.2;
+        Sun, 18 Jun 2023 08:54:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687103656; x=1689695656;
+        d=gmail.com; s=20221208; t=1687103697; x=1689695697;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:sender
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=DRkUw/2fPCwmjqO//WQSxM/yAklAIHP55L9AcTiCTNU=;
-        b=mXo4S/wRq1jnjJq05XD0CcKIhk0vcvr6OKY+uVI8TaEiSTOEB6yvZQ2+wTHJqDqKy4
-         DXq4MPyzAcX5sOtiwIe/cfdFhu9PK7Wkmh/D+5MgsSbx2QdlCfMY2yB/fnfERCsj4EHR
-         1ZBEHNNlRCFeeQ/pdgBgFNV6q302PV1UjINUio5mMADVWFFFsHoothfKOuyUd1WPEfbb
-         FTxyD7oOBoEg2QViyod6NB4YCFZzLd3a1UkE6D8vqWVkPJ+cycHybGQTnRVlrhesqlwL
-         Z1qcdK31uxniBVYJ9GyOu+t28K9gFQv1fMUOCmGCEv+OPGOn4O0CxnZ/zwa6F2UxS/wB
-         7CHA==
+        bh=f9vWNjtJCgOYE0tvi5Fu/c1AUdXqlTISD3uczbjGvzs=;
+        b=CoIysCD1HM2TssfWHrOwMlh90AgP2v+1atKljpwamrXbuvPa+pR2xCvSf82eHXB4lu
+         wNg2AzC8McRLVHZB70BE1H8D0QzpMLy0NwC12eNhu5TZpHakRl1eNmbdD9syqu6idRIh
+         vee72Ovqkmh6BJdW0Ag5x4vlDbiyW0anYS/Imc7ORJJJq+/vyRvPei/wMSDF5vtu71Ul
+         sQh9i4qSzNCDCgZ0thmlbEhyniZxTSdgN8gh5pl5OVu+ADGCYKNJ8T/ST2WzV3N/phld
+         2iCJIhyvKdoelcsFJBy4D9Ordkyhg6YPOef7l05zdcM5RXYOmF6Xk0uR1STkdmuRCJ6z
+         B8hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687103656; x=1689695656;
+        d=1e100.net; s=20221208; t=1687103697; x=1689695697;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:sender
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DRkUw/2fPCwmjqO//WQSxM/yAklAIHP55L9AcTiCTNU=;
-        b=Y3//NwOBxl7yiPrxmhkFbl18sZ2zzt9TkFEY5Faw8OvqhaTuAHjp5RmtSOW2Ldm3b8
-         7BA0EvgzbuRPN3HsLjOlnUWPa/ajHS+ScyJt3woaCQER/PzARxd+6UEm3E5xpSylq46q
-         d7utWVN9F8F6YyZMCsGtTjD7cQ6vjddmdC/azWmFU6WmByFIeBw42yI+YLtGdl+XnLNr
-         ZpmKUhtliFC/Q5fslVlnBvEtjr2t4KaijhiNSwS/cSU6ZpOI8XDqmCaxPyFrS/3ypFVO
-         xgwWrq3BIIF6DWNs+MVStGnY05T5yB/KFIypkJtcu0xB1QHO4y+EKZ0R3iRRyyOlHRzT
-         A8Pw==
-X-Gm-Message-State: AC+VfDxoiy8CH9wofT7efn75ydC7j0rb47dRFelLkAyOPM5f8KfMrxVN
-        rFpPr7BhTh2v4pL2qw8TLQU=
-X-Google-Smtp-Source: ACHHUZ4BKHaf7XvK45/sdK9qEnBiGarMgqtI+mQuResfyEJzLMP4hxjtnt76Gaj7fOrHeuwlKNBJ/Q==
-X-Received: by 2002:a92:d486:0:b0:340:d836:1f64 with SMTP id p6-20020a92d486000000b00340d8361f64mr6666293ilg.29.1687103656201;
-        Sun, 18 Jun 2023 08:54:16 -0700 (PDT)
+        bh=f9vWNjtJCgOYE0tvi5Fu/c1AUdXqlTISD3uczbjGvzs=;
+        b=fSFMXGlwxMiPonglUtM1ez9x5j5oHw37pQWorL0SviS0s2Fs1agE+i6zjt0gA3PoZn
+         3sm7TYyIeEOv76/HyFb10k060zzNZrdi11EZ/Tiv/puYZ+OCA0HC15tj3jD6mq6dNtsb
+         qef77cg4OecaTirx8U1EjH4rVg1HcCerJIacw2WBMo4/uMU1myJFJJ60l5SnBxniromw
+         MP+39SehXdET+GIFkOz2ii3QUkEYHrcen9FmTP50yC5i4cnctLzKhLvOKs0xB2vvJ9Oo
+         dPdwUPNAyM8UEyhAJ2/zOKkkt6y1AZO4NiZqew1O22SefbzVMMl3dcjYN2+7bMrJP+pX
+         TOLg==
+X-Gm-Message-State: AC+VfDzxmwzS9KzF4D2rR39C9NyoKB11fDc63WKbAaRpY6MAIXnAagEE
+        Gp1mHKpa85J+yCaj6bwFnvEK6MnOcBs=
+X-Google-Smtp-Source: ACHHUZ471e4AtCyrzgxu6sCf49OreiuhV2fCgC1fcfHHWCih4U0WCoQZdQUDsT+rSzQdH9biNI3b2g==
+X-Received: by 2002:a05:6830:148d:b0:6b1:5e8f:e50c with SMTP id s13-20020a056830148d00b006b15e8fe50cmr5599616otq.30.1687103697637;
+        Sun, 18 Jun 2023 08:54:57 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y8-20020a1709027c8800b001b51f6ad766sm5798371pll.284.2023.06.18.08.54.15
+        by smtp.gmail.com with ESMTPSA id c3-20020aa78c03000000b0062e0c39977csm2454022pfd.139.2023.06.18.08.54.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Jun 2023 08:54:15 -0700 (PDT)
+        Sun, 18 Jun 2023 08:54:57 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 18 Jun 2023 08:54:14 -0700
+Date:   Sun, 18 Jun 2023 08:54:56 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     =?iso-8859-1?Q?Joaqu=EDn_Ignacio_Aramend=EDa?= <samsagax@gmail.com>
 Cc:     derekjohn.clark@gmail.com, jdelvare@suse.com,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] hwmon: (oxp-sensors) Remove unused header
-Message-ID: <923f828a-c8e3-4515-8723-4d4f7474a3c1@roeck-us.net>
+Subject: Re: [PATCH 2/2] hwmon: (oxp-sensors) Simplify logic of error return
+Message-ID: <1c7961f5-a7d0-4c9d-a25d-6929ec4ea2da@roeck-us.net>
 References: <20230617181159.32844-1-samsagax@gmail.com>
- <20230617181159.32844-2-samsagax@gmail.com>
+ <20230617181159.32844-3-samsagax@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230617181159.32844-2-samsagax@gmail.com>
+In-Reply-To: <20230617181159.32844-3-samsagax@gmail.com>
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -76,8 +76,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 03:11:42PM -0300, Joaquín Ignacio Aramendía wrote:
-> We are not using <dev_printk.h>, remove that.
+On Sat, Jun 17, 2023 at 03:11:43PM -0300, Joaquín Ignacio Aramendía wrote:
+> Take return logic on error out of if-else, eliminating
+> duplicated code in tt_togle_store() function.
 > 
 > Signed-off-by: Joaquín Ignacio Aramendía <samsagax@gmail.com>
 
@@ -87,18 +88,27 @@ Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/oxp-sensors.c | 1 -
->  1 file changed, 1 deletion(-)
+>  drivers/hwmon/oxp-sensors.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
 > 
 > diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
-> index be36d38f13d9..584e48d8106e 100644
+> index 584e48d8106e..1e59d97219c4 100644
 > --- a/drivers/hwmon/oxp-sensors.c
 > +++ b/drivers/hwmon/oxp-sensors.c
-> @@ -16,7 +16,6 @@
->   */
+> @@ -226,13 +226,12 @@ static ssize_t tt_toggle_store(struct device *dev,
 >  
->  #include <linux/acpi.h>
-> -#include <linux/dev_printk.h>
->  #include <linux/dmi.h>
->  #include <linux/hwmon.h>
->  #include <linux/init.h>
+>  	if (value) {
+>  		rval = tt_toggle_enable();
+> -		if (rval)
+> -			return rval;
+>  	} else {
+>  		rval = tt_toggle_disable();
+> -		if (rval)
+> -			return rval;
+>  	}
+> +	if (rval)
+> +		return rval;
+> +
+>  	return count;
+>  }
+>  
