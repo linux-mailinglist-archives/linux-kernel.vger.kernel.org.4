@@ -2,149 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A524B735DFA
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 21:49:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AFBB735DFE
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 21:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbjFSTtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 15:49:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49832 "EHLO
+        id S230106AbjFSTvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 15:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230345AbjFSTty (ORCPT
+        with ESMTP id S229632AbjFSTvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 15:49:54 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD6B118
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 12:49:53 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-25eb9e8299fso1442675a91.0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 12:49:53 -0700 (PDT)
+        Mon, 19 Jun 2023 15:51:22 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30364106;
+        Mon, 19 Jun 2023 12:51:21 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-987accb4349so427209566b.0;
+        Mon, 19 Jun 2023 12:51:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687204192; x=1689796192;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Vl+W0dm86MLhJH1YgS+uWQvaw5Vcun/5O6JALu35QNk=;
-        b=U6q9E4HBaSxAGXy6QOLon8eb8ICYa5e3HewjZ5qp2W+XhViL69FCQIJhros+ab4Hlg
-         ob+eEnTk60AwQPK38A5mnNUQU6d9ZE6L6Tuba6o2l+a7FFiygNpr546Xdf5AmlxtkkZO
-         tyS/DmjsUKg+Wz3Ss2UQql3XYL03ZPz50Mxbo=
+        d=googlemail.com; s=20221208; t=1687204279; x=1689796279;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Sd0Z4QXfggzwHtnXjPLZAClg5L7keAUm3VKoUQTaD/E=;
+        b=EJ4G6ji/n65WTVFd+8fUKpKE/pPADTSbANE84/FVL/5xaqN9lrz6hUYxCruKjB00T3
+         A+PzuCjKDLHT/NHQBzW77tyuTB/iOEdzUo5QQoHANdWUOMYd80KyJtTl8KnusjARFyRY
+         P2Dq86RDh4y69k3YOc4/sWJMnCzw3f6PBs+45PAHWzERKRIuN0osGyfLtDbjMFYffkNL
+         y16PhKmWZm42f2MUP9VOa+W2O3RPpB7FkwOFxbxbG2lw2CDrtIRT8xLrVvOWI4kv0nOf
+         ag7kxQF7Tfqx9QJWbEq6cfwBXoU/ZfvRMu27Y9+ttAESU2F7kuB0gnH4TL1efzIPyEFL
+         9SIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687204192; x=1689796192;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vl+W0dm86MLhJH1YgS+uWQvaw5Vcun/5O6JALu35QNk=;
-        b=PFILXFqMqZsO5ZoJw7MAcWsdUugegqOvevUeEaRaxOi9ZwV3QLf9yQMrgSFKWLKJpn
-         lPB+wGSMg8IR1eMBjg6Qr7I4hPtMwqMEAfw7x7AFE3EVYq777xU0LQ/3Mh6zgROCFaek
-         zJcu0Wbsaugas73aiXxvLRjUWuARrc1hNF4sUruLWbzxZVxpTnC3mzIgJdD9qIM7l8T5
-         iT7XnUW7vrbOgobnyCgKRj6zBWEpZaK/Jjb4RpNodgY07iUw8RSwBHfjPGLB/O2SULU6
-         szIu5/RWUSYtS5yUlBi6szT9u7jQ2gNGygdl4ZuBnSYxxPD/+Pt4MBENe/ldBan1GUIq
-         ENkQ==
-X-Gm-Message-State: AC+VfDwXAppQAjFHR1YehXml6n9QxO+D/uIfPx9LiFBX1gUuISmNYCa7
-        Y8hm7YrGilQ5UcA7+r8KDzZ2QQ==
-X-Google-Smtp-Source: ACHHUZ5RG6Ywm6bhbwEyCAB01M2NKK49+8NDckUGMte9UF4jutXGv3AUo0NtJ7eB0rimk49wTAS3xQ==
-X-Received: by 2002:a17:90a:17ce:b0:25b:ce91:c204 with SMTP id q72-20020a17090a17ce00b0025bce91c204mr5457082pja.46.1687204192421;
-        Mon, 19 Jun 2023 12:49:52 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id q23-20020a635057000000b0054fd1723554sm80580pgl.21.2023.06.19.12.49.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 12:49:51 -0700 (PDT)
-Date:   Mon, 19 Jun 2023 12:49:51 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Finn Thain <fthain@linux-m68k.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        tech-board-discuss@lists.linux-foundation.org,
-        Theodore Ts'o <tytso@mit.edu>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Documentation: Linux Contribution Maturity Model and the
- wider community
-Message-ID: <202306191247.3CA085BA64@keescook>
-References: <cd1786eadd1ff05d9ca053b72eb5f06ceb0c470d.1687167717.git.fthain@linux-m68k.org>
+        d=1e100.net; s=20221208; t=1687204279; x=1689796279;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Sd0Z4QXfggzwHtnXjPLZAClg5L7keAUm3VKoUQTaD/E=;
+        b=BnJeWnixcRVcn2mMc06wavPfo6yVOxbwPYzrO7oCdGzVV7FGcnxblNf1DEnG9egIOQ
+         VLV5ztodqPIQKf/XTemURLMDayNDhqIrJxn5z+r4ystufPOt4+olD7yHVwVCTV1fn3uc
+         +LH2RBtvVQ8A854nUCR0ivZN+VrXTXu0LVSGOt3a2upOUkHKzboxm5eMF4+y2u62vHyg
+         7bGGGyUwc06FqUVanwB3ZwDLMhZYMIPgRCcEPRwk9hBLLPK1r7bytAdJZzX7PDAoXqO/
+         sLiOg8ULSPL87awZh6EhZ4Pn2j+zwWpY51JgAcJUbtYWp2L8EMcJlFBxLoBkW1TF0sYT
+         OJeg==
+X-Gm-Message-State: AC+VfDxQKWrn6aWIL8gmYlVFhjqQIRMYHCoROO7Hg2f60LOIEmUez71x
+        hKbGI0+FANkTkPj1cuc4mKzCc6InYC5Im2a49NyYe4vaSv4=
+X-Google-Smtp-Source: ACHHUZ63TBsrxqGLzHLhPqGvnsA2IbglzQC0C14yaOFsZ83BWmNwv/AKD9ZicJVSWO/8KUat6yXXiS0uTl+xZQU81/M=
+X-Received: by 2002:a17:907:7faa:b0:988:2111:bb2d with SMTP id
+ qk42-20020a1709077faa00b009882111bb2dmr7590179ejc.7.1687204279367; Mon, 19
+ Jun 2023 12:51:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cd1786eadd1ff05d9ca053b72eb5f06ceb0c470d.1687167717.git.fthain@linux-m68k.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <TYZPR01MB5556B56D834E02F41C44D81DC95FA@TYZPR01MB5556.apcprd01.prod.exchangelabs.com>
+In-Reply-To: <TYZPR01MB5556B56D834E02F41C44D81DC95FA@TYZPR01MB5556.apcprd01.prod.exchangelabs.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Mon, 19 Jun 2023 21:51:08 +0200
+Message-ID: <CAFBinCAJ1E6JKmFTuaJwGpd_MBzHMZ0mMj-1AE3TNeB2_72nZA@mail.gmail.com>
+Subject: Re: [PATCH] mmc: meson-mx-sdhc: Fix initialization frozen issue
+To:     Ziyang Huang <hzyitc@outlook.com>
+Cc:     ulf.hansson@linaro.org, neil.armstrong@linaro.org,
+        khilman@baylibre.com, jbrunet@baylibre.com,
+        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 07:41:57PM +1000, Finn Thain wrote:
-> The Linux Contribution Maturity Model methodology is notionally based on
-> the Open source Maturity Model (OMM) which was in turn based on the
-> Capability Maturity Model Integration (CMMI).
-> 
-> According to Petrinja et al., the goal of the OMM was to extend the CMMI
-> so as to be useful both for companies and for communities [1][2]. However,
-> the Linux Contribution Maturity Model considers only companies and
-> businesses.
-> 
-> This patch addresses this bias as it could hinder collaboration with
-> not-for-profit organisations and individuals, which would be a loss to
-> any stakeholder.
-> 
-> Level 5 is amended to remove the invitation to exercise the same bias
-> i.e. employees rewarded indirectly by other companies.
-> 
-> [1] Petrinja, E., Nambakam, R., Sillitti, A.: Introducing the
-> OpenSource Maturity Model. In: 2nd Emerging Trends in FLOSS Research
-> and Development Workshop at ICSE 2009, Vancouver, BC, Canada (2009)
-> 
-> [2] Wittmann, M., Nambakam, R.: Qualipso Deliverable A6.D1.6.3
-> CMM-like model for OSS.
-> 
-> Cc: Theodore Ts'o <tytso@mit.edu>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Signed-off-by: Finn Thain <fthain@linux-m68k.org>
-> ---
->  Documentation/process/contribution-maturity-model.rst | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/process/contribution-maturity-model.rst b/Documentation/process/contribution-maturity-model.rst
-> index b87ab34de22c..863a2e4c22e2 100644
-> --- a/Documentation/process/contribution-maturity-model.rst
-> +++ b/Documentation/process/contribution-maturity-model.rst
-> @@ -62,8 +62,8 @@ Level 3
->  =======
->  
->  * Software Engineers are expected to review patches (including patches
-> -  authored by engineers from other companies) as part of their job
-> -  responsibilities
-> +  authored by contributors from outside of the organization) as part of
-> +  their job responsibilities
+Hello,
 
-This seems fine to me.
+first of all: thank you for this patch!
 
->  * Contributing presentations or papers to Linux-related or academic
->    conferences (such those organized by the Linux Foundation, Usenix,
->    ACM, etc.), are considered part of an engineer’s work.
-> @@ -103,7 +103,6 @@ Level 5
->  
->  * Upstream kernel development is considered a formal job position, with
->    at least a third of the engineer’s time spent doing Upstream Work.
-> -* Organizations will actively seek out community member feedback as a
-> -  factor in official performance reviews.
+On Mon, Jun 19, 2023 at 7:36=E2=80=AFPM Ziyang Huang <hzyitc@outlook.com> w=
+rote:
+>
+> Commit 4bc31edebde5 ("mmc: core: Set HS clock speed before sending
+> HS CMD13") set HS clock (52MHz) before switching to HS mode. For this
+> freq, FCLK_DIV5 will be selected and div value is 10 (reg value is 9).
+> Then we set rx_clk_phase to 11 or 15 which is out of range and make
+> hardware frozen. After we send command request, no irq will be
+> interrupted and the mmc driver will keep to wait for request finished,
+> even durning rebooting.
+I think this is the exact same problem I reported some days ago: [0]
+Ulf is questioning whether we properly support 52MHz clocks correctly,
+so I think you're onto something!
 
-This really cannot be dropped -- companies must factor upstream work
-into performance reviews or it will continue to be seen as "free time"
-work, and employees won't be recognized for their upstream contributions.
-If an org has no perf reviews, this item is already nullified, IMO.
+So this is an excellent finding! I can confirm that using rx_clk_phase
+of 1 makes my Odroid-C1 eMMC work again :-)
 
->  * Organizations will regularly report internally on the ratio of
-> -  Upstream Work to work focused on directly pursuing business goals.
-> +  Upstream Work to work focused on directly pursuing the organisation's
-> +  other goals.
+> So let's set a common value - 1 just for initialization. Then let
+> meson_mx_sdhc_execute_tuning() to find the accurate value for data
+> transfer.
+As far as I know unconditionally using value 1 can negatively affect
+other devices.
+I'm assuming that you're testing on an Odroid-C1 or similar board with
+HS200 eMMC:
+On those SoC + eMMC combinations we do support. But on other boards
+(for example Meson8b EC-100 / Endless Mini) there's no HS200 support
+because the eMMC is connected with 3.3V IO lines. So tuning is not
+executed there (if I recall correctly).
 
-This seems fine to me.
+What do you think about adding a special case for the 51MHz "actual
+clock rate" and adding a comment that it was found by manual testing?
+For some reason (that I don't understand) Amlogic's vendor driver
+maxes out at 47.22MHz (presumably because they limit themselves to
+using FCLK_DIV3 as input only - but I don't get why...).
 
--Kees
 
--- 
-Kees Cook
+Best regards,
+Martin
+
+
+[0] https://lore.kernel.org/linux-amlogic/CAFBinCD0RT0p-jk86W0JuMT3ufohRh1R=
+qWCcM35DKZJpuc10HQ@mail.gmail.com/
+[1] https://lore.kernel.org/linux-amlogic/CAPDyKFpS-UwiaRPMqSpX0mNPrS5p=3Dy=
+Jzu3g0=3DpGyCkWHSYyqWg@mail.gmail.com/
