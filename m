@@ -2,180 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87C3735AE3
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B296735AE7
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:14:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbjFSPNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 11:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
+        id S230274AbjFSPOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 11:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbjFSPNJ (ORCPT
+        with ESMTP id S229649AbjFSPOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 11:13:09 -0400
-Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1B60B9
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:13:05 -0700 (PDT)
-Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-77e365f5bd6so133536939f.1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:13:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687187585; x=1689779585;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NtllAkZ32Xdq4j14poacviPx+rBPNHY5U0EDj1En0pE=;
-        b=idx7KSFixkYJtN55Ev9Dzy+PmNhU2W5+o7EWpoASch9a4Ioh6Pr1ZZ9fIaxCVkYYvS
-         gHZU33vfSdO7yeEIYv+5AdeA36ARB62F/vd3Ok90dDSfoIPx4BRZqvAk5J6w1A3TjQcg
-         srPh4Yv3EWuvVZ2K4TOxDDf1bD9ygb+2h5mJBCT6Q+SJweyTrkQzgvSHDmtEf5eh3izU
-         IZfHSTwykV5gDr5ZslvOsYFijsHnpen9QE60/82dmXAhJdJzu3+56VVfxnxDt49McOqv
-         ZvfGwUM22Fwm51o7SC7dLTNRomj9GRiqXWngc2kfZqESAHbQr9pyZw2a2V1SGidoMYHx
-         qMyA==
-X-Gm-Message-State: AC+VfDwZlvtlYRRx+9Hx4h44H1Z+9ReUHKlxw1ao/JIxdnlZR2CgCtA+
-        KbMNLHW+BHSyKPU/FYuaEpWp0d/QJyNhJYTcCCg1yWKCw1Mr
-X-Google-Smtp-Source: ACHHUZ57xDk+5ZZTI4rmcAPElGHV2O9pT/1piT7PyBvsH5ta/JpVjSIP0kahXE48oGQmUnrClwFuZkEX6ivb7UZgZgp2xc85AFr7
+        Mon, 19 Jun 2023 11:14:12 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2059.outbound.protection.outlook.com [40.107.255.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1269B
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:14:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TQ1pR/nhzAy2/lYbnyH+yQUAX2yeOS9oHqruf1EVtCKZOzSbp6B7OM7Qvz9SX03Qe6gQhfOc/H4al4aZkaJ3LfqM2NKmOw+qT/gu4p36Ab3D62b5j+CvGeyiVNz9g5Q+a8oXFSK8zIHLv7EO+wEH4QOSL+XeZ82Bss5iU57rZBR4KIN8tGwnoIpHr4bHlzbtMZl9Bd90ZDXfZZEQoqKV+bsGcnPq728Vdddn1iYVTLPeCLpmnmQ97AdmZO/5YdDcl4NsGM31BFhUNyoIxJiM7SRMrVXv/M5akMaT0xSN6b10HiiL/du51zjAHlJhd7j5oAemEVBf93Tdrj54Ks6xew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ws3001Ha4KWJrKW9/L5KAtU5rvP3PzpR5tIGoWO/So8=;
+ b=UnMNN4NgZGrFAsAiXBZrUwtNWZ1inXwLJmxZ5c/m2n2BKIYRyufw1awjWZeexyDYfmEJ0fiCLDS8DI9gBUF8i7xpo8iYGytAYLmyFw86bIP+hAx+2tirABrm4OrC8FUcsY6fhy8zy4prg2c9hKJ2ZUaRjcmDADnurvbZCmsJM4ItFxBGwCHvCFRpLHLSiV3KprWWZmIx9FoPHbbiAhy/I1ItO9xZ0Ln31/jp0CSyyOw59bRKBJuwzwTZkAMjf7GAI86PY20zwNa9Tvq4Mi65ibBi6jayw7DsP+IZF3l74syLaC5sR7TVy+qrU1cNfjOwAA4mnMXTIMPunSu+ZHmBIw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oppo.com; dmarc=pass action=none header.from=oppo.com;
+ dkim=pass header.d=oppo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ws3001Ha4KWJrKW9/L5KAtU5rvP3PzpR5tIGoWO/So8=;
+ b=GDnUqpn3wwK+lXC/jIs+yTM8Lu8A9Hh+cyp/s5mqVxHuS6lFyH+XprtauRElDSZixT8L8+3Q8J1s/6b5sUNEo+FU5j/kpvOfYxQrCdgGkMs/90PtIhgn2ueqm/b2U2PAce5EQDFUbzn6RIB5rG9Wb1ibQzk4abJBmp3K77kHXBI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oppo.com;
+Received: from TY2PR02MB4479.apcprd02.prod.outlook.com (2603:1096:404:800e::7)
+ by PUZPR02MB6211.apcprd02.prod.outlook.com (2603:1096:301:f8::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.19; Mon, 19 Jun
+ 2023 15:14:08 +0000
+Received: from TY2PR02MB4479.apcprd02.prod.outlook.com
+ ([fe80::bc4a:4d7a:4c73:76eb]) by TY2PR02MB4479.apcprd02.prod.outlook.com
+ ([fe80::bc4a:4d7a:4c73:76eb%4]) with mapi id 15.20.6521.020; Mon, 19 Jun 2023
+ 15:14:08 +0000
+From:   Yunlei He <heyunlei@oppo.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yunlei He <heyunlei@oppo.com>
+Subject: [f2fs-dev][PATCH] f2fs: remove unneeded page uptodate check/set
+Date:   Mon, 19 Jun 2023 23:13:53 +0800
+Message-Id: <20230619151353.2168306-1-heyunlei@oppo.com>
+X-Mailer: git-send-email 2.40.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI1PR02CA0060.apcprd02.prod.outlook.com
+ (2603:1096:4:1f5::17) To TY2PR02MB4479.apcprd02.prod.outlook.com
+ (2603:1096:404:800e::7)
 MIME-Version: 1.0
-X-Received: by 2002:a02:95a2:0:b0:420:f404:40b6 with SMTP id
- b31-20020a0295a2000000b00420f40440b6mr2628829jai.1.1687187585081; Mon, 19 Jun
- 2023 08:13:05 -0700 (PDT)
-Date:   Mon, 19 Jun 2023 08:13:05 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ada87505fe7cf809@google.com>
-Subject: [syzbot] [crypto?] general protection fault in shash_ahash_update
-From:   syzbot <syzbot+88f4b1e6cf88da11f5cd@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, herbert@gondor.apana.org.au,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TY2PR02MB4479:EE_|PUZPR02MB6211:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1e2d0eea-f05d-43b5-4f82-08db70d7d413
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HN38jcoy1nnAFZdvNVSrGq+WTwzx3sBm2FHnCSAaSuWz9I8DXHmAuuK6CrVUUDNpjikzXnG1WiYQWsfjlPOsGhP7OaOq0cY9ep6TdWWZc2MnFYtPTRsvpwaScE4kjLU2x/gOu52tyZgiD1h+sSPtxr0q++7B6t2QtguJriE5T+73E/qo1emh67Pjc/WxKs75U0BSpoahgJ1ZfQZX9+XWc54QQPxeS8A535ll8BmorPQ6QPTTuMy5hrVo3g8J9tpkd/AQ9lI5lQMEYZfXkM6RqXHR45Et4Etmz+i6O/XGnuRR/4JQhdfl9BBH9khPvAyeMNUVcIMz3Lg476U8Zpmv27lELKlO1zCI5Mokk0eyNabDmDFCBIfJ1S13PR1TWEXDzVnDpLRER26eDG+lOwcu3fMy40kG5+SMvfaSfn46d7Kc4DOsyaSaUf5b3NIBArHIrrXw7kHwcvODZa1xANywkn8BjXMOX2TjddHfu3FpypaNwHURoSAiNmKFOrwzQp55YwvAYTZt4tYj90Y3bok/PBq4xZxnZ+yqm4oG7nrvApQZwEQClkJ60JTiSL4KO0Ly4EJU7rBRQQe5IoonVfiDUhQSMkAdLtAoN4ZVPmW8D+9SsQQZCSN0PxNo9rYMylhg
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR02MB4479.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(346002)(396003)(39860400002)(376002)(451199021)(107886003)(2616005)(86362001)(4744005)(2906002)(83380400001)(5660300002)(66476007)(8936002)(186003)(66946007)(8676002)(66556008)(36756003)(26005)(478600001)(38100700002)(41300700001)(4326008)(6512007)(1076003)(6506007)(52116002)(6486002)(38350700002)(6666004)(316002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SAmtBAhMmFkl8jricR2dhFpIo+yXgL1tRxkSn9rNZFXyJqvhATxlV+VzYubf?=
+ =?us-ascii?Q?335vrUWXg4lgr4IhPBPDNbqBUQm54S7utWy2lkzwaYseuY3S5ugnYfkyGxwM?=
+ =?us-ascii?Q?6il3fUFBjsiQ4zqUWzQ61nAPit4LeCXMO7n/yczrrk30CGDbDPkTWFFJlYBm?=
+ =?us-ascii?Q?OSmZicSwYVnG2EzZp0tiSmx3xAMDp5fxevFBOn2jFyBvc/ALXNlSoIckfSBt?=
+ =?us-ascii?Q?m8sGIEwvyYF8ajkk9RzuZOP4aMI3YLwiJBuKlh0F2seflDydyH6fLt5cIlQb?=
+ =?us-ascii?Q?LdaXZ33R8lugc1paMPMbS7jLrigGOulLxaNt10Do79OzLwLe1ZL1iRCTDWfQ?=
+ =?us-ascii?Q?PW4WOaWNeqTbnlbJlYAco6tzPotA+Hx4uzhj+cNP9pp5YIUsr7+l93LRm8G4?=
+ =?us-ascii?Q?040DcWjwQnwifckwM1Gp/VUHMujhAgiAcHpQNz0qSBrhLEq6JTTSDW3mEk6k?=
+ =?us-ascii?Q?3Iat0+R6bGplWsZge/jnxvUdqeSyZ5DttyEswzr6QV2pSohshWNIUOPxsvDu?=
+ =?us-ascii?Q?CH8/OpgyitigQKcB16zSdeURaYqVdKjlO8VP63kdDCXnGAOa1Xt8ezeUnupN?=
+ =?us-ascii?Q?z0HkJWwSMMAS3y7M264XOkwFJievyERN3h77CieRk9cO4xlFY3tZVkGYCSa9?=
+ =?us-ascii?Q?LuqGd2LEU20pA5XFrYcNb6pD8zMUhRkcDKX9KC87QIhpVh7SoJHaseT6l2u7?=
+ =?us-ascii?Q?9BKT6oemglO8BXRuv6Y6h48a3xJ5EkAwUjZxXY1Oph2aK+WKoMlzYR5noxCB?=
+ =?us-ascii?Q?ugExL/0XKIkrewNSZmwnSjgF0skCYRs2/9i1I05NAbdnTyHb7qS3ddOJH5uD?=
+ =?us-ascii?Q?tRToeM87C1PclW9+/T/wHrOLqgcUPkdB0V/rreXK+bMrAKA2ewZS6HHy0Pa9?=
+ =?us-ascii?Q?B9McUuvmTSglynph0maAJdUxCB6Nb1CGZERHHoseMLLOtNVVTyi2BirAShfz?=
+ =?us-ascii?Q?JNRxz0amfoHa3LbAXCoV2ZB4fpgbkldVNOcYnAZpiI1AhOXKXu5sS2CIb9cx?=
+ =?us-ascii?Q?Y4oopkcpoU6zKeLoswuMRNTczspUEvZcSuiD8xRIi6q23snXxJ7g9Z9OVJVI?=
+ =?us-ascii?Q?LJNE5vBOCalnJS5WPapMgr34kNBGBe3qYDLPwl5cenOPer2rrh7D3oxtOLpK?=
+ =?us-ascii?Q?/NZLg0MNCV8tfXHpcwVt+CzdIcQTtTJvp47Q1ayp0fKFgf+FDVlcYecrXcfk?=
+ =?us-ascii?Q?fbOQd9FHlf64jDhN1QLULv3GVU/W5ApS308KJrsdpibBRe4PUGdLcc//e5P6?=
+ =?us-ascii?Q?2wtNqaHeqb3pjTChH+6sBpH6CGpih9QR7JBCShU142wZXj4Glhg7sOZP7r6S?=
+ =?us-ascii?Q?48aV5BMVLb7xgoYVk7x3SsRRaTxmSUmXvuhd/TFqfD7xA2Jcz7raJ7ay8gQ9?=
+ =?us-ascii?Q?yqXw+5fEece4pwzjXFWN6b8jL4gT31diB2pypOMaVGOpIN2d5xHYYURDlnIh?=
+ =?us-ascii?Q?eIUoaiE3J8oXB3pI95Z+EQk1c5QDj7pt4WSF0znnXB1lUSl9SETR4bWjAn9E?=
+ =?us-ascii?Q?lq8L7NlyscSDgGw6NXlzE36Egrqohi07tskWQGEEQrOrtG3JyZXjvWigOO0o?=
+ =?us-ascii?Q?6ZzWSuTYHELrhaDKytZrI1kxKVdVpmNt+4T42HVW?=
+X-OriginatorOrg: oppo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e2d0eea-f05d-43b5-4f82-08db70d7d413
+X-MS-Exchange-CrossTenant-AuthSource: TY2PR02MB4479.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jun 2023 15:14:08.3625
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /epqYKxDP1dGqyXfj/arKwb/r1luzDDYL+bW4ppZ/v2Hy6a8HO/EJg5xnDZIauTS53AUXmK7Q3w7LpS+RymuTA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZPR02MB6211
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+This patch remove unneeded page uptodate check/set in
+f2fs_vm_page_mkwrite, which already done in set_page_dirty.
 
-syzbot found the following issue on:
-
-HEAD commit:    9a94d764e9bc Merge tag 'mlx5-updates-2023-06-16' of git://..
-git tree:       net-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=14774987280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a4a7d74e6a7c3211
-dashboard link: https://syzkaller.appspot.com/bug?extid=88f4b1e6cf88da11f5cd
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1152c4ff280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1307cbcf280000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/79cfaaedcd27/disk-9a94d764.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/a22e22124e0b/vmlinux-9a94d764.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/fe2e1ce58898/bzImage-9a94d764.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+88f4b1e6cf88da11f5cd@syzkaller.appspotmail.com
-
-general protection fault, probably for non-canonical address 0xdffffc0000000004: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000020-0x0000000000000027]
-CPU: 1 PID: 5004 Comm: syz-executor202 Not tainted 6.4.0-rc6-syzkaller-01333-g9a94d764e9bc #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-RIP: 0010:crypto_shash_alg include/crypto/hash.h:827 [inline]
-RIP: 0010:crypto_shash_update crypto/shash.c:124 [inline]
-RIP: 0010:shash_ahash_update+0x126/0x210 crypto/shash.c:306
-Code: 8c 00 00 00 e8 bb f7 a4 fd 48 8b 04 24 48 8b 6c 24 40 80 38 00 0f 85 c3 00 00 00 4d 8b 75 00 49 8d 7e 20 48 89 fa 48 c1 ea 03 <80> 3c 1a 00 0f 85 c1 00 00 00 4d 8b 7e 20 49 8d 7f 2c 48 89 fa 48
-RSP: 0018:ffffc900039df948 EFLAGS: 00010202
-RAX: ffffed1003ce8b6b RBX: dffffc0000000000 RCX: 0000000000000000
-RDX: 0000000000000004 RSI: ffffffff83df4f25 RDI: 0000000000000020
-RBP: ffff8880732a3100 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000f00 R11: 0000000000000009 R12: 0000000000000f00
-R13: ffff88801e745b58 R14: 0000000000000000 R15: 1ffff9200073bf2b
-FS:  00005555565db300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fccb3501440 CR3: 0000000021e60000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- ghash_async_update+0x136/0x170 arch/x86/crypto/ghash-clmulni-intel_glue.c:206
- crypto_ahash_update include/crypto/hash.h:608 [inline]
- hash_sendmsg+0x434/0xde0 crypto/algif_hash.c:139
- sock_sendmsg_nosec net/socket.c:724 [inline]
- sock_sendmsg+0xde/0x190 net/socket.c:747
- ____sys_sendmsg+0x733/0x920 net/socket.c:2493
- ___sys_sendmsg+0x110/0x1b0 net/socket.c:2547
- __sys_sendmsg+0xf7/0x1c0 net/socket.c:2576
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f95e272ecb9
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd82939a68 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f95e272ecb9
-RDX: 0000000000000000 RSI: 00000000200001c0 RDI: 0000000000000004
-RBP: 00007f95e26f2e60 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f95e26f2ef0
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:crypto_shash_alg include/crypto/hash.h:827 [inline]
-RIP: 0010:crypto_shash_update crypto/shash.c:124 [inline]
-RIP: 0010:shash_ahash_update+0x126/0x210 crypto/shash.c:306
-Code: 8c 00 00 00 e8 bb f7 a4 fd 48 8b 04 24 48 8b 6c 24 40 80 38 00 0f 85 c3 00 00 00 4d 8b 75 00 49 8d 7e 20 48 89 fa 48 c1 ea 03 <80> 3c 1a 00 0f 85 c1 00 00 00 4d 8b 7e 20 49 8d 7f 2c 48 89 fa 48
-RSP: 0018:ffffc900039df948 EFLAGS: 00010202
-RAX: ffffed1003ce8b6b RBX: dffffc0000000000 RCX: 0000000000000000
-RDX: 0000000000000004 RSI: ffffffff83df4f25 RDI: 0000000000000020
-RBP: ffff8880732a3100 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000f00 R11: 0000000000000009 R12: 0000000000000f00
-R13: ffff88801e745b58 R14: 0000000000000000 R15: 1ffff9200073bf2b
-FS:  00005555565db300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f29a2df2304 CR3: 0000000021e60000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	8c 00                	mov    %es,(%rax)
-   2:	00 00                	add    %al,(%rax)
-   4:	e8 bb f7 a4 fd       	callq  0xfda4f7c4
-   9:	48 8b 04 24          	mov    (%rsp),%rax
-   d:	48 8b 6c 24 40       	mov    0x40(%rsp),%rbp
-  12:	80 38 00             	cmpb   $0x0,(%rax)
-  15:	0f 85 c3 00 00 00    	jne    0xde
-  1b:	4d 8b 75 00          	mov    0x0(%r13),%r14
-  1f:	49 8d 7e 20          	lea    0x20(%r14),%rdi
-  23:	48 89 fa             	mov    %rdi,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	80 3c 1a 00          	cmpb   $0x0,(%rdx,%rbx,1) <-- trapping instruction
-  2e:	0f 85 c1 00 00 00    	jne    0xf5
-  34:	4d 8b 7e 20          	mov    0x20(%r14),%r15
-  38:	49 8d 7f 2c          	lea    0x2c(%r15),%rdi
-  3c:	48 89 fa             	mov    %rdi,%rdx
-  3f:	48                   	rex.W
-
-
+Signed-off-by: Yunlei He <heyunlei@oppo.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ fs/f2fs/file.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index 147ab24ae579..b3e96bceaef2 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -149,8 +149,6 @@ static vm_fault_t f2fs_vm_page_mkwrite(struct vm_fault *vmf)
+ 		zero_user_segment(page, offset, PAGE_SIZE);
+ 	}
+ 	set_page_dirty(page);
+-	if (!PageUptodate(page))
+-		SetPageUptodate(page);
+ 
+ out_sem:
+ 	f2fs_update_iostat(sbi, inode, APP_MAPPED_IO, F2FS_BLKSIZE);
+-- 
+2.40.1
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
