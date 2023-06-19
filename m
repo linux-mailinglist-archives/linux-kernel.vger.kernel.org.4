@@ -2,152 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A86BC735FBE
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 00:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0D33735FC1
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 00:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbjFSWGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 18:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59486 "EHLO
+        id S229888AbjFSWJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 18:09:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjFSWGe (ORCPT
+        with ESMTP id S229880AbjFSWJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 18:06:34 -0400
-Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79206AF
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 15:06:32 -0700 (PDT)
-Received: by mail-vk1-xa31.google.com with SMTP id 71dfb90a1353d-4717089ae5bso793525e0c.0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 15:06:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1687212391; x=1689804391;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=epHaUjkubRomEjpu/oKPC+kOjwKS/BUbVDRooU3Z4so=;
-        b=Clc4AYB6+dKRBg/IDg+ygozDHkBJRNn61FpjM6RVMm18cdgtaWY0cX5rcr9WOoyL5f
-         m7u70nYbAuk2kaAZCxpqaLxARlP2YJoS64wUCYS+vmIGiqgwXTBcSll6d9X/2eD/SOng
-         bnvSuhu3b16BWuqmdkF7tHs0c3d9r0mv4QvUGsldx7qxTme7ArCAoNuiCIBOokrzdVRE
-         epGhqtrFxDpd0gMY9anaTfl+z9wKFgnv3qJSw5Snx0PtIhSGlt/z5JfEPVnEFHlTZ2gR
-         oME2kHMtBN2/kFhbqPIZph5uY1swSYpVqA1TrM1J6JuowBy2eLA6cv0zprikuBxbJBIP
-         JgeQ==
+        Mon, 19 Jun 2023 18:09:38 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62815187
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 15:09:37 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-77a1d6d2f7fso389917339f.2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 15:09:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687212391; x=1689804391;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=epHaUjkubRomEjpu/oKPC+kOjwKS/BUbVDRooU3Z4so=;
-        b=a5CMts2GoeYRmmt/HgVoknAWBDRbkQgKt0CR8khsBLfhECeIOhI2dJacVVoo4pCbWL
-         vnSjaq20Ylb/MxihXrpW7oFQGm6V+BkNHZIll3lb/h9t4tlhslRCTpCnpP5gGoSeMadn
-         VgfiSzRfngDqdRZqHliTKqS1q0ENzrVh4W+wGnAqllSMG4EyldzESE53+GqkDISJV2eQ
-         5Q5NA8gFaxJdbjIV4AVOvHVYGDwUcEs94xmY5flRF09HCaJQB9eW2urJJ02k02rHZBnH
-         5dTaDteBD+SjLz1leg9ukkeDPww5Z9H580jdvMl4HN/M/gN9tLNSI28PU8dYYabn/mxe
-         WE6Q==
-X-Gm-Message-State: AC+VfDwiKW2HAXorxMZ95t/SnW07+YVBwb1/UsUUyrVCT5tQK+Uff1dL
-        gZYmJ2xZxDSy7XRl3b7VpXAzSA==
-X-Google-Smtp-Source: ACHHUZ7DIN/jiAGa9oBPkCoLh+LmqcRVR1Lpn9QSUwCOEnPyWLgfT+5eGZP6x9+3N0protXz72Kx0w==
-X-Received: by 2002:a1f:3d11:0:b0:465:fa30:d633 with SMTP id k17-20020a1f3d11000000b00465fa30d633mr2844926vka.0.1687212391496;
-        Mon, 19 Jun 2023 15:06:31 -0700 (PDT)
-Received: from localhost ([135.180.227.0])
-        by smtp.gmail.com with ESMTPSA id g7-20020a635207000000b00528db73ed70sm165781pgb.3.2023.06.19.15.06.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 15:06:30 -0700 (PDT)
-Date:   Mon, 19 Jun 2023 15:06:30 -0700 (PDT)
-X-Google-Original-Date: Mon, 19 Jun 2023 15:06:25 PDT (-0700)
-Subject:     Re: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-In-Reply-To: <mhng-41a06775-95dc-4747-aaab-2c5c83fd6422@palmer-ri-x1c9>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
-        Arnd Bergmann <arnd@arndb.de>, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     jszhang@kernel.org, llvm@lists.linux.dev
-Message-ID: <mhng-57559277-afaa-4a85-a3ad-b9be6dba737f@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1687212576; x=1689804576;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=18wIF3rKinLoRpSkehNKDsiNhig12DTTerhF0r5bB/A=;
+        b=EDThN/imkFlPjVKzte0U48m5GMseEAeNwl59/HMKNnN1KaqksaR2iZtmrjry9F/JgL
+         Ou9hBikvhPpa5KivQhNQdA7liRNlzlVjNfebC052KIK3UV+ZZHs7i8GD5NaXJY/cHbS8
+         7Omt1ciO4a1oy4BP1RDc3Di/UMScwOU6qRvut/GRjkc+ZLzEZGi4Bu0/w0cD2zgL7+BB
+         nCUqmePLAqZVoteTywGGDsr5iDH4zEUkU+n2D4gaHq8p18DzM4uyAJZjAyvlMX7bOLWK
+         7bdzQpLCaYaLE5s6vyCv5YTOMV1BA8qPgMGoV2MXXlhtc7HHNBMi8Kyq7oOkrpXQGFaf
+         cLlg==
+X-Gm-Message-State: AC+VfDxPfHpEVBw/qTn9g7VSZ86HXO2Ny5jimk7ZwK1VQ/rmKMutUgvg
+        yHXcusmTqmxJItJ6X1R4Vnng1+nnFe+5opoZEgCjqKsUV7WN
+X-Google-Smtp-Source: ACHHUZ47JiJ7D6zbVcTND2HYnJ/ijfBs9OfkopT5ILSUxZMfqmcxVgGVigX37KA31taxlGmZ9fCoz0oSgn1EnM5BowFoIAwwT2yh
+MIME-Version: 1.0
+X-Received: by 2002:a02:93a7:0:b0:426:29a2:9d24 with SMTP id
+ z36-20020a0293a7000000b0042629a29d24mr3087319jah.2.1687212576774; Mon, 19 Jun
+ 2023 15:09:36 -0700 (PDT)
+Date:   Mon, 19 Jun 2023 15:09:36 -0700
+In-Reply-To: <1167416.1687211141@warthog.procyon.org.uk>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004ca4ee05fe82cae7@google.com>
+Subject: Re: [syzbot] [crypto?] general protection fault in shash_ahash_update
+From:   syzbot <syzbot+88f4b1e6cf88da11f5cd@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, dhowells@redhat.com,
+        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Jun 2023 06:54:33 PDT (-0700), Palmer Dabbelt wrote:
-> On Wed, 14 Jun 2023 09:25:49 PDT (-0700), jszhang@kernel.org wrote:
->>
->> On Wed, Jun 14, 2023 at 07:49:17AM -0700, Palmer Dabbelt wrote:
->>> On Tue, 23 May 2023 09:54:58 PDT (-0700), jszhang@kernel.org wrote:
->>> > When trying to run linux with various opensource riscv core on
->>> > resource limited FPGA platforms, for example, those FPGAs with less
->>> > than 16MB SDRAM, I want to save mem as much as possible. One of the
->>> > major technologies is kernel size optimizations, I found that riscv
->>> > does not currently support HAVE_LD_DEAD_CODE_DATA_ELIMINATION, which
->>> > passes -fdata-sections, -ffunction-sections to CFLAGS and passes the
->>> > --gc-sections flag to the linker.
->>> >
->>> > This not only benefits my case on FPGA but also benefits defconfigs.
->>> > Here are some notable improvements from enabling this with defconfigs:
->>> >
->>> > nommu_k210_defconfig:
->>> >    text    data     bss     dec     hex
->>> > 1112009  410288   59837 1582134  182436     before
->>> >  962838  376656   51285 1390779  1538bb     after
->>> >
->>> > rv32_defconfig:
->>> >    text    data     bss     dec     hex
->>> > 8804455 2816544  290577 11911576 b5c198     before
->>> > 8692295 2779872  288977 11761144 b375f8     after
->>> >
->>> > defconfig:
->>> >    text    data     bss     dec     hex
->>> > 9438267 3391332  485333 13314932 cb2b74     before
->>> > 9285914 3350052  483349 13119315 c82f53     after
->>> >
->>> > patch1 and patch2 are clean ups.
->>> > patch3 fixes a typo.
->>> > patch4 finally enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION for riscv.
->>> >
->>> > NOTE: Zhangjin Wu firstly sent out a patch to enable dead code
->>> > elimination for riscv several months ago, I didn't notice it until
->>> > yesterday. Although it missed some preparations and some sections's
->>> > keeping, he is the first person to enable this feature for riscv. To
->>> > ease merging, this series take his patch into my entire series and
->>> > makes patch4 authored by him after getting his ack to reflect
->>> > the above fact.
->>> >
->>> > Since v1:
->>> >   - collect Reviewed-by, Tested-by tag
->>> >   - Make patch4 authored by Zhangjin Wu, add my co-developed-by tag
->>> >
->>> > Jisheng Zhang (3):
->>> >   riscv: move options to keep entries sorted
->>> >   riscv: vmlinux-xip.lds.S: remove .alternative section
->>> >   vmlinux.lds.h: use correct .init.data.* section name
->>> >
->>> > Zhangjin Wu (1):
->>> >   riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
->>> >
->>> >  arch/riscv/Kconfig                  |  13 +-
->>> >  arch/riscv/kernel/vmlinux-xip.lds.S |   6 -
->>> >  arch/riscv/kernel/vmlinux.lds.S     |   6 +-
->>> >  include/asm-generic/vmlinux.lds.h   |   2 +-
->>> >  4 files changed, 11 insertions(+), 16 deletions(-)
->>>
->>> Do you have a base commit for this?  It's not applying to 6.4-rc1 and the
->>> patchwork bot couldn't find one either.
->>
->> Hi Palmer,
->>
->> Commit 3b90b09af5be ("riscv: Fix orphan section warnings caused by
->> kernel/pi") touches vmlinux.lds.S, so to make the merge easy, this
->> series is based on 6.4-rc2.
->
-> Thanks.
+Hello,
 
-Sorry to be so slow here, but I think this is causing LLD to hang on 
-allmodconfig.  I'm still getting to the bottom of it, there's a few 
-other things I have in flight still.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
->
->>
->> Thanks
+Reported-and-tested-by: syzbot+88f4b1e6cf88da11f5cd@syzkaller.appspotmail.com
+
+Tested on:
+
+commit:         49310624 Merge branch 'ipv6-random-cleanup-for-extensi..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git main
+console output: https://syzkaller.appspot.com/x/log.txt?x=178ba75b280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a4a7d74e6a7c3211
+dashboard link: https://syzkaller.appspot.com/bug?extid=88f4b1e6cf88da11f5cd
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=11352c83280000
+
+Note: testing is done by a robot and is best-effort only.
