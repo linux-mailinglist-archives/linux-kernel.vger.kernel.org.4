@@ -2,107 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08DBC73594F
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 16:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49830735951
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 16:17:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231731AbjFSOQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 10:16:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57562 "EHLO
+        id S231534AbjFSORU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 10:17:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjFSOQl (ORCPT
+        with ESMTP id S229660AbjFSORS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 10:16:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0CC59C
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 07:15:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687184153;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type;
-        bh=szFwNVj7FocmAbg+wX1oALpVqaDR+gblq+HEqVQ9CGM=;
-        b=djAcCjm9ADzQTAHqAlHBSqtV73jAV1VsXs+Gb9LfJuCfmg8/LqESEhrLV74jQek9LzUnPQ
-        Z7BqDm43qnRxrq7kn/TeRmKBcNhj/C2HAJ12Beuix+FXUXGOH+eQzRgqOb8BKkTEYWG8Jl
-        DScErcwe+oguhB+OuO/OpEKhIR/rsFA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-349-1eLVCzz8MI2daKr5f13JwQ-1; Mon, 19 Jun 2023 10:15:49 -0400
-X-MC-Unique: 1eLVCzz8MI2daKr5f13JwQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B395C3C108E6;
-        Mon, 19 Jun 2023 14:15:48 +0000 (UTC)
-Received: from localhost (unknown [10.22.8.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D7F4D10CE7;
-        Mon, 19 Jun 2023 14:15:47 +0000 (UTC)
-Date:   Mon, 19 Jun 2023 11:15:46 -0300
-From:   "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        stable-rt <stable-rt@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Pavel Machek <pavel@denx.de>,
-        Jeff Brady <jeffreyjbrady@gmail.com>,
-        Luis Goncalves <lgoncalv@redhat.com>
-Subject: [ANNOUNCE] 5.10.184-rt90
-Message-ID: <ZJBjEt+XxB9SmKLK@uudg.org>
+        Mon, 19 Jun 2023 10:17:18 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EBCF9C
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 07:17:18 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id 98e67ed59e1d1-25bf4b269e0so3125601a91.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 07:17:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687184237; x=1689776237;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=m462Io47RlCWBfDJCQFiCJnqNvxTLHRYWMF6j3UT8B0=;
+        b=Ju6rdffIi4s6qEqyNIzu8niM8oNTnG/uxGon9J9yJLsdAboFnyUvOLZkm2VAGkd28j
+         jpYhtbv4LmDpVqyiq+wq5Dep01gGsEkXNUBW93U/r2Ia7470KRRo1VwBogPKZxcuOsxC
+         fN328Z2kg4U7T/G+1Jh7WkTrhwILEtmegjMJFaFR2assviRqYauOm9TrKLYWGIIF3Kcs
+         aQOf+Q6a2zTlu3jGGvdXh4TUBois9K9qwxeAJkwiLoYDKUISG+UFdQOqJF8rZOAPJ+eG
+         ReCPqBrGnU1e+tLqGjLEi2VIjc899vxQRmK2vbKZbodgv4yamLJYUQtVYJO1xMTicEkQ
+         qSVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687184237; x=1689776237;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=m462Io47RlCWBfDJCQFiCJnqNvxTLHRYWMF6j3UT8B0=;
+        b=NqH7730gyJAvexA9yt+YyEbLG6hwZd66ll4AIJean5/QhGKIPHyFd6ORhcguxSOuJb
+         jDVhfUQmn0QMbZkIfsBKNzAbQn7MIEpb4agU9qK4/nS+3q7HBWdVZOUt4iMQChgmpa42
+         s565TYe9sKZtz0ZU7iI+X2Q74ev9MhAkBwrgWIgoqc6dRyOPVVSDQm5rn1bodCxGUcd6
+         VBCsq5qHyPrA0CEpCkeA6AaEDwP4ZjFC0H2gI82EN8c1khbDnndIiDP6FmE/v4k0kfoY
+         KcpY+jg1tLzbJsuK0aRse0153sft/3+wTsVbEeFoBCGfUMFmO6koTzffugVii2PkjT86
+         4GvQ==
+X-Gm-Message-State: AC+VfDxL21WJeBCTF/d5w7o9n7N+LdzM5tC3CNP4O3IHDC5lndeGdcBD
+        +RzXoDrseGvLZCfszKNQEd0=
+X-Google-Smtp-Source: ACHHUZ65D/W4si0E5ycCXfvGbSLyoUtFQJnN9DnqBS592C87gg9tWtlIWCnWgouDRpUYEDW9bNc8vQ==
+X-Received: by 2002:a17:90a:6f43:b0:25e:fb6d:ce68 with SMTP id d61-20020a17090a6f4300b0025efb6dce68mr5438247pjk.6.1687184237181;
+        Mon, 19 Jun 2023 07:17:17 -0700 (PDT)
+Received: from zephyrusG14 ([103.251.210.211])
+        by smtp.gmail.com with ESMTPSA id bo24-20020a17090b091800b0025edb720cc1sm3731946pjb.22.2023.06.19.07.17.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 07:17:16 -0700 (PDT)
+Date:   Mon, 19 Jun 2023 19:47:11 +0530
+From:   Yogesh Hegde <yogi.kernel@gmail.com>
+To:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Cc:     dan.carpenter@linaro.org, philipp.g.hortmann@gmail.com,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        skhan@linuxfoundation.org, ivan.orlov0322@gmail.com
+Subject: [PATCH v4 0/4] Trivial code cleanup patches
+Message-ID: <cover.1687183827.git.yogi.kernel@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello RT-list!
+Rename variables in struct rtllib_device to avoid CamelCase which is not
+accepted by checkpatch.
 
-I'm pleased to announce the 5.10.184-rt90 stable release.
+---
 
-This release is just an update to the new stable 5.10.184
-version and no RT specific changes have been made.
+v4: Rebase to latest staging-testing branch as suggested by Greg Kroah-Hartman  
+    <gregkh@linuxfoundation.org>.
 
-This release has been tested under the tag v5.10.184-rt90-rc1 at:
+v3: The driver is split into 2 modules, calling the functions directly which 
+    the v2 of the patchset does breaks compile. So reverting back to v1 of 
+    the patch as suggested by Greg Kroah-Hartman <gregkh@linuxfoundation.org>.
 
-  https://linux.kernelci.org/test/job/rt-stable/branch/v5.10-rt-next/kernel/v5.10.184-rt90-rc1/
+v2: Removed the variable and called the function directly instead of
+    just renaming the variable as suggested by Greg Kroah-Hartman
+    <gregkh@linuxfoundation.org>.
 
-You can get this release via the git tree at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
+Yogesh Hegde (4):
+  staging: rtl8192e: Rename variable SetWirelessMode
+  staging: rtl8192e: Rename variable SetBWModeHandler
+  staging: rtl8192e: Rename variable LeisurePSLeave
+  staging: rtl8192e: Rename variable InitialGainHandler
 
-  branch: v5.10-rt
-  Head SHA1: 4c0096468c71420c3ee30681322ef6c086e629fc
+ drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c |  4 ++--
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c   |  8 ++++----
+ drivers/staging/rtl8192e/rtl819x_HTProc.c      |  4 ++--
+ drivers/staging/rtl8192e/rtllib.h              | 12 ++++++------
+ drivers/staging/rtl8192e/rtllib_rx.c           |  2 +-
+ drivers/staging/rtl8192e/rtllib_softmac.c      | 12 ++++++------
+ drivers/staging/rtl8192e/rtllib_softmac_wx.c   |  6 +++---
+ 7 files changed, 24 insertions(+), 24 deletions(-)
 
-Or to build 5.10.184-rt90 directly, the following patches should be applied:
-
-  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.10.tar.xz
-
-  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.10.184.xz
-
-  https://www.kernel.org/pub/linux/kernel/projects/rt/5.10/older/patch-5.10.184-rt90.patch.xz
-
-Signing key fingerprint:
-
-  9354 0649 9972 8D31 D464  D140 F394 A423 F8E6 7C26
-
-All keys used for the above files and repositories can be found on the
-following git repository:
-
-   git://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
-
-Enjoy!
-Luis
+-- 
+2.34.1
 
