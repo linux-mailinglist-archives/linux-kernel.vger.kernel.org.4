@@ -2,146 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADDB3734AD4
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 06:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A28B734AD6
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 06:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbjFSEDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 00:03:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39578 "EHLO
+        id S229664AbjFSEFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 00:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjFSEDh (ORCPT
+        with ESMTP id S229456AbjFSEE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 00:03:37 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F138FF;
-        Sun, 18 Jun 2023 21:03:35 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        Mon, 19 Jun 2023 00:04:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1CBFF
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 21:04:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qkx2W7293z4wg8;
-        Mon, 19 Jun 2023 14:03:31 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687147412;
-        bh=TVJKR0fHhUqXJ3TbbCvXJXNSGk8DOs9SSkTVMI7js44=;
-        h=Date:From:To:Cc:Subject:From;
-        b=RRsL5Hs+voOIPw2EbO1s+QfDR3X6tnQa8lp51qQl3AKX+O1vtEK/gBNFz2D3XEIkq
-         r7+4QUsrPUPVobpg6yMoAFxehufDDI/L4apLtj/XOxZp0TX9egxrK4wNl5niE+n+Gc
-         iqQMgyg2xQCoHuBQ/IhKNYIKIckYzmx+t17kCDbDw/h3NNyf81+4NdYWLdW753eBw7
-         of5tZHLX/eaL3PrPmh21PBGxZuEXUJPmK8/wzypx8dXBy0bMqzudqfGAvVOECzdVAs
-         O+D0c24KTrR4RiP//USvQ/yRJyu0oASDeOOjytCMj3Mbjz1bvat+BI0wpXedFfVjwb
-         VrJsyxJwL1clQ==
-Date:   Mon, 19 Jun 2023 14:03:30 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Vlastimil Babka <vbabka@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the slab tree with the mm tree
-Message-ID: <20230619140330.28437ac3@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BCBC760B62
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 04:04:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E524DC433C8;
+        Mon, 19 Jun 2023 04:04:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687147496;
+        bh=W8waJk4XTaE76FP7LndZakOM9LvxqgfZtqHIAdHYMGw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=QigEo1GRv2wym/UeqLTVusquiKXKw82/893v9gmr0EaRMB6/V8+WWrvGZMzjcb5rO
+         /THHwNsdaEGYw3HC1YBFpXGf+NpuMt5PtZ1FILgcjD0fDgrOUhJVC8Qr53gP5ZyM2s
+         8unE9jtqzwP2GkA4kQKsMFK9xuZTak2XzXMJHD2jJd3jtgSylIEQ2pHrR/hfGkCpdM
+         xF0EFpsWKIjw5R1g54W2X3oy+zqvYmnP8iVO8/nDtA5OhxCFIffRNRitgcAGiWgBIQ
+         9Uew+S5GlrbsI/tMLbnV1ljZdZLagzIHAZ0HqGuZ98I9lOwM6d03LQlIUf4K1+pxzO
+         6jGJ6aCq5tclw==
+Message-ID: <65ce42d6-889a-5e1d-8f04-af8f66fd0afa@kernel.org>
+Date:   Mon, 19 Jun 2023 12:04:52 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/P2ovrU.PT44xPxmwCi3HdIE";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] f2fs: compress: don't force buffered io when in
+ COMPR_MODE_USER mode
+Content-Language: en-US
+To:     Yangtao Li <frank.li@vivo.com>, Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     Qi Han <hanqi@vivo.com>, linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20230609131555.56651-1-frank.li@vivo.com>
+ <8097d4d9-815e-2527-0fb7-90ec0609a4a3@kernel.org>
+ <dde6972a-e98c-8a6e-493b-9aff5668101d@vivo.com>
+ <7ab6b6f9-37fa-9bf2-69ce-7b1b1944d9f3@kernel.org>
+ <fe223231-5445-61ef-1ba8-0d46f4f4ed5f@vivo.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <fe223231-5445-61ef-1ba8-0d46f4f4ed5f@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/P2ovrU.PT44xPxmwCi3HdIE
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2023/6/19 11:11, Yangtao Li wrote:
+> On 2023/6/19 8:54, Chao Yu wrote:
+> 
+>> On 2023/6/13 12:14, Yangtao Li wrote:
+>>>
+>>> On 2023/6/12 22:38, Chao Yu wrote:
+>>>> On 2023/6/9 21:15, Yangtao Li wrote:
+>>>>> It is observed that when in user compression mode
+>>>>> (compress_extension=*),
+>>>>> even though the file is not compressed, the file is still forced to use
+>>>>> buffer io, which makes the AndroBench sequential read and write drop
+>>>>> significantly. In fact, when the file is not compressed, we don't need
+>>>>> to force it to buffer io.
+>>>>>
+>>>>>                    | w/o patch | w/ patch |
+>>>>> seq read  (MB/s) | 1320.068  | 3696.154 |
+>>>>> seq write (MB/s) | 617.996   | 2978.478 |
+>>>>>
+>>>>> Fixes: 4c8ff7095bef ("f2fs: support data compression")
+>>>>> Signed-off-by: Qi Han <hanqi@vivo.com>
+>>>>> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+>>>>> ---
+>>>>>    fs/f2fs/f2fs.h | 14 ++++++++++++++
+>>>>>    fs/f2fs/file.c |  2 +-
+>>>>>    2 files changed, 15 insertions(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+>>>>> index 1efcfd9e5a99..7f5472525310 100644
+>>>>> --- a/fs/f2fs/f2fs.h
+>>>>> +++ b/fs/f2fs/f2fs.h
+>>>>> @@ -3168,6 +3168,20 @@ static inline int f2fs_compressed_file(struct
+>>>>> inode *inode)
+>>>>>            is_inode_flag_set(inode, FI_COMPRESSED_FILE);
+>>>>>    }
+>>>>>    +static inline bool f2fs_is_compressed_file(struct inode *inode)
+>>>>> +{
+>>>>> +    int compress_mode = F2FS_OPTION(F2FS_I_SB(inode)).compress_mode;
+>>>>> +
+>>>>> +    if (compress_mode == COMPR_MODE_FS)
+>>>>> +        return f2fs_compressed_file(inode);
+>>>>> +    else if (atomic_read(&F2FS_I(inode)->i_compr_blocks) ||
+>>>>
+>>>> Should check dirty page as well? i_compr_blocks may increase after
+>>>> data writeback.
+>>>>
+>>> IIUC, in COMPR_MODE_USER mode, i_compr_blocks will only be updated when
+>>> FI_ENABLE_COMPRESS is enabled.
+>>>
+>>> If FI_ENABLE_COMPRESS is not enabled, i_compr_blocks will never be
+>>> updated after data writeback.
+>>>
+>>> So there is no need to additionally judge whether there is a dirty page?
+>>
+>> Oh, user mode, that's correct.
+>>
+>> If we allow dio/aio on compress file, it needs to consider race case in
+>> between aio and ioc_compress_file.
+> 
+> 
+> The inode_lock is already held in f2fs_file_write_iter and f2fs_ioc_compress_file, I guess this is enough?
+> 
+> What else?
 
-Hi all,
+aio may complete outside inode lock, so it needs to call inode_dio_wait()
+in f2fs_ioc_compress_file() to avoid the race case?
 
-Today's linux-next merge of the slab tree got a conflict in:
+Thanks,
 
-  mm/slab_common.c
-
-between commits:
-
-  fef594ee7142 ("mm/slab: simplify create_kmalloc_cache() args and make it =
-static")
-  6e6f174b6eda ("mm/slab: limit kmalloc() minimum alignment to dma_get_cach=
-e_alignment()")
-
-from the mm tree and commit:
-
-  d5bf48574699 ("mm/slab_common: use SLAB_NO_MERGE instead of negative refc=
-ount")
-
-from the slab tree.
-
-I fixed it up (I think - see below) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc mm/slab_common.c
-index 43c008165f56,90ecaface410..000000000000
---- a/mm/slab_common.c
-+++ b/mm/slab_common.c
-@@@ -892,24 -876,17 +890,24 @@@ new_kmalloc_cache(int idx, enum kmalloc
-  		flags |=3D SLAB_CACHE_DMA;
-  	}
- =20
- +	if (minalign > ARCH_KMALLOC_MINALIGN) {
- +		aligned_size =3D ALIGN(aligned_size, minalign);
- +		aligned_idx =3D __kmalloc_index(aligned_size, false);
- +	}
- +
-+ 	/*
-+ 	 * If CONFIG_MEMCG_KMEM is enabled, disable cache merging for
-+ 	 * KMALLOC_NORMAL caches.
-+ 	 */
-+ 	if (IS_ENABLED(CONFIG_MEMCG_KMEM) && (type =3D=3D KMALLOC_NORMAL))
-+ 		flags |=3D SLAB_NO_MERGE;
-+=20
- -	kmalloc_caches[type][idx] =3D create_kmalloc_cache(
- -					kmalloc_info[idx].name[type],
- -					kmalloc_info[idx].size, flags, 0,
- -					kmalloc_info[idx].size);
- +	if (!kmalloc_caches[type][aligned_idx])
- +		kmalloc_caches[type][aligned_idx] =3D create_kmalloc_cache(
- +					kmalloc_info[aligned_idx].name[type],
- +					aligned_size, flags);
- +	if (idx !=3D aligned_idx)
- +		kmalloc_caches[type][idx] =3D kmalloc_caches[type][aligned_idx];
--=20
-- 	/*
-- 	 * If CONFIG_MEMCG_KMEM is enabled, disable cache merging for
-- 	 * KMALLOC_NORMAL caches.
-- 	 */
-- 	if (IS_ENABLED(CONFIG_MEMCG_KMEM) && (type =3D=3D KMALLOC_NORMAL))
-- 		kmalloc_caches[type][idx]->refcount =3D -1;
-  }
- =20
-  /*
-
---Sig_/P2ovrU.PT44xPxmwCi3HdIE
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSP05IACgkQAVBC80lX
-0Gy5xggAhp9cBxE8LgtT4OOc7WzPGHTC8VJo0BzFwoTKajrY13vID48gbCLxvCqs
-ARm3L/mTpE6x/CnmONkqcj8+69wuMweo1Q/PCwQj9Jko3AL7/xRi3S1WEi7NEyGd
-XsqRGCYWPrByN70Xj7JI4nuX0Z0HlpEiLCoKieR672jKs3Qx52IGIy+Fu79THk5C
-I79ozx9QptBHEScdKrkxISO1f4Mls1ROo59RwEshfTxKMjbpCUXdUfmVaeCW6fM9
-K9lTWi7eDN/ZSVEtAh6T/WrshLSsTj2k6yqQE6QPISxyJZUtbwRF634LCYCFBFvU
-71qoLyjOEShQgVEhYHGPCcwSTr45og==
-=Rfgw
------END PGP SIGNATURE-----
-
---Sig_/P2ovrU.PT44xPxmwCi3HdIE--
+> 
+> 
+> 4691 static ssize_t f2fs_file_write_iter(struct kiocb *iocb, struct iov_iter *from)
+> 4692 {
+> 4693         struct inode *inode = file_inode(iocb->ki_filp);
+> 4694         const loff_t orig_pos = iocb->ki_pos;
+> 4695         const size_t orig_count = iov_iter_count(from);
+> 4696         loff_t target_size;
+> 4697         bool dio;
+> 4698         bool may_need_sync = true;
+> 4699         int preallocated;
+> 4700         ssize_t ret;
+> 4701
+> 4702         if (unlikely(f2fs_cp_error(F2FS_I_SB(inode)))) {
+> 4703                 ret = -EIO;
+> 4704                 goto out;
+> 4705         }
+> 4706
+> 4707         if (!f2fs_is_compress_backend_ready(inode)) {
+> 4708                 ret = -EOPNOTSUPP;
+> 4709                 goto out;
+> 4710         }
+> 4711
+> 4712         if (iocb->ki_flags & IOCB_NOWAIT) {
+> 4713                 if (!inode_trylock(inode)) {
+> 4714                         ret = -EAGAIN;
+> 4715                         goto out;
+> 4716                 }
+> 4717         } else {
+> 4718                 inode_lock(inode);
+> 4719         }
+> 
+> 
+> 4115 static int f2fs_ioc_compress_file(struct file *filp)
+> 4116 {
+> 4117         struct inode *inode = file_inode(filp);
+> 4118         struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+> 4119         pgoff_t page_idx = 0, last_idx;
+> 4120         unsigned int blk_per_seg = sbi->blocks_per_seg;
+> 4121         int cluster_size = F2FS_I(inode)->i_cluster_size;
+> 4122         int count, ret;
+> 4123
+> 4124         if (!f2fs_sb_has_compression(sbi) ||
+> 4125                         F2FS_OPTION(sbi).compress_mode != COMPR_MODE_USER)
+> 4126                 return -EOPNOTSUPP;
+> 4127
+> 4128         if (!(filp->f_mode & FMODE_WRITE))
+> 4129                 return -EBADF;
+> 4130
+> 4131         if (!f2fs_compressed_file(inode))
+> 4132                 return -EINVAL;
+> 4133
+> 4134         f2fs_balance_fs(sbi, true);
+> 4135
+> 4136         file_start_write(filp);
+> 4137         inode_lock(inode);
+> 
+> 
+> Thanks,
+> 
+>>
+>> Thanks,
+>>
+>>>
+>>>
+>>> Thanks,
+>>>
+>>>> Thanks,
+>>>>
+>>>>> +        is_inode_flag_set(inode, FI_COMPRESS_RELEASED) ||
+>>>>> +        is_inode_flag_set(inode, FI_ENABLE_COMPRESS))
+>>>>> +        return true;
+>>>>> +
+>>>>> +    return false;
+>>>>> +}
+>>>>> +
+>>>>>    static inline bool f2fs_need_compress_data(struct inode *inode)
+>>>>>    {
+>>>>>        int compress_mode = F2FS_OPTION(F2FS_I_SB(inode)).compress_mode;
+>>>>> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+>>>>> index 74ecc9e20619..0698129b2165 100644
+>>>>> --- a/fs/f2fs/file.c
+>>>>> +++ b/fs/f2fs/file.c
+>>>>> @@ -821,7 +821,7 @@ static bool f2fs_force_buffered_io(struct inode
+>>>>> *inode, int rw)
+>>>>>            return true;
+>>>>>        if (fsverity_active(inode))
+>>>>>            return true;
+>>>>> -    if (f2fs_compressed_file(inode))
+>>>>> +    if (f2fs_is_compressed_file(inode))
+>>>>>            return true;
+>>>>>          /* disallow direct IO if any of devices has unaligned blksize */
