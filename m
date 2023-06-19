@@ -2,66 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F7B3734E34
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:43:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67868734E37
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbjFSInW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 04:43:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43266 "EHLO
+        id S230386AbjFSInc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 04:43:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjFSImz (ORCPT
+        with ESMTP id S230506AbjFSInB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 04:42:55 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265D03A92;
-        Mon, 19 Jun 2023 01:40:48 -0700 (PDT)
-Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 18098547;
-        Mon, 19 Jun 2023 10:39:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1687163998;
-        bh=6NJRwC5Dr2vzbjlVl+AeJg6cppAZ6p7cGxmaf/F5s+A=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PaMdwDVelUCr2Bpl2OTfDXcqBa72Fpqc3Hu/XO7d+sfRqTSba/rZCj1lwsB+RT3uR
-         gIs59uF6Vc5B3SJS4habkckkrntXpSc/YOZGagGbM0stbTIGIvGlg/AkMT1KEKFO5J
-         +4E8WyJYBT0wdbv/Q2lI9F6NGyDLy4rYgedF8/Wg=
-Message-ID: <fa3f72a1-8f69-e3f1-96c3-5e53c612afe7@ideasonboard.com>
-Date:   Mon, 19 Jun 2023 11:40:28 +0300
+        Mon, 19 Jun 2023 04:43:01 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE3E35B0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 01:41:03 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1687164047;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PUlbkGJCuvyMh1uRW/BF3POrtz1pE51GldRG3yIglCQ=;
+        b=2AZtzytovYeaAw/aPOP7wVBgZjBLXDzmU7PNrOkk1uEulIJW94dBlfw0MDxe4omKc71vBy
+        9fZ9ZD+w8C3vD4v57wmB+vlcvgZsoqyVESdlznap6G4ZpJq9nXwV4Zzk6ISIBA1AQkeayV
+        k7wohhPAC3RTrh2cRwtwL6nJcmzIoYLyEHM3HjYnKxKM3+LagQ6SbAxBoCsYmZAAzA9wpx
+        oG4jpmTd3cvVSSNNIrvWm+oVR0lW8Fwb39EvHIsD1OzWyEhIh/Wd7hPdTB+SEQkSeSKndt
+        e39zuGPRKCmoEi56egbQ8olGZSjwuNFoi8ELFOa66DJeCvpsL2fE8z8XJ1VWQQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1687164047;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PUlbkGJCuvyMh1uRW/BF3POrtz1pE51GldRG3yIglCQ=;
+        b=UmqJfv0XdPrxI5aLJ1CLBVwYzcGOYNMgeh3MbDNi6d1FmwklT85EqpKqu1h9J5VAoKggln
+        CkHXuZTQ199JwvDA==
+To:     Nikolay Borisov <nik.borisov@suse.com>, x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, mhocko@suse.com, jslaby@suse.cz
+Subject: Re: [PATCH v3 5/5] x86/entry: Make IA32 syscalls' availability
+ depend on ia32_enabled()
+In-Reply-To: <cf24db95-9c91-5d30-fe83-3a1e2cbf0cc1@suse.com>
+References: <20230616125730.1164989-1-nik.borisov@suse.com>
+ <20230616125730.1164989-6-nik.borisov@suse.com> <87mt0wqxkt.ffs@tglx>
+ <cf24db95-9c91-5d30-fe83-3a1e2cbf0cc1@suse.com>
+Date:   Mon, 19 Jun 2023 10:40:46 +0200
+Message-ID: <87a5wvrgj5.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v14 11/18] media: i2c: ds90ub9xx: Select GPIOLIB rather
- than OF_GPIO
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>
-References: <20230616135922.442979-1-tomi.valkeinen@ideasonboard.com>
- <20230616135922.442979-12-tomi.valkeinen@ideasonboard.com>
- <ZIxu+IvTSaFW3erU@smile.fi.intel.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <ZIxu+IvTSaFW3erU@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,66 +60,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/06/2023 17:17, Andy Shevchenko wrote:
-> On Fri, Jun 16, 2023 at 04:59:15PM +0300, Tomi Valkeinen wrote:
->> Select GPIOLIB rather than OF_GPIO, as the drivers use gpiolib
->> functionality, but no of_gpio (directly).
-> 
-> This is useful change, but has to be folded in the original code.
-> We do not want even a trace of newly added OF_GPIO.
+On Mon, Jun 19 2023 at 09:28, Nikolay Borisov wrote:
+> On 19.06.23 =D0=B3. 0:17 =D1=87., Thomas Gleixner wrote:
+>> On Fri, Jun 16 2023 at 15:57, Nikolay Borisov wrote:
+>>> Another major aspect of supporting running of 32bit processes is the
+>>> ability to access 32bit syscalls. Such syscalls are invoked either by
+>>> using the legacy int 0x80 call gate interface or via the newer sysenter
+>>> instruction.
+>>>
+>>> Ensure that if ia32 emulation is disabled (either at compile time or
+>>> runtime) then those 2 syscall mechanisms are also disabled.
+>>=20
+>> AFAICT there are _three_ mechanisms for 32bit syscalls, no?
+>
+> int 0x80 and sysenter make it 2? Which one is the 3rd one - the "native=20
+> 64bit syscall" used in for X32 ABI ? This patch specifically deals with=20
+> the first 2?
 
-Yes, I think the first three new patches should be squashed:
+int 80, sysenter, syscall =3D 3
 
-   media: i2c: ds90ub960: Fix use of UB960_SR_FWD_CTL1
-   media: i2c: ds90ub9xx: Add COMMON_CLK kconfig dependency
-   media: i2c: ds90ub9xx: Select GPIOLIB rather than OF_GPIO
+They obviously depend on the vendor preference when the CPU has enabled
+long mode:
 
-The rest... Thinking about it now, I should have perhaps left them out, 
-as they're not fixing issues, and perhaps they just confuse the merging 
-process.
+                      AMD    Intel
+compat_int 80         y      y
+compat_sysenter       #UD    y
+compat_syscall        y      #UD
 
-  Tomi
+On Intel SYSENTER is trivial to disable by setting MSR_IA32_SYSENTER_CS
+to 0 which makes sysenter raise #GP.
 
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
->> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
->> ---
->>   drivers/media/i2c/Kconfig | 6 +++---
->>   1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
->> index 8a5f09a3de6c..29fc00e30d8b 100644
->> --- a/drivers/media/i2c/Kconfig
->> +++ b/drivers/media/i2c/Kconfig
->> @@ -1622,7 +1622,7 @@ config VIDEO_DS90UB913
->>   	depends on OF && I2C && VIDEO_DEV && COMMON_CLK
->>   	select I2C_ATR
->>   	select MEDIA_CONTROLLER
->> -	select OF_GPIO
->> +	select GPIOLIB
->>   	select REGMAP_I2C
->>   	select V4L2_FWNODE
->>   	select VIDEO_V4L2_SUBDEV_API
->> @@ -1635,7 +1635,7 @@ config VIDEO_DS90UB953
->>   	depends on OF && I2C && VIDEO_DEV && COMMON_CLK
->>   	select I2C_ATR
->>   	select MEDIA_CONTROLLER
->> -	select OF_GPIO
->> +	select GPIOLIB
->>   	select REGMAP_I2C
->>   	select V4L2_FWNODE
->>   	select VIDEO_V4L2_SUBDEV_API
->> @@ -1648,7 +1648,7 @@ config VIDEO_DS90UB960
->>   	depends on OF && I2C && VIDEO_DEV && COMMON_CLK
->>   	select I2C_ATR
->>   	select MEDIA_CONTROLLER
->> -	select OF_GPIO
->> +	select GPIOLIB
->>   	select REGMAP_I2C
->>   	select V4L2_FWNODE
->>   	select VIDEO_V4L2_SUBDEV_API
->> -- 
->> 2.34.1
->>
-> 
+The nasty one is SYSCALL on AMD. If MSR_EFER.SCE=3D1 then MSR_CSTAR must
+contain a valid kernel text address because otherwise compat SYSCALL
+faults with CPL0 and user GSBASE. That's the whole reason for the stub
+function which just sets EAX to -ENOSYS and returns via SYSRET.
 
+And your patch deals with all _three_:
+
+                    compat=3DON                    compat=3DOFF
+compat_int 80:      Set system interrupt gate    ---
+
+compat_sysenter:    Set up SYSENTER MSRs for     Invalidate SYSENTER
+                    entry_SYSENTER_compat()      MSRs
+
+compat_syscall:     Set MSR_CSTAR to             Set MSR_CSTAR to
+                    entry_SYSCALL_compat()       stub function
+                    (AMD only)                   (AMD only)
+
+No?
+
+Changelogs have to be precise. Otherwise they are useless and in the
+worst case actively misleading.
+
+Thanks,
+
+        tglx
