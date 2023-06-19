@@ -2,80 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C47C734B88
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 08:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 370A6734B89
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 08:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbjFSGGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 02:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35520 "EHLO
+        id S229847AbjFSGHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 02:07:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjFSGGy (ORCPT
+        with ESMTP id S229805AbjFSGHA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 02:06:54 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC73B83;
-        Sun, 18 Jun 2023 23:06:50 -0700 (PDT)
-Received: from [192.168.10.54] (unknown [119.155.63.248])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C077B6606EAC;
-        Mon, 19 Jun 2023 07:06:40 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687154808;
-        bh=LaJGH3yqvxiz7d1XRjjTwc0675jX+65TTloxqyBYO7U=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=ZZBnyw/q0oyg8M5onwbOGeUldCra5i4t8Y6TXg1FATA0XytwqnkyLKYhtlljOmxHV
-         x9VXbAAAsUjR4O9YFEcumZ97jQ4PyYDmvE95A76O9+QBEKLGOgsN/pYLlXJ5WWhYcJ
-         K7TQEkKyAOm9qxrb5qpg5S/67YsjIYCrXycQbpYWezJ7Su/m/1R52fjGdWc5F7WQkr
-         zpwqMpA27VIRaiVqH+AMuDMjzgP+UQcYo0ow+xTKjvXSau3C2wi38EHDVTMRrVFqx0
-         B486VTYWSShgUMcfp21eXciYZyGJRkwDloqCPcGDQ5tNSyKozpZCDzEk5nEqWBcdah
-         E4an2PlXpZDHg==
-Message-ID: <212e331f-35b0-5ae7-6371-26caa577d637@collabora.com>
-Date:   Mon, 19 Jun 2023 11:06:36 +0500
+        Mon, 19 Jun 2023 02:07:00 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95559B1;
+        Sun, 18 Jun 2023 23:06:58 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35J5vnjt030474;
+        Sun, 18 Jun 2023 23:06:46 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=pfpt0220; bh=zOJ7wWMQldgXdwhlqtudOFETz8AB3AjI/touzpFQHCg=;
+ b=Zdkk4zQj/ycBH00bOFuy+H4TFkeWpRdpoU1/remeGA/I2YVroajWgMQ32G25ZYJRwEyC
+ mNsJTLy+7RBq6ZyZinCHQV2n5tHePHhBn1JVu43Hh/zr/727k83hmq8shT9zun0YiMPz
+ sVyp5cbk/+tNXRrCvItir3on6wPA9QM1njORSy28vqsi9q+WyTz0A/ItFhTivIBfM160
+ 2iJQc+EDpJ+Q8wkPKEwM8AwWZy6evoAZ6aKuqShIPPvmtZPjBUZ6h0BM8LKZOgXqysWX
+ 6DbHnwww6NxbeL6Bw0z8s7boNYCGtncNDMzpOTq8jriXfCZoQ8GUaRZXSccvgVzszWjG Ig== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3r9cbkbsj1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Sun, 18 Jun 2023 23:06:45 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sun, 18 Jun
+ 2023 23:06:43 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Sun, 18 Jun 2023 23:06:43 -0700
+Received: from marvell-OptiPlex-7090.marvell.com (unknown [10.28.36.165])
+        by maili.marvell.com (Postfix) with ESMTP id 595205C68EC;
+        Sun, 18 Jun 2023 23:06:40 -0700 (PDT)
+From:   Ratheesh Kannoth <rkannoth@marvell.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <sgoutham@marvell.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <sbhatta@marvell.com>, <gakula@marvell.com>, <schalla@marvell.com>,
+        <hkelam@marvell.com>, "Ratheesh Kannoth" <rkannoth@marvell.com>
+Subject: [PATCH net-next] octeontx2-pf: TC flower offload support for rxqueue mapping
+Date:   Mon, 19 Jun 2023 11:36:38 +0530
+Message-ID: <20230619060638.1032304-1-rkannoth@marvell.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v19 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     Andrei Vagin <avagin@gmail.com>
-References: <20230615141144.665148-1-usama.anjum@collabora.com>
- <20230615141144.665148-3-usama.anjum@collabora.com>
- <ZI1VGsaOZ2a1HiKN@gmail.com>
-Content-Language: en-US
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <ZI1VGsaOZ2a1HiKN@gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain
+X-Proofpoint-GUID: C1X34JIlqrMUAO_t0i2PedUSpeSYFFs9
+X-Proofpoint-ORIG-GUID: C1X34JIlqrMUAO_t0i2PedUSpeSYFFs9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-19_04,2023-06-16_01,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,122 +67,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/17/23 11:39 AM, Andrei Vagin wrote:
-> On Thu, Jun 15, 2023 at 07:11:41PM +0500, Muhammad Usama Anjum wrote:
->> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
->> +				  unsigned long end, struct mm_walk *walk)
->> +{
->> +	bool is_written, flush = false, is_interesting = true;
->> +	struct pagemap_scan_private *p = walk->private;
->> +	struct vm_area_struct *vma = walk->vma;
->> +	unsigned long bitmap, addr = end;
->> +	pte_t *pte, *orig_pte, ptent;
->> +	spinlock_t *ptl;
->> +	int ret = 0;
->> +
->> +	arch_enter_lazy_mmu_mode();
->> +
->> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
->> +	ptl = pmd_trans_huge_lock(pmd, vma);
->> +	if (ptl) {
->> +		unsigned long n_pages = (end - start)/PAGE_SIZE;
->> +
->> +		if (p->max_pages && n_pages > p->max_pages - p->found_pages)
->> +			n_pages = p->max_pages - p->found_pages;
->> +
->> +		is_written = !is_pmd_uffd_wp(*pmd);
->> +
->> +		/*
->> +		 * Break huge page into small pages if the WP operation need to
->> +		 * be performed is on a portion of the huge page.
->> +		 */
->> +		if (is_written && IS_PM_SCAN_WP(p->flags) &&
->> +		    n_pages < HPAGE_SIZE/PAGE_SIZE) {
->> +			spin_unlock(ptl);
->> +
->> +			split_huge_pmd(vma, pmd, start);
->> +			goto process_smaller_pages;
->> +		}
->> +
->> +		bitmap = PM_SCAN_FLAGS(is_written, (bool)vma->vm_file,
->> +				       pmd_present(*pmd), is_swap_pmd(*pmd));
->> +
->> +		if (IS_PM_SCAN_GET(p->flags)) {
->> +			is_interesting = pagemap_scan_is_interesting_page(bitmap, p);
->> +			if (is_interesting)
->> +				ret = pagemap_scan_output(bitmap, p, start, n_pages);
->> +		}
->> +
->> +		if (IS_PM_SCAN_WP(p->flags) && is_written && is_interesting &&
->> +		    ret >= 0) {
->> +			make_uffd_wp_pmd(vma, start, pmd);
->> +			flush_tlb_range(vma, start, end);
->> +		}
->> +
->> +		spin_unlock(ptl);
->> +
->> +		arch_leave_lazy_mmu_mode();
->> +		return ret;
->> +	}
->> +
->> +process_smaller_pages:
->> +#endif
->> +
->> +	orig_pte = pte = pte_offset_map_lock(vma->vm_mm, pmd, start, &ptl);
->> +	if (!pte) {
-> 
-> Do we need to unlock ptl here?
-> 
-> 		spin_unlock(ptl);
-No, please look at these recently merged patches:
-https://lore.kernel.org/all/c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com
+ TC rule support to offload rx queue mapping rules.
 
-> 
->> +		walk->action = ACTION_AGAIN;
->> +		return 0;
->> +	}
->> +
->> +	for (addr = start; addr < end && !ret; pte++, addr += PAGE_SIZE) {
->> +		ptent = ptep_get(pte);
->> +		is_written = !is_pte_uffd_wp(ptent);
->> +
->> +		bitmap = PM_SCAN_FLAGS(is_written, (bool)vma->vm_file,
->> +				       pte_present(ptent), is_swap_pte(ptent));
-> 
-> The vma->vm_file check isn't correct in this case. You can look when
-> pte_to_pagemap_entry sets PM_FILE. This flag is used to detect what
-> pages have a file backing store and what pages are anonymous.
-I'll update.
+Eg:
+   tc filter add dev eth2 ingress protocol ip flower \
+      dst_ip 192.168.8.100  \
+      action skbedit queue_mapping 4 skip_sw
+      action mirred ingress redirect dev eth5
 
-> 
-> I was trying to integrate this new interace into CRIU and I found
-> one more thing that is required. We need to detect zero pages.
-Should we name it ZERO_PFN_PRESENT_PAGE to be exact or what?
+Packets destined to 192.168.8.100 will be forwarded to rx
+queue 4 of eth5 interface.
 
-> 
-> It should look something like this:
-> 
-> #define PM_SCAN_FLAGS(wt, file, present, swap, zero)   \
->        ((wt) | ((file) << 1) | ((present) << 2) | ((swap) << 3) | ((zero) << 4))
-> 
-> 
-> bitmap = PM_SCAN_FLAGS(is_written, page && !PageAnon(page),
-> 		      pte_present(ptent), is_swap_pte(ptent),
-> 		      pte_present(ptent) && is_zero_pfn(pte_pfn(ptent)));
-Okay. Can you please confirm my assumptions:
-- A THP cannot be file backed. (PM_FILE isn't being set for THP case)
-- A hole is also not file backed.
+   tc filter add dev eth2 ingress protocol ip flower \
+      dst_ip 192.168.8.100  \
+      action skbedit queue_mapping 9 skip_sw
 
-A hole isn't present in memory. So its pfn would be zero. But as it isn't
-present, it shouldn't report zero page. Right? For hole::
+Packets destined to 192.168.8.100 will be forwarded to rx
+queue 4 of eth2 interface.
 
-PM_SCAN_FLAGS(false, false, false, false, false)
+Signed-off-by: Ratheesh Kannoth <rkannoth@marvell.com>
+---
+ .../net/ethernet/marvell/octeontx2/nic/otx2_tc.c   | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-
-> 
-> Thanks,
-> Andrei
-
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+index 231c3f0efb60..8a13df592af6 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+@@ -396,8 +396,12 @@ static int otx2_tc_parse_actions(struct otx2_nic *nic,
+ 				return -EOPNOTSUPP;
+ 			}
+ 			req->vf = priv->pcifunc & RVU_PFVF_FUNC_MASK;
+-			req->op = NIX_RX_ACTION_DEFAULT;
+-			return 0;
++
++			/* if op is already set; avoid overwriting the same */
++			if (!req->op)
++				req->op = NIX_RX_ACTION_DEFAULT;
++			break;
++
+ 		case FLOW_ACTION_VLAN_POP:
+ 			req->vtag0_valid = true;
+ 			/* use RX_VTAG_TYPE7 which is initialized to strip vlan tag */
+@@ -433,6 +437,12 @@ static int otx2_tc_parse_actions(struct otx2_nic *nic,
+ 		case FLOW_ACTION_MARK:
+ 			mark = act->mark;
+ 			break;
++
++		case FLOW_ACTION_RX_QUEUE_MAPPING:
++			req->op = NIX_RX_ACTIONOP_UCAST;
++			req->index = act->rx_queue;
++			break;
++
+ 		default:
+ 			return -EOPNOTSUPP;
+ 		}
 -- 
-BR,
-Muhammad Usama Anjum
+2.25.1
+
