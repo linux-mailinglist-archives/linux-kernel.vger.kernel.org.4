@@ -2,203 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF45734B99
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 08:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23A50734B9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 08:13:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229654AbjFSGMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 02:12:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38006 "EHLO
+        id S229876AbjFSGNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 02:13:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjFSGMF (ORCPT
+        with ESMTP id S229513AbjFSGN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 02:12:05 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDFD983;
-        Sun, 18 Jun 2023 23:12:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
- s=s31663417; t=1687155119; x=1687759919; i=deller@gmx.de;
- bh=qXHv99deYLTD2kNmmjlNL7L1IAyhuZLLm9e6QxYmVUo=;
- h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
- b=dz7QnozsNW1O3khG9qJJBLjQ8zB0r9dYCwVTd6ibDY76A53Y6F0MhJ48alK/0rppaKyczXk
- 8IsDmLmbnzMyJAs6KJMaqFPJnK/owrOJJYtjbDser3PuAQvPJ9GtMyVoYc3pwZKG/L+0TYh3t
- Gy8K0m2uwBAYE9uCwzpy7p1KAoWX6zWRl+z4GD+azrXcZ5/IGDi/Zcu96yuc2ETqcevpkf4kF
- D3KXna8W3jknUdrG0d2AFSxN4LJKpyCeZnJ9I8Y4n42mLMKsKT0qZLUmE4b/glkIBXd4ciIyW
- 7PQIPZFRxkrxGLl6N63IE9eZYOGx4y7T780oEvj1ca9nCRc0ox4w==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([94.134.144.204]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MKsj7-1qP65y1Jnh-00LGQ4; Mon, 19
- Jun 2023 08:11:59 +0200
-Message-ID: <b110f9e9-f654-6a43-fa23-ea461d0bb405@gmx.de>
-Date:   Mon, 19 Jun 2023 08:11:58 +0200
+        Mon, 19 Jun 2023 02:13:29 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2054.outbound.protection.outlook.com [40.107.101.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBE6D9
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 23:13:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=c33W0mD5D+DHS/f88sxg6V7s/e3yNEQ63PtObkJPlX0eDty1PudrOpEkTVNfqwPFGibQrYnD7tcBx5F6k02vJz0ECfzV39/juVPEKsYSrBvdwnLrUWouchdrQ/SGwcAOKyfxrDW1J9JAQngCcBtnSaTGdys0loZmuv8zIqtD0f+U05OECPsR6umSahsqoun7QZFmDwlfPtO99Cany+tBnQQfHWxfTxVT/eRbyuvm4Jwjo9X9O8/Ei76t+Z9TRry9ImivCvgXn8iY9X/jNe5OitjgdbXnLTtM+4yA8TuGhlbcyK7q6tbrIlGmAg9ThnCJL/UCgZa+BMlwBdWhBjQnkQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ptb579KyEyY6+SW9P55RuzJ03tUeMRmLWj3V9mGVCPs=;
+ b=PdN2MDWxfbVYsSv+4NJgorEtRv3yiERz2MqvcNBgdMx0xgsAbzdsGvsiC9KEdhov716IpN+n29lH7FcrJjOgk9a5WrxpaHCZsutg78ykvuQZti9pMeNx3F0eV0YxixhyK5JjBMQabumWarx1WyJKGx1PbpkuOJAEOn7iGFu1XZ/TWbx/Imsr4xTHS0wv63XBVa1jnSsmQxXL7jvpneMMudAn/500AV2EdleX5WDQzKzVec0Lcql1lAzMG+PlLsEeiAQZNSCPaOJauIERRIvsDIKX30I9B7Q5oyveE4VNuxeFpCENk+w2g72scDOq0phZcoPKw8h40gEM0H3YvnMxwg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ptb579KyEyY6+SW9P55RuzJ03tUeMRmLWj3V9mGVCPs=;
+ b=unz+Rj+5EAfjBAEmTJ89WR2VEDwj4wOCH/OY8K0kRxw7KndlBOMT2rPMJVAX3PeJUI/M5uTNCMej1QEZyRUrHS+J8jRFe6HWAypNASP/BEjlp3nBrhhaj6wOSxMBwQ4fynr6SalniklCfD6hQ8dBQZ5P9IUck/JGHXLJHTySoLs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BYAPR12MB3286.namprd12.prod.outlook.com (2603:10b6:a03:139::15)
+ by PH7PR12MB6763.namprd12.prod.outlook.com (2603:10b6:510:1ad::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.36; Mon, 19 Jun
+ 2023 06:13:26 +0000
+Received: from BYAPR12MB3286.namprd12.prod.outlook.com
+ ([fe80::8801:420d:4748:33b1]) by BYAPR12MB3286.namprd12.prod.outlook.com
+ ([fe80::8801:420d:4748:33b1%4]) with mapi id 15.20.6500.036; Mon, 19 Jun 2023
+ 06:13:25 +0000
+Date:   Mon, 19 Jun 2023 11:43:13 +0530
+From:   "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+To:     David Vernet <void@manifault.com>
+Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, rostedt@goodmis.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, joshdon@google.com,
+        roman.gushchin@linux.dev, tj@kernel.org, kernel-team@meta.com
+Subject: Re: [RFC PATCH 3/3] sched: Implement shared wakequeue in CFS
+Message-ID: <ZI/x+RkSqpct4bM3@BLR-5CG11610CF.amd.com>
+References: <20230613052004.2836135-1-void@manifault.com>
+ <20230613052004.2836135-4-void@manifault.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230613052004.2836135-4-void@manifault.com>
+X-ClientProxiedBy: MA1P287CA0003.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:a00:35::16) To BYAPR12MB3286.namprd12.prod.outlook.com
+ (2603:10b6:a03:139::15)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] video/hdmi: Reorder fields in 'struct hdmi_avi_infoframe'
-Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-References: <f5745aeab896f8d4622ff4c3cd0475d9be6bafd8.1687121400.git.christophe.jaillet@wanadoo.fr>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <f5745aeab896f8d4622ff4c3cd0475d9be6bafd8.1687121400.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:THrzSc5kYreNWwNp0T/jefNTCwcF33SLXJ+j9b2pW45wVFGRWgL
- hNdphyJpdlFurvY8hcX4BZEg37Ds/QIMUKY+Hxfd2DVbelBjaFS6F3DtYNBkddEA/kLlj91
- P4Zs/Wu/2qCH5tLvNCMM+Rc3kejbIOSIMohJO6sqcHyve8f+MrWtraPkv/H+Dr7miirMlQ2
- Czm+a1ET/s0IzU+uMfpHQ==
-UI-OutboundReport: notjunk:1;M01:P0:yOoWD3U3y0Q=;PT/Ri5PRJRd8WF6+tc3vfJyQFgG
- zecaWq3Yve88tWuqFi8piFjjE0RBwnZWQS5ymAJV/9FIbwLFrzoU3Zl/GLq1hyqJNKiF+MdAk
- 8ADoHeqYe2D/LtP+EPOJbQdGUkMumMSVj5pRb/rGSMpZRocDa0zpVtUHNM8iGrs2pasGWAysv
- 6QJ12e00x85HcWSZE8mCCtJ+t8J72Wo4X/OWHQuFQp0lge36SahvaJopbos1ABK5o5bU4hs6U
- U3/amuoJzM6kNpdXo6iOnKFJxIseG0LTpvO1+MjuCbOMOvS8LUSTLRY8eYmG4tIwiyD0Lw/Jx
- Er38oWAi0fhCRQhZbvp+cdDsvNL7xcmV2uGXmvLieus8LKNHyT6fq3C6TcRc/aLpYa4hh6Zhl
- fa85g33Y+w8J/baLdtcioiTrjkxn0GM9+VgYrL3pC4dVLxp9HRWm6yzBK92+mlwSKSZdOip7e
- WTBpEooqv4dONkfMP0jkAM/bvQ+qUEUFdhOcafH2Imfgz2hYMSW1U1VpX/zKMFfMWAgfYrY/j
- QL6w83Pa74rg9/Zg6Yd+8jlSsrmr7gEFaRbtw9oxQ+N9D4tIuVYGJx68mJYNecSRC7NHN2DR4
- TMKeMv30lGIjvnHm9bHrfB7la7PKjMTPXxzac4w/7clDbBtF2+fWnlpa9CKMNy6csK6m/k8Ox
- LLcaiJdC6zRqkBEv9meKtE64GMYqD2Q8z+pIHh7HGBpqW0CywficHn+g1FSBM++HWMKxjzBHw
- 0S0zumQ7BZymJk9UgE3Z145Y1fYL5nemT2rLY3bKbyWVu+wHj8kv9U4JczXDMrAwFS9QKrKEw
- z3LVr28gJIUbgmp7NotnUYWxTFHHSJLoPE4PAF6my8XjT5dldFRNkgO1lgd4GaIpssoCrYoci
- npQpxvDL+B0LV+BIciUOAzPvewzXuZBdn+fpdX7Mno/K5HtLKk5s32rNCWxGo/norDxgijeW2
- 4GTvkQ==
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3286:EE_|PH7PR12MB6763:EE_
+X-MS-Office365-Filtering-Correlation-Id: e5927a0d-d34c-4c72-c2ec-08db708c4a92
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 58SQuLtVHuQtzqQT4pshAwM6WlUMzgjyXxFYMkVVhZAR4YxJMB6iVo9qMvWLRfYe26KDWrEQ+fJMca1fYVIugacRD+tBjl/4I5ttGan6XP24vWvhTtwFtBenbwSQcu0OKDUEEx4Wu9cpIdfGgvikmkcMlxwNZ7U36l1IiG1TEKQLiST5Uo+gB4VviCTI/e9ZTrxvG2GvR7kSBvlLZu7meAys+l7aTBzUlLHEb4NGAk8DI/paSINr+bAurQYzhhmhFW+j8e+wVEkmn/EvTHld2KybXbLCB+vunFa13xhs0PaLHmO+PPqJLiRiLjVce2Cr0bM5sflrVh3trz5C4oY2gMFuuKH0HDvJWfozcIvOmIiAI0Rq6oCJTvi5IIr7k6G8GYaKJFnc+wixvo/+Kfw2JuRVRPbf0xWXUTo1Hgxp9p9Y8WN8u50gG4UAGTTAE+Z3zb85R5CWaYg3Q06Adg6aVh9Vxkpcd0lClzUYU2iCgtmumSchtPvJd79tQ9YNB9+/cf8CAQJWUnNrKP81y6kaLc9qmpukvyrcOGeC/uIGVlVeKCmgufXzfP1IyWnzcqkY
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3286.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(39860400002)(346002)(376002)(366004)(451199021)(7416002)(83380400001)(6486002)(6666004)(38100700002)(316002)(8676002)(8936002)(6512007)(6506007)(86362001)(26005)(4326008)(186003)(41300700001)(5660300002)(55236004)(6916009)(66946007)(66556008)(66476007)(478600001)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HUp3BSLVsChkErfDMowfLqgFohSqnfOV/BO5orlZ4/iuXufvWwBEGdx2IKtt?=
+ =?us-ascii?Q?5sUjHTS9cjNI0u2Mqg5pDgoNHUQIqLLhr7i3l0/agYIN0jOOy8vD0mNjORJS?=
+ =?us-ascii?Q?C1Icv7VFHsCL5XzYGPFJrNFriiE2zr9K61oA+tiT27eZcArfEhsVod++sIjv?=
+ =?us-ascii?Q?Qsdw4MzYkDWqI0FNcBl/Z2QWVhqJg3EdlhdAVnK2L/ToXCJ7Xywgi4HKgXOn?=
+ =?us-ascii?Q?8ogWk2lD5z2s3Ibm+oLOeNlGMGBvwKD8da1TqkZr9GWvHOU0F7mSznJ9zso/?=
+ =?us-ascii?Q?fmNu85N2zexuY6n0zBG16DQknulQ3+TpGT1/ofDX83+6bG22NvRU1lLZtjgw?=
+ =?us-ascii?Q?38b+G1+vvmBDXZofLmEA88uY0vbDdQZK98DruiurmlHnUweSxV3vCpLgilea?=
+ =?us-ascii?Q?uG12V9BQPUeh2dHHUDqiWvp6Nd4iRy5N+kz4n/Eu5Imq9QVF/8hG/Vtn/Zgp?=
+ =?us-ascii?Q?H7E2fJIpOdKOu32++X9hKVc0/t0xD5YMseRjXiu3C6cgllaDtfDBOAdpLxzM?=
+ =?us-ascii?Q?/tKbG9jfj8erBOW2AIMXHhAg5E4Dhz3C5AEVpr3yxN2077YARLeY66sn29ds?=
+ =?us-ascii?Q?CiXWFyfXZjcHBidA79YMtTQqjqPpJNDBW9yIlWk/MsadYCeWLfwCufrZYuOq?=
+ =?us-ascii?Q?23OZIauM/h7XRlSkEW9Uokb4stEtwRGvIBQu7AxvvAROZbkYpO5A4BSRVx9P?=
+ =?us-ascii?Q?kzoyWB7G2uD1lBoOI5Tcaur2EgMWUj2P7xiQx1qyJ6K8O5q1RBSGSpWf1+i2?=
+ =?us-ascii?Q?SK4zZNC3zhUE+kq9KQbk69l03/WYykaG6b17FnvE6bbqUEZT+Wr21L76885X?=
+ =?us-ascii?Q?hHHhPpQjn4l9YRoho9mlYVfq64w60w4TAFnZ87Tj7xnRooJV559uvlr4HOm5?=
+ =?us-ascii?Q?op8T8KScgrVHfO4hHHHhSfUSZDF2qMZv4//sxdKSqlDvk10cLEjVkOgYTnkL?=
+ =?us-ascii?Q?p0Jldp5TOzSUtihpfZZtBstyzSkM8n+moRmHiysCjz3WlxAyCfgPS5i5xYcU?=
+ =?us-ascii?Q?jAuKolLPuEvTser6or+oJfKP3erSvWgQVXHoz7LssKxxbCImxvKhp5AvSfwf?=
+ =?us-ascii?Q?KcChBrcTudcNqqmOx3m1FUeTv2BPYmJ/2OpUbC6h2NdGS1Cpku0eCTbUzwnY?=
+ =?us-ascii?Q?AcY7rSFiCIMI52cqa+9DycbwxmFvfo7qxd78krZbsMWxgSD4pyFJSDmC7p+e?=
+ =?us-ascii?Q?VpSBPzlnYF5fk1JFsBq6pSjx7xAxraGYNvONyeo4iY11fzvDLHPrls18yyf4?=
+ =?us-ascii?Q?IrEXwkpByefr1KfA1IKNcYFimj0KZgZ1Lvv9hPOdOBGa7CbKrKHlS83vLvhg?=
+ =?us-ascii?Q?f6qw5WMYF0wj7QD7i/r1lJbXPt15K2YueGECocmcd7xdlXecFr9JYwd6jmoQ?=
+ =?us-ascii?Q?fuZ4sWsuM/Kw5wLwPMnqGuGl2Iu+V2J1fLINiEgiHxEmJ6b9S88+JT/HbtCR?=
+ =?us-ascii?Q?a/wRqB47EBl63CUF2uuXQzA+ZSW1OFsMoqvgnVYk32wscjSTHWa9hgaWL4dO?=
+ =?us-ascii?Q?KH7RV07s0NuRilqXULFZv3q/5h1WH35X6t87BlprsVFbIHQ2h0WIlpAoNk2u?=
+ =?us-ascii?Q?Wy0UVfFdcHlDO5H4ykcZGSd6c988Sqh2z5gPAR1B?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e5927a0d-d34c-4c72-c2ec-08db708c4a92
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3286.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jun 2023 06:13:25.5766
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9D8u3by1p3cIimGCfnU03duZlbmtaykwxr6Fvz5uRAqR1c2nGbg/yzEsXErXPH9cgTGrT1xh+yG9z/jiRzYwgQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6763
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/18/23 22:52, Christophe JAILLET wrote:
-> Group some variables based on their sizes to reduce hole and avoid paddi=
-ng.
-> On x86_64, this shrinks the size of 'struct hdmi_avi_infoframe'
-> from 68 to 60 bytes.
->
-> It saves a few bytes of memory and is more cache-line friendly.
->
-> This also reduces the union hdmi_infoframe the same way.
->
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-
-applied.
-
-Thanks!
-Helge
+Hello David,
 
 
-> ---
-> Using pahole
->
-> Before:
-> =3D=3D=3D=3D=3D=3D
-> struct hdmi_avi_infoframe {
-> 	enum hdmi_infoframe_type   type;                 /*     0     4 */
-> 	unsigned char              version;              /*     4     1 */
-> 	unsigned char              length;               /*     5     1 */
->
-> 	/* XXX 2 bytes hole, try to pack */
->
-> 	enum hdmi_colorspace       colorspace;           /*     8     4 */
-> 	enum hdmi_scan_mode        scan_mode;            /*    12     4 */
-> 	enum hdmi_colorimetry      colorimetry;          /*    16     4 */
-> 	enum hdmi_picture_aspect   picture_aspect;       /*    20     4 */
-> 	enum hdmi_active_aspect    active_aspect;        /*    24     4 */
-> 	bool                       itc;                  /*    28     1 */
->
-> 	/* XXX 3 bytes hole, try to pack */
->
-> 	enum hdmi_extended_colorimetry extended_colorimetry; /*    32     4 */
-> 	enum hdmi_quantization_range quantization_range; /*    36     4 */
-> 	enum hdmi_nups             nups;                 /*    40     4 */
-> 	unsigned char              video_code;           /*    44     1 */
->
-> 	/* XXX 3 bytes hole, try to pack */
->
-> 	enum hdmi_ycc_quantization_range ycc_quantization_range; /*    48     4=
- */
-> 	enum hdmi_content_type     content_type;         /*    52     4 */
-> 	unsigned char              pixel_repeat;         /*    56     1 */
->
-> 	/* XXX 1 byte hole, try to pack */
->
-> 	short unsigned int         top_bar;              /*    58     2 */
-> 	short unsigned int         bottom_bar;           /*    60     2 */
-> 	short unsigned int         left_bar;             /*    62     2 */
-> 	/* --- cacheline 1 boundary (64 bytes) --- */
-> 	short unsigned int         right_bar;            /*    64     2 */
->
-> 	/* size: 68, cachelines: 2, members: 20 */
-> 	/* sum members: 57, holes: 4, sum holes: 9 */
-> 	/* padding: 2 */
-> 	/* last cacheline: 4 bytes */
-> };
->
->
-> After:
-> =3D=3D=3D=3D=3D
-> struct hdmi_avi_infoframe {
-> 	enum hdmi_infoframe_type   type;                 /*     0     4 */
-> 	unsigned char              version;              /*     4     1 */
-> 	unsigned char              length;               /*     5     1 */
-> 	bool                       itc;                  /*     6     1 */
-> 	unsigned char              pixel_repeat;         /*     7     1 */
-> 	enum hdmi_colorspace       colorspace;           /*     8     4 */
-> 	enum hdmi_scan_mode        scan_mode;            /*    12     4 */
-> 	enum hdmi_colorimetry      colorimetry;          /*    16     4 */
-> 	enum hdmi_picture_aspect   picture_aspect;       /*    20     4 */
-> 	enum hdmi_active_aspect    active_aspect;        /*    24     4 */
-> 	enum hdmi_extended_colorimetry extended_colorimetry; /*    28     4 */
-> 	enum hdmi_quantization_range quantization_range; /*    32     4 */
-> 	enum hdmi_nups             nups;                 /*    36     4 */
-> 	unsigned char              video_code;           /*    40     1 */
->
-> 	/* XXX 3 bytes hole, try to pack */
->
-> 	enum hdmi_ycc_quantization_range ycc_quantization_range; /*    44     4=
- */
-> 	enum hdmi_content_type     content_type;         /*    48     4 */
-> 	short unsigned int         top_bar;              /*    52     2 */
-> 	short unsigned int         bottom_bar;           /*    54     2 */
-> 	short unsigned int         left_bar;             /*    56     2 */
-> 	short unsigned int         right_bar;            /*    58     2 */
->
-> 	/* size: 60, cachelines: 1, members: 20 */
-> 	/* sum members: 57, holes: 1, sum holes: 3 */
-> 	/* last cacheline: 60 bytes */
-> };
-> ---
->   include/linux/hdmi.h | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/include/linux/hdmi.h b/include/linux/hdmi.h
-> index 2f4dcc8d060e..3bb87bf6bc65 100644
-> --- a/include/linux/hdmi.h
-> +++ b/include/linux/hdmi.h
-> @@ -170,19 +170,19 @@ struct hdmi_avi_infoframe {
->   	enum hdmi_infoframe_type type;
->   	unsigned char version;
->   	unsigned char length;
-> +	bool itc;
-> +	unsigned char pixel_repeat;
->   	enum hdmi_colorspace colorspace;
->   	enum hdmi_scan_mode scan_mode;
->   	enum hdmi_colorimetry colorimetry;
->   	enum hdmi_picture_aspect picture_aspect;
->   	enum hdmi_active_aspect active_aspect;
-> -	bool itc;
->   	enum hdmi_extended_colorimetry extended_colorimetry;
->   	enum hdmi_quantization_range quantization_range;
->   	enum hdmi_nups nups;
->   	unsigned char video_code;
->   	enum hdmi_ycc_quantization_range ycc_quantization_range;
->   	enum hdmi_content_type content_type;
-> -	unsigned char pixel_repeat;
->   	unsigned short top_bar;
->   	unsigned short bottom_bar;
->   	unsigned short left_bar;
+On Tue, Jun 13, 2023 at 12:20:04AM -0500, David Vernet wrote:
+[..snip..]
 
+> +static void swqueue_enqueue(struct rq *rq, struct task_struct *p, int enq_flags)
+> +{
+> +	unsigned long flags;
+> +	struct swqueue *swqueue;
+> +	bool task_migrated = enq_flags & ENQUEUE_MIGRATED;
+> +	bool task_wakeup = enq_flags & ENQUEUE_WAKEUP;
+> +
+> +	/*
+> +	 * Only enqueue the task in the shared wakequeue if:
+> +	 *
+> +	 * - SWQUEUE is enabled
+> +	 * - The task is on the wakeup path
+> +	 * - The task wasn't purposefully migrated to the current rq by
+> +	 *   select_task_rq()
+> +	 * - The task isn't pinned to a specific CPU
+> +	 */
+> +	if (!task_wakeup || task_migrated || p->nr_cpus_allowed == 1)
+> +		return;
+
+In select_task_rq_fair(), having determined if the target of task
+wakeup should be the task's previous CPU vs the waker's current CPU,
+we spend quite a bit of time already to determine if there is an idle
+core/CPU in the target's LLC. @rq would correspond to CPU chosen as a
+result of that scan or if no idle CPU exists, @rq corresponds to the
+target CPU determined by wake_affine_idle()/wake_affine_weight().
+
+So if the CPU of @rq is idle here, can we not simply return here?
+
+Or if the idea is to avoid the scan for an idle core/CPU in
+select_task_rq_fair(), then 
+
+Perhaps I am missing something...
+
+> +
+> +	swqueue = rq_swqueue(rq);
+> +	spin_lock_irqsave(&swqueue->lock, flags);
+> +	list_add_tail(&p->swqueue_node, &swqueue->list);
+> +	spin_unlock_irqrestore(&swqueue->lock, flags);
+> +}
+> +
+
+--
+Thanks and Regards
+gautham.
