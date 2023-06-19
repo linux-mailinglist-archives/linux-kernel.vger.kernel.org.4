@@ -2,83 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA3EC734E43
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:44:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 576D1734E4A
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbjFSIoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 04:44:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47732 "EHLO
+        id S229881AbjFSIpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 04:45:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230498AbjFSIoP (ORCPT
+        with ESMTP id S230332AbjFSIo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 04:44:15 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9461FF6;
-        Mon, 19 Jun 2023 01:42:23 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 483751F45A;
-        Mon, 19 Jun 2023 08:42:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1687164135; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SOKhXmilt88fh3PH69dqWXrHOU75W6OLJmOPOMDb65A=;
-        b=hqwR1LHoJ/MGt4KUFnwRE3sdb8oZ/60DMUSBxyAKyMZHyAK1Uvi0fSf6BaTng1dwigxoGI
-        +KwikHzcuLd9DGYXF19PFZrb8ePudNcUCCT2+m/2rKTY2XYhPgt6AtbrMcBYgU6VPF/CU3
-        WXf5TL1esz78++EnfrFfr/dnIn7E8sU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1687164135;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SOKhXmilt88fh3PH69dqWXrHOU75W6OLJmOPOMDb65A=;
-        b=sm+nEFoa3Al6c2EaK7mZ0IpjVbhOZDVheZ7ODRIX+kF2rfutvLdCZMBNqWEm5ODydrlan+
-        f1mdjFDaUkgd04DA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EAFBA139C2;
-        Mon, 19 Jun 2023 08:42:14 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 4NgxOOYUkGS4GgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 19 Jun 2023 08:42:14 +0000
-Message-ID: <c3dcf033-64f6-3352-98eb-7fa8f9fd9952@suse.de>
-Date:   Mon, 19 Jun 2023 10:42:14 +0200
-MIME-Version: 1.0
+        Mon, 19 Jun 2023 04:44:27 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2054.outbound.protection.outlook.com [40.107.20.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862EF26BD;
+        Mon, 19 Jun 2023 01:42:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z5K1cm3JaZ2rJVdx93OeU4GwwiEK43I8WC0Olk6Oy5GqPITUNv1km1V6Y5+Kyu1C1JLI+8pKRXvkG6IcIxGm7cm6Jkf0EtV5lg3Ed2ETz21J61MJ1mbguMZNmZblSL9ZKs/w70oZAjxcoCzJG1BDcb10midi3r5GJ+ZU1HgmH4HjOUXtxEMXuPASef+GZh5k+TbvB9lErjow4EmB8aWum2KCc4eD6Gc+yZcRs1cG14kEsOJOejjjky570ZWDJl2aazoqi+2KoTU4rA4nINBdoE1mZ0QV2IA0eSJzPNx68AooA5Yd0KqFmw08IQg0J3t/gaYJQgqqJI7zKyKqhnx5oQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iBjGqDZ2/FU+1NvLVg5BhZMRNjIbbTCGQBwoOmRqwDg=;
+ b=N5HeczatIZNAn18VYrOe62w5z0NNA681bpmtrRbq+1LNE6ToZjK+Wp6QlDZ26zglKMRkv1YisbIuDzK8cdaKA2MHHRe19whdvlrkdQ1XcpsC+wGae7MSPjsmnFHnCoKB6tUNQVlzCQc+ByOR7Gixmvp2haaqfuNHhvKDoonr4J14E9ckSax8tauJ2ntiWz8OXgHvD5ReZrVsxmcFBghor762VwI69EJADsVLB/AVl+6/3LkIgiJw+DHgOrikvMzCwHfmfiOrDDoFfJSyGPpiWvQR4Mv35YDV6Xmm9mi1aK5FzUyjBiXfLKVNzh/FIo9OoVQrTdP1x9yOPL266JqvTw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iBjGqDZ2/FU+1NvLVg5BhZMRNjIbbTCGQBwoOmRqwDg=;
+ b=IeB19UJpDDdSCAFf9a7yX2UC6vzdgdWUqa6M0naw5baPEAm2sZvd8wNW1FM734Cc6jlHgaTKUxoQJuk7tYmlk5BDyHEYHr6TDCerDT+kCiO2X5vYALpQLblm2jRZDLnbcuN8gGgdctJt85Vh0YWgeo4uylejBNUet6joAWdTk3U=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from AM9PR04MB8954.eurprd04.prod.outlook.com (2603:10a6:20b:409::7)
+ by AM9PR04MB8259.eurprd04.prod.outlook.com (2603:10a6:20b:3e4::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.36; Mon, 19 Jun
+ 2023 08:42:26 +0000
+Received: from AM9PR04MB8954.eurprd04.prod.outlook.com
+ ([fe80::5356:c79f:ef9f:dc29]) by AM9PR04MB8954.eurprd04.prod.outlook.com
+ ([fe80::5356:c79f:ef9f:dc29%4]) with mapi id 15.20.6500.036; Mon, 19 Jun 2023
+ 08:42:29 +0000
+Message-ID: <9cba4edd-5eab-5a4e-0c10-753495278f8c@oss.nxp.com>
+Date:   Mon, 19 Jun 2023 11:42:28 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v3 01/38] backlight/bd6107: Compare against struct
- fb_info.device
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net-next v1 01/14] net: phy: nxp-c45-tja11xx: fix the PTP
+ interrupt enablig/disabling
 Content-Language: en-US
-To:     Lee Jones <lee@kernel.org>
-Cc:     daniel.thompson@linaro.org,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        linux-kernel@vger.kernel.org, geert+renesas@glider.be,
-        linux-sh@vger.kernel.org, jingoohan1@gmail.com, deller@gmx.de,
-        linux-staging@lists.linux.dev, javierm@redhat.com,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        michael.j.ruhl@intel.com, stable@vger.kernel.org,
-        linux-omap@vger.kernel.org, sam@ravnborg.org,
-        dan.carpenter@linaro.org
-References: <20230613110953.24176-1-tzimmermann@suse.de>
- <20230613110953.24176-2-tzimmermann@suse.de>
- <20230614135157.GU3635807@google.com>
- <5720dbc1-a3e4-2b23-28cd-f889d3a5a4fc@suse.de>
- <9f74b8de-9a1b-2547-5eab-d4b4349a6a81@suse.de>
- <20230619083124.GO3635807@google.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230619083124.GO3635807@google.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------x2uTMyNaWILr0059uzJaxuqD"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        richardcochran@gmail.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sebastian.tobuschat@nxp.com,
+        stable@vger.kernel.org
+References: <20230616135323.98215-1-radu-nicolae.pirea@oss.nxp.com>
+ <20230616135323.98215-2-radu-nicolae.pirea@oss.nxp.com>
+ <5f47ee8c-6a84-4449-9331-1895e4a612d9@lunn.ch>
+From:   "Radu Pirea (OSS)" <radu-nicolae.pirea@oss.nxp.com>
+In-Reply-To: <5f47ee8c-6a84-4449-9331-1895e4a612d9@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AS4P189CA0008.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d7::9) To AM9PR04MB8954.eurprd04.prod.outlook.com
+ (2603:10a6:20b:409::7)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM9PR04MB8954:EE_|AM9PR04MB8259:EE_
+X-MS-Office365-Filtering-Correlation-Id: 44362faa-6452-46b3-2a43-08db70a11d67
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: eDVdxZWpisHArBK5LX2hriC4ObKviXf1dLkhhmp9zVB0IRcUM5J+A3NANbvNnPrtiQkRKEsxRBklK9c7elBZQVA/3b4s3og0ADchBk1eoqOEaJIQF2qbabViThT0YJRcLG2waGRdIftiNyjNT3fXVNoTaYD8MjBS16tjDbeMV6zoRo2WGezyH0AZ+lohlrx0rmArAKPXX9U9l8L2w0LKCKzEtnbtxGukOPfpFRwxMYxG2jZnUPKklPUCyjsu3ZHpGslYD25Vgi78E8dfvfAdVfqy4IMHjZC5VYboG2PgletQIWkYQ1ra2XTetdHvwBtD4ygQSAGn80Fl8LohRtZZBay/tAKngOpl9KiyPexzK1Xdy3xLKOcRYcrjrEJ0JdPCtE+D+/3lH8Vf029maobcXLYh3hMgn19MWGDMJMRCBXyb0g4tAMx2SkZGAFtSaTt0bLrmRQX28IT7y/YfEj92/HoV/GCaz9SGNFItFAPtjOlu8qvcJ6Vlf90C5BSGkKubXSo+jIq/lm48wO0cwiy6fbVjk8C4OgRRgEDIRqTUZLTpHj8koM9HiXMqVKgEhpj7vGJeDGP9DNJlRv3mnCvXK/1Ap35L3hA/tN64Q/YIYpz9xmxMuThnwVKcVowA5dOBk/CK5ApKzgr22eeHo0Rebg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8954.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(136003)(376002)(366004)(346002)(451199021)(41300700001)(5660300002)(7416002)(8936002)(8676002)(2906002)(86362001)(31696002)(26005)(6506007)(6512007)(53546011)(186003)(478600001)(6486002)(66946007)(66556008)(66476007)(6916009)(4326008)(38100700002)(316002)(31686004)(2616005)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZWNzZWdZOFUzK0tKc2hDWXVia3RDeUk1aGszV3htUkFBSGRPTjZoR3hRZFhO?=
+ =?utf-8?B?c2VuWCt4a0tyUm54YmJlMzdRTTVZd2h6Ti91SE13a09yaTlvVTBsYnhWYzk0?=
+ =?utf-8?B?VkdjcUZTKzMwNk5nNHlxWk9lUDVBTG0ydUJpK0hJOGJxMkhRRzZtQ25Dcy9Q?=
+ =?utf-8?B?N1dEc3pqT2VEajAwRENVbzRkSEJBei9KbmR1VllBeGNUNHpVN1pkWXErenQr?=
+ =?utf-8?B?bU56R1RaakFRQ2FTRTlGK0ZGaEV1bkZWOE85M1JXdzRXdVNJVXlTUGRZMWM4?=
+ =?utf-8?B?TnJTVDRhSjJ4UFprUVlKMnkwNnpFa1dUb3JMZ212dWxOajYvK0lab1pKWlVZ?=
+ =?utf-8?B?cXhueGFUa1FabDg4UUNyelBkSTNQU3Z0RFAxbmhVaEs1K1ZqRnhGZFlTN2tY?=
+ =?utf-8?B?UFZjd3RCTDdab3FacjJPazNoa0h4eHpLMFJ3MHlJVjJpZGZZSER4WlBmMFph?=
+ =?utf-8?B?RWRkVGR4Z0lJUFVvNWI2NG9CQ1F2K0tQVWx0QUk4MDM3WGJWOGRhTUNUNUFB?=
+ =?utf-8?B?UnVvWEo1MDY3Z1ByOEhGT0dRcFhXSGV4MU9aWUdGeVMyMTFWcUJtZ2NWLytr?=
+ =?utf-8?B?RE96Y3VHTVNpMmdmTXltL1FxSENpUkNFbUNqbHlyUnNGTW5KTzhNcitNRllK?=
+ =?utf-8?B?YzFmKzdJMjk3emNLREU5S2FPRkJ3UlJjVWVzSHN3a29hYVBOUTc2SUFxZTQv?=
+ =?utf-8?B?K0gzNHZ3TC9CUnlWdlFRQlk5ZDJBTFh5c0xkcFVnOWNOaVFyVmR4YmNaYVQw?=
+ =?utf-8?B?amNMc0YrTWEzcG1PclRuQkIrT0FJbkpTaERrVnJUSGFMY0Q2ZWJQZm1hdmR6?=
+ =?utf-8?B?bVhkV3lKcmxBMHF2YkpkVVUwN3MwMXRqdFlvdHo5R3BLWlh2YkVmdE5vVk1y?=
+ =?utf-8?B?bE1lK2tiYW1QOVU1R2pMNlJjbUsvaU1RQWJZVUJtN3FXaE15U1dlVXJ4ejFJ?=
+ =?utf-8?B?RjNNYUhMVG5mcUQ1NjZvU1ZFLy8zNm5HUlUvRUd6cVowbXJXb3pmUVVMVnF3?=
+ =?utf-8?B?NTBvWkdsRlVPUFJjUmdUTzNqYnRDbVN0N2lkWFVBUGpFalRjQXJ0ZytHdXpk?=
+ =?utf-8?B?L2NGK0hiVVBvMTc0OGRwM0NvVWRkL0xKQXZOenE3Y253NXZwYndPVjJzTUlM?=
+ =?utf-8?B?T1NCbHRyT2ZZNERTNDNuL0JWRVNlZkFvbHh3MzdkZ3c5SytuaXFSZ1dOeGJs?=
+ =?utf-8?B?a1dnQmk1MHdkaVpqUG96c1VLbnZEaGU3MXNYbTF1K2t2dkY5ZWR4QmhpaUJH?=
+ =?utf-8?B?bEI3bXVmUDl1aEgrMG4vZFkzMFdnWHdKMUZiU25Qbno3ODFNL0tCeW9MU3FP?=
+ =?utf-8?B?eG8xMllpb1Z6RngrdmVmN21ZeUxIcW56MEtpZXU4cXhsTnJkeUM3YW51N3A3?=
+ =?utf-8?B?Q1NnMjZkaktvMThHRUN5Mi9TZThlajkvYkJXVGF5SnpmZm5DbmFvZHllWmVF?=
+ =?utf-8?B?eGZqcTJsaXh2Z3A2L2JXUkFUU2I2TzRMNzdBVzVJWGdPK1dVeGFqajdDaGoz?=
+ =?utf-8?B?MC91c094RitDMm1MYmV6VERKbEcyWEFHVW9WenUyOFVkVnc1c2FlakROcmwz?=
+ =?utf-8?B?OXZvam9ESHcrd0NMNjJHcjI4V3ptMHVPa3ZwN1dtejVQbGZCakJreGxlL0V6?=
+ =?utf-8?B?a2VkRGFraDNCczdQTlZ5WWQxTk1qUHBSTis0dlA5WEYxeURLeDBsN1lTc2Mz?=
+ =?utf-8?B?ekxFUUNYWCs1LzB4VDBFZE9UY1J6bFE2UGR6c3FUcDE0WkhGQ3BseDAycG1m?=
+ =?utf-8?B?c3NKcmxMWUs5TlZPTUU4SjUwbFJrZTZ2SHdWRG5ONTlmOXB4Q3oveXJ3aUxm?=
+ =?utf-8?B?b3N1V2F2MjlGTVJ4V0FxeDNwbFVqQUVNQk1WSTZ6djhqZFRrK2JzcVBGMTMz?=
+ =?utf-8?B?cFg2NVRmdVdIemdESE5rUXNoUy83VW9jbEwrYzZPTnByWkIraTdURG01czdO?=
+ =?utf-8?B?UjlqZWJwOTFJbVFUVkgzUGE5RG5rSTBITTVlbkZrWWZXQVVrSE5qSGNVNWVS?=
+ =?utf-8?B?MGM1TWFZbkxEbkZHZnptaUZqbDZMWTRTVnBCUE9oT1lkTFpnanJGVFMrL1JQ?=
+ =?utf-8?B?Zmg2ajhIZHkySlNISGZTNTMyVXhaRlBhT0dvK0M3a2VZSityR0lyVWJhRElI?=
+ =?utf-8?B?eE51WTEzL2lkcDdxN2xFdTdCSXF0RW1iUU1Ldlk0MnhHcUJhMkNUVG9idjBL?=
+ =?utf-8?B?Y3c9PQ==?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 44362faa-6452-46b3-2a43-08db70a11d67
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8954.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jun 2023 08:42:29.0477
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LZkqjnT1XQaboPJjqbNflr3oCQd9ZVd30gdY8EYDd5O9adC+g54TXUJrqhjEon8VwZ0cebHnI3hH3j2/rfmLgLHceceqfe4VMv6F7z42h50=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8259
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,72 +134,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------x2uTMyNaWILr0059uzJaxuqD
-Content-Type: multipart/mixed; boundary="------------FfrcJLINIay9mSvujcOdSA7r";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Lee Jones <lee@kernel.org>
-Cc: daniel.thompson@linaro.org,
- Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
- linux-kernel@vger.kernel.org, geert+renesas@glider.be,
- linux-sh@vger.kernel.org, jingoohan1@gmail.com, deller@gmx.de,
- linux-staging@lists.linux.dev, javierm@redhat.com,
- dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
- michael.j.ruhl@intel.com, stable@vger.kernel.org,
- linux-omap@vger.kernel.org, sam@ravnborg.org, dan.carpenter@linaro.org
-Message-ID: <c3dcf033-64f6-3352-98eb-7fa8f9fd9952@suse.de>
-Subject: Re: [PATCH v3 01/38] backlight/bd6107: Compare against struct
- fb_info.device
-References: <20230613110953.24176-1-tzimmermann@suse.de>
- <20230613110953.24176-2-tzimmermann@suse.de>
- <20230614135157.GU3635807@google.com>
- <5720dbc1-a3e4-2b23-28cd-f889d3a5a4fc@suse.de>
- <9f74b8de-9a1b-2547-5eab-d4b4349a6a81@suse.de>
- <20230619083124.GO3635807@google.com>
-In-Reply-To: <20230619083124.GO3635807@google.com>
+On 16.06.2023 23:36, Andrew Lunn wrote:
+> On Fri, Jun 16, 2023 at 04:53:10PM +0300, Radu Pirea (NXP OSS) wrote:
+>> .config_intr() handles only the link event interrupt and should
+>> disable/enable the PTP interrupt also.
+>>
+>> It's safe to disable/enable the PTP irq even if the egress ts irq
+>> is disabled. This interrupt, the PTP one, acts as a global switch for all
+>> PTP irqs.
+>>
+>> Fixes: 514def5dd339 ("phy: nxp-c45-tja11xx: add timestamping support")
+>> CC: stable@vger.kernel.org # 5.15+
+>> Signed-off-by: Radu Pirea (NXP OSS) <radu-nicolae.pirea@oss.nxp.com>
+> 
+> Please don't mix fixes and development work in one patchset. Please
+> post this to applying to net, not net-next.
 
---------------FfrcJLINIay9mSvujcOdSA7r
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Ok. I will send it to net and apply your suggestions.
 
-DQoNCkFtIDE5LjA2LjIzIHVtIDEwOjMxIHNjaHJpZWIgTGVlIEpvbmVzOg0KPiBPbiBGcmks
-IDE2IEp1biAyMDIzLCBUaG9tYXMgWmltbWVybWFubiB3cm90ZToNCj4gDQo+PiBIaSBMZWUN
-Cj4+DQo+PiBBbSAxNC4wNi4yMyB1bSAxNjoxMyBzY2hyaWViIFRob21hcyBaaW1tZXJtYW5u
-Og0KPj4gWy4uLl0NCj4+Pj4gQ2FuIHRoZSBCYWNrbGlnaHQgcGF0Y2hlcyBiZSBhcHBsaWVk
-IHdpdGhvdXQgdGhlIG90aGVycyBhbmQgdmlzYSB2ZXJzYT8NCj4+Pg0KPj4+IFVuZm9ydHVu
-YXRlbHkgbm90LiBUaGUgcmVzdCBvZiB0aGUgc2VyaWVzIHJlcXVpcmVzIHRoZSBiYWNrbGln
-aHQgcGF0Y2hlcy4NCj4+DQo+PiBBcmUgeW91IE9LIHdpdGggdGhlIHBhdGNoZXMgZ29pbmcg
-dGhyb3VnaCBkcm0/DQo+IA0KPiBTaG91bGRuJ3QgYmUgYW4gaXNzdWUuDQo+IA0KPiBQbGVh
-c2UgZW5zdXJlIG15IEFjayBpcyBhZGRlZCB0byBlYWNoIHBhdGNoLCBldmVuIGlmIHlvdSBo
-YXZlIHRvIFJFU0VORC4NCj4gDQoNClRoYW5rIHlvdSBzbyBtdWNoLg0KDQotLSANClRob21h
-cyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJl
-IFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCkZyYW5rZW5zdHJhc3NlIDE0NiwgOTA0NjEgTnVl
-cm5iZXJnLCBHZXJtYW55DQpHRjogSXZvIFRvdGV2LCBBbmRyZXcgTXllcnMsIEFuZHJldyBN
-Y0RvbmFsZCwgQm91ZGllbiBNb2VybWFuDQpIUkIgMzY4MDkgKEFHIE51ZXJuYmVyZykNCg==
+> 
+>>   static int nxp_c45_config_intr(struct phy_device *phydev)
+>>   {
+>> -     if (phydev->interrupts == PHY_INTERRUPT_ENABLED)
+>> +     /* The return value is ignored on purpose. It might be < 0.
+>> +      * 0x807A register is not present on SJA1110 PHYs.
+>> +      */
+>> +     if (phydev->interrupts == PHY_INTERRUPT_ENABLED) {
+>> +             phy_set_bits_mmd(phydev, MDIO_MMD_VEND1,
+>> +                              VEND1_PORT_FUNC_IRQ_EN, PTP_IRQS);
+>>                return phy_set_bits_mmd(phydev, MDIO_MMD_VEND1,
+>>                                        VEND1_PHY_IRQ_EN, PHY_IRQ_LINK_EVENT);
+> 
+> phy_set_bits_mmd() will not return an error if the register does not
+> exist. There is no such indication for MDIO. This is going to do a
+> read/modify/write. That read might get 0xffff, or random junk. And
+> then the write back will be successful. The only time
+> phy_read()/phy_write return error is when there is a problem within
+> the bus master, like its clock gets turned off and the transfer times
+> out.
+> 
+> So it is good to document you are accessing a register which might not
+> exist, but there is no need to ignore the return code.
+> 
+>         Andrew
 
-
---------------FfrcJLINIay9mSvujcOdSA7r--
-
---------------x2uTMyNaWILr0059uzJaxuqD
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmSQFOYFAwAAAAAACgkQlh/E3EQov+Ch
-BQ/+JflJsQuMzXECPK9VFU7zEi53QUx+vcXje64q3GmMHSTW9fdVYOmGbymvWuX6fBVe8dKb0mRD
-qWkSo1eIVuB529fujKvvUv1aYyaeXeClVcfr7tBttmcvaB59aLRjQd9ZY/g6ESubE6sRFhyDr/XU
-ACjE7JDXd4c4cb3c7Oxh4BJbCUMIQy3SEdPdAORSRszkWu3l1mh8SUjsebxJjWNLciriJOgqU/AP
-w3hQKcFjtouXKZD6ABevwyUT0ONCUma5EwVNDdRpzcx3hy+BJQ2r/eo5A6tWVEtEJYjiuEPIk/Lo
-hn19NLelNf/iJk2iX/4eKCz2iIYEr2hb9UO9SgevpaCzSCJHUEwSsN1oo3g8zlKpJcToX9dzBknx
-3yzyNKelgmwBqaLxmUKQv/pACJBvTFiee4rcjp/NvK6aOB3dWT/QUpGZy2zDkLQjMtMVbMkeEmrD
-+8/syCKWxf/U5f+O7INzTply1L6zOt/u+Ck4ZF8FRpFsQlUovJdnyZy682OmwERwYmEHr6KCZs+8
-ufThfC8y7P9/h1vrW+esO8WVFC82xVTKGHR9p0oUZ+NWPKps1PLKftYENFMuSf+JkMcjkdkub9YQ
-JwYAIVxKVZnqTwOtb4AirhbO8SkP+9l3gB3aemfLAmnsqcA9gqk/XHAyWHtTCkhUSOpQPzS2sBQ7
-Ehw=
-=SeiA
------END PGP SIGNATURE-----
-
---------------x2uTMyNaWILr0059uzJaxuqD--
+-- 
+Radu P.
