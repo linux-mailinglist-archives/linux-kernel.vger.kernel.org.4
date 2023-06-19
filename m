@@ -2,118 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 850C1734EF1
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:01:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF554734EF6
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbjFSJBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 05:01:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35306 "EHLO
+        id S230333AbjFSJBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 05:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjFSJAz (ORCPT
+        with ESMTP id S230273AbjFSJBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 05:00:55 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2C39B;
-        Mon, 19 Jun 2023 02:00:54 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f845ca2d92so718883e87.1;
-        Mon, 19 Jun 2023 02:00:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687165253; x=1689757253;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V75CwKkoMS9GVL1WDBw8U7VzaszOLOs5Vwr/ePxHWAs=;
-        b=nFy1j8fEblfOtQ9ROMm9sQQfY+F7p8fn0NlZPyYFude7xSsfEKkk07PhsUrOuno7vS
-         CimR8dDTdd4cX/rc6knXJV6/J5+EGSCeGsO+bUuSj97EIxfmmRTpHN8CnudxNzPbtkaU
-         aL4NJg5AE1/qLvsncvPtRC/y8yozOkNDE43OhLKHr2erFXpLUGhi6ElAGvgKuEIJ9BNu
-         SlQM35IoIAIACJoHR6pkr0d5FwNSSDFkJVmBUQJNOqf25BeHD7BkLnxE9ubieBcrxp0i
-         5DzkGdqvgfmN+CtL3BuHrxYwGXpxArxtF7cxAVIJFoHXrFFLGeywBPtOofYXtGD+cC9h
-         RC3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687165253; x=1689757253;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=V75CwKkoMS9GVL1WDBw8U7VzaszOLOs5Vwr/ePxHWAs=;
-        b=Jepuj3avUvaqRNY9tdkFmXeI/7MPmY23lM6PPXC0Tt6dCCB6RFkktOLIwYLOg8zBeL
-         NxoJ7lYjtM3mgRB3uTUUxuCeZwqqbkc1763eJzj09zlmfVldAoGxVY/VWG+Y7MKx4Vt0
-         Z/9g8zdvbCIZAOQ3uN2oggJg/zLjK0pPP5a4ky6gb0M5MIgIl+9V9koGyWkbp/2giES5
-         GhTZi8YfkyY6rATmoIomgGXSyqtAflYdGA8tGvV/WFWznYzhvZIfJdm9I/JR5qMsZoHZ
-         YGuPsbHtu7lbW7HGczgqtUb9oP9ktn8/bCxc9yhp9vK5GUZF36szz0qLvqycG49UAjY1
-         ZSNg==
-X-Gm-Message-State: AC+VfDz7KSoSQHctYeJvwS8KprmM/vXkp2JA0x5oyi6hGzyFTdV5aOdi
-        ITEm1w/4GcTsjzeDEJBFEHN0NIrQwOQ=
-X-Google-Smtp-Source: ACHHUZ5LWGe6gI5kmyP5XAeV564r+VmRjYajDuEmT6KFvFUB1O72TxULrEgF5jia4by+SK1cWBjsCQ==
-X-Received: by 2002:a05:6512:25a:b0:4f7:6a87:f16f with SMTP id b26-20020a056512025a00b004f76a87f16fmr3606802lfo.4.1687165252532;
-        Mon, 19 Jun 2023 02:00:52 -0700 (PDT)
-Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id u25-20020a056512041900b004f24ee39661sm4164551lfk.137.2023.06.19.02.00.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 02:00:52 -0700 (PDT)
-Date:   Mon, 19 Jun 2023 12:00:51 +0300
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jim Mattson <jmattson@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH 0/6] KVM: Documentation: Update document description for
- kvm_mmu_page and kvm_mmu_page_role
-Message-ID: <20230619120051.00001f0f.zhi.wang.linux@gmail.com>
-In-Reply-To: <20230618000856.1714902-1-mizhang@google.com>
-References: <20230618000856.1714902-1-mizhang@google.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Mon, 19 Jun 2023 05:01:13 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B497FC;
+        Mon, 19 Jun 2023 02:01:03 -0700 (PDT)
+Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1BFC6547;
+        Mon, 19 Jun 2023 11:00:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1687165227;
+        bh=++FuKg5OCQoRLQpRm46B0DJduC3B6dQ7Oavq6P5dx/Q=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=FdjLvWrTnc+nxExh2hxZUMsyrZISKWnSAYl2N9/GmyWduhRGZNThmezGzBfF3pydT
+         U1mmAoy7Fg/9OtPfRkiq/4a5CkK69W68iyMLUB67Hb6qEhfzFRR8Iw9+ry+bDsOYU8
+         G5tQVhi5pOLhmMiVWdYiiE1XhYLtV84lSndDtaes=
+Message-ID: <dc79de4e-4043-5448-db44-ef8f7749a376@ideasonboard.com>
+Date:   Mon, 19 Jun 2023 12:00:57 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v14 18/18] media: i2c: ds90ub953: Support non-sync mode
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>
+References: <20230616135922.442979-1-tomi.valkeinen@ideasonboard.com>
+ <20230616135922.442979-19-tomi.valkeinen@ideasonboard.com>
+ <ZIx17WC7plfDPpmc@smile.fi.intel.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <ZIx17WC7plfDPpmc@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 18 Jun 2023 00:08:50 +0000
-Mingwei Zhang <mizhang@google.com> wrote:
+On 16/06/2023 17:47, Andy Shevchenko wrote:
+> On Fri, Jun 16, 2023 at 04:59:22PM +0300, Tomi Valkeinen wrote:
+>> Add support for FPD-Link non-sync mode with external clock. The only
+>> thing that needs to be added is the calculation for the clkout.
+> 
+> ...
+> 
+>> +	switch (priv->mode) {
+>> +	case UB953_MODE_SYNC:
+>> +		if (priv->hw_data->is_ub971)
+>> +			return priv->plat_data->bc_rate * 160ull;
+>> +		else
+>> +			return priv->plat_data->bc_rate / 2 * 160ull;
+> 
+> Redundant 'else'.
 
-> When reading the KVM MMU documentation for nested virtualization, I feel
-> that the description of kvm_mmu_page (and kvm_mmu_page_role) has been
-> lagging for around 1-2 years. The descriptions for several fields in struct
-> kvm_mmu_page and struct kvm_mmu_page_role are missing. So I think it might
-> be good to add them to make it consistent with the current code.
->
+True, but I like the symmetry in:
 
-This is so nice. A trivial comment, maybe refining the tittle of PATCH 1-6 a
-bit: "Add the missing comment of xxxx into xxxx". It is a little bit confusing
-by just looking at the titles at the first glance, more like some members are
-missing, not the comments. :)
+if (foo)
+	return 123;
+else
+	return 321;
 
-> Note that there are still some fields not added in this series:
->  - kvm_mmu_page.nx_huge_page_disallowed
->  - kvm_mmu_page.possible_nx_huge_page_link
->  - kvm_mmu_page.hash_link
->  - kvm_mmu_page.link
+> Do I understand correctly you don't want to fallthrough because it will give
+> ±160 in the rate (depending if it's even or odd)?
+
+Sorry, can you clarify? Fallthrough to what?
+
+>> +	case UB953_MODE_NONSYNC_EXT:
+>> +		/* CLKIN_DIV = 1 always */
+>> +		return clk_get_rate(priv->clkin) * 80ull;
+>> +
+>> +	default:
+>>   		/* Not supported */
+>>   		return 0;
+>>   	}
 > 
-> For the above, I thought the description might be just better to be
-> inlined or there is already good description inlined.
-> 
-> Mingwei Zhang (6):
->   KVM: Documentation: Add the missing guest_mode in kvm_mmu_page_role
->   KVM: Documentation: Update the field name gfns in kvm_mmu_page
->   KVM: Documentation: Add the missing ptep in kvm_mmu_page
->   KVM: Documentation: Add the missing tdp_mmu_root_count into
->     kvm_mmu_page
->   KVM: Documentation: Add the missing mmu_valid_gen into kvm_mmu_page
->   KVM: Documentation: Add the missing tdp_mmu_page into kvm_mmu_page
-> 
->  Documentation/virt/kvm/x86/mmu.rst | 22 +++++++++++++++++++++-
->  1 file changed, 21 insertions(+), 1 deletion(-)
-> 
-> 
-> base-commit: 265b97cbc22e0f67f79a71443b60dc1237ca5ee6
 
