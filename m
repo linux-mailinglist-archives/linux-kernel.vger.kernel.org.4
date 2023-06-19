@@ -2,90 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA1A734D31
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:09:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C00734D37
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:10:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbjFSIJm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 19 Jun 2023 04:09:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50370 "EHLO
+        id S230231AbjFSIKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 04:10:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbjFSIJ0 (ORCPT
+        with ESMTP id S230395AbjFSIKM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 04:09:26 -0400
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183E51731;
-        Mon, 19 Jun 2023 01:08:58 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-5702415be17so26124857b3.2;
-        Mon, 19 Jun 2023 01:08:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687162108; x=1689754108;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NJTqCVXdPadmDoFW6YXRm6Af8uvl9zqFd+RPVsZaxPw=;
-        b=PsUwJmE9HiWO05W04Yar7wba8s0NtPkw4bCYrZoGmCfNXNgkx+3ZIx3nYV5MUH68+5
-         0lAKeKJNJ/B6M6VitZBr1LFmoX29aWPFZPAR19eHO0a7AskEqXHaqD7kYdHhfwKnf95i
-         S3yL6MIymJhZ/+9J41slrm33BJRQwCJyYYnNIdx2J6ewX1QPgZ0zysfShAMUhHwEZyOz
-         XY6zVtieEb0QlCaS+Nw5g3k85BzbLyb0YFZhAdLZMNmI8y/1kaVYg8ZFzi8iQE3m7egW
-         0y/PpTqPRLNZARLJn3OOQLPtVAsUYkwMgwJk4jRqOqemKIMLg9Kcqi/Fqc5WrhF7iXmo
-         sVTw==
-X-Gm-Message-State: AC+VfDw8Uzv0ws2dpvTytDoa9gJcMukh4rn7+GfiU1ZZzy40CRFgtOOj
-        IVQK7/9T8ZYjyq0R1s2HdK46rMNq7vksow==
-X-Google-Smtp-Source: ACHHUZ43ggvQxr0tbtXYZGsG4+XN95dGApJUvd28qPoxdnka/gqqXqxML2b9PR6Bgw1DMoABIKJgRg==
-X-Received: by 2002:a0d:cc02:0:b0:56d:2c60:2f84 with SMTP id o2-20020a0dcc02000000b0056d2c602f84mr6438977ywd.46.1687162107732;
-        Mon, 19 Jun 2023 01:08:27 -0700 (PDT)
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
-        by smtp.gmail.com with ESMTPSA id w135-20020a0dd48d000000b00568a207aaedsm1232871ywd.68.2023.06.19.01.08.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 01:08:27 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-570282233ceso26207067b3.1;
-        Mon, 19 Jun 2023 01:08:27 -0700 (PDT)
-X-Received: by 2002:a25:db54:0:b0:bc7:2e80:b50f with SMTP id
- g81-20020a25db54000000b00bc72e80b50fmr3976835ybf.61.1687162107270; Mon, 19
- Jun 2023 01:08:27 -0700 (PDT)
+        Mon, 19 Jun 2023 04:10:12 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7967D10FF;
+        Mon, 19 Jun 2023 01:10:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1687162204; x=1718698204;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bdyjboCvWW1rFiLeY1lR8Uam7LXcv5Dt7KtGdVPBM/Y=;
+  b=pTx+BGDmZKlMbH+5QE5JQzSvuxXjHIorPwunY2uT/GVT3iC9IjI6GTdR
+   D9qTa8BRTku6AOCS3U0DLF8ILarsfSW88aqHWwP56eOdkCfrKyp2c48CZ
+   rV9KgMjp1gYo333uH0MTTY/w1QI3sSJmG3HFmGi6Slf5f6KFes1oOk6i1
+   9AgxcvUCOhR0SRHb6FwcwAqkqFobormSc5FYmewI14LUAOIy8oAFdPypR
+   0TjBsB4mTFIONhRIvBXAHm4Y34TCGf78psXdyYzxb8Fwa1UN81GmG2lbA
+   jgimWAVIt7Cnq+9nng6ZjABYsqeFLWR8nWUqUP6BNKeO3y892MC5ppZRT
+   w==;
+X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
+   d="scan'208";a="157547885"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Jun 2023 01:10:03 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 19 Jun 2023 01:10:03 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Mon, 19 Jun 2023 01:10:03 -0700
+Date:   Mon, 19 Jun 2023 10:10:02 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     "Radu Pirea (NXP OSS)" <radu-nicolae.pirea@oss.nxp.com>
+CC:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <richardcochran@gmail.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <sebastian.tobuschat@nxp.com>
+Subject: Re: [PATCH net-next v1 08/14] net: phy: nxp-c45-tja11xx: enable LTC
+ sampling on both ext_ts edges
+Message-ID: <20230619081002.x6crxnx7c66z4hhe@soft-dev3-1>
+References: <20230616135323.98215-1-radu-nicolae.pirea@oss.nxp.com>
+ <20230616135323.98215-9-radu-nicolae.pirea@oss.nxp.com>
 MIME-Version: 1.0
-References: <20230617150302.38477-1-aford173@gmail.com> <20230617150302.38477-4-aford173@gmail.com>
-In-Reply-To: <20230617150302.38477-4-aford173@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 19 Jun 2023 10:08:08 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVnRaXAdh7aA_-0oLigSn7xPPL61tnsDVxaF0r7-tYXkg@mail.gmail.com>
-Message-ID: <CAMuHMdVnRaXAdh7aA_-0oLigSn7xPPL61tnsDVxaF0r7-tYXkg@mail.gmail.com>
-Subject: Re: [PATCH 4/4] clk: renesas: r8a774e1: Add 3dge and ZG support
-To:     Adam Ford <aford173@gmail.com>
-Cc:     linux-clk <linux-clk@vger.kernel.org>,
-        Adam Ford-BE <aford@beaconembedded.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20230616135323.98215-9-radu-nicolae.pirea@oss.nxp.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 5:03 PM Adam Ford <aford173@gmail.com> wrote:
-> The 3dge and ZG clocks are necessary to support the 3D graphics.
->
-> Signed-off-by: Adam Ford <aford173@gmail.com>
+The 06/16/2023 16:53, Radu Pirea (NXP OSS) wrote:
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-clk-for-v6.6, with s/e1/b1/ in the one-line summary.
+Hi Radu,
 
-Gr{oetje,eeting}s,
+> 
+> The external trigger configuration for TJA1120 has changed. The PHY
+> supports sampling of the LTC on rising and on falling edge.
 
-                        Geert
+> 
+> Signed-off-by: Radu Pirea (NXP OSS) <radu-nicolae.pirea@oss.nxp.com>
+> ---
+>  drivers/net/phy/nxp-c45-tja11xx.c | 64 +++++++++++++++++++++++++++----
+>  1 file changed, 56 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/net/phy/nxp-c45-tja11xx.c b/drivers/net/phy/nxp-c45-tja11xx.c
+> index 2160b9f8940c..6aa738396daf 100644
+> --- a/drivers/net/phy/nxp-c45-tja11xx.c
+> +++ b/drivers/net/phy/nxp-c45-tja11xx.c
+> @@ -104,6 +104,10 @@
+>  #define VEND1_PTP_CONFIG               0x1102
+>  #define EXT_TRG_EDGE                   BIT(1)
+> 
+> +#define TJA1120_SYNC_TRIG_FILTER       0x1010
+> +#define PTP_TRIG_RISE_TS               BIT(3)
+> +#define PTP_TRIG_FALLING_TS            BIT(2)
+> +
+>  #define CLK_RATE_ADJ_LD                        BIT(15)
+>  #define CLK_RATE_ADJ_DIR               BIT(14)
+> 
+> @@ -240,6 +244,7 @@ struct nxp_c45_phy_data {
+>         const struct nxp_c45_phy_stats *stats;
+>         int n_stats;
+>         u8 ptp_clk_period;
+> +       bool ext_ts_both_edges;
+>         void (*counters_enable)(struct phy_device *phydev);
+>         void (*ptp_init)(struct phy_device *phydev);
+>         void (*ptp_enable)(struct phy_device *phydev, bool enable);
+> @@ -682,9 +687,52 @@ static int nxp_c45_perout_enable(struct nxp_c45_phy *priv,
+>         return 0;
+>  }
+> 
+> +static void nxp_c45_set_rising_or_falling(struct phy_device *phydev,
+> +                                         struct ptp_extts_request *extts)
+> +{
+> +       /* Some enable request has only the PTP_ENABLE_FEATURE flag set and in
+> +        * this case external ts should be enabled on rising edge.
+> +        */
+> +       if (extts->flags & PTP_RISING_EDGE ||
+> +           extts->flags == PTP_ENABLE_FEATURE)
+> +               phy_clear_bits_mmd(phydev, MDIO_MMD_VEND1,
+> +                                  VEND1_PTP_CONFIG, EXT_TRG_EDGE);
+
+With this patch, are you not changing the behaviour for TJA1103?
+In the way, before there was not check for extts->flags ==
+PTP_ENABLE_FEATURE and now if that is set you configure to trigger on
+raising edge. If that is the case, shouldn't be this in a different
+patch?
+
+> +
+> +       if (extts->flags & PTP_FALLING_EDGE)
+> +               phy_set_bits_mmd(phydev, MDIO_MMD_VEND1,
+> +                                VEND1_PTP_CONFIG, EXT_TRG_EDGE);
+> +}
+> +
+ 
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+/Horatiu
