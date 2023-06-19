@@ -2,116 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 344FC735C6C
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 18:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9FE3735C6A
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 18:48:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbjFSQs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 12:48:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46880 "EHLO
+        id S229981AbjFSQsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 12:48:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbjFSQsZ (ORCPT
+        with ESMTP id S229658AbjFSQsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 12:48:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94CC4E74
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:47:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687193257;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=i+a8DGHRj3jW50Valrkn+7VRWxzc0jyAL0po+eTjD1I=;
-        b=dxpZnTXSg8vrngdPG5ra9xWnAPQfCb5BpCCubKZrahDUM6uQAVwFF5MyEExoU1ZZyt+eG4
-        7PNG2bY/TunB+7Jy+5CEyi5gIENF3fafO+odom/kJKTr3QXJTYoC+AlhIaQn3hVvnKcBX1
-        DG4zDBHJX6zURwVDymtdLLrbo0iWgpM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-302-ojfv7mcJNBW2RxY_gMc9Ug-1; Mon, 19 Jun 2023 12:47:30 -0400
-X-MC-Unique: ojfv7mcJNBW2RxY_gMc9Ug-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 19 Jun 2023 12:48:09 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E8A102;
+        Mon, 19 Jun 2023 09:48:07 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A4C1B858287;
-        Mon, 19 Jun 2023 16:47:29 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7B601112132D;
-        Mon, 19 Jun 2023 16:47:27 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <ZIw8y2w+A+t5u+IJ@gondor.apana.org.au>
-References: <ZIw8y2w+A+t5u+IJ@gondor.apana.org.au> <ZIw4+Go7ZIth+CsY@gondor.apana.org.au> <1679829.1686785273@warthog.procyon.org.uk> <426353.1686911878@warthog.procyon.org.uk>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     dhowells@redhat.com, netdev@vger.kernel.org,
-        syzbot+13a08c0bf4d212766c3c@syzkaller.appspotmail.com,
-        syzbot+14234ccf6d0ef629ec1a@syzkaller.appspotmail.com,
-        syzbot+4e2e47f32607d0f72d43@syzkaller.appspotmail.com,
-        syzbot+472626bb5e7c59fb768f@syzkaller.appspotmail.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] crypto: af_alg/hash: Fix recvmsg() after sendmsg(MSG_MORE)
+        by ms.lwn.net (Postfix) with ESMTPSA id 62AE449B;
+        Mon, 19 Jun 2023 16:48:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 62AE449B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1687193287; bh=8mEQ2qVV3NQ4ryWzZHEZukEHUKHAb2sehmACRxBJOtA=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=VL5sJ1X0jkd152hPF9+Ibi6d/g3SjtNhHWIXDYGjhSEs8A3W+4o7Hjw+KkuZlkcCu
+         35G3rTcG76vCRJ9itFN4aVqaVRk/nRrcHGAYBj50dafgxCaEajW2SvX4GvKIOKqb3k
+         GossMbnM+Ht9Jo3ZqqNe4eUZ5a3ZV6vQXT6IYb5IiTSPnzndlV92CfF8Fgjc+UI2kb
+         CqVt4JG6lNzFO5I2SNMP0h47va+q2VR3T/pEoRaU8f2B0BNJatxvdD85iG4wklVxOX
+         EdyOPbuJV3bTmnvk28yRvjCkjq+P4zsAMT8Di0g4n/iTAfTfQW7WMjJGQOopuSyJ5D
+         nVDRiuSzxvfdQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Conor Dooley <conor@kernel.org>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Atish Kumar Patra <atishp@rivosinc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, linux-doc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] Documentation: riscv: Add early boot document
+In-Reply-To: <20230619-sponge-armful-6beeaf4a8624@spud>
+References: <20230619094705.51337-1-alexghiti@rivosinc.com>
+ <20230619-kerchief-unmixed-cfdbeb1cf242@wendy>
+ <CAHVXubjV=0HNyc0-UMAQRQfi4ZUnwH8dmghV-BGogZsJiumtZA@mail.gmail.com>
+ <20230619-sponge-armful-6beeaf4a8624@spud>
+Date:   Mon, 19 Jun 2023 10:48:06 -0600
+Message-ID: <87r0q7v1o9.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1132300.1687193246.1@warthog.procyon.org.uk>
-Date:   Mon, 19 Jun 2023 17:47:26 +0100
-Message-ID: <1132301.1687193246@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Herbert Xu <herbert@gondor.apana.org.au> wrote:
+Conor Dooley <conor@kernel.org> writes:
 
-> Anyway, why did you remove the condition on hash_free_result?
-> We free the result if it's not needed, not to clear the previous
-> hash.  So by doing it uncondtionally you will simply end up
-> freeing and reallocating the result for no good reason.
+> On Mon, Jun 19, 2023 at 04:04:52PM +0200, Alexandre Ghiti wrote:
+>> On Mon, Jun 19, 2023 at 2:26=E2=80=AFPM Conor Dooley <conor.dooley@micro=
+chip.com> wrote:
+>> > On Mon, Jun 19, 2023 at 11:47:04AM +0200, Alexandre Ghiti wrote:
+>
+>> > > diff --git a/Documentation/riscv/boot.rst b/Documentation/riscv/boot=
+.rst
+>> > > new file mode 100644
+>> > > index 000000000000..b02230818b79
+>> > > --- /dev/null
+>> > > +++ b/Documentation/riscv/boot.rst
+>> > > @@ -0,0 +1,181 @@
+>> > > +.. SPDX-License-Identifier: GPL-2.0
+>> > > +
+>> > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>> > > +Early boot requirements/constraints on RISC-V
+>> > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>> >
+>> > Please use "title case", here and elsewhere in the doc.
+>>=20
+>> You mean using "title: " instead of "=3D=3D=3D=3D"? Or using uppercase f=
+or the
+>> first letter of each word? FYI I followed
+>> https://docs.kernel.org/doc-guide/sphinx.html?highlight=3Dtitle#specific=
+-guidelines-for-the-kernel-documentation
+>
+> The latter. That's weird, I guess it would be nice to see what Jon
+> thinks about that.
 
-The free here:
+I have Never Been Fond of Excessive Use of Capital Letters, so my
+preference would be capitalization as in a normal sentence.
 
-	if (!continuing) {
-		if ((msg->msg_flags & MSG_MORE))
-			hash_free_result(sk, ctx);
+That said, I don't really feel that something like this is important
+enough that we need to define and enforce a policy around it.  If the
+maintainers for specific subsystems feel differently, then I guess
+that's up to them.
 
-only happens in the following case:
+Thanks,
 
-	send(hashfd, "", 0, 0);
-	send(hashfd, "", 0, MSG_MORE);  <--- by this
-
-and the patch changes how this case works if no data is given.  In Linus's
-tree, it will create a result, init the crypto and finalise it in
-hash_sendmsg(); with this patch that case is then handled by hash_recvmsg().
-If you consider the following sequence:
-
-	send(hashfd, "", 0, 0);
-	send(hashfd, "", 0, 0);
-	send(hashfd, "", 0, 0);
-	send(hashfd, "", 0, 0);
-
-Upstream, the first one will create a result and then each of them will init
-and finalise a hash, whereas with my patch, the first one will release any
-outstanding result and then none of them will do any crypto ops.
-
-However, as, with my patch hash_sendmsg() no longer calculated a result, it
-has to clear the result pointer because the logic inside hash_recvmsg() relies
-on the result pointer to indicate that there is a result.
-
-Instead, hash_recvmsg() concocts the result - something it has to be able to
-do anyway in case someone calls recvmsg() without first supplying data.
-
-David
-
+jon
