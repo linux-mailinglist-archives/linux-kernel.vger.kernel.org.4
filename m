@@ -2,88 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 368CA7358A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 15:33:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B06EF7358A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 15:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbjFSNcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 09:32:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38436 "EHLO
+        id S230189AbjFSNd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 09:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbjFSNcw (ORCPT
+        with ESMTP id S229743AbjFSNd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 09:32:52 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FB7101;
-        Mon, 19 Jun 2023 06:32:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687181571; x=1718717571;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=iFF5DN6oG5LxHqftmodvyVCWe0fRqJT8Cy4sLlEHdrc=;
-  b=HKmlcFLm0GzMRuFpJ/bpByHDN3Ry0OGrGPlsaBPV0+D/vAN+srMrsh/B
-   cIf71UiJpTHZxDe3iFDeLHeNoWTMRQIPjxbW6Y1OHrH9/k9PKpB7OZ/xN
-   u3pJcXXCNLZ/pxFqFOqlwzrMedhgSi4AZ9n3liEXd/ph6TRcr+GLQtdri
-   qw2U7sDXejwgidH0dJo3CjXvTKmWz7bvwHmMEGPCsUrz9jmB0xi4985ED
-   9rEaGNNwfpIwFyGgxrMqE7enPh4VJFLWEabT1GRqSigHbIVkuI65mXNWf
-   rlAXjGTiC1HsPQwJVNEzafW1dct3VmVc6lVsWhk+NK85x7HJD+IOmZ5rQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="388692012"
-X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
-   d="scan'208";a="388692012"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 06:32:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="743464098"
-X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
-   d="scan'208";a="743464098"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 19 Jun 2023 06:32:49 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id E4F6E40F; Mon, 19 Jun 2023 16:32:58 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-Subject: [PATCH v1 1/1] hwmon: (nct6775) Fix use of undefined variable
-Date:   Mon, 19 Jun 2023 16:32:57 +0300
-Message-Id: <20230619133257.57569-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
+        Mon, 19 Jun 2023 09:33:27 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED707E54;
+        Mon, 19 Jun 2023 06:33:24 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7A77512FC;
+        Mon, 19 Jun 2023 06:34:08 -0700 (PDT)
+Received: from [10.1.196.40] (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5838F3F59C;
+        Mon, 19 Jun 2023 06:33:23 -0700 (PDT)
+Message-ID: <5d0d6665-93e4-f61f-d700-008c0fcb4a2f@arm.com>
+Date:   Mon, 19 Jun 2023 14:33:18 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/2] iommu: Prevent RESV_DIRECT devices from blocking
+ domains
+Content-Language: en-GB
+To:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Nicolin Chen <nicolinc@nvidia.com>
+Cc:     iommu@lists.linux.dev, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>
+References: <20230607035145.343698-1-baolu.lu@linux.intel.com>
+ <20230607035145.343698-2-baolu.lu@linux.intel.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20230607035145.343698-2-baolu.lu@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's unknown how, but in one place in the code the undefined variable
-is still in use. Replace it with the respective bitmap API call.
+On 07/06/2023 4:51 am, Lu Baolu wrote:
+> The IOMMU_RESV_DIRECT flag indicates that a memory region must be mapped
+> 1:1 at all times. This means that the region must always be accessible to
+> the device, even if the device is attached to a blocking domain. This is
+> equal to saying that IOMMU_RESV_DIRECT flag prevents devices from being
+> attached to blocking domains.
+> 
+> This also implies that devices that implement RESV_DIRECT regions will be
+> prevented from being assigned to user space since taking the DMA ownership
+> immediately switches to a blocking domain.
+> 
+> The rule of preventing devices with the IOMMU_RESV_DIRECT regions from
+> being assigned to user space has existed in the Intel IOMMU driver for
+> a long time. Now, this rule is being lifted up to a general core rule,
+> as other architectures like AMD and ARM also have RMRR-like reserved
+> regions. This has been discussed in the community mailing list and refer
+> to below link for more details.
+> 
+> Other places using unmanaged domains for kernel DMA must follow the
+> iommu_get_resv_regions() and setup IOMMU_RESV_DIRECT - we do not restrict
+> them in the core code.
+> 
+> Cc: Robin Murphy <robin.murphy@arm.com>
+> Cc: Alex Williamson <alex.williamson@redhat.com>
+> Cc: Kevin Tian <kevin.tian@intel.com>
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> Link: https://lore.kernel.org/linux-iommu/BN9PR11MB5276E84229B5BD952D78E9598C639@BN9PR11MB5276.namprd11.prod.outlook.com
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> ---
+>   include/linux/iommu.h |  2 ++
+>   drivers/iommu/iommu.c | 39 +++++++++++++++++++++++++++++----------
+>   2 files changed, 31 insertions(+), 10 deletions(-)
+> 
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index d31642596675..fd18019ac951 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -409,6 +409,7 @@ struct iommu_fault_param {
+>    * @priv:	 IOMMU Driver private data
+>    * @max_pasids:  number of PASIDs this device can consume
+>    * @attach_deferred: the dma domain attachment is deferred
+> + * @requires_direct: The driver requested IOMMU_RESV_DIRECT
+>    *
+>    * TODO: migrate other per device data pointers under iommu_dev_data, e.g.
+>    *	struct iommu_group	*iommu_group;
+> @@ -422,6 +423,7 @@ struct dev_iommu {
+>   	void				*priv;
+>   	u32				max_pasids;
+>   	u32				attach_deferred:1;
+> +	u32				requires_direct:1;
+>   };
+>   
+>   int iommu_device_register(struct iommu_device *iommu,
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index 9e0228ef612b..e59de7852067 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -959,12 +959,7 @@ static int iommu_create_device_direct_mappings(struct iommu_domain *domain,
+>   	unsigned long pg_size;
+>   	int ret = 0;
+>   
+> -	if (!iommu_is_dma_domain(domain))
+> -		return 0;
+> -
+> -	BUG_ON(!domain->pgsize_bitmap);
+> -
+> -	pg_size = 1UL << __ffs(domain->pgsize_bitmap);
+> +	pg_size = domain->pgsize_bitmap ? 1UL << __ffs(domain->pgsize_bitmap) : 0;
+>   	INIT_LIST_HEAD(&mappings);
+>   
+>   	iommu_get_resv_regions(dev, &mappings);
+> @@ -974,13 +969,22 @@ static int iommu_create_device_direct_mappings(struct iommu_domain *domain,
+>   		dma_addr_t start, end, addr;
+>   		size_t map_size = 0;
+>   
+> +		if (entry->type == IOMMU_RESV_DIRECT)
+> +			dev->iommu->requires_direct = 1;
+> +
+> +		if ((entry->type != IOMMU_RESV_DIRECT &&
+> +		     entry->type != IOMMU_RESV_DIRECT_RELAXABLE) ||
+> +		    !iommu_is_dma_domain(domain))
+> +			continue;
+> +
+> +		if (WARN_ON_ONCE(!pg_size)) {
+> +			ret = -EINVAL;
+> +			goto out;
+> +		}
+> +
+>   		start = ALIGN(entry->start, pg_size);
+>   		end   = ALIGN(entry->start + entry->length, pg_size);
+>   
+> -		if (entry->type != IOMMU_RESV_DIRECT &&
+> -		    entry->type != IOMMU_RESV_DIRECT_RELAXABLE)
+> -			continue;
+> -
+>   		for (addr = start; addr <= end; addr += pg_size) {
+>   			phys_addr_t phys_addr;
+>   
+> @@ -2121,6 +2125,21 @@ static int __iommu_device_set_domain(struct iommu_group *group,
+>   {
+>   	int ret;
+>   
+> +	/*
+> +	 * If the driver has requested IOMMU_RESV_DIRECT then we cannot allow
+> +	 * the blocking domain to be attached as it does not contain the
+> +	 * required 1:1 mapping. This test effectively exclusive the device from
+> +	 * being used with iommu_group_claim_dma_owner() which will block vfio
+> +	 * and iommufd as well.
+> +	 */
+> +	if (dev->iommu->requires_direct &&
+> +	    (new_domain->type == IOMMU_DOMAIN_BLOCKED ||
 
-Fixes: d7f4737c37b5 ("hwmon: (nct6775) Switch to use bitmap type and APIs")
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/hwmon/nct6775-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Given the notion elsewhere that we want to use the blocking domain as a 
+last resort to handle an attach failure, at face value it looks suspect 
+that failing to attach to a blocking domain could also be a thing. I 
+guess technically this is failing at a slightly different level so maybe 
+it does work out OK, but it's still smelly.
 
-diff --git a/drivers/hwmon/nct6775-core.c b/drivers/hwmon/nct6775-core.c
-index a334fcf9406d..56aa68875c42 100644
---- a/drivers/hwmon/nct6775-core.c
-+++ b/drivers/hwmon/nct6775-core.c
-@@ -3829,7 +3829,7 @@ int nct6775_probe(struct device *dev, struct nct6775_data *data,
- 	case nct6797:
- 	case nct6798:
- 	case nct6799:
--		data->in_num = 15;
-+		bitmap_set(data->have_in, 0, 15);
- 		data->pwm_num = (data->kind == nct6796 ||
- 				 data->kind == nct6797 ||
- 				 data->kind == nct6798 ||
--- 
-2.40.0.1.gaa8946217a0b
+The main thing, though, is that not everything implements the 
+IOMMU_DOMAIN_BLOCKED optimisation, so a nominal blocking domain could be 
+IOMMU_DOMAIN_UNMANAGED as well. FWIW I'd prefer to make the RESV_DIRECT 
+check explicit in __iommu_take_dma_ownership() rather than hide it in an 
+implementation detail; that's going to be a lot clearer to reason about 
+as time goes on.
 
+Thanks,
+Robin.
+
+> +	     new_domain == group->blocking_domain)) {
+> +		dev_warn(dev,
+> +			 "Firmware has requested this device have a 1:1 IOMMU mapping, rejecting configuring the device without a 1:1 mapping. Contact your platform vendor.\n");
+> +		return -EINVAL;
+> +	}
+> +
+>   	if (dev->iommu->attach_deferred) {
+>   		if (new_domain == group->default_domain)
+>   			return 0;
