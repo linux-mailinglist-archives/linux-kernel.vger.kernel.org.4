@@ -2,180 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7934C734CD2
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 09:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFB33734CF5
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:02:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbjFSH6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 03:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44348 "EHLO
+        id S230102AbjFSICQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 04:02:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjFSH6n (ORCPT
+        with ESMTP id S230214AbjFSIBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 03:58:43 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D179E6B;
-        Mon, 19 Jun 2023 00:58:37 -0700 (PDT)
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35J7nrvK004275;
-        Mon, 19 Jun 2023 07:58:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=UVc7QTQJZ7JDsfewiDrvsuhEYLKOviG1uZkcmVBxAyA=;
- b=LDBy2qT3oIqeSXDZDGDRkfXRa7VXD6bEM5FWDMyooSE+EMzRS6DdjyiTzrUjweoQg7Pl
- qnV4ubTecMzCYX9sHvJZh+wEdabQ7nS6JJYI8Ljs524oTxqRqul+PJ5Zjcu8wpDib5/4
- 5uFmLRAyUgAfzOULt3f7rIRsCd8Tlzt6k+gouvg4Onhp15Ninn8+YJ8WrxPht4RJlYit
- 5XTZj0q7rYsvMzNDd3cGhJyi7/ykEs1JvJMNaFqYGix4+gptEuoye6kdWyL0fsi7WWr9
- Fz9Rj0vgZAxjlpaB9fIcavz92hfIQGl/KcFWzRd13PwxhNMJzqhxrVfkuL1SnnfgqQKc bg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rajyfg6b3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Jun 2023 07:58:34 +0000
-Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35J7oSNa005932;
-        Mon, 19 Jun 2023 07:58:34 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rajyfg6ac-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Jun 2023 07:58:34 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35J5pqKn015738;
-        Mon, 19 Jun 2023 07:58:32 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3r943e0x83-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Jun 2023 07:58:31 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35J7wSSB57540958
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 19 Jun 2023 07:58:28 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6AEDA2004F;
-        Mon, 19 Jun 2023 07:58:28 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DA9442004B;
-        Mon, 19 Jun 2023 07:58:27 +0000 (GMT)
-Received: from [9.171.51.54] (unknown [9.171.51.54])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 19 Jun 2023 07:58:27 +0000 (GMT)
-Message-ID: <b938709c-fc80-4801-e70f-5ee70a1ae1bd@linux.ibm.com>
-Date:   Mon, 19 Jun 2023 09:58:27 +0200
+        Mon, 19 Jun 2023 04:01:36 -0400
+Received: from ste-pvt-msa1.bahnhof.se (ste-pvt-msa1.bahnhof.se [213.80.101.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4120B26BD
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 01:00:18 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTP id 0B2B240A80;
+        Mon, 19 Jun 2023 09:59:54 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at bahnhof.se
+X-Spam-Score: -2.2
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+Authentication-Results: ste-pvt-msa1.bahnhof.se (amavisd-new);
+        dkim=pass (1024-bit key) header.d=shipmail.org
+Received: from ste-pvt-msa1.bahnhof.se ([127.0.0.1])
+        by localhost (ste-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id JHJ22o8d7g3u; Mon, 19 Jun 2023 09:59:52 +0200 (CEST)
+Received: by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id C78C840A59;
+        Mon, 19 Jun 2023 09:59:51 +0200 (CEST)
+Received: from [192.168.0.209] (h-155-4-205-35.A357.priv.bahnhof.se [155.4.205.35])
+        by mail1.shipmail.org (Postfix) with ESMTPSA id 54A4D3631FE;
+        Mon, 19 Jun 2023 09:59:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=shipmail.org; s=mail;
+        t=1687161591; bh=lKpentDuo+eUKVk60Qur3HgdnqCuR/j+T/VCjjRUt7M=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=GcxwNuF54lCuOZXO+hvxmf/SIrp7aDVR10nTeNMRwqYBO0EB23LW8ABDYY8m4mHCg
+         iHIV1LT68QCjY6XT7vu9SmocuyOv2F70kadxdODdRKCie7KSE+Orv8bdx6BYl1QuZE
+         gQgcBv3Urn2A5VlaJALdM8I8szMp1zEkd+G4h2Eg=
+Message-ID: <f2cc785b-f34a-2a71-78b1-18b4f37de24b@shipmail.org>
+Date:   Mon, 19 Jun 2023 09:59:50 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] perf test: fix failing test cases on linux-next for s390
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        irogers@google.com, sumanthk@linux.ibm.com, hca@linux.ibm.com,
-        svens@linux.ibm.com, gor@linux.ibm.com
-References: <20230616081437.1932003-1-tmricht@linux.ibm.com>
- <ZIxf7A1jPiDUUdDt@kernel.org>
+ Thunderbird/102.11.1
+Subject: Re: [PATCH v2] drm/i915: Replace kmap() with kmap_local_page()
 Content-Language: en-US
-From:   Thomas Richter <tmricht@linux.ibm.com>
-Organization: IBM
-In-Reply-To: <ZIxf7A1jPiDUUdDt@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Ira Weiny <ira.weiny@intel.com>,
+        Sumitra Sharma <sumitraartsy@gmail.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     Fabio <fmdefrancesco@gmail.com>, Deepak R Varma <drv@mailo.com>
+References: <20230617180420.GA410966@sumitra.com>
+ <648f48bc3d3c2_1de3f9294a3@iweiny-mobl.notmuch>
+From:   =?UTF-8?Q?Thomas_Hellstr=c3=b6m_=28Intel=29?= 
+        <thomas_os@shipmail.org>
+In-Reply-To: <648f48bc3d3c2_1de3f9294a3@iweiny-mobl.notmuch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: kJ_5xs5yVd8zLCUFf5TAGHQcU_8jHl2i
-X-Proofpoint-ORIG-GUID: vO5Npx_Kp1hLPPXoH4xP7YANEPTDhO86
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-19_05,2023-06-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- impostorscore=0 spamscore=0 lowpriorityscore=0 phishscore=0 malwarescore=0
- bulkscore=0 adultscore=0 priorityscore=1501 clxscore=1015 mlxscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306190068
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/16/23 15:13, Arnaldo Carvalho de Melo wrote:
-> Em Fri, Jun 16, 2023 at 10:14:37AM +0200, Thomas Richter escreveu:
->> In linux-next tree the many test cases fail on s390x when running the
->> perf test suite, sometime the perf tool dumps core.
->>
->> Output before:
->>   6.1: Test event parsing                               : FAILED!
->>  10.3: Parsing of PMU event table metrics               : FAILED!
->>  10.4: Parsing of PMU event table metrics with fake PMUs: FAILED!
->>  17: Setup struct perf_event_attr                       : FAILED!
->>  24: Number of exit events of a simple workload         : FAILED!
->>  26: Object code reading                                : FAILED!
->>  28: Use a dummy software event to keep tracking        : FAILED!
->>  35: Track with sched_switch                            : FAILED!
->>  42.3: BPF prologue generation                          : FAILED!
->>  66: Parse and process metrics                          : FAILED!
->>  68: Event expansion for cgroups                        : FAILED!
->>  69.2: Perf time to TSC                                 : FAILED!
->>  74: build id cache operations                          : FAILED!
->>  86: Zstd perf.data compression/decompression           : FAILED!
->>  87: perf record tests                                  : FAILED!
->> 106: Test java symbol                                   : FAILED!
->>
->> The reason for all these failure is a missing PMU. On s390x
->> the PMU is named cpum_cf which is not detected as core PMU.
->> A similar patch was added before, see
->> commit 9bacbced0e32 ("perf list: Add s390 support for detailed PMU event description")
->> which got lost during the recent reworks. Add it again.
->>
->> Output after:
->>  10.2: PMU event map aliases                            : FAILED!
->>  42.3: BPF prologue generation                          : FAILED!
->>
->> Most test cases now work and there is not core dump anymore.
-> 
-> So you're not fixing 'perf test', that is just what detects the problem,
-> the part being fixed is the PMU code, so I'm rewriting the patch subject
-> to:
-> 
-> [PATCH] perf pmu: Fix core PMU detection on s/390
-> 
-> Have you bisected the problem to the first patch where this problem
-> appears?
-> 
-> - Arnaldo
 
-Thanks for picking this patch, I noticed it is already in linux-next tree.
-
-No I did not do the bisect. That first patch info came from Ian Rogers.
-
->  
->> Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
->> Cc: Ian Rogers <irogers@google.com>
+On 6/18/23 20:11, Ira Weiny wrote:
+> Sumitra Sharma wrote:
+>> kmap() has been deprecated in favor of the kmap_local_page()
+>> due to high cost, restricted mapping space, the overhead of a
+>> global lock for synchronization, and making the process sleep
+>> in the absence of free slots.
+>>
+>> kmap_local_page() is faster than kmap() and offers thread-local
+>> and CPU-local mappings, take pagefaults in a local kmap region
+>> and preserves preemption by saving the mappings of outgoing tasks
+>> and restoring those of the incoming one during a context switch.
+>>
+>> The mapping is kept thread local in the function
+>> “i915_vma_coredump_create” in i915_gpu_error.c
+>>
+>> Therefore, replace kmap() with kmap_local_page().
+>>
+>> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+>>
+> NIT: No need for the line break between Suggested-by and your signed off line.
+>
+>> Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
 >> ---
->>  tools/perf/util/pmu.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
 >>
->> diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
->> index fe64ad292d36..6142e4710a2f 100644
->> --- a/tools/perf/util/pmu.c
->> +++ b/tools/perf/util/pmu.c
->> @@ -1419,7 +1419,7 @@ void perf_pmu__del_formats(struct list_head *formats)
->>  
->>  bool is_pmu_core(const char *name)
->>  {
->> -	return !strcmp(name, "cpu") || is_sysfs_pmu_core(name);
->> +	return !strcmp(name, "cpu") || !strcmp(name, "cpum_cf") || is_sysfs_pmu_core(name);
->>  }
->>  
->>  bool perf_pmu__supports_legacy_cache(const struct perf_pmu *pmu)
+>> Changes in v2:
+>> 	- Replace kmap() with kmap_local_page().
+> Generally it is customary to attribute a change like this to those who
+> suggested it in a V1 review.
+>
+> For example:
+>
+>   	- Tvrtko/Thomas: Use kmap_local_page() instead of page_address()
+>
+> Also I don't see Thomas on the new email list.  Since he took the time to
+> review V1 he might want to check this version out.  I've added him to the
+> 'To:' list.
+
+Thanks.
+
+
+> Also a link to V1 is nice.  B4 formats it like this:
+>
+> - Link to v1: https://lore.kernel.org/all/20230614123556.GA381200@sumitra.com/
+>
+> All that said the code looks good to me.  So with the above changes.
+>
+> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+
+LGTM. Reviewed-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+
+
+
+>
+>> 	- Change commit subject and message.
+>>
+>>   drivers/gpu/drm/i915/i915_gpu_error.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/i915/i915_gpu_error.c b/drivers/gpu/drm/i915/i915_gpu_error.c
+>> index f020c0086fbc..bc41500eedf5 100644
+>> --- a/drivers/gpu/drm/i915/i915_gpu_error.c
+>> +++ b/drivers/gpu/drm/i915/i915_gpu_error.c
+>> @@ -1164,9 +1164,9 @@ i915_vma_coredump_create(const struct intel_gt *gt,
+>>   
+>>   			drm_clflush_pages(&page, 1);
+>>   
+>> -			s = kmap(page);
+>> +			s = kmap_local_page(page);
+>>   			ret = compress_page(compress, s, dst, false);
+>> -			kunmap(page);
+>> +			kunmap_local(s);
+>>   
+>>   			drm_clflush_pages(&page, 1);
+>>   
 >> -- 
->> 2.39.2
+>> 2.25.1
 >>
-> 
-
--- 
-Thomas Richter, Dept 3303, IBM s390 Linux Development, Boeblingen, Germany
---
-Vorsitzender des Aufsichtsrats: Gregor Pillen
-Geschäftsführung: David Faller
-Sitz der Gesellschaft: Böblingen / Registergericht: Amtsgericht Stuttgart, HRB 243294
-
