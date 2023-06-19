@@ -2,77 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DA28735C8B
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 18:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 351D3735C8F
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 18:59:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbjFSQ4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 12:56:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48952 "EHLO
+        id S229840AbjFSQ6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 12:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232047AbjFSQ4N (ORCPT
+        with ESMTP id S230444AbjFSQ62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 12:56:13 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8F9E6E
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:55:58 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id af79cd13be357-763aba07271so2404385a.2
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:55:58 -0700 (PDT)
+        Mon, 19 Jun 2023 12:58:28 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61529E2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:58:27 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f9b0f139feso15309155e9.3
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:58:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1687193757; x=1689785757;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KnZNU/I8hVx/txQg+gZcbNdILNkL1d9QJiWI/0DW9wI=;
-        b=FZytthrbCYDv3RZOtaTdlEZCVgoapIc+1yj309YHwRqE+CagPIrZRG0F4niNuuyc3M
-         wLe5zF+7iiwSyXRnaT6Y7CPeQqeymyE9pCTfaXwRIDGwIf5wx1u+z2L4eWJQ3cpboG1I
-         Ho3OM31KAsV2ZJtI2AE5AiRcYIozPpNICyWts=
+        d=linaro.org; s=google; t=1687193906; x=1689785906;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cSjLhKAkEVmr9MYwtf9eP9pfk3HW3uaYe68MnVI4gb4=;
+        b=JlVoWKoejeYGVw9gW2I/yNfs7ivLHcr1xRX/Kt9aY+bNwIYXp2NvRfeCZHk+T69Xux
+         VizWnR2LcZ3KuXcodUg3gLKcfu8BL0M3D1nWycrXYlyzMwkn69cL5OxaHIDnbsFTtY2n
+         BHz9GBSZ2mPvHFQCavT77ItUUyjF+RrquclO4Lx3lmmbYQxwGJ+SqmxCdgE2+Tweej4E
+         chy5R2GV5JpIAaUz/bl3nf2SsHV2/w7d3uUzR248KV+FHYj3EEUyu91Cnj7Xn72ETw2E
+         E5fgy16kn6ppIe+1J9ceVMUUQudx3B3igm5sTtnCpY1Jpm68LHzCFoZLjcRLhf7kOs3x
+         5Lxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687193757; x=1689785757;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KnZNU/I8hVx/txQg+gZcbNdILNkL1d9QJiWI/0DW9wI=;
-        b=c70y0DCxCmFxNaEAk8Q/FjCfiN08hVAyI+MAzdI0i8V87rnzqYAl5w7+fBOrrcjkr7
-         p4or43blR+tfnVGqrBiuvz/xvvxktCEl6OanELXyvK+JkbUJyJUjjcH/4GplSV7fEXHv
-         ZV4lR4ESwuGWFPeE8bpNjXQgJQU4Edhng8S9acO6IIK4xFAq7PxwDQfjy7Bvpmutgq7B
-         fi0r/dD+8C5zO1EkTyOVAwHbMTILPHgVNjybuRW81POTXyfV4TOuEESzXsq80oPvexVM
-         p0DDrOU0hcVRUpW52VUqGeKsTlMydQ4STgtbn4n7bGJqnaBC3Cru356PQI6mEajcwWm3
-         1mNw==
-X-Gm-Message-State: AC+VfDzcxNVL1mNJpH1Ut6oJfCV7G1Ix6aYr+aoJRI7o3dyke2JLA3ly
-        dbVkHtbGr2QOu0lbWaaO94Cbucot2tfZOTmeaDw=
-X-Google-Smtp-Source: ACHHUZ4seV5vQMD1B3+dqGuDxNBwJBs85xEpHLWIbXaIhwEvDfAjEJU/sT7OAfJwkc2qH0vO0JafgQ==
-X-Received: by 2002:a05:620a:4397:b0:762:39c:7fb3 with SMTP id a23-20020a05620a439700b00762039c7fb3mr11634709qkp.60.1687193757326;
-        Mon, 19 Jun 2023 09:55:57 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.pdxnet.pdxeng.ch (host-79-25-27-4.retail.telecomitalia.it. [79.25.27.4])
-        by smtp.gmail.com with ESMTPSA id p23-20020a05620a15f700b0075d49ce31c3sm109103qkm.91.2023.06.19.09.55.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 09:55:57 -0700 (PDT)
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Philippe Cornu <philippe.cornu@foss.st.com>,
-        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        michael@amarulasolutions.com,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: [PATCH v4 6/6] drm/stm: set framebuffer bit depth through DTS property
-Date:   Mon, 19 Jun 2023 18:55:25 +0200
-Message-Id: <20230619165525.1035243-7-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20230619165525.1035243-1-dario.binacchi@amarulasolutions.com>
-References: <20230619165525.1035243-1-dario.binacchi@amarulasolutions.com>
+        d=1e100.net; s=20221208; t=1687193906; x=1689785906;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cSjLhKAkEVmr9MYwtf9eP9pfk3HW3uaYe68MnVI4gb4=;
+        b=QIXsxDULRpqScRo8GNPrQQjccHxpi7gu7pYsWAfwblO9uev5NnVBW2guUtFBpw39ED
+         gRmBaiEzVOQJbWVoDSqXdR53wrBM51rEzovH8iy2VuAvcDqzp05onn/d7+fpQ0oNIu4y
+         60sIThC6tfp3yoQGKjyMcE9vuq+GDNQoemNnRE7MneS4J4NYwmLXvqLBQjN6PiTOXSOn
+         OKqlR026wqOHGhjayx7tsJqykvsYDAh5KJFgEnWq8Bwr6UfTuCqEY84wIJkmpOu2uGP+
+         9x96ZpIQtLUGNQSPGHOmW/cmjqciufsZJXvQZg5qNVe057EVYZp43Y1VfNyklJuMzsOc
+         yNMQ==
+X-Gm-Message-State: AC+VfDxyPYDejjD8nCpD/WO/DVCEmYWf1V49NdJxlMn1x1a4hNqj5BRX
+        sWjl3sLngti+a+7KaGcuzvie3A==
+X-Google-Smtp-Source: ACHHUZ7LG1qZO6pyGSLX05cmV1ONaJCA3BVDnjiEngtgcdfzljIp98Kn6HsVCboJAURsVKJ3A49TRw==
+X-Received: by 2002:a05:600c:b4e:b0:3f7:fcca:5e32 with SMTP id k14-20020a05600c0b4e00b003f7fcca5e32mr9158353wmr.17.1687193905807;
+        Mon, 19 Jun 2023 09:58:25 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:13d0:1b6c:ce40:5429? ([2a05:6e02:1041:c10:13d0:1b6c:ce40:5429])
+        by smtp.googlemail.com with ESMTPSA id x23-20020a1c7c17000000b003f72468833esm211361wmc.26.2023.06.19.09.58.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Jun 2023 09:58:25 -0700 (PDT)
+Message-ID: <07c5efe5-4eb0-121f-7b50-8f3fba68beab@linaro.org>
+Date:   Mon, 19 Jun 2023 18:58:24 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/1] clocksource: hyper-v: Rework clocksource and sched
+ clock setup
+Content-Language: en-US
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
+References: <1686325621-16382-1-git-send-email-mikelley@microsoft.com>
+ <fdc643c4-6298-d337-1d8d-3f28f6c1acfc@linaro.org>
+ <BYAPR21MB1688E1163BB36DF03CC8E00BD75FA@BYAPR21MB1688.namprd21.prod.outlook.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <BYAPR21MB1688E1163BB36DF03CC8E00BD75FA@BYAPR21MB1688.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,52 +83,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The patch, which is backwards compatible, sets the bit depth of the
-framebuffer using the optional property 'st,fb-bpp' in the DTS.
+On 19/06/2023 18:44, Michael Kelley (LINUX) wrote:
+> From: Daniel Lezcano <daniel.lezcano@linaro.org> Sent: Monday, June 19, 2023 9:16 AM
+>>
+>> On 09/06/2023 17:47, Michael Kelley wrote:
+>>> Current code assigns either the Hyper-V TSC page or MSR-based ref counter
+>>> as the sched clock. This may be sub-optimal in two cases. First, if there
+>>> is hardware support to ensure consistent TSC frequency across live
+>>> migrations and Hyper-V is using that support, the raw TSC is a faster
+>>> source of time than the Hyper-V TSC page.  Second, the MSR-based ref
+>>> counter is relatively slow because reads require a trap to the hypervisor.
+>>> As such, it should never be used as the sched clock. The native sched
+>>> clock based on the raw TSC or jiffies is much better.
+>>>
+>>> Rework the sched clock setup so it is set to the TSC page only if
+>>> Hyper-V indicates that the TSC may have inconsistent frequency across
+>>> live migrations. Also, remove the code that sets the sched clock to
+>>> the MSR-based ref counter. In the cases where it is not set, the sched
+>>> clock will then be the native sched clock.
+>>>
+>>> As part of the rework, always enable both the TSC page clocksource and
+>>> the MSR-based ref counter clocksource. Set the ratings so the TSC page
+>>> clocksource is preferred. While the MSR-based ref counter clocksource
+>>> is unlikely to ever be the default, having it available for manual
+>>> selection is convenient for development purposes.
+>>>
+>>> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+>>
+>> The patch does not apply, does it depend on another patch?
+> 
+> It should apply to linux-next.  It depends on two previous patches from
+> Peter Zijlstra in the sched/core branch of tip.  See:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=sched/core&id=9397fa2ea3e7634f61da1ab76b9eb88ba04dfdfc
+> 
+> and
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=sched/core&id=e39acc37db34f6688e2c16e958fb1d662c422c81
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Yeah, but the branch is tip/timers/core
 
----
+Could you respin against it ?
 
-Changes in v4:
-- Use DTS property instead of module parameter to set the framebuffer bit depth.
+Thanks
 
-Changes in v3:
-- drop [4/6] dt-bindings: display: simple: add Rocktech RK043FN48H
-  Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next):
-  https://cgit.freedesktop.org/drm/drm-misc/commit/?id=c42a37a27c777d63961dd634a30f7c887949491a
-- drop [5/6] drm/panel: simple: add support for Rocktech RK043FN48H panel
-  Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next)
-  https://cgit.freedesktop.org/drm/drm-misc/commit/?id=13cdd12a9f934158f4ec817cf048fcb4384aa9dc
-
- drivers/gpu/drm/stm/drv.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/stm/drv.c b/drivers/gpu/drm/stm/drv.c
-index 422220df7d8c..7a61a3c63469 100644
---- a/drivers/gpu/drm/stm/drv.c
-+++ b/drivers/gpu/drm/stm/drv.c
-@@ -180,7 +180,9 @@ static const struct dev_pm_ops drv_pm_ops = {
- static int stm_drm_platform_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-+	struct device_node *np = pdev->dev.of_node;
- 	struct drm_device *ddev;
-+	u32 fb_bpp = 16;
- 	int ret;
- 
- 	DRM_DEBUG("%s\n", __func__);
-@@ -203,7 +205,9 @@ static int stm_drm_platform_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto err_put;
- 
--	drm_fbdev_dma_setup(ddev, 16);
-+	of_property_read_u32(np, "st,fb-bpp", &fb_bpp);
-+
-+	drm_fbdev_dma_setup(ddev, fb_bpp);
- 
- 	return 0;
- 
 -- 
-2.32.0
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
