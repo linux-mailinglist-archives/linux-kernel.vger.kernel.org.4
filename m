@@ -2,124 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86BEC7359FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 16:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F62C7359FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 16:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232195AbjFSOpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 10:45:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43436 "EHLO
+        id S232098AbjFSOqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 10:46:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232156AbjFSOpo (ORCPT
+        with ESMTP id S232047AbjFSOqB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 10:45:44 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CBD10DD;
-        Mon, 19 Jun 2023 07:45:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687185938; x=1718721938;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yoEByqBkambGkCJiJIubqQfRE/V06XGkaD+JTvok5Kw=;
-  b=Pb9N50+CrNWTFM7sBwfryEvfizDG8KMr8HODU6rl4qE9YaMeUouq6xOX
-   4ECwaWxBQZ+8MwfYuxU330A3LKEASAKOHfvqEiZG8I9IbJ620vSU7KdXV
-   bl70wbdYlTrThG2Xd4lYALVNLOEVehBDCrJWXszT0t4bRq6lMeBxR+T4l
-   UBIxEu24TWbXo1MBEqkuQ1Cn/hYvyha/FNMjQ69KrloN/jVWNITRHWG8T
-   LweWj8zl+0roSHviX+MVKotE7JAlnYzJZUFtkepWiyM0CY8MFsW7mAcQA
-   ng9SILItLPCFlMSlmqnUr7T8AOh17E4ss2ed65i52lQg8OiPYKgrN4+i6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="388725059"
-X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
-   d="scan'208";a="388725059"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 07:45:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="743478143"
-X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
-   d="scan'208";a="743478143"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 19 Jun 2023 07:45:33 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qBG8K-0004o6-25;
-        Mon, 19 Jun 2023 14:45:32 +0000
-Date:   Mon, 19 Jun 2023 22:45:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Minda Chen <minda.chen@starfivetech.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Conor Dooley <conor@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Roger Quadros <rogerq@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Minda Chen <minda.chen@starfivetech.com>,
-        Mason Huo <mason.huo@starfivetech.com>
-Subject: Re: [PATCH v7 4/5] phy: starfive: Add JH7110 PCIE 2.0 PHY driver
-Message-ID: <202306192215.TvQco9m6-lkp@intel.com>
-References: <20230619094759.21013-5-minda.chen@starfivetech.com>
+        Mon, 19 Jun 2023 10:46:01 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DA318C
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 07:45:55 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f87592ecaeso805578e87.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 07:45:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687185954; x=1689777954;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JGh6q8YX2/fWXkHg5338c1JuUfqVUfeIziiaO9CuRyA=;
+        b=TMZberxgZEP/PuQu10gXIwK7DBYB0ixRdQQLw/TmK400FmYVO9qRtMwj6HGRz5Z7RU
+         vqFApHi2qsnNfC+tJFWbIiCxRsLCKaCrr3KOPuC9teq2sB+iJYRIn6Sn4bjVQ5Deu8rg
+         ACg3yOGdFSxE48tZD5SiCinEXwtFqkpqDlZ2qzhZU5yTPTY2PGaKqmo1E3H9c5G5fmaw
+         IvWRXha6TOCRJC5V+h7pvKj5jHJqBEbNmdrEBVP/JBsGUClnbgkabMqpFcoZZIjAE8Y+
+         dzu5cbNLQMU1eaCGZjDQGp9kbax0mtNw2rbeUxDNGxrTFZU/K3m/uLwr0CF8PFbhfDvE
+         eisg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687185954; x=1689777954;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JGh6q8YX2/fWXkHg5338c1JuUfqVUfeIziiaO9CuRyA=;
+        b=URATpteKTFA4Xa5RAS/VkMW0SLcmzvdr9awq5YylC/o0iEJoRzQkkldWKbGYmVxvff
+         h7sWZmXGnf03qQCSYS3XFyQLU2TjBniplbYr+Ld+5V1jiJn7icGvToqEgwxv2ffcCkx0
+         dt+CIYQuEdSOQRsEwgU9L2d0rQ2SnQW2su7cVndBTQloDVnvCQf19TTSWzlWXZpAcPQv
+         kbp9z7PbeyyiQ2zZtQ1/C50ry6d9sAfeI5KqBdA5VZZj5xcUbvTx9OAYeJ4ns0QqI9rL
+         se6rUzs0wbSb31eo71V2EBSVQUU4T6eZil33bQnnTKOUH4noOouaarUCnK4K9bf7LFe8
+         cPIw==
+X-Gm-Message-State: AC+VfDzbgR3DhXWoikIwzBP1jlI3A3hqFn7E5dOTWbYdp0pWtfWy/Mcb
+        LjdUqLLpQOq76WL4QmcBL5xB/w==
+X-Google-Smtp-Source: ACHHUZ58xFLtIpptHAM69KQBzXtTb2dYEYCsNT4yppezElKLNkx81i5BNudAdsvN6Sa6fvflLxceWw==
+X-Received: by 2002:a19:7b02:0:b0:4f8:83f:babe with SMTP id w2-20020a197b02000000b004f8083fbabemr5268988lfc.62.1687185954010;
+        Mon, 19 Jun 2023 07:45:54 -0700 (PDT)
+Received: from [192.168.1.101] (abyl242.neoplus.adsl.tpnet.pl. [83.9.31.242])
+        by smtp.gmail.com with ESMTPSA id y18-20020ac255b2000000b004eb12850c40sm4294426lfg.14.2023.06.19.07.45.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Jun 2023 07:45:53 -0700 (PDT)
+Message-ID: <7d85389e-3066-b031-437a-0c0b800f57ad@linaro.org>
+Date:   Mon, 19 Jun 2023 16:45:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230619094759.21013-5-minda.chen@starfivetech.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm8350: add APR and LPASS TLMM
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230616190222.2251186-1-krzysztof.kozlowski@linaro.org>
+ <20230616190222.2251186-3-krzysztof.kozlowski@linaro.org>
+ <4e558ea5-84cf-c7d4-19c2-f6e72f497c74@linaro.org>
+ <1dfcc1cd-3e71-8d02-5d5e-4b501d7ada50@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <1dfcc1cd-3e71-8d02-5d5e-4b501d7ada50@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Minda,
+On 19.06.2023 16:37, Krzysztof Kozlowski wrote:
+> On 19/06/2023 15:24, Konrad Dybcio wrote:
+>> On 16.06.2023 21:02, Krzysztof Kozlowski wrote:
+>>> Add audio-related nodes: the APR in the ADSP (same as on SM8250) and
+>>> LPASS TLMM pin controller.
+>>>
+>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>
+>>> ---
+>>>
+>>> Bindings for SM8350:
+>>> https://lore.kernel.org/linux-arm-msm/20230616185742.2250452-1-krzysztof.kozlowski@linaro.org/T/#t
+>>> ---
+>>>  arch/arm64/boot/dts/qcom/sm8350.dtsi | 82 ++++++++++++++++++++++++++++
+>>>  1 file changed, 82 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+>>> index 33b7ef8fd78a..9650cecb1370 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+>>> @@ -15,7 +15,9 @@
+>>>  #include <dt-bindings/mailbox/qcom-ipcc.h>
+>>>  #include <dt-bindings/phy/phy-qcom-qmp.h>
+>>>  #include <dt-bindings/power/qcom-rpmpd.h>
+>>> +#include <dt-bindings/soc/qcom,apr.h>
+>>>  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
+>>> +#include <dt-bindings/sound/qcom,q6afe.h>
+>>>  #include <dt-bindings/thermal/thermal.h>
+>>>  #include <dt-bindings/interconnect/qcom,sm8350.h>
+>>>  
+>>> @@ -1780,6 +1782,20 @@ tcsr_mutex: hwlock@1f40000 {
+>>>  			#hwlock-cells = <1>;
+>>>  		};
+>>>  
+>>> +		lpass_tlmm: pinctrl@33c0000 {
+>>> +			compatible = "qcom,sm8350-lpass-lpi-pinctrl";
+>>> +			reg = <0 0x033c0000 0x0 0x20000>,
+>> '0' for addr, '0x0' for size :/
+>>
+>> The rest of the file uses '0', please do that
+> It's a mixture but mostly 0x0 in both places. I don't mind switching to 0.
+0x0 would be preferred (dec makes no sense for registers) but I don't
+think anybody wants to do (or handle) the mess of replacing that
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linus/master v6.4-rc7 next-20230619]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Minda-Chen/dt-bindings-phy-Add-StarFive-JH7110-PCIe-PHY/20230619-184756
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230619094759.21013-5-minda.chen%40starfivetech.com
-patch subject: [PATCH v7 4/5] phy: starfive: Add JH7110 PCIE 2.0 PHY driver
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20230619/202306192215.TvQco9m6-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230619/202306192215.TvQco9m6-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306192215.TvQco9m6-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "devm_platform_ioremap_resource" [drivers/phy/starfive/phy-jh7110-pcie.ko] undefined!
-ERROR: modpost: "devm_ioremap_resource" [drivers/dma/qcom/hdma.ko] undefined!
-ERROR: modpost: "devm_platform_ioremap_resource" [drivers/dma/fsl-edma.ko] undefined!
-ERROR: modpost: "devm_platform_ioremap_resource" [drivers/dma/idma64.ko] undefined!
-ERROR: modpost: "iounmap" [drivers/tty/ipwireless/ipwireless.ko] undefined!
-ERROR: modpost: "ioremap" [drivers/tty/ipwireless/ipwireless.ko] undefined!
-ERROR: modpost: "devm_platform_ioremap_resource" [drivers/char/xillybus/xillybus_of.ko] undefined!
-ERROR: modpost: "devm_memremap" [drivers/misc/open-dice.ko] undefined!
-ERROR: modpost: "devm_memunmap" [drivers/misc/open-dice.ko] undefined!
-ERROR: modpost: "iounmap" [drivers/net/ethernet/8390/pcnet_cs.ko] undefined!
-WARNING: modpost: suppressed 19 unresolved symbol warnings because there were too many)
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for USB_PHY
-   Depends on [n]: USB_SUPPORT [=n]
-   Selected by [m]:
-   - PHY_STARFIVE_JH7110_PCIE [=m]
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Konrad
+> 
+>>
+>>> +			      <0 0x03550000 0x0 0x10000>;
+>>> +
+>>> +			clocks = <&q6afecc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
+>>> +				 <&q6afecc LPASS_HW_DCODEC_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
+>>> +			clock-names = "core", "audio";
+>>> +
+>>> +			gpio-controller;
+>>> +			#gpio-cells = <2>;
+>>> +			gpio-ranges = <&lpass_tlmm 0 0 15>;
+>>> +		};
+>>> +
+>>>  		gpu: gpu@3d00000 {
+>>>  			compatible = "qcom,adreno-660.1", "qcom,adreno";
+>>>  
+>>> @@ -3189,6 +3205,72 @@ IPCC_MPROC_SIGNAL_GLINK_QMP
+>>>  				label = "lpass";
+>>>  				qcom,remote-pid = <2>;
+>>>  
+>>> +				apr {
+>>> +					compatible = "qcom,apr-v2";
+>>> +					qcom,glink-channels = "apr_audio_svc";
+>>> +					qcom,domain = <APR_DOMAIN_ADSP>;
+>>> +					#address-cells = <1>;
+>>> +					#size-cells = <0>;
+>>> +
+>>> +					service@3 {
+>>> +						reg = <APR_SVC_ADSP_CORE>;
+>>> +						compatible = "qcom,q6core";
+>>> +						qcom,protection-domain = "avs/audio", "msm/adsp/audio_pd";
+>>> +					};
+>>> +
+>>> +					q6afe: service@4 {
+>>> +						compatible = "qcom,q6afe";
+>>> +						reg = <APR_SVC_AFE>;
+>>> +						qcom,protection-domain = "avs/audio", "msm/adsp/audio_pd";
+>> Missing newline before subnodes
+> 
+> acks
+> 
+> Best regards,
+> Krzysztof
+> 
