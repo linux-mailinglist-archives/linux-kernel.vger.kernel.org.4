@@ -2,203 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48272734A4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 04:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E96A734A4E
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 04:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbjFSCdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 22:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52126 "EHLO
+        id S229795AbjFSCea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 22:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjFSCdK (ORCPT
+        with ESMTP id S229567AbjFSCe2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 22:33:10 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 804EE1B4;
-        Sun, 18 Jun 2023 19:33:07 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qkv2601YXz4x0B;
-        Mon, 19 Jun 2023 12:33:01 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687141986;
-        bh=t1l5GS/PuRN5cARlTbwzxa0sSs/zfPxD2hxKuKE13R8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=BYfTRHJf+D2B56AZEtGjrO0GQ1RRFdocYxpx1ZoDpDKIVIhsKpkJB/h+LoEM9IwwO
-         k0uqOMDCgsdnk6/EoEKBaVAuRneQDf3W5+naUpR3T8RoVe2YKc8O4me5kQEJM7MROm
-         /ImsbdV8kSYhohDTkHnqlzJOXGdlpu0JI7kjHwq6wU8196InqEZATPxYkO1WRaqdkV
-         rgKLNgFzo0jyhrzFFwboXjhu4q094MgA+oi+EDJcBlR4tm+l4LqkeyWjYW+DGe10ho
-         dmM1WEApDtMWtuLkcil9f2RnjobJKlJM9/r4XuFPP4lbanFMTI9XKoOiYS84O5/+QE
-         FevfzoiBXczrg==
-Date:   Mon, 19 Jun 2023 12:33:00 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Anup Patel <anup@brainfault.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul@pwsan.com>
-Cc:     Andy Chiu <andy.chiu@sifive.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Vincent Chen <vincent.chen@sifive.com>
-Subject: linux-next: manual merge of the kvm-riscv tree with the risc-v tree
-Message-ID: <20230619123300.389e3dc9@canb.auug.org.au>
+        Sun, 18 Jun 2023 22:34:28 -0400
+Received: from out-34.mta1.migadu.com (out-34.mta1.migadu.com [95.215.58.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E8F116
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 19:34:27 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1687142065;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=oVQbxjpuybR0tDH9ddBEqcix10WINBbUnDacUemPWWA=;
+        b=Mn0IXsSF0w1YIqlm5F+yQWMVV4RZqBO5LgK1xOC66NLlKvuf4FZdDHF9JB7cnIVUAC1Vk5
+        I51mMpf4cNHS3ZgZ/PvIOeTojrmPt7TuNwHY/RByoqyXtLxyLemfKimVYOB5L5jSR4qWSE
+        FDk2p6b9errHejR2r9GD1BazcIA9lEY=
+From:   Yajun Deng <yajun.deng@linux.dev>
+To:     akpm@linux-foundation.org, rppt@kernel.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Yajun Deng <yajun.deng@linux.dev>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v4] mm: pass nid to reserve_bootmem_region()
+Date:   Mon, 19 Jun 2023 10:34:06 +0800
+Message-Id: <20230619023406.424298-1-yajun.deng@linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/=bB+dLl5ZRVFtXoRq8SiKYH";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/=bB+dLl5ZRVFtXoRq8SiKYH
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+early_pfn_to_nid() is called frequently in init_reserved_page(), it
+returns the node id of the PFN. These PFN are probably from the same
+memory region, they have the same node id. It's not necessary to call
+early_pfn_to_nid() for each PFN.
 
-Hi all,
+Pass nid to reserve_bootmem_region() and drop the call to
+early_pfn_to_nid() in init_reserved_page(). Also, set nid on all
+reserved pages before doing this, as some reserved memory regions may
+not be set nid.
 
-Today's linux-next merge of the kvm-riscv tree got a conflict in:
+The most beneficial function is memmap_init_reserved_pages() if
+CONFIG_DEFERRED_STRUCT_PAGE_INIT is enabled.
 
-  arch/riscv/include/uapi/asm/kvm.h
+The following data was tested on an x86 machine with 190GB of RAM.
 
-between commit:
+before:
+memmap_init_reserved_pages()  67ms
 
-  0f4b82579716 ("riscv: KVM: Add vector lazy save/restore support")
+after:
+memmap_init_reserved_pages()  20ms
 
-from the risc-v tree and commits:
+Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202306160145.juJMr3Bi-lkp@intel.com
+---
+V3 -> V4: make the test for early_page_initialised() inside if
+	  (IS_ENABLED(CONFIG_DEFERRED_STRUCT_PAGE_INIT))
+V2 -> V3: set nid on all reserved pages before pass nid.
+V1 -> V2: fix build error when CONFIG_NUMA is not enabled.
+---
+ include/linux/mm.h |  3 ++-
+ mm/memblock.c      | 31 +++++++++++++++++++++----------
+ mm/mm_init.c       | 30 +++++++++++++++++-------------
+ 3 files changed, 40 insertions(+), 24 deletions(-)
 
-  00f918f61c56 ("RISC-V: KVM: Skeletal in-kernel AIA irqchip support")
-  89d01306e34d ("RISC-V: KVM: Implement device interface for AIA irqchip")
-  289a007b98b0 ("RISC-V: KVM: Expose APLIC registers as attributes of AIA i=
-rqchip")
-  4fe9eadad83b ("RISC-V: KVM: Expose IMSIC registers as attributes of AIA i=
-rqchip")
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index fdd966b11f79..a7a0e692d44d 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -2960,7 +2960,8 @@ extern unsigned long free_reserved_area(void *start, void *end,
+ 
+ extern void adjust_managed_page_count(struct page *page, long count);
+ 
+-extern void reserve_bootmem_region(phys_addr_t start, phys_addr_t end);
++extern void reserve_bootmem_region(phys_addr_t start,
++				   phys_addr_t end, int nid);
+ 
+ /* Free the reserved page into the buddy system, so it gets managed. */
+ static inline void free_reserved_page(struct page *page)
+diff --git a/mm/memblock.c b/mm/memblock.c
+index ff0da1858778..f9e61e565a53 100644
+--- a/mm/memblock.c
++++ b/mm/memblock.c
+@@ -2091,19 +2091,30 @@ static void __init memmap_init_reserved_pages(void)
+ {
+ 	struct memblock_region *region;
+ 	phys_addr_t start, end;
+-	u64 i;
++	int nid;
++
++	/*
++	 * set nid on all reserved pages and also treat struct
++	 * pages for the NOMAP regions as PageReserved
++	 */
++	for_each_mem_region(region) {
++		nid = memblock_get_region_node(region);
++		start = region->base;
++		end = start + region->size;
++
++		if (memblock_is_nomap(region))
++			reserve_bootmem_region(start, end, nid);
++
++		memblock_set_node(start, end, &memblock.reserved, nid);
++	}
+ 
+ 	/* initialize struct pages for the reserved regions */
+-	for_each_reserved_mem_range(i, &start, &end)
+-		reserve_bootmem_region(start, end);
++	for_each_reserved_mem_region(region) {
++		nid = memblock_get_region_node(region);
++		start = region->base;
++		end = start + region->size;
+ 
+-	/* and also treat struct pages for the NOMAP regions as PageReserved */
+-	for_each_mem_region(region) {
+-		if (memblock_is_nomap(region)) {
+-			start = region->base;
+-			end = start + region->size;
+-			reserve_bootmem_region(start, end);
+-		}
++		reserve_bootmem_region(start, end, nid);
+ 	}
+ }
+ 
+diff --git a/mm/mm_init.c b/mm/mm_init.c
+index d393631599a7..a1963c3322af 100644
+--- a/mm/mm_init.c
++++ b/mm/mm_init.c
+@@ -646,10 +646,8 @@ static inline void pgdat_set_deferred_range(pg_data_t *pgdat)
+ }
+ 
+ /* Returns true if the struct page for the pfn is initialised */
+-static inline bool __meminit early_page_initialised(unsigned long pfn)
++static inline bool __meminit early_page_initialised(unsigned long pfn, int nid)
+ {
+-	int nid = early_pfn_to_nid(pfn);
+-
+ 	if (node_online(nid) && pfn >= NODE_DATA(nid)->first_deferred_pfn)
+ 		return false;
+ 
+@@ -695,15 +693,14 @@ defer_init(int nid, unsigned long pfn, unsigned long end_pfn)
+ 	return false;
+ }
+ 
+-static void __meminit init_reserved_page(unsigned long pfn)
++static void __meminit init_reserved_page(unsigned long pfn, int nid)
+ {
+ 	pg_data_t *pgdat;
+-	int nid, zid;
++	int zid;
+ 
+-	if (early_page_initialised(pfn))
++	if (early_page_initialised(pfn, nid))
+ 		return;
+ 
+-	nid = early_pfn_to_nid(pfn);
+ 	pgdat = NODE_DATA(nid);
+ 
+ 	for (zid = 0; zid < MAX_NR_ZONES; zid++) {
+@@ -717,7 +714,7 @@ static void __meminit init_reserved_page(unsigned long pfn)
+ #else
+ static inline void pgdat_set_deferred_range(pg_data_t *pgdat) {}
+ 
+-static inline bool early_page_initialised(unsigned long pfn)
++static inline bool early_page_initialised(unsigned long pfn, int nid)
+ {
+ 	return true;
+ }
+@@ -727,7 +724,7 @@ static inline bool defer_init(int nid, unsigned long pfn, unsigned long end_pfn)
+ 	return false;
+ }
+ 
+-static inline void init_reserved_page(unsigned long pfn)
++static inline void init_reserved_page(unsigned long pfn, int nid)
+ {
+ }
+ #endif /* CONFIG_DEFERRED_STRUCT_PAGE_INIT */
+@@ -738,7 +735,8 @@ static inline void init_reserved_page(unsigned long pfn)
+  * marks the pages PageReserved. The remaining valid pages are later
+  * sent to the buddy page allocator.
+  */
+-void __meminit reserve_bootmem_region(phys_addr_t start, phys_addr_t end)
++void __meminit reserve_bootmem_region(phys_addr_t start,
++				      phys_addr_t end, int nid)
+ {
+ 	unsigned long start_pfn = PFN_DOWN(start);
+ 	unsigned long end_pfn = PFN_UP(end);
+@@ -747,7 +745,7 @@ void __meminit reserve_bootmem_region(phys_addr_t start, phys_addr_t end)
+ 		if (pfn_valid(start_pfn)) {
+ 			struct page *page = pfn_to_page(start_pfn);
+ 
+-			init_reserved_page(start_pfn);
++			init_reserved_page(start_pfn, nid);
+ 
+ 			/* Avoid false-positive PageTail() */
+ 			INIT_LIST_HEAD(&page->lru);
+@@ -2579,8 +2577,14 @@ void __init set_dma_reserve(unsigned long new_dma_reserve)
+ void __init memblock_free_pages(struct page *page, unsigned long pfn,
+ 							unsigned int order)
+ {
+-	if (!early_page_initialised(pfn))
+-		return;
++
++	if (IS_ENABLED(CONFIG_DEFERRED_STRUCT_PAGE_INIT)) {
++		int nid = early_pfn_to_nid(pfn);
++
++		if (!early_page_initialised(pfn, nid))
++			return;
++	}
++
+ 	if (!kmsan_memblock_free_pages(page, order)) {
+ 		/* KMSAN will take care of these pages. */
+ 		return;
+-- 
+2.25.1
 
-from the kvm-riscv tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/riscv/include/uapi/asm/kvm.h
-index 855c047e86d4,61d7fecc4899..000000000000
---- a/arch/riscv/include/uapi/asm/kvm.h
-+++ b/arch/riscv/include/uapi/asm/kvm.h
-@@@ -204,13 -204,77 +205,84 @@@ enum KVM_RISCV_SBI_EXT_ID=20
-  #define KVM_REG_RISCV_SBI_MULTI_REG_LAST	\
-  		KVM_REG_RISCV_SBI_MULTI_REG(KVM_RISCV_SBI_EXT_MAX - 1)
- =20
- +/* V extension registers are mapped as type 9 */
- +#define KVM_REG_RISCV_VECTOR		(0x09 << KVM_REG_RISCV_TYPE_SHIFT)
- +#define KVM_REG_RISCV_VECTOR_CSR_REG(name)	\
- +		(offsetof(struct __riscv_v_ext_state, name) / sizeof(unsigned long))
- +#define KVM_REG_RISCV_VECTOR_REG(n)	\
- +		((n) + sizeof(struct __riscv_v_ext_state) / sizeof(unsigned long))
- +
-+ /* Device Control API: RISC-V AIA */
-+ #define KVM_DEV_RISCV_APLIC_ALIGN		0x1000
-+ #define KVM_DEV_RISCV_APLIC_SIZE		0x4000
-+ #define KVM_DEV_RISCV_APLIC_MAX_HARTS		0x4000
-+ #define KVM_DEV_RISCV_IMSIC_ALIGN		0x1000
-+ #define KVM_DEV_RISCV_IMSIC_SIZE		0x1000
-+=20
-+ #define KVM_DEV_RISCV_AIA_GRP_CONFIG		0
-+ #define KVM_DEV_RISCV_AIA_CONFIG_MODE		0
-+ #define KVM_DEV_RISCV_AIA_CONFIG_IDS		1
-+ #define KVM_DEV_RISCV_AIA_CONFIG_SRCS		2
-+ #define KVM_DEV_RISCV_AIA_CONFIG_GROUP_BITS	3
-+ #define KVM_DEV_RISCV_AIA_CONFIG_GROUP_SHIFT	4
-+ #define KVM_DEV_RISCV_AIA_CONFIG_HART_BITS	5
-+ #define KVM_DEV_RISCV_AIA_CONFIG_GUEST_BITS	6
-+=20
-+ /*
-+  * Modes of RISC-V AIA device:
-+  * 1) EMUL (aka Emulation): Trap-n-emulate IMSIC
-+  * 2) HWACCEL (aka HW Acceleration): Virtualize IMSIC using IMSIC guest f=
-iles
-+  * 3) AUTO (aka Automatic): Virtualize IMSIC using IMSIC guest files when=
-ever
-+  *    available otherwise fallback to trap-n-emulation
-+  */
-+ #define KVM_DEV_RISCV_AIA_MODE_EMUL		0
-+ #define KVM_DEV_RISCV_AIA_MODE_HWACCEL		1
-+ #define KVM_DEV_RISCV_AIA_MODE_AUTO		2
-+=20
-+ #define KVM_DEV_RISCV_AIA_IDS_MIN		63
-+ #define KVM_DEV_RISCV_AIA_IDS_MAX		2048
-+ #define KVM_DEV_RISCV_AIA_SRCS_MAX		1024
-+ #define KVM_DEV_RISCV_AIA_GROUP_BITS_MAX	8
-+ #define KVM_DEV_RISCV_AIA_GROUP_SHIFT_MIN	24
-+ #define KVM_DEV_RISCV_AIA_GROUP_SHIFT_MAX	56
-+ #define KVM_DEV_RISCV_AIA_HART_BITS_MAX		16
-+ #define KVM_DEV_RISCV_AIA_GUEST_BITS_MAX	8
-+=20
-+ #define KVM_DEV_RISCV_AIA_GRP_ADDR		1
-+ #define KVM_DEV_RISCV_AIA_ADDR_APLIC		0
-+ #define KVM_DEV_RISCV_AIA_ADDR_IMSIC(__vcpu)	(1 + (__vcpu))
-+ #define KVM_DEV_RISCV_AIA_ADDR_MAX		\
-+ 		(1 + KVM_DEV_RISCV_APLIC_MAX_HARTS)
-+=20
-+ #define KVM_DEV_RISCV_AIA_GRP_CTRL		2
-+ #define KVM_DEV_RISCV_AIA_CTRL_INIT		0
-+=20
-+ /*
-+  * The device attribute type contains the memory mapped offset of the
-+  * APLIC register (range 0x0000-0x3FFF) and it must be 4-byte aligned.
-+  */
-+ #define KVM_DEV_RISCV_AIA_GRP_APLIC		3
-+=20
-+ /*
-+  * The lower 12-bits of the device attribute type contains the iselect
-+  * value of the IMSIC register (range 0x70-0xFF) whereas the higher order
-+  * bits contains the VCPU id.
-+  */
-+ #define KVM_DEV_RISCV_AIA_GRP_IMSIC		4
-+ #define KVM_DEV_RISCV_AIA_IMSIC_ISEL_BITS	12
-+ #define KVM_DEV_RISCV_AIA_IMSIC_ISEL_MASK	\
-+ 		((1U << KVM_DEV_RISCV_AIA_IMSIC_ISEL_BITS) - 1)
-+ #define KVM_DEV_RISCV_AIA_IMSIC_MKATTR(__vcpu, __isel)	\
-+ 		(((__vcpu) << KVM_DEV_RISCV_AIA_IMSIC_ISEL_BITS) | \
-+ 		 ((__isel) & KVM_DEV_RISCV_AIA_IMSIC_ISEL_MASK))
-+ #define KVM_DEV_RISCV_AIA_IMSIC_GET_ISEL(__attr)	\
-+ 		((__attr) & KVM_DEV_RISCV_AIA_IMSIC_ISEL_MASK)
-+ #define KVM_DEV_RISCV_AIA_IMSIC_GET_VCPU(__attr)	\
-+ 		((__attr) >> KVM_DEV_RISCV_AIA_IMSIC_ISEL_BITS)
-+=20
-+ /* One single KVM irqchip, ie. the AIA */
-+ #define KVM_NR_IRQCHIPS			1
-+=20
-  #endif
- =20
-  #endif /* __LINUX_KVM_RISCV_H */
-
---Sig_/=bB+dLl5ZRVFtXoRq8SiKYH
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSPvlwACgkQAVBC80lX
-0GwdFQf/d9CCgkE0PrUDzkBr7r/4XMvFg6yGJyfFPG21dOLnKsfLV6ZJmE+CW3vT
-ycKvWtX9MlCnVUrSdZUVU7MzxcIfDGwgif8pyx6ouBcJANTEVjt6of5isuGazuPY
-lqSNGDImyQi8oqKvqk7i9xsDxMCY1VaBzAgsSIATbG9eN9KauopXk2av24bCdmAl
-nQKX3ZGQirpg9fv/3Bd13SSyQDQ4Kxu8pDo2/+JTrEZp9YJeaRh8EtjC2mPUgSwt
-yc4YhfieAx/6MEI2+BEWNLGgonWG+ObGmiP/BEZLE87Jm3ndjqPa7thf85MfmhMl
-6snjJ5fcZmdPx2Pc4RmiQGde2SiqGA==
-=mIfB
------END PGP SIGNATURE-----
-
---Sig_/=bB+dLl5ZRVFtXoRq8SiKYH--
