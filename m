@@ -2,87 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D30E735E71
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 22:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95DF3735E73
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 22:25:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbjFSUZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 16:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35020 "EHLO
+        id S229823AbjFSUZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 16:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjFSUZU (ORCPT
+        with ESMTP id S229757AbjFSUZm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 16:25:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48485CC
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 13:24:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687206275;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=L+7NDxcHQTB4tiGksszjGmWGVz0Hs3EOY3lovbfaDMI=;
-        b=EJLm31LqfZLJoQsREcMfryTJw4ELgkTqIgw+Z2w8JEZYjb0Xb49Q+uS5cYFBn8/HWFq1ev
-        Z2KJMXHLWK/CUD8KVEYISVPZ7IJqJJ9zDMi8orXtnQntmCON8idPttQFPLIFCbZotL0VQW
-        vl7bdKLQ7zA2naIeNa5kRe9FyV9gW7I=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-497-IaidyvNzPTiD-bAA2DHNSA-1; Mon, 19 Jun 2023 16:24:33 -0400
-X-MC-Unique: IaidyvNzPTiD-bAA2DHNSA-1
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-3f8283a3a7aso9957591cf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 13:24:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687206273; x=1689798273;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L+7NDxcHQTB4tiGksszjGmWGVz0Hs3EOY3lovbfaDMI=;
-        b=AvmQAs37KSRbjAsvnnuo+AMWWUTLAw1395ZWMpmM/EO8JVx/2MvWiY8GEC9fkV+x/7
-         cPj64orM2zzzykq6/WOay4shI+ujrbLzH5Aj8pMK4be5SR0KRb67bQmfLXaDNe5UcvN1
-         pkebV0Hsmojy7qHsAfp4OhObV9lxpXdtC3gkT0Uhp5aLWzrxpesbRDHj1yb9tMaJYPbm
-         hCQZDyLfDxVqjsiyE3vJk8v+7ttEVMrFErv7xJo2B7ewYrgrepTcjnMfoBCkHgB389js
-         UpmiVV79FUvMXF7QbLjRqcm5MdMB8WgIZgJwDDHVY22b/c26EaVJ/oLcdKK0NtjZ/oR/
-         QuUQ==
-X-Gm-Message-State: AC+VfDxfyiLXCcE/a/JY7EkV+PZq3bFprE/GC+eu3RylwjC30Fc7ELnu
-        r41ivO0a9VgFFWX26ksvoiYS8n6izhP9Q+h/sDqh5oC+tDtFqm6+li2GEtj1lDB9M4+mH9yKMop
-        t/fXjGlOgxPWnZpNkFs89Ce65
-X-Received: by 2002:ac8:5842:0:b0:3f9:cb97:f15a with SMTP id h2-20020ac85842000000b003f9cb97f15amr14546253qth.0.1687206273195;
-        Mon, 19 Jun 2023 13:24:33 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6WIOHDZ2wnZk1jY00viqycxxSeQBQ8/Wl9zGA/XOhryPBnhgsBROAKpvOdG1nbeCdTgeRN9A==
-X-Received: by 2002:ac8:5842:0:b0:3f9:cb97:f15a with SMTP id h2-20020ac85842000000b003f9cb97f15amr14546240qth.0.1687206272971;
-        Mon, 19 Jun 2023 13:24:32 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id i10-20020ac860ca000000b003f9cca00552sm238782qtm.93.2023.06.19.13.24.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 13:24:32 -0700 (PDT)
-Date:   Mon, 19 Jun 2023 16:24:31 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        James Houghton <jthoughton@google.com>,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH 6/7] mm/gup: Accelerate thp gup even for "pages != NULL"
-Message-ID: <ZJC5f+oXEKGS0jtW@x1n>
-References: <20230613215346.1022773-1-peterx@redhat.com>
- <20230613215346.1022773-7-peterx@redhat.com>
- <d8c76484-1030-44a3-b148-7e69fa84243a@lucifer.local>
- <ZJCuepgy3+66S03G@x1n>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZJCuepgy3+66S03G@x1n>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Mon, 19 Jun 2023 16:25:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03294FE;
+        Mon, 19 Jun 2023 13:25:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BBF460EF6;
+        Mon, 19 Jun 2023 20:25:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE0D4C433C8;
+        Mon, 19 Jun 2023 20:25:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1687206338;
+        bh=WAYvKIcP5JGcLoFhs+xJByJUau+tOkVoHGTkkvrP4JU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=0wXaJbOrGQB8I5NagWd0d0bwZnuFr0sqwVgcuephvPeNk8PiIDJ6lAJRWIJ30F2eA
+         Ma2AXZUP278LGHlvO8gKasSqhaH7kP3JiqAIWDa1SUowswj56q4jxDUJ3pm1vlsewf
+         J9RBAQoe+JoYDiibsRs/mGswTn58y/6Z0sad7Ttw=
+Date:   Mon, 19 Jun 2023 13:25:37 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the mm tree with Linus' tree
+Message-Id: <20230619132537.d3ae1873ad90e9fed47437d6@linux-foundation.org>
+In-Reply-To: <20230619092355.133c5cdb@canb.auug.org.au>
+References: <20230619092355.133c5cdb@canb.auug.org.au>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,53 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 03:37:30PM -0400, Peter Xu wrote:
-> Here what I can do is still guard this try_grab_folio() and fail the GUP if
-> for any reason it failed.  Perhaps then it means I'll also keep that one
-> untouched in hugetlb_follow_page_mask() too.  But I suppose keeping the
-> WARN_ON_ONCE() seems still proper.
+On Mon, 19 Jun 2023 09:23:55 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Here's the outcome that I plan to post in the new version, taking care of
-try_grab_folio() failures even if it happens, meanwhile remove the
-compound_head() redundancy on the page.
+> Hi all,
+> 
+> Today's linux-next merge of the mm tree got a conflict in:
+> 
+>   mm/mmap.c
+> 
+> between commit:
+> 
+>   606c812eb1d5 ("mm/mmap: Fix error path in do_vmi_align_munmap()")
+> 
+> from the origin tree and commits:
+> 
+>   66106c364147 ("mm: change do_vmi_align_munmap() side tree index")
+>   47b1d8de18f5 ("mm/mmap: change vma iteration order in do_vmi_align_munmap()")
+> 
+> from the mm tree.
+> 
+> I fixed it up (I think - see below) and can carry the fix as
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
+> 
 
-__get_user_pages():
-...
-===8<===
-			/*
-			 * This must be a large folio (and doesn't need to
-			 * be the whole folio; it can be part of it), do
-			 * the refcount work for all the subpages too.
-			 *
-			 * NOTE: here the page may not be the head page
-			 * e.g. when start addr is not thp-size aligned.
-			 * try_grab_folio() should have taken care of tail
-			 * pages.
-			 */
-			if (page_increm > 1) {
-				struct folio *folio;
+Thanks, Stephen.
 
-				/*
-				 * Since we already hold refcount on the
-				 * large folio, this should never fail.
-				 */
-				folio = try_grab_folio(page, page_increm - 1,
-						       foll_flags);
-				if (WARN_ON_ONCE(!folio)) {
-					/*
-					 * Release the 1st page ref if the
-					 * folio is problematic, fail hard.
-					 */
-					gup_put_folio(page_folio(page), 1,
-						      foll_flags);
-					ret = -EFAULT;
-					goto out;
-				}
-			}
-===8<===
+We'll push the series "Reduce preallocations for maple tree" into the
+next -rc cycle, so this issue should go away.
 
-Thanks,
+These:
 
--- 
-Peter Xu
+maple_tree-add-benchmarking-for-mas_for_each.patch
+maple_tree-add-benchmarking-for-mas_prev.patch
+mm-move-unmap_vmas-declaration-to-internal-header.patch
+mm-change-do_vmi_align_munmap-side-tree-index.patch
+mm-remove-prev-check-from-do_vmi_align_munmap.patch
+maple_tree-introduce-__mas_set_range.patch
+mm-remove-re-walk-from-mmap_region.patch
+maple_tree-adjust-node-allocation-on-mas_rebalance.patch
+maple_tree-re-introduce-entry-to-mas_preallocate-arguments.patch
+mm-use-vma_iter_clear_gfp-in-nommu.patch
+mm-set-up-vma-iterator-for-vma_iter_prealloc-calls.patch
+maple_tree-move-mas_wr_end_piv-below-mas_wr_extend_null.patch
+maple_tree-update-mas_preallocate-testing.patch
+maple_tree-refine-mas_preallocate-node-calculations.patch
+maple_tree-reduce-resets-during-store-setup.patch
+mm-mmap-change-vma-iteration-order-in-do_vmi_align_munmap.patch
 
