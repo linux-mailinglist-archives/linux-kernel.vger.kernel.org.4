@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82D65735635
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 13:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA7EC735634
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 13:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbjFSLwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 07:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32822 "EHLO
+        id S229824AbjFSLwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 07:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjFSLwE (ORCPT
+        with ESMTP id S229521AbjFSLwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 19 Jun 2023 07:52:04 -0400
 Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE4610B;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EBD5106;
         Mon, 19 Jun 2023 04:52:03 -0700 (PDT)
 Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35JAiV8x017493;
-        Mon, 19 Jun 2023 13:51:31 +0200
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35JAiV1h017510;
+        Mon, 19 Jun 2023 13:51:43 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=XMJnVSv0T7nCBxS+9vu0ogPkCSj//pIU8jGy+wxMdT8=;
- b=ZfJvzNYMtTbmpVrR74XAneE3UGXw5Gf9oAO8KxboaGR0xkIwHT44QYDAqo+lTx3YKFrA
- jsvGLydrY12uhjQFG0bkADarU0ydU7kOZ0H7WwCdCq2UTbfYZPePIHHbhy+lmQqfKa8S
- RmqSqev5ny8e8s3V/HCfiHmqGnlNcAn9cOlFkCoyBSr5V8RNu6qh3iY/gfX0sEeLFWMx
- wvMHe2o2cp+yv8B0TTgPJPWujIxdNSL/1rgvyjBNzJcMaH6UOYSxsVxsonRO5pfip0l5
- hB9y8g7JNQXh9iK14njmxcTpxvvksGliK4rBrOUzuxFZkvO8wENRbBl+o3O3rFq+bkel og== 
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=selector1;
+ bh=Zg7+vsy6uVMMMttExr1UyrGtSbJa9wdNY7n7qAIFW80=;
+ b=Y3vjtCZvipWojlyeUOi/8oyRNjCYndyhWz8jcIsd//587N3PnUuWfkd4gCWkRXEFgCjy
+ 5oS8rAeNThFTreyrqwDoHqYDEN9ZxgY/NXc8EseRF2XGQCjfIS8jaglg4PwJUfHQJ5sZ
+ WoT8GYlcwvb0WnYiD0HlZBwUvDOAGxWHsil7Mfd5P0ZTJCIhq4UgSp7FJ7h0GRH9GrXx
+ uk/day86G3lOSaHjNVabwxbgNTEOOQNrXJx1NnR4rEExVqJuQPFEN8uv3tZ1jG8PtkDR
+ ZzmDiB6khRYNiq4V9cQA9koldPo8w2jOVMegH+ot3MBDWDCa974fhQTd4f60ZFlurkqY Kg== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rah6bt9jd-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rah6bt9kx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Jun 2023 13:51:31 +0200
+        Mon, 19 Jun 2023 13:51:43 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E14F810002A;
-        Mon, 19 Jun 2023 13:51:28 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1D90010002A;
+        Mon, 19 Jun 2023 13:51:43 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D34CC228A33;
-        Mon, 19 Jun 2023 13:51:28 +0200 (CEST)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1252E228A33;
+        Mon, 19 Jun 2023 13:51:43 +0200 (CEST)
 Received: from localhost (10.201.21.210) by SHFDAG1NODE2.st.com (10.75.129.70)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 19 Jun
- 2023 13:51:28 +0200
+ 2023 13:51:40 +0200
 From:   Yann Gautier <yann.gautier@foss.st.com>
 To:     Ulf Hansson <ulf.hansson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -59,10 +59,12 @@ CC:     Conor Dooley <conor+dt@kernel.org>,
         <linux-stm32@st-md-mailman.stormreply.com>,
         <linux-arm-kernel@lists.infradead.org>,
         Yann Gautier <yann.gautier@foss.st.com>
-Subject: [PATCH v2 0/6] Update MMCI driver for STM32MP25
-Date:   Mon, 19 Jun 2023 13:51:14 +0200
-Message-ID: <20230619115120.64474-1-yann.gautier@foss.st.com>
+Subject: [PATCH v2 1/6] dt-bindings: mmc: mmci: Add st,stm32mp25-sdmmc2 compatible
+Date:   Mon, 19 Jun 2023 13:51:15 +0200
+Message-ID: <20230619115120.64474-2-yann.gautier@foss.st.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230619115120.64474-1-yann.gautier@foss.st.com>
+References: <20230619115120.64474-1-yann.gautier@foss.st.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -81,40 +83,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-STM32MP25 is a new SoC from STMicroelectronics. The machine was
-pushed by Alexandre [1] in his tree.
-On this new SoC, the SDMMC peripheral, using PL18x/MMCI driver
-has been updated to v3.
-The driver has been updated to manage this new version, and the new
-features it supports:
-* FIFO size increased from 64B to 1kB
-* IDMA size alignment/mask updated
-* New block gap hardware flow control
-* Delay block updated and dependent on SoC
+For STM32MP25, we'll need to distinguish how is managed the delay block.
+This is done through a new comptible dedicated for this SoC, as the
+delay block registers are located in SYSCFG peripheral.
 
-This series was pushed on top of next branch in Ulf's mmc tree, as it
-requires feedback clock update patch [2].
-
-[1] https://lore.kernel.org/lkml/59f4a900-34ee-d991-c350-265d38e7c862@foss.st.com/T/
-[2] https://lore.kernel.org/r/20230613150148.429828-1-yann.gautier@foss.st.com
-
+Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
+---
 Changes in v2:
 - update dt-bindings file (remove bootloader reference and use enum)
 
-Yann Gautier (6):
-  dt-bindings: mmc: mmci: Add st,stm32mp25-sdmmc2 compatible
-  mmc: mmci: add stm32_idmabsize_align parameter
-  mmc: mmci: Add support for sdmmc variant revision v3.0
-  mmc: mmci: stm32: manage block gap hardware flow control
-  mmc: mmci: stm32: prepare other delay block support
-  mmc: mmci: stm32: add delay block support for STM32MP25
+ Documentation/devicetree/bindings/mmc/arm,pl18x.yaml | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
- .../devicetree/bindings/mmc/arm,pl18x.yaml    |   7 +-
- drivers/mmc/host/mmci.c                       |  35 ++++
- drivers/mmc/host/mmci.h                       |   8 +-
- drivers/mmc/host/mmci_stm32_sdmmc.c           | 149 ++++++++++++++++--
- 4 files changed, 179 insertions(+), 20 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml b/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
+index 1c96da04f0e53..2459a55ed540b 100644
+--- a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
++++ b/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
+@@ -53,10 +53,11 @@ properties:
+         items:
+           - const: arm,pl18x
+           - const: arm,primecell
+-      - description: Entry for STMicroelectronics variant of PL18x.
+-          This dedicated compatible is used by bootloaders.
++      - description: Entries for STMicroelectronics variant of PL18x.
+         items:
+-          - const: st,stm32-sdmmc2
++          - enum:
++              - st,stm32-sdmmc2
++              - st,stm32mp25-sdmmc2
+           - const: arm,pl18x
+           - const: arm,primecell
+ 
 -- 
 2.25.1
 
