@@ -2,149 +2,495 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0056B7349E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 04:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 634AF7349E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 04:04:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbjFSCCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 22:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
+        id S229735AbjFSCEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 22:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjFSCCr (ORCPT
+        with ESMTP id S229725AbjFSCEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 22:02:47 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06985E4C
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 19:02:46 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-25e9e5f9e0cso1465286a91.0
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 19:02:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1687140165; x=1689732165;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gXezs9Rch4qwU+sdxagt3dLdrAjbG0FwaZwoUeR58wM=;
-        b=vfSLTGeOOV9bXM60MXaB/SN/BFKlMuMTB9eryikMaXPFS+OIVAClQjCasaf+Rr+eCN
-         NxCB3Oj2fuDpNQ8bVdKk6l2woFpF1MtMo/2ShGqntdBegEsnRoBkT5kvooi7ga4b3huL
-         DyJVqpB47fMhBffBLA8m/ctkisyEyQYK0hFEP42jZX6T+z3Tjz8gIdV2G8LDflkMle4W
-         pS1nhHNxFKLM9S+ExOFgltU7NqQRcHWVqUsuAGKiru5ONS53jdO+QgahSgYx3vZbSoYZ
-         92WjTJ58OsPEZMPgJEd1Dp5EPdfaOJykOkbTVpp+JOAQBCAGGoI4VqJxUb76aIzEGpzM
-         SKBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687140165; x=1689732165;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gXezs9Rch4qwU+sdxagt3dLdrAjbG0FwaZwoUeR58wM=;
-        b=Hq6dBP7Rj6Z/uF5SJq6DvebtSewabQ4IBCQPdDd3Jp74mZf6f/S3RreYZZj1Hl7tN3
-         uIihbbGh7L6h8b7GeeVxjJIAKDOejkttuB9M+VCU9io9soA6uMbUWnNls393ypsbYOq1
-         4YA17xGeoMrEymQHfX56E3GuiKn4P7Ofqo3iOjc8U7ryGX4jHXm3dchljP5cIkwLJfGw
-         bLazpP6kj29gJ9GVSVlnE9jvvhxdHf1Kgmgk3+ePv8G45HDQPVYttou6ofueTcFg5JC4
-         /eUKMA7J5pCNQY26wSjeOBKNLoBBBwcQ8XrrklMaLv4U9bcJzeMsgAMNwxUYCoD1Q01O
-         7qJg==
-X-Gm-Message-State: AC+VfDwQ3YnkyWVNmNssZEjiXq2OPKm/F1fynryZZsNiD2KfXKYPA2aq
-        ZT3aXJH3St5rjRGNQ0JwwucmHw==
-X-Google-Smtp-Source: ACHHUZ7GzEI3+lUZKDJza2HOWhvjB2quX2IIULD5jSFg9g5vW9C4J2mlqnDOA/Xv+8gq8gRP8dQx3Q==
-X-Received: by 2002:a17:90a:6e09:b0:259:c10:ea34 with SMTP id b9-20020a17090a6e0900b002590c10ea34mr6574076pjk.2.1687140165427;
-        Sun, 18 Jun 2023 19:02:45 -0700 (PDT)
-Received: from dread.disaster.area (pa49-180-13-202.pa.nsw.optusnet.com.au. [49.180.13.202])
-        by smtp.gmail.com with ESMTPSA id h2-20020a17090a298200b002310ed024adsm4970670pjd.12.2023.06.18.19.02.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Jun 2023 19:02:44 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-        (envelope-from <david@fromorbit.com>)
-        id 1qB4E5-00DTx5-2I;
-        Mon, 19 Jun 2023 12:02:41 +1000
-Date:   Mon, 19 Jun 2023 12:02:41 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     syzbot <syzbot+510dcbdc6befa1e6b2f6@syzkaller.appspotmail.com>
-Cc:     djwong@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [xfs?] UBSAN: array-index-out-of-bounds in
- xfs_attr3_leaf_add_work
-Message-ID: <ZI+3QXDHiohgv/Pb@dread.disaster.area>
-References: <0000000000001c8edb05fe518644@google.com>
+        Sun, 18 Jun 2023 22:04:38 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2051.outbound.protection.outlook.com [40.107.94.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F7318F;
+        Sun, 18 Jun 2023 19:04:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BHyRCHwMTShhUdYV8fU2EmAfRLoxqFHX+/EcYlfwhqe2N7ZvwMCviyTPA+rbKa1Rno1gUo3JzTAm884af0QeoyKAcXUgNE/ddzGcKuPixrOYiaSAC22spUlsrXcEBvQwq0pPz9x+bs9EUjRDDR7k5SanM/2hu8s0qTUgpxtfmnhqwu1rHYytwrAhyUXnf8Ol3SSmx6hiArSVYyyIiqjohQ8qtz+ST2flvVGV4otquFNIs8wvQWhdDWe7z0UPZUjof9GdNh1GU1415via3saDsdWGz4zaJWCT1A7jvoX06uvTwPk24MBLhflztMg5AXTxgFz6Us7+nrUCH6qT3Ox3uA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ky7ufUKo/LTl2b4iufGgb0Qztrw9y4UB7KvbIjQFJC4=;
+ b=TNwoxllto21aXUIl0dLFcXYnanUVYHpK5QmU7zVX4j4tpGS30AbuygdrAgPg/8D7uATavpb9bJmiZkF1cxZ9avN2KQUmKCgAi2gbB4YFtYOKNQVk8YJiTfd7jgye+hdn58vbozuBBFQ24k0CVOAweZfwutFlAWBYlK3EkTG6S8CWtYEvbFfYtB2C+hqaANt4O2MNCddC/cpIfM24qRCuPj3O1hE4W/QlVb6i6vB7CQsvk1llnOO7BlnE8fzYYJY2D+quHo8gJoPj3bmtOHwscyxdK/zPojwn17IGYA9SXNrNnryEB6eqEihBchmyYOiLuNdL3uGNwL1tb9GBPYtHmA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ky7ufUKo/LTl2b4iufGgb0Qztrw9y4UB7KvbIjQFJC4=;
+ b=n0uAKERKWPWOu6gToAsMN4VKseYBN0robE6sGfroFb27wukQHMkQ+L+LvCOpSgdN3sGVCbCDLeADW/UzwR7TDFQnIb9m3hDZu8bvchYiG7ymsvRg+o8j3iIKuW1X7Gwv1FZs3gQebk+LYH97MuJ+FWjZNwWnjHB0X/JNd+EtvL0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by PH7PR12MB6396.namprd12.prod.outlook.com (2603:10b6:510:1fc::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.35; Mon, 19 Jun
+ 2023 02:04:33 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::dfcf:f53c:c778:6f70]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::dfcf:f53c:c778:6f70%5]) with mapi id 15.20.6500.036; Mon, 19 Jun 2023
+ 02:04:33 +0000
+Message-ID: <fc055de3-3ff4-c0dc-f48a-9f30a60bfcbf@amd.com>
+Date:   Sun, 18 Jun 2023 21:04:29 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH V3 1/7] drivers/acpi: Add support for Wifi band RF
+ mitigations
+Content-Language: en-US
+To:     Evan Quan <evan.quan@amd.com>
+Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-wireless@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
+        Alexander.Deucher@amd.com, Christian.Koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
+        kvalo@kernel.org, nbd@nbd.name, lorenzo@kernel.org,
+        ryder.lee@mediatek.com, shayne.chen@mediatek.com,
+        sean.wang@mediatek.com, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, Lijo.Lazar@amd.com
+References: <20230616065757.1054422-1-evan.quan@amd.com>
+ <20230616065757.1054422-2-evan.quan@amd.com>
+From:   Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <20230616065757.1054422-2-evan.quan@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: DM6PR02CA0060.namprd02.prod.outlook.com
+ (2603:10b6:5:177::37) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000001c8edb05fe518644@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|PH7PR12MB6396:EE_
+X-MS-Office365-Filtering-Correlation-Id: d2184c06-d0e6-4041-eee5-08db70698628
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: X2fyA9skfgutXkSu7toB60UDj0U1+YUtgvxqi+o9RQ/2a4X8NeGf9EWbLvuFZ+IfdbS+j1IbXWgialHVJ8ARwRDzITgZwAIOBbk7zAcVjS7P/Zsj8yUUBc0UXyscCz0ztpiyuorKwUucBiNpjWl4jy0pFXwtLxTPBxlNRkDipTMEepDaLQU6zwy7IvUutlQcKT/4Oh7joS2s2bsU32MlrbpCShv0glLkyoNVgdkka8sInDu5DIRIozAgJS7rKYkMAa/xjVuwrlP0K00GgE35kdwfft9guZ+1q6P/S0keptJPUwPx5h2daVdA2XNcy8PJfdCVLO0+gB97Y7W4SlUSXP+y82Gh8gr+srfJa4QYEpEYMq1IFp8QZLoIvewPxEjZoYnGzVeGnjuJj5zQuF7kgv2BywDEmwc88Qb8X73/JXLLkIgEzwNa0elftmaOtOPBzEANeKiDZXH+a1h+Bb+uN+1TkfYGOjHicr2WP9uQ47XhXnSDWd6abRZIhTCvAfUv7zkDg4dWmqxHfnYbj4Jtjd3hNoGrFHuHzYCNHZJN93Zqkkcr/HO1PNavFjWTUkVToAkB7ed6uAnd1K5QCSkxwjqTWOIVeICp1KyFs317g8dxx+W4aC9TuQFtxh781pNcI6DK/AvlQVV2jJD9+WpW8A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(366004)(346002)(136003)(39860400002)(451199021)(2906002)(30864003)(41300700001)(7416002)(5660300002)(44832011)(6862004)(8676002)(8936002)(36756003)(86362001)(31696002)(53546011)(478600001)(6506007)(6512007)(37006003)(186003)(6486002)(6666004)(66946007)(66476007)(66556008)(6636002)(4326008)(316002)(38100700002)(2616005)(31686004)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d1VDYm1xbXFGZGNYQWhvL3NkdXBadkNTUllGUUVZUytJd0o3NjA5a1BXZ1pv?=
+ =?utf-8?B?VDF2ckwvN3RucHBESnhOQm0wWGI0SEJhRnZFSjVWSlZ6dytSR21VajNhQktK?=
+ =?utf-8?B?QTZDalV5VGpvaTVNUzFOcWhHbm9qRWlaTm8wcWo4bDNNUENHWGpKbmFsaFdX?=
+ =?utf-8?B?WnEvK3dQYWtseHRaWnlIYzk0RktqRTMxWVk3S2NaamUvQ2o4VGlHNkNwOHFx?=
+ =?utf-8?B?bmhYckNGdkpvYkhFa1RXaHhza1FvcXZxQWV2dHd3TmNhd0F3K3pzSWRHTzBh?=
+ =?utf-8?B?QmZxdUN0Nm92bGljdTB4d0RxdDJQMmVjQnpjOWI5Sy84d1NrSHFhWEw2ZXhD?=
+ =?utf-8?B?U0sxSTcyREE0ZEVibVArK1lSclhFazk1cC9LSDBaSXprWGMxMlhDRFF6SkZU?=
+ =?utf-8?B?cElCQ0RYNlg5T2lwa0tYRXF3WS85a3B0WG5vcHMzYnBQeG5aRFIyOXN0QVBU?=
+ =?utf-8?B?RVR4Q0UzSTdURTdqWnJaN2tIMHdTTmdSVVVhRk9mT21nN09PS0pib2M0NURw?=
+ =?utf-8?B?NmN0LzJaUTBEMEZVaTg3K0d0TG5YOTdwZGJoQmVBcENGVW94V3BFV3ZLMlRR?=
+ =?utf-8?B?S1crc01uZmpINzg1OUd3TWZ5aTQ5MVJkR3R0cGs2NTBJRkJpUGxNbmJPcTVJ?=
+ =?utf-8?B?UWhDU3pRQnFxejdZS3JMN29hQnBNT01kTlFJUTZGd3h4UlJteFp6OVN2V1ZF?=
+ =?utf-8?B?RHdMQ3lZbVVJNm1oOWlUL29kZnRHRFVRcDZta3htSUFhT0l3VXRhK1dKT3Jq?=
+ =?utf-8?B?UUw4ZTZaSnNOVmRlZUFlNTZyUEdydWFMV0U2eXlFdEMwUE1JS1E4L1FRR0sz?=
+ =?utf-8?B?bkJlWUpic0tJNHYyeGJQaUJlSHFEaFBJaHViZFplckpobWZxQnBYYlZjR3JC?=
+ =?utf-8?B?bzh5VGN0ZjNaT3ZXcVkvejNqTEpWMG9SamFiOWlpYTNJeGdQVUZDS1ZDU3dy?=
+ =?utf-8?B?MUNGZytpaE1Ud2JYVEdOYzBsYjByZDh0VDAxR1FnM3NjL2Q3L0J1eDZHcGhM?=
+ =?utf-8?B?YTBSNTA3NDR4bEpjTEtDeDlUbWRWSHlWZ1lNK0pZUEt5L2ZuQVowSUdwUFpG?=
+ =?utf-8?B?NGo1bG9CMWFVSVYvakJ6YlppMWFaQXV1RVVWdjhvUFVWZ3E1WURaY01hWjdI?=
+ =?utf-8?B?c2xEdEM4RVp0dEpkVGVCOEZnZThhTUR6c3IvMHdhWnFPK2QvcEhiTU0zTzNF?=
+ =?utf-8?B?Wk1Dc0FaZkZNSU5vc0pWaURkbStzd1ZUcEYwa1c4Rm4yc1RxZVRTcUZoT0Ja?=
+ =?utf-8?B?OFZCclNhUDFHdmUwbkNDRHhUMjBRai82amdvYVdXY2ZQS2NZSlM1b3pNTlVo?=
+ =?utf-8?B?b08zZ2dISkVDY3BzMFlPQ3kwcDJtM2J6SWwxQ3htQkVrcFBhaWhKSDJ4Y2JU?=
+ =?utf-8?B?djYxaEdvUndUV3lyd080WTRUQTZDTjBkVFpNRnpEWGM1KzlpQXl5ekFGdFgz?=
+ =?utf-8?B?UlZ1NDNLbDB4NHBKbHUycEszeEgray9mZDkwSFovY3hESmxqRGNkN0VlWEVP?=
+ =?utf-8?B?eW9FV2FDZWtDam83TVRhYWtINlMyOUM5OGxiZksrWm1PTithRmVyWjkxR2Ft?=
+ =?utf-8?B?UG5tNlRZdFphVXp2NGx3MTdQMk1FWHBDUzdzNlQzL1BmdE8yQURXbTlWWFJn?=
+ =?utf-8?B?MXBGTFJZbXFUdmlyM0ZidEFNY2M1SzdiQ01LOWRPdkovdHNlNWdIOHJkMkVr?=
+ =?utf-8?B?OWZabUg0VkdLZmxlRU0wVXRMY0dpcEYxNEZkYUFsemxnRnJwa29Mb3ZpZVRD?=
+ =?utf-8?B?UW5qRVVPMzZ5YzdzRnRyazdCYnF0dENTRnBsdS9jTHJzaTE2VXlESEk3Q0RI?=
+ =?utf-8?B?TGtDSEJ2ckJyaHNpRVFUcXdRdExzTjlBNkxFK0lwNVNxYkFUdGVDakxlbW01?=
+ =?utf-8?B?MFJWSDNvK1liTmFNQUNBS1BXZllDNjZjYmExN2hKVUpEc0Q5UTZMLzM4ZGpm?=
+ =?utf-8?B?WExCU1pTaW1zcDVXaVY2NTRFZ051U0pRWm1DTlhDdXlGWklaSXdrU0ZyRGw3?=
+ =?utf-8?B?aXY0YVN2UEJJUWRYMFozVFVpSjhaS0NwZ0hOY3VJSWlyRDNKd1hYODFzcnVE?=
+ =?utf-8?B?R1QrN0t5enNTRmxObFpQT1lkMDErSHJSOE5tdlRZek5QUFBtLzhpWEJiU3Zr?=
+ =?utf-8?B?NkE4c21YbjZyYnNvMTRhZUM5ckYwQWh2R1N0b1MxWmtpZXZ1Zkk1WGUxbjdh?=
+ =?utf-8?B?amc9PQ==?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d2184c06-d0e6-4041-eee5-08db70698628
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jun 2023 02:04:32.9197
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: J8QI+yob7Eyk9dIhT8v/4tgL4qmOaRV4R0CJccm1hja2QA7xCtKMDrITyf3kOPe7UtMcpCE5gxgcHHjz03aubg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6396
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 04:22:59AM -0700, syzbot wrote:
-> Hello,
+On 6/16/23 01:57, Evan Quan wrote:
+> From: Mario Limonciello <mario.limonciello@amd.com>
 > 
-> syzbot found the following issue on:
+> Due to electrical and mechanical constraints in certain platform designs
+> there may be likely interference of relatively high-powered harmonics of
+> the (G-)DDR memory clocks with local radio module frequency bands used
+> by Wifi 6/6e/7.
 > 
-> HEAD commit:    1f6ce8392d6f Add linux-next specific files for 20230613
-> git tree:       linux-next
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=14e629dd280000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=d103d5f9125e9fe9
-> dashboard link: https://syzkaller.appspot.com/bug?extid=510dcbdc6befa1e6b2f6
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=139d8d2d280000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11b371f1280000
+> To mitigate this, AMD has introduced an ACPI based mechanism that
+> devices can use to notify active use of particular frequencies so
+> that devices can make relative internal adjustments as necessary
+> to avoid this resonance.
 > 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/2d9bf45aeae9/disk-1f6ce839.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/e0b03ef83e17/vmlinux-1f6ce839.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/b6c21a24174d/bzImage-1f6ce839.xz
-> mounted in repro: https://storage.googleapis.com/syzbot-assets/65eca6891c21/mount_0.gz
+> In order for a device to support this, the expected flow for device
+> driver or subsystems:
 > 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+510dcbdc6befa1e6b2f6@syzkaller.appspotmail.com
+> Drivers/subsystems contributing frequencies:
 > 
-> XFS (loop0): Mounting V4 Filesystem 5e6273b8-2167-42bb-911b-418aa14a1261
-> XFS (loop0): Ending clean mount
-> xfs filesystem being mounted at /root/file0 supports timestamps until 2038-01-19 (0x7fffffff)
-> ================================================================================
-> UBSAN: array-index-out-of-bounds in fs/xfs/libxfs/xfs_attr_leaf.c:1560:3
-> index 14 is out of range for type '__u8 [1]'
-> CPU: 1 PID: 5021 Comm: syz-executor198 Not tainted 6.4.0-rc6-next-20230613-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
->  ubsan_epilogue lib/ubsan.c:217 [inline]
->  __ubsan_handle_out_of_bounds+0xd5/0x140 lib/ubsan.c:348
->  xfs_attr3_leaf_add_work+0x1528/0x1730 fs/xfs/libxfs/xfs_attr_leaf.c:1560
->  xfs_attr3_leaf_add+0x750/0x880 fs/xfs/libxfs/xfs_attr_leaf.c:1438
->  xfs_attr_leaf_try_add+0x1b7/0x660 fs/xfs/libxfs/xfs_attr.c:1242
->  xfs_attr_leaf_addname fs/xfs/libxfs/xfs_attr.c:444 [inline]
->  xfs_attr_set_iter+0x16c4/0x2f90 fs/xfs/libxfs/xfs_attr.c:721
->  xfs_xattri_finish_update+0x3c/0x140 fs/xfs/xfs_attr_item.c:332
+> 1) During probe, check `wbrf_supported_producer` to see if WBRF supported
+>     for the device.
+> 2) If adding frequencies, then call `wbrf_add_exclusion` with the
+>     start and end ranges of the frequencies.
+> 3) If removing frequencies, then call `wbrf_remove_exclusion` with
+>     start and end ranges of the frequencies.
+> 
+> Drivers/subsystems responding to frequencies:
+> 
+> 1) During probe, check `wbrf_supported_consumer` to see if WBRF is supported
+>     for the device.
+> 2) Call the `wbrf_retrieve_exclusions` to retrieve the current
+>     exclusions on receiving an ACPI notification for a new frequency
+>     change.
+> 
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> Co-developed-by: Evan Quan <evan.quan@amd.com>
+> Signed-off-by: Evan Quan <evan.quan@amd.com>
+> --
+> v1->v2:
+>    - move those wlan specific implementations to net/mac80211(Mario)
+> ---
+>   drivers/acpi/Kconfig     |   7 ++
+>   drivers/acpi/Makefile    |   2 +
+>   drivers/acpi/acpi_wbrf.c | 215 +++++++++++++++++++++++++++++++++++++++
+>   include/linux/wbrf.h     |  55 ++++++++++
+>   4 files changed, 279 insertions(+)
+>   create mode 100644 drivers/acpi/acpi_wbrf.c
+>   create mode 100644 include/linux/wbrf.h
+> 
+> diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
+> index ccbeab9500ec..9ee7c7dcc3e6 100644
+> --- a/drivers/acpi/Kconfig
+> +++ b/drivers/acpi/Kconfig
+> @@ -611,3 +611,10 @@ config X86_PM_TIMER
+>   
+>   	  You should nearly always say Y here because many modern
+>   	  systems require this timer.
+> +
+> +config ACPI_WBRF
+> +	bool "ACPI Wifi band RF mitigation mechanism"
+> +	help
+> +	  Wifi band RF mitigation mechanism allows multiple drivers from
+> +	  different domains to notify the frequencies in use so that hardware
+> +	  can be reconfigured to avoid harmonic conflicts.
+> \ No newline at end of file
 
-The on disk format for this field is defined as:
+There should be a newline at the end of the Kconfig file.
 
-typedef struct xfs_attr_leaf_name_local {
-        __be16  valuelen;               /* number of bytes in value */
-        __u8    namelen;                /* length of name bytes */
-        __u8    nameval[1];             /* name/value bytes */
-} xfs_attr_leaf_name_local_t
+> diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
+> index feb36c0b9446..be173e76aa62 100644
+> --- a/drivers/acpi/Makefile
+> +++ b/drivers/acpi/Makefile
+> @@ -131,3 +131,5 @@ obj-y				+= dptf/
+>   obj-$(CONFIG_ARM64)		+= arm64/
+>   
+>   obj-$(CONFIG_ACPI_VIOT)		+= viot.o
+> +
+> +obj-$(CONFIG_ACPI_WBRF)		+= acpi_wbrf.o
+> \ No newline at end of file
+> diff --git a/drivers/acpi/acpi_wbrf.c b/drivers/acpi/acpi_wbrf.c
+> new file mode 100644
+> index 000000000000..8c275998ac29
+> --- /dev/null
+> +++ b/drivers/acpi/acpi_wbrf.c
+> @@ -0,0 +1,215 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * AMD Wifi Band Exclusion Interface
+> + * Copyright (C) 2023 Advanced Micro Devices
+> + *
+> + */
+> +
+> +#include <linux/wbrf.h>
+> +
+> +/* functions */
+> +#define WBRF_RECORD		0x1
+> +#define WBRF_RETRIEVE		0x2
+> +
+> +/* record actions */
+> +#define WBRF_RECORD_ADD		0x0
+> +#define WBRF_RECORD_REMOVE	0x1
+> +
+> +#define WBRF_REVISION		0x1
+> +
+> +static const guid_t wifi_acpi_dsm_guid =
+> +	GUID_INIT(0x7b7656cf, 0xdc3d, 0x4c1c,
+> +		  0x83, 0xe9, 0x66, 0xe7, 0x21, 0xde, 0x30, 0x70);
+> +
+> +static int wbrf_dsm(struct acpi_device *adev, u8 fn,
+> +		    union acpi_object *argv4,
+> +		    union acpi_object **out)
+> +{
+> +	union acpi_object *obj;
+> +	int rc;
+> +
+> +	obj = acpi_evaluate_dsm(adev->handle, &wifi_acpi_dsm_guid,
+> +				WBRF_REVISION, fn, argv4);
+> +	if (!obj)
+> +		return -ENXIO;
+> +
+> +	switch (obj->type) {
+> +	case ACPI_TYPE_BUFFER:
+> +		if (!*out) {
+> +			rc = -EINVAL;
+> +			break;
+> +		}
+> +		*out = obj;
+> +		return 0;
+> +
+> +	case ACPI_TYPE_INTEGER:
+> +		rc =  obj->integer.value ? -EINVAL : 0;
+> +		break;
+> +	default:
+> +		rc = -EOPNOTSUPP;
+> +	}
+> +	ACPI_FREE(obj);
+> +
+> +	return rc;
+> +}
+> +
+> +static int wbrf_record(struct acpi_device *adev, uint8_t action,
+> +		       struct wbrf_ranges_in *in)
+> +{
+> +	union acpi_object *argv4;
+> +	uint32_t num_of_ranges = 0;
+> +	uint32_t arg_idx = 0;
+> +	uint32_t loop_idx;
+> +	int ret;
+> +
+> +	if (!in)
+> +		return -EINVAL;
+> +
+> +	for (loop_idx = 0; loop_idx < ARRAY_SIZE(in->band_list);
+> +	     loop_idx++)
+> +		if (in->band_list[loop_idx].start &&
+> +		    in->band_list[loop_idx].end)
+> +			num_of_ranges++;
+> +
+> +	argv4 = kzalloc(sizeof(*argv4) * (2 * num_of_ranges + 2 + 1), GFP_KERNEL);
+> +	if (!argv4)
+> +		return -ENOMEM;
+> +
+> +	argv4[arg_idx].package.type = ACPI_TYPE_PACKAGE;
+> +	argv4[arg_idx].package.count = 2 + 2 * num_of_ranges;
+> +	argv4[arg_idx++].package.elements = &argv4[1];
+> +	argv4[arg_idx].integer.type = ACPI_TYPE_INTEGER;
+> +	argv4[arg_idx++].integer.value = num_of_ranges;
+> +	argv4[arg_idx].integer.type = ACPI_TYPE_INTEGER;
+> +	argv4[arg_idx++].integer.value = action;
+> +
+> +	for (loop_idx = 0; loop_idx < ARRAY_SIZE(in->band_list);
+> +	     loop_idx++) {
+> +		if (!in->band_list[loop_idx].start ||
+> +		    !in->band_list[loop_idx].end)
+> +			continue;
+> +
+> +		argv4[arg_idx].integer.type = ACPI_TYPE_INTEGER;
+> +		argv4[arg_idx++].integer.value = in->band_list[loop_idx].start;
+> +		argv4[arg_idx].integer.type = ACPI_TYPE_INTEGER;
+> +		argv4[arg_idx++].integer.value = in->band_list[loop_idx].end;
+> +	}
+> +
+> +	ret = wbrf_dsm(adev, WBRF_RECORD, argv4, NULL);
+> +
+> +	kfree(argv4);
+> +
+> +	return ret;
+> +}
+> +
+> +int wbrf_add_exclusion(struct acpi_device *adev,
+> +		       struct wbrf_ranges_in *in)
+> +{
+> +	return wbrf_record(adev, WBRF_RECORD_ADD, in);
+> +}
+> +EXPORT_SYMBOL_GPL(wbrf_add_exclusion);
+> +
+> +int wbrf_remove_exclusion(struct acpi_device *adev,
+> +			  struct wbrf_ranges_in *in)
+> +{
+> +	return wbrf_record(adev, WBRF_RECORD_REMOVE, in);
+> +}
+> +EXPORT_SYMBOL_GPL(wbrf_remove_exclusion);
+> +
+> +bool wbrf_supported_producer(struct acpi_device *adev)
+> +{
+> +	return acpi_check_dsm(adev->handle, &wifi_acpi_dsm_guid,
+> +			      WBRF_REVISION,
+> +			      (1ULL << WBRF_RECORD) | (1ULL << WBRF_RETRIEVE));
+> +}
+> +EXPORT_SYMBOL_GPL(wbrf_supported_producer);
+> +
+> +static union acpi_object *
+> +acpi_evaluate_wbrf(acpi_handle handle, u64 rev, u64 func)
+> +{
+> +	acpi_status ret;
+> +	struct acpi_buffer buf = {ACPI_ALLOCATE_BUFFER, NULL};
+> +	union acpi_object params[4];
+> +	struct acpi_object_list input = {
+> +		.count = 4,
+> +		.pointer = params,
+> +	};
+> +
+> +	params[0].type = ACPI_TYPE_INTEGER;
+> +	params[0].integer.value = rev;
+> +	params[1].type = ACPI_TYPE_INTEGER;
+> +	params[1].integer.value = func;
+> +	params[2].type = ACPI_TYPE_PACKAGE;
+> +	params[2].package.count = 0;
+> +	params[2].package.elements = NULL;
+> +	params[3].type = ACPI_TYPE_STRING;
+> +	params[3].string.length = 0;
+> +	params[3].string.pointer= NULL;
+> +
+> +	ret = acpi_evaluate_object(handle, "WBRF", &input, &buf);
+> +	if (ACPI_SUCCESS(ret))
+> +		return (union acpi_object *)buf.pointer;
+> +
+> +	if (ret != AE_NOT_FOUND)
+> +		acpi_handle_warn(handle,
+> +				 "failed to evaluate WBRF(0x%x)\n", ret);
+> +
+> +	return NULL;
+> +}
+> +
+> +static bool check_acpi_wbrf(acpi_handle handle, u64 rev, u64 funcs)
+> +{
+> +	int i;
+> +	u64 mask = 0;
+> +	union acpi_object *obj;
+> +
+> +	if (funcs == 0)
+> +		return false;
+> +
+> +	obj = acpi_evaluate_wbrf(handle, rev, 0);
+> +	if (!obj)
+> +		return false;
+> +
+> +	if (obj->type != ACPI_TYPE_BUFFER)
+> +		return false;
+> +
+> +	for (i = 0; i < obj->buffer.length && i < 8; i++)
+> +		mask |= (((u64)obj->buffer.pointer[i]) << (i * 8));
+> +	ACPI_FREE(obj);
+> +
+> +	/*
+> +	 * Bit 0 indicates whether there's support for any functions other than
+> +	 * function 0.
+> +	 */
+> +	if ((mask & 0x1) && (mask & funcs) == funcs)
+> +		return true;
+> +
+> +	return false;
+> +}
+> +
+> +bool wbrf_supported_consumer(struct acpi_device *adev)
+> +{
+> +	return check_acpi_wbrf(adev->handle,
+> +			       WBRF_REVISION,
+> +			       1ULL << WBRF_RETRIEVE);
+> +}
+> +EXPORT_SYMBOL_GPL(wbrf_supported_consumer);
+> +
+> +int wbrf_retrieve_exclusions(struct acpi_device *adev,
+> +			     struct wbrf_ranges_out *exclusions_out)
+> +{
+> +	union acpi_object *obj;
+> +
+> +	obj = acpi_evaluate_wbrf(adev->handle,
+> +				 WBRF_REVISION,
+> +				 WBRF_RETRIEVE);
+> +	if (!obj)
+> +		return -EINVAL;
+> +
+> +	memcpy(exclusions_out, obj->buffer.pointer, obj->buffer.length);
+> +
+> +	ACPI_FREE(obj);
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(wbrf_retrieve_exclusions);
+> diff --git a/include/linux/wbrf.h b/include/linux/wbrf.h
+> new file mode 100644
+> index 000000000000..e4c99b69f1d2
+> --- /dev/null
+> +++ b/include/linux/wbrf.h
+> @@ -0,0 +1,55 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * AMD Wifi Band Exclusion Interface
+> + * Copyright (C) 2023 Advanced Micro Devices
+> + */
+> +
+> +#ifndef _LINUX_WBRF_H
+> +#define _LINUX_WBRF_H
+> +
+> +#include <linux/acpi.h>
+> +
+> +/* Maximum number of wbrf ranges */
+> +#define MAX_NUM_OF_WBRF_RANGES		11 > +
+> +struct exclusion_range {
+> +	/* start and end point of the frequency range in Hz */
+> +	uint64_t	start;
+> +	uint64_t	end;
+> +};
+> +
+> +struct wbrf_ranges_in {
+> +	/* valid entry: `start` and `end` filled with non-zero values */
+> +	struct exclusion_range	band_list[MAX_NUM_OF_WBRF_RANGES];
+> +};
+> +
+> +struct wbrf_ranges_out {
+> +	uint32_t		num_of_ranges;
+> +	struct exclusion_range	band_list[MAX_NUM_OF_WBRF_RANGES];
+> +} __attribute__((packed));
+> +
+> +/**
+> + * APIs needed by drivers/subsystems for contributing frequencies:
+> + * During probe, check `wbrf_supported_producer` to see if WBRF is supported.
+> + * If adding frequencies, then call `wbrf_add_exclusion` with the
+> + * start and end points specified for the frequency ranges added.
+> + * If removing frequencies, then call `wbrf_remove_exclusion` with
+> + * start and end points specified for the frequency ranges added.
+> + */
+> +bool wbrf_supported_producer(struct acpi_device *adev);
+> +int wbrf_add_exclusion(struct acpi_device *adev,
+> +		       struct wbrf_ranges_in *in);
+> +int wbrf_remove_exclusion(struct acpi_device *adev,
+> +			  struct wbrf_ranges_in *in);
+> +
+> +/**
+> + * APIs needed by drivers/subsystems responding to frequencies:
+> + * During probe, check `wbrf_supported_consumer` to see if WBRF is supported.
+> + * When receiving an ACPI notification for some frequencies change, run
+> + * `wbrf_retrieve_exclusions` to retrieve the latest frequencies ranges.
+> + */
+> +int wbrf_retrieve_exclusions(struct acpi_device *adev,
+> +			     struct wbrf_ranges_out *out);
+> +bool wbrf_supported_consumer(struct acpi_device *adev);
+> +
+> +#endif /* _LINUX_WBRF_H */
 
-If someone wants to do change the on-disk format definition to use
-"kernel proper" flex arrays in both the kernel code and user space,
-update all the documentation and do all the validation work that
-on-disk format changes require for all XFS disk structures that are
-defined this way, then we'll fix this.
-
-But as it stands, these structures have been defined this way for 25
-years and the code accessing them has been around for just as long.
-The code is not broken and it does not need fixing. We have way more
-important things to be doing that fiddling with on disk format
-definitions and long standing, working code just to shut up UBSAN
-and/or syzbot.
-
-WONTFIX, NOTABUG.
-
--Dave.
--- 
-Dave Chinner
-david@fromorbit.com
