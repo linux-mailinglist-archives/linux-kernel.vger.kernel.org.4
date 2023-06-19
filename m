@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3518A735AB8
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 198C2735AAF
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbjFSPFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 11:05:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50826 "EHLO
+        id S230083AbjFSPFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 11:05:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbjFSPFJ (ORCPT
+        with ESMTP id S230110AbjFSPFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 11:05:09 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148DC19A7
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:04:23 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1a9d57f8f9fso3311473fac.3
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:04:23 -0700 (PDT)
+        Mon, 19 Jun 2023 11:05:11 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20CE10F9
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:04:25 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-25edb50c3acso1677307a91.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:04:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687187061; x=1689779061;
+        d=linaro.org; s=google; t=1687187065; x=1689779065;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0m9rhWOn8qYbjuVQmQ20zeGCmNCpO//YkkWL6MmvNwg=;
-        b=X4rnGsDhhgcstlEOl2O8Xh0D75fvA4vp4Lp/Hch/7e27uzGYUexdfNn8ekHr0mFBme
-         xRW2Jgigs40z3tnW83vRGWXtbHyCNxWMrMBZJ6b1+dj/QesU3nVfa2PCr01i4TxFgyl5
-         JBfJcs93mVxfsGsi6e5la8UBwnx4Ipd7LNTUrMxmhu+eV0oXz/Fh8ARus8WzXPrPV/RS
-         lHTfF2qz+tPJkpSeHgniix7/lRe+ods8MgZJ1EIpBI2htcjR7+uqSkL5vkczsm7R2HpG
-         aU2lpY8HphbspEUze2dxaRhc3sjMSJ+IqLTvOqRFsi5UolLc0LtUzb8u+bMHAMdKZW1N
-         WU3A==
+        bh=B3Dy+kmf8ZISKkCa0j/2ldqP//6MEtxXXYzBp48Kt14=;
+        b=vtWdf8pUd95J6h7vr8vtdO30v//wqJANxXMEAkrewzCtyzASzN6R1KCTHyzYqpE4XQ
+         hT2kjH2LwEyWdUVa4l+QKByViVVB3fDKG589hDa2B/GS61bFgtH+ehQeoiGkasGegRpT
+         YQx9WvmTyBkaBEXT8Br5Lw/JrB0Ls9D8M5+/Z7CN0NCZmzBFuhT9LpZE4Mfddpg8iiJB
+         qYKTrgxOMkA5GiRUJ49ooaOW55zu4RQ+IbRQgq55Naz61UT/c70rzn9DvhG+UMzQVjsF
+         jUk0ALOCs2vziKBb4OHIaKfoPmUib0Swi38K7NWzs4xSpQQxbr5Io76IuGCZcrAT2BCt
+         ImLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687187061; x=1689779061;
+        d=1e100.net; s=20221208; t=1687187065; x=1689779065;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0m9rhWOn8qYbjuVQmQ20zeGCmNCpO//YkkWL6MmvNwg=;
-        b=Kv8l4h1HWnKWtaE2ehEhjhik805PqHfJ3iOl7ca8nJfHVeFwrBL1KXtcWrGs9b8faK
-         c8BsZkHl0wxoIy+zu+KTxEkAa8JADQiOhy08yFq3KaUteHljv/bs5yMm0pcmwgBwzQr7
-         zqfHC+zEHyDZxMe+SEessxsCc5eQfXdYovYZ/2QC97fy+/Bnfrt+9IfRVyrvlQX76w03
-         9zQtKsBg32V+EI+ObXNqFNLhthDqSwYH3jxj07ePylU996ecOuwm6/S6//8VFZS1La+m
-         6MpJUElZ3ThR5+gWIRatbqx4ULtwRHWVoOWwc2E7krkEMgP6extqC5YTgy8ht2wjyzcI
-         v5Wg==
-X-Gm-Message-State: AC+VfDxLG2zuXsaZjm/crNNnr+PRiyqGV1Q549DkvIuuWVIipDHl/b5F
-        NUdcg86RIP9h9zOJFDMqu5aI
-X-Google-Smtp-Source: ACHHUZ5vRE7brlsRPe3Zp8R6nDsOTJqauqzXZH+wyitHVFyn/PXC/KWiff8ZoBlpQBA7Fut4l4DxOw==
-X-Received: by 2002:a05:6870:4710:b0:18f:558a:1f51 with SMTP id b16-20020a056870471000b0018f558a1f51mr11017078oaq.53.1687187061309;
-        Mon, 19 Jun 2023 08:04:21 -0700 (PDT)
+        bh=B3Dy+kmf8ZISKkCa0j/2ldqP//6MEtxXXYzBp48Kt14=;
+        b=kus8bGHBWvk7Ec0RH2TJfx1wZrEMRpNwzmJmj5MHvEXcaYKlbl4QfjInBR1sTA6umk
+         f/sVqefQzthRi/0WX8gUpkJzRiQDqAX2Ue4lqmvkUR4iXgZs6dvPQcpByen2wReman6r
+         Jekj4szaMSwbWewi0J5qcBnKsyPxeWnSItjqawfCVjr7DOMhRzNC+DtTzWuSVDtlwKBU
+         VDKdq8BVNJ1P1uxL82Yu0/K87G5qqaOqldHj6yHX9kR0uI/ybFTtqNlgNyMqII0mEJ+6
+         oFvALe3q1EK/fskliSL88u93xfuFaC4gQJWgud3miRgkYfn3v2SIpE/m+TLJgOJ/K16I
+         SnXw==
+X-Gm-Message-State: AC+VfDw8xPmdSSNdgxT+iI7Z29OPbTNGuS+Qm2Ueqa78y5jzHAFLHXyW
+        HLEHExRQC+x3cg002QqmoH2O
+X-Google-Smtp-Source: ACHHUZ4qUQ3hwY9mNHMbObMwBwLYFeY8h8minGqKyB/SxZiGDuFVPaHBPp6CG8/MfyFm+ePr+YTp5A==
+X-Received: by 2002:a17:90a:e516:b0:25e:8f12:a74d with SMTP id t22-20020a17090ae51600b0025e8f12a74dmr9926485pjy.44.1687187065087;
+        Mon, 19 Jun 2023 08:04:25 -0700 (PDT)
 Received: from localhost.localdomain ([117.217.183.37])
-        by smtp.gmail.com with ESMTPSA id 10-20020a17090a19ca00b0025efaf7a0d3sm2765480pjj.14.2023.06.19.08.04.17
+        by smtp.gmail.com with ESMTPSA id 10-20020a17090a19ca00b0025efaf7a0d3sm2765480pjj.14.2023.06.19.08.04.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 08:04:20 -0700 (PDT)
+        Mon, 19 Jun 2023 08:04:24 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com
 Cc:     robh@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
@@ -57,10 +57,10 @@ Cc:     robh@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
         linux-kernel@vger.kernel.org, steev@kali.org,
         quic_srichara@quicinc.com,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        stable@vger.kernel.org
-Subject: [PATCH v4 1/9] PCI: qcom: Disable write access to read only registers for IP v2.3.3
-Date:   Mon, 19 Jun 2023 20:34:00 +0530
-Message-Id: <20230619150408.8468-2-manivannan.sadhasivam@linaro.org>
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: [PATCH v4 2/9] PCI: qcom: Use DWC helpers for modifying the read-only DBI registers
+Date:   Mon, 19 Jun 2023 20:34:01 +0530
+Message-Id: <20230619150408.8468-3-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230619150408.8468-1-manivannan.sadhasivam@linaro.org>
 References: <20230619150408.8468-1-manivannan.sadhasivam@linaro.org>
@@ -76,30 +76,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the post init sequence of v2.9.0, write access to read only registers
-are not disabled after updating the registers. Fix it by disabling the
-access after register update.
+DWC core already exposes dw_pcie_dbi_ro_wr_{en/dis} helper APIs for
+enabling and disabling the write access to read only DBI registers. So
+let's use them instead of doing it manually.
 
-Cc: <stable@vger.kernel.org>
+Also, the existing code doesn't disable the write access when it's done.
+This is also fixed now.
+
 Fixes: 5d76117f070d ("PCI: qcom: Add support for IPQ8074 PCIe controller")
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- drivers/pci/controller/dwc/pcie-qcom.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/pci/controller/dwc/pcie-qcom.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-index 4ab30892f6ef..ef385d36d653 100644
+index ef385d36d653..01795ee7ce45 100644
 --- a/drivers/pci/controller/dwc/pcie-qcom.c
 +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -836,6 +836,8 @@ static int qcom_pcie_post_init_2_3_3(struct qcom_pcie *pcie)
- 	writel(PCI_EXP_DEVCTL2_COMP_TMOUT_DIS, pci->dbi_base + offset +
- 		PCI_EXP_DEVCTL2);
+@@ -61,7 +61,6 @@
+ /* DBI registers */
+ #define AXI_MSTR_RESP_COMP_CTRL0		0x818
+ #define AXI_MSTR_RESP_COMP_CTRL1		0x81c
+-#define MISC_CONTROL_1_REG			0x8bc
  
-+	dw_pcie_dbi_ro_wr_dis(pci);
+ /* MHI registers */
+ #define PARF_DEBUG_CNT_PM_LINKST_IN_L2		0xc04
+@@ -132,9 +131,6 @@
+ /* AXI_MSTR_RESP_COMP_CTRL1 register fields */
+ #define CFG_BRIDGE_SB_INIT			BIT(0)
+ 
+-/* MISC_CONTROL_1_REG register fields */
+-#define DBI_RO_WR_EN				1
+-
+ /* PCI_EXP_SLTCAP register fields */
+ #define PCIE_CAP_SLOT_POWER_LIMIT_VAL		FIELD_PREP(PCI_EXP_SLTCAP_SPLV, 250)
+ #define PCIE_CAP_SLOT_POWER_LIMIT_SCALE		FIELD_PREP(PCI_EXP_SLTCAP_SPLS, 1)
+@@ -826,7 +822,9 @@ static int qcom_pcie_post_init_2_3_3(struct qcom_pcie *pcie)
+ 	writel(0, pcie->parf + PARF_Q2A_FLUSH);
+ 
+ 	writel(PCI_COMMAND_MASTER, pci->dbi_base + PCI_COMMAND);
+-	writel(DBI_RO_WR_EN, pci->dbi_base + MISC_CONTROL_1_REG);
 +
- 	return 0;
- }
++	dw_pcie_dbi_ro_wr_en(pci);
++
+ 	writel(PCIE_CAP_SLOT_VAL, pci->dbi_base + offset + PCI_EXP_SLTCAP);
  
+ 	val = readl(pci->dbi_base + offset + PCI_EXP_LNKCAP);
 -- 
 2.25.1
 
