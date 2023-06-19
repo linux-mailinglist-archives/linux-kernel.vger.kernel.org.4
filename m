@@ -2,140 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B06BE734C4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 09:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB60734C58
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 09:27:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbjFSHW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 03:22:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60614 "EHLO
+        id S229680AbjFSH1d convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 19 Jun 2023 03:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjFSHWZ (ORCPT
+        with ESMTP id S229482AbjFSH10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 03:22:25 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F69E4;
-        Mon, 19 Jun 2023 00:22:23 -0700 (PDT)
-Received: from dggpemm500014.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Ql1NL1P6NzMpZ8;
-        Mon, 19 Jun 2023 15:19:14 +0800 (CST)
-Received: from [10.174.178.120] (10.174.178.120) by
- dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Mon, 19 Jun 2023 15:22:20 +0800
-Message-ID: <a7d39606-cc85-42c3-c882-fa217954bf00@huawei.com>
-Date:   Mon, 19 Jun 2023 15:22:20 +0800
+        Mon, 19 Jun 2023 03:27:26 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253E6121;
+        Mon, 19 Jun 2023 00:27:22 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 378B88138;
+        Mon, 19 Jun 2023 15:27:14 +0800 (CST)
+Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 19 Jun
+ 2023 15:27:14 +0800
+Received: from [192.168.1.218] (180.164.60.184) by EXMBX073.cuchost.com
+ (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 19 Jun
+ 2023 15:27:13 +0800
+Message-ID: <73ded260-3967-7547-9317-f4cbe5bcbb1c@starfivetech.com>
+Date:   Mon, 19 Jun 2023 15:27:13 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-CC:     <mawupeng1@huawei.com>, <akpm@linux-foundation.org>,
-        <david@redhat.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
-        <richard.weiyang@linux.alibaba.com>, <mst@redhat.com>,
-        <jasowang@redhat.com>, <pankaj.gupta.linux@gmail.com>,
-        <mhocko@kernel.org>, <osalvador@suse.de>
-Subject: Re: [PATCH stable 5.10] mm/memory_hotplug: extend
- offline_and_remove_memory() to handle more than one memory block
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v6 3/6] media: starfive: Add basic driver
 Content-Language: en-US
-To:     <gregkh@linuxfoundation.org>
-References: <cd9688dc-a716-3031-489e-a867df0d1ea2@huawei.com>
- <20230619065121.1720912-1-mawupeng1@huawei.com>
- <2023061926-monoxide-pastor-fa3b@gregkh>
-From:   mawupeng <mawupeng1@huawei.com>
-In-Reply-To: <2023061926-monoxide-pastor-fa3b@gregkh>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Eugen Hristev <eugen.hristev@collabora.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <changhuang.liang@starfivetech.com>
+References: <20230525083202.67933-1-jack.zhu@starfivetech.com>
+ <20230525083202.67933-4-jack.zhu@starfivetech.com>
+ <fa665e61-f36a-5f65-4837-8d7c8c6a052e@linaro.org>
+From:   Jack Zhu <jack.zhu@starfivetech.com>
+In-Reply-To: <fa665e61-f36a-5f65-4837-8d7c8c6a052e@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.120]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500014.china.huawei.com (7.185.36.153)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [180.164.60.184]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX073.cuchost.com
+ (172.16.6.83)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Bryan,
 
+Thank you for your comments.
 
-On 2023/6/19 15:16, Greg KH wrote:
-> On Mon, Jun 19, 2023 at 02:51:21PM +0800, Wupeng Ma wrote:
->> From: David Hildenbrand <david@redhat.com>
+On 2023/6/16 21:13, Bryan O'Donoghue wrote:
+> On 25/05/2023 09:31, Jack Zhu wrote:
+>> Add basic platform driver for StarFive Camera Subsystem.
 >>
->> commit 8dc4bb58a146655eb057247d7c9d19e73928715b upstream.
->>
->> virtio-mem soon wants to use offline_and_remove_memory() memory that
->> exceeds a single Linux memory block (memory_block_size_bytes()). Let's
->> remove that restriction.
->>
->> Let's remember the old state and try to restore that if anything goes
->> wrong. While re-onlining can, in general, fail, it's highly unlikely to
->> happen (usually only when a notifier fails to allocate memory, and these
->> are rather rare).
->>
->> This will be used by virtio-mem to offline+remove memory ranges that are
->> bigger than a single memory block - for example, with a device block
->> size of 1 GiB (e.g., gigantic pages in the hypervisor) and a Linux memory
->> block size of 128MB.
->>
->> While we could compress the state into 2 bit, using 8 bit is much
->> easier.
->>
->> This handling is similar, but different to acpi_scan_try_to_offline():
->>
->> a) We don't try to offline twice. I am not sure if this CONFIG_MEMCG
->> optimization is still relevant - it should only apply to ZONE_NORMAL
->> (where we have no guarantees). If relevant, we can always add it.
->>
->> b) acpi_scan_try_to_offline() simply onlines all memory in case
->> something goes wrong. It doesn't restore previous online type. Let's do
->> that, so we won't overwrite what e.g., user space configured.
->>
->> Reviewed-by: Wei Yang <richard.weiyang@linux.alibaba.com>
->> Cc: "Michael S. Tsirkin" <mst@redhat.com>
->> Cc: Jason Wang <jasowang@redhat.com>
->> Cc: Pankaj Gupta <pankaj.gupta.linux@gmail.com>
->> Cc: Michal Hocko <mhocko@kernel.org>
->> Cc: Oscar Salvador <osalvador@suse.de>
->> Cc: Wei Yang <richard.weiyang@linux.alibaba.com>
->> Cc: Andrew Morton <akpm@linux-foundation.org>
->> Signed-off-by: David Hildenbrand <david@redhat.com>
->> Link: https://lore.kernel.org/r/20201112133815.13332-28-david@redhat.com
->> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
->> Acked-by: Andrew Morton <akpm@linux-foundation.org>
->> Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
->> ---
->>  mm/memory_hotplug.c | 105 +++++++++++++++++++++++++++++++++++++-------
->>  1 file changed, 89 insertions(+), 16 deletions(-)
->>
+>> Reviewed-by: Bryan O'Donoghue <c.odonoghue@linaro.org>
+>> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
 > 
-> Why is this needed in 5.10.y?  Looks like a new feature to me, what
-> problem does it solve there?
+> One thing here is the patch title and hence commit message.
 > 
-> thanks,
+> "media: starfive:" doesn't really tell you this is a camera versus say a encoder/decoder.
 > 
-> greg k-h
+> I see you've used the name "camss" for your driver, which I think is a perfectly good and logical choice - however if you started to make commits along the lines of "media: camss" that would conflict with the qcom camss.
+> 
+> How about for starfive and qcom by the way, we do what Laurent did in
+> 
+> commit 3e8537b4c15172bfe1b285c3155ed5c37d523cd3
+> Author: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Date:   Wed Dec 21 10:33:39 2022 +0100
+> 
+>     media: ti: omap3isp: Use media_pipeline_for_each_entity()
+> 
+> i.e. future StarFive commits for camera would be "media: starfive: camss" and similarly for Qualcomm "media: qualcomm: camss"
+> 
+> The point being the commit title namespace should be instructive and specific re: 3e8537b4c15172bfe1b285c3155ed5c37d523cd3
+> 
 
-It do introduce a new feature. But at the same time, it fix a memleak introduced
-in Commit 08b3acd7a68f ("mm/memory_hotplug: Introduce offline_and_remove_memory()"
+Okay， I will add a camss directory under the starfive directory and modify the patch title.
 
-Our test find a memleak in init_memory_block, it is clear that mem is never
-been released due to wrong refcount. Commit 08b3acd7a68f ("mm/memory_hotplug:
-Introduce offline_and_remove_memory()") failed to dec refcount after
-find_memory_block which fail to dec refcount to zero in remove memory
-causing the leak.
+> ---
+> bod
 
-Commit 8dc4bb58a146 ("mm/memory_hotplug: extend offline_and_remove_memory()
-to handle more than one memory block") introduce walk_memory_blocks to
-replace find_memory_block which dec refcount by calling put_device after
-find_memory_block_by_id. In the way, the memleak is fixed.
+-- 
+Regards,
 
-Here is the simplified calltrace:
-
-  kmem_cache_alloc_trace+0x664/0xed0
-  init_memory_block+0x8c/0x170
-  create_memory_block_devices+0xa4/0x150
-  add_memory_resource+0x188/0x530
-  __add_memory+0x78/0x104
-  add_memory+0x6c/0xb0
+Jack Zhu
