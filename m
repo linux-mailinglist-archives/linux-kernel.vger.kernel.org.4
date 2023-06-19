@@ -2,118 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51DFF735AD5
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7D39735AD7
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbjFSPKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 11:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58544 "EHLO
+        id S230075AbjFSPKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 11:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231920AbjFSPKB (ORCPT
+        with ESMTP id S229609AbjFSPKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 11:10:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BEC2F9;
-        Mon, 19 Jun 2023 08:09:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B0A6260D17;
-        Mon, 19 Jun 2023 15:09:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C823DC433C0;
-        Mon, 19 Jun 2023 15:09:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687187386;
-        bh=GxkfFiD3FPUB0uLvuilF9gvjzRT76yd6Rs02FVbihhc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=o0VoNJf4eC1pSRDjQJk+s3aJUzAeS2Sr88XbW0kl+dXDsjO5Zj5JuqfG6vvufxAkp
-         KI/ce6Fm33ihLFWVgwWDDu1XhLC7S2KS1QdvmIn6de333bSLKI28xrq3ip2lBU7Dhl
-         YqxSDXlREeNzzzLiwIfV5sTc9WKk4pkxJJuXfWfixd0koeSGpFMn2Qy1LiNhgOtgJQ
-         9CLB/pDxD2zz5sWkaE1ebCkt++0+dtclSoxPNHXlG0HUFmoNl7tzCNMOMVPqm/GJNW
-         p0G+NsTKzpC+Fvx33uvrISHD8JuzCQUNGQgcBYFGqQhBs7hWXE1jQVClEC5/0jnrfJ
-         t7+mGPfIh6MvQ==
-Date:   Mon, 19 Jun 2023 10:09:44 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Lukas Wunner <lukas@wunner.de>, linux-pci@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Wilczy??ski <kw@linux.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Stefan =?iso-8859-1?Q?M=E4tje?= <stefan.maetje@esd.eu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jesse Barnes <jbarnes@virtuousgeek.org>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Shaohua Li <shaohua.li@intel.com>,
-        Thomas Renninger <trenn@suse.de>,
-        Greg Kroah-Hartman <gregkh@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dean Luick <dean.luick@cornelisnetworks.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2 3/9] PCI/ASPM: Use RMW accessors for changing LNKCTL
-Message-ID: <20230619150944.GA8560@bhelgaas>
+        Mon, 19 Jun 2023 11:10:06 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A663DE68
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:10:04 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-51a324beca6so4957038a12.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:10:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687187403; x=1689779403;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TD4KyJwmLcyQbc53eDQ3FoSu3CT+Si3hOoe+8Vx8cGw=;
+        b=E2uiSvQQAPNHpBZb32RR72MmOJ6cKYumOcMuiSSVUg0phsA8mhm1pa9jSx9Hym4aqc
+         dYzd61eMBJQA14d9tlDoucGBDk8f5JwGn7ZskCn1AY+nb3hqjXYfZJsXLpA3ma4eALcP
+         zD0lPTGeG1jvkMjNMeZUhcKupkB/HcEvIuYQtas3WzWqjbJjE+Hx61XlalfQmc94ADnv
+         1fobQVhO4TqzYCffSHQepxZGsOhCqqnAGYWcHv+UvaGIVh7cfNLduTLysoqLDecCtXvS
+         hbe+Jbc3XsqZAIm/xhxmnQAkFU7KFxpm0iMktt20glCsN7BbGKwApP7mlH2DJ/zQcl4S
+         JbgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687187403; x=1689779403;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TD4KyJwmLcyQbc53eDQ3FoSu3CT+Si3hOoe+8Vx8cGw=;
+        b=KPKEZWdNDzRR/0sDICoBKIjGLo0f4Ihbmn/s6izVfZXiVw92zh6ipfEsrkRX2GOGuM
+         MyDQ0yBsj2sktbSmXURbok/0i99gu6Jm25aGrz6Qq1DDK33SMHswvY0jsDxn703bOyqv
+         vCzG7/FPchJ9+HQTyyszx5OsR0aZzMG89S4hK8oHHxq9/VJf9bjfXYN/DS7kevrjMpOs
+         PGqWRj7wAzRkFbmm9fu2OiosgoKJXgMenXpBna5ZaJSUSywxNgAKXh5GB/MoIl+E3NMk
+         7k3Sl5hkz35JH8Haq+nYmIP3H8HU5/4y9NP1Ym1+Olwv3RjvpBxP+t7r6q0kAUpv1Uz7
+         0I4Q==
+X-Gm-Message-State: AC+VfDz7T06222D+z4q9Npbi0qfsFI50W/prV4mIfLx635S1QdCjmgPh
+        N5+y2ThvxOeJq8oYcUbrCuT9joHFpmo=
+X-Google-Smtp-Source: ACHHUZ4lv1LI1EaN8I+nHnwhvD+Z4VbBsYtpegX2mQ62GMDa0k2hbDRPqmcdVIfQdtS802sW8rXNkA==
+X-Received: by 2002:a50:ed83:0:b0:51a:2c69:5c74 with SMTP id h3-20020a50ed83000000b0051a2c695c74mr7097975edr.37.1687187402901;
+        Mon, 19 Jun 2023 08:10:02 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5abbd5.dynamic.kabel-deutschland.de. [95.90.187.213])
+        by smtp.gmail.com with ESMTPSA id p6-20020a056402044600b0050488d1d376sm13297186edw.0.2023.06.19.08.10.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 08:10:02 -0700 (PDT)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     philipp.g.hortmann@gmail.com, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH 0/4] staging: rtl8192e: some simple cleanups
+Date:   Mon, 19 Jun 2023 17:09:49 +0200
+Message-ID: <20230619150953.22484-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <f6397fe9-bc77-fe1f-b941-f8aac91bea65@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 05:45:06PM +0300, Ilpo Järvinen wrote:
-> On Fri, 16 Jun 2023, Lukas Wunner wrote:
-> > On Wed, May 17, 2023 at 01:52:29PM +0300, Ilpo Järvinen wrote:
-> > > Don't assume that the device is fully under the control of ASPM and use
-> > > RMW capability accessors which do proper locking to avoid losing
-> > > concurrent updates to the register values.
-> > > 
-> > > If configuration fails in pcie_aspm_configure_common_clock(), the
-> > > function attempts to restore the old PCI_EXP_LNKCTL_CCC settings. Store
-> > > only the old PCI_EXP_LNKCTL_CCC bit for the relevant devices rather
-> > > than the content of the whole LNKCTL registers. It aligns better with
-> > > how pcie_lnkctl_clear_and_set() expects its parameter and makes the
-> > > code more obvious to understand.
-> > [...]
-> > > @@ -224,17 +223,14 @@ static bool pcie_retrain_link(struct pcie_link_state *link)
-> > >  	if (!pcie_wait_for_retrain(parent))
-> > >  		return false;
-> > >  
-> > > -	pcie_capability_read_word(parent, PCI_EXP_LNKCTL, &reg16);
-> > > -	reg16 |= PCI_EXP_LNKCTL_RL;
-> > > -	pcie_capability_write_word(parent, PCI_EXP_LNKCTL, reg16);
-> > > +	pcie_capability_set_word(parent, PCI_EXP_LNKCTL, PCI_EXP_LNKCTL_RL);
-> > >  	if (parent->clear_retrain_link) {
-> > 
-> > This and several other RMW operations in drivers/pci/pcie/aspm.c
-> > are touched by commit b1689799772a ("PCI/ASPM: Use distinct local
-> > vars in pcie_retrain_link()") which got applied to pci/enumeration
-> > this week:
-> > 
-> > https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git/commit/?h=enumeration&id=b1689799772a6f4180f918b0ff66e264a3db9796
-> > 
-> > As a result the $SUBJECT_PATCH no longer applies cleanly and needs
-> > to be respun.
-> 
-> Okay but I'm a bit lost which commit/head in pci repo I should now base 
-> this series because there's a conflict between pci/aspm and 
-> pci/enumeration which is not resolved in the repo because pci/enumeration 
-> hasn't advanced into pci/next yet. Any suggestion?
+Four patches with simple coding style cleanups.
 
-Generally speaking I prefer patches based on the PCI "main" branch
-(usually -rc1) because I base topic branches on that.  If there are
-conflicts with other pending material, it's great if you can mention
-them, but I can resolve them when applying, so no need to repost just
-for that.
+Michael Straube (4):
+  staging: rtl8192e: clean up brace coding style issues
+  staging: rtl8192e: convert else if sequence to switch
+  staging: rtl8192e: remove return statement from void function
+  staging: rtl8192e: remove comparison to true
 
-Bjorn
+ .../staging/rtl8192e/rtl8192e/r8192E_dev.c    |  3 +-
+ .../staging/rtl8192e/rtl8192e/r8192E_phy.c    | 11 +++---
+ drivers/staging/rtl8192e/rtl8192e/rtl_dm.c    |  3 +-
+ drivers/staging/rtl8192e/rtl8192e/rtl_ps.c    |  3 +-
+ drivers/staging/rtl8192e/rtl8192e/rtl_wx.c    |  6 +--
+ drivers/staging/rtl8192e/rtllib_softmac.c     | 39 +++++++++++--------
+ drivers/staging/rtl8192e/rtllib_softmac_wx.c  |  4 +-
+ 7 files changed, 40 insertions(+), 29 deletions(-)
+
+-- 
+2.41.0
+
