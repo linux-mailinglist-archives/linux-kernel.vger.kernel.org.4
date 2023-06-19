@@ -2,148 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E977B7355E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 13:32:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23C9E7355E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 13:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbjFSLcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 07:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51356 "EHLO
+        id S231341AbjFSLdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 07:33:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbjFSLch (ORCPT
+        with ESMTP id S229519AbjFSLdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 07:32:37 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2105.outbound.protection.outlook.com [40.107.215.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F7B120
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 04:32:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GHADuM6YbiVTSnZVNuJ13EdxzuV2uenx4BU0Vov2z7d0M7vt0miehFlFutL3Gbq4yl9oBo41Tdmuhlt8R42cSHWdf3YahA7l0U5PmY4hTiLGHD2bAztJR2msjs9xuhEvZ1YjnqE+bEm/w/zbWLrttYLhf7iT7VMTZc78lcCUVEhSbFcDK97gqWdsVpgDzQo7YW5tRsgqxsc/VbNGRUXHhw9gmftg1wT8XT45flFKmQnDmxjK81cVugYw0AjNhOS+mG1Ozt7gSxb7x2yxr6zzgwshnwLh9XU6LojNBcNNEzdRxCqJfA0xzlodEfTmgBZXFckdELF+4XFwZxHtfq0oYg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2sygWTEQYKT2sAAbYq3ZZShq4XcPpiLNxWRj17rEoPE=;
- b=DWI65f+c7/oSYuL+Tj0e0Geqnkvms1jJQEFTZoHoFWrtIzWMj1OqJn+UddAoFOlargbVSbuMWZ3DDIYbAoNMrCpCSBmQEamgrBOm5wktP7VoPV+RLpNoRcVwcvcsQMUn6cZyoOSgLzN6XEk1eoR9/aqonQHJvYkQLxjGqf/gOOO2Ru+L/I0jbe8N8wmLZJX/Hdny5xxjRMk1yAmk1uncvyBh8Vzjt/yBxf6UV2ci8nyJLOZsA++ZJILWZy7UOVDE2Ngg6LwfZ8Ht+FX/kvDCVVi4Sw5Cq8fxXgGlhBKEwl4BG4ZwYCiY7HA6A8jw2LxhFmPTb82G4LYtPFg48kVNDQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2sygWTEQYKT2sAAbYq3ZZShq4XcPpiLNxWRj17rEoPE=;
- b=RN+jMTbrAM4bU2PybA2xU+KSaKhitMZUauQuKKjTLXM50h36PdhJdEzFgRz+Nt56EXzq5Ma55pUFAOb/hckN9upofDAPWDMZ5FNVZ20JFtj4eifMZCVT6OqgXXCvy2ViKXRfo7WjeIdSqdRG+FSqfKRtsk1FTVjSpkNDNDjemAonEuL3Idjm/qYvhVRvY8XOB36qRmJupuBNM19D0l9G4KNGb65uwu9KTiCC0fgCsuyYFnJkrkm4a4Q0mz4MS1iaK+wfiEEmi1BcAZTvCxeX5ZjAyfwxojKo+wckxqw/VRe4sfqZSslFo6W7/pIaJQPjtmNa1yRDDCseqlWKvl9wkw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5022.apcprd06.prod.outlook.com (2603:1096:101:48::5)
- by SI2PR06MB5410.apcprd06.prod.outlook.com (2603:1096:4:1ed::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.36; Mon, 19 Jun
- 2023 11:32:28 +0000
-Received: from SEZPR06MB5022.apcprd06.prod.outlook.com
- ([fe80::37cd:b3a2:1fee:705c]) by SEZPR06MB5022.apcprd06.prod.outlook.com
- ([fe80::37cd:b3a2:1fee:705c%6]) with mapi id 15.20.6500.031; Mon, 19 Jun 2023
- 11:32:27 +0000
-From:   Li Dong <lidong@vivo.com>
-To:     Artur Weber <aweber.kernel@gmail.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org (open list:DRM PANEL DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Cc:     opensource.kernel@vivo.com, lidong@vivo.com
-Subject: [PATCH] gpu: drm: Optimize the unused variable ret
-Date:   Mon, 19 Jun 2023 19:31:33 +0800
-Message-Id: <20230619113154.1980-1-lidong@vivo.com>
-X-Mailer: git-send-email 2.31.1.windows.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TY2PR0101CA0033.apcprd01.prod.exchangelabs.com
- (2603:1096:404:8000::19) To SEZPR06MB5022.apcprd06.prod.outlook.com
- (2603:1096:101:48::5)
+        Mon, 19 Jun 2023 07:33:05 -0400
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE2DBF;
+        Mon, 19 Jun 2023 04:33:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1687174373;
+        bh=zMoAd1INwZDS2apf3X9h/nweHdcswKoOiEd7Um0Mpas=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:From;
+        b=jG4JZDlGqPln7P729neCaqXEtsoQ44Mqfbz1/iHCwT6N64F4tSlVF41lRhEo597eS
+         ckAok2PDoo80hDgejjbSlBJ368Walt1AbkuhLPQHP0x5VE1m4OwLk06Nv7z8f/L8Hp
+         G9klX+5Ggu4tS8oc5p8mnSvsL5tgI3th52GOFEXU=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id C2601128603A;
+        Mon, 19 Jun 2023 07:32:53 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+ by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id Hj0QRTet-pRa; Mon, 19 Jun 2023 07:32:53 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1687174373;
+        bh=zMoAd1INwZDS2apf3X9h/nweHdcswKoOiEd7Um0Mpas=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:From;
+        b=jG4JZDlGqPln7P729neCaqXEtsoQ44Mqfbz1/iHCwT6N64F4tSlVF41lRhEo597eS
+         ckAok2PDoo80hDgejjbSlBJ368Walt1AbkuhLPQHP0x5VE1m4OwLk06Nv7z8f/L8Hp
+         G9klX+5Ggu4tS8oc5p8mnSvsL5tgI3th52GOFEXU=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::c14])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id BF7951286035;
+        Mon, 19 Jun 2023 07:32:52 -0400 (EDT)
+Message-ID: <e78eef83a50a558aae765baafcf9c571788a02a5.camel@HansenPartnership.com>
+Subject: Re: [PATCH] Documentation: Linux Contribution Maturity Model and
+ the wider community
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     fthain@linux-m68k.org
+Cc:     corbet@lwn.net, dan.j.williams@intel.com,
+        gregkh@linuxfoundation.org, keescook@chromium.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tech-board-discuss@lists.linux-foundation.org, tytso@mit.edu
+Date:   Mon, 19 Jun 2023 07:32:50 -0400
+In-Reply-To: <cd1786eadd1ff05d9ca053b72eb5f06ceb0c470d.1687167717.git.fthain@linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5022:EE_|SI2PR06MB5410:EE_
-X-MS-Office365-Filtering-Correlation-Id: 066032a8-dc03-457f-e923-08db70b8dc54
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4tDbiI8F+i+XsJgDH0xWYPghsJ/KV+HxsVYGcURa1bBwvFkBWlW8JR81fNBiHuW4/pwK/2U3nm98HYbZfWZ23SfSWAVyBZjgSso1qeae6GNH8OUx3lqrGyHjvg4aNYIhSD8W6QfM+FYZDBABRa+YqjAFBi9XIR1cgyFTRZ0BA4Ngo9sWmJXiYWGs0TSadC4133NHFxRUstxOjLkNqjFMv/ViSBNMD6lkAnRWHKhc7g768MD4C2nH/RD8zm9Z0BAXfF4jbNuZDJeNvvutbMrfakEsn9qiyy01HUMDNLjXTxhXfkkQGu7LjOtby1WEO/01HTE1bjKIsNQunL5MXrcDe5XkcZtkr6rxNGhuJNb1EWNLcznofGLvaHiNlAvZ3qE7bbHIdZ6gEIHnGGstSQYeiVXQ2IGfu+Ve3ZVRw9fUMKdCCaL+AqGIYcbbFLfIC+nHGo8Rsidg/Y0ss66rQY0V0JUqsHcdTjWtofs2lP8ygP3u0g+a0URmDWxJxu70yGD/G3/LmtVxH4t72p759AQ46q9E5mGnYFugbgBvUGFAcwL5/dBWP3BfNcK1ThdRX+msl8lkrOVU2PAYM5KAAFQ3dNSznlc/GAxQSFIJsnYw1x+UDFK9D7xUD8rIhsx24TX4
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5022.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(366004)(396003)(39860400002)(376002)(451199021)(107886003)(2616005)(86362001)(4744005)(2906002)(83380400001)(5660300002)(66476007)(110136005)(8936002)(186003)(66946007)(8676002)(66556008)(36756003)(26005)(478600001)(38100700002)(41300700001)(4326008)(6512007)(1076003)(6506007)(52116002)(6486002)(6666004)(38350700002)(316002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rDwdcJL/J79HtU3AvsrtpeDzl0ebvvEbuN1ZmQ/dTjz8fdG+B0Dd4hf9xtD+?=
- =?us-ascii?Q?D///pNMym21OBANiQmpzDHHe7wvDGpDgTg/XJdsZdcA9yO4N9uDsP1S7L+To?=
- =?us-ascii?Q?zty2ndZbY16rjnMS1vMV44CU0Xa1D62vjtq/7yAnS2OFyVbwaL/K7GeKRB6T?=
- =?us-ascii?Q?WmbBq1KZXfpYyxBnVRFSycYnOnfSv1JtmCDZoAsF98f5k4phfi7T4pnnkPjn?=
- =?us-ascii?Q?JKsxVGxdHCPE3SZJNAsxrVbGyUtGqViPBzJ1O9iIAFSuMcNEAsTxWrD8mI1r?=
- =?us-ascii?Q?bum0HRX1kLCGigMiymnBVGKD5R4vjkViFBslFxRdTM9YUKGE1WJIZRY75t29?=
- =?us-ascii?Q?iSQ9q04TPIcDJJ9MfQB0pKxzWRJb4pODzbXcyqXHc1LPWDZLy7mN2juOBwfS?=
- =?us-ascii?Q?P5uymKd+56IOnY68YsryOMnJVJkOQ8OE6L2gaU6mFknRJhXPWzXL6Z/Yq+1b?=
- =?us-ascii?Q?0AeeJAWATYjJLz4sgr6vdT1AewVyHEJHz6m3yFZm+XGhtGJsHyycc1qTYl+6?=
- =?us-ascii?Q?kM+1XJghov6clQjh1Nd4QhoVeqZrpLLIbQOZAlgqkY8aYJF/esmIrLP9Yz0z?=
- =?us-ascii?Q?/SOP6ABSvb/X045kHBneohYJiRkI5cMGp6gToiSAZ9yni7hWHJxDSwuYuL/E?=
- =?us-ascii?Q?iCN6tAj9yxVOZmf6lEX20+uRsf8kd0+UHMdc0DvBK3E5d7Y27tlS5votjpZN?=
- =?us-ascii?Q?ldyigheTkvZz7DpcXbZoDBHao4UtoVLVEGZ/kdzdrqlBJDLkGOT7HEUFh5dJ?=
- =?us-ascii?Q?OjJTZ2CFKYD+NWdUzKqft8OtaywwQpmfJoTf1zSksiNqAt+Z/MIHl5rrsW9C?=
- =?us-ascii?Q?z7PGPjHG4+o4VuvJFFmPf4R7RkbiiNkZx8R9c2BufWWhaohKJr/GC3j9gLRt?=
- =?us-ascii?Q?KXO6j5sHF3S3hdaZZyRMCJy/qtkXMOV1NyBwlG+RZkuBh3eRJcEeXE3KO7Fw?=
- =?us-ascii?Q?xKpEXw4FqMSabsGwi0dQUt7R3kM/Uhmx/JCTX/TM3ff8WhhnZJOwgjwIzkju?=
- =?us-ascii?Q?Q4Q3M4kJdvrQVHA3QavENEJK4ozVA9/91pGJKNvlxINs/QYjX3F5z6qjAlTc?=
- =?us-ascii?Q?P/8W9SW5UV6sZY3ubZTkGl0KkBwfMW4jk/xun5ZqoBBXrQYnco6kO1GFUaLr?=
- =?us-ascii?Q?yL/WeZVJPHjabtY9wN9MP2q6+GzqPWXgDYpa6upl371OboFwqT/AneWFBlvH?=
- =?us-ascii?Q?Iici8kmFtcnICMYmnVFw9SYMi+GXNF9+8MTxkayqQoNAUgCFu7ugcFkOJtxb?=
- =?us-ascii?Q?W0HV8CV2zdojX8vQcZaZ2maRhKRtahBoP096u0F55oTY8jN2wgsfPwR0icu6?=
- =?us-ascii?Q?OzI7Zwmvx8ew4rKfY5SlvcSLgiaeCHrUUVSETb7zSPGQnOhyM5Isio1zl6zs?=
- =?us-ascii?Q?/+JELY9kzxEy4BuLHnlDfv9U9YeiIilbr+pmh4PBhxrNvYuSPbs1ZbPDVOXk?=
- =?us-ascii?Q?suYD75adSzBc6WTJYm/CxR6oeCaD+u6L5ds3akzBYuyVlJFhAouWkqkpC9rA?=
- =?us-ascii?Q?1vRaUgBHMZrKA1XFUwdz4B3MLDLMGsibNgfMnVEWBm7KT9MrcvhsTHBJoe7n?=
- =?us-ascii?Q?u/Qmc8i/QFP3gaqyTad7kW/WDBhOmb12OltXhnXj?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 066032a8-dc03-457f-e923-08db70b8dc54
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5022.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jun 2023 11:32:27.8623
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xwiCxhIvwmc7+wAaF++PAHhqqfzNDUzSTB5AJrh+3VlVZhi+4C3Gp8BynwVt/qzV0Kts0B8VmN3aQJemVwlYgg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB5410
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use zero as the return value instead of the unused variable ret
 
-Signed-off-by: Li Dong <lidong@vivo.com>
----
- drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+On Mon, Jun 19, 2023 at 07:41:57PM +1000, Finn Thain wrote:
+> The Linux Contribution Maturity Model methodology is notionally based
+> on the Open source Maturity Model (OMM) which was in turn based on
+> the Capability Maturity Model Integration (CMMI).
+> 
+> According to Petrinja et al., the goal of the OMM was to extend the
+> CMMI so as to be useful both for companies and for communities
+> [1][2].  However, the Linux Contribution Maturity Model considers
+> only companies and businesses.
 
-diff --git a/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c b/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
-index 102e1fc7ee38..fec0d014fd0e 100644
---- a/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
-+++ b/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
-@@ -66,7 +66,6 @@ static void s6d7aa0_reset(struct s6d7aa0 *ctx)
- static int s6d7aa0_lock(struct s6d7aa0 *ctx, bool lock)
- {
- 	struct mipi_dsi_device *dsi = ctx->dsi;
--	int ret = 0;
- 
- 	if (lock) {
- 		mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD1, 0xa5, 0xa5);
-@@ -80,7 +79,7 @@ static int s6d7aa0_lock(struct s6d7aa0 *ctx, bool lock)
- 			mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD3, 0xa5, 0xa5);
- 	}
- 
--	return ret;
-+	return 0;
- }
- 
- static int s6d7aa0_on(struct s6d7aa0 *ctx)
--- 
-2.31.1.windows.1
+That's not a correct characterization.  The model is designed to
+measure and be useful to businesses, but it definitely considers the
+community because it's progress is built around being more useful to
+and working more effectively with the community.
+
+> This patch addresses this bias as it could hinder collaboration with
+> not-for-profit organisations and individuals, which would be a loss
+> to any stakeholder.
+
+I don't really think changing 'Businesses' to 'Organizations' entirely
+addresses what you claim is the bias because individuals would still be
+excluded from the term 'Organizations'.  I also don't really think it
+matters.  Part of the reason this whole thing doesn't matter is that
+sometimes people do know who a contributor they work with works for,
+but most of the time they don't.  If you really want this to be
+inclusive, you could change it to 'other contributors' but I'm still
+not sure it's worth it.
+
+> 
+> Level 5 is amended to remove the invitation to exercise the same bias
+> i.e. employees rewarded indirectly by other companies.
+
+I also wouldn't remove the bit about seeking upstream feedback on
+employees; I know from personal experience it happens a lot.
+
+Regards,
+
+James
+
 
