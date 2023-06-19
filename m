@@ -2,80 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 020C1735BA2
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E44735BA4
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbjFSPzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 11:55:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54600 "EHLO
+        id S230182AbjFSP4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 11:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232109AbjFSPzd (ORCPT
+        with ESMTP id S229888AbjFSP4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 11:55:33 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 209A4E65
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:55:30 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f909853509so16364675e9.3
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:55:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687190128; x=1689782128;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=l4N5dpoipWOf8XjguRYHpHwQdxrpSgiwAsJRRqnoHc4=;
-        b=LwgqnVBD1fU/4SV7LuNUlwiGQEW2ZbTGfdoNVNyGsrqf+MhrrUS7ncVu6xyLJyqqAe
-         va4K6Gw/eNfPJYdL3awXemcn4RYOcUmwSfvmeFhs/a/ajiVFipcIZqy+4WGshFdm7lOK
-         mCGkYq46heS1NYYAnMD3gPLj/o5m3WMWKMdjPxmJML3NGSylUF0ZmJg8lLoyalihX5T3
-         b2EP/AO3qfUM2ql5nImQ35KNqjtk9MIo/meeJM0uH4OFNrDQGr9/jYs1Lm3AgS0aGheb
-         bqg7OzE7qlw89Xw1hm8ASDaGZBbq4TZKDcpQiVXHkmBQljH86DNLRI70SpIPwcdzZheS
-         db3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687190128; x=1689782128;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l4N5dpoipWOf8XjguRYHpHwQdxrpSgiwAsJRRqnoHc4=;
-        b=LDw/yzsuB0MYbv/sYulTDpKNMNzK5oBHJHWbCShmM4M0d5ZmItOLGRMPBXyqIzMr2O
-         7TtXbkzbhrUvkuYQlFXugLOdiLGphuGkummyl5L/rxwrdm/xr7TXaIqVacEVFBFIvobx
-         M7z5Mlg3geWwDzjAv/JxUwnb4i4DnYk6a9/vp5WBmSm413Hzw7D0ihoVQvfrWkNnItQq
-         rrCXr5LnQ+8oxu9qvWOpRStsquozeUjhw62BP2yPWRSKwWDwSRowWb8KnsSk+30gmNdu
-         JJPB5lZB4tEygmsBQ6syKmopG23Hx5J0eOzOtZAyqVnzbQRyGwD2/KX/P2dpyNNUO+fr
-         tkXQ==
-X-Gm-Message-State: AC+VfDyuuy9hrTyvKFqmcrFgRKbNboEXNZN/Qhveyx3qiXLrL0uI+XSQ
-        zLHz2bu98odTXb/ds33gUMD5IA==
-X-Google-Smtp-Source: ACHHUZ5IwS5usHztRMwX7/oGdnNG0GHU6nRGgZp8/B+DITYYL9I+wvnzN3jtFNcL0pGDxhMrBz/G3Q==
-X-Received: by 2002:a7b:cb9a:0:b0:3f9:a6f2:8656 with SMTP id m26-20020a7bcb9a000000b003f9a6f28656mr2449612wmi.35.1687190128430;
-        Mon, 19 Jun 2023 08:55:28 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:13d0:1b6c:ce40:5429? ([2a05:6e02:1041:c10:13d0:1b6c:ce40:5429])
-        by smtp.googlemail.com with ESMTPSA id c16-20020a7bc010000000b003f7f60203ffsm11198628wmb.25.2023.06.19.08.55.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 08:55:28 -0700 (PDT)
-Message-ID: <815ad411-555a-058b-683c-1cbba4806198@linaro.org>
-Date:   Mon, 19 Jun 2023 17:55:27 +0200
+        Mon, 19 Jun 2023 11:56:13 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90FFE188;
+        Mon, 19 Jun 2023 08:56:11 -0700 (PDT)
+X-QQ-mid: bizesmtp67t1687190155tjgcboy4
+Received: from linux-lab-host.localdomain ( [116.30.126.60])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 19 Jun 2023 23:55:54 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: 3M0okmaRx3j+DH7O25w4I49usNQKwukZko0M+fI3sghNet1qUt9QPoFPGaQxB
+        qUMyPH1KyGxQc++m+763kfmCEtcyL49JXo2yHMQadZgrhtZ7A1HIxET4qQIWuaQOQuc0B5z
+        vXxgUMSbD9P70U/yfA+nxAN7nnTlIGoBh+4w3niCvA+Z/2EOraI8DQpA6m6s2k1ajHZvFoE
+        FAdBwRDieRX70M3hWobE0uCkcUfsM27XxUYZSJ731A6sywzYCHmnPH1saAHF580yKVSi5mj
+        zZ4fd6N1vzXqxDKGes/atceNbMHFINvKZj0tmM57KNReZMT+tcf5OTPZU7XYbS6Z2xzD3im
+        9Tcu3DQ5VpCXjBBMGVSGOFXsL98Q4YN1yqC9dgHnKrP/0d+Ma8YNWMUUD2oOwcdwJyI9WXD
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 1231696777476800510
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     david.laight@aculab.com, arnd@arndb.de, falcon@tinylab.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org, thomas@t-8ch.de
+Subject: [PATCH v4 10/10] selftests/nolibc: add mmap and munmap test cases
+Date:   Mon, 19 Jun 2023 23:55:41 +0800
+Message-Id: <9c46f648cd8c784405afed565bed120f0a2f239e.1687187451.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1687187451.git.falcon@tinylab.org>
+References: <cover.1687187451.git.falcon@tinylab.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/3] clocksource/drivers/imx-gpt: Drop unused function
- mxc_timer_init()
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-References: <20230328100531.879485-1-u.kleine-koenig@pengutronix.de>
- <CAOMZO5AHrXrJZJ2NY3GN56zf=meA5r3rWpD7GVuszBL7zcye5Q@mail.gmail.com>
- <20230328103136.xafgjdkvdwnn7pwi@pengutronix.de>
- <20230530153438.yomexkg2uypjtov7@pengutronix.de>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230530153438.yomexkg2uypjtov7@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,38 +52,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/05/2023 17:34, Uwe Kleine-König wrote:
-> On Tue, Mar 28, 2023 at 12:31:36PM +0200, Uwe Kleine-König wrote:
->> On Tue, Mar 28, 2023 at 07:14:24AM -0300, Fabio Estevam wrote:
->>> Hi Uwe,
->>>
->>> On Tue, Mar 28, 2023 at 7:06 AM Uwe Kleine-König
->>> <u.kleine-koenig@pengutronix.de> wrote:
->>>>
->>>> The last caller is gone since v5.10-rc1~28.
->>>>
->>>> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
->>>
->>> I have already submitted this change:
->>> https://lore.kernel.org/linux-arm-kernel/20230307124313.708255-1-festevam@denx.de/
->>
->> I don't care much which of them is included. Before patch #3 of my
->> series is applied, either of the two must be applied first.
-> 
-> OK, Fabio's patch got in. So now the way is clear for patches #2 and #3
-> of this series.
-> 
-> FTR: b4 am -l -P2,3 20230328103136.xafgjdkvdwnn7pwi@pengutronix.de
-> does the right thing.
+Three mmap/munmap related test cases are added:
 
-Applied patch #3
+- mmap(NULL, 0, PROT_READ, MAP_PRIVATE, 0, 0), MAP_FAILED, EINVAL)
 
-Thanks
+  The length argument must be greater than 0, otherwise, fail with -EINVAL.
 
+- munmap((void *)-1, 4*1024), -1, EINVAL)
+
+  Invalid (void *)-1 address fail with -EINVAL.
+
+- test_mmap_munmap(4*1024)
+
+  It finds a init file, mmap() it and then munmap().
+
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/testing/selftests/nolibc/nolibc-test.c | 31 ++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 80ab29e2887c..f7c0ca72cb28 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -592,6 +592,34 @@ static int test_stat_timestamps(void)
+ 	return 0;
+ }
+ 
++int test_mmap_munmap(int size)
++{
++	char init_files[5][20] = {"/init", "/sbin/init", "/etc/init", "/bin/init", "/bin/sh"};
++	int ret, fd, i;
++	void *mem;
++
++	for (i = 0; i < 5; i++) {
++		ret = fd = open(init_files[i], O_RDONLY);
++		if (ret < 0)
++			continue;
++		else
++			break;
++	}
++	if (ret < 0)
++		return ret;
++
++	mem = mmap(NULL, size, PROT_READ, MAP_SHARED, fd, 0);
++	if (mem == MAP_FAILED)
++		return -1;
++
++	ret = munmap(mem, size);
++	if (ret < 0)
++		return ret;
++
++	return close(fd);
++}
++
++
+ /* Run syscall tests between IDs <min> and <max>.
+  * Return 0 on success, non-zero on failure.
+  */
+@@ -666,6 +694,9 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(lseek_m1);          EXPECT_SYSER(1, lseek(-1, 0, SEEK_SET), -1, EBADF); break;
+ 		CASE_TEST(lseek_0);           EXPECT_SYSER(1, lseek(0, 0, SEEK_SET), -1, ESPIPE); break;
+ 		CASE_TEST(mkdir_root);        EXPECT_SYSER(1, mkdir("/", 0755), -1, EEXIST); break;
++		CASE_TEST(mmap_bad);          EXPECT_PTRER(1, mmap(NULL, 0, PROT_READ, MAP_PRIVATE, 0, 0), MAP_FAILED, EINVAL); break;
++		CASE_TEST(munmap_bad);        EXPECT_SYSER(1, munmap((void *)-1, 0), -1, EINVAL); break;
++		CASE_TEST(mmap_good);         EXPECT_SYSZR(1, test_mmap_munmap(4*1024)); break;
+ 		CASE_TEST(open_tty);          EXPECT_SYSNE(1, tmp = open("/dev/null", 0), -1); if (tmp != -1) close(tmp); break;
+ 		CASE_TEST(open_blah);         EXPECT_SYSER(1, tmp = open("/proc/self/blah", 0), -1, ENOENT); if (tmp != -1) close(tmp); break;
+ 		CASE_TEST(poll_null);         EXPECT_SYSZR(1, poll(NULL, 0, 0)); break;
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.25.1
 
