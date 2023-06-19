@@ -2,98 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A87734EAE
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76610734EB7
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:54:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbjFSIxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 04:53:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52774 "EHLO
+        id S230095AbjFSIyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 04:54:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230392AbjFSIx1 (ORCPT
+        with ESMTP id S230475AbjFSIxz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 04:53:27 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35C72D5F;
-        Mon, 19 Jun 2023 01:52:25 -0700 (PDT)
-Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A4BA2547;
-        Mon, 19 Jun 2023 10:51:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1687164710;
-        bh=B00zRuFkwkcFL8RsmEawKa5iBKl4WJesv+28pc/wdYk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=jaP57+xXVeWhodB/lrjQGKEzTI8MoWVBb9yCIpIMUnS2RqPs3OoJk5GHvK/JPAqc0
-         UVA/arS/Lhdil2A59pODyshl6qRXo9zeWmrxAlMZPBOJFAuanISqbpLN06svvfMCqI
-         KJZdN7BpVrYtqbjgn0IYUT5/XafDWr0QdHXv+nq4=
-Message-ID: <78fdbb28-4133-0165-69ff-a0e568cd84fe@ideasonboard.com>
-Date:   Mon, 19 Jun 2023 11:52:19 +0300
+        Mon, 19 Jun 2023 04:53:55 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC0D12F;
+        Mon, 19 Jun 2023 01:53:04 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35J7BilH019508;
+        Mon, 19 Jun 2023 03:52:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=KN9bBN5Pb+ea0O+RR7lKadXIEdNIzwB4JEpMI+Jsp+0=;
+ b=EFsqCWA9qKYnaxOm4+hukqHEiCwIR7bjxK4iKkUWRROOXZ2Qu6dLy2E+DKd36HWfLBT0
+ xbXU6hhv6fyVlJM0COQfqbx2dNkcqIe5jbQK1+kmOXJBICfLdymQ7DmZksoCtJ7D5Jtk
+ 2YLMzYdOJ34rZp3s7nnFvtqj5MtDX53K/q5HLlHr8/35BFw9YuUaqdjHgSkBJcrbGQIg
+ DbtudSRF4TC9I8MP4tvAgTwh78dOVbnROKYcA6vk6iAwfbilRPZo9VjGzMUaafWQ5s6M
+ cSgNVv+7vDC11iW+JM3HN8X+RpSIalS533HYitJp69xtHNgwHI865l8qOAWdP73VylHr 7g== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3r9a809knw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Jun 2023 03:52:46 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Mon, 19 Jun
+ 2023 09:52:44 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
+ Transport; Mon, 19 Jun 2023 09:52:44 +0100
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 800B611AA;
+        Mon, 19 Jun 2023 08:52:44 +0000 (UTC)
+Date:   Mon, 19 Jun 2023 08:52:44 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Lee Jones <lee@kernel.org>
+CC:     <broonie@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linus.walleij@linaro.org>, <vkoul@kernel.org>,
+        <robh+dt@kernel.org>, <conor+dt@kernel.org>, <lgirdwood@gmail.com>,
+        <yung-chuan.liao@linux.intel.com>, <sanyog.r.kale@intel.com>,
+        <pierre-louis.bossart@linux.intel.com>,
+        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 3/6] mfd: cs42l43: Add support for cs42l43 core driver
+Message-ID: <20230619085244.GU68926@ediswmail.ad.cirrus.com>
+References: <20230605125504.2570158-1-ckeepax@opensource.cirrus.com>
+ <20230605125504.2570158-4-ckeepax@opensource.cirrus.com>
+ <20230615171124.GL3635807@google.com>
+ <20230616083404.GR68926@ediswmail.ad.cirrus.com>
+ <20230619083005.GN3635807@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v14 13/18] media: i2c: ds90ub953: Use
- v4l2_fwnode_endpoint_parse()
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>
-References: <20230616135922.442979-1-tomi.valkeinen@ideasonboard.com>
- <20230616135922.442979-14-tomi.valkeinen@ideasonboard.com>
- <ZIxwjebnV/1JaoXt@smile.fi.intel.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <ZIxwjebnV/1JaoXt@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230619083005.GN3635807@google.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-ORIG-GUID: yH0bMObXJlRVCdEL-QCa-N4rlQtwNX-w
+X-Proofpoint-GUID: yH0bMObXJlRVCdEL-QCa-N4rlQtwNX-w
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/06/2023 17:24, Andy Shevchenko wrote:
-> On Fri, Jun 16, 2023 at 04:59:17PM +0300, Tomi Valkeinen wrote:
->> Use v4l2_fwnode_endpoint_parse() to parse the sink endpoint parameters.
+On Mon, Jun 19, 2023 at 09:30:05AM +0100, Lee Jones wrote:
+> On Fri, 16 Jun 2023, Charles Keepax wrote:
+> > On Thu, Jun 15, 2023 at 06:11:24PM +0100, Lee Jones wrote:
+> > > On Mon, 05 Jun 2023, Charles Keepax wrote:
+> > > > +static struct i2c_device_id cs42l43_i2c_id[] = {
+> > > > +	{ "cs42l43", 0 },
+> > > > +	{}
+> > > > +};
+> > > > +MODULE_DEVICE_TABLE(i2c, cs42l43_i2c_id);
+> > > 
+> > > Is this required anymore?
+> > > 
+> > 
+> > I was not aware of it not being required, I think it will still
+> > be used for the purposes of module naming. Perhaps someone more
+> > knowledgable than me can comment?
 > 
->> +	nlanes = vep.bus.mipi_csi2.num_data_lanes;
->>   
-> 
-> I would also drop this blank line now.
-
-Ok.
-
->> -	if (ret != 1 && ret != 2 && ret != 4)
->> +	if (nlanes != 1 && nlanes != 2 && nlanes != 4)
-> 
-> Isn't the following cleaner?
-> 
-> 	if (!is_power_of_2(nlanes) || nlanes > 4)
-
-No, I don't think so... The current one is more human-readable.
-
->>   		return dev_err_probe(dev, -EINVAL,
->> -				     "bad number of data-lanes: %d\n", ret);
->> +				     "bad number of data-lanes: %d\n", nlanes);
+> Since this table isn't providing any information which cannot be derived
+> from the other (OF, ACPI) tables, the I2C subsystem should be able to
+> obtain it from those sources instead.
 > 
 
-  Tomi
+Sorry I literally just sent a v4 then saw this email. I will test
+removing this table and send a v5.
 
+> > > > +#if IS_ENABLED(CONFIG_MFD_CS42L43_I2C)
+> > > > +const struct regmap_config cs42l43_i2c_regmap = {
+> > > > +	.reg_bits		= 32,
+> > > > +	.reg_stride		= 4,
+> > > > +	.val_bits		= 32,
+> > > > +	.reg_format_endian	= REGMAP_ENDIAN_BIG,
+> > > > +	.val_format_endian	= REGMAP_ENDIAN_BIG,
+> > > > +
+> > > > +	.max_register		= CS42L43_MCU_RAM_MAX,
+> > > > +	.readable_reg		= cs42l43_readable_register,
+> > > > +	.volatile_reg		= cs42l43_volatile_register,
+> > > > +	.precious_reg		= cs42l43_precious_register,
+> > > > +
+> > > > +	.cache_type		= REGCACHE_RBTREE,
+> > > > +	.reg_defaults		= cs42l43_reg_default,
+> > > > +	.num_reg_defaults	= ARRAY_SIZE(cs42l43_reg_default),
+> > > > +};
+> > > > +EXPORT_SYMBOL_NS_GPL(cs42l43_i2c_regmap, MFD_CS42L43);
+> > > > +#endif
+> > > 
+> > > We don't tend to like #ifery in C files.
+> > > 
+> > > Why is it required?
+> > > 
+> > > And why not just put them were they're consumed?
+> > 
+> > The trouble is the cs42l43_reg_default array and the array size.
+> > There is no good way to statically initialise those two fields
+> > from a single array in both the I2C and SDW modules.
+> 
+> Can you have a little think for another way to solve this please?
+> 
+
+I will have another go at it, if memory serves the vague options
+were:
+
+1) this approach
+2) some sort of horrible #include to put the defaults array in
+both modules, although I would really prefer to avoid this one.
+3) dynamically allocate the regmap_configs so those two fields
+can be filled in with non-static data.
+
+If I fail to come up with an option 4 would you prefer 1 or 3?
+Well or 2 but I really would prefer not to do 2.
+
+> > > Perhaps some simple function headers would help?
+> > You mean add some kernel doc for these functions, right? Assuming
+> > that is what you mean, will do.
+> 
+> I'd suggest not using kernel-doc formatting, but that type of thing,
+> yes.
+
+Ok I will remove the kernel doc bits for v5.
+
+Thanks,
+Charles
