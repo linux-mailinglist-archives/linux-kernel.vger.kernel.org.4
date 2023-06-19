@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1A5773574A
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 14:51:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BFD173574E
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 14:51:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbjFSMuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 08:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34534 "EHLO
+        id S230188AbjFSMug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 08:50:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231317AbjFSMt4 (ORCPT
+        with ESMTP id S231336AbjFSMt6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 08:49:56 -0400
+        Mon, 19 Jun 2023 08:49:58 -0400
 Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25120113;
-        Mon, 19 Jun 2023 05:49:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A649D91;
+        Mon, 19 Jun 2023 05:49:57 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Ql8jq2yYwz4f3rJR;
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Ql8jq5tWXz4f3v1N;
         Mon, 19 Jun 2023 20:49:51 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.104.67])
-        by APP4 (Coremail) with SMTP id gCh0CgBH_rHrTpBkoNw8MA--.51801S11;
+        by APP4 (Coremail) with SMTP id gCh0CgBH_rHrTpBkoNw8MA--.51801S12;
         Mon, 19 Jun 2023 20:49:52 +0800 (CST)
 From:   Yu Kuai <yukuai1@huaweicloud.com>
 To:     xni@redhat.com, song@kernel.org
 Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
         yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
         yangerkun@huawei.com
-Subject: [PATCH -next 7/8] md/md-linear: enable io accounting
-Date:   Tue, 20 Jun 2023 04:48:25 +0800
-Message-Id: <20230619204826.755559-8-yukuai1@huaweicloud.com>
+Subject: [PATCH -next 8/8] md/md-faulty: enable io accounting
+Date:   Tue, 20 Jun 2023 04:48:26 +0800
+Message-Id: <20230619204826.755559-9-yukuai1@huaweicloud.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230619204826.755559-1-yukuai1@huaweicloud.com>
 References: <20230619204826.755559-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBH_rHrTpBkoNw8MA--.51801S11
-X-Coremail-Antispam: 1UD129KBjvdXoW7GFWDCF1rKr1fAFy8tr43Wrg_yoWxKwb_uF
-        1fur9rur1jqr4Fgr1Yvr4SvFWYv3Z5uFykuFy7KFsayr1xZw1xtr1UGF47J3ZrZrWSqa45
-        ArnFqr1fXr10yjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+X-CM-TRANSID: gCh0CgBH_rHrTpBkoNw8MA--.51801S12
+X-Coremail-Antispam: 1UD129KBjvdXoW7GFWDCF1rKr1fAFy8tr43Wrg_yoWxuwcE9r
+        s09rZrXr15KF18Kr1jyr4xZFWY93ZYg3WkWF17KFZxAF15Aa1IkrZ0kF4xJa13uFWfXa43
+        J340qw4fXr40kjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
         9fnUUIcSsGvfJTRUUUbDAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
         6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M28IrcIa0xkI8V
         A2jI8067AKxVWUAVCq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJ
@@ -70,21 +70,22 @@ mddev_suspend() will wait for all io to be done.
 
 Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- drivers/md/md-linear.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/md/md-faulty.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/md/md-linear.c b/drivers/md/md-linear.c
-index 4eb72b9dd933..71ac99646827 100644
---- a/drivers/md/md-linear.c
-+++ b/drivers/md/md-linear.c
-@@ -238,6 +238,7 @@ static bool linear_make_request(struct mddev *mddev, struct bio *bio)
- 		bio = split;
+diff --git a/drivers/md/md-faulty.c b/drivers/md/md-faulty.c
+index 50ad818978a4..a039e8e20f55 100644
+--- a/drivers/md/md-faulty.c
++++ b/drivers/md/md-faulty.c
+@@ -204,6 +204,8 @@ static bool faulty_make_request(struct mddev *mddev, struct bio *bio)
+ 			failit = 1;
+ 		}
  	}
- 
++
 +	md_account_bio(mddev, &bio);
- 	bio_set_dev(bio, tmp_dev->rdev->bdev);
- 	bio->bi_iter.bi_sector = bio->bi_iter.bi_sector -
- 		start_sector + data_offset;
+ 	if (failit) {
+ 		struct bio *b = bio_alloc_clone(conf->rdev->bdev, bio, GFP_NOIO,
+ 						&mddev->bio_set);
 -- 
 2.39.2
 
