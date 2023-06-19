@@ -2,107 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DE45735868
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 15:20:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D5D273586C
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 15:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231638AbjFSNUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 09:20:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58026 "EHLO
+        id S231873AbjFSNUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 09:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232103AbjFSNUI (ORCPT
+        with ESMTP id S231810AbjFSNUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 09:20:08 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A98FE59;
-        Mon, 19 Jun 2023 06:20:05 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-3112c11fdc9so1629570f8f.3;
-        Mon, 19 Jun 2023 06:20:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687180804; x=1689772804;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=M2wb2dQCW7fBOdFZFZHr16+OjAXbPjBQ6SA6JZNaR40=;
-        b=Cwmoboud/nFa5rnnaQV9sgUFjEfIFxltkAT7WbAbEZ1gIqpspzerjZdmb/5ry4GDim
-         wvYoQOKeqhDDx/h/TVN+im1euS2BAVXi5o2tsP41IpCng9031lPP+do51Rwd6WG0edqb
-         039JP1YXfduen2E3RrEYCOq2Qct2jya8k1upn8xJgO6qlNnmOpojMFnvC9YVgoioqaXl
-         HONZxfSDPEucjjupDEc3Lc2xLGDPScxb+KzzkXUU81DNjI1TRRO61WsFK1p66Zru98SW
-         TNW38xd7WpHr/xEkJDkmjryhl4C5QDHRGF6lWySNeeQ6/OjUUoIWRr/Tts8MRktThr8W
-         8UUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687180804; x=1689772804;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M2wb2dQCW7fBOdFZFZHr16+OjAXbPjBQ6SA6JZNaR40=;
-        b=NqtluYCnspVHnsdfkJwr8lE7l3K6cDw5Gysn0sVHMqQ9/fJvHKkpat2PL1ltliq/QG
-         I6+Mu1+pYeyh8C5myOrFER4S3ECgCj8KNMeARqSghN3ilQX6ms0YWVcFcFSsWOrdheC9
-         GFPaUJANoyQi1odakz/PphPu4m9SOpxm8cOJ7zFwGtfukmnMOEaAc9XnC9QXR/DWKQmy
-         FjrY9jf8U5BlYYe0hvjuBa5B/mw/h+13If0EHKdFM8CQ1Ct6z0OyeXUiPi6FzypNOz1c
-         K92gHPpyjWRPNxyi3Zv3Rrsuia2uyhp6Om1ZS6RWDGFbBmI6g8V+PJ6ON11cI9dLIrJI
-         J7Ng==
-X-Gm-Message-State: AC+VfDycIkSIzypZbcYu3L+wGYBxBAXjqkPdU9ZQJwWFmSWC3B1S1WCV
-        7io1j8HJHX0EZts6qEARgSXc2XtEM73D2nLe
-X-Google-Smtp-Source: ACHHUZ5gTJzvZQfjJjDEyn4Q/+S0CagNlqitgicIUCj2Nbo3ecG3/SA2tQh54/7TQUeKn0QxKeIAqg==
-X-Received: by 2002:a5d:58c7:0:b0:30e:45ac:810e with SMTP id o7-20020a5d58c7000000b0030e45ac810emr6391868wrf.36.1687180803699;
-        Mon, 19 Jun 2023 06:20:03 -0700 (PDT)
-Received: from [10.178.67.29] ([192.19.248.250])
-        by smtp.gmail.com with ESMTPSA id i1-20020a5d4381000000b0030c4d8930b1sm31500187wrq.91.2023.06.19.06.20.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 06:20:03 -0700 (PDT)
-Message-ID: <390a3ed6-7349-916a-1d2f-19d644c891f7@gmail.com>
-Date:   Mon, 19 Jun 2023 14:20:01 +0100
+        Mon, 19 Jun 2023 09:20:51 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A65F1AC
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 06:20:46 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id B5F3D218E6;
+        Mon, 19 Jun 2023 13:20:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1687180844; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=e/SWAgI5HI5GKotedaHyXkoUm3dh7H6kmLw/xseZ1DY=;
+        b=Ie5U9APgMNUrpdGe8gCGjCqqdjxijMm8mC7Jg+stWOZ4RJQ2y2YZR0JpNcWbyrYeg2nVlO
+        +wmOA1LaSR8fv9KGy1lJuFah5Ye7K4lfmj8J1UhcPcHAwRYkZkDOBtc70sFlWgVkg2pUjr
+        QqaXc/VcESKX0joJQ2fBzlWFE72BbUo=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 00E252C141;
+        Mon, 19 Jun 2023 13:20:43 +0000 (UTC)
+Date:   Mon, 19 Jun 2023 15:20:43 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>, hexingwei001@208suo.com,
+        senozhatsky@chromium.org, linux-kernel@vger.kernel.org,
+        linux@rasmusvillemoes.dk
+Subject: Re: [PATCH] lib/test_printf.c: space required after that ','
+Message-ID: <ZJBWK01h7xCO0olj@alley>
+References: <20230614082523.63191-1-panzhiai@cdjrlc.com>
+ <f2d8eb955890bc1db1b307db713d4a4a@208suo.com>
+ <ZImzXhc7ZRbSvz7/@smile.fi.intel.com>
+ <20230614110640.57817123@gandalf.local.home>
+ <ZInZ1BcHHQbok+wg@smile.fi.intel.com>
+ <ZI/5guHaSPrld+Cv@duo.ucw.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 5.10 00/89] 5.10.185-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230619102138.279161276@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230619102138.279161276@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZI/5guHaSPrld+Cv@duo.ucw.cz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon 2023-06-19 08:45:22, Pavel Machek wrote:
+> On Wed 2023-06-14 18:16:36, Andy Shevchenko wrote:
+> > On Wed, Jun 14, 2023 at 11:06:40AM -0400, Steven Rostedt wrote:
+> > > On Wed, 14 Jun 2023 15:32:30 +0300
+> > > Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> > > > On Wed, Jun 14, 2023 at 04:30:55PM +0800, hexingwei001@208suo.com wrote:
+> > > > > Add missing spaces to clear checkpatch errors:
+> > > > > 
+> > > > > lib/test_printf.c:562: ERROR: space required after that ',' (ctx:VxV).
+> > > > > lib/test_printf.c:562: ERROR: space required after that ',' (ctx:VxV).
+> > > > > lib/test_printf.c:562: ERROR: space required after that ',' (ctx:VxV).
+> > > > > lib/test_printf.c:562: ERROR: space required after that ',' (ctx:VxV).
+> > > > > lib/test_printf.c:562: ERROR: space required after that ',' (ctx:VxV).
+> > > > > lib/test_printf.c:562: ERROR: space required after that ',' (ctx:VxV).  
+> > > > 
+> > > > Doesn't make any difference to the code, so let do this (unneeded) churn
+> > > > to calm checkpatch down.
+> > > > 
+> > > > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > 
+> > > checkpatch is for patches (new code) and should not be run on existing code.
+> > 
+> > Why does it have -f option? What do you propose to prevent people from using it?
+> 
+> Brain needs to be used while using checkpatch.
+
+I agree.
+
+Also I agree with Sergey that these changes just complicate
+backport.
+
+I would prefer if people did not send these cosmetic "fixes".
 
 
-On 6/19/2023 11:29 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.185 release.
-> There are 89 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 21 Jun 2023 10:21:12 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.185-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> Plus, autosel is "great" trying to backport anything that mentions
+> "error", so better don't do this.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+Autosel is another tool which would deserve a human filter. Well, we have
+it because of lack of resources...
 
-Tested-by: Florian Fainelli <florian.fainelli@broadcom.com>
--- 
-Florian
+I am surprised that checkpatch.po reports the missing space as an "ERROR"
+in the first place.
+
+Best Regards,
+Petr
