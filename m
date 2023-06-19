@@ -2,87 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF847356C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 14:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA3D57356E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 14:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230302AbjFSMYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 08:24:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46500 "EHLO
+        id S230520AbjFSMa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 08:30:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbjFSMYN (ORCPT
+        with ESMTP id S229799AbjFSMaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 08:24:13 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13063E60
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 05:23:33 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b45e347266so37140721fa.0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 05:23:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687177409; x=1689769409;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TSP20PRjLfEjEczhmjfYNlia/vcSKNLRdUGUz9NHLWk=;
-        b=yo+Z+f5JTD4zf+O3aNYVki4aAyWmqo9AGYDhyQXjeCuyotDVx5sjiU3lNnxu5dNF4r
-         gWi9toGSJ0qggbyNgYt83JM5CmBlAoJk5Na/Rxh8xLCneHmgrQHJfo4EZMKUq4J4gT8m
-         vbfLwDA9/sMvcAtiqOLpM/80FvrFBsls1lOpQ92tmXK1Q5X0Z/fsxjv7zSQ2OAoLAvNq
-         1q8VrWtJYjZ/Qt4qyeuEQd6R2iNvsUpfKcPYu1ed0Yrlpxl6aP5/5XC3ABwl0vH3UMRz
-         6dyS1XvJNUMU1084BqEMdAcA04kzQS4pxZc79NCW3EtIZoZ7rL1l4XfIBUMcJEUtdO5z
-         R7Cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687177409; x=1689769409;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TSP20PRjLfEjEczhmjfYNlia/vcSKNLRdUGUz9NHLWk=;
-        b=d56j/I+CZHPyyVKZtMpn+6QT0EJJZd9Yv5YyA6Ft+RY34mwNk/O1PWZU60U6RiE8wd
-         WkYYhnoSuEnKFWUBr3woqNdOf6q1JqKkh83DsDTWynZLYgdQGs68sCFnKvSo03+t5qoX
-         YlmizV1wR6PI/v7ENpnQ1FXn1gSzlW63xZRfEOVtL6+V6Tcz7CgkehhErVN/nWFlKfFL
-         V24HigaxvL/k5905hGUVqUCzo+Q5LDkkO8n2egZx/R2+pJz8ZpUtUdJSABRJlKyqIlOO
-         qz39fTMrux6QVWEHhJcvsr3byb6NT4QBPfttooCop5RVTfnPKA9J9bTbUOMu2vxuTYid
-         wsUw==
-X-Gm-Message-State: AC+VfDwpIq2poPsJxlJMaDEFJXmRhFDx4Hv+8YBza5BHl3s2pf5+W6uI
-        Hl1oGVHNAZ/qAj0wRKF8awD8NA==
-X-Google-Smtp-Source: ACHHUZ55Tp1NaWXP5nJ6mewhwTdXY+WArg4PWOHSlyIXMGE3IKFjWZen5h93Q5FJPTwyw1f8IXcyAA==
-X-Received: by 2002:a2e:a401:0:b0:2b4:809a:1c7c with SMTP id p1-20020a2ea401000000b002b4809a1c7cmr933619ljn.19.1687177408953;
-        Mon, 19 Jun 2023 05:23:28 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id k27-20020a17090646db00b00988be3c1d87sm1123119ejs.116.2023.06.19.05.23.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 05:23:28 -0700 (PDT)
-Message-ID: <598c14f9-395c-d218-4af9-31bba022dcf6@linaro.org>
-Date:   Mon, 19 Jun 2023 14:23:25 +0200
+        Mon, 19 Jun 2023 08:30:24 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0D5E62;
+        Mon, 19 Jun 2023 05:30:19 -0700 (PDT)
+X-QQ-mid: bizesmtp73t1687177462tlqf4j6u
+Received: from linux-lab-host.localdomain ( [116.30.126.60])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 19 Jun 2023 20:24:21 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: VbOeDQvtdXORok8YaoXRnAMACRibjaa4Zvbrj15+WMLSwufmkG9LMAdyY8Ein
+        2OwxfOiDDC0BifHbTdxZbJH1mljpItWBnPOr5JhNTv1Ya59YgaKMc6CXWsTmjhXxKIT8Qqp
+        JjGYsjnMR5XlwjUElOlkjPwSSa135JuYzIIoYGtsDYvqSTWKooG3Fn4Bn6OZi2rO2Xse8nZ
+        P2wJLMQDrGvO+iDQiiea/Gqh2kxuXeioFKdrwfUqWdkV59oboGAlAnMVF1icF8qLtBhCyrl
+        TkNwi8bPvI+9G6E6l1biDAbQqd8j1p3c/djFR1455mi9OGMsg5xSJhywwDPUrbed0dCa6jk
+        XvdNHbwwb+m9QbRjJJXJFZqoOEc87yWDomOKuz5AD3JdDPe4pm4kEek7QVXCA==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 1937257225110562742
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        thomas@t-8ch.de
+Subject: [PATCH v5 1/5] tools/nolibc: fix up #error compile failures with -ENOSYS
+Date:   Mon, 19 Jun 2023 20:24:15 +0800
+Message-Id: <1a823ba7b250ba5190f802dfc4428d4e248f71b3.1687176996.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1687176996.git.falcon@tinylab.org>
+References: <cover.1687176996.git.falcon@tinylab.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 1/6] dt-bindings: mmc: mmci: Add st,stm32mp25-sdmmc2
- compatible
-Content-Language: en-US
-To:     Yann Gautier <yann.gautier@foss.st.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     Conor Dooley <conor+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        linux-kernel@vger.kernel.org, Marek Vasut <marex@denx.de>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Xiang wangx <wangxiang@cdjrlc.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-References: <20230619115120.64474-1-yann.gautier@foss.st.com>
- <20230619115120.64474-2-yann.gautier@foss.st.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230619115120.64474-2-yann.gautier@foss.st.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -91,43 +52,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/06/2023 13:51, Yann Gautier wrote:
-> For STM32MP25, we'll need to distinguish how is managed the delay block.
-> This is done through a new comptible dedicated for this SoC, as the
-> delay block registers are located in SYSCFG peripheral.
-> 
-> Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
-> ---
-> Changes in v2:
-> - update dt-bindings file (remove bootloader reference and use enum)
-> 
->  Documentation/devicetree/bindings/mmc/arm,pl18x.yaml | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml b/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
-> index 1c96da04f0e53..2459a55ed540b 100644
-> --- a/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/arm,pl18x.yaml
-> @@ -53,10 +53,11 @@ properties:
->          items:
->            - const: arm,pl18x
->            - const: arm,primecell
-> -      - description: Entry for STMicroelectronics variant of PL18x.
-> -          This dedicated compatible is used by bootloaders.
-> +      - description: Entries for STMicroelectronics variant of PL18x.
->          items:
-> -          - const: st,stm32-sdmmc2
-> +          - enum:
-> +              - st,stm32-sdmmc2
-> +              - st,stm32mp25-sdmmc2
+Compiling nolibc for rv32 got such errors:
 
-It's nicely visible that old stm32 entry was family-generic, not
-device-specific, thus not really correct. :( I hope we can learn from
-this for future stm submissions.
+    In file included from nolibc/sysroot/riscv/include/nolibc.h:99,
+                     from nolibc/sysroot/riscv/include/errno.h:26,
+                     from nolibc/sysroot/riscv/include/stdio.h:14,
+                     from tools/testing/selftests/nolibc/nolibc-test.c:12:
+    nolibc/sysroot/riscv/include/sys.h:946:2: error: #error Neither __NR_ppoll nor __NR_poll defined, cannot implement sys_poll()
+      946 | #error Neither __NR_ppoll nor __NR_poll defined, cannot implement sys_poll()
+          |  ^~~~~
+    nolibc/sysroot/riscv/include/sys.h:1062:2: error: #error None of __NR_select, __NR_pselect6, nor __NR__newselect defined, cannot implement sys_select()
+     1062 | #error None of __NR_select, __NR_pselect6, nor __NR__newselect defined, cannot implement sys_select()
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+If a syscall is not supported by a target platform, 'return -ENOSYS' is
+better than '#error', which lets the other syscalls work as-is and
+allows developers to fix up the test failures reported by nolibc-test
+one by one later.
 
+This converts all of the '#error' to 'return -ENOSYS', so, all of the
+'#error' failures are fixed.
 
-Best regards,
-Krzysztof
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Link: https://lore.kernel.org/linux-riscv/5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com/
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/include/nolibc/sys.h | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
+
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index 856249a11890..78c86f124335 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -124,7 +124,7 @@ int sys_chmod(const char *path, mode_t mode)
+ #elif defined(__NR_chmod)
+ 	return my_syscall2(__NR_chmod, path, mode);
+ #else
+-#error Neither __NR_fchmodat nor __NR_chmod defined, cannot implement sys_chmod()
++	return -ENOSYS;
+ #endif
+ }
+ 
+@@ -153,7 +153,7 @@ int sys_chown(const char *path, uid_t owner, gid_t group)
+ #elif defined(__NR_chown)
+ 	return my_syscall3(__NR_chown, path, owner, group);
+ #else
+-#error Neither __NR_fchownat nor __NR_chown defined, cannot implement sys_chown()
++	return -ENOSYS;
+ #endif
+ }
+ 
+@@ -251,7 +251,7 @@ int sys_dup2(int old, int new)
+ #elif defined(__NR_dup2)
+ 	return my_syscall2(__NR_dup2, old, new);
+ #else
+-#error Neither __NR_dup3 nor __NR_dup2 defined, cannot implement sys_dup2()
++	return -ENOSYS;
+ #endif
+ }
+ 
+@@ -351,7 +351,7 @@ pid_t sys_fork(void)
+ #elif defined(__NR_fork)
+ 	return my_syscall0(__NR_fork);
+ #else
+-#error Neither __NR_clone nor __NR_fork defined, cannot implement sys_fork()
++	return -ENOSYS;
+ #endif
+ }
+ #endif
+@@ -648,7 +648,7 @@ int sys_link(const char *old, const char *new)
+ #elif defined(__NR_link)
+ 	return my_syscall2(__NR_link, old, new);
+ #else
+-#error Neither __NR_linkat nor __NR_link defined, cannot implement sys_link()
++	return -ENOSYS;
+ #endif
+ }
+ 
+@@ -700,7 +700,7 @@ int sys_mkdir(const char *path, mode_t mode)
+ #elif defined(__NR_mkdir)
+ 	return my_syscall2(__NR_mkdir, path, mode);
+ #else
+-#error Neither __NR_mkdirat nor __NR_mkdir defined, cannot implement sys_mkdir()
++	return -ENOSYS;
+ #endif
+ }
+ 
+@@ -729,7 +729,7 @@ long sys_mknod(const char *path, mode_t mode, dev_t dev)
+ #elif defined(__NR_mknod)
+ 	return my_syscall3(__NR_mknod, path, mode, dev);
+ #else
+-#error Neither __NR_mknodat nor __NR_mknod defined, cannot implement sys_mknod()
++	return -ENOSYS;
+ #endif
+ }
+ 
+@@ -848,7 +848,7 @@ int sys_open(const char *path, int flags, mode_t mode)
+ #elif defined(__NR_open)
+ 	return my_syscall3(__NR_open, path, flags, mode);
+ #else
+-#error Neither __NR_openat nor __NR_open defined, cannot implement sys_open()
++	return -ENOSYS;
+ #endif
+ }
+ 
+@@ -943,7 +943,7 @@ int sys_poll(struct pollfd *fds, int nfds, int timeout)
+ #elif defined(__NR_poll)
+ 	return my_syscall3(__NR_poll, fds, nfds, timeout);
+ #else
+-#error Neither __NR_ppoll nor __NR_poll defined, cannot implement sys_poll()
++	return -ENOSYS;
+ #endif
+ }
+ 
+@@ -1059,7 +1059,7 @@ int sys_select(int nfds, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeva
+ #endif
+ 	return my_syscall5(__NR__newselect, nfds, rfds, wfds, efds, timeout);
+ #else
+-#error None of __NR_select, __NR_pselect6, nor __NR__newselect defined, cannot implement sys_select()
++	return -ENOSYS;
+ #endif
+ }
+ 
+@@ -1196,7 +1196,7 @@ int sys_stat(const char *path, struct stat *buf)
+ #elif defined(__NR_stat)
+ 	ret = my_syscall2(__NR_stat, path, &stat);
+ #else
+-#error Neither __NR_newfstatat nor __NR_stat defined, cannot implement sys_stat()
++	return -ENOSYS;
+ #endif
+ 	buf->st_dev          = stat.st_dev;
+ 	buf->st_ino          = stat.st_ino;
+@@ -1243,7 +1243,7 @@ int sys_symlink(const char *old, const char *new)
+ #elif defined(__NR_symlink)
+ 	return my_syscall2(__NR_symlink, old, new);
+ #else
+-#error Neither __NR_symlinkat nor __NR_symlink defined, cannot implement sys_symlink()
++	return -ENOSYS;
+ #endif
+ }
+ 
+@@ -1312,7 +1312,7 @@ int sys_unlink(const char *path)
+ #elif defined(__NR_unlink)
+ 	return my_syscall1(__NR_unlink, path);
+ #else
+-#error Neither __NR_unlinkat nor __NR_unlink defined, cannot implement sys_unlink()
++	return -ENOSYS;
+ #endif
+ }
+ 
+-- 
+2.25.1
 
