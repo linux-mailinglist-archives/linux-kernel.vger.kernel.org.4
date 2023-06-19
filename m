@@ -2,73 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E0637351E5
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 12:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCFEC7351E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 12:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbjFSKU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 06:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34558 "EHLO
+        id S231178AbjFSKVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 06:21:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbjFSKUw (ORCPT
+        with ESMTP id S230342AbjFSKVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 06:20:52 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B568798;
-        Mon, 19 Jun 2023 03:20:51 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E78626606F53;
-        Mon, 19 Jun 2023 11:20:49 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687170050;
-        bh=0SQkYnJ5OZn2pySciArIeOgIhxM+yYD/1GtLehRZoEk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=UcQTpcYm7Hq1FLbRzf1Pv5v/E5WaglkluO4lHCyeroKGwQ2rJKV5KvysEnQDUqO6M
-         YNqE7r6WK5Q7W9pkYOVrrdxEbWQxS6uvokhIGMu+CZxRPWnXkS6aFgFffWcGZ80vfn
-         vi8H7RVCgNqf6LDcAs8DPFPf32Zra6XVq4wxLhQixXja4SiNDy9gLoB9u9cS4XyHMy
-         TlRx5VQnztss5NlSNMuRobSFaI+1MwgEm5DUB9Dlq19SGP20mf7P98mSRkDtDpZM21
-         fkT1iNGV01UnzFd0X5cOiQdgydikYQ9QDmbT2crInUkJAfGKT6XH9PAvPywr3b3apq
-         4Q1ciVVSkD8rA==
-Message-ID: <ef11f724-5bd1-1ae3-906d-cd9407f242ab@collabora.com>
-Date:   Mon, 19 Jun 2023 12:20:47 +0200
+        Mon, 19 Jun 2023 06:21:17 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1CF339B;
+        Mon, 19 Jun 2023 03:21:16 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 944CF150C;
+        Mon, 19 Jun 2023 03:21:59 -0700 (PDT)
+Received: from [10.57.86.121] (unknown [10.57.86.121])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 80CFF3F64C;
+        Mon, 19 Jun 2023 03:21:14 -0700 (PDT)
+Message-ID: <90823b33-1f44-8789-9a38-282407fd9f15@arm.com>
+Date:   Mon, 19 Jun 2023 11:20:58 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH] gnss: Use devm_regulator_get_enable_optional()
-Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Johan Hovold <johan@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <62effa7aa1a2023a77709e6416c57d9cb79a5ccc.1686995765.git.christophe.jaillet@wanadoo.fr>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <62effa7aa1a2023a77709e6416c57d9cb79a5ccc.1686995765.git.christophe.jaillet@wanadoo.fr>
+Subject: Re: Question about reserved_regions w/ Intel IOMMU
+Content-Language: en-GB
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Alexander Duyck <alexander.duyck@gmail.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Baolu Lu <baolu.lu@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+References: <CAKgT0UezciLjHacOx372+v8MZkDf22D5Thn82n-07xxKy_0FTQ@mail.gmail.com>
+ <CAKgT0UfMeVOz6AOqSvVvzpsedGDiXCNQrjM+4KDv7qJJ1orpsw@mail.gmail.com>
+ <a1cff65b-b390-3872-25b5-dd6bbfb3524c@linux.intel.com>
+ <b24a6c7b-27fc-41c0-5c82-15696b4a7dc1@arm.com> <ZIiRK2Dzl2/9Jqle@ziepe.ca>
+ <BN9PR11MB52765C24405D2475CF3CBEBE8C58A@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZIxTmGU4a5dniEY3@nvidia.com>
+ <CAKgT0UfmdOOPSD5YvpHnh1A02URn9zxVLbyXJM_67On7xojLcA@mail.gmail.com>
+ <520e2be4-726f-c680-c010-a308cdddbae0@arm.com> <ZIyxFpzh3WG+ifws@nvidia.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <ZIyxFpzh3WG+ifws@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 17/06/23 11:57, Christophe JAILLET ha scritto:
-> Use devm_regulator_get_enable_optional() instead of hand writing it. It
-> saves some line of code.
+On 2023-06-16 19:59, Jason Gunthorpe wrote:
+> On Fri, Jun 16, 2023 at 05:34:53PM +0100, Robin Murphy wrote:
+>>
+>> If the system has working ACS configured correctly, then this issue should
+>> be moot;
 > 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Yes
+> 
+>> if it doesn't, then a VFIO user is going to get a whole group of
+>> peer devices if they're getting anything at all, so it doesn't seem entirely
+>> unreasonable to leave it up to them to check that all those devices'
+>> resources play well with their expected memory map.
+> 
+> I think the kernel should be helping here.. 'go figure it out from
+> lspci' is a very convoluted and obscure uAPI, and I don't see things
+> like DPDK actually doing that.
+> 
+> IMHO the uAPI expectation is that the kernel informs userspace what
+> the usable IOVA is, if bridge windows and lack of ACS are rendering
+> address space unusable then VFIO/iommufd should return it as excluded
+> as well.
+> 
+> If we are going to do that then all UNAMANGED domain users should
+> follow the same logic.
+> 
+> We probably have avoided bug reports because of how rare it would be
+> to see a switch and an UNMANAGED domain using scenario together -
+> especially with ACS turned off.
+> 
+> So it is really narrow niche.. Obscure enough I'm not going to make
+> patches :)
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+The main thing is that we've already been round this once before; we 
+tried it 6 years ago and then reverted it a year later for causing more 
+problems than it solved:
 
+https://lkml.org/lkml/2018/3/2/760
 
+Thanks,
+Robin.
