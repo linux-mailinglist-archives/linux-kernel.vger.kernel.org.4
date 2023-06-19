@@ -2,71 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1A3734C24
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 09:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E6AD734C32
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 09:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbjFSHLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 03:11:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56878 "EHLO
+        id S230155AbjFSHQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 03:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjFSHLg (ORCPT
+        with ESMTP id S229657AbjFSHQd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 03:11:36 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E41DF4
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 00:11:35 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-bf3934ee767so891878276.0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 00:11:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687158694; x=1689750694;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/mUeepgJ1O9cz8Kl0I6X55iLETdP0NbFcT/ejiaDsQQ=;
-        b=JbRn+7OdF7AufnePj+eplT2mGaIj2u1IwBrwOH6tnkiQ+PZs8GHeMz+PSQgw3KJbFB
-         xLLVUWLWKC5i2olWlGi0A4no/0w434x+iT7QrlYxMTSwpkiEoR1P6OY/rDGxx24DsZk0
-         eN8/IbplZdrdxgrKBNffqxm5JKSiz9UG9L2y6lR0Pe5yhIbCpionZUJvsDqI9ncqFMmn
-         VHcIp+cHlQdu75zAARyI0bsaRnRk2BQ1G0FUjyVD+gLE+TeieFyYvOYUSmXa+o9Nefx1
-         wtgpPZNZNam/ViY6NA69hdLRJNfIzoP6N63WH3BYNsThMSwwGjsCrbiZioR+XdYjJ5yI
-         LU+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687158694; x=1689750694;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/mUeepgJ1O9cz8Kl0I6X55iLETdP0NbFcT/ejiaDsQQ=;
-        b=FNe5qEYy0LvpFkAZOVwJ9WbiKmYy2fS7LubbcW/zN3g4b0yvjCn8G00Mt3MLp3oeFh
-         4J67cutvIho9ESPAU376EaacmOYSkjt0yiz0wd7Vazs+FM2AEvCTwCF4TgAKgdBIR3DK
-         1Zk+W4txz2yy3RS3bRUWW7jjrSYSDEshkJk+xG97Afx0QZe28zE3IG2tyFbNyr4+kU7W
-         skxrw3zc78RMFbgsAwoY+Yeen/X99jkrgrFK7lqusk0ch8TJXUPk3BFu4uqrEmAuNxiu
-         MsBk/0KzlFqSUFauymsAc06F9f1llTIAI8grqkzFBAY/HYk0iiFLCysW1TvSPGno0aha
-         1Fgg==
-X-Gm-Message-State: AC+VfDw4r+pR7Dh3jq4Hhvb/jGW299x2lo2y7RGWruBWS71+w7CPOIed
-        X9ABw+yBdVTtfDk25wqZos17UA517LOOMTAbfOUfvA==
-X-Google-Smtp-Source: ACHHUZ7xT7ohcHWC/jRL4gObxDq8YAx42oA5crBnwhAm9ubPFQceXHcvTmrEUJcqDaJ6P5ftDa09D2dA/tjHa+CcXCc=
-X-Received: by 2002:a25:6a43:0:b0:ba8:2a74:155 with SMTP id
- f64-20020a256a43000000b00ba82a740155mr5461790ybc.32.1687158694570; Mon, 19
- Jun 2023 00:11:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230417-ux500-sram-v2-0-6e62ad551faa@linaro.org>
- <20230417-ux500-sram-v2-2-6e62ad551faa@linaro.org> <e41ff013-8224-1b96-5cd3-f0632d27191d@gmail.com>
-In-Reply-To: <e41ff013-8224-1b96-5cd3-f0632d27191d@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 19 Jun 2023 09:11:23 +0200
-Message-ID: <CACRpkdagHDUz4P0Z81ZqyhJD97gfn=p1=fx1dwKTrO8J3zkPrw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] misc: sram: Generate unique names for subpools
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        Mon, 19 Jun 2023 03:16:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576071A4
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 00:15:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687158946;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kpOKy137UOdxxz61biF46fSeY49E4HdHA4JMVS1NKBg=;
+        b=FFtup4KTLnAJYjpz03otSNHEOjc4uQ7Ny8XfcFXaOnkc3rwiZnoRrG4JgsaTc9Jdm8fVBA
+        cwgEmL2M7M0zE/czRzNDGz3/kwYDdMYGyfXa/h7d7+0XzKrCTOVt9DQERGUWPg+ZHOJ/GY
+        9tu0yYH0Jf/fe+qfbHHa3Xj9Ib0GKUU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-487-VU_7nSh9NQW2iMr7elRSkw-1; Mon, 19 Jun 2023 03:15:42 -0400
+X-MC-Unique: VU_7nSh9NQW2iMr7elRSkw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 60B44185A7AF;
+        Mon, 19 Jun 2023 07:15:41 +0000 (UTC)
+Received: from samus.usersys.redhat.com (unknown [10.43.17.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A934E492C1B;
+        Mon, 19 Jun 2023 07:15:39 +0000 (UTC)
+Date:   Mon, 19 Jun 2023 09:15:37 +0200
+From:   Artem Savkov <asavkov@redhat.com>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Subject: Re: [PATCH v2 0/2] perf tools: annotation browser from c2c tui
+Message-ID: <20230619071537.GA153131@samus.usersys.redhat.com>
+References: <20230608084407.140323-1-asavkov@redhat.com>
+ <CAM9d7cgvtuqMeQx8ehLCLw_Ur9Ju-VzDrakzFJxnxvFjdsWk_g@mail.gmail.com>
+ <20230609083731.GA168559@samus.usersys.redhat.com>
+ <ZIoJK66ZrKZblkJN@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZIoJK66ZrKZblkJN@kernel.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,49 +72,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 18, 2023 at 11:33=E2=80=AFPM Dmitry Osipenko <digetx@gmail.com>=
- wrote:
+On Wed, Jun 14, 2023 at 03:38:35PM -0300, Arnaldo Carvalho de Melo wrote:
+> Em Fri, Jun 09, 2023 at 10:37:31AM +0200, Artem Savkov escreveu:
+> > On Thu, Jun 08, 2023 at 02:09:06PM -0700, Namhyung Kim wrote:
+> > > Hello,
+> > > 
+> > > On Thu, Jun 8, 2023 at 1:44 AM Artem Savkov <asavkov@redhat.com> wrote:
+> > > >
+> > > > These patches add ability to start annotation browser from c2c report
+> > > > tui. The idea comes from Arnaldo's "Profiling Data Structures" talk [1].
+> > > 
+> > > I was thinking about how it works and realized that it didn't collect
+> > > samples by symbol.  Then I'm not sure if the result is meaningful.
+> > > I think it'd show a random symbol that touched the cache line
+> > > first.  The same cache line can be accessed from other locations
+> > > but it cannot know where they are.
+> > > 
+> > > Also different instructions in a function (symbol) would access a
+> > > different cache line.  The annotate output just shows any memory
+> > > access.  So it might be good to check the instruction at the point
+> > > but others should not be considered related.
+> > > 
+> > > Hmm.. I suspect even the same instruction will hit the different
+> > > cache lines at different times.  Then probably the annotation
+> > > won't work well in terms of correlating cache lines.
+> > 
+> > The annotation hotkey is only added to the cacheline detailed view where
+> > we do have symbol instruction information. The idea is to give the user
+> > ability to quickly jump to source code/disassembly directly from c2c
+> > TUI.
+> > 
+> > The hit percentages in annotation view don't make much sense in this
+> > case though, so maybe it is better to use dummy evsel so that none are
+> > shown.
+> 
+> Yes, the point is just to reuse the source browser, if there is no
+> annotation data applicable, don't use any.
+> 
 
-> >                       if (!label)
-> > -                             label =3D child->name;
-> > -
-> > -                     block->label =3D devm_kstrdup(sram->dev,
-> > -                                                 label, GFP_KERNEL);
-> > +                             block->label =3D devm_kasprintf(sram->dev=
-, GFP_KERNEL,
-> > +                                                           "%s", dev_n=
-ame(sram->dev));
->
-> This broke device-trees that have no label property.
+Ok, should be as easy as the following diff. I'll include it in v3 if
+there si more feedback.
 
-Which system is affected? Asking so I can inspect the DTS file
-and figure out how this needs to work.
+---
 
->  The SRAM DT binding says:
->
-> "
-> label:
-> description:
->         The name for the reserved partition, if omitted, the label is tak=
-en
->         from the node name excluding the unit address.
-> "
->
-> Not sure whether breakage was on purpose, otherwise doc needs to be
-> updated or there should be explicit check for the duplicated node names.
->
-> Secondly, AFAICS, the dev_name(sram->dev) is the name of the parent SRAM
-> device and not of the children sub-nodes, hence it's now always the same
-> dev_name(sram->dev) for all sub-nodes.
+diff --git b/tools/perf/builtin-c2c.c a/tools/perf/builtin-c2c.c
+index dce8604837aec..c856ce7a50740 100644
+--- b/tools/perf/builtin-c2c.c
++++ a/tools/perf/builtin-c2c.c
+@@ -2701,7 +2701,11 @@ static int perf_c2c__browse_cacheline(struct hist_entry *he)
 
-Sounds like I should go back to the original approach in patch v1:
-https://lore.kernel.org/linux-devicetree/20230417-ux500-sram-v1-2-5924988bb=
-835@linaro.org/
+                switch (key) {
+                case 'a':
+-                       do_annotate(browser, evlist__first(c2c.evlist));
++                       /*
++                        * We don't need percentage info so use 'dummy:HG'
++                        * evsel which is last in evlist.
++                        */
++                       do_annotate(browser, evlist__last(c2c.evlist));
+                        break;
+                case 's':
+                        c2c.symbol_full = !c2c.symbol_full;
 
-and also augment the DTS binding text to say it uses the full node name
-including the address.
-
-Does that look OK to you, or will this regress your system as well?
-
-Yours,
-Linus Walleij
