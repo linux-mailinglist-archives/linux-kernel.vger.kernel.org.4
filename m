@@ -2,68 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D46377354D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 12:59:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D14C77354F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 13:00:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232444AbjFSK7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 06:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
+        id S232464AbjFSLAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 07:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232385AbjFSK64 (ORCPT
+        with ESMTP id S232558AbjFSLAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 06:58:56 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ECCB10F2;
-        Mon, 19 Jun 2023 03:57:35 -0700 (PDT)
-Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 59952DDA;
-        Mon, 19 Jun 2023 12:56:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1687172219;
-        bh=cD5pqKTY5/ObcvKp271EhUpO47bHD0WwDTzCRMlW9Ng=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=TdV0Ju26ZNebUaHN5/9bM4MNZNuAMA3ToCFYvHf9NrkG65IIPBcgXh9lkLmotE20l
-         wybYH2rdiekkF1OKSbv821V3chou6EkYMRAydKIGa7eGdC6u5xr3IYDDfyJkolJ2/u
-         enRIPVPhukWDi0ZRB+3DkwvJoBFvgN5K6WbpnQFs=
-Message-ID: <3dda6808-cda2-e587-88a7-00621b2cfca3@ideasonboard.com>
-Date:   Mon, 19 Jun 2023 13:57:29 +0300
+        Mon, 19 Jun 2023 07:00:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B9B19B4
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 03:58:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687172305;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ACfdLduvpo39aBxZ+VT/qUTVLmOjSOUrCckJRvc8dEA=;
+        b=eEfmVCM3DCQR+p7cXHHFrJYh38yeFopWdW59P5RqkCoqhodS1QPOuC6Dn4KrDUvTrQp+LI
+        TwqBkupQ9Epp5VAst4ASlPvr9FYqBEDDFGIDyzs/2OpezbJeZitR3jOVpJc3ja10hRxUiZ
+        kMJ6tk0Kirgn6zZuAZY3zmjAbL42Gho=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-96-CXW5x-a_OUCulziiNLLqJw-1; Mon, 19 Jun 2023 06:58:20 -0400
+X-MC-Unique: CXW5x-a_OUCulziiNLLqJw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AA91D101A52C;
+        Mon, 19 Jun 2023 10:58:19 +0000 (UTC)
+Received: from swamp.redhat.com (unknown [10.45.224.86])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9E076C1603B;
+        Mon, 19 Jun 2023 10:58:17 +0000 (UTC)
+From:   Petr Oros <poros@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, michal.swiatkowski@linux.intel.com,
+        jacob.e.keller@intel.com, intel-wired-lan@lists.osuosl.org,
+        linux-kernel@vger.kernel.org, pmenzel@molgen.mpg.de
+Subject: [PATCH net v2] ice: Unregister netdev and devlink_port only once
+Date:   Mon, 19 Jun 2023 12:58:13 +0200
+Message-ID: <20230619105813.369912-1-poros@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v14 18/18] media: i2c: ds90ub953: Support non-sync mode
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>
-References: <20230616135922.442979-1-tomi.valkeinen@ideasonboard.com>
- <20230616135922.442979-19-tomi.valkeinen@ideasonboard.com>
- <ZIx17WC7plfDPpmc@smile.fi.intel.com>
- <dc79de4e-4043-5448-db44-ef8f7749a376@ideasonboard.com>
- <ZJAyb9WHjWrdSsBw@smile.fi.intel.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <ZJAyb9WHjWrdSsBw@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,61 +61,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/06/2023 13:48, Andy Shevchenko wrote:
-> On Mon, Jun 19, 2023 at 12:00:57PM +0300, Tomi Valkeinen wrote:
->> On 16/06/2023 17:47, Andy Shevchenko wrote:
->>> On Fri, Jun 16, 2023 at 04:59:22PM +0300, Tomi Valkeinen wrote:
->>>> Add support for FPD-Link non-sync mode with external clock. The only
->>>> thing that needs to be added is the calculation for the clkout.
-> 
-> ...
-> 
->>>> +	switch (priv->mode) {
->>>> +	case UB953_MODE_SYNC:
->>>> +		if (priv->hw_data->is_ub971)
->>>> +			return priv->plat_data->bc_rate * 160ull;
->>>> +		else
->>>> +			return priv->plat_data->bc_rate / 2 * 160ull;
->>>
->>> Redundant 'else'.
->>
->> True, but I like the symmetry in:
->>
->> if (foo)
->> 	return 123;
->> else
->> 	return 321;
-> 
-> At the same time it will be symmetry with other switch-case(s). That's why the
-> question about fallthrough below.
-> 
->>> Do I understand correctly you don't want to fallthrough because it will give
->>> ±160 in the rate (depending if it's even or odd)?
->>
->> Sorry, can you clarify? Fallthrough to what?
-> 
-> To the below case since '/ 2 * 160 ~= *80'. Why ~ because it might give
-> off-by-one error due to even/odd input.
+Since commit 6624e780a577fc ("ice: split ice_vsi_setup into smaller
+functions") ice_vsi_release does things twice. There is unregister
+netdev which is unregistered in ice_deinit_eth also.
 
-The below case is different. "priv->plat_data->bc_rate" vs 
-"clk_get_rate(priv->clkin)".
+It also unregisters the devlink_port twice which is also unregistered
+in ice_deinit_eth(). This double deregistration is hidden because
+devl_port_unregister ignores the return value of xa_erase.
 
-As to the order of the calculation (/ 2 * 160 versus * 160 / 2), 
-generally speaking, I have never figured out what are the correct ways 
-to calculate clock rates.
+[   68.642167] Call Trace:
+[   68.650385]  ice_devlink_destroy_pf_port+0xe/0x20 [ice]
+[   68.655656]  ice_vsi_release+0x445/0x690 [ice]
+[   68.660147]  ice_deinit+0x99/0x280 [ice]
+[   68.664117]  ice_remove+0x1b6/0x5c0 [ice]
 
-I wrote "x / 2 * 160" as that's what the documentation gives (there's a 
-hardware /2 divider in non-ub971 chips, followed by a 160 multiplier). 
-But does the documentation presume that the calculation is done 
-precisely, not in integers? If so, "x * 160 / 2" would be better (but 
-then, do we need to round?). Or does the /2 hardware divider basically 
-actually work as a an integer division, in case "x / 2 * 160" is the 
-correct one.
+[  171.103841] Call Trace:
+[  171.109607]  ice_devlink_destroy_pf_port+0xf/0x20 [ice]
+[  171.114841]  ice_remove+0x158/0x270 [ice]
+[  171.118854]  pci_device_remove+0x3b/0xc0
+[  171.122779]  device_release_driver_internal+0xc7/0x170
+[  171.127912]  driver_detach+0x54/0x8c
+[  171.131491]  bus_remove_driver+0x77/0xd1
+[  171.135406]  pci_unregister_driver+0x2d/0xb0
+[  171.139670]  ice_module_exit+0xc/0x55f [ice]
 
->>>> +	case UB953_MODE_NONSYNC_EXT:
->>>> +		/* CLKIN_DIV = 1 always */
->>>> +		return clk_get_rate(priv->clkin) * 80ull;
-> 
+Fixes: 6624e780a577 ("ice: split ice_vsi_setup into smaller functions")
+Signed-off-by: Petr Oros <poros@redhat.com>
+---
+v2: reword subject
 
-  Tomi
+v1: https://lore.kernel.org/netdev/20230619084948.360128-1-poros@redhat.com/
+---
+ drivers/net/ethernet/intel/ice/ice_lib.c | 27 ------------------------
+ 1 file changed, 27 deletions(-)
+
+diff --git a/drivers/net/ethernet/intel/ice/ice_lib.c b/drivers/net/ethernet/intel/ice/ice_lib.c
+index 11ae0e41f518a1..284a1f0bfdb545 100644
+--- a/drivers/net/ethernet/intel/ice/ice_lib.c
++++ b/drivers/net/ethernet/intel/ice/ice_lib.c
+@@ -3272,39 +3272,12 @@ int ice_vsi_release(struct ice_vsi *vsi)
+ 		return -ENODEV;
+ 	pf = vsi->back;
+ 
+-	/* do not unregister while driver is in the reset recovery pending
+-	 * state. Since reset/rebuild happens through PF service task workqueue,
+-	 * it's not a good idea to unregister netdev that is associated to the
+-	 * PF that is running the work queue items currently. This is done to
+-	 * avoid check_flush_dependency() warning on this wq
+-	 */
+-	if (vsi->netdev && !ice_is_reset_in_progress(pf->state) &&
+-	    (test_bit(ICE_VSI_NETDEV_REGISTERED, vsi->state))) {
+-		unregister_netdev(vsi->netdev);
+-		clear_bit(ICE_VSI_NETDEV_REGISTERED, vsi->state);
+-	}
+-
+-	if (vsi->type == ICE_VSI_PF)
+-		ice_devlink_destroy_pf_port(pf);
+-
+ 	if (test_bit(ICE_FLAG_RSS_ENA, pf->flags))
+ 		ice_rss_clean(vsi);
+ 
+ 	ice_vsi_close(vsi);
+ 	ice_vsi_decfg(vsi);
+ 
+-	if (vsi->netdev) {
+-		if (test_bit(ICE_VSI_NETDEV_REGISTERED, vsi->state)) {
+-			unregister_netdev(vsi->netdev);
+-			clear_bit(ICE_VSI_NETDEV_REGISTERED, vsi->state);
+-		}
+-		if (test_bit(ICE_VSI_NETDEV_ALLOCD, vsi->state)) {
+-			free_netdev(vsi->netdev);
+-			vsi->netdev = NULL;
+-			clear_bit(ICE_VSI_NETDEV_ALLOCD, vsi->state);
+-		}
+-	}
+-
+ 	/* retain SW VSI data structure since it is needed to unregister and
+ 	 * free VSI netdev when PF is not in reset recovery pending state,\
+ 	 * for ex: during rmmod.
+-- 
+2.41.0
 
