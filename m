@@ -2,164 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE9BA7350BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9C5A7350C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbjFSJqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 05:46:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36074 "EHLO
+        id S229647AbjFSJqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 05:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbjFSJq3 (ORCPT
+        with ESMTP id S231657AbjFSJqi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 05:46:29 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2050.outbound.protection.outlook.com [40.107.7.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 725BEDB;
-        Mon, 19 Jun 2023 02:46:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jAG/Qv/Fvw+3mR6uI6AFiEjhOCs+Y+7matZG3Ep2b5N7EbIzSOBuebEZqUPCqbHu89+Hq5tPP8p/cTtxoV/yQqV+hhixCQA6FSFs32UG2KORPnHV4VxUdlRf/85A3TYpmU2eMoFd6R7oSzNau4eaD8W9eD1dMon2PZU8dy4aTRxZ9NLGVafUbMFv7wW9Kh0rh7wJOER36pD50Y2FkwBRBIDn7idUJ7LCVkliVn1aFj1RovUaMedsCj4xz7v28raDiPt741dEuQx3zoBqgYg/RkL8jTOKh3rGihd64Pyx7LJjrrB11cmE/ZEgvb2UhmxR1s4UD+buZrlhiXnRkmLmFg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GVzKKd5BwH+quXiUby+N5gP3+mo+IY9ldK6NnQXTpTk=;
- b=oAp6tVFbW3w9DHq7+VPsoZqIFUbfpFRAVW1Srsw0pp0mT7e7rjzvcRwHWJcrHa6rEGk60mFTevo8VkzLxYPwz91qFHoAAEFxDK7Tf+Sr3rlCGkw1Mw5Ul4ouVWk2wc6al7GnWaCKXtGZvdGAE3mSiJvA74H9zoGHRrf+1OkDWE6SEqlkEwKtPRKN01dQK8J/V3X6IOWyqPZ5esM8RhyyqwSSOqzNO17NEVXv7hDOpZeEBw+ig480NeKiYUaR28BRSk0YXGPm9HEtqHOidVhdN/OITo+XPfzGVrA5FLwuW2kPP0FfsgZdDfqJRMeveUjX+xzULQAsNigJ2Ue/vMM70A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GVzKKd5BwH+quXiUby+N5gP3+mo+IY9ldK6NnQXTpTk=;
- b=AW0antfqN8jwRl0vndDK7Aq8D7EGCUXsXvoCsW08E2Rx5gQqC4JMGruj819fee9f8/k5XkTD4nCxwztfbz1pZTMJjr9Hl8aBbLXUi8tJup7TsyXZmuV18kfSfI+nE3bvnWPZbrDm60vytwCGOvHFRlzhQkG/5F3abh0mbqLYZLE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from AM9PR04MB8954.eurprd04.prod.outlook.com (2603:10a6:20b:409::7)
- by DBBPR04MB7914.eurprd04.prod.outlook.com (2603:10a6:10:1f0::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.36; Mon, 19 Jun
- 2023 09:46:24 +0000
-Received: from AM9PR04MB8954.eurprd04.prod.outlook.com
- ([fe80::5356:c79f:ef9f:dc29]) by AM9PR04MB8954.eurprd04.prod.outlook.com
- ([fe80::5356:c79f:ef9f:dc29%4]) with mapi id 15.20.6500.036; Mon, 19 Jun 2023
- 09:46:24 +0000
-Message-ID: <7eda291f-1e2a-1af6-ae25-785b6eccc281@oss.nxp.com>
-Date:   Mon, 19 Jun 2023 12:46:22 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH net-next v1 14/14] net: phy: nxp-c45-tja11xx: timestamp
- reading workaround for TJA1120
-Content-Language: en-US
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, richardcochran@gmail.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sebastian.tobuschat@nxp.com
-References: <20230616135323.98215-1-radu-nicolae.pirea@oss.nxp.com>
- <20230616135323.98215-15-radu-nicolae.pirea@oss.nxp.com>
- <20230619085831.dnzg2i5mqysc6r3r@soft-dev3-1>
-From:   "Radu Pirea (OSS)" <radu-nicolae.pirea@oss.nxp.com>
-In-Reply-To: <20230619085831.dnzg2i5mqysc6r3r@soft-dev3-1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AS4P251CA0024.EURP251.PROD.OUTLOOK.COM
- (2603:10a6:20b:5d3::16) To AM9PR04MB8954.eurprd04.prod.outlook.com
- (2603:10a6:20b:409::7)
+        Mon, 19 Jun 2023 05:46:38 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A57139;
+        Mon, 19 Jun 2023 02:46:36 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id 5614622812f47-39cf00a2ad2so2207435b6e.1;
+        Mon, 19 Jun 2023 02:46:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687167996; x=1689759996;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=E0M5oLj5cn7ynWhyyJDuHHDTH0wICAdKxkhUJt5kJHc=;
+        b=MdoPbAPSwR7b7ZHnU7rPQrji/p86DMxxBOcQdwaafeW0mO7IwusX0RyrZcOUa8IJ0r
+         144wiZzZzDuVvGgQSGUPg45+ybM0VNfKq2PPj2asjI0ZK9j6xH67FfUm3E1QiaN1/N+j
+         Tt1pDol1V2yQbtgYzroimkXOshqmHtG/MJfjpp4ix9YRmro2Jh6/uYafKUG7/lQNTWcs
+         rtFhBq2t4vmkAoMDdv9ofYpV5phkYek49Lu6hpujLWI4/bBibTaTHmJ4OEZSapg/sasJ
+         kxvh2Rp8DZSiJoDCXXgrDWWlRBNAbGw9yqGUv0oL8aqiUZP1uYyTNDsaXspPmgToJLah
+         kEDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687167996; x=1689759996;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=E0M5oLj5cn7ynWhyyJDuHHDTH0wICAdKxkhUJt5kJHc=;
+        b=LoAWlDX2fNVjaJ1w/plsqn0nmbZgCzKXTIcFKeIWUVgdhOBOdu4gu07Z9crxvslqTw
+         drxJJQrCUEGCPNQuD0ne6Ml4uYfFqEMbe/a/t0vUHrNaZ1o60GawN19FIiyVQiqDlc1d
+         Y3UDwWBJbKwYvWbDPMYMNJVxjJyTSoq1MUVZNHVKQGiapj1JwQgnEUDW9l0Z4iiKkX7e
+         O3LmdEQmjsblgl3yOrDsgWbmBo2R0Eqe5GGr16+pW7QyvtLaQesJK4ePptxL4WDTOONR
+         ILuOzjq2CDUnAzvVeu3s73BLy4RV5LDujUNL2pd0sWCHARNVzgx8qpJBU54g9Q3xrBIL
+         ffxg==
+X-Gm-Message-State: AC+VfDyEhyCZxUcsv6qaXZ3e5dsmrvIZcUh64uerL3BUNpl9neW97lQi
+        z1uE4adnOEjWEgBnB1JOsJGEknYmuxUKsA==
+X-Google-Smtp-Source: ACHHUZ7NKvrtqJyOCIepwrTN3r5GDaBAf9XRFhjuDilngZYdxFCkMdZ4M7palGvv4uT87P+uwtllrw==
+X-Received: by 2002:a05:6808:2795:b0:39c:cd8b:61f5 with SMTP id es21-20020a056808279500b0039ccd8b61f5mr6786643oib.13.1687167996133;
+        Mon, 19 Jun 2023 02:46:36 -0700 (PDT)
+Received: from localhost ([2402:d0c0:2:a2a::1])
+        by smtp.gmail.com with ESMTPSA id l3-20020a17090a72c300b0025930e50e28sm5274582pjk.41.2023.06.19.02.46.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 02:46:35 -0700 (PDT)
+From:   Alan Huang <mmpgouride@gmail.com>
+To:     paulmck@kernel.org
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alan Huang <mmpgouride@gmail.com>
+Subject: [PATCH] rcu: Add necessary WRITE_ONCE()
+Date:   Mon, 19 Jun 2023 09:46:24 +0000
+Message-Id: <20230619094624.205990-1-mmpgouride@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM9PR04MB8954:EE_|DBBPR04MB7914:EE_
-X-MS-Office365-Filtering-Correlation-Id: 35d1297a-c1f5-4c06-5e95-08db70aa0b24
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qjzQDJY34q8Y9tRaDs+910hmCOMLfzdtnSSKg8nivDoSWsmoER5y6XNfKBJMi0QTB2NVs8Zh9mfiOhvrPeCSf+4UvtunGo0HXzrMcjhO4lMWq1L8cAp8V35RtEeFLqZaGlKnqSPSb3QlIFMowKGdlfcQLb2QOI2SHR51dw70v0Ye6Bh2H+Dvuoe6zLStLaR0tFXBFw2+5P8hQUAH6PfXsjkKR80uMNOeHTbCESom+hVl69/mh5R+8lurlJhX4xRGWNOw6Uf2+4p5AuUoSGjIZikzZURDo252LRcIKb5vKaeZwEu+nI1lUiKRU3PhMl8pvmqjcxZC0MnxAVHTB3SUm1niuuaQCxAiDRhaxwqMIWGABa1B2+5a8adM3lULsZst0bk2zXO5QMnYEPz+nc2EdcquFzKK+ucRRQ7dsxz0ujuW/sIAwCl1KC43kF27Ke5F9wrPlZ4mr0mMSCP/5iJYcst6RO6Ha59NOqZ4mNftfzGqUwcB2CHIJY1/K9N85h5a7TcoLF+Z/Td/QE6xSKSGWVR/yHRWfd2VHwTqjKA+IVSrPOqQzP38UX44d+n4pHL/c3o08IuzGXftJVtCqRW8bumpwx64oP7caHLdW7XLr9uBdjvjyDYYk3E5JlJ97tATVcWFI4FT/+HCB3XP3yi37A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8954.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(136003)(366004)(346002)(39860400002)(451199021)(478600001)(31686004)(66946007)(66556008)(66476007)(6916009)(8676002)(4326008)(41300700001)(2616005)(83380400001)(38100700002)(31696002)(6486002)(86362001)(2906002)(5660300002)(316002)(8936002)(4744005)(7416002)(6506007)(53546011)(6512007)(26005)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UDZEcWhxWU1lVFg1ektWTDh2QXNNWFlFQys3cXZOc0E3MjJrV2RzWDRWKzFW?=
- =?utf-8?B?c3hTVmNmS1crZ3Q0bnVzdDVhcmtWcWQwYjZxNW1uYk1Oc1JTaGxyYW9SenRa?=
- =?utf-8?B?cjNhWGJyZEptUFAyS0NMSU9kS0NZRFk4YmNSUVhXS2wxSThXRkFqa3hVZ3oy?=
- =?utf-8?B?RlpRM1JIVzhzNHVEY25PRjl0OStPQm1iOEVEOC9WMGxFU0VQbGNoNm1GTDJt?=
- =?utf-8?B?MFRYQUV2aCt2NjdqZG9ZQXJEcHpoNXZiWTVEWEFZaEo4ejlkTEcwZVUvSzFq?=
- =?utf-8?B?RG04WE5LRFkzY2UxbzQ1UG9WWVduVG81b1RrTFlQaFN3ZmZIbW8yL0txeWtZ?=
- =?utf-8?B?WTlYM0FNQlRwUVNjUDJGTS8yMHNXSFVoTURhVXc5QmFwc1MwUENxWFR6QkN4?=
- =?utf-8?B?TEJPV0R0WXNLYWFxVGlWblpYK1p3Tk84NklIcjNwVFV0Mi9UTHByb0ZVeFdV?=
- =?utf-8?B?eS8yVEQzMG4zNzZqL3orRlRSbGp1S0ZGblB3SnY4ZmFrZXpSc09JOHFTNUlz?=
- =?utf-8?B?NElUZ2duYTZncThXMUx2VU1kcTNuL2tRMVdlUzVYOGJnZkM5N0poZ1JuMDBZ?=
- =?utf-8?B?em0xUGJnNzN4TyttYTFCdDNuZE1MbWRQdXNsWlYrU1lTQ0I3TlU1RWVNV2Ni?=
- =?utf-8?B?U2tTZldzZ080dE5kVE5RNTNsckxUdHFQZDRaT2ltYkVhdXEzR1ZSQlIxQzJL?=
- =?utf-8?B?UE9DeEgrS3BkbnhEVkNkQkF1Y1hEU0dZekVGWUxwOXdORnoyYVZnN244YzRH?=
- =?utf-8?B?VVhSU0RDY1JpZFhzTGtLc1plclFYUkRnMzdaOGZVNWFtT2FMbUpScnNYWFhF?=
- =?utf-8?B?djFPSndIUnF4aHZ5VXROUFBIeXA1QVBmVlNUT2Q0aGxGM1UzZ3F2WVc1dFFD?=
- =?utf-8?B?c2lOYWNSZVRuQzI1dlVxK29jTSs2S2Y1L0d3Qmdpa1lhZW1VQm54Q2FTMnd2?=
- =?utf-8?B?dTFtdFpTNGd4TmJYRkxJT040UGhQTlpCRTBIemRFVVhQOGQyODJuZHFXZmh1?=
- =?utf-8?B?UkpXWHIrcWhoSjJ6NGFsMnRBY2NEei96SlZVVTV5Wnh0RGNEdmMvK1dnU0xF?=
- =?utf-8?B?eFgxZzE0UElCMDZjeDVpdTlUazQ2MnREZ0lwa2UrZUZYb0xXTmJIeUFPUEV4?=
- =?utf-8?B?aWs2NFMvc3ZDdU5tSkdKQjhEeFJ5TzNiMzNML1d2cmttWHlEWWloWlpMYnFl?=
- =?utf-8?B?b1pMd3ZITVlXUzdpTkQyMjBxNXBCVU9ZTEpVNHNmMTl6WnZiUi91eThVMmk0?=
- =?utf-8?B?ZGNSTWlMcDhoMFkzUE9sSUJSYjV3VmZvQm5XejY2c1JYYndYYmtVbDIwS2hv?=
- =?utf-8?B?bnBPaFlTTXU1UHd1M3hmYUJqUjVrdEhxeStMS05jZkF0Q2k3cGJJSXBKSUEr?=
- =?utf-8?B?SWZxWVh6dUdJSUlJSDI3V0U5TW1Ta1RCOHRtckhKUU5pampUZnhuKzdhZ0lK?=
- =?utf-8?B?YzhmTnZYZEhjUm9oQ09qeXRJRXRYeGltaXNncEJpWENVUDZWVml2eXVmWTRC?=
- =?utf-8?B?Z0dGQzdxa3FYY0hFRlBYRGxtRi9xN2tWNXNtakl2YnZlcVFQekN5ZyszZVZI?=
- =?utf-8?B?ajBYSXhuQUpDWERzdlQ3OEZLcVZ6cWpBeEVSZmZ1SjJhdityaG9udjNmY2o1?=
- =?utf-8?B?MW00Umt4NmZ5aWNabVUyQnVVYzR2eWl6dTNSb1VscGRQenNORXVCcVlzNE5H?=
- =?utf-8?B?bjZMS3RKbDN4VGpSV1BrRHZmT2pqaW9pb3kxTkRYVU9MVTJSL0hLNnc5NXNt?=
- =?utf-8?B?MnhGSUFsYjM5MDVZdWtFcHA0RHhSczMyUGo4WGNCV1BMeWpoMGtoL0piVThv?=
- =?utf-8?B?MDFhSFNEQ1ZPRDlURFZUWlc5WGRqWkh5N1QvNG53OVdJZ0x0cUhtUmw5bGsr?=
- =?utf-8?B?VWVKVlhXek10Qnd2OVZHckNZVTZOOEJjakUvVmNVU1JpT3ZpcVpEcCsveDlv?=
- =?utf-8?B?Zmg5amY4c3loRDRFT1Z3VVFvUkZXNHpjcms0elRza29wS2YwcGxZMjY3RDR2?=
- =?utf-8?B?KzF1RmZzVzk2dHVORHVlUVUxR21hNzZPaXZLa0Qya09jeXFFNUxNZ3p3VWVz?=
- =?utf-8?B?WUVMWDM3ZjJXWWdRRi9EcXJSL2tUbVhMcnAzTHpNdHc1NS9QMWkvOVpvNTV0?=
- =?utf-8?B?VU1SaVA3TWdyaVZibS83OXNSWU5ZWmF0K09nOWg4d3ZldlZmc21McU1MbVZi?=
- =?utf-8?B?bkE9PQ==?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 35d1297a-c1f5-4c06-5e95-08db70aa0b24
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8954.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jun 2023 09:46:23.9911
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LA8ZijIyJiiYwVZCe9rqGb/K2yazjf7SMApWInqkV5wDDDRnijBeBNF3p67w26jdEeYp4BPpuOFCAZRh1Ww1aEltopl7dw/TKwzK0E0FNyI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7914
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit c54a2744497d("list: Add hlist_unhashed_lockless()") and
+commit 860c8802ace1("rcu: Use WRITE_ONCE() for assignments to
+->pprev for hlist_nulls") added various WRITE_ONCE() to pair with
+the READ_ONCE() in hlist_unhashed_lockless(), but there are still
+some places where WRITE_ONCE() was not added, this commit adds that.
 
-On 19.06.2023 11:58, Horatiu Vultur wrote:
-> The 06/16/2023 16:53, Radu Pirea (NXP OSS) wrote:
-> 
-> Hi Radu,
-> 
->>
->> On TJA1120 engineering samples, the new timestamp is stuck in the FIFO.
->> If the MORE_TS bit is set and the VALID bit is not set, we know that we
->> have a timestamp in the FIFO but not in the buffer.
->>
->> To move the new timestamp in the buffer registers, the current
->> timestamp(which is invalid) is unlocked by writing any of the buffer
->> registers.
-> 
-> Shouldn't this be split and merged in patch 9 and patch 10?
-> As those two patches introduced this functions with issues.
-> 
-Ok. I will merge the workarounds in patches 9 and 12 if it looks better 
-to you. The intention here was to implement the timestamp reading 
-sequence in a clean way and to add the workarounds later.
->>
->>
-> 
-> --
-> /Horatiu
+Also add WRITE_ONCE() to pair with the READ_ONCE() in hlist_empty().
 
+Signed-off-by: Alan Huang <mmpgouride@gmail.com>
+---
+ include/linux/list.h          | 6 +++---
+ include/linux/list_nulls.h    | 2 +-
+ include/linux/rculist_nulls.h | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/include/linux/list.h b/include/linux/list.h
+index ac366958ea..ef2d895d3c 100644
+--- a/include/linux/list.h
++++ b/include/linux/list.h
+@@ -912,7 +912,7 @@ static inline void hlist_del(struct hlist_node *n)
+ {
+ 	__hlist_del(n);
+ 	n->next = LIST_POISON1;
+-	n->pprev = LIST_POISON2;
++	WRITE_ONCE(n->pprev, LIST_POISON2);
+ }
+ 
+ /**
+@@ -1026,8 +1026,8 @@ static inline void hlist_move_list(struct hlist_head *old,
+ {
+ 	new->first = old->first;
+ 	if (new->first)
+-		new->first->pprev = &new->first;
+-	old->first = NULL;
++		WRITE_ONCE(new->first->pprev, &new->first);
++	WRITE_ONCE(old->first, NULL);
+ }
+ 
+ #define hlist_entry(ptr, type, member) container_of(ptr,type,member)
+diff --git a/include/linux/list_nulls.h b/include/linux/list_nulls.h
+index fa6e8471bd..b63b0589fa 100644
+--- a/include/linux/list_nulls.h
++++ b/include/linux/list_nulls.h
+@@ -95,7 +95,7 @@ static inline void hlist_nulls_add_head(struct hlist_nulls_node *n,
+ 
+ 	n->next = first;
+ 	WRITE_ONCE(n->pprev, &h->first);
+-	h->first = n;
++	WRITE_ONCE(h->first, n);
+ 	if (!is_a_nulls(first))
+ 		WRITE_ONCE(first->pprev, &n->next);
+ }
+diff --git a/include/linux/rculist_nulls.h b/include/linux/rculist_nulls.h
+index ba4c00dd80..c65121655b 100644
+--- a/include/linux/rculist_nulls.h
++++ b/include/linux/rculist_nulls.h
+@@ -138,7 +138,7 @@ static inline void hlist_nulls_add_tail_rcu(struct hlist_nulls_node *n,
+ 
+ 	if (last) {
+ 		n->next = last->next;
+-		n->pprev = &last->next;
++		WRITE_ONCE(n->pprev, &last->next);
+ 		rcu_assign_pointer(hlist_nulls_next_rcu(last), n);
+ 	} else {
+ 		hlist_nulls_add_head_rcu(n, h);
 -- 
-Radu P.
+2.34.1
+
