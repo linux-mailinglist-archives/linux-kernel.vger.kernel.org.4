@@ -2,186 +2,304 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30734735892
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 15:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF987735896
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 15:31:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231425AbjFSNaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 09:30:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36320 "EHLO
+        id S231970AbjFSNau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 09:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjFSNaS (ORCPT
+        with ESMTP id S231634AbjFSNas (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 09:30:18 -0400
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2089.outbound.protection.outlook.com [40.107.105.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE7A101;
-        Mon, 19 Jun 2023 06:30:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UTBkfBNizI+cn4lKauu03NceYxqCL64xh9vJ7lnA1li2OYmaPGmcaH2QxsGlT6vgRg9pLqdL8BO+7cjGMC1u5jnxi2W1w8ZFilsEkdjF/nPLFskYoAA4PKnFhWbujJJ36V6IbxLKLHGoQvmD8ls77zA8VUfez/6LESXmjafSntEx8W/7l4Jbyszs7Xxe3ev2Wio0CjxYE7tHyyPw9MZaWBg/R+TyPwjtbJhgAPesrSDdXTSfPRwSmhGfr2iTffE0+Nv6pLcsxM5xEOAOvKptkDvPsHFA9XAZj15l1e9R/vnQuQPYqt70D5wwZBpJUYTglCbFAAtGQU427TpuXCSywg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+RIuHTtlFGIWs268JjlMQMTzhH6CEFEaQktnPCA2DfE=;
- b=eBzrnqJHciLeW4AVGnWwWXjkgj8EpjbYYipagfWa1uqA7x34aFIc0Vz2RXbez+kykT3BVA6nTqrRcaDcQrHdYg0OAqhDrsOUgmMeV7BjdeAk05yIuCTgJ1+6uScg+5iQz8BM8AOoW3fSuBnKUpntJ8+vUIH7Z50YxtbCkBirSoEkvYNq2gT0+0z8STrrUBYYLNcBwJEWvZF690nZelnv5IVfsZ96lR1TIvoyzT7+LHkQuthU1y+TNV6PM0hZ/GkcfGiVLkdKzx+ZRPazRdgBGC68ShC0sL1LDFvViUg+c696LFpf6yCgeg1PZ92vR7/sw/2zLlj/vIG1yfsarXJi3g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+RIuHTtlFGIWs268JjlMQMTzhH6CEFEaQktnPCA2DfE=;
- b=Muriv0bqL/ibQ9t/tyImpHJ3AvdseSi9y6yWkvHI/ihoS4ztIkcdF+cZhZvBRsUB0opSN3DyQHprTcm3UMdjNu75pBEhc7+4lKb8CZhlZPRFQPPzfxClT7bACXkgctOGbH8i9C9l32NZqylhARBhKplLKTA7j4wVIVp69IxhvvY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from AM9PR04MB8954.eurprd04.prod.outlook.com (2603:10a6:20b:409::7)
- by AS8PR04MB9077.eurprd04.prod.outlook.com (2603:10a6:20b:444::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.36; Mon, 19 Jun
- 2023 13:30:12 +0000
-Received: from AM9PR04MB8954.eurprd04.prod.outlook.com
- ([fe80::5356:c79f:ef9f:dc29]) by AM9PR04MB8954.eurprd04.prod.outlook.com
- ([fe80::5356:c79f:ef9f:dc29%4]) with mapi id 15.20.6500.036; Mon, 19 Jun 2023
- 13:30:12 +0000
-From:   "Radu Pirea (NXP OSS)" <radu-nicolae.pirea@oss.nxp.com>
-To:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, richardcochran@gmail.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sebastian.tobuschat@nxp.com,
-        "Radu Pirea (NXP OSS)" <radu-nicolae.pirea@oss.nxp.com>,
-        stable@vger.kernel.org
-Subject: [PATCH net v3 1/1] net: phy: nxp-c45-tja11xx: fix the PTP interrupt enablig/disabling
-Date:   Mon, 19 Jun 2023 16:28:51 +0300
-Message-Id: <20230619132851.233976-1-radu-nicolae.pirea@oss.nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: AS4P250CA0007.EURP250.PROD.OUTLOOK.COM
- (2603:10a6:20b:5df::11) To AM9PR04MB8954.eurprd04.prod.outlook.com
- (2603:10a6:20b:409::7)
+        Mon, 19 Jun 2023 09:30:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13117E58
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 06:29:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687181393;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ehDF1EfqVpL/EjIHvvHkOTz1CnikocCQsrKsBdK85Eg=;
+        b=h2tGtxiCS2dCo6r5V9C0KVV1SOLVxRiBvT1azW7z8U9TB/QeSakfSJc03v2HbcTdKKfhDN
+        b6WxVynvAJ78YmgTYuacjfNS/XJm5d6cUrmByFPsgBWUInMM0CcpCMYOBV+r0ohx+Qwqoh
+        Kkp1FOw81YENzMJPudZ6VFDQCKhyvgY=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-672-kXpb2veXOgCMQGKOF31ctA-1; Mon, 19 Jun 2023 09:29:50 -0400
+X-MC-Unique: kXpb2veXOgCMQGKOF31ctA-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3112808cd0cso1119571f8f.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 06:29:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687181389; x=1689773389;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ehDF1EfqVpL/EjIHvvHkOTz1CnikocCQsrKsBdK85Eg=;
+        b=a8FM4BvNKHhhva4Cf8hfFkX2wYbdeQc3hyyCrdapZDpGHy/Fsr21VPHHcOM29mK8M0
+         FDRzcZ2YoBhf7t1rxGmqSRKmbp5oabizUkXJ0Qf4bF/S/RvGl9QmGuGSljCco2OxsXC4
+         bhOUhY21NCKTJ64pv6mo25jzqqzK4SKnQYXIG0KCqubAA+Ul4iDMO078xW5Nw2Loqpaw
+         aX0osJUKbbfgH3r+syckBG+zvqgMM8zRKVqn0ap+PVZsMvb+XwIKn9w7J9kaX/cQLKhE
+         EdnuEyubdsDYx7qMADs0/mni5ue3UpQIDH7JbaKZs277tHb5fwSlV6b5n5fT/kRYSFOZ
+         EV+Q==
+X-Gm-Message-State: AC+VfDw9J8gesZPZgNEogxL11tWqNrq0WGXgAg0kAAL3AVoXhjm997uY
+        +gyFKJ5wAZYJnZKbw8p0v1o7FwCI8HYkBrOrPCjbs+ALKrnAR39t7gqM3GqYJn0Y/g9oUrxAQUK
+        wsusrGMUuu+kaVGH5XckKZs3z
+X-Received: by 2002:adf:de8a:0:b0:30f:bc8f:6d49 with SMTP id w10-20020adfde8a000000b0030fbc8f6d49mr7989118wrl.13.1687181389691;
+        Mon, 19 Jun 2023 06:29:49 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5gkXts3fBcO0DhPEqkdGGOMRJbBKr7VX2UJB4CAxFPZSuJglE6lxSJb6gTUvuXnBPXMkfpiA==
+X-Received: by 2002:adf:de8a:0:b0:30f:bc8f:6d49 with SMTP id w10-20020adfde8a000000b0030fbc8f6d49mr7989087wrl.13.1687181389229;
+        Mon, 19 Jun 2023 06:29:49 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c72f:7100:cede:6433:a77b:41e9? (p200300cbc72f7100cede6433a77b41e9.dip0.t-ipconnect.de. [2003:cb:c72f:7100:cede:6433:a77b:41e9])
+        by smtp.gmail.com with ESMTPSA id h14-20020a5d6e0e000000b003078354f774sm31386031wrz.36.2023.06.19.06.29.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Jun 2023 06:29:48 -0700 (PDT)
+Message-ID: <0d5d75ec-c7db-7546-80cb-e8755fc7cae0@redhat.com>
+Date:   Mon, 19 Jun 2023 15:29:47 +0200
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM9PR04MB8954:EE_|AS8PR04MB9077:EE_
-X-MS-Office365-Filtering-Correlation-Id: bc18d987-850d-432d-51d0-08db70c94f2a
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2Oz7j0IM2XAjyoZZSM/Jdlu9pluCayfZ9AEZBF/+odHZS1qmiIUMXuzc+aCyCd50zlnzBHtg60tGdFEaguUFjUckae6jEwu6lO8LHnkIQ2dPyllBF26CMzv4/Sb6NCJu8Wfd3v2QeFMSHDiUldbYmPPXopXTrh4a60aaFGxRGMZR1hm4eBhSrp+kSkPJeP2H76+oW4920V4Yl2Hh56LddmkTlNc6oY0SqOdJAsgC2G1WSRLqsy9rzmqLawORfdbqmQfwUiawRiWUvEp/XK4FE7XnAhidRXu1266cuguHZ6EE3jaXpfhNVVvA6dgaPLqj1aqBFDIgFRndHxQVogEOBV1Z4p7xIGywQiNdkro21JrYu1ug3r3H4KuC8WVLt4scj8o+Me5H3q0xrLl6G5oXgBTIcFx9sHEW7UeVOoQx5DcfZFjlgKcBusmCJ9N25OP7/emoLban13DoTs4mbnoEkFhRKFIhZ1MILFv/7CYzhcN6Nvv/TKmjLf7HpSTve7V85MP10yszoj2wDXxQfxgeh50v/bz/aVw/FEJqgeZTD/YldwemjyzmDUAjvC0bVKv1KytqNyrVjSriZL7mKLJiAZJjU9IRTjTYmTEuoqrUTyI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8954.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(366004)(39860400002)(396003)(136003)(451199021)(186003)(52116002)(478600001)(966005)(6666004)(6486002)(86362001)(1076003)(6506007)(6512007)(26005)(2616005)(38100700002)(316002)(38350700002)(83380400001)(66946007)(66556008)(66476007)(4326008)(8676002)(8936002)(7416002)(5660300002)(2906002)(41300700001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DMcrvLHmtU552jKqhsED6+XH28AYQY/9nHXFy3HMOXCWN2S0qJ1Fwf+vO//N?=
- =?us-ascii?Q?hae/GydaPJpoFBvFc/p/ooc12VYCWCaOoC+LCVbPH1kXJpteXl8dyzkiRdkL?=
- =?us-ascii?Q?vQXbtQFMZ9jfBuiUFZWKRl3U+LY71smaS4bCCNvjUbAEV8wQCIdo1RP7WCCd?=
- =?us-ascii?Q?ArG3vaA5yfSXll7bnmEjH1QW846TXdzb2f2A88z55EYiQZww0r/ltwLWMA/c?=
- =?us-ascii?Q?9TaU8ZUVuz/b7cjf/Y+dQy3k+hJKRDA+gDQum3LqbWNZ71ST1EJ5PNPRoXQS?=
- =?us-ascii?Q?wuLE5MLB/JFis3eWmvXnbCK0A/bEyArO9Vt+1sSIkim0CXGGdhZnARyhT1zy?=
- =?us-ascii?Q?ghGeUmkbn//pdFJ8hBtGfOzsPfZcv7VFNGqDv5o7/wxpvWUz3y9m7mm8BUge?=
- =?us-ascii?Q?zAo6UQU066fVarXWL03Bx+ieykWcTnj5hmc1D6gzpllnkgQIA4y3q4iTmmEc?=
- =?us-ascii?Q?Ci9y2gr1EGGTzrLsUH8L9vKj48CQq0G2SqvHPdtpibljilferebMWxFgBAPY?=
- =?us-ascii?Q?BWuskAaokKUDiQp7k0WSHlf2ZV5lLk2ilLkH22cNDqpXjLhQUtoXYIRHBL8r?=
- =?us-ascii?Q?7gG5LFeWdZ/qlc7++gkbPX2kNhIJth33IOE+JSXLGPPmapxSsDvIStvEaF/5?=
- =?us-ascii?Q?LPRUmrsVKiiemJ6Jrcz51ZPCu45u8/a1bdrW39afecOh0HbbQ/33nmZAaaoK?=
- =?us-ascii?Q?HGFjnAhWMJDu7uyysMa8bqAMY7P0+472u/+PmpYTYiQQMSUJTAHi54KANFOX?=
- =?us-ascii?Q?Gz/CzYnl6P3FyfZOYPGp/onrZC6XBTYzKxordj1UBgXVpUlerSSjmZ4JgP62?=
- =?us-ascii?Q?2mxx5RAzLDKNB0p/PlRNSHFpRDGG+cGy9E7Y2bVhXgL2GZ7GxZjIAj7HM8BW?=
- =?us-ascii?Q?If6+QOUABMljS5iQz50TkI7qUXsasi/Do7zUgWMNGcHDd7ZUV6/wny0eR4hh?=
- =?us-ascii?Q?pldGkzWqi3cvwZiWNxwUT0ye/WwNW8R7UGQ6HWhQCQtTBBEspfC33j5p0g5+?=
- =?us-ascii?Q?LVQyd2AHMhUdvxbXiZuCd9oKGZ4cfP3fZV6gZauQNrDMGmIPVEI+FDbDfHvI?=
- =?us-ascii?Q?+l4zoFw2x97xsWIz+YN9cHzHk8EOlDTJw/rStnz3Rjpr6+yTvw8AuSy/Gxda?=
- =?us-ascii?Q?YHdVtbFknxc4IYIVFudMH1DkSHA/C6nC6Id0xbeTgPzJvTPeJHvVzGLvjyDX?=
- =?us-ascii?Q?yHoKwo3/k8mM5RRV0IjgpJec73ldSR+g1c1uS+VfLJOSHBIuEzNEowTQljsy?=
- =?us-ascii?Q?Z73Lz6RD5EbqTdRfMgbQkzF1oun0xfvqBbI49fKRU7rzw2A8pTE0Hcn3C0To?=
- =?us-ascii?Q?HjLkiMiLx8lBup2sfCiRWqY61g0IPQHsV5I3G4Ss0eLrDZppGwqi2y6u73p4?=
- =?us-ascii?Q?4A0RBFBzgsDERjGByHEFg7ogElzJ69yLu6neHRwp6G3pvW5wLiMJXXOPtupS?=
- =?us-ascii?Q?dCcT+9r3WHURVTuTRCp2EBp/VPfJhbHi+zKG3x7FyTQePPDgP85E2jU93Z53?=
- =?us-ascii?Q?sMyPsjRepWkPEtvKocjnKXXgGPyUnt7MluHJ9zg2RN70HZ6iRkimfGfhGKr0?=
- =?us-ascii?Q?8VAL/cO0wOOZYH6Jmd8PKgyi7Xv0tk9P4cW5d/IjRG2nP4tIivs3ogwKclEL?=
- =?us-ascii?Q?9g=3D=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bc18d987-850d-432d-51d0-08db70c94f2a
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8954.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jun 2023 13:30:12.3843
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4BV97CH+Cc6hAXWZ2q8tqRT4GMz0zldZhhfMK0fU6VeA4c0cO5iUNSZC0Q8ivmpjDD8BltX1XKpmk558sP5qTkzsXwWDrLh0ZvwiLItwiEQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB9077
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, dave.hansen@intel.com,
+        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
+        peterz@infradead.org, tglx@linutronix.de, seanjc@google.com,
+        pbonzini@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, ying.huang@intel.com,
+        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
+        sagis@google.com, imammedo@redhat.com
+References: <cover.1685887183.git.kai.huang@intel.com>
+ <50386eddbb8046b0b222d385e56e8115ed566526.1685887183.git.kai.huang@intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v11 08/20] x86/virt/tdx: Get information about TDX module
+ and TDX-capable memory
+In-Reply-To: <50386eddbb8046b0b222d385e56e8115ed566526.1685887183.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-.config_intr() handles only the link event interrupt and should
-disable/enable the PTP interrupt also.
+On 04.06.23 16:27, Kai Huang wrote:
+> Start to transit out the "multi-steps" to initialize the TDX module.
+> 
+> TDX provides increased levels of memory confidentiality and integrity.
+> This requires special hardware support for features like memory
+> encryption and storage of memory integrity checksums.  Not all memory
+> satisfies these requirements.
+> 
+> As a result, TDX introduced the concept of a "Convertible Memory Region"
+> (CMR).  During boot, the firmware builds a list of all of the memory
+> ranges which can provide the TDX security guarantees.
+> 
+> CMRs tell the kernel which memory is TDX compatible.  The kernel takes
+> CMRs (plus a little more metadata) and constructs "TD Memory Regions"
+> (TDMRs).  TDMRs let the kernel grant TDX protections to some or all of
+> the CMR areas.
+> 
+> The TDX module also reports necessary information to let the kernel
+> build TDMRs and run TDX guests in structure 'tdsysinfo_struct'.  The
+> list of CMRs, along with the TDX module information, is available to
+> the kernel by querying the TDX module.
+> 
+> As a preparation to construct TDMRs, get the TDX module information and
+> the list of CMRs.  Print out CMRs to help user to decode which memory
+> regions are TDX convertible.
+> 
+> The 'tdsysinfo_struct' is fairly large (1024 bytes) and contains a lot
+> of info about the TDX module.  Fully define the entire structure, but
+> only use the fields necessary to build the TDMRs and pr_info() some
+> basics about the module.  The rest of the fields will get used by KVM.
+> 
+> For now both 'tdsysinfo_struct' and CMRs are only used during the module
+> initialization.  But because they are both relatively big, declare them
+> inside the module initialization function but as static variables.
+> 
+> Signed-off-by: Kai Huang <kai.huang@intel.com>
+> Reviewed-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
 
-It's safe to disable/enable the PTP irq even if the egress ts irq
-is disabled. This interrupt, the PTP one, acts as a global switch for all
-PTP irqs.
 
-Fixes: 514def5dd339 ("phy: nxp-c45-tja11xx: add timestamping support")
-CC: stable@vger.kernel.org # 5.15+
-Signed-off-by: Radu Pirea (NXP OSS) <radu-nicolae.pirea@oss.nxp.com>
----
+[...]
 
-Where is V1?
-https://patchwork.kernel.org/project/netdevbpf/patch/20230410124856.287753-1-radu-nicolae.pirea@oss.nxp.com/
 
-Where is V2?
-https://patchwork.kernel.org/project/netdevbpf/patch/20230616135323
+> ---
+>   arch/x86/virt/vmx/tdx/tdx.c | 67 +++++++++++++++++++++++++++++++++-
+>   arch/x86/virt/vmx/tdx/tdx.h | 72 +++++++++++++++++++++++++++++++++++++
+>   2 files changed, 138 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
+> index bcf2b2d15a2e..9fde0f71dd8b 100644
+> --- a/arch/x86/virt/vmx/tdx/tdx.c
+> +++ b/arch/x86/virt/vmx/tdx/tdx.c
+> @@ -20,6 +20,7 @@
+>   #include <asm/msr-index.h>
+>   #include <asm/msr.h>
+>   #include <asm/archrandom.h>
+> +#include <asm/page.h>
+>   #include <asm/tdx.h>
+>   #include "tdx.h"
+>   
+> @@ -191,12 +192,76 @@ int tdx_cpu_enable(void)
+>   }
+>   EXPORT_SYMBOL_GPL(tdx_cpu_enable);
+>   
+> +static inline bool is_cmr_empty(struct cmr_info *cmr)
+> +{
+> +	return !cmr->size;
+> +}
+> +
 
- drivers/net/phy/nxp-c45-tja11xx.c | 21 +++++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
+Nit: maybe it's just me, but this function seems unnecessary.
 
-diff --git a/drivers/net/phy/nxp-c45-tja11xx.c b/drivers/net/phy/nxp-c45-tja11xx.c
-index 029875a59ff8..f0d047019f33 100644
---- a/drivers/net/phy/nxp-c45-tja11xx.c
-+++ b/drivers/net/phy/nxp-c45-tja11xx.c
-@@ -63,6 +63,9 @@
- #define VEND1_PORT_ABILITIES		0x8046
- #define PTP_ABILITY			BIT(3)
- 
-+#define VEND1_PORT_FUNC_IRQ_EN		0x807A
-+#define PTP_IRQS			BIT(3)
-+
- #define VEND1_PORT_INFRA_CONTROL	0xAC00
- #define PORT_INFRA_CONTROL_EN		BIT(14)
- 
-@@ -890,12 +893,26 @@ static int nxp_c45_start_op(struct phy_device *phydev)
- 
- static int nxp_c45_config_intr(struct phy_device *phydev)
- {
--	if (phydev->interrupts == PHY_INTERRUPT_ENABLED)
-+	int ret;
-+
-+	/* 0x807A register is not present on SJA1110 PHYs. */
-+	if (phydev->interrupts == PHY_INTERRUPT_ENABLED) {
-+		ret = phy_set_bits_mmd(phydev, MDIO_MMD_VEND1,
-+				       VEND1_PORT_FUNC_IRQ_EN, PTP_IRQS);
-+		if (ret)
-+			return ret;
-+
- 		return phy_set_bits_mmd(phydev, MDIO_MMD_VEND1,
- 					VEND1_PHY_IRQ_EN, PHY_IRQ_LINK_EVENT);
--	else
-+	} else {
-+		ret = phy_clear_bits_mmd(phydev, MDIO_MMD_VEND1,
-+					 VEND1_PORT_FUNC_IRQ_EN, PTP_IRQS);
-+		if (ret)
-+			return ret;
-+
- 		return phy_clear_bits_mmd(phydev, MDIO_MMD_VEND1,
- 					  VEND1_PHY_IRQ_EN, PHY_IRQ_LINK_EVENT);
-+	}
- }
- 
- static irqreturn_t nxp_c45_handle_interrupt(struct phy_device *phydev)
+If "!cmr->size" is not expressive, then I don't know why "is_cmr_empty" 
+should be. Just inline that into the single user.
+
+.. after all the single caller also uses/prints cmr->size ...
+
+> +static void print_cmrs(struct cmr_info *cmr_array, int nr_cmrs)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < nr_cmrs; i++) {
+> +		struct cmr_info *cmr = &cmr_array[i];
+> +
+> +		/*
+> +		 * The array of CMRs reported via TDH.SYS.INFO can
+> +		 * contain tail empty CMRs.  Don't print them.
+> +		 */
+> +		if (is_cmr_empty(cmr))
+> +			break;
+> +
+> +		pr_info("CMR: [0x%llx, 0x%llx)\n", cmr->base,
+> +				cmr->base + cmr->size);
+> +	}
+> +}
+> +
+> +/*
+> + * Get the TDX module information (TDSYSINFO_STRUCT) and the array of
+> + * CMRs, and save them to @sysinfo and @cmr_array.  @sysinfo must have
+> + * been padded to have enough room to save the TDSYSINFO_STRUCT.
+> + */
+> +static int tdx_get_sysinfo(struct tdsysinfo_struct *sysinfo,
+> +			   struct cmr_info *cmr_array)
+> +{
+> +	struct tdx_module_output out;
+> +	u64 sysinfo_pa, cmr_array_pa;
+> +	int ret;
+> +
+> +	sysinfo_pa = __pa(sysinfo);
+> +	cmr_array_pa = __pa(cmr_array);
+> +	ret = seamcall(TDH_SYS_INFO, sysinfo_pa, TDSYSINFO_STRUCT_SIZE,
+> +			cmr_array_pa, MAX_CMRS, NULL, &out);
+> +	if (ret)
+> +		return ret;
+> +
+> +	pr_info("TDX module: atributes 0x%x, vendor_id 0x%x, major_version %u, minor_version %u, build_date %u, build_num %u",
+
+
+"attributes" ?
+
+> +		sysinfo->attributes,	sysinfo->vendor_id,
+> +		sysinfo->major_version, sysinfo->minor_version,
+> +		sysinfo->build_date,	sysinfo->build_num);
+> +
+> +	/* R9 contains the actual entries written to the CMR array. */
+> +	print_cmrs(cmr_array, out.r9);
+> +
+> +	return 0;
+> +}
+> +
+>   static int init_tdx_module(void)
+>   {
+> +	static DECLARE_PADDED_STRUCT(tdsysinfo_struct, tdsysinfo,
+> +			TDSYSINFO_STRUCT_SIZE, TDSYSINFO_STRUCT_ALIGNMENT);
+> +	static struct cmr_info cmr_array[MAX_CMRS]
+> +			__aligned(CMR_INFO_ARRAY_ALIGNMENT);
+> +	struct tdsysinfo_struct *sysinfo = &PADDED_STRUCT(tdsysinfo);
+> +	int ret;
+> +
+> +	ret = tdx_get_sysinfo(sysinfo, cmr_array);
+> +	if (ret)
+> +		return ret;
+> +
+>   	/*
+>   	 * TODO:
+>   	 *
+> -	 *  - Get TDX module information and TDX-capable memory regions.
+>   	 *  - Build the list of TDX-usable memory regions.
+>   	 *  - Construct a list of "TD Memory Regions" (TDMRs) to cover
+>   	 *    all TDX-usable memory regions.
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.h b/arch/x86/virt/vmx/tdx/tdx.h
+> index 9fb46033c852..97f4d7e7f1a4 100644
+> --- a/arch/x86/virt/vmx/tdx/tdx.h
+> +++ b/arch/x86/virt/vmx/tdx/tdx.h
+> @@ -3,6 +3,8 @@
+>   #define _X86_VIRT_TDX_H
+>   
+>   #include <linux/types.h>
+> +#include <linux/stddef.h>
+> +#include <linux/compiler_attributes.h>
+>   
+>   /*
+>    * This file contains both macros and data structures defined by the TDX
+> @@ -21,6 +23,76 @@
+>    */
+>   #define TDH_SYS_INIT		33
+>   #define TDH_SYS_LP_INIT		35
+> +#define TDH_SYS_INFO		32
+> +
+> +struct cmr_info {
+> +	u64	base;
+> +	u64	size;
+> +} __packed;
+> +
+> +#define MAX_CMRS			32
+> +#define CMR_INFO_ARRAY_ALIGNMENT	512
+> +
+> +struct cpuid_config {
+> +	u32	leaf;
+> +	u32	sub_leaf;
+> +	u32	eax;
+> +	u32	ebx;
+> +	u32	ecx;
+> +	u32	edx;
+> +} __packed;
+> +
+> +#define DECLARE_PADDED_STRUCT(type, name, size, alignment)	\
+> +	struct type##_padded {					\
+> +		union {						\
+> +			struct type name;			\
+> +			u8 padding[size];			\
+> +		};						\
+> +	} name##_padded __aligned(alignment)
+> +
+> +#define PADDED_STRUCT(name)	(name##_padded.name)
+> +
+> +#define TDSYSINFO_STRUCT_SIZE		1024
+
+So, it can never be larger than 1024 bytes? Not even with many cpuid 
+configs?
+
+> +#define TDSYSINFO_STRUCT_ALIGNMENT	1024
+> +
+
 -- 
-2.34.1
+Cheers,
+
+David / dhildenb
 
