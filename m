@@ -2,66 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE397353E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 12:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADC787353DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 12:49:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232170AbjFSKtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 06:49:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51480 "EHLO
+        id S232139AbjFSKtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 06:49:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232158AbjFSKsg (ORCPT
+        with ESMTP id S232135AbjFSKsg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 19 Jun 2023 06:48:36 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4BD10CF;
-        Mon, 19 Jun 2023 03:48:24 -0700 (PDT)
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0A010D2;
+        Mon, 19 Jun 2023 03:48:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1687171705; x=1718707705;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nIUqjU+9sWui+M1P0a6/KkrhLGUghRBFd77P7yxBipc=;
-  b=JITr5u4/zZ7bIHq99JmoCPXR0K/mdkNHQWTszwOtNOnB1AHziYXYZA2F
-   C18BTT+eUAP1+aOMxbvRfXRfpClw9THx9j5fRT6OObEo4uyS4cH+9zdji
-   k3LPszg2AntnG8vv9FpTxwfWJwTYVdG62Yr7KbVL8lVnxGpxxasHsMgnK
-   TVxSh+p3a/+A1bAPjImA6HgEJAmxBUzBQ7calQGqI3YOJBLU7q6JbRypj
-   58jLC0SHG63+Uef2sHB5FxSIL5pa6woEiXAXYhvX+eS4jr66d42ksVUMc
-   MX7E9F4QCZjc8KorjIaNzquflD4eEa4kNtlTmK/gCTu2J1YXq3vONY2g7
-   g==;
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=K+lZ9WFPMWC3ASBG9Jy2Zl4Eqf7XwfhBA2UB45dFP10=;
+  b=PFGJolF4yuqxkgaUfQ34h3kccExoL3V/rd7gm1F8Yh8+5lYqLeTjROMW
+   sDNiWFXfbKQMZi3+sytTlYvSfziBNMOKhe8tg/rqP6RL1HAjExz3bVYpY
+   64rg11ZGaPlwDJtpMqv/fGltZIw5+JZm0zl42Pvctptp1wtDmDe8PsUC1
+   00bd6gO+ayhBgD2EAzLwNRmyyU6BSozHYh41XIcuJHpjCI1h+cj7yUadh
+   DXYS+56XsBMoffd28ZoSXnSUX9efqyVJ2z76KclJTGhQKIRiYn5wYpVe/
+   PvSL9eYTVNxr9A82gKE9vZPBaeEqg9FRZ55WbnYXT70BviQizOzqt5u1C
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="358473824"
 X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
-   d="scan'208";a="220892977"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Jun 2023 03:48:24 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 19 Jun 2023 03:48:14 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Mon, 19 Jun 2023 03:48:14 -0700
-Date:   Mon, 19 Jun 2023 12:48:13 +0200
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     "Radu Pirea (OSS)" <radu-nicolae.pirea@oss.nxp.com>
-CC:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <richardcochran@gmail.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <sebastian.tobuschat@nxp.com>
-Subject: Re: [PATCH net-next v1 12/14] net: phy: nxp-c45-tja11xx: read ext
- trig ts TJA1120
-Message-ID: <20230619104813.tiodielj7faw557s@soft-dev3-1>
-References: <20230616135323.98215-1-radu-nicolae.pirea@oss.nxp.com>
- <20230616135323.98215-13-radu-nicolae.pirea@oss.nxp.com>
- <20230619084941.q6c26zhf4ssnseiu@soft-dev3-1>
- <1052d020-6866-f1a2-2b59-bec88ff00271@oss.nxp.com>
+   d="scan'208";a="358473824"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 03:48:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="663943226"
+X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
+   d="scan'208";a="663943226"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003.jf.intel.com with ESMTP; 19 Jun 2023 03:48:18 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1qBCQh-004yAN-2o;
+        Mon, 19 Jun 2023 13:48:15 +0300
+Date:   Mon, 19 Jun 2023 13:48:15 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>
+Subject: Re: [PATCH v14 18/18] media: i2c: ds90ub953: Support non-sync mode
+Message-ID: <ZJAyb9WHjWrdSsBw@smile.fi.intel.com>
+References: <20230616135922.442979-1-tomi.valkeinen@ideasonboard.com>
+ <20230616135922.442979-19-tomi.valkeinen@ideasonboard.com>
+ <ZIx17WC7plfDPpmc@smile.fi.intel.com>
+ <dc79de4e-4043-5448-db44-ef8f7749a376@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <1052d020-6866-f1a2-2b59-bec88ff00271@oss.nxp.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <dc79de4e-4043-5448-db44-ef8f7749a376@ideasonboard.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,24 +87,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 06/19/2023 13:07, Radu Pirea (OSS) wrote:
-> 
-> On 19.06.2023 11:49, Horatiu Vultur wrote:
-> > The data->get_extts can't be null. So I don't think you need this check.
-> 
-> I kinda agree with this because _I wrote the driver and I know what it
-> does_, but on the other hand don't want to fight with any static analyzer.
+On Mon, Jun 19, 2023 at 12:00:57PM +0300, Tomi Valkeinen wrote:
+> On 16/06/2023 17:47, Andy Shevchenko wrote:
+> > On Fri, Jun 16, 2023 at 04:59:22PM +0300, Tomi Valkeinen wrote:
+> > > Add support for FPD-Link non-sync mode with external clock. The only
+> > > thing that needs to be added is the calculation for the clkout.
 
-Yes, but then wouldn't be an issue with the static analyzer tools that
-can't detect this kind of code?
+...
 
-> 
+> > > +	switch (priv->mode) {
+> > > +	case UB953_MODE_SYNC:
+> > > +		if (priv->hw_data->is_ub971)
+> > > +			return priv->plat_data->bc_rate * 160ull;
+> > > +		else
+> > > +			return priv->plat_data->bc_rate / 2 * 160ull;
 > > 
-> > --
-> > /Horatiu
+> > Redundant 'else'.
 > 
-> --
-> Radu P.
+> True, but I like the symmetry in:
+> 
+> if (foo)
+> 	return 123;
+> else
+> 	return 321;
+
+At the same time it will be symmetry with other switch-case(s). That's why the
+question about fallthrough below.
+
+> > Do I understand correctly you don't want to fallthrough because it will give
+> > ±160 in the rate (depending if it's even or odd)?
+> 
+> Sorry, can you clarify? Fallthrough to what?
+
+To the below case since '/ 2 * 160 ~= *80'. Why ~ because it might give
+off-by-one error due to even/odd input.
+
+> > > +	case UB953_MODE_NONSYNC_EXT:
+> > > +		/* CLKIN_DIV = 1 always */
+> > > +		return clk_get_rate(priv->clkin) * 80ull;
 
 -- 
-/Horatiu
+With Best Regards,
+Andy Shevchenko
+
+
