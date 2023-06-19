@@ -2,100 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C4FE735780
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 15:00:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F455735783
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 15:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231450AbjFSNAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 09:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41800 "EHLO
+        id S231401AbjFSNAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 09:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231700AbjFSNAQ (ORCPT
+        with ESMTP id S231491AbjFSNAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 09:00:16 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D6A1AC;
-        Mon, 19 Jun 2023 06:00:15 -0700 (PDT)
-Received: from dggpeml500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Ql8vY1DzzzLmnW;
-        Mon, 19 Jun 2023 20:58:17 +0800 (CST)
-Received: from [10.67.103.44] (10.67.103.44) by dggpeml500002.china.huawei.com
- (7.185.36.158) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 19 Jun
- 2023 21:00:12 +0800
-Subject: Re: [PATCH v4 4/5] hwtracing: hisi_ptt: Advertise
- PERF_PMU_CAP_NO_EXCLUDE for PTT PMU
-To:     Yicong Yang <yangyicong@huawei.com>, <mathieu.poirier@linaro.org>,
-        <suzuki.poulose@arm.com>, <jonathan.cameron@huawei.com>,
-        <corbet@lwn.net>, <linux-kernel@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>
-References: <20230606142244.10939-1-yangyicong@huawei.com>
- <20230606142244.10939-5-yangyicong@huawei.com>
-CC:     <alexander.shishkin@linux.intel.com>, <helgaas@kernel.org>,
-        <linux-pci@vger.kernel.org>, <prime.zeng@huawei.com>,
-        <yangyicong@hisilicon.com>
-From:   hejunhao <hejunhao3@huawei.com>
-Message-ID: <01c39cb9-e56a-862b-2d99-024b7ba5a769@huawei.com>
-Date:   Mon, 19 Jun 2023 21:00:12 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+        Mon, 19 Jun 2023 09:00:48 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17A401738;
+        Mon, 19 Jun 2023 06:00:37 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3B3BE12FC;
+        Mon, 19 Jun 2023 06:01:20 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.36.163])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 03FA23F663;
+        Mon, 19 Jun 2023 06:00:34 -0700 (PDT)
+Date:   Mon, 19 Jun 2023 14:00:32 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Anup Patel <anup@brainfault.org>
+Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        lkft-triage@lists.linaro.org, Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: next: arch/riscv/kvm/aia_imsic.c:237:9: error: call to
+ undeclared function  'arch_atomic_long_fetch_or'
+Message-ID: <ZJBRcG4gPA2wzgax@FVFF77S0Q05N.cambridge.arm.com>
+References: <CA+G9fYvtPPhG6w8Ge2_YOdQ6F0nSNA1q-2JLej=6gsyoCT-0ag@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20230606142244.10939-5-yangyicong@huawei.com>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.103.44]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500002.china.huawei.com (7.185.36.158)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYvtPPhG6w8Ge2_YOdQ6F0nSNA1q-2JLej=6gsyoCT-0ag@mail.gmail.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Yicong
+On Mon, Jun 19, 2023 at 03:27:47PM +0530, Naresh Kamboju wrote:
+> Following build regressions noticed on Linux next-20230619.
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> Regressions found on riscv:
+> 
+>  - build/rv32-clang-16-lkftconfig
+>  - build/rv32-clang-16-tinyconfig
+>  - build/rv32-clang-nightly-defconfig
+>  - build/rv32-clang-16-allnoconfig
+>  - build/gcc-12-defconfig
+>  - build/gcc-11-lkftconfig
+>  - build/clang-16-lkftconfig
+>  - build/rv32-clang-16-defconfig
+>  - build/gcc-8-defconfig
+>  - build/rv32-gcc-11-lkftconfig
+>  - build/clang-16-defconfig
+>  - build/rv32-clang-nightly-allnoconfig
+>  - build/rv32-clang-nightly-tinyconfig
+>  - build/clang-nightly-defconfig
+> 
+> 
+> arch/riscv/kvm/aia_imsic.c:237:9: error: call to undeclared function
+>  'arch_atomic_long_fetch_or'; ISO C99 and later do not support implicit
+>     function declarations [-Wimplicit-function-declaration]
+>         return arch_atomic_long_fetch_or(val, (atomic_long_t *)ptr);
+>                ^
+> arch/riscv/kvm/aia_imsic.c:237:9: note: did you mean 'raw_atomic_long_fetch_or'?
+> include/linux/atomic/atomic-long.h:1087:1: note:
+> 'raw_atomic_long_fetch_or' declared here
+> raw_atomic_long_fetch_or(long i, atomic_long_t *v)
+> ^
+> 1 error generated.
 
+It looks like this is because:
 
-On 2023/6/6 22:22, Yicong Yang wrote:
-> From: Yicong Yang <yangyicong@hisilicon.com>
->
-> The PTT trace collects PCIe TLP headers from the PCIe link and don't
-> have the ability to exclude certain context. It doesn't support itrace
-> as well. So only advertise PERF_PMU_CAP_NO_EXCLUDE. This will greatly
-> save the storage of final data. Tested tracing idle link for ~15s,
-> without this patch we'll collect ~28.682MB data for context related
-> information and with this patch it reduced to ~0.226MB.
->
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> ---
->   drivers/hwtracing/ptt/hisi_ptt.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/hwtracing/ptt/hisi_ptt.c b/drivers/hwtracing/ptt/hisi_ptt.c
-> index 5c7e93e7705f..ff2c16efe5b1 100644
-> --- a/drivers/hwtracing/ptt/hisi_ptt.c
-> +++ b/drivers/hwtracing/ptt/hisi_ptt.c
-> @@ -1210,7 +1210,7 @@ static int hisi_ptt_register_pmu(struct hisi_ptt *hisi_ptt)
->   
->   	hisi_ptt->hisi_ptt_pmu = (struct pmu) {
->   		.module		= THIS_MODULE,
-> -		.capabilities	= PERF_PMU_CAP_EXCLUSIVE | PERF_PMU_CAP_ITRACE,
-> +		.capabilities	= PERF_PMU_CAP_NO_EXCLUDE,
+  2f68d5420412040e ("RISC-V: KVM: Add in-kernel virtualization of AIA IMSIC")
 
-According to the error prompt of function hisi_ptt_trace_start().
-https://elixir.bootlin.com/linux/v6.4-rc7/source/drivers/hwtracing/ptt/hisi_ptt.c#L197
+... added a call to arch_atomic_long_fetch_or(), but we've reworked the atomics
+in the tip locking/core branch such that arch_atomic_long_fetch_or() doesn't
+exist unless provided directly by the architecture.
 
-You may be need to keep advertise PERF_PMU_CAP_EXCLUSIVE?
-Such pmus can only have one event scheduled at a time, if not the perf
-tool will report device busy.
+Does this actually need to be arch_atomic_long_fetch_or(), i.e. was there a
+specific reason not to use atomic_long_fetch_or() here?
 
-Best regards,
-Junhao.
+If not, then please use atomic_long_fetch_or() -- that'll work before and after
+the locking/core changes.
 
->   		.task_ctx_nr	= perf_sw_context,
->   		.attr_groups	= hisi_ptt_pmu_groups,
->   		.event_init	= hisi_ptt_pmu_event_init,
+Otherwise we'll need to figure out how to handle the transient breakage.
 
+Thanks,
+Mark.
