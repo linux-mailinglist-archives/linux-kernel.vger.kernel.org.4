@@ -2,194 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15FCC73564A
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 13:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 175AF73564F
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 13:56:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230283AbjFSLyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 07:54:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
+        id S230296AbjFSL4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 07:56:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbjFSLyA (ORCPT
+        with ESMTP id S229916AbjFSL4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 07:54:00 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB757134;
-        Mon, 19 Jun 2023 04:53:53 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35JAiTNw032603;
-        Mon, 19 Jun 2023 13:53:33 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=i1KQomgbTCKKL1jhfJcq7MepijYGukr9j+2PCgWp/oI=;
- b=bwJlV/8jzyl4tx7faoHfBVBavw5NOIOv2tj28Ki+HhhAiR/YH19CT5WQhGFt8rwG2qhL
- ZWnoM8Nt9n7/xthDGTeQ8n8zUxifWYNc3FC6A4QReMRRN//OPCZITDvVW6NLYdWEaNgT
- AlCK+tsMsOW1l5mV/6fYVe9txZzdKgQHFAJXeBhIJrpC+6Kqzu4d4wBgKdqEgL+N3zVh
- E27JN4aV6BpRq0AGs0x7XYc4s1jPOKYBVOZFPj6vxp8wzGumVOAPLB2bLlxHL7zFRHuI
- 2kNVOYq1Cu+z8OCkxjp/7xOQVTwYwv69etBb0OWX6ZtHOTEBW0Tnyf/eS7447fljkGt3 Rg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ramu5rnqg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Jun 2023 13:53:33 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2581E10002A;
-        Mon, 19 Jun 2023 13:53:33 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1C0BE228A33;
-        Mon, 19 Jun 2023 13:53:33 +0200 (CEST)
-Received: from localhost (10.201.21.210) by SHFDAG1NODE2.st.com (10.75.129.70)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 19 Jun
- 2023 13:53:32 +0200
-From:   Yann Gautier <yann.gautier@foss.st.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>
-CC:     Conor Dooley <conor+dt@kernel.org>,
+        Mon, 19 Jun 2023 07:56:04 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB1F102;
+        Mon, 19 Jun 2023 04:56:03 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-988b75d8b28so109133266b.3;
+        Mon, 19 Jun 2023 04:56:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687175761; x=1689767761;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=vOF1HQ65PMcVDah81Cgs1ZApX9tkkoWLvArF198/E+k=;
+        b=Wfq+AvrzBdKN9WTKX0+xbZ1aUARe6smA6r9p9lttA+/LoMw1qQoa6jvVwu5LKTzhp0
+         J2ZX6/EBgRuq36n2Nrx0aPKjl5UujfmFDKIbsdK72iRcleopzeR1iPH6ckGQXLoddfyo
+         3LY9RkbvuxK6zG8et1VLY/1KaKEhKN5hiEWKn0us0jrrqji4EIjKhuaz8EF8vf3Zp5xj
+         Xi099ai3YrwMI/98sv2yBmHicoj1atC8iqzBOyR5UwYD5POq2/58mZPHNasyXOx86J1c
+         GeXKComhurH8mybVHOt2niIfTXLSEWFIJc4RG+XRmD0YJ49ZJ7OXYBtQrN7ve1FMXQdT
+         pnqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687175761; x=1689767761;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vOF1HQ65PMcVDah81Cgs1ZApX9tkkoWLvArF198/E+k=;
+        b=RZl1ODP0HOa3HeODsZ/4oTKbOZ0lS11OgYKAfmNU6NpK86RinZLTw4SDbTp7Tc/BH9
+         vvsi8S3ZrDzqd/4xpLer+4YZkXGT+qvK8Lw7Bgnao4N6mHF3NyiByUK70X/OMbNqoM2q
+         aHXGZSm9m4lowWGomHbB6AurZAPR9lrM+qhHOzdyAWgSyp6L8UAagQMFOJwtSGxxLiQc
+         IGwrWPAz0gOxXYCesfAs6Q7FOOUfDL2X47IVelmoAGXXjNzNeuBbLJJbGr2vpGl4v5yt
+         sXhkXtvoDcYonyhpVqMCaCxw21cddzmYOUmdL/MR+kgOD7vxmI45bK9Yl70Q0EUk2sQC
+         DMEg==
+X-Gm-Message-State: AC+VfDyM+9VEmOW7ZJfVSYI9DM7J1TC6f0zzgrnj8aVUPCQFMWFDVsuB
+        IR3/hAe3eZI75YcrKIyogaw=
+X-Google-Smtp-Source: ACHHUZ6RA5IYBywkmrhFAiIjoMLVhWWRWoBkuAx3NCOFQ0lftLuqhSw8HcKoZubPZww6v17ga/g7kw==
+X-Received: by 2002:a17:907:7f12:b0:988:66d9:438 with SMTP id qf18-20020a1709077f1200b0098866d90438mr3653609ejc.51.1687175761392;
+        Mon, 19 Jun 2023 04:56:01 -0700 (PDT)
+Received: from skbuf ([188.25.159.134])
+        by smtp.gmail.com with ESMTPSA id t25-20020a170906269900b00982983a6a34sm6281529ejc.34.2023.06.19.04.55.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 04:56:01 -0700 (PDT)
+Date:   Mon, 19 Jun 2023 14:55:58 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     arinc9.unal@gmail.com
+Cc:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
         Russell King <linux@armlinux.org.uk>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        <linux-kernel@vger.kernel.org>, Marek Vasut <marex@denx.de>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Xiang wangx <wangxiang@cdjrlc.com>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Yann Gautier <yann.gautier@foss.st.com>
-Subject: [PATCH v2 6/6] mmc: mmci: stm32: add delay block support for STM32MP25
-Date:   Mon, 19 Jun 2023 13:51:20 +0200
-Message-ID: <20230619115120.64474-7-yann.gautier@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230619115120.64474-1-yann.gautier@foss.st.com>
-References: <20230619115120.64474-1-yann.gautier@foss.st.com>
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net v6 3/6] net: dsa: mt7530: fix handling of BPDUs on
+ MT7530 switch
+Message-ID: <20230619115558.vqh6oedosxunwy3l@skbuf>
+References: <20230617062649.28444-1-arinc.unal@arinc9.com>
+ <20230617062649.28444-4-arinc.unal@arinc9.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.201.21.210]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-19_08,2023-06-16_01,2023-05-22_02
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230617062649.28444-4-arinc.unal@arinc9.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On STM32MP25, the delay block is inside the SoC, and configured through
-the SYSCFG registers. The algorithm is also different from what was in
-STM32MP1 chip.
+On Sat, Jun 17, 2023 at 09:26:46AM +0300, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+> 
+> BPDUs are link-local frames, therefore they must be trapped to the CPU
+> port. Currently, the MT7530 switch treats BPDUs as regular multicast
+> frames, therefore flooding them to user ports. To fix this, set BPDUs to be
+> trapped to the CPU port. Group this on mt7530_setup() and
+> mt7531_setup_common() into mt753x_trap_frames() and call that.
+> 
+> Fixes: b8f126a8d543 ("net-next: dsa: add dsa support for Mediatek MT7530 switch")
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> ---
 
-Signed-off-by: Yann Gautier <yann.gautier@foss.st.com>
----
- drivers/mmc/host/mmci_stm32_sdmmc.c | 66 ++++++++++++++++++++++++++++-
- 1 file changed, 65 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/mmc/host/mmci_stm32_sdmmc.c b/drivers/mmc/host/mmci_stm32_sdmmc.c
-index c51c85ca24917..d6112a8dacf8b 100644
---- a/drivers/mmc/host/mmci_stm32_sdmmc.c
-+++ b/drivers/mmc/host/mmci_stm32_sdmmc.c
-@@ -33,6 +33,20 @@
- #define DLYB_LNG_TIMEOUT_US	1000
- #define SDMMC_VSWEND_TIMEOUT_US 10000
- 
-+#define SYSCFG_DLYBSD_CR	0x0
-+#define DLYBSD_CR_EN		BIT(0)
-+#define DLYBSD_CR_RXTAPSEL_MASK	GENMASK(6, 1)
-+#define DLYBSD_TAPSEL_NB	32
-+#define DLYBSD_BYP_EN		BIT(16)
-+#define DLYBSD_BYP_CMD		GENMASK(21, 17)
-+#define DLYBSD_ANTIGLITCH_EN	BIT(22)
-+
-+#define SYSCFG_DLYBSD_SR	0x4
-+#define DLYBSD_SR_LOCK		BIT(0)
-+#define DLYBSD_SR_RXTAPSEL_ACK	BIT(1)
-+
-+#define DLYBSD_TIMEOUT_1S_IN_US	1000000
-+
- struct sdmmc_lli_desc {
- 	u32 idmalar;
- 	u32 idmabase;
-@@ -499,6 +513,46 @@ static int sdmmc_dlyb_mp15_prepare(struct mmci_host *host)
- 	return 0;
- }
- 
-+static int sdmmc_dlyb_mp25_enable(struct sdmmc_dlyb *dlyb)
-+{
-+	u32 cr, sr;
-+
-+	cr = readl_relaxed(dlyb->base + SYSCFG_DLYBSD_CR);
-+	cr |= DLYBSD_CR_EN;
-+
-+	writel_relaxed(cr, dlyb->base + SYSCFG_DLYBSD_CR);
-+
-+	return readl_relaxed_poll_timeout(dlyb->base + SYSCFG_DLYBSD_SR,
-+					   sr, sr & DLYBSD_SR_LOCK, 1,
-+					   DLYBSD_TIMEOUT_1S_IN_US);
-+}
-+
-+static int sdmmc_dlyb_mp25_set_cfg(struct sdmmc_dlyb *dlyb,
-+				   int unit __maybe_unused, int phase,
-+				   bool sampler __maybe_unused)
-+{
-+	u32 cr, sr;
-+
-+	cr = readl_relaxed(dlyb->base + SYSCFG_DLYBSD_CR);
-+	cr &= ~DLYBSD_CR_RXTAPSEL_MASK;
-+	cr |= FIELD_PREP(DLYBSD_CR_RXTAPSEL_MASK, phase);
-+
-+	writel_relaxed(cr, dlyb->base + SYSCFG_DLYBSD_CR);
-+
-+	return readl_relaxed_poll_timeout(dlyb->base + SYSCFG_DLYBSD_SR,
-+					  sr, sr & DLYBSD_SR_RXTAPSEL_ACK, 1,
-+					  DLYBSD_TIMEOUT_1S_IN_US);
-+}
-+
-+static int sdmmc_dlyb_mp25_prepare(struct mmci_host *host)
-+{
-+	struct sdmmc_dlyb *dlyb = host->variant_priv;
-+
-+	dlyb->max = DLYBSD_TAPSEL_NB;
-+
-+	return 0;
-+}
-+
- static int sdmmc_dlyb_phase_tuning(struct mmci_host *host, u32 opcode)
- {
- 	struct sdmmc_dlyb *dlyb = host->variant_priv;
-@@ -639,6 +693,12 @@ static struct sdmmc_tuning_ops dlyb_tuning_mp15_ops = {
- 	.set_cfg = sdmmc_dlyb_mp15_set_cfg,
- };
- 
-+static struct sdmmc_tuning_ops dlyb_tuning_mp25_ops = {
-+	.dlyb_enable = sdmmc_dlyb_mp25_enable,
-+	.tuning_prepare = sdmmc_dlyb_mp25_prepare,
-+	.set_cfg = sdmmc_dlyb_mp25_set_cfg,
-+};
-+
- void sdmmc_variant_init(struct mmci_host *host)
- {
- 	struct device_node *np = host->mmc->parent->of_node;
-@@ -657,7 +717,11 @@ void sdmmc_variant_init(struct mmci_host *host)
- 		return;
- 
- 	dlyb->base = base_dlyb;
--	dlyb->ops = &dlyb_tuning_mp15_ops;
-+	if (of_device_is_compatible(np, "st,stm32mp25-sdmmc2"))
-+		dlyb->ops = &dlyb_tuning_mp25_ops;
-+	else
-+		dlyb->ops = &dlyb_tuning_mp15_ops;
-+
- 	host->variant_priv = dlyb;
- 	host->mmc_ops->execute_tuning = sdmmc_execute_tuning;
- }
--- 
-2.25.1
-
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
