@@ -2,119 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A9BF7355E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 13:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E69D47355F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 13:37:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231630AbjFSLei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 07:34:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52080 "EHLO
+        id S231738AbjFSLhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 07:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjFSLeg (ORCPT
+        with ESMTP id S229519AbjFSLg7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 07:34:36 -0400
-Received: from out-34.mta0.migadu.com (out-34.mta0.migadu.com [91.218.175.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1483FEE
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 04:34:34 -0700 (PDT)
-Date:   Mon, 19 Jun 2023 07:34:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1687174472;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Tt3RWh8BEKoqLhK86LDh7llJ14l6KCTXk/okAyPXAzA=;
-        b=i+cENnWbA17Y+F/fishc8UmKkX2d11aFrfbkEA/RSeJGs8DaK+pP54Vf1C7aoZ8NsEj74R
-        cXaE50KWXHIuXWZXVuGC783hgIjWLesjrEEDAYhwTaqLKdCoI85w4n4+GuOUgBvzA2QigP
-        oa1A17/zsm0VN2UgH6YNfjC3Cc/g4gI=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Puranjay Mohan <puranjay12@gmail.com>,
-        Rick P Edgecombe <rick.p.edgecombe@intel.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Song Liu <song@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org,
-        the arch/x86 maintainers <x86@kernel.org>
-Subject: Re: [PATCH v2 02/12] mm: introduce execmem_text_alloc() and
- jit_text_alloc()
-Message-ID: <20230619113426.c37bpwvdagbzyevn@moria.home.lan>
-References: <20230616085038.4121892-1-rppt@kernel.org>
- <20230616085038.4121892-3-rppt@kernel.org>
- <f9a7eebe-d36e-4587-b99d-35d4edefdd14@app.fastmail.com>
+        Mon, 19 Jun 2023 07:36:59 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29318C9
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 04:36:58 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b475b54253so16056251fa.2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 04:36:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687174616; x=1689766616;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=FvbuaaSlDBqWb5lPKsIhoBijmFdvxXqOiBhjtzjptTs=;
+        b=GmVrGv8DUt0/UIzYHV7LoaYoTMEobq2qs8xsfKhSEH2CDK/YmxFQxL9p1XYI0p36VO
+         2MX0y1ziSurytO3Z8bAAgI9i86qTcDxjUnqs+ml6t7hnFd8iB+s0IDi5T5RdnzVcLWYC
+         T99IKNnTy27cVR57dOBvSaibI6oLrx9fumpqKLekyoY5lq9Wrt+nzeRz2DFFAjagZ1qB
+         ohFBz/7DXc0jl7cTIYycN5/xNkynU3iAQaBEzd+NeshrxW7JUadykXbpH1y4RszyBZ4H
+         aciTdcct4AupyDpm9ZhL0QQSMEGUvdRKUoFMD4i54tVqY4LsM6s+YLhfl7XTOz9yNOgV
+         2Whw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687174616; x=1689766616;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FvbuaaSlDBqWb5lPKsIhoBijmFdvxXqOiBhjtzjptTs=;
+        b=VRh9p6/exj0YChggcIofSY9Ptg8QF5anIxDBCDHC2ADc7dGjABlc2XYJJHD0vP7iRl
+         vWy4rGOHIy0xTx0U3eU5oJOgPSjcKf3/rJ/50/amJn8wGVOuUSgW/i6TBVN7iyoTce2u
+         j7v9Q8DdPAus2bfHeCa7I4HzFzZv/ISJnwRP5M7Jee468YwSgYhKS3MY92b2Rr/bRmin
+         NbHG3btVDvknd2mWk4j8bPrhRM9GJ9/4nD1p8fLoor13OnNifLBPFDRBV84f2R97P5l6
+         HCKXwf/lj6JnTjyS9zKLbJwj5F42K0kqhV9eV9bjmxOLXseOxYmMranIPLs+KCP4I8s3
+         Mcfg==
+X-Gm-Message-State: AC+VfDyexTqrI1YvzEEfCiM7829ffytBNkusvgi+rr4amqG4At2Yu7AZ
+        HS93A1+xy/48axC2L87ReKSbRGuA5aRH/r/hzrdH0w==
+X-Google-Smtp-Source: ACHHUZ75k3RleqyJd/MrNvXKUK57iavnh8cQiGzOQwP95XHmyzUpBB+l0IFLNT4tBG85iWMV90foHUn/Wb39rq92HbE=
+X-Received: by 2002:a19:5f07:0:b0:4dd:9f86:859d with SMTP id
+ t7-20020a195f07000000b004dd9f86859dmr5082021lfb.13.1687174616231; Mon, 19 Jun
+ 2023 04:36:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f9a7eebe-d36e-4587-b99d-35d4edefdd14@app.fastmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230619101224.22978-1-chanho.min@lge.com> <CACT4Y+Zn49-6R00buq-y_H0qs=4gBh6PBsJDFBptL8=h6GPQYA@mail.gmail.com>
+In-Reply-To: <CACT4Y+Zn49-6R00buq-y_H0qs=4gBh6PBsJDFBptL8=h6GPQYA@mail.gmail.com>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 19 Jun 2023 13:36:19 +0200
+Message-ID: <CANpmjNMSfVeDa-YC-RQcZ-V=wvHGi43xvXSvaR0GQkEP0OOmOQ@mail.gmail.com>
+Subject: Re: [PATCH] kasan: fix mention for KASAN_HW_TAGS
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Chanho Min <chanho.min@lge.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, gunho.lee@lge.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 01:38:29PM -0700, Andy Lutomirski wrote:
-> On Fri, Jun 16, 2023, at 1:50 AM, Mike Rapoport wrote:
-> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+On Mon, 19 Jun 2023 at 12:15, Dmitry Vyukov <dvyukov@google.com> wrote:
+> On Mon, 19 Jun 2023 at 12:12, Chanho Min <chanho.min@lge.com> wrote:
 > >
-> > module_alloc() is used everywhere as a mean to allocate memory for code.
-> >
-> > Beside being semantically wrong, this unnecessarily ties all subsystems
-> > that need to allocate code, such as ftrace, kprobes and BPF to modules
-> > and puts the burden of code allocation to the modules code.
-> >
-> > Several architectures override module_alloc() because of various
-> > constraints where the executable memory can be located and this causes
-> > additional obstacles for improvements of code allocation.
-> >
-> > Start splitting code allocation from modules by introducing
-> > execmem_text_alloc(), execmem_free(), jit_text_alloc(), jit_free() APIs.
-> >
-> > Initially, execmem_text_alloc() and jit_text_alloc() are wrappers for
-> > module_alloc() and execmem_free() and jit_free() are replacements of
-> > module_memfree() to allow updating all call sites to use the new APIs.
-> >
-> > The intention semantics for new allocation APIs:
-> >
-> > * execmem_text_alloc() should be used to allocate memory that must reside
-> >   close to the kernel image, like loadable kernel modules and generated
-> >   code that is restricted by relative addressing.
-> >
-> > * jit_text_alloc() should be used to allocate memory for generated code
-> >   when there are no restrictions for the code placement. For
-> >   architectures that require that any code is within certain distance
-> >   from the kernel image, jit_text_alloc() will be essentially aliased to
-> >   execmem_text_alloc().
-> >
-> 
-> Is there anything in this series to help users do the appropriate synchronization when the actually populate the allocated memory with code?  See here, for example:
-> 
-> https://lore.kernel.org/linux-fsdevel/cb6533c6-cea0-4f04-95cf-b8240c6ab405@app.fastmail.com/T/#u
+> > This patch removes description of the KASAN_HW_TAGS's memory consumption.
+> > KASAN_HW_TAGS does not set 1/32nd shadow memory.
+>
+> The hardware still allocates/uses shadow in MTE.
+> Though, it may be 1/16-th, not sure.
 
-We're still in need of an arch independent text_poke() api.
+I think the point is that it depends on the hardware implementation of
+MTE. There are a range of possibilities, but enabling KASAN_HW_TAGS
+doesn't consume any extra memory for tags itself if the hardware has
+to enable MTE and provision tag space via firmware to begin with.
+
+> > Signed-off-by: Chanho Min <chanho.min@lge.com>
+
+I think you just have to be a bit clearer in the commit description,
+just briefly mentioning how/where the tag space is allocated in
+hardware that do support MTE. Then removing this line is probably
+fair, if KASAN_HW_TAGS isn't the direct reason for tag memory being
+allocated.
