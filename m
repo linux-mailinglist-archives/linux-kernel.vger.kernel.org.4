@@ -2,79 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5F827360E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 02:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A9C7360E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 02:57:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbjFTA5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 20:57:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44958 "EHLO
+        id S229928AbjFTA5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 20:57:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbjFTA5Y (ORCPT
+        with ESMTP id S229899AbjFTA5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 20:57:24 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B286A10C6
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 17:57:21 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-25ea1b6b659so2191422a91.2
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 17:57:21 -0700 (PDT)
+        Mon, 19 Jun 2023 20:57:19 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166CDE7E
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 17:57:17 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-3fde5e37974so28943591cf.2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 17:57:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687222641; x=1689814641;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687222636; x=1689814636;
         h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
          :subject:references:in-reply-to:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gBIbwLVWMH//WD3Wf9PBLkgpgUav5DDPmHySKVJGkxs=;
-        b=D3pBN2EIf32vLSdkOh29A1LHMm5TMF2J2yQIlV+iG12cgfQi7sW66+VtTSFTha4Qv9
-         m1duhRu0twm1MEiaHVMvr3WRu4sndp7F+uut7wOSySJvDZdKfPntqjVVRWgJLKddienr
-         n8Duylo2Pvc8Tza4BPUFHnahRdrp3xP2Tf0xJQ63Wa7jKdr/WRzCiZMfBIRErprrGRP7
-         +tFi/s8npOZSaNj9aHIQg0ERzQBm0p/MbbOrZMctOiSxGP52VJ1hu1rSrTQTdub16CGJ
-         g7pciOXrFZCZ4Rf9UBiijSVoRM+yCNWwUSlqWkv3sY3qDa3yi1XGSz8HTEHIYzA1U7Ox
-         xMkg==
+        bh=vgrA10PlHqfUGfzRZzcrXtrkAeSCmc5QAg9LlgetDZ8=;
+        b=FNDZS5lsetRtZSn1PvfXIXdbXNMLt+Xn3NNjVym1JoLwcLXGf7cfedR9Y0g+IrPrgT
+         0G53k+RT6Qoh6HbJC3mpbatuGpalbeOZawDwpv64uWZpyGJh0ud1LMEB+Y6Ypk4YI2G/
+         hrU+G6o5lsdwxvzgTS3MgQ/8t+mXm4/l4CxzPElEvVrv8z4frsifWMcWWfCVfbLdVUVT
+         OXIPQeCjFi0lPYlDElB5KK+6gR4u4lHWZ11kN2a748MizOJwIcmQataCi6P5QmmKJuTA
+         x1+lHa96+wt++MZvX724HLKshHJ70P43ZstF0acjjSWhenE6A/meO8q2PZLcnK5jEIIU
+         rP8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687222641; x=1689814641;
+        d=1e100.net; s=20221208; t=1687222636; x=1689814636;
         h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
          :subject:references:in-reply-to:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gBIbwLVWMH//WD3Wf9PBLkgpgUav5DDPmHySKVJGkxs=;
-        b=N4DpXOaHXKonsl7HjuXgc4vubh8TMhr3VQhZliwmkMZJ7Qhs+l9IkNJ5YjCm2UEERF
-         n9PV0Go90y8F8DMZimjQnuSInLHtjlDC6ECQ3lWvrtVvgnuF6aX/J5A/hIT8BHvKkPLH
-         FX4OohYNt+nvyVTeH6Ecgo4eBBDClra3vKHQg0yLYk+avdsm5gHIsAwS601P+zwgR9Zx
-         mk9Ye4BL++fw2gVoMqNBCOx+eeKJJPKch9+TUBYr1u/33jKrZl5Tl5BlhHqn560sKoLP
-         yAxmcgj4gg9K29q7a3v8KEbAmvPr8/TdMffWB8KdeFyv+AvoGgix8uL21CMZgkL5J6zQ
-         rG5g==
-X-Gm-Message-State: AC+VfDx5TrxL/9+Xw1gYYnL4tzM0yGw2vZIA/nHVRifpCAD5+Jm3yrSi
-        Df6gDVZy6IjnkNYLw/k2bBJ8Ag==
-X-Google-Smtp-Source: ACHHUZ40lV3Zh+E3IFDyCnE48Nl/azsICbkSdfKF13FTWfxhYHUs6IYph016dX3P9sIQF3XRMcLR4w==
-X-Received: by 2002:a17:902:e543:b0:1b1:d51c:f3f6 with SMTP id n3-20020a170902e54300b001b1d51cf3f6mr11325151plf.57.1687222641217;
-        Mon, 19 Jun 2023 17:57:21 -0700 (PDT)
+        bh=vgrA10PlHqfUGfzRZzcrXtrkAeSCmc5QAg9LlgetDZ8=;
+        b=bl20FObJ/HfYfqoPv7E1mqhf+radzqa/sl3AfNsMbABaMH2c6Vkg3E8p+NXD+iw3HZ
+         LnwqADaz1zYrJAejdh7yJ/NV5XpREPbSSu84jj0kcosiPkfSq9iVGc9kxBaMk2vhVGoH
+         GQH6X8N4q48xPGYNGc8+kJFYVKCDYgJbw179PqtA70RMtuKGVNcH0hUiod1ofgcSJaYM
+         HYUna80X12aKen8scpK7mrIsHDd0kgEvVsWMRcKa9PyZON4Z7rrvhtxjl2kA3mgF09n9
+         2lAQEquAz0bz+8LPngPnmKfXLio+4ogBkmhCI7P/p1N3JRZ3UK/Xlq/Px1IGtyI3Fi1j
+         e7Tw==
+X-Gm-Message-State: AC+VfDxiV/mT6L3UStXJ3CTlo0T4rCNfBZmzTOpHzPpAmAWCx3B2+KpH
+        4YQeLzjyeaNYat4zvHrmpMxXmA==
+X-Google-Smtp-Source: ACHHUZ6b+THtxPksGqB7NfejvUSscrc9nACIvaaPTW2ypTct6ZfFy/dWI58bE/AsRZKwVf2/mXwozA==
+X-Received: by 2002:ac8:5fd2:0:b0:3f6:c0f7:a5c6 with SMTP id k18-20020ac85fd2000000b003f6c0f7a5c6mr15011128qta.46.1687222636182;
+        Mon, 19 Jun 2023 17:57:16 -0700 (PDT)
 Received: from localhost ([135.180.227.0])
-        by smtp.gmail.com with ESMTPSA id s6-20020a170902988600b001b20dc1b3b9sm375264plp.104.2023.06.19.17.57.20
+        by smtp.gmail.com with ESMTPSA id g6-20020a6544c6000000b00520f4ecd71esm202476pgs.93.2023.06.19.17.57.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 17:57:20 -0700 (PDT)
-In-Reply-To: <20230509182504.2997252-1-evan@rivosinc.com>
-References: <20230509182504.2997252-1-evan@rivosinc.com>
-Subject: Re: [PATCH v2 0/3] RISC-V: Export Zba, Zbb to usermode via hwprobe
-Message-Id: <168721242551.30028.288770602847866224.b4-ty@rivosinc.com>
+        Mon, 19 Jun 2023 17:57:15 -0700 (PDT)
+In-Reply-To: <20230519060854.214138-1-suagrfillet@gmail.com>
+References: <20230519060854.214138-1-suagrfillet@gmail.com>
+Subject: Re: [PATCH] riscv: hibernation: Replace jalr with jr before
+ suspend_restore_regs
+Message-Id: <168721242542.30028.8232901143224055307.b4-ty@rivosinc.com>
 Date:   Mon, 19 Jun 2023 15:07:05 -0700
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13-dev-901c5
-Cc:     Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Celeste Liu <coelacanthus@outlook.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
 From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Evan Green <evan@rivosinc.com>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
+        jeeheng.sia@starfivetech.com, mason.huo@starfivetech.com,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Song Shuai <suagrfillet@gmail.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -85,29 +77,16 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Tue, 09 May 2023 11:25:00 -0700, Evan Green wrote:
-> This change detects the presence of Zba, Zbb, and Zbs extensions and exports
-> them per-hart to userspace via the hwprobe mechanism. Glibc can then use
-> these in setting up hwcaps-based library search paths.
+On Fri, 19 May 2023 14:08:54 +0800, Song Shuai wrote:
+> No need to link the x1/ra reg via jalr before suspend_restore_regs
+> So it's better to replace jalr with jr.
 > 
-> There's a little bit of extra housekeeping here: the first change adds
-> Zba and Zbs to the set of extensions the kernel recognizes, and the second
-> change starts tracking ISA features per-hart (in addition to the ANDed
-> mask of features across all harts which the kernel uses to make
-> decisions). Now that we track the ISA information per-hart, we could
-> even fix up /proc/cpuinfo to accurately report extension per-hart,
-> though I've left that out of this series for now.
 > 
-> [...]
 
 Applied, thanks!
 
-[1/3] RISC-V: Add Zba, Zbs extension probing
-      https://git.kernel.org/palmer/c/c6699baf1064
-[2/3] RISC-V: Track ISA extensions per hart
-      https://git.kernel.org/palmer/c/82e9c66e81c8
-[3/3] RISC-V: hwprobe: Expose Zba, Zbb, and Zbs
-      https://git.kernel.org/palmer/c/c0baf321038d
+[1/1] riscv: hibernation: Replace jalr with jr before suspend_restore_regs
+      https://git.kernel.org/palmer/c/650ea2a1dd96
 
 Best regards,
 -- 
