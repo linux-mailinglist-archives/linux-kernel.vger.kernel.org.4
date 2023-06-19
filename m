@@ -2,175 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 279A1735DE6
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 21:38:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C95D735DE7
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 21:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbjFSTiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 15:38:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44972 "EHLO
+        id S229448AbjFSTih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 15:38:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjFSTiX (ORCPT
+        with ESMTP id S230457AbjFSTie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 15:38:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0D0106
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 12:37:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687203457;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tl6PHbc+VyYybGOhiv2rCh7kHt25l23EfmA39lRewBs=;
-        b=QX7U9x2bpKEp6A38t/CIUmQvut0vGIo/wqY6KKMd3yzC6c4j9NzA8uIgaMexN+Yo17icCw
-        P8KlpMFNnRKwUZ9gILIkZzfge0H1+kRNqDwRUCL8BrWtJn9b1jucdAj6bxwIN9u0UsHb2z
-        41qJwG/wBKbnh9bWHELXibW7b3EVNk4=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-146-2dqP3yp2N5G_baN2X2EUiA-1; Mon, 19 Jun 2023 15:37:36 -0400
-X-MC-Unique: 2dqP3yp2N5G_baN2X2EUiA-1
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7606a134623so60933685a.1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 12:37:36 -0700 (PDT)
+        Mon, 19 Jun 2023 15:38:34 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFBEDE71
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 12:38:31 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-be47a3b3a01so4003385276.2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 12:38:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687203511; x=1689795511;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=HCw2VH+vwapV6l/h+dF5z2IFI4Xz0i/+vWzvGaN0ULY=;
+        b=ob9C8F/z7W2ZwmjqKz/Cvine6FVUEUnDsKk1zQIsGAIkjG83xxDJzueWto4L0n6VBq
+         V0jkBXab7krBI+QchBRNdl5zRkUv1eEYXNfD54GlT4eg181CEItBbaNF2WGB6SkK9hWB
+         alN+QbwXqOPTUwn3IOEBhW6FQ6gX1+KEah/ycaLWU4tl5xVPL4aJXhvXNAhDb92wLKgG
+         JTv5Mp0z75TlwvOCjFlF6fz976sUTZfB1t/YeUx8BTpYTeRZaEJ7a9Gd6kCdydKWHfDx
+         4ZtGINXlu88f8GZnqSjrNh93MPA+YKVTVY4aOIaQXDRBafm7QJwqNuAvJ5Ho7Sr1UPRZ
+         Q8WQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687203455; x=1689795455;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tl6PHbc+VyYybGOhiv2rCh7kHt25l23EfmA39lRewBs=;
-        b=DrYRUksMIyNRXkmoiO/tNOrs9dl2IOS63TKyejHEf1kHCvaLZH82650ekJszFRXvP2
-         riHvEOJ404PaApGMzzqrDgKcfQcqt8FRKifsNUBVl9PKlQL/XE3ZDf89pLE1EXO4ERD3
-         jxZKGxwqbRf/+RDHsoxCXfxX5D5vBUx8a5xKoqLyaB+cIxymATVt1mDOnFbH37G+O5tC
-         z2kFpOObRAQiQ6uk6DZXmCsZ8T/u4DsGb/Ut5F1NvzVWbowbPlSPA+Mg4woRX4EIq5+B
-         HRHnoo6Xd1SwNksXQ3DTMBYnU3L/NaI/1Lkq5QLp0jnsB+iSvHhZ4ebOpl7AEtYXZmXK
-         yQcQ==
-X-Gm-Message-State: AC+VfDwAaop29cyiDjQV82ID4YJhuq98Nvz9g64TD0LzR8l0zfMdyJ87
-        dwWY2UF8pwkKPZk5PVBno4LZNaVUCLuqkZHSe6Z+heFofmkRuP19UPVS+3KcoimTB7DS4Lx8vHT
-        f8gK+OnglOO0ByPuYTFpP6oY5nqJ3HxLt
-X-Received: by 2002:a05:6214:5298:b0:62f:1283:6185 with SMTP id kj24-20020a056214529800b0062f12836185mr13121859qvb.2.1687203455489;
-        Mon, 19 Jun 2023 12:37:35 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6vycr93q9nZDfE7eqifHLn7LWkIsJW1lnFzitjV/i0b+6uSxUhyWoTVcx9J4AH10Kuev/zPQ==
-X-Received: by 2002:a05:6214:5298:b0:62f:1283:6185 with SMTP id kj24-20020a056214529800b0062f12836185mr13121850qvb.2.1687203455193;
-        Mon, 19 Jun 2023 12:37:35 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id f19-20020a0cf3d3000000b005fdbcab3065sm280254qvm.72.2023.06.19.12.37.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 12:37:34 -0700 (PDT)
-Date:   Mon, 19 Jun 2023 15:37:30 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        James Houghton <jthoughton@google.com>,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH 6/7] mm/gup: Accelerate thp gup even for "pages != NULL"
-Message-ID: <ZJCuepgy3+66S03G@x1n>
-References: <20230613215346.1022773-1-peterx@redhat.com>
- <20230613215346.1022773-7-peterx@redhat.com>
- <d8c76484-1030-44a3-b148-7e69fa84243a@lucifer.local>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <d8c76484-1030-44a3-b148-7e69fa84243a@lucifer.local>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        d=1e100.net; s=20221208; t=1687203511; x=1689795511;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HCw2VH+vwapV6l/h+dF5z2IFI4Xz0i/+vWzvGaN0ULY=;
+        b=KU6Rf0W2XM6w74mpGDxPiMJi+vN+m0noZYDC0fbq1+cLYSRBE2GKKyZNPW7ZUrH/kz
+         lAYinRD7evuTrE3oJjgn1duJ0GTq7FLsdFqvenHojcZTsKot1o5L1Xr2+fzyMXGJRzWR
+         vjne6Bfhu8XZH/Xw6VY1bHev0q1VF4BHmcLlPMw+wk+nAK4DFisyawCNAb+kaOUbQkPW
+         /TjnN3f8V5uTVMDykF8vrdgj2UpK2PWh35s77gosSwkUWEy0Y1QM590Zr8hB/sNqUBwY
+         TT84rVWLk9JMOyAZX48ai5ZqHchpsfKg03Kbpyk4EGCao5+gaXMHu0CmT+ydVTQbC3in
+         GN8g==
+X-Gm-Message-State: AC+VfDwIKcmwPdjSE0Zdj1m/gv0eWjaRWGINW9eNX5gIwrtjw71H4YmZ
+        QGV/Hfge/og+qdOZT6S+v+TbEloV3yA=
+X-Google-Smtp-Source: ACHHUZ5pfU5AaytiISOSDvFrNLXjh0g8DNDoFNsY2iGWO+BXyG7SrQ5ViqTG3yVka44liPSNzRY5KXR79KI=
+X-Received: from yuzhao.bld.corp.google.com ([2620:15c:183:202:6457:2153:f1fa:3f37])
+ (user=yuzhao job=sendgmr) by 2002:a25:23c1:0:b0:be7:ea0b:2702 with SMTP id
+ j184-20020a2523c1000000b00be7ea0b2702mr1031854ybj.12.1687203511044; Mon, 19
+ Jun 2023 12:38:31 -0700 (PDT)
+Date:   Mon, 19 Jun 2023 13:38:21 -0600
+Message-Id: <20230619193821.2710944-1-yuzhao@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.185.g7c58973941-goog
+Subject: [PATCH mm-unstable v1] mm/mglru: make memcg_lru->lock irq safe
+From:   Yu Zhao <yuzhao@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Yu Zhao <yuzhao@google.com>,
+        syzbot+87c490fd2be656269b6a@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 09:27:22PM +0100, Lorenzo Stoakes wrote:
-> On Tue, Jun 13, 2023 at 05:53:45PM -0400, Peter Xu wrote:
-> > The acceleration of THP was done with ctx.page_mask, however it'll be
-> > ignored if **pages is non-NULL.
-> >
-> > The old optimization was introduced in 2013 in 240aadeedc4a ("mm:
-> > accelerate mm_populate() treatment of THP pages").  It didn't explain why
-> > we can't optimize the **pages non-NULL case.  It's possible that at that
-> > time the major goal was for mm_populate() which should be enough back then.
-> >
-> > Optimize thp for all cases, by properly looping over each subpage, doing
-> > cache flushes, and boost refcounts / pincounts where needed in one go.
-> >
-> > This can be verified using gup_test below:
-> >
-> >   # chrt -f 1 ./gup_test -m 512 -t -L -n 1024 -r 10
-> >
-> > Before:    13992.50 ( +-8.75%)
-> > After:       378.50 (+-69.62%)
-> >
-> > Signed-off-by: Peter Xu <peterx@redhat.com>
-> > ---
-> >  mm/gup.c | 36 +++++++++++++++++++++++++++++-------
-> >  1 file changed, 29 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/mm/gup.c b/mm/gup.c
-> > index a2d1b3c4b104..cdabc8ea783b 100644
-> > --- a/mm/gup.c
-> > +++ b/mm/gup.c
-> > @@ -1210,16 +1210,38 @@ static long __get_user_pages(struct mm_struct *mm,
-> >  			goto out;
-> >  		}
-> >  next_page:
-> > -		if (pages) {
-> > -			pages[i] = page;
-> > -			flush_anon_page(vma, page, start);
-> > -			flush_dcache_page(page);
-> > -			ctx.page_mask = 0;
-> > -		}
-> > -
-> >  		page_increm = 1 + (~(start >> PAGE_SHIFT) & ctx.page_mask);
-> >  		if (page_increm > nr_pages)
-> >  			page_increm = nr_pages;
-> > +
-> > +		if (pages) {
-> > +			struct page *subpage;
-> > +			unsigned int j;
-> > +
-> > +			/*
-> > +			 * This must be a large folio (and doesn't need to
-> > +			 * be the whole folio; it can be part of it), do
-> > +			 * the refcount work for all the subpages too.
-> > +			 * Since we already hold refcount on the head page,
-> > +			 * it should never fail.
-> > +			 *
-> > +			 * NOTE: here the page may not be the head page
-> > +			 * e.g. when start addr is not thp-size aligned.
-> > +			 */
-> > +			if (page_increm > 1)
-> > +				WARN_ON_ONCE(
-> > +				    try_grab_folio(compound_head(page),
-> > +						   page_increm - 1,
-> > +						   foll_flags) == NULL);
-> 
-> I'm not sure this should be warning but otherwise ignoring this returning
-> NULL?  This feels like a case that could come up in realtiy,
-> e.g. folio_ref_try_add_rcu() fails, or !folio_is_longterm_pinnable().
+lru_gen_rotate_memcg() can happen in softirq if
+memory.soft_limit_in_bytes is set. This requires memcg_lru->lock to be
+irq safe.
 
-Note that we hold already at least 1 refcount on the folio (also mentioned
-in the comment above this chunk of code), so both folio_ref_try_add_rcu()
-and folio_is_longterm_pinnable() should already have been called on the
-same folio and passed.  If it will fail it should have already, afaict.
+This problem only affects memcg v1.
 
-I still don't see how that would trigger if the refcount won't overflow.
+Reported-by: syzbot+87c490fd2be656269b6a@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=87c490fd2be656269b6a
+Fixes: e4dde56cd208 ("mm: multi-gen LRU: per-node lru_gen_folio lists")
+Signed-off-by: Yu Zhao <yuzhao@google.com>
+---
+ mm/vmscan.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-Here what I can do is still guard this try_grab_folio() and fail the GUP if
-for any reason it failed.  Perhaps then it means I'll also keep that one
-untouched in hugetlb_follow_page_mask() too.  But I suppose keeping the
-WARN_ON_ONCE() seems still proper.
-
-Thanks,
-
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index 45d17c7cc555..27f90896f789 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -4759,10 +4759,11 @@ static void lru_gen_rotate_memcg(struct lruvec *lruvec, int op)
+ {
+ 	int seg;
+ 	int old, new;
++	unsigned long flags;
+ 	int bin = get_random_u32_below(MEMCG_NR_BINS);
+ 	struct pglist_data *pgdat = lruvec_pgdat(lruvec);
+ 
+-	spin_lock(&pgdat->memcg_lru.lock);
++	spin_lock_irqsave(&pgdat->memcg_lru.lock, flags);
+ 
+ 	VM_WARN_ON_ONCE(hlist_nulls_unhashed(&lruvec->lrugen.list));
+ 
+@@ -4797,7 +4798,7 @@ static void lru_gen_rotate_memcg(struct lruvec *lruvec, int op)
+ 	if (!pgdat->memcg_lru.nr_memcgs[old] && old == get_memcg_gen(pgdat->memcg_lru.seq))
+ 		WRITE_ONCE(pgdat->memcg_lru.seq, pgdat->memcg_lru.seq + 1);
+ 
+-	spin_unlock(&pgdat->memcg_lru.lock);
++	spin_unlock_irqrestore(&pgdat->memcg_lru.lock, flags);
+ }
+ 
+ void lru_gen_online_memcg(struct mem_cgroup *memcg)
+@@ -4810,7 +4811,7 @@ void lru_gen_online_memcg(struct mem_cgroup *memcg)
+ 		struct pglist_data *pgdat = NODE_DATA(nid);
+ 		struct lruvec *lruvec = get_lruvec(memcg, nid);
+ 
+-		spin_lock(&pgdat->memcg_lru.lock);
++		spin_lock_irq(&pgdat->memcg_lru.lock);
+ 
+ 		VM_WARN_ON_ONCE(!hlist_nulls_unhashed(&lruvec->lrugen.list));
+ 
+@@ -4821,7 +4822,7 @@ void lru_gen_online_memcg(struct mem_cgroup *memcg)
+ 
+ 		lruvec->lrugen.gen = gen;
+ 
+-		spin_unlock(&pgdat->memcg_lru.lock);
++		spin_unlock_irq(&pgdat->memcg_lru.lock);
+ 	}
+ }
+ 
+@@ -4845,7 +4846,7 @@ void lru_gen_release_memcg(struct mem_cgroup *memcg)
+ 		struct pglist_data *pgdat = NODE_DATA(nid);
+ 		struct lruvec *lruvec = get_lruvec(memcg, nid);
+ 
+-		spin_lock(&pgdat->memcg_lru.lock);
++		spin_lock_irq(&pgdat->memcg_lru.lock);
+ 
+ 		VM_WARN_ON_ONCE(hlist_nulls_unhashed(&lruvec->lrugen.list));
+ 
+@@ -4857,7 +4858,7 @@ void lru_gen_release_memcg(struct mem_cgroup *memcg)
+ 		if (!pgdat->memcg_lru.nr_memcgs[gen] && gen == get_memcg_gen(pgdat->memcg_lru.seq))
+ 			WRITE_ONCE(pgdat->memcg_lru.seq, pgdat->memcg_lru.seq + 1);
+ 
+-		spin_unlock(&pgdat->memcg_lru.lock);
++		spin_unlock_irq(&pgdat->memcg_lru.lock);
+ 	}
+ }
+ 
 -- 
-Peter Xu
+2.41.0.185.g7c58973941-goog
 
