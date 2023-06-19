@@ -2,113 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F27735C3D
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 18:41:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B282735C40
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 18:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232317AbjFSQlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 12:41:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42752 "EHLO
+        id S231954AbjFSQl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 12:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232298AbjFSQlD (ORCPT
+        with ESMTP id S231636AbjFSQlx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 12:41:03 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CFBFFA
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:41:03 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id d75a77b69052e-3fde82c8ca7so25527991cf.3
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:41:03 -0700 (PDT)
+        Mon, 19 Jun 2023 12:41:53 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46022DD
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:41:52 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f9083d8849so29471705e9.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:41:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687192862; x=1689784862;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mcV19aRCquvCQdRFuACW3XW/4/XQ46XTCmzcnj1+5kE=;
-        b=QGEI9H8MCmtVcf8VSUAwJPRiCKL9aS3yCq3ltJqJz2LQ9Zp1dwEVzyamh1ME5fzMpc
-         WmFhdVtC68JdF8KqozhMLXhC5yYx5AvQSJRCadMn/tBX9RQo4cZbwb42RY0Y/TwSz5B1
-         gdj/GN++JQv9ifPPKq7RnypplBIZAPi6T3c1hcttr3aTViTw35/X+Y61BfrLVf/AVAA8
-         qZJzzT0c0jWHuea2C0q98Lp6NXg9/3TCbqvsZHr9QwgzjHjOenNDxFvK2WTsBDjbHxRw
-         eY9jtA5SxRRiwVgP0IfRoVngaaqbZdQanQi0Q6LEN3aUYXRkrHds2dLwS5hkMM4z63Ns
-         uQlw==
+        d=arista.com; s=google; t=1687192911; x=1689784911;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ibNl8hagn3rTly8LUTpZEDxxRnM23ysNCd6OX53mne8=;
+        b=kPezCUnVg3j3Fk/Uq6JUrVFKWzbGW0Ll1GLgoW75fYv7O7ORrpHKAOsmnXohdQ8auu
+         vjOZvJTe/A1C63Z2PX4W56gGJs7dtF3urgNos6T1fqfLXqxrkdUDzAkxPPCWcnS8OTgs
+         TyYJKnOiu6P08SHtX1spdj7HxAOyu9KuLjV11E+od3lm66RbWTwsN66KjsQuRZTuOuCv
+         agl2UYrFCg3TiV4NvhX0CQkvWHdI5qlq4z2P84XyaVM+bWAg1UfNmQuqKfeBiCJgEZg2
+         XGWpHyOovrfhUHkqN2qftnVxpIqAl403XTtAbjOlvnnDGKAZXo6CWWOJ73rTFyBGjqtZ
+         rIig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687192862; x=1689784862;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=mcV19aRCquvCQdRFuACW3XW/4/XQ46XTCmzcnj1+5kE=;
-        b=j+yJDb6r56lwp6T4+vQ6J8KLgMsxLRrO6LVaX6Wv44uqRaqXNwx5020EGH+cYVkQFt
-         89KYh2nZupX+0SBPdFjJyt0A9MJuuQW9l8HEjlKCvr4Ug2uJiPlt+6g0D0a0PZiSlbm/
-         drcYc4AenbYJTHIlS19Npgrjs5/zXdA4Y0QlU4GI4a3QZC29e3zmWJVUDDNpFBegt+ej
-         xDzA5+RK5PYcdnas80AoN291z7TE7sS6Q+d6epYMapuQ13gQ0qO20H6mSEto6fdRdY9U
-         28wXRSO/zmecyazSjt+MYeCgS9cFaTur54so5XpZBtjmmpjBWkH6GkMO4pKMaG40zP84
-         trLA==
-X-Gm-Message-State: AC+VfDxvxwPj09VT6senIhy/Fm1wTycEtbMUBr1Q2L5IpS8wka/wKP+C
-        YC5jV3qWQIKQPI2jbcGd+Q==
-X-Google-Smtp-Source: ACHHUZ4mXi2yn6+G8lN33A77Se7WDpZn/bDqisFwDZPDhH9CwrLCxxQQVoujDd96nGPvlwdEdAo7tQ==
-X-Received: by 2002:a05:622a:54f:b0:3ff:21f1:949 with SMTP id m15-20020a05622a054f00b003ff21f10949mr1778733qtx.9.1687192861829;
-        Mon, 19 Jun 2023 09:41:01 -0700 (PDT)
-Received: from serve.minyard.net ([47.184.157.108])
-        by smtp.gmail.com with ESMTPSA id z17-20020ac87cb1000000b003f86c08b3e7sm68644qtv.21.2023.06.19.09.41.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 09:41:01 -0700 (PDT)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from mail.minyard.net (unknown [IPv6:2001:470:b8f6:1b:3c66:2774:dcfe:891a])
-        by serve.minyard.net (Postfix) with ESMTPSA id 4C3DA1800E8;
-        Mon, 19 Jun 2023 16:41:00 +0000 (UTC)
-Date:   Mon, 19 Jun 2023 11:40:59 -0500
-From:   Corey Minyard <minyard@acm.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     kamlakantp@marvell.com, openipmi-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ipmi:ssif: Add check for kstrdup
-Message-ID: <ZJCFG3o4JL/OL9WU@mail.minyard.net>
-Reply-To: minyard@acm.org
-References: <20230619092802.35384-1-jiasheng@iscas.ac.cn>
+        d=1e100.net; s=20221208; t=1687192911; x=1689784911;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ibNl8hagn3rTly8LUTpZEDxxRnM23ysNCd6OX53mne8=;
+        b=AaPWMqTHBg3+rn0luvmceJoZTXfZbXbuNy+y7IgOmNaauz94+Ua2r/NVg3CGLVtnm+
+         nphGj3tVkvMOY6qs7S4NzIEaTMW58o+Xyo4+PuU7H3TutSnG1tSyHIBuvFTFfpKc9HO4
+         K771wzAYEZZ2CyjsB5mRK/BDe0lUYU7p7RYZW0q2QPGpuqjveMmcD6e5Df+14MLtgNhQ
+         /5XtUB0L3wu3Y9lagl531mradXyCP5RGNhuEH69146+daYbJaNdeEGiPbIzJCRGJUHHj
+         5X8x2mz3PP+8hFHhISUstzHJ7/yCrUkFZEfDi+lKN4N77gEQEl3waebTAFkq0m+o7Pdu
+         4xPw==
+X-Gm-Message-State: AC+VfDxzliXBw2xP+m6PfiiVQ9cGGo5TaJWUc2c8fa7GEYgYYG7dPZM7
+        IKBhCfY5VJSZQkg8MASD1NX4GA==
+X-Google-Smtp-Source: ACHHUZ5YA9SJlPEJfePsXwU8aR532C5VQlv4CirPkKCK3EEV97r3WWChCB1H8ckLL/a74gTEf5Eidg==
+X-Received: by 2002:a1c:f709:0:b0:3f6:9634:c8d6 with SMTP id v9-20020a1cf709000000b003f69634c8d6mr9034792wmh.18.1687192910721;
+        Mon, 19 Jun 2023 09:41:50 -0700 (PDT)
+Received: from [10.83.37.24] ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id z8-20020a05600c220800b003f9b12b1598sm3232781wml.22.2023.06.19.09.41.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Jun 2023 09:41:50 -0700 (PDT)
+Message-ID: <9ae5c977-ff9c-591d-3a32-ca9dd00d531e@arista.com>
+Date:   Mon, 19 Jun 2023 17:41:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230619092802.35384-1-jiasheng@iscas.ac.cn>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v7 04/22] net/tcp: Prevent TCP-MD5 with TCP-AO being set
+Content-Language: en-US
+To:     David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     linux-kernel@vger.kernel.org,
+        Andy Lutomirski <luto@amacapital.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Bob Gilligan <gilligan@arista.com>,
+        Dan Carpenter <error27@gmail.com>,
+        David Laight <David.Laight@aculab.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Donald Cassidy <dcassidy@redhat.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Francesco Ruggeri <fruggeri05@gmail.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Ivan Delalande <colona@arista.com>,
+        Leonard Crestez <cdleonard@gmail.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        netdev@vger.kernel.org
+References: <20230614230947.3954084-1-dima@arista.com>
+ <20230614230947.3954084-5-dima@arista.com>
+ <85077827-d11d-d3e6-0d23-9e60974cad0f@kernel.org>
+ <1c2537d0-cf64-c010-fec6-9fa9ad758f42@arista.com>
+From:   Dmitry Safonov <dima@arista.com>
+In-Reply-To: <1c2537d0-cf64-c010-fec6-9fa9ad758f42@arista.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 05:28:02PM +0800, Jiasheng Jiang wrote:
-> Add check for the return value of kstrdup() and return the error
-> if it fails in order to avoid NULL pointer dereference.
+On 6/19/23 17:31, Dmitry Safonov wrote:
+> Hi David,
+> 
+> On 6/18/23 18:50, David Ahern wrote:
+>> On 6/14/23 4:09 PM, Dmitry Safonov wrote:
+>>> Be as conservative as possible: if there is TCP-MD5 key for a given peer
+>>> regardless of L3 interface - don't allow setting TCP-AO key for the same
+>>> peer. According to RFC5925, TCP-AO is supposed to replace TCP-MD5 and
+>>> there can't be any switch between both on any connected tuple.
+>>> Later it can be relaxed, if there's a use, but in the beginning restrict
+>>> any intersection.
+>>>
+>>> Note: it's still should be possible to set both TCP-MD5 and TCP-AO keys
+>>> on a listening socket for *different* peers.
+>>
+>> Does the testsuite cover use of both MD5 and AO for a single listening
+>> socket with different peers and then other tests covering attempts to
+>> use both for a same peer?
+> 
+> Thanks for the question, I have written the following tests for
+> AO/MD5/unsigned listening socket [1]:
+> 
+> 1. Listener with TCP-AO key, which has addr = INADDR_ANY
+> 2. Listener with TCP-MD5 key, which has tcpm_addr = INADDR_ANY
+> 3. Listener without any key
+> 
+> Then there's AO_REQUIRED thing, which BGP folks asked to introduce,
+> which is (7.3) from RFC5925, an option that is per-ao_info, which makes
+> such socket accepting only TCP-AO enabled segments.
+> 
+> So, 4. Listener with TCP-AO, AO_REQUIRED flag.
+> 
+> And then, going to non-INADDR_ANY:
+> 5. Listener with TCP-AO and TCP-MD5 keys for different peers.
+> 
+> Here again, for each of AO/MD5/unsigned methods, attempt to connect:
+> 6. outside of both key peers
+> 7. inside correct key: i.e. TCP-MD5 client to TCP-MD5 matching key
+> 8. to a wrong key: i.e. TCP-AO client to TCP-MD5 matching key
+> 
+> And another type of checks are the ones expecting *setsockopt()* to fail:
+> 9. Adding TCP-AO key that matches the same peer as TCP-MD5 key
+> 10. The reverse situation
+> 11. Adding TCP-MD5 key to AO_REQUIRED socket
+> 12. Setting AO_REQUIRED on a socket with TCP-MD5 key
+> 13. Adding TCP-AO key on already established connection without any key
 
-Thanks, this is in my next tree.
+Oh, yeah, forgot to mention, there are another 2 tests for TCP_CLOSE
+socket (just a new one), that has both TCP-AO and TCP-MD5 keys and tries
+to call connect(). In discussion with the team, it seems really
+unexpected situation and better to force userspace to remove either AO
+or MD5 key before calling connect(). Those from the output in [1] are:
 
--corey
+> ok 39 AO+MD5 server: client with both [TCP-MD5] and TCP-AO keys:
+connect() was prevented
+> ok 40 AO+MD5 server: client with both TCP-MD5 and [TCP-AO] keys:
+connect() was prevented
 
 > 
-> Fixes: c4436c9149c5 ("ipmi_ssif: avoid registering duplicate ssif interface")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
->  drivers/char/ipmi/ipmi_ssif.c | 5 +++++
->  1 file changed, 5 insertions(+)
+> And then another bunch of tests that check TCP-AO/TCP-MD5/unsigned
+> interaction in non/default VRFs.
+> I think the output of selftest [1] is more-or-less self-descriptive,
+> correct me if I could improve that.
 > 
-> diff --git a/drivers/char/ipmi/ipmi_ssif.c b/drivers/char/ipmi/ipmi_ssif.c
-> index 3b921c78ba08..3b87a2726e99 100644
-> --- a/drivers/char/ipmi/ipmi_ssif.c
-> +++ b/drivers/char/ipmi/ipmi_ssif.c
-> @@ -1600,6 +1600,11 @@ static int ssif_add_infos(struct i2c_client *client)
->  	info->addr_src = SI_ACPI;
->  	info->client = client;
->  	info->adapter_name = kstrdup(client->adapter->name, GFP_KERNEL);
-> +	if (!info->adapter_name) {
-> +		kfree(info);
-> +		return -ENOMEM;
-> +	}
-> +
->  	info->binfo.addr = client->addr;
->  	list_add_tail(&info->link, &ssif_infos);
->  	return 0;
-> -- 
-> 2.25.1
-> 
+> [1]
+> https://github.com/0x7f454c46/linux/commit/d7b321f2b5a481e5ff0e80e2e0b3503b1ddb9817
+
+Thanks,
+          Dmitry
+
