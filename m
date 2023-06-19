@@ -2,98 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FEE7735D33
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 19:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 229D1735D32
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 19:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231858AbjFSR5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 13:57:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
+        id S231653AbjFSR5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 13:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230507AbjFSR5j (ORCPT
+        with ESMTP id S229537AbjFSR5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 13:57:39 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1FB612A
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 10:57:38 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-986d871a9beso483896866b.1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 10:57:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20221208; t=1687197457; x=1689789457;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=91ya57sBghq3g7zgKLiTtn0v+IyDnYxUjv4qrxeCvmY=;
-        b=qCgGxfZGGUDTq8y218bOMBxMHfghmE+40/FS+XHNOrQ6bDXIzOXaGc3K+U3rim5Mzs
-         mqbUcyLVy465st22BiXCyl1ttiGydkBOphM4SCT4+U3IJWgWbNpxfJwV9Cl7H+YqZjOt
-         T+heN1Rzrqo9QtHxXJZCgUXZqAoDU+thbTp4QV5C4Oti8q8rDaens4YAHYHhy9Rs3/4h
-         vrnCbUkpc9Ppy9wySKEYCpIwX+0Pwo1L0eohpCLZZag4Lz0hSZNc91fwE159S1oxGkiP
-         eruUlWwxn53ddn+R540EbaEkhE9f+bJ/oMikHWm548MlIpc1lP43ecoMVV4Z8xeUCw2y
-         vAzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687197457; x=1689789457;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=91ya57sBghq3g7zgKLiTtn0v+IyDnYxUjv4qrxeCvmY=;
-        b=aKR8vxfTklFCr2GLR7VdFS723sL9c25tWGiyaErLhGZHMmqC2Yk0o7WwUWqNryCaFx
-         kVAJ8B3eusDbbk0dHLvJXifo/VAi8F4HcvdOwr6O1sroVFfZnV8N0F9AAeeYnIM+6wEA
-         W4Yu9Te18NbtQ9g266T6Jxy2a1MRJhs0lgztBLqc7ln4eeG9aX5IhlIRDOvxrEEsGNn8
-         X2Wc5Cx95SDegG9PP8lNwtQTYmtpQKIgNQuU1fIy0lvJDWGxQogrgDnd4+lhucNIKV8G
-         Aj0IFz5wXqLo45AhJd11PrFkXdFDV+h3a759FHDvUqcv2Vg8yrx7+Bdipz+YR3SV5QlC
-         W/QA==
-X-Gm-Message-State: AC+VfDwp5j9toYNZIwtRsL3TwihrF8ySsl13aCvInOxh/Mw/ODYdXkPT
-        znODipmaSk5UR7JJdv07j3M=
-X-Google-Smtp-Source: ACHHUZ48OeFtLT4mS1Z/ABnCYeFsOL8xaJk3NajO43nO0+eZCexBqnnfhnemhJ+YejJg+rJ+akVKKA==
-X-Received: by 2002:a17:907:1609:b0:986:4789:1029 with SMTP id hb9-20020a170907160900b0098647891029mr10134421ejc.23.1687197457026;
-        Mon, 19 Jun 2023 10:57:37 -0700 (PDT)
-Received: from localhost.localdomain ([2a02:810a:9640:26a8:dcda:2154:7873:34])
-        by smtp.gmail.com with ESMTPSA id q25-20020a170906145900b0098503ba0db4sm9146ejc.149.2023.06.19.10.57.36
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 19 Jun 2023 10:57:36 -0700 (PDT)
-From:   Franziska Naepelt <franziska.naepelt@googlemail.com>
-X-Google-Original-From: Franziska Naepelt <franziska.naepelt@gmail.com>
-To:     linux-staging@lists.linux.dev
-Cc:     linux-kernel@vger.kernel.org, eperi1024@gmail.com,
-        hdegoede@redhat.com, quic_vjakkam@quicinc.com,
-        johannes.berg@intel.com, tegongkang@gmail.com,
-        gregkh@linuxfoundation.org,
-        Franziska Naepelt <franziska.naepelt@gmail.com>
-Subject: [PATCH 0/5] Fix some checkpatch issues
-Date:   Mon, 19 Jun 2023 19:57:03 +0200
-Message-Id: <20230619175703.18826-1-franziska.naepelt@gmail.com>
-X-Mailer: git-send-email 2.39.2 (Apple Git-143)
+        Mon, 19 Jun 2023 13:57:15 -0400
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6989312A;
+        Mon, 19 Jun 2023 10:57:12 -0700 (PDT)
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id 808C4518; Mon, 19 Jun 2023 12:57:10 -0500 (CDT)
+Date:   Mon, 19 Jun 2023 12:57:10 -0500
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     Ben Dooks <ben.dooks@codethink.co.uk>
+Cc:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, serge@hallyn.com,
+        Paul Moore <paul@paul-moore.com>
+Subject: Re: [PATCH] capabilities: fix sparse warning about __user access
+Message-ID: <20230619175710.GA200481@mail.hallyn.com>
+References: <20230619123535.324632-1-ben.dooks@codethink.co.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230619123535.324632-1-ben.dooks@codethink.co.uk>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a series of patches to fix some trivial checkpatch issues. Not all
-issues have been fixed. I intend to submit another series to fix more stuff.
+On Mon, Jun 19, 2023 at 01:35:35PM +0100, Ben Dooks wrote:
+> The two syscalls for capget and capset are producing sparse warnings
+> as sparse is thinking that the "struct __user_cap_data_struct" is marked
+> user, which seems to be down to the declaration and typedef at the same
+> time.
+> 
+> Fix the following warnings by splutting the struct declaration and then
+> the user typedef into two:
 
-Testing:
-* Build the kernel with `CONFIG_RTL8723BS=m`
-* Boot the kernel with busybox in initramfs
-* Load the module
--> No errors or warnings
+I'm not a fan of making code changes to work around scanners'
+shortcomings, mainly because eventually I assume the scanners
+will learn to deal with it.
 
-Franziska Naepelt (5):
-  staging: rtl8723bs: Fix indentation issues
-  staging: rtl8723bs: Fix space issues
-  staging: rtl8723bs: Fix block comment issue
-  staging: rtl8723bs: Fix blank line issues
-  staging: rtl8723bs: Fix alignment open parenthesis
+However, I don't like the all-in-one typedef+struct definition
+either, so let's go with it :)
 
- .../staging/rtl8723bs/os_dep/ioctl_cfg80211.c | 224 +++++++-----------
- 1 file changed, 92 insertions(+), 132 deletions(-)
+Paul, do you mind picking this up?
 
+thanks,
+-serge
 
-base-commit: 45a3e24f65e90a047bef86f927ebdc4c710edaa1
---
-2.39.2 (Apple Git-143)
+> kernel/capability.c:191:35: warning: incorrect type in argument 2 (different address spaces)
+> kernel/capability.c:191:35:    expected void const *from
+> kernel/capability.c:191:35:    got struct __user_cap_data_struct [noderef] __user *
+> kernel/capability.c:168:14: warning: dereference of noderef expression
+> kernel/capability.c:168:45: warning: dereference of noderef expression
+> kernel/capability.c:169:14: warning: dereference of noderef expression
+> kernel/capability.c:169:45: warning: dereference of noderef expression
+> kernel/capability.c:170:14: warning: dereference of noderef expression
+> kernel/capability.c:170:45: warning: dereference of noderef expression
+> kernel/capability.c:244:29: warning: incorrect type in argument 1 (different address spaces)
+> kernel/capability.c:244:29:    expected void *to
+> kernel/capability.c:244:29:    got struct __user_cap_data_struct [noderef] __user ( * )[2]
+> kernel/capability.c:247:42: warning: dereference of noderef expression
+> kernel/capability.c:247:64: warning: dereference of noderef expression
+> kernel/capability.c:248:42: warning: dereference of noderef expression
+> kernel/capability.c:248:64: warning: dereference of noderef expression
+> kernel/capability.c:249:42: warning: dereference of noderef expression
+> kernel/capability.c:249:64: warning: dereference of noderef expression
+> 
+> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
 
+Reviewed-by: Serge Hallyn <serge@hallyn.com>
+
+> ---
+>  include/uapi/linux/capability.h | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/uapi/linux/capability.h b/include/uapi/linux/capability.h
+> index 3d61a0ae055d..5bb906098697 100644
+> --- a/include/uapi/linux/capability.h
+> +++ b/include/uapi/linux/capability.h
+> @@ -41,11 +41,12 @@ typedef struct __user_cap_header_struct {
+>  	int pid;
+>  } __user *cap_user_header_t;
+>  
+> -typedef struct __user_cap_data_struct {
+> +struct __user_cap_data_struct {
+>          __u32 effective;
+>          __u32 permitted;
+>          __u32 inheritable;
+> -} __user *cap_user_data_t;
+> +};
+> +typedef struct __user_cap_data_struct __user *cap_user_data_t;
+>  
+>  
+>  #define VFS_CAP_REVISION_MASK	0xFF000000
+> -- 
+> 2.39.2
