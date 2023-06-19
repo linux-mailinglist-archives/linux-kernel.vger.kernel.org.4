@@ -2,102 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FFB9735AFC
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:18:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D143F735AFE
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:19:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231573AbjFSPSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 11:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37592 "EHLO
+        id S231629AbjFSPTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 11:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbjFSPSb (ORCPT
+        with ESMTP id S229711AbjFSPTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 11:18:31 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9369B9;
-        Mon, 19 Jun 2023 08:18:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=fnh6RCNEHzHmS6/XhMUtUgMq0ysRFuFiukVtZgZImCA=; b=yZwwXIIj5HgDds8uv5azf2KFL/
-        2uOyxDsC2zQx94/fuYz/HMXyE8iaMYuq7Pq7xMj1XEJ5+hejE1RPa95u1uWWylGSY/5YnXx9JYyX3
-        SGMuBbGF7xcCb388EMh5vL4UnxNMcKbq+xqjH3mH9qMrNY50KdylIB/2upUvNJzaRXSKhYF9BACD4
-        8VNgCFIG8/QxP4ULg3KhAPOu2qEAY+ZryZrIWPBrpgN/g1jcybCU7SBpwX5oMvJG601MHpDM4ItjB
-        QF5tdzW6P3J3PQhI44QvbuZFczBKdCYVuSyNXLAP38+ZAEWpKO1NBeue+wryY/JADpJ17hBvPTD+j
-        rPNWaCaQ==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qBGeB-008lL4-01;
-        Mon, 19 Jun 2023 15:18:27 +0000
-Message-ID: <7c7cc6b2-5c63-f893-d4ac-fcea40b2a4b4@infradead.org>
-Date:   Mon, 19 Jun 2023 08:18:25 -0700
+        Mon, 19 Jun 2023 11:19:16 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558CB9B;
+        Mon, 19 Jun 2023 08:19:15 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0DB961F88B;
+        Mon, 19 Jun 2023 15:19:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1687187954; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BxX0JR9pCiqX52Q86QN+MVAg4XLHJ++XGVzlT7hnH14=;
+        b=g+YutJ0hLg8FV8N7BnfQi4VR/A8bq9g/lIidDNG3k4i1JkpFe+BJdnOx9ZuJ5XTqP61T7N
+        wxfB9Ep1ev8uV0C/OhnGKTsF3xO3L5kSfjzV3gQ+d8mz7a/6Y+dmtpT7pAiQpBCcpZqapw
+        tQik1aixlJIXoSQn2K+tarMHBd761rU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1687187954;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BxX0JR9pCiqX52Q86QN+MVAg4XLHJ++XGVzlT7hnH14=;
+        b=bIQmVuT6O2DhUaekn7EDcUK8P+v+BH7/hZFFW81fcngvvWtsgrZIGgwABzZDRpCDmM+1yG
+        XlEIW71I6CsfUmDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DC759139C2;
+        Mon, 19 Jun 2023 15:19:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ps8TNPFxkGTDOwAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Mon, 19 Jun 2023 15:19:13 +0000
+Date:   Mon, 19 Jun 2023 17:19:12 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Marius Hoch <mail@mariushoch.de>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] i2c: i801: Force no IRQ for Dell Latitude E7450
+Message-ID: <20230619171912.5407a7eb@endymion.delvare>
+In-Reply-To: <967411b3-7013-619e-4fef-90644fa8d489@mariushoch.de>
+References: <20230514103634.235917-1-mail@mariushoch.de>
+        <20230523200350.62ab4788@endymion.delvare>
+        <59a6a917-2a93-d52d-37f3-091295dd0db4@mariushoch.de>
+        <20230604160132.102dd6a7@endymion.delvare>
+        <967411b3-7013-619e-4fef-90644fa8d489@mariushoch.de>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] s390/net: lcs: use IS_ENABLED() for kconfig detection
-Content-Language: en-US
-To:     Alexandra Winter <wintera@linux.ibm.com>,
-        patchwork-bot+netdevbpf@kernel.org
-Cc:     linux-kernel@vger.kernel.org, wenjia@linux.ibm.com,
-        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com
-References: <20230615222152.13250-1-rdunlap@infradead.org>
- <168690302072.8823.785077843270614259.git-patchwork-notify@kernel.org>
- <4f2afa34-830a-3c17-99e7-1cb5b874e7ce@linux.ibm.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <4f2afa34-830a-3c17-99e7-1cb5b874e7ce@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, 18 Jun 2023 15:42:40 +0200, Marius Hoch wrote:
+> I just booted with acpi=3Dnoirq, the PCI device no longer fails to be=20
+> enabled and the device got assigned IRQ 19 now (according to lspci -v/=20
+> proc/interrupts), while the freefall device remained at IRQ 18.
+> Interestingly dmesg is full of spam from the freefall device (endlessly=20
+> reporting that freefall got detected, probably indicating a problem in=20
+> IRQ handling, yikes).
 
+Unfortunately, while acpi=3Dnoirq can be useful for testing purposes and
+bug investigation, there's no guarantee that a modern x86 system can
+actually work properly without ACPI-based PCI routing.
 
-On 6/19/23 03:04, Alexandra Winter wrote:
-> 
-> 
-> On 16.06.23 10:10, patchwork-bot+netdevbpf@kernel.org wrote:
->> Hello:
->>
->> This patch was applied to netdev/net-next.git (main)
->> by David S. Miller <davem@davemloft.net>:
->>
->> On Thu, 15 Jun 2023 15:21:52 -0700 you wrote:
->>> When CONFIG_ETHERNET=m or CONFIG_FDDI=m, lcs.s has build errors or
->>> warnings:
->>>
->  
-> IIUC, CONFIG_ETHERNET is bool.
+> Booting without the smo8800 module results in:
+> [root@fedora ~]# dmesg | grep -i smbus
+> [=C2=A0=C2=A0 20.042515] i801_smbus 0000:00:1f.3: PCI->APIC IRQ transform=
+: INT C=20
+> -> IRQ 19 =20
+> [=C2=A0=C2=A0 20.042548] i801_smbus 0000:00:1f.3: SPD Write Disable is set
+> [=C2=A0=C2=A0 20.042574] i801_smbus 0000:00:1f.3: SMBus using PCI interru=
+pt
+> [=C2=A0=C2=A0 20.051270] i801_smbus 0000:00:1f.3: Accelerometer lis3lv02d=
+ is=20
+> present on SMBus but its address is unknown, skipping registration
+> [=C2=A0=C2=A0 20.253942] i801_smbus 0000:00:1f.3: Transaction timeout
+> [=C2=A0=C2=A0 20.461962] i801_smbus 0000:00:1f.3: Transaction timeout
+>=20
+> The "Transaction timeout" messages might indicate that interrupt routing=
+=20
+> isn't actually working?
 
-duh, yes. Thanks.
+Indeed. This means the driver waited for an interrupt but was never
+called back.
 
-> I reproduced this with CONFIG_ETHERNET=n and CONFIG_FDDI=m,
-> and verified that it does compile with your patch.
-> 
-> Thank you Randy for correcting this.
-> 
->>> ../drivers/s390/net/lcs.c:40:2: error: #error Cannot compile lcs.c without some net devices switched on.
->>>    40 | #error Cannot compile lcs.c without some net devices switched on.
->>> ../drivers/s390/net/lcs.c: In function 'lcs_startlan_auto':
->>> ../drivers/s390/net/lcs.c:1601:13: warning: unused variable 'rc' [-Wunused-variable]
->>>  1601 |         int rc;
->>>
->>> [...]
->>
->> Here is the summary with links:
->>   - s390/net: lcs: use IS_ENABLED() for kconfig detection
->>     https://git.kernel.org/netdev/net-next/c/128272336120
->>
->> You are awesome, thank you!
-> 
-
--- 
-~Randy
+--=20
+Jean Delvare
+SUSE L3 Support
