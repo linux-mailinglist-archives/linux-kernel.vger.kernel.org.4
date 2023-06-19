@@ -2,139 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FDAD735AEC
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:14:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2DAB735AEF
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231454AbjFSPOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 11:14:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35472 "EHLO
+        id S231491AbjFSPOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 11:14:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231225AbjFSPOe (ORCPT
+        with ESMTP id S231476AbjFSPOh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 11:14:34 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2072.outbound.protection.outlook.com [40.107.255.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC4709B
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:14:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F+4LxN+zliuEKylx9g7A7l0RoF0dfe0mREeNIrmVI5W70NBVL34zXXZQYVuWeojUesEcmRRO9JhLy2IKyrBuqQ3CgnVR+krtlJToqwsyUY1WxmxEmvG9QNRBBRwEn3Lo9WZnQ8JAZnBGt80QQuY7mNRhQyDIqjMCZsNXURbA9qwlRJvKl7zwdg8mdOKz7NxfipVPZpJCvA7Fnk1BL+0g2fz7NbfHz+i1wbQVdrExCkMecqLpJENqKVnAlxB53CaodHTVsh/UmueHq+JJX8KTT3a4s8dAVYp0fVF3slESeHps56NzqCckJmJ4z+tRyhYhPfNy9/B/j0IQwbYZboM2Uw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k0CsHNtfxLTQodyJkBTcfGjINEaKjznyfUJgi+yWUpQ=;
- b=gcA2EOkShRCQNyYvsAGsKndjCu96GQZbEaApr4NDcjr2l/xGF6zs2YjWbyxFrhhIiDVBFsroerVQxJH0waJdvfgYvJ1/eGltP8okhaV649n8NHiG9FOS802QdKtcZbRKE2bO3AXUHMEHqq27dAQo9Z645UZYlyhFUme0XyWoxK4NTZOUndthZMUflMzXGbXlLqvnf4PfXN6qSJHLckWosai7TNAQy29XRWhi6DtNvVG6aRpMcYgB4Mh7tmGRQ6IAXaskKE6l2Gow0bxU3x1TYl8pOl/pn0K/HBfswVcT6XJyBbAE2WNBqkq5s9NgndRJTDvxonPJnrU83c0Nw8mUXA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oppo.com; dmarc=pass action=none header.from=oppo.com;
- dkim=pass header.d=oppo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k0CsHNtfxLTQodyJkBTcfGjINEaKjznyfUJgi+yWUpQ=;
- b=TblfEGjYLfoBfoWVrYx5Hla6Cy3omF3CdJrEkMofnPa8ysDqIImbO4Pk2AQ3ndew5C1HRL1oSAdQjrL+jetb3xVtxShjCFqq4O5YHKrhzOJ68uikF6vh6rl5O8QQYHl7PdhUv/N4C88defTiXVo+AEFeM0N2+7l/8e4S1WrjB/M=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oppo.com;
-Received: from TY2PR02MB4479.apcprd02.prod.outlook.com (2603:1096:404:800e::7)
- by PUZPR02MB6211.apcprd02.prod.outlook.com (2603:1096:301:f8::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.19; Mon, 19 Jun
- 2023 15:14:29 +0000
-Received: from TY2PR02MB4479.apcprd02.prod.outlook.com
- ([fe80::bc4a:4d7a:4c73:76eb]) by TY2PR02MB4479.apcprd02.prod.outlook.com
- ([fe80::bc4a:4d7a:4c73:76eb%4]) with mapi id 15.20.6521.020; Mon, 19 Jun 2023
- 15:14:29 +0000
-From:   Yunlei He <heyunlei@oppo.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Yunlei He <heyunlei@oppo.com>
-Subject: [f2fs-dev][PATCH] f2fs: count mmap write io more accurately
-Date:   Mon, 19 Jun 2023 23:14:16 +0800
-Message-Id: <20230619151416.2168499-1-heyunlei@oppo.com>
-X-Mailer: git-send-email 2.40.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0052.apcprd02.prod.outlook.com
- (2603:1096:4:1f5::20) To TY2PR02MB4479.apcprd02.prod.outlook.com
- (2603:1096:404:800e::7)
+        Mon, 19 Jun 2023 11:14:37 -0400
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDA9BD
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:14:36 -0700 (PDT)
+Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3420ed1a6dcso21778075ab.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:14:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687187675; x=1689779675;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CWdqkF9fjtWsJ4T/pIJKWqa8TolLcvybFPb84QHvsUM=;
+        b=IOh/vGzbJ2XPJJaEJnmqMeHDAEJVjflZuSu5wvZDXmwepUPkycb261s9MsQ693CDZu
+         kiBE/OQV8uOVP//dnPUd/nUTXviPPksFfDeVUXzYni/j2FP2IyzEcxOj30voyMuQPyDE
+         QumrBmDz4zECvJuXbqeC+BEWiScxXPm6afnBsJIGs4V4pwjRTOhDPBQjCEaeg8a6CrdR
+         DksFfFHLrW8EpDD1DkPInSHvu6megPBdGa4J9gum485+tohQ9kdqjCgk+xAssMLxXprf
+         pzbIiufnJsRFQq3vDUL4C1BD4IyimY24dHaWuXlxPxVlFqXqMumRSaPdQHt307VJlwau
+         C0Mw==
+X-Gm-Message-State: AC+VfDzpfH40c1xNZjJAMjhT3kRLZbX3S+5mddT2KhPZkWAjFjDzOo9g
+        6Xu42zgvDHG7laH6l4InI9vwShb7IZFTAf5G8s7hBqStYyBe
+X-Google-Smtp-Source: ACHHUZ6aEEl1LDQo+VNSHKoVZE2usIZheW12BKRc/qoUEGPL9jTg5ak2yE1FxeK4jkr/XVN5lb+eHOL0zowHNShrF6sGnB3LYDjm
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TY2PR02MB4479:EE_|PUZPR02MB6211:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3f992703-b743-4f7e-392e-08db70d7e0dc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Wp96vUwAx8bmp9/X1JYnQgh1qoc1o438krUcPGjAmFZUzN9v8AeoJ8SPbOciQZaiCgvcjFDrTV5lYLst7Az08WphNVGm6CHZytHygCVGibBC/HY/aQ/FVjS5Enb9krrMxLZM7raDGCMYIZTzN1oz2UXlZCFbbgX9VnN9103Jb3+RC7oOKKvXDCXQTkpF32kEiTn85L3O/jq9dzG9NyEdDabxmDBkcFZ6FkUtLXyJMoHjmtN6vwZUGaGoLIqqhTefaHmbf207HTzZOw+oKVU0DBUpBy2gYQdHIRISpTXoHWp4Ejx7Vf8GNoffLM8CCfqGhsP+PCnUoUUtfLId8Piu0sEaVtkjW82ZBIq42LJ/I0J053F/U5wju3rU6zthb8zZLRrPVvO6qoj9lTE0poN/ewHh6bzIPf1kmBYbIvOqc0kcObsxoiazS6bHgfk+wgjGu4E8ZPCs5fPAEBWVm3xP00vrEDs06ZxFpiN3Jp6Z8JM65bYhi1YQm4jQ/GrVjKDOufLCrerV1C5qXxYhj7VhSiEgLDi1IVJxES2RMMff/MXX8cbqAZpylTkeNSHUjQM/JW073g4wxlkbcT+NoNPbYdB4qlaPFMTJhwPhmcwFi6kRtfAmMD61AXEOTu3qPKL7
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR02MB4479.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(346002)(396003)(39860400002)(376002)(451199021)(107886003)(2616005)(86362001)(4744005)(2906002)(83380400001)(5660300002)(66476007)(8936002)(186003)(66946007)(8676002)(66556008)(36756003)(26005)(478600001)(38100700002)(41300700001)(4326008)(6512007)(1076003)(6506007)(52116002)(6486002)(38350700002)(6666004)(316002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hMMTFB7dLkYek2PdYwVOE4uz72l8/9U8LFSMhkBk1uXwoEoO5D0AWnWFY3sq?=
- =?us-ascii?Q?+8GOQf5z2NTP4SkRS50cFOsc07dRXntjo1EGMT3WoWwi0X1pP5IP/brwqoMs?=
- =?us-ascii?Q?RkOFs4FvpSaSihGXU0u5SXo1YuCY6y35oqtgtvOUGSlc0FPrmR7xvfGFhDCP?=
- =?us-ascii?Q?PpstTBsVKuLBHguJyKKGu9HgfC9J6ICEl597X8S2Xm9HVrimhKHlcxP8nj0s?=
- =?us-ascii?Q?7FK/Bkb2giCVmOyBDv+ndfd9k35AC4Wv3zQYtVjbuTQQCWRxiDi6XNERlrT1?=
- =?us-ascii?Q?o3MTqCPZJc1KN+fm64C6syjUM8LnV0XI1xdMiRiNmB3k8HFVONqgrQOPcz1A?=
- =?us-ascii?Q?K38vm2B2s/7NVFSiBJa8/7R3/Rkpj52TdOpdS+olpalyw7l6LzYUp+4ChPg2?=
- =?us-ascii?Q?EB1OZpd7kux8bIdZECS4duyLSzwUEj3LTWAMl8CEXslJfPamsfmZQYdUrd4Y?=
- =?us-ascii?Q?ykFKXAf0b4rPFAvlAB9RX4r7lktyCEkOZ+851PsE/Bfq6sX7yePJsHNnVJ1J?=
- =?us-ascii?Q?srbK7QBIITrYuBUuRrzMogHYw8EjzDQvmPlQ+aQwzbi0ktV60j8Pv3NSwgO6?=
- =?us-ascii?Q?wT/Lbi/Nr2wfj66sv3JkfLAcMWJOr+wOAZgfv2lmEd337B0mfP9lEmffKlSg?=
- =?us-ascii?Q?n9xBVyZVr5tzTlxETDKkl8KDGRqwgQTL6lI3CdCehEihPJU1R/yAzfp6gj+l?=
- =?us-ascii?Q?tqjJFd+rROV20Pl4x6vtoGdy8E3nGP23bn/thmp1hDKvg79BFZu/KN+Yl6PM?=
- =?us-ascii?Q?yO7ufoOrZMMLnrW9B/81+kax9mtXHSvyBx2ialFnXniGxhQCsgGp+D14iptG?=
- =?us-ascii?Q?94FCzr4rjb7ucshPUobXQqIRUSdQRej7B0aLUjcnu2tE1ntrO5nupfX966U8?=
- =?us-ascii?Q?SleVQVmAkg4uJxbXQXaO5U/RHiT2UCjt1Io6URcrhtN32Lng5rnYsCzdglxT?=
- =?us-ascii?Q?rgieoSUV86rdkQdLOkKW3fhbil+8B3o5aNli1Y5cUG7pMK+6w+1xN2WdUYRr?=
- =?us-ascii?Q?12AWkRSP8PUE2Qh6sggeNugguOJhLiTMFnHoT4tNBYewvFKj02fbs6WE9gW5?=
- =?us-ascii?Q?bVeISEHzWtY+Q48JJtsar1He4gMnZeKoq9v4V0pIMd3D3tUUuaAFdXbUaZ4r?=
- =?us-ascii?Q?emF0+V3miDHKHgw5Z1wtPHS8uY6hlQbdEijyqj3r/3WJbEzy6a/vHTgbBy2t?=
- =?us-ascii?Q?GQrF9X+kBDqkOyL17n+ygYTT0OXlunl4iF0TOjkyK4foyTGQRbs74Oc1R4s6?=
- =?us-ascii?Q?M7LxQOMobqDualkUYZDMKq0mndTfCb7YrezlWyZw63uDJ37mVvb2OFubl1jN?=
- =?us-ascii?Q?i0FWJ7GKpGqLrhrAdVdzTbh5uW5tC/jPuwN0+H+ujbutOoYh6azN9Zup9PfT?=
- =?us-ascii?Q?r1Pevt6w0qPzObeS3tXDPu9gXRpZKggR9RAapNbHwkW4er85xg6T4g16J/mC?=
- =?us-ascii?Q?MvcP69oLWjn0ab1v6doCK2ZAJL1/E+G0gXcADoBquaCH8GmfRe5+5edbfZVG?=
- =?us-ascii?Q?CE9vh0lbEwZn6Wj+tEVjKDR62+UkOLQJZqT67yDmY3IerxOMWBVxoEDLk2HZ?=
- =?us-ascii?Q?iZ/QWnoz2HFSL/KdoiLgk7ovqOk6jvxJ1Xl5Ph69?=
-X-OriginatorOrg: oppo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3f992703-b743-4f7e-392e-08db70d7e0dc
-X-MS-Exchange-CrossTenant-AuthSource: TY2PR02MB4479.apcprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jun 2023 15:14:29.7645
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AHpADtPM64H8UmGCyvkjbVKDGy/FSMKwA+W8fV+Xzwmq4owtijalaZr474nYn6FTl2wS0eaZOH/dHD6O/mzPVA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZPR02MB6211
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:c986:0:b0:340:5928:e058 with SMTP id
+ y6-20020a92c986000000b003405928e058mr2771094iln.3.1687187675387; Mon, 19 Jun
+ 2023 08:14:35 -0700 (PDT)
+Date:   Mon, 19 Jun 2023 08:14:35 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000fa09c05fe7cfea6@google.com>
+Subject: [syzbot] [mm?] inconsistent lock state in lru_gen_rotate_memcg
+From:   syzbot <syzbot+87c490fd2be656269b6a@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch count mmap write io more accurately.
+Hello,
 
-Signed-off-by: Yunlei He <heyunlei@oppo.com>
+syzbot found the following issue on:
+
+HEAD commit:    40f71e7cd3c6 Merge tag 'net-6.4-rc7' of git://git.kernel.o..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1154eb17280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b55c7ca2258f24ba
+dashboard link: https://syzkaller.appspot.com/bug?extid=87c490fd2be656269b6a
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12acd517280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14276ecf280000
+
+Downloadable assets:
+disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7bc7510fe41f/non_bootable_disk-40f71e7c.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/1d6d986d5baf/vmlinux-40f71e7c.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/cb0c02dd7f64/bzImage-40f71e7c.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+87c490fd2be656269b6a@syzkaller.appspotmail.com
+
+================================
+WARNING: inconsistent lock state
+6.4.0-rc6-syzkaller-00195-g40f71e7cd3c6 #0 Not tainted
+--------------------------------
+inconsistent {SOFTIRQ-ON-W} -> {IN-SOFTIRQ-W} usage.
+syz-executor192/6901 [HC0[0]:SC1[1]:HE0:SE0] takes:
+ffff88807ffdc728 (&pgdat->memcg_lru.lock){+.?.}-{2:2}, at: spin_lock include/linux/spinlock.h:350 [inline]
+ffff88807ffdc728 (&pgdat->memcg_lru.lock){+.?.}-{2:2}, at: lru_gen_rotate_memcg+0x64/0xab0 mm/vmscan.c:4749
+{SOFTIRQ-ON-W} state was registered at:
+  lock_acquire kernel/locking/lockdep.c:5705 [inline]
+  lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5670
+  __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+  _raw_spin_lock+0x2e/0x40 kernel/locking/spinlock.c:154
+  spin_lock include/linux/spinlock.h:350 [inline]
+  lru_gen_online_memcg+0x16b/0x5a0 mm/vmscan.c:4797
+  mem_cgroup_css_online+0x227/0x3b0 mm/memcontrol.c:5468
+  online_css+0xaf/0x2a0 kernel/cgroup/cgroup.c:5491
+  cgroup_init_subsys+0x46b/0x900 kernel/cgroup/cgroup.c:6022
+  cgroup_init+0xb83/0x1090 kernel/cgroup/cgroup.c:6106
+  start_kernel+0x398/0x490 init/main.c:1077
+  x86_64_start_reservations+0x18/0x30 arch/x86/kernel/head64.c:556
+  x86_64_start_kernel+0xb3/0xc0 arch/x86/kernel/head64.c:537
+  secondary_startup_64_no_verify+0xf4/0xfb
+irq event stamp: 1403
+hardirqs last  enabled at (1402): [<ffffffff81dc88cf>] mod_memcg_state include/linux/memcontrol.h:982 [inline]
+hardirqs last  enabled at (1402): [<ffffffff81dc88cf>] memcg_account_kmem+0x4f/0x80 mm/memcontrol.c:3094
+hardirqs last disabled at (1403): [<ffffffff81dcc157>] uncharge_batch+0x1c7/0x560 mm/memcontrol.c:7142
+softirqs last  enabled at (1178): [<ffffffff880eb512>] rcu_read_unlock_bh include/linux/rcupdate.h:839 [inline]
+softirqs last  enabled at (1178): [<ffffffff880eb512>] __dev_queue_xmit+0x1df2/0x3b10 net/core/dev.c:4271
+softirqs last disabled at (1253): [<ffffffff814cefd4>] invoke_softirq kernel/softirq.c:445 [inline]
+softirqs last disabled at (1253): [<ffffffff814cefd4>] __irq_exit_rcu+0x114/0x190 kernel/softirq.c:650
+
+other info that might help us debug this:
+ Possible unsafe locking scenario:
+
+       CPU0
+       ----
+  lock(&pgdat->memcg_lru.lock);
+  <Interrupt>
+    lock(&pgdat->memcg_lru.lock);
+
+ *** DEADLOCK ***
+
+2 locks held by syz-executor192/6901:
+ #0: ffffffff8e10b9e8 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:78 [inline]
+ #0: ffffffff8e10b9e8 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x3e8/0xd50 net/core/rtnetlink.c:6414
+ #1: ffffffff8c795fe0 (rcu_callback){....}-{0:0}, at: rcu_do_batch kernel/rcu/tree.c:2104 [inline]
+ #1: ffffffff8c795fe0 (rcu_callback){....}-{0:0}, at: rcu_core+0x791/0x1ad0 kernel/rcu/tree.c:2377
+
+stack backtrace:
+CPU: 3 PID: 6901 Comm: syz-executor192 Not tainted 6.4.0-rc6-syzkaller-00195-g40f71e7cd3c6 #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ print_usage_bug kernel/locking/lockdep.c:3949 [inline]
+ valid_state kernel/locking/lockdep.c:3991 [inline]
+ mark_lock_irq kernel/locking/lockdep.c:4194 [inline]
+ mark_lock.part.0+0x1110/0x1970 kernel/locking/lockdep.c:4656
+ mark_lock kernel/locking/lockdep.c:4620 [inline]
+ mark_usage kernel/locking/lockdep.c:4545 [inline]
+ __lock_acquire+0x1227/0x5f30 kernel/locking/lockdep.c:5042
+ lock_acquire kernel/locking/lockdep.c:5705 [inline]
+ lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5670
+ __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+ _raw_spin_lock+0x2e/0x40 kernel/locking/spinlock.c:154
+ spin_lock include/linux/spinlock.h:350 [inline]
+ lru_gen_rotate_memcg+0x64/0xab0 mm/vmscan.c:4749
+ lru_gen_soft_reclaim+0x62/0x70 mm/vmscan.c:4852
+ uncharge_batch+0x2be/0x560 mm/memcontrol.c:7145
+ __mem_cgroup_uncharge+0x11f/0x290 mm/memcontrol.c:7221
+ mem_cgroup_uncharge include/linux/memcontrol.h:698 [inline]
+ __folio_put_small mm/swap.c:105 [inline]
+ __folio_put+0xb6/0x140 mm/swap.c:129
+ folio_put include/linux/mm.h:1430 [inline]
+ put_page include/linux/mm.h:1499 [inline]
+ free_page_and_swap_cache+0x257/0x2c0 mm/swap_state.c:305
+ __tlb_remove_table arch/x86/include/asm/tlb.h:34 [inline]
+ __tlb_remove_table_free mm/mmu_gather.c:153 [inline]
+ tlb_remove_table_rcu+0x89/0xe0 mm/mmu_gather.c:208
+ rcu_do_batch kernel/rcu/tree.c:2115 [inline]
+ rcu_core+0x806/0x1ad0 kernel/rcu/tree.c:2377
+ __do_softirq+0x1d4/0x905 kernel/softirq.c:571
+ invoke_softirq kernel/softirq.c:445 [inline]
+ __irq_exit_rcu+0x114/0x190 kernel/softirq.c:650
+ irq_exit_rcu+0x9/0x20 kernel/softirq.c:662
+ sysvec_apic_timer_interrupt+0x97/0xc0 arch/x86/kernel/apic/apic.c:1106
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:645
+RIP: 0010:__sanitizer_cov_trace_pc+0x3b/0x70 kernel/kcov.c:207
+Code: 81 e1 00 01 00 00 65 48 8b 14 25 00 bc 03 00 a9 00 01 ff 00 74 0e 85 c9 74 35 8b 82 0c 16 00 00 85 c0 74 2b 8b 82 e8 15 00 00 <83> f8 02 75 20 48 8b 8a f0 15 00 00 8b 92 ec 15 00 00 48 8b 01 48
+RSP: 0018:ffffc9000420ecf8 EFLAGS: 00000246
+RAX: 0000000000000000 RBX: 0000000000000064 RCX: 0000000000000000
+RDX: ffff888044f60380 RSI: ffffffff8a021a9b RDI: 0000000000000001
+RBP: ffff88802b6d6004 R08: 0000000000000001 R09: 000000000000006e
+R10: 0000000000000064 R11: 0000000000094001 R12: ffff888054ea8005
+R13: 00000000ffffffff R14: 00000000ffffffff R15: dffffc0000000000
+ vsscanf+0x34b/0x2600 lib/vsprintf.c:3518
+ sscanf+0xbf/0xf0 lib/vsprintf.c:3716
+ __dev_alloc_name net/core/dev.c:1065 [inline]
+ dev_alloc_name_ns+0x343/0x610 net/core/dev.c:1099
+ dev_get_valid_name+0x69/0x170 net/core/dev.c:1134
+ register_netdevice+0x3ba/0x1640 net/core/dev.c:10006
+ veth_newlink+0x352/0x9d0 drivers/net/veth.c:1897
+ rtnl_newlink_create net/core/rtnetlink.c:3465 [inline]
+ __rtnl_newlink+0x10c2/0x1840 net/core/rtnetlink.c:3682
+ rtnl_newlink+0x68/0xa0 net/core/rtnetlink.c:3695
+ rtnetlink_rcv_msg+0x43d/0xd50 net/core/rtnetlink.c:6417
+ netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2546
+ netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
+ netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1365
+ netlink_sendmsg+0x925/0xe30 net/netlink/af_netlink.c:1913
+ sock_sendmsg_nosec net/socket.c:724 [inline]
+ sock_sendmsg+0xde/0x190 net/socket.c:747
+ ____sys_sendmsg+0x71c/0x900 net/socket.c:2503
+ ___sys_sendmsg+0x110/0x1b0 net/socket.c:2557
+ __sys_sendmsg+0xf7/0x1c0 net/socket.c:2586
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f0ee7a7d049
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 41 16 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffe607e0d88 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f0ee7a7d049
+RDX: 0000000000000000 RSI: 0000000020000040 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 0000000000000003 R09: 0000000000000003
+R10: 0000000000000003 R11: 0000000000000246 R12: 00007ffe607e0db8
+R13: 00007ffe607e0dd0 R14: 00007ffe607e0e10 R15: 00000000000006cd
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0:	81 e1 00 01 00 00    	and    $0x100,%ecx
+   6:	65 48 8b 14 25 00 bc 	mov    %gs:0x3bc00,%rdx
+   d:	03 00
+   f:	a9 00 01 ff 00       	test   $0xff0100,%eax
+  14:	74 0e                	je     0x24
+  16:	85 c9                	test   %ecx,%ecx
+  18:	74 35                	je     0x4f
+  1a:	8b 82 0c 16 00 00    	mov    0x160c(%rdx),%eax
+  20:	85 c0                	test   %eax,%eax
+  22:	74 2b                	je     0x4f
+  24:	8b 82 e8 15 00 00    	mov    0x15e8(%rdx),%eax
+* 2a:	83 f8 02             	cmp    $0x2,%eax <-- trapping instruction
+  2d:	75 20                	jne    0x4f
+  2f:	48 8b 8a f0 15 00 00 	mov    0x15f0(%rdx),%rcx
+  36:	8b 92 ec 15 00 00    	mov    0x15ec(%rdx),%edx
+  3c:	48 8b 01             	mov    (%rcx),%rax
+  3f:	48                   	rex.W
+
+
 ---
- fs/f2fs/file.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index 41e7c2b80f31..147ab24ae579 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -152,11 +152,11 @@ static vm_fault_t f2fs_vm_page_mkwrite(struct vm_fault *vmf)
- 	if (!PageUptodate(page))
- 		SetPageUptodate(page);
- 
-+out_sem:
- 	f2fs_update_iostat(sbi, inode, APP_MAPPED_IO, F2FS_BLKSIZE);
- 	f2fs_update_time(sbi, REQ_TIME);
- 
- 	trace_f2fs_vm_page_mkwrite(page, DATA);
--out_sem:
- 	filemap_invalidate_unlock_shared(inode->i_mapping);
- 
- 	sb_end_pagefault(inode->i_sb);
--- 
-2.40.1
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
