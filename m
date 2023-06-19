@@ -2,73 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D264734F11
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:05:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18286734F15
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:05:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230400AbjFSJFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 05:05:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38450 "EHLO
+        id S230483AbjFSJFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 05:05:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230516AbjFSJE4 (ORCPT
+        with ESMTP id S231131AbjFSJE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 05:04:56 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B3C9B
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:04:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687165495; x=1718701495;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Uv2EpNdqJwxaFNuIj4uRVkuHXE/wlrHTHfQ2/9uDTjk=;
-  b=OhUryP/oRKPjPrUl7/YKGGutdf+vMkOpt2u1WC+Qfiz3jLbZvp9FnqVT
-   JN43H3Pdy+k1fDlZZsystbE6OOjSX4k2tNjpHOmKGAz27UCqOb5oHgt/Y
-   5vBzXmLT9HNdxWFKc7esMcqKuVkwIItDNIPgaEn6DuEdG64SEDeziJy/q
-   Jh60D9U7hlPSB1bPc8+fbK8edCBcF5LfX9DmI07/i8WRQpr6tW69ZUo+9
-   pK4EFJUhYphB3LqjEZ6HF8+c0ObuSLtBOZlQCYBjM1u3hq7475qwgJtIp
-   o39l+6Tpt7LL6nnn9H8DX2BFMgWD4opSWQPhkMfPGvaDvic8KhETtKrbL
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="357069853"
-X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
-   d="scan'208";a="357069853"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 02:04:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="803551712"
-X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
-   d="scan'208";a="803551712"
-Received: from baparham-mobl.ger.corp.intel.com (HELO intel.com) ([10.249.45.169])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 02:04:50 -0700
-Date:   Mon, 19 Jun 2023 11:04:47 +0200
-From:   Andi Shyti <andi.shyti@linux.intel.com>
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     Andi Shyti <andi.shyti@linux.intel.com>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Imre Deak <imre.deak@intel.com>,
-        Alan Previn <alan.previn.teres.alexis@intel.com>,
-        Anshuman Gupta <anshuman.gupta@intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/i915: make i915_drm_client_fdinfo() reference
- conditional again
-Message-ID: <ZJAaL/MJp6gBbgdt@ashyti-mobl2.lan>
-References: <20230616093158.3568480-1-arnd@kernel.org>
- <ZIw2kdx9+DCmUZUV@ashyti-mobl2.lan>
- <ef849277-10ef-90db-fd6c-3646599e32ba@linux.intel.com>
+        Mon, 19 Jun 2023 05:04:57 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58803AD;
+        Mon, 19 Jun 2023 02:04:56 -0700 (PDT)
+Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 261E6FB;
+        Mon, 19 Jun 2023 11:04:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1687165460;
+        bh=+SksVrsMHgEBW8BF4m3gnrQDCstsaJ2nBtdSpsK2iIQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=pz7pjujvp5IQEz3T+uG+w2BFrFA3ezbQZamn6qoaWiUSORPnX1EAr5OSAQpFql5Tf
+         JtaEGkuRplrTEnV+gMw93kx5vyRMQqnVcRriln+BDROW79niHcmNxCr5NN+Eco0Ob0
+         5qAcI8U8hJnA6x8M9wIp3gV+alBgqhS84Pgy3ijk=
+Message-ID: <47bdb323-9350-0b58-f956-39d286e16c45@ideasonboard.com>
+Date:   Mon, 19 Jun 2023 12:04:49 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ef849277-10ef-90db-fd6c-3646599e32ba@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v14 16/18] media: i2c: ds90ub960: Allow FPD-Link async
+ mode
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>
+References: <20230616135922.442979-1-tomi.valkeinen@ideasonboard.com>
+ <20230616135922.442979-17-tomi.valkeinen@ideasonboard.com>
+ <ZIxy5qKjiMZluGOf@smile.fi.intel.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <ZIxy5qKjiMZluGOf@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,66 +70,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tvrtko,
-
-On Fri, Jun 16, 2023 at 12:17:50PM +0100, Tvrtko Ursulin wrote:
+On 16/06/2023 17:34, Andy Shevchenko wrote:
+> On Fri, Jun 16, 2023 at 04:59:20PM +0300, Tomi Valkeinen wrote:
+>> Allow using FPD-Link in async mode. The driver handles it correctly, but
+>> the mode was blocked at probe time as there wasn't HW to test this with.
+>> Now the mode has been tested, and it works.
 > 
-> On 16/06/2023 11:16, Andi Shyti wrote:
-> > Hi Arnd,
-> > 
-> > On Fri, Jun 16, 2023 at 11:31:47AM +0200, Arnd Bergmann wrote:
-> > > From: Arnd Bergmann <arnd@arndb.de>
-> > > 
-> > > The function is only defined if CONFIG_PROC_FS is enabled:
-> > > 
-> > > ld.lld: error: undefined symbol: i915_drm_client_fdinfo
-> > > > > > referenced by i915_driver.c
-> > > > > >                drivers/gpu/drm/i915/i915_driver.o:(i915_drm_driver) in archive vmlinux.a
-> > > 
-> > > Use the PTR_IF() helper to make the reference NULL otherwise.
-> > > 
-> > > Fixes: e894b724c316d ("drm/i915: Use the fdinfo helper")
-> > > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > > ---
-> > >   drivers/gpu/drm/i915/i915_driver.c     | 2 +-
-> > >   drivers/gpu/drm/i915/i915_drm_client.h | 2 --
-> > >   2 files changed, 1 insertion(+), 3 deletions(-)
-> > > 
-> > > diff --git a/drivers/gpu/drm/i915/i915_driver.c b/drivers/gpu/drm/i915/i915_driver.c
-> > > index 75cbc43b326dd..0ad0c5885ec27 100644
-> > > --- a/drivers/gpu/drm/i915/i915_driver.c
-> > > +++ b/drivers/gpu/drm/i915/i915_driver.c
-> > > @@ -1816,7 +1816,7 @@ static const struct drm_driver i915_drm_driver = {
-> > >   	.open = i915_driver_open,
-> > >   	.lastclose = i915_driver_lastclose,
-> > >   	.postclose = i915_driver_postclose,
-> > > -	.show_fdinfo = i915_drm_client_fdinfo,
-> > > +	.show_fdinfo = PTR_IF(IS_ENABLED(CONFIG_PROC_FS), i915_drm_client_fdinfo),
-> > >   	.prime_handle_to_fd = drm_gem_prime_handle_to_fd,
-> > >   	.prime_fd_to_handle = drm_gem_prime_fd_to_handle,
-> > > diff --git a/drivers/gpu/drm/i915/i915_drm_client.h b/drivers/gpu/drm/i915/i915_drm_client.h
-> > > index 4c18b99e10a4e..67816c912bca1 100644
-> > > --- a/drivers/gpu/drm/i915/i915_drm_client.h
-> > > +++ b/drivers/gpu/drm/i915/i915_drm_client.h
-> > > @@ -47,8 +47,6 @@ static inline void i915_drm_client_put(struct i915_drm_client *client)
-> > >   struct i915_drm_client *i915_drm_client_alloc(void);
-> > > -#ifdef CONFIG_PROC_FS
-> > >   void i915_drm_client_fdinfo(struct drm_printer *p, struct drm_file *file);
-> > > -#endif
-> > 
-> > nice! This is becoming the new trend now.
-> > 
-> > Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
-> 
-> Thanks for the fix and review! (And I got to learn about existence of PTR_IF
-> too.)
-> 
-> Andi will you merge once green or should I?
+> Looks good, but I assume you will incorporate this into the original code.
 
-will do! Thanks!
+Perhaps, but to be honest, I just want to get the basic set merged, as 
+it's been circulating for so many years. So, as I mentioned in the 
+earlier email, it was perhaps a mistake to include these additional 
+changes...
 
-Andi
+If the reviews for the new commits are quick and easy, I can squash them 
+and send a v15. But if there's anything that needs more discussions, I'd 
+like to leave the rest for later.
 
-> Regards,
-> 
-> Tvrtko
+  Tomi
+
