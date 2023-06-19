@@ -2,486 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C20735815
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 15:11:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C9CF73581B
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 15:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230198AbjFSNK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 09:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50296 "EHLO
+        id S230295AbjFSNLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 09:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjFSNKw (ORCPT
+        with ESMTP id S229636AbjFSNLq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 09:10:52 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19479FE
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 06:10:49 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b47bfd4e45so12232991fa.0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 06:10:49 -0700 (PDT)
+        Mon, 19 Jun 2023 09:11:46 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB339AA
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 06:11:45 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id 5b1f17b1804b1-3f90ab8e841so3764415e9.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 06:11:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687180247; x=1689772247;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PtVdSdU88LNefkY72KFJQZutSu/EAmlxtmHK1QOiwmw=;
-        b=Btmt5VBwmuO+gYWg4hz6LJAYqrE/pf6gWMF9KW0ZL1p6ttVPYn4leAVhdecN254JGD
-         Q2kilkwqlje1MAnUdtDBZnY3gEU465W9HjIFaWFzhrHVAzKbZ7uKJIIw8la1JLg0c+U9
-         /5qdfMUkUQTeJDkO5+ckbK5A6jXqsh+F7PBWsKH9qMXn5zZhDKwOO+ooPDifTsge3GHw
-         5WdlFGFf1w0VLrY3ziJb4uR39n1vZnMSouC30BPk81HpPBf/WXQ+ifvyauwmSqcsdphK
-         CR0STgE/aMNTXIrrCGLEqZPDx2RLDtr7GDL2ra0aSSXZ5ouY3jwZhyRy75OIAlMpQlIv
-         VYAA==
+        d=gmail.com; s=20221208; t=1687180304; x=1689772304;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
+        b=D8EYqLMjhoOvhNXxrkPLTjlTxNflKweygAd7DnCi6RxxQ9jBvZNertsF4/hFrSGr8f
+         cnl69NeZx8WBVYXVon0g9r3CfM33FXbbkimukMLExFEX+zygQD/8amqlC9tUC3Gj3+EB
+         GTWjKjztsfWs19KpeEKrtz71/vPZTlkGHkFgxqO4YgkeykuCAUQfidk5zBN0s5g/gqEB
+         uD7dgF0PKkc+kedpnXaF1QWrRhaD0PHVXJn/8bl7f07nj+ReKaksTpT3LER4UMgsN/TR
+         PW8dV8KcmKotnsLijnfD075SIk5l9wGHgjYPkrZiTYcONZZ43mBJnl0FB4bvkI7yD1d9
+         4yIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687180247; x=1689772247;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1687180304; x=1689772304;
+        h=to:subject:message-id:date:from:reply-to:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PtVdSdU88LNefkY72KFJQZutSu/EAmlxtmHK1QOiwmw=;
-        b=RxdgdrxVlBSYdeyMwTfRNvazvqqB1NvpOcX0H9g8ZnS93IlHKNFME3mwsROCHnw1jA
-         r9Y+FYMW+jLYxz4rSU2x3koR0/X/N3fSIcNdAjsACLND5W0du9vqGjTYdnEABeK27HCw
-         /bP74r1MlwX1IGB+6k6OHzzO6xkSMkTaL1ZOXum+Bix8VOe0qkN/R1X89RKL9VQvB0Kh
-         DrVVqmFwqFV1TFFSaFyhSM0/EcR2nloLXN+eJgltlm1FZByHxJ3KeL0jhhBJ5dX/GAh6
-         e32ZfqiFEtd7QMBVpAip5V1ud8PV/7JMFQ47BAlOITg/md6tmjrh+cKCla88eUKoFy4v
-         nkUQ==
-X-Gm-Message-State: AC+VfDzHaLDE8OR/zS0kvT+fKZa3+b4U1M2I+oTWRxgfI5sRFYPzsu6h
-        8FKTw9egrI6q4nZfb+8HgcghFA==
-X-Google-Smtp-Source: ACHHUZ4DnGAHEekUA4iOo293sW8ZgS8Q4mleM8K8Lnivp0CUEHjzUgdefTLrh8L3iHJ87q4a0S1qaQ==
-X-Received: by 2002:a2e:3a05:0:b0:2b2:4e86:510b with SMTP id h5-20020a2e3a05000000b002b24e86510bmr6120161lja.13.1687180247222;
-        Mon, 19 Jun 2023 06:10:47 -0700 (PDT)
-Received: from [192.168.1.101] (abyl242.neoplus.adsl.tpnet.pl. [83.9.31.242])
-        by smtp.gmail.com with ESMTPSA id a15-20020a2e860f000000b002b44bcdf809sm2114696lji.87.2023.06.19.06.10.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 06:10:46 -0700 (PDT)
-Message-ID: <0696f655-1928-ac7a-da3f-67c40f8f6743@linaro.org>
-Date:   Mon, 19 Jun 2023 15:10:44 +0200
+        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
+        b=Bo3YKfRSKbn/wlVKv1VyVk+/ArZ+bnYO5hthJLAatZufh3t5tqMjlBxiDJmJK0+O3f
+         EdohoAjxEyxVt4rgLoBt2auVldYSB4n99Z6TS/Rv7PrWpX02D2f46ljyHGMWxBNSAfLh
+         +kDPgnqtGEIT40yg+2rt0tqq1cLU32T/pQtBntNjeaNKXFMuVz1M9fG6QtuOGHrzbMyK
+         qQy+Z38/8hd+5vjzCgkwID1Q21l0KdPWiYD7fFyonZ1BVlsilgVShrY2y5xw8vw53uy4
+         zbbc7xYdrFAO/ivQaHkwDBk8MO8EieOTzLs2C53RbtXMGtE+ZzBIRaEY6vOfQqvZind2
+         EKuw==
+X-Gm-Message-State: AC+VfDzVi6tlTwwVuRhJpc0lVHtkLJv1qilFlgngZ+IuNFfKqAJ70cab
+        otZ+R4V3AV7fxAHKe29uaP8bFOhD7BYrFeNUGNE=
+X-Google-Smtp-Source: ACHHUZ758V+hBJaPVBOqTXKZrkmX6DZ+F5MNaKRnhq91i6hMBDf8VzlOcX14KZxZZDoGY357Zfb+6QUKCZU1vcyMtPs=
+X-Received: by 2002:a5d:4811:0:b0:305:ed26:856e with SMTP id
+ l17-20020a5d4811000000b00305ed26856emr6967619wrq.4.1687180303946; Mon, 19 Jun
+ 2023 06:11:43 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [Freedreno] [PATCH v8 10/18] drm/msm/a6xx: Introduce GMU wrapper
- support
-Content-Language: en-US
-To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc:     Rob Clark <robdclark@chromium.org>,
-        freedreno@lists.freedesktop.org,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Sean Paul <sean@poorly.run>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>
-References: <20230223-topic-gmuwrapper-v8-0-69c68206609e@linaro.org>
- <20230223-topic-gmuwrapper-v8-10-69c68206609e@linaro.org>
- <2vr72w4tslxxumzphtuwgkcnbfjrtmw2j4qak2cukcabchadlg@spjbqoa7v4lr>
- <c5396101-ad5b-afdd-d6d7-1a2efa3b9bf7@linaro.org>
- <z5imqaxyumc5pyk4ijumjby4tswfmnjsnedeekonx5tymhwsfi@h5dk3pl2zawf>
- <68e64a35-9705-6565-3b5c-5de38419aba8@linaro.org>
- <ghxtdcvjaqkyu3xnsvwanevjxbucaw2qlesbm26yrk423jfxxt@epmsxqse3njs>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <ghxtdcvjaqkyu3xnsvwanevjxbucaw2qlesbm26yrk423jfxxt@epmsxqse3njs>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:adf:ecc1:0:b0:30a:edba:b4f2 with HTTP; Mon, 19 Jun 2023
+ 06:11:43 -0700 (PDT)
+Reply-To: dravasmith27@gmail.com
+From:   Dr Ava Smith <hku222173@gmail.com>
+Date:   Mon, 19 Jun 2023 06:11:43 -0700
+Message-ID: <CAKZmc+9KTN_-OOA6Gyk2SOuOtN8E_CcsJv5CbAdN2mspiHOifw@mail.gmail.com>
+Subject: GREETINGS FROM DR AVA SMITH
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:344 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4964]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [dravasmith27[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [hku222173[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [hku222173[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17.06.2023 18:07, Akhil P Oommen wrote:
-> On Sat, Jun 17, 2023 at 02:00:50AM +0200, Konrad Dybcio wrote:
->>
->> On 16.06.2023 19:54, Akhil P Oommen wrote:
->>> On Thu, Jun 15, 2023 at 11:43:04PM +0200, Konrad Dybcio wrote:
->>>>
->>>> On 10.06.2023 00:06, Akhil P Oommen wrote:
->>>>> On Mon, May 29, 2023 at 03:52:29PM +0200, Konrad Dybcio wrote:
->>>>>>
->>>>>> Some (particularly SMD_RPM, a.k.a non-RPMh) SoCs implement A6XX GPUs
->>>>>> but don't implement the associated GMUs. This is due to the fact that
->>>>>> the GMU directly pokes at RPMh. Sadly, this means we have to take care
->>>>>> of enabling & scaling power rails, clocks and bandwidth ourselves.
->>>>>>
->>>>>> Reuse existing Adreno-common code and modify the deeply-GMU-infused
->>>>>> A6XX code to facilitate these GPUs. This involves if-ing out lots
->>>>>> of GMU callbacks and introducing a new type of GMU - GMU wrapper (it's
->>>>>> the actual name that Qualcomm uses in their downstream kernels).
->>>>>>
->>>>>> This is essentially a register region which is convenient to model
->>>>>> as a device. We'll use it for managing the GDSCs. The register
->>>>>> layout matches the actual GMU_CX/GX regions on the "real GMU" devices
->>>>>> and lets us reuse quite a bit of gmu_read/write/rmw calls.
->>>>>>
->>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>>>>> ---
->> [...]
->>
->>>>>> +
->>>>>> +	ret = clk_bulk_prepare_enable(gpu->nr_clocks, gpu->grp_clks);
->>>>>> +	if (ret)
->>>>>> +		goto err_bulk_clk;
->>>>>> +
->>>>>> +	/* If anything goes south, tear the GPU down piece by piece.. */
->>>>>> +	if (ret) {
->>>>>> +err_bulk_clk:
->>>>>
->>>>> Goto jump directly to another block looks odd to me. Why do you need this label
->>>>> anyway?
->>>> If clk_bulk_prepare_enable() fails, trying to proceed will hang the
->>>> platform with unclocked accesses. We need to unwind everything that
->>>> has been done up until that point, in reverse order.
->>>
->>> I missed this response from you earlier.
->>>
->>> But you are checking for 'ret' twice here. You will end up here even
->>> if you don't jump! So "if (ret) goto err_bulk_clk;" looks
->>> unnecessary.
->>>
->>> -Akhil.
->> Ohhh right, silly mistake on my part ;)
->>
->> I already sent out a v9 since.. Please check it out and if you
->> have any further comments, I'll fix this, and if not.. Perhaps I
->> could fix it in an incremental patch if that revision is gtg?
-> 
-> Incremental patch is fine as there is no functional issue.
-Okay so I took another look with today's next that already contains
-this series, and it currently looks like:
-
-
-ret = clk_bulk_prepare_enable(gpu->nr_clocks, gpu->grp_clks);
-if (ret)
-	goto err_bulk_clk;
-
-if (adreno_is_a619_holi(adreno_gpu))
-	a6xx_sptprac_enable(gmu);
-
-/* If anything goes south, tear the GPU down piece by piece.. */
-if (ret) {
-err_bulk_clk:
-
-
-So it makes sense this way.. perhaps I just left it in this patch
-by mistake when I was rebasing some changes. I guess it requires
-no further action now?
-
-Konrad
-> 
-> -Akhil.
-> 
->>
->> Konrad
->>>
->>>>
->>>>>
->>>>>> +		pm_runtime_put(gmu->gxpd);
->>>>>> +		pm_runtime_put(gmu->dev);
->>>>>> +		dev_pm_opp_set_opp(&gpu->pdev->dev, NULL);
->>>>>> +	}
->>>>>> +err_set_opp:
->>>>>
->>>>> Generally, it is better to name the label based on what you do here. For
->>>>> eg: "unlock_lock:".
->>>> That seems to be a mixed bag all throughout the kernel, I've seen many
->>>> usages of err_(what went wrong)
->>>>
->>>>>
->>>>> Also, this function is small enough that it is better to return directly
->>>>> in case of error. I think that would be more readable.
->>>> Not really, adding the necessary cleanup steps in `if (ret)`
->>>> blocks would roughly double the function's size.
->>>>
->>>>>
->>>>>> +	mutex_unlock(&a6xx_gpu->gmu.lock);
->>>>>> +
->>>>>> +	if (!ret)
->>>>>> +		msm_devfreq_resume(gpu);
->>>>>> +
->>>>>> +	return ret;
->>>>>> +}
->>>>>> +
->>>>>> +static int a6xx_gmu_pm_suspend(struct msm_gpu *gpu)
->>>>>>  {
->>>>>>  	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
->>>>>>  	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
->>>>>> @@ -1720,7 +1799,40 @@ static int a6xx_pm_suspend(struct msm_gpu *gpu)
->>>>>>  	return 0;
->>>>>>  }
->>>>>>  
->>>>>> -static int a6xx_get_timestamp(struct msm_gpu *gpu, uint64_t *value)
->>>>>> +static int a6xx_pm_suspend(struct msm_gpu *gpu)
->>>>>> +{
->>>>>> +	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
->>>>>> +	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
->>>>>> +	struct a6xx_gmu *gmu = &a6xx_gpu->gmu;
->>>>>> +	int i;
->>>>>> +
->>>>>> +	trace_msm_gpu_suspend(0);
->>>>>> +
->>>>>> +	msm_devfreq_suspend(gpu);
->>>>>> +
->>>>>> +	mutex_lock(&a6xx_gpu->gmu.lock);
->>>>>
->>>>> Again, is this initialized somewhere?
->>>>>
->>>>>> +
->>>>>> +	/* Drain the outstanding traffic on memory buses */
->>>>>> +	a6xx_bus_clear_pending_transactions(adreno_gpu, true);
->>>>>> +
->>>>>> +	clk_bulk_disable_unprepare(gpu->nr_clocks, gpu->grp_clks);
->>>>>> +
->>>>>> +	pm_runtime_put_sync(gmu->gxpd);
->>>>>> +	dev_pm_opp_set_opp(&gpu->pdev->dev, NULL);
->>>>>> +	pm_runtime_put_sync(gmu->dev);
->>>>>> +
->>>>>> +	mutex_unlock(&a6xx_gpu->gmu.lock);
->>>>>> +
->>>>>> +	if (a6xx_gpu->shadow_bo)
->>>>>> +		for (i = 0; i < gpu->nr_rings; i++)
->>>>>> +			a6xx_gpu->shadow[i] = 0;
->>>>>> +
->>>>>> +	gpu->suspend_count++;
->>>>>> +
->>>>>> +	return 0;
->>>>>> +}
->>>>>> +
->>>>>> +static int a6xx_gmu_get_timestamp(struct msm_gpu *gpu, uint64_t *value)
->>>>>>  {
->>>>>>  	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
->>>>>>  	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
->>>>>> @@ -1739,6 +1851,12 @@ static int a6xx_get_timestamp(struct msm_gpu *gpu, uint64_t *value)
->>>>>>  	return 0;
->>>>>>  }
->>>>>>  
->>>>>> +static int a6xx_get_timestamp(struct msm_gpu *gpu, uint64_t *value)
->>>>>> +{
->>>>>> +	*value = gpu_read64(gpu, REG_A6XX_CP_ALWAYS_ON_COUNTER);
->>>>>> +	return 0;
->>>>>> +}
->>>>>> +
->>>>>>  static struct msm_ringbuffer *a6xx_active_ring(struct msm_gpu *gpu)
->>>>>>  {
->>>>>>  	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
->>>>>> @@ -2004,8 +2122,8 @@ static const struct adreno_gpu_funcs funcs = {
->>>>>>  		.set_param = adreno_set_param,
->>>>>>  		.hw_init = a6xx_hw_init,
->>>>>>  		.ucode_load = a6xx_ucode_load,
->>>>>> -		.pm_suspend = a6xx_pm_suspend,
->>>>>> -		.pm_resume = a6xx_pm_resume,
->>>>>> +		.pm_suspend = a6xx_gmu_pm_suspend,
->>>>>> +		.pm_resume = a6xx_gmu_pm_resume,
->>>>>>  		.recover = a6xx_recover,
->>>>>>  		.submit = a6xx_submit,
->>>>>>  		.active_ring = a6xx_active_ring,
->>>>>> @@ -2020,6 +2138,35 @@ static const struct adreno_gpu_funcs funcs = {
->>>>>>  #if defined(CONFIG_DRM_MSM_GPU_STATE)
->>>>>>  		.gpu_state_get = a6xx_gpu_state_get,
->>>>>>  		.gpu_state_put = a6xx_gpu_state_put,
->>>>>> +#endif
->>>>>> +		.create_address_space = a6xx_create_address_space,
->>>>>> +		.create_private_address_space = a6xx_create_private_address_space,
->>>>>> +		.get_rptr = a6xx_get_rptr,
->>>>>> +		.progress = a6xx_progress,
->>>>>> +	},
->>>>>> +	.get_timestamp = a6xx_gmu_get_timestamp,
->>>>>> +};
->>>>>> +
->>>>>> +static const struct adreno_gpu_funcs funcs_gmuwrapper = {
->>>>>> +	.base = {
->>>>>> +		.get_param = adreno_get_param,
->>>>>> +		.set_param = adreno_set_param,
->>>>>> +		.hw_init = a6xx_hw_init,
->>>>>> +		.ucode_load = a6xx_ucode_load,
->>>>>> +		.pm_suspend = a6xx_pm_suspend,
->>>>>> +		.pm_resume = a6xx_pm_resume,
->>>>>> +		.recover = a6xx_recover,
->>>>>> +		.submit = a6xx_submit,
->>>>>> +		.active_ring = a6xx_active_ring,
->>>>>> +		.irq = a6xx_irq,
->>>>>> +		.destroy = a6xx_destroy,
->>>>>> +#if defined(CONFIG_DRM_MSM_GPU_STATE)
->>>>>> +		.show = a6xx_show,
->>>>>> +#endif
->>>>>> +		.gpu_busy = a6xx_gpu_busy,
->>>>>> +#if defined(CONFIG_DRM_MSM_GPU_STATE)
->>>>>> +		.gpu_state_get = a6xx_gpu_state_get,
->>>>>> +		.gpu_state_put = a6xx_gpu_state_put,
->>>>>>  #endif
->>>>>>  		.create_address_space = a6xx_create_address_space,
->>>>>>  		.create_private_address_space = a6xx_create_private_address_space,
->>>>>> @@ -2050,15 +2197,31 @@ struct msm_gpu *a6xx_gpu_init(struct drm_device *dev)
->>>>>>  
->>>>>>  	adreno_gpu->registers = NULL;
->>>>>>  
->>>>>> +	/* Check if there is a GMU phandle and set it up */
->>>>>> +	node = of_parse_phandle(pdev->dev.of_node, "qcom,gmu", 0);
->>>>>> +	/* FIXME: How do we gracefully handle this? */
->>>>>> +	BUG_ON(!node);
->>>>>> +
->>>>>> +	adreno_gpu->gmu_is_wrapper = of_device_is_compatible(node, "qcom,adreno-gmu-wrapper");
->>>>>> +
->>>>>>  	/*
->>>>>>  	 * We need to know the platform type before calling into adreno_gpu_init
->>>>>>  	 * so that the hw_apriv flag can be correctly set. Snoop into the info
->>>>>>  	 * and grab the revision number
->>>>>>  	 */
->>>>>>  	info = adreno_info(config->rev);
->>>>>> -
->>>>>> -	if (info && (info->revn == 650 || info->revn == 660 ||
->>>>>> -			adreno_cmp_rev(ADRENO_REV(6, 3, 5, ANY_ID), info->rev)))
->>>>>> +	if (!info)
->>>>>> +		return ERR_PTR(-EINVAL);
->>>>>> +
->>>>>> +	/* Assign these early so that we can use the is_aXYZ helpers */
->>>>>> +	/* Numeric revision IDs (e.g. 630) */
->>>>>> +	adreno_gpu->revn = info->revn;
->>>>>> +	/* New-style ADRENO_REV()-only */
->>>>>> +	adreno_gpu->rev = info->rev;
->>>>>> +	/* Quirk data */
->>>>>> +	adreno_gpu->info = info;
->>>>>> +
->>>>>> +	if (adreno_is_a650(adreno_gpu) || adreno_is_a660_family(adreno_gpu))
->>>>>>  		adreno_gpu->base.hw_apriv = true;
->>>>>>  
->>>>>>  	a6xx_llc_slices_init(pdev, a6xx_gpu);
->>>>>> @@ -2069,7 +2232,10 @@ struct msm_gpu *a6xx_gpu_init(struct drm_device *dev)
->>>>>>  		return ERR_PTR(ret);
->>>>>>  	}
->>>>>>  
->>>>>> -	ret = adreno_gpu_init(dev, pdev, adreno_gpu, &funcs, 1);
->>>>>> +	if (adreno_has_gmu_wrapper(adreno_gpu))
->>>>>> +		ret = adreno_gpu_init(dev, pdev, adreno_gpu, &funcs_gmuwrapper, 1);
->>>>>> +	else
->>>>>> +		ret = adreno_gpu_init(dev, pdev, adreno_gpu, &funcs, 1);
->>>>>>  	if (ret) {
->>>>>>  		a6xx_destroy(&(a6xx_gpu->base.base));
->>>>>>  		return ERR_PTR(ret);
->>>>>> @@ -2082,13 +2248,10 @@ struct msm_gpu *a6xx_gpu_init(struct drm_device *dev)
->>>>>>  	if (adreno_is_a618(adreno_gpu) || adreno_is_7c3(adreno_gpu))
->>>>>>  		priv->gpu_clamp_to_idle = true;
->>>>>>  
->>>>>> -	/* Check if there is a GMU phandle and set it up */
->>>>>> -	node = of_parse_phandle(pdev->dev.of_node, "qcom,gmu", 0);
->>>>>> -
->>>>>> -	/* FIXME: How do we gracefully handle this? */
->>>>>> -	BUG_ON(!node);
->>>>>> -
->>>>>> -	ret = a6xx_gmu_init(a6xx_gpu, node);
->>>>>> +	if (adreno_has_gmu_wrapper(adreno_gpu))
->>>>>> +		ret = a6xx_gmu_wrapper_init(a6xx_gpu, node);
->>>>>> +	else
->>>>>> +		ret = a6xx_gmu_init(a6xx_gpu, node);
->>>>>>  	of_node_put(node);
->>>>>>  	if (ret) {
->>>>>>  		a6xx_destroy(&(a6xx_gpu->base.base));
->>>>>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
->>>>>> index aa70390ee1c6..c788b06e72da 100644
->>>>>> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
->>>>>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
->>>>>> @@ -76,6 +76,7 @@ int a6xx_gmu_set_oob(struct a6xx_gmu *gmu, enum a6xx_gmu_oob_state state);
->>>>>>  void a6xx_gmu_clear_oob(struct a6xx_gmu *gmu, enum a6xx_gmu_oob_state state);
->>>>>>  
->>>>>>  int a6xx_gmu_init(struct a6xx_gpu *a6xx_gpu, struct device_node *node);
->>>>>> +int a6xx_gmu_wrapper_init(struct a6xx_gpu *a6xx_gpu, struct device_node *node);
->>>>>>  void a6xx_gmu_remove(struct a6xx_gpu *a6xx_gpu);
->>>>>>  
->>>>>>  void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp,
->>>>>> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c
->>>>>> index 30ecdff363e7..4e5d650578c6 100644
->>>>>> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c
->>>>>> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c
->>>>>> @@ -1041,16 +1041,18 @@ struct msm_gpu_state *a6xx_gpu_state_get(struct msm_gpu *gpu)
->>>>>>  	/* Get the generic state from the adreno core */
->>>>>>  	adreno_gpu_state_get(gpu, &a6xx_state->base);
->>>>>>  
->>>>>> -	a6xx_get_gmu_registers(gpu, a6xx_state);
->>>>>> +	if (!adreno_has_gmu_wrapper(adreno_gpu)) {
->>>>>> +		a6xx_get_gmu_registers(gpu, a6xx_state);
->>>>>>  
->>>>>> -	a6xx_state->gmu_log = a6xx_snapshot_gmu_bo(a6xx_state, &a6xx_gpu->gmu.log);
->>>>>> -	a6xx_state->gmu_hfi = a6xx_snapshot_gmu_bo(a6xx_state, &a6xx_gpu->gmu.hfi);
->>>>>> -	a6xx_state->gmu_debug = a6xx_snapshot_gmu_bo(a6xx_state, &a6xx_gpu->gmu.debug);
->>>>>> +		a6xx_state->gmu_log = a6xx_snapshot_gmu_bo(a6xx_state, &a6xx_gpu->gmu.log);
->>>>>> +		a6xx_state->gmu_hfi = a6xx_snapshot_gmu_bo(a6xx_state, &a6xx_gpu->gmu.hfi);
->>>>>> +		a6xx_state->gmu_debug = a6xx_snapshot_gmu_bo(a6xx_state, &a6xx_gpu->gmu.debug);
->>>>>>  /
->>>>>> -	a6xx_snapshot_gmu_hfi_history(gpu, a6xx_state);
->>>>>> +		a6xx_snapshot_gmu_hfi_history(gpu, a6xx_state);
->>>>>> +	}
->>>>>>  
->>>>>>  	/* If GX isn't on the rest of the data isn't going to be accessible */
->>>>>> -	if (!a6xx_gmu_gx_is_on(&a6xx_gpu->gmu))
->>>>>> +	if (!adreno_has_gmu_wrapper(adreno_gpu) && !a6xx_gmu_gx_is_on(&a6xx_gpu->gmu))
->>>>>>  		return &a6xx_state->base;
->>>>>>  
->>>>>>  	/* Get the banks of indexed registers */
->>>>>> diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
->>>>>> index 6934cee07d42..5c5901d65950 100644
->>>>>> --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
->>>>>> +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
->>>>>> @@ -528,6 +528,10 @@ int adreno_load_fw(struct adreno_gpu *adreno_gpu)
->>>>>>  		if (!adreno_gpu->info->fw[i])
->>>>>>  			continue;
->>>>>>  
->>>>>> +		/* Skip loading GMU firwmare with GMU Wrapper */
->>>>>> +		if (adreno_has_gmu_wrapper(adreno_gpu) && i == ADRENO_FW_GMU)
->>>>>> +			continue;
->>>>>> +
->>>>>>  		/* Skip if the firmware has already been loaded */
->>>>>>  		if (adreno_gpu->fw[i])
->>>>>>  			continue;
->>>>>> @@ -1074,8 +1078,8 @@ int adreno_gpu_init(struct drm_device *drm, struct platform_device *pdev,
->>>>>>  	u32 speedbin;
->>>>>>  	int ret;
->>>>>>  
->>>>>> -	/* Only handle the core clock when GMU is not in use */
->>>>>> -	if (config->rev.core < 6) {
->>>>>> +	/* Only handle the core clock when GMU is not in use (or is absent). */
->>>>>> +	if (adreno_has_gmu_wrapper(adreno_gpu) || config->rev.core < 6) {
->>>>>>  		/*
->>>>>>  		 * This can only be done before devm_pm_opp_of_add_table(), or
->>>>>>  		 * dev_pm_opp_set_config() will WARN_ON()
->>>>>> diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.h b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
->>>>>> index f62612a5c70f..ee5352bc5329 100644
->>>>>> --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.h
->>>>>> +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
->>>>>> @@ -115,6 +115,7 @@ struct adreno_gpu {
->>>>>>  	 * code (a3xx_gpu.c) and stored in this common location.
->>>>>>  	 */
->>>>>>  	const unsigned int *reg_offsets;
->>>>>> +	bool gmu_is_wrapper;
->>>>>>  };
->>>>>>  #define to_adreno_gpu(x) container_of(x, struct adreno_gpu, base)
->>>>>>  
->>>>>> @@ -145,6 +146,11 @@ struct adreno_platform_config {
->>>>>>  
->>>>>>  bool adreno_cmp_rev(struct adreno_rev rev1, struct adreno_rev rev2);
->>>>>>  
->>>>>> +static inline bool adreno_has_gmu_wrapper(struct adreno_gpu *gpu)
->>>>>> +{
->>>>>> +	return gpu->gmu_is_wrapper;
->>>>>> +}
->>>>>> +
->>>>>>  static inline bool adreno_is_a2xx(struct adreno_gpu *gpu)
->>>>>>  {
->>>>>>  	return (gpu->revn < 300);
->>>>>>
->>>>>> -- 
->>>>>> 2.40.1
->>>>>>
->>>>>
->>>>> I am still not fully onboard with the idea of gmu_wrapper node in devicetree.
->>>>> Aside from that, I don't see any other issue. Please check the few comments I left.
->>>> Thanks for your review!
->>>>
->>>> Konrad
->>>>>
->>>>> -Akhil.
->>>>>
+-- 
+Hello Dear,
+how are you today?hope you are fine
+My name is Dr Ava Smith ,Am an English and French nationalities.
+I will give you pictures and more details about me as soon as i hear from you
+Thanks
+Ava
