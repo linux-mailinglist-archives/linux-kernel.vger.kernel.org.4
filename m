@@ -2,51 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2DAB735AEF
+	by mail.lfdr.de (Postfix) with ESMTP id 76EE6735AEE
 	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbjFSPOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 11:14:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35510 "EHLO
+        id S231539AbjFSPOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 11:14:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231476AbjFSPOh (ORCPT
+        with ESMTP id S231477AbjFSPOi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 11:14:37 -0400
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDA9BD
+        Mon, 19 Jun 2023 11:14:38 -0400
+Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47308DE
         for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:14:36 -0700 (PDT)
-Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3420ed1a6dcso21778075ab.0
+Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-77e357f9033so80624639f.0
         for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:14:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1687187675; x=1689779675;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=CWdqkF9fjtWsJ4T/pIJKWqa8TolLcvybFPb84QHvsUM=;
-        b=IOh/vGzbJ2XPJJaEJnmqMeHDAEJVjflZuSu5wvZDXmwepUPkycb261s9MsQ693CDZu
-         kiBE/OQV8uOVP//dnPUd/nUTXviPPksFfDeVUXzYni/j2FP2IyzEcxOj30voyMuQPyDE
-         QumrBmDz4zECvJuXbqeC+BEWiScxXPm6afnBsJIGs4V4pwjRTOhDPBQjCEaeg8a6CrdR
-         DksFfFHLrW8EpDD1DkPInSHvu6megPBdGa4J9gum485+tohQ9kdqjCgk+xAssMLxXprf
-         pzbIiufnJsRFQq3vDUL4C1BD4IyimY24dHaWuXlxPxVlFqXqMumRSaPdQHt307VJlwau
-         C0Mw==
-X-Gm-Message-State: AC+VfDzpfH40c1xNZjJAMjhT3kRLZbX3S+5mddT2KhPZkWAjFjDzOo9g
-        6Xu42zgvDHG7laH6l4InI9vwShb7IZFTAf5G8s7hBqStYyBe
-X-Google-Smtp-Source: ACHHUZ6aEEl1LDQo+VNSHKoVZE2usIZheW12BKRc/qoUEGPL9jTg5ak2yE1FxeK4jkr/XVN5lb+eHOL0zowHNShrF6sGnB3LYDjm
+        bh=ZdVR8emX5fYwQTKiB8+qGbypEkQ5NOcZ73pGxB9Ih80=;
+        b=HAOWv8Lg3zX0x98iIkykbZsnlwGDS01St8dvBFllJJxkZ3qjvWvAdwBS+NCwTEa6bU
+         cIRoPR1JdhwdA7nn4U4bx3dgsp5KlXfDEA84BkcQc3z5LPfloLIfwVobfQDDGWQW15nH
+         laLmeZSR2r1JTn52g74YAOd3qYOOpyjndBBLj2MFcjL5mG/YpwyZgz06kqeLf6GeKpuH
+         FLoVBRbbEFqgGejj1f9iKsnYqpsl89AuUmRKmAG+70nWtEqvCNEcuc070J/X9R8bC1ci
+         Ijq78SLbrVL2YOSUlg8PuamDeqpup3LJm9PhiRxfdtOqGgMmqLqS5BkY9NGRIqLnmGEN
+         cyaA==
+X-Gm-Message-State: AC+VfDw2T5up4+YFCD/rwvyaoPMQO3hb3+TCzVbF3vTQ3H/85/VA3sTO
+        b5bwnqofPzrno3j1TyVaSYh3vg7tmiWBAB4b/tZmlKIu0MGG
+X-Google-Smtp-Source: ACHHUZ4nvqlLEsm0x4CZ9j2C+2khd63Dr+hL4ZTgSIob61yu5Pd9PkzC19LXbjKSnAzcxa//TPXlT6lx/I0qMl63c262AlwFYyLl
 MIME-Version: 1.0
-X-Received: by 2002:a92:c986:0:b0:340:5928:e058 with SMTP id
- y6-20020a92c986000000b003405928e058mr2771094iln.3.1687187675387; Mon, 19 Jun
+X-Received: by 2002:a02:848e:0:b0:422:f031:deb5 with SMTP id
+ f14-20020a02848e000000b00422f031deb5mr2685121jai.0.1687187675598; Mon, 19 Jun
  2023 08:14:35 -0700 (PDT)
 Date:   Mon, 19 Jun 2023 08:14:35 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000fa09c05fe7cfea6@google.com>
-Subject: [syzbot] [mm?] inconsistent lock state in lru_gen_rotate_memcg
-From:   syzbot <syzbot+87c490fd2be656269b6a@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
+Message-ID: <00000000000012d89205fe7cfe00@google.com>
+Subject: [syzbot] [rdma?] general protection fault in rxe_completer
+From:   syzbot <syzbot+2da1965168e7dbcba136@syzkaller.appspotmail.com>
+To:     jgg@ziepe.ca, leon@kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, zyjzyj2000@gmail.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,134 +59,65 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    40f71e7cd3c6 Merge tag 'net-6.4-rc7' of git://git.kernel.o..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1154eb17280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b55c7ca2258f24ba
-dashboard link: https://syzkaller.appspot.com/bug?extid=87c490fd2be656269b6a
+HEAD commit:    0dbcac3a6dbb Merge tag 'mlx5-fixes-2023-06-16' of git://gi..
+git tree:       net
+console output: https://syzkaller.appspot.com/x/log.txt?x=168647cf280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ac246111fb601aec
+dashboard link: https://syzkaller.appspot.com/bug?extid=2da1965168e7dbcba136
 compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12acd517280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14276ecf280000
+
+Unfortunately, I don't have any reproducer for this issue yet.
 
 Downloadable assets:
-disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7bc7510fe41f/non_bootable_disk-40f71e7c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/1d6d986d5baf/vmlinux-40f71e7c.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/cb0c02dd7f64/bzImage-40f71e7c.xz
+disk image: https://storage.googleapis.com/syzbot-assets/7a5b8a7805df/disk-0dbcac3a.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/7aea10826aef/vmlinux-0dbcac3a.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/d2e6c04c44a8/bzImage-0dbcac3a.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+87c490fd2be656269b6a@syzkaller.appspotmail.com
+Reported-by: syzbot+2da1965168e7dbcba136@syzkaller.appspotmail.com
 
-================================
-WARNING: inconsistent lock state
-6.4.0-rc6-syzkaller-00195-g40f71e7cd3c6 #0 Not tainted
---------------------------------
-inconsistent {SOFTIRQ-ON-W} -> {IN-SOFTIRQ-W} usage.
-syz-executor192/6901 [HC0[0]:SC1[1]:HE0:SE0] takes:
-ffff88807ffdc728 (&pgdat->memcg_lru.lock){+.?.}-{2:2}, at: spin_lock include/linux/spinlock.h:350 [inline]
-ffff88807ffdc728 (&pgdat->memcg_lru.lock){+.?.}-{2:2}, at: lru_gen_rotate_memcg+0x64/0xab0 mm/vmscan.c:4749
-{SOFTIRQ-ON-W} state was registered at:
-  lock_acquire kernel/locking/lockdep.c:5705 [inline]
-  lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5670
-  __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
-  _raw_spin_lock+0x2e/0x40 kernel/locking/spinlock.c:154
-  spin_lock include/linux/spinlock.h:350 [inline]
-  lru_gen_online_memcg+0x16b/0x5a0 mm/vmscan.c:4797
-  mem_cgroup_css_online+0x227/0x3b0 mm/memcontrol.c:5468
-  online_css+0xaf/0x2a0 kernel/cgroup/cgroup.c:5491
-  cgroup_init_subsys+0x46b/0x900 kernel/cgroup/cgroup.c:6022
-  cgroup_init+0xb83/0x1090 kernel/cgroup/cgroup.c:6106
-  start_kernel+0x398/0x490 init/main.c:1077
-  x86_64_start_reservations+0x18/0x30 arch/x86/kernel/head64.c:556
-  x86_64_start_kernel+0xb3/0xc0 arch/x86/kernel/head64.c:537
-  secondary_startup_64_no_verify+0xf4/0xfb
-irq event stamp: 1403
-hardirqs last  enabled at (1402): [<ffffffff81dc88cf>] mod_memcg_state include/linux/memcontrol.h:982 [inline]
-hardirqs last  enabled at (1402): [<ffffffff81dc88cf>] memcg_account_kmem+0x4f/0x80 mm/memcontrol.c:3094
-hardirqs last disabled at (1403): [<ffffffff81dcc157>] uncharge_batch+0x1c7/0x560 mm/memcontrol.c:7142
-softirqs last  enabled at (1178): [<ffffffff880eb512>] rcu_read_unlock_bh include/linux/rcupdate.h:839 [inline]
-softirqs last  enabled at (1178): [<ffffffff880eb512>] __dev_queue_xmit+0x1df2/0x3b10 net/core/dev.c:4271
-softirqs last disabled at (1253): [<ffffffff814cefd4>] invoke_softirq kernel/softirq.c:445 [inline]
-softirqs last disabled at (1253): [<ffffffff814cefd4>] __irq_exit_rcu+0x114/0x190 kernel/softirq.c:650
-
-other info that might help us debug this:
- Possible unsafe locking scenario:
-
-       CPU0
-       ----
-  lock(&pgdat->memcg_lru.lock);
-  <Interrupt>
-    lock(&pgdat->memcg_lru.lock);
-
- *** DEADLOCK ***
-
-2 locks held by syz-executor192/6901:
- #0: ffffffff8e10b9e8 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:78 [inline]
- #0: ffffffff8e10b9e8 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x3e8/0xd50 net/core/rtnetlink.c:6414
- #1: ffffffff8c795fe0 (rcu_callback){....}-{0:0}, at: rcu_do_batch kernel/rcu/tree.c:2104 [inline]
- #1: ffffffff8c795fe0 (rcu_callback){....}-{0:0}, at: rcu_core+0x791/0x1ad0 kernel/rcu/tree.c:2377
-
-stack backtrace:
-CPU: 3 PID: 6901 Comm: syz-executor192 Not tainted 6.4.0-rc6-syzkaller-00195-g40f71e7cd3c6 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+infiniband syz2: set active
+infiniband syz2: added wg2
+general protection fault, probably for non-canonical address 0xdffffc0000000006: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000030-0x0000000000000037]
+CPU: 1 PID: 20166 Comm: syz-executor.2 Not tainted 6.4.0-rc6-syzkaller-00218-g0dbcac3a6dbb #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+RIP: 0010:flush_send_queue drivers/infiniband/sw/rxe/rxe_comp.c:600 [inline]
+RIP: 0010:rxe_completer+0x25c7/0x3d80 drivers/infiniband/sw/rxe/rxe_comp.c:659
+Code: 80 3c 02 00 0f 85 7e 10 00 00 4c 8b ad 88 03 00 00 49 8d 45 30 48 89 c2 48 89 04 24 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e 80 11 00 00 49 8d 45 2c 45 8b
+RSP: 0018:ffffc90004ebe938 EFLAGS: 00010006
+RAX: dffffc0000000000 RBX: ffffed10087e4000 RCX: ffffc900103f7000
+RDX: 0000000000000006 RSI: ffffffff877fcaf5 RDI: ffff888043f20388
+RBP: ffff888043f20000 R08: 0000000000000000 R09: ffff888043f2055b
+R10: ffffed10087e40ab R11: 1ffffffff21a70e1 R12: 0000000000000246
+R13: 0000000000000000 R14: ffff888043f201a0 R15: 0000000000000000
+FS:  00007f94b8e21700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b2db24000 CR3: 000000007e0d8000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- print_usage_bug kernel/locking/lockdep.c:3949 [inline]
- valid_state kernel/locking/lockdep.c:3991 [inline]
- mark_lock_irq kernel/locking/lockdep.c:4194 [inline]
- mark_lock.part.0+0x1110/0x1970 kernel/locking/lockdep.c:4656
- mark_lock kernel/locking/lockdep.c:4620 [inline]
- mark_usage kernel/locking/lockdep.c:4545 [inline]
- __lock_acquire+0x1227/0x5f30 kernel/locking/lockdep.c:5042
- lock_acquire kernel/locking/lockdep.c:5705 [inline]
- lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5670
- __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
- _raw_spin_lock+0x2e/0x40 kernel/locking/spinlock.c:154
- spin_lock include/linux/spinlock.h:350 [inline]
- lru_gen_rotate_memcg+0x64/0xab0 mm/vmscan.c:4749
- lru_gen_soft_reclaim+0x62/0x70 mm/vmscan.c:4852
- uncharge_batch+0x2be/0x560 mm/memcontrol.c:7145
- __mem_cgroup_uncharge+0x11f/0x290 mm/memcontrol.c:7221
- mem_cgroup_uncharge include/linux/memcontrol.h:698 [inline]
- __folio_put_small mm/swap.c:105 [inline]
- __folio_put+0xb6/0x140 mm/swap.c:129
- folio_put include/linux/mm.h:1430 [inline]
- put_page include/linux/mm.h:1499 [inline]
- free_page_and_swap_cache+0x257/0x2c0 mm/swap_state.c:305
- __tlb_remove_table arch/x86/include/asm/tlb.h:34 [inline]
- __tlb_remove_table_free mm/mmu_gather.c:153 [inline]
- tlb_remove_table_rcu+0x89/0xe0 mm/mmu_gather.c:208
- rcu_do_batch kernel/rcu/tree.c:2115 [inline]
- rcu_core+0x806/0x1ad0 kernel/rcu/tree.c:2377
- __do_softirq+0x1d4/0x905 kernel/softirq.c:571
- invoke_softirq kernel/softirq.c:445 [inline]
- __irq_exit_rcu+0x114/0x190 kernel/softirq.c:650
- irq_exit_rcu+0x9/0x20 kernel/softirq.c:662
- sysvec_apic_timer_interrupt+0x97/0xc0 arch/x86/kernel/apic/apic.c:1106
- </IRQ>
  <TASK>
- asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:645
-RIP: 0010:__sanitizer_cov_trace_pc+0x3b/0x70 kernel/kcov.c:207
-Code: 81 e1 00 01 00 00 65 48 8b 14 25 00 bc 03 00 a9 00 01 ff 00 74 0e 85 c9 74 35 8b 82 0c 16 00 00 85 c0 74 2b 8b 82 e8 15 00 00 <83> f8 02 75 20 48 8b 8a f0 15 00 00 8b 92 ec 15 00 00 48 8b 01 48
-RSP: 0018:ffffc9000420ecf8 EFLAGS: 00000246
-RAX: 0000000000000000 RBX: 0000000000000064 RCX: 0000000000000000
-RDX: ffff888044f60380 RSI: ffffffff8a021a9b RDI: 0000000000000001
-RBP: ffff88802b6d6004 R08: 0000000000000001 R09: 000000000000006e
-R10: 0000000000000064 R11: 0000000000094001 R12: ffff888054ea8005
-R13: 00000000ffffffff R14: 00000000ffffffff R15: dffffc0000000000
- vsscanf+0x34b/0x2600 lib/vsprintf.c:3518
- sscanf+0xbf/0xf0 lib/vsprintf.c:3716
- __dev_alloc_name net/core/dev.c:1065 [inline]
- dev_alloc_name_ns+0x343/0x610 net/core/dev.c:1099
- dev_get_valid_name+0x69/0x170 net/core/dev.c:1134
- register_netdevice+0x3ba/0x1640 net/core/dev.c:10006
- veth_newlink+0x352/0x9d0 drivers/net/veth.c:1897
- rtnl_newlink_create net/core/rtnetlink.c:3465 [inline]
- __rtnl_newlink+0x10c2/0x1840 net/core/rtnetlink.c:3682
- rtnl_newlink+0x68/0xa0 net/core/rtnetlink.c:3695
- rtnetlink_rcv_msg+0x43d/0xd50 net/core/rtnetlink.c:6417
- netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2546
+ rxe_qp_do_cleanup+0x1c1/0x820 drivers/infiniband/sw/rxe/rxe_qp.c:771
+ execute_in_process_context+0x3b/0x150 kernel/workqueue.c:3473
+ __rxe_cleanup+0x21e/0x370 drivers/infiniband/sw/rxe/rxe_pool.c:233
+ rxe_create_qp+0x3f6/0x5f0 drivers/infiniband/sw/rxe/rxe_verbs.c:583
+ create_qp+0x5ac/0x970 drivers/infiniband/core/verbs.c:1235
+ ib_create_qp_kernel+0xa1/0x310 drivers/infiniband/core/verbs.c:1346
+ ib_create_qp include/rdma/ib_verbs.h:3743 [inline]
+ create_mad_qp+0x177/0x380 drivers/infiniband/core/mad.c:2905
+ ib_mad_port_open drivers/infiniband/core/mad.c:2986 [inline]
+ ib_mad_init_device+0xf40/0x1a90 drivers/infiniband/core/mad.c:3077
+ add_client_context+0x405/0x5e0 drivers/infiniband/core/device.c:721
+ enable_device_and_get+0x1cd/0x3b0 drivers/infiniband/core/device.c:1332
+ ib_register_device drivers/infiniband/core/device.c:1420 [inline]
+ ib_register_device+0x8b1/0xbc0 drivers/infiniband/core/device.c:1366
+ rxe_register_device+0x302/0x3e0 drivers/infiniband/sw/rxe/rxe_verbs.c:1486
+ rxe_net_add+0x90/0xf0 drivers/infiniband/sw/rxe/rxe_net.c:534
+ rxe_newlink+0xf0/0x1b0 drivers/infiniband/sw/rxe/rxe.c:197
+ nldev_newlink+0x332/0x5e0 drivers/infiniband/core/nldev.c:1731
+ rdma_nl_rcv_msg+0x371/0x6a0 drivers/infiniband/core/netlink.c:195
+ rdma_nl_rcv_skb.constprop.0.isra.0+0x2fc/0x440 drivers/infiniband/core/netlink.c:239
  netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
  netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1365
  netlink_sendmsg+0x925/0xe30 net/netlink/af_netlink.c:1913
@@ -197,34 +129,50 @@ R13: 00000000ffffffff R14: 00000000ffffffff R15: dffffc0000000000
  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f0ee7a7d049
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 41 16 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffe607e0d88 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f0ee7a7d049
-RDX: 0000000000000000 RSI: 0000000020000040 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000003 R09: 0000000000000003
-R10: 0000000000000003 R11: 0000000000000246 R12: 00007ffe607e0db8
-R13: 00007ffe607e0dd0 R14: 00007ffe607e0e10 R15: 00000000000006cd
+RIP: 0033:0x7f94b808c389
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f94b8e21168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007f94b81abf80 RCX: 00007f94b808c389
+RDX: 0000000000000000 RSI: 0000000020000380 RDI: 0000000000000003
+RBP: 00007f94b80d7493 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffe6f1226cf R14: 00007f94b8e21300 R15: 0000000000022000
  </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:flush_send_queue drivers/infiniband/sw/rxe/rxe_comp.c:600 [inline]
+RIP: 0010:rxe_completer+0x25c7/0x3d80 drivers/infiniband/sw/rxe/rxe_comp.c:659
+Code: 80 3c 02 00 0f 85 7e 10 00 00 4c 8b ad 88 03 00 00 49 8d 45 30 48 89 c2 48 89 04 24 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <0f> b6 04 02 84 c0 74 08 3c 03 0f 8e 80 11 00 00 49 8d 45 2c 45 8b
+RSP: 0018:ffffc90004ebe938 EFLAGS: 00010006
+RAX: dffffc0000000000 RBX: ffffed10087e4000 RCX: ffffc900103f7000
+RDX: 0000000000000006 RSI: ffffffff877fcaf5 RDI: ffff888043f20388
+RBP: ffff888043f20000 R08: 0000000000000000 R09: ffff888043f2055b
+R10: ffffed10087e40ab R11: 1ffffffff21a70e1 R12: 0000000000000246
+R13: 0000000000000000 R14: ffff888043f201a0 R15: 0000000000000000
+FS:  00007f94b8e21700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b2db24000 CR3: 000000007e0d8000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 ----------------
 Code disassembly (best guess):
-   0:	81 e1 00 01 00 00    	and    $0x100,%ecx
-   6:	65 48 8b 14 25 00 bc 	mov    %gs:0x3bc00,%rdx
-   d:	03 00
-   f:	a9 00 01 ff 00       	test   $0xff0100,%eax
-  14:	74 0e                	je     0x24
-  16:	85 c9                	test   %ecx,%ecx
-  18:	74 35                	je     0x4f
-  1a:	8b 82 0c 16 00 00    	mov    0x160c(%rdx),%eax
-  20:	85 c0                	test   %eax,%eax
-  22:	74 2b                	je     0x4f
-  24:	8b 82 e8 15 00 00    	mov    0x15e8(%rdx),%eax
-* 2a:	83 f8 02             	cmp    $0x2,%eax <-- trapping instruction
-  2d:	75 20                	jne    0x4f
-  2f:	48 8b 8a f0 15 00 00 	mov    0x15f0(%rdx),%rcx
-  36:	8b 92 ec 15 00 00    	mov    0x15ec(%rdx),%edx
-  3c:	48 8b 01             	mov    (%rcx),%rax
-  3f:	48                   	rex.W
+   0:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
+   4:	0f 85 7e 10 00 00    	jne    0x1088
+   a:	4c 8b ad 88 03 00 00 	mov    0x388(%rbp),%r13
+  11:	49 8d 45 30          	lea    0x30(%r13),%rax
+  15:	48 89 c2             	mov    %rax,%rdx
+  18:	48 89 04 24          	mov    %rax,(%rsp)
+  1c:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  23:	fc ff df
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
+  2e:	84 c0                	test   %al,%al
+  30:	74 08                	je     0x3a
+  32:	3c 03                	cmp    $0x3,%al
+  34:	0f 8e 80 11 00 00    	jle    0x11ba
+  3a:	49 8d 45 2c          	lea    0x2c(%r13),%rax
+  3e:	45                   	rex.RB
+  3f:	8b                   	.byte 0x8b
 
 
 ---
@@ -237,10 +185,6 @@ https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
 If the bug is already fixed, let syzbot know by replying with:
 #syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
 
 If you want to change bug's subsystems, reply with:
 #syz set subsystems: new-subsystem
