@@ -2,79 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BED59735C41
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 18:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9C73735C54
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 18:45:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232322AbjFSQoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 12:44:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43684 "EHLO
+        id S232343AbjFSQod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 12:44:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjFSQoS (ORCPT
+        with ESMTP id S232326AbjFSQo0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 12:44:18 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D39DD
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:44:17 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f640e48bc3so4676186e87.2
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:44:17 -0700 (PDT)
+        Mon, 19 Jun 2023 12:44:26 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD000E61
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:44:24 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f7deee339dso4405558e87.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:44:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687193056; x=1689785056;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NHM0B0vYW8Moj4jOHMcKxrRBWR7x0bZGC3l3qr2YTGA=;
-        b=sKgybTjikwRKb87FUK/rDmBirvzBAJ8OQsgp4ESmA/XVMMy/qpWWE9dl6SwkFbgFCA
-         QSh0tTX2N+l9Gdf/Rt5rMkDPVGlnHJyVQuEU82HnAYpjQlP2tcJJk9QnXV3TrbaqGBzz
-         hjCnclfEJYtIkYGoZXCDFrNJfyRJnbZ/5Zc6444ePEp2Vvj+NHYrJEu2l9Ogc1x7mBpf
-         T7QI4E9gnh+8kg5aFUOEQ4ZrLmCjHrQaJGbTl0Lr+Us38KdRROKxbneCV16VXcaYNsGq
-         tAWDwrzcoRFEX6/thBNZhisAxe4/jU52Cn+YZ8jpOiTVzcjCalj0rzt9clRHtaktly5l
-         gasQ==
+        d=linaro.org; s=google; t=1687193063; x=1689785063;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hk3+XLzwvUhnac+YdwTL34Deb6BoH9HZb6xFXJBKUGM=;
+        b=TBZG7v7If7o/5pSou59M0mIZP5qeoKj+Nh+mbYavYalVGusJMKNk7Tc4+mD14X24Rl
+         gB144EyGtNJUDAbx2Dsov95atHXw81pvbEShQTNGjnhskR2lKGiuqaeviwqtAJPxFxGi
+         6TKUdnGIRwDL3EvyiH+nKoOZF6HOKPUD7UBcqhZZwCYoEbNaXQpF2F3L5kNEIy07hvmT
+         Bf+Yg6MqCVGqiv4GzptJG4WS51vdxd7vEkjMKfcH8M3tVFUY9UcLWx8ITARFmsGVYGI3
+         PyjSn1jqOfeTL1hel2r5maJzPRuz2fUJO6S0O4I9IjQYrQJuddFvVaOnwf51mPVSYooa
+         9srw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687193056; x=1689785056;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NHM0B0vYW8Moj4jOHMcKxrRBWR7x0bZGC3l3qr2YTGA=;
-        b=SYETIpSlIigbmRKPKVEbymlfiqRY8lEJrFfZ9yVf2s3EaMii35TYItKl5lOvVeOc4U
-         LVp7DItN3U/PpUJFAA/xcQPHPSGva2iGTcVK7Kt4V8ZEYR4YurTa/IGBQlXgQXWLsVT7
-         GEHRlx5ecxcm+yrbHsxn7OGVcRYGHWPZJJATYLc0fowEXAxgnNQWF43hcd2k8aCXHcR9
-         amYNpK5BlQ0WRPaG1XvshzICt7lueCtfWcIhgWbSjWnR05SxSH3iy6+9YYCkJErOqSh1
-         MCOm7rxW0a2ZdCnlrWrvq79Vw2enl+RlG/4M/ZuRWGk+9uX2E7IpJHxptJjZPNLmbwva
-         tmJA==
-X-Gm-Message-State: AC+VfDwFNerMGmaJCD1MibllT18f0cbhVsKkS/QT+sM77muIn7bkfP+X
-        lN5dXAM1Mr4pKTIhQYm1cqry9g==
-X-Google-Smtp-Source: ACHHUZ5/Yxl3B5Pw42d+rnSvPpBcVE1TMNul4G+s47SuGjWGX7HYsBA9nvxKaHVAVJyutdH86IGrCw==
-X-Received: by 2002:ac2:4647:0:b0:4f4:d324:8b14 with SMTP id s7-20020ac24647000000b004f4d3248b14mr5600175lfo.14.1687193055446;
-        Mon, 19 Jun 2023 09:44:15 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:13d0:1b6c:ce40:5429? ([2a05:6e02:1041:c10:13d0:1b6c:ce40:5429])
-        by smtp.googlemail.com with ESMTPSA id d22-20020a1c7316000000b003f80946116dsm11237825wmb.45.2023.06.19.09.44.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 09:44:15 -0700 (PDT)
-Message-ID: <4c2f66f1-2623-306f-f1d3-83a32a0c2885@linaro.org>
-Date:   Mon, 19 Jun 2023 18:44:14 +0200
+        d=1e100.net; s=20221208; t=1687193063; x=1689785063;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hk3+XLzwvUhnac+YdwTL34Deb6BoH9HZb6xFXJBKUGM=;
+        b=C83p9FrFiagrInSllBK4WG3i+j8cxpNoSGxeZMmUnDGoxoI5KV4fxHPCLUPPY6tclb
+         96fVbpBqfJb1Jh59pfeETPyFq3rIxAFLIeNsz9n14Xwf7B20NZe4cIeY28OJoSnIT05v
+         S8i8xzTq2q4xzBi7zfr79UWWf0EFeAyQ/jJ4/fH5CjWs0L+Kp2Ytsy9a2EIHgP3M60AF
+         /iboBDBiWBhmhnhHAUiZMP6ukXRs2en1U7krEiQAPELySci+873/+1Cf8PazPEuXOJ4W
+         +lQ7qVl6XUHetPdJZOR3/YkN0xJQxn5Ix65CsnwtfTGuu3a27UYsso67EV6XpHVH0roA
+         7zMw==
+X-Gm-Message-State: AC+VfDxw2pYP710KbBxjCi1xH/UxzAhbI0Fo84XSPSVAAKCY96gDJVfC
+        UpUNS+iWx3scy7bqpWNF53FShg==
+X-Google-Smtp-Source: ACHHUZ43YVyyMvpV79hwaPfXJTAxmlC/6e/OWjQ1pc/ydVIDwICbEz1/Yu+VrbtJj+Npcj/Fmg5R2Q==
+X-Received: by 2002:a19:e016:0:b0:4f8:5886:1868 with SMTP id x22-20020a19e016000000b004f858861868mr4674410lfg.24.1687193063082;
+        Mon, 19 Jun 2023 09:44:23 -0700 (PDT)
+Received: from [192.168.1.101] (abyl242.neoplus.adsl.tpnet.pl. [83.9.31.242])
+        by smtp.gmail.com with ESMTPSA id d9-20020ac24c89000000b004f849605be7sm1774293lfl.292.2023.06.19.09.44.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 09:44:22 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v3 0/6] Adreno QoL changes
+Date:   Mon, 19 Jun 2023 18:44:20 +0200
+Message-Id: <20230517-topic-a7xx_prep-v3-0-a3ce3725385b@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v5 0/4] Support timer drivers as loadable modules
-Content-Language: en-US
-To:     walter.chang@mediatek.com, Thomas Gleixner <tglx@linutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        John Stultz <jstultz@google.com>
-Cc:     wsd_upstream@mediatek.com, stanley.chu@mediatek.com,
-        Chun-hung.Wu@mediatek.com, Freddy.Hsin@mediatek.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230517022557.24388-1-walter.chang@mediatek.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230517022557.24388-1-walter.chang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOWFkGQC/4WNQQ6CMBREr2K6tqZ8hFpX3sMY81taaEJa0iLBE
+ O7uh50L43ImM+8tLNvkbWbXw8KSnXz2MVAojwdmOgyt5b6hzEBAKapC8jEO3nCU8/wckh24vEi
+ slZGNcI7RS2O2XCcMpqNfePU9lbR0ft419wflzucxpvdunYqt/S2YCi64RFWfHVilDNx6HzDFU
+ 0wt22AT/AEAASqtGkTQYJz4Aqzr+gGkors4BQEAAA==
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1687193061; l=1497;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=fU7IOvGFZT+jtDrFsHSlPtEO+e2x+lA6EVgMfmK5BgE=;
+ b=UBAMGsIGb0WZMAKEbrHuoXl8s1shs2X+HNxHtR5cntD9grU6aO3tDG/rzyE3s2Ad67Wy68QFc
+ nhLhLOplWgZDaveJw0ANYhBIme+xR984zvUcx/LroWMxZSBcJ3WxeZu
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,69 +88,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series brings some niceties in preparation for A7xx introduction.
 
-As I already said, I'm not very comfortable with these changes and the 
-potential impact it can have on the overall time framework.
+It should be fully independent of the GMU wrapper series.
 
-I will pick the series if Thomas gives its Acked-by
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Changes in v3:
+- Pull more definitions from mesa
+- Decode CP_PROTECT_CNTL bitfields
+- Rebase on next-20230619
+- Link to v2: https://lore.kernel.org/r/20230517-topic-a7xx_prep-v2-0-5b9daa2b2cf0@linaro.org
 
-Thanks
+Changes in v2:
+- Drop switching to using the GMU_AO counter in timestamp
+- Add a definition for REG_A6XX_GMU_AHB_FENCE_STATUS_CLR, may be subbed
+  with a register sync after mesa MR22901
+- Link to v1: https://lore.kernel.org/r/20230517-topic-a7xx_prep-v1-0-7a964f2e99c2@linaro.org
 
+---
+Konrad Dybcio (6):
+      drm/msm/a6xx: Add some missing header definitions
+      drm/msm/a6xx: Use descriptive bitfield names for CP_PROTECT_CNTL
+      drm/msm/a6xx: Skip empty protection ranges entries
+      drm/msm/a6xx: Ensure clean GMU state in a6xx_gmu_fw_start
+      drm/msm/a6xx: Improve GMU force shutdown sequence
+      drm/msm/a6xx: Fix up GMU region reservations
 
-On 17/05/2023 04:25, walter.chang@mediatek.com wrote:
-> From: Walter Chang <walter.chang@mediatek.com>
-> 
-> This set of patches aims to make SoC related timer drivers, such as
-> timer-mediatek.c become loadable modules for the Generic Kernel Image
-> (GKI).
-> 
-> This driver registers an always-on timer as tick_broadcast_device on
-> MediaTek SoCs. If the system does not load this module at startup,
-> system will also boot normally by using built-in `bc_hrtimer` instead.
-> Besides, the previous experiment [1] indicates that the SYST/GPT, in
-> combination with a loadable module, is fully operational.
-> 
-> The first three patches export functions and remove __init markings to
-> support loadable timer modules.
-> 
-> The fourth patch makes timer-mediatek.c become loadable module for GKI.
-> 
-> [1]
-> https://lore.kernel.org/all/32777456f8e0f98e4cd5b950f421d21f71b149cf.camel@mediatek.com/#t
-> 
-> [v5]
-> - Add Signed-off-by tags in all patches
-> - Add Acked-by tags and Reviewed-by tags
-> 
-> [v4]
-> - Fix review comments pointed by Angelo
-> 
-> [v3]
-> - Rebase on linux-next
-> 
-> [v2]
-> - Convert timer-mediatek.c driver to loadable module
-> 
-> Chun-Hung Wu (4):
->    time/sched_clock: Export sched_clock_register()
->    clocksource/drivers/mmio: Export clocksource_mmio_init()
->    clocksource/drivers/timer-of: Remove __init markings
->    clocksource/drivers/timer-mediatek: Make timer-mediatek become
->      loadable module
-> 
->   drivers/clocksource/Kconfig          |  2 +-
->   drivers/clocksource/mmio.c           |  8 ++++---
->   drivers/clocksource/timer-mediatek.c | 33 ++++++++++++++++++++++++++++
->   drivers/clocksource/timer-of.c       | 23 +++++++++----------
->   drivers/clocksource/timer-of.h       |  6 ++---
->   kernel/time/sched_clock.c            |  4 ++--
->   6 files changed, 56 insertions(+), 20 deletions(-)
-> 
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c     | 21 +++++++++++++++++----
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.xml.h |  2 ++
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c     | 14 ++++++++++----
+ 3 files changed, 29 insertions(+), 8 deletions(-)
+---
+base-commit: 47045630bc409ce6606d97b790895210dd1d517d
+change-id: 20230517-topic-a7xx_prep-787a69c7d0ff
 
+Best regards,
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
