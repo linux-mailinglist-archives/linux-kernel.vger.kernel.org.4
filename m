@@ -2,72 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D38B8735AC6
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F21E735ACB
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbjFSPGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 11:06:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53770 "EHLO
+        id S230308AbjFSPH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 11:07:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231555AbjFSPFY (ORCPT
+        with ESMTP id S229658AbjFSPHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 11:05:24 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADBB610FE
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:04:52 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-25ec175b86bso2339538a91.1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:04:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687187092; x=1689779092;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BAHgbKUGLDFGyzp+XWYZ2sseIunYBsYQIO/Xldf05CU=;
-        b=XvdhBRHXtdzN60JPoHiXZGxe3Wk8p3gEVy+80P/yCIUnn5q/UjEz6wGlLUXO/Tcp/B
-         p8G1lcxkxYlP5xBp89pAbZZsu5TTC+qOgOXZx0qANDXGrqsKG5jlWFQVYeQMgog4GiVg
-         wdxkf03RP9va75x46RLsvNHYZv9BMqmZ8LQqPta7Z6Zq8i+eA+ZPRky6UY20MUYFYLkr
-         AiJCUirnH8hMizZurVOfFD4mTj3SdBbkydnp+kTqBxXNiyFRO5NJsTl5mYeFNPA5V9gf
-         rSIvT9+E06Kh8dESXnCMURATxRR6WFsSxEu8qtTmzg8ahZcvAundvWcd7CY1HHfnvrf3
-         CsnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687187092; x=1689779092;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BAHgbKUGLDFGyzp+XWYZ2sseIunYBsYQIO/Xldf05CU=;
-        b=RfWv/FxiTx/uYCqM6TamMbcZlMIqYb2LabKtlDsgGeN/axFPZhv3hoOmRTaViCLCf+
-         qgxomD7tDq9t9mr4+DA/swekWYzqC+nxn/nKTaCpbyy702kn2FM4UFhBJXxmZV6T+/nS
-         Et2C8dLjJbYjRIdU8PmdHSu3sleCqJrZNdTRU+uyJ3+XdPzm5haNYIthhnQaU1FsUAq5
-         U8xoSlwg4tcrKE3F2g00pjB1+zEUd9Gt5iKGn5D9hGimZ+UqvqdTK+M++aL1sF5ao9tF
-         Vi4tpqwuIGC6owpzzlyfy3GRorOFAvUQO27LE3bTORNVGOXxfAhDdSD6fiXOEgxI6ky2
-         w9rg==
-X-Gm-Message-State: AC+VfDxMe3LN5gzUZEL30Lff95RDkMu+u6VDo5XAaCfD+4ICzbRDVo+R
-        nlj2OCHgBlbucu2wq3D6MRKB
-X-Google-Smtp-Source: ACHHUZ6mX5eL59bpG47z5VL6nwHLS8G/J72KGT7pv4yLTGgHpPgvjAqo6OiEFj63qn6HUCs8V7wiOA==
-X-Received: by 2002:a17:90a:df95:b0:25b:e216:bc15 with SMTP id p21-20020a17090adf9500b0025be216bc15mr10269006pjv.23.1687187092079;
-        Mon, 19 Jun 2023 08:04:52 -0700 (PDT)
-Received: from localhost.localdomain ([117.217.183.37])
-        by smtp.gmail.com with ESMTPSA id 10-20020a17090a19ca00b0025efaf7a0d3sm2765480pjj.14.2023.06.19.08.04.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 08:04:51 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com
-Cc:     robh@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, steev@kali.org,
-        quic_srichara@quicinc.com,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v4 9/9] PCI: qcom: Do not advertise hotplug capability for IP v2.1.0
-Date:   Mon, 19 Jun 2023 20:34:08 +0530
-Message-Id: <20230619150408.8468-10-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230619150408.8468-1-manivannan.sadhasivam@linaro.org>
-References: <20230619150408.8468-1-manivannan.sadhasivam@linaro.org>
+        Mon, 19 Jun 2023 11:07:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0773610FE;
+        Mon, 19 Jun 2023 08:06:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BCD2360CA0;
+        Mon, 19 Jun 2023 15:06:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 219B1C433C8;
+        Mon, 19 Jun 2023 15:06:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687187207;
+        bh=68pHvNEjGgMDZeKdqaK5OhjSf82d8Kjku7zDW9PYkYw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SImQxy688z/P6cKz+8EDhzhPPkamlzmTFEfskk0yD6TwyTkX5JPVltFh13aPGaXKr
+         X1BLNeMGMsh6Q6C85ZZ6rVDW5orAS27eyvkp+ezoZuho1aAb3tZZeo7yAwGpzrw8s6
+         3cTgPf3245a3OlrXMEynIqwKKa9sS78dblHlaPQQNfrpSKNtBFCoZLIU/To8L/jF95
+         Dn9BhKmlfThsYnpYRHThoCEaaCDC5b6DHqVelzEIRZ3sY9mS4iruOHIozcYqc+aGMM
+         98fgaelS/YDCKcqlu8fOvPEdmeCJIKVNBlDDs2xXv5tPax40DV9rXAUJFA20ctLSle
+         2YZ6wYbKGz5Gg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1qBGSq-0003ZO-Ul; Mon, 19 Jun 2023 17:06:45 +0200
+Date:   Mon, 19 Jun 2023 17:06:44 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
+        quic_jackp@quicinc.com, quic_ugoswami@quicinc.com
+Subject: Re: [PATCH v3] usb: dwc3: gadget: Propagate core init errors to UDC
+ during pullup
+Message-ID: <ZJBvBE-xy2X_wWO0@hovoldconsulting.com>
+References: <20230618120949.14868-1-quic_kriskura@quicinc.com>
+ <ZI_-c5g20DSJOSu2@hovoldconsulting.com>
+ <fca531e0-88ec-ba19-2c11-e8965ac653b2@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fca531e0-88ec-ba19-2c11-e8965ac653b2@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,40 +64,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SoCs making use of Qcom PCIe controller IP v2.1.0 do not support hotplug
-functionality. But the hotplug capability bit is set by default in the
-hardware. This causes the kernel PCI core to register hotplug service for
-the controller and send hotplug commands to it. But those commands will
-timeout generating messages as below during boot and suspend/resume.
+On Mon, Jun 19, 2023 at 06:20:43PM +0530, Krishna Kurapati PSSNV wrote:
+> On 6/19/2023 12:36 PM, Johan Hovold wrote:
+> > On Sun, Jun 18, 2023 at 05:39:49PM +0530, Krishna Kurapati wrote:
 
-[    5.782159] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x03c0 (issued 2020 msec ago)
-[    5.810161] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x03c0 (issued 2048 msec ago)
-[    7.838162] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x07c0 (issued 2020 msec ago)
-[    7.870159] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x07c0 (issued 2052 msec ago)
+> >> @@ -2747,7 +2747,9 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+> >>   	ret = pm_runtime_get_sync(dwc->dev);
+> >>   	if (!ret || ret < 0) {
+> >>   		pm_runtime_put(dwc->dev);
+> >> -		return 0;
+> >> +		if (ret < 0)
+> >> +			pm_runtime_set_suspended(dwc->dev);
+> > 
+> > This bit is broken and is also not mentioned or explained in the commit
+> > message. What are you trying to achieve here?
+> > 
+> > You cannot set the state like this after runtime PM is enabled and the
+> > above call will always fail.
 
-This not only spams the console output but also induces a delay of a
-couple of seconds. To fix this issue, let's clear the HPC bit in
-PCI_EXP_SLTCAP register as a part of the post init sequence to not
-advertise the hotplug capability for the controller.
+> The reason why I an returning ret is because, when the first get_sync 
+> fails because of core_init failure and we return 0 instead of ret, the 
+> UDC thinks that controller has started successfully but we never set the 
+> run stop bit.
 
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/pci/controller/dwc/pcie-qcom.c | 2 ++
- 1 file changed, 2 insertions(+)
+That bit is clear.
 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-index 612266fb849a..7a87a47eb7ed 100644
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -438,6 +438,8 @@ static int qcom_pcie_post_init_2_1_0(struct qcom_pcie *pcie)
- 	writel(CFG_BRIDGE_SB_INIT,
- 	       pci->dbi_base + AXI_MSTR_RESP_COMP_CTRL1);
+> So when we plug out the cable,  the disconnect event won't 
+> be generated and we never send on systems like android the user space 
+> will never clear the UDC upon disconnect. Its a sort of mismatch between 
+> controller and udc.
+
+Ok, but the controller is an error state after the resume failure. And
+here you rely on user space to retry gadget activation in order to
+eventually detect the disconnect event?
  
-+	qcom_pcie_clear_hpc(pcie->pci);
-+
- 	return 0;
- }
- 
--- 
-2.25.1
+> Also once the first get_sync fails, the dwc->dev->power.runtime_error 
+> flag is set and successive calls to get_sync always return -EINVAL. In 
+> this situation even if UDC/configfs retry pullup, resume_common will 
+> never be called and we never actually start the controller or resume 
+> dwc->dev.
+> 
+> By calling set_suspended, I am trying to clear the runtime_error flag so 
+> that the next retry to pullup will call resume_common and retry 
+> core_init and set run_stop.
 
+Ok, thanks, that's the bit I was missing in the commit message.
+
+First, I perhaps mistakingly thought pm_runtime_set_suspended() may only
+be called with PM runtime disabled, but it appears it may indeed be
+valid to call also after an error but with the caveat that the device
+must then actually be in the suspended state.
+
+The documentation and implementation is inconsistent here as the kernel
+doc for pm_runtime_set_suspended() clearly states:
+
+	It is not valid to call this function for devices with runtime
+	PM enabled.
+
+and it also looks like we'd end up with an active-child counter
+imbalance if anyone actually tries to do so.
+
+But either way, it also seems like the controller is not guaranteed to
+be suspended here as pm_runtime_get_sync() may also fail after a
+previous errors that have left the controller in the active state?
+
+Also, what kind of errors would cause core_init and resume to fail here?
+
+If this is something that you see during normal operation then this
+seems to suggest that something is wrong with the runtime pm
+implementation.
+
+Note that virtually all drivers treat resume failures as fatal errors
+and do not implement any recovery from that.
+
+In fact, the only other example of this kind of usage that I could find
+is also for a Qualcomm driver...
+
+Johan
