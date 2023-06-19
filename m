@@ -2,611 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2817A73562A
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 13:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BE43735624
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 13:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbjFSLuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 07:50:54 -0400
+        id S229458AbjFSLu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 07:50:27 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbjFSLui (ORCPT
+        with ESMTP id S229782AbjFSLuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 07:50:38 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C684FE63;
-        Mon, 19 Jun 2023 04:50:30 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id d9443c01a7336-1b50e309602so28094035ad.0;
-        Mon, 19 Jun 2023 04:50:30 -0700 (PDT)
+        Mon, 19 Jun 2023 07:50:23 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E239C102
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 04:50:22 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id 46e09a7af769-6b58351327eso560910a34.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 04:50:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687175430; x=1689767430;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7yHpRcPU/Sa72lmyzQ+iBfHBoSJBYyJfz78UAY0STFc=;
-        b=Cukfp+kfBlhnfykyvPFb9uIkjdGTJCj85SRBCBcCLh58QgXeT0oK/694n/vhEfNnlf
-         AaxZM97k0+jgJU5EM7LIJk0ybdcpTfCUoXaABZSuUdwcGNAx4wZb4CeGIBH23ZCVYS0E
-         v+1pKdUlrtgk9lXvq/MxZoYvPTYoJUjBIpMIMmMDMOaI3bMvuyGBPx3hBQ35udZj6kdF
-         rUciI9q+VisJvscSm52ap0FKxDQOauujYmp6htnYvsYtDjv2NF9BxXqhu6Wu0BlRtiEe
-         Qyz43NHB0Eal3iREJcb4NIn16vVarKbalgLzoRO67Th5fIegLpztnfp9iprl8zFvNmgz
-         KZRA==
+        d=broadcom.com; s=google; t=1687175422; x=1689767422;
+        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JEQSsqyCYviOhf+N7ZYabeUQ8p5HZKea+Dsm9SlDsOY=;
+        b=RrYSIAZLUjI4/4MR53PV+kdG4k2kOjfCy+jYeiZfS8Q3qitVVqcBpGtAz2UVccbFBZ
+         QLCaL1RxR3ygtalzuD40JvIWQ8C2f3PlH0ehkjGlfUyvMZ3E9TdzhfAhLHtfE6+Z+SIk
+         mkRVYYMObq/gAPDpG47QpDF2Xr0wtucK7tZa4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687175430; x=1689767430;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7yHpRcPU/Sa72lmyzQ+iBfHBoSJBYyJfz78UAY0STFc=;
-        b=I0lhuW9p+Mg5AsIalKonRB8+3Cu//m2MRofTUPrpA4rxrWR5B/UTjgZG+OCzPM8sNi
-         kYLVOahYrMCAtVhVdbThsIQMtnucprKzC+HiFpgBzxaPlEX8cDmLxn9Na20SbV1fDXAC
-         ijy5loF70xzfDafYjoljFNegnqsnlbOJSOQnQQ2tRlyp1fsssIU4DJ03mE7ce6SA2dpM
-         h1UbVmULip3BvF0HHSoykQDcGawt77pzGjEHJA7B1TkVfP9lCaERowWWmH0T0hal7vWh
-         0GbMvP08JUf7PH5V9ahEnKNMZ7qYPC7yUJC7E6a9GMC8y8KEUdmCdE2pAgW50xrW0fIA
-         MTCQ==
-X-Gm-Message-State: AC+VfDw7nQypAavmpaczfXu62SkrtWk8j7JVgoq1Q1rWcu4KX6xBghVB
-        TdGA4/w0beoQZs7BPiLpRdY=
-X-Google-Smtp-Source: ACHHUZ5TBp0sFBr2ul0ou72IxAkwXDt90m4exehd0yWd8o/5jZ8PHoOgUJG8SBEvsknvoHBoDRvj/w==
-X-Received: by 2002:a17:902:d38d:b0:1b1:9f7d:2aec with SMTP id e13-20020a170902d38d00b001b19f7d2aecmr8990102pld.68.1687175429594;
-        Mon, 19 Jun 2023 04:50:29 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.86])
-        by smtp.gmail.com with ESMTPSA id k1-20020a170902694100b001aaf370b1c7sm20287882plt.278.2023.06.19.04.50.25
+        d=1e100.net; s=20221208; t=1687175422; x=1689767422;
+        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JEQSsqyCYviOhf+N7ZYabeUQ8p5HZKea+Dsm9SlDsOY=;
+        b=Z5R2YbO6X4yS6ey47zk7I8Em/IeFBrB+9JgUap1ehu1HZ+5Th/KE8uFFDy+s6fRkTS
+         cgxZuVbqWRO2KyGXF+QIlzauqFhumXMaHN2/ue3KaLDcpb9UddcyGoA53ayRzrurSuKp
+         +1fkWuLhxT3tUfVNu0C1BaMl5RKre1rG4ZtGwWpLkJGLv7xD39szWPzPvuSVmq3x7nyW
+         KnL1tuW+avXzTRZtafSaHFM4ojdTWpRZjw+ZoLWmc8Wm2MbX0Bl/sF2xk2HmIUmCFGIf
+         fWVnAHflnK+DkloOhCYYMf5ejTK4tody2sBJGffOcaBE/vsr5JqZO6smrnfIUvfVtZy5
+         JnBA==
+X-Gm-Message-State: AC+VfDwnCE4fhsczhrYxOIkzTsGCRgLricz/P+OXc1WdBbVDYn6chwkf
+        YQFA0BJxdJd6z9FvkDCTnofYQg==
+X-Google-Smtp-Source: ACHHUZ4wlwb3JI7RPmQDj+3fG0WOqmkcpH+mMBFA2MYBZPig4cMfhIXqa/hfmrQnhyrMIOauTCCEEg==
+X-Received: by 2002:a05:6358:edc:b0:12b:c378:b090 with SMTP id 28-20020a0563580edc00b0012bc378b090mr3563433rwh.26.1687175422024;
+        Mon, 19 Jun 2023 04:50:22 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id p1-20020ac84601000000b003e0945575dasm10808686qtn.1.2023.06.19.04.50.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 04:50:29 -0700 (PDT)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     yhs@meta.com, alexei.starovoitov@gmail.com
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, benbjiang@tencent.com,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Menglong Dong <imagedong@tencent.com>
-Subject: [PATCH bpf-next v6 3/3] selftests/bpf: add testcase for TRACING with 6+ arguments
-Date:   Mon, 19 Jun 2023 19:49:47 +0800
-Message-Id: <20230619114947.1543848-4-imagedong@tencent.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230619114947.1543848-1-imagedong@tencent.com>
-References: <20230619114947.1543848-1-imagedong@tencent.com>
+        Mon, 19 Jun 2023 04:50:21 -0700 (PDT)
+From:   Florian Fainelli <florian.fainelli@broadcom.com>
+To:     bcm-kernel-feedback-list@broadcom.com,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] dt-bindings: firmware: brcm,kona-smc: convert to YAML
+Date:   Mon, 19 Jun 2023 04:50:18 -0700
+Message-Id: <20230619115018.3378417-1-florian.fainelli@broadcom.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230618151308.GA23586@standask-GA-A55M-S2HP>
+References: <20230618151308.GA23586@standask-GA-A55M-S2HP>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000ba867e05fe7a23fa"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+--000000000000ba867e05fe7a23fa
+Content-Transfer-Encoding: 8bit
 
-Add test9/test10 in fexit_test.c and fentry_test.c to test the fentry
-and fexit whose target function have 7/11 arguments.
+From: Florian Fainelli <f.fainelli@gmail.com>
 
-Correspondingly, add bpf_testmod_fentry_test7() and
-bpf_testmod_fentry_test11() to bpf_testmod.c
+On Sun, 18 Jun 2023 17:13:08 +0200, Stanislav Jakubek <stano.jakubek@gmail.com> wrote:
+> Convert Broadcom Kona family Secure Monitor bounce buffer bindings
+> to DT schema.
+> 
+> Changes during conversion:
+>   - move from misc to firmware subdirectory
+>   - add used, but previously undocumented SoC-specific compatibles
+>   - drop deprecated compatibles (they've been deprecated for ~10 years)
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+> ---
 
-Meanwhile, add bpf_modify_return_test2() to test_run.c to test the
-MODIFY_RETURN with 7 arguments.
+Applied to https://github.com/Broadcom/stblinux/commits/devicetree/next, thanks!
+--
+Florian
 
-Add bpf_testmod_test_struct_arg_7/bpf_testmod_test_struct_arg_7 in
-bpf_testmod.c to test the struct in the arguments.
+--000000000000ba867e05fe7a23fa
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-And the testcases passed:
-
-./test_progs -t fexit
-Summary: 5/12 PASSED, 0 SKIPPED, 0 FAILED
-
-./test_progs -t fentry
-Summary: 3/0 PASSED, 0 SKIPPED, 0 FAILED
-
-./test_progs -t modify_return
-Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
-
-./test_progs -t tracing_struct
-Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
-
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
----
-v6:
-- add testcases to tracing_struct.c instead of fentry_test.c and
-  fexit_test.c
-v5:
-- add testcases for MODIFY_RETURN
-v4:
-- use different type for args in bpf_testmod_fentry_test{7,12}
-- add testcase for grabage values in ctx
-v3:
-- move bpf_fentry_test{7,12} to bpf_testmod.c and rename them to
-  bpf_testmod_fentry_test{7,12} meanwhile
-- get return value by bpf_get_func_ret() in
-  "fexit/bpf_testmod_fentry_test12", as we don't change ___bpf_ctx_cast()
-  in this version
----
- net/bpf/test_run.c                            | 23 ++++++--
- .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 49 ++++++++++++++++-
- .../selftests/bpf/prog_tests/fentry_fexit.c   |  4 +-
- .../selftests/bpf/prog_tests/fentry_test.c    |  2 +
- .../selftests/bpf/prog_tests/fexit_test.c     |  2 +
- .../selftests/bpf/prog_tests/modify_return.c  | 20 ++++++-
- .../selftests/bpf/prog_tests/tracing_struct.c | 19 +++++++
- .../testing/selftests/bpf/progs/fentry_test.c | 32 +++++++++++
- .../testing/selftests/bpf/progs/fexit_test.c  | 33 ++++++++++++
- .../selftests/bpf/progs/modify_return.c       | 40 ++++++++++++++
- .../selftests/bpf/progs/tracing_struct.c      | 54 +++++++++++++++++++
- 11 files changed, 271 insertions(+), 7 deletions(-)
-
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 2321bd2f9964..df58e8bf5e07 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -561,6 +561,13 @@ __bpf_kfunc int bpf_modify_return_test(int a, int *b)
- 	return a + *b;
- }
- 
-+__bpf_kfunc int bpf_modify_return_test2(int a, int *b, short c, int d,
-+					void *e, char f, int g)
-+{
-+	*b += 1;
-+	return a + *b + c + d + (long)e + f + g;
-+}
-+
- int noinline bpf_fentry_shadow_test(int a)
- {
- 	return a + 1;
-@@ -596,9 +603,13 @@ __diag_pop();
- 
- BTF_SET8_START(bpf_test_modify_return_ids)
- BTF_ID_FLAGS(func, bpf_modify_return_test)
-+BTF_ID_FLAGS(func, bpf_modify_return_test2)
- BTF_ID_FLAGS(func, bpf_fentry_test1, KF_SLEEPABLE)
- BTF_SET8_END(bpf_test_modify_return_ids)
- 
-+BTF_ID_LIST(bpf_modify_return_test_id)
-+BTF_ID(func, bpf_modify_return_test)
-+
- static const struct btf_kfunc_id_set bpf_test_modify_return_set = {
- 	.owner = THIS_MODULE,
- 	.set   = &bpf_test_modify_return_ids,
-@@ -661,9 +672,15 @@ int bpf_prog_test_run_tracing(struct bpf_prog *prog,
- 			goto out;
- 		break;
- 	case BPF_MODIFY_RETURN:
--		ret = bpf_modify_return_test(1, &b);
--		if (b != 2)
--			side_effect = 1;
-+		if (prog->aux->attach_btf_id == *bpf_modify_return_test_id) {
-+			ret = bpf_modify_return_test(1, &b);
-+			if (b != 2)
-+				side_effect = 1;
-+		} else {
-+			ret = bpf_modify_return_test2(1, &b, 3, 4, (void *)5, 6, 7);
-+			if (b != 2)
-+				side_effect = 1;
-+		}
- 		break;
- 	default:
- 		goto out;
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-index aaf6ef1201c7..a6f991b56345 100644
---- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-@@ -34,6 +34,11 @@ struct bpf_testmod_struct_arg_3 {
- 	int b[];
- };
- 
-+struct bpf_testmod_struct_arg_4 {
-+	u64 a;
-+	int b;
-+};
-+
- __diag_push();
- __diag_ignore_all("-Wmissing-prototypes",
- 		  "Global functions as their definitions will be in bpf_testmod.ko BTF");
-@@ -75,6 +80,24 @@ bpf_testmod_test_struct_arg_6(struct bpf_testmod_struct_arg_3 *a) {
- 	return bpf_testmod_test_struct_arg_result;
- }
- 
-+noinline int
-+bpf_testmod_test_struct_arg_7(u64 a, void *b, short c, int d, void *e,
-+			      struct bpf_testmod_struct_arg_4 f)
-+{
-+	bpf_testmod_test_struct_arg_result = a + (long)b + c + d +
-+		(long)e + f.a + f.b;
-+	return bpf_testmod_test_struct_arg_result;
-+}
-+
-+noinline int
-+bpf_testmod_test_struct_arg_8(u64 a, void *b, short c, int d, void *e,
-+			      struct bpf_testmod_struct_arg_4 f, int g)
-+{
-+	bpf_testmod_test_struct_arg_result = a + (long)b + c + d +
-+		(long)e + f.a + f.b + g;
-+	return bpf_testmod_test_struct_arg_result;
-+}
-+
- __bpf_kfunc void
- bpf_testmod_test_mod_kfunc(int i)
- {
-@@ -191,6 +214,20 @@ noinline int bpf_testmod_fentry_test3(char a, int b, u64 c)
- 	return a + b + c;
- }
- 
-+noinline int bpf_testmod_fentry_test7(u64 a, void *b, short c, int d,
-+				      void *e, char f, int g)
-+{
-+	return a + (long)b + c + d + (long)e + f + g;
-+}
-+
-+noinline int bpf_testmod_fentry_test11(u64 a, void *b, short c, int d,
-+				       void *e, char f, int g,
-+				       unsigned int h, long i, __u64 j,
-+				       unsigned long k)
-+{
-+	return a + (long)b + c + d + (long)e + f + g + h + i + j + k;
-+}
-+
- int bpf_testmod_fentry_ok;
- 
- noinline ssize_t
-@@ -206,6 +243,7 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
- 	struct bpf_testmod_struct_arg_1 struct_arg1 = {10};
- 	struct bpf_testmod_struct_arg_2 struct_arg2 = {2, 3};
- 	struct bpf_testmod_struct_arg_3 *struct_arg3;
-+	struct bpf_testmod_struct_arg_4 struct_arg4 = {21, 22};
- 	int i = 1;
- 
- 	while (bpf_testmod_return_ptr(i))
-@@ -216,6 +254,11 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
- 	(void)bpf_testmod_test_struct_arg_3(1, 4, struct_arg2);
- 	(void)bpf_testmod_test_struct_arg_4(struct_arg1, 1, 2, 3, struct_arg2);
- 	(void)bpf_testmod_test_struct_arg_5();
-+	(void)bpf_testmod_test_struct_arg_7(16, (void *)17, 18, 19,
-+					    (void *)20, struct_arg4);
-+	(void)bpf_testmod_test_struct_arg_8(16, (void *)17, 18, 19,
-+					    (void *)20, struct_arg4, 23);
-+
- 
- 	struct_arg3 = kmalloc((sizeof(struct bpf_testmod_struct_arg_3) +
- 				sizeof(int)), GFP_KERNEL);
-@@ -243,7 +286,11 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
- 
- 	if (bpf_testmod_fentry_test1(1) != 2 ||
- 	    bpf_testmod_fentry_test2(2, 3) != 5 ||
--	    bpf_testmod_fentry_test3(4, 5, 6) != 15)
-+	    bpf_testmod_fentry_test3(4, 5, 6) != 15 ||
-+	    bpf_testmod_fentry_test7(16, (void *)17, 18, 19, (void *)20,
-+			21, 22) != 133 ||
-+	    bpf_testmod_fentry_test11(16, (void *)17, 18, 19, (void *)20,
-+			21, 22, 23, 24, 25, 26) != 231)
- 		goto out;
- 
- 	bpf_testmod_fentry_ok = 1;
-diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-index 130f5b82d2e6..0078acee0ede 100644
---- a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-@@ -31,10 +31,12 @@ void test_fentry_fexit(void)
- 	ASSERT_OK(err, "ipv6 test_run");
- 	ASSERT_OK(topts.retval, "ipv6 test retval");
- 
-+	ASSERT_OK(trigger_module_test_read(1), "trigger_read");
-+
- 	fentry_res = (__u64 *)fentry_skel->bss;
- 	fexit_res = (__u64 *)fexit_skel->bss;
- 	printf("%lld\n", fentry_skel->bss->test1_result);
--	for (i = 0; i < 8; i++) {
-+	for (i = 0; i < 11; i++) {
- 		ASSERT_EQ(fentry_res[i], 1, "fentry result");
- 		ASSERT_EQ(fexit_res[i], 1, "fexit result");
- 	}
-diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_test.c b/tools/testing/selftests/bpf/prog_tests/fentry_test.c
-index c0d1d61d5f66..e1c0ce40febf 100644
---- a/tools/testing/selftests/bpf/prog_tests/fentry_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fentry_test.c
-@@ -24,6 +24,8 @@ static int fentry_test(struct fentry_test_lskel *fentry_skel)
- 	ASSERT_OK(err, "test_run");
- 	ASSERT_EQ(topts.retval, 0, "test_run");
- 
-+	ASSERT_OK(trigger_module_test_read(1), "trigger_read");
-+
- 	result = (__u64 *)fentry_skel->bss;
- 	for (i = 0; i < sizeof(*fentry_skel->bss) / sizeof(__u64); i++) {
- 		if (!ASSERT_EQ(result[i], 1, "fentry_result"))
-diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_test.c b/tools/testing/selftests/bpf/prog_tests/fexit_test.c
-index 101b7343036b..ea81fa913ec6 100644
---- a/tools/testing/selftests/bpf/prog_tests/fexit_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fexit_test.c
-@@ -24,6 +24,8 @@ static int fexit_test(struct fexit_test_lskel *fexit_skel)
- 	ASSERT_OK(err, "test_run");
- 	ASSERT_EQ(topts.retval, 0, "test_run");
- 
-+	ASSERT_OK(trigger_module_test_read(1), "trigger_read");
-+
- 	result = (__u64 *)fexit_skel->bss;
- 	for (i = 0; i < sizeof(*fexit_skel->bss) / sizeof(__u64); i++) {
- 		if (!ASSERT_EQ(result[i], 1, "fexit_result"))
-diff --git a/tools/testing/selftests/bpf/prog_tests/modify_return.c b/tools/testing/selftests/bpf/prog_tests/modify_return.c
-index 5d9955af6247..93febb6d81ef 100644
---- a/tools/testing/selftests/bpf/prog_tests/modify_return.c
-+++ b/tools/testing/selftests/bpf/prog_tests/modify_return.c
-@@ -11,7 +11,8 @@
- #define UPPER(x) ((x) >> 16)
- 
- 
--static void run_test(__u32 input_retval, __u16 want_side_effect, __s16 want_ret)
-+static void run_test(__u32 input_retval, __u16 want_side_effect,
-+		     __s16 want_ret, __s16 want_ret2)
- {
- 	struct modify_return *skel = NULL;
- 	int err, prog_fd;
-@@ -41,6 +42,19 @@ static void run_test(__u32 input_retval, __u16 want_side_effect, __s16 want_ret)
- 	ASSERT_EQ(skel->bss->fexit_result, 1, "modify_return fexit_result");
- 	ASSERT_EQ(skel->bss->fmod_ret_result, 1, "modify_return fmod_ret_result");
- 
-+	prog_fd = bpf_program__fd(skel->progs.fmod_ret_test2);
-+	err = bpf_prog_test_run_opts(prog_fd, &topts);
-+	ASSERT_OK(err, "test_run");
-+
-+	side_effect = UPPER(topts.retval);
-+	ret = LOWER(topts.retval);
-+
-+	ASSERT_EQ(ret, want_ret2, "test_run ret2");
-+	ASSERT_EQ(side_effect, want_side_effect, "modify_return side_effect2");
-+	ASSERT_EQ(skel->bss->fentry_result2, 1, "modify_return fentry_result2");
-+	ASSERT_EQ(skel->bss->fexit_result2, 1, "modify_return fexit_result2");
-+	ASSERT_EQ(skel->bss->fmod_ret_result2, 1, "modify_return fmod_ret_result2");
-+
- cleanup:
- 	modify_return__destroy(skel);
- }
-@@ -50,8 +64,10 @@ void serial_test_modify_return(void)
- {
- 	run_test(0 /* input_retval */,
- 		 1 /* want_side_effect */,
--		 4 /* want_ret */);
-+		 4 /* want_ret */,
-+		 29 /* want_ret */);
- 	run_test(-EINVAL /* input_retval */,
- 		 0 /* want_side_effect */,
-+		 -EINVAL /* want_ret */,
- 		 -EINVAL /* want_ret */);
- }
-diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-index 1c75a32186d6..fe0fb0c9849a 100644
---- a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-@@ -55,6 +55,25 @@ static void test_fentry(void)
- 
- 	ASSERT_EQ(skel->bss->t6, 1, "t6 ret");
- 
-+	ASSERT_EQ(skel->bss->t7_a, 16, "t7:a");
-+	ASSERT_EQ(skel->bss->t7_b, 17, "t7:b");
-+	ASSERT_EQ(skel->bss->t7_c, 18, "t7:c");
-+	ASSERT_EQ(skel->bss->t7_d, 19, "t7:d");
-+	ASSERT_EQ(skel->bss->t7_e, 20, "t7:e");
-+	ASSERT_EQ(skel->bss->t7_f_a, 21, "t7:f.a");
-+	ASSERT_EQ(skel->bss->t7_f_b, 22, "t7:f.b");
-+	ASSERT_EQ(skel->bss->t7_ret, 133, "t7 ret");
-+
-+	ASSERT_EQ(skel->bss->t8_a, 16, "t8:a");
-+	ASSERT_EQ(skel->bss->t8_b, 17, "t8:b");
-+	ASSERT_EQ(skel->bss->t8_c, 18, "t8:c");
-+	ASSERT_EQ(skel->bss->t8_d, 19, "t8:d");
-+	ASSERT_EQ(skel->bss->t8_e, 20, "t8:e");
-+	ASSERT_EQ(skel->bss->t8_f_a, 21, "t8:f.a");
-+	ASSERT_EQ(skel->bss->t8_f_b, 22, "t8:f.b");
-+	ASSERT_EQ(skel->bss->t8_g, 23, "t8:g");
-+	ASSERT_EQ(skel->bss->t8_ret, 156, "t8 ret");
-+
- 	tracing_struct__detach(skel);
- destroy_skel:
- 	tracing_struct__destroy(skel);
-diff --git a/tools/testing/selftests/bpf/progs/fentry_test.c b/tools/testing/selftests/bpf/progs/fentry_test.c
-index 52a550d281d9..18a0ea63cf67 100644
---- a/tools/testing/selftests/bpf/progs/fentry_test.c
-+++ b/tools/testing/selftests/bpf/progs/fentry_test.c
-@@ -77,3 +77,35 @@ int BPF_PROG(test8, struct bpf_fentry_test_t *arg)
- 		test8_result = 1;
- 	return 0;
- }
-+
-+__u64 test9_result = 0;
-+SEC("fentry/bpf_testmod_fentry_test7")
-+int BPF_PROG(test9, __u64 a, void *b, short c, int d, void *e, char f,
-+	     int g)
-+{
-+	test9_result = a == 16 && b == (void *)17 && c == 18 && d == 19 &&
-+		e == (void *)20 && f == 21 && g == 22;
-+	return 0;
-+}
-+
-+__u64 test10_result = 0;
-+SEC("fentry/bpf_testmod_fentry_test11")
-+int BPF_PROG(test10, __u64 a, void *b, short c, int d, void *e, char f,
-+	     int g, unsigned int h, long i, __u64 j, unsigned long k)
-+{
-+	test10_result = a == 16 && b == (void *)17 && c == 18 && d == 19 &&
-+		e == (void *)20 && f == 21 && g == 22 && h == 23 &&
-+		i == 24 && j == 25 && k == 26;
-+	return 0;
-+}
-+
-+__u64 test11_result = 0;
-+SEC("fentry/bpf_testmod_fentry_test11")
-+int BPF_PROG(test11, __u64 a, __u64 b, __u64 c, __u64 d, __u64 e, __u64 f,
-+	     __u64 g, __u64 h, __u64 i, __u64 j, __u64 k)
-+{
-+	test11_result = a == 16 && b == 17 && c == 18 && d == 19 &&
-+		e == 20 && f == 21 && g == 22 && h == 23 &&
-+		i == 24 && j == 25 && k == 26;
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/fexit_test.c b/tools/testing/selftests/bpf/progs/fexit_test.c
-index 8f1ccb7302e1..b2126fb781a1 100644
---- a/tools/testing/selftests/bpf/progs/fexit_test.c
-+++ b/tools/testing/selftests/bpf/progs/fexit_test.c
-@@ -78,3 +78,36 @@ int BPF_PROG(test8, struct bpf_fentry_test_t *arg)
- 		test8_result = 1;
- 	return 0;
- }
-+
-+__u64 test9_result = 0;
-+SEC("fexit/bpf_testmod_fentry_test7")
-+int BPF_PROG(test9, __u64 a, void *b, short c, int d, void *e, char f,
-+	     int g, int ret)
-+{
-+	test9_result = a == 16 && b == (void *)17 && c == 18 && d == 19 &&
-+		e == (void *)20 && f == 21 && g == 22 && ret == 133;
-+	return 0;
-+}
-+
-+__u64 test10_result = 0;
-+SEC("fexit/bpf_testmod_fentry_test11")
-+int BPF_PROG(test10, __u64 a, void *b, short c, int d, void *e, char f,
-+	     int g, unsigned int h, long i, __u64 j, unsigned long k,
-+	     int ret)
-+{
-+	test10_result = a == 16 && b == (void *)17 && c == 18 && d == 19 &&
-+		e == (void *)20 && f == 21 && g == 22 && h == 23 &&
-+		i == 24 && j == 25 && k == 26 && ret == 231;
-+	return 0;
-+}
-+
-+__u64 test11_result = 0;
-+SEC("fexit/bpf_testmod_fentry_test11")
-+int BPF_PROG(test11, __u64 a, __u64 b, __u64 c, __u64 d, __u64 e, __u64 f,
-+	     __u64 g, __u64 h, __u64 i, __u64 j, __u64 k, __u64 ret)
-+{
-+	test11_result = a == 16 && b == 17 && c == 18 && d == 19 &&
-+		e == 20 && f == 21 && g == 22 && h == 23 &&
-+		i == 24 && j == 25 && k == 26 && ret == 231;
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/modify_return.c b/tools/testing/selftests/bpf/progs/modify_return.c
-index 8b7466a15c6b..3376d4849f58 100644
---- a/tools/testing/selftests/bpf/progs/modify_return.c
-+++ b/tools/testing/selftests/bpf/progs/modify_return.c
-@@ -47,3 +47,43 @@ int BPF_PROG(fexit_test, int a, __u64 b, int ret)
- 
- 	return 0;
- }
-+
-+static int sequence2;
-+
-+__u64 fentry_result2 = 0;
-+SEC("fentry/bpf_modify_return_test2")
-+int BPF_PROG(fentry_test2, int a, int *b, short c, int d, void *e, char f,
-+	     int g)
-+{
-+	sequence2++;
-+	fentry_result2 = (sequence2 == 1);
-+	return 0;
-+}
-+
-+__u64 fmod_ret_result2 = 0;
-+SEC("fmod_ret/bpf_modify_return_test2")
-+int BPF_PROG(fmod_ret_test2, int a, int *b, short c, int d, void *e, char f,
-+	     int g, int ret)
-+{
-+	sequence2++;
-+	/* This is the first fmod_ret program, the ret passed should be 0 */
-+	fmod_ret_result2 = (sequence2 == 2 && ret == 0);
-+	return input_retval;
-+}
-+
-+__u64 fexit_result2 = 0;
-+SEC("fexit/bpf_modify_return_test2")
-+int BPF_PROG(fexit_test2, int a, int *b, short c, int d, void *e, char f,
-+	     int g, int ret)
-+{
-+	sequence2++;
-+	/* If the input_reval is non-zero a successful modification should have
-+	 * occurred.
-+	 */
-+	if (input_retval)
-+		fexit_result2 = (sequence2 == 3 && ret == input_retval);
-+	else
-+		fexit_result2 = (sequence2 == 3 && ret == 29);
-+
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/tracing_struct.c b/tools/testing/selftests/bpf/progs/tracing_struct.c
-index c435a3a8328a..515daef3c84b 100644
---- a/tools/testing/selftests/bpf/progs/tracing_struct.c
-+++ b/tools/testing/selftests/bpf/progs/tracing_struct.c
-@@ -18,6 +18,11 @@ struct bpf_testmod_struct_arg_3 {
- 	int b[];
- };
- 
-+struct bpf_testmod_struct_arg_4 {
-+	u64 a;
-+	int b;
-+};
-+
- long t1_a_a, t1_a_b, t1_b, t1_c, t1_ret, t1_nregs;
- __u64 t1_reg0, t1_reg1, t1_reg2, t1_reg3;
- long t2_a, t2_b_a, t2_b_b, t2_c, t2_ret;
-@@ -25,6 +30,9 @@ long t3_a, t3_b, t3_c_a, t3_c_b, t3_ret;
- long t4_a_a, t4_b, t4_c, t4_d, t4_e_a, t4_e_b, t4_ret;
- long t5_ret;
- int t6;
-+long t7_a, t7_b, t7_c, t7_d, t7_e, t7_f_a, t7_f_b, t7_ret;
-+long t8_a, t8_b, t8_c, t8_d, t8_e, t8_f_a, t8_f_b, t8_g, t8_ret;
-+
- 
- SEC("fentry/bpf_testmod_test_struct_arg_1")
- int BPF_PROG2(test_struct_arg_1, struct bpf_testmod_struct_arg_2, a, int, b, int, c)
-@@ -130,4 +138,50 @@ int BPF_PROG2(test_struct_arg_11, struct bpf_testmod_struct_arg_3 *, a)
- 	return 0;
- }
- 
-+SEC("fentry/bpf_testmod_test_struct_arg_7")
-+int BPF_PROG2(test_struct_arg_12, __u64, a, void *, b, short, c, int, d,
-+	      void *, e, struct bpf_testmod_struct_arg_4, f)
-+{
-+	t7_a = a;
-+	t7_b = (long)b;
-+	t7_c = c;
-+	t7_d = d;
-+	t7_e = (long)e;
-+	t7_f_a = f.a;
-+	t7_f_b = f.b;
-+	return 0;
-+}
-+
-+SEC("fexit/bpf_testmod_test_struct_arg_7")
-+int BPF_PROG2(test_struct_arg_13, __u64, a, void *, b, short, c, int, d,
-+	      void *, e, struct bpf_testmod_struct_arg_4, f, int, ret)
-+{
-+	t7_ret = ret;
-+	return 0;
-+}
-+
-+SEC("fentry/bpf_testmod_test_struct_arg_8")
-+int BPF_PROG2(test_struct_arg_14, __u64, a, void *, b, short, c, int, d,
-+	      void *, e, struct bpf_testmod_struct_arg_4, f, int, g)
-+{
-+	t8_a = a;
-+	t8_b = (long)b;
-+	t8_c = c;
-+	t8_d = d;
-+	t8_e = (long)e;
-+	t8_f_a = f.a;
-+	t8_f_b = f.b;
-+	t8_g = g;
-+	return 0;
-+}
-+
-+SEC("fexit/bpf_testmod_test_struct_arg_8")
-+int BPF_PROG2(test_struct_arg_15, __u64, a, void *, b, short, c, int, d,
-+	      void *, e, struct bpf_testmod_struct_arg_4, f, int, g,
-+	      int, ret)
-+{
-+	t8_ret = ret;
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.40.1
-
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
+9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
+UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
+KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
+nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
+Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
+BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
+KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
+kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
+2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
+3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
+NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
+AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
+LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIEAh0Cu/EF/jdZpL
+YN6pDeUhwd3QzDxHiL4FnewkrpHpMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDYxOTExNTAyMlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBv/pIQ124oS0Um/tKXGYFqcYyYxMnJXEku
+fOuaW8W9D8rVLIo+xt7RKJYZc6zxHxQoNDcLM19UF6J/wUmbF+52NnbKOsVmQPYGgixSPIQ3VWKa
+gp9jBfr63UIDWFrcy+ydJk0mRIaSGx1U4fIwEBBH+iwNH7RUCfYYub1StKbOFYoqpDaD1+bHpADe
+SOYI8OLvEmiEJ4NHi4H8Yv+1lxo4o2YZKNaLk0Ah+Ak0ctc+Ka+jbYxMYAfeqT6Sfz4B2bVRn95C
+o5lyW88HLGhkhjQkCjK7ie4U1+iWvuQ/qDSzU88jCA3NcuGfG4oaIC/HmaP2yWdOk06WlLtXk+k/
+IU0P
+--000000000000ba867e05fe7a23fa--
