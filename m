@@ -2,161 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D7BD734EE8
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:59:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3087D734EEA
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:00:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbjFSI7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 04:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57846 "EHLO
+        id S229678AbjFSI7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 04:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbjFSI66 (ORCPT
+        with ESMTP id S230215AbjFSI7U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 04:58:58 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72088D9;
-        Mon, 19 Jun 2023 01:58:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687165136; x=1718701136;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BTctNJGtNKeC547EpUBouwSImLTyx71b0O6iSpMn8wQ=;
-  b=J7H0Gx0dKggIsfcoKSYXW6EaJd9/x7jgu0YeEgIl/emAxB6j+cYWxDBs
-   K4gCeJn3XCBfHBuFQhBVoAGlLtNgbeAW58AH7vah8pqwI3dVTBiSKIlAH
-   5R87GtTR1PHwKbIrO0N3OMQpQnWAXARMwoNKo3aHdEXqQLsaHjPCiR5ZR
-   OZjbIlwWY+n5BLfkUJIUVZz9cGP1NB5ZLuhMxIrpqOjXPKpdrtCBrh0oY
-   /85YdjMucCJXMVJgW5vNyT3IP4pN1haB/ZCQ5fF/MMsAvnDI7ZXxLEWXg
-   KEtzL9jGbjynOfcMpa1CNaJubUjQiXJUupTNOGibh/8Pl2Wvz8n06HRTc
-   w==;
-X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
-   d="scan'208";a="216633003"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Jun 2023 01:58:55 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 19 Jun 2023 01:58:32 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Mon, 19 Jun 2023 01:58:32 -0700
-Date:   Mon, 19 Jun 2023 10:58:31 +0200
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     "Radu Pirea (NXP OSS)" <radu-nicolae.pirea@oss.nxp.com>
-CC:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <richardcochran@gmail.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <sebastian.tobuschat@nxp.com>
-Subject: Re: [PATCH net-next v1 14/14] net: phy: nxp-c45-tja11xx: timestamp
- reading workaround for TJA1120
-Message-ID: <20230619085831.dnzg2i5mqysc6r3r@soft-dev3-1>
-References: <20230616135323.98215-1-radu-nicolae.pirea@oss.nxp.com>
- <20230616135323.98215-15-radu-nicolae.pirea@oss.nxp.com>
+        Mon, 19 Jun 2023 04:59:20 -0400
+Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E42D83;
+        Mon, 19 Jun 2023 01:59:17 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0VlTKQLc_1687165151;
+Received: from 30.221.149.0(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VlTKQLc_1687165151)
+          by smtp.aliyun-inc.com;
+          Mon, 19 Jun 2023 16:59:12 +0800
+Message-ID: <a6e1114c-b37c-6999-0668-039aa495db84@linux.alibaba.com>
+Date:   Mon, 19 Jun 2023 16:59:08 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20230616135323.98215-15-radu-nicolae.pirea@oss.nxp.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.2
+Subject: Re: [PATCH v3 2/7] perf metric: Event "Compat" value supports
+ matching multiple identifiers
+To:     John Garry <john.g.garry@oracle.com>,
+        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        Zhuo Song <zhuo.song@linux.alibaba.com>
+References: <1685438374-33287-1-git-send-email-renyu.zj@linux.alibaba.com>
+ <1685438374-33287-3-git-send-email-renyu.zj@linux.alibaba.com>
+ <c1d8ee9b-4839-1011-4dad-c4777d8f8224@oracle.com>
+ <452e724b-2a2c-52fd-274b-60db7a7f730e@linux.alibaba.com>
+ <c4b2fca8-602d-9c76-90a7-3eafd92da8bc@oracle.com>
+ <76fcb062-61a8-5f90-b39d-b5fb6da35652@linux.alibaba.com>
+ <5f38ef6c-8c50-5df9-19dd-c3c9fe590452@oracle.com>
+ <e4be7189-a1ba-7758-bff3-e7b8d8ff1419@linux.alibaba.com>
+ <892f57c7-8ce2-634c-26f3-4d4ab8b2f2ce@oracle.com>
+ <079d7920-2030-2e00-a833-5ec6d450f7dc@oracle.com>
+ <552eebae-76bb-a2fe-ccdc-11e8a01717da@linux.alibaba.com>
+ <045a49c9-b9ae-bf0e-c4be-858d905bcc55@oracle.com>
+ <7c765e0f-ca76-d212-0496-f9c56369e389@linux.alibaba.com>
+ <d1ab4947-6bdf-2b9c-5b26-52c572611ca6@oracle.com>
+From:   Jing Zhang <renyu.zj@linux.alibaba.com>
+In-Reply-To: <d1ab4947-6bdf-2b9c-5b26-52c572611ca6@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 06/16/2023 16:53, Radu Pirea (NXP OSS) wrote:
 
-Hi Radu,
 
+在 2023/6/19 下午3:07, John Garry 写道:
+> On 19/06/2023 03:58, Jing Zhang wrote:
+>>> +++ b/tools/perf/pmu-events/arch/arm64/arm/cmn/sys/metrics.json
+>>> @@ -0,0 +1,74 @@
+>>> +[
+>>> +    {
+>>> +        "MetricName": "slc_miss_rate",
+>>> +        "BriefDescription": "The system level cache miss rate include.",
+>>> +        "MetricGroup": "arm_cmn",
+>>> +        "MetricExpr": "hnf_cache_miss / hnf_slc_sf_cache_access",
+>>>
+>>> So this expression uses event aliases hnf_cache_miss and hnf_slc_sf_cache_access - where are they defined in a JSON?
+>>>
+>> Hi John,
+>>
+>> I defined the aliases for these events in the JSON file during the RFC version. However, I later removed the alias
+>> definitions for these events in subsequent versions due to the possibility of non-uniqueness and difficulty in defining
+>> their EventCode. But this does not affect their usage in metrics. In other words, metrics can use the aliases without
+>> defining event aliases in the JSON file.
 > 
-> On TJA1120 engineering samples, the new timestamp is stuck in the FIFO.
-> If the MORE_TS bit is set and the VALID bit is not set, we know that we
-> have a timestamp in the FIFO but not in the buffer.
+> Really? So how can we resolve the event aliases when we try to run the metric?
 > 
-> To move the new timestamp in the buffer registers, the current
-> timestamp(which is invalid) is unlocked by writing any of the buffer
-> registers.
-
-Shouldn't this be split and merged in patch 9 and patch 10?
-As those two patches introduced this functions with issues.
-
-> 
-> Signed-off-by: Radu Pirea (NXP OSS) <radu-nicolae.pirea@oss.nxp.com>
-> ---
->  drivers/net/phy/nxp-c45-tja11xx.c | 31 ++++++++++++++++++++++++++++---
->  1 file changed, 28 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/net/phy/nxp-c45-tja11xx.c b/drivers/net/phy/nxp-c45-tja11xx.c
-> index 0d22eb7534dc..3543c8fe099c 100644
-> --- a/drivers/net/phy/nxp-c45-tja11xx.c
-> +++ b/drivers/net/phy/nxp-c45-tja11xx.c
-> @@ -532,15 +532,30 @@ static bool nxp_c45_get_extts(struct nxp_c45_phy *priv,
->  static bool tja1120_get_extts(struct nxp_c45_phy *priv,
->                               struct timespec64 *extts)
->  {
-> +       const struct nxp_c45_regmap *regmap = nxp_c45_get_regmap(priv->phydev);
-> +       bool more_ts;
->         bool valid;
->         u16 reg;
-> 
-> +       reg = phy_read_mmd(priv->phydev, MDIO_MMD_VEND1,
-> +                          regmap->vend1_ext_trg_ctrl);
-> +       more_ts = !!(reg & TJA1120_MORE_TS);
-> +
->         reg = phy_read_mmd(priv->phydev, MDIO_MMD_VEND1,
->                            TJA1120_VEND1_PTP_TRIG_DATA_S);
->         valid = !!(reg & TJA1120_TS_VALID);
->         if (valid)
->                 return nxp_c45_get_extts(priv, extts);
-> 
-> +       /* Bug workaround for TJA1120 enegineering samples: move the new
-> +        * timestamp from the FIFO to the buffer.
-> +        */
-> +       if (more_ts) {
-> +               phy_write_mmd(priv->phydev, MDIO_MMD_VEND1,
-> +                             regmap->vend1_ext_trg_ctrl, RING_DONE);
-> +               return nxp_c45_get_extts(priv, extts);
-> +       }
-> +
->         return valid;
->  }
-> 
-> @@ -588,15 +603,25 @@ static bool tja1120_get_hwtxts(struct nxp_c45_phy *priv,
->                                struct nxp_c45_hwts *hwts)
->  {
->         struct phy_device *phydev = priv->phydev;
-> +       bool more_ts;
->         bool valid;
->         u16 reg;
-> 
->         mutex_lock(&priv->ptp_lock);
-> +       reg = phy_read_mmd(phydev, MDIO_MMD_VEND1, TJA1120_EGRESS_TS_END);
-> +       more_ts = !!(reg & TJA1120_MORE_TS);
->         reg = phy_read_mmd(phydev, MDIO_MMD_VEND1, TJA1120_EGRESS_TS_DATA_S);
->         valid = !!(reg & TJA1120_TS_VALID);
-> -       if (!valid)
-> -               goto tja1120_get_hwtxts_out;
-> -
-> +       if (!valid) {
-> +               if (!more_ts)
-> +                       goto tja1120_get_hwtxts_out;
-> +               /* Bug workaround for TJA1120 enegineering samples: move the
-> +                * new timestamp from the FIFO to the buffer.
-> +                */
-> +               phy_clear_bits_mmd(phydev, MDIO_MMD_VEND1,
-> +                                  TJA1120_EGRESS_TS_END, TJA1120_TS_VALID);
-> +               valid = true;
-> +       }
->         nxp_c45_read_egress_ts(priv, hwts);
->         phy_clear_bits_mmd(phydev, MDIO_MMD_VEND1, TJA1120_EGRESS_TS_DATA_S,
->                            TJA1120_TS_VALID);
-> --
-> 2.34.1
-> 
+> Please verify running these metrics with 'perf stat', like 'perf stat -v -M slc_miss_rate'
 > 
 
--- 
-/Horatiu
+Ok, it shows:
+#./perf stat -v -M slc_miss_rate sleep 1
+
+metric expr hnf_cache_miss / hnf_slc_sf_cache_access for slc_miss_rate
+found event duration_time
+found event hnf_slc_sf_cache_access
+found event hnf_cache_miss
+Parsing metric events '{hnf_slc_sf_cache_access/metric-id=hnf_slc_sf_cache_access/,hnf_cache_miss/metric-id=hnf_cache_miss/}:W,duration_time'
+hnf_slc_sf_cache_access -> arm_cmn_0/type=0x5,eventid=0x2/
+hnf_slc_sf_cache_access -> arm_cmn_1/type=0x5,eventid=0x2/
+hnf_cache_miss -> arm_cmn_0/type=0x5,eventid=0x1/
+hnf_cache_miss -> arm_cmn_1/type=0x5,eventid=0x1/
+Control descriptor is not initialized
+hnf_slc_sf_cache_access: 127615 1001344900 1001344900
+hnf_cache_miss: 36829 1001344900 1001344900
+hnf_slc_sf_cache_access: 131526 1001343540 1001343540
+hnf_cache_miss: 40587 1001343540 1001343540
+duration_time: 1001381687 1001381687 1001381687
+
+ Performance counter stats for 'system wide':
+
+           259,141      hnf_slc_sf_cache_access   #     29.9 %  slc_miss_rate
+            77,416      hnf_cache_miss
+     1,001,381,687 ns   duration_time
+
+       1.001381687 seconds time elapsed
+
+
+
+#./perf list
+...
+ arm_cmn_0/hnf_cache_miss/                          [Kernel PMU event]
+ arm_cmn_0/hnf_slc_sf_cache_access/                 [Kernel PMU event]
+...
+ arm_cmn_1/hnf_cache_miss/                          [Kernel PMU event]
+ arm_cmn_1/hnf_slc_sf_cache_access/                 [Kernel PMU event]
+...
+
+>>
+>> In the past, I always thought that the function of the alias was to explain the meaning of these events in the perf list.
+>> Or maybe I'm missing something?
+> 
+> Event aliases do give the ability to describe the event in perf list. But we can also run them for 'perf stat', like:
+> 
+> ./perf list uncore
+> List of pre-defined events (to be used in -e or -M):
+> 
+>   uncore_cbox_0/clockticks/                          [Kernel PMU event]
+>   uncore_cbox_1/clockticks/                          [Kernel PMU event]
+>   uncore_imc/data_reads/                             [Kernel PMU event]
+>   uncore_imc/data_writes/                            [Kernel PMU event]
+>   uncore_imc/gt_requests/                            [Kernel PMU event]
+>   uncore_imc/ia_requests/                            [Kernel PMU event]
+>   uncore_imc/io_requests/                            [Kernel PMU event]
+> 
+> uncore cache:
+>   unc_cbo_cache_lookup.any_es
+>        [L3 Lookup any request that access cache and found line in E or S-state. Unit: uncore_cbox]
+> ...
+> 
+> sudo ./perf stat -v -e unc_cbo_cache_lookup.any_es
+> Using CPUID GenuineIntel-6-3D-4
+> unc_cbo_cache_lookup.any_es -> uncore_cbox_0/event=0x34,umask=0x86/
+> unc_cbo_cache_lookup.any_es -> uncore_cbox_1/event=0x34,umask=0x86/
+> Control descriptor is not initialized
+> ^Cunc_cbo_cache_lookup.any_es: 14361103 1853372468 1853372468
+> unc_cbo_cache_lookup.any_es: 14322188 1853360415 1853360415
+> 
+>  Performance counter stats for 'system wide':
+> 
+>         14,361,103      unc_cbo_cache_lookup.any_es
+>         14,322,188      unc_cbo_cache_lookup.any_es
+> 
+>        1.853388227 seconds time elapsed
+> 
+
+Ok, thanks. If I use events without a prefix, such as perf stat -e clockticks sleep 1, will this also work?
+
+Thanks,
+Jing
+
+
+> 
+> Thanks,
+> John
