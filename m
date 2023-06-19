@@ -2,105 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 435A0734D6E
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8085B734D4B
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:13:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbjFSIU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 04:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57676 "EHLO
+        id S229945AbjFSINY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 04:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbjFSIU1 (ORCPT
+        with ESMTP id S229881AbjFSINV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 04:20:27 -0400
-X-Greylist: delayed 495 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 19 Jun 2023 01:20:21 PDT
-Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C467FE4E;
-        Mon, 19 Jun 2023 01:20:21 -0700 (PDT)
-Received: from ed3e173716be.home.arpa (unknown [124.16.138.129])
-        by APP-05 (Coremail) with SMTP id zQCowAD3_7vUDZBkfYFsAQ--.5512S3;
-        Mon, 19 Jun 2023 16:12:05 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     dwlsalmeida@gmail.com, mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH 2/2] media: vidtv: mux: Add check and kfree for kstrdup
-Date:   Mon, 19 Jun 2023 16:12:02 +0800
-Message-Id: <20230619081202.25283-2-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230619081202.25283-1-jiasheng@iscas.ac.cn>
-References: <20230619081202.25283-1-jiasheng@iscas.ac.cn>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowAD3_7vUDZBkfYFsAQ--.5512S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7WFWfZFyxKr43Gw15AF4Dtwb_yoW8Wr45pF
-        Z3urWqvrW5Gan8Ka10yw13JF1rCan3tas8K3srAw15X3WakFnxGr15J34DCrsxC3yfAw4a
-        vF1YqrWUWa4UJr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBS14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-        x26xkF7I0E14v26r1Y6r1xM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
-        ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFyl42xK82
-        IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC2
-        0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMI
-        IF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF
-        0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87
-        Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUYZXoUUUUU
-X-Originating-IP: [124.16.138.129]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 19 Jun 2023 04:13:21 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD87AF;
+        Mon, 19 Jun 2023 01:13:19 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id D5F135C0091;
+        Mon, 19 Jun 2023 04:13:18 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 19 Jun 2023 04:13:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1687162398; x=1687248798; bh=ac
+        mQm0nuxCyr0NIKr6vJjBR8GRwKxrYohjffNuU8ThI=; b=jSf0Dn1cNRjWCPqBp/
+        tmQZzNRdUPVbsfRpFhe4brf3D6W8oWhX7R/kba0c2bdIfpHuioIPd+GAaTGuQQMS
+        JejO5C+VGa75RTFv/tGXYBNjhMX9zDV6DWD680ak+HG2ufngtLABDMK8bAP3mmGf
+        iKIiJ1bc+wkBe320cg4NLxrfcUc0rA9mHGm3dSaP64B4lzE11awVDRpfrLOD0OvS
+        BLO6jKPG1lDXy1Re+bQbocQBuvmZGIXnzyAH3peknh3DlaI5lhyCUGQHpFwT0cHR
+        QW+/0joER771++ZsU8/NZK8LXDJC5izVBQqCTsMovWTC2t5TqfS3ZkeUtH1EScdb
+        Opqg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1687162398; x=1687248798; bh=acmQm0nuxCyr0
+        NIKr6vJjBR8GRwKxrYohjffNuU8ThI=; b=FFGWsIVeXBmDhzlMRAfZjj3K2eiwR
+        v0Bd6yvnCFsXK7oYvg118CsfDxw27jjWlwL2aRHzHx6S5VYTWiCK1fBRpbzwjp1t
+        681ZuaiQc1d2lkVP/ZOhlMuO2kkOI0SPJIRM9s+gf7idnKhG++vzwbSj5VLANeLH
+        6JR50eJMDDOdwzyIRsF5f7qLFCuBBL1fmWN5w2BzgSeb2u6LJFAF7Ah6A1LFQJ+d
+        INj+Hv143hG8dlqTXlhlJ4p3n5UhXCQ1feV1kWgrgtsYLxSfKL4czVSfCRCmGuDk
+        U2dJinyRCawabNBZBrg5Rqf4ecqcV+g8mlv6U2aNVUmak3wfG0GdLRAHA==
+X-ME-Sender: <xms:HQ6QZHudSZcr99XCGAwT8aexgY-5xPnlBrnMRPhHxX3M_KLtiUhGPw>
+    <xme:HQ6QZIerLq1unp2hy-1fvpPA3Si46dm91um9J5xJwV9O5OVoWqzV63c-uypohthH1
+    4W0shxPNhSWefEavyc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefvdcutefuodetggdotefrodftvfcurf
+    hrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeetffen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
+    esrghrnhgusgdruggv
+X-ME-Proxy: <xmx:Hg6QZKyqztS5u4jssAhWLeO90hrurtwGAZK24v5IXmDaggara6lybg>
+    <xmx:Hg6QZGOfyAy2G09L8c5M7pjUCnGIxCooHD4r4H8-EFH1PHulm6_iyg>
+    <xmx:Hg6QZH-TJrb7_qIrOl-SxEH7hfAU1cMNiShpH_cXFHQ8Df1Hnmvsqg>
+    <xmx:Hg6QZGjya9-5i6kyAcYL4gA-4Ns_yms7_IzDbRXRLzt2KIkoGQ2OZg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D61E5B60086; Mon, 19 Jun 2023 04:13:17 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-496-g8c46984af0-fm-20230615.001-g8c46984a
+Mime-Version: 1.0
+Message-Id: <f3f9bd5c-b4bd-461c-a6e1-b310cdaa0595@app.fastmail.com>
+In-Reply-To: <20230619033041.233921-1-ychuang570808@gmail.com>
+References: <20230619033041.233921-1-ychuang570808@gmail.com>
+Date:   Mon, 19 Jun 2023 10:12:56 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Jacky Huang" <ychuang570808@gmail.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, "Lee Jones" <lee@kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        "Stephen Boyd" <sboyd@kernel.org>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Jiri Slaby" <jirislaby@kernel.org>,
+        "Tomer Maimon" <tmaimon77@gmail.com>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-serial@vger.kernel.org, soc@kernel.org, schung@nuvoton.com,
+        mjchen@nuvoton.com, "Jacky Huang" <ychuang3@nuvoton.com>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v15 2/2] clk: nuvoton: Add clock driver for ma35d1 clock controller
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add check for the return value of kstrdup() and return the error
-if it fails in order to avoid NULL pointer dereference.
-Moreover, use kfree() in the later error handling in order to avoid
-memory leak.
+On Mon, Jun 19, 2023, at 05:30, Jacky Huang wrote:
+> From: Jacky Huang <ychuang3@nuvoton.com>
+>
+> The clock controller generates clocks for the whole chip, including
+> system clocks and all peripheral clocks. This driver support ma35d1
+> clock gating, divider, and individual PLL configuration.
+>
+> There are 6 PLLs in ma35d1 SoC:
+>   - CA-PLL for the two Cortex-A35 CPU clock
+>   - SYS-PLL for system bus, which comes from the companion MCU
+>     and cannot be programmed by clock controller.
+>   - DDR-PLL for DDR
+>   - EPLL for GMAC and GFX, Display, and VDEC IPs.
+>   - VPLL for video output pixel clock
+>   - APLL for SDHC, I2S audio, and other IPs.
+> CA-PLL has only one operation mode.
+> DDR-PLL, EPLL, VPLL, and APLL are advanced PLLs which have 3
+> operation modes: integer mode, fraction mode, and spread specturm mode.
+>
+> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Fixes: c2f78f0cb294 ("media: vidtv: psi: add a Network Information Table (NIT)")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/media/test-drivers/vidtv/vidtv_mux.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Hi Jacky,
 
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_mux.c b/drivers/media/test-drivers/vidtv/vidtv_mux.c
-index b51e6a3b8cbe..f99878eff7ac 100644
---- a/drivers/media/test-drivers/vidtv/vidtv_mux.c
-+++ b/drivers/media/test-drivers/vidtv/vidtv_mux.c
-@@ -504,13 +504,16 @@ struct vidtv_mux *vidtv_mux_init(struct dvb_frontend *fe,
- 	m->priv = args->priv;
- 	m->network_id = args->network_id;
- 	m->network_name = kstrdup(args->network_name, GFP_KERNEL);
-+	if (!m->network_name)
-+		goto free_mux_buf;
-+
- 	m->timing.current_jiffies = get_jiffies_64();
- 
- 	if (args->channels)
- 		m->channels = args->channels;
- 	else
- 		if (vidtv_channels_init(m) < 0)
--			goto free_mux_buf;
-+			goto free_mux_network_name;
- 
- 	/* will alloc data for pmt_sections after initializing pat */
- 	if (vidtv_channel_si_init(m) < 0)
-@@ -527,6 +530,8 @@ struct vidtv_mux *vidtv_mux_init(struct dvb_frontend *fe,
- 	vidtv_channel_si_destroy(m);
- free_channels:
- 	vidtv_channels_destroy(m);
-+free_mux_network_name:
-+	kfree(m->network_name);
- free_mux_buf:
- 	vfree(m->mux_buf);
- free_mux:
--- 
-2.25.1
+Since I have already picked up the previous version of this patch,
+please send a diff against the version I merged please.
 
+     Arnd
