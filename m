@@ -2,149 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D4D5735D8A
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 20:41:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E986735D87
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 20:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232370AbjFSSlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 14:41:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55450 "EHLO
+        id S231948AbjFSSkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 14:40:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232087AbjFSSkw (ORCPT
+        with ESMTP id S229458AbjFSSkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 14:40:52 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A63D18C;
-        Mon, 19 Jun 2023 11:40:51 -0700 (PDT)
-Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 77862210DDA3;
-        Mon, 19 Jun 2023 11:40:50 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 77862210DDA3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1687200050;
-        bh=qo6WhpT1uRSqMbsupvdaieoE2v8tvR0YEzNpA1DiJWw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cyk+6dMT8YaqJtnwfjGNxxzVmIrLKjDtWYtPaPvZ2y+oLBYTW8jrJZ5SxplYeaK9S
-         KjWtqX5EYMjTBiuBZnkRjhAylPCC0u6sfqFnFxUTKyfnfz8uc87UheW0h19oOfdGfX
-         EY0W1j40j7qLmZoUB1pV6EnwAMaG/0zlNKaqhWpY=
-Date:   Mon, 19 Jun 2023 11:40:44 -0700
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     sunliming <kelulanainsley@gmail.com>
-Cc:     mhiramat@kernel.org, rostedt@goodmis.org, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] tracing/user_events: Fix incorrect return value
- for writing operation when events are disabled
-Message-ID: <20230619184044.GA88@W11-BEAU-MD.localdomain>
-References: <20230609030302.1278716-1-sunliming@kylinos.cn>
- <20230609030302.1278716-2-sunliming@kylinos.cn>
- <20230616160845.GA88@W11-BEAU-MD.localdomain>
- <CAJncD7Sfasoe4-hKZP4c3bPZ892S2Kk5JaMo-aca6eBDwLjLNQ@mail.gmail.com>
+        Mon, 19 Jun 2023 14:40:49 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6259A18C;
+        Mon, 19 Jun 2023 11:40:48 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b5422163f4so22693925ad.2;
+        Mon, 19 Jun 2023 11:40:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687200048; x=1689792048;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5ZgkawgcpNKfDimADbfMrf4fLDUhrxI/ZCrEvpkQwog=;
+        b=qt204KFijdMQILdU/na9toTnE6G/SqHDazWMqgZP5zuHq87dvUKh9pTIF1WngvsQld
+         7YBBr/Ckqrjhn5fg7FEPFmiRN0CEugazjpz5zE2wE1Zz3VJFxkOcX9/d8lSRSQZvAJY3
+         cx6YvtoKRu0ysR/m7FDCp43AYuziwk51IRVfgPswmRTnuJA8a+cqIhmz2PvLjo6/hD4f
+         k8SAMpgEL0dBCUjlv4gUn1Uy4YBrnomChIpqcIKM40Gn7iOXUwLgnamjUSoOxPdJyKTJ
+         HqARmqSiRVITyBL6MWBkIkwvxk44lEFYGgo4u9Il+QPWFfQkLFxIjZRXrQJmM6Dfv6QO
+         mRtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687200048; x=1689792048;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5ZgkawgcpNKfDimADbfMrf4fLDUhrxI/ZCrEvpkQwog=;
+        b=kox8jO1/3BxP+2o1a6kxk87nKhjRx+OVdmZAksTyRh/pXFFpjlTEbcATfaHNKAbQ/E
+         rMVGaYjVfXGuLtHTJao2k2mI2xgAkT/GDZw9u1HtM0r0cLERgU6A+qGWiltvnwafyGO8
+         xmScjnWTiLPcE6tji68/NWMPOYckpXwX0MVaOB3uOqLL0GKlmCviW+c1oo3cv++pMqhq
+         G7s/Q0ONsCwHws7Di1p++FCW9waVHrg13SpnVIwlHnzuLdNviv7qXMWFtEYAdfiDHD46
+         Wy9TEYiqSe74GsP0qF5Gy7lEF3wGhtwT6ZuhoQxMtaDS+Lh1bM9fjKaGPs7imoqRGBBn
+         zeAQ==
+X-Gm-Message-State: AC+VfDzSUXBVFprAjaCRitURE4xRTmSlaWxduC3YMkO8bhLBq5WiKm+Z
+        utN8EGTAG4Aimw9wu739OgF8JScYDcM=
+X-Google-Smtp-Source: ACHHUZ7ImFqqYJ9etidekSI7vzGm4O7RZaoJwcEi155Zgh9sJFBVSD0oz0qHjbsPgb44jXoA/A3h5Q==
+X-Received: by 2002:a17:903:2307:b0:1b3:e31e:abaa with SMTP id d7-20020a170903230700b001b3e31eabaamr11911728plh.0.1687200047757;
+        Mon, 19 Jun 2023 11:40:47 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s17-20020a170902989100b001b546440893sm146327plp.235.2023.06.19.11.40.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Jun 2023 11:40:46 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <598247ee-3ff8-8413-274a-7d313c2af324@roeck-us.net>
+Date:   Mon, 19 Jun 2023 11:40:45 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-US
+To:     "Limonciello, Mario" <mario.limonciello@amd.com>,
+        Baskaran Kannan <Baski.Kannan@amd.com>, babu.moger@amd.com,
+        clemens@ladisch.de, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230619165413.806450-1-Baski.Kannan@amd.com>
+ <4585ec62-b7bb-9f2a-eee0-07032648e55a@roeck-us.net>
+ <012ea369-52ec-4a7a-ec66-812690d430ad@amd.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v3] hwmon: (k10temp) Enable AMD3255 Proc to show negative
+ temperature
+In-Reply-To: <012ea369-52ec-4a7a-ec66-812690d430ad@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJncD7Sfasoe4-hKZP4c3bPZ892S2Kk5JaMo-aca6eBDwLjLNQ@mail.gmail.com>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 04:51:56PM +0800, sunliming wrote:
-> Beau Belgrave <beaub@linux.microsoft.com> 于2023年6月17日周六 00:08写道：
-> >
-> > On Fri, Jun 09, 2023 at 11:03:00AM +0800, sunliming wrote:
-> > > The writing operation return the count of writes whether events are
-> > > enabled or disabled. This is incorrect when events are disabled. Fix
-> > > this by just return -ENOENT when events are disabled.
-> > >
-> >
-> > When testing this patch locally I found that we would occasionally get
-> > -ENOENT when events were enabled, but then become disabled, since writes
-> > do not have any locking around the tracepoint checks for performance
-> > reasons.
-> >
-> > I've asked a few peers of mine their thoughts on this, whether an error
-> > should result when there are no enabled events. The consensus I've heard
-> > back is that they would not consider this case an actual error, just as
-> > writing to /dev/null does not actually return an error.
-> >
-> > However, if you feel strongly we need this and have a good use case, it
-> > seems better to enable this logic behind a flag instead of having it
-> > default based on my conversations with others.
-> >
-> > Thanks,
-> > -Beau
+On 6/19/23 11:02, Limonciello, Mario wrote:
 > 
+> On 6/19/2023 12:07 PM, Guenter Roeck wrote:
+>> On 6/19/23 09:54, Baskaran Kannan wrote:
+>>> Industrial processor i3255 supports temperatures -40 deg celcius
+>>> to 105 deg Celcius. The current implementation of k10temp_read_temp
+>>> rounds off any negative
+>>> temperatures to '0'. To fix this, the following changes have been made.
+>>> Added a flag 'disp_negative' to struct k10temp_data to support
+>>> AMD i3255 processors. Flag 'disp_negative' is set if 3255 processor
+>>> is found during k10temp_probe.  Flag 'disp_negative' is used to determine
+>>> whether to round off negative temperatures to '0' in k10temp_read_temp.
+>>>
+>>> Signed-off-by: Baskaran Kannan <Baski.Kannan@amd.com>
+>>
+>> Now you have made changes you were not asked to make, extended the flag
+>> to cover a range of processors instead of just i3255, and did not provide
+>> a change log nor a comment in the code describing why processors with
+>> certain model numbers should display negative temperatures.
+>>
+> i3255 happens to be one of the industrial processors in family 17h models
+> 01h through 08h.  These are potentially used at subzero temperatures and
+> so displaying negative numbers makes a lot sense.
 > 
+> So I think the commit message needs to be be amended to better explain that.
 > 
-> There is indeed a problem. Once enabled, perform the write operation
-> immediately.
+> I guided Kannan against leaving a comment in the code with specific models
+> because it either won't age well as other industrial processors are
+> introduced or may need to be ping-ponged each time.
+> 
+That only applies if there is a guarantee that the check does not
+inadvertently ends up displaying negative temperatures for other CPUs
+which are misconfigured. After all, the current code is just a hack
+working around some problem with bad temperatures reported on other CPUs.
+Personally I'd rather have a clean fix for that. If/since that is not
+available, whatever is done subsequently (including the code suggested here)
+is just a hack.
+
+... and if a hack on top of a hack is introduced, we need to make sure that
+it does not undo the previous hack.
+
+> But perhaps it should be more generic like:
+> 
+> /* Industrial processors may be used at sub zero temperatures */
 > 
 
-The immediate write does work, and gets put into a buffer. The ftrace
-and perf self tests do the above case. So, no worries at this point.
+You can not just display negative temperatures for family 0x17h models
+0x00..0x07 without explanation. The above needs to be documented.
+I fail to understand why a variant of
 
-> Now，when the event is disabled, the trace record appears to be lost.
+"i3255 happens to be one of the industrial processors in family 17h models
+  01h through 08h.  These are potentially used at subzero temperatures and
+  so displaying negative numbers makes a lot sense."
 
-I'm taking this to mean, if in between the time of the bit check and the
-actual write() /writev() syscall the event becomes disabled, the event
-won't write to the buffer. Yes, that is expected.
+can not be added as comment and description if that is exactly what the code
+checks for. Something like
 
-> In some situations
-> where data timing is sensitive, it may cause confusion. In this case,
-> not returning an
-> error (as mentioned in your reply, it is not considered this case an
-> actual error) and
-> returning 0 ( meaning that the number of data to be written is 0) may
-> be a good way
-> to handle it?
+"Family 17h models 01h through 08h are industrial processors with an operational
+  temperature of -40°C - 105°C and may be used at subzero temperatures.
+  Display negative temperatures for those processors."
 
-This is where I get a little lost. What would a user process do with a
-return of 0 bytes? It shouldn't retry, since it just hit that small
-timing window. In reality, it just incurred a temporary excessive
-syscall cost, but no real data loss (the operator/admin turned the event
-off).
+makes perfect sense to me. Only of course it is incorrect ...
 
-I'm missing why you feel it's important the user process know such a
-window was hit?
+Model 0x1 was used for the original Zen, and 0x8 is Zen+. 1950X is family 0x17 model
+0x01 per cpuinfo, meaning your hack undoes the original hack, and the bad
+temperatures would again be displayed for the affected systems. That is simply
+unacceptable.
 
-Can you help me understand that?
+Yes, it may be a pain to find an acceptable hack to solve the problem,
+but after all this is a self-inflicted problem, so it can't be helped.
+The alternative would always be to find a better means to identify CPUs
+affected by the original problem. If that is not possible, explicitly listing CPUs
+which are _not_ affected is the only possible alternative.
 
-I do think returning 0 bytes is better than an error here, but I'd
-really like to know why the user process wants to know at all. Maybe
-they have user-space only logging and want to be able to mark there if
-it's in both spots (kernel and user buffers)?
+Note that the code sets disp_negative for model numbers < 0x8, meaning it
+does not include model 0x8. It also sets disp_negative for model 0x00 which is
+specifically excluded above.
 
-Thanks,
--Beau
+All that is no excuse for not providing change logs.
 
-> Thanks,
-> -Sunliming
-> 
-> >
-> > > Signed-off-by: sunliming <sunliming@kylinos.cn>
-> > > ---
-> > >  kernel/trace/trace_events_user.c | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-> > > index 1ac5ba5685ed..92204bbe79da 100644
-> > > --- a/kernel/trace/trace_events_user.c
-> > > +++ b/kernel/trace/trace_events_user.c
-> > > @@ -1957,7 +1957,8 @@ static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
-> > >
-> > >               if (unlikely(faulted))
-> > >                       return -EFAULT;
-> > > -     }
-> > > +     } else
-> > > +             return -ENOENT;
-> > >
-> > >       return ret;
-> > >  }
-> > > --
-> > > 2.25.1
+Guenter
+
+>> Guenter
+>>
+>>> ---
+>>>   drivers/hwmon/k10temp.c | 8 ++++++--
+>>>   1 file changed, 6 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+>>> index 7b177b9fbb09..2613420d43ff 100644
+>>> --- a/drivers/hwmon/k10temp.c
+>>> +++ b/drivers/hwmon/k10temp.c
+>>> @@ -86,6 +86,7 @@ struct k10temp_data {
+>>>       u32 show_temp;
+>>>       bool is_zen;
+>>>       u32 ccd_offset;
+>>> +    bool disp_negative;
+>>>   };
+>>>     #define TCTL_BIT    0
+>>> @@ -204,12 +205,12 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
+>>>           switch (channel) {
+>>>           case 0:        /* Tctl */
+>>>               *val = get_raw_temp(data);
+>>> -            if (*val < 0)
+>>> +            if (*val < 0 && !data->disp_negative)
+>>>                   *val = 0;
+>>>               break;
+>>>           case 1:        /* Tdie */
+>>>               *val = get_raw_temp(data) - data->temp_offset;
+>>> -            if (*val < 0)
+>>> +            if (*val < 0 && !data->disp_negative)
+>>>                   *val = 0;
+>>>               break;
+>>>           case 2 ... 13:        /* Tccd{1-12} */
+>>> @@ -405,6 +406,9 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>>>       data->pdev = pdev;
+>>>       data->show_temp |= BIT(TCTL_BIT);    /* Always show Tctl */
+>>>   +    if (boot_cpu_data.x86 == 0x17 && boot_cpu_data.x86_model < 0x8)
+>>> +        data->disp_negative = true;
+>>> +
+>>>       if (boot_cpu_data.x86 == 0x15 &&
+>>>           ((boot_cpu_data.x86_model & 0xf0) == 0x60 ||
+>>>            (boot_cpu_data.x86_model & 0xf0) == 0x70)) {
+>>
+
