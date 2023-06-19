@@ -2,118 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90ABA735566
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 13:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A27FF735574
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 13:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232000AbjFSLFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 07:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34134 "EHLO
+        id S231764AbjFSLGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 07:06:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232626AbjFSLEl (ORCPT
+        with ESMTP id S232658AbjFSLFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 07:04:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F1D2733;
-        Mon, 19 Jun 2023 04:03:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9923160BA2;
-        Mon, 19 Jun 2023 11:03:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05EB9C433C8;
-        Mon, 19 Jun 2023 11:03:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687172610;
-        bh=Gbbft4RegPZLfwKq98ecTGKYvyCX9Hk20rzGGLCNRyg=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=uiPAiFYuI4+WL4ZgxE2edNxsq+aFR5tBS4hzIg7oRW40jX81+zqf3Sy3hVTfZTK1c
-         /+Qc684YtfpetV9nsPn2fgtk0Glha8F8DpfB3AjOhJR0VEUWgpq8vCHqhlyVJt+vxy
-         1PzdGnP9kdhbjzoDxqqj+ugdkWXAdTAiLMDdP72hpGL2SBJKm0hVgES8+IqZmfOEX9
-         BzHZjLAS4o40UwDLy0AtgTv/nu18bfZ7KHN2UJnaXVssR8vA2JX4aQ9mYiXp9iH00h
-         kYFXX6y9OmcfGcMUF0ECcZqVulY9HB16vasxC8y0oyMTJ4dY29TaJw3g3xG3I21wtc
-         Pp7az95SIw/0w==
-Message-ID: <356b94ef10dc12063da5dc145b61a47ddff5c23a.camel@kernel.org>
-Subject: Re: [PATCH] nfsd: move init of percpu reply_cache_stats counters
- back to nfsd_init_net
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Chuck Lever III <chuck.lever@oracle.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     Chuck Lever <cel@kernel.org>, Neil Brown <neilb@suse.de>,
-        Olga Kornievskaia <kolga@netapp.com>,
-        Dai Ngo <dai.ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
-        linux-stable <stable@vger.kernel.org>,
-        Eirik Fuller <efuller@redhat.com>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Date:   Mon, 19 Jun 2023 07:03:27 -0400
-In-Reply-To: <9154BA25-C795-4BEF-B32D-EAB8679E9472@oracle.com>
-References: <20230616191744.202292-1-jlayton@kernel.org>
-         <ZIzFp3ViiU2SCi6J@manet.1015granger.net>
-         <4b5063eb5a1139adc9dd4bdadde30674faee0700.camel@kernel.org>
-         <d698b838-57e0-d019-a783-c229c04eeca4@leemhuis.info>
-         <7d9515dbe6af110f2c32dce2b994120e4637b295.camel@kernel.org>
-         <9154BA25-C795-4BEF-B32D-EAB8679E9472@oracle.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+        Mon, 19 Jun 2023 07:05:43 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E321BC1;
+        Mon, 19 Jun 2023 04:04:53 -0700 (PDT)
+Date:   Mon, 19 Jun 2023 11:04:50 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1687172691;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6HJ+EWkrX10ljGl7K8BAce/hg/LIYukKCp9hwGTV8Is=;
+        b=GdzjjDcRJ4MG0RrL2miNDvypDr5Buw+fprgogjGgofXXrmQ1UYdBfsarIIaS4vz2nq9co8
+        R1fK1shBXNrVGNqX8R3WwJBud3XCH6tsk4ZMDL0kmbzO9q7T8G9Ij+GOBR48dvgbhSPN8a
+        /26gRCv5RrqBWkp1fPMbOIa1N7VsR6PAKr+NRr6d1WBeVFdG6gZqQ2/ctAMS+umtXxZk8L
+        OF14aq+7KytoEFXIR2CvZ17MwZVS7UPzQXE6Ho1kZqIxj62hS/wzIhD/KFG0shuy/8Y7ql
+        HpWiQOotpOLc7xm+HCk+c4/v8Lg1jP5KMeHEPMgUqwn0S5AtQu5T8VMI8zSsXw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1687172691;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6HJ+EWkrX10ljGl7K8BAce/hg/LIYukKCp9hwGTV8Is=;
+        b=NVHMgAj8araB2PV4/4RKTDBrhoR1GNGvyToyPJWwuswJ7aDUyQjaxPsv2qq/G3n9jsZJwb
+        JlwBUIlOu9rRFHDA==
+From:   "tip-bot2 for Hao Jia" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: sched/core] sched/core: Avoid double calling update_rq_clock()
+ in __balance_push_cpu_stop()
+Cc:     Hao Jia <jiahao.os@bytedance.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230613082012.49615-3-jiahao.os@bytedance.com>
+References: <20230613082012.49615-3-jiahao.os@bytedance.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <168717269089.404.10438864985621759181.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2023-06-18 at 15:59 +0000, Chuck Lever III wrote:
->=20
-> > On Jun 18, 2023, at 8:09 AM, Jeff Layton <jlayton@kernel.org> wrote:
-> >=20
-> > On Sun, 2023-06-18 at 12:40 +0200, Thorsten Leemhuis wrote:
-> > > On 16.06.23 22:54, Jeff Layton wrote:
-> > > > On Fri, 2023-06-16 at 16:27 -0400, Chuck Lever wrote:
-> > > > > Thanks Eirik and Jeff.
-> > > > >=20
-> > > > > At this point in the release cycle, I plan to apply this for the
-> > > > > next merge window (6.5).
-> > > >=20
-> > > > I think we should take this in sooner. This is a regression and a
-> > > > user-triggerable oops in the right situation. If:
-> > > >=20
-> > > > - non-x86_64 arch
-> > > > - /proc/fs/nfsd is mounted in the namespace
-> > > > - nfsd is not started in the namespace
-> > > > - unprivileged user calls "cat /proc/fs/nfsd/reply_cache_stats"
-> > >=20
-> > > FWIW, might be worth to simply tell Linus about it and let him decide=
-,
-> > > that's totally fine and even documented in the old and the new docs f=
-or
-> > > handling regressions[1].
-> > >=20
-> > > [1]
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/c=
-ommit/Documentation/process/handling-regressions.rst?id=3Deed892da9cd08be76=
-a8f467c600ef58716dbb4d2
-> > >=20
-> >=20
-> > I'd rather Chuck make the final call here.
->=20
-> Thanks! I feel this one needs broader testing than we can manage
-> in just a couple of days. If this were earlier in the -rc cycle
-> I would pull the patch right into 6.4-rc without hesitation. It
-> is obviously -rc material, but the timing is unfortunate.
->=20
-> I'm planning the nfsd for-6.5 pull request early in the merge
-> window, so practically speaking it shouldn't delay the finalized
-> upstream version of this patch by more than a few days.
->=20
->=20
-Ok. I'll trust your judgment then and just cultivate my patience!
+The following commit has been merged into the sched/core branch of tip:
 
-Cheers,
---=20
-Jeff Layton <jlayton@kernel.org>
+Commit-ID:     96500560f0c73c71bca1b27536c6254fa0e8ce37
+Gitweb:        https://git.kernel.org/tip/96500560f0c73c71bca1b27536c6254fa0e8ce37
+Author:        Hao Jia <jiahao.os@bytedance.com>
+AuthorDate:    Tue, 13 Jun 2023 16:20:10 +08:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Fri, 16 Jun 2023 22:08:12 +02:00
+
+sched/core: Avoid double calling update_rq_clock() in __balance_push_cpu_stop()
+
+There is a double update_rq_clock() invocation:
+
+  __balance_push_cpu_stop()
+    update_rq_clock()
+    __migrate_task()
+      update_rq_clock()
+
+Sadly select_fallback_rq() also needs update_rq_clock() for
+__do_set_cpus_allowed(), it is not possible to remove the update from
+__balance_push_cpu_stop(). So remove it from __migrate_task() and
+ensure all callers of this function call update_rq_clock() prior to
+calling it.
+
+Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+Link: https://lkml.kernel.org/r/20230613082012.49615-3-jiahao.os@bytedance.com
+---
+ kernel/sched/core.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 442efe5..c7db597 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -2546,7 +2546,6 @@ static struct rq *__migrate_task(struct rq *rq, struct rq_flags *rf,
+ 	if (!is_cpu_allowed(p, dest_cpu))
+ 		return rq;
+ 
+-	update_rq_clock(rq);
+ 	rq = move_queued_task(rq, rf, p, dest_cpu);
+ 
+ 	return rq;
+@@ -2604,10 +2603,12 @@ static int migration_cpu_stop(void *data)
+ 				goto out;
+ 		}
+ 
+-		if (task_on_rq_queued(p))
++		if (task_on_rq_queued(p)) {
++			update_rq_clock(rq);
+ 			rq = __migrate_task(rq, &rf, p, arg->dest_cpu);
+-		else
++		} else {
+ 			p->wake_cpu = arg->dest_cpu;
++		}
+ 
+ 		/*
+ 		 * XXX __migrate_task() can fail, at which point we might end
