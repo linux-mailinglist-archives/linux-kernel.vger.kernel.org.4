@@ -2,105 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1AAC735A0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 16:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 936F6735A0F
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 16:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232225AbjFSOug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 10:50:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46250 "EHLO
+        id S232228AbjFSOve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 10:51:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232200AbjFSOud (ORCPT
+        with ESMTP id S229998AbjFSOvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 10:50:33 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4F01AD
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 07:50:32 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C895C1EC0398;
-        Mon, 19 Jun 2023 16:50:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1687186230;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=oYKdPeBEwTAUlAiZzuVusNxVM+kxlyg9CTET+oS2gLM=;
-        b=MqKXXFb7O4SKaXiXMiAhDFApA6UN1Sm6bcKn2Txd5rbU1vruwZm6lkE9reelWKIZUYKJEl
-        dT7aXj3miTJfIb1otsklkB0ndWGEWyhJojCGL9gQZyf/WVN7yEXQdUJ6MF04HVMt8+x/HA
-        DFAvyI+rkYktt+po3mOxAXp+De/uZtY=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id CDTyTjsdyFE6; Mon, 19 Jun 2023 14:50:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1687186227; bh=oYKdPeBEwTAUlAiZzuVusNxVM+kxlyg9CTET+oS2gLM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dqSkpN5zE8/WvNaKBY83qDmazt3W88AhxN4B0sxIdEHfsePI6hXivjVJF03ke0Lp4
-         Bp3shhLzwRCso4iy10AEprbn1A6LZvv7qKqS5Rwy4XvtN1u+um+3APN7sv/t5kI8Jo
-         C5bPMeVZxMxitjw7lt5duEBmYuC4t4kjtdS+6+OQYQROqm6HLKXNQI8W3XZznMApw6
-         ZtiTHwN1tf8racVBqmCIHrqaGNzOupQ8m7R+zrtcLjhE1qV0Ga6iJqtOQMUJMUkd2w
-         hozAsm6IvQ9VhdHigExJJGSiSBv4kxOy+dQkuNghwa/OHo9BQLz4eAi8zckyELCgNA
-         ZRUxgXU/d7TU6YshNTVFRQopQCjXvNPwXxwp8x+ZpsaBH/OWvurqFPs05v6zTsBynJ
-         isUCOKZY6l3mS+k97hvKQfhd78qt0Tq37AERy+vPKwwlp4rMoliHV7UqaL/fgefFu4
-         7xcmJ5HPVtRxHobrpg1budF1Y1G2l3dA7DCoNuI2M2Yb2tXwEwF8TTea3lzo7AXQFl
-         R2UJsIXKQA/zJYfnwOFdMhroB7V44uqsYFEr1HjqtwAu6Nad++OOTFJllj6z6n3WSm
-         lC80oRXog16T0BYFvF/8CncLHowAZ2Tkm+fX/26sG5U7WFf7Bdqg349X3eGKqSyqao
-         6TOihQT+f4WAdyZgam8ll8KM=
-Received: from zn.tnic (p200300EA971dC5b2329c23FfFEA6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971d:c5b2:329c:23ff:fea6:a903])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 62F5140E01DE;
-        Mon, 19 Jun 2023 14:50:16 +0000 (UTC)
-Date:   Mon, 19 Jun 2023 16:50:12 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Dheeraj Kumar Srivastava <dheerajkumar.srivastava@amd.com>
-Cc:     linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        gorcunov@openvz.org, suresh.b.siddha@intel.com,
-        Kishon Vijay Abraham I <kvijayab@amd.com>,
-        Vasant Hegde <vasant.hegde@amd.com>
-Subject: Re: [PATCH v1] x86/apic: Fix kernel panic when "intremap=off" and
- "x2apic_phys" are set
-Message-ID: <20230619145012.GCZJBrJKuiape5djVt@fat_crate.local>
-References: <20230616212236.1389-1-dheerajkumar.srivastava@amd.com>
+        Mon, 19 Jun 2023 10:51:32 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C1BA8C1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 07:51:30 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 577F512FC;
+        Mon, 19 Jun 2023 07:52:14 -0700 (PDT)
+Received: from [10.1.196.40] (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6ACBB3F59C;
+        Mon, 19 Jun 2023 07:51:29 -0700 (PDT)
+Message-ID: <092dda67-8751-9e80-304d-05465162cd97@arm.com>
+Date:   Mon, 19 Jun 2023 15:51:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230616212236.1389-1-dheerajkumar.srivastava@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 2/2] iommu: rockchip: Allocate tables from all
+ available memory for IOMMU v2
+Content-Language: en-GB
+To:     Jonas Karlman <jonas@kwiboo.se>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>, Heiko Stuebner <heiko@sntech.de>
+Cc:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230617182540.3091374-1-jonas@kwiboo.se>
+ <20230617182540.3091374-3-jonas@kwiboo.se>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20230617182540.3091374-3-jonas@kwiboo.se>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 02:52:36AM +0530, Dheeraj Kumar Srivastava wrote:
-> x2APIC mode requires "Interrupt Remapping" to be enabled and the
-> "physical x2apic" driver can be used only when x2APIC mode is enabled.
-> However when "intremap=off" and "x2apic_phys" kernel command line
-> parameters are passed, "physical x2apic" driver is being used even when
-> x2APIC mode is disabled ("intremap=off" disables x2APIC mode).
-> This results in the below kernel panic:
+On 17/06/2023 7:25 pm, Jonas Karlman wrote:
+> IOMMU v2 found in newer Rockchip SoCs, e.g. RK356x and RK3588, support
+> placing directory and page tables in up to 40-bit addressable physical
+> memory.
 > 
->   unchecked MSR access error: RDMSR from 0x80f at rIP: 0xffffffff87eab4ec
+> Remove the use of GFP_DMA32 flag for IOMMU v2 now that the physical
+> address to the directory table is correctly written to DTE_ADDR.
 
-Not a kernel panic - that's a warning about accessing a non-existent
-MSR.
+FWIW I'd be tempted to refactor a bit harder since this is closely 
+coupled to the DMA mask and both could be calculated from a single data 
+value, but there's absolutely nothing wrong with this approach either.
 
-Can you send full dmesg? Privately is fine too.
+Reviewed-by: Robin Murphy <robin.murphy@arm.com>
 
-How exactly do you trigger this? What hw?
+[ In fact if you start down that rabbit-hole, then I think logically it 
+leads to an even bigger refactor to convert the whole lot to use 
+dma_alloc_pages() instead ]
 
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+> Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
+> ---
+> v3:
+> - rework to only affect IOMMU v2
+> 
+> v2:
+> - no change
+> 
+>   drivers/iommu/rockchip-iommu.c | 7 +++++--
+>   1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/iommu/rockchip-iommu.c b/drivers/iommu/rockchip-iommu.c
+> index ae42959bc490..8ff69fbf9f65 100644
+> --- a/drivers/iommu/rockchip-iommu.c
+> +++ b/drivers/iommu/rockchip-iommu.c
+> @@ -99,6 +99,7 @@ struct rk_iommu_ops {
+>   	u32 (*mk_dtentries)(dma_addr_t pt_dma);
+>   	u32 (*mk_ptentries)(phys_addr_t page, int prot);
+>   	u64 dma_bit_mask;
+> +	gfp_t gfp_flags;
+>   };
+>   
+>   struct rk_iommu {
+> @@ -727,7 +728,7 @@ static u32 *rk_dte_get_page_table(struct rk_iommu_domain *rk_domain,
+>   	if (rk_dte_is_pt_valid(dte))
+>   		goto done;
+>   
+> -	page_table = (u32 *)get_zeroed_page(GFP_ATOMIC | GFP_DMA32);
+> +	page_table = (u32 *)get_zeroed_page(GFP_ATOMIC | rk_ops->gfp_flags);
+>   	if (!page_table)
+>   		return ERR_PTR(-ENOMEM);
+>   
+> @@ -1076,7 +1077,7 @@ static struct iommu_domain *rk_iommu_domain_alloc(unsigned type)
+>   	 * Each level1 (dt) and level2 (pt) table has 1024 4-byte entries.
+>   	 * Allocate one 4 KiB page for each table.
+>   	 */
+> -	rk_domain->dt = (u32 *)get_zeroed_page(GFP_KERNEL | GFP_DMA32);
+> +	rk_domain->dt = (u32 *)get_zeroed_page(GFP_KERNEL | rk_ops->gfp_flags);
+>   	if (!rk_domain->dt)
+>   		goto err_free_domain;
+>   
+> @@ -1377,6 +1378,7 @@ static struct rk_iommu_ops iommu_data_ops_v1 = {
+>   	.mk_dtentries = &rk_mk_dte,
+>   	.mk_ptentries = &rk_mk_pte,
+>   	.dma_bit_mask = DMA_BIT_MASK(32),
+> +	.gfp_flags = GFP_DMA32,
+>   };
+>   
+>   static struct rk_iommu_ops iommu_data_ops_v2 = {
+> @@ -1384,6 +1386,7 @@ static struct rk_iommu_ops iommu_data_ops_v2 = {
+>   	.mk_dtentries = &rk_mk_dte_v2,
+>   	.mk_ptentries = &rk_mk_pte_v2,
+>   	.dma_bit_mask = DMA_BIT_MASK(40),
+> +	.gfp_flags = 0,
+>   };
+>   
+>   static const struct of_device_id rk_iommu_dt_ids[] = {
