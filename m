@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D6A735716
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 14:42:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75CF4735718
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 14:43:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjFSMmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 08:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56120 "EHLO
+        id S229986AbjFSMnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 08:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230253AbjFSMmW (ORCPT
+        with ESMTP id S229690AbjFSMm0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 08:42:22 -0400
+        Mon, 19 Jun 2023 08:42:26 -0400
 Received: from 189.cn (ptr.189.cn [183.61.185.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D695E66
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 05:42:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E5BBE10D3
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 05:42:21 -0700 (PDT)
 HMM_SOURCE_IP: 10.64.8.41:49634.708654646
 HMM_ATTACHE_NUM: 0000
 HMM_SOURCE_TYPE: SMTP
 Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id 1F5C710298A;
-        Mon, 19 Jun 2023 20:42:16 +0800 (CST)
+        by 189.cn (HERMES) with SMTP id E85ED102995;
+        Mon, 19 Jun 2023 20:42:18 +0800 (CST)
 Received: from  ([114.242.206.180])
-        by gateway-151646-dep-75648544bd-xwndj with ESMTP id 8a8114871d834566bbad2466a63a610f for l.stach@pengutronix.de;
+        by gateway-151646-dep-75648544bd-xwndj with ESMTP id a4cbec9d97a5455a8cc00a4dbdebc0e3 for l.stach@pengutronix.de;
         Mon, 19 Jun 2023 20:42:18 CST
-X-Transaction-ID: 8a8114871d834566bbad2466a63a610f
+X-Transaction-ID: a4cbec9d97a5455a8cc00a4dbdebc0e3
 X-Real-From: 15330273260@189.cn
 X-Receive-IP: 114.242.206.180
 X-MEDUSA-Status: 0
@@ -37,12 +37,10 @@ To:     Lucas Stach <l.stach@pengutronix.de>,
         Daniel Vetter <daniel@ffwll.ch>
 Cc:     linux-kernel@vger.kernel.org, etnaviv@lists.freedesktop.org,
         dri-devel@lists.freedesktop.org,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH v10 08/11] drm/etnaviv: Add a dedicated function to create the virtual master
-Date:   Mon, 19 Jun 2023 20:41:58 +0800
-Message-Id: <20230619124201.2215558-9-15330273260@189.cn>
+        Sui Jingfeng <suijingfeng@loongson.cn>
+Subject: [PATCH v10 09/11] drm/etnaviv: Clean up etnaviv_pdev_probe() function
+Date:   Mon, 19 Jun 2023 20:41:59 +0800
+Message-Id: <20230619124201.2215558-10-15330273260@189.cn>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230619124201.2215558-1-15330273260@189.cn>
 References: <20230619124201.2215558-1-15330273260@189.cn>
@@ -61,84 +59,112 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Sui Jingfeng <suijingfeng@loongson.cn>
 
-After introducing the etnaviv_of_first_available_node() helper, the
-creation of the virtual master platform device can also be simplified.
-So, switch to etnaviv_create_virtual_master() function.
+Add a dedicate function to do the DMA configuration to the virtual master.
+Also replace the &pdev->dev with dev.
 
-Cc: Lucas Stach <l.stach@pengutronix.de>
-Cc: Christian Gmeiner <christian.gmeiner@gmail.com>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
 Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
 ---
- drivers/gpu/drm/etnaviv/etnaviv_drv.c | 43 ++++++++++++++++-----------
- 1 file changed, 26 insertions(+), 17 deletions(-)
+ drivers/gpu/drm/etnaviv/etnaviv_drv.c | 65 +++++++++++++++------------
+ 1 file changed, 36 insertions(+), 29 deletions(-)
 
 diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.c b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
-index d8e788aa16cb..47b2cdbb53e2 100644
+index 47b2cdbb53e2..8907cdb8a1f8 100644
 --- a/drivers/gpu/drm/etnaviv/etnaviv_drv.c
 +++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
-@@ -767,10 +767,32 @@ static void etnaviv_destroy_platform_device(struct platform_device **ppdev)
- 	*ppdev = NULL;
+@@ -54,6 +54,40 @@ static bool etnaviv_is_dma_coherent(struct device *dev)
+ 	return coherent;
  }
  
-+static int etnaviv_create_virtual_master(void)
++static int etnaviv_of_dma_configure(struct device *dev)
 +{
-+	struct platform_device **master = &etnaviv_platform_device;
-+	struct device_node *np;
++	struct device_node *first_node;
 +
 +	/*
-+	 * If the DT contains at least one available GPU device, instantiate
-+	 * the DRM platform device.
++	 * PTA and MTLB can have 40 bit base addresses, but
++	 * unfortunately, an entry in the MTLB can only point to a
++	 * 32 bit base address of a STLB. Moreover, to initialize the
++	 * MMU we need a command buffer with a 32 bit address because
++	 * without an MMU there is only an indentity mapping between
++	 * the internal 32 bit addresses and the bus addresses.
++	 *
++	 * To make things easy, we set the dma_coherent_mask to 32
++	 * bit to make sure we are allocating the command buffers and
++	 * TLBs in the lower 4 GiB address space.
 +	 */
-+	np = etnaviv_of_first_available_node();
-+	if (np) {
-+		int ret;
-+
-+		of_node_put(np);
-+
-+		ret = etnaviv_create_platform_device("etnaviv", master);
-+		if (ret)
-+			return ret;
++	if (dma_set_mask(dev, DMA_BIT_MASK(40)) ||
++	    dma_set_coherent_mask(dev, DMA_BIT_MASK(32))) {
++		dev_err(dev, "No suitable DMA available\n");
++		return -ENODEV;
 +	}
++
++	/*
++	 * Apply the same DMA configuration to the virtual etnaviv
++	 * device as the GPU we found. This assumes that all Vivante
++	 * GPUs in the system share the same DMA constraints.
++	 */
++	first_node = etnaviv_of_first_available_node();
++	if (first_node)
++		of_dma_configure(dev, first_node, true);
 +
 +	return 0;
 +}
 +
- static int __init etnaviv_init(void)
+ /*
+  * etnaviv private data construction and destructions:
+  */
+@@ -664,7 +698,6 @@ static const struct component_master_ops etnaviv_master_ops = {
+ static int etnaviv_pdev_probe(struct platform_device *pdev)
  {
- 	int ret;
--	struct device_node *np;
+ 	struct device *dev = &pdev->dev;
+-	struct device_node *first_node = NULL;
+ 	struct component_match *match = NULL;
  
- 	etnaviv_validate_init();
+ 	if (!dev->platform_data) {
+@@ -674,10 +707,7 @@ static int etnaviv_pdev_probe(struct platform_device *pdev)
+ 			if (!of_device_is_available(core_node))
+ 				continue;
  
-@@ -786,22 +808,9 @@ static int __init etnaviv_init(void)
- 	if (ret != 0)
- 		goto unregister_platform_driver;
+-			if (!first_node)
+-				first_node = core_node;
+-
+-			drm_of_component_match_add(&pdev->dev, &match,
++			drm_of_component_match_add(dev, &match,
+ 						   component_compare_of, core_node);
+ 		}
+ 	} else {
+@@ -688,31 +718,8 @@ static int etnaviv_pdev_probe(struct platform_device *pdev)
+ 			component_match_add(dev, &match, component_compare_dev_name, names[i]);
+ 	}
  
 -	/*
--	 * If the DT contains at least one available GPU device, instantiate
--	 * the DRM platform device.
+-	 * PTA and MTLB can have 40 bit base addresses, but
+-	 * unfortunately, an entry in the MTLB can only point to a
+-	 * 32 bit base address of a STLB. Moreover, to initialize the
+-	 * MMU we need a command buffer with a 32 bit address because
+-	 * without an MMU there is only an indentity mapping between
+-	 * the internal 32 bit addresses and the bus addresses.
+-	 *
+-	 * To make things easy, we set the dma_coherent_mask to 32
+-	 * bit to make sure we are allocating the command buffers and
+-	 * TLBs in the lower 4 GiB address space.
 -	 */
--	for_each_compatible_node(np, NULL, "vivante,gc") {
--		if (!of_device_is_available(np))
--			continue;
--		of_node_put(np);
--
--		ret = etnaviv_create_platform_device("etnaviv",
--						     &etnaviv_platform_device);
--		if (ret)
--			goto unregister_platform_driver;
--
--		break;
+-	if (dma_set_mask(&pdev->dev, DMA_BIT_MASK(40)) ||
+-	    dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32))) {
+-		dev_dbg(&pdev->dev, "No suitable DMA available\n");
++	if (etnaviv_of_dma_configure(dev))
+ 		return -ENODEV;
 -	}
-+	ret = etnaviv_create_virtual_master();
-+	if (ret)
-+		goto unregister_platform_driver;
+-
+-	/*
+-	 * Apply the same DMA configuration to the virtual etnaviv
+-	 * device as the GPU we found. This assumes that all Vivante
+-	 * GPUs in the system share the same DMA constraints.
+-	 */
+-	if (first_node)
+-		of_dma_configure(&pdev->dev, first_node, true);
  
- 	return ret;
- 
+ 	return component_master_add_with_match(dev, &etnaviv_master_ops, match);
+ }
 -- 
 2.25.1
 
