@@ -2,142 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A99C5735958
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 16:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D1D473595F
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 16:20:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232176AbjFSOTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 10:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59504 "EHLO
+        id S229647AbjFSOUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 10:20:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232184AbjFSOTD (ORCPT
+        with ESMTP id S229567AbjFSOUh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 10:19:03 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A3AE64
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 07:19:02 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b51780c1b3so28157205ad.1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 07:19:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687184342; x=1689776342;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=j3rO86JQ5SHM0eemJ/VqPbGFU0io6tHVoiFzDxr8Og0=;
-        b=elw+cl1rlqwKShs5z+o3pnWcbAKateNwHR4iLX+c7aQT3ymfwK7pTPJmAqbKBxIozO
-         Lx4k7TRunfRXhNXl8RIKNItivmqVNgaTu3/iHzhaEun4j7XVlXTGM9WlHNsSlLpJ7J8P
-         LtTNTtA6k20Z5mdVQw5I2d78vKjQYtNjj5nfpDZcnu4UYWvq+F5ptFxuunsK+si2sezK
-         HjiKyVQPFRSSMfXFFkaocvXyLgN2LS+ReyHAeQ2q1B5MD59+AyYHdaQTEdOp0RFiLMmD
-         JFlVjKoupWnaF1c/Q2Vatgs4MmsmOZWTolXHU3SHmCjLsgm36LUoztHhpt4k8rn6OMO/
-         tnSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687184342; x=1689776342;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j3rO86JQ5SHM0eemJ/VqPbGFU0io6tHVoiFzDxr8Og0=;
-        b=d7UADQcAWHD60mWp0fHBewLgwVWAciH7ueuZAwZHP77cDG68ljL4f0hnAtcShR88nf
-         XDPGMFrV1i2zkPxxkBylKCmY7z1FljL3mAcK+gcUg3zQpm6t5uSQHaKtq2Kar0QxVApC
-         YtJEkwmDq9ghPM50VbodNGn0ztqSln2Fq+c9WpH2D0pF6lpMX32XfUmqQzVcvu3mGWCX
-         vzq5El1AxM6cAZqqStN8/VfsX4UBE6Rgb0FLjMp8RXSfdA1wWk0oxRDVBnIWVcJOW+4Q
-         kXLidaylS9wyQEXruMVh2KNs/IaZx/s7hPY8wVYHnzHQrXHL1iEzzhMV+SfdbpWbPMYc
-         984g==
-X-Gm-Message-State: AC+VfDxVQYRofRDsCcAZT307IYbNSCzceLHIib5pjoSKxfYvCE6QtFrE
-        ov2geRKRf9iOnX5d9UfFk3c=
-X-Google-Smtp-Source: ACHHUZ6F0GU9diLxr0UYwIygVNvfY9+r/Rh6ObsRANw0cuXNcZrDAV55mbM2wjB20fh/S8C3+qZ+5w==
-X-Received: by 2002:a17:902:d485:b0:1b6:79fe:3832 with SMTP id c5-20020a170902d48500b001b679fe3832mr281315plg.69.1687184342004;
-        Mon, 19 Jun 2023 07:19:02 -0700 (PDT)
-Received: from zephyrusG14 ([103.251.210.211])
-        by smtp.gmail.com with ESMTPSA id u3-20020a17090341c300b001aaecc15d66sm20560820ple.289.2023.06.19.07.18.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 07:19:01 -0700 (PDT)
-Date:   Mon, 19 Jun 2023 19:48:57 +0530
-From:   Yogesh Hegde <yogi.kernel@gmail.com>
-To:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Cc:     dan.carpenter@linaro.org, philipp.g.hortmann@gmail.com,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        skhan@linuxfoundation.org, ivan.orlov0322@gmail.com
-Subject: [PATCH v4 4/4] staging: rtl8192e: Rename variable InitialGainHandler
-Message-ID: <a2f37a6cb962e9775978ae5f4fde958b74806a4e.1687183827.git.yogi.kernel@gmail.com>
-References: <cover.1687183827.git.yogi.kernel@gmail.com>
+        Mon, 19 Jun 2023 10:20:37 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8AAEDE7;
+        Mon, 19 Jun 2023 07:20:36 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 056E012FC;
+        Mon, 19 Jun 2023 07:21:20 -0700 (PDT)
+Received: from [10.1.196.40] (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F2B643F59C;
+        Mon, 19 Jun 2023 07:20:34 -0700 (PDT)
+Message-ID: <0c1aec7a-8724-0f49-bccb-6025f5863bb7@arm.com>
+Date:   Mon, 19 Jun 2023 15:20:30 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1687183827.git.yogi.kernel@gmail.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/2] iommu: Prevent RESV_DIRECT devices from blocking
+ domains
+Content-Language: en-GB
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Nicolin Chen <nicolinc@nvidia.com>, iommu@lists.linux.dev,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230607035145.343698-1-baolu.lu@linux.intel.com>
+ <20230607035145.343698-2-baolu.lu@linux.intel.com>
+ <5d0d6665-93e4-f61f-d700-008c0fcb4a2f@arm.com> <ZJBbJHevOa8mAdll@nvidia.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <ZJBbJHevOa8mAdll@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename variable InitialGainHandler to init_gain_handler to avoid
-CamelCase which is not accepted by checkpatch.
+On 19/06/2023 2:41 pm, Jason Gunthorpe wrote:
+> On Mon, Jun 19, 2023 at 02:33:18PM +0100, Robin Murphy wrote:
+>>> @@ -2121,6 +2125,21 @@ static int __iommu_device_set_domain(struct iommu_group *group,
+>>>    {
+>>>    	int ret;
+>>> +	/*
+>>> +	 * If the driver has requested IOMMU_RESV_DIRECT then we cannot allow
+>>> +	 * the blocking domain to be attached as it does not contain the
+>>> +	 * required 1:1 mapping. This test effectively exclusive the device from
+>>> +	 * being used with iommu_group_claim_dma_owner() which will block vfio
+>>> +	 * and iommufd as well.
+>>> +	 */
+>>> +	if (dev->iommu->requires_direct &&
+>>> +	    (new_domain->type == IOMMU_DOMAIN_BLOCKED ||
+>>
+>> Given the notion elsewhere that we want to use the blocking domain as a last
+>> resort to handle an attach failure,
+> 
+> We shouldn't do that for cases where requires_direct is true, the last
+> resort will have to be the static identity domain.
+> 
+>> at face value it looks suspect that failing to attach to a blocking
+>> domain could also be a thing. I guess technically this is failing at
+>> a slightly different level so maybe it does work out OK, but it's
+>> still smelly.
+> 
+> It basically says that this driver doesn't support blocking domains on
+> this device. What we don't want is for the driver to fail blocking or
+> identity attaches.
 
-Signed-off-by: Yogesh Hegde <yogi.kernel@gmail.com>
----
+Is that really the relevant semantic though? I thought the point was to 
+prevent userspace (or anyone else for that matter) taking ownership of a 
+device with reserved regions which we can't trust them to honour. Not 
+least because the series is entitled "Prevent RESV_DIRECT devices from 
+user assignment", not anything about attaching to blocking domains. Plus 
+the existing intel-iommu behaviour being generalised is specific to 
+IOMMU_DOMAIN_UNMANAGED.
 
-v4: Rebase to latest staging-testing branch as suggested by Greg Kroah-Hartman
-    <gregkh@linuxfoundation.org>.
+>> The main thing, though, is that not everything implements the
+>> IOMMU_DOMAIN_BLOCKED optimisation, so a nominal blocking domain could be
+>> IOMMU_DOMAIN_UNMANAGED as well.
+> 
+> Yes, it should check new_domain == group->blocking_domain as well.
+> 
+>> FWIW I'd prefer to make the RESV_DIRECT check explicit in
+>> __iommu_take_dma_ownership() rather than hide it in an
+>> implementation detail; that's going to be a lot clearer to reason
+>> about as time goes on.
+> 
+> We want to completely forbid blocking domains at all on these devices
+> because they are not supported (by FW request). I don't really like
+> the idea that we go and assume the only users of blocking domains are
+> also using take_dma_ownership() - that feels like a future bug waiting
+> to happen.
 
-v3: Revert back to v1 of the patch as suggested by Greg Kroah-Hartman
-    <gregkh@linuxfoundation.org>.
+On reflection, I don't think that aspect actually matters anyway - 
+nobody can explicitly request attachment to a blocking domain, so if the 
+only time they're used is when the IOMMU driver has already had a 
+catastrophic internal failure such that we decide to declare the device 
+toasted and deliberately put it into an unusable state, blocking its 
+reserved regions doesn't seem like a big deal. In fact if anything it 
+kind of feels like the right thing to do for that situation. We're 
+saying that we want the device to stop accessing memory because things 
+might be in an inconsistent state which we can't trust; who says that 
+mappings of RESV_DIRECT regions haven't also gone wonky? Having BLOCKED 
+mean that the device truly cannot access - and thus potentially corrupt 
+- *any* memory anywhere seems like the most robust and useful behaviour.
 
-v2: Removed the variable and called the function directly instead of
-    just renaming the variable as suggested by Greg Kroah-Hartman
-    <gregkh@linuxfoundation.org>.
----
- drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c | 4 ++--
- drivers/staging/rtl8192e/rtl8192e/rtl_core.c   | 2 +-
- drivers/staging/rtl8192e/rtllib.h              | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-index 7b0da55fa7aa..267fc6f8800e 100644
---- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-@@ -1109,11 +1109,11 @@ void rtl92e_scan_op_backup(struct net_device *dev, u8 Operation)
- 	if (priv->up) {
- 		switch (Operation) {
- 		case SCAN_OPT_BACKUP:
--			priv->rtllib->InitialGainHandler(dev, IG_Backup);
-+			priv->rtllib->init_gain_handler(dev, IG_Backup);
- 			break;
- 
- 		case SCAN_OPT_RESTORE:
--			priv->rtllib->InitialGainHandler(dev, IG_Restore);
-+			priv->rtllib->init_gain_handler(dev, IG_Restore);
- 			break;
- 		}
- 	}
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-index 631cbe016ea9..4447489a16ea 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-@@ -734,7 +734,7 @@ static void _rtl92e_init_priv_handler(struct net_device *dev)
- 
- 	priv->rtllib->SetHwRegHandler = rtl92e_set_reg;
- 	priv->rtllib->AllowAllDestAddrHandler = rtl92e_set_monitor_mode;
--	priv->rtllib->InitialGainHandler = rtl92e_init_gain;
-+	priv->rtllib->init_gain_handler = rtl92e_init_gain;
- 	priv->rtllib->rtllib_ips_leave_wq = rtl92e_rtllib_ips_leave_wq;
- 	priv->rtllib->rtllib_ips_leave = rtl92e_rtllib_ips_leave;
- 	priv->rtllib->ScanOperationBackupHandler = rtl92e_scan_op_backup;
-diff --git a/drivers/staging/rtl8192e/rtllib.h b/drivers/staging/rtl8192e/rtllib.h
-index 37e6fcd4b1ec..dbf78b60dd78 100644
---- a/drivers/staging/rtl8192e/rtllib.h
-+++ b/drivers/staging/rtl8192e/rtllib.h
-@@ -1693,7 +1693,7 @@ struct rtllib_device {
- 	void (*set_wireless_mode)(struct net_device *dev, u8 wireless_mode);
- 	bool (*GetHalfNmodeSupportByAPsHandler)(struct net_device *dev);
- 	u8   (*rtllib_ap_sec_type)(struct rtllib_device *ieee);
--	void (*InitialGainHandler)(struct net_device *dev, u8 Operation);
-+	void (*init_gain_handler)(struct net_device *dev, u8 Operation);
- 	void (*ScanOperationBackupHandler)(struct net_device *dev,
- 					   u8 Operation);
- 	void (*SetHwRegHandler)(struct net_device *dev, u8 variable, u8 *val);
--- 
-2.34.1
-
+Thanks,
+Robin.
