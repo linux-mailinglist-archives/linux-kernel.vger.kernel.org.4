@@ -2,36 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 229D1735D32
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 19:57:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04E69735D35
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 19:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231653AbjFSR5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 13:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41994 "EHLO
+        id S231912AbjFSR6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 13:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjFSR5P (ORCPT
+        with ESMTP id S229506AbjFSR6w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 13:57:15 -0400
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6989312A;
-        Mon, 19 Jun 2023 10:57:12 -0700 (PDT)
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-        id 808C4518; Mon, 19 Jun 2023 12:57:10 -0500 (CDT)
-Date:   Mon, 19 Jun 2023 12:57:10 -0500
-From:   "Serge E. Hallyn" <serge@hallyn.com>
-To:     Ben Dooks <ben.dooks@codethink.co.uk>
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, serge@hallyn.com,
-        Paul Moore <paul@paul-moore.com>
-Subject: Re: [PATCH] capabilities: fix sparse warning about __user access
-Message-ID: <20230619175710.GA200481@mail.hallyn.com>
-References: <20230619123535.324632-1-ben.dooks@codethink.co.uk>
+        Mon, 19 Jun 2023 13:58:52 -0400
+Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE54E1B6;
+        Mon, 19 Jun 2023 10:58:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1687197526; x=1718733526;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=HuYTfMb/GhmUw42QQ4NnVbo1MVi6HCUnTYBgaM7pYlw=;
+  b=gqV6H0lmcv7JWqqJ2PMnh42QYS8K1q9XeNSSCoffOi0o3dBvD0KZ+La/
+   tsFlecMM5fOJAhYVoOwbcdfIHRIrSP2njKJfDy+37QTzJNjEMmDK+n25s
+   V44wt0CxwAK/zoop3JaRzahIr0GbjAWpdGus4kceL+u96iUyFzXP5a4NR
+   k=;
+X-IronPort-AV: E=Sophos;i="6.00,255,1681171200"; 
+   d="scan'208";a="291877941"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-m6i4x-d7759ebe.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 17:58:40 +0000
+Received: from EX19MTAUWB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1d-m6i4x-d7759ebe.us-east-1.amazon.com (Postfix) with ESMTPS id 9E704467EA;
+        Mon, 19 Jun 2023 17:58:36 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Mon, 19 Jun 2023 17:58:35 +0000
+Received: from 88665a182662.ant.amazon.com (10.106.100.47) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.26;
+ Mon, 19 Jun 2023 17:58:33 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <edumazet@google.com>
+CC:     <davem@davemloft.net>, <dsahern@kernel.org>,
+        <duanmuquan@baidu.com>, <kuba@kernel.org>, <kuniyu@amazon.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <pabeni@redhat.com>
+Subject: Re: [PATCH v2] tcp: fix connection reset due to tw hashdance race.
+Date:   Mon, 19 Jun 2023 10:58:24 -0700
+Message-ID: <20230619175824.50385-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <CANn89iJCWnG0p_5C1ams264_kA97_zaQBSx-akH_SsHFg5gG6A@mail.gmail.com>
+References: <CANn89iJCWnG0p_5C1ams264_kA97_zaQBSx-akH_SsHFg5gG6A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230619123535.324632-1-ben.dooks@codethink.co.uk>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.106.100.47]
+X-ClientProxiedBy: EX19D036UWC002.ant.amazon.com (10.13.139.242) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -39,72 +69,303 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 01:35:35PM +0100, Ben Dooks wrote:
-> The two syscalls for capget and capset are producing sparse warnings
-> as sparse is thinking that the "struct __user_cap_data_struct" is marked
-> user, which seems to be down to the declaration and typedef at the same
-> time.
+From: Eric Dumazet <edumazet@google.com>
+Date: Mon, 19 Jun 2023 19:39:20 +0200
+> On Mon, Jun 19, 2023 at 7:03 PM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
+> >
+> > From: Eric Dumazet <edumazet@google.com>
+> > Date: Thu, 8 Jun 2023 08:35:20 +0200
+> > > On Thu, Jun 8, 2023 at 7:48 AM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
+> > > >
+> > > > From: Eric Dumazet <edumazet@google.com>
+> > > > Date: Wed, 7 Jun 2023 15:32:57 +0200
+> > > > > On Wed, Jun 7, 2023 at 1:59 PM Duan,Muquan <duanmuquan@baidu.com> wrote:
+> > > > > >
+> > > > > > Hi, Eric,
+> > > > > >
+> > > > > >  Thanks for your comments!
+> > > > > >
+> > > > > >  About the second lookup, I am sorry that I did not give enough explanations about it. Here are some details:
+> > > > > >
+> > > > > >  1.  The second lookup can find the tw sock and avoid the connection refuse error on userland applications:
+> > > > > >
+> > > > > > If the original sock is found, but when validating its refcnt, it has been destroyed and sk_refcnt has become 0 after decreased by tcp_time_wait()->tcp_done()->inet_csk_destory_sock()->sock_put().The validation for refcnt fails and the lookup process gets a listener sock.
+> > > > > >
+> > > > > > When this case occurs, the hashdance has definitely finished，because tcp_done() is executed after inet_twsk_hashdance(). Then if look up the ehash table again, hashdance has already finished, tw sock will be found.
+> > > > > >
+> > > > > >  With this fix, logically we can solve the connection reset issue completely when no established sock is found due to hashdance race.In my reproducing environment, the connection refuse error will occur about every 6 hours with only the fix of bad case (2). But with both of the 2 fixes, I tested it many times, the longest test continues for 10 days, it does not occur again,
+> > > > > >
+> > > > > >
+> > > > > >
+> > > > > > 2. About the performance impact:
+> > > > > >
+> > > > > >      A similar scenario is that __inet_lookup_established() will do inet_match() check for the second time, if fails it will look up    the list again. It is the extra effort to reduce the race impact without using reader lock. inet_match() failure occurs with about the same probability with refcnt validation failure in my test environment.
+> > > > > >
+> > > > > >  The second lookup will only be done in the condition that FIN segment gets a listener sock.
+> > > > > >
+> > > > > >   About the performance impact:
+> > > > > >
+> > > > > > 1)  Most of the time, this condition will not met, the added codes introduces at most 3 comparisons for each segment.
+> > > > > >
+> > > > > > The second inet_match() in __inet_lookup_established()  does least 3 comparisons for each segmet.
+> > > > > >
+> > > > > >
+> > > > > > 2)  When this condition is met, the probability is very small. The impact is similar to the second try due to inet_match() failure. Since tw sock can definitely be found in the second try, I think this cost is worthy to avoid connection reused error on userland applications.
+> > > > > >
+> > > > > >
+> > > > > >
+> > > > > > My understanding is, current philosophy is avoiding the reader lock by tolerating the minor defect which occurs in a small probability.For example, if the FIN from passive closer is dropped due to the found sock is destroyed, a retransmission can be tolerated, it only makes the connection termination slower. But I think the bottom line is that it does not affect the userland applications’ functionality. If application fails to connect due to the hashdance race, it can’t be tolerated. In fact, guys from product department push hard on the connection refuse error.
+> > > > > >
+> > > > > >
+> > > > > > About bad case (2):
+> > > > > >
+> > > > > >  tw sock is found, but its tw_refcnt has not been set to 3, it is still 0, validating for sk_refcnt will fail.
+> > > > > >
+> > > > > > I do not know the reason why setting tw_refcnt after adding it into list, could anyone help point out the reason? It adds  extra race because the new added tw sock may be found and checked in other CPU concurrently before ƒsetting tw_refcnt to 3.
+> > > > > >
+> > > > > > By setting tw_refcnt to 3 before adding it into list, this case will be solved, and almost no cost. In my reproducing environment, it occurs more frequently than bad case (1), it appears about every 20 minutes, bad case (1) appears about every 6 hours.
+> > > > > >
+> > > > > >
+> > > > > >
+> > > > > > About the bucket spinlock, the original established sock and tw sock are stored in the ehash table, I concern about the performance when there are lots of short TCP connections, the reader lock may affect the performance of connection creation and termination. Could you share some details of your idea? Thanks in advance.
+> > > > > >
+> > > > > >
+> > > > >
+> > > > > Again, you can write a lot of stuff, the fact is that your patch does
+> > > > > not solve the issue.
+> > > > >
+> > > > > You could add 10 lookups, and still miss some cases, because they are
+> > > > > all RCU lookups with no barriers.
+> > > > >
+> > > > > In order to solve the issue of packets for the same 4-tuple being
+> > > > > processed by many cpus, the only way to solve races is to add mutual
+> > > > > exclusion.
+> > > > >
+> > > > > Note that we already have to lock the bucket spinlock every time we
+> > > > > transition a request socket to socket, a socket to timewait, or any
+> > > > > insert/delete.
+> > > > >
+> > > > > We need to expand the scope of this lock, and cleanup things that we
+> > > > > added in the past, because we tried too hard to 'detect races'
+> > > >
+> > > > How about this ?  This is still a workaround though, retry sounds
+> > > > better than expanding the scope of the lock given the race is rare.
+> > >
+> > > The chance of two cpus having to hold the same spinlock is rather small.
+> > >
+> > > Algo is the following:
+> > >
+> > > Attempt a lockless/RCU lookup.
+> > >
+> > > 1) Socket is found, we are good to go. Fast path is still fast.
+> > >
+> > > 2) Socket  is not found in ehash
+> > >    - We lock the bucket spinlock.
+> > >    - We retry the lookup
+> > >    - If socket found, continue with it (release the spinlock when
+> > > appropriate, after all write manipulations in the bucket are done)
+> > >    - If socket still not found, we lookup a listener.
+> > >       We insert a TCP_NEW_SYN_RECV ....
+> > >        Again, we release the spinlock when appropriate, after all
+> > > write manipulations in the bucket are done)
+> > >
+> > > No more races, and the fast path is the same.
+> >
+> > I was looking around the issue this weekend.  Is this what you were
+> > thinking ?  I'm wondering if you were also thinking another races like
+> > found_dup_sk/own_req things. e.g.) acquire ehash lock when we start to
+> > process reqsk ?
 > 
-> Fix the following warnings by splutting the struct declaration and then
-> the user typedef into two:
-
-I'm not a fan of making code changes to work around scanners'
-shortcomings, mainly because eventually I assume the scanners
-will learn to deal with it.
-
-However, I don't like the all-in-one typedef+struct definition
-either, so let's go with it :)
-
-Paul, do you mind picking this up?
-
-thanks,
--serge
-
-> kernel/capability.c:191:35: warning: incorrect type in argument 2 (different address spaces)
-> kernel/capability.c:191:35:    expected void const *from
-> kernel/capability.c:191:35:    got struct __user_cap_data_struct [noderef] __user *
-> kernel/capability.c:168:14: warning: dereference of noderef expression
-> kernel/capability.c:168:45: warning: dereference of noderef expression
-> kernel/capability.c:169:14: warning: dereference of noderef expression
-> kernel/capability.c:169:45: warning: dereference of noderef expression
-> kernel/capability.c:170:14: warning: dereference of noderef expression
-> kernel/capability.c:170:45: warning: dereference of noderef expression
-> kernel/capability.c:244:29: warning: incorrect type in argument 1 (different address spaces)
-> kernel/capability.c:244:29:    expected void *to
-> kernel/capability.c:244:29:    got struct __user_cap_data_struct [noderef] __user ( * )[2]
-> kernel/capability.c:247:42: warning: dereference of noderef expression
-> kernel/capability.c:247:64: warning: dereference of noderef expression
-> kernel/capability.c:248:42: warning: dereference of noderef expression
-> kernel/capability.c:248:64: warning: dereference of noderef expression
-> kernel/capability.c:249:42: warning: dereference of noderef expression
-> kernel/capability.c:249:64: warning: dereference of noderef expression
+> No.
 > 
-> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
+> Idea is to hold the bucket lock and keep it until all write operations
+> in the bucket have been done.
 
-Reviewed-by: Serge Hallyn <serge@hallyn.com>
+Thanks for clarification!  I understood why it takes time.
 
-> ---
->  include/uapi/linux/capability.h | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+Actually I started on the way like
+
+  1. convert bool *refcounted to enum (noref, refcnt, locked)
+  2. add 2nd ehash lookup hoding lock and mark locked
+  3. release lock when necessary
+
+but switched to this version because there were many callers of
+__inet_lookup().
+
+
 > 
-> diff --git a/include/uapi/linux/capability.h b/include/uapi/linux/capability.h
-> index 3d61a0ae055d..5bb906098697 100644
-> --- a/include/uapi/linux/capability.h
-> +++ b/include/uapi/linux/capability.h
-> @@ -41,11 +41,12 @@ typedef struct __user_cap_header_struct {
->  	int pid;
->  } __user *cap_user_header_t;
->  
-> -typedef struct __user_cap_data_struct {
-> +struct __user_cap_data_struct {
->          __u32 effective;
->          __u32 permitted;
->          __u32 inheritable;
-> -} __user *cap_user_data_t;
-> +};
-> +typedef struct __user_cap_data_struct __user *cap_user_data_t;
->  
->  
->  #define VFS_CAP_REVISION_MASK	0xFF000000
-> -- 
-> 2.39.2
+> 
+> 
+> >
+> > Duan, could you test the diff below ?
+> >
+> > If this resolves the FIN issue, we can also revert 3f4ca5fafc08 ("tcp:
+> > avoid the lookup process failing to get sk in ehash table").
+> >
+> > ---8<---
+> > diff --git a/include/net/inet6_hashtables.h b/include/net/inet6_hashtables.h
+> > index 56f1286583d3..bb8e49a6e80f 100644
+> > --- a/include/net/inet6_hashtables.h
+> > +++ b/include/net/inet6_hashtables.h
+> > @@ -48,6 +48,11 @@ struct sock *__inet6_lookup_established(struct net *net,
+> >                                         const u16 hnum, const int dif,
+> >                                         const int sdif);
+> >
+> > +struct sock *__inet6_lookup_established_lock(struct net *net, struct inet_hashinfo *hashinfo,
+> > +                                            const struct in6_addr *saddr, const __be16 sport,
+> > +                                            const struct in6_addr *daddr, const u16 hnum,
+> > +                                            const int dif, const int sdif);
+> > +
+> >  struct sock *inet6_lookup_listener(struct net *net,
+> >                                    struct inet_hashinfo *hashinfo,
+> >                                    struct sk_buff *skb, int doff,
+> > @@ -70,9 +75,15 @@ static inline struct sock *__inet6_lookup(struct net *net,
+> >         struct sock *sk = __inet6_lookup_established(net, hashinfo, saddr,
+> >                                                      sport, daddr, hnum,
+> >                                                      dif, sdif);
+> > -       *refcounted = true;
+> > -       if (sk)
+> > +
+> > +       if (!sk)
+> > +               sk = __inet6_lookup_established_lock(net, hashinfo, saddr, sport,
+> > +                                                    daddr, hnum, dif, sdif);
+> > +       if (sk) {
+> > +               *refcounted = true;
+> >                 return sk;
+> > +       }
+> > +
+> >         *refcounted = false;
+> >         return inet6_lookup_listener(net, hashinfo, skb, doff, saddr, sport,
+> >                                      daddr, hnum, dif, sdif);
+> > diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.h
+> > index 99bd823e97f6..ad97fec63d7a 100644
+> > --- a/include/net/inet_hashtables.h
+> > +++ b/include/net/inet_hashtables.h
+> > @@ -379,6 +379,12 @@ struct sock *__inet_lookup_established(struct net *net,
+> >                                        const __be32 daddr, const u16 hnum,
+> >                                        const int dif, const int sdif);
+> >
+> > +struct sock *__inet_lookup_established_lock(struct net *net,
+> > +                                           struct inet_hashinfo *hashinfo,
+> > +                                           const __be32 saddr, const __be16 sport,
+> > +                                           const __be32 daddr, const u16 hnum,
+> > +                                           const int dif, const int sdif);
+> > +
+> >  static inline struct sock *
+> >         inet_lookup_established(struct net *net, struct inet_hashinfo *hashinfo,
+> >                                 const __be32 saddr, const __be16 sport,
+> > @@ -402,9 +408,14 @@ static inline struct sock *__inet_lookup(struct net *net,
+> >
+> >         sk = __inet_lookup_established(net, hashinfo, saddr, sport,
+> >                                        daddr, hnum, dif, sdif);
+> > -       *refcounted = true;
+> > -       if (sk)
+> > +       if (!sk)
+> > +               sk = __inet_lookup_established_lock(net, hashinfo, saddr, sport,
+> > +                                                   daddr, hnum, dif, sdif);
+> > +       if (sk) {
+> > +               *refcounted = true;
+> >                 return sk;
+> > +       }
+> > +
+> >         *refcounted = false;
+> >         return __inet_lookup_listener(net, hashinfo, skb, doff, saddr,
+> >                                       sport, daddr, hnum, dif, sdif);
+> > diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+> > index e7391bf310a7..1eeadaf1c9f9 100644
+> > --- a/net/ipv4/inet_hashtables.c
+> > +++ b/net/ipv4/inet_hashtables.c
+> > @@ -514,6 +514,41 @@ struct sock *__inet_lookup_established(struct net *net,
+> >  }
+> >  EXPORT_SYMBOL_GPL(__inet_lookup_established);
+> >
+> > +struct sock *__inet_lookup_established_lock(struct net *net, struct inet_hashinfo *hashinfo,
+> > +                                           const __be32 saddr, const __be16 sport,
+> > +                                           const __be32 daddr, const u16 hnum,
+> > +                                           const int dif, const int sdif)
+> > +{
+> > +       const __portpair ports = INET_COMBINED_PORTS(sport, hnum);
+> > +       INET_ADDR_COOKIE(acookie, saddr, daddr);
+> > +       const struct hlist_nulls_node *node;
+> > +       struct inet_ehash_bucket *head;
+> > +       unsigned int hash;
+> > +       spinlock_t *lock;
+> > +       struct sock *sk;
+> > +
+> > +       hash = inet_ehashfn(net, daddr, hnum, saddr, sport);
+> > +       head = inet_ehash_bucket(hashinfo, hash);
+> > +       lock = inet_ehash_lockp(hashinfo, hash);
+> > +
+> > +       spin_lock(lock);
+> > +       sk_nulls_for_each(sk, node, &head->chain) {
+> > +               if (sk->sk_hash != hash)
+> > +                       continue;
+> > +
+> > +               if (unlikely(!inet_match(net, sk, acookie, ports, dif, sdif)))
+> > +                       continue;
+> > +
+> > +               sock_hold(sk);
+> > +               spin_unlock(lock);
+> > +               return sk;
+> > +       }
+> > +       spin_unlock(lock);
+> 
+> Here we need to keep the lock held, and release it later.
+> 
+> > +
+> > +       return NULL;
+> > +}
+> > +EXPORT_SYMBOL_GPL(__inet_lookup_established_lock);
+> > +
+> >  /* called with local bh disabled */
+> >  static int __inet_check_established(struct inet_timewait_death_row *death_row,
+> >                                     struct sock *sk, __u16 lport,
+> > diff --git a/net/ipv6/inet6_hashtables.c b/net/ipv6/inet6_hashtables.c
+> > index b64b49012655..1b2c971859c0 100644
+> > --- a/net/ipv6/inet6_hashtables.c
+> > +++ b/net/ipv6/inet6_hashtables.c
+> > @@ -89,6 +89,40 @@ struct sock *__inet6_lookup_established(struct net *net,
+> >  }
+> >  EXPORT_SYMBOL(__inet6_lookup_established);
+> >
+> > +struct sock *__inet6_lookup_established_lock(struct net *net, struct inet_hashinfo *hashinfo,
+> > +                                            const struct in6_addr *saddr, const __be16 sport,
+> > +                                            const struct in6_addr *daddr, const u16 hnum,
+> > +                                            const int dif, const int sdif)
+> > +{
+> > +       const __portpair ports = INET_COMBINED_PORTS(sport, hnum);
+> > +       const struct hlist_nulls_node *node;
+> > +       struct inet_ehash_bucket *head;
+> > +       unsigned int hash;
+> > +       spinlock_t *lock;
+> > +       struct sock *sk;
+> > +
+> > +       hash = inet6_ehashfn(net, daddr, hnum, saddr, sport);
+> > +       head = inet_ehash_bucket(hashinfo, hash);
+> > +       lock = inet_ehash_lockp(hashinfo, hash);
+> > +
+> > +       spin_lock(lock);
+> > +       sk_nulls_for_each(sk, node, &head->chain) {
+> > +               if (sk->sk_hash != hash)
+> > +                       continue;
+> > +
+> > +               if (unlikely(!inet6_match(net, sk, saddr, daddr, ports, dif, sdif)))
+> > +                       continue;
+> > +
+> > +               sock_hold(sk);
+> > +               spin_unlock(lock);
+> > +               return sk;
+> > +       }
+> > +       spin_unlock(lock);
+> 
+> /* Same here. */
+> 
+> > +
+> > +       return NULL;
+> > +}
+> > +EXPORT_SYMBOL(__inet6_lookup_established_lock);
+> > +
+> >  static inline int compute_score(struct sock *sk, struct net *net,
+> >                                 const unsigned short hnum,
+> >                                 const struct in6_addr *daddr,
+> > ---8<---
