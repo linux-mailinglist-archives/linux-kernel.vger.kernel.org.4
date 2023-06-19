@@ -2,107 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84EDB734B76
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 07:58:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C3C734B78
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 08:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbjFSF6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 01:58:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60212 "EHLO
+        id S229767AbjFSGA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 02:00:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjFSF6K (ORCPT
+        with ESMTP id S229456AbjFSGAz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 01:58:10 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 583CC1B8
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 22:58:09 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1b5465a79cdso7091065ad.3
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 22:58:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=digitalocean.com; s=google; t=1687154289; x=1689746289;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HrlL+BdDDMCHPlpiqgd7BagbHF5+QnXLM/eoRrhffjw=;
-        b=JQQfI02E/0uIDKwMsgUWVgb8+jY6IwmniqxVhT9/IhAsUk9U3lQ+O2pXnr7+SmTLCp
-         Tp5/BoExKS0X2z3j60E9sjkRLFdBd0R1Gpu1uIHnSs4vBNl1gV7xzqkTAeaE99yl1h34
-         oGAB/cSTCRtO2vt/SI+fJKsST3OTU+DyErM0A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687154289; x=1689746289;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HrlL+BdDDMCHPlpiqgd7BagbHF5+QnXLM/eoRrhffjw=;
-        b=jnKwDjBCafRGjxFLoER+Af9DiRmk/MGm4TXyoonoTdsL51uE69DLsYIxXt1YKRj9PQ
-         jT5f9bvHCJKk1e3pdaQ+OJdArfpMydjD4dIPSEWtP96RelRzWNE0qzyXIb4gI4j9ptB1
-         r6maVoDFJl+ctS+uqU3y0JYIJVSY4Prdy8MFCgBnxZ1Ja6kkCCnMaD4kXMDnwT/ipfID
-         yKl2UVeB6sIlJWwMBUB/R0O0rST9PEHaHhaEqUBJpsaXhzvbQHm21Kua3h+Nx/lf7Ovc
-         A+WGMUZuiev0DMJR+lMgMuc0Q5qmfe2WUekFSuKaEJQPSfWfNRzEEsY8gxwMvD5h8KKT
-         N5DA==
-X-Gm-Message-State: AC+VfDxSUFkLqcjmokTNbdNnGuhNLe0mJBYZDn+YA2SLE35op3s9/NBF
-        lcvMF8xzc6nXpVYd2y6zl1WH5w==
-X-Google-Smtp-Source: ACHHUZ430EgqLN8QRZoHICne/+B0YkTFuQ/CtdV3NfVaoGyRY6Kil5C6+PvIELt9JIWPwYqL0r1APQ==
-X-Received: by 2002:a17:902:c942:b0:1b0:7c3c:31f7 with SMTP id i2-20020a170902c94200b001b07c3c31f7mr8566821pla.28.1687154288719;
-        Sun, 18 Jun 2023 22:58:08 -0700 (PDT)
-Received: from ika.internal.digitalocean.com ([2a02:8070:8e85:8a0:6016:eca3:bea:a7da])
-        by smtp.gmail.com with ESMTPSA id f13-20020a170902ce8d00b001b0358848b0sm12936489plg.161.2023.06.18.22.58.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Jun 2023 22:58:08 -0700 (PDT)
-From:   Jan Glauber <jglauber@digitalocean.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Jan Glauber <jglauber@digitalocean.com>
-Subject: [PATCH] mm: Fix shmem THP counters on migration
-Date:   Mon, 19 Jun 2023 07:57:35 +0200
-Message-Id: <20230619055735.141740-1-jglauber@digitalocean.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 19 Jun 2023 02:00:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3E91A6
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 23:00:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687154407;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1Z+NO+U3mF4VkZPV3TiZ9hDCsNGYkiNE2A8dRovLHfw=;
+        b=KFCHLeaNT+RfLyBxagPhlw5qcoabJ0e2DM2HtXEi3t4MV62idz/VJF/3YuSKGih9T9B9je
+        WsYQze4my65b9jgHAY6HVsq111K6dRqjhSQVpXan3I7vUHCF8M5Ax2jyd/ZO4BT196CNT3
+        K1SoXXZ6OQgI1tTcluCQ5XGBnMj8oiM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-384-e-TQ8zTVO1GPjKCn5TdD5g-1; Mon, 19 Jun 2023 02:00:01 -0400
+X-MC-Unique: e-TQ8zTVO1GPjKCn5TdD5g-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0B2E3800888;
+        Mon, 19 Jun 2023 06:00:01 +0000 (UTC)
+Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-194.pek2.redhat.com [10.72.12.194])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 20987112132C;
+        Mon, 19 Jun 2023 05:59:54 +0000 (UTC)
+From:   Baoquan He <bhe@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     catalin.marinas@arm.com, thunder.leizhen@huawei.com,
+        John.p.donnelly@oracle.com, kexec@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, horms@kernel.org,
+        chenjiahao16@huawei.com, linux-riscv@lists.infradead.org,
+        x86@kernel.org, bp@alien8.de, Baoquan He <bhe@redhat.com>
+Subject: [RFC PATCH 0/4] kdump: add generic functions to simplify crashkernel crashkernel in architecture
+Date:   Mon, 19 Jun 2023 13:59:47 +0800
+Message-Id: <20230619055951.45620-1-bhe@redhat.com>
 MIME-Version: 1.0
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The per node numa_stat values for shmem don't change on
-page migration for THP:
+In the current arm64, crashkernel=,high support has been finished after
+several rounds of posting and careful reviewing. The code in arm64 which
+parses crashkernel kernel parameters firstly, then reserve memory can be
+a good example for other ARCH to refer to.
 
-  grep shmem /sys/fs/cgroup/machine.slice/.../memory.numa_stat:
+Whereas in x86_64, the code mixing crashkernel parameter parsing and
+memory reserving is twisted, and looks messy. Refactoring the code to
+make it more readable maintainable is necessary.
 
-    shmem N0=1092616192 N1=10485760
-    shmem_thp N0=1092616192 N1=10485760
+Here, try to abstract the crashkernel parameter parsing code into a
+generic function parse_crashkernel_generic(), and the crashkernel memory
+reserving code into a generic function reserve_crashkernel_generic().
+Then, in ARCH which crashkernel=,high support is needed, a simple
+arch_reserve_crashkernel() can be added to call above two generic
+functions. This can remove the duplicated implmentation code in each
+ARCH, like arm64, x86_64.
 
-  migratepages 9181 0 1:
+I only change the arm64 and x86_64 implementation to make use of the
+generic functions to simplify code. Risc-v can be done very easily refer
+to the steps in arm64 and x86_64. I leave this to Jiahao or other risc-v
+developer since Jiahao have posted a patchset to add crashkernel=,high
+support to risc-v.
 
-    shmem N0=0 N1=1103101952
-    shmem_thp N0=1092616192 N1=10485760
+This patchset is based on the latest linus's tree, and on top of below
+patch:
 
-Fix that by updating shmem_thp counters likewise to shmem counters
-on page migration.
+arm64: kdump: simplify the reservation behaviour of crashkernel=,high
+      https://git.kernel.org/arm64/c/6c4dcaddbd36
 
-Signed-off-by: Jan Glauber <jglauber@digitalocean.com>
----
- mm/migrate.c | 5 +++++
- 1 file changed, 5 insertions(+)
 
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 01cac26a3127..d2ba786ea105 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -492,6 +492,11 @@ int folio_migrate_mapping(struct address_space *mapping,
- 		if (folio_test_swapbacked(folio) && !folio_test_swapcache(folio)) {
- 			__mod_lruvec_state(old_lruvec, NR_SHMEM, -nr);
- 			__mod_lruvec_state(new_lruvec, NR_SHMEM, nr);
-+
-+			if (folio_test_transhuge(folio)) {
-+				__mod_lruvec_state(old_lruvec, NR_SHMEM_THP, -nr);
-+				__mod_lruvec_state(new_lruvec, NR_SHMEM_THP, nr);
-+			}
- 		}
- #ifdef CONFIG_SWAP
- 		if (folio_test_swapcache(folio)) {
+Baoquan He (4):
+  kdump: rename parse_crashkernel() to parse_crashkernel_common()
+  kdump: add generic functions to parse crashkernel and do reservation
+  arm64: kdump: use generic interfaces to simplify crashkernel
+    reservation code
+  x86: kdump: use generic interfaces to simplify crashkernel reservation
+    code
+
+ arch/arm/kernel/setup.c              |   4 +-
+ arch/arm64/Kconfig                   |   3 +
+ arch/arm64/include/asm/kexec.h       |   8 ++
+ arch/arm64/mm/init.c                 | 141 ++----------------------
+ arch/ia64/kernel/setup.c             |   4 +-
+ arch/loongarch/kernel/setup.c        |   3 +-
+ arch/mips/cavium-octeon/setup.c      |   2 +-
+ arch/mips/kernel/setup.c             |   4 +-
+ arch/powerpc/kernel/fadump.c         |   5 +-
+ arch/powerpc/kexec/core.c            |   4 +-
+ arch/powerpc/mm/nohash/kaslr_booke.c |   4 +-
+ arch/riscv/mm/init.c                 |   5 +-
+ arch/s390/kernel/setup.c             |   4 +-
+ arch/sh/kernel/machine_kexec.c       |   5 +-
+ arch/x86/Kconfig                     |   3 +
+ arch/x86/include/asm/kexec.h         |  32 ++++++
+ arch/x86/kernel/setup.c              | 141 +++---------------------
+ include/linux/crash_core.h           |  33 +++++-
+ kernel/crash_core.c                  | 158 +++++++++++++++++++++++++--
+ 19 files changed, 274 insertions(+), 289 deletions(-)
+
 -- 
-2.25.1
+2.34.1
 
