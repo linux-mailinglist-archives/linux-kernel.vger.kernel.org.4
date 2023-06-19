@@ -2,114 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E997349AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 03:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0056B7349E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 04:02:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbjFSBSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 21:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34796 "EHLO
+        id S229720AbjFSCCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 22:02:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjFSBSD (ORCPT
+        with ESMTP id S229544AbjFSCCr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 21:18:03 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44DE1B5
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 18:18:00 -0700 (PDT)
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230619011756epoutp0194712075fcfb883439fe6bef72ef477c~p6piqkVOZ0218602186epoutp01Q
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 01:17:56 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230619011756epoutp0194712075fcfb883439fe6bef72ef477c~p6piqkVOZ0218602186epoutp01Q
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1687137476;
-        bh=OleBLvtikVcBHuH8IDNEgE039JVPKNisZ9aLSJ3hOFY=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=uUWjEbNOYrZBVsKR6SvsyRHr+Tzm+SKq6OcbDSQsPwOGN9VbOALLdOVioWInjHwuQ
-         G9tjqiDh0CGLklFvYQs1rB+TKHWbLMTxd9lPbERwvoklQnOVqHx41kBXCIpu4atd8H
-         vgCE+QJ8n3HslVaIpRV5UW/9vHGRWo/69f6HnDgM=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20230619011756epcas5p49e7808cd190e4707f5c73efab94995bb~p6ph6JEVs1902519025epcas5p4a;
-        Mon, 19 Jun 2023 01:17:56 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.174]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4QksMQ2zqcz4x9Q0; Mon, 19 Jun
-        2023 01:17:54 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        D5.9D.58203.2CCAF846; Mon, 19 Jun 2023 10:17:54 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20230619011354epcas5p32c094e0c9bcd1ec2184c66a5f8be3268~p6mAmrEJA0421404214epcas5p3L;
-        Mon, 19 Jun 2023 01:13:54 +0000 (GMT)
-Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230619011354epsmtrp22f0aa82bf7f77d011a0707e0336d55d1~p6mAl07Yn1345013450epsmtrp2d;
-        Mon, 19 Jun 2023 01:13:54 +0000 (GMT)
-X-AuditID: b6c32a4b-c55fd7000001e35b-8e-648facc291aa
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C8.81.64355.1DBAF846; Mon, 19 Jun 2023 10:13:54 +0900 (KST)
-Received: from ubuntu.. (unknown [109.105.118.54]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20230619011352epsmtip1ec693ec61f4bed0d0c8c3f920ba79937~p6l-P13IR2286522865epsmtip1P;
-        Mon, 19 Jun 2023 01:13:52 +0000 (GMT)
-From:   Min Li <min15.li@samsung.com>
-To:     axboe@kernel.dk, willy@infradead.org, hch@lst.de,
-        dlemoal@kernel.org, gregkh@linuxfoundation.org, wsa@kernel.org,
-        vkoul@kernel.org
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Min Li <min15.li@samsung.com>
-Subject: [PATCH v4] block: add capacity validation in bdev_add_partition()
-Date:   Mon, 19 Jun 2023 09:12:14 +0000
-Message-Id: <20230619091214.31615-1-min15.li@samsung.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 18 Jun 2023 22:02:47 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06985E4C
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 19:02:46 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-25e9e5f9e0cso1465286a91.0
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 19:02:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1687140165; x=1689732165;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gXezs9Rch4qwU+sdxagt3dLdrAjbG0FwaZwoUeR58wM=;
+        b=vfSLTGeOOV9bXM60MXaB/SN/BFKlMuMTB9eryikMaXPFS+OIVAClQjCasaf+Rr+eCN
+         NxCB3Oj2fuDpNQ8bVdKk6l2woFpF1MtMo/2ShGqntdBegEsnRoBkT5kvooi7ga4b3huL
+         DyJVqpB47fMhBffBLA8m/ctkisyEyQYK0hFEP42jZX6T+z3Tjz8gIdV2G8LDflkMle4W
+         pS1nhHNxFKLM9S+ExOFgltU7NqQRcHWVqUsuAGKiru5ONS53jdO+QgahSgYx3vZbSoYZ
+         92WjTJ58OsPEZMPgJEd1Dp5EPdfaOJykOkbTVpp+JOAQBCAGGoI4VqJxUb76aIzEGpzM
+         SKBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687140165; x=1689732165;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gXezs9Rch4qwU+sdxagt3dLdrAjbG0FwaZwoUeR58wM=;
+        b=Hq6dBP7Rj6Z/uF5SJq6DvebtSewabQ4IBCQPdDd3Jp74mZf6f/S3RreYZZj1Hl7tN3
+         uIihbbGh7L6h8b7GeeVxjJIAKDOejkttuB9M+VCU9io9soA6uMbUWnNls393ypsbYOq1
+         4YA17xGeoMrEymQHfX56E3GuiKn4P7Ofqo3iOjc8U7ryGX4jHXm3dchljP5cIkwLJfGw
+         bLazpP6kj29gJ9GVSVlnE9jvvhxdHf1Kgmgk3+ePv8G45HDQPVYttou6ofueTcFg5JC4
+         /eUKMA7J5pCNQY26wSjeOBKNLoBBBwcQ8XrrklMaLv4U9bcJzeMsgAMNwxUYCoD1Q01O
+         7qJg==
+X-Gm-Message-State: AC+VfDwQ3YnkyWVNmNssZEjiXq2OPKm/F1fynryZZsNiD2KfXKYPA2aq
+        ZT3aXJH3St5rjRGNQ0JwwucmHw==
+X-Google-Smtp-Source: ACHHUZ7GzEI3+lUZKDJza2HOWhvjB2quX2IIULD5jSFg9g5vW9C4J2mlqnDOA/Xv+8gq8gRP8dQx3Q==
+X-Received: by 2002:a17:90a:6e09:b0:259:c10:ea34 with SMTP id b9-20020a17090a6e0900b002590c10ea34mr6574076pjk.2.1687140165427;
+        Sun, 18 Jun 2023 19:02:45 -0700 (PDT)
+Received: from dread.disaster.area (pa49-180-13-202.pa.nsw.optusnet.com.au. [49.180.13.202])
+        by smtp.gmail.com with ESMTPSA id h2-20020a17090a298200b002310ed024adsm4970670pjd.12.2023.06.18.19.02.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Jun 2023 19:02:44 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.96)
+        (envelope-from <david@fromorbit.com>)
+        id 1qB4E5-00DTx5-2I;
+        Mon, 19 Jun 2023 12:02:41 +1000
+Date:   Mon, 19 Jun 2023 12:02:41 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     syzbot <syzbot+510dcbdc6befa1e6b2f6@syzkaller.appspotmail.com>
+Cc:     djwong@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [xfs?] UBSAN: array-index-out-of-bounds in
+ xfs_attr3_leaf_add_work
+Message-ID: <ZI+3QXDHiohgv/Pb@dread.disaster.area>
+References: <0000000000001c8edb05fe518644@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrFJsWRmVeSWpSXmKPExsWy7bCmhu6hNf0pBi8miVmsvtvPZvFgv71F
-        8+L1bBY3jr9jtpj7+hKLxcrVR5ks9t7Stri8aw6bxfJVHUwWZyd8YLXYeecEs8XvH0Cxu/vn
-        MlrcWHeVxYHPY/MKLY/LZ0s9Nq3qZPPYP3cNu8fumw1sHn1bVjF6fN4kF8AelW2TkZqYklqk
-        kJqXnJ+SmZduq+QdHO8cb2pmYKhraGlhrqSQl5ibaqvk4hOg65aZA3SvkkJZYk4pUCggsbhY
-        Sd/Opii/tCRVISO/uMRWKbUgJafApECvODG3uDQvXS8vtcTK0MDAyBSoMCE748Wbj4wFT7kr
-        bl/2b2DcxtnFyMkhIWAi8fd9L0sXIxeHkMBuRonGl0cYIZxPjBL/VmxkgXNWv5nFAtPy6dJM
-        NojETkaJvtnt7BDOc0aJ13fPMncxcnCwCShLbFvqA9IgItDBKLHlKNg+ZoE4iUtdnewgtrCA
-        l0Tnvi9sIDaLgKrEzmWHmUFsXgFLiV8n5kAtk5fYf/AsVFxQ4uTMJywQc+QlmrfOZgbZKyHQ
-        yiEx6+NeNogGF4nr+79DNQtLvDq+hR3ClpL4/A6khgPILpZ4+SMMIlwjsfvbbSYI21pi2/p1
-        TCAlzAKaEut36UOEZSWmnlrHBLGWT6L39xOocl6JHfNgbCWJvxfOMULYEhKL9z9khbA9JE6/
-        PABWIyQQKzH1cA/LBEb5WUi+mYXkm1kImxcwMq9ilEwtKM5NTy02LTDOSy2HR2tyfu4mRnCi
-        1fLewfjowQe9Q4xMHIyHGCU4mJVEeIP29qUI8aYkVlalFuXHF5XmpBYfYjQFBvFEZinR5Hxg
-        qs8riTc0sTQwMTMzM7E0NjNUEue9eL03RUggPbEkNTs1tSC1CKaPiYNTqoFp/r6Me58Mn2za
-        fme/lu/+d4Kfox/k8XNoty03tN+nfW+T5kdVj20ykccuB1/myrMV9xJOOn101ZU99mw9WjsX
-        zPT1Or7UcPHPb3WzuBmO1/kxX7GrXXfqSd6BftFDRe9tVuzKjF1mcmYOTz6/7sHFH+RORLlv
-        SNm1LLCivuf841Itj5tNcq/uvjKVqFrwc9JVBe7X675JHf48+YV7JLNUcduedn+9P7PNGvy2
-        /D/05qNEmdr735cD5bfOd3Evnd4V925ZQnyVPG9CAs8D+aj1Ju/FNIqN16x9G9zxaSnn603H
-        566cevTOsr/ffrza9rR8umP1RM+Pf5ZwbXR1PxkrsMu/rqYtSCk2Ucw8gCntmRJLcUaioRZz
-        UXEiACYdgX49BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrELMWRmVeSWpSXmKPExsWy7bCSnO6l1f0pBtdfM1qsvtvPZvFgv71F
-        8+L1bBY3jr9jtpj7+hKLxcrVR5ks9t7Stri8aw6bxfJVHUwWZyd8YLXYeecEs8XvH0Cxu/vn
-        MlrcWHeVxYHPY/MKLY/LZ0s9Nq3qZPPYP3cNu8fumw1sHn1bVjF6fN4kF8AexWWTkpqTWZZa
-        pG+XwJXx4s1HxoKn3BW3L/s3MG7j7GLk5JAQMJH4dGkmG4gtJLCdUeLw5xqIuITE+Xm/2CBs
-        YYmV/56zdzFyAdU8ZZTY1bCVsYuRg4NNQFli21IfkLiIwCRGifsXXrOCNDALJEh0/DjEDmIL
-        C3hJdO77AjaIRUBVYueyw8wgNq+ApcSvE3NYIBbIS+w/eBYqLihxcuYTFog58hLNW2czT2Dk
-        m4UkNQtJagEj0ypG0dSC4tz03OQCQ73ixNzi0rx0veT83E2M4GDXCtrBuGz9X71DjEwcjIcY
-        JTiYlUR4g/b2pQjxpiRWVqUW5ccXleakFh9ilOZgURLnVc7pTBESSE8sSc1OTS1ILYLJMnFw
-        SjUwWamL8195qLNFyv/c4zu6ZnFhppPeWXbPDuGzYd2yetWB55mRJYWz/4iItGouEeVd23hO
-        Y99/A584YeOkg6e0am89uf3qiojo3mUL1X3s3vOGH0phyWi1+H1+DWPP/wnH1rj2zivTm3qK
-        26TNPXfSys0BfusP+EYmvjnxSHvKXEtex8/B3clvp2fclZgmvrVY4re5sEO18sxfxddXr9J8
-        +P9TmMnEgn5rsb0HsreX2cckPDtup7jtaW2Suv0h174ct30WPu9n7i1v1P16yGBa/p1Cx2+3
-        7s9TiZBw8GEJuMX3K2va6l65zxaL1kelTwmetp49wVRP87Gs8wRBpRVFLOse1WXvszWQ9XM5
-        cmuGEktxRqKhFnNRcSIAMiTDTeUCAAA=
-X-CMS-MailID: 20230619011354epcas5p32c094e0c9bcd1ec2184c66a5f8be3268
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230619011354epcas5p32c094e0c9bcd1ec2184c66a5f8be3268
-References: <CGME20230619011354epcas5p32c094e0c9bcd1ec2184c66a5f8be3268@epcas5p3.samsung.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0000000000001c8edb05fe518644@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -117,58 +77,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the function bdev_add_partition(),there is no check that the start
-and end sectors exceed the size of the disk before calling add_partition.
-When we call the block's ioctl interface directly to add a partition,
-and the capacity of the disk is set to 0 by driver,the command will
-continue to execute.
+On Sat, Jun 17, 2023 at 04:22:59AM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    1f6ce8392d6f Add linux-next specific files for 20230613
+> git tree:       linux-next
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=14e629dd280000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=d103d5f9125e9fe9
+> dashboard link: https://syzkaller.appspot.com/bug?extid=510dcbdc6befa1e6b2f6
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=139d8d2d280000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11b371f1280000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/2d9bf45aeae9/disk-1f6ce839.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/e0b03ef83e17/vmlinux-1f6ce839.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/b6c21a24174d/bzImage-1f6ce839.xz
+> mounted in repro: https://storage.googleapis.com/syzbot-assets/65eca6891c21/mount_0.gz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+510dcbdc6befa1e6b2f6@syzkaller.appspotmail.com
+> 
+> XFS (loop0): Mounting V4 Filesystem 5e6273b8-2167-42bb-911b-418aa14a1261
+> XFS (loop0): Ending clean mount
+> xfs filesystem being mounted at /root/file0 supports timestamps until 2038-01-19 (0x7fffffff)
+> ================================================================================
+> UBSAN: array-index-out-of-bounds in fs/xfs/libxfs/xfs_attr_leaf.c:1560:3
+> index 14 is out of range for type '__u8 [1]'
+> CPU: 1 PID: 5021 Comm: syz-executor198 Not tainted 6.4.0-rc6-next-20230613-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
+>  ubsan_epilogue lib/ubsan.c:217 [inline]
+>  __ubsan_handle_out_of_bounds+0xd5/0x140 lib/ubsan.c:348
+>  xfs_attr3_leaf_add_work+0x1528/0x1730 fs/xfs/libxfs/xfs_attr_leaf.c:1560
+>  xfs_attr3_leaf_add+0x750/0x880 fs/xfs/libxfs/xfs_attr_leaf.c:1438
+>  xfs_attr_leaf_try_add+0x1b7/0x660 fs/xfs/libxfs/xfs_attr.c:1242
+>  xfs_attr_leaf_addname fs/xfs/libxfs/xfs_attr.c:444 [inline]
+>  xfs_attr_set_iter+0x16c4/0x2f90 fs/xfs/libxfs/xfs_attr.c:721
+>  xfs_xattri_finish_update+0x3c/0x140 fs/xfs/xfs_attr_item.c:332
 
-Signed-off-by: Min Li <min15.li@samsung.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+The on disk format for this field is defined as:
 
----
-Changes from v1:
+typedef struct xfs_attr_leaf_name_local {
+        __be16  valuelen;               /* number of bytes in value */
+        __u8    namelen;                /* length of name bytes */
+        __u8    nameval[1];             /* name/value bytes */
+} xfs_attr_leaf_name_local_t
 
-- Check for overflows of the start + length value
-- Place the capacity check at the beginning of the function.
+If someone wants to do change the on-disk format definition to use
+"kernel proper" flex arrays in both the kernel code and user space,
+update all the documentation and do all the validation work that
+on-disk format changes require for all XFS disk structures that are
+defined this way, then we'll fix this.
 
-Changes from v2:
+But as it stands, these structures have been defined this way for 25
+years and the code accessing them has been around for just as long.
+The code is not broken and it does not need fixing. We have way more
+important things to be doing that fiddling with on disk format
+definitions and long standing, working code just to shut up UBSAN
+and/or syzbot.
 
-- Place the assignment on the first line and merge the two lines into one
+WONTFIX, NOTABUG.
 
-Changes from v3:
-
-- Modify the singed name
----
- block/partitions/core.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/block/partitions/core.c b/block/partitions/core.c
-index 49e0496ff23c..b511f88bf558 100644
---- a/block/partitions/core.c
-+++ b/block/partitions/core.c
-@@ -436,10 +436,21 @@ static bool partition_overlaps(struct gendisk *disk, sector_t start,
- int bdev_add_partition(struct gendisk *disk, int partno, sector_t start,
- 		sector_t length)
- {
-+	sector_t capacity = get_capacity(disk), end;
- 	struct block_device *part;
- 	int ret;
- 
- 	mutex_lock(&disk->open_mutex);
-+	if (check_add_overflow(start, length, &end)) {
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
-+	if (start >= capacity || end > capacity) {
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
- 	if (!disk_live(disk)) {
- 		ret = -ENXIO;
- 		goto out;
+-Dave.
 -- 
-2.34.1
-
+Dave Chinner
+david@fromorbit.com
