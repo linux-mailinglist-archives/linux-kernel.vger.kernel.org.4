@@ -2,91 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 393F7735B6B
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:45:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6499735B42
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:40:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232012AbjFSPpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 11:45:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47626 "EHLO
+        id S231236AbjFSPki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 11:40:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231607AbjFSPpG (ORCPT
+        with ESMTP id S229711AbjFSPkg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 11:45:06 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A1A139;
-        Mon, 19 Jun 2023 08:45:01 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 9D1CC1F38D;
-        Mon, 19 Jun 2023 15:45:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1687189500;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yLSpnZMq1VP6bVEp1wTg9KcwJ0gQP+VEqdtcmClSXfw=;
-        b=KpXi6LHmQhkuY+y/Q6sAF2+7b+oL/9RNZfRM/CyubI9zWwG/Tn2pcpQVXmK+FdDM0+0dAX
-        CwmtJZYZNI+abcPZMVW6gpg6hKvI3ZTvPzL5U2NYHikN8Q6DhSigGhAXumMLT3jaOsxse8
-        ekGDLUX8unKlXwSzAg8Y6/e4JOLolgg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1687189500;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yLSpnZMq1VP6bVEp1wTg9KcwJ0gQP+VEqdtcmClSXfw=;
-        b=OuBoqUC+lphZI6avYQnWdhfwi2Ejqtf7QUh/g+NDloaaLyu4xG63SLonT5F/9jcnNNSkY5
-        6nw+y2DQVmbOl0Cg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 78125139C2;
-        Mon, 19 Jun 2023 15:45:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id pMUfHPx3kGR1RwAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Mon, 19 Jun 2023 15:45:00 +0000
-Date:   Mon, 19 Jun 2023 17:38:37 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] btrfs: update i_version in update_dev_time
-Message-ID: <20230619153837.GB16168@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <20230615124946.106957-1-jlayton@kernel.org>
+        Mon, 19 Jun 2023 11:40:36 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753CF113;
+        Mon, 19 Jun 2023 08:40:32 -0700 (PDT)
+X-QQ-mid: bizesmtp74t1687189213tv6onhfr
+Received: from linux-lab-host.localdomain ( [116.30.126.60])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 19 Jun 2023 23:40:12 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: vLOCICHxEeCdPu6sxmPtsZK2JR41RQr69IIe96Zy/WgX2mbiQUxlN61O1ndW5
+        UXzJ/B3lyJL6i/R4h2zRfxILs4UT4iZK/xKxFXfZAStwRkWnCA54CN1R+h240f1a7vUDO3/
+        vMoRBnTqis9myq4zdL+BbIlnDjNPZ962VZv3wXbhNiRgYZI2w3Dj/SdjGuNHQO3j1f6zjKM
+        UZTSf39u/FPW9KwavQfUU+v5KDVtC11x9oecSsl8y8FJPAOhzbc0MbKcryZKBLiVLdItFmA
+        aUj65E8V8cq0Uv3Npj72F0SD/lHFd0Ewb7iBcLfUmCR1xMxTG+vhiFhjqf20Jl7rfolA9lw
+        PeOBTP07LE3SqrAjWC6NlCkB2M4sTqroI+QAmozZOxeapmlPnk=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 11779720520343571934
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     david.laight@aculab.com, arnd@arndb.de, falcon@tinylab.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org, thomas@t-8ch.de
+Subject: [PATCH v4 00/10] tools/nolibc: add a new syscall helper
+Date:   Mon, 19 Jun 2023 23:40:10 +0800
+Message-Id: <cover.1687187451.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230615124946.106957-1-jlayton@kernel.org>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 08:49:45AM -0400, Jeff Layton wrote:
-> When updating the ctime, we also want to update i_version.
-> 
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> ---
->  fs/btrfs/volumes.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> This is just something I noticed by inspection. There is probably no way
-> to test this today unless you can somehow get to this inode via nfsd.
-> Still, I think it's the right thing to do for consistency's sake.
+Hi, Thomas, David, Willy
 
-I don't see anything wrong with setting the iversion bit, however I also
-don't see where this would be useful. Agreed with the consistency,
-otherwise the time is updated when device super block is wiped or a
-device initialized, both are big events so missing that due to lack of
-iversion update seems unlikely. I'll add it to the queue, thanks.
+Thanks very much for your kindly review.
+
+This is the revision of v3 "tools/nolibc: add a new syscall helper" [1],
+this mainly applies the suggestion from David in this reply [2] and
+rebased everything on the dev.2023.06.14a branch of linux-rcu [3].
+
+The old __sysret() doesn't support the syscalls with pointer return
+value, this revision now supports such syscalls. The left mmap() syscall
+is converted to use this new __sysret() with additional test cases.
+
+Changes from v3 -> v4:
+
+* tools/nolibc: sys.h: add a syscall return helper
+  tools/nolibc: unistd.h: apply __sysret() helper
+  tools/nolibc: sys.h: apply __sysret() helper
+
+  The original v3 series, no code change, except the Reviewed-by lines
+  from Thomas.
+
+* tools/nolibc: unistd.h: reorder the syscall macros
+
+  reorder the syscall macros in using order and align most of them.
+
+* tools/nolibc: add missing my_syscall6() for mips
+
+  required by mmap() syscall, this is the last missing my_syscall6().
+
+* tools/nolibc: __sysret: support syscalls who return a pointer
+
+  Apply suggestion from David.  
+
+  Let __sysret() also supports syscalls with pointer return value, so, the
+  return value is converted to unsigned long and the comparing of < 0 is
+  converted to the comparing of [(unsigned long)-MAX_ERRNO, (unsigned long)-1].
+
+  This also allows return a huge value (not pointer) with highest bit as 1.
+
+  It is able to merge this one to the first one if necessary.
+
+* tools/nolibc: clean up mmap() support
+
+  Apply new __sysret(), clean up #ifdef and some macros.
+
+* selftests/nolibc: add EXPECT_PTREQ, EXPECT_PTRNE and EXPECT_PTRER
+  selftests/nolibc: add sbrk_0 to test current brk getting
+  selftests/nolibc: add mmap and munmap test cases
+
+  Add some mmap & munmap test cases and the corresponding helpers, to
+  verify one of the new helpers, a sbrk_0 test case is also added.
+
+Best regards,
+Zhangjin
+---
+[1]: https://lore.kernel.org/linux-riscv/87e7a391-b97b-4001-b12a-76d20790563e@t-8ch.de/
+[2]: https://lore.kernel.org/linux-riscv/94dd5170929f454fbc0a10a2eb3b108d@AcuMS.aculab.com/
+[3]: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/
+
+Zhangjin Wu (10):
+  tools/nolibc: sys.h: add a syscall return helper
+  tools/nolibc: unistd.h: apply __sysret() helper
+  tools/nolibc: sys.h: apply __sysret() helper
+  tools/nolibc: unistd.h: reorder the syscall macros
+  tools/nolibc: add missing my_syscall6() for mips
+  tools/nolibc: __sysret: support syscalls who return a pointer
+  tools/nolibc: clean up mmap() support
+  selftests/nolibc: add EXPECT_PTREQ, EXPECT_PTRNE and EXPECT_PTRER
+  selftests/nolibc: add sbrk_0 to test current brk getting
+  selftests/nolibc: add mmap and munmap test cases
+
+ tools/include/nolibc/arch-mips.h             |  26 ++
+ tools/include/nolibc/nolibc.h                |   9 +-
+ tools/include/nolibc/sys.h                   | 391 +++----------------
+ tools/include/nolibc/types.h                 |  11 +
+ tools/include/nolibc/unistd.h                |  13 +-
+ tools/testing/selftests/nolibc/nolibc-test.c |  90 +++++
+ 6 files changed, 191 insertions(+), 349 deletions(-)
+
+-- 
+2.25.1
+
