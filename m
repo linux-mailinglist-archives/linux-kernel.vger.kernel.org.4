@@ -2,81 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77DCD734D6C
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE61B734D77
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbjFSIUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 04:20:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57388 "EHLO
+        id S230294AbjFSIV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 04:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbjFSITy (ORCPT
+        with ESMTP id S230243AbjFSIVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 04:19:54 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7B6FA;
-        Mon, 19 Jun 2023 01:19:53 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-988e6fc41ccso20201766b.3;
-        Mon, 19 Jun 2023 01:19:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687162791; x=1689754791;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jFHkTes8DrKw9cwR8pyZFdUyDvr03PKoP5YKGbpmVFI=;
-        b=FIMM1NNke8QgY6YTZDycoAXTOmacd/2jr/2eNabYgpy+NtqQdsIJHLESxKKION5YXR
-         fkrHoKlXZuLl6VI3414HGaWYxtYEakGNgGelXznIdkCMN8JOBvwgx0pWA9y3iFNW7DNh
-         gnzDCGOdsdfGlNGZHBVyBFGqqu4BbRMamzp/1t0tnh82BxD8DnrHtGnTnOtN5MDR2zHx
-         aWZmsKZeUzSQphSu1tHYIsHZcsA6oNWo3V5hwpQukI6azw7lW7Zmj2DaSPj+S+UnIK1z
-         OCWqtn/7BY1/+i9on+uOwt7R2ccDAEkTnmzZSifmy40n6CztG2Ss7CzMAvV/qJeJgd9K
-         zO2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687162791; x=1689754791;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jFHkTes8DrKw9cwR8pyZFdUyDvr03PKoP5YKGbpmVFI=;
-        b=FR617PURaeTG0pywsWwIUC1cctZJWzvl2D4nTOXF+VcU51lQPcaNjVPEKfeJE8uUoQ
-         NnL67kaE+V1losbK0SUdvgAVa7GTSKlzO2HuDu8E8K9tJY9dgaigcCa3lSm6FwIL5KdG
-         RJmrWTyfgeaM9X+uP+Pn+XNJ7zDIrjqbA35vQ+uzFlfM2mrvzk35TSYUXPDVOFL2Sstq
-         dSwHxOzAe0GEdaOJWptLHk1zyT77DgQ2VfOYe5OG+eUFkICGVnGloce09T8384PglbCA
-         o0BBoqTJG8KIyoSRaE63FgJsGhtfygSTUJWFNt51XDOFs4hd0HAqrTUpd+p0tBXA6hhg
-         V9yA==
-X-Gm-Message-State: AC+VfDxdHwBGoZZAR33oT9/FIa+axoD3MRXdtDQTWLYK0nPiSMQcNLdP
-        KCyBW4LhtvM69cOs9i3v5fc=
-X-Google-Smtp-Source: ACHHUZ63Dj5hadfhxWMjs8TUCRxjMwPLmhmAnA27KrmdZvk7i5867WtemrAERVQ44S3AdvyT1/NGBQ==
-X-Received: by 2002:a17:907:3e97:b0:973:344:6a39 with SMTP id hs23-20020a1709073e9700b0097303446a39mr7486763ejc.76.1687162791299;
-        Mon, 19 Jun 2023 01:19:51 -0700 (PDT)
-Received: from shift.daheim (p200300d5ff26fa00aaa159fffeeb01f1.dip0.t-ipconnect.de. [2003:d5:ff26:fa00:aaa1:59ff:feeb:1f1])
-        by smtp.gmail.com with ESMTPSA id w9-20020a170906480900b00986211f35bdsm4479490ejq.80.2023.06.19.01.19.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 01:19:50 -0700 (PDT)
-Received: from localhost ([127.0.0.1])
-        by shift.daheim with esmtp (Exim 4.96)
-        (envelope-from <chunkeey@gmail.com>)
-        id 1qBA74-0003da-1F;
-        Mon, 19 Jun 2023 10:19:50 +0200
-Message-ID: <f4b0f337-c530-8c4f-dc22-cfaf834dd5f0@gmail.com>
-Date:   Mon, 19 Jun 2023 10:19:50 +0200
+        Mon, 19 Jun 2023 04:21:13 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2095.outbound.protection.outlook.com [40.107.117.95])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A42A9E7A;
+        Mon, 19 Jun 2023 01:21:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ds2eje9/6mfayRqPKze0wOP+0GmRPxbjwYLHgPMEgvkm1jpjk5+vO4VRB5/0RPMweRzRu0gP+SKXLMZnNz+qcRjuNlmWnI4L68BsOxkpk5INxZStkrSW9h4usSrt9VQ0Wo+Y2NZ1dFGgCK8VlAAgwT47wn3PEju4Hdo/jxDtABwD20Y8+JaBkBvwU/sAVVewBSaiT5u7PGpoRD9FljXhv7eobQrho7Ix+DyzLsBadOvsQzj7tAiyRqzO3ldfdyuYArnZ126cb/u6DEv/RxoPvRi8CD3vh4Vr/wW32Qpt3reu7DuG9jq7oH5lItvFwNHqvHpsRC9Dwm62pzOJxFMD9A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dxr2j1r7ClnjuyNGavJzDFLpVnujmCNeTe2yKqNjr08=;
+ b=Jyd5JL1wmFXJLFnhN/k+ngmMFEm6y5RZo+slf5WB8axmY6YRYAJgiiqe+f8Rq4NwweSjk12/Y8hz5hVBtIwJ0rv/lcd9ABiNbctaznEWT4essR0E4srxiComz3FeT5Gg4+FTs9z/Yw4iKYLmd26PxHOHgAICm4y3yT3ceWiAlxkR01aovgYhYphdmyedOTWCNAjqqEIKTmDNzj6Mm++aDWJ3r51/5/rVsR6LdE/zgZU3+xmifali+xVzJDnTegJo42JtrM9IcL7scMRx022iz8eeoq2mZ3jK5Az/11gv71gBfSHZEf6myu1OaiuvUPwMy60WNsubMUbE3U4wjfjpfA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dxr2j1r7ClnjuyNGavJzDFLpVnujmCNeTe2yKqNjr08=;
+ b=X0AX52VTfuM2LmEuTn8B9qaNKt8kUf4GofPySI3xge+CoSzohNlE2W5PvXFWTlVl+dSgpCOIVmRsD7dbYkm4w5NaPNDxcJuTVqK1lcW9chrYSIQXGkONTP9kx4fgUjCqUqRowiYrzCSXG3E0bU9m64c4xeGym+Yu8FmmMLZjcnSMr0AZPMRaFAAXt40J7j/I8HaI56QA3+H75KfvTfL2L0FtbGN092jXGbFxRFCaGLeKDAkwm+vNOj24531v4AkTsQeEVDrhkKov8p+enhXIyPmN25ouFNVpdrSf7ieZb9xewSOFJ9VfrMv7BnQ1NrCCKHnGJuiUO3fgekMXfiWuvw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5022.apcprd06.prod.outlook.com (2603:1096:101:48::5)
+ by SG2PR06MB5010.apcprd06.prod.outlook.com (2603:1096:4:1b5::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.35; Mon, 19 Jun
+ 2023 08:20:56 +0000
+Received: from SEZPR06MB5022.apcprd06.prod.outlook.com
+ ([fe80::37cd:b3a2:1fee:705c]) by SEZPR06MB5022.apcprd06.prod.outlook.com
+ ([fe80::37cd:b3a2:1fee:705c%6]) with mapi id 15.20.6500.031; Mon, 19 Jun 2023
+ 08:20:56 +0000
+From:   Li Dong <lidong@vivo.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-perf-users@vger.kernel.org (open list:PERFORMANCE EVENTS
+        SUBSYSTEM),
+        linux-kernel@vger.kernel.org (open list:PERFORMANCE EVENTS SUBSYSTEM)
+Cc:     opensource.kernel@vivo.com, lidong@vivo.com
+Subject: [PATCH] tools: Fix incorrect calculation of object size by sizeof
+Date:   Mon, 19 Jun 2023 16:20:10 +0800
+Message-Id: <20230619082036.410-1-lidong@vivo.com>
+X-Mailer: git-send-email 2.31.1.windows.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: TYXPR01CA0055.jpnprd01.prod.outlook.com
+ (2603:1096:403:a::25) To SEZPR06MB5022.apcprd06.prod.outlook.com
+ (2603:1096:101:48::5)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] usb: host: xhci: parameterize Renesas delay/retry
-Content-Language: de-DE
-To:     Anne Macedo <retpolanne@posteo.net>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230618224656.2476-2-retpolanne@posteo.net>
-From:   Christian Lamparter <chunkeey@gmail.com>
-In-Reply-To: <20230618224656.2476-2-retpolanne@posteo.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5022:EE_|SG2PR06MB5010:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7511fc28-7b1d-4b0c-8db9-08db709e1aa6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: u/+O7X8LZiOjdknsrTlw1rxk9V0BPlCdwrWtwmnc7raHYpWm+pCk0i7V0eq6Zkh7W5/cX7SnSOJwzR7Ja/gYJqMZ7GaC0q0bp0NMZMBcKD8/JLFjswo41oOWAc/UnMxz93qQwYQfAD+4zJsDQ1yrOSXmZV8/Y2Ax8HSQSRRrjOfns1Rqr08o5g/t4qwdDqS/ViVy6W/EmAO3nhGSYri0dXLhyNCVGSkSdMohiBBXmztfKcIJ7gTgo1QH797f4X64aMEOApFwURVVe8Wefcq9jldmH4cwOgfujtMq+Tziy9qqUIe7R3VwfI2AEx1ldg6+85IyqtrWeFJ1qw96NF6UwKffPPFB+2XBmpiHh6htIDdMmxrEt0EgQGhBQmYjKD3Ytfo3+qzsC6OsAUk29mmjHhCF5MyotbVzbeXyZ+leL8jEk+foGDuyALoxxHGo+Caq0fO2sIsqTc6+Y7q1TjeiZJGveSfAA0ZLSN3In1LDaYWMG6w9k6ufgtL4LTermi5DfwedmSpC1/xIinLE1kdGcNeX4i4YRfcUv+mfMDdE16SjxZNAfywcCIVCAm3HpQdhEsf3xgja63DenKdehenDNDVi5Z+yKPW8nG3/DSTUgkXTh6wRaz9kHIs/LQiWzDQlmxJYC88IJsV7vtOW/JI1NA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5022.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(366004)(39860400002)(396003)(346002)(451199021)(38350700002)(38100700002)(921005)(36756003)(86362001)(52116002)(6666004)(6486002)(26005)(1076003)(6512007)(6506007)(107886003)(186003)(8936002)(8676002)(5660300002)(7416002)(478600001)(110136005)(316002)(41300700001)(66946007)(4326008)(66556008)(66476007)(2906002)(83380400001)(2616005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?je4YmDguM6ZAGZXRABvQF/vmEcPPebhfabl0x5DB6MBhrKKFk4X3gloBr/L0?=
+ =?us-ascii?Q?VcBCp6epYszNJAZxtrJzfXo1V2mohXOc2NrPVDBJEjXPUEihCloEJ1okhnwE?=
+ =?us-ascii?Q?ohBKRY68mejfI2NaKRdBGKeW7IL/aeDINGMntYUh3NCRtnRh+UaCsmV7D094?=
+ =?us-ascii?Q?z0xdORupBSP1RDO/mfekNlIcEf2BRe6nYeXlwPAOu8ynoFfIWm53tnigIkMW?=
+ =?us-ascii?Q?NWjq/yyqDrNuLB2QojGjk1hazDWQgy5+oYHwa8pf8ItnRrmhaFSNGBr8ZoK7?=
+ =?us-ascii?Q?jq+GqZ0zsoewcvFLatFUUyNPyVdzGXZMO8lQCylK4XW4rQEW/crbX6vMaGwv?=
+ =?us-ascii?Q?IYHyRYK+Woz4FFZYNMf4yUUJW76SpGC4Z0lunN1OHx2hzeWQr2etJSXmA5Vm?=
+ =?us-ascii?Q?hBpGlXsVjdWm6X3evR8Xz+KtDuFigF1lwKQX6QH32j/rzssXpzRlwsRcfepS?=
+ =?us-ascii?Q?X1TSMHRrLIZiWlW3ZqR3bp9V0C3Rqp8iNO+p7eykMVb3ZQ6n4PXcfJf01TN1?=
+ =?us-ascii?Q?f+iZl9vm2BLL3j1iTtEw8Ds++htcrS733+8qzQDl2WgJmgUHtOoMd5t7s7aR?=
+ =?us-ascii?Q?QFHmEB9zcu5XQOdfTfzTqpy0VXNCm41Us7XBXrC+hBm2BZlYHCdWQNSrcK97?=
+ =?us-ascii?Q?hafNkIiLRWVzTG+RQSkKIQhQUgId5sLO5tUnVXM9PzWiNzPqmI11gatqG0iV?=
+ =?us-ascii?Q?kBiT85m0OkQTmzXQwXhsUn6+lew0/Xx1DL1zlEujG1e2GTpy8BnFWiwosNMr?=
+ =?us-ascii?Q?DyNnD7NCrr7EG0Aa9naWvT51gPMtXOx4AONqXxylHOFvBpBO0y401TKJU0CF?=
+ =?us-ascii?Q?FPfxk3HjxK9kSLIyGRT4B3DPpsGERC3nzpm8Y7etAI4u8nMlnUwnn4sZM4jr?=
+ =?us-ascii?Q?US7u7kvgtNQPMP+EAOPoTbiiYmqUyvXFnHFAtvrnjpqqNTI/vfIVxVza5E0x?=
+ =?us-ascii?Q?+9oar7Pl07gmsjHxS0OP2p5KuBbw6IdzBFX/iTw0HVv/ZSBxJvDLL+iBwMM6?=
+ =?us-ascii?Q?VpjND1+GENcv9mVYVqd6/c5B8uLSxulRAiidX3JqYS4dP7/6Yo/u8pYjmqx0?=
+ =?us-ascii?Q?GfEackiJEMDZrGyhzXNLoHGLupK0hisUhI48F3X6DqdZM6f9JCC3LsuTnWk4?=
+ =?us-ascii?Q?Cwwn3XapW8GHwinjAuW1EvoneWrywu8K6/42rl009Xhg0tIloiAbstTwEhBk?=
+ =?us-ascii?Q?EBM6oJCthHPP7SXxECU3TeTajE9VK6H8iKF8HxZj1rJ+fpISYr127BecIY0u?=
+ =?us-ascii?Q?+r7+JPCcPs7jxNNsKLqVsaoV1FgixlKpKMOi21BVWkd2lpjWY2xjwuGrp0K2?=
+ =?us-ascii?Q?zLuIX48Wg/Y57RVWzeQfDIb4dlS34BxCqcbFyrLK9HuJQx5TFotzif0qrWiV?=
+ =?us-ascii?Q?bu/US5lKC0RxIZJCl+iprXqVBuNbx4JGqkrIW+PhPf2N5hqzoRYSlMrqkU4q?=
+ =?us-ascii?Q?MBF9dLRMxZtaxVPYVa3gjPPoCHnxGQWhFLn6RV3+SQLhCCYqlLWrfW/20nkE?=
+ =?us-ascii?Q?7xse0fs6ukbLrZ05GVwUWVk0v/f4zByOMrO8lGh+ij8FNx4yBg53TA4E0CIh?=
+ =?us-ascii?Q?kL/EwLLBedr1nt6/I1AY0BLXHvOqf2QUEWHcL+79?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7511fc28-7b1d-4b0c-8db9-08db709e1aa6
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5022.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jun 2023 08:20:56.1268
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: D1u30Z9TD0TQyfxoVosFRnbyI4fQuQ1xszAwgYtWJ7Sxn5ssEZRtlY/emUI2VEAb6QjdlmgfKcuGjU1MzLsnAw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB5010
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,51 +122,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/19/23 00:46, Anne Macedo wrote:
-> Cards based on Renesas uPD720202 have their firmware downloaded during
-> boot by xhci-pci. At this step, the status of the firmware is read and
-> it takes a while for this read to happen (up to a few seconds). The
-> macros RENESAS_RETRY and RENESAS_DELAY are used to retry reading this
-> status byte from PCI a few times. If it can't read the status byte in
-> RENESAS_RETRY tries, it times out.
-> 
-> However, since this may vary from card to card, these retry and delay
-> values need to be tweaked. In order to avoid having to patch the code to
-> change these values, CONFIG_USB_XHCI_PCI_RENESAS_RETRY and
-> CONFIG_USB_XHCI_PCI_RENESAS_DELAY are introduced.
-> 
-> If applied, this patch helps to fix errors such as:
-> 
-> ROM Download Step 34 failed at position 136 bytes
-> Firmware Download Step 2 failed at position 8 bytes with (-110)
-> 
-> while loading xhci-pci when using these cards.
-> 
-> This error in particular has been noticed by this e-mail [1].
-> 
-> [1] https://lore.kernel.org/lkml/20190626070658.GP2962@vkoul-mobl/
+What we need to calculate is the size of the object, not the size of the
+pointer.
 
-Can you tell me on what hardware (is it something older, with maybe
-a Synopsys/Designware PCIe host controller?) do you experience these
-errors and what delay+retry values are you configuring in order to
-get your DUT up an running?
+Signed-off-by: Li Dong <lidong@vivo.com>
+---
+ tools/perf/util/scripting-engines/trace-event-python.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- From what I can tell, the quoted [1] link to Vinod's mail was just
-an update during development. This was v3 of the patch series back
-then (and it went on to v10 I think, so this wasn't an issue with
-what's in the kernel right now).
-
-Note: If you are interested I still got the "uPD720201/uPD720202 User's
-Manual" back then from Renesas site. (Nowadays they want you to
-register or something.). This document was the base for the code and
-maybe there's something in there you can quote to extend the
-retries/delays.
-
-(From what I vaguely remember. Most of the transfer was fast and
-no retries where necessary, but some register write took so long.
-Vinod  also posted hints about a newer firmware for the
-uPD720201/uPD720202. Have you tried that as well?)
-
-Regards,
-Christian
+diff --git a/tools/perf/util/scripting-engines/trace-event-python.c b/tools/perf/util/scripting-engines/trace-event-python.c
+index 59063ec98619..25fcd6630a4d 100644
+--- a/tools/perf/util/scripting-engines/trace-event-python.c
++++ b/tools/perf/util/scripting-engines/trace-event-python.c
+@@ -771,12 +771,12 @@ static void set_regs_in_dict(PyObject *dict,
+ 	int size = __sw_hweight64(attr->sample_regs_intr) * 28;
+ 	char *bf = malloc(size);
+ 
+-	regs_map(&sample->intr_regs, attr->sample_regs_intr, arch, bf, sizeof(bf));
++	regs_map(&sample->intr_regs, attr->sample_regs_intr, arch, bf, size);
+ 
+ 	pydict_set_item_string_decref(dict, "iregs",
+ 			_PyUnicode_FromString(bf));
+ 
+-	regs_map(&sample->user_regs, attr->sample_regs_user, arch, bf, sizeof(bf));
++	regs_map(&sample->user_regs, attr->sample_regs_user, arch, bf, size);
+ 
+ 	pydict_set_item_string_decref(dict, "uregs",
+ 			_PyUnicode_FromString(bf));
+-- 
+2.31.1.windows.1
 
