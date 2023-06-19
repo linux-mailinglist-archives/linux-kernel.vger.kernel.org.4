@@ -2,58 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B61E2735F47
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 23:37:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60E9A735F4B
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 23:39:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjFSVhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 17:37:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53040 "EHLO
+        id S229652AbjFSVjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 17:39:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjFSVhV (ORCPT
+        with ESMTP id S229520AbjFSVjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 17:37:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2918BE64;
-        Mon, 19 Jun 2023 14:37:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A29E560EAB;
-        Mon, 19 Jun 2023 21:37:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB7CCC433C8;
-        Mon, 19 Jun 2023 21:37:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687210639;
-        bh=uBhmHL9sGeVHprDShlUwP6iM5RxyKgskvEbeJubZdck=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=LLZfnENqlBuWdWEIKr6/QJ+Yxjtxg5KXUFTvNaBZ6kdOXR0mi+d2UpG7zexKVmeN/
-         2605ejSMtTH6drU6Y5vPSa6fMfvQq7E0zgSVYOl/d1znI3serTuSlJGbWzEdyinUhy
-         c7IXoIqJFUgnMnBIZpJXXDLEMrJziuyUsdk82RQjZbyTM3XY8jnAWn77oNY0jV24tI
-         ab/PKJkQ7vI96+DMg9u1VbnrOT7EnqzNzttz0Wx2Ey3qAmuiEvQmq6ONQ38GYpqGh3
-         zrfoZtG1qQJswVfT+Z7OlqxDCiOmekqaKApotETNzbIJTcibf2MrAn462eMl9PFYPX
-         oRwGfp/fitJ/w==
-Date:   Mon, 19 Jun 2023 16:37:16 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>, bhelgaas@google.com,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Michael Bottini <michael.a.bottini@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI/ASPM: Enable ASPM on external PCIe devices
-Message-ID: <20230619213716.GA23372@bhelgaas>
+        Mon, 19 Jun 2023 17:39:02 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBE91BB
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 14:39:01 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b474dac685so25726161fa.3
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 14:39:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687210739; x=1689802739;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NJqgFyZORxKSRICxsmBFhPlaldFyLWkexWK7bDGxjGc=;
+        b=RPfDbbXupqzacz7KmZUEQIISSc1lhv+2xRsN7vCGYpBl6AXY9CbUmlVWhZ98RO3D42
+         nVQ8K02IklHfRbbOREnhR5b8ttJtfv5xqS3zYzOKuo76kZCzNQQqoqeAO4AUV2DFuUzG
+         DniqlfoxeWNQlHekVLs0UT9jbTxhIjD2aUk0Esm/2CsTRRKhZ0pD10m8d1ZG6AyGuYws
+         YwK9aOTmhf+qQCZ6mDc8Dxyb5p3EEvQ6npsQ7e/ZtvUyZU2WEN8z+0PBX6gwIWBQi0qW
+         fSyQdThWVI6RDHslTDs5eRZQoUcmG9jTevSVKtBGTZHvByvIDf6E+fV2/YAWve5/wkkh
+         KfVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687210739; x=1689802739;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NJqgFyZORxKSRICxsmBFhPlaldFyLWkexWK7bDGxjGc=;
+        b=aT+PEsn/eOo6OK7c9Ki9yk3vsgQng6KqOueaaXmluxaNFyxnX9CH9G039S+6+JgHTc
+         PC6uo2IcvGbJhBJkarIjHGdEjdaEoKHwuzTS4Q+sD/Toqk3WUAxuBG+3s4WqJriGiTUn
+         zFR2z3ksuuVhOjXjQ5WdbQywXLtypRnGlFwWwUHLRkInynhfYWSY8TNcXK5ZDxsyeaP+
+         Iz0bFKtyh9ivpXZDbn1tA+FgDgZFoQGDjXBntdQc6R1oO/mhJj4gixdn3oJOlJDfIp6L
+         eDHhA3h04xFRpstCbjNS+qL1lm/4iWgYNN78HuwZGsNhtILN7m+MyUEDTk6iaourFv71
+         ZF7Q==
+X-Gm-Message-State: AC+VfDwHcCu2TKDawEimQ6TEI/k9wdKRYXuFsWjm/zEPIxTc/BeCJa2u
+        UMKT/l3ovPx07kaHSJekuH1peg==
+X-Google-Smtp-Source: ACHHUZ7mho7mHSB6JCzN3pI1HKBCa5gj+wq/4VTVHdrMTAaqPwUmQrdQYLCZ6sPJApcpZkejhtLHCA==
+X-Received: by 2002:a2e:9189:0:b0:2b4:75b7:edda with SMTP id f9-20020a2e9189000000b002b475b7eddamr2530334ljg.24.1687210739281;
+        Mon, 19 Jun 2023 14:38:59 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id e22-20020a2e8ed6000000b002adc2fe3fc8sm66717ljl.4.2023.06.19.14.38.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Jun 2023 14:38:58 -0700 (PDT)
+Message-ID: <c25ba108-1363-9c6f-3d02-2524ede7484e@linaro.org>
+Date:   Tue, 20 Jun 2023 00:38:57 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] drm/msm: Fix typo in comment
+Content-Language: en-GB
+To:     zhumao001@208suo.com, robdclark@gmail.com,
+        quic_abhinavk@quicinc.com, airlied@gmail.com, daniel@ffwll.ch,
+        sumit.semwal@linaro.org, christian.koenig@amd.com, sean@poorly.run
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+References: <20230618143813.15142-1-dengshaomin@cdjrlc.com>
+ <20230618143813.15142-4-dengshaomin@cdjrlc.com>
+ <610b47a2989976b9dae162ecc55ddc85@208suo.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <610b47a2989976b9dae162ecc55ddc85@208suo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20ac3359-cc0d-7725-fc75-d415bcd4c2fe@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,125 +80,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 11:16:35AM -0500, Limonciello, Mario wrote:
-> On 6/15/2023 10:01 PM, Kai-Heng Feng wrote:
-> > On Fri, Jun 16, 2023 at 1:12 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > On Thu, Jun 15, 2023 at 03:04:20PM +0800, Kai-Heng Feng wrote:
-> > > > When a PCIe device is hotplugged to a Thunderbolt port, ASPM is not
-> > > > enabled for that device. However, when the device is plugged preboot,
-> > > > ASPM is enabled by default.
-> > > > 
-> > > > The disparity happens because BIOS doesn't have the ability to program
-> > > > ASPM on hotplugged devices.
-> > > > 
-> > > > So enable ASPM by default for external connected PCIe devices so ASPM
-> > > > settings are consitent between preboot and hotplugged.
-> > > > 
-> > > > On HP Thunderbolt Dock G4, enable ASPM can also fix BadDLLP error:
-> > > > pcieport 0000:00:1d.0: AER: Corrected error received: 0000:07:04.0
-> > > > pcieport 0000:07:04.0: PCIe Bus Error: severity=Corrected, type=Data Link Layer, (Receiver ID)
-> > > > pcieport 0000:07:04.0:   device [8086:0b26] error status/mask=00000080/00002000
-> > > > pcieport 0000:07:04.0:    [ 7] BadDLLP
-> > > > 
-> > > > The root cause is still unclear, but quite likely because the I225 on
-> > > > the dock supports PTM, where ASPM timing is precalculated for the PTM.
-> > > > 
-> > > > Cc: Mario Limonciello <mario.limonciello@amd.com>
-> > > > Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > > > Link: https://bugzilla.kernel.org/show_bug.cgi?id=217557
-> > > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > > > ---
-> > > >   drivers/pci/pcie/aspm.c | 4 +++-
-> > > >   1 file changed, 3 insertions(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> > > > index 66d7514ca111..613b0754c9bb 100644
-> > > > --- a/drivers/pci/pcie/aspm.c
-> > > > +++ b/drivers/pci/pcie/aspm.c
-> > > > @@ -119,7 +119,9 @@ static int policy_to_aspm_state(struct pcie_link_state *link)
-> > > >                /* Enable Everything */
-> > > >                return ASPM_STATE_ALL;
-> > > >        case POLICY_DEFAULT:
-> > > > -             return link->aspm_default;
-> > > > +             return dev_is_removable(&link->downstream->dev) ?
-> > > > +                     link->aspm_capable :
-> > > > +                     link->aspm_default;
-> > >
-> > > I'm a little hesitant because dev_is_removable() is a convenient
-> > > test that covers the current issue, but it doesn't seem tightly
-> > > connected from a PCIe architecture perspective.
-> > > 
-> > > I think the current model of compile-time ASPM policy selection:
-> > > 
-> > >    CONFIG_PCIEASPM_DEFAULT          /* BIOS default setting */
-> > >    CONFIG_PCIEASPM_PERFORMANCE      /* disable L0s and L1 */
-> > >    CONFIG_PCIEASPM_POWERSAVE        /* enable L0s and L1 */
-> > >    CONFIG_PCIEASPM_POWER_SUPERSAVE  /* enable L1 substates */
-> > > 
-> > > is flawed.  As far as I know, there's no technical reason we
-> > > have to select this at kernel build-time.  I suspect the
-> > > original reason was risk avoidance, i.e., we were worried that
-> > > we might expose hardware defects if we enabled ASPM states that
-> > > BIOS hadn't already enabled.
-> > > 
-> > > How do we get out of that model?  We do have sysfs knobs that
-> > > should cover all the functionality (set overall policy as above
-> > > via /sys/module/pcie_aspm/parameters/policy; set device-level
-> > > exceptions via /sys/bus/pci/devices/.../link/*_aspm).
-> >
-> > Agree. Build-time policy can be obsoleted by boot-time argument.
->
-> I agree as well.
+On 18/06/2023 17:54, zhumao001@208suo.com wrote:
+> Fix typo in comment of msm_gem.c.
+> 
+> Signed-off-by: Zhu Mao <zhumao001@208suo.com>
+> ---
+>   drivers/gpu/drm/msm/msm_gem.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 
-This isn't strictly relevant to the current problem, so let's put this
-on the back burner for now.
+This patch doesn't apply. Please use git send-email to send patches.
 
-> > > In my opinion, the cleanest solution would be to enable all ASPM
-> > > functionality whenever possible and let users disable it if they
-> > > need to for performance.  If there are device defects when
-> > > something is enabled, deal with it via quirks, as we do for
-> > > other PCI features.
-> > > 
-> > > That feels a little risky, but let's have a conversation about
-> > > where we want to go in the long term.  It's good to avoid risk,
-> > > but too much avoidance leads to its own complexity and an
-> > > inability to change things.
-> >
-> > I think we should separate the situation into two cases:
-> > - When BIOS/system firmware has the ability to program ASPM, honor
-> > it.  This applies to most "internal" PCI devices.
-> > - When BIOS/system can't program ASPM, enable ASPM for whatever
-> > it's capable of. Most notable case is Intel VMD controller, and
-> > this patch for devices connected through TBT.
-> > 
-> > Enabling all ASPM functionality regardless of what's being
-> > pre-programmed by BIOS is way too risky.  Disabling ASPM to
-> > workaround issues and defects are still quite common among
-> > hardware manufacturers.
+-- 
+With best wishes
+Dmitry
 
-It sounds like you have actual experience with this :)  Do you have
-any concrete examples that we can use as "known breakage"?
-
-This feels like a real problem to me.  There are existing mechanisms
-(ACPI_FADT_NO_ASPM and _OSC PCIe cap ownership) the platform can use
-to prevent the OS from using ASPM.
-
-If vendors assume that *in addition*, the OS will pay attention to
-whatever ASPM configuration BIOS did, that's a major disconnect.  We
-don't do anything like that for other PCI features, and I'm not aware
-of any restriction like that being documented.
-
-> I think the pragmatic way to approach it is to (essentially) apply
-> the policy as BIOS defaults and allow overrides from that.
-
-Do you mean that when enumerating a device (at boot-time or hot-add
-time), we would read the current ASPM config but not change it?  And
-users could use the sysfs knobs to enable/disable ASPM as desired?
-That wouldn't solve the problem Kai-Heng is trying to solve.
-
-Or that we leave ASPM alone during boot-time enumeration, but enable
-ASPM when we enumerate hot-added devices?  It doesn't sound right that
-a device would be configured differently if present at boot vs
-hot-added.
-
-Bjorn
