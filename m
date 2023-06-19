@@ -2,249 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E9A734B71
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 07:48:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41153734B75
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 07:55:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbjFSFsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 01:48:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58958 "EHLO
+        id S229761AbjFSFza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 01:55:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjFSFsq (ORCPT
+        with ESMTP id S229456AbjFSFz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 01:48:46 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DA61A8;
-        Sun, 18 Jun 2023 22:48:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
- s=s31663417; t=1687153678; x=1687758478; i=deller@gmx.de;
- bh=3bpv0Sq84qpeiKzwxZGQAnzIVxWHnuEFv0IZNw09BQY=;
- h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
- b=erSM4FKBEmuXAlZ59doRaUwk8EwhueZdegMbzKP+QhYfRbKi2Lhx6IofVmpVONNpLiug8S9
- p9r/TQNwzg7ALvwtjSEt2eAVTxoxtjpWbGuGVq+kfsr1FEcVW+VeiAdDHm6b7PHYLJcg4oz+8
- 9/bEgLbRWcQY5XecBZ3JfLlA9SQvZ7N+vT8/gC9Cnk1GspNb5VoEWWGJ3uJfQ8eRrBZ6wgzVF
- U3aA8LhWNS6bl1L3ql9uXRIfiyeF0DBr6U3H3zlvszQH2R9m5m0NyHlSsZX7l0ZfFx8D6YVaj
- bKq0mb9A4vX9/hTOvFX0Ub0iwCmKhvxq3LYymljnrcRVvVbyvTdA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([94.134.144.204]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MtfJX-1ppBXV0PpH-00v9sa; Mon, 19
- Jun 2023 07:47:58 +0200
-Message-ID: <75a0786d-d3ec-05e2-6505-188c3d181b83@gmx.de>
-Date:   Mon, 19 Jun 2023 07:47:52 +0200
+        Mon, 19 Jun 2023 01:55:28 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6986B1B5;
+        Sun, 18 Jun 2023 22:55:27 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 26AAE1F893;
+        Mon, 19 Jun 2023 05:55:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1687154126; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Iz0ylscT0iQMeeO7bZHzABXDMYozwbLtr3UR7JBADas=;
+        b=1lQan1JNf0mftmkXqZ16o7VKMQchmCPm5wv5I15ECeL4ZyqYxu5xE265fljB2451sSpbfM
+        4uqMcMFNfr0qnF+WvEW33kI/yD+vNFpNve7j7yzIRryESE8eirlMbRvhRnYSr+x9LRdqoG
+        iMxEeWKeQERQwcdHHXUpnPhg3xSsuTo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1687154126;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Iz0ylscT0iQMeeO7bZHzABXDMYozwbLtr3UR7JBADas=;
+        b=7gMSFGhVyOn4ZcOMxMp0tc5DkhgEn7+ckkR0nS9PrBdnEKKOB2BMda9UNcjOeWXOal+fnW
+        +gAJA51/6qNuUCBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DC189139C2;
+        Mon, 19 Jun 2023 05:55:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id T3SZNM3tj2SfVAAAMHmgww
+        (envelope-from <hare@suse.de>); Mon, 19 Jun 2023 05:55:25 +0000
+Message-ID: <091d7daa-2782-66a0-57f4-ab62bbb82daf@suse.de>
+Date:   Mon, 19 Jun 2023 07:55:22 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v6 14/19] parisc: mm: Convert to GENERIC_IOREMAP
+ Thunderbird/102.11.0
+Subject: Re: [PATCH RFC 2/7] blk-mq: delay tag fair sharing until fail to get
+ driver tag
 Content-Language: en-US
-To:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
-        christophe.leroy@csgroup.eu, hch@lst.de, rppt@kernel.org,
-        willy@infradead.org, agordeev@linux.ibm.com,
-        wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
-        David.Laight@ACULAB.COM, shorne@gmail.com,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        linux-parisc@vger.kernel.org
-References: <20230609075528.9390-1-bhe@redhat.com>
- <20230609075528.9390-15-bhe@redhat.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20230609075528.9390-15-bhe@redhat.com>
+To:     Yu Kuai <yukuai1@huaweicloud.com>, bvanassche@acm.org,
+        axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yi.zhang@huawei.com, yangerkun@huawei.com
+References: <20230618160738.54385-1-yukuai1@huaweicloud.com>
+ <20230618160738.54385-3-yukuai1@huaweicloud.com>
+From:   Hannes Reinecke <hare@suse.de>
+In-Reply-To: <20230618160738.54385-3-yukuai1@huaweicloud.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:4xBnCYot+P9hRdTSapi4CiX5gBlJsUOVbaNVW1eypzPZ2gwUQ1i
- BEO8XT+RYH8BNM/68eCkJfLORi3jHcTAU4Hme7siRfX6+VG12ljyon+Tz4qCuW1a2QgFrXk
- uSq6Cq3S4uEQxotyGWHAkKGN/etzWeES+801teEI00aZ0oVpYpucJxVgpHwCIyXu0ZHkOIP
- 6yXBZFVFsD6XwSxRed+4A==
-UI-OutboundReport: notjunk:1;M01:P0:br2Bb9rJ1aI=;vxRiu6N5Lpq4NJtTWUikbA7SH2c
- 4634vVbd2iDsJjV4erZSRwYVHH/DNTf8WnEwDhLJPlifzIGU/pJlxJremwNCQnpQOrVYouym7
- l55UvXiLNYb4ZNWek9Fmi0lQYQK9Zy8DWf5tsCxKDzPbYxSZ13HpVsJ4B1QvHwEFkB6bK/8iH
- g+dk9NU5GhB97NVa8Uj3DahDQrVfjEd0EzEMh6gogmwlFwRV3iZYyFSZ8264aAZ8bfXlLJEoY
- 8v2eKCqw1WoUWanNovFK3iytd19Ej5h5a5mLhHw2CmeQcfauoRq9liajYm4ooGaGvHDt1AunP
- jcl1aMC3zBepd2AllaptPyDCliZFBr3I6zJ7M+0tIf7nQKtfjkNdM0L3DpZP8Gsdl2ZjiXdU5
- iKu8w6qLvePxRQoomI1GzPSMlsGV8/806ZuhpzMvB1eISBocjSv86kWluMLAiQFgddxNdLLbT
- QUbnUPn4o8kYagcnh5pARO0SF6AyMSjAmLyzmxmzl8My0iCcaSpz6c1VJGTln2wD2BHNcGOAQ
- x2cLa+eKo+pf6vd9jq2Ns6bQmztJk8iurCA6Maoxexu13uSu7Nfb9tUZ1QXTVug6YiLnrqvtk
- frQZsL7D6FHB/I0DADoCed1uGagiJUEQ13Wj7APly8/ut3N8nL6g9IbqxI6FYoaT0R3RV7doD
- 6ecjieXYxMCFHEpYD/5gWWw+7rL75Yy7zBU+2/qc/MoevH9txTTF27KHjDktFP00n6X7oK+CA
- 29EX8pZ1wE6iuEZdTeKFC1JfLjPzhYSfCE0ywjrCLi8QAYfcfqAgNTAsdzqO+oKM96MYc3egL
- jcVRqv98AIIDmSKMF3/rqfnL1/sZvI7ILYC4uj9kTju5YtfvmQA6O7CdnrxxaQl6LKAwpTBhB
- V8DB6wQa4F2/SkpW00PuMxBm1Syip8kAfeMatbOJj1PqfOmKT9tCCWPfG0/oDMOhQmKFoZUal
- Z+smTtB2T6GEy5dIVC2iI+XXth4=
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/9/23 09:55, Baoquan He wrote:
-> By taking GENERIC_IOREMAP method, the generic generic_ioremap_prot(),
-> generic_iounmap(), and their generic wrapper ioremap_prot(), ioremap()
-> and iounmap() are all visible and available to arch. Arch needs to
-> provide wrapper functions to override the generic versions if there's
-> arch specific handling in its ioremap_prot(), ioremap() or iounmap().
-> This change will simplify implementation by removing duplicated codes
-> with generic_ioremap_prot() and generic_iounmap(), and has the equivalen=
-t
-> functioality as before.
->
-> Here, add wrapper function ioremap_prot() for parisc's special operation
-> when iounmap().
->
-> Signed-off-by: Baoquan He <bhe@redhat.com>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-> Cc: Helge Deller <deller@gmx.de>
-> Cc: linux-parisc@vger.kernel.org
-
-Acked-by: Helge Deller <deller@gmx.de> # parisc
-
-Thanks!
-Helge
-
+On 6/18/23 18:07, Yu Kuai wrote:
+> From: Yu Kuai <yukuai3@huawei.com>
+> 
+> Start tag fair sharing when a device start to issue io will waste
+> resources, same number of tags will be assigned to each disk/hctx,
+> and such tags can't be used for other disk/hctx, which means a disk/hctx
+> can't use more than assinged tags even if there are still lots of tags
+> that is assinged to other disks are unused.
+> 
+> Add a new api blk_mq_driver_tag_busy(), it will be called when get
+> driver tag failed, and move tag sharing from blk_mq_tag_busy() to
+> blk_mq_driver_tag_busy().
+> 
+> This approch will work well if total tags are not exhausted, and follow
+> up patches will try to refactor how tag is shared to handle this case.
+> 
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 > ---
-> v5->v6:
->    Remove the stale paragraph related to ARCH_HAS_IOREMAP_WC adding in
->    log - Mike
->
->   arch/parisc/Kconfig          |  1 +
->   arch/parisc/include/asm/io.h | 15 ++++++---
->   arch/parisc/mm/ioremap.c     | 62 +++---------------------------------
->   3 files changed, 15 insertions(+), 63 deletions(-)
->
-> diff --git a/arch/parisc/Kconfig b/arch/parisc/Kconfig
-> index 967bde65dd0e..315cc42b1a2c 100644
-> --- a/arch/parisc/Kconfig
-> +++ b/arch/parisc/Kconfig
-> @@ -36,6 +36,7 @@ config PARISC
->   	select GENERIC_ATOMIC64 if !64BIT
->   	select GENERIC_IRQ_PROBE
->   	select GENERIC_PCI_IOMAP
-> +	select GENERIC_IOREMAP
->   	select ARCH_HAVE_NMI_SAFE_CMPXCHG
->   	select GENERIC_SMP_IDLE_THREAD
->   	select GENERIC_ARCH_TOPOLOGY if SMP
-> diff --git a/arch/parisc/include/asm/io.h b/arch/parisc/include/asm/io.h
-> index c05e781be2f5..366537042465 100644
-> --- a/arch/parisc/include/asm/io.h
-> +++ b/arch/parisc/include/asm/io.h
-> @@ -125,12 +125,17 @@ static inline void gsc_writeq(unsigned long long v=
-al, unsigned long addr)
->   /*
->    * The standard PCI ioremap interfaces
->    */
-> -void __iomem *ioremap(unsigned long offset, unsigned long size);
-> -#define ioremap_wc			ioremap
-> -#define ioremap_uc			ioremap
-> -#define pci_iounmap			pci_iounmap
-> +#define ioremap_prot ioremap_prot
-> +
-> +#define _PAGE_IOREMAP (_PAGE_PRESENT | _PAGE_RW | _PAGE_DIRTY | \
-> +		       _PAGE_ACCESSED | _PAGE_NO_CACHE)
->
-> -extern void iounmap(const volatile void __iomem *addr);
-> +#define ioremap_wc(addr, size)  \
-> +	ioremap_prot((addr), (size), _PAGE_IOREMAP)
-> +#define ioremap_uc(addr, size)  \
-> +	ioremap_prot((addr), (size), _PAGE_IOREMAP)
-> +
-> +#define pci_iounmap			pci_iounmap
->
->   void memset_io(volatile void __iomem *addr, unsigned char val, int cou=
-nt);
->   void memcpy_fromio(void *dst, const volatile void __iomem *src, int co=
-unt);
-> diff --git a/arch/parisc/mm/ioremap.c b/arch/parisc/mm/ioremap.c
-> index 345ff0b66499..fd996472dfe7 100644
-> --- a/arch/parisc/mm/ioremap.c
-> +++ b/arch/parisc/mm/ioremap.c
-> @@ -13,25 +13,9 @@
->   #include <linux/io.h>
->   #include <linux/mm.h>
->
-> -/*
-> - * Generic mapping function (not visible outside):
-> - */
-> -
-> -/*
-> - * Remap an arbitrary physical address space into the kernel virtual
-> - * address space.
-> - *
-> - * NOTE! We need to allow non-page-aligned mappings too: we will obviou=
-sly
-> - * have to convert them into an offset in a page-aligned mapping, but t=
-he
-> - * caller shouldn't need to know that small detail.
-> - */
-> -void __iomem *ioremap(unsigned long phys_addr, unsigned long size)
-> +void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
-> +			   unsigned long prot)
+>   block/blk-mq-debugfs.c |  4 ++-
+>   block/blk-mq-tag.c     | 60 ++++++++++++++++++++++++++++++++++--------
+>   block/blk-mq.c         |  4 ++-
+>   block/blk-mq.h         | 13 ++++++---
+>   include/linux/blk-mq.h |  6 +++--
+>   include/linux/blkdev.h |  1 +
+>   6 files changed, 70 insertions(+), 18 deletions(-)
+> 
+> diff --git a/block/blk-mq-debugfs.c b/block/blk-mq-debugfs.c
+> index 431aaa3eb181..de5a911b07c2 100644
+> --- a/block/blk-mq-debugfs.c
+> +++ b/block/blk-mq-debugfs.c
+> @@ -400,8 +400,10 @@ static void blk_mq_debugfs_tags_show(struct seq_file *m,
 >   {
-> -	void __iomem *addr;
-> -	struct vm_struct *area;
-> -	unsigned long offset, last_addr;
-> -	pgprot_t pgprot;
-> -
->   #ifdef CONFIG_EISA
->   	unsigned long end =3D phys_addr + size - 1;
->   	/* Support EISA addresses */
-> @@ -40,11 +24,6 @@ void __iomem *ioremap(unsigned long phys_addr, unsign=
-ed long size)
->   		phys_addr |=3D F_EXTEND(0xfc000000);
->   #endif
->
-> -	/* Don't allow wraparound or zero size */
-> -	last_addr =3D phys_addr + size - 1;
-> -	if (!size || last_addr < phys_addr)
-> -		return NULL;
-> -
->   	/*
->   	 * Don't allow anybody to remap normal RAM that we're using..
->   	 */
-> @@ -62,39 +41,6 @@ void __iomem *ioremap(unsigned long phys_addr, unsign=
-ed long size)
->   		}
->   	}
->
-> -	pgprot =3D __pgprot(_PAGE_PRESENT | _PAGE_RW | _PAGE_DIRTY |
-> -			  _PAGE_ACCESSED | _PAGE_NO_CACHE);
-> -
-> -	/*
-> -	 * Mappings have to be page-aligned
-> -	 */
-> -	offset =3D phys_addr & ~PAGE_MASK;
-> -	phys_addr &=3D PAGE_MASK;
-> -	size =3D PAGE_ALIGN(last_addr + 1) - phys_addr;
-> -
-> -	/*
-> -	 * Ok, go for it..
-> -	 */
-> -	area =3D get_vm_area(size, VM_IOREMAP);
-> -	if (!area)
-> -		return NULL;
-> -
-> -	addr =3D (void __iomem *) area->addr;
-> -	if (ioremap_page_range((unsigned long)addr, (unsigned long)addr + size=
-,
-> -			       phys_addr, pgprot)) {
-> -		vunmap(addr);
-> -		return NULL;
-> -	}
-> -
-> -	return (void __iomem *) (offset + (char __iomem *)addr);
-> -}
-> -EXPORT_SYMBOL(ioremap);
-> -
-> -void iounmap(const volatile void __iomem *io_addr)
-> -{
-> -	unsigned long addr =3D (unsigned long)io_addr & PAGE_MASK;
-> -
-> -	if (is_vmalloc_addr((void *)addr))
-> -		vunmap((void *)addr);
-> +	return generic_ioremap_prot(phys_addr, size, __pgprot(prot));
+>   	seq_printf(m, "nr_tags=%u\n", tags->nr_tags);
+>   	seq_printf(m, "nr_reserved_tags=%u\n", tags->nr_reserved_tags);
+> -	seq_printf(m, "active_queues=%d\n",
+> +	seq_printf(m, "active_queues=%u\n",
+>   		   READ_ONCE(tags->ctl.active_queues));
+> +	seq_printf(m, "share_queues=%u\n",
+> +		   READ_ONCE(tags->ctl.share_queues));
+>   
+>   	seq_puts(m, "\nbitmap_tags:\n");
+>   	sbitmap_queue_show(&tags->bitmap_tags, m);
+> diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c
+> index fe41a0d34fc0..1c2bde917195 100644
+> --- a/block/blk-mq-tag.c
+> +++ b/block/blk-mq-tag.c
+> @@ -29,6 +29,32 @@ static void blk_mq_update_wake_batch(struct blk_mq_tags *tags,
+>   			users);
 >   }
-> -EXPORT_SYMBOL(iounmap);
-> +EXPORT_SYMBOL(ioremap_prot);
+>   
+> +void __blk_mq_driver_tag_busy(struct blk_mq_hw_ctx *hctx)
+> +{
+> +	struct blk_mq_tags *tags = hctx->tags;
+> +
+> +	/*
+> +	 * calling test_bit() prior to test_and_set_bit() is intentional,
+> +	 * it avoids dirtying the cacheline if the queue is already active.
+> +	 */
+> +	if (blk_mq_is_shared_tags(hctx->flags)) {
+> +		struct request_queue *q = hctx->queue;
+> +
+> +		if (test_bit(QUEUE_FLAG_HCTX_BUSY, &q->queue_flags) ||
+> +		    test_and_set_bit(QUEUE_FLAG_HCTX_BUSY, &q->queue_flags))
+> +			return;
+> +	} else {
+> +		if (test_bit(BLK_MQ_S_DTAG_BUSY, &hctx->state) ||
+> +		    test_and_set_bit(BLK_MQ_S_DTAG_BUSY, &hctx->state))
+> +			return;
+> +	}
+> +
+> +	spin_lock_irq(&tags->lock);
+> +	WRITE_ONCE(tags->ctl.share_queues, tags->ctl.active_queues);
+> +	blk_mq_update_wake_batch(tags, tags->ctl.share_queues);
+> +	spin_unlock_irq(&tags->lock);
+> +}
+> +
+>   /*
+>    * If a previously inactive queue goes active, bump the active user count.
+>    * We need to do this before try to allocate driver tag, then even if fail
+> @@ -37,7 +63,6 @@ static void blk_mq_update_wake_batch(struct blk_mq_tags *tags,
+>    */
+>   void __blk_mq_tag_busy(struct blk_mq_hw_ctx *hctx)
+>   {
+> -	unsigned int users;
+>   	struct blk_mq_tags *tags = hctx->tags;
+>   
+>   	/*
+> @@ -57,9 +82,7 @@ void __blk_mq_tag_busy(struct blk_mq_hw_ctx *hctx)
+>   	}
+>   
+>   	spin_lock_irq(&tags->lock);
+> -	users = tags->ctl.active_queues + 1;
+> -	WRITE_ONCE(tags->ctl.active_queues, users);
+> -	blk_mq_update_wake_batch(tags, users);
+> +	WRITE_ONCE(tags->ctl.active_queues, tags->ctl.active_queues + 1);
+
+Why did you remove the call to blk_mq_update_wake_batch() here?
+
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Ivo Totev, Andrew
+Myers, Andrew McDonald, Martje Boudien Moerman
 
