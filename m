@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51BA0735576
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 13:06:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEDF1735575
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 13:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232603AbjFSLGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 07:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38354 "EHLO
+        id S232613AbjFSLGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 07:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232660AbjFSLFn (ORCPT
+        with ESMTP id S232576AbjFSLFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 19 Jun 2023 07:05:43 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4BFD19B6;
-        Mon, 19 Jun 2023 04:04:53 -0700 (PDT)
-Date:   Mon, 19 Jun 2023 11:04:51 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12DF410DE;
+        Mon, 19 Jun 2023 04:04:55 -0700 (PDT)
+Date:   Mon, 19 Jun 2023 11:04:52 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1687172692;
+        s=2020; t=1687172693;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=J97AV1wbvGzM84xSecIv75HNLCdjTpNilZUb/XHuEvw=;
-        b=QqOqFoJ+f1IVCZkhDbXydMy8yHrAFn9sBrzw6jE05H/dn7wihkQ9u5KWZTqZ8u7E/xDGU1
-        mXti7X4JXEJxQZ5SNiQLcLJIWCokigBkNgZl0U2JSpWADD1AtjwDc6WO8knvn7nHAStomF
-        WMrxPy1lHX9bFqFhmKfug/V5LZXinIM4N9QayNX83CShLHEjDgWD2bfY3WWZ0EGr6jLcr8
-        QfYVQYieR/s9mSVlkMsN2Y48Ezaz2cfbrIEZem/YkSWqHCQwMR+bMORt9S0Yx1K4C0Ng8e
-        mogtTxZLCwnFTbjnB+kSENqZV5E++xNgn7Uusf2Dw7gf88mFEru1jzS3vp/bIA==
+        bh=OBk6SVQF8hbLqgrYb7zBnRJ0TouOnsyxVPTI0vV8hDc=;
+        b=hbmtd5SEN1CPWEFk6+CLULGU5Bp1u7moVRZ3FQHARFXXBFi3GZcS0Z4vYVCl9hOtwWpcIr
+        pmJ2HPaxCP4OmY1gdHVSxNz8FOV8SvgjNZjtLLTGXSPU/gJ8mMIMehSAqg4GnVMlUylj1T
+        Hb1sJpp+GpH9HxS3WRZwA4WRnkAnhrMCqzFu1NG6Y5EiCc9jyH7B8qMbKYqCApUmqSPeAl
+        nkHNilI1mdyDgrCj5ebwB4881Jcw+c9WXeZMxtZEOcx6I/vMoDPVyvyrD7/KvQaADm5Imj
+        F7YkLzBRfMFFqA8sKDfmCKF65AXVEpYNFxiM7fsCWZOzvJE7yqKiREhW5vW49Q==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1687172692;
+        s=2020e; t=1687172693;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=J97AV1wbvGzM84xSecIv75HNLCdjTpNilZUb/XHuEvw=;
-        b=Jqmvjs6qkWzSLcXJr40+UfI821V/Nb0EfnphKp/Ij9hP1NzOSxEnQdSrbIMr0lPDBXg+gG
-        Y4R009F8AHshr9AQ==
-From:   "tip-bot2 for Hao Jia" <tip-bot2@linutronix.de>
+        bh=OBk6SVQF8hbLqgrYb7zBnRJ0TouOnsyxVPTI0vV8hDc=;
+        b=Ggq39IJsydop6sOJbiJ8PF2HeS7F/itIyzGezceFf3T8PkKMOmrkcBZYWuF2y21oO1O5YY
+        DI4s2dDFowUT99Dw==
+From:   "tip-bot2 for Vineeth Pillai" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/core: Fixed missing rq clock update before
- calling set_rq_offline()
-Cc:     Ben Segall <bsegall@google.com>, Hao Jia <jiahao.os@bytedance.com>,
+Subject: [tip: sched/core] sched/deadline: Fix bandwidth reclaim equation in GRUB
+Cc:     "Vineeth Pillai (Google)" <vineeth@bitbyteword.org>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>, x86@kernel.org,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230613082012.49615-2-jiahao.os@bytedance.com>
-References: <20230613082012.49615-2-jiahao.os@bytedance.com>
+In-Reply-To: <20230530135526.2385378-1-vineeth@bitbyteword.org>
+References: <20230530135526.2385378-1-vineeth@bitbyteword.org>
 MIME-Version: 1.0
-Message-ID: <168717269157.404.12414969911873741834.tip-bot2@tip-bot2>
+Message-ID: <168717269311.404.14622042036287952781.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,87 +69,192 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     cab3ecaed5cdcc9c36a96874b4c45056a46ece45
-Gitweb:        https://git.kernel.org/tip/cab3ecaed5cdcc9c36a96874b4c45056a46ece45
-Author:        Hao Jia <jiahao.os@bytedance.com>
-AuthorDate:    Tue, 13 Jun 2023 16:20:09 +08:00
+Commit-ID:     6a9d623aad89539eca71eb264db6b9d538620ad5
+Gitweb:        https://git.kernel.org/tip/6a9d623aad89539eca71eb264db6b9d538620ad5
+Author:        Vineeth Pillai <vineeth@bitbyteword.org>
+AuthorDate:    Tue, 30 May 2023 09:55:25 -04:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Fri, 16 Jun 2023 22:08:12 +02:00
+CommitterDate: Fri, 16 Jun 2023 22:08:11 +02:00
 
-sched/core: Fixed missing rq clock update before calling set_rq_offline()
+sched/deadline: Fix bandwidth reclaim equation in GRUB
 
-When using a cpufreq governor that uses
-cpufreq_add_update_util_hook(), it is possible to trigger a missing
-update_rq_clock() warning for the CPU hotplug path:
+According to the GRUB[1] rule, the runtime is depreciated as:
+  "dq = -max{u, (1 - Uinact - Uextra)} dt" (1)
 
-  rq_attach_root()
-    set_rq_offline()
-      rq_offline_rt()
-	__disable_runtime()
-	  sched_rt_rq_enqueue()
-	    enqueue_top_rt_rq()
-	      cpufreq_update_util()
-		data->func(data, rq_clock(rq), flags)
+To guarantee that deadline tasks doesn't starve lower class tasks,
+we do not allocate the full bandwidth of the cpu to deadline tasks.
+Maximum bandwidth usable by deadline tasks is denoted by "Umax".
+Considering Umax, equation (1) becomes:
+  "dq = -(max{u, (Umax - Uinact - Uextra)} / Umax) dt" (2)
 
-Move update_rq_clock() from sched_cpu_deactivate() (one of it's
-callers) into set_rq_offline() such that it covers all
-set_rq_offline() usage.
+Current implementation has a minor bug in equation (2), which this
+patch fixes.
 
-Additionally change rq_attach_root() to use rq_lock_irqsave() so that
-it will properly manage the runqueue clock flags.
+The reclamation logic is verified by a sample program which creates
+multiple deadline threads and observing their utilization. The tests
+were run on an isolated cpu(isolcpus=3) on a 4 cpu system.
 
-Suggested-by: Ben Segall <bsegall@google.com>
-Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
+Tests on 6.3.0
+==============
+
+RUN 1: runtime=7ms, deadline=period=10ms, RT capacity = 95%
+TID[693]: RECLAIM=1, (r=7ms, d=10ms, p=10ms), Util: 93.33
+TID[693]: RECLAIM=1, (r=7ms, d=10ms, p=10ms), Util: 93.35
+
+RUN 2: runtime=1ms, deadline=period=100ms, RT capacity = 95%
+TID[708]: RECLAIM=1, (r=1ms, d=100ms, p=100ms), Util: 16.69
+TID[708]: RECLAIM=1, (r=1ms, d=100ms, p=100ms), Util: 16.69
+
+RUN 3: 2 tasks
+  Task 1: runtime=1ms, deadline=period=10ms
+  Task 2: runtime=1ms, deadline=period=100ms
+TID[631]: RECLAIM=1, (r=1ms, d=10ms, p=10ms), Util: 62.67
+TID[632]: RECLAIM=1, (r=1ms, d=100ms, p=100ms), Util: 6.37
+TID[631]: RECLAIM=1, (r=1ms, d=10ms, p=10ms), Util: 62.38
+TID[632]: RECLAIM=1, (r=1ms, d=100ms, p=100ms), Util: 6.23
+
+As seen above, the reclamation doesn't reclaim the maximum allowed
+bandwidth and as the bandwidth of tasks gets smaller, the reclaimed
+bandwidth also comes down.
+
+Tests with this patch applied
+=============================
+
+RUN 1: runtime=7ms, deadline=period=10ms, RT capacity = 95%
+TID[608]: RECLAIM=1, (r=7ms, d=10ms, p=10ms), Util: 95.19
+TID[608]: RECLAIM=1, (r=7ms, d=10ms, p=10ms), Util: 95.16
+
+RUN 2: runtime=1ms, deadline=period=100ms, RT capacity = 95%
+TID[616]: RECLAIM=1, (r=1ms, d=100ms, p=100ms), Util: 95.27
+TID[616]: RECLAIM=1, (r=1ms, d=100ms, p=100ms), Util: 95.21
+
+RUN 3: 2 tasks
+  Task 1: runtime=1ms, deadline=period=10ms
+  Task 2: runtime=1ms, deadline=period=100ms
+TID[620]: RECLAIM=1, (r=1ms, d=10ms, p=10ms), Util: 86.64
+TID[621]: RECLAIM=1, (r=1ms, d=100ms, p=100ms), Util: 8.66
+TID[620]: RECLAIM=1, (r=1ms, d=10ms, p=10ms), Util: 86.45
+TID[621]: RECLAIM=1, (r=1ms, d=100ms, p=100ms), Util: 8.73
+
+Running tasks on all cpus allowing for migration also showed that
+the utilization is reclaimed to the maximum. Running 10 tasks on
+3 cpus SCHED_FLAG_RECLAIM - top shows:
+%Cpu0  : 94.6 us,  0.0 sy,  0.0 ni,  5.4 id,  0.0 wa
+%Cpu1  : 95.2 us,  0.0 sy,  0.0 ni,  4.8 id,  0.0 wa
+%Cpu2  : 95.8 us,  0.0 sy,  0.0 ni,  4.2 id,  0.0 wa
+
+[1]: Abeni, Luca & Lipari, Giuseppe & Parri, Andrea & Sun, Youcheng.
+     (2015). Parallel and sequential reclaiming in multicore
+     real-time global scheduling.
+
+Signed-off-by: Vineeth Pillai (Google) <vineeth@bitbyteword.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
-Link: https://lkml.kernel.org/r/20230613082012.49615-2-jiahao.os@bytedance.com
+Reviewed-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+Acked-by: Juri Lelli <juri.lelli@redhat.com>
+Link: https://lore.kernel.org/r/20230530135526.2385378-1-vineeth@bitbyteword.org
 ---
- kernel/sched/core.c     | 2 +-
- kernel/sched/topology.c | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ kernel/sched/deadline.c | 50 ++++++++++++++++++----------------------
+ kernel/sched/sched.h    |  6 +++++-
+ 2 files changed, 29 insertions(+), 27 deletions(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index ac38225..442efe5 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -9585,6 +9585,7 @@ void set_rq_offline(struct rq *rq)
- 	if (rq->online) {
- 		const struct sched_class *class;
+diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+index f827067..e41a36b 100644
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@ -1253,43 +1253,39 @@ int dl_runtime_exceeded(struct sched_dl_entity *dl_se)
+ }
  
-+		update_rq_clock(rq);
- 		for_each_class(class) {
- 			if (class->rq_offline)
- 				class->rq_offline(rq);
-@@ -9726,7 +9727,6 @@ int sched_cpu_deactivate(unsigned int cpu)
- 
- 	rq_lock_irqsave(rq, &rf);
- 	if (rq->rd) {
--		update_rq_clock(rq);
- 		BUG_ON(!cpumask_test_cpu(cpu, rq->rd->span));
- 		set_rq_offline(rq);
- 	}
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index cb92dc5..d3a3b26 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -487,9 +487,9 @@ static void free_rootdomain(struct rcu_head *rcu)
- void rq_attach_root(struct rq *rq, struct root_domain *rd)
+ /*
+- * This function implements the GRUB accounting rule:
+- * according to the GRUB reclaiming algorithm, the runtime is
+- * not decreased as "dq = -dt", but as
+- * "dq = -max{u / Umax, (1 - Uinact - Uextra)} dt",
++ * This function implements the GRUB accounting rule. According to the
++ * GRUB reclaiming algorithm, the runtime is not decreased as "dq = -dt",
++ * but as "dq = -(max{u, (Umax - Uinact - Uextra)} / Umax) dt",
+  * where u is the utilization of the task, Umax is the maximum reclaimable
+  * utilization, Uinact is the (per-runqueue) inactive utilization, computed
+  * as the difference between the "total runqueue utilization" and the
+- * runqueue active utilization, and Uextra is the (per runqueue) extra
++ * "runqueue active utilization", and Uextra is the (per runqueue) extra
+  * reclaimable utilization.
+- * Since rq->dl.running_bw and rq->dl.this_bw contain utilizations
+- * multiplied by 2^BW_SHIFT, the result has to be shifted right by
+- * BW_SHIFT.
+- * Since rq->dl.bw_ratio contains 1 / Umax multiplied by 2^RATIO_SHIFT,
+- * dl_bw is multiped by rq->dl.bw_ratio and shifted right by RATIO_SHIFT.
+- * Since delta is a 64 bit variable, to have an overflow its value
+- * should be larger than 2^(64 - 20 - 8), which is more than 64 seconds.
+- * So, overflow is not an issue here.
++ * Since rq->dl.running_bw and rq->dl.this_bw contain utilizations multiplied
++ * by 2^BW_SHIFT, the result has to be shifted right by BW_SHIFT.
++ * Since rq->dl.bw_ratio contains 1 / Umax multiplied by 2^RATIO_SHIFT, dl_bw
++ * is multiped by rq->dl.bw_ratio and shifted right by RATIO_SHIFT.
++ * Since delta is a 64 bit variable, to have an overflow its value should be
++ * larger than 2^(64 - 20 - 8), which is more than 64 seconds. So, overflow is
++ * not an issue here.
+  */
+ static u64 grub_reclaim(u64 delta, struct rq *rq, struct sched_dl_entity *dl_se)
  {
- 	struct root_domain *old_rd = NULL;
--	unsigned long flags;
-+	struct rq_flags rf;
+-	u64 u_inact = rq->dl.this_bw - rq->dl.running_bw; /* Utot - Uact */
+ 	u64 u_act;
+-	u64 u_act_min = (dl_se->dl_bw * rq->dl.bw_ratio) >> RATIO_SHIFT;
++	u64 u_inact = rq->dl.this_bw - rq->dl.running_bw; /* Utot - Uact */
  
--	raw_spin_rq_lock_irqsave(rq, flags);
-+	rq_lock_irqsave(rq, &rf);
+ 	/*
+-	 * Instead of computing max{u * bw_ratio, (1 - u_inact - u_extra)},
+-	 * we compare u_inact + rq->dl.extra_bw with
+-	 * 1 - (u * rq->dl.bw_ratio >> RATIO_SHIFT), because
+-	 * u_inact + rq->dl.extra_bw can be larger than
+-	 * 1 * (so, 1 - u_inact - rq->dl.extra_bw would be negative
+-	 * leading to wrong results)
++	 * Instead of computing max{u, (u_max - u_inact - u_extra)}, we
++	 * compare u_inact + u_extra with u_max - u, because u_inact + u_extra
++	 * can be larger than u_max. So, u_max - u_inact - u_extra would be
++	 * negative leading to wrong results.
+ 	 */
+-	if (u_inact + rq->dl.extra_bw > BW_UNIT - u_act_min)
+-		u_act = u_act_min;
++	if (u_inact + rq->dl.extra_bw > rq->dl.max_bw - dl_se->dl_bw)
++		u_act = dl_se->dl_bw;
+ 	else
+-		u_act = BW_UNIT - u_inact - rq->dl.extra_bw;
++		u_act = rq->dl.max_bw - u_inact - rq->dl.extra_bw;
  
- 	if (rq->rd) {
- 		old_rd = rq->rd;
-@@ -515,7 +515,7 @@ void rq_attach_root(struct rq *rq, struct root_domain *rd)
- 	if (cpumask_test_cpu(rq->cpu, cpu_active_mask))
- 		set_rq_online(rq);
++	u_act = (u_act * rq->dl.bw_ratio) >> RATIO_SHIFT;
+ 	return (delta * u_act) >> BW_SHIFT;
+ }
  
--	raw_spin_rq_unlock_irqrestore(rq, flags);
-+	rq_unlock_irqrestore(rq, &rf);
+@@ -2788,12 +2784,12 @@ static void init_dl_rq_bw_ratio(struct dl_rq *dl_rq)
+ {
+ 	if (global_rt_runtime() == RUNTIME_INF) {
+ 		dl_rq->bw_ratio = 1 << RATIO_SHIFT;
+-		dl_rq->extra_bw = 1 << BW_SHIFT;
++		dl_rq->max_bw = dl_rq->extra_bw = 1 << BW_SHIFT;
+ 	} else {
+ 		dl_rq->bw_ratio = to_ratio(global_rt_runtime(),
+ 			  global_rt_period()) >> (BW_SHIFT - RATIO_SHIFT);
+-		dl_rq->extra_bw = to_ratio(global_rt_period(),
+-						    global_rt_runtime());
++		dl_rq->max_bw = dl_rq->extra_bw =
++			to_ratio(global_rt_period(), global_rt_runtime());
+ 	}
+ }
  
- 	if (old_rd)
- 		call_rcu(&old_rd->rcu, free_rootdomain);
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 556496c..36e23e4 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -748,6 +748,12 @@ struct dl_rq {
+ 	u64			extra_bw;
+ 
+ 	/*
++	 * Maximum available bandwidth for reclaiming by SCHED_FLAG_RECLAIM
++	 * tasks of this rq. Used in calculation of reclaimable bandwidth(GRUB).
++	 */
++	u64			max_bw;
++
++	/*
+ 	 * Inverse of the fraction of CPU utilization that can be reclaimed
+ 	 * by the GRUB algorithm.
+ 	 */
