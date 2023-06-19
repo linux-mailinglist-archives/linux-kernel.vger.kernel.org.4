@@ -2,70 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56C1A735C20
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 18:23:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D7B2735C21
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 18:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232170AbjFSQW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 12:22:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37854 "EHLO
+        id S229758AbjFSQXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 12:23:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231743AbjFSQWz (ORCPT
+        with ESMTP id S232236AbjFSQW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 12:22:55 -0400
-Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA77E60
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:22:53 -0700 (PDT)
-Received: by mail-oo1-xc33.google.com with SMTP id 006d021491bc7-5607cdb0959so387288eaf.2
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:22:53 -0700 (PDT)
+        Mon, 19 Jun 2023 12:22:59 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52DBE5C
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:22:58 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-25df7944f60so2830051a91.2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:22:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687191773; x=1689783773;
+        d=gmail.com; s=20221208; t=1687191778; x=1689783778;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+dBZ4QE3iHZ2NqaoR/mbbh84ypRmb1ClG886OJW8OOA=;
-        b=JPctqpk/k4DOgnE5DJdIZ1VK2Qu5L8ICLwX17bvGkAccLb/f9teMUmaFA+nVdNbSAr
-         lC3qXg2ny1vtOtJhLZC+38UlOOJ+S1LxtFq9pX6RG3tPwn+TflOAucFuhLIk3DHMNOfl
-         fmi1DwXfbJrw2Ripmy8919WOj7UvLon4bcRQG07yCvoErIl5ksV2dGcTbLM8/LZQJYck
-         Zw6x1+pXu+yLhJ9Pg+gLmNtxqWO+B/rDd9lPjL3t95kkFqYIJd+qTmgoRhMCb7KBoimy
-         m44EaM2lJnwn2ib0KZYosCg6rrv6tJU7oNZf7DJldnFIKd+azJQXMJ6IUX8YIbgAyAOb
-         NyzA==
+        bh=BYKfkHUhPmEWMTYBe49vLBB3BZHoBpD7ULXkFfcwNLg=;
+        b=PVrB+7LDEV23b7y1JNuNcTb1lKoZ1vu0xbLyaKzfUTuvybQu4kEoQ8WQ4Fi2reP2SZ
+         fmGKtpaTl8EYEQQLXtN4k1F5/Anq9IX3h1oKnYMMNVm3JKIdOUjIJeYEyBgpPEHLCeZV
+         cv4RVUpLhNI6jtT0k2JoH3ZA4SCDnDJzPXvsRGPo+7LABM/6eL4KhO/ba6JUoqzVQvc8
+         B1oJv9EY0Sq6le4qG3auPcsCNNx0ObsnxD/qLTTSzVi/rsHsM5+YdhrZXzYNZO7jXVm2
+         mjWt4ZPUxbDyQ2dUVg5symwJzUq0XEkr/pD3vuFQ/XXNCIEwWAqffNrMXf9IpsNtSIuQ
+         lqmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687191773; x=1689783773;
+        d=1e100.net; s=20221208; t=1687191778; x=1689783778;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+dBZ4QE3iHZ2NqaoR/mbbh84ypRmb1ClG886OJW8OOA=;
-        b=NLGycij2sEiGgsbRThF3k3ow67Ms9URPoH7B9LYkqWj/nkuS1stkEn9ENftk2Nt4qq
-         sWxlN6pKQbKLnYCH+MZxXbSoGkWh1HcfKZwMc+Sf/EE2SslQiE8BV6hHByOcajhesykS
-         4xh/XNpa2qY6VDSpGCc6HtqC53UE1sANIk1umtm0LLbgFZRXXOf/rT9WZpY/Hu58shDS
-         /VyA1IBrY+Tf5YM41Ga9YMaSd92T5V9TVFSZKdGlvI5Wq0dReP4IMdNioojsovhY/sWL
-         +J0rt3U6TkHu4sVJ9GqqK3VWWJrHbUJST5xVL/nrVZ86hi/U5lMOWzkLQwRTRxbyswuG
-         xY9A==
-X-Gm-Message-State: AC+VfDxH1oPYZKm/ui2DN8I/tytlnrb1SuvP0tOF8slGSvKQBJOHN1Lp
-        NGJf1ptFifmUhRn41zcgIII=
-X-Google-Smtp-Source: ACHHUZ6RBh7MoPUIKifmx/4+vl5ryIe2Zirj7C2/QmQdiz9P7UWQdKqmpaa7hxLgfEy2EX1eolO2PA==
-X-Received: by 2002:aca:2115:0:b0:39e:b834:1853 with SMTP id 21-20020aca2115000000b0039eb8341853mr4514837oiz.33.1687191772986;
-        Mon, 19 Jun 2023 09:22:52 -0700 (PDT)
+        bh=BYKfkHUhPmEWMTYBe49vLBB3BZHoBpD7ULXkFfcwNLg=;
+        b=ePdvsztj9IOsY7KKYDeBiF2e+sHgSqaDUGo48ZIEGKgon/gE+Mx3LbWsIdn7Tb4uHd
+         3DkWbeR7mA4hc4y/xYNjUuwlt1Bod8NQ2NdyM+oaV3pgkoVleD1lQBqGuWtjO4aKUcQc
+         ep0ytP91PDvGmehFWlePXZRnb7iwl83sXhUBuUQ1bkctGUeWAkTEavhgSforbe/Ty5qL
+         4pnf5a5xk/8jjVzZYCzse6epAaB4lnEhzFrVwd2lsyZUKEdflffCzHO9zpUxd9r8DFgd
+         AT+naGRrpPs7W7n+3/0H8mRBJz3sjXQyofgfSGISMruaMrCUtc9JvKSUe9CzoTVYrb3q
+         rLqA==
+X-Gm-Message-State: AC+VfDymKHJimdzQL2ust5RmLTBvEBgPgBM9mXem6gJbtwjqkZpH5Pd+
+        aLelbw1gNu1ONkyM2UK95Jk=
+X-Google-Smtp-Source: ACHHUZ6f9DaBoWHDnC1YKiYnePtJl2GpijXt3bvzF+SpR4F244IpBpmOoILvRr8H/MFV6v2hANaJQw==
+X-Received: by 2002:a17:90a:f83:b0:25b:f66c:35a9 with SMTP id 3-20020a17090a0f8300b0025bf66c35a9mr8970440pjz.48.1687191778229;
+        Mon, 19 Jun 2023 09:22:58 -0700 (PDT)
 Received: from redkillpc.. ([49.207.216.186])
-        by smtp.gmail.com with ESMTPSA id 2-20020a17090a1a4200b0025f09822d7csm62997pjl.24.2023.06.19.09.22.49
+        by smtp.gmail.com with ESMTPSA id 2-20020a17090a1a4200b0025f09822d7csm62997pjl.24.2023.06.19.09.22.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 09:22:52 -0700 (PDT)
+        Mon, 19 Jun 2023 09:22:57 -0700 (PDT)
 From:   Prathu Baronia <prathubaronia2011@gmail.com>
 To:     prathubaronia2011@gmail.com,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
         "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
         Khadija Kamran <kamrankhadijadj@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
 Cc:     dan.carpenter@linaro.org, error27@gmail.com, lkp@intel.com,
         oe-kbuild-all@lists.linux.dev, oe-kbuild@lists.linux.dev
-Subject: [PATCH v6 1/2] axis-fifo: use devm_kasprintf() for allocating formatted strings
-Date:   Mon, 19 Jun 2023 21:52:44 +0530
-Message-Id: <20230619162246.33007-1-prathubaronia2011@gmail.com>
+Subject: [PATCH v6 2/2] axis-fifo: change device name by assigning unique device id
+Date:   Mon, 19 Jun 2023 21:52:45 +0530
+Message-Id: <20230619162246.33007-2-prathubaronia2011@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <ZI/5H+GZU6/2osGT@redkillpc>
+In-Reply-To: <20230619162246.33007-1-prathubaronia2011@gmail.com>
 References: <ZI/5H+GZU6/2osGT@redkillpc>
+ <20230619162246.33007-1-prathubaronia2011@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,53 +79,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In various places, string buffers of a fixed size are allocated, and
-filled using snprintf() with the same fixed size, which is error-prone.
-
-Replace this by calling devm_kasprintf() instead, which always uses the
-appropriate size.
+Allocating the device name with a unique identifier
+instead of a kernel address.
 
 Signed-off-by: Prathu Baronia <prathubaronia2011@gmail.com>
 ---
-V5 -> V6: Split into api change and name change commits
-V4 -> V5: Remove the dev_info() and use a unique identifier for dev name
-V3 -> V4: Split into warning fixing and cleanup commits
-V2 -> V3: Fix smatch warnings from kernel test robot
-V1 -> V2: Split into logical commits and fix commit message
-
- drivers/staging/axis-fifo/axis-fifo.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/staging/axis-fifo/axis-fifo.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/staging/axis-fifo/axis-fifo.c b/drivers/staging/axis-fifo/axis-fifo.c
-index 7a21f2423204..7d8da9ce2db8 100644
+index 7d8da9ce2db8..5e070e00e27a 100644
 --- a/drivers/staging/axis-fifo/axis-fifo.c
 +++ b/drivers/staging/axis-fifo/axis-fifo.c
-@@ -816,10 +816,6 @@ static int axis_fifo_probe(struct platform_device *pdev)
- 	 * ----------------------------
- 	 */
- 
--	device_name = devm_kzalloc(dev, 32, GFP_KERNEL);
--	if (!device_name)
--		return -ENOMEM;
--
- 	/* allocate device wrapper memory */
- 	fifo = devm_kzalloc(dev, sizeof(*fifo), GFP_KERNEL);
- 	if (!fifo)
-@@ -857,7 +853,11 @@ static int axis_fifo_probe(struct platform_device *pdev)
+@@ -853,7 +853,7 @@ static int axis_fifo_probe(struct platform_device *pdev)
  	dev_dbg(fifo->dt_device, "remapped memory to 0x%p\n", fifo->base_addr);
  
  	/* create unique device name */
--	snprintf(device_name, 32, "%s_%pa", DRIVER_NAME, &r_mem->start);
-+	device_name = devm_kasprintf(dev, GFP_KERNEL, "%s_%p", DRIVER_NAME, &r_mem->start);
-+	if (!device_name) {
-+		rc = -ENOMEM;
-+		goto err_initial;
-+	}
- 	dev_dbg(fifo->dt_device, "device name [%s]\n", device_name);
- 
- 	/* ----------------------------
-
-base-commit: 45a3e24f65e90a047bef86f927ebdc4c710edaa1
+-	device_name = devm_kasprintf(dev, GFP_KERNEL, "%s_%p", DRIVER_NAME, &r_mem->start);
++	device_name = devm_kasprintf(dev, GFP_KERNEL, "%s_%d", DRIVER_NAME, pdev->id);
+ 	if (!device_name) {
+ 		rc = -ENOMEM;
+ 		goto err_initial;
 -- 
 2.34.1
 
