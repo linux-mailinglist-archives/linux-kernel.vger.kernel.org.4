@@ -2,121 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2A8735F69
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 23:54:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E468735F6C
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 23:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbjFSVyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 17:54:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57556 "EHLO
+        id S229558AbjFSVzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 17:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbjFSVyU (ORCPT
+        with ESMTP id S229538AbjFSVzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 17:54:20 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5BB3E76;
-        Mon, 19 Jun 2023 14:54:14 -0700 (PDT)
-Received: from mercury (unknown [185.209.196.239])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4DB116606F13;
-        Mon, 19 Jun 2023 22:54:13 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687211653;
-        bh=iX1WsP52rvu8TUG/hr+rCxY7LacBt13DuItmHpip29E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TrkY2SKYM46DhmM8O7nYasLX5BjBSNtXCZhZCVbhkBLP5geLMHMVacQakqp6ZCFRa
-         LDHECS6Y7wucE2IxLIItibj8crNn5HZHXM1hcNHb9Iue0nddIAiU0D2ct7ykBTuxvL
-         NoshC0Gh2Y/PLq9sFIY2Vf+/FtSXfiwYl47AL0CE4hc+JuJ6oO+8CbUoi104WRSMAg
-         N1zl2+X2kXxm6M0cKYPlwcLXBu1Gd2Y4Y/xj+YKR2KbLyUoRTdlmGtV+UVxrzl0/if
-         zyDjK815DlqZFlrxdhsz8+OWxn9opajoT8NGncd1ed4RmoMLr+PVeG5vGxlo7RjKPe
-         C4/8RYi3r0NNA==
-Received: by mercury (Postfix, from userid 1000)
-        id DD5331060A6A; Mon, 19 Jun 2023 23:54:10 +0200 (CEST)
-Date:   Mon, 19 Jun 2023 23:54:10 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        conor+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 4/4] MAINTAINERS: add documentation file for Microchip
- SAMA5D2 shutdown controller
-Message-ID: <20230619215410.cw52rjbjenjifvcx@mercury.elektranox.org>
-References: <20230616101646.879480-1-claudiu.beznea@microchip.com>
- <20230616101646.879480-5-claudiu.beznea@microchip.com>
+        Mon, 19 Jun 2023 17:55:22 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B013E2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 14:55:21 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id 6a1803df08f44-62ff1cdf079so30966066d6.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 14:55:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687211720; x=1689803720;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RdzLczGyyyiIYNvTKN6t+nBWF1GzRjK5CWv52ZbiRPw=;
+        b=APeY+OLAeUM0ntetAp1LDxTmd/ZT8qV36vebhZ6/VcMwk4uMUUhR800CSyT18vQlKW
+         uZrNQ0FXmnmG48copWury88dMkDTPzBwzMO4eHtQcqLUzVlqVbWLjqVkFWoHN7/9nYt4
+         gdgeN6/4LPgoMA6mnX7E+CKl7ob64ZJ233kC5FH2SyFdQUNGKTK5tvC1N0UIsrq+T6yn
+         HK2AWxXZShhWSMaNeyZIHkrZSssRKkui9N5KvRKfbAdA0nA9UQ3gK6+SPuyPkaTf9Xh8
+         yEtrMZykMHE2W08gpiQ9liyy7c+0Bi4srhjg+nU5OCAJPdoY1CcNDc3e2kdTORGk8eX3
+         j7lA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687211720; x=1689803720;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RdzLczGyyyiIYNvTKN6t+nBWF1GzRjK5CWv52ZbiRPw=;
+        b=GmSNYUzKwJI1xtTjs1VxhFepkBtg8GmtAHZ2sK/PjXllrqDwBttxNUDLqEgcuXdbLN
+         n1cGGYXFVqK5HLAIerbhAEGWJB3Zbx6vFn7g3BqXPBXtRHstCle6xK0kz4ON8PbrxRZp
+         nrhjcfDaP0UFOjxLHEmSdslvZNWAzVN/FTpwxm4C5iUxll0PEonwLstzi89g7KElaWp7
+         wCxc5dW+fB+WQzD+BJKLj0uOdTORDXpa0FllpSO8pWSls3IULM2uHejnDSucYwsISk4q
+         SnbdC4cY4Z57JzddNsl+V6lzh0aHFC/GYL92w18BnTf7QO3vYGH0hM65OdLrhvJwNrLt
+         tOGw==
+X-Gm-Message-State: AC+VfDy8upOtvo+qw6yFj2ZHeUlPwE7xlYThgyt8K2BAgF1qRrVDu4ZP
+        zuGmnD9A0AtmFimZsP832EUbstczumr+ShyJR0VGWg==
+X-Google-Smtp-Source: ACHHUZ6KgfyuctugoVyraKcM8/CJNj0lR3f8HJwxs5YUXGKvuIfI0mQXyJJIMWhpcjZgwCcSiJvSEr/zQ5TDsp+5oq4=
+X-Received: by 2002:a05:6214:21ec:b0:615:a18b:d5af with SMTP id
+ p12-20020a05621421ec00b00615a18bd5afmr13033287qvj.35.1687211720528; Mon, 19
+ Jun 2023 14:55:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5gzjbh54lkf3rfdd"
-Content-Disposition: inline
-In-Reply-To: <20230616101646.879480-5-claudiu.beznea@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1686858861.git.isaku.yamahata@intel.com>
+ <CAGtprH8O6dsjjNrMzLPmRio0ZDLe6M3U06HD0oNX3NN9FeWQfg@mail.gmail.com> <20230619231142.0000134a.zhi.wang.linux@gmail.com>
+In-Reply-To: <20230619231142.0000134a.zhi.wang.linux@gmail.com>
+From:   Vishal Annapurve <vannapurve@google.com>
+Date:   Mon, 19 Jun 2023 14:55:09 -0700
+Message-ID: <CAGtprH8jreK52wTcNhoAcBoHKZfkQ_1AYArgb2v6M_YVRYAw+w@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/6] KVM: guest memory: Misc enhacnement
+To:     Zhi Wang <zhi.wang.linux@gmail.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Kai Huang <kai.huang@intel.com>, chen.bo@intel.com,
+        linux-coco@lists.linux.dev,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Michael Roth <michael.roth@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jun 19, 2023 at 1:11=E2=80=AFPM Zhi Wang <zhi.wang.linux@gmail.com>=
+ wrote:
+>
+> On Mon, 19 Jun 2023 12:11:50 -0700
+> Vishal Annapurve <vannapurve@google.com> wrote:
+>
+> > On Thu, Jun 15, 2023 at 1:12___PM <isaku.yamahata@intel.com> wrote:
+> > > ...
+> > >
+> > > * VM type: Now we have KVM_X86_PROTECTED_VM. How do we proceed?
+> > >   - Keep KVM_X86_PROTECTED_VM for its use. Introduce KVM_X86_TDX_VM
+> > >   - Use KVM_X86_PROTECTED_VM for TDX. (If necessary, introduce anothe=
+r type in
+> > >     the future)
+> > >   - any other way?
+> >
+> > There are selftests posted[1] in context of this work, which rely on
+> > KVM_X86_PROTECTED_VM being just the software-only psuedo-confidential
+> > VMs. In future there might be more work to expand this usecase to
+> > full-scale VMs. So it would be better to treat protected VMs as a
+> > separate type which can be used on any platform without the need of
+> > enabling TDX/SEV functionality.
+> >
+>
+> Out of curiosity, is this really a valid case in practice except selftest=
+?
+> It sounds to me whenever KVM_X86_PROTECTED_VM is used, it has to be tied
+> with a platform-specific CC type.
 
---5gzjbh54lkf3rfdd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Protected VM effort is about being able to have guest memory ranges
+not mapped into Userspace VMM and so are unreachable for most of the
+cases from KVM as well. Non-CC VMs can use this support to mitigate
+any unintended accesses from userspace VMM/KVM possibly using
+enlightened kernels.
 
-Hi,
+Exact implementation of such a support warrants more discussion but it
+should be in the line of sight here as a future work item.
 
-On Fri, Jun 16, 2023 at 01:16:46PM +0300, Claudiu Beznea wrote:
-> Add documentation file for SAMA5D2 shutdown controller.
->=20
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-> ---
 
-Thanks, queued.
 
--- Sebastian
 
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 74a6b6b13d84..cdf4b41cf62b 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -13811,6 +13811,7 @@ F:	include/dt-bindings/iio/adc/at91-sama5d2_adc.h
->  MICROCHIP SAMA5D2-COMPATIBLE SHUTDOWN CONTROLLER
->  M:	Claudiu Beznea <claudiu.beznea@microchip.com>
->  S:	Supported
-> +F:	Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.yaml
->  F:	drivers/power/reset/at91-sama5d2_shdwc.c
-> =20
->  MICROCHIP SPI DRIVER
-> --=20
-> 2.34.1
->=20
-
---5gzjbh54lkf3rfdd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSQzoIACgkQ2O7X88g7
-+prvsQ//ZolFWiSJZtyR3LPZn7Mmq9cwerjY1feOPQoyiV9Sm9MSr1cx9lWDRzAK
-7fLCt9ZibihWYzFnpGgBmPsjVMSwmQSC8mYmqt1kyinDBYI5W/isjXyGKFdRowhz
-cdHejnBqPOwskKjjcQeNfxkgOfsoRmmVTYw5iFjVvsn68Se/1Wnwfq2S/dTXzVcU
-n8xx7R6c5Q800rdZtCWcQi//kB9+regOG653+vdHrzLwbBv9RndzbOZN42NYQlNx
-KkFCMMc7N1yYg7IPXriZtgfTzL9KSqSAYQN8u0EeUax6oSktIpbdRVpW+SnUxos+
-K/ByH/DNeTsvw2jDT5DtbS2wirrI98c1ARnCZ4mV0eVJ/St1MqmUEPUdzGoZvU9c
-I419JDACOnER6kTbecJeDYu+acZa9bXrgOIkVaQJnv9pgRse7qoqBQb1vjugDTZr
-LolBhpt9kkJptmL0UdTml8enM1MToMVDehEbXEjYiGvbcUfT9hvGgD+oLE1+wGzG
-gOyk5BUYQPNan1zl7UsLdqtgfU12pEi5JOHk7lEF+xzriqV/JmOwcH5EHv3wfm+Z
-lHypVzRtbPr/cyeqx20qVNsltgmqAt6RdNkT1ODNFnqJhOkTiFV99PLReh1SZgsO
-9VbT9MMhk8xxT6pYLbQk4zcFcny9DGirGC/yAWlqghLQyKMq9Ts=
-=MKQh
------END PGP SIGNATURE-----
-
---5gzjbh54lkf3rfdd--
+>
+> > TDX VM type can possibly serve as a specialized type of protected VM
+> > with additional arch specific capabilities enabled.
+> >
+> > [1] - https://github.com/sean-jc/linux/commits/x86/kvm_gmem_solo
+>
