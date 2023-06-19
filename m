@@ -2,75 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02AE0734F1E
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDC1D734F27
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbjFSJGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 05:06:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39692 "EHLO
+        id S230226AbjFSJHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 05:07:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbjFSJG2 (ORCPT
+        with ESMTP id S230190AbjFSJHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 05:06:28 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EAC5102
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:06:26 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id ca18e2360f4ac-77e2c42de06so91829139f.1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:06:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687165585; x=1689757585;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=73UFP3t8bqb8g7lRxRg12r50WZsfcyr2bTaBvl7g6DI=;
-        b=Mn+nKD/wyB3o0mN9yxlPrEFihNKnSHUo62EkRjzNmL3X4A8nrX3j8pirPx03mWoGVd
-         U7Th91y2IRLJHrFAM5ocqsuO2zGew8ddd5M3x+bALzSdUju/RHJV406udcHlOSjZ5Mm+
-         Jtxl2QSf+7v/OL28dfLjB5KCN/m3UtFelr9+4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687165585; x=1689757585;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=73UFP3t8bqb8g7lRxRg12r50WZsfcyr2bTaBvl7g6DI=;
-        b=NwCupoiIq4vjH1eMmcJHayJfSqAoL+37cY1GaXAnpObN1KZxNLjeiBaQUIAzs4rTQT
-         tXVl2CxqC6+ilVifC2VICWx/hAoPMwg2K6piGEA7k/fIFS0yESWYm2E6dFyZsJqWUJle
-         tmHF2fz6EEmR2tJrLGVcQGdK4ASuV4u7ZEQwjfrYV8dbHnSjIs3cu/LCiGbLP1YwiBWs
-         8AoiI8JoCFHdyC7RG4bHjGQPSG3dSCfYia/GLb0DurF9+kjP5ZilQdOP7BQu7rELLeKY
-         2FBHmb0omD9KK96EEO7aaRlH8FjodXe9ETP0B/odTnx2rWYlHIjp6ZnqA1j28/VbHi9E
-         wcig==
-X-Gm-Message-State: AC+VfDyfuL2IczQ5je/2Lwh5qR68weVIaCOMnJ3X8wQswNtZvwKjfpKA
-        8ffoX0/PY6iRw1CFoQIx+2p1ZvRy4WeR8gHfcm369Q==
-X-Google-Smtp-Source: ACHHUZ5GRFpgFYkOxWdVKAYkWgaUrohsQNMsjBmGZZTogWOM0VQ0KQzpW36mM6uD0AZ5CJsninGaJA==
-X-Received: by 2002:a5e:8505:0:b0:77a:c494:b4bc with SMTP id i5-20020a5e8505000000b0077ac494b4bcmr6751930ioj.20.1687165585642;
-        Mon, 19 Jun 2023 02:06:25 -0700 (PDT)
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com. [209.85.166.54])
-        by smtp.gmail.com with ESMTPSA id 16-20020a0566380a5000b0041675393f68sm4722516jap.6.2023.06.19.02.06.24
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 02:06:24 -0700 (PDT)
-Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-77e357f8faeso62237839f.3
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:06:24 -0700 (PDT)
-X-Received: by 2002:a05:6602:2013:b0:763:5f1b:2f6f with SMTP id
- y19-20020a056602201300b007635f1b2f6fmr7963281iod.7.1687165584097; Mon, 19 Jun
- 2023 02:06:24 -0700 (PDT)
+        Mon, 19 Jun 2023 05:07:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF507B4;
+        Mon, 19 Jun 2023 02:07:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 441AA60B42;
+        Mon, 19 Jun 2023 09:07:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33A63C433C8;
+        Mon, 19 Jun 2023 09:07:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687165653;
+        bh=14J4WS+8yy469joEoEVl33nkw3ghjN+BWRbdAbpGaU0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B9tlb1O7jbTOkBZh0+L/dMVuqQVsH5U+Wy/XX47i0cD6T/QRklmp/GNNT2/XtMP80
+         3YL4FQgWuyrs5jvAHOJ9wyD+9N8FSJuWyY9WB3ZBjYaGpF8NfjjoXsl0p/SNP+aHXg
+         kVtja0B7ictQY+Ue96WUtQmr2jmfLVjdQ5uYIVO/bSWuuJb/TjurGkOd+Qg++4JSfz
+         tiRGlwp/7c9UF6/tOnLRgds404eejjbY3Vu6zAP7SfsZdJUeHKHyyX6eQx/9U/peRZ
+         3hH4JYTMV8EfDtL2desisfGwrWGJKryttrAQEFp/VLXW3nsV5en8Q+KXKzc1Ez9XMa
+         gNs3HBK7H8XlQ==
+Date:   Mon, 19 Jun 2023 11:07:24 +0200
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Hongxing Zhu <hongxing.zhu@nxp.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Subject: Re: [PATCH v2] PCI: imx6: Save and restore MSI control of RC in
+ suspend and resume
+Message-ID: <ZJAazCtc0jx3NDbM@lpieralisi>
+References: <AS8PR04MB8676EC48C27C8A0DF8B35B648CBD9@AS8PR04MB8676.eurprd04.prod.outlook.com>
+ <20230317222436.GA1978818@bhelgaas>
+ <AS8PR04MB86765E47FE7AAECC121838188C809@AS8PR04MB8676.eurprd04.prod.outlook.com>
+ <ZB3I0gpds8OH2+gx@lpieralisi>
+ <AS8PR04MB8676A79C4C4F43627D8FE4BC8C8B9@AS8PR04MB8676.eurprd04.prod.outlook.com>
+ <ZC2aBGlQRYHHDBqi@lpieralisi>
+ <AS8PR04MB8676740A3B1F3159B8EC2DD78C959@AS8PR04MB8676.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-References: <20230619112253.v2.1.I13f060c10549ef181603e921291bdea95f83033c@changeid>
- <35f6212e-69f8-432f-a5c8-99ed5c844f11@moroto.mountain>
-In-Reply-To: <35f6212e-69f8-432f-a5c8-99ed5c844f11@moroto.mountain>
-From:   Fei Shao <fshao@chromium.org>
-Date:   Mon, 19 Jun 2023 17:05:47 +0800
-X-Gmail-Original-Message-ID: <CAC=S1njwxLfw7LcnXkgY7pbiFaqvNQVyAzHVhK9+nYJC63d=Zw@mail.gmail.com>
-Message-ID: <CAC=S1njwxLfw7LcnXkgY7pbiFaqvNQVyAzHVhK9+nYJC63d=Zw@mail.gmail.com>
-Subject: Re: [PATCH v2] clk: Fix memory leak in devm_clk_notifier_register()
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <AS8PR04MB8676740A3B1F3159B8EC2DD78C959@AS8PR04MB8676.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,48 +71,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 4:48=E2=80=AFPM Dan Carpenter <dan.carpenter@linaro=
-.org> wrote:
->
-> On Mon, Jun 19, 2023 at 11:22:53AM +0800, Fei Shao wrote:
-> > devm_clk_notifier_register() allocates a devres resource for clk
-> > notifier but didn't register that to the device, so the notifier didn't
-> > get unregistered on device detach and the allocated resource was leaked=
-.
-> >
-> > Fix the issue by registering the resource through devres_add().
-> >
-> > Fixes: 6d30d50d037d ("clk: add devm variant of clk_notifier_register")
-> > Signed-off-by: Fei Shao <fshao@chromium.org>
-> > ---
-> >
->
-> Reviewed-by: Dan Carpenter <dan.carpenter@linaro.org>
->
-> How did you find this bug?
->
-> I can think of some ways to find this bug with static analysis.
->
+On Mon, Apr 10, 2023 at 06:48:48AM +0000, Hongxing Zhu wrote:
 
-It was actually detected by kmemleak on an unreleased Chromebook device.
-I added the trace snippet in the message at first but removed that
-before sending this. Maybe I shouldn't have.
+[...]
 
-I can resend a v3 to add that back if that's preferable. What do you think?
+> > I am getting back to this since I am still not convinced and I want to understand
+> > this once for all.
+> > 
+> > We do use dw_pcie_find_capability() in most DWC drivers to find and peek/poke
+> > at eg PCI express capability of the *Root port* (?),
+> > 
+> > eg dw_pcie_wait_for_link()
+> > 
+> > so I assume that for iMX6 dw_pcie_find_capability() does just the same, which
+> > would mean that we are poking the "Message Control" field of the Root port MSI
+> > capability.
+> > 
+> > Either that (which would mean that iMX6 has a HW bug because the RP Message
+> > Control field does not control the delivery of MSIs from endpoints but just for the
+> > root port itself ) or all DWC controllers modelled the root complex MMIO space as
+> > a set of PCI/PCIe capabilities that are NOT necessarily mappable to PCI
+> > specifications defined ones.
+> > 
+> > Can anyone please shed some light on this ? I don't have DWC HW, we need to
+> > know before merging this code.
+> Hi Lorenzo:
+> Regarding my understanding, DWC HW has the PCI/PCIe capability map when
+>  it works in RC mode and Spec doesn’t specify these Caps for host controller.
+> And, there are comments describe these callbacks already in pcie-designware.c.
+> ...
+> /*
+>  * These interfaces resemble the pci_find_*capability() interfaces, but these
+>  * are for configuring host controllers, which are bridges *to* PCI devices but
+>  * are not PCI devices themselves.
+>  */
+> static u8 __dw_pcie_find_next_cap(struct dw_pcie *pci, u8 cap_ptr,
+>                                   u8 cap)
+> ...
+> 
+> 
 
-Regards,
-Fei
+I still believe this is an integration bug, more so after reading the
+commit Serge pointed out:
 
+75cb8d20c112 ("PCI: imx: Enable MSI from downstream components").
 
-> KTODO: static analysis:  look at unused parameters
->
-> Both GCC and Clang have a warning for unused parameters.  I think the
-> last time I looked at GCC it had a lot of false positives for functions
-> which were called as pointers but hopefully that has been fixed now?
-> Smatch does not have a check for this.  If someone were to write it,
-> I would probably the check under the --pedantic flag so it would be
-> turned off by default.
->
-> regards,
-> dan carpenter
->
+The commit above implies that if you have CONFIG_PCIEPORTBUS enabled,
+you would not need to set the MSI enable bit explicitly because that's
+done by the port driver while requesting RP services.
+
+This means that it is _seen_ by the PCI core as a capability register
+and it also means that if you have CONFIG_PCIEPORTBUS enabled and that
+the port driver disables MSIs, all downstream MSIs are disabled, not
+only the RP ones (as it should be according to the PCI specs).
+
+So, this is a HW bug I am afraid - I will merge this patch but AFAICS
+the HW integration bug is there regardless, however we slice it.
+
+Thanks,
+Lorenzo
