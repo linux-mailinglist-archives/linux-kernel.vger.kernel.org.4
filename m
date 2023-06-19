@@ -2,102 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80F937351C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 12:15:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B24857351C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 12:17:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231839AbjFSKPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 06:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58536 "EHLO
+        id S231322AbjFSKRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 06:17:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232030AbjFSKPH (ORCPT
+        with ESMTP id S230073AbjFSKQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 06:15:07 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBDBE51
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 03:15:04 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f81b83b8d5so102675e9.1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 03:15:03 -0700 (PDT)
+        Mon, 19 Jun 2023 06:16:59 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0697599
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 03:16:58 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-307d20548adso2339752f8f.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 03:16:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687169702; x=1689761702;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=h6+4WUre3d5bVXKSjFFWZpGKa0679AOLoEWy8qr2V00=;
-        b=2XPBs/hcyqpbJwohNBmCV7+YRJ5+24eq1+NRGRV0ouC9dQDeCiOirhWKrRYCMg8weO
-         HCpm/6D1WA6dGvPxrGQpaiuZvjgAu7Uox2wZw5HbaPzD/bELuGDYp26bXEEFrnwxysZd
-         axn8fcfsZCG88aN4QIUsLcYkpJX3FLFR2k5y1zfsbyRpjL9Z5GHEhQJKWRTKPe+NxVOv
-         HggBIg1Pr0b1kcms1YzqwNCdkSut/V6x9sHKjxvPdXiZzvOqRFcVI9PsoYkiMZcq/U20
-         rhE38oLIYLj3m/zoO26VTEYvc2K8k8CauJHofPsFjbjRy9Zt0LLJiuNV+yq96QRJFyd8
-         +RQQ==
+        d=linaro.org; s=google; t=1687169816; x=1689761816;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gSYLEp+YdUxldV8igLt5BFNVK72bviFN+/4CDtA3Mh8=;
+        b=dLj1MVLXyF0FrCD8KYvoc9fQGbRxY6I7GSzXo3cjom6O7tGC188XsxGeJIc7XT63Jb
+         3yPOs8Hqypd9Bi6B8IQxGCjq3U1MFE/SUsMK4UG0jLtgbCGqNRc4dwBiVksSyNUqY3Ne
+         gEx+DKEqXiDIG7o/hH1cl9pZBFcRKhdNWatv9gpj4zE2evMz2XkxdT5xB76oRAcXIDC0
+         AzHJc1lgC26H1gRvizZGMT8orYL8aFcvrL89DaOxa0AHS7lxy2aWyvftE6HInU/SPe6t
+         XLhiyyGpeqwm7p4GAFj0wemaS81PXkEyRH5tkTEDqm9gdJfo2EdYWH5z3UBHqFLwqC2j
+         8aXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687169702; x=1689761702;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1687169816; x=1689761816;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=h6+4WUre3d5bVXKSjFFWZpGKa0679AOLoEWy8qr2V00=;
-        b=QkRTEzECPeRgdZcP5znXSOuOTSFnw1Hn2qTD4d2qDASH11jpJxU1x2cwGsuXt6ysfb
-         8vS7kLUwTUhFvDyvcI48f5I8MttSl+a6DBI5AOCaLT6b3wNe0yMKCn0UrFiTGNweEgwW
-         TKfVJiNSlFlb8Q1ZFV3h1OMBUiDAuz7YV0gQU+0LD8loI4iyaB3hg1JFAMtlPrkqCD5i
-         gYRUBEC3dWor6C1LXXgTCQQze/Ninwhash3BXsiA3WBIb1349ZdCLQX4G4X3gtGxbF3W
-         +FprtK4MuJ9b8onkIZuhtVQJzlgUPuZr9cks76FsxQaOkkindC8tfGfFL7KBHc+0lP2a
-         ssKA==
-X-Gm-Message-State: AC+VfDwuPm5tapocTOn2Nzv/FYACJa1DqOGAPcN7iF1IXoQNf/HEZAi3
-        1ak/yW3eqKR1ZJTBmWCjJ3XaLnceq6V4ZQKJjXxXVA==
-X-Google-Smtp-Source: ACHHUZ7NjrNlAp0jQUMkRSh5vhYMpXSMJrGBNsK/wvbYmX8p+yqYKxvvQfZ7W5/tM4vY5I8oco2QlDLwVRkwNzV4maM=
-X-Received: by 2002:a05:600c:691b:b0:3f7:3654:8d3 with SMTP id
- fo27-20020a05600c691b00b003f7365408d3mr141237wmb.2.1687169702435; Mon, 19 Jun
- 2023 03:15:02 -0700 (PDT)
+        bh=gSYLEp+YdUxldV8igLt5BFNVK72bviFN+/4CDtA3Mh8=;
+        b=d939uXQrMofUYhvB5oWhKwTDvQi1ASwqnB3J73M144ws4tF4T9TgVPID++ee6gDhKv
+         cmile1EK7sKr5SboUjcSuDRlqZSKUfxEJpNqqcQQa7lSeE5qi8GJuqZMudqlYN90bEqf
+         24y/rYR+ZBwfj7N1oMXUjWv5jBSqCCmO6KSUX01jvzL+ONxjkwq+ixPvbLkmb3mi8w9w
+         Xpat0krdPGobL8atyCAT4VRAf4X3C5G66/24DoubcwE8yz7JZSA9li1vEfbhP450YqxK
+         jehbXlmqc+GoAC1DJNY4Idu7fIyoGLKPtqj5OlQAB0KLPG0MjISZpoFPAlRG1ahAfnKV
+         3O0w==
+X-Gm-Message-State: AC+VfDyG4yGoX/VrVfO3jPFR+hEPaBgN6GdGgsq/jYNsmB8+SO5QiSPV
+        fYARP89tYuuWObKMSe69O5eJNg==
+X-Google-Smtp-Source: ACHHUZ4B9JQC1lZJ8vlWh4TNeD8qz6y9HFsakUA3OeGPoGiIknnJ1wgidU3nd85ZRFDQcLB8DrwBzA==
+X-Received: by 2002:adf:e849:0:b0:311:27bf:f9ec with SMTP id d9-20020adfe849000000b0031127bff9ecmr4601602wrn.21.1687169816492;
+        Mon, 19 Jun 2023 03:16:56 -0700 (PDT)
+Received: from localhost.localdomain ([5.133.47.210])
+        by smtp.gmail.com with ESMTPSA id c2-20020a5d5282000000b002fae7408544sm31146922wrv.108.2023.06.19.03.16.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 03:16:55 -0700 (PDT)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     broonie@kernel.org
+Cc:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
+        ckeepax@opensource.cirrus.com, kuninori.morimoto.gx@renesas.com,
+        linux-kernel@vger.kernel.org, pierre-louis.bossart@linux.intel.com,
+        alsa-devel@alsa-project.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH v3 00/11] ASoC: qcom: audioreach: add compress offload support
+Date:   Mon, 19 Jun 2023 11:16:42 +0100
+Message-Id: <20230619101653.9750-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-References: <20230619101224.22978-1-chanho.min@lge.com>
-In-Reply-To: <20230619101224.22978-1-chanho.min@lge.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 19 Jun 2023 12:14:49 +0200
-Message-ID: <CACT4Y+Zn49-6R00buq-y_H0qs=4gBh6PBsJDFBptL8=h6GPQYA@mail.gmail.com>
-Subject: Re: [PATCH] kasan: fix mention for KASAN_HW_TAGS
-To:     Chanho Min <chanho.min@lge.com>
-Cc:     Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        elver@google.com, kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, gunho.lee@lge.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Jun 2023 at 12:12, Chanho Min <chanho.min@lge.com> wrote:
->
-> This patch removes description of the KASAN_HW_TAGS's memory consumption.
-> KASAN_HW_TAGS does not set 1/32nd shadow memory.
+This patchset adds compressed offload support to Qualcomm audioreach drivers.
+Currently it supports AAC, MP3 and FALC along with gapless.
 
-The hardware still allocates/uses shadow in MTE.
-Though, it may be 1/16-th, not sure.
+Tested this on SM8450 and sc7280.
 
-> Signed-off-by: Chanho Min <chanho.min@lge.com>
-> ---
->  lib/Kconfig.kasan | 2 --
->  1 file changed, 2 deletions(-)
->
-> diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
-> index fdca89c05745..5be1740234b9 100644
-> --- a/lib/Kconfig.kasan
-> +++ b/lib/Kconfig.kasan
-> @@ -124,8 +124,6 @@ config KASAN_HW_TAGS
->           Supported only on arm64 CPUs starting from ARMv8.5 and relies on
->           Memory Tagging Extension and Top Byte Ignore.
->
-> -         Consumes about 1/32nd of available memory.
-> -
->           May potentially introduce problems related to pointer casting and
->           comparison, as it embeds a tag into the top byte of each pointer.
->
-> --
-> 2.17.1
->
+thanks,
+srini
+
+Changes since v2:
+	- fixed order of sign-off
+	- added placeholder decoder and encoder to audioreach_set_media_format
+
+Mohammad Rafi Shaik (4):
+  ASoC: qcom: SC7280: audioreach: Add sc7280 hardware param fixup
+    callback
+  ASoC: q6dsp: q6apm: add end of stream events
+  ASoC: q6dsp: audioreach: Add support to set compress format params
+  ASoC: q6dsp: audioreach: Add gapless feature support
+
+Srinivas Kandagatla (7):
+  ASoC: q6dsp: audioreach: add helper function to set u32 param
+  ASoC: q6dsp: audioreach: Add placeholder decoder for compress playback
+  ASoC: q6dsp: q6apm-dai: Add open/free compress DAI callbacks
+  ASoC: q6dsp: q6apm-dai: Add compress DAI and codec caps get callbacks
+  ASoC: q6dsp: q6apm-dai: Add trigger/pointer compress DAI callbacks
+  ASoC: q6dsp: q6apm-dai: Add compress set params and metadata DAI
+    callbacks
+  ASoC: q6dsp: q6apm-dai: Add mmap and copy compress DAI callbacks
+
+ sound/soc/qcom/qdsp6/audioreach.c | 250 ++++++++++-------
+ sound/soc/qcom/qdsp6/audioreach.h |  51 ++++
+ sound/soc/qcom/qdsp6/q6apm-dai.c  | 445 ++++++++++++++++++++++++++++++
+ sound/soc/qcom/qdsp6/q6apm.c      |  68 +++++
+ sound/soc/qcom/qdsp6/q6apm.h      |   6 +
+ sound/soc/qcom/sc7280.c           |  23 +-
+ 6 files changed, 747 insertions(+), 96 deletions(-)
+
+-- 
+2.21.0
+
