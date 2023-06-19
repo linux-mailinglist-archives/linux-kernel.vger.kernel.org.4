@@ -2,99 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACF60735ED6
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 23:13:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 808AB735EDC
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 23:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjFSVNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 17:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46422 "EHLO
+        id S229670AbjFSVQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 17:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjFSVNJ (ORCPT
+        with ESMTP id S229448AbjFSVQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 17:13:09 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D1AE4E;
-        Mon, 19 Jun 2023 14:13:08 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1687209187;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ivHjZk8fFqTFzRj+cfny70EMr9Go5eZSugY+CzDe+1w=;
-        b=HSQKF1I4+fqvWlpnhgM1bP48xgjlOmpPi0VvRBC1AztdA/uX6+T02Ye9Kb6U7UwKJC0Xu+
-        VFpOzmZtmFgg6UbzDSmLsRASAuefF8ipuSwRprJJpHBK/4dlJmMdxEl0WApW4xdRCVkuFT
-        8KU1YH8wDbwWAoGKgbXwXaijT8UscSB0PQowHtK8ALJFJDVs50Bkp74jMZlaL9NSBYxwQB
-        ZorJxz1ZLxQAs2oCMIcPCnxQWDGnr86DIJMqzoM0RftRAec9gNC7BLx2fp0K/Vmph5VwIA
-        d0ld5iGu5JN4YU1PSdVMMGlyJck76LS59R311IPIS121lRf7Kp1yMfDQY/RzcQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1687209187;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ivHjZk8fFqTFzRj+cfny70EMr9Go5eZSugY+CzDe+1w=;
-        b=/8Y4h2G0iyKO1NcBDGUvGCzdS4TtKsNfVvPUuEM/6slBzUaemHp2mHaeh02PZk2yC5I1Gi
-        gyqQylbBgXo+AyDw==
-To:     "Li, Xin3" <xin3.li@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-Cc:     "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "jiangshanlai@gmail.com" <jiangshanlai@gmail.com>,
-        "Kang, Shan" <shan.kang@intel.com>
-Subject: RE: [PATCH v8 05/33] x86/traps: add external_interrupt() to
- dispatch external interrupts
-In-Reply-To: <SA1PR11MB67340ED76E3707707D1D61A3A85FA@SA1PR11MB6734.namprd11.prod.outlook.com>
-References: <20230410081438.1750-1-xin3.li@intel.com>
- <20230410081438.1750-6-xin3.li@intel.com> <87ttvm6s2v.ffs@tglx>
- <SA1PR11MB67340ED76E3707707D1D61A3A85FA@SA1PR11MB6734.namprd11.prod.outlook.com>
-Date:   Mon, 19 Jun 2023 23:13:06 +0200
-Message-ID: <87pm5rp34t.ffs@tglx>
+        Mon, 19 Jun 2023 17:16:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8A4DC;
+        Mon, 19 Jun 2023 14:16:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C06E560EAE;
+        Mon, 19 Jun 2023 21:16:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91A1DC433C0;
+        Mon, 19 Jun 2023 21:16:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687209401;
+        bh=JBTWR99Q1eDNuEVibhcmNlst4vu0Z56hRZJoZoOhNwg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ntsWACbUMlnuW5BSnHsZG2TTKeBnqu9hsRTu2DIbaC85MZo+lGwm6tnlfJ8J+7HM9
+         elm8G1GjrejFg+VwKxcuqiQFN37K7ae5J7lxLKIBz39nVf4tA40IPNiVmFDP2LdOGS
+         J9HwwI7Ci9S3Xp6IJuDchl8Nyj3BhSr3D+O0zRSBAIBUnB5E8uW4ZqzfbGmp6nW5AM
+         2Wr4XOsUqqPhLxfvwTFsrrj098Qspkf3uPElDBmFpjQttojz2GxLSn0LO2897pFljV
+         6tGr0YE4Nu5z+wbRNotqfHjARq6tLaliXmpnC2ONRZ4eHtpFBh3l84C+hEOwW+WqJR
+         Bc8rxLL7U4PJQ==
+Date:   Mon, 19 Jun 2023 22:16:37 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: mfd: samsung,s5m8767: Simplify excluding
+ properties
+Message-ID: <20230619-rejoin-brook-f878220ba872@spud>
+References: <20230619101424.25897-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="hmlYTsCCInqqIcWl"
+Content-Disposition: inline
+In-Reply-To: <20230619101424.25897-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19 2023 at 19:16, Li, Xin3 wrote:
->> > Add external_interrupt() to dispatch external interrupts to their handlers.
->> >
->> > If an external interrupt is a system interrupt, dipatch it through
->> > system_interrupt_handlers table, otherwise to
->> > dispatch_common_interrupt().
->> 
->> This naming convention sucks. external interrupts which can be system
->> interrupts. Come on.
->
-> This name dispatch_common_interrupt() comes from arch/x86/kernel/irq.c:
 
-That's not the point. Your changelog says:
+--hmlYTsCCInqqIcWl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  If an external interrupt is a system interrupt...
+On Mon, Jun 19, 2023 at 12:14:24PM +0200, Krzysztof Kozlowski wrote:
+> Mutually exclusive s5m8767,pmic-buck[234]-uses-gpio-dvs properties can
+> be written simpler, with half of the lines of code.
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-It's either an external interrupt which goes through common_interrupt()
-or it is a system interrupt which goes through it's very own handler,
-no?
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-Thanks,
+Cheers,
+Conor.
 
-        tglx
+--hmlYTsCCInqqIcWl
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJDFtQAKCRB4tDGHoIJi
+0iUCAP4i1Kjk0wc2dj0ZaaIq8QmB9iocPvRDHthhZumZnr0ePgD9Hqb8IWG9I42G
+VOFA7KootLNN1/cXoX+wPZIFqtB0bwE=
+=o6Lb
+-----END PGP SIGNATURE-----
 
-
-
+--hmlYTsCCInqqIcWl--
