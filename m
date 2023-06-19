@@ -2,310 +2,325 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B956373505F
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FC35735061
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:34:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231713AbjFSJeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 05:34:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55012 "EHLO
+        id S231546AbjFSJea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 05:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbjFSJd0 (ORCPT
+        with ESMTP id S231465AbjFSJd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 19 Jun 2023 05:33:26 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9524204;
-        Mon, 19 Jun 2023 02:31:42 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35J0xCow028503;
-        Mon, 19 Jun 2023 09:31:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2023-03-30;
- bh=5E/lgjAIyzhiHmuIcNdYHf2/XB8aFVT03426mkJsOkY=;
- b=gPw2gt77L/d5u5niAcDiqK90t6FxfbQ9a8sQuZRiMNVHm++/IaMuW+wx6uK0tTaLo+VF
- wMSp8JjLmfqM6ViD7Y7OYa09F1DQ5lYqQaxViCgMz1jx7z0oqszyVtRtZhC2bwRWZf5E
- brj3hgzQSLrtC6WXRnWjz1lJWeocLgSOsBFU+IbxwiJ0R/sv4VTgZ1ujg16pJmYG3jSN
- KZXlf04jE7Ye4j7y8WlArw8tVrzNEoOiYK85eKPyfc0zajHBY5pz/MdH9d6CAv5JzwgI
- Iv26FF2fwWIDnMwj0zEbtUN1clbIVBMg/amhfrLll6HMD9nhXGgIAUhC7ePbMxR7pv5X YQ== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r94qa2c85-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 19 Jun 2023 09:31:20 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35J8JMsk032965;
-        Mon, 19 Jun 2023 09:31:19 GMT
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2105.outbound.protection.outlook.com [104.47.70.105])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3r93945hp2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 19 Jun 2023 09:31:19 +0000
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2130.outbound.protection.outlook.com [40.107.255.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1A41BCD
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:31:49 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ddN5kWemKAX2f7CMSb2plhOAt2HwB+uOaU6JAtEslUyyxP8pfxBJkb2BAM1zbvp+frO2o149WnpzaB/q3pCNNVC6SdwLC3UzyWA1Iay3WcGjdNj8ErN7K2O1zKBLl+FMypOlrSx1bssNUrTT4fyKdM57WTcUPVzBJ236uW0nhzg6keyaGLYMOgh4FVF8giSOKe9LurrVZRLJ1I73TsdaaPchrnvl6yEZq7muoeKud4rPawLAqzlGurl8xdvIbqzXh5hmFKwMSqQF5yfrWJAl4S0HiX4zcq2R6UhT8ccQzJWn5v6W1MzbT2pCAWGqCn4rVX7MJzNW8Rc6lQhUzIOYrA==
+ b=mCVMFr2uOu88MTRMITVu6t5zClP+w484lKkvdv4RLpiBWPLPwJQIbmMB9YjABxeo0KaqAtDozbh09SKFwZptt0FWno04NEhvRG6fgvsVMJkT5w8aLtdEb+d/AprR+g1rRKH4EzTeAhH7SlCYPAbzyyFYlW40vYfgWt2sqPtBJlfO7yywDY5mTYi7XaKtSzgPH8pKUJvlm9gbiJmQve9Zux9Kh7mIqVnX0bzsOAOB5StGR9DF//JU8cR8IzGdeH4L6hC+5zNXTYNFeeRywd/bCqb7dhHl1RsJ2YUlOx6uIUMG7f2TwrkcVvOCaP/YNvdDPt6ggUIHnUOkw+UaWbsbjw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5E/lgjAIyzhiHmuIcNdYHf2/XB8aFVT03426mkJsOkY=;
- b=ln6uIjkMi8auSud5gCy6PnyLT2koAbOu+LjvMtXEIaCcbXfP1uymzjIyi+iApCHpoR+/EbmJLBt6anK28MWhid3bMhsTeUige7BxL09KdEkpmnMWLnEsM7dcajyGB4jzBz5LVVagIsMP9aoc95mJr3F0al/EADtMtXbk9ENmfaiN5fQZi5gblXtVF46jNND3PaSGdYkfWetEmvhmNYe9dE7iIP4hDrEjqyhhlAzQINvxykPQMbdAqVyS/HYs4kRECMPhrQAYOHBy9Y10ZhrxIlqHc0iKhGYnE7u2qj+hJ7YHaX1jmiAnssXDAn0frQbMqZvNbHcpRjD1Hr49dq3Klg==
+ bh=9HkI8VeoGXjKhoA5tcoleC6UJuKEf8+EikTBpU0LDDU=;
+ b=H8pAyiR8jxIQL1+seQlLM0w5XotFtxWTntGQjpFtQ9ZTFvD/MZAZqI6/UPzdXrZ+OO/hXahLFW+WsdDVQFRPsV7QBa0qp8EgNoxUfJBzcqqYwZtXME3yIPA4qI1jqU46ehqyzgLgU/yNtIsxRm4niyxUssi945JxbppYhDItBQkj8VZ0ODOlnsetJzpp2RTEkMGYlNi27yN+grfrSihJxCbb2pXsJXtT357WgqQurrQiHdGfcj7ECkAd3OC7ZdTW3E9S9EJfCqZJyvoLxsMR8AZf5v1dI9rUr4rga73ZnDxh1484FxvUTSZcrtixrnHaBt6i/o8dEm+n8C2B7ZyJmg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5E/lgjAIyzhiHmuIcNdYHf2/XB8aFVT03426mkJsOkY=;
- b=v6oAxs+PLbHm1PIqqHsebsOqNPUmZy1yXYQfqnZ1mnPyT1EPQRI4VuYsEBS37BopaKtEU9al1Nc+U1E2xcb9TKm2jz1DKiYBfJHh0L3gQw0unK+czrBzb0JJhnKtsmkzqpWVfDhACAojZxk5qUGFmbjGyVKYLZw3I3jrrwxWDDk=
-Received: from DM6PR10MB4313.namprd10.prod.outlook.com (2603:10b6:5:212::20)
- by CH0PR10MB4890.namprd10.prod.outlook.com (2603:10b6:610:c9::5) with
+ bh=9HkI8VeoGXjKhoA5tcoleC6UJuKEf8+EikTBpU0LDDU=;
+ b=XVNigIRT9sv/jEaWE5oYQ2/j4BPMMWLCjm5cfpSmR+hPbUbZ+97X+7+k3pN1lU+XcES7CsaMpcIamsye3HtgvF7batT7wVAequJtTOU+YDGXKXxB6hJ5dmFLhls69CDF4tv0u/gsDIj5CBM2THgAjecHKO8YDnshAf2jioagDrT67nZ3ByrMqASATy3G4MQlhuYmXnbcCfWzi7Dvsja0WFBB7bjZ4Q8yxtSa+Urw0XmxfNHU0aiBmtSuUv48c0uDc8tN66qBFpTdSWcBLMSnpkFWPaIMqBnOU4uyF5m96tpHSGCNNME88Q6NZlwc7khKFXIsT8Y0BGO4ihV+cq2VzQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by SEZPR06MB5591.apcprd06.prod.outlook.com (2603:1096:101:c9::5) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37; Mon, 19 Jun
- 2023 09:31:14 +0000
-Received: from DM6PR10MB4313.namprd10.prod.outlook.com
- ([fe80::e38:5b81:b87f:c1eb]) by DM6PR10MB4313.namprd10.prod.outlook.com
- ([fe80::e38:5b81:b87f:c1eb%7]) with mapi id 15.20.6500.036; Mon, 19 Jun 2023
- 09:31:18 +0000
-Message-ID: <71c4ef1e-0982-1ef4-5135-001303b43cd3@oracle.com>
-Date:   Mon, 19 Jun 2023 10:31:10 +0100
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.36; Mon, 19 Jun
+ 2023 09:31:45 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::fa0e:6c06:7474:285c%4]) with mapi id 15.20.6500.036; Mon, 19 Jun 2023
+ 09:31:44 +0000
+Message-ID: <6fb1d0be-b9d5-ce0a-7984-56b2e1a1a242@vivo.com>
+Date:   Mon, 19 Jun 2023 17:31:19 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v3 2/7] perf metric: Event "Compat" value supports
- matching multiple identifiers
-To:     Jing Zhang <renyu.zj@linux.alibaba.com>,
-        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        Zhuo Song <zhuo.song@linux.alibaba.com>
-References: <1685438374-33287-1-git-send-email-renyu.zj@linux.alibaba.com>
- <1685438374-33287-3-git-send-email-renyu.zj@linux.alibaba.com>
- <c1d8ee9b-4839-1011-4dad-c4777d8f8224@oracle.com>
- <452e724b-2a2c-52fd-274b-60db7a7f730e@linux.alibaba.com>
- <c4b2fca8-602d-9c76-90a7-3eafd92da8bc@oracle.com>
- <76fcb062-61a8-5f90-b39d-b5fb6da35652@linux.alibaba.com>
- <5f38ef6c-8c50-5df9-19dd-c3c9fe590452@oracle.com>
- <e4be7189-a1ba-7758-bff3-e7b8d8ff1419@linux.alibaba.com>
- <892f57c7-8ce2-634c-26f3-4d4ab8b2f2ce@oracle.com>
- <079d7920-2030-2e00-a833-5ec6d450f7dc@oracle.com>
- <552eebae-76bb-a2fe-ccdc-11e8a01717da@linux.alibaba.com>
- <045a49c9-b9ae-bf0e-c4be-858d905bcc55@oracle.com>
- <7c765e0f-ca76-d212-0496-f9c56369e389@linux.alibaba.com>
- <d1ab4947-6bdf-2b9c-5b26-52c572611ca6@oracle.com>
- <a6e1114c-b37c-6999-0668-039aa495db84@linux.alibaba.com>
-Content-Language: en-US
-From:   John Garry <john.g.garry@oracle.com>
-Organization: Oracle Corporation
-In-Reply-To: <a6e1114c-b37c-6999-0668-039aa495db84@linux.alibaba.com>
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] f2fs: compress: don't force buffered io when in
+ COMPR_MODE_USER mode
+To:     Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     Qi Han <hanqi@vivo.com>, linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20230609131555.56651-1-frank.li@vivo.com>
+ <8097d4d9-815e-2527-0fb7-90ec0609a4a3@kernel.org>
+ <dde6972a-e98c-8a6e-493b-9aff5668101d@vivo.com>
+ <7ab6b6f9-37fa-9bf2-69ce-7b1b1944d9f3@kernel.org>
+ <fe223231-5445-61ef-1ba8-0d46f4f4ed5f@vivo.com>
+ <65ce42d6-889a-5e1d-8f04-af8f66fd0afa@kernel.org>
+From:   Yangtao Li <frank.li@vivo.com>
+In-Reply-To: <65ce42d6-889a-5e1d-8f04-af8f66fd0afa@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: LO4P123CA0128.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:193::7) To DM6PR10MB4313.namprd10.prod.outlook.com
- (2603:10b6:5:212::20)
+X-ClientProxiedBy: SGXP274CA0023.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::35)
+ To SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR10MB4313:EE_|CH0PR10MB4890:EE_
-X-MS-Office365-Filtering-Correlation-Id: ef2958c7-b9ac-4294-3a96-08db70a7ef64
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SEZPR06MB5591:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0d94bb1a-4d60-45d4-ef92-08db70a7fefb
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: X/TIxfErVwuG34FoExUXXUD0oHra+C7ewNq8iHo/bJ1hdFRacdqM84+TBtRCILQCK6y04H/yS8zHZ4V2Bxom9dVtg9atMFUSCiDrqRwadbf6X86nQyw5wnxx4oTVfIYf+mdtEnadv9Tx4EUTEB6TWV5JLKPx2fOhdZhPT9swcGH8+LOX3e+hNeCz4IX+CszBZQta6Yx5GBGxiCh9g/cDeXCzdCSmiuFa0y44Fm3bPbGfDqZr6DBPJXVrdVaMH7PekreSENaTSsqBGXCQowbhAXQOso3IezAqgfKQq6o9MUfqqDyfLW6yxVEgyMK7YW5Ba9JFhk1r0F3RWzg+aOSs6MJQNTPKRCjMju/HyGT88LpH607medi+nt9MxHhojfQhF1IyuTOewy9shOFEg6HrpfyWUQMKQuOazrS2DWIa3AkQgHaHjng2CpUplX2TX1i40ggNbEikPYqqQj5vD+w1froPOkQJX3A9p8MMfnwGEx7i9BY9FzX+56iEY5r1Tmk9p9Y4qTAr1owEUVLw7i8SxR+FjKhsfJjRkX9IpFB5py5zKWs8Repz5jzca/5Kk2nwSC+zFEHBgxXocPpLX0ZjZDG0K8fRorF3x0ZpKwySsFjRnGaBmqYejGCsY0xyJfePHww3dwuB/Aal9Gn+D+LN+w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB4313.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(396003)(136003)(366004)(346002)(39860400002)(451199021)(31696002)(478600001)(2906002)(19627235002)(54906003)(36916002)(6666004)(6486002)(2616005)(110136005)(86362001)(36756003)(26005)(186003)(6506007)(6512007)(53546011)(8936002)(8676002)(66476007)(66556008)(66946007)(7416002)(5660300002)(38100700002)(316002)(4326008)(83380400001)(31686004)(41300700001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: NMl7Te0A0YJeFBtjFlZr2uIjOA1cpZbQjF1UDv2oABHEHuKaVsLZLQaqNzm7zVnnrkXBQpbbvEDsAzIm4fbraAZzl3v+4odj1ikx+XYJaRK7BPyAbh4upIGgStkTAvl/U7EOJIqeDzxkWrQdrtCFg0gl60HLLn/RO5PenK1gbTzo9IYhaMokoEGkzv/5R/Zf/jcbbokBuYHP8gdGpbD8BXUQPF4SHhyr97GQcfSuWNooGrSiel7S/jPej/z7/Jn5WRGnNAFJnqN8mYlK6jroDzEpZlE3NRAFgDGHw37bQQfP1fY8yUeqEqkAE7sKEuLFms94R0ujyiaw2PjIlsiWeYK5tQzl/+WE9EedBBjroo3f0XupqOaqbWtheiWGko4s4/0GPbYKfPj3R+BVuuJHZ3LK3pTQOWuj4KC4XFMTAR1AGnxpuNXSOJgGNy4uA2/xV0zTvZaFucHZ/s5x1CRcLt14+vTl9W07iPbvkjQhKn279bF9Tc+YnH4sU1yuFmIFaXxfJlxicCPD0T/CmbCUOU95u3830XNvz/nqVb7Q5+2GuBHcnuGPWBaMCZbV6C7R1XiPCq3uPH1EGC6xOBS5NmEFY1NFr4nhQBmopSlPhaMdCiVr1SPecVmT67bnZWttaiQnnVNBGdbriS72l7mDypNVd//QRf3f44FuLvDHdm/S9UEGYvZpmnxFeujMjYmO
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(376002)(39860400002)(366004)(396003)(451199021)(2616005)(31696002)(86362001)(2906002)(31686004)(83380400001)(5660300002)(110136005)(66476007)(8936002)(186003)(66946007)(8676002)(66556008)(36756003)(26005)(478600001)(40140700001)(38100700002)(41300700001)(4326008)(6512007)(53546011)(6506007)(52116002)(6486002)(6666004)(316002)(38350700002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aWZDZlpvTThzL1NLckdSbzJpU3FvSzRkT0p2R0FqaXhoVWFRNUc4QjJqQzNF?=
- =?utf-8?B?MXhPalcya1hVVGFxblNjaGVqamJxeklLRzFacXJ4OVQ5MHg0UWlwbTBzSkp6?=
- =?utf-8?B?WUk4V2lrT0JIc3RxSCtQUGFVVXRzZ1Q1UUkwRUQwQXc4NHZsb1M4K21KRTZF?=
- =?utf-8?B?d2pEamR1YXprS1c1YnBSMGZiWVdicmkzdlYwSVBDajcvOGQwdlB2YnI2QXU0?=
- =?utf-8?B?Q08xVjl5TXZnaytJMG1yU3kyU0FRMXZzai9LQW1Hb0hIWXRudXowWktpcUYw?=
- =?utf-8?B?NjhjYU16K2szU25SUjBiTWxDYTM1a0RoVWVJbWNnQ0JTMXhIdWdBZ2p3NlhG?=
- =?utf-8?B?WnhsV0xvd0V1blVBekllZGFSY0ZrR0V5bGM5SEFsYXVsS0NIUGZPMzdwM0tB?=
- =?utf-8?B?Sm5FNG5WcEhBYTNjR1pzWFZ4b0trMm5JNEsrWndXTXZDUTBDZ2RxaUVIL010?=
- =?utf-8?B?WXhMZ29pb1ExbzA1bFRzRUhuUjVYc09JMDFEUXNBOEwwQWFmNmdVMVRpWTlU?=
- =?utf-8?B?SnBRNkVHV05FeVJRQmxkUDlUM1pqTHNFRlR1MWxKaFNDZU5ERk1VS0JHc2lL?=
- =?utf-8?B?UDVHVVo1MDFGQnljcjV2L3FOZVR1SG5jZmlTNkJEU1VkbWxzUzdpbVdUTU1V?=
- =?utf-8?B?S1UySk5TUzBhMG1hZUNsNVMwRWRwOUhEWlRzUzRxZE9wdnR0azFMcXhTdEk1?=
- =?utf-8?B?VWRUYWcwckFJUmpmZzlTMU04TXRYQzl4U2JtOHZSRzZjd1NKK1JTSFpsM21x?=
- =?utf-8?B?WGM2UFBwdG1MWVdtT1k1dUlPQVBKcm9zTXUraU0wSFFJVU5zd3YvQVFLc0Vu?=
- =?utf-8?B?UmFiK3oyWFdWY3YyL2svOHVVand4eHFjOHRYZDk4bUpyMVhuc28yOUM2OVNB?=
- =?utf-8?B?RjFHdGIzVXA0SWIwcFMxQ2pqQU9pV1JzS0NNNUpRcWs4bWQ2a0VUSWdxUitV?=
- =?utf-8?B?R2NLMWZ6eWpSYVFCWC9IdStNZWNaSWFwVk5qOHgva2NlcDZZTWVqdlZoZkRu?=
- =?utf-8?B?UVdSRkpCa0xQQU1kWGFkTmFiR3NOTFpqM3Fab0FZc2Y3ZEx4anNGc29VeVo1?=
- =?utf-8?B?MUZ5SWZrZCt3eG5XaFFqL3VBUCtmblhnNVZWTGcrT1pKRGVIZ09NUmYwWVk2?=
- =?utf-8?B?ckRyRVlZMEhqY1paNVRHNS9LVU5CaGVVbUNYSE4xQkU5RU5Kejl0dkYwZzY1?=
- =?utf-8?B?U0FpZk5VVXQxR3JNd3pzeFZtRWpXWjQ5S28yTDhRalJkVDduSkFKMHpDeG9X?=
- =?utf-8?B?YVdieXhscVhyYnNIRjRQYkFMY1BDOWxGT2ZJMzl5UkpPNCtHLzA1bUJ3ZHM0?=
- =?utf-8?B?ZUoyVW52bURwaUh4bmp4NUhVcWVwTEN3RnpMNHFXSy9aajhJRDNxVzdWdytj?=
- =?utf-8?B?M09vU1p3VkVPVU1odFhmQmQrUXFpVTJkZnJ4cWVkM3RmYTBUUDJqOEFzVnJV?=
- =?utf-8?B?WW4vZDVCMXN1L2xBNzVydWdGbEs3UUhUZTUxdFE0dWl6UklRcitlV0QrVXp2?=
- =?utf-8?B?azc2VnVkTTFpUTNyT0RpYU9GTFkwcTVBMCtiT0o2b3BQOFQwVDRPY3lEVTc4?=
- =?utf-8?B?d2N5VTNsbjVzdzMyVTlhNFFKN0lacDNMbk82UjJ5b1ZNYlZqYTBsbUJjWmNk?=
- =?utf-8?B?MzRoZ0tqRG43TDRhQTgwM2x1RmtlWmpFTDdLUmI3TDJPUkRCL25IcUdWMFhQ?=
- =?utf-8?B?Z1lTd1hGVG1vQzlLSDNHaFczcWVjM0crWUxoRWdmT3plL0xaS2o4NWV1NUxM?=
- =?utf-8?B?QldZM29rNGdQdlMvK2FOa2FoYWhvNmVtSjNQZW5iL3FEL3RQcU9xSVphb2F6?=
- =?utf-8?B?T2FZakIwZHNEckNCZEZ3djlCdFVDTEpWeEI3Skd6aGtCYkh5d3htRWxSMXlk?=
- =?utf-8?B?WndDZ0dEd0MybEV2aHlkL1U1d2h4dHJWbEZRaytoWXVGOSs4TFBVZGg1SEc1?=
- =?utf-8?B?KzA5UUJGU01yNXlpdFdPSlI3WVRVd2VKaGN2NHQwNGxsZ3lQait0R2FrcU15?=
- =?utf-8?B?WWlxMUVSOEY4c3RzL25HU041VmhLYUVwQzJTTnVJa1JvdGlKNFdPR1RNeThY?=
- =?utf-8?B?ckl2VGlDQW1UbVlvNU0ybFVWQXFkamNvNTM3VFBIMXNJQzNjOWs4MXFQOVZS?=
- =?utf-8?Q?MApxYxrxWGmuYBPbwwLo03vEO?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?MmZlSTZyWVFueG16TVk0Mk1VeU1kSGQyaUQrS0pmVjVjM0hqbUZTdzFRQUEw?=
- =?utf-8?B?Q3Rrd0tJOHFGYXhPRjVBRVU3YXFnVjdnc21UMElEM3hPckgrNHoxdjJsUFU0?=
- =?utf-8?B?aGxjYytPbG5GTGVmR1RGWjQ1YVVIaHV0NlFoQnRrbzl6WTFKZEcxYjIybUk5?=
- =?utf-8?B?MEVNU3Z3MkxrazFOSHFXQ29TZFhUeWdsZEw1Wkc2bzhwUmNxQ2cxZDNCM0Jw?=
- =?utf-8?B?R0NDS09YbmN6RVhqd3ZrTDNwM1lkdnBEY0hrR1ptWUpJVXdTc2JCVjVGd2Fv?=
- =?utf-8?B?QWNXVUd5TzlNZTdvNnZHV2hqd1BOcWVVT3pNMXU0YXJLUmEvaDFWdGY0ZUxl?=
- =?utf-8?B?eSttY2pRVXo4VWtZY2lyenRzZWxYUnJvWjdQYlpBNmI0bU5HTG1nZEtoNmR1?=
- =?utf-8?B?NU9obXY0NXlxbDBnVWs0Qk1tTjNlUDM1NjhsSldIdGZkOVpYZElWUGQ4SEpY?=
- =?utf-8?B?QlVEYXRkS3RhU09QZ3F2NGJhN21BMWtoQkV0eEZIblU3YU5KR3c0NmdRV2hy?=
- =?utf-8?B?UkFHM1h1OEVyZ2J2aDFVYjd1UExiUFZlSUYrS01XUkNIZlAwMVRrdWJXR1VR?=
- =?utf-8?B?ZUk5dWVoelo1cFZKQnYvMGtlNnNLc1V2Qzd3dTdndnczVkRTQnJUS3NmQjcw?=
- =?utf-8?B?VHFNQjBHNlAxVlZ2UnVlNFVrSGNpNERzV3JrWHZjcFB5YzdFdTZTdlR2STMv?=
- =?utf-8?B?QXZQMTdEK0pXaHMyV3dCWUN3L3hKQnZpTlBpUnF0NXJ1akpWb0ZmekdkQnpr?=
- =?utf-8?B?UzEzZ2Z4bkQzaHNsUHBvTjRNbDdRVllCdndxYW5ERTZ4dVZkbHFHNDhaRmZx?=
- =?utf-8?B?ZldRbmI3K2tXU0EzbkgrNzBVYmJVcU9xR0NORzFjaXZzU3RHRlUwUkpTdlFq?=
- =?utf-8?B?eTVFMXcvVDMwVTEwRjhXNVdUZVFHTm5LTFJkVTlmOFBwV0lHa2V1bTIzUnRH?=
- =?utf-8?B?enhFclJXUXJVV1Nrd3ZlMnQxdit2Rm5qNkdtc0I4WmVvWW50M0R1NHhDMk55?=
- =?utf-8?B?WERqdDR3VXJxTnNQM2FVUTRKL1c3VWVqWmxrSC9qeDlSeXA3blRJaDd4bDFG?=
- =?utf-8?B?dndLTGg2RmVWV01Dc3NNWFFlOTYwMFByRmgzQ3dkUjBEY1dhY1Y4cERJZXFY?=
- =?utf-8?B?NDI5bnNKUEJBNkQwZjZlN3lIK05nWlNud2ZoZkdqdUtiYnI1UzhVcEJ1V0Zq?=
- =?utf-8?B?d0ZaN2hZZG96K2tURE9CSzJ3RUZVdEhFTXFobitNQkRLbTB4ejIybmZsWjFT?=
- =?utf-8?B?RUdZazYrdDBjSFk3MnRZblBzeUtKQVVzUGNSUVg5V1E1L01sS2FwMUJDTjBz?=
- =?utf-8?B?RG5iS2h1b3g3bFRZK2xjTzZadURlN1U4akh1ZTZraThtYVhkem9CK0Y1dk9w?=
- =?utf-8?B?OU11bzJBSEFQMDk2KytaTmZhSCtNT0xUbmc1bm1pS2VRa0dxdGZFMkl0NENr?=
- =?utf-8?B?NWlhTlRqUmE2a0duK3JieVhCSjRoUmFLUmxCbklQSDJXY2x4V2d0QnROUWdX?=
- =?utf-8?Q?S5DsHQ=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ef2958c7-b9ac-4294-3a96-08db70a7ef64
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB4313.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WEp4TUpBanY4YnNkZGVtVGh0a1g5UUlDeEg1L3FHSEd0YTAyRXR6YUNTMFVT?=
+ =?utf-8?B?QUY5TG9LMVM3bHI3ODFXSFdzNVZWT295cVhqSk9PcFEvQ24vbWZXeDhxbjdh?=
+ =?utf-8?B?OGtmVFo4UlFJVVc5Y0FCZzBYWmJxY2w4QWdtZW5iTUdFeG5HR216Y0VpNzda?=
+ =?utf-8?B?Q3VUUjRwSzN2LzZZZWhzdTlIaEhQaktlQ3BuVjRMSEJKVXhyczBublg4YWsz?=
+ =?utf-8?B?anoxb0JCUlB3UTRDL1RhSm1rODRtM1l3b1AzWTd0RlpCS0RROWpqa1lvdTFw?=
+ =?utf-8?B?dzNoMVNQZHhrUVI2NzVTYUdRNC9qdi9icnFraXdQUnhlcGQ2Yi93RVd6YWs0?=
+ =?utf-8?B?NkxXczdVK3RwaW03NEpVZ3BaOFZ1QWpsV1R1b3FpbDFYTzlXN3VqSm95MURk?=
+ =?utf-8?B?RFRlaVBYWjJEUmdVc0FTMk5EQlpWQ2lMNE9rMm03bk1WMG1pMkEyd3NMRmpu?=
+ =?utf-8?B?TWxYVEg5LzhMWTExYis1Y2ZCeGdIVDlXd2ljVjUzZ2hNZGx2aXhyL1FSY2FG?=
+ =?utf-8?B?ZzdGaXdldysxc2JCVURIUjk3MElYYW5LQWw2Z2lBaU1RZko2TjZKTW5Qb2E4?=
+ =?utf-8?B?MXpObUNyMXE0TXdCUE16dklMbDlNeGx1VUhLbXR4ODlXejNxSWhyeCtJRVdQ?=
+ =?utf-8?B?VHorMWFFbzRtU2xpYy9tWmJPdUpBWjBDd0ZCREFaR1FrVUF3aU9UaGZZRmdF?=
+ =?utf-8?B?WHlZTkwwWEJtU0hZRjFYMm1rZG9YZkxPamR6R1I0VGd1UXpwbFFTMmk3UU1K?=
+ =?utf-8?B?dDlIaThnQU1mbklEaEljSU9qYUMxMUZjMlNZR1hmTVFiZjh1ayszb3N5Q0R3?=
+ =?utf-8?B?RXBKb0E1M0VuM3RHQVBQV0k5WFVlTEhJQ2dWeWNEMExUSk9pdnhZT1JwRGll?=
+ =?utf-8?B?Mzd4allhUG5hYWZPOXRvMGdnKzE3SWJFWVE2Y3lJUlJNWlQza1lwcnVJQlZG?=
+ =?utf-8?B?QVdqTHdsenNVMWtjSHdaWWJxeVQrOFJ4WWtkMm0ydDJvMUVldEFNZnRNM1pr?=
+ =?utf-8?B?QVkzTndtSHBGYjY0emx5RmgwNWJxOXpVQmNaVE5zSDN5cEtsRFRBOXRRVktQ?=
+ =?utf-8?B?UVBCK25KQUlYMlZsT0RwMXlObzExeGNTRS84UHJLbm51UStYVElWVVZlZ2Za?=
+ =?utf-8?B?bWpycnkrM24xZUFkMi9jV0VaQkdJWkxZWEM4azBhUnZvaXV0MTJwVHRldE5P?=
+ =?utf-8?B?S0pLNkpRbkt3M1JxSWRZdUdlTVllb1ErMlZBS0tZK3ZvRW16MS85K2I1TlFa?=
+ =?utf-8?B?STR0aE1vK0pOUkVjaCtkTmd6WmtIN3paTHdqbElWWC9RaU5hZVA0V3RZLzl0?=
+ =?utf-8?B?dGQzSEtwYVhtSDNqUThQME90aWp5dWxZMWdjRS93ZG9rUjJua0g1cEpuM2Zz?=
+ =?utf-8?B?MitmTGNGRlNqbUk1Q2JzOU9iVStLNTJUVWUxVm14RkJ4VHVDVk9DL0V3Q0cx?=
+ =?utf-8?B?RlBseW9QMVkxN1hqS3Z3YmNPV0t3MWVZalpTWVJJYldjTUdDYVYwUHBLcE1U?=
+ =?utf-8?B?MmgzUXpacGpZdW1ZcE4yeE55aVo3ekhaTkpUZ3RXWWdMb2J3UE9seVYvNWxH?=
+ =?utf-8?B?Rzl2blFGQ0RQZkVyRmF0Nms0WituTXJweUJESXZPTWlGKy82d0UyYjdWeFlX?=
+ =?utf-8?B?bkZ3VFQ5Yk85ckZBRmNvZjZleXhZM3F0QnVUcFM2cDBhRU9yM2owOFRHVDlU?=
+ =?utf-8?B?U1BJQloyVFBlbTNKUjc0RHRQQVR2N0lxR0drSGN2aXo5UmM5bmVhcU51eXV4?=
+ =?utf-8?B?Uy9teG9xVzlzSTIwTjF6ckV4eGN6cVNhM3NsbnVjY0xzUjkydWgzN214KzUx?=
+ =?utf-8?B?UW1NbVpiRWJ2UEFneUJwT3h5ZDloRGtnaEYvazN0YnJPdTNxbVlWOHhycGhu?=
+ =?utf-8?B?MHhlMVczN3p5SUJvRnovM3RYSVNwZlJGNU9VNk5IWXc4OCtWa1BVNkkwaGJ3?=
+ =?utf-8?B?bXQrS0EvbHZULzdONWxBN2tvSXRlU1pnUm0xbzgzdmJIdTdYUVBSa0NEOVlJ?=
+ =?utf-8?B?UDhyR0FRZk1HdkxaZ1F0bXZHazJrZ2FVRTJZWm1DbXNaeUlXb1JUSGlGenhG?=
+ =?utf-8?B?WEllb21NT09TWmhBTlB3WmE2ejVlMC9xd3k5VXpyWk5hS05TbnlSZUhBQnlh?=
+ =?utf-8?Q?p/SYWKDiRCKE7NsXPpYToHY4n?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0d94bb1a-4d60-45d4-ef92-08db70a7fefb
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jun 2023 09:31:18.3392
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jun 2023 09:31:44.5953
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gu1NzO/zq2/wDVkdqjUuUEj9Vb0sPWC7H7d3NUkkgolE8TCdtJcWqj3tLfT66um5zEIrK7KJFQtI0MDbA1wU9A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB4890
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-19_06,2023-06-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
- bulkscore=0 suspectscore=0 mlxscore=0 spamscore=0 malwarescore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306190086
-X-Proofpoint-GUID: 3GwVfPQP38P9AUe3FzJ3AsfmSvpbYx6v
-X-Proofpoint-ORIG-GUID: 3GwVfPQP38P9AUe3FzJ3AsfmSvpbYx6v
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: bhNCMl7dPVS3R+DT0F8fc/HMKi+C51BiC82T5UdXzehCuINzezh9kwN9iLY2FWCSkqi6gREDRuoCQvJlEGZmHg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB5591
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/06/2023 09:59, Jing Zhang wrote:
->> Please verify running these metrics with 'perf stat', like 'perf stat -v -M slc_miss_rate'
->>
-> Ok, it shows:
-> #./perf stat -v -M slc_miss_rate sleep 1
-> 
-> metric expr hnf_cache_miss / hnf_slc_sf_cache_access for slc_miss_rate
-> found event duration_time
-> found event hnf_slc_sf_cache_access
+On 2023/6/19 12:04, Chao Yu wrote:
 
-In the earlier RFC series you had 
-tools/perf/pmu-events/arch/arm64/arm/cmn700/sys/cmn.json, which 
-describes event hnf_slc_sf_cache_access
+> On 2023/6/19 11:11, Yangtao Li wrote:
+>> On 2023/6/19 8:54, Chao Yu wrote:
+>>
+>>> On 2023/6/13 12:14, Yangtao Li wrote:
+>>>>
+>>>> On 2023/6/12 22:38, Chao Yu wrote:
+>>>>> On 2023/6/9 21:15, Yangtao Li wrote:
+>>>>>> It is observed that when in user compression mode
+>>>>>> (compress_extension=*),
+>>>>>> even though the file is not compressed, the file is still forced 
+>>>>>> to use
+>>>>>> buffer io, which makes the AndroBench sequential read and write drop
+>>>>>> significantly. In fact, when the file is not compressed, we don't 
+>>>>>> need
+>>>>>> to force it to buffer io.
+>>>>>>
+>>>>>>                    | w/o patch | w/ patch |
+>>>>>> seq read  (MB/s) | 1320.068  | 3696.154 |
+>>>>>> seq write (MB/s) | 617.996   | 2978.478 |
+>>>>>>
+>>>>>> Fixes: 4c8ff7095bef ("f2fs: support data compression")
+>>>>>> Signed-off-by: Qi Han <hanqi@vivo.com>
+>>>>>> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+>>>>>> ---
+>>>>>>    fs/f2fs/f2fs.h | 14 ++++++++++++++
+>>>>>>    fs/f2fs/file.c |  2 +-
+>>>>>>    2 files changed, 15 insertions(+), 1 deletion(-)
+>>>>>>
+>>>>>> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+>>>>>> index 1efcfd9e5a99..7f5472525310 100644
+>>>>>> --- a/fs/f2fs/f2fs.h
+>>>>>> +++ b/fs/f2fs/f2fs.h
+>>>>>> @@ -3168,6 +3168,20 @@ static inline int f2fs_compressed_file(struct
+>>>>>> inode *inode)
+>>>>>>            is_inode_flag_set(inode, FI_COMPRESSED_FILE);
+>>>>>>    }
+>>>>>>    +static inline bool f2fs_is_compressed_file(struct inode *inode)
+>>>>>> +{
+>>>>>> +    int compress_mode = 
+>>>>>> F2FS_OPTION(F2FS_I_SB(inode)).compress_mode;
+>>>>>> +
+>>>>>> +    if (compress_mode == COMPR_MODE_FS)
+>>>>>> +        return f2fs_compressed_file(inode);
+>>>>>> +    else if (atomic_read(&F2FS_I(inode)->i_compr_blocks) ||
+>>>>>
+>>>>> Should check dirty page as well? i_compr_blocks may increase after
+>>>>> data writeback.
+>>>>>
+>>>> IIUC, in COMPR_MODE_USER mode, i_compr_blocks will only be updated 
+>>>> when
+>>>> FI_ENABLE_COMPRESS is enabled.
+>>>>
+>>>> If FI_ENABLE_COMPRESS is not enabled, i_compr_blocks will never be
+>>>> updated after data writeback.
+>>>>
+>>>> So there is no need to additionally judge whether there is a dirty 
+>>>> page?
+>>>
+>>> Oh, user mode, that's correct.
+>>>
+>>> If we allow dio/aio on compress file, it needs to consider race case in
+>>> between aio and ioc_compress_file.
+>>
+>>
+>> The inode_lock is already held in f2fs_file_write_iter and 
+>> f2fs_ioc_compress_file, I guess this is enough?
+>>
+>> What else?
+>
+> aio may complete outside inode lock, so it needs to call inode_dio_wait()
+> in f2fs_ioc_compress_file() to avoid the race case?
 
-But that JSON is not in this series. Why is it not included?
 
-The cmn kernel driver exposes event hnf_slc_sf_cache_access, but I did 
-not think that perf tool metric code matches those events described in 
-/bus/event_sourcs/devices/<PMU>/events
+How about adding this below？
 
-> found event hnf_cache_miss
-> Parsing metric events '{hnf_slc_sf_cache_access/metric-id=hnf_slc_sf_cache_access/,hnf_cache_miss/metric-id=hnf_cache_miss/}:W,duration_time'
-> hnf_slc_sf_cache_access -> arm_cmn_0/type=0x5,eventid=0x2/
-> hnf_slc_sf_cache_access -> arm_cmn_1/type=0x5,eventid=0x2/
-> hnf_cache_miss -> arm_cmn_0/type=0x5,eventid=0x1/
-> hnf_cache_miss -> arm_cmn_1/type=0x5,eventid=0x1/
-> Control descriptor is not initialized
-> hnf_slc_sf_cache_access: 127615 1001344900 1001344900
-> hnf_cache_miss: 36829 1001344900 1001344900
-> hnf_slc_sf_cache_access: 131526 1001343540 1001343540
-> hnf_cache_miss: 40587 1001343540 1001343540
-> duration_time: 1001381687 1001381687 1001381687
-> 
->   Performance counter stats for 'system wide':
-> 
->             259,141      hnf_slc_sf_cache_access   #     29.9 %  slc_miss_rate
->              77,416      hnf_cache_miss
->       1,001,381,687 ns   duration_time
-> 
->         1.001381687 seconds time elapsed
-> 
-> 
-> 
-> #./perf list
-> ...
->   arm_cmn_0/hnf_cache_miss/                          [Kernel PMU event]
->   arm_cmn_0/hnf_slc_sf_cache_access/                 [Kernel PMU event]
-> ...
->   arm_cmn_1/hnf_cache_miss/                          [Kernel PMU event]
->   arm_cmn_1/hnf_slc_sf_cache_access/                 [Kernel PMU event]
-> ...
-> 
->>> In the past, I always thought that the function of the alias was to explain the meaning of these events in the perf list.
->>> Or maybe I'm missing something?
->> Event aliases do give the ability to describe the event in perf list. But we can also run them for 'perf stat', like:
->>
->> ./perf list uncore
->> List of pre-defined events (to be used in -e or -M):
->>
->>    uncore_cbox_0/clockticks/                          [Kernel PMU event]
->>    uncore_cbox_1/clockticks/                          [Kernel PMU event]
->>    uncore_imc/data_reads/                             [Kernel PMU event]
->>    uncore_imc/data_writes/                            [Kernel PMU event]
->>    uncore_imc/gt_requests/                            [Kernel PMU event]
->>    uncore_imc/ia_requests/                            [Kernel PMU event]
->>    uncore_imc/io_requests/                            [Kernel PMU event]
->>
->> uncore cache:
->>    unc_cbo_cache_lookup.any_es
->>         [L3 Lookup any request that access cache and found line in E or S-state. Unit: uncore_cbox]
->> ...
->>
->> sudo ./perf stat -v -e unc_cbo_cache_lookup.any_es
->> Using CPUID GenuineIntel-6-3D-4
->> unc_cbo_cache_lookup.any_es -> uncore_cbox_0/event=0x34,umask=0x86/
->> unc_cbo_cache_lookup.any_es -> uncore_cbox_1/event=0x34,umask=0x86/
->> Control descriptor is not initialized
->> ^Cunc_cbo_cache_lookup.any_es: 14361103 1853372468 1853372468
->> unc_cbo_cache_lookup.any_es: 14322188 1853360415 1853360415
->>
->>   Performance counter stats for 'system wide':
->>
->>          14,361,103      unc_cbo_cache_lookup.any_es
->>          14,322,188      unc_cbo_cache_lookup.any_es
->>
->>         1.853388227 seconds time elapsed
->>
-> Ok, thanks. If I use events without a prefix, such as perf stat -e clockticks sleep 1, will this also work?
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index f45d05c13ae5..5021d13e788b 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -4146,6 +4146,10 @@ static int f2fs_ioc_compress_file(struct file *filp)
+                 goto out;
+         }
 
-In this case, yes - it would work for uncore_cbox_0/clockticks/ and 
-uncore_cbox_1/clockticks/
++       /* avoid race case between aio and ioc_compress_file */
++       if (F2FS_OPTION(sbi).compress_mode == COMPR_MODE_USER)
++               inode_dio_wait(inode);
++
+         ret = filemap_write_and_wait_range(inode->i_mapping, 0, LLONG_MAX);
+         if (ret)
+                 goto out;
 
-But you need to be careful to here - if another PMU has same event name, 
-then it might also match.
 
 Thanks,
-John
 
+
+>
+> Thanks,
+>
+>>
+>>
+>> 4691 static ssize_t f2fs_file_write_iter(struct kiocb *iocb, struct 
+>> iov_iter *from)
+>> 4692 {
+>> 4693         struct inode *inode = file_inode(iocb->ki_filp);
+>> 4694         const loff_t orig_pos = iocb->ki_pos;
+>> 4695         const size_t orig_count = iov_iter_count(from);
+>> 4696         loff_t target_size;
+>> 4697         bool dio;
+>> 4698         bool may_need_sync = true;
+>> 4699         int preallocated;
+>> 4700         ssize_t ret;
+>> 4701
+>> 4702         if (unlikely(f2fs_cp_error(F2FS_I_SB(inode)))) {
+>> 4703                 ret = -EIO;
+>> 4704                 goto out;
+>> 4705         }
+>> 4706
+>> 4707         if (!f2fs_is_compress_backend_ready(inode)) {
+>> 4708                 ret = -EOPNOTSUPP;
+>> 4709                 goto out;
+>> 4710         }
+>> 4711
+>> 4712         if (iocb->ki_flags & IOCB_NOWAIT) {
+>> 4713                 if (!inode_trylock(inode)) {
+>> 4714                         ret = -EAGAIN;
+>> 4715                         goto out;
+>> 4716                 }
+>> 4717         } else {
+>> 4718                 inode_lock(inode);
+>> 4719         }
+>>
+>>
+>> 4115 static int f2fs_ioc_compress_file(struct file *filp)
+>> 4116 {
+>> 4117         struct inode *inode = file_inode(filp);
+>> 4118         struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+>> 4119         pgoff_t page_idx = 0, last_idx;
+>> 4120         unsigned int blk_per_seg = sbi->blocks_per_seg;
+>> 4121         int cluster_size = F2FS_I(inode)->i_cluster_size;
+>> 4122         int count, ret;
+>> 4123
+>> 4124         if (!f2fs_sb_has_compression(sbi) ||
+>> 4125                         F2FS_OPTION(sbi).compress_mode != 
+>> COMPR_MODE_USER)
+>> 4126                 return -EOPNOTSUPP;
+>> 4127
+>> 4128         if (!(filp->f_mode & FMODE_WRITE))
+>> 4129                 return -EBADF;
+>> 4130
+>> 4131         if (!f2fs_compressed_file(inode))
+>> 4132                 return -EINVAL;
+>> 4133
+>> 4134         f2fs_balance_fs(sbi, true);
+>> 4135
+>> 4136         file_start_write(filp);
+>> 4137         inode_lock(inode);
+>>
+>>
+>> Thanks,
+>>
+>>>
+>>> Thanks,
+>>>
+>>>>
+>>>>
+>>>> Thanks,
+>>>>
+>>>>> Thanks,
+>>>>>
+>>>>>> +        is_inode_flag_set(inode, FI_COMPRESS_RELEASED) ||
+>>>>>> +        is_inode_flag_set(inode, FI_ENABLE_COMPRESS))
+>>>>>> +        return true;
+>>>>>> +
+>>>>>> +    return false;
+>>>>>> +}
+>>>>>> +
+>>>>>>    static inline bool f2fs_need_compress_data(struct inode *inode)
+>>>>>>    {
+>>>>>>        int compress_mode = 
+>>>>>> F2FS_OPTION(F2FS_I_SB(inode)).compress_mode;
+>>>>>> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+>>>>>> index 74ecc9e20619..0698129b2165 100644
+>>>>>> --- a/fs/f2fs/file.c
+>>>>>> +++ b/fs/f2fs/file.c
+>>>>>> @@ -821,7 +821,7 @@ static bool f2fs_force_buffered_io(struct inode
+>>>>>> *inode, int rw)
+>>>>>>            return true;
+>>>>>>        if (fsverity_active(inode))
+>>>>>>            return true;
+>>>>>> -    if (f2fs_compressed_file(inode))
+>>>>>> +    if (f2fs_is_compressed_file(inode))
+>>>>>>            return true;
+>>>>>>          /* disallow direct IO if any of devices has unaligned 
+>>>>>> blksize */
