@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A01735CA9
+	by mail.lfdr.de (Postfix) with ESMTP id C2725735CAA
 	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 19:02:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbjFSRCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 13:02:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52300 "EHLO
+        id S231767AbjFSRCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 13:02:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbjFSRCA (ORCPT
+        with ESMTP id S231368AbjFSRCE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 13:02:00 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7458010DC
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 10:01:57 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-51a2c8e5a2cso5242739a12.2
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 10:01:57 -0700 (PDT)
+        Mon, 19 Jun 2023 13:02:04 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2937A10E0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 10:01:59 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-51a200fc3eeso5076896a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 10:01:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687194116; x=1689786116;
+        d=linaro.org; s=google; t=1687194117; x=1689786117;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=COsaRxZdSPBV9CeyLNaEQg4S1uumP/ZoT63AXElGvQM=;
-        b=S0bbD5N+FhAvM28xfCEV5Iv+dBsG5PjpwStWc5X6w49zIJF3b+47JtdzVOlg6gw9hL
-         5aAdxExIPkQ3l7YcACz80nKEZMpf8txfNDw0i2Mm0xC+TLDELcXIgnbojrbCY4srkbk+
-         Zfg5y9bTk2jpBukwEMFOUZkgs+oF02mO4OzL5SHC88a8Acu9IPQFINQZB0wAPyksyrgA
-         BV9EIihYks9f8Y6UQqPYDHNSiHU789rcsLxxY1YB2XC017WQ8kRqz0jmO13xRsiCa3Co
-         ree1NoyNf5txD6WcIbr0CJcagyRsCEfKK/DcLC6UbG23UoOCwkGk4EuQ3cRar7D1MoYt
-         ELGg==
+        bh=6JaUNq2uBkN/LZLH2KyX589Bxtvv+gIlmVGHptckdMA=;
+        b=XmczEfH9cf2mva55kZ98ts5ntqtiOr7Qwfd15OMEXEe6VwJhJzQ+zww+d4VkuCcRWA
+         XsN6XYuaruND0FTQw2/dXNuyYa+JwvIo2HcBTCgSORHu1dZYpY76chbpWIMGu7VtK2qY
+         ICCFxVWVI6fPOBq60VX0HPhKbWupVT8HoQCFEQxNMs3XJI26KspK3QXOQ6k1y+K3qkJg
+         f5tmq6C4NC0hDdOCH9M/nN4ll4AFEEWSr/XHoW6oFQMs42USuIWY5nthD7sOhlEVzD+D
+         meGBoFUHi6oadclrwF+hrbG54rPYRvo53XtrVmvSN7qDrObBbWHjxTrZ8Xx3BPEBSRsN
+         Xaqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687194116; x=1689786116;
+        d=1e100.net; s=20221208; t=1687194117; x=1689786117;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=COsaRxZdSPBV9CeyLNaEQg4S1uumP/ZoT63AXElGvQM=;
-        b=gm1s0iwGQMuPmE1kJTVAiNmTSUDxiOKPvRCc9jJXQVV09JAK+C5z/P1FUB1tME5BSZ
-         tMg6NPaG5t0JkyJSPA6+cZrD/Zei+dof286k46WdZSpKEk3ixIGo/c5S2+lXa+iOo86b
-         wDl10DDxTxDd/VrYNmHUFm9Qz2diggIHRM9kInQhRhUt0CAiOtQezd4J1txcXPCZBzEU
-         ECtiUk3bjTNE3w+W2pzS2mvjD+tO/ZHA97t+8Kt9PWTodx00OHNLZWh+9+0xN1hJjkI8
-         H8rXPyLo5tEhVbTTsxebLHnMHUXW8uFx7j6OlI4Ba7tMAObY6EWm0oB5ya1SmWZiTUab
-         KKag==
-X-Gm-Message-State: AC+VfDzxcrtdhPXxJeOndEV6brby53Vx5Vepn6jrAUi7QVvxHS4Kigcy
-        m4iYgJpl92FKossanIFhVoQfKw==
-X-Google-Smtp-Source: ACHHUZ7if91saarUGDyScY9DruSyV8Eho0OkIVDfKRL0EUFbxDpR2014gXdCLR/yFZM4Y/tN2uLjvg==
-X-Received: by 2002:a05:6402:218:b0:517:6ed9:662d with SMTP id t24-20020a056402021800b005176ed9662dmr7128683edv.19.1687194115978;
-        Mon, 19 Jun 2023 10:01:55 -0700 (PDT)
+        bh=6JaUNq2uBkN/LZLH2KyX589Bxtvv+gIlmVGHptckdMA=;
+        b=NfAd06Ib/KIWrU6XCNeoFFYsGRPFCkmaMemKhv+OOh8buwF6g9nOE1LBM20WLPl3CV
+         Qy1yxmsX6UlS0//I+53wAg8Uq2X3ZPpehR5rNJGHLA9C/S9aQcGSnPiB3n0E57e45JXH
+         O2bvxeGXDML5j6wWlZOdW3KklnXFRdS3FCgADze+omHdDvIzd7DHifnOXktAFP4ZLXAu
+         nIZOpuZDO1MQFifSbBa1/iNxEo33fyJK2ACkIrTJ49oj+hrQAwh8NOYR5cZ/naXwpjF7
+         sx3j4wDt9I99A5SRJi53qUzFnGBKFilSyzllkD+uSHczxA9/Sb/RX2QtCH1oT/w09hnT
+         Ctjg==
+X-Gm-Message-State: AC+VfDyshqZh1SHn5mlWJm8Jg3Huxrggyed8MdU1gp3BgXjgRPujYHv7
+        XMtMsOTtVxpJ9XTIaQSSXFf+5A==
+X-Google-Smtp-Source: ACHHUZ4A4Xqk6DZwE+htrE1EoU891qG5cn72NFcapvZV3QrjOmbfRRw6nz4ZGbsVZwBlgY4wLXt3uA==
+X-Received: by 2002:a05:6402:759:b0:51a:7bcd:a82d with SMTP id p25-20020a056402075900b0051a7bcda82dmr1472410edy.23.1687194117629;
+        Mon, 19 Jun 2023 10:01:57 -0700 (PDT)
 Received: from krzk-bin.. ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id p9-20020aa7cc89000000b005166663b8dcsm13136672edt.16.2023.06.19.10.01.54
+        by smtp.gmail.com with ESMTPSA id p9-20020aa7cc89000000b005166663b8dcsm13136672edt.16.2023.06.19.10.01.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 10:01:55 -0700 (PDT)
+        Mon, 19 Jun 2023 10:01:57 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -60,9 +60,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/4] ARM: dts: qcom: sdx55: use generic node names for USB
-Date:   Mon, 19 Jun 2023 19:01:49 +0200
-Message-Id: <20230619170151.65505-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 3/4] ARM: dts: qcom: ipq8064: drop spi-max-frequency from controller
+Date:   Mon, 19 Jun 2023 19:01:50 +0200
+Message-Id: <20230619170151.65505-3-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230619170151.65505-1-krzysztof.kozlowski@linaro.org>
 References: <20230619170151.65505-1-krzysztof.kozlowski@linaro.org>
@@ -70,7 +70,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,29 +78,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Device node names should be generic which is also expected by USB
-bindings:
+spi-max-frequency is a property of SPI device, not SPI controller.  Drop
+it from the controller nodes.  No functional impact expected because
+child SPI device already defines spi-max-frequency.  This fixes
+dtbs_check warnings like:
 
-  qcom-sdx55-t55.dtb: dwc3@a600000: $nodename:0: 'dwc3@a600000' does not match '^usb(@.*)?'
+  qcom-ipq8064-ap148.dtb: spi@1a280000: Unevaluated properties are not allowed ('spi-max-frequency' was unexpected)
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm/boot/dts/qcom-sdx55.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/dts/qcom-ipq8064-rb3011.dts | 1 -
+ arch/arm/boot/dts/qcom-ipq8064-v1.0.dtsi  | 1 -
+ 2 files changed, 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/qcom-sdx55.dtsi b/arch/arm/boot/dts/qcom-sdx55.dtsi
-index df3cd9c4ffb9..55ce87b75253 100644
---- a/arch/arm/boot/dts/qcom-sdx55.dtsi
-+++ b/arch/arm/boot/dts/qcom-sdx55.dtsi
-@@ -603,7 +603,7 @@ usb: usb@a6f8800 {
+diff --git a/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts b/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
+index 104eb729c2d6..1796ded31d17 100644
+--- a/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
++++ b/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
+@@ -282,7 +282,6 @@ gsbi5: gsbi@1a200000 {
  
- 			resets = <&gcc GCC_USB30_BCR>;
+ 			spi4: spi@1a280000 {
+ 				status = "okay";
+-				spi-max-frequency = <50000000>;
  
--			usb_dwc3: dwc3@a600000 {
-+			usb_dwc3: usb@a600000 {
- 				compatible = "snps,dwc3";
- 				reg = <0x0a600000 0xcd00>;
- 				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
+ 				pinctrl-0 = <&spi_pins>;
+ 				pinctrl-names = "default";
+diff --git a/arch/arm/boot/dts/qcom-ipq8064-v1.0.dtsi b/arch/arm/boot/dts/qcom-ipq8064-v1.0.dtsi
+index c5abe7151f14..17f65e140e02 100644
+--- a/arch/arm/boot/dts/qcom-ipq8064-v1.0.dtsi
++++ b/arch/arm/boot/dts/qcom-ipq8064-v1.0.dtsi
+@@ -30,7 +30,6 @@ gsbi5: gsbi@1a200000 {
+ 
+ 			spi4: spi@1a280000 {
+ 				status = "okay";
+-				spi-max-frequency = <50000000>;
+ 
+ 				pinctrl-0 = <&spi_pins>;
+ 				pinctrl-names = "default";
 -- 
 2.34.1
 
