@@ -2,131 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC1D734F27
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1F5734F29
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbjFSJHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 05:07:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40342 "EHLO
+        id S230490AbjFSJIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 05:08:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbjFSJHf (ORCPT
+        with ESMTP id S229865AbjFSJIO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 05:07:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF507B4;
-        Mon, 19 Jun 2023 02:07:34 -0700 (PDT)
+        Mon, 19 Jun 2023 05:08:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC29983;
+        Mon, 19 Jun 2023 02:08:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 441AA60B42;
-        Mon, 19 Jun 2023 09:07:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33A63C433C8;
-        Mon, 19 Jun 2023 09:07:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 88FEE60B42;
+        Mon, 19 Jun 2023 09:08:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E905FC433C0;
+        Mon, 19 Jun 2023 09:08:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687165653;
-        bh=14J4WS+8yy469joEoEVl33nkw3ghjN+BWRbdAbpGaU0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B9tlb1O7jbTOkBZh0+L/dMVuqQVsH5U+Wy/XX47i0cD6T/QRklmp/GNNT2/XtMP80
-         3YL4FQgWuyrs5jvAHOJ9wyD+9N8FSJuWyY9WB3ZBjYaGpF8NfjjoXsl0p/SNP+aHXg
-         kVtja0B7ictQY+Ue96WUtQmr2jmfLVjdQ5uYIVO/bSWuuJb/TjurGkOd+Qg++4JSfz
-         tiRGlwp/7c9UF6/tOnLRgds404eejjbY3Vu6zAP7SfsZdJUeHKHyyX6eQx/9U/peRZ
-         3hH4JYTMV8EfDtL2desisfGwrWGJKryttrAQEFp/VLXW3nsV5en8Q+KXKzc1Ez9XMa
-         gNs3HBK7H8XlQ==
-Date:   Mon, 19 Jun 2023 11:07:24 +0200
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Hongxing Zhu <hongxing.zhu@nxp.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Subject: Re: [PATCH v2] PCI: imx6: Save and restore MSI control of RC in
- suspend and resume
-Message-ID: <ZJAazCtc0jx3NDbM@lpieralisi>
-References: <AS8PR04MB8676EC48C27C8A0DF8B35B648CBD9@AS8PR04MB8676.eurprd04.prod.outlook.com>
- <20230317222436.GA1978818@bhelgaas>
- <AS8PR04MB86765E47FE7AAECC121838188C809@AS8PR04MB8676.eurprd04.prod.outlook.com>
- <ZB3I0gpds8OH2+gx@lpieralisi>
- <AS8PR04MB8676A79C4C4F43627D8FE4BC8C8B9@AS8PR04MB8676.eurprd04.prod.outlook.com>
- <ZC2aBGlQRYHHDBqi@lpieralisi>
- <AS8PR04MB8676740A3B1F3159B8EC2DD78C959@AS8PR04MB8676.eurprd04.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <AS8PR04MB8676740A3B1F3159B8EC2DD78C959@AS8PR04MB8676.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        s=k20201202; t=1687165692;
+        bh=nYsHo1/mi4nz30DXQPx6lDr0nZvhK16CBTfpaRXnRxk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Srpb+UyywToj320m2gcEVqI4Og5699S8nuj9wG4+vKPutI/bwB+33aPjD5l+j+WIs
+         jeNMfIVxAaJa7iytiM9Y4utgjePdlMoyRSDIArmZVbH3KKyRBHBFPwlYM21q/80nc1
+         p+kxeCA90QhwsLXDQGSHJ1TltK5D8wBzV+Wf/cfLOxumBxj/a26BHL/wx9ql9z/wMC
+         diTtQkDv19OSmYdbqfXRqrtYwOvui6i4c6CIuPIf1/tjdtYERui6ZrZ/+GVBqQ8YhA
+         foPM/yVd38Phy2MX4GQVOalNcbHiOXk36t15iw8c9odDEGxaaPB1ej3Pgf10Lyv4na
+         bZhCqIXJszoVQ==
+Received: from [82.3.55.74] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1qBArp-006SIh-AE;
+        Mon, 19 Jun 2023 10:08:09 +0100
+Date:   Mon, 19 Jun 2023 10:08:07 +0100
+Message-ID: <87wmzzq0p4.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        kernel test robot <lkp@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, mark.rutland@arm.com, llvm@lists.linux.dev,
+        oe-kbuild-all@lists.linux.dev, Mark Brown <broonie@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH V12 05/10] arm64/perf: Add branch stack support in ARMV8 PMU
+In-Reply-To: <f624966d-5973-0aed-bd73-29ef0530e5ce@arm.com>
+References: <20230615133239.442736-6-anshuman.khandual@arm.com>
+        <202306160706.Uei5XDoi-lkp@intel.com>
+        <883f2a20-fe20-4d43-86cf-7847d59e2169@arm.com>
+        <ZIwpma4SAJ/ZUyh5@arm.com>
+        <f624966d-5973-0aed-bd73-29ef0530e5ce@arm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 82.3.55.74
+X-SA-Exim-Rcpt-To: anshuman.khandual@arm.com, catalin.marinas@arm.com, lkp@intel.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, will@kernel.org, mark.rutland@arm.com, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, broonie@kernel.org, james.clark@arm.com, robh@kernel.org, suzuki.poulose@arm.com, peterz@infradead.org, mingo@redhat.com, acme@kernel.org, linux-perf-users@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 10, 2023 at 06:48:48AM +0000, Hongxing Zhu wrote:
+On Mon, 19 Jun 2023 06:45:07 +0100,
+Anshuman Khandual <anshuman.khandual@arm.com> wrote:
+>=20
+>=20
+>=20
+> On 6/16/23 14:51, Catalin Marinas wrote:
+> > On Fri, Jun 16, 2023 at 06:57:52AM +0530, Anshuman Khandual wrote:
+> >> On 6/16/23 05:12, kernel test robot wrote:
+> >>> kernel test robot noticed the following build errors:
+> >>>
+> >>> [auto build test ERROR on arm64/for-next/core]
+> >>> [also build test ERROR on tip/perf/core acme/perf/core linus/master v=
+6.4-rc6 next-20230615]
+> >>> [If your patch is applied to the wrong git tree, kindly drop us a not=
+e.
+> >>> And when submitting patch, we suggest to use '--base' as documented in
+> >>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> >>>
+> >>> url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khand=
+ual/drivers-perf-arm_pmu-Add-new-sched_task-callback/20230615-223352
+> >>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.g=
+it for-next/core
+> >>> patch link:    https://lore.kernel.org/r/20230615133239.442736-6-ansh=
+uman.khandual%40arm.com
+> >>> patch subject: [PATCH V12 05/10] arm64/perf: Add branch stack support=
+ in ARMV8 PMU
+> >>> config: arm-randconfig-r004-20230615 (https://download.01.org/0day-ci=
+/archive/20230616/202306160706.Uei5XDoi-lkp@intel.com/config)
+> >>> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.=
+git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> >>> reproduce (this is a W=3D1 build):
+> >>>         mkdir -p ~/bin
+> >>>         wget https://raw.githubusercontent.com/intel/lkp-tests/master=
+/sbin/make.cross -O ~/bin/make.cross
+> >>>         chmod +x ~/bin/make.cross
+> >>>         # install arm cross compiling tool for clang build
+> >>>         # apt-get install binutils-arm-linux-gnueabi
+> >>>         git remote add arm64 https://git.kernel.org/pub/scm/linux/ker=
+nel/git/arm64/linux.git
+> >>>         git fetch arm64 for-next/core
+> >>>         git checkout arm64/for-next/core
+> >>>         b4 shazam https://lore.kernel.org/r/20230615133239.442736-6-a=
+nshuman.khandual@arm.com
+> >>>         # save the config file
+> >>>         mkdir build_dir && cp config build_dir/.config
+> >>>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/mak=
+e.cross W=3D1 O=3Dbuild_dir ARCH=3Darm olddefconfig
+> >>>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/mak=
+e.cross W=3D1 O=3Dbuild_dir ARCH=3Darm SHELL=3D/bin/bash drivers/perf/
+> >>
+> >> I am unable to reproduce this on mainline 6.4-rc6 via default cross co=
+mpiler
+> >> on a W=3D1 build. Looking at all other problems reported on the file, =
+it seems
+> >> something is not right here. Reported build problems around these call=
+backs,
+> >> i.e armv8pmu_branch_XXXX() do not make sense as they are available via=
+ config
+> >> CONFIG_PERF_EVENTS which is also enabled along with CONFIG_ARM_PMUV3 i=
+n this
+> >> test config.
+> >=20
+> > Have you tried applying this series on top of the arm64 for-next/core
+> > branch? That's what the robot it testing (in the absence of a --base
+> > option when generating the patches).
+>=20
+> Right, it turned out to be a build problem on arm (32 bit) platform inste=
+ad.
+> After arm_pmuv3.c moved into common ./drivers/perf from ./arch/arm64/kern=
+el/,
+> it can no longer access arch/arm64/include/asm/perf_event.h defined funct=
+ions
+> without breaking arm (32) bit. The following code block needs to be moved=
+ out
+> from arch/arm64/include/asm/perf_event.h into include/linux/perf/arm_pmuv=
+3.h
+> (which is preferred as all call sites are inside drivers/perf/arm_pmuv3.c=
+) or
+> may be arm_pmu.h (which is one step higher in the abstraction).
 
-[...]
+No, that's the wrong approach. The 32bit backend must have its own
+stubs for the stuff it implements or not.
 
-> > I am getting back to this since I am still not convinced and I want to understand
-> > this once for all.
-> > 
-> > We do use dw_pcie_find_capability() in most DWC drivers to find and peek/poke
-> > at eg PCI express capability of the *Root port* (?),
-> > 
-> > eg dw_pcie_wait_for_link()
-> > 
-> > so I assume that for iMX6 dw_pcie_find_capability() does just the same, which
-> > would mean that we are poking the "Message Control" field of the Root port MSI
-> > capability.
-> > 
-> > Either that (which would mean that iMX6 has a HW bug because the RP Message
-> > Control field does not control the delivery of MSIs from endpoints but just for the
-> > root port itself ) or all DWC controllers modelled the root complex MMIO space as
-> > a set of PCI/PCIe capabilities that are NOT necessarily mappable to PCI
-> > specifications defined ones.
-> > 
-> > Can anyone please shed some light on this ? I don't have DWC HW, we need to
-> > know before merging this code.
-> Hi Lorenzo:
-> Regarding my understanding, DWC HW has the PCI/PCIe capability map when
->  it works in RC mode and Spec doesn’t specify these Caps for host controller.
-> And, there are comments describe these callbacks already in pcie-designware.c.
-> ...
-> /*
->  * These interfaces resemble the pci_find_*capability() interfaces, but these
->  * are for configuring host controllers, which are bridges *to* PCI devices but
->  * are not PCI devices themselves.
->  */
-> static u8 __dw_pcie_find_next_cap(struct dw_pcie *pci, u8 cap_ptr,
->                                   u8 cap)
-> ...
-> 
-> 
-
-I still believe this is an integration bug, more so after reading the
-commit Serge pointed out:
-
-75cb8d20c112 ("PCI: imx: Enable MSI from downstream components").
-
-The commit above implies that if you have CONFIG_PCIEPORTBUS enabled,
-you would not need to set the MSI enable bit explicitly because that's
-done by the port driver while requesting RP services.
-
-This means that it is _seen_ by the PCI core as a capability register
-and it also means that if you have CONFIG_PCIEPORTBUS enabled and that
-the port driver disables MSIs, all downstream MSIs are disabled, not
-only the RP ones (as it should be according to the PCI specs).
-
-So, this is a HW bug I am afraid - I will merge this patch but AFAICS
-the HW integration bug is there regardless, however we slice it.
+Just add something like the patch below, and please *test* that a
+32bit VM using PMUv3 doesn't have any regression.
 
 Thanks,
-Lorenzo
+
+	M.
+
+=46rom 017362ca518e6d6ac3262514d1f7f27e73232799 Mon Sep 17 00:00:00 2001
+From: Marc Zyngier <maz@kernel.org>
+Date: Mon, 19 Jun 2023 10:05:52 +0100
+Subject: [PATCH] 32bit hack
+
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+---
+ arch/arm/include/asm/arm_pmuv3.h | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/arch/arm/include/asm/arm_pmuv3.h b/arch/arm/include/asm/arm_pm=
+uv3.h
+index f4db3e75d75f..c4bcb7a18267 100644
+--- a/arch/arm/include/asm/arm_pmuv3.h
++++ b/arch/arm/include/asm/arm_pmuv3.h
+@@ -244,4 +244,22 @@ static inline bool is_pmuv3p5(int pmuver)
+ 	return pmuver >=3D ARMV8_PMU_DFR_VER_V3P5;
+ }
+=20
++/* BRBE stubs */
++static inline void armv8pmu_branch_enable(struct perf_event *event) { }
++static inline void armv8pmu_branch_disable(struct perf_event *event) { }
++static inline void armv8pmu_branch_read(struct pmu_hw_events * cpuc,
++					struct perf_event *event) { }
++static inline void armv8pmu_branch_save(struct arm_pmu *armpmu, void *ctx)=
+ {}
++static inline void armv8pmu_branch_reset(void) {}
++static inline bool armv8pmu_branch_attr_valid(struct perf_event *event)
++{
++	return false;
++}
++static inline void armv8pmu_branch_probe(struct arm_pmu *armpmu) {}
++static inline int armv8pmu_task_ctx_cache_alloc(struct arm_pmu *armpmu)
++{
++	return 0;
++}
++static inline void armv8pmu_task_ctx_cache_free(struct arm_pmu *armpmu) {}
++
+ #endif
+--=20
+2.39.2
+
+
+--=20
+Without deviation from the norm, progress is not possible.
