@@ -2,338 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FED0735CB6
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 19:03:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69517735CBF
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 19:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbjFSRDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 13:03:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54102 "EHLO
+        id S230501AbjFSRHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 13:07:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231341AbjFSRDt (ORCPT
+        with ESMTP id S229537AbjFSRHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 13:03:49 -0400
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4564F1;
-        Mon, 19 Jun 2023 10:03:30 -0700 (PDT)
+        Mon, 19 Jun 2023 13:07:22 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0215124;
+        Mon, 19 Jun 2023 10:07:21 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id 5614622812f47-39ee19cfb77so647437b6e.0;
+        Mon, 19 Jun 2023 10:07:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1687194211; x=1718730211;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=qAdjcjZOKhCJYps/VsVq3P/dtdL65NDTqBgCUh7nKvQ=;
-  b=FQ0BX5JUpDL14UDS2E/w6g+w4palAJyfsNzKlGIfEIM7s6gPAtVIFr3a
-   k6JOV1+ecJwXpYii2zqfOoT1ZniW7HE68BiGHKyuKXyP4wf5FW6RH9DuY
-   hRUb8asO/4CSoSrqfwCoR2RMq0bW5TiDcENMzKLNRReIKdsBhxU9rcowF
-   4=;
-X-IronPort-AV: E=Sophos;i="6.00,255,1681171200"; 
-   d="scan'208";a="341928229"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-189d700f.us-west-2.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 17:03:28 +0000
-Received: from EX19MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2b-m6i4x-189d700f.us-west-2.amazon.com (Postfix) with ESMTPS id 99DFC40D65;
-        Mon, 19 Jun 2023 17:03:26 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWB001.ant.amazon.com (10.250.64.248) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 19 Jun 2023 17:03:26 +0000
-Received: from 88665a182662.ant.amazon.com (10.106.100.47) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 19 Jun 2023 17:03:23 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <edumazet@google.com>, <duanmuquan@baidu.com>
-CC:     <davem@davemloft.net>, <dsahern@kernel.org>, <kuba@kernel.org>,
-        <kuniyu@amazon.com>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <pabeni@redhat.com>
-Subject: Re: [PATCH v2] tcp: fix connection reset due to tw hashdance race.
-Date:   Mon, 19 Jun 2023 10:03:14 -0700
-Message-ID: <20230619170314.42333-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <CANn89iK8snOz8TYOhhwfimC7ykYA78GA3Nyv8x06SZYa1nKdyA@mail.gmail.com>
-References: <CANn89iK8snOz8TYOhhwfimC7ykYA78GA3Nyv8x06SZYa1nKdyA@mail.gmail.com>
+        d=gmail.com; s=20221208; t=1687194441; x=1689786441;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=bRJlXAK0GLifL/6sbIsWFY66HEmTj1aB/zhZvbrx7Lw=;
+        b=Jdg7dcywDJr5WWIe8jqdGKw5ATll9kBe6Wd9iMIAjOh9QvCzolYwxzaO7lp7MxibQd
+         Eunn8/2xk233rmrThMWU2DLTxSihGShHyWm3afwOHsdy1lTycizZPuSxaokFmbsYOsz2
+         CpBecfTOzt1v+7CCa31pPdaie7MhkLlIKhnH1lhQrcaRtlKWySs/pAXi+fkbymmYAMKC
+         kKBtsHqmk8TK3qGnhCpEfzOSMFh5qhiX03acCkS2U76yqIWz7vDfFMJ/UH96pAt0Fkw1
+         QGOIsFhDUkix2nn+5qLRLDXuSr6OgrqzNggde4M4En/PIt3bmvkiFf7yY8/VZa158gJF
+         Pv1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687194441; x=1689786441;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bRJlXAK0GLifL/6sbIsWFY66HEmTj1aB/zhZvbrx7Lw=;
+        b=LcYGGf5wDZvF06wIwIGKjV0FQYLksI/Z9mRjrGrbUhSCI3u2s7Uk4yCY6NLrq6bqU7
+         JfgI5JlNtEGz7E7pMR07VtT2lONfSa+gXg8fM0hfHizsvNvLuF3n+eE5ZlC2+9DLWwWF
+         H+iJVcD65hr4D0pzWoY8C4bDx4q87NeC6YCtkh3gWs5BOpgRugDQJz06kM9BlnnqkS9Y
+         kG5bM8rk11PrNeAVnvfmsqOSpjx7CiG6vc/5CdmpZSWle+aAZY0B3O61HDfLWt+9Flcf
+         SbvouopG88r7TFJLAeKSKObHZGtzdDoLPivQmb10Ry8MfYalYyaAkGMluWSTa3Yng0CE
+         NU+w==
+X-Gm-Message-State: AC+VfDyz5ngwsmVdhuR0+Bi1oD/Dau9IfW79pi0QIoBKsjF+lgDCZO6A
+        EfHSPzEiHSaVvJ38zXkC9FBADCmAvLc=
+X-Google-Smtp-Source: ACHHUZ4B7iIRRgPh8epIfSj0RWc7ZeBy8DxB616R1Q1hL9fMln0Rj9LE7dznGm6dEYpoIkNMsVQGZQ==
+X-Received: by 2002:a05:6808:152b:b0:39e:ddd8:4c4 with SMTP id u43-20020a056808152b00b0039eddd804c4mr3589926oiw.9.1687194440982;
+        Mon, 19 Jun 2023 10:07:20 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bo24-20020a17090b091800b00246f9725ffcsm82713pjb.33.2023.06.19.10.07.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Jun 2023 10:07:19 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <4585ec62-b7bb-9f2a-eee0-07032648e55a@roeck-us.net>
+Date:   Mon, 19 Jun 2023 10:07:17 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.106.100.47]
-X-ClientProxiedBy: EX19D046UWA001.ant.amazon.com (10.13.139.112) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3] hwmon: (k10temp) Enable AMD3255 Proc to show negative
+ temperature
+Content-Language: en-US
+To:     Baskaran Kannan <Baski.Kannan@amd.com>, Mario.Limonciello@amd.com,
+        babu.moger@amd.com, clemens@ladisch.de, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230619165413.806450-1-Baski.Kannan@amd.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230619165413.806450-1-Baski.Kannan@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
-Date: Thu, 8 Jun 2023 08:35:20 +0200
-> On Thu, Jun 8, 2023 at 7:48 AM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
-> >
-> > From: Eric Dumazet <edumazet@google.com>
-> > Date: Wed, 7 Jun 2023 15:32:57 +0200
-> > > On Wed, Jun 7, 2023 at 1:59 PM Duan,Muquan <duanmuquan@baidu.com> wrote:
-> > > >
-> > > > Hi, Eric,
-> > > >
-> > > >  Thanks for your comments!
-> > > >
-> > > >  About the second lookup, I am sorry that I did not give enough explanations about it. Here are some details:
-> > > >
-> > > >  1.  The second lookup can find the tw sock and avoid the connection refuse error on userland applications:
-> > > >
-> > > > If the original sock is found, but when validating its refcnt, it has been destroyed and sk_refcnt has become 0 after decreased by tcp_time_wait()->tcp_done()->inet_csk_destory_sock()->sock_put().The validation for refcnt fails and the lookup process gets a listener sock.
-> > > >
-> > > > When this case occurs, the hashdance has definitely finished，because tcp_done() is executed after inet_twsk_hashdance(). Then if look up the ehash table again, hashdance has already finished, tw sock will be found.
-> > > >
-> > > >  With this fix, logically we can solve the connection reset issue completely when no established sock is found due to hashdance race.In my reproducing environment, the connection refuse error will occur about every 6 hours with only the fix of bad case (2). But with both of the 2 fixes, I tested it many times, the longest test continues for 10 days, it does not occur again,
-> > > >
-> > > >
-> > > >
-> > > > 2. About the performance impact:
-> > > >
-> > > >      A similar scenario is that __inet_lookup_established() will do inet_match() check for the second time, if fails it will look up    the list again. It is the extra effort to reduce the race impact without using reader lock. inet_match() failure occurs with about the same probability with refcnt validation failure in my test environment.
-> > > >
-> > > >  The second lookup will only be done in the condition that FIN segment gets a listener sock.
-> > > >
-> > > >   About the performance impact:
-> > > >
-> > > > 1)  Most of the time, this condition will not met, the added codes introduces at most 3 comparisons for each segment.
-> > > >
-> > > > The second inet_match() in __inet_lookup_established()  does least 3 comparisons for each segmet.
-> > > >
-> > > >
-> > > > 2)  When this condition is met, the probability is very small. The impact is similar to the second try due to inet_match() failure. Since tw sock can definitely be found in the second try, I think this cost is worthy to avoid connection reused error on userland applications.
-> > > >
-> > > >
-> > > >
-> > > > My understanding is, current philosophy is avoiding the reader lock by tolerating the minor defect which occurs in a small probability.For example, if the FIN from passive closer is dropped due to the found sock is destroyed, a retransmission can be tolerated, it only makes the connection termination slower. But I think the bottom line is that it does not affect the userland applications’ functionality. If application fails to connect due to the hashdance race, it can’t be tolerated. In fact, guys from product department push hard on the connection refuse error.
-> > > >
-> > > >
-> > > > About bad case (2):
-> > > >
-> > > >  tw sock is found, but its tw_refcnt has not been set to 3, it is still 0, validating for sk_refcnt will fail.
-> > > >
-> > > > I do not know the reason why setting tw_refcnt after adding it into list, could anyone help point out the reason? It adds  extra race because the new added tw sock may be found and checked in other CPU concurrently before ƒsetting tw_refcnt to 3.
-> > > >
-> > > > By setting tw_refcnt to 3 before adding it into list, this case will be solved, and almost no cost. In my reproducing environment, it occurs more frequently than bad case (1), it appears about every 20 minutes, bad case (1) appears about every 6 hours.
-> > > >
-> > > >
-> > > >
-> > > > About the bucket spinlock, the original established sock and tw sock are stored in the ehash table, I concern about the performance when there are lots of short TCP connections, the reader lock may affect the performance of connection creation and termination. Could you share some details of your idea? Thanks in advance.
-> > > >
-> > > >
-> > >
-> > > Again, you can write a lot of stuff, the fact is that your patch does
-> > > not solve the issue.
-> > >
-> > > You could add 10 lookups, and still miss some cases, because they are
-> > > all RCU lookups with no barriers.
-> > >
-> > > In order to solve the issue of packets for the same 4-tuple being
-> > > processed by many cpus, the only way to solve races is to add mutual
-> > > exclusion.
-> > >
-> > > Note that we already have to lock the bucket spinlock every time we
-> > > transition a request socket to socket, a socket to timewait, or any
-> > > insert/delete.
-> > >
-> > > We need to expand the scope of this lock, and cleanup things that we
-> > > added in the past, because we tried too hard to 'detect races'
-> >
-> > How about this ?  This is still a workaround though, retry sounds
-> > better than expanding the scope of the lock given the race is rare.
+On 6/19/23 09:54, Baskaran Kannan wrote:
+> Industrial processor i3255 supports temperatures -40 deg celcius
+> to 105 deg Celcius. The current implementation of k10temp_read_temp
+> rounds off any negative
+> temperatures to '0'. To fix this, the following changes have been made.
+> Added a flag 'disp_negative' to struct k10temp_data to support
+> AMD i3255 processors. Flag 'disp_negative' is set if 3255 processor
+> is found during k10temp_probe.  Flag 'disp_negative' is used to determine
+> whether to round off negative temperatures to '0' in k10temp_read_temp.
 > 
-> The chance of two cpus having to hold the same spinlock is rather small.
-> 
-> Algo is the following:
-> 
-> Attempt a lockless/RCU lookup.
-> 
-> 1) Socket is found, we are good to go. Fast path is still fast.
-> 
-> 2) Socket  is not found in ehash
->    - We lock the bucket spinlock.
->    - We retry the lookup
->    - If socket found, continue with it (release the spinlock when
-> appropriate, after all write manipulations in the bucket are done)
->    - If socket still not found, we lookup a listener.
->       We insert a TCP_NEW_SYN_RECV ....
->        Again, we release the spinlock when appropriate, after all
-> write manipulations in the bucket are done)
-> 
-> No more races, and the fast path is the same.
+> Signed-off-by: Baskaran Kannan <Baski.Kannan@amd.com>
 
-I was looking around the issue this weekend.  Is this what you were
-thinking ?  I'm wondering if you were also thinking another races like
-found_dup_sk/own_req things. e.g.) acquire ehash lock when we start to
-process reqsk ?
+Now you have made changes you were not asked to make, extended the flag
+to cover a range of processors instead of just i3255, and did not provide
+a change log nor a comment in the code describing why processors with
+certain model numbers should display negative temperatures.
 
-Duan, could you test the diff below ?
+Guenter
 
-If this resolves the FIN issue, we can also revert 3f4ca5fafc08 ("tcp:
-avoid the lookup process failing to get sk in ehash table").
+> ---
+>   drivers/hwmon/k10temp.c | 8 ++++++--
+>   1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+> index 7b177b9fbb09..2613420d43ff 100644
+> --- a/drivers/hwmon/k10temp.c
+> +++ b/drivers/hwmon/k10temp.c
+> @@ -86,6 +86,7 @@ struct k10temp_data {
+>   	u32 show_temp;
+>   	bool is_zen;
+>   	u32 ccd_offset;
+> +	bool disp_negative;
+>   };
+>   
+>   #define TCTL_BIT	0
+> @@ -204,12 +205,12 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
+>   		switch (channel) {
+>   		case 0:		/* Tctl */
+>   			*val = get_raw_temp(data);
+> -			if (*val < 0)
+> +			if (*val < 0 && !data->disp_negative)
+>   				*val = 0;
+>   			break;
+>   		case 1:		/* Tdie */
+>   			*val = get_raw_temp(data) - data->temp_offset;
+> -			if (*val < 0)
+> +			if (*val < 0 && !data->disp_negative)
+>   				*val = 0;
+>   			break;
+>   		case 2 ... 13:		/* Tccd{1-12} */
+> @@ -405,6 +406,9 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>   	data->pdev = pdev;
+>   	data->show_temp |= BIT(TCTL_BIT);	/* Always show Tctl */
+>   
+> +	if (boot_cpu_data.x86 == 0x17 && boot_cpu_data.x86_model < 0x8)
+> +		data->disp_negative = true;
+> +
+>   	if (boot_cpu_data.x86 == 0x15 &&
+>   	    ((boot_cpu_data.x86_model & 0xf0) == 0x60 ||
+>   	     (boot_cpu_data.x86_model & 0xf0) == 0x70)) {
 
----8<---
-diff --git a/include/net/inet6_hashtables.h b/include/net/inet6_hashtables.h
-index 56f1286583d3..bb8e49a6e80f 100644
---- a/include/net/inet6_hashtables.h
-+++ b/include/net/inet6_hashtables.h
-@@ -48,6 +48,11 @@ struct sock *__inet6_lookup_established(struct net *net,
- 					const u16 hnum, const int dif,
- 					const int sdif);
- 
-+struct sock *__inet6_lookup_established_lock(struct net *net, struct inet_hashinfo *hashinfo,
-+					     const struct in6_addr *saddr, const __be16 sport,
-+					     const struct in6_addr *daddr, const u16 hnum,
-+					     const int dif, const int sdif);
-+
- struct sock *inet6_lookup_listener(struct net *net,
- 				   struct inet_hashinfo *hashinfo,
- 				   struct sk_buff *skb, int doff,
-@@ -70,9 +75,15 @@ static inline struct sock *__inet6_lookup(struct net *net,
- 	struct sock *sk = __inet6_lookup_established(net, hashinfo, saddr,
- 						     sport, daddr, hnum,
- 						     dif, sdif);
--	*refcounted = true;
--	if (sk)
-+
-+	if (!sk)
-+		sk = __inet6_lookup_established_lock(net, hashinfo, saddr, sport,
-+						     daddr, hnum, dif, sdif);
-+	if (sk) {
-+		*refcounted = true;
- 		return sk;
-+	}
-+
- 	*refcounted = false;
- 	return inet6_lookup_listener(net, hashinfo, skb, doff, saddr, sport,
- 				     daddr, hnum, dif, sdif);
-diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.h
-index 99bd823e97f6..ad97fec63d7a 100644
---- a/include/net/inet_hashtables.h
-+++ b/include/net/inet_hashtables.h
-@@ -379,6 +379,12 @@ struct sock *__inet_lookup_established(struct net *net,
- 				       const __be32 daddr, const u16 hnum,
- 				       const int dif, const int sdif);
- 
-+struct sock *__inet_lookup_established_lock(struct net *net,
-+					    struct inet_hashinfo *hashinfo,
-+					    const __be32 saddr, const __be16 sport,
-+					    const __be32 daddr, const u16 hnum,
-+					    const int dif, const int sdif);
-+
- static inline struct sock *
- 	inet_lookup_established(struct net *net, struct inet_hashinfo *hashinfo,
- 				const __be32 saddr, const __be16 sport,
-@@ -402,9 +408,14 @@ static inline struct sock *__inet_lookup(struct net *net,
- 
- 	sk = __inet_lookup_established(net, hashinfo, saddr, sport,
- 				       daddr, hnum, dif, sdif);
--	*refcounted = true;
--	if (sk)
-+	if (!sk)
-+		sk = __inet_lookup_established_lock(net, hashinfo, saddr, sport,
-+						    daddr, hnum, dif, sdif);
-+	if (sk) {
-+		*refcounted = true;
- 		return sk;
-+	}
-+
- 	*refcounted = false;
- 	return __inet_lookup_listener(net, hashinfo, skb, doff, saddr,
- 				      sport, daddr, hnum, dif, sdif);
-diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-index e7391bf310a7..1eeadaf1c9f9 100644
---- a/net/ipv4/inet_hashtables.c
-+++ b/net/ipv4/inet_hashtables.c
-@@ -514,6 +514,41 @@ struct sock *__inet_lookup_established(struct net *net,
- }
- EXPORT_SYMBOL_GPL(__inet_lookup_established);
- 
-+struct sock *__inet_lookup_established_lock(struct net *net, struct inet_hashinfo *hashinfo,
-+					    const __be32 saddr, const __be16 sport,
-+					    const __be32 daddr, const u16 hnum,
-+					    const int dif, const int sdif)
-+{
-+	const __portpair ports = INET_COMBINED_PORTS(sport, hnum);
-+	INET_ADDR_COOKIE(acookie, saddr, daddr);
-+	const struct hlist_nulls_node *node;
-+	struct inet_ehash_bucket *head;
-+	unsigned int hash;
-+	spinlock_t *lock;
-+	struct sock *sk;
-+
-+	hash = inet_ehashfn(net, daddr, hnum, saddr, sport);
-+	head = inet_ehash_bucket(hashinfo, hash);
-+	lock = inet_ehash_lockp(hashinfo, hash);
-+
-+	spin_lock(lock);
-+	sk_nulls_for_each(sk, node, &head->chain) {
-+		if (sk->sk_hash != hash)
-+			continue;
-+
-+		if (unlikely(!inet_match(net, sk, acookie, ports, dif, sdif)))
-+			continue;
-+
-+		sock_hold(sk);
-+		spin_unlock(lock);
-+		return sk;
-+	}
-+	spin_unlock(lock);
-+
-+	return NULL;
-+}
-+EXPORT_SYMBOL_GPL(__inet_lookup_established_lock);
-+
- /* called with local bh disabled */
- static int __inet_check_established(struct inet_timewait_death_row *death_row,
- 				    struct sock *sk, __u16 lport,
-diff --git a/net/ipv6/inet6_hashtables.c b/net/ipv6/inet6_hashtables.c
-index b64b49012655..1b2c971859c0 100644
---- a/net/ipv6/inet6_hashtables.c
-+++ b/net/ipv6/inet6_hashtables.c
-@@ -89,6 +89,40 @@ struct sock *__inet6_lookup_established(struct net *net,
- }
- EXPORT_SYMBOL(__inet6_lookup_established);
- 
-+struct sock *__inet6_lookup_established_lock(struct net *net, struct inet_hashinfo *hashinfo,
-+					     const struct in6_addr *saddr, const __be16 sport,
-+					     const struct in6_addr *daddr, const u16 hnum,
-+					     const int dif, const int sdif)
-+{
-+	const __portpair ports = INET_COMBINED_PORTS(sport, hnum);
-+	const struct hlist_nulls_node *node;
-+	struct inet_ehash_bucket *head;
-+	unsigned int hash;
-+	spinlock_t *lock;
-+	struct sock *sk;
-+
-+	hash = inet6_ehashfn(net, daddr, hnum, saddr, sport);
-+	head = inet_ehash_bucket(hashinfo, hash);
-+	lock = inet_ehash_lockp(hashinfo, hash);
-+
-+	spin_lock(lock);
-+	sk_nulls_for_each(sk, node, &head->chain) {
-+		if (sk->sk_hash != hash)
-+			continue;
-+
-+		if (unlikely(!inet6_match(net, sk, saddr, daddr, ports, dif, sdif)))
-+			continue;
-+
-+		sock_hold(sk);
-+		spin_unlock(lock);
-+		return sk;
-+	}
-+	spin_unlock(lock);
-+
-+	return NULL;
-+}
-+EXPORT_SYMBOL(__inet6_lookup_established_lock);
-+
- static inline int compute_score(struct sock *sk, struct net *net,
- 				const unsigned short hnum,
- 				const struct in6_addr *daddr,
----8<---
