@@ -2,67 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77FD67349F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 04:15:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D3E7349F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 04:15:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbjFSCPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 22:15:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45386 "EHLO
+        id S229592AbjFSCPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 22:15:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjFSCPf (ORCPT
+        with ESMTP id S229494AbjFSCPb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 22:15:35 -0400
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144A4E47;
-        Sun, 18 Jun 2023 19:15:34 -0700 (PDT)
-Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-77e35504c1bso72174939f.1;
-        Sun, 18 Jun 2023 19:15:34 -0700 (PDT)
+        Sun, 18 Jun 2023 22:15:31 -0400
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01B8E47;
+        Sun, 18 Jun 2023 19:15:30 -0700 (PDT)
+Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-77e24ace5a8so146272039f.0;
+        Sun, 18 Jun 2023 19:15:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687140933; x=1689732933;
+        d=1e100.net; s=20221208; t=1687140930; x=1689732930;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=bBtnlsl4Pv/CEloCUaVVZxW6xo2UFnTXvxqXhklKZoE=;
-        b=F5G9pRqhc5Cjsfg18aNpWbo5KZrFVgZ7ffKzGXaOnp0SFk+QyL1JHtuvbruDBqAG6C
-         WRVjbUkiDcujmaESnfQjI2Ota77+xRuEzc4g3KD7GPVHe4cSdqUWUXfTDuAaGU2kL5NK
-         0Q/c32e7BE9/LVc8JLeHJwocuds2oPgvDj44k3IO1eJPF5WboKkdjHKRQkFSEoX34m17
-         m9RtjajHnoxU5TiMOd/DYlMxq+wyjUFbxbquJ9QJbbcbyjsrLM4x5u/CGG9Mhaa7Peld
-         I4YdH/EFDc1A6FfyB3bdBHZ6fQhv3lNSgoOCVxgX9nHFMHV2WDdggCBVImY14RjAdC0S
-         vdLQ==
-X-Gm-Message-State: AC+VfDz/7J9esFyODZADHYkCNj+axDXNka2z+MrCBcw4vwM+y2ssG9JN
-        yHPSYSxBGWZQxVQ7dh/SOQ==
-X-Google-Smtp-Source: ACHHUZ4vbf5Ns9/6gGG0RTqSrtAFSQNlqmKu62lK5EfG6OfihpRyqotDLGVxGu+nbKPTCZABchn2lw==
-X-Received: by 2002:a5d:8f95:0:b0:766:48cf:6ca9 with SMTP id l21-20020a5d8f95000000b0076648cf6ca9mr8693407iol.12.1687140933249;
-        Sun, 18 Jun 2023 19:15:33 -0700 (PDT)
+        bh=32Swg/UjoS3cjV/nFi0Bc3Ya5tQYAIpuii1MxYpla+0=;
+        b=DSNq1iY/q3vXTnQFmvlLkw+K6+cfxRoVTbzbHJ6w+eqsC5Er6QJNuRRBVulcYyhGMw
+         yJBnsuFYp+2NHRE9+1k2qqbBCMfnrDMt7cK2fLcrqSJqwM4Kntp1fxdFdSuvLZT4sz2X
+         bBMfop6LC04d+59Kx3STEzhAey5Aj/TO/sXl7snNrc1LB/LZVISLha90SHBunBXc3rjJ
+         Id2RTtho7sWkJXv9HLBL+ulSAkqEbTNXzEqejCDZKIDUbNyMAiYKnmDDYpfU3ExRnMjx
+         mv5O8VrWbJ7/+qaiUE/tvbenv9ynTgt5vgN5jJNFn+c+9846Pr/1t4RSGor+ocYs2K6U
+         wotw==
+X-Gm-Message-State: AC+VfDzL+PK8W7mazzzEAyaAdtzZwxHLo12ErfYD7/YFC7T1IU31CEnk
+        QhvqTm3HZll6YwIRUeANQA==
+X-Google-Smtp-Source: ACHHUZ5TCWb4WJX/SaVFMO5AYbmrF1gAF1OID/i5CY95XSzj4oglTH4qvR0Wg6hTT1ROypX5YAMAiQ==
+X-Received: by 2002:a92:90f:0:b0:33d:85c3:93ee with SMTP id y15-20020a92090f000000b0033d85c393eemr7373943ilg.17.1687140930209;
+        Sun, 18 Jun 2023 19:15:30 -0700 (PDT)
 Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id k25-20020a02cb59000000b0042675e04900sm290517jap.119.2023.06.18.19.15.31
+        by smtp.gmail.com with ESMTPSA id h1-20020a92c081000000b003421d25e5a2sm1591707ile.50.2023.06.18.19.15.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Jun 2023 19:15:32 -0700 (PDT)
-Received: (nullmailer pid 2833 invoked by uid 1000);
+        Sun, 18 Jun 2023 19:15:29 -0700 (PDT)
+Received: (nullmailer pid 2830 invoked by uid 1000);
         Mon, 19 Jun 2023 02:15:27 -0000
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
-To:     niravkumar.l.rabara@intel.com
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Adrian Ng Ho Yin <adrian.ho.yin.ng@intel.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Wen Ping <wen.ping.teh@intel.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>, netdev@vger.kernel.org,
-        Philipp Zabel <p.zabel@pengutronix.de>
-In-Reply-To: <20230618132235.728641-3-niravkumar.l.rabara@intel.com>
-References: <20230618132235.728641-1-niravkumar.l.rabara@intel.com>
- <20230618132235.728641-3-niravkumar.l.rabara@intel.com>
-Message-Id: <168714092772.2813.6608190334028827343.robh@kernel.org>
-Subject: Re: [PATCH 2/4] dt-bindings: clock: Add Intel Agilex5 clocks and
- resets
+To:     Furkan Kardame <f.kardame@manjaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        arnd@arndb.de, linux-kernel@vger.kernel.org, conor+dt@kernel.org,
+        dsterba@suse.com, heiko@sntech.de,
+        linux-rockchip@lists.infradead.org, deller@gmx.de,
+        devicetree@vger.kernel.org, broonie@kernel.org
+In-Reply-To: <20230617135315.25441-2-f.kardame@manjaro.org>
+References: <20230617135315.25441-1-f.kardame@manjaro.org>
+ <20230617135315.25441-2-f.kardame@manjaro.org>
+Message-Id: <168714092636.2784.10614022790347799844.robh@kernel.org>
+Subject: Re: [PATCHv2 1/2] dt-bindings: arm: rockchip: Add Firefly Station
+ P2
 Date:   Sun, 18 Jun 2023 20:15:27 -0600
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
@@ -76,37 +70,34 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Sun, 18 Jun 2023 21:22:33 +0800, niravkumar.l.rabara@intel.com wrote:
-> From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+On Sat, 17 Jun 2023 16:53:14 +0300, Furkan Kardame wrote:
+> Station P2 is a single board computer by firefly based
+> on rk3568 soc
 > 
-> Add clock and reset ID definitions for Intel Agilex5 SoCFPGA
-> 
-> Co-developed-by: Teh Wen Ping <wen.ping.teh@intel.com>
-> Signed-off-by: Teh Wen Ping <wen.ping.teh@intel.com>
-> Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+> Signed-off-by: Furkan Kardame <f.kardame@manjaro.org>
 > ---
->  .../bindings/clock/intel,agilex5.yaml         |  42 ++++++++
->  include/dt-bindings/clock/agilex5-clock.h     | 100 ++++++++++++++++++
->  .../dt-bindings/reset/altr,rst-mgr-agilex5.h  |  79 ++++++++++++++
->  3 files changed, 221 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/intel,agilex5.yaml
->  create mode 100644 include/dt-bindings/clock/agilex5-clock.h
->  create mode 100644 include/dt-bindings/reset/altr,rst-mgr-agilex5.h
+>  Documentation/devicetree/bindings/arm/rockchip.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
+./Documentation/devicetree/bindings/arm/rockchip.yaml:189:1: [error] syntax error: found character '\t' that cannot start any token (syntax)
 
 dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/intel,agilex5.yaml: title: 'Intel SoCFPGA Agilex5 platform clock controller binding' should not be valid under {'pattern': '([Bb]inding| [Ss]chema)'}
-	hint: Everything is a binding/schema, no need to say it. Describe what hardware the binding is for.
-	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+make[1]: *** Deleting file 'Documentation/devicetree/bindings/arm/rockchip.example.dts'
+Documentation/devicetree/bindings/arm/rockchip.yaml:189:1: found a tab character that violates indentation
+make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/arm/rockchip.example.dts] Error 1
+make[1]: *** Waiting for unfinished jobs....
+./Documentation/devicetree/bindings/arm/rockchip.yaml:189:1: found a tab character that violates indentation
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/arm/rockchip.yaml: ignoring, error parsing file
+make: *** [Makefile:1512: dt_binding_check] Error 2
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230618132235.728641-3-niravkumar.l.rabara@intel.com
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230617135315.25441-2-f.kardame@manjaro.org
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
