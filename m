@@ -2,68 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5961734AB2
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 05:43:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B33EE734AB6
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 05:44:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbjFSDnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 23:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36254 "EHLO
+        id S229599AbjFSDn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 23:43:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjFSDnM (ORCPT
+        with ESMTP id S229554AbjFSDn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 23:43:12 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C95FC;
-        Sun, 18 Jun 2023 20:43:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687146186; x=1718682186;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=t5NJVxXP5HMKsYrQDJqtpkg7zu4vWzJYowr7YxRo3qA=;
-  b=EzloyZKGFw5yHDK4/YjwvbD7nikbXg/MY0+DdimPzGB4L/wkT4b7zl25
-   6v8oA4N++6FTzk1hKTz5ybPTheBXEg+a1ElVaEDA7OtKWcgVQVIt+qbUw
-   EL2IAm2EFa01AFyAxdMacObiUkt0gz0UybjjRtU1snRfSPHaBD6ZjAM5T
-   AT33nFKJP4krz1NW5O1g8Ehfu+QkeMwaikf1uoREuPCxOGO03CJkMqxna
-   M63s9cZCP7sNFOBJ8HNFW84+vY6ibBSmfLbSHKAMcSN451KRbORfdQ7Qt
-   mbagVgcofST5wa8VDOi6N7HfFWYNfP9+sqMVN0ZCY5/efAC7vnpkOhksO
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="425486593"
-X-IronPort-AV: E=Sophos;i="6.00,253,1681196400"; 
-   d="scan'208";a="425486593"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2023 20:43:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="707741632"
-X-IronPort-AV: E=Sophos;i="6.00,253,1681196400"; 
-   d="scan'208";a="707741632"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 18 Jun 2023 20:43:02 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qB5nB-0004II-16;
-        Mon, 19 Jun 2023 03:43:01 +0000
-Date:   Mon, 19 Jun 2023 11:42:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vidya Sagar <vidyas@nvidia.com>, lpieralisi@kernel.org,
-        kw@linux.com, robh@kernel.org, bhelgaas@google.com,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        Sergey.Semin@baikalelectronics.ru
-Cc:     oe-kbuild-all@lists.linux.dev, linux-pci@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kthota@nvidia.com, mmaddireddy@nvidia.com, vidyas@nvidia.com,
-        sagar.tv@gmail.com
-Subject: Re: [PATCH V2] Revert "PCI: tegra194: Enable support for 256 Byte
- payload"
-Message-ID: <202306191113.M2RDKBvQ-lkp@intel.com>
-References: <20230619014218.1970846-1-vidyas@nvidia.com>
+        Sun, 18 Jun 2023 23:43:56 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 601F1FC;
+        Sun, 18 Jun 2023 20:43:53 -0700 (PDT)
+Received: from loongson.cn (unknown [10.40.46.158])
+        by gateway (Coremail) with SMTP id _____8BxL_D4zo9kC7wGAA--.13923S3;
+        Mon, 19 Jun 2023 11:43:52 +0800 (CST)
+Received: from [192.168.124.126] (unknown [10.40.46.158])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxluT2zo9ka8QfAA--.23712S3;
+        Mon, 19 Jun 2023 11:43:50 +0800 (CST)
+Subject: Re: [PATCH v13 03/30] LoongArch: KVM: Implement kvm hardware enable,
+ disable interface
+To:     "bibo, mao" <bibo.mao@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Xi Ruoyao <xry111@xry111.site>, tangyouling@loongson.cn,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20230609090832.2131037-1-zhaotianrui@loongson.cn>
+ <20230609090832.2131037-4-zhaotianrui@loongson.cn>
+ <cc73aaf7-85bf-2062-6d1b-f1cbb70242f8@loongson.cn>
+From:   zhaotianrui <zhaotianrui@loongson.cn>
+Message-ID: <8bc58ebf-080e-fdb9-5b79-0bfe8412bd32@loongson.cn>
+Date:   Mon, 19 Jun 2023 11:43:50 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230619014218.1970846-1-vidyas@nvidia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <cc73aaf7-85bf-2062-6d1b-f1cbb70242f8@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID: AQAAf8DxluT2zo9ka8QfAA--.23712S3
+X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj93XoWxXw13KF45CFWUZrW7JF1kJFc_yoW5tr1rpr
+        1kAFW5JrWUJrn3GF9xXFn8AFy5Ary8G3ZrJF1Iqa4UJr429r1FgFyjgryqgF15Xw48JF10
+        yr1jgrnxuF1DJrgCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+        AVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
+        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67
+        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
+        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14
+        v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8
+        JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j5o7tUUU
+        UU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,118 +76,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vidya,
 
-kernel test robot noticed the following build errors:
+在 2023/6/13 下午8:49, bibo, mao 写道:
+>
+>
+> 在 2023/6/9 17:08, Tianrui Zhao 写道:
+>> Implement kvm hardware enable, disable interface, setting
+>> the guest config register to enable virtualization features
+>> when called the interface.
+>>
+>> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
+>> ---
+>>   arch/loongarch/kvm/main.c | 64 +++++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 64 insertions(+)
+>>
+>> diff --git a/arch/loongarch/kvm/main.c b/arch/loongarch/kvm/main.c
+>> index f98c1619725f..5ebae1ea7565 100644
+>> --- a/arch/loongarch/kvm/main.c
+>> +++ b/arch/loongarch/kvm/main.c
+>> @@ -195,6 +195,70 @@ static void _kvm_init_gcsr_flag(void)
+>>       set_gcsr_sw_flag(LOONGARCH_CSR_PERFCNTR3);
+>>   }
+>>   +void kvm_init_vmcs(struct kvm *kvm)
+>> +{
+>> +    kvm->arch.vmcs = vmcs;
+>> +}
+>> +
+>> +long kvm_arch_dev_ioctl(struct file *filp,
+>> +            unsigned int ioctl, unsigned long arg)
+>> +{
+>> +    return -ENOIOCTLCMD;
+>> +}
+>> +
+>> +#ifdef CONFIG_KVM_GENERIC_HARDWARE_ENABLING
+> Can we remove macro CONFIG_KVM_GENERIC_HARDWARE_ENABLING here since it 
+> is always enabled? The other looks good to me.
+>
+> Reviewed-by: Bibo Mao <maobibo@loongson.cn>
+>
+> Regards
+> Bibo, Mao
+Thanks, this CONFIG_KVM_GENERIC_HARDWARE_ENABLING is meaningless, and I 
+will remove it.
 
-[auto build test ERROR on pci/next]
-[also build test ERROR on pci/for-linus linus/master v6.4-rc7 next-20230616]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Tianrui Zhao
+>> +int kvm_arch_hardware_enable(void)
+>> +{
+>> +    unsigned long env, gcfg = 0;
+>> +
+>> +    env = read_csr_gcfg();
+>> +    /* First init gtlbc, gcfg, gstat, gintc. All guest use the same 
+>> config */
+>> +    clear_csr_gtlbc(CSR_GTLBC_USETGID | CSR_GTLBC_TOTI);
+>> +    write_csr_gcfg(0);
+>> +    write_csr_gstat(0);
+>> +    write_csr_gintc(0);
+>> +
+>> +    /*
+>> +     * Enable virtualization features granting guest direct control of
+>> +     * certain features:
+>> +     * GCI=2:       Trap on init or unimplement cache instruction.
+>> +     * TORU=0:      Trap on Root Unimplement.
+>> +     * CACTRL=1:    Root control cache.
+>> +     * TOP=0:       Trap on Previlege.
+>> +     * TOE=0:       Trap on Exception.
+>> +     * TIT=0:       Trap on Timer.
+>> +     */
+>> +    if (env & CSR_GCFG_GCIP_ALL)
+>> +        gcfg |= CSR_GCFG_GCI_SECURE;
+>> +    if (env & CSR_GCFG_MATC_ROOT)
+>> +        gcfg |= CSR_GCFG_MATC_ROOT;
+>> +
+>> +    gcfg |= CSR_GCFG_TIT;
+>> +    write_csr_gcfg(gcfg);
+>> +
+>> +    kvm_flush_tlb_all();
+>> +
+>> +    /* Enable using TGID  */
+>> +    set_csr_gtlbc(CSR_GTLBC_USETGID);
+>> +    kvm_debug("gtlbc:%llx gintc:%llx gstat:%llx gcfg:%llx",
+>> +            read_csr_gtlbc(), read_csr_gintc(),
+>> +            read_csr_gstat(), read_csr_gcfg());
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +void kvm_arch_hardware_disable(void)
+>> +{
+>> +    clear_csr_gtlbc(CSR_GTLBC_USETGID | CSR_GTLBC_TOTI);
+>> +    write_csr_gcfg(0);
+>> +    write_csr_gstat(0);
+>> +    write_csr_gintc(0);
+>> +
+>> +    /* Flush any remaining guest TLB entries */
+>> +    kvm_flush_tlb_all();
+>> +}
+>> +#endif
+>> +
+>>   static int kvm_loongarch_env_init(void)
+>>   {
+>>       struct kvm_context *context;
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vidya-Sagar/Revert-PCI-tegra194-Enable-support-for-256-Byte-payload/20230619-094403
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20230619014218.1970846-1-vidyas%40nvidia.com
-patch subject: [PATCH V2] Revert "PCI: tegra194: Enable support for 256 Byte payload"
-config: arm64-defconfig (https://download.01.org/0day-ci/archive/20230619/202306191113.M2RDKBvQ-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230619/202306191113.M2RDKBvQ-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306191113.M2RDKBvQ-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/pci/controller/dwc/pcie-tegra194.c: In function 'tegra_pcie_dw_host_init':
->> drivers/pci/controller/dwc/pcie-tegra194.c:906:17: error: 'val_16' undeclared (first use in this function)
-     906 |                 val_16 = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base +
-         |                 ^~~~~~
-   drivers/pci/controller/dwc/pcie-tegra194.c:906:17: note: each undeclared identifier is reported only once for each function it appears in
-   drivers/pci/controller/dwc/pcie-tegra194.c: In function 'pex_ep_event_pex_rst_deassert':
-   drivers/pci/controller/dwc/pcie-tegra194.c:1865:17: error: 'val_16' undeclared (first use in this function)
-    1865 |                 val_16 = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base +
-         |                 ^~~~~~
-
-
-vim +/val_16 +906 drivers/pci/controller/dwc/pcie-tegra194.c
-
-56e15a238d9278 Vidya Sagar   2019-08-13  867  
-64451ac83fe6ab Bjorn Helgaas 2022-08-04  868  static int tegra_pcie_dw_host_init(struct dw_pcie_rp *pp)
-56e15a238d9278 Vidya Sagar   2019-08-13  869  {
-56e15a238d9278 Vidya Sagar   2019-08-13  870  	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-f1ab409d578752 Vidya Sagar   2022-07-21  871  	struct tegra_pcie_dw *pcie = to_tegra_pcie(pci);
-56e15a238d9278 Vidya Sagar   2019-08-13  872  	u32 val;
-56e15a238d9278 Vidya Sagar   2019-08-13  873  
-275e88b06a277c Rob Herring   2020-12-18  874  	pp->bridge->ops = &tegra_pci_ops;
-275e88b06a277c Rob Herring   2020-12-18  875  
-369b868f4a2ef8 Vidya Sagar   2020-11-26  876  	if (!pcie->pcie_cap_base)
-369b868f4a2ef8 Vidya Sagar   2020-11-26  877  		pcie->pcie_cap_base = dw_pcie_find_capability(&pcie->pci,
-369b868f4a2ef8 Vidya Sagar   2020-11-26  878  							      PCI_CAP_ID_EXP);
-369b868f4a2ef8 Vidya Sagar   2020-11-26  879  
-56e15a238d9278 Vidya Sagar   2019-08-13  880  	val = dw_pcie_readl_dbi(pci, PCI_IO_BASE);
-56e15a238d9278 Vidya Sagar   2019-08-13  881  	val &= ~(IO_BASE_IO_DECODE | IO_BASE_IO_DECODE_BIT8);
-56e15a238d9278 Vidya Sagar   2019-08-13  882  	dw_pcie_writel_dbi(pci, PCI_IO_BASE, val);
-56e15a238d9278 Vidya Sagar   2019-08-13  883  
-56e15a238d9278 Vidya Sagar   2019-08-13  884  	val = dw_pcie_readl_dbi(pci, PCI_PREF_MEMORY_BASE);
-56e15a238d9278 Vidya Sagar   2019-08-13  885  	val |= CFG_PREF_MEM_LIMIT_BASE_MEM_DECODE;
-56e15a238d9278 Vidya Sagar   2019-08-13  886  	val |= CFG_PREF_MEM_LIMIT_BASE_MEM_LIMIT_DECODE;
-56e15a238d9278 Vidya Sagar   2019-08-13  887  	dw_pcie_writel_dbi(pci, PCI_PREF_MEMORY_BASE, val);
-56e15a238d9278 Vidya Sagar   2019-08-13  888  
-56e15a238d9278 Vidya Sagar   2019-08-13  889  	dw_pcie_writel_dbi(pci, PCI_BASE_ADDRESS_0, 0);
-56e15a238d9278 Vidya Sagar   2019-08-13  890  
-56e15a238d9278 Vidya Sagar   2019-08-13  891  	/* Enable as 0xFFFF0001 response for CRS */
-56e15a238d9278 Vidya Sagar   2019-08-13  892  	val = dw_pcie_readl_dbi(pci, PORT_LOGIC_AMBA_ERROR_RESPONSE_DEFAULT);
-56e15a238d9278 Vidya Sagar   2019-08-13  893  	val &= ~(AMBA_ERROR_RESPONSE_CRS_MASK << AMBA_ERROR_RESPONSE_CRS_SHIFT);
-56e15a238d9278 Vidya Sagar   2019-08-13  894  	val |= (AMBA_ERROR_RESPONSE_CRS_OKAY_FFFF0001 <<
-56e15a238d9278 Vidya Sagar   2019-08-13  895  		AMBA_ERROR_RESPONSE_CRS_SHIFT);
-56e15a238d9278 Vidya Sagar   2019-08-13  896  	dw_pcie_writel_dbi(pci, PORT_LOGIC_AMBA_ERROR_RESPONSE_DEFAULT, val);
-56e15a238d9278 Vidya Sagar   2019-08-13  897  
-56e15a238d9278 Vidya Sagar   2019-08-13  898  	/* Configure Max lane width from DT */
-56e15a238d9278 Vidya Sagar   2019-08-13  899  	val = dw_pcie_readl_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKCAP);
-56e15a238d9278 Vidya Sagar   2019-08-13  900  	val &= ~PCI_EXP_LNKCAP_MLW;
-56e15a238d9278 Vidya Sagar   2019-08-13  901  	val |= (pcie->num_lanes << PCI_EXP_LNKSTA_NLW_SHIFT);
-56e15a238d9278 Vidya Sagar   2019-08-13  902  	dw_pcie_writel_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKCAP, val);
-56e15a238d9278 Vidya Sagar   2019-08-13  903  
-a54e190737181c Vidya Sagar   2022-07-21  904  	/* Clear Slot Clock Configuration bit if SRNS configuration */
-a54e190737181c Vidya Sagar   2022-07-21  905  	if (pcie->enable_srns) {
-a54e190737181c Vidya Sagar   2022-07-21 @906  		val_16 = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base +
-a54e190737181c Vidya Sagar   2022-07-21  907  					   PCI_EXP_LNKSTA);
-a54e190737181c Vidya Sagar   2022-07-21  908  		val_16 &= ~PCI_EXP_LNKSTA_SLC;
-a54e190737181c Vidya Sagar   2022-07-21  909  		dw_pcie_writew_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA,
-a54e190737181c Vidya Sagar   2022-07-21  910  				   val_16);
-a54e190737181c Vidya Sagar   2022-07-21  911  	}
-a54e190737181c Vidya Sagar   2022-07-21  912  
-56e15a238d9278 Vidya Sagar   2019-08-13  913  	config_gen3_gen4_eq_presets(pcie);
-56e15a238d9278 Vidya Sagar   2019-08-13  914  
-56e15a238d9278 Vidya Sagar   2019-08-13  915  	init_host_aspm(pcie);
-56e15a238d9278 Vidya Sagar   2019-08-13  916  
-6b6fafc1abc7c0 Vidya Sagar   2020-12-03  917  	/* Disable ASPM-L1SS advertisement if there is no CLKREQ routing */
-6b6fafc1abc7c0 Vidya Sagar   2020-12-03  918  	if (!pcie->supports_clkreq) {
-6b6fafc1abc7c0 Vidya Sagar   2020-12-03  919  		disable_aspm_l11(pcie);
-6b6fafc1abc7c0 Vidya Sagar   2020-12-03  920  		disable_aspm_l12(pcie);
-6b6fafc1abc7c0 Vidya Sagar   2020-12-03  921  	}
-6b6fafc1abc7c0 Vidya Sagar   2020-12-03  922  
-a54e190737181c Vidya Sagar   2022-07-21  923  	if (!pcie->of_data->has_l1ss_exit_fix) {
-56e15a238d9278 Vidya Sagar   2019-08-13  924  		val = dw_pcie_readl_dbi(pci, GEN3_RELATED_OFF);
-56e15a238d9278 Vidya Sagar   2019-08-13  925  		val &= ~GEN3_RELATED_OFF_GEN3_ZRXDC_NONCOMPL;
-56e15a238d9278 Vidya Sagar   2019-08-13  926  		dw_pcie_writel_dbi(pci, GEN3_RELATED_OFF, val);
-a54e190737181c Vidya Sagar   2022-07-21  927  	}
-56e15a238d9278 Vidya Sagar   2019-08-13  928  
-56e15a238d9278 Vidya Sagar   2019-08-13  929  	if (pcie->update_fc_fixup) {
-56e15a238d9278 Vidya Sagar   2019-08-13  930  		val = dw_pcie_readl_dbi(pci, CFG_TIMER_CTRL_MAX_FUNC_NUM_OFF);
-56e15a238d9278 Vidya Sagar   2019-08-13  931  		val |= 0x1 << CFG_TIMER_CTRL_ACK_NAK_SHIFT;
-56e15a238d9278 Vidya Sagar   2019-08-13  932  		dw_pcie_writel_dbi(pci, CFG_TIMER_CTRL_MAX_FUNC_NUM_OFF, val);
-56e15a238d9278 Vidya Sagar   2019-08-13  933  	}
-56e15a238d9278 Vidya Sagar   2019-08-13  934  
-56e15a238d9278 Vidya Sagar   2019-08-13  935  	clk_set_rate(pcie->core_clk, GEN4_CORE_CLK_FREQ);
-56e15a238d9278 Vidya Sagar   2019-08-13  936  
-275e88b06a277c Rob Herring   2020-12-18  937  	return 0;
-275e88b06a277c Rob Herring   2020-12-18  938  }
-275e88b06a277c Rob Herring   2020-12-18  939  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
