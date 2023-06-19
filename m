@@ -2,100 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75160734EA7
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BD40734EA9
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:53:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbjFSIx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 04:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53224 "EHLO
+        id S230523AbjFSIxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 04:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbjFSIxL (ORCPT
+        with ESMTP id S230236AbjFSIxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 04:53:11 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F6910F0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 01:51:58 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-bc476bf5239so3489829276.2
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 01:51:58 -0700 (PDT)
+        Mon, 19 Jun 2023 04:53:18 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D9D1987;
+        Mon, 19 Jun 2023 01:52:09 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id ffacd0b85a97d-30fcda210cfso2884983f8f.3;
+        Mon, 19 Jun 2023 01:52:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687164718; x=1689756718;
+        d=gmail.com; s=20221208; t=1687164728; x=1689756728;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bBwiRtnNLuDw3VW76KF3adxsJHja6pYQXr29NX53oxw=;
-        b=sIyaQSCUAwmh0dDgqwb4R4xc5wAhkIb1kTvhyuEA25zvuId4iaFZe9EIjgsXEz+H8y
-         /kSPU3Tw2nVhXa4bZiE2uLa9BV6yyLrAxMf/i/zx/AGjw303GWfvFN6ARfEHnSqDqBYS
-         c3wrtiGTv4P497aFwtYFEnWVOj1a78s+dsc5Z4kKR2fhHnrozmZjym6249i6Bhcj7Yoi
-         jj+2mbvafAT5hZ/8ffY6scH55Qe6cA43RXwQqKClko86UsXjWWba+W3z2KgjGhKvqnrZ
-         0jFMSWEXfqvmsdN8ds2FOoqUNSs/l212ZlPl4XK0MPi00TE4tWOo03yO1WYO6l9KKd6i
-         sqzA==
+        bh=eBEZFKfyfFh7Lx6RyyuflCIxHFiXm98adeAgy3n5TSc=;
+        b=AaBhLhhg61OBKlARK2zycZbvlLMQhyhSwO/xGIjyxOC1cFkmc3rrVzTxwQKmvLOjGx
+         hEdzbdEbq19wPg4JYymfmbv0EReojIEiDubFP/Law9/MOZq3Z5aFsUMHf2P7Fvun3QmS
+         WeRpm7kZuSj0ljHOZX2LJVuZ9SGcoLo6QdKaVYriD3PT+bjfWf6EJ3Gab78BiVtlEbpH
+         3inNXolHZywUckCFMfKd9ztFpucG9shp2/XCpNHHkpvuqTI5fGyicC3Zp0WEFlltoOSN
+         MwUtW4OHM607kWzdw7VYCzyHx+Ic+4hmUvyS0f44oUtBYJ/V30k2xRc8YKWpaIcuvurE
+         MnfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687164718; x=1689756718;
+        d=1e100.net; s=20221208; t=1687164728; x=1689756728;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bBwiRtnNLuDw3VW76KF3adxsJHja6pYQXr29NX53oxw=;
-        b=jNOfMb9KcJNBkz7eHAdWuip9UucYrfY39vncdhNJBLmf46ahCrYhxUt2OaI/o63UTz
-         XDaiPTOVqcGbNCuuePCQOxVRA6ucP9oEXcib/DuBa7PV+eo9CuFGSwb+JxhPuUHjbDg4
-         5Foc1q5J0+Rkuc1AXDd3W/PCW1JJhG7KDNPgt4N8kyaP4xmr/GxABsTGLuJQwikRmugS
-         jonMXTwn2LaK/87zSJ7o3ARwtF03pBVttBGkZLkuhFBf+orKz3BcbuJSbbPiojxzsu2s
-         /0Lp3HgMG/8qCBdfMkCB7a+rTe1Ty6jemw+CxU0llqsCrQUS3hS1RaN7IWOBrKk3iOS4
-         sbxg==
-X-Gm-Message-State: AC+VfDzDp+ORNBfHm8/Dlj2dnVLGkkrBsbdWBlfBzEatzLF3VLjgj5My
-        T/s686fLJr9IMRQt1hTYUcrm9FSioAbLM0tJPpXbxg==
-X-Google-Smtp-Source: ACHHUZ5WH1oMGiYWP5bDrggvQiakiCRNxMMXJEFaSbH+xRAAZF/DZelyjUR9nPWup9sabQt9U+GmXs87B5zfYUFDN/0=
-X-Received: by 2002:a25:9112:0:b0:bc8:cd2c:2fb with SMTP id
- v18-20020a259112000000b00bc8cd2c02fbmr5860163ybl.9.1687164717947; Mon, 19 Jun
- 2023 01:51:57 -0700 (PDT)
+        bh=eBEZFKfyfFh7Lx6RyyuflCIxHFiXm98adeAgy3n5TSc=;
+        b=DcQmp9zHaBwqZr8MAvdiNysWBDB0P0ULyBmwng38KrFhQf0rpADch7u8feXThJyp8Z
+         BpE/detFVw6b75ox1lpZMeHd5yqGD89HORUsRv6ve7EQDZqs5npgWZwNzLhZCV4K1G2H
+         v9fw+52J2F+G9oQP4YMJ1WmInmGvgmserncZ4KI6lTfY0bELzciV9yzuNH2MC+srvuqF
+         qNvmNfKrrYpXPAv55EzhLytfMBvLrOpbNwV3qzyqzeWD7o4D9SAZk1SalYlXQqiLumnb
+         7zozMYCXndgA3Xcgi98FJw1sYKCWSNGVLpwFbOrQIZggkhkPG2XHSCURF2EnaIItiUOu
+         4Aig==
+X-Gm-Message-State: AC+VfDywJZKkhtpYPsbiMbX2WxAe5+u0RkbjVrkD3cODm5zbyITpNjBo
+        LX07N/hef81yq47PJ7NQvzgSVXmu/FGfRZotAZHY6weSxpG8
+X-Google-Smtp-Source: ACHHUZ43WkXQAAGZFkQ4ZSL/gsUvjznIJocOX5L7/QQJoORw4wNJjZ94ATGxo1vuA9Inm4faX0YYZFyfGnfzZyaTzYw=
+X-Received: by 2002:adf:d0c8:0:b0:2ee:f77f:3d02 with SMTP id
+ z8-20020adfd0c8000000b002eef77f3d02mr6453841wrh.0.1687164727869; Mon, 19 Jun
+ 2023 01:52:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230619082104.699331-1-arnd@kernel.org>
-In-Reply-To: <20230619082104.699331-1-arnd@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 19 Jun 2023 10:51:46 +0200
-Message-ID: <CACRpkdY3S3f7CuegyZaS+QZcF6p7OG=PB-89cmdJkPnr4o6BYg@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: mlxbf3: remove broken Kconfig 'select'
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Lee Jones <lee@kernel.org>,
-        Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230609030302.1278716-1-sunliming@kylinos.cn>
+ <20230609030302.1278716-2-sunliming@kylinos.cn> <20230616160845.GA88@W11-BEAU-MD.localdomain>
+In-Reply-To: <20230616160845.GA88@W11-BEAU-MD.localdomain>
+From:   sunliming <kelulanainsley@gmail.com>
+Date:   Mon, 19 Jun 2023 16:51:56 +0800
+Message-ID: <CAJncD7Sfasoe4-hKZP4c3bPZ892S2Kk5JaMo-aca6eBDwLjLNQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] tracing/user_events: Fix incorrect return value
+ for writing operation when events are disabled
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     mhiramat@kernel.org, rostedt@goodmis.org, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 10:21=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wr=
-ote:
+Beau Belgrave <beaub@linux.microsoft.com> =E4=BA=8E2023=E5=B9=B46=E6=9C=881=
+7=E6=97=A5=E5=91=A8=E5=85=AD 00:08=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Fri, Jun 09, 2023 at 11:03:00AM +0800, sunliming wrote:
+> > The writing operation return the count of writes whether events are
+> > enabled or disabled. This is incorrect when events are disabled. Fix
+> > this by just return -ENOENT when events are disabled.
+> >
+>
+> When testing this patch locally I found that we would occasionally get
+> -ENOENT when events were enabled, but then become disabled, since writes
+> do not have any locking around the tracepoint checks for performance
+> reasons.
+>
+> I've asked a few peers of mine their thoughts on this, whether an error
+> should result when there are no enabled events. The consensus I've heard
+> back is that they would not consider this case an actual error, just as
+> writing to /dev/null does not actually return an error.
+>
+> However, if you feel strongly we need this and have a good use case, it
+> seems better to enable this logic behind a flag instead of having it
+> default based on my conversations with others.
+>
+> Thanks,
+> -Beau
 
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The new pinctrl driver selects GPIO_MLXBF3, but that can not be enabled y=
-et because
-> the MELLANOX_PLATFORM symbol does not exist in the tree:
->
-> WARNING: unmet direct dependencies detected for GPIO_MLXBF3
->   Depends on [n]: GPIOLIB [=3Dy] && PCI [=3Dn] && (MELLANOX_PLATFORM [=3D=
-n] && ARM64 [=3Dy] || COMPILE_TEST [=3Dy])
->   Selected by [y]:
->   - PINCTRL_MLXBF3 [=3Dy] && PINCTRL [=3Dy] && (MELLANOX_PLATFORM [=3Dn] =
-&& ARM64 [=3Dy] || COMPILE_TEST [=3Dy])
->
-> As it turns out, the pinctlr driver still builds fine without this, so ju=
-st
-> remove the select statement.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Patch applied!
 
-Yours,
-Linus Walleij
+There is indeed a problem. Once enabled, perform the write operation
+immediately.
+
+Now=EF=BC=8Cwhen the event is disabled, the trace record appears to be lost=
+.
+In some situations
+where data timing is sensitive, it may cause confusion. In this case,
+not returning an
+error (as mentioned in your reply, it is not considered this case an
+actual error) and
+returning 0 ( meaning that the number of data to be written is 0) may
+be a good way
+to handle it?
+Thanks,
+-Sunliming
+
+>
+> > Signed-off-by: sunliming <sunliming@kylinos.cn>
+> > ---
+> >  kernel/trace/trace_events_user.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_even=
+ts_user.c
+> > index 1ac5ba5685ed..92204bbe79da 100644
+> > --- a/kernel/trace/trace_events_user.c
+> > +++ b/kernel/trace/trace_events_user.c
+> > @@ -1957,7 +1957,8 @@ static ssize_t user_events_write_core(struct file=
+ *file, struct iov_iter *i)
+> >
+> >               if (unlikely(faulted))
+> >                       return -EFAULT;
+> > -     }
+> > +     } else
+> > +             return -ENOENT;
+> >
+> >       return ret;
+> >  }
+> > --
+> > 2.25.1
