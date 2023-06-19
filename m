@@ -2,147 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84F67734A9D
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 05:26:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9899B734A9E
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 05:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbjFSD00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 23:26:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60928 "EHLO
+        id S229729AbjFSD1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 23:27:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjFSD0Y (ORCPT
+        with ESMTP id S229584AbjFSD1Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 23:26:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8AF8E62
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 20:25:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687145135;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ivKvkwGCkvotfc0fZr6hNN4RRHeyZqwTcj4Dp/7Dgzw=;
-        b=dmLqF+xRgaoE8IO4xOYS20JX2KopSejT6xrOmBz0drDZnA30nyxt8VAbfQHqyoGyFq8+at
-        UHictc/aH+W2aBFHJsdSj2qEy+eIPxUaMr1e3SirY+ZD8LE5+aUAJTxlWr0BikG2l8cHIQ
-        eloTkhYZYdmRDK0VHT4kN7mGbSBc7W8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-324-3b1LzjG6MRy7lRBMkdskOA-1; Sun, 18 Jun 2023 23:25:31 -0400
-X-MC-Unique: 3b1LzjG6MRy7lRBMkdskOA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8238C3C11A09;
-        Mon, 19 Jun 2023 03:25:30 +0000 (UTC)
-Received: from [10.22.16.51] (unknown [10.22.16.51])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3FC66C1603B;
-        Mon, 19 Jun 2023 03:25:29 +0000 (UTC)
-Message-ID: <ef2490a0-2768-ba70-e89d-59c0df76f827@redhat.com>
-Date:   Sun, 18 Jun 2023 23:25:29 -0400
+        Sun, 18 Jun 2023 23:27:16 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9281AB
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 20:27:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687145235; x=1718681235;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=O5zztc/f2oQYxwqzTnF+e2glrsNYbDR/DOPtIyJtEdc=;
+  b=Rss3W05gUytkmjrHnFxod8C2oGuFu2w+Ps57DfZc/4C1uOWrpTxLYWpC
+   HKdMeOxnvvPwrfimAnIz2jq4IqoOUszywRxRJOYENmgXKelDMRu62evfD
+   GM6sePubO0bYv/4ryHKFVKWjzN0MYsNRLsHY8oZkwDPMBY8jMxVPZb3s1
+   /nEb1vXX7/ORXYT26vdxzIPsPUUPb9BkL5iU3LsF5v2Giicq4ovyBa+8h
+   NNvY8zRbsVboEvlJczXLo2+MN2CxVpmuadY2mEGuLPHO1t7yoDuP7XhZk
+   OrrPikP9Pb2XqjM5petTQcv7xBlKEDmY/5xV7W8Lz2uIEmvsyfdlql5Ls
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="339870383"
+X-IronPort-AV: E=Sophos;i="6.00,253,1681196400"; 
+   d="scan'208";a="339870383"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2023 20:27:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="707739014"
+X-IronPort-AV: E=Sophos;i="6.00,253,1681196400"; 
+   d="scan'208";a="707739014"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2023 20:27:12 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     liuq <liuq131@chinatelecom.cn>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>
+Subject: Re: [PATCH] mm/min_free_kbytes: modify min_free_kbytes calculation
+ rules
+References: <20230609032552.218010-1-liuq131@chinatelecom.cn>
+Date:   Mon, 19 Jun 2023 11:25:38 +0800
+In-Reply-To: <20230609032552.218010-1-liuq131@chinatelecom.cn> (liuq's message
+        of "Fri, 9 Jun 2023 11:25:52 +0800")
+Message-ID: <87edm88765.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 0/5] x86/speculation: Disable IBRS when idle
-Content-Language: en-US
-From:   Waiman Long <longman@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Robin Jarry <rjarry@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H.Peter Anvin" <hpa@zytor.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Joe Mario <jmario@redhat.com>
-References: <20230616200003.745742-1-longman@redhat.com>
- <CTECMFWMMST3.9FTWRDG7FFKQ@ringo>
- <20230617122115.GA1830050@hirez.programming.kicks-ass.net>
- <55219f3b-992d-ccc3-ba29-7bf33465b5cc@redhat.com>
-In-Reply-To: <55219f3b-992d-ccc3-ba29-7bf33465b5cc@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/18/23 21:18, Waiman Long wrote:
-> On 6/17/23 08:21, Peter Zijlstra wrote:
->> On Fri, Jun 16, 2023 at 10:14:52PM +0200, Robin Jarry wrote:
->>> Waiman Long, Jun 16, 2023 at 21:59:
->>>> For Intel processors that need to turn on IBRS to protect against
->>>> Spectre v2 and Retbleed, the IBRS bit in the SPEC_CTRL MSR affects
->>>> the performance of the whole core even if only one thread is turning
->>>> it on when running in the kernel. For user space heavy applications,
->>>> the performance impact of occasionally turning IBRS on during syscalls
->>>> shouldn't be significant. Unfortunately, that is not the case when the
->>>> sibling thread is idling in the kernel. In that case, the performance
->>>> impact can be significant.
->>>>
->>>> When DPDK is running on an isolated CPU thread processing network 
->>>> packets
->>>> in user space while its sibling thread is idle. The performance of the
->>>> busy DPDK thread with IBRS on and off in the sibling idle thread are:
->>>>
->>>>                                  IBRS on               IBRS off
->>>>                                  ------- --------
->>>>    packets/second:                  7.8M 10.4M
->>>>    avg tsc cycles/packet:         282.26 209.86
->>>>
->>>> This is a 25% performance degradation. The test system is a Intel Xeon
->>>> 4114 CPU @ 2.20GHz.
->>>>
->>>> This patch series turns off IBRS when in various idle mode to 
->>>> eliminate
->>>> the performance impact of the idling thread on its busy sibling 
->>>> thread.
->>> Hi Longman,
->>>
->>> thanks a lot for the quick turnaround on this issue.
->>>
->>> Tested-by: Robin Jarry <rjarry@redhat.com>
->> I can't see the patches -- they didn't arrive in my mailbox nor can I
->> find them in the archive, in fact this here mail is the only evidence
->> they exist at all.
->
-> I got a rebound message from your mail server about incorrect message 
-> format. It is probably caused by some problem in my end.
->
->
->> However, did you all see intel_idle_ibrs() and how that is selected for
->> C6 and up?
->>
->> What exactly isn't working there?
->
-> We were testing on the RHEL9.2 kernel which doesn't have your 
-> intel_idle_ibrs() patch yet. My preliminary testing does indicate your 
-> patch will likely work. I will ask Jerry to test a newer RHEL9.3 
-> kernel with the intel_idle_ibrs() patch to see if it helps.
 
-We may need to extend your current solution to cover more cases. Perhaps 
-adding a module parameter (e.g. idle_no_ibrs) to force the use of 
-intel_idle_ibrs(). BTW, is it really the case that we can't disable IBRS 
-when irq is enabled? The idle thread does not really interact with any 
-user applications. I don't think there is any risk of information 
-leakage even if we disable IBRS with interrupt enabled. Is my assumption 
-incorrect?
+Added Mel and Vlastimil.
 
-Thanks,
-Longman
+liuq <liuq131@chinatelecom.cn> writes:
 
+> The current calculation of min_free_kbytes only uses ZONE_DMA and
+> ZONE_NORMAL pages,but the ZONE_MOVABLE zone->_watermark[WMARK_MIN]
+> will also divide part of min_free_kbytes.This will cause the min
+> watermark of ZONE_NORMAL to be too small in the presence of ZONE_MOVEABLE.
+
+This seems like a real problem per my understanding.  Can you show the
+contents of /proc/zoneinfo on a problem system?
+
+But, per my understanding, min_free_kbytes are used for __GFP_HIGH and
+PF_MEMALLOC allocations.  While ZONE_MOVABLE will not be used for them
+usually.  So I think we should treat ZONE_MOVABLE as ZONE_HIGHMEM in
+__setup_per_zone_wmarks().
+
+Best Regards,
+Huang, Ying
+
+> Signed-off-by: liuq <liuq131@chinatelecom.cn>
+> ---
+>  include/linux/mm.h |  1 +
+>  mm/khugepaged.c    |  2 +-
+>  mm/page_alloc.c    | 15 ++++++++++++++-
+>  3 files changed, 16 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index cf3d0d673f6b..1f91d035bcaf 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -863,6 +863,7 @@ void split_page(struct page *page, unsigned int order);
+>  void folio_copy(struct folio *dst, struct folio *src);
+>  
+>  unsigned long nr_free_buffer_pages(void);
+> +unsigned long nr_free_pagecache_pages(void);
+>  
+>  /*
+>   * Compound pages have a destructor function.  Provide a
+> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> index 16be62d493cd..6632264b951c 100644
+> --- a/mm/khugepaged.c
+> +++ b/mm/khugepaged.c
+> @@ -2342,7 +2342,7 @@ static void set_recommended_min_free_kbytes(void)
+>  
+>  	/* don't ever allow to reserve more than 5% of the lowmem */
+>  	recommended_min = min(recommended_min,
+> -			      (unsigned long) nr_free_buffer_pages() / 20);
+> +			      (unsigned long) nr_free_pagecache_pages() / 20);
+>  	recommended_min <<= (PAGE_SHIFT-10);
+>  
+>  	if (recommended_min > min_free_kbytes) {
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index e008a3df0485..489b564526dd 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -5775,6 +5775,19 @@ unsigned long nr_free_buffer_pages(void)
+>  }
+>  EXPORT_SYMBOL_GPL(nr_free_buffer_pages);
+>  
+> +/**
+> + * nr_free_pagecache_pages - count number of pages beyond high watermark
+> + *
+> + * nr_free_pagecache_pages() counts the number of pages which are beyond the
+> + * high watermark within all zones.
+> + *
+> + * Return: number of pages beyond high watermark within all zones.
+> + */
+> +unsigned long nr_free_pagecache_pages(void)
+> +{
+> +	return nr_free_zone_pages(gfp_zone(GFP_HIGHUSER_MOVABLE));
+> +}
+> +
+>  static inline void show_node(struct zone *zone)
+>  {
+>  	if (IS_ENABLED(CONFIG_NUMA))
+> @@ -8651,7 +8664,7 @@ void calculate_min_free_kbytes(void)
+>  	unsigned long lowmem_kbytes;
+>  	int new_min_free_kbytes;
+>  
+> -	lowmem_kbytes = nr_free_buffer_pages() * (PAGE_SIZE >> 10);
+> +	lowmem_kbytes = nr_free_pagecache_pages() * (PAGE_SIZE >> 10);
+>  	new_min_free_kbytes = int_sqrt(lowmem_kbytes * 16);
+>  
+>  	if (new_min_free_kbytes > user_min_free_kbytes)
