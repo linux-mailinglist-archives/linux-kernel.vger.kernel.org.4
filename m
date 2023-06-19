@@ -2,156 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDD10735EED
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 23:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA36735EF1
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 23:21:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbjFSVTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 17:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48302 "EHLO
+        id S229782AbjFSVVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 17:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbjFSVTV (ORCPT
+        with ESMTP id S229799AbjFSVUi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 17:19:21 -0400
-Received: from mo4-p03-ob.smtp.rzone.de (mo4-p03-ob.smtp.rzone.de [85.215.255.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309E61701;
-        Mon, 19 Jun 2023 14:19:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1687209526; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=m14ydInAO32RSNeBAEUmo5VtS9IdNsIE1lEAXPUqN3jpWhmRIQgK47Y/rbAT3wMzzQ
-    zFtEMz7KVxS3NSfPnKVhU8xUFPgcXLrgGIWN2Mu6997FuL8lqVsKbxqkA5fE3gv3MDvZ
-    JWD0zt4m7taKUiiTj/MHW/kGwq6EOfjUlaUH7tbWkr4Af8BIy7xIimnnWnFOzHZDScLt
-    3eQQywEXNYQ+IC988XlH/CzjqwE7RWPjci5ZMT3eKpmQ4AYgRzTbVvGQ14Z3slHIt375
-    Yy3e8mWPjZSUhmyrItczO8JH8++rOTMjFybtj/1ToabmROD6JBE3b3hIRI6t4sFE0TtU
-    aoQg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1687209526;
-    s=strato-dkim-0002; d=strato.com;
-    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=4VoCJCkUkGyuMs9ktPD9dGvwPKJ6aIyifN3L5LWABx8=;
-    b=JvbswYT1Nxu/3JVFow4AGCMKUY/2XH05O3KHS/AN8d5uMp/6ohrS1PkKNW1d/qNfgx
-    ehqaHoKJtUwJelBXbn8r72WycTsEtzleB3hRsAdSOiMxKKKUyyzM1b0QCThREEAj4AVl
-    q5Zch4h3R7Uu5hmKzx0c67sYBQ7RCDzOg2GeGoQXN0rqERPliWUQ7yvIll/pNLS86+kk
-    ycpoPF2xhfADP3mWfL3TWsU3V7nm1cIVk4/xiq4xy4rgcMqi+C1ZDffmzSuCPuUy2QbM
-    /SnVisX5HcQFQW9BMmEdDPGdYuiBwFgNDv/UpoVl9iqq0weeChmJvaYg58IuIMlqC5Qo
-    pzxA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo03
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1687209526;
-    s=strato-dkim-0002; d=iokpp.de;
-    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=4VoCJCkUkGyuMs9ktPD9dGvwPKJ6aIyifN3L5LWABx8=;
-    b=GQuLI20iuo/3e3+FcTWN+gW33eL6iyjV5edlrwBquBLU1yKxMk3gJO7CkF6DC8eUq6
-    gHTqB7hfa+ATxhvaPSMfQF2q1ieLcDoBiT59Fsr1IPCYkHAsKStHGpL5+2bmwDdUy5o6
-    wWcaHwSe4L7bsjHTc+Z2xsLCyrvZnNGEpGXihjQrDj+pGs7x89Ywj1dSAEhZdOzDw30X
-    xBQqWzsXqNbS7+ugJ5EL0MiFGcZuz8DhcDB1mRCCRnQFkCb9JzLKyz9t7rn+bd+LO1cC
-    bPTxr2ni/HsxkQCdCwk6SUJrBKWPg4dVvZ6emoZsJFm5HNNbg2fpUBWqLP/n/eSdf1Eq
-    JkWg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1687209526;
-    s=strato-dkim-0003; d=iokpp.de;
-    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=4VoCJCkUkGyuMs9ktPD9dGvwPKJ6aIyifN3L5LWABx8=;
-    b=Fi7GsifBZj+G9wnlO1nTmf1xXDrGLocv0iS6G3hKSGfd89rdXROo90SMzMsF39I5um
-    2ld4NTWy8oTessFRFiCw==
-X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSedrgBzPc9DUyubU4DD1EQ33bneoxgmq7ABeEwyjghc0WGLJ+05px4XK4px0+bSzE8qij5Q="
-Received: from blinux.speedport.ip
-    by smtp.strato.de (RZmta 49.6.0 AUTH)
-    with ESMTPSA id zb0c8bz5JLIjDvk
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Mon, 19 Jun 2023 23:18:45 +0200 (CEST)
-From:   Bean Huo <beanhuo@iokpp.de>
-To:     viro@zeniv.linux.org.uk, brauner@kernel.org,
-        akpm@linux-foundation.org, jack@suse.cz, jack@suse.com,
-        tytso@mit.edu, adilger.kernel@dilger.ca, mark@fasheh.com,
-        jlbec@evilplan.org, joseph.qi@linux.alibaba.com
-Cc:     linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ocfs2-devel@oss.oracle.com,
-        beanhuo@micron.com
-Subject: [PATCH v2 5/5] fs/buffer.c: convert block_commit_write to return void
-Date:   Mon, 19 Jun 2023 23:18:27 +0200
-Message-Id: <20230619211827.707054-6-beanhuo@iokpp.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230619211827.707054-1-beanhuo@iokpp.de>
-References: <20230619211827.707054-1-beanhuo@iokpp.de>
+        Mon, 19 Jun 2023 17:20:38 -0400
+Received: from mail11.truemail.it (mail11.truemail.it [IPv6:2001:4b7e:0:8::81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594AD10E
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 14:20:36 -0700 (PDT)
+Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+        by mail11.truemail.it (Postfix) with ESMTPA id 3AEBE201E6;
+        Mon, 19 Jun 2023 23:20:33 +0200 (CEST)
+Date:   Mon, 19 Jun 2023 23:20:28 +0200
+From:   Francesco Dolcini <francesco@dolcini.it>
+To:     Nishanth Menon <nm@ti.com>
+Cc:     Santosh Shilimkar <ssantosh@kernel.org>,
+        Tero Kristo <kristo@kernel.org>,
+        Francesco Dolcini <francesco@dolcini.it>,
+        Wadim Egorov <w.egorov@phytec.de>, vigneshr@ti.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        d-gole@ti.com
+Subject: Re: [PATCH] firmware: ti_sci: Use system_state to determine polling
+Message-ID: <ZJDGnM7X/n4WkIFS@francesco-nb.int.toradex.com>
+References: <20230619131236.3285069-1-nm@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230619131236.3285069-1-nm@ti.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bean Huo <beanhuo@micron.com>
+On Mon, Jun 19, 2023 at 08:12:36AM -0500, Nishanth Menon wrote:
+> Commit b9e8a7d950ff ("firmware: ti_sci: Switch transport to polled
+> mode during system suspend") aims to resolve issues with tisci
+> operations during system suspend operation. However, the system may
+> enter a no_irq stage in various other usage modes, including power-off
+> and restart. To determine if polling mode is appropriate, use the
+> system_state instead.
+> 
+> While at this, drop the unused is_suspending state variable and
+> related helpers.
+> 
+> Reported-by: Francesco Dolcini <francesco@dolcini.it>
+> Reported-by: Wadim Egorov <w.egorov@phytec.de>
+> Link: https://lore.kernel.org/all/ZGeHMjlnob2GFyHF@francesco-nb.int.toradex.com/
+> Signed-off-by: Nishanth Menon <nm@ti.com>
 
-block_commit_write() always returns 0, this patch changes it to
-return void.
+s/Link/Closes/
 
-Signed-off-by: Bean Huo <beanhuo@micron.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
----
- fs/buffer.c                 | 11 +++++------
- include/linux/buffer_head.h |  2 +-
- 2 files changed, 6 insertions(+), 7 deletions(-)
+Fixes: b9e8a7d950ff ("firmware: ti_sci: Switch transport to polled mode during system suspend")
 
-diff --git a/fs/buffer.c b/fs/buffer.c
-index b88bb7ec38be..fa09cf94f771 100644
---- a/fs/buffer.c
-+++ b/fs/buffer.c
-@@ -2116,7 +2116,7 @@ int __block_write_begin(struct page *page, loff_t pos, unsigned len,
- }
- EXPORT_SYMBOL(__block_write_begin);
- 
--int block_commit_write(struct page *page, unsigned int from, unsigned int to)
-+void block_commit_write(struct page *page, unsigned int from, unsigned int to)
- {
- 	unsigned block_start, block_end;
- 	int partial = 0;
-@@ -2151,7 +2151,6 @@ int block_commit_write(struct page *page, unsigned int from, unsigned int to)
- 	 */
- 	if (!partial)
- 		SetPageUptodate(page);
--	return 0;
- }
- EXPORT_SYMBOL(block_commit_write);
- 
-@@ -2577,11 +2576,11 @@ int block_page_mkwrite(struct vm_area_struct *vma, struct vm_fault *vmf,
- 		end = PAGE_SIZE;
- 
- 	ret = __block_write_begin(page, 0, end, get_block);
--	if (!ret)
--		ret = block_commit_write(page, 0, end);
--
--	if (unlikely(ret < 0))
-+	if (unlikely(ret))
- 		goto out_unlock;
-+
-+	block_commit_write(page, 0, end);
-+
- 	set_page_dirty(page);
- 	wait_for_stable_page(page);
- 	return 0;
-diff --git a/include/linux/buffer_head.h b/include/linux/buffer_head.h
-index 1520793c72da..873653d2f1aa 100644
---- a/include/linux/buffer_head.h
-+++ b/include/linux/buffer_head.h
-@@ -284,7 +284,7 @@ int cont_write_begin(struct file *, struct address_space *, loff_t,
- 			unsigned, struct page **, void **,
- 			get_block_t *, loff_t *);
- int generic_cont_expand_simple(struct inode *inode, loff_t size);
--int block_commit_write(struct page *page, unsigned from, unsigned to);
-+void block_commit_write(struct page *page, unsigned int from, unsigned int to);
- int block_page_mkwrite(struct vm_area_struct *vma, struct vm_fault *vmf,
- 				get_block_t get_block);
- /* Convert errno to return value from ->page_mkwrite() call */
--- 
-2.34.1
+>  drivers/firmware/ti_sci.c | 35 ++---------------------------------
+>  1 file changed, 2 insertions(+), 33 deletions(-)
+> 
+> diff --git a/drivers/firmware/ti_sci.c b/drivers/firmware/ti_sci.c
+> index 039d92a595ec..dc7906e38f09 100644
+> --- a/drivers/firmware/ti_sci.c
+> +++ b/drivers/firmware/ti_sci.c
+...
+> -static DEFINE_SIMPLE_DEV_PM_OPS(ti_sci_pm_ops, ti_sci_suspend, ti_sci_resume);
+
+You need to stop using ti_sci_pm_ops in ti_sci_driver, without this
+change it does not build.
+
+diff --git a/drivers/firmware/ti_sci.c b/drivers/firmware/ti_sci.c
+index dc7906e38f09..91aaa0ca9bde 100644
+--- a/drivers/firmware/ti_sci.c
++++ b/drivers/firmware/ti_sci.c
+@@ -3485,7 +3485,6 @@ static struct platform_driver ti_sci_driver = {
+        .driver = {
+                   .name = "ti-sci",
+                   .of_match_table = of_match_ptr(ti_sci_of_match),
+-                  .pm = &ti_sci_pm_ops,
+        },
+ };
+
+
+With that change I was able to do a quick test on a patched v6.4-rc7 and
+it seems to solve the issue.
+
+Tested-by: Francesco Dolcini <francesco.dolcini@toradex.com> # Toradex Verdin AM62
+
+Francesco
 
