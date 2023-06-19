@@ -2,67 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9420E7349C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 03:49:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 211F57349CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 03:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbjFSBtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 21:49:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
+        id S229675AbjFSBwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 21:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjFSBtW (ORCPT
+        with ESMTP id S229670AbjFSBwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 21:49:22 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA3D0E42
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 18:49:20 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Qkt0h1TbXztR1p;
-        Mon, 19 Jun 2023 09:46:44 +0800 (CST)
-Received: from [10.174.151.185] (10.174.151.185) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Mon, 19 Jun 2023 09:49:18 +0800
-Subject: Re: [PATCH] sched/deadline: Use helper function task_current()
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     <mingo@redhat.com>, <juri.lelli@redhat.com>,
-        <vincent.guittot@linaro.org>, <dietmar.eggemann@arm.com>,
-        <rostedt@goodmis.org>, <bsegall@google.com>, <mgorman@suse.de>,
-        <bristot@redhat.com>, <vschneid@redhat.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20230617074305.1916633-1-linmiaohe@huawei.com>
- <20230617122622.GC1830050@hirez.programming.kicks-ass.net>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <bbbc0c4d-0680-c31d-8166-563fafe8e1c7@huawei.com>
-Date:   Mon, 19 Jun 2023 09:49:17 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Sun, 18 Jun 2023 21:52:17 -0400
+Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73D9E44
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 18:52:15 -0700 (PDT)
+Received: by mail-oo1-xc30.google.com with SMTP id 006d021491bc7-55e163e93d5so1907946eaf.3
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 18:52:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1687139535; x=1689731535;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=y0HdewFqYNfw5Jxe2MzOIpg2fQoQaMstEP/0eP1FzIo=;
+        b=Kvk+6JStgD+T3vLboAGdC7I6gRd1y1qtW0W4iGqEuZHqI7jcLRfFHzRDQNVj6T9qM6
+         lxgxIRar69qsT7/QH9vfAcL4WBVTLdFDZOjAlYlaB+ej7n4OgrS9joLYgCrqktJjysz0
+         6F59etDPLOW29tFTNH5DeumtBTeFNl9bikMSGHZLmbDe4qMyND+d+lYzZOdr4VxUo3yJ
+         KJ9WBSxvq7lxqyAeV5igBgG/ZxAMvyadUiuJGJj+6qjw8Z/+vO7SmzNpASBgDKjbp/BM
+         TiOQMuMStI2zqYVU0n9idx4m8EZP8DyKZAIyHJBzuQ24neRM9v2G5E5GbNjIGorO/Uv1
+         femg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687139535; x=1689731535;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y0HdewFqYNfw5Jxe2MzOIpg2fQoQaMstEP/0eP1FzIo=;
+        b=VaiRLkC69rgS4aLv3nrvXt+D1nBQXuNkY4BDM5peSqBoINR+GPAYJcEx3RIfvmqYQU
+         CbgW32WpmgIa8SgHMCNBm7G6caZY54MWiGG5jhSVGfUTmr6Yn4OeZLPLd7HYEyXeeYHS
+         5sQocgTGkPX2WQSurYaxInESoCag3nOfyn0mBAygQiTy1yXr6BJoLb/TaMwUv3wRb9Dw
+         YuaiayNq0LnCybsGOAUchO/3AGhDpnANmc+QxUdH2T5shz9ySSffSvRSeZmGkQFb/sm6
+         /0ujPXunWGR/eFCi6PfenNdMHeQ8eDPpVGtWgc/Yyl1YzQidBUNnOKg/ca9tzDYmzLcG
+         eENw==
+X-Gm-Message-State: AC+VfDw4KCRI4G5DNUAdc4q71j87FoxQCVLfLFvF/7yeponczT79xULN
+        /2zboi0je7OfMLhD2XYrlB9JrA==
+X-Google-Smtp-Source: ACHHUZ5qbz78riMP2Loam5VGkXbrUYuwQpD+CXejr+CTgGGnq4Io593wt0JxdkeDmwPnL6VgQzbIYw==
+X-Received: by 2002:a05:6808:15a4:b0:39e:d344:b4c0 with SMTP id t36-20020a05680815a400b0039ed344b4c0mr3026443oiw.34.1687139534927;
+        Sun, 18 Jun 2023 18:52:14 -0700 (PDT)
+Received: from dread.disaster.area (pa49-180-13-202.pa.nsw.optusnet.com.au. [49.180.13.202])
+        by smtp.gmail.com with ESMTPSA id p14-20020a170902e74e00b001b39e866324sm15469535plf.306.2023.06.18.18.52.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Jun 2023 18:52:14 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.96)
+        (envelope-from <david@fromorbit.com>)
+        id 1qB43u-00DTfc-2U;
+        Mon, 19 Jun 2023 11:52:10 +1000
+Date:   Mon, 19 Jun 2023 11:52:10 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     syzbot <syzbot+b7854dc75e15ffc8c2ae@syzkaller.appspotmail.com>
+Cc:     djwong@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [xfs?] KASAN: slab-out-of-bounds Read in xlog_pack_data
+Message-ID: <ZI+0yi+V+ziqAQ3Z@dread.disaster.area>
+References: <00000000000029729c05fe5c6f5c@google.com>
 MIME-Version: 1.0
-In-Reply-To: <20230617122622.GC1830050@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00000000000029729c05fe5c6f5c@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/17 20:26, Peter Zijlstra wrote:
-> On Sat, Jun 17, 2023 at 03:43:05PM +0800, Miaohe Lin wrote:
->> Use helper function task_current() to check whether task is currently
->> running on the runqueue. No functional change intended.
+On Sat, Jun 17, 2023 at 05:23:58P[   65.275181][ T4996] XFS (loop0): Deprecated V4 format (crc=0) will not be supported after September 2030.
+> Hello,
 > 
-> Why though? this makes no sense. Please leave perfectly fine code alone.
+> syzbot found the following issue on:
+> 
+> HEAD commit:    15adb51c04cc Merge tag 'devicetree-fixes-for-6.4-3' of git..
+> git tree:       upstream
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=17554263280000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3731e922b1097b2e
+> dashboard link: https://syzkaller.appspot.com/bug?extid=b7854dc75e15ffc8c2ae
+> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1323469d280000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12975795280000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/733f46de69b0/disk-15adb51c.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/f9a6a2c566b8/vmlinux-15adb51c.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/55e80680ef0e/bzImage-15adb51c.xz
+> mounted in repro: https://storage.googleapis.com/syzbot-assets/99d5407c555b/mount_0.gz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+b7854dc75e15ffc8c2ae@syzkaller.appspotmail.com
 
-IMHO, it would improve the code readability if we use helper function/macro instead
-of open code it directly. If this is unwanted change, I will drop this patch. :)
+ XFS (loop0): Deprecated V4 format (crc=0) will not be supported after September 2030.
+ XFS (loop0): Mounting V4 Filesystem acfebfcd-0806-4e27-9777-0ac4ff5ddf54
+ XFS (loop0): Log size 756 blocks too small, minimum size is 2220 blocks
+ XFS (loop0): Log size out of supported range.
+ XFS (loop0): Continuing onwards, but if log hangs are experienced then please report this message in the bug report.
+ XFS (loop0): Torn write (CRC failure) detected at log block 0x10. Truncating head block from 0x20.
+ XFS (loop0): Ending clean mount
+ xfs filesystem being mounted at /root/file0 supports timestamps until 2038-01-19 (0x7fffffff)
+ XFS (loop0): Unmounting Filesystem acfebfcd-0806-4e27-9777-0ac4ff5ddf54
 
-Thanks.
+<sigh>
 
+Still testing on v4 filesystems.
+
+And with yet another invalid configuration - one that we
+explicitly cannot fix for v4 filesystems, yet one that V5
+filesystems will immediately reject.
+
+So at this point, the problem "discovered" by syzbot will not
+manifest on V5 formats at all.
+
+> xfs filesystem being mounted at /root/file0 supports timestamps until 2038-01-19 (0x7fffffff)
+> XFS (loop0): Unmounting Filesystem acfebfcd-0806-4e27-9777-0ac4ff5ddf54
+> ==================================================================
+> BUG: KASAN: slab-out-of-bounds in xlog_pack_data+0x370/0x540 fs/xfs/xfs_log.c:1822
+> Read of size 4 at addr ffff888075c64e00 by task syz-executor205/4996
+
+And, yeah, the issue that is a too-small log on V4 filesystems skips
+over other geometry checks (which will still be run on V5) and it's
+one of those skipped geometry checks that causes the UAF.
+
+Even if the log was not too small, the specific corruption
+that caused the OOB read would have been caught at mount by a V5
+filesystem and rejected before anything any attempt to write to the
+log occurred.
+
+So here we are again, with syzbot reporting a V4 filesystem issue
+that just doesn't happen in the real world, and one that V5
+filesystems detect and reject.
+
+And, once again, I'm going to have to modify the code so that V4
+filesystems reject stuff that v5 filesystems already reject, even
+though no users are actually going to benefit from these changes:
+
+ loop0: detected capacity change from 0 to 65536
+ XFS (loop0): log stripe unit 151041 bytes must be a multiple of block size
+ XFS (loop0): Metadata corruption detected at xfs_sb_read_verify+0x279/0x2a0, xfs_sb_quiet block 0x0 
+ XFS (loop0): Unmount and run xfs_repair
+ XFS (loop0): First 128 bytes of corrupted metadata buffer:
+ 00000000: 58 46 53 42 00 00 08 00 00 00 00 00 00 00 40 00  XFSB..........@.
+ 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+ 00000020: ac fe bf cd 08 06 4e 27 97 77 0a c4 ff 5d df 54  ......N'.w...].T
+ 00000030: 00 00 00 00 00 00 20 04 00 00 00 00 00 00 00 10  ...... .........
+ 00000040: 00 00 00 00 00 00 00 11 00 00 00 00 00 00 00 12  ................
+ 00000050: 00 00 00 02 00 00 20 00 00 00 00 02 00 00 00 00  ...... .........
+ 00000060: 00 00 02 f4 b4 b4 02 00 04 00 00 02 00 00 00 00  ................
+ 00000070: 00 00 00 00 00 00 00 00 0b 09 0a 01 0d 00 00 05  ................
+
+Can you please just stop testing V4 filesystems already?
+
+-Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
