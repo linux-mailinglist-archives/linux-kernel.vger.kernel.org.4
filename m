@@ -2,144 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8486E73589B
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 15:31:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49420735B87
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232014AbjFSNb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 09:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37026 "EHLO
+        id S229866AbjFSPuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 11:50:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjFSNbJ (ORCPT
+        with ESMTP id S231696AbjFSPug (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 09:31:09 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877F810F2;
-        Mon, 19 Jun 2023 06:31:03 -0700 (PDT)
-Received: from dggpeml500012.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Ql9Yh1BSSzMpSX;
-        Mon, 19 Jun 2023 21:27:52 +0800 (CST)
-Received: from localhost.localdomain (10.67.175.61) by
- dggpeml500012.china.huawei.com (7.185.36.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Mon, 19 Jun 2023 21:30:59 +0800
-From:   Zheng Yejian <zhengyejian1@huawei.com>
-To:     <gregkh@linuxfoundation.org>, <rostedt@goodmis.org>,
-        <mhiramat@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
-        <zhengyejian1@huawei.com>
-Subject: [PATCH 5.4] tracing: Add tracing_reset_all_online_cpus_unlocked() function
-Date:   Tue, 20 Jun 2023 09:31:13 +0800
-Message-ID: <20230620013113.1127152-1-zhengyejian1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 19 Jun 2023 11:50:36 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A5EA4;
+        Mon, 19 Jun 2023 08:50:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1687189835;
+  x=1718725835;
+  h=references:from:to:cc:subject:date:in-reply-to:
+   message-id:mime-version;
+  bh=jV18MHlcdS/4W3J35UCUnXhAnFfGk9RQbYDuqUPQ4r8=;
+  b=TSLn6bEzHoHeP1JS2TVLwYHfJxfbNYg0w8Q9Va4bVKHagwvmaML4E6o9
+   UXOJwU0NkbLTjvUjvpHq9KRVe50mcc8AM7zUF+imF5dUNtgxr0VYLYsUM
+   cIRowHYKCN+k5m+TjiNXgzpv4//kDu5Erton5xmPi3tDEU6bURCdJgwk2
+   qhJcNrcAyQHdjEzUIquc70FgpaUTR1p/f8gh0fX9qqYag261Xv9rGYZ5t
+   JKVZgIxD4CM0zHHH8BEsD4Ke105FGG1wFLGATyt73UpLj9jOwkFEh3JTt
+   plDptDQasvwrB2a+Dx1rckaSjZXeucpAKcxC51uNwaxiiqNM7PsMvviux
+   Q==;
+References: <cover.1686926857.git.waqarh@axis.com>
+ <d2d8f34c09a2ba0504eaba4f451412de41db2f37.1686926857.git.waqarh@axis.com>
+ <682cf4f8-ba1b-d74a-c744-6aa484c1acd5@metafoo.de>
+User-agent: a.out
+From:   Waqar Hameed <waqar.hameed@axis.com>
+To:     Lars-Peter Clausen <lars@metafoo.de>
+CC:     Jonathan Cameron <jic23@kernel.org>, <linux-iio@vger.kernel.org>,
+        <kernel@axis.com>, <linux-kernel@vger.kernel.org>,
+        <kernel@lists.axis.com>
+Subject: Re: [PATCH 2/2] iio: Add driver for Murata IRS-D200
+Date:   Mon, 19 Jun 2023 13:21:51 +0200
+In-Reply-To: <682cf4f8-ba1b-d74a-c744-6aa484c1acd5@metafoo.de>
+Message-ID: <pndsfan1mev.fsf@axis.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.175.61]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500012.china.huawei.com (7.185.36.15)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.0.5.60]
+X-ClientProxiedBy: se-mail02w.axis.com (10.20.40.8) To se-mail01w.axis.com
+ (10.20.40.7)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Fri, Jun 16, 2023 at 18:37 -0700 Lars-Peter Clausen <lars@metafoo.de> wrote:
 
-commit e18eb8783ec4949adebc7d7b0fdb65f65bfeefd9 upstream.
+> On 6/16/23 08:10, Waqar Hameed wrote:
+>> Murata IRS-D200 is a PIR sensor for human detection. It has support for
+>> raw data measurements and detection event notification.
+>>
+>> Add a driver with support for triggered buffer and events. Map the
+>> various settings to the `iio` framework, e.g. threshold values, sampling
+>> frequency, filter frequencies etc.
+>>
+>> Signed-off-by: Waqar Hameed <waqar.hameed@axis.com>
+>
+> Looks very good, small minor comments.
 
-Currently the tracing_reset_all_online_cpus() requires the
-trace_types_lock held. But only one caller of this function actually has
-that lock held before calling it, and the other just takes the lock so
-that it can call it. More users of this function is needed where the lock
-is not held.
+Thanks!
 
-Add a tracing_reset_all_online_cpus_unlocked() function for the one use
-case that calls it without being held, and also add a lockdep_assert to
-make sure it is held when called.
+[...]
 
-Then have tracing_reset_all_online_cpus() take the lock internally, such
-that callers do not need to worry about taking it.
+>> index 000000000000..699801d60295
+>> --- /dev/null
+>> +++ b/drivers/iio/proximity/irsd200.c
+>> @@ -0,0 +1,1051 @@
+>> [...]
+>> +/*
+>> + * The upper 4 bits in register IRS_REG_COUNT value is the upper count value
+>> + * (exceeding upper threshold value). The lower 4 is the lower count value
+>> + * (exceeding lower threshold value).
+>> + */
+>> +#define IRS_UPPER_COUNT(count)	(count >> 4)
+>> +#define IRS_LOWER_COUNT(count)	(count & GENMASK(3, 0))
+>
+> Usually we add parenthesis around macro arguments to avoid issues in case the
+> argument is a non-singular expression.
 
-Link: https://lkml.kernel.org/r/20221123192741.658273220@goodmis.org
+Of course! Will use `FIELD_GET()` as Jonathan suggests.
 
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Zheng Yejian <zhengyejian1@huawei.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+>> [...]
+>>
+>> +static int irsd200_read_data(struct irsd200_data *data, s16 *val)
+>> +{
+>> +	unsigned int tmpval;
+>> +	int ret;
+>> +
+>> +	ret = regmap_read(data->regmap, IRS_REG_DATA_HI, &tmpval);
+>> +	if (ret < 0) {
+>> +		dev_err(data->dev, "Could not read hi data (%d)\n", ret);
+>> +		return ret;
+>> +	}
+>> +
+>> +	*val = (s16)(tmpval << 8);
+>> +
+>> +	ret = regmap_read(data->regmap, IRS_REG_DATA_LO, &tmpval);
+>> +	if (ret < 0) {
+>> +		dev_err(data->dev, "Could not read lo data (%d)\n", ret);
+>> +		return ret;
+>> +	}
+> Is there a way to bulk read those registers in one go to avoid inconsistent data
+> if they change while being read?
 
-[Refers to commit message of 1603feac154ff38514e8354e3079a455eb4801e2,
-this patch is pre-depended, and tracing_reset_all_online_cpus() should
-be called after trace_types_lock is held as its comment describes.]
-Fixes: 1603feac154f ("tracing: Free buffers when a used dynamic event is removed")
-Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
----
- kernel/trace/trace.c        | 11 ++++++++++-
- kernel/trace/trace.h        |  1 +
- kernel/trace/trace_events.c |  2 +-
- 3 files changed, 12 insertions(+), 2 deletions(-)
+Yes, will use `regmap_bulk_read()`.
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index d068124815bc..219cd2c81936 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -1931,10 +1931,12 @@ void tracing_reset_online_cpus(struct trace_buffer *buf)
- }
- 
- /* Must have trace_types_lock held */
--void tracing_reset_all_online_cpus(void)
-+void tracing_reset_all_online_cpus_unlocked(void)
- {
- 	struct trace_array *tr;
- 
-+	lockdep_assert_held(&trace_types_lock);
-+
- 	list_for_each_entry(tr, &ftrace_trace_arrays, list) {
- 		if (!tr->clear_trace)
- 			continue;
-@@ -1946,6 +1948,13 @@ void tracing_reset_all_online_cpus(void)
- 	}
- }
- 
-+void tracing_reset_all_online_cpus(void)
-+{
-+	mutex_lock(&trace_types_lock);
-+	tracing_reset_all_online_cpus_unlocked();
-+	mutex_unlock(&trace_types_lock);
-+}
-+
- /*
-  * The tgid_map array maps from pid to tgid; i.e. the value stored at index i
-  * is the tgid last observed corresponding to pid=i.
-diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
-index f2ff39353e03..edc17a640ab3 100644
---- a/kernel/trace/trace.h
-+++ b/kernel/trace/trace.h
-@@ -677,6 +677,7 @@ int tracing_is_enabled(void);
- void tracing_reset_online_cpus(struct trace_buffer *buf);
- void tracing_reset_current(int cpu);
- void tracing_reset_all_online_cpus(void);
-+void tracing_reset_all_online_cpus_unlocked(void);
- int tracing_open_generic(struct inode *inode, struct file *filp);
- int tracing_open_generic_tr(struct inode *inode, struct file *filp);
- bool tracing_is_disabled(void);
-diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index 8f2cbc9ebb6e..a0675ecc8142 100644
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -2440,7 +2440,7 @@ static void trace_module_remove_events(struct module *mod)
- 	 * over from this module may be passed to the new module events and
- 	 * unexpected results may occur.
- 	 */
--	tracing_reset_all_online_cpus();
-+	tracing_reset_all_online_cpus_unlocked();
- }
- 
- static int trace_module_notify(struct notifier_block *self,
--- 
-2.25.1
+>> +	*val |= tmpval;
+>> +
+>> +	return 0;
+>> +}
+>> [...]
+>> +static int irsd200_write_raw(struct iio_dev *indio_dev,
+>> +			     struct iio_chan_spec const *chan, int val,
+>> +			     int val2, long mask)
+>> +{
+>> +	struct irsd200_data *data = iio_priv(indio_dev);
+>> +	int ret;
+>> +
+>> +	switch (mask) {
+>> +	case IIO_CHAN_INFO_SAMP_FREQ:
+>> +		ret = irsd200_write_data_rate(data, val);
+>> +		return ret;
+> Maybe just `return irsd200_write_data_rate(...)`
 
+Of course! (Remnant from a refactorization... Sorry!)
+
+>> +	default:
+>> +		return -EINVAL;
+>> +	}
+>> +}
+>> +
+>>
+>> [...]
+>> +static int irsd200_probe(struct i2c_client *client)
+>> +{
+>> +	struct iio_trigger *trigger;
+>> +	struct irsd200_data *data;
+>> +	struct iio_dev *indio_dev;
+>> +	struct regmap *regmap;
+>> +	size_t i;
+>> +	int ret;
+>> +
+>> +	regmap = devm_regmap_init_i2c(client, &irsd200_regmap_config);
+>> +	if (IS_ERR(regmap)) {
+>> +		dev_err(&client->dev, "Could not initialize regmap\n");
+> dev_err_probe() is the more modern variant for error reporting in the probe
+> function. Same for all the other dev_err() in this function.
+
+Alright, I'll change to `dev_err_probe()`.
