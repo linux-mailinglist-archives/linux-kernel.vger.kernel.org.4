@@ -2,153 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F429735534
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 13:02:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D46377354D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 12:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232342AbjFSLCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 07:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33564 "EHLO
+        id S232444AbjFSK7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 06:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231801AbjFSLBx (ORCPT
+        with ESMTP id S232385AbjFSK64 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 07:01:53 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2095.outbound.protection.outlook.com [40.107.117.95])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C001987
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 04:00:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=awC8UeIvXSoocPfEdYGvseyblw0xw5ADzb1+G5HMzoBzxVUtNhBJU1t4Hm3awLWFwE9SOLzktA9TAKQvlhnAh7Gufl2iUIEi8Z5dlbsCy28YR62xVvIGD/4NXfMbaP1t/ODJisuOy59tLoB2hV3MElOw6fXbq5Oqusq/W7oGNFtUHArVANHbA3j+qiCn95JK6LdN4jb9ScZtkf4SDRa/Psmuk2YJXnMctk2IGbXGKj4S5mpMKrpuIQCENTiwZPa8ZzC3FzKaYcn6uRdPSi76eBX0mMb2iK+ovXDZq5qQeb5ILsDqefYAwAmFJMgO+GctkO+gX6wm7bGubg3OTsWfMg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ivJsXuB2YQe25+wDdOAG6THiewWW1JCsiheI1umJqfw=;
- b=Dj9nWLVP/DFK8zqnunmZegmH6T46JKG0XYLPBOA01zyo81HjjfzbToxYGmrnyD8sHaKB6/Bl/8gnyzTqbR9L54RLOc5SQIEi2RcG3STrgqTzD2UFRiQufHlYNTwNJtipB8chwtC89YGKu1e1icmCYVD5vSQkNji0BcgtpNgr/Ox6Bo8l5GNXvhiOLo//31L6SN8AtJkGPivHIbrgqO6RthoWluoqdSuDTVhx80Di1gOQDRsZDLrFY8/RMCsg5b6pyQsiN7I4AGTpjPqmqpvo2/4hRPiqQdxRyBvN/ft728mO3I5aT16myQ8rVEbEm1aKZtcsz/1bTG+b3nMrsmgpKg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ivJsXuB2YQe25+wDdOAG6THiewWW1JCsiheI1umJqfw=;
- b=D1ls8N7BTi9azjRo8l+JW1Zoq0HyS/4ukDGP8sclshhV9iDaZqxlEfRrJZL2TPcBPGZsraUKF2rWnH7pfVFL0CM2v1k/NDEzoRZC/5z4gwOsZ5IyV/+afUOdK9oDlln3YjefekBOjVzhP2a6uS58gwJkCVRmguT/nPM91uiq1/uJtJTtO3tvIRkiPt8OeiXJQvWJkrc0YyPHOAulVAa50vpGZ3AVRsQtvSt9hLpxHZwC0WLuyp1NIcDXec5G8xRfKQxUu/hz0+7GsoVZmz5lbf7VAi/hw8eDrftTVbBGULIWVU73MTG74JlqwG//AHuKNjUqEQK1rebHkd6mC0ifqg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5022.apcprd06.prod.outlook.com (2603:1096:101:48::5)
- by TYZPR06MB6566.apcprd06.prod.outlook.com (2603:1096:400:454::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.36; Mon, 19 Jun
- 2023 11:00:53 +0000
-Received: from SEZPR06MB5022.apcprd06.prod.outlook.com
- ([fe80::37cd:b3a2:1fee:705c]) by SEZPR06MB5022.apcprd06.prod.outlook.com
- ([fe80::37cd:b3a2:1fee:705c%6]) with mapi id 15.20.6500.031; Mon, 19 Jun 2023
- 11:00:53 +0000
-From:   Li Dong <lidong@vivo.com>
-To:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Aric Cyr <aric.cyr@amd.com>,
-        Tom Rix <trix@redhat.com>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        Anthony Koo <Anthony.Koo@amd.com>,
-        "Leo (Hanghong) Ma" <hanghong.ma@amd.com>,
-        Li Dong <lidong@vivo.com>,
-        Dillon Varone <Dillon.Varone@amd.com>,
-        Austin Zheng <austin.zheng@amd.com>,
-        Mike Hsieh <Mike.Hsieh@amd.com>,
-        amd-gfx@lists.freedesktop.org (open list:AMD DISPLAY CORE),
-        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Cc:     opensource.kernel@vivo.com
-Subject: [PATCH] gpu: drm/amd: Fix traditional comparison using max method
-Date:   Mon, 19 Jun 2023 18:54:45 +0800
-Message-Id: <20230619105514.1888-1-lidong@vivo.com>
-X-Mailer: git-send-email 2.31.1.windows.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TYAPR01CA0030.jpnprd01.prod.outlook.com
- (2603:1096:404:28::18) To SEZPR06MB5022.apcprd06.prod.outlook.com
- (2603:1096:101:48::5)
+        Mon, 19 Jun 2023 06:58:56 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ECCB10F2;
+        Mon, 19 Jun 2023 03:57:35 -0700 (PDT)
+Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 59952DDA;
+        Mon, 19 Jun 2023 12:56:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1687172219;
+        bh=cD5pqKTY5/ObcvKp271EhUpO47bHD0WwDTzCRMlW9Ng=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=TdV0Ju26ZNebUaHN5/9bM4MNZNuAMA3ToCFYvHf9NrkG65IIPBcgXh9lkLmotE20l
+         wybYH2rdiekkF1OKSbv821V3chou6EkYMRAydKIGa7eGdC6u5xr3IYDDfyJkolJ2/u
+         enRIPVPhukWDi0ZRB+3DkwvJoBFvgN5K6WbpnQFs=
+Message-ID: <3dda6808-cda2-e587-88a7-00621b2cfca3@ideasonboard.com>
+Date:   Mon, 19 Jun 2023 13:57:29 +0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5022:EE_|TYZPR06MB6566:EE_
-X-MS-Office365-Filtering-Correlation-Id: 061b6f3b-f862-4025-5d1a-08db70b472f0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5OB6F7x2elN9xCqCf/TNGmDdR8bVTBQT3tJOwa3bAzQNckTa7FBOWrrjfVL7CvtSDS6Et9nHw7D2eYilnYXkKBpk7aMmqHE2g2N2OqH74oOHhg+jMAO/2FeG+Yl45NoaxSertxgaZDRXxwGsngPtXpjmHAGDWBOS7jUXstqNrcvYhwR+fG+yZfHd97MfNs/MVZuf+TNvfZLkqKY9W85ysndiRNycWkIeTgTSLk5Gktb5E4UDZikvUf1ON1f+GYvWxTn399DVREokSPqq12Al6dsSDBYVHY5dl+w4bY68g/Dbl1RjyH5IDDabpcU42eQg1IoJNtx0Z3qtA5TC3a+dQ5kpyk1LHz6pAA+zu43SCmmu47JQXg9nitl3hIkA4qOFo4RYdKMp4pRPEYgNqlsgVQVLMywmMZHhqYkoNhpN+SqjSEDevqTm1D9BikbJaFDd2k0R2moqo00XZ+0FU1AHwO+IY01SPu7JGyTb832vOZNbLqJx5hWlMwqJVHOWJOGAh8zTu+uqVHm6N0+4V1bMXqgcKPekKFnxuNusXHE7u969Do9kV3EjAAn5n0drWr9qMBsBiGOKnH8axtmTC4BPZgbsBopB2Wo2GnGiH/noURQaUmuQW3yLoOZKpJTPSK4lKoXPVC6Jv+8wA6K9TFNlpg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5022.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39850400004)(346002)(136003)(396003)(366004)(451199021)(478600001)(83380400001)(86362001)(107886003)(6486002)(52116002)(6666004)(316002)(38350700002)(921005)(66556008)(66476007)(4326008)(66946007)(38100700002)(1076003)(6506007)(6512007)(26005)(186003)(110136005)(2616005)(8676002)(8936002)(7416002)(2906002)(5660300002)(41300700001)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dHfrkXeJ+aWLt6NXHGKX10UD+ocpvbEGlpcSSBpmvskth7Saq8DPoLvlatU1?=
- =?us-ascii?Q?czuRvkLU/GNB+CFdkDB+P1SYbVr5VzILDIn3uJg7fK30cdY2yBe90lI5czrF?=
- =?us-ascii?Q?MH1f9znks8roVAdlZPsIgq5bXb0L3bZY2yCaeV1hEnjQRkxQI0MJKt51Wt0I?=
- =?us-ascii?Q?tKr4/GTVOzrFI/qKJUF9CfDLd2UJm8aWVSido5gQQzEBLEIQmRcYCEI81ygG?=
- =?us-ascii?Q?mklVoh9128rXIURRjgvUrNn8o1CTvjYnvvHwcGMZWwe6ZzK5XwU5azjYA3lg?=
- =?us-ascii?Q?oUqfWeUoakvrpnJBWMB8aTxr4EFB8xY0pwyF9I32nIHxI4dH6fB/kboCsBgX?=
- =?us-ascii?Q?9XhKYZZ50EPpLi8NYEedxtzWcZVJR33oFQGqwcou+njsKVcC0ja4OVgKiHUD?=
- =?us-ascii?Q?8/klJmrN4mjg81xIqRdqr6/tJHr+7b5Zz4rCv/1xA0BGeUxKRJo2dsfIM5xu?=
- =?us-ascii?Q?2ylIBzffbidsIU1lMBSnN2wqwxjg5jP8lymry0LJwH9fEt4ckNze1Di8u5mL?=
- =?us-ascii?Q?TBQ7xCNyNLziQWBF2or34IhrREi2DzBnmzfRG4R/ICzciL8BZsHk6a47sYLY?=
- =?us-ascii?Q?Q+Aku5xiZYC6v8DqVbrY4JYueObLjdjIUWCyf5V7hEAHTa5V1GQ/QbasPrL7?=
- =?us-ascii?Q?Q2XobAUG6RTLybuGMCSNtwVhLghqdCdC37ZmhUqNtIgBIL6Q9S35O3fp4zus?=
- =?us-ascii?Q?6bZxJWBJ/Fz/L8TYHNY3iMcSB8LN3bYRR3NLYg9g1fruVBFVC8aKhcf0Y+dQ?=
- =?us-ascii?Q?tgydx8jFR+XeU/xBBySR3yIh83Dyq79U6lD79tC9ctnf7sYiypVWhMSzTubx?=
- =?us-ascii?Q?1T0Ym6RM60NRtYkdM57he+aj3gPVmDKtqykPcYPBpN7rMOzfbXF/2OtxhG3P?=
- =?us-ascii?Q?yajav+8P+4ncOf99SAYjnv3//BQACAWhQEez50IYkZKjylEdoZrOzdtPPtw0?=
- =?us-ascii?Q?w+/Zi13SlEjyiBTYk0Y7d9hnH5jOAFvDFgaGXEkUe2YZSoJ9pZEuHJN4sCNG?=
- =?us-ascii?Q?nsKRfe0EqbaNlKAiI/FyBhwmPSkKF5bQnv+/QRC0hSngSkcsbKF+Ft8Cg3PA?=
- =?us-ascii?Q?xMsgNkpayjPTOUOPsw5hkKrCr2VpYoOn0ACVdgu34+XIt002bbyAjyJ4WzoZ?=
- =?us-ascii?Q?d/CeWd0p5gRthOkVqF69UFlxP8iEMy+7sFcSvbSI2MdwNU75hWgAsvWJXgy3?=
- =?us-ascii?Q?dQkS0yECG3HFv0VmYRVgOmzEwfSg6N9Ki84ORkmbE0xKbPzSWC8KbTDW6tY+?=
- =?us-ascii?Q?HihjPOvtiKG8sj+o3cZ3ZAEDEg42b7CPJWRK2oXcyRs2e8u/0N16LOQulnED?=
- =?us-ascii?Q?ULsk/sHbnLPuxbDWNe9RCkzZi8HuvCHRpiaFyhO+8wL0nKwyUSCAzK8eNnNk?=
- =?us-ascii?Q?Pw4P47qzp+J8PyrYViTAqSpICsLc2c/4AvcOiuOvHk9ZdfvZyuno+Njuqwhj?=
- =?us-ascii?Q?NOXU500KanPQQEpsIfqwE3j/3p4FoKEeXQWqWaYlt5KqsNV1kQVNfXZtj4PZ?=
- =?us-ascii?Q?Wres30O23FipdFae5jbsR+L1xLStDuzSPhKkFlmMqjRmtO6Ce94pcQq3JVIt?=
- =?us-ascii?Q?H3v42iM3UE55M7+3x/UfJYsU16pzlzfrj81w2upZ?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 061b6f3b-f862-4025-5d1a-08db70b472f0
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5022.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jun 2023 11:00:53.1894
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UNhjA7SaKE19oryodqvX6Touw3yOPA8h7S+V0F8bLdmnd2Hv1KG2+EkpYDVLY5GLNBDlqFQZSQRvJiQM/FUnmA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB6566
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v14 18/18] media: i2c: ds90ub953: Support non-sync mode
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>
+References: <20230616135922.442979-1-tomi.valkeinen@ideasonboard.com>
+ <20230616135922.442979-19-tomi.valkeinen@ideasonboard.com>
+ <ZIx17WC7plfDPpmc@smile.fi.intel.com>
+ <dc79de4e-4043-5448-db44-ef8f7749a376@ideasonboard.com>
+ <ZJAyb9WHjWrdSsBw@smile.fi.intel.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <ZJAyb9WHjWrdSsBw@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It would be better to replace the traditional ternary conditional operator with max()
+On 19/06/2023 13:48, Andy Shevchenko wrote:
+> On Mon, Jun 19, 2023 at 12:00:57PM +0300, Tomi Valkeinen wrote:
+>> On 16/06/2023 17:47, Andy Shevchenko wrote:
+>>> On Fri, Jun 16, 2023 at 04:59:22PM +0300, Tomi Valkeinen wrote:
+>>>> Add support for FPD-Link non-sync mode with external clock. The only
+>>>> thing that needs to be added is the calculation for the clkout.
+> 
+> ...
+> 
+>>>> +	switch (priv->mode) {
+>>>> +	case UB953_MODE_SYNC:
+>>>> +		if (priv->hw_data->is_ub971)
+>>>> +			return priv->plat_data->bc_rate * 160ull;
+>>>> +		else
+>>>> +			return priv->plat_data->bc_rate / 2 * 160ull;
+>>>
+>>> Redundant 'else'.
+>>
+>> True, but I like the symmetry in:
+>>
+>> if (foo)
+>> 	return 123;
+>> else
+>> 	return 321;
+> 
+> At the same time it will be symmetry with other switch-case(s). That's why the
+> question about fallthrough below.
+> 
+>>> Do I understand correctly you don't want to fallthrough because it will give
+>>> ±160 in the rate (depending if it's even or odd)?
+>>
+>> Sorry, can you clarify? Fallthrough to what?
+> 
+> To the below case since '/ 2 * 160 ~= *80'. Why ~ because it might give
+> off-by-one error due to even/odd input.
 
-Signed-off-by: Li Dong <lidong@vivo.com>
----
- drivers/gpu/drm/amd/display/modules/freesync/freesync.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+The below case is different. "priv->plat_data->bc_rate" vs 
+"clk_get_rate(priv->clkin)".
 
-diff --git a/drivers/gpu/drm/amd/display/modules/freesync/freesync.c b/drivers/gpu/drm/amd/display/modules/freesync/freesync.c
-index dbd60811f95d..a5eabde53fa4 100644
---- a/drivers/gpu/drm/amd/display/modules/freesync/freesync.c
-+++ b/drivers/gpu/drm/amd/display/modules/freesync/freesync.c
-@@ -1005,8 +1005,7 @@ void mod_freesync_build_vrr_params(struct mod_freesync *mod_freesync,
- 			(stream->timing.h_total * stream->ctx->dc->caps.max_v_total));
- 	}
- 	/* Limit minimum refresh rate to what can be supported by hardware */
--	min_refresh_in_uhz = min_hardware_refresh_in_uhz > in_config->min_refresh_in_uhz ?
--		min_hardware_refresh_in_uhz : in_config->min_refresh_in_uhz;
-+	min_refresh_in_uhz = max(min_hardware_refresh_in_uhz, in_config->min_refresh_in_uhz);
- 	max_refresh_in_uhz = in_config->max_refresh_in_uhz;
- 
- 	/* Full range may be larger than current video timing, so cap at nominal */
--- 
-2.31.1.windows.1
+As to the order of the calculation (/ 2 * 160 versus * 160 / 2), 
+generally speaking, I have never figured out what are the correct ways 
+to calculate clock rates.
+
+I wrote "x / 2 * 160" as that's what the documentation gives (there's a 
+hardware /2 divider in non-ub971 chips, followed by a 160 multiplier). 
+But does the documentation presume that the calculation is done 
+precisely, not in integers? If so, "x * 160 / 2" would be better (but 
+then, do we need to round?). Or does the /2 hardware divider basically 
+actually work as a an integer division, in case "x / 2 * 160" is the 
+correct one.
+
+>>>> +	case UB953_MODE_NONSYNC_EXT:
+>>>> +		/* CLKIN_DIV = 1 always */
+>>>> +		return clk_get_rate(priv->clkin) * 80ull;
+> 
+
+  Tomi
 
