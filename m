@@ -2,168 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B282735C40
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 18:42:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BED59735C41
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 18:44:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231954AbjFSQl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 12:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43120 "EHLO
+        id S232322AbjFSQoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 12:44:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231636AbjFSQlx (ORCPT
+        with ESMTP id S229521AbjFSQoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 12:41:53 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46022DD
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:41:52 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f9083d8849so29471705e9.0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:41:52 -0700 (PDT)
+        Mon, 19 Jun 2023 12:44:18 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D39DD
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:44:17 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f640e48bc3so4676186e87.2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:44:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google; t=1687192911; x=1689784911;
+        d=linaro.org; s=google; t=1687193056; x=1689785056;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ibNl8hagn3rTly8LUTpZEDxxRnM23ysNCd6OX53mne8=;
-        b=kPezCUnVg3j3Fk/Uq6JUrVFKWzbGW0Ll1GLgoW75fYv7O7ORrpHKAOsmnXohdQ8auu
-         vjOZvJTe/A1C63Z2PX4W56gGJs7dtF3urgNos6T1fqfLXqxrkdUDzAkxPPCWcnS8OTgs
-         TyYJKnOiu6P08SHtX1spdj7HxAOyu9KuLjV11E+od3lm66RbWTwsN66KjsQuRZTuOuCv
-         agl2UYrFCg3TiV4NvhX0CQkvWHdI5qlq4z2P84XyaVM+bWAg1UfNmQuqKfeBiCJgEZg2
-         XGWpHyOovrfhUHkqN2qftnVxpIqAl403XTtAbjOlvnnDGKAZXo6CWWOJ73rTFyBGjqtZ
-         rIig==
+        bh=NHM0B0vYW8Moj4jOHMcKxrRBWR7x0bZGC3l3qr2YTGA=;
+        b=sKgybTjikwRKb87FUK/rDmBirvzBAJ8OQsgp4ESmA/XVMMy/qpWWE9dl6SwkFbgFCA
+         QSh0tTX2N+l9Gdf/Rt5rMkDPVGlnHJyVQuEU82HnAYpjQlP2tcJJk9QnXV3TrbaqGBzz
+         hjCnclfEJYtIkYGoZXCDFrNJfyRJnbZ/5Zc6444ePEp2Vvj+NHYrJEu2l9Ogc1x7mBpf
+         T7QI4E9gnh+8kg5aFUOEQ4ZrLmCjHrQaJGbTl0Lr+Us38KdRROKxbneCV16VXcaYNsGq
+         tAWDwrzcoRFEX6/thBNZhisAxe4/jU52Cn+YZ8jpOiTVzcjCalj0rzt9clRHtaktly5l
+         gasQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687192911; x=1689784911;
+        d=1e100.net; s=20221208; t=1687193056; x=1689785056;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ibNl8hagn3rTly8LUTpZEDxxRnM23ysNCd6OX53mne8=;
-        b=AaPWMqTHBg3+rn0luvmceJoZTXfZbXbuNy+y7IgOmNaauz94+Ua2r/NVg3CGLVtnm+
-         nphGj3tVkvMOY6qs7S4NzIEaTMW58o+Xyo4+PuU7H3TutSnG1tSyHIBuvFTFfpKc9HO4
-         K771wzAYEZZ2CyjsB5mRK/BDe0lUYU7p7RYZW0q2QPGpuqjveMmcD6e5Df+14MLtgNhQ
-         /5XtUB0L3wu3Y9lagl531mradXyCP5RGNhuEH69146+daYbJaNdeEGiPbIzJCRGJUHHj
-         5X8x2mz3PP+8hFHhISUstzHJ7/yCrUkFZEfDi+lKN4N77gEQEl3waebTAFkq0m+o7Pdu
-         4xPw==
-X-Gm-Message-State: AC+VfDxzliXBw2xP+m6PfiiVQ9cGGo5TaJWUc2c8fa7GEYgYYG7dPZM7
-        IKBhCfY5VJSZQkg8MASD1NX4GA==
-X-Google-Smtp-Source: ACHHUZ5YA9SJlPEJfePsXwU8aR532C5VQlv4CirPkKCK3EEV97r3WWChCB1H8ckLL/a74gTEf5Eidg==
-X-Received: by 2002:a1c:f709:0:b0:3f6:9634:c8d6 with SMTP id v9-20020a1cf709000000b003f69634c8d6mr9034792wmh.18.1687192910721;
-        Mon, 19 Jun 2023 09:41:50 -0700 (PDT)
-Received: from [10.83.37.24] ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id z8-20020a05600c220800b003f9b12b1598sm3232781wml.22.2023.06.19.09.41.49
+        bh=NHM0B0vYW8Moj4jOHMcKxrRBWR7x0bZGC3l3qr2YTGA=;
+        b=SYETIpSlIigbmRKPKVEbymlfiqRY8lEJrFfZ9yVf2s3EaMii35TYItKl5lOvVeOc4U
+         LVp7DItN3U/PpUJFAA/xcQPHPSGva2iGTcVK7Kt4V8ZEYR4YurTa/IGBQlXgQXWLsVT7
+         GEHRlx5ecxcm+yrbHsxn7OGVcRYGHWPZJJATYLc0fowEXAxgnNQWF43hcd2k8aCXHcR9
+         amYNpK5BlQ0WRPaG1XvshzICt7lueCtfWcIhgWbSjWnR05SxSH3iy6+9YYCkJErOqSh1
+         MCOm7rxW0a2ZdCnlrWrvq79Vw2enl+RlG/4M/ZuRWGk+9uX2E7IpJHxptJjZPNLmbwva
+         tmJA==
+X-Gm-Message-State: AC+VfDwFNerMGmaJCD1MibllT18f0cbhVsKkS/QT+sM77muIn7bkfP+X
+        lN5dXAM1Mr4pKTIhQYm1cqry9g==
+X-Google-Smtp-Source: ACHHUZ5/Yxl3B5Pw42d+rnSvPpBcVE1TMNul4G+s47SuGjWGX7HYsBA9nvxKaHVAVJyutdH86IGrCw==
+X-Received: by 2002:ac2:4647:0:b0:4f4:d324:8b14 with SMTP id s7-20020ac24647000000b004f4d3248b14mr5600175lfo.14.1687193055446;
+        Mon, 19 Jun 2023 09:44:15 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:13d0:1b6c:ce40:5429? ([2a05:6e02:1041:c10:13d0:1b6c:ce40:5429])
+        by smtp.googlemail.com with ESMTPSA id d22-20020a1c7316000000b003f80946116dsm11237825wmb.45.2023.06.19.09.44.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 09:41:50 -0700 (PDT)
-Message-ID: <9ae5c977-ff9c-591d-3a32-ca9dd00d531e@arista.com>
-Date:   Mon, 19 Jun 2023 17:41:48 +0100
+        Mon, 19 Jun 2023 09:44:15 -0700 (PDT)
+Message-ID: <4c2f66f1-2623-306f-f1d3-83a32a0c2885@linaro.org>
+Date:   Mon, 19 Jun 2023 18:44:14 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v7 04/22] net/tcp: Prevent TCP-MD5 with TCP-AO being set
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v5 0/4] Support timer drivers as loadable modules
 Content-Language: en-US
-To:     David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     linux-kernel@vger.kernel.org,
-        Andy Lutomirski <luto@amacapital.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Bob Gilligan <gilligan@arista.com>,
-        Dan Carpenter <error27@gmail.com>,
-        David Laight <David.Laight@aculab.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Donald Cassidy <dcassidy@redhat.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Francesco Ruggeri <fruggeri05@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Ivan Delalande <colona@arista.com>,
-        Leonard Crestez <cdleonard@gmail.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        netdev@vger.kernel.org
-References: <20230614230947.3954084-1-dima@arista.com>
- <20230614230947.3954084-5-dima@arista.com>
- <85077827-d11d-d3e6-0d23-9e60974cad0f@kernel.org>
- <1c2537d0-cf64-c010-fec6-9fa9ad758f42@arista.com>
-From:   Dmitry Safonov <dima@arista.com>
-In-Reply-To: <1c2537d0-cf64-c010-fec6-9fa9ad758f42@arista.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     walter.chang@mediatek.com, Thomas Gleixner <tglx@linutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        John Stultz <jstultz@google.com>
+Cc:     wsd_upstream@mediatek.com, stanley.chu@mediatek.com,
+        Chun-hung.Wu@mediatek.com, Freddy.Hsin@mediatek.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230517022557.24388-1-walter.chang@mediatek.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230517022557.24388-1-walter.chang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/19/23 17:31, Dmitry Safonov wrote:
-> Hi David,
-> 
-> On 6/18/23 18:50, David Ahern wrote:
->> On 6/14/23 4:09 PM, Dmitry Safonov wrote:
->>> Be as conservative as possible: if there is TCP-MD5 key for a given peer
->>> regardless of L3 interface - don't allow setting TCP-AO key for the same
->>> peer. According to RFC5925, TCP-AO is supposed to replace TCP-MD5 and
->>> there can't be any switch between both on any connected tuple.
->>> Later it can be relaxed, if there's a use, but in the beginning restrict
->>> any intersection.
->>>
->>> Note: it's still should be possible to set both TCP-MD5 and TCP-AO keys
->>> on a listening socket for *different* peers.
->>
->> Does the testsuite cover use of both MD5 and AO for a single listening
->> socket with different peers and then other tests covering attempts to
->> use both for a same peer?
-> 
-> Thanks for the question, I have written the following tests for
-> AO/MD5/unsigned listening socket [1]:
-> 
-> 1. Listener with TCP-AO key, which has addr = INADDR_ANY
-> 2. Listener with TCP-MD5 key, which has tcpm_addr = INADDR_ANY
-> 3. Listener without any key
-> 
-> Then there's AO_REQUIRED thing, which BGP folks asked to introduce,
-> which is (7.3) from RFC5925, an option that is per-ao_info, which makes
-> such socket accepting only TCP-AO enabled segments.
-> 
-> So, 4. Listener with TCP-AO, AO_REQUIRED flag.
-> 
-> And then, going to non-INADDR_ANY:
-> 5. Listener with TCP-AO and TCP-MD5 keys for different peers.
-> 
-> Here again, for each of AO/MD5/unsigned methods, attempt to connect:
-> 6. outside of both key peers
-> 7. inside correct key: i.e. TCP-MD5 client to TCP-MD5 matching key
-> 8. to a wrong key: i.e. TCP-AO client to TCP-MD5 matching key
-> 
-> And another type of checks are the ones expecting *setsockopt()* to fail:
-> 9. Adding TCP-AO key that matches the same peer as TCP-MD5 key
-> 10. The reverse situation
-> 11. Adding TCP-MD5 key to AO_REQUIRED socket
-> 12. Setting AO_REQUIRED on a socket with TCP-MD5 key
-> 13. Adding TCP-AO key on already established connection without any key
 
-Oh, yeah, forgot to mention, there are another 2 tests for TCP_CLOSE
-socket (just a new one), that has both TCP-AO and TCP-MD5 keys and tries
-to call connect(). In discussion with the team, it seems really
-unexpected situation and better to force userspace to remove either AO
-or MD5 key before calling connect(). Those from the output in [1] are:
+As I already said, I'm not very comfortable with these changes and the 
+potential impact it can have on the overall time framework.
 
-> ok 39 AO+MD5 server: client with both [TCP-MD5] and TCP-AO keys:
-connect() was prevented
-> ok 40 AO+MD5 server: client with both TCP-MD5 and [TCP-AO] keys:
-connect() was prevented
+I will pick the series if Thomas gives its Acked-by
 
+Thanks
+
+
+On 17/05/2023 04:25, walter.chang@mediatek.com wrote:
+> From: Walter Chang <walter.chang@mediatek.com>
 > 
-> And then another bunch of tests that check TCP-AO/TCP-MD5/unsigned
-> interaction in non/default VRFs.
-> I think the output of selftest [1] is more-or-less self-descriptive,
-> correct me if I could improve that.
+> This set of patches aims to make SoC related timer drivers, such as
+> timer-mediatek.c become loadable modules for the Generic Kernel Image
+> (GKI).
+> 
+> This driver registers an always-on timer as tick_broadcast_device on
+> MediaTek SoCs. If the system does not load this module at startup,
+> system will also boot normally by using built-in `bc_hrtimer` instead.
+> Besides, the previous experiment [1] indicates that the SYST/GPT, in
+> combination with a loadable module, is fully operational.
+> 
+> The first three patches export functions and remove __init markings to
+> support loadable timer modules.
+> 
+> The fourth patch makes timer-mediatek.c become loadable module for GKI.
 > 
 > [1]
-> https://github.com/0x7f454c46/linux/commit/d7b321f2b5a481e5ff0e80e2e0b3503b1ddb9817
+> https://lore.kernel.org/all/32777456f8e0f98e4cd5b950f421d21f71b149cf.camel@mediatek.com/#t
+> 
+> [v5]
+> - Add Signed-off-by tags in all patches
+> - Add Acked-by tags and Reviewed-by tags
+> 
+> [v4]
+> - Fix review comments pointed by Angelo
+> 
+> [v3]
+> - Rebase on linux-next
+> 
+> [v2]
+> - Convert timer-mediatek.c driver to loadable module
+> 
+> Chun-Hung Wu (4):
+>    time/sched_clock: Export sched_clock_register()
+>    clocksource/drivers/mmio: Export clocksource_mmio_init()
+>    clocksource/drivers/timer-of: Remove __init markings
+>    clocksource/drivers/timer-mediatek: Make timer-mediatek become
+>      loadable module
+> 
+>   drivers/clocksource/Kconfig          |  2 +-
+>   drivers/clocksource/mmio.c           |  8 ++++---
+>   drivers/clocksource/timer-mediatek.c | 33 ++++++++++++++++++++++++++++
+>   drivers/clocksource/timer-of.c       | 23 +++++++++----------
+>   drivers/clocksource/timer-of.h       |  6 ++---
+>   kernel/time/sched_clock.c            |  4 ++--
+>   6 files changed, 56 insertions(+), 20 deletions(-)
+> 
 
-Thanks,
-          Dmitry
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
