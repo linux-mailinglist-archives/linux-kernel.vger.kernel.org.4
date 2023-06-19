@@ -2,263 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 705CD735585
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 13:12:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0682735589
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 13:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjFSLMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 07:12:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41634 "EHLO
+        id S229749AbjFSLOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 07:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231365AbjFSLMI (ORCPT
+        with ESMTP id S229559AbjFSLOP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 07:12:08 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8928391;
-        Mon, 19 Jun 2023 04:12:06 -0700 (PDT)
-Date:   Mon, 19 Jun 2023 11:12:02 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1687173123;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BNJEUYNaGO3ndcxsqEx3+fRdKWTSJ0HsE326eSb9jdQ=;
-        b=IQGhwOSi4DtjxNYzq42oDElp3x+Au/Koo2kIDPkgm3CmbagNgZBjVJ8ZuZS1SKfjrMxIse
-        m2Ki1imnxMBaviunDBNQeb77X2nAqhTHYLJ/v1H0gJ18d42MUwr+R5/jgxkRu5kdrYwbZD
-        UtLIkxpOBz6ZgnlvQWRfbRiTXd/1BDcjUnAvRrwKUDPUoHCplk1TGLw2ZEgcXzOmHMvjhq
-        tzxuBU9HsWi03nIe+PAp+BC0c1AclIS+x1Y6C3dDM33QTigC/FLYzkxP1NAAyiI2foJLIF
-        nYl00IT4oKSx8d2NkjbIVrmw3/aRyV3FiH0ekBEWsJBl8nynG/uNZeR05hZGEA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1687173123;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BNJEUYNaGO3ndcxsqEx3+fRdKWTSJ0HsE326eSb9jdQ=;
-        b=3snc5LE2YXLbyZIQFrPN55H+M4yEUnNRSfpkoFalBRlaUk+iP9DAsxEW+n9nv0zo3BxYXL
-        Po2LY8W+POKa9VBw==
-From:   "tip-bot2 for Yazen Ghannam" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: ras/core] EDAC/amd64: Cache and use GPU node map
-Cc:     Yazen Ghannam <yazen.ghannam@amd.com>,
-        Muralidhara M K <muralidhara.mk@amd.com>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230610210930.174074-1-trix@redhat.com ]>
-References: <20230610210930.174074-1-trix@redhat.com ]>
+        Mon, 19 Jun 2023 07:14:15 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2086.outbound.protection.outlook.com [40.107.95.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655D891;
+        Mon, 19 Jun 2023 04:14:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dl+n1TDiSRHgkXjC1AVhPNYZChm6VizCYOkcAbRTEBj/FwvnBcjkT0Kr9LMeM3kEp02GXL39dmTWm/EGIgzmmAerSxlYrAId83vb5JHhr+EfQGBVNdbLojkUkZA9vWqLfiCknR2vENTPqjZbH3ftO2vM7Jg4SsKUkrXGbYu8fyED3RNAiEBOfvQiDLjNjm7nBI9RyadTHPvrMtwly7WQjxaU1QU3YDkw43FQt8dXKHinlzM0GA6GUaY7yCC3ZRONeOHflj0YCCeBAA4zE3C1sVeeS3TerFYbx3IrnFuO+CAzu6weeUV5+BTS+a1jKqdLHfzJw0dZZwKlzlV5Brymhw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EhAhghbDWiD+52jDrthUSHIu2loILfH5SHy5xK5VSOU=;
+ b=gNOOI7gg3JffsjzbtZtiIhRa+1RjJedrW1w5/xESeNtOPycEKEdvTDRoQg4/qUjhqtrpHaKw+RZSBeLdPT3/H/hqbRTpRN/p7gu6pLBiDtuYb8zQbrZ+9wHXrfg/VkIE+kskTAFIWOXrE/v/s4zAm2BBOMRXRGqwwkXQMCWfzynq+QR/KDWl6xnYDc4yl6BgTGhQlrrH9FlS6rSYGC/lpE0nOzxpITUCAkFK1emeqx4qsFA6ywfQei3AvRfRS7xiCePWtCclsJOjceze9rlVl2qlnTSBIMf2OFT1/0CiiJFDONcSHugHc+h0KBlFZcYfxwA+oqW6jl2DI21NfE6gMw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EhAhghbDWiD+52jDrthUSHIu2loILfH5SHy5xK5VSOU=;
+ b=FmrfBBGY3z7G4tGaqaBePAPXiQnPlagWja439NXGmUIKHCVjDJpNv3dtQCRWI9OteHgp7Fe7rGZtPjUEt3YmqGD5p9j132mLVnHi/ILnz6Yeti7qYHDTjKgorqzoeFAdVaBARZD29a7lSMSA5qk5ZuGLuxe64Anbx5Z29QyitPapJyC0x4qk0F9j7XwYrXbaxg6QvXx7lwdrgVEtspf9XwUXRpUJEoNdf6CW+k4dj3L1pZZdhTgYbfXIPtxiqcETTR1cCFlzjtuvYuMfFmSDMyqMbWoBZ0iZeX8qYhzkfwmnZtb/zYUaWD0pYhJsyWktavKlJE9zQDogeMq52Wmg4Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
+ by DS7PR12MB6045.namprd12.prod.outlook.com (2603:10b6:8:86::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.36; Mon, 19 Jun
+ 2023 11:14:09 +0000
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::66d8:40d2:14ed:7697]) by CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::66d8:40d2:14ed:7697%5]) with mapi id 15.20.6500.036; Mon, 19 Jun 2023
+ 11:14:09 +0000
+Date:   Mon, 19 Jun 2023 14:14:04 +0300
+From:   Ido Schimmel <idosch@nvidia.com>
+To:     r-gunasekaran@ti.com
+Cc:     kuba@kernel.org, Nikolay Aleksandrov <razor@blackwall.org>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Ravi Gunasekaran <r-gunasekaran@ti.com>, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, bigeasy@linutronix.de,
+        simon.horman@corigine.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rogerq@kernel.org
+Subject: Re: [PATCH v2 net-next] net: hsr: Disable promiscuous mode in
+ offload mode
+Message-ID: <ZJA4fIH6vm9cO2VG@shredder>
+References: <20230614114710.31400-1-r-gunasekaran@ti.com>
+ <20230615223736.0577fb11@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230615223736.0577fb11@kernel.org>
+X-ClientProxiedBy: FR2P281CA0045.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:92::17) To CY5PR12MB6179.namprd12.prod.outlook.com
+ (2603:10b6:930:24::22)
 MIME-Version: 1.0
-Message-ID: <168717312215.404.10267458336828769262.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR12MB6179:EE_|DS7PR12MB6045:EE_
+X-MS-Office365-Filtering-Correlation-Id: 388235cc-5765-40c6-e334-08db70b64d9a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZS+MGxCSjpsUer6LJ0KtP88xJA/YihKLNOmffOGQeIgqfDM9Rcns2OjkX+FNwiEjz1w2Gzii0OkVSXLnFGa32h8YTOphKtF1bypRTiwwMxFZsp5fxqwCOSr0xY55y7bqAOBl/GCUXBclzifjuAKwe7h1hrW1md068w+NcJOny4YYTwdxZKqB0aU/Zt6TLOZ8ZApvGTTXCzSOXXf0Az33XMHw689xO7jeZswyd6D/pFAsxCynM8nqvAwo0sKaZl5nN5PkWBFfKroYV9548bTRWDkJvhwS/wUVeMyftEXoWc/MogPv1xl9mPuCg0XGY7tIFoAFZDKZ/PE4fy3STYH4+yVTGdzLsvKH7N/V8MqblAV7pzXDc6l6z2/IvzPSGhPuaHZWvODtpNuSTIBeVBUUFQSLflu1XuLfxoRL0Qch3F+P74vpxKHq8vSJbQ6b6nfKp4Cg11yZBzW4eveJhKMT9E9eUSy6LVWUZbqGuIRkjXRO8HKEyUPTY8XadV5j+4k7LR1BOdDoRIRN7kPfoY8pex3p0SdgapBiqIyPPQDER/qtnhlvScbxgaTGmspE2XQNo4drNevW3GtBHtAQNs8Mizbyetgt11YXWOQbNnHx0YQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(7916004)(346002)(396003)(136003)(39860400002)(366004)(376002)(451199021)(2906002)(41300700001)(7416002)(5660300002)(8676002)(8936002)(33716001)(86362001)(9686003)(478600001)(26005)(6506007)(6512007)(186003)(54906003)(6486002)(6666004)(966005)(66946007)(66476007)(66556008)(6916009)(4326008)(316002)(38100700002)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?K1vGKVNArNBxHxNAgz47j/J/isY+YO90Ps6zL/qxBbYI4ErBtH7KMVmq6bMw?=
+ =?us-ascii?Q?MLe63+c99rmVo4gd32w82nanpWkoa5+TaI5ZXyBFV/figgOjASlOvWfUjgi5?=
+ =?us-ascii?Q?FZjgukgl+ex+hJ/24dcI2JW1ed3ZpfmqWfVRaKxaFlbTYLQoxazhN/QTF6PM?=
+ =?us-ascii?Q?Wr37PVsbLNeiEkQhpgF8Al/syHZ96abxqcLu5AYtl/foDxsf+jvF0BDUYHnp?=
+ =?us-ascii?Q?nzheamdjpPurRCCbt9IuzHEGoYrYCBf+KLao2S3KLiP0QyHlWE+yDDyFtLZ4?=
+ =?us-ascii?Q?W4GY7spAGqMzFqfY+gNOeRr5nDZMZ1QfziMtTOqQvOPQjcpqd6GbY9+QluM4?=
+ =?us-ascii?Q?AwPGc/sfotNlwSNESE3jcK+BHQIyj3flxkBePyOeByJWBs+XMu14ymEgKTsZ?=
+ =?us-ascii?Q?eVGgmmL2ORXFzzm36EE76t+VvxFkyKNHZ4iXuYp3ZX2e+po7DHVOwrVhJLUO?=
+ =?us-ascii?Q?8ireoss+lBIOfa+iZ1NXO0WTrY7s3Y3BBbf+y1ao7O1nHbcFlxNaumapgdCk?=
+ =?us-ascii?Q?qj6lHlxv1lI+S+vp5ztKXiQ/9VqdJW+ChEFB+fL7gbpw0Evw/mtYrDMk5RXa?=
+ =?us-ascii?Q?+5vdGrcRq+knyJT/14QwWkWucGvyH6Lqjm27kmXFUEIu3OqOmg9nePoVPmmO?=
+ =?us-ascii?Q?VcJy/Zp2BbOG474Z7rQg9nZ3b9F2GigxiH8O/PbmJZmEoT68in9ehFaBx/E8?=
+ =?us-ascii?Q?pSoAF37IG+6XYf8OWRxu+mqir9kQ4gU5J2LQOvZEDV8CTs7Ydx7pIlRHe3Td?=
+ =?us-ascii?Q?pV2FgFLWOcbk341TTv9NC6YPG4LJlXhuWwg5SuLDsLTJASbOTv5gcczrBTl+?=
+ =?us-ascii?Q?8ElDz1u2SRRa+iQSZDay21HXQIxPxt5Tt5oTm6i7JgkfqRKXxSbvknaxNULC?=
+ =?us-ascii?Q?h+V3Vn29QdZ6+57zIi+Lm8WMQjP3ZaEAm90hHBx0GbPjSxyfgugIyHr2wXjd?=
+ =?us-ascii?Q?YnZJs3VC6Fq0nqACp161JI2v/q53H1zv2P5akzUQHh58VLuPbc0VKm9arm39?=
+ =?us-ascii?Q?DX0myrnYJVwvV6iOLNpcm8ayfJ0DDlpkPlnJwMIrW0zPvp06cjfcWnJA9Icg?=
+ =?us-ascii?Q?zj2/0BNyuQKzBndLVTVetEQJ9ntH++nns+xwO0chQ7XkIqTcXDMwqqX7tYTu?=
+ =?us-ascii?Q?0Rs+QttP9pYS3a5Y9dQ+iQS+SBV6VJZgRpvC8o7V9SPg1Q16q99uJqrfX40H?=
+ =?us-ascii?Q?VrPPO9glEV+BG901Mg49jBhg0CzOtJCghBKqzYZkEIsZuQpyG8sImH80+ilI?=
+ =?us-ascii?Q?jMsBxxo8nvn91MzBqeSltlvlodjscnUIhjuMNnvRi31/bKfPkKqfz3PhxUJs?=
+ =?us-ascii?Q?FL0vE5VgyLSRQpvo/t90cksHeOFVu1gCLRE9ll8DslXtHiXmvbxM0cXLK/5D?=
+ =?us-ascii?Q?CAjdt3ly3L+XN5MHHa4AmRXCP2qrwLrD0d38aQyZakKL3wTi6gebyGYuKtiT?=
+ =?us-ascii?Q?xnIhzS0+QVIsCyXpwLQFmYXj1EPwo2wCa4se1E2BXbeAp0Qe213KL1eii1aH?=
+ =?us-ascii?Q?87wPN6jVp1i+hMrCVVnH+JTx9HLncneFJQ3BMHvH2ycFKRP8W01SHNrv/c8y?=
+ =?us-ascii?Q?s8WY+vVJ6yI7X7SVfPB1TTIiJ+vRbkosUVMuikR+?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 388235cc-5765-40c6-e334-08db70b64d9a
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jun 2023 11:14:09.3714
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mcI7G9Raj8Vqc+FBSuQqPYr4W9mgsAfHGpNu8bBI7c2mSNpvcttPaXNkEc2v7moYzBIR24V5G5zzvOzJWojyoQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6045
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the ras/core branch of tip:
+On Thu, Jun 15, 2023 at 10:37:36PM -0700, Jakub Kicinski wrote:
+> On Wed, 14 Jun 2023 17:17:10 +0530 Ravi Gunasekaran wrote:
+> > When port-to-port forwarding for interfaces in HSR node is enabled,
+> > disable promiscuous mode since L2 frame forward happens at the
+> > offloaded hardware.
 
-Commit-ID:     4251566ebc1cf95ae26a1e5a24cdac1ac25e942f
-Gitweb:        https://git.kernel.org/tip/4251566ebc1cf95ae26a1e5a24cdac1ac25e942f
-Author:        Yazen Ghannam <yazen.ghannam@amd.com>
-AuthorDate:    Mon, 15 May 2023 11:35:37 
-Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Mon, 19 Jun 2023 13:01:44 +02:00
+It's not clear to me why you want to disable promiscuous mode. I'm not
+familiar with HSR, but I assume you want the hardware to forward all the
+packets between the two ports and not only specific DMACs.
 
-EDAC/amd64: Cache and use GPU node map
+How does the underlying device implement "promiscuous mode" that you
+benefit from disabling it?
 
-AMD systems have historically provided an "AMD Node ID" that is a unique
-identifier for each die in a multi-die package. This was associated with
-a unique instance of the AMD Northbridge on a legacy system. And now it
-is associated with a unique instance of the AMD Data Fabric on modern
-systems. Each instance is referred to as a "Node"; this is an
-AMD-specific term not to be confused with NUMA nodes.
+Thanks
 
-The data fabric provides a number of interfaces accessible through a set
-of functions in a single PCI device. There is one PCI device per Data
-Fabric (AMD Node), and multi-die systems will see multiple such PCI
-devices. The AMD Node ID matches a Node's position in the PCI hierarchy.
-For example, the Node 0 is accessed using the first PCI device, Node 1
-is accessed using the second, and so on. A logical CPU can find its AMD
-Node ID using CPUID. Furthermore, the AMD Node ID is used within the
-hardware fabric, so it is not purely a logical value.
-
-Heterogeneous AMD systems, with a CPU Data Fabric connected to GPU data
-fabrics, follow a similar convention. Each CPU and GPU die has a unique
-AMD Node ID value, and each Node ID corresponds to PCI devices in
-sequential order.
-
-However, there are two caveats:
-1) GPUs are not x86, and they don't have CPUID to read their AMD Node ID
-like on CPUs. This means the value is more implicit and based on PCI
-enumeration and hardware-specifics.
-2) There is a gap in the hardware values for AMD Node IDs. Values 0-7
-are for CPUs and values 8-15 are for GPUs.
-
-For example, a system with one CPU die and two GPUs dies will have the
-following values:
-  CPU0 -> AMD Node 0
-  GPU0 -> AMD Node 8
-  GPU1 -> AMD Node 9
-
-EDAC is the only subsystem where this has a practical effect. Memory
-errors on AMD systems are commonly reported through MCA to a CPU on the
-local AMD Node. The error information is passed along to EDAC where the
-AMD EDAC modules use the AMD Node ID of reporting logical CPU to access
-AMD Node information.
-
-However, memory errors from a GPU die will be reported to the CPU die.
-Therefore, the logical CPU's AMD Node ID can't be used since it won't
-match the AMD Node ID of the GPU die. The AMD Node ID of the GPU die is
-provided as part of the MCA information, and the value will match the
-hardware enumeration (e.g. 8-15).
-
-Handle this situation by discovering GPU dies the same way as CPU dies
-in the AMD NB code. But do a "node id" fixup in AMD64 EDAC where it's
-needed.
-
-The GPU data fabrics provide a register with the base AMD Node ID for
-their local "type", i.e. GPU data fabric. This value is the same for all
-fabrics of the same type in a system.
-
-Read and cache the base AMD Node ID from one of the GPU devices during
-module initialization. Use this to fixup the "node id" when reporting
-memory errors at runtime.
-
-  [ bp: Squash a fix making gpu_node_map static as reported by
-        Tom Rix <trix@redhat.com>.
-    Link: https://lore.kernel.org/r/20230610210930.174074-1-trix@redhat.com ]
-
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Co-developed-by: Muralidhara M K <muralidhara.mk@amd.com>
-Signed-off-by: Muralidhara M K <muralidhara.mk@amd.com>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/20230515113537.1052146-6-muralimk@amd.com
----
- drivers/edac/amd64_edac.c | 76 ++++++++++++++++++++++++++++++++++++++-
- drivers/edac/amd64_edac.h |  1 +-
- 2 files changed, 77 insertions(+)
-
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 28155b0..c52834d 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -975,6 +975,74 @@ static int sys_addr_to_csrow(struct mem_ctl_info *mci, u64 sys_addr)
- 	return csrow;
- }
- 
-+/*
-+ * See AMD PPR DF::LclNodeTypeMap
-+ *
-+ * This register gives information for nodes of the same type within a system.
-+ *
-+ * Reading this register from a GPU node will tell how many GPU nodes are in the
-+ * system and what the lowest AMD Node ID value is for the GPU nodes. Use this
-+ * info to fixup the Linux logical "Node ID" value set in the AMD NB code and EDAC.
-+ */
-+static struct local_node_map {
-+	u16 node_count;
-+	u16 base_node_id;
-+} gpu_node_map;
-+
-+#define PCI_DEVICE_ID_AMD_MI200_DF_F1		0x14d1
-+#define REG_LOCAL_NODE_TYPE_MAP			0x144
-+
-+/* Local Node Type Map (LNTM) fields */
-+#define LNTM_NODE_COUNT				GENMASK(27, 16)
-+#define LNTM_BASE_NODE_ID			GENMASK(11, 0)
-+
-+static int gpu_get_node_map(void)
-+{
-+	struct pci_dev *pdev;
-+	int ret;
-+	u32 tmp;
-+
-+	/*
-+	 * Node ID 0 is reserved for CPUs.
-+	 * Therefore, a non-zero Node ID means we've already cached the values.
-+	 */
-+	if (gpu_node_map.base_node_id)
-+		return 0;
-+
-+	pdev = pci_get_device(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_MI200_DF_F1, NULL);
-+	if (!pdev) {
-+		ret = -ENODEV;
-+		goto out;
-+	}
-+
-+	ret = pci_read_config_dword(pdev, REG_LOCAL_NODE_TYPE_MAP, &tmp);
-+	if (ret)
-+		goto out;
-+
-+	gpu_node_map.node_count = FIELD_GET(LNTM_NODE_COUNT, tmp);
-+	gpu_node_map.base_node_id = FIELD_GET(LNTM_BASE_NODE_ID, tmp);
-+
-+out:
-+	pci_dev_put(pdev);
-+	return ret;
-+}
-+
-+static int fixup_node_id(int node_id, struct mce *m)
-+{
-+	/* MCA_IPID[InstanceIdHi] give the AMD Node ID for the bank. */
-+	u8 nid = (m->ipid >> 44) & 0xF;
-+
-+	if (smca_get_bank_type(m->extcpu, m->bank) != SMCA_UMC_V2)
-+		return node_id;
-+
-+	/* Nodes below the GPU base node are CPU nodes and don't need a fixup. */
-+	if (nid < gpu_node_map.base_node_id)
-+		return node_id;
-+
-+	/* Convert the hardware-provided AMD Node ID to a Linux logical one. */
-+	return nid - gpu_node_map.base_node_id + 1;
-+}
-+
- /* Protect the PCI config register pairs used for DF indirect access. */
- static DEFINE_MUTEX(df_indirect_mutex);
- 
-@@ -3001,6 +3069,8 @@ static void decode_umc_error(int node_id, struct mce *m)
- 	struct err_info err;
- 	u64 sys_addr;
- 
-+	node_id = fixup_node_id(node_id, m);
-+
- 	mci = edac_mc_find(node_id);
- 	if (!mci)
- 		return;
-@@ -3888,6 +3958,12 @@ static void gpu_prep_chip_selects(struct amd64_pvt *pvt)
- 
- static int gpu_hw_info_get(struct amd64_pvt *pvt)
- {
-+	int ret;
-+
-+	ret = gpu_get_node_map();
-+	if (ret)
-+		return ret;
-+
- 	pvt->umc = kcalloc(pvt->max_mcs, sizeof(struct amd64_umc), GFP_KERNEL);
- 	if (!pvt->umc)
- 		return -ENOMEM;
-diff --git a/drivers/edac/amd64_edac.h b/drivers/edac/amd64_edac.h
-index e84fe0d..a9d6290 100644
---- a/drivers/edac/amd64_edac.h
-+++ b/drivers/edac/amd64_edac.h
-@@ -16,6 +16,7 @@
- #include <linux/slab.h>
- #include <linux/mmzone.h>
- #include <linux/edac.h>
-+#include <linux/bitfield.h>
- #include <asm/cpu_device_id.h>
- #include <asm/msr.h>
- #include "edac_module.h"
+> > 
+> > Signed-off-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
+> > Reviewed-by: Simon Horman <simon.horman@corigine.com>
+> 
+> Bridge folks any thoughts on this? Is this the behavior bridge has 
+> and if not should we try to align the two?
+> 
+> > Changes from v1:
+> > ===============
+> > * Changed the data type of "fwd_offloaded" from "unsigned int" to "bool"
+> >   and moved it below "net_id" struct member as per Paolo's comment.
+> > * Collected Reviewed-by tag from v1 patch.
+> > 
+> > v1: https://lore.kernel.org/all/20230612093933.13267-1-r-gunasekaran@ti.com/
+> > 
+> >  net/hsr/hsr_device.c |  5 +++++
+> >  net/hsr/hsr_main.h   |  1 +
+> >  net/hsr/hsr_slave.c  | 15 +++++++++++----
+> >  3 files changed, 17 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/net/hsr/hsr_device.c b/net/hsr/hsr_device.c
+> > index 5a236aae2366..306f942c3b28 100644
+> > --- a/net/hsr/hsr_device.c
+> > +++ b/net/hsr/hsr_device.c
+> > @@ -531,6 +531,11 @@ int hsr_dev_finalize(struct net_device *hsr_dev, struct net_device *slave[2],
+> >  	if (res)
+> >  		goto err_add_master;
+> >  
+> > +	/* HSR forwarding offload supported in lower device? */
+> > +	if ((slave[0]->features & NETIF_F_HW_HSR_FWD) &&
+> > +	    (slave[1]->features & NETIF_F_HW_HSR_FWD))
+> > +		hsr->fwd_offloaded = true;
+> > +
+> >  	res = register_netdevice(hsr_dev);
+> >  	if (res)
+> >  		goto err_unregister;
+> > diff --git a/net/hsr/hsr_main.h b/net/hsr/hsr_main.h
+> > index 5584c80a5c79..6851e33df7d1 100644
+> > --- a/net/hsr/hsr_main.h
+> > +++ b/net/hsr/hsr_main.h
+> > @@ -208,6 +208,7 @@ struct hsr_priv {
+> >  	u8 net_id;		/* for PRP, it occupies most significant 3 bits
+> >  				 * of lan_id
+> >  				 */
+> > +	bool fwd_offloaded;	/* Forwarding offloaded to HW */
+> >  	unsigned char		sup_multicast_addr[ETH_ALEN] __aligned(sizeof(u16));
+> >  				/* Align to u16 boundary to avoid unaligned access
+> >  				 * in ether_addr_equal
+> > diff --git a/net/hsr/hsr_slave.c b/net/hsr/hsr_slave.c
+> > index b70e6bbf6021..e5742f2a2d52 100644
+> > --- a/net/hsr/hsr_slave.c
+> > +++ b/net/hsr/hsr_slave.c
+> > @@ -131,9 +131,14 @@ static int hsr_portdev_setup(struct hsr_priv *hsr, struct net_device *dev,
+> >  	struct hsr_port *master;
+> >  	int res;
+> >  
+> > -	res = dev_set_promiscuity(dev, 1);
+> > -	if (res)
+> > -		return res;
+> > +	/* Don't use promiscuous mode for offload since L2 frame forward
+> > +	 * happens at the offloaded hardware.
+> > +	 */
+> > +	if (!port->hsr->fwd_offloaded) {
+> > +		res = dev_set_promiscuity(dev, 1);
+> > +		if (res)
+> > +			return res;
+> > +	}
+> >  
+> >  	master = hsr_port_get_hsr(hsr, HSR_PT_MASTER);
+> >  	hsr_dev = master->dev;
+> > @@ -152,7 +157,9 @@ static int hsr_portdev_setup(struct hsr_priv *hsr, struct net_device *dev,
+> >  fail_rx_handler:
+> >  	netdev_upper_dev_unlink(dev, hsr_dev);
+> >  fail_upper_dev_link:
+> > -	dev_set_promiscuity(dev, -1);
+> > +	if (!port->hsr->fwd_offloaded)
+> > +		dev_set_promiscuity(dev, -1);
+> > +
+> >  	return res;
+> >  }
+> >  
+> 
