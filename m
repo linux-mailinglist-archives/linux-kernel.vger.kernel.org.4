@@ -2,114 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2E50735018
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:29:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF1D273501F
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231329AbjFSJ3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 05:29:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50398 "EHLO
+        id S231697AbjFSJ3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 05:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231539AbjFSJ2p (ORCPT
+        with ESMTP id S231655AbjFSJ24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 05:28:45 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD3E35B1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:27:47 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-987a977f62aso206882966b.1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:27:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687166865; x=1689758865;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=svU69Ew57Xfle/xIRnYJHjwQ/Cr4wmX9tz165FRycWs=;
-        b=wvqYuZaB5ca1vjq5S2aqa1LAEvRYnArRCq/6LebFSu1mfx1hl0d94TYjRMb2QfqnkZ
-         Q+OwX9s1IzNO60CzHgAPoOyBQyLPLtbi7XcbOz3MRWVCDzapdizxF6gNawW571nnEtrJ
-         0cfvpujETVJB2OZM9Z+0omINCTcTpIh+m9nG4WA05qWkHSjmBpbcYFJY7y4+iOIf89WR
-         oww0oS3Oybze1aBQGzFmaJLlx4bp6cAF2HUu6NqDlHVxFVbzcAeGH6fmA+scC/PoLvJ4
-         +0I4fq91EtCsRvR/3+Xi56PnJH2dIUWHkCni+yNbm+11C68IkLoAoJ6upAbtlO+hNuQp
-         jeSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687166865; x=1689758865;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=svU69Ew57Xfle/xIRnYJHjwQ/Cr4wmX9tz165FRycWs=;
-        b=iCPw97+8BUrbdmamG014rx+tH8Ld5sfdvw1P1IzqU6vu8pd5YQYeEdUpo9rhGzit/I
-         CP01sMHOsFfS6JxVj/ib6e36qp+lthAXy6qjJX2Qg6x12tPg2syEa1QVWVxA7Z/gamN/
-         uHgoDSECkEuZr/ZKJSNlDYiFiPcX93mO3H2WtdDXEGviRUN5eBsMJRiL4bisNzd+xcI4
-         PFAHm6ciF4buc1eQ306prMF/1v0XwRGfrolMp/wg8hZkggWnjc+UoOWOPxFjXyMtLcQJ
-         VXZjnKE8Nb6zaZ8wItQODo/UDet7RKbgjI+RbMYSsf4zdgJVdvASch/PX34xIVCBB9z4
-         Wdpg==
-X-Gm-Message-State: AC+VfDy7GB5e7TMPhugHE/slyQOhn/g4aPp1k0W7CVUI1DQ5QN9eDxlr
-        8ck1ut8q1ImZdCqudc579b0m7YIV6ZaYyZ/AMMI=
-X-Google-Smtp-Source: ACHHUZ5aVA22BWULJT+mapNrH3Xpe/4h+2f+voEsc0N/o7LxeS1bDtvZ37XCqoWGgmKrE5wFMSc6fA==
-X-Received: by 2002:a17:906:6a27:b0:982:a3c8:4126 with SMTP id qw39-20020a1709066a2700b00982a3c84126mr7786798ejc.73.1687166864976;
-        Mon, 19 Jun 2023 02:27:44 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id si1-20020a170906cec100b00988c0c175c6sm857994ejb.189.2023.06.19.02.27.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 02:27:44 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 3/3] arm64: defconfig: enable Qualcomm SM8350 LPASS pinctrl
-Date:   Mon, 19 Jun 2023 11:27:35 +0200
-Message-Id: <20230619092735.20323-3-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230619092735.20323-1-krzysztof.kozlowski@linaro.org>
-References: <20230619092735.20323-1-krzysztof.kozlowski@linaro.org>
+        Mon, 19 Jun 2023 05:28:56 -0400
+Received: from cstnet.cn (smtp80.cstnet.cn [159.226.251.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740DDE50
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:28:16 -0700 (PDT)
+Received: from ed3e173716be.home.arpa (unknown [124.16.138.129])
+        by APP-01 (Coremail) with SMTP id qwCowAB3fQmjH5BkvNZfAQ--.20548S2;
+        Mon, 19 Jun 2023 17:28:03 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     minyard@acm.org, kamlakantp@marvell.com
+Cc:     openipmi-developer@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] ipmi:ssif: Add check for kstrdup
+Date:   Mon, 19 Jun 2023 17:28:02 +0800
+Message-Id: <20230619092802.35384-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: qwCowAB3fQmjH5BkvNZfAQ--.20548S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrur45XryDCFW5ur1rZFW7twb_yoWfurg_Cr
+        yvqw13Gryvyr409w12yayfZryay3s8XryDWF1jqr1fC3s5Wwn3ZF9Fvr9ava1kArW5KF1D
+        JrZFk34DAr1xGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb2AFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8uwCF
+        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUIhFcUUUUU=
+X-Originating-IP: [124.16.138.129]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the Qualcomm SM8350 LPASS TLMM pin controller driver for
-providing GPIOs/pins for audio block on SM8350 based boards (e.g.
-HDK8350).
+Add check for the return value of kstrdup() and return the error
+if it fails in order to avoid NULL pointer dereference.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
-
+Fixes: c4436c9149c5 ("ipmi_ssif: avoid registering duplicate ssif interface")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
+ drivers/char/ipmi/ipmi_ssif.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Changes in v2:
-1. Add Ack
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 57c6b7bb88d4..b7b2b51a4251 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -593,6 +593,7 @@ CONFIG_PINCTRL_SM8150=y
- CONFIG_PINCTRL_SM8250=y
- CONFIG_PINCTRL_SM8250_LPASS_LPI=m
- CONFIG_PINCTRL_SM8350=y
-+CONFIG_PINCTRL_SM8350_LPASS_LPI=m
- CONFIG_PINCTRL_SM8450=y
- CONFIG_PINCTRL_SM8450_LPASS_LPI=m
- CONFIG_PINCTRL_SC8280XP_LPASS_LPI=m
+diff --git a/drivers/char/ipmi/ipmi_ssif.c b/drivers/char/ipmi/ipmi_ssif.c
+index 3b921c78ba08..3b87a2726e99 100644
+--- a/drivers/char/ipmi/ipmi_ssif.c
++++ b/drivers/char/ipmi/ipmi_ssif.c
+@@ -1600,6 +1600,11 @@ static int ssif_add_infos(struct i2c_client *client)
+ 	info->addr_src = SI_ACPI;
+ 	info->client = client;
+ 	info->adapter_name = kstrdup(client->adapter->name, GFP_KERNEL);
++	if (!info->adapter_name) {
++		kfree(info);
++		return -ENOMEM;
++	}
++
+ 	info->binfo.addr = client->addr;
+ 	list_add_tail(&info->link, &ssif_infos);
+ 	return 0;
 -- 
-2.34.1
+2.25.1
 
