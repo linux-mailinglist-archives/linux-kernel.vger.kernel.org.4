@@ -2,64 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EFCA734B8D
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 08:07:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88417734B92
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 08:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbjFSGHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 02:07:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35922 "EHLO
+        id S229906AbjFSGKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 02:10:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbjFSGHR (ORCPT
+        with ESMTP id S229500AbjFSGKx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 02:07:17 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B364E76;
-        Sun, 18 Jun 2023 23:07:10 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Qkzn41BBmz4f3tDl;
-        Mon, 19 Jun 2023 14:07:04 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgD3mp6I8I9kV94oMA--.6599S3;
-        Mon, 19 Jun 2023 14:07:06 +0800 (CST)
-Subject: Re: [PATCH RFC 2/7] blk-mq: delay tag fair sharing until fail to get
- driver tag
-To:     Hannes Reinecke <hare@suse.de>, Yu Kuai <yukuai1@huaweicloud.com>,
-        bvanassche@acm.org, axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230618160738.54385-1-yukuai1@huaweicloud.com>
- <20230618160738.54385-3-yukuai1@huaweicloud.com>
- <091d7daa-2782-66a0-57f4-ab62bbb82daf@suse.de>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <debe4f22-67f3-60aa-9b65-7308dfc58f6d@huaweicloud.com>
-Date:   Mon, 19 Jun 2023 14:07:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 19 Jun 2023 02:10:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC6283
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 23:10:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687155007;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WGDrBUF36TLreoIVg0sYhBbDfxOAFyjjLH/MwCEaO0o=;
+        b=imbP6qycGgm7xhKoqn+AK0Pj7KAiNUNaGW7xYsIbJWCwYAKudV3aJXKuFzF0FmjGECahXL
+        JJqH+2XD1wjuBoYSerleBdntrG3ayxUWYQFG36FK6623fnl3AhH4GjER6s3wpj8Yz09ih/
+        dv7Hj2jsvr7fwz7ubwK1eoGiue33xeI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-349-H6uWdKehPG-vx_7-Qi-58Q-1; Mon, 19 Jun 2023 02:10:04 -0400
+X-MC-Unique: H6uWdKehPG-vx_7-Qi-58Q-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 911883C025AC;
+        Mon, 19 Jun 2023 06:10:03 +0000 (UTC)
+Received: from localhost (ovpn-12-194.pek2.redhat.com [10.72.12.194])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 81DA2112132C;
+        Mon, 19 Jun 2023 06:10:01 +0000 (UTC)
+Date:   Mon, 19 Jun 2023 14:09:58 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     catalin.marinas@arm.com, thunder.leizhen@huawei.com,
+        John.p.donnelly@oracle.com, kexec@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, horms@kernel.org,
+        chenjiahao16@huawei.com, linux-riscv@lists.infradead.org,
+        x86@kernel.org, bp@alien8.de
+Subject: Re: [RFC PATCH 0/4] kdump: add generic functions to simplify
+ crashkernel crashkernel in architecture
+Message-ID: <ZI/xNm23BCNcB0+v@MiWiFi-R3L-srv>
+References: <20230619055951.45620-1-bhe@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <091d7daa-2782-66a0-57f4-ab62bbb82daf@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgD3mp6I8I9kV94oMA--.6599S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxAr1kXFWktw1fuFykAr1xAFb_yoWrKryDpF
-        WkJa13G34rXrn7XrW7X3y7XFyFyr4kt3WDGrnaqFy5Ar1j9r1Sgr18Zryv9r48Jr4kAr4U
-        Ar1jqr9rZF1UJrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
-        Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbU
-        UUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230619055951.45620-1-bhe@redhat.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,117 +64,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-在 2023/06/19 13:55, Hannes Reinecke 写道:
-> On 6/18/23 18:07, Yu Kuai wrote:
->> From: Yu Kuai <yukuai3@huawei.com>
->>
->> Start tag fair sharing when a device start to issue io will waste
->> resources, same number of tags will be assigned to each disk/hctx,
->> and such tags can't be used for other disk/hctx, which means a disk/hctx
->> can't use more than assinged tags even if there are still lots of tags
->> that is assinged to other disks are unused.
->>
->> Add a new api blk_mq_driver_tag_busy(), it will be called when get
->> driver tag failed, and move tag sharing from blk_mq_tag_busy() to
->> blk_mq_driver_tag_busy().
->>
->> This approch will work well if total tags are not exhausted, and follow
->> up patches will try to refactor how tag is shared to handle this case.
->>
->> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
->> ---
->>   block/blk-mq-debugfs.c |  4 ++-
->>   block/blk-mq-tag.c     | 60 ++++++++++++++++++++++++++++++++++--------
->>   block/blk-mq.c         |  4 ++-
->>   block/blk-mq.h         | 13 ++++++---
->>   include/linux/blk-mq.h |  6 +++--
->>   include/linux/blkdev.h |  1 +
->>   6 files changed, 70 insertions(+), 18 deletions(-)
->>
->> diff --git a/block/blk-mq-debugfs.c b/block/blk-mq-debugfs.c
->> index 431aaa3eb181..de5a911b07c2 100644
->> --- a/block/blk-mq-debugfs.c
->> +++ b/block/blk-mq-debugfs.c
->> @@ -400,8 +400,10 @@ static void blk_mq_debugfs_tags_show(struct 
->> seq_file *m,
->>   {
->>       seq_printf(m, "nr_tags=%u\n", tags->nr_tags);
->>       seq_printf(m, "nr_reserved_tags=%u\n", tags->nr_reserved_tags);
->> -    seq_printf(m, "active_queues=%d\n",
->> +    seq_printf(m, "active_queues=%u\n",
->>              READ_ONCE(tags->ctl.active_queues));
->> +    seq_printf(m, "share_queues=%u\n",
->> +           READ_ONCE(tags->ctl.share_queues));
->>       seq_puts(m, "\nbitmap_tags:\n");
->>       sbitmap_queue_show(&tags->bitmap_tags, m);
->> diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c
->> index fe41a0d34fc0..1c2bde917195 100644
->> --- a/block/blk-mq-tag.c
->> +++ b/block/blk-mq-tag.c
->> @@ -29,6 +29,32 @@ static void blk_mq_update_wake_batch(struct 
->> blk_mq_tags *tags,
->>               users);
->>   }
->> +void __blk_mq_driver_tag_busy(struct blk_mq_hw_ctx *hctx)
->> +{
->> +    struct blk_mq_tags *tags = hctx->tags;
->> +
->> +    /*
->> +     * calling test_bit() prior to test_and_set_bit() is intentional,
->> +     * it avoids dirtying the cacheline if the queue is already active.
->> +     */
->> +    if (blk_mq_is_shared_tags(hctx->flags)) {
->> +        struct request_queue *q = hctx->queue;
->> +
->> +        if (test_bit(QUEUE_FLAG_HCTX_BUSY, &q->queue_flags) ||
->> +            test_and_set_bit(QUEUE_FLAG_HCTX_BUSY, &q->queue_flags))
->> +            return;
->> +    } else {
->> +        if (test_bit(BLK_MQ_S_DTAG_BUSY, &hctx->state) ||
->> +            test_and_set_bit(BLK_MQ_S_DTAG_BUSY, &hctx->state))
->> +            return;
->> +    }
->> +
->> +    spin_lock_irq(&tags->lock);
->> +    WRITE_ONCE(tags->ctl.share_queues, tags->ctl.active_queues);
->> +    blk_mq_update_wake_batch(tags, tags->ctl.share_queues);
->> +    spin_unlock_irq(&tags->lock);
->> +}
->> +
->>   /*
->>    * If a previously inactive queue goes active, bump the active user 
->> count.
->>    * We need to do this before try to allocate driver tag, then even 
->> if fail
->> @@ -37,7 +63,6 @@ static void blk_mq_update_wake_batch(struct 
->> blk_mq_tags *tags,
->>    */
->>   void __blk_mq_tag_busy(struct blk_mq_hw_ctx *hctx)
->>   {
->> -    unsigned int users;
->>       struct blk_mq_tags *tags = hctx->tags;
->>       /*
->> @@ -57,9 +82,7 @@ void __blk_mq_tag_busy(struct blk_mq_hw_ctx *hctx)
->>       }
->>       spin_lock_irq(&tags->lock);
->> -    users = tags->ctl.active_queues + 1;
->> -    WRITE_ONCE(tags->ctl.active_queues, users);
->> -    blk_mq_update_wake_batch(tags, users);
->> +    WRITE_ONCE(tags->ctl.active_queues, tags->ctl.active_queues + 1);
+On 06/19/23 at 01:59pm, Baoquan He wrote:
+> In the current arm64, crashkernel=,high support has been finished after
+> several rounds of posting and careful reviewing. The code in arm64 which
+> parses crashkernel kernel parameters firstly, then reserve memory can be
+> a good example for other ARCH to refer to.
 > 
-> Why did you remove the call to blk_mq_update_wake_batch() here?
-
-blk_mq_update_wake_batch() should be called when the available tags is
-changed, however, active_queues is no longer used for hctx_may_queue()
-to calculate available tags, share_queues is used instead and it's
-updated in the new helper blk_mq_driver_tag_busy().
-
-Thanks,
-Kuai
+> Whereas in x86_64, the code mixing crashkernel parameter parsing and
+> memory reserving is twisted, and looks messy. Refactoring the code to
+> make it more readable maintainable is necessary.
+                       ^ 'and' missed
 > 
-> Cheers,
+> Here, try to abstract the crashkernel parameter parsing code into a
+> generic function parse_crashkernel_generic(), and the crashkernel memory
+> reserving code into a generic function reserve_crashkernel_generic().
+> Then, in ARCH which crashkernel=,high support is needed, a simple
+> arch_reserve_crashkernel() can be added to call above two generic
+> functions. This can remove the duplicated implmentation code in each
+> ARCH, like arm64, x86_64.
 > 
-> Hannes
+> I only change the arm64 and x86_64 implementation to make use of the
+> generic functions to simplify code. Risc-v can be done very easily refer
+> to the steps in arm64 and x86_64. I leave this to Jiahao or other risc-v
+> developer since Jiahao have posted a patchset to add crashkernel=,high
+> support to risc-v.
+> 
+> This patchset is based on the latest linus's tree, and on top of below
+> patch:
+> 
+> arm64: kdump: simplify the reservation behaviour of crashkernel=,high
+>       https://git.kernel.org/arm64/c/6c4dcaddbd36
+> 
+> 
+> Baoquan He (4):
+>   kdump: rename parse_crashkernel() to parse_crashkernel_common()
+>   kdump: add generic functions to parse crashkernel and do reservation
+>   arm64: kdump: use generic interfaces to simplify crashkernel
+>     reservation code
+>   x86: kdump: use generic interfaces to simplify crashkernel reservation
+>     code
+> 
+>  arch/arm/kernel/setup.c              |   4 +-
+>  arch/arm64/Kconfig                   |   3 +
+>  arch/arm64/include/asm/kexec.h       |   8 ++
+>  arch/arm64/mm/init.c                 | 141 ++----------------------
+>  arch/ia64/kernel/setup.c             |   4 +-
+>  arch/loongarch/kernel/setup.c        |   3 +-
+>  arch/mips/cavium-octeon/setup.c      |   2 +-
+>  arch/mips/kernel/setup.c             |   4 +-
+>  arch/powerpc/kernel/fadump.c         |   5 +-
+>  arch/powerpc/kexec/core.c            |   4 +-
+>  arch/powerpc/mm/nohash/kaslr_booke.c |   4 +-
+>  arch/riscv/mm/init.c                 |   5 +-
+>  arch/s390/kernel/setup.c             |   4 +-
+>  arch/sh/kernel/machine_kexec.c       |   5 +-
+>  arch/x86/Kconfig                     |   3 +
+>  arch/x86/include/asm/kexec.h         |  32 ++++++
+>  arch/x86/kernel/setup.c              | 141 +++---------------------
+>  include/linux/crash_core.h           |  33 +++++-
+>  kernel/crash_core.c                  | 158 +++++++++++++++++++++++++--
+>  19 files changed, 274 insertions(+), 289 deletions(-)
+> 
+> -- 
+> 2.34.1
+> 
 
