@@ -2,68 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82827735789
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 15:01:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D02735790
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 15:04:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231493AbjFSNBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 09:01:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42618 "EHLO
+        id S231494AbjFSNEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 09:04:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231490AbjFSNBb (ORCPT
+        with ESMTP id S229848AbjFSNEd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 09:01:31 -0400
-Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2196E7E
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 06:01:19 -0700 (PDT)
-Received: by mail-vk1-xa32.google.com with SMTP id 71dfb90a1353d-47184397ab4so1331825e0c.1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 06:01:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1687179679; x=1689771679;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JOOoSS+F0a2RdMkqm6GJBrGXPR5DaWdsNr0kGMMs4Bw=;
-        b=OB3K3a9ApKPYdKLzEKgj+0sANB6yFN5fyA2ZQ5yXfulJc9FMwylO48yycbNNORDKwW
-         YGm9vup9enufN5JJHX6FinTz4XpFVigEWZ7lguoNIEfAaiLtdHBsJRjw3dKrNslJ3MkV
-         GgjynCEESy9hOunZFqpFCKAzNuXHLvOl/n+Ye9XF/oodN4WDUimFE7q5BYkPlMHLZsmP
-         bzJwUMwYiVHgazw5f0cQJSqWsm4GrILgUoOMHP13AHtVviK2nY+VZHKKloN649LaQMYD
-         VsRokbRY8e6j9oKPae8PPCMUgKznOckD+LHgxpB7ObGqpGoJHUeoTlVLWfF2ox76J+rm
-         XsBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687179679; x=1689771679;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JOOoSS+F0a2RdMkqm6GJBrGXPR5DaWdsNr0kGMMs4Bw=;
-        b=dMSA7OfAT8cFIk2jAmOAfeiypoGAvVOTW6XX6xCD8bkaVL5DjtjriKMcnBWyrP/S9+
-         iTe3FVFaMd4zL/2EqS9Rvdh6s7JFeOiF0o28QsKXq7eN6VmrC4a7WbDMOIANX46bap/8
-         fTxuphjog52KTZz/U6JRh/ffqZQqTPebVDaYmrcVwCcrRnqxIhKg8YXpGSoRw25jsA2b
-         +6awuA0L9cDqR82HSG875rJANmfJfwkB6XM4FLauG3TBWEn6jMqckY+zD3D/mzCjJ3UK
-         ICejhgu94ZNq/q4wrwiCjMG8a2nTvDsCeCiDihPxeg2KVFgEicuws2GkBt1jOUXnLvzq
-         PiVQ==
-X-Gm-Message-State: AC+VfDwAR0TMztUc1ubmGlrXKl55zJqHGAgDOt1CCD7N1jvjviORFa44
-        a6U6kD4gFl6Tj0GEokd6JMKQMQW/PO76Zhn+5lAfgA==
-X-Google-Smtp-Source: ACHHUZ5zM9XHtakKxyFSDb4NdBBVpJlXIrmV5Jzbs7XjYL8/AvTVYGd3lv+B7bY+b0R5GUnt7vbhKgEf4wVb2JOSWkw=
-X-Received: by 2002:a1f:641d:0:b0:457:56a4:19e7 with SMTP id
- y29-20020a1f641d000000b0045756a419e7mr2192721vkb.0.1687179678927; Mon, 19 Jun
- 2023 06:01:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230616135313.76338-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230616135313.76338-1-andriy.shevchenko@linux.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 19 Jun 2023 15:01:08 +0200
-Message-ID: <CAMRc=Md28NqUudp38yZZx1vqvyxXQ=-zaP-Wzo2dy2mbBrfB8Q@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] gpiolib: Drop unused domain_ops memeber of GPIO
- IRQ chip
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andy@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        Mon, 19 Jun 2023 09:04:33 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE7B91;
+        Mon, 19 Jun 2023 06:04:31 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 67F665C024E;
+        Mon, 19 Jun 2023 09:04:31 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 19 Jun 2023 09:04:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1687179871; x=1687266271; bh=lo
+        98U6NNyBvPDxCtGn35zLY8FueG6iIEIBGk0drXwXE=; b=z8vAYqIkQbtDax2PKx
+        L8LhGaTy1GhwxG9wqCIXcXXnQHbMUXWvd1Ky5DGeRTcPvxCcSkU/dX55TLC5u+98
+        n5iX7LtYlKFCVnAno9h33SkBL0bqf7V5MAqULGwNc25EEP3fE/N4v5dsNmannGCF
+        E2X+qDPeLkzfy5WmEPJrQHi3Nu5xz8vDN1VhhG4ab6flmW9ZPRKTuuLlphsczOe1
+        BH6L9prVMoy2oJBGr4gl5LFV4ubcdG7F1W1f1WCOtsOXxWGLifmEq+a17giEkF1R
+        Yo5a9JS99/MMRDNZhlrbm+qzhLk2DRCqkFP3t1dS4knzMX7Vdfh/vYe1KZBVXdFx
+        Y4qw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1687179871; x=1687266271; bh=lo98U6NNyBvPD
+        xCtGn35zLY8FueG6iIEIBGk0drXwXE=; b=ORVC3oKwUHMuI6QEg2EiPCIznXzPj
+        Wn4rKkey5xpwg/caTm6VFHnI5vlgmDiNKII0YPSFFontMxuwuCbHvD92bnYFjH/B
+        OOjcpwil6c6LQHvn+aREPLlYkdSqgSfRp0xQgvUreH0kZQuvryQivGzEhQpM6/aU
+        qydt4cSAhKKMqcESudu1LAUGff8jhVbDEM26vw+tsd0McXfMgyIFMO39GzC7rPEJ
+        8xu1AqQTmDCoPY1utIim9oDlDh42UJXrkwyeqrQBy7gvbXZOArQDY3qfw27Kme+i
+        ejZUBxKglsYqyRn739fWW7JqQMZAFaYw+qJCA9IvahTe4yaAHuKaGp9jw==
+X-ME-Sender: <xms:XlKQZHfNK5-eJRX4BUTuej2AWe8oyewiqpJEmPh0NNzfQ1HcH4eLzg>
+    <xme:XlKQZNOB6QNODHEJecWl02dhOgXHGl7jHuYEapnX-r8_qemj3gW9zZMh-9wZTXCBA
+    RjfGbHXLAPRf6pb59E>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefvddgheejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:XlKQZAgx9BRBvpOmx-m6dFA6dpopv2GUug69HB-WRFh6e3k2QScoPg>
+    <xmx:XlKQZI98SbiQaili2D4ZePuoVRjq3LjmwfyxR-YKlzh-C4LvZmG3bA>
+    <xmx:XlKQZDtHSo_ryleXBPzUB7Y9EYBs4YAYrv4GwV2gmY1nocg7s4A4tA>
+    <xmx:X1KQZM8mU7c0nMRhQDu-uID-Yr9LvmbKnA-sOMeJYeBrZwzm3TUD7Q>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id C840CB60086; Mon, 19 Jun 2023 09:04:30 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-496-g8c46984af0-fm-20230615.001-g8c46984a
+Mime-Version: 1.0
+Message-Id: <e3e9f246-5bf7-4868-aedb-0e194f52de5b@app.fastmail.com>
+In-Reply-To: <7c448f02-4031-0a90-97e2-0cc663b0cff9@gmail.com>
+References: <20230619091215.2731541-1-arnd@kernel.org>
+ <20230619091215.2731541-3-arnd@kernel.org>
+ <7c448f02-4031-0a90-97e2-0cc663b0cff9@gmail.com>
+Date:   Mon, 19 Jun 2023 15:04:10 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Edward Cree" <ecree.xilinx@gmail.com>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        "Martin Habets" <habetsm.xilinx@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>
+Cc:     Netdev <netdev@vger.kernel.org>, linux-net-drivers@amd.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] sfc: selftest: fix struct packing
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,15 +92,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 3:53=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> It seems there is no driver that requires custom IRQ chip
-> domain options. Drop the member and respective code.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
 
-Applied, thanks!
 
-Bart
+On Mon, Jun 19, 2023, at 12:25, Edward Cree wrote:
+> On 19/06/2023 10:12, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>> 
+>> Three of the sfc drivers define a packed loopback_payload structure with an
+>> ethernet header followed by an IP header. However, the kernel definition
+>> of iphdr specifies that this is 4-byte aligned, causing a W=1 warning:
+>> 
+>> net/ethernet/sfc/siena/selftest.c:46:15: error: field ip within 'struct efx_loopback_payload' is less aligned than 'struct iphdr' and is usually due to 'struct efx_loopback_payload' being packed, which can lead to unaligned accesses [-Werror,-Wunaligned-access]
+>>         struct iphdr ip;
+>> 
+>> As the iphdr packing is not easily changed without breaking other code,
+>> change the three structures to use a local definition instead.
+>> 
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>
+> Duplicating the definition isn't the prettiest thing in the world; it'd
+>  do for a quick fix if needed but I assume W=1 warnings aren't blocking
+>  anyone, so maybe defer this one for now and I'll follow up soon with a
+>  rewrite that fixes this more cleanly?  My idea is to drop the __packed
+>  from the containing struct, make efx_begin_loopback() copy the layers
+>  separately, and efx_loopback_rx_packet() similarly do something less
+>  direct than casting the packet data to the struct.
+>
+> But I don't insist on it; if you want this fix in immediately then I'm
+>  okay with that too.
+>
+>> ---
+>>  drivers/net/ethernet/sfc/falcon/selftest.c | 21 ++++++++++++++++++++-
+>>  drivers/net/ethernet/sfc/selftest.c        | 21 ++++++++++++++++++++-
+>>  drivers/net/ethernet/sfc/siena/selftest.c  | 21 ++++++++++++++++++++-
+>>  3 files changed, 60 insertions(+), 3 deletions(-)
+>> 
+>> diff --git a/drivers/net/ethernet/sfc/falcon/selftest.c b/drivers/net/ethernet/sfc/falcon/selftest.c
+>> index 6a454ac6f8763..fb7fcd27a33a5 100644
+>> --- a/drivers/net/ethernet/sfc/falcon/selftest.c
+>> +++ b/drivers/net/ethernet/sfc/falcon/selftest.c
+>> @@ -40,7 +40,26 @@
+>>   */
+>>  struct ef4_loopback_payload {
+>>  	struct ethhdr header;
+>> -	struct iphdr ip;
+>> +	struct {
+>> +#if defined(__LITTLE_ENDIAN_BITFIELD)
+>> +		__u8	ihl:4,
+>> +			version:4;
+>> +#elif defined (__BIG_ENDIAN_BITFIELD)
+>> +		__u8	version:4,
+>> +			ihl:4;
+>> +#else
+>> +#error	"Please fix <asm/byteorder.h>"
+>> +#endif
+>> +		__u8	tos;
+>> +		__be16	tot_len;
+>> +		__be16	id;
+>> +		__be16	frag_off;
+>> +		__u8	ttl;
+>> +		__u8	protocol;
+>> +		__sum16	check;
+>> +		__be32	saddr;
+>> +		__be32	daddr;
+>> +	} __packed ip; /* unaligned struct iphdr */
+>>  	struct udphdr udp;
+>>  	__be16 iteration;
+>>  	char msg[64];
+>> diff --git a/drivers/net/ethernet/sfc/selftest.c b/drivers/net/ethernet/sfc/selftest.c
+>> index 3c5227afd4977..440a57953779c 100644
+>> --- a/drivers/net/ethernet/sfc/selftest.c
+>> +++ b/drivers/net/ethernet/sfc/selftest.c
+>> @@ -43,7 +43,26 @@
+>>   */
+>>  struct efx_loopback_payload {
+>>  	struct ethhdr header;
+>> -	struct iphdr ip;
+>> +	struct {
+>> +#if defined(__LITTLE_ENDIAN_BITFIELD)
+>> +		__u8	ihl:4,
+>> +			version:4;
+>> +#elif defined (__BIG_ENDIAN_BITFIELD)
+>> +		__u8	version:4,
+>> +			ihl:4;
+>> +#else
+>> +#error	"Please fix <asm/byteorder.h>"
+>> +#endif
+>> +		__u8	tos;
+>> +		__be16	tot_len;
+>> +		__be16	id;
+>> +		__be16	frag_off;
+>> +		__u8	ttl;
+>> +		__u8	protocol;
+>> +		__sum16	check;
+>> +		__be32	saddr;
+>> +		__be32	daddr;
+>> +	} __packed ip; /* unaligned struct iphdr */
+>>  	struct udphdr udp;
+>>  	__be16 iteration;
+>>  	char msg[64];
+>> diff --git a/drivers/net/ethernet/sfc/siena/selftest.c b/drivers/net/ethernet/sfc/siena/selftest.c
+>> index 07715a3d6beab..b8a8b0495f661 100644
+>> --- a/drivers/net/ethernet/sfc/siena/selftest.c
+>> +++ b/drivers/net/ethernet/sfc/siena/selftest.c
+>> @@ -43,7 +43,26 @@
+>>   */
+>>  struct efx_loopback_payload {
+>>  	struct ethhdr header;
+>> -	struct iphdr ip;
+>> +	struct {
+>> +#if defined(__LITTLE_ENDIAN_BITFIELD)
+>> +		__u8	ihl:4,
+>> +			version:4;
+>> +#elif defined (__BIG_ENDIAN_BITFIELD)
+>> +		__u8	version:4,
+>> +			ihl:4;
+>> +#else
+>> +#error	"Please fix <asm/byteorder.h>"
+>> +#endif
+>> +		__u8	tos;
+>> +		__be16	tot_len;
+>> +		__be16	id;
+>> +		__be16	frag_off;
+>> +		__u8	ttl;
+>> +		__u8	protocol;
+>> +		__sum16	check;
+>> +		__be32	saddr;
+>> +		__be32	daddr;
+>> +	} __packed ip; /* unaligned struct iphdr */
+>>  	struct udphdr udp;
+>>  	__be16 iteration;
+>>  	char msg[64];
+>>
