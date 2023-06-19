@@ -2,442 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D94735D1E
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 19:39:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C62E8735D22
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 19:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231410AbjFSRjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 13:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38458 "EHLO
+        id S231566AbjFSRlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 13:41:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjFSRje (ORCPT
+        with ESMTP id S229506AbjFSRl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 13:39:34 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2740D19C
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 10:39:33 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-3ff25ca795eso159971cf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 10:39:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687196372; x=1689788372;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ayFQ487CT2QWVLe89ol8oaf4LIGITCKdns22LRz/IOM=;
-        b=Rj9+1YIlGspvfIoMsqXyXUHu/gVREXZ5JQk+8lQe5N/2gnaPKb7SOMg6ZpfGxJIqy2
-         2zQDPOCTMiphGT2xFp+d2IpqWhjHnZ3EgTLIp20vo5UmIdXLiam55Q7Sr32ClFODureW
-         Og840jJUpQauEM0yqDEns9Eb/IUZGM02wdT1lXuGGKXhUH72q1zg2+4O6HsA+DK/9Bg8
-         7UImItJghZGXILNpNgelch5LHmU9sTK+6eIeVstIOKBHvsgEetRNeurA9xPOTCWzNmIx
-         MHJm0Sq7gEkNl/xlSsvsJPS/aBBxa5UkprAeZOFnkX2nAi0AhFke82U7c3o0KqMO/7Ag
-         LEpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687196372; x=1689788372;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ayFQ487CT2QWVLe89ol8oaf4LIGITCKdns22LRz/IOM=;
-        b=i7JAHOVOrMFYoWzyWt/2bFBOsb2IznAR0C2sSna9k1QfeoZFCOQy+keaekqhZWBQ5u
-         yB6LquXFlqNhR9CD4dplvoZ2MDT5xKsh2SZscpv2vuSCzHqAeZPV/eawWnxRN/0nC16I
-         mYHd2NqH6Ji+7Ga8H0T1kZc1AI2dCYeAlQ7/DBFBznX8cZpFOH2ihpb3wpPyhJyvVJsM
-         pc3H4DJKuJbqDto4PJb69z553JrAke4U+S5PIaqC0mEs/8ppXeG7FI+MDZGv0aef7dnL
-         QMD/LyvyuIMomiUhvBE5h9QY3SEQNUc2grPa6t6RKRNVfycI1xOJ6e6mMuztV07cVEH7
-         JnJg==
-X-Gm-Message-State: AC+VfDzLNATxDALuZuvaMipqzo/4s8n6pYoBFQbOl8UPGrU7FGy1e7ga
-        aBV8EiAT9VxYriitYEHdk+aBqFDY3PI/VD3Tk6oHlA==
-X-Google-Smtp-Source: ACHHUZ50YyrkRcC6nQ0Lj4z90xWO7RSjCup/6bvJMa8KX9+hRkKPSCr3gqg0bwMLD4XPX335JhbVRZskLWfV6R9J60s=
-X-Received: by 2002:a05:622a:2c1:b0:3ef:343b:fe7e with SMTP id
- a1-20020a05622a02c100b003ef343bfe7emr1034110qtx.2.1687196371936; Mon, 19 Jun
- 2023 10:39:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <CANn89iK8snOz8TYOhhwfimC7ykYA78GA3Nyv8x06SZYa1nKdyA@mail.gmail.com>
- <20230619170314.42333-1-kuniyu@amazon.com>
-In-Reply-To: <20230619170314.42333-1-kuniyu@amazon.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Mon, 19 Jun 2023 19:39:20 +0200
-Message-ID: <CANn89iJCWnG0p_5C1ams264_kA97_zaQBSx-akH_SsHFg5gG6A@mail.gmail.com>
-Subject: Re: [PATCH v2] tcp: fix connection reset due to tw hashdance race.
-To:     Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc:     duanmuquan@baidu.com, davem@davemloft.net, dsahern@kernel.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 19 Jun 2023 13:41:27 -0400
+Received: from BN3PR00CU001.outbound.protection.outlook.com (mail-eastus2azon11020024.outbound.protection.outlook.com [52.101.56.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62070E0;
+        Mon, 19 Jun 2023 10:41:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RQXaqLwVO81OcT1E4Y+jzqujqBfxQQ7sK7uc9yYwzm3ze57C0B9UuENX4ZHUWnFbJbA92j+C4Z7qWOuMtfW/pVury3m54CUkkJcIThreAPVBHzcaugO/PUnYBsgu1H44YoJ9cnKcbzlMwemXSjasCqphBkrQEeWH549UvJmbBHs90nU9LsAQ05eREZoUY4V9OsodDp9VqXJVZndLt0LJ0t/JhVV9FK/vOBmpwDbd0FUZOwxti09/CfK8AKFcKOhTQ5pvvru0fcy7B8CWdHKPBDybzuEPXD3QFPEtb8NfMovOHXisuVAahrkkHoifDkygqpEe7s0Ed5XNhkQs1mZIug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SKgNK+XyPhNtnI0XAKINLSXON4dyFQhDlXCo90KgeTU=;
+ b=iDIGgQeoyN7XSlfbW2Z1JBWQgc5YZi9lG1gPhy0xpX7x1y2L6U4DnTy/UikSO3jpRLlqzuyeDpN7zvbrxGUVM/UCTwUSJtAXANgfn+xkIIeSPTxVorUYioUDtziwPXxD1ROOdtR74X/AwU/kB0jjSupNCgkLtd0MngiXeRv4mCrClp3zLXpuS7VMP5IlZewT1V7+vxDbd4eKAdwwlyqLcUgP3A97ur2kvrc0qDyeXhPwaB8aPtOHT8xhkHelV9VGHdZtCWVe7xO9oI/KJ958y+S3i2+o5JxSaxxvYZmATqopszHgAVLQJxtGUbvJ9spQYcxlQN3xcuzeAAQ221khaQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SKgNK+XyPhNtnI0XAKINLSXON4dyFQhDlXCo90KgeTU=;
+ b=geo8GV2omeuZg9p5O3KOqMJBFCDr+38uCS43/YwYhM9UZ+zMLSwJ6vQNoocelFa+AhZpz8XZbUxicDI/wS2NU/eBuS81nYkaq/U+rmp54JX/DTKh7aF5XQVxQycS+vWshw13JNiqFW2teKCidXiXo9xMJiT1eGaIdyQMcUME49c=
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
+ by CO1PR21MB1315.namprd21.prod.outlook.com (2603:10b6:303:152::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.5; Mon, 19 Jun
+ 2023 17:41:20 +0000
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::7d5d:3139:cf68:64b]) by BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::7d5d:3139:cf68:64b%3]) with mapi id 15.20.6544.002; Mon, 19 Jun 2023
+ 17:41:20 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
+Subject: RE: [PATCH 1/1] clocksource: hyper-v: Rework clocksource and sched
+ clock setup
+Thread-Topic: [PATCH 1/1] clocksource: hyper-v: Rework clocksource and sched
+ clock setup
+Thread-Index: AQHZmunMRY0uWgs/g0+c1NT6w1jjM6+SXPaAgAAFcRCAAAZKAIAACuQA
+Date:   Mon, 19 Jun 2023 17:41:20 +0000
+Message-ID: <BYAPR21MB168877B777F93FB6A2453B7DD75FA@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <1686325621-16382-1-git-send-email-mikelley@microsoft.com>
+ <fdc643c4-6298-d337-1d8d-3f28f6c1acfc@linaro.org>
+ <BYAPR21MB1688E1163BB36DF03CC8E00BD75FA@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <07c5efe5-4eb0-121f-7b50-8f3fba68beab@linaro.org>
+In-Reply-To: <07c5efe5-4eb0-121f-7b50-8f3fba68beab@linaro.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=d34586cd-8829-43de-855b-774e18b889c0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-06-19T17:37:23Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|CO1PR21MB1315:EE_
+x-ms-office365-filtering-correlation-id: 0b73e992-0d10-4f54-6cf6-08db70ec6462
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: OcblweH2uXAhOQkEktnUQ8G8/+730gOlLkjQq9xWdZClTOPHWrWt7CXhqjcPZMvQTA8imqBrRP8QEH2tQFS/psWZMqLnmuu6V1bAnaNJFXjaXPjGIbP7IJ5t+iAORr+s9c0wuqDTvO736GJ8w/tIPmZwJ8xiPDeAqg5a2W7hbxBLTPw1p54OydaDClOjqxMldKLXILrG03xRWCnF6ZgJGfLsoDO+LmcqCCItZHix36vRfHFlkQPDca4VirP/fqkUHt1/f2Kmu7uA1EDl1SGYOMktzxXehKa73tBIFNGbz+zQ59XFb1ONNyWNRnaZvy38s/EO4lnRds/GHZ1kMhs682TTyBzG/b+Ws5+Gm877BeCkO05KVOy6SuunUpyHBRYnUFr3Ndc41rE5dXe+o+LkY3R5/Ykzz2s8pquaFmqvkE1WuOzgay5vp08R4IFzuAIai5NKSOYxNcwGQHuie0U2p1oHV5yNzHEjzNxPfUYQmmQR4bFb0gKb+f7wh8iRAUcT7XTRfQ54F9Ea4KjwpkGBa2rY6cI6eHTNElZfcL9EhEYVIRebyekDjL0RyHzWTP59TEarQxPfOIMa40SpKv/VSabqZAmjFjzH3mCyb41Tr3VE21M8/YR2l/rXMx/zuqrbLw9z6I6wYriMQVM0JyKuDYnkFu6mUt/xctnGTH/CYWVCFnoKYm1RBM71/VoMnrwO
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(396003)(39860400002)(366004)(376002)(451199021)(52536014)(122000001)(82960400001)(82950400001)(83380400001)(38100700002)(33656002)(86362001)(38070700005)(41300700001)(8936002)(8676002)(5660300002)(66446008)(64756008)(66556008)(66476007)(66946007)(316002)(6506007)(53546011)(9686003)(26005)(966005)(55016003)(186003)(76116006)(478600001)(7696005)(110136005)(71200400001)(10290500003)(2906002)(8990500004);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?V97kKTqaNV0uc7a1BHzdwFZR2SEFLkFu9/JpeSRHUAcgWDEdyB9K7Vi7WJ3h?=
+ =?us-ascii?Q?XMZEvajjhcXI6+FV5wN2kyVg35Unm3fn3KR0v9JENyNetmnqd4quM+TD/qpq?=
+ =?us-ascii?Q?uc4DPbX0OHd6P3rP9eXtsDWX+JaWrlQ0vMY06XQdDJscV8ot1i078R30fo7F?=
+ =?us-ascii?Q?sFjhz1E5EdiPRZJ66Aoo+t4e/HpiMWs+lO7xEh5RzZju3grMqNG4yUMAi4Mx?=
+ =?us-ascii?Q?yFCKjZYHoFmAuVzrKa+tlcQjb7yOXki+7tSWqISEwTH638Wqh0f8z/fQnrDH?=
+ =?us-ascii?Q?cM06ZY+26pdqGb8056s53TADHIWwLmfKTFCyIAinejZejIp+yIXqg6ETyoE7?=
+ =?us-ascii?Q?wzxEjBQE0+VzWr6IVsEPlx+/1uyZya8Nlo5s0I8/twvTK9phK0cDWTnPcg87?=
+ =?us-ascii?Q?NzAnxQiumNKtW0/x4FUtd8JQ4Kv2Y0RQrqyW2Wm0xtGpjy5UP6zapR0LdF9k?=
+ =?us-ascii?Q?DRaixgi35bQXFvoVJJ6kL1YqsvMp8kBTW38rULeyr6MGE4aqSHqhzmkSoEXe?=
+ =?us-ascii?Q?OhKU+z8yV5JERuHL6yYDWWWCM/l+bRuIeLpS0RfmBtHajaQ5GLozdHErP0Vh?=
+ =?us-ascii?Q?UVuxruJFM3CJwowNgNfQpcG2b7Js6w8KZD018GRReblWIt9sPKlRAae+F7AO?=
+ =?us-ascii?Q?9LGHuG6HLfTUqUv0ZtxYnexCcywpfPzzv8pjXfjrZMtDGRKl4DSXd6wpKan1?=
+ =?us-ascii?Q?qfIiA2SBRzUWcQfs5d7uudvXIyxMQifX3B9/Blwe0R5bDSRBokMOT3yO0LIf?=
+ =?us-ascii?Q?GpvL098r/RBW7XfwDMOM6D5UMUntCN2waZ4zdndYoZR8RNowAD8QWqQxQwWU?=
+ =?us-ascii?Q?p4dTA3VTnwLAvmI4v2LPK0JQCpw2okvLTFnCyt08YYaCk4+m+vYyS0LnP0zU?=
+ =?us-ascii?Q?BHBbKWYeGtBJ30tY+eiN9fDHGf6effjkf5XfvHMRcd8fx4sKSdQsJtQDWyn9?=
+ =?us-ascii?Q?HwqWX6cFJGO0HEwOOkgleWqi6Plxbviz/tkbobci+sSaG+GyFCO3elWqDOqG?=
+ =?us-ascii?Q?KVMzHulKIIuCj3xlHMjpIdOMXRmqtlZNszGSOSZhx+vJIH8CljNWxYBcA7rI?=
+ =?us-ascii?Q?tSv0lc/awyRDnC4oVzpsHz1ztbJEoB10G7pPNfgWFooJqvDKdocMKK8aaMwm?=
+ =?us-ascii?Q?iYB5Ep6PImeO3We7k8w3WlBr+gAJeUHEZfcNN6hCQNTC5hai4U5oiBtXFk9s?=
+ =?us-ascii?Q?cG3tOwPRIpctzeFUjE+ZywBzAVeLOIhWLOec+tDJjZoLyGzcRA0LjB4UiU9Q?=
+ =?us-ascii?Q?0AJ1Ag6160/pqfw4GTqOE41OxKjPxG09z7D4E3dtO4yNNgajpBMKqfNAQv2J?=
+ =?us-ascii?Q?LEMLHEvZNzlKlkTwnl8XHr/PFYd40LBPL5miqtrMDRcFJGJ2iqK+SK4jIhCC?=
+ =?us-ascii?Q?duFBW0PCKKVzIfDJBChCcN/82zkcq0srCOYyDijDzRWuM852molWw1/m2TH6?=
+ =?us-ascii?Q?La99mq3qJI3fhRkVKHTm3O+saArB8li8cJ9uoPib9i6CAgkMkPob5LvdpsvQ?=
+ =?us-ascii?Q?UaSENDSUZLdoFzjxhw4x9IVZ/qdIO+nbQaop22HHhOnlBiyRcaI5TluTvLfo?=
+ =?us-ascii?Q?YDaPHz7ZmYDhkZbWIg0iwYrp+OeG59hhGbc3QG/Sdj6cg1Y0z9aM4LCGnkhw?=
+ =?us-ascii?Q?Xg=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0b73e992-0d10-4f54-6cf6-08db70ec6462
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jun 2023 17:41:20.1627
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LLJDjaG+EOVZqT9xOKOZJBZbIQwI+5q5pMd4jo9EWBRHmD9I5AaPUYU0QTDFkWGJuUs3amYE0PeIBv+LNO9+3jzXKZRyRAWV2e9bBeoAelk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR21MB1315
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 7:03=E2=80=AFPM Kuniyuki Iwashima <kuniyu@amazon.co=
-m> wrote:
->
-> From: Eric Dumazet <edumazet@google.com>
-> Date: Thu, 8 Jun 2023 08:35:20 +0200
-> > On Thu, Jun 8, 2023 at 7:48=E2=80=AFAM Kuniyuki Iwashima <kuniyu@amazon=
-.com> wrote:
-> > >
-> > > From: Eric Dumazet <edumazet@google.com>
-> > > Date: Wed, 7 Jun 2023 15:32:57 +0200
-> > > > On Wed, Jun 7, 2023 at 1:59=E2=80=AFPM Duan,Muquan <duanmuquan@baid=
-u.com> wrote:
-> > > > >
-> > > > > Hi, Eric,
-> > > > >
-> > > > >  Thanks for your comments!
-> > > > >
-> > > > >  About the second lookup, I am sorry that I did not give enough e=
-xplanations about it. Here are some details:
-> > > > >
-> > > > >  1.  The second lookup can find the tw sock and avoid the connect=
-ion refuse error on userland applications:
-> > > > >
-> > > > > If the original sock is found, but when validating its refcnt, it=
- has been destroyed and sk_refcnt has become 0 after decreased by tcp_time_=
-wait()->tcp_done()->inet_csk_destory_sock()->sock_put().The validation for =
-refcnt fails and the lookup process gets a listener sock.
-> > > > >
-> > > > > When this case occurs, the hashdance has definitely finished=EF=
-=BC=8Cbecause tcp_done() is executed after inet_twsk_hashdance(). Then if l=
-ook up the ehash table again, hashdance has already finished, tw sock will =
-be found.
-> > > > >
-> > > > >  With this fix, logically we can solve the connection reset issue=
- completely when no established sock is found due to hashdance race.In my r=
-eproducing environment, the connection refuse error will occur about every =
-6 hours with only the fix of bad case (2). But with both of the 2 fixes, I =
-tested it many times, the longest test continues for 10 days, it does not o=
-ccur again,
-> > > > >
-> > > > >
-> > > > >
-> > > > > 2. About the performance impact:
-> > > > >
-> > > > >      A similar scenario is that __inet_lookup_established() will =
-do inet_match() check for the second time, if fails it will look up    the =
-list again. It is the extra effort to reduce the race impact without using =
-reader lock. inet_match() failure occurs with about the same probability wi=
-th refcnt validation failure in my test environment.
-> > > > >
-> > > > >  The second lookup will only be done in the condition that FIN se=
-gment gets a listener sock.
-> > > > >
-> > > > >   About the performance impact:
-> > > > >
-> > > > > 1)  Most of the time, this condition will not met, the added code=
-s introduces at most 3 comparisons for each segment.
-> > > > >
-> > > > > The second inet_match() in __inet_lookup_established()  does leas=
-t 3 comparisons for each segmet.
-> > > > >
-> > > > >
-> > > > > 2)  When this condition is met, the probability is very small. Th=
-e impact is similar to the second try due to inet_match() failure. Since tw=
- sock can definitely be found in the second try, I think this cost is worth=
-y to avoid connection reused error on userland applications.
-> > > > >
-> > > > >
-> > > > >
-> > > > > My understanding is, current philosophy is avoiding the reader lo=
-ck by tolerating the minor defect which occurs in a small probability.For e=
-xample, if the FIN from passive closer is dropped due to the found sock is =
-destroyed, a retransmission can be tolerated, it only makes the connection =
-termination slower. But I think the bottom line is that it does not affect =
-the userland applications=E2=80=99 functionality. If application fails to c=
-onnect due to the hashdance race, it can=E2=80=99t be tolerated. In fact, g=
-uys from product department push hard on the connection refuse error.
-> > > > >
-> > > > >
-> > > > > About bad case (2):
-> > > > >
-> > > > >  tw sock is found, but its tw_refcnt has not been set to 3, it is=
- still 0, validating for sk_refcnt will fail.
-> > > > >
-> > > > > I do not know the reason why setting tw_refcnt after adding it in=
-to list, could anyone help point out the reason? It adds  extra race becaus=
-e the new added tw sock may be found and checked in other CPU concurrently =
-before =C6=92setting tw_refcnt to 3.
-> > > > >
-> > > > > By setting tw_refcnt to 3 before adding it into list, this case w=
-ill be solved, and almost no cost. In my reproducing environment, it occurs=
- more frequently than bad case (1), it appears about every 20 minutes, bad =
-case (1) appears about every 6 hours.
-> > > > >
-> > > > >
-> > > > >
-> > > > > About the bucket spinlock, the original established sock and tw s=
-ock are stored in the ehash table, I concern about the performance when the=
-re are lots of short TCP connections, the reader lock may affect the perfor=
-mance of connection creation and termination. Could you share some details =
-of your idea? Thanks in advance.
-> > > > >
-> > > > >
-> > > >
-> > > > Again, you can write a lot of stuff, the fact is that your patch do=
-es
-> > > > not solve the issue.
-> > > >
-> > > > You could add 10 lookups, and still miss some cases, because they a=
-re
-> > > > all RCU lookups with no barriers.
-> > > >
-> > > > In order to solve the issue of packets for the same 4-tuple being
-> > > > processed by many cpus, the only way to solve races is to add mutua=
-l
-> > > > exclusion.
-> > > >
-> > > > Note that we already have to lock the bucket spinlock every time we
-> > > > transition a request socket to socket, a socket to timewait, or any
-> > > > insert/delete.
-> > > >
-> > > > We need to expand the scope of this lock, and cleanup things that w=
+From: Daniel Lezcano <daniel.lezcano@linaro.org> Sent: Monday, June 19, 202=
+3 9:58 AM
+>=20
+> On 19/06/2023 18:44, Michael Kelley (LINUX) wrote:
+> > From: Daniel Lezcano <daniel.lezcano@linaro.org> Sent: Monday, June 19,=
+ 2023 9:16 AM
+> >>
+> >> On 09/06/2023 17:47, Michael Kelley wrote:
+> >>> Current code assigns either the Hyper-V TSC page or MSR-based ref cou=
+nter
+> >>> as the sched clock. This may be sub-optimal in two cases. First, if t=
+here
+> >>> is hardware support to ensure consistent TSC frequency across live
+> >>> migrations and Hyper-V is using that support, the raw TSC is a faster
+> >>> source of time than the Hyper-V TSC page.  Second, the MSR-based ref
+> >>> counter is relatively slow because reads require a trap to the hyperv=
+isor.
+> >>> As such, it should never be used as the sched clock. The native sched
+> >>> clock based on the raw TSC or jiffies is much better.
+> >>>
+> >>> Rework the sched clock setup so it is set to the TSC page only if
+> >>> Hyper-V indicates that the TSC may have inconsistent frequency across
+> >>> live migrations. Also, remove the code that sets the sched clock to
+> >>> the MSR-based ref counter. In the cases where it is not set, the sche=
+d
+> >>> clock will then be the native sched clock.
+> >>>
+> >>> As part of the rework, always enable both the TSC page clocksource an=
+d
+> >>> the MSR-based ref counter clocksource. Set the ratings so the TSC pag=
 e
-> > > > added in the past, because we tried too hard to 'detect races'
-> > >
-> > > How about this ?  This is still a workaround though, retry sounds
-> > > better than expanding the scope of the lock given the race is rare.
+> >>> clocksource is preferred. While the MSR-based ref counter clocksource
+> >>> is unlikely to ever be the default, having it available for manual
+> >>> selection is convenient for development purposes.
+> >>>
+> >>> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+> >>
+> >> The patch does not apply, does it depend on another patch?
 > >
-> > The chance of two cpus having to hold the same spinlock is rather small=
-.
+> > It should apply to linux-next.  It depends on two previous patches from
+> > Peter Zijlstra in the sched/core branch of tip.  See:
 > >
-> > Algo is the following:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=
+=3Dsched/core&id=3D9397fa2ea3e7634f61da1ab76b9eb88ba04dfdfc
 > >
-> > Attempt a lockless/RCU lookup.
+> > and
 > >
-> > 1) Socket is found, we are good to go. Fast path is still fast.
-> >
-> > 2) Socket  is not found in ehash
-> >    - We lock the bucket spinlock.
-> >    - We retry the lookup
-> >    - If socket found, continue with it (release the spinlock when
-> > appropriate, after all write manipulations in the bucket are done)
-> >    - If socket still not found, we lookup a listener.
-> >       We insert a TCP_NEW_SYN_RECV ....
-> >        Again, we release the spinlock when appropriate, after all
-> > write manipulations in the bucket are done)
-> >
-> > No more races, and the fast path is the same.
+> > https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=
+=3Dsched/core&id=3De39acc37db34f6688e2c16e958fb1d662c422c81
 >
-> I was looking around the issue this weekend.  Is this what you were
-> thinking ?  I'm wondering if you were also thinking another races like
-> found_dup_sk/own_req things. e.g.) acquire ehash lock when we start to
-> process reqsk ?
+> Yeah, but the branch is tip/timers/core
+>=20
+> Could you respin against it ?
+>=20
 
-No.
+Ah, OK.  Just to confirm, you are saying that this patch would go through t=
+he
+tip/timers/core branch, which does *not* have Peter's patches.  Resolving t=
+he
+merge conflict will be done within the tip branches.
 
-Idea is to hold the bucket lock and keep it until all write operations
-in the bucket have been done.
+Yes, I'll respin for tip/timers/core.
 
-
-
->
-> Duan, could you test the diff below ?
->
-> If this resolves the FIN issue, we can also revert 3f4ca5fafc08 ("tcp:
-> avoid the lookup process failing to get sk in ehash table").
->
-> ---8<---
-> diff --git a/include/net/inet6_hashtables.h b/include/net/inet6_hashtable=
-s.h
-> index 56f1286583d3..bb8e49a6e80f 100644
-> --- a/include/net/inet6_hashtables.h
-> +++ b/include/net/inet6_hashtables.h
-> @@ -48,6 +48,11 @@ struct sock *__inet6_lookup_established(struct net *ne=
-t,
->                                         const u16 hnum, const int dif,
->                                         const int sdif);
->
-> +struct sock *__inet6_lookup_established_lock(struct net *net, struct ine=
-t_hashinfo *hashinfo,
-> +                                            const struct in6_addr *saddr=
-, const __be16 sport,
-> +                                            const struct in6_addr *daddr=
-, const u16 hnum,
-> +                                            const int dif, const int sdi=
-f);
-> +
->  struct sock *inet6_lookup_listener(struct net *net,
->                                    struct inet_hashinfo *hashinfo,
->                                    struct sk_buff *skb, int doff,
-> @@ -70,9 +75,15 @@ static inline struct sock *__inet6_lookup(struct net *=
-net,
->         struct sock *sk =3D __inet6_lookup_established(net, hashinfo, sad=
-dr,
->                                                      sport, daddr, hnum,
->                                                      dif, sdif);
-> -       *refcounted =3D true;
-> -       if (sk)
-> +
-> +       if (!sk)
-> +               sk =3D __inet6_lookup_established_lock(net, hashinfo, sad=
-dr, sport,
-> +                                                    daddr, hnum, dif, sd=
-if);
-> +       if (sk) {
-> +               *refcounted =3D true;
->                 return sk;
-> +       }
-> +
->         *refcounted =3D false;
->         return inet6_lookup_listener(net, hashinfo, skb, doff, saddr, spo=
-rt,
->                                      daddr, hnum, dif, sdif);
-> diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.=
-h
-> index 99bd823e97f6..ad97fec63d7a 100644
-> --- a/include/net/inet_hashtables.h
-> +++ b/include/net/inet_hashtables.h
-> @@ -379,6 +379,12 @@ struct sock *__inet_lookup_established(struct net *n=
-et,
->                                        const __be32 daddr, const u16 hnum=
-,
->                                        const int dif, const int sdif);
->
-> +struct sock *__inet_lookup_established_lock(struct net *net,
-> +                                           struct inet_hashinfo *hashinf=
-o,
-> +                                           const __be32 saddr, const __b=
-e16 sport,
-> +                                           const __be32 daddr, const u16=
- hnum,
-> +                                           const int dif, const int sdif=
-);
-> +
->  static inline struct sock *
->         inet_lookup_established(struct net *net, struct inet_hashinfo *ha=
-shinfo,
->                                 const __be32 saddr, const __be16 sport,
-> @@ -402,9 +408,14 @@ static inline struct sock *__inet_lookup(struct net =
-*net,
->
->         sk =3D __inet_lookup_established(net, hashinfo, saddr, sport,
->                                        daddr, hnum, dif, sdif);
-> -       *refcounted =3D true;
-> -       if (sk)
-> +       if (!sk)
-> +               sk =3D __inet_lookup_established_lock(net, hashinfo, sadd=
-r, sport,
-> +                                                   daddr, hnum, dif, sdi=
-f);
-> +       if (sk) {
-> +               *refcounted =3D true;
->                 return sk;
-> +       }
-> +
->         *refcounted =3D false;
->         return __inet_lookup_listener(net, hashinfo, skb, doff, saddr,
->                                       sport, daddr, hnum, dif, sdif);
-> diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-> index e7391bf310a7..1eeadaf1c9f9 100644
-> --- a/net/ipv4/inet_hashtables.c
-> +++ b/net/ipv4/inet_hashtables.c
-> @@ -514,6 +514,41 @@ struct sock *__inet_lookup_established(struct net *n=
-et,
->  }
->  EXPORT_SYMBOL_GPL(__inet_lookup_established);
->
-> +struct sock *__inet_lookup_established_lock(struct net *net, struct inet=
-_hashinfo *hashinfo,
-> +                                           const __be32 saddr, const __b=
-e16 sport,
-> +                                           const __be32 daddr, const u16=
- hnum,
-> +                                           const int dif, const int sdif=
-)
-> +{
-> +       const __portpair ports =3D INET_COMBINED_PORTS(sport, hnum);
-> +       INET_ADDR_COOKIE(acookie, saddr, daddr);
-> +       const struct hlist_nulls_node *node;
-> +       struct inet_ehash_bucket *head;
-> +       unsigned int hash;
-> +       spinlock_t *lock;
-> +       struct sock *sk;
-> +
-> +       hash =3D inet_ehashfn(net, daddr, hnum, saddr, sport);
-> +       head =3D inet_ehash_bucket(hashinfo, hash);
-> +       lock =3D inet_ehash_lockp(hashinfo, hash);
-> +
-> +       spin_lock(lock);
-> +       sk_nulls_for_each(sk, node, &head->chain) {
-> +               if (sk->sk_hash !=3D hash)
-> +                       continue;
-> +
-> +               if (unlikely(!inet_match(net, sk, acookie, ports, dif, sd=
-if)))
-> +                       continue;
-> +
-> +               sock_hold(sk);
-> +               spin_unlock(lock);
-> +               return sk;
-> +       }
-> +       spin_unlock(lock);
-
-Here we need to keep the lock held, and release it later.
-
-> +
-> +       return NULL;
-> +}
-> +EXPORT_SYMBOL_GPL(__inet_lookup_established_lock);
-> +
->  /* called with local bh disabled */
->  static int __inet_check_established(struct inet_timewait_death_row *deat=
-h_row,
->                                     struct sock *sk, __u16 lport,
-> diff --git a/net/ipv6/inet6_hashtables.c b/net/ipv6/inet6_hashtables.c
-> index b64b49012655..1b2c971859c0 100644
-> --- a/net/ipv6/inet6_hashtables.c
-> +++ b/net/ipv6/inet6_hashtables.c
-> @@ -89,6 +89,40 @@ struct sock *__inet6_lookup_established(struct net *ne=
-t,
->  }
->  EXPORT_SYMBOL(__inet6_lookup_established);
->
-> +struct sock *__inet6_lookup_established_lock(struct net *net, struct ine=
-t_hashinfo *hashinfo,
-> +                                            const struct in6_addr *saddr=
-, const __be16 sport,
-> +                                            const struct in6_addr *daddr=
-, const u16 hnum,
-> +                                            const int dif, const int sdi=
-f)
-> +{
-> +       const __portpair ports =3D INET_COMBINED_PORTS(sport, hnum);
-> +       const struct hlist_nulls_node *node;
-> +       struct inet_ehash_bucket *head;
-> +       unsigned int hash;
-> +       spinlock_t *lock;
-> +       struct sock *sk;
-> +
-> +       hash =3D inet6_ehashfn(net, daddr, hnum, saddr, sport);
-> +       head =3D inet_ehash_bucket(hashinfo, hash);
-> +       lock =3D inet_ehash_lockp(hashinfo, hash);
-> +
-> +       spin_lock(lock);
-> +       sk_nulls_for_each(sk, node, &head->chain) {
-> +               if (sk->sk_hash !=3D hash)
-> +                       continue;
-> +
-> +               if (unlikely(!inet6_match(net, sk, saddr, daddr, ports, d=
-if, sdif)))
-> +                       continue;
-> +
-> +               sock_hold(sk);
-> +               spin_unlock(lock);
-> +               return sk;
-> +       }
-> +       spin_unlock(lock);
-
-/* Same here. */
-
-> +
-> +       return NULL;
-> +}
-> +EXPORT_SYMBOL(__inet6_lookup_established_lock);
-> +
->  static inline int compute_score(struct sock *sk, struct net *net,
->                                 const unsigned short hnum,
->                                 const struct in6_addr *daddr,
-> ---8<---
+Michael
