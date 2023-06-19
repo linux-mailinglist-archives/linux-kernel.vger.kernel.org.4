@@ -2,207 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E986735D87
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 20:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62D0C735D89
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 20:41:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231948AbjFSSkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 14:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55444 "EHLO
+        id S232364AbjFSSlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 14:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjFSSkt (ORCPT
+        with ESMTP id S232136AbjFSSlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 14:40:49 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6259A18C;
-        Mon, 19 Jun 2023 11:40:48 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b5422163f4so22693925ad.2;
-        Mon, 19 Jun 2023 11:40:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687200048; x=1689792048;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5ZgkawgcpNKfDimADbfMrf4fLDUhrxI/ZCrEvpkQwog=;
-        b=qt204KFijdMQILdU/na9toTnE6G/SqHDazWMqgZP5zuHq87dvUKh9pTIF1WngvsQld
-         7YBBr/Ckqrjhn5fg7FEPFmiRN0CEugazjpz5zE2wE1Zz3VJFxkOcX9/d8lSRSQZvAJY3
-         cx6YvtoKRu0ysR/m7FDCp43AYuziwk51IRVfgPswmRTnuJA8a+cqIhmz2PvLjo6/hD4f
-         k8SAMpgEL0dBCUjlv4gUn1Uy4YBrnomChIpqcIKM40Gn7iOXUwLgnamjUSoOxPdJyKTJ
-         HqARmqSiRVITyBL6MWBkIkwvxk44lEFYGgo4u9Il+QPWFfQkLFxIjZRXrQJmM6Dfv6QO
-         mRtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687200048; x=1689792048;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5ZgkawgcpNKfDimADbfMrf4fLDUhrxI/ZCrEvpkQwog=;
-        b=kox8jO1/3BxP+2o1a6kxk87nKhjRx+OVdmZAksTyRh/pXFFpjlTEbcATfaHNKAbQ/E
-         rMVGaYjVfXGuLtHTJao2k2mI2xgAkT/GDZw9u1HtM0r0cLERgU6A+qGWiltvnwafyGO8
-         xmScjnWTiLPcE6tji68/NWMPOYckpXwX0MVaOB3uOqLL0GKlmCviW+c1oo3cv++pMqhq
-         G7s/Q0ONsCwHws7Di1p++FCW9waVHrg13SpnVIwlHnzuLdNviv7qXMWFtEYAdfiDHD46
-         Wy9TEYiqSe74GsP0qF5Gy7lEF3wGhtwT6ZuhoQxMtaDS+Lh1bM9fjKaGPs7imoqRGBBn
-         zeAQ==
-X-Gm-Message-State: AC+VfDzSUXBVFprAjaCRitURE4xRTmSlaWxduC3YMkO8bhLBq5WiKm+Z
-        utN8EGTAG4Aimw9wu739OgF8JScYDcM=
-X-Google-Smtp-Source: ACHHUZ7ImFqqYJ9etidekSI7vzGm4O7RZaoJwcEi155Zgh9sJFBVSD0oz0qHjbsPgb44jXoA/A3h5Q==
-X-Received: by 2002:a17:903:2307:b0:1b3:e31e:abaa with SMTP id d7-20020a170903230700b001b3e31eabaamr11911728plh.0.1687200047757;
-        Mon, 19 Jun 2023 11:40:47 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s17-20020a170902989100b001b546440893sm146327plp.235.2023.06.19.11.40.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 11:40:46 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <598247ee-3ff8-8413-274a-7d313c2af324@roeck-us.net>
-Date:   Mon, 19 Jun 2023 11:40:45 -0700
+        Mon, 19 Jun 2023 14:41:13 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893CFE6E;
+        Mon, 19 Jun 2023 11:41:09 -0700 (PDT)
+X-GND-Sasl: kory.maincent@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1687200068;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bdfkvwi5YASMPpEuIoUnF7CVkCeJJHGf2/I6JPyJWQU=;
+        b=cOrV+fPZMJsmIOrJxWCq30GEPUpalF7Ug4i14220zLMGZOsWLxF/XsoIG2qn5zmhVjdkVN
+        jF3+0bjWITwlFZYaJejasJZeUWPTsA2Q3sKScPC97Y2Noxt9l2CM+LkorzNkixXcorxWAd
+        9cv3emDLNcNtK68YleAjJ/8RdEpMdrU3oPVV7x6RAmLpyBO8BlHKkB99rpQeeinn4WJjnP
+        I+5J2W5NTaSuplTCeCoNrF1S9KM5QhlH/Cc4X6HNGo/V7+rgHOHDZpeOyKx7qKShn4w55M
+        OuFT/cb3STiJBLyfM+RgMJ40bNKgi2THotxhyanA6gkpOMJ3Wo87FfD2VWEXsQ==
+X-GND-Sasl: kory.maincent@bootlin.com
+X-GND-Sasl: kory.maincent@bootlin.com
+X-GND-Sasl: kory.maincent@bootlin.com
+X-GND-Sasl: kory.maincent@bootlin.com
+X-GND-Sasl: kory.maincent@bootlin.com
+X-GND-Sasl: kory.maincent@bootlin.com
+X-GND-Sasl: kory.maincent@bootlin.com
+X-GND-Sasl: kory.maincent@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E17CD20002;
+        Mon, 19 Jun 2023 18:41:06 +0000 (UTC)
+Date:   Mon, 19 Jun 2023 20:41:05 +0200
+From:   =?UTF-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Cai Huoqing <cai.huoqing@linux.dev>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>
+Subject: Re: [PATCH 5/9] dmaengine: dw-edma: HDMA: Fix possible race
+ condition in remote setup
+Message-ID: <20230619204105.620f87e6@kmaincent-XPS-13-7390>
+In-Reply-To: <20230619171550.3iyujmbre3dpe5oq@mobilestation.baikal.int>
+References: <20230609081654.330857-1-kory.maincent@bootlin.com>
+        <20230609081654.330857-6-kory.maincent@bootlin.com>
+        <20230619171550.3iyujmbre3dpe5oq@mobilestation.baikal.int>
+Organization: bootlin
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>,
-        Baskaran Kannan <Baski.Kannan@amd.com>, babu.moger@amd.com,
-        clemens@ladisch.de, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230619165413.806450-1-Baski.Kannan@amd.com>
- <4585ec62-b7bb-9f2a-eee0-07032648e55a@roeck-us.net>
- <012ea369-52ec-4a7a-ec66-812690d430ad@amd.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v3] hwmon: (k10temp) Enable AMD3255 Proc to show negative
- temperature
-In-Reply-To: <012ea369-52ec-4a7a-ec66-812690d430ad@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/19/23 11:02, Limonciello, Mario wrote:
-> 
-> On 6/19/2023 12:07 PM, Guenter Roeck wrote:
->> On 6/19/23 09:54, Baskaran Kannan wrote:
->>> Industrial processor i3255 supports temperatures -40 deg celcius
->>> to 105 deg Celcius. The current implementation of k10temp_read_temp
->>> rounds off any negative
->>> temperatures to '0'. To fix this, the following changes have been made.
->>> Added a flag 'disp_negative' to struct k10temp_data to support
->>> AMD i3255 processors. Flag 'disp_negative' is set if 3255 processor
->>> is found during k10temp_probe.  Flag 'disp_negative' is used to determine
->>> whether to round off negative temperatures to '0' in k10temp_read_temp.
->>>
->>> Signed-off-by: Baskaran Kannan <Baski.Kannan@amd.com>
->>
->> Now you have made changes you were not asked to make, extended the flag
->> to cover a range of processors instead of just i3255, and did not provide
->> a change log nor a comment in the code describing why processors with
->> certain model numbers should display negative temperatures.
->>
-> i3255 happens to be one of the industrial processors in family 17h models
-> 01h through 08h.  These are potentially used at subzero temperatures and
-> so displaying negative numbers makes a lot sense.
-> 
-> So I think the commit message needs to be be amended to better explain that.
-> 
-> I guided Kannan against leaving a comment in the code with specific models
-> because it either won't age well as other industrial processors are
-> introduced or may need to be ping-ponged each time.
-> 
-That only applies if there is a guarantee that the check does not
-inadvertently ends up displaying negative temperatures for other CPUs
-which are misconfigured. After all, the current code is just a hack
-working around some problem with bad temperatures reported on other CPUs.
-Personally I'd rather have a clean fix for that. If/since that is not
-available, whatever is done subsequently (including the code suggested here)
-is just a hack.
+On Mon, 19 Jun 2023 20:15:50 +0300
+Serge Semin <fancer.lancer@gmail.com> wrote:
 
-... and if a hack on top of a hack is introduced, we need to make sure that
-it does not undo the previous hack.
+> On Fri, Jun 09, 2023 at 10:16:50AM +0200, K=C3=B6ry Maincent wrote:
+> > From: Kory Maincent <kory.maincent@bootlin.com>
+> >=20
+> > When writing the linked list elements and pointer the control need to be
+> > written at the end. If the control is written and the SAR and DAR not
+> > stored we could face a race condition.
+> >=20
+> > Fixes: e74c39573d35 ("dmaengine: dw-edma: Add support for native HDMA")
+> > Signed-off-by: Kory Maincent <kory.maincent@bootlin.com> =20
+>=20
+> Once again. Is this a hypothetical bug or have you actually
+> experienced the denoted problem? If you do please describe the
+> circumstances, give more details. Otherwise it sounds weird. Here is
+> why.
+>=20
+> DW eDMA HW manual states that the control LL DWORD is indeed supposed
+> to be written after the rest of the descriptor DWORDs are written. But
+> AFAICS it's only relevant for the LL tree entries recycling. Current
+> DW eDMA driver design doesn't truly implement that pattern. Instead
+> the DMA transfer is halted at the end of the chunk. Then the engine is
+> recharged with the next chunk and execution is started over. So the
+> runtime recycling isn't implemented (alas) for which the CB flag of
+> the control DWORD needs to be updated only after the rest of the LLI
+> fields.
 
-> But perhaps it should be more generic like:
-> 
-> /* Industrial processors may be used at sub zero temperatures */
-> 
+This one is only hypothetical. It appears to me that writing the control
+after the configuration of sar and dar is more relevant to prevent race iss=
+ues
+and should be the usual coding choice. Also you are right saying that it wi=
+ll
+be relevant only for the LL tree entries recycling.
+Simple question from non DMA expert: isn't cyclic DMA mode recycle the LL t=
+ree
+entries?=20
 
-You can not just display negative temperatures for family 0x17h models
-0x00..0x07 without explanation. The above needs to be documented.
-I fail to understand why a variant of
+>=20
+> If you described a hypothetical problem then it would be ok to accept
+> the change for the sake of consistency but I would have dropped the
+> Fixes tag and updated the patch description with more details of the
+> race condition you are talking about.
 
-"i3255 happens to be one of the industrial processors in family 17h models
-  01h through 08h.  These are potentially used at subzero temperatures and
-  so displaying negative numbers makes a lot sense."
+Alright, I will do that.
 
-can not be added as comment and description if that is exactly what the code
-checks for. Something like
-
-"Family 17h models 01h through 08h are industrial processors with an operational
-  temperature of -40°C - 105°C and may be used at subzero temperatures.
-  Display negative temperatures for those processors."
-
-makes perfect sense to me. Only of course it is incorrect ...
-
-Model 0x1 was used for the original Zen, and 0x8 is Zen+. 1950X is family 0x17 model
-0x01 per cpuinfo, meaning your hack undoes the original hack, and the bad
-temperatures would again be displayed for the affected systems. That is simply
-unacceptable.
-
-Yes, it may be a pain to find an acceptable hack to solve the problem,
-but after all this is a self-inflicted problem, so it can't be helped.
-The alternative would always be to find a better means to identify CPUs
-affected by the original problem. If that is not possible, explicitly listing CPUs
-which are _not_ affected is the only possible alternative.
-
-Note that the code sets disp_negative for model numbers < 0x8, meaning it
-does not include model 0x8. It also sets disp_negative for model 0x00 which is
-specifically excluded above.
-
-All that is no excuse for not providing change logs.
-
-Guenter
-
->> Guenter
->>
->>> ---
->>>   drivers/hwmon/k10temp.c | 8 ++++++--
->>>   1 file changed, 6 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
->>> index 7b177b9fbb09..2613420d43ff 100644
->>> --- a/drivers/hwmon/k10temp.c
->>> +++ b/drivers/hwmon/k10temp.c
->>> @@ -86,6 +86,7 @@ struct k10temp_data {
->>>       u32 show_temp;
->>>       bool is_zen;
->>>       u32 ccd_offset;
->>> +    bool disp_negative;
->>>   };
->>>     #define TCTL_BIT    0
->>> @@ -204,12 +205,12 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
->>>           switch (channel) {
->>>           case 0:        /* Tctl */
->>>               *val = get_raw_temp(data);
->>> -            if (*val < 0)
->>> +            if (*val < 0 && !data->disp_negative)
->>>                   *val = 0;
->>>               break;
->>>           case 1:        /* Tdie */
->>>               *val = get_raw_temp(data) - data->temp_offset;
->>> -            if (*val < 0)
->>> +            if (*val < 0 && !data->disp_negative)
->>>                   *val = 0;
->>>               break;
->>>           case 2 ... 13:        /* Tccd{1-12} */
->>> @@ -405,6 +406,9 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->>>       data->pdev = pdev;
->>>       data->show_temp |= BIT(TCTL_BIT);    /* Always show Tctl */
->>>   +    if (boot_cpu_data.x86 == 0x17 && boot_cpu_data.x86_model < 0x8)
->>> +        data->disp_negative = true;
->>> +
->>>       if (boot_cpu_data.x86 == 0x15 &&
->>>           ((boot_cpu_data.x86_model & 0xf0) == 0x60 ||
->>>            (boot_cpu_data.x86_model & 0xf0) == 0x70)) {
->>
-
+K=C3=B6ry
