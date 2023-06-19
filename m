@@ -2,138 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF6CE736047
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 01:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76EA973601D
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 01:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbjFSX6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 19:58:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55710 "EHLO
+        id S229829AbjFSX0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 19:26:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjFSX6D (ORCPT
+        with ESMTP id S229651AbjFSXYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 19:58:03 -0400
-X-Greylist: delayed 1200 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 19 Jun 2023 16:58:02 PDT
-Received: from rere.qmqm.pl (rere.qmqm.pl [91.227.64.183])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC09D1AD
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 16:58:02 -0700 (PDT)
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 4QlQhV611Jz4T;
-        Tue, 20 Jun 2023 01:19:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1687216779; bh=yLwjcEffcUiCkHIBtIV2E2+D5trU+fSj78KTub/a45Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=En5YPhY/zkeHqi2jZtDiSil2zhRDEPq1EAMvvptbUI9Rf7RWrVcNPAG6lE2MdyKFD
-         jT7tvDsLSAPnTqZ8+kJ3074zoXA1+Ts9JwL0aboHZK0CJXMbsjSlqb3opPZEcSDqof
-         biTz133qqtpdphof/68zbeLDzAj3m0lpuP6NVm1xQElsvo/iwdZBxuNXbPx1ntZCs8
-         4IEy83b8NQGnFGdpzAC90kl8ymWOULGBrlWztn68jTRHkPLrKK1ZT8VdmQHpjAgC1E
-         2tpdHgTSNcxw9EQtZIY8djXSycXb5p6sd+/fD9n8RtkdOPJGgOKfla9Aulr2tfHkrl
-         3dCz7K6HgxUCw==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.103.8 at mail
-Date:   Tue, 20 Jun 2023 01:19:37 +0200
-From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Svyatoslav Ryhel <clamor95@gmail.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: add binding for i2c-hotplug-gpio
-Message-ID: <ZJDiiZLfRO62NFPx@qmqm.qmqm.pl>
-References: <20230619153732.46258-1-clamor95@gmail.com>
- <20230619153732.46258-2-clamor95@gmail.com>
- <32b0e664-9381-19c4-de9d-9466a00b4f50@linaro.org>
+        Mon, 19 Jun 2023 19:24:23 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6CA419B0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 16:22:59 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-1acdfbe1c78so489760fac.2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 16:22:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687216979; x=1689808979;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XfNSjXBuKM+6HmRYQwLz0qjo1KyosHUhRL762fqxh/Q=;
+        b=YfueofKuZCq1gjJQCocUP0jH/vW8oFVQ/MMoPlx1CMUR8F6HKbGq21PKfl4GMU6+ky
+         qJjgFvlgJdb7XNJNun2MmumQSmCKP2II5bA2lSIH6NphuFUcV8sQsFAd2XgUIAQBsiKl
+         cKlDFYHgBiahiM6sdhgfyBQSpvUCUqTXphzkSyLrarWtKK4JNUuIJ6za9ZNJOJj6ByMR
+         iuNIl3ABvl9DNIHvTnWivixI9P2tNS2scWRIDBFAgX93KXlbn+hCvldq4jMQ0fhEvJ/5
+         3sbmgTWS20kDyBhHpco29vkDbhW4E1p8B6UZ0tZ+DuQytHL2V3SeoeJKnSiUo5FKWDee
+         bIsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687216979; x=1689808979;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XfNSjXBuKM+6HmRYQwLz0qjo1KyosHUhRL762fqxh/Q=;
+        b=EpWOHKGRhKPFnXxbH93CZCqkAPzKqiprPZclw/DhgdRUahDU9xdgsxuN4pnurUoCpx
+         DgiCDX2DlUfhM9FUzC3RcKKTLossJlL6OaB0nMAoW/49UXlZYRr0vBf5FSXgvs0Mayoa
+         /oyXF8dEgMCijC5jZBopgBUu62tN2j1kURsD9l5Hk0sW0udkX+eUNjzZNWLobwEQcphz
+         jZ1JFSb0F7TIUz0AoyrFagtdXqtqt46Wg7D54VJQBSa5GiDXwNBzsTbtiRykWmwHLXUT
+         IynkcAirLHUSjsbB/ut+NTEqxMsbvGS+LJNnw+dfMl6BjP2JLlth68dKihXCdgVaqsjC
+         Wcyg==
+X-Gm-Message-State: AC+VfDyebk+Aw31mezo4Yh7je/RMsfgTyBCAuaeGHo/vsz5Nxgu70nw7
+        X2769n2pxYa0XX4rHWylX3AcIBPaBSgetg==
+X-Google-Smtp-Source: ACHHUZ79aiTlm+f1fr7phm2qA0RkHfoC/RIknkfD4npcLFTuyyI2i+EJy8x/SFu0pQnoBzgY52IOdw==
+X-Received: by 2002:a05:6870:3845:b0:1a9:9847:b485 with SMTP id z5-20020a056870384500b001a99847b485mr7133046oal.2.1687216978844;
+        Mon, 19 Jun 2023 16:22:58 -0700 (PDT)
+Received: from nelson-Aspire-A315-51.. ([181.124.133.106])
+        by smtp.gmail.com with ESMTPSA id a4-20020a056870d18400b0019f4f5c8298sm482474oac.56.2023.06.19.16.22.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 16:22:58 -0700 (PDT)
+From:   edagarmarjara <edgarmarjara@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     dri-devel@lists.freedesktop.org,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
+        Arthur Grillo <arthurgrillo@riseup.net>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        edagarmarjara <edgarmarjara@gmail.com>
+Subject: [PATCH] Tercera entrega completa
+Date:   Mon, 19 Jun 2023 19:22:49 -0400
+Message-Id: <20230619232249.16319-1-edgarmarjara@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <32b0e664-9381-19c4-de9d-9466a00b4f50@linaro.org>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 05:53:24PM +0200, Krzysztof Kozlowski wrote:
-> On 19/06/2023 17:37, Svyatoslav Ryhel wrote:
-> > Document device tree schema which describes hot-pluggable via GPIO
-> > i2c bus.
-> > 
-> > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-[...]
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/i2c/i2c-hotplug-gpio.yaml
-> > @@ -0,0 +1,65 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/i2c/i2c-hotplug-gpio.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: GPIO detected hot-plugged I2C bus
-> > +
-> > +maintainers:
-> > +  - Micha³ Miros³aw <mirq-linux@rere.qmqm.pl>
-> > +
-> > +description:
-> > +  Driver for hot-plugged I2C busses, where some devices on a bus
-> 
-> "Driver" so SW? Bindings are for hardware, not for drivers.
-[...]
-> > +  detect-gpios:
-> > +    maxItems: 1
-> > +
-> > +  i2c-parent:
-> > +    maxItems: 1
-> 
-> Discussion from v1 stands - this is a software construct, not a real device.
-[...]
-> Anyway, don't send v3, before the discussion about the entire concept
-> finishes. You create a software/virtual device, instead of adding these
-> properties to bindings for a real hardware.
+---
+ drivers/gpu/drm/tests/drm_rect_test.c | 30 +++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-Hi,
+diff --git a/drivers/gpu/drm/tests/drm_rect_test.c b/drivers/gpu/drm/tests/drm_rect_test.c
+index e9809ea32696..d03e1d9b208d 100644
+--- a/drivers/gpu/drm/tests/drm_rect_test.c
++++ b/drivers/gpu/drm/tests/drm_rect_test.c
+@@ -35,6 +35,7 @@ static void drm_test_rect_clip_scaled_div_by_zero(struct kunit *test)
+ 	KUNIT_EXPECT_FALSE_MSG(test, drm_rect_visible(&src), "Source should not be visible\n");
+ }
+ 
++
+ static void drm_test_rect_clip_scaled_not_clipped(struct kunit *test)
+ {
+ 	struct drm_rect src, dst, clip;
+@@ -196,11 +197,40 @@ static void drm_test_rect_clip_scaled_signed_vs_unsigned(struct kunit *test)
+ 	KUNIT_EXPECT_FALSE_MSG(test, drm_rect_visible(&src), "Source should not be visible\n");
+ }
+ 
++static void drm_test_rect_clip_over_scaled_signed_vs_unsigned(struct kunit *test)
++{
++	
++	const void* gem_params(const void *prev, char *desc); 
++	struct drm_rect src, dst, clip;
++	bool visible;
++
++	/*
++	 * 'clip.x2 - dst.x1 >= dst width' could result a negative
++	 * src rectangle width which is no longer expected by the
++	 * code as it's using unsigned types. This could lead to
++	 * the clipped source rectangle appering visible when it
++	 * should have been fully clipped. Make sure both rectangles
++	 * end up invisible.
++	 * en esta parte cambio los valores y hago por aun mas afuera para el clip scaled
++	 * para poder saber si al exagerar mas aun la escala sigue funcionando
++	 */
++	drm_rect_init(&src, 2, 2, INT_MAX, INT_MAX);
++	drm_rect_init(&dst, 2, 2, 4, 4);
++	drm_rect_init(&clip, 6, 6, 3, 3);
++
++	visible = drm_rect_clip_scaled(&src, &dst, &clip);
++	
++	KUNIT_EXPECT_FALSE_MSG(test, visible, "Destination should not be visible\n");
++	KUNIT_EXPECT_FALSE_MSG(test, drm_rect_visible(&src), "Source should not be visible\n");
++}
++
++
+ static struct kunit_case drm_rect_tests[] = {
+ 	KUNIT_CASE(drm_test_rect_clip_scaled_div_by_zero),
+ 	KUNIT_CASE(drm_test_rect_clip_scaled_not_clipped),
+ 	KUNIT_CASE(drm_test_rect_clip_scaled_clipped),
+ 	KUNIT_CASE(drm_test_rect_clip_scaled_signed_vs_unsigned),
++	KUNIT_CASE(drm_test_rect_clip_over_scaled_signed_vs_unsigned), //Test entrega 2
+ 	{ }
+ };
+ 
+-- 
+2.34.1
 
-In this case it's hard for me to tell the difference if this is
-real or virtual hardware.
-
-The Transformers have a connector that's used for USB, charging or
-for attaching a keyboard (called a dock; it also has a battery and
-a touchpad). This connector probably (I don't have the means to verify
-that) has an I2C bus lines and a "detect" line (pulled low on the dock
-side) among the pins. I guess there is either no additional chip or
-a transparent bridge/buffer chip, but nothing that could be controlled
-by software. For DT this setup could be modelled like an I2C gate or
-2-port mux with enable joining two I2C busses (one "closer" to the
-CPU -- parent).
-
-> > +
-> > +examples:
-> > +  - |
-> > +    /*
-> > +     * Asus Transformers use I2C hotplug for attachable dock keyboard
-> > +     */
-> > +    #include <dt-bindings/gpio/gpio.h>
-> > +    #include <dt-bindings/interrupt-controller/irq.h>
-> > +
-> > +    i2c-dock {
-> > +        compatible = "i2c-hotplug-gpio";
-> > +
-> > +        #address-cells = <1>;
-> > +        #size-cells = <0>;
-> > +
-> > +        interrupts-extended = <&gpio 164 IRQ_TYPE_EDGE_BOTH>;
-> > +        detect-gpios = <&gpio 164 GPIO_ACTIVE_LOW>;
-> 
-> I don't think you can have both interrupt and GPIO on the same line.
-
-This actually works as expected. There are multiple devices (and
-drivers) that depend on this, e.g. matrix-keypad and gpio-keys.
-
-Best Regards
-Micha³ Miros³aw
