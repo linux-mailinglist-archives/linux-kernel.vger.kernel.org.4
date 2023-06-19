@@ -2,92 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12394735BF8
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 18:13:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73106735C01
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 18:14:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232008AbjFSQNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 12:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33046 "EHLO
+        id S232171AbjFSQN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 12:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbjFSQNA (ORCPT
+        with ESMTP id S232016AbjFSQN0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 12:13:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E975A2;
-        Mon, 19 Jun 2023 09:12:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AE5DD60D30;
-        Mon, 19 Jun 2023 16:12:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC27CC433C0;
-        Mon, 19 Jun 2023 16:12:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687191178;
-        bh=/H6FT3FrmV0NJ8VWtFxL0MtU2bSU6n73mHMPI4XRQBE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AMT5ndmgubCl23aIo/nslz/83VJoyve6t1E7pDI6/gvbGLCGEeffTuifbdDruLHnw
-         /ZavuMYavxaQvsrl4Z7lJ3hIVyzoV/Yija9MfeosJqe2JJb5Fpk7jUW+jheAw193/f
-         a+zX4Q8als5VJohEMnSGRu96dNhsX47Ow+96ej/XH6EAgw/Jom+Wnhf4j6e3eDHh43
-         kyomnYLtcLz4LCgssPyWNZe0DELwCVJ6iKrbUTGu7BD4hCybUfag8OcQSWN50eczp7
-         qq7lFI+Absa8n68blhi7JegCSxKbT9bBkVMdXbTvXqtH/zp7BtzAMlojViKcSVYZz0
-         9vD/P0wNcndWw==
-Message-ID: <f9a85fcc-33e3-b47b-9c32-1d680edadcf8@kernel.org>
-Date:   Mon, 19 Jun 2023 09:12:55 -0700
+        Mon, 19 Jun 2023 12:13:26 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E29F3C1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:13:23 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b455855fb2so48831231fa.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:13:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687191202; x=1689783202;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZdJyfM0wQbXVorPTo/xhbHvwBGV6R1GO0tiAajjVkTc=;
+        b=GJ6cOZ91sa5wua2rUcyeQ0M2MJI+XPL9FfWQmkX0F1URArzw2jzsibCA3VVVsfRju0
+         BYEzsgEbbxZtBa8kZM17Fo8qhzDvnlH9+fL6zGk0toceoLIxcgwRx77AAJ9kuQgv6wn/
+         D6G6sWMJxT/nimw5A5ciI6shRZzZVMk3DUq9+GTsPD8CtBshrUn2pXtd0zNvY/gm4tRT
+         FZW5b92KH/lfRH/IieMylKY63mUKF7mYIm00SUBt3bAHZF/1VRqh0OsPwnlAsk+l5nqB
+         yBpYJyEN4m5i/JuSQL3ecdSWbEZOLUqLLGL3fbcxbzlr8zQ8IpoyakdWAsNNqO5/8zb3
+         MBfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687191202; x=1689783202;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZdJyfM0wQbXVorPTo/xhbHvwBGV6R1GO0tiAajjVkTc=;
+        b=JcEE55aqgh+RTZtqza7mxyimahSOX/AUfnfhSFF5E6SYdE5KlRsCZ6mdjm7PpAm920
+         Oa7ej5jZZMRvkFAuuty9l+4+hsI6hQQfxKa0+/FhOWVfVRxoTRR1TEXy/oYhyAnwUTSf
+         xrZEEGqSyxwEcFFUkGQ83Vde1HyQlav4U491Kz928rTEr2DqvAApO7rpwA9AjEqnP8pW
+         0TC3PhK+vwLnxLCzk+z7eYLi58LNlndabccx3QFzKLZuEPVAj+tWTHkm4Q0VtMUYyQQ8
+         y2nId0RGEKuEJ7IWwrUgJwX25hKd7LbXbLVATCxo1rZ2objROQba8vc/ZT3oFLWEsICx
+         ZnfQ==
+X-Gm-Message-State: AC+VfDxjWNWCvXbXhsrXl1LpPn7wKaEreZTSDoz1lnR44s/ZPJAdH8v4
+        28iEfhY9MeaElyS4HxHYXHS15g==
+X-Google-Smtp-Source: ACHHUZ7toL2rdZPnjv56/gQRsxXwX8ZSK5dbAZyZn8H5ZcAQi5iTHDxmxNhoI9rEpwj/K2sTpYXB9w==
+X-Received: by 2002:a2e:9f54:0:b0:2b4:479a:aaba with SMTP id v20-20020a2e9f54000000b002b4479aaabamr6051054ljk.19.1687191202175;
+        Mon, 19 Jun 2023 09:13:22 -0700 (PDT)
+Received: from [192.168.1.101] (abyl242.neoplus.adsl.tpnet.pl. [83.9.31.242])
+        by smtp.gmail.com with ESMTPSA id x20-20020a2e7c14000000b002b471efb253sm1011714ljc.46.2023.06.19.09.13.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 09:13:21 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH 0/2] SC8280XP clock runtime pm
+Date:   Mon, 19 Jun 2023 18:13:16 +0200
+Message-Id: <20230619-topic-sc8280xp-clk-rpm-v1-0-1e5e1064cdb2@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.2
-Subject: Re: [RFC PATCH v2 1/4] net: wire up support for
- file_operations->uring_cmd()
-Content-Language: en-US
-To:     Breno Leitao <leitao@debian.org>, axboe@kernel.dk,
-        asml.silence@gmail.com
-Cc:     io-uring@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Mat Martineau <martineau@kernel.org>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>, leit@fb.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dccp@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-sctp@vger.kernel.org, ast@kernel.org, kuniyu@amazon.com,
-        martin.lau@kernel.org, Jason Xing <kernelxing@tencent.com>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Guillaume Nault <gnault@redhat.com>,
-        Andrea Righi <andrea.righi@canonical.com>
-References: <20230614110757.3689731-1-leitao@debian.org>
- <20230614110757.3689731-2-leitao@debian.org>
- <6b5e5988-3dc7-f5d6-e447-397696c0d533@kernel.org>
- <ZJA6AwbRWtSiJ5pL@gmail.com>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <ZJA6AwbRWtSiJ5pL@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-B4-Tracking: v=1; b=H4sIAJx+kGQC/x2N0QrCMAwAf2Xk2UDWoVR/RXzostQFa1faKYOxf
+ zf4eAfH7dCkqjS4dTtU+WrTJRv0pw54DvkpqJMxOHIDXforrktRxsbeedoKcnphLW+c2NPgzpF
+ CjGDxGJrgWEPm2fL8SclkqRJ1+9/uj+P4ATBEOaB9AAAA
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1687191201; l=659;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=6t4hMp1VbI7Kk57kUEUY0uBWHVgMinJG5qAuxHi3rEI=;
+ b=OmHWFgsr/nCvi5E1fj7GlkSK0nx2BNJNlkssqEyX1dGu617b4n32KYICXInHl8DsUnuAGb9LD
+ Q4PkgKAliFHC9NVaqmsYrEzsLVsCkQli+uZXIuLo6iGYbQjLKnyDHCF
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/19/23 4:20 AM, Breno Leitao wrote:
-> On Wed, Jun 14, 2023 at 08:15:10AM -0700, David Ahern wrote:
->> On 6/14/23 5:07 AM, Breno Leitao wrote:
->> io_uring is just another in-kernel user of sockets. There is no reason
->> for io_uring references to be in core net code. It should be using
->> exposed in-kernel APIs and doing any translation of its op codes in
->> io_uring/  code.
-> Thanks for the feedback. If we want to keep the network subsystem
-> untouched, then I we can do it using an approach similar to the
-> following. Is this a better approach moving forward?
+Keeping power domains always enabled hinders power efficiency. Add runtime
+PM to 8280 clock controllers to prevent that.
 
-yes. It keeps the translation from io_uring commands to networking APIs
-in one place and does not need to propagate that translation through the
-networking code.
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (2):
+      clk: qcom: gpucc-sc8280xp: Add runtime PM
+      clk: qcom: gcc-sc8280xp: Add runtime PM
+
+ drivers/clk/qcom/gcc-sc8280xp.c   | 18 ++++++++++++++++--
+ drivers/clk/qcom/gpucc-sc8280xp.c | 19 +++++++++++++++++--
+ 2 files changed, 33 insertions(+), 4 deletions(-)
+---
+base-commit: 47045630bc409ce6606d97b790895210dd1d517d
+change-id: 20230619-topic-sc8280xp-clk-rpm-dc80325f0aff
+
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
+
