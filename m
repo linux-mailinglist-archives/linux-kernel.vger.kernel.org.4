@@ -2,88 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AC50735AF5
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:17:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC895735AF8
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231565AbjFSPR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 11:17:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36894 "EHLO
+        id S231596AbjFSPRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 11:17:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231345AbjFSPRZ (ORCPT
+        with ESMTP id S231209AbjFSPR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 11:17:25 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2F19B;
-        Mon, 19 Jun 2023 08:17:23 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f90a7325f6so22548995e9.3;
-        Mon, 19 Jun 2023 08:17:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687187842; x=1689779842;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C2BCqWZdnOgJLi1yS8YB0jgtq7UEXjCvPUI8CflkrIM=;
-        b=fcoarEbtF5e7jxTOdi2dHyVdAjhYmhluM3IFzimhgMrW9R2daBbBYONDuB/o0J7YOr
-         bYoFkt5eSY/Qihi9kxiUYuqaZKwp6C/9xXf69fScIaGVS4gjGSSOvIOa3jTRTzaSwqgo
-         2gaZezk7u5fR7Kg509bBrm6W/dGDLiGwmt92XSnrUpruNV7ERRTZMtx4PpTBz5mWAvXH
-         E6WXnT/ZBDfu65fZkld2fRZj1Frr4AmlNFoCLHOgMTJ+7yEUexlom1z70/90A4OAA2Yh
-         NSvi3RBD5Ebu0ss9+0SIJSPmMzhVizmHebLSUqHuIeomQXmB+2xsS8oMi2Q6cDaymSv0
-         1KBw==
+        Mon, 19 Jun 2023 11:17:29 -0400
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9DDB9;
+        Mon, 19 Jun 2023 08:17:28 -0700 (PDT)
+Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-77e2f4498d3so139573039f.1;
+        Mon, 19 Jun 2023 08:17:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687187842; x=1689779842;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C2BCqWZdnOgJLi1yS8YB0jgtq7UEXjCvPUI8CflkrIM=;
-        b=HNHd7Kkiocvr21u+1yNLnqWjWEYf8XVohoCLKytBrq++6Alo1CgHAGP98o7nsagNq6
-         YlKuMtlI5O0bm7aM1xr1UOHQKNTtFBsNdDsdd8AZbNnUV4G4GxEILr+Oc9ub3+wXCGNs
-         7xKIIpyiP5zT5lxIindNWqwv/JX6OtYwG3lTqP4qzdNsJ6xexl68YtBWcRPk8/b1fOxC
-         U6OFAnxn+ZDgorYYZuLWKhVP/lJS1j/+WeH8cfNtX5QUCLB3j4HjrLIdDvCmRzK4Z5Vz
-         EfLulR7NAiozpZBvnSjm/Tjg1goNGmuDBhKkEXkSSYaQEHsZOW0m/jzJwfWzqP7vfKIs
-         TDOQ==
-X-Gm-Message-State: AC+VfDwRXdEt4VZK+k1Pod1JhPbo1wh+NJu68P5j5oePwenzXqRNf2E6
-        wnVXSPUFURp5kltN31jX+hQ=
-X-Google-Smtp-Source: ACHHUZ7K5Wzb9tlqACcOU9KMrL7nII5/kQ/ZHVCVs95ZpIEDFwh9jxtGKtIzb9hQmQ6Nf+bJZPS2NA==
-X-Received: by 2002:a7b:ce14:0:b0:3f9:7a15:1716 with SMTP id m20-20020a7bce14000000b003f97a151716mr3720485wmc.5.1687187842081;
-        Mon, 19 Jun 2023 08:17:22 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id v18-20020a5d43d2000000b0030ae93bd196sm31712456wrr.21.2023.06.19.08.17.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 08:17:21 -0700 (PDT)
-Message-ID: <91db8e7b-29fb-3c43-ac38-008ebc9b1f6b@gmail.com>
-Date:   Mon, 19 Jun 2023 17:17:18 +0200
+        d=1e100.net; s=20221208; t=1687187848; x=1689779848;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=WgKRXvSMWABKvbmLX95jy/NSU+/y9S3eGrmMqjWNJU0=;
+        b=mGVlhnyjSkGaOBKc/9ivIgtWosRjEfaW2RRA+fjjgrJL6GJQnM9XDOQh2U2sdpBUjr
+         V9T7oZ8Nhrj/Cwd27/xAjuiQ8+L+AuaMszwJ633DKW1a85kefR2qXwmGWzgK5+Kc/tb3
+         5xm7ZCY047Q7Ps8QBE7RQYuxJ00nBkj8BuFvi5WjhBqsLeYtJX4uCu/gJIE+F/Sm+8QI
+         X96IQ493pAIpJpxjAsKIvnjxb48cX75yt9W6Jn3bChU27Wp97jCT2ewadU2gFiECVmhm
+         CnNiYcDaArZUgUrlDqDWAyN0bRoICGKjT4udNKOWOz9f8zXZHRE32lcvw391LkJXii8p
+         prZQ==
+X-Gm-Message-State: AC+VfDy26DJk/T3jrncXHlfW4kCL6kHW7ZTVuNw0ylcXr0BpIr07aHcp
+        skzfjJlaoyAfGc0VNpFr0A==
+X-Google-Smtp-Source: ACHHUZ5es6kWhTCARuzVLDXGsRnpv7SH6/aqBJ5ei9Fyio38kSLiK55jginlEAtUi6nJJcy3wyFkVA==
+X-Received: by 2002:a6b:d903:0:b0:774:9c64:e0a4 with SMTP id r3-20020a6bd903000000b007749c64e0a4mr8720642ioc.4.1687187846644;
+        Mon, 19 Jun 2023 08:17:26 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id c2-20020a6bec02000000b0077e2ae3170fsm1754400ioh.55.2023.06.19.08.17.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 08:17:26 -0700 (PDT)
+Received: (nullmailer pid 1285056 invoked by uid 1000);
+        Mon, 19 Jun 2023 15:17:24 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v3 11/12] thermal/drivers/generic-adc: Register thermal
- zones as hwmon sensors
-Content-Language: en-US, ca-ES, es-ES
-To:     Yangtao Li <frank.li@vivo.com>, glaroque@baylibre.com,
-        rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        thara.gopinath@gmail.com, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, anarsoul@gmail.com,
-        tiny.windzz@gmail.com, wens@csie.org, jernej.skrabec@gmail.com,
-        samuel@sholland.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, edubezval@gmail.com, j-keerthy@ti.com,
-        angelogioacchino.delregno@collabora.com, bchihi@baylibre.com,
-        niklas.soderlund+renesas@ragnatech.se, wenst@chromium.org
-Cc:     linux-pm@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        linux-tegra@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-References: <20230613114904.15749-1-frank.li@vivo.com>
- <20230613114904.15749-11-frank.li@vivo.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230613114904.15749-11-frank.li@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Svyatoslav Ryhel <clamor95@gmail.com>
+Cc:     Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?utf-8?q?Micha=C5=82_Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
+        devicetree@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-i2c@vger.kernel.org
+In-Reply-To: <20230619143611.24482-2-clamor95@gmail.com>
+References: <20230619143611.24482-1-clamor95@gmail.com>
+ <20230619143611.24482-2-clamor95@gmail.com>
+Message-Id: <168718784438.1285040.10790522017287667306.robh@kernel.org>
+Subject: Re: [PATCH v1 1/2] dt-bindings: i2c: add binding for
+ i2c-hotplug-gpio
+Date:   Mon, 19 Jun 2023 09:17:24 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -91,46 +70,42 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-
-On 13/06/2023 13:49, Yangtao Li wrote:
-> From: Chen-Yu Tsai <wenst@chromium.org>
+On Mon, 19 Jun 2023 17:36:10 +0300, Svyatoslav Ryhel wrote:
+> Document device tree schema which describes hot-pluggable via GPIO
+> i2c bus.
 > 
-> Register thermal zones as hwmon sensors to let userspace read
-> temperatures using standard hwmon interface.
-> 
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-> [Yangtao change to use dev_warn and remove return]
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
 > ---
->   drivers/thermal/thermal-generic-adc.c | 5 +++++
->   1 file changed, 5 insertions(+)
+>  .../bindings/i2c/i2c-hotplug-gpio.yaml        | 68 +++++++++++++++++++
+>  1 file changed, 68 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-hotplug-gpio.yaml
 > 
-> diff --git a/drivers/thermal/thermal-generic-adc.c b/drivers/thermal/thermal-generic-adc.c
-> index 017b0ce52122..9531bc2f2ce7 100644
-> --- a/drivers/thermal/thermal-generic-adc.c
-> +++ b/drivers/thermal/thermal-generic-adc.c
-> @@ -13,6 +13,8 @@
->   #include <linux/slab.h>
->   #include <linux/thermal.h>
->   
-> +#include "thermal_hwmon.h"
-> +
->   struct gadc_thermal_info {
->   	struct device *dev;
->   	struct thermal_zone_device *tz_dev;
-> @@ -153,6 +155,9 @@ static int gadc_thermal_probe(struct platform_device *pdev)
->   		return ret;
->   	}
->   
-> +	if (devm_thermal_add_hwmon_sysfs(&pdev->dev, gti->tz_dev))
-> +		dev_warn(&pdev->dev, "Failed to add hwmon sysfs attributes\n");
 
-Isn't that already done by patch 1/12?
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Regards,
-Matthias
+yamllint warnings/errors:
 
-> +
->   	return 0;
->   }
->   
+dtschema/dtc warnings/errors:
+FATAL ERROR: Can't generate fixup for reference to path &{/i2c@7000c400}
+make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/i2c/i2c-hotplug-gpio.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1512: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230619143611.24482-2-clamor95@gmail.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
