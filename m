@@ -2,150 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3059C73528B
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 12:36:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 723427352C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 12:37:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231635AbjFSKgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 06:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41998 "EHLO
+        id S231719AbjFSKhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 06:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbjFSKfj (ORCPT
+        with ESMTP id S231342AbjFSKhi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 06:35:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7B3173D;
-        Mon, 19 Jun 2023 03:35:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B0CAE60B6D;
-        Mon, 19 Jun 2023 10:35:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FC56C433C9;
-        Mon, 19 Jun 2023 10:35:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687170931;
-        bh=5dt6l3lx8FHqgt+yEGvI0hRPuTRkjicnDuM52S/ToEU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZektIom2LsRtOyxwQz8sOmWcQciXT8JR4ZjkunidMtKtQvHPoKihYbDXYj7jb8/vU
-         hPNrYAL0YBaU3WLs0kYtWu+mwxs/owBgjD3NNWW8lgIWnbFSRFYNXZ9drkrNS/EGqV
-         g1XzT83U7UMZ7vH1hzwvYbcih25AMOhSnfOWGTQueLHP2klGaqI81AUmvZlhb7A3ld
-         11BHHDw733l04et6x9BJwan0nQ0019Z1TQJ81ni18nKLyKxWGtxvG20zPDonFh5MGF
-         0P/gCyZ2aDF9HXTlpWTWffoh0r3YT5XW/jGQg1Evijre2cX8IagbSdg53Z2EQXJ3je
-         N36FmOjONZjXA==
-Date:   Mon, 19 Jun 2023 11:35:24 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Jakob Hauser <jahau@rocketmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        Mon, 19 Jun 2023 06:37:38 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F14102;
+        Mon, 19 Jun 2023 03:37:37 -0700 (PDT)
+Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CDD9BFB;
+        Mon, 19 Jun 2023 12:36:59 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1687171021;
+        bh=j9D//YVQRuMR4JMg7qTsktMpiYHgQzslyET9vXnkYSM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=wkRCdL384dHyrzyc5/AzEr1y4PG/e063YSnYU+MjC1opw04AURFAkbt/QT8cR9k6q
+         NhmK2GmVrH0HG+KDKRUSgPg/qXK0rlAQXIlZGtWWpuOMCMA/DHNBPRLQ7368ZgmSEB
+         QF+KWfY5QTRlgZvqdaPDvjG8TM75ZqiMQh7BMVF0=
+Message-ID: <e0df1839-5c00-7d4a-8322-527bd93420bb@ideasonboard.com>
+Date:   Mon, 19 Jun 2023 13:37:31 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v14 15/18] media: i2c: ds90ub953: Handle
+ V4L2_MBUS_CSI2_NONCONTINUOUS_CLOCK
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Henrik Grimler <henrik@grimler.se>,
-        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [GIT PULL] Immutable branch between MFD and Power due for the
- v6.5 merge window
-Message-ID: <20230619103524.GA1472962@google.com>
-References: <cover.1684182964.git.jahau.ref@rocketmail.com>
- <cover.1684182964.git.jahau@rocketmail.com>
- <20230609064753.GL3635807@google.com>
- <faff027d-2a6a-22ca-2487-2ae05223fabd@rocketmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <faff027d-2a6a-22ca-2487-2ae05223fabd@rocketmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>
+References: <20230616135922.442979-1-tomi.valkeinen@ideasonboard.com>
+ <20230616135922.442979-16-tomi.valkeinen@ideasonboard.com>
+ <ZIxyqTdEsS40emBV@smile.fi.intel.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <ZIxyqTdEsS40emBV@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sebastian,
-
-On Fri, 16 Jun 2023, Jakob Hauser wrote:
-> On 09.06.23 08:47, Lee Jones wrote:
-> > Enjoy!
-> > 
-> > The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
-> > 
-> >    Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
-> > 
-> > are available in the Git repository at:
-> > 
-> >    git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-power-v6.5
-> > 
-> > for you to fetch changes up to b54185c1e3b02c91e4a190ac5c346ea7bfb0de93:
-> > 
-> >    dt-bindings: Add rt5033 MFD, Regulator and Charger (2023-06-08 18:18:13 +0100)
-> > 
-> > ----------------------------------------------------------------
-> > Immutable branch between MFD and Power due for the v6.5 merge window
-> > 
-> > ----------------------------------------------------------------
-> > Jakob Hauser (8):
-> >        mfd: rt5033: Fix chip revision readout
-> >        mfd: rt5033: Fix STAT_MASK, HZ_MASK and AICR defines
-> >        mfd: rt5033: Apply preparatory changes before adding rt5033-charger driver
-> >        power: supply: rt5033_charger: Add RT5033 charger device driver
-> >        power: supply: rt5033_battery: Move struct rt5033_battery to battery driver
-> >        power: supply: rt5033_battery: Adopt status property from charger
-> >        dt-bindings: power: supply: rt5033-battery: Apply unevaluatedProperties
-> >        dt-bindings: Add rt5033 MFD, Regulator and Charger
-> > 
-> > Stephan Gerhold (1):
-> >        mfd: rt5033: Drop rt5033-battery sub-device
-> > 
-> >   .../devicetree/bindings/mfd/richtek,rt5033.yaml    | 138 ++++++
-> >   .../power/supply/richtek,rt5033-battery.yaml       |   2 +-
-> >   .../power/supply/richtek,rt5033-charger.yaml       |  65 +++
-> >   drivers/mfd/rt5033.c                               |   8 +-
-> >   drivers/power/supply/Kconfig                       |   8 +
-> >   drivers/power/supply/Makefile                      |   1 +
-> >   drivers/power/supply/rt5033_battery.c              |  38 +-
-> >   drivers/power/supply/rt5033_charger.c              | 472 +++++++++++++++++++++
-> >   include/linux/mfd/rt5033-private.h                 |  64 ++-
-> >   include/linux/mfd/rt5033.h                         |  24 --
-> >   10 files changed, 762 insertions(+), 58 deletions(-)
-> >   create mode 100644 Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
-> >   create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
-> >   create mode 100644 drivers/power/supply/rt5033_charger.c
-> > 
+On 16/06/2023 17:33, Andy Shevchenko wrote:
+> On Fri, Jun 16, 2023 at 04:59:19PM +0300, Tomi Valkeinen wrote:
+>> Handle V4L2_MBUS_CSI2_NONCONTINUOUS_CLOCK flag to configure the CSI-2 RX
+>> continuous/non-continuous clock register.
 > 
-> I just realized that there is one patch missing in the immutable branch
-> "ib-mfd-power-v6.5" [1]. Unfortunately I haven't noticed earlier. The
-> immutable branch holds 9 patches, the patchset has 10 patches [2]. The
-> missing patch is No. 6 "power: supply: rt5033_charger: Add cable detection
-> and USB OTG supply".
-
-Did you take this pull-request?
-
-If so, would you like to apply the missing patch or would you like me to
-take it via MFD (without a subsequent PR)?
-
-> As this patch No. 6 affects only the file
-> drivers/power/supply/rt5033_charger.c and is the last patch on that file,
-> it's no problem to add this patch on top of the other patches.
+> ...
 > 
-> Could you submit another pull request for the v6.5 merge window to add this
-> patch?
+>>   	struct regmap		*regmap;
 > 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git/log/?h=ib-mfd-power-6.5
-> [2] https://lore.kernel.org/linux-pm/cover.1684182964.git.jahau@rocketmail.com/T/#t
+> I forgot if we discussed this along with i2c_client *client nearby. Since I
+> reviewed Hans' patches the pure struct device *dev (instead of *client) might
+> make more sense, despite being duplicative with regmap associated device.
+> 
+>>   	u32			num_data_lanes;
+>> +	bool			non_cont_clk;
+>>   
+>>   	struct gpio_chip	gpio_chip;
+> 
+> And also try to place this as a first member and see (by using bloat-o-meter,
+> for example) if it saves bytes.
+> 
+> I'm wondering if we have tools like pahole but which suggests the better layout
+> based on the code generation... Maybe something along with clang?
 
--- 
-Lee Jones [李琼斯]
+Isn't all this a bit on the side of pointless micro-optimizations? We're 
+talking about possibly saving a few tens of bytes in a struct that's 
+likely allocated a few times, by possibly messing up the (cosmetic) 
+grouping and ordering of the fields in the struct?
+
+If there's a common rule-of-thumb wrt. struct members that everyone 
+should follow, I'm good with that and can change this accordingly. But 
+just trying to hunt for a field order that happens to save a few bytes 
+here... It doesn't sound like time well spent.
+
+If things were perfect, this would be something the compiler would 
+optimize, presuming the field ordering in the struct doesn't matter.
+
+  Tomi
+
