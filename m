@@ -2,72 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B20D9734EE6
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D7BD734EE8
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbjFSI67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 04:58:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
+        id S230217AbjFSI7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 04:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230223AbjFSI6n (ORCPT
+        with ESMTP id S230157AbjFSI66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 04:58:43 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A309E62
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 01:58:00 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-5702415be17so26513227b3.2
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 01:58:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687165079; x=1689757079;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xLmeJWd/edsFY2ls/Yz70yLNc/eoAErRFP6oqVGaQzo=;
-        b=uIr0hcR/YywyPAn1Q9NNec4n4+nmGsa9QwL8DBaVlBbyAkaJwg20xEqKD4ly3I2aVj
-         BQyWFsp6A9kFryjQcNVsM+x32cYfVnFmDqL66ku1aFu2ZbDAwTzeu2PDry2Sq5HtQ7ZE
-         D/GcEb21bpeuRiXhhVx4B44cJGiL0tdXU/UduN4U1SvhInp2hUshVs9ec8TvARKAmuZI
-         D/CJUYRpjiJhPBty1vLybrP32uODyW51NPMX395ko6lcldvDcibUDq6/3CJtQYIqCP+D
-         eHD4MGOHPb2qMmcVE8o6OIIDznY6aOEFSdXT801SIgY4pE1lQe1IyCTJhQDM6JVHCnA8
-         Q26g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687165079; x=1689757079;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xLmeJWd/edsFY2ls/Yz70yLNc/eoAErRFP6oqVGaQzo=;
-        b=h5DdFTXmvGU41F2Mzvv+kw3hg8CUgFnHU9hh46WBeflr9RNdyZqj4fygQC3h/yBZw/
-         O95JzA0U2uoqq1cL92FaM7IvmIMDoMzuOg2sekNzpd0yEnEepZ3UG4sVrhYWUMyuQ+J2
-         33tmgU2NpahLnNfMo/q3eF6vzZTOfpHPW14DctS/1Xk56WIkGTBYiO8t36iCFP7kccpP
-         omf9Vr8u8XWPDJCfnNUblZCeDwLLplwJHm1kFJwVvpw0HZZ5u9S+CCtAQWx7C3z+9shO
-         WEyq4ZKeCkFlS946V62moEHaUXu8hGgPeoXwIPcqFgEhewxD5qxba43MBNPZTfUK8/Iq
-         CTNQ==
-X-Gm-Message-State: AC+VfDzLQMpbdq3fLd6NjEak6kUtlCvojtfpMO1T4QtNSf5122MvN17p
-        yfGBSm5adBGx2+TINJehW139sq8njPTbVmDS5XkOjQ==
-X-Google-Smtp-Source: ACHHUZ5+r5xud6CHZeGlG1QSWzO428im7bO5R2mp0md9VvDElGt3sdaijKYmfRcsXy0ZO73h1kU6UMMNy9w6gPMGHyg=
-X-Received: by 2002:a25:ce85:0:b0:b96:4634:146 with SMTP id
- x127-20020a25ce85000000b00b9646340146mr4203242ybe.60.1687165079656; Mon, 19
- Jun 2023 01:57:59 -0700 (PDT)
+        Mon, 19 Jun 2023 04:58:58 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72088D9;
+        Mon, 19 Jun 2023 01:58:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1687165136; x=1718701136;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BTctNJGtNKeC547EpUBouwSImLTyx71b0O6iSpMn8wQ=;
+  b=J7H0Gx0dKggIsfcoKSYXW6EaJd9/x7jgu0YeEgIl/emAxB6j+cYWxDBs
+   K4gCeJn3XCBfHBuFQhBVoAGlLtNgbeAW58AH7vah8pqwI3dVTBiSKIlAH
+   5R87GtTR1PHwKbIrO0N3OMQpQnWAXARMwoNKo3aHdEXqQLsaHjPCiR5ZR
+   OZjbIlwWY+n5BLfkUJIUVZz9cGP1NB5ZLuhMxIrpqOjXPKpdrtCBrh0oY
+   /85YdjMucCJXMVJgW5vNyT3IP4pN1haB/ZCQ5fF/MMsAvnDI7ZXxLEWXg
+   KEtzL9jGbjynOfcMpa1CNaJubUjQiXJUupTNOGibh/8Pl2Wvz8n06HRTc
+   w==;
+X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
+   d="scan'208";a="216633003"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Jun 2023 01:58:55 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 19 Jun 2023 01:58:32 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Mon, 19 Jun 2023 01:58:32 -0700
+Date:   Mon, 19 Jun 2023 10:58:31 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     "Radu Pirea (NXP OSS)" <radu-nicolae.pirea@oss.nxp.com>
+CC:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <richardcochran@gmail.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <sebastian.tobuschat@nxp.com>
+Subject: Re: [PATCH net-next v1 14/14] net: phy: nxp-c45-tja11xx: timestamp
+ reading workaround for TJA1120
+Message-ID: <20230619085831.dnzg2i5mqysc6r3r@soft-dev3-1>
+References: <20230616135323.98215-1-radu-nicolae.pirea@oss.nxp.com>
+ <20230616135323.98215-15-radu-nicolae.pirea@oss.nxp.com>
 MIME-Version: 1.0
-References: <20230616145036.3910153-1-arnd@kernel.org>
-In-Reply-To: <20230616145036.3910153-1-arnd@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 19 Jun 2023 10:57:48 +0200
-Message-ID: <CACRpkdaNqELB8OtCuEbqny80OvJnxo1Ggw4kEQQ59+9BonDpeA@mail.gmail.com>
-Subject: Re: [PATCH] gpio: synq: remove unused zynq_gpio_irq_reqres/zynq_gpio_irq_relres
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Michal Simek <michal.simek@amd.com>,
-        Manikanta Guntupalli <manikanta.guntupalli@amd.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Srinivas Neeli <srinivas.neeli@amd.com>,
-        Andy Shevchenko <andy@kernel.org>, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20230616135323.98215-15-radu-nicolae.pirea@oss.nxp.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,49 +67,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 4:50=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
-te:
+The 06/16/2023 16:53, Radu Pirea (NXP OSS) wrote:
 
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The driver now uses the generic request/release callbacks, so the custom
-> ones are no longer called. When building with -Woverride-init, gcc produc=
-es
-> a warning about the duplicate entries:
->
-> In file included from drivers/gpio/gpio-zynq.c:10:
-> include/linux/gpio/driver.h:621:43: error: initialized field overwritten =
-[-Werror=3Doverride-init]
->   621 |                 .irq_request_resources  =3D gpiochip_irq_reqres, =
-         \
->       |                                           ^~~~~~~~~~~~~~~~~~~
-> drivers/gpio/gpio-zynq.c:611:9: note: in expansion of macro 'GPIOCHIP_IRQ=
-_RESOURCE_HELPERS'
->   611 |         GPIOCHIP_IRQ_RESOURCE_HELPERS,
->       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> include/linux/gpio/driver.h:621:43: note: (near initialization for 'zynq_=
-gpio_level_irqchip.irq_request_resources')
->   621 |                 .irq_request_resources  =3D gpiochip_irq_reqres, =
-         \
->       |                                           ^~~~~~~~~~~~~~~~~~~
-> drivers/gpio/gpio-zynq.c:625:9: note: in expansion of macro 'GPIOCHIP_IRQ=
-_RESOURCE_HELPERS'
->   625 |         GPIOCHIP_IRQ_RESOURCE_HELPERS,
->       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> include/linux/gpio/driver.h:622:43: error: initialized field overwritten =
-[-Werror=3Doverride-init]
->   622 |                 .irq_release_resources  =3D gpiochip_irq_relres
->       |                                           ^~~~~~~~~~~~~~~~~~~
->
-> Removing the old ones has no effect on the driver but avoids the warnings=
-.
->
-> Fixes: f569143935378 ("gpio: zynq: fix zynqmp_gpio not an immutable chip =
-warning")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Hi Radu,
 
-Right.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> 
+> On TJA1120 engineering samples, the new timestamp is stuck in the FIFO.
+> If the MORE_TS bit is set and the VALID bit is not set, we know that we
+> have a timestamp in the FIFO but not in the buffer.
+> 
+> To move the new timestamp in the buffer registers, the current
+> timestamp(which is invalid) is unlocked by writing any of the buffer
+> registers.
 
-Yours,
-Linus Walleij
+Shouldn't this be split and merged in patch 9 and patch 10?
+As those two patches introduced this functions with issues.
+
+> 
+> Signed-off-by: Radu Pirea (NXP OSS) <radu-nicolae.pirea@oss.nxp.com>
+> ---
+>  drivers/net/phy/nxp-c45-tja11xx.c | 31 ++++++++++++++++++++++++++++---
+>  1 file changed, 28 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/phy/nxp-c45-tja11xx.c b/drivers/net/phy/nxp-c45-tja11xx.c
+> index 0d22eb7534dc..3543c8fe099c 100644
+> --- a/drivers/net/phy/nxp-c45-tja11xx.c
+> +++ b/drivers/net/phy/nxp-c45-tja11xx.c
+> @@ -532,15 +532,30 @@ static bool nxp_c45_get_extts(struct nxp_c45_phy *priv,
+>  static bool tja1120_get_extts(struct nxp_c45_phy *priv,
+>                               struct timespec64 *extts)
+>  {
+> +       const struct nxp_c45_regmap *regmap = nxp_c45_get_regmap(priv->phydev);
+> +       bool more_ts;
+>         bool valid;
+>         u16 reg;
+> 
+> +       reg = phy_read_mmd(priv->phydev, MDIO_MMD_VEND1,
+> +                          regmap->vend1_ext_trg_ctrl);
+> +       more_ts = !!(reg & TJA1120_MORE_TS);
+> +
+>         reg = phy_read_mmd(priv->phydev, MDIO_MMD_VEND1,
+>                            TJA1120_VEND1_PTP_TRIG_DATA_S);
+>         valid = !!(reg & TJA1120_TS_VALID);
+>         if (valid)
+>                 return nxp_c45_get_extts(priv, extts);
+> 
+> +       /* Bug workaround for TJA1120 enegineering samples: move the new
+> +        * timestamp from the FIFO to the buffer.
+> +        */
+> +       if (more_ts) {
+> +               phy_write_mmd(priv->phydev, MDIO_MMD_VEND1,
+> +                             regmap->vend1_ext_trg_ctrl, RING_DONE);
+> +               return nxp_c45_get_extts(priv, extts);
+> +       }
+> +
+>         return valid;
+>  }
+> 
+> @@ -588,15 +603,25 @@ static bool tja1120_get_hwtxts(struct nxp_c45_phy *priv,
+>                                struct nxp_c45_hwts *hwts)
+>  {
+>         struct phy_device *phydev = priv->phydev;
+> +       bool more_ts;
+>         bool valid;
+>         u16 reg;
+> 
+>         mutex_lock(&priv->ptp_lock);
+> +       reg = phy_read_mmd(phydev, MDIO_MMD_VEND1, TJA1120_EGRESS_TS_END);
+> +       more_ts = !!(reg & TJA1120_MORE_TS);
+>         reg = phy_read_mmd(phydev, MDIO_MMD_VEND1, TJA1120_EGRESS_TS_DATA_S);
+>         valid = !!(reg & TJA1120_TS_VALID);
+> -       if (!valid)
+> -               goto tja1120_get_hwtxts_out;
+> -
+> +       if (!valid) {
+> +               if (!more_ts)
+> +                       goto tja1120_get_hwtxts_out;
+> +               /* Bug workaround for TJA1120 enegineering samples: move the
+> +                * new timestamp from the FIFO to the buffer.
+> +                */
+> +               phy_clear_bits_mmd(phydev, MDIO_MMD_VEND1,
+> +                                  TJA1120_EGRESS_TS_END, TJA1120_TS_VALID);
+> +               valid = true;
+> +       }
+>         nxp_c45_read_egress_ts(priv, hwts);
+>         phy_clear_bits_mmd(phydev, MDIO_MMD_VEND1, TJA1120_EGRESS_TS_DATA_S,
+>                            TJA1120_TS_VALID);
+> --
+> 2.34.1
+> 
+> 
+
+-- 
+/Horatiu
