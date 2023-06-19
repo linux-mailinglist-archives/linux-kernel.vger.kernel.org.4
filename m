@@ -2,173 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 948A7734AAE
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 05:37:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D072E734AAC
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 05:36:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbjFSDhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 23:37:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35616 "EHLO
+        id S229560AbjFSDgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 23:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjFSDhK (ORCPT
+        with ESMTP id S229670AbjFSDge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 23:37:10 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D98283;
-        Sun, 18 Jun 2023 20:37:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687145829; x=1718681829;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Mn9sUNu9bUbT2aZ3NgMLU/44FoDyp8AQtljBXhFRLyg=;
-  b=OJI46TMNb8drVGNSKSKqZqznLy4h8c3MvTV3pWciBUw2EAwFGEJw1UdE
-   ESLlYrUg0RNpuEfF4NUhIsK+kirMjLw1ppM22i1R7r5fWOl5NerGcHj+j
-   RkPBba3ZfDPTh9HctCB4CWPB6ls1CcR4nFNO1xPmWdg+hvyGqLsTuUkB2
-   1sh013TSd7AMO+txfS/1WXlHJsn0iKvhDjeIdZDGkQeH5h/hFLiIeMrjy
-   OIkI7KyoMtP279Nw0IfPnr2rIb5x5ODJuMKprFjsEvkz/dhh22mG5DGH1
-   +eiy82Y35a5UH+U0E/34f6Elpub0MOn4ih4srPrrLCGz/fNlAR8iKfuUH
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="445917488"
-X-IronPort-AV: E=Sophos;i="6.00,253,1681196400"; 
-   d="scan'208";a="445917488"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2023 20:37:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="858063084"
-X-IronPort-AV: E=Sophos;i="6.00,253,1681196400"; 
-   d="scan'208";a="858063084"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
-  by fmsmga001.fm.intel.com with ESMTP; 18 Jun 2023 20:37:04 -0700
-Message-ID: <bc963573-f4d3-1467-daaf-2d85f6befe3f@linux.intel.com>
-Date:   Mon, 19 Jun 2023 11:35:50 +0800
+        Sun, 18 Jun 2023 23:36:34 -0400
+Received: from cstnet.cn (smtp80.cstnet.cn [159.226.251.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6454183
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 20:36:33 -0700 (PDT)
+Received: from ed3e173716be.home.arpa (unknown [124.16.138.129])
+        by APP-01 (Coremail) with SMTP id qwCowAAHDws4zY9k6sFGAQ--.12194S2;
+        Mon, 19 Jun 2023 11:36:25 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     dan.j.williams@intel.com, vishal.l.verma@intel.com,
+        dave.jiang@intel.com, ira.weiny@intel.com, oohall@gmail.com,
+        aneesh.kumar@linux.ibm.com
+Cc:     nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] libnvdimm/of_pmem: Add check and kfree for kstrdup
+Date:   Mon, 19 Jun 2023 11:36:23 +0800
+Message-Id: <20230619033623.11044-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Cc:     baolu.lu@linux.intel.com, Jason Gunthorpe <jgg@ziepe.ca>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        Yi Liu <yi.l.liu@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        iommu@lists.linux.dev, linux-kselftest@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCHES 00/17] IOMMUFD: Deliver IO page faults to user space
-Content-Language: en-US
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
-References: <20230530053724.232765-1-baolu.lu@linux.intel.com>
- <20230616113232.GA84678@myrica>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230616113232.GA84678@myrica>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowAAHDws4zY9k6sFGAQ--.12194S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrur45XrWxZF1fArWxWryDJrb_yoWkXrcEkr
+        1UXFy3Wr4xC3sakwsFywna9r9Ika1qvr1rZr1Sg3WayFZrGa13JrWUZrn5Gws3Zrn7tF9F
+        kr1jkF98Cry7GjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbcAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
+        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_
+        Gr4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
+        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
+        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUnQ6pDUUUU
+X-Originating-IP: [124.16.138.129]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/16/23 7:32 PM, Jean-Philippe Brucker wrote:
-> Hi Baolu,
+Add check for the return value of kstrdup() and return the error
+if it fails in order to avoid NULL pointer dereference.
+Moreover, use kfree() in the later error handling in order to avoid
+memory leak.
 
-Hi Jean,
+Fixes: 49bddc73d15c ("libnvdimm/of_pmem: Provide a unique name for bus provider")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/nvdimm/of_pmem.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Thank you for the informational reply.
+diff --git a/drivers/nvdimm/of_pmem.c b/drivers/nvdimm/of_pmem.c
+index 10dbdcdfb9ce..fe6edb7e6631 100644
+--- a/drivers/nvdimm/of_pmem.c
++++ b/drivers/nvdimm/of_pmem.c
+@@ -31,11 +31,17 @@ static int of_pmem_region_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	priv->bus_desc.provider_name = kstrdup(pdev->name, GFP_KERNEL);
++	if (!priv->bus_desc.provider_name) {
++		kfree(priv);
++		return -ENOMEM;
++	}
++
+ 	priv->bus_desc.module = THIS_MODULE;
+ 	priv->bus_desc.of_node = np;
+ 
+ 	priv->bus = bus = nvdimm_bus_register(&pdev->dev, &priv->bus_desc);
+ 	if (!bus) {
++		kfree(priv->bus_desc.provider_name);
+ 		kfree(priv);
+ 		return -ENODEV;
+ 	}
+-- 
+2.25.1
 
-> 
-> On Tue, May 30, 2023 at 01:37:07PM +0800, Lu Baolu wrote:
->> - The timeout value for the pending page fault messages. Ideally we
->>    should determine the timeout value from the device configuration, but
->>    I failed to find any statement in the PCI specification (version 6.x).
->>    A default 100 milliseconds is selected in the implementation, but it
->>    leave the room for grow the code for per-device setting.
-> 
-> If it helps we had some discussions about this timeout [1]. It's useful to
-> print out a warning for debugging, but I don't think completing the fault
-> on timeout is correct, we should leave the fault pending. Given that the
-> PCI spec does not indicate a timeout, the guest can wait as long as it
-> wants to complete the fault (and 100ms may even be reasonable on an
-> emulator, who knows how many layers and context switches the fault has to
-> go through).
-
-When I was designing this, I was also hesitant about whether to use a
-timer. Even worse, I didn't see any description of timeout in the PCI
-spec.
-
-I agree with you that a better approach might be to ensure that devices
-respect the number of in-flight PPRs that are allocated to them. We need
-to design a queue that is large enough to prevent device from flooding
-it with page requests.
-
-> 
-> Another outstanding issue was what to do for PASID stop. When the guest
-> device driver stops using a PASID it issues a PASID stop request to the
-> device (a device-specific mechanism). If the device is not using PRI stop
-> markers it waits for pending PRs to complete and we're fine. Otherwise it
-> sends a stop marker which is flushed to the PRI queue, but does not wait
-> for pending PRs.
-> 
-> Handling stop markers is annoying. If the device issues one, then the PRI
-> queue contains stale faults, a stop marker, followed by valid faults for
-> the next address space bound to this PASID. The next address space will
-> get all the spurious faults because the fault handler doesn't know that
-> there is a stop marker coming. Linux is probably alright with spurious
-> faults, though maybe not in all cases, and other guests may not support
-> them at all.
-> 
-> We might need to revisit supporting stop markers: request that each device
-> driver declares whether their device uses stop markers on unbind() ("This
-> mechanism must indicate that a Stop Marker Message will be generated."
-> says the spec, but doesn't say if the function always uses one or the
-> other mechanism so it's per-unbind). Then we still have to synchronize
-> unbind() with the fault handler to deal with the pending stop marker,
-> which might have already gone through or be generated later.
-
-I don't quite follow here. Once a PASID is unbound from the device, the
-device driver should be free to release the PASID. The PASID could then
-be used for any other purpose. The device driver has no idea when the
-pending page requests are flushed after unbind(), so it cannot decide
-how long should the PASID be delayed for reuse. Therefore, I understand
-that a successful return from the unbind() function denotes that all
-pending page requests have been flushed and the PASID is viable for
-other use.
-
-> 
-> Currently we ignore all that and just flush the PRI queue, followed by the
-> IOPF queue, to get rid of any stale fault before reassigning the PASID. A
-> guest however would also need to first flush the HW PRI queue, but doesn't
-> have a direct way to do that. If we want to support guests that don't deal
-> with stop markers, the host needs to flush the PRI queue when a PASID is
-> detached. I guess on Intel detaching the PASID goes through the host which
-> can flush the host queue. On Arm we'll probably need to flush the queue
-> when receiving a PASID cache invalidation, which the guest issues after
-> clearing a PASID table entry.
-
-The Intel VT-d driver follows below steps to drain pending page requests
-when a PASID is unbound from a device.
-
-- Tear down the device's pasid table entry for the stopped pasid.
-   This ensures that ATS/PRI will stop putting more page requests for the
-   pasid in VT-d PRQ.
-- Sync with the PRQ handling thread until all related page requests in
-   PRQ have been delivered.
-- Flush the iopf queue with iopf_queue_flush_dev().
-- Follow the steps defined in VT-d spec section 7.10 to drain all page
-   requests and responses between VT-d and the endpoint device.
-
-> 
-> Thanks,
-> Jean
-> 
-> [1] https://lore.kernel.org/linux-iommu/20180423153622.GC38106@ostrya.localdomain/
->      Also unregistration, not sure if relevant here
->      https://lore.kernel.org/linux-iommu/20190605154553.0d00ad8d@jacob-builder/
-> 
-
-Best regards,
-baolu
