@@ -2,61 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0662C7359B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 16:35:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA56E7359BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 16:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbjFSOfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 10:35:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37248 "EHLO
+        id S231359AbjFSOgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 10:36:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbjFSOfY (ORCPT
+        with ESMTP id S229448AbjFSOgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 10:35:24 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4091E68
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 07:35:23 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 1414A5FD2B;
-        Mon, 19 Jun 2023 17:35:22 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1687185322;
-        bh=qkAqgOog0Wha6onJcOVZ2iYFUcpXYVWLhgQSsgfFkw4=;
-        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=GNCjOeK5MQU0348wIlewlcv613AtqJhNNSR65PSAxd0fr3yMAFVaif/CzC5MS89Ig
-         rAyfaJDZFQHIJ08+ai3QfHdodwvBgRTvG855/E++P2pk34UUolUo+RC+/PXROUglgR
-         94C+Si/SBq/v7U07AFOu2RPyaLQZdU9GmxB0UsaYErJQ1Mvs+HMnttTVp5dYThztF/
-         4C7uhBf/KWbEHShCHr46ZVZsi3aJ7cnQYTXYwmD7Vv1hBTfHSjPtx8f2gHbduiov/d
-         64KjILGGak+q3gocUSI5H9g0MIzsqaPh/XSLwHFa+3qzRsgItIKI5YYMLrYWEAaOO/
-         dbsxnA3i1AVNA==
-Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Mon, 19 Jun 2023 17:35:22 +0300 (MSK)
-From:   Alexey Romanov <avromanov@sberdevices.ru>
-To:     <minchan@kernel.org>, <senozhatsky@chromium.org>,
-        <akpm@linux-foundation.org>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, Alexey Romanov <avromanov@sberdevices.ru>
-Subject: [PATCH v1 2/2] zsmalloc: check empty page in find_alloced_obj
-Date:   Mon, 19 Jun 2023 17:35:06 +0300
-Message-ID: <20230619143506.45253-3-avromanov@sberdevices.ru>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20230619143506.45253-1-avromanov@sberdevices.ru>
-References: <20230619143506.45253-1-avromanov@sberdevices.ru>
+        Mon, 19 Jun 2023 10:36:33 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3C7F1;
+        Mon, 19 Jun 2023 07:36:32 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b479d53d48so13717411fa.1;
+        Mon, 19 Jun 2023 07:36:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687185390; x=1689777390;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lb3BsbwhSdIU8ke3rmUbsQpQJmTyimjl4tAXInZCbwI=;
+        b=XMY1F52O9BeRJswuECfglKhJp0K5TP9PrZgTIoRvwkIqaEzCLjYFZ1LEAv0RELrwGs
+         7oYHHKGMKXw2sHR3BMolNDOcDfNyEpNlqNdQCMO9GFGRIbNS+C0wFru2przkyxjh8hXC
+         LlUCAOOQgtz39imbzV2WISnrse8RLz9hKSN6Iim2b4klrxXZDR1pFVU9rzEcvmK+CKaK
+         COQLmPG8LzoXXCpMCnQMyZFoAoj0vZJxfvvDQ/uk8b1fnZUZz5bV0rlcXvYnRft+sHFu
+         eVjyxZfaAt1m3ltvDIXd4t2vD8JD5O//CLNTA0op9xXGskT8vHF7gd+EYKzADclOV8ne
+         Amsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687185390; x=1689777390;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lb3BsbwhSdIU8ke3rmUbsQpQJmTyimjl4tAXInZCbwI=;
+        b=YnYLvJ+J2qyxd3zwEXmkbWME9gg2DRhfR4Dii5I7gY65MFbD41GPAhZn3iYcoB8t5X
+         QQc4AepZwHfTCndZ4muxq6rlEJShZPwcCgimfL/jn/LLP1FtLM1Lt+nrO8DFaUYEPePd
+         q8rZuEXlqaMBZj759XZS0siRGQRhpi1v2SlmCkblxiL3vyI7CP9Wjl/qbSBqnDOmWAKH
+         UFulrrcEj6orbb70fdpWHSWV+bwCSxtmKaepd/kvQZuHhgGbV5AIdsTnr4ZtakYW8pxB
+         PRtAfG7viBD38NN3WHKmn3QIgLPzJi2pNcLIsWCpXN8q+eHvZHq+xxfC8iFWfeRanGbo
+         di4w==
+X-Gm-Message-State: AC+VfDxlHM+p/iyBJae34jI+5q08n/UeRkckT2Op2w2zVOdrtdfjUL1m
+        DByn2h8wtLKepPl7xJnXM+wV+C+zG2VPIQ==
+X-Google-Smtp-Source: ACHHUZ6GsPsB+1U6ide6EgMslbglikC2ezyhHxNi+lDsPqQu+TQt9FwBoIglgfL7iYj0sw6VR/czyw==
+X-Received: by 2002:a2e:3019:0:b0:2b4:7380:233 with SMTP id w25-20020a2e3019000000b002b473800233mr2007580ljw.5.1687185389312;
+        Mon, 19 Jun 2023 07:36:29 -0700 (PDT)
+Received: from xeon.. ([188.163.112.79])
+        by smtp.gmail.com with ESMTPSA id r13-20020aa7d58d000000b00514b2a9ce60sm13073283edq.81.2023.06.19.07.36.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 07:36:28 -0700 (PDT)
+From:   Svyatoslav Ryhel <clamor95@gmail.com>
+To:     Andi Shyti <andi.shyti@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
+        Svyatoslav Ryhel <clamor95@gmail.com>
+Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/2] GPIO-based hotplug i2c bus
+Date:   Mon, 19 Jun 2023 17:36:09 +0300
+Message-Id: <20230619143611.24482-1-clamor95@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/19 10:56:00 #21523989
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,31 +76,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It makes no sense to search for an allocated object
-if there are none on the page. Using this check, we
-get rid of the extra kmap_atomic, as well as the search
-for a tagged object. On my synthetic test data, this
-change speed up zsmalloc compaction time by up to 10%.
+ASUS Transformers require this driver for proper work with their dock.
+Dock is controlled by EC and its presence is detected by a GPIO.
 
-Signed-off-by: Alexey Romanov <avromanov@sberdevices.ru>
----
- mm/zsmalloc.c | 3 +++
- 1 file changed, 3 insertions(+)
+Michał Mirosław (1):
+  i2c: Add GPIO-based hotplug gate
 
-diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
-index dd6e2c3429e0..d0ce579dcde5 100644
---- a/mm/zsmalloc.c
-+++ b/mm/zsmalloc.c
-@@ -1764,6 +1764,9 @@ static unsigned long find_tagged_obj(struct size_class *class,
- static unsigned long find_alloced_obj(struct size_class *class,
- 					struct page *page, int *obj_idx)
- {
-+	if (!get_obj_allocated(page))
-+		return 0;
-+
- 	return find_tagged_obj(class, page, obj_idx, OBJ_ALLOCATED_TAG);
- }
- 
+Svyatoslav Ryhel (1):
+  dt-bindings: i2c: add binding for i2c-hotplug-gpio
+
+ .../bindings/i2c/i2c-hotplug-gpio.yaml        |  68 +++++
+ drivers/i2c/Kconfig                           |  11 +
+ drivers/i2c/Makefile                          |   1 +
+ drivers/i2c/i2c-hotplug-gpio.c                | 266 ++++++++++++++++++
+ 4 files changed, 346 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/i2c/i2c-hotplug-gpio.yaml
+ create mode 100644 drivers/i2c/i2c-hotplug-gpio.c
+
 -- 
-2.38.1
+2.39.2
 
