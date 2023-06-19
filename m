@@ -2,157 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B3D7350C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:47:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C117350CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:47:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbjFSJrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 05:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36904 "EHLO
+        id S229888AbjFSJr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 05:47:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbjFSJrQ (ORCPT
+        with ESMTP id S229489AbjFSJrW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 05:47:16 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B943AE42
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:47:03 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f9b37cd58bso3069985e9.0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:47:03 -0700 (PDT)
+        Mon, 19 Jun 2023 05:47:22 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A5518D
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:47:16 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-3113675d582so885478f8f.3
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:47:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687168022; x=1689760022;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=F/XqReijeUR7u77F+xNxSXnKlJ8Sk3U/SIuLR8Eb+eg=;
-        b=xQtDKwlGdSe8x4Jz/l1Bcp+K3e62KXA3mfaWmVyUDSK0+ggvY63c0AGbwjf9UPqOHi
-         wuxc3ZUYjsm1XJ0IX2DHjB+4b+cbkoUWvKYeuRWNRztBRZXLhDpyd1AVgJ9/N2gS3uLZ
-         +7O4y2A21PlO4rRCoFeT5n3EnjPE8g80qmzb2TCvnsbPCEQdLj5yfAzwLE2W7WZk38K4
-         KIJuIgmN2Wu6HtgFp0MRuBo1Er2t/ZllyIZMX+6xJsE2fasnBv6XiOOexpHwcFJ6YAjf
-         +F/aPTU2zlDjJhYSRCHhurHUNboHcjUbk7rn6yG2emi/MUs71kdKK3PqXOT4UfTwNhFl
-         fzTg==
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687168034; x=1689760034;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pm5bDO7dAW0U1/ZbP5zCHPn8yVTZ8TIF+oUNu//7tHw=;
+        b=eoKvIZdQXEl0s4AQsuIPqutj8dZ3pqg+m54vtxstzp6Q0Cl1fFmcVYBGLRaGahbRvw
+         4WTUnVOpcgg1uKzRkVqNkc0cTFSTeg99LuqB6iFfQdZ4lcwONnwloO9/Uh7KKy6yxRo0
+         ID3jZMT9Jm13te2HaRdlSP3bZ4ka+kz9eBSG7NfZ6aN/qXeRSrxhqCOuT/i9I1x6CLsf
+         ejknWxyg7oYUDdBmP2yQjBXnRKg+SxrNYPjgIpIXs1XK1kguhu0Xh36iOiKEHEFAjeBN
+         T/00S5O8FK7uHrHczAvt9ujM+Gt1C6GFyFqzc/l46kBEjEkUfeBCqhBnhHzTaGQkvDVr
+         AYbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687168022; x=1689760022;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1687168034; x=1689760034;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=F/XqReijeUR7u77F+xNxSXnKlJ8Sk3U/SIuLR8Eb+eg=;
-        b=Yk49cduJs99ngosZhcGR/2q3uJ7TDp7682o6MkIB/Kn35F+sQPnZR2S7z/G4KQEZZB
-         SV//TKnj+TbCtFcKXiNvcL9b9F+z0EsgcmdDBhysjwm4PrVBz8SA6h5MkTyYbBaGLdcz
-         JGA0wwkEjP5nz9TLtI4bNmkRxSmihflpCt4KPSAHyaYRRVg1vMPIWE1btWhYBhRBy1BP
-         /aCu9MkwlJXpO/uroF3f7hiJ4xQOoLKp+w0LJMbhLMNPxo34Itqbm7e/htqO2j6Rv/sl
-         L6mzpwRAQJeTk4kI+MyQrIAssmbtdwq4ruyE1CuDdwG/Ls5AnqcQRd3fX9y34C9YQWl6
-         asKw==
-X-Gm-Message-State: AC+VfDzDAbMxQjly2+5zCmApHa74OdALxF16fiKymuIuggWVGTzEwC5i
-        NALn/woJrIV7ezfk5u2xC3M80A==
-X-Google-Smtp-Source: ACHHUZ46nHZHoQQyoNt4lSkFcuT/C3/X5ZfC54XPpGfLLhsSTAjnMLTO90y7Qdhf6ybQJ2+QBuIatQ==
-X-Received: by 2002:a7b:ce99:0:b0:3f9:b06a:edb4 with SMTP id q25-20020a7bce99000000b003f9b06aedb4mr1520185wmj.35.1687168022185;
-        Mon, 19 Jun 2023 02:47:02 -0700 (PDT)
-Received: from [192.168.7.189] (679773502.box.freepro.com. [212.114.21.58])
-        by smtp.gmail.com with ESMTPSA id p6-20020a7bcc86000000b003f7f4dc6d14sm10209707wma.14.2023.06.19.02.47.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 02:47:01 -0700 (PDT)
-Message-ID: <a3a7f840-eb74-dc32-dd8b-5f74a484b765@linaro.org>
-Date:   Mon, 19 Jun 2023 11:47:00 +0200
+        bh=pm5bDO7dAW0U1/ZbP5zCHPn8yVTZ8TIF+oUNu//7tHw=;
+        b=HH9HAZjDmU23g8lgLIUa8nxUKVEkCmuPHnYxMAWgMxdJNDY0lO9dqo8SbfOm5wUYr+
+         nMBOIBIVlL+7tGLpbrozM1P3KH3tahbvOntVYXNWYvQrWLabT07hAP2CtXYl2DOgKz+3
+         6Ha4jU0vR27DM1MIvm8c+c80QPuFT48QZ/MJTkUbiGBe+rE1g8Fzh3JicfOwM9uKYJfP
+         BRAgIruqGkZkzw0/KNkQDekmVNONRHptaiAIPsEkAcvmA+U3CdnpkJqaFOFt/SGQ++e1
+         3jLAPcfGG5J74kA+6cfBXUBFadtBjmdc9fRCVsv8oYqLe0h7IWYFqOfe5mFbcUuWEAW8
+         46BQ==
+X-Gm-Message-State: AC+VfDwmgkxaBP+3wCTMhVFFqUTfkUGH+CaSb9WOJjxMk97DydZH2VjY
+        W2nFyF1IAcPmnviaaxz08GbyBxOB0S93fbC05Uc=
+X-Google-Smtp-Source: ACHHUZ4srevsoh92EwaOJ4I0058DKxrJQ5ezWwKSVZZI0bdfQ65hdj+8R6fMYDUvniAfJk44wWtanA==
+X-Received: by 2002:adf:f952:0:b0:311:162a:ce2a with SMTP id q18-20020adff952000000b00311162ace2amr5395662wrr.29.1687168034471;
+        Mon, 19 Jun 2023 02:47:14 -0700 (PDT)
+Received: from localhost.localdomain (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
+        by smtp.gmail.com with ESMTPSA id c1-20020a5d5281000000b0030aded83385sm30971199wrv.27.2023.06.19.02.47.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 02:47:14 -0700 (PDT)
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, linux-doc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Subject: [PATCH 1/2] Documentation: riscv: Add early boot document
+Date:   Mon, 19 Jun 2023 11:47:04 +0200
+Message-Id: <20230619094705.51337-1-alexghiti@rivosinc.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 1/2] interconnect: qcom: rpmh: add optional mask to send
- as vote
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230619-topic-sm8550-upstream-interconnect-mask-vote-v1-0-66663c0aa592@linaro.org>
- <20230619-topic-sm8550-upstream-interconnect-mask-vote-v1-1-66663c0aa592@linaro.org>
- <9e890ca0-396d-fb97-a7d5-db13b8fdbb92@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <9e890ca0-396d-fb97-a7d5-db13b8fdbb92@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This document describes the constraints and requirements of the early
+boot process in a RISC-V kernel.
 
-On 19/06/2023 11:45, Konrad Dybcio wrote:
-> On 19.06.2023 10:24, Neil Armstrong wrote:
->> On the SM8550 SoC, some nodes requires a specific bit mark
->> instead of a bandwidth when voting.
->>
->> Add an enable_mask variable to be used to vote when a node
->> is enabled in an aggregate loop.
->>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
-> Would be nice to mention that it's literally this commit:
-> 
-> https://git.codelinaro.org/clo/la/kernel/msm-5.15/-/commit/2d1573e0206998151b342e6b52a4c0f7234d7e36
+Szigned-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+---
+ Documentation/riscv/boot-image-header.rst |   3 -
+ Documentation/riscv/boot.rst              | 181 ++++++++++++++++++++++
+ Documentation/riscv/index.rst             |   1 +
+ 3 files changed, 182 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/riscv/boot.rst
 
-Good catch, I just copied the bits but yeah in fine it's the same...
-
-I'll refer to it in a v2.
-
-> 
-> For the code:
-> 
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Thanks,
-Neil
-
-> 
-> Konrad
->>   drivers/interconnect/qcom/bcm-voter.c | 5 +++++
->>   drivers/interconnect/qcom/icc-rpmh.h  | 2 ++
->>   2 files changed, 7 insertions(+)
->>
->> diff --git a/drivers/interconnect/qcom/bcm-voter.c b/drivers/interconnect/qcom/bcm-voter.c
->> index 8f385f9c2dd3..d5f2a6b5376b 100644
->> --- a/drivers/interconnect/qcom/bcm-voter.c
->> +++ b/drivers/interconnect/qcom/bcm-voter.c
->> @@ -83,6 +83,11 @@ static void bcm_aggregate(struct qcom_icc_bcm *bcm)
->>   
->>   		temp = agg_peak[bucket] * bcm->vote_scale;
->>   		bcm->vote_y[bucket] = bcm_div(temp, bcm->aux_data.unit);
->> +
->> +		if (bcm->enable_mask && (bcm->vote_x[bucket] || bcm->vote_y[bucket])) {
->> +			bcm->vote_x[bucket] = 0;
->> +			bcm->vote_y[bucket] = bcm->enable_mask;
->> +		}
->>   	}
->>   
->>   	if (bcm->keepalive && bcm->vote_x[QCOM_ICC_BUCKET_AMC] == 0 &&
->> diff --git a/drivers/interconnect/qcom/icc-rpmh.h b/drivers/interconnect/qcom/icc-rpmh.h
->> index 04391c1ba465..7843d8864d6b 100644
->> --- a/drivers/interconnect/qcom/icc-rpmh.h
->> +++ b/drivers/interconnect/qcom/icc-rpmh.h
->> @@ -81,6 +81,7 @@ struct qcom_icc_node {
->>    * @vote_x: aggregated threshold values, represents sum_bw when @type is bw bcm
->>    * @vote_y: aggregated threshold values, represents peak_bw when @type is bw bcm
->>    * @vote_scale: scaling factor for vote_x and vote_y
->> + * @enable_mask: optional mask to send as vote instead of vote_x/vote_y
->>    * @dirty: flag used to indicate whether the bcm needs to be committed
->>    * @keepalive: flag used to indicate whether a keepalive is required
->>    * @aux_data: auxiliary data used when calculating threshold values and
->> @@ -97,6 +98,7 @@ struct qcom_icc_bcm {
->>   	u64 vote_x[QCOM_ICC_NUM_BUCKETS];
->>   	u64 vote_y[QCOM_ICC_NUM_BUCKETS];
->>   	u64 vote_scale;
->> +	u32 enable_mask;
->>   	bool dirty;
->>   	bool keepalive;
->>   	struct bcm_db aux_data;
->>
+diff --git a/Documentation/riscv/boot-image-header.rst b/Documentation/riscv/boot-image-header.rst
+index d7752533865f..a4a45310c4c4 100644
+--- a/Documentation/riscv/boot-image-header.rst
++++ b/Documentation/riscv/boot-image-header.rst
+@@ -7,9 +7,6 @@ Boot image header in RISC-V Linux
+ 
+ This document only describes the boot image header details for RISC-V Linux.
+ 
+-TODO:
+-  Write a complete booting guide.
+-
+ The following 64-byte header is present in decompressed Linux kernel image::
+ 
+ 	u32 code0;		  /* Executable code */
+diff --git a/Documentation/riscv/boot.rst b/Documentation/riscv/boot.rst
+new file mode 100644
+index 000000000000..b02230818b79
+--- /dev/null
++++ b/Documentation/riscv/boot.rst
+@@ -0,0 +1,181 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++=============================================
++Early boot requirements/constraints on RISC-V
++=============================================
++
++:Author: Alexandre Ghiti <alexghiti@rivosinc.com>
++:Date: 23 May 2023
++
++This document describes what the RISC-V kernel expects from the previous stages
++and the firmware, but also the constraints that any developer must have in mind
++when touching the early boot process, e.g. before the final virtual mapping is
++setup.
++
++Pre-kernel boot (Expectations from firmware)
++============================================
++
++Registers state
++---------------
++
++The RISC-V kernel expects:
++
++  * `$a0` to contain the hartid of the current core.
++  * `$a1` to contain the address of the device tree in memory.
++
++CSR state
++---------
++
++The RISC-V kernel expects:
++
++  * `$satp = 0`: the MMU must be disabled.
++
++Reserved memory for resident firmware
++-------------------------------------
++
++The RISC-V kernel expects the firmware to mark any resident memory with the
++`no-map` flag, thus the kernel won't map those regions in the direct mapping
++(avoiding issues with hibernation, speculative accesses and probably other
++subsystems).
++
++Kernel location
++---------------
++
++The RISC-V kernel expects to be placed at a PMD boundary (2MB for rv64 and 4MB
++for rv32). Note though that the EFI stub will physically relocate the kernel if
++that's not the case.
++
++Device-tree
++-----------
++
++The RISC-V kernel always expects a device tree, it is:
++
++- either passed directly to the kernel from the previous stage using the `$a1`
++  register,
++- or when booting with UEFI, the device tree will be retrieved by the EFI stub
++  using the EFI configuration table or it will be created.
++
++Bootflow
++--------
++
++There exist 2 methods to enter the kernel:
++
++- `RISCV_BOOT_SPINWAIT`: the firmware releases all harts in the kernel, one hart
++  wins a lottery and executes the early boot code while the other harts are
++  parked waiting for the initialization to finish. This method is now
++  **deprecated**.
++- Ordered booting: the firmware releases only one hart that will execute the
++  initialization phase and then will start all other harts using the SBI HSM
++  extension.
++
++UEFI
++----
++
++UEFI memory map
++~~~~~~~~~~~~~~~
++
++When booting with UEFI, the RISC-V kernel will use only the EFI memory map to
++populate the system memory.
++
++The UEFI firmware must parse the subnodes of the `/reserved-memory` device tree
++node and abide by the device tree specification to convert the attributes of
++those subnodes (`no-map` and `reusable`) into their correct EFI equivalent
++(refer to section "3.5.4 /reserved-memory and UEFI" of the device tree
++specification).
++
++RISCV_EFI_BOOT_PROTOCOL
++~~~~~~~~~~~~~~~~~~~~~~~
++
++When booting with UEFI, the EFI stub requires the boot hartid in order to pass
++it to the RISC-V kernel in `$a1`. The EFI stub retrieves the boot hartid using
++one of the following methods:
++
++- `RISCV_EFI_BOOT_PROTOCOL` (**preferred**).
++- `boot-hartid` device tree subnode (**deprecated**).
++
++Any new firmware must implement `RISCV_EFI_BOOT_PROTOCOL` as the device tree
++based approach is deprecated now.
++
++During kernel boot: (Kernel internals)
++======================================
++
++EFI stub and device tree
++------------------------
++
++When booting with UEFI, the device tree is supplemented by the EFI stub with the
++following parameters (largely shared with arm64 in Documentation/arm/uefi.rst):
++
++==========================  ======   ===========================================
++Name                        Size     Description
++==========================  ======   ===========================================
++linux,uefi-system-table     64-bit   Physical address of the UEFI System Table.
++
++linux,uefi-mmap-start       64-bit   Physical address of the UEFI memory map,
++                                     populated by the UEFI GetMemoryMap() call.
++
++linux,uefi-mmap-size        32-bit   Size in bytes of the UEFI memory map
++                                     pointed to in previous entry.
++
++linux,uefi-mmap-desc-size   32-bit   Size in bytes of each entry in the UEFI
++                                     memory map.
++
++linux,uefi-mmap-desc-ver    32-bit   Version of the mmap descriptor format.
++
++kaslr-seed                  64-bit   Entropy used to randomize the kernel image
++                                     base address location.
++
++bootargs                             Kernel command line
++==========================  ======   ===========================================
++
++Virtual mapping setup
++---------------------
++
++The installation of the virtual mapping is done in 2 steps in the RISC-V kernel:
++
++1. :c:func:`setup_vm` installs a temporary kernel mapping in
++   :c:var:`early_pg_dir` which allows to discover the system memory: only the
++   kernel text/data are mapped at this point. When establishing this mapping,
++   no allocation can be done (since the system memory is not known yet), so
++   :c:var:`early_pg_dir` page table is statically allocated (using only one
++   table for each level).
++
++2. :c:func:`setup_vm_final` creates the final kernel mapping in
++   :c:var:`swapper_pg_dir` and takes advantage of the discovered system memory
++   to create the linear mapping. When establishing this mapping, the kernel
++   can allocate memory but cannot access it directly (since the direct mapping
++   is not present yet), so it uses temporary mappings in the fixmap region to
++   be able to access the newly allocated page table levels.
++
++For :c:func:`virt_to_phys` and :c:func:`phys_to_virt` to be able to correctly
++convert direct mapping addresses to physical addresses, it needs to know the
++start of the DRAM: this happens after 1, right before 2 installs the direct
++mapping (see :c:func:`setup_bootmem` function in arch/riscv/mm/init.c). So
++any usage of those macros before the final virtual mapping is installed must be
++carefully examined.
++
++Device-tree mapping via fixmap
++------------------------------
++
++The RISC-V kernel uses the fixmap region to map the device tree because the
++device tree virtual mapping must remain the same between :c:func:`setup_vm` and
++:c:func:`setup_vm_final` calls since :c:var:`reserved_mem` array is initialized
++with virtual addresses established by :c:func:`setup_vm` and used with the
++mapping established by :c:func:`setup_vm_final`.
++
++Pre-MMU execution
++-----------------
++
++Any code that executes before even the first virtual mapping is established
++must be very carefully compiled as:
++
++- `-fno-pie`: This is needed for relocatable kernels which use `-fPIE`, since
++  otherwise, any access to a global symbol would go through the GOT which is
++  only relocated virtually.
++- `-mcmodel=medany`: Any access to a global symbol must be PC-relative to avoid
++  any relocations to happen before the MMU is setup.
++- Also note that *all* instrumentation must also be disabled (that includes
++  KASAN, ftrace and others).
++
++As using a symbol from a different compilation unit requires this unit to be
++compiled with those flags, we advise, as much as possible, not to use external
++symbols.
+diff --git a/Documentation/riscv/index.rst b/Documentation/riscv/index.rst
+index 175a91db0200..1f66062def6d 100644
+--- a/Documentation/riscv/index.rst
++++ b/Documentation/riscv/index.rst
+@@ -5,6 +5,7 @@ RISC-V architecture
+ .. toctree::
+     :maxdepth: 1
+ 
++    boot
+     boot-image-header
+     vm-layout
+     hwprobe
+-- 
+2.39.2
 
