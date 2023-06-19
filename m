@@ -2,134 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E6AD734C32
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 09:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88961734C30
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 09:16:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbjFSHQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 03:16:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57486 "EHLO
+        id S230145AbjFSHQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 03:16:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjFSHQd (ORCPT
+        with ESMTP id S229657AbjFSHQO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 03:16:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576071A4
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 00:15:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687158946;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kpOKy137UOdxxz61biF46fSeY49E4HdHA4JMVS1NKBg=;
-        b=FFtup4KTLnAJYjpz03otSNHEOjc4uQ7Ny8XfcFXaOnkc3rwiZnoRrG4JgsaTc9Jdm8fVBA
-        cwgEmL2M7M0zE/czRzNDGz3/kwYDdMYGyfXa/h7d7+0XzKrCTOVt9DQERGUWPg+ZHOJ/GY
-        9tu0yYH0Jf/fe+qfbHHa3Xj9Ib0GKUU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-487-VU_7nSh9NQW2iMr7elRSkw-1; Mon, 19 Jun 2023 03:15:42 -0400
-X-MC-Unique: VU_7nSh9NQW2iMr7elRSkw-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 60B44185A7AF;
-        Mon, 19 Jun 2023 07:15:41 +0000 (UTC)
-Received: from samus.usersys.redhat.com (unknown [10.43.17.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A934E492C1B;
-        Mon, 19 Jun 2023 07:15:39 +0000 (UTC)
-Date:   Mon, 19 Jun 2023 09:15:37 +0200
-From:   Artem Savkov <asavkov@redhat.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] perf tools: annotation browser from c2c tui
-Message-ID: <20230619071537.GA153131@samus.usersys.redhat.com>
-References: <20230608084407.140323-1-asavkov@redhat.com>
- <CAM9d7cgvtuqMeQx8ehLCLw_Ur9Ju-VzDrakzFJxnxvFjdsWk_g@mail.gmail.com>
- <20230609083731.GA168559@samus.usersys.redhat.com>
- <ZIoJK66ZrKZblkJN@kernel.org>
+        Mon, 19 Jun 2023 03:16:14 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC32106;
+        Mon, 19 Jun 2023 00:16:12 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R611e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VlR1tor_1687158967;
+Received: from 30.221.149.136(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VlR1tor_1687158967)
+          by smtp.aliyun-inc.com;
+          Mon, 19 Jun 2023 15:16:09 +0800
+Message-ID: <705ffdff-fe52-d617-9184-5e9bc6fb5de0@linux.alibaba.com>
+Date:   Mon, 19 Jun 2023 15:16:03 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZIoJK66ZrKZblkJN@kernel.org>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.0
+Subject: Re: [PATCH v3 0/2] block: fine-granular CAP_SYS_ADMIN for Persistent
+ Reservation ioctl
+Content-Language: en-US
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+To:     axboe@kernel.dk, hch@lst.de, linux-block@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, tianjia.zhang@linux.alibaba.com,
+        xiang@kernel.org, casey@schaufler-ca.com
+References: <20230613084008.93795-1-jefflexu@linux.alibaba.com>
+In-Reply-To: <20230613084008.93795-1-jefflexu@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 03:38:35PM -0300, Arnaldo Carvalho de Melo wrote:
-> Em Fri, Jun 09, 2023 at 10:37:31AM +0200, Artem Savkov escreveu:
-> > On Thu, Jun 08, 2023 at 02:09:06PM -0700, Namhyung Kim wrote:
-> > > Hello,
-> > > 
-> > > On Thu, Jun 8, 2023 at 1:44 AM Artem Savkov <asavkov@redhat.com> wrote:
-> > > >
-> > > > These patches add ability to start annotation browser from c2c report
-> > > > tui. The idea comes from Arnaldo's "Profiling Data Structures" talk [1].
-> > > 
-> > > I was thinking about how it works and realized that it didn't collect
-> > > samples by symbol.  Then I'm not sure if the result is meaningful.
-> > > I think it'd show a random symbol that touched the cache line
-> > > first.  The same cache line can be accessed from other locations
-> > > but it cannot know where they are.
-> > > 
-> > > Also different instructions in a function (symbol) would access a
-> > > different cache line.  The annotate output just shows any memory
-> > > access.  So it might be good to check the instruction at the point
-> > > but others should not be considered related.
-> > > 
-> > > Hmm.. I suspect even the same instruction will hit the different
-> > > cache lines at different times.  Then probably the annotation
-> > > won't work well in terms of correlating cache lines.
-> > 
-> > The annotation hotkey is only added to the cacheline detailed view where
-> > we do have symbol instruction information. The idea is to give the user
-> > ability to quickly jump to source code/disassembly directly from c2c
-> > TUI.
-> > 
-> > The hit percentages in annotation view don't make much sense in this
-> > case though, so maybe it is better to use dummy evsel so that none are
-> > shown.
+Hi, Jens,
+
+Would do you think of this series?
+
+
+On 6/13/23 4:40 PM, Jingbo Xu wrote:
+> changes since v2:
+> - patch 1: disallow reservations on partitions entirely and make it into
+>   a separate patch (hch)
+> - patch 2: rebase to hch's series of converting fmode_t to blk_mode_t
+>   and execute permission check upon blk_mode_t (hch)
 > 
-> Yes, the point is just to reuse the source browser, if there is no
-> annotation data applicable, don't use any.
+> changes since RFC:
+> - only allow unprivileged reservations if the file descriptor is open
+>   for write (Christoph Hellwig)
+> - refuse the unprivileged reservations on partitions (Christoph Hellwig)
+>   (maybe this checking shall also be done when CAP_SYS_ADMIN is set?)
+> 
+> 
+> RFC: https://lore.kernel.org/all/20230609102122.118800-1-jefflexu@linux.alibaba.com/
+> v2: https://lore.kernel.org/all/20230612074103.4866-1-jefflexu@linux.alibaba.com/
+> 
+> Jingbo Xu (2):
+>   block: disallow Persistent Reservation on partitions
+>   block: fine-granular CAP_SYS_ADMIN for Persistent Reservation
+> 
+>  block/ioctl.c | 47 +++++++++++++++++++++++++++++++----------------
+>  1 file changed, 31 insertions(+), 16 deletions(-)
 > 
 
-Ok, should be as easy as the following diff. I'll include it in v3 if
-there si more feedback.
-
----
-
-diff --git b/tools/perf/builtin-c2c.c a/tools/perf/builtin-c2c.c
-index dce8604837aec..c856ce7a50740 100644
---- b/tools/perf/builtin-c2c.c
-+++ a/tools/perf/builtin-c2c.c
-@@ -2701,7 +2701,11 @@ static int perf_c2c__browse_cacheline(struct hist_entry *he)
-
-                switch (key) {
-                case 'a':
--                       do_annotate(browser, evlist__first(c2c.evlist));
-+                       /*
-+                        * We don't need percentage info so use 'dummy:HG'
-+                        * evsel which is last in evlist.
-+                        */
-+                       do_annotate(browser, evlist__last(c2c.evlist));
-                        break;
-                case 's':
-                        c2c.symbol_full = !c2c.symbol_full;
-
+-- 
+Thanks,
+Jingbo
