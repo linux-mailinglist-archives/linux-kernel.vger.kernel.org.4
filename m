@@ -2,49 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E61735B8B
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2D7735B8C
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:52:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231316AbjFSPvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 11:51:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51830 "EHLO
+        id S229848AbjFSPw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 11:52:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbjFSPvn (ORCPT
+        with ESMTP id S229629AbjFSPwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 11:51:43 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0AD0A4;
-        Mon, 19 Jun 2023 08:51:41 -0700 (PDT)
-X-QQ-mid: bizesmtp64t1687189887tg4fzjsv
-Received: from linux-lab-host.localdomain ( [116.30.126.60])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 19 Jun 2023 23:51:26 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: 5q30pvLz2icBH/caXxT27x4f9FBSJcYyNdLV7m3J8v2Ry7takMP0mXa7DT1i3
-        jQwPJO38Q3Zvqx2UcT3WQjrB96lfe6DY5IP8gMxXL0flRy+x+YiGwXSCxfPaniPbV/rHyxs
-        yoCZLQy3AZVEbwKpQFcTc9cslDqmauQUwqfn8v36BVI4qnUnlhFcGWHj9fDtwxI8XCdfYIv
-        i9fBc5Z6q3dWlxGEJI1/wI4qq4HDv2X/movyUNAkL1VkfOgx0kA6MUkYC6oLN4eefLH/mRc
-        tao0Zr/YcNcFkXKtnmghIGRbaKk31qEouoCTsHb4mhVL4uhexQC/kBtEQnAz7gZoTN4Yoz5
-        6O2NyuOrm0FK53k38XqBR3Z/A38eOqjxexOj5nmTN6RQsEeT+lQZW4+A4mKEA==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 6198696245822752568
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     david.laight@aculab.com, arnd@arndb.de, falcon@tinylab.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org, thomas@t-8ch.de
-Subject: [PATCH v4 07/10] tools/nolibc: clean up mmap() support
-Date:   Mon, 19 Jun 2023 23:51:20 +0800
-Message-Id: <b1162bc16ce5c397e99925e49317756c110e6f1a.1687187451.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1687187451.git.falcon@tinylab.org>
-References: <cover.1687187451.git.falcon@tinylab.org>
+        Mon, 19 Jun 2023 11:52:24 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E032B186
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:52:22 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-5195c85fbb2so4627693a12.2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:52:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687189941; x=1689781941;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=F7Sy5uyS4+3x47XHnoFiJXjC2wHKZ9yU1dlAX2FPVgA=;
+        b=jltWjB7rpxGtsoZ3hQ45GSilkS/zyUMUgXjKWFvPjgqxOWSZ3/c9EJpZzx123KJHdZ
+         ToDjJ4RxRxZTSu9wwxPIqIwxDh0ncMlaPxLdsSmUeK76QlzcFewF/LCPcS3yKptWLK9a
+         Udi0VwSu4PsS3Zsz64f2wR7gdyzl54Tfm+bRJ0t/DazFZskXuYpzjFpeK1+F0QsbdVxD
+         IrbabYTjzARI2VdXfDhQEPCHEU/xWiufL1spyHqH2mT25Mj0u8yj3oC8aZUbwtSGLcO/
+         WVBoIzNj9P821buYvUYzds/GsR2V11qFofVcCOQJrr/fCYSn+wTwWS47Y6rpb+1wp5eH
+         SH4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687189941; x=1689781941;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=F7Sy5uyS4+3x47XHnoFiJXjC2wHKZ9yU1dlAX2FPVgA=;
+        b=OXZ3p214bHVmc3vcw9pqkkyNGbYdXzTfnvu01tVaHlzkSFPQojXAcKM85sD1GqCqPd
+         kdpEWI5rmTZrsOsICl3yvaItvZdGRwffRftPIMRYWCma20KJdJN7OWGtZISllCfA0R9o
+         43jEAeff7rlZlQxPuCj/q5oXd07QIX+hq1X0TlP7xT8UONsykCSqYWcWUViDhcyc+vib
+         Lqn+u4MGtM7phh22k2Aat3ojIvyQcz0ZMUs3rsbj0O6J3H2GSAXCxXJaMrXiVI7dUloH
+         yBVb/zVZbWM5ob92GiOfmHx4r0KqriuNFZGsk6oVDeoVPU+NNygRB/LxZjlhwWeec4Ap
+         wNDg==
+X-Gm-Message-State: AC+VfDy/oEvOV7vGG3Ck0k9Fp6XSdhVfObVVHwg66jHNALNj9n2fJy61
+        PtxaVByTc42v+h8vjdFfCKg=
+X-Google-Smtp-Source: ACHHUZ57tCmYCfO9AfOAzRUrTXHGU0OAJ6O4W2mTxTgcjw386hpFzIdIxDdK9C6mNBwiQQgAsyoqjA==
+X-Received: by 2002:aa7:d9cf:0:b0:516:459d:d913 with SMTP id v15-20020aa7d9cf000000b00516459dd913mr7305823eds.37.1687189941043;
+        Mon, 19 Jun 2023 08:52:21 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5abbd5.dynamic.kabel-deutschland.de. [95.90.187.213])
+        by smtp.gmail.com with ESMTPSA id d16-20020a056402001000b0051849ba515esm8562430edu.13.2023.06.19.08.52.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 08:52:20 -0700 (PDT)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     philipp.g.hortmann@gmail.com, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH] staging: rtl8192e: remove 5G related code
+Date:   Mon, 19 Jun 2023 17:52:03 +0200
+Message-ID: <20230619155203.6039-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,97 +70,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Do several cleanups together:
+In previous patches we removed 5G code since the hardware that uses this
+driver does not support 5G. There is still some 5G related code, remove it.
+All the removed defines are unused and we can safely remove "N-5G" from the
+rtllib_modes array.
 
-- Since all supported architectures have my_syscall6() now, remove the
-  #ifdef check.
-
-- Move the mmap() related macros to tools/include/nolibc/types.h
-
-- Apply the new __sysret() to convert the calling of sys_map() to
-  oneline code
-
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+Signed-off-by: Michael Straube <straube.linux@gmail.com>
 ---
- tools/include/nolibc/sys.h   | 24 +-----------------------
- tools/include/nolibc/types.h | 11 +++++++++++
- 2 files changed, 12 insertions(+), 23 deletions(-)
+Compile-tested only, due to lack of hardware.
 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 8a6e16472d54..1c02cec3bcd9 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -624,26 +624,11 @@ int mknod(const char *path, mode_t mode, dev_t dev)
- 	return __sysret(sys_mknod(path, mode, dev));
- }
+ drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h     | 1 -
+ drivers/staging/rtl8192e/rtl8192e/r8192E_phyreg.h | 2 --
+ drivers/staging/rtl8192e/rtllib.h                 | 1 -
+ drivers/staging/rtl8192e/rtllib_wx.c              | 2 +-
+ 4 files changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h b/drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h
+index f4d4b01630a2..09f8c76b7e65 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h
++++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h
+@@ -159,7 +159,6 @@ enum _RTL8192PCI_HW {
+ 	WFCRC2		  = 0x2f8,
  
--#ifndef MAP_SHARED
--#define MAP_SHARED		0x01	/* Share changes */
--#define MAP_PRIVATE		0x02	/* Changes are private */
--#define MAP_SHARED_VALIDATE	0x03	/* share + validate extension flags */
--#endif
--
--#ifndef MAP_FAILED
--#define MAP_FAILED ((void *)-1)
--#endif
--
- #ifndef sys_mmap
- static __attribute__((unused))
- void *sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
- 	       off_t offset)
- {
--#ifndef my_syscall6
--	/* Function not implemented. */
--	return (void *)-ENOSYS;
--#else
--
- 	int n;
+ 	BW_OPMODE		= 0x300,
+-#define	BW_OPMODE_5G			BIT1
+ #define	BW_OPMODE_20MHZ			BIT2
+ 	IC_VERRSION		= 0x301,
+ 	MSR			= 0x303,
+diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phyreg.h b/drivers/staging/rtl8192e/rtl8192e/r8192E_phyreg.h
+index 65365ebe4e85..24fb0ca539ea 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phyreg.h
++++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phyreg.h
+@@ -266,7 +266,6 @@
+ #define b3WireAddressLength		0x400
+ #define b3WireRFPowerDown		0x1
+ /*#define bHWSISelect			0x8 */
+-#define b5GPAPEPolarity			0x40000000
+ #define b2GPAPEPolarity			0x80000000
+ #define bRFSW_TxDefaultAnt		0x3
+ #define bRFSW_TxOptionAnt		0x30
+@@ -284,7 +283,6 @@
+ #define bRFSI_ANTSW			0x100
+ #define bRFSI_ANTSWB			0x200
+ #define bRFSI_PAPE			0x400
+-#define bRFSI_PAPE5G			0x800
+ #define bBandSelect			0x1
+ #define bHTSIG2_GI			0x80
+ #define bHTSIG2_Smoothing		0x01
+diff --git a/drivers/staging/rtl8192e/rtllib.h b/drivers/staging/rtl8192e/rtllib.h
+index dbf78b60dd78..e3ce4431d460 100644
+--- a/drivers/staging/rtl8192e/rtllib.h
++++ b/drivers/staging/rtl8192e/rtllib.h
+@@ -427,7 +427,6 @@ enum wireless_mode {
+ 	WIRELESS_MODE_G = 0x04,
+ 	WIRELESS_MODE_AUTO = 0x08,
+ 	WIRELESS_MODE_N_24G = 0x10,
+-	WIRELESS_MODE_N_5G = 0x20
+ };
  
- #if defined(__NR_mmap2)
-@@ -654,20 +639,13 @@ void *sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
- #endif
+ #ifndef ETH_P_PAE
+diff --git a/drivers/staging/rtl8192e/rtllib_wx.c b/drivers/staging/rtl8192e/rtllib_wx.c
+index 538cedb1dc02..e9469bfef3dd 100644
+--- a/drivers/staging/rtl8192e/rtllib_wx.c
++++ b/drivers/staging/rtl8192e/rtllib_wx.c
+@@ -19,7 +19,7 @@
+ #include "rtllib.h"
  
- 	return (void *)my_syscall6(n, addr, length, prot, flags, fd, offset);
--#endif
- }
- #endif
+ static const char * const rtllib_modes[] = {
+-	"a", "b", "g", "?", "N-24G", "N-5G"
++	"a", "b", "g", "?", "N-24G"
+ };
  
- static __attribute__((unused))
- void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
- {
--	void *ret = sys_mmap(addr, length, prot, flags, fd, offset);
--
--	if ((unsigned long)ret >= -4095UL) {
--		SET_ERRNO(-(long)ret);
--		ret = MAP_FAILED;
--	}
--	return ret;
-+	return (void *)__sysret((unsigned long)sys_mmap(addr, length, prot, flags, fd, offset));
- }
- 
- static __attribute__((unused))
-diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
-index f96e28bff4ba..f889d4e0ac7e 100644
---- a/tools/include/nolibc/types.h
-+++ b/tools/include/nolibc/types.h
-@@ -81,6 +81,17 @@
- #define MAXPATHLEN     (PATH_MAX)
- #endif
- 
-+/* flags for mmap */
-+#ifndef MAP_SHARED
-+#define MAP_SHARED		0x01	/* Share changes */
-+#define MAP_PRIVATE		0x02	/* Changes are private */
-+#define MAP_SHARED_VALIDATE	0x03	/* share + validate extension flags */
-+#endif
-+
-+#ifndef MAP_FAILED
-+#define MAP_FAILED ((void *)-1)
-+#endif
-+
- /* whence values for lseek() */
- #define SEEK_SET       0
- #define SEEK_CUR       1
+ #define MAX_CUSTOM_LEN 64
 -- 
-2.25.1
+2.41.0
 
