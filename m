@@ -2,81 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFFF7735CEF
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 19:19:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD72735CF3
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 19:20:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbjFSRT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 13:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60464 "EHLO
+        id S231469AbjFSRUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 13:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjFSRT4 (ORCPT
+        with ESMTP id S231247AbjFSRUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 13:19:56 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA0494;
-        Mon, 19 Jun 2023 10:19:54 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qBIXg-0002Jf-Dy; Mon, 19 Jun 2023 19:19:52 +0200
-Message-ID: <6d67384e-456c-13c7-cf92-33b20f3fa2d6@leemhuis.info>
-Date:   Mon, 19 Jun 2023 19:19:51 +0200
+        Mon, 19 Jun 2023 13:20:20 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D736194;
+        Mon, 19 Jun 2023 10:20:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687195219; x=1718731219;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=M8cpsIdLnXuuGWAJvDw9amJqINMPDXinMkvsofzWarg=;
+  b=OgAyet8Ncy4YSguU9Ts7KSft997A0tLOtSzqufKOPHkMcM3/6cYRgoT/
+   3PMFgb+g8BQgJsVyiS6nQiaXqM52tSFEkAe6+KuhrJ9Sv+1nyqjlJeGcq
+   G6fP5wbnLtRGyd1D6HYrciYlZaU0/05zc3/iqQSUkkAyu+9TGChjhCG9w
+   fAhwgujuneQarL/erLR84c2wgM6D+Hx2Fu0wBFPjcXSdfe87qaiXG3wvb
+   RxGa30wz6oS/6oo17WBuEH1DJyME0ZIS0+eAFzRxErDqce0K8whm4Np1p
+   rVEgGh128I+5nUf0pmonNZkKNXtQWAp1+x3fGvizFPYsXKs6iYn0paAKP
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="363105833"
+X-IronPort-AV: E=Sophos;i="6.00,255,1681196400"; 
+   d="scan'208";a="363105833"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 10:20:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="960482500"
+X-IronPort-AV: E=Sophos;i="6.00,255,1681196400"; 
+   d="scan'208";a="960482500"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 19 Jun 2023 10:20:13 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 8B0323CC; Mon, 19 Jun 2023 20:20:23 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>,
+        David Lin <CTLIN0@nuvoton.com>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
+Cc:     Antti Palosaari <crope@iki.fi>, Sergey Kozlov <serjk@netup.ru>,
+        Abylay Ospan <aospan@netup.ru>,
+        Yasunari Takiguchi <Yasunari.Takiguchi@sony.com>,
+        Michael Krufky <mkrufky@linuxtv.org>,
+        Matthias Schwarzott <zzam@gentoo.org>,
+        Akihiro Tsukada <tskd08@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Subject: [PATCH v1 0/4] ASoC: remove copy of intlog10()
+Date:   Mon, 19 Jun 2023 20:20:15 +0300
+Message-Id: <20230619172019.21457-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: Fwd: nvsp_rndis_pkt_complete error status and net_ratelimit:
- callbacks suppressed messages on 6.4.0rc4
-Content-Language: en-US, de-DE
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        Linux BPF <bpf@vger.kernel.org>,
-        Linux on Hyper-V <linux-hyperv@vger.kernel.org>
-Cc:     Michael Kelley <mikelley@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-References: <15dd93af-fcd5-5b9a-a6ba-9781768dbae7@gmail.com>
-From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <15dd93af-fcd5-5b9a-a6ba-9781768dbae7@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1687195194;c9a0e5b4;
-X-HE-SMSGID: 1qBIXg-0002Jf-Dy
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[TLDR: This mail in primarily relevant for Linux kernel regression
-tracking. See link in footer if these mails annoy you.]
+The first three patches moves intlog10() to be available in entire
+kernel. The last one removes copy of it in one driver. Besides already
+good Lines of Code (LoC) statistics the upcoming users, if any, can
+utilize the exported functions.
 
-On 30.05.23 14:25, Bagas Sanjaya wrote:
-> 
-> I notice a regression report on Bugzilla [1]. Quoting from it:
-> [...]
-> #regzbot introduced: dca5161f9bd052 https://bugzilla.kernel.org/show_bug.cgi?id=217503
-> #regzbot title: net_ratelimit and nvsp_rndis_pkt_complete error due to SEND_RNDIS_PKT status check
-> 
-> Thanks.
-> 
-> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=217503
+The series can be routed either via ASoC tree or media tree.
 
-#regzbot resolve: turned out it's not a regression, see
-https://bugzilla.kernel.org/show_bug.cgi?id=217503#c10
-#regzbot ignore-activity
+Note, int_log.h is separated from math.h due to licensing.
+I dunno if we can mix two in a single header file. In any
+case we may do it later on.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
+Andy Shevchenko (4):
+  lib/math: Move dvb_math.c into lib/math/int_log.c
+  lib/math/int_log: Use ARRAY_SIZE(logtable) where makes sense
+  lib/math/int_log: Replace LGPL-2.1-or-later boilerplate with SPDX
+    identifier
+  ASoC: nau8825: Replace copied'n'pasted intlog10()
 
-#regzbot ignore-activity
+ Documentation/driver-api/media/dtv-common.rst |  2 +-
+ drivers/media/dvb-core/Makefile               |  2 +-
+ drivers/media/dvb-frontends/af9013_priv.h     |  2 +-
+ drivers/media/dvb-frontends/af9033_priv.h     |  2 +-
+ drivers/media/dvb-frontends/cxd2820r_priv.h   |  2 +-
+ drivers/media/dvb-frontends/cxd2841er.c       |  2 +-
+ .../cxd2880/cxd2880_tnrdmd_dvbt2_mon.c        |  2 +-
+ .../cxd2880/cxd2880_tnrdmd_dvbt_mon.c         |  2 +-
+ .../media/dvb-frontends/cxd2880/cxd2880_top.c |  2 +-
+ drivers/media/dvb-frontends/dib7000p.c        |  2 +-
+ drivers/media/dvb-frontends/dib8000.c         |  2 +-
+ drivers/media/dvb-frontends/dib9000.c         |  2 +-
+ drivers/media/dvb-frontends/drxk_hard.c       |  2 +-
+ drivers/media/dvb-frontends/lgdt3305.c        |  2 +-
+ drivers/media/dvb-frontends/lgdt3306a.c       |  2 +-
+ drivers/media/dvb-frontends/lgdt330x.c        |  2 +-
+ drivers/media/dvb-frontends/m88ds3103_priv.h  |  2 +-
+ drivers/media/dvb-frontends/mn88443x.c        |  2 +-
+ drivers/media/dvb-frontends/mn88472_priv.h    |  2 +-
+ drivers/media/dvb-frontends/mn88473_priv.h    |  2 +-
+ drivers/media/dvb-frontends/or51132.c         |  2 +-
+ drivers/media/dvb-frontends/or51211.c         |  2 +-
+ drivers/media/dvb-frontends/rtl2830_priv.h    |  2 +-
+ drivers/media/dvb-frontends/rtl2832_priv.h    |  2 +-
+ drivers/media/dvb-frontends/si2165.c          |  2 +-
+ drivers/media/dvb-frontends/stv0367.c         |  2 +-
+ drivers/media/dvb-frontends/tc90522.c         |  2 +-
+ drivers/media/dvb-frontends/tda10048.c        |  2 +-
+ include/{media/dvb_math.h => linux/int_log.h} | 18 +---
+ lib/math/Makefile                             |  2 +-
+ .../dvb-core/dvb_math.c => lib/math/int_log.c | 26 ++----
+ sound/soc/codecs/nau8825.c                    | 93 +------------------
+ 32 files changed, 45 insertions(+), 150 deletions(-)
+ rename include/{media/dvb_math.h => linux/int_log.h} (63%)
+ rename drivers/media/dvb-core/dvb_math.c => lib/math/int_log.c (84%)
+
+-- 
+2.40.0.1.gaa8946217a0b
+
