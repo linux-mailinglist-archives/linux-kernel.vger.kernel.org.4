@@ -2,82 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0E7F735126
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD8BB735139
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231878AbjFSJ5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 05:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
+        id S231858AbjFSJ6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 05:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231750AbjFSJ45 (ORCPT
+        with ESMTP id S231848AbjFSJ5O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 05:56:57 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E298E68
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:56:54 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f867700f36so1941789e87.0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:56:53 -0700 (PDT)
+        Mon, 19 Jun 2023 05:57:14 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB2EE58
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:57:11 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f9b258f3d8so4255525e9.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:57:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687168612; x=1689760612;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jEB+6HRgDgKrgxjDAFwou0bm0SyjRLdUU0ZM4Yt8SJQ=;
-        b=kHe8MPNWhdEi7bbibJpTjZkk7g+oJ32pCsTK7RyH8AY5dTYSMAaF69C6YJJvvYSfkA
-         MFlXKtSHvRjCzmgOspNRJ52UWdQ1bDaCf9LFGifqyGH1BHbMOkqd6T6geoECm1xbsoJp
-         rTp4xpYlAEN4wlGrTS+rEZuIfc2DXBKsneRBwRA1QbIPQ4XVP64a1Liu6gXXd/mBpEz9
-         EZm5+Qa01pwgyc+34ThHIY0tsELW6FVI8CxfdKZfLmAiSsISIu0jfMjF9Q+SbMKCyjeE
-         O+G+cCoZnhXR4sOEJflmoabqkvwHqePzRk5LBvJQDePqWppd/s52ifPGUQ9wb1bZ2J7L
-         sqfA==
+        d=linaro.org; s=google; t=1687168630; x=1689760630;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TitqDCAZ4k0kUmwWL2ar9UbakjN8g88PZ4eJsoBtptM=;
+        b=ggdlD1Fc1EqBybvqJQe0fukI25JfKzFgSzXYqpuHcFK2D2CV0OmeGSi3UGqqlN+6kY
+         q8lOJmPNeOM7JStY4ycQm/M4KPWrhqGwph34t1KE533DO428a7tcfJdU5EXJTBRbNUwa
+         vQtFztAJkgIXXy3480T605ckmV2Z3xbCl2KzRMyVVZRbXv7gjMnnpyhnVwY5zAhq0cvW
+         XaozgORjDTDEVBElEeXi94y2aQoRH6zgp1YZBxIRU865tMb22AP7PX1CCVDpgJJLYrjK
+         HhVAt4Kl8ofO1SIWto2V+HJ2uNfhKP6yDlLEy/OaCFYIXF4N4qqSSNtds06rKd6AxmBV
+         ZLlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687168612; x=1689760612;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jEB+6HRgDgKrgxjDAFwou0bm0SyjRLdUU0ZM4Yt8SJQ=;
-        b=CYqx17H6W3dAkjB8LkNL9B5odX75cRnVq/2iSWIjTdU1FS92xa8TT4k9N1ks809A8p
-         ZO20uGvkijrde4txWTxqnxLwUI0J6LCo15k3WUtEqrwHM2oEBf6nxlVWPOnEIBTzGNqj
-         t4jSMNB5GC3hUcZn86Mdj2dGHOKQayUKeFpMMt2xzNOdlP3Kcu8R/IpI5KtdqI3AqWrI
-         igllixPzwVoeB8fwejtbR9Zl52qFcbN1oAXZ4rNKopiYvgA6toMaBPaAo8HrloI9gK1A
-         ypCgfUIuv+y2UViXmsb9f40lMdvrrlN1ymxRXSoOWJHEy+xMPcLy7+WfFOerD/1sku/M
-         NWvQ==
-X-Gm-Message-State: AC+VfDxPf2Id/vY4LDMiiSHCYQVB45Igv4J7wNBfqolhGE0y/kMHTYvU
-        1mvdWcobqqKde0fcAzVGh7u/Uw==
-X-Google-Smtp-Source: ACHHUZ53S7dP0hAu3ZhG+uHhwky//K+M3G3ddJkMSQC8DJMNmbGf2zOTPrv7rG0KK8YVOJ52+OO5PA==
-X-Received: by 2002:a19:6544:0:b0:4ed:cc6d:61fe with SMTP id c4-20020a196544000000b004edcc6d61femr4670418lfj.24.1687168612307;
-        Mon, 19 Jun 2023 02:56:52 -0700 (PDT)
-Received: from [192.168.1.101] (abyl242.neoplus.adsl.tpnet.pl. [83.9.31.242])
-        by smtp.gmail.com with ESMTPSA id c26-20020ac244ba000000b004ec8b638115sm4173747lfm.193.2023.06.19.02.56.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 02:56:52 -0700 (PDT)
-Message-ID: <32fcbd97-f37a-0792-eb7e-f80f0dfd0fee@linaro.org>
-Date:   Mon, 19 Jun 2023 11:56:50 +0200
+        d=1e100.net; s=20221208; t=1687168630; x=1689760630;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TitqDCAZ4k0kUmwWL2ar9UbakjN8g88PZ4eJsoBtptM=;
+        b=cH8ZkRnBfwJhVDMoUYCoGGW/p3xTbyavBuUowjPIe/WZokM4Cx3a4KkZ4eBloGXkrI
+         YqoTju5rKLtjaqbAuT2jTaFKTfNfPJpBsBPGeDXwSqyNmII8kHCC1D7LKMNyvkTPU6a7
+         BnypD06qPQ/S65fqGhQkWJ6cMx/zfMwNmhcWxxz1HqdevpD8bN+7Xm23WMiPp7ZHpj/k
+         anVJnR7Lr9BpRqTd9lY58qW9x60vX68MMvC0owZTw4ekniFfLRqTanecgL4ew0c/WSNl
+         1BOjQZywXVYUnq1NQQQCO1ayMAsipDOqsJxSkySayRPl4F3+GP+h94/q8/jpoZzfcoat
+         xAXw==
+X-Gm-Message-State: AC+VfDzkWRhKnFimuzfkNsilHVvRLnuGinvMKY1cFS5nKjNlmVDgvE0Y
+        4A4QoZdYuQb5azBSxL8KoDFlnA==
+X-Google-Smtp-Source: ACHHUZ5aFxxxf68NHso+69usx5VV9RWbpXdqprXQ1ehxbJoVQwsKX8Nn4gCtoWCvFtJClVlj5+wIug==
+X-Received: by 2002:a1c:7705:0:b0:3f9:6f7:9d7d with SMTP id t5-20020a1c7705000000b003f906f79d7dmr4561926wmi.0.1687168629876;
+        Mon, 19 Jun 2023 02:57:09 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id o19-20020a05600c511300b003f8fe1933e4sm10891640wms.3.2023.06.19.02.57.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 02:57:07 -0700 (PDT)
+Date:   Mon, 19 Jun 2023 12:57:04 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Fei Shao <fshao@chromium.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] clk: Fix memory leak in devm_clk_notifier_register()
+Message-ID: <658d32f2-a71b-4dc2-bff9-649fadf41889@kadam.mountain>
+References: <20230619112253.v2.1.I13f060c10549ef181603e921291bdea95f83033c@changeid>
+ <35f6212e-69f8-432f-a5c8-99ed5c844f11@moroto.mountain>
+ <CAC=S1njwxLfw7LcnXkgY7pbiFaqvNQVyAzHVhK9+nYJC63d=Zw@mail.gmail.com>
+ <32fa8c0e-26f4-4ee4-889a-4037530c128d@kadam.mountain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 3/7] arm64: dts: qcom: sm6125-pdx201: correct ramoops
- pmsg-size
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20230618114442.140185-1-krzysztof.kozlowski@linaro.org>
- <20230618114442.140185-3-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230618114442.140185-3-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <32fa8c0e-26f4-4ee4-889a-4037530c128d@kadam.mountain>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,32 +76,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18.06.2023 13:44, Krzysztof Kozlowski wrote:
-> There is no 'msg-size' property in ramoops, so assume intention was for
-> 'pmsg-size':
-> 
->   sm6125-sony-xperia-seine-pdx201.dtb: ramoops@ffc00000: Unevaluated properties are not allowed ('msg-size' was unexpected)
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-Downstream copypasta
+On Mon, Jun 19, 2023 at 12:24:41PM +0300, Dan Carpenter wrote:
+> > It was actually detected by kmemleak on an unreleased Chromebook device.
+> > I added the trace snippet in the message at first but removed that
+> > before sending this. Maybe I shouldn't have.
+> > 
+> > I can resend a v3 to add that back if that's preferable. What do you think?
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+The other reason to include stack traces is so that if someone else
+runs into the same bug they can find your patch by googling their stack
+trace.
 
-Konrad
->  arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts b/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
-> index 2b4840446cb0..9e44ac229619 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
-> @@ -79,7 +79,7 @@ pstore_mem: ramoops@ffc00000 {
->  			reg = <0x0 0xffc40000 0x0 0xc0000>;
->  			record-size = <0x1000>;
->  			console-size = <0x40000>;
-> -			msg-size = <0x20000 0x20000>;
-> +			pmsg-size = <0x20000>;
->  		};
->  
->  		cmdline_mem: memory@ffd00000 {
+Normal users aren't going to be running kmemleak.  And people doing
+testing work for companies are hopefully going to pull this fix in via
+the stable tree so they'll get this patch automatically that way so
+they won't see it either.
+
+But if the stack trace is like a NULL dereference bug, then users
+absolutely do notice that kind of thing.  You should always include
+those kind of stack traces.
+
+regards,
+dan carpenter
