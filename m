@@ -2,87 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F005735DD6
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 21:19:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE97735DD9
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 21:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232341AbjFSTTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 15:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40730 "EHLO
+        id S232405AbjFST1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 15:27:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231225AbjFSTTN (ORCPT
+        with ESMTP id S229518AbjFST1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 15:19:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577A2E5C
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 12:18:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687202297;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xsIBCnHr4DaWqSJb6zhumnwbJfejyz9/hGIX739o62I=;
-        b=d96EwpyLFeOWq78bP74wJCzmJIdqAFtbpiRzoYL5pQf9dYxQi1bfzNLO8fYQ9+vkysdF6c
-        tzUnyG2qrTPVoo77jZiXhr34le1goiizDVdz8nMrVlGNT03mawBLw/fXO5cjonvCYVJKBy
-        QAsWp8PzPqMiJazTPtJqnnTbhLMr98k=
-Received: from mail-vk1-f197.google.com (mail-vk1-f197.google.com
- [209.85.221.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-228-HCBbQQdyNsGSXgq-IyTLMQ-1; Mon, 19 Jun 2023 15:18:16 -0400
-X-MC-Unique: HCBbQQdyNsGSXgq-IyTLMQ-1
-Received: by mail-vk1-f197.google.com with SMTP id 71dfb90a1353d-471603b2e6dso121859e0c.1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 12:18:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687202295; x=1689794295;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xsIBCnHr4DaWqSJb6zhumnwbJfejyz9/hGIX739o62I=;
-        b=HdEkNhpAqoPR2vSdLYqcMZB9QvY6LpMAm1uL6XOSv8KFdFsfHBF+Npb9XCTYEEfFCn
-         MpsBBEeokQE/vDttPXIgT2hv50sFDZiwwq8EuL6trnHMxA5rPTCWxYNVQKzQ5T+Nwue2
-         /qMesi8NuUVDXpQ6f2LX1gEm729QTe9/8l5ihByXhHqwWhVub6crmzRG/AyPRV8TxgTO
-         8hyq6mucJpLuq4VA7/EnuxOaTvroP6NUkXlIl5SZOI4W7UFtiXqeTVGCVNJFz3SiBD9v
-         fwsFHvSH9KmeS9n8izrJY3UvsB55i4x7oQCRQzzhau0pFq3jGKVQHTeqi084KuIgvnkD
-         5d9A==
-X-Gm-Message-State: AC+VfDy7QRSCAxeZZEHMbPWooV1Y2IQ6iNuk+yzGalxmzCBabO7u152H
-        WISB3uzU//vhUQcmLM1M8wI6H1ALYPNmQi6nJmkaPGa2TpHeOj5yULy6Fb+U1igbavj5iMwO2FS
-        mE4QvkNnod7mmViXYHJZr8J5R
-X-Received: by 2002:a05:6102:2924:b0:440:a800:c005 with SMTP id cz36-20020a056102292400b00440a800c005mr2117948vsb.1.1687202295434;
-        Mon, 19 Jun 2023 12:18:15 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4sKJJix/7pu6y3jAziZG2YsnBRDijpBnhMwlZLNMyr2x2ZEEF57I1Q9nvSMkv3Frdyrl0w9g==
-X-Received: by 2002:a05:6102:2924:b0:440:a800:c005 with SMTP id cz36-20020a056102292400b00440a800c005mr2117931vsb.1.1687202295153;
-        Mon, 19 Jun 2023 12:18:15 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id h17-20020ae9ec11000000b0074def53eca5sm240162qkg.53.2023.06.19.12.18.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 12:18:14 -0700 (PDT)
-Date:   Mon, 19 Jun 2023 15:18:13 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        James Houghton <jthoughton@google.com>,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH 5/7] mm/gup: Cleanup next_page handling
-Message-ID: <ZJCp9aBS8INMkehh@x1n>
-References: <20230613215346.1022773-1-peterx@redhat.com>
- <20230613215346.1022773-6-peterx@redhat.com>
- <f4087efd-36c3-4e3a-96ce-44dbd1a0b5d7@lucifer.local>
- <5886f78c-3ff8-4b64-9aa6-027c22e7d5fc@lucifer.local>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <5886f78c-3ff8-4b64-9aa6-027c22e7d5fc@lucifer.local>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        Mon, 19 Jun 2023 15:27:02 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4195A9F;
+        Mon, 19 Jun 2023 12:26:58 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id D4AAD5C036B;
+        Mon, 19 Jun 2023 15:26:55 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 19 Jun 2023 15:26:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1687202815; x=1687289215; bh=RkdhSqLZgVEX1NN/WLsswvWnrGRK9C1YpT+
+        3WFY7fJs=; b=lqi9LNlWDqkiNo12WAlGf5470UOr5JZtzm/5UlrqyrtS4Ly5E7Q
+        yHm8eP7v/j6Eb/H+WfNdf9H2W0gE4YQ5172dDEyqM+1/1kMu/nhwrkPx/RSnW7kZ
+        QzM9l2t85HLrsuNAEWPomJ69F5BBNI3X300UdjF4Tr1lYFMhX6UiQWT4k4JXX4If
+        WzXR2V/C1ZGnVTrcNh+/rRasL0MCiGg01GUdac0dypFkDUi8XPJ6G+nLtDCi0Lry
+        PWrCa88MRHkbJ+MsfUWoqWoWWvzrWT9bFqKYuiYnjxVW3+OU7rj9Y2FYOS6plDXy
+        1YlF8JhK7aeKKce8Wa9WC/CM3H7aixVeU8Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1687202815; x=1687289215; bh=RkdhSqLZgVEX1NN/WLsswvWnrGRK9C1YpT+
+        3WFY7fJs=; b=p01IQHTz6KkHuhYq6u3hE/P9uumBXV8balAzp1bvsZZOkXSHFR9
+        VkxLLFw1ovBtOtphGc/uGPFpOKmp8OgwjnDJb7CuK5vl4kQwvVrcSxvDywxKdlp6
+        qCelVMvzPT8bBEyk4hyoX4O3UVYaW8RSCqvy6K7OVXomWxncQiqKpt+MetIC5LDl
+        pZ99b8qxIgT5+W2mI70GJKZ1lto7SQHVZs3dPobjFZmxKJFMaPE1S1Tr7Vh9DnGc
+        GQItxtdPo7AH3wEBhE4lYkL2NZ6ErqMsf/2XSaHgw0iCWXdwgmUZ2EomQDifvG6S
+        F+/foTtq8vuPLQUi5b0PZg85tyftLkdWHYg==
+X-ME-Sender: <xms:_quQZLmpyV9ZI1dQ2Zeyk08OAiJGtYzpvde6aA4eAbjK7s6kWv6BFA>
+    <xme:_quQZO2V2yP1UKBSub2bBdHetWkwQORL-FdSLfMG0iUjvHPulxJVBFKNQ0RDkVsAp
+    Kex7apeFIF9Nrv5pQ4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefvddgudefhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
+    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
+    grthhtvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudek
+    tdfgjeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:_quQZBocDkFMAUMCbVoJ_7I69BiuZ7RTpfAmOfFlWZw1f2BeMtxhIA>
+    <xmx:_quQZDm_HBnodVkCpUQrsm3jc6JmfIlK87dUVxV5wD2VB7_NKaqjFg>
+    <xmx:_quQZJ1l2ndt4OZwHsiEQyNWqN6AELxAekS4ytcm5SAAs4s9tTTs_A>
+    <xmx:_6uQZCI_RFTqzhbpNr5nwcRDafw5iXhWDAmRToH3HnaC3OHt-kY8kg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id CDAB4B60086; Mon, 19 Jun 2023 15:26:54 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-496-g8c46984af0-fm-20230615.001-g8c46984a
+Mime-Version: 1.0
+Message-Id: <300ecb3e-8747-4399-8452-77724f85330b@app.fastmail.com>
+In-Reply-To: <d9f088d1d548c8735b393a15d5a16dbd914ddeca.camel@collabora.com>
+References: <20230616144854.3818934-1-arnd@kernel.org>
+ <20230616144854.3818934-2-arnd@kernel.org>
+ <e264ac3a15e0f115aa7e941a77eb312429b8f65e.camel@collabora.com>
+ <063a8886-fd31-425f-901c-fc830512eca3@app.fastmail.com>
+ <d9f088d1d548c8735b393a15d5a16dbd914ddeca.camel@collabora.com>
+Date:   Mon, 19 Jun 2023 21:26:34 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Nicolas Dufresne" <nicolas.dufresne@collabora.com>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        "Ezequiel Garcia" <ezequiel@vanguardiasur.com.ar>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>
+Cc:     "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
+        "Benjamin Gaignard" <benjamin.gaignard@collabora.com>,
+        "Jernej Skrabec" <jernej.skrabec@gmail.com>,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] media: verisilicon: change confusingly named relaxed register
+ access
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,93 +98,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 09:00:34PM +0100, Lorenzo Stoakes wrote:
-> On Sat, Jun 17, 2023 at 08:48:38PM +0100, Lorenzo Stoakes wrote:
-> > On Tue, Jun 13, 2023 at 05:53:44PM -0400, Peter Xu wrote:
-> > > The only path that doesn't use generic "**pages" handling is the gate vma.
-> > > Make it use the same path, meanwhile tune the next_page label upper to
-> > > cover "**pages" handling.  This prepares for THP handling for "**pages".
-> > >
-> > > Signed-off-by: Peter Xu <peterx@redhat.com>
-> > > ---
-> > >  mm/gup.c | 7 +++----
-> > >  1 file changed, 3 insertions(+), 4 deletions(-)
-> > >
-> > > diff --git a/mm/gup.c b/mm/gup.c
-> > > index 8d59ae4554e7..a2d1b3c4b104 100644
-> > > --- a/mm/gup.c
-> > > +++ b/mm/gup.c
-> > > @@ -1135,7 +1135,7 @@ static long __get_user_pages(struct mm_struct *mm,
-> > >  			if (!vma && in_gate_area(mm, start)) {
-> > >  				ret = get_gate_page(mm, start & PAGE_MASK,
-> > >  						gup_flags, &vma,
-> > > -						pages ? &pages[i] : NULL);
-> > > +						pages ? &page : NULL);
-> >
-> > Good spot... ugh that we handled this differently.
-> >
-> > >  				if (ret)
-> > >  					goto out;
-> > >  				ctx.page_mask = 0;
-> >
-> > We can drop this line now right? As the new next_page block will duplicate
-> > this.
-> 
-> OK I can see why you left this in given the last patch in the series :)
-> Please disregard.
+On Mon, Jun 19, 2023, at 20:29, Nicolas Dufresne wrote:
+> Le lundi 19 juin 2023 =C3=A0 16:49 +0200, Arnd Bergmann a =C3=A9crit=C2=
+=A0:
+>> >=20
+>> > In this text you spoke about potential performance side effects of =
+existing code
+>> > and your changes, but its left all very vague and theoretical. Have=
+ you done any
+>> > measurement ? Do you need help with the manner ?
+>>=20
+>> I don't have this hardware and have not done any measurements.
+>> Obviously the only point of using relaxed accessors is to
+>> improve performance in critical code paths, but from the way they
+>> are used here it seems that this was instead just an accident
+>> and nobody else did any comparisons either.
+>>=20
+>> My guess would be that if one wanted to speed up the register
+>> access, a better way would be to use a regmap cache to avoid
+>> reading registers when the contents are already known.
+>
+> All I know is that for the majority of registers when programming stat=
+eless
+> codecs, each 32bit word of registers are fully written too, the read v=
+alue is
+> not always meaningful (its a value from last time the HW has been trig=
+gered) and
+> should be ignored, so better to not do that. As for regmap, there is f=
+olks that
+> have reported regmap to be completely overkill for this type of hardwa=
+re.
 
-Yes the other "page_mask=0" will be removed in the next (not last) patch.
+Right, most likely neither the cache nor avoiding the readl() is necessa=
+ry,
+and that was exactly my point to start with: don't add potentially dange=
+rous
+microoptimizations like relaxed accessors unless the obvious optimizatio=
+ns
+are also needed and used.
 
-> 
-> >
-> > > @@ -1205,19 +1205,18 @@ static long __get_user_pages(struct mm_struct *mm,
-> > >  				ret = PTR_ERR(page);
-> > >  				goto out;
-> > >  			}
-> > > -
-> > > -			goto next_page;
-> >
-> > This is neat, we've already checked if pages != NULL so the if (pages)
-> > block at the new next_page label will not be run.
+Obviously, testing my patch would still be a good idea before applying i=
+t.
 
-Yes.
-
-> >
-> > >  		} else if (IS_ERR(page)) {
-> > >  			ret = PTR_ERR(page);
-> > >  			goto out;
-> > >  		}
-> > > +next_page:
-> > >  		if (pages) {
-> > >  			pages[i] = page;
-> > >  			flush_anon_page(vma, page, start);
-> > >  			flush_dcache_page(page);
-> >
-> > I guess there's no harm that we now flush here, though it seems to me to be
-> > superfluous, it's not a big deal I don't think.
-
-I'd say GUP on gate vma page should be so rare so yeah I think it shouldn't
-be a big deal.  Even iiuc vsyscall=xonly should be the default, so gup may
-have already failed on a gate vma page even trying to read-only..
-
-> >
-> > >  			ctx.page_mask = 0;
-> > >  		}
-> > > -next_page:
-> > > +
-> > >  		page_increm = 1 + (~(start >> PAGE_SHIFT) & ctx.page_mask);
-> > >  		if (page_increm > nr_pages)
-> > >  			page_increm = nr_pages;
-> > > --
-> > > 2.40.1
-> > >
-> >
-> > Other than that, LGTM,
-> >
-> > Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
-
-Thanks for looking!
-
--- 
-Peter Xu
-
+       Arnd
