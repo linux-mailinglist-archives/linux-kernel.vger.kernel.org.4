@@ -2,147 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B21734B4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 07:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3C7734B4E
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 07:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbjFSFTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 01:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53418 "EHLO
+        id S229791AbjFSFUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 01:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjFSFTe (ORCPT
+        with ESMTP id S229525AbjFSFUV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 01:19:34 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD372E0
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 22:19:32 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-988a2715b8cso118389466b.0
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 22:19:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687151971; x=1689743971;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xkIBRh1CRI7l1b26sTYaQ/9/gUUFxPZU0t2NyWKWH7Q=;
-        b=eUeNwGRZOej+JmaNNUaJ6OPJIgJYdwORyCeMfKZTOjdOO76BnXQtHBcPlqW8xlMFQY
-         s1nvqNLfu7R+DtrblqmhCcyNv9raxlOUrGUkijSYF2DLN/Fx1lHmAyyGItjJsLQKZ9SB
-         GPfMkm2H1dEBHmBvUMD1gOtZO1fVM3k/h0NmiHlxO9RkzW6RQBtin+wJYQW/lxXbrH2y
-         2jT67uQLUKUbBewiI+qS3az+zA4/Ja0YIqT9Cp1VvKdGyGO7ldm1/RKTqK5ZdG6UMaPi
-         c/6Ert/O4bIexYOn5ii9geuHAbjF/UjC8Wjr754r+o8/7VgLwsDMrXGWCp8mWr05623N
-         VqbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687151971; x=1689743971;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xkIBRh1CRI7l1b26sTYaQ/9/gUUFxPZU0t2NyWKWH7Q=;
-        b=EMscoFJlQiUJrjr3p7L5dAIlYzS78AZq2wRcI0nNF4jSW3Rztvg5tvfQpYBihjfJwH
-         cAF0lZssL1mqR9OGrdzxry3axq2spnbdz+xWFLHNEh72HZNtgnQSo+d8FdFuLfmByntA
-         eEk7Ft08CNtWgc/A173aqs7gHWbBgT7Ew9MiBM+OCAxgCcC0V3OYaXo0k2ctHbqi6i/O
-         xkEESQ5oY0JOVaV4FtvWPQgtA1xtbSvwJ7wNqLGip7FtM64LZnzXhuV8QZf/CYd4ai6E
-         Mu8nCPbPj/VE3iRy7hFHnxV1d+2xOGKSVJ7rND6G7wEpiy5A9NU+c6yRIV2s5RvKXZrQ
-         G+Gw==
-X-Gm-Message-State: AC+VfDyvBWw7SGe63Q4bZAhTyN6yPft6IicICmW1D5ETXHPnm+wURIx6
-        Bywn9Q/RvVbbV4O8MEcW6Vtz4Y30UwvCvTRxw3eXzw==
-X-Google-Smtp-Source: ACHHUZ71H1JCg8qVnIn2avxbwYZAfCJAhaV/i8QHAcldJFca6caRKDrrFVg7SKgaFiydxOgLaPuVe+XBQIA36QYs2Qk=
-X-Received: by 2002:a17:907:2d10:b0:988:7209:f42 with SMTP id
- gs16-20020a1709072d1000b0098872090f42mr2344570ejc.7.1687151971080; Sun, 18
- Jun 2023 22:19:31 -0700 (PDT)
+        Mon, 19 Jun 2023 01:20:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93EF5A4
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 22:20:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2927060B7A
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 05:20:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FA02C433C0;
+        Mon, 19 Jun 2023 05:20:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687152019;
+        bh=ZxpwI7dfhBwFKwaQNvHNP489mvSi6n3Qqmaud4rDcBI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=sJlEq6GcOw1C6O2vsuGdQu7YZKvTkEbH4hDdMSlyNizSUeNbMuh/DBrLTM1MjDqQv
+         xCrHiTjINLySXaeAiCwwbJwgb/JPusYGtqtNpDcfo9iHlL6kVYjDb2bkX2uLH+WnpK
+         /j2jdeevX1ZO0JllzJsGDbZRmsdQEuhCjSJGhm0/wDTrwefTgbAcvbflQ1uXkb1iI5
+         SP2pkusiWgJCi625UnM0uCXW2eOwPXZMrUNMqr7o7qiKVTBGhuFZuo5UtOuAfOWrV0
+         BfcTIaqqBLYpccvtuTRpdnPSIzmFv9wb1+VBjLlFf7sb0yc7I2yfknG0Z67VqbnDGE
+         +khQk7iSsGA/w==
+Message-ID: <5409930b-4379-b279-886b-a05149436a68@kernel.org>
+Date:   Mon, 19 Jun 2023 13:20:16 +0800
 MIME-Version: 1.0
-References: <20230619051715.2306134-1-yosryahmed@google.com>
-In-Reply-To: <20230619051715.2306134-1-yosryahmed@google.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Sun, 18 Jun 2023 22:18:54 -0700
-Message-ID: <CAJD7tkYspn8LwCDh2fjfGePWbRB405M3d1tgtax_4dGFSk3jBg@mail.gmail.com>
-Subject: Re: [PATCH] selftests/cgroup: allow running a specific test with test_memcontrol
-To:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] f2fs: no need test opt for f2fs_issue_flush
+Content-Language: en-US
+To:     Yangtao Li <frank.li@vivo.com>, jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230425165857.29175-1-frank.li@vivo.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20230425165857.29175-1-frank.li@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 18, 2023 at 10:17=E2=80=AFPM Yosry Ahmed <yosryahmed@google.com=
-> wrote:
->
-> It is handy during testing and/or debugging to be able to run a single
-> test from test_memcontrol. Allow passing in a test name through a
-> command line argument (e.g. ./test_memcontrol -t test_memcg_recharge).
->
-> Change-Id: I0e0d74d81fdd9d997987389085a816715160467f
+On 2023/4/26 0:58, Yangtao Li wrote:
+> This information can now be obtained from the mount, and there isi
+> no need to print it out every time the trace event is triggered.
 
-I missed removing this gerrit tag, sorry. Will fix it if/when I respin.
+It makes sense.
 
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> ---
->  .../selftests/cgroup/test_memcontrol.c        | 30 +++++++++++++++++++
->  1 file changed, 30 insertions(+)
->
-> diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/tes=
-ting/selftests/cgroup/test_memcontrol.c
-> index a2a90f4bfe9f..d8f8a13bc6c4 100644
-> --- a/tools/testing/selftests/cgroup/test_memcontrol.c
-> +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-> @@ -1308,9 +1308,36 @@ struct memcg_test {
->
->  int main(int argc, char **argv)
->  {
-> +       int opt;
->         char root[PATH_MAX];
-> +       int selected_test =3D -1;
->         int i, proc_status, ret =3D EXIT_SUCCESS;
->
-> +       while ((opt =3D getopt(argc, argv, "ht:")) !=3D -1) {
-> +               switch (opt) {
-> +               case 't':
-> +                       for (i =3D 0; i < ARRAY_SIZE(tests); i++) {
-> +                               if (!strcmp(tests[i].name, optarg)) {
-> +                                       selected_test =3D i;
-> +                                       break;
-> +                               }
-> +                       }
-> +                       if (selected_test >=3D 0)
-> +                               break;
-> +                       fprintf(stderr, "test %s not found\n", optarg);
-> +                       return EXIT_FAILURE;
-> +               case 'h':
-> +                       fprintf(stderr,
-> +                               "Usage: %s [-h] [-t name]\n"
-> +                               "\t-h       print help\n"
-> +                               "\t-t name  run specific test\n"
-> +                               , argv[0]);
-> +                       return ret;
-> +               default:
-> +                       break;
-> +               }
-> +       }
-> +
->         if (cg_find_unified_root(root, sizeof(root)))
->                 ksft_exit_skip("cgroup v2 isn't mounted\n");
->
-> @@ -1336,6 +1363,9 @@ int main(int argc, char **argv)
->         has_localevents =3D proc_status;
->
->         for (i =3D 0; i < ARRAY_SIZE(tests); i++) {
-> +               if (selected_test >=3D 0 && selected_test !=3D i)
-> +                       continue;
-> +
->                 switch (tests[i].fn(root)) {
->                 case KSFT_PASS:
->                         ksft_test_result_pass("%s\n", tests[i].name);
-> --
-> 2.41.0.162.gfafddb0af9-goog
->
+Jaegeuk, is it intentional to print mount option in f2fs_issue_flush
+tracepoint?
+
+Thanks,
