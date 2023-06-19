@@ -2,108 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82D4A73532B
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 12:42:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D69D735330
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 12:42:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbjFSKmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 06:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46558 "EHLO
+        id S232041AbjFSKmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 06:42:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231295AbjFSKls (ORCPT
+        with ESMTP id S231146AbjFSKmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 06:41:48 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7707186;
-        Mon, 19 Jun 2023 03:41:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687171307; x=1718707307;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=vj1LZCY5tVAC4efMLkoqqYSvlGvU5CP11qFPl/AedSs=;
-  b=iLPFiaIqQcSV7M6vcDE+VWYNHZLTmxrXLzKrzyZinV2CJNBPQa/B8c1Y
-   bcJuKCskFy9VAyoEjLmZTeB7kWqTZvCN/AWTf+w0mhOLR7WD9zh8TjEyr
-   4ROnaCvKDOMPC8BB2Z3euIpfPoBE3GdTbnOwe/wYjKDGLyk4EYxupwMvx
-   SSLnVKxAe4Oi5c5Oz8gbKZjNm1MtH6tSBIR+d555hmwAVg6AiLLT2r4kh
-   +t3FXY77gCBkVynYRNnDxIiPCaKs3CcSxWcU1T5Lf/pTbW/Wv9i2B/nuU
-   KXPp/3OWy5f83VtLj+QeDJZMHc45WOXZpYKsQi/Mil40Fxc2Th3L2vAAv
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="425553083"
-X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
-   d="scan'208";a="425553083"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 03:41:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="716823168"
-X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
-   d="scan'208";a="716823168"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP; 19 Jun 2023 03:41:44 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qBCKN-004y5A-1N;
-        Mon, 19 Jun 2023 13:41:43 +0300
-Date:   Mon, 19 Jun 2023 13:41:43 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: Re: [PATCH v1 1/1] gpiolib: Drop unused domain_ops memeber of GPIO
- IRQ chip
-Message-ID: <ZJAw507ODTUX2elD@smile.fi.intel.com>
-References: <20230616135313.76338-1-andriy.shevchenko@linux.intel.com>
- <CACRpkdbPEvVvaehB521gdjkkzh+wFnFxsCNm36PD-hnTb1Na_w@mail.gmail.com>
- <87y1kipeui.wl-maz@kernel.org>
+        Mon, 19 Jun 2023 06:42:07 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559B6199;
+        Mon, 19 Jun 2023 03:42:06 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-988f066f665so21960166b.2;
+        Mon, 19 Jun 2023 03:42:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687171325; x=1689763325;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Lc8A8Vw9LtMkTqv5o4GSfreuArCukUUbiIQJyiLS2Gs=;
+        b=meJYO/VluisrybFU77MgPXARQR8H/BczsgubpOvzbai2yX5V/vNJ1a44DdL5P+gT9h
+         zWaMyX4vsVMcZpdzrqrHuVgt+KJuH3wxsdVuftFTJAWDxqpYYhN8DbGuM3qnFIwm16oj
+         82X3mXu6193cPrAuBqSkaBVCPjA+IlrSg0lVP2EgXLsSKrDYFwgPWW6rm/HGLgLKKYIl
+         34H3ha0Lr8mUP3vvONSgYZQMDRcXXwTvK2ivTbHlbWcynep/tWcyXhjnXuYYReLgQVjd
+         0N2/eM5FJL05+0TX1P5SmIhH8m9bEJkBy7lV3xJ+RlpmSHuYsp1dMtRC0O3xgQ4t5YUO
+         G+mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687171325; x=1689763325;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Lc8A8Vw9LtMkTqv5o4GSfreuArCukUUbiIQJyiLS2Gs=;
+        b=e8QBXfYw1FmFcjMWNM9p80fjZMlWzvET+1v5sjuhl1Uj3TiDUvMXiDHFONDGD+qIGq
+         7KnEDCdZUM8BK9k/CfXpSvGyXDYNhmI4JKoxhCnw2fuxzrCZsP/c4Yv7wLit7c4uNRyz
+         /6oUqlL3I4zUYIZgH8tjvbnK41DF83RtOEXCJYhBeSWknt5If11RNlBswyJDqO9PPJbo
+         yGe/7yxkpxOBcV8yJOqXjX/kn5vmwmaXdAAQqgeZXka6cQn+kxPyuif46hdFuc2IkZwE
+         5M2cruzwQrFezHTfyFfqIrpshQqJVtmZPAJhfGgTGQRPvlpp18ONF1g6pav9nUKeL0gG
+         hnbw==
+X-Gm-Message-State: AC+VfDxSeK4NsYG3ZG914aPV99pKWPPbZHiAuyUtMLE/jfTb8qHQKLAm
+        pW8/CIaRNzLLQLWfjZS0BzgutEKG6uX6Zw==
+X-Google-Smtp-Source: ACHHUZ6gvL3qDfw9MwR4eqOkuWp5n5zJry97i6r137AZVb9sYts/gHSzat3Fvpas0VxRgRcJ5YqdUQ==
+X-Received: by 2002:a17:907:7207:b0:988:8786:f56c with SMTP id dr7-20020a170907720700b009888786f56cmr3273576ejc.0.1687171324574;
+        Mon, 19 Jun 2023 03:42:04 -0700 (PDT)
+Received: from [10.176.234.233] ([147.161.245.31])
+        by smtp.gmail.com with ESMTPSA id m23-20020a1709060d9700b00988e400c468sm421140eji.190.2023.06.19.03.42.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 03:42:04 -0700 (PDT)
+Message-ID: <efb4cbf2ee6f006b2b458c209fc0f31e8ba655e2.camel@gmail.com>
+Subject: Re: [PATCH v1 2/5] fs/buffer.c: convert block_commit_write to
+ return void
+From:   Bean Huo <huobean@gmail.com>
+To:     Jan Kara <jack@suse.cz>, Bean Huo <beanhuo@iokpp.de>
+Cc:     viro@zeniv.linux.org.uk, brauner@kernel.org,
+        akpm@linux-foundation.org, jack@suse.com, tytso@mit.edu,
+        adilger.kernel@dilger.ca, mark@fasheh.com, jlbec@evilplan.org,
+        joseph.qi@linux.alibaba.com, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ocfs2-devel@oss.oracle.com, beanhuo@micron.com
+Date:   Mon, 19 Jun 2023 12:42:02 +0200
+In-Reply-To: <20230619095604.uknf7uovnn2az2wu@quack3>
+References: <20230618213250.694110-1-beanhuo@iokpp.de>
+         <20230618213250.694110-3-beanhuo@iokpp.de>
+         <20230619095604.uknf7uovnn2az2wu@quack3>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87y1kipeui.wl-maz@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 11:23:17AM +0100, Marc Zyngier wrote:
-> On Sat, 17 Jun 2023 10:08:10 +0100,
-> Linus Walleij <linus.walleij@linaro.org> wrote:
-> > On Fri, Jun 16, 2023 at 3:53 PM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-
-(...)
-
-> > > -               /* Some drivers provide custom irqdomain ops */
-> > >                 gc->irq.domain = irq_domain_create_simple(fwnode,
-> > >                         gc->ngpio,
-> > >                         gc->irq.first,
-> > > -                       gc->irq.domain_ops ?: &gpiochip_domain_ops,
-> > > +                       &gpiochip_domain_ops,
-> > 
-> > We better run this by Marc Zyngier, and Thierry who introduced it.
-> > 
-> > But some grepping and looking seems to conclude you are righ!
-> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> 
-> No objection from my end. If this is unused, let's kill it.
-
-Grepping by two independent people and so far no complains from CI, I believe
-the patch tells truth.
-
-> Acked-by: Marc Zyngier <maz@kernel.org>
-
-Thank you!
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+T24gTW9uLCAyMDIzLTA2LTE5IGF0IDExOjU2ICswMjAwLCBKYW4gS2FyYSB3cm90ZToKPiBMb29r
+cyBnb29kIHRvIG1lIGJ1dCB5b3UnbGwgbmVlZCB0byByZW9yZGVyIHRoaXMgcGF0Y2ggYXQgdGhl
+IGVuZCBvZgo+IHRoZQo+IHBhdGNoIHNlcmllcyB0byBhdm9pZCBicmVha2luZyBjb21waWxhdGlv
+biBpbiB0aGUgbWlkZGxlIG9mIHRoZQo+IHNlcmllcy4KPiBPdGhlcndpc2UgZmVlbCBmcmVlIHRv
+IGFkZDoKPiAKPiBSZXZpZXdlZC1ieTogSmFuIEthcmEgPGphY2tAc3VzZS5jej4KPiAKPiDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoEhvbnphCnRoYW5rcyBKYW4sIEkgd2lsbCByZW9yZGVyIGl0IGluIHRoZSB2Mi4K
+CktpbmQgcmVnYXJkcywKQmVhbgo=
 
