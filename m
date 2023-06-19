@@ -2,105 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68C847358EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 15:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6B77358ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 15:49:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232075AbjFSNtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 09:49:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46224 "EHLO
+        id S232063AbjFSNta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 09:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231372AbjFSNti (ORCPT
+        with ESMTP id S229861AbjFSNt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 09:49:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B80E5C
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 06:48:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687182533;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=rbkpbKU4zNImW8Ox6PAE6hc6BtGlcpoEWuzNxPHb0d0=;
-        b=K0sprwQajuQTdgdU35KEMphiA3Zo6KKu//vetITinRSqdAnbVbiVlqc/0DrB7ZfL9Ej6lx
-        an4IDeAc0O3r/e2+gidR09aoniNqBl0GDBozrCXFU5f/JKH8xIp1s0RzhIJOcPFW5Pqfmf
-        /U60sKhVROfSBqAkScoitrwJGK/lkFw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-49-PWi8h3-WO46KN9wJmfBPug-1; Mon, 19 Jun 2023 09:48:50 -0400
-X-MC-Unique: PWi8h3-WO46KN9wJmfBPug-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3B1BD2A5956D;
-        Mon, 19 Jun 2023 13:48:50 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8850A1415102;
-        Mon, 19 Jun 2023 13:48:49 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] afs: Fix writeback
+        Mon, 19 Jun 2023 09:49:28 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80136BD
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 06:49:27 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b5251e5774so14247835ad.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 06:49:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687182567; x=1689774567;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=nfV234ipEV2m8xogB7Wi+sWBOiJ7SNMV0abfD7C/wG8=;
+        b=Ine5LS6c9y6jwgvPYxtPmp3P+gEHDDJp7KHx59PjhUElufW0f4UcBZlKvqAr5XwPbp
+         bJfOVz1sMMhPSh4Rzv0AmURNRc6WUw70Rxd/uQFxsilFi0rmyC7lEVHPgIcyM0ZpNHnd
+         1Y1ae7fYj506xRLLJ5Ufm+mc48XziVNB6C0hwZ3Ewa+2qht6XzRA1//Rd/BxMaJYO+4U
+         alelOTV8aAV/oGz9ADJLrI+K7TpffXNJsbDvw3FjB6+Yr9Tr4UVyZjCR3QSmhQpTG1di
+         43u/OS0ZP+9Hh25z4PQY5yHKju2EkENsCbEYCmKlfEue3H2ex+ThpX7iZqFha70LRy2F
+         7Rug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687182567; x=1689774567;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nfV234ipEV2m8xogB7Wi+sWBOiJ7SNMV0abfD7C/wG8=;
+        b=C/jv59Ws/EkHGz1PnpQEYFUaVv6beJ5JJpznzQnHDPW1XZhcdaSLEl06w2WAdu5cIJ
+         JxTaygd471ngNUAdp5b7bdgtDxByKgLOWgnJl8c7qhPzGsO1e++/qRceB9JOQS1C2OWv
+         e6tu93MPDdremcoVnvzsdS2m2UMYgUEtpDhk8U3CrVUYFwbzBNaKdR1zBhJhwTeCU7MS
+         pE+FBDluEsHl55VdkUoFvDwKM7y9VvNbWVeNr061yLQduqFqp37UEWB52IpgKgNxzhf/
+         fZUulEQ7SeQpHQdqxLZuFijj6mFkwTj9mDpcAPbCYcv4YR/l3o7BwZ3W+nKfNX/rpd59
+         /btA==
+X-Gm-Message-State: AC+VfDxeqppe75Ad078isyv+thx/kJJBqBsc/rap2+VGLs0DG6i/fY4j
+        uCqlfiFnSmL2iGF/4pxM/vw=
+X-Google-Smtp-Source: ACHHUZ6UkYGnyShtmIsx+2AzmKB5WwOodXTLV9pRDEnnIp+I/qSpQYiXcWw+0WYZsdbPX0yEYlgbVA==
+X-Received: by 2002:a17:903:22c4:b0:1b0:6e1:4b9f with SMTP id y4-20020a17090322c400b001b006e14b9fmr876665plg.43.1687182566817;
+        Mon, 19 Jun 2023 06:49:26 -0700 (PDT)
+Received: from zephyrusG14 ([103.251.210.211])
+        by smtp.gmail.com with ESMTPSA id w16-20020a170902a71000b001b061dcdb6bsm20501435plq.28.2023.06.19.06.49.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 06:49:26 -0700 (PDT)
+Date:   Mon, 19 Jun 2023 19:19:21 +0530
+From:   Yogesh Hegde <yogi.kernel@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Philipp Hortmann <philipp.g.hortmann@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dan.carpenter@linaro.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        skhan@linuxfoundation.org, ivan.orlov0322@gmail.com
+Subject: Re: [PATCH v3 0/4] Trivial code cleanup patches
+Message-ID: <ZJBc4bok1krfjqWf@zephyrusG14>
+References: <cover.1687092111.git.yogi.kernel@gmail.com>
+ <e80d385d-5515-ed42-e5dd-f9c977f7d4d1@gmail.com>
+ <2023061938-unbounded-unbent-e706@gregkh>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <923155.1687182529.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Mon, 19 Jun 2023 14:48:49 +0100
-Message-ID: <923156.1687182529@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2023061938-unbounded-unbent-e706@gregkh>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi Greg, 
+On Mon, Jun 19, 2023 at 02:57:56PM +0200, Greg Kroah-Hartman wrote:
+> On Sun, Jun 18, 2023 at 10:26:37PM +0200, Philipp Hortmann wrote:
+> > This patch series alone is fine. But when my patch series ([PATCH 0/9]
+> > staging: rtl8192e: Remove unsupported modes a and 5G) is applied before it
+> > fails as we change same lines. Will see what happens.
+> 
+> Yes, none of these apply :(
+> 
+> Yogesh, can you rebase this on my staging-next branch and resend?
+Sure, will rebase and resend. Did you mean staging-testing branch instead of 
+staging-next branch ? 
 
-Could you apply these fixes to AFS writeback code from Vishal?
+The patch series is rebased to commit "f99bbb4412ce axis-fifo: remove the 
+unnecessary dev_info()" which is the HEAD of staging-next.
+Latest changes by Philipp are merged into staging-testing branch. 
+Let me know if you still want to rebase it to staging-next branch. 
 
- (1) Release the acquired batch before returning if we got >=3D5 skips.
-
- (2) Retry a page we had to wait for rather than skipping over it after th=
-e
-     wait.
-
-Thanks,
-David
----
-The following changes since commit 45a3e24f65e90a047bef86f927ebdc4c710edaa=
-1:
-
-  Linux 6.4-rc7 (2023-06-18 14:06:27 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git tags=
-/afs-fixes-20230719
-
-for you to fetch changes up to 819da022dd007398d0c42ebcd8dbb1b681acea53:
-
-  afs: Fix waiting for writeback then skipping folio (2023-06-19 14:30:58 =
-+0100)
-
-----------------------------------------------------------------
-AFS fixes
-
-----------------------------------------------------------------
-Vishal Moola (Oracle) (2):
-      afs: Fix dangling folio ref counts in writeback
-      afs: Fix waiting for writeback then skipping folio
-
- fs/afs/write.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
+Regards 
+Yogesh 
