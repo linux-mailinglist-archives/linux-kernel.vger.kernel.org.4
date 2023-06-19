@@ -2,71 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5F67350E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:52:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77E737350F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbjFSJwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 05:52:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40586 "EHLO
+        id S231259AbjFSJzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 05:55:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbjFSJwe (ORCPT
+        with ESMTP id S231817AbjFSJzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 05:52:34 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6CD6F3;
-        Mon, 19 Jun 2023 02:52:32 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 838F8210E7;
-        Mon, 19 Jun 2023 09:52:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1687168351; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        Mon, 19 Jun 2023 05:55:11 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C566FA9;
+        Mon, 19 Jun 2023 02:55:09 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 680A91F38A;
+        Mon, 19 Jun 2023 09:55:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1687168508; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DxIJDuuYClXmgqYM4N1lEgYI6VAbXG1zZ254H2n4+qw=;
-        b=cfNES0tRgRt0IZv0nqHW23+HqATlwNpQKXeKBshiiYxpUWvkGCDRZ+Xv/27M4Oas5e7Am3
-        SGaDzkXL1/aWl/XjXWpwAP3yJUyAa0getdW6KZzTkY31VyFlS0WWeYjvFZdOrGyi4BJ6js
-        Kqe0majp2iBdXrYARIc++DT8QhLXOBE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1687168351;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DxIJDuuYClXmgqYM4N1lEgYI6VAbXG1zZ254H2n4+qw=;
-        b=7kExUx51RD0vHom4H8oJKaZpf32mIjedU88Fjzph254nHGLgby4ShOkk2dzXoePKpxwLt0
-        kRtpzEJMEkigAKDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=BqmUWIwDB6MccYaGRsbpmDX+MgysrUEAbIREmqAE7tY=;
+        b=kpNSnf7reRG026G37InlC9KBsz3JngC4BSohPCpE0Ofc8ydoyz5aDha+1hAEwNWXhASmzX
+        JV7x4Bu/lZZHnRlKAzxfLi3A7L5vetPl1KZBY3/H/ktCk4Lt0ZiiylFlNJrfUgRwyPoKfP
+        BcAm8JrzmAlSyJ7pzGIK0PKATklgyIU=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6EB02138E8;
-        Mon, 19 Jun 2023 09:52:31 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Esz8Gl8lkGQmNQAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 19 Jun 2023 09:52:31 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 059ABA0755; Mon, 19 Jun 2023 11:52:31 +0200 (CEST)
-Date:   Mon, 19 Jun 2023 11:52:30 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Bean Huo <beanhuo@iokpp.de>
-Cc:     viro@zeniv.linux.org.uk, brauner@kernel.org,
-        akpm@linux-foundation.org, jack@suse.cz, jack@suse.com,
-        tytso@mit.edu, adilger.kernel@dilger.ca, mark@fasheh.com,
-        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ocfs2-devel@oss.oracle.com,
-        beanhuo@micron.com
-Subject: Re: [PATCH v1 1/5] fs/buffer: clean up block_commit_write
-Message-ID: <20230619095230.undchckir57stooe@quack3>
-References: <20230618213250.694110-1-beanhuo@iokpp.de>
- <20230618213250.694110-2-beanhuo@iokpp.de>
+        by relay2.suse.de (Postfix) with ESMTPS id A3CCF2C141;
+        Mon, 19 Jun 2023 09:55:06 +0000 (UTC)
+Date:   Mon, 19 Jun 2023 11:55:06 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        sparclinux@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v2 4/6] watchdog/hardlockup: Make HAVE_NMI_WATCHDOG
+ sparc64-specific
+Message-ID: <ZJAl-rznBaZubY3-@alley>
+References: <20230616150618.6073-1-pmladek@suse.com>
+ <20230616150618.6073-5-pmladek@suse.com>
+ <CAD=FV=U=ox4ApMbDL7v=ivNF6x=UyG=dd4MU_Dt0rppNCEwCpw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230618213250.694110-2-beanhuo@iokpp.de>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAD=FV=U=ox4ApMbDL7v=ivNF6x=UyG=dd4MU_Dt0rppNCEwCpw@mail.gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -77,83 +65,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun 18-06-23 23:32:46, Bean Huo wrote:
-> From: Bean Huo <beanhuo@micron.com>
+On Fri 2023-06-16 09:48:06, Doug Anderson wrote:
+> Hi,
 > 
-> Originally inode is used to get blksize, after commit 45bce8f3e343
-> ("fs/buffer.c: make block-size be per-page and protected by the page lock"),
-> __block_commit_write no longer uses this parameter inode, this patch is to
-> remove inode and clean up block_commit_write.
+> On Fri, Jun 16, 2023 at 8:07 AM Petr Mladek <pmladek@suse.com> wrote:
+> >
+> > There are several hardlockup detector implementations and several Kconfig
+> > values which allow selection and build of the preferred one.
+[...]
+> > Note that HARDLOCKUP_DETECTOR_PREFER_BUDDY, HARDLOCKUP_DETECTOR_PERF,
+> > and HARDLOCKUP_DETECTOR_BUDDY may conflict only with
+> > HAVE_HARDLOCKUP_DETECTOR_ARCH. They depend on HARDLOCKUP_DETECTOR
+> > and it is not longer enabled when HAVE_NMI_WATCHDOG is set.
+> >
+> > Signed-off-by: Petr Mladek <pmladek@suse.com>
+> >
+> > watchdog/sparc64: Rename HAVE_NMI_WATCHDOG to HAVE_HARDLOCKUP_WATCHDOG_SPARC64
+[...]
+> > Also the variable is set only on sparc64. Move the definition
+> > from arch/Kconfig to arch/sparc/Kconfig.debug.
+> >
+> > Signed-off-by: Petr Mladek <pmladek@suse.com>
 > 
-> Signed-off-by: Bean Huo <beanhuo@micron.com>
+> I think you goofed up when squashing the patches. You've now got a
+> second patch subject after your first Signed-off-by and then a second
+> Signed-off-by... I assume everything after the first Signed-off-by
+> should be dropped?
 
-Nice! Feel free to add:
+Ah, you are right. It seems that Andrew has fixed this when taking
+the patch.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
-> ---
->  fs/buffer.c | 15 +++------------
->  1 file changed, 3 insertions(+), 12 deletions(-)
-> 
-> diff --git a/fs/buffer.c b/fs/buffer.c
-> index a7fc561758b1..b88bb7ec38be 100644
-> --- a/fs/buffer.c
-> +++ b/fs/buffer.c
-> @@ -2116,8 +2116,7 @@ int __block_write_begin(struct page *page, loff_t pos, unsigned len,
->  }
->  EXPORT_SYMBOL(__block_write_begin);
->  
-> -static int __block_commit_write(struct inode *inode, struct page *page,
-> -		unsigned from, unsigned to)
-> +int block_commit_write(struct page *page, unsigned int from, unsigned int to)
->  {
->  	unsigned block_start, block_end;
->  	int partial = 0;
-> @@ -2154,6 +2153,7 @@ static int __block_commit_write(struct inode *inode, struct page *page,
->  		SetPageUptodate(page);
->  	return 0;
->  }
-> +EXPORT_SYMBOL(block_commit_write);
->  
->  /*
->   * block_write_begin takes care of the basic task of block allocation and
-> @@ -2188,7 +2188,6 @@ int block_write_end(struct file *file, struct address_space *mapping,
->  			loff_t pos, unsigned len, unsigned copied,
->  			struct page *page, void *fsdata)
->  {
-> -	struct inode *inode = mapping->host;
->  	unsigned start;
->  
->  	start = pos & (PAGE_SIZE - 1);
-> @@ -2214,7 +2213,7 @@ int block_write_end(struct file *file, struct address_space *mapping,
->  	flush_dcache_page(page);
->  
->  	/* This could be a short (even 0-length) commit */
-> -	__block_commit_write(inode, page, start, start+copied);
-> +	block_commit_write(page, start, start+copied);
->  
->  	return copied;
->  }
-> @@ -2535,14 +2534,6 @@ int cont_write_begin(struct file *file, struct address_space *mapping,
->  }
->  EXPORT_SYMBOL(cont_write_begin);
->  
-> -int block_commit_write(struct page *page, unsigned from, unsigned to)
-> -{
-> -	struct inode *inode = page->mapping->host;
-> -	__block_commit_write(inode,page,from,to);
-> -	return 0;
-> -}
-> -EXPORT_SYMBOL(block_commit_write);
-> -
->  /*
->   * block_page_mkwrite() is not allowed to change the file size as it gets
->   * called from a page fault handler when a page is first dirtied. Hence we must
-> -- 
-> 2.34.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Thank you both,
+Petr
