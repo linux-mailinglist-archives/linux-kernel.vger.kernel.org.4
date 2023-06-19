@@ -2,100 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A82734BF4
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 08:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C12734BF7
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 08:56:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbjFSG4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 02:56:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51512 "EHLO
+        id S230108AbjFSG4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 02:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbjFSG42 (ORCPT
+        with ESMTP id S230095AbjFSG4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 02:56:28 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22AF913D
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 23:56:27 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b46773e427so24042911fa.3
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 23:56:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687157785; x=1689749785;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qVQvPmZfMjyE4EriF44N+ZqOy+pXJULp7jhybIMTZRg=;
-        b=Nz7oMq/2JerE/qSJ0p1lmM0Tc6F/T4n0tY/5puv07oURkxjNaE3hnag7QPHhBQjjtu
-         pVxH+uT/izoeyx1d4ygzWZPMkHcF3kXs3BSobsB0Z/iATiWJ9slFaccqjZs+5nVaRg9l
-         xaKTFpVuIW6y12JVg0ZeDuO+vLXn8SIDk8GUMppBI4UXBKFzuGKyX1xVaYDLDQjWsubT
-         550gEcY9B6WXteuUHKUJk3DU3p4BUHhK3cLpmq4h93naDBxH8tvUzPG3dSwkmteTcnxE
-         pIXu6PX7TznbjL37tyhAa4kt9fasvG4OKhMLYeiqIOMBjWBxam5eGAM8trzdor1oITs/
-         yIEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687157785; x=1689749785;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qVQvPmZfMjyE4EriF44N+ZqOy+pXJULp7jhybIMTZRg=;
-        b=JBD9tgsWht5WlezXOYGHGrgSqf6fd4RCv7YKCtNWAIxB2b8336WNUydbjQ8I5wVHjc
-         UCXl7eHtKNAzisAo0kHsjLWGgROgDXGCWqkGQzsDaBjAezQjDMNYvp96O8HVLCn8G85F
-         E7+vPLoPeOm7QcpbUGrREES/fwU1dzJtVQPWs+sXLPL2UYo7ogIz3mLKT61iEtjG/Ods
-         SsolCMJwwWgpqpAIdbyWT55Tf+E7m1cWaOpXe6rnfLn9+ZvLdWJcbTBy6Di5BpPLn3Sc
-         LXLUiWKiKLPHlQRpcMbN1qEFfUizyvQ6pTySr9OOZA1Kwq09CUj83jfxUD2dFdNNHqP2
-         E6RA==
-X-Gm-Message-State: AC+VfDzYLGMQiaFMIJooSX7tF2yYuz3kxoNsdqXd7gems1j3YyzFSnj4
-        0YnYAtJ5MaTQEZiGrpxJVi+aPQ==
-X-Google-Smtp-Source: ACHHUZ73QHeatxNWNXWGjtENaICZG2mDwLhCI1onbdo3FjYTjn3nlSLNYVQvlsMOir4Fl3iZo9lkMQ==
-X-Received: by 2002:a2e:9a8f:0:b0:2b4:470e:8447 with SMTP id p15-20020a2e9a8f000000b002b4470e8447mr5553201lji.34.1687157785301;
-        Sun, 18 Jun 2023 23:56:25 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id o8-20020aa7d3c8000000b0051a575c76e6sm1172846edr.43.2023.06.18.23.56.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Jun 2023 23:56:24 -0700 (PDT)
-Message-ID: <2a9e503b-7a5b-3b1e-a912-5d54a23c1ca1@linaro.org>
-Date:   Mon, 19 Jun 2023 08:56:22 +0200
+        Mon, 19 Jun 2023 02:56:36 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8AC013D;
+        Sun, 18 Jun 2023 23:56:34 -0700 (PDT)
+X-QQ-mid: bizesmtp69t1687157784tkcpo91n
+Received: from linux-lab-host.localdomain ( [116.30.126.60])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 19 Jun 2023 14:56:23 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: 5q30pvLz2ifOL7+eKkGV+l+xNjgAcXo7/um90KtQZbwA/x9c6K+kVT3CD9yTU
+        3Ob2lb03K+MuRZrzURo0i1xFpf1vU1LTevUHfFqRpCwWRGD0eIuTYiXqF/P3Ks3VQdyMgtJ
+        c2pjERcLylH93SwqS70SlZ6Ab+BArIU2bblM2vTaW8mRG2mnPDGk+8T75SMT2mPK02g4aJr
+        y7B9MuJaMsWw6q1mgOJl9sV0I+DySYEFkkkazGClZb6piKGGkHKuJRb36h76tOSq1TKbInd
+        CJqO7AkYKMkbaW5cPKe4y76m4ZhAQuTiQc6yTX23eKND+7aFAQMWABXvEf2KA7ZoF9dKewk
+        DSn942ARQjxWtCABXREZdc1QQXI0f52WOYL6k4Ex2Y5IQC4RRc7+wtlpylCCHxwVwe3HLti
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 14674773114149374089
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, thomas@t-8ch.de
+Subject: [PATCH v2 1/3] selftests/nolibc: add a standalone test report macro
+Date:   Mon, 19 Jun 2023 14:56:22 +0800
+Message-Id: <a9ffadbde0a0f529301acede3292b11680295b64.1687156560.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1687156559.git.falcon@tinylab.org>
+References: <cover.1687156559.git.falcon@tinylab.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v5 1/2] dt-bindings: arm: aspeed: add Inventec
- starscream-bmc
-Content-Language: en-US
-To:     PJ Chen <chen.pj@inventec.com>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org
-Cc:     ye.vic@inventec.com, Huang.Alang@inventec.com
-References: <20230619064249.3623-1-chen.pj@inventec.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230619064249.3623-1-chen.pj@inventec.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/06/2023 08:42, PJ Chen wrote:
-> From: Chen PJ <Chen.pj@inventec.com>
-> 
-> Document the new compatibles used on Inventec starscream-bmc
-> 
-> Signed-off-by: Chen PJ <Chen.pj@inventec.com>
+The run-user, run and rerun targets use the same test report script,
+let's add a standalone test report macro for them.
 
-https://lore.kernel.org/all/3106c4a1-ce5b-a9c4-5cf4-6adead7fce80@linaro.org/
+This shrinks code lines and simplify the future maintainability.
 
-https://lore.kernel.org/all/2e06e7db-64f9-51f8-adf1-b240f30a2608@linaro.org/
+Suggested-by: Willy Tarreau <w@1wt.eu>
+Link: https://lore.kernel.org/lkml/ZIB792FtG6ibOudp@1wt.eu/
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/testing/selftests/nolibc/Makefile | 19 +++++++------------
+ 1 file changed, 7 insertions(+), 12 deletions(-)
 
-What's unclear here? You did not care to respond to that (the second
-part of that message).
-
-Best regards,
-Krzysztof
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index 1b7b3c82f8ad..262a9f21d1b4 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -84,6 +84,10 @@ CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
+ 		$(CFLAGS_$(ARCH)) $(CFLAGS_STACKPROTECTOR)
+ LDFLAGS := -s
+ 
++REPORT  ?= awk '/\[OK\][\r]*$$/{p++} /\[FAIL\][\r]*$$/{f++} /\[SKIPPED\][\r]*$$/{s++} \
++		END{ printf("%d test(s) passed, %d skipped, %d failed.", p, s, f); \
++		if (s+f > 0) printf(" See all results in %s\n", ARGV[1]); else print; }'
++
+ help:
+ 	@echo "Supported targets under selftests/nolibc:"
+ 	@echo "  all          call the \"run\" target below"
+@@ -131,10 +135,7 @@ libc-test: nolibc-test.c
+ # qemu user-land test
+ run-user: nolibc-test
+ 	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(CURDIR)/run.out" || :
+-	$(Q)awk '/\[OK\][\r]*$$/{p++} /\[FAIL\][\r]*$$/{f++} /\[SKIPPED\][\r]*$$/{s++} \
+-	         END{ printf("%d test(s) passed, %d skipped, %d failed.", p, s, f); \
+-	         if (s+f > 0) printf(" See all results in %s\n", ARGV[1]); else print; }' \
+-	         $(CURDIR)/run.out
++	$(Q)$(REPORT) $(CURDIR)/run.out
+ 
+ initramfs: nolibc-test
+ 	$(QUIET_MKDIR)mkdir -p initramfs
+@@ -150,18 +151,12 @@ kernel: initramfs
+ # run the tests after building the kernel
+ run: kernel
+ 	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
+-	$(Q)awk '/\[OK\][\r]*$$/{p++} /\[FAIL\][\r]*$$/{f++} /\[SKIPPED\][\r]*$$/{s++} \
+-	         END{ printf("%d test(s) passed, %d skipped, %d failed.", p, s, f); \
+-	         if (s+f > 0) printf(" See all results in %s\n", ARGV[1]); else print; }' \
+-	         $(CURDIR)/run.out
++	$(Q)$(REPORT) $(CURDIR)/run.out
+ 
+ # re-run the tests from an existing kernel
+ rerun:
+ 	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
+-	$(Q)awk '/\[OK\][\r]*$$/{p++} /\[FAIL\][\r]*$$/{f++} /\[SKIPPED\][\r]*$$/{s++} \
+-	         END{ printf("%d test(s) passed, %d skipped, %d failed.", p, s, f); \
+-	         if (s+f > 0) printf(" See all results in %s\n", ARGV[1]); else print; }' \
+-	         $(CURDIR)/run.out
++	$(Q)$(REPORT) $(CURDIR)/run.out
+ 
+ clean:
+ 	$(call QUIET_CLEAN, sysroot)
+-- 
+2.25.1
 
