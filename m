@@ -2,113 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43D3E7349F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 04:15:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A889734A01
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 04:17:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbjFSCPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 22:15:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45374 "EHLO
+        id S229675AbjFSCRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 22:17:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjFSCPb (ORCPT
+        with ESMTP id S229635AbjFSCRa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 22:15:31 -0400
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01B8E47;
-        Sun, 18 Jun 2023 19:15:30 -0700 (PDT)
-Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-77e24ace5a8so146272039f.0;
-        Sun, 18 Jun 2023 19:15:30 -0700 (PDT)
+        Sun, 18 Jun 2023 22:17:30 -0400
+Received: from mail-yw1-x1144.google.com (mail-yw1-x1144.google.com [IPv6:2607:f8b0:4864:20::1144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5201AA;
+        Sun, 18 Jun 2023 19:17:29 -0700 (PDT)
+Received: by mail-yw1-x1144.google.com with SMTP id 00721157ae682-570282233ceso24172687b3.1;
+        Sun, 18 Jun 2023 19:17:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687141048; x=1689733048;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ttO0u+Z6WQYWJ1cn7SJJo6s1imUQP7dQUUPthXcpsAs=;
+        b=BczPpn1kwG8lBWrpS2jzFxsp3nY4roQKzMUvAL6qmKJhkjIbk6enoHdy2IsbasY4sw
+         XQ/VLEJlXU6xnHbEuUUIT1uExtB4LpeTfmH2bAkB5oUaenRwqdIeRRHW00e2Gr68j3Ap
+         Jsks8DSrEx/GgLrxN8eJroes4yk3dfHiYdpYB9JgvZf8PLzP1DYo+v5NmOXBnAx8bSUw
+         gN7MewUzeb//mbbJzmxZl8Wgw8XD+b9nD3m3Y9dy96Xb1Q9f/9FuaPebVH+Ui00ZEq/n
+         k3yV+BNmJiKGVg6DgJFkrG7S6rhK1WqrdH5M+RVWzlBcRuHRocOMFk2g2erfckKPKiSc
+         mTLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687140930; x=1689732930;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=32Swg/UjoS3cjV/nFi0Bc3Ya5tQYAIpuii1MxYpla+0=;
-        b=DSNq1iY/q3vXTnQFmvlLkw+K6+cfxRoVTbzbHJ6w+eqsC5Er6QJNuRRBVulcYyhGMw
-         yJBnsuFYp+2NHRE9+1k2qqbBCMfnrDMt7cK2fLcrqSJqwM4Kntp1fxdFdSuvLZT4sz2X
-         bBMfop6LC04d+59Kx3STEzhAey5Aj/TO/sXl7snNrc1LB/LZVISLha90SHBunBXc3rjJ
-         Id2RTtho7sWkJXv9HLBL+ulSAkqEbTNXzEqejCDZKIDUbNyMAiYKnmDDYpfU3ExRnMjx
-         mv5O8VrWbJ7/+qaiUE/tvbenv9ynTgt5vgN5jJNFn+c+9846Pr/1t4RSGor+ocYs2K6U
-         wotw==
-X-Gm-Message-State: AC+VfDzL+PK8W7mazzzEAyaAdtzZwxHLo12ErfYD7/YFC7T1IU31CEnk
-        QhvqTm3HZll6YwIRUeANQA==
-X-Google-Smtp-Source: ACHHUZ5TCWb4WJX/SaVFMO5AYbmrF1gAF1OID/i5CY95XSzj4oglTH4qvR0Wg6hTT1ROypX5YAMAiQ==
-X-Received: by 2002:a92:90f:0:b0:33d:85c3:93ee with SMTP id y15-20020a92090f000000b0033d85c393eemr7373943ilg.17.1687140930209;
-        Sun, 18 Jun 2023 19:15:30 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id h1-20020a92c081000000b003421d25e5a2sm1591707ile.50.2023.06.18.19.15.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Jun 2023 19:15:29 -0700 (PDT)
-Received: (nullmailer pid 2830 invoked by uid 1000);
-        Mon, 19 Jun 2023 02:15:27 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20221208; t=1687141048; x=1689733048;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ttO0u+Z6WQYWJ1cn7SJJo6s1imUQP7dQUUPthXcpsAs=;
+        b=Z2WXShPVWabqimGgUbPw8mGp6ozikvF/DxfFPZoWLUQri6g1N+U29NFNYRyRYUROzt
+         NM9RWIALOiJyIe4f3HXUzGDrp4k3p4Vzle060B+fxELckMjKPA+vGDkVHERSYtsEfapN
+         qy7/PDKgG72P4Am1UHZaoC8qR9EQf8na5JUvgQoNBX9Iuonmtdxv2NXlpkxks0qHDlXZ
+         P17OJx+0x9he5wktWVizsFhE4gR+yB/LpYTKBydh2phxobSQ+7yyDg61VGVFyiAaI2NC
+         KT7g0yru8eOoMg9f633Kw4IROwiZzsI6lGEDnxpalfr1dHKKttWV6geFXvEKQO0vcdsG
+         Y36w==
+X-Gm-Message-State: AC+VfDwAgrqsW+tD4UJO35q7ewg4wzC+AsHjlVtT7G4ZghzzKDqIq1Bt
+        SAPNJ3K7NSoPnicantCHXEM66liijspZQGGVzVU=
+X-Google-Smtp-Source: ACHHUZ7rZNxAznSbMOxw5yyxIaX1bWX3kTvQT3ojDNAi9nivDJwLHO5ELWr47EFg/X6cjESwcY86Tm59IbRKV+BXnaE=
+X-Received: by 2002:a25:2593:0:b0:bc6:a82a:a24d with SMTP id
+ l141-20020a252593000000b00bc6a82aa24dmr3377053ybl.53.1687141048363; Sun, 18
+ Jun 2023 19:17:28 -0700 (PDT)
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Furkan Kardame <f.kardame@manjaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        arnd@arndb.de, linux-kernel@vger.kernel.org, conor+dt@kernel.org,
-        dsterba@suse.com, heiko@sntech.de,
-        linux-rockchip@lists.infradead.org, deller@gmx.de,
-        devicetree@vger.kernel.org, broonie@kernel.org
-In-Reply-To: <20230617135315.25441-2-f.kardame@manjaro.org>
-References: <20230617135315.25441-1-f.kardame@manjaro.org>
- <20230617135315.25441-2-f.kardame@manjaro.org>
-Message-Id: <168714092636.2784.10614022790347799844.robh@kernel.org>
-Subject: Re: [PATCHv2 1/2] dt-bindings: arm: rockchip: Add Firefly Station
- P2
-Date:   Sun, 18 Jun 2023 20:15:27 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230613025226.3167956-1-imagedong@tencent.com>
+ <20230613025226.3167956-2-imagedong@tencent.com> <12ff965a-12d7-e7f4-a577-5e645d4ff6c0@meta.com>
+In-Reply-To: <12ff965a-12d7-e7f4-a577-5e645d4ff6c0@meta.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Mon, 19 Jun 2023 10:17:17 +0800
+Message-ID: <CADxym3ZSvctkAu7gjeWFh1aJtTt89smoBPsPQ1xXZ2V8isygZw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 1/3] bpf, x86: clean garbage values when store
+ args from regs into stack
+To:     Yonghong Song <yhs@meta.com>
+Cc:     alexei.starovoitov@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        benbjiang@tencent.com, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jun 19, 2023 at 6:52=E2=80=AFAM Yonghong Song <yhs@meta.com> wrote:
+>
+>
+>
+> On 6/12/23 7:52 PM, menglong8.dong@gmail.com wrote:
+> > From: Menglong Dong <imagedong@tencent.com>
+> >
+> > There are garbage values in upper bytes when we store the arguments
+> > into stack in save_regs() if the size of the argument less then 8.
+> >
+> > As we already reserve 8 byte for the arguments in regs and stack,
+> > it is ok to store/restore the regs in BPF_DW size. Then, the garbage
+> > values in upper bytes will be cleaned.
+>
+> Please make it clear that there are no bugs in the existing code
+> since for each argument, a type case will happen like
+>      (parameter_type)ctx[stack_slot]
+> where ctx[] is an u64 type array. The compiler will generate
+> correct code to do type casting so garbage value will not impact
+> the final result. But indeed, uniformly
+> do save/restore with BPF_DW size can simplify code.
+>
 
-On Sat, 17 Jun 2023 16:53:14 +0300, Furkan Kardame wrote:
-> Station P2 is a single board computer by firefly based
-> on rk3568 soc
-> 
-> Signed-off-by: Furkan Kardame <f.kardame@manjaro.org>
-> ---
->  Documentation/devicetree/bindings/arm/rockchip.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
+Yeah, this is to prepare for the next commit and no bugs
+in the existing code. I'll make it clear in the commit log in
+the next version.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Thanks!
+Menglong Dong
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/arm/rockchip.yaml:189:1: [error] syntax error: found character '\t' that cannot start any token (syntax)
-
-dtschema/dtc warnings/errors:
-make[1]: *** Deleting file 'Documentation/devicetree/bindings/arm/rockchip.example.dts'
-Documentation/devicetree/bindings/arm/rockchip.yaml:189:1: found a tab character that violates indentation
-make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/arm/rockchip.example.dts] Error 1
-make[1]: *** Waiting for unfinished jobs....
-./Documentation/devicetree/bindings/arm/rockchip.yaml:189:1: found a tab character that violates indentation
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/arm/rockchip.yaml: ignoring, error parsing file
-make: *** [Makefile:1512: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230617135315.25441-2-f.kardame@manjaro.org
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+> >
+> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
+>
+> Acked-by: Yonghong Song <yhs@fb.com>
+>
+> > ---
+> >   arch/x86/net/bpf_jit_comp.c | 35 ++++++-----------------------------
+> >   1 file changed, 6 insertions(+), 29 deletions(-)
+> >
+> > diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> > index 1056bbf55b17..a407fbbffecd 100644
+> > --- a/arch/x86/net/bpf_jit_comp.c
+> > +++ b/arch/x86/net/bpf_jit_comp.c
+> > @@ -1860,57 +1860,34 @@ st:                   if (is_imm8(insn->off))
+> >   static void save_regs(const struct btf_func_model *m, u8 **prog, int =
+nr_regs,
+> >                     int stack_size)
+> >   {
+> > -     int i, j, arg_size;
+> > -     bool next_same_struct =3D false;
+> > +     int i;
+> >
+> >       /* Store function arguments to stack.
+> >        * For a function that accepts two pointers the sequence will be:
+> >        * mov QWORD PTR [rbp-0x10],rdi
+> >        * mov QWORD PTR [rbp-0x8],rsi
+> >        */
+> > -     for (i =3D 0, j =3D 0; i < min(nr_regs, 6); i++) {
+> > -             /* The arg_size is at most 16 bytes, enforced by the veri=
+fier. */
+> > -             arg_size =3D m->arg_size[j];
+> > -             if (arg_size > 8) {
+> > -                     arg_size =3D 8;
+> > -                     next_same_struct =3D !next_same_struct;
+> > -             }
+> > -
+> > -             emit_stx(prog, bytes_to_bpf_size(arg_size),
+> > -                      BPF_REG_FP,
+> > +     for (i =3D 0; i < min(nr_regs, 6); i++)
+> > +             emit_stx(prog, BPF_DW, BPF_REG_FP,
+> >                        i =3D=3D 5 ? X86_REG_R9 : BPF_REG_1 + i,
+> >                        -(stack_size - i * 8));
+> > -
+> > -             j =3D next_same_struct ? j : j + 1;
+> > -     }
+> >   }
+> >
+> [...]
