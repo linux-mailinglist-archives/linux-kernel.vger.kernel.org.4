@@ -2,159 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EECBD735694
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 14:20:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8EF3735696
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 14:22:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbjFSMUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 08:20:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44020 "EHLO
+        id S229899AbjFSMWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 08:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbjFSMUQ (ORCPT
+        with ESMTP id S229569AbjFSMWW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 08:20:16 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7B3E65
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 05:20:15 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-988b204ce5fso118870166b.3
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 05:20:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687177214; x=1689769214;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=r8IkgjCbYZ6ybcsI1GkHhRXG+M118R7BE1wtTAsnJr8=;
-        b=ClBnqG9Gjo9yzp03JC2sB9Tl5OykGEG0MCJfr1gRTiPcMlb2sUa63W1A/h/3FcWLZ6
-         Oy+I69ZWHgkwChDAddgOpSJnOFM9+abTF6e1r5FBj+O42kaBoGYG0U0mC7k920HYfGIF
-         FAQh/w9ifmvIm7waigd8Lj1Y4DeFo1UeUkH8y2Lgf0RZYTSMy9fabS9jneySUICduSAY
-         wMB/lz9ssGuuLUzSwZuB8bSDc+sZMiRDCHVvS3SSpsbJYgUQkDKp5xuBM7QUy0586W4B
-         sy3v8JwtknzXVgYmQgfnckuUpNmuLUpsd+2aCcn03JLheYs9kqu0H6wjdMY2qpPD1A24
-         +J1w==
+        Mon, 19 Jun 2023 08:22:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618A41AB
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 05:21:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687177298;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pIB4Pfs9fbpMTO7m6AmZ/9HnKP7cCuS9gi+tv9YLZxo=;
+        b=MZotyI8M6CrPjy5CdJ04kNOM/si4AIwvfYFS3lLHPDlcCjXC1P6/fnKCuM/OA1XxevUEdQ
+        rQ2jkhAkt8LFzPVnBTUrE4MEsFUFMenx58wYBTJhCGaHz+Hlk7uf4Q8reFaKsHQ+0Ze+U2
+        PqWORe0rO9L7ANykLUh4llm8ltPJpFA=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-379-mRqmAPBKN_GNkGTolNJlEQ-1; Mon, 19 Jun 2023 08:21:36 -0400
+X-MC-Unique: mRqmAPBKN_GNkGTolNJlEQ-1
+Received: by mail-lf1-f72.google.com with SMTP id 2adb3069b0e04-4edc7ab63ccso2146162e87.3
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 05:21:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687177214; x=1689769214;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r8IkgjCbYZ6ybcsI1GkHhRXG+M118R7BE1wtTAsnJr8=;
-        b=WncvYF5nu29pRgmO+OnYTNXuUWtvWDr0fhnb2JOgj1rOwsTGYdJlOyXjBo1BSGKqeK
-         sOI+QqDEEZWwEZ1a/MVbms97yakAS1YVyqRiln4o0Fpoy/0ChnVQvbOXyF2bYxgtnDRq
-         f9yNBZ+4WvqPQxC5U7E8qXsa26hldJANvZ8fLxj5s+lh42i/1UaAkV8NXoA6hE0YKQbc
-         XqdlVnoOD+5/IOiJsgN/dp8a9DFOXaDaynUI71hQHNHaz5sajgDNBaojQbxhLgzWlir0
-         fXrEBvafWZepQHF5ThfjsaIS+cEufUwi/h9AT2csbR7NvGTVEIWnLH95Kk6sdrrJf9y0
-         BewA==
-X-Gm-Message-State: AC+VfDwoyg3usz48/SNIpzxhy9pZm7fu1w89kM7t6JSaB/WTMOBIINL8
-        uj3zf7ZjmjKcE6wPs8SrwED4QA==
-X-Google-Smtp-Source: ACHHUZ47zEpJ6DeZD7uVxLdbu7k9xsdXjPX7y1tBu5kP3TPtRM2Jk60R/mDNGae7578PNVPH21KORg==
-X-Received: by 2002:a17:907:7d86:b0:978:8790:9103 with SMTP id oz6-20020a1709077d8600b0097887909103mr9499787ejc.70.1687177214016;
-        Mon, 19 Jun 2023 05:20:14 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id c21-20020a170906341500b00985bdb7dd5fsm4805480ejb.201.2023.06.19.05.20.12
+        d=1e100.net; s=20221208; t=1687177295; x=1689769295;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pIB4Pfs9fbpMTO7m6AmZ/9HnKP7cCuS9gi+tv9YLZxo=;
+        b=LLw8S28l4llZEEZBmVAP0YAMtnwnIx6p4xKENETK+NorcrM/krfPv2A1xQUEmNjJzP
+         Y9xKG6SL4P/5zbx8qB36Z05DufUYarTdWWvWUyLTf+KEldGXLTkb4YgJpX5KF09a5Rdm
+         YsUmZhuTKlfsP7vZMcGlvadzBjHRvtcEAbuCC/qUe4lTVfQnjAfwvxYyaADchhF6Abq3
+         XkU4z+N37bw2FujFMeCUj1rvYcE+0UQq3W6SmhxIRA4HlnvQpLQY+jFWY4HrKeZEB43X
+         G5VvBJmUvszKMj04bSUH8THKkeSEiljzB9venhxt4Pcc8zHzc15GpM5zQIkQ9bc0Dd0+
+         su8g==
+X-Gm-Message-State: AC+VfDx1w2ln+NCYTDqPnEjPR1e5vNHJ/QhQGrqO2L9J1rN3Du6jDpgM
+        2MEI0esnNOl5CGjTujH9uxd6D1oFYh82AspiES95JaU7Rgmy6inBjftcjOI3urf/uRxAhldunAT
+        IULe7jUstpnMl8UbaQlh8msGB
+X-Received: by 2002:a05:6512:3286:b0:4f8:7127:9b9d with SMTP id p6-20020a056512328600b004f871279b9dmr1478950lfe.37.1687177295326;
+        Mon, 19 Jun 2023 05:21:35 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6Ja7N7ynoEdw3gVBRjtgeD5bqeanvdmHPH1S5c1ZXM6MVwIxYJ0TZf0dca8krz+8Q4ueDjKA==
+X-Received: by 2002:a05:6512:3286:b0:4f8:7127:9b9d with SMTP id p6-20020a056512328600b004f871279b9dmr1478921lfe.37.1687177294844;
+        Mon, 19 Jun 2023 05:21:34 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c72f:7100:cede:6433:a77b:41e9? (p200300cbc72f7100cede6433a77b41e9.dip0.t-ipconnect.de. [2003:cb:c72f:7100:cede:6433:a77b:41e9])
+        by smtp.gmail.com with ESMTPSA id m9-20020a056000008900b0030ae499da59sm31424013wrx.111.2023.06.19.05.21.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 05:20:13 -0700 (PDT)
-Message-ID: <7b7694da-8b40-d76a-adca-4cf9aa206ff4@linaro.org>
-Date:   Mon, 19 Jun 2023 14:20:11 +0200
+        Mon, 19 Jun 2023 05:21:34 -0700 (PDT)
+Message-ID: <723dd9da-ebd5-edb0-e9e5-2d8c14aaffe2@redhat.com>
+Date:   Mon, 19 Jun 2023 14:21:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v3 3/3] riscv: dts: starfive: Add QSPI controller node for
- StarFive JH7110 SoC
+Subject: Re: [PATCH v11 04/20] x86/cpu: Detect TDX partial write machine check
+ erratum
 Content-Language: en-US
-To:     William Qiu <william.qiu@starfivetech.com>,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Ziv Xu <ziv.xu@starfivetech.com>
-References: <20230619083517.415597-1-william.qiu@starfivetech.com>
- <20230619083517.415597-4-william.qiu@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230619083517.415597-4-william.qiu@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, dave.hansen@intel.com,
+        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
+        peterz@infradead.org, tglx@linutronix.de, seanjc@google.com,
+        pbonzini@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, ying.huang@intel.com,
+        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
+        sagis@google.com, imammedo@redhat.com
+References: <cover.1685887183.git.kai.huang@intel.com>
+ <86f2a8814240f4bbe850f6a09fc9d0b934979d1b.1685887183.git.kai.huang@intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <86f2a8814240f4bbe850f6a09fc9d0b934979d1b.1685887183.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/06/2023 10:35, William Qiu wrote:
-> Add the quad spi controller node for the StarFive JH7110 SoC.
+On 04.06.23 16:27, Kai Huang wrote:
+> TDX memory has integrity and confidentiality protections.  Violations of
+> this integrity protection are supposed to only affect TDX operations and
+> are never supposed to affect the host kernel itself.  In other words,
+> the host kernel should never, itself, see machine checks induced by the
+> TDX integrity hardware.
 > 
-> Co-developed-by: Ziv Xu <ziv.xu@starfivetech.com>
-> Signed-off-by: Ziv Xu <ziv.xu@starfivetech.com>
-> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
-> Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
+> Alas, the first few generations of TDX hardware have an erratum.  A
+> "partial" write to a TDX private memory cacheline will silently "poison"
+> the line.  Subsequent reads will consume the poison and generate a
+> machine check.  According to the TDX hardware spec, neither of these
+> things should have happened.
+> 
+> Virtually all kernel memory accesses operations happen in full
+> cachelines.  In practice, writing a "byte" of memory usually reads a 64
+> byte cacheline of memory, modifies it, then writes the whole line back.
+> Those operations do not trigger this problem.
+
+So, ordinary writes to TD private memory are not a problem? I thought 
+one motivation for the unmapped-guest-memory discussion was to prevent 
+host (userspace) writes to such memory because it would trigger a MC and 
+eventually crash the host.
+
+I recall that this would happen easily (not just in some weird "partial" 
+case and that the spec would allow for it)
+
+1) Does that, in general, not happen anymore (was the hardware fixed?)?
+
+2) Will new hardware prevent/"fix" that completely (was the spec updated?)?
+
+
+... or was my understanding wrong?
+
+Thanks!
+
+> 
+> This problem is triggered by "partial" writes where a write transaction
+> of less than cacheline lands at the memory controller.  The CPU does
+> these via non-temporal write instructions (like MOVNTI), or through
+> UC/WC memory mappings.  The issue can also be triggered away from the
+> CPU by devices doing partial writes via DMA.
+> 
+> With this erratum, there are additional things need to be done around
+> machine check handler and kexec(), etc.  Similar to other CPU bugs, use
+> a CPU bug bit to indicate this erratum, and detect this erratum during
+> early boot.  Note this bug reflects the hardware thus it is detected
+> regardless of whether the kernel is built with TDX support or not.
+> 
+> Signed-off-by: Kai Huang <kai.huang@intel.com>
 > ---
->  .../jh7110-starfive-visionfive-2.dtsi         | 32 +++++++++++++++++++
->  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 18 +++++++++++
->  2 files changed, 50 insertions(+)
 > 
-> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-> index 2a6d81609284..22212c1150f9 100644
-> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-> @@ -126,6 +126,38 @@ &i2c6 {
->  	status = "okay";
->  };
->  
-> +&qspi {
-> +	#address-cells = <1>;
-> +	#size-cells = <0>;
+> v10 -> v11:
+>   - New patch
+> 
+> ---
+>   arch/x86/include/asm/cpufeatures.h |  1 +
+>   arch/x86/kernel/cpu/intel.c        | 21 +++++++++++++++++++++
+>   2 files changed, 22 insertions(+)
+> 
+> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+> index cb8ca46213be..dc8701f8d88b 100644
+> --- a/arch/x86/include/asm/cpufeatures.h
+> +++ b/arch/x86/include/asm/cpufeatures.h
+> @@ -483,5 +483,6 @@
+>   #define X86_BUG_RETBLEED		X86_BUG(27) /* CPU is affected by RETBleed */
+>   #define X86_BUG_EIBRS_PBRSB		X86_BUG(28) /* EIBRS is vulnerable to Post Barrier RSB Predictions */
+>   #define X86_BUG_SMT_RSB			X86_BUG(29) /* CPU is vulnerable to Cross-Thread Return Address Predictions */
+> +#define X86_BUG_TDX_PW_MCE		X86_BUG(30) /* CPU may incur #MC if non-TD software does partial write to TDX private memory */
+>   
+>   #endif /* _ASM_X86_CPUFEATURES_H */
+> diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
+> index 1c4639588ff9..251b333e53d2 100644
+> --- a/arch/x86/kernel/cpu/intel.c
+> +++ b/arch/x86/kernel/cpu/intel.c
+> @@ -1552,3 +1552,24 @@ u8 get_this_hybrid_cpu_type(void)
+>   
+>   	return cpuid_eax(0x0000001a) >> X86_HYBRID_CPU_TYPE_ID_SHIFT;
+>   }
 > +
-> +	nor_flash: flash@0 {
-> +		compatible = "jedec,spi-nor";
-> +		reg=<0>;
-
-Missing spaces.
-
-> +		cdns,read-delay = <5>;
-> +		spi-max-frequency = <12000000>;
-> +		cdns,tshsl-ns = <1>;
-> +		cdns,tsd2d-ns = <1>;
-> +		cdns,tchsh-ns = <1>;
-> +		cdns,tslch-ns = <1>;
-> +
-> +		partitions {
-> +			compatible = "fixed-partitions";
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +
-> +			spl@0 {
-> +				reg = <0x0 0x20000>;
-> +			};
-> +			uboot@100000 {
-> +				reg = <0x100000 0x300000>;
-> +			};
-> +			data@f00000 {
-> +				reg = <0xf00000 0x100000>;
-> +			};
-> +		};
-> +	};
+> +/*
+> + * These CPUs have an erratum.  A partial write from non-TD
+> + * software (e.g. via MOVNTI variants or UC/WC mapping) to TDX
+> + * private memory poisons that memory, and a subsequent read of
+> + * that memory triggers #MC.
+> + */
+> +static const struct x86_cpu_id tdx_pw_mce_cpu_ids[] __initconst = {
+> +	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X, NULL),
+> +	X86_MATCH_INTEL_FAM6_MODEL(EMERALDRAPIDS_X, NULL),
+> +	{ }
 > +};
 > +
->  &sysgpio {
->  	i2c0_pins: i2c0-0 {
->  		i2c-pins {
-> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> index 4c5fdb905da8..0b24f9e66e67 100644
-> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> @@ -440,6 +440,24 @@ i2c6: i2c@12060000 {
->  			status = "disabled";
->  		};
->  
-> +		qspi: spi@13010000 {
-> +			compatible = "starfive,jh7110-qspi", "cdns,qspi-nor";
-> +			reg = <0x0 0x13010000 0x0 0x10000
-> +				0x0 0x21000000 0x0 0x400000>;
+> +static int __init tdx_erratum_detect(void)
+> +{
+> +	if (x86_match_cpu(tdx_pw_mce_cpu_ids))
+> +		setup_force_cpu_bug(X86_BUG_TDX_PW_MCE);
+> +
+> +	return 0;
+> +}
+> +early_initcall(tdx_erratum_detect);
 
-This should be two items so <>, <>. Not one item.
+-- 
+Cheers,
 
-Best regards,
-Krzysztof
+David / dhildenb
 
