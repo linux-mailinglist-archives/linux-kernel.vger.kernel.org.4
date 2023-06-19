@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AADFB735CD4
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 19:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8829735CD9
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 19:15:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231351AbjFSRP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 13:15:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57736 "EHLO
+        id S231811AbjFSRPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 13:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231811AbjFSRPZ (ORCPT
+        with ESMTP id S231908AbjFSRPw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 13:15:25 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995CE186
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 10:15:23 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b46f5d236dso24992221fa.2
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 10:15:23 -0700 (PDT)
+        Mon, 19 Jun 2023 13:15:52 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C295124
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 10:15:51 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b46d270ea1so29663491fa.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 10:15:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687194922; x=1689786922;
+        d=linaro.org; s=google; t=1687194950; x=1689786950;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=4piptKyUoRwukoX6DDI9D7lqdP3wM0DejgG7WSpaPbo=;
-        b=fWcW04ISHTqeHdt/epnCqiDi8Oo0VCUvTA4fxANKG78bDajAK4n31R6SoWiTj80rXI
-         SyEWsndyPiI4uXzVjXwXjxJp7+YYltnYscxckGjTYaDJXmUqgnt4qBcr7NQDjsK0OV51
-         f6H8bardb0VzCoUJmpmAgn6LOybyn72HyLSIneb4TLz2EmQJT4tufJTLoxClJ0+dIjJ8
-         Afjh7yntBNiU2ErjKN+0cZYW6JKopMPmfh0naoUSTWH4hFG9bgDsxIyliPWtqP9jFwtI
-         kwv+eeXVpoN+8R+2B97bdY/+5g99r16aQE9Tmi44Wu3VhqP9TNGv+HJZP5mZsG+kAKzh
-         nocA==
+        bh=/2kap/rQ5fJ3nXml0zM9OrJF0E6FXM6ScX91UdQLE7c=;
+        b=rngpnQwhAh16JuBIZPn/mivLNTP5pydspTYZdbbJEbzMqDcGq3VmBdGkmCbjZnDCzp
+         LEH+IUgpNUnQWGxn6bSihKLo3dxtoaGPuNujh3uKSi1UZwUWByza1I0ytYJzbWxH2zJh
+         v6fvFmRCi9kA6GA3FVvLSIMLoEAseXbZiTJ1biC1rVpTSv0VWEKMH37jz1Yu/zq0hATw
+         ufu9kXCxWBzZXSAK2Sh5Jg9GqL3Vfn8cwOQjebSLE1IdP/fDiMYgRDipJnbJZDvLSpIS
+         4Z7PDEqBh73HLPo9UdfYR6qBULCyfDwDVWifJkiKt6rWrZL3CMqqP7KTYb3M3+7oTCBk
+         26IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687194922; x=1689786922;
+        d=1e100.net; s=20221208; t=1687194950; x=1689786950;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4piptKyUoRwukoX6DDI9D7lqdP3wM0DejgG7WSpaPbo=;
-        b=JVIrqf6YEDCxk49g6nuHnxvW7oRoXsw+yLMpXKBlYaY9njDGWVRgZbc0gBP5mjgi2g
-         jacrBTcU5dh78rv1sOr/Gsq0vBbTl+T2zCOMzexZd2BhDmiqBSN2FcZsd3S0HNS6z3B8
-         eJNhRVULOsfBpOcjS0I1qT8eTPTmb7YABedt4lCBDZno9iNDSFmMSLaWchB4A+0hpxiL
-         WURgK2QMP9iwdOGmF9w+upmaSOr9Sw9q3K4JVrEXbDfmJ0H/NTTdVsL4n8Wwe8sigbOs
-         1ig/KeQxTP7YiPLr4vFHTFxbf+v+tHbiCoz4Kg8qwiEKPP168fp3OxSpQpIu2OkfVSXC
-         TNjg==
-X-Gm-Message-State: AC+VfDyk06ewLCpz+IkR3IoLwCFi26ykQ2GevDt5tDDTJUxX5rqSfn4c
-        kyTWcHX78LC0pkh4RjHihoesjg==
-X-Google-Smtp-Source: ACHHUZ6rtfvIDQDqUT5GcIrYtOOT3h+2qyj++fScdODItL+lHHqKK56PwK7cwKm3AGKB2KFQsTZLDg==
-X-Received: by 2002:a2e:80c4:0:b0:2b1:d91b:51c3 with SMTP id r4-20020a2e80c4000000b002b1d91b51c3mr5660407ljg.30.1687194921793;
-        Mon, 19 Jun 2023 10:15:21 -0700 (PDT)
+        bh=/2kap/rQ5fJ3nXml0zM9OrJF0E6FXM6ScX91UdQLE7c=;
+        b=TzFrUsbGVGLTvQU5nBERxOiIc122W+t0PnvKtT2QbkQ2bJFYiuhJxIirja519bQBye
+         fTt385TWB/rt8QsQ0oRwwhwnxaaTvXQQ4qJwpeD65DhvZKC5UWi0yK/WqH6CDfHzQcEf
+         zZr3x6BZPRnnuG7SlPrJ1qTbeBA7gpvGzO1CX5ROUWH44SqZ9rf9AeswmoUEbSaRR3AO
+         lEZSAnwmVrpxbKqsujQw5KOm9W3MtY0NFQxwv0CeX8p0Ud4KHChy7INiRvRT8F0PB7K4
+         WhP6gylyibx3QaHaSrLkWmEiR/1OhPbbUbumLci/G3y9yKp4vItqZzGyu/iQRpYHhV1a
+         z2IQ==
+X-Gm-Message-State: AC+VfDyFEmKZU1WWgfutQYDD8p6UPubFe9bS+RNaTnJJxV6IxoSrIcZq
+        iGAkOTInjnTmonXCJQQ2CfRXSA==
+X-Google-Smtp-Source: ACHHUZ6vqHQBArGvKBQIyIZwIu2jaSsAkaxyu18Hntva09WShrWLr/AaiGEZ5krhRE31N72a0W00Bg==
+X-Received: by 2002:a2e:9106:0:b0:2b4:6d59:785f with SMTP id m6-20020a2e9106000000b002b46d59785fmr3344540ljg.43.1687194949706;
+        Mon, 19 Jun 2023 10:15:49 -0700 (PDT)
 Received: from [192.168.1.101] (abyl242.neoplus.adsl.tpnet.pl. [83.9.31.242])
-        by smtp.gmail.com with ESMTPSA id l19-20020a2e3e13000000b002b1edfe817fsm5242032lja.88.2023.06.19.10.15.20
+        by smtp.gmail.com with ESMTPSA id y24-20020a2e7d18000000b002b4762882e4sm829534ljc.39.2023.06.19.10.15.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 10:15:21 -0700 (PDT)
-Message-ID: <38d3d28f-fa64-8c7b-cfdc-36e3ab6dc475@linaro.org>
-Date:   Mon, 19 Jun 2023 19:15:19 +0200
+        Mon, 19 Jun 2023 10:15:49 -0700 (PDT)
+Message-ID: <75cad230-ae46-5572-ca86-743fdfd295c0@linaro.org>
+Date:   Mon, 19 Jun 2023 19:15:44 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH 1/4] ARM: dts: qcom: ipq4019: use generic node names for
- USB
+Subject: Re: [PATCH 2/4] ARM: dts: qcom: sdx55: use generic node names for USB
 Content-Language: en-US
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Andy Gross <agross@kernel.org>,
@@ -67,8 +66,9 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20230619170151.65505-1-krzysztof.kozlowski@linaro.org>
+ <20230619170151.65505-2-krzysztof.kozlowski@linaro.org>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230619170151.65505-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230619170151.65505-2-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -85,104 +85,26 @@ On 19.06.2023 19:01, Krzysztof Kozlowski wrote:
 > Device node names should be generic which is also expected by USB
 > bindings:
 > 
->   qcom-ipq4018-jalapeno.dtb: dwc3@6000000: $nodename:0: 'dwc3@6000000' does not match '^usb(@.*)?'
-> 
-> Override also the DWC3 node in qcom-ipq4018-ap120c-ac.dtsi by
-> label/phandle, not via node path, because it is less error-prone and
-> makes the overriding node-name independent.
+>   qcom-sdx55-t55.dtb: dwc3@a600000: $nodename:0: 'dwc3@a600000' does not match '^usb(@.*)?'
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
 Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
 Konrad
->  arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi |  7 ++++---
->  arch/arm/boot/dts/qcom-ipq4019.dtsi           | 14 +++++++-------
->  2 files changed, 11 insertions(+), 10 deletions(-)
+>  arch/arm/boot/dts/qcom-sdx55.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi b/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi
-> index d90b4f4c63af..da67d55fa557 100644
-> --- a/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi
-> +++ b/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtsi
-> @@ -262,10 +262,11 @@ &usb3_hs_phy {
->  &usb3 {
->  	status = "okay";
+> diff --git a/arch/arm/boot/dts/qcom-sdx55.dtsi b/arch/arm/boot/dts/qcom-sdx55.dtsi
+> index df3cd9c4ffb9..55ce87b75253 100644
+> --- a/arch/arm/boot/dts/qcom-sdx55.dtsi
+> +++ b/arch/arm/boot/dts/qcom-sdx55.dtsi
+> @@ -603,7 +603,7 @@ usb: usb@a6f8800 {
 >  
-> -	dwc3@8a00000 {
-> -		phys = <&usb3_hs_phy>;
-> -		phy-names = "usb2-phy";
->  	};
-> +
-> +&usb3_dwc {
-> +	phys = <&usb3_hs_phy>;
-> +	phy-names = "usb2-phy";
->  };
+>  			resets = <&gcc GCC_USB30_BCR>;
 >  
->  &usb2_hs_phy {
-> diff --git a/arch/arm/boot/dts/qcom-ipq4019.dtsi b/arch/arm/boot/dts/qcom-ipq4019.dtsi
-> index f0ef86fadc9d..13388e5c1b4b 100644
-> --- a/arch/arm/boot/dts/qcom-ipq4019.dtsi
-> +++ b/arch/arm/boot/dts/qcom-ipq4019.dtsi
-> @@ -621,7 +621,7 @@ ethphy4: ethernet-phy@4 {
->  			};
->  		};
->  
-> -		usb3_ss_phy: ssphy@9a000 {
-> +		usb3_ss_phy: usb-phy@9a000 {
->  			compatible = "qcom,usb-ss-ipq4019-phy";
->  			#phy-cells = <0>;
->  			reg = <0x9a000 0x800>;
-> @@ -631,7 +631,7 @@ usb3_ss_phy: ssphy@9a000 {
->  			status = "disabled";
->  		};
->  
-> -		usb3_hs_phy: hsphy@a6000 {
-> +		usb3_hs_phy: usb-phy@a6000 {
->  			compatible = "qcom,usb-hs-ipq4019-phy";
->  			#phy-cells = <0>;
->  			reg = <0xa6000 0x40>;
-> @@ -641,7 +641,7 @@ usb3_hs_phy: hsphy@a6000 {
->  			status = "disabled";
->  		};
->  
-> -		usb3: usb3@8af8800 {
-> +		usb3: usb@8af8800 {
->  			compatible = "qcom,ipq4019-dwc3", "qcom,dwc3";
->  			reg = <0x8af8800 0x100>;
->  			#address-cells = <1>;
-> @@ -653,7 +653,7 @@ usb3: usb3@8af8800 {
->  			ranges;
->  			status = "disabled";
->  
-> -			dwc3@8a00000 {
-> +			usb3_dwc: usb@8a00000 {
+> -			usb_dwc3: dwc3@a600000 {
+> +			usb_dwc3: usb@a600000 {
 >  				compatible = "snps,dwc3";
->  				reg = <0x8a00000 0xf8000>;
->  				interrupts = <GIC_SPI 132 IRQ_TYPE_LEVEL_HIGH>;
-> @@ -663,7 +663,7 @@ dwc3@8a00000 {
->  			};
->  		};
->  
-> -		usb2_hs_phy: hsphy@a8000 {
-> +		usb2_hs_phy: usb-phy@a8000 {
->  			compatible = "qcom,usb-hs-ipq4019-phy";
->  			#phy-cells = <0>;
->  			reg = <0xa8000 0x40>;
-> @@ -673,7 +673,7 @@ usb2_hs_phy: hsphy@a8000 {
->  			status = "disabled";
->  		};
->  
-> -		usb2: usb2@60f8800 {
-> +		usb2: usb@60f8800 {
->  			compatible = "qcom,ipq4019-dwc3", "qcom,dwc3";
->  			reg = <0x60f8800 0x100>;
->  			#address-cells = <1>;
-> @@ -685,7 +685,7 @@ usb2: usb2@60f8800 {
->  			ranges;
->  			status = "disabled";
->  
-> -			dwc3@6000000 {
-> +			usb@6000000 {
->  				compatible = "snps,dwc3";
->  				reg = <0x6000000 0xf8000>;
->  				interrupts = <GIC_SPI 136 IRQ_TYPE_LEVEL_HIGH>;
+>  				reg = <0x0a600000 0xcd00>;
+>  				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
