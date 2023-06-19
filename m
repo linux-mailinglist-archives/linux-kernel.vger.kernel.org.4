@@ -2,97 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 542C2735F5D
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 23:48:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1BD735F62
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 23:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbjFSVsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 17:48:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56250 "EHLO
+        id S229753AbjFSVxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 17:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjFSVsI (ORCPT
+        with ESMTP id S229448AbjFSVxa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 17:48:08 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA090A4
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 14:48:05 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-3fde82c8ca7so28235661cf.3
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 14:48:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1687211285; x=1689803285;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g/a28Txpe/xFs8OvL2UdzPa0B/lrYB+pe8A6lGyR9n4=;
-        b=TnZqaiebwtv85kvXU8LPXr9Lq0kIs8D666fZOLzE3PdnavwHA2nl7Nr2ZEycZj18rx
-         B8zajBi68rQcoStusHu7uobaROlnt20ZGJ90mJWEW2Aa04bCRmNE9BGBSgwDjUjAqR2X
-         pNmwY5LMR/WCovjvvhcVNtZLrCfb9qevRM6mfgEDSOmiVcI7MHD7PqWqQ2NyN/sY8Sme
-         HT26rb8XvbdXo3Uj+zoB2EHI6y7JJ9sZnFEbvMk3MgQJOCjwHr48Gug+tX7KyURynK5l
-         vSSxrV4Ugb8rEsjJwH/CCmdI3vB6goj0kr2YPT2yfg5GBTyCEr5m3W5aCRACEGaJvjaU
-         Mu7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687211285; x=1689803285;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g/a28Txpe/xFs8OvL2UdzPa0B/lrYB+pe8A6lGyR9n4=;
-        b=iYfW++yH0XqQNmqpYoijiOj4Eih0a5qPqlbOgLf8c2NYjukeO2NfDALVTv+1yAKHhz
-         U+FjDbPsC8/UVwRwEPg5oPvLmsPfZ1BnV3rCGKqCviyiKD4Xg31pHqcijhEcaNjBjaxL
-         DJFLSHQYeeUKaCk/L5HUZ/hdn1Oa1wCO6QTzd3a8sv4HUf2yUfrGmFAU28EeSiJxO6rd
-         eBERkImrFIE+htat8bNxBpcd62XdYjhCvPZQUWzF3hAu1QtsN2odAdyU7dCtetzEpWid
-         iTAei+uIt8zX+b5eVaegP55OqW6P+xFIsNJTUEDWpevJGsU7R9eKGByN50d640/ZNBVq
-         f+SA==
-X-Gm-Message-State: AC+VfDwOeDNV+0rI/+DDmaoSTC3JJHI8ddHNKoCYHN3a6Emp43+cVUIe
-        RH0soyleSg8VH/RKpBZQhRs4zqv4Zvd0T3/1QjwcMig/4k2fuXs=
-X-Google-Smtp-Source: ACHHUZ5WUVtPyLbh1y+BwzvrAZDSSn9X8cX4a4Ec+I0knJvwMXFOqtcF3hUpiZd+SxA9vRfFHQ2b+1dKBuq7XaPQt3Q=
-X-Received: by 2002:a05:622a:34b:b0:3f6:b823:f2af with SMTP id
- r11-20020a05622a034b00b003f6b823f2afmr2394470qtw.1.1687211284960; Mon, 19 Jun
- 2023 14:48:04 -0700 (PDT)
+        Mon, 19 Jun 2023 17:53:30 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCEA6E2;
+        Mon, 19 Jun 2023 14:53:28 -0700 (PDT)
+Received: from mercury (unknown [185.254.75.45])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 656696606F13;
+        Mon, 19 Jun 2023 22:53:27 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1687211607;
+        bh=5z8n2eraxnXQHN5g+zkp8eImcsGHHw1vCEuKhUGVzVU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=m2Tx1iHxXwrp5tqXQdr6WGPVOo5p0HRgXZ/w9qPNtDk+NDLoy+TFaG8gf/ILplL3w
+         JDC3sRZWwtJaQVugcQSIqlg+QpZdYakNWUg0DYATNk3FXjYE10vuHQZ1g5LXEHQaUc
+         O9qa0LVeSkPBplcYcKKlO65LWAbgIrecvZ9PgzEw3Xz7A4Omwu3MnzHzGgZqnIzUE9
+         YV6g/SNqzgfi+Y1J55WIVx8tRWZhwjU5NV1ZFRpMN6fsnB7Tb1oQUAau3tqYwEGikt
+         TNvCNczQCd8ONe+8/jzflxS+zTBw0yB5ALizf0/2eFHlFlNwFErPHcjS6QcH/N4MQ4
+         UUa7mRmiKP/Ow==
+Received: by mercury (Postfix, from userid 1000)
+        id 2FD321060A6A; Mon, 19 Jun 2023 23:53:25 +0200 (CEST)
+Date:   Mon, 19 Jun 2023 23:53:25 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        conor+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH v3 2/4] dt-bindings: power: reset:
+ atmel,at91sam9260-shdwc: convert to yaml
+Message-ID: <20230619215325.5wbjnbvq4aw2nquj@mercury.elektranox.org>
+References: <20230616101646.879480-1-claudiu.beznea@microchip.com>
+ <20230616101646.879480-3-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
-References: <20230619123535.324632-1-ben.dooks@codethink.co.uk> <20230619175710.GA200481@mail.hallyn.com>
-In-Reply-To: <20230619175710.GA200481@mail.hallyn.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 19 Jun 2023 17:47:54 -0400
-Message-ID: <CAHC9VhRz0Y_D1Q=8xPKVJemYf=KUziC9s1TUJ86F+Lw+OrXdVg@mail.gmail.com>
-Subject: Re: [PATCH] capabilities: fix sparse warning about __user access
-To:     "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     Ben Dooks <ben.dooks@codethink.co.uk>,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3dmf6ievniy44dey"
+Content-Disposition: inline
+In-Reply-To: <20230616101646.879480-3-claudiu.beznea@microchip.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 1:57=E2=80=AFPM Serge E. Hallyn <serge@hallyn.com> =
-wrote:
->
-> On Mon, Jun 19, 2023 at 01:35:35PM +0100, Ben Dooks wrote:
-> > The two syscalls for capget and capset are producing sparse warnings
-> > as sparse is thinking that the "struct __user_cap_data_struct" is marke=
-d
-> > user, which seems to be down to the declaration and typedef at the same
-> > time.
-> >
-> > Fix the following warnings by splutting the struct declaration and then
-> > the user typedef into two:
->
-> I'm not a fan of making code changes to work around scanners'
-> shortcomings, mainly because eventually I assume the scanners
-> will learn to deal with it.
->
-> However, I don't like the all-in-one typedef+struct definition
-> either, so let's go with it :)
->
-> Paul, do you mind picking this up?
 
-Sure, no problem.  Since we are at -rc7, I'm assuming this can wait
-until after the merge window?
+--3dmf6ievniy44dey
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
---=20
-paul-moore.com
+Hi,
+
+On Fri, Jun 16, 2023 at 01:16:44PM +0300, Claudiu Beznea wrote:
+> Convert Microchip AT91 shutdown controller to YAML.
+>=20
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+> ---
+
+Thanks, queued.
+
+-- Sebastian
+
+>  .../devicetree/bindings/arm/atmel-sysregs.txt | 31 -------
+>  .../power/reset/atmel,at91sam9260-shdwc.yaml  | 82 +++++++++++++++++++
+>  2 files changed, 82 insertions(+), 31 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/power/reset/atmel,a=
+t91sam9260-shdwc.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt b/Do=
+cumentation/devicetree/bindings/arm/atmel-sysregs.txt
+> index ab1b352344ae..e6b2fb291b45 100644
+> --- a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
+> +++ b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
+> @@ -52,37 +52,6 @@ Example:
+>  		reg =3D <0xe3804000 0x1000>;
+>  };
+> =20
+> -SHDWC Shutdown Controller
+> -
+> -required properties:
+> -- compatible: Should be "atmel,<chip>-shdwc".
+> -  <chip> can be "at91sam9260", "at91sam9rl" or "at91sam9x5".
+> -- reg: Should contain registers location and length
+> -- clocks: phandle to input clock.
+> -
+> -optional properties:
+> -- atmel,wakeup-mode: String, operation mode of the wakeup mode.
+> -  Supported values are: "none", "high", "low", "any".
+> -- atmel,wakeup-counter: Counter on Wake-up 0 (between 0x0 and 0xf).
+> -
+> -optional at91sam9260 properties:
+> -- atmel,wakeup-rtt-timer: boolean to enable Real-time Timer Wake-up.
+> -
+> -optional at91sam9rl properties:
+> -- atmel,wakeup-rtc-timer: boolean to enable Real-time Clock Wake-up.
+> -- atmel,wakeup-rtt-timer: boolean to enable Real-time Timer Wake-up.
+> -
+> -optional at91sam9x5 properties:
+> -- atmel,wakeup-rtc-timer: boolean to enable Real-time Clock Wake-up.
+> -
+> -Example:
+> -
+> -	shdwc@fffffd10 {
+> -		compatible =3D "atmel,at91sam9260-shdwc";
+> -		reg =3D <0xfffffd10 0x10>;
+> -		clocks =3D <&clk32k>;
+> -	};
+> -
+>  SHDWC SAMA5D2-Compatible Shutdown Controller
+> =20
+>  1) shdwc node
+> diff --git a/Documentation/devicetree/bindings/power/reset/atmel,at91sam9=
+260-shdwc.yaml b/Documentation/devicetree/bindings/power/reset/atmel,at91sa=
+m9260-shdwc.yaml
+> new file mode 100644
+> index 000000000000..f559a2cfd82e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/reset/atmel,at91sam9260-shd=
+wc.yaml
+> @@ -0,0 +1,82 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/reset/atmel,at91sam9260-shdwc.y=
+aml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Microchip AT91 SHDWC Shutdown Controller
+> +
+> +maintainers:
+> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
+> +
+> +description: |
+> +  Microchip AT91 SHDWC shutdown controller controls the power supplies V=
+DDIO
+> +  and VDDCORE and the wake-up detection on debounced input lines.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - atmel,at91sam9260-shdwc
+> +      - atmel,at91sam9rl-shdwc
+> +      - atmel,at91sam9x5-shdwc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  atmel,wakeup-mode:
+> +    description: operation mode of the wakeup mode
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    enum: [ none, high, low, any ]
+> +
+> +  atmel,wakeup-counter:
+> +    description: counter on wake-up 0
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 0
+> +    maximum: 15
+> +
+> +  atmel,wakeup-rtt-timer:
+> +    description: enable real-time timer wake-up
+> +    type: boolean
+> +
+> +  atmel,wakeup-rtc-timer:
+> +    description: enable real-time clock wake-up
+> +    type: boolean
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: atmel,at91sam9x5-shdwc
+> +    then:
+> +      properties:
+> +        atmel,wakeup-rtt-timer: false
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: atmel,at91sam9260-shdwc
+> +    then:
+> +      properties:
+> +        atmel,wakeup-rtc-timer: false
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    shdwc: poweroff@fffffd10 {
+> +        compatible =3D "atmel,at91sam9260-shdwc";
+> +        reg =3D <0xfffffd10 0x10>;
+> +        clocks =3D <&clk32k>;
+> +    };
+> +
+> +...
+> --=20
+> 2.34.1
+>=20
+
+--3dmf6ievniy44dey
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSQzlQACgkQ2O7X88g7
++ppBrA//a8TlYAedWE0i0wDFTehPupN5AfUv0rbxynlHMdv8ShWk9aFamLoNXrb5
+R8aWb3evB/KMY0A2R2DIBEOBlbyerjjKsm2ysbDMpesmda9UzxcmGCB2pqqciuvc
+pWL3Ze8QSAsgn6JnJ++wx56axC7zYmKBRn8VWeVEjCcWEoIMjJxQI0NDx9q00N9W
+MJtSODPsFYneL6rqUu68uSx2yy43VNfI+7PNEA4/RoS2Yr4S6x9LCMFi+N/1YV4n
+wAfHt2PM2ioED0SVxmSL+SFtOOVo6foeV86qR4HqmK7TJprkLXOGVhH9T9IA0IxF
+J5CNho/aEeP8R2gk/ZhYNpplYowKXvcqlZCx4t3l/gSMneNVcXWt9m/ov4xXFpZC
+lU6SQ4NmvQoB0dEdJDe7pqttNoxOyQrBech+DswfE3Lwz+gxLmK4ex1Xief3utFt
+d3T4s4+a8jDTbdJsYIZzH7tzVi7ufShI+0fDIpGGryXCJSW6n0uMf2g++j5BZcXE
+dxldodB81lkYEye+GcnIzFdVP12OuncxFSXJ6ZERIk2v3funlKed70F+U7Xt/lur
+jp6EAo9wXZn35YmbJCz1ojuNnartGZXJhd3WtIkxeeYvxGvkyvpxPmb6tyYrpTh4
+HT2mp43gKlBC3dOLEaK/ijXmq4ZWvzVWKOy+xV+vtxldfoMSujQ=
+=EFtf
+-----END PGP SIGNATURE-----
+
+--3dmf6ievniy44dey--
