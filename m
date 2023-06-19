@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43171735120
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A91F373512E
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:58:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231767AbjFSJ5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 05:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42234 "EHLO
+        id S230423AbjFSJ53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 05:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231747AbjFSJ4x (ORCPT
+        with ESMTP id S231492AbjFSJ44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 05:56:53 -0400
+        Mon, 19 Jun 2023 05:56:56 -0400
 Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D2DE5C;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C9CE59;
         Mon, 19 Jun 2023 02:56:47 -0700 (PDT)
 Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35J5mUng002763;
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35J5mUnh002763;
         Mon, 19 Jun 2023 04:56:25 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=PODMain02222019;
- bh=ZUwtWDbN+Xi9vSy0kuLY6Hls3ttHaS7lNlDP6YzuMZk=;
- b=klY7YkK1ID+idSlNsDQ0Y/W1riLMvYtMypOiqbGenv3wMNfIQ2S14knFpBtxu196NW8p
- ZjRXkXi1VqQf8azbrVwk/lvqLVPJl1tt3CA0SyJl8AuTs2yFmZC5aVbgHbfygOnvovT0
- R9efAtTQ5K14IeP+WA0LRg2d3EzgZ9QZnXpR1rXfAnmzMycqYvxgK4P7soNfz0ih+pU1
- FXXsOpLwKsP7jIvCsO7KXZF1sMcsknZHU5Hn8WfbFwqfhstWmCSEayAFQvnqd7Kg3E6J
- dYaHiqSxM/I3hbHMFC2+wnhzXga89K/Hje2Ct0ZPt/2EKFB1BF4i265rhijlh1j+oTQ6 sQ== 
+ bh=cpHkfCAzEJJW1CS6GcpubURDKyU3rHOGnxBd77XOIes=;
+ b=WWg4PDc93NSGhhByE+4zYy8O93FMtr2pN+QtiYKuv3lG4lf1GqO2dqfcFMd2aujBBoL+
+ EaBHXwokQ6xiJDhxRnpSFjlFZ4YnPgpCsB4GH6V0lxqateQcU7hgnnzkQvL1Tu5dh+SA
+ S+evaTsDEcgOqECq1Qwx/C+SXtwhN7DgjQ4AiCDg+3N4HrzIbHM9f7GpmukA4X2XHci/
+ 4/HEf9OQxT0vI24HclMQrTK0iwua3g8PLP3ZZbSRuMM+NAmH8HALiBg/YuMnYEFpXL/S
+ QCOvH8H0J9Q02GD+furjB1Mqu9Ib4shIE54+1+FsrMfkANTvKEwXGn1eLHV4tqglN/xm aQ== 
 Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3r998mhtm4-1
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3r998mhtm4-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Jun 2023 04:56:24 -0500
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+        Mon, 19 Jun 2023 04:56:25 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Mon, 19 Jun
  2023 10:56:23 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
- Transport; Mon, 19 Jun 2023 10:56:23 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Mon, 19 Jun 2023 10:56:23 +0100
 Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 487FB11AA;
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 637B115B7;
         Mon, 19 Jun 2023 09:56:23 +0000 (UTC)
 From:   Charles Keepax <ckeepax@opensource.cirrus.com>
 To:     <broonie@kernel.org>, <lee@kernel.org>,
@@ -51,17 +51,17 @@ CC:     <robh+dt@kernel.org>, <conor+dt@kernel.org>, <lgirdwood@gmail.com>,
         <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
         <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
         <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v5 1/6] soundwire: bus: Allow SoundWire peripherals to register IRQ handlers
-Date:   Mon, 19 Jun 2023 10:56:18 +0100
-Message-ID: <20230619095623.1987742-2-ckeepax@opensource.cirrus.com>
+Subject: [PATCH v5 2/6] dt-bindings: mfd: cirrus,cs42l43: Add initial DT binding
+Date:   Mon, 19 Jun 2023 10:56:19 +0100
+Message-ID: <20230619095623.1987742-3-ckeepax@opensource.cirrus.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230619095623.1987742-1-ckeepax@opensource.cirrus.com>
 References: <20230619095623.1987742-1-ckeepax@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-GUID: 7K4VRrS7RVWKIB3q-7UjrF7WZrKDsNPv
-X-Proofpoint-ORIG-GUID: 7K4VRrS7RVWKIB3q-7UjrF7WZrKDsNPv
+X-Proofpoint-GUID: BDBEBDAYgxwi0PNsPdQdUlRyXJUMrooU
+X-Proofpoint-ORIG-GUID: BDBEBDAYgxwi0PNsPdQdUlRyXJUMrooU
 X-Proofpoint-Spam-Reason: safe
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
@@ -72,24 +72,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lucas Tanure <tanureal@opensource.cirrus.com>
+The CS42L43 is an audio CODEC with integrated MIPI SoundWire interface
+(Version 1.2.1 compliant), I2C, SPI, and I2S/TDM interfaces designed
+for portable applications. It provides a high dynamic range, stereo
+DAC for headphone output, two integrated Class D amplifiers for
+loudspeakers, and two ADCs for wired headset microphone input or
+stereo line input. PDM inputs are provided for digital microphones.
 
-Currently the in-band alerts for SoundWire peripherals can only
-be communicated to the driver through the interrupt_callback
-function. This however is slightly inconvient for devices that wish to
-share IRQ handling code between SoundWire and I2C/SPI, the later would
-normally register an IRQ handler with the IRQ subsystem. However there
-is no reason the SoundWire in-band IRQs can not also be communicated
-as an actual IRQ to the driver.
+Add a YAML DT binding document for this device.
 
-Add support for SoundWire peripherals to register a normal IRQ handler
-to receive SoundWire in-band alerts, allowing code to be shared across
-control buses. Note that we allow users to use both the
-interrupt_callback and the IRQ handler, this is useful for devices which
-must clear additional chip specific SoundWire registers that are not a
-part of the normal IRQ flow, or the SoundWire specification.
-
-Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 ---
 
@@ -98,175 +90,329 @@ No change since v4.
 Thanks,
 Charles
 
- drivers/soundwire/bus.c       | 32 ++++++++++++++++++++++++++++++++
- drivers/soundwire/bus_type.c  | 12 ++++++++++++
- include/linux/soundwire/sdw.h |  9 +++++++++
- 3 files changed, 53 insertions(+)
+ .../bindings/sound/cirrus,cs42l43.yaml        | 313 ++++++++++++++++++
+ 1 file changed, 313 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/cirrus,cs42l43.yaml
 
-diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
-index 1ea6a64f8c4a5..81f358ec09bee 100644
---- a/drivers/soundwire/bus.c
-+++ b/drivers/soundwire/bus.c
-@@ -3,6 +3,7 @@
- 
- #include <linux/acpi.h>
- #include <linux/delay.h>
-+#include <linux/irq.h>
- #include <linux/mod_devicetable.h>
- #include <linux/pm_runtime.h>
- #include <linux/soundwire/sdw_registers.h>
-@@ -25,6 +26,23 @@ static int sdw_get_id(struct sdw_bus *bus)
- 	return 0;
- }
- 
-+static int sdw_irq_map(struct irq_domain *h, unsigned int virq,
-+		       irq_hw_number_t hw)
-+{
-+	struct sdw_bus *bus = h->host_data;
+diff --git a/Documentation/devicetree/bindings/sound/cirrus,cs42l43.yaml b/Documentation/devicetree/bindings/sound/cirrus,cs42l43.yaml
+new file mode 100644
+index 0000000000000..7a6de938b11d1
+--- /dev/null
++++ b/Documentation/devicetree/bindings/sound/cirrus,cs42l43.yaml
+@@ -0,0 +1,313 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/sound/cirrus,cs42l43.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+	irq_set_chip_data(virq, bus);
-+	irq_set_chip(virq, &bus->irq_chip);
-+	irq_set_nested_thread(virq, 1);
-+	irq_set_noprobe(virq);
++title: Cirrus Logic CS42L43 Audio CODEC
 +
-+	return 0;
-+}
++maintainers:
++  - patches@opensource.cirrus.com
 +
-+static const struct irq_domain_ops sdw_domain_ops = {
-+	.map	= sdw_irq_map,
-+};
++description: |
++  The CS42L43 is an audio CODEC with integrated MIPI SoundWire interface
++  (Version 1.2.1 compliant), I2C, SPI, and I2S/TDM interfaces designed
++  for portable applications. It provides a high dynamic range, stereo
++  DAC for headphone output, two integrated Class D amplifiers for
++  loudspeakers, and two ADCs for wired headset microphone input or
++  stereo line input. PDM inputs are provided for digital microphones.
 +
- /**
-  * sdw_bus_master_add() - add a bus Master instance
-  * @bus: bus instance
-@@ -142,6 +160,14 @@ int sdw_bus_master_add(struct sdw_bus *bus, struct device *parent,
- 	bus->params.curr_bank = SDW_BANK0;
- 	bus->params.next_bank = SDW_BANK1;
- 
-+	bus->irq_chip.name = dev_name(bus->dev);
-+	bus->domain = irq_domain_create_linear(fwnode, SDW_MAX_DEVICES,
-+					       &sdw_domain_ops, bus);
-+	if (!bus->domain) {
-+		dev_err(bus->dev, "Failed to add IRQ domain\n");
-+		return -EINVAL;
-+	}
++allOf:
++  - $ref: dai-common.yaml#
 +
- 	return 0;
- }
- EXPORT_SYMBOL(sdw_bus_master_add);
-@@ -178,6 +204,9 @@ static int sdw_delete_slave(struct device *dev, void *data)
- void sdw_bus_master_delete(struct sdw_bus *bus)
- {
- 	device_for_each_child(bus->dev, NULL, sdw_delete_slave);
++properties:
++  compatible:
++    enum:
++      - cirrus,cs42l43
 +
-+	irq_domain_remove(bus->domain);
++  reg:
++    maxItems: 1
 +
- 	sdw_master_device_del(bus);
- 
- 	sdw_bus_debugfs_exit(bus);
-@@ -1711,6 +1740,9 @@ static int sdw_handle_slave_alerts(struct sdw_slave *slave)
- 				struct device *dev = &slave->dev;
- 				struct sdw_driver *drv = drv_to_sdw_driver(dev->driver);
- 
-+				if (slave->prop.use_domain_irq && slave->irq)
-+					handle_nested_irq(slave->irq);
++  vdd-p-supply:
++    description:
++      Power supply for the high voltage interface.
 +
- 				if (drv->ops && drv->ops->interrupt_callback) {
- 					slave_intr.sdca_cascade = sdca_cascade;
- 					slave_intr.control_port = clear;
-diff --git a/drivers/soundwire/bus_type.c b/drivers/soundwire/bus_type.c
-index 1f43ee848eac8..fafbc284e82da 100644
---- a/drivers/soundwire/bus_type.c
-+++ b/drivers/soundwire/bus_type.c
-@@ -122,6 +122,12 @@ static int sdw_drv_probe(struct device *dev)
- 	if (drv->ops && drv->ops->read_prop)
- 		drv->ops->read_prop(slave);
- 
-+	if (slave->prop.use_domain_irq) {
-+		slave->irq = irq_create_mapping(slave->bus->domain, slave->dev_num);
-+		if (!slave->irq)
-+			dev_warn(dev, "Failed to map IRQ\n");
-+	}
++  vdd-a-supply:
++    description:
++      Power supply for internal analog circuits.
 +
- 	/* init the sysfs as we have properties now */
- 	ret = sdw_slave_sysfs_init(slave);
- 	if (ret < 0)
-@@ -166,7 +172,13 @@ static int sdw_drv_remove(struct device *dev)
- 	int ret = 0;
- 
- 	mutex_lock(&slave->sdw_dev_lock);
++  vdd-d-supply:
++    description:
++      Power supply for internal digital circuits. Can be internally supplied.
 +
- 	slave->probed = false;
++  vdd-io-supply:
++    description:
++      Power supply for external interface and internal digital logic.
 +
-+	if (slave->prop.use_domain_irq)
-+		irq_dispose_mapping(irq_find_mapping(slave->bus->domain,
-+						     slave->dev_num));
++  vdd-cp-supply:
++    description:
++      Power supply for the amplifier 3 and 4 charge pump.
 +
- 	mutex_unlock(&slave->sdw_dev_lock);
- 
- 	if (drv->remove)
-diff --git a/include/linux/soundwire/sdw.h b/include/linux/soundwire/sdw.h
-index ef645de13ae93..c3ab5e5f9cfa4 100644
---- a/include/linux/soundwire/sdw.h
-+++ b/include/linux/soundwire/sdw.h
-@@ -5,6 +5,8 @@
- #define __SOUNDWIRE_H
- 
- #include <linux/bug.h>
-+#include <linux/irq.h>
-+#include <linux/irqdomain.h>
- #include <linux/mod_devicetable.h>
- #include <linux/bitfield.h>
- 
-@@ -369,6 +371,7 @@ struct sdw_dpn_prop {
-  * @clock_reg_supported: the Peripheral implements the clock base and scale
-  * registers introduced with the SoundWire 1.2 specification. SDCA devices
-  * do not need to set this boolean property as the registers are required.
-+ * @use_domain_irq: call actual IRQ handler on slave, as well as callback
-  */
- struct sdw_slave_prop {
- 	u32 mipi_revision;
-@@ -393,6 +396,7 @@ struct sdw_slave_prop {
- 	u8 scp_int1_mask;
- 	u32 quirks;
- 	bool clock_reg_supported;
-+	bool use_domain_irq;
- };
- 
- #define SDW_SLAVE_QUIRKS_INVALID_INITIAL_PARITY	BIT(0)
-@@ -640,6 +644,7 @@ struct sdw_slave_ops {
-  * struct sdw_slave - SoundWire Slave
-  * @id: MIPI device ID
-  * @dev: Linux device
-+ * @irq: IRQ number
-  * @status: Status reported by the Slave
-  * @bus: Bus handle
-  * @prop: Slave properties
-@@ -669,6 +674,7 @@ struct sdw_slave_ops {
- struct sdw_slave {
- 	struct sdw_slave_id id;
- 	struct device dev;
-+	int irq;
- 	enum sdw_slave_status status;
- 	struct sdw_bus *bus;
- 	struct sdw_slave_prop prop;
-@@ -883,6 +889,7 @@ struct sdw_master_ops {
-  * is used to compute and program bus bandwidth, clock, frame shape,
-  * transport and port parameters
-  * @debugfs: Bus debugfs
-+ * @domain: IRQ domain
-  * @defer_msg: Defer message
-  * @clk_stop_timeout: Clock stop timeout computed
-  * @bank_switch_timeout: Bank switch timeout computed
-@@ -916,6 +923,8 @@ struct sdw_bus {
- #ifdef CONFIG_DEBUG_FS
- 	struct dentry *debugfs;
- #endif
-+	struct irq_chip irq_chip;
-+	struct irq_domain *domain;
- 	struct sdw_defer defer_msg;
- 	unsigned int clk_stop_timeout;
- 	u32 bank_switch_timeout;
++  vdd-amp-supply:
++    description:
++      Power supply for amplifier 1 and 2.
++
++  reset-gpios:
++    maxItems: 1
++
++  interrupt-controller: true
++
++  "#interrupt-cells":
++    const: 2
++
++  interrupts:
++    maxItems: 1
++
++  "#sound-dai-cells":
++    const: 1
++
++  clocks:
++    items:
++      - description: Synchronous audio clock provided on mclk_in.
++
++  clock-names:
++    const: mclk
++
++  cirrus,bias-low:
++    type: boolean
++    description:
++      Select a 1.8V headset micbias rather than 2.8V.
++
++  cirrus,bias-sense-microamp:
++    description:
++      Current at which the headset micbias sense clamp will engage, 0 to
++      disable.
++    enum: [ 0, 14, 23, 41, 50, 60, 68, 86, 95 ]
++    default: 0
++
++  cirrus,bias-ramp-ms:
++    description:
++      Time in milliseconds the hardware allows for the headset micbias to
++      ramp up.
++    enum: [ 10, 40, 90, 170 ]
++    default: 170
++
++  cirrus,detect-us:
++    description:
++      Time in microseconds the type detection will run for. Long values will
++      cause more audible effects, but give more accurate detection.
++    enum: [ 20, 100, 1000, 10000, 50000, 75000, 100000, 200000 ]
++    default: 10000
++
++  cirrus,button-automute:
++    type: boolean
++    description:
++      Enable the hardware automuting of decimator 1 when a headset button is
++      pressed.
++
++  cirrus,buttons-ohms:
++    description:
++      Impedance in Ohms for each headset button, these should be listed in
++      ascending order.
++    minItems: 1
++    maxItems: 6
++
++  cirrus,tip-debounce-ms:
++    description:
++      Software debounce on tip sense triggering in milliseconds.
++    default: 0
++
++  cirrus,tip-invert:
++    type: boolean
++    description:
++      Indicates tip detect polarity, inverted implies open-circuit whilst the
++      jack is inserted.
++
++  cirrus,tip-disable-pullup:
++    type: boolean
++    description:
++      Indicates if the internal pullup on the tip detect should be disabled.
++
++  cirrus,tip-fall-db-ms:
++    description:
++      Time in milliseconds a falling edge on the tip detect should be hardware
++      debounced for. Note the falling edge is considered after the invert.
++    enum: [ 0, 125, 250, 500, 750, 1000, 1250, 1500 ]
++    default: 500
++
++  cirrus,tip-rise-db-ms:
++    description:
++      Time in milliseconds a rising edge on the tip detect should be hardware
++      debounced for. Note the rising edge is considered after the invert.
++    enum: [ 0, 125, 250, 500, 750, 1000, 1250, 1500 ]
++    default: 500
++
++  cirrus,use-ring-sense:
++    type: boolean
++    description:
++      Indicates if the ring sense should be used.
++
++  cirrus,ring-invert:
++    type: boolean
++    description:
++      Indicates ring detect polarity, inverted implies open-circuit whilst the
++      jack is inserted.
++
++  cirrus,ring-disable-pullup:
++    type: boolean
++    description:
++      Indicates if the internal pullup on the ring detect should be disabled.
++
++  cirrus,ring-fall-db-ms:
++    description:
++      Time in milliseconds a falling edge on the ring detect should be hardware
++      debounced for. Note the falling edge is considered after the invert.
++    enum: [ 0, 125, 250, 500, 750, 1000, 1250, 1500 ]
++    default: 500
++
++  cirrus,ring-rise-db-ms:
++    description:
++      Time in milliseconds a rising edge on the ring detect should be hardware
++      debounced for. Note the rising edge is considered after the invert.
++    enum: [ 0, 125, 250, 500, 750, 1000, 1250, 1500 ]
++    default: 500
++
++  pinctrl:
++    type: object
++    $ref: /schemas/pinctrl/pinctrl.yaml#
++    additionalProperties: false
++
++    properties:
++      gpio-controller: true
++
++      "#gpio-cells":
++        const: 2
++
++      gpio-ranges:
++        items:
++          - description: A phandle to the CODEC pinctrl node
++            minimum: 0
++          - const: 0
++          - const: 0
++          - const: 3
++
++    patternProperties:
++      "-state$":
++        oneOf:
++          - $ref: "#/$defs/cirrus-cs42l43-state"
++          - patternProperties:
++              "-pins$":
++                $ref: "#/$defs/cirrus-cs42l43-state"
++            additionalProperties: false
++
++  spi:
++    type: object
++    $ref: /schemas/spi/spi-controller.yaml#
++    unevaluatedProperties: false
++
++$defs:
++  cirrus-cs42l43-state:
++    type: object
++
++    allOf:
++      - $ref: /schemas/pinctrl/pincfg-node.yaml#
++      - $ref: /schemas/pinctrl/pinmux-node.yaml#
++
++    oneOf:
++      - required: [ groups ]
++      - required: [ pins ]
++
++    additionalProperties: false
++
++    properties:
++      groups:
++        enum: [ gpio1, gpio2, gpio3, asp, pdmout2, pdmout1, i2c, spi ]
++
++      pins:
++        enum: [ gpio1, gpio2, gpio3,
++                asp_dout, asp_fsync, asp_bclk,
++                pdmout2_clk, pdmout2_data, pdmout1_clk, pdmout1_data,
++                i2c_sda, i2c_scl,
++                spi_miso, spi_sck, spi_ssb ]
++
++      function:
++        enum: [ gpio, spdif, irq, mic-shutter, spk-shutter ]
++
++      drive-strength:
++        description: Set drive strength in mA
++        enum: [ 1, 2, 4, 8, 9, 10, 12, 16 ]
++
++      input-debounce:
++        description: Set input debounce in uS
++        enum: [ 0, 85 ]
++
++required:
++  - compatible
++  - reg
++  - vdd-p-supply
++  - vdd-a-supply
++  - vdd-io-supply
++  - vdd-cp-supply
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        cs42l43: codec@1a {
++            compatible = "cirrus,cs42l43";
++            reg = <0x1a>;
++
++            vdd-p-supply = <&vdd5v0>;
++            vdd-a-supply = <&vdd1v8>;
++            vdd-io-supply = <&vdd1v8>;
++            vdd-cp-supply = <&vdd1v8>;
++            vdd-amp-supply = <&vdd5v0>;
++
++            reset-gpios = <&gpio 0>;
++
++            interrupt-controller;
++            #interrupt-cells = <2>;
++            interrupt-parent = <&gpio>;
++            interrupts = <56 IRQ_TYPE_LEVEL_LOW>;
++
++            #sound-dai-cells = <1>;
++
++            clocks = <&clks 0>;
++            clock-names = "mclk";
++
++            cs42l43_pins: pinctrl {
++                gpio-controller;
++                #gpio-cells = <2>;
++                gpio-ranges = <&cs42l43_pins 0 0 3>;
++
++                pinctrl-names = "default";
++                pinctrl-0 = <&pinsettings>;
++
++                pinsettings: default-state {
++                    shutter-pins {
++                        groups = "gpio3";
++                        function = "mic-shutter";
++                    };
++                };
++            };
++
++            spi {
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                cs-gpios = <&cs42l43_pins 1 0>;
++
++                sensor@0 {
++                    compatible = "bosch,bme680";
++                    reg = <0>;
++                    spi-max-frequency = <1400000>;
++                };
++            };
++        };
++    };
 -- 
 2.30.2
 
