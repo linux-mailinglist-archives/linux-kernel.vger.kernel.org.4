@@ -2,112 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23F94735BE4
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 18:06:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 093AB735BE9
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 18:07:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232134AbjFSQF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 12:05:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58856 "EHLO
+        id S232119AbjFSQG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 12:06:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjFSQF5 (ORCPT
+        with ESMTP id S231846AbjFSQG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 12:05:57 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC9D1BE;
-        Mon, 19 Jun 2023 09:05:56 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id af79cd13be357-7624012c0b4so232638285a.1;
-        Mon, 19 Jun 2023 09:05:56 -0700 (PDT)
+        Mon, 19 Jun 2023 12:06:57 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E731AD
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:06:55 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-570877f7838so29982867b3.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:06:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687190756; x=1689782756;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MAG7rQupq4oWMLsKqHJ7tE/XqH6FjbJlLP3kpsmMAzE=;
-        b=cWFr6cfNisMaiF8KA7shMPYkopIbeyGwZeRRWlMHD0ahMWoL9sw+/+Ln8gJ2/6/Aea
-         xJDNSZwZ7Ujk1H9UT0ZRtve9N8Pepz0Sod20j1v0xechbRVo7BPp27ZRjA8QWxAuPaep
-         s4eu8BkbrhxJPz2tpEf29bZuPzdDGlNM8woeBsvTzrfsgt+OqPXUDSkrw1NjOpJfdNey
-         DKszbq4mT6ce93VXcqHg9I7+4iIpKPgSlKTmsoXTOStRwFYjeWJYkElZP7XalzYmnIKK
-         KF0a7oKUyeJzYj5IKRtkFtEMS9Shq2gHkrGC8HVVzMs2W/e7NYOBF2y9G045Nh9Z844u
-         bBFw==
+        d=paul-moore.com; s=google; t=1687190814; x=1689782814;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E6Gz+pnHILNa9vWsNogxJJDOmyqbXg0zg3q5EITIlyc=;
+        b=cBZoYDbHUrKhlJCdSIqjbSOIiuXD8YwnymLZ9S75FsrsLTa4U/5c289R7l8No3uhUo
+         /V8c/HXr9O8bUYXlY+C0kyTeIPWtdxflMTa7eGHyqRd203pDb0pkmv6rTaQyg8JIEwQh
+         E7IobhpfiNG8CkR/P/kzC6DkDsPTp93jUcawIzWVc8gNYPgThtGA0hXHgHLclnn1QNnh
+         5r2kceqYplEfKZE8TtCcXzjLcZMeamsZZwFgjv8GktBBo5CshHurrT+dLk8m740EYRAD
+         fQ2JbmcLZxJbrAVH2rOHKM/vHktRkG3sAhLKPMkMiGVUC9G49tlAxFWx8xsqn6aRAHso
+         3tWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687190756; x=1689782756;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MAG7rQupq4oWMLsKqHJ7tE/XqH6FjbJlLP3kpsmMAzE=;
-        b=EZShQEkqw2zxsgpnY3qoJVx9eTNUVsWEmu4nM6+ht53o3J3BHjb9LD16fbJf1QkoSz
-         HSmkdkTRz/f7QNOc/yP+xgxvM7Ewd2cQwwSy4N7utkcFbXpkwjkSYBtowtzUZV9mr0Il
-         /Cyn8SrENFTgDYw946fMSVFl6ARbcEIhaZIZf72+qdkHJ6CpQOhnxTYrMzpj9j4St+j8
-         1AI1DJ4S213xJqseVub0HIYL2o5vI5bDwDhd8e//hkPbI1m/Nc5mg348m1Zpm7fEjcSr
-         WX4MdNT9yEp2IuKB0Q59hNDys2VWsSO0IHVbC14EocYmMLuWf3Xeyk8PKkg7JvWDeaRP
-         zEng==
-X-Gm-Message-State: AC+VfDwBiEtjJ50V9ccbG8itfT+fI9iTVx4AW7Zap7BkZwJKhu9za7OK
-        LmhnIGrfNmETofaqnqcW8FdkKRA5JdGV+jHT
-X-Google-Smtp-Source: ACHHUZ7A0FTyRgoZQBA5xxdHf2GAjLmeqwONxRsGT4cCME85kO/Le6UGR58og2ZTBKvA35SRyljzow==
-X-Received: by 2002:a05:620a:192a:b0:75d:51a4:3310 with SMTP id bj42-20020a05620a192a00b0075d51a43310mr10847923qkb.53.1687190755757;
-        Mon, 19 Jun 2023 09:05:55 -0700 (PDT)
-Received: from [10.178.67.29] ([192.19.248.250])
-        by smtp.gmail.com with ESMTPSA id cx12-20020a05620a51cc00b0076211938e93sm89623qkb.46.2023.06.19.09.05.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 09:05:55 -0700 (PDT)
-Message-ID: <d35aaedf-6350-d7aa-93cf-78b183709198@gmail.com>
-Date:   Mon, 19 Jun 2023 17:05:51 +0100
+        d=1e100.net; s=20221208; t=1687190814; x=1689782814;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E6Gz+pnHILNa9vWsNogxJJDOmyqbXg0zg3q5EITIlyc=;
+        b=KrJlU2NYweTbNAqZB4u88EBGoCzgjjiib/lHYRIm7kgrtkIAqozPGbp8Jc/7GopTOm
+         KSJxiQAM6JkVNRS27nl/z/FptQFnGJhWu3aQy3m1awoKVRlBwN71a7LuzJEPE4ZuHXIv
+         vm4rB+EYITmszgG3X1u/0MXJ2Qc2fUWvi3PguyA9GaLNxInA2AzlfQHcbDnx76H5BHWJ
+         iCIi38T64FoIkFZfkhBzGAKmkDsAMlEog/26fsga8Gpt5wwGFvsQcnl0rVy/wfZkpUe7
+         1LR9NpFzqpLiWf/crh0fQWlOfp5p3uAeTN/CaCR29Y90mjgNiJeavv1o82ZmclBArVIW
+         ZhgA==
+X-Gm-Message-State: AC+VfDw3fErmd7zge0Oi2Wa6MC5MxBSLD+xFoZmttFmOrOOdycUa8ae7
+        sEnD6XjgzM0IAk67v1u9+E4aoa37pUsReh4B0cTt
+X-Google-Smtp-Source: ACHHUZ6Pm/zBPHr7GxLINf+kQ3ucnOJrHhsX5RZRZ7fWZLZ3aeqR5bT2dsKcT1WNl0Mxf4joP/ftAF6WpPnMN8Kw06I=
+X-Received: by 2002:a0d:e892:0:b0:573:527b:747b with SMTP id
+ r140-20020a0de892000000b00573527b747bmr2700111ywe.36.1687190813964; Mon, 19
+ Jun 2023 09:06:53 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH net v6 6/6] MAINTAINERS: add me as maintainer of MEDIATEK
- SWITCH DRIVER
-Content-Language: en-US
-To:     arinc9.unal@gmail.com,
-        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
+References: <aa109847260e51e174c823b6d1441f75be370f01.1687083361.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <aa109847260e51e174c823b6d1441f75be370f01.1687083361.git.christophe.jaillet@wanadoo.fr>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 19 Jun 2023 12:06:43 -0400
+Message-ID: <CAHC9VhTu4dEbi0Sj1F9R+OR=5BfOzQNq5fBF9MWag2QxxMtfwg@mail.gmail.com>
+Subject: Re: [PATCH net-next] netlabel: Reorder fields in 'struct netlbl_domaddr6_map'
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230617062649.28444-1-arinc.unal@arinc9.com>
- <20230617062649.28444-7-arinc.unal@arinc9.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230617062649.28444-7-arinc.unal@arinc9.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, netdev@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Jun 18, 2023 at 6:16=E2=80=AFAM Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+>
+> Group some variables based on their sizes to reduce hole and avoid paddin=
+g.
+> On x86_64, this shrinks the size of 'struct netlbl_domaddr6_map'
+> from 72 to 64 bytes.
+>
+> It saves a few bytes of memory and is more cache-line friendly.
+>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> Using pahole
+>
+> Before:
+> =3D=3D=3D=3D=3D=3D
+> struct netlbl_dom_map {
+>         char *                     domain;               /*     0     8 *=
+/
+>         u16                        family;               /*     8     2 *=
+/
+>
+>         /* XXX 6 bytes hole, try to pack */
+>
+>         struct netlbl_dommap_def   def;                  /*    16    16 *=
+/
+>         u32                        valid;                /*    32     4 *=
+/
+>
+>         /* XXX 4 bytes hole, try to pack */
+>
+>         struct list_head           list;                 /*    40    16 *=
+/
+>         struct callback_head       rcu __attribute__((__aligned__(8))); /=
+*    56    16 */
+>
+>         /* size: 72, cachelines: 2, members: 6 */
+>         /* sum members: 62, holes: 2, sum holes: 10 */
+>         /* forced alignments: 1 */
+>         /* last cacheline: 8 bytes */
+> } __attribute__((__aligned__(8)));
+>
+>
+> After:
+> =3D=3D=3D=3D=3D
+> struct netlbl_dom_map {
+>         char *                     domain;               /*     0     8 *=
+/
+>         struct netlbl_dommap_def   def;                  /*     8    16 *=
+/
+>         u16                        family;               /*    24     2 *=
+/
+>
+>         /* XXX 2 bytes hole, try to pack */
+>
+>         u32                        valid;                /*    28     4 *=
+/
+>         struct list_head           list;                 /*    32    16 *=
+/
+>         struct callback_head       rcu __attribute__((__aligned__(8))); /=
+*    48    16 */
+>
+>         /* size: 64, cachelines: 1, members: 6 */
+>         /* sum members: 62, holes: 1, sum holes: 2 */
+>         /* forced alignments: 1 */
+> } __attribute__((__aligned__(8)));
+> ---
+>  net/netlabel/netlabel_domainhash.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
+Acked-by: Paul Moore <paul@paul-moore.com>
 
-On 6/17/2023 7:26 AM, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
-> 
-> Add me as a maintainer of the MediaTek MT7530 DSA subdriver.
-> 
-> List maintainers in alphabetical order by first name.
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
-
-Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
--- 
-Florian
+--=20
+paul-moore.com
