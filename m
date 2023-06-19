@@ -2,241 +2,345 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D50C0735D58
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 20:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 172D2735D5A
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 20:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231727AbjFSSNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 14:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48406 "EHLO
+        id S232260AbjFSSNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 14:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbjFSSND (ORCPT
+        with ESMTP id S232111AbjFSSNF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 14:13:03 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2044.outbound.protection.outlook.com [40.107.93.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F997E4D;
-        Mon, 19 Jun 2023 11:13:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=U9ASOTf0Ae4N/pA3NDmw9V6KJ7fCfxxUuVVscJ/yGvAO/jMZx+V0dcUoRgDxrOqsdSiANX/ZSlacT0jdMRDFq71djiOaheL7CK+VkfcGalPz3vKc+/1QiEJtmX1fdfQQxPWReCDzgDd0H2qiFcrSGl3/AK6SSZJaTQCxAu9OokL+uHPXWJlXiXh79q+au8xOMeh/MSuzoJ6G+Nb79XC7WRyKmtOH565RcCYFVUHdZDH6u9gMcnjl7o3x67e8DBsYFkQ+maHkrkh/NjN9Mbows/8Luh+NWWNLKM7E8ooPfgvgUz/cj309qw7r4wqJ+XkgbE0Tke0MjWYNwo+8LRGF8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sNx2tuIqkkYvNYrFmw2RBueysxlbi+wGA9aBScBp59s=;
- b=NNtW2dKKoC4yXoTCR65k09SjJvm2H08ckF5Cpkdz/f0dy+9uu174ApCCg4hrG7Y//EjGIOVv/xGLqV0wGP02oY4TxyyMSCg+7OP90xTckUMZfCAE/2rujv4I5kwhbk2J8F2Ee46stnzI5Ugjpj7DgohYFySn7TyFUReHUbbWG8O2sIvCpZ0eWQc7XymbBsQTpEnPcEOdIZrj2OwMtqwq4a4M+sg47DRpPIfbNjYu5amlxAvi7f0HJFC/e0tFWClHTvLWUBqUBlTxhZOPNhvSvg/oHpPUK4S6tnJfTHp5FfUDOJz4ZT+YjyN8fPbQzLWlQrayOesPIz7R19CEtnBwQw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sNx2tuIqkkYvNYrFmw2RBueysxlbi+wGA9aBScBp59s=;
- b=sYLNZC81/VFddJ9CRRLiEVs8BKS3Bnldwjg4LxyN+mHYkuonoVKwJMyRwFDgwzEOI9d7+wRHWCHSTf1GNYzzGmFrdWjHaelmsnEbd7KwUYBgK/jqDu++d8K+slFb+/hHT9EPN21Geo8/2pmm+D3rV/jJyRa6LJLCRzVss5ugL1E=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by MN0PR12MB5884.namprd12.prod.outlook.com (2603:10b6:208:37c::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.36; Mon, 19 Jun
- 2023 18:12:56 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::dfcf:f53c:c778:6f70]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::dfcf:f53c:c778:6f70%5]) with mapi id 15.20.6500.036; Mon, 19 Jun 2023
- 18:12:56 +0000
-Message-ID: <5b6fdf65-b354-94a9-f883-be820157efad@amd.com>
-Date:   Mon, 19 Jun 2023 13:12:52 -0500
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v6 2/8] PCI/VGA: Deal only with VGA class devices
-Content-Language: en-US
-To:     Sui Jingfeng <15330273260@189.cn>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian Konig <christian.koenig@amd.com>,
-        Pan Xinhui <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        YiPeng Chai <YiPeng.Chai@amd.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
-        Bokun Zhang <Bokun.Zhang@amd.com>,
-        Ville Syrjala <ville.syrjala@linux.intel.com>,
-        Li Yi <liyi@loongson.cn>,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Abhishek Sahu <abhsahu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-References: <20230612192550.197053-1-15330273260@189.cn>
- <20230612192550.197053-3-15330273260@189.cn>
-From:   "Limonciello, Mario" <mario.limonciello@amd.com>
-In-Reply-To: <20230612192550.197053-3-15330273260@189.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: DM6PR07CA0050.namprd07.prod.outlook.com
- (2603:10b6:5:74::27) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+        Mon, 19 Jun 2023 14:13:05 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C67A1B0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 11:13:02 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9887ebe16d0so235918766b.2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 11:13:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20221208; t=1687198380; x=1689790380;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k3lPC1NaG28i6896h3scqLwd/Pl9ZFzYUuPdAO/i3WU=;
+        b=REouLqfcG5RmtqcrUPyseUPu3OEdrtRxbrg8YZAsp5AQW69nUfAtDDDj3sFCm7kVhr
+         wwrj8CP68bwOtVBp3BnlUXl5gwDdLN/WsWLigk3e5kEYoKQUkgk20ECM4CawgVaWwVQl
+         /0VKfixyOIEZbZw7a+l0qZvJpmpOF+x97uQtoBe85owCoGe+2PuHhbRymx25DIYDj2lX
+         j13DdfYczEOGZp8N36RzmVPlW38OHZvouiXg+xVxB3txdXQrEWHgLhLatr9uNG1L0jDv
+         BhQ3dOq3Bsxtasxhu8+bcl56H9MUZC8dSisBfHH3j5xVst6Wz+aHjafAp9nhDDaSQGXE
+         amSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687198380; x=1689790380;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=k3lPC1NaG28i6896h3scqLwd/Pl9ZFzYUuPdAO/i3WU=;
+        b=X3nIswCorWhQZMSOoObQ2GWgqcJLbS47KeSi4/gWy1MceUkrIgK9dPSlzRjLA2vmP9
+         xCc/grKGQpTjdx9f/zJu4iMXAggVVbO9TuCG/L9CfEBgb17UYAJqL1JIkEfCwjcgpSMM
+         nAJkcDszpkwsSbNMJaZfLaby0j3D8kjjtK4W9qbSZygOfgshyI++opPCcib+OozL45An
+         RD5d1cqM6qGQ8P4Ltfi5Ak5Y4jTNv8xMXZVdXoTHHmRRIlJ1KOwYFYIiKnc8uD9SpQwZ
+         Bvmoc8orgv7lsB7LKFoIRS2ZQQc21SJq18kCTdF+YamDr00abUUCwWqjeDKCVcOU7jwD
+         PAJQ==
+X-Gm-Message-State: AC+VfDyBXaMraii4VPKNQnDzufXuCmqh4g3W71Pk5oXPQKzSPdAZUtcC
+        yqMiAUh5pQHLAuVTp/HxDlw=
+X-Google-Smtp-Source: ACHHUZ5+bsTW94X154hZMIJPIV5jfq+bsCsgyITU/b4qM8u02y+nWwrEcxZ17RzZ/LNTQYYQ+yBBlw==
+X-Received: by 2002:a17:907:3fa3:b0:94e:116:8581 with SMTP id hr35-20020a1709073fa300b0094e01168581mr10957330ejc.5.1687198380447;
+        Mon, 19 Jun 2023 11:13:00 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:810a:9640:26a8:dcda:2154:7873:34])
+        by smtp.gmail.com with ESMTPSA id qu13-20020a170907110d00b00988781076e2sm30992ejb.78.2023.06.19.11.12.59
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 19 Jun 2023 11:13:00 -0700 (PDT)
+From:   Franziska Naepelt <franziska.naepelt@googlemail.com>
+X-Google-Original-From: Franziska Naepelt <franziska.naepelt@gmail.com>
+To:     franziska.naepelt@googlemail.com
+Cc:     eperi1024@gmail.com, franziska.naepelt@gmail.com,
+        gregkh@linuxfoundation.org, hdegoede@redhat.com,
+        johannes.berg@intel.com, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev, quic_vjakkam@quicinc.com,
+        tegongkang@gmail.com
+Subject: [PATCH 5/5] staging: rtl8723bs: Fix alignment open parenthesis
+Date:   Mon, 19 Jun 2023 20:12:58 +0200
+Message-Id: <20230619181258.19152-1-franziska.naepelt@gmail.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
+In-Reply-To: <20230619175703.18826-1-franziska.naepelt@gmail.com>
+References: <20230619175703.18826-1-franziska.naepelt@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|MN0PR12MB5884:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6da40299-46c0-46bd-f82c-08db70f0ce8a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6ZDmG/WaUMkOoeDfjtgZMVBMu7T2io108gmgJ+QvkLSHk/lvRFBXxPbdU+YeE9R4dLQuFDjTEsMcfyzUIFNEHXHIUMIPGVXzifeULILL08jHXHclE4IzjhZG1zJ+QinPeuDUgukhnHh3ZrkMoxHtqFm98oAtbLgjZeIUnzbJ8cwxPpTwWTpqsbzYeOEBg4NRGls5gwcJtehz4fptNrjMIj5oVl+VrJWfm56W37dWC17loEY76cKHAcMwFiy9EVvi83HoGn+dGwnWTdzO4MHWh+SZsom3kbKBwWcqXSQYyDhObSRLXwPx9eBQ1TEat6tSiOo5u3kfA3UhSnnCxx1RZdmpEvvZ7RjcIgcSDtvtjwjDj2Oy4huMxvHiT1LB8MBANKnCKW63pm8TkfIZu35H19bvHD6YKQe7c7wLjB2/oVt3f6NmXgZLK6JxSe+PsMcd/SSBvFES8lJWACoziRRm+vK1YJPY/S134KjtqpF+z6ZLFwDlqUQnjjnXRbVTXSZkkeIyjO2tpsOkb4VMQKW0ZX0jlhU5ff1GuXhDlwqoEnXusLo7J5yLf9LKC3zwaYE22yufuoav15Wl+2qAi9WcFjdRSDQAbs3EHaWIy4jAHuhOiAfyOvKnheElOFRgFUQ8XMWzXcsrlL3defOQTziaOzY9vHOnqCeIt2Oz9j9h/X0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(396003)(366004)(376002)(39860400002)(451199021)(66899021)(31696002)(7416002)(31686004)(83380400001)(38100700002)(86362001)(41300700001)(8936002)(8676002)(7406005)(5660300002)(66556008)(66476007)(66946007)(316002)(2616005)(921005)(6506007)(53546011)(6512007)(26005)(6666004)(186003)(6486002)(478600001)(110136005)(4326008)(2906002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ejJvSHZiVzhNemdmOGdENG54cnBWWGZGUGV6ZmVZU3BNRW94MjJLZE9sa3ZS?=
- =?utf-8?B?elJxSVRjZlRNTThhQVFZbWdaMjFVYjdlTEk0MkJzeWFGWi9Tb2xsaU9CUDFy?=
- =?utf-8?B?RzVWZlJhdmREWlBraXRzYkNxNXhWcXhxcUUrVjIvYmtaRkViM3pRaDlmdU4y?=
- =?utf-8?B?cy9Ic0N5TnFoMEVkcmQ5R1diSEFUbXdqVzkrZFBSVTVvcXRsaUhOMTJCaWd2?=
- =?utf-8?B?Q3FtMC9UNVhTNGpUMk5XRUxaZ3ArRjlsMkR6dzJzU2xZUzhMMUR3WldVbVhI?=
- =?utf-8?B?MW9oVjB0V25ZbFdhdWI1enM3SHcwYzl3RzB0WWlQUGpqdXhBZytnOVlGdVRC?=
- =?utf-8?B?SWl1dVVKOTJ4bm5ESmN2b3R3Y2Rva2xRMEpVeVlVc3BrSERDbVA3L2t3alBB?=
- =?utf-8?B?UTdFQnQ0WDR6bENKTnFkcWwwTzBPc3ZwMEFDbExuUUM5Z1Jxa2tzVGlHQ2hF?=
- =?utf-8?B?TjJZTHZ0WkFQdmJObE9YbG5BVGxNWlhsV0VFOUo3d1VoRUVTNXJVd0h2cVg1?=
- =?utf-8?B?bzhRcmVhMEpLY0xHT3dVUlMwWEtuZ2lKNC9vYkhnVkxKdzZQYjJyYlQyQ2dE?=
- =?utf-8?B?NVRNenRjRjhZKzlIbmNIbSszaTZUNEVpRS93TXhPL1VmRnJVKzN5Tk1tUjhE?=
- =?utf-8?B?RmZjZUtxMWZDOVR6TGhWM0lDWEFSSmt0eDNramtzcC9pejNiOFl1SmZKYnFF?=
- =?utf-8?B?OGY5OWNlZm5NaDBXSWJOajJXQ0hoeVRTa2dhR3FFZ2hJYmY0bHV2eTk4MVls?=
- =?utf-8?B?dXNUZGx0YzRMN0hFTjNYc2Nwd2JXWmZJRlhhZEVjUGR0MGJScGZDU3RBaFNB?=
- =?utf-8?B?bmg3bVFieEdwMzVNbU4vaTgrVlRPelBoU25RQkF4aEZiSUNSN1oyckxVZkNp?=
- =?utf-8?B?SzFET0pZM3hpWW9MT0c5QnNnd0ZjQTRodFVDK1BMUkczeHMwcTNLMmpKcXNX?=
- =?utf-8?B?bklnRThxdHc2eURmS2pZUjFsMjRyRGFLb0F3d0FndGw0a2VRTGRRMDRMSllI?=
- =?utf-8?B?YTVRS0ZYMVdPVE1PTG5yU05UV0lGbUd2Z3Vnc0UxdHU4WmozTENqcnZTQmFH?=
- =?utf-8?B?MXFIWE96WENEcjBkNGw3NDZiVzFtcHZudWNRNGhRa29ReFB4MXYzaGZZWEtp?=
- =?utf-8?B?TXlnbTNDdU41QWNPTmJXNmZxK2o5eUIxV2diVXZoRUg4b2xpa3k0OVVPcktR?=
- =?utf-8?B?MGdYWHJPV3ZRQ3hmZG9ZTElIbHZrU2pXZUxpSVpmY0QxZm1Edy9iMytudEtx?=
- =?utf-8?B?ZzM0MExZNmR1WVFySkJERHh6NlpnZVU0TkRUL0x3VkRndFBPYWtpQkxleUFw?=
- =?utf-8?B?Um9uelQxcHdiMmxhTUVtNnRWVm5hOTBuWS91dWpPc0NYTWV3Z1NpcUE5YjVh?=
- =?utf-8?B?L0VyUEhzQ01pTEMxVDE4U1dYMTVBUlpvZ0RWaFFQL0N3QW9lVFlPdnhpKy9G?=
- =?utf-8?B?bFBRRmpKSDErd1l0SGxrRFNmbTFlZHRtQUlMVHVxV1haNk8xM3JjRlM1dzNP?=
- =?utf-8?B?dHdROUtqNGVZdHdQclVFTTNNeStOWmVBZWd4ZU40dmFVTC9STldoczFDaGtO?=
- =?utf-8?B?WjVzc1pnc0UvK0w4SjVUSU1ySm1obFhrMm83VUhQemxzalBVZFdvbTNzYXhP?=
- =?utf-8?B?bVB0Q1haTjBIS0NCMi9KR2s3Q2c4ajFhNTVQL0t2amdlcE5aSG16S29LSG1l?=
- =?utf-8?B?QlRvTXFkcnhuNUUwNTlxUU5kTWp4Q3M4bmJNMXFPV2pvRnlUSjdrVjJ6UE1m?=
- =?utf-8?B?QmRuaFBRcS84VjY1TW8vdUV5ZHhwWmlDREh4NTlHOUhTdDMxRGRtKzZSOTV6?=
- =?utf-8?B?eVBmalJjcm9objQ1NDlsbXZNMWgxUmY2TnBqNnQ2Vy9zTXg5UWlCbzBzS0k5?=
- =?utf-8?B?UExacElXZC9VTzdMMEpVbDJSS05GdURYclk1Nk5sRDlVZUFmTkErNjNsNVRy?=
- =?utf-8?B?eXFPR3NpVTRGMWIzSGUzS01OLy9RUEZWaEk4MWV5c1NIaUdxejl4MHlOT1V1?=
- =?utf-8?B?NnNJWkJUSHdsQXZGemhhak84clFPZkVFbUZQNjVTZHJFTExObVQ1d1p6am51?=
- =?utf-8?B?VDV2K0pTRDZWblZHeVRSUTJOMGlhMUg0eGFUdUxTb1dCVHI1YVVqSEpxQjFV?=
- =?utf-8?Q?Vw9rcaGqFOQjQCbeoqrafFMr7?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6da40299-46c0-46bd-f82c-08db70f0ce8a
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jun 2023 18:12:56.4165
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EMkootrrO50AhxHV+7OpkOcMREW6hR6ZM6Fgt1SsvV3toYrbEGsYxDzRgI6lWeBNwqAG787tSJpk/7HD4SCI5g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5884
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Fix the following checkpatch issues:
+- CHECK: Alignment should match open parenthesis
 
-On 6/12/2023 2:25 PM, Sui Jingfeng wrote:
-> From: Sui Jingfeng <suijingfeng@loongson.cn>
->
-> Deal only with the VGA devcie(pdev->class == 0x0300), so replace the
-> pci_get_subsys() function with pci_get_class(). Filter the non-PCI display
-> device(pdev->class != 0x0300) out. There no need to process the non-display
-> PCI device.
->
-> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
-> ---
-This also means that deleting a PCI device no longer needs
-to walk the list.
+Signed-off-by: Franziska Naepelt <franziska.naepelt@gmail.com>
+---
+ .../staging/rtl8723bs/os_dep/ioctl_cfg80211.c | 91 ++++++++++---------
+ 1 file changed, 49 insertions(+), 42 deletions(-)
 
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+diff --git a/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c b/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
+index c00a377258d8..292cba045023 100644
+--- a/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
++++ b/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
+@@ -95,14 +95,14 @@ static struct ieee80211_channel rtw_2ghz_channels[] = {
+ static void rtw_2g_channels_init(struct ieee80211_channel *channels)
+ {
+ 	memcpy((void *)channels, (void *)rtw_2ghz_channels,
+-		sizeof(struct ieee80211_channel) * RTW_2G_CHANNELS_NUM
++	       sizeof(struct ieee80211_channel) * RTW_2G_CHANNELS_NUM
+ 	);
+ }
+ 
+ static void rtw_2g_rates_init(struct ieee80211_rate *rates)
+ {
+ 	memcpy(rates, rtw_g_rates,
+-		sizeof(struct ieee80211_rate) * RTW_G_RATES_NUM
++	       sizeof(struct ieee80211_rate) * RTW_G_RATES_NUM
+ 	);
+ }
+ 
+@@ -275,7 +275,7 @@ struct cfg80211_bss *rtw_cfg80211_inform_bss(struct adapter *padapter, struct wl
+ 
+ 	/* We've set wiphy's signal_type as CFG80211_SIGNAL_TYPE_MBM: signal strength in mBm (100*dBm) */
+ 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true &&
+-		is_same_network(&pmlmepriv->cur_network.network, &pnetwork->network, 0)) {
++	    is_same_network(&pmlmepriv->cur_network.network, &pnetwork->network, 0)) {
+ 		notify_signal = 100 * translate_percentage_to_dbm(padapter->recvpriv.signal_strength);/* dbm */
+ 	} else {
+ 		notify_signal = 100 * translate_percentage_to_dbm(pnetwork->network.phy_info.signal_strength);/* dbm */
+@@ -313,7 +313,7 @@ struct cfg80211_bss *rtw_cfg80211_inform_bss(struct adapter *padapter, struct wl
+ 	*((__le64 *)pbuf) = cpu_to_le64(notify_timestamp);
+ 
+ 	bss = cfg80211_inform_bss_frame(wiphy, notify_channel, (struct ieee80211_mgmt *)buf,
+-		len, notify_signal, GFP_ATOMIC);
++					len, notify_signal, GFP_ATOMIC);
+ 
+ 	if (unlikely(!bss))
+ 		goto exit;
+@@ -345,9 +345,9 @@ int rtw_cfg80211_check_bss(struct adapter *padapter)
+ 
+ 	notify_channel = ieee80211_get_channel(padapter->rtw_wdev->wiphy, freq);
+ 	bss = cfg80211_get_bss(padapter->rtw_wdev->wiphy, notify_channel,
+-			pnetwork->mac_address, pnetwork->ssid.ssid,
+-			pnetwork->ssid.ssid_length,
+-			IEEE80211_BSS_TYPE_ANY, IEEE80211_PRIVACY_ANY);
++			       pnetwork->mac_address, pnetwork->ssid.ssid,
++			       pnetwork->ssid.ssid_length,
++			       IEEE80211_BSS_TYPE_ANY, IEEE80211_PRIVACY_ANY);
+ 
+ 	cfg80211_put_bss(padapter->rtw_wdev->wiphy, bss);
+ 
+@@ -486,7 +486,7 @@ void rtw_cfg80211_indicate_disconnect(struct adapter *padapter)
+ 					      NULL, 0, true, GFP_ATOMIC);
+ 		} else {
+ 			cfg80211_connect_result(padapter->pnetdev, NULL, NULL, 0, NULL, 0,
+-				WLAN_STATUS_UNSPECIFIED_FAILURE, GFP_ATOMIC/*GFP_KERNEL*/);
++						WLAN_STATUS_UNSPECIFIED_FAILURE, GFP_ATOMIC/*GFP_KERNEL*/);
+ 		}
+ 	}
+ }
+@@ -777,7 +777,7 @@ static int rtw_cfg80211_set_encryption(struct net_device *dev, struct ieee_param
+ 					psta->ieee8021x_blocked = false;
+ 
+ 				if ((padapter->securitypriv.ndisencryptstatus == Ndis802_11Encryption2Enabled) ||
+-						(padapter->securitypriv.ndisencryptstatus ==  Ndis802_11Encryption3Enabled)) {
++				    (padapter->securitypriv.ndisencryptstatus ==  Ndis802_11Encryption3Enabled)) {
+ 					psta->dot118021XPrivacy = padapter->securitypriv.dot11PrivacyAlgrthm;
+ 				}
+ 
+@@ -826,7 +826,7 @@ static int rtw_cfg80211_set_encryption(struct net_device *dev, struct ieee_param
+ 					pbcmc_sta->ieee8021x_blocked = false;
+ 
+ 				if ((padapter->securitypriv.ndisencryptstatus == Ndis802_11Encryption2Enabled) ||
+-						(padapter->securitypriv.ndisencryptstatus ==  Ndis802_11Encryption3Enabled)) {
++				    (padapter->securitypriv.ndisencryptstatus ==  Ndis802_11Encryption3Enabled)) {
+ 					pbcmc_sta->dot118021XPrivacy = padapter->securitypriv.dot11PrivacyAlgrthm;
+ 				}
+ 			}
+@@ -944,9 +944,9 @@ static int cfg80211_rtw_del_key(struct wiphy *wiphy, struct net_device *ndev,
+ }
+ 
+ static int cfg80211_rtw_set_default_key(struct wiphy *wiphy,
+-	struct net_device *ndev, int link_id, u8 key_index
+-	, bool unicast, bool multicast
+-	)
++					struct net_device *ndev, int link_id,
++					u8 key_index, bool unicast,
++					bool multicast)
+ {
+ 	struct adapter *padapter = rtw_netdev_priv(ndev);
+ 	struct security_priv *psecuritypriv = &padapter->securitypriv;
+@@ -1121,9 +1121,10 @@ void rtw_cfg80211_unlink_bss(struct adapter *padapter, struct wlan_network *pnet
+ 	struct wlan_bssid_ex *select_network = &pnetwork->network;
+ 
+ 	bss = cfg80211_get_bss(wiphy, NULL/*notify_channel*/,
+-		select_network->mac_address, select_network->ssid.ssid,
+-		select_network->ssid.ssid_length, IEEE80211_BSS_TYPE_ANY,
+-		IEEE80211_PRIVACY_ANY);
++			       select_network->mac_address,
++			       select_network->ssid.ssid,
++			       select_network->ssid.ssid_length,
++			       IEEE80211_BSS_TYPE_ANY, IEEE80211_PRIVACY_ANY);
+ 
+ 	if (bss) {
+ 		cfg80211_unlink_bss(wiphy, bss);
+@@ -1328,7 +1329,7 @@ static int rtw_cfg80211_set_wpa_version(struct security_priv *psecuritypriv, u32
+ }
+ 
+ static int rtw_cfg80211_set_auth_type(struct security_priv *psecuritypriv,
+-			     enum nl80211_auth_type sme_auth_type)
++				      enum nl80211_auth_type sme_auth_type)
+ {
+ 	switch (sme_auth_type) {
+ 	case NL80211_AUTHTYPE_AUTOMATIC:
+@@ -1633,7 +1634,7 @@ static int cfg80211_rtw_leave_ibss(struct wiphy *wiphy, struct net_device *ndev)
+ }
+ 
+ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
+-				 struct cfg80211_connect_params *sme)
++				struct cfg80211_connect_params *sme)
+ {
+ 	int ret = 0;
+ 	enum ndis_802_11_authentication_mode authmode;
+@@ -1708,7 +1709,7 @@ static int cfg80211_rtw_connect(struct wiphy *wiphy, struct net_device *ndev,
+ 
+ 	/* For WEP Shared auth */
+ 	if ((psecuritypriv->dot11AuthAlgrthm == dot11AuthAlgrthm_Shared ||
+-	    psecuritypriv->dot11AuthAlgrthm == dot11AuthAlgrthm_Auto) && sme->key) {
++	     psecuritypriv->dot11AuthAlgrthm == dot11AuthAlgrthm_Auto) && sme->key) {
+ 		u32 wep_key_idx, wep_key_len, wep_total_len;
+ 		struct ndis_802_11_wep	 *pwep = NULL;
+ 
+@@ -1806,15 +1807,14 @@ static int cfg80211_rtw_disconnect(struct wiphy *wiphy, struct net_device *ndev,
+ }
+ 
+ static int cfg80211_rtw_set_txpower(struct wiphy *wiphy,
+-	struct wireless_dev *wdev,
+-	enum nl80211_tx_power_setting type, int mbm)
++				    struct wireless_dev *wdev,
++				    enum nl80211_tx_power_setting type, int mbm)
+ {
+ 	return 0;
+ }
+ 
+ static int cfg80211_rtw_get_txpower(struct wiphy *wiphy,
+-	struct wireless_dev *wdev,
+-	int *dbm)
++				    struct wireless_dev *wdev, int *dbm)
+ {
+ 	*dbm = (12);
+ 
+@@ -2227,7 +2227,7 @@ static struct wireless_dev *
+ }
+ 
+ static int cfg80211_rtw_del_virtual_intf(struct wiphy *wiphy,
+-	struct wireless_dev *wdev
++					 struct wireless_dev *wdev
+ )
+ {
+ 	struct net_device *ndev = wdev_to_ndev(wdev);
+@@ -2294,13 +2294,14 @@ static int rtw_add_beacon(struct adapter *adapter, const u8 *head, size_t head_l
+ }
+ 
+ static int cfg80211_rtw_start_ap(struct wiphy *wiphy, struct net_device *ndev,
+-								struct cfg80211_ap_settings *settings)
++				 struct cfg80211_ap_settings *settings)
+ {
+ 	int ret = 0;
+ 	struct adapter *adapter = rtw_netdev_priv(ndev);
+ 
+-	ret = rtw_add_beacon(adapter, settings->beacon.head, settings->beacon.head_len,
+-		settings->beacon.tail, settings->beacon.tail_len);
++	ret = rtw_add_beacon(adapter, settings->beacon.head,
++			     settings->beacon.head_len, settings->beacon.tail,
++			     settings->beacon.tail_len);
+ 
+ 	adapter->mlmeextpriv.mlmext_info.hidden_ssid_mode = settings->hidden_ssid;
+ 
+@@ -2317,8 +2318,9 @@ static int cfg80211_rtw_start_ap(struct wiphy *wiphy, struct net_device *ndev,
+ 	return ret;
+ }
+ 
+-static int cfg80211_rtw_change_beacon(struct wiphy *wiphy, struct net_device *ndev,
+-		struct cfg80211_beacon_data *info)
++static int cfg80211_rtw_change_beacon(struct wiphy *wiphy,
++				      struct net_device *ndev,
++				      struct cfg80211_beacon_data *info)
+ {
+ 	struct adapter *adapter = rtw_netdev_priv(ndev);
+ 
+@@ -2331,9 +2333,10 @@ static int cfg80211_rtw_stop_ap(struct wiphy *wiphy, struct net_device *ndev,
+ 	return 0;
+ }
+ 
+-static int	cfg80211_rtw_add_station(struct wiphy *wiphy, struct net_device *ndev,
+-				const u8 *mac,
+-			struct station_parameters *params)
++static int	cfg80211_rtw_add_station(struct wiphy *wiphy,
++					 struct net_device *ndev,
++					 const u8 *mac,
++					 struct station_parameters *params)
+ {
+ 	return 0;
+ }
+@@ -2395,8 +2398,10 @@ static int cfg80211_rtw_del_station(struct wiphy *wiphy, struct net_device *ndev
+ 	return ret;
+ }
+ 
+-static int cfg80211_rtw_change_station(struct wiphy *wiphy, struct net_device *ndev,
+-				  const u8 *mac, struct station_parameters *params)
++static int cfg80211_rtw_change_station(struct wiphy *wiphy,
++				       struct net_device *ndev,
++				       const u8 *mac,
++				       struct station_parameters *params)
+ {
+ 	return 0;
+ }
+@@ -2421,8 +2426,10 @@ static struct sta_info *rtw_sta_info_get_by_idx(const int idx, struct sta_priv *
+ 	return psta;
+ }
+ 
+-static int	cfg80211_rtw_dump_station(struct wiphy *wiphy, struct net_device *ndev,
+-			       int idx, u8 *mac, struct station_info *sinfo)
++static int	cfg80211_rtw_dump_station(struct wiphy *wiphy,
++					  struct net_device *ndev,
++					  int idx, u8 *mac,
++					  struct station_info *sinfo)
+ {
+ 	int ret = 0;
+ 	struct adapter *padapter = rtw_netdev_priv(ndev);
+@@ -2444,8 +2451,9 @@ static int	cfg80211_rtw_dump_station(struct wiphy *wiphy, struct net_device *nde
+ 	return ret;
+ }
+ 
+-static int	cfg80211_rtw_change_bss(struct wiphy *wiphy, struct net_device *ndev,
+-			      struct bss_parameters *params)
++static int	cfg80211_rtw_change_bss(struct wiphy *wiphy,
++					struct net_device *ndev,
++					struct bss_parameters *params)
+ {
+ 	return 0;
+ }
+@@ -2528,10 +2536,9 @@ static int _cfg80211_rtw_mgmt_tx(struct adapter *padapter, u8 tx_ch, const u8 *b
+ 	return ret;
+ }
+ 
+-static int cfg80211_rtw_mgmt_tx(struct wiphy *wiphy,
+-	struct wireless_dev *wdev,
+-	struct cfg80211_mgmt_tx_params *params,
+-	u64 *cookie)
++static int cfg80211_rtw_mgmt_tx(struct wiphy *wiphy, struct wireless_dev *wdev,
++				struct cfg80211_mgmt_tx_params *params,
++				u64 *cookie)
+ {
+ 	struct net_device *ndev = wdev_to_ndev(wdev);
+ 	struct ieee80211_channel *chan = params->chan;
+-- 
+2.39.2 (Apple Git-143)
 
->   drivers/pci/vgaarb.c | 22 ++++++++++++----------
->   1 file changed, 12 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/pci/vgaarb.c b/drivers/pci/vgaarb.c
-> index c1bc6c983932..22a505e877dc 100644
-> --- a/drivers/pci/vgaarb.c
-> +++ b/drivers/pci/vgaarb.c
-> @@ -754,10 +754,6 @@ static bool vga_arbiter_add_pci_device(struct pci_dev *pdev)
->   	struct pci_dev *bridge;
->   	u16 cmd;
->   
-> -	/* Only deal with VGA class devices */
-> -	if ((pdev->class >> 8) != PCI_CLASS_DISPLAY_VGA)
-> -		return false;
-> -
->   	/* Allocate structure */
->   	vgadev = kzalloc(sizeof(struct vga_device), GFP_KERNEL);
->   	if (vgadev == NULL) {
-> @@ -1500,7 +1496,9 @@ static int pci_notify(struct notifier_block *nb, unsigned long action,
->   	struct pci_dev *pdev = to_pci_dev(dev);
->   	bool notify = false;
->   
-> -	vgaarb_dbg(dev, "%s\n", __func__);
-> +	/* Only deal with VGA class devices */
-> +	if (pdev->class != PCI_CLASS_DISPLAY_VGA << 8)
-> +		return 0;
->   
->   	/* For now we're only intereted in devices added and removed. I didn't
->   	 * test this thing here, so someone needs to double check for the
-> @@ -1510,6 +1508,8 @@ static int pci_notify(struct notifier_block *nb, unsigned long action,
->   	else if (action == BUS_NOTIFY_DEL_DEVICE)
->   		notify = vga_arbiter_del_pci_device(pdev);
->   
-> +	vgaarb_dbg(dev, "%s: action = %lu\n", __func__, action);
-> +
->   	if (notify)
->   		vga_arbiter_notify_clients();
->   	return 0;
-> @@ -1534,8 +1534,8 @@ static struct miscdevice vga_arb_device = {
->   
->   static int __init vga_arb_device_init(void)
->   {
-> +	struct pci_dev *pdev = NULL;
->   	int rc;
-> -	struct pci_dev *pdev;
->   
->   	rc = misc_register(&vga_arb_device);
->   	if (rc < 0)
-> @@ -1545,11 +1545,13 @@ static int __init vga_arb_device_init(void)
->   
->   	/* We add all PCI devices satisfying VGA class in the arbiter by
->   	 * default */
-> -	pdev = NULL;
-> -	while ((pdev =
-> -		pci_get_subsys(PCI_ANY_ID, PCI_ANY_ID, PCI_ANY_ID,
-> -			       PCI_ANY_ID, pdev)) != NULL)
-> +	while (1) {
-> +		pdev = pci_get_class(PCI_CLASS_DISPLAY_VGA << 8, pdev);
-> +		if (!pdev)
-> +			break;
-> +
->   		vga_arbiter_add_pci_device(pdev);
-> +	}
->   
->   	pr_info("loaded\n");
->   	return rc;
