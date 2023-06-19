@@ -2,81 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D57B735BFE
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 18:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E24E735C04
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 18:16:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232206AbjFSQNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 12:13:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33384 "EHLO
+        id S231492AbjFSQPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 12:15:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232055AbjFSQN1 (ORCPT
+        with ESMTP id S232310AbjFSQPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 12:13:27 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED22B1B0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:13:25 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b46bfa66d2so29012601fa.2
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:13:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687191204; x=1689783204;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hmgYvNinjU/fT+erZeLft1aKLnZsg+oPmLA3CULSbeM=;
-        b=PTEHzxVjoT1bF8b5NSp4p68xB+MVPrSsJJUY0khQid3MBOQ+0J/+/PjP5ztIJnoEte
-         wnFd+gMhlzHN05KizStYKFgY0/J+neM+FabraUyIE4grK0b2Xy36NcJEcfAiw/eidaTL
-         lBbCMzwMCHodFXALMzlUfFHUad8nkzCyoihpPCx6ZhelQM7cijXatQVr4/BNAib/4/zt
-         EVBHsyAyofZh9OiQNOounIyW6aW5CrPCYY1bdmTzYy2IrpZSC51i0Todnq/bli6Xw9mS
-         6D3ZYv9axSfxuK0o7pZQ2IxZZBVV5cteCUXqmOSQPNYe7B847ZjptQGNcfhNtWYSarSo
-         LpcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687191204; x=1689783204;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hmgYvNinjU/fT+erZeLft1aKLnZsg+oPmLA3CULSbeM=;
-        b=SfJRERLihdq3awOF2bthYcu1bGVt3pThkPHQhcZ8BN1UCOJ3GqLpNpXWmUxkkAFGFa
-         wqYQ4odankmkQglq7ZM6vzrXGC1n/RYDdETV2p0DLU3JjAset083+4cDKH2yCfNquO+b
-         Ee/hwSM8wwFqlsv+TE7q7vFGkQqpty+ZcahwQeWvSo+6Nm38Lc5z6Ag+ee/Sy/eVUw0J
-         k7y5l3OT6n5IJbkTEfF8O5XSBcREAGWuqe1iqyrqqK289YGQjtfLcmDbDQ8yhKqS7NA/
-         00Tzd4tYkIHWPe13h6cvXeSOF6KdufqwCtIo/Au2MdRUB3SEy27i3ro3CcBXe2KDATaR
-         sv9g==
-X-Gm-Message-State: AC+VfDxvgjHu10Ig12jT1+jTn0Rwi8qCwvX6GYmTm1AKGyUl2YcmhJpb
-        jMIy0WtW3E4yYBfPKf6JrL7LOPcKAU1FeyyPKak=
-X-Google-Smtp-Source: ACHHUZ5FVyfJK40+gm5ktlujj/AXdHiYmbvKw0KBnc6dK1hlmNuaf+P6ZagFHzrzYXyq0LyYIyYb4A==
-X-Received: by 2002:a2e:960d:0:b0:2ad:d291:72e1 with SMTP id v13-20020a2e960d000000b002add29172e1mr6611945ljh.18.1687191204336;
-        Mon, 19 Jun 2023 09:13:24 -0700 (PDT)
-Received: from [192.168.1.101] (abyl242.neoplus.adsl.tpnet.pl. [83.9.31.242])
-        by smtp.gmail.com with ESMTPSA id x20-20020a2e7c14000000b002b471efb253sm1011714ljc.46.2023.06.19.09.13.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 09:13:24 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 19 Jun 2023 18:13:18 +0200
-Subject: [PATCH 2/2] clk: qcom: gcc-sc8280xp: Add runtime PM
+        Mon, 19 Jun 2023 12:15:03 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4755F1AB;
+        Mon, 19 Jun 2023 09:15:01 -0700 (PDT)
+X-QQ-mid: bizesmtp81t1687191285t01nawk2
+Received: from linux-lab-host.localdomain ( [116.30.126.60])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 20 Jun 2023 00:14:44 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: ZdHcY4j9T+JijOCEaI8NmadI1bU2NcMWNN0LyKkwYd78IIfSGuJNw4ExYDsC6
+        4p+ypSy34TXQkH2u4G361x0wwuIvn+6JwClrIj35FYTsUsypkzVae2C/aLNMHgTDkvGKkUC
+        b7iX+Sg3k2OiyMGpOpz+YEcBx0k9YEj4udS4iTsULv4XQd5W002HtAam6/ruHiJTzk6lVMj
+        MonXQf1k6YcDfjUOz1FGyI5E07uFJI6QFGlddPjOFY/v29nn2HUpS+QxyKmzAX2JLhwPnZZ
+        AdngcSwJgBVlEuh3xUzyI40+sxnz16o3BkySAiORsqLOHVGN7sfTQtxygVthRzMIhxGG7HU
+        9D1KBqNWPyarbrI+fC4pCeml0sgPg==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 15276055031568297956
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     falcon@tinylab.org
+Cc:     arnd@arndb.de, david.laight@aculab.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org, thomas@t-8ch.de, w@1wt.eu
+Subject: [PATCH v4 10/10] selftests/nolibc: add mmap and munmap test cases
+Date:   Tue, 20 Jun 2023 00:14:44 +0800
+Message-Id: <20230619161444.285353-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <9c46f648cd8c784405afed565bed120f0a2f239e.1687187451.git.falcon@tinylab.org>
+References: <9c46f648cd8c784405afed565bed120f0a2f239e.1687187451.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230619-topic-sc8280xp-clk-rpm-v1-2-1e5e1064cdb2@linaro.org>
-References: <20230619-topic-sc8280xp-clk-rpm-v1-0-1e5e1064cdb2@linaro.org>
-In-Reply-To: <20230619-topic-sc8280xp-clk-rpm-v1-0-1e5e1064cdb2@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1687191201; l=1628;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=iLOsinGTJtv8sPDkEM7a2zWDxDnO0K1p+yOFG6UU878=;
- b=7gTXtpfYHcJ+0pwGRH82J2GexETpGG26Gyb/o04zQKY9qD5wnd1s78SdNgclCurw05CB4RlMi
- lEdx/i0XRbsDjfQmEAqtdOzVf3WwIQRHifziP649VUBKp7lkQLL5FK5
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,62 +52,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The GCC block on SC8280XP is powered by the CX rail. We need to ensure
-that it's enabled to prevent unwanted power collapse.
+Hi,
 
-Enable runtime PM to keep the power flowing only when necessary.
+> Three mmap/munmap related test cases are added:
+> 
+> - mmap(NULL, 0, PROT_READ, MAP_PRIVATE, 0, 0), MAP_FAILED, EINVAL)
+> 
+>   The length argument must be greater than 0, otherwise, fail with -EINVAL.
+> 
+> - munmap((void *)-1, 4*1024), -1, EINVAL)
+>
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/clk/qcom/gcc-sc8280xp.c | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+Sorry, this message doesn't match the code, will change it in new revison.
 
-diff --git a/drivers/clk/qcom/gcc-sc8280xp.c b/drivers/clk/qcom/gcc-sc8280xp.c
-index 04a99dbaa57e..b90c71637814 100644
---- a/drivers/clk/qcom/gcc-sc8280xp.c
-+++ b/drivers/clk/qcom/gcc-sc8280xp.c
-@@ -9,6 +9,7 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/of_device.h>
-+#include <linux/pm_runtime.h>
- #include <linux/of.h>
- #include <linux/regmap.h>
- 
-@@ -7421,9 +7422,19 @@ static int gcc_sc8280xp_probe(struct platform_device *pdev)
- 	struct regmap *regmap;
- 	int ret;
- 
-+	ret = devm_pm_runtime_enable(&pdev->dev);
-+	if (ret)
-+		return ret;
-+
-+	ret = pm_runtime_resume_and_get(&pdev->dev);
-+	if (ret)
-+		return ret;
-+
- 	regmap = qcom_cc_map(pdev, &gcc_sc8280xp_desc);
--	if (IS_ERR(regmap))
-+	if (IS_ERR(regmap)) {
-+		pm_runtime_put(&pdev->dev);
- 		return PTR_ERR(regmap);
-+	}
- 
- 	/*
- 	 * Keep the clocks always-ON
-@@ -7445,7 +7456,10 @@ static int gcc_sc8280xp_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	return qcom_cc_really_probe(pdev, &gcc_sc8280xp_desc, regmap);
-+	ret = qcom_cc_really_probe(pdev, &gcc_sc8280xp_desc, regmap);
-+	pm_runtime_put(&pdev->dev);
-+
-+	return ret;
- }
- 
- static const struct of_device_id gcc_sc8280xp_match_table[] = {
+>   Invalid (void *)-1 address fail with -EINVAL.
+> 
+> - test_mmap_munmap(4*1024)
+> 
+>   It finds a init file, mmap() it and then munmap().
+> 
+> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> ---
+>  tools/testing/selftests/nolibc/nolibc-test.c | 31 ++++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+> index 80ab29e2887c..f7c0ca72cb28 100644
+> --- a/tools/testing/selftests/nolibc/nolibc-test.c
+> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+> @@ -592,6 +592,34 @@ static int test_stat_timestamps(void)
+>  	return 0;
+>  }
+>  
+> +int test_mmap_munmap(int size)
+> +{
+> +	char init_files[5][20] = {"/init", "/sbin/init", "/etc/init", "/bin/init", "/bin/sh"};
+> +	int ret, fd, i;
+> +	void *mem;
+> +
+> +	for (i = 0; i < 5; i++) {
+> +		ret = fd = open(init_files[i], O_RDONLY);
+> +		if (ret < 0)
+> +			continue;
+> +		else
+> +			break;
+> +	}
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	mem = mmap(NULL, size, PROT_READ, MAP_SHARED, fd, 0);
+> +	if (mem == MAP_FAILED)
+> +		return -1;
+> +
 
--- 
-2.41.0
+And here need a close(fd):
 
+	if (mem == MAP_FAILED) {
+		close(fd);
+		return -1;
+	}
+
+> +	ret = munmap(mem, size);
+> +	if (ret < 0)
+> +		return ret;
+> +
+
+And here too:
+
+	if (ret < 0) {
+		close(fd);
+		return ret;
+	}
+
+
+> +	return close(fd);
+
+	close(fd);
+	return 0;
+
+Thanks,
+Zhangjin
+
+> +}
+> +
+> +
+>  /* Run syscall tests between IDs <min> and <max>.
+>   * Return 0 on success, non-zero on failure.
+>   */
+> @@ -666,6 +694,9 @@ int run_syscall(int min, int max)
+>  		CASE_TEST(lseek_m1);          EXPECT_SYSER(1, lseek(-1, 0, SEEK_SET), -1, EBADF); break;
+>  		CASE_TEST(lseek_0);           EXPECT_SYSER(1, lseek(0, 0, SEEK_SET), -1, ESPIPE); break;
+>  		CASE_TEST(mkdir_root);        EXPECT_SYSER(1, mkdir("/", 0755), -1, EEXIST); break;
+> +		CASE_TEST(mmap_bad);          EXPECT_PTRER(1, mmap(NULL, 0, PROT_READ, MAP_PRIVATE, 0, 0), MAP_FAILED, EINVAL); break;
+> +		CASE_TEST(munmap_bad);        EXPECT_SYSER(1, munmap((void *)-1, 0), -1, EINVAL); break;
+> +		CASE_TEST(mmap_good);         EXPECT_SYSZR(1, test_mmap_munmap(4*1024)); break;
+>  		CASE_TEST(open_tty);          EXPECT_SYSNE(1, tmp = open("/dev/null", 0), -1); if (tmp != -1) close(tmp); break;
+>  		CASE_TEST(open_blah);         EXPECT_SYSER(1, tmp = open("/proc/self/blah", 0), -1, ENOENT); if (tmp != -1) close(tmp); break;
+>  		CASE_TEST(poll_null);         EXPECT_SYSZR(1, poll(NULL, 0, 0)); break;
+> -- 
+> 2.25.1
