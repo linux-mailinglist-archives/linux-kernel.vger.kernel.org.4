@@ -2,55 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C987349B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 03:32:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D6F7349BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 03:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjFSBbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 21:31:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37032 "EHLO
+        id S229641AbjFSBek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 21:34:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjFSBbn (ORCPT
+        with ESMTP id S229475AbjFSBef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 21:31:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD8BD1
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 18:31:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E7A260F0F
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 01:31:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1E3CC433C0;
-        Mon, 19 Jun 2023 01:31:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687138301;
-        bh=i3jkIUwYMg0GoBLvyBEiJO0i1ENUUhOWr6sshjDMEpM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kUllh/f0NoNMU2ZcAhzXYlzyRRLJO8p75zYc+jWDd41d0jEqA7eD4E1HSsQ1ffe6o
-         d/h2XcGNJvwUDS7nwDY9acWTORJyxQl/RQCqSDHDQruSium5aHcgh+Bc9WXUfYXeMJ
-         X9R9KE6gaqR8Ig1GIWuFfQypAPspBYx4SmGmFcf5ZEgjsEHe6R2WNi6vryxPUyxV0y
-         3ya5BYXVxI+EyxEdJqiJU37otoSReF+rUJvRURUunDdxb9S5r5mCDezMC3qID1024s
-         dszuuxr40JYnOGhmr8K/L9g1gQGQ8Wev4xH7FKEFsq3VjrjSQ7qcDCJRmRXARmSb/y
-         Il8DlNoTeTxYg==
-Message-ID: <0a6619cd-444b-69c4-818b-1b6dd6757c6c@kernel.org>
-Date:   Mon, 19 Jun 2023 09:31:38 +0800
+        Sun, 18 Jun 2023 21:34:35 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7BE1BF
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 18:34:33 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Qksjs0JnKzTlWv;
+        Mon, 19 Jun 2023 09:33:53 +0800 (CST)
+Received: from [10.174.151.185] (10.174.151.185) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Mon, 19 Jun 2023 09:34:30 +0800
+Subject: Re: [PATCH] mm/mm_init.c: remove obsolete macro HASH_SMALL
+To:     Mike Rapoport <rppt@kernel.org>
+CC:     <akpm@linux-foundation.org>, <tglx@linutronix.de>,
+        <mingo@redhat.com>, <peterz@infradead.org>, <dvhart@infradead.org>,
+        <dave@stgolabs.net>, <andrealmeid@igalia.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <20230617070955.1751393-1-linmiaohe@huawei.com>
+ <20230617075644.GV52412@kernel.org>
+ <6d149902-a944-7961-89c1-f07047953c7f@huawei.com>
+ <20230617105137.GX52412@kernel.org>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <e9c0f02e-d848-1d7f-624d-311fe0368fc1@huawei.com>
+Date:   Mon, 19 Jun 2023 09:34:30 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v4] f2fs: refactor struct f2fs_attr macro
+In-Reply-To: <20230617105137.GX52412@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Yangtao Li <frank.li@vivo.com>, Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     kernel test robot <lkp@intel.com>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <20230506151604.36890-1-frank.li@vivo.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20230506151604.36890-1-frank.li@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,15 +55,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/6 23:16, Yangtao Li wrote:
-> This patch provides a large number of variants of F2FS_RW_ATTR
-> and F2FS_RO_ATTR macros, reducing the number of parameters required
-> to initialize the f2fs_attr structure.
+On 2023/6/17 18:51, Mike Rapoport wrote:
+> On Sat, Jun 17, 2023 at 04:39:44PM +0800, Miaohe Lin wrote:
+>> On 2023/6/17 15:56, Mike Rapoport wrote:
+>>> On Sat, Jun 17, 2023 at 03:09:55PM +0800, Miaohe Lin wrote:
+>>>> HASH_SMALL only works when parameter numentries is 0. But the sole caller
+>>>> futex_init() never calls alloc_large_system_hash() with numentries set to
+>>>> 0. 
+>>>
+>>
+>> Thanks for your quick review.
+>>
+>>> Doesn't it? 
+>>> What happens when CONFIG_BASE_SMALL is set?
+>>
+>> When CONFIG_BASE_SMALL is set, futex_hashsize is set to 16 and alloc_large_system_hash() is called with
+>> numentries == 16 && flags == HASH_SMALL. But in the alloc_large_system_hash(), we have the below logic:
+>>
+>> alloc_large_system_hash()
+>> {
+>>   if (!numentries) { /* numentries == 16 here, so this code block is skipped. */
+>>     ...
+>>     if (unlikely(flags & HASH_SMALL)) { /* So as here. */
+>>       ...
+>>   }
+>>   ...
+>> }
+>>
+>> So HASH_SMALL is just unused. Or am I miss something?
 > 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202304152234.wjaY3IYm-lkp@intel.com/
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> You are right, I've missed that. 
+> 
+>> Thanks.
+>>
+>>>
+>>>> So HASH_SMALL is obsolete and remove it.
+>>>
+>>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>>>> ---
+>>>>  include/linux/memblock.h |  2 --
+>>>>  kernel/futex/core.c      |  3 +--
+>>>>  mm/mm_init.c             | 10 +---------
+>>>>  3 files changed, 2 insertions(+), 13 deletions(-)
+>>>>
+>>>> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
+>>>> index f71ff9f0ec81..346d80809517 100644
+>>>> --- a/include/linux/memblock.h
+>>>> +++ b/include/linux/memblock.h
+>>>> @@ -581,8 +581,6 @@ extern void *alloc_large_system_hash(const char *tablename,
+>>>>  				     unsigned long high_limit);
+>>>>  
+>>>>  #define HASH_EARLY	0x00000001	/* Allocating during early boot? */
+>>>> -#define HASH_SMALL	0x00000002	/* sub-page allocation allowed, min
+>>>> -					 * shift passed via *_hash_shift */
+>>>>  #define HASH_ZERO	0x00000004	/* Zero allocated hash table */
+> 
+> Can you update HASH_ZERO to 0x2?
 
-Reviewed-by: Chao Yu <chao@kernel.org>
-
-Thanks,
+Will do. Thanks.
