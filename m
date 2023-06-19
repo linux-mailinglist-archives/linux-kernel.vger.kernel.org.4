@@ -2,81 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD488735B0E
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:24:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0250A735B12
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:25:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbjFSPYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 11:24:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39170 "EHLO
+        id S231741AbjFSPYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 11:24:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231223AbjFSPYT (ORCPT
+        with ESMTP id S229771AbjFSPYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 11:24:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74615F9;
-        Mon, 19 Jun 2023 08:24:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0793460D33;
-        Mon, 19 Jun 2023 15:24:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AA4DC433C8;
-        Mon, 19 Jun 2023 15:24:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687188257;
-        bh=N4a6+AKTlpfQu+hNLgDTvYGemlpqgXPewbtXySTT2Wk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kRzjt2nDIAl4X26ojRiB8w8CJVn45eTmiPbIYkIvDYRBR/QR7IVpfAXYd9FpfNQDQ
-         OvemWMKmfnlcr5GwcS7TCX2oTJmzf2fUUsDJHf2Oq+4RHGmHWKbk0CASnuDz6Gk1Ld
-         1e26ENdIJqn1qjqL2vy8CRe3zudh+ZqjAZ7btzz+Jja4UEKxYRLaqjs+hNR8TPWi48
-         sYyUqJtdsNHbcbOzxo9zMe/AaYlu9nZhYjfHu5NSh21mKAk+otvslcioi5dkhxeNTF
-         EnxnECqDbcsPkYZvvYUeyjGiH7IzMmaAIOnWvmMc+HuAd2WDWUtK2BFwEfTtd03m+J
-         SY9K1sARFWi7g==
-Date:   Mon, 19 Jun 2023 18:23:34 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Puranjay Mohan <puranjay12@gmail.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Song Liu <song@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v2 06/12] mm/execmem: introduce execmem_data_alloc()
-Message-ID: <20230619152334.GC52412@kernel.org>
-References: <20230616085038.4121892-1-rppt@kernel.org>
- <20230616085038.4121892-7-rppt@kernel.org>
- <87jzw0qu3s.ffs@tglx>
+        Mon, 19 Jun 2023 11:24:49 -0400
+Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B614F9
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:24:47 -0700 (PDT)
+Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-77ac4aa24eeso300254339f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:24:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687188287; x=1689780287;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bcDmpyYLHAMJ85onJYMN0r/KdlWgRJsi8m67AeFqA2Q=;
+        b=h5xOAT0F5UH+dNczZu+COe1TimVN/J90Ihv5hjDumwbc6NsCrNjOQixnzFFahlGZpi
+         JvuvWOJez3XG4cJvn9lAtxe4j2/cIb71FjQZLjeKWiQfORPfAupIX8zPH6v8vCv5rIcp
+         rqxvNyx2AygjZ0Ma82EjskKz6OE0O/hGCdL4jCHQA1Pgap/2uNVpm74p2qmu3S7x6OLL
+         cqg9Zy2UFSlcNpL8b2oIuLFie6hsIEOM9HqWo6ZrQkPSijwvZELpuyIT6oF0l5OG6aUs
+         zj9ZSFjAhocmsXYWvXNfPdRrmH0E+TkQEtPXnvshr2JaPIljWKIDOVZq80f/0KLyO22i
+         Rgww==
+X-Gm-Message-State: AC+VfDyR8t4TZI3xHkCBJbU22xNNf20s/CdzMP962pIod0DyZVsGSKaM
+        9Qlo9rYjChYI3OsaDafE66Amznzkny6RcceTQiy//miq8wys
+X-Google-Smtp-Source: ACHHUZ6TIgteXfkalZHs0TmKVeLSoGrKnohITVB6cf/aFVMrjprJ+1jKAbbO2cAlwl+sFbENtOjlylSxTVc/f+l+sNcebooUpwMA
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87jzw0qu3s.ffs@tglx>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a02:2ac7:0:b0:41a:c455:f4c8 with SMTP id
+ w190-20020a022ac7000000b0041ac455f4c8mr2740129jaw.3.1687188286996; Mon, 19
+ Jun 2023 08:24:46 -0700 (PDT)
+Date:   Mon, 19 Jun 2023 08:24:46 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000084090905fe7d22bb@google.com>
+Subject: [syzbot] [udf?] KASAN: use-after-free Read in udf_finalize_lvid
+From:   syzbot <syzbot+46073c22edd7f242c028@syzkaller.appspotmail.com>
+To:     jack@suse.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,63 +54,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 12:32:55AM +0200, Thomas Gleixner wrote:
-> Mike!
-> 
-> Sorry for being late on this ...
-> 
-> On Fri, Jun 16 2023 at 11:50, Mike Rapoport wrote:
-> 
-> The fact that my suggestions had a 'mod_' namespace prefix does not make
-> any of my points moot.
+Hello,
 
-The prefix does not matter. What matters is what we are trying to abstract.
-Your suggestion is based of the memory used by modules. I'm abstracting
-address spaces for different types of executable and related memory. They
-are similar, yes, but they are not the same.
+syzbot found the following issue on:
 
-The TEXT, INIT_TEXT and *_DATA do not match to what we have from arch POV.
-They have modules with text, rw data, ro data and ro after init data and
-the memory for the generated code. The memory for modules and memory for
-other users have different restrictions for their placement, so using a
-single TEXT type for them is semantically wrong. BPF and kprobes do not
-necessarily must be at the same address range as modules and init text does
-not differ from normal text.
+HEAD commit:    40f71e7cd3c6 Merge tag 'net-6.4-rc7' of git://git.kernel.o..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=164eceef280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ac246111fb601aec
+dashboard link: https://syzkaller.appspot.com/bug?extid=46073c22edd7f242c028
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=167bc85b280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=165bbae3280000
 
-> Song did an extremly good job in abstracting things out, but you decided
-> to ditch his ground work instead of building on it and keeping the good
-> parts. That's beyond sad.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e44e674ee0cc/disk-40f71e7c.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/ed0a3681597b/vmlinux-40f71e7c.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/320a8bdb797c/bzImage-40f71e7c.xz
+mounted in repro #1: https://storage.googleapis.com/syzbot-assets/52d1f2684156/mount_0.gz
+mounted in repro #2: https://storage.googleapis.com/syzbot-assets/ff7382a27de2/mount_3.gz
 
-Actually not. The core idea to describe address range suitable for code
-allocations with a structure and have arch code initialize this structure
-at boot and be done with it is the same. But I don't think vmalloc
-parameters belong there, they should be completely encapsulated in the
-allocator. Having fallback range named explicitly is IMO clearer than an
-array of address spaces.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+46073c22edd7f242c028@syzkaller.appspotmail.com
 
-I accept your point that the structures describing ranges for different
-types should be unified and I've got carried away with making the wrappers
-to convert that structure to parameters to the core allocation function.
+==================================================================
+BUG: KASAN: use-after-free in crc_itu_t+0xd2/0xe0 lib/crc-itu-t.c:60
+Read of size 1 at addr ffff888071a7e000 by task syz-executor298/5001
 
-I've chosen to define ranges as fields in the containing structure rather
-than enum with types and an array because I strongly feel that the callers
-should not care about these parameters. These parameters are defined by
-architecture and the callers should not need to know how each and every
-arch defines restrictions suitable for modules, bpf or kprobes.
+CPU: 1 PID: 5001 Comm: syz-executor298 Not tainted 6.4.0-rc6-syzkaller-00195-g40f71e7cd3c6 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:351
+ print_report mm/kasan/report.c:462 [inline]
+ kasan_report+0x11c/0x130 mm/kasan/report.c:572
+ crc_itu_t+0xd2/0xe0 lib/crc-itu-t.c:60
+ udf_finalize_lvid+0xe0/0x1d0 fs/udf/super.c:1988
+ udf_close_lvid.isra.0+0x406/0x550 fs/udf/super.c:2056
+ udf_put_super+0x1bb/0x230 fs/udf/super.c:2326
+ generic_shutdown_super+0x158/0x480 fs/super.c:500
+ kill_block_super+0xa1/0x100 fs/super.c:1407
+ deactivate_locked_super+0x98/0x160 fs/super.c:331
+ deactivate_super+0xb1/0xd0 fs/super.c:362
+ cleanup_mnt+0x2ae/0x3d0 fs/namespace.c:1177
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ ptrace_notify+0x118/0x140 kernel/signal.c:2371
+ ptrace_report_syscall include/linux/ptrace.h:411 [inline]
+ ptrace_report_syscall_exit include/linux/ptrace.h:473 [inline]
+ syscall_exit_work kernel/entry/common.c:252 [inline]
+ syscall_exit_to_user_mode_prepare+0x129/0x220 kernel/entry/common.c:279
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:284 [inline]
+ syscall_exit_to_user_mode+0xd/0x50 kernel/entry/common.c:297
+ do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f082b4a11f7
+Code: 07 00 48 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd2475cbc8 EFLAGS: 00000202 ORIG_RAX: 00000000000000a6
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f082b4a11f7
+RDX: 00007ffd2475cc89 RSI: 000000000000000a RDI: 00007ffd2475cc80
+RBP: 00007ffd2475cc80 R08: 00000000ffffffff R09: 00007ffd2475ca60
+R10: 000055555740b66b R11: 0000000000000202 R12: 00007ffd2475dcf0
+R13: 000055555740b5f0 R14: 00007ffd2475cbf0 R15: 0000000000000004
+ </TASK>
 
-That's also the reason to have different names for API calls, exactly to
-avoid having alloc(KPROBES,...), alloc(BPF, ...), alloc(MODULES, ...) an so
-on.
+The buggy address belongs to the physical page:
+page:ffffea0001c69f80 refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x71a7e
+flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
+page_type: 0xffffffff()
+raw: 00fff00000000000 ffffea0001c69fc8 ffffea0001c42348 0000000000000000
+raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as freed
+page last allocated via order 0, migratetype Movable, gfp_mask 0x140dca(GFP_HIGHUSER_MOVABLE|__GFP_COMP|__GFP_ZERO), pid 5006, tgid 5006 (syz-executor298), ts 46591154745, free_ts 46799828739
+ set_page_owner include/linux/page_owner.h:31 [inline]
+ post_alloc_hook+0x2db/0x350 mm/page_alloc.c:1731
+ prep_new_page mm/page_alloc.c:1738 [inline]
+ get_page_from_freelist+0xf41/0x2c00 mm/page_alloc.c:3502
+ __alloc_pages+0x1cb/0x4a0 mm/page_alloc.c:4768
+ __folio_alloc+0x16/0x40 mm/page_alloc.c:4800
+ vma_alloc_folio+0x155/0x890 mm/mempolicy.c:2240
+ do_anonymous_page mm/memory.c:4085 [inline]
+ do_pte_missing mm/memory.c:3645 [inline]
+ handle_pte_fault mm/memory.c:4947 [inline]
+ __handle_mm_fault+0x224c/0x41c0 mm/memory.c:5089
+ handle_mm_fault+0x2af/0x9f0 mm/memory.c:5243
+ do_user_addr_fault+0x2ca/0x1210 arch/x86/mm/fault.c:1349
+ handle_page_fault arch/x86/mm/fault.c:1534 [inline]
+ exc_page_fault+0x98/0x170 arch/x86/mm/fault.c:1590
+ asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:570
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1302 [inline]
+ free_unref_page_prepare+0x62e/0xcb0 mm/page_alloc.c:2564
+ free_unref_page_list+0xe3/0xa70 mm/page_alloc.c:2705
+ release_pages+0xcd8/0x1380 mm/swap.c:1042
+ tlb_batch_pages_flush+0xa8/0x1a0 mm/mmu_gather.c:97
+ tlb_flush_mmu_free mm/mmu_gather.c:292 [inline]
+ tlb_flush_mmu mm/mmu_gather.c:299 [inline]
+ tlb_finish_mmu+0x14b/0x7e0 mm/mmu_gather.c:391
+ exit_mmap+0x2b2/0x930 mm/mmap.c:3123
+ __mmput+0x128/0x4c0 kernel/fork.c:1351
+ mmput+0x60/0x70 kernel/fork.c:1373
+ exit_mm kernel/exit.c:567 [inline]
+ do_exit+0x9b0/0x29b0 kernel/exit.c:861
+ do_group_exit+0xd4/0x2a0 kernel/exit.c:1024
+ __do_sys_exit_group kernel/exit.c:1035 [inline]
+ __se_sys_exit_group kernel/exit.c:1033 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1033
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-All in all, if I filter all the ranting, this boils down to having a
-unified structure for all the address ranges and passing this structure
-from the wrappers to the core alloc as is rather that translating it to
-separate parameters, with which I agree.
+Memory state around the buggy address:
+ ffff888071a7df00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff888071a7df80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffff888071a7e000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+                   ^
+ ffff888071a7e080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff888071a7e100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+==================================================================
 
-> Thanks,
-> 
->         tglx
 
--- 
-Sincerely yours,
-Mike.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
