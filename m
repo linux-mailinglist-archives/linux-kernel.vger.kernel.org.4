@@ -2,93 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D8C1735A0B
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 16:50:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1AAC735A0C
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 16:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232222AbjFSOuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 10:50:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45906 "EHLO
+        id S232225AbjFSOug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 10:50:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232200AbjFSOuI (ORCPT
+        with ESMTP id S232200AbjFSOud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 10:50:08 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03385C1;
-        Mon, 19 Jun 2023 07:50:06 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id ADE525C02DC;
-        Mon, 19 Jun 2023 10:50:04 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 19 Jun 2023 10:50:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1687186204; x=1687272604; bh=Ox0mGgHLkp5N/Da4WUkUcZFzC5y5KCU3DdU
-        4cU5s0Zw=; b=uBukndHQGWLUkt5Elnl5NgRUP7VADlbyByjzxpYFPTCu6ZQkXkW
-        EuO6nRksRTSITxAS041IgShdDE/C8nTnzCS7s+KZ4sgX6fv6hI2se4CxS3f76Cel
-        P4ZqwZ2nOukWFZcSdwaDdraA+vnJ1lG0EYHRF7+UXlzs90o5yeMkfrs7nMAAZEK3
-        X3Pd/FoSMQ/gIs5V+CHZCfBNZdcNzQ5SwsRMhOJ9/JciE/N6W9hfB33m7yfbtupm
-        9H+jHbnWngZ6Rn/8sSIBLubLAbe59dNfS4uFYJ2GJnNy68mS1j7tEA7MtrS6Equz
-        x1kQ67rUB17ZXrv0EkRvrnlrLXmZMNDbu8g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1687186204; x=1687272604; bh=Ox0mGgHLkp5N/Da4WUkUcZFzC5y5KCU3DdU
-        4cU5s0Zw=; b=BlQIjlC4NmqbmqO/N50HX0TO6aj3XPhHGD7M9YlMcqHrSp+rasA
-        HsYFM3OHe592/b0g5KK9mszRBYFpelGzdavoUPRhfMLRRbYFj0QEc2vqC/OAicj6
-        k+vRxIuu6wlDRpXXi3opAdHsWh3CGny8wP/7moaXopic9tdQhKXtAmHJ8vVVZTAf
-        VZ6Z8ss9uvYbSipcfWyx/j2V51PwTCM7ilQUkrjJnZKfqY6v3uR2+u1GwOTrlkOL
-        FY5YX1ZFR0waug0Knym4rss67fjXHFFdn4ZAWHOpAb49Xxx//wdmeRtVp7BLueus
-        64bMxkkTpglzcGdQP7EnXj0ahq7qRiH8lMQ==
-X-ME-Sender: <xms:HGuQZFgGOAhuUZ4CKNgTny7qdd2QSQY5T65AhPpH_OtUQoQf8pAoZA>
-    <xme:HGuQZKDfo0bl_ti3SX1Ai2pN33AvW9DTfaSARGUffcyYwD9W0XrPgKHZcI5YVdsww
-    zsvn2-YHI0G60mzM3M>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefvddgjeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:HGuQZFFPkC1g4AxtOWHiKVCoutxonI8fb5p5FMcCuCJi2eDvuqzzQg>
-    <xmx:HGuQZKT3Q682uKecNV6ASB1RYXERLp9xPObFiBF6sbUTsV5BosHdaw>
-    <xmx:HGuQZCyN4W8k3O2ouLqLZXxIUD5jo4CMTfcEv7HaYaUskz9b1zX9lg>
-    <xmx:HGuQZBmupTpROysgmBoVV2vahoAhxBiXsQC9ASt9WJXsIqsz_4HAgw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 1B2F9B60086; Mon, 19 Jun 2023 10:50:03 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-496-g8c46984af0-fm-20230615.001-g8c46984a
-Mime-Version: 1.0
-Message-Id: <063a8886-fd31-425f-901c-fc830512eca3@app.fastmail.com>
-In-Reply-To: <e264ac3a15e0f115aa7e941a77eb312429b8f65e.camel@collabora.com>
-References: <20230616144854.3818934-1-arnd@kernel.org>
- <20230616144854.3818934-2-arnd@kernel.org>
- <e264ac3a15e0f115aa7e941a77eb312429b8f65e.camel@collabora.com>
-Date:   Mon, 19 Jun 2023 16:49:41 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Nicolas Dufresne" <nicolas.dufresne@collabora.com>,
-        "Arnd Bergmann" <arnd@kernel.org>,
-        "Ezequiel Garcia" <ezequiel@vanguardiasur.com.ar>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>
-Cc:     "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
-        "Benjamin Gaignard" <benjamin.gaignard@collabora.com>,
-        "Jernej Skrabec" <jernej.skrabec@gmail.com>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] media: verisilicon: change confusingly named relaxed register
- access
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        Mon, 19 Jun 2023 10:50:33 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4F01AD
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 07:50:32 -0700 (PDT)
+Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C895C1EC0398;
+        Mon, 19 Jun 2023 16:50:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1687186230;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=oYKdPeBEwTAUlAiZzuVusNxVM+kxlyg9CTET+oS2gLM=;
+        b=MqKXXFb7O4SKaXiXMiAhDFApA6UN1Sm6bcKn2Txd5rbU1vruwZm6lkE9reelWKIZUYKJEl
+        dT7aXj3miTJfIb1otsklkB0ndWGEWyhJojCGL9gQZyf/WVN7yEXQdUJ6MF04HVMt8+x/HA
+        DFAvyI+rkYktt+po3mOxAXp+De/uZtY=
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+        header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id CDTyTjsdyFE6; Mon, 19 Jun 2023 14:50:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+        t=1687186227; bh=oYKdPeBEwTAUlAiZzuVusNxVM+kxlyg9CTET+oS2gLM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dqSkpN5zE8/WvNaKBY83qDmazt3W88AhxN4B0sxIdEHfsePI6hXivjVJF03ke0Lp4
+         Bp3shhLzwRCso4iy10AEprbn1A6LZvv7qKqS5Rwy4XvtN1u+um+3APN7sv/t5kI8Jo
+         C5bPMeVZxMxitjw7lt5duEBmYuC4t4kjtdS+6+OQYQROqm6HLKXNQI8W3XZznMApw6
+         ZtiTHwN1tf8racVBqmCIHrqaGNzOupQ8m7R+zrtcLjhE1qV0Ga6iJqtOQMUJMUkd2w
+         hozAsm6IvQ9VhdHigExJJGSiSBv4kxOy+dQkuNghwa/OHo9BQLz4eAi8zckyELCgNA
+         ZRUxgXU/d7TU6YshNTVFRQopQCjXvNPwXxwp8x+ZpsaBH/OWvurqFPs05v6zTsBynJ
+         isUCOKZY6l3mS+k97hvKQfhd78qt0Tq37AERy+vPKwwlp4rMoliHV7UqaL/fgefFu4
+         7xcmJ5HPVtRxHobrpg1budF1Y1G2l3dA7DCoNuI2M2Yb2tXwEwF8TTea3lzo7AXQFl
+         R2UJsIXKQA/zJYfnwOFdMhroB7V44uqsYFEr1HjqtwAu6Nad++OOTFJllj6z6n3WSm
+         lC80oRXog16T0BYFvF/8CncLHowAZ2Tkm+fX/26sG5U7WFf7Bdqg349X3eGKqSyqao
+         6TOihQT+f4WAdyZgam8ll8KM=
+Received: from zn.tnic (p200300EA971dC5b2329c23FfFEA6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971d:c5b2:329c:23ff:fea6:a903])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+        (No client certificate requested)
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 62F5140E01DE;
+        Mon, 19 Jun 2023 14:50:16 +0000 (UTC)
+Date:   Mon, 19 Jun 2023 16:50:12 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Dheeraj Kumar Srivastava <dheerajkumar.srivastava@amd.com>
+Cc:     linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        gorcunov@openvz.org, suresh.b.siddha@intel.com,
+        Kishon Vijay Abraham I <kvijayab@amd.com>,
+        Vasant Hegde <vasant.hegde@amd.com>
+Subject: Re: [PATCH v1] x86/apic: Fix kernel panic when "intremap=off" and
+ "x2apic_phys" are set
+Message-ID: <20230619145012.GCZJBrJKuiape5djVt@fat_crate.local>
+References: <20230616212236.1389-1-dheerajkumar.srivastava@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230616212236.1389-1-dheerajkumar.srivastava@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,44 +80,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023, at 16:41, Nicolas Dufresne wrote:
-> Le vendredi 16 juin 2023 =C3=A0 16:48 +0200, Arnd Bergmann a =C3=A9cri=
-t=C2=A0:
->> From: Arnd Bergmann <arnd@arndb.de>
->>=20
->> The register abstraction has wrappers around both the normal writel()
->> and its writel_relaxed() counterpart, but this has led to a lot of us=
-ers
->> ending up with the relaxed version.
->>=20
->> There is sometimes a need to intentionally pick the relaxed accessor =
-for
->> performance critical functions, but I noticed that each hantro_reg_wr=
-ite()
->> call also contains a non-relaxed readl(), which is typically much more
->> expensive than a writel, so there is little benefit here but an added
->> risk of missing a serialization against DMA.
->>=20
->> To make this behave like other interfaces, use the normal accessor by
->> default and only provide the relaxed version as an alternative for
->> performance critical code. hantro_postproc.c is the only place that
->> used both the relaxed and normal writel, but this does not seem
->> cricital either, so change it all to the normal ones.
->
-> In this text you spoke about potential performance side effects of exi=
-sting code
-> and your changes, but its left all very vague and theoretical. Have yo=
-u done any
-> measurement ? Do you need help with the manner ?
+On Sat, Jun 17, 2023 at 02:52:36AM +0530, Dheeraj Kumar Srivastava wrote:
+> x2APIC mode requires "Interrupt Remapping" to be enabled and the
+> "physical x2apic" driver can be used only when x2APIC mode is enabled.
+> However when "intremap=off" and "x2apic_phys" kernel command line
+> parameters are passed, "physical x2apic" driver is being used even when
+> x2APIC mode is disabled ("intremap=off" disables x2APIC mode).
+> This results in the below kernel panic:
+> 
+>   unchecked MSR access error: RDMSR from 0x80f at rIP: 0xffffffff87eab4ec
 
-I don't have this hardware and have not done any measurements.
-Obviously the only point of using relaxed accessors is to
-improve performance in critical code paths, but from the way they
-are used here it seems that this was instead just an accident
-and nobody else did any comparisons either.
+Not a kernel panic - that's a warning about accessing a non-existent
+MSR.
 
-My guess would be that if one wanted to speed up the register
-access, a better way would be to use a regmap cache to avoid
-reading registers when the contents are already known.
+Can you send full dmesg? Privately is fine too.
 
-     Arnd
+How exactly do you trigger this? What hw?
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
