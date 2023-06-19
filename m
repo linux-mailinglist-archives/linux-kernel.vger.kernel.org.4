@@ -2,131 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2055735853
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 15:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DA9A735850
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 15:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjFSNSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 09:18:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57768 "EHLO
+        id S230041AbjFSNR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 09:17:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231271AbjFSNSG (ORCPT
+        with ESMTP id S231769AbjFSNRp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 09:18:06 -0400
-Received: from sender-of-o51.zoho.in (sender-of-o51.zoho.in [103.117.158.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7919124;
-        Mon, 19 Jun 2023 06:17:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1687180639; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=NBdXVMn5z9fWMBGwVqYqBoCyLpHQOCJwzIifpNUC3TNjRszlZfWK5/y5Eu/4/ZNFgfcrNJcq/BeSieQz9R4nNLvdHrcQ4MoaPQ02kt+PpuWmAc7XmfLn2XcReii6LBjkj/VFKDhw/bBbkJ8+YRhgHi/abmZhJe40zrMiAe+v0zE=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1687180639; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
-        bh=GvzDRB8KKM+eFSppRsIz/VHygepCr5cjnv/6S4U0hdo=; 
-        b=fUJTI8z4jxlOoFSClv9SIhRkvh9fvRZdeXFs6G7rPwLtxlxLu2uWnL9RQrxLKZhO5E+Chj6oUHI6Xd9gtmDsHXHjfXEWtjvDQ9D5Y0CvT+B0J4P5JmJ4CbhYdIBkQ2EQepwli73ETqlxfgyonypPgThRg6ZfBH8fTnz67WpoABw=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1687180639;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-        bh=GvzDRB8KKM+eFSppRsIz/VHygepCr5cjnv/6S4U0hdo=;
-        b=GPgWrcCZkH2OW2/Y3pftJf/rXBY+6/GUt0qVsBANuoi/UFFygltgRbHJR9jkmaxi
-        lJR+BnOPBtctgxnydC7ePBSwCLdjyJHhxOAp0kIJn6+kUHiowQ/cLkirmSsqUUCXv+C
-        1yMeqKIpaXjSO2yE6e6RS2fnjMFYi6RSMcPWun6c=
-Received: from kampyooter.. (223.179.149.51 [223.179.149.51]) by mx.zoho.in
-        with SMTPS id 1687180638188470.44972217847703; Mon, 19 Jun 2023 18:47:18 +0530 (IST)
-From:   Siddh Raman Pant <code@siddh.me>
-To:     Dave Kleikamp <dave.kleikamp@oracle.com>,
-        Hoi Pok Wu <wuhoipok@gmail.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Dongliang Mu <mudongliangabcd@gmail.com>
-Cc:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        syzbot+d2cd27dcf8e04b232eb2@syzkaller.appspotmail.com,
-        stable@vger.kernel.org
-Message-ID: <20230619131644.118332-1-code@siddh.me>
-Subject: [PATCH v2] jfs: jfs_dmap: Validate db_l2nbperpage while mounting
-Date:   Mon, 19 Jun 2023 18:46:44 +0530
-X-Mailer: git-send-email 2.39.2
+        Mon, 19 Jun 2023 09:17:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778571713
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 06:16:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687180613;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qkl7/OAql/f43M/MBr1GZ7gscQkSnXy1/Z0UiG5toM4=;
+        b=d2tAYntJD7D22kUoFEcopPZpT8N1g62yluHtUlic1rFXc3wgkl9a6l12I3j9utpUls/yP7
+        XDOECPuvattThCwiAwrFPv4zl3V1jaTwu3Q3h55zrS0FtxdGT1cgnLQCPEXq9f6ojRSh60
+        65n5MFisuwxsgQKm+er0aDakJvGmdEA=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-508-wzuzmz7ENYaVbyol7ae2BQ-1; Mon, 19 Jun 2023 09:16:52 -0400
+X-MC-Unique: wzuzmz7ENYaVbyol7ae2BQ-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-30fb1f3c30aso1190763f8f.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 06:16:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687180611; x=1689772611;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qkl7/OAql/f43M/MBr1GZ7gscQkSnXy1/Z0UiG5toM4=;
+        b=OZa9C9/ii/hrPpNl3ufAPrP77ye8VMb3tgJ1LveEHktoHefB4NqZlO8OG62YPDZx1X
+         FaLpVqvhueeYLsZFWzhaxuqf6kfq8UNbGQ1Fw3FsipLbw84ko615i0I7RARFm+ZmnWDj
+         tKGMVE0jN+b39ycmG5/vY4sTJ7ugqnY53/Cca9EwVxZMblpKKXBwTI5CquGyNTLwUbsN
+         ysmyQIl/OFZRNkFsYdOTzoAicK6dVY2vetwHH2zc8njolwKIiir06fY1i6p+k2RkmuMA
+         hoSH9Cmu5xBwWcKPrsP8rtfq+1EGvUY/luWtItOg9MYYEGO3PyaQIw6MczDu7AcOwgRh
+         ZtCA==
+X-Gm-Message-State: AC+VfDyRvCuXR3x4ZClP6l7pQiayyYhziJjiMMtxHutuBGyFRP+N1xqZ
+        FRCUEBp4oi6UjHUnpPXPZrMXUtQ6Ss9qjuFsLULsUkYW6JoaDOLkicaLkYfGaONauHwEfsaxFfM
+        QWSFxBFRoEed7BaV0+LbaYhrw
+X-Received: by 2002:adf:e849:0:b0:311:27bf:f9ec with SMTP id d9-20020adfe849000000b0031127bff9ecmr4932068wrn.21.1687180611060;
+        Mon, 19 Jun 2023 06:16:51 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6eUMkRiOhkqj3R+Kc+faaknCTta5upUMsqs0nsEyjVXkgYUL1lVH+0E4qxHZvBrhI8RFMvMQ==
+X-Received: by 2002:adf:e849:0:b0:311:27bf:f9ec with SMTP id d9-20020adfe849000000b0031127bff9ecmr4932030wrn.21.1687180610610;
+        Mon, 19 Jun 2023 06:16:50 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c72f:7100:cede:6433:a77b:41e9? (p200300cbc72f7100cede6433a77b41e9.dip0.t-ipconnect.de. [2003:cb:c72f:7100:cede:6433:a77b:41e9])
+        by smtp.gmail.com with ESMTPSA id k17-20020a5d4291000000b003047ea78b42sm31571827wrq.43.2023.06.19.06.16.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Jun 2023 06:16:49 -0700 (PDT)
+Message-ID: <895f7f8d-6fd2-2098-9208-6240d2655978@redhat.com>
+Date:   Mon, 19 Jun 2023 15:16:48 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-ZohoMailClient: External
-Content-Type: text/plain; charset=utf8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, dave.hansen@intel.com,
+        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
+        peterz@infradead.org, tglx@linutronix.de, seanjc@google.com,
+        pbonzini@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, ying.huang@intel.com,
+        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
+        sagis@google.com, imammedo@redhat.com
+References: <cover.1685887183.git.kai.huang@intel.com>
+ <21b3a45cb73b4e1917c1eba75b7769781a15aa14.1685887183.git.kai.huang@intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v11 07/20] x86/virt/tdx: Add skeleton to enable TDX on
+ demand
+In-Reply-To: <21b3a45cb73b4e1917c1eba75b7769781a15aa14.1685887183.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In jfs_dmap.c at line 381, BLKTODMAP is used to get a logical block
-number inside dbFree(). db_l2nbperpage, which is the log2 number of
-blocks per page, is passed as an argument to BLKTODMAP which uses it
-for shifting.
+On 04.06.23 16:27, Kai Huang wrote:
+> To enable TDX the kernel needs to initialize TDX from two perspectives:
+> 1) Do a set of SEAMCALLs to initialize the TDX module to make it ready
+> to create and run TDX guests; 2) Do the per-cpu initialization SEAMCALL
+> on one logical cpu before the kernel wants to make any other SEAMCALLs
+> on that cpu (including those involved during module initialization and
+> running TDX guests).
+> 
+> The TDX module can be initialized only once in its lifetime.  Instead
+> of always initializing it at boot time, this implementation chooses an
+> "on demand" approach to initialize TDX until there is a real need (e.g
+> when requested by KVM).  This approach has below pros:
+> 
+> 1) It avoids consuming the memory that must be allocated by kernel and
+> given to the TDX module as metadata (~1/256th of the TDX-usable memory),
+> and also saves the CPU cycles of initializing the TDX module (and the
+> metadata) when TDX is not used at all.
+> 
+> 2) The TDX module design allows it to be updated while the system is
+> running.  The update procedure shares quite a few steps with this "on
+> demand" initialization mechanism.  The hope is that much of "on demand"
+> mechanism can be shared with a future "update" mechanism.  A boot-time
+> TDX module implementation would not be able to share much code with the
+> update mechanism.
+> 
+> 3) Making SEAMCALL requires VMX to be enabled.  Currently, only the KVM
+> code mucks with VMX enabling.  If the TDX module were to be initialized
+> separately from KVM (like at boot), the boot code would need to be
+> taught how to muck with VMX enabling and KVM would need to be taught how
+> to cope with that.  Making KVM itself responsible for TDX initialization
+> lets the rest of the kernel stay blissfully unaware of VMX.
+> 
+> Similar to module initialization, also make the per-cpu initialization
+> "on demand" as it also depends on VMX being enabled.
+> 
+> Add two functions, tdx_enable() and tdx_cpu_enable(), to enable the TDX
+> module and enable TDX on local cpu respectively.  For now tdx_enable()
+> is a placeholder.  The TODO list will be pared down as functionality is
+> added.
+> 
+> In tdx_enable() use a state machine protected by mutex to make sure the
+> initialization will only be done once, as tdx_enable() can be called
+> multiple times (i.e. KVM module can be reloaded) and may be called
+> concurrently by other kernel components in the future.
+> 
+> The per-cpu initialization on each cpu can only be done once during the
+> module's life time.  Use a per-cpu variable to track its status to make
+> sure it is only done once in tdx_cpu_enable().
+> 
+> Also, a SEAMCALL to do TDX module global initialization must be done
+> once on any logical cpu before any per-cpu initialization SEAMCALL.  Do
+> it inside tdx_cpu_enable() too (if hasn't been done).
+> 
+> tdx_enable() can potentially invoke SEAMCALLs on any online cpus.  The
+> per-cpu initialization must be done before those SEAMCALLs are invoked
+> on some cpu.  To keep things simple, in tdx_cpu_enable(), always do the
+> per-cpu initialization regardless of whether the TDX module has been
+> initialized or not.  And in tdx_enable(), don't call tdx_cpu_enable()
+> but assume the caller has disabled CPU hotplug, done VMXON and
+> tdx_cpu_enable() on all online cpus before calling tdx_enable().
+> 
+> Signed-off-by: Kai Huang <kai.huang@intel.com>
+> Reviewed-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+> 
+> v10 -> v11:
+>   - Return -NODEV instead of -EINVAL when CONFIG_INTEL_TDX_HOST is off.
+>   - Return the actual error code for tdx_enable() instead of -EINVAL.
+>   - Added Isaku's Reviewed-by.
+> 
+> v9 -> v10:
+>   - Merged the patch to handle per-cpu initialization to this patch to
+>     tell the story better.
+>   - Changed how to handle the per-cpu initialization to only provide a
+>     tdx_cpu_enable() function to let the user of TDX to do it when the
+>     user wants to run TDX code on a certain cpu.
+>   - Changed tdx_enable() to not call cpus_read_lock() explicitly, but
+>     call lockdep_assert_cpus_held() to assume the caller has done that.
+>   - Improved comments around tdx_enable() and tdx_cpu_enable().
+>   - Improved changelog to tell the story better accordingly.
+> 
+> v8 -> v9:
+>   - Removed detailed TODO list in the changelog (Dave).
+>   - Added back steps to do module global initialization and per-cpu
+>     initialization in the TODO list comment.
+>   - Moved the 'enum tdx_module_status_t' from tdx.c to local tdx.h
+> 
+> v7 -> v8:
+>   - Refined changelog (Dave).
+>   - Removed "all BIOS-enabled cpus" related code (Peter/Thomas/Dave).
+>   - Add a "TODO list" comment in init_tdx_module() to list all steps of
+>     initializing the TDX Module to tell the story (Dave).
+>   - Made tdx_enable() unverisally return -EINVAL, and removed nonsense
+>     comments (Dave).
+>   - Simplified __tdx_enable() to only handle success or failure.
+>   - TDX_MODULE_SHUTDOWN -> TDX_MODULE_ERROR
+>   - Removed TDX_MODULE_NONE (not loaded) as it is not necessary.
+>   - Improved comments (Dave).
+>   - Pointed out 'tdx_module_status' is software thing (Dave).
+> 
+> v6 -> v7:
+>   - No change.
+> 
+> v5 -> v6:
+>   - Added code to set status to TDX_MODULE_NONE if TDX module is not
+>     loaded (Chao)
+>   - Added Chao's Reviewed-by.
+>   - Improved comments around cpus_read_lock().
+> 
+> - v3->v5 (no feedback on v4):
+>   - Removed the check that SEAMRR and TDX KeyID have been detected on
+>     all present cpus.
+>   - Removed tdx_detect().
+>   - Added num_online_cpus() to MADT-enabled CPUs check within the CPU
+>     hotplug lock and return early with error message.
+>   - Improved dmesg printing for TDX module detection and initialization.
+> 
+> 
+> ---
+>   arch/x86/include/asm/tdx.h  |   4 +
+>   arch/x86/virt/vmx/tdx/tdx.c | 179 ++++++++++++++++++++++++++++++++++++
+>   arch/x86/virt/vmx/tdx/tdx.h |  13 +++
+>   3 files changed, 196 insertions(+)
+> 
+> diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
+> index b489b5b9de5d..03f74851608f 100644
+> --- a/arch/x86/include/asm/tdx.h
+> +++ b/arch/x86/include/asm/tdx.h
+> @@ -102,8 +102,12 @@ static inline long tdx_kvm_hypercall(unsigned int nr, unsigned long p1,
+>   
+>   #ifdef CONFIG_INTEL_TDX_HOST
+>   bool platform_tdx_enabled(void);
+> +int tdx_cpu_enable(void);
+> +int tdx_enable(void);
+>   #else	/* !CONFIG_INTEL_TDX_HOST */
+>   static inline bool platform_tdx_enabled(void) { return false; }
+> +static inline int tdx_cpu_enable(void) { return -ENODEV; }
+> +static inline int tdx_enable(void)  { return -ENODEV; }
+>   #endif	/* CONFIG_INTEL_TDX_HOST */
+>   
+>   #endif /* !__ASSEMBLY__ */
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
+> index e62e978eba1b..bcf2b2d15a2e 100644
+> --- a/arch/x86/virt/vmx/tdx/tdx.c
+> +++ b/arch/x86/virt/vmx/tdx/tdx.c
+> @@ -13,6 +13,10 @@
+>   #include <linux/errno.h>
+>   #include <linux/printk.h>
+>   #include <linux/smp.h>
+> +#include <linux/cpu.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/percpu-defs.h>
+> +#include <linux/mutex.h>
+>   #include <asm/msr-index.h>
+>   #include <asm/msr.h>
+>   #include <asm/archrandom.h>
+> @@ -23,6 +27,18 @@ static u32 tdx_global_keyid __ro_after_init;
+>   static u32 tdx_guest_keyid_start __ro_after_init;
+>   static u32 tdx_nr_guest_keyids __ro_after_init;
+>   
+> +static unsigned int tdx_global_init_status;
+> +static DEFINE_RAW_SPINLOCK(tdx_global_init_lock);
+> +#define TDX_GLOBAL_INIT_DONE	_BITUL(0)
+> +#define TDX_GLOBAL_INIT_FAILED	_BITUL(1)
+> +
+> +static DEFINE_PER_CPU(unsigned int, tdx_lp_init_status);
+> +#define TDX_LP_INIT_DONE	_BITUL(0)
+> +#define TDX_LP_INIT_FAILED	_BITUL(1)
 
-Syzbot reported a shift out-of-bounds crash because db_l2nbperpage is
-too big. This happens because the large value is set without any
-validation in dbMount() at line 181.
+I'm curious, why do we have to track three states: uninitialized 
+(!done), initialized (done + ! failed), permanent error (done + failed).
 
-Thus, make sure that db_l2nbperpage is correct while mounting.
+[besides: why can't you use an enum and share that between global and pcpu?]
 
-Max number of pages =3D Page size / Min block size
-=3D> log2(Max number of pages) =3D log2(Page size / Min block size)
-=09=09=09     =3D log2(Page size) - log2(Min block size)
+Why can't you have a pcpu "bool tdx_lp_initialized" and "bool 
+tdx_global_initialized"?
 
-=3D> Max db_l2nbperpage =3D L2PSIZE - L2MINBLOCKSIZE
+I mean, if there was an error during previous initialization, it's not 
+initialized: you'd try initializing again -- and possibly fail again -- 
+on the next attempt. I doubt that a "try to cache failed status to keep 
+failing fast" is really required.
 
-Reported-and-tested-by: syzbot+d2cd27dcf8e04b232eb2@syzkaller.appspotmail.c=
-om
-Closes: https://syzkaller.appspot.com/bug?id=3D2a70a453331db32ed491f5cbb07e=
-81bf2d225715
-Cc: stable@vger.kernel.org
-Suggested-by: Dave Kleikamp <dave.kleikamp@oracle.com>
-Signed-off-by: Siddh Raman Pant <code@siddh.me>
----
-Changes in v2:
-- Fix upper bound as pointed out in v1 by Shaggy.
-- Add an explanation for the same in commit message for completeness.
+Is there any other reason (e.g., second init attempt would set your 
+computer on fire) why it can't be simpler?
 
- fs/jfs/jfs_dmap.c   | 6 ++++++
- fs/jfs/jfs_filsys.h | 2 ++
- 2 files changed, 8 insertions(+)
 
-diff --git a/fs/jfs/jfs_dmap.c b/fs/jfs/jfs_dmap.c
-index a3eb1e826947..da6a2bc6bf02 100644
---- a/fs/jfs/jfs_dmap.c
-+++ b/fs/jfs/jfs_dmap.c
-@@ -178,7 +178,13 @@ int dbMount(struct inode *ipbmap)
- =09dbmp_le =3D (struct dbmap_disk *) mp->data;
- =09bmp->db_mapsize =3D le64_to_cpu(dbmp_le->dn_mapsize);
- =09bmp->db_nfree =3D le64_to_cpu(dbmp_le->dn_nfree);
-+
- =09bmp->db_l2nbperpage =3D le32_to_cpu(dbmp_le->dn_l2nbperpage);
-+=09if (bmp->db_l2nbperpage > L2PSIZE - L2MINBLOCKSIZE) {
-+=09=09err =3D -EINVAL;
-+=09=09goto err_release_metapage;
-+=09}
-+
- =09bmp->db_numag =3D le32_to_cpu(dbmp_le->dn_numag);
- =09if (!bmp->db_numag) {
- =09=09err =3D -EINVAL;
-diff --git a/fs/jfs/jfs_filsys.h b/fs/jfs/jfs_filsys.h
-index b5d702df7111..33ef13a0b110 100644
---- a/fs/jfs/jfs_filsys.h
-+++ b/fs/jfs/jfs_filsys.h
-@@ -122,7 +122,9 @@
- #define NUM_INODE_PER_IAG=09INOSPERIAG
-=20
- #define MINBLOCKSIZE=09=09512
-+#define L2MINBLOCKSIZE=09=099
- #define MAXBLOCKSIZE=09=094096
-+#define L2MAXBLOCKSIZE=09=0912
- #define=09MAXFILESIZE=09=09((s64)1 << 52)
-=20
- #define JFS_LINK_MAX=09=090xffffffff
---=20
-2.39.2
+[...]
 
+-- 
+Cheers,
+
+David / dhildenb
 
