@@ -2,129 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B4BB735186
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 12:08:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E8A7351A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 12:11:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbjFSKIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 06:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52724 "EHLO
+        id S231853AbjFSKLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 06:11:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbjFSKIU (ORCPT
+        with ESMTP id S229472AbjFSKLX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 06:08:20 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6620134
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 03:08:19 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id d75a77b69052e-3fde9bfb3c8so216131cf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 03:08:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687169299; x=1689761299;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Sc9cJ6usscm6Ij2tQjnNdZlm85wrZazMfBi//urMko4=;
-        b=MB/K51c4OvvhQqEdFScFEhKv86Sx+OoRDgl6LnByrRNcI+KEtwH0qYyMmCI/0pqIuI
-         h3Vci0bo7z8H2Tvc+MYx8vaBMWVx0bKrRrPgd636nQJTLowPBm2U2bGOH+nSOJJAKdnB
-         FRLUBYC+XJwEhxO1Mkbo1O5fEyi+vWwsypu5iZnsAD8Za/8rtBUZJaXmj848eKRKBR3a
-         TlvwRZ9QmQJZftJ5c9A0vX8fFIWr4LYHnaUc9Ciq3W0R7nkCz7eUgsGxsWw/p7xvMmlz
-         P3bakp8ebGg+uukalg1Vs3BVehnhJ2hezWwOJKnzDj5Cw86yzqRZXvH/vnnNOlywZDde
-         zhRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687169299; x=1689761299;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Sc9cJ6usscm6Ij2tQjnNdZlm85wrZazMfBi//urMko4=;
-        b=jGa9jOJz/Rgd7NhklSbmwf9HPqnBXJuM1m/ccGrB0RLVdsxRuWqYh5apiqyu0O7JeV
-         UuG9Z9GdLlaGxuEbI2BjYXctW0mUEWsWetAyoM0gGuVkgOBrGyEPSdWu6/NNn0Qt+li/
-         bHzY4aAsdmFJMpmTLKsmgThbRxYtYLAnY/u501qUr7ZLubbWF2DhNr3kP4MSbOHR4ZDA
-         uxhpe5p+NeKw7n4h4HxGPaaSF7tWwEyB2knCAlBqAexul3roUaY+cLzzE1pwp3pPvQKU
-         HJf2+9dV329t5wm2zqWYez3PBfZMtJXBECEgquubIezSY2O2Kf2NZGiY/5OKL6JErm1Z
-         CHwQ==
-X-Gm-Message-State: AC+VfDx1bjxlYSh+u4e9vnpSHqIM8QPuRhs58sn4xInJ8uGQmLyFmOYL
-        Ua1eJd+B3KePb8jmOPk1qGNGsH7+ZzeTA/j0eQX7sQ==
-X-Google-Smtp-Source: ACHHUZ6DXozSYx4P4n9OspYAxsZSyNwGnGWiAr7oC/mIlQO5JIaYJtuZVYyz/Bwbl52/VZU2z8SqimCjlDFsfQobdL0=
-X-Received: by 2002:ac8:5992:0:b0:3f5:2006:50f1 with SMTP id
- e18-20020ac85992000000b003f5200650f1mr908051qte.12.1687169298618; Mon, 19 Jun
- 2023 03:08:18 -0700 (PDT)
+        Mon, 19 Jun 2023 06:11:23 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5738B1BB;
+        Mon, 19 Jun 2023 03:11:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687169468; x=1718705468;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=zcfAJFCZmlOTI97hjlrEzimQztXQaTNGYnp64cKAXto=;
+  b=XmJCi7mTeZo7JjioEL8pKplg6aegcywXR1RBpP4LsdC1Af1As3L5Ls9X
+   yRHcdnisRwKnefgHeLHiociRmOPVfWQ01jcynvgQJUtTNA5XBZA1jm3M3
+   G8RKkeE01dO8g3kNCgeq2Jb21t7WRge0um4KmjgrxJO+YH8O8L6pf25lC
+   2ou0sb98hGYJ7NmN59eBL1XbTjOhGROCCWO0wTNHtA6OaPIT0KtJvULDO
+   ZVLqhqDcamsuzWQ3XICOmR3jkmkqKBek6ADP/b4e3lboihil+uDzE+C68
+   eTrD1dTMM1hlQI2vNGiG48dVJU66NErbFsigWUocv9D/0xNmH88W76IrX
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="339934275"
+X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
+   d="scan'208";a="339934275"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 03:11:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="803572727"
+X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
+   d="scan'208";a="803572727"
+Received: from unknown (HELO jiaqingz-acrn-container.sh.intel.com) ([10.239.138.235])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 03:11:06 -0700
+From:   Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jiaqing Zhao <jiaqing.zhao@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2] Revert "8250: add support for ASIX devices with a FIFO bug"
+Date:   Mon, 19 Jun 2023 10:08:19 +0000
+Message-Id: <20230619100818.778176-1-jiaqing.zhao@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230619082547.73929-1-wuyun.abel@bytedance.com>
-In-Reply-To: <20230619082547.73929-1-wuyun.abel@bytedance.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Mon, 19 Jun 2023 12:08:07 +0200
-Message-ID: <CANn89i+deprQWB0dmsUD1sRmy1VQCQwKnZUkLu_AEGV=ow=PKQ@mail.gmail.com>
-Subject: Re: [PATCH net-next] inet: Save one atomic op if no memcg to charge
-To:     Abel Wu <wuyun.abel@bytedance.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "open list:NETWORKING [IPv4/IPv6]" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 10:26=E2=80=AFAM Abel Wu <wuyun.abel@bytedance.com>=
- wrote:
->
-> If there is no net-memcg associated with the sock, don't bother
-> calculating its memory usage for charge.
->
-> Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
-> ---
->  net/ipv4/inet_connection_sock.c | 18 +++++++++++-------
->  1 file changed, 11 insertions(+), 7 deletions(-)
->
-> diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_s=
-ock.c
-> index 65ad4251f6fd..73798282c1ef 100644
-> --- a/net/ipv4/inet_connection_sock.c
-> +++ b/net/ipv4/inet_connection_sock.c
-> @@ -706,20 +706,24 @@ struct sock *inet_csk_accept(struct sock *sk, int f=
-lags, int *err, bool kern)
->  out:
->         release_sock(sk);
->         if (newsk && mem_cgroup_sockets_enabled) {
-> -               int amt;
-> +               int amt =3D 0;
->
->                 /* atomically get the memory usage, set and charge the
->                  * newsk->sk_memcg.
->                  */
->                 lock_sock(newsk);
->
-> -               /* The socket has not been accepted yet, no need to look =
-at
-> -                * newsk->sk_wmem_queued.
-> -                */
-> -               amt =3D sk_mem_pages(newsk->sk_forward_alloc +
-> -                                  atomic_read(&newsk->sk_rmem_alloc));
->                 mem_cgroup_sk_alloc(newsk);
-> -               if (newsk->sk_memcg && amt)
-> +               if (newsk->sk_memcg) {
-> +                       /* The socket has not been accepted yet, no need
-> +                        * to look at newsk->sk_wmem_queued.
-> +                        */
-> +                       amt =3D sk_mem_pages(newsk->sk_forward_alloc +
-> +                                          atomic_read(&newsk->sk_rmem_al=
-loc));
-> +
-> +               }
-> +
-> +               if (amt)
->                         mem_cgroup_charge_skmem(newsk->sk_memcg, amt,
->                                                 GFP_KERNEL | __GFP_NOFAIL=
-);
+Commit eb26dfe8aa7e ("8250: add support for ASIX devices with a FIFO
+bug") merged on Jul 13, 2012 adds a quirk for PCI_VENDOR_ID_ASIX
+(0x9710). But that ID is the same as PCI_VENDOR_ID_NETMOS defined in
+1f8b061050c7 ("[PATCH] Netmos parallel/serial/combo support") merged
+on Mar 28, 2005. In pci_serial_quirks array, the NetMos entry always
+takes precedence over the ASIX entry even since it was initially
+merged, code in that commit is always unreachable.
 
-This looks correct, but claiming reading an atomic_t is an 'atomic op'
-is a bit exaggerated.
+In my tests adding the FIFO workaround to pci_netmos_init() makes no
+difference, and the vendor driver also does not have such workaround.
+Given that the code was never used for over a decade, it's safe to
+revert it.
+
+Also, the real PCI_VENDOR_ID_ASIX should be 0x125b, which is used on
+their newer AX99100 PCIe serial controllers released on 2016. The FIFO
+workaround should not be intended for these newer controllers, and it
+was never implemented in vendor driver.
+
+This reverts commit eb26dfe8aa7eeb5a5aa0b7574550125f8aa4c3b3.
+
+Signed-off-by: Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2:
+* Got a Reviewed-By
+* Update commit message
+* Renamed from "serial: 8250_pci: remove unreachable code for ASIX
+  devices"
+
+ drivers/tty/serial/8250/8250.h      |  1 -
+ drivers/tty/serial/8250/8250_pci.c  | 19 -------------------
+ drivers/tty/serial/8250/8250_port.c | 11 +++--------
+ include/linux/serial_8250.h         |  1 -
+ 4 files changed, 3 insertions(+), 29 deletions(-)
+
+diff --git a/drivers/tty/serial/8250/8250.h b/drivers/tty/serial/8250/8250.h
+index 1e8fe44a7099..eeb7b43ebe53 100644
+--- a/drivers/tty/serial/8250/8250.h
++++ b/drivers/tty/serial/8250/8250.h
+@@ -91,7 +91,6 @@ struct serial8250_config {
+ #define UART_BUG_TXEN	BIT(1)	/* UART has buggy TX IIR status */
+ #define UART_BUG_NOMSR	BIT(2)	/* UART has buggy MSR status bits (Au1x00) */
+ #define UART_BUG_THRE	BIT(3)	/* UART has buggy THRE reassertion */
+-#define UART_BUG_PARITY	BIT(4)	/* UART mishandles parity if FIFO enabled */
+ #define UART_BUG_TXRACE	BIT(5)	/* UART Tx fails to set remote DR */
+ 
+ 
+diff --git a/drivers/tty/serial/8250/8250_pci.c b/drivers/tty/serial/8250/8250_pci.c
+index e80c4f6551a1..d2d547b5da95 100644
+--- a/drivers/tty/serial/8250/8250_pci.c
++++ b/drivers/tty/serial/8250/8250_pci.c
+@@ -1232,14 +1232,6 @@ static int pci_oxsemi_tornado_setup(struct serial_private *priv,
+ 	return pci_default_setup(priv, board, up, idx);
+ }
+ 
+-static int pci_asix_setup(struct serial_private *priv,
+-		  const struct pciserial_board *board,
+-		  struct uart_8250_port *port, int idx)
+-{
+-	port->bugs |= UART_BUG_PARITY;
+-	return pci_default_setup(priv, board, port, idx);
+-}
+-
+ #define QPCR_TEST_FOR1		0x3F
+ #define QPCR_TEST_GET1		0x00
+ #define QPCR_TEST_FOR2		0x40
+@@ -1955,7 +1947,6 @@ pci_moxa_setup(struct serial_private *priv,
+ #define PCI_DEVICE_ID_WCH_CH355_4S	0x7173
+ #define PCI_VENDOR_ID_AGESTAR		0x5372
+ #define PCI_DEVICE_ID_AGESTAR_9375	0x6872
+-#define PCI_VENDOR_ID_ASIX		0x9710
+ #define PCI_DEVICE_ID_BROADCOM_TRUMANAGE 0x160a
+ #define PCI_DEVICE_ID_AMCC_ADDIDATA_APCI7800 0x818e
+ 
+@@ -2600,16 +2591,6 @@ static struct pci_serial_quirk pci_serial_quirks[] = {
+ 		.exit		= pci_wch_ch38x_exit,
+ 		.setup          = pci_wch_ch38x_setup,
+ 	},
+-	/*
+-	 * ASIX devices with FIFO bug
+-	 */
+-	{
+-		.vendor		= PCI_VENDOR_ID_ASIX,
+-		.device		= PCI_ANY_ID,
+-		.subvendor	= PCI_ANY_ID,
+-		.subdevice	= PCI_ANY_ID,
+-		.setup		= pci_asix_setup,
+-	},
+ 	/*
+ 	 * Broadcom TruManage (NetXtreme)
+ 	 */
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+index c153ba3a018a..053d44412e42 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -2636,11 +2636,8 @@ static unsigned char serial8250_compute_lcr(struct uart_8250_port *up,
+ 
+ 	if (c_cflag & CSTOPB)
+ 		cval |= UART_LCR_STOP;
+-	if (c_cflag & PARENB) {
++	if (c_cflag & PARENB)
+ 		cval |= UART_LCR_PARITY;
+-		if (up->bugs & UART_BUG_PARITY)
+-			up->fifo_bug = true;
+-	}
+ 	if (!(c_cflag & PARODD))
+ 		cval |= UART_LCR_EPAR;
+ 	if (c_cflag & CMSPAR)
+@@ -2801,8 +2798,7 @@ serial8250_do_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	up->lcr = cval;					/* Save computed LCR */
+ 
+ 	if (up->capabilities & UART_CAP_FIFO && port->fifosize > 1) {
+-		/* NOTE: If fifo_bug is not set, a user can set RX_trigger. */
+-		if ((baud < 2400 && !up->dma) || up->fifo_bug) {
++		if (baud < 2400 && !up->dma) {
+ 			up->fcr &= ~UART_FCR_TRIGGER_MASK;
+ 			up->fcr |= UART_FCR_TRIGGER_1;
+ 		}
+@@ -3138,8 +3134,7 @@ static int do_set_rxtrig(struct tty_port *port, unsigned char bytes)
+ 	struct uart_8250_port *up = up_to_u8250p(uport);
+ 	int rxtrig;
+ 
+-	if (!(up->capabilities & UART_CAP_FIFO) || uport->fifosize <= 1 ||
+-	    up->fifo_bug)
++	if (!(up->capabilities & UART_CAP_FIFO) || uport->fifosize <= 1)
+ 		return -EINVAL;
+ 
+ 	rxtrig = bytes_to_fcr_rxtrig(up, bytes);
+diff --git a/include/linux/serial_8250.h b/include/linux/serial_8250.h
+index 6f78f302d272..09029cb33e74 100644
+--- a/include/linux/serial_8250.h
++++ b/include/linux/serial_8250.h
+@@ -98,7 +98,6 @@ struct uart_8250_port {
+ 	struct list_head	list;		/* ports on this IRQ */
+ 	u32			capabilities;	/* port capabilities */
+ 	unsigned short		bugs;		/* port bugs */
+-	bool			fifo_bug;	/* min RX trigger if enabled */
+ 	unsigned int		tx_loadsz;	/* transmit fifo load size */
+ 	unsigned char		acr;
+ 	unsigned char		fcr;
+-- 
+2.39.2
+
