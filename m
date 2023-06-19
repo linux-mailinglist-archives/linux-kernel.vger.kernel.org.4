@@ -2,50 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7F2E7356E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 14:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16DF87356EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 14:32:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230468AbjFSMaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 08:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51114 "EHLO
+        id S229693AbjFSMch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 08:32:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbjFSM36 (ORCPT
+        with ESMTP id S229688AbjFSMcf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 08:29:58 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC0791;
-        Mon, 19 Jun 2023 05:29:55 -0700 (PDT)
-X-QQ-mid: bizesmtp73t1687177786tu58ycog
-Received: from linux-lab-host.localdomain ( [116.30.126.60])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 19 Jun 2023 20:29:45 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: FVl8EHhfVR6mCyZUawKuNgOeziftOVI0KH5LBW2YGVs3vsD+ECpNHgIeXFx/q
-        55cBDOd3xctgZvSpVrgb9ncBLZmJvIhXd0bvaDoGUnDSGwfJwgKXoZBOkt6tveDZZtIBOYe
-        yuUlrH/9m695KsRymGnpX9XEsCpjLYr58ubytYfvtvKx97yA35zYpfrtNc3svfC6JQ2JpMw
-        hcDSSJ+eskWbHKlMVocljtJZKEb6zGLyGABTNMRap3dnet7EGZJthiLydfUncjWsxNi7xSJ
-        3BVwRqCjrRMXAhmcehIoXbGhc3LkE9qI3Wfy54GOnDfaNFoXeepNrZpDk+5AiyVj3e0ZZnR
-        IJYKyS445erEkiQ1yfg/CulKRr82dBR/SqneBCvfF/u8j0LPDsJzx2dCCknULy9rL0MqK26
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 17039376255074177118
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v5 5/5] selftests/nolibc: riscv: customize makefile for rv32
-Date:   Mon, 19 Jun 2023 20:29:38 +0800
-Message-Id: <2ebfb48c66b18a5fd7d0bd6b7c832a5d8ce6486f.1687176996.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1687176996.git.falcon@tinylab.org>
-References: <cover.1687176996.git.falcon@tinylab.org>
+        Mon, 19 Jun 2023 08:32:35 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DED91
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 05:32:34 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f8775126d3so27817e87.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 05:32:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687177952; x=1689769952;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6kQXXt7p+guLFHPeMdd87LrI9K2HMO9Lr8NPYCPaiaU=;
+        b=aUrEmIOqBaZuBpXpLhfXNUlXBrksflmXT1QYahTBgtXnKKN3h2wgQfAEtJ2B/2f1up
+         nxsws/gt5wzQ4SlhfAxOSS5bPL3xEWHUruRzq7RO5qcBTgOUH3xWoTP3FwZEMXGtxNgZ
+         ciAdYnJwF0L+odYzmRK4hvjDg095odpNHJQoW9sE/Z296NpLCaksgVZjlqGSyLwl8Yaf
+         eJp6SLJ1i/7z99XpYkyaGMlsqG/TzOCCGit8f5zy5S76XSMSSt7b0vuET+AOYv/Hoowg
+         7/X+4qE5gMohu/byY1ITg0stnrgnjj0meB6gvkWX4jzP3xki1DqEmK3DPmZAVkC6oaBD
+         93iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687177952; x=1689769952;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6kQXXt7p+guLFHPeMdd87LrI9K2HMO9Lr8NPYCPaiaU=;
+        b=ah7tT28kFl3VixVx1rhYqgaZ5EMDZCOb/MPEmxlB+9uC4ZtmvMo8i1y1BVYBRo7TQB
+         2HiQlilfwsc/7aXFhyMlaGMSxlT3mP8w4hbmhwtRij/tzRq+zqtYC8r4hIIifCJewZSv
+         PFiFfzvEEFBKy7V5yNZnIDKeZRID77c0vjEvNzkK2mzSPXR3RzNagiHPw8ShjT7UUyvd
+         zjVjet8YVo/TuFXlqFrGOEtg+lZ+RxHNiHsWceWBuSmGALLg+IvG0QLhJmyOntTpHsTW
+         sSTFCa4L5HOQnrL4slt/NIogYBz5acsoEVZszRwAdeZxGWF3jWtgNB2qe6IbuKP9jxNI
+         VxGQ==
+X-Gm-Message-State: AC+VfDx6k62e86EtBD83iytV9+jutdJ1OtqJ5pis/uDE4aHC8qDSlMOy
+        ip3bSMuYtC9C9BNDMPQVWxJc/w==
+X-Google-Smtp-Source: ACHHUZ52egGatzVJmcc8tV1/fH13uuqeyMtxMUK+2ORfAoCImdlFMJInTDDxmEGpv640/Hxi7LXvWA==
+X-Received: by 2002:ac2:504f:0:b0:4f5:1ac9:ab1b with SMTP id a15-20020ac2504f000000b004f51ac9ab1bmr6076236lfm.23.1687177952284;
+        Mon, 19 Jun 2023 05:32:32 -0700 (PDT)
+Received: from [192.168.1.101] (abyl242.neoplus.adsl.tpnet.pl. [83.9.31.242])
+        by smtp.gmail.com with ESMTPSA id y27-20020ac2447b000000b004f4c3feb9fbsm4240238lfl.61.2023.06.19.05.32.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 05:32:31 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Date:   Mon, 19 Jun 2023 14:32:26 +0200
+Subject: [PATCH] soc: qcom: rpmpd: Add sync_state
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230619-topic-rpmpd_syncstate-v1-1-54f986cf9444@linaro.org>
+X-B4-Tracking: v=1; b=H4sIANlKkGQC/x2N0QrCMAwAf2Xk2cBadW7+yhDpuswFZlaaKsrYv
+ xt8vIPjNlDKTArXaoNMb1ZexcAdKohzkAchj8bga3+sG9dhWRNHzOmZxrt+JWoJhXBq/KU9dyf
+ nWwfWDkEJhxwkzlbLa1lMpkwTf/6z/rbvP9iqYpl8AAAA
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1687177951; l=2369;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=4R5E7B3l629um2WTAAe7o796GIVLmPC9TwVvJNOq4pA=;
+ b=u6dNKI9qG7a4/XqA4lcu+SuPwfg6a4CxyLNj4pIXhVfr4Gq0owPzf0Fe164la24Pkuhn8y0Lu
+ KF4iXn4AzonBZzBv9kGV6v3A7p7S8XBw13ca1GF6MVLoeg2ZLAOvCfq
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,123 +82,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both riscv64 and riscv32 have:
+Add a sync_state implementation, very similar to the one already present
+in the RPMhPD driver.
 
-* the same arch/riscv source code tree
-* the same tools/include/nolibc/arch-riscv.h
-* the same ARCH=riscv value passed to top-level kernel Makefile
-
-The only differences are:
-
-* riscv64 uses defconfig, riscv32 uses rv32_defconfig
-* riscv64 uses qemu-system-riscv64, riscv32 uses qemu-system-riscv32
-* riscv32 has different compiler options (-march= and -mabi=)
-
-So, riscv32 can share most of the settings with riscv64, add riscv32
-support like the original ARCH=riscv support.
-
-To align with x86, the default riscv is reserved for riscv64 and a new
-riscv64 is also added to allow users pass ARCH=riscv64 directly.
-
-Since top-level kernel Makefile only accept ARCH=riscv, to make kernel
-happy, let's set kernel specific KARCH as riscv for both riscv32 and
-riscv64.
-
-And since they share the same arch-riscv.h, let's set nolibc specific
-NARCH as riscv too.
-
-Usage:
-
-    $ make defconfig ARCH=riscv32 CROSS_COMPILE=riscv64-linux-gnu- ...
-    $ make run ARCH=riscv32 CROSS_COMPILE=riscv64-linux-gnu- ...
-
-Suggested-by: Thomas Weißschuh <linux@weissschuh.net>
-Link: https://lore.kernel.org/linux-riscv/4a3b1cdf-91d5-4668-925e-21f8f5c64a92@t-8ch.de/
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Link: https://lore.kernel.org/linux-riscv/d1c83340-af4c-4780-a101-b9d22b47379c@app.fastmail.com/
-Suggested-by: Willy Tarreau <w@1wt.eu>
-Link: https://lore.kernel.org/lkml/ZIAywHvr6UB1J4of@1wt.eu/
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- tools/include/nolibc/Makefile           |  4 ++++
- tools/testing/selftests/nolibc/Makefile | 11 +++++++++++
- 2 files changed, 15 insertions(+)
+ drivers/soc/qcom/rpmpd.c | 34 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 33 insertions(+), 1 deletion(-)
 
-diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
-index 14a6416fa57f..875e13e3c851 100644
---- a/tools/include/nolibc/Makefile
-+++ b/tools/include/nolibc/Makefile
-@@ -24,9 +24,13 @@ Q=@
- endif
+diff --git a/drivers/soc/qcom/rpmpd.c b/drivers/soc/qcom/rpmpd.c
+index 99b017fd76b7..fa58c04214ee 100644
+--- a/drivers/soc/qcom/rpmpd.c
++++ b/drivers/soc/qcom/rpmpd.c
+@@ -58,6 +58,7 @@ struct rpmpd {
+ 	struct qcom_smd_rpm *rpm;
+ 	unsigned int max_state;
+ 	__le32 key;
++	bool state_synced;
+ };
  
- # kernel supported ARCH names by architecture
-+KARCH_riscv32    = riscv
-+KARCH_riscv64    = riscv
- KARCH            = $(or $(KARCH_$(ARCH)),$(ARCH))
+ struct rpmpd_desc {
+@@ -823,7 +824,11 @@ static int rpmpd_aggregate_corner(struct rpmpd *pd)
+ 	unsigned int this_active_corner = 0, this_sleep_corner = 0;
+ 	unsigned int peer_active_corner = 0, peer_sleep_corner = 0;
  
- # nolibc supported ARCH names by architecture
-+NARCH_riscv32    = riscv
-+NARCH_riscv64    = riscv
- NARCH_arm64      = aarch64
- NARCH            = $(or $(NARCH_$(ARCH)),$(ARCH))
+-	to_active_sleep(pd, pd->corner, &this_active_corner, &this_sleep_corner);
++	/* Clamp to the highest corner/level if sync_state isn't done yet */
++	if (!pd->state_synced)
++		this_active_corner = this_sleep_corner = pd->max_state - 1;
++	else
++		to_active_sleep(pd, pd->corner, &this_active_corner, &this_sleep_corner);
  
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index ebecb8cfd947..848884204a84 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -15,6 +15,8 @@ ARCH = $(SUBARCH)
- endif
+ 	if (peer && peer->enabled)
+ 		to_active_sleep(peer, peer->corner, &peer_active_corner,
+@@ -973,11 +978,38 @@ static int rpmpd_probe(struct platform_device *pdev)
+ 	return of_genpd_add_provider_onecell(pdev->dev.of_node, data);
+ }
  
- # kernel supported ARCH names by architecture
-+KARCH_riscv32    = riscv
-+KARCH_riscv64    = riscv
- KARCH            = $(or $(KARCH_$(ARCH)),$(ARCH))
- 
- # kernel image names by architecture
-@@ -24,6 +26,8 @@ IMAGE_x86        = arch/x86/boot/bzImage
- IMAGE_arm64      = arch/arm64/boot/Image
- IMAGE_arm        = arch/arm/boot/zImage
- IMAGE_mips       = vmlinuz
-+IMAGE_riscv32    = arch/riscv/boot/Image
-+IMAGE_riscv64    = arch/riscv/boot/Image
- IMAGE_riscv      = arch/riscv/boot/Image
- IMAGE_s390       = arch/s390/boot/bzImage
- IMAGE_loongarch  = arch/loongarch/boot/vmlinuz.efi
-@@ -37,6 +41,8 @@ DEFCONFIG_x86        = defconfig
- DEFCONFIG_arm64      = defconfig
- DEFCONFIG_arm        = multi_v7_defconfig
- DEFCONFIG_mips       = malta_defconfig
-+DEFCONFIG_riscv32    = rv32_defconfig
-+DEFCONFIG_riscv64    = defconfig
- DEFCONFIG_riscv      = defconfig
- DEFCONFIG_s390       = defconfig
- DEFCONFIG_loongarch  = defconfig
-@@ -52,6 +58,8 @@ QEMU_ARCH_x86        = x86_64
- QEMU_ARCH_arm64      = aarch64
- QEMU_ARCH_arm        = arm
- QEMU_ARCH_mips       = mipsel  # works with malta_defconfig
-+QEMU_ARCH_riscv32    = riscv32
-+QEMU_ARCH_riscv64    = riscv64
- QEMU_ARCH_riscv      = riscv64
- QEMU_ARCH_s390       = s390x
- QEMU_ARCH_loongarch  = loongarch64
-@@ -64,6 +72,8 @@ QEMU_ARGS_x86        = -M pc -append "console=ttyS0,9600 i8042.noaux panic=-1 $(
- QEMU_ARGS_arm64      = -M virt -cpu cortex-a53 -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_arm        = -M virt -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_mips       = -M malta -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-+QEMU_ARGS_riscv32    = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-+QEMU_ARGS_riscv64    = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_riscv      = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_s390       = -M s390-ccw-virtio -m 1G -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_loongarch  = -M virt -append "console=ttyS0,115200 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-@@ -79,6 +89,7 @@ else
- Q=@
- endif
- 
-+CFLAGS_riscv32 = -march=rv32im -mabi=ilp32
- CFLAGS_s390 = -m64
- CFLAGS_mips = -EL
- CFLAGS_STACKPROTECTOR ?= $(call cc-option,-mstack-protector-guard=global $(call cc-option,-fstack-protector-all))
++static void rpmpd_sync_state(struct device *dev)
++{
++	const struct rpmpd_desc *desc = of_device_get_match_data(dev);
++	struct rpmpd **rpmpds = desc->rpmpds;
++	struct rpmpd *pd;
++	unsigned int i;
++	int ret;
++
++	mutex_lock(&rpmpd_lock);
++	for (i = 0; i < desc->num_pds; i++) {
++		pd = rpmpds[i];
++		if (!pd)
++			continue;
++
++		pd->state_synced = true;
++
++		if (!pd->enabled)
++			pd->corner = 0;
++
++		ret = rpmpd_aggregate_corner(pd);
++		if (ret)
++			dev_err(dev, "failed to sync %s: %d\n", pd->pd.name, ret);
++	}
++	mutex_unlock(&rpmpd_lock);
++}
++
+ static struct platform_driver rpmpd_driver = {
+ 	.driver = {
+ 		.name = "qcom-rpmpd",
+ 		.of_match_table = rpmpd_match_table,
+ 		.suppress_bind_attrs = true,
++		.sync_state = rpmpd_sync_state,
+ 	},
+ 	.probe = rpmpd_probe,
+ };
+
+---
+base-commit: 47045630bc409ce6606d97b790895210dd1d517d
+change-id: 20230619-topic-rpmpd_syncstate-f62785941281
+
+Best regards,
 -- 
-2.25.1
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
