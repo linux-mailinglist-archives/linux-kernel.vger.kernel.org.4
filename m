@@ -2,119 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67535735EB7
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 22:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DF41735EAE
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 22:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbjFSUrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 16:47:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42576 "EHLO
+        id S229670AbjFSUrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 16:47:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbjFSUr1 (ORCPT
+        with ESMTP id S229489AbjFSUrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 16:47:27 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D57F1A3;
-        Mon, 19 Jun 2023 13:47:24 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-31272fcedf6so1056097f8f.2;
-        Mon, 19 Jun 2023 13:47:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687207643; x=1689799643;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ccjdX+IZqQAhgyk6xPOcJY+ngvdDgr2cEw+3he/cnkM=;
-        b=jHYqsvXA6NiTfeCcqKVcOiRIKTt+m2BZuSNb260ylv7/IACNKLfLYiqzemybP73R7r
-         E/cN0oKUQtbleX04sIgx0XWdlndkVtGIgOtq1JGz3fBggnfoZzhCzPobJVyvq78WBhi3
-         Jv5wWJaHtzIVPu98JdDMdLI7YpEwnmQ2fb+TzOU/533Ypi+Kh40R9a0BcOEuH+k/tyzk
-         lKdHnqhkGNit4/GxpXJgLxQ9Bqh3oIY5iLMPn0DUmvdd4c4EtqssVw0tDoDaIGZHumqe
-         LJvTUul00cc/6PGucXfyjJtbtveK2sex0Z8cZsyyD9IROs71j3KltUJxgSdzBn22EkKs
-         jr/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687207643; x=1689799643;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ccjdX+IZqQAhgyk6xPOcJY+ngvdDgr2cEw+3he/cnkM=;
-        b=iQ4iNkmWuXmo/LfzyjT2dcexZcd2rNabGJAFYaVzqMYi1cEGT0pXJHw1pfvRG0/LCq
-         k98plSkvUiFIrGOs7W4+H+K6gN2xPOP7xIJjzkzqVJ8G5EQZvzeNhAyEM+MGTm0BasRF
-         HN1Qnhh8/THdGO5b+R5sLgotIpdndqdyc1pPZ5tsDDNx/MYRY5YuMJPm1ELC+w4RyJM1
-         FUt/2+iR8k0YYv3e5UnFvJXRNU3G3g/vDWYb70K1Juvmw7hw+C1HxGAHThFI8FGDld8q
-         HdDfD0icU1zsQx6suYs2bUIl0EkOutT7a7H98O8VouhWACW7P/smfn3nG1bCAc5JkkFS
-         rvYg==
-X-Gm-Message-State: AC+VfDwdv37asNIHY5OMtI/GguNBczFe0hEcD4udRqvE7hIAp5qKx3ur
-        1x8sxJZKasgYLoU1EYStvWg=
-X-Google-Smtp-Source: ACHHUZ64PxnAcEzdZjOfMT3Y8G3sRivHC3/PtHnSoZZboPqURSJbMXFV1kZVfApV5qyJ3bG0U8iyuQ==
-X-Received: by 2002:a5d:6292:0:b0:30f:cf67:564e with SMTP id k18-20020a5d6292000000b0030fcf67564emr7527330wru.62.1687207642690;
-        Mon, 19 Jun 2023 13:47:22 -0700 (PDT)
-Received: from localhost.localdomain (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
-        by smtp.googlemail.com with ESMTPSA id k10-20020adff5ca000000b0030ae87bd3e3sm434043wrp.18.2023.06.19.13.47.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 13:47:22 -0700 (PDT)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [net-next PATCH v5 3/3] leds: trigger: netdev: expose hw_control status via sysfs
-Date:   Mon, 19 Jun 2023 22:47:00 +0200
-Message-Id: <20230619204700.6665-4-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230619204700.6665-1-ansuelsmth@gmail.com>
-References: <20230619204700.6665-1-ansuelsmth@gmail.com>
+        Mon, 19 Jun 2023 16:47:09 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 621701A3;
+        Mon, 19 Jun 2023 13:47:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687207628; x=1718743628;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ycKjZzBsCwN//CAhRyctU2g6YIaDxzvCXqjhNY5zko8=;
+  b=bOKlz9WZ2C5zDPx+Haav0WkJDTpeT4KXwwzIV8eNqpDrJ834u5HSA57g
+   J0EQIPTluFTSqtrMNBcaZfEsiLekBSCxQBdh7+wZC8EGry2ESjma29bCv
+   ZL1lRoef/9hnDVD7oKyNbjY1siu1epsAjhWHThGIsDvBcZntoxxQVhWHa
+   tnV4Yo5dRr+rzaXAssCVgPvWp4hKzH93Cptvofee3j8A3kALE6W5sQNto
+   27mxmRRsYcFsSiTE6T9aqXXGwO/6vSlFQNRAiPA0OaXf/lf/Z9tbS8qik
+   rFr36PnbHuMQ1Wl13N1AdtkRwH//fZ1N//ObULG0w3VibF547KnyCPSFU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="349437114"
+X-IronPort-AV: E=Sophos;i="6.00,255,1681196400"; 
+   d="scan'208";a="349437114"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 13:47:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="691194551"
+X-IronPort-AV: E=Sophos;i="6.00,255,1681196400"; 
+   d="scan'208";a="691194551"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 19 Jun 2023 13:47:04 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qBLmB-00057c-2J;
+        Mon, 19 Jun 2023 20:47:03 +0000
+Date:   Tue, 20 Jun 2023 04:47:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Fabien Parent <parent.f@gmail.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Markus Schneider-Pargmann <msp@baylibre.com>
+Subject: Re: [PATCH v5 8/8] soc: mediatek: pm-domains: Add support for MT8365
+Message-ID: <202306200439.julbXDpI-lkp@intel.com>
+References: <20230619085344.2885311-9-msp@baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230619085344.2885311-9-msp@baylibre.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Expose hw_control status via sysfs for the netdev trigger to give
-userspace better understanding of the current state of the trigger and
-the LED.
+Hi Markus,
 
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
----
- drivers/leds/trigger/ledtrig-netdev.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+kernel test robot noticed the following build warnings:
 
-diff --git a/drivers/leds/trigger/ledtrig-netdev.c b/drivers/leds/trigger/ledtrig-netdev.c
-index 2c1c9e95860e..32b66703068a 100644
---- a/drivers/leds/trigger/ledtrig-netdev.c
-+++ b/drivers/leds/trigger/ledtrig-netdev.c
-@@ -406,6 +406,16 @@ static ssize_t interval_store(struct device *dev,
- 
- static DEVICE_ATTR_RW(interval);
- 
-+static ssize_t hw_control_show(struct device *dev,
-+			       struct device_attribute *attr, char *buf)
-+{
-+	struct led_netdev_data *trigger_data = led_trigger_get_drvdata(dev);
-+
-+	return sprintf(buf, "%d\n", trigger_data->hw_control);
-+}
-+
-+static DEVICE_ATTR_RO(hw_control);
-+
- static struct attribute *netdev_trig_attrs[] = {
- 	&dev_attr_device_name.attr,
- 	&dev_attr_link.attr,
-@@ -417,6 +427,7 @@ static struct attribute *netdev_trig_attrs[] = {
- 	&dev_attr_rx.attr,
- 	&dev_attr_tx.attr,
- 	&dev_attr_interval.attr,
-+	&dev_attr_hw_control.attr,
- 	NULL
- };
- ATTRIBUTE_GROUPS(netdev_trig);
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on krzk-dt/for-next linus/master v6.4-rc7 next-20230619]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Markus-Schneider-Pargmann/dt-bindings-power-Add-MT8365-power-domains/20230619-165759
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230619085344.2885311-9-msp%40baylibre.com
+patch subject: [PATCH v5 8/8] soc: mediatek: pm-domains: Add support for MT8365
+config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20230620/202306200439.julbXDpI-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230620/202306200439.julbXDpI-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306200439.julbXDpI-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/bits.h:6,
+                    from include/linux/bitops.h:6,
+                    from include/linux/kernel.h:22,
+                    from include/linux/clk.h:13,
+                    from drivers/soc/mediatek/mtk-pm-domains.c:5:
+>> include/vdso/bits.h:7:33: warning: conversion from 'long unsigned int' to 'unsigned char' changes value from '384' to '128' [-Woverflow]
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                 ^
+   drivers/soc/mediatek/mtk-pm-domains.h:15:41: note: in expansion of macro 'BIT'
+      15 | #define MTK_SCPD_STRICT_BUS_PROTECTION  BIT(8)
+         |                                         ^~~
+   drivers/soc/mediatek/mt8365-pm-domains.h:69:25: note: in expansion of macro 'MTK_SCPD_STRICT_BUS_PROTECTION'
+      69 |                 .caps = MTK_SCPD_STRICT_BUS_PROTECTION | MTK_SCPD_HAS_INFRA_NAO,
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +7 include/vdso/bits.h
+
+3945ff37d2f48d Vincenzo Frascino 2020-03-20  6  
+3945ff37d2f48d Vincenzo Frascino 2020-03-20 @7  #define BIT(nr)			(UL(1) << (nr))
+cbdb1f163af2bb Andy Shevchenko   2022-11-28  8  #define BIT_ULL(nr)		(ULL(1) << (nr))
+3945ff37d2f48d Vincenzo Frascino 2020-03-20  9  
+
 -- 
-2.40.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
