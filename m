@@ -2,182 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A28D4735F35
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 23:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37065735F3C
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 23:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbjFSV02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 17:26:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50812 "EHLO
+        id S229678AbjFSVae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 17:30:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjFSV01 (ORCPT
+        with ESMTP id S229454AbjFSVab (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 17:26:27 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90915E5
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 14:26:25 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1b4fef08cfdso18826085ad.1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 14:26:25 -0700 (PDT)
+        Mon, 19 Jun 2023 17:30:31 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9583DE5
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 14:30:29 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b44eddb52dso55381951fa.3
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 14:30:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687209985; x=1689801985;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0F/HmPYrX2+2YXjhicna2U9ZXZVghOWwV5+8A0s6ZuM=;
-        b=oXWJFMrLryRiRcluWQ0ExLJUaukON7mv7BNPPv/Xp426GKqT2t0kdEK8NR1TMrvMd1
-         Pdiw//+MthS3dl2hx07aMzM9qbrsXkjS5gniypxOlxjnaje9uV8YC5bRxYLmABgVDv0k
-         /la8eBBD6jHW2nVJgcb1qxDxjfUPiHodRKYoCnxG/3SH9vl+Nc7L2zroggSi1qt8A5zy
-         P6uKY5IQcRFRMI6sST8vyr4FZMlrjkKWabNYdVPIP4mCQ2fn+JB+bjIi6lx1feSJ1lqs
-         x6yPK+WAe8/ia4B5ZDJg3/0TA5yoHsxRmA4cDswU/0GpKrJ2sQTXWM9InZeJOYw+N40A
-         QF5A==
+        d=linaro.org; s=google; t=1687210228; x=1689802228;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Q/v4jKV/v/ss0UgkWSkSr35lDQPiYbm4goSyQ755oto=;
+        b=MlAcH3K9STzJq9DVgte/xtOcbBQcaFntPvVsv8v7mJZBV6JWVfXm+zu8RmdPxMlCgO
+         5/7QWYwcn9XuGk+7h6CMH92f/jaAw3AhOxjdro/2OAM9wLRb3nb+LRzWvczRde0xCI7N
+         i+AAQmPlfJyZrur4euTJwHEZKlbHMux1IziygrbWvQW1HZUCrU+wy3xeiqvfSOPr91rj
+         t6YE+jnxKjFoxYIPTC2r4aKboqO0r0/Q5BvsP7jr9hN9jESWQW98uqPBrXtTtv+prAj0
+         UUyspVBdbrJdaGmIcwQo9lH4Ms7ydU5vDzYpzdIAOdAgDr6p5VezbKiArSbV5CBBuw0Z
+         RD0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687209985; x=1689801985;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0F/HmPYrX2+2YXjhicna2U9ZXZVghOWwV5+8A0s6ZuM=;
-        b=OiygRFCeGEHlY3kzM6y+ZtbJLwCSU6vs8ySD6dJN9thBbl590eVj2pp6Fnqq31unze
-         c21jFdmigFjdymVIkaJ8y+Xk+fxoBhnLWq5I6wR1J3l83zR+CZblgb19tddfEd1Z/a+6
-         68oVqQUHEaqny23nPMcklqH9/GkJtU0z3JCFXiHlMNseZ4KaReN37FQ8MXcKo1XqQ7W2
-         4YeCuagSzbpKJToMgz9h6VWToQb0JrbcABcQaOZ514CpRSZD/9x1czV0TEGaEGRjm6qT
-         nW95q4fxkBk5BAgbNrEtv9MO9LciPNMwvm5I44WY1EG05TCXik/h/v7sXBXwrfOLXrsD
-         T3RA==
-X-Gm-Message-State: AC+VfDwa3Sqk3eVsWum77hyPvcpKJ+0asynX9MaqKcxIRaqKFPs12MYh
-        yWcumInQsVwokFco0cUDl7QzlKSc6oXWEkKN7ZE=
-X-Google-Smtp-Source: ACHHUZ5nrTxKbGcep4MMwAasKKXH7oF6DEVGKf3/Wh7QTJ3SnsRwMA3iCd5tLojnKjaVjo1s2UhcmQ==
-X-Received: by 2002:a17:902:f688:b0:1b4:5699:aab8 with SMTP id l8-20020a170902f68800b001b45699aab8mr6984381plg.29.1687209984924;
-        Mon, 19 Jun 2023 14:26:24 -0700 (PDT)
-Received: from localhost ([135.180.227.0])
-        by smtp.gmail.com with ESMTPSA id z8-20020a1709027e8800b001b5620c2c59sm266765pla.159.2023.06.19.14.26.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 14:26:24 -0700 (PDT)
-Date:   Mon, 19 Jun 2023 14:26:24 -0700 (PDT)
-X-Google-Original-Date: Mon, 19 Jun 2023 14:26:19 PDT (-0700)
-Subject:     Re: ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol 'misaligned_access_speed'; recompile with -fPIC
-In-Reply-To: <CAKwvOd=yg5GE8eF5bFY4t2S-0Od3smH9iRB+2Ctkg=+WXM97ig@mail.gmail.com>
-CC:     alexghiti@rivosinc.com, lkp@intel.com, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     ndesaulniers@google.com
-Message-ID: <mhng-5f0a04c3-5e31-49a6-9366-c8817396becb@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1687210228; x=1689802228;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q/v4jKV/v/ss0UgkWSkSr35lDQPiYbm4goSyQ755oto=;
+        b=XnV5RpgzSjK8N4h9gzJgpCOopzNgSKSFfjBhFa02cjyEB7kC+zWfRxLn2rcMMBmMgj
+         UuQdFKMguS8SUgQojgQn7JdAQ9M21p6llaOyVLQpdRHaHON/jOB8UW01TmRbPDmNZrIB
+         sEpcV+Dx4XDJqIgRReqpe0SxGHC//b4Ms5bzhkzrEPicsuAAKIsTGHk+o1x8cVfuqZjj
+         ypkpA0+OJ7QmjKlVsGiPbEtoB/Cka9fMPCz8HpGpFORTlZ8GQrwYuB2pXzfrj/nAB05z
+         rdpltopfQ45BszTGwRmbbrYRoQ2qoVUTI/1r/dFSkd/MzCWpdSWpIgfY0Mz0oyLNp9rp
+         LhGw==
+X-Gm-Message-State: AC+VfDxEohtdNPwLOcU5o9ZGTdP82YBg2bafguOCe98UZcpahGI9nhVd
+        4zUIeKKuNxUi5UTdDAOyzZjJXQ==
+X-Google-Smtp-Source: ACHHUZ4o6dh5B2/cPLw+tC3fwf7EALethpsMM/RIRU+zmsmR1VvQNW66C59wPLdtGAiedCPoLkt0XQ==
+X-Received: by 2002:a2e:9056:0:b0:2b4:76a8:bb97 with SMTP id n22-20020a2e9056000000b002b476a8bb97mr2374523ljg.14.1687210227840;
+        Mon, 19 Jun 2023 14:30:27 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id w16-20020a2e9990000000b002a8ae16ac8csm64180lji.18.2023.06.19.14.30.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Jun 2023 14:30:27 -0700 (PDT)
+Message-ID: <bba3c566-5ec3-79ca-96cf-2a7d3133831e@linaro.org>
+Date:   Tue, 20 Jun 2023 00:30:26 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 1/2] drm/msm/dpu: retrieve DSI DSC struct through
+ priv->dsi[0]
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, andersson@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_jesszhan@quicinc.com,
+        quic_sbillaka@quicinc.com, marijn.suijten@somainline.org,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1686694742-20862-1-git-send-email-quic_khsieh@quicinc.com>
+ <1686694742-20862-2-git-send-email-quic_khsieh@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1686694742-20862-2-git-send-email-quic_khsieh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Jun 2023 09:40:28 PDT (-0700), ndesaulniers@google.com wrote:
-> On Tue, Jun 13, 2023 at 4:17 AM Alexandre Ghiti <alexghiti@rivosinc.com> wrote:
->>
->> On Sun, Jun 11, 2023 at 2:11 AM kernel test robot <lkp@intel.com> wrote:
->> >
->> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
->> > head:   022ce8862dff83c859089cd14bc4dca0733e2f90
->> > commit: 8dc2a7e8027fbeca0c7df81d4c82e735a59b5741 riscv: Fix relocatable kernels with early alternatives using -fno-pie
->> > date:   10 days ago
->> > config: riscv-randconfig-r022-20230611 (https://download.01.org/0day-ci/archive/20230611/202306110855.7TlBCIzI-lkp@intel.com/config)
->> > compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
->> > reproduce (this is a W=1 build):
->> >         mkdir -p ~/bin
->> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->> >         chmod +x ~/bin/make.cross
->> >         # install riscv cross compiling tool for clang build
->> >         # apt-get install binutils-riscv64-linux-gnu
->> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8dc2a7e8027fbeca0c7df81d4c82e735a59b5741
->> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->> >         git fetch --no-tags linus master
->> >         git checkout 8dc2a7e8027fbeca0c7df81d4c82e735a59b5741
->> >         # save the config file
->> >         mkdir build_dir && cp config build_dir/.config
->> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
->> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
->> >
->> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
->> > the same patch/commit), kindly add following tags
->> > | Reported-by: kernel test robot <lkp@intel.com>
->> > | Closes: https://lore.kernel.org/oe-kbuild-all/202306110855.7TlBCIzI-lkp@intel.com/
->> >
->> > All errors (new ones prefixed by >>):
->> >
->> > >> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol 'misaligned_access_speed'; recompile with -fPIC
->> >    >>> defined in vmlinux.a(arch/riscv/kernel/cpufeature.o)
->> >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
->> >    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_probe_func) in archive vmlinux.a
->> > --
->> > >> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symbol 'misaligned_access_speed'; recompile with -fPIC
->> >    >>> defined in vmlinux.a(arch/riscv/kernel/cpufeature.o)
->> >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
->> >    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_probe_func) in archive vmlinux.a
->> > --
->> > >> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol 'riscv_cbom_block_size'; recompile with -fPIC
->> >    >>> defined in vmlinux.a(arch/riscv/mm/cacheflush.o)
->> >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
->> >    >>>               arch/riscv/errata/thead/errata.o:(thead_errata_patch_func) in archive vmlinux.a
->> > --
->> > >> ld.lld: error: relocation R_RISCV_LO12_S cannot be used against symbol 'riscv_cbom_block_size'; recompile with -fPIC
->> >    >>> defined in vmlinux.a(arch/riscv/mm/cacheflush.o)
->> >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
->> >    >>>               arch/riscv/errata/thead/errata.o:(thead_errata_patch_func) in archive vmlinux.a
->> > --
->> > >> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol '__per_cpu_offset'; recompile with -fPIC
->> >    >>> defined in vmlinux.a(mm/percpu.o)
->> >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
->> >    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_probe_func) in archive vmlinux.a
->> > --
->> > >> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symbol '__per_cpu_offset'; recompile with -fPIC
->> >    >>> defined in vmlinux.a(mm/percpu.o)
->> >    >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
->> >    >>>               arch/riscv/errata/thead/errata.o:(thead_feature_probe_func) in archive vmlinux.a
->> >
->>
->> So I looked into those errors, the config is basically = RELOCATABLE +
->> MEDLOW - EARLY_ALTERNATIVES. Then errata/thead is not compiled as
->
-> Thanks for taking a look.  Shouldn't CONFIG_RELOCATABLE be setting
-> -fPIC? If so, why is LLD complaining about -fPIC not being used?
->
-> arch/riscv/Makefile sets -fPIE if CONFIG_RELOCATABLE == y.
->
-> Is it possible that -fpie was dropped for these object files, or
-> -fno-pic or -fno-pie was added to the cflags for these object files
-> somehow?
->
-> I've filed
-> https://github.com/ClangBuiltLinux/linux/issues/1872
-> to track this.
+On 14/06/2023 01:19, Kuogee Hsieh wrote:
+> Currently struct drm_dsc_config for DSI is populated at display
+> setup during system boot up. This mechanism works fine with
+> embedded display but not for pluggable displays as the
+> struct drm_dsc_config will become stale once external display
+> is unplugged.
+> 
+> Move storing of DSI DSC struct to atomic_enable() so that same
+> mechanism will work for both embedded display and pluggable
+> displays.
+> 
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 42 ++++++++++++++++++++---------
+>   1 file changed, 30 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> index 2e1873d..e00cd39 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> @@ -543,11 +543,24 @@ bool dpu_encoder_use_dsc_merge(struct drm_encoder *drm_enc)
+>   	return (num_dsc > 0) && (num_dsc > intf_count);
+>   }
+>   
+> +static struct drm_dsc_config *dpu_encoder_get_dsc_config(struct drm_encoder *drm_enc)
+> +{
+> +	struct msm_drm_private *priv = drm_enc->dev->dev_private;
+> +	struct dpu_encoder_virt *dpu_enc = to_dpu_encoder_virt(drm_enc);
+> +	int index = dpu_enc->disp_info.h_tile_instance[0];
+> +
+> +        if (dpu_enc->disp_info.intf_type == INTF_DSI)
+> +		return msm_dsi_get_dsc_config(priv->dsi[index]);
 
-Using R_RISCV_{HI20,LO12_I,LO12_S} to refer to non-absolute symbols in a 
-PIE shouldn't be allowed, it's not going to produce the right answer at 
-runtime.
+Wrong indentation.
 
-We've got a lot of complicated bits in the build scripts so it's worth 
-checking to make sure that `-fPIE` actually manifests in the link step.  
-If it is and GNU LD isn't complaining then I think we've likely got a 
-linker bug.
+> +
+> +	return NULL;
+> +}
+> +				
 
->> medany, which makes sense since we only need this code to be medany
->> when EARLY_ALTERNATIVES is enabled (because the code would be executed
->> with mmu off, which is not the case here).
->>
->> I can fix those errors by adding the medany flag, but I'm not sure
->> actually we want to do that since we do not need it and gcc does not
->> complain: any idea?
->>
->> Alex
->>
->>
->>
->> > --
->> > 0-DAY CI Kernel Test Service
->> > https://github.com/intel/lkp-tests/wiki
->>
->
->
-> -- 
-> Thanks,
-> ~Nick Desaulniers
+A string of 4 tabs causes checkpatch.pl to report an error.
+
+>   static struct msm_display_topology dpu_encoder_get_topology(
+>   			struct dpu_encoder_virt *dpu_enc,
+>   			struct dpu_kms *dpu_kms,
+>   			struct drm_display_mode *mode,
+> -			struct drm_crtc_state *crtc_state)
+> +			struct drm_crtc_state *crtc_state,
+> +			struct drm_dsc_config *dsc)
+>   {
+>   	struct msm_display_topology topology = {0};
+>   	int i, intf_count = 0;
+> @@ -579,7 +592,7 @@ static struct msm_display_topology dpu_encoder_get_topology(
+>   
+>   	topology.num_intf = intf_count;
+>   
+> -	if (dpu_enc->dsc) {
+> +	if (dsc) {
+>   		/*
+>   		 * In case of Display Stream Compression (DSC), we would use
+>   		 * 2 DSC encoders, 2 layer mixers and 1 interface
+> @@ -605,6 +618,7 @@ static int dpu_encoder_virt_atomic_check(
+>   	struct drm_display_mode *adj_mode;
+>   	struct msm_display_topology topology;
+>   	struct dpu_global_state *global_state;
+> +	struct drm_dsc_config *dsc;
+>   	int i = 0;
+>   	int ret = 0;
+>   
+> @@ -640,7 +654,9 @@ static int dpu_encoder_virt_atomic_check(
+>   		}
+>   	}
+>   
+> -	topology = dpu_encoder_get_topology(dpu_enc, dpu_kms, adj_mode, crtc_state);
+> +	dsc = dpu_encoder_get_dsc_config(drm_enc);
+> +
+> +	topology = dpu_encoder_get_topology(dpu_enc, dpu_kms, adj_mode, crtc_state, dsc);
+>   
+>   	/*
+>   	 * Release and Allocate resources on every modeset
+> @@ -1072,14 +1088,12 @@ static void dpu_encoder_virt_atomic_mode_set(struct drm_encoder *drm_enc,
+>   		dpu_enc->hw_pp[i] = i < num_pp ? to_dpu_hw_pingpong(hw_pp[i])
+>   						: NULL;
+>   
+> -	if (dpu_enc->dsc) {
+> -		num_dsc = dpu_rm_get_assigned_resources(&dpu_kms->rm, global_state,
+> -							drm_enc->base.id, DPU_HW_BLK_DSC,
+> -							hw_dsc, ARRAY_SIZE(hw_dsc));
+> -		for (i = 0; i < num_dsc; i++) {
+> -			dpu_enc->hw_dsc[i] = to_dpu_hw_dsc(hw_dsc[i]);
+> -			dsc_mask |= BIT(dpu_enc->hw_dsc[i]->idx - DSC_0);
+> -		}
+> +	num_dsc = dpu_rm_get_assigned_resources(&dpu_kms->rm, global_state,
+> +						drm_enc->base.id, DPU_HW_BLK_DSC,
+> +						hw_dsc, ARRAY_SIZE(hw_dsc));
+> +	for (i = 0; i < num_dsc; i++) {
+> +		dpu_enc->hw_dsc[i] = to_dpu_hw_dsc(hw_dsc[i]);
+> +		dsc_mask |= BIT(dpu_enc->hw_dsc[i]->idx - DSC_0);
+>   	}
+>   
+>   	dpu_enc->dsc_mask = dsc_mask;
+> @@ -1187,6 +1201,8 @@ static void dpu_encoder_virt_atomic_enable(struct drm_encoder *drm_enc,
+>   
+>   	dpu_enc = to_dpu_encoder_virt(drm_enc);
+>   
+> +	dpu_enc->dsc = dpu_encoder_get_dsc_config(drm_enc);
+> +
+>   	mutex_lock(&dpu_enc->enc_lock);
+>   	cur_mode = &dpu_enc->base.crtc->state->adjusted_mode;
+>   
+> @@ -2109,8 +2125,10 @@ void dpu_encoder_helper_phys_cleanup(struct dpu_encoder_phys *phys_enc)
+>   					phys_enc->hw_pp->merge_3d->idx);
+>   	}
+>   
+> -	if (dpu_enc->dsc)
+> +	if (dpu_enc->dsc) {
+>   		dpu_encoder_unprep_dsc(dpu_enc);
+> +		dpu_enc->dsc = NULL;
+> +	}
+>   
+>   	intf_cfg.stream_sel = 0; /* Don't care value for video mode */
+>   	intf_cfg.mode_3d = dpu_encoder_helper_get_3d_blend_mode(phys_enc);
+
+-- 
+With best wishes
+Dmitry
+
