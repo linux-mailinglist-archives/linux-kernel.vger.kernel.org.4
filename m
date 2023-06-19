@@ -2,186 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06390735614
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 13:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19886735618
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 13:47:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbjFSLqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 07:46:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57658 "EHLO
+        id S229797AbjFSLqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 07:46:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbjFSLqo (ORCPT
+        with ESMTP id S229693AbjFSLqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 07:46:44 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3EE137;
-        Mon, 19 Jun 2023 04:46:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MXN2Hxgx/LItOPexyNj74fs+V4y+GBRlwcKOSjNEOkk9jP94XhWCr5CLd2Wz8jBlYfx1X6bu/8tkgXI0bebXAjMLYdaCMnV8GtNQGJWWx2Sw+60HZQcmnLQLj+EPa+msjiSfzrP1fQCCtTueScUQbi8X6TxH6EmqYyK2A7SfWlYsL46GOdXgOjsd33+EsASeZR4ZZ/j7yiALM9U87ceMr3Q973hSEOZMXQe84jvUWAD+D7aVGJ39mDUvIx/GD81eqt3ndCNiYjvGk+Y1Y6viiWzF3HIlWByav3jSmn5ADq11ZGzGazZD3jG9ORwiTlgLmfpuRqeCbhq+DzkwYWD9nw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=af1ghpKobEtHqKNjBUQDFwlRyMUyJVKVL21ySo1vaHo=;
- b=Cf+PwtEwKK0LL847QB30tkiRu9qxT1jB6BYw3cHWspRTkR4IKLxmpgERE0NmSqNfIUmUy6WhsEQD3rywYy6p/GV0XiSuMdMzL+qxpzbOQdc4epEKniiwUA2fjFiIKKs6UfZ2NNXLk11s9Y1GmdVO6nyb4jzTMW45HRGYq02LV70N3jfS2yz4faFY0Nf2F4Dd76ka4ZWoCQYp1HWSpfxoP9SmlSNaeYsI5DvbIP8BnQoW126CDXs2HHK+GqzT0EinY6brfUsshOD0UZ+WrVxOd4qyRgE0fHqBnTZD5c+0bPOJpXqMc6S5qZ9p//31V94SfzvbI5ImHi9mEYTZKO4VFQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=af1ghpKobEtHqKNjBUQDFwlRyMUyJVKVL21ySo1vaHo=;
- b=VqpprNLqC3qu0Ue2aHLq2YP32uaBC/ZPHjl2sPCtI1HqqQD+LbLkzyI7gMEMf3qxkbmPsQactZ/rpAm0JSMoeYP8zjlC+b/JDL7cnhvSEZGEZtbMthGvj1e1XTjDQlsfw+5tlqjPSlPtYyEZBclOR6V3NjV8yJm4HhdVnkGbiD8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB5712.namprd12.prod.outlook.com (2603:10b6:510:1e3::13)
- by IA1PR12MB6308.namprd12.prod.outlook.com (2603:10b6:208:3e4::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.36; Mon, 19 Jun
- 2023 11:46:39 +0000
-Received: from PH7PR12MB5712.namprd12.prod.outlook.com
- ([fe80::9c4d:b56:ce20:d723]) by PH7PR12MB5712.namprd12.prod.outlook.com
- ([fe80::9c4d:b56:ce20:d723%7]) with mapi id 15.20.6500.036; Mon, 19 Jun 2023
- 11:46:38 +0000
-Message-ID: <268afbc2-4e65-0f31-a023-aff4823dd8e8@amd.com>
-Date:   Mon, 19 Jun 2023 17:16:27 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] perf test: Retry without grouping for all metrics test
-To:     Ian Rogers <irogers@google.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, adrian.hunter@intel.com,
-        kjain@linux.ibm.com, atrajeev@linux.vnet.ibm.com,
-        barnali@linux.ibm.com, ayush.jain3@amd.com, ananth.narayan@amd.com,
-        ravi.bangoria@amd.com, santosh.shukla@amd.com
-References: <20230614090710.680330-1-sandipan.das@amd.com>
- <CAP-5=fV9Fx99QmKWSqqDK23vF0dcTS+g-r-9zr6q0A2ZXWmCBw@mail.gmail.com>
-Content-Language: en-US
-From:   Sandipan Das <sandipan.das@amd.com>
-In-Reply-To: <CAP-5=fV9Fx99QmKWSqqDK23vF0dcTS+g-r-9zr6q0A2ZXWmCBw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SI2PR02CA0032.apcprd02.prod.outlook.com
- (2603:1096:4:195::12) To PH7PR12MB5712.namprd12.prod.outlook.com
- (2603:10b6:510:1e3::13)
+        Mon, 19 Jun 2023 07:46:49 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2695318C
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 04:46:46 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-3111547c8f9so3954948f8f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 04:46:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687175204; x=1689767204;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QdTN+h4pTxBF1R7xcHre9g6cPzO2KdkdTYscPEGzTLM=;
+        b=P4fDi611uOngEP6EdaSnzNOY1Y9HBEURzrdFMAmQOjvBAUoKi1jB05Cs3LxK3/mw+g
+         LCDriaIztJ+nbZHY6sIGxlOAKrFHUkIvt02Dh3shvokTI/PyjkyG0nvpcmPYnK3l5X6C
+         foXOQP5+h0yb29GFkAKAmNIrMBcZfzS4eqGGU3PVUOGta4hLMR5Pkj6yPS7HEuiLeMm+
+         SbtcJ5zRBk02AuOwps126whp2tqJcflBviVkMKBNjS9aHKnfOKJQjrqa6eJeFCu8CLkd
+         UhwONdMcDViELwP4lqM3sXMdYoB+J0b3oYlWSdVdlzbeyRBjc5LF+itHX6XNYJD2lTk8
+         ZCkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687175204; x=1689767204;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QdTN+h4pTxBF1R7xcHre9g6cPzO2KdkdTYscPEGzTLM=;
+        b=N4CGxqo6ysH2iBAtsUZbzUTZycREenYjS13VUNPuHnnF2PYNbjBs1PT/ioj/jKpfnG
+         z772iYHe9/b9vWJXLqaNwCqXiuhWJvwVwWxivn8Y3J07Wi35W1a8ESEk/AYvtFEcfRso
+         LWsf3tN+WU+XEEZwBtH+NS9L3G/4q26N/x3S5B21x5NlHWfxSDiRnakOAjY1O4kJBhGH
+         xq9uhbhrb1eNr4YHO/GDHzi8F3BAMGmA7stMiAsaPuQCWRclhztBEEgKA24AtW+v3m5U
+         qEhi80MSaSuvOO19F8OwYzS04TBUeKTGnwqw0HK0HpcOcaZt4cUNUSiDx3w9//kB4+aq
+         LgKQ==
+X-Gm-Message-State: AC+VfDx2x0wgmdTEKzKBq80TghGzfO4+jCx5ZVSTzD30rTvSb87WwrKO
+        7VMI6qLal/UidLRxJuR9DylrCA==
+X-Google-Smtp-Source: ACHHUZ48llS+kCE2mbeNkI9PvjAKHZDHQ6+DVkkVBa31lHuvuNsqCSvu6iqRvSbgnmoGOLso/x4MWA==
+X-Received: by 2002:a5d:62cc:0:b0:30d:2184:84c0 with SMTP id o12-20020a5d62cc000000b0030d218484c0mr8443200wrv.30.1687175204447;
+        Mon, 19 Jun 2023 04:46:44 -0700 (PDT)
+Received: from blmsp ([2001:4090:a245:802c:bc2b:8db8:9210:41eb])
+        by smtp.gmail.com with ESMTPSA id i1-20020a5d4381000000b0030c4d8930b1sm31281062wrq.91.2023.06.19.04.46.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 04:46:43 -0700 (PDT)
+Date:   Mon, 19 Jun 2023 13:46:42 +0200
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 06/16] can: m_can: Write transmit header and data in
+ one transaction
+Message-ID: <20230619114642.66sccv36i4sfonny@blmsp>
+References: <20230315110546.2518305-1-msp@baylibre.com>
+ <20230315110546.2518305-7-msp@baylibre.com>
+ <ZBLhDSl4a7AuCgNy@corigine.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5712:EE_|IA1PR12MB6308:EE_
-X-MS-Office365-Filtering-Correlation-Id: d92db463-b5af-4f11-afe0-08db70bad774
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: M8FdJqhvbTMDcf9YSiD9QJ4FWfyIOIZcwJr7tLFqn1p2r8KOAxwDSi6PKor6hZ5cinVqfeO+cmx2+DO0myOR/zlULM6qwaM6pzqN7zUZNnkZeoM41mVq5/HX5AeCEas2TNko/xtf0r9xgqg8wNXEAjQ+NqUyzBCHyN89zG2Vom8KXJRtfs6vhfzrqwVhULCMCyAeIw+6o1ny02qMqXmHT4QC22yvznGhXKnCB7oTmUSZZWHHTt1MgiiLkHQLXgXgnCPPIQCIUNZs2SAprqPgRJzW2tjCl21+8bVp3AJ3JNzaoAEqUWWbgS3z4rO78HEbmc+no999VVC3PpIk7Kk2v/26HjsUZiHgn0DJqhJnHIeU6czWGQqxlTuvvMMvEeQ53XiYJpMLboKQ37TtHVLgP5J4PNVMu3LHhHzdoApU3hnJKT9YsPLd+NwoBiBRi4USr5sgDK8z4DLvbDoO3+OjgWbZemUio4P1I6ea7B8iWF/GnaJ6mSvidDq8c2+6b7sFiXIv4Tz4USx+fy72cMVqloCQVQMFkZKLc27d8Zalqm3AYjDVqr6Lxba20VplaR75/Wu+4R5N79C0TaJKeTjyUJ7cojvdwtWgon4NcU6ShODZDE75CsgNNobU5Nh0ffNEiPAQszGo6mzy1FRd8cDsgA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5712.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(366004)(39860400002)(396003)(346002)(451199021)(7416002)(44832011)(31696002)(86362001)(41300700001)(8676002)(8936002)(5660300002)(66556008)(66476007)(66946007)(316002)(6916009)(31686004)(2616005)(38100700002)(83380400001)(186003)(36756003)(26005)(6512007)(6486002)(6666004)(6506007)(53546011)(4326008)(478600001)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NFJnTnNVbUQzZXBnSkh6NlNkRTFvTUNCb2ZTa0MxZGNXK3BRc2paemEwUGJu?=
- =?utf-8?B?bm83VXg5TlEyRk5sNWhNN00ybFprQXZHc2IyQ1grM1k0MDBGWHhFRGZZY3B1?=
- =?utf-8?B?MWFKMm0wbjNNWGM3ZDRhTnFTQlNuQjVVdkNKU3E5bjB3a2ZwTG94QVR2aHMy?=
- =?utf-8?B?cmNhR2lGRmR0NXJYZFEwR0thYWJxNkd4RXJqSldKcE5DNXg4TEpTd0tOOGJv?=
- =?utf-8?B?QytiZ2svQWt2czNYV2Z1K3IzaGVyWlRHOXJUUFBzc3hWVyt4S2dXaW1KZ2pi?=
- =?utf-8?B?dkR0NGJBc2syOXcwSzlxUFlqQTlVNmJxL29jL21vRGFBbHNhMTBTY1lvMGJh?=
- =?utf-8?B?NUdoMEFneU92UExYb2VIeFJwSWpPTzQ4c2hVaEJhYjRaK1RldXU2WUFpZ3VI?=
- =?utf-8?B?K2NaWmwvNTBEM2ZtUW5mMTlUVEdGNVgyVFpLQnIzeFhnU1JEQmZwRk9vZ3ZB?=
- =?utf-8?B?Mi9BSDJVdEFrN216Q01zUWpyVVduMWk4T1YwZ05YdGFjYi9lR2tJRHEwUERY?=
- =?utf-8?B?clAyMHhxZUVQVVlJb2pCVkpjRWVLU0hiQ2Y2M05KTXg3ZnVSS1ZINWFEVy9V?=
- =?utf-8?B?V3h5MG9Xa2FpVkIzNGlKVEw1QTRmNkd1UUl6dXRlcDlOTnIyb254VzJVa2RT?=
- =?utf-8?B?Vyt6eUgrVDVPTzdmVDNLejZzTENIN3I0bnpsQzdLbHNSdHk0cHNXNGJaQzI0?=
- =?utf-8?B?QW1TOGNpY2RLNCtPL2tTQXNMeFlLTnROWHZOMFZvRDZJeC9LaWZQWTY3M212?=
- =?utf-8?B?TEJncGV3NDRPNHlwdFdjalc2aDdhNlNiOHp6RTBOSHhjQnVVajR6clQ0WnV5?=
- =?utf-8?B?WFo0dS8wQUxmVmxab2ZScmpEcU5iVjdOZ1lEQkxiRDZKN3lWam9WNG80Rjd0?=
- =?utf-8?B?Y1FoWWxsM0NwUlRsTXQwbWJQc0FXamI0bG1GbFZGYllJWktlVFJWUXEzZ08v?=
- =?utf-8?B?OGtBM1FBM1llTkQ5a09iTU9YelpVSlpYUHVhZHVyTTBlWURvVTRJU1FjT2k5?=
- =?utf-8?B?ZlFYbjVKWENzZFZFK2JoZ1RIcXZ5RzZ2UVc2SEFGSUc3aTlsM21FUnNJSU5u?=
- =?utf-8?B?RnRlR2lDVUNlVkFGTTBsV3YrMVdzc2ZyRWd2K1Rpck8zcnBFUjVRKzFMZ2Vw?=
- =?utf-8?B?Q29STXkzdVR3elo4ZEFhb0dZSVNwREhtYVdERjJMZWJ3SmxNbGlHQm12YUpm?=
- =?utf-8?B?ZUtDcnc2YWZVMVJJZU1NK0I5TXRsbkVDQWlCTHlBRnpXK0d4MVBIY2dKN2FN?=
- =?utf-8?B?cjN3WVpNVnA1K3dvbnM1QmF4QjB3NjVYM2ppeFVwL1FocFFpajlJelRnYXdK?=
- =?utf-8?B?ZDZtd1lkZ3N0UjdnZ1ZDbXl6TE1IUWhxYUd2UXlwQUFnSXdJRlpNd3FGeGY3?=
- =?utf-8?B?S1pVTC9yWm1mejJBVlVybGp2b2huRmRaQitNWTFuMlhnMkFFVjByOUN4K1NZ?=
- =?utf-8?B?U29vSUZVZjFnWFBnMENLcHBBUXBFUlhRbXJ3T0ZoWUxGVU5NQm1sN2NBWXJD?=
- =?utf-8?B?eGVxdHo5dnpzMC9qYTRWVktEb1cwUVUxOFlvWHFySnFacVN2ZDlCZ1pCVUwy?=
- =?utf-8?B?ME91Y1IxZ0IzdnRHZ2IycThCa1Q2RFBFbGJBeEoxMTlRMDZmTzNNbEdBOGI4?=
- =?utf-8?B?M2pxWXF5cWxkbWpjS3ZvOUMyOEV4SFBoY3pBZmdWa3pUN21rcVJQNlRYdEV2?=
- =?utf-8?B?SmZNR1hvM21CQUNlZzZFbklMcDdjeU9PM2N0OHBJRUFRSU1SRzl6Z1JzM0tH?=
- =?utf-8?B?ckZuSW80UnlUV3BvWHV6V1ZZcmRubEZYNEQyZkN0OGhIbEZDUnI2ejFvaXhh?=
- =?utf-8?B?UFp4UmVVMzBOZDFGUHdCRE9hb2VQNW1RU3lZTUo5Z0RFQTRkVlM3VWRPS1Fu?=
- =?utf-8?B?T3BEK2MyU3NFdlRBbmp0bG45VHF5dFFNTEZPckhxcVA4aStxMzlhQWFENjll?=
- =?utf-8?B?Y3JYYWZYU0NUaGswV1BXT1c5THNTcUlpV1dWNVNTeUI3eGpWbDAyckRQallH?=
- =?utf-8?B?UlNDK3RENmptRXpCMTZyNW1BYW90UFBNSzc4bllwOE9RRlN2NjFoaHBKZ3RN?=
- =?utf-8?B?Vk5ieThYQWFWQ1JtUEM3V29ORFNrNkVFVU91NmpPaE14cEI5Ly9BdTBpMlpq?=
- =?utf-8?Q?NqJUCvowPTuRHSpmIpMra9ekN?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d92db463-b5af-4f11-afe0-08db70bad774
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5712.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jun 2023 11:46:38.7217
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uy6MH++ExzddBiQ2xghw12amSkeTOdYc0dbMbmtdjhHRfkNDjOU6Jbx3npURkEDA03cRdxxbVLHLjo+4jM+Q6w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6308
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZBLhDSl4a7AuCgNy@corigine.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ian,
+Hi Simon,
 
-On 6/14/2023 10:10 PM, Ian Rogers wrote:
-> On Wed, Jun 14, 2023 at 2:07 AM Sandipan Das <sandipan.das@amd.com> wrote:
->>
->> There are cases where a metric uses more events than the number of
->> counters. E.g. AMD Zen, Zen 2 and Zen 3 processors have four data fabric
->> counters but the "nps1_die_to_dram" metric has eight events. By default,
->> the constituent events are placed in a group. Since the events cannot be
->> scheduled at the same time, the metric is not computed. The all metrics
->> test also fails because of this.
+On Thu, Mar 16, 2023 at 10:27:41AM +0100, Simon Horman wrote:
+> On Wed, Mar 15, 2023 at 12:05:36PM +0100, Markus Schneider-Pargmann wrote:
+> > Combine header and data before writing to the transmit fifo to reduce
+> > the overhead for peripheral chips.
+> > 
+> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
 > 
-> Thanks Sandipan. So this is exposing a bug in the AMD data fabric PMU
-> driver. When the events are added the driver should create a fake PMU,
-> check that adding the group is valid and if not fail. The failure is
-> picked up by the tool and it will remove the group.
+> Thanks for addressing my comments on v2.
 > 
-> I appreciate the need for a time machine to make such a fix work. To
-> workaround the issue with the metrics add:
-> "MetricConstraint": "NO_GROUP_EVENTS",
-> to each metric in the json.
+> > ---
+> >  drivers/net/can/m_can/m_can.c | 11 ++++++-----
+> >  1 file changed, 6 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+> > index a5003435802b..35a2332464e5 100644
+> > --- a/drivers/net/can/m_can/m_can.c
+> > +++ b/drivers/net/can/m_can/m_can.c
+> > @@ -1681,6 +1681,8 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
+> >  		m_can_write(cdev, M_CAN_TXBAR, 0x1);
+> >  		/* End of xmit function for version 3.0.x */
+> >  	} else {
+> > +		char buf[TXB_ELEMENT_SIZE];
+> > +		u8 len_padded = DIV_ROUND_UP(cf->len, 4);
+> >  		/* Transmit routine for version >= v3.1.x */
+> >  
+> >  		txfqs = m_can_read(cdev, M_CAN_TXFQS);
+> > @@ -1720,12 +1722,11 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
+> >  		fifo_header.dlc = FIELD_PREP(TX_BUF_MM_MASK, putidx) |
+> >  			FIELD_PREP(TX_BUF_DLC_MASK, can_fd_len2dlc(cf->len)) |
+> >  			fdflags | TX_BUF_EFC;
+> > -		err = m_can_fifo_write(cdev, putidx, M_CAN_FIFO_ID, &fifo_header, 2);
+> > -		if (err)
+> > -			goto out_fail;
+> > +		memcpy(buf, &fifo_header, 8);
+> > +		memcpy_and_pad(&buf[8], len_padded, &cf->data, cf->len, 0);
 > 
+> I'm probably missing something obvious here but I'm seeing:
+> 
+> * len_padded is the number of 4-byte words
+> * but the 2nd argument to memcpy_and_pad should be a length in bytes
+> * so perhaps it should be: len_padded * 4
 
-Thanks for the suggestions. The amd_uncore driver is indeed missing group
-validation checks during event init. Will send out a fix with the
-"NO_GROUP_EVENTS" workaround.
+Thank you Simon for all the reviews, finally some time to continue on
+this:
 
->> Before announcing failure, the test can try multiple options for each
->> available metric. After system-wide mode fails, retry once again with
->> the "--metric-no-group" option.
->>
->> E.g.
->>
->>   $ sudo perf test -v 100
->>
->> Before:
->>
->>   100: perf all metrics test                                           :
->>   --- start ---
->>   test child forked, pid 672731
->>   Testing branch_misprediction_ratio
->>   Testing all_remote_links_outbound
->>   Testing nps1_die_to_dram
->>   Metric 'nps1_die_to_dram' not printed in:
->>   Error:
->>   Invalid event (dram_channel_data_controller_4) in per-thread mode, enable system wide with '-a'.
+Thanks for pointing this out. I updated my script used for testing so I
+catch something like this the next time. I will be using
+TXB_ELEMENT_SIZE - 8 to reflect the buffer size and the 8 byte offset.
+
+Best,
+Markus
+
 > 
-> This error doesn't relate to grouping, so I'm confused about having it
-> in the commit message, aside from the test failure.
+> >  
+> > -		err = m_can_fifo_write(cdev, putidx, M_CAN_FIFO_DATA,
+> > -				       cf->data, DIV_ROUND_UP(cf->len, 4));
+> > +		err = m_can_fifo_write(cdev, putidx, M_CAN_FIFO_ID,
+> > +				       buf, 2 + len_padded);
 > 
-
-Agreed. That's the error message from the last attempt where the test
-tries to use a longer running workload (perf bench).
-
-- Sandipan
+> This part looks good to me :)
+> 
+> >  		if (err)
+> >  			goto out_fail;
+> >  
+> > -- 
+> > 2.39.2
+> > 
