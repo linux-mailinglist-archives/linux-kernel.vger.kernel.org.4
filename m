@@ -2,137 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C642F734BE9
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 08:54:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2A82734BF4
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 08:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbjFSGy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 02:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50886 "EHLO
+        id S230104AbjFSG4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 02:56:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbjFSGy0 (ORCPT
+        with ESMTP id S230095AbjFSG42 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 02:54:26 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9851A4;
-        Sun, 18 Jun 2023 23:54:24 -0700 (PDT)
-Received: from dggpemm500014.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Ql0m33pBkzMp5B;
-        Mon, 19 Jun 2023 14:51:15 +0800 (CST)
-Received: from [10.174.178.120] (10.174.178.120) by
- dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Mon, 19 Jun 2023 14:54:22 +0800
-Message-ID: <0ce6abb5-bf32-a5dc-c6eb-0a96e12a8ebd@huawei.com>
-Date:   Mon, 19 Jun 2023 14:54:21 +0800
+        Mon, 19 Jun 2023 02:56:28 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22AF913D
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 23:56:27 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b46773e427so24042911fa.3
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 23:56:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687157785; x=1689749785;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qVQvPmZfMjyE4EriF44N+ZqOy+pXJULp7jhybIMTZRg=;
+        b=Nz7oMq/2JerE/qSJ0p1lmM0Tc6F/T4n0tY/5puv07oURkxjNaE3hnag7QPHhBQjjtu
+         pVxH+uT/izoeyx1d4ygzWZPMkHcF3kXs3BSobsB0Z/iATiWJ9slFaccqjZs+5nVaRg9l
+         xaKTFpVuIW6y12JVg0ZeDuO+vLXn8SIDk8GUMppBI4UXBKFzuGKyX1xVaYDLDQjWsubT
+         550gEcY9B6WXteuUHKUJk3DU3p4BUHhK3cLpmq4h93naDBxH8tvUzPG3dSwkmteTcnxE
+         pIXu6PX7TznbjL37tyhAa4kt9fasvG4OKhMLYeiqIOMBjWBxam5eGAM8trzdor1oITs/
+         yIEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687157785; x=1689749785;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qVQvPmZfMjyE4EriF44N+ZqOy+pXJULp7jhybIMTZRg=;
+        b=JBD9tgsWht5WlezXOYGHGrgSqf6fd4RCv7YKCtNWAIxB2b8336WNUydbjQ8I5wVHjc
+         UCXl7eHtKNAzisAo0kHsjLWGgROgDXGCWqkGQzsDaBjAezQjDMNYvp96O8HVLCn8G85F
+         E7+vPLoPeOm7QcpbUGrREES/fwU1dzJtVQPWs+sXLPL2UYo7ogIz3mLKT61iEtjG/Ods
+         SsolCMJwwWgpqpAIdbyWT55Tf+E7m1cWaOpXe6rnfLn9+ZvLdWJcbTBy6Di5BpPLn3Sc
+         LXLUiWKiKLPHlQRpcMbN1qEFfUizyvQ6pTySr9OOZA1Kwq09CUj83jfxUD2dFdNNHqP2
+         E6RA==
+X-Gm-Message-State: AC+VfDzYLGMQiaFMIJooSX7tF2yYuz3kxoNsdqXd7gems1j3YyzFSnj4
+        0YnYAtJ5MaTQEZiGrpxJVi+aPQ==
+X-Google-Smtp-Source: ACHHUZ73QHeatxNWNXWGjtENaICZG2mDwLhCI1onbdo3FjYTjn3nlSLNYVQvlsMOir4Fl3iZo9lkMQ==
+X-Received: by 2002:a2e:9a8f:0:b0:2b4:470e:8447 with SMTP id p15-20020a2e9a8f000000b002b4470e8447mr5553201lji.34.1687157785301;
+        Sun, 18 Jun 2023 23:56:25 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id o8-20020aa7d3c8000000b0051a575c76e6sm1172846edr.43.2023.06.18.23.56.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 18 Jun 2023 23:56:24 -0700 (PDT)
+Message-ID: <2a9e503b-7a5b-3b1e-a912-5d54a23c1ca1@linaro.org>
+Date:   Mon, 19 Jun 2023 08:56:22 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-CC:     <mawupeng1@huawei.com>, <akpm@linux-foundation.org>,
-        <david@redhat.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
-        <richard.weiyang@linux.alibaba.com>, <mst@redhat.com>,
-        <jasowang@redhat.com>, <pankaj.gupta.linux@gmail.com>,
-        <mhocko@kernel.org>, <osalvador@suse.de>
-Subject: Re: [PATCH stable 5.10 1/1] mm/memory_hotplug: extend
- offline_and_remove_memory() to handle more than one memory block
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v5 1/2] dt-bindings: arm: aspeed: add Inventec
+ starscream-bmc
 Content-Language: en-US
-To:     <gregkh@linuxfoundation.org>
-References: <20230614061900.3296725-1-mawupeng1@huawei.com>
- <20230614061900.3296725-2-mawupeng1@huawei.com>
- <2023061440-showing-happiest-937e@gregkh>
- <cd9688dc-a716-3031-489e-a867df0d1ea2@huawei.com>
- <2023061927-parsnip-gauging-86e9@gregkh>
-From:   mawupeng <mawupeng1@huawei.com>
-In-Reply-To: <2023061927-parsnip-gauging-86e9@gregkh>
-Content-Type: text/plain; charset="UTF-8"
+To:     PJ Chen <chen.pj@inventec.com>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org
+Cc:     ye.vic@inventec.com, Huang.Alang@inventec.com
+References: <20230619064249.3623-1-chen.pj@inventec.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230619064249.3623-1-chen.pj@inventec.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.120]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500014.china.huawei.com (7.185.36.153)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/6/19 14:20, Greg KH wrote:
-> On Wed, Jun 14, 2023 at 02:45:58PM +0800, mawupeng wrote:
->>
->>
->> On 2023/6/14 14:35, Greg KH wrote:
->>> On Wed, Jun 14, 2023 at 02:19:00PM +0800, Wupeng Ma wrote:
->>>> From: David Hildenbrand <david@redhat.com>
->>>>
->>>> virtio-mem soon wants to use offline_and_remove_memory() memory that
->>>> exceeds a single Linux memory block (memory_block_size_bytes()). Let's
->>>> remove that restriction.
->>>>
->>>> Let's remember the old state and try to restore that if anything goes
->>>> wrong. While re-onlining can, in general, fail, it's highly unlikely to
->>>> happen (usually only when a notifier fails to allocate memory, and these
->>>> are rather rare).
->>>>
->>>> This will be used by virtio-mem to offline+remove memory ranges that are
->>>> bigger than a single memory block - for example, with a device block
->>>> size of 1 GiB (e.g., gigantic pages in the hypervisor) and a Linux memory
->>>> block size of 128MB.
->>>>
->>>> While we could compress the state into 2 bit, using 8 bit is much
->>>> easier.
->>>>
->>>> This handling is similar, but different to acpi_scan_try_to_offline():
->>>>
->>>> a) We don't try to offline twice. I am not sure if this CONFIG_MEMCG
->>>> optimization is still relevant - it should only apply to ZONE_NORMAL
->>>> (where we have no guarantees). If relevant, we can always add it.
->>>>
->>>> b) acpi_scan_try_to_offline() simply onlines all memory in case
->>>> something goes wrong. It doesn't restore previous online type. Let's do
->>>> that, so we won't overwrite what e.g., user space configured.
->>>>
->>>> Reviewed-by: Wei Yang <richard.weiyang@linux.alibaba.com>
->>>> Cc: "Michael S. Tsirkin" <mst@redhat.com>
->>>> Cc: Jason Wang <jasowang@redhat.com>
->>>> Cc: Pankaj Gupta <pankaj.gupta.linux@gmail.com>
->>>> Cc: Michal Hocko <mhocko@kernel.org>
->>>> Cc: Oscar Salvador <osalvador@suse.de>
->>>> Cc: Wei Yang <richard.weiyang@linux.alibaba.com>
->>>> Cc: Andrew Morton <akpm@linux-foundation.org>
->>>> Signed-off-by: David Hildenbrand <david@redhat.com>
->>>> Link: https://lore.kernel.org/r/20201112133815.13332-28-david@redhat.com
->>>> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
->>>> Acked-by: Andrew Morton <akpm@linux-foundation.org>
->>>> ---
->>>>  mm/memory_hotplug.c | 105 +++++++++++++++++++++++++++++++++++++-------
->>>>  1 file changed, 89 insertions(+), 16 deletions(-)
->>>
->>> As you forwarded this patch on, you too need to sign-off on it.
->>
->> Thanks for reminding me.
->>
->> Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
->>
->>>
->>> Also, what is the git id of the commit in Linus's tree?
->>
->> Sorry, here is the commit in Linus's tree.
->>
->> commit 8dc4bb58a146655eb057247d7c9d19e73928715b upstream.
+On 19/06/2023 08:42, PJ Chen wrote:
+> From: Chen PJ <Chen.pj@inventec.com>
 > 
-> Please resend the change with both of these things fixed up, so I don't
-> have to manually do it :)
-
-I have resend the patch but use the parent message id for in-reply-to.
-
-Sorry.
-
+> Document the new compatibles used on Inventec starscream-bmc
 > 
-> thanks,
-> 
-> greg k-h
+> Signed-off-by: Chen PJ <Chen.pj@inventec.com>
+
+https://lore.kernel.org/all/3106c4a1-ce5b-a9c4-5cf4-6adead7fce80@linaro.org/
+
+https://lore.kernel.org/all/2e06e7db-64f9-51f8-adf1-b240f30a2608@linaro.org/
+
+What's unclear here? You did not care to respond to that (the second
+part of that message).
+
+Best regards,
+Krzysztof
+
