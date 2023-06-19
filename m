@@ -2,96 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70EBE7356F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 14:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B157356F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 14:35:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbjFSMgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 08:36:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53102 "EHLO
+        id S230039AbjFSMfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 08:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjFSMgT (ORCPT
+        with ESMTP id S229481AbjFSMfm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 08:36:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89CE7E6
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 05:35:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687178128;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yAWE58CsaAMtd+AIOuACgTo0t+B1QSHHfRWY4TLyueI=;
-        b=eUeIX6UzWmIBwp64Vv9+00k8U2DCgr2D6sR53fWM8kCmFWzdsm8AW8gCrXA+77xmSMvZNH
-        K5FkFoGHcJdnpqPMlgrMZo+inMQAABmTW/7cHe6XGj9ntFnMT7mqavo5pAgmqTlgYbpote
-        bqcbmun1oG+o7iwMb3H2X/RE1vp/QH8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-434-iZkqP-SwMrCQnSEB2MSuuw-1; Mon, 19 Jun 2023 08:35:23 -0400
-X-MC-Unique: iZkqP-SwMrCQnSEB2MSuuw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A24D52A59570;
-        Mon, 19 Jun 2023 12:35:22 +0000 (UTC)
-Received: from sirius.home.kraxel.org (unknown [10.39.194.241])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4644740C6F58;
-        Mon, 19 Jun 2023 12:35:22 +0000 (UTC)
-Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
-        id E201218003AB; Mon, 19 Jun 2023 14:35:15 +0200 (CEST)
-Date:   Mon, 19 Jun 2023 14:35:15 +0200
-From:   Gerd Hoffmann <kraxel@redhat.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        dri-devel@lists.freedesktop.org, qemu-devel@nongnu.org,
-        Vivek Kasireddy <vivek.kasireddy@intel.com>,
-        Dongwon Kim <dongwon.kim@intel.com>,
-        Junxiao Chang <junxiao.chang@intel.com>,
-        kirill.shutemov@linux.intel.com, mhocko@suse.com,
-        jmarchan@redhat.com, muchun.song@linux.dev,
-        James Houghton <jthoughton@google.com>,
-        David Hildenbrand <david@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] udmabuf: revert 'Add support for mapping hugepages (v4)'
-Message-ID: <jdfdmwanxzi6udltiezoqli77kutoeuzodet6tsfyyu4sibbom@yxhycebnts6j>
-References: <20230608204927.88711-1-mike.kravetz@oracle.com>
+        Mon, 19 Jun 2023 08:35:42 -0400
+Received: from imap5.colo.codethink.co.uk (imap5.colo.codethink.co.uk [78.40.148.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C55FDB;
+        Mon, 19 Jun 2023 05:35:39 -0700 (PDT)
+Received: from [167.98.27.226] (helo=rainbowdash)
+        by imap5.colo.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
+        id 1qBE6a-00AyAW-F4; Mon, 19 Jun 2023 13:35:37 +0100
+Received: from ben by rainbowdash with local (Exim 4.96)
+        (envelope-from <ben@rainbowdash>)
+        id 1qBE6b-001MTk-07;
+        Mon, 19 Jun 2023 13:35:37 +0100
+From:   Ben Dooks <ben.dooks@codethink.co.uk>
+To:     linux-security-module@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, serge@hallyn.com,
+        Ben Dooks <ben.dooks@codethink.co.uk>
+Subject: [PATCH] capabilities: fix sparse warning about __user access
+Date:   Mon, 19 Jun 2023 13:35:35 +0100
+Message-Id: <20230619123535.324632-1-ben.dooks@codethink.co.uk>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230608204927.88711-1-mike.kravetz@oracle.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 01:49:27PM -0700, Mike Kravetz wrote:
-> This effectively reverts commit 16c243e99d33 ("udmabuf: Add support
-> for mapping hugepages (v4)").  Recently, Junxiao Chang found a BUG
-> with page map counting as described here [1].  This issue pointed out
-> that the udmabuf driver was making direct use of subpages of hugetlb
-> pages.  This is not a good idea, and no other mm code attempts such use.
-> In addition to the mapcount issue, this also causes issues with hugetlb
-> vmemmap optimization and page poisoning.
-> 
-> For now, remove hugetlb support.
-> 
-> If udmabuf wants to be used on hugetlb mappings, it should be changed to
-> only use complete hugetlb pages.  This will require different alignment
-> and size requirements on the UDMABUF_CREATE API.
-> 
-> [1] https://lore.kernel.org/linux-mm/20230512072036.1027784-1-junxiao.chang@intel.com/
-> 
-> Fixes: 16c243e99d33 ("udmabuf: Add support for mapping hugepages (v4)")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+The two syscalls for capget and capset are producing sparse warnings
+as sparse is thinking that the "struct __user_cap_data_struct" is marked
+user, which seems to be down to the declaration and typedef at the same
+time.
 
-Acked-by: Gerd Hoffmann <kraxel@redhat.com>
+Fix the following warnings by splutting the struct declaration and then
+the user typedef into two:
+
+kernel/capability.c:191:35: warning: incorrect type in argument 2 (different address spaces)
+kernel/capability.c:191:35:    expected void const *from
+kernel/capability.c:191:35:    got struct __user_cap_data_struct [noderef] __user *
+kernel/capability.c:168:14: warning: dereference of noderef expression
+kernel/capability.c:168:45: warning: dereference of noderef expression
+kernel/capability.c:169:14: warning: dereference of noderef expression
+kernel/capability.c:169:45: warning: dereference of noderef expression
+kernel/capability.c:170:14: warning: dereference of noderef expression
+kernel/capability.c:170:45: warning: dereference of noderef expression
+kernel/capability.c:244:29: warning: incorrect type in argument 1 (different address spaces)
+kernel/capability.c:244:29:    expected void *to
+kernel/capability.c:244:29:    got struct __user_cap_data_struct [noderef] __user ( * )[2]
+kernel/capability.c:247:42: warning: dereference of noderef expression
+kernel/capability.c:247:64: warning: dereference of noderef expression
+kernel/capability.c:248:42: warning: dereference of noderef expression
+kernel/capability.c:248:64: warning: dereference of noderef expression
+kernel/capability.c:249:42: warning: dereference of noderef expression
+kernel/capability.c:249:64: warning: dereference of noderef expression
+
+Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
+---
+ include/uapi/linux/capability.h | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/include/uapi/linux/capability.h b/include/uapi/linux/capability.h
+index 3d61a0ae055d..5bb906098697 100644
+--- a/include/uapi/linux/capability.h
++++ b/include/uapi/linux/capability.h
+@@ -41,11 +41,12 @@ typedef struct __user_cap_header_struct {
+ 	int pid;
+ } __user *cap_user_header_t;
+ 
+-typedef struct __user_cap_data_struct {
++struct __user_cap_data_struct {
+         __u32 effective;
+         __u32 permitted;
+         __u32 inheritable;
+-} __user *cap_user_data_t;
++};
++typedef struct __user_cap_data_struct __user *cap_user_data_t;
+ 
+ 
+ #define VFS_CAP_REVISION_MASK	0xFF000000
+-- 
+2.39.2
 
