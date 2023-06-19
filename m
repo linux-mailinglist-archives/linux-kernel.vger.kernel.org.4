@@ -2,85 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 322D2734D45
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:12:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE77734D71
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230191AbjFSIMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 04:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53972 "EHLO
+        id S230224AbjFSIUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 04:20:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbjFSIMG (ORCPT
+        with ESMTP id S229454AbjFSIU1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 04:12:06 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C134510C0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 01:12:02 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f86fbe5e4fso843323e87.2
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 01:12:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687162321; x=1689754321;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :to:content-language:subject:reply-to:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=7MkhTrJ9T0aYR/ypFkdnmXuhMMz/1JRUzQsSC4Yvkus=;
-        b=QqpRxf01ABUbLt9+xVQ3DYAogIXvxBukHbzT6IO53gGfL4sXz89QnCXsA4BQY6ATjo
-         NXnaf5Q2nMHwWBBEnEbEmkGhZhz1Jv3hT7ruF7NMRH4a6Pog+dmN2F42LyFTOgeLgpYP
-         a5h8C1UdGdURjlRfKyVGfqmPMWtCJuugRJkPuKWLpercaCab02f4au3k3lMCTdHuZPGb
-         4W2PoL4PibmES9QwScb4v9zyQFv2Rgp+9A3AhZr6+ANPcupRTblgtrmrcSys+afehYE6
-         wNCyGNgA6DTAOfv3vU1Lr1Q5GIvD6YPRJCA01yhTOg3CeV/RtBKSbr2f3XbfahWo9PSJ
-         gY0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687162321; x=1689754321;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :to:content-language:subject:reply-to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7MkhTrJ9T0aYR/ypFkdnmXuhMMz/1JRUzQsSC4Yvkus=;
-        b=l0e7547zKn3RXuYHoTEkIvuNbC14k4DHqeoNgh+qHajMPCkHmKcFDUjnzkMtCie39Q
-         UmDK2DAjaeHkd4yJgylgswhhu28DQrfx1c0CcVynn4WZPbOMsqYq4buPa3TARpo7zHTk
-         nDiMb4BrwCMYtbXz67rfenUb0A9RJz26ak3Zk6Su6q3M6WOt6Ur9UmW9/s4JhunV0DES
-         RZEfqTiivZw1PNtQmrDPM9w0edsCUG7A89ZoFL6Dt+GdumyseqH9RnJ1ayr5nL0F7pKd
-         r3bOJz0wVkZD2X4B8jW6zXHcli9TozfSTkCszmwduZamypqDc2LvbYpSK4kwvIl7zWwB
-         H+kg==
-X-Gm-Message-State: AC+VfDzYqyrsbSL39V+32CzCp/UBcUe6SADreHCYmyeDR0sgk51jaZLF
-        gkT99KuMW+zuPt+93P/yl90hkg==
-X-Google-Smtp-Source: ACHHUZ5BIZqOUn6vxe0wdzVkKVSgdsXpn+O7ruN3luGwb786xYDYZQ8vIqdtm3NH41FBRZ9bhCjOGw==
-X-Received: by 2002:a19:2d17:0:b0:4f8:55dd:e726 with SMTP id k23-20020a192d17000000b004f855dde726mr4514984lfj.12.1687162321068;
-        Mon, 19 Jun 2023 01:12:01 -0700 (PDT)
-Received: from [192.168.7.189] (679773502.box.freepro.com. [212.114.21.58])
-        by smtp.gmail.com with ESMTPSA id p4-20020a5d4e04000000b003113943bb66sm3327084wrt.110.2023.06.19.01.12.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 01:12:00 -0700 (PDT)
-Message-ID: <59a2a835-346d-22b1-ba5c-820b5b3b347e@linaro.org>
-Date:   Mon, 19 Jun 2023 10:11:59 +0200
+        Mon, 19 Jun 2023 04:20:27 -0400
+Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF07E50;
+        Mon, 19 Jun 2023 01:20:21 -0700 (PDT)
+Received: from ed3e173716be.home.arpa (unknown [124.16.138.129])
+        by APP-05 (Coremail) with SMTP id zQCowAD3_7vUDZBkfYFsAQ--.5512S2;
+        Mon, 19 Jun 2023 16:12:04 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     dwlsalmeida@gmail.com, mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH 1/2] media: vidtv: psi: Add check for kstrdup
+Date:   Mon, 19 Jun 2023 16:12:01 +0800
+Message-Id: <20230619081202.25283-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 2/7] arm64: dts: qcom: sm8450-hdk: correct FSA4480 port
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20230618114442.140185-1-krzysztof.kozlowski@linaro.org>
- <20230618114442.140185-2-krzysztof.kozlowski@linaro.org>
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20230618114442.140185-2-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowAD3_7vUDZBkfYFsAQ--.5512S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWry7ury8Zw4xCr1rZw4fKrg_yoW5CF1Upa
+        yrW3Z0yrWIgr4Yga15Jw1kZFy5Can7tF4rCry2qw13Z34fur45KF17A3WY9rs5A34Svr4a
+        vFW5tw13Wry5JFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkq14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r43
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
+        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjMKZJUUUUU==
+X-Originating-IP: [124.16.138.129]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,39 +55,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/06/2023 13:44, Krzysztof Kozlowski wrote:
-> FSA4480 has only one port according to bindings:
-> 
->    sm8450-hdk.dtb: typec-mux@42: 'port' is a required property
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->   arch/arm64/boot/dts/qcom/sm8450-hdk.dts | 13 +++----------
->   1 file changed, 3 insertions(+), 10 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
-> index d7975b3cf064..e5cbea92e07a 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
-> @@ -518,16 +518,9 @@ typec-mux@42 {
->   		mode-switch;
->   		orientation-switch;
->   
-> -		ports {
-> -			#address-cells = <1>;
-> -			#size-cells = <0>;
-> -
-> -			port@0 {
-> -				reg = <0>;
-> -
-> -				fsa4480_sbu_mux: endpoint {
-> -					remote-endpoint = <&pmic_glink_sbu>;
-> -				};
-> +		port {
-> +			fsa4480_sbu_mux: endpoint {
-> +				remote-endpoint = <&pmic_glink_sbu>;
->   			};
->   		};
->   	};
+Add check for the return value of kstrdup() and return the error
+if it fails in order to avoid NULL pointer dereference.
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+Fixes: 7a7899f6f58e ("media: vidtv: psi: Implement an Event Information Table (EIT)")
+Fixes: c2f78f0cb294 ("media: vidtv: psi: add a Network Information Table (NIT)")
+Fixes: f90cf6079bf6 ("media: vidtv: add a bridge driver")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/media/test-drivers/vidtv/vidtv_psi.c | 45 +++++++++++++++++---
+ 1 file changed, 40 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_psi.c b/drivers/media/test-drivers/vidtv/vidtv_psi.c
+index ce0b7a6e92dc..2a51c898c11e 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_psi.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_psi.c
+@@ -301,16 +301,29 @@ struct vidtv_psi_desc_service *vidtv_psi_service_desc_init(struct vidtv_psi_desc
+ 
+ 	desc->service_name_len = service_name_len;
+ 
+-	if (service_name && service_name_len)
++	if (service_name && service_name_len) {
+ 		desc->service_name = kstrdup(service_name, GFP_KERNEL);
++		if (!desc->service_name)
++			goto free_desc;
++	}
+ 
+ 	desc->provider_name_len = provider_name_len;
+ 
+-	if (provider_name && provider_name_len)
++	if (provider_name && provider_name_len) {
+ 		desc->provider_name = kstrdup(provider_name, GFP_KERNEL);
++		if (!desc->provider_name)
++			goto free_desc_service_name;
++	}
+ 
+ 	vidtv_psi_desc_chain(head, (struct vidtv_psi_desc *)desc);
+ 	return desc;
++
++free_desc_service_name:
++	if (service_name && service_name_len)
++		kfree(desc->service_name);
++free_desc:
++	kfree(desc);
++	return NULL;
+ }
+ 
+ struct vidtv_psi_desc_registration
+@@ -355,8 +368,13 @@ struct vidtv_psi_desc_network_name
+ 
+ 	desc->length = network_name_len;
+ 
+-	if (network_name && network_name_len)
++	if (network_name && network_name_len) {
+ 		desc->network_name = kstrdup(network_name, GFP_KERNEL);
++		if (!desc->network_name) {
++			kfree(desc);
++			return NULL;
++		}
++	}
+ 
+ 	vidtv_psi_desc_chain(head, (struct vidtv_psi_desc *)desc);
+ 	return desc;
+@@ -442,15 +460,32 @@ struct vidtv_psi_desc_short_event
+ 		iso_language_code = "eng";
+ 
+ 	desc->iso_language_code = kstrdup(iso_language_code, GFP_KERNEL);
++	if (!desc->iso_language_code)
++		goto free_desc;
+ 
+-	if (event_name && event_name_len)
++	if (event_name && event_name_len) {
+ 		desc->event_name = kstrdup(event_name, GFP_KERNEL);
++		if (!desc->event_name)
++			goto free_desc_language_code;
++	}
+ 
+-	if (text && text_len)
++	if (text && text_len) {
+ 		desc->text = kstrdup(text, GFP_KERNEL);
++		if (!desc->text)
++			goto free_desc_event_name;
++	}
+ 
+ 	vidtv_psi_desc_chain(head, (struct vidtv_psi_desc *)desc);
+ 	return desc;
++
++free_desc_event_name:
++	if (event_name && event_name_len)
++		kfree(desc->event_name);
++free_desc_language_code:
++	kfree(desc->iso_language_code);
++free_desc:
++	kfree(desc);
++	return NULL;
+ }
+ 
+ struct vidtv_psi_desc *vidtv_psi_desc_clone(struct vidtv_psi_desc *desc)
+-- 
+2.25.1
+
