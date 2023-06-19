@@ -2,179 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D3FB734F4C
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C60F734F61
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:15:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbjFSJMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 05:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43196 "EHLO
+        id S231332AbjFSJOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 05:14:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231238AbjFSJMq (ORCPT
+        with ESMTP id S231215AbjFSJOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 05:12:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB7110E
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:12:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE2BA60204
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:12:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E9ABC433C0;
-        Mon, 19 Jun 2023 09:12:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687165963;
-        bh=qxfUKz7rm5GuWEeyfp0weQ2JFwovXXhOCgww3LgVweQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VRznDpGmTl7br3LipdSczF4mjvDiVoU4H2w2jIJzeS2NRj6AyAwmHlptSVRvcDNws
-         MS/kogBoz3+GM69Yg/gzsaYVzgbvU3wj1NkYzX41lODZQyu4F9SGzuB+Al1FodFnMU
-         /BMOQGUCPcpsjORuvNY6D3TpKkbsaBCWzNHN790KzY37Z4+qrDwsS4ixfn1G74C2qq
-         uYVDCLqZQwTRZ2fWWOlQmZ3gf6rzj/tycq0H34Qom908ygXhnbKf/gePAR+LKkVD7p
-         vSrcHmoTHx21hnmhZS81Ee1PBuGjDLa1bx/rJkkpJxsV8nIYTUmPxy7d+23reaTtUu
-         S5g7ojolXdVnw==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, netdev@vger.kernel.org,
-        linux-net-drivers@amd.com, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] sfc: selftest: fix struct packing
-Date:   Mon, 19 Jun 2023 11:12:11 +0200
-Message-Id: <20230619091215.2731541-3-arnd@kernel.org>
+        Mon, 19 Jun 2023 05:14:11 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7520C1A8
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:13:42 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f640e48bc3so3923755e87.2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:13:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1687166020; x=1689758020;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FGUmUyPYRQe7JCe5YSSOKzsUZSYLXR3kceyIiK3bZTo=;
+        b=jF7pdXS3XhA2vRtlsR7hRh6g4RSLWEnZZL29aG3Csa3XHvACUzVJqPmkbtOf1YmX4t
+         Sk3hHWWHpFn8lqavTJDhbBqKqj75OXR2fwgsay2bnpcVxYGJlzOJrqS6i6MafXRZs6NN
+         kD5suHqFLxFkuj+7vLJScGh3Sfql66h/Gc5ntN7Wmix3dL/0lRMTGEfkrQV7e2SsgsUm
+         c8tZ0LQwU5rvBEi0+YIKuC04utnu6rzpDHXGVhru5hYdZo25u87yiTPT15h6RRKUAtSW
+         ELqf9YFazuGXOlrTf8OpsmciEKvMS7EeV8p9LoslLEE8GvD6NdI03QmLTcKphJxLRlv6
+         qJHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687166020; x=1689758020;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FGUmUyPYRQe7JCe5YSSOKzsUZSYLXR3kceyIiK3bZTo=;
+        b=KwqvYyXxllW52iYUhKbs0J7u8+jSAGC4OTRfKt595RBQwQS0BWGGET/a7WeaxcMmY+
+         K1oYNkS0dB6Mabrg8RRu6XdPEae25tjLLtSzluKdwxrumGctZyRWdpBw3qKyred/u33u
+         h6S4fRt+UmPjT2dGWOPjEC2sMTE6N9FoIJXJRNN/bF2G6Ssv4ImCaKOw096gjtwwyHwU
+         nclLmwesJ1LzVnxGj7PRoyBOe9ZbY+RK47gH/ikmF4u0d9p6kranWw897u0SZjhAlH4b
+         A6IOVDReZsRtUboNGbJ2wsIqEAtdgddlP6dRNs8RBPr1UcRndqS++eoXMJoUTIWaZ6la
+         sKiQ==
+X-Gm-Message-State: AC+VfDyRjDPNHVmq9tSKy6vhod4+XLOSRaX58PYFh/VyID/T4VfVYHfQ
+        omNZnKJGvkuHVn49KK38F3zDqw==
+X-Google-Smtp-Source: ACHHUZ78zEUhE9gBbobf8MIedRP5SIggqx8yhpnqgFdeJalbMShz4tBLCD/3Fg+jBdr7c4DmfZ4tFQ==
+X-Received: by 2002:a19:790e:0:b0:4f8:6e16:fca3 with SMTP id u14-20020a19790e000000b004f86e16fca3mr1368039lfc.28.1687166020479;
+        Mon, 19 Jun 2023 02:13:40 -0700 (PDT)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:d9e8:ddbf:7391:a0b0])
+        by smtp.gmail.com with ESMTPSA id p20-20020a05600c205400b003f9a6f3f240sm3072993wmg.14.2023.06.19.02.13.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 02:13:40 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [RESEND PATCH v2 0/3] phy: add the SerDes/SGMII driver for Qualcomm SoCs
+Date:   Mon, 19 Jun 2023 11:13:33 +0200
+Message-Id: <20230619091336.194914-1-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230619091215.2731541-1-arnd@kernel.org>
-References: <20230619091215.2731541-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Three of the sfc drivers define a packed loopback_payload structure with an
-ethernet header followed by an IP header. However, the kernel definition
-of iphdr specifies that this is 4-byte aligned, causing a W=1 warning:
+Add a new PHY driver and its DT bindings (reviewed by DT maintainers).
 
-net/ethernet/sfc/siena/selftest.c:46:15: error: field ip within 'struct efx_loopback_payload' is less aligned than 'struct iphdr' and is usually due to 'struct efx_loopback_payload' being packed, which can lead to unaligned accesses [-Werror,-Wunaligned-access]
-        struct iphdr ip;
+This is a sub-series of [1] with only the patches targetting the PHY subsystem
+as they can go in independently.
 
-As the iphdr packing is not easily changed without breaking other code,
-change the three structures to use a local definition instead.
+[1] https://lore.kernel.org/lkml/20230617001644.4e093326@kernel.org/T/
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/net/ethernet/sfc/falcon/selftest.c | 21 ++++++++++++++++++++-
- drivers/net/ethernet/sfc/selftest.c        | 21 ++++++++++++++++++++-
- drivers/net/ethernet/sfc/siena/selftest.c  | 21 ++++++++++++++++++++-
- 3 files changed, 60 insertions(+), 3 deletions(-)
+Bartosz Golaszewski (3):
+  phy: qualcomm: fix indentation in Makefile
+  dt-bindings: phy: describe the Qualcomm SGMII PHY
+  phy: qcom: add the SGMII SerDes PHY driver
 
-diff --git a/drivers/net/ethernet/sfc/falcon/selftest.c b/drivers/net/ethernet/sfc/falcon/selftest.c
-index 6a454ac6f8763..fb7fcd27a33a5 100644
---- a/drivers/net/ethernet/sfc/falcon/selftest.c
-+++ b/drivers/net/ethernet/sfc/falcon/selftest.c
-@@ -40,7 +40,26 @@
-  */
- struct ef4_loopback_payload {
- 	struct ethhdr header;
--	struct iphdr ip;
-+	struct {
-+#if defined(__LITTLE_ENDIAN_BITFIELD)
-+		__u8	ihl:4,
-+			version:4;
-+#elif defined (__BIG_ENDIAN_BITFIELD)
-+		__u8	version:4,
-+			ihl:4;
-+#else
-+#error	"Please fix <asm/byteorder.h>"
-+#endif
-+		__u8	tos;
-+		__be16	tot_len;
-+		__be16	id;
-+		__be16	frag_off;
-+		__u8	ttl;
-+		__u8	protocol;
-+		__sum16	check;
-+		__be32	saddr;
-+		__be32	daddr;
-+	} __packed ip; /* unaligned struct iphdr */
- 	struct udphdr udp;
- 	__be16 iteration;
- 	char msg[64];
-diff --git a/drivers/net/ethernet/sfc/selftest.c b/drivers/net/ethernet/sfc/selftest.c
-index 3c5227afd4977..440a57953779c 100644
---- a/drivers/net/ethernet/sfc/selftest.c
-+++ b/drivers/net/ethernet/sfc/selftest.c
-@@ -43,7 +43,26 @@
-  */
- struct efx_loopback_payload {
- 	struct ethhdr header;
--	struct iphdr ip;
-+	struct {
-+#if defined(__LITTLE_ENDIAN_BITFIELD)
-+		__u8	ihl:4,
-+			version:4;
-+#elif defined (__BIG_ENDIAN_BITFIELD)
-+		__u8	version:4,
-+			ihl:4;
-+#else
-+#error	"Please fix <asm/byteorder.h>"
-+#endif
-+		__u8	tos;
-+		__be16	tot_len;
-+		__be16	id;
-+		__be16	frag_off;
-+		__u8	ttl;
-+		__u8	protocol;
-+		__sum16	check;
-+		__be32	saddr;
-+		__be32	daddr;
-+	} __packed ip; /* unaligned struct iphdr */
- 	struct udphdr udp;
- 	__be16 iteration;
- 	char msg[64];
-diff --git a/drivers/net/ethernet/sfc/siena/selftest.c b/drivers/net/ethernet/sfc/siena/selftest.c
-index 07715a3d6beab..b8a8b0495f661 100644
---- a/drivers/net/ethernet/sfc/siena/selftest.c
-+++ b/drivers/net/ethernet/sfc/siena/selftest.c
-@@ -43,7 +43,26 @@
-  */
- struct efx_loopback_payload {
- 	struct ethhdr header;
--	struct iphdr ip;
-+	struct {
-+#if defined(__LITTLE_ENDIAN_BITFIELD)
-+		__u8	ihl:4,
-+			version:4;
-+#elif defined (__BIG_ENDIAN_BITFIELD)
-+		__u8	version:4,
-+			ihl:4;
-+#else
-+#error	"Please fix <asm/byteorder.h>"
-+#endif
-+		__u8	tos;
-+		__be16	tot_len;
-+		__be16	id;
-+		__be16	frag_off;
-+		__u8	ttl;
-+		__u8	protocol;
-+		__sum16	check;
-+		__be32	saddr;
-+		__be32	daddr;
-+	} __packed ip; /* unaligned struct iphdr */
- 	struct udphdr udp;
- 	__be16 iteration;
- 	char msg[64];
+ .../phy/qcom,sa8775p-dwmac-sgmii-phy.yaml     |  55 +++
+ drivers/phy/qualcomm/Kconfig                  |   9 +
+ drivers/phy/qualcomm/Makefile                 |   3 +-
+ drivers/phy/qualcomm/phy-qcom-sgmii-eth.c     | 451 ++++++++++++++++++
+ 4 files changed, 517 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/phy/qcom,sa8775p-dwmac-sgmii-phy.yaml
+ create mode 100644 drivers/phy/qualcomm/phy-qcom-sgmii-eth.c
+
 -- 
 2.39.2
 
