@@ -2,152 +2,334 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E60A8735C24
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 18:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EDB5735C25
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 18:24:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232243AbjFSQX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 12:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38258 "EHLO
+        id S232216AbjFSQYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 12:24:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232287AbjFSQXU (ORCPT
+        with ESMTP id S232215AbjFSQYc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 12:23:20 -0400
-Received: from BN3PR00CU001.outbound.protection.outlook.com (mail-eastus2azon11020027.outbound.protection.outlook.com [52.101.56.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D56710D7;
-        Mon, 19 Jun 2023 09:23:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WSHiVpnPofYbFsTbzhUVe86XD1vKjg+r3se7Er8s3APKo9yRUqUoY2NTgUjIWrnS7IjdrZE3CZFeWYEYiZfjxt5eVSZqOSozBViUmS2SWBuigM5Kvy+F+sDI2mhD9MJlsW+lw0BBfkoqvZRQwl0s6AY11bxxq+2Bqz8Hq1zgPbYGZ03g970YyMALEK8J/0PCk8gHqaiPl+yK6OuYKiaorz6xhWn86I6Fx283kf1J8mX0aTfesPa1IH5la6QIyaok2syU8PPJ0mW1Jk/jA7yjHwZiie3U481qVPoWL1OB3dEOfa/UgsW/L5aDDqAfH2aO8t1XLozz0XfEoaxyf2Kknw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nuGu8UOnvaOKRTfEmi8OZ5Wq/r2VAvfy4AIX/TenCpk=;
- b=dfpoHLmtNrg9HmSpLMGdYfBHX08T6/N9PGv20hY0GuHD+i7+GFvA6GF3OSZxuoJ9IDXbw55Umuv1O9obrLY7a6jTbZPDp36wzLkkfZwyeHyglUVsa2E7GuPm4zy18r1g51UmmnBPATaljPAGJ8+4Qy+ftMyUHMIuMYnkDiezPdCDGtGT/b9yUX7NMG5mSK8eVgj4kC101mZxCMuS0DI4TskOtrAmls5wnBaxsVqQxkl+m8mPP8r7OO8tJXWzhhZGfFq3cL9NQxqsgd6/rdEZuJfNYLmJY+UNkdgMz0ChnbebgaBSR95oHICXHyN2COdz9Aa5PUCIk8Gzyli0OoiU9w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nuGu8UOnvaOKRTfEmi8OZ5Wq/r2VAvfy4AIX/TenCpk=;
- b=Y8q0v63ZMa6ZpQTaHiPR6WrccADtIROvsconQde+3ksseJohDKL8SKj4UP2z0ZsX6hPU+/m7MIDA7bbvQpIjE+/kzufqC/ff+Wok4BW83LZvwK8mBbncaX8Awg4kO1McyOlGqSwOdasIGXJUf/nqUU1BfTBCWeqEeSdQmBzbzNk=
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
- by MN0PR21MB3461.namprd21.prod.outlook.com (2603:10b6:208:3d2::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.17; Mon, 19 Jun
- 2023 16:23:08 +0000
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::bb03:96fc:3397:6022]) by SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::bb03:96fc:3397:6022%4]) with mapi id 15.20.6544.002; Mon, 19 Jun 2023
- 16:23:08 +0000
-From:   Dexuan Cui <decui@microsoft.com>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-CC:     "ak@linux.intel.com" <ak@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "dave.hansen@intel.com" <dave.hansen@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>
-Subject: RE: [PATCH v7 0/2] Support TDX guests on Hyper-V (the x86/tdx part)
-Thread-Topic: [PATCH v7 0/2] Support TDX guests on Hyper-V (the x86/tdx part)
-Thread-Index: AQHZorSU2GP9/xu+t0uTiZxQudDm86+STukQ
-Date:   Mon, 19 Jun 2023 16:23:08 +0000
-Message-ID: <SA1PR21MB133580B3E69A91C7ED282144BF5FA@SA1PR21MB1335.namprd21.prod.outlook.com>
-References: <20230616044701.15888-1-decui@microsoft.com>
- <20230619134709.6c4sgargh67xwc5g@box.shutemov.name>
-In-Reply-To: <20230619134709.6c4sgargh67xwc5g@box.shutemov.name>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=9dceed54-8d62-46ab-a4d5-6e79564f58dc;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-06-19T16:21:54Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|MN0PR21MB3461:EE_
-x-ms-office365-filtering-correlation-id: f7488df1-feda-47c0-e537-08db70e177e7
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: iv5+7Ex1HpgebFZMnhQ4eSxy3uCN5LA4dfz3Jldzoy4NZXDiR3Sv0Rx1o8f8/Wa9Fb1K3c/m90DLrbvPZMfWTKRTq6YiE+nrpNnCj98WTc3Fcgwmxx4HhNgN8nAbFpvqDRyyqvrDOc3rQ61kgDWbXbI8ghNuKfDv+1lWcyFso8zhcUZN9HCNiuuwmX/B6DbsHlTkc8s+mJO2TcyLGhqFHAbhBc6SAoDBESeM0Qr+GojIb6nnV1Es6DgcixastGN5d+wp98+m7hIcVlypKgUy2Dh7RxSZVGzO3T3B/cLimUakdCMJNrUlDRIcofL4WlPM9k0uHOeY+dQCfyOJqvGDlv8HdVXGyR0j8dBAr+en/OUBvElbBTIzU2D5198zO4Zqp7QzlEBuv5n5Rwc3gieTesb/fow8merY/bNw2zjAPkC4SwDAencUFM/wTsXeuO+op+TfJB62xrjs7wLdY2EWBs5wUh+WEWN7GhHu4dZrEtwauLhQRD7V7cTY7AqEQ+obrxO+cgBHgtWovRMPTAqmXIEHv66GvPSeEA0Jk8at14Iy51S0gRhNJS4E9a7CmREcFdb3jTNlcCXNa/w3bKr+SIkuXJUlxFo/TF5Htq1e+eu+mbfygt7KDmFnAYuat1Y8Zc4sIQ0Q7NSkG3K3KYGisw92lm19QohPIebFFXADhas=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(376002)(136003)(39860400002)(396003)(451199021)(5660300002)(33656002)(86362001)(52536014)(38070700005)(558084003)(7416002)(2906002)(8990500004)(55016003)(7696005)(26005)(186003)(9686003)(6506007)(76116006)(82950400001)(122000001)(71200400001)(54906003)(66946007)(82960400001)(66476007)(10290500003)(38100700002)(66556008)(4326008)(478600001)(316002)(8936002)(8676002)(41300700001)(66446008)(64756008)(6916009);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?tW9OA8kDMo7WADAJJB8f15zt89XVSyDYG5JBrNWutsEU6/sqtaYXTg62mkL5?=
- =?us-ascii?Q?ppfX9YyUZR/j25yup5PG/OBa09OEy3GmlUWiPWCA78lgMnh2M0H5GLCg13NW?=
- =?us-ascii?Q?Gkkac4Sp+Ye0Hg3rzu0VmnwDcJ5Q3fSIFhr/dU818vU97WsEdLuG1p3MAVo3?=
- =?us-ascii?Q?woE8qlPb18LyXJKE9552TMH6JlGEzP3mXF4KGCtOX2Gqvv6XYI38tBtLI5E8?=
- =?us-ascii?Q?hjedZGoqwG4EUlqILmSuF4FhO5bRfPdnRnCQNJjotJlw+oMNpG4F/6+XmsxE?=
- =?us-ascii?Q?j1KJz9aTc6ctQrWIXm92FK8Q71EsLXXH09Wn5cbVb7KQmjW9poDNp4yxy6ur?=
- =?us-ascii?Q?NRBQxCV9W7cs++yr0B2CcXXM8c/YqAqWtHn6gvUjViQ+iloQhkNEDuQi3ZL9?=
- =?us-ascii?Q?f1azxnrpI1QqcZ4YDY+yzLE4Ywf1WASleuBpiMrwjUkRIk4HGZGGB9GaKZdz?=
- =?us-ascii?Q?QIu02di//x4nAr33gz0wVKuQqnvfimERjjBhoYYzqiiRewt2m/8v0PinvS3E?=
- =?us-ascii?Q?BSCrdtSO0SYOaOYKraq5Q8HBQHjAtsj80AM5y+pv0Ywcyl72avCZ9fIOznY0?=
- =?us-ascii?Q?2TjGVHtdvD+5dmlcNPghPxhMxzrmc8mjfe+tCjj+ILWOm6T+PO7meIQ+jb24?=
- =?us-ascii?Q?2CUk/4+tI0CJiulxByXVhGNxnqitTbJVPNOHL/MGQAOCYWs/LHpVhToE5/fD?=
- =?us-ascii?Q?p6o5yNpYhrJKiGWcKjosF6v5InvhsjYZGi9CBOGEdRoGthnRi8LhgMfD3GDz?=
- =?us-ascii?Q?sWiH61KNL+ong4+nxK6qs8P6zsIlD2oMihOVbAmRf5H13xh1Od19G26RdnOa?=
- =?us-ascii?Q?su2fJtWkFOUK5ZKv6IaftTkfl9Db6LOBdvxgN4mgxEA9o6e5+lymgqncOjbB?=
- =?us-ascii?Q?sfXxpsSb/b3/lSZIIu3S9XviLwrI8i1Yq+XDoiAq+l5DuIOZ11FpILGP718v?=
- =?us-ascii?Q?d7PCSa7OqAFVWp11HN8QYCGqqYf01/kcPvjE2eGcu7NZ13XHAeP2yGKDutlU?=
- =?us-ascii?Q?6VVleSIrxG8HqlpUTif+7qyxO7kXfxk2z31TeXpDERFRKta6kLYeIxS5tqf/?=
- =?us-ascii?Q?L/7mFTe2dB+f9A6eCww2bMP6Z/QGNJS03zp2zVrPMqd/36AhwXbFTK62/43E?=
- =?us-ascii?Q?5Jpc4wgbRl6HtwoXHZiO6SlQfZvDup6+F3ojAm7gtQd1sLc4LnzvXGU8iqEY?=
- =?us-ascii?Q?Q/LIJP4AXaV6+BCGZuDYNDFNFdEQueyAh/QbuujGMHhS2G6qNI/I324ADvIw?=
- =?us-ascii?Q?NjrxCfdtQL+KdkUQD2jlpG2zuOz+NGM3UHVjbY6vqLu2CPcEO9IOL0rscrYf?=
- =?us-ascii?Q?pgCLBlX/qFtMIx0nXXaDRRryRTpRVpTevdOmkcJHTQrcE5ZFxrknLTqqwypY?=
- =?us-ascii?Q?Qa/YHupg8Nls+bDt7RERuRAp0S4J6Qi1lQJu+EN3gk6BZkjyPSpdonbaEHEg?=
- =?us-ascii?Q?QlAH6Iz25+O4qMtp1gX6xn79C3Qb/hwaGs+Xyo6qDJZ1NOn5eOOYq4QcvBZU?=
- =?us-ascii?Q?+amKb3Yq9iiUqR9RG4XUdRtDJct/+B6UKxgkHbBE1HJJxtzxOf5xq6ffQLGH?=
- =?us-ascii?Q?hM8dHNdCG2qR3ldfacKZyDE+mQ1oukLyfbgd/RQ1?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 19 Jun 2023 12:24:32 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF2DE5C
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:24:30 -0700 (PDT)
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35JGK0ac032374;
+        Mon, 19 Jun 2023 16:24:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=X1v6V8A8RWjvjICN/a2k2VECbrHR6onQY35uUlc45nQ=;
+ b=gMTMThV/doQ17V6FAiPWESXl9oaa1GZIfUyox9DchUrLDyEOAtuxiQ6osDu0KJ8Kehdw
+ h24l74Zs32jXo9idDThSc56RJxyITOGCkwdszN7GEZK/7/IfseoWY0kFoeD6ynppENJf
+ UJ08ktjnfLVaupi4PV2lOCxSiEBQRaE4D8/1ON/GWxwWUDiHw+md9u+i0qv+hQnLtpU7
+ Vum38j38kFa85tI8W4YcP+BOXt3r+dyYJbmJQoTggnj1MOEd3/UhbYNYnBYoEnlMpk3B
+ oST4AJe0jDaYWg2e9+RRCATF6dULKD/LyH4bSerbVPUxJsyv4VMscW5QMmurOdHYKqdJ RQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rateug2dw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Jun 2023 16:24:09 +0000
+Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35JGKJ5G000623;
+        Mon, 19 Jun 2023 16:24:08 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rateug2dq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Jun 2023 16:24:08 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35JG0HMf031839;
+        Mon, 19 Jun 2023 16:24:07 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
+        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3r94f61qqd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Jun 2023 16:24:07 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35JGO6lZ36700698
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 19 Jun 2023 16:24:06 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B607158057;
+        Mon, 19 Jun 2023 16:24:06 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E959158058;
+        Mon, 19 Jun 2023 16:23:44 +0000 (GMT)
+Received: from skywalker.linux.ibm.com (unknown [9.43.80.193])
+        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 19 Jun 2023 16:23:44 +0000 (GMT)
+X-Mailer: emacs 29.0.91 (via feedmail 11-beta-1 I)
+From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+To:     Huang Ying <ying.huang@intel.com>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Huang Ying <ying.huang@intel.com>, Wei Xu <weixugc@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Rafael J Wysocki <rafael.j.wysocki@intel.com>
+Subject: Re: [RFC 3/4] acpi, hmat: calculate abstract distance with HMAT
+In-Reply-To: <20230616070538.190042-4-ying.huang@intel.com>
+References: <20230616070538.190042-1-ying.huang@intel.com>
+ <20230616070538.190042-4-ying.huang@intel.com>
+Date:   Mon, 19 Jun 2023 21:53:42 +0530
+Message-ID: <87352nifox.fsf@linux.ibm.com>
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f7488df1-feda-47c0-e537-08db70e177e7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jun 2023 16:23:08.4559
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: VrnM8n609yEaOKFhY5rT5Iur8BSeInKDDF3HTZ9QUT2o9Wu5LmirfQv3bR1sG+7w+zOGEt7kf7Q1SEYo0qmzZQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR21MB3461
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: P03RsTRvyHazbFogDjxPUYxgdd1MmH2x
+X-Proofpoint-GUID: UQz9lgxvU6-SHb1YrLRzqo6prZoctKD1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-19_11,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
+ adultscore=0 mlxscore=0 priorityscore=1501 malwarescore=0 suspectscore=0
+ mlxlogscore=999 phishscore=0 impostorscore=0 clxscore=1011
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306190147
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Kirill A. Shutemov <kirill@shutemov.name>
-> Sent: Monday, June 19, 2023 6:47 AM
-> ...
-> JFYI, it won't apply to tip/master. Unaccepted memory changed the code yo=
-u
-> patching.
-Thanks for letting me know! I'll rebase to tip/master and repost shortly.
+Huang Ying <ying.huang@intel.com> writes:
+
+> A memory tiering abstract distance calculation algorithm based on ACPI
+> HMAT is implemented.  The basic idea is as follows.
+>
+> The performance attributes of system default DRAM nodes are recorded
+> as the base line.  Whose abstract distance is MEMTIER_ADISTANCE_DRAM.
+> Then, the ratio of the abstract distance of a memory node (target) to
+> MEMTIER_ADISTANCE_DRAM is scaled based on the ratio of the performance
+> attributes of the node to that of the default DRAM nodes.
+>
+> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+> Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+> Cc: Wei Xu <weixugc@google.com>
+> Cc: Alistair Popple <apopple@nvidia.com>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: Dave Hansen <dave.hansen@intel.com>
+> Cc: Davidlohr Bueso <dave@stgolabs.net>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Cc: Michal Hocko <mhocko@kernel.org>
+> Cc: Yang Shi <shy828301@gmail.com>
+> Cc: Rafael J Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/acpi/numa/hmat.c     | 124 ++++++++++++++++++++++++++++++++++-
+>  include/linux/memory-tiers.h |   2 +
+>  mm/memory-tiers.c            |   2 +-
+>  3 files changed, 126 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/acpi/numa/hmat.c b/drivers/acpi/numa/hmat.c
+> index 2dee0098f1a9..21e4deb581ad 100644
+> --- a/drivers/acpi/numa/hmat.c
+> +++ b/drivers/acpi/numa/hmat.c
+> @@ -24,6 +24,7 @@
+>  #include <linux/node.h>
+>  #include <linux/sysfs.h>
+>  #include <linux/dax.h>
+> +#include <linux/memory-tiers.h>
+>  
+>  static u8 hmat_revision;
+>  static int hmat_disable __initdata;
+> @@ -759,6 +760,123 @@ static int hmat_callback(struct notifier_block *self,
+>  	return NOTIFY_OK;
+>  }
+>  
+> +static int hmat_adistance_disabled;
+> +static struct node_hmem_attrs default_dram_attrs;
+> +
+> +static void dump_hmem_attrs(struct node_hmem_attrs *attrs)
+> +{
+> +	pr_cont("read_latency: %u, write_latency: %u, read_bandwidth: %u, write_bandwidth: %u\n",
+> +		attrs->read_latency, attrs->write_latency,
+> +		attrs->read_bandwidth, attrs->write_bandwidth);
+> +}
+> +
+> +static void disable_hmat_adistance_algorithm(void)
+> +{
+> +	hmat_adistance_disabled = true;
+> +}
+> +
+> +static int hmat_init_default_dram_attrs(void)
+> +{
+> +	struct memory_target *target;
+> +	struct node_hmem_attrs *attrs;
+> +	int nid, pxm;
+> +	int nid_dram = NUMA_NO_NODE;
+> +
+> +	if (default_dram_attrs.read_latency +
+> +	    default_dram_attrs.write_latency != 0)
+> +		return 0;
+> +
+> +	if (!default_dram_type)
+> +		return -EIO;
+> +
+> +	for_each_node_mask(nid, default_dram_type->nodes) {
+> +		pxm = node_to_pxm(nid);
+> +		target = find_mem_target(pxm);
+> +		if (!target)
+> +			continue;
+> +		attrs = &target->hmem_attrs[1];
+> +		if (nid_dram == NUMA_NO_NODE) {
+> +			if (attrs->read_latency + attrs->write_latency == 0 ||
+> +			    attrs->read_bandwidth + attrs->write_bandwidth == 0) {
+> +				pr_info("hmat: invalid hmem attrs for default DRAM node: %d,\n",
+> +					nid);
+> +				pr_info("  ");
+> +				dump_hmem_attrs(attrs);
+> +				pr_info("  disable hmat based abstract distance algorithm.\n");
+> +				disable_hmat_adistance_algorithm();
+> +				return -EIO;
+> +			}
+> +			nid_dram = nid;
+> +			default_dram_attrs = *attrs;
+> +			continue;
+> +		}
+> +		if (abs(attrs->read_latency - default_dram_attrs.read_latency) * 10 >
+> +		    default_dram_attrs.read_latency ||
+> +		    abs(attrs->write_latency - default_dram_attrs.write_latency) * 10 >
+> +		    default_dram_attrs.write_latency ||
+> +		    abs(attrs->read_bandwidth - default_dram_attrs.read_bandwidth) * 10 >
+> +		    default_dram_attrs.read_bandwidth) {
+> +			pr_info("hmat: hmem attrs for DRAM nodes mismatch.\n");
+> +			pr_info("  node %d:", nid_dram);
+> +			dump_hmem_attrs(&default_dram_attrs);
+> +			pr_info("  node %d:", nid);
+> +			dump_hmem_attrs(attrs);
+> +			pr_info("  disable hmat based abstract distance algorithm.\n");
+> +			disable_hmat_adistance_algorithm();
+> +			return -EIO;
+> +		}
+
+What is this check about? what is the significance of 10? Can you add
+the details as a code comment ?
+
+
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int hmat_calculate_adistance(struct notifier_block *self,
+> +				    unsigned long nid, void *data)
+> +{
+> +	static DECLARE_BITMAP(p_nodes, MAX_NUMNODES);
+> +	struct memory_target *target;
+> +	struct node_hmem_attrs *attrs;
+> +	int *adist = data;
+> +	int pxm;
+> +
+> +	if (hmat_adistance_disabled)
+> +		return NOTIFY_OK;
+> +
+> +	pxm = node_to_pxm(nid);
+> +	target = find_mem_target(pxm);
+> +	if (!target)
+> +		return NOTIFY_OK;
+> +
+> +	if (hmat_init_default_dram_attrs())
+> +		return NOTIFY_OK;
+> +
+> +	mutex_lock(&target_lock);
+> +	hmat_update_target_attrs(target, p_nodes, 1);
+> +	mutex_unlock(&target_lock);
+> +
+> +	attrs = &target->hmem_attrs[1];
+> +
+> +	if (attrs->read_latency + attrs->write_latency == 0 ||
+> +	    attrs->read_bandwidth + attrs->write_bandwidth == 0)
+> +		return NOTIFY_OK;
+> +
+> +	*adist = MEMTIER_ADISTANCE_DRAM *
+> +		(attrs->read_latency + attrs->write_latency) /
+> +		(default_dram_attrs.read_latency +
+> +		 default_dram_attrs.write_latency) *
+> +		(default_dram_attrs.read_bandwidth +
+> +		 default_dram_attrs.write_bandwidth) /
+> +		(attrs->read_bandwidth + attrs->write_bandwidth);
+
+
+Can you write a comment describing how we use all these attributes in
+deriving the abstract distance value?
+
+
+> +
+> +	return NOTIFY_STOP;
+> +}
+> +
+> +static __meminitdata struct notifier_block hmat_adist_nb =
+> +{
+> +	.notifier_call = hmat_calculate_adistance,
+> +	.priority = 100,
+> +};
+> +
+>  static __init void hmat_free_structures(void)
+>  {
+>  	struct memory_target *target, *tnext;
+> @@ -801,6 +919,7 @@ static __init int hmat_init(void)
+>  	struct acpi_table_header *tbl;
+>  	enum acpi_hmat_type i;
+>  	acpi_status status;
+> +	int usage;
+>  
+>  	if (srat_disabled() || hmat_disable)
+>  		return 0;
+> @@ -841,8 +960,11 @@ static __init int hmat_init(void)
+>  	hmat_register_targets();
+>  
+>  	/* Keep the table and structures if the notifier may use them */
+> -	if (!hotplug_memory_notifier(hmat_callback, HMAT_CALLBACK_PRI))
+> +	usage = !hotplug_memory_notifier(hmat_callback, HMAT_CALLBACK_PRI);
+> +	usage += !register_mt_adistance_algorithm(&hmat_adist_nb);
+> +	if (usage)
+>  		return 0;
+> +
+>  out_put:
+>  	hmat_free_structures();
+>  	acpi_put_table(tbl);
+> diff --git a/include/linux/memory-tiers.h b/include/linux/memory-tiers.h
+> index c6429e624244..9377239c8d34 100644
+> --- a/include/linux/memory-tiers.h
+> +++ b/include/linux/memory-tiers.h
+> @@ -33,6 +33,7 @@ struct memory_dev_type {
+>  
+>  #ifdef CONFIG_NUMA
+>  extern bool numa_demotion_enabled;
+> +extern struct memory_dev_type *default_dram_type;
+>  struct memory_dev_type *alloc_memory_type(int adistance);
+>  void destroy_memory_type(struct memory_dev_type *memtype);
+>  void init_node_memory_type(int node, struct memory_dev_type *default_type);
+> @@ -64,6 +65,7 @@ static inline bool node_is_toptier(int node)
+>  #else
+>  
+>  #define numa_demotion_enabled	false
+> +#define default_dram_type	NULL
+>  /*
+>   * CONFIG_NUMA implementation returns non NULL error.
+>   */
+> diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
+> index fb5398e710cc..3aabc7240402 100644
+> --- a/mm/memory-tiers.c
+> +++ b/mm/memory-tiers.c
+> @@ -37,7 +37,7 @@ struct node_memory_type_map {
+>  static DEFINE_MUTEX(memory_tier_lock);
+>  static LIST_HEAD(memory_tiers);
+>  static struct node_memory_type_map node_memory_types[MAX_NUMNODES];
+> -static struct memory_dev_type *default_dram_type;
+> +struct memory_dev_type *default_dram_type;
+>  
+>  static struct bus_type memory_tier_subsys = {
+>  	.name = "memory_tiering",
+> -- 
+> 2.39.2
