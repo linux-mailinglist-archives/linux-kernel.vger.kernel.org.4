@@ -2,113 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD8C735DEA
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 21:42:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D13D4735DED
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 21:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbjFSTmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 15:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46120 "EHLO
+        id S231361AbjFSTmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 15:42:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbjFSTmN (ORCPT
+        with ESMTP id S231254AbjFSTmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 15:42:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52F3118
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 12:41:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687203684;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NKoKC0b+LCjcSl2EVWbdFRgACSV8gQthNjDiIthburU=;
-        b=CZSIYjYILznvOaWyV7XdNytwygJU4wNDSfKMIPqOGiM6004pr+nfpUDzSZlZUzZed22iO6
-        Iydu++cWIx8gyTWTPWhsgwU/FRZU/ITXOlyT6FpwcZ+fjSSxWCSm6pf6KRCQtSLEM0xvyI
-        Aa6RhE7NYg7B3UZ7AxYqiFYyNaz62WI=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-473-PGwI8LK-MtG0uTRcO5ItAw-1; Mon, 19 Jun 2023 15:41:23 -0400
-X-MC-Unique: PGwI8LK-MtG0uTRcO5ItAw-1
-Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-3f871a1e3f9so6857181cf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 12:41:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687203683; x=1689795683;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NKoKC0b+LCjcSl2EVWbdFRgACSV8gQthNjDiIthburU=;
-        b=RU54m/NOfiS3ex8q/c4RISTbe0RHJZbePejCAlLpNm95WDm2+IskUwAa5nnlevi115
-         494Urpic+YOk2dH4EgTpkrA9eAE08FaQ+Fipb7K7uQqzXoGxj3EMTZqExm0l+dNv2Co3
-         ULjZd3VSRs4AWR0SmplwwuYWRpFv5I8H0/EhFsh6eNw1/zZIg61UEkNSeWLzmoJPaMJN
-         5Y5nu5eo05bqF4ajXSkvM21WTldK9RGVFHh2Rr5EpQNtj5Bj2Uzm3AECnfcJzUlm1EAZ
-         hxbvX3616U/NVmE5gacmSxPuSzEXc1SnowXs6r3txU5Z/7Uo+C8aEyxyovnmOxa+wveM
-         6zuQ==
-X-Gm-Message-State: AC+VfDwx26MvULdFEir6s+joXKwkNREdCRBquc3fGFS4D60qugSQ9say
-        NquyJ4/uCAmnOKZE+qkqzugBmqWQINTFO+J0QvHeJ23e49nlDOHD91TNoJLc1oc3CcP1A3yV3RR
-        3uDFLcG+8+Mkg/WXH+bU7wTy2
-X-Received: by 2002:ac8:5842:0:b0:3f9:ab2c:8895 with SMTP id h2-20020ac85842000000b003f9ab2c8895mr14600248qth.3.1687203682937;
-        Mon, 19 Jun 2023 12:41:22 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4ZzRjTvhMgkKAzruDtjbgbAepbDf8LrZ+k0sJu+iGWmbjsg+ceTUlHogXIsQHR6jn4iNlczA==
-X-Received: by 2002:ac8:5842:0:b0:3f9:ab2c:8895 with SMTP id h2-20020ac85842000000b003f9ab2c8895mr14600233qth.3.1687203682664;
-        Mon, 19 Jun 2023 12:41:22 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id g4-20020ac84684000000b003ef1586721dsm227166qto.26.2023.06.19.12.41.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 12:41:22 -0700 (PDT)
-Date:   Mon, 19 Jun 2023 15:41:20 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        James Houghton <jthoughton@google.com>,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH 7/7] mm/gup: Retire follow_hugetlb_page()
-Message-ID: <ZJCvYOLhBH3H6CLT@x1n>
-References: <20230613215346.1022773-1-peterx@redhat.com>
- <20230613215346.1022773-8-peterx@redhat.com>
- <c1d768b3-f573-42f1-8c11-f2e5c05f72d4@lucifer.local>
+        Mon, 19 Jun 2023 15:42:40 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C6D118
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 12:42:39 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-111-196.bstnma.fios.verizon.net [173.48.111.196])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 35JJgGng028862
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Jun 2023 15:42:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1687203739; bh=vPMi+7KO21XyZ0qnD0pDNPiOfUhhFZ7sZOqlW0yLHoo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=lwIGgdc/Wm4AAFS1JaBSskUg0GyRkC5aU4sicyBEnrBlDFEcSiPZxUco+wp4TtMnn
+         HuM/Iw2Vi8sCn1MX5edcZXssJahHn6jpxwSYPGOkd1e4Mxm5uVU3jhQXso8iQ5ih4y
+         d1yz3h8tH1j+hvqyHenVUP8PiPenQcr9fXWPoCpgaDvtbG4k6fsynCZ0+B5pyKoMcE
+         XII5VlFlXsR/USg/DSLs/Et0Zu4mqJR9X5EH/PfJjNCGByOrLQf4BVVkzYZlRNC8D2
+         RZYDKITkdxq+WZfDb2UuIQfrtyxkHZglJwSi1FB2P13Fg5mxw/BUUoZ3GkrATdnnPn
+         E05+7B7jW+F5g==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id B62D015C0266; Mon, 19 Jun 2023 15:42:16 -0400 (EDT)
+Date:   Mon, 19 Jun 2023 15:42:16 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Finn Thain <fthain@linux-m68k.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        tech-board-discuss@lists.linux-foundation.org,
+        Kees Cook <keescook@chromium.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Documentation: Linux Contribution Maturity Model and the
+ wider community
+Message-ID: <20230619194216.GB286961@mit.edu>
+References: <cd1786eadd1ff05d9ca053b72eb5f06ceb0c470d.1687167717.git.fthain@linux-m68k.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c1d768b3-f573-42f1-8c11-f2e5c05f72d4@lucifer.local>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <cd1786eadd1ff05d9ca053b72eb5f06ceb0c470d.1687167717.git.fthain@linux-m68k.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 09:40:41PM +0100, Lorenzo Stoakes wrote:
-> On Tue, Jun 13, 2023 at 05:53:46PM -0400, Peter Xu wrote:
-> > Now __get_user_pages() should be well prepared to handle thp completely,
-> > as long as hugetlb gup requests even without the hugetlb's special path.
-> >
-> > Time to retire follow_hugetlb_page().
-> 
-> Nit, but there's a couple left over references to this function in comments
-> in fs/userfaultfd.c and mm/hugetlb.c.
+On Mon, Jun 19, 2023 at 07:41:57PM +1000, Finn Thain wrote:
+> The Linux Contribution Maturity Model methodology is notionally based on
+> the Open source Maturity Model (OMM) which was in turn based on the
+> Capability Maturity Model Integration (CMMI).
 
-Indeed, let me touch those too when respin.
+So from a historical/factual basis, this is not true.  It was *not*
+based on the Open Source Maturity Model; in fact, as the principal
+author of this document, I wasn't even aware of the OMM when I wrote
+it.  The general framework of Maturity Models[1] is a very long one, and
+goes back well beyond Dececmber 2022, which is when the folks in the
+banking sector launched the OMM[2].
 
-> Absolutely wonderful to see such delightful code deletion :)
-> 
-> I haven't really dug into the huge page side of this in great detail, so I
-> can't give a meaningful tag, but I can certainly appreciate the code you're
-> removing here!
+[1] https://en.wikipedia.org/wiki/Maturity_model
+[2] https://www.finos.org/blog/open-source-maturity-model-launch
 
-Yeah, hopefully it'll make the code also cleaner.  Thanks a lot,
+The reason why the language in the Linux Contribution Maturity Model
+(LCMM) focused on companies was that was where the problem was
+perceived to be.  That is, the *vast* majority of Linux Kernel
+contributors work at companies, and because of many companys' focus on
+reducing costs and increasing profits of their products which are part
+of the Linux kernel ecosystem, some of them enagage in anti-patterns
+which are not healthy either for their own role in the Linux Kernel
+ecosystem, and for the Linux Kernel ecosystem at large.
 
--- 
-Peter Xu
+For example, if you look at the 6.3 contribution report[3], you'll see
+that by changesets (git commits), 85.4% of the contributions came from
+companies, 6.6% were unknown, 4.8% were "None" (e.g.,
+hobbists/students), and 1.1% were from the Linux Foundation.
 
+[3] https://lwn.net/Articles/929582/
+
+In actual practice, we get *very* few commits from non-profit
+organizations such as, say, the Mozilla Foundation, the Eclipse
+Foundation, or even community distributions such as Debian or Arch.
+And so the concerns around software engineers not getting the
+permission and encourage they need so they can contribute to the Linux
+kernel community at large, is primarily coming from companies.  The
+only non-profit organization that even shows up at the contribution
+reports is the Linux Foundation, and I'm pretty confident in how
+enlightened the LF management vis-a-vis kernel contribution.  :-)
+
+As far as individuals are concerned, things like performance reviews,
+the ability for overly paranoid corporate Corporate General Counsel
+not allowing their engineers from contributing to Open Source (in
+general) and the Linux Kernel (in particular), yes, those things
+aren't really applicable.  But again, there is a specific problem that
+we are trying to solve, and it's not with individual contriduals.
+
+> This patch addresses this bias as it could hinder collaboration with
+> not-for-profit organisations and individuals, which would be a loss to
+> any stakeholder.
+
+I'm not sure how this document would "hinder collaboration" with
+non-profit organizations and individuals.  Could you say more about
+your concern regarding how this undesireable outcome would happen in
+practice?
+
+I'm not against making using wording which is more general, such as
+perhaps "companies and organizations" instead of "companies", but it's
+important that we don't dilute the message the primary audience ---
+which is pointed-haired management types, who are familiar with the
+Maturity Model framework, who are *primarily* working at for-profit
+companies, and who could make it easier for those Linux developers
+whose day job involves Linux kernel development.
+
+Cheers,
+
+						- Ted
