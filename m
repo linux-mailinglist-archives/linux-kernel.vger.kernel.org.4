@@ -2,144 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89093734D83
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91B1F734D86
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbjFSIXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 04:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59842 "EHLO
+        id S230143AbjFSIXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 04:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjFSIX2 (ORCPT
+        with ESMTP id S230234AbjFSIXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 04:23:28 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3EA110;
-        Mon, 19 Jun 2023 01:23:27 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-3112c11fdc9so1323386f8f.3;
-        Mon, 19 Jun 2023 01:23:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687163006; x=1689755006;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sSBDd1/f6xXmLpw9z/ese37NiOW7x5KUx8osjqdGUnM=;
-        b=Lsl9EsX4jszeG2zvJgvVKjDAR4ejPIDTxSfqQw+n1L8gF+f7OgxW8IkzEQptJqo3jv
-         3f+ywIeXHzCLnN0BoQSzh140TYGbvtlQxK/WgKGmeNw5JVjmePsBpRc/5edy2o+A6K4e
-         xKbkbq4gGu1DhMfFjrYklap/6XWzpXgxGliXuvoPQVpsRAJWgm94xVVfGJ9BpMkUgxUk
-         VRC7iOeu1H2s4wj6R7f9m3VkuG5nOKdFVuL4rAX8gCJpS7QXFsDSL6zOUNjme/F2KwVY
-         qpTmxDZhXR9U4EmlqJnuWTgGn7HiKIssbn/9KC7Lc3wQ6vF4BFh1IhIM7br3SEmVKnG+
-         3kHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687163006; x=1689755006;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sSBDd1/f6xXmLpw9z/ese37NiOW7x5KUx8osjqdGUnM=;
-        b=bqcnJUftHIQ3+r099798U31RNTb3kTy5C5C09aZB8kMpZwDHPBEa4LerxE8yNMRK6e
-         wqC9PmOk53RtAKhPoIU46TLV1tJQf0d/DiWUfjyEZAfl68SFbrHROn/D0RN9f7Qee0fG
-         1LZ/jV5JYpCdyanFpL9DA1RM7cHhuGDrhLCNfo6o0pXE+xvPnQvGQQ8vU/wG8GGEyrZ3
-         7WIb16HM/IXkE/nBHryNc6Nk1X6MVR95ug1JZIMWTvgvuz3gKBVdtSSNKE1NakMmoUu/
-         0oURujZA+gu6PhrIRK8yHYHxoLAZb2FJaAlQNTPan+LYCkuTcGIubNz8d1UsbYx/j5T5
-         80BQ==
-X-Gm-Message-State: AC+VfDyfMvKd4HD2+WzzE61WT/PTRUREWdmITyBOl4HVkDlwXkGWRCv9
-        jXc/PciiepjJZr84w0dITJr1x/3/csc=
-X-Google-Smtp-Source: ACHHUZ7EeWzzK8WgDL/QMovggKVNr0k/fH9meoPoVMqoAtP4sO1FreA9c6hWXDPwYHtwf9V0pzIqIg==
-X-Received: by 2002:a5d:568a:0:b0:311:1497:a002 with SMTP id f10-20020a5d568a000000b003111497a002mr5516686wrv.3.1687163005624;
-        Mon, 19 Jun 2023 01:23:25 -0700 (PDT)
-Received: from [10.158.37.55] ([193.47.165.251])
-        by smtp.gmail.com with ESMTPSA id e3-20020a056000194300b0030ae901bc54sm30867342wry.62.2023.06.19.01.23.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 01:23:25 -0700 (PDT)
-Message-ID: <ecbb5d7e-7238-28e2-1a17-686325e2bb50@gmail.com>
-Date:   Mon, 19 Jun 2023 11:23:22 +0300
+        Mon, 19 Jun 2023 04:23:46 -0400
+Received: from out-42.mta1.migadu.com (out-42.mta1.migadu.com [95.215.58.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB79E6E
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 01:23:43 -0700 (PDT)
+Date:   Mon, 19 Jun 2023 17:23:30 +0900
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1687163019;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e1f+pZURW+w1RCPnnZXu1sVV0QTjxA8H8mKJ4xL39JA=;
+        b=CFy7fZtOVlnjuX11edB8SC+1mfUuiV37ttTYe0TfaE5rdfh09ywb23mSOR1z+lfR/cdZ8N
+        7oirQpd7N8PwmNxLTYrEuo4Xlps07Mi7eoLn3bDwrCJsjLzeAJwZGGffwmso6bZ+u4Srhs
+        zQ64v4AHL/TbjQ/4JsjRHlG1oX93mhk=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Jiaqi Yan <jiaqiyan@google.com>,
+        HORIGUCHI =?utf-8?B?TkFPWUEo5aCA5Y+jIOebtOS5nyk=?= 
+        <naoya.horiguchi@nec.com>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "shy828301@gmail.com" <shy828301@gmail.com>,
+        "linmiaohe@huawei.com" <linmiaohe@huawei.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "duenwen@google.com" <duenwen@google.com>,
+        "axelrasmussen@google.com" <axelrasmussen@google.com>,
+        "jthoughton@google.com" <jthoughton@google.com>
+Subject: Re: [PATCH v1 1/3] mm/hwpoison: find subpage in hugetlb HWPOISON list
+Message-ID: <20230619082330.GA1612447@ik1-406-35019.vs.sakura.ne.jp>
+References: <20230522044557.GA845371@hori.linux.bs1.fc.nec.co.jp>
+ <CACw3F50rkrWkdMKo7yq35vDbGrcF4b0zohN3dORxL_h0KxZ7Bg@mail.gmail.com>
+ <20230523024305.GA920098@hori.linux.bs1.fc.nec.co.jp>
+ <CACw3F53C0f_Ph0etD+BgkAz4P8pX3YArjFgSPaLh_d6rUqMUCw@mail.gmail.com>
+ <CACw3F52k=fhYpLpvDoVPcmKnOALLkPsGk08PdS_H0+miSYvhEQ@mail.gmail.com>
+ <20230612041901.GA3083591@ik1-406-35019.vs.sakura.ne.jp>
+ <CACw3F51o1ZFSYZa+XLnk4Wwjy2w_q=Kn+aOQs0=qpfG-ZYDFKg@mail.gmail.com>
+ <20230616233447.GB7371@monkey>
+ <CACw3F52iG5bqQbvZ9QkkRkVfy+NbSOu9hnkVOt5khukNNG73OQ@mail.gmail.com>
+ <20230617225927.GA3540@monkey>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH net-next v10 08/16] tls: Inline do_tcp_sendpages()
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Chuck Lever III <chuck.lever@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Boris Pismenny <borisp@nvidia.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Gal Pressman <gal@nvidia.com>, ranro@nvidia.com,
-        samiram@nvidia.com, drort@nvidia.com,
-        Tariq Toukan <tariqt@nvidia.com>
-References: <4c49176f-147a-4283-f1b1-32aac7b4b996@gmail.com>
- <20230522121125.2595254-1-dhowells@redhat.com>
- <20230522121125.2595254-9-dhowells@redhat.com>
- <2267272.1686150217@warthog.procyon.org.uk>
- <5a9d4ffb-a569-3f60-6ac8-070ab5e5f5ad@gmail.com>
-Content-Language: en-US
-From:   Tariq Toukan <ttoukan.linux@gmail.com>
-In-Reply-To: <5a9d4ffb-a569-3f60-6ac8-070ab5e5f5ad@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230617225927.GA3540@monkey>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Jun 17, 2023 at 03:59:27PM -0700, Mike Kravetz wrote:
+> On 06/16/23 19:18, Jiaqi Yan wrote:
+> > On Fri, Jun 16, 2023 at 4:35 PM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+> > > On 06/16/23 14:19, Jiaqi Yan wrote:
+> > > >
+> > > > Now looking again this, I think concurrent adding and deleting are
+> > > > fine with each other and with themselves, because raw_hwp_list is
+> > > > lock-less llist.
+> > >
+> > > Correct.
+> > >
+> > > > As for synchronizing traversal with adding and deleting, I wonder is
+> > > > it a good idea to make __update_and_free_hugetlb_folio hold
+> > > > hugetlb_lock before it folio_clear_hugetlb_hwpoison(which traverse +
+> > > > delete raw_hwp_list)? In hugetlb, get_huge_page_for_hwpoison already
+> > > > takes hugetlb_lock; it seems to me __update_and_free_hugetlb_folio is
+> > > > missing the lock.
+> > >
+> > > I do not think the lock is needed.  However, while looking more closely
+> > > at this I think I discovered another issue.
+> > > This is VERY subtle.
+> > > Perhaps Naoya can help verify if my reasoning below is correct.
+> > >
+> > > In __update_and_free_hugetlb_folio we are not operating on a hugetlb page.
+> > > Why is this?
+> > > Before calling update_and_free_hugetlb_folio we call remove_hugetlb_folio.
+> > > The purpose of remove_hugetlb_folio is to remove the huge page from the
+> > > list AND compound page destructor indicating this is a hugetlb page is changed.
+> > > This is all done while holding the hugetlb lock.  So, the test for
+> > > folio_test_hugetlb(folio) is false.
+> > >
+> > > We have technically a compound non-hugetlb page with a non-null raw_hwp_list.
+> > >
+> > > Important note: at this time we have not reallocated vmemmap pages if
+> > > hugetlb page was vmemmap optimized.  That is done later in
+> > > __update_and_free_hugetlb_folio.
+> > 
+> > 
+> > >
+> > > The 'good news' is that after this point get_huge_page_for_hwpoison will
+> > > not recognize this as a hugetlb page, so nothing will be added to the
+> > > list.  There is no need to worry about entries being added to the list
+> > > during traversal.
+> > >
+> > > The 'bad news' is that if we get a memory error at this time we will
+> > > treat it as a memory error on a regular compound page.  So,
+> > > TestSetPageHWPoison(p) in memory_failure() may try to write a read only
+> > > struct page. :(
+> > 
+> > At least I think this is an issue.
+> > 
+> > Would it help if dissolve_free_huge_page doesn't unlock hugetlb_lock
+> > until update_and_free_hugetlb_folio is done, or basically until
+> > dissolve_free_huge_page is done?
+> 
+> Unfortunately, update_and_free_hugetlb_folio is designed to be called
+> without locks held.  This is because we can not hold any locks while
+> allocating vmemmap pages.
+> 
+> I'll try to think of some way to restructure the code.  IIUC, this is a
+> potential general issue, not just isolated to memory error handling.
+
+Considering this issue as one specific to memory error handling, checking
+HPG_vmemmap_optimized in __get_huge_page_for_hwpoison() might be helpful to
+detect the race.  Then, an idea like the below diff (not tested) can make
+try_memory_failure_hugetlb() retry (with retaking hugetlb_lock) to wait
+for complete the allocation of vmemmap pages.
+
+@@ -1938,8 +1938,11 @@ int __get_huge_page_for_hwpoison(unsigned long pfn, int flags,
+        int ret = 2;    /* fallback to normal page handling */
+        bool count_increased = false;
+
+-       if (!folio_test_hugetlb(folio))
++       if (!folio_test_hugetlb(folio)) {
++               if (folio_test_hugetlb_vmemmap_optimized(folio))
++                       ret = -EBUSY;
+                goto out;
++       }
+
+        if (flags & MF_COUNT_INCREASED) {
+                ret = 1;
 
 
-On 13/06/2023 14:15, Tariq Toukan wrote:
-> 
-> 
-> On 07/06/2023 18:03, David Howells wrote:
->> Tariq Toukan <ttoukan.linux@gmail.com> wrote:
->>
->>> My team spotted a new degradation in TLS TX device offload, bisected 
->>> to this
->>> patch.
->>
->> I presume you're using some hardware (I'm guessing Mellanox?) that can
->> actually do TLS offload?  Unfortunately, I don't have any hardware 
->> that can do
->> this, so I can't test the tls_device stuff.
->>
->>>  From a quick look at the patch, it's not clear to me what's going 
->>> wrong.
->>> Please let us know of any helpful information that we can provide to 
->>> help in
->>> the debug.
->>
->> Can you find out what source line this corresponds to?
->>
->>     RIP: 0010:skb_splice_from_iter+0x102/0x300
->>
->> Assuming you're building your own kernel, something like the following 
->> might
->> do the trick:
->>
->>     echo "RIP: 0010:skb_splice_from_iter+0x102/0x300" |
->>     ./scripts/decode_stacktrace.sh /my/built/vmlinux /my/build/tree
->>
-> 
-> Hi,
-> 
-> It's:
-> RIP: 0010:skb_splice_from_iter (/usr/linux/net/core/skbuff.c:6957)
-> 
-> which coresponds to this line:
->                          if (WARN_ON_ONCE(!sendpage_ok(page)))
-> 
+Thanks,
+Naoya Horiguchi
 
-Hi David,
-Any other debug information that we can provide to progress with the 
-analysis?
+> -- 
+> Mike Kravetz
+> 
+> > 
+> > TestSetPageHWPoison in memory_failure is called after
+> > try_memory_failure_hugetlb, and folio_test_hugetlb is tested within
+> > __get_huge_page_for_hwpoison, which is wrapped by the hugetlb_lock. So
+> > by the time dissolve_free_huge_page returns, subpages already go
+> > through hugetlb_vmemmap_restore and __destroy_compound_gigantic_folio
+> > and become non-compound raw pages (folios). Now
+> > folio_test_hugetlb(p)=false will be correct for memory_failure, and it
+> > can recover p as a dissolved non-hugetlb page.
