@@ -2,142 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69517735CBF
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 19:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E2C735CC8
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 19:09:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230501AbjFSRHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 13:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55960 "EHLO
+        id S230077AbjFSRJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 13:09:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjFSRHW (ORCPT
+        with ESMTP id S231351AbjFSRJa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 13:07:22 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0215124;
-        Mon, 19 Jun 2023 10:07:21 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id 5614622812f47-39ee19cfb77so647437b6e.0;
-        Mon, 19 Jun 2023 10:07:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687194441; x=1689786441;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=bRJlXAK0GLifL/6sbIsWFY66HEmTj1aB/zhZvbrx7Lw=;
-        b=Jdg7dcywDJr5WWIe8jqdGKw5ATll9kBe6Wd9iMIAjOh9QvCzolYwxzaO7lp7MxibQd
-         Eunn8/2xk233rmrThMWU2DLTxSihGShHyWm3afwOHsdy1lTycizZPuSxaokFmbsYOsz2
-         CpBecfTOzt1v+7CCa31pPdaie7MhkLlIKhnH1lhQrcaRtlKWySs/pAXi+fkbymmYAMKC
-         kKBtsHqmk8TK3qGnhCpEfzOSMFh5qhiX03acCkS2U76yqIWz7vDfFMJ/UH96pAt0Fkw1
-         QGOIsFhDUkix2nn+5qLRLDXuSr6OgrqzNggde4M4En/PIt3bmvkiFf7yY8/VZa158gJF
-         Pv1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687194441; x=1689786441;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bRJlXAK0GLifL/6sbIsWFY66HEmTj1aB/zhZvbrx7Lw=;
-        b=LcYGGf5wDZvF06wIwIGKjV0FQYLksI/Z9mRjrGrbUhSCI3u2s7Uk4yCY6NLrq6bqU7
-         JfgI5JlNtEGz7E7pMR07VtT2lONfSa+gXg8fM0hfHizsvNvLuF3n+eE5ZlC2+9DLWwWF
-         H+iJVcD65hr4D0pzWoY8C4bDx4q87NeC6YCtkh3gWs5BOpgRugDQJz06kM9BlnnqkS9Y
-         kG5bM8rk11PrNeAVnvfmsqOSpjx7CiG6vc/5CdmpZSWle+aAZY0B3O61HDfLWt+9Flcf
-         SbvouopG88r7TFJLAeKSKObHZGtzdDoLPivQmb10Ry8MfYalYyaAkGMluWSTa3Yng0CE
-         NU+w==
-X-Gm-Message-State: AC+VfDyz5ngwsmVdhuR0+Bi1oD/Dau9IfW79pi0QIoBKsjF+lgDCZO6A
-        EfHSPzEiHSaVvJ38zXkC9FBADCmAvLc=
-X-Google-Smtp-Source: ACHHUZ4B7iIRRgPh8epIfSj0RWc7ZeBy8DxB616R1Q1hL9fMln0Rj9LE7dznGm6dEYpoIkNMsVQGZQ==
-X-Received: by 2002:a05:6808:152b:b0:39e:ddd8:4c4 with SMTP id u43-20020a056808152b00b0039eddd804c4mr3589926oiw.9.1687194440982;
-        Mon, 19 Jun 2023 10:07:20 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bo24-20020a17090b091800b00246f9725ffcsm82713pjb.33.2023.06.19.10.07.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 10:07:19 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4585ec62-b7bb-9f2a-eee0-07032648e55a@roeck-us.net>
-Date:   Mon, 19 Jun 2023 10:07:17 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3] hwmon: (k10temp) Enable AMD3255 Proc to show negative
- temperature
-Content-Language: en-US
-To:     Baskaran Kannan <Baski.Kannan@amd.com>, Mario.Limonciello@amd.com,
-        babu.moger@amd.com, clemens@ladisch.de, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230619165413.806450-1-Baski.Kannan@amd.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230619165413.806450-1-Baski.Kannan@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        Mon, 19 Jun 2023 13:09:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74487130;
+        Mon, 19 Jun 2023 10:09:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8EBF60E84;
+        Mon, 19 Jun 2023 17:09:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2BBEC433C0;
+        Mon, 19 Jun 2023 17:09:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687194567;
+        bh=JAKwTrp1uinVAtoLWlXEGNS+fEBZEu6il2wWrUqzEzo=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=YEOROC7YGunxOkL9NsbJwROPW3V877k09rIaiwwEQBd6bVLJWdMjusQxoVnbsuD5D
+         SKibXVd7FHc2nMr1tudbdYIZvJGYXAOuK4akurudUoPTNxoZjnK21I5AdFijJrVbol
+         wMmYZdLv8Hw2umDYdeUGRbNj+IGHaRZ0DomN5ubTCsJ6NBLT+yY4qE1y7ajOHRP1RW
+         KGFKHX9UnHaE0jcV0Lk398WnGNpxO+L8j061yUD+7F16bO6b13PKK3oASVquk5plTv
+         fi30eJK4gcno8KPn/VoCZ0cPaw9JHH45FBctirdWyvzfVojpY1MuX3tVhu6B84K6vz
+         1DQlrW9fvYTQw==
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id BDC6027C0054;
+        Mon, 19 Jun 2023 13:09:24 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+  by compute3.internal (MEProxy); Mon, 19 Jun 2023 13:09:24 -0400
+X-ME-Sender: <xms:wouQZL1KKgLu09W-gITBMTpyAXyCop721KHeRNSzShP91di0wPWHmw>
+    <xme:wouQZKG8Wf_3R-mPlBMuIdAgUtqSh1IoF1oSxFnk9i4TgZk6ENhss3V_yoaRPv-RL
+    TAuvGDsGQbdSiWuWsY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefvddguddtjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    nhguhicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpedvhfeuvddthfdufffhkeekffetgffhledtleegffetheeugeej
+    ffduhefgteeihfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedu
+    keehieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinh
+    hugidrlhhuthhordhush
+X-ME-Proxy: <xmx:wouQZL5OetLa4Clx3-k8PoL2vfJibp2bgnqmJ2SvMc_usNTskAjOCQ>
+    <xmx:wouQZA2n3SB0X1LUMOotkjWhlqzrq7LHl-_hgrAS7-wGIbb0zOE8Fw>
+    <xmx:wouQZOGStaRHYVBRbGjqqlxYN_stg3xW85Vh8QJme5E9zOhMY7GQOQ>
+    <xmx:xIuQZOK5iPdRAlFtT5-Mu5Cjdtszefp8KfJWF6OppfL2ayIjz9WFYA>
+Feedback-ID: ieff94742:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 5BFB531A0063; Mon, 19 Jun 2023 13:09:22 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-496-g8c46984af0-fm-20230615.001-g8c46984a
+Mime-Version: 1.0
+Message-Id: <a17c65c6-863f-4026-9c6f-a04b659e9ab4@app.fastmail.com>
+In-Reply-To: <20230618080027.GA52412@kernel.org>
+References: <20230616085038.4121892-1-rppt@kernel.org>
+ <20230616085038.4121892-3-rppt@kernel.org>
+ <f9a7eebe-d36e-4587-b99d-35d4edefdd14@app.fastmail.com>
+ <20230618080027.GA52412@kernel.org>
+Date:   Mon, 19 Jun 2023 10:09:02 -0700
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Mike Rapoport" <rppt@kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        "Kees Cook" <keescook@chromium.org>
+Cc:     "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Dinh Nguyen" <dinguyen@kernel.org>,
+        "Heiko Carstens" <hca@linux.ibm.com>,
+        "Helge Deller" <deller@gmx.de>,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "Kent Overstreet" <kent.overstreet@linux.dev>,
+        "Luis Chamberlain" <mcgrof@kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Nadav Amit" <nadav.amit@gmail.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Puranjay Mohan" <puranjay12@gmail.com>,
+        "Rick P Edgecombe" <rick.p.edgecombe@intel.com>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        "Song Liu" <song@kernel.org>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Will Deacon" <will@kernel.org>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Subject: Re: [PATCH v2 02/12] mm: introduce execmem_text_alloc() and jit_text_alloc()
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DIET_1,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/19/23 09:54, Baskaran Kannan wrote:
-> Industrial processor i3255 supports temperatures -40 deg celcius
-> to 105 deg Celcius. The current implementation of k10temp_read_temp
-> rounds off any negative
-> temperatures to '0'. To fix this, the following changes have been made.
-> Added a flag 'disp_negative' to struct k10temp_data to support
-> AMD i3255 processors. Flag 'disp_negative' is set if 3255 processor
-> is found during k10temp_probe.  Flag 'disp_negative' is used to determine
-> whether to round off negative temperatures to '0' in k10temp_read_temp.
-> 
-> Signed-off-by: Baskaran Kannan <Baski.Kannan@amd.com>
 
-Now you have made changes you were not asked to make, extended the flag
-to cover a range of processors instead of just i3255, and did not provide
-a change log nor a comment in the code describing why processors with
-certain model numbers should display negative temperatures.
 
-Guenter
+On Sun, Jun 18, 2023, at 1:00 AM, Mike Rapoport wrote:
+> On Sat, Jun 17, 2023 at 01:38:29PM -0700, Andy Lutomirski wrote:
+>> On Fri, Jun 16, 2023, at 1:50 AM, Mike Rapoport wrote:
+>> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+>> >
+>> > module_alloc() is used everywhere as a mean to allocate memory for code.
+>> >
+>> > Beside being semantically wrong, this unnecessarily ties all subsystems
+>> > that need to allocate code, such as ftrace, kprobes and BPF to modules
+>> > and puts the burden of code allocation to the modules code.
+>> >
+>> > Several architectures override module_alloc() because of various
+>> > constraints where the executable memory can be located and this causes
+>> > additional obstacles for improvements of code allocation.
+>> >
+>> > Start splitting code allocation from modules by introducing
+>> > execmem_text_alloc(), execmem_free(), jit_text_alloc(), jit_free() APIs.
+>> >
+>> > Initially, execmem_text_alloc() and jit_text_alloc() are wrappers for
+>> > module_alloc() and execmem_free() and jit_free() are replacements of
+>> > module_memfree() to allow updating all call sites to use the new APIs.
+>> >
+>> > The intention semantics for new allocation APIs:
+>> >
+>> > * execmem_text_alloc() should be used to allocate memory that must reside
+>> >   close to the kernel image, like loadable kernel modules and generated
+>> >   code that is restricted by relative addressing.
+>> >
+>> > * jit_text_alloc() should be used to allocate memory for generated code
+>> >   when there are no restrictions for the code placement. For
+>> >   architectures that require that any code is within certain distance
+>> >   from the kernel image, jit_text_alloc() will be essentially aliased to
+>> >   execmem_text_alloc().
+>> >
+>> 
+>> Is there anything in this series to help users do the appropriate
+>> synchronization when the actually populate the allocated memory with
+>> code?  See here, for example:
+>
+> This series only factors out the executable allocations from modules and
+> puts them in a central place.
+> Anything else would go on top after this lands.
 
-> ---
->   drivers/hwmon/k10temp.c | 8 ++++++--
->   1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-> index 7b177b9fbb09..2613420d43ff 100644
-> --- a/drivers/hwmon/k10temp.c
-> +++ b/drivers/hwmon/k10temp.c
-> @@ -86,6 +86,7 @@ struct k10temp_data {
->   	u32 show_temp;
->   	bool is_zen;
->   	u32 ccd_offset;
-> +	bool disp_negative;
->   };
->   
->   #define TCTL_BIT	0
-> @@ -204,12 +205,12 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
->   		switch (channel) {
->   		case 0:		/* Tctl */
->   			*val = get_raw_temp(data);
-> -			if (*val < 0)
-> +			if (*val < 0 && !data->disp_negative)
->   				*val = 0;
->   			break;
->   		case 1:		/* Tdie */
->   			*val = get_raw_temp(data) - data->temp_offset;
-> -			if (*val < 0)
-> +			if (*val < 0 && !data->disp_negative)
->   				*val = 0;
->   			break;
->   		case 2 ... 13:		/* Tccd{1-12} */
-> @@ -405,6 +406,9 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->   	data->pdev = pdev;
->   	data->show_temp |= BIT(TCTL_BIT);	/* Always show Tctl */
->   
-> +	if (boot_cpu_data.x86 == 0x17 && boot_cpu_data.x86_model < 0x8)
-> +		data->disp_negative = true;
-> +
->   	if (boot_cpu_data.x86 == 0x15 &&
->   	    ((boot_cpu_data.x86_model & 0xf0) == 0x60 ||
->   	     (boot_cpu_data.x86_model & 0xf0) == 0x70)) {
+Hmm.
+
+On the one hand, there's nothing wrong with factoring out common code. On the other hand, this is probably the right time to at least start thinking about synchronization, at least to the extent that it might make us want to change this API.  (I'm not at all saying that this series should require changes -- I'm just saying that this is a good time to think about how this should work.)
+
+The current APIs, *and* the proposed jit_text_alloc() API, don't actually look like the one think in the Linux ecosystem that actually intelligently and efficiently maps new text into an address space: mmap().
+
+On x86, you can mmap() an existing file full of executable code PROT_EXEC and jump to it with minimal synchronization (just the standard implicit ordering in the kernel that populates the pages before setting up the PTEs and whatever user synchronization is needed to avoid jumping into the mapping before mmap() finishes).  It works across CPUs, and the only possible way userspace can screw it up (for a read-only mapping of read-only text, anyway) is to jump to the mapping too early, in which case userspace gets a page fault.  Incoherence is impossible, and no one needs to "serialize" (in the SDM sense).
+
+I think the same sequence (from userspace's perspective) works on other architectures, too, although I think more cache management is needed on the kernel's end.  As far as I know, no Linux SMP architecture needs an IPI to map executable text into usermode, but I could easily be wrong.  (IIRC RISC-V has very developer-unfriendly icache management, but I don't remember the details.)
+
+Of course, using ptrace or any other FOLL_FORCE to modify text on x86 is rather fraught, and I bet many things do it wrong when userspace is multithreaded.  But not in production because it's mostly not used in production.)
+
+But jit_text_alloc() can't do this, because the order of operations doesn't match.  With jit_text_alloc(), the executable mapping shows up before the text is populated, so there is no atomic change from not-there to populated-and-executable.  Which means that there is an opportunity for CPUs, speculatively or otherwise, to start filling various caches with intermediate states of the text, which means that various architectures (even x86!) may need serialization.
+
+For eBPF- and module- like use cases, where JITting/code gen is quite coarse-grained, perhaps something vaguely like:
+
+jit_text_alloc() -> returns a handle and an executable virtual address, but does *not* map it there
+jit_text_write() -> write to that handle
+jit_text_map() -> map it and synchronize if needed (no sync needed on x86, I think)
+
+could be more efficient and/or safer.
+
+(Modules could use this too.  Getting alternatives right might take some fiddling, because off the top of my head, this doesn't match how it works now.)
+
+To make alternatives easier, this could work, maybe (haven't fully thought it through):
+
+jit_text_alloc()
+jit_text_map_rw_inplace() -> map at the target address, but RW, !X
+
+write the text and apply alternatives
+
+jit_text_finalize() -> change from RW to RX *and synchronize*
+
+jit_text_finalize() would either need to wait for RCU (possibly extra heavy weight RCU to get "serialization") or send an IPI.
+
+This is slower than the alloc, write, map solution, but allows alternatives to be applied at the final address.
+
+
+Even fancier variants where the writing is some using something like use_temporary_mm() might even make sense.
+
+
+To what extent does performance matter for the various users?  module loading is slow, and I don't think we care that much.  eBPF loaded is not super fast, and we care to a limited extent.  I *think* the bcachefs use case needs to be very fast, but I'm not sure it can be fast and supportable.
+
+Anyway, food for thought.
 
