@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A82E6734D3A
+	by mail.lfdr.de (Postfix) with ESMTP id 5C285734D39
 	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjFSIL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 04:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53422 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbjFSILY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229650AbjFSILY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 19 Jun 2023 04:11:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53408 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229453AbjFSILV (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 19 Jun 2023 04:11:21 -0400
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABB891
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 01:11:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D2A4B9
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 01:11:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687162283; x=1718698283;
+  t=1687162280; x=1718698280;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=zX9ymhzPlSkTtUaB3GrV2/mGitYNJ+x/SMXE6d0ux+c=;
-  b=gLMf6aPMUSXRyqCq1AyxlES4nspdG4hcGgIACa2o01e4LzdugHBx1Vk+
-   DYk0W9NijF7ZBCYPbcdHRd8HIpjtDuNLZM3hhmtsiYbtQ5gcK6EJF3b/E
-   MzWeQpZQU4p5th+SawD1oiFfwCBhhDtkw/ruwOMk4rVUHMuRPSsWex+Ks
-   IIC4X49gEcxbRrkbzb/7V90Z50Nlu6IxGMmaHo3bb2gbTCcNx/A+GyVyQ
-   NFqOZudiCi2HqITr5oprsGtyzGDcdp5gtgQDdLiPDICq6yx3mPJMKvzBH
-   XNnBI97z398chxt84iKre9+ugFGSrxhyAHR3plBD3DvERfid2dql/3EJy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="445951737"
+  bh=Ted8Nn1H7GufJzYooU/uOUvQapGTmM3q/NcHCiQQPPk=;
+  b=SX+tLhj3nkfsjrcT0SioaLiOec9qrzAj68JtvJ0jzHYWd4PJ+53MB0xe
+   grllyPs7jB6kI8T6yvyumbw9MLKdtgFy1HgaZdUsk/K9VYpUWJjY8Q5JZ
+   urj/2vw0j75fqNff61yuNwICdLR2Hc85TjWOaW2RlXciKXXe1qnWvz58U
+   yj9yKTt//VTXaBCmvKpuYk/kGJ1Kvod8CrpDyLVdn/xbpPT40Cg8W+kl8
+   fM8fd6L9WP6rHsjvy/ZuFbe+N6zRwergJ7j7IByD4NWK94WdH+9YtzZjT
+   h+xPfuPkqkIKtLIHais9qu/RpEB/r88XFwJ6j4L9JBOcx7g/kEtwIdmyD
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="445951727"
 X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
-   d="scan'208";a="445951737"
+   d="scan'208";a="445951727"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 01:11:23 -0700
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 01:11:20 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="837787254"
+X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="837787250"
 X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
-   d="scan'208";a="837787254"
+   d="scan'208";a="837787250"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
   by orsmga004.jf.intel.com with ESMTP; 19 Jun 2023 01:11:18 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1qB9yn-0004Xq-1Q;
+        id 1qB9yn-0004Xo-1K;
         Mon, 19 Jun 2023 08:11:17 +0000
-Date:   Mon, 19 Jun 2023 16:11:12 +0800
+Date:   Mon, 19 Jun 2023 16:11:15 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Jan Glauber <jglauber@digitalocean.com>, akpm@linux-foundation.org
 Cc:     oe-kbuild-all@lists.linux.dev, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org,
         Jan Glauber <jglauber@digitalocean.com>
 Subject: Re: [PATCH] mm: Fix shmem THP counters on migration
-Message-ID: <202306191545.gATleHf1-lkp@intel.com>
+Message-ID: <202306191621.KNBoT2wn-lkp@intel.com>
 References: <20230619055735.141740-1-jglauber@digitalocean.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -76,14 +76,14 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Jan-Glauber/mm-Fix-shmem-
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
 patch link:    https://lore.kernel.org/r/20230619055735.141740-1-jglauber%40digitalocean.com
 patch subject: [PATCH] mm: Fix shmem THP counters on migration
-config: sparc-randconfig-r024-20230619 (https://download.01.org/0day-ci/archive/20230619/202306191545.gATleHf1-lkp@intel.com/config)
-compiler: sparc-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230619/202306191545.gATleHf1-lkp@intel.com/reproduce)
+config: csky-randconfig-r006-20230619 (https://download.01.org/0day-ci/archive/20230619/202306191621.KNBoT2wn-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230619/202306191621.KNBoT2wn-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306191545.gATleHf1-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306191621.KNBoT2wn-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
