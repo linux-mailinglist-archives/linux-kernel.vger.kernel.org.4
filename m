@@ -2,206 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E2C735CC8
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 19:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23CC5735CD0
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 19:15:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbjFSRJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 13:09:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56504 "EHLO
+        id S231717AbjFSRPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 13:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbjFSRJa (ORCPT
+        with ESMTP id S231351AbjFSRPF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 13:09:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74487130;
-        Mon, 19 Jun 2023 10:09:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D8EBF60E84;
-        Mon, 19 Jun 2023 17:09:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2BBEC433C0;
-        Mon, 19 Jun 2023 17:09:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687194567;
-        bh=JAKwTrp1uinVAtoLWlXEGNS+fEBZEu6il2wWrUqzEzo=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=YEOROC7YGunxOkL9NsbJwROPW3V877k09rIaiwwEQBd6bVLJWdMjusQxoVnbsuD5D
-         SKibXVd7FHc2nMr1tudbdYIZvJGYXAOuK4akurudUoPTNxoZjnK21I5AdFijJrVbol
-         wMmYZdLv8Hw2umDYdeUGRbNj+IGHaRZ0DomN5ubTCsJ6NBLT+yY4qE1y7ajOHRP1RW
-         KGFKHX9UnHaE0jcV0Lk398WnGNpxO+L8j061yUD+7F16bO6b13PKK3oASVquk5plTv
-         fi30eJK4gcno8KPn/VoCZ0cPaw9JHH45FBctirdWyvzfVojpY1MuX3tVhu6B84K6vz
-         1DQlrW9fvYTQw==
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id BDC6027C0054;
-        Mon, 19 Jun 2023 13:09:24 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute3.internal (MEProxy); Mon, 19 Jun 2023 13:09:24 -0400
-X-ME-Sender: <xms:wouQZL1KKgLu09W-gITBMTpyAXyCop721KHeRNSzShP91di0wPWHmw>
-    <xme:wouQZKG8Wf_3R-mPlBMuIdAgUtqSh1IoF1oSxFnk9i4TgZk6ENhss3V_yoaRPv-RL
-    TAuvGDsGQbdSiWuWsY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefvddguddtjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    nhguhicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpedvhfeuvddthfdufffhkeekffetgffhledtleegffetheeugeej
-    ffduhefgteeihfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedu
-    keehieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinh
-    hugidrlhhuthhordhush
-X-ME-Proxy: <xmx:wouQZL5OetLa4Clx3-k8PoL2vfJibp2bgnqmJ2SvMc_usNTskAjOCQ>
-    <xmx:wouQZA2n3SB0X1LUMOotkjWhlqzrq7LHl-_hgrAS7-wGIbb0zOE8Fw>
-    <xmx:wouQZOGStaRHYVBRbGjqqlxYN_stg3xW85Vh8QJme5E9zOhMY7GQOQ>
-    <xmx:xIuQZOK5iPdRAlFtT5-Mu5Cjdtszefp8KfJWF6OppfL2ayIjz9WFYA>
-Feedback-ID: ieff94742:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 5BFB531A0063; Mon, 19 Jun 2023 13:09:22 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-496-g8c46984af0-fm-20230615.001-g8c46984a
-Mime-Version: 1.0
-Message-Id: <a17c65c6-863f-4026-9c6f-a04b659e9ab4@app.fastmail.com>
-In-Reply-To: <20230618080027.GA52412@kernel.org>
-References: <20230616085038.4121892-1-rppt@kernel.org>
- <20230616085038.4121892-3-rppt@kernel.org>
- <f9a7eebe-d36e-4587-b99d-35d4edefdd14@app.fastmail.com>
- <20230618080027.GA52412@kernel.org>
-Date:   Mon, 19 Jun 2023 10:09:02 -0700
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Mike Rapoport" <rppt@kernel.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        "Kees Cook" <keescook@chromium.org>
-Cc:     "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Dinh Nguyen" <dinguyen@kernel.org>,
-        "Heiko Carstens" <hca@linux.ibm.com>,
-        "Helge Deller" <deller@gmx.de>,
-        "Huacai Chen" <chenhuacai@kernel.org>,
-        "Kent Overstreet" <kent.overstreet@linux.dev>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Nadav Amit" <nadav.amit@gmail.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Puranjay Mohan" <puranjay12@gmail.com>,
-        "Rick P Edgecombe" <rick.p.edgecombe@intel.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        "Song Liu" <song@kernel.org>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Will Deacon" <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Subject: Re: [PATCH v2 02/12] mm: introduce execmem_text_alloc() and jit_text_alloc()
+        Mon, 19 Jun 2023 13:15:05 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F54B2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 10:15:03 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1687194902;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CPJqe5fTBR0aJ5jpaj3EjZ/URBImS5R5IdkZX0nWfXw=;
+        b=Emwa1WmLtvccC3yx3fD8Q4Vi8Kvm2HMIpjvgxo+RJJeNvNDyeezFwwJClOkuvZ/Uj7meIZ
+        RDXPMF5GFtSfg6Tjp+wDbhO8lhlooJy1UkhkRCkzUlYRgzHyAYRfOs/kB1pgOT8hg7+Wmn
+        yxb4NPWl6wqNa6CcMBLnxgkbl7+fLgYIxKJkK3zhy6RvlbnonTJHC2Kq9z0Sy6fuCo6bQi
+        UJbXG09icXb7O/OEyFY1jMUKWzNf10wPXfPCYG2q+WU5tXZtxjG0vRgu4nFd8WkrMc8dDG
+        bLAZZ2rz80bI8Z81eGWFjkQf/ptVWFKISYwsh3c9brDoAu6Dm6DZSTTlFa+2fQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1687194902;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CPJqe5fTBR0aJ5jpaj3EjZ/URBImS5R5IdkZX0nWfXw=;
+        b=d8agZ1JQiewhHZ1fyJhP0m43q6bqVtmSBrhRrc2kClrXKw+781t8JovA9TrsDTwug6zEyJ
+        gDa3Ci8JC25Fv5Aw==
+To:     "Limonciello, Mario" <mario.limonciello@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     x86@kernel.org, Tom Lendacky <thomas.lendacky@amd.com>,
+        Tony Battersby <tonyb@cybernetics.com>,
+        Ashok Raj <ashok.raj@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Eric Biederman <ebiederm@xmission.com>
+Subject: Re: [patch v3 2/7] x86/smp: Dont access non-existing CPUID leaf
+In-Reply-To: <220eb0c4-ace2-d67c-8680-fc9cd361f873@amd.com>
+References: <20230615190036.898273129@linutronix.de>
+ <20230615193330.322186388@linutronix.de>
+ <220eb0c4-ace2-d67c-8680-fc9cd361f873@amd.com>
+Date:   Mon, 19 Jun 2023 19:15:01 +0200
+Message-ID: <87v8fjpe5m.ffs@tglx>
+MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DIET_1,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On Sun, Jun 18, 2023, at 1:00 AM, Mike Rapoport wrote:
-> On Sat, Jun 17, 2023 at 01:38:29PM -0700, Andy Lutomirski wrote:
->> On Fri, Jun 16, 2023, at 1:50 AM, Mike Rapoport wrote:
->> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
->> >
->> > module_alloc() is used everywhere as a mean to allocate memory for code.
->> >
->> > Beside being semantically wrong, this unnecessarily ties all subsystems
->> > that need to allocate code, such as ftrace, kprobes and BPF to modules
->> > and puts the burden of code allocation to the modules code.
->> >
->> > Several architectures override module_alloc() because of various
->> > constraints where the executable memory can be located and this causes
->> > additional obstacles for improvements of code allocation.
->> >
->> > Start splitting code allocation from modules by introducing
->> > execmem_text_alloc(), execmem_free(), jit_text_alloc(), jit_free() APIs.
->> >
->> > Initially, execmem_text_alloc() and jit_text_alloc() are wrappers for
->> > module_alloc() and execmem_free() and jit_free() are replacements of
->> > module_memfree() to allow updating all call sites to use the new APIs.
->> >
->> > The intention semantics for new allocation APIs:
->> >
->> > * execmem_text_alloc() should be used to allocate memory that must reside
->> >   close to the kernel image, like loadable kernel modules and generated
->> >   code that is restricted by relative addressing.
->> >
->> > * jit_text_alloc() should be used to allocate memory for generated code
->> >   when there are no restrictions for the code placement. For
->> >   architectures that require that any code is within certain distance
->> >   from the kernel image, jit_text_alloc() will be essentially aliased to
->> >   execmem_text_alloc().
->> >
->> 
->> Is there anything in this series to help users do the appropriate
->> synchronization when the actually populate the allocated memory with
->> code?  See here, for example:
+On Mon, Jun 19 2023 at 12:02, Limonciello, Mario wrote:
+> On 6/15/2023 3:33 PM, Thomas Gleixner wrote:
+>> From: Tony Battersby <tonyb@cybernetics.com>
+>>
+>> stop_this_cpu() tests CPUID leaf 0x8000001f::EAX unconditionally. CPUs
+>> return the content of the highest supported leaf when a non-existing leaf
+>> is read. So the result of the test is lottery except on AMD CPUs which
+>> support that leaf.
+>>
+>> While harmless it's incorrect and causes the conditional wbinvd() to be
+>> issued where not required.
+>>
+>> Check whether the leaf is supported before reading it.
+>>
+>> [ tglx: Adjusted changelog ]
+>>
+>> Fixes: 08f253ec3767 ("x86/cpu: Clear SME feature flag when not in use")
 >
-> This series only factors out the executable allocations from modules and
-> puts them in a central place.
-> Anything else would go on top after this lands.
+> Thanks for this fix.
+> This particular patch should probably also CC to stable.
 
-Hmm.
-
-On the one hand, there's nothing wrong with factoring out common code. On the other hand, this is probably the right time to at least start thinking about synchronization, at least to the extent that it might make us want to change this API.  (I'm not at all saying that this series should require changes -- I'm just saying that this is a good time to think about how this should work.)
-
-The current APIs, *and* the proposed jit_text_alloc() API, don't actually look like the one think in the Linux ecosystem that actually intelligently and efficiently maps new text into an address space: mmap().
-
-On x86, you can mmap() an existing file full of executable code PROT_EXEC and jump to it with minimal synchronization (just the standard implicit ordering in the kernel that populates the pages before setting up the PTEs and whatever user synchronization is needed to avoid jumping into the mapping before mmap() finishes).  It works across CPUs, and the only possible way userspace can screw it up (for a read-only mapping of read-only text, anyway) is to jump to the mapping too early, in which case userspace gets a page fault.  Incoherence is impossible, and no one needs to "serialize" (in the SDM sense).
-
-I think the same sequence (from userspace's perspective) works on other architectures, too, although I think more cache management is needed on the kernel's end.  As far as I know, no Linux SMP architecture needs an IPI to map executable text into usermode, but I could easily be wrong.  (IIRC RISC-V has very developer-unfriendly icache management, but I don't remember the details.)
-
-Of course, using ptrace or any other FOLL_FORCE to modify text on x86 is rather fraught, and I bet many things do it wrong when userspace is multithreaded.  But not in production because it's mostly not used in production.)
-
-But jit_text_alloc() can't do this, because the order of operations doesn't match.  With jit_text_alloc(), the executable mapping shows up before the text is populated, so there is no atomic change from not-there to populated-and-executable.  Which means that there is an opportunity for CPUs, speculatively or otherwise, to start filling various caches with intermediate states of the text, which means that various architectures (even x86!) may need serialization.
-
-For eBPF- and module- like use cases, where JITting/code gen is quite coarse-grained, perhaps something vaguely like:
-
-jit_text_alloc() -> returns a handle and an executable virtual address, but does *not* map it there
-jit_text_write() -> write to that handle
-jit_text_map() -> map it and synchronize if needed (no sync needed on x86, I think)
-
-could be more efficient and/or safer.
-
-(Modules could use this too.  Getting alternatives right might take some fiddling, because off the top of my head, this doesn't match how it works now.)
-
-To make alternatives easier, this could work, maybe (haven't fully thought it through):
-
-jit_text_alloc()
-jit_text_map_rw_inplace() -> map at the target address, but RW, !X
-
-write the text and apply alternatives
-
-jit_text_finalize() -> change from RW to RX *and synchronize*
-
-jit_text_finalize() would either need to wait for RCU (possibly extra heavy weight RCU to get "serialization") or send an IPI.
-
-This is slower than the alloc, write, map solution, but allows alternatives to be applied at the final address.
-
-
-Even fancier variants where the writing is some using something like use_temporary_mm() might even make sense.
-
-
-To what extent does performance matter for the various users?  module loading is slow, and I don't think we care that much.  eBPF loaded is not super fast, and we care to a limited extent.  I *think* the bcachefs use case needs to be very fast, but I'm not sure it can be fast and supportable.
-
-Anyway, food for thought.
-
+It's pretty much all stable material.
