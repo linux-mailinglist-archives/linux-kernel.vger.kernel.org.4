@@ -2,109 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2E05735BF3
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 18:12:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12394735BF8
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 18:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231875AbjFSQMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 12:12:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60902 "EHLO
+        id S232008AbjFSQNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 12:13:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjFSQMc (ORCPT
+        with ESMTP id S229888AbjFSQNA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 12:12:32 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9182B1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:12:31 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f8f3786f1dso40133595e9.2
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:12:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687191150; x=1689783150;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=v0/b2EjSkCTg8kSWGnyoY5ofxy0GORXIjVW1oN5fAkI=;
-        b=hOrLIhP3eghCi8ZLw5KuAl3EYvGzAwacdIJP8r3PCS8+eO157uGjvOl0mswuigm8i+
-         3rWQ4iVLhlnpxk/Ho7ovyZ0ewMaczC27GDpfXoxwkYXAyOj4Rf1tmm6j6zlj33kHuLp/
-         nv3BINASFrSa3aEx+PqEDPICI/DnOxY4fFU0PvIR2C5ahPBW5Nr/FVI9rB7k3BCnBB7j
-         1EJ9DApUIWAGUguoZ7duFObmn8SNd2WtWGh75XKdVkAXx3x/m4JeApU1bmw4WzQGQTa1
-         7snk4W16BWgZgdu8zEnssNTquwTxDF+jkqX9Xb7dtipmQwNeGOzHp3La4kv+BuwkrWgC
-         FkAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687191150; x=1689783150;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v0/b2EjSkCTg8kSWGnyoY5ofxy0GORXIjVW1oN5fAkI=;
-        b=Oj548uXWWseRXTChPwxpQAR1Bxy7v/9APVtI0VheYEy382L4q6sLAhrbEztMm90rWC
-         MMS1BAQSW+fy3WmhXJLHH62VF54/VX5YvzqUZ37voPa6ei4SqTOt71Z8/VYlJCG3PYB2
-         vuX8L39I2U6qVqvrODSvIUd4hg3iLVkVQvyvE5eIj1w86aiLOC6GIKvZAKMjQ5I0lMkh
-         r4vxmZz0ROJZog0OgOudDicjw7/C5yNh2Q6VbdAoR18p++j9pa/mD161UpWFAEI7hJIr
-         Bgb+1bI2ktqzDYhTeBy91Ge5qVz7M2YtykFcJm+nuXPHsM++W0KMU2moMcgonLO18xsB
-         7GGg==
-X-Gm-Message-State: AC+VfDyJv5vk26ifDtGDoJc7qLK5UfqkHJb94M/gaJefk61JDY2VxvA8
-        2ZCEwbsT6cdZplRyqRqWT8EBltr9hgI+HIAthwo=
-X-Google-Smtp-Source: ACHHUZ7Jius8lE7B9o8DmcK3xv1xBW2j/h8yXk8k2d4mvYFLUUvsMtvnPOG+51chV5CbC9Tj5mrOeA==
-X-Received: by 2002:a1c:ed08:0:b0:3f7:f584:5796 with SMTP id l8-20020a1ced08000000b003f7f5845796mr10625015wmh.2.1687191150340;
-        Mon, 19 Jun 2023 09:12:30 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:13d0:1b6c:ce40:5429? ([2a05:6e02:1041:c10:13d0:1b6c:ce40:5429])
-        by smtp.googlemail.com with ESMTPSA id u23-20020a05600c00d700b003f78fd2cf5esm78197wmm.40.2023.06.19.09.12.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 09:12:29 -0700 (PDT)
-Message-ID: <a98f4b5b-5656-a960-61d1-a258a1681784@linaro.org>
-Date:   Mon, 19 Jun 2023 18:12:29 +0200
+        Mon, 19 Jun 2023 12:13:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E975A2;
+        Mon, 19 Jun 2023 09:12:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE5DD60D30;
+        Mon, 19 Jun 2023 16:12:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC27CC433C0;
+        Mon, 19 Jun 2023 16:12:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687191178;
+        bh=/H6FT3FrmV0NJ8VWtFxL0MtU2bSU6n73mHMPI4XRQBE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=AMT5ndmgubCl23aIo/nslz/83VJoyve6t1E7pDI6/gvbGLCGEeffTuifbdDruLHnw
+         /ZavuMYavxaQvsrl4Z7lJ3hIVyzoV/Yija9MfeosJqe2JJb5Fpk7jUW+jheAw193/f
+         a+zX4Q8als5VJohEMnSGRu96dNhsX47Ow+96ej/XH6EAgw/Jom+Wnhf4j6e3eDHh43
+         kyomnYLtcLz4LCgssPyWNZe0DELwCVJ6iKrbUTGu7BD4hCybUfag8OcQSWN50eczp7
+         qq7lFI+Absa8n68blhi7JegCSxKbT9bBkVMdXbTvXqtH/zp7BtzAMlojViKcSVYZz0
+         9vD/P0wNcndWw==
+Message-ID: <f9a85fcc-33e3-b47b-9c32-1d680edadcf8@kernel.org>
+Date:   Mon, 19 Jun 2023 09:12:55 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 2/3] clocksource: Add StarFive timer driver
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.2
+Subject: Re: [RFC PATCH v2 1/4] net: wire up support for
+ file_operations->uring_cmd()
 Content-Language: en-US
-To:     Xingyu Wu <xingyu.wu@starfivetech.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Samin Guo <samin.guo@starfivetech.com>,
-        linux-kernel@vger.kernel.org, Conor Dooley <conor@kernel.org>
-References: <20230320135433.144832-1-xingyu.wu@starfivetech.com>
- <20230320135433.144832-3-xingyu.wu@starfivetech.com>
- <506c0a1e-a839-c9b7-1b04-7fb3af535fe0@starfivetech.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <506c0a1e-a839-c9b7-1b04-7fb3af535fe0@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Breno Leitao <leitao@debian.org>, axboe@kernel.dk,
+        asml.silence@gmail.com
+Cc:     io-uring@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <martineau@kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>, leit@fb.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dccp@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-sctp@vger.kernel.org, ast@kernel.org, kuniyu@amazon.com,
+        martin.lau@kernel.org, Jason Xing <kernelxing@tencent.com>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Guillaume Nault <gnault@redhat.com>,
+        Andrea Righi <andrea.righi@canonical.com>
+References: <20230614110757.3689731-1-leitao@debian.org>
+ <20230614110757.3689731-2-leitao@debian.org>
+ <6b5e5988-3dc7-f5d6-e447-397696c0d533@kernel.org>
+ <ZJA6AwbRWtSiJ5pL@gmail.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <ZJA6AwbRWtSiJ5pL@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/06/2023 11:45, Xingyu Wu wrote:
-> On 2023/3/20 21:54, Xingyu Wu wrote:
->> Add timer driver for the StarFive JH7110 SoC.
->>
->> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
->> ---
+On 6/19/23 4:20 AM, Breno Leitao wrote:
+> On Wed, Jun 14, 2023 at 08:15:10AM -0700, David Ahern wrote:
+>> On 6/14/23 5:07 AM, Breno Leitao wrote:
+>> io_uring is just another in-kernel user of sockets. There is no reason
+>> for io_uring references to be in core net code. It should be using
+>> exposed in-kernel APIs and doing any translation of its op codes in
+>> io_uring/  code.
+> Thanks for the feedback. If we want to keep the network subsystem
+> untouched, then I we can do it using an approach similar to the
+> following. Is this a better approach moving forward?
 
-[ ... ]
-
-> Hi Daniel and Thomas,
-> 
-> I have submitted patches for Timer driver. Could you please help to review and give your comments?
-
-You told in the series you will send a new version
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+yes. It keeps the translation from io_uring commands to networking APIs
+in one place and does not need to propagate that translation through the
+networking code.
