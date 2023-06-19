@@ -2,113 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D143F735AFE
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:19:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84018735B00
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231629AbjFSPTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 11:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
+        id S231646AbjFSPVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 11:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbjFSPTQ (ORCPT
+        with ESMTP id S229669AbjFSPU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 11:19:16 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558CB9B;
-        Mon, 19 Jun 2023 08:19:15 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0DB961F88B;
-        Mon, 19 Jun 2023 15:19:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1687187954; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BxX0JR9pCiqX52Q86QN+MVAg4XLHJ++XGVzlT7hnH14=;
-        b=g+YutJ0hLg8FV8N7BnfQi4VR/A8bq9g/lIidDNG3k4i1JkpFe+BJdnOx9ZuJ5XTqP61T7N
-        wxfB9Ep1ev8uV0C/OhnGKTsF3xO3L5kSfjzV3gQ+d8mz7a/6Y+dmtpT7pAiQpBCcpZqapw
-        tQik1aixlJIXoSQn2K+tarMHBd761rU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1687187954;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BxX0JR9pCiqX52Q86QN+MVAg4XLHJ++XGVzlT7hnH14=;
-        b=bIQmVuT6O2DhUaekn7EDcUK8P+v+BH7/hZFFW81fcngvvWtsgrZIGgwABzZDRpCDmM+1yG
-        XlEIW71I6CsfUmDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DC759139C2;
-        Mon, 19 Jun 2023 15:19:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ps8TNPFxkGTDOwAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Mon, 19 Jun 2023 15:19:13 +0000
-Date:   Mon, 19 Jun 2023 17:19:12 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Marius Hoch <mail@mariushoch.de>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] i2c: i801: Force no IRQ for Dell Latitude E7450
-Message-ID: <20230619171912.5407a7eb@endymion.delvare>
-In-Reply-To: <967411b3-7013-619e-4fef-90644fa8d489@mariushoch.de>
-References: <20230514103634.235917-1-mail@mariushoch.de>
-        <20230523200350.62ab4788@endymion.delvare>
-        <59a6a917-2a93-d52d-37f3-091295dd0db4@mariushoch.de>
-        <20230604160132.102dd6a7@endymion.delvare>
-        <967411b3-7013-619e-4fef-90644fa8d489@mariushoch.de>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
+        Mon, 19 Jun 2023 11:20:59 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40139B;
+        Mon, 19 Jun 2023 08:20:57 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f900cd3f69so21031995e9.0;
+        Mon, 19 Jun 2023 08:20:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687188056; x=1689780056;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XwN3PZ1wjLMk6buIa7toS1K6WytwdNPBNwxi1r1rCEk=;
+        b=Aqig/3zOeQpdRTYZiGfg/KlTCq7ZXkYHPTrUprvJkAcnmhrvzkYndc+actcCZn8v9X
+         2jAgfZ6+j2LQzbI2KMlkW9zc67wP+Njjj5WXT/fcUor7xSfh2iImMe9rveB45lqKXZz6
+         NCI+PbbRlVniN/zbRnUizZFl2zg//nhlmmsTVWYs3BmgF4/pWaEGLIY4f9+OMfYYKNs5
+         QloNDZMMfkX9Iei7tQIObiHFujbZROhRshzptvE2g55nO6W+F0n9KrSGja3F62W3tJGJ
+         uDTXS/RZrYmtqU+mS5tivEkNnfpK7Y7dWtM1mqnLOgG5XxnDIGy/Hr7uMf/4Sqt52Sst
+         LL1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687188056; x=1689780056;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XwN3PZ1wjLMk6buIa7toS1K6WytwdNPBNwxi1r1rCEk=;
+        b=StLVjwpMd4oarpe1XJnU5oyfgupHdP/2tO+nuK7Tz8QtqCBaHZRZhQqEtH8BEaiYNH
+         G/h5WHSRHCQR41zDi6NXNKnAIIRrbD3V5AhekyYOEncCnV8KGcj8UuarDHqcgib5njxN
+         L8FMdasNCgHBoKqUepsw/dMpKqkuCJEuH3VsqnASCIXYvD+4gBwEfiiYjGJurmcJjNot
+         JmeBftgyk6ouMT12D2casdmAyOQVIzE4TbqYzxBI05fe3BHAOACgi5qwBazQ4NhSjtzt
+         aBGElUOt294c9A9tNvEK6btQc6XJHbSOpPnRVZifh6/VBDnnyDFOn8b+Bpuon/sOfDxm
+         J3/A==
+X-Gm-Message-State: AC+VfDzusIt6QwI/bk4cBeolYGcbXpPQuGzkfhQ4Y2oxDaB8Yz3X8vVM
+        AM4/XWtn9sFz+rituQ8Qwr6cWRE+x+w=
+X-Google-Smtp-Source: ACHHUZ774LceIVSslgnYV3/ERRNDOqTQzWZEwR884PFc6smp+4gyLIISFnLGepomdZBG7RtA4dOo3A==
+X-Received: by 2002:a05:6000:151:b0:312:74a9:8267 with SMTP id r17-20020a056000015100b0031274a98267mr1127094wrx.9.1687188056191;
+        Mon, 19 Jun 2023 08:20:56 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id n13-20020a5d67cd000000b003111fd2e33dsm9946792wrw.30.2023.06.19.08.20.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Jun 2023 08:20:55 -0700 (PDT)
+Message-ID: <91e84965-f44c-e5a5-67a8-e6d286a6ad99@gmail.com>
+Date:   Mon, 19 Jun 2023 17:20:53 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2,3/3] drm/mediatek: dsi: Add dsi cmdq_ctl to send panel
+ initial code
+Content-Language: en-US, ca-ES, es-ES
+To:     Shuijing Li <shuijing.li@mediatek.com>, chunkuang.hu@kernel.org,
+        p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
+        angelogioacchino.delregno@collabora.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
+Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        jitao.shi@mediatek.com
+References: <20230616073659.26536-1-shuijing.li@mediatek.com>
+ <20230616073659.26536-4-shuijing.li@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230616073659.26536-4-shuijing.li@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 18 Jun 2023 15:42:40 +0200, Marius Hoch wrote:
-> I just booted with acpi=3Dnoirq, the PCI device no longer fails to be=20
-> enabled and the device got assigned IRQ 19 now (according to lspci -v/=20
-> proc/interrupts), while the freefall device remained at IRQ 18.
-> Interestingly dmesg is full of spam from the freefall device (endlessly=20
-> reporting that freefall got detected, probably indicating a problem in=20
-> IRQ handling, yikes).
 
-Unfortunately, while acpi=3Dnoirq can be useful for testing purposes and
-bug investigation, there's no guarantee that a modern x86 system can
-actually work properly without ACPI-based PCI routing.
 
-> Booting without the smo8800 module results in:
-> [root@fedora ~]# dmesg | grep -i smbus
-> [=C2=A0=C2=A0 20.042515] i801_smbus 0000:00:1f.3: PCI->APIC IRQ transform=
-: INT C=20
-> -> IRQ 19 =20
-> [=C2=A0=C2=A0 20.042548] i801_smbus 0000:00:1f.3: SPD Write Disable is set
-> [=C2=A0=C2=A0 20.042574] i801_smbus 0000:00:1f.3: SMBus using PCI interru=
-pt
-> [=C2=A0=C2=A0 20.051270] i801_smbus 0000:00:1f.3: Accelerometer lis3lv02d=
- is=20
-> present on SMBus but its address is unknown, skipping registration
-> [=C2=A0=C2=A0 20.253942] i801_smbus 0000:00:1f.3: Transaction timeout
-> [=C2=A0=C2=A0 20.461962] i801_smbus 0000:00:1f.3: Transaction timeout
->=20
-> The "Transaction timeout" messages might indicate that interrupt routing=
-=20
-> isn't actually working?
+On 16/06/2023 09:36, Shuijing Li wrote:
+> For mt8188, add dsi cmdq reg control to send long packets to panel
+> initialization.
+> 
+> Signed-off-by: Shuijing Li <shuijing.li@mediatek.com>
+> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
 
-Indeed. This means the driver waited for an interrupt but was never
-called back.
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 
---=20
-Jean Delvare
-SUSE L3 Support
+> ---
+> Changes in v2:
+> use mtk_dsi_mask(dsi, DSI_CMDQ_SIZE, CMDQ_SIZE_SEL, CMDQ_SIZE_SEL); directly,
+> per suggestion from the previous thread:
+> https://lore.kernel.org/lkml/015f4c60-ed77-9e1f-8a6b-cda6e4f6ac93@gmail.com/
+> ---
+>   drivers/gpu/drm/mediatek/mtk_dsi.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> index 500a3054282d..8b43d9f48178 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> @@ -86,6 +86,7 @@
+>   
+>   #define DSI_CMDQ_SIZE		0x60
+>   #define CMDQ_SIZE			0x3f
+> +#define CMDQ_SIZE_SEL			BIT(15)
+>   
+>   #define DSI_HSTX_CKL_WC		0x64
+>   
+> @@ -178,6 +179,7 @@ struct mtk_dsi_driver_data {
+>   	const u32 reg_cmdq_off;
+>   	bool has_shadow_ctl;
+>   	bool has_size_ctl;
+> +	bool cmdq_long_packet_ctl;
+>   };
+>   
+>   struct mtk_dsi {
+> @@ -996,6 +998,8 @@ static void mtk_dsi_cmdq(struct mtk_dsi *dsi, const struct mipi_dsi_msg *msg)
+>   
+>   	mtk_dsi_mask(dsi, reg_cmdq_off, cmdq_mask, reg_val);
+>   	mtk_dsi_mask(dsi, DSI_CMDQ_SIZE, CMDQ_SIZE, cmdq_size);
+> +	if (dsi->driver_data->cmdq_long_packet_ctl)
+> +		mtk_dsi_mask(dsi, DSI_CMDQ_SIZE, CMDQ_SIZE_SEL, CMDQ_SIZE_SEL);
+>   }
+>   
+>   static ssize_t mtk_dsi_host_send_cmd(struct mtk_dsi *dsi,
+> @@ -1200,18 +1204,21 @@ static const struct mtk_dsi_driver_data mt8183_dsi_driver_data = {
+>   	.reg_cmdq_off = 0x200,
+>   	.has_shadow_ctl = true,
+>   	.has_size_ctl = true,
+> +	.cmdq_long_packet_ctl = false,
+>   };
+>   
+>   static const struct mtk_dsi_driver_data mt8186_dsi_driver_data = {
+>   	.reg_cmdq_off = 0xd00,
+>   	.has_shadow_ctl = true,
+>   	.has_size_ctl = true,
+> +	.cmdq_long_packet_ctl = false,
+>   };
+>   
+>   static const struct mtk_dsi_driver_data mt8188_dsi_driver_data = {
+>   	.reg_cmdq_off = 0xd00,
+>   	.has_shadow_ctl = true,
+>   	.has_size_ctl = true,
+> +	.cmdq_long_packet_ctl = true,
+>   };
+>   
+>   static const struct of_device_id mtk_dsi_of_match[] = {
