@@ -2,77 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58196735084
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CD80735082
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:39:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231480AbjFSJjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 05:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33156 "EHLO
+        id S231407AbjFSJj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 05:39:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjFSJji (ORCPT
+        with ESMTP id S229513AbjFSJjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 05:39:38 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF92D187
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:39:36 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id ca18e2360f4ac-77acb944bdfso195518039f.0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:39:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687167575; x=1689759575;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T3S6m5Y25scP8HALvcaSJM0xoSq4jCZByGKuGX9HF7A=;
-        b=bzhTNPKpiKBORfUH4L2aNV+I6EG+irZxbEbrZ84zKg+0ncfkN2VfRYcsUNesROadDo
-         iEmndaBC/YZaQBMtJAmBOLpqjs9Wkwn0a75wMPa2NLJyoGpI9QIt0zVBvcDzqiE8IIjV
-         iwmVk0t1Qqf4NylMzM6xr+df+FokJUO/1h8dM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687167575; x=1689759575;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T3S6m5Y25scP8HALvcaSJM0xoSq4jCZByGKuGX9HF7A=;
-        b=gpz/F3rRwDH9UbsoWYSbxPK6B5Gd1g6LwullhwH5KC887fgb8QwRv78nbYWHSRMKoa
-         BWyDELnwbupURa9O++EGJtan7S565aO0RHZgxVGuK5bfNicJ3lkTfa9xWILld/r+sJJC
-         XeSFkSeu1ddZhaZx+Sja/uIrS5sgHTTUonc1HzujPRGeHp2YSBauZbQrE7tspyUbDGeP
-         n4yGnUovnKxOWKmsqqNcSgzzZdwkNv2spstyhKT+CCiQAk2N6zjwLSSL66IFCEtvzLzG
-         r2tubcB8fEciHKZF6NC25UZJ1LixNCH9PNpfLd/LmV5Lc/P5NOvt28oIFFt7u8qrqwnd
-         ir3A==
-X-Gm-Message-State: AC+VfDxmN3e09lxSCv6jjfUHi2lnrSjXQkQBdYTg3tsj+7lzIVFZ4Yxc
-        qiGR0UWktZUsm33W6Y2sBcQzi6z+2MyopNr/nMm1rg==
-X-Google-Smtp-Source: ACHHUZ4tEq5eADpbRMuhULGhejLFgX7ROzDdd972tKSAjJEeMl8cnCzPyTQbTGgN+1LR52ojOgsRjg==
-X-Received: by 2002:a5e:8516:0:b0:774:8786:1b59 with SMTP id i22-20020a5e8516000000b0077487861b59mr7618808ioj.11.1687167575730;
-        Mon, 19 Jun 2023 02:39:35 -0700 (PDT)
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com. [209.85.166.48])
-        by smtp.gmail.com with ESMTPSA id b4-20020a02c984000000b004265e176da1sm1368540jap.76.2023.06.19.02.39.35
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 02:39:35 -0700 (PDT)
-Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-77acb944bdfso195517739f.0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:39:35 -0700 (PDT)
-X-Received: by 2002:a5e:d915:0:b0:74c:c6ed:6de with SMTP id
- n21-20020a5ed915000000b0074cc6ed06demr7033957iop.12.1687167574993; Mon, 19
- Jun 2023 02:39:34 -0700 (PDT)
+        Mon, 19 Jun 2023 05:39:23 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122B3AF;
+        Mon, 19 Jun 2023 02:39:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1687167561; x=1718703561;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FIVpQIzsj4Ssu2XYiw1BeI1GG1jqR889PGXaA6nQNcg=;
+  b=D9E4xxsRnFp7Y9yaeeAWwx9c8vmA+eeiKFi8jgSeLJLvui3TsNPX48p7
+   HkWo+GfhnTWkY787+fpP1tOHOhzTclx03qr2an1JlxHOtK65Sbz6402uv
+   hHBWXg6n/+QjnJHC8VzDzl2qpbbC66OkDWJQ3fYG6+orqKj7EALMwUnHp
+   Kejju/18Dc/1tJBCfqY9HzluZqu2HajpiYxAOKlP3cj+l61kPqwgHcaOh
+   T9Ed2wEo6DtKm6hNNDPoi67PR9lnnJVNWJbj7xOKVGdrp0hX0CeHt6hlc
+   +QYiepxSw8x/aoAzvGsrqPLia48w56bZMq5mYhJ5uDbHY6pb5k2Br81PQ
+   g==;
+X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
+   d="scan'208";a="230876711"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Jun 2023 02:39:21 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 19 Jun 2023 02:39:16 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Mon, 19 Jun 2023 02:39:16 -0700
+Date:   Mon, 19 Jun 2023 11:39:16 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Alex Maftei <alex.maftei@amd.com>
+CC:     <richardcochran@gmail.com>, <shuah@kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+Subject: Re: [PATCH net 1/2] selftests/ptp: Add -x option for testing
+ PTP_SYS_OFFSET_EXTENDED
+Message-ID: <20230619093916.xxfkzj576hwz4tjq@soft-dev3-1>
+References: <cover.1686955631.git.alex.maftei@amd.com>
+ <e3e14166f0e92065d08a024159e29160b815d2bf.1686955631.git.alex.maftei@amd.com>
 MIME-Version: 1.0
-References: <20230619112253.v2.1.I13f060c10549ef181603e921291bdea95f83033c@changeid>
- <35f6212e-69f8-432f-a5c8-99ed5c844f11@moroto.mountain> <CAC=S1njwxLfw7LcnXkgY7pbiFaqvNQVyAzHVhK9+nYJC63d=Zw@mail.gmail.com>
- <32fa8c0e-26f4-4ee4-889a-4037530c128d@kadam.mountain>
-In-Reply-To: <32fa8c0e-26f4-4ee4-889a-4037530c128d@kadam.mountain>
-From:   Fei Shao <fshao@chromium.org>
-Date:   Mon, 19 Jun 2023 17:38:58 +0800
-X-Gmail-Original-Message-ID: <CAC=S1nhVZtmc=gz9umg2k83P3GiJWa1A4K-hUhJN7LM8qjTo6Q@mail.gmail.com>
-Message-ID: <CAC=S1nhVZtmc=gz9umg2k83P3GiJWa1A4K-hUhJN7LM8qjTo6Q@mail.gmail.com>
-Subject: Re: [PATCH v2] clk: Fix memory leak in devm_clk_notifier_register()
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <e3e14166f0e92065d08a024159e29160b815d2bf.1686955631.git.alex.maftei@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,60 +65,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 5:24=E2=80=AFPM Dan Carpenter <dan.carpenter@linaro=
-.org> wrote:
->
-> On Mon, Jun 19, 2023 at 05:05:47PM +0800, Fei Shao wrote:
-> > On Mon, Jun 19, 2023 at 4:48=E2=80=AFPM Dan Carpenter <dan.carpenter@li=
-naro.org> wrote:
-> > >
-> > > On Mon, Jun 19, 2023 at 11:22:53AM +0800, Fei Shao wrote:
-> > > > devm_clk_notifier_register() allocates a devres resource for clk
-> > > > notifier but didn't register that to the device, so the notifier di=
-dn't
-> > > > get unregistered on device detach and the allocated resource was le=
-aked.
-> > > >
-> > > > Fix the issue by registering the resource through devres_add().
-> > > >
-> > > > Fixes: 6d30d50d037d ("clk: add devm variant of clk_notifier_registe=
-r")
-> > > > Signed-off-by: Fei Shao <fshao@chromium.org>
-> > > > ---
-> > > >
-> > >
-> > > Reviewed-by: Dan Carpenter <dan.carpenter@linaro.org>
-> > >
-> > > How did you find this bug?
-> > >
-> > > I can think of some ways to find this bug with static analysis.
-> > >
-> >
-> > It was actually detected by kmemleak on an unreleased Chromebook device=
-.
-> > I added the trace snippet in the message at first but removed that
-> > before sending this. Maybe I shouldn't have.
-> >
-> > I can resend a v3 to add that back if that's preferable. What do you th=
-ink?
->
-> I'm not a clk maintainer, but let's not go overboard resending patches,
-> especially when they're as straight forward as this one.
->
-> This is good information though so I would include that kind of stuff in
-> future patches.  I don't really need to see the kmemleak warning itself
-> because I know what those look like already.  But to me it says a lot
-> that actually this was detected at runtime.  It says good things about
-> your test infrastructure and makes me feel more confident that your
-> patch is correct.  So maybe just a comment that "This leak was detected
-> by kmemleak".
+The 06/16/2023 23:48, Alex Maftei wrote:
 
-That makes sense. Acknowledged and noted.
+Hi Alex,
 
-Thanks,
-Fei
+As I can see you will need to send another patch, I have just a small
+comment bellow.
 
->
-> regards,
-> dan carpenter
->
+
+> The -x option (where 'x' stands for eXtended) takes an argument which
+> represents the number of samples to request from the PTP device.
+> The help message will display the maximum number of samples allowed.
+> Providing an invalid argument will also display the maximum number of
+> samples allowed.
+> 
+> Signed-off-by: Alex Maftei <alex.maftei@amd.com>
+> ---
+>  tools/testing/selftests/ptp/testptp.c | 42 +++++++++++++++++++++++++--
+>  1 file changed, 40 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/ptp/testptp.c b/tools/testing/selftests/ptp/testptp.c
+> index cfa9562f3cd8..2a99973ffc1b 100644
+> --- a/tools/testing/selftests/ptp/testptp.c
+> +++ b/tools/testing/selftests/ptp/testptp.c
+> @@ -142,8 +142,9 @@ static void usage(char *progname)
+>                 " -S         set the system time from the ptp clock time\n"
+>                 " -t val     shift the ptp clock time by 'val' seconds\n"
+>                 " -T val     set the ptp clock time to 'val' seconds\n"
+> +               " -x val     get an extended ptp clock time with the desired number of samples (up to %d)\n"
+>                 " -z         test combinations of rising/falling external time stamp flags\n",
+> -               progname);
+> +               progname, PTP_MAX_SAMPLES);
+>  }
+> 
+>  int main(int argc, char *argv[])
+> @@ -157,6 +158,7 @@ int main(int argc, char *argv[])
+>         struct timex tx;
+>         struct ptp_clock_time *pct;
+>         struct ptp_sys_offset *sysoff;
+> +       struct ptp_sys_offset_extended *soe;
+> 
+>         char *progname;
+>         unsigned int i;
+> @@ -174,6 +176,7 @@ int main(int argc, char *argv[])
+>         int index = 0;
+>         int list_pins = 0;
+>         int pct_offset = 0;
+> +       int getextended = 0;
+>         int n_samples = 0;
+>         int pin_index = -1, pin_func;
+>         int pps = -1;
+> @@ -188,7 +191,7 @@ int main(int argc, char *argv[])
+> 
+>         progname = strrchr(argv[0], '/');
+>         progname = progname ? 1+progname : argv[0];
+> -       while (EOF != (c = getopt(argc, argv, "cd:e:f:ghH:i:k:lL:n:p:P:sSt:T:w:z"))) {
+> +       while (EOF != (c = getopt(argc, argv, "cd:e:f:ghH:i:k:lL:n:p:P:sSt:T:w:x:Xz"))) {
+
+The 'X' needs to be part of the next patch, as you introduce here only 'x'.
+
+>                 switch (c) {
+>                 case 'c':
+>                         capabilities = 1;
+> @@ -250,6 +253,13 @@ int main(int argc, char *argv[])
+>                 case 'w':
+>                         pulsewidth = atoi(optarg);
+>                         break;
+> +               case 'x':
+> +                       getextended = atoi(optarg);
+> +                       if (getextended < 1 || getextended > PTP_MAX_SAMPLES) {
+> +                               fprintf(stderr, "number of extended timestamp samples must be between 1 and %d; was asked for %d\n", PTP_MAX_SAMPLES, getextended);
+> +                               return -1;
+> +                       }
+> +                       break;
+>                 case 'z':
+>                         flagtest = 1;
+>                         break;
+> @@ -516,6 +526,34 @@ int main(int argc, char *argv[])
+>                 free(sysoff);
+>         }
+> 
+> +       if (getextended) {
+> +               soe = calloc(1, sizeof(*soe));
+> +               if (!soe) {
+> +                       perror("calloc");
+> +                       return -1;
+> +               }
+> +
+> +               soe->n_samples = getextended;
+> +
+> +               if (ioctl(fd, PTP_SYS_OFFSET_EXTENDED, soe))
+> +                       perror("PTP_SYS_OFFSET_EXTENDED");
+> +               else {
+> +                       printf("extended timestamp request returned %d samples\n",
+> +                               getextended);
+> +
+> +                       for (i = 0; i < getextended; i++) {
+> +                               printf("sample #%2d: system time before: %lld.%09u\n",
+> +                               i, soe->ts[i][0].sec, soe->ts[i][0].nsec);
+> +                               printf("            phc time: %lld.%09u\n",
+> +                               soe->ts[i][1].sec, soe->ts[i][1].nsec);
+> +                               printf("            system time after: %lld.%09u\n",
+> +                               soe->ts[i][2].sec, soe->ts[i][2].nsec);
+> +                       }
+> +               }
+> +
+> +               free(soe);
+> +       }
+> +
+>         close(fd);
+>         return 0;
+>  }
+> --
+> 2.28.0
+> 
+> 
+
+-- 
+/Horatiu
