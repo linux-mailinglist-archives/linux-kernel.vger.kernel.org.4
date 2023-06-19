@@ -2,181 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576D1734E4A
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:45:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50003734F51
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbjFSIpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 04:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47342 "EHLO
+        id S231308AbjFSJNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 05:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbjFSIo1 (ORCPT
+        with ESMTP id S231225AbjFSJMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 04:44:27 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2054.outbound.protection.outlook.com [40.107.20.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862EF26BD;
-        Mon, 19 Jun 2023 01:42:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Z5K1cm3JaZ2rJVdx93OeU4GwwiEK43I8WC0Olk6Oy5GqPITUNv1km1V6Y5+Kyu1C1JLI+8pKRXvkG6IcIxGm7cm6Jkf0EtV5lg3Ed2ETz21J61MJ1mbguMZNmZblSL9ZKs/w70oZAjxcoCzJG1BDcb10midi3r5GJ+ZU1HgmH4HjOUXtxEMXuPASef+GZh5k+TbvB9lErjow4EmB8aWum2KCc4eD6Gc+yZcRs1cG14kEsOJOejjjky570ZWDJl2aazoqi+2KoTU4rA4nINBdoE1mZ0QV2IA0eSJzPNx68AooA5Yd0KqFmw08IQg0J3t/gaYJQgqqJI7zKyKqhnx5oQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iBjGqDZ2/FU+1NvLVg5BhZMRNjIbbTCGQBwoOmRqwDg=;
- b=N5HeczatIZNAn18VYrOe62w5z0NNA681bpmtrRbq+1LNE6ToZjK+Wp6QlDZ26zglKMRkv1YisbIuDzK8cdaKA2MHHRe19whdvlrkdQ1XcpsC+wGae7MSPjsmnFHnCoKB6tUNQVlzCQc+ByOR7Gixmvp2haaqfuNHhvKDoonr4J14E9ckSax8tauJ2ntiWz8OXgHvD5ReZrVsxmcFBghor762VwI69EJADsVLB/AVl+6/3LkIgiJw+DHgOrikvMzCwHfmfiOrDDoFfJSyGPpiWvQR4Mv35YDV6Xmm9mi1aK5FzUyjBiXfLKVNzh/FIo9OoVQrTdP1x9yOPL266JqvTw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iBjGqDZ2/FU+1NvLVg5BhZMRNjIbbTCGQBwoOmRqwDg=;
- b=IeB19UJpDDdSCAFf9a7yX2UC6vzdgdWUqa6M0naw5baPEAm2sZvd8wNW1FM734Cc6jlHgaTKUxoQJuk7tYmlk5BDyHEYHr6TDCerDT+kCiO2X5vYALpQLblm2jRZDLnbcuN8gGgdctJt85Vh0YWgeo4uylejBNUet6joAWdTk3U=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from AM9PR04MB8954.eurprd04.prod.outlook.com (2603:10a6:20b:409::7)
- by AM9PR04MB8259.eurprd04.prod.outlook.com (2603:10a6:20b:3e4::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.36; Mon, 19 Jun
- 2023 08:42:26 +0000
-Received: from AM9PR04MB8954.eurprd04.prod.outlook.com
- ([fe80::5356:c79f:ef9f:dc29]) by AM9PR04MB8954.eurprd04.prod.outlook.com
- ([fe80::5356:c79f:ef9f:dc29%4]) with mapi id 15.20.6500.036; Mon, 19 Jun 2023
- 08:42:29 +0000
-Message-ID: <9cba4edd-5eab-5a4e-0c10-753495278f8c@oss.nxp.com>
-Date:   Mon, 19 Jun 2023 11:42:28 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH net-next v1 01/14] net: phy: nxp-c45-tja11xx: fix the PTP
- interrupt enablig/disabling
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        richardcochran@gmail.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sebastian.tobuschat@nxp.com,
-        stable@vger.kernel.org
-References: <20230616135323.98215-1-radu-nicolae.pirea@oss.nxp.com>
- <20230616135323.98215-2-radu-nicolae.pirea@oss.nxp.com>
- <5f47ee8c-6a84-4449-9331-1895e4a612d9@lunn.ch>
-From:   "Radu Pirea (OSS)" <radu-nicolae.pirea@oss.nxp.com>
-In-Reply-To: <5f47ee8c-6a84-4449-9331-1895e4a612d9@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AS4P189CA0008.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:20b:5d7::9) To AM9PR04MB8954.eurprd04.prod.outlook.com
- (2603:10a6:20b:409::7)
+        Mon, 19 Jun 2023 05:12:45 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F21102;
+        Mon, 19 Jun 2023 02:12:43 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35J80iW9017479;
+        Mon, 19 Jun 2023 03:43:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=YMRw7TpzL0COzz9yr9CYVV7IRxhEoZZRsZPOw+0tAws=;
+ b=iwcqhKGt90qIQyGpvNr0edrqXoodtC6ViVYX/O9BlHR1snsCnId6uRx9pWKSQ55eVdsG
+ T1G8Q5dTOwCZVb+juXI/+bJU48yiGRznwr/sKj91pF9c4CxWZ84gBEgdNsieAgPdXpHb
+ oUVTspX//JY3Li5axM5CAl94q0IG2Yn/cKXofl2xQdKkWUeV/5xbG6FFUm10MmzGhGGV
+ Y4CrFtFC/4Zhn9LsA5O/eGOGT8Bbv/Nojx7bXXtWOAybtpU/S/tKfMWAEfEVKJWRytRX
+ n1a+jDyXknHww0Y8K5LuI1F8TZA7GV0fpSwGbf+wylKH2ZLGT1qyAospHjeYrvz2md7k uA== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3r998mhrr2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Jun 2023 03:43:26 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Mon, 19 Jun
+ 2023 09:43:25 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Mon, 19 Jun 2023 09:43:25 +0100
+Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 3331946B;
+        Mon, 19 Jun 2023 08:43:25 +0000 (UTC)
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     <broonie@kernel.org>, <lee@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linus.walleij@linaro.org>,
+        <vkoul@kernel.org>
+CC:     <robh+dt@kernel.org>, <conor+dt@kernel.org>, <lgirdwood@gmail.com>,
+        <yung-chuan.liao@linux.intel.com>, <sanyog.r.kale@intel.com>,
+        <pierre-louis.bossart@linux.intel.com>,
+        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 0/6] Add cs42l43 PC focused SoundWire CODEC
+Date:   Mon, 19 Jun 2023 09:43:19 +0100
+Message-ID: <20230619084325.1721501-1-ckeepax@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM9PR04MB8954:EE_|AM9PR04MB8259:EE_
-X-MS-Office365-Filtering-Correlation-Id: 44362faa-6452-46b3-2a43-08db70a11d67
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: eDVdxZWpisHArBK5LX2hriC4ObKviXf1dLkhhmp9zVB0IRcUM5J+A3NANbvNnPrtiQkRKEsxRBklK9c7elBZQVA/3b4s3og0ADchBk1eoqOEaJIQF2qbabViThT0YJRcLG2waGRdIftiNyjNT3fXVNoTaYD8MjBS16tjDbeMV6zoRo2WGezyH0AZ+lohlrx0rmArAKPXX9U9l8L2w0LKCKzEtnbtxGukOPfpFRwxMYxG2jZnUPKklPUCyjsu3ZHpGslYD25Vgi78E8dfvfAdVfqy4IMHjZC5VYboG2PgletQIWkYQ1ra2XTetdHvwBtD4ygQSAGn80Fl8LohRtZZBay/tAKngOpl9KiyPexzK1Xdy3xLKOcRYcrjrEJ0JdPCtE+D+/3lH8Vf029maobcXLYh3hMgn19MWGDMJMRCBXyb0g4tAMx2SkZGAFtSaTt0bLrmRQX28IT7y/YfEj92/HoV/GCaz9SGNFItFAPtjOlu8qvcJ6Vlf90C5BSGkKubXSo+jIq/lm48wO0cwiy6fbVjk8C4OgRRgEDIRqTUZLTpHj8koM9HiXMqVKgEhpj7vGJeDGP9DNJlRv3mnCvXK/1Ap35L3hA/tN64Q/YIYpz9xmxMuThnwVKcVowA5dOBk/CK5ApKzgr22eeHo0Rebg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8954.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(136003)(376002)(366004)(346002)(451199021)(41300700001)(5660300002)(7416002)(8936002)(8676002)(2906002)(86362001)(31696002)(26005)(6506007)(6512007)(53546011)(186003)(478600001)(6486002)(66946007)(66556008)(66476007)(6916009)(4326008)(38100700002)(316002)(31686004)(2616005)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZWNzZWdZOFUzK0tKc2hDWXVia3RDeUk1aGszV3htUkFBSGRPTjZoR3hRZFhO?=
- =?utf-8?B?c2VuWCt4a0tyUm54YmJlMzdRTTVZd2h6Ti91SE13a09yaTlvVTBsYnhWYzk0?=
- =?utf-8?B?VkdjcUZTKzMwNk5nNHlxWk9lUDVBTG0ydUJpK0hJOGJxMkhRRzZtQ25Dcy9Q?=
- =?utf-8?B?N1dEc3pqT2VEajAwRENVbzRkSEJBei9KbmR1VllBeGNUNHpVN1pkWXErenQr?=
- =?utf-8?B?bU56R1RaakFRQ2FTRTlGK0ZGaEV1bkZWOE85M1JXdzRXdVNJVXlTUGRZMWM4?=
- =?utf-8?B?TnJTVDRhSjJ4UFprUVlKMnkwNnpFa1dUb3JMZ212dWxOajYvK0lab1pKWlVZ?=
- =?utf-8?B?cXhueGFUa1FabDg4UUNyelBkSTNQU3Z0RFAxbmhVaEs1K1ZqRnhGZFlTN2tY?=
- =?utf-8?B?UFZjd3RCTDdab3FacjJPazNoa0h4eHpLMFJ3MHlJVjJpZGZZSER4WlBmMFph?=
- =?utf-8?B?RWRkVGR4Z0lJUFVvNWI2NG9CQ1F2K0tQVWx0QUk4MDM3WGJWOGRhTUNUNUFB?=
- =?utf-8?B?UnVvWEo1MDY3Z1ByOEhGT0dRcFhXSGV4MU9aWUdGeVMyMTFWcUJtZ2NWLytr?=
- =?utf-8?B?RE96Y3VHTVNpMmdmTXltL1FxSENpUkNFbUNqbHlyUnNGTW5KTzhNcitNRllK?=
- =?utf-8?B?YzFmKzdJMjk3emNLREU5S2FPRkJ3UlJjVWVzSHN3a29hYVBOUTc2SUFxZTQv?=
- =?utf-8?B?K0gzNHZ3TC9CUnlWdlFRQlk5ZDJBTFh5c0xkcFVnOWNOaVFyVmR4YmNaYVQw?=
- =?utf-8?B?amNMc0YrTWEzcG1PclRuQkIrT0FJbkpTaERrVnJUSGFMY0Q2ZWJQZm1hdmR6?=
- =?utf-8?B?bVhkV3lKcmxBMHF2YkpkVVUwN3MwMXRqdFlvdHo5R3BLWlh2YkVmdE5vVk1y?=
- =?utf-8?B?bE1lK2tiYW1QOVU1R2pMNlJjbUsvaU1RQWJZVUJtN3FXaE15U1dlVXJ4ejFJ?=
- =?utf-8?B?RjNNYUhMVG5mcUQ1NjZvU1ZFLy8zNm5HUlUvRUd6cVowbXJXb3pmUVVMVnF3?=
- =?utf-8?B?NTBvWkdsRlVPUFJjUmdUTzNqYnRDbVN0N2lkWFVBUGpFalRjQXJ0ZytHdXpk?=
- =?utf-8?B?L2NGK0hiVVBvMTc0OGRwM0NvVWRkL0xKQXZOenE3Y253NXZwYndPVjJzTUlM?=
- =?utf-8?B?T1NCbHRyT2ZZNERTNDNuL0JWRVNlZkFvbHh3MzdkZ3c5SytuaXFSZ1dOeGJs?=
- =?utf-8?B?a1dnQmk1MHdkaVpqUG96c1VLbnZEaGU3MXNYbTF1K2t2dkY5ZWR4QmhpaUJH?=
- =?utf-8?B?bEI3bXVmUDl1aEgrMG4vZFkzMFdnWHdKMUZiU25Qbno3ODFNL0tCeW9MU3FP?=
- =?utf-8?B?eG8xMllpb1Z6RngrdmVmN21ZeUxIcW56MEtpZXU4cXhsTnJkeUM3YW51N3A3?=
- =?utf-8?B?Q1NnMjZkaktvMThHRUN5Mi9TZThlajkvYkJXVGF5SnpmZm5DbmFvZHllWmVF?=
- =?utf-8?B?eGZqcTJsaXh2Z3A2L2JXUkFUU2I2TzRMNzdBVzVJWGdPK1dVeGFqajdDaGoz?=
- =?utf-8?B?MC91c094RitDMm1MYmV6VERKbEcyWEFHVW9WenUyOFVkVnc1c2FlakROcmwz?=
- =?utf-8?B?OXZvam9ESHcrd0NMNjJHcjI4V3ptMHVPa3ZwN1dtejVQbGZCakJreGxlL0V6?=
- =?utf-8?B?a2VkRGFraDNCczdQTlZ5WWQxTk1qUHBSTis0dlA5WEYxeURLeDBsN1lTc2Mz?=
- =?utf-8?B?ekxFUUNYWCs1LzB4VDBFZE9UY1J6bFE2UGR6c3FUcDE0WkhGQ3BseDAycG1m?=
- =?utf-8?B?c3NKcmxMWUs5TlZPTUU4SjUwbFJrZTZ2SHdWRG5ONTlmOXB4Q3oveXJ3aUxm?=
- =?utf-8?B?b3N1V2F2MjlGTVJ4V0FxeDNwbFVqQUVNQk1WSTZ6djhqZFRrK2JzcVBGMTMz?=
- =?utf-8?B?cFg2NVRmdVdIemdESE5rUXNoUy83VW9jbEwrYzZPTnByWkIraTdURG01czdO?=
- =?utf-8?B?UjlqZWJwOTFJbVFUVkgzUGE5RG5rSTBITTVlbkZrWWZXQVVrSE5qSGNVNWVS?=
- =?utf-8?B?MGM1TWFZbkxEbkZHZnptaUZqbDZMWTRTVnBCUE9oT1lkTFpnanJGVFMrL1JQ?=
- =?utf-8?B?Zmg2ajhIZHkySlNISGZTNTMyVXhaRlBhT0dvK0M3a2VZSityR0lyVWJhRElI?=
- =?utf-8?B?eE51WTEzL2lkcDdxN2xFdTdCSXF0RW1iUU1Ldlk0MnhHcUJhMkNUVG9idjBL?=
- =?utf-8?B?Y3c9PQ==?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 44362faa-6452-46b3-2a43-08db70a11d67
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8954.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jun 2023 08:42:29.0477
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LZkqjnT1XQaboPJjqbNflr3oCQd9ZVd30gdY8EYDd5O9adC+g54TXUJrqhjEon8VwZ0cebHnI3hH3j2/rfmLgLHceceqfe4VMv6F7z42h50=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8259
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: ToI6sQVpL4LKWrtTaQ_4XY0MkL6PMpwV
+X-Proofpoint-ORIG-GUID: ToI6sQVpL4LKWrtTaQ_4XY0MkL6PMpwV
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.06.2023 23:36, Andrew Lunn wrote:
-> On Fri, Jun 16, 2023 at 04:53:10PM +0300, Radu Pirea (NXP OSS) wrote:
->> .config_intr() handles only the link event interrupt and should
->> disable/enable the PTP interrupt also.
->>
->> It's safe to disable/enable the PTP irq even if the egress ts irq
->> is disabled. This interrupt, the PTP one, acts as a global switch for all
->> PTP irqs.
->>
->> Fixes: 514def5dd339 ("phy: nxp-c45-tja11xx: add timestamping support")
->> CC: stable@vger.kernel.org # 5.15+
->> Signed-off-by: Radu Pirea (NXP OSS) <radu-nicolae.pirea@oss.nxp.com>
-> 
-> Please don't mix fixes and development work in one patchset. Please
-> post this to applying to net, not net-next.
+This patch chain adds support for the Cirrus Logic cs42l43 PC focused
+SoundWire CODEC. The chain is currently based of Lee's for-mfd-next
+branch.
 
-Ok. I will send it to net and apply your suggestions.
+Thanks,
+Charles
 
-> 
->>   static int nxp_c45_config_intr(struct phy_device *phydev)
->>   {
->> -     if (phydev->interrupts == PHY_INTERRUPT_ENABLED)
->> +     /* The return value is ignored on purpose. It might be < 0.
->> +      * 0x807A register is not present on SJA1110 PHYs.
->> +      */
->> +     if (phydev->interrupts == PHY_INTERRUPT_ENABLED) {
->> +             phy_set_bits_mmd(phydev, MDIO_MMD_VEND1,
->> +                              VEND1_PORT_FUNC_IRQ_EN, PTP_IRQS);
->>                return phy_set_bits_mmd(phydev, MDIO_MMD_VEND1,
->>                                        VEND1_PHY_IRQ_EN, PHY_IRQ_LINK_EVENT);
-> 
-> phy_set_bits_mmd() will not return an error if the register does not
-> exist. There is no such indication for MDIO. This is going to do a
-> read/modify/write. That read might get 0xffff, or random junk. And
-> then the write back will be successful. The only time
-> phy_read()/phy_write return error is when there is a problem within
-> the bus master, like its clock gets turned off and the transfer times
-> out.
-> 
-> So it is good to document you are accessing a register which might not
-> exist, but there is no need to ignore the return code.
-> 
->         Andrew
+Charles Keepax (4):
+  dt-bindings: mfd: cirrus,cs42l43: Add initial DT binding
+  mfd: cs42l43: Add support for cs42l43 core driver
+  pinctrl: cs42l43: Add support for the cs42l43
+  ASoC: cs42l43: Add support for the cs42l43
+
+Lucas Tanure (2):
+  soundwire: bus: Allow SoundWire peripherals to register IRQ handlers
+  spi: cs42l43: Add SPI controller support
+
+ .../bindings/sound/cirrus,cs42l43.yaml        |  313 +++
+ MAINTAINERS                                   |    4 +
+ drivers/mfd/Kconfig                           |   23 +
+ drivers/mfd/Makefile                          |    3 +
+ drivers/mfd/cs42l43-i2c.c                     |   87 +
+ drivers/mfd/cs42l43-sdw.c                     |  222 ++
+ drivers/mfd/cs42l43.c                         | 1262 +++++++++
+ drivers/mfd/cs42l43.h                         |   23 +
+ drivers/pinctrl/cirrus/Kconfig                |   11 +
+ drivers/pinctrl/cirrus/Makefile               |    2 +
+ drivers/pinctrl/cirrus/pinctrl-cs42l43.c      |  609 +++++
+ drivers/soundwire/bus.c                       |   32 +
+ drivers/soundwire/bus_type.c                  |   12 +
+ drivers/spi/Kconfig                           |    7 +
+ drivers/spi/Makefile                          |    1 +
+ drivers/spi/spi-cs42l43.c                     |  281 ++
+ include/linux/mfd/cs42l43-regs.h              | 1184 +++++++++
+ include/linux/mfd/cs42l43.h                   |  102 +
+ include/linux/soundwire/sdw.h                 |    9 +
+ include/sound/cs42l43.h                       |   17 +
+ sound/soc/codecs/Kconfig                      |   16 +
+ sound/soc/codecs/Makefile                     |    4 +
+ sound/soc/codecs/cs42l43-jack.c               |  969 +++++++
+ sound/soc/codecs/cs42l43-sdw.c                |   74 +
+ sound/soc/codecs/cs42l43.c                    | 2278 +++++++++++++++++
+ sound/soc/codecs/cs42l43.h                    |  131 +
+ 26 files changed, 7676 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/cirrus,cs42l43.yaml
+ create mode 100644 drivers/mfd/cs42l43-i2c.c
+ create mode 100644 drivers/mfd/cs42l43-sdw.c
+ create mode 100644 drivers/mfd/cs42l43.c
+ create mode 100644 drivers/mfd/cs42l43.h
+ create mode 100644 drivers/pinctrl/cirrus/pinctrl-cs42l43.c
+ create mode 100644 drivers/spi/spi-cs42l43.c
+ create mode 100644 include/linux/mfd/cs42l43-regs.h
+ create mode 100644 include/linux/mfd/cs42l43.h
+ create mode 100644 include/sound/cs42l43.h
+ create mode 100644 sound/soc/codecs/cs42l43-jack.c
+ create mode 100644 sound/soc/codecs/cs42l43-sdw.c
+ create mode 100644 sound/soc/codecs/cs42l43.c
+ create mode 100644 sound/soc/codecs/cs42l43.h
 
 -- 
-Radu P.
+2.30.2
+
