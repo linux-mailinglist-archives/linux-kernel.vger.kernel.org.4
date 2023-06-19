@@ -2,46 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA8837355BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 13:27:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 812D97355C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 13:28:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbjFSL1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 07:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46614 "EHLO
+        id S231825AbjFSL2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 07:28:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbjFSL13 (ORCPT
+        with ESMTP id S229932AbjFSL22 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 07:27:29 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC9F100;
-        Mon, 19 Jun 2023 04:27:28 -0700 (PDT)
-Received: from desky.lan (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DB887800;
-        Mon, 19 Jun 2023 13:26:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1687174011;
-        bh=Ua5NcitkYLYSqBnLZDqy7P/dMOR9PahCDNt3nwt7wFM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZNHpJMwzDW3Z/m/Niqez8UbbEjXIXS1IOOiQTnROmHWVPt55Owh09Fnz6j/ytirh8
-         ePGHkqMzS3byVpgXkvJF6NcpS3kxhtDEknarMnldYRYtA6LqlZuLwWOGB3sFlhaJcb
-         WE0zJE+/WWHvQMbci4olFIHpTO3mrfKBxzj16AFM=
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mon, 19 Jun 2023 07:28:28 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854DF1700;
+        Mon, 19 Jun 2023 04:28:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687174080; x=1718710080;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xf23/MtYveY8JP522ZK351WjL956r9eMqWGHw9Q7TQQ=;
+  b=BJ+0+MxIIUvp6uweH/WPwDpP0DWKMr/HntxQXEgyb2ezWu4rxNE8ahPt
+   AXvsUsjPdxzTpy4JemEh/Ng2VrhX73pRHCUynRd3FMeMd1sOT5e5cfYnW
+   uDhmaz+w3bGmNnY+1pQ8k7V9uKuG08uIsU0y6JYbb9sxtjO65w0fW6fv5
+   ym3AUq0qG81mYQEzMBaxfmqaK250IVnQPyBC6o77nHuXCjmX7g+lzG5VC
+   JFULYN66FHVHTVFKE4D8Cut0vmgJs2po9eule6CiwBKCWEaYX1zn1WYEE
+   Nvj1EeO+pyrteqZVI8KcP3utj/GUqAX+dMDMv2jwKIXr6tJNBoy14BHOz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="349328375"
+X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
+   d="scan'208";a="349328375"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 04:27:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="826562710"
+X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
+   d="scan'208";a="826562710"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP; 19 Jun 2023 04:27:54 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1qBD31-004ync-2q;
+        Mon, 19 Jun 2023 14:27:51 +0300
+Date:   Mon, 19 Jun 2023 14:27:51 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH 3/3] media: subdev: Add debug prints to enable/disable_streams
-Date:   Mon, 19 Jun 2023 14:27:07 +0300
-Message-Id: <20230619112707.239565-3-tomi.valkeinen@ideasonboard.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230619112707.239565-1-tomi.valkeinen@ideasonboard.com>
-References: <20230619112707.239565-1-tomi.valkeinen@ideasonboard.com>
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>
+Subject: Re: [PATCH v14 17/18] media: i2c: ds90ub953: Restructure clkout
+ management
+Message-ID: <ZJA7t6KwEipAX494@smile.fi.intel.com>
+References: <20230616135922.442979-1-tomi.valkeinen@ideasonboard.com>
+ <20230616135922.442979-18-tomi.valkeinen@ideasonboard.com>
+ <ZIxzsUbuUz3ysA31@smile.fi.intel.com>
+ <002e0475-23dd-5106-6f5c-e4b50a0c506f@ideasonboard.com>
+ <ZJAxqFuJ/Tj5dIT8@smile.fi.intel.com>
+ <3e915435-b4d0-e792-6bdc-02bbf8f08362@ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3e915435-b4d0-e792-6bdc-02bbf8f08362@ideasonboard.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,55 +89,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is often useful to see when streaming for a device is being enabled
-or disabled. Add debug prints for this to v4l2_subdev_enable_streams()
-and v4l2_subdev_disable_streams().
+On Mon, Jun 19, 2023 at 02:11:09PM +0300, Tomi Valkeinen wrote:
+> On 19/06/2023 13:44, Andy Shevchenko wrote:
+> > On Mon, Jun 19, 2023 at 01:14:34PM +0300, Tomi Valkeinen wrote:
+> > > On 16/06/2023 17:37, Andy Shevchenko wrote:
+> > > > On Fri, Jun 16, 2023 at 04:59:21PM +0300, Tomi Valkeinen wrote:
 
-Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
----
- drivers/media/v4l2-core/v4l2-subdev.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+...
 
-diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
-index 73f716a42569..0f86a165b202 100644
---- a/drivers/media/v4l2-core/v4l2-subdev.c
-+++ b/drivers/media/v4l2-core/v4l2-subdev.c
-@@ -1977,11 +1977,16 @@ int v4l2_subdev_enable_streams(struct v4l2_subdev *sd, u32 pad,
- 		goto done;
- 	}
- 
-+	dev_dbg(dev, "enable streams %u:%#llx\n", pad, streams_mask);
-+
- 	/* Call the .enable_streams() operation. */
- 	ret = v4l2_subdev_call(sd, pad, enable_streams, state, pad,
- 			       streams_mask);
--	if (ret)
-+	if (ret) {
-+		dev_dbg(dev, "enable streams %u:%#llx failed: %d\n", pad,
-+			streams_mask, ret);
- 		goto done;
-+	}
- 
- 	/* Mark the streams as enabled. */
- 	for (i = 0; i < state->stream_configs.num_configs; ++i) {
-@@ -2089,11 +2094,16 @@ int v4l2_subdev_disable_streams(struct v4l2_subdev *sd, u32 pad,
- 		goto done;
- 	}
- 
-+	dev_dbg(dev, "disable streams %u:%#llx\n", pad, streams_mask);
-+
- 	/* Call the .disable_streams() operation. */
- 	ret = v4l2_subdev_call(sd, pad, disable_streams, state, pad,
- 			       streams_mask);
--	if (ret)
-+	if (ret) {
-+		dev_dbg(dev, "disable streams %u:%#llx failed: %d\n", pad,
-+			streams_mask, ret);
- 		goto done;
-+	}
- 
- 	/* Mark the streams as disabled. */
- 	for (i = 0; i < state->stream_configs.num_configs; ++i) {
+> > > > > +struct ub953_clkout_data {
+> > > > > +	u32 hs_div;
+> > > > > +	u32 m;
+> > > > > +	u32 n;
+> > > > 
+> > > > Please, use struxt u32_fract instead of m/n.
+> > > 
+> > > I'm not sure how that helps. The documentation talks about m and n. Using
+> > > different terms will make it more difficult to compare the code and the
+> > > docs.
+> > 
+> > You can always add a comment.
+> > 
+> > (For example in drivers/clk/clk-fractional-divider.c our documentation also
+> >   says about m/n, but most of the people understands that this is about
+> >   fractional divider and actually with properly spelled parameters it will
+> >   help others who are not experts in the CLK hardware.)
+> 
+> Yes, I would agree with you if this was a generic piece of code, but I don't
+> see the reasoning as valid as this is specific to a piece of hardware. Here,
+> I think, matching the code to the HW documentation is more important than
+> possibly making the code more understandable to people who are not familiar
+> with the HW.
+> 
+> Especially as for non-English people seeing "numerator" and "denominator"
+> might require a check to figure out which one is which, whereas m and n are
+> (I would guess) a bit more universal (or maybe it's just me).
+
+I think for unprepared user the English plain words are simpler,
+or maybe it's just me.
+
+At least we have a strong disagreement here, seems :-)
+
 -- 
-2.34.1
+With Best Regards,
+Andy Shevchenko
+
 
