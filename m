@@ -2,161 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E017734DC2
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:32:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 231D5734DC0
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:32:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230310AbjFSIcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 04:32:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36014 "EHLO
+        id S229806AbjFSIcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 04:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbjFSIcI (ORCPT
+        with ESMTP id S229612AbjFSIcI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 19 Jun 2023 04:32:08 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B0697;
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F5ABC
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 01:32:07 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f8d258f203so23639565e9.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 01:32:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687163525; x=1689755525;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pKgLxFNe6Vqer27h+wDKJ38s4aUcdV6KAPk/ux2OGzM=;
+        b=isa+VCyPRBW3qNrZPJExkSh+lO23Q8qPTzQ5U8b6qLj0CqlJi+dNX7oXhQHcTgN7+0
+         0WKkQUalhafgEitjWIhmDhWX2KG8SXN4S1bXpXytq9ibpi94NP5k3Cvrw79HRRnbzInJ
+         t4k1u+sEfFCPdRFmH0JZ6N4bWl19s3SOT/g5GVDa5t/eDDWDlV7oQfxfdnIEdgtkKaks
+         zSJvhsxgNDsRmo+fPXIQuFr6VqBE6pokBVHZr086RXQQA5P88+OBqRFJiPaHvYRvyXrY
+         KHjeLvlMdjmi2jeqbxL1aQf2VukxyV+IeBxCCnUYeZTJCK9b48Qf9zpF0l9JgYj2sPI2
+         Er/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687163525; x=1689755525;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pKgLxFNe6Vqer27h+wDKJ38s4aUcdV6KAPk/ux2OGzM=;
+        b=VK/zJlgDBd0AHOA09/ZqjWrpl7ofN7sABxx2GbsZaM6FQWFyOqaw7/uHCMMFHEldho
+         Dfkwm7ok7kWLXOpSoz1BgasfdZGI0C6290TtE4aVHBhQvk6aA9KI61RaiJmep0yelf3j
+         B7DFFc9w2hprO4OGs5SyuerYbeVVYEmh7jEgg4HARpZD+SsrRyh1pMzEoLqhjxCJVKC2
+         irbV7D3nF0QrNLTFpuWg2G8JT2hyS6LjZptDwHrhK0LgUn/WihbYFRbX/eKsT7/HqvKa
+         Udi+Y4XVA+w06Z51KRdtzJ1VoPsKBlPC63UQHh7b1v+fKKmGasmZ4FNA23gJFnSirgfe
+         ZkwQ==
+X-Gm-Message-State: AC+VfDyhDCD5qj3lh09SYKg6geZSvRD9O5sgP9wKEb3NcdHrGqEaFTuC
+        sYvsmCEE9QyvqblDt8P0ldsKOA==
+X-Google-Smtp-Source: ACHHUZ5dfrlTzQZaKtkSsJqn5n2OOWZI5AIm3s7kGaM1LXA0sGsO4oPrV7FqHvnbGydobk6ik4WaBA==
+X-Received: by 2002:a1c:e914:0:b0:3f8:facf:7626 with SMTP id q20-20020a1ce914000000b003f8facf7626mr5530793wmc.20.1687163525549;
         Mon, 19 Jun 2023 01:32:05 -0700 (PDT)
-Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 37A9A547;
-        Mon, 19 Jun 2023 10:31:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1687163490;
-        bh=iTBmgvKkm/RP71iegbPwrVucLcjIHJ7plxMSPCw6Oc0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=glwrKMUxVkqwUz9nEFWGj2T80a1Nvk35ivf6ESWzFTV80mALHg32mrqOsX0OHUfJI
-         0JzSGTjDS/IfNG9jAtaHje1/xD713o0LNc9w66Bvko18xFBtXqGa4zRuwyU6t4aBAL
-         2pU790FLQgq7aru38ImrjZSG5qod94QbDxZqlLrE=
-Message-ID: <ac326ebe-4d99-e73d-27bf-c21b532f3c4b@ideasonboard.com>
-Date:   Mon, 19 Jun 2023 11:31:59 +0300
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id z25-20020a7bc7d9000000b003f8fac0ad4bsm8634301wmk.17.2023.06.19.01.32.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 01:32:04 -0700 (PDT)
+Date:   Mon, 19 Jun 2023 11:32:01 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Markus Elfring <Markus.Elfring@web.de>
+Cc:     Fei Shao <fshao@chromium.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>, cocci@inria.fr,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: clk: Fix memory leak in devm_clk_notifier_register()
+Message-ID: <56998d04-7f09-4982-b0f1-20ef917aa524@kadam.mountain>
+References: <20230617160901.1.I2b151cdf7a72d9e3ecc7ab2ff38409ebe6d65d6b@changeid>
+ <71168ceb-8273-4067-d0e0-c6c219d4618e@web.de>
+ <CAC=S1ngN=TFQa0Y4FoSCOTUs8HRi4NEP1OwY8WccUEUMG_UDeQ@mail.gmail.com>
+ <8366a35f-bc2c-4aee-b2bb-5fc9b2a7072b@kadam.mountain>
+ <ea5c0b0b-7aa5-d4eb-def9-fa279d69cd44@web.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v9 0/2] Add DSS support for AM625 SoC
-To:     Aradhya Bhatia <a-bhatia1@ti.com>, Jyri Sarha <jyri.sarha@iki.fi>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     DRI Development List <dri-devel@lists.freedesktop.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Jayesh Choudhary <j-choudhary@ti.com>
-References: <20230616150900.6617-1-a-bhatia1@ti.com>
-Content-Language: en-US
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <20230616150900.6617-1-a-bhatia1@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ea5c0b0b-7aa5-d4eb-def9-fa279d69cd44@web.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/06/2023 18:08, Aradhya Bhatia wrote:
-> This patch series adds a new compatible for the Display SubSystem (DSS)
-> controller on TI's AM625 SoC. It further adds the required support for
-> the same in the tidss driver.
+On Mon, Jun 19, 2023 at 09:42:37AM +0200, Markus Elfring wrote:
+> > He doesn't have a very accurate perspective
+> > of what is important and what is not important.
 > 
-> The AM625-DSS is a newer version of the DSS from the AM65X version with
-> the major change being the addition of another OLDI TX. With the help of
-> 2 OLDI TXes, the AM625 DSS can support dual-linked OLDI displays with a
-> resolution of up-to 2K or WUXGA (1920x1200@60fps) at half the OLDI clock
-> frequency or even cloned video outputs on each of the TXes.
-> 
-> This patch series acts as a continuation of the patches posted in v3[1].
-> The OLDI support patches combined from v5 onwards are now separated
-> again. The OLDI support will be added subsequently with a separte patch
-> series.
-> 
-> I have tested these patches on AM625 SK-EVM and AM625 based Beagle Play.
-> To test this series on AM625 based platforms, basic display support
-> patches (for driver + devicetree) can be found in the
-> "next_am62-base_support-V2" branch on my github fork[2].
+> I offered various hints for desirable change possibilities.
+> The change acceptance might evolve in more constructive ways, doesn't it?
 
-Looks good to me. I'll pick these up to drm-misc.
+No, I'm sorry, it's not constructive at all.  You're just creating noise
+when we should be looking at if the patch is correct and how we can
+improve our QC infrastructure to prevent bugs like this in the future.
 
-  Tomi
-
-> 
-> [1]: V3: https://patchwork.freedesktop.org/series/105373/
-> [2]: https://github.com/aradhya07/linux-ab/tree/next_am62-base_support-V2
-> 
-> Previous versions:
-> - V8: https://patchwork.freedesktop.org/series/119088/
-> - V7: https://patchwork.freedesktop.org/series/113328/
-> - V6: https://patchwork.freedesktop.org/series/111106/
-> - V5: https://patchwork.freedesktop.org/series/109194/
-> 
-> Changelog:
-> V9:
->    - Edit the commit message for Patch 2/2.
->    - Add Krzysztof Kozlowski's and Tomi Valkeinen's tags.
-> 
-> V8:
->    - Rebase for current merge window.
->    - Drop all the OLDI support patches.
->    - Update the binding to remove the 2nd OLDI port instances.
->    - Drop the Reviewed-by tags of Krzysztof Kozlowski and Rahul T R
->      because of the changes.
-> 
-> V7:
->    - Rebase to current linux-next.
->    - Address Tomi Valkeinen's comments.
->      1. Separate the DSS VP and output port coupling.
->         v6 introduced 'output_port_bus_type' in addition to 'vp_bus_type'
->         but having both of the variables was redundant. Hence, in v7
->         the 'output_port_bus_type' essentially replaces 'vp_bus_type'.
->      2. Break Patch v6 2/5 into 2 separate patches (v7 1/6 and v7 3/6).
->      3. Change in name and addition of OLDI mode macros.
->      4. Other minor changes.
-> 
-> V6:
->    - Rebase for current merge window.
->    - Add 'allOf:' condition in the DT binding.
->    - Address Tomi Valkeinen's comments.
->      1. Combine DT binding patches for new compatible and 3rd DSS port.
->      2. Further separate DSS VPs and output ports.
->      3. Separate OLDI mode discovery logic from the panel/bridge
->         discovery (which allowed support for OLDI bridges as well.)
->      4. Organize OLDI IO control register macros platform wise.
-> 
-> V5:
->    - Rebase for current merge window.
->    - Add max DT ports in DSS features.
->    - Combine the OLDI support series.
-> 
-> (Changes from OLDI support series v1)
->    - Address Tomi Valkeinen's comments.
->      1. Update the OLDI link detection approach.
->      2. Add port #3 for 2nd OLDI TX.
->      3. Configure 2 panel-bridges for cloned panels.
->      4. Drop the OLDI clock set patch.
->      5. Drop rgb565-to-888 patch.
-> 
-> V3:
->    - Change yaml enum in alphabetical order.
->    - Correct a typo.
-> 
-> V2:
->    - Remove redundant register array.
-> 
-> Aradhya Bhatia (2):
->    dt-bindings: display: ti,am65x-dss: Add am625 dss compatible
->    drm/tidss: Add support for AM625 DSS
-> 
->   .../bindings/display/ti/ti,am65x-dss.yaml     | 18 ++++--
->   drivers/gpu/drm/tidss/tidss_dispc.c           | 57 ++++++++++++++++++-
->   drivers/gpu/drm/tidss/tidss_dispc.h           |  2 +
->   drivers/gpu/drm/tidss/tidss_drv.c             |  1 +
->   4 files changed, 71 insertions(+), 7 deletions(-)
-> 
-
+regards,
+dan carpenter
