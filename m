@@ -2,54 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A028735DD4
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 21:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F005735DD6
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 21:19:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232406AbjFSTRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 15:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40154 "EHLO
+        id S232341AbjFSTTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 15:19:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232400AbjFSTRx (ORCPT
+        with ESMTP id S231225AbjFSTTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 15:17:53 -0400
-Received: from out-19.mta1.migadu.com (out-19.mta1.migadu.com [IPv6:2001:41d0:203:375::13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B57E59
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 12:17:47 -0700 (PDT)
-Date:   Mon, 19 Jun 2023 15:17:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1687202265;
+        Mon, 19 Jun 2023 15:19:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577A2E5C
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 12:18:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687202297;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=kyPXfpVQ4C+B8nMExw9vaxU/T8HvIqFX6/+tZpsWRZk=;
-        b=W7xeUfMhioXlZpOSNVtKa+8xBg0rix59OVcvUz35FaQQkLVc47A7lTZtgKbJBJG24Mk9tl
-        m35qopb39p/Ct2MnipRlyA/LcAg0HZiWjSxkZeLfnuuhcbqmaQ9YzzJ/82jSptrRvF4VG1
-        bjM/b2Ad03rEpWR1gMybH8+6KcYzd+M=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-bcachefs@vger.kernel.org,
-        Kent Overstreet <kent.overstreet@gmail.com>,
+        bh=xsIBCnHr4DaWqSJb6zhumnwbJfejyz9/hGIX739o62I=;
+        b=d96EwpyLFeOWq78bP74wJCzmJIdqAFtbpiRzoYL5pQf9dYxQi1bfzNLO8fYQ9+vkysdF6c
+        tzUnyG2qrTPVoo77jZiXhr34le1goiizDVdz8nMrVlGNT03mawBLw/fXO5cjonvCYVJKBy
+        QAsWp8PzPqMiJazTPtJqnnTbhLMr98k=
+Received: from mail-vk1-f197.google.com (mail-vk1-f197.google.com
+ [209.85.221.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-228-HCBbQQdyNsGSXgq-IyTLMQ-1; Mon, 19 Jun 2023 15:18:16 -0400
+X-MC-Unique: HCBbQQdyNsGSXgq-IyTLMQ-1
+Received: by mail-vk1-f197.google.com with SMTP id 71dfb90a1353d-471603b2e6dso121859e0c.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 12:18:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687202295; x=1689794295;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xsIBCnHr4DaWqSJb6zhumnwbJfejyz9/hGIX739o62I=;
+        b=HdEkNhpAqoPR2vSdLYqcMZB9QvY6LpMAm1uL6XOSv8KFdFsfHBF+Npb9XCTYEEfFCn
+         MpsBBEeokQE/vDttPXIgT2hv50sFDZiwwq8EuL6trnHMxA5rPTCWxYNVQKzQ5T+Nwue2
+         /qMesi8NuUVDXpQ6f2LX1gEm729QTe9/8l5ihByXhHqwWhVub6crmzRG/AyPRV8TxgTO
+         8hyq6mucJpLuq4VA7/EnuxOaTvroP6NUkXlIl5SZOI4W7UFtiXqeTVGCVNJFz3SiBD9v
+         fwsFHvSH9KmeS9n8izrJY3UvsB55i4x7oQCRQzzhau0pFq3jGKVQHTeqi084KuIgvnkD
+         5d9A==
+X-Gm-Message-State: AC+VfDy7QRSCAxeZZEHMbPWooV1Y2IQ6iNuk+yzGalxmzCBabO7u152H
+        WISB3uzU//vhUQcmLM1M8wI6H1ALYPNmQi6nJmkaPGa2TpHeOj5yULy6Fb+U1igbavj5iMwO2FS
+        mE4QvkNnod7mmViXYHJZr8J5R
+X-Received: by 2002:a05:6102:2924:b0:440:a800:c005 with SMTP id cz36-20020a056102292400b00440a800c005mr2117948vsb.1.1687202295434;
+        Mon, 19 Jun 2023 12:18:15 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4sKJJix/7pu6y3jAziZG2YsnBRDijpBnhMwlZLNMyr2x2ZEEF57I1Q9nvSMkv3Frdyrl0w9g==
+X-Received: by 2002:a05:6102:2924:b0:440:a800:c005 with SMTP id cz36-20020a056102292400b00440a800c005mr2117931vsb.1.1687202295153;
+        Mon, 19 Jun 2023 12:18:15 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id h17-20020ae9ec11000000b0074def53eca5sm240162qkg.53.2023.06.19.12.18.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 12:18:14 -0700 (PDT)
+Date:   Mon, 19 Jun 2023 15:18:13 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>, linux-mm@kvack.org,
-        Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@kernel.org>
-Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
-Message-ID: <20230619191740.2qmlza3inwycljih@moria.home.lan>
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
- <20230509165657.1735798-8-kent.overstreet@linux.dev>
- <ZJAdhBIvwFBOFQU/@FVFF77S0Q05N>
- <20230619104717.3jvy77y3quou46u3@moria.home.lan>
- <ZJBOVsFraksigfRF@FVFF77S0Q05N.cambridge.arm.com>
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        James Houghton <jthoughton@google.com>,
+        Hugh Dickins <hughd@google.com>
+Subject: Re: [PATCH 5/7] mm/gup: Cleanup next_page handling
+Message-ID: <ZJCp9aBS8INMkehh@x1n>
+References: <20230613215346.1022773-1-peterx@redhat.com>
+ <20230613215346.1022773-6-peterx@redhat.com>
+ <f4087efd-36c3-4e3a-96ce-44dbd1a0b5d7@lucifer.local>
+ <5886f78c-3ff8-4b64-9aa6-027c22e7d5fc@lucifer.local>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZJBOVsFraksigfRF@FVFF77S0Q05N.cambridge.arm.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+In-Reply-To: <5886f78c-3ff8-4b64-9aa6-027c22e7d5fc@lucifer.local>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,57 +90,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 01:47:18PM +0100, Mark Rutland wrote:
-> Sorry, but I do have an engineering rationale here: I want to make sure that
-> this actually works, on architectures that I care about, and will be
-> maintanable long-term.
+On Sat, Jun 17, 2023 at 09:00:34PM +0100, Lorenzo Stoakes wrote:
+> On Sat, Jun 17, 2023 at 08:48:38PM +0100, Lorenzo Stoakes wrote:
+> > On Tue, Jun 13, 2023 at 05:53:44PM -0400, Peter Xu wrote:
+> > > The only path that doesn't use generic "**pages" handling is the gate vma.
+> > > Make it use the same path, meanwhile tune the next_page label upper to
+> > > cover "**pages" handling.  This prepares for THP handling for "**pages".
+> > >
+> > > Signed-off-by: Peter Xu <peterx@redhat.com>
+> > > ---
+> > >  mm/gup.c | 7 +++----
+> > >  1 file changed, 3 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/mm/gup.c b/mm/gup.c
+> > > index 8d59ae4554e7..a2d1b3c4b104 100644
+> > > --- a/mm/gup.c
+> > > +++ b/mm/gup.c
+> > > @@ -1135,7 +1135,7 @@ static long __get_user_pages(struct mm_struct *mm,
+> > >  			if (!vma && in_gate_area(mm, start)) {
+> > >  				ret = get_gate_page(mm, start & PAGE_MASK,
+> > >  						gup_flags, &vma,
+> > > -						pages ? &pages[i] : NULL);
+> > > +						pages ? &page : NULL);
+> >
+> > Good spot... ugh that we handled this differently.
+> >
+> > >  				if (ret)
+> > >  					goto out;
+> > >  				ctx.page_mask = 0;
+> >
+> > We can drop this line now right? As the new next_page block will duplicate
+> > this.
 > 
-> We've had a bunch of problems with other JITs ranging from JIT-local "we got
-> the encoding wrong" to major kernel infrastructure changes like tasks RCU rude
-> synchronization. I'm trying to figure out whether any of those are likely to
-> apply and/or whether we should be refactoring other infrastructure for use here
-> (e.g. the factoring the acutal instruction generation from arch code, or
-> perhaps reusing eBPF so this can be arch-neutral).
+> OK I can see why you left this in given the last patch in the series :)
+> Please disregard.
+
+Yes the other "page_mask=0" will be removed in the next (not last) patch.
+
 > 
-> I appreciate that's not clear from my initial mail, but please don't jump
-> straight to assuming I'm adversarial here.
+> >
+> > > @@ -1205,19 +1205,18 @@ static long __get_user_pages(struct mm_struct *mm,
+> > >  				ret = PTR_ERR(page);
+> > >  				goto out;
+> > >  			}
+> > > -
+> > > -			goto next_page;
+> >
+> > This is neat, we've already checked if pages != NULL so the if (pages)
+> > block at the new next_page label will not be run.
 
-I know you're not trying to be adversarial, but vague negative feedback
-_is_ hostile, because productive technical discussions can't happen
-without specifics and you're putting all the onus on the other person to
-make that happen.
+Yes.
 
-When you're raising an issue, try be specific - don't make people dig.
-If you're unable to be specific, perhaps you're not the right person to
-be raising the issue.
+> >
+> > >  		} else if (IS_ERR(page)) {
+> > >  			ret = PTR_ERR(page);
+> > >  			goto out;
+> > >  		}
+> > > +next_page:
+> > >  		if (pages) {
+> > >  			pages[i] = page;
+> > >  			flush_anon_page(vma, page, start);
+> > >  			flush_dcache_page(page);
+> >
+> > I guess there's no harm that we now flush here, though it seems to me to be
+> > superfluous, it's not a big deal I don't think.
 
-I'm of course happy to answer questions that haven't already been asked.
+I'd say GUP on gate vma page should be so rare so yeah I think it shouldn't
+be a big deal.  Even iiuc vsyscall=xonly should be the default, so gup may
+have already failed on a gate vma page even trying to read-only..
 
-This code is pretty simple as JITs go. With the existing, vmalloc_exec()
-based code, there aren't any fancy secondary mappings going on, so no
-crazy cache coherency games, and no crazy syncronization issues to worry
-about: the jit functions are protected by the per-btree-node locks.
+> >
+> > >  			ctx.page_mask = 0;
+> > >  		}
+> > > -next_page:
+> > > +
+> > >  		page_increm = 1 + (~(start >> PAGE_SHIFT) & ctx.page_mask);
+> > >  		if (page_increm > nr_pages)
+> > >  			page_increm = nr_pages;
+> > > --
+> > > 2.40.1
+> > >
+> >
+> > Other than that, LGTM,
+> >
+> > Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
 
-vmalloc_exec() isn't being upstreamed however, since people don't want
-WX mappings.
+Thanks for looking!
 
-The infrastructure changes we need (and not just for bcachefs) are
- - better executable memory allocation API, with support for sub-page
-   allocations: this is already being worked on, the prototype slab
-   allocator I posted is probably going to be the basis for part of this
+-- 
+Peter Xu
 
- - an arch indepenendent version of text_poke(): we don't want user code
-   to be flipping page permissions to update text, text_poke() is the
-   proper API but it's x86 only. No one has volunteered for this yet.
-
-Re-using eBPF for bcachefs's unpack functions is not outside the realm
-of possibility, but BPF is a heavy, complex dependency - it's not
-something I'll be looking at unless the BPF people are volunteering to
-refactor their stuff to provide a suitable API.
-
-> One thing I note mmediately is that HAVE_BCACHEFS_COMPILED_UNPACK seems to be
-> x86-only. If this is important, that'll need some rework to either be
-> arch-neutral or allow for arch-specific implementations.
-
-Correct. Arm will happen at some point, but it's not an immediate
-priority.
