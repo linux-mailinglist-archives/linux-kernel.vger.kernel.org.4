@@ -2,142 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6421A735BEA
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 18:07:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2E05735BF3
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 18:12:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232152AbjFSQHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 12:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59402 "EHLO
+        id S231875AbjFSQMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 12:12:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232126AbjFSQHC (ORCPT
+        with ESMTP id S229448AbjFSQMc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 12:07:02 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B528F95;
-        Mon, 19 Jun 2023 09:07:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687190820; x=1718726820;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=m+jbbq5rQUt/MAZUXn1lznCro4VPPLa6sXO1lMHLgpQ=;
-  b=HR+6NxKUK7lkuJnFdGcHIFgaRcExmLhAyNFmKKRcfKOcPhn+POQh1R+M
-   AWyK50awYFJao7O2WtNQ9Z0LLwJzQdDyLssuv3gNVkNZam0gAgmgbZHXy
-   OaOu/HGi7nndkuvU0HlQMxux/hmIGXgY7d4BPB9/KyMz+8x9xG+SqUDm3
-   WUA4igxOY2J8q6EuYQWQdsEfbm7WnNiqNcZi9aI+zsQmaraTeTsfuntRc
-   ug0pT2Z65DOGGM/ZIjKTymP1dSW0pKIm8Zu39CLtDOjgqbrgyiFkG0ew1
-   I++1nI8UnzSC9WiV3Qrhj9QeNl+73qgFtXc0fqqAUVTCf8lYJ5Teqj0+u
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="339278072"
-X-IronPort-AV: E=Sophos;i="6.00,255,1681196400"; 
-   d="scan'208";a="339278072"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 09:06:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="707938021"
-X-IronPort-AV: E=Sophos;i="6.00,255,1681196400"; 
-   d="scan'208";a="707938021"
-Received: from ijarvine-mobl2.ger.corp.intel.com ([10.252.61.238])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 09:06:53 -0700
-Date:   Mon, 19 Jun 2023 19:06:51 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-cc:     Lukas Wunner <lukas@wunner.de>, linux-pci@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Wilczy??ski <kw@linux.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        =?ISO-8859-15?Q?Stefan_M=E4tje?= <stefan.maetje@esd.eu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jesse Barnes <jbarnes@virtuousgeek.org>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Shaohua Li <shaohua.li@intel.com>,
-        Thomas Renninger <trenn@suse.de>,
-        Greg Kroah-Hartman <gregkh@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dean Luick <dean.luick@cornelisnetworks.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2 3/9] PCI/ASPM: Use RMW accessors for changing LNKCTL
-In-Reply-To: <20230619150944.GA8560@bhelgaas>
-Message-ID: <987455-5d85-ecf1-145c-694b3de96340@linux.intel.com>
-References: <20230619150944.GA8560@bhelgaas>
+        Mon, 19 Jun 2023 12:12:32 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9182B1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:12:31 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f8f3786f1dso40133595e9.2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:12:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687191150; x=1689783150;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=v0/b2EjSkCTg8kSWGnyoY5ofxy0GORXIjVW1oN5fAkI=;
+        b=hOrLIhP3eghCi8ZLw5KuAl3EYvGzAwacdIJP8r3PCS8+eO157uGjvOl0mswuigm8i+
+         3rWQ4iVLhlnpxk/Ho7ovyZ0ewMaczC27GDpfXoxwkYXAyOj4Rf1tmm6j6zlj33kHuLp/
+         nv3BINASFrSa3aEx+PqEDPICI/DnOxY4fFU0PvIR2C5ahPBW5Nr/FVI9rB7k3BCnBB7j
+         1EJ9DApUIWAGUguoZ7duFObmn8SNd2WtWGh75XKdVkAXx3x/m4JeApU1bmw4WzQGQTa1
+         7snk4W16BWgZgdu8zEnssNTquwTxDF+jkqX9Xb7dtipmQwNeGOzHp3La4kv+BuwkrWgC
+         FkAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687191150; x=1689783150;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=v0/b2EjSkCTg8kSWGnyoY5ofxy0GORXIjVW1oN5fAkI=;
+        b=Oj548uXWWseRXTChPwxpQAR1Bxy7v/9APVtI0VheYEy382L4q6sLAhrbEztMm90rWC
+         MMS1BAQSW+fy3WmhXJLHH62VF54/VX5YvzqUZ37voPa6ei4SqTOt71Z8/VYlJCG3PYB2
+         vuX8L39I2U6qVqvrODSvIUd4hg3iLVkVQvyvE5eIj1w86aiLOC6GIKvZAKMjQ5I0lMkh
+         r4vxmZz0ROJZog0OgOudDicjw7/C5yNh2Q6VbdAoR18p++j9pa/mD161UpWFAEI7hJIr
+         Bgb+1bI2ktqzDYhTeBy91Ge5qVz7M2YtykFcJm+nuXPHsM++W0KMU2moMcgonLO18xsB
+         7GGg==
+X-Gm-Message-State: AC+VfDyJv5vk26ifDtGDoJc7qLK5UfqkHJb94M/gaJefk61JDY2VxvA8
+        2ZCEwbsT6cdZplRyqRqWT8EBltr9hgI+HIAthwo=
+X-Google-Smtp-Source: ACHHUZ7Jius8lE7B9o8DmcK3xv1xBW2j/h8yXk8k2d4mvYFLUUvsMtvnPOG+51chV5CbC9Tj5mrOeA==
+X-Received: by 2002:a1c:ed08:0:b0:3f7:f584:5796 with SMTP id l8-20020a1ced08000000b003f7f5845796mr10625015wmh.2.1687191150340;
+        Mon, 19 Jun 2023 09:12:30 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:13d0:1b6c:ce40:5429? ([2a05:6e02:1041:c10:13d0:1b6c:ce40:5429])
+        by smtp.googlemail.com with ESMTPSA id u23-20020a05600c00d700b003f78fd2cf5esm78197wmm.40.2023.06.19.09.12.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Jun 2023 09:12:29 -0700 (PDT)
+Message-ID: <a98f4b5b-5656-a960-61d1-a258a1681784@linaro.org>
+Date:   Mon, 19 Jun 2023 18:12:29 +0200
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1360604632-1687190818=:1758"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 2/3] clocksource: Add StarFive timer driver
+Content-Language: en-US
+To:     Xingyu Wu <xingyu.wu@starfivetech.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Samin Guo <samin.guo@starfivetech.com>,
+        linux-kernel@vger.kernel.org, Conor Dooley <conor@kernel.org>
+References: <20230320135433.144832-1-xingyu.wu@starfivetech.com>
+ <20230320135433.144832-3-xingyu.wu@starfivetech.com>
+ <506c0a1e-a839-c9b7-1b04-7fb3af535fe0@starfivetech.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <506c0a1e-a839-c9b7-1b04-7fb3af535fe0@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On 02/06/2023 11:45, Xingyu Wu wrote:
+> On 2023/3/20 21:54, Xingyu Wu wrote:
+>> Add timer driver for the StarFive JH7110 SoC.
+>>
+>> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+>> ---
 
---8323329-1360604632-1687190818=:1758
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
+[ ... ]
 
-On Mon, 19 Jun 2023, Bjorn Helgaas wrote:
-
-> On Mon, Jun 19, 2023 at 05:45:06PM +0300, Ilpo Järvinen wrote:
-> > On Fri, 16 Jun 2023, Lukas Wunner wrote:
-> > > On Wed, May 17, 2023 at 01:52:29PM +0300, Ilpo Järvinen wrote:
-> > > > Don't assume that the device is fully under the control of ASPM and use
-> > > > RMW capability accessors which do proper locking to avoid losing
-> > > > concurrent updates to the register values.
-> > > > 
-> > > > If configuration fails in pcie_aspm_configure_common_clock(), the
-> > > > function attempts to restore the old PCI_EXP_LNKCTL_CCC settings. Store
-> > > > only the old PCI_EXP_LNKCTL_CCC bit for the relevant devices rather
-> > > > than the content of the whole LNKCTL registers. It aligns better with
-> > > > how pcie_lnkctl_clear_and_set() expects its parameter and makes the
-> > > > code more obvious to understand.
-> > > [...]
-> > > > @@ -224,17 +223,14 @@ static bool pcie_retrain_link(struct pcie_link_state *link)
-> > > >  	if (!pcie_wait_for_retrain(parent))
-> > > >  		return false;
-> > > >  
-> > > > -	pcie_capability_read_word(parent, PCI_EXP_LNKCTL, &reg16);
-> > > > -	reg16 |= PCI_EXP_LNKCTL_RL;
-> > > > -	pcie_capability_write_word(parent, PCI_EXP_LNKCTL, reg16);
-> > > > +	pcie_capability_set_word(parent, PCI_EXP_LNKCTL, PCI_EXP_LNKCTL_RL);
-> > > >  	if (parent->clear_retrain_link) {
-> > > 
-> > > This and several other RMW operations in drivers/pci/pcie/aspm.c
-> > > are touched by commit b1689799772a ("PCI/ASPM: Use distinct local
-> > > vars in pcie_retrain_link()") which got applied to pci/enumeration
-> > > this week:
-> > > 
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git/commit/?h=enumeration&id=b1689799772a6f4180f918b0ff66e264a3db9796
-> > > 
-> > > As a result the $SUBJECT_PATCH no longer applies cleanly and needs
-> > > to be respun.
-> > 
-> > Okay but I'm a bit lost which commit/head in pci repo I should now base 
-> > this series because there's a conflict between pci/aspm and 
-> > pci/enumeration which is not resolved in the repo because pci/enumeration 
-> > hasn't advanced into pci/next yet. Any suggestion?
+> Hi Daniel and Thomas,
 > 
-> Generally speaking I prefer patches based on the PCI "main" branch
-> (usually -rc1) because I base topic branches on that.  If there are
-> conflicts with other pending material, it's great if you can mention
-> them, but I can resolve them when applying, so no need to repost just
-> for that.
+> I have submitted patches for Timer driver. Could you please help to review and give your comments?
 
-Just to confirm I'm understanding this correctly... Am I supposed to send
-a patch whose changelog description and diff do not agree?? (The diff 
-will still modify pcie/aspm.c if it's main-based and the description 
-refers to something more generic as per Lukas' request since the code got 
-moved into pci.c in the enumeration branch).
+You told in the series you will send a new version
 
 
 -- 
- i.
+<http://www.linaro.org/> Linaro.org â”‚ Open source software for ARM SoCs
 
---8323329-1360604632-1687190818=:1758--
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
