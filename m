@@ -2,150 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD4BD735CDC
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 19:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6EAB735CE2
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 19:16:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232016AbjFSRQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 13:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58132 "EHLO
+        id S231944AbjFSRQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 13:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231944AbjFSRP4 (ORCPT
+        with ESMTP id S229454AbjFSRQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 13:15:56 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D521E133;
-        Mon, 19 Jun 2023 10:15:54 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f86fbe5e4fso1753825e87.2;
-        Mon, 19 Jun 2023 10:15:54 -0700 (PDT)
+        Mon, 19 Jun 2023 13:16:20 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1921186
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 10:16:10 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f7deee339dso4459312e87.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 10:16:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687194953; x=1689786953;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=5aYWsp6KbNeg2MOX/P43UYoIALiLHt3j0iMIOhhdmlE=;
-        b=BmN9Mk80Pk9Ym6baqM3DnlOYhyiaMso3ZigbZSz1mhHjaDrRhEqfFDBmQrB5VR6nuX
-         SewCKBFFMvL424WvDFbQqgc82TWDotFwPdS3VhLDiQFIOfCVQvaNElZgsDs9lUuhzDAH
-         5k2mrcZKGNpJBmdGCTpuMlDPPaWiMTIXm5gM4yrGq5tJFNLDVwgrklQgd02BLTZwfP7a
-         mkmcWZZdTj/cNE0Bf0iZ9MBtYhRpcK+ZaU72yQ9B8PknwKiDGFbon6V6O7Q5Lopw8C91
-         6CipsTcX64gI7txbbTk7iGyUyVVWIFhOErvJs0qoycF6mczWlM2egbZ0ZLTfS1BiQ7eh
-         Czlg==
+        d=linaro.org; s=google; t=1687194968; x=1689786968;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=j2FcjPKCgbA6FW2FWS/o1DzGvlA6sM5LXsqFHbYxl0k=;
+        b=y5VRgkWag5kk6OyxAbcRd6LI7uQQX6lhtCTJu2m+I9VwYCLFeqt31j/Rtum0mEFltG
+         ZBQcrWGMSjJNNG4QiSoFTq2tLXA+/mMVvh1I3Z3BQK8yJIZsvgS2xo9iGfp71yPGhbSx
+         BF7qajLaJ+mw0Pze5/yWBXWSb6OjvHY6UtU9cJOqm4ZlKgt5oqB8n7kINYQ4fGCHacqb
+         mWgF6IIS4Rd3qzmBkey3QV5zZnmEoh5GJaquW6u46Ph217wj2ZPVYEl45TIa03ykO2e2
+         6fwMf3I1a3by+myvS/n9djAqxYcEDGDB81OarVXAp9q5F3MGo3XiLp0+eaWbmOXME0i4
+         AeIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687194953; x=1689786953;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20221208; t=1687194968; x=1689786968;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5aYWsp6KbNeg2MOX/P43UYoIALiLHt3j0iMIOhhdmlE=;
-        b=DprPfPax4mLDDiwLwgnph1yFnfGb4mb+xmrMTR8Dj/uzSxKSLmVEzV0EOO2X0JPpnQ
-         sGoycRhmM0lBhNtgammLCoPdqY1NmqLh58MsERMrdX+xwO1DoyY3NYv8QoX5VN95hZJQ
-         1HBb+X5CVZdBfhYqqo0ari9aafyhPXlvsXIZWHa2kFPw1fJ+mZa8FhgJf5KIqiAzVGYD
-         RUXXO5G1g6ReT55BL+JMeXN7pMeMTmiIOSs5E9TlZTL4Jn2QT8nFR+xFxMfDySGFXD/K
-         Zh1sK0HuksZVq6pAQeRd/nqoFmQZ3g4tmjfDMEqkYRkT484v3SaOU+KqPUFl93VNnp0C
-         E5Lg==
-X-Gm-Message-State: AC+VfDyn3ghz8tUXKCBgDoVImlSanj+h/Yr9sZ9bW6cj45Ta7q089j2x
-        4hr0A2Hg12am2WE1UiewQkR6xBRPRbw=
-X-Google-Smtp-Source: ACHHUZ76hDLrxNh0ERjPVOjRpi6DyVvvGML4dNgAzJWTdUN8AWWoMYe5VOExYEEiSfW1Laso5AogZA==
-X-Received: by 2002:ac2:5f9b:0:b0:4f3:78c2:2a6d with SMTP id r27-20020ac25f9b000000b004f378c22a6dmr5405123lfe.3.1687194952750;
-        Mon, 19 Jun 2023 10:15:52 -0700 (PDT)
-Received: from mobilestation.baikal.int (srv1.baikalchip.ru. [87.245.175.227])
-        by smtp.gmail.com with ESMTPSA id a9-20020a19f809000000b004f3a71a9e72sm12875lff.102.2023.06.19.10.15.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 10:15:52 -0700 (PDT)
-Date:   Mon, 19 Jun 2023 20:15:50 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     =?utf-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
-Cc:     Cai Huoqing <cai.huoqing@linux.dev>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>
-Subject: Re: [PATCH 5/9] dmaengine: dw-edma: HDMA: Fix possible race
- condition in remote setup
-Message-ID: <20230619171550.3iyujmbre3dpe5oq@mobilestation.baikal.int>
-References: <20230609081654.330857-1-kory.maincent@bootlin.com>
- <20230609081654.330857-6-kory.maincent@bootlin.com>
+        bh=j2FcjPKCgbA6FW2FWS/o1DzGvlA6sM5LXsqFHbYxl0k=;
+        b=FxYXyGoZVfHS9+lSJK3D2vX8arjD3iXiGyw/zc5qNAMjqVys/h17x6wgVIDxy5GN9L
+         0l2EcsGeiWjS9GA5NDLLxrn3+sznqOUQeuycK5eSS0Z1/UeebPdb3xULzrJHLXeI7LhC
+         so31I/Qj7Y/KwUcB8HRq8iwABEjevpA7vVa4YpFWY/bcdWLoMLKtL6TjWKisUfY3qdt5
+         EhSOgPC89AlX3jyunNqjdSeTiKL68GrF4tN6cCvluBxhVTJEzfMmlrmQRbKg2cXKAvev
+         X/CEatxROGtLk67N8tWUPB2vuinulA47+rxXuZtf6FJwQpRKxda46Q4euh7rAQ1kqARW
+         Fgqw==
+X-Gm-Message-State: AC+VfDzzoLUt6lg/jIME3DiktUXREvRRDu5PAGrL5ufa1eVNwlyN2yqx
+        VxzZT7WdNupwJyQItuOiKpI7Pw==
+X-Google-Smtp-Source: ACHHUZ7T8wisZqG9VbGvGIRQJ/2+tzyUbNYkisc0gFT4RNkXV7f32ZQR/bewP+3cIRceTtP0/7JVTA==
+X-Received: by 2002:ac2:5d28:0:b0:4f8:4255:16ca with SMTP id i8-20020ac25d28000000b004f8425516camr5346744lfb.38.1687194968698;
+        Mon, 19 Jun 2023 10:16:08 -0700 (PDT)
+Received: from [192.168.1.101] (abyl242.neoplus.adsl.tpnet.pl. [83.9.31.242])
+        by smtp.gmail.com with ESMTPSA id o4-20020a056512050400b004f85f908f91sm17084lfb.19.2023.06.19.10.16.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Jun 2023 10:16:08 -0700 (PDT)
+Message-ID: <c542a678-fbbb-35ca-d286-34fc3926cbcb@linaro.org>
+Date:   Mon, 19 Jun 2023 19:16:02 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230609081654.330857-6-kory.maincent@bootlin.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 3/4] ARM: dts: qcom: ipq8064: drop spi-max-frequency from
+ controller
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230619170151.65505-1-krzysztof.kozlowski@linaro.org>
+ <20230619170151.65505-3-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230619170151.65505-3-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 10:16:50AM +0200, Köry Maincent wrote:
-> From: Kory Maincent <kory.maincent@bootlin.com>
+On 19.06.2023 19:01, Krzysztof Kozlowski wrote:
+> spi-max-frequency is a property of SPI device, not SPI controller.  Drop
+> it from the controller nodes.  No functional impact expected because
+> child SPI device already defines spi-max-frequency.  This fixes
+> dtbs_check warnings like:
 > 
-> When writing the linked list elements and pointer the control need to be
-> written at the end. If the control is written and the SAR and DAR not
-> stored we could face a race condition.
+>   qcom-ipq8064-ap148.dtb: spi@1a280000: Unevaluated properties are not allowed ('spi-max-frequency' was unexpected)
 > 
-> Fixes: e74c39573d35 ("dmaengine: dw-edma: Add support for native HDMA")
-> Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
-
-Once again. Is this a hypothetical bug or have you actually
-experienced the denoted problem? If you do please describe the
-circumstances, give more details. Otherwise it sounds weird. Here is
-why.
-
-DW eDMA HW manual states that the control LL DWORD is indeed supposed
-to be written after the rest of the descriptor DWORDs are written. But
-AFAICS it's only relevant for the LL tree entries recycling. Current
-DW eDMA driver design doesn't truly implement that pattern. Instead
-the DMA transfer is halted at the end of the chunk. Then the engine is
-recharged with the next chunk and execution is started over. So the
-runtime recycling isn't implemented (alas) for which the CB flag of
-the control DWORD needs to be updated only after the rest of the LLI
-fields.
-
-If you described a hypothetical problem then it would be ok to accept
-the change for the sake of consistency but I would have dropped the
-Fixes tag and updated the patch description with more details of the
-race condition you are talking about.
-
--Serge(y)
-
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>  arch/arm/boot/dts/qcom-ipq8064-rb3011.dts | 1 -
+>  arch/arm/boot/dts/qcom-ipq8064-v1.0.dtsi  | 1 -
+>  2 files changed, 2 deletions(-)
 > 
-> This patch is fixing a commit which is only in dmaengine tree and not
-> merged mainline.
-> ---
->  drivers/dma/dw-edma/dw-hdma-v0-core.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/dma/dw-edma/dw-hdma-v0-core.c b/drivers/dma/dw-edma/dw-hdma-v0-core.c
-> index 0b77ddbe91b5..f28e1671a753 100644
-> --- a/drivers/dma/dw-edma/dw-hdma-v0-core.c
-> +++ b/drivers/dma/dw-edma/dw-hdma-v0-core.c
-> @@ -162,10 +162,10 @@ static void dw_hdma_v0_write_ll_data(struct dw_edma_chunk *chunk, int i,
->  	} else {
->  		struct dw_hdma_v0_lli __iomem *lli = chunk->ll_region.vaddr.io + ofs;
+> diff --git a/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts b/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
+> index 104eb729c2d6..1796ded31d17 100644
+> --- a/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
+> +++ b/arch/arm/boot/dts/qcom-ipq8064-rb3011.dts
+> @@ -282,7 +282,6 @@ gsbi5: gsbi@1a200000 {
 >  
-> -		writel(control, &lli->control);
->  		writel(size, &lli->transfer_size);
->  		writeq(sar, &lli->sar.reg);
->  		writeq(dar, &lli->dar.reg);
-> +		writel(control, &lli->control);
->  	}
->  }
+>  			spi4: spi@1a280000 {
+>  				status = "okay";
+> -				spi-max-frequency = <50000000>;
 >  
-> @@ -182,8 +182,8 @@ static void dw_hdma_v0_write_ll_link(struct dw_edma_chunk *chunk,
->  	} else {
->  		struct dw_hdma_v0_llp __iomem *llp = chunk->ll_region.vaddr.io + ofs;
+>  				pinctrl-0 = <&spi_pins>;
+>  				pinctrl-names = "default";
+> diff --git a/arch/arm/boot/dts/qcom-ipq8064-v1.0.dtsi b/arch/arm/boot/dts/qcom-ipq8064-v1.0.dtsi
+> index c5abe7151f14..17f65e140e02 100644
+> --- a/arch/arm/boot/dts/qcom-ipq8064-v1.0.dtsi
+> +++ b/arch/arm/boot/dts/qcom-ipq8064-v1.0.dtsi
+> @@ -30,7 +30,6 @@ gsbi5: gsbi@1a200000 {
 >  
-> -		writel(control, &llp->control);
->  		writeq(pointer, &llp->llp.reg);
-> +		writel(control, &llp->control);
->  	}
->  }
+>  			spi4: spi@1a280000 {
+>  				status = "okay";
+> -				spi-max-frequency = <50000000>;
 >  
-> -- 
-> 2.25.1
-> 
+>  				pinctrl-0 = <&spi_pins>;
+>  				pinctrl-names = "default";
