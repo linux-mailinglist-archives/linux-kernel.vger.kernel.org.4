@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC330735952
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 16:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40FA7735955
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 16:18:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231923AbjFSORz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 10:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
+        id S232172AbjFSOS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 10:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjFSORw (ORCPT
+        with ESMTP id S232160AbjFSOSV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 10:17:52 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639B6E7
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 07:17:51 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-666e916b880so1187407b3a.2
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 07:17:51 -0700 (PDT)
+        Mon, 19 Jun 2023 10:18:21 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5DC1186
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 07:18:20 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b5251e5774so14469255ad.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 07:18:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687184271; x=1689776271;
+        d=gmail.com; s=20221208; t=1687184300; x=1689776300;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=z2lE7a2e73x78sHkw8HLnq0fUJFGsUNME76JPhx8NgU=;
-        b=NHpLwEgbAllkTYZVBSWJFhrO127G4EAGk+PObZwauMv29q3xq9Ph+MbO26c4+j2cpA
-         MyCtGuYnHvcRP4YpAbZtZn+fBwsIeIStGioI/TNjNeVurN+ead6ZGjqRMnEvB/zEBCGp
-         3JllhG70x/GQD23zisSEKQBKLlaA0rkPyK0hKhbjNHWlcpJyB7btvhR2inltVM5YS4+l
-         0Xe8q5oCZoMx3PoPKpWeRfcRFLipYEiC3XaSDWaLM/lQGHgl702/BmR0298xXd/T+REJ
-         fDgzro9JD229vzbd9XdBIZ32rFH1iB5D3l7UPU/UH/nQWHt6LzeGMmkx3b6bfZ6rNBQf
-         AuCg==
+        bh=JQy84gQUtEAMC5sEhanysB2VGHkEqPs0ft2DSQHuBlk=;
+        b=TF9Ir8ArfA1ZmdS3lhs/0saMshbLdrbX3GKiqC6IrUHGC5nf306M71GvRX5jM6GN1L
+         WKsR2pilm46hyNOSHC3PfRaCZmyE610r9Z7Cndj+hdmPwsQ1NbsEDtel3g5Dp6Ge4vQo
+         C3gbgNk+j1HH+F4VW6EicBFXyp5kBWyTLoyCU9rZF7qe2LeNF9C+97HN3i4RatIlz3o4
+         z2j6gyuJ3wXqCNOFDR6khZTT7hV5sivUVE7trMGAaStGvNAWzOIt4uU5k4J0AtsdtGDw
+         ZJQA1fPQXXuC5nU3+Wt1HnAySOQmUVeUmbE4StTeOtkcTglcOMJ9V7axs8lq4D/UcWP4
+         xOOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687184271; x=1689776271;
+        d=1e100.net; s=20221208; t=1687184300; x=1689776300;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=z2lE7a2e73x78sHkw8HLnq0fUJFGsUNME76JPhx8NgU=;
-        b=WvKqkuB4WsTwFQN59qPvbFaq+LR91sRyDarlrrgqh9HfRhzK9L1UCyf+iGW1RVOdug
-         EuGN8jzLhH8yrHlVU22z2yIyOPfiM6uDcVUYgQlhDrkkQ4xwA5dA8bDeIiUXLGKF5Fv5
-         fdOaWhyi10YYcfSlSEkC7vuDeeqI6oeZnEkOlEoS0qaj63jGQx1SIAftc1pYHn0Wo2lP
-         Avptx2+J/dZMfVJUCQFLAJigpEcE5F1KekzXcwFycJKDOCHoQyNzjrUN/cTxlz59fcip
-         yXTSk8wzfupvL4sujikNJFgNEtph+dVko6c9VNRQpdHAFxr+E4L/egZPxy5o3nvjjkgX
-         JcNg==
-X-Gm-Message-State: AC+VfDyp3bG4zRG7C++gIxlTBHIzc7HaYBHWe+N6gn8FuABn+YWWDN4R
-        hkn+0nSaGwD2dGRN3kigc+I=
-X-Google-Smtp-Source: ACHHUZ71lOMJwPR5Z+FKfKg9o2n6I9rc5xObNqZMrTaCL5qHi7HhX5JyYX06DYG6aX7zVZ/htUYlLA==
-X-Received: by 2002:a05:6a20:9187:b0:11a:c012:4fdb with SMTP id v7-20020a056a20918700b0011ac0124fdbmr938782pzd.34.1687184270774;
-        Mon, 19 Jun 2023 07:17:50 -0700 (PDT)
+        bh=JQy84gQUtEAMC5sEhanysB2VGHkEqPs0ft2DSQHuBlk=;
+        b=Np+bDVsa5ilZMTDlCGKLYxlbDg8064L7B5ZOc/iJDJYrjPtbB3NzC7IK8yidwO0yFy
+         T+pOeVZRBGkp58sfsfjj97G283rPe1iB7Stuvvu/egm5ckyvlYT49t5zNWAFtsep81mu
+         PZ1tJ9757QDHiktCvV5US19ifgiI7TCCmgZb7dL+ZPv7p1vfdliQVh/6SB4LYZLuLlre
+         6z941DYfK4TlQjT9eyqedJA8JQPIBbaJLIJ0d6jZeieIgJwduomoFad+fuKZSmMc+nlt
+         2JgsXioLpJHWgEGmYU8IgJmUbpM5twH+8ve6yZ6HdGkkxUHpfE4ALKBjrmSMfwKynWjH
+         102A==
+X-Gm-Message-State: AC+VfDyVUu69JRZoVvEqHjvpH2I6y1JX/bBNvwC061kboKC+sB8G8NYz
+        FNqBrCHa6DcRapcX/I9Pg4U=
+X-Google-Smtp-Source: ACHHUZ4gJBaUyELc7uscWZ5vr2ruSCb1nPh4+1QxdZJOfW1HMPII/IxFC1SQyJwwqmnM7x4ICyEIaA==
+X-Received: by 2002:a17:902:d2cb:b0:1a9:40d5:b0ae with SMTP id n11-20020a170902d2cb00b001a940d5b0aemr1060217plc.12.1687184300199;
+        Mon, 19 Jun 2023 07:18:20 -0700 (PDT)
 Received: from zephyrusG14 ([103.251.210.211])
-        by smtp.gmail.com with ESMTPSA id x1-20020a056a00270100b005a8173829d5sm12177962pfv.66.2023.06.19.07.17.48
+        by smtp.gmail.com with ESMTPSA id b9-20020a170902d88900b001b55fe1b471sm2589127plz.302.2023.06.19.07.18.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 07:17:50 -0700 (PDT)
-Date:   Mon, 19 Jun 2023 19:47:46 +0530
+        Mon, 19 Jun 2023 07:18:19 -0700 (PDT)
+Date:   Mon, 19 Jun 2023 19:48:15 +0530
 From:   Yogesh Hegde <yogi.kernel@gmail.com>
 To:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
 Cc:     dan.carpenter@linaro.org, philipp.g.hortmann@gmail.com,
         linux-kernel-mentees@lists.linuxfoundation.org,
         skhan@linuxfoundation.org, ivan.orlov0322@gmail.com
-Subject: [PATCH v4 1/4] staging: rtl8192e: Rename variable SetWirelessMode
-Message-ID: <c0a65d217d272bf457917c89462c49e67bbfedb2.1687183827.git.yogi.kernel@gmail.com>
+Subject: [PATCH v4 2/4] staging: rtl8192e: Rename variable SetBWModeHandler
+Message-ID: <fe6c16cfe1d8f7ff41b5fce90fc63383fbfec4f5.1687183827.git.yogi.kernel@gmail.com>
 References: <cover.1687183827.git.yogi.kernel@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -73,7 +73,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename variable SetWirelessMode to set_wireless_mode to avoid
+Rename variable SetBWModeHandler to set_bw_mode_handler to avoid
 CamelCase which is not accepted by checkpatch.
 
 Signed-off-by: Yogesh Hegde <yogi.kernel@gmail.com>
@@ -89,88 +89,82 @@ v2: Removed the variable and called the function directly instead of
     just renaming the variable as suggested by Greg Kroah-Hartman
     <gregkh@linuxfoundation.org>.
 ---
- drivers/staging/rtl8192e/rtl8192e/rtl_core.c |  2 +-
- drivers/staging/rtl8192e/rtllib.h            |  2 +-
- drivers/staging/rtl8192e/rtllib_softmac.c    | 12 ++++++------
- 3 files changed, 8 insertions(+), 8 deletions(-)
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c | 2 +-
+ drivers/staging/rtl8192e/rtl819x_HTProc.c    | 4 ++--
+ drivers/staging/rtl8192e/rtllib.h            | 6 +++---
+ drivers/staging/rtl8192e/rtllib_softmac_wx.c | 4 ++--
+ 4 files changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-index 9cb4ae9ba970..51748166eecc 100644
+index 51748166eecc..a06d1c4e778a 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
 +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-@@ -716,7 +716,7 @@ static void _rtl92e_init_priv_handler(struct net_device *dev)
- 	priv->rtllib->check_nic_enough_desc	= _rtl92e_check_nic_enough_desc;
- 	priv->rtllib->handle_assoc_response	= _rtl92e_handle_assoc_response;
+@@ -718,7 +718,7 @@ static void _rtl92e_init_priv_handler(struct net_device *dev)
  	priv->rtllib->handle_beacon		= _rtl92e_handle_beacon;
--	priv->rtllib->SetWirelessMode		= rtl92e_set_wireless_mode;
-+	priv->rtllib->set_wireless_mode		= rtl92e_set_wireless_mode;
+ 	priv->rtllib->set_wireless_mode		= rtl92e_set_wireless_mode;
  	priv->rtllib->LeisurePSLeave		= rtl92e_leisure_ps_leave;
- 	priv->rtllib->SetBWModeHandler		= rtl92e_set_bw_mode;
+-	priv->rtllib->SetBWModeHandler		= rtl92e_set_bw_mode;
++	priv->rtllib->set_bw_mode_handler	= rtl92e_set_bw_mode;
  	priv->rf_set_chan			= rtl92e_set_channel;
+ 
+ 	priv->rtllib->start_send_beacons = rtl92e_start_beacon;
+diff --git a/drivers/staging/rtl8192e/rtl819x_HTProc.c b/drivers/staging/rtl8192e/rtl819x_HTProc.c
+index 7ee3cb846ca1..f9fa3f2bb728 100644
+--- a/drivers/staging/rtl8192e/rtl819x_HTProc.c
++++ b/drivers/staging/rtl8192e/rtl819x_HTProc.c
+@@ -833,11 +833,11 @@ static void HTSetConnectBwModeCallback(struct rtllib_device *ieee)
+ 			ieee->set_chan(ieee->dev,
+ 				       ieee->current_network.channel);
+ 
+-		ieee->SetBWModeHandler(ieee->dev, HT_CHANNEL_WIDTH_20_40,
++		ieee->set_bw_mode_handler(ieee->dev, HT_CHANNEL_WIDTH_20_40,
+ 				       ht_info->CurSTAExtChnlOffset);
+ 	} else {
+ 		ieee->set_chan(ieee->dev, ieee->current_network.channel);
+-		ieee->SetBWModeHandler(ieee->dev, HT_CHANNEL_WIDTH_20,
++		ieee->set_bw_mode_handler(ieee->dev, HT_CHANNEL_WIDTH_20,
+ 				       HT_EXTCHNL_OFFSET_NO_EXT);
+ 	}
+ 
 diff --git a/drivers/staging/rtl8192e/rtllib.h b/drivers/staging/rtl8192e/rtllib.h
-index cdd167de127f..581d568476ce 100644
+index 581d568476ce..b3d6699b31ed 100644
 --- a/drivers/staging/rtl8192e/rtllib.h
 +++ b/drivers/staging/rtl8192e/rtllib.h
-@@ -1690,7 +1690,7 @@ struct rtllib_device {
- 				 enum ht_channel_width bandwidth,
- 				 enum ht_extchnl_offset Offset);
+@@ -1686,9 +1686,9 @@ struct rtllib_device {
+ 
+ 	/* check whether Tx hw resource available */
+ 	short (*check_nic_enough_desc)(struct net_device *dev, int queue_index);
+-	void (*SetBWModeHandler)(struct net_device *dev,
+-				 enum ht_channel_width bandwidth,
+-				 enum ht_extchnl_offset Offset);
++	void (*set_bw_mode_handler)(struct net_device *dev,
++				    enum ht_channel_width bandwidth,
++				    enum ht_extchnl_offset Offset);
  	bool (*GetNmodeSupportBySecCfg)(struct net_device *dev);
--	void (*SetWirelessMode)(struct net_device *dev, u8 wireless_mode);
-+	void (*set_wireless_mode)(struct net_device *dev, u8 wireless_mode);
+ 	void (*set_wireless_mode)(struct net_device *dev, u8 wireless_mode);
  	bool (*GetHalfNmodeSupportByAPsHandler)(struct net_device *dev);
- 	u8   (*rtllib_ap_sec_type)(struct rtllib_device *ieee);
- 	void (*InitialGainHandler)(struct net_device *dev, u8 Operation);
-diff --git a/drivers/staging/rtl8192e/rtllib_softmac.c b/drivers/staging/rtl8192e/rtllib_softmac.c
-index 7494c7e6fff6..0eaff91d92bd 100644
---- a/drivers/staging/rtl8192e/rtllib_softmac.c
-+++ b/drivers/staging/rtl8192e/rtllib_softmac.c
-@@ -1470,7 +1470,7 @@ static void rtllib_associate_complete_wq(void *data)
- 		netdev_info(ieee->dev, "Using G rates:%d\n", ieee->rate);
- 	} else {
- 		ieee->rate = 22;
--		ieee->SetWirelessMode(ieee->dev, WIRELESS_MODE_B);
-+		ieee->set_wireless_mode(ieee->dev, WIRELESS_MODE_B);
- 		netdev_info(ieee->dev, "Using B rates:%d\n", ieee->rate);
+diff --git a/drivers/staging/rtl8192e/rtllib_softmac_wx.c b/drivers/staging/rtl8192e/rtllib_softmac_wx.c
+index be82f0a655e8..d8c7b7377132 100644
+--- a/drivers/staging/rtl8192e/rtllib_softmac_wx.c
++++ b/drivers/staging/rtl8192e/rtllib_softmac_wx.c
+@@ -335,7 +335,7 @@ void rtllib_wx_sync_scan_wq(void *data)
+ 		b40M = 1;
+ 		chan_offset = ieee->ht_info->CurSTAExtChnlOffset;
+ 		bandwidth = (enum ht_channel_width)ieee->ht_info->bCurBW40MHz;
+-		ieee->SetBWModeHandler(ieee->dev, HT_CHANNEL_WIDTH_20,
++		ieee->set_bw_mode_handler(ieee->dev, HT_CHANNEL_WIDTH_20,
+ 				       HT_EXTCHNL_OFFSET_NO_EXT);
  	}
- 	if (ieee->ht_info->bCurrentHTSupport && ieee->ht_info->enable_ht) {
-@@ -1654,12 +1654,12 @@ inline void rtllib_softmac_new_net(struct rtllib_device *ieee,
- 				    (ieee->modulation &
- 				     RTLLIB_OFDM_MODULATION)) {
- 					ieee->rate = 108;
--					ieee->SetWirelessMode(ieee->dev, WIRELESS_MODE_G);
-+					ieee->set_wireless_mode(ieee->dev, WIRELESS_MODE_G);
- 					netdev_info(ieee->dev,
- 						    "Using G rates\n");
- 				} else {
- 					ieee->rate = 22;
--					ieee->SetWirelessMode(ieee->dev, WIRELESS_MODE_B);
-+					ieee->set_wireless_mode(ieee->dev, WIRELESS_MODE_B);
- 					netdev_info(ieee->dev,
- 						    "Using B rates\n");
- 				}
-@@ -2233,11 +2233,11 @@ static void rtllib_rx_auth_resp(struct rtllib_device *ieee, struct sk_buff *skb)
- 		}
- 		/* Dummy wirless mode setting to avoid encryption issue */
- 		if (bSupportNmode) {
--			ieee->SetWirelessMode(ieee->dev,
-+			ieee->set_wireless_mode(ieee->dev,
- 					      ieee->current_network.mode);
- 		} else {
- 			/*TODO*/
--			ieee->SetWirelessMode(ieee->dev, WIRELESS_MODE_G);
-+			ieee->set_wireless_mode(ieee->dev, WIRELESS_MODE_G);
- 		}
  
- 		if ((ieee->current_network.mode == WIRELESS_MODE_N_24G) &&
-@@ -2566,7 +2566,7 @@ static void rtllib_start_ibss_wq(void *data)
- 		}
- 
- 		ieee->current_network.qos_data.supported = 0;
--		ieee->SetWirelessMode(ieee->dev, WIRELESS_MODE_G);
-+		ieee->set_wireless_mode(ieee->dev, WIRELESS_MODE_G);
- 		ieee->current_network.mode = ieee->mode;
- 		ieee->current_network.atim_window = 0;
- 		ieee->current_network.capability = WLAN_CAPABILITY_IBSS;
+@@ -348,7 +348,7 @@ void rtllib_wx_sync_scan_wq(void *data)
+ 			ieee->set_chan(ieee->dev, chan - 2);
+ 		else
+ 			ieee->set_chan(ieee->dev, chan);
+-		ieee->SetBWModeHandler(ieee->dev, bandwidth, chan_offset);
++		ieee->set_bw_mode_handler(ieee->dev, bandwidth, chan_offset);
+ 	} else {
+ 		ieee->set_chan(ieee->dev, chan);
+ 	}
 -- 
 2.34.1
 
