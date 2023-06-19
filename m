@@ -2,177 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E31C735029
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C49973503F
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231157AbjFSJ3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 05:29:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50886 "EHLO
+        id S230329AbjFSJbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 05:31:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231700AbjFSJ3A (ORCPT
+        with ESMTP id S231719AbjFSJ3v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 05:29:00 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13DAD12D;
-        Mon, 19 Jun 2023 02:28:43 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2b46f5d236dso17048251fa.2;
-        Mon, 19 Jun 2023 02:28:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687166921; x=1689758921;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Vfkmu5cuB1pNP5xL5R0kLfcMecO69/OKJ9kN+IP/bbA=;
-        b=TQar8EtM/RlVHae0XaCyI7JdmXAYTZXj8Tuxdy+W0JeLMkXVFrOGbpq2zv6XCs+yuM
-         6OvsxR7c3cEe0KsO7W6IVmCE/fHxM5kx/fCCMahSUZiqOCFQ/8AK2TTmu8ta6x87Xu8M
-         b75bbHa53B3c1L904/jF/TgvDJtZUbx+71/nBCC7BESHzGiSu2AbBenA1LHQXbYcbFPY
-         1b1zTJuyViULRAyT8EwUry84OOe6SF4P8FGUVkHGBnwAf5CL3w158BMcoh4Th/AQNZFl
-         s8mFfRNnRkxo9SSw+FQCESPn/S8QZrXfrG7MsCJ/4MhuovFxYa3shwFE67afkRTMtPkH
-         QtNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687166921; x=1689758921;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vfkmu5cuB1pNP5xL5R0kLfcMecO69/OKJ9kN+IP/bbA=;
-        b=DMG3CAklkAURaLP7E8uXU1MQWDUpwGng/5IwPMTqsPBbYmMjtqGoNK1JHtrvL4cI30
-         nYopxdjIVfVmpitChWimEBnTP0SeKSL2RldRdlDQHRm3HJ68t8YlkNizJVKgHlc/QUXW
-         uuC4SDUWYa88jOheVlli8AWs2VRX/EfQWAc/hrUJz1eQs8eP1i7jBSDTdSK0E2fzNYRP
-         PhcptseYkR5uEHrCCTyo0QzzEyAb5ejriAy+1b0Ia0rx89wuTAGfeEFou033V7BJZXyd
-         gXV98thMVJ4FDGQAUDDhEi6t6Y8APwcg0GSd96V9bCBUMFX4k3kLY3NSpv9HCfuIA3+K
-         rPkQ==
-X-Gm-Message-State: AC+VfDx3Y8aNz3V3zGY4PPcp99ulfMqcldNCWSOFbbK3F08DR0ypn3ul
-        u9+PW3zx2M1k9M68RgCaDqM=
-X-Google-Smtp-Source: ACHHUZ6SZykzNmpaFGnLLkoNzoEAuucs1owKHlQ1mFwMyzrnC8pJvMUfrCmeVd7N7DXvIQp1GNIimA==
-X-Received: by 2002:a05:651c:1031:b0:2b4:5b65:c914 with SMTP id w17-20020a05651c103100b002b45b65c914mr4071058ljm.24.1687166920660;
-        Mon, 19 Jun 2023 02:28:40 -0700 (PDT)
-Received: from [192.168.43.77] (82-132-229-146.dab.02.net. [82.132.229.146])
-        by smtp.gmail.com with ESMTPSA id n12-20020a7bc5cc000000b003eddc6aa5fasm10125005wmk.39.2023.06.19.02.28.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 02:28:40 -0700 (PDT)
-Message-ID: <d9c9bd5f-b17e-fbd8-5646-4f51b927cc6b@gmail.com>
-Date:   Mon, 19 Jun 2023 10:28:30 +0100
+        Mon, 19 Jun 2023 05:29:51 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084B719B2;
+        Mon, 19 Jun 2023 02:29:22 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 981056606E98;
+        Mon, 19 Jun 2023 10:29:20 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1687166961;
+        bh=8SdaP7ntrKluxKpCnNBDtyK/qq34xMIqJVvJvy6SKNQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ZjW8Wi2jRcotxAKybid4GWjCNQRJ3u+9ezC6GKGFXIUoyt6qzitYC+HTZFI3v1mCZ
+         +vV146z0N8Evfmui6O5P6t0MkonySoBX36IppFEmoVftnpuYDd1Ck6S/X4p7MRq3UA
+         y0mugChJcc6iHDwnJ9SyKzr3f4LNAroqNcyW9fxY1cOwNsha4bsDL9S+dnorYgiVKx
+         1pKiIRVDzWJUivyGo+Fr4fljmu9+lZly5AlS+tKosBbgKrXmNKTIi/ojqAXm+iEZMb
+         L4lrx0EUXLxIure/9M8rDQF8jMa81bX6aYer8mHsVvMusH1A7rzS8cF958xoB0UTay
+         8V05Gn1JbkjOQ==
+Message-ID: <590f9a11-a153-abaf-0f99-9496882ee929@collabora.com>
+Date:   Mon, 19 Jun 2023 11:29:18 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC PATCH v2 1/4] net: wire up support for
- file_operations->uring_cmd()
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v5 6/8] soc: mediatek: Add support for WAY_EN operations
 Content-Language: en-US
-To:     David Ahern <dsahern@kernel.org>, Breno Leitao <leitao@debian.org>,
-        io-uring@vger.kernel.org, axboe@kernel.dk, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Mat Martineau <martineau@kernel.org>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>
-Cc:     leit@fb.com, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dccp@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-sctp@vger.kernel.org, ast@kernel.org, kuniyu@amazon.com,
-        martin.lau@kernel.org, Jason Xing <kernelxing@tencent.com>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Guillaume Nault <gnault@redhat.com>,
-        Andrea Righi <andrea.righi@canonical.com>
-References: <20230614110757.3689731-1-leitao@debian.org>
- <20230614110757.3689731-2-leitao@debian.org>
- <6b5e5988-3dc7-f5d6-e447-397696c0d533@kernel.org>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <6b5e5988-3dc7-f5d6-e447-397696c0d533@kernel.org>
+To:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Fabien Parent <parent.f@gmail.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>
+References: <20230619085344.2885311-1-msp@baylibre.com>
+ <20230619085344.2885311-7-msp@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230619085344.2885311-7-msp@baylibre.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/14/23 16:15, David Ahern wrote:
-> On 6/14/23 5:07 AM, Breno Leitao wrote:
->> diff --git a/include/linux/net.h b/include/linux/net.h
->> index 8defc8f1d82e..58dea87077af 100644
->> --- a/include/linux/net.h
->> +++ b/include/linux/net.h
->> @@ -182,6 +182,8 @@ struct proto_ops {
->>   	int	 	(*compat_ioctl) (struct socket *sock, unsigned int cmd,
->>   				      unsigned long arg);
->>   #endif
->> +	int		(*uring_cmd)(struct socket *sock, struct io_uring_cmd *cmd,
->> +				     unsigned int issue_flags);
->>   	int		(*gettstamp) (struct socket *sock, void __user *userstamp,
->>   				      bool timeval, bool time32);
->>   	int		(*listen)    (struct socket *sock, int len);
->> diff --git a/include/net/sock.h b/include/net/sock.h
->> index 62a1b99da349..a49b8b19292b 100644
->> --- a/include/net/sock.h
->> +++ b/include/net/sock.h
->> @@ -111,6 +111,7 @@ typedef struct {
->>   struct sock;
->>   struct proto;
->>   struct net;
->> +struct io_uring_cmd;
->>   
->>   typedef __u32 __bitwise __portpair;
->>   typedef __u64 __bitwise __addrpair;
->> @@ -1259,6 +1260,9 @@ struct proto {
->>   
->>   	int			(*ioctl)(struct sock *sk, int cmd,
->>   					 int *karg);
->> +	int			(*uring_cmd)(struct sock *sk,
->> +					     struct io_uring_cmd *cmd,
->> +					     unsigned int issue_flags);
->>   	int			(*init)(struct sock *sk);
->>   	void			(*destroy)(struct sock *sk);
->>   	void			(*shutdown)(struct sock *sk, int how);
->> @@ -1934,6 +1938,8 @@ int sock_common_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
->>   			int flags);
->>   int sock_common_setsockopt(struct socket *sock, int level, int optname,
->>   			   sockptr_t optval, unsigned int optlen);
->> +int sock_common_uring_cmd(struct socket *sock, struct io_uring_cmd *cmd,
->> +			  unsigned int issue_flags);
->>   
->>   void sk_common_release(struct sock *sk);
->>   
->> diff --git a/net/core/sock.c b/net/core/sock.c
->> index 1df7e432fec5..339fa74db60f 100644
->> --- a/net/core/sock.c
->> +++ b/net/core/sock.c
->> @@ -3668,6 +3668,18 @@ int sock_common_setsockopt(struct socket *sock, int level, int optname,
->>   }
->>   EXPORT_SYMBOL(sock_common_setsockopt);
->>   
->> +int sock_common_uring_cmd(struct socket *sock, struct io_uring_cmd *cmd,
->> +			  unsigned int issue_flags)
->> +{
->> +	struct sock *sk = sock->sk;
->> +
->> +	if (!sk->sk_prot || !sk->sk_prot->uring_cmd)
->> +		return -EOPNOTSUPP;
->> +
->> +	return sk->sk_prot->uring_cmd(sk, cmd, issue_flags);
->> +}
->> +EXPORT_SYMBOL(sock_common_uring_cmd);
->> +
+Il 19/06/23 10:53, Markus Schneider-Pargmann ha scritto:
+> From: Alexandre Bailon <abailon@baylibre.com>
 > 
+> This updates the power domain to support WAY_EN operations. WAY_EN
+> operations on mt8365 are using a different component to check for the
+> acknowledgment, namely the infracfg-nao component. Also to enable a way
+> it the bit needs to be cleared while disabling a way needs a bit to be
+> set. To support these two operations two flags are added,
+> BUS_PROT_INVERTED and BUS_PROT_STA_COMPONENT_INFRA_NAO. Additionally
+> another regmap is created if the INFRA_NAO capability is set.
 > 
-> io_uring is just another in-kernel user of sockets. There is no reason
-> for io_uring references to be in core net code. It should be using
-> exposed in-kernel APIs and doing any translation of its op codes in
-> io_uring/  code.
+> This operation is required by the mt8365 for the MM power domain.
+> 
+> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> ---
+>   drivers/soc/mediatek/mtk-pm-domains.c | 39 +++++++++++++++++++++++----
+>   drivers/soc/mediatek/mtk-pm-domains.h |  7 +++--
+>   2 files changed, 39 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/soc/mediatek/mtk-pm-domains.c b/drivers/soc/mediatek/mtk-pm-domains.c
+> index 3cdf62c0b6bd..4659f0a0aa08 100644
+> --- a/drivers/soc/mediatek/mtk-pm-domains.c
+> +++ b/drivers/soc/mediatek/mtk-pm-domains.c
+> @@ -44,6 +44,7 @@ struct scpsys_domain {
+>   	struct clk_bulk_data *clks;
+>   	int num_subsys_clks;
+>   	struct clk_bulk_data *subsys_clks;
+> +	struct regmap *infracfg_nao;
+>   	struct regmap *infracfg;
+>   	struct regmap *smi;
+>   	struct regulator *supply;
+> @@ -127,13 +128,26 @@ static struct regmap *scpsys_bus_protect_get_regmap(struct scpsys_domain *pd,
+>   		return pd->infracfg;
+>   }
+>   
+> +static struct regmap *scpsys_bus_protect_get_sta_regmap(struct scpsys_domain *pd,
+> +							const struct scpsys_bus_prot_data *bpd)
+> +{
+> +	if (bpd->flags & BUS_PROT_STA_COMPONENT_INFRA_NAO)
+> +		return pd->infracfg_nao;
+> +	else
+> +		return scpsys_bus_protect_get_regmap(pd, bpd);
+> +}
+> +
+>   static int scpsys_bus_protect_clear(struct scpsys_domain *pd,
+>   				    const struct scpsys_bus_prot_data *bpd)
+>   {
+> +	struct regmap *sta_regmap = scpsys_bus_protect_get_sta_regmap(pd, bpd);
+>   	struct regmap *regmap = scpsys_bus_protect_get_regmap(pd, bpd);
+> +	u32 expected_ack;
+>   	u32 val;
+>   	u32 sta_mask = bpd->bus_prot_sta_mask;
+>   
+> +	expected_ack = (bpd->flags & BUS_PROT_STA_COMPONENT_INFRA_NAO ? sta_mask : 0);
+> +
+>   	if (bpd->flags & BUS_PROT_REG_UPDATE)
+>   		regmap_clear_bits(regmap, bpd->bus_prot_clr, bpd->bus_prot_set_clr_mask);
+>   	else
+> @@ -142,14 +156,15 @@ static int scpsys_bus_protect_clear(struct scpsys_domain *pd,
+>   	if (bpd->flags & BUS_PROT_IGNORE_CLR_ACK)
+>   		return 0;
+>   
+> -	return regmap_read_poll_timeout(regmap, bpd->bus_prot_sta,
+> -					val, !(val & sta_mask),
+> +	return regmap_read_poll_timeout(sta_regmap, bpd->bus_prot_sta,
+> +					val, (val & sta_mask) == expected_ack,
+>   					MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
+>   }
+>   
+>   static int scpsys_bus_protect_set(struct scpsys_domain *pd,
+>   				  const struct scpsys_bus_prot_data *bpd)
+>   {
+> +	struct regmap *sta_regmap = scpsys_bus_protect_get_sta_regmap(pd, bpd);
+>   	struct regmap *regmap = scpsys_bus_protect_get_regmap(pd, bpd);
+>   	u32 val;
+>   	u32 sta_mask = bpd->bus_prot_sta_mask;
+> @@ -159,7 +174,7 @@ static int scpsys_bus_protect_set(struct scpsys_domain *pd,
+>   	else
+>   		regmap_write(regmap, bpd->bus_prot_set, bpd->bus_prot_set_clr_mask);
+>   
+> -	return regmap_read_poll_timeout(regmap, bpd->bus_prot_sta,
+> +	return regmap_read_poll_timeout(sta_regmap, bpd->bus_prot_sta,
+>   					val, (val & sta_mask) == sta_mask,
+>   					MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
+>   }
+> @@ -173,7 +188,10 @@ static int scpsys_bus_protect_enable(struct scpsys_domain *pd)
+>   		if (!bpd->bus_prot_set_clr_mask)
+>   			break;
+>   
+> -		ret = scpsys_bus_protect_set(pd, bpd);
+> +		if (bpd->flags & BUS_PROT_INVERTED)
+> +			ret = scpsys_bus_protect_clear(pd, bpd);
+> +		else
+> +			ret = scpsys_bus_protect_set(pd, bpd);
+>   		if (ret)
+>   			return ret;
+>   	}
+> @@ -190,7 +208,10 @@ static int scpsys_bus_protect_disable(struct scpsys_domain *pd)
+>   		if (!bpd->bus_prot_set_clr_mask)
+>   			continue;
+>   
+> -		ret = scpsys_bus_protect_clear(pd, bpd);
+> +		if (bpd->flags & BUS_PROT_INVERTED)
+> +			ret = scpsys_bus_protect_set(pd, bpd);
+> +		else
+> +			ret = scpsys_bus_protect_clear(pd, bpd);
+>   		if (ret)
+>   			return ret;
+>   	}
+> @@ -377,6 +398,14 @@ generic_pm_domain *scpsys_add_one_domain(struct scpsys *scpsys, struct device_no
+>   			return ERR_CAST(pd->smi);
+>   	}
+>   
+> +	pd->infracfg_nao = syscon_regmap_lookup_by_phandle(node, "mediatek,infracfg-nao");
 
-That callback is all about file dependent operations, just like ioctl.
-And as the patch in question is doing socket specific stuff, I think
-architecturally it fits well. I also believe Breno wants to extend it
-later to support more operations.
+If we don't expect infracfg-nao to be present, what's the point about trying to
+get a regmap handle and then failing only if we do expect it to be there?
 
-Sockets are a large chunk of use cases, it can be implemented as a
-separate io_uring request type if nothing else works, but in general
-that might not be as scalable.
+At this point you can just do...
 
--- 
-Pavel Begunkov
+	if (MTK_SCPD_CAPS(pd, MTK_SCPD_HAS_INFRA_NAO)) {
+		pd->infracfg_nao = syscon_regmap_lookup_by_phandle(...);
+		if (IS_ERR(....))
+			return ....
+	}
+
+> +	if (IS_ERR(pd->infracfg_nao)) {
+> +		if (MTK_SCPD_CAPS(pd, MTK_SCPD_HAS_INFRA_NAO))
+> +			return ERR_CAST(pd->infracfg_nao);
+> +
+> +		pd->infracfg_nao = NULL;
+> +	}
+> +
+>   	num_clks = of_clk_get_parent_count(node);
+>   	if (num_clks > 0) {
+>   		/* Calculate number of subsys_clks */
+> diff --git a/drivers/soc/mediatek/mtk-pm-domains.h b/drivers/soc/mediatek/mtk-pm-domains.h
+> index 356788263db2..562d4e92ce16 100644
+> --- a/drivers/soc/mediatek/mtk-pm-domains.h
+> +++ b/drivers/soc/mediatek/mtk-pm-domains.h
+> @@ -11,6 +11,7 @@
+>   /* can't set MTK_SCPD_KEEP_DEFAULT_OFF at the same time */
+>   #define MTK_SCPD_ALWAYS_ON		BIT(5)
+>   #define MTK_SCPD_EXT_BUCK_ISO		BIT(6)
+> +#define MTK_SCPD_HAS_INFRA_NAO		BIT(7)
+>   #define MTK_SCPD_CAPS(_scpd, _x)	((_scpd)->data->caps & (_x))
+>   
+>   #define SPM_VDE_PWR_CON			0x0210
+> @@ -45,8 +46,10 @@
+>   enum scpsys_bus_prot_flags {
+>   	BUS_PROT_REG_UPDATE = BIT(1),
+>   	BUS_PROT_IGNORE_CLR_ACK = BIT(2),
+> -	BUS_PROT_COMPONENT_INFRA = BIT(3),
+> -	BUS_PROT_COMPONENT_SMI = BIT(4),
+> +	BUS_PROT_INVERTED = BIT(3),
+
+I get the reason why you're setting inverted as bit 3, but at that point you can
+just set BUS_PROT_COMPONENT_INFRA to bit 4 from the very beginning, instead of
+using bit 3 for that and then changing them all in a subsequent commit (this one).
+
+Cheers,
+Angelo
+
