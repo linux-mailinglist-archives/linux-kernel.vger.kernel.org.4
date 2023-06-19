@@ -2,119 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55274734F06
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:04:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D537B734F10
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:05:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbjFSJES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 05:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37798 "EHLO
+        id S230436AbjFSJFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 05:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230397AbjFSJEN (ORCPT
+        with ESMTP id S230304AbjFSJEs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 05:04:13 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E49116
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:04:09 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f907f31247so13661275e9.2
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:04:08 -0700 (PDT)
+        Mon, 19 Jun 2023 05:04:48 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE55B4
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:04:46 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-51a20c744ebso3794237a12.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:04:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687165447; x=1689757447;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+        d=brainfault-org.20221208.gappssmtp.com; s=20221208; t=1687165485; x=1689757485;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8yGd3GSbLFhZ5atbejnGL2mGXHbrB6Og1PKpMLfAUrY=;
-        b=WOlUKyrsHN+PneEtfTf4PaBEyfLL65+KwXaNw5Dkon4zNvm7CGRnc/jtNmpM3UvOvS
-         1uvQm0wF+P0diAvmPDCO0zNETEwCtDclnRsONuk+SowkDZebLc4MAlfoE/SDi8Q0oGAJ
-         Ju7H/F34CnjzJaHwnuqvzgBEge/e7ZcNsv91dsFYE1a1BQi0BD2Hxr/PLjk2pXeSqoE7
-         jsIsoddCJLKPlN4dXu4FOGJh3q5wtR0KHhudgSmBKKXflbWqHN61HNSXcXFEnps2w1jy
-         E19Illjnx+qpLCB1onuQHngO/C3H9PSeB9XWt2NfekFmtzg2TgBGgmyuBAcfuB7cUDym
-         WsXw==
+        bh=VOMkMMAr2Gg0bJAi4+JqalAqrnOAduCDY6ClopKhu7o=;
+        b=lxfJQE0xX3I5jYqy0UEhvatNi1bEe0LGgP/lmC+ZElBgNg8sCnadykEjHqFC/p8GUZ
+         izgUIZptlaFMrc8RDR4jfovxA/95RIVzNUUjt0goz5x9tNml47o7KEgjlNGeuUIFlzzM
+         Kczl256i4qumx9ZEC8E+fYH4DzRutLAjcl15Sq8Gz5IDXxWBaA3BulNihk3nNoOLSCN5
+         Gyfz7P03rL+tiOSJ+8sWw0K8lYOqYyqu6fXCaeURDBfebaAGuMrGy4kMT+MSq12Khjoa
+         +VpnP5757yuYBbTTMKYT2K5vTTNNmN/jtuIr4gh2rfewpbPm44EtvxoRipKYSQpHFGgQ
+         R9TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687165447; x=1689757447;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1687165485; x=1689757485;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8yGd3GSbLFhZ5atbejnGL2mGXHbrB6Og1PKpMLfAUrY=;
-        b=lY6TRseOWmGTl6AJrzIRHrgQo8cufUlIH5W290BgE8uD+++rul/VDjxjEqYvc44lI/
-         tpMMBAyO8oKVSqKegvOS4rNP/9V2xpVVmBk4qHroDql0RTQhotWWsWsK28GzKKWL/vae
-         25XWs4i+xv/xNjMEHF0h9lJXusQ0GwjwKhMqayVCp0qGzDKclH84HtwEjalE6DOnnAA0
-         B2tLcWJJmTcm7PnXm4p2nzF6coYXuiZkI9692B9g8avN+y5DhpxDY2Pf2zictIUBG3z2
-         DN8MDn29iMlVY3g96cekS0wJUkodGHxlsDRXHHzJ24M+bAIXzS5VMz7GeeiJ3u769s+O
-         gqbw==
-X-Gm-Message-State: AC+VfDwcqOYDw4UNu672b0tYCmz0pKr2uPC3EH8aw9E0ARfj4HF5R+gD
-        A3vBrhttKlqd/WgOimmw3W3/ug==
-X-Google-Smtp-Source: ACHHUZ6Id4Zo9VfB9WYG29OMsmVG3Fwo8v35RDi9Sz8WnpwhfvScLCULE5Z4NMDRo39oZGxlqaxHCQ==
-X-Received: by 2002:a05:600c:ca:b0:3f9:163:35d5 with SMTP id u10-20020a05600c00ca00b003f9016335d5mr3859462wmm.2.1687165447362;
-        Mon, 19 Jun 2023 02:04:07 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id c6-20020a7bc846000000b003f8fb02c413sm8633213wml.8.2023.06.19.02.04.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 02:04:06 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-To:     khilman@baylibre.com, jbrunet@baylibre.com,
-        martin.blumenstingl@googlemail.com,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Alexey Romanov <avromanov@sberdevices.ru>
-Cc:     linux-arm-kernel@lists.infradead.org, kernel@sberdevices.ru,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230610090414.90529-1-avromanov@sberdevices.ru>
-References: <20230610090414.90529-1-avromanov@sberdevices.ru>
-Subject: Re: [PATCH v1] drivers: meson: secure-pwrc: always enable DMA
- domain
-Message-Id: <168716544629.1449314.9025193999820850128.b4-ty@linaro.org>
-Date:   Mon, 19 Jun 2023 11:04:06 +0200
+        bh=VOMkMMAr2Gg0bJAi4+JqalAqrnOAduCDY6ClopKhu7o=;
+        b=NAlgGOpqAXNB9ajSKRQYkDveDTiERix/CQPbB3q6mI88+MbUcYEUZvKMtYZixoj89q
+         tTulpSaFS77YphF8ZGPWAccJz9DsdN73BXXXCazpnAQZ57yoC5IMpsa26OtMOqBoG5VX
+         377IGbSLo4/kOC5C0uApNInVX9gPM1RN54qtFl9y8WwKB1IznRITlZ/NeyYH+wmno3RU
+         AIfiMPka6yeg31R4XtPjfZeQwvPau8OMx/UuKuRS5NZv3NwxLnM75nR967RdRnvu3i95
+         Cid2XvyWkaKZNzok+/K2rLF3ppfKk8LD0dOsSoDoCon7+j6z2K5dPl+ZyEMM8J6LBC0V
+         DKTg==
+X-Gm-Message-State: AC+VfDy6ZR4nNBFwCgiXAqYtoiDAbRzJQY+igXszG5wmEjEutMC0jM1k
+        mj2uJowsp1rHN+ZQByTQ8jpEtQJZ9dg1Aopyd8uWNQ==
+X-Google-Smtp-Source: ACHHUZ768q3f6zOzDHZ7Hx9YSEKq+8wOdyRXvCMU8hq5SVfPwpgMrdOf2DcZ4MrsHubHFDfXQzUhn4Ddv1whxrE6xW0=
+X-Received: by 2002:a17:907:a41e:b0:976:b93f:26db with SMTP id
+ sg30-20020a170907a41e00b00976b93f26dbmr8200640ejc.53.1687165484807; Mon, 19
+ Jun 2023 02:04:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230612111044.87775-1-apatel@ventanamicro.com>
+In-Reply-To: <20230612111044.87775-1-apatel@ventanamicro.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Mon, 19 Jun 2023 14:34:33 +0530
+Message-ID: <CAAhSdy2H8fhb84Q7kn==6pdRod_CcZ1hWyr3niDBGKfr4e-mQg@mail.gmail.com>
+Subject: Re: [PATCH] RISC-V: KVM: Allow Svnapot extension for Guest/VM
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Andrew Jones <ajones@ventanamicro.com>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Jun 12, 2023 at 4:41=E2=80=AFPM Anup Patel <apatel@ventanamicro.com=
+> wrote:
+>
+> We extend the KVM ISA extension ONE_REG interface to allow KVM
+> user space to detect and enable Svnapot extension for Guest/VM.
+>
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 
-On Sat, 10 Jun 2023 12:04:14 +0300, Alexey Romanov wrote:
-> Starting from commit e45f243409db ("firmware: meson_sm:
-> populate platform devices from sm device tree data") pwrc
-> is probed successfully and disables unused pwr domains.
-> By A1 SoC family design, any TEE requires DMA pwr domain
-> always enabled.
-> 
-> 
-> [...]
+Queued this patch for Linux-6.5
 
-Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.5/drivers)
+Thanks,
+Anup
 
-[1/1] drivers: meson: secure-pwrc: always enable DMA domain
-      https://git.kernel.org/amlogic/c/0bb4644d583789c97e74d3e3047189f0c59c4742
-
-These changes has been applied on the intermediate git tree [1].
-
-The v6.5/drivers branch will then be sent via a formal Pull Request to the Linux SoC maintainers
-for inclusion in their intermediate git branches in order to be sent to Linus during
-the next merge window, or sooner if it's a set of fixes.
-
-In the cases of fixes, those will be merged in the current release candidate
-kernel and as soon they appear on the Linux master branch they will be
-backported to the previous Stable and Long-Stable kernels [2].
-
-The intermediate git branches are merged daily in the linux-next tree [3],
-people are encouraged testing these pre-release kernels and report issues on the
-relevant mailing-lists.
-
-If problems are discovered on those changes, please submit a signed-off-by revert
-patch followed by a corrective changeset.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-
--- 
-Neil
-
+> ---
+>  arch/riscv/include/uapi/asm/kvm.h | 1 +
+>  arch/riscv/kvm/vcpu.c             | 2 ++
+>  2 files changed, 3 insertions(+)
+>
+> diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/=
+asm/kvm.h
+> index 61d7fecc4899..a1ca18408bbd 100644
+> --- a/arch/riscv/include/uapi/asm/kvm.h
+> +++ b/arch/riscv/include/uapi/asm/kvm.h
+> @@ -122,6 +122,7 @@ enum KVM_RISCV_ISA_EXT_ID {
+>         KVM_RISCV_ISA_EXT_ZICBOZ,
+>         KVM_RISCV_ISA_EXT_ZBB,
+>         KVM_RISCV_ISA_EXT_SSAIA,
+> +       KVM_RISCV_ISA_EXT_SVNAPOT,
+>         KVM_RISCV_ISA_EXT_MAX,
+>  };
+>
+> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
+> index 2db62c6c0d3e..7b355900f235 100644
+> --- a/arch/riscv/kvm/vcpu.c
+> +++ b/arch/riscv/kvm/vcpu.c
+> @@ -61,6 +61,7 @@ static const unsigned long kvm_isa_ext_arr[] =3D {
+>         KVM_ISA_EXT_ARR(SSAIA),
+>         KVM_ISA_EXT_ARR(SSTC),
+>         KVM_ISA_EXT_ARR(SVINVAL),
+> +       KVM_ISA_EXT_ARR(SVNAPOT),
+>         KVM_ISA_EXT_ARR(SVPBMT),
+>         KVM_ISA_EXT_ARR(ZBB),
+>         KVM_ISA_EXT_ARR(ZIHINTPAUSE),
+> @@ -102,6 +103,7 @@ static bool kvm_riscv_vcpu_isa_disable_allowed(unsign=
+ed long ext)
+>         case KVM_RISCV_ISA_EXT_SSAIA:
+>         case KVM_RISCV_ISA_EXT_SSTC:
+>         case KVM_RISCV_ISA_EXT_SVINVAL:
+> +       case KVM_RISCV_ISA_EXT_SVNAPOT:
+>         case KVM_RISCV_ISA_EXT_ZIHINTPAUSE:
+>         case KVM_RISCV_ISA_EXT_ZBB:
+>                 return false;
+> --
+> 2.34.1
+>
+>
+> --
+> kvm-riscv mailing list
+> kvm-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/kvm-riscv
