@@ -2,128 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF41735EAE
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 22:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2446D735EBD
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 22:48:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjFSUrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 16:47:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42266 "EHLO
+        id S229806AbjFSUsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 16:48:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjFSUrJ (ORCPT
+        with ESMTP id S229473AbjFSUso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 16:47:09 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 621701A3;
-        Mon, 19 Jun 2023 13:47:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687207628; x=1718743628;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ycKjZzBsCwN//CAhRyctU2g6YIaDxzvCXqjhNY5zko8=;
-  b=bOKlz9WZ2C5zDPx+Haav0WkJDTpeT4KXwwzIV8eNqpDrJ834u5HSA57g
-   J0EQIPTluFTSqtrMNBcaZfEsiLekBSCxQBdh7+wZC8EGry2ESjma29bCv
-   ZL1lRoef/9hnDVD7oKyNbjY1siu1epsAjhWHThGIsDvBcZntoxxQVhWHa
-   tnV4Yo5dRr+rzaXAssCVgPvWp4hKzH93Cptvofee3j8A3kALE6W5sQNto
-   27mxmRRsYcFsSiTE6T9aqXXGwO/6vSlFQNRAiPA0OaXf/lf/Z9tbS8qik
-   rFr36PnbHuMQ1Wl13N1AdtkRwH//fZ1N//ObULG0w3VibF547KnyCPSFU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="349437114"
-X-IronPort-AV: E=Sophos;i="6.00,255,1681196400"; 
-   d="scan'208";a="349437114"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 13:47:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="691194551"
-X-IronPort-AV: E=Sophos;i="6.00,255,1681196400"; 
-   d="scan'208";a="691194551"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 19 Jun 2023 13:47:04 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qBLmB-00057c-2J;
-        Mon, 19 Jun 2023 20:47:03 +0000
-Date:   Tue, 20 Jun 2023 04:47:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        Fabien Parent <parent.f@gmail.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Markus Schneider-Pargmann <msp@baylibre.com>
-Subject: Re: [PATCH v5 8/8] soc: mediatek: pm-domains: Add support for MT8365
-Message-ID: <202306200439.julbXDpI-lkp@intel.com>
-References: <20230619085344.2885311-9-msp@baylibre.com>
+        Mon, 19 Jun 2023 16:48:44 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCD010D0;
+        Mon, 19 Jun 2023 13:48:21 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-311099fac92so4577862f8f.0;
+        Mon, 19 Jun 2023 13:48:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687207700; x=1689799700;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=eG/q3bTcWJveMElwbHmeYU1bo7tO0X8xnhpRm1N5g14=;
+        b=Huie7AkoX9OHjyqyj8+wbnfiluB8hE+LGKpoCwfRw2gjDi+73SggGwkl4V4lzXrq1c
+         hmC7jFpkdBFpfEKVZiQ+mY0DaNEX90T4M21iFfRLvv8m76tgWvsAc1jOQ63DsORma5Po
+         kLIxU5CrZAi6epZXe5+zWpbK8atFrmkoyEWHIrN1+PPhJKZ+kRENYcVHAwisB8yiGVnu
+         +M5bjFuBfeIVdCjPSFIiIipypmYlr9sAZ6gx7jN5OTJh+Nv4R0x3VeEmqPvisTNn+cRM
+         9WDlmhQMVpeQ4d9DQVXYyhR6eGFUWuqH+L6Xr7IlTAhjU+RIv7/F8Yzu15XkDJw4gdMC
+         jJFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687207700; x=1689799700;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eG/q3bTcWJveMElwbHmeYU1bo7tO0X8xnhpRm1N5g14=;
+        b=Cqx2vK9RVLoGW8yzB5z8OYd+yRdmPYczcx8xdFDszocioniY07fQWk80UmLuD7ecA9
+         ysarwA3Yp6bOinn7x+MzHo1/bIdWlurcTuvspeF7FZvg51Vk+eT8HsWy7W+ZexDsLDCu
+         gsxtS8WPPPbBqkYmPi2ddtKwVrGYui725hoSoTon1+9rVVMCBNprHVGHcG/42jFyYTKi
+         UBqlKjpgmvnks0H4O+mmTzl1BHBTOWpYxn+e9ct2xKIWaHmg818ItiMZCGxXo5qPb699
+         5yzK4keOSt2sAHTH47Dkd/IcLTetAZzJTZTnf9C6E5RzfZMfSUWUFNqaM97arS0lcwEH
+         tCGw==
+X-Gm-Message-State: AC+VfDw08H5ufVk5U5UN0SC2AepxrKqPPT+qDW9NP0+0E9Kl4joWdKpl
+        oerq404at0Wqj5ix6mTfISQ=
+X-Google-Smtp-Source: ACHHUZ6kBE6BjYmWKc4YmkTEYlMYrDS5l2tXUetkuCWW+M4SwSxjVvZly4xBTwOeLiy4LP/RivkCIA==
+X-Received: by 2002:adf:e848:0:b0:30a:eac4:26a0 with SMTP id d8-20020adfe848000000b0030aeac426a0mr8952293wrn.18.1687207699809;
+        Mon, 19 Jun 2023 13:48:19 -0700 (PDT)
+Received: from Ansuel-xps. (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
+        by smtp.gmail.com with ESMTPSA id n15-20020a5d4c4f000000b003111025ec67sm430542wrt.25.2023.06.19.13.48.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 13:48:19 -0700 (PDT)
+Message-ID: <6490bf13.5d0a0220.f1a5a.2c4a@mx.google.com>
+X-Google-Original-Message-ID: <ZJC/DyLpLry69PLB@Ansuel-xps.>
+Date:   Mon, 19 Jun 2023 22:48:15 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next PATCH v4 0/3] leds: trigger: netdev: add additional
+ modes
+References: <20230617115355.22868-1-ansuelsmth@gmail.com>
+ <ZJC6GaZO7DgdMmIv@corigine.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230619085344.2885311-9-msp@baylibre.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZJC6GaZO7DgdMmIv@corigine.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Markus,
+On Mon, Jun 19, 2023 at 10:27:05PM +0200, Simon Horman wrote:
+> On Sat, Jun 17, 2023 at 01:53:52PM +0200, Christian Marangi wrote:
+> > This is a continue of [1]. It was decided to take a more gradual
+> > approach to implement LEDs support for switch and phy starting with
+> > basic support and then implementing the hw control part when we have all
+> > the prereq done.
+> > 
+> > This should be the final part for the netdev trigger.
+> > I added net-next tag and added netdev mailing list since I was informed
+> > that this should be merged with netdev branch.
+> > 
+> > We collect some info around and we found a good set of modes that are
+> > common in almost all the PHY and Switch.
+> > 
+> > These modes are:
+> > - Modes for dedicated link speed(10, 100, 1000 mbps). Additional mode
+> >   can be added later following this example.
+> > - Modes for half and full duplex.
+> > 
+> > The original idea was to add hw control only modes.
+> > While the concept makes sense in practice it would results in lots of 
+> > additional code and extra check to make sure we are setting correct modes.
+> > 
+> > With the suggestion from Andrew it was pointed out that using the ethtool
+> > APIs we can actually get the current link speed and duplex and this
+> > effectively removed the problem of having hw control only modes since we
+> > can fallback to software.
+> > 
+> > Since these modes are supported by software, we can skip providing an
+> > user for this in the LED driver to support hw control for these new modes
+> > (that will come right after this is merged) and prevent this to be another
+> > multi subsystem series.
+> > 
+> > For link speed and duplex we use ethtool APIs.
+> > 
+> > To call ethtool APIs, rtnl lock is needed but this can be skipped on
+> > handling netdev events as the lock is already held.
+> > 
+> > [1] https://lore.kernel.org/lkml/20230216013230.22978-1-ansuelsmth@gmail.com/
+> 
+> Hi Christian,
+> 
+> I am sorry if I am missing something obvious here,
+> but this series does not appear to apply on top of net-next.
+> 
+> Please consider rebasing and reposting.
+> 
+> As you probably know, you can include the reviewed-by tags
+> provided by Andrew for this posting, unless there are
+> substantial changes.
+> 
+> -- 
+> pw-bot: changes-requested
+> 
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on krzk-dt/for-next linus/master v6.4-rc7 next-20230619]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Markus-Schneider-Pargmann/dt-bindings-power-Add-MT8365-power-domains/20230619-165759
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230619085344.2885311-9-msp%40baylibre.com
-patch subject: [PATCH v5 8/8] soc: mediatek: pm-domains: Add support for MT8365
-config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20230620/202306200439.julbXDpI-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230620/202306200439.julbXDpI-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306200439.julbXDpI-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/bits.h:6,
-                    from include/linux/bitops.h:6,
-                    from include/linux/kernel.h:22,
-                    from include/linux/clk.h:13,
-                    from drivers/soc/mediatek/mtk-pm-domains.c:5:
->> include/vdso/bits.h:7:33: warning: conversion from 'long unsigned int' to 'unsigned char' changes value from '384' to '128' [-Woverflow]
-       7 | #define BIT(nr)                 (UL(1) << (nr))
-         |                                 ^
-   drivers/soc/mediatek/mtk-pm-domains.h:15:41: note: in expansion of macro 'BIT'
-      15 | #define MTK_SCPD_STRICT_BUS_PROTECTION  BIT(8)
-         |                                         ^~~
-   drivers/soc/mediatek/mt8365-pm-domains.h:69:25: note: in expansion of macro 'MTK_SCPD_STRICT_BUS_PROTECTION'
-      69 |                 .caps = MTK_SCPD_STRICT_BUS_PROTECTION | MTK_SCPD_HAS_INFRA_NAO,
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +7 include/vdso/bits.h
-
-3945ff37d2f48d Vincenzo Frascino 2020-03-20  6  
-3945ff37d2f48d Vincenzo Frascino 2020-03-20 @7  #define BIT(nr)			(UL(1) << (nr))
-cbdb1f163af2bb Andy Shevchenko   2022-11-28  8  #define BIT_ULL(nr)		(ULL(1) << (nr))
-3945ff37d2f48d Vincenzo Frascino 2020-03-20  9  
+Hi, sorry for the mistake. I just sent v5 and added the additional
+Review-by tag.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+	Ansuel
